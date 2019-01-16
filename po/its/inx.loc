@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<locatingRules>
+  <locatingRule name="inkscape-extension" pattern="*.inx">
+    <documentRule localName="inkscape-extension" target="inx.its"/>
+  </locatingRule>
+</locatingRules>

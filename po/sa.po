@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-01-03 00:43+0100\n"
+"POT-Creation-Date: 2019-01-17 00:47+0100\n"
 "PO-Revision-Date: 2013-06-07 19:48+0530\n"
 "Last-Translator: \n"
 "Language-Team: Hindi <Indlinux>\n"
@@ -1139,8 +1139,8 @@ msgstr "कृष्णप्रकाशः"
 #: ../src/extension/internal/filter/paint.h:718
 #: ../src/extension/internal/filter/shadows.h:74
 #: ../src/extension/internal/filter/transparency.h:346
-#: ../src/filter-enums.cpp:68 ../src/ui/dialog/clonetiler.cpp:788
-#: ../src/ui/dialog/clonetiler.cpp:917
+#: ../src/filter-enums.cpp:68 ../src/ui/dialog/clonetiler.cpp:787
+#: ../src/ui/dialog/clonetiler.cpp:916
 #: ../src/ui/dialog/document-properties.cpp:154
 #: ../share/extensions/color_HSL_adjust.inx.h:20
 #: ../share/extensions/color_blackandwhite.inx.h:3
@@ -4849,12 +4849,12 @@ msgstr "दर्शयितारं लोपय "
 msgid "<b>Guideline</b>: %s"
 msgstr "<b>दर्शयितृरेखा</b>: %s"
 
-#: ../src/desktop.cpp:804
+#: ../src/desktop.cpp:802
 #, fuzzy
 msgid "No previous transform."
 msgstr "पूर्वतनजूम् न।"
 
-#: ../src/desktop.cpp:827
+#: ../src/desktop.cpp:825
 #, fuzzy
 msgid "No next transform."
 msgstr "अग्रिमजूम् न। "
@@ -5233,22 +5233,22 @@ msgstr "ग्रिड् अन्तरकरणस्य बहुत्व�
 msgid " to "
 msgstr "प्रति "
 
-#: ../src/document.cpp:553
+#: ../src/document.cpp:554
 #, c-format
 msgid "New document %d"
 msgstr "नूतनलेख्यपत्रम् %d "
 
-#: ../src/document.cpp:558
+#: ../src/document.cpp:559
 #, c-format
 msgid "Memory document %d"
 msgstr "स्मृतिलेख्यपत्रम् %d"
 
-#: ../src/document.cpp:587
+#: ../src/document.cpp:588
 #, fuzzy
 msgid "Memory document %1"
 msgstr "स्मृतिलेख्यपत्रम् %d"
 
-#: ../src/document.cpp:890
+#: ../src/document.cpp:898
 #, c-format
 msgid "Unnamed document %d"
 msgstr "नामरहितलेख्यपत्रम् %d "
@@ -5875,7 +5875,7 @@ msgstr "वृतबिट्मैप्(स्) तथा विशेषय �
 #: ../src/extension/internal/bitmap/opacity.cpp:39
 #: ../src/extension/internal/filter/blurs.h:334
 #: ../src/extension/internal/filter/transparency.h:280
-#: ../src/ui/dialog/clonetiler.cpp:795 ../src/ui/dialog/clonetiler.cpp:926
+#: ../src/ui/dialog/clonetiler.cpp:794 ../src/ui/dialog/clonetiler.cpp:925
 #: ../src/ui/toolbar/tweak-toolbar.cpp:325
 #: ../share/extensions/interp_att_g.inx.h:20
 msgid "Opacity"
@@ -6224,7 +6224,7 @@ msgstr "%i तः"
 #: ../src/extension/internal/vsd-input.cpp:155
 #: ../src/extension/prefdialog.cpp:78
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:51
-#: ../src/ui/dialog/export.cpp:918 ../src/ui/dialog/export.cpp:1302
+#: ../src/ui/dialog/export.cpp:917 ../src/ui/dialog/export.cpp:1301
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:670
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:981
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1537
@@ -6232,7 +6232,7 @@ msgstr "%i तः"
 #: ../src/ui/dialog/livepatheffect-add.cpp:27
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:30
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:36
-#: ../src/ui/dialog/ocaldialogs.cpp:1086 ../src/ui/interface.cpp:1428
+#: ../src/ui/dialog/ocaldialogs.cpp:1086 ../src/ui/interface.cpp:1430
 #: ../src/widgets/desktop-widget.cpp:1101
 #: ../src/widgets/desktop-widget.cpp:1150
 #, fuzzy
@@ -7814,7 +7814,7 @@ msgstr "विस्तारः "
 
 #: ../src/extension/internal/filter/morphology.h:70
 #: ../src/extension/internal/filter/morphology.h:191
-#: ../src/ui/dialog/export.cpp:149
+#: ../src/ui/dialog/export.cpp:148
 #, fuzzy
 msgid "Antialiasing"
 msgstr "एण्टिलियास् "
@@ -7934,7 +7934,7 @@ msgstr "घोषपूर्तिः "
 #: ../src/extension/internal/filter/paint.h:691
 #: ../src/extension/internal/filter/shadows.h:61
 #: ../src/live_effects/lpe-measure-segments.cpp:278
-#: ../src/ui/dialog/find.cpp:79 ../src/ui/dialog/tracedialog.cpp:743
+#: ../src/ui/dialog/find.cpp:77 ../src/ui/dialog/tracedialog.cpp:743
 #: ../share/extensions/color_HSL_adjust.inx.h:2
 #: ../share/extensions/color_custom.inx.h:2
 #: ../share/extensions/color_randomize.inx.h:2 ../share/extensions/dots.inx.h:2
@@ -8616,7 +8616,7 @@ msgstr "आलिख "
 #: ../src/extension/internal/grid.cpp:204
 #: ../src/ui/dialog/document-properties.cpp:152
 #: ../src/ui/dialog/inkscape-preferences.cpp:1118
-#: ../src/widgets/toolbox.cpp:1401
+#: ../src/widgets/toolbox.cpp:1462
 msgid "Grids"
 msgstr "जालानि "
 
@@ -8995,11 +8995,11 @@ msgid "Vector graphics format used by Corel WordPerfect"
 msgstr "वेक्टर्सुचित्रीयरचना कोरल् वर्ड्पर्फेक्ट् उपयोजयति"
 
 #: ../src/extension/prefdialog.cpp:78 ../src/ui/dialog/knot-properties.cpp:41
-#: ../src/ui/dialog/text-edit.cpp:71 ../src/verbs.cpp:2626
+#: ../src/ui/dialog/text-edit.cpp:69 ../src/verbs.cpp:2626
 msgid "_Close"
 msgstr "पिधत्स्व (_C)"
 
-#: ../src/extension/prefdialog.cpp:79 ../src/ui/dialog/text-edit.cpp:72
+#: ../src/extension/prefdialog.cpp:79 ../src/ui/dialog/text-edit.cpp:70
 #: ../src/ui/dialog/transformation.cpp:158
 #, fuzzy
 msgid "_Apply"
@@ -9095,88 +9095,91 @@ msgstr "O"
 msgid "Update Document"
 msgstr "लेख्यपत्रं सञ्चय "
 
-#: ../src/file.cpp:168
+#. TRANSLATORS: translate this into "default-<yourcodename>.svg" (for instance, default-fr.svg)
+#. and double-check that share/templates/create_defaults.pl contains a translation for your language
+#. If in doubt about this, ask a developer.
+#: ../src/file.cpp:170
 msgid "default.svg"
 msgstr "default.svg"
 
-#: ../src/file.cpp:287 ../src/main-cmdlinexact.cpp:188
+#: ../src/file.cpp:270
 msgid "Broken links have been changed to point to existing files."
 msgstr ""
 
-#: ../src/file.cpp:302 ../src/file.cpp:1307
+#: ../src/file.cpp:299 ../src/file.cpp:1303
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "%s प्रार्थितसञ्चिकायाः लोड्करणं निष्फलम्"
 
-#: ../src/file.cpp:328
+#: ../src/file.cpp:325
 msgid "Document not saved yet.  Cannot revert."
 msgstr "लेख्यपत्रं न सञ्चितम्। निवर्तयितुं न शक्यते।"
 
-#: ../src/file.cpp:334
+#: ../src/file.cpp:331
 #, fuzzy
 msgid "Changes will be lost! Are you sure you want to reload document %1?"
 msgstr "परिणामाः नष्टाः भविष्यन्ति! निश्चयेन एतत् लेख्यपत्रं पुनः लोड्कर्तुम् इच्छसि किम् %s?"
 
-#: ../src/file.cpp:360
+#: ../src/file.cpp:357
 msgid "Document reverted."
 msgstr "लेख्यपत्रं निवर्तितम्।"
 
-#: ../src/file.cpp:362
+#: ../src/file.cpp:359
 msgid "Document not reverted."
 msgstr "लेखपत्रं न निवर्तितम्।"
 
-#: ../src/file.cpp:512
+#: ../src/file.cpp:509
 msgid "Select file to open"
 msgstr "उद्घाटयितुं सञ्चिकां वृणु "
 
-#: ../src/file.cpp:594
+#: ../src/file.cpp:591
 #, fuzzy
 msgid "Clean up document"
 msgstr "लेख्यपत्रं सञ्चय "
 
-#: ../src/file.cpp:601
+#: ../src/file.cpp:598
 #, c-format
 msgid "Removed <b>%i</b> unused definition in &lt;defs&gt;."
 msgid_plural "Removed <b>%i</b> unused definitions in &lt;defs&gt;."
 msgstr[0] "अनुपयुक्तलक्षणं <b>%i</b> अपनीतं &lt;defs&gt; मध्ये।"
 msgstr[1] "<b>%i</b> अप्रयुक्त परिभाषाएँ &lt;defs&gt; में हटाया."
 
-#: ../src/file.cpp:606
+#: ../src/file.cpp:603
 msgid "No unused definitions in &lt;defs&gt;."
 msgstr "किमपि अनुपयुक्तलक्षणं न &lt;defs&gt; मध्ये।"
 
-#: ../src/file.cpp:640
+#: ../src/file.cpp:637
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown filename extension."
 msgstr "लेख्यपत्रं (%s) सञ्चयितुं किमपि इङ्क्स्केप् विस्तारणं न दृष्टम्।"
 
-#: ../src/file.cpp:641 ../src/file.cpp:651 ../src/file.cpp:660
-#: ../src/file.cpp:667 ../src/file.cpp:672 ../src/file.cpp:684
-#: ../src/file.cpp:694
+#: ../src/file.cpp:638 ../src/file.cpp:648 ../src/file.cpp:657
+#: ../src/file.cpp:664 ../src/file.cpp:669 ../src/file.cpp:681
+#: ../src/file.cpp:691
 msgid "Document not saved."
 msgstr "लेखपत्रं न सञ्चितम्।"
 
-#: ../src/file.cpp:650
+#: ../src/file.cpp:647
 #, c-format
 msgid ""
 "File %s is write protected. Please remove write protection and try again."
 msgstr "सञ्चिका %s लेखनरक्षिता। कृपया लेखनरक्षणम् अपनीय यतस्व।"
 
-#: ../src/file.cpp:659 ../src/file.cpp:693
+#: ../src/file.cpp:656 ../src/file.cpp:690
 #, c-format
 msgid "File %s could not be saved."
 msgstr "%s सञ्चिकां सञ्चितुं न शक्यते। "
 
-#: ../src/file.cpp:671
+#: ../src/file.cpp:668
 #, c-format
 msgid ""
 "File could not be saved:\n"
 "No object with ID '%s' found."
 msgstr ""
 
-#: ../src/file.cpp:681
+#: ../src/file.cpp:678
 #, c-format
 msgid ""
 "File %s could not be saved.\n"
@@ -9185,51 +9188,51 @@ msgid ""
 "'%s'"
 msgstr ""
 
-#: ../src/file.cpp:716 ../src/file.cpp:718
+#: ../src/file.cpp:713 ../src/file.cpp:715
 msgid "Document saved."
 msgstr "लेख्यपत्रं सञ्चितम्"
 
 #. We are saving for the first time; create a unique default filename
-#: ../src/file.cpp:776 ../src/file.cpp:1466
+#: ../src/file.cpp:773 ../src/file.cpp:1462
 #, fuzzy
 msgid "drawing"
 msgstr "रेखाचित्रं %s"
 
-#: ../src/file.cpp:781
+#: ../src/file.cpp:778
 #, fuzzy
 msgid "drawing-%1"
 msgstr "रेखाचित्रं %s"
 
-#: ../src/file.cpp:798
+#: ../src/file.cpp:795
 msgid "Select file to save a copy to"
 msgstr "कापी सञ्चयितुं सञ्चिकां वृणु "
 
-#: ../src/file.cpp:800
+#: ../src/file.cpp:797
 msgid "Select file to save to"
 msgstr "सञ्चयितुं सञ्चिकां वृणु"
 
-#: ../src/file.cpp:905 ../src/file.cpp:907
+#: ../src/file.cpp:902 ../src/file.cpp:904
 msgid "No changes need to be saved."
 msgstr "किमपि परिवर्तनं न सञ्चितम्।"
 
-#: ../src/file.cpp:926
+#: ../src/file.cpp:923
 msgid "Saving document..."
 msgstr "लेख्यपत्रं सञ्चयति..."
 
-#: ../src/file.cpp:1304 ../src/ui/dialog/inkscape-preferences.cpp:1831
+#: ../src/file.cpp:1300 ../src/ui/dialog/inkscape-preferences.cpp:1831
 #: ../src/ui/dialog/ocaldialogs.cpp:1088
 msgid "Import"
 msgstr "आयानीकुरु"
 
-#: ../src/file.cpp:1354
+#: ../src/file.cpp:1350
 msgid "Select file to import"
 msgstr "आयानाय सञ्चिकां वृणु "
 
-#: ../src/file.cpp:1487
+#: ../src/file.cpp:1483
 msgid "Select file to export to"
 msgstr "निर्याणाय सञ्चिकां वृणु"
 
-#: ../src/file.cpp:1740
+#: ../src/file.cpp:1736
 #, fuzzy
 msgid "Import Clip Art"
 msgstr "आयानं/निर्याणम्"
@@ -9489,7 +9492,7 @@ msgstr "ग्रेडियण्ट् निर्वाहकान् म�
 msgid "Move gradient handle"
 msgstr "ग्रेडियण्ट् निर्वाहकं चेष्टय"
 
-#: ../src/gradient-drag.cpp:1175 ../src/widgets/gradient-vector.cpp:783
+#: ../src/gradient-drag.cpp:1175 ../src/widgets/gradient-vector.cpp:781
 msgid "Delete gradient stop"
 msgstr "ग्रेडियण्ट् रोधं लोपय "
 
@@ -9605,238 +9608,244 @@ msgstr ""
 msgid "GUI: Console only."
 msgstr "वर्णः एव"
 
+#: ../src/inkscape-application.cpp:90
+msgid ""
+"GUI: Close window after processing actions (needed as some verbs require "
+"GUI)."
+msgstr ""
+
 #. Open/Import
-#: ../src/inkscape-application.cpp:92
+#: ../src/inkscape-application.cpp:93
 #, fuzzy
 msgid "Open: PDF page to import"
 msgstr "आयानाय सञ्चिकां वृणु "
 
-#: ../src/inkscape-application.cpp:92
+#: ../src/inkscape-application.cpp:93
 msgid "PAGE"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:93
+#: ../src/inkscape-application.cpp:94
 msgid ""
 "Open: Method used to convert pre-0.92 document dpi, if needed: [none|scale-"
 "viewbox|scale-document]."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:94
+#: ../src/inkscape-application.cpp:95
 msgid "Open: Do not fix pre-0.92 document's text baseline spacing on opening."
 msgstr ""
 
 #. Query - Geometry
-#: ../src/inkscape-application.cpp:97
+#: ../src/inkscape-application.cpp:98
 #, fuzzy
 msgid "Query: ID(s) of object(s) to be queried."
 msgstr "यस्य डैमेन्शन्स् पृष्टानि तस्य वस्तुनः ID"
 
-#: ../src/inkscape-application.cpp:97 ../src/inkscape-application.cpp:106
+#: ../src/inkscape-application.cpp:98 ../src/inkscape-application.cpp:107
 msgid "OBJECT-ID[,OBJECT-ID]*"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:98
+#: ../src/inkscape-application.cpp:99
 msgid "Query: Print bounding boxes of all objects."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:99
+#: ../src/inkscape-application.cpp:100
 #, fuzzy
 msgid "Query: X coordinate of drawing or object (if specified by --query-id)."
 msgstr "आलेखस्य X निर्देशसङ्ख्यां पृच्छ अथवा, निर्दिष्टञ्चेत्, वस्तुनः सह --query-id"
 
-#: ../src/inkscape-application.cpp:100
+#: ../src/inkscape-application.cpp:101
 #, fuzzy
 msgid "Query: Y coordinate of drawing or object (if specified by --query-id)."
 msgstr "आलेखस्य Y निर्देशसङ्ख्यां पृच्छ अथवा, निर्दिष्टञ्चेत्, वस्तुनः सह --query-id"
 
-#: ../src/inkscape-application.cpp:101
+#: ../src/inkscape-application.cpp:102
 #, fuzzy
 msgid "Query: Width of drawing or object (if specified by --query-id)."
 msgstr "आलेखस्य विस्तारं पृच्छ अथवा, निर्दिष्टञ्चेत्, वस्तुनः सह --query-id"
 
-#: ../src/inkscape-application.cpp:102
+#: ../src/inkscape-application.cpp:103
 #, fuzzy
 msgid "Query: Heightof drawing or object (if specified by --query-id)."
 msgstr "आलेखस्य औन्नत्यं पृच्छ अथवा, निर्दिष्टञ्चेत्, वस्तुनः सह --query-id"
 
 #. Processing
-#: ../src/inkscape-application.cpp:105
+#: ../src/inkscape-application.cpp:106
 #, fuzzy
 msgid ""
 "Process: Remove unused definitions from the <defs> section(s) of document."
 msgstr "लेख्यपत्रस्य defs भागात्(भागेभ्यः) अनुपयुक्तलक्षणानि अपनय"
 
-#: ../src/inkscape-application.cpp:106
+#: ../src/inkscape-application.cpp:107
 msgid "Process: Select objects: comma separated list of IDs."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:107
+#: ../src/inkscape-application.cpp:108
 #, fuzzy
 msgid "Process: Verb(s) to call when Inkscape opens."
 msgstr "इङ्क्स्केप् उद्घाटनसमये आह्वयितुं क्रिया।"
 
-#: ../src/inkscape-application.cpp:107
+#: ../src/inkscape-application.cpp:108
 msgid "VERB-ID[;VERB-ID]*"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:108
+#: ../src/inkscape-application.cpp:109
 #, fuzzy
 msgid "Process: Start Inkscape in interactive shell mode."
 msgstr "परस्परशेल् प्रकारे इङ्क्स्केप् प्रारभस्व।"
 
 #. Export - File and File Type
-#: ../src/inkscape-application.cpp:111
+#: ../src/inkscape-application.cpp:112
 msgid "Export: File type:[svg,png,ps,psf,tex,emf,wmf,xaml]"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:112
+#: ../src/inkscape-application.cpp:113
 #, fuzzy
 msgid "Export: File name"
 msgstr "सञ्चिकानाम"
 
-#: ../src/inkscape-application.cpp:112
+#: ../src/inkscape-application.cpp:113
 #, fuzzy
 msgid "EXPORT-FILENAME"
 msgstr "FILENAME "
 
-#: ../src/inkscape-application.cpp:113
+#: ../src/inkscape-application.cpp:114
 msgid "Export: Overwrite input file."
 msgstr ""
 
 #. BSP
 #. B = PNG, S = SVG, P = PS/EPS/PDF
 #. Export - Geometry
-#: ../src/inkscape-application.cpp:117
+#: ../src/inkscape-application.cpp:118
 msgid "Export: Area to export in SVG user units."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:117
+#: ../src/inkscape-application.cpp:118
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
 #. BSP
-#: ../src/inkscape-application.cpp:118
+#: ../src/inkscape-application.cpp:119
 #, fuzzy
 msgid "Export: Area to export is drawing (not page)."
 msgstr "निर्यातक्षेत्रं पूर्णालेखः अस्ति (पृष्ठं न)"
 
 #. BSP
-#: ../src/inkscape-application.cpp:119
+#: ../src/inkscape-application.cpp:120
 #, fuzzy
 msgid "Export: Area to export is page."
 msgstr "निर्याणक्षेत्रं पृष्ठमस्ति"
 
 #. BSP
-#: ../src/inkscape-application.cpp:120
+#: ../src/inkscape-application.cpp:121
 msgid ""
 "Export: Margin around export area: units of page size for SVG, mm for PS/EPS/"
 "PDF."
 msgstr ""
 
 #. xSP
-#: ../src/inkscape-application.cpp:121
+#: ../src/inkscape-application.cpp:122
 #, fuzzy
 msgid ""
 "Export: Snap the bitmap export area outwards to the nearest integer values."
 msgstr "समीपतरपूर्णाङ्कमूल्येभ्यः बहिः बिट्मैप् निर्यातक्षेत्रं स्नैप् कुरु (SVG प्रयोक्त्रङ्काः)"
 
 #. Bxx
-#: ../src/inkscape-application.cpp:122
+#: ../src/inkscape-application.cpp:123
 #, fuzzy
 msgid "Export: Bitmap width in pixels (overrides --export-dpi)."
 msgstr "पिक्सेल्स् मध्ये निर्यातबिट्मैप् विस्तारः (export-dpi अधिलिखति)"
 
-#: ../src/inkscape-application.cpp:122
+#: ../src/inkscape-application.cpp:123
 msgid "WIDTH"
 msgstr "WIDTH"
 
 #. Bxx
-#: ../src/inkscape-application.cpp:123
+#: ../src/inkscape-application.cpp:124
 #, fuzzy
 msgid "Export: Bitmap height in pixels (overrides --export-dpi)."
 msgstr "पिक्सेल्स् मध्ये निर्यातबिट्मैप् विस्तारः (export-dpi अधिलिखति)"
 
-#: ../src/inkscape-application.cpp:123
+#: ../src/inkscape-application.cpp:124
 msgid "HEIGHT"
 msgstr "HEIGHT "
 
 #. Bxx
 #. Export - Options
-#: ../src/inkscape-application.cpp:126
+#: ../src/inkscape-application.cpp:127
 #, fuzzy
 msgid "Export: ID(s) of object(s) to export."
 msgstr "निर्याणाय वस्तुनः ID"
 
-#: ../src/inkscape-application.cpp:126
+#: ../src/inkscape-application.cpp:127
 msgid "OBJECT-ID[;OBJECT-ID]*"
 msgstr ""
 
 #. BSP
-#: ../src/inkscape-application.cpp:127
+#: ../src/inkscape-application.cpp:128
 #, fuzzy
 msgid "Export: Hide all objects except object with ID selected by export-id."
 msgstr "निर्यातचित्रे, वृतानि विहाय सर्वाणि वस्तूनि तिरोधत्स्व"
 
 #. BSx
-#: ../src/inkscape-application.cpp:128
+#: ../src/inkscape-application.cpp:129
 msgid "Export: Remove items in the Inkscape namespace."
 msgstr ""
 
 #. xSx
-#: ../src/inkscape-application.cpp:129
+#: ../src/inkscape-application.cpp:130
 #, fuzzy
 msgid ""
 "Export: Resolution for rasterization bitmaps and filters (default is 96)."
 msgstr ""
 "PS/EPS/PDF मध्ये बिट्मैप् प्रति निर्याणाय तथा फिल्टर्स् रास्टरैसेशन् कृते विश्लेषणम् (मूलभूतम् 90)"
 
-#: ../src/inkscape-application.cpp:129
+#: ../src/inkscape-application.cpp:130
 #: ../src/ui/widget/rendering-options.cpp:34
 msgid "DPI"
 msgstr "DPI"
 
 #. BxP
-#: ../src/inkscape-application.cpp:130
+#: ../src/inkscape-application.cpp:131
 #, fuzzy
 msgid ""
 "Export: Render objects without filters instead of rasterizing. (PS/EPS/PDF)"
 msgstr "रास्टरैसिङ् स्थाने, फिल्टर्स् विना फिल्टर्कृतवस्तूनि आलिख (PS, EPS, PDF)"
 
 #. xxP
-#: ../src/inkscape-application.cpp:131
+#: ../src/inkscape-application.cpp:132
 #, fuzzy
 msgid "Export: Convert text to paths. (PS/EPS/PDF/SVG)."
 msgstr "निर्याणे विषयवस्तु मार्गानिव विकारय (PS, EPS, PDF)"
 
 #. xxP
-#: ../src/inkscape-application.cpp:132
+#: ../src/inkscape-application.cpp:133
 msgid "Export: Postscript level (2 or 3). Default is 3."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:132
+#: ../src/inkscape-application.cpp:133
 #, fuzzy
 msgid "PS-Level"
 msgstr "स्तरः "
 
 #. xxP
-#: ../src/inkscape-application.cpp:133
+#: ../src/inkscape-application.cpp:134
 msgid "Export: PDF level (1.4 or 1.5)"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:133
+#: ../src/inkscape-application.cpp:134
 #, fuzzy
 msgid "PDF-Level"
 msgstr "स्तरः "
 
 #. xxP
-#: ../src/inkscape-application.cpp:134
+#: ../src/inkscape-application.cpp:135
 msgid ""
 "Export: Export text separately to LaTeX file (PS/EPS/PDF). Include via "
 "\\input{file.tex}"
 msgstr ""
 
 #. xxP
-#: ../src/inkscape-application.cpp:135
+#: ../src/inkscape-application.cpp:136
 #, fuzzy
 msgid ""
 "Export: Use stored filename and DPI hints when exporting object selected by "
@@ -9844,45 +9853,45 @@ msgid ""
 msgstr "निर्याणसमये सञ्चितसञ्चिकानाम DPI टिप्पणीः च उपयोजय (export-id सह एव)"
 
 #. Bxx
-#: ../src/inkscape-application.cpp:136
+#: ../src/inkscape-application.cpp:137
 #, fuzzy
 msgid "Export: Background color for exported bitmaps (any SVG color string)."
 msgstr "निर्याणीकृतबिट्मैप् पृष्ठपटलवर्णः (किमपि SVG समर्थितवर्णस्ट्रिङ्ग्) "
 
-#: ../src/inkscape-application.cpp:136
+#: ../src/inkscape-application.cpp:137
 msgid "COLOR"
 msgstr "COLOR"
 
 #. Bxx
-#: ../src/inkscape-application.cpp:137
+#: ../src/inkscape-application.cpp:138
 #, fuzzy
 msgid ""
 "Export: Background opacity for exported bitmaps (either 0.0 to 1.0 or 1 to "
 "255)."
 msgstr "निर्यातबिट्मैप् पृष्ठपटलापारदर्शिता (0.0 तः 1.0, अथवा 1 तः 255)"
 
-#: ../src/inkscape-application.cpp:137
+#: ../src/inkscape-application.cpp:138
 msgid "VALUE"
 msgstr "VALUE"
 
-#: ../src/inkscape-application.cpp:140
+#: ../src/inkscape-application.cpp:141
 msgid "Process: xverb command file."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:140
+#: ../src/inkscape-application.cpp:141
 #, fuzzy
 msgid "XVERBS-FILENAME"
 msgstr "FILENAME "
 
-#: ../src/inkscape-application.cpp:144
+#: ../src/inkscape-application.cpp:145
 msgid "D-Bus: Enter a listening loop for D-Bus messages in console mode."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:145
+#: ../src/inkscape-application.cpp:146
 msgid "D-Bus: Specify the D-Bus name (default is 'org.inkscape')."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:145
+#: ../src/inkscape-application.cpp:146
 msgid "BUS-NAME"
 msgstr ""
 
@@ -10393,7 +10402,7 @@ msgstr "आदिममार्गं नमयितुं मार्गः"
 
 #: ../src/live_effects/lpe-bendpath.cpp:61
 #: ../src/live_effects/lpe-patternalongpath.cpp:76
-#: ../src/ui/dialog/export.cpp:259 ../src/ui/dialog/transformation.cpp:68
+#: ../src/ui/dialog/export.cpp:258 ../src/ui/dialog/transformation.cpp:68
 #: ../src/ui/widget/page-sizer.cpp:48
 msgid "_Width:"
 msgstr "विस्तारः : (_W)"
@@ -12163,7 +12172,7 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:276
-#: ../src/ui/dialog/find.cpp:80
+#: ../src/ui/dialog/find.cpp:78
 #, fuzzy
 msgid "General"
 msgstr "<b>सामान्यम्</b> "
@@ -13745,16 +13754,6 @@ msgstr "वेक्टर् पैरामीटर् परिणम "
 msgid "Change unit parameter"
 msgstr "अङ्कपैरामीटर् परिणम "
 
-#: ../src/main-cmdlineact.cpp:71
-#, c-format
-msgid "Unable to find verb ID '%s' specified on the command line.\n"
-msgstr "कमाण्ड् रेखायां निर्दष्टं क्रिया ID '%s' अन्वेषयितुं न शक्यते।\n"
-
-#: ../src/main-cmdlineact.cpp:82 ../src/main-cmdlinexact.cpp:268
-#, c-format
-msgid "Unable to find node ID: '%s'\n"
-msgstr "नोडे ID अन्वेषयितुं न शक्यते : '%s'\n"
-
 #. ## Add a menu for clear()
 #: ../src/menus-skeleton.h:23 ../src/ui/dialog/debug.cpp:71
 #: ../share/ui/menus.xml.h:1
@@ -14210,7 +14209,7 @@ msgstr "मार्गविपर्यासं करोति"
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "वरणे विपर्यासं कर्तुं <b>मार्गाः न</b> सन्ति।"
 
-#: ../src/preferences.cpp:142
+#: ../src/preferences.cpp:138
 msgid ""
 "Inkscape will run with default settings, and new settings will not be saved. "
 msgstr "मूलभूतनिर्धारणैः इङ्क्स्केप् चलिष्यति, नूतननिर्धारणानि सञ्चितानि न भविष्यन्ति।"
@@ -14218,7 +14217,7 @@ msgstr "मूलभूतनिर्धारणैः इङ्क्स्�
 #. the creation failed
 #. _reportError(Glib::ustring::compose(_("Cannot create profile directory %1."),
 #. Glib::filename_to_utf8(_prefs_dir)), not_saved);
-#: ../src/preferences.cpp:158
+#: ../src/preferences.cpp:154
 #, c-format
 msgid "Cannot create profile directory %s."
 msgstr "%s प्रोफैल्कोशम् उत्पादयितुम् न शक्यते।"
@@ -14226,7 +14225,7 @@ msgstr "%s प्रोफैल्कोशम् उत्पादयित�
 #. The profile dir is not actually a directory
 #. _reportError(Glib::ustring::compose(_("%1 is not a valid directory."),
 #. Glib::filename_to_utf8(_prefs_dir)), not_saved);
-#: ../src/preferences.cpp:176
+#: ../src/preferences.cpp:163
 #, c-format
 msgid "%s is not a valid directory."
 msgstr "%s सिद्धकोशः नास्ति।"
@@ -14234,30 +14233,40 @@ msgstr "%s सिद्धकोशः नास्ति।"
 #. The write failed.
 #. _reportError(Glib::ustring::compose(_("Failed to create the preferences file %1."),
 #. Glib::filename_to_utf8(_prefs_filename)), not_saved);
-#: ../src/preferences.cpp:186
+#: ../src/preferences.cpp:182
 #, c-format
 msgid "Failed to create the preferences file %s."
 msgstr "%s ऐच्छिकासञ्चिकायाः उत्पादनं निष्फलम्।"
 
-#: ../src/preferences.cpp:222
+#: ../src/preferences.cpp:218
 #, c-format
 msgid "The preferences file %s is not a regular file."
 msgstr "%s ऐच्छिकासञ्चिका नियमितसञ्चिका नास्ति। "
 
-#: ../src/preferences.cpp:232
+#: ../src/preferences.cpp:228
 #, c-format
 msgid "The preferences file %s could not be read."
 msgstr "%s ऐच्छिकासञ्चिकां पठितुं न शक्यते।"
 
-#: ../src/preferences.cpp:243
+#: ../src/preferences.cpp:239
 #, c-format
 msgid "The preferences file %s is not a valid XML document."
 msgstr "%s ऐच्छिकासञ्चिका सिद्धं XML लेख्यपत्रं नास्ति।"
 
-#: ../src/preferences.cpp:252
+#: ../src/preferences.cpp:248
 #, c-format
 msgid "The file %s is not a valid Inkscape preferences file."
 msgstr "%s सञ्चिका सिद्धा इङ्क्स्केप् ऐच्छिकासञ्चिका नास्ति। "
+
+#: ../src/preferences.cpp:298
+#, fuzzy
+msgid "Preferences file was deleted."
+msgstr "%s ऐच्छिकासञ्चिकां पठितुं न शक्यते।"
+
+#: ../src/preferences.cpp:299
+#, fuzzy
+msgid "There was an error trying to delete the preferences file."
+msgstr "%s ऐच्छिकासञ्चिकायाः उत्पादनं निष्फलम्।"
 
 #: ../src/rdf.cpp:178
 msgid "CC Attribution"
@@ -14715,7 +14724,7 @@ msgstr "पिक्सेल्स् द्वारा तिर्यग्�
 msgid "The selection has no applied path effect."
 msgstr "वरणे प्रयुक्तमार्गप्रभावः नास्ति।"
 
-#: ../src/selection-chemistry.cpp:2605 ../src/ui/dialog/clonetiler.cpp:2064
+#: ../src/selection-chemistry.cpp:2605 ../src/ui/dialog/clonetiler.cpp:2063
 msgid "Select an <b>object</b> to clone."
 msgstr "क्लोन् कर्तुं <b>वस्तु</b> वृणु।"
 
@@ -15095,8 +15104,8 @@ msgstr ""
 "<b>चेष्टय</b> %s, %s इत्यनेन; <b>Ctrl</b> सह तिर्यग्रूपं/ऋजुरूपं प्रति निर्बन्धयितुं; "
 "<b>Shift</b> सह स्नैप्पिङ् निष्प्रकारयितुम्"
 
-#: ../src/shortcuts.cpp:410 ../src/ui/dialog/export.cpp:1299
-#: ../src/ui/dialog/export.cpp:1329
+#: ../src/shortcuts.cpp:410 ../src/ui/dialog/export.cpp:1298
+#: ../src/ui/dialog/export.cpp:1328
 msgid "Select a filename for exporting"
 msgstr "निर्याणाय सञ्चिकानाम वृणु"
 
@@ -15705,7 +15714,7 @@ msgid "Rearrange"
 msgstr "पुनर्व्यवस्थापय"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:925
-#: ../src/widgets/toolbox.cpp:1303
+#: ../src/widgets/toolbox.cpp:1364
 msgid "Nodes"
 msgstr "नोड्स् "
 
@@ -15971,7 +15980,7 @@ msgid "_Delete"
 msgstr "लोपय (_D)"
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:60
-#: ../src/ui/dialog/export.cpp:1303
+#: ../src/ui/dialog/export.cpp:1302
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:982
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1538
 #: ../src/ui/dialog/input.cpp:912 ../src/verbs.cpp:2600
@@ -15984,617 +15993,617 @@ msgstr "सञ्चय (_S)"
 msgid "Add profile"
 msgstr "फिल्टर् सङ्कलय"
 
-#: ../src/ui/dialog/clonetiler.cpp:100
+#: ../src/ui/dialog/clonetiler.cpp:99
 msgid "_Symmetry"
 msgstr "सुविभक्तता(_S)"
 
 #. TRANSLATORS: "translation" means "shift" / "displacement" here.
-#: ../src/ui/dialog/clonetiler.cpp:112
+#: ../src/ui/dialog/clonetiler.cpp:111
 msgid "<b>P1</b>: simple translation"
 msgstr "<b>P1</b>: सामान्यानुवादः"
 
-#: ../src/ui/dialog/clonetiler.cpp:113
+#: ../src/ui/dialog/clonetiler.cpp:112
 msgid "<b>P2</b>: 180&#176; rotation"
 msgstr "<b>P2</b>: 180&#176; परिवर्तनम् "
 
-#: ../src/ui/dialog/clonetiler.cpp:114
+#: ../src/ui/dialog/clonetiler.cpp:113
 msgid "<b>PM</b>: reflection"
 msgstr "<b>PM</b>: प्रतिबिम्बम्"
 
 #. TRANSLATORS: "glide reflection" is a reflection and a translation combined.
 #. For more info, see http://mathforum.org/sum95/suzanne/symsusan.html
-#: ../src/ui/dialog/clonetiler.cpp:117
+#: ../src/ui/dialog/clonetiler.cpp:116
 msgid "<b>PG</b>: glide reflection"
 msgstr "<b>PG</b>: सर्पणप्रतिबिम्बम्"
 
-#: ../src/ui/dialog/clonetiler.cpp:118
+#: ../src/ui/dialog/clonetiler.cpp:117
 msgid "<b>CM</b>: reflection + glide reflection"
 msgstr "<b>CM</b>: प्रतिबिम्बम् + सर्पणप्रतिबिम्बम्"
 
-#: ../src/ui/dialog/clonetiler.cpp:119
+#: ../src/ui/dialog/clonetiler.cpp:118
 msgid "<b>PMM</b>: reflection + reflection"
 msgstr "<b>PMM</b>: प्रतिबिम्बम् + प्रतिबिम्बम्"
 
-#: ../src/ui/dialog/clonetiler.cpp:120
+#: ../src/ui/dialog/clonetiler.cpp:119
 msgid "<b>PMG</b>: reflection + 180&#176; rotation"
 msgstr "<b>PMG</b>: प्रतिबिम्बम् + 180&#176; परिवर्तनम् "
 
-#: ../src/ui/dialog/clonetiler.cpp:121
+#: ../src/ui/dialog/clonetiler.cpp:120
 msgid "<b>PGG</b>: glide reflection + 180&#176; rotation"
 msgstr "<b>PGG</b>: सर्पणप्रतिबिम्बम् + 180&#176; परिवर्तनम् "
 
-#: ../src/ui/dialog/clonetiler.cpp:122
+#: ../src/ui/dialog/clonetiler.cpp:121
 msgid "<b>CMM</b>: reflection + reflection + 180&#176; rotation"
 msgstr "<b>CMM</b>: प्रतिबिम्बम् + प्रतिबिम्बम् + 180&#176; परिवर्तनम् "
 
-#: ../src/ui/dialog/clonetiler.cpp:123
+#: ../src/ui/dialog/clonetiler.cpp:122
 msgid "<b>P4</b>: 90&#176; rotation"
 msgstr "<b>P4</b>: 90&#176; परिवर्तनम् "
 
-#: ../src/ui/dialog/clonetiler.cpp:124
+#: ../src/ui/dialog/clonetiler.cpp:123
 msgid "<b>P4M</b>: 90&#176; rotation + 45&#176; reflection"
 msgstr "<b>P4M</b>: 90&#176; परिवर्तनम् + 45&#176; प्रतिबिम्बम् "
 
-#: ../src/ui/dialog/clonetiler.cpp:125
+#: ../src/ui/dialog/clonetiler.cpp:124
 msgid "<b>P4G</b>: 90&#176; rotation + 90&#176; reflection"
 msgstr "<b>P4G</b>: 90&#176; परिवर्तनम् + 90&#176; प्रतिबिम्बम् "
 
-#: ../src/ui/dialog/clonetiler.cpp:126
+#: ../src/ui/dialog/clonetiler.cpp:125
 msgid "<b>P3</b>: 120&#176; rotation"
 msgstr "<b>P3</b>: 120&#176; परिवर्तनम् "
 
-#: ../src/ui/dialog/clonetiler.cpp:127
+#: ../src/ui/dialog/clonetiler.cpp:126
 msgid "<b>P31M</b>: reflection + 120&#176; rotation, dense"
 msgstr "<b>P31M</b>: प्रतिबिम्बम् + 120&#176; परिवर्तनम्, घनम् "
 
-#: ../src/ui/dialog/clonetiler.cpp:128
+#: ../src/ui/dialog/clonetiler.cpp:127
 msgid "<b>P3M1</b>: reflection + 120&#176; rotation, sparse"
 msgstr "<b>P3M1</b>: प्रतिबिम्बम् + 120&#176; परिवर्तनम्, विरलम् "
 
-#: ../src/ui/dialog/clonetiler.cpp:129
+#: ../src/ui/dialog/clonetiler.cpp:128
 msgid "<b>P6</b>: 60&#176; rotation"
 msgstr "<b>P6</b>: 60&#176; परिवर्तनम् "
 
-#: ../src/ui/dialog/clonetiler.cpp:130
+#: ../src/ui/dialog/clonetiler.cpp:129
 msgid "<b>P6M</b>: reflection + 60&#176; rotation"
 msgstr "<b>P6M</b>: प्रतिबिम्बम् + 60&#176; परिवर्तनम् "
 
-#: ../src/ui/dialog/clonetiler.cpp:137
+#: ../src/ui/dialog/clonetiler.cpp:136
 msgid "Select one of the 17 symmetry groups for the tiling"
 msgstr "टैलिङ् कृते 17 सुविभक्तसमूहेषु एकं वृणु"
 
-#: ../src/ui/dialog/clonetiler.cpp:160
+#: ../src/ui/dialog/clonetiler.cpp:159
 msgid "S_hift"
 msgstr "स्थानान्तरं कुरु(_h)"
 
 #. TRANSLATORS: "shift" means: the tiles will be shifted (offset) horizontally by this amount
-#: ../src/ui/dialog/clonetiler.cpp:170
+#: ../src/ui/dialog/clonetiler.cpp:169
 #, no-c-format
 msgid "<b>Shift X:</b>"
 msgstr "<b>स्थानान्तरं कुरु X:</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:178
+#: ../src/ui/dialog/clonetiler.cpp:177
 #, no-c-format
 msgid "Horizontal shift per row (in % of tile width)"
 msgstr "तिर्यग्रूपशिफ्ट् प्रतिपङ्क्ति (टैल् विस्तरस्य %)"
 
-#: ../src/ui/dialog/clonetiler.cpp:186
+#: ../src/ui/dialog/clonetiler.cpp:185
 #, no-c-format
 msgid "Horizontal shift per column (in % of tile width)"
 msgstr "तिर्यग्रूपशिफ्ट् प्रतिस्तम्भं (टैल् विस्तरस्य %)"
 
-#: ../src/ui/dialog/clonetiler.cpp:192
+#: ../src/ui/dialog/clonetiler.cpp:191
 msgid "Randomize the horizontal shift by this percentage"
 msgstr "अनेन प्रतिशतेन तिर्यग्रूपशिफ्ट् यादृच्छिकं कुरु"
 
 #. TRANSLATORS: "shift" means: the tiles will be shifted (offset) vertically by this amount
-#: ../src/ui/dialog/clonetiler.cpp:202
+#: ../src/ui/dialog/clonetiler.cpp:201
 #, no-c-format
 msgid "<b>Shift Y:</b>"
 msgstr "<b>स्थानान्तरं कुरु Y:</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:210
+#: ../src/ui/dialog/clonetiler.cpp:209
 #, no-c-format
 msgid "Vertical shift per row (in % of tile height)"
 msgstr "ऋजुरूपशिफ्ट् प्रतिपङ्क्ति (टैल् औन्नत्यस्य %)"
 
-#: ../src/ui/dialog/clonetiler.cpp:218
+#: ../src/ui/dialog/clonetiler.cpp:217
 #, no-c-format
 msgid "Vertical shift per column (in % of tile height)"
 msgstr "ऋजुरूपशिफ्ट् प्रतिस्तम्भं (टैल् औन्नत्यस्य %)"
 
-#: ../src/ui/dialog/clonetiler.cpp:225
+#: ../src/ui/dialog/clonetiler.cpp:224
 msgid "Randomize the vertical shift by this percentage"
 msgstr "अनेन प्रतिशतेन ऋजुरूपशिफ्ट् यादृच्छिकं कुरु"
 
-#: ../src/ui/dialog/clonetiler.cpp:233 ../src/ui/dialog/clonetiler.cpp:379
+#: ../src/ui/dialog/clonetiler.cpp:232 ../src/ui/dialog/clonetiler.cpp:378
 msgid "<b>Exponent:</b>"
 msgstr "<b> घाताङ्की :</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:240
+#: ../src/ui/dialog/clonetiler.cpp:239
 msgid "Whether rows are spaced evenly (1), converge (<1) or diverge (>1)"
 msgstr "पङ्क्तयः समतया (1) वर्तन्ते अथवा, केन्द्रीभवन्ति (<1) अथवा विकीर्णानि सन्ति (>1) "
 
-#: ../src/ui/dialog/clonetiler.cpp:247
+#: ../src/ui/dialog/clonetiler.cpp:246
 msgid "Whether columns are spaced evenly (1), converge (<1) or diverge (>1)"
 msgstr "स्तम्भाः समतया (1) वर्तन्ते अथवा, केन्द्रीभवन्ति (<1) अथवा विकीर्णानि सन्ति (>1)"
 
 #. TRANSLATORS: "Alternate" is a verb here
-#: ../src/ui/dialog/clonetiler.cpp:255 ../src/ui/dialog/clonetiler.cpp:419
-#: ../src/ui/dialog/clonetiler.cpp:495 ../src/ui/dialog/clonetiler.cpp:568
-#: ../src/ui/dialog/clonetiler.cpp:614 ../src/ui/dialog/clonetiler.cpp:737
+#: ../src/ui/dialog/clonetiler.cpp:254 ../src/ui/dialog/clonetiler.cpp:418
+#: ../src/ui/dialog/clonetiler.cpp:494 ../src/ui/dialog/clonetiler.cpp:567
+#: ../src/ui/dialog/clonetiler.cpp:613 ../src/ui/dialog/clonetiler.cpp:736
 msgid "<small>Alternate:</small>"
 msgstr "<small>विकल्पय :</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:261
+#: ../src/ui/dialog/clonetiler.cpp:260
 msgid "Alternate the sign of shifts for each row"
 msgstr "प्रतिपङ्क्तये शिफ्ट्स् चिह्नं विकल्पय"
 
-#: ../src/ui/dialog/clonetiler.cpp:266
+#: ../src/ui/dialog/clonetiler.cpp:265
 msgid "Alternate the sign of shifts for each column"
 msgstr "प्रतिस्तम्भाय शिफ्ट्स् चिह्नं विकल्पय"
 
 #. TRANSLATORS: "Cumulate" is a verb here
-#: ../src/ui/dialog/clonetiler.cpp:273 ../src/ui/dialog/clonetiler.cpp:437
-#: ../src/ui/dialog/clonetiler.cpp:513
+#: ../src/ui/dialog/clonetiler.cpp:272 ../src/ui/dialog/clonetiler.cpp:436
+#: ../src/ui/dialog/clonetiler.cpp:512
 msgid "<small>Cumulate:</small>"
 msgstr "<small>योजय:</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:279
+#: ../src/ui/dialog/clonetiler.cpp:278
 msgid "Cumulate the shifts for each row"
 msgstr "प्रतिपङ्क्तये शिफ्ट्स् योजय"
 
-#: ../src/ui/dialog/clonetiler.cpp:284
+#: ../src/ui/dialog/clonetiler.cpp:283
 msgid "Cumulate the shifts for each column"
 msgstr "प्रतिस्तम्भाय शिफ्ट्स् योजय"
 
 #. TRANSLATORS: "Cumulate" is a verb here
-#: ../src/ui/dialog/clonetiler.cpp:291
+#: ../src/ui/dialog/clonetiler.cpp:290
 msgid "<small>Exclude tile:</small>"
 msgstr "<small>टैल् वारय :</small> "
 
-#: ../src/ui/dialog/clonetiler.cpp:297
+#: ../src/ui/dialog/clonetiler.cpp:296
 msgid "Exclude tile height in shift"
 msgstr "शिफ्ट् मध्ये टैल् औन्नत्यं वारय"
 
-#: ../src/ui/dialog/clonetiler.cpp:302
+#: ../src/ui/dialog/clonetiler.cpp:301
 msgid "Exclude tile width in shift"
 msgstr "शिफ्ट् मध्ये टैल् विस्तारं वारय"
 
-#: ../src/ui/dialog/clonetiler.cpp:311
+#: ../src/ui/dialog/clonetiler.cpp:310
 msgid "Sc_ale"
 msgstr "मापय(_a)"
 
-#: ../src/ui/dialog/clonetiler.cpp:319
+#: ../src/ui/dialog/clonetiler.cpp:318
 msgid "<b>Scale X:</b>"
 msgstr "<b>मापय X:</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:327
+#: ../src/ui/dialog/clonetiler.cpp:326
 #, no-c-format
 msgid "Horizontal scale per row (in % of tile width)"
 msgstr "तिर्यग्रूपमापकः प्रतिपङ्क्ति (टैल् विस्तरस्य %)"
 
-#: ../src/ui/dialog/clonetiler.cpp:335
+#: ../src/ui/dialog/clonetiler.cpp:334
 #, no-c-format
 msgid "Horizontal scale per column (in % of tile width)"
 msgstr "तिर्यग्रूपमापकः प्रतिस्तम्भं (टैल् विस्तरस्य %)"
 
-#: ../src/ui/dialog/clonetiler.cpp:341
+#: ../src/ui/dialog/clonetiler.cpp:340
 msgid "Randomize the horizontal scale by this percentage"
 msgstr "अनेन प्रतिशतेन तिर्यग्रूपमापकं यादृच्छिकं कुरु"
 
-#: ../src/ui/dialog/clonetiler.cpp:349
+#: ../src/ui/dialog/clonetiler.cpp:348
 msgid "<b>Scale Y:</b>"
 msgstr "<b>मापय Y:</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:357
+#: ../src/ui/dialog/clonetiler.cpp:356
 #, no-c-format
 msgid "Vertical scale per row (in % of tile height)"
 msgstr "ऋजुरूपमापकः प्रतिपङ्क्ति (टैल् औन्नत्यस्य %)"
 
-#: ../src/ui/dialog/clonetiler.cpp:365
+#: ../src/ui/dialog/clonetiler.cpp:364
 #, no-c-format
 msgid "Vertical scale per column (in % of tile height)"
 msgstr "ऋजुरूपमापकः प्रतिस्तम्भं (टैल् औन्नत्यस्य %)"
 
-#: ../src/ui/dialog/clonetiler.cpp:371
+#: ../src/ui/dialog/clonetiler.cpp:370
 msgid "Randomize the vertical scale by this percentage"
 msgstr "अनेन प्रतिशतेन ऋजुरूपमापकं यादृच्छिकं कुरु"
 
-#: ../src/ui/dialog/clonetiler.cpp:385
+#: ../src/ui/dialog/clonetiler.cpp:384
 msgid "Whether row scaling is uniform (1), converge (<1) or diverge (>1)"
 msgstr "पङ्क्तिमापनं समतया (1) वर्तते अथवा, केन्द्रीभवति (<1) अथवा विकीर्णं अस्ति (>1) "
 
-#: ../src/ui/dialog/clonetiler.cpp:391
+#: ../src/ui/dialog/clonetiler.cpp:390
 msgid "Whether column scaling is uniform (1), converge (<1) or diverge (>1)"
 msgstr "स्तम्भमापनं समतया (1) वर्तते अथवा, केन्द्रीभवति (<1) अथवा विकीर्णं अस्ति (>1)"
 
-#: ../src/ui/dialog/clonetiler.cpp:399
+#: ../src/ui/dialog/clonetiler.cpp:398
 msgid "<b>Base:</b>"
 msgstr "<b>आधारः :</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:405 ../src/ui/dialog/clonetiler.cpp:411
+#: ../src/ui/dialog/clonetiler.cpp:404 ../src/ui/dialog/clonetiler.cpp:410
 msgid ""
 "Base for a logarithmic spiral: not used (0), converge (<1), or diverge (>1)"
 msgstr ""
 "लोगरिथमिक् स्पैरल् कृते आधारः अनुपयुक्तः (0), केन्द्रीभवति (<1) अथवा विकीर्णं अस्ति (>1)"
 
-#: ../src/ui/dialog/clonetiler.cpp:425
+#: ../src/ui/dialog/clonetiler.cpp:424
 msgid "Alternate the sign of scales for each row"
 msgstr "प्रतिपङ्क्तये मापकानां चिह्नं विकल्पय"
 
-#: ../src/ui/dialog/clonetiler.cpp:430
+#: ../src/ui/dialog/clonetiler.cpp:429
 msgid "Alternate the sign of scales for each column"
 msgstr "प्रतिस्तम्भाय मापकानां चिह्नं विकल्पय"
 
-#: ../src/ui/dialog/clonetiler.cpp:443
+#: ../src/ui/dialog/clonetiler.cpp:442
 msgid "Cumulate the scales for each row"
 msgstr "प्रतिपङ्क्तये मापकान् योजय"
 
-#: ../src/ui/dialog/clonetiler.cpp:448
+#: ../src/ui/dialog/clonetiler.cpp:447
 msgid "Cumulate the scales for each column"
 msgstr "प्रतिस्तम्भाय मापकान् योजय"
 
-#: ../src/ui/dialog/clonetiler.cpp:457
+#: ../src/ui/dialog/clonetiler.cpp:456
 msgid "_Rotation"
 msgstr "परिवर्तनम्(_R)"
 
-#: ../src/ui/dialog/clonetiler.cpp:465
+#: ../src/ui/dialog/clonetiler.cpp:464
 msgid "<b>Angle:</b>"
 msgstr "<b>कोणः :</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:473
+#: ../src/ui/dialog/clonetiler.cpp:472
 #, no-c-format
 msgid "Rotate tiles by this angle for each row"
 msgstr "प्रतिपङ्क्तये अनेन कोणेन टैल्स् परिवर्तय"
 
-#: ../src/ui/dialog/clonetiler.cpp:481
+#: ../src/ui/dialog/clonetiler.cpp:480
 #, no-c-format
 msgid "Rotate tiles by this angle for each column"
 msgstr "प्रतिस्तम्भाय अनेन कोणेन टैल्स् परिवर्तय"
 
-#: ../src/ui/dialog/clonetiler.cpp:487
+#: ../src/ui/dialog/clonetiler.cpp:486
 msgid "Randomize the rotation angle by this percentage"
 msgstr "अनेन प्रतिशतेन परिवर्तनकोणं यादृच्छिकं कुरु"
 
-#: ../src/ui/dialog/clonetiler.cpp:501
+#: ../src/ui/dialog/clonetiler.cpp:500
 msgid "Alternate the rotation direction for each row"
 msgstr "प्रतिपङ्क्तये परिवर्तनदिक् विकल्पय"
 
-#: ../src/ui/dialog/clonetiler.cpp:506
+#: ../src/ui/dialog/clonetiler.cpp:505
 msgid "Alternate the rotation direction for each column"
 msgstr "प्रतिस्तम्भाय परिवर्तनदिक् विकल्पय"
 
-#: ../src/ui/dialog/clonetiler.cpp:519
+#: ../src/ui/dialog/clonetiler.cpp:518
 msgid "Cumulate the rotation for each row"
 msgstr "प्रतिपङ्क्तये परिवर्तनं योजय"
 
-#: ../src/ui/dialog/clonetiler.cpp:524
+#: ../src/ui/dialog/clonetiler.cpp:523
 msgid "Cumulate the rotation for each column"
 msgstr "प्रतिस्तम्भाय परिवर्तनं योजय"
 
-#: ../src/ui/dialog/clonetiler.cpp:533
+#: ../src/ui/dialog/clonetiler.cpp:532
 msgid "_Blur & opacity"
 msgstr "अस्पष्टता अपारदर्शिता च(_B)"
 
-#: ../src/ui/dialog/clonetiler.cpp:542
+#: ../src/ui/dialog/clonetiler.cpp:541
 msgid "<b>Blur:</b>"
 msgstr "<b>अस्पष्टता :</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:548
+#: ../src/ui/dialog/clonetiler.cpp:547
 msgid "Blur tiles by this percentage for each row"
 msgstr "प्रतिपङ्क्तये अनेन प्रतिशतेन टैल्स् अस्पष्टीकुरु"
 
-#: ../src/ui/dialog/clonetiler.cpp:554
+#: ../src/ui/dialog/clonetiler.cpp:553
 msgid "Blur tiles by this percentage for each column"
 msgstr "प्रतिस्तम्भाय अनेन प्रतिशतेन टैल्स् अस्पष्टीकुरु"
 
-#: ../src/ui/dialog/clonetiler.cpp:560
+#: ../src/ui/dialog/clonetiler.cpp:559
 msgid "Randomize the tile blur by this percentage"
 msgstr "अनेन प्रतिशतेन टैल् यादृच्छिकं कुरु"
 
-#: ../src/ui/dialog/clonetiler.cpp:574
+#: ../src/ui/dialog/clonetiler.cpp:573
 msgid "Alternate the sign of blur change for each row"
 msgstr "प्रतिपङ्क्तये अस्पष्टतापरिणामचिह्नं विकल्पय"
 
-#: ../src/ui/dialog/clonetiler.cpp:579
+#: ../src/ui/dialog/clonetiler.cpp:578
 msgid "Alternate the sign of blur change for each column"
 msgstr "प्रतिस्तम्भाय अस्पष्टतापरिणामचिह्नं विकल्पय"
 
-#: ../src/ui/dialog/clonetiler.cpp:588
+#: ../src/ui/dialog/clonetiler.cpp:587
 #, fuzzy
 msgid "<b>Opacity:</b>"
 msgstr "अपारदर्शिता : "
 
-#: ../src/ui/dialog/clonetiler.cpp:594
+#: ../src/ui/dialog/clonetiler.cpp:593
 msgid "Decrease tile opacity by this percentage for each row"
 msgstr "प्रतिपङ्क्तये अनेन प्रतिशतेन टैल् अपारदर्शितां न्यूनीकुरु"
 
-#: ../src/ui/dialog/clonetiler.cpp:600
+#: ../src/ui/dialog/clonetiler.cpp:599
 msgid "Decrease tile opacity by this percentage for each column"
 msgstr "प्रतिस्तम्भाय अनेन प्रतिशतेन टैल् अपारदर्शितां न्यूनीकुरु"
 
-#: ../src/ui/dialog/clonetiler.cpp:606
+#: ../src/ui/dialog/clonetiler.cpp:605
 msgid "Randomize the tile opacity by this percentage"
 msgstr "अनेन प्रतिशतेन टैल् अपारदर्शितां यादृच्छिकं कुरु"
 
-#: ../src/ui/dialog/clonetiler.cpp:620
+#: ../src/ui/dialog/clonetiler.cpp:619
 msgid "Alternate the sign of opacity change for each row"
 msgstr "प्रतिपङ्क्तये अपारदर्शितापरिणामचिह्नं विकल्पय"
 
-#: ../src/ui/dialog/clonetiler.cpp:625
+#: ../src/ui/dialog/clonetiler.cpp:624
 msgid "Alternate the sign of opacity change for each column"
 msgstr "प्रतिस्तम्भाय अपारदर्शितापरिणामचिह्नं विकल्पय"
 
-#: ../src/ui/dialog/clonetiler.cpp:633
+#: ../src/ui/dialog/clonetiler.cpp:632
 msgid "Co_lor"
 msgstr "वर्णः (_l)"
 
-#: ../src/ui/dialog/clonetiler.cpp:639
+#: ../src/ui/dialog/clonetiler.cpp:638
 msgid "Initial color: "
 msgstr "आदिमवर्णः :"
 
-#: ../src/ui/dialog/clonetiler.cpp:643
+#: ../src/ui/dialog/clonetiler.cpp:642
 msgid "Initial color of tiled clones"
 msgstr "टैल्कृतक्लोन्स् आदिमवर्णः"
 
-#: ../src/ui/dialog/clonetiler.cpp:643
+#: ../src/ui/dialog/clonetiler.cpp:642
 #, fuzzy
 msgid ""
 "Initial color for clones (works only if the original has unset fill or "
 "stroke or on spray tool in copy mode)"
 msgstr "क्लोन्स् कृते आदिमवर्णः (आदिमे अस्थापितपूर्तिः स्ट्रोक् वा अस्ति चेदेव कार्यं करोति)"
 
-#: ../src/ui/dialog/clonetiler.cpp:658
+#: ../src/ui/dialog/clonetiler.cpp:657
 msgid "<b>H:</b>"
 msgstr "<b>H:</b> "
 
-#: ../src/ui/dialog/clonetiler.cpp:664
+#: ../src/ui/dialog/clonetiler.cpp:663
 msgid "Change the tile hue by this percentage for each row"
 msgstr "प्रतिपङ्क्तये अनेन प्रतिशतेन टैल् ह्यू परिणम"
 
-#: ../src/ui/dialog/clonetiler.cpp:670
+#: ../src/ui/dialog/clonetiler.cpp:669
 msgid "Change the tile hue by this percentage for each column"
 msgstr "प्रतिस्तम्भाय अनेन प्रतिशतेन टैल् ह्यू परिणम "
 
-#: ../src/ui/dialog/clonetiler.cpp:676
+#: ../src/ui/dialog/clonetiler.cpp:675
 msgid "Randomize the tile hue by this percentage"
 msgstr "अनेन प्रतिशतेन टैल् ह्यू यादृच्छिकं कुरु"
 
-#: ../src/ui/dialog/clonetiler.cpp:685
+#: ../src/ui/dialog/clonetiler.cpp:684
 msgid "<b>S:</b>"
 msgstr "<b>S:</b> "
 
-#: ../src/ui/dialog/clonetiler.cpp:691
+#: ../src/ui/dialog/clonetiler.cpp:690
 msgid "Change the color saturation by this percentage for each row"
 msgstr "प्रतिपङ्क्तये अनेन प्रतिशतेन वर्णपरिपूर्णतां परिणम"
 
-#: ../src/ui/dialog/clonetiler.cpp:697
+#: ../src/ui/dialog/clonetiler.cpp:696
 msgid "Change the color saturation by this percentage for each column"
 msgstr "प्रतिस्तम्भाय अनेन प्रतिशतेन वर्णपरिपूर्णतां परिणम"
 
-#: ../src/ui/dialog/clonetiler.cpp:703
+#: ../src/ui/dialog/clonetiler.cpp:702
 msgid "Randomize the color saturation by this percentage"
 msgstr "अनेन प्रतिशतेन वर्णपरिपूर्णतां यादृच्छिकं कुरु"
 
-#: ../src/ui/dialog/clonetiler.cpp:711
+#: ../src/ui/dialog/clonetiler.cpp:710
 msgid "<b>L:</b>"
 msgstr "<b>L:</b> "
 
-#: ../src/ui/dialog/clonetiler.cpp:717
+#: ../src/ui/dialog/clonetiler.cpp:716
 msgid "Change the color lightness by this percentage for each row"
 msgstr "प्रतिपङ्क्तये अनेन प्रतिशतेन वर्णलघुतां परिणम"
 
-#: ../src/ui/dialog/clonetiler.cpp:723
+#: ../src/ui/dialog/clonetiler.cpp:722
 msgid "Change the color lightness by this percentage for each column"
 msgstr "प्रतिस्तम्भाय अनेन प्रतिशतेन वर्णलघुतां परिणम"
 
-#: ../src/ui/dialog/clonetiler.cpp:729
+#: ../src/ui/dialog/clonetiler.cpp:728
 msgid "Randomize the color lightness by this percentage"
 msgstr "अनेन प्रतिशतेन वर्णलघुतां यादृच्छिकं कुरु"
 
-#: ../src/ui/dialog/clonetiler.cpp:743
+#: ../src/ui/dialog/clonetiler.cpp:742
 msgid "Alternate the sign of color changes for each row"
 msgstr "प्रतिपङ्क्तये वर्णपरिणामानां चिह्नं विकल्पय"
 
-#: ../src/ui/dialog/clonetiler.cpp:748
+#: ../src/ui/dialog/clonetiler.cpp:747
 msgid "Alternate the sign of color changes for each column"
 msgstr "प्रतिस्तम्भाय वर्णपरिणामानां चिह्नं विकल्पय"
 
-#: ../src/ui/dialog/clonetiler.cpp:756
+#: ../src/ui/dialog/clonetiler.cpp:755
 msgid "_Trace"
 msgstr "अन्वेषय(_T)"
 
-#: ../src/ui/dialog/clonetiler.cpp:762
+#: ../src/ui/dialog/clonetiler.cpp:761
 #, fuzzy
 msgid "Trace the drawing under the clones/sprayed items"
 msgstr "टैल्स् अधः आलेखम् अन्वेषय"
 
-#: ../src/ui/dialog/clonetiler.cpp:766
+#: ../src/ui/dialog/clonetiler.cpp:765
 #, fuzzy
 msgid ""
 "For each clone/sprayed item, pick a value from the drawing in its location "
 "and apply it"
 msgstr "प्रति क्लोन् कृते, क्लोन् स्थाने आलेखात् एकं मूल्यं वृत्वा क्लोन् प्रति प्रयोजय"
 
-#: ../src/ui/dialog/clonetiler.cpp:778
+#: ../src/ui/dialog/clonetiler.cpp:777
 msgid "1. Pick from the drawing:"
 msgstr "1. आलेखात् चिनु"
 
-#: ../src/ui/dialog/clonetiler.cpp:789
+#: ../src/ui/dialog/clonetiler.cpp:788
 msgid "Pick the visible color and opacity"
 msgstr "दृश्यवर्णम् अपारदर्शितां च चिनु"
 
-#: ../src/ui/dialog/clonetiler.cpp:796
+#: ../src/ui/dialog/clonetiler.cpp:795
 msgid "Pick the total accumulated opacity"
 msgstr "सर्वचितापारदर्शितां चिनु"
 
-#: ../src/ui/dialog/clonetiler.cpp:802
+#: ../src/ui/dialog/clonetiler.cpp:801
 msgid "R"
 msgstr "R"
 
-#: ../src/ui/dialog/clonetiler.cpp:803
+#: ../src/ui/dialog/clonetiler.cpp:802
 msgid "Pick the Red component of the color"
 msgstr "वर्णस्य रक्तघटकं चिनु"
 
-#: ../src/ui/dialog/clonetiler.cpp:809
+#: ../src/ui/dialog/clonetiler.cpp:808
 msgid "G"
 msgstr "G"
 
-#: ../src/ui/dialog/clonetiler.cpp:810
+#: ../src/ui/dialog/clonetiler.cpp:809
 msgid "Pick the Green component of the color"
 msgstr "वर्णस्य हरितघटकं चिनु"
 
-#: ../src/ui/dialog/clonetiler.cpp:816
+#: ../src/ui/dialog/clonetiler.cpp:815
 msgid "B"
 msgstr "B"
 
-#: ../src/ui/dialog/clonetiler.cpp:817
+#: ../src/ui/dialog/clonetiler.cpp:816
 msgid "Pick the Blue component of the color"
 msgstr "वर्णस्य नीलघटकं चिनु"
 
-#: ../src/ui/dialog/clonetiler.cpp:823
+#: ../src/ui/dialog/clonetiler.cpp:822
 #, fuzzy
 msgctxt "Clonetiler color hue"
 msgid "H"
 msgstr "H"
 
-#: ../src/ui/dialog/clonetiler.cpp:824
+#: ../src/ui/dialog/clonetiler.cpp:823
 msgid "Pick the hue of the color"
 msgstr "वर्णस्य ह्यू चिनु"
 
-#: ../src/ui/dialog/clonetiler.cpp:830
+#: ../src/ui/dialog/clonetiler.cpp:829
 #, fuzzy
 msgctxt "Clonetiler color saturation"
 msgid "S"
 msgstr "S"
 
-#: ../src/ui/dialog/clonetiler.cpp:831
+#: ../src/ui/dialog/clonetiler.cpp:830
 msgid "Pick the saturation of the color"
 msgstr "वर्णस्य परिपूर्णतां चिनु "
 
-#: ../src/ui/dialog/clonetiler.cpp:837
+#: ../src/ui/dialog/clonetiler.cpp:836
 #, fuzzy
 msgctxt "Clonetiler color lightness"
 msgid "L"
 msgstr "L"
 
-#: ../src/ui/dialog/clonetiler.cpp:838
+#: ../src/ui/dialog/clonetiler.cpp:837
 msgid "Pick the lightness of the color"
 msgstr "वर्णस्य लघुतां चिनु"
 
-#: ../src/ui/dialog/clonetiler.cpp:847
+#: ../src/ui/dialog/clonetiler.cpp:846
 msgid "2. Tweak the picked value:"
 msgstr "2. चितमूल्यं व्यवस्थापय :"
 
-#: ../src/ui/dialog/clonetiler.cpp:858
+#: ../src/ui/dialog/clonetiler.cpp:857
 msgid "Gamma-correct:"
 msgstr "गामा-समीचीनम् :"
 
-#: ../src/ui/dialog/clonetiler.cpp:862
+#: ../src/ui/dialog/clonetiler.cpp:861
 msgid "Shift the mid-range of the picked value upwards (>0) or downwards (<0)"
 msgstr "चितमूल्यस्य मध्यमगोचरं उपरि (>0) अथवा अधः (<0) शिफ्ट् कुरु"
 
-#: ../src/ui/dialog/clonetiler.cpp:869
+#: ../src/ui/dialog/clonetiler.cpp:868
 msgid "Randomize:"
 msgstr "यादृच्छिकं कुरु "
 
-#: ../src/ui/dialog/clonetiler.cpp:873
+#: ../src/ui/dialog/clonetiler.cpp:872
 msgid "Randomize the picked value by this percentage"
 msgstr "अनेन  प्रतिशतेन चितमूल्यं यादृच्छिकं कुरु"
 
-#: ../src/ui/dialog/clonetiler.cpp:880
+#: ../src/ui/dialog/clonetiler.cpp:879
 msgid "Invert:"
 msgstr "विपर्यासं कुरु :"
 
-#: ../src/ui/dialog/clonetiler.cpp:884
+#: ../src/ui/dialog/clonetiler.cpp:883
 msgid "Invert the picked value"
 msgstr "चितमूल्यस्य विपर्यासं कुरु"
 
-#: ../src/ui/dialog/clonetiler.cpp:890
+#: ../src/ui/dialog/clonetiler.cpp:889
 msgid "3. Apply the value to the clones':"
 msgstr "3. क्लोन्स् प्रति मूल्यं प्रयोजय':"
 
-#: ../src/ui/dialog/clonetiler.cpp:899
+#: ../src/ui/dialog/clonetiler.cpp:898
 msgid "Presence"
 msgstr "उपस्थितिः "
 
-#: ../src/ui/dialog/clonetiler.cpp:902
+#: ../src/ui/dialog/clonetiler.cpp:901
 msgid ""
 "Each clone is created with the probability determined by the picked value in "
 "that point"
 msgstr "तत् समये चितमूल्येन निश्चितं या शक्यता तया प्रत्येकं क्लोन् उत्पाद्यते"
 
-#: ../src/ui/dialog/clonetiler.cpp:908
+#: ../src/ui/dialog/clonetiler.cpp:907
 msgid "Size"
 msgstr "परिमाणम्"
 
-#: ../src/ui/dialog/clonetiler.cpp:911
+#: ../src/ui/dialog/clonetiler.cpp:910
 msgid "Each clone's size is determined by the picked value in that point"
 msgstr "तत् समये चितमूल्येन प्रत्येकं क्लोन् निश्चीयते"
 
-#: ../src/ui/dialog/clonetiler.cpp:920
+#: ../src/ui/dialog/clonetiler.cpp:919
 msgid ""
 "Each clone is painted by the picked color (the original must have unset fill "
 "or stroke)"
 msgstr "प्रत्येकं क्लोन् वृतवर्णेन लिप्यते (आदिमे अस्थापितपूर्तिः स्ट्रोक् वा भवितव्यम्)"
 
-#: ../src/ui/dialog/clonetiler.cpp:929
+#: ../src/ui/dialog/clonetiler.cpp:928
 msgid "Each clone's opacity is determined by the picked value in that point"
 msgstr "तत् समये चितमूल्येन प्रत्येकक्लोन् अपादर्शिता निश्चीयते"
 
-#: ../src/ui/dialog/clonetiler.cpp:943
+#: ../src/ui/dialog/clonetiler.cpp:942
 #, fuzzy
 msgid "Apply to tiled clones:"
 msgstr "टैल्कृतक्लोन्स् लोपय"
 
-#: ../src/ui/dialog/clonetiler.cpp:964
+#: ../src/ui/dialog/clonetiler.cpp:963
 msgid "How many rows in the tiling"
 msgstr "टैलिङ् मध्ये कति पङ्क्तयः सन्ति"
 
-#: ../src/ui/dialog/clonetiler.cpp:984
+#: ../src/ui/dialog/clonetiler.cpp:983
 msgid "How many columns in the tiling"
 msgstr "टैलिङ् मध्ये कति स्तम्भाः सन्ति"
 
-#: ../src/ui/dialog/clonetiler.cpp:1013
+#: ../src/ui/dialog/clonetiler.cpp:1012
 msgid "Width of the rectangle to be filled"
 msgstr "पूरणाय आयतविस्तारः "
 
-#: ../src/ui/dialog/clonetiler.cpp:1036
+#: ../src/ui/dialog/clonetiler.cpp:1035
 msgid "Height of the rectangle to be filled"
 msgstr "पूरणाय आयतौन्नत्यम् "
 
-#: ../src/ui/dialog/clonetiler.cpp:1051
+#: ../src/ui/dialog/clonetiler.cpp:1050
 msgid "Rows, columns: "
 msgstr "पङ्क्तयः, स्तम्भाः :"
 
-#: ../src/ui/dialog/clonetiler.cpp:1052
+#: ../src/ui/dialog/clonetiler.cpp:1051
 msgid "Create the specified number of rows and columns"
 msgstr "पङ्क्तीनां स्तम्भानां च निर्दिष्टसंख्याम् उत्पादय"
 
-#: ../src/ui/dialog/clonetiler.cpp:1061
+#: ../src/ui/dialog/clonetiler.cpp:1060
 msgid "Width, height: "
 msgstr "विस्तारः, औन्नत्यम् :"
 
-#: ../src/ui/dialog/clonetiler.cpp:1062
+#: ../src/ui/dialog/clonetiler.cpp:1061
 msgid "Fill the specified width and height with the tiling"
 msgstr "निर्दिष्टं विस्तारम् औन्नत्यं च टैलिङ् सह पूरय"
 
-#: ../src/ui/dialog/clonetiler.cpp:1078
+#: ../src/ui/dialog/clonetiler.cpp:1077
 msgid "Use saved size and position of the tile"
 msgstr "सञ्चितं टैल् परिमाणं स्थानं च उपयोजय"
 
-#: ../src/ui/dialog/clonetiler.cpp:1081
+#: ../src/ui/dialog/clonetiler.cpp:1080
 msgid ""
 "Pretend that the size and position of the tile are the same as the last time "
 "you tiled it (if any), instead of using the current size"
 msgstr "वर्तमानपरिमाणस्थाने, पूर्वं यथाकृतं तथैव अधुनापि टैल् परिमाणं स्थानं च वर्तते इति मन्यस्व"
 
-#: ../src/ui/dialog/clonetiler.cpp:1107
+#: ../src/ui/dialog/clonetiler.cpp:1106
 msgid " <b>_Create</b> "
 msgstr "<b>उत्पादय</b>(_C)"
 
-#: ../src/ui/dialog/clonetiler.cpp:1109
+#: ../src/ui/dialog/clonetiler.cpp:1108
 msgid "Create and tile the clones of the selection"
 msgstr "वरणस्य क्लोन्स् उत्पाद्य टैल् कुरु"
 
@@ -16603,28 +16612,28 @@ msgstr "वरणस्य क्लोन्स् उत्पाद्य ट
 #. diagrams on the left in the following screenshot:
 #. http://www.inkscape.org/screenshots/gallery/inkscape-0.42-CVS-tiles-unclump.png
 #. So unclumping is the process of spreading a number of objects out more evenly.
-#: ../src/ui/dialog/clonetiler.cpp:1125
+#: ../src/ui/dialog/clonetiler.cpp:1124
 msgid " _Unclump "
 msgstr "विगुच्छीकुरु(_U)"
 
-#: ../src/ui/dialog/clonetiler.cpp:1126
+#: ../src/ui/dialog/clonetiler.cpp:1125
 msgid "Spread out clones to reduce clumping; can be applied repeatedly"
 msgstr "गुच्छीकरणं न्यूनीकर्तुं क्लोन्स् विस्तारय; पुनःपुनः प्रयोजयितुं शक्यते"
 
-#: ../src/ui/dialog/clonetiler.cpp:1132
+#: ../src/ui/dialog/clonetiler.cpp:1131
 msgid " Re_move "
 msgstr "अपनय(_m)"
 
-#: ../src/ui/dialog/clonetiler.cpp:1133
+#: ../src/ui/dialog/clonetiler.cpp:1132
 msgid "Remove existing tiled clones of the selected object (siblings only)"
 msgstr "वृतवस्तुनः विद्यमानानि टैल्कृतक्लोन्स् अपनय (सोदराणि एव)"
 
-#: ../src/ui/dialog/clonetiler.cpp:1148
+#: ../src/ui/dialog/clonetiler.cpp:1147
 msgid " R_eset "
 msgstr "पुनस्स्थापय(_e)"
 
 #. TRANSLATORS: "change" is a noun here
-#: ../src/ui/dialog/clonetiler.cpp:1150
+#: ../src/ui/dialog/clonetiler.cpp:1149
 msgid ""
 "Reset all shifts, scales, rotates, opacity and color changes in the dialog "
 "to zero"
@@ -16632,40 +16641,40 @@ msgstr ""
 "संवादे सर्वाणि शिफ्ट्स्, मापकान्, परिवर्तनानि, अपारदर्शितां, तथा वर्णपरिणामान् शून्यं प्रति "
 "पुनस्स्थापय"
 
-#: ../src/ui/dialog/clonetiler.cpp:1210
+#: ../src/ui/dialog/clonetiler.cpp:1209
 msgid "<small>Nothing selected.</small>"
 msgstr "<small>किमपि न वृतम्।</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:1216
+#: ../src/ui/dialog/clonetiler.cpp:1215
 msgid "<small>More than one object selected.</small>"
 msgstr "<small>एकाधिकं वस्तु वृतम्।</small> "
 
-#: ../src/ui/dialog/clonetiler.cpp:1223
+#: ../src/ui/dialog/clonetiler.cpp:1222
 #, c-format
 msgid "<small>Object has <b>%d</b> tiled clones.</small>"
 msgstr "<small>वस्तुनि <b>%d</b> टैल्कृतानि क्लोन्स् सन्ति।</small> "
 
-#: ../src/ui/dialog/clonetiler.cpp:1228
+#: ../src/ui/dialog/clonetiler.cpp:1227
 msgid "<small>Object has no tiled clones.</small>"
 msgstr "<small>वस्तुनि किमपि टैल्कृतक्लोन् नास्ति।</small> "
 
-#: ../src/ui/dialog/clonetiler.cpp:1945
+#: ../src/ui/dialog/clonetiler.cpp:1944
 msgid "Select <b>one object</b> whose tiled clones to unclump."
 msgstr "यस्य टैल्कृतक्लोन्स् विगुच्छीकर्तव्यानि तत् <b>एकं वस्तु</b> वृणु। "
 
-#: ../src/ui/dialog/clonetiler.cpp:1965
+#: ../src/ui/dialog/clonetiler.cpp:1964
 msgid "Unclump tiled clones"
 msgstr "टैल्कृतक्लोन्स् विगुच्छीकुरु"
 
-#: ../src/ui/dialog/clonetiler.cpp:1994
+#: ../src/ui/dialog/clonetiler.cpp:1993
 msgid "Select <b>one object</b> whose tiled clones to remove."
 msgstr "यस्य टैल्कृतक्लोन्स् अपनेतव्यानि तत् <b>एकं वस्तु</b> वृणु। "
 
-#: ../src/ui/dialog/clonetiler.cpp:2017
+#: ../src/ui/dialog/clonetiler.cpp:2016
 msgid "Delete tiled clones"
 msgstr "टैल्कृतक्लोन्स् लोपय"
 
-#: ../src/ui/dialog/clonetiler.cpp:2070
+#: ../src/ui/dialog/clonetiler.cpp:2069
 msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
@@ -16674,23 +16683,23 @@ msgstr ""
 "b>। "
 
 #. set statusbar text
-#: ../src/ui/dialog/clonetiler.cpp:2078
+#: ../src/ui/dialog/clonetiler.cpp:2077
 msgid "<small>Creating tiled clones...</small>"
 msgstr "<small>टैल्कृतक्लोन्स् उत्पादयति...</small> "
 
-#: ../src/ui/dialog/clonetiler.cpp:2494
+#: ../src/ui/dialog/clonetiler.cpp:2493
 msgid "Create tiled clones"
 msgstr "टैल्कृतक्लोन्स् उत्पादय "
 
-#: ../src/ui/dialog/clonetiler.cpp:2686
+#: ../src/ui/dialog/clonetiler.cpp:2685
 msgid "<small>Per row:</small>"
 msgstr "<small>प्रतिपङ्क्ति :</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:2700
+#: ../src/ui/dialog/clonetiler.cpp:2699
 msgid "<small>Per column:</small>"
 msgstr "<small>प्रतिस्तम्बम् :</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:2708
+#: ../src/ui/dialog/clonetiler.cpp:2707
 msgid "<small>Randomize:</small>"
 msgstr "<small>यादृच्छिकं कुरु :</small>"
 
@@ -16738,7 +16747,7 @@ msgstr "संपादयितुं गुणं <b>क्लिक् कु
 #: ../src/ui/dialog/cssdialog.cpp:156
 #, fuzzy, c-format
 msgid ""
-"Propery <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
+"Property <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
 "commit changes."
 msgstr "<b>%s</b> गुणः वृतः। संपादनात् परं परिणामान् पञ्जीकर्तुं <b>Ctrl+Enter</b> नोदय।"
 
@@ -17037,7 +17046,7 @@ msgstr "अपनय (_R)"
 msgid "Remove selected grid."
 msgstr "वृतजालम् अपनय।"
 
-#: ../src/ui/dialog/document-properties.cpp:151 ../src/widgets/toolbox.cpp:1410
+#: ../src/ui/dialog/document-properties.cpp:151 ../src/widgets/toolbox.cpp:1471
 msgid "Guides"
 msgstr "दर्शयितारः "
 
@@ -17254,67 +17263,67 @@ msgstr "जालं अपनय"
 msgid "Changed default display unit"
 msgstr "मूलभूतग्रेडियण्ट् उत्पादय "
 
-#: ../src/ui/dialog/export.cpp:118 ../src/verbs.cpp:3049
+#: ../src/ui/dialog/export.cpp:117 ../src/verbs.cpp:3049
 msgid "_Page"
 msgstr "पृष्ठम्(_P)"
 
-#: ../src/ui/dialog/export.cpp:118 ../src/verbs.cpp:3053
+#: ../src/ui/dialog/export.cpp:117 ../src/verbs.cpp:3053
 msgid "_Drawing"
 msgstr "रेखाचित्रम्(_D)"
 
-#: ../src/ui/dialog/export.cpp:118 ../src/verbs.cpp:3055
+#: ../src/ui/dialog/export.cpp:117 ../src/verbs.cpp:3055
 msgid "_Selection"
 msgstr "वरणम्(_S)"
 
-#: ../src/ui/dialog/export.cpp:118
+#: ../src/ui/dialog/export.cpp:117
 msgid "_Custom"
 msgstr "स्वेच्छा(_C)"
 
-#: ../src/ui/dialog/export.cpp:136 ../src/ui/toolbar/measure-toolbar.cpp:304
+#: ../src/ui/dialog/export.cpp:135 ../src/ui/toolbar/measure-toolbar.cpp:304
 #: ../src/ui/toolbar/measure-toolbar.cpp:312
 #: ../share/extensions/render_gears.inx.h:6
 msgid "Units:"
 msgstr "अङ्काः : "
 
-#: ../src/ui/dialog/export.cpp:138
+#: ../src/ui/dialog/export.cpp:137
 #, fuzzy
 msgid "_Export As..."
 msgstr "बिट्मैप् निर्याणं कुरु ...(_E)"
 
-#: ../src/ui/dialog/export.cpp:141
+#: ../src/ui/dialog/export.cpp:140
 msgid "B_atch export all selected objects"
 msgstr "सर्ववृतवस्तूनि समूहरूपेण निर्याणं कुरु(_a)"
 
-#: ../src/ui/dialog/export.cpp:142
+#: ../src/ui/dialog/export.cpp:141
 #, fuzzy
 msgid "Use interlacing"
 msgstr "एण्टिएलियसिङ् अनुकुरु"
 
-#: ../src/ui/dialog/export.cpp:143
+#: ../src/ui/dialog/export.cpp:142
 #, fuzzy
 msgid "Bit depth"
 msgstr "Z गाम्भीर्यम् :"
 
-#: ../src/ui/dialog/export.cpp:145
+#: ../src/ui/dialog/export.cpp:144
 #, fuzzy
 msgid "Compression"
 msgstr "शुद्धता : "
 
-#: ../src/ui/dialog/export.cpp:147
+#: ../src/ui/dialog/export.cpp:146
 msgid "pHYs dpi"
 msgstr ""
 
-#: ../src/ui/dialog/export.cpp:152
+#: ../src/ui/dialog/export.cpp:151
 #, fuzzy
 msgid "Hide all except selected"
 msgstr "वृतं विहाय सर्वं तिरोधत्स्व(_l)"
 
-#: ../src/ui/dialog/export.cpp:153
+#: ../src/ui/dialog/export.cpp:152
 #, fuzzy
 msgid "Close when complete"
 msgstr "स्वतस्सञ्चयः सम्पूर्णः।"
 
-#: ../src/ui/dialog/export.cpp:166
+#: ../src/ui/dialog/export.cpp:165
 msgid ""
 "Export each selected object into its own PNG file, using export hints if any "
 "(caution, overwrites without asking!)"
@@ -17322,179 +17331,179 @@ msgstr ""
 "प्रत्येकं वृतवस्तु स्वस्यां PNG सञ्चिकायां निर्याणटिप्पणीः उपयुज्य निर्याणं कुरु (सावधानं, प्रश्नेन "
 "विना आधिलिखति!)"
 
-#: ../src/ui/dialog/export.cpp:168
+#: ../src/ui/dialog/export.cpp:167
 msgid "In the exported image, hide all objects except those that are selected"
 msgstr "निर्यातचित्रे, वृतानि विहाय सर्वाणि वस्तूनि तिरोधत्स्व"
 
-#: ../src/ui/dialog/export.cpp:170
+#: ../src/ui/dialog/export.cpp:169
 msgid ""
 "Enables ADAM7 interlacing for PNG output. This results in slightly heavier "
 "images, but big images will look better sooner when loading the file"
 msgstr ""
 
-#: ../src/ui/dialog/export.cpp:172
+#: ../src/ui/dialog/export.cpp:171
 msgid "Once the export completes, close this dialog"
 msgstr ""
 
-#: ../src/ui/dialog/export.cpp:179
+#: ../src/ui/dialog/export.cpp:178
 #, fuzzy
 msgid "<b>Export area</b>"
 msgstr "<big><b>निर्याणक्षेत्रम्</b></big>"
 
-#: ../src/ui/dialog/export.cpp:212
+#: ../src/ui/dialog/export.cpp:211
 msgid "_x0:"
 msgstr "_x0:"
 
-#: ../src/ui/dialog/export.cpp:216
+#: ../src/ui/dialog/export.cpp:215
 msgid "x_1:"
 msgstr "x_1:"
 
-#: ../src/ui/dialog/export.cpp:220
+#: ../src/ui/dialog/export.cpp:219
 msgid "Wid_th:"
 msgstr "विस्तारः :(_t)"
 
-#: ../src/ui/dialog/export.cpp:224
+#: ../src/ui/dialog/export.cpp:223
 msgid "_y0:"
 msgstr "_y0:"
 
-#: ../src/ui/dialog/export.cpp:228
+#: ../src/ui/dialog/export.cpp:227
 msgid "y_1:"
 msgstr "y_1:"
 
-#: ../src/ui/dialog/export.cpp:232
+#: ../src/ui/dialog/export.cpp:231
 msgid "Hei_ght:"
 msgstr "औन्नत्यम् :(_g)"
 
-#: ../src/ui/dialog/export.cpp:247
+#: ../src/ui/dialog/export.cpp:246
 #, fuzzy
 msgid "<b>Image size</b>"
 msgstr "<b>पृष्ठपरिमाणम्</b>"
 
-#: ../src/ui/dialog/export.cpp:259 ../src/ui/dialog/export.cpp:270
+#: ../src/ui/dialog/export.cpp:258 ../src/ui/dialog/export.cpp:269
 msgid "pixels at"
 msgstr "अत्र पिक्सेल्स्"
 
-#: ../src/ui/dialog/export.cpp:265
+#: ../src/ui/dialog/export.cpp:264
 msgid "dp_i"
 msgstr "dp_i"
 
-#: ../src/ui/dialog/export.cpp:270 ../src/ui/dialog/transformation.cpp:70
+#: ../src/ui/dialog/export.cpp:269 ../src/ui/dialog/transformation.cpp:70
 #: ../src/ui/widget/page-sizer.cpp:49
 msgid "_Height:"
 msgstr "औन्नत्यम् : (_H)"
 
-#: ../src/ui/dialog/export.cpp:278
+#: ../src/ui/dialog/export.cpp:277
 #: ../src/ui/dialog/inkscape-preferences.cpp:1824
 #: ../src/ui/dialog/inkscape-preferences.cpp:1828
 #: ../src/ui/dialog/inkscape-preferences.cpp:1862
 msgid "dpi"
 msgstr "dpi"
 
-#: ../src/ui/dialog/export.cpp:286
+#: ../src/ui/dialog/export.cpp:285
 #, fuzzy
 msgid "<b>_Filename</b>"
 msgstr "<big><b>सञ्चिकानाम</b></big>(_F)"
 
-#: ../src/ui/dialog/export.cpp:324
+#: ../src/ui/dialog/export.cpp:323
 msgid "_Export"
 msgstr "निर्याणं कुरु(_E)"
 
-#: ../src/ui/dialog/export.cpp:326
+#: ../src/ui/dialog/export.cpp:325
 msgid "Export the bitmap file with these settings"
 msgstr "एतैः निर्धारणैः बिट्मैप् सञ्चिकानिर्याणं कुरु"
 
 #. Advanced
-#: ../src/ui/dialog/export.cpp:332
+#: ../src/ui/dialog/export.cpp:331
 msgid "Advanced"
 msgstr ""
 
-#: ../src/ui/dialog/export.cpp:346
+#: ../src/ui/dialog/export.cpp:345
 msgid ""
 "Will force-set the physical dpi for the png file. Set this to 72 if you're "
 "planning to work on your png with Photoshop"
 msgstr ""
 
-#: ../src/ui/dialog/export.cpp:486
+#: ../src/ui/dialog/export.cpp:485
 #, fuzzy
 msgid "bitmap"
 msgstr "बिट्मैप् "
 
-#: ../src/ui/dialog/export.cpp:593
+#: ../src/ui/dialog/export.cpp:592
 #, c-format
 msgid "B_atch export %d selected object"
 msgid_plural "B_atch export %d selected objects"
 msgstr[0] "बैच निर्यात %d ने वस्तुएँ चुना (_a)"
 msgstr[1] "बैच निर्यात %d ने वस्तुएँ चुना (_a)"
 
-#: ../src/ui/dialog/export.cpp:909
+#: ../src/ui/dialog/export.cpp:908
 msgid "Export in progress"
 msgstr "निर्याणं प्रगत्याम् अस्ति "
 
-#: ../src/ui/dialog/export.cpp:1011
+#: ../src/ui/dialog/export.cpp:1010
 #, fuzzy
 msgid "No items selected."
 msgstr "किमपि फिल्टर् न वृतम् "
 
-#: ../src/ui/dialog/export.cpp:1015 ../src/ui/dialog/export.cpp:1017
+#: ../src/ui/dialog/export.cpp:1014 ../src/ui/dialog/export.cpp:1016
 #, fuzzy
 msgid "Exporting %1 files"
 msgstr "%d सञ्चिकानां निर्याणं करोति"
 
-#: ../src/ui/dialog/export.cpp:1059 ../src/ui/dialog/export.cpp:1061
+#: ../src/ui/dialog/export.cpp:1058 ../src/ui/dialog/export.cpp:1060
 #, fuzzy, c-format
 msgid "Exporting file <b>%s</b>..."
 msgstr "%d सञ्चिकानां निर्याणं करोति"
 
-#: ../src/ui/dialog/export.cpp:1072 ../src/ui/dialog/export.cpp:1167
+#: ../src/ui/dialog/export.cpp:1071 ../src/ui/dialog/export.cpp:1166
 #, c-format
 msgid "Could not export to filename %s.\n"
 msgstr "%s सञ्चिकानाम प्रति निर्याणं कर्तुं न शक्यते।\n"
 
-#: ../src/ui/dialog/export.cpp:1075
+#: ../src/ui/dialog/export.cpp:1074
 #, fuzzy, c-format
 msgid "Could not export to filename <b>%s</b>."
 msgstr "%s सञ्चिकानाम प्रति निर्याणं कर्तुं न शक्यते।\n"
 
-#: ../src/ui/dialog/export.cpp:1090
+#: ../src/ui/dialog/export.cpp:1089
 #, c-format
 msgid "Successfully exported <b>%d</b> files from <b>%d</b> selected items."
 msgstr ""
 
-#: ../src/ui/dialog/export.cpp:1101
+#: ../src/ui/dialog/export.cpp:1100
 #, fuzzy
 msgid "You have to enter a filename."
 msgstr "सञ्चिकानाम निवेशनीयम्"
 
-#: ../src/ui/dialog/export.cpp:1102
+#: ../src/ui/dialog/export.cpp:1101
 msgid "You have to enter a filename"
 msgstr "सञ्चिकानाम निवेशनीयम्"
 
-#: ../src/ui/dialog/export.cpp:1117
+#: ../src/ui/dialog/export.cpp:1116
 #, fuzzy
 msgid "The chosen area to be exported is invalid."
 msgstr "निर्याणाय वृतं क्षेत्रम् असिद्धम्"
 
-#: ../src/ui/dialog/export.cpp:1118
+#: ../src/ui/dialog/export.cpp:1117
 msgid "The chosen area to be exported is invalid"
 msgstr "निर्याणाय वृतं क्षेत्रम् असिद्धम्"
 
-#: ../src/ui/dialog/export.cpp:1133
+#: ../src/ui/dialog/export.cpp:1132
 #, c-format
 msgid "Directory %s does not exist or is not a directory.\n"
 msgstr "%s केशः न विद्यते अथवा कोशः नास्ति।\n"
 
 #. TRANSLATORS: %1 will be the filename, %2 the width, and %3 the height of the image
-#: ../src/ui/dialog/export.cpp:1147 ../src/ui/dialog/export.cpp:1149
+#: ../src/ui/dialog/export.cpp:1146 ../src/ui/dialog/export.cpp:1148
 #, fuzzy
 msgid "Exporting %1 (%2 x %3)"
 msgstr "%s निर्याणं करोति (%lu x %lu)"
 
-#: ../src/ui/dialog/export.cpp:1178
+#: ../src/ui/dialog/export.cpp:1177
 #, fuzzy, c-format
 msgid "Drawing exported to <b>%s</b>."
 msgstr "पैरामीटर् <b>%s</b> सम्पादयति।"
 
-#: ../src/ui/dialog/export.cpp:1182
+#: ../src/ui/dialog/export.cpp:1181
 #, fuzzy
 msgid "Export aborted."
 msgstr "निर्याणं प्रगत्याम् अस्ति "
@@ -18386,310 +18395,310 @@ msgstr "अनुकृतं फिल्टर् आदिमम्"
 msgid "Set filter primitive attribute"
 msgstr "फिल्टर् आदिमगुणं स्थापय"
 
-#: ../src/ui/dialog/find.cpp:63
+#: ../src/ui/dialog/find.cpp:61
 msgid "F_ind:"
 msgstr ""
 
-#: ../src/ui/dialog/find.cpp:63
+#: ../src/ui/dialog/find.cpp:61
 #, fuzzy
 msgid "Find objects by their content or properties (exact or partial match)"
 msgstr "स्वविषयान्तर्गतवस्तुना वस्तूनि अन्वेषय (यथा तथा अथवा असमग्रमेलनम्)"
 
-#: ../src/ui/dialog/find.cpp:64
+#: ../src/ui/dialog/find.cpp:62
 #, fuzzy
 msgid "R_eplace:"
 msgstr "प्रतिसमाधत्स्व : "
 
-#: ../src/ui/dialog/find.cpp:64
+#: ../src/ui/dialog/find.cpp:62
 #, fuzzy
 msgid "Replace match with this value"
 msgstr "सर्वफाण्ट्स् अनेन प्रतिसमाधत्स्व : "
 
-#: ../src/ui/dialog/find.cpp:66
+#: ../src/ui/dialog/find.cpp:64
 msgid "_All"
 msgstr ""
 
-#: ../src/ui/dialog/find.cpp:67
+#: ../src/ui/dialog/find.cpp:65
 #, fuzzy
 msgid "Current _layer"
 msgstr "वर्तमानसंस्तरः"
 
-#: ../src/ui/dialog/find.cpp:68
+#: ../src/ui/dialog/find.cpp:66
 msgid "Sele_ction"
 msgstr "वरणम्(_c)"
 
-#: ../src/ui/dialog/find.cpp:69 ../src/ui/dialog/text-edit.cpp:68
+#: ../src/ui/dialog/find.cpp:67 ../src/ui/dialog/text-edit.cpp:66
 #: ../share/ui/menus.xml.h:18
 msgid "_Text"
 msgstr "विषयः (_T)"
 
-#: ../src/ui/dialog/find.cpp:70
+#: ../src/ui/dialog/find.cpp:68
 #, fuzzy
 msgid "_Properties"
 msgstr "%s विशेषाः "
 
-#: ../src/ui/dialog/find.cpp:72
+#: ../src/ui/dialog/find.cpp:70
 #, fuzzy
 msgid "Search in"
 msgstr "अन्वेषय "
 
-#: ../src/ui/dialog/find.cpp:73
+#: ../src/ui/dialog/find.cpp:71
 msgid "Scope"
 msgstr ""
 
-#: ../src/ui/dialog/find.cpp:75
+#: ../src/ui/dialog/find.cpp:73
 #, fuzzy
 msgid "Case sensiti_ve"
 msgstr "हरणसंवेदनशीलता :"
 
-#: ../src/ui/dialog/find.cpp:76
+#: ../src/ui/dialog/find.cpp:74
 #, fuzzy
 msgid "E_xact match"
 msgstr "चित्रं निष्कासय"
 
-#: ../src/ui/dialog/find.cpp:77
+#: ../src/ui/dialog/find.cpp:75
 msgid "Include _hidden"
 msgstr "तिरोहितम् अन्तर्गमय(_h)"
 
-#: ../src/ui/dialog/find.cpp:78
+#: ../src/ui/dialog/find.cpp:76
 #, fuzzy
 msgid "Include loc_ked"
 msgstr "पिहितम् अन्तर्गमय (_o)"
 
-#: ../src/ui/dialog/find.cpp:82
+#: ../src/ui/dialog/find.cpp:80
 #, fuzzy
 msgid "_ID"
 msgstr "_ID:"
 
-#: ../src/ui/dialog/find.cpp:83
+#: ../src/ui/dialog/find.cpp:81
 #, fuzzy
 msgid "Attribute _name"
 msgstr "गुणनाम "
 
-#: ../src/ui/dialog/find.cpp:84
+#: ../src/ui/dialog/find.cpp:82
 #, fuzzy
 msgid "Attri_bute value"
 msgstr "गुणमूल्यम् "
 
-#: ../src/ui/dialog/find.cpp:85
+#: ../src/ui/dialog/find.cpp:83
 #, fuzzy
 msgid "_Style"
 msgstr "शैली : (_S)"
 
-#: ../src/ui/dialog/find.cpp:86
+#: ../src/ui/dialog/find.cpp:84
 msgid "F_ont"
 msgstr ""
 
-#: ../src/ui/dialog/find.cpp:87
+#: ../src/ui/dialog/find.cpp:85
 #, fuzzy
 msgid "Properties"
 msgstr "%s विशेषाः "
 
-#: ../src/ui/dialog/find.cpp:89
+#: ../src/ui/dialog/find.cpp:87
 msgid "All types"
 msgstr "सर्ववर्गाः "
 
-#: ../src/ui/dialog/find.cpp:90
+#: ../src/ui/dialog/find.cpp:88
 msgid "Rectangles"
 msgstr "आयताः "
 
-#: ../src/ui/dialog/find.cpp:91
+#: ../src/ui/dialog/find.cpp:89
 msgid "Ellipses"
 msgstr "दीर्घवृत्तानि "
 
-#: ../src/ui/dialog/find.cpp:92
+#: ../src/ui/dialog/find.cpp:90
 msgid "Stars"
 msgstr "नक्षत्राणि "
 
-#: ../src/ui/dialog/find.cpp:93
+#: ../src/ui/dialog/find.cpp:91
 msgid "Spirals"
 msgstr "स्पैरल्स् "
 
-#: ../src/ui/dialog/find.cpp:94 ../src/widgets/toolbox.cpp:1311
+#: ../src/ui/dialog/find.cpp:92 ../src/widgets/toolbox.cpp:1372
 msgid "Paths"
 msgstr "मार्गाः "
 
-#: ../src/ui/dialog/find.cpp:95
+#: ../src/ui/dialog/find.cpp:93
 msgid "Texts"
 msgstr "विषयाः"
 
-#: ../src/ui/dialog/find.cpp:96
+#: ../src/ui/dialog/find.cpp:94
 msgid "Groups"
 msgstr "समूहाः "
 
 #. TRANSLATORS: "Clones" is a noun indicating type of object to find
-#: ../src/ui/dialog/find.cpp:99
+#: ../src/ui/dialog/find.cpp:97
 #, fuzzy
 msgctxt "Find dialog"
 msgid "Clones"
 msgstr "क्लोन्स्"
 
-#: ../src/ui/dialog/find.cpp:101 ../share/extensions/embedimage.inx.h:3
+#: ../src/ui/dialog/find.cpp:99 ../share/extensions/embedimage.inx.h:3
 #: ../share/extensions/extractimage.inx.h:6
 #: ../share/extensions/image_attributes.inx.h:29
 msgid "Images"
 msgstr "चित्राणि "
 
-#: ../src/ui/dialog/find.cpp:102
+#: ../src/ui/dialog/find.cpp:100
 msgid "Offsets"
 msgstr "ओफ्सेट्स्"
 
-#: ../src/ui/dialog/find.cpp:103
+#: ../src/ui/dialog/find.cpp:101
 #, fuzzy
 msgid "Object types"
 msgstr "वस्तुवर्गः : "
 
-#: ../src/ui/dialog/find.cpp:106
+#: ../src/ui/dialog/find.cpp:104
 msgid "_Find"
 msgstr "अन्वेषय(_F)"
 
-#: ../src/ui/dialog/find.cpp:107
+#: ../src/ui/dialog/find.cpp:105
 #, fuzzy
 msgid "_Replace All"
 msgstr "प्रतिसमाधत्स्व "
 
-#: ../src/ui/dialog/find.cpp:115
+#: ../src/ui/dialog/find.cpp:113
 #, fuzzy
 msgid "Select all objects matching the selection criteria"
 msgstr "त्वया पूरितक्षेत्रैः सह यानि मिलन्ति तानि वस्तूनि वृणु"
 
-#: ../src/ui/dialog/find.cpp:117
+#: ../src/ui/dialog/find.cpp:115
 #, fuzzy
 msgid "Replace all matches"
 msgstr "सर्वस्केचस् मध्यं कुरु"
 
-#: ../src/ui/dialog/find.cpp:119
+#: ../src/ui/dialog/find.cpp:117
 #, fuzzy
 msgid "Search in all layers"
 msgstr "सर्वसंस्तरेषु वृणु "
 
-#: ../src/ui/dialog/find.cpp:121
+#: ../src/ui/dialog/find.cpp:119
 msgid "Limit search to the current layer"
 msgstr "वर्तमानसंस्तरं प्रति अन्वेषणम् अवरोधय"
 
-#: ../src/ui/dialog/find.cpp:123
+#: ../src/ui/dialog/find.cpp:121
 msgid "Limit search to the current selection"
 msgstr "वर्तमानवरणं प्रति अन्वेषणम् अवरोधय"
 
-#: ../src/ui/dialog/find.cpp:125
+#: ../src/ui/dialog/find.cpp:123
 #, fuzzy
 msgid "Search in text objects"
 msgstr "विषयवस्तूनि अन्वेषय "
 
-#: ../src/ui/dialog/find.cpp:127
+#: ../src/ui/dialog/find.cpp:125
 msgid "Search in object properties, styles, attributes and IDs"
 msgstr ""
 
-#: ../src/ui/dialog/find.cpp:129
+#: ../src/ui/dialog/find.cpp:127
 msgid "Match upper/lower case"
 msgstr ""
 
-#: ../src/ui/dialog/find.cpp:132
+#: ../src/ui/dialog/find.cpp:130
 #, fuzzy
 msgid "Match whole objects only"
 msgstr "वृतवस्तूनि एव "
 
-#: ../src/ui/dialog/find.cpp:135
+#: ../src/ui/dialog/find.cpp:133
 msgid "Include hidden objects in search"
 msgstr "अन्वेषणे तिरोहितवस्तूनि अन्तर्गमय"
 
-#: ../src/ui/dialog/find.cpp:138
+#: ../src/ui/dialog/find.cpp:136
 msgid "Include locked objects in search"
 msgstr "अन्वेषणे पिहितवस्तूनि अन्तर्गमय"
 
-#: ../src/ui/dialog/find.cpp:141
+#: ../src/ui/dialog/find.cpp:139
 #, fuzzy
 msgid "Search id name"
 msgstr "चित्राणि अन्वेषय "
 
-#: ../src/ui/dialog/find.cpp:144
+#: ../src/ui/dialog/find.cpp:142
 #, fuzzy
 msgid "Search attribute name"
 msgstr "गुणनाम "
 
-#: ../src/ui/dialog/find.cpp:147
+#: ../src/ui/dialog/find.cpp:145
 #, fuzzy
 msgid "Search attribute value"
 msgstr "गुणमूल्यम् "
 
-#: ../src/ui/dialog/find.cpp:150
+#: ../src/ui/dialog/find.cpp:148
 #, fuzzy
 msgid "Search style"
 msgstr "क्लोन्स् अन्वेषय"
 
-#: ../src/ui/dialog/find.cpp:153
+#: ../src/ui/dialog/find.cpp:151
 #, fuzzy
 msgid "Search fonts"
 msgstr "क्लोन्स् अन्वेषय"
 
-#: ../src/ui/dialog/find.cpp:156
+#: ../src/ui/dialog/find.cpp:154
 #, fuzzy
 msgid "Search all object types"
 msgstr "सर्ववस्तुवर्गेषु अन्वेषय"
 
-#: ../src/ui/dialog/find.cpp:159
+#: ../src/ui/dialog/find.cpp:157
 msgid "Search rectangles"
 msgstr "आयतान् अन्वेषय"
 
-#: ../src/ui/dialog/find.cpp:162
+#: ../src/ui/dialog/find.cpp:160
 msgid "Search ellipses, arcs, circles"
 msgstr "दीर्घवृत्तानि, चापान्, वृत्तानि च अन्वेषय"
 
-#: ../src/ui/dialog/find.cpp:165
+#: ../src/ui/dialog/find.cpp:163
 msgid "Search stars and polygons"
 msgstr "नक्षत्राणि बहुभुजान् च अन्वेषय"
 
-#: ../src/ui/dialog/find.cpp:168
+#: ../src/ui/dialog/find.cpp:166
 msgid "Search spirals"
 msgstr "स्पैरल्स् अन्वेषय "
 
-#: ../src/ui/dialog/find.cpp:171
+#: ../src/ui/dialog/find.cpp:169
 msgid "Search paths, lines, polylines"
 msgstr "मार्गान्, रेखान्, बहुरेखान् च अन्वेषय"
 
-#: ../src/ui/dialog/find.cpp:174
+#: ../src/ui/dialog/find.cpp:172
 msgid "Search text objects"
 msgstr "विषयवस्तूनि अन्वेषय "
 
-#: ../src/ui/dialog/find.cpp:177
+#: ../src/ui/dialog/find.cpp:175
 msgid "Search groups"
 msgstr "समूहान् अन्वेषय "
 
-#: ../src/ui/dialog/find.cpp:180
+#: ../src/ui/dialog/find.cpp:178
 msgid "Search clones"
 msgstr "क्लोन्स् अन्वेषय"
 
-#: ../src/ui/dialog/find.cpp:183
+#: ../src/ui/dialog/find.cpp:181
 msgid "Search images"
 msgstr "चित्राणि अन्वेषय "
 
-#: ../src/ui/dialog/find.cpp:186
+#: ../src/ui/dialog/find.cpp:184
 msgid "Search offset objects"
 msgstr "ओफ्सेट् वस्तूनि अन्वेषय"
 
-#: ../src/ui/dialog/find.cpp:866
+#: ../src/ui/dialog/find.cpp:864
 #, fuzzy
 msgid "Nothing to replace"
 msgstr "पुनःकर्तुं किमपि न। "
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
-#: ../src/ui/dialog/find.cpp:907
+#: ../src/ui/dialog/find.cpp:905
 #, c-format
 msgid "<b>%d</b> object found (out of <b>%d</b>), %s match."
 msgid_plural "<b>%d</b> objects found (out of <b>%d</b>), %s match."
 msgstr[0] "<b>%d</b> वस्तुएँ मिला (<b>%d</b> से), %s मिलान."
 msgstr[1] "<b>%d</b> वस्तुएँ मिला (<b>%d</b> से), %s मिलान."
 
-#: ../src/ui/dialog/find.cpp:910
+#: ../src/ui/dialog/find.cpp:908
 msgid "exact"
 msgstr "यथा "
 
-#: ../src/ui/dialog/find.cpp:910
+#: ../src/ui/dialog/find.cpp:908
 msgid "partial"
 msgstr "असमग्रम्"
 
 #. TRANSLATORS: "%1" is replaced with the number of matches
-#: ../src/ui/dialog/find.cpp:913
+#: ../src/ui/dialog/find.cpp:911
 #, fuzzy
 msgid "%1 match replaced"
 msgid_plural "%1 matches replaced"
@@ -18697,33 +18706,33 @@ msgstr[0] "प्रतिसमाधातुं वर्णः"
 msgstr[1] "प्रतिसमाधातुं वर्णः"
 
 #. TRANSLATORS: "%1" is replaced with the number of matches
-#: ../src/ui/dialog/find.cpp:917
+#: ../src/ui/dialog/find.cpp:915
 #, fuzzy
 msgid "%1 object found"
 msgid_plural "%1 objects found"
 msgstr[0] "वस्तूनि नोपलब्धानि"
 msgstr[1] "वस्तूनि नोपलब्धानि"
 
-#: ../src/ui/dialog/find.cpp:931
+#: ../src/ui/dialog/find.cpp:929
 #, fuzzy
 msgid "Replace text or property"
 msgstr "विषयं प्रतिसमाधत्स्व "
 
-#: ../src/ui/dialog/find.cpp:935
+#: ../src/ui/dialog/find.cpp:933
 #, fuzzy
 msgid "Nothing found"
 msgstr "अपनेतुं किमपि न। "
 
-#: ../src/ui/dialog/find.cpp:940
+#: ../src/ui/dialog/find.cpp:938
 msgid "No objects found"
 msgstr "वस्तूनि नोपलब्धानि"
 
-#: ../src/ui/dialog/find.cpp:961
+#: ../src/ui/dialog/find.cpp:959
 #, fuzzy
 msgid "Select an object type"
 msgstr "सर्ववस्तुवर्गेषु अन्वेषय"
 
-#: ../src/ui/dialog/find.cpp:979
+#: ../src/ui/dialog/find.cpp:977
 #, fuzzy
 msgid "Select a property"
 msgstr "दर्शयितृविशेषान् स्थापय "
@@ -22625,7 +22634,6 @@ msgid "Default image resolution (in dots per inch) in the Export dialog"
 msgstr "निर्याणसंवादे मूलभूतबिट्मैप् विश्लेषणम् (बिन्दुषु प्रति इञ्च्)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1826
-#: ../src/ui/dialog/xml-tree.cpp:743
 msgid "Create"
 msgstr "उत्पादय "
 
@@ -22854,198 +22862,203 @@ msgstr "सिस्टम् सूचना :"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2303
 #, fuzzy
+msgid "Reset Preferences"
+msgstr "विषयैच्छिकाः "
+
+#: ../src/ui/dialog/inkscape-preferences.cpp:2306
+#, fuzzy
 msgid "User preferences: "
 msgstr "मार्जकैच्छिकाः "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2304
+#: ../src/ui/dialog/inkscape-preferences.cpp:2307
 #, fuzzy
 msgid "Location of the user’s preferences file"
 msgstr "%s ऐच्छिकासञ्चिकायाः उत्पादनं निष्फलम्।"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2306
+#: ../src/ui/dialog/inkscape-preferences.cpp:2309
 #, fuzzy
 msgid "Open preferences folder"
 msgstr "नोड् साधनाय ऐच्छिकाः उद्घाटय"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2307
+#: ../src/ui/dialog/inkscape-preferences.cpp:2310
 msgid "User config: "
 msgstr "प्रयोक्तृविन्यासः : "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2307
+#: ../src/ui/dialog/inkscape-preferences.cpp:2310
 msgid "Location of users configuration"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2310
+#: ../src/ui/dialog/inkscape-preferences.cpp:2313
 #, fuzzy
 msgid "Open extensions folder"
 msgstr "वैदिकविस्तारणानि "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2311
+#: ../src/ui/dialog/inkscape-preferences.cpp:2314
 #, fuzzy
 msgid "User extensions: "
 msgstr "वैदिकविस्तारणानि "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2312
+#: ../src/ui/dialog/inkscape-preferences.cpp:2315
 #, fuzzy
 msgid "Location of the user’s extensions"
 msgstr "इङ्क्स्केप् विस्तारणविषये सूचना"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2314
+#: ../src/ui/dialog/inkscape-preferences.cpp:2317
 msgid "Open themes folder"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2315
+#: ../src/ui/dialog/inkscape-preferences.cpp:2318
 #, fuzzy
 msgid "User themes: "
 msgstr "प्रयोक्तृकैश् :"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2315
+#: ../src/ui/dialog/inkscape-preferences.cpp:2318
 #, fuzzy
 msgid "Location of the user’s themes"
 msgstr "इङ्क्स्केप् विस्तारणविषये सूचना"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2318
+#: ../src/ui/dialog/inkscape-preferences.cpp:2321
 msgid "Open icons folder"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2319
+#: ../src/ui/dialog/inkscape-preferences.cpp:2322
 #, fuzzy
 msgid "User icons: "
 msgstr "प्रयोक्तृविन्यासः : "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2319
+#: ../src/ui/dialog/inkscape-preferences.cpp:2322
 #, fuzzy
 msgid "Location of the user’s icons"
 msgstr "इङ्क्स्केप् विस्तारणविषये सूचना"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2322
+#: ../src/ui/dialog/inkscape-preferences.cpp:2325
 #, fuzzy
 msgid "Open templates folder"
 msgstr "किमपि फिल्टर् न वृतम् "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2323
+#: ../src/ui/dialog/inkscape-preferences.cpp:2326
 #, fuzzy
 msgid "User templates: "
 msgstr "कापी सञ्चय... (_y)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2324
+#: ../src/ui/dialog/inkscape-preferences.cpp:2327
 #, fuzzy
 msgid "Location of the user’s templates"
 msgstr "इङ्क्स्केप् विस्तारणविषये सूचना"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2327
+#: ../src/ui/dialog/inkscape-preferences.cpp:2330
 #, fuzzy
 msgid "Open symbols folder"
 msgstr "वस्तूनि नोपलब्धानि"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2328
+#: ../src/ui/dialog/inkscape-preferences.cpp:2331
 #, fuzzy
 msgid "User symbols: "
 msgstr "ख्मेर् सङ्केताः "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2328
+#: ../src/ui/dialog/inkscape-preferences.cpp:2331
 #, fuzzy
 msgid "Location of the user’s symbols"
 msgstr "इङ्क्स्केप् विस्तारणविषये सूचना"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2332
+#: ../src/ui/dialog/inkscape-preferences.cpp:2335
 #, fuzzy
 msgid "Open palettes folder"
 msgstr "HPGL प्लोट्टर् सञ्चिकाः उद्घाटय"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2333
+#: ../src/ui/dialog/inkscape-preferences.cpp:2336
 #, fuzzy
 msgid "User palettes: "
 msgstr "प्रयोक्तृडाटा :"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2333
+#: ../src/ui/dialog/inkscape-preferences.cpp:2336
 #, fuzzy
 msgid "Location of the user’s palettes"
 msgstr "इङ्क्स्केप् विस्तारणविषये सूचना"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2337
+#: ../src/ui/dialog/inkscape-preferences.cpp:2340
 #, fuzzy
 msgid "Open keyboard shortcuts folder"
 msgstr "PS सञ्चिकां प्रति लेख्यपत्रं निर्याणीकुरु "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2338
+#: ../src/ui/dialog/inkscape-preferences.cpp:2341
 #, fuzzy
 msgid "User keys: "
 msgstr "प्रयोक्तृकैश् :"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2339
+#: ../src/ui/dialog/inkscape-preferences.cpp:2342
 #, fuzzy
 msgid "Location of the user’s keyboard mapping files"
 msgstr "%s ऐच्छिकासञ्चिकायाः उत्पादनं निष्फलम्।"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2342
+#: ../src/ui/dialog/inkscape-preferences.cpp:2345
 msgid "Open user interface folder"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2343
+#: ../src/ui/dialog/inkscape-preferences.cpp:2346
 #, fuzzy
 msgid "User UI: "
 msgstr "प्रयोक्तृडाटा :"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2344
+#: ../src/ui/dialog/inkscape-preferences.cpp:2347
 #, fuzzy
 msgid "Location of the user’s user interface description files"
 msgstr "%s ऐच्छिकासञ्चिकायाः उत्पादनं निष्फलम्।"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2348
+#: ../src/ui/dialog/inkscape-preferences.cpp:2351
 msgid "User cache: "
 msgstr "प्रयोक्तृकैश् :"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2348
+#: ../src/ui/dialog/inkscape-preferences.cpp:2351
 #, fuzzy
 msgid "Location of user’s cache"
 msgstr "इङ्क्स्केप् विस्तारणविषये सूचना"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2356
+#: ../src/ui/dialog/inkscape-preferences.cpp:2359
 msgid "Temporary files: "
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2356
+#: ../src/ui/dialog/inkscape-preferences.cpp:2359
 msgid "Location of the temporary files used for autosave"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2360
+#: ../src/ui/dialog/inkscape-preferences.cpp:2363
 #, fuzzy
 msgid "Inkscape data: "
 msgstr "इङ्क्स्केप् मानुअल् "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2360
+#: ../src/ui/dialog/inkscape-preferences.cpp:2363
 #, fuzzy
 msgid "Location of Inkscape data"
 msgstr "इङ्क्स्केप् विस्तारणविषये सूचना"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2364
+#: ../src/ui/dialog/inkscape-preferences.cpp:2367
 #, fuzzy
 msgid "Inkscape extensions: "
 msgstr "इङ्क्स्केप् विस्तारणविषये सूचना"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2364
+#: ../src/ui/dialog/inkscape-preferences.cpp:2367
 #, fuzzy
 msgid "Location of the Inkscape extensions"
 msgstr "इङ्क्स्केप् विस्तारणविषये सूचना"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2374
+#: ../src/ui/dialog/inkscape-preferences.cpp:2377
 msgid "System data: "
 msgstr "सिस्टम् डाटा :"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2374
+#: ../src/ui/dialog/inkscape-preferences.cpp:2377
 msgid "Locations of system data"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2388
+#: ../src/ui/dialog/inkscape-preferences.cpp:2391
 msgid "Icon theme: "
 msgstr "प्रतीकवीथिका :"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2388
+#: ../src/ui/dialog/inkscape-preferences.cpp:2391
 msgid "Locations of icon themes"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2390
+#: ../src/ui/dialog/inkscape-preferences.cpp:2393
 msgid "System"
 msgstr "सिस्टम् "
 
@@ -24029,7 +24042,7 @@ msgid "Reset all settings to defaults"
 msgstr "वर्तमानटैब् मध्ये मूलभूतानि प्रति मूल्यानि पुनः स्थापय"
 
 #. ## The OK button
-#: ../src/ui/dialog/pixelartdialog.cpp:299 ../src/ui/dialog/spellcheck.cpp:73
+#: ../src/ui/dialog/pixelartdialog.cpp:299 ../src/ui/dialog/spellcheck.cpp:72
 #: ../src/ui/dialog/tracedialog.cpp:813
 msgid "_Stop"
 msgstr "रुन्धि (_S)"
@@ -24213,73 +24226,73 @@ msgstr "विवरणम् :"
 msgid "Keywords: "
 msgstr "विशेषशब्दाः :"
 
-#: ../src/ui/dialog/spellcheck.cpp:68
+#: ../src/ui/dialog/spellcheck.cpp:67
 msgid "_Accept"
 msgstr "अङ्गीकुरु (_A)"
 
-#: ../src/ui/dialog/spellcheck.cpp:69
+#: ../src/ui/dialog/spellcheck.cpp:68
 msgid "_Ignore once"
 msgstr "एकवारम् उपेक्षस्व (_I)"
 
-#: ../src/ui/dialog/spellcheck.cpp:70
+#: ../src/ui/dialog/spellcheck.cpp:69
 msgid "_Ignore"
 msgstr "उपेक्षस्व (_I)"
 
-#: ../src/ui/dialog/spellcheck.cpp:71
+#: ../src/ui/dialog/spellcheck.cpp:70
 msgid "A_dd"
 msgstr ""
 
-#: ../src/ui/dialog/spellcheck.cpp:74
+#: ../src/ui/dialog/spellcheck.cpp:73
 msgid "_Start"
 msgstr "प्रारभस्व (_S)"
 
-#: ../src/ui/dialog/spellcheck.cpp:104
+#: ../src/ui/dialog/spellcheck.cpp:103
 msgid "Suggestions:"
 msgstr "उपदेशाः :"
 
-#: ../src/ui/dialog/spellcheck.cpp:119
+#: ../src/ui/dialog/spellcheck.cpp:118
 msgid "Accept the chosen suggestion"
 msgstr "वृतोपदेशम् अङ्गीकुरु"
 
-#: ../src/ui/dialog/spellcheck.cpp:120
+#: ../src/ui/dialog/spellcheck.cpp:119
 msgid "Ignore this word only once"
 msgstr "एतं शब्दं एकवारम् उपेक्षस्व"
 
-#: ../src/ui/dialog/spellcheck.cpp:121
+#: ../src/ui/dialog/spellcheck.cpp:120
 msgid "Ignore this word in this session"
 msgstr "अस्यां संसदि एतं शब्दम् उपेक्षस्व "
 
-#: ../src/ui/dialog/spellcheck.cpp:122
+#: ../src/ui/dialog/spellcheck.cpp:121
 msgid "Add this word to the chosen dictionary"
 msgstr "वृतशब्दकोशं प्रति एतं शब्दं सङ्कलय"
 
-#: ../src/ui/dialog/spellcheck.cpp:136
+#: ../src/ui/dialog/spellcheck.cpp:135
 msgid "Stop the check"
 msgstr "परीक्षां रुन्धि"
 
-#: ../src/ui/dialog/spellcheck.cpp:137
+#: ../src/ui/dialog/spellcheck.cpp:136
 msgid "Start the check"
 msgstr "परीक्षां प्रारभस्व"
 
-#: ../src/ui/dialog/spellcheck.cpp:432
+#: ../src/ui/dialog/spellcheck.cpp:431
 #, c-format
 msgid "<b>Finished</b>, <b>%d</b> words added to dictionary"
 msgstr "<b>समाप्तम्</b>, <b>%d</b> शब्दकोशं प्रति शब्दाः सङ्कलिताः"
 
-#: ../src/ui/dialog/spellcheck.cpp:434
+#: ../src/ui/dialog/spellcheck.cpp:433
 msgid "<b>Finished</b>, nothing suspicious found"
 msgstr "<b>समाप्तम्</b>, किमपि सन्दिग्धं न"
 
-#: ../src/ui/dialog/spellcheck.cpp:549
+#: ../src/ui/dialog/spellcheck.cpp:548
 #, c-format
 msgid "Not in dictionary (%s): <b>%s</b>"
 msgstr "शब्दकोशे नास्ति (%s): <b>%s</b>"
 
-#: ../src/ui/dialog/spellcheck.cpp:698
+#: ../src/ui/dialog/spellcheck.cpp:697
 msgid "<i>Checking...</i>"
 msgstr "<i>परीक्षते...</i>"
 
-#: ../src/ui/dialog/spellcheck.cpp:767
+#: ../src/ui/dialog/spellcheck.cpp:766
 msgid "Fix spelling"
 msgstr "वर्णविन्यासं परीक्षस्व "
 
@@ -24288,7 +24301,7 @@ msgstr "वर्णविन्यासं परीक्षस्व "
 msgid "Edited style element."
 msgstr "tutorial-elements.svg"
 
-#: ../src/ui/dialog/styledialog.cpp:885 ../src/ui/dialog/xml-tree.cpp:737
+#: ../src/ui/dialog/styledialog.cpp:885
 msgid "Cancel"
 msgstr "निरसनं कुरु "
 
@@ -24396,7 +24409,8 @@ msgid "Cap Height:"
 msgstr "पट्टौन्नत्यम् : "
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:474
-msgid "I don't know what this does."
+msgid ""
+"The height of a capital letter above the baseline like the letter 'H' or 'I'."
 msgstr ""
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:475
@@ -24405,7 +24419,8 @@ msgid "x Height:"
 msgstr "औन्नत्यम् : "
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:475
-msgid "Not sure about this one either."
+msgid ""
+"The height of a lower-case letter above the baseline like the letter 'x'."
 msgstr ""
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:548
@@ -24540,7 +24555,7 @@ msgstr "फोण्ट् "
 msgid "Add font"
 msgstr "फाण्ट् सङ्कलय "
 
-#: ../src/ui/dialog/svg-fonts-dialog.cpp:1017 ../src/ui/dialog/text-edit.cpp:67
+#: ../src/ui/dialog/svg-fonts-dialog.cpp:1017 ../src/ui/dialog/text-edit.cpp:65
 msgid "_Font"
 msgstr "फाण्ट् (_F)"
 
@@ -24566,7 +24581,7 @@ msgid "Preview Text:"
 msgstr "पूर्वदृश्यविषयः  :"
 
 #: ../src/ui/dialog/swatches.cpp:210 ../src/ui/tools/gradient-tool.cpp:359
-#: ../src/ui/tools/gradient-tool.cpp:446 ../src/widgets/gradient-vector.cpp:750
+#: ../src/ui/tools/gradient-tool.cpp:446 ../src/widgets/gradient-vector.cpp:748
 msgid "Add gradient stop"
 msgstr "ग्रेडियण्ट् रोधं सङ्कलय"
 
@@ -24861,12 +24876,12 @@ msgstr "मार्गः : "
 msgid "By: "
 msgstr ""
 
-#: ../src/ui/dialog/text-edit.cpp:69
+#: ../src/ui/dialog/text-edit.cpp:67
 #, fuzzy
 msgid "_Features"
 msgstr "स्वरूपाणि "
 
-#: ../src/ui/dialog/text-edit.cpp:70
+#: ../src/ui/dialog/text-edit.cpp:68
 #, fuzzy
 msgid "Set as _default"
 msgstr "मूलभूतमिव स्थापय "
@@ -24876,12 +24891,12 @@ msgstr "मूलभूतमिव स्थापय "
 #. * text has been entered) to get a preview of the font.  Choose
 #. * some representative characters that users of your locale will be
 #. * interested in.
-#: ../src/ui/dialog/text-edit.cpp:84
+#: ../src/ui/dialog/text-edit.cpp:82
 #, fuzzy
 msgid "AaBbCcIiPpQq12369$€¢?.;/()"
 msgstr "AaBbCcIiPpQq12369$€¢?.;/()"
 
-#: ../src/ui/dialog/text-edit.cpp:458 ../src/ui/tools/text-tool.cpp:1534
+#: ../src/ui/dialog/text-edit.cpp:456 ../src/ui/tools/text-tool.cpp:1534
 msgid "Set text style"
 msgstr "विषयशैलीं स्थापय "
 
@@ -25336,154 +25351,150 @@ msgstr "परिणतिमेट्रिक्स् सम्पादय"
 msgid "Rotation angle (positive = clockwise)"
 msgstr "परिवर्तनकोणः (अन्वयम् = वामावृत्तम्)"
 
-#: ../src/ui/dialog/xml-tree.cpp:66 ../src/ui/dialog/xml-tree.cpp:111
+#: ../src/ui/dialog/xml-tree.cpp:64 ../src/ui/dialog/xml-tree.cpp:109
 msgid "New element node"
 msgstr "नूतनतत्त्वनोड् "
 
-#: ../src/ui/dialog/xml-tree.cpp:67 ../src/ui/dialog/xml-tree.cpp:118
+#: ../src/ui/dialog/xml-tree.cpp:65 ../src/ui/dialog/xml-tree.cpp:116
 msgid "New text node"
 msgstr "नूतनविषयनोड् "
 
-#: ../src/ui/dialog/xml-tree.cpp:68 ../src/ui/dialog/xml-tree.cpp:134
+#: ../src/ui/dialog/xml-tree.cpp:66 ../src/ui/dialog/xml-tree.cpp:132
 msgid "nodeAsInXMLdialogTooltip|Delete node"
 msgstr "nodeAsInXMLdialogTooltip|Delete नोड्"
 
-#: ../src/ui/dialog/xml-tree.cpp:69 ../src/ui/dialog/xml-tree.cpp:125
-#: ../src/ui/dialog/xml-tree.cpp:804
+#: ../src/ui/dialog/xml-tree.cpp:67 ../src/ui/dialog/xml-tree.cpp:123
+#: ../src/ui/dialog/xml-tree.cpp:754
 msgid "Duplicate node"
 msgstr "अनुकृतनोड् "
 
 #. tree view
-#: ../src/ui/dialog/xml-tree.cpp:102
+#: ../src/ui/dialog/xml-tree.cpp:100
 #, fuzzy
 msgid "_Nodes"
 msgstr "नोड्स् "
 
-#: ../src/ui/dialog/xml-tree.cpp:104
+#: ../src/ui/dialog/xml-tree.cpp:102
 msgid "Drag to reorder nodes"
 msgstr "नोड्स् पुनः क्रमस्थीकर्तुं कर्षय "
 
-#: ../src/ui/dialog/xml-tree.cpp:143 ../src/ui/dialog/xml-tree.cpp:144
-#: ../src/ui/dialog/xml-tree.cpp:914
+#: ../src/ui/dialog/xml-tree.cpp:141 ../src/ui/dialog/xml-tree.cpp:142
+#: ../src/ui/dialog/xml-tree.cpp:864
 msgid "Unindent node"
 msgstr "नोड् अन्निण्डेण्ट् कुरु "
 
-#: ../src/ui/dialog/xml-tree.cpp:151 ../src/ui/dialog/xml-tree.cpp:152
-#: ../src/ui/dialog/xml-tree.cpp:892
+#: ../src/ui/dialog/xml-tree.cpp:149 ../src/ui/dialog/xml-tree.cpp:150
+#: ../src/ui/dialog/xml-tree.cpp:842
 msgid "Indent node"
 msgstr "नोड् इण्डेण्ट् कुरु "
 
-#: ../src/ui/dialog/xml-tree.cpp:159 ../src/ui/dialog/xml-tree.cpp:160
-#: ../src/ui/dialog/xml-tree.cpp:843
+#: ../src/ui/dialog/xml-tree.cpp:157 ../src/ui/dialog/xml-tree.cpp:158
+#: ../src/ui/dialog/xml-tree.cpp:793
 msgid "Raise node"
 msgstr "नोड् उत्थापय "
 
-#: ../src/ui/dialog/xml-tree.cpp:167 ../src/ui/dialog/xml-tree.cpp:168
-#: ../src/ui/dialog/xml-tree.cpp:861
+#: ../src/ui/dialog/xml-tree.cpp:165 ../src/ui/dialog/xml-tree.cpp:166
+#: ../src/ui/dialog/xml-tree.cpp:811
 msgid "Lower node"
 msgstr "नोड् न्यूनीकुरु "
 
-#: ../src/ui/dialog/xml-tree.cpp:186
+#: ../src/ui/dialog/xml-tree.cpp:184
 #, fuzzy
 msgid "_Attributes"
 msgstr "गुणः :(_A)"
 
-#: ../src/ui/dialog/xml-tree.cpp:207
+#: ../src/ui/dialog/xml-tree.cpp:205
 #, fuzzy
 msgid "_Styles"
 msgstr "शैली : (_S)"
 
-#: ../src/ui/dialog/xml-tree.cpp:250
+#: ../src/ui/dialog/xml-tree.cpp:248
 msgid "<b>Click</b> to select nodes, <b>drag</b> to rearrange."
 msgstr "<b>क्लिक् कुरु</b> नोड्स् वृणोतुं, <b>कर्षय</b> पुनर्व्यवस्थापयितम्।"
 
-#: ../src/ui/dialog/xml-tree.cpp:460
+#: ../src/ui/dialog/xml-tree.cpp:458
 msgid "Drag XML subtree"
 msgstr "XML उपतरुं कर्षय"
 
-#: ../src/ui/dialog/xml-tree.cpp:711
-msgid "New element node..."
-msgstr "नूतनतत्त्वनोड् ... "
-
-#: ../src/ui/dialog/xml-tree.cpp:774
+#: ../src/ui/dialog/xml-tree.cpp:724
 msgid "Create new element node"
 msgstr "नूतनतत्त्वनोड् उत्पादय "
 
-#: ../src/ui/dialog/xml-tree.cpp:789
+#: ../src/ui/dialog/xml-tree.cpp:739
 msgid "Create new text node"
 msgstr "नूतनविषयनोड् उत्पादय "
 
-#: ../src/ui/dialog/xml-tree.cpp:821
+#: ../src/ui/dialog/xml-tree.cpp:771
 msgid "nodeAsInXMLinHistoryDialog|Delete node"
 msgstr "nodeAsInXMLinHistoryDialog|Delete नोड्"
 
-#: ../src/ui/interface.cpp:765
+#: ../src/ui/interface.cpp:767
 #, fuzzy
 msgctxt "Interface setup"
 msgid "Default"
 msgstr "मूलभूतम्"
 
-#: ../src/ui/interface.cpp:765
+#: ../src/ui/interface.cpp:767
 msgid "Default interface setup"
 msgstr "मूलभूता इण्टर्फेस् स्थापना"
 
-#: ../src/ui/interface.cpp:766
+#: ../src/ui/interface.cpp:768
 #, fuzzy
 msgctxt "Interface setup"
 msgid "Custom"
 msgstr "स्वेच्छा "
 
-#: ../src/ui/interface.cpp:766
+#: ../src/ui/interface.cpp:768
 #, fuzzy
 msgid "Setup for custom task"
 msgstr "स्वेच्छाकार्यं स्थापय "
 
-#: ../src/ui/interface.cpp:767
+#: ../src/ui/interface.cpp:769
 #, fuzzy
 msgctxt "Interface setup"
 msgid "Wide"
 msgstr "विस्तृतम्"
 
-#: ../src/ui/interface.cpp:767
+#: ../src/ui/interface.cpp:769
 msgid "Setup for widescreen work"
 msgstr "विस्तृतपटकार्याय स्थापना"
 
-#: ../src/ui/interface.cpp:903
+#: ../src/ui/interface.cpp:905
 #, c-format
 msgid "Verb \"%s\" Unknown"
 msgstr "\"%s\" क्रिया अज्ञाता"
 
-#: ../src/ui/interface.cpp:938
+#: ../src/ui/interface.cpp:940
 msgid "Open _Recent"
 msgstr "अद्यतनम् उद्घाटय (_R)"
 
-#: ../src/ui/interface.cpp:1046 ../src/ui/interface.cpp:1132
-#: ../src/ui/interface.cpp:1235 ../src/ui/widget/selected-style.cpp:531
+#: ../src/ui/interface.cpp:1048 ../src/ui/interface.cpp:1134
+#: ../src/ui/interface.cpp:1237 ../src/ui/widget/selected-style.cpp:531
 msgid "Drop color"
 msgstr "वर्णं पातय "
 
-#: ../src/ui/interface.cpp:1085 ../src/ui/interface.cpp:1195
+#: ../src/ui/interface.cpp:1087 ../src/ui/interface.cpp:1197
 msgid "Drop color on gradient"
 msgstr "ग्रेडियण्ट् मध्ये वर्णं पातय "
 
-#: ../src/ui/interface.cpp:1250
+#: ../src/ui/interface.cpp:1252
 msgid "Could not parse SVG data"
 msgstr "SVG डाटा परिशीलयितुं न शक्यते"
 
-#: ../src/ui/interface.cpp:1289
+#: ../src/ui/interface.cpp:1291
 msgid "Drop SVG"
 msgstr "SVG पातय"
 
-#: ../src/ui/interface.cpp:1306
+#: ../src/ui/interface.cpp:1308
 #, fuzzy
 msgid "Drop Symbol"
 msgstr "ख्मेर् सङ्केताः "
 
-#: ../src/ui/interface.cpp:1329
+#: ../src/ui/interface.cpp:1331
 msgid "Drop bitmap image"
 msgstr "बिट्मैप् चित्रं पातय"
 
-#: ../src/ui/interface.cpp:1422
+#: ../src/ui/interface.cpp:1424
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">A file named \"%s\" already exists. Do "
@@ -25497,7 +25508,7 @@ msgstr ""
 " \"%s\" मध्ये पूर्वमेव सञ्चिका वर्तते। तत्प्रतिसमाधानेन तस्याः अन्तर्गतवस्तूनि अधिलिखितानि "
 "भविष्यन्ति।"
 
-#: ../src/ui/interface.cpp:1429 ../share/extensions/web-set-att.inx.h:21
+#: ../src/ui/interface.cpp:1431 ../share/extensions/web-set-att.inx.h:21
 #: ../share/extensions/web-transmit-att.inx.h:19
 msgid "Replace"
 msgstr "प्रतिसमाधत्स्व "
@@ -26844,7 +26855,7 @@ msgid "Multiple gradients"
 msgstr "ग्रेडियण्ट्स् चेष्टय "
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:544
-#: ../src/widgets/gradient-vector.cpp:568
+#: ../src/widgets/gradient-vector.cpp:566
 msgid "No stops in gradient"
 msgstr "ग्रेडियण्ट् मध्ये रोधाः न"
 
@@ -26863,7 +26874,7 @@ msgid "Set gradient repeat"
 msgstr "स्ट्रोक् मध्ये ग्रेडियण्ट् स्थापय"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:828
-#: ../src/widgets/gradient-vector.cpp:676
+#: ../src/widgets/gradient-vector.cpp:674
 msgid "Change gradient stop offset"
 msgstr "ग्रेडियण्ट् रोध-ओफ्सेट् परिणम"
 
@@ -26959,7 +26970,7 @@ msgstr "रुन्धि (_S)"
 
 #. Label
 #: ../src/ui/toolbar/gradient-toolbar.cpp:1044
-#: ../src/widgets/gradient-vector.cpp:853
+#: ../src/widgets/gradient-vector.cpp:851
 #, fuzzy
 msgctxt "Gradient"
 msgid "Offset:"
@@ -26978,7 +26989,7 @@ msgstr "नोड् समावेशय"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:1076
 #: ../src/ui/toolbar/gradient-toolbar.cpp:1077
-#: ../src/widgets/gradient-vector.cpp:839
+#: ../src/widgets/gradient-vector.cpp:837
 msgid "Delete stop"
 msgstr "रोधं लोपय"
 
@@ -34547,43 +34558,43 @@ msgstr "स्वाच्"
 msgid "Rename gradient"
 msgstr "ग्रेडियण्ट् विपर्यासं कुरु "
 
-#: ../src/widgets/gradient-vector.cpp:294 ../src/widgets/paint-selector.cpp:904
+#: ../src/widgets/gradient-vector.cpp:292 ../src/widgets/paint-selector.cpp:904
 #: ../src/widgets/paint-selector.cpp:1240
 #: ../src/widgets/stroke-marker-selector.cpp:145
 msgid "No document selected"
 msgstr "किमपि लेख्यपत्रं न वृतम् "
 
-#: ../src/widgets/gradient-vector.cpp:298
+#: ../src/widgets/gradient-vector.cpp:296
 msgid "No gradients in document"
 msgstr "लेख्यपत्रे न ग्रेडियण्ट्स्"
 
-#: ../src/widgets/gradient-vector.cpp:302
+#: ../src/widgets/gradient-vector.cpp:300
 msgid "No gradient selected"
 msgstr "किमपि ग्रेडियण्ट् न वृतम् "
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: ../src/widgets/gradient-vector.cpp:834
+#: ../src/widgets/gradient-vector.cpp:832
 msgid "Add stop"
 msgstr "रोधं सङ्कलय"
 
-#: ../src/widgets/gradient-vector.cpp:837
+#: ../src/widgets/gradient-vector.cpp:835
 msgid "Add another control stop to gradient"
 msgstr "ग्रेडियण्ट् प्रति अन्यं नियन्त्रणरोधं सङ्कलय"
 
-#: ../src/widgets/gradient-vector.cpp:842
+#: ../src/widgets/gradient-vector.cpp:840
 msgid "Delete current control stop from gradient"
 msgstr "ग्रेडियण्ट् तः वर्तमाननियन्त्रणरोधं लोपय"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: ../src/widgets/gradient-vector.cpp:903
+#: ../src/widgets/gradient-vector.cpp:901
 msgid "Stop Color"
 msgstr "रोधवर्णः"
 
-#: ../src/widgets/gradient-vector.cpp:942
+#: ../src/widgets/gradient-vector.cpp:941
 msgid "Gradient editor"
 msgstr "ग्रेडियण्ट् सम्पादकः "
 
-#: ../src/widgets/gradient-vector.cpp:1286
+#: ../src/widgets/gradient-vector.cpp:1287
 msgid "Change gradient stop color"
 msgstr "ग्रेडियण्ट् रोधवर्णं परिणम "
 
@@ -34877,140 +34888,140 @@ msgstr "TBD"
 msgid "Style of Paint Bucket fill objects"
 msgstr "लेप्यद्रोणीपूर्तिवस्तूनां शैली"
 
-#: ../src/widgets/toolbox.cpp:1257
+#: ../src/widgets/toolbox.cpp:1318
 msgid "Bounding box"
 msgstr "आबद्धपेटिका "
 
-#: ../src/widgets/toolbox.cpp:1257
+#: ../src/widgets/toolbox.cpp:1318
 #, fuzzy
 msgid "Snap bounding boxes"
 msgstr "आबद्धपेटिकाकोणान् स्नैप् कुरु"
 
-#: ../src/widgets/toolbox.cpp:1266
+#: ../src/widgets/toolbox.cpp:1327
 msgid "Bounding box edges"
 msgstr "आबद्धपेटिकाप्रान्ताः"
 
-#: ../src/widgets/toolbox.cpp:1266
+#: ../src/widgets/toolbox.cpp:1327
 msgid "Snap to edges of a bounding box"
 msgstr "आबद्धपेटिकायाः प्रान्तान् प्रति स्नैप् कुरु"
 
-#: ../src/widgets/toolbox.cpp:1275
+#: ../src/widgets/toolbox.cpp:1336
 msgid "Bounding box corners"
 msgstr "आबद्धपेटिकाकोणाः"
 
-#: ../src/widgets/toolbox.cpp:1275
+#: ../src/widgets/toolbox.cpp:1336
 msgid "Snap bounding box corners"
 msgstr "आबद्धपेटिकाकोणान् स्नैप् कुरु"
 
-#: ../src/widgets/toolbox.cpp:1284
+#: ../src/widgets/toolbox.cpp:1345
 msgid "BBox Edge Midpoints"
 msgstr "BBox प्रान्तः मध्यबिन्दवः"
 
-#: ../src/widgets/toolbox.cpp:1284
+#: ../src/widgets/toolbox.cpp:1345
 #, fuzzy
 msgid "Snap midpoints of bounding box edges"
 msgstr "आबद्धपेटिकाप्रान्तानां मध्यबिन्दुतः प्रति च स्नैप् कुरु"
 
-#: ../src/widgets/toolbox.cpp:1294
+#: ../src/widgets/toolbox.cpp:1355
 msgid "BBox Centers"
 msgstr "BBox मध्यानि"
 
-#: ../src/widgets/toolbox.cpp:1294
+#: ../src/widgets/toolbox.cpp:1355
 #, fuzzy
 msgid "Snapping centers of bounding boxes"
 msgstr "आबद्धपेटिकाप्रान्तानां मध्यबिन्दुतः प्रति च स्नैप्पिङ्"
 
-#: ../src/widgets/toolbox.cpp:1303
+#: ../src/widgets/toolbox.cpp:1364
 #, fuzzy
 msgid "Snap nodes, paths, and handles"
 msgstr "नोड्स् निर्वाहकान् वा स्नैप् कुरु"
 
-#: ../src/widgets/toolbox.cpp:1311
+#: ../src/widgets/toolbox.cpp:1372
 msgid "Snap to paths"
 msgstr "मार्गान् स्नैप् कुरु"
 
-#: ../src/widgets/toolbox.cpp:1320
+#: ../src/widgets/toolbox.cpp:1381
 msgid "Path intersections"
 msgstr "मार्गछेदनानि "
 
-#: ../src/widgets/toolbox.cpp:1320
+#: ../src/widgets/toolbox.cpp:1381
 msgid "Snap to path intersections"
 msgstr "मार्गछेदनानि प्रति स्नैप् कुरु"
 
-#: ../src/widgets/toolbox.cpp:1329
+#: ../src/widgets/toolbox.cpp:1390
 msgid "To nodes"
 msgstr "नोड्स् प्रति"
 
-#: ../src/widgets/toolbox.cpp:1329
+#: ../src/widgets/toolbox.cpp:1390
 msgid "Snap cusp nodes, incl. rectangle corners"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1338
+#: ../src/widgets/toolbox.cpp:1399
 msgid "Smooth nodes"
 msgstr "श्लक्ष्णनोड्स्"
 
-#: ../src/widgets/toolbox.cpp:1338
+#: ../src/widgets/toolbox.cpp:1399
 msgid "Snap smooth nodes, incl. quadrant points of ellipses"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1347
+#: ../src/widgets/toolbox.cpp:1408
 msgid "Line Midpoints"
 msgstr "रेखामध्यबिन्दवः"
 
-#: ../src/widgets/toolbox.cpp:1347
+#: ../src/widgets/toolbox.cpp:1408
 #, fuzzy
 msgid "Snap midpoints of line segments"
 msgstr "रेखाभागानां मध्यबिन्दुतः प्रति च स्नैप् कुरु"
 
-#: ../src/widgets/toolbox.cpp:1356
+#: ../src/widgets/toolbox.cpp:1417
 #, fuzzy
 msgid "Others"
 msgstr "अन्यः "
 
-#: ../src/widgets/toolbox.cpp:1356
+#: ../src/widgets/toolbox.cpp:1417
 msgid "Snap other points (centers, guide origins, gradient handles, etc.)"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1364
+#: ../src/widgets/toolbox.cpp:1425
 msgid "Object Centers"
 msgstr "वस्तुमध्यानि"
 
-#: ../src/widgets/toolbox.cpp:1364
+#: ../src/widgets/toolbox.cpp:1425
 #, fuzzy
 msgid "Snap centers of objects"
 msgstr "वस्तूनां मध्यात् मध्यं स्नैप् कुरु"
 
-#: ../src/widgets/toolbox.cpp:1373
+#: ../src/widgets/toolbox.cpp:1434
 msgid "Rotation Centers"
 msgstr "परिवर्तनमध्यानि"
 
-#: ../src/widgets/toolbox.cpp:1373
+#: ../src/widgets/toolbox.cpp:1434
 #, fuzzy
 msgid "Snap an item's rotation center"
 msgstr "वस्तुनः परिवर्तनमध्यात् मध्यं स्नैप् कुरु"
 
-#: ../src/widgets/toolbox.cpp:1382
+#: ../src/widgets/toolbox.cpp:1443
 msgid "Text baseline"
 msgstr "विषयाधाररेखा"
 
-#: ../src/widgets/toolbox.cpp:1382
+#: ../src/widgets/toolbox.cpp:1443
 #, fuzzy
 msgid "Snap text anchors and baselines"
 msgstr "विषयाधारेखाः पङ्क्तीकुरु"
 
-#: ../src/widgets/toolbox.cpp:1392
+#: ../src/widgets/toolbox.cpp:1453
 msgid "Page border"
 msgstr "पृष्ठसीमा "
 
-#: ../src/widgets/toolbox.cpp:1392
+#: ../src/widgets/toolbox.cpp:1453
 msgid "Snap to the page border"
 msgstr "पृष्ठसीमां प्रति स्नैप् कुरु"
 
-#: ../src/widgets/toolbox.cpp:1401
+#: ../src/widgets/toolbox.cpp:1462
 msgid "Snap to grids"
 msgstr "जालानि प्रति स्नैप् कुरु"
 
-#: ../src/widgets/toolbox.cpp:1410
+#: ../src/widgets/toolbox.cpp:1471
 #, fuzzy
 msgid "Snap guides"
 msgstr "दर्शयितॄन् प्रति स्नैप् कुरु "
@@ -42775,6 +42786,15 @@ msgstr "साहाय्यम् (_H)"
 #: ../share/ui/menus.xml.h:22
 msgid "Tutorials"
 msgstr "पाठाः"
+
+#~ msgid "Unable to find verb ID '%s' specified on the command line.\n"
+#~ msgstr "कमाण्ड् रेखायां निर्दष्टं क्रिया ID '%s' अन्वेषयितुं न शक्यते।\n"
+
+#~ msgid "Unable to find node ID: '%s'\n"
+#~ msgstr "नोडे ID अन्वेषयितुं न शक्यते : '%s'\n"
+
+#~ msgid "New element node..."
+#~ msgstr "नूतनतत्त्वनोड् ... "
 
 #~ msgid "Perspective path"
 #~ msgstr "दृष्ट्यनुसारमार्गः"
