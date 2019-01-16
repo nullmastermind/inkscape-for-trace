@@ -340,9 +340,6 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<
     _active_document = desktop->getDocument();
     // _documents.push_back(desktop->getDocument());
 
-    // Add Gtk::Window to app window list.
-    add_window(*desktop->getToplevel());
-
     return (desktop); // Temp: Need to track desktop for shell mode.
 }
 
