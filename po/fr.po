@@ -8543,8 +8543,8 @@ msgid ""
 "This file contains digital artwork for screen display. <b>(Choose if "
 "unsure.)</b>"
 msgstr ""
-"Ce fichier contient une œuvre numérique pour l'affichage sur écran. <b>(à "
-"choisir en cas de doute)</b>"
+"Ce fichier contient une œuvre numérique pour l'affichage sur écran. <b>(À "
+"choisir en cas de doute.)</b>"
 
 #: ../src/file-update.cpp:351
 msgid "This file is intended for physical output, such as paper or 3D prints."
@@ -8558,7 +8558,7 @@ msgid ""
 "is most important. <b>(Choose if unsure.)</b>"
 msgstr ""
 "L'apparence des éléments comme les découpes, les masques, les filtres\n"
-"et les clones est le plus important <b>(à choisir en cas de doute)</b>"
+"et les clones est le plus important. <b>(À choisir en cas de doute.)</b>"
 
 #: ../src/file-update.cpp:357
 msgid ""
@@ -8566,7 +8566,7 @@ msgid ""
 "in the file is most important. (Experimental.)"
 msgstr ""
 "La précision de l'unité de référence et la position des objets du\n"
-"fichier est le plus important. (Expérimental)"
+"fichier sont les plus importantes. (Expérimental.)"
 
 #: ../src/file-update.cpp:359
 msgid "Create a backup file in same directory."
@@ -8613,7 +8613,7 @@ msgstr ""
 "rapport au document.\n"
 "\n"
 "<b>Redimensionner les éléments individuellement :</b> cette méthode est "
-"moins fiable et peut conduire à un changement d'apparence, mais il est "
+"moins fiable et peut conduire à un changement d'apparence, mais elle est "
 "préférable pour une œuvre conçue pour un support physique, qui repose sur la "
 "précision des tailles et des positions (pour l'impression 3D par exemple).\n"
 "\n"
@@ -8722,7 +8722,7 @@ msgid ""
 "No object with ID '%s' found."
 msgstr ""
 "Le fichier n'a pas pu être enregistré :\n"
-"Aucun objet avec l'ID '%s'."
+"Aucun objet avec l'ID « %s »."
 
 #: ../src/file.cpp:678
 #, c-format
@@ -8734,7 +8734,7 @@ msgid ""
 msgstr ""
 "Le fichier %s n'a pas pu être enregistré.\n"
 "L'information suivante a été fournie par l'extension :\n"
-"'%s'"
+"« %s »"
 
 #: ../src/file.cpp:713 ../src/file.cpp:715
 msgid "Document saved."
@@ -10424,7 +10424,7 @@ msgstr "Messages importants"
 
 #: ../src/live_effects/lpe-dash-stroke.cpp:23
 msgid "Add <b>\"Fill Between Many LPE\"</b> to add fill."
-msgstr "Ajoutez du remplissage avec l'effet <b>\"Remplir dans les nuées\"</b>."
+msgstr "Ajoutez du remplissage avec l'effet <b>« Remplir dans les nuées »</b>."
 
 #: ../src/live_effects/lpe-ellipse_5pts.cpp:75
 msgid "Five points required for constructing an ellipse"
@@ -10619,7 +10619,7 @@ msgstr "Éléments fournissant les chemins originaux"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:36
 msgid "LPE's on linked:"
-msgstr "ECI sur l'élément lié"
+msgstr "ECI sur l'élément lié :"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:36
 msgid "LPE's on linked"
@@ -11713,7 +11713,6 @@ msgid "Start mirror line"
 msgstr "Ligne miroir de départ"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:62
-#, fuzzy
 msgid "Adjust start of mirroring"
 msgstr "Ajuster le début de la copie en miroir"
 
@@ -11722,27 +11721,22 @@ msgid "End mirror line"
 msgstr "Ligne miroir de fin"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:63
-#, fuzzy
 msgid "Adjust end of mirroring"
 msgstr "Ajuster la fin de la copie en miroir"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:64
-#, fuzzy
 msgid "Center mirror line"
 msgstr "Ligne miroir centrale"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:64
-#, fuzzy
 msgid "Adjust center of mirroring"
 msgstr "Ajuster le centre de la copie en miroir"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:148
-#, fuzzy
 msgid "Vertical center"
 msgstr "Centre vertical"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:151
-#, fuzzy
 msgid "Horizontal center"
 msgstr "Centre horizontal"
 
@@ -19629,8 +19623,8 @@ msgid ""
 "Load additional fonts from \"fonts\" directory located in Inkscape's global "
 "\"share\" directory"
 msgstr ""
-"Charge des polices supplémentaires depuis le dossier \"fonts\" situé dans le "
-"dossier global d'Inkscape \"share\""
+"Charge des polices supplémentaires depuis le dossier « fonts » situé dans le "
+"dossier global d'Inkscape « share »"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:528
 msgid "Use user's fonts directory"
@@ -19641,7 +19635,7 @@ msgid ""
 "Load additional fonts from \"fonts\" directory located in Inkscape's user "
 "configuration directory"
 msgstr ""
-"Charge des polices supplémentaires depuis le dossier \"fonts\" situé dans le "
+"Charge des polices supplémentaires depuis le dossier « fonts » situé dans le "
 "dossier de configuration de l'utilisateur"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:531
@@ -20238,7 +20232,7 @@ msgstr "Changement de thème"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:886
 msgid "Change Gtk theme:"
-msgstr "Changer le thème Gtk :"
+msgstr "Changer le thème GTK+ :"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:889
 #: ../src/ui/dialog/inkscape-preferences.cpp:890
@@ -20249,7 +20243,7 @@ msgstr "Utiliser le thème foncé"
 #: ../src/ui/dialog/inkscape-preferences.cpp:893
 msgid "Display icons, press reload icons or restart to apply"
 msgstr ""
-"Afficher les icônes, pour appliquer les changements, cliquer sur Recharger "
+"Afficher les icônes ; pour appliquer les changements, cliquer sur Recharger "
 "les icônes ou redémarrer"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:916
@@ -21606,7 +21600,7 @@ msgid ""
 "global snapping be set to."
 msgstr ""
 "Définit le magnétisme par défaut lors de la création d'un nouveau document "
-"ou à l'ouverture d'un fichier SVG non-Inkscape"
+"ou à l'ouverture d'un fichier SVG non Inkscape"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1581
 msgid "Snap indicator"
@@ -22512,7 +22506,7 @@ msgstr "Emplacement des fichiers de raccourcis clavier de l'utilisateur"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2345
 msgid "Open user interface folder"
-msgstr "Ouvrir le dossier "
+msgstr "Ouvrir le dossier de l'interface utilisateur"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2346
 msgid "User UI: "
@@ -23735,9 +23729,8 @@ msgstr "Corriger l'orthographe"
 
 # Name of the displayed file (in Help > tutorials > ...). To be translated if the tutorial has been translated.
 #: ../src/ui/dialog/styledialog.cpp:538
-#, fuzzy
 msgid "Edited style element."
-msgstr "Élément de style édité."
+msgstr "Élément de style modifié."
 
 #: ../src/ui/dialog/styledialog.cpp:885
 msgid "Cancel"
@@ -23778,7 +23771,7 @@ msgstr "Retrait horizontal X"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:466
 msgid "Average amount of horizontal space each letter takes up."
-msgstr "Proportion moyenne de l'espace horizontal pris par chaque lettre."
+msgstr "Proportion moyenne de l'espace horizontal pris par chaque lettre"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:467
 #, fuzzy
@@ -23800,7 +23793,7 @@ msgstr "Position verticale moyenne de l'origine de chaque lettre"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:469
 msgid "Font Face Attributes"
-msgstr "Attributs de la fonte face"
+msgstr "Attributs de l'identité de la fonte"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:470
 msgid "Family Name:"
@@ -24229,7 +24222,7 @@ msgid ""
 "Choose a different symbol set\n"
 "or add a new symbol."
 msgstr ""
-"Aucun symbol dans le document en cours.\n"
+"Aucun symbole dans le document en cours.\n"
 "Choisissez un autre jeu de symboles\n"
 "ou ajoutez un nouveau symbole."
 
@@ -24670,7 +24663,7 @@ msgstr "Appliquer à chaque _objet séparément"
 
 #: ../src/ui/dialog/transformation.cpp:92
 msgid "Edit c_urrent matrix"
-msgstr "Éditer la matrice act_uelle"
+msgstr "Modifier la matrice act_uelle"
 
 #: ../src/ui/dialog/transformation.cpp:96
 msgid ""
@@ -24697,8 +24690,8 @@ msgid ""
 "Edit the current transform= matrix; otherwise, post-multiply transform= by "
 "this matrix"
 msgstr ""
-"Si coché, édite la matrice de la transformation actuelle; sinon, post-"
-"multiplie la transformation actuelle par cette matrice."
+"Si coché, modifie la matrice de transformation actuelle (attribut "
+"transform=); sinon, post-multiplie la matrice transform= par cette matrice."
 
 #: ../src/ui/dialog/transformation.cpp:113
 msgid "_Scale"
@@ -26433,7 +26426,7 @@ msgid ""
 "Set limiting bounding box (used to cut infinite lines) to the bounding box "
 "of current selection"
 msgstr ""
-"Définir la boîte englobante limite (utilisée pour couper les lignes "
+"Définit la boîte englobante limite (utilisée pour couper les lignes "
 "infinies) à la boîte englobante de la sélection"
 
 #: ../src/ui/toolbar/lpe-toolbar.cpp:345
@@ -28197,11 +28190,11 @@ msgid ""
 " Even: Evenly spaced.\n"
 " Adjustable: No restrictions."
 msgstr ""
-"Mode d'espacement des lignes:\n"
-" Relatif: adaptation de l'espacement à la taille de la fonte.\n"
-" Minimum: comme Relatif, mais avec un espacement minimum.\n"
-" Uniforme: espacement régulier.\n"
-" Ajustable: sans restriction."
+"Mode d'espacement des lignes :\n"
+" Relatif : adaptation de l'espacement à la taille de la fonte.\n"
+" Minimum : comme Relatif, mais avec un espacement minimum.\n"
+" Uniforme : espacement régulier.\n"
+" Ajustable : sans restriction."
 
 #. Drop down menu
 #: ../src/ui/toolbar/text-toolbar.cpp:2379
@@ -30227,7 +30220,7 @@ msgstr "Simplifié"
 #: ../src/ui/widget/font-variants.cpp:155
 msgctxt "Font feature"
 msgid "Traditional"
-msgstr "Traditionel"
+msgstr "Traditionnel"
 
 #: ../src/ui/widget/font-variants.cpp:157
 msgctxt "Font feature"
@@ -33151,7 +33144,8 @@ msgstr "Traits fins visibles"
 #: ../src/verbs.cpp:3110
 msgid "Make sure hairlines are always drawn thick enough to see"
 msgstr ""
-"Assurez-vous que les traits fins sont suffisamment épais pour être visibles"
+"Garantir une épaisseur minimale aux traits fins du dessin pour qu'ils "
+"restent toujours visibles"
 
 #. new ZoomVerb(SP_VERB_VIEW_COLOR_MODE_PRINT_COLORS_PREVIEW, "ViewColorModePrintColorsPreview", N_("_Print
 #. Colors Preview"),
@@ -34843,7 +34837,7 @@ msgid ""
 "{} is now a method in the svg document. Use `self.svg.get_current_layer()` "
 "instead."
 msgstr ""
-"{} est maintenant une méthode dans le document svg. Utilisez à la place "
+"{} est maintenant une méthode dans le document SVG. Utilisez à la place "
 "`self.svg.get_current_layer()`."
 
 #: ../share/extensions/inkex/deprecated.py:99
@@ -34851,21 +34845,21 @@ msgid ""
 "{} is now a method in the svg document. Use `self.svg.get_center_position()` "
 "instead."
 msgstr ""
-"{} est maintenant une méthode dans le document svg. Utilisez à la place "
+"{} est maintenant une méthode dans le document SVG. Utilisez à la place "
 "`self.svg.get_center_position()`."
 
 #: ../share/extensions/inkex/deprecated.py:105
 msgid ""
 "{} is now a dictionary in the svg document. Use self.svg.selected instead."
 msgstr ""
-"{} est maintenant un dictionnaire dans le document svg. Utilisez à la place "
+"{} est maintenant un dictionnaire dans le document SVG. Utilisez à la place "
 "`self.svg.selected`."
 
 #: ../share/extensions/inkex/deprecated.py:111
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.get_ids()` instead."
 msgstr ""
-"{} est maintenant une méthode dans le document svg. Utilisez à la place "
+"{} est maintenant une méthode dans le document SVG. Utilisez à la place "
 "`self.svg.get_ids()`."
 
 #: ../share/extensions/inkex/deprecated.py:116
@@ -34873,7 +34867,7 @@ msgid ""
 "{} is now a method in the svg document. Use `self.svg.getElementById(eid)` "
 "instead."
 msgstr ""
-"{} est maintenant une méthode dans le document svg. Utilisez à la place "
+"{} est maintenant une méthode dans le document SVG. Utilisez à la place "
 "`self.svg.getElementById(eid)`."
 
 #: ../share/extensions/inkex/deprecated.py:121
@@ -34881,7 +34875,7 @@ msgid ""
 "{} is now a new method in the svg document. Use `self.svg.getElement(path)` "
 "instead.`"
 msgstr ""
-"{} est maintenant une méthode dans le document svg. Utilisez à la place "
+"{} est maintenant une méthode dans le document SVG. Utilisez à la place "
 "`self.svg.getElement(path)`."
 
 #: ../share/extensions/inkex/deprecated.py:126
@@ -34889,7 +34883,7 @@ msgid ""
 "{} should never have existed. lxml always had a getparent() method and that "
 "should be used instead of this custom Effect method."
 msgstr ""
-"{} n'aurait jamais dû exister. lxml a toujours une méthode getparent() et "
+"{} n'aurait jamais dû exister. lxml a toujours eu une méthode getparent() et "
 "elle devrait être utilisée à la place de cette méthode Effect personnalisée."
 
 #: ../share/extensions/inkex/deprecated.py:132
@@ -34897,7 +34891,7 @@ msgid ""
 "{} is now a property of the svg document. Use `self.svg.namedview` to access "
 "this element"
 msgstr ""
-"{} est maintenant une propriété du document svg. Utilisez `self.svg."
+"{} est maintenant une propriété du document SVG. Utilisez `self.svg."
 "namedview` pour accéder à cet élément."
 
 #: ../share/extensions/inkex/deprecated.py:137
@@ -34919,7 +34913,7 @@ msgid ""
 "{} is now a method in the svg document.  Use `self.svg."
 "get_unique_id(old_id)` instead."
 msgstr ""
-"{} est maintenant une méthode dans le document svg. Utilisez à la place "
+"{} est maintenant une méthode dans le document SVG. Utilisez à la place "
 "`self.svg.get_unique_id(old_id)`."
 
 #: ../share/extensions/inkex/deprecated.py:153
@@ -34927,33 +34921,33 @@ msgid ""
 "{} wasn't even a public property, why is your effect extension even using "
 "it? Should be inkex.units.CONVERSIONS"
 msgstr ""
-"{} n'était vraiment pas une propriété publique, pourquoi votre extension "
+"{} n'était même pas une propriété publique, pourquoi votre extension "
 "l'utilise-t-elle ? Optez pour inkex.units.CONVERSIONS."
 
 #: ../share/extensions/inkex/deprecated.py:159
 msgid "{} is now a property of the svg document. Use `self.svg.width` instead."
 msgstr ""
-"{} est maintenant une propriété du document svg. Utilisez à la place `self."
+"{} est maintenant une propriété du document SVG. Utilisez à la place `self."
 "svg.width`."
 
 #: ../share/extensions/inkex/deprecated.py:164
 msgid ""
 "{} is now a property of the svg document. Use `self.svg.height` instead."
 msgstr ""
-"{} est maintenant une propriété du document svg. Utilisez à la place `self."
+"{} est maintenant une propriété du document SVG. Utilisez à la place `self."
 "svg.height`."
 
 #: ../share/extensions/inkex/deprecated.py:169
 msgid "{} is now a property of the svg document. Use `self.svg.unit` instead."
 msgstr ""
-"{} est maintenant une propriété du document svg. Utilisez à la place `self."
+"{} est maintenant une propriété du document SVG. Utilisez à la place `self."
 "svg.unit`."
 
 #: ../share/extensions/inkex/deprecated.py:174
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.unittouu(str)` instead."
 msgstr ""
-"{} est maintenant une méthode dans le document svg. Utilisez à la place "
+"{} est maintenant une méthode dans le document SVG. Utilisez à la place "
 "`self.svg.unittouu(str)`."
 
 #: ../share/extensions/inkex/deprecated.py:179
@@ -34961,7 +34955,7 @@ msgid ""
 "{} is now a method in the svg document. Use `self.svg.uutounit(value, unit)` "
 "instead."
 msgstr ""
-"{} est maintenant une méthode dans le document svg. Utilisez à la place "
+"{} est maintenant une méthode dans le document SVG. Utilisez à la place "
 "`self.svg.uutounit(value, unit)`."
 
 #: ../share/extensions/inkex/deprecated.py:184
@@ -34969,7 +34963,7 @@ msgid ""
 "{} is now a method in the svg document. Use `self.svg.add_unit(value)` "
 "instead."
 msgstr ""
-"{} est maintenant une méthode dans le document svg. Utilisez à la place "
+"{} est maintenant une méthode dans le document SVG. Utilisez à la place "
 "`self.svg.add_unit(value)`."
 
 #: ../share/extensions/interp_att_g.py:139
@@ -35170,7 +35164,7 @@ msgid ""
 "Could not obtain the selected layer for inclusion of the video element.\n"
 "\n"
 msgstr ""
-"Impossible de récupérer le calque sélectionner pour l'inclusion de l'élément "
+"Impossible de récupérer le calque sélectionné pour l'inclusion de l'élément "
 "vidéo.\n"
 "\n"
 
@@ -35361,7 +35355,7 @@ msgstr "Le fichier spécifié ne contient aucune donnée de facette."
 msgid "Try selecting \"Edge Specified\" in the Model File tab.\n"
 msgstr ""
 "Essayez de sélectionner « défini par les bords » dans l'onglet Fichier "
-"modèle .\n"
+"modèle.\n"
 
 #: ../share/extensions/polyhedron_3d.py:346
 msgid "No edge data found in specified file."
@@ -35371,7 +35365,7 @@ msgstr "Le fichier spécifié ne contient aucune donnée de bord."
 msgid "Try selecting \"Face Specified\" in the Model File tab.\n"
 msgstr ""
 "Essayez de sélectionner « défini par les facettes » dans l'onglet Fichier "
-"modèle .\n"
+"modèle.\n"
 
 #: ../share/extensions/polyhedron_3d.py:457
 msgid ""
@@ -35676,13 +35670,13 @@ msgid ""
 "  Blue Function: g"
 msgstr ""
 "Permet l'évaluation de différentes fonctions pour chaque canal.\n"
-"r, v et b sont les valeurs normalisées pour les canaux rouge, vert et bleu. "
+"r, g et b sont les valeurs normalisées pour les canaux rouge, vert et bleu. "
 "Les valeurs RVB résultantes sont recalculées automatiquement.\n"
 "\n"
 "Exemple (division du rouge par deux, échange du vert et du bleu) :\n"
 "  Fonction pour le rouge : r*0.5\n"
 "  Fonction pour le vert : b\n"
-"  Fonction pour le bleu: v"
+"  Fonction pour le bleu: g"
 
 #: ../share/extensions/color_darker.inx.h:1
 msgid "Darker"
@@ -36801,6 +36795,7 @@ msgstr ""
 "pointus avec des tranchets coniques. Ce greffon calcule le G-code pour les "
 "chemins en utilisant l'interpolation circulaire ou le mouvement linéaire si "
 "besoin.\n"
+"\n"
 "Des tutoriels, des manuels et des forums d'aide sont disponibles.\n"
 "Forum anglais :\n"
 "\thttp://www.cnc-club.ru/gcodetools\n"
@@ -38620,7 +38615,7 @@ msgstr "Autre attribut :"
 
 #: ../share/extensions/interp_att_g.inx.h:5
 msgid "Examples: r, width, inkscape:rounded, sodipodi:sides"
-msgstr "Exemples: r, width, inkscape:rounded, sodipodi:sides"
+msgstr "Exemples : r, width, inkscape:rounded, sodipodi:sides"
 
 #: ../share/extensions/interp_att_g.inx.h:6
 msgid "Other Attribute type:"
@@ -38774,7 +38769,6 @@ msgid "Duration in seconds:"
 msgstr "Durée en secondes :"
 
 #: ../share/extensions/jessyInk_effects.inx.h:6
-#, fuzzy
 msgid "Built-in effect"
 msgstr "Effet entrant"
 
@@ -40495,7 +40489,7 @@ msgid ""
 "Linux something like: '/dev/usb/lp2' (Default: /dev/usb/lp2)"
 msgstr ""
 "Le port de votre connexion série ; avec Windows, non géré pour l'instant ; "
-"avec Linux, quelque-chose comme « /dev/usb/lp2 » (par défaut : /dev/usb/lp2)"
+"avec Linux, quelque chose comme « /dev/usb/lp2 » (par défaut : /dev/usb/lp2)"
 
 #: ../share/extensions/plotter.inx.h:7
 msgid "Serial port:"
@@ -40506,7 +40500,7 @@ msgid ""
 "The port of your serial connection, on Windows something like 'COM1', on "
 "Linux something like: '/dev/ttyUSB0' (Default: COM1)"
 msgstr ""
-"Le port de votre connexion série ; avec Windows, quelque-chose comme "
+"Le port de votre connexion série ; avec Windows, quelque chose comme "
 "« COM1 » ; avec Linux, comme « /dev/ttyUSB0 » (par défaut : COM1)"
 
 #: ../share/extensions/plotter.inx.h:9
@@ -41574,7 +41568,7 @@ msgstr "Extraire"
 #: ../share/extensions/text_extract.inx.h:2
 #: ../share/extensions/text_merge.inx.h:2
 msgid "Text direction:"
-msgstr "Direction du texte :"
+msgstr "Orientation du texte :"
 
 #: ../share/extensions/text_extract.inx.h:3
 #: ../share/extensions/text_merge.inx.h:3
