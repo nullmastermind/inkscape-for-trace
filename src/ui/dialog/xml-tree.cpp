@@ -353,7 +353,7 @@ void XmlTree::set_tree_select(Inkscape::XML::Node *repr)
 
 void XmlTree::propagate_tree_select(Inkscape::XML::Node *repr)
 {
-    if (repr && (repr->type() == Inkscape::XML::ELEMENT_NODE)) {
+    if (repr && (repr->type() == Inkscape::XML::ELEMENT_NODE || repr->type() == Inkscape::XML::TEXT_NODE)) {
         attributes->setRepr(repr);
     } else {
         attributes->setRepr(nullptr);
