@@ -336,24 +336,22 @@ void AttrDialog::nameEdited (const Glib::ustring& path, const Glib::ustring& nam
     Gtk::TreeModel::Row row = *_store->get_iter(path);
     if(row && this->_repr) {
         Glib::ustring old_name = row[_attrColumns._attributeName];
-        if (old_name == "content") {
+        if (old_name == "content" ||
+            old_name == name) 
+        {
             return;
         }
         Glib::ustring value = row[_attrColumns._attributeValue];
+        // Move to editing value, we set the name as a temporary store value
         if(!old_name.empty()) {
-            // Remove named value
-            _repr->setAttribute(old_name, nullptr, false);
-            _repr->setAttribute(name, value, false);
-            this->setUndo(_("Rename attribute"));
-        } else {
-            // Move to editing value, we set the name as a temporary store value
-            row[_attrColumns._attributeName] = name;
-            // This would be nice to have, but it causes a crash when treeview looses focus
-            // because signaling vs. focus is in some sort of conflict.
-            //Gtk::TreeModel::Path _path = (Gtk::TreeModel::Path)row;
-            //_treeView.set_cursor(_path, *_valueCol, true);
-            //grab_focus();
+            // Remove old named value
+            _repr->setAttribute(old_name.c_str(), nullptr, false);
         }
+        if(!name.empty()) {
+            _repr->setAttribute(name.c_str(), value, false);
+            row[_attrColumns._attributeName] = name;
+        }
+        this->setUndo(_("Rename attribute"));
     }
 }
 
@@ -372,8 +370,12 @@ void AttrDialog::valueEdited (const Glib::ustring& path, const Glib::ustring& va
         if (name == "content") {
             _repr->setContent(value.c_str());
         } else {
-            _repr->setAttribute(name, value, false);
+            _repr->setAttribute(name.c_str(), value, false);
         }
+        if(!value.empty()) {
+            row[_attrColumns._attributeValue] = value;
+        }
+
         this->setUndo(_("Change attribute value"));
     }
 }
