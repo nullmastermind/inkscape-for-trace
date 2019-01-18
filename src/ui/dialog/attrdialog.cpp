@@ -274,12 +274,13 @@ void AttrDialog::onAttrDelete(Glib::ustring path)
     Gtk::TreeModel::Row row = *_store->get_iter(path);
     if (row) {
         Glib::ustring name = row[_attrColumns._attributeName];
-        if(name == "content") {
+        if (name == "content") {
             return;
         } else {
+            this->_store->erase(row);
             this->_repr->setAttribute(name.c_str(), nullptr, false);
+            this->setUndo(_("Delete attribute"));
         }
-        this->setUndo(_("Delete attribute"));
     }
 }
 
@@ -304,9 +305,10 @@ bool AttrDialog::onKeyPressed(GdkEventKey *event)
                 if(name == "content") {
                     return true;
                 } else {
+                    this->_store->erase(row);
                     this->_repr->setAttribute(name.c_str(), nullptr, false);
+                    this->setUndo(_("Delete attribute"));
                 }
-                this->setUndo(_("Delete attribute"));
                 return true;
               }
             case GDK_KEY_plus:
@@ -343,11 +345,11 @@ void AttrDialog::nameEdited (const Glib::ustring& path, const Glib::ustring& nam
         }
         Glib::ustring value = row[_attrColumns._attributeValue];
         // Move to editing value, we set the name as a temporary store value
-        if(!old_name.empty()) {
+        if (!old_name.empty()) {
             // Remove old named value
             _repr->setAttribute(old_name.c_str(), nullptr, false);
         }
-        if(!name.empty()) {
+        if (!name.empty()) {
             _repr->setAttribute(name.c_str(), value, false);
             row[_attrColumns._attributeName] = name;
         }
