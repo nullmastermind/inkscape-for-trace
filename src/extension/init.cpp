@@ -36,8 +36,12 @@
 # include "internal/emf-print.h"
 # include "internal/wmf-inout.h"
 # include "internal/wmf-print.h"
-#ifdef HAVE_CAIRO_PDF
+
+#include <cairo.h>
+#ifdef CAIRO_HAS_PDF_SURFACE
 # include "internal/cairo-renderer-pdf-out.h"
+#endif
+#ifdef CAIRO_HAS_PS_SURFACE
 # include "internal/cairo-ps-out.h"
 #endif
 #include "internal/pov-out.h"
@@ -151,10 +155,10 @@ init()
     Internal::Svg::init();
     Internal::Svgz::init();
 
-#ifdef HAVE_CAIRO_PDF
-    //g_print ("Using CairoRendererPdfOutput: new pdf exporter\n");
+#ifdef CAIRO_HAS_PDF_SURFACE
     Internal::CairoRendererPdfOutput::init();
-
+#endif
+#ifdef CAIRO_HAS_PS_SURFACE
     Internal::CairoPsOutput::init();
     Internal::CairoEpsOutput::init();
 #endif

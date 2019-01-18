@@ -29,14 +29,6 @@
 #include <3rdparty/libuemf/symbol_convert.h>
 
 
-namespace Inkscape {
-    namespace Extension {
-        namespace Internal {
-            class CairoRenderContext;
-        }
-    }
-}
-
 using Inkscape::Extension::Internal::CairoRenderContext;
 using Inkscape::Extension::Internal::CairoGlyphInfo;
 
@@ -424,7 +416,6 @@ std:: cout << "DEBUG Layout::print in while  ---  "
 }
 
 
-#ifdef HAVE_CAIRO_PDF
 void Layout::showGlyphs(CairoRenderContext *ctx) const
 {
     if (_input_stream.empty()) return;
@@ -519,7 +510,6 @@ void Layout::showGlyphs(CairoRenderContext *ctx) const
         }
     }
 }
-#endif
 
 #if DEBUG_TEXTLAYOUT_DUMPASTEXT
 // these functions are for dumpAsText() only. No need to translate
