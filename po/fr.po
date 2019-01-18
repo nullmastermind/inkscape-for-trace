@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2019-01-17 00:47+0100\n"
-"PO-Revision-Date: 2016-11-13 22:34+0100\n"
+"PO-Revision-Date: 2019-01-18 22:06+0100\n"
 "Last-Translator: Sylvain Chiron <chironsylvain@orange.fr>\n"
 "Language-Team: français <>\n"
 "Language: fr_FR\n"
@@ -30,7 +30,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-Bookmarks: 46,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.2\n"
 
 #: ../inkscape.appdata.xml.in.h:1
 msgid "Main application window"
@@ -1256,7 +1256,7 @@ msgstr "Transparence toilée"
 
 #: ../share/filters/filters.svg.h:456
 msgid "Gives a canvas like HSL sensitive transparency."
-msgstr "Donne une transparence sensible TSL, façon toile"
+msgstr "Donne une transparence sensible TSL, façon toile."
 
 #: ../share/filters/filters.svg.h:458
 msgid "Smear Transparency"
@@ -12925,9 +12925,8 @@ msgid "Change font button parameter"
 msgstr "Modifier le paramètre du bouton de fonte"
 
 #: ../src/live_effects/parameter/item.cpp:133
-#, fuzzy
 msgid "Link to item on clipboard"
-msgstr "Lier à l'élément contenu dans le presse-papiers."
+msgstr "Lier à l'élément contenu dans le presse-papiers"
 
 #: ../src/live_effects/parameter/item.cpp:255
 #, fuzzy
@@ -13053,7 +13052,7 @@ msgstr "Coller le chemin"
 
 #: ../src/live_effects/parameter/path.cpp:256
 msgid "Link to path on clipboard"
-msgstr "Lier au chemin contenu dans le presse-papiers."
+msgstr "Lier au chemin contenu dans le presse-papiers"
 
 #: ../src/live_effects/parameter/path.cpp:531
 msgid "Paste path parameter"
@@ -13599,7 +13598,7 @@ msgid ""
 "Inkscape will run with default settings, and new settings will not be saved. "
 msgstr ""
 "Inkscape va démarrer avec les préférences par défaut.\n"
-"Les nouvelles préférences ne seront pas enregistrées."
+"Les nouvelles préférences ne seront pas enregistrées. "
 
 #. the creation failed
 #. _reportError(Glib::ustring::compose(_("Cannot create profile directory %1."),
@@ -13942,16 +13941,14 @@ msgid "Select <b>object(s)</b> to stack up."
 msgstr "Sélectionner des <b>objets</b> à monter au premier plan."
 
 #: ../src/selection-chemistry.cpp:1169
-#, fuzzy
 msgid "We hit top."
-msgstr "Monter au premier plan"
+msgstr "Premier plan atteint."
 
 #. TRANSLATORS: undo history: "stack up" means to raise an object of its ordinal position by 1
 #: ../src/selection-chemistry.cpp:1177
-#, fuzzy
 msgctxt "Undo action"
 msgid "stack up"
-msgstr "Réempiler"
+msgstr "monter"
 
 #: ../src/selection-chemistry.cpp:1182
 #, fuzzy
@@ -13959,16 +13956,14 @@ msgid "Select <b>object(s)</b> to stack down."
 msgstr "Sélectionner des <b>objets</b> à combiner."
 
 #: ../src/selection-chemistry.cpp:1193
-#, fuzzy
 msgid "We hit bottom."
-msgstr "Descendre à l'arrière-plan"
+msgstr "Arrière-plan atteint."
 
 #. TRANSLATORS: undo history: "stack down" means to lower an object of its ordinal position by 1
 #: ../src/selection-chemistry.cpp:1201
-#, fuzzy
 msgctxt "Undo action"
 msgid "stack down"
-msgstr "Mode réempilage"
+msgstr "descendre"
 
 #: ../src/selection-chemistry.cpp:1211
 msgid "Nothing to undo."
@@ -14034,7 +14029,7 @@ msgstr "Sélectionner des <b>objets</b> à déplacer au calque du dessous."
 
 #: ../src/selection-chemistry.cpp:1482
 msgid "Lower to previous layer"
-msgstr "Descendre au calque précédent."
+msgstr "Descendre au calque précédent"
 
 #: ../src/selection-chemistry.cpp:1489
 msgid "No more layers below."
@@ -14589,7 +14584,7 @@ msgstr "<b>Aucun chemin</b> à éroder/dilater dans la sélection."
 
 #: ../src/splivarot.cpp:2313
 msgid "Simplifying paths (separately):"
-msgstr "Simplification individuelle des chemins"
+msgstr "Simplification individuelle des chemins :"
 
 #: ../src/splivarot.cpp:2315
 msgid "Simplifying paths:"
@@ -15033,7 +15028,8 @@ msgstr ""
 " Florent Becker (florent.becker@ens-lyon.org)\n"
 " Sophie Gousset (contact@sophieweb.com)\n"
 " Nicolas Dufour (nicoduf@yahoo.fr)\n"
-" Sylvain Chiron (chironsylvain@orange.fr)"
+" Sylvain Chiron (chironsylvain@orange.fr)\n"
+" Guillaume Audirac (guillaume.audirac@gmail.com)"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:211
 #: ../src/ui/dialog/align-and-distribute.cpp:921
@@ -15191,7 +15187,7 @@ msgstr "Distribuer des distances égales entre les bords droits des objets"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:993
 msgid "Make vertical gaps between objects equal"
-msgstr "Distribuer des distances égales verticalement entre les objets "
+msgstr "Distribuer des distances égales verticalement entre les objets"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:997
 msgid "Distribute top edges equidistantly"
@@ -15521,13 +15517,13 @@ msgstr "<b>Exposant :</b>"
 msgid "Whether rows are spaced evenly (1), converge (<1) or diverge (>1)"
 msgstr ""
 "Selon la valeur, l'inter ligne reste constant (1), converge (<1) ou diverge "
-"(>1) "
+"(>1)"
 
 #: ../src/ui/dialog/clonetiler.cpp:246
 msgid "Whether columns are spaced evenly (1), converge (<1) or diverge (>1)"
 msgstr ""
 "Selon la valeur, l'inter colonne reste constant (1), converge (<1) ou "
-"diverge (>1) "
+"diverge (>1)"
 
 #. TRANSLATORS: "Alternate" is a verb here
 #: ../src/ui/dialog/clonetiler.cpp:254 ../src/ui/dialog/clonetiler.cpp:418
@@ -15624,13 +15620,13 @@ msgstr "Introduire ce pourcentage de hasard dans le redimensionnement vertical"
 msgid "Whether row scaling is uniform (1), converge (<1) or diverge (>1)"
 msgstr ""
 "Selon la valeur, le redimensionnement des lignes est uniforme (1), converge "
-"(<1) ou diverge (>1) "
+"(<1) ou diverge (>1)"
 
 #: ../src/ui/dialog/clonetiler.cpp:390
 msgid "Whether column scaling is uniform (1), converge (<1) or diverge (>1)"
 msgstr ""
 "Selon la valeur, le redimensionnement des colonnes est uniforme (1), "
-"converge (<1) ou diverge (>1) "
+"converge (<1) ou diverge (>1)"
 
 #: ../src/ui/dialog/clonetiler.cpp:398
 msgid "<b>Base:</b>"
@@ -15755,7 +15751,7 @@ msgstr "Cou_leur"
 
 #: ../src/ui/dialog/clonetiler.cpp:638
 msgid "Initial color: "
-msgstr "Couleur initiale :"
+msgstr "Couleur initiale : "
 
 #: ../src/ui/dialog/clonetiler.cpp:642
 msgid "Initial color of tiled clones"
@@ -15911,11 +15907,11 @@ msgstr "Capturer la luminosité de la couleur"
 
 #: ../src/ui/dialog/clonetiler.cpp:846
 msgid "2. Tweak the picked value:"
-msgstr "2. Modifier la valeur capturée"
+msgstr "2. Modifier la valeur capturée :"
 
 #: ../src/ui/dialog/clonetiler.cpp:857
 msgid "Gamma-correct:"
-msgstr "Corriger le Gamma"
+msgstr "Correction du gamma :"
 
 #: ../src/ui/dialog/clonetiler.cpp:861
 msgid "Shift the mid-range of the picked value upwards (>0) or downwards (<0)"
@@ -15962,7 +15958,7 @@ msgstr "Dimensions"
 msgid "Each clone's size is determined by the picked value in that point"
 msgstr ""
 "Les dimensions de chaque clone sont déterminées selon la valeur capturée en "
-"ce point "
+"ce point"
 
 #: ../src/ui/dialog/clonetiler.cpp:919
 msgid ""
@@ -15999,7 +15995,7 @@ msgstr "Hauteur du rectangle à remplir"
 
 #: ../src/ui/dialog/clonetiler.cpp:1050
 msgid "Rows, columns: "
-msgstr "Lignes, colonnes :"
+msgstr "Lignes, colonnes : "
 
 #: ../src/ui/dialog/clonetiler.cpp:1051
 msgid "Create the specified number of rows and columns"
@@ -16007,7 +16003,7 @@ msgstr "Créer le nombre spécifié de lignes et de colonnes"
 
 #: ../src/ui/dialog/clonetiler.cpp:1060
 msgid "Width, height: "
-msgstr "Largeur, hauteur :"
+msgstr "Largeur, hauteur : "
 
 #: ../src/ui/dialog/clonetiler.cpp:1061
 msgid "Fill the specified width and height with the tiling"
@@ -16040,7 +16036,7 @@ msgstr "Créer des clones et paver la sélection avec"
 #. So unclumping is the process of spreading a number of objects out more evenly.
 #: ../src/ui/dialog/clonetiler.cpp:1124
 msgid " _Unclump "
-msgstr "É_parpiller"
+msgstr " É_parpiller "
 
 #: ../src/ui/dialog/clonetiler.cpp:1125
 msgid "Spread out clones to reduce clumping; can be applied repeatedly"
@@ -16050,7 +16046,7 @@ msgstr ""
 
 #: ../src/ui/dialog/clonetiler.cpp:1131
 msgid " Re_move "
-msgstr "_Supprimer"
+msgstr " _Supprimer "
 
 #: ../src/ui/dialog/clonetiler.cpp:1132
 msgid "Remove existing tiled clones of the selected object (siblings only)"
@@ -16060,7 +16056,7 @@ msgstr ""
 
 #: ../src/ui/dialog/clonetiler.cpp:1147
 msgid " R_eset "
-msgstr " R-à-_z"
+msgstr " R-à-_z "
 
 #. TRANSLATORS: "change" is a noun here
 #: ../src/ui/dialog/clonetiler.cpp:1149
@@ -16478,7 +16474,7 @@ msgstr "_Nouveau"
 
 #: ../src/ui/dialog/document-properties.cpp:143
 msgid "Create new grid."
-msgstr "Créer une nouvelle grille"
+msgstr "Créer une nouvelle grille."
 
 #: ../src/ui/dialog/document-properties.cpp:144
 msgctxt "Grid"
@@ -16675,7 +16671,7 @@ msgstr "Modifier le programme incorporé"
 
 #: ../src/ui/dialog/document-properties.cpp:1394
 msgid "<b>Creation</b>"
-msgstr " <b>Création</b> "
+msgstr "<b>Création</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:1395
 msgid "<b>Defined grids</b>"
@@ -16733,7 +16729,7 @@ msgstr "Compression"
 
 #: ../src/ui/dialog/export.cpp:146
 msgid "pHYs dpi"
-msgstr "PPP"
+msgstr "pHYs ppp"
 
 #: ../src/ui/dialog/export.cpp:151
 msgid "Hide all except selected"
@@ -16873,7 +16869,7 @@ msgstr "Exportation de %1 fichiers"
 #: ../src/ui/dialog/export.cpp:1058 ../src/ui/dialog/export.cpp:1060
 #, c-format
 msgid "Exporting file <b>%s</b>..."
-msgstr "Exportation du fichier <b>%s</b> en cours"
+msgstr "Exportation du fichier <b>%s</b> en cours..."
 
 #: ../src/ui/dialog/export.cpp:1071 ../src/ui/dialog/export.cpp:1166
 #, c-format
@@ -18890,11 +18886,11 @@ msgstr "Spéciaux"
 
 #: ../src/ui/dialog/glyphs.cpp:353
 msgid "Script: "
-msgstr "Écriture :"
+msgstr "Écriture : "
 
 #: ../src/ui/dialog/glyphs.cpp:378
 msgid "Range: "
-msgstr "Sous-ensemble :"
+msgstr "Sous-ensemble : "
 
 #: ../src/ui/dialog/glyphs.cpp:441
 msgid "Append"
@@ -18972,7 +18968,7 @@ msgstr ""
 #. Anchor selection widget
 #: ../src/ui/dialog/grid-arrange-tab.cpp:686
 msgid "Alignment:"
-msgstr "Alignement : "
+msgstr "Alignement :"
 
 #. #### Radio buttons to control spacing manually or to fit selection bbox ####
 #: ../src/ui/dialog/grid-arrange-tab.cpp:696
@@ -19413,7 +19409,7 @@ msgid ""
 msgstr ""
 "Définit combien de temps le contour sera visible après son survol par la "
 "souris (en millisecondes) ; choisir 0 pour garder le contour visible jusqu'à "
-"ce que la souris quitte le chemin."
+"ce que la souris quitte le chemin"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:419
 msgid "Editing preferences"
@@ -20507,7 +20503,7 @@ msgstr ""
 msgid "Use GTK open and save dialogs "
 msgstr ""
 "Utiliser les boîtes de dialogue GTK pour l'ouverture et l'enregistrement de "
-"fichiers"
+"fichiers "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1028
 msgid "Dialogs on top:"
@@ -21216,7 +21212,7 @@ msgid ""
 msgstr ""
 "Dossier dans lequel les enregistrements automatiques sont écrits. Il s'agit "
 "d'un chemin absolu (commençant par / sur les systèmes Gnu/Linux ou Unix, ou "
-"par la lettre du lecteur, C: par exemple, sous Windows)."
+"par la lettre du lecteur, C: par exemple, sous Windows). "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1443
 msgid "_Interval (in minutes):"
@@ -21264,7 +21260,7 @@ msgid ""
 "The server name of the Open Clip Art Library webdav server; it's used by the "
 "Import and Export to OCAL function"
 msgstr ""
-"Le nom du serveur webdav de la bibliothèque Open Clip Art ; il est utilisé "
+"Le nom du serveur WebDAV de la bibliothèque Open Clip Art ; il est utilisé "
 "par la fonction d'import et export vers OCAL."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1467
@@ -21579,7 +21575,7 @@ msgid ""
 msgstr ""
 "Si coché, la molette de la souris zoome sans la touche Ctrl et fait défiler "
 "la zone de travail avec Ctrl ; si décoché, elle zoome avec Ctrl et fait "
-"défiler sans Ctrl."
+"défiler sans Ctrl"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1572
 msgid "Scrolling"
@@ -22528,7 +22524,7 @@ msgstr "Emplacement du cache utilisateur"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2359
 msgid "Temporary files: "
-msgstr "Fichiers temporaires :"
+msgstr "Fichiers temporaires : "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2359
 msgid "Location of the temporary files used for autosave"
@@ -22538,7 +22534,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2363
 msgid "Inkscape data: "
-msgstr "Données d'Inkscape :"
+msgstr "Données d'Inkscape : "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2363
 msgid "Location of Inkscape data"
@@ -22546,7 +22542,7 @@ msgstr "Emplacement des données d'Inkscape"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2367
 msgid "Inkscape extensions: "
-msgstr "Extensions d'Inkscape :"
+msgstr "Extensions d'Inkscape : "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2367
 msgid "Location of the Inkscape extensions"
@@ -23124,11 +23120,11 @@ msgstr "Réf"
 
 #: ../src/ui/dialog/object-properties.cpp:405
 msgid "Id invalid! "
-msgstr "ID invalide !"
+msgstr "ID invalide ! "
 
 #: ../src/ui/dialog/object-properties.cpp:407
 msgid "Id exists! "
-msgstr "Cet ID existe déjà !"
+msgstr "Cet ID existe déjà ! "
 
 #: ../src/ui/dialog/object-properties.cpp:413
 msgid "Set object ID"
@@ -23641,11 +23637,11 @@ msgstr "Enregistrer le document comme modèle"
 
 #: ../src/ui/dialog/save-template-dialog.cpp:24
 msgid "Name: "
-msgstr "Nom :"
+msgstr "Nom : "
 
 #: ../src/ui/dialog/save-template-dialog.cpp:25
 msgid "Author: "
-msgstr "Auteur :"
+msgstr "Auteur : "
 
 #: ../src/ui/dialog/save-template-dialog.cpp:26
 #: ../src/ui/dialog/template-widget.cpp:128
@@ -23949,7 +23945,7 @@ msgstr "Ajouter une paire de crénage"
 #. Kerning Setup:
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:888
 msgid "Kerning Setup"
-msgstr "Paramétrage du crénage :"
+msgstr "Paramétrage du crénage"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:890
 msgid "1st Glyph:"
@@ -24691,7 +24687,7 @@ msgid ""
 "this matrix"
 msgstr ""
 "Si coché, modifie la matrice de transformation actuelle (attribut "
-"transform=); sinon, post-multiplie la matrice transform= par cette matrice."
+"transform=) ; sinon, post-multiplie la matrice transform= par cette matrice"
 
 #: ../src/ui/dialog/transformation.cpp:113
 msgid "_Scale"
@@ -24936,9 +24932,9 @@ msgid ""
 "Resize box in X/Y direction; with <b>Shift</b> along the Z axis; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
 msgstr ""
-"Redimensionner la boîte suivant les axes X/Y. Avec <b>Maj</b>, suivant l'axe "
-"Z; avec <b>Ctrl</b> pour préserver les directions des arêtes ou des "
-"diagonales."
+"Redimensionner la boîte suivant les axes X/Y ; avec <b>Maj</b>, suivant "
+"l'axe Z; avec <b>Ctrl</b> pour préserver les directions des arêtes ou des "
+"diagonales"
 
 #: ../src/ui/shape-editor-knotholders.cpp:828
 #: ../src/ui/shape-editor-knotholders.cpp:832
@@ -24948,13 +24944,13 @@ msgid ""
 "Resize box along the Z axis; with <b>Shift</b> in X/Y direction; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
 msgstr ""
-"Redimensionner la boîte suivant l'axe Z. Avec <b>Maj</b>, suivant les axes X/"
-"Y; avec <b>Ctrl</b> pour préserver les directions des arêtes ou des "
-"diagonales."
+"Redimensionner la boîte suivant l'axe Z ; avec <b>Maj</b>, suivant les axes "
+"X/Y; avec <b>Ctrl</b> pour préserver les directions des arêtes ou des "
+"diagonales"
 
 #: ../src/ui/shape-editor-knotholders.cpp:844
 msgid "Move the box in perspective"
-msgstr "Déplacer la boîte en perspective."
+msgstr "Déplacer la boîte en perspective"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1131
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
@@ -25773,7 +25769,7 @@ msgstr "(défaut)"
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:394
 #: ../src/ui/toolbar/eraser-toolbar.cpp:183
 msgid "(broad stroke)"
-msgstr " (trait large)"
+msgstr "(trait large)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:397
 #: ../src/ui/toolbar/eraser-toolbar.cpp:186
@@ -26487,7 +26483,7 @@ msgstr "Mesurer tout."
 
 #: ../src/ui/toolbar/measure-toolbar.cpp:193
 msgid "Show all crossings."
-msgstr "Afficher tous les calques"
+msgstr "Afficher tous les croisements."
 
 #: ../src/ui/toolbar/measure-toolbar.cpp:195
 msgid "Show visible crossings."
@@ -26976,7 +26972,7 @@ msgstr "Type de remplissage"
 
 #: ../src/ui/toolbar/paintbucket-toolbar.cpp:159
 msgid "Fill Threshold"
-msgstr "Seuil de remplissage :"
+msgstr "Seuil de remplissage"
 
 #: ../src/ui/toolbar/paintbucket-toolbar.cpp:160
 msgid ""
@@ -27141,7 +27137,7 @@ msgstr "Lissage :"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:559
 msgid "Smoothing: "
-msgstr "Lissage :"
+msgstr "Lissage : "
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:560
 msgid "How much smoothing (simplifying) is applied to the line"
@@ -27415,7 +27411,7 @@ msgstr "le centre est beaucoup plus dense"
 
 #: ../src/ui/toolbar/spiral-toolbar.cpp:264
 msgid "Divergence"
-msgstr "Divergence :"
+msgstr "Divergence"
 
 #: ../src/ui/toolbar/spiral-toolbar.cpp:264
 msgid "Divergence:"
@@ -27439,7 +27435,7 @@ msgstr "démarrer près du bord"
 
 #: ../src/ui/toolbar/spiral-toolbar.cpp:278
 msgid "Inner radius"
-msgstr "Rayon intérieur :"
+msgstr "Rayon intérieur"
 
 #: ../src/ui/toolbar/spiral-toolbar.cpp:278
 msgid "Inner radius:"
@@ -27883,9 +27879,8 @@ msgid "Text: Change font style"
 msgstr "Texte : modifier le style de la police"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:362
-#, fuzzy
 msgid "Text: Unset line height."
-msgstr "Texte : annuler la hauteur de ligne"
+msgstr "Texte : annuler la hauteur de ligne."
 
 #: ../src/ui/toolbar/text-toolbar.cpp:439
 msgid "Text: Change superscript or subscript"
@@ -35485,7 +35480,7 @@ msgstr ""
 #: ../share/extensions/webslicer_create_group.py:73
 #, python-format
 msgid "Oops... The element \"%s\" is not in the Web Slicer layer"
-msgstr "Attention  ! L'élément « %s » n'est pas dans le calque de découpe."
+msgstr "Attention ! L'élément « %s » n'est pas dans le calque de découpe."
 
 #: ../share/extensions/webslicer_export.py:56
 msgid "You must give a directory to export the slices."
@@ -35827,7 +35822,7 @@ msgid ""
 "at http://live.gnome.org/Dia"
 msgstr ""
 "Pour pouvoir importer des fichiers Dia, Dia doit aussi être installé. Vous "
-"pouvez obtenir Dia sur http://www.gnome.org/projects/dia/ "
+"pouvez obtenir Dia sur http://live.gnome.org/Dia/"
 
 #: ../share/extensions/dia.inx.h:4
 msgid "Dia Diagram (*.dia)"
@@ -37520,7 +37515,7 @@ msgstr "Bibliothèque d'outils"
 
 #: ../share/extensions/gcodetools_tools_library.inx.h:2
 msgid "Tools type:"
-msgstr "Type d'outils : "
+msgstr "Type d'outils :"
 
 #: ../share/extensions/gcodetools_tools_library.inx.h:3
 msgid "default"
@@ -37552,7 +37547,7 @@ msgstr "graffiti"
 
 #: ../share/extensions/gcodetools_tools_library.inx.h:10
 msgid "Just check tools"
-msgstr "vérifier seulement les outils"
+msgstr "Vérifier seulement les outils"
 
 #: ../share/extensions/gcodetools_tools_library.inx.h:11
 msgid ""
@@ -38222,7 +38217,7 @@ msgstr ""
 
 #: ../share/extensions/hpgl_output.inx.h:3 ../share/extensions/plotter.inx.h:36
 msgid "Plotter Settings "
-msgstr "Paramètres du traceur"
+msgstr "Paramètres du traceur "
 
 #: ../share/extensions/hpgl_output.inx.h:8 ../share/extensions/plotter.inx.h:41
 msgid "Pen number:"
@@ -38317,7 +38312,7 @@ msgstr ""
 #: ../share/extensions/hpgl_output.inx.h:23
 #: ../share/extensions/plotter.inx.h:56
 msgid "Plot Features "
-msgstr "Fonctionnalités du traceur"
+msgstr "Fonctionnalités du traceur "
 
 #: ../share/extensions/hpgl_output.inx.h:24
 #: ../share/extensions/plotter.inx.h:57
@@ -38810,7 +38805,7 @@ msgstr ""
 
 #: ../share/extensions/jessyInk_export.inx.h:1
 msgid "JessyInk zipped pdf or png output"
-msgstr "Exportation JessyInk PDF ou PNG compressée."
+msgstr "Exportation JessyInk PDF ou PNG compressée"
 
 #: ../share/extensions/jessyInk_export.inx.h:4
 msgid "Resolution:"
@@ -39527,7 +39522,7 @@ msgstr "Mesurer un chemin"
 
 #: ../share/extensions/measure.inx.h:3
 msgid "Measurement Type: "
-msgstr "Type de mesure :"
+msgstr "Type de mesure : "
 
 #: ../share/extensions/measure.inx.h:4
 msgid "Text Presets"
@@ -40422,7 +40417,7 @@ msgstr "Points"
 
 #: ../share/extensions/perfectboundcover.inx.h:12
 msgid "Bond Weight #"
-msgstr "Grammage"
+msgstr "Grammage #"
 
 #: ../share/extensions/perfectboundcover.inx.h:13
 msgid "Specify Width"
