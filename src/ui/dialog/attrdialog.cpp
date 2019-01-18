@@ -234,10 +234,16 @@ void AttrDialog::onAttrChanged(Inkscape::XML::Node *repr, const gchar * name, co
             }
         }
     }
-    if(new_value) {
-        Gtk::TreeModel::Row row = *(_store->append());
-        row[_attrColumns._attributeName] = name;
-        row[_attrColumns._attributeValue] = new_value;
+    if (new_value) {
+        if ((repr->type() == Inkscape::XML::TEXT_NODE || repr->type() == Inkscape::XML::COMMENT_NODE) &&
+             name != "content") 
+        {
+            return;   
+        } else {
+            Gtk::TreeModel::Row row = *(_store->append());
+            row[_attrColumns._attributeName] = name;
+            row[_attrColumns._attributeValue] = new_value;
+        }
     }
 }
 
