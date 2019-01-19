@@ -133,143 +133,11 @@ void ms_read_selection( Inkscape::Selection *selection,
     }
 }
 
-/*
- * Core function, setup all the widgets whenever something changes on the desktop
- */
-static void ms_tb_selection_changed(Inkscape::Selection * /*selection*/, gpointer data)
-{
-
-    // std::cout << "ms_tb_selection_changed" << std::endl;
-
-    if (blocked)
-        return;
-
-    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(G_OBJECT(data), "desktop"));
-    if (!desktop) {
-        return;
-    }
-
-    Inkscape::Selection *selection = desktop->getSelection(); // take from desktop, not from args
-    if (selection) {
-        // ToolBase *ev = sp_desktop_event_context(desktop);
-        // GrDrag *drag = NULL;
-        // if (ev) {
-        //     drag = ev->get_drag();
-        //     // Hide/show handles?
-        // }
-
-        SPMeshGradient *ms_selected = nullptr;
-        SPMeshType ms_type = SP_MESH_TYPE_COONS;
-        bool ms_selected_multi = false;
-        bool ms_type_multi = false; 
-        ms_read_selection( selection, ms_selected, ms_selected_multi, ms_type, ms_type_multi );
-        // std::cout << "   type: " << ms_type << std::endl;
-        
-        InkSelectOneAction* type = static_cast<InkSelectOneAction*> (g_object_get_data(G_OBJECT(data), "mesh_select_type_action"));
-        if (type) {
-            type->set_sensitive(!ms_type_multi);
-            blocked = TRUE;
-            type->set_active(ms_type);
-            blocked = FALSE;
-        }
-    }
-}
-
-
-static void ms_tb_selection_modified(Inkscape::Selection *selection, guint /*flags*/, gpointer data)
-{
-    ms_tb_selection_changed(selection, data);
-}
-
-static void ms_drag_selection_changed(gpointer /*dragger*/, gpointer data)
-{
-    ms_tb_selection_changed(nullptr, data);
-
-}
-
-static void ms_defs_release(SPObject * /*defs*/, GObject *widget)
-{
-    ms_tb_selection_changed(nullptr, widget);
-}
-
-static void ms_defs_modified(SPObject * /*defs*/, guint /*flags*/, GObject *widget)
-{
-    ms_tb_selection_changed(nullptr, widget);
-}
 
 /*
  * Callback functions for user actions
  */
 
-static void ms_new_geometry_changed( GObject * /*tbl*/, int mode )
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setInt("/tools/mesh/mesh_geometry", mode);
-}
-
-static void ms_new_fillstroke_changed( GObject * /*tbl*/, int mode )
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setInt("/tools/mesh/newfillorstroke", mode);
-}
-
-static void ms_row_changed(GtkAdjustment *adj, GObject * /*tbl*/ )
-{
-    if (blocked) {
-        return;
-    }
-
-    blocked = TRUE;
-
-    int rows = gtk_adjustment_get_value(adj);
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
-    prefs->setInt("/tools/mesh/mesh_rows", rows);
-
-    blocked = FALSE;
-}
-
-static void ms_col_changed(GtkAdjustment *adj, GObject * /*tbl*/ )
-{
-    if (blocked) {
-        return;
-    }
-
-    blocked = TRUE;
-
-    int cols = gtk_adjustment_get_value(adj);
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
-    prefs->setInt("/tools/mesh/mesh_cols", cols);
-
-    blocked = FALSE;
-}
-
-/**
- * Sets mesh type: Coons, Bicubic
- */
-static void ms_type_changed( GObject *tbl, int mode )
-{
-    if (blocked) {
-        return;
-    }
-
-    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(tbl, "desktop"));
-    Inkscape::Selection *selection = desktop->getSelection();
-    std::vector<SPMeshGradient *> meshes = ms_get_dt_selected_gradients(selection);
-
-    SPMeshType type = (SPMeshType) mode;
-    for (auto & meshe : meshes) {
-        meshe->type = type;
-        meshe->type_set = true;
-        meshe->updateRepr();
-    }
-    if (!meshes.empty() ) {
-        DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MESH,_("Set mesh type"));
-    }
-}
 
 /** Temporary hack: Returns the mesh tool in the active desktop.
  * Will go away during tool refactoring. */
@@ -317,50 +185,30 @@ static void ms_fit_mesh()
     }
 }
 
-static void ms_toggle_handles()
-{
-    MeshTool *mt = get_mesh_tool();
-    if (mt) {
-        GrDrag *drag = mt->_grdrag;
-        drag->refreshDraggers();
-    }
-}
-
-static void ms_toggle_fill_stroke(InkToggleAction * /*act*/, gpointer data)
-{
-    MeshTool *mt = get_mesh_tool();
-    if (mt) {
-        GrDrag *drag = mt->_grdrag;
-        drag->updateDraggers();
-        drag->updateLines();
-        drag->updateLevels();
-        ms_tb_selection_changed(nullptr, data); // Need to update Type widget
-    }
-}
-
-static void ms_warning_popup()
-{
-    char *msg = _("Mesh gradients are part of SVG 2:\n"
-                  "* Syntax may change.\n"
-                  "* Web browser implementation is not guaranteed.\n"
-                  "\n"
-                  "For web: convert to bitmap (Edit->Make bitmap copy).\n"
-                  "For print: export to PDF.");
-    Gtk::MessageDialog dialog(msg, false, Gtk::MESSAGE_WARNING,
-                              Gtk::BUTTONS_OK, true);
-    dialog.run();
-
-}
 
 static void mesh_toolbox_watch_ec(SPDesktop* dt, Inkscape::UI::Tools::ToolBase* ec, GObject* holder);
+
+namespace Inkscape {
+namespace UI {
+namespace Toolbar {
+
+MeshToolbar::~MeshToolbar()
+{
+    if(_edit_fill_pusher) delete _edit_fill_pusher;
+    if(_edit_stroke_pusher) delete _edit_stroke_pusher;
+    if(_show_handles_pusher) delete _show_handles_pusher;
+}
 
 /**
  * Mesh auxiliary toolbar construction and setup.
  * Don't forget to add to XML in widgets/toolbox.cpp!
  *
  */
-void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObject* holder)
+GtkWidget *
+MeshToolbar::prep(SPDesktop * desktop, GtkActionGroup* mainActions)
 {
+    auto toolbar = new MeshToolbar(desktop);
+
     GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
     EgeAdjustmentAction* eact = nullptr;
@@ -387,22 +235,21 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
         row[columns.col_icon     ] = INKSCAPE_ICON("paint-gradient-conical");
         row[columns.col_sensitive] = true;
 
-        InkSelectOneAction* act =
+        toolbar->_new_type_mode =
             InkSelectOneAction::create( "MeshNewTypeAction", // Name
                                         _("New:"),           // Label
                                         "",                  // Tooltip
                                         "Not Used",          // Icon
                                         store );             // Tree store
 
-        act->use_radio( true );
-        act->use_group_label( true );
+        toolbar->_new_type_mode->use_radio( true );
+        toolbar->_new_type_mode->use_group_label( true );
         gint mode = prefs->getInt("/tools/mesh/mesh_geometry", SP_MESH_GEOMETRY_NORMAL);
-        act->set_active( mode );
+        toolbar->_new_type_mode->set_active( mode );
 
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
-        g_object_set_data( holder, "mesh_new_type_mode", act );
+        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_new_type_mode->gobj() ));
 
-        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&ms_new_geometry_changed), holder));
+        toolbar->_new_type_mode->signal_changed().connect(sigc::mem_fun(*toolbar, &MeshToolbar::new_geometry_changed));
     }
 
     /* New gradient on fill or stroke*/
@@ -425,22 +272,21 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
         row[columns.col_icon     ] = INKSCAPE_ICON("object-stroke");
         row[columns.col_sensitive] = true;
 
-        InkSelectOneAction* act =
+        toolbar->_new_fillstroke_mode =
             InkSelectOneAction::create( "MeshNewFillStrokeAction", // Name
                                         "",                  // Label
                                         "",                  // Tooltip
                                         "Not Used",          // Icon
                                         store );             // Tree store
 
-        act->use_radio( true );
-        act->use_group_label( false );
+        toolbar->_new_fillstroke_mode->use_radio( true );
+        toolbar->_new_fillstroke_mode->use_group_label( false );
         gint mode = prefs->getInt("/tools/mesh/newfillorstroke");
-        act->set_active( mode );
+        toolbar->_new_fillstroke_mode->set_active( mode );
 
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
-        g_object_set_data( holder, "mesh_new_type_mode", act );
+        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_new_fillstroke_mode->gobj() ));
 
-        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&ms_new_fillstroke_changed), holder));
+        toolbar->_new_fillstroke_mode->signal_changed().connect(sigc::mem_fun(*toolbar, &MeshToolbar::new_fillstroke_changed));
     }
 
     /* Number of mesh rows */
@@ -450,11 +296,16 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
         eact = create_adjustment_action( "MeshRowAction",
                                          _("Rows"), _("Rows:"), _("Number of rows in new mesh"),
                                          "/tools/mesh/mesh_rows", 1,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
+                                         GTK_WIDGET(desktop->canvas),
+                                         nullptr, // dataKludge
+                                         FALSE, nullptr,
                                          1, 20, 1, 1,
                                          labels, values, 0,
-                                         ms_row_changed, nullptr /*unit tracker*/,
+                                         nullptr, // callback
+                                         nullptr /*unit tracker*/,
                                          1.0, 0 );
+        toolbar->_row_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
+        toolbar->_row_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &MeshToolbar::row_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
     }
@@ -466,11 +317,16 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
         eact = create_adjustment_action( "MeshColumnAction",
                                          _("Columns"), _("Columns:"), _("Number of columns in new mesh"),
                                          "/tools/mesh/mesh_cols", 1,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
+                                         GTK_WIDGET(desktop->canvas),
+                                         nullptr, // dataKludge
+                                         FALSE, nullptr,
                                          1, 20, 1, 1,
                                          labels, values, 0,
-                                         ms_col_changed, nullptr /*unit tracker*/,
+                                         nullptr, // callback
+                                         nullptr /*unit tracker*/,
                                          1.0, 0 );
+        toolbar->_col_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
+        toolbar->_col_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &MeshToolbar::col_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
     }
@@ -483,9 +339,8 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
                                                       INKSCAPE_ICON("object-fill"),
                                                       secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/edit_fill");
-        g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
-        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(ms_toggle_fill_stroke), holder);
+        toolbar->_edit_fill_pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/edit_fill");
+        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(toggle_fill_stroke), (gpointer)toolbar);
     }
 
     /* Edit stroke mesh */
@@ -496,9 +351,8 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
                                                       INKSCAPE_ICON("object-stroke"),
                                                       secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/edit_stroke");
-        g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
-        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(ms_toggle_fill_stroke), holder);
+        toolbar->_edit_stroke_pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/edit_stroke");
+        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(toggle_fill_stroke), (gpointer)toolbar);
     }
 
     /* Show/hide side and tensor handles */
@@ -509,14 +363,11 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
                                                       INKSCAPE_ICON("show-node-handles"),
                                                       secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/show_handles");
-        g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
-        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(ms_toggle_handles), 0);
+        toolbar->_show_handles_pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/show_handles");
+        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(toggle_handles), nullptr);
     }
 
-    g_object_set_data(holder, "desktop", desktop);
-
-    desktop->connectEventContextChanged(sigc::bind(sigc::ptr_fun(mesh_toolbox_watch_ec), holder));
+    desktop->connectEventContextChanged(sigc::mem_fun(*toolbar, &MeshToolbar::watch_ec));
 
     /* Warning */
     {
@@ -526,7 +377,7 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
                                          INKSCAPE_ICON("dialog-warning"),
                                          secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
-        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(ms_warning_popup), holder );
+        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(warning_popup), (gpointer)toolbar );
         gtk_action_set_sensitive( GTK_ACTION(act), TRUE );
     }
 
@@ -551,24 +402,23 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
         row[columns.col_sensitive] = true;
 
         // TRANSLATORS: Type of Smoothing. See https://en.wikipedia.org/wiki/Coons_patch
-        InkSelectOneAction* act =
+        toolbar->_select_type_action =
             InkSelectOneAction::create( "MeshSmoothAction",  // Name
                                         _("Smoothing"),      // Label
                                         _("Coons: no smothing. Bicubic: smothing across patch boundaries."),               // Tooltip
                                         "Not Used",          // Icon
                                         store );             // Tree store
 
-        act->use_radio( false );
-        act->use_label( true );
-        act->use_icon( false );
-        act->use_group_label( true );
-        act->set_sensitive( false );
-        act->set_active( 0 );
+        toolbar->_select_type_action->use_radio( false );
+        toolbar->_select_type_action->use_label( true );
+        toolbar->_select_type_action->use_icon( false );
+        toolbar->_select_type_action->use_group_label( true );
+        toolbar->_select_type_action->set_sensitive( false );
+        toolbar->_select_type_action->set_active( 0 );
 
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
-        g_object_set_data( holder, "mesh_select_type_action", act );
+        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_select_type_action->gobj() ));
 
-        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&ms_type_changed), holder));
+        toolbar->_select_type_action->signal_changed().connect(sigc::mem_fun(*toolbar, &MeshToolbar::type_changed));
     }
 
     {
@@ -616,28 +466,98 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
 
+    return GTK_WIDGET(toolbar->gobj());
 }
 
-static void mesh_toolbox_watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec, GObject* holder)
+void
+MeshToolbar::new_geometry_changed(int mode)
 {
-    static sigc::connection c_selection_changed;
-    static sigc::connection c_selection_modified;
-    static sigc::connection c_subselection_changed;
-    static sigc::connection c_defs_release;
-    static sigc::connection c_defs_modified;
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setInt("/tools/mesh/mesh_geometry", mode);
+}
 
+void
+MeshToolbar::new_fillstroke_changed(int mode)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setInt("/tools/mesh/newfillorstroke", mode);
+}
+
+void
+MeshToolbar::row_changed()
+{
+    if (blocked) {
+        return;
+    }
+
+    blocked = TRUE;
+
+    int rows = _row_adj->get_value();
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
+    prefs->setInt("/tools/mesh/mesh_rows", rows);
+
+    blocked = FALSE;
+}
+
+void
+MeshToolbar::col_changed()
+{
+    if (blocked) {
+        return;
+    }
+
+    blocked = TRUE;
+
+    int cols = _col_adj->get_value();
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
+    prefs->setInt("/tools/mesh/mesh_cols", cols);
+
+    blocked = FALSE;
+}
+
+void
+MeshToolbar::toggle_fill_stroke(InkToggleAction * /*act*/, gpointer data)
+{
+    auto toolbar = reinterpret_cast<MeshToolbar *>(data);
+    MeshTool *mt = get_mesh_tool();
+    if (mt) {
+        GrDrag *drag = mt->_grdrag;
+        drag->updateDraggers();
+        drag->updateLines();
+        drag->updateLevels();
+        toolbar->selection_changed(nullptr); // Need to update Type widget
+    }
+}
+
+void
+MeshToolbar::toggle_handles()
+{
+    MeshTool *mt = get_mesh_tool();
+    if (mt) {
+        GrDrag *drag = mt->_grdrag;
+        drag->refreshDraggers();
+    }
+}
+
+void
+MeshToolbar::watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec)
+{
     if (SP_IS_MESH_CONTEXT(ec)) {
         // connect to selection modified and changed signals
         Inkscape::Selection *selection = desktop->getSelection();
         SPDocument *document = desktop->getDocument();
 
-        c_selection_changed = selection->connectChanged(sigc::bind(sigc::ptr_fun(&ms_tb_selection_changed), holder));
-        c_selection_modified = selection->connectModified(sigc::bind(sigc::ptr_fun(&ms_tb_selection_modified), holder));
-        c_subselection_changed = desktop->connectToolSubselectionChanged(sigc::bind(sigc::ptr_fun(&ms_drag_selection_changed), holder));
+        c_selection_changed = selection->connectChanged(sigc::mem_fun(*this, &MeshToolbar::selection_changed));
+        c_selection_modified = selection->connectModified(sigc::mem_fun(*this, &MeshToolbar::selection_modified));
+        c_subselection_changed = desktop->connectToolSubselectionChanged(sigc::mem_fun(*this, &MeshToolbar::drag_selection_changed));
 
-        c_defs_release = document->getDefs()->connectRelease(sigc::bind<1>(sigc::ptr_fun(&ms_defs_release), holder));
-        c_defs_modified = document->getDefs()->connectModified(sigc::bind<2>(sigc::ptr_fun(&ms_defs_modified), holder));
-        ms_tb_selection_changed(selection, holder);
+        c_defs_release = document->getDefs()->connectRelease(sigc::mem_fun(*this, &MeshToolbar::defs_release));
+        c_defs_modified = document->getDefs()->connectModified(sigc::mem_fun(*this, &MeshToolbar::defs_modified));
+        selection_changed(selection);
     } else {
         if (c_selection_changed)
             c_selection_changed.disconnect();
@@ -650,6 +570,113 @@ static void mesh_toolbox_watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolB
         if (c_defs_modified)
             c_defs_modified.disconnect();
     }
+}
+
+void
+MeshToolbar::selection_modified(Inkscape::Selection *selection, guint /*flags*/)
+{
+    selection_changed(selection);
+}
+
+void
+MeshToolbar::drag_selection_changed(gpointer /*dragger*/)
+{
+    selection_changed(nullptr);
+}
+
+void
+MeshToolbar::defs_release(SPObject * /*defs*/)
+{
+    selection_changed(nullptr);
+}
+
+void
+MeshToolbar::defs_modified(SPObject * /*defs*/, guint /*flags*/)
+{
+    selection_changed(nullptr);
+}
+
+/*
+ * Core function, setup all the widgets whenever something changes on the desktop
+ */
+void
+MeshToolbar::selection_changed(Inkscape::Selection * /* selection */)
+{
+    // std::cout << "ms_tb_selection_changed" << std::endl;
+
+    if (blocked)
+        return;
+
+    if (!_desktop) {
+        return;
+    }
+
+    Inkscape::Selection *selection = _desktop->getSelection(); // take from desktop, not from args
+    if (selection) {
+        // ToolBase *ev = sp_desktop_event_context(desktop);
+        // GrDrag *drag = NULL;
+        // if (ev) {
+        //     drag = ev->get_drag();
+        //     // Hide/show handles?
+        // }
+
+        SPMeshGradient *ms_selected = nullptr;
+        SPMeshType ms_type = SP_MESH_TYPE_COONS;
+        bool ms_selected_multi = false;
+        bool ms_type_multi = false; 
+        ms_read_selection( selection, ms_selected, ms_selected_multi, ms_type, ms_type_multi );
+        // std::cout << "   type: " << ms_type << std::endl;
+        
+        if (_select_type_action) {
+            _select_type_action->set_sensitive(!ms_type_multi);
+            blocked = TRUE;
+            _select_type_action->set_active(ms_type);
+            blocked = FALSE;
+        }
+    }
+}
+
+void
+MeshToolbar::warning_popup()
+{
+    char *msg = _("Mesh gradients are part of SVG 2:\n"
+                  "* Syntax may change.\n"
+                  "* Web browser implementation is not guaranteed.\n"
+                  "\n"
+                  "For web: convert to bitmap (Edit->Make bitmap copy).\n"
+                  "For print: export to PDF.");
+    Gtk::MessageDialog dialog(msg, false, Gtk::MESSAGE_WARNING,
+                              Gtk::BUTTONS_OK, true);
+    dialog.run();
+
+}
+
+/**
+ * Sets mesh type: Coons, Bicubic
+ */
+void
+MeshToolbar::type_changed(int mode)
+{
+    if (blocked) {
+        return;
+    }
+
+    Inkscape::Selection *selection = _desktop->getSelection();
+    std::vector<SPMeshGradient *> meshes = ms_get_dt_selected_gradients(selection);
+
+    SPMeshType type = (SPMeshType) mode;
+    for (auto & meshe : meshes) {
+        meshe->type = type;
+        meshe->type_set = true;
+        meshe->updateRepr();
+    }
+    if (!meshes.empty() ) {
+        DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_MESH,_("Set mesh type"));
+    }
+}
+
+}
+}
 }
 
 /*

@@ -28,11 +28,47 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "toolbar.h"
+
+#include <gtkmm/adjustment.h>
+
+class InkSelectOneAction;
 class SPDesktop;
 
 typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _GObject GObject;
 
-void       sp_paintbucket_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
+namespace Inkscape {
+namespace UI {
+namespace Widget {
+class UnitTracker;
+}
+
+namespace Toolbar {
+class PaintbucketToolbar : public Toolbar {
+private:
+    InkSelectOneAction *_channels_action;
+    InkSelectOneAction *_autogap_action;
+
+    Glib::RefPtr<Gtk::Adjustment> _threshold_adj;
+    Glib::RefPtr<Gtk::Adjustment> _offset_adj;
+
+    UI::Widget::UnitTracker *_tracker;
+
+    void channels_changed(int channels);
+    void threshold_changed();
+    void offset_changed();
+    void autogap_changed(int autogap);
+    static void defaults(GtkWidget *widget, gpointer data);
+
+protected:
+    PaintbucketToolbar(SPDesktop *desktop);
+
+public:
+    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+};
+
+}
+}
+}
 
 #endif /* !SEEN_PAINTBUCKET_TOOLBAR_H */

@@ -49,70 +49,18 @@ using Inkscape::UI::PrefPusher;
 using Inkscape::Util::unit_table;
 
 
-//#########################
-//##     Paintbucket     ##
-//#########################
+namespace Inkscape {
+namespace UI {
+namespace Toolbar {
+PaintbucketToolbar::PaintbucketToolbar(SPDesktop *desktop)
+    : Toolbar(desktop),
+      _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
+{}
 
-static void paintbucket_channels_changed(GObject* /*tbl*/, int channels)
+GtkWidget *
+PaintbucketToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
 {
-    Inkscape::UI::Tools::FloodTool::set_channels(channels);
-}
-
-static void paintbucket_threshold_changed(GtkAdjustment *adj, GObject * /*tbl*/)
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setInt("/tools/paintbucket/threshold", (gint)gtk_adjustment_get_value(adj));
-}
-
-static void paintbucket_autogap_changed(GObject * /*tbl*/, int autogap)
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setInt("/tools/paintbucket/autogap", autogap);
-}
-
-static void paintbucket_offset_changed(GtkAdjustment *adj, GObject *tbl)
-{
-    UnitTracker* tracker = static_cast<UnitTracker*>(g_object_get_data( tbl, "tracker" ));
-    Unit const *unit = tracker->getActiveUnit();
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
-    // Don't adjust the offset value because we're saving the
-    // unit and it'll be correctly handled on load.
-    prefs->setDouble("/tools/paintbucket/offset", (gdouble)gtk_adjustment_get_value(adj));
-
-    g_return_if_fail(unit != nullptr);
-    prefs->setString("/tools/paintbucket/offsetunits", unit->abbr);
-}
-
-static void paintbucket_defaults(GtkWidget *, GObject *tbl)
-{
-    // FIXME: make defaults settable via Inkscape Options
-    struct KeyValue {
-        char const *key;
-        double value;
-    } const key_values[] = {
-        {"threshold", 15},
-        {"offset", 0.0}
-    };
-
-    for (auto kv : key_values) {
-        GtkAdjustment* adj = static_cast<GtkAdjustment *>(g_object_get_data(tbl, kv.key));
-        if ( adj ) {
-            gtk_adjustment_set_value(adj, kv.value);
-        }
-    }
-
-    InkSelectOneAction* channels_action =
-        static_cast<InkSelectOneAction*>( g_object_get_data( tbl, "channels_action" ) );
-    channels_action->set_active( Inkscape::UI::Tools::FLOOD_CHANNELS_RGB );
-
-    InkSelectOneAction* autogap_action =
-        static_cast<InkSelectOneAction*>( g_object_get_data( tbl, "autogap_action" ) );
-    autogap_action->set_active( 0 );
-}
-
-void sp_paintbucket_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
-{
+    auto toolbar = new PaintbucketToolbar(desktop);
     EgeAdjustmentAction* eact = nullptr;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -132,24 +80,23 @@ void sp_paintbucket_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
             row[columns.col_sensitive] = true;
         }
 
-        InkSelectOneAction* act =
+        toolbar->_channels_action =
             InkSelectOneAction::create( "ChannelsAction",    // Name
                                         _("Fill by"),        // Label
                                         (""),                // Tooltip
                                         "Not Used",          // Icon
                                         store );             // Tree store
 
-        act->use_radio( false );
-        act->use_icon( false );
-        act->use_label( true );
-        act->use_group_label( true );
+        toolbar->_channels_action->use_radio( false );
+        toolbar->_channels_action->use_icon( false );
+        toolbar->_channels_action->use_label( true );
+        toolbar->_channels_action->use_group_label( true );
         int channels = prefs->getInt("/tools/paintbucket/channels", 0);
-        act->set_active( channels );
+        toolbar->_channels_action->set_active( channels );
 
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
-        g_object_set_data( holder, "channels_action", act );
+        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_channels_action->gobj() ));
 
-        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&paintbucket_channels_changed), holder));
+        toolbar->_channels_action->signal_changed().connect(sigc::mem_fun(*toolbar, &PaintbucketToolbar::channels_changed));
     }
 
     // Spacing spinbox
@@ -158,26 +105,29 @@ void sp_paintbucket_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
             "ThresholdAction",
             _("Fill Threshold"), _("Threshold:"),
             _("The maximum allowed difference between the clicked pixel and the neighboring pixels to be counted in the fill"),
-            "/tools/paintbucket/threshold", 5, GTK_WIDGET(desktop->canvas), holder, TRUE,
+            "/tools/paintbucket/threshold", 5, GTK_WIDGET(desktop->canvas),
+            nullptr, // dataKludge
+            TRUE,
             "inkscape:paintbucket-threshold", 0, 100.0, 1.0, 10.0,
             nullptr, nullptr, 0,
-            paintbucket_threshold_changed, nullptr /*unit tracker*/, 1, 0 );
+            nullptr, // callback
+            nullptr /*unit tracker*/, 1, 0 );
 
+        toolbar->_threshold_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
+        toolbar->_threshold_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &PaintbucketToolbar::threshold_changed));
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
     }
 
     // Create the units menu.
-    UnitTracker* tracker = new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR);
     Glib::ustring stored_unit = prefs->getString("/tools/paintbucket/offsetunits");
     if (!stored_unit.empty()) {
         Unit const *u = unit_table.getUnit(stored_unit);
-        tracker->setActiveUnit(u);
+        toolbar->_tracker->setActiveUnit(u);
     }
-    g_object_set_data( holder, "tracker", tracker );
 
     {
-        InkSelectOneAction* act = tracker->createAction( "PaintbucketUnitsAction", _("Units"), ("") );
+        InkSelectOneAction* act = toolbar->_tracker->createAction( "PaintbucketUnitsAction", _("Units"), ("") );
         gtk_action_group_add_action( mainActions, act->gobj() );
     }
 
@@ -187,10 +137,16 @@ void sp_paintbucket_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
             "OffsetAction",
             _("Grow/shrink by"), _("Grow/shrink by:"),
             _("The amount to grow (positive) or shrink (negative) the created fill path"),
-            "/tools/paintbucket/offset", 0, GTK_WIDGET(desktop->canvas), holder, TRUE,
+            "/tools/paintbucket/offset", 0, GTK_WIDGET(desktop->canvas),
+            nullptr, // dataKludge
+            TRUE,
             "inkscape:paintbucket-offset", -1e4, 1e4, 0.1, 0.5,
             nullptr, nullptr, 0,
-            paintbucket_offset_changed, tracker, 1, 2);
+            nullptr, // callback
+            toolbar->_tracker,
+            1, 2);
+        toolbar->_offset_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
+        toolbar->_offset_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &PaintbucketToolbar::offset_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
     }
 
@@ -210,24 +166,23 @@ void sp_paintbucket_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
             row[columns.col_sensitive] = true;
         }
 
-        InkSelectOneAction* act =
+        toolbar->_autogap_action =
             InkSelectOneAction::create( "AutoGapAction",     // Name
                                         _("Close gaps"),     // Label
                                         (""),                // Tooltip
                                         "Not Used",          // Icon
                                         store );             // Tree store
 
-        act->use_radio( false );
-        act->use_icon( false );
-        act->use_label( true );
-        act->use_group_label( true );
+        toolbar->_autogap_action->use_radio( false );
+        toolbar->_autogap_action->use_icon( false );
+        toolbar->_autogap_action->use_label( true );
+        toolbar->_autogap_action->use_group_label( true );
         int autogap = prefs->getInt("/tools/paintbucket/autogap");
-        act->set_active( autogap );
+        toolbar->_autogap_action->set_active( autogap );
 
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
-        g_object_set_data( holder, "autogap_action", act );
+        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_autogap_action->gobj() ));
 
-        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&paintbucket_autogap_changed), holder));
+        toolbar->_autogap_action->signal_changed().connect(sigc::mem_fun(*toolbar, &PaintbucketToolbar::autogap_changed));
     }
 
     /* Reset */
@@ -237,11 +192,63 @@ void sp_paintbucket_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
                                           _("Reset paint bucket parameters to defaults (use Inkscape Preferences > Tools to change defaults)"),
                                           INKSCAPE_ICON("edit-clear"),
                                           GTK_ICON_SIZE_SMALL_TOOLBAR);
-        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(paintbucket_defaults), holder );
+        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(defaults), (gpointer)toolbar );
         gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
         gtk_action_set_sensitive( GTK_ACTION(inky), TRUE );
     }
 
+    return GTK_WIDGET(toolbar->gobj());
+}
+
+void
+PaintbucketToolbar::channels_changed(int channels)
+{
+    Inkscape::UI::Tools::FloodTool::set_channels(channels);
+}
+
+void
+PaintbucketToolbar::threshold_changed()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setInt("/tools/paintbucket/threshold", (gint)_threshold_adj->get_value());
+}
+
+void
+PaintbucketToolbar::offset_changed()
+{
+    Unit const *unit = _tracker->getActiveUnit();
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
+    // Don't adjust the offset value because we're saving the
+    // unit and it'll be correctly handled on load.
+    prefs->setDouble("/tools/paintbucket/offset", (gdouble)_offset_adj->get_value());
+
+    g_return_if_fail(unit != nullptr);
+    prefs->setString("/tools/paintbucket/offsetunits", unit->abbr);
+}
+
+void
+PaintbucketToolbar::autogap_changed(int autogap)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setInt("/tools/paintbucket/autogap", autogap);
+}
+
+void
+PaintbucketToolbar::defaults(GtkWidget * /* widget */, gpointer data)
+{
+    auto toolbar = reinterpret_cast<PaintbucketToolbar *>(data);
+
+    // FIXME: make defaults settable via Inkscape Options
+    toolbar->_threshold_adj->set_value(15);
+    toolbar->_offset_adj->set_value(0.0);
+
+    toolbar->_channels_action->set_active( Inkscape::UI::Tools::FLOOD_CHANNELS_RGB );
+    toolbar->_autogap_action->set_active( 0 );
+}
+
+}
+}
 }
 
 /*

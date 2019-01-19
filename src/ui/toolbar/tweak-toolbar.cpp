@@ -52,52 +52,12 @@ using Inkscape::UI::PrefPusher;
 //##       Tweak        ##
 //########################
 
-static void sp_tweak_width_value_changed( GtkAdjustment *adj, GObject * /*tbl*/ )
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/tweak/width",
-            gtk_adjustment_get_value(adj) * 0.01 );
-}
-
-static void sp_tweak_force_value_changed( GtkAdjustment *adj, GObject * /*tbl*/ )
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/tweak/force",
-            gtk_adjustment_get_value(adj) * 0.01 );
-}
-
 static void sp_tweak_pressure_state_changed( GtkToggleAction *act, gpointer /*data*/ )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool("/tools/tweak/usepressure", gtk_toggle_action_get_active(act));
 }
 
-static void sp_tweak_mode_changed( GObject *tbl, int mode )
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setInt("/tools/tweak/mode", mode);
-
-    static gchar const* names[] = {"tweak_doh", "tweak_dos", "tweak_dol", "tweak_doo", "tweak_channels_label"};
-    bool flag = ((mode == Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT) ||
-                 (mode == Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER));
-    for (auto & name : names) {
-        GtkAction *act = GTK_ACTION(g_object_get_data( tbl, name ));
-        if (act) {
-            gtk_action_set_visible(act, flag);
-        }
-    }
-    GtkAction *fid = GTK_ACTION(g_object_get_data( tbl, "tweak_fidelity"));
-    if (fid) {
-        gtk_action_set_visible(fid, !flag);
-    }
-}
-
-static void sp_tweak_fidelity_value_changed( GtkAdjustment *adj, GObject * /*tbl*/ )
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/tweak/fidelity",
-            gtk_adjustment_get_value(adj) * 0.01 );
-}
 
 static void tweak_toggle_doh(GtkToggleAction *act, gpointer /*data*/) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -116,8 +76,14 @@ static void tweak_toggle_doo(GtkToggleAction *act, gpointer /*data*/) {
     prefs->setBool("/tools/tweak/doo", gtk_toggle_action_get_active(act));
 }
 
-void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
+namespace Inkscape {
+namespace UI {
+namespace Toolbar {
+GtkWidget *
+TweakToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
 {
+    auto holder = new TweakToolbar(desktop);
+
     GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -128,10 +94,16 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
         EgeAdjustmentAction *eact = create_adjustment_action( "TweakWidthAction",
                                                               _("Width"), _("Width:"), _("The width of the tweak area (relative to the visible canvas area)"),
                                                               "/tools/tweak/width", 15,
-                                                              GTK_WIDGET(desktop->canvas), holder, TRUE, "altx-tweak",
+                                                              GTK_WIDGET(desktop->canvas),
+                                                              nullptr, // dataKludge
+                                                              TRUE, "altx-tweak",
                                                               1, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              sp_tweak_width_value_changed, nullptr /*unit tracker*/, 0.01, 0, 100 );
+                                                              nullptr, // callback
+                                                              nullptr /*unit tracker*/, 0.01, 0, 100 );
+
+        holder->_adj_tweak_width = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
+        holder->_adj_tweak_width->signal_value_changed().connect(sigc::mem_fun(*holder, &TweakToolbar::tweak_width_value_changed));
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
@@ -145,10 +117,15 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
         EgeAdjustmentAction *eact = create_adjustment_action( "TweakForceAction",
                                                               _("Force"), _("Force:"), _("The force of the tweak action"),
                                                               "/tools/tweak/force", 20,
-                                                              GTK_WIDGET(desktop->canvas), holder, TRUE, "tweak-force",
+                                                              GTK_WIDGET(desktop->canvas),
+                                                              nullptr, // dataKludge
+                                                              TRUE, "tweak-force",
                                                               1, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              sp_tweak_force_value_changed, nullptr /*unit tracker*/, 0.01, 0, 100 );
+                                                              nullptr, // callback
+                                                              nullptr /*unit tracker*/, 0.01, 0, 100 );
+        holder->_adj_tweak_force = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
+        holder->_adj_tweak_force->signal_value_changed().connect(sigc::mem_fun(*holder, &TweakToolbar::tweak_force_value_changed));
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
@@ -240,120 +217,119 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
         row[columns.col_icon     ] = INKSCAPE_ICON("object-tweak-blur");
         row[columns.col_sensitive] = true;
 
-        InkSelectOneAction* act =
+        holder->_tweak_tool_mode =
             InkSelectOneAction::create( "TweakModeAction",   // Name
                                         _("Mode"),           // Label
                                         (""),                // Tooltip
                                         "Not Used",          // Icon
                                         store );             // Tree store
 
-        act->use_radio( true );
-        act->use_icon( true );
-        act->use_label( false );
-        act->use_group_label( true );
+        holder->_tweak_tool_mode->use_radio( true );
+        holder->_tweak_tool_mode->use_icon( true );
+        holder->_tweak_tool_mode->use_label( false );
+        holder->_tweak_tool_mode->use_group_label( true );
         int mode = prefs->getInt("/tools/tweak/mode", 0);
-        act->set_active( mode );
+        holder->_tweak_tool_mode->set_active( mode );
 
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
-        g_object_set_data( holder, "tweak_tool_mode", act );
+        gtk_action_group_add_action( mainActions, GTK_ACTION( holder->_tweak_tool_mode->gobj() ));
 
-        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&sp_tweak_mode_changed), holder));
+        holder->_tweak_tool_mode->signal_changed().connect(sigc::mem_fun(*holder, &TweakToolbar::tweak_mode_changed));
     }
 
     guint mode = prefs->getInt("/tools/tweak/mode", 0);
 
     {
-        EgeOutputAction* act = ege_output_action_new( "TweakChannelsLabel", _("Channels:"), "", nullptr );
-        ege_output_action_set_use_markup( act, TRUE );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
+        holder->_tweak_channels_label = ege_output_action_new( "TweakChannelsLabel", _("Channels:"), "", nullptr );
+        ege_output_action_set_use_markup( holder->_tweak_channels_label, TRUE );
+        gtk_action_group_add_action( mainActions, GTK_ACTION( holder->_tweak_channels_label ) );
         if (mode != Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT && mode != Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {
-            gtk_action_set_visible (GTK_ACTION(act), FALSE);
+            gtk_action_set_visible (GTK_ACTION(holder->_tweak_channels_label), FALSE);
         }
-        g_object_set_data( holder, "tweak_channels_label", act);
     }
 
     {
-        InkToggleAction* act = ink_toggle_action_new( "TweakDoH",
+        holder->_tweak_doh = ink_toggle_action_new( "TweakDoH",
                                                       _("Hue"),
                                                       _("In color mode, act on objects' hue"),
                                                       nullptr,
                                                       GTK_ICON_SIZE_MENU );
         //TRANSLATORS:  "H" here stands for hue
-        g_object_set( act, "short_label", C_("Hue", "H"), NULL );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(tweak_toggle_doh), desktop );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/tweak/doh", true) );
+        gtk_action_set_short_label(GTK_ACTION(holder->_tweak_doh), C_("Hue", "H"));
+        gtk_action_group_add_action( mainActions, GTK_ACTION( holder->_tweak_doh ) );
+        g_signal_connect_after( G_OBJECT(holder->_tweak_doh), "toggled", G_CALLBACK(tweak_toggle_doh), desktop );
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(holder->_tweak_doh), prefs->getBool("/tools/tweak/doh", true) );
         if (mode != Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT && mode != Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {
-            gtk_action_set_visible (GTK_ACTION(act), FALSE);
+            gtk_action_set_visible (GTK_ACTION(holder->_tweak_doh), FALSE);
         }
-        g_object_set_data( holder, "tweak_doh", act);
     }
     {
-        InkToggleAction* act = ink_toggle_action_new( "TweakDoS",
-                                                      _("Saturation"),
-                                                      _("In color mode, act on objects' saturation"),
-                                                      nullptr,
-                                                      GTK_ICON_SIZE_MENU );
+        holder->_tweak_dos = ink_toggle_action_new( "TweakDoS",
+                                                     _("Saturation"),
+                                                     _("In color mode, act on objects' saturation"),
+                                                     nullptr,
+                                                     GTK_ICON_SIZE_MENU );
         //TRANSLATORS: "S" here stands for Saturation
-        g_object_set( act, "short_label", C_("Saturation", "S"), NULL );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(tweak_toggle_dos), desktop );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/tweak/dos", true) );
+        gtk_action_set_short_label( GTK_ACTION(holder->_tweak_dos), C_("Saturation", "S"));
+        gtk_action_group_add_action( mainActions, GTK_ACTION( holder->_tweak_dos ) );
+        g_signal_connect_after( G_OBJECT(holder->_tweak_dos), "toggled", G_CALLBACK(tweak_toggle_dos), desktop );
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(holder->_tweak_dos), prefs->getBool("/tools/tweak/dos", true) );
         if (mode != Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT && mode != Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {
-            gtk_action_set_visible (GTK_ACTION(act), FALSE);
+            gtk_action_set_visible (GTK_ACTION(holder->_tweak_dos), FALSE);
         }
-        g_object_set_data( holder, "tweak_dos", act );
     }
     {
-        InkToggleAction* act = ink_toggle_action_new( "TweakDoL",
-                                                      _("Lightness"),
-                                                      _("In color mode, act on objects' lightness"),
-                                                      nullptr,
-                                                      GTK_ICON_SIZE_MENU );
+        holder->_tweak_dol = ink_toggle_action_new( "TweakDoL",
+                                                     _("Lightness"),
+                                                     _("In color mode, act on objects' lightness"),
+                                                     nullptr,
+                                                     GTK_ICON_SIZE_MENU );
         //TRANSLATORS: "L" here stands for Lightness
-        g_object_set( act, "short_label", C_("Lightness", "L"), NULL );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(tweak_toggle_dol), desktop );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/tweak/dol", true) );
+        gtk_action_set_short_label( GTK_ACTION(holder->_tweak_dol), C_("Lightness", "L"));
+        gtk_action_group_add_action( mainActions, GTK_ACTION( holder->_tweak_dol ) );
+        g_signal_connect_after( G_OBJECT(holder->_tweak_dol), "toggled", G_CALLBACK(tweak_toggle_dol), desktop );
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(holder->_tweak_dol), prefs->getBool("/tools/tweak/dol", true) );
         if (mode != Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT && mode != Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {
-            gtk_action_set_visible (GTK_ACTION(act), FALSE);
+            gtk_action_set_visible (GTK_ACTION(holder->_tweak_dol), FALSE);
         }
-        g_object_set_data( holder, "tweak_dol", act );
     }
     {
-        InkToggleAction* act = ink_toggle_action_new( "TweakDoO",
-                                                      _("Opacity"),
-                                                      _("In color mode, act on objects' opacity"),
-                                                      nullptr,
-                                                      GTK_ICON_SIZE_MENU );
+        holder->_tweak_doo = ink_toggle_action_new( "TweakDoO",
+                                                     _("Opacity"),
+                                                     _("In color mode, act on objects' opacity"),
+                                                     nullptr,
+                                                     GTK_ICON_SIZE_MENU );
         //TRANSLATORS: "O" here stands for Opacity
-        g_object_set( act, "short_label", C_("Opacity", "O"), NULL );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(tweak_toggle_doo), desktop );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/tweak/doo", true) );
+        gtk_action_set_short_label( GTK_ACTION(holder->_tweak_doo), C_("Opacity", "O"));
+        gtk_action_group_add_action( mainActions, GTK_ACTION( holder->_tweak_doo ) );
+        g_signal_connect_after( G_OBJECT(holder->_tweak_doo), "toggled", G_CALLBACK(tweak_toggle_doo), desktop );
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(holder->_tweak_doo), prefs->getBool("/tools/tweak/doo", true) );
         if (mode != Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT && mode != Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {
-            gtk_action_set_visible (GTK_ACTION(act), FALSE);
+            gtk_action_set_visible (GTK_ACTION(holder->_tweak_doo), FALSE);
         }
-        g_object_set_data( holder, "tweak_doo", act );
     }
 
     {   /* Fidelity */
         gchar const* labels[] = {_("(rough, simplified)"), nullptr, nullptr, _("(default)"), nullptr, nullptr, _("(fine, but many nodes)")};
         gdouble values[] = {10, 25, 35, 50, 60, 80, 100};
-        EgeAdjustmentAction *eact = create_adjustment_action( "TweakFidelityAction",
-                                                              _("Fidelity"), _("Fidelity:"),
-                                                              _("Low fidelity simplifies paths; high fidelity preserves path features but may generate a lot of new nodes"),
-                                                              "/tools/tweak/fidelity", 50,
-                                                              GTK_WIDGET(desktop->canvas), holder, TRUE, "tweak-fidelity",
-                                                              1, 100, 1.0, 10.0,
-                                                              labels, values, G_N_ELEMENTS(labels),
-                                                              sp_tweak_fidelity_value_changed, nullptr /*unit tracker*/, 0.01, 0, 100 );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
-        gtk_action_set_visible( GTK_ACTION(eact), TRUE );
+        holder->_tweak_fidelity = create_adjustment_action( "TweakFidelityAction",
+                                                            _("Fidelity"), _("Fidelity:"),
+                                                            _("Low fidelity simplifies paths; high fidelity preserves path features but may generate a lot of new nodes"),
+                                                            "/tools/tweak/fidelity", 50,
+                                                            GTK_WIDGET(desktop->canvas),
+                                                            nullptr, // dataKludge
+                                                            TRUE, "tweak-fidelity",
+                                                            1, 100, 1.0, 10.0,
+                                                            labels, values, G_N_ELEMENTS(labels),
+                                                            nullptr, // callback
+                                                            nullptr /*unit tracker*/, 0.01, 0, 100 );
+
+        holder->_adj_tweak_fidelity = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_tweak_fidelity));
+        holder->_adj_tweak_fidelity->signal_value_changed().connect(sigc::mem_fun(*holder, &TweakToolbar::tweak_fidelity_value_changed));
+        gtk_action_group_add_action( mainActions, GTK_ACTION(holder->_tweak_fidelity) );
+        gtk_action_set_visible( GTK_ACTION(holder->_tweak_fidelity), TRUE );
         if (mode == Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT || mode == Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {
-            gtk_action_set_visible (GTK_ACTION(eact), FALSE);
+            gtk_action_set_visible (GTK_ACTION(holder->_tweak_fidelity), FALSE);
         }
-        g_object_set_data( holder, "tweak_fidelity", eact );
     }
 
 
@@ -369,8 +345,56 @@ void sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
         gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/tweak/usepressure", true) );
     }
 
+    return GTK_WIDGET(holder->gobj());
 }
 
+void
+TweakToolbar::tweak_width_value_changed()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setDouble( "/tools/tweak/width",
+            _adj_tweak_width->get_value() * 0.01 );
+}
+
+void
+TweakToolbar::tweak_force_value_changed()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setDouble( "/tools/tweak/force",
+            _adj_tweak_force->get_value() * 0.01 );
+}
+
+void
+TweakToolbar::tweak_mode_changed(int mode)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setInt("/tools/tweak/mode", mode);
+
+    bool flag = ((mode == Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT) ||
+                 (mode == Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER));
+
+    gtk_action_set_visible(GTK_ACTION(_tweak_doh), flag);
+    gtk_action_set_visible(GTK_ACTION(_tweak_dos), flag);
+    gtk_action_set_visible(GTK_ACTION(_tweak_dol), flag);
+    gtk_action_set_visible(GTK_ACTION(_tweak_doo), flag);
+    gtk_action_set_visible(GTK_ACTION(_tweak_channels_label), flag);
+
+    if (_tweak_fidelity) {
+        gtk_action_set_visible(GTK_ACTION(_tweak_fidelity), !flag);
+    }
+}
+
+void
+TweakToolbar::tweak_fidelity_value_changed()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setDouble( "/tools/tweak/fidelity",
+            _adj_tweak_fidelity->get_value() * 0.01 );
+}
+
+}
+}
+}
 
 /*
   Local Variables:

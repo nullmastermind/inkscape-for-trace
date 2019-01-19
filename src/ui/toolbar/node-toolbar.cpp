@@ -25,8 +25,11 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "node-toolbar.h"
+
 #include <glibmm/i18n.h>
 
+#include <gtkmm/adjustment.h>
 
 #include "desktop.h"
 #include "document-undo.h"
@@ -34,7 +37,6 @@
 #include "widgets/ink-tool-menu-action.h"
 #include "widgets/toolbox.h"
 #include "inkscape.h"
-#include "node-toolbar.h"
 #include "selection-chemistry.h"
 #include "verbs.h"
 
@@ -207,132 +209,36 @@ static void sp_node_path_edit_nextLPEparam(GtkAction * /*act*/, gpointer data) {
     sp_selection_next_patheffect_param( reinterpret_cast<SPDesktop*>(data) );
 }
 
-/* is called when the node selection is modified */
-static void sp_node_toolbox_coord_changed(gpointer /*shape_editor*/, GObject *tbl)
-{
-    GtkAction* xact = GTK_ACTION( g_object_get_data( tbl, "nodes_x_action" ) );
-    GtkAction* yact = GTK_ACTION( g_object_get_data( tbl, "nodes_y_action" ) );
-    GtkAdjustment *xadj = ege_adjustment_action_get_adjustment(EGE_ADJUSTMENT_ACTION(xact));
-    GtkAdjustment *yadj = ege_adjustment_action_get_adjustment(EGE_ADJUSTMENT_ACTION(yact));
 
-    // quit if run by the attr_changed listener
-    if (g_object_get_data( tbl, "freeze" )) {
-        return;
-    }
-
-    // in turn, prevent listener from responding
-    g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE));
-
-    UnitTracker* tracker = reinterpret_cast<UnitTracker*>( g_object_get_data( tbl, "tracker" ) );
-    if (!tracker) {
-        return;
-    }
-    Unit const *unit = tracker->getActiveUnit();
-    g_return_if_fail(unit != nullptr);
-
-    NodeTool *nt = get_node_tool();
-    if (!nt || !(nt->_selected_nodes) ||nt->_selected_nodes->empty()) {
-        // no path selected
-        gtk_action_set_sensitive(xact, FALSE);
-        gtk_action_set_sensitive(yact, FALSE);
-    } else {
-        gtk_action_set_sensitive(xact, TRUE);
-        gtk_action_set_sensitive(yact, TRUE);
-        Geom::Coord oldx = Quantity::convert(gtk_adjustment_get_value(xadj), unit, "px");
-        Geom::Coord oldy = Quantity::convert(gtk_adjustment_get_value(yadj), unit, "px");
-        Geom::Point mid = nt->_selected_nodes->pointwiseBounds()->midpoint();
-
-        if (oldx != mid[Geom::X]) {
-            gtk_adjustment_set_value(xadj, Quantity::convert(mid[Geom::X], "px", unit));
-        }
-        if (oldy != mid[Geom::Y]) {
-            gtk_adjustment_set_value(yadj, Quantity::convert(mid[Geom::Y], "px", unit));
-        }
-    }
-
-    g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
-}
-
-static void sp_node_path_value_changed(GtkAdjustment *adj, GObject *tbl, Geom::Dim2 d)
-{
-    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
-    UnitTracker* tracker = reinterpret_cast<UnitTracker*>(g_object_get_data( tbl, "tracker" ));
-    if (!tracker) {
-        return;
-    }
-    Unit const *unit = tracker->getActiveUnit();
-
-    if (DocumentUndo::getUndoSensitive(desktop->getDocument())) {
-        prefs->setDouble(Glib::ustring("/tools/nodes/") + (d == Geom::X ? "x" : "y"),
-            Quantity::convert(gtk_adjustment_get_value(adj), unit, "px"));
-    }
-
-    // quit if run by the attr_changed listener
-    if (g_object_get_data( tbl, "freeze" ) || tracker->isUpdating()) {
-        return;
-    }
-
-    // in turn, prevent listener from responding
-    g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE));
-
-    NodeTool *nt = get_node_tool();
-    if (nt && !nt->_selected_nodes->empty()) {
-        double val = Quantity::convert(gtk_adjustment_get_value(adj), unit, "px");
-        double oldval = nt->_selected_nodes->pointwiseBounds()->midpoint()[d];
-        Geom::Point delta(0,0);
-        delta[d] = val - oldval;
-        nt->_multipath->move(delta);
-    }
-
-    g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
-}
-
-static void sp_node_path_x_value_changed(GtkAdjustment *adj, GObject *tbl)
-{
-    sp_node_path_value_changed(adj, tbl, Geom::X);
-}
-
-static void sp_node_path_y_value_changed(GtkAdjustment *adj, GObject *tbl)
-{
-    sp_node_path_value_changed(adj, tbl, Geom::Y);
-}
-
-static void sp_node_toolbox_sel_changed(Inkscape::Selection *selection, GObject *tbl)
-{
-    {
-    GtkAction* w = GTK_ACTION( g_object_get_data( tbl, "nodes_lpeedit" ) );
-    SPItem *item = selection->singleItem();
-    if (item && SP_IS_LPE_ITEM(item)) {
-       if (SP_LPE_ITEM(item)->hasPathEffect()) {
-           gtk_action_set_sensitive(w, TRUE);
-       } else {
-           gtk_action_set_sensitive(w, FALSE);
-       }
-    } else {
-       gtk_action_set_sensitive(w, FALSE);
-    }
-    }
-}
-
-static void sp_node_toolbox_sel_modified(Inkscape::Selection *selection, guint /*flags*/, GObject *tbl)
-{
-    sp_node_toolbox_sel_changed (selection, tbl);
-}
-
-static void node_toolbox_watch_ec(SPDesktop* dt, Inkscape::UI::Tools::ToolBase* ec, GObject* holder);
 
 //################################
 //##    Node Editing Toolbox    ##
 //################################
 
-void sp_node_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
+namespace Inkscape {
+namespace UI {
+namespace Toolbar {
+
+NodeToolbar::NodeToolbar(SPDesktop *desktop)
+    : Toolbar(desktop),
+    _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
+{}
+
+NodeToolbar::~NodeToolbar()
 {
-    UnitTracker* tracker = new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR);
+    delete _pusher_show_transform_handles;
+    delete _pusher_show_handles;
+    delete _pusher_show_outline;
+    delete _pusher_edit_clipping_paths;
+    delete _pusher_edit_masks;
+}
+
+GtkWidget *
+NodeToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
+{
+    auto holder = new NodeToolbar(desktop);
     Unit doc_units = *desktop->getNamedView()->display_units;
-    tracker->setActiveUnit(&doc_units);
-    g_object_set_data( holder, "tracker", tracker );
+    holder->_tracker->setActiveUnit(&doc_units);
 
     GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
@@ -342,7 +248,7 @@ void sp_node_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                                             _("Insert new nodes into selected segments"),
                                                             INKSCAPE_ICON("node-add"),
                                                             secondarySize );
-        g_object_set( INK_ACTION(inky), "short_label", _("Insert"), NULL );
+        gtk_action_set_short_label(GTK_ACTION(inky), _("Insert"));
         g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_node_path_edit_add), 0 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
         GtkToolItem *menu_tool_button = gtk_menu_tool_button_new (nullptr, nullptr);
@@ -357,7 +263,7 @@ void sp_node_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                           _("Insert new nodes at min X into selected segments"),
                                           INKSCAPE_ICON("node_insert_min_x"),
                                           secondarySize );
-        g_object_set( inky, "short_label", _("Insert min X"), NULL );
+        gtk_action_set_short_label( GTK_ACTION(inky), _("Insert min X"));
         g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_node_path_edit_add_min_x), 0 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
     }
@@ -512,8 +418,7 @@ void sp_node_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                                       "node-transform",
                                                       secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/nodes/show_transform_handles");
-        g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
+        holder->_pusher_show_transform_handles = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/nodes/show_transform_handles");
     }
 
     {
@@ -523,8 +428,7 @@ void sp_node_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                                       INKSCAPE_ICON("show-node-handles"),
                                                       secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/nodes/show_handles");
-        g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
+        holder->_pusher_show_handles = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/nodes/show_handles");
     }
 
     {
@@ -534,20 +438,18 @@ void sp_node_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                                       INKSCAPE_ICON("show-path-outline"),
                                                       secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/nodes/show_outline");
-        g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
+        holder->_pusher_show_outline = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/nodes/show_outline");
     }
 
     {
         Inkscape::Verb* verb = Inkscape::Verb::get(SP_VERB_EDIT_NEXT_PATHEFFECT_PARAMETER);
-        InkAction* inky = ink_action_new( verb->get_id(),
-                                          verb->get_name(),
-                                          verb->get_tip(),
-                                          INKSCAPE_ICON("path-effect-parameter-next"),
-                                          secondarySize );
-        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_node_path_edit_nextLPEparam), desktop );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-        g_object_set_data( holder, "nodes_lpeedit", inky);
+        holder->_nodes_lpeedit = ink_action_new( verb->get_id(),
+                                                 verb->get_name(),
+                                                 verb->get_tip(),
+                                                 INKSCAPE_ICON("path-effect-parameter-next"),
+                                                 secondarySize );
+        g_signal_connect_after( G_OBJECT(holder->_nodes_lpeedit), "activate", G_CALLBACK(sp_node_path_edit_nextLPEparam), desktop );
+        gtk_action_group_add_action( mainActions, GTK_ACTION(holder->_nodes_lpeedit) );
     }
 
     {
@@ -557,8 +459,7 @@ void sp_node_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                           INKSCAPE_ICON("path-clip-edit"),
                                           secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(inky), "/tools/nodes/edit_clipping_paths");
-        g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
+        holder->_pusher_edit_clipping_paths = new PrefPusher(GTK_TOGGLE_ACTION(inky), "/tools/nodes/edit_clipping_paths");
     }
 
     {
@@ -568,68 +469,124 @@ void sp_node_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                           INKSCAPE_ICON("path-mask-edit"),
                                           secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(inky), "/tools/nodes/edit_masks");
-        g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
+        holder->_pusher_edit_masks = new PrefPusher(GTK_TOGGLE_ACTION(inky), "/tools/nodes/edit_masks");
     }
 
     /* X coord of selected node(s) */
     {
-        EgeAdjustmentAction* eact = nullptr;
         gchar const* labels[] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
         gdouble values[] = {1, 2, 3, 5, 10, 20, 50, 100, 200, 500};
-        eact = create_adjustment_action( "NodeXAction",
-                                         _("X coordinate:"), _("X:"), _("X coordinate of selected node(s)"),
-                                         "/tools/nodes/Xcoord", 0,
-                                         GTK_WIDGET(desktop->canvas), holder, TRUE, "altx-nodes",
-                                         -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
-                                         labels, values, G_N_ELEMENTS(labels),
-                                         sp_node_path_x_value_changed, tracker );
-        g_object_set_data( holder, "nodes_x_action", eact );
-        gtk_action_set_sensitive( GTK_ACTION(eact), FALSE );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
+        holder->_nodes_x_action = create_adjustment_action( "NodeXAction",
+                                                            _("X coordinate:"), _("X:"), _("X coordinate of selected node(s)"),
+                                                            "/tools/nodes/Xcoord", 0,
+                                                            GTK_WIDGET(desktop->canvas),
+                                                            nullptr, // dataKludge
+                                                            TRUE, "altx-nodes",
+                                                            -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
+                                                            labels, values, G_N_ELEMENTS(labels),
+                                                            nullptr, // callback
+                                                            holder->_tracker );
+        holder->_nodes_x_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_nodes_x_action));
+        holder->_nodes_x_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &NodeToolbar::value_changed), Geom::X));
+        gtk_action_set_sensitive( GTK_ACTION(holder->_nodes_x_action), FALSE );
+        gtk_action_group_add_action( mainActions, GTK_ACTION(holder->_nodes_x_action) );
     }
 
     /* Y coord of selected node(s) */
     {
-        EgeAdjustmentAction* eact = nullptr;
         gchar const* labels[] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
         gdouble values[] = {1, 2, 3, 5, 10, 20, 50, 100, 200, 500};
-        eact = create_adjustment_action( "NodeYAction",
-                                         _("Y coordinate:"), _("Y:"), _("Y coordinate of selected node(s)"),
-                                         "/tools/nodes/Ycoord", 0,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
-                                         -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
-                                         labels, values, G_N_ELEMENTS(labels),
-                                         sp_node_path_y_value_changed, tracker );
-        g_object_set_data( holder, "nodes_y_action", eact );
-        gtk_action_set_sensitive( GTK_ACTION(eact), FALSE );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
+        holder->_nodes_y_action = create_adjustment_action( "NodeYAction",
+                                                            _("Y coordinate:"), _("Y:"), _("Y coordinate of selected node(s)"),
+                                                            "/tools/nodes/Ycoord", 0,
+                                                            GTK_WIDGET(desktop->canvas),
+                                                            nullptr, // dataKludge
+                                                            FALSE, nullptr,
+                                                            -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
+                                                            labels, values, G_N_ELEMENTS(labels),
+                                                            nullptr, // callback
+                                                            holder->_tracker );
+        holder->_nodes_y_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_nodes_y_action));
+        holder->_nodes_y_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &NodeToolbar::value_changed), Geom::Y));
+        gtk_action_set_sensitive( GTK_ACTION(holder->_nodes_y_action), FALSE );
+        gtk_action_group_add_action( mainActions, GTK_ACTION(holder->_nodes_y_action) );
     }
 
     // add the units menu
     {
-        InkSelectOneAction* act = tracker->createAction( "NodeUnitsAction", _("Units"), ("") );
+        InkSelectOneAction* act = holder->_tracker->createAction( "NodeUnitsAction", _("Units"), ("") );
         gtk_action_group_add_action( mainActions, act->gobj() );
     }
 
-    sp_node_toolbox_sel_changed(desktop->getSelection(), holder);
-    desktop->connectEventContextChanged(sigc::bind(sigc::ptr_fun(node_toolbox_watch_ec), holder));
+    holder->sel_changed(desktop->getSelection());
+    desktop->connectEventContextChanged(sigc::mem_fun(*holder, &NodeToolbar::watch_ec));
 
-} // end of sp_node_toolbox_prep()
+    return GTK_WIDGET(holder->gobj());
+} // NodeToolbar::prep()
 
-static void node_toolbox_watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec, GObject* holder)
+void
+NodeToolbar::value_changed(Geom::Dim2 d)
 {
-    static sigc::connection c_selection_changed;
-    static sigc::connection c_selection_modified;
-    static sigc::connection c_subselection_changed;
+    auto adj = (d == Geom::X) ? _nodes_x_adj : _nodes_y_adj;
 
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
+    if (!_tracker) {
+        return;
+    }
+
+    Unit const *unit = _tracker->getActiveUnit();
+
+    if (DocumentUndo::getUndoSensitive(_desktop->getDocument())) {
+        prefs->setDouble(Glib::ustring("/tools/nodes/") + (d == Geom::X ? "x" : "y"),
+            Quantity::convert(adj->get_value(), unit, "px"));
+    }
+
+    // quit if run by the attr_changed listener
+    if (_freeze || _tracker->isUpdating()) {
+        return;
+    }
+
+    // in turn, prevent listener from responding
+    _freeze = true;
+
+    NodeTool *nt = get_node_tool();
+    if (nt && !nt->_selected_nodes->empty()) {
+        double val = Quantity::convert(adj->get_value(), unit, "px");
+        double oldval = nt->_selected_nodes->pointwiseBounds()->midpoint()[d];
+        Geom::Point delta(0,0);
+        delta[d] = val - oldval;
+        nt->_multipath->move(delta);
+    }
+
+    _freeze = false;
+}
+
+void
+NodeToolbar::sel_changed(Inkscape::Selection *selection)
+{
+    SPItem *item = selection->singleItem();
+    if (item && SP_IS_LPE_ITEM(item)) {
+       if (SP_LPE_ITEM(item)->hasPathEffect()) {
+           gtk_action_set_sensitive(GTK_ACTION(_nodes_lpeedit), TRUE);
+       } else {
+           gtk_action_set_sensitive(GTK_ACTION(_nodes_lpeedit), FALSE);
+       }
+    } else {
+       gtk_action_set_sensitive(GTK_ACTION(_nodes_lpeedit), FALSE);
+    }
+}
+
+void
+NodeToolbar::watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec)
+{
     if (INK_IS_NODE_TOOL(ec)) {
         // watch selection
-        c_selection_changed = desktop->getSelection()->connectChanged(sigc::bind(sigc::ptr_fun(sp_node_toolbox_sel_changed), holder));
-        c_selection_modified = desktop->getSelection()->connectModified(sigc::bind(sigc::ptr_fun(sp_node_toolbox_sel_modified), holder));
-        c_subselection_changed = desktop->connectToolSubselectionChanged(sigc::bind(sigc::ptr_fun(sp_node_toolbox_coord_changed), holder));
+        c_selection_changed = desktop->getSelection()->connectChanged(sigc::mem_fun(*this, &NodeToolbar::sel_changed));
+        c_selection_modified = desktop->getSelection()->connectModified(sigc::mem_fun(*this, &NodeToolbar::sel_modified));
+        c_subselection_changed = desktop->connectToolSubselectionChanged(sigc::mem_fun(*this, &NodeToolbar::coord_changed));
 
-        sp_node_toolbox_sel_changed(desktop->getSelection(), holder);
+        sel_changed(desktop->getSelection());
     } else {
         if (c_selection_changed)
             c_selection_changed.disconnect();
@@ -640,6 +597,56 @@ static void node_toolbox_watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolB
     }
 }
 
+void
+NodeToolbar::sel_modified(Inkscape::Selection *selection, guint /*flags*/)
+{
+    sel_changed(selection);
+}
+
+/* is called when the node selection is modified */
+void
+NodeToolbar::coord_changed(gpointer /*shape_editor*/)
+{
+    // quit if run by the attr_changed listener
+    if (_freeze) {
+        return;
+    }
+
+    // in turn, prevent listener from responding
+    _freeze = true;
+
+    if (!_tracker) {
+        return;
+    }
+    Unit const *unit = _tracker->getActiveUnit();
+    g_return_if_fail(unit != nullptr);
+
+    NodeTool *nt = get_node_tool();
+    if (!nt || !(nt->_selected_nodes) ||nt->_selected_nodes->empty()) {
+        // no path selected
+        gtk_action_set_sensitive(GTK_ACTION(_nodes_x_action), FALSE);
+        gtk_action_set_sensitive(GTK_ACTION(_nodes_y_action), FALSE);
+    } else {
+        gtk_action_set_sensitive(GTK_ACTION(_nodes_x_action), TRUE);
+        gtk_action_set_sensitive(GTK_ACTION(_nodes_y_action), TRUE);
+        Geom::Coord oldx = Quantity::convert(_nodes_x_adj->get_value(), unit, "px");
+        Geom::Coord oldy = Quantity::convert(_nodes_y_adj->get_value(), unit, "px");
+        Geom::Point mid = nt->_selected_nodes->pointwiseBounds()->midpoint();
+
+        if (oldx != mid[Geom::X]) {
+            _nodes_x_adj->set_value(Quantity::convert(mid[Geom::X], "px", unit));
+        }
+        if (oldy != mid[Geom::Y]) {
+            _nodes_y_adj->set_value(Quantity::convert(mid[Geom::Y], "px", unit));
+        }
+    }
+
+    _freeze = false;
+}
+
+}
+}
+}
 
 /*
   Local Variables:

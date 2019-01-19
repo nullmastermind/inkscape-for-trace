@@ -28,12 +28,76 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "toolbar.h"
+#include <gtkmm/adjustment.h>
+
+class InkSelectOneAction;
 class SPDesktop;
 
+typedef struct _EgeAdjustmentAction EgeAdjustmentAction;
 typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _GObject GObject;
+typedef struct _InkToggleAction InkToggleAction;
 
-void sp_calligraphy_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
-void update_presets_list(GObject *tbl);
+namespace Inkscape {
+namespace UI {
+class PrefPusher;
+
+namespace Toolbar {
+
+class CalligraphyToolbar : public Toolbar {
+private:
+    bool _presets_blocked;
+
+    EgeAdjustmentAction *_angle_action;
+    InkSelectOneAction *_profile_selector;
+
+    std::map<Glib::ustring, GObject *> _widget_map;
+
+    Glib::RefPtr<Gtk::Adjustment> _width_adj;
+    Glib::RefPtr<Gtk::Adjustment> _mass_adj;
+    Glib::RefPtr<Gtk::Adjustment> _wiggle_adj;
+    Glib::RefPtr<Gtk::Adjustment> _angle_adj;
+    Glib::RefPtr<Gtk::Adjustment> _thinning_adj;
+    Glib::RefPtr<Gtk::Adjustment> _tremor_adj;
+    Glib::RefPtr<Gtk::Adjustment> _fixation_adj;
+    Glib::RefPtr<Gtk::Adjustment> _cap_rounding_adj;
+    InkToggleAction *_usepressure;
+    InkToggleAction *_tracebackground;
+    InkToggleAction *_usetilt;
+
+    PrefPusher *_tracebackground_pusher;
+    PrefPusher *_usepressure_pusher;
+    PrefPusher *_usetilt_pusher;
+
+    void width_value_changed();
+    void velthin_value_changed();
+    void angle_value_changed();
+    void flatness_value_changed();
+    void cap_rounding_value_changed();
+    void tremor_value_changed();
+    void wiggle_value_changed();
+    void mass_value_changed();
+    void build_presets_list();
+    void change_profile(int mode);
+    void save_profile(GtkWidget *widget);
+
+    static void edit_profile(GtkAction *act, gpointer data);
+    static void update_presets_list(gpointer data);
+    static void tilt_state_changed( GtkToggleAction *act, gpointer data );
+    
+protected:
+    CalligraphyToolbar(SPDesktop *desktop)
+        : Toolbar(desktop)
+    {}
+
+    ~CalligraphyToolbar();
+
+public:
+    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+};
+
+}
+}
+}
 
 #endif /* !SEEN_CALLIGRAPHY_TOOLBAR_H */

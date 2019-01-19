@@ -28,11 +28,50 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "toolbar.h"
+
+class InkSelectOneAction;
 class SPDesktop;
 
+typedef struct _EgeAdjustmentAction EgeAdjustmentAction;
+typedef struct _EgeOutputAction EgeOutputAction;
 typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _GObject GObject;
+typedef struct _InkToggleAction InkToggleAction;
 
-void       sp_tweak_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
+namespace Inkscape {
+namespace UI {
+namespace Toolbar {
+class TweakToolbar : public Toolbar {
+private:
+    Glib::RefPtr<Gtk::Adjustment> _adj_tweak_width;
+    Glib::RefPtr<Gtk::Adjustment> _adj_tweak_force;
+    Glib::RefPtr<Gtk::Adjustment> _adj_tweak_fidelity;
+
+    InkSelectOneAction *_tweak_tool_mode;
+
+    EgeOutputAction *_tweak_channels_label;
+    InkToggleAction *_tweak_doh;
+    InkToggleAction *_tweak_dos;
+    InkToggleAction *_tweak_dol;
+    InkToggleAction *_tweak_doo;
+
+    EgeAdjustmentAction *_tweak_fidelity;
+
+    void tweak_width_value_changed();
+    void tweak_force_value_changed();
+    void tweak_mode_changed(int mode);
+    void tweak_fidelity_value_changed();
+
+protected:
+    TweakToolbar(SPDesktop *_desktop)
+        : Toolbar(_desktop)
+    {}
+
+public:
+    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+};
+}
+}
+}
 
 #endif /* !SEEN_SELECT_TOOLBAR_H */

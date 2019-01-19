@@ -4,7 +4,7 @@
 
 /**
  * @file
- * Measue aux toolbar
+ * Measure aux toolbar
  */
 /* Authors:
  *   MenTaLguY <mental@rydia.net>
@@ -28,11 +28,44 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "toolbar.h"
+
+#include <gtkmm/adjustment.h>
+
 class SPDesktop;
 
 typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _GObject GObject;
 
-void       sp_measure_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
+namespace Inkscape {
+namespace UI {
+namespace Widget {
+class UnitTracker;
+}
+
+namespace Toolbar {
+class MeasureToolbar : public Toolbar {
+private:
+    UI::Widget::UnitTracker *_tracker;
+    Glib::RefPtr<Gtk::Adjustment> _font_size_adj;
+    Glib::RefPtr<Gtk::Adjustment> _precision_adj;
+    Glib::RefPtr<Gtk::Adjustment> _scale_adj;
+    Glib::RefPtr<Gtk::Adjustment> _offset_adj;
+
+    void fontsize_value_changed();
+    void unit_changed(int notUsed);
+    void precision_value_changed();
+    void scale_value_changed();
+    void offset_value_changed();
+
+protected:
+    MeasureToolbar(SPDesktop *desktop);
+
+public:
+    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+};
+
+}
+}
+}
 
 #endif /* !SEEN_MEASURE_TOOLBAR_H */

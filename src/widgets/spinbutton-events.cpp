@@ -17,7 +17,6 @@
 
 #include "ui/tools/tool-base.h"
 
-#include "sp-widget.h"
 #include "spinbutton-events.h"
 
 gboolean spinbutton_focus_in(GtkWidget *w, GdkEventKey * /*event*/, gpointer /*data*/)

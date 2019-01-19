@@ -28,11 +28,85 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "toolbar.h"
+
+#include <gtkmm/adjustment.h>
+
 class SPDesktop;
+class SPItem;
+class SPRect;
 
+typedef struct _EgeAdjustmentAction EgeAdjustmentAction;
+typedef struct _EgeOutputAction EgeOutputAction;
 typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _GObject GObject;
+typedef struct _InkAction InkAction;
 
-void       sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
+namespace Inkscape {
+class Selection;
+
+namespace XML {
+class Node;
+}
+
+namespace UI {
+namespace Tools {
+class ToolBase;
+}
+
+namespace Widget {
+class UnitTracker;
+}
+
+namespace Toolbar {
+class RectToolbar : public Toolbar {
+private:
+    EgeOutputAction *_mode_action;
+
+    UI::Widget::UnitTracker *_tracker;
+
+    XML::Node *_repr;
+    SPItem *_item;
+
+    EgeAdjustmentAction *_width_action;
+    EgeAdjustmentAction *_height_action;
+    InkAction *_not_rounded;
+
+    Glib::RefPtr<Gtk::Adjustment> _width_adj;
+    Glib::RefPtr<Gtk::Adjustment> _height_adj;
+    Glib::RefPtr<Gtk::Adjustment> _rx_adj;
+    Glib::RefPtr<Gtk::Adjustment> _ry_adj;
+
+    bool _freeze;
+    bool _single;
+
+    void value_changed(Glib::RefPtr<Gtk::Adjustment>&  adj,
+                       gchar const                    *value_name,
+                       void (SPRect::*setter)(gdouble));
+
+    void sensitivize();
+    static void defaults(GtkWidget *widget,
+                         GObject   *obj);
+    void watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
+    void selection_changed(Inkscape::Selection *selection);
+
+protected:
+    RectToolbar(SPDesktop *desktop);
+    ~RectToolbar();
+
+public:
+    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+
+    static void event_attr_changed(Inkscape::XML::Node *repr,
+                                   gchar const         *name,
+                                   gchar const         *old_value,
+                                   gchar const         *new_value,
+                                   bool                 is_interactive,
+                                   gpointer             data);
+
+};
+
+}
+}
+}
 
 #endif /* !SEEN_RECT_TOOLBAR_H */

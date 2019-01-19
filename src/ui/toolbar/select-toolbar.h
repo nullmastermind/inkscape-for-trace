@@ -15,14 +15,54 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "toolbar.h"
+
 class SPDesktop;
 
 typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _GObject GObject;
 
-void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
+namespace Inkscape {
+class Selection;
 
+namespace UI {
 
+namespace Widget {
+class UnitTracker;
+}
+
+namespace Toolbar {
+
+class SelectToolbar : public Toolbar {
+private:
+    UI::Widget::UnitTracker *_tracker;
+
+    Glib::RefPtr<Gtk::Adjustment>  _adj_x;
+    Glib::RefPtr<Gtk::Adjustment>  _adj_y;
+    Glib::RefPtr<Gtk::Adjustment>  _adj_w;
+    Glib::RefPtr<Gtk::Adjustment>  _adj_h;
+    GtkToggleAction               *_lock;
+
+    GtkActionGroup *_selection_actions;
+    std::vector<GtkAction *> *_context_actions;
+
+    bool _update;
+
+    void any_value_changed(Glib::RefPtr<Gtk::Adjustment>& adj);
+    void layout_widget_update(Inkscape::Selection *sel);
+    void on_inkscape_selection_modified(Inkscape::Selection *selection, guint flags);
+    void on_inkscape_selection_changed(Inkscape::Selection *selection);
+
+protected:
+    SelectToolbar(SPDesktop *desktop);
+    ~SelectToolbar();
+
+public:
+    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+};
+
+}
+}
+}
 #endif /* !SEEN_SELECT_TOOLBAR_H */
 
 /*

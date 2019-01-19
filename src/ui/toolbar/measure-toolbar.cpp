@@ -25,9 +25,9 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <glibmm/i18n.h>
-
 #include "measure-toolbar.h"
+
+#include <glibmm/i18n.h>
 
 #include "desktop.h"
 #include "document-undo.h"
@@ -70,81 +70,8 @@ static MeasureTool *get_measure_tool()
     return tool;
 }
 
-static void
-sp_measure_fontsize_value_changed(GtkAdjustment *adj, GObject *tbl)
-{
-    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
 
-    if (DocumentUndo::getUndoSensitive(desktop->getDocument())) {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setDouble(Glib::ustring("/tools/measure/fontsize"),
-            gtk_adjustment_get_value(adj));
-        MeasureTool *mt = get_measure_tool();
-        if (mt) {
-            mt->showCanvasItems();
-        }
-    }
-}
 
-static void
-sp_measure_offset_value_changed(GtkAdjustment *adj, GObject *tbl)
-{
-    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
-
-    if (DocumentUndo::getUndoSensitive(desktop->getDocument())) {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setDouble(Glib::ustring("/tools/measure/offset"),
-            gtk_adjustment_get_value(adj));
-        MeasureTool *mt = get_measure_tool();
-        if (mt) {
-            mt->showCanvasItems();
-        }
-    }
-}
-
-static void sp_measure_scale_value_changed(GtkAdjustment *adj, GObject *tbl)
-{
-    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
-
-    if (DocumentUndo::getUndoSensitive(desktop->getDocument())) {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setDouble(Glib::ustring("/tools/measure/scale"),
-            gtk_adjustment_get_value(adj));
-        MeasureTool *mt = get_measure_tool();
-        if (mt) {
-            mt->showCanvasItems();
-        }
-    }
-}
-
-static void
-sp_measure_precision_value_changed(GtkAdjustment *adj, GObject *tbl)
-{
-    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
-
-    if (DocumentUndo::getUndoSensitive(desktop->getDocument())) {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setInt(Glib::ustring("/tools/measure/precision"),
-            gtk_adjustment_get_value(adj));
-        MeasureTool *mt = get_measure_tool();
-        if (mt) {
-            mt->showCanvasItems();
-        }
-    }
-}
-
-static void 
-sp_measure_unit_changed(GObject* tbl, int /* notUsed */)
-{
-    UnitTracker* tracker = reinterpret_cast<UnitTracker*>(g_object_get_data(tbl, "tracker"));
-    Glib::ustring const unit = tracker->getActiveUnit()->abbr;
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setString("/tools/measure/unit", unit);
-    MeasureTool *mt = get_measure_tool();
-    if (mt) {
-        mt->showCanvasItems();
-    }
-}
 
 static void 
 sp_toggle_ignore_1st_and_last( GtkToggleAction* act, gpointer data )
@@ -275,13 +202,21 @@ sp_to_item(){
     }
 }
 
-void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObject* holder)
+namespace Inkscape {
+namespace UI {
+namespace Toolbar {
+MeasureToolbar::MeasureToolbar(SPDesktop *desktop)
+    : Toolbar(desktop),
+    _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
+{}
+
+GtkWidget *
+MeasureToolbar::prep(SPDesktop * desktop, GtkActionGroup* mainActions)
 {
-    UnitTracker* tracker = new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR);
+    auto holder = new MeasureToolbar(desktop);
+
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    tracker->setActiveUnitByAbbr(prefs->getString("/tools/measure/unit").c_str());
-    
-    g_object_set_data( holder, "tracker", tracker );
+    holder->_tracker->setActiveUnitByAbbr(prefs->getString("/tools/measure/unit").c_str());
 
     EgeAdjustmentAction *eact = nullptr;
     GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
@@ -292,10 +227,15 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                          _("Font Size"), _("Font Size:"),
                                          _("The font size to be used in the measurement labels"),
                                          "/tools/measure/fontsize", 10.0,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
+                                         GTK_WIDGET(desktop->canvas),
+                                         nullptr, // dataKludge
+                                         FALSE, nullptr,
                                          1.0, 36.0, 1.0, 4.0,
                                          nullptr, nullptr, 0,
-                                         sp_measure_fontsize_value_changed, nullptr, 0 , 2);
+                                         nullptr, // callback
+                                         nullptr, 0 , 2);
+        holder->_font_size_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
+        holder->_font_size_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &MeasureToolbar::fontsize_value_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact));
     }
 
@@ -309,8 +249,8 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
 
     /* units menu */
     {
-        InkSelectOneAction* act = tracker->createAction( "MeasureUnitsAction", _("Units:"), _("The units to be used for the measurements") );
-        act->signal_changed_after().connect(sigc::bind<0>(sigc::ptr_fun(&sp_measure_unit_changed), holder));
+        InkSelectOneAction* act = holder->_tracker->createAction( "MeasureUnitsAction", _("Units:"), _("The units to be used for the measurements") );
+        act->signal_changed_after().connect(sigc::mem_fun(*holder, &MeasureToolbar::unit_changed));
         gtk_action_group_add_action( mainActions, act->gobj() );
     }
 
@@ -320,10 +260,15 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                          _("Precision"), _("Precision:"),
                                          _("Decimal precision of measure"),
                                          "/tools/measure/precision", 2,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
+                                         GTK_WIDGET(desktop->canvas),
+                                         nullptr, // dataKludge
+                                         FALSE, nullptr,
                                          0, 10, 1, 0,
                                          nullptr, nullptr, 0,
-                                         sp_measure_precision_value_changed, nullptr, 0 ,0);
+                                         nullptr, // callback
+                                         nullptr, 0 ,0);
+        holder->_precision_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
+        holder->_precision_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &MeasureToolbar::precision_value_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact));
     }
 
@@ -333,10 +278,15 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                          _("Scale %"), _("Scale %:"),
                                          _("Scale the results"),
                                          "/tools/measure/scale", 100.0,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
+                                         GTK_WIDGET(desktop->canvas),
+                                         nullptr, // dataKludge
+                                         FALSE, nullptr,
                                          0.0, 90000.0, 1.0, 4.0,
                                          nullptr, nullptr, 0,
-                                         sp_measure_scale_value_changed, nullptr, 0 , 3);
+                                         nullptr, // callback
+                                         nullptr, 0 , 3);
+        holder->_scale_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
+        holder->_scale_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &MeasureToolbar::scale_value_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
     }
 
@@ -346,10 +296,15 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                          _("Offset"), _("Offset:"),
                                          _("Mark dimension offset"),
                                          "/tools/measure/offset", 5.0,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, nullptr,
+                                         GTK_WIDGET(desktop->canvas),
+                                         nullptr, // dataKludge
+                                         FALSE, nullptr,
                                          0.0, 90000.0, 1.0, 4.0,
                                          nullptr, nullptr, 0,
-                                         sp_measure_offset_value_changed, nullptr, 0 , 2);
+                                         nullptr, // callback
+                                         nullptr, 0 , 2);
+        holder->_offset_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
+        holder->_offset_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &MeasureToolbar::offset_value_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
     }
 
@@ -459,7 +414,81 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
         g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(sp_to_item), 0 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
-} // end of sp_measure_toolbox_prep()
+
+    return GTK_WIDGET(holder->gobj());
+} // MeasureToolbar::prep()
+
+void
+MeasureToolbar::fontsize_value_changed()
+{
+    if (DocumentUndo::getUndoSensitive(_desktop->getDocument())) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        prefs->setDouble(Glib::ustring("/tools/measure/fontsize"),
+            _font_size_adj->get_value());
+        MeasureTool *mt = get_measure_tool();
+        if (mt) {
+            mt->showCanvasItems();
+        }
+    }
+}
+
+void 
+MeasureToolbar::unit_changed(int /* notUsed */)
+{
+    Glib::ustring const unit = _tracker->getActiveUnit()->abbr;
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setString("/tools/measure/unit", unit);
+    MeasureTool *mt = get_measure_tool();
+    if (mt) {
+        mt->showCanvasItems();
+    }
+}
+
+void
+MeasureToolbar::precision_value_changed()
+{
+    if (DocumentUndo::getUndoSensitive(_desktop->getDocument())) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        prefs->setInt(Glib::ustring("/tools/measure/precision"),
+            _precision_adj->get_value());
+        MeasureTool *mt = get_measure_tool();
+        if (mt) {
+            mt->showCanvasItems();
+        }
+    }
+}
+
+void
+MeasureToolbar::scale_value_changed()
+{
+    if (DocumentUndo::getUndoSensitive(_desktop->getDocument())) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        prefs->setDouble(Glib::ustring("/tools/measure/scale"),
+            _scale_adj->get_value());
+        MeasureTool *mt = get_measure_tool();
+        if (mt) {
+            mt->showCanvasItems();
+        }
+    }
+}
+
+void
+MeasureToolbar::offset_value_changed()
+{
+    if (DocumentUndo::getUndoSensitive(_desktop->getDocument())) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        prefs->setDouble(Glib::ustring("/tools/measure/offset"),
+            _offset_adj->get_value());
+        MeasureTool *mt = get_measure_tool();
+        if (mt) {
+            mt->showCanvasItems();
+        }
+    }
+}
+
+}
+}
+}
 
 
 /*

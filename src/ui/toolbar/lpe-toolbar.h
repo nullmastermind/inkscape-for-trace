@@ -28,11 +28,70 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "toolbar.h"
+
+class InkSelectOneAction;
 class SPDesktop;
+class SPLPEItem;
 
 typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _GObject GObject;
 
-void       sp_lpetool_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
+namespace Inkscape {
+namespace LivePathEffect {
+class Effect;
+}
+
+namespace UI {
+namespace Tools {
+class ToolBase;
+}
+
+namespace Widget {
+class UnitTracker;
+}
+
+namespace Toolbar {
+class LPEToolbar : public Toolbar {
+private:
+    UI::Widget::UnitTracker *_tracker;
+    InkSelectOneAction *_mode_action;
+    InkSelectOneAction *_line_segment_action;
+    InkSelectOneAction *_units_action;
+
+    bool _freeze;
+
+    LivePathEffect::Effect *_currentlpe;
+    SPLPEItem *_currentlpeitem;
+
+    sigc::connection c_selection_modified;
+    sigc::connection c_selection_changed;
+
+    void mode_changed(int mode);
+    void unit_changed(int not_used);
+    void sel_modified(Inkscape::Selection *selection, guint flags);
+    void sel_changed(Inkscape::Selection *selection);
+    void change_line_segment_type(int mode);
+    void watch_ec(SPDesktop* desktop, UI::Tools::ToolBase* ec);
+
+    static void toggle_show_bbox(GtkToggleAction *act,
+                                 gpointer         data);
+    static void toggle_set_bbox(GtkToggleAction *act,
+                                gpointer         data);
+    static void toggle_show_measuring_info(GtkToggleAction *act,
+                                           gpointer         data);
+    static void open_lpe_dialog(GtkToggleAction *act,
+                                gpointer         data);
+
+protected:
+    LPEToolbar(SPDesktop *desktop);
+    ~LPEToolbar();
+
+public:
+    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+};
+
+}
+}
+}
 
 #endif /* !SEEN_LPE_TOOLBAR_H */

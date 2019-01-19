@@ -28,11 +28,68 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "toolbar.h"
+#include "2geom/coord.h"
+
 class SPDesktop;
 
+typedef struct _EgeAdjustmentAction EgeAdjustmentAction;
 typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _GObject GObject;
+typedef struct _InkAction InkAction;
 
-void       sp_node_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
+namespace Inkscape {
+class Selection;
 
+namespace UI {
+class PrefPusher;
+
+namespace Tools {
+class ToolBase;
+}
+
+namespace Widget {
+class UnitTracker;
+}
+
+namespace Toolbar {
+class NodeToolbar : public Toolbar {
+private:
+    UI::Widget::UnitTracker *_tracker;
+
+    PrefPusher *_pusher_show_transform_handles;
+    PrefPusher *_pusher_show_handles;
+    PrefPusher *_pusher_show_outline;
+    PrefPusher *_pusher_edit_clipping_paths;
+    PrefPusher *_pusher_edit_masks;
+
+    InkAction *_nodes_lpeedit;
+
+    EgeAdjustmentAction *_nodes_x_action;
+    EgeAdjustmentAction *_nodes_y_action;
+
+    Glib::RefPtr<Gtk::Adjustment> _nodes_x_adj;
+    Glib::RefPtr<Gtk::Adjustment> _nodes_y_adj;
+
+    bool _freeze;
+
+    sigc::connection c_selection_changed;
+    sigc::connection c_selection_modified;
+    sigc::connection c_subselection_changed;
+
+    void value_changed(Geom::Dim2 d);
+    void sel_changed(Inkscape::Selection *selection);
+    void sel_modified(Inkscape::Selection *selection, guint /*flags*/);
+    void coord_changed(gpointer shape_editor);
+    void watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
+
+protected:
+    NodeToolbar(SPDesktop *desktop);
+    ~NodeToolbar();
+
+public:
+    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+};
+}
+}
+}
 #endif /* !SEEN_SELECT_TOOLBAR_H */

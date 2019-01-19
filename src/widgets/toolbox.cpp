@@ -186,57 +186,57 @@ static struct {
     gchar const *type_name;
     gchar const *data_name;
     GtkWidget *(*create_func)(SPDesktop *desktop);
-    void (*prep_func)(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
+    GtkWidget *(*prep_func)(SPDesktop *desktop, GtkActionGroup* mainActions);
     gchar const *ui_name;
     gint swatch_verb_id;
     gchar const *swatch_tool;
     gchar const *swatch_tip;
 } const aux_toolboxes[] = {
-    { "/tools/select", "select_toolbox", nullptr, sp_select_toolbox_prep,            "SelectToolbar",
+    { "/tools/select", "select_toolbox", nullptr, Inkscape::UI::Toolbar::SelectToolbar::prep,            "SelectToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
-    { "/tools/nodes",   "node_toolbox",   nullptr, sp_node_toolbox_prep,              "NodeToolbar",
+    { "/tools/nodes",   "node_toolbox",   nullptr, Inkscape::UI::Toolbar::NodeToolbar::prep,              "NodeToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
-    { "/tools/tweak",   "tweak_toolbox",   nullptr, sp_tweak_toolbox_prep,              "TweakToolbar",
+    { "/tools/tweak",   "tweak_toolbox",   nullptr, Inkscape::UI::Toolbar::TweakToolbar::prep,              "TweakToolbar",
       SP_VERB_CONTEXT_TWEAK_PREFS, "/tools/tweak", N_("Color/opacity used for color tweaking")},
-    { "/tools/spray",   "spray_toolbox",   nullptr, sp_spray_toolbox_prep,              "SprayToolbar",
+    { "/tools/spray",   "spray_toolbox",   nullptr, Inkscape::UI::Toolbar::SprayToolbar::prep,              "SprayToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
     { "/tools/zoom",   "zoom_toolbox",   Inkscape::UI::Toolbar::ZoomToolbar::create, nullptr, "ZoomToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
-    { "/tools/measure",   "measure_toolbox",   nullptr, sp_measure_toolbox_prep,              "MeasureToolbar",
+    { "/tools/measure",   "measure_toolbox",   nullptr, Inkscape::UI::Toolbar::MeasureToolbar::prep,              "MeasureToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
-    { "/tools/shapes/star",   "star_toolbox",   nullptr, sp_star_toolbox_prep,              "StarToolbar",
+    { "/tools/shapes/star",   "star_toolbox",   nullptr, Inkscape::UI::Toolbar::StarToolbar::prep,              "StarToolbar",
       SP_VERB_CONTEXT_STAR_PREFS,   "/tools/shapes/star",     N_("Style of new stars")},
-    { "/tools/shapes/rect",   "rect_toolbox",   nullptr, sp_rect_toolbox_prep,              "RectToolbar",
+    { "/tools/shapes/rect",   "rect_toolbox",   nullptr, Inkscape::UI::Toolbar::RectToolbar::prep,              "RectToolbar",
       SP_VERB_CONTEXT_RECT_PREFS,   "/tools/shapes/rect",     N_("Style of new rectangles")},
-    { "/tools/shapes/3dbox",  "3dbox_toolbox",  nullptr, box3d_toolbox_prep,             "3DBoxToolbar",
+    { "/tools/shapes/3dbox",  "3dbox_toolbox",  nullptr, Inkscape::UI::Toolbar::Box3DToolbar::prep,             "3DBoxToolbar",
       SP_VERB_CONTEXT_3DBOX_PREFS,  "/tools/shapes/3dbox",    N_("Style of new 3D boxes")},
-    { "/tools/shapes/arc",    "arc_toolbox",    nullptr, sp_arc_toolbox_prep,               "ArcToolbar",
+    { "/tools/shapes/arc",    "arc_toolbox",    nullptr, Inkscape::UI::Toolbar::ArcToolbar::prep,               "ArcToolbar",
       SP_VERB_CONTEXT_ARC_PREFS,    "/tools/shapes/arc",      N_("Style of new ellipses")},
-    { "/tools/shapes/spiral", "spiral_toolbox", nullptr, sp_spiral_toolbox_prep,            "SpiralToolbar",
+    { "/tools/shapes/spiral", "spiral_toolbox", nullptr, Inkscape::UI::Toolbar::SpiralToolbar::prep,            "SpiralToolbar",
       SP_VERB_CONTEXT_SPIRAL_PREFS, "/tools/shapes/spiral",   N_("Style of new spirals")},
-    { "/tools/freehand/pencil", "pencil_toolbox", nullptr, sp_pencil_toolbox_prep,            "PencilToolbar",
+    { "/tools/freehand/pencil", "pencil_toolbox", nullptr, Inkscape::UI::Toolbar::PencilToolbar::prep_pencil,   "PencilToolbar",
       SP_VERB_CONTEXT_PENCIL_PREFS, "/tools/freehand/pencil", N_("Style of new paths created by Pencil")},
-    { "/tools/freehand/pen", "pen_toolbox", nullptr, sp_pen_toolbox_prep,                     "PenToolbar",
+    { "/tools/freehand/pen", "pen_toolbox", nullptr,       Inkscape::UI::Toolbar::PencilToolbar::prep_pen,      "PenToolbar",
       SP_VERB_CONTEXT_PEN_PREFS,    "/tools/freehand/pen",    N_("Style of new paths created by Pen")},
-    { "/tools/calligraphic", "calligraphy_toolbox", nullptr, sp_calligraphy_toolbox_prep,"CalligraphyToolbar",
+    { "/tools/calligraphic", "calligraphy_toolbox", nullptr, Inkscape::UI::Toolbar::CalligraphyToolbar::prep,"CalligraphyToolbar",
       SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS, "/tools/calligraphic", N_("Style of new calligraphic strokes")},
-    { "/tools/eraser", "eraser_toolbox", nullptr, sp_eraser_toolbox_prep,"EraserToolbar",
+    { "/tools/eraser", "eraser_toolbox", nullptr, Inkscape::UI::Toolbar::EraserToolbar::prep,"EraserToolbar",
       SP_VERB_CONTEXT_ERASER_PREFS, "/tools/eraser", _("TBD")},
-    { "/tools/lpetool", "lpetool_toolbox", nullptr, sp_lpetool_toolbox_prep, "LPEToolToolbar",
+    { "/tools/lpetool", "lpetool_toolbox", nullptr, Inkscape::UI::Toolbar::LPEToolbar::prep, "LPEToolToolbar",
       SP_VERB_CONTEXT_LPETOOL_PREFS, "/tools/lpetool", _("TBD")},
     // If you change TextToolbar here, change it also in desktop-widget.cpp
-    { "/tools/text",   "text_toolbox",   nullptr, sp_text_toolbox_prep, "TextToolbar",
+    { "/tools/text",   "text_toolbox",   nullptr, Inkscape::UI::Toolbar::TextToolbar::prep, "TextToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
     { "/tools/dropper", "dropper_toolbox", Inkscape::UI::Toolbar::DropperToolbar::create, nullptr,         "DropperToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
-    { "/tools/connector", "connector_toolbox", nullptr, sp_connector_toolbox_prep,   "ConnectorToolbar",
+    { "/tools/connector", "connector_toolbox", nullptr, Inkscape::UI::Toolbar::ConnectorToolbar::prep,   "ConnectorToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
-    { "/tools/gradient", "gradient_toolbox", nullptr, sp_gradient_toolbox_prep, "GradientToolbar",
+    { "/tools/gradient", "gradient_toolbox", nullptr, Inkscape::UI::Toolbar::GradientToolbar::prep, "GradientToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
-    { "/tools/mesh", "mesh_toolbox", nullptr, sp_mesh_toolbox_prep, "MeshToolbar",
+    { "/tools/mesh", "mesh_toolbox", nullptr, Inkscape::UI::Toolbar::MeshToolbar::prep, "MeshToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
 #if HAVE_POTRACE
-    { "/tools/paintbucket",  "paintbucket_toolbox",  nullptr, sp_paintbucket_toolbox_prep, "PaintbucketToolbar",
+    { "/tools/paintbucket",  "paintbucket_toolbox",  nullptr, Inkscape::UI::Toolbar::PaintbucketToolbar::prep, "PaintbucketToolbar",
       SP_VERB_CONTEXT_PAINTBUCKET_PREFS, "/tools/paintbucket", N_("Style of Paint Bucket fill objects")},
 #else
     { "/tools/paintbucket",  "paintbucket_toolbox",  0, NULL, "PaintbucketToolbar", SP_VERB_NONE, "/tools/paintbucket", N_("Disabled")},
@@ -401,7 +401,7 @@ void purge_repr_listener( GObject* /*obj*/, GObject* tbl )
     }
 }
 
-PrefPusher::PrefPusher( GtkToggleAction *act, Glib::ustring const &path, void (*callback)(GObject*), GObject *cbData ) :
+PrefPusher::PrefPusher( GtkToggleAction *act, Glib::ustring const &path, void (*callback)(gpointer), gpointer cbData ) :
     Observer(path),
     act(act),
     callback(callback),
@@ -714,7 +714,7 @@ EgeAdjustmentAction * create_adjustment_action( gchar const *name,
                                                        gchar const *label, gchar const *shortLabel, gchar const *tooltip,
                                                        Glib::ustring const &path, gdouble def,
                                                        GtkWidget *focusTarget,
-                                                       GObject *dataKludge,
+                                                       GObject * /* dataKludge */,
                                                        gboolean altx, gchar const *altx_mark,
                                                        gdouble lower, gdouble upper, gdouble step, gdouble page,
                                                        gchar const** descrLabels, gdouble const* descrValues, guint descrCount,
@@ -732,7 +732,7 @@ EgeAdjustmentAction * create_adjustment_action( gchar const *name,
     GtkAdjustment* adj = GTK_ADJUSTMENT( gtk_adjustment_new( prefs->getDouble(path, def) * factor,
                                                              lower, upper, step, page, 0 ) );
 
-    g_signal_connect( G_OBJECT(adj), "value-changed", G_CALLBACK(callback), dataKludge );
+//    g_signal_connect( G_OBJECT(adj), "value-changed", G_CALLBACK(callback), dataKludge );
 
     EgeAdjustmentAction* act = ege_adjustment_action_new( adj, name, label, tooltip, nullptr, climb, digits, unit_tracker );
     if ( shortLabel ) {
@@ -751,11 +751,14 @@ EgeAdjustmentAction * create_adjustment_action( gchar const *name,
         g_object_set( G_OBJECT(act), "self-id", altx_mark, NULL );
     }
 
+    /*
+     * TODO: Is this ever used?
     if ( dataKludge ) {
         // Rather lame, but it's the only place where we need to get the entry name
         // but we don't have an Entry
         g_object_set_data( dataKludge, prefs->getEntry(path).getEntryName().data(), adj );
     }
+    */
 
     if (unit_tracker) {
         unit_tracker->addAdjustment(adj);
@@ -1027,12 +1030,11 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             // that only contains a set of GtkActions.  In other
             // words, this doesn't actually show anything... it
             // just defines behaviour.
-            GtkWidget* kludge = gtk_toolbar_new();
+            GtkWidget* kludge = aux_toolboxes[i].prep_func(desktop, mainActions->gobj());
             gtk_widget_set_name( kludge, "Kludge" );
-            g_object_set_data( G_OBJECT(kludge), "dtw", desktop->canvas);
-            g_object_set_data( G_OBJECT(kludge), "desktop", desktop);
+            // g_object_set_data( G_OBJECT(kludge), "dtw", desktop->canvas);
+            // g_object_set_data( G_OBJECT(kludge), "desktop", desktop);
             dataHolders[aux_toolboxes[i].type_name] = kludge;
-            aux_toolboxes[i].prep_func( desktop, mainActions->gobj(), G_OBJECT(kludge) );
         } else {
 
             // For the "create" method, directly create a "real" toolbar,

@@ -28,11 +28,94 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "toolbar.h"
+
+#include <gtkmm/adjustment.h>
+
+class InkSelectOneAction;
 class SPDesktop;
 
+typedef struct _EgeAdjustmentAction EgeAdjustmentAction;
 typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _GObject GObject;
+typedef struct _InkToggleAction InkToggleAction;
 
-void       sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder);
+namespace Inkscape {
+namespace UI {
+class PrefPusher;
+
+namespace Toolbar {
+class SprayToolbar : public Toolbar {
+private:
+    Glib::RefPtr<Gtk::Adjustment> _width_adj;
+    Glib::RefPtr<Gtk::Adjustment> _mean_adj;
+    Glib::RefPtr<Gtk::Adjustment> _sd_adj;
+    Glib::RefPtr<Gtk::Adjustment> _population_adj;
+    Glib::RefPtr<Gtk::Adjustment> _rotation_adj;
+    Glib::RefPtr<Gtk::Adjustment> _offset_adj;
+    Glib::RefPtr<Gtk::Adjustment> _scale_adj;
+
+    PrefPusher *_usepressurewidth_pusher;
+    PrefPusher *_usepressurepopulation_pusher;
+
+    InkSelectOneAction *_spray_tool_mode;
+    EgeAdjustmentAction *_spray_population;
+    EgeAdjustmentAction *_spray_rotation;
+    EgeAdjustmentAction *_spray_scale;
+    InkToggleAction * _usepressurescale;
+    InkToggleAction *_picker;
+    InkToggleAction *_pick_center;
+    InkToggleAction *_pick_inverse_value;
+    InkToggleAction *_pick_fill;
+    InkToggleAction *_pick_stroke;
+    InkToggleAction *_pick_no_overlap;
+    InkToggleAction *_over_transparent;
+    InkToggleAction *_over_no_transparent;
+    InkToggleAction *_no_overlap;
+    EgeAdjustmentAction *_offset;
+
+    void width_value_changed();
+    void mean_value_changed();
+    void standard_deviation_value_changed();
+    void mode_changed(int mode);
+    void init();
+    void population_value_changed();
+    void rotation_value_changed();
+    void update_widgets();
+    void scale_value_changed();
+    void offset_value_changed();
+    static void toggle_no_overlap         (GtkToggleAction *toggleaction,
+                                           gpointer         user_data);
+    static void toggle_pressure_scale     (GtkToggleAction *toggleaction,
+                                           gpointer         user_data);
+    static void toggle_over_no_transparent(GtkToggleAction *toggleaction,
+                                           gpointer         user_data);
+    static void toggle_over_transparent   (GtkToggleAction *toggleaction,
+                                           gpointer         user_data);
+    static void toggle_picker             (GtkToggleAction *toggleaction,
+                                           gpointer         user_data);
+    static void toggle_pick_center        (GtkToggleAction *toggleaction,
+                                           gpointer         user_data);
+    static void toggle_pick_fill          (GtkToggleAction *toggleaction,
+                                           gpointer         user_data);
+    static void toggle_pick_stroke        (GtkToggleAction *toggleaction,
+                                           gpointer         user_data);
+    static void toggle_pick_no_overlap    (GtkToggleAction *toggleaction,
+                                           gpointer         user_data);
+    static void toggle_pick_inverse_value (GtkToggleAction *toggleaction,
+                                           gpointer         user_data);
+
+protected:
+    SprayToolbar(SPDesktop *desktop) :
+        Toolbar(desktop)
+    {}
+
+    ~SprayToolbar();
+
+public:
+    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+};
+}
+}
+}
 
 #endif /* !SEEN_SELECT_TOOLBAR_H */

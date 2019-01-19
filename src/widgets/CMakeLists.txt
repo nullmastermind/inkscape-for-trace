@@ -18,7 +18,6 @@ set(widgets_SRC
 	paint-selector.cpp
 	sp-attribute-widget.cpp
 	sp-color-selector.cpp
-	sp-widget.cpp
 	sp-xmlview-tree.cpp
 	spinbutton-events.cpp
 	spw-utilities.cpp
@@ -46,7 +45,6 @@ set(widgets_SRC
 	paint-selector.h
 	sp-attribute-widget.h
 	sp-color-selector.h
-	sp-widget.h
 	sp-xmlview-tree.h
 	spinbutton-events.h
 	spw-utilities.h
