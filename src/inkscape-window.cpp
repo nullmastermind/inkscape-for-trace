@@ -20,6 +20,8 @@
 #include "shortcuts.h"
 #include "inkscape-application.h"
 
+#include "ui/drag-and-drop.h"
+
 #include "widgets/desktop-widget.h"
 
 InkscapeWindow::InkscapeWindow(SPDocument* document)
@@ -39,6 +41,9 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     }
 
     set_resizable(true);
+
+    // Set up drag-and-drop, probably should be moved to SPCanvas.
+    sp_ui_drag_setup(this);
 
     // Callbacks
     signal_key_press_event().connect(sigc::mem_fun(*this, &InkscapeWindow::key_press));

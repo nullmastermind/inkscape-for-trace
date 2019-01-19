@@ -5,16 +5,17 @@ set(ui_SRC
 	control-manager.cpp
 	dialog-events.cpp
 	draw-anchor.cpp
+        drag-and-drop.cpp
 	icon-loader.cpp
 	interface.cpp
-    monitor.cpp
+        monitor.cpp
 	previewholder.cpp
 	selected-color.cpp
 	shape-editor.cpp
 	shape-editor-knotholders.cpp
 	tool-factory.cpp
 	tools-switch.cpp
-    util.cpp
+        util.cpp
 	uxmanager.cpp
 
 	cache/svg_preview_cache.cpp
@@ -217,6 +218,7 @@ set(ui_SRC
 	control-manager.h
 	control-types.h
 	dialog-events.h
+        drag-and-drop.h
 	draw-anchor.h
 	event-debug.h
 	icon-names.h

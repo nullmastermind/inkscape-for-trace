@@ -48,6 +48,8 @@ void sp_ui_new_view ();
 
 void sp_ui_reload();
 
+void sp_ui_import_files(gchar *buffer);
+
 /**
  *  This function is called to exit the program, and iterates through all
  *  open document view windows, attempting to close each in turn.  If the
