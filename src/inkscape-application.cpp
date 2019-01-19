@@ -197,6 +197,8 @@ ConcreteInkscapeApplication<Gtk::Application>::on_startup2()
     Inkscape::UI::Widget::Panel::prep();
 
     // ========================= Builder ==========================
+    // App menus deprecated in 3.32. This whole block of code should be
+    // removed after confirming this code isn't required.
     _builder = Gtk::Builder::create();
 
     Glib::ustring app_builder_file = get_filename(UIS, "inkscape-application.xml");
@@ -215,7 +217,7 @@ ConcreteInkscapeApplication<Gtk::Application>::on_startup2()
     if (!menu) {
         std::cerr << "InkscapeApplication: failed to load application menu!" << std::endl;
     } else {
-        set_app_menu(menu);
+        // set_app_menu(menu);
     }
 }
 
@@ -339,9 +341,6 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<
 
     _active_document = desktop->getDocument();
     // _documents.push_back(desktop->getDocument());
-
-    // Add Gtk::Window to app window list.
-    add_window(*desktop->getToplevel());
 
     return (desktop); // Temp: Need to track desktop for shell mode.
 }

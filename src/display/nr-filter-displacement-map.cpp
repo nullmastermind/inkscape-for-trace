@@ -72,16 +72,11 @@ private:
 
 void FilterDisplacementMap::render_cairo(FilterSlot &slot)
 {
-    std::cout << "FilterDisplacementMap:" << std::endl;
     cairo_surface_t *texture = slot.getcairo(_input);
     cairo_surface_t *map = slot.getcairo(_input2);
     cairo_surface_t *out = ink_cairo_surface_create_identical(texture);
     // color_interpolation_filters for out same as texture. See spec.
     copy_cairo_surface_ci( texture, out );
-
-    std::cout << "  texture: " << cairo_image_surface_get_width(texture) << std::endl;
-    std::cout << "  map:     " << cairo_image_surface_get_width(map)     << std::endl;
-    std::cout << "  out:     " << cairo_image_surface_get_width(out)     << std::endl;
 
     // We may need to transform map surface to correct color interpolation space. The map surface
     // might be used as input to another primitive but it is likely that all the primitives in a given

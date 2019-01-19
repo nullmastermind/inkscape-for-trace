@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.92.x\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-01-03 00:43+0100\n"
+"POT-Creation-Date: 2019-01-17 00:47+0100\n"
 "PO-Revision-Date: 2016-03-26 16:54+0800\n"
 "Last-Translator: Aron Xu <happyaron.xu@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
@@ -1076,8 +1076,8 @@ msgstr "黑色光"
 #: ../src/extension/internal/filter/paint.h:718
 #: ../src/extension/internal/filter/shadows.h:74
 #: ../src/extension/internal/filter/transparency.h:346
-#: ../src/filter-enums.cpp:68 ../src/ui/dialog/clonetiler.cpp:788
-#: ../src/ui/dialog/clonetiler.cpp:917
+#: ../src/filter-enums.cpp:68 ../src/ui/dialog/clonetiler.cpp:787
+#: ../src/ui/dialog/clonetiler.cpp:916
 #: ../src/ui/dialog/document-properties.cpp:154
 #: ../share/extensions/color_HSL_adjust.inx.h:20
 #: ../share/extensions/color_blackandwhite.inx.h:3
@@ -4443,12 +4443,12 @@ msgstr "删除辅助线"
 msgid "<b>Guideline</b>: %s"
 msgstr "<b>辅助线</b>：%s"
 
-#: ../src/desktop.cpp:804
+#: ../src/desktop.cpp:802
 #, fuzzy
 msgid "No previous transform."
 msgstr "无缩放记录。"
 
-#: ../src/desktop.cpp:827
+#: ../src/desktop.cpp:825
 #, fuzzy
 msgid "No next transform."
 msgstr "无缩放记录。"
@@ -4817,21 +4817,21 @@ msgstr "格线间距的倍数"
 msgid " to "
 msgstr " 至 "
 
-#: ../src/document.cpp:553
+#: ../src/document.cpp:554
 #, c-format
 msgid "New document %d"
 msgstr "新建文档 %d"
 
-#: ../src/document.cpp:558
+#: ../src/document.cpp:559
 #, c-format
 msgid "Memory document %d"
 msgstr "记忆文档 %d"
 
-#: ../src/document.cpp:587
+#: ../src/document.cpp:588
 msgid "Memory document %1"
 msgstr "记忆文档 %1"
 
-#: ../src/document.cpp:890
+#: ../src/document.cpp:898
 #, c-format
 msgid "Unnamed document %d"
 msgstr "未命名文档 %d"
@@ -5452,7 +5452,7 @@ msgstr "风格化选中的位图，产生像用油画绘制的效果"
 #: ../src/extension/internal/bitmap/opacity.cpp:39
 #: ../src/extension/internal/filter/blurs.h:334
 #: ../src/extension/internal/filter/transparency.h:280
-#: ../src/ui/dialog/clonetiler.cpp:795 ../src/ui/dialog/clonetiler.cpp:926
+#: ../src/ui/dialog/clonetiler.cpp:794 ../src/ui/dialog/clonetiler.cpp:925
 #: ../src/ui/toolbar/tweak-toolbar.cpp:325
 #: ../share/extensions/interp_att_g.inx.h:20
 msgid "Opacity"
@@ -5790,7 +5790,7 @@ msgstr "共 %i 页"
 #: ../src/extension/internal/vsd-input.cpp:155
 #: ../src/extension/prefdialog.cpp:78
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:51
-#: ../src/ui/dialog/export.cpp:918 ../src/ui/dialog/export.cpp:1302
+#: ../src/ui/dialog/export.cpp:917 ../src/ui/dialog/export.cpp:1301
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:670
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:981
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1537
@@ -5798,7 +5798,7 @@ msgstr "共 %i 页"
 #: ../src/ui/dialog/livepatheffect-add.cpp:27
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:30
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:36
-#: ../src/ui/dialog/ocaldialogs.cpp:1086 ../src/ui/interface.cpp:1428
+#: ../src/ui/dialog/ocaldialogs.cpp:1086 ../src/ui/interface.cpp:1430
 #: ../src/widgets/desktop-widget.cpp:1101
 #: ../src/widgets/desktop-widget.cpp:1150
 msgid "_Cancel"
@@ -7241,7 +7241,7 @@ msgstr "宽度"
 
 #: ../src/extension/internal/filter/morphology.h:70
 #: ../src/extension/internal/filter/morphology.h:191
-#: ../src/ui/dialog/export.cpp:149
+#: ../src/ui/dialog/export.cpp:148
 msgid "Antialiasing"
 msgstr "抗锯齿"
 
@@ -7345,7 +7345,7 @@ msgstr "噪点填充"
 #: ../src/extension/internal/filter/paint.h:691
 #: ../src/extension/internal/filter/shadows.h:61
 #: ../src/live_effects/lpe-measure-segments.cpp:278
-#: ../src/ui/dialog/find.cpp:79 ../src/ui/dialog/tracedialog.cpp:743
+#: ../src/ui/dialog/find.cpp:77 ../src/ui/dialog/tracedialog.cpp:743
 #: ../share/extensions/color_HSL_adjust.inx.h:2
 #: ../share/extensions/color_custom.inx.h:2
 #: ../share/extensions/color_randomize.inx.h:2 ../share/extensions/dots.inx.h:2
@@ -7978,7 +7978,7 @@ msgstr "渲染"
 #: ../src/extension/internal/grid.cpp:204
 #: ../src/ui/dialog/document-properties.cpp:152
 #: ../src/ui/dialog/inkscape-preferences.cpp:1118
-#: ../src/widgets/toolbox.cpp:1401
+#: ../src/widgets/toolbox.cpp:1462
 msgid "Grids"
 msgstr "网格"
 
@@ -8345,11 +8345,11 @@ msgid "Vector graphics format used by Corel WordPerfect"
 msgstr "由 Corel WordPerfect 使用的矢量图形格式"
 
 #: ../src/extension/prefdialog.cpp:78 ../src/ui/dialog/knot-properties.cpp:41
-#: ../src/ui/dialog/text-edit.cpp:71 ../src/verbs.cpp:2626
+#: ../src/ui/dialog/text-edit.cpp:69 ../src/verbs.cpp:2626
 msgid "_Close"
 msgstr "关闭(_C)"
 
-#: ../src/extension/prefdialog.cpp:79 ../src/ui/dialog/text-edit.cpp:72
+#: ../src/extension/prefdialog.cpp:79 ../src/ui/dialog/text-edit.cpp:70
 #: ../src/ui/dialog/transformation.cpp:158
 #, fuzzy
 msgid "_Apply"
@@ -8445,85 +8445,88 @@ msgstr "不透明"
 msgid "Update Document"
 msgstr "保存文档"
 
-#: ../src/file.cpp:168
+#. TRANSLATORS: translate this into "default-<yourcodename>.svg" (for instance, default-fr.svg)
+#. and double-check that share/templates/create_defaults.pl contains a translation for your language
+#. If in doubt about this, ask a developer.
+#: ../src/file.cpp:170
 msgid "default.svg"
 msgstr "default.svg"
 
-#: ../src/file.cpp:287 ../src/main-cmdlinexact.cpp:188
+#: ../src/file.cpp:270
 msgid "Broken links have been changed to point to existing files."
 msgstr "无效的链接已变成指向现有文件。"
 
-#: ../src/file.cpp:302 ../src/file.cpp:1307
+#: ../src/file.cpp:299 ../src/file.cpp:1303
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "请求的文件 %s 加载失败"
 
-#: ../src/file.cpp:328
+#: ../src/file.cpp:325
 msgid "Document not saved yet.  Cannot revert."
 msgstr "文档未保存。不能还原。"
 
-#: ../src/file.cpp:334
+#: ../src/file.cpp:331
 msgid "Changes will be lost! Are you sure you want to reload document %1?"
 msgstr "更改将会遗失！您确定要重新加载文件 %1？"
 
-#: ../src/file.cpp:360
+#: ../src/file.cpp:357
 msgid "Document reverted."
 msgstr "文档已还原。"
 
-#: ../src/file.cpp:362
+#: ../src/file.cpp:359
 msgid "Document not reverted."
 msgstr "文档未还原。"
 
-#: ../src/file.cpp:512
+#: ../src/file.cpp:509
 msgid "Select file to open"
 msgstr "选择要打开的文件"
 
-#: ../src/file.cpp:594
+#: ../src/file.cpp:591
 msgid "Clean up document"
 msgstr "清理文档"
 
-#: ../src/file.cpp:601
+#: ../src/file.cpp:598
 #, c-format
 msgid "Removed <b>%i</b> unused definition in &lt;defs&gt;."
 msgid_plural "Removed <b>%i</b> unused definitions in &lt;defs&gt;."
 msgstr[0] "去除了 <b>%i</b> 个在 &lt;defs&gt; 中的未使用定义。"
 
-#: ../src/file.cpp:606
+#: ../src/file.cpp:603
 msgid "No unused definitions in &lt;defs&gt;."
 msgstr "在 &lt;defs&gt; 没有未使用定义."
 
-#: ../src/file.cpp:640
+#: ../src/file.cpp:637
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown filename extension."
 msgstr "没有找到 Inkscape 扩展名来保存文档(%s)。可能是未知文件扩展名导致的。"
 
-#: ../src/file.cpp:641 ../src/file.cpp:651 ../src/file.cpp:660
-#: ../src/file.cpp:667 ../src/file.cpp:672 ../src/file.cpp:684
-#: ../src/file.cpp:694
+#: ../src/file.cpp:638 ../src/file.cpp:648 ../src/file.cpp:657
+#: ../src/file.cpp:664 ../src/file.cpp:669 ../src/file.cpp:681
+#: ../src/file.cpp:691
 msgid "Document not saved."
 msgstr "文档未保存."
 
-#: ../src/file.cpp:650
+#: ../src/file.cpp:647
 #, c-format
 msgid ""
 "File %s is write protected. Please remove write protection and try again."
 msgstr "文件 %s 受写保护。请移除写保护后重试。"
 
-#: ../src/file.cpp:659 ../src/file.cpp:693
+#: ../src/file.cpp:656 ../src/file.cpp:690
 #, c-format
 msgid "File %s could not be saved."
 msgstr "无法保存文件 %s。"
 
-#: ../src/file.cpp:671
+#: ../src/file.cpp:668
 #, c-format
 msgid ""
 "File could not be saved:\n"
 "No object with ID '%s' found."
 msgstr ""
 
-#: ../src/file.cpp:681
+#: ../src/file.cpp:678
 #, c-format
 msgid ""
 "File %s could not be saved.\n"
@@ -8532,49 +8535,49 @@ msgid ""
 "'%s'"
 msgstr ""
 
-#: ../src/file.cpp:716 ../src/file.cpp:718
+#: ../src/file.cpp:713 ../src/file.cpp:715
 msgid "Document saved."
 msgstr "文档已保存。"
 
 #. We are saving for the first time; create a unique default filename
-#: ../src/file.cpp:776 ../src/file.cpp:1466
+#: ../src/file.cpp:773 ../src/file.cpp:1462
 msgid "drawing"
 msgstr "绘图"
 
-#: ../src/file.cpp:781
+#: ../src/file.cpp:778
 msgid "drawing-%1"
 msgstr "绘图-%1"
 
-#: ../src/file.cpp:798
+#: ../src/file.cpp:795
 msgid "Select file to save a copy to"
 msgstr "选择要保存副本的文件"
 
-#: ../src/file.cpp:800
+#: ../src/file.cpp:797
 msgid "Select file to save to"
 msgstr "选择要保存的文件"
 
-#: ../src/file.cpp:905 ../src/file.cpp:907
+#: ../src/file.cpp:902 ../src/file.cpp:904
 msgid "No changes need to be saved."
 msgstr "没有需要保存的更改。"
 
-#: ../src/file.cpp:926
+#: ../src/file.cpp:923
 msgid "Saving document..."
 msgstr "正在保存文档..."
 
-#: ../src/file.cpp:1304 ../src/ui/dialog/inkscape-preferences.cpp:1831
+#: ../src/file.cpp:1300 ../src/ui/dialog/inkscape-preferences.cpp:1831
 #: ../src/ui/dialog/ocaldialogs.cpp:1088
 msgid "Import"
 msgstr "导入"
 
-#: ../src/file.cpp:1354
+#: ../src/file.cpp:1350
 msgid "Select file to import"
 msgstr "选择要导入的文件"
 
-#: ../src/file.cpp:1487
+#: ../src/file.cpp:1483
 msgid "Select file to export to"
 msgstr "选择要导出的文件"
 
-#: ../src/file.cpp:1740
+#: ../src/file.cpp:1736
 msgid "Import Clip Art"
 msgstr "导入剪贴画"
 
@@ -8818,7 +8821,7 @@ msgstr "合并渐变控制柄"
 msgid "Move gradient handle"
 msgstr "移动渐变柄"
 
-#: ../src/gradient-drag.cpp:1175 ../src/widgets/gradient-vector.cpp:783
+#: ../src/gradient-drag.cpp:1175 ../src/widgets/gradient-vector.cpp:781
 msgid "Delete gradient stop"
 msgstr "删除渐变分段点"
 
@@ -8930,237 +8933,243 @@ msgstr ""
 msgid "GUI: Console only."
 msgstr "仅图标"
 
+#: ../src/inkscape-application.cpp:90
+msgid ""
+"GUI: Close window after processing actions (needed as some verbs require "
+"GUI)."
+msgstr ""
+
 #. Open/Import
-#: ../src/inkscape-application.cpp:92
+#: ../src/inkscape-application.cpp:93
 #, fuzzy
 msgid "Open: PDF page to import"
 msgstr "选择要导入的文件"
 
-#: ../src/inkscape-application.cpp:92
+#: ../src/inkscape-application.cpp:93
 msgid "PAGE"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:93
+#: ../src/inkscape-application.cpp:94
 msgid ""
 "Open: Method used to convert pre-0.92 document dpi, if needed: [none|scale-"
 "viewbox|scale-document]."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:94
+#: ../src/inkscape-application.cpp:95
 msgid "Open: Do not fix pre-0.92 document's text baseline spacing on opening."
 msgstr ""
 
 #. Query - Geometry
-#: ../src/inkscape-application.cpp:97
+#: ../src/inkscape-application.cpp:98
 #, fuzzy
 msgid "Query: ID(s) of object(s) to be queried."
 msgstr "被查询尺寸的对象的 ID"
 
-#: ../src/inkscape-application.cpp:97 ../src/inkscape-application.cpp:106
+#: ../src/inkscape-application.cpp:98 ../src/inkscape-application.cpp:107
 msgid "OBJECT-ID[,OBJECT-ID]*"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:98
+#: ../src/inkscape-application.cpp:99
 msgid "Query: Print bounding boxes of all objects."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:99
+#: ../src/inkscape-application.cpp:100
 #, fuzzy
 msgid "Query: X coordinate of drawing or object (if specified by --query-id)."
 msgstr "查询绘图的 X 坐标，或者若被 --query-id 指定了的话，查询指定的对象"
 
-#: ../src/inkscape-application.cpp:100
+#: ../src/inkscape-application.cpp:101
 #, fuzzy
 msgid "Query: Y coordinate of drawing or object (if specified by --query-id)."
 msgstr "查询绘图的 Y 坐标，或者若被 --query-id 指定了的话，查询指定的对象"
 
-#: ../src/inkscape-application.cpp:101
+#: ../src/inkscape-application.cpp:102
 #, fuzzy
 msgid "Query: Width of drawing or object (if specified by --query-id)."
 msgstr "查询绘图的高度，或者若被 --query-id 指定了的话，查询指定的对象"
 
-#: ../src/inkscape-application.cpp:102
+#: ../src/inkscape-application.cpp:103
 #, fuzzy
 msgid "Query: Heightof drawing or object (if specified by --query-id)."
 msgstr "查询绘图的宽度，或者若被 --query-id 指定了的话，查询指定的对象"
 
 #. Processing
-#: ../src/inkscape-application.cpp:105
+#: ../src/inkscape-application.cpp:106
 #, fuzzy
 msgid ""
 "Process: Remove unused definitions from the <defs> section(s) of document."
 msgstr "从文档的 defs 段去除未使用的定义"
 
-#: ../src/inkscape-application.cpp:106
+#: ../src/inkscape-application.cpp:107
 msgid "Process: Select objects: comma separated list of IDs."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:107
+#: ../src/inkscape-application.cpp:108
 #, fuzzy
 msgid "Process: Verb(s) to call when Inkscape opens."
 msgstr "Inkscape 启动时调用的动作。"
 
-#: ../src/inkscape-application.cpp:107
+#: ../src/inkscape-application.cpp:108
 msgid "VERB-ID[;VERB-ID]*"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:108
+#: ../src/inkscape-application.cpp:109
 #, fuzzy
 msgid "Process: Start Inkscape in interactive shell mode."
 msgstr "以交互式 shell 模式启动 Inkscape。"
 
 #. Export - File and File Type
-#: ../src/inkscape-application.cpp:111
+#: ../src/inkscape-application.cpp:112
 msgid "Export: File type:[svg,png,ps,psf,tex,emf,wmf,xaml]"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:112
+#: ../src/inkscape-application.cpp:113
 #, fuzzy
 msgid "Export: File name"
 msgstr "文件名"
 
-#: ../src/inkscape-application.cpp:112
+#: ../src/inkscape-application.cpp:113
 #, fuzzy
 msgid "EXPORT-FILENAME"
 msgstr "FILENAME"
 
-#: ../src/inkscape-application.cpp:113
+#: ../src/inkscape-application.cpp:114
 msgid "Export: Overwrite input file."
 msgstr ""
 
 #. BSP
 #. B = PNG, S = SVG, P = PS/EPS/PDF
 #. Export - Geometry
-#: ../src/inkscape-application.cpp:117
+#: ../src/inkscape-application.cpp:118
 msgid "Export: Area to export in SVG user units."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:117
+#: ../src/inkscape-application.cpp:118
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
 #. BSP
-#: ../src/inkscape-application.cpp:118
+#: ../src/inkscape-application.cpp:119
 #, fuzzy
 msgid "Export: Area to export is drawing (not page)."
 msgstr "导出区域是整个绘图(不是页面)"
 
 #. BSP
-#: ../src/inkscape-application.cpp:119
+#: ../src/inkscape-application.cpp:120
 #, fuzzy
 msgid "Export: Area to export is page."
 msgstr "导出区域是整个页面"
 
 #. BSP
-#: ../src/inkscape-application.cpp:120
+#: ../src/inkscape-application.cpp:121
 msgid ""
 "Export: Margin around export area: units of page size for SVG, mm for PS/EPS/"
 "PDF."
 msgstr ""
 
 #. xSP
-#: ../src/inkscape-application.cpp:121
+#: ../src/inkscape-application.cpp:122
 #, fuzzy
 msgid ""
 "Export: Snap the bitmap export area outwards to the nearest integer values."
 msgstr "吸附位图导出区域到靠外的最接近的整数(按照 SVG 用户单位)"
 
 #. Bxx
-#: ../src/inkscape-application.cpp:122
+#: ../src/inkscape-application.cpp:123
 #, fuzzy
 msgid "Export: Bitmap width in pixels (overrides --export-dpi)."
 msgstr "导出位图的像素宽度(覆盖导出-dpi)"
 
-#: ../src/inkscape-application.cpp:122
+#: ../src/inkscape-application.cpp:123
 msgid "WIDTH"
 msgstr "WIDTH"
 
 #. Bxx
-#: ../src/inkscape-application.cpp:123
+#: ../src/inkscape-application.cpp:124
 #, fuzzy
 msgid "Export: Bitmap height in pixels (overrides --export-dpi)."
 msgstr "导出位图的像素宽度(覆盖导出-dpi)"
 
-#: ../src/inkscape-application.cpp:123
+#: ../src/inkscape-application.cpp:124
 msgid "HEIGHT"
 msgstr "HEIGHT"
 
 #. Bxx
 #. Export - Options
-#: ../src/inkscape-application.cpp:126
+#: ../src/inkscape-application.cpp:127
 #, fuzzy
 msgid "Export: ID(s) of object(s) to export."
 msgstr "要导出的对象的 ID"
 
-#: ../src/inkscape-application.cpp:126
+#: ../src/inkscape-application.cpp:127
 msgid "OBJECT-ID[;OBJECT-ID]*"
 msgstr ""
 
 #. BSP
-#: ../src/inkscape-application.cpp:127
+#: ../src/inkscape-application.cpp:128
 #, fuzzy
 msgid "Export: Hide all objects except object with ID selected by export-id."
 msgstr "在导出的图片中，没有选中的对象将隐藏"
 
 #. BSx
-#: ../src/inkscape-application.cpp:128
+#: ../src/inkscape-application.cpp:129
 msgid "Export: Remove items in the Inkscape namespace."
 msgstr ""
 
 #. xSx
-#: ../src/inkscape-application.cpp:129
+#: ../src/inkscape-application.cpp:130
 #, fuzzy
 msgid ""
 "Export: Resolution for rasterization bitmaps and filters (default is 96)."
 msgstr "PS/EPS/PDF 格式中导出位图和滤镜点阵化的分辨率(默认为 96)"
 
-#: ../src/inkscape-application.cpp:129
+#: ../src/inkscape-application.cpp:130
 #: ../src/ui/widget/rendering-options.cpp:34
 msgid "DPI"
 msgstr "DPI"
 
 #. BxP
-#: ../src/inkscape-application.cpp:130
+#: ../src/inkscape-application.cpp:131
 #, fuzzy
 msgid ""
 "Export: Render objects without filters instead of rasterizing. (PS/EPS/PDF)"
 msgstr "渲染滤镜对象时不包括滤镜效果，而不是执行栅格化(PS、EPS、PDF)"
 
 #. xxP
-#: ../src/inkscape-application.cpp:131
+#: ../src/inkscape-application.cpp:132
 #, fuzzy
 msgid "Export: Convert text to paths. (PS/EPS/PDF/SVG)."
 msgstr "导出时将文本对象转成路径(PS、EPS、PDF、SVG)"
 
 #. xxP
-#: ../src/inkscape-application.cpp:132
+#: ../src/inkscape-application.cpp:133
 msgid "Export: Postscript level (2 or 3). Default is 3."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:132
+#: ../src/inkscape-application.cpp:133
 #, fuzzy
 msgid "PS-Level"
 msgstr "PS 等级"
 
 #. xxP
-#: ../src/inkscape-application.cpp:133
+#: ../src/inkscape-application.cpp:134
 msgid "Export: PDF level (1.4 or 1.5)"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:133
+#: ../src/inkscape-application.cpp:134
 #, fuzzy
 msgid "PDF-Level"
 msgstr "级别"
 
 #. xxP
-#: ../src/inkscape-application.cpp:134
+#: ../src/inkscape-application.cpp:135
 msgid ""
 "Export: Export text separately to LaTeX file (PS/EPS/PDF). Include via "
 "\\input{file.tex}"
 msgstr ""
 
 #. xxP
-#: ../src/inkscape-application.cpp:135
+#: ../src/inkscape-application.cpp:136
 #, fuzzy
 msgid ""
 "Export: Use stored filename and DPI hints when exporting object selected by "
@@ -9168,47 +9177,47 @@ msgid ""
 msgstr "导出时使用保存的文件名和 DPI(只包括导出 ID)"
 
 #. Bxx
-#: ../src/inkscape-application.cpp:136
+#: ../src/inkscape-application.cpp:137
 #, fuzzy
 msgid "Export: Background color for exported bitmaps (any SVG color string)."
 msgstr "导出位图的背景色(任何 SVG 支持的颜色字符串)"
 
-#: ../src/inkscape-application.cpp:136
+#: ../src/inkscape-application.cpp:137
 msgid "COLOR"
 msgstr "COLOR"
 
 #. Bxx
-#: ../src/inkscape-application.cpp:137
+#: ../src/inkscape-application.cpp:138
 #, fuzzy
 msgid ""
 "Export: Background opacity for exported bitmaps (either 0.0 to 1.0 or 1 to "
 "255)."
 msgstr "导出位图的背景不透明度(0.0 到 1.0，或者 1 到 255)"
 
-#: ../src/inkscape-application.cpp:137
+#: ../src/inkscape-application.cpp:138
 msgid "VALUE"
 msgstr "VALUE"
 
-#: ../src/inkscape-application.cpp:140
+#: ../src/inkscape-application.cpp:141
 msgid "Process: xverb command file."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:140
+#: ../src/inkscape-application.cpp:141
 #, fuzzy
 msgid "XVERBS-FILENAME"
 msgstr "FILENAME"
 
-#: ../src/inkscape-application.cpp:144
+#: ../src/inkscape-application.cpp:145
 #, fuzzy
 msgid "D-Bus: Enter a listening loop for D-Bus messages in console mode."
 msgstr "在控制台模式中进入一个用于 D-Bus 消息的监听循环"
 
-#: ../src/inkscape-application.cpp:145
+#: ../src/inkscape-application.cpp:146
 #, fuzzy
 msgid "D-Bus: Specify the D-Bus name (default is 'org.inkscape')."
 msgstr "指定用于消息监听的 D-Bus BUS 名称(默认值为 org.inkscape)"
 
-#: ../src/inkscape-application.cpp:145
+#: ../src/inkscape-application.cpp:146
 msgid "BUS-NAME"
 msgstr "BUS-NAME"
 
@@ -9698,7 +9707,7 @@ msgstr "沿该路径弯曲原始路径"
 
 #: ../src/live_effects/lpe-bendpath.cpp:61
 #: ../src/live_effects/lpe-patternalongpath.cpp:76
-#: ../src/ui/dialog/export.cpp:259 ../src/ui/dialog/transformation.cpp:68
+#: ../src/ui/dialog/export.cpp:258 ../src/ui/dialog/transformation.cpp:68
 #: ../src/ui/widget/page-sizer.cpp:48
 msgid "_Width:"
 msgstr "宽度(_W)："
@@ -11405,7 +11414,7 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:276
-#: ../src/ui/dialog/find.cpp:80
+#: ../src/ui/dialog/find.cpp:78
 msgid "General"
 msgstr "常规"
 
@@ -12912,16 +12921,6 @@ msgstr "修改矢量参数"
 msgid "Change unit parameter"
 msgstr "修改计量参数"
 
-#: ../src/main-cmdlineact.cpp:71
-#, c-format
-msgid "Unable to find verb ID '%s' specified on the command line.\n"
-msgstr "找不到命令行中指定的动作 ID“%s”。\n"
-
-#: ../src/main-cmdlineact.cpp:82 ../src/main-cmdlinexact.cpp:268
-#, c-format
-msgid "Unable to find node ID: '%s'\n"
-msgstr "找不到节点 ID：“%s”\n"
-
 #. ## Add a menu for clear()
 #: ../src/menus-skeleton.h:23 ../src/ui/dialog/debug.cpp:71
 #: ../share/ui/menus.xml.h:1
@@ -13354,7 +13353,7 @@ msgstr "反向路径"
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "选区里<b>没有路径</b>可以反向。"
 
-#: ../src/preferences.cpp:142
+#: ../src/preferences.cpp:138
 msgid ""
 "Inkscape will run with default settings, and new settings will not be saved. "
 msgstr "Inkscape 将使用默认设置运行，不会保存新的设置。"
@@ -13362,7 +13361,7 @@ msgstr "Inkscape 将使用默认设置运行，不会保存新的设置。"
 #. the creation failed
 #. _reportError(Glib::ustring::compose(_("Cannot create profile directory %1."),
 #. Glib::filename_to_utf8(_prefs_dir)), not_saved);
-#: ../src/preferences.cpp:158
+#: ../src/preferences.cpp:154
 #, c-format
 msgid "Cannot create profile directory %s."
 msgstr "不能创建配置文件目录 %s。"
@@ -13370,7 +13369,7 @@ msgstr "不能创建配置文件目录 %s。"
 #. The profile dir is not actually a directory
 #. _reportError(Glib::ustring::compose(_("%1 is not a valid directory."),
 #. Glib::filename_to_utf8(_prefs_dir)), not_saved);
-#: ../src/preferences.cpp:176
+#: ../src/preferences.cpp:163
 #, c-format
 msgid "%s is not a valid directory."
 msgstr "%s 是无效目录。"
@@ -13378,30 +13377,40 @@ msgstr "%s 是无效目录。"
 #. The write failed.
 #. _reportError(Glib::ustring::compose(_("Failed to create the preferences file %1."),
 #. Glib::filename_to_utf8(_prefs_filename)), not_saved);
-#: ../src/preferences.cpp:186
+#: ../src/preferences.cpp:182
 #, c-format
 msgid "Failed to create the preferences file %s."
 msgstr "不能创建配置文件 %s。"
 
-#: ../src/preferences.cpp:222
+#: ../src/preferences.cpp:218
 #, c-format
 msgid "The preferences file %s is not a regular file."
 msgstr "配置文件 %s 不是一个普通文件。"
 
-#: ../src/preferences.cpp:232
+#: ../src/preferences.cpp:228
 #, c-format
 msgid "The preferences file %s could not be read."
 msgstr "不能读入配置文件 %s。"
 
-#: ../src/preferences.cpp:243
+#: ../src/preferences.cpp:239
 #, c-format
 msgid "The preferences file %s is not a valid XML document."
 msgstr "配置文件 %s 不是有效的 XML 文档."
 
-#: ../src/preferences.cpp:252
+#: ../src/preferences.cpp:248
 #, c-format
 msgid "The file %s is not a valid Inkscape preferences file."
 msgstr "%s 是无效的 Inkscape 配置文件."
+
+#: ../src/preferences.cpp:298
+#, fuzzy
+msgid "Preferences file was deleted."
+msgstr "不能读入配置文件 %s。"
+
+#: ../src/preferences.cpp:299
+#, fuzzy
+msgid "There was an error trying to delete the preferences file."
+msgstr "不能创建配置文件 %s。"
 
 #: ../src/rdf.cpp:178
 msgid "CC Attribution"
@@ -13845,7 +13854,7 @@ msgstr "按像素水平移动"
 msgid "The selection has no applied path effect."
 msgstr "被选对象没有被应用过路径效果。"
 
-#: ../src/selection-chemistry.cpp:2605 ../src/ui/dialog/clonetiler.cpp:2064
+#: ../src/selection-chemistry.cpp:2605 ../src/ui/dialog/clonetiler.cpp:2063
 msgid "Select an <b>object</b> to clone."
 msgstr "选择一个要克隆的<b>对象</b>。"
 
@@ -14205,8 +14214,8 @@ msgstr ""
 "<b>移动</b> %s，%s 距离; 使用<b>Ctrl</b>限制水平/垂直移动；按住 <b>Shift</b> "
 "禁用吸附"
 
-#: ../src/shortcuts.cpp:410 ../src/ui/dialog/export.cpp:1299
-#: ../src/ui/dialog/export.cpp:1329
+#: ../src/shortcuts.cpp:410 ../src/ui/dialog/export.cpp:1298
+#: ../src/ui/dialog/export.cpp:1328
 msgid "Select a filename for exporting"
 msgstr "选择一个文件名导出"
 
@@ -14804,7 +14813,7 @@ msgid "Rearrange"
 msgstr "重新安排"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:925
-#: ../src/widgets/toolbox.cpp:1303
+#: ../src/widgets/toolbox.cpp:1364
 msgid "Nodes"
 msgstr "节点"
 
@@ -15068,7 +15077,7 @@ msgid "_Delete"
 msgstr "删除(_D)"
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:60
-#: ../src/ui/dialog/export.cpp:1303
+#: ../src/ui/dialog/export.cpp:1302
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:982
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1538
 #: ../src/ui/dialog/input.cpp:912 ../src/verbs.cpp:2600
@@ -15080,609 +15089,609 @@ msgstr "保存(_S)"
 msgid "Add profile"
 msgstr "加入配置文件"
 
-#: ../src/ui/dialog/clonetiler.cpp:100
+#: ../src/ui/dialog/clonetiler.cpp:99
 msgid "_Symmetry"
 msgstr "对称(_S)"
 
 #. TRANSLATORS: "translation" means "shift" / "displacement" here.
-#: ../src/ui/dialog/clonetiler.cpp:112
+#: ../src/ui/dialog/clonetiler.cpp:111
 msgid "<b>P1</b>: simple translation"
 msgstr "<b>P1</b>：简单变换"
 
-#: ../src/ui/dialog/clonetiler.cpp:113
+#: ../src/ui/dialog/clonetiler.cpp:112
 msgid "<b>P2</b>: 180&#176; rotation"
 msgstr "<b>P2</b>：180&#176;旋转"
 
-#: ../src/ui/dialog/clonetiler.cpp:114
+#: ../src/ui/dialog/clonetiler.cpp:113
 msgid "<b>PM</b>: reflection"
 msgstr "<b>PM</b>：镜像"
 
 #. TRANSLATORS: "glide reflection" is a reflection and a translation combined.
 #. For more info, see http://mathforum.org/sum95/suzanne/symsusan.html
-#: ../src/ui/dialog/clonetiler.cpp:117
+#: ../src/ui/dialog/clonetiler.cpp:116
 msgid "<b>PG</b>: glide reflection"
 msgstr "<b>PG</b>：滑动镜像"
 
-#: ../src/ui/dialog/clonetiler.cpp:118
+#: ../src/ui/dialog/clonetiler.cpp:117
 msgid "<b>CM</b>: reflection + glide reflection"
 msgstr "<b>CM</b>：镜像 + 滑动镜像"
 
-#: ../src/ui/dialog/clonetiler.cpp:119
+#: ../src/ui/dialog/clonetiler.cpp:118
 msgid "<b>PMM</b>: reflection + reflection"
 msgstr "<b>PMM</b>：镜像 + 镜像"
 
-#: ../src/ui/dialog/clonetiler.cpp:120
+#: ../src/ui/dialog/clonetiler.cpp:119
 msgid "<b>PMG</b>: reflection + 180&#176; rotation"
 msgstr "<b>PMG</b>：镜像 + 180&#176;旋转"
 
-#: ../src/ui/dialog/clonetiler.cpp:121
+#: ../src/ui/dialog/clonetiler.cpp:120
 msgid "<b>PGG</b>: glide reflection + 180&#176; rotation"
 msgstr "<b>PGG</b>：滑动镜像 + 180&#176;旋转"
 
-#: ../src/ui/dialog/clonetiler.cpp:122
+#: ../src/ui/dialog/clonetiler.cpp:121
 msgid "<b>CMM</b>: reflection + reflection + 180&#176; rotation"
 msgstr "<b>CMM</b>：镜像 + 镜像 + 180&#176;旋转"
 
-#: ../src/ui/dialog/clonetiler.cpp:123
+#: ../src/ui/dialog/clonetiler.cpp:122
 msgid "<b>P4</b>: 90&#176; rotation"
 msgstr "<b>P4</b>：90&#176;旋转"
 
-#: ../src/ui/dialog/clonetiler.cpp:124
+#: ../src/ui/dialog/clonetiler.cpp:123
 msgid "<b>P4M</b>: 90&#176; rotation + 45&#176; reflection"
 msgstr "<b>P4M</b>：90&#176;旋转 + 45&#176; 镜像"
 
-#: ../src/ui/dialog/clonetiler.cpp:125
+#: ../src/ui/dialog/clonetiler.cpp:124
 msgid "<b>P4G</b>: 90&#176; rotation + 90&#176; reflection"
 msgstr "<b>P4G</b>：90&#176;旋转 + 90&#176; 镜像"
 
-#: ../src/ui/dialog/clonetiler.cpp:126
+#: ../src/ui/dialog/clonetiler.cpp:125
 msgid "<b>P3</b>: 120&#176; rotation"
 msgstr "<b>P3</b>：120&#176;旋转"
 
-#: ../src/ui/dialog/clonetiler.cpp:127
+#: ../src/ui/dialog/clonetiler.cpp:126
 msgid "<b>P31M</b>: reflection + 120&#176; rotation, dense"
 msgstr "<b>P31M</b>：镜像 + 120&#176;旋转，密集"
 
-#: ../src/ui/dialog/clonetiler.cpp:128
+#: ../src/ui/dialog/clonetiler.cpp:127
 msgid "<b>P3M1</b>: reflection + 120&#176; rotation, sparse"
 msgstr "<b>P3M1</b>：镜像 + 120&#176;旋转，稀疏"
 
-#: ../src/ui/dialog/clonetiler.cpp:129
+#: ../src/ui/dialog/clonetiler.cpp:128
 msgid "<b>P6</b>: 60&#176; rotation"
 msgstr "<b>P6</b>：60&#176;旋转"
 
-#: ../src/ui/dialog/clonetiler.cpp:130
+#: ../src/ui/dialog/clonetiler.cpp:129
 msgid "<b>P6M</b>: reflection + 60&#176; rotation"
 msgstr "<b>P6M</b>：镜像 + 60&#176; 旋转"
 
-#: ../src/ui/dialog/clonetiler.cpp:137
+#: ../src/ui/dialog/clonetiler.cpp:136
 msgid "Select one of the 17 symmetry groups for the tiling"
 msgstr "选择 17 个对称组合之一平铺"
 
-#: ../src/ui/dialog/clonetiler.cpp:160
+#: ../src/ui/dialog/clonetiler.cpp:159
 msgid "S_hift"
 msgstr "偏移(_H)"
 
 #. TRANSLATORS: "shift" means: the tiles will be shifted (offset) horizontally by this amount
-#: ../src/ui/dialog/clonetiler.cpp:170
+#: ../src/ui/dialog/clonetiler.cpp:169
 #, no-c-format
 msgid "<b>Shift X:</b>"
 msgstr "<b>X 偏移：</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:178
+#: ../src/ui/dialog/clonetiler.cpp:177
 #, no-c-format
 msgid "Horizontal shift per row (in % of tile width)"
 msgstr "每行水平偏移(宽度的百分比)"
 
-#: ../src/ui/dialog/clonetiler.cpp:186
+#: ../src/ui/dialog/clonetiler.cpp:185
 #, no-c-format
 msgid "Horizontal shift per column (in % of tile width)"
 msgstr "每列水平偏移(宽度的百分比)"
 
-#: ../src/ui/dialog/clonetiler.cpp:192
+#: ../src/ui/dialog/clonetiler.cpp:191
 msgid "Randomize the horizontal shift by this percentage"
 msgstr "使用当前百分比在水平方向随机偏移"
 
 #. TRANSLATORS: "shift" means: the tiles will be shifted (offset) vertically by this amount
-#: ../src/ui/dialog/clonetiler.cpp:202
+#: ../src/ui/dialog/clonetiler.cpp:201
 #, no-c-format
 msgid "<b>Shift Y:</b>"
 msgstr "<b> Y 偏移：</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:210
+#: ../src/ui/dialog/clonetiler.cpp:209
 #, no-c-format
 msgid "Vertical shift per row (in % of tile height)"
 msgstr "每行水平偏移(高度的百分比)"
 
-#: ../src/ui/dialog/clonetiler.cpp:218
+#: ../src/ui/dialog/clonetiler.cpp:217
 #, no-c-format
 msgid "Vertical shift per column (in % of tile height)"
 msgstr "每列水平偏移(高度的百分比)"
 
-#: ../src/ui/dialog/clonetiler.cpp:225
+#: ../src/ui/dialog/clonetiler.cpp:224
 msgid "Randomize the vertical shift by this percentage"
 msgstr "使用当前百分比在垂直方向随机移动"
 
-#: ../src/ui/dialog/clonetiler.cpp:233 ../src/ui/dialog/clonetiler.cpp:379
+#: ../src/ui/dialog/clonetiler.cpp:232 ../src/ui/dialog/clonetiler.cpp:378
 msgid "<b>Exponent:</b>"
 msgstr "<b>指数：</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:240
+#: ../src/ui/dialog/clonetiler.cpp:239
 msgid "Whether rows are spaced evenly (1), converge (<1) or diverge (>1)"
 msgstr "行间距是均匀的 (1)，收敛的 (<1) 还是发散的 (>1)"
 
-#: ../src/ui/dialog/clonetiler.cpp:247
+#: ../src/ui/dialog/clonetiler.cpp:246
 msgid "Whether columns are spaced evenly (1), converge (<1) or diverge (>1)"
 msgstr "列间距是均匀的 (1)，收敛的 (<1) 还是发散的 (>1)"
 
 #. TRANSLATORS: "Alternate" is a verb here
-#: ../src/ui/dialog/clonetiler.cpp:255 ../src/ui/dialog/clonetiler.cpp:419
-#: ../src/ui/dialog/clonetiler.cpp:495 ../src/ui/dialog/clonetiler.cpp:568
-#: ../src/ui/dialog/clonetiler.cpp:614 ../src/ui/dialog/clonetiler.cpp:737
+#: ../src/ui/dialog/clonetiler.cpp:254 ../src/ui/dialog/clonetiler.cpp:418
+#: ../src/ui/dialog/clonetiler.cpp:494 ../src/ui/dialog/clonetiler.cpp:567
+#: ../src/ui/dialog/clonetiler.cpp:613 ../src/ui/dialog/clonetiler.cpp:736
 msgid "<small>Alternate:</small>"
 msgstr "<small>交替：</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:261
+#: ../src/ui/dialog/clonetiler.cpp:260
 msgid "Alternate the sign of shifts for each row"
 msgstr "交替各行的偏移符号"
 
-#: ../src/ui/dialog/clonetiler.cpp:266
+#: ../src/ui/dialog/clonetiler.cpp:265
 msgid "Alternate the sign of shifts for each column"
 msgstr "交替各列的偏移符号"
 
 #. TRANSLATORS: "Cumulate" is a verb here
-#: ../src/ui/dialog/clonetiler.cpp:273 ../src/ui/dialog/clonetiler.cpp:437
-#: ../src/ui/dialog/clonetiler.cpp:513
+#: ../src/ui/dialog/clonetiler.cpp:272 ../src/ui/dialog/clonetiler.cpp:436
+#: ../src/ui/dialog/clonetiler.cpp:512
 msgid "<small>Cumulate:</small>"
 msgstr "<small>累积：</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:279
+#: ../src/ui/dialog/clonetiler.cpp:278
 msgid "Cumulate the shifts for each row"
 msgstr "累计各行的偏移"
 
-#: ../src/ui/dialog/clonetiler.cpp:284
+#: ../src/ui/dialog/clonetiler.cpp:283
 msgid "Cumulate the shifts for each column"
 msgstr "累计各列的偏移"
 
 #. TRANSLATORS: "Cumulate" is a verb here
-#: ../src/ui/dialog/clonetiler.cpp:291
+#: ../src/ui/dialog/clonetiler.cpp:290
 msgid "<small>Exclude tile:</small>"
 msgstr "<small>挤压平铺：</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:297
+#: ../src/ui/dialog/clonetiler.cpp:296
 msgid "Exclude tile height in shift"
 msgstr "平移时挤压平铺高度"
 
-#: ../src/ui/dialog/clonetiler.cpp:302
+#: ../src/ui/dialog/clonetiler.cpp:301
 msgid "Exclude tile width in shift"
 msgstr "平移时挤压平铺宽度"
 
-#: ../src/ui/dialog/clonetiler.cpp:311
+#: ../src/ui/dialog/clonetiler.cpp:310
 msgid "Sc_ale"
 msgstr "缩放(_A)"
 
-#: ../src/ui/dialog/clonetiler.cpp:319
+#: ../src/ui/dialog/clonetiler.cpp:318
 msgid "<b>Scale X:</b>"
 msgstr "<b>X 缩放：</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:327
+#: ../src/ui/dialog/clonetiler.cpp:326
 #, no-c-format
 msgid "Horizontal scale per row (in % of tile width)"
 msgstr "每行水平缩放(宽度的百分比)"
 
-#: ../src/ui/dialog/clonetiler.cpp:335
+#: ../src/ui/dialog/clonetiler.cpp:334
 #, no-c-format
 msgid "Horizontal scale per column (in % of tile width)"
 msgstr "每列水平缩放(宽度的百分比)"
 
-#: ../src/ui/dialog/clonetiler.cpp:341
+#: ../src/ui/dialog/clonetiler.cpp:340
 msgid "Randomize the horizontal scale by this percentage"
 msgstr "使用当前百分比在水平方向随机缩放"
 
-#: ../src/ui/dialog/clonetiler.cpp:349
+#: ../src/ui/dialog/clonetiler.cpp:348
 msgid "<b>Scale Y:</b>"
 msgstr "<b>Y 缩放:</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:357
+#: ../src/ui/dialog/clonetiler.cpp:356
 #, no-c-format
 msgid "Vertical scale per row (in % of tile height)"
 msgstr "每行垂直缩放(高度的百分比)"
 
-#: ../src/ui/dialog/clonetiler.cpp:365
+#: ../src/ui/dialog/clonetiler.cpp:364
 #, no-c-format
 msgid "Vertical scale per column (in % of tile height)"
 msgstr "每列水平缩放(高度的百分比)"
 
-#: ../src/ui/dialog/clonetiler.cpp:371
+#: ../src/ui/dialog/clonetiler.cpp:370
 msgid "Randomize the vertical scale by this percentage"
 msgstr "使用当前百分比在垂直方向随机缩放"
 
-#: ../src/ui/dialog/clonetiler.cpp:385
+#: ../src/ui/dialog/clonetiler.cpp:384
 msgid "Whether row scaling is uniform (1), converge (<1) or diverge (>1)"
 msgstr "行缩放是均匀的(1)，收敛的 (<1) 还是发散的 (>1)"
 
-#: ../src/ui/dialog/clonetiler.cpp:391
+#: ../src/ui/dialog/clonetiler.cpp:390
 msgid "Whether column scaling is uniform (1), converge (<1) or diverge (>1)"
 msgstr "列缩放是均匀的(1)，收敛的 (<1) 还是发散的 (>1)"
 
-#: ../src/ui/dialog/clonetiler.cpp:399
+#: ../src/ui/dialog/clonetiler.cpp:398
 msgid "<b>Base:</b>"
 msgstr "<b>基数：</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:405 ../src/ui/dialog/clonetiler.cpp:411
+#: ../src/ui/dialog/clonetiler.cpp:404 ../src/ui/dialog/clonetiler.cpp:410
 msgid ""
 "Base for a logarithmic spiral: not used (0), converge (<1), or diverge (>1)"
 msgstr "对数螺旋线的基数: 不起作用(0)，收敛(<1)，发散(>1)"
 
-#: ../src/ui/dialog/clonetiler.cpp:425
+#: ../src/ui/dialog/clonetiler.cpp:424
 msgid "Alternate the sign of scales for each row"
 msgstr "交替各行的缩放符号"
 
-#: ../src/ui/dialog/clonetiler.cpp:430
+#: ../src/ui/dialog/clonetiler.cpp:429
 msgid "Alternate the sign of scales for each column"
 msgstr "交替各列的缩放符号"
 
-#: ../src/ui/dialog/clonetiler.cpp:443
+#: ../src/ui/dialog/clonetiler.cpp:442
 msgid "Cumulate the scales for each row"
 msgstr "累计各行的缩放"
 
-#: ../src/ui/dialog/clonetiler.cpp:448
+#: ../src/ui/dialog/clonetiler.cpp:447
 msgid "Cumulate the scales for each column"
 msgstr "累计各列的缩放"
 
-#: ../src/ui/dialog/clonetiler.cpp:457
+#: ../src/ui/dialog/clonetiler.cpp:456
 msgid "_Rotation"
 msgstr "旋转(_R)"
 
-#: ../src/ui/dialog/clonetiler.cpp:465
+#: ../src/ui/dialog/clonetiler.cpp:464
 msgid "<b>Angle:</b>"
 msgstr "<b>角度：</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:473
+#: ../src/ui/dialog/clonetiler.cpp:472
 #, no-c-format
 msgid "Rotate tiles by this angle for each row"
 msgstr "对每行按照这个角度旋转平铺"
 
-#: ../src/ui/dialog/clonetiler.cpp:481
+#: ../src/ui/dialog/clonetiler.cpp:480
 #, no-c-format
 msgid "Rotate tiles by this angle for each column"
 msgstr "对每列按照这个角度旋转平铺"
 
-#: ../src/ui/dialog/clonetiler.cpp:487
+#: ../src/ui/dialog/clonetiler.cpp:486
 msgid "Randomize the rotation angle by this percentage"
 msgstr "按照百分比随机的旋转一个角度"
 
-#: ../src/ui/dialog/clonetiler.cpp:501
+#: ../src/ui/dialog/clonetiler.cpp:500
 msgid "Alternate the rotation direction for each row"
 msgstr "替换每行的旋转方向"
 
-#: ../src/ui/dialog/clonetiler.cpp:506
+#: ../src/ui/dialog/clonetiler.cpp:505
 msgid "Alternate the rotation direction for each column"
 msgstr "替换每列的旋转方向"
 
-#: ../src/ui/dialog/clonetiler.cpp:519
+#: ../src/ui/dialog/clonetiler.cpp:518
 msgid "Cumulate the rotation for each row"
 msgstr "累计各行的旋转方向"
 
-#: ../src/ui/dialog/clonetiler.cpp:524
+#: ../src/ui/dialog/clonetiler.cpp:523
 msgid "Cumulate the rotation for each column"
 msgstr "累计各列的旋转方向"
 
-#: ../src/ui/dialog/clonetiler.cpp:533
+#: ../src/ui/dialog/clonetiler.cpp:532
 msgid "_Blur & opacity"
 msgstr "模糊与透明(_B)"
 
-#: ../src/ui/dialog/clonetiler.cpp:542
+#: ../src/ui/dialog/clonetiler.cpp:541
 msgid "<b>Blur:</b>"
 msgstr "<b>模糊：</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:548
+#: ../src/ui/dialog/clonetiler.cpp:547
 msgid "Blur tiles by this percentage for each row"
 msgstr "对每行使用此百分比模糊平铺"
 
-#: ../src/ui/dialog/clonetiler.cpp:554
+#: ../src/ui/dialog/clonetiler.cpp:553
 msgid "Blur tiles by this percentage for each column"
 msgstr "对每列使用此百分比模糊平铺"
 
-#: ../src/ui/dialog/clonetiler.cpp:560
+#: ../src/ui/dialog/clonetiler.cpp:559
 msgid "Randomize the tile blur by this percentage"
 msgstr "按照此百分比随机模糊平铺"
 
-#: ../src/ui/dialog/clonetiler.cpp:574
+#: ../src/ui/dialog/clonetiler.cpp:573
 msgid "Alternate the sign of blur change for each row"
 msgstr "对每行反转模糊的符号"
 
-#: ../src/ui/dialog/clonetiler.cpp:579
+#: ../src/ui/dialog/clonetiler.cpp:578
 msgid "Alternate the sign of blur change for each column"
 msgstr "对每列反转模糊的符号"
 
-#: ../src/ui/dialog/clonetiler.cpp:588
+#: ../src/ui/dialog/clonetiler.cpp:587
 msgid "<b>Opacity:</b>"
 msgstr "<b>不透明度：</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:594
+#: ../src/ui/dialog/clonetiler.cpp:593
 msgid "Decrease tile opacity by this percentage for each row"
 msgstr "对每行按照这个百分比降低平铺的不透明度"
 
-#: ../src/ui/dialog/clonetiler.cpp:600
+#: ../src/ui/dialog/clonetiler.cpp:599
 msgid "Decrease tile opacity by this percentage for each column"
 msgstr "对每列按照这个百分比降低平铺的不透明度"
 
-#: ../src/ui/dialog/clonetiler.cpp:606
+#: ../src/ui/dialog/clonetiler.cpp:605
 msgid "Randomize the tile opacity by this percentage"
 msgstr "按照这个百分比随机选择平铺的不透明度"
 
-#: ../src/ui/dialog/clonetiler.cpp:620
+#: ../src/ui/dialog/clonetiler.cpp:619
 msgid "Alternate the sign of opacity change for each row"
 msgstr "交替改变每一行的不透明度符号"
 
-#: ../src/ui/dialog/clonetiler.cpp:625
+#: ../src/ui/dialog/clonetiler.cpp:624
 msgid "Alternate the sign of opacity change for each column"
 msgstr "交替改变每一列的不透明度符号"
 
-#: ../src/ui/dialog/clonetiler.cpp:633
+#: ../src/ui/dialog/clonetiler.cpp:632
 msgid "Co_lor"
 msgstr "颜色(_L)"
 
-#: ../src/ui/dialog/clonetiler.cpp:639
+#: ../src/ui/dialog/clonetiler.cpp:638
 msgid "Initial color: "
 msgstr "初始颜色："
 
-#: ../src/ui/dialog/clonetiler.cpp:643
+#: ../src/ui/dialog/clonetiler.cpp:642
 msgid "Initial color of tiled clones"
 msgstr "平铺克隆的初始颜色"
 
-#: ../src/ui/dialog/clonetiler.cpp:643
+#: ../src/ui/dialog/clonetiler.cpp:642
 msgid ""
 "Initial color for clones (works only if the original has unset fill or "
 "stroke or on spray tool in copy mode)"
 msgstr "克隆的初始颜色(只有原始对象没有设置填充或绘制属性才起作用)"
 
-#: ../src/ui/dialog/clonetiler.cpp:658
+#: ../src/ui/dialog/clonetiler.cpp:657
 msgid "<b>H:</b>"
 msgstr "<b>色调：</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:664
+#: ../src/ui/dialog/clonetiler.cpp:663
 msgid "Change the tile hue by this percentage for each row"
 msgstr "对每行按照这个百分比改变平铺的色调"
 
-#: ../src/ui/dialog/clonetiler.cpp:670
+#: ../src/ui/dialog/clonetiler.cpp:669
 msgid "Change the tile hue by this percentage for each column"
 msgstr "对每列按照这个百分比改变平铺的色调"
 
-#: ../src/ui/dialog/clonetiler.cpp:676
+#: ../src/ui/dialog/clonetiler.cpp:675
 msgid "Randomize the tile hue by this percentage"
 msgstr "按照这个百分比随机设置平铺的色调"
 
-#: ../src/ui/dialog/clonetiler.cpp:685
+#: ../src/ui/dialog/clonetiler.cpp:684
 msgid "<b>S:</b>"
 msgstr "<b>饱和度：</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:691
+#: ../src/ui/dialog/clonetiler.cpp:690
 msgid "Change the color saturation by this percentage for each row"
 msgstr "对每行按照这个百分比改变平铺的饱和度"
 
-#: ../src/ui/dialog/clonetiler.cpp:697
+#: ../src/ui/dialog/clonetiler.cpp:696
 msgid "Change the color saturation by this percentage for each column"
 msgstr "对每列按照这个百分比改变平铺的饱和度"
 
-#: ../src/ui/dialog/clonetiler.cpp:703
+#: ../src/ui/dialog/clonetiler.cpp:702
 msgid "Randomize the color saturation by this percentage"
 msgstr "按照这个百分比随机设置平铺的饱和度"
 
-#: ../src/ui/dialog/clonetiler.cpp:711
+#: ../src/ui/dialog/clonetiler.cpp:710
 msgid "<b>L:</b>"
 msgstr "<b>亮度:</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:717
+#: ../src/ui/dialog/clonetiler.cpp:716
 msgid "Change the color lightness by this percentage for each row"
 msgstr "对每行按照这个百分比改变平铺的亮度"
 
-#: ../src/ui/dialog/clonetiler.cpp:723
+#: ../src/ui/dialog/clonetiler.cpp:722
 msgid "Change the color lightness by this percentage for each column"
 msgstr "对每列按照这个百分比改变平铺的亮度"
 
-#: ../src/ui/dialog/clonetiler.cpp:729
+#: ../src/ui/dialog/clonetiler.cpp:728
 msgid "Randomize the color lightness by this percentage"
 msgstr "按照这个百分比随机设置平铺的亮度"
 
-#: ../src/ui/dialog/clonetiler.cpp:743
+#: ../src/ui/dialog/clonetiler.cpp:742
 msgid "Alternate the sign of color changes for each row"
 msgstr "交替每一行的颜色变化量符号"
 
-#: ../src/ui/dialog/clonetiler.cpp:748
+#: ../src/ui/dialog/clonetiler.cpp:747
 msgid "Alternate the sign of color changes for each column"
 msgstr "交替每一列的颜色变化量符号"
 
-#: ../src/ui/dialog/clonetiler.cpp:756
+#: ../src/ui/dialog/clonetiler.cpp:755
 msgid "_Trace"
 msgstr "临摹(_T)"
 
-#: ../src/ui/dialog/clonetiler.cpp:762
+#: ../src/ui/dialog/clonetiler.cpp:761
 msgid "Trace the drawing under the clones/sprayed items"
 msgstr "临摹网格下的绘画"
 
-#: ../src/ui/dialog/clonetiler.cpp:766
+#: ../src/ui/dialog/clonetiler.cpp:765
 #, fuzzy
 msgid ""
 "For each clone/sprayed item, pick a value from the drawing in its location "
 "and apply it"
 msgstr "对于每个克隆对象，从绘画中在此位置拾取一个值然后应用到克隆对象"
 
-#: ../src/ui/dialog/clonetiler.cpp:778
+#: ../src/ui/dialog/clonetiler.cpp:777
 msgid "1. Pick from the drawing:"
 msgstr "1. 从绘画中拾取："
 
-#: ../src/ui/dialog/clonetiler.cpp:789
+#: ../src/ui/dialog/clonetiler.cpp:788
 msgid "Pick the visible color and opacity"
 msgstr "拾取可见颜色和不透明度"
 
-#: ../src/ui/dialog/clonetiler.cpp:796
+#: ../src/ui/dialog/clonetiler.cpp:795
 msgid "Pick the total accumulated opacity"
 msgstr "拾取总累加的不透明度"
 
-#: ../src/ui/dialog/clonetiler.cpp:802
+#: ../src/ui/dialog/clonetiler.cpp:801
 msgid "R"
 msgstr "红"
 
-#: ../src/ui/dialog/clonetiler.cpp:803
+#: ../src/ui/dialog/clonetiler.cpp:802
 msgid "Pick the Red component of the color"
 msgstr "拾取颜色的红色组分"
 
-#: ../src/ui/dialog/clonetiler.cpp:809
+#: ../src/ui/dialog/clonetiler.cpp:808
 msgid "G"
 msgstr "绿"
 
-#: ../src/ui/dialog/clonetiler.cpp:810
+#: ../src/ui/dialog/clonetiler.cpp:809
 msgid "Pick the Green component of the color"
 msgstr "拾取颜色的绿色组分"
 
-#: ../src/ui/dialog/clonetiler.cpp:816
+#: ../src/ui/dialog/clonetiler.cpp:815
 msgid "B"
 msgstr "蓝"
 
-#: ../src/ui/dialog/clonetiler.cpp:817
+#: ../src/ui/dialog/clonetiler.cpp:816
 msgid "Pick the Blue component of the color"
 msgstr "拾取颜色的蓝色组分"
 
-#: ../src/ui/dialog/clonetiler.cpp:823
+#: ../src/ui/dialog/clonetiler.cpp:822
 msgctxt "Clonetiler color hue"
 msgid "H"
 msgstr "色"
 
-#: ../src/ui/dialog/clonetiler.cpp:824
+#: ../src/ui/dialog/clonetiler.cpp:823
 msgid "Pick the hue of the color"
 msgstr "拾取颜色的色调"
 
-#: ../src/ui/dialog/clonetiler.cpp:830
+#: ../src/ui/dialog/clonetiler.cpp:829
 msgctxt "Clonetiler color saturation"
 msgid "S"
 msgstr "饱"
 
-#: ../src/ui/dialog/clonetiler.cpp:831
+#: ../src/ui/dialog/clonetiler.cpp:830
 msgid "Pick the saturation of the color"
 msgstr "拾取颜色的饱和度"
 
-#: ../src/ui/dialog/clonetiler.cpp:837
+#: ../src/ui/dialog/clonetiler.cpp:836
 msgctxt "Clonetiler color lightness"
 msgid "L"
 msgstr "亮"
 
-#: ../src/ui/dialog/clonetiler.cpp:838
+#: ../src/ui/dialog/clonetiler.cpp:837
 msgid "Pick the lightness of the color"
 msgstr "拾取颜色的亮度"
 
-#: ../src/ui/dialog/clonetiler.cpp:847
+#: ../src/ui/dialog/clonetiler.cpp:846
 msgid "2. Tweak the picked value:"
 msgstr "2. 调整拾取的值："
 
-#: ../src/ui/dialog/clonetiler.cpp:858
+#: ../src/ui/dialog/clonetiler.cpp:857
 msgid "Gamma-correct:"
 msgstr "伽马校正："
 
-#: ../src/ui/dialog/clonetiler.cpp:862
+#: ../src/ui/dialog/clonetiler.cpp:861
 msgid "Shift the mid-range of the picked value upwards (>0) or downwards (<0)"
 msgstr "向上 (>0) 或者向下 (<0) 移动拾取值的中间范围"
 
-#: ../src/ui/dialog/clonetiler.cpp:869
+#: ../src/ui/dialog/clonetiler.cpp:868
 msgid "Randomize:"
 msgstr "随机："
 
-#: ../src/ui/dialog/clonetiler.cpp:873
+#: ../src/ui/dialog/clonetiler.cpp:872
 msgid "Randomize the picked value by this percentage"
 msgstr "按照这个百分比随机化拾取的颜色"
 
-#: ../src/ui/dialog/clonetiler.cpp:880
+#: ../src/ui/dialog/clonetiler.cpp:879
 msgid "Invert:"
 msgstr "反转："
 
-#: ../src/ui/dialog/clonetiler.cpp:884
+#: ../src/ui/dialog/clonetiler.cpp:883
 msgid "Invert the picked value"
 msgstr "反转拾取值"
 
-#: ../src/ui/dialog/clonetiler.cpp:890
+#: ../src/ui/dialog/clonetiler.cpp:889
 msgid "3. Apply the value to the clones':"
 msgstr "3. 应用数值到克隆的对象："
 
-#: ../src/ui/dialog/clonetiler.cpp:899
+#: ../src/ui/dialog/clonetiler.cpp:898
 msgid "Presence"
 msgstr "外观"
 
-#: ../src/ui/dialog/clonetiler.cpp:902
+#: ../src/ui/dialog/clonetiler.cpp:901
 msgid ""
 "Each clone is created with the probability determined by the picked value in "
 "that point"
 msgstr "每一个克隆对象的创建可能性由拾取值得那个点的值决定"
 
-#: ../src/ui/dialog/clonetiler.cpp:908
+#: ../src/ui/dialog/clonetiler.cpp:907
 msgid "Size"
 msgstr "尺寸"
 
-#: ../src/ui/dialog/clonetiler.cpp:911
+#: ../src/ui/dialog/clonetiler.cpp:910
 msgid "Each clone's size is determined by the picked value in that point"
 msgstr "每一个克隆对象的大小由拾取值得那个点的值决定"
 
-#: ../src/ui/dialog/clonetiler.cpp:920
+#: ../src/ui/dialog/clonetiler.cpp:919
 msgid ""
 "Each clone is painted by the picked color (the original must have unset fill "
 "or stroke)"
 msgstr "每一个克隆对象通过拾取的颜色绘制(原始对象没有设置填充或者笔刷属性)"
 
-#: ../src/ui/dialog/clonetiler.cpp:929
+#: ../src/ui/dialog/clonetiler.cpp:928
 msgid "Each clone's opacity is determined by the picked value in that point"
 msgstr "每一个克隆对象的不透明度由拾取值得那个点的值决定"
 
-#: ../src/ui/dialog/clonetiler.cpp:943
+#: ../src/ui/dialog/clonetiler.cpp:942
 msgid "Apply to tiled clones:"
 msgstr "应用到平铺克隆："
 
-#: ../src/ui/dialog/clonetiler.cpp:964
+#: ../src/ui/dialog/clonetiler.cpp:963
 msgid "How many rows in the tiling"
 msgstr "平铺里有多少行"
 
-#: ../src/ui/dialog/clonetiler.cpp:984
+#: ../src/ui/dialog/clonetiler.cpp:983
 msgid "How many columns in the tiling"
 msgstr "平铺里有多少列"
 
-#: ../src/ui/dialog/clonetiler.cpp:1013
+#: ../src/ui/dialog/clonetiler.cpp:1012
 msgid "Width of the rectangle to be filled"
 msgstr "被填充矩形的宽度"
 
-#: ../src/ui/dialog/clonetiler.cpp:1036
+#: ../src/ui/dialog/clonetiler.cpp:1035
 msgid "Height of the rectangle to be filled"
 msgstr "被填充矩形的高度"
 
-#: ../src/ui/dialog/clonetiler.cpp:1051
+#: ../src/ui/dialog/clonetiler.cpp:1050
 msgid "Rows, columns: "
 msgstr "行，列："
 
-#: ../src/ui/dialog/clonetiler.cpp:1052
+#: ../src/ui/dialog/clonetiler.cpp:1051
 msgid "Create the specified number of rows and columns"
 msgstr "创建指定数目的行和列"
 
-#: ../src/ui/dialog/clonetiler.cpp:1061
+#: ../src/ui/dialog/clonetiler.cpp:1060
 msgid "Width, height: "
 msgstr "宽，高："
 
-#: ../src/ui/dialog/clonetiler.cpp:1062
+#: ../src/ui/dialog/clonetiler.cpp:1061
 msgid "Fill the specified width and height with the tiling"
 msgstr "使用平铺填充指定的宽度和高度"
 
-#: ../src/ui/dialog/clonetiler.cpp:1078
+#: ../src/ui/dialog/clonetiler.cpp:1077
 msgid "Use saved size and position of the tile"
 msgstr "使用保存下来的平铺的尺寸和位置"
 
-#: ../src/ui/dialog/clonetiler.cpp:1081
+#: ../src/ui/dialog/clonetiler.cpp:1080
 msgid ""
 "Pretend that the size and position of the tile are the same as the last time "
 "you tiled it (if any), instead of using the current size"
 msgstr "假装平铺的尺寸和位置与上次平铺的一样(如果有的话)，而非当前使用的尺寸"
 
-#: ../src/ui/dialog/clonetiler.cpp:1107
+#: ../src/ui/dialog/clonetiler.cpp:1106
 msgid " <b>_Create</b> "
 msgstr " <b>创建(_C)</b> "
 
-#: ../src/ui/dialog/clonetiler.cpp:1109
+#: ../src/ui/dialog/clonetiler.cpp:1108
 msgid "Create and tile the clones of the selection"
 msgstr "创建并平铺选择区的克隆"
 
@@ -15691,90 +15700,90 @@ msgstr "创建并平铺选择区的克隆"
 #. diagrams on the left in the following screenshot:
 #. http://www.inkscape.org/screenshots/gallery/inkscape-0.42-CVS-tiles-unclump.png
 #. So unclumping is the process of spreading a number of objects out more evenly.
-#: ../src/ui/dialog/clonetiler.cpp:1125
+#: ../src/ui/dialog/clonetiler.cpp:1124
 msgid " _Unclump "
 msgstr " 解散(_U) "
 
-#: ../src/ui/dialog/clonetiler.cpp:1126
+#: ../src/ui/dialog/clonetiler.cpp:1125
 msgid "Spread out clones to reduce clumping; can be applied repeatedly"
 msgstr "散开克隆以减少组合; 可以重复应用"
 
-#: ../src/ui/dialog/clonetiler.cpp:1132
+#: ../src/ui/dialog/clonetiler.cpp:1131
 msgid " Re_move "
 msgstr " 去除(_M) "
 
-#: ../src/ui/dialog/clonetiler.cpp:1133
+#: ../src/ui/dialog/clonetiler.cpp:1132
 msgid "Remove existing tiled clones of the selected object (siblings only)"
 msgstr "去除选择的对象的已存在平铺克隆(只有兄弟对象)"
 
-#: ../src/ui/dialog/clonetiler.cpp:1148
+#: ../src/ui/dialog/clonetiler.cpp:1147
 msgid " R_eset "
 msgstr " 重置(_E) "
 
 #. TRANSLATORS: "change" is a noun here
-#: ../src/ui/dialog/clonetiler.cpp:1150
+#: ../src/ui/dialog/clonetiler.cpp:1149
 msgid ""
 "Reset all shifts, scales, rotates, opacity and color changes in the dialog "
 "to zero"
 msgstr "重置对话框中所有偏移、缩放、旋转、不透明度和颜色为零"
 
-#: ../src/ui/dialog/clonetiler.cpp:1210
+#: ../src/ui/dialog/clonetiler.cpp:1209
 msgid "<small>Nothing selected.</small>"
 msgstr "<small>未选择任何内容。</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:1216
+#: ../src/ui/dialog/clonetiler.cpp:1215
 msgid "<small>More than one object selected.</small>"
 msgstr "<b>超过一个对象已选。</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:1223
+#: ../src/ui/dialog/clonetiler.cpp:1222
 #, c-format
 msgid "<small>Object has <b>%d</b> tiled clones.</small>"
 msgstr "<small>对象有<b>%d</b>个平铺克隆。</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:1228
+#: ../src/ui/dialog/clonetiler.cpp:1227
 msgid "<small>Object has no tiled clones.</small>"
 msgstr "<small>对象没有平铺克隆。</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:1945
+#: ../src/ui/dialog/clonetiler.cpp:1944
 msgid "Select <b>one object</b> whose tiled clones to unclump."
 msgstr "选择一个<b>对象</b>，解散其平铺克隆。"
 
-#: ../src/ui/dialog/clonetiler.cpp:1965
+#: ../src/ui/dialog/clonetiler.cpp:1964
 msgid "Unclump tiled clones"
 msgstr "解散平铺克隆"
 
-#: ../src/ui/dialog/clonetiler.cpp:1994
+#: ../src/ui/dialog/clonetiler.cpp:1993
 msgid "Select <b>one object</b> whose tiled clones to remove."
 msgstr "选择一个<b>对象</b>，去除其平铺克隆。"
 
-#: ../src/ui/dialog/clonetiler.cpp:2017
+#: ../src/ui/dialog/clonetiler.cpp:2016
 msgid "Delete tiled clones"
 msgstr "删除平铺克隆"
 
-#: ../src/ui/dialog/clonetiler.cpp:2070
+#: ../src/ui/dialog/clonetiler.cpp:2069
 msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
 msgstr "如果要克隆几个对象，先<b>组合</b>然后再<b>克隆群组</b>。"
 
 #. set statusbar text
-#: ../src/ui/dialog/clonetiler.cpp:2078
+#: ../src/ui/dialog/clonetiler.cpp:2077
 msgid "<small>Creating tiled clones...</small>"
 msgstr "<small>创建平铺克隆...</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:2494
+#: ../src/ui/dialog/clonetiler.cpp:2493
 msgid "Create tiled clones"
 msgstr "创建平铺克隆"
 
-#: ../src/ui/dialog/clonetiler.cpp:2686
+#: ../src/ui/dialog/clonetiler.cpp:2685
 msgid "<small>Per row:</small>"
 msgstr "<small>每行：</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:2700
+#: ../src/ui/dialog/clonetiler.cpp:2699
 msgid "<small>Per column:</small>"
 msgstr "<small>每列：</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:2708
+#: ../src/ui/dialog/clonetiler.cpp:2707
 msgid "<small>Randomize:</small>"
 msgstr "<small>随机：</small>"
 
@@ -15820,7 +15829,7 @@ msgstr "<b>单击</b>属性编辑。"
 #: ../src/ui/dialog/cssdialog.cpp:156
 #, fuzzy, c-format
 msgid ""
-"Propery <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
+"Property <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
 "commit changes."
 msgstr "已选择属性<b>%s</b>。完成编辑后按 <b>Ctrl+Enter</b> 提交更改."
 
@@ -16108,7 +16117,7 @@ msgstr "移除(_R)"
 msgid "Remove selected grid."
 msgstr "移除选中的网格。"
 
-#: ../src/ui/dialog/document-properties.cpp:151 ../src/widgets/toolbox.cpp:1410
+#: ../src/ui/dialog/document-properties.cpp:151 ../src/widgets/toolbox.cpp:1471
 msgid "Guides"
 msgstr "参考线"
 
@@ -16309,65 +16318,65 @@ msgstr "移除网格"
 msgid "Changed default display unit"
 msgstr "已更改默认显示单位"
 
-#: ../src/ui/dialog/export.cpp:118 ../src/verbs.cpp:3049
+#: ../src/ui/dialog/export.cpp:117 ../src/verbs.cpp:3049
 msgid "_Page"
 msgstr "页面(_P)"
 
-#: ../src/ui/dialog/export.cpp:118 ../src/verbs.cpp:3053
+#: ../src/ui/dialog/export.cpp:117 ../src/verbs.cpp:3053
 msgid "_Drawing"
 msgstr "绘图(_D)"
 
-#: ../src/ui/dialog/export.cpp:118 ../src/verbs.cpp:3055
+#: ../src/ui/dialog/export.cpp:117 ../src/verbs.cpp:3055
 msgid "_Selection"
 msgstr "选区(_S)"
 
-#: ../src/ui/dialog/export.cpp:118
+#: ../src/ui/dialog/export.cpp:117
 msgid "_Custom"
 msgstr "自定义(_C)"
 
-#: ../src/ui/dialog/export.cpp:136 ../src/ui/toolbar/measure-toolbar.cpp:304
+#: ../src/ui/dialog/export.cpp:135 ../src/ui/toolbar/measure-toolbar.cpp:304
 #: ../src/ui/toolbar/measure-toolbar.cpp:312
 #: ../share/extensions/render_gears.inx.h:6
 msgid "Units:"
 msgstr "单位:"
 
-#: ../src/ui/dialog/export.cpp:138
+#: ../src/ui/dialog/export.cpp:137
 msgid "_Export As..."
 msgstr "导出为(_E)..."
 
-#: ../src/ui/dialog/export.cpp:141
+#: ../src/ui/dialog/export.cpp:140
 msgid "B_atch export all selected objects"
 msgstr "批次导出所有选择的对象(_A)"
 
-#: ../src/ui/dialog/export.cpp:142
+#: ../src/ui/dialog/export.cpp:141
 #, fuzzy
 msgid "Use interlacing"
 msgstr "使用抗锯齿"
 
-#: ../src/ui/dialog/export.cpp:143
+#: ../src/ui/dialog/export.cpp:142
 #, fuzzy
 msgid "Bit depth"
 msgstr "Z 深度："
 
-#: ../src/ui/dialog/export.cpp:145
+#: ../src/ui/dialog/export.cpp:144
 #, fuzzy
 msgid "Compression"
 msgstr "精度"
 
-#: ../src/ui/dialog/export.cpp:147
+#: ../src/ui/dialog/export.cpp:146
 msgid "pHYs dpi"
 msgstr ""
 
-#: ../src/ui/dialog/export.cpp:152
+#: ../src/ui/dialog/export.cpp:151
 #, fuzzy
 msgid "Hide all except selected"
 msgstr "隐藏所有未被选取的对象(_L)"
 
-#: ../src/ui/dialog/export.cpp:153
+#: ../src/ui/dialog/export.cpp:152
 msgid "Close when complete"
 msgstr "完成时关闭"
 
-#: ../src/ui/dialog/export.cpp:166
+#: ../src/ui/dialog/export.cpp:165
 msgid ""
 "Export each selected object into its own PNG file, using export hints if any "
 "(caution, overwrites without asking!)"
@@ -16375,154 +16384,154 @@ msgstr ""
 "将选定的对象根据导出设置逐个导出到单独的PNG文件，如果有导出设置的话(注意：覆"
 "盖文件时没有提示！)"
 
-#: ../src/ui/dialog/export.cpp:168
+#: ../src/ui/dialog/export.cpp:167
 msgid "In the exported image, hide all objects except those that are selected"
 msgstr "在导出的图片中，没有选中的对象将隐藏"
 
-#: ../src/ui/dialog/export.cpp:170
+#: ../src/ui/dialog/export.cpp:169
 msgid ""
 "Enables ADAM7 interlacing for PNG output. This results in slightly heavier "
 "images, but big images will look better sooner when loading the file"
 msgstr ""
 
-#: ../src/ui/dialog/export.cpp:172
+#: ../src/ui/dialog/export.cpp:171
 msgid "Once the export completes, close this dialog"
 msgstr "一旦导出完成，就关闭此对话窗"
 
-#: ../src/ui/dialog/export.cpp:179
+#: ../src/ui/dialog/export.cpp:178
 msgid "<b>Export area</b>"
 msgstr "<b>导出范围</b>"
 
-#: ../src/ui/dialog/export.cpp:212
+#: ../src/ui/dialog/export.cpp:211
 msgid "_x0:"
 msgstr "_x0："
 
-#: ../src/ui/dialog/export.cpp:216
+#: ../src/ui/dialog/export.cpp:215
 msgid "x_1:"
 msgstr "x_1："
 
-#: ../src/ui/dialog/export.cpp:220
+#: ../src/ui/dialog/export.cpp:219
 msgid "Wid_th:"
 msgstr "宽度(_T)："
 
-#: ../src/ui/dialog/export.cpp:224
+#: ../src/ui/dialog/export.cpp:223
 msgid "_y0:"
 msgstr "_y0："
 
-#: ../src/ui/dialog/export.cpp:228
+#: ../src/ui/dialog/export.cpp:227
 msgid "y_1:"
 msgstr "y_1："
 
-#: ../src/ui/dialog/export.cpp:232
+#: ../src/ui/dialog/export.cpp:231
 msgid "Hei_ght:"
 msgstr "高度(_G)："
 
-#: ../src/ui/dialog/export.cpp:247
+#: ../src/ui/dialog/export.cpp:246
 msgid "<b>Image size</b>"
 msgstr "<b>图片尺寸</b>"
 
-#: ../src/ui/dialog/export.cpp:259 ../src/ui/dialog/export.cpp:270
+#: ../src/ui/dialog/export.cpp:258 ../src/ui/dialog/export.cpp:269
 msgid "pixels at"
 msgstr "像素"
 
-#: ../src/ui/dialog/export.cpp:265
+#: ../src/ui/dialog/export.cpp:264
 msgid "dp_i"
 msgstr "dp_i"
 
-#: ../src/ui/dialog/export.cpp:270 ../src/ui/dialog/transformation.cpp:70
+#: ../src/ui/dialog/export.cpp:269 ../src/ui/dialog/transformation.cpp:70
 #: ../src/ui/widget/page-sizer.cpp:49
 msgid "_Height:"
 msgstr "高度(_H)："
 
-#: ../src/ui/dialog/export.cpp:278
+#: ../src/ui/dialog/export.cpp:277
 #: ../src/ui/dialog/inkscape-preferences.cpp:1824
 #: ../src/ui/dialog/inkscape-preferences.cpp:1828
 #: ../src/ui/dialog/inkscape-preferences.cpp:1862
 msgid "dpi"
 msgstr "dpi"
 
-#: ../src/ui/dialog/export.cpp:286
+#: ../src/ui/dialog/export.cpp:285
 msgid "<b>_Filename</b>"
 msgstr "<b>文件名(_F)</b>"
 
-#: ../src/ui/dialog/export.cpp:324
+#: ../src/ui/dialog/export.cpp:323
 msgid "_Export"
 msgstr "导出(_E)"
 
-#: ../src/ui/dialog/export.cpp:326
+#: ../src/ui/dialog/export.cpp:325
 msgid "Export the bitmap file with these settings"
 msgstr "使用这些设置导出位图文件"
 
 #. Advanced
-#: ../src/ui/dialog/export.cpp:332
+#: ../src/ui/dialog/export.cpp:331
 msgid "Advanced"
 msgstr ""
 
-#: ../src/ui/dialog/export.cpp:346
+#: ../src/ui/dialog/export.cpp:345
 msgid ""
 "Will force-set the physical dpi for the png file. Set this to 72 if you're "
 "planning to work on your png with Photoshop"
 msgstr ""
 
-#: ../src/ui/dialog/export.cpp:486
+#: ../src/ui/dialog/export.cpp:485
 msgid "bitmap"
 msgstr "位图"
 
-#: ../src/ui/dialog/export.cpp:593
+#: ../src/ui/dialog/export.cpp:592
 #, c-format
 msgid "B_atch export %d selected object"
 msgid_plural "B_atch export %d selected objects"
 msgstr[0] "批次导出 %d 选择的对象(_A)"
 
-#: ../src/ui/dialog/export.cpp:909
+#: ../src/ui/dialog/export.cpp:908
 msgid "Export in progress"
 msgstr "正在导出"
 
-#: ../src/ui/dialog/export.cpp:1011
+#: ../src/ui/dialog/export.cpp:1010
 msgid "No items selected."
 msgstr "没有选中项。"
 
-#: ../src/ui/dialog/export.cpp:1015 ../src/ui/dialog/export.cpp:1017
+#: ../src/ui/dialog/export.cpp:1014 ../src/ui/dialog/export.cpp:1016
 msgid "Exporting %1 files"
 msgstr "正在导出 %1 个文件"
 
-#: ../src/ui/dialog/export.cpp:1059 ../src/ui/dialog/export.cpp:1061
+#: ../src/ui/dialog/export.cpp:1058 ../src/ui/dialog/export.cpp:1060
 #, c-format
 msgid "Exporting file <b>%s</b>..."
 msgstr "正在导出文件 <b>%s</b>..."
 
-#: ../src/ui/dialog/export.cpp:1072 ../src/ui/dialog/export.cpp:1167
+#: ../src/ui/dialog/export.cpp:1071 ../src/ui/dialog/export.cpp:1166
 #, c-format
 msgid "Could not export to filename %s.\n"
 msgstr "不能导出到文件 %s。\n"
 
-#: ../src/ui/dialog/export.cpp:1075
+#: ../src/ui/dialog/export.cpp:1074
 #, c-format
 msgid "Could not export to filename <b>%s</b>."
 msgstr "无法导出为文件名 <b>%s</b>。"
 
-#: ../src/ui/dialog/export.cpp:1090
+#: ../src/ui/dialog/export.cpp:1089
 #, c-format
 msgid "Successfully exported <b>%d</b> files from <b>%d</b> selected items."
 msgstr "已成功从 <b>%d</b> 个选中项导出 <b>%d</b> 个文件。"
 
-#: ../src/ui/dialog/export.cpp:1101
+#: ../src/ui/dialog/export.cpp:1100
 msgid "You have to enter a filename."
 msgstr "您必须输入文件名。"
 
-#: ../src/ui/dialog/export.cpp:1102
+#: ../src/ui/dialog/export.cpp:1101
 msgid "You have to enter a filename"
 msgstr "必须输入文件名"
 
-#: ../src/ui/dialog/export.cpp:1117
+#: ../src/ui/dialog/export.cpp:1116
 msgid "The chosen area to be exported is invalid."
 msgstr "要导出的选择区域无效。"
 
-#: ../src/ui/dialog/export.cpp:1118
+#: ../src/ui/dialog/export.cpp:1117
 msgid "The chosen area to be exported is invalid"
 msgstr "要导出的选择区域无效"
 
-#: ../src/ui/dialog/export.cpp:1133
+#: ../src/ui/dialog/export.cpp:1132
 #, c-format
 msgid "Directory %s does not exist or is not a directory.\n"
 msgstr ""
@@ -16530,16 +16539,16 @@ msgstr ""
 "\n"
 
 #. TRANSLATORS: %1 will be the filename, %2 the width, and %3 the height of the image
-#: ../src/ui/dialog/export.cpp:1147 ../src/ui/dialog/export.cpp:1149
+#: ../src/ui/dialog/export.cpp:1146 ../src/ui/dialog/export.cpp:1148
 msgid "Exporting %1 (%2 x %3)"
 msgstr "正在导出 %1 (%2 x %3)"
 
-#: ../src/ui/dialog/export.cpp:1178
+#: ../src/ui/dialog/export.cpp:1177
 #, c-format
 msgid "Drawing exported to <b>%s</b>."
 msgstr "绘图已导出成 <b>%s</b>。"
 
-#: ../src/ui/dialog/export.cpp:1182
+#: ../src/ui/dialog/export.cpp:1181
 msgid "Export aborted."
 msgstr "导出已中止。"
 
@@ -17400,309 +17409,309 @@ msgstr "再制滤镜基元"
 msgid "Set filter primitive attribute"
 msgstr "设置滤镜基元属性"
 
-#: ../src/ui/dialog/find.cpp:63
+#: ../src/ui/dialog/find.cpp:61
 msgid "F_ind:"
 msgstr "查找(_F)："
 
-#: ../src/ui/dialog/find.cpp:63
+#: ../src/ui/dialog/find.cpp:61
 msgid "Find objects by their content or properties (exact or partial match)"
 msgstr "依照内容或属性查找对象 (完整匹配或部分匹配)"
 
-#: ../src/ui/dialog/find.cpp:64
+#: ../src/ui/dialog/find.cpp:62
 msgid "R_eplace:"
 msgstr "替换(_E)："
 
-#: ../src/ui/dialog/find.cpp:64
+#: ../src/ui/dialog/find.cpp:62
 msgid "Replace match with this value"
 msgstr "以此数值替换匹配的项目"
 
-#: ../src/ui/dialog/find.cpp:66
+#: ../src/ui/dialog/find.cpp:64
 msgid "_All"
 msgstr "全部(_A)"
 
-#: ../src/ui/dialog/find.cpp:67
+#: ../src/ui/dialog/find.cpp:65
 msgid "Current _layer"
 msgstr "当前图层(_L)"
 
-#: ../src/ui/dialog/find.cpp:68
+#: ../src/ui/dialog/find.cpp:66
 msgid "Sele_ction"
 msgstr "选择范围(_C)"
 
-#: ../src/ui/dialog/find.cpp:69 ../src/ui/dialog/text-edit.cpp:68
+#: ../src/ui/dialog/find.cpp:67 ../src/ui/dialog/text-edit.cpp:66
 #: ../share/ui/menus.xml.h:18
 msgid "_Text"
 msgstr "文字(_T)"
 
-#: ../src/ui/dialog/find.cpp:70
+#: ../src/ui/dialog/find.cpp:68
 msgid "_Properties"
 msgstr "属性(_P)"
 
-#: ../src/ui/dialog/find.cpp:72
+#: ../src/ui/dialog/find.cpp:70
 msgid "Search in"
 msgstr "搜索于"
 
-#: ../src/ui/dialog/find.cpp:73
+#: ../src/ui/dialog/find.cpp:71
 msgid "Scope"
 msgstr "范围"
 
-#: ../src/ui/dialog/find.cpp:75
+#: ../src/ui/dialog/find.cpp:73
 msgid "Case sensiti_ve"
 msgstr "区分大小写(_V)"
 
-#: ../src/ui/dialog/find.cpp:76
+#: ../src/ui/dialog/find.cpp:74
 msgid "E_xact match"
 msgstr "完整匹配(_X)"
 
-#: ../src/ui/dialog/find.cpp:77
+#: ../src/ui/dialog/find.cpp:75
 msgid "Include _hidden"
 msgstr "包含隐藏(_H)"
 
-#: ../src/ui/dialog/find.cpp:78
+#: ../src/ui/dialog/find.cpp:76
 msgid "Include loc_ked"
 msgstr "包含锁定对象(_K)"
 
-#: ../src/ui/dialog/find.cpp:82
+#: ../src/ui/dialog/find.cpp:80
 msgid "_ID"
 msgstr "_ID"
 
-#: ../src/ui/dialog/find.cpp:83
+#: ../src/ui/dialog/find.cpp:81
 msgid "Attribute _name"
 msgstr "属性名称(_N)"
 
-#: ../src/ui/dialog/find.cpp:84
+#: ../src/ui/dialog/find.cpp:82
 msgid "Attri_bute value"
 msgstr "属性值(_B)"
 
-#: ../src/ui/dialog/find.cpp:85
+#: ../src/ui/dialog/find.cpp:83
 msgid "_Style"
 msgstr "样式(_S)"
 
-#: ../src/ui/dialog/find.cpp:86
+#: ../src/ui/dialog/find.cpp:84
 msgid "F_ont"
 msgstr "字体(_O)"
 
-#: ../src/ui/dialog/find.cpp:87
+#: ../src/ui/dialog/find.cpp:85
 msgid "Properties"
 msgstr "属性"
 
-#: ../src/ui/dialog/find.cpp:89
+#: ../src/ui/dialog/find.cpp:87
 msgid "All types"
 msgstr "所有类型"
 
-#: ../src/ui/dialog/find.cpp:90
+#: ../src/ui/dialog/find.cpp:88
 msgid "Rectangles"
 msgstr "矩形"
 
-#: ../src/ui/dialog/find.cpp:91
+#: ../src/ui/dialog/find.cpp:89
 msgid "Ellipses"
 msgstr "椭圆"
 
-#: ../src/ui/dialog/find.cpp:92
+#: ../src/ui/dialog/find.cpp:90
 msgid "Stars"
 msgstr "星形"
 
-#: ../src/ui/dialog/find.cpp:93
+#: ../src/ui/dialog/find.cpp:91
 msgid "Spirals"
 msgstr "螺旋"
 
-#: ../src/ui/dialog/find.cpp:94 ../src/widgets/toolbox.cpp:1311
+#: ../src/ui/dialog/find.cpp:92 ../src/widgets/toolbox.cpp:1372
 msgid "Paths"
 msgstr "路径"
 
-#: ../src/ui/dialog/find.cpp:95
+#: ../src/ui/dialog/find.cpp:93
 msgid "Texts"
 msgstr "文字"
 
-#: ../src/ui/dialog/find.cpp:96
+#: ../src/ui/dialog/find.cpp:94
 msgid "Groups"
 msgstr "组"
 
 #. TRANSLATORS: "Clones" is a noun indicating type of object to find
-#: ../src/ui/dialog/find.cpp:99
+#: ../src/ui/dialog/find.cpp:97
 msgctxt "Find dialog"
 msgid "Clones"
 msgstr "克隆"
 
-#: ../src/ui/dialog/find.cpp:101 ../share/extensions/embedimage.inx.h:3
+#: ../src/ui/dialog/find.cpp:99 ../share/extensions/embedimage.inx.h:3
 #: ../share/extensions/extractimage.inx.h:6
 #: ../share/extensions/image_attributes.inx.h:29
 msgid "Images"
 msgstr "图像"
 
-#: ../src/ui/dialog/find.cpp:102
+#: ../src/ui/dialog/find.cpp:100
 msgid "Offsets"
 msgstr "偏移"
 
-#: ../src/ui/dialog/find.cpp:103
+#: ../src/ui/dialog/find.cpp:101
 msgid "Object types"
 msgstr "对象类型"
 
-#: ../src/ui/dialog/find.cpp:106
+#: ../src/ui/dialog/find.cpp:104
 msgid "_Find"
 msgstr "查找(_F)"
 
-#: ../src/ui/dialog/find.cpp:107
+#: ../src/ui/dialog/find.cpp:105
 msgid "_Replace All"
 msgstr "全部替换(_R)"
 
-#: ../src/ui/dialog/find.cpp:115
+#: ../src/ui/dialog/find.cpp:113
 msgid "Select all objects matching the selection criteria"
 msgstr "选取全部匹配搜索条件的对象"
 
-#: ../src/ui/dialog/find.cpp:117
+#: ../src/ui/dialog/find.cpp:115
 msgid "Replace all matches"
 msgstr "替换所有匹配的项目"
 
-#: ../src/ui/dialog/find.cpp:119
+#: ../src/ui/dialog/find.cpp:117
 msgid "Search in all layers"
 msgstr "搜索所有图层"
 
-#: ../src/ui/dialog/find.cpp:121
+#: ../src/ui/dialog/find.cpp:119
 msgid "Limit search to the current layer"
 msgstr "搜索限制在当前图层"
 
-#: ../src/ui/dialog/find.cpp:123
+#: ../src/ui/dialog/find.cpp:121
 msgid "Limit search to the current selection"
 msgstr "搜索限制在当前选区"
 
-#: ../src/ui/dialog/find.cpp:125
+#: ../src/ui/dialog/find.cpp:123
 msgid "Search in text objects"
 msgstr "搜索文本对象"
 
-#: ../src/ui/dialog/find.cpp:127
+#: ../src/ui/dialog/find.cpp:125
 msgid "Search in object properties, styles, attributes and IDs"
 msgstr "搜索对象属性、样式、属性值和 ID"
 
-#: ../src/ui/dialog/find.cpp:129
+#: ../src/ui/dialog/find.cpp:127
 msgid "Match upper/lower case"
 msgstr "匹配大小写"
 
-#: ../src/ui/dialog/find.cpp:132
+#: ../src/ui/dialog/find.cpp:130
 msgid "Match whole objects only"
 msgstr "仅完整匹配的对象"
 
-#: ../src/ui/dialog/find.cpp:135
+#: ../src/ui/dialog/find.cpp:133
 msgid "Include hidden objects in search"
 msgstr "搜索包含隐藏对象"
 
-#: ../src/ui/dialog/find.cpp:138
+#: ../src/ui/dialog/find.cpp:136
 msgid "Include locked objects in search"
 msgstr "搜索包含锁定对象"
 
-#: ../src/ui/dialog/find.cpp:141
+#: ../src/ui/dialog/find.cpp:139
 msgid "Search id name"
 msgstr "搜索识别名称"
 
-#: ../src/ui/dialog/find.cpp:144
+#: ../src/ui/dialog/find.cpp:142
 msgid "Search attribute name"
 msgstr "搜索属性名称"
 
-#: ../src/ui/dialog/find.cpp:147
+#: ../src/ui/dialog/find.cpp:145
 msgid "Search attribute value"
 msgstr "搜索属性值"
 
-#: ../src/ui/dialog/find.cpp:150
+#: ../src/ui/dialog/find.cpp:148
 msgid "Search style"
 msgstr "搜索样式"
 
-#: ../src/ui/dialog/find.cpp:153
+#: ../src/ui/dialog/find.cpp:151
 msgid "Search fonts"
 msgstr "搜索字体"
 
-#: ../src/ui/dialog/find.cpp:156
+#: ../src/ui/dialog/find.cpp:154
 msgid "Search all object types"
 msgstr "搜索所有对象类型"
 
-#: ../src/ui/dialog/find.cpp:159
+#: ../src/ui/dialog/find.cpp:157
 msgid "Search rectangles"
 msgstr "搜索矩形"
 
-#: ../src/ui/dialog/find.cpp:162
+#: ../src/ui/dialog/find.cpp:160
 msgid "Search ellipses, arcs, circles"
 msgstr ""
 "搜索椭圆、弧\n"
 "、圆"
 
-#: ../src/ui/dialog/find.cpp:165
+#: ../src/ui/dialog/find.cpp:163
 msgid "Search stars and polygons"
 msgstr "搜索星形和多边形"
 
-#: ../src/ui/dialog/find.cpp:168
+#: ../src/ui/dialog/find.cpp:166
 msgid "Search spirals"
 msgstr "搜索螺旋"
 
-#: ../src/ui/dialog/find.cpp:171
+#: ../src/ui/dialog/find.cpp:169
 msgid "Search paths, lines, polylines"
 msgstr "搜索路径、线、多边形"
 
-#: ../src/ui/dialog/find.cpp:174
+#: ../src/ui/dialog/find.cpp:172
 msgid "Search text objects"
 msgstr "搜索文字对象"
 
-#: ../src/ui/dialog/find.cpp:177
+#: ../src/ui/dialog/find.cpp:175
 msgid "Search groups"
 msgstr "搜索组"
 
-#: ../src/ui/dialog/find.cpp:180
+#: ../src/ui/dialog/find.cpp:178
 msgid "Search clones"
 msgstr "搜索克隆"
 
-#: ../src/ui/dialog/find.cpp:183
+#: ../src/ui/dialog/find.cpp:181
 msgid "Search images"
 msgstr "搜索图像"
 
-#: ../src/ui/dialog/find.cpp:186
+#: ../src/ui/dialog/find.cpp:184
 msgid "Search offset objects"
 msgstr "搜索偏移对象"
 
-#: ../src/ui/dialog/find.cpp:866
+#: ../src/ui/dialog/find.cpp:864
 msgid "Nothing to replace"
 msgstr "没有可以替换的项目"
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
-#: ../src/ui/dialog/find.cpp:907
+#: ../src/ui/dialog/find.cpp:905
 #, c-format
 msgid "<b>%d</b> object found (out of <b>%d</b>), %s match."
 msgid_plural "<b>%d</b> objects found (out of <b>%d</b>), %s match."
 msgstr[0] "找到 <b>%d</b> 对象 (在 <b>%d</b> 个中), %s 匹配."
 
-#: ../src/ui/dialog/find.cpp:910
+#: ../src/ui/dialog/find.cpp:908
 msgid "exact"
 msgstr "精确"
 
-#: ../src/ui/dialog/find.cpp:910
+#: ../src/ui/dialog/find.cpp:908
 msgid "partial"
 msgstr "部分"
 
 #. TRANSLATORS: "%1" is replaced with the number of matches
-#: ../src/ui/dialog/find.cpp:913
+#: ../src/ui/dialog/find.cpp:911
 msgid "%1 match replaced"
 msgid_plural "%1 matches replaced"
 msgstr[0] "已替换 %1 个匹配项目"
 
 #. TRANSLATORS: "%1" is replaced with the number of matches
-#: ../src/ui/dialog/find.cpp:917
+#: ../src/ui/dialog/find.cpp:915
 msgid "%1 object found"
 msgid_plural "%1 objects found"
 msgstr[0] "找到 %1 个对象"
 
-#: ../src/ui/dialog/find.cpp:931
+#: ../src/ui/dialog/find.cpp:929
 msgid "Replace text or property"
 msgstr "替换文本或属性"
 
-#: ../src/ui/dialog/find.cpp:935
+#: ../src/ui/dialog/find.cpp:933
 msgid "Nothing found"
 msgstr "找不到"
 
-#: ../src/ui/dialog/find.cpp:940
+#: ../src/ui/dialog/find.cpp:938
 msgid "No objects found"
 msgstr "没有发现对象"
 
-#: ../src/ui/dialog/find.cpp:961
+#: ../src/ui/dialog/find.cpp:959
 msgid "Select an object type"
 msgstr "选择一种对象类型"
 
-#: ../src/ui/dialog/find.cpp:979
+#: ../src/ui/dialog/find.cpp:977
 msgid "Select a property"
 msgstr "选择一种属性"
 
@@ -21468,7 +21477,6 @@ msgid "Default image resolution (in dots per inch) in the Export dialog"
 msgstr "导出对话框里的默认位图分辨率(按 dpi 计)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1826
-#: ../src/ui/dialog/xml-tree.cpp:743
 msgid "Create"
 msgstr "创建"
 
@@ -21688,193 +21696,198 @@ msgid "System info"
 msgstr "系统信息"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2303
+#, fuzzy
+msgid "Reset Preferences"
+msgstr "文字首选项"
+
+#: ../src/ui/dialog/inkscape-preferences.cpp:2306
 msgid "User preferences: "
 msgstr "用户首选项："
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2304
+#: ../src/ui/dialog/inkscape-preferences.cpp:2307
 #, fuzzy
 msgid "Location of the user’s preferences file"
 msgstr "用户首选项文件的位置"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2306
+#: ../src/ui/dialog/inkscape-preferences.cpp:2309
 #, fuzzy
 msgid "Open preferences folder"
 msgstr "打开节点工具的首选项"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2307
+#: ../src/ui/dialog/inkscape-preferences.cpp:2310
 msgid "User config: "
 msgstr "用户设置："
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2307
+#: ../src/ui/dialog/inkscape-preferences.cpp:2310
 msgid "Location of users configuration"
 msgstr "用户配置的位置"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2310
+#: ../src/ui/dialog/inkscape-preferences.cpp:2313
 #, fuzzy
 msgid "Open extensions folder"
 msgstr "用户扩展："
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2311
+#: ../src/ui/dialog/inkscape-preferences.cpp:2314
 msgid "User extensions: "
 msgstr "用户扩展："
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2312
+#: ../src/ui/dialog/inkscape-preferences.cpp:2315
 #, fuzzy
 msgid "Location of the user’s extensions"
 msgstr "用户扩展的位置"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2314
+#: ../src/ui/dialog/inkscape-preferences.cpp:2317
 msgid "Open themes folder"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2315
+#: ../src/ui/dialog/inkscape-preferences.cpp:2318
 #, fuzzy
 msgid "User themes: "
 msgstr "用户缓存："
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2315
+#: ../src/ui/dialog/inkscape-preferences.cpp:2318
 #, fuzzy
 msgid "Location of the user’s themes"
 msgstr "用户扩展的位置"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2318
+#: ../src/ui/dialog/inkscape-preferences.cpp:2321
 msgid "Open icons folder"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2319
+#: ../src/ui/dialog/inkscape-preferences.cpp:2322
 #, fuzzy
 msgid "User icons: "
 msgstr "用户设置："
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2319
+#: ../src/ui/dialog/inkscape-preferences.cpp:2322
 #, fuzzy
 msgid "Location of the user’s icons"
 msgstr "用户扩展的位置"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2322
+#: ../src/ui/dialog/inkscape-preferences.cpp:2325
 #, fuzzy
 msgid "Open templates folder"
 msgstr "未选择模板"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2323
+#: ../src/ui/dialog/inkscape-preferences.cpp:2326
 #, fuzzy
 msgid "User templates: "
 msgstr "模板(_T)..."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2324
+#: ../src/ui/dialog/inkscape-preferences.cpp:2327
 #, fuzzy
 msgid "Location of the user’s templates"
 msgstr "用户扩展的位置"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2327
+#: ../src/ui/dialog/inkscape-preferences.cpp:2330
 #, fuzzy
 msgid "Open symbols folder"
 msgstr "没有发现对象"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2328
+#: ../src/ui/dialog/inkscape-preferences.cpp:2331
 #, fuzzy
 msgid "User symbols: "
 msgstr "柬埔寨语符号"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2328
+#: ../src/ui/dialog/inkscape-preferences.cpp:2331
 #, fuzzy
 msgid "Location of the user’s symbols"
 msgstr "用户扩展的位置"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2332
+#: ../src/ui/dialog/inkscape-preferences.cpp:2335
 #, fuzzy
 msgid "Open palettes folder"
 msgstr "打开 HPGL 绘图仪文件"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2333
+#: ../src/ui/dialog/inkscape-preferences.cpp:2336
 #, fuzzy
 msgid "User palettes: "
 msgstr "用户扩展："
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2333
+#: ../src/ui/dialog/inkscape-preferences.cpp:2336
 #, fuzzy
 msgid "Location of the user’s palettes"
 msgstr "用户扩展的位置"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2337
+#: ../src/ui/dialog/inkscape-preferences.cpp:2340
 #, fuzzy
 msgid "Open keyboard shortcuts folder"
 msgstr "从文件导入自定义键盘快捷键"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2338
+#: ../src/ui/dialog/inkscape-preferences.cpp:2341
 #, fuzzy
 msgid "User keys: "
 msgstr "用户缓存："
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2339
+#: ../src/ui/dialog/inkscape-preferences.cpp:2342
 #, fuzzy
 msgid "Location of the user’s keyboard mapping files"
 msgstr "用户首选项文件的位置"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2342
+#: ../src/ui/dialog/inkscape-preferences.cpp:2345
 msgid "Open user interface folder"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2343
+#: ../src/ui/dialog/inkscape-preferences.cpp:2346
 #, fuzzy
 msgid "User UI: "
 msgstr "用户缓存："
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2344
+#: ../src/ui/dialog/inkscape-preferences.cpp:2347
 #, fuzzy
 msgid "Location of the user’s user interface description files"
 msgstr "用户首选项文件的位置"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2348
+#: ../src/ui/dialog/inkscape-preferences.cpp:2351
 msgid "User cache: "
 msgstr "用户缓存："
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2348
+#: ../src/ui/dialog/inkscape-preferences.cpp:2351
 #, fuzzy
 msgid "Location of user’s cache"
 msgstr "用户缓存的位置"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2356
+#: ../src/ui/dialog/inkscape-preferences.cpp:2359
 msgid "Temporary files: "
 msgstr "临时文件："
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2356
+#: ../src/ui/dialog/inkscape-preferences.cpp:2359
 msgid "Location of the temporary files used for autosave"
 msgstr "用于自动保存的临时文件的位置"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2360
+#: ../src/ui/dialog/inkscape-preferences.cpp:2363
 msgid "Inkscape data: "
 msgstr "Inkscape 数据："
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2360
+#: ../src/ui/dialog/inkscape-preferences.cpp:2363
 msgid "Location of Inkscape data"
 msgstr "Inkscape 数据的位置"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2364
+#: ../src/ui/dialog/inkscape-preferences.cpp:2367
 msgid "Inkscape extensions: "
 msgstr "Inkscape 扩展："
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2364
+#: ../src/ui/dialog/inkscape-preferences.cpp:2367
 msgid "Location of the Inkscape extensions"
 msgstr "Inkscape 扩展的位置"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2374
+#: ../src/ui/dialog/inkscape-preferences.cpp:2377
 msgid "System data: "
 msgstr "系统数据："
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2374
+#: ../src/ui/dialog/inkscape-preferences.cpp:2377
 msgid "Locations of system data"
 msgstr "系统数据的位置"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2388
+#: ../src/ui/dialog/inkscape-preferences.cpp:2391
 msgid "Icon theme: "
 msgstr "图标主题："
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2388
+#: ../src/ui/dialog/inkscape-preferences.cpp:2391
 msgid "Locations of icon themes"
 msgstr "图标主题的位置"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2390
+#: ../src/ui/dialog/inkscape-preferences.cpp:2393
 msgid "System"
 msgstr "系统"
 
@@ -22789,7 +22802,7 @@ msgid "Reset all settings to defaults"
 msgstr "重置全部设置为默认值"
 
 #. ## The OK button
-#: ../src/ui/dialog/pixelartdialog.cpp:299 ../src/ui/dialog/spellcheck.cpp:73
+#: ../src/ui/dialog/pixelartdialog.cpp:299 ../src/ui/dialog/spellcheck.cpp:72
 #: ../src/ui/dialog/tracedialog.cpp:813
 msgid "_Stop"
 msgstr "停止(_S)"
@@ -22957,73 +22970,73 @@ msgstr "描述："
 msgid "Keywords: "
 msgstr "关键字："
 
-#: ../src/ui/dialog/spellcheck.cpp:68
+#: ../src/ui/dialog/spellcheck.cpp:67
 msgid "_Accept"
 msgstr "接受(_A)"
 
-#: ../src/ui/dialog/spellcheck.cpp:69
+#: ../src/ui/dialog/spellcheck.cpp:68
 msgid "_Ignore once"
 msgstr "忽略一次(_I)"
 
-#: ../src/ui/dialog/spellcheck.cpp:70
+#: ../src/ui/dialog/spellcheck.cpp:69
 msgid "_Ignore"
 msgstr "忽略(_I)"
 
-#: ../src/ui/dialog/spellcheck.cpp:71
+#: ../src/ui/dialog/spellcheck.cpp:70
 msgid "A_dd"
 msgstr "添加(_D)"
 
-#: ../src/ui/dialog/spellcheck.cpp:74
+#: ../src/ui/dialog/spellcheck.cpp:73
 msgid "_Start"
 msgstr "开始(_S)"
 
-#: ../src/ui/dialog/spellcheck.cpp:104
+#: ../src/ui/dialog/spellcheck.cpp:103
 msgid "Suggestions:"
 msgstr "建议："
 
-#: ../src/ui/dialog/spellcheck.cpp:119
+#: ../src/ui/dialog/spellcheck.cpp:118
 msgid "Accept the chosen suggestion"
 msgstr "接受选择的建议"
 
-#: ../src/ui/dialog/spellcheck.cpp:120
+#: ../src/ui/dialog/spellcheck.cpp:119
 msgid "Ignore this word only once"
 msgstr "只忽略该词一次"
 
-#: ../src/ui/dialog/spellcheck.cpp:121
+#: ../src/ui/dialog/spellcheck.cpp:120
 msgid "Ignore this word in this session"
 msgstr "在当前会话中忽略该词"
 
-#: ../src/ui/dialog/spellcheck.cpp:122
+#: ../src/ui/dialog/spellcheck.cpp:121
 msgid "Add this word to the chosen dictionary"
 msgstr "将该词添加到指定词典"
 
-#: ../src/ui/dialog/spellcheck.cpp:136
+#: ../src/ui/dialog/spellcheck.cpp:135
 msgid "Stop the check"
 msgstr "停止检查"
 
-#: ../src/ui/dialog/spellcheck.cpp:137
+#: ../src/ui/dialog/spellcheck.cpp:136
 msgid "Start the check"
 msgstr "开始检查"
 
-#: ../src/ui/dialog/spellcheck.cpp:432
+#: ../src/ui/dialog/spellcheck.cpp:431
 #, c-format
 msgid "<b>Finished</b>, <b>%d</b> words added to dictionary"
 msgstr "<b>完成</b>，<b>%d</b> 个单词已添加到词典"
 
-#: ../src/ui/dialog/spellcheck.cpp:434
+#: ../src/ui/dialog/spellcheck.cpp:433
 msgid "<b>Finished</b>, nothing suspicious found"
 msgstr "<b>完成</b>，未找到可疑项"
 
-#: ../src/ui/dialog/spellcheck.cpp:549
+#: ../src/ui/dialog/spellcheck.cpp:548
 #, c-format
 msgid "Not in dictionary (%s): <b>%s</b>"
 msgstr "不在词典中(%s)：<b>%s</b>"
 
-#: ../src/ui/dialog/spellcheck.cpp:698
+#: ../src/ui/dialog/spellcheck.cpp:697
 msgid "<i>Checking...</i>"
 msgstr "<i>正在检查...</i>"
 
-#: ../src/ui/dialog/spellcheck.cpp:767
+#: ../src/ui/dialog/spellcheck.cpp:766
 msgid "Fix spelling"
 msgstr "修正拼写"
 
@@ -23032,7 +23045,7 @@ msgstr "修正拼写"
 msgid "Edited style element."
 msgstr "您需要选择至少两个对象."
 
-#: ../src/ui/dialog/styledialog.cpp:885 ../src/ui/dialog/xml-tree.cpp:737
+#: ../src/ui/dialog/styledialog.cpp:885
 msgid "Cancel"
 msgstr "取消"
 
@@ -23141,7 +23154,8 @@ msgid "Cap Height:"
 msgstr "大写字高："
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:474
-msgid "I don't know what this does."
+msgid ""
+"The height of a capital letter above the baseline like the letter 'H' or 'I'."
 msgstr ""
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:475
@@ -23150,7 +23164,8 @@ msgid "x Height:"
 msgstr "高度："
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:475
-msgid "Not sure about this one either."
+msgid ""
+"The height of a lower-case letter above the baseline like the letter 'x'."
 msgstr ""
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:548
@@ -23285,7 +23300,7 @@ msgstr "字体"
 msgid "Add font"
 msgstr "添加字体"
 
-#: ../src/ui/dialog/svg-fonts-dialog.cpp:1017 ../src/ui/dialog/text-edit.cpp:67
+#: ../src/ui/dialog/svg-fonts-dialog.cpp:1017 ../src/ui/dialog/text-edit.cpp:65
 msgid "_Font"
 msgstr "字体(_F)"
 
@@ -23311,7 +23326,7 @@ msgid "Preview Text:"
 msgstr "预览文本："
 
 #: ../src/ui/dialog/swatches.cpp:210 ../src/ui/tools/gradient-tool.cpp:359
-#: ../src/ui/tools/gradient-tool.cpp:446 ../src/widgets/gradient-vector.cpp:750
+#: ../src/ui/tools/gradient-tool.cpp:446 ../src/widgets/gradient-vector.cpp:748
 msgid "Add gradient stop"
 msgstr "增加渐变分段点"
 
@@ -23578,12 +23593,12 @@ msgstr "路径："
 msgid "By: "
 msgstr "用："
 
-#: ../src/ui/dialog/text-edit.cpp:69
+#: ../src/ui/dialog/text-edit.cpp:67
 #, fuzzy
 msgid "_Features"
 msgstr "纹理"
 
-#: ../src/ui/dialog/text-edit.cpp:70
+#: ../src/ui/dialog/text-edit.cpp:68
 msgid "Set as _default"
 msgstr "设为默认(_D)："
 
@@ -23592,11 +23607,11 @@ msgstr "设为默认(_D)："
 #. * text has been entered) to get a preview of the font.  Choose
 #. * some representative characters that users of your locale will be
 #. * interested in.
-#: ../src/ui/dialog/text-edit.cpp:84
+#: ../src/ui/dialog/text-edit.cpp:82
 msgid "AaBbCcIiPpQq12369$€¢?.;/()"
 msgstr "AaBbCcIiPpQq12369$€¢?.;/() “東国三力今，書鷹酬鬱愛袋；永。”"
 
-#: ../src/ui/dialog/text-edit.cpp:458 ../src/ui/tools/text-tool.cpp:1534
+#: ../src/ui/dialog/text-edit.cpp:456 ../src/ui/tools/text-tool.cpp:1534
 msgid "Set text style"
 msgstr "设置文本样式"
 
@@ -24019,149 +24034,145 @@ msgstr "编辑变换矩阵"
 msgid "Rotation angle (positive = clockwise)"
 msgstr "旋转角度(正值=顺时针)"
 
-#: ../src/ui/dialog/xml-tree.cpp:66 ../src/ui/dialog/xml-tree.cpp:111
+#: ../src/ui/dialog/xml-tree.cpp:64 ../src/ui/dialog/xml-tree.cpp:109
 msgid "New element node"
 msgstr "新元素节点"
 
-#: ../src/ui/dialog/xml-tree.cpp:67 ../src/ui/dialog/xml-tree.cpp:118
+#: ../src/ui/dialog/xml-tree.cpp:65 ../src/ui/dialog/xml-tree.cpp:116
 msgid "New text node"
 msgstr "新文字节点"
 
-#: ../src/ui/dialog/xml-tree.cpp:68 ../src/ui/dialog/xml-tree.cpp:134
+#: ../src/ui/dialog/xml-tree.cpp:66 ../src/ui/dialog/xml-tree.cpp:132
 msgid "nodeAsInXMLdialogTooltip|Delete node"
 msgstr "删除节点"
 
-#: ../src/ui/dialog/xml-tree.cpp:69 ../src/ui/dialog/xml-tree.cpp:125
-#: ../src/ui/dialog/xml-tree.cpp:804
+#: ../src/ui/dialog/xml-tree.cpp:67 ../src/ui/dialog/xml-tree.cpp:123
+#: ../src/ui/dialog/xml-tree.cpp:754
 msgid "Duplicate node"
 msgstr "再制节点"
 
 #. tree view
-#: ../src/ui/dialog/xml-tree.cpp:102
+#: ../src/ui/dialog/xml-tree.cpp:100
 #, fuzzy
 msgid "_Nodes"
 msgstr "节点"
 
-#: ../src/ui/dialog/xml-tree.cpp:104
+#: ../src/ui/dialog/xml-tree.cpp:102
 msgid "Drag to reorder nodes"
 msgstr "拖动重新给节点排序"
 
-#: ../src/ui/dialog/xml-tree.cpp:143 ../src/ui/dialog/xml-tree.cpp:144
-#: ../src/ui/dialog/xml-tree.cpp:914
+#: ../src/ui/dialog/xml-tree.cpp:141 ../src/ui/dialog/xml-tree.cpp:142
+#: ../src/ui/dialog/xml-tree.cpp:864
 msgid "Unindent node"
 msgstr "撤销缩进节点"
 
-#: ../src/ui/dialog/xml-tree.cpp:151 ../src/ui/dialog/xml-tree.cpp:152
-#: ../src/ui/dialog/xml-tree.cpp:892
+#: ../src/ui/dialog/xml-tree.cpp:149 ../src/ui/dialog/xml-tree.cpp:150
+#: ../src/ui/dialog/xml-tree.cpp:842
 msgid "Indent node"
 msgstr "缩进节点"
 
-#: ../src/ui/dialog/xml-tree.cpp:159 ../src/ui/dialog/xml-tree.cpp:160
-#: ../src/ui/dialog/xml-tree.cpp:843
+#: ../src/ui/dialog/xml-tree.cpp:157 ../src/ui/dialog/xml-tree.cpp:158
+#: ../src/ui/dialog/xml-tree.cpp:793
 msgid "Raise node"
 msgstr "升高节点"
 
-#: ../src/ui/dialog/xml-tree.cpp:167 ../src/ui/dialog/xml-tree.cpp:168
-#: ../src/ui/dialog/xml-tree.cpp:861
+#: ../src/ui/dialog/xml-tree.cpp:165 ../src/ui/dialog/xml-tree.cpp:166
+#: ../src/ui/dialog/xml-tree.cpp:811
 msgid "Lower node"
 msgstr "降低节点"
 
-#: ../src/ui/dialog/xml-tree.cpp:186
+#: ../src/ui/dialog/xml-tree.cpp:184
 #, fuzzy
 msgid "_Attributes"
 msgstr "设置属性"
 
-#: ../src/ui/dialog/xml-tree.cpp:207
+#: ../src/ui/dialog/xml-tree.cpp:205
 #, fuzzy
 msgid "_Styles"
 msgstr "样式(_S)"
 
-#: ../src/ui/dialog/xml-tree.cpp:250
+#: ../src/ui/dialog/xml-tree.cpp:248
 msgid "<b>Click</b> to select nodes, <b>drag</b> to rearrange."
 msgstr "<b>单击</b>选择节点，<b>拖动</b>重新安排。"
 
-#: ../src/ui/dialog/xml-tree.cpp:460
+#: ../src/ui/dialog/xml-tree.cpp:458
 msgid "Drag XML subtree"
 msgstr "拖动 XML 子树"
 
-#: ../src/ui/dialog/xml-tree.cpp:711
-msgid "New element node..."
-msgstr "新元素节点..."
-
-#: ../src/ui/dialog/xml-tree.cpp:774
+#: ../src/ui/dialog/xml-tree.cpp:724
 msgid "Create new element node"
 msgstr "创建新元素节点"
 
-#: ../src/ui/dialog/xml-tree.cpp:789
+#: ../src/ui/dialog/xml-tree.cpp:739
 msgid "Create new text node"
 msgstr "创建新文字节点"
 
-#: ../src/ui/dialog/xml-tree.cpp:821
+#: ../src/ui/dialog/xml-tree.cpp:771
 msgid "nodeAsInXMLinHistoryDialog|Delete node"
 msgstr "删除节点"
 
-#: ../src/ui/interface.cpp:765
+#: ../src/ui/interface.cpp:767
 msgctxt "Interface setup"
 msgid "Default"
 msgstr "默认"
 
-#: ../src/ui/interface.cpp:765
+#: ../src/ui/interface.cpp:767
 msgid "Default interface setup"
 msgstr "默认的界面设置"
 
-#: ../src/ui/interface.cpp:766
+#: ../src/ui/interface.cpp:768
 msgctxt "Interface setup"
 msgid "Custom"
 msgstr "自定义"
 
-#: ../src/ui/interface.cpp:766
+#: ../src/ui/interface.cpp:768
 msgid "Setup for custom task"
 msgstr "自定义任务设置"
 
-#: ../src/ui/interface.cpp:767
+#: ../src/ui/interface.cpp:769
 msgctxt "Interface setup"
 msgid "Wide"
 msgstr "宽"
 
-#: ../src/ui/interface.cpp:767
+#: ../src/ui/interface.cpp:769
 msgid "Setup for widescreen work"
 msgstr "宽屏工作模式"
 
-#: ../src/ui/interface.cpp:903
+#: ../src/ui/interface.cpp:905
 #, c-format
 msgid "Verb \"%s\" Unknown"
 msgstr "动词“%s”未知"
 
-#: ../src/ui/interface.cpp:938
+#: ../src/ui/interface.cpp:940
 msgid "Open _Recent"
 msgstr "最近文档(_R)"
 
-#: ../src/ui/interface.cpp:1046 ../src/ui/interface.cpp:1132
-#: ../src/ui/interface.cpp:1235 ../src/ui/widget/selected-style.cpp:531
+#: ../src/ui/interface.cpp:1048 ../src/ui/interface.cpp:1134
+#: ../src/ui/interface.cpp:1237 ../src/ui/widget/selected-style.cpp:531
 msgid "Drop color"
 msgstr "放置颜色"
 
-#: ../src/ui/interface.cpp:1085 ../src/ui/interface.cpp:1195
+#: ../src/ui/interface.cpp:1087 ../src/ui/interface.cpp:1197
 msgid "Drop color on gradient"
 msgstr "将颜色放置到渐变上"
 
-#: ../src/ui/interface.cpp:1250
+#: ../src/ui/interface.cpp:1252
 msgid "Could not parse SVG data"
 msgstr "不能解析 SVG 数据"
 
-#: ../src/ui/interface.cpp:1289
+#: ../src/ui/interface.cpp:1291
 msgid "Drop SVG"
 msgstr "丢弃 SVG"
 
-#: ../src/ui/interface.cpp:1306
+#: ../src/ui/interface.cpp:1308
 msgid "Drop Symbol"
 msgstr "丢弃符号"
 
-#: ../src/ui/interface.cpp:1329
+#: ../src/ui/interface.cpp:1331
 msgid "Drop bitmap image"
 msgstr "丢弃位图图像"
 
-#: ../src/ui/interface.cpp:1422
+#: ../src/ui/interface.cpp:1424
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">A file named \"%s\" already exists. Do "
@@ -24173,7 +24184,7 @@ msgstr ""
 "\n"
 "已存在文件“%s”。替换将覆盖其内容。"
 
-#: ../src/ui/interface.cpp:1429 ../share/extensions/web-set-att.inx.h:21
+#: ../src/ui/interface.cpp:1431 ../share/extensions/web-set-att.inx.h:21
 #: ../share/extensions/web-transmit-att.inx.h:19
 msgid "Replace"
 msgstr "替换"
@@ -25471,7 +25482,7 @@ msgid "Multiple gradients"
 msgstr "多渐变"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:544
-#: ../src/widgets/gradient-vector.cpp:568
+#: ../src/widgets/gradient-vector.cpp:566
 msgid "No stops in gradient"
 msgstr "渐变中没有分段点"
 
@@ -25488,7 +25499,7 @@ msgid "Set gradient repeat"
 msgstr "设置渐变重复"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:828
-#: ../src/widgets/gradient-vector.cpp:676
+#: ../src/widgets/gradient-vector.cpp:674
 msgid "Change gradient stop offset"
 msgstr "改变渐变分段点偏移"
 
@@ -25574,7 +25585,7 @@ msgstr "分段点"
 
 #. Label
 #: ../src/ui/toolbar/gradient-toolbar.cpp:1044
-#: ../src/widgets/gradient-vector.cpp:853
+#: ../src/widgets/gradient-vector.cpp:851
 msgctxt "Gradient"
 msgid "Offset:"
 msgstr "偏移量："
@@ -25590,7 +25601,7 @@ msgstr "插入新分段点"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:1076
 #: ../src/ui/toolbar/gradient-toolbar.cpp:1077
-#: ../src/widgets/gradient-vector.cpp:839
+#: ../src/widgets/gradient-vector.cpp:837
 msgid "Delete stop"
 msgstr "删除分段点"
 
@@ -32882,43 +32893,43 @@ msgstr "色盘"
 msgid "Rename gradient"
 msgstr "重命名渐变"
 
-#: ../src/widgets/gradient-vector.cpp:294 ../src/widgets/paint-selector.cpp:904
+#: ../src/widgets/gradient-vector.cpp:292 ../src/widgets/paint-selector.cpp:904
 #: ../src/widgets/paint-selector.cpp:1240
 #: ../src/widgets/stroke-marker-selector.cpp:145
 msgid "No document selected"
 msgstr "没有选择文档"
 
-#: ../src/widgets/gradient-vector.cpp:298
+#: ../src/widgets/gradient-vector.cpp:296
 msgid "No gradients in document"
 msgstr "文档中没有渐变"
 
-#: ../src/widgets/gradient-vector.cpp:302
+#: ../src/widgets/gradient-vector.cpp:300
 msgid "No gradient selected"
 msgstr "没有选择渐变"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: ../src/widgets/gradient-vector.cpp:834
+#: ../src/widgets/gradient-vector.cpp:832
 msgid "Add stop"
 msgstr "添加分段点"
 
-#: ../src/widgets/gradient-vector.cpp:837
+#: ../src/widgets/gradient-vector.cpp:835
 msgid "Add another control stop to gradient"
 msgstr "为渐变添加另一个控制分段点"
 
-#: ../src/widgets/gradient-vector.cpp:842
+#: ../src/widgets/gradient-vector.cpp:840
 msgid "Delete current control stop from gradient"
 msgstr "从渐变中删除当前控制分段点"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: ../src/widgets/gradient-vector.cpp:903
+#: ../src/widgets/gradient-vector.cpp:901
 msgid "Stop Color"
 msgstr "分段点颜色"
 
-#: ../src/widgets/gradient-vector.cpp:942
+#: ../src/widgets/gradient-vector.cpp:941
 msgid "Gradient editor"
 msgstr "渐变编辑器"
 
-#: ../src/widgets/gradient-vector.cpp:1286
+#: ../src/widgets/gradient-vector.cpp:1287
 msgid "Change gradient stop color"
 msgstr "改变渐变分段点颜色"
 
@@ -33197,131 +33208,131 @@ msgstr "待续 (TBD)"
 msgid "Style of Paint Bucket fill objects"
 msgstr "油漆桶填充样式"
 
-#: ../src/widgets/toolbox.cpp:1257
+#: ../src/widgets/toolbox.cpp:1318
 msgid "Bounding box"
 msgstr "边界框"
 
-#: ../src/widgets/toolbox.cpp:1257
+#: ../src/widgets/toolbox.cpp:1318
 msgid "Snap bounding boxes"
 msgstr "吸附边界框"
 
-#: ../src/widgets/toolbox.cpp:1266
+#: ../src/widgets/toolbox.cpp:1327
 msgid "Bounding box edges"
 msgstr "边界框的边"
 
-#: ../src/widgets/toolbox.cpp:1266
+#: ../src/widgets/toolbox.cpp:1327
 msgid "Snap to edges of a bounding box"
 msgstr "吸附到边界框的边"
 
-#: ../src/widgets/toolbox.cpp:1275
+#: ../src/widgets/toolbox.cpp:1336
 msgid "Bounding box corners"
 msgstr "边界框的顶点"
 
-#: ../src/widgets/toolbox.cpp:1275
+#: ../src/widgets/toolbox.cpp:1336
 msgid "Snap bounding box corners"
 msgstr "吸附边界框的顶点"
 
-#: ../src/widgets/toolbox.cpp:1284
+#: ../src/widgets/toolbox.cpp:1345
 msgid "BBox Edge Midpoints"
 msgstr "边界框边的中点"
 
-#: ../src/widgets/toolbox.cpp:1284
+#: ../src/widgets/toolbox.cpp:1345
 msgid "Snap midpoints of bounding box edges"
 msgstr "吸附边界框边缘的中点"
 
-#: ../src/widgets/toolbox.cpp:1294
+#: ../src/widgets/toolbox.cpp:1355
 msgid "BBox Centers"
 msgstr "边界框中心 "
 
-#: ../src/widgets/toolbox.cpp:1294
+#: ../src/widgets/toolbox.cpp:1355
 msgid "Snapping centers of bounding boxes"
 msgstr "吸附到边界框的中心"
 
-#: ../src/widgets/toolbox.cpp:1303
+#: ../src/widgets/toolbox.cpp:1364
 msgid "Snap nodes, paths, and handles"
 msgstr "吸附节点、路径和手柄"
 
-#: ../src/widgets/toolbox.cpp:1311
+#: ../src/widgets/toolbox.cpp:1372
 msgid "Snap to paths"
 msgstr "吸附到路径"
 
-#: ../src/widgets/toolbox.cpp:1320
+#: ../src/widgets/toolbox.cpp:1381
 msgid "Path intersections"
 msgstr "路径交点"
 
-#: ../src/widgets/toolbox.cpp:1320
+#: ../src/widgets/toolbox.cpp:1381
 msgid "Snap to path intersections"
 msgstr "吸附到路径交点"
 
-#: ../src/widgets/toolbox.cpp:1329
+#: ../src/widgets/toolbox.cpp:1390
 msgid "To nodes"
 msgstr "到节点"
 
-#: ../src/widgets/toolbox.cpp:1329
+#: ../src/widgets/toolbox.cpp:1390
 msgid "Snap cusp nodes, incl. rectangle corners"
 msgstr "吸附尖角节点，包括矩形边角"
 
-#: ../src/widgets/toolbox.cpp:1338
+#: ../src/widgets/toolbox.cpp:1399
 msgid "Smooth nodes"
 msgstr "光滑节点"
 
-#: ../src/widgets/toolbox.cpp:1338
+#: ../src/widgets/toolbox.cpp:1399
 msgid "Snap smooth nodes, incl. quadrant points of ellipses"
 msgstr "吸附平滑节点，包括椭圆的四个极限点"
 
-#: ../src/widgets/toolbox.cpp:1347
+#: ../src/widgets/toolbox.cpp:1408
 msgid "Line Midpoints"
 msgstr "线的中点"
 
-#: ../src/widgets/toolbox.cpp:1347
+#: ../src/widgets/toolbox.cpp:1408
 msgid "Snap midpoints of line segments"
 msgstr "吸附线段的中点"
 
-#: ../src/widgets/toolbox.cpp:1356
+#: ../src/widgets/toolbox.cpp:1417
 msgid "Others"
 msgstr "其他"
 
-#: ../src/widgets/toolbox.cpp:1356
+#: ../src/widgets/toolbox.cpp:1417
 msgid "Snap other points (centers, guide origins, gradient handles, etc.)"
 msgstr "吸附其他点(中心、辅助原点、渐变手柄等)"
 
-#: ../src/widgets/toolbox.cpp:1364
+#: ../src/widgets/toolbox.cpp:1425
 msgid "Object Centers"
 msgstr "对象中心"
 
-#: ../src/widgets/toolbox.cpp:1364
+#: ../src/widgets/toolbox.cpp:1425
 msgid "Snap centers of objects"
 msgstr "吸附对象的中心"
 
-#: ../src/widgets/toolbox.cpp:1373
+#: ../src/widgets/toolbox.cpp:1434
 msgid "Rotation Centers"
 msgstr "旋转中心"
 
-#: ../src/widgets/toolbox.cpp:1373
+#: ../src/widgets/toolbox.cpp:1434
 msgid "Snap an item's rotation center"
 msgstr "吸附一个项目的旋转中心"
 
-#: ../src/widgets/toolbox.cpp:1382
+#: ../src/widgets/toolbox.cpp:1443
 msgid "Text baseline"
 msgstr "文本基线"
 
-#: ../src/widgets/toolbox.cpp:1382
+#: ../src/widgets/toolbox.cpp:1443
 msgid "Snap text anchors and baselines"
 msgstr "吸附文本锚点和基线"
 
-#: ../src/widgets/toolbox.cpp:1392
+#: ../src/widgets/toolbox.cpp:1453
 msgid "Page border"
 msgstr "页面边沿"
 
-#: ../src/widgets/toolbox.cpp:1392
+#: ../src/widgets/toolbox.cpp:1453
 msgid "Snap to the page border"
 msgstr "吸附到页面边沿"
 
-#: ../src/widgets/toolbox.cpp:1401
+#: ../src/widgets/toolbox.cpp:1462
 msgid "Snap to grids"
 msgstr "吸附到网格"
 
-#: ../src/widgets/toolbox.cpp:1410
+#: ../src/widgets/toolbox.cpp:1471
 msgid "Snap guides"
 msgstr "吸附辅助线"
 
@@ -40912,6 +40923,15 @@ msgstr "帮助(_H)"
 #: ../share/ui/menus.xml.h:22
 msgid "Tutorials"
 msgstr "教程"
+
+#~ msgid "Unable to find verb ID '%s' specified on the command line.\n"
+#~ msgstr "找不到命令行中指定的动作 ID“%s”。\n"
+
+#~ msgid "Unable to find node ID: '%s'\n"
+#~ msgstr "找不到节点 ID：“%s”\n"
+
+#~ msgid "New element node..."
+#~ msgstr "新元素节点..."
 
 #~ msgid "Perspective path"
 #~ msgstr "透视路径"

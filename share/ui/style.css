@@ -49,19 +49,33 @@ GtkWidget, widget {
 
 GtkSpinButton {
     padding: 0;
+    outline-style : none;
 }
 
 spinbutton {
     padding: 0;
+    outline-style : none;
 }
 
-GtkSpinButton.entry {
+GtkSpinButton entry {
     padding-left: 2px;
+    padding-right:0;
 }
 
-spinbutton.entry {
+spinbutton entry {
     padding-left: 2px;
+    padding-right:0;
 }
+
+GtkSpinButton undershoot {
+	outline-style : none;
+}
+
+spinbutton undershoot {
+	outline-style : none;
+}
+
+
 
 SPRuler {
     background-color: @theme_bg_color;
@@ -168,9 +182,7 @@ combobox window.popup scrolledwindow treeview separator {
 }
 
 
-spinbutton undershoot {
-	outline-style : none;
-}
+
 #symbolsView,
 #markerCombo button,
 #markerCombo menu,

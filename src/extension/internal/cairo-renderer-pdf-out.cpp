@@ -19,7 +19,8 @@
 # include "config.h"  // only include where actually required!
 #endif
 
-#ifdef HAVE_CAIRO_PDF
+#include <cairo.h>
+#ifdef CAIRO_HAS_PDF_SURFACE
 
 #include "cairo-renderer-pdf-out.h"
 #include "cairo-render-context.h"

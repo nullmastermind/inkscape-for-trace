@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-01-03 00:43+0100\n"
+"POT-Creation-Date: 2019-01-17 00:47+0100\n"
 "PO-Revision-Date: 2013-05-15 04:05-0800\n"
 "Last-Translator: \n"
 "Language-Team: gist\n"
@@ -1155,8 +1155,8 @@ msgstr "كالی روشنی"
 #: ../src/extension/internal/filter/paint.h:718
 #: ../src/extension/internal/filter/shadows.h:74
 #: ../src/extension/internal/filter/transparency.h:346
-#: ../src/filter-enums.cpp:68 ../src/ui/dialog/clonetiler.cpp:788
-#: ../src/ui/dialog/clonetiler.cpp:917
+#: ../src/filter-enums.cpp:68 ../src/ui/dialog/clonetiler.cpp:787
+#: ../src/ui/dialog/clonetiler.cpp:916
 #: ../src/ui/dialog/document-properties.cpp:154
 #: ../share/extensions/color_HSL_adjust.inx.h:20
 #: ../share/extensions/color_blackandwhite.inx.h:3
@@ -4710,12 +4710,12 @@ msgstr "گائڈ كو منسوخ كریں۔"
 msgid "<b>Guideline</b>: %s"
 msgstr "<b>گائڈ لائن</b>: %s"
 
-#: ../src/desktop.cpp:804
+#: ../src/desktop.cpp:802
 #, fuzzy
 msgid "No previous transform."
 msgstr "كوئی پچھلا زوم نہیں۔"
 
-#: ../src/desktop.cpp:827
+#: ../src/desktop.cpp:825
 #, fuzzy
 msgid "No next transform."
 msgstr "كوئی اگلا زوم نہیں۔"
@@ -5098,22 +5098,22 @@ msgstr "گریڈ اسپیسینگ كا ملٹیپل"
 msgid " to "
 msgstr "كو"
 
-#: ../src/document.cpp:553
+#: ../src/document.cpp:554
 #, c-format
 msgid "New document %d"
 msgstr "نیا دستاویز%d "
 
-#: ../src/document.cpp:558
+#: ../src/document.cpp:559
 #, c-format
 msgid "Memory document %d"
 msgstr "میمری دستاویز %d"
 
-#: ../src/document.cpp:587
+#: ../src/document.cpp:588
 #, fuzzy
 msgid "Memory document %1"
 msgstr "میمری دستاویز %d"
 
-#: ../src/document.cpp:890
+#: ../src/document.cpp:898
 #, c-format
 msgid "Unnamed document %d"
 msgstr "بنا نام دستاویز %d"
@@ -5782,7 +5782,7 @@ msgstr ""
 #: ../src/extension/internal/bitmap/opacity.cpp:39
 #: ../src/extension/internal/filter/blurs.h:334
 #: ../src/extension/internal/filter/transparency.h:280
-#: ../src/ui/dialog/clonetiler.cpp:795 ../src/ui/dialog/clonetiler.cpp:926
+#: ../src/ui/dialog/clonetiler.cpp:794 ../src/ui/dialog/clonetiler.cpp:925
 #: ../src/ui/toolbar/tweak-toolbar.cpp:325
 #: ../share/extensions/interp_att_g.inx.h:20
 msgid "Opacity"
@@ -6160,7 +6160,7 @@ msgstr "%i میں سے "
 #: ../src/extension/internal/vsd-input.cpp:155
 #: ../src/extension/prefdialog.cpp:78
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:51
-#: ../src/ui/dialog/export.cpp:918 ../src/ui/dialog/export.cpp:1302
+#: ../src/ui/dialog/export.cpp:917 ../src/ui/dialog/export.cpp:1301
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:670
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:981
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1537
@@ -6168,7 +6168,7 @@ msgstr "%i میں سے "
 #: ../src/ui/dialog/livepatheffect-add.cpp:27
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:30
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:36
-#: ../src/ui/dialog/ocaldialogs.cpp:1086 ../src/ui/interface.cpp:1428
+#: ../src/ui/dialog/ocaldialogs.cpp:1086 ../src/ui/interface.cpp:1430
 #: ../src/widgets/desktop-widget.cpp:1101
 #: ../src/widgets/desktop-widget.cpp:1150
 #, fuzzy
@@ -7760,7 +7760,7 @@ msgstr "چوڑائی"
 
 #: ../src/extension/internal/filter/morphology.h:70
 #: ../src/extension/internal/filter/morphology.h:191
-#: ../src/ui/dialog/export.cpp:149
+#: ../src/ui/dialog/export.cpp:148
 #, fuzzy
 msgid "Antialiasing"
 msgstr "اینٹی الایس"
@@ -7881,7 +7881,7 @@ msgstr "آواز بھرنا"
 #: ../src/extension/internal/filter/paint.h:691
 #: ../src/extension/internal/filter/shadows.h:61
 #: ../src/live_effects/lpe-measure-segments.cpp:278
-#: ../src/ui/dialog/find.cpp:79 ../src/ui/dialog/tracedialog.cpp:743
+#: ../src/ui/dialog/find.cpp:77 ../src/ui/dialog/tracedialog.cpp:743
 #: ../share/extensions/color_HSL_adjust.inx.h:2
 #: ../share/extensions/color_custom.inx.h:2
 #: ../share/extensions/color_randomize.inx.h:2 ../share/extensions/dots.inx.h:2
@@ -8589,7 +8589,7 @@ msgstr "رینڈر"
 #: ../src/extension/internal/grid.cpp:204
 #: ../src/ui/dialog/document-properties.cpp:152
 #: ../src/ui/dialog/inkscape-preferences.cpp:1118
-#: ../src/widgets/toolbox.cpp:1401
+#: ../src/widgets/toolbox.cpp:1462
 msgid "Grids"
 msgstr "گریڈس"
 
@@ -8969,11 +8969,11 @@ msgid "Vector graphics format used by Corel WordPerfect"
 msgstr "كورل ورڈ پرفیكٹ كے ذریعے استعمال كیا گیا ویكٹر گرافیكس فارمیٹ"
 
 #: ../src/extension/prefdialog.cpp:78 ../src/ui/dialog/knot-properties.cpp:41
-#: ../src/ui/dialog/text-edit.cpp:71 ../src/verbs.cpp:2626
+#: ../src/ui/dialog/text-edit.cpp:69 ../src/verbs.cpp:2626
 msgid "_Close"
 msgstr "بند كریں"
 
-#: ../src/extension/prefdialog.cpp:79 ../src/ui/dialog/text-edit.cpp:72
+#: ../src/extension/prefdialog.cpp:79 ../src/ui/dialog/text-edit.cpp:70
 #: ../src/ui/dialog/transformation.cpp:158
 #, fuzzy
 msgid "_Apply"
@@ -9071,58 +9071,61 @@ msgstr "O"
 msgid "Update Document"
 msgstr "دستاویز كو محفوظ كریں۔"
 
-#: ../src/file.cpp:168
+#. TRANSLATORS: translate this into "default-<yourcodename>.svg" (for instance, default-fr.svg)
+#. and double-check that share/templates/create_defaults.pl contains a translation for your language
+#. If in doubt about this, ask a developer.
+#: ../src/file.cpp:170
 msgid "default.svg"
 msgstr "default.svg"
 
-#: ../src/file.cpp:287 ../src/main-cmdlinexact.cpp:188
+#: ../src/file.cpp:270
 msgid "Broken links have been changed to point to existing files."
 msgstr ""
 
-#: ../src/file.cpp:302 ../src/file.cpp:1307
+#: ../src/file.cpp:299 ../src/file.cpp:1303
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "درخواست كی گئی %s فائل لوڈ كرنے میں ناكامیاب رہی۔"
 
-#: ../src/file.cpp:328
+#: ../src/file.cpp:325
 msgid "Document not saved yet.  Cannot revert."
 msgstr "دستاویز كو ابھی تك محفوظ نہیں كیا گیا ہے۔ واپس نہیں كرسكتے۔"
 
-#: ../src/file.cpp:334
+#: ../src/file.cpp:331
 #, fuzzy
 msgid "Changes will be lost! Are you sure you want to reload document %1?"
 msgstr ""
 "تبدیلی كھو جائینگی! كیا آپ واقعی دستاویز%s كو دوبارہ لوڈ كرنا چاہتے ہیں۔"
 
-#: ../src/file.cpp:360
+#: ../src/file.cpp:357
 msgid "Document reverted."
 msgstr "دستاویز واپس كردیاگیا"
 
-#: ../src/file.cpp:362
+#: ../src/file.cpp:359
 msgid "Document not reverted."
 msgstr "دستاویز واپس نہیں كیااگیا"
 
-#: ../src/file.cpp:512
+#: ../src/file.cpp:509
 msgid "Select file to open"
 msgstr "كھولنے كے لئے فائل منتخب كریں۔"
 
-#: ../src/file.cpp:594
+#: ../src/file.cpp:591
 #, fuzzy
 msgid "Clean up document"
 msgstr "دستاویز كو محفوظ كریں۔"
 
-#: ../src/file.cpp:601
+#: ../src/file.cpp:598
 #, c-format
 msgid "Removed <b>%i</b> unused definition in &lt;defs&gt;."
 msgid_plural "Removed <b>%i</b> unused definitions in &lt;defs&gt;."
 msgstr[0] "&lt;defs&gt;. میں بغیر استعمال كیے گئے تعین شدہ نكالیں۔"
 msgstr[1] ""
 
-#: ../src/file.cpp:606
+#: ../src/file.cpp:603
 msgid "No unused definitions in &lt;defs&gt;."
 msgstr "<defs> میں كوئی غیر استعمال شدہ ڈیفینیشن نہیں ہے."
 
-#: ../src/file.cpp:640
+#: ../src/file.cpp:637
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
@@ -9131,13 +9134,13 @@ msgstr ""
 "دستاویز (%s)كو محفوظ كرنے كے لئے كوئی  انك اسكیپ اكسٹینشن نہیں ملا۔ ایلك "
 "نامعلوم فائل نام اكسٹینشن كی وجہ سے ایسا ہوا ہوگا۔"
 
-#: ../src/file.cpp:641 ../src/file.cpp:651 ../src/file.cpp:660
-#: ../src/file.cpp:667 ../src/file.cpp:672 ../src/file.cpp:684
-#: ../src/file.cpp:694
+#: ../src/file.cpp:638 ../src/file.cpp:648 ../src/file.cpp:657
+#: ../src/file.cpp:664 ../src/file.cpp:669 ../src/file.cpp:681
+#: ../src/file.cpp:691
 msgid "Document not saved."
 msgstr "دستاویز محفوظ نہیں كیا گیا۔"
 
-#: ../src/file.cpp:650
+#: ../src/file.cpp:647
 #, c-format
 msgid ""
 "File %s is write protected. Please remove write protection and try again."
@@ -9145,19 +9148,19 @@ msgstr ""
 "فائل %s رائٹ پروٹیكٹڈ ہے۔ برائے كرم رائٹ پروٹیكشن كو ہٹائیں اور پھر سے كوشش "
 "كریں۔"
 
-#: ../src/file.cpp:659 ../src/file.cpp:693
+#: ../src/file.cpp:656 ../src/file.cpp:690
 #, c-format
 msgid "File %s could not be saved."
 msgstr "فائل %s كو محفوظ نہیں كیا جاسكا۔"
 
-#: ../src/file.cpp:671
+#: ../src/file.cpp:668
 #, c-format
 msgid ""
 "File could not be saved:\n"
 "No object with ID '%s' found."
 msgstr ""
 
-#: ../src/file.cpp:681
+#: ../src/file.cpp:678
 #, c-format
 msgid ""
 "File %s could not be saved.\n"
@@ -9166,51 +9169,51 @@ msgid ""
 "'%s'"
 msgstr ""
 
-#: ../src/file.cpp:716 ../src/file.cpp:718
+#: ../src/file.cpp:713 ../src/file.cpp:715
 msgid "Document saved."
 msgstr "فائل كو محفوظ كیا گیا ہے۔"
 
 #. We are saving for the first time; create a unique default filename
-#: ../src/file.cpp:776 ../src/file.cpp:1466
+#: ../src/file.cpp:773 ../src/file.cpp:1462
 #, fuzzy
 msgid "drawing"
 msgstr "ڈرائینگ%s "
 
-#: ../src/file.cpp:781
+#: ../src/file.cpp:778
 #, fuzzy
 msgid "drawing-%1"
 msgstr "ڈرائینگ%s "
 
-#: ../src/file.cpp:798
+#: ../src/file.cpp:795
 msgid "Select file to save a copy to"
 msgstr "ایك كاپی كو محفوظ كرنے كے لئے ایك فائل منتخب كریں۔"
 
-#: ../src/file.cpp:800
+#: ../src/file.cpp:797
 msgid "Select file to save to"
 msgstr "محفوظ كرنے كے لئے فائل منتخب كریں۔"
 
-#: ../src/file.cpp:905 ../src/file.cpp:907
+#: ../src/file.cpp:902 ../src/file.cpp:904
 msgid "No changes need to be saved."
 msgstr "كسی بھی تبدیلی كو محفوظ كرنا ضروری نہیں ہے۔"
 
-#: ../src/file.cpp:926
+#: ../src/file.cpp:923
 msgid "Saving document..."
 msgstr "دستاویز كو محفوظ كیا جارہا ہے..."
 
-#: ../src/file.cpp:1304 ../src/ui/dialog/inkscape-preferences.cpp:1831
+#: ../src/file.cpp:1300 ../src/ui/dialog/inkscape-preferences.cpp:1831
 #: ../src/ui/dialog/ocaldialogs.cpp:1088
 msgid "Import"
 msgstr "درآمد"
 
-#: ../src/file.cpp:1354
+#: ../src/file.cpp:1350
 msgid "Select file to import"
 msgstr "درآمد كرنے كے لئے فائل منتخب كریں"
 
-#: ../src/file.cpp:1487
+#: ../src/file.cpp:1483
 msgid "Select file to export to"
 msgstr "ایك فائل منتخب كریں جس میں برآمد كیا جانا ہے۔"
 
-#: ../src/file.cpp:1740
+#: ../src/file.cpp:1736
 #, fuzzy
 msgid "Import Clip Art"
 msgstr "درآمد/ برآمد"
@@ -9470,7 +9473,7 @@ msgstr "گریڈینٹ ہینڈلوں كو ملائیں۔"
 msgid "Move gradient handle"
 msgstr "گریڈینٹ ہینڈل كو حركت دیں۔"
 
-#: ../src/gradient-drag.cpp:1175 ../src/widgets/gradient-vector.cpp:783
+#: ../src/gradient-drag.cpp:1175 ../src/widgets/gradient-vector.cpp:781
 msgid "Delete gradient stop"
 msgstr "گریڈینٹ اسٹاپ كو منسوخ كریں۔"
 
@@ -9589,62 +9592,68 @@ msgstr ""
 msgid "GUI: Console only."
 msgstr ""
 
+#: ../src/inkscape-application.cpp:90
+msgid ""
+"GUI: Close window after processing actions (needed as some verbs require "
+"GUI)."
+msgstr ""
+
 #. Open/Import
-#: ../src/inkscape-application.cpp:92
+#: ../src/inkscape-application.cpp:93
 #, fuzzy
 msgid "Open: PDF page to import"
 msgstr "درآمد كرنے كے لئے فائل منتخب كریں"
 
-#: ../src/inkscape-application.cpp:92
+#: ../src/inkscape-application.cpp:93
 msgid "PAGE"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:93
+#: ../src/inkscape-application.cpp:94
 msgid ""
 "Open: Method used to convert pre-0.92 document dpi, if needed: [none|scale-"
 "viewbox|scale-document]."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:94
+#: ../src/inkscape-application.cpp:95
 msgid "Open: Do not fix pre-0.92 document's text baseline spacing on opening."
 msgstr ""
 
 #. Query - Geometry
-#: ../src/inkscape-application.cpp:97
+#: ../src/inkscape-application.cpp:98
 #, fuzzy
 msgid "Query: ID(s) of object(s) to be queried."
 msgstr "اُث آبجیكٹ كی آئی ڈی جس كے ڈائمینشن كے متعلق پوچھا جاتا ہے۔"
 
-#: ../src/inkscape-application.cpp:97 ../src/inkscape-application.cpp:106
+#: ../src/inkscape-application.cpp:98 ../src/inkscape-application.cpp:107
 msgid "OBJECT-ID[,OBJECT-ID]*"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:98
+#: ../src/inkscape-application.cpp:99
 msgid "Query: Print bounding boxes of all objects."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:99
+#: ../src/inkscape-application.cpp:100
 #, fuzzy
 msgid "Query: X coordinate of drawing or object (if specified by --query-id)."
 msgstr ""
 "ڈرائینگ كے X كوارڈنیٹ كے بارے میں پوچھیں، یا اگر تعین شدہ ہے تو آبجیكٹ كے "
 "بارے میں كیوری آئی ڈی ۔ ۔ كی مدد سے پوچھیں۔ "
 
-#: ../src/inkscape-application.cpp:100
+#: ../src/inkscape-application.cpp:101
 #, fuzzy
 msgid "Query: Y coordinate of drawing or object (if specified by --query-id)."
 msgstr ""
 "ڈرائینگ كے Yكوارڈنیٹ كے بارے میں پوچھیں، یا اگر تعین شدہ ہے تو آبجیكٹ كے "
 "بارے میں كیوری آئی ڈی ۔ ۔ كی مدد سے پوچھیں۔ "
 
-#: ../src/inkscape-application.cpp:101
+#: ../src/inkscape-application.cpp:102
 #, fuzzy
 msgid "Query: Width of drawing or object (if specified by --query-id)."
 msgstr ""
 "ڈرائینگ كی چوڑائی كے بارے میں پوچھیں یا، اگر تعین شدہ ہے تو آبجیكٹ كی چوڑائی "
 "كے بارے میں ۔ ۔ ۔  كیوری آئی ڈی كی مدد سے پوچھیں۔"
 
-#: ../src/inkscape-application.cpp:102
+#: ../src/inkscape-application.cpp:103
 #, fuzzy
 msgid "Query: Heightof drawing or object (if specified by --query-id)."
 msgstr ""
@@ -9652,81 +9661,81 @@ msgstr ""
 "كے بارے میں ۔ ۔ ۔  كیوری آئی ڈی كی مدد سے پوچھیں۔"
 
 #. Processing
-#: ../src/inkscape-application.cpp:105
+#: ../src/inkscape-application.cpp:106
 #, fuzzy
 msgid ""
 "Process: Remove unused definitions from the <defs> section(s) of document."
 msgstr "بغیر استعمال شدہ ڈیفینیشن كو دستاویز كے ڈیفس سیكشن(س) سے ہٹائیں۔"
 
-#: ../src/inkscape-application.cpp:106
+#: ../src/inkscape-application.cpp:107
 msgid "Process: Select objects: comma separated list of IDs."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:107
+#: ../src/inkscape-application.cpp:108
 #, fuzzy
 msgid "Process: Verb(s) to call when Inkscape opens."
 msgstr "انك اسكیپ كے كھُلتے وقت بولانے كے لئے ورب"
 
-#: ../src/inkscape-application.cpp:107
+#: ../src/inkscape-application.cpp:108
 msgid "VERB-ID[;VERB-ID]*"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:108
+#: ../src/inkscape-application.cpp:109
 #, fuzzy
 msgid "Process: Start Inkscape in interactive shell mode."
 msgstr "انك اسكیپ كو انٹراكٹیو شیل موڈ میں شروع كریں۔"
 
 #. Export - File and File Type
-#: ../src/inkscape-application.cpp:111
+#: ../src/inkscape-application.cpp:112
 msgid "Export: File type:[svg,png,ps,psf,tex,emf,wmf,xaml]"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:112
+#: ../src/inkscape-application.cpp:113
 #, fuzzy
 msgid "Export: File name"
 msgstr "فائل نام"
 
-#: ../src/inkscape-application.cpp:112
+#: ../src/inkscape-application.cpp:113
 #, fuzzy
 msgid "EXPORT-FILENAME"
 msgstr "FILENAME"
 
-#: ../src/inkscape-application.cpp:113
+#: ../src/inkscape-application.cpp:114
 msgid "Export: Overwrite input file."
 msgstr ""
 
 #. BSP
 #. B = PNG, S = SVG, P = PS/EPS/PDF
 #. Export - Geometry
-#: ../src/inkscape-application.cpp:117
+#: ../src/inkscape-application.cpp:118
 msgid "Export: Area to export in SVG user units."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:117
+#: ../src/inkscape-application.cpp:118
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
 #. BSP
-#: ../src/inkscape-application.cpp:118
+#: ../src/inkscape-application.cpp:119
 #, fuzzy
 msgid "Export: Area to export is drawing (not page)."
 msgstr "برآمد شدہ ائریا پوری ڈرائینگ ہے ـ( صفحہ نہیں )"
 
 #. BSP
-#: ../src/inkscape-application.cpp:119
+#: ../src/inkscape-application.cpp:120
 #, fuzzy
 msgid "Export: Area to export is page."
 msgstr "برآمد ائریا صفحہ ہے۔"
 
 #. BSP
-#: ../src/inkscape-application.cpp:120
+#: ../src/inkscape-application.cpp:121
 msgid ""
 "Export: Margin around export area: units of page size for SVG, mm for PS/EPS/"
 "PDF."
 msgstr ""
 
 #. xSP
-#: ../src/inkscape-application.cpp:121
+#: ../src/inkscape-application.cpp:122
 #, fuzzy
 msgid ""
 "Export: Snap the bitmap export area outwards to the nearest integer values."
@@ -9735,51 +9744,51 @@ msgstr ""
 "كریں۔(SVG صارف اكائیوں میں )"
 
 #. Bxx
-#: ../src/inkscape-application.cpp:122
+#: ../src/inkscape-application.cpp:123
 #, fuzzy
 msgid "Export: Bitmap width in pixels (overrides --export-dpi)."
 msgstr ""
 "برآمد شدہ بٹ میپ كی چوڑائی پكسیل میں (برآمد شدہ ۔dpi كو اوررائڈ كرتا ہے)"
 
-#: ../src/inkscape-application.cpp:122
+#: ../src/inkscape-application.cpp:123
 msgid "WIDTH"
 msgstr "WIDTH"
 
 #. Bxx
-#: ../src/inkscape-application.cpp:123
+#: ../src/inkscape-application.cpp:124
 #, fuzzy
 msgid "Export: Bitmap height in pixels (overrides --export-dpi)."
 msgstr ""
 "برآمد شدہ بٹ میپ كی چوڑائی پكسیل میں (برآمد شدہ ۔dpi كو اوررائڈ كرتا ہے)"
 
-#: ../src/inkscape-application.cpp:123
+#: ../src/inkscape-application.cpp:124
 msgid "HEIGHT"
 msgstr "HEIGHT"
 
 #. Bxx
 #. Export - Options
-#: ../src/inkscape-application.cpp:126
+#: ../src/inkscape-application.cpp:127
 #, fuzzy
 msgid "Export: ID(s) of object(s) to export."
 msgstr "برآمد كے لئے آبجیكٹ كی  ID"
 
-#: ../src/inkscape-application.cpp:126
+#: ../src/inkscape-application.cpp:127
 msgid "OBJECT-ID[;OBJECT-ID]*"
 msgstr ""
 
 #. BSP
-#: ../src/inkscape-application.cpp:127
+#: ../src/inkscape-application.cpp:128
 #, fuzzy
 msgid "Export: Hide all objects except object with ID selected by export-id."
 msgstr "برآمد كیے گئے امیج میں، منتخبہ كو چھوڑ كر تمام آبجیكٹس كو چھپائیں"
 
 #. BSx
-#: ../src/inkscape-application.cpp:128
+#: ../src/inkscape-application.cpp:129
 msgid "Export: Remove items in the Inkscape namespace."
 msgstr ""
 
 #. xSx
-#: ../src/inkscape-application.cpp:129
+#: ../src/inkscape-application.cpp:130
 #, fuzzy
 msgid ""
 "Export: Resolution for rasterization bitmaps and filters (default is 96)."
@@ -9787,13 +9796,13 @@ msgstr ""
 "بٹ میپ میں برآمد كے لئے اور  PS/EPS/PDF (ڈیفالٹ  90) میں فلٹروں كے "
 "راسٹرائزیشن كے لئے ریزولوشن"
 
-#: ../src/inkscape-application.cpp:129
+#: ../src/inkscape-application.cpp:130
 #: ../src/ui/widget/rendering-options.cpp:34
 msgid "DPI"
 msgstr "DPI"
 
 #. BxP
-#: ../src/inkscape-application.cpp:130
+#: ../src/inkscape-application.cpp:131
 #, fuzzy
 msgid ""
 "Export: Render objects without filters instead of rasterizing. (PS/EPS/PDF)"
@@ -9802,40 +9811,40 @@ msgstr ""
 "PDF)"
 
 #. xxP
-#: ../src/inkscape-application.cpp:131
+#: ../src/inkscape-application.cpp:132
 #, fuzzy
 msgid "Export: Convert text to paths. (PS/EPS/PDF/SVG)."
 msgstr "برآمد پر متن آبجیكٹ كو پاتھس میں تبدیل كریں(PS, EPS, PDF)"
 
 #. xxP
-#: ../src/inkscape-application.cpp:132
+#: ../src/inkscape-application.cpp:133
 msgid "Export: Postscript level (2 or 3). Default is 3."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:132
+#: ../src/inkscape-application.cpp:133
 #, fuzzy
 msgid "PS-Level"
 msgstr "لیول"
 
 #. xxP
-#: ../src/inkscape-application.cpp:133
+#: ../src/inkscape-application.cpp:134
 msgid "Export: PDF level (1.4 or 1.5)"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:133
+#: ../src/inkscape-application.cpp:134
 #, fuzzy
 msgid "PDF-Level"
 msgstr "لیول"
 
 #. xxP
-#: ../src/inkscape-application.cpp:134
+#: ../src/inkscape-application.cpp:135
 msgid ""
 "Export: Export text separately to LaTeX file (PS/EPS/PDF). Include via "
 "\\input{file.tex}"
 msgstr ""
 
 #. xxP
-#: ../src/inkscape-application.cpp:135
+#: ../src/inkscape-application.cpp:136
 #, fuzzy
 msgid ""
 "Export: Use stored filename and DPI hints when exporting object selected by "
@@ -9845,17 +9854,17 @@ msgstr ""
 "آئی ڈی كے ساتھ)"
 
 #. Bxx
-#: ../src/inkscape-application.cpp:136
+#: ../src/inkscape-application.cpp:137
 #, fuzzy
 msgid "Export: Background color for exported bitmaps (any SVG color string)."
 msgstr "برآمد شدہ بٹ میپ كا پس منظر رنگ (كوئی بھی SVG ۔سپورٹیڈ رنگ اسٹرینگ)"
 
-#: ../src/inkscape-application.cpp:136
+#: ../src/inkscape-application.cpp:137
 msgid "COLOR"
 msgstr "COLOR"
 
 #. Bxx
-#: ../src/inkscape-application.cpp:137
+#: ../src/inkscape-application.cpp:138
 #, fuzzy
 msgid ""
 "Export: Background opacity for exported bitmaps (either 0.0 to 1.0 or 1 to "
@@ -9863,28 +9872,28 @@ msgid ""
 msgstr ""
 "برآمد شدہ بٹ میپ كی پس منظر غیر شفافیت (یا تو  0.0 سے  1.0, یا  1 سے 255) "
 
-#: ../src/inkscape-application.cpp:137
+#: ../src/inkscape-application.cpp:138
 msgid "VALUE"
 msgstr "VALUE"
 
-#: ../src/inkscape-application.cpp:140
+#: ../src/inkscape-application.cpp:141
 msgid "Process: xverb command file."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:140
+#: ../src/inkscape-application.cpp:141
 #, fuzzy
 msgid "XVERBS-FILENAME"
 msgstr "FILENAME"
 
-#: ../src/inkscape-application.cpp:144
+#: ../src/inkscape-application.cpp:145
 msgid "D-Bus: Enter a listening loop for D-Bus messages in console mode."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:145
+#: ../src/inkscape-application.cpp:146
 msgid "D-Bus: Specify the D-Bus name (default is 'org.inkscape')."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:145
+#: ../src/inkscape-application.cpp:146
 msgid "BUS-NAME"
 msgstr ""
 
@@ -10409,7 +10418,7 @@ msgstr "وہ پاتھ جس كے ساتھ بنیادی پاتھ كو موڑا ج�
 
 #: ../src/live_effects/lpe-bendpath.cpp:61
 #: ../src/live_effects/lpe-patternalongpath.cpp:76
-#: ../src/ui/dialog/export.cpp:259 ../src/ui/dialog/transformation.cpp:68
+#: ../src/ui/dialog/export.cpp:258 ../src/ui/dialog/transformation.cpp:68
 #: ../src/ui/widget/page-sizer.cpp:48
 msgid "_Width:"
 msgstr "_چوڑائی:"
@@ -12199,7 +12208,7 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:276
-#: ../src/ui/dialog/find.cpp:80
+#: ../src/ui/dialog/find.cpp:78
 #, fuzzy
 msgid "General"
 msgstr "<b>عام</b>"
@@ -13832,16 +13841,6 @@ msgstr "ویكٹر پیرامیٹر كو تبدیل كریں۔"
 msgid "Change unit parameter"
 msgstr "اكائی  پیرامیٹر كو تبدیل كریں۔"
 
-#: ../src/main-cmdlineact.cpp:71
-#, c-format
-msgid "Unable to find verb ID '%s' specified on the command line.\n"
-msgstr "كمانڈ لائن پر تعین شدہ  '%s' ID   كو تلاش كرنے میں ناقابل۔ \n"
-
-#: ../src/main-cmdlineact.cpp:82 ../src/main-cmdlinexact.cpp:268
-#, c-format
-msgid "Unable to find node ID: '%s'\n"
-msgstr "نوڈ ID: '%s' كو تلاش كرنے میں ناقابل.\n"
-
 #. ## Add a menu for clear()
 #: ../src/menus-skeleton.h:23 ../src/ui/dialog/debug.cpp:71
 #: ../share/ui/menus.xml.h:1
@@ -14294,7 +14293,7 @@ msgstr "پاتھ كو پلٹیں"
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr "انتخاب میں پلٹنے كے لئے <b>كوئی پاتھ(س) نہیں</b>۔"
 
-#: ../src/preferences.cpp:142
+#: ../src/preferences.cpp:138
 msgid ""
 "Inkscape will run with default settings, and new settings will not be saved. "
 msgstr ""
@@ -14304,7 +14303,7 @@ msgstr ""
 #. the creation failed
 #. _reportError(Glib::ustring::compose(_("Cannot create profile directory %1."),
 #. Glib::filename_to_utf8(_prefs_dir)), not_saved);
-#: ../src/preferences.cpp:158
+#: ../src/preferences.cpp:154
 #, c-format
 msgid "Cannot create profile directory %s."
 msgstr "پروفائل ڈائریكٹری %s تخلیق نہیں جاسكتی۔"
@@ -14312,7 +14311,7 @@ msgstr "پروفائل ڈائریكٹری %s تخلیق نہیں جاسكتی۔"
 #. The profile dir is not actually a directory
 #. _reportError(Glib::ustring::compose(_("%1 is not a valid directory."),
 #. Glib::filename_to_utf8(_prefs_dir)), not_saved);
-#: ../src/preferences.cpp:176
+#: ../src/preferences.cpp:163
 #, c-format
 msgid "%s is not a valid directory."
 msgstr "%s ایك معتبر ڈائریكٹری نہیں ہے."
@@ -14320,30 +14319,40 @@ msgstr "%s ایك معتبر ڈائریكٹری نہیں ہے."
 #. The write failed.
 #. _reportError(Glib::ustring::compose(_("Failed to create the preferences file %1."),
 #. Glib::filename_to_utf8(_prefs_filename)), not_saved);
-#: ../src/preferences.cpp:186
+#: ../src/preferences.cpp:182
 #, c-format
 msgid "Failed to create the preferences file %s."
 msgstr "پرفیرنس فائل %s تخلیق كرنے میں ناكامیاب"
 
-#: ../src/preferences.cpp:222
+#: ../src/preferences.cpp:218
 #, c-format
 msgid "The preferences file %s is not a regular file."
 msgstr "پرفیرنسیس فائل %s ایك ریگولر فائل نہیں ہے۔"
 
-#: ../src/preferences.cpp:232
+#: ../src/preferences.cpp:228
 #, c-format
 msgid "The preferences file %s could not be read."
 msgstr "پرفیرنسس فائل %s كو پڑھا نہیں جاسكتا ہے۔"
 
-#: ../src/preferences.cpp:243
+#: ../src/preferences.cpp:239
 #, c-format
 msgid "The preferences file %s is not a valid XML document."
 msgstr "پرفیرنسس فائل %s ایك معتبرXML دستاویز نہیں ہے۔"
 
-#: ../src/preferences.cpp:252
+#: ../src/preferences.cpp:248
 #, c-format
 msgid "The file %s is not a valid Inkscape preferences file."
 msgstr "فائل %s  ایك معتبر انك اسكیپ پرفیرنس فائل نہیں ہے۔"
+
+#: ../src/preferences.cpp:298
+#, fuzzy
+msgid "Preferences file was deleted."
+msgstr "پرفیرنسس فائل %s كو پڑھا نہیں جاسكتا ہے۔"
+
+#: ../src/preferences.cpp:299
+#, fuzzy
+msgid "There was an error trying to delete the preferences file."
+msgstr "پرفیرنس فائل %s تخلیق كرنے میں ناكامیاب"
 
 #: ../src/rdf.cpp:178
 msgid "CC Attribution"
@@ -14813,7 +14822,7 @@ msgstr "پكسیل كے ذریعے اُفقی طور پر حركت دیں۔"
 msgid "The selection has no applied path effect."
 msgstr "انتخاب میں كوئی لاگو كیا گیا پاتھ اثر نہیں ہے۔"
 
-#: ../src/selection-chemistry.cpp:2605 ../src/ui/dialog/clonetiler.cpp:2064
+#: ../src/selection-chemistry.cpp:2605 ../src/ui/dialog/clonetiler.cpp:2063
 msgid "Select an <b>object</b> to clone."
 msgstr "كلون كرنے كے لئے <b>آبجیكٹ</b> منتخب كریں۔"
 
@@ -15199,8 +15208,8 @@ msgstr ""
 "%s, %s كے ذریعے حركت دیں; افقی /عمودی تك محدود ركھنے كے لئے<b>Ctrl</b> سے ; "
 "اسنیپنگ ناقابل كرنے كے لئے<b>Shift</b> سے"
 
-#: ../src/shortcuts.cpp:410 ../src/ui/dialog/export.cpp:1299
-#: ../src/ui/dialog/export.cpp:1329
+#: ../src/shortcuts.cpp:410 ../src/ui/dialog/export.cpp:1298
+#: ../src/ui/dialog/export.cpp:1328
 msgid "Select a filename for exporting"
 msgstr "برآمد كرنے كے لئے فائل نام منتخب كریں۔"
 
@@ -15825,7 +15834,7 @@ msgid "Rearrange"
 msgstr "ترتیب دیجیے"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:925
-#: ../src/widgets/toolbox.cpp:1303
+#: ../src/widgets/toolbox.cpp:1364
 msgid "Nodes"
 msgstr "نوڈس"
 
@@ -16097,7 +16106,7 @@ msgid "_Delete"
 msgstr "مٹائیں"
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:60
-#: ../src/ui/dialog/export.cpp:1303
+#: ../src/ui/dialog/export.cpp:1302
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:982
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1538
 #: ../src/ui/dialog/input.cpp:912 ../src/verbs.cpp:2600
@@ -16110,369 +16119,369 @@ msgstr "_محفوظ كریں"
 msgid "Add profile"
 msgstr "فلٹر شامل كریں"
 
-#: ../src/ui/dialog/clonetiler.cpp:100
+#: ../src/ui/dialog/clonetiler.cpp:99
 msgid "_Symmetry"
 msgstr "_موزونیت"
 
 #. TRANSLATORS: "translation" means "shift" / "displacement" here.
-#: ../src/ui/dialog/clonetiler.cpp:112
+#: ../src/ui/dialog/clonetiler.cpp:111
 msgid "<b>P1</b>: simple translation"
 msgstr "<b>P1</b>:سادہ ترجمہ"
 
-#: ../src/ui/dialog/clonetiler.cpp:113
+#: ../src/ui/dialog/clonetiler.cpp:112
 msgid "<b>P2</b>: 180&#176; rotation"
 msgstr "<b>P2</b>: 180° محوری "
 
-#: ../src/ui/dialog/clonetiler.cpp:114
+#: ../src/ui/dialog/clonetiler.cpp:113
 msgid "<b>PM</b>: reflection"
 msgstr "<b>PM</b>: ریفلیكشن"
 
 #. TRANSLATORS: "glide reflection" is a reflection and a translation combined.
 #. For more info, see http://mathforum.org/sum95/suzanne/symsusan.html
-#: ../src/ui/dialog/clonetiler.cpp:117
+#: ../src/ui/dialog/clonetiler.cpp:116
 msgid "<b>PG</b>: glide reflection"
 msgstr "<b>PG</b>: گلائڈ ریفلیكشن "
 
-#: ../src/ui/dialog/clonetiler.cpp:118
+#: ../src/ui/dialog/clonetiler.cpp:117
 msgid "<b>CM</b>: reflection + glide reflection"
 msgstr "<b>CM</b>: ریفلیكشن + گلائڈ ریفلیكشن"
 
-#: ../src/ui/dialog/clonetiler.cpp:119
+#: ../src/ui/dialog/clonetiler.cpp:118
 msgid "<b>PMM</b>: reflection + reflection"
 msgstr "<b>PMM</b>: ریفلیكشن + ریفلیكشن"
 
-#: ../src/ui/dialog/clonetiler.cpp:120
+#: ../src/ui/dialog/clonetiler.cpp:119
 msgid "<b>PMG</b>: reflection + 180&#176; rotation"
 msgstr "<b>PMG</b>:ریفلیكشن + 180° محوری"
 
-#: ../src/ui/dialog/clonetiler.cpp:121
+#: ../src/ui/dialog/clonetiler.cpp:120
 msgid "<b>PGG</b>: glide reflection + 180&#176; rotation"
 msgstr "<b>PGG</b>: گلائڈ ریفلیكشن + 180°محوری"
 
-#: ../src/ui/dialog/clonetiler.cpp:122
+#: ../src/ui/dialog/clonetiler.cpp:121
 msgid "<b>CMM</b>: reflection + reflection + 180&#176; rotation"
 msgstr "<b>CMM</b>: ریفلیكشن + ریفلیكشن + 180° محوری"
 
-#: ../src/ui/dialog/clonetiler.cpp:123
+#: ../src/ui/dialog/clonetiler.cpp:122
 msgid "<b>P4</b>: 90&#176; rotation"
 msgstr "<b>P4</b>: 90° محوری"
 
-#: ../src/ui/dialog/clonetiler.cpp:124
+#: ../src/ui/dialog/clonetiler.cpp:123
 msgid "<b>P4M</b>: 90&#176; rotation + 45&#176; reflection"
 msgstr "<b>P4M</b>: 90° محوری + 45° ریفلیكشن "
 
-#: ../src/ui/dialog/clonetiler.cpp:125
+#: ../src/ui/dialog/clonetiler.cpp:124
 msgid "<b>P4G</b>: 90&#176; rotation + 90&#176; reflection"
 msgstr "<b>P4G</b>: 90° محوری + 90° ریفلیكشن "
 
-#: ../src/ui/dialog/clonetiler.cpp:126
+#: ../src/ui/dialog/clonetiler.cpp:125
 msgid "<b>P3</b>: 120&#176; rotation"
 msgstr "<b>P3</b>: 120° محوری "
 
-#: ../src/ui/dialog/clonetiler.cpp:127
+#: ../src/ui/dialog/clonetiler.cpp:126
 msgid "<b>P31M</b>: reflection + 120&#176; rotation, dense"
 msgstr "<b>P31M</b>: ریفلیكشن + 120° محوری ,گھنا "
 
-#: ../src/ui/dialog/clonetiler.cpp:128
+#: ../src/ui/dialog/clonetiler.cpp:127
 msgid "<b>P3M1</b>: reflection + 120&#176; rotation, sparse"
 msgstr "<b>P3M1</b>: ریفلیكشن + 120° محوری, اسپارس "
 
-#: ../src/ui/dialog/clonetiler.cpp:129
+#: ../src/ui/dialog/clonetiler.cpp:128
 msgid "<b>P6</b>: 60&#176; rotation"
 msgstr "<b>P6</b>: 60° محوری "
 
-#: ../src/ui/dialog/clonetiler.cpp:130
+#: ../src/ui/dialog/clonetiler.cpp:129
 msgid "<b>P6M</b>: reflection + 60&#176; rotation"
 msgstr "<b>P6M</b>: ریفلیكشن + 60° محوری "
 
-#: ../src/ui/dialog/clonetiler.cpp:137
+#: ../src/ui/dialog/clonetiler.cpp:136
 msgid "Select one of the 17 symmetry groups for the tiling"
 msgstr "ٹائل بنانے كے لئے ۱۷ موزوں گروپوں میں سے ایك منتخب كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:160
+#: ../src/ui/dialog/clonetiler.cpp:159
 msgid "S_hift"
 msgstr "S_hift"
 
 #. TRANSLATORS: "shift" means: the tiles will be shifted (offset) horizontally by this amount
-#: ../src/ui/dialog/clonetiler.cpp:170
+#: ../src/ui/dialog/clonetiler.cpp:169
 #, no-c-format
 msgid "<b>Shift X:</b>"
 msgstr "<b>Shift X:</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:178
+#: ../src/ui/dialog/clonetiler.cpp:177
 #, no-c-format
 msgid "Horizontal shift per row (in % of tile width)"
 msgstr "ہر صف كے لئے اُفقی شفٹ (ٹائل كی چوڑائی %  میں )"
 
-#: ../src/ui/dialog/clonetiler.cpp:186
+#: ../src/ui/dialog/clonetiler.cpp:185
 #, no-c-format
 msgid "Horizontal shift per column (in % of tile width)"
 msgstr "ہر ستون كے لئے  اُفقی شفٹ  (ٹائل كی چوڑائی %  میں )"
 
-#: ../src/ui/dialog/clonetiler.cpp:192
+#: ../src/ui/dialog/clonetiler.cpp:191
 msgid "Randomize the horizontal shift by this percentage"
 msgstr "اس فی صدی كے ذریعے اُفقی شفٹ كو رینڈمائز كریں۔"
 
 #. TRANSLATORS: "shift" means: the tiles will be shifted (offset) vertically by this amount
-#: ../src/ui/dialog/clonetiler.cpp:202
+#: ../src/ui/dialog/clonetiler.cpp:201
 #, no-c-format
 msgid "<b>Shift Y:</b>"
 msgstr "<b>Shift Y:</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:210
+#: ../src/ui/dialog/clonetiler.cpp:209
 #, no-c-format
 msgid "Vertical shift per row (in % of tile height)"
 msgstr "ہر صف كے لئے عمودی شفٹ (ٹائل كی لمبائی %  میں )"
 
-#: ../src/ui/dialog/clonetiler.cpp:218
+#: ../src/ui/dialog/clonetiler.cpp:217
 #, no-c-format
 msgid "Vertical shift per column (in % of tile height)"
 msgstr "ہر ستون كے لئے عمودی شفٹ  (ٹائل كی لمبائی %  میں )"
 
-#: ../src/ui/dialog/clonetiler.cpp:225
+#: ../src/ui/dialog/clonetiler.cpp:224
 msgid "Randomize the vertical shift by this percentage"
 msgstr "اس فی صدی كے ذریعے عمودی شفٹ كو رینڈمائز كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:233 ../src/ui/dialog/clonetiler.cpp:379
+#: ../src/ui/dialog/clonetiler.cpp:232 ../src/ui/dialog/clonetiler.cpp:378
 msgid "<b>Exponent:</b>"
 msgstr "<b>اكسپوننٹ:</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:240
+#: ../src/ui/dialog/clonetiler.cpp:239
 msgid "Whether rows are spaced evenly (1), converge (<1) or diverge (>1)"
 msgstr ""
 "كیا صف كو برابر روپ میں (1), كوریج (<1) یا ڈائكوریج  (>1)مقام دیا جاتا ہے۔."
 
-#: ../src/ui/dialog/clonetiler.cpp:247
+#: ../src/ui/dialog/clonetiler.cpp:246
 msgid "Whether columns are spaced evenly (1), converge (<1) or diverge (>1)"
 msgstr ""
 "كیا ستون  كو برابر روپ میں (1), كوریج (<1) یا ڈائكوریج  (>1)مقام دیا جاتا "
 "ہے۔."
 
 #. TRANSLATORS: "Alternate" is a verb here
-#: ../src/ui/dialog/clonetiler.cpp:255 ../src/ui/dialog/clonetiler.cpp:419
-#: ../src/ui/dialog/clonetiler.cpp:495 ../src/ui/dialog/clonetiler.cpp:568
-#: ../src/ui/dialog/clonetiler.cpp:614 ../src/ui/dialog/clonetiler.cpp:737
+#: ../src/ui/dialog/clonetiler.cpp:254 ../src/ui/dialog/clonetiler.cpp:418
+#: ../src/ui/dialog/clonetiler.cpp:494 ../src/ui/dialog/clonetiler.cpp:567
+#: ../src/ui/dialog/clonetiler.cpp:613 ../src/ui/dialog/clonetiler.cpp:736
 msgid "<small>Alternate:</small>"
 msgstr "<small>باری باری سے:</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:261
+#: ../src/ui/dialog/clonetiler.cpp:260
 msgid "Alternate the sign of shifts for each row"
 msgstr "ہر ایك صف كے لئے شفٹس كے سائن كو الٹرنیٹ كریں"
 
-#: ../src/ui/dialog/clonetiler.cpp:266
+#: ../src/ui/dialog/clonetiler.cpp:265
 msgid "Alternate the sign of shifts for each column"
 msgstr "ہر ایك ستون كے لئے شفٹس كے سائن كو الٹرنیٹ كریں"
 
 #. TRANSLATORS: "Cumulate" is a verb here
-#: ../src/ui/dialog/clonetiler.cpp:273 ../src/ui/dialog/clonetiler.cpp:437
-#: ../src/ui/dialog/clonetiler.cpp:513
+#: ../src/ui/dialog/clonetiler.cpp:272 ../src/ui/dialog/clonetiler.cpp:436
+#: ../src/ui/dialog/clonetiler.cpp:512
 msgid "<small>Cumulate:</small>"
 msgstr "<small>ایك ساتھ كریں:</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:279
+#: ../src/ui/dialog/clonetiler.cpp:278
 msgid "Cumulate the shifts for each row"
 msgstr "ہر ایك صف كے لئے شفٹس كو یكجا كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:284
+#: ../src/ui/dialog/clonetiler.cpp:283
 msgid "Cumulate the shifts for each column"
 msgstr "ہر ایك ستون كے لئے شفٹس كو یكجا كریں۔"
 
 #. TRANSLATORS: "Cumulate" is a verb here
-#: ../src/ui/dialog/clonetiler.cpp:291
+#: ../src/ui/dialog/clonetiler.cpp:290
 msgid "<small>Exclude tile:</small>"
 msgstr "<small>ٹائل كو نكال دیں:</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:297
+#: ../src/ui/dialog/clonetiler.cpp:296
 msgid "Exclude tile height in shift"
 msgstr "شفٹ میں ٹائل كی اونچائی كو چھوڑ دیں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:302
+#: ../src/ui/dialog/clonetiler.cpp:301
 msgid "Exclude tile width in shift"
 msgstr "شفٹ میں ٹائل كی چوڑائی كو چھوڑ دیں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:311
+#: ../src/ui/dialog/clonetiler.cpp:310
 msgid "Sc_ale"
 msgstr "پیمانہ"
 
-#: ../src/ui/dialog/clonetiler.cpp:319
+#: ../src/ui/dialog/clonetiler.cpp:318
 msgid "<b>Scale X:</b>"
 msgstr "<b>پیمانہ X:</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:327
+#: ../src/ui/dialog/clonetiler.cpp:326
 #, no-c-format
 msgid "Horizontal scale per row (in % of tile width)"
 msgstr "ہر صف اُفقی پیمانہ (ٹائل كی چوڑائی % میں ) "
 
-#: ../src/ui/dialog/clonetiler.cpp:335
+#: ../src/ui/dialog/clonetiler.cpp:334
 #, no-c-format
 msgid "Horizontal scale per column (in % of tile width)"
 msgstr "ہر ستون اُفقی پیمانہ (ٹائل كی چوڑائی % میں ) "
 
-#: ../src/ui/dialog/clonetiler.cpp:341
+#: ../src/ui/dialog/clonetiler.cpp:340
 msgid "Randomize the horizontal scale by this percentage"
 msgstr "اس فی صد كے ذریعے اُفقی پیمانہ كو رینڈمائز كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:349
+#: ../src/ui/dialog/clonetiler.cpp:348
 msgid "<b>Scale Y:</b>"
 msgstr "<b>اسكیل Y:</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:357
+#: ../src/ui/dialog/clonetiler.cpp:356
 #, no-c-format
 msgid "Vertical scale per row (in % of tile height)"
 msgstr "ہر ایك صف عمودی پیمانہ (ٹائل كی لمبائی  %میں)"
 
-#: ../src/ui/dialog/clonetiler.cpp:365
+#: ../src/ui/dialog/clonetiler.cpp:364
 #, no-c-format
 msgid "Vertical scale per column (in % of tile height)"
 msgstr "ہر ایك ستون عمودی پیمانہ (ٹائل كی لمبائی  %میں)"
 
-#: ../src/ui/dialog/clonetiler.cpp:371
+#: ../src/ui/dialog/clonetiler.cpp:370
 msgid "Randomize the vertical scale by this percentage"
 msgstr "اس فی صدی كے ذریعے عمودی پیمانہ كو رینڈمائز كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:385
+#: ../src/ui/dialog/clonetiler.cpp:384
 msgid "Whether row scaling is uniform (1), converge (<1) or diverge (>1)"
 msgstr "كیا صف كا پیمانہ برابر ہے (1), كنورج(<1) یا ڈائورج(>1)"
 
-#: ../src/ui/dialog/clonetiler.cpp:391
+#: ../src/ui/dialog/clonetiler.cpp:390
 msgid "Whether column scaling is uniform (1), converge (<1) or diverge (>1)"
 msgstr "كیاستون كا پیمانہ برابر ہے (1), كنورج(<1) یا ڈائورج(>1)"
 
-#: ../src/ui/dialog/clonetiler.cpp:399
+#: ../src/ui/dialog/clonetiler.cpp:398
 msgid "<b>Base:</b>"
 msgstr "<b>بنیاد:</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:405 ../src/ui/dialog/clonetiler.cpp:411
+#: ../src/ui/dialog/clonetiler.cpp:404 ../src/ui/dialog/clonetiler.cpp:410
 msgid ""
 "Base for a logarithmic spiral: not used (0), converge (<1), or diverge (>1)"
 msgstr ""
 "لوگیرتھمیك  اسپائرل كے لئے بنیاد: استعمال نہیں كیا گیا (0), كنورج(<1), یا "
 "ڈائورج (>1) ہے."
 
-#: ../src/ui/dialog/clonetiler.cpp:425
+#: ../src/ui/dialog/clonetiler.cpp:424
 msgid "Alternate the sign of scales for each row"
 msgstr "ہر ایك صف كے لئے پیمانوں كے سائن كا باری باری سے استعمال كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:430
+#: ../src/ui/dialog/clonetiler.cpp:429
 msgid "Alternate the sign of scales for each column"
 msgstr "ہر ایك ستون كے لئے پیمانوں كے سائن كا باری باری سے استعمال كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:443
+#: ../src/ui/dialog/clonetiler.cpp:442
 msgid "Cumulate the scales for each row"
 msgstr "ہر ایك صف كے لئے پیمانوں كو یكجا كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:448
+#: ../src/ui/dialog/clonetiler.cpp:447
 msgid "Cumulate the scales for each column"
 msgstr "ہر ایك ستون كے لئے پیمانوں كو یكجا كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:457
+#: ../src/ui/dialog/clonetiler.cpp:456
 msgid "_Rotation"
 msgstr "_محوری"
 
-#: ../src/ui/dialog/clonetiler.cpp:465
+#: ../src/ui/dialog/clonetiler.cpp:464
 msgid "<b>Angle:</b>"
 msgstr "<b>زاویہ:</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:473
+#: ../src/ui/dialog/clonetiler.cpp:472
 #, no-c-format
 msgid "Rotate tiles by this angle for each row"
 msgstr "ہر ایك صف كے لئے اس زاویہ سے ٹائلس كو گھمائیں"
 
-#: ../src/ui/dialog/clonetiler.cpp:481
+#: ../src/ui/dialog/clonetiler.cpp:480
 #, no-c-format
 msgid "Rotate tiles by this angle for each column"
 msgstr "ہر ایك ستون كے لئے اس زاویہ سے ٹائلس كو گھمائیں"
 
-#: ../src/ui/dialog/clonetiler.cpp:487
+#: ../src/ui/dialog/clonetiler.cpp:486
 msgid "Randomize the rotation angle by this percentage"
 msgstr "اس فی صدی سے محوری زاویہ كو رینڈمائز كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:501
+#: ../src/ui/dialog/clonetiler.cpp:500
 msgid "Alternate the rotation direction for each row"
 msgstr "ہر ایك صف كے لئے محوری سمت باری باری سے بدلیں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:506
+#: ../src/ui/dialog/clonetiler.cpp:505
 msgid "Alternate the rotation direction for each column"
 msgstr "ہر ایك ستون كے لئے محوری سمت باری باری سے بدلیں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:519
+#: ../src/ui/dialog/clonetiler.cpp:518
 msgid "Cumulate the rotation for each row"
 msgstr "ہر ایك صف كے لئے محوری كو یكجا كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:524
+#: ../src/ui/dialog/clonetiler.cpp:523
 msgid "Cumulate the rotation for each column"
 msgstr "ہر ایك ستون كے لئے محوری كو یكجا كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:533
+#: ../src/ui/dialog/clonetiler.cpp:532
 msgid "_Blur & opacity"
 msgstr "_دھندلاپن اور غیر شفاف"
 
-#: ../src/ui/dialog/clonetiler.cpp:542
+#: ../src/ui/dialog/clonetiler.cpp:541
 msgid "<b>Blur:</b>"
 msgstr "<b>دھندلاپن:</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:548
+#: ../src/ui/dialog/clonetiler.cpp:547
 msgid "Blur tiles by this percentage for each row"
 msgstr "ہر ایك صف كے لئے اس فی صدی سے ٹائلوں كو دھندلا كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:554
+#: ../src/ui/dialog/clonetiler.cpp:553
 msgid "Blur tiles by this percentage for each column"
 msgstr "ہر ایك ستون كے لئے اس فی صدی سے ٹائلوں كو دھندلا كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:560
+#: ../src/ui/dialog/clonetiler.cpp:559
 msgid "Randomize the tile blur by this percentage"
 msgstr "اس فی صدی سے ٹائل بلر  كو رینڈمائز كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:574
+#: ../src/ui/dialog/clonetiler.cpp:573
 msgid "Alternate the sign of blur change for each row"
 msgstr ""
 "ہر ایك صف كے لئے دھندلاپن میں بدلاؤ كے سائن كا باری باری سے استعمال كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:579
+#: ../src/ui/dialog/clonetiler.cpp:578
 msgid "Alternate the sign of blur change for each column"
 msgstr ""
 "ہر ایك ستون كے لئے دھندلاپن میں بدلاؤ كے سائن كا باری باری سے استعمال كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:588
+#: ../src/ui/dialog/clonetiler.cpp:587
 #, fuzzy
 msgid "<b>Opacity:</b>"
 msgstr "غیر شفافیت"
 
-#: ../src/ui/dialog/clonetiler.cpp:594
+#: ../src/ui/dialog/clonetiler.cpp:593
 msgid "Decrease tile opacity by this percentage for each row"
 msgstr "ہر ایك صف كے لئے اس فی صدی سے ٹائل كی غیر شفافیت كو كم كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:600
+#: ../src/ui/dialog/clonetiler.cpp:599
 msgid "Decrease tile opacity by this percentage for each column"
 msgstr "ہر ایك ستون كے لئے اس فی صدی سے ٹائل كی غیر شفافیت كو كم كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:606
+#: ../src/ui/dialog/clonetiler.cpp:605
 msgid "Randomize the tile opacity by this percentage"
 msgstr "اس فی صدی سے ٹائل كی غیر شفافیت كو رینڈمائز كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:620
+#: ../src/ui/dialog/clonetiler.cpp:619
 msgid "Alternate the sign of opacity change for each row"
 msgstr ""
 "ہر ایك صف كے لئے غیر شفافیت میں بدلاؤ كے سائن كا ادل بدل كر استعمال كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:625
+#: ../src/ui/dialog/clonetiler.cpp:624
 msgid "Alternate the sign of opacity change for each column"
 msgstr ""
 "ہر ایك ستون كے لئے غیر شفافیت میں بدلاؤ كے سائن كا ادل بدل كر استعمال كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:633
+#: ../src/ui/dialog/clonetiler.cpp:632
 msgid "Co_lor"
 msgstr "رنگ:"
 
-#: ../src/ui/dialog/clonetiler.cpp:639
+#: ../src/ui/dialog/clonetiler.cpp:638
 msgid "Initial color: "
 msgstr "ابتدائی رنگ:"
 
-#: ../src/ui/dialog/clonetiler.cpp:643
+#: ../src/ui/dialog/clonetiler.cpp:642
 msgid "Initial color of tiled clones"
 msgstr "ٹائلڈ كلونس كا ابتدائی رنگ"
 
-#: ../src/ui/dialog/clonetiler.cpp:643
+#: ../src/ui/dialog/clonetiler.cpp:642
 #, fuzzy
 msgid ""
 "Initial color for clones (works only if the original has unset fill or "
@@ -16481,72 +16490,72 @@ msgstr ""
 "كلونس كے لئے ابتدائی رنگ (صرف تبھی كام كرتا ہے جب حقیقی روپ میں انسیٹ فل یا "
 "اسٹروك ہوتا ہے۔)"
 
-#: ../src/ui/dialog/clonetiler.cpp:658
+#: ../src/ui/dialog/clonetiler.cpp:657
 msgid "<b>H:</b>"
 msgstr "<b>H:</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:664
+#: ../src/ui/dialog/clonetiler.cpp:663
 msgid "Change the tile hue by this percentage for each row"
 msgstr "ہر ایك صف كے لئے اس فی صدی سے ٹائل ہیو بدلیں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:670
+#: ../src/ui/dialog/clonetiler.cpp:669
 msgid "Change the tile hue by this percentage for each column"
 msgstr "ہر ایكستون كے لئے اس فی صدی سے ٹائل ہیو بدلیں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:676
+#: ../src/ui/dialog/clonetiler.cpp:675
 msgid "Randomize the tile hue by this percentage"
 msgstr "اس فی صدی سے ٹائل ہیو كو رینڈمائز كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:685
+#: ../src/ui/dialog/clonetiler.cpp:684
 msgid "<b>S:</b>"
 msgstr "<b>S:</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:691
+#: ../src/ui/dialog/clonetiler.cpp:690
 msgid "Change the color saturation by this percentage for each row"
 msgstr "ہر ایك صف كے لئے اس فی صدی سے رنگ كے سیچوریشن كو بدلیں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:697
+#: ../src/ui/dialog/clonetiler.cpp:696
 msgid "Change the color saturation by this percentage for each column"
 msgstr "ہر ایك ستون كے لئے اس فی صدی سے رنگ كے سیچوریشن كو بدلیں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:703
+#: ../src/ui/dialog/clonetiler.cpp:702
 msgid "Randomize the color saturation by this percentage"
 msgstr "اس فی صدی سے رنگ سیچوریشن كو رینڈمائز كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:711
+#: ../src/ui/dialog/clonetiler.cpp:710
 msgid "<b>L:</b>"
 msgstr "<b>L:</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:717
+#: ../src/ui/dialog/clonetiler.cpp:716
 msgid "Change the color lightness by this percentage for each row"
 msgstr "ہر ایك صف كے لئے اس فی صدی سے رنگ كی چمك كو بدلیں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:723
+#: ../src/ui/dialog/clonetiler.cpp:722
 msgid "Change the color lightness by this percentage for each column"
 msgstr "ہر ایك ستون كے لئے اس فی صدی سے رنگ كی چمك كو بدلیں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:729
+#: ../src/ui/dialog/clonetiler.cpp:728
 msgid "Randomize the color lightness by this percentage"
 msgstr "اس فی صدی سے رنگ كی چمك كو رینڈمائز كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:743
+#: ../src/ui/dialog/clonetiler.cpp:742
 msgid "Alternate the sign of color changes for each row"
 msgstr "ہر ایك صف كے لئے رنگ میں بدلاؤ كے سائن كو ادل بدل كر استعمال كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:748
+#: ../src/ui/dialog/clonetiler.cpp:747
 msgid "Alternate the sign of color changes for each column"
 msgstr "ہر ایك ستون كے لئے رنگ میں بدلاؤ كے سائن كو ادل بدل كر استعمال كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:756
+#: ../src/ui/dialog/clonetiler.cpp:755
 msgid "_Trace"
 msgstr "_پتہ لگائیں"
 
-#: ../src/ui/dialog/clonetiler.cpp:762
+#: ../src/ui/dialog/clonetiler.cpp:761
 #, fuzzy
 msgid "Trace the drawing under the clones/sprayed items"
 msgstr "ٹائلوں كے نیچے ڈرائینگ كا پتہ لگائیں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:766
+#: ../src/ui/dialog/clonetiler.cpp:765
 #, fuzzy
 msgid ""
 "For each clone/sprayed item, pick a value from the drawing in its location "
@@ -16555,109 +16564,109 @@ msgstr ""
 "ہر ایك كلون كے لئے، اُس كلون كے مقام میں ڈرائینگ سے ایك ویلیو منتخب كریں اور "
 "اسے كلون پر استعمال كریں"
 
-#: ../src/ui/dialog/clonetiler.cpp:778
+#: ../src/ui/dialog/clonetiler.cpp:777
 msgid "1. Pick from the drawing:"
 msgstr "۱. ڑائینگ سے منتخب كریں: "
 
-#: ../src/ui/dialog/clonetiler.cpp:789
+#: ../src/ui/dialog/clonetiler.cpp:788
 msgid "Pick the visible color and opacity"
 msgstr "دیكھائی دینے والے رنگ اور غیر شفافیت كو منتخب كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:796
+#: ../src/ui/dialog/clonetiler.cpp:795
 msgid "Pick the total accumulated opacity"
 msgstr "كُل اكیومولیٹڈ غیرشفافیت كو منتخب كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:802
+#: ../src/ui/dialog/clonetiler.cpp:801
 msgid "R"
 msgstr "R"
 
-#: ../src/ui/dialog/clonetiler.cpp:803
+#: ../src/ui/dialog/clonetiler.cpp:802
 msgid "Pick the Red component of the color"
 msgstr "رنگ كے لال كمپوننٹ كو منتخب كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:809
+#: ../src/ui/dialog/clonetiler.cpp:808
 msgid "G"
 msgstr "G"
 
-#: ../src/ui/dialog/clonetiler.cpp:810
+#: ../src/ui/dialog/clonetiler.cpp:809
 msgid "Pick the Green component of the color"
 msgstr "رنگ كے ہرے كمپوننٹ كو منتخب كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:816
+#: ../src/ui/dialog/clonetiler.cpp:815
 msgid "B"
 msgstr "B"
 
-#: ../src/ui/dialog/clonetiler.cpp:817
+#: ../src/ui/dialog/clonetiler.cpp:816
 msgid "Pick the Blue component of the color"
 msgstr "رنگ كے نیلے كمپوننٹ كو منتخب كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:823
+#: ../src/ui/dialog/clonetiler.cpp:822
 #, fuzzy
 msgctxt "Clonetiler color hue"
 msgid "H"
 msgstr "H"
 
-#: ../src/ui/dialog/clonetiler.cpp:824
+#: ../src/ui/dialog/clonetiler.cpp:823
 msgid "Pick the hue of the color"
 msgstr "رنگ كے ہیو كو منتخب كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:830
+#: ../src/ui/dialog/clonetiler.cpp:829
 #, fuzzy
 msgctxt "Clonetiler color saturation"
 msgid "S"
 msgstr "S"
 
-#: ../src/ui/dialog/clonetiler.cpp:831
+#: ../src/ui/dialog/clonetiler.cpp:830
 msgid "Pick the saturation of the color"
 msgstr "رنگ كے سیچوریشن كو منتخب كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:837
+#: ../src/ui/dialog/clonetiler.cpp:836
 #, fuzzy
 msgctxt "Clonetiler color lightness"
 msgid "L"
 msgstr "L"
 
-#: ../src/ui/dialog/clonetiler.cpp:838
+#: ../src/ui/dialog/clonetiler.cpp:837
 msgid "Pick the lightness of the color"
 msgstr "رنگ كے چمك كو منتخب كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:847
+#: ../src/ui/dialog/clonetiler.cpp:846
 msgid "2. Tweak the picked value:"
 msgstr "۲۔ منتخب كی گئی ویلیو ٹویك كریں:"
 
-#: ../src/ui/dialog/clonetiler.cpp:858
+#: ../src/ui/dialog/clonetiler.cpp:857
 msgid "Gamma-correct:"
 msgstr "گاما ۔ صحیح:"
 
-#: ../src/ui/dialog/clonetiler.cpp:862
+#: ../src/ui/dialog/clonetiler.cpp:861
 msgid "Shift the mid-range of the picked value upwards (>0) or downwards (<0)"
 msgstr "منتخبہ ویلیو كی درمیانی رینج كو اوپر(>0) یا نیچے (<0)كی طرف لے جائیں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:869
+#: ../src/ui/dialog/clonetiler.cpp:868
 msgid "Randomize:"
 msgstr "رینڈمائز:"
 
-#: ../src/ui/dialog/clonetiler.cpp:873
+#: ../src/ui/dialog/clonetiler.cpp:872
 msgid "Randomize the picked value by this percentage"
 msgstr "اس فی صدی سے منتخبہ ویلیو كو رینڈمائز كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:880
+#: ../src/ui/dialog/clonetiler.cpp:879
 msgid "Invert:"
 msgstr "اُلٹا كریں:"
 
-#: ../src/ui/dialog/clonetiler.cpp:884
+#: ../src/ui/dialog/clonetiler.cpp:883
 msgid "Invert the picked value"
 msgstr "منتخبہ ویلیو كو اُلٹا كریں"
 
-#: ../src/ui/dialog/clonetiler.cpp:890
+#: ../src/ui/dialog/clonetiler.cpp:889
 msgid "3. Apply the value to the clones':"
 msgstr "۳۔ كلونس كو ویلیو لاگو كریں:"
 
-#: ../src/ui/dialog/clonetiler.cpp:899
+#: ../src/ui/dialog/clonetiler.cpp:898
 msgid "Presence"
 msgstr "موجودگی"
 
-#: ../src/ui/dialog/clonetiler.cpp:902
+#: ../src/ui/dialog/clonetiler.cpp:901
 msgid ""
 "Each clone is created with the probability determined by the picked value in "
 "that point"
@@ -16665,16 +16674,16 @@ msgstr ""
 "ہر ایك كلون كو اُس نقطہ میں منتخبہ ویلیو ذریعہ تعین شدہ ممكنیت كے ساتھ بنایا "
 "جاتا ہے۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:908
+#: ../src/ui/dialog/clonetiler.cpp:907
 msgid "Size"
 msgstr "سائز"
 
-#: ../src/ui/dialog/clonetiler.cpp:911
+#: ../src/ui/dialog/clonetiler.cpp:910
 msgid "Each clone's size is determined by the picked value in that point"
 msgstr ""
 "ہر ایك كلون كی سائز اُس نقطہ میں منتخبہ ویلیو كے ذریعہ تعین كیا جاتا ہے۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:920
+#: ../src/ui/dialog/clonetiler.cpp:919
 msgid ""
 "Each clone is painted by the picked color (the original must have unset fill "
 "or stroke)"
@@ -16682,53 +16691,53 @@ msgstr ""
 "ہر ایك كلون كو منتخب كیے گئے رنگ سے پینٹ كیا جاتا ہے (حقیقی روپ میں غیر سیٹ "
 "فل یا اسٹروك ہونا چاہئیے)"
 
-#: ../src/ui/dialog/clonetiler.cpp:929
+#: ../src/ui/dialog/clonetiler.cpp:928
 msgid "Each clone's opacity is determined by the picked value in that point"
 msgstr ""
 "ہر ایك كلون كی غیر شفافیت اُس نقطہ میں منتخب ویلیو كے ذریعہ تعین كی جاتی ہے۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:943
+#: ../src/ui/dialog/clonetiler.cpp:942
 #, fuzzy
 msgid "Apply to tiled clones:"
 msgstr "ٹائل ڈ كلونس منسوخ كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:964
+#: ../src/ui/dialog/clonetiler.cpp:963
 msgid "How many rows in the tiling"
 msgstr "ٹائلینگ میں كتنے صف موجود ہیں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:984
+#: ../src/ui/dialog/clonetiler.cpp:983
 msgid "How many columns in the tiling"
 msgstr "ٹائلینگ میں كتنے ستون موجود ہیں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:1013
+#: ../src/ui/dialog/clonetiler.cpp:1012
 msgid "Width of the rectangle to be filled"
 msgstr "اُس مربع كی چوڑائی جس میں بھرنا ہے۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:1036
+#: ../src/ui/dialog/clonetiler.cpp:1035
 msgid "Height of the rectangle to be filled"
 msgstr "اُس مربع كی لمبائی جس میں بھرنا ہے۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:1051
+#: ../src/ui/dialog/clonetiler.cpp:1050
 msgid "Rows, columns: "
 msgstr "صف، ستون:"
 
-#: ../src/ui/dialog/clonetiler.cpp:1052
+#: ../src/ui/dialog/clonetiler.cpp:1051
 msgid "Create the specified number of rows and columns"
 msgstr "متعین تعداد میں صف اور ستون تخلیق كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:1061
+#: ../src/ui/dialog/clonetiler.cpp:1060
 msgid "Width, height: "
 msgstr "چوڑائی، لمبائی:"
 
-#: ../src/ui/dialog/clonetiler.cpp:1062
+#: ../src/ui/dialog/clonetiler.cpp:1061
 msgid "Fill the specified width and height with the tiling"
 msgstr "متعین شدہ چوڑائی اور لمبائی ٹائلینگ سے بھریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:1078
+#: ../src/ui/dialog/clonetiler.cpp:1077
 msgid "Use saved size and position of the tile"
 msgstr "ٹائل كے محفوظ كیے گئے سائز اور مقام كا استعمال كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:1081
+#: ../src/ui/dialog/clonetiler.cpp:1080
 msgid ""
 "Pretend that the size and position of the tile are the same as the last time "
 "you tiled it (if any), instead of using the current size"
@@ -16736,11 +16745,11 @@ msgstr ""
 "حالیہ سائز كا استعمال كرنے كی بجائے، مان لیں كہ ٹائل كی شكل اور مقام وہی ہے "
 "جیسے كہ اپ نے اسے آخری بار )اگر كوئی ہو ٹائل كیا تھا)"
 
-#: ../src/ui/dialog/clonetiler.cpp:1107
+#: ../src/ui/dialog/clonetiler.cpp:1106
 msgid " <b>_Create</b> "
 msgstr " <b>_تخلیق كریں</b>"
 
-#: ../src/ui/dialog/clonetiler.cpp:1109
+#: ../src/ui/dialog/clonetiler.cpp:1108
 msgid "Create and tile the clones of the selection"
 msgstr "انتخاب كے كلونس كو تخلیق كریں اور ٹائل كریں۔"
 
@@ -16749,30 +16758,30 @@ msgstr "انتخاب كے كلونس كو تخلیق كریں اور ٹائل ك
 #. diagrams on the left in the following screenshot:
 #. http://www.inkscape.org/screenshots/gallery/inkscape-0.42-CVS-tiles-unclump.png
 #. So unclumping is the process of spreading a number of objects out more evenly.
-#: ../src/ui/dialog/clonetiler.cpp:1125
+#: ../src/ui/dialog/clonetiler.cpp:1124
 msgid " _Unclump "
 msgstr "_ان كلمپ "
 
-#: ../src/ui/dialog/clonetiler.cpp:1126
+#: ../src/ui/dialog/clonetiler.cpp:1125
 msgid "Spread out clones to reduce clumping; can be applied repeatedly"
 msgstr ""
 "كلمپینگ كو كم كرنے كے لئے كلونس كو پھیلا دیں; اسے بار بار استعمال كیا جاسكتا "
 "ہے۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:1132
+#: ../src/ui/dialog/clonetiler.cpp:1131
 msgid " Re_move "
 msgstr "نكالیں"
 
-#: ../src/ui/dialog/clonetiler.cpp:1133
+#: ../src/ui/dialog/clonetiler.cpp:1132
 msgid "Remove existing tiled clones of the selected object (siblings only)"
 msgstr "منتخبہ آبجیكٹ (صرف سیبلینگس) كے موجودہ ٹائلڈ كلونس كو ہٹائیں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:1148
+#: ../src/ui/dialog/clonetiler.cpp:1147
 msgid " R_eset "
 msgstr "ریسیٹ "
 
 #. TRANSLATORS: "change" is a noun here
-#: ../src/ui/dialog/clonetiler.cpp:1150
+#: ../src/ui/dialog/clonetiler.cpp:1149
 msgid ""
 "Reset all shifts, scales, rotates, opacity and color changes in the dialog "
 "to zero"
@@ -16780,41 +16789,41 @@ msgstr ""
 "ڈائیلاگ میں تمام شفٹس، پیمانے، روٹیٹس، غیر شفافیت اور رنگ كے بدلاؤ كو صفر كے "
 "روپ میں دوبارہ سیٹ كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:1210
+#: ../src/ui/dialog/clonetiler.cpp:1209
 msgid "<small>Nothing selected.</small>"
 msgstr "<small>كچھ بھی منتخبہ نہیں.</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:1216
+#: ../src/ui/dialog/clonetiler.cpp:1215
 msgid "<small>More than one object selected.</small>"
 msgstr "<small>ایك سے زیادہ آبجیكٹ منتخب كیے گئے</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:1223
+#: ../src/ui/dialog/clonetiler.cpp:1222
 #, c-format
 msgid "<small>Object has <b>%d</b> tiled clones.</small>"
 msgstr "<small>آبجیكٹ میں<b>%d</b>  ٹائل كیے گئے كلونس ہیں۔</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:1228
+#: ../src/ui/dialog/clonetiler.cpp:1227
 msgid "<small>Object has no tiled clones.</small>"
 msgstr "<small>آبجیكٹ میں ٹائل كیے گئے كلونس نہیں ہیں۔.</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:1945
+#: ../src/ui/dialog/clonetiler.cpp:1944
 msgid "Select <b>one object</b> whose tiled clones to unclump."
 msgstr ""
 "<b>ایك آبجیكٹ</b> منتخب كریں جس كے ٹائل كیے گئے كلونس كو ان كلمپ كرنا ہے۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:1965
+#: ../src/ui/dialog/clonetiler.cpp:1964
 msgid "Unclump tiled clones"
 msgstr "ٹائل كیے گئے كلونس ان كلمپ"
 
-#: ../src/ui/dialog/clonetiler.cpp:1994
+#: ../src/ui/dialog/clonetiler.cpp:1993
 msgid "Select <b>one object</b> whose tiled clones to remove."
 msgstr "<b> ایك آبجیكٹ </b>منتخب كریں جس كے ٹائل كیے گئے كلونس كو نكالنا ہے۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:2017
+#: ../src/ui/dialog/clonetiler.cpp:2016
 msgid "Delete tiled clones"
 msgstr "ٹائل ڈ كلونس منسوخ كریں۔"
 
-#: ../src/ui/dialog/clonetiler.cpp:2070
+#: ../src/ui/dialog/clonetiler.cpp:2069
 msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
@@ -16823,23 +16832,23 @@ msgstr ""
 "گروپ كا كلون </b>بنائیں۔"
 
 #. set statusbar text
-#: ../src/ui/dialog/clonetiler.cpp:2078
+#: ../src/ui/dialog/clonetiler.cpp:2077
 msgid "<small>Creating tiled clones...</small>"
 msgstr "<small>ٹائلڈ كلونس بنائیں جارہے ہیں...</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:2494
+#: ../src/ui/dialog/clonetiler.cpp:2493
 msgid "Create tiled clones"
 msgstr "ٹائلڈ كلون بنائیں"
 
-#: ../src/ui/dialog/clonetiler.cpp:2686
+#: ../src/ui/dialog/clonetiler.cpp:2685
 msgid "<small>Per row:</small>"
 msgstr "<small>ہر صف</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:2700
+#: ../src/ui/dialog/clonetiler.cpp:2699
 msgid "<small>Per column:</small>"
 msgstr "<small>ہر ستون:</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:2708
+#: ../src/ui/dialog/clonetiler.cpp:2707
 msgid "<small>Randomize:</small>"
 msgstr "<small>رینڈمائز:</small>"
 
@@ -16887,7 +16896,7 @@ msgstr "<b>كلك</b> مرتب كرنے كے لئے ایٹریبیوٹ."
 #: ../src/ui/dialog/cssdialog.cpp:156
 #, fuzzy, c-format
 msgid ""
-"Propery <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
+"Property <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
 "commit changes."
 msgstr ""
 "ایٹریبیوٹ <b>%s</b> كو منتخب كیا گیا ہے۔ مرتب كرنا مكمل ہونے كے بعد تبدیلی "
@@ -17194,7 +17203,7 @@ msgstr "_ہٹائیں"
 msgid "Remove selected grid."
 msgstr "منتخبہ گریڈ كو ہٹائیں"
 
-#: ../src/ui/dialog/document-properties.cpp:151 ../src/widgets/toolbox.cpp:1410
+#: ../src/ui/dialog/document-properties.cpp:151 ../src/widgets/toolbox.cpp:1471
 msgid "Guides"
 msgstr "گائیڈ"
 
@@ -17411,68 +17420,68 @@ msgstr "گریڈ ہٹائیں"
 msgid "Changed default display unit"
 msgstr "ڈیفالٹ گریڈینٹ تخلیق كریں۔"
 
-#: ../src/ui/dialog/export.cpp:118 ../src/verbs.cpp:3049
+#: ../src/ui/dialog/export.cpp:117 ../src/verbs.cpp:3049
 msgid "_Page"
 msgstr "_صفحہ"
 
-#: ../src/ui/dialog/export.cpp:118 ../src/verbs.cpp:3053
+#: ../src/ui/dialog/export.cpp:117 ../src/verbs.cpp:3053
 msgid "_Drawing"
 msgstr "_ڈرائینگ"
 
-#: ../src/ui/dialog/export.cpp:118 ../src/verbs.cpp:3055
+#: ../src/ui/dialog/export.cpp:117 ../src/verbs.cpp:3055
 msgid "_Selection"
 msgstr "_انتخاب"
 
-#: ../src/ui/dialog/export.cpp:118
+#: ../src/ui/dialog/export.cpp:117
 msgid "_Custom"
 msgstr "_كسٹم"
 
-#: ../src/ui/dialog/export.cpp:136 ../src/ui/toolbar/measure-toolbar.cpp:304
+#: ../src/ui/dialog/export.cpp:135 ../src/ui/toolbar/measure-toolbar.cpp:304
 #: ../src/ui/toolbar/measure-toolbar.cpp:312
 #: ../share/extensions/render_gears.inx.h:6
 msgid "Units:"
 msgstr "اكائیاں:"
 
-#: ../src/ui/dialog/export.cpp:138
+#: ../src/ui/dialog/export.cpp:137
 #, fuzzy
 msgid "_Export As..."
 msgstr "_بٹ میپ كو برآمد كریں... "
 
-#: ../src/ui/dialog/export.cpp:141
+#: ../src/ui/dialog/export.cpp:140
 #, fuzzy
 msgid "B_atch export all selected objects"
 msgstr "تمام منتخبہ آبجیكٹس كا بیچ بر آمد كریں۔"
 
-#: ../src/ui/dialog/export.cpp:142
+#: ../src/ui/dialog/export.cpp:141
 #, fuzzy
 msgid "Use interlacing"
 msgstr "اینٹی الایس"
 
-#: ../src/ui/dialog/export.cpp:143
+#: ../src/ui/dialog/export.cpp:142
 #, fuzzy
 msgid "Bit depth"
 msgstr "چوڑائی"
 
-#: ../src/ui/dialog/export.cpp:145
+#: ../src/ui/dialog/export.cpp:144
 #, fuzzy
 msgid "Compression"
 msgstr "درستگی"
 
-#: ../src/ui/dialog/export.cpp:147
+#: ../src/ui/dialog/export.cpp:146
 msgid "pHYs dpi"
 msgstr ""
 
-#: ../src/ui/dialog/export.cpp:152
+#: ../src/ui/dialog/export.cpp:151
 #, fuzzy
 msgid "Hide all except selected"
 msgstr "منتخبہ كو چھوڑ كر تمام كو چھپائیں"
 
-#: ../src/ui/dialog/export.cpp:153
+#: ../src/ui/dialog/export.cpp:152
 #, fuzzy
 msgid "Close when complete"
 msgstr "خود كار طریقے سے محفوظ كرنا پورا ہوگیا"
 
-#: ../src/ui/dialog/export.cpp:166
+#: ../src/ui/dialog/export.cpp:165
 msgid ""
 "Export each selected object into its own PNG file, using export hints if any "
 "(caution, overwrites without asking!)"
@@ -17480,179 +17489,179 @@ msgstr ""
 ", ہر ایك منتخبہ آبجیكٹ كو ، برآمد كے سوراخوں كا استعمال كر، اگر كوئی ہو، اس "
 "كی اپنی PNG فائل میں بر آمد كریں (آگاہی، بنا پوچھے مٹاكر لكھ دیتا ہے)"
 
-#: ../src/ui/dialog/export.cpp:168
+#: ../src/ui/dialog/export.cpp:167
 msgid "In the exported image, hide all objects except those that are selected"
 msgstr "برآمد كیے گئے امیج میں، منتخبہ كو چھوڑ كر تمام آبجیكٹس كو چھپائیں"
 
-#: ../src/ui/dialog/export.cpp:170
+#: ../src/ui/dialog/export.cpp:169
 msgid ""
 "Enables ADAM7 interlacing for PNG output. This results in slightly heavier "
 "images, but big images will look better sooner when loading the file"
 msgstr ""
 
-#: ../src/ui/dialog/export.cpp:172
+#: ../src/ui/dialog/export.cpp:171
 msgid "Once the export completes, close this dialog"
 msgstr ""
 
-#: ../src/ui/dialog/export.cpp:179
+#: ../src/ui/dialog/export.cpp:178
 #, fuzzy
 msgid "<b>Export area</b>"
 msgstr "<big><b>برآمد ائریا<big><b>"
 
-#: ../src/ui/dialog/export.cpp:212
+#: ../src/ui/dialog/export.cpp:211
 msgid "_x0:"
 msgstr "_x0:"
 
-#: ../src/ui/dialog/export.cpp:216
+#: ../src/ui/dialog/export.cpp:215
 msgid "x_1:"
 msgstr "x_1:"
 
-#: ../src/ui/dialog/export.cpp:220
+#: ../src/ui/dialog/export.cpp:219
 msgid "Wid_th:"
 msgstr "چوڑائی:"
 
-#: ../src/ui/dialog/export.cpp:224
+#: ../src/ui/dialog/export.cpp:223
 msgid "_y0:"
 msgstr "_y0:"
 
-#: ../src/ui/dialog/export.cpp:228
+#: ../src/ui/dialog/export.cpp:227
 msgid "y_1:"
 msgstr "y_1:"
 
-#: ../src/ui/dialog/export.cpp:232
+#: ../src/ui/dialog/export.cpp:231
 msgid "Hei_ght:"
 msgstr "اونچائی"
 
-#: ../src/ui/dialog/export.cpp:247
+#: ../src/ui/dialog/export.cpp:246
 #, fuzzy
 msgid "<b>Image size</b>"
 msgstr "<b>صفحہ كی سائز</b>"
 
-#: ../src/ui/dialog/export.cpp:259 ../src/ui/dialog/export.cpp:270
+#: ../src/ui/dialog/export.cpp:258 ../src/ui/dialog/export.cpp:269
 msgid "pixels at"
 msgstr "میں پكسیل"
 
-#: ../src/ui/dialog/export.cpp:265
+#: ../src/ui/dialog/export.cpp:264
 msgid "dp_i"
 msgstr "dp_i"
 
-#: ../src/ui/dialog/export.cpp:270 ../src/ui/dialog/transformation.cpp:70
+#: ../src/ui/dialog/export.cpp:269 ../src/ui/dialog/transformation.cpp:70
 #: ../src/ui/widget/page-sizer.cpp:49
 msgid "_Height:"
 msgstr "_اونچائی"
 
-#: ../src/ui/dialog/export.cpp:278
+#: ../src/ui/dialog/export.cpp:277
 #: ../src/ui/dialog/inkscape-preferences.cpp:1824
 #: ../src/ui/dialog/inkscape-preferences.cpp:1828
 #: ../src/ui/dialog/inkscape-preferences.cpp:1862
 msgid "dpi"
 msgstr "dpi"
 
-#: ../src/ui/dialog/export.cpp:286
+#: ../src/ui/dialog/export.cpp:285
 #, fuzzy
 msgid "<b>_Filename</b>"
 msgstr "<big><b>_فائل نام<big><b>"
 
-#: ../src/ui/dialog/export.cpp:324
+#: ../src/ui/dialog/export.cpp:323
 msgid "_Export"
 msgstr "_برآمد"
 
-#: ../src/ui/dialog/export.cpp:326
+#: ../src/ui/dialog/export.cpp:325
 msgid "Export the bitmap file with these settings"
 msgstr "ان ترتیب كے ساتھ بٹ میپ فائل كو برآمد كریں۔"
 
 #. Advanced
-#: ../src/ui/dialog/export.cpp:332
+#: ../src/ui/dialog/export.cpp:331
 msgid "Advanced"
 msgstr ""
 
-#: ../src/ui/dialog/export.cpp:346
+#: ../src/ui/dialog/export.cpp:345
 msgid ""
 "Will force-set the physical dpi for the png file. Set this to 72 if you're "
 "planning to work on your png with Photoshop"
 msgstr ""
 
-#: ../src/ui/dialog/export.cpp:486
+#: ../src/ui/dialog/export.cpp:485
 #, fuzzy
 msgid "bitmap"
 msgstr "بٹ میپ"
 
-#: ../src/ui/dialog/export.cpp:593
+#: ../src/ui/dialog/export.cpp:592
 #, fuzzy, c-format
 msgid "B_atch export %d selected object"
 msgid_plural "B_atch export %d selected objects"
 msgstr[0] "بایچ %d  منتخبہ آبجیكٹ برآمد كرتا ہے۔"
 msgstr[1] ""
 
-#: ../src/ui/dialog/export.cpp:909
+#: ../src/ui/dialog/export.cpp:908
 msgid "Export in progress"
 msgstr "برآمد پروگریس میں ہے۔"
 
-#: ../src/ui/dialog/export.cpp:1011
+#: ../src/ui/dialog/export.cpp:1010
 #, fuzzy
 msgid "No items selected."
 msgstr "كوئی فلٹر منتخب نہیں كیا گیا"
 
-#: ../src/ui/dialog/export.cpp:1015 ../src/ui/dialog/export.cpp:1017
+#: ../src/ui/dialog/export.cpp:1014 ../src/ui/dialog/export.cpp:1016
 #, fuzzy
 msgid "Exporting %1 files"
 msgstr "%d فائلیں برآمد ہورہی ہیں۔"
 
-#: ../src/ui/dialog/export.cpp:1059 ../src/ui/dialog/export.cpp:1061
+#: ../src/ui/dialog/export.cpp:1058 ../src/ui/dialog/export.cpp:1060
 #, fuzzy, c-format
 msgid "Exporting file <b>%s</b>..."
 msgstr "%d فائلیں برآمد ہورہی ہیں۔"
 
-#: ../src/ui/dialog/export.cpp:1072 ../src/ui/dialog/export.cpp:1167
+#: ../src/ui/dialog/export.cpp:1071 ../src/ui/dialog/export.cpp:1166
 #, c-format
 msgid "Could not export to filename %s.\n"
 msgstr "%s فائل نام میں برآمد نہیں كیا جاسكا۔\n"
 
-#: ../src/ui/dialog/export.cpp:1075
+#: ../src/ui/dialog/export.cpp:1074
 #, fuzzy, c-format
 msgid "Could not export to filename <b>%s</b>."
 msgstr "%s فائل نام میں برآمد نہیں كیا جاسكا۔\n"
 
-#: ../src/ui/dialog/export.cpp:1090
+#: ../src/ui/dialog/export.cpp:1089
 #, c-format
 msgid "Successfully exported <b>%d</b> files from <b>%d</b> selected items."
 msgstr ""
 
-#: ../src/ui/dialog/export.cpp:1101
+#: ../src/ui/dialog/export.cpp:1100
 #, fuzzy
 msgid "You have to enter a filename."
 msgstr "آپ كو ایك فائل نام درج كرنا ہوگا۔"
 
-#: ../src/ui/dialog/export.cpp:1102
+#: ../src/ui/dialog/export.cpp:1101
 msgid "You have to enter a filename"
 msgstr "آپ كو ایك فائل نام درج كرنا ہوگا۔"
 
-#: ../src/ui/dialog/export.cpp:1117
+#: ../src/ui/dialog/export.cpp:1116
 #, fuzzy
 msgid "The chosen area to be exported is invalid."
 msgstr "برآمد كیا جانے والا منتخبہ آئریا غیر معتبر ہے۔"
 
-#: ../src/ui/dialog/export.cpp:1118
+#: ../src/ui/dialog/export.cpp:1117
 msgid "The chosen area to be exported is invalid"
 msgstr "برآمد كیا جانے والا منتخبہ آئریا غیر معتبر ہے۔"
 
-#: ../src/ui/dialog/export.cpp:1133
+#: ../src/ui/dialog/export.cpp:1132
 #, c-format
 msgid "Directory %s does not exist or is not a directory.\n"
 msgstr "%s ڈائریكٹری موجودنہیں ہے یا یہ ایك ڈائریكٹری نہیں ہے۔\n"
 
 #. TRANSLATORS: %1 will be the filename, %2 the width, and %3 the height of the image
-#: ../src/ui/dialog/export.cpp:1147 ../src/ui/dialog/export.cpp:1149
+#: ../src/ui/dialog/export.cpp:1146 ../src/ui/dialog/export.cpp:1148
 #, fuzzy
 msgid "Exporting %1 (%2 x %3)"
 msgstr "%sكو برآمد كیا جارہا ہے۔ (%lu x %lu)"
 
-#: ../src/ui/dialog/export.cpp:1178
+#: ../src/ui/dialog/export.cpp:1177
 #, fuzzy, c-format
 msgid "Drawing exported to <b>%s</b>."
 msgstr "ایڈیٹنگ پیرامیٹر  <b>%s</b>"
 
-#: ../src/ui/dialog/export.cpp:1182
+#: ../src/ui/dialog/export.cpp:1181
 #, fuzzy
 msgid "Export aborted."
 msgstr "برآمد پروگریس میں ہے۔"
@@ -18569,343 +18578,343 @@ msgstr "نقلی فلٹر پریمیٹیو"
 msgid "Set filter primitive attribute"
 msgstr "فلٹر پریمیٹیو ایٹریبیوٹ سیٹ كریں۔"
 
-#: ../src/ui/dialog/find.cpp:63
+#: ../src/ui/dialog/find.cpp:61
 msgid "F_ind:"
 msgstr ""
 
-#: ../src/ui/dialog/find.cpp:63
+#: ../src/ui/dialog/find.cpp:61
 #, fuzzy
 msgid "Find objects by their content or properties (exact or partial match)"
 msgstr "آبجیكٹس كو آُن كے متن كنٹینٹ كے مطابق تلاش كریں(درست یا پارشیل مایچ)"
 
-#: ../src/ui/dialog/find.cpp:64
+#: ../src/ui/dialog/find.cpp:62
 #, fuzzy
 msgid "R_eplace:"
 msgstr "پہلی جگہ پردوبارہ رکھنا:"
 
-#: ../src/ui/dialog/find.cpp:64
+#: ../src/ui/dialog/find.cpp:62
 msgid "Replace match with this value"
 msgstr ""
 
-#: ../src/ui/dialog/find.cpp:66
+#: ../src/ui/dialog/find.cpp:64
 msgid "_All"
 msgstr ""
 
-#: ../src/ui/dialog/find.cpp:67
+#: ../src/ui/dialog/find.cpp:65
 #, fuzzy
 msgid "Current _layer"
 msgstr "حالیہ لئیر"
 
-#: ../src/ui/dialog/find.cpp:68
+#: ../src/ui/dialog/find.cpp:66
 #, fuzzy
 msgid "Sele_ction"
 msgstr "انتخاب"
 
-#: ../src/ui/dialog/find.cpp:69 ../src/ui/dialog/text-edit.cpp:68
+#: ../src/ui/dialog/find.cpp:67 ../src/ui/dialog/text-edit.cpp:66
 #: ../share/ui/menus.xml.h:18
 msgid "_Text"
 msgstr "_متن"
 
-#: ../src/ui/dialog/find.cpp:70
+#: ../src/ui/dialog/find.cpp:68
 #, fuzzy
 msgid "_Properties"
 msgstr "%s خصوصیات "
 
-#: ../src/ui/dialog/find.cpp:72
+#: ../src/ui/dialog/find.cpp:70
 #, fuzzy
 msgid "Search in"
 msgstr "تلاش"
 
-#: ../src/ui/dialog/find.cpp:73
+#: ../src/ui/dialog/find.cpp:71
 msgid "Scope"
 msgstr ""
 
-#: ../src/ui/dialog/find.cpp:75
+#: ../src/ui/dialog/find.cpp:73
 #, fuzzy
 msgid "Case sensiti_ve"
 msgstr "سینسیٹیوٹی گراب كریں:"
 
-#: ../src/ui/dialog/find.cpp:76
+#: ../src/ui/dialog/find.cpp:74
 #, fuzzy
 msgid "E_xact match"
 msgstr "اكسٹریكٹ امیج"
 
-#: ../src/ui/dialog/find.cpp:77
+#: ../src/ui/dialog/find.cpp:75
 msgid "Include _hidden"
 msgstr "چھپے ہوئے كو شامل كریں۔"
 
-#: ../src/ui/dialog/find.cpp:78
+#: ../src/ui/dialog/find.cpp:76
 #, fuzzy
 msgid "Include loc_ked"
 msgstr "لاكڈ كو شامل كریں۔"
 
-#: ../src/ui/dialog/find.cpp:82
+#: ../src/ui/dialog/find.cpp:80
 #, fuzzy
 msgid "_ID"
 msgstr "ID"
 
-#: ../src/ui/dialog/find.cpp:83
+#: ../src/ui/dialog/find.cpp:81
 #, fuzzy
 msgid "Attribute _name"
 msgstr "ایٹریبیوٹ كا نام"
 
-#: ../src/ui/dialog/find.cpp:84
+#: ../src/ui/dialog/find.cpp:82
 #, fuzzy
 msgid "Attri_bute value"
 msgstr "ایٹریبیوٹ ویلیو"
 
-#: ../src/ui/dialog/find.cpp:85
+#: ../src/ui/dialog/find.cpp:83
 #, fuzzy
 msgid "_Style"
 msgstr "اسٹائل"
 
-#: ../src/ui/dialog/find.cpp:86
+#: ../src/ui/dialog/find.cpp:84
 msgid "F_ont"
 msgstr ""
 
-#: ../src/ui/dialog/find.cpp:87
+#: ../src/ui/dialog/find.cpp:85
 #, fuzzy
 msgid "Properties"
 msgstr "%s خصوصیات "
 
-#: ../src/ui/dialog/find.cpp:89
+#: ../src/ui/dialog/find.cpp:87
 msgid "All types"
 msgstr "تمام قسمیں"
 
-#: ../src/ui/dialog/find.cpp:90
+#: ../src/ui/dialog/find.cpp:88
 msgid "Rectangles"
 msgstr "مستطیل"
 
-#: ../src/ui/dialog/find.cpp:91
+#: ../src/ui/dialog/find.cpp:89
 msgid "Ellipses"
 msgstr "بیضوی شكل"
 
-#: ../src/ui/dialog/find.cpp:92
+#: ../src/ui/dialog/find.cpp:90
 msgid "Stars"
 msgstr "ستارے"
 
-#: ../src/ui/dialog/find.cpp:93
+#: ../src/ui/dialog/find.cpp:91
 msgid "Spirals"
 msgstr "اسپائرل"
 
-#: ../src/ui/dialog/find.cpp:94 ../src/widgets/toolbox.cpp:1311
+#: ../src/ui/dialog/find.cpp:92 ../src/widgets/toolbox.cpp:1372
 msgid "Paths"
 msgstr "پاتھس"
 
-#: ../src/ui/dialog/find.cpp:95
+#: ../src/ui/dialog/find.cpp:93
 msgid "Texts"
 msgstr "متن"
 
-#: ../src/ui/dialog/find.cpp:96
+#: ../src/ui/dialog/find.cpp:94
 msgid "Groups"
 msgstr "گروپ"
 
 #. TRANSLATORS: "Clones" is a noun indicating type of object to find
-#: ../src/ui/dialog/find.cpp:99
+#: ../src/ui/dialog/find.cpp:97
 #, fuzzy
 msgctxt "Find dialog"
 msgid "Clones"
 msgstr "كلونس"
 
-#: ../src/ui/dialog/find.cpp:101 ../share/extensions/embedimage.inx.h:3
+#: ../src/ui/dialog/find.cpp:99 ../share/extensions/embedimage.inx.h:3
 #: ../share/extensions/extractimage.inx.h:6
 #: ../share/extensions/image_attributes.inx.h:29
 msgid "Images"
 msgstr "امیجس"
 
-#: ../src/ui/dialog/find.cpp:102
+#: ../src/ui/dialog/find.cpp:100
 msgid "Offsets"
 msgstr "آف سیٹ"
 
-#: ../src/ui/dialog/find.cpp:103
+#: ../src/ui/dialog/find.cpp:101
 #, fuzzy
 msgid "Object types"
 msgstr "آبجیكٹ قسم"
 
-#: ../src/ui/dialog/find.cpp:106
+#: ../src/ui/dialog/find.cpp:104
 msgid "_Find"
 msgstr "تلاش كریں۔"
 
-#: ../src/ui/dialog/find.cpp:107
+#: ../src/ui/dialog/find.cpp:105
 #, fuzzy
 msgid "_Replace All"
 msgstr "بدلیں"
 
-#: ../src/ui/dialog/find.cpp:115
+#: ../src/ui/dialog/find.cpp:113
 #, fuzzy
 msgid "Select all objects matching the selection criteria"
 msgstr "آپ كے ذریعے بھرے گئے تمام فیلڈس سے ملتے ہوئے آبجیكٹس كو منتخب كریؔ۔"
 
-#: ../src/ui/dialog/find.cpp:117
+#: ../src/ui/dialog/find.cpp:115
 #, fuzzy
 msgid "Replace all matches"
 msgstr "تمام اسكیچس كو اوسط روپ دیں۔"
 
-#: ../src/ui/dialog/find.cpp:119
+#: ../src/ui/dialog/find.cpp:117
 #, fuzzy
 msgid "Search in all layers"
 msgstr "تمام تہہ میں منتخب كریں"
 
-#: ../src/ui/dialog/find.cpp:121
+#: ../src/ui/dialog/find.cpp:119
 msgid "Limit search to the current layer"
 msgstr "تلاش كو موجودہ لئیر میں ركھیں۔"
 
-#: ../src/ui/dialog/find.cpp:123
+#: ../src/ui/dialog/find.cpp:121
 msgid "Limit search to the current selection"
 msgstr "تلاش كو موجودہ انتخاب تك ہی ركھیں۔"
 
-#: ../src/ui/dialog/find.cpp:125
+#: ../src/ui/dialog/find.cpp:123
 #, fuzzy
 msgid "Search in text objects"
 msgstr "متن آبجیكٹس كو تلاش كریں۔"
 
-#: ../src/ui/dialog/find.cpp:127
+#: ../src/ui/dialog/find.cpp:125
 msgid "Search in object properties, styles, attributes and IDs"
 msgstr ""
 
-#: ../src/ui/dialog/find.cpp:129
+#: ../src/ui/dialog/find.cpp:127
 msgid "Match upper/lower case"
 msgstr ""
 
-#: ../src/ui/dialog/find.cpp:132
+#: ../src/ui/dialog/find.cpp:130
 #, fuzzy
 msgid "Match whole objects only"
 msgstr "آف سیٹ آبجیكٹس كو تلاش كریں۔"
 
-#: ../src/ui/dialog/find.cpp:135
+#: ../src/ui/dialog/find.cpp:133
 msgid "Include hidden objects in search"
 msgstr "تلاش میں چھپے ہوئے آبجیكٹس كو شامل كریں۔"
 
-#: ../src/ui/dialog/find.cpp:138
+#: ../src/ui/dialog/find.cpp:136
 msgid "Include locked objects in search"
 msgstr "تلاش میں لاكڈ آبجیكٹس كو شامل كریں۔"
 
-#: ../src/ui/dialog/find.cpp:141
+#: ../src/ui/dialog/find.cpp:139
 #, fuzzy
 msgid "Search id name"
 msgstr "امیجس كو تلاش كریں۔"
 
-#: ../src/ui/dialog/find.cpp:144
+#: ../src/ui/dialog/find.cpp:142
 #, fuzzy
 msgid "Search attribute name"
 msgstr "ایٹریبیوٹ كا نام"
 
-#: ../src/ui/dialog/find.cpp:147
+#: ../src/ui/dialog/find.cpp:145
 #, fuzzy
 msgid "Search attribute value"
 msgstr "ایٹریبیوٹ ویلیو"
 
-#: ../src/ui/dialog/find.cpp:150
+#: ../src/ui/dialog/find.cpp:148
 #, fuzzy
 msgid "Search style"
 msgstr "كلونس كو تلاش كریں۔"
 
-#: ../src/ui/dialog/find.cpp:153
+#: ../src/ui/dialog/find.cpp:151
 #, fuzzy
 msgid "Search fonts"
 msgstr "كلونس كو تلاش كریں۔"
 
-#: ../src/ui/dialog/find.cpp:156
+#: ../src/ui/dialog/find.cpp:154
 #, fuzzy
 msgid "Search all object types"
 msgstr "آبجیكٹ كے تمام قسموں میں تلاش كریں۔"
 
-#: ../src/ui/dialog/find.cpp:159
+#: ../src/ui/dialog/find.cpp:157
 msgid "Search rectangles"
 msgstr "مستطیل كو تلاش كریں۔"
 
-#: ../src/ui/dialog/find.cpp:162
+#: ../src/ui/dialog/find.cpp:160
 msgid "Search ellipses, arcs, circles"
 msgstr "بیضوی شكل، ارك اور دائروں كو تلاش كریں۔"
 
-#: ../src/ui/dialog/find.cpp:165
+#: ../src/ui/dialog/find.cpp:163
 msgid "Search stars and polygons"
 msgstr "ستاروں اور كثیر الاضلاع كو تلاش كریں۔"
 
-#: ../src/ui/dialog/find.cpp:168
+#: ../src/ui/dialog/find.cpp:166
 msgid "Search spirals"
 msgstr "اسپائرلس كو تلاش كریں۔"
 
-#: ../src/ui/dialog/find.cpp:171
+#: ../src/ui/dialog/find.cpp:169
 msgid "Search paths, lines, polylines"
 msgstr "پاتھس، لائنس، اور پالی لائنس كو تلاش كریں۔"
 
-#: ../src/ui/dialog/find.cpp:174
+#: ../src/ui/dialog/find.cpp:172
 msgid "Search text objects"
 msgstr "متن آبجیكٹس كو تلاش كریں۔"
 
-#: ../src/ui/dialog/find.cpp:177
+#: ../src/ui/dialog/find.cpp:175
 msgid "Search groups"
 msgstr "گروپوں كو تلاش كریں"
 
-#: ../src/ui/dialog/find.cpp:180
+#: ../src/ui/dialog/find.cpp:178
 msgid "Search clones"
 msgstr "كلونس كو تلاش كریں۔"
 
-#: ../src/ui/dialog/find.cpp:183
+#: ../src/ui/dialog/find.cpp:181
 msgid "Search images"
 msgstr "امیجس كو تلاش كریں۔"
 
-#: ../src/ui/dialog/find.cpp:186
+#: ../src/ui/dialog/find.cpp:184
 msgid "Search offset objects"
 msgstr "آف سیٹ آبجیكٹس كو تلاش كریں۔"
 
-#: ../src/ui/dialog/find.cpp:866
+#: ../src/ui/dialog/find.cpp:864
 #, fuzzy
 msgid "Nothing to replace"
 msgstr "ری ڈو كرنے كے لئے "
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
-#: ../src/ui/dialog/find.cpp:907
+#: ../src/ui/dialog/find.cpp:905
 #, c-format
 msgid "<b>%d</b> object found (out of <b>%d</b>), %s match."
 msgid_plural "<b>%d</b> objects found (out of <b>%d</b>), %s match."
 msgstr[0] "<b>%d</b> آبجیكٹ ملا(out of <b>%d</b>), %s ماچ."
 msgstr[1] "<b>%d</b> objects found (out of <b>%d</b>), %s match."
 
-#: ../src/ui/dialog/find.cpp:910
+#: ../src/ui/dialog/find.cpp:908
 msgid "exact"
 msgstr "درست"
 
-#: ../src/ui/dialog/find.cpp:910
+#: ../src/ui/dialog/find.cpp:908
 msgid "partial"
 msgstr "پارشیل"
 
 #. TRANSLATORS: "%1" is replaced with the number of matches
-#: ../src/ui/dialog/find.cpp:913
+#: ../src/ui/dialog/find.cpp:911
 msgid "%1 match replaced"
 msgid_plural "%1 matches replaced"
 msgstr[0] ""
 msgstr[1] ""
 
 #. TRANSLATORS: "%1" is replaced with the number of matches
-#: ../src/ui/dialog/find.cpp:917
+#: ../src/ui/dialog/find.cpp:915
 #, fuzzy
 msgid "%1 object found"
 msgid_plural "%1 objects found"
 msgstr[0] "كوئی آبجیكٹ نہیں ملا۔"
 msgstr[1] "كوئی آبجیكٹ نہیں ملا۔"
 
-#: ../src/ui/dialog/find.cpp:931
+#: ../src/ui/dialog/find.cpp:929
 #, fuzzy
 msgid "Replace text or property"
 msgstr "ری پلیس متن"
 
-#: ../src/ui/dialog/find.cpp:935
+#: ../src/ui/dialog/find.cpp:933
 #, fuzzy
 msgid "Nothing found"
 msgstr "ان ڈو كرنے كے لئے كچھ نہیں"
 
-#: ../src/ui/dialog/find.cpp:940
+#: ../src/ui/dialog/find.cpp:938
 msgid "No objects found"
 msgstr "كوئی آبجیكٹ نہیں ملا۔"
 
-#: ../src/ui/dialog/find.cpp:961
+#: ../src/ui/dialog/find.cpp:959
 #, fuzzy
 msgid "Select an object type"
 msgstr "آبجیكٹ كے تمام قسموں میں تلاش كریں۔"
 
-#: ../src/ui/dialog/find.cpp:979
+#: ../src/ui/dialog/find.cpp:977
 #, fuzzy
 msgid "Select a property"
 msgstr "گائیڈ خصوصیات سیٹ كریں"
@@ -22946,7 +22955,6 @@ msgid "Default image resolution (in dots per inch) in the Export dialog"
 msgstr "برآمد ڈائیلاگ میں ڈیفالٹ بٹ میپ ریزولوشن (ہر انچ ڈاٹس میں )"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1826
-#: ../src/ui/dialog/xml-tree.cpp:743
 msgid "Create"
 msgstr "تخلیق كریں"
 
@@ -23178,198 +23186,203 @@ msgstr "سسٹم انفو"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2303
 #, fuzzy
+msgid "Reset Preferences"
+msgstr "متن ترجیحات"
+
+#: ../src/ui/dialog/inkscape-preferences.cpp:2306
+#, fuzzy
 msgid "User preferences: "
 msgstr "ربر ترجیحات"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2304
+#: ../src/ui/dialog/inkscape-preferences.cpp:2307
 #, fuzzy
 msgid "Location of the user’s preferences file"
 msgstr "پرفیرنس فائل %s تخلیق كرنے میں ناكامیاب"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2306
+#: ../src/ui/dialog/inkscape-preferences.cpp:2309
 #, fuzzy
 msgid "Open preferences folder"
 msgstr "نوڈ ٹول كے لئے پرفیرنسس كو كھولیں"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2307
+#: ../src/ui/dialog/inkscape-preferences.cpp:2310
 msgid "User config: "
 msgstr "صارف كانفگ:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2307
+#: ../src/ui/dialog/inkscape-preferences.cpp:2310
 msgid "Location of users configuration"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2310
+#: ../src/ui/dialog/inkscape-preferences.cpp:2313
 #, fuzzy
 msgid "Open extensions folder"
 msgstr "ویدیك اكسٹینشنس"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2311
+#: ../src/ui/dialog/inkscape-preferences.cpp:2314
 #, fuzzy
 msgid "User extensions: "
 msgstr "ویدیك اكسٹینشنس"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2312
+#: ../src/ui/dialog/inkscape-preferences.cpp:2315
 #, fuzzy
 msgid "Location of the user’s extensions"
 msgstr "انك اسكیپ اكسٹینشن پر معلومات"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2314
+#: ../src/ui/dialog/inkscape-preferences.cpp:2317
 msgid "Open themes folder"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2315
+#: ../src/ui/dialog/inkscape-preferences.cpp:2318
 #, fuzzy
 msgid "User themes: "
 msgstr "صارف كیچے:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2315
+#: ../src/ui/dialog/inkscape-preferences.cpp:2318
 #, fuzzy
 msgid "Location of the user’s themes"
 msgstr "انك اسكیپ اكسٹینشن پر معلومات"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2318
+#: ../src/ui/dialog/inkscape-preferences.cpp:2321
 msgid "Open icons folder"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2319
+#: ../src/ui/dialog/inkscape-preferences.cpp:2322
 #, fuzzy
 msgid "User icons: "
 msgstr "صارف كانفگ:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2319
+#: ../src/ui/dialog/inkscape-preferences.cpp:2322
 #, fuzzy
 msgid "Location of the user’s icons"
 msgstr "انك اسكیپ اكسٹینشن پر معلومات"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2322
+#: ../src/ui/dialog/inkscape-preferences.cpp:2325
 #, fuzzy
 msgid "Open templates folder"
 msgstr "كوئی فلٹر منتخب نہیں كیا گیا"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2323
+#: ../src/ui/dialog/inkscape-preferences.cpp:2326
 #, fuzzy
 msgid "User templates: "
 msgstr "ایك كاپی كو محفوظ كریں۔"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2324
+#: ../src/ui/dialog/inkscape-preferences.cpp:2327
 #, fuzzy
 msgid "Location of the user’s templates"
 msgstr "انك اسكیپ اكسٹینشن پر معلومات"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2327
+#: ../src/ui/dialog/inkscape-preferences.cpp:2330
 #, fuzzy
 msgid "Open symbols folder"
 msgstr "كوئی آبجیكٹ نہیں ملا۔"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2328
+#: ../src/ui/dialog/inkscape-preferences.cpp:2331
 #, fuzzy
 msgid "User symbols: "
 msgstr "كھمیر علامتیں"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2328
+#: ../src/ui/dialog/inkscape-preferences.cpp:2331
 #, fuzzy
 msgid "Location of the user’s symbols"
 msgstr "انك اسكیپ اكسٹینشن پر معلومات"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2332
+#: ../src/ui/dialog/inkscape-preferences.cpp:2335
 #, fuzzy
 msgid "Open palettes folder"
 msgstr "HPGL پلاٹر فائلیں كھولیں"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2333
+#: ../src/ui/dialog/inkscape-preferences.cpp:2336
 #, fuzzy
 msgid "User palettes: "
 msgstr "صارف ڈاٹا:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2333
+#: ../src/ui/dialog/inkscape-preferences.cpp:2336
 #, fuzzy
 msgid "Location of the user’s palettes"
 msgstr "انك اسكیپ اكسٹینشن پر معلومات"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2337
+#: ../src/ui/dialog/inkscape-preferences.cpp:2340
 #, fuzzy
 msgid "Open keyboard shortcuts folder"
 msgstr "دستاویز كو ایك PS فائل میں برآمد كریں۔"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2338
+#: ../src/ui/dialog/inkscape-preferences.cpp:2341
 #, fuzzy
 msgid "User keys: "
 msgstr "صارف كیچے:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2339
+#: ../src/ui/dialog/inkscape-preferences.cpp:2342
 #, fuzzy
 msgid "Location of the user’s keyboard mapping files"
 msgstr "پرفیرنس فائل %s تخلیق كرنے میں ناكامیاب"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2342
+#: ../src/ui/dialog/inkscape-preferences.cpp:2345
 msgid "Open user interface folder"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2343
+#: ../src/ui/dialog/inkscape-preferences.cpp:2346
 #, fuzzy
 msgid "User UI: "
 msgstr "صارف ڈاٹا:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2344
+#: ../src/ui/dialog/inkscape-preferences.cpp:2347
 #, fuzzy
 msgid "Location of the user’s user interface description files"
 msgstr "پرفیرنس فائل %s تخلیق كرنے میں ناكامیاب"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2348
+#: ../src/ui/dialog/inkscape-preferences.cpp:2351
 msgid "User cache: "
 msgstr "صارف كیچے:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2348
+#: ../src/ui/dialog/inkscape-preferences.cpp:2351
 #, fuzzy
 msgid "Location of user’s cache"
 msgstr "انك اسكیپ اكسٹینشن پر معلومات"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2356
+#: ../src/ui/dialog/inkscape-preferences.cpp:2359
 msgid "Temporary files: "
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2356
+#: ../src/ui/dialog/inkscape-preferences.cpp:2359
 msgid "Location of the temporary files used for autosave"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2360
+#: ../src/ui/dialog/inkscape-preferences.cpp:2363
 #, fuzzy
 msgid "Inkscape data: "
 msgstr "اِنك اسكیپ مینول"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2360
+#: ../src/ui/dialog/inkscape-preferences.cpp:2363
 #, fuzzy
 msgid "Location of Inkscape data"
 msgstr "انك اسكیپ اكسٹینشن پر معلومات"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2364
+#: ../src/ui/dialog/inkscape-preferences.cpp:2367
 #, fuzzy
 msgid "Inkscape extensions: "
 msgstr "انك اسكیپ اكسٹینشن پر معلومات"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2364
+#: ../src/ui/dialog/inkscape-preferences.cpp:2367
 #, fuzzy
 msgid "Location of the Inkscape extensions"
 msgstr "انك اسكیپ اكسٹینشن پر معلومات"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2374
+#: ../src/ui/dialog/inkscape-preferences.cpp:2377
 msgid "System data: "
 msgstr "سسٹم ڈاٹا:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2374
+#: ../src/ui/dialog/inkscape-preferences.cpp:2377
 msgid "Locations of system data"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2388
+#: ../src/ui/dialog/inkscape-preferences.cpp:2391
 msgid "Icon theme: "
 msgstr "آئكن تھیم :"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2388
+#: ../src/ui/dialog/inkscape-preferences.cpp:2391
 msgid "Locations of icon themes"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2390
+#: ../src/ui/dialog/inkscape-preferences.cpp:2393
 msgid "System"
 msgstr "سسٹم"
 
@@ -24356,7 +24369,7 @@ msgid "Reset all settings to defaults"
 msgstr "حالیہ بٹ میپ پر ویلیوز كو ڈیفالٹ كے روپ میں ری سیٹ كریں۔"
 
 #. ## The OK button
-#: ../src/ui/dialog/pixelartdialog.cpp:299 ../src/ui/dialog/spellcheck.cpp:73
+#: ../src/ui/dialog/pixelartdialog.cpp:299 ../src/ui/dialog/spellcheck.cpp:72
 #: ../src/ui/dialog/tracedialog.cpp:813
 msgid "_Stop"
 msgstr "_روكیں "
@@ -24539,73 +24552,73 @@ msgstr "وضاحت"
 msgid "Keywords: "
 msgstr "كی ورڈس"
 
-#: ../src/ui/dialog/spellcheck.cpp:68
+#: ../src/ui/dialog/spellcheck.cpp:67
 msgid "_Accept"
 msgstr "قبول كریں"
 
-#: ../src/ui/dialog/spellcheck.cpp:69
+#: ../src/ui/dialog/spellcheck.cpp:68
 msgid "_Ignore once"
 msgstr "ایك بار نظر انداز كریں"
 
-#: ../src/ui/dialog/spellcheck.cpp:70
+#: ../src/ui/dialog/spellcheck.cpp:69
 msgid "_Ignore"
 msgstr "نظر انداز كریں"
 
-#: ../src/ui/dialog/spellcheck.cpp:71
+#: ../src/ui/dialog/spellcheck.cpp:70
 msgid "A_dd"
 msgstr ""
 
-#: ../src/ui/dialog/spellcheck.cpp:74
+#: ../src/ui/dialog/spellcheck.cpp:73
 msgid "_Start"
 msgstr "شروع كریں"
 
-#: ../src/ui/dialog/spellcheck.cpp:104
+#: ../src/ui/dialog/spellcheck.cpp:103
 msgid "Suggestions:"
 msgstr "سُجھاؤ:"
 
-#: ../src/ui/dialog/spellcheck.cpp:119
+#: ../src/ui/dialog/spellcheck.cpp:118
 msgid "Accept the chosen suggestion"
 msgstr "انتخاب كیے گئے سُجھاؤ كو قبول كریں۔"
 
-#: ../src/ui/dialog/spellcheck.cpp:120
+#: ../src/ui/dialog/spellcheck.cpp:119
 msgid "Ignore this word only once"
 msgstr "اس لفظ صرف ایك بار نظر انداز كریں"
 
-#: ../src/ui/dialog/spellcheck.cpp:121
+#: ../src/ui/dialog/spellcheck.cpp:120
 msgid "Ignore this word in this session"
 msgstr "اس سیشن میں اس لفظ كو نظر انداز كریں۔"
 
-#: ../src/ui/dialog/spellcheck.cpp:122
+#: ../src/ui/dialog/spellcheck.cpp:121
 msgid "Add this word to the chosen dictionary"
 msgstr "اس لفظ كو انتخاب شدہ لغت میں جوڑیں"
 
-#: ../src/ui/dialog/spellcheck.cpp:136
+#: ../src/ui/dialog/spellcheck.cpp:135
 msgid "Stop the check"
 msgstr "جانچ روكیں"
 
-#: ../src/ui/dialog/spellcheck.cpp:137
+#: ../src/ui/dialog/spellcheck.cpp:136
 msgid "Start the check"
 msgstr "جانچ شروع كریں"
 
-#: ../src/ui/dialog/spellcheck.cpp:432
+#: ../src/ui/dialog/spellcheck.cpp:431
 #, c-format
 msgid "<b>Finished</b>, <b>%d</b> words added to dictionary"
 msgstr "<b>مكمل ہوگیا</b>, <b>%d</b> لغات میں الفاظ شامل كیے گئے۔"
 
-#: ../src/ui/dialog/spellcheck.cpp:434
+#: ../src/ui/dialog/spellcheck.cpp:433
 msgid "<b>Finished</b>, nothing suspicious found"
 msgstr "<b>مكمل ہوگیا </b>, كچھ سسپیسیس نہیں ملا۔"
 
-#: ../src/ui/dialog/spellcheck.cpp:549
+#: ../src/ui/dialog/spellcheck.cpp:548
 #, c-format
 msgid "Not in dictionary (%s): <b>%s</b>"
 msgstr "لغت میں نہیں ہے (%s): %s "
 
-#: ../src/ui/dialog/spellcheck.cpp:698
+#: ../src/ui/dialog/spellcheck.cpp:697
 msgid "<i>Checking...</i>"
 msgstr "<i>جانچ كی جارہی ہے...</i>"
 
-#: ../src/ui/dialog/spellcheck.cpp:767
+#: ../src/ui/dialog/spellcheck.cpp:766
 msgid "Fix spelling"
 msgstr "ہجے ٹھیك كریں"
 
@@ -24614,7 +24627,7 @@ msgstr "ہجے ٹھیك كریں"
 msgid "Edited style element."
 msgstr "tutorial-elements.svg"
 
-#: ../src/ui/dialog/styledialog.cpp:885 ../src/ui/dialog/xml-tree.cpp:737
+#: ../src/ui/dialog/styledialog.cpp:885
 msgid "Cancel"
 msgstr "رد كریں"
 
@@ -24722,7 +24735,8 @@ msgid "Cap Height:"
 msgstr "بار اونچائی"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:474
-msgid "I don't know what this does."
+msgid ""
+"The height of a capital letter above the baseline like the letter 'H' or 'I'."
 msgstr ""
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:475
@@ -24731,7 +24745,8 @@ msgid "x Height:"
 msgstr "اونچائی: "
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:475
-msgid "Not sure about this one either."
+msgid ""
+"The height of a lower-case letter above the baseline like the letter 'x'."
 msgstr ""
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:548
@@ -24867,7 +24882,7 @@ msgstr "فانٹ"
 msgid "Add font"
 msgstr "فانٹ شامل كریں"
 
-#: ../src/ui/dialog/svg-fonts-dialog.cpp:1017 ../src/ui/dialog/text-edit.cpp:67
+#: ../src/ui/dialog/svg-fonts-dialog.cpp:1017 ../src/ui/dialog/text-edit.cpp:65
 msgid "_Font"
 msgstr "_فانٹ"
 
@@ -24893,7 +24908,7 @@ msgid "Preview Text:"
 msgstr "پیش منظر متن:"
 
 #: ../src/ui/dialog/swatches.cpp:210 ../src/ui/tools/gradient-tool.cpp:359
-#: ../src/ui/tools/gradient-tool.cpp:446 ../src/widgets/gradient-vector.cpp:750
+#: ../src/ui/tools/gradient-tool.cpp:446 ../src/widgets/gradient-vector.cpp:748
 msgid "Add gradient stop"
 msgstr "گریڈینٹ اسٹاپ جوڑیں"
 
@@ -25185,12 +25200,12 @@ msgstr "پاتھ"
 msgid "By: "
 msgstr ""
 
-#: ../src/ui/dialog/text-edit.cpp:69
+#: ../src/ui/dialog/text-edit.cpp:67
 #, fuzzy
 msgid "_Features"
 msgstr "بناوٹ"
 
-#: ../src/ui/dialog/text-edit.cpp:70
+#: ../src/ui/dialog/text-edit.cpp:68
 #, fuzzy
 msgid "Set as _default"
 msgstr "ڈیفالٹ روپ میں سیٹ كریں۔"
@@ -25200,12 +25215,12 @@ msgstr "ڈیفالٹ روپ میں سیٹ كریں۔"
 #. * text has been entered) to get a preview of the font.  Choose
 #. * some representative characters that users of your locale will be
 #. * interested in.
-#: ../src/ui/dialog/text-edit.cpp:84
+#: ../src/ui/dialog/text-edit.cpp:82
 #, fuzzy
 msgid "AaBbCcIiPpQq12369$€¢?.;/()"
 msgstr "AaBbCcIiPpQq12369$€¢?.;/()"
 
-#: ../src/ui/dialog/text-edit.cpp:458 ../src/ui/tools/text-tool.cpp:1534
+#: ../src/ui/dialog/text-edit.cpp:456 ../src/ui/tools/text-tool.cpp:1534
 msgid "Set text style"
 msgstr "متن اسٹائل سیٹ كریں۔"
 
@@ -25679,155 +25694,151 @@ msgstr "ٹرانسفارمیشن ماٹریكس كو مرتب كریں۔"
 msgid "Rotation angle (positive = clockwise)"
 msgstr "محوری زاویہ (مثبت = كاؤنٹر كلاك وائز)"
 
-#: ../src/ui/dialog/xml-tree.cpp:66 ../src/ui/dialog/xml-tree.cpp:111
+#: ../src/ui/dialog/xml-tree.cpp:64 ../src/ui/dialog/xml-tree.cpp:109
 msgid "New element node"
 msgstr "نیا ایلیمینٹ نوڈ"
 
-#: ../src/ui/dialog/xml-tree.cpp:67 ../src/ui/dialog/xml-tree.cpp:118
+#: ../src/ui/dialog/xml-tree.cpp:65 ../src/ui/dialog/xml-tree.cpp:116
 msgid "New text node"
 msgstr "نیا متن نوڈ"
 
-#: ../src/ui/dialog/xml-tree.cpp:68 ../src/ui/dialog/xml-tree.cpp:134
+#: ../src/ui/dialog/xml-tree.cpp:66 ../src/ui/dialog/xml-tree.cpp:132
 msgid "nodeAsInXMLdialogTooltip|Delete node"
 msgstr "nodeAsInXMLdialogTooltip|نوڈ كو منسوخ كریں"
 
-#: ../src/ui/dialog/xml-tree.cpp:69 ../src/ui/dialog/xml-tree.cpp:125
-#: ../src/ui/dialog/xml-tree.cpp:804
+#: ../src/ui/dialog/xml-tree.cpp:67 ../src/ui/dialog/xml-tree.cpp:123
+#: ../src/ui/dialog/xml-tree.cpp:754
 msgid "Duplicate node"
 msgstr "ڈوپلیكیٹ نوڈ"
 
 #. tree view
-#: ../src/ui/dialog/xml-tree.cpp:102
+#: ../src/ui/dialog/xml-tree.cpp:100
 #, fuzzy
 msgid "_Nodes"
 msgstr "نوڈس"
 
-#: ../src/ui/dialog/xml-tree.cpp:104
+#: ../src/ui/dialog/xml-tree.cpp:102
 msgid "Drag to reorder nodes"
 msgstr "نوڈس كو دوبارہ آردڑ میں ركھنے كے لئے ڈریگ كریں۔"
 
-#: ../src/ui/dialog/xml-tree.cpp:143 ../src/ui/dialog/xml-tree.cpp:144
-#: ../src/ui/dialog/xml-tree.cpp:914
+#: ../src/ui/dialog/xml-tree.cpp:141 ../src/ui/dialog/xml-tree.cpp:142
+#: ../src/ui/dialog/xml-tree.cpp:864
 msgid "Unindent node"
 msgstr "غیر انڈینٹ نوڈ"
 
-#: ../src/ui/dialog/xml-tree.cpp:151 ../src/ui/dialog/xml-tree.cpp:152
-#: ../src/ui/dialog/xml-tree.cpp:892
+#: ../src/ui/dialog/xml-tree.cpp:149 ../src/ui/dialog/xml-tree.cpp:150
+#: ../src/ui/dialog/xml-tree.cpp:842
 msgid "Indent node"
 msgstr "انڈینٹ نوڈ"
 
-#: ../src/ui/dialog/xml-tree.cpp:159 ../src/ui/dialog/xml-tree.cpp:160
-#: ../src/ui/dialog/xml-tree.cpp:843
+#: ../src/ui/dialog/xml-tree.cpp:157 ../src/ui/dialog/xml-tree.cpp:158
+#: ../src/ui/dialog/xml-tree.cpp:793
 msgid "Raise node"
 msgstr "ریز نوڈ"
 
-#: ../src/ui/dialog/xml-tree.cpp:167 ../src/ui/dialog/xml-tree.cpp:168
-#: ../src/ui/dialog/xml-tree.cpp:861
+#: ../src/ui/dialog/xml-tree.cpp:165 ../src/ui/dialog/xml-tree.cpp:166
+#: ../src/ui/dialog/xml-tree.cpp:811
 msgid "Lower node"
 msgstr "لور نوڈ"
 
-#: ../src/ui/dialog/xml-tree.cpp:186
+#: ../src/ui/dialog/xml-tree.cpp:184
 #, fuzzy
 msgid "_Attributes"
 msgstr "خصوصیت"
 
-#: ../src/ui/dialog/xml-tree.cpp:207
+#: ../src/ui/dialog/xml-tree.cpp:205
 #, fuzzy
 msgid "_Styles"
 msgstr "اسٹائل"
 
-#: ../src/ui/dialog/xml-tree.cpp:250
+#: ../src/ui/dialog/xml-tree.cpp:248
 msgid "<b>Click</b> to select nodes, <b>drag</b> to rearrange."
 msgstr ""
 "<b>كلك</b> نوڈس منتخب كرنے كے لئے, <b>ڈریگ </b> دوبارہ ترتیب دینے كے لئے ."
 
-#: ../src/ui/dialog/xml-tree.cpp:460
+#: ../src/ui/dialog/xml-tree.cpp:458
 msgid "Drag XML subtree"
 msgstr "XML سب ٹری كو ڈریگ كریں  "
 
-#: ../src/ui/dialog/xml-tree.cpp:711
-msgid "New element node..."
-msgstr "نیا ایلیمینٹ نوڈ"
-
-#: ../src/ui/dialog/xml-tree.cpp:774
+#: ../src/ui/dialog/xml-tree.cpp:724
 msgid "Create new element node"
 msgstr "نیا ایلیمینٹ نوڈ تخلیق كریں۔"
 
-#: ../src/ui/dialog/xml-tree.cpp:789
+#: ../src/ui/dialog/xml-tree.cpp:739
 msgid "Create new text node"
 msgstr "نیا متن نوڈ تخلیق كریں۔"
 
-#: ../src/ui/dialog/xml-tree.cpp:821
+#: ../src/ui/dialog/xml-tree.cpp:771
 msgid "nodeAsInXMLinHistoryDialog|Delete node"
 msgstr "nodeAsInXMLinHistoryDialog|نوڈ كو مٹائیں"
 
-#: ../src/ui/interface.cpp:765
+#: ../src/ui/interface.cpp:767
 #, fuzzy
 msgctxt "Interface setup"
 msgid "Default"
 msgstr "ڈیفالٹ"
 
-#: ../src/ui/interface.cpp:765
+#: ../src/ui/interface.cpp:767
 msgid "Default interface setup"
 msgstr "ڈیفالٹ انٹرفیس سیٹ اپ"
 
-#: ../src/ui/interface.cpp:766
+#: ../src/ui/interface.cpp:768
 #, fuzzy
 msgctxt "Interface setup"
 msgid "Custom"
 msgstr "كسٹم"
 
-#: ../src/ui/interface.cpp:766
+#: ../src/ui/interface.cpp:768
 #, fuzzy
 msgid "Setup for custom task"
 msgstr "كسٹم ٹاسك سیٹ كریں"
 
-#: ../src/ui/interface.cpp:767
+#: ../src/ui/interface.cpp:769
 #, fuzzy
 msgctxt "Interface setup"
 msgid "Wide"
 msgstr "چوڑا"
 
-#: ../src/ui/interface.cpp:767
+#: ../src/ui/interface.cpp:769
 msgid "Setup for widescreen work"
 msgstr "وائڈ اسكرین ورك كے لئے سیٹ اپ"
 
-#: ../src/ui/interface.cpp:903
+#: ../src/ui/interface.cpp:905
 #, c-format
 msgid "Verb \"%s\" Unknown"
 msgstr "ورب \"%s\" نامعلوم"
 
-#: ../src/ui/interface.cpp:938
+#: ../src/ui/interface.cpp:940
 msgid "Open _Recent"
 msgstr "حال ہی میں كھولا گیا"
 
-#: ../src/ui/interface.cpp:1046 ../src/ui/interface.cpp:1132
-#: ../src/ui/interface.cpp:1235 ../src/ui/widget/selected-style.cpp:531
+#: ../src/ui/interface.cpp:1048 ../src/ui/interface.cpp:1134
+#: ../src/ui/interface.cpp:1237 ../src/ui/widget/selected-style.cpp:531
 msgid "Drop color"
 msgstr "ڈراپ كلر"
 
-#: ../src/ui/interface.cpp:1085 ../src/ui/interface.cpp:1195
+#: ../src/ui/interface.cpp:1087 ../src/ui/interface.cpp:1197
 msgid "Drop color on gradient"
 msgstr "گریڈینٹ پر ڈراپ كلر"
 
-#: ../src/ui/interface.cpp:1250
+#: ../src/ui/interface.cpp:1252
 msgid "Could not parse SVG data"
 msgstr "SVG ڈاٹا پارس نہیں ہوسكا۔"
 
-#: ../src/ui/interface.cpp:1289
+#: ../src/ui/interface.cpp:1291
 msgid "Drop SVG"
 msgstr "ڈراپ SVG"
 
-#: ../src/ui/interface.cpp:1306
+#: ../src/ui/interface.cpp:1308
 #, fuzzy
 msgid "Drop Symbol"
 msgstr "كھمیر علامتیں"
 
-#: ../src/ui/interface.cpp:1329
+#: ../src/ui/interface.cpp:1331
 msgid "Drop bitmap image"
 msgstr "ڈراپ بٹ میپ امیج"
 
-#: ../src/ui/interface.cpp:1422
+#: ../src/ui/interface.cpp:1424
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">A file named \"%s\" already exists. Do "
@@ -25841,7 +25852,7 @@ msgstr ""
 "یہ \"%s\" فائل میں پہلے سے موجود ہے۔ اسے بدلنے سے اسكے كنٹینٹ كو مٹا كے لكھ "
 "دیا جائے گا۔"
 
-#: ../src/ui/interface.cpp:1429 ../share/extensions/web-set-att.inx.h:21
+#: ../src/ui/interface.cpp:1431 ../share/extensions/web-set-att.inx.h:21
 #: ../share/extensions/web-transmit-att.inx.h:19
 msgid "Replace"
 msgstr "بدلیں"
@@ -27231,7 +27242,7 @@ msgid "Multiple gradients"
 msgstr "گریڈینڈس  كوحركت دیں"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:544
-#: ../src/widgets/gradient-vector.cpp:568
+#: ../src/widgets/gradient-vector.cpp:566
 msgid "No stops in gradient"
 msgstr "گریڈینٹ میں كوئی اسٹاپس نہیں"
 
@@ -27250,7 +27261,7 @@ msgid "Set gradient repeat"
 msgstr "اسٹروك پر گریڈینٹ سیٹ كریں"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:828
-#: ../src/widgets/gradient-vector.cpp:676
+#: ../src/widgets/gradient-vector.cpp:674
 msgid "Change gradient stop offset"
 msgstr "گریڈینٹ اسٹاپ آف سیٹ تبدیل كریں"
 
@@ -27346,7 +27357,7 @@ msgstr "_روكیں "
 
 #. Label
 #: ../src/ui/toolbar/gradient-toolbar.cpp:1044
-#: ../src/widgets/gradient-vector.cpp:853
+#: ../src/widgets/gradient-vector.cpp:851
 #, fuzzy
 msgctxt "Gradient"
 msgid "Offset:"
@@ -27365,7 +27376,7 @@ msgstr "نوڈ داخل كرو"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:1076
 #: ../src/ui/toolbar/gradient-toolbar.cpp:1077
-#: ../src/widgets/gradient-vector.cpp:839
+#: ../src/widgets/gradient-vector.cpp:837
 msgid "Delete stop"
 msgstr "اسٹاپ ڈیلیٹ كریں"
 
@@ -35101,43 +35112,43 @@ msgstr "سویچ"
 msgid "Rename gradient"
 msgstr "گریڈینٹ كو اُلٹا كریں۔"
 
-#: ../src/widgets/gradient-vector.cpp:294 ../src/widgets/paint-selector.cpp:904
+#: ../src/widgets/gradient-vector.cpp:292 ../src/widgets/paint-selector.cpp:904
 #: ../src/widgets/paint-selector.cpp:1240
 #: ../src/widgets/stroke-marker-selector.cpp:145
 msgid "No document selected"
 msgstr "كوئی دستاویز منتخبہ نہیں"
 
-#: ../src/widgets/gradient-vector.cpp:298
+#: ../src/widgets/gradient-vector.cpp:296
 msgid "No gradients in document"
 msgstr "دستاویز میں كوئی گریڈینٹ نہیں"
 
-#: ../src/widgets/gradient-vector.cpp:302
+#: ../src/widgets/gradient-vector.cpp:300
 msgid "No gradient selected"
 msgstr "كوئی گریڈینٹ منتخبہ نہیں"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: ../src/widgets/gradient-vector.cpp:834
+#: ../src/widgets/gradient-vector.cpp:832
 msgid "Add stop"
 msgstr "اسٹاپ شامل كریں"
 
-#: ../src/widgets/gradient-vector.cpp:837
+#: ../src/widgets/gradient-vector.cpp:835
 msgid "Add another control stop to gradient"
 msgstr "گریڈینٹ میں دوسرا كنٹرول اسٹاپ شامل كریں"
 
-#: ../src/widgets/gradient-vector.cpp:842
+#: ../src/widgets/gradient-vector.cpp:840
 msgid "Delete current control stop from gradient"
 msgstr "گریڈینٹ سے حالیہ كنٹرول اسٹاپ ڈیلیٹ كریں"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
-#: ../src/widgets/gradient-vector.cpp:903
+#: ../src/widgets/gradient-vector.cpp:901
 msgid "Stop Color"
 msgstr "اسٹاپ رنگ"
 
-#: ../src/widgets/gradient-vector.cpp:942
+#: ../src/widgets/gradient-vector.cpp:941
 msgid "Gradient editor"
 msgstr "گریڈینٹ رنگ"
 
-#: ../src/widgets/gradient-vector.cpp:1286
+#: ../src/widgets/gradient-vector.cpp:1287
 msgid "Change gradient stop color"
 msgstr "گریڈینٹ اسٹاپ رنگ تبدیل كریں"
 
@@ -35436,140 +35447,140 @@ msgstr "TBD"
 msgid "Style of Paint Bucket fill objects"
 msgstr "پینٹ بكیٹ فل آبجیكٹس كی اسٹائل"
 
-#: ../src/widgets/toolbox.cpp:1257
+#: ../src/widgets/toolbox.cpp:1318
 msgid "Bounding box"
 msgstr "باؤنڈینگ باكس"
 
-#: ../src/widgets/toolbox.cpp:1257
+#: ../src/widgets/toolbox.cpp:1318
 #, fuzzy
 msgid "Snap bounding boxes"
 msgstr "باؤنڈینگ باكس كے كونے اسنیپ كریں"
 
-#: ../src/widgets/toolbox.cpp:1266
+#: ../src/widgets/toolbox.cpp:1327
 msgid "Bounding box edges"
 msgstr "باؤنڈینگ باكس كے كنارے"
 
-#: ../src/widgets/toolbox.cpp:1266
+#: ../src/widgets/toolbox.cpp:1327
 msgid "Snap to edges of a bounding box"
 msgstr "باؤنڈینگ باكس كے كنارے اسنیپ كریں"
 
-#: ../src/widgets/toolbox.cpp:1275
+#: ../src/widgets/toolbox.cpp:1336
 msgid "Bounding box corners"
 msgstr "باؤنڈینگ باكس كے كونے"
 
-#: ../src/widgets/toolbox.cpp:1275
+#: ../src/widgets/toolbox.cpp:1336
 msgid "Snap bounding box corners"
 msgstr "باؤنڈینگ باكس كے كونے اسنیپ كریں"
 
-#: ../src/widgets/toolbox.cpp:1284
+#: ../src/widgets/toolbox.cpp:1345
 msgid "BBox Edge Midpoints"
 msgstr "بی باكس ایڈچ مڈ پوائنٹ"
 
-#: ../src/widgets/toolbox.cpp:1284
+#: ../src/widgets/toolbox.cpp:1345
 #, fuzzy
 msgid "Snap midpoints of bounding box edges"
 msgstr "باؤنڈینگ باكس كے كناروں كے درمیانی نقطوں سے اور وہاں تك اسنیپ كریں"
 
-#: ../src/widgets/toolbox.cpp:1294
+#: ../src/widgets/toolbox.cpp:1355
 msgid "BBox Centers"
 msgstr "B باكس سینٹرس"
 
-#: ../src/widgets/toolbox.cpp:1294
+#: ../src/widgets/toolbox.cpp:1355
 #, fuzzy
 msgid "Snapping centers of bounding boxes"
 msgstr "باؤنڈینگ باكسیس كے درمیان سے اپر وہاں تك اسنیپ كرنا۔"
 
-#: ../src/widgets/toolbox.cpp:1303
+#: ../src/widgets/toolbox.cpp:1364
 #, fuzzy
 msgid "Snap nodes, paths, and handles"
 msgstr "ہینڈلس یا نوڈس اسنیپ كریں"
 
-#: ../src/widgets/toolbox.cpp:1311
+#: ../src/widgets/toolbox.cpp:1372
 msgid "Snap to paths"
 msgstr "پاتھس اسنیپ كریں"
 
-#: ../src/widgets/toolbox.cpp:1320
+#: ../src/widgets/toolbox.cpp:1381
 msgid "Path intersections"
 msgstr "پاتھ انٹرسیكشن"
 
-#: ../src/widgets/toolbox.cpp:1320
+#: ../src/widgets/toolbox.cpp:1381
 msgid "Snap to path intersections"
 msgstr "پاتھ انٹرسیكشنس اسنیپ كریں"
 
-#: ../src/widgets/toolbox.cpp:1329
+#: ../src/widgets/toolbox.cpp:1390
 msgid "To nodes"
 msgstr "نوڈس كو"
 
-#: ../src/widgets/toolbox.cpp:1329
+#: ../src/widgets/toolbox.cpp:1390
 msgid "Snap cusp nodes, incl. rectangle corners"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1338
+#: ../src/widgets/toolbox.cpp:1399
 msgid "Smooth nodes"
 msgstr "اسموت نوڈس"
 
-#: ../src/widgets/toolbox.cpp:1338
+#: ../src/widgets/toolbox.cpp:1399
 msgid "Snap smooth nodes, incl. quadrant points of ellipses"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1347
+#: ../src/widgets/toolbox.cpp:1408
 msgid "Line Midpoints"
 msgstr "لائن مڈ پوائنٹ"
 
-#: ../src/widgets/toolbox.cpp:1347
+#: ../src/widgets/toolbox.cpp:1408
 #, fuzzy
 msgid "Snap midpoints of line segments"
 msgstr "لائن سیگمینٹ كے درمیانی نقطوں سے اور وہاں تك اسنیپ كریں"
 
-#: ../src/widgets/toolbox.cpp:1356
+#: ../src/widgets/toolbox.cpp:1417
 #, fuzzy
 msgid "Others"
 msgstr "دیگر"
 
-#: ../src/widgets/toolbox.cpp:1356
+#: ../src/widgets/toolbox.cpp:1417
 msgid "Snap other points (centers, guide origins, gradient handles, etc.)"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1364
+#: ../src/widgets/toolbox.cpp:1425
 msgid "Object Centers"
 msgstr "آبجیكٹ مراكز"
 
-#: ../src/widgets/toolbox.cpp:1364
+#: ../src/widgets/toolbox.cpp:1425
 #, fuzzy
 msgid "Snap centers of objects"
 msgstr "آبجیكٹس كے درمیان سے اور وہاں تك اسنیپ كریں"
 
-#: ../src/widgets/toolbox.cpp:1373
+#: ../src/widgets/toolbox.cpp:1434
 msgid "Rotation Centers"
 msgstr "محوری مراكز"
 
-#: ../src/widgets/toolbox.cpp:1373
+#: ../src/widgets/toolbox.cpp:1434
 #, fuzzy
 msgid "Snap an item's rotation center"
 msgstr "ایك آئٹم كے گھماؤ سینٹر سے اور وہاں اسنیپ كریں"
 
-#: ../src/widgets/toolbox.cpp:1382
+#: ../src/widgets/toolbox.cpp:1443
 msgid "Text baseline"
 msgstr "متن بیس لائن"
 
-#: ../src/widgets/toolbox.cpp:1382
+#: ../src/widgets/toolbox.cpp:1443
 #, fuzzy
 msgid "Snap text anchors and baselines"
 msgstr "متن بنیادی لكیروں كو الائن كریں۔"
 
-#: ../src/widgets/toolbox.cpp:1392
+#: ../src/widgets/toolbox.cpp:1453
 msgid "Page border"
 msgstr "صفحہ كی بورڈر"
 
-#: ../src/widgets/toolbox.cpp:1392
+#: ../src/widgets/toolbox.cpp:1453
 msgid "Snap to the page border"
 msgstr "صفحہ بورڈر تك اسنیپ كریں"
 
-#: ../src/widgets/toolbox.cpp:1401
+#: ../src/widgets/toolbox.cpp:1462
 msgid "Snap to grids"
 msgstr "گریڈس اسنیپ كریں"
 
-#: ../src/widgets/toolbox.cpp:1410
+#: ../src/widgets/toolbox.cpp:1471
 #, fuzzy
 msgid "Snap guides"
 msgstr "گائیڈس اسنیپ كریں"
@@ -43510,6 +43521,15 @@ msgstr "_مدد"
 #: ../share/ui/menus.xml.h:22
 msgid "Tutorials"
 msgstr "ٹیوٹوریلس"
+
+#~ msgid "Unable to find verb ID '%s' specified on the command line.\n"
+#~ msgstr "كمانڈ لائن پر تعین شدہ  '%s' ID   كو تلاش كرنے میں ناقابل۔ \n"
+
+#~ msgid "Unable to find node ID: '%s'\n"
+#~ msgstr "نوڈ ID: '%s' كو تلاش كرنے میں ناقابل.\n"
+
+#~ msgid "New element node..."
+#~ msgstr "نیا ایلیمینٹ نوڈ"
 
 #~ msgid "Perspective path"
 #~ msgstr "پرسپیكٹیو پاتھ"

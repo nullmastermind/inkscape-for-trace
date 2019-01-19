@@ -133,8 +133,6 @@ void AboutBox::build_splash_widget() {
         double height=doc->getHeight().value("px") / 2.0;
         viewer->setResize(width, height);
 
-        doc->doUnref();
-
         _splash_widget = new Gtk::AspectFrame();
         _splash_widget->unset_label();
         _splash_widget->set_shadow_type(Gtk::SHADOW_NONE);

@@ -20,8 +20,6 @@ establishment of a friendly, open, community-oriented development
 processes.
 
 [![build status](https://gitlab.com/inkscape/inkscape/badges/master/build.svg)](https://gitlab.com/inkscape/inkscape/commits/master)
+[![Build Status](https://ci.appveyor.com/api/projects/status/gitlab/inkscape/inkscape?branch=master&svg=true)](https://ci.appveyor.com/project/inkscape/inkscape)
 
-
-For installation, please see:
-
-  INSTALL.md
+For installation, please see: [INSTALL.md](INSTALL.md)

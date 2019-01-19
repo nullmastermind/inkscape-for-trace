@@ -422,13 +422,16 @@ void ObjectsPanel::_updateObject( SPObject *obj, bool recurse ) {
 bool ObjectsPanel::_checkForUpdated(const Gtk::TreeIter& iter, SPObject* obj)
 {
     Gtk::TreeModel::Row row = *iter;
-    if ( obj == row[_model->_colObject] )
+    if (obj && *iter && obj == row[_model->_colObject] )
     {
         //We found our item in the tree!!  Update it!
         SPItem * item = SP_IS_ITEM(obj) ? SP_ITEM(obj) : nullptr;
         SPGroup * group = SP_IS_GROUP(obj) ? SP_GROUP(obj) : nullptr;
-        
-        row[_model->_colLabel] = obj->label() ? obj->label() : obj->getId();
+        gchar const * id = obj->getId();
+        if (!id) {
+            id = _("no-id");
+        }
+        row[_model->_colLabel] = obj->label() ? obj->label() : id;
         row[_model->_colVisible] = item ? !item->isHidden() : false;
         row[_model->_colLocked] = item ? !item->isSensitive() : false;
         row[_model->_colType] = group ? (group->layerMode() == SPGroup::LAYER ? 2 : 1) : 0;

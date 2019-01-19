@@ -47,7 +47,10 @@ Layout::iterator Layout::_cursorXOnLineToIterator(unsigned line_index, double lo
             best_x_difference = this_x_difference;
         }
     }
-    if (best_char_index == -1) return iterator(this, char_index);
+    if (best_char_index == -1)
+        best_char_index = char_index;
+    if (best_char_index == _characters.size())
+        return end();
     return iterator(this, best_char_index);
 }
 
@@ -183,6 +186,8 @@ Layout::iterator Layout::sourceToIterator(void *source_cookie /*, Glib::ustring:
     if (_input_stream[source_index]->Type() != TEXT_SOURCE)
         return iterator(this, char_index);
 
+    if (char_index >= _characters.size())
+        return end();
     return iterator(this, char_index);
     /* This code was never used, the text_iterator argument was "NULL" in all calling code
     InputStreamTextSource const *text_source = static_cast<InputStreamTextSource const *>(_input_stream[source_index]);
@@ -498,7 +503,7 @@ void Layout::queryCursorShape(iterator const &it, Geom::Point &position, double 
                 if (it._glyph_index == -1) {
                     rotation = 0.0;
                 } else if(it._glyph_index == 0) {
-                    rotation = _glyphs[0].rotation;
+                    rotation = _glyphs.empty() ? 0.0 : _glyphs[0].rotation;
                 } else{
                     rotation = _glyphs[it._glyph_index - 1].rotation;
                 }
@@ -784,7 +789,10 @@ bool Layout::iterator::nextLineCursor(int n)
                          - _parent_layout->_chunks[_parent_layout->_spans[_parent_layout->_lineToSpan(line_index)].in_chunk].left_x;
     }
     _char_index = _parent_layout->_cursorXOnLineToIterator(line_index + n, _x_coordinate)._char_index;
-    _glyph_index = _parent_layout->_characters[_char_index].in_glyph;
+    if (_char_index == _parent_layout->_characters.size())
+        _glyph_index = _parent_layout->_glyphs.size();
+    else
+        _glyph_index = _parent_layout->_characters[_char_index].in_glyph;
     return true;
 }
 

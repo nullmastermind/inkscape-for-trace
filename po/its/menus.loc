@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<locatingRules>
+  <locatingRule name="inkscape" pattern="menus.xml">
+    <documentRule localName="inkscape" target="menus.its"/>
+  </locatingRule>
+</locatingRules>

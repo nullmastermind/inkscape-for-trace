@@ -28,7 +28,6 @@
 #include <svg/svg-length.h>
 #include "style-enums.h"
 
-#ifdef HAVE_CAIRO_PDF
 namespace Inkscape {
         namespace Extension {
                 namespace Internal {
@@ -38,7 +37,6 @@ namespace Inkscape {
 }
 
 using Inkscape::Extension::Internal::CairoRenderContext;
-#endif
 
 class SPStyle;
 class Shape;
@@ -403,12 +401,10 @@ public:
     */
     void print(SPPrintContext *ctx, Geom::OptRect const &pbox, Geom::OptRect const &dbox, Geom::OptRect const &bbox, Geom::Affine const &ctm) const;
 
-#ifdef HAVE_CAIRO_PDF    
     /** Renders all the glyphs to the given Cairo rendering context.
      \param ctx   The Cairo rendering context to be used
      */
     void showGlyphs(CairoRenderContext *ctx) const;
-#endif
 
     /** Returns the font family of the indexed span */
     Glib::ustring getFontFamily(unsigned span_index) const;

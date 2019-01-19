@@ -36,11 +36,20 @@ static void on_attr_changed (Inkscape::XML::Node * repr,
 {
     ATTR_DIALOG(data)->onAttrChanged(repr, name, new_value);
 }
+
+static void on_content_changed (Inkscape::XML::Node * repr,
+                                gchar const * oldcontent,
+                                gchar const * newcontent,
+                                gpointer data)
+{
+    ATTR_DIALOG(data)->onAttrChanged(repr, "content", repr->content());
+}
+
 Inkscape::XML::NodeEventVector _repr_events = {
     nullptr, /* child_added */
     nullptr, /* child_removed */
     on_attr_changed,
-    nullptr, /* content_changed */
+    on_content_changed, /* content_changed */
     nullptr  /* order_changed */
 };
 
@@ -126,7 +135,6 @@ AttrDialog::AttrDialog():
 
     setDesktop(getDesktop());
 }
-
 
 /**
  * @brief AttrDialog::~AttrDialog
@@ -226,10 +234,16 @@ void AttrDialog::onAttrChanged(Inkscape::XML::Node *repr, const gchar * name, co
             }
         }
     }
-    if(new_value) {
-        Gtk::TreeModel::Row row = *(_store->append());
-        row[_attrColumns._attributeName] = name;
-        row[_attrColumns._attributeValue] = new_value;
+    if (new_value) {
+        if ((repr->type() == Inkscape::XML::TEXT_NODE || repr->type() == Inkscape::XML::COMMENT_NODE) &&
+             name != "content") 
+        {
+            return;   
+        } else {
+            Gtk::TreeModel::Row row = *(_store->append());
+            row[_attrColumns._attributeName] = name;
+            row[_attrColumns._attributeValue] = new_value;
+        }
     }
 }
 
@@ -260,8 +274,13 @@ void AttrDialog::onAttrDelete(Glib::ustring path)
     Gtk::TreeModel::Row row = *_store->get_iter(path);
     if (row) {
         Glib::ustring name = row[_attrColumns._attributeName];
-        this->_repr->setAttribute(name.c_str(), nullptr, false);
-        this->setUndo(_("Delete attribute"));
+        if (name == "content") {
+            return;
+        } else {
+            this->_store->erase(row);
+            this->_repr->setAttribute(name.c_str(), nullptr, false);
+            this->setUndo(_("Delete attribute"));
+        }
     }
 }
 
@@ -283,8 +302,13 @@ bool AttrDialog::onKeyPressed(GdkEventKey *event)
               {
                 // Create new attribute (repeat code, fold into above event!)
                 Glib::ustring name = row[_attrColumns._attributeName];
-                this->_repr->setAttribute(name.c_str(), nullptr, false);
-                this->setUndo(_("Delete attribute"));
+                if(name == "content") {
+                    return true;
+                } else {
+                    this->_store->erase(row);
+                    this->_repr->setAttribute(name.c_str(), nullptr, false);
+                    this->setUndo(_("Delete attribute"));
+                }
                 return true;
               }
             case GDK_KEY_plus:
@@ -314,21 +338,22 @@ void AttrDialog::nameEdited (const Glib::ustring& path, const Glib::ustring& nam
     Gtk::TreeModel::Row row = *_store->get_iter(path);
     if(row && this->_repr) {
         Glib::ustring old_name = row[_attrColumns._attributeName];
-        Glib::ustring value = row[_attrColumns._attributeValue];
-        if(!old_name.empty()) {
-            // Remove named value
-            _repr->setAttribute(old_name, nullptr, false);
-            _repr->setAttribute(name, value, false);
-            this->setUndo(_("Rename attribute"));
-        } else {
-            // Move to editing value, we set the name as a temporary store value
-            row[_attrColumns._attributeName] = name;
-            // This would be nice to have, but it causes a crash when treeview looses focus
-            // because signaling vs. focus is in some sort of conflict.
-            //Gtk::TreeModel::Path _path = (Gtk::TreeModel::Path)row;
-            //_treeView.set_cursor(_path, *_valueCol, true);
-            //grab_focus();
+        if (old_name == "content" ||
+            old_name == name) 
+        {
+            return;
         }
+        Glib::ustring value = row[_attrColumns._attributeValue];
+        // Move to editing value, we set the name as a temporary store value
+        if (!old_name.empty()) {
+            // Remove old named value
+            _repr->setAttribute(old_name.c_str(), nullptr, false);
+        }
+        if (!name.empty()) {
+            _repr->setAttribute(name.c_str(), value, false);
+            row[_attrColumns._attributeName] = name;
+        }
+        this->setUndo(_("Rename attribute"));
     }
 }
 
@@ -344,7 +369,15 @@ void AttrDialog::valueEdited (const Glib::ustring& path, const Glib::ustring& va
     if(row && this->_repr) {
         Glib::ustring name = row[_attrColumns._attributeName];
         if(name.empty()) return;
-        _repr->setAttribute(name, value, false);
+        if (name == "content") {
+            _repr->setContent(value.c_str());
+        } else {
+            _repr->setAttribute(name.c_str(), value, false);
+        }
+        if(!value.empty()) {
+            row[_attrColumns._attributeValue] = value;
+        }
+
         this->setUndo(_("Change attribute value"));
     }
 }

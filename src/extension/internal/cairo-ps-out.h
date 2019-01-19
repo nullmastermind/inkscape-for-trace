@@ -23,8 +23,6 @@
 
 #include "extension/implementation/implementation.h"
 
-#ifdef HAVE_CAIRO_PDF
-
 namespace Inkscape {
 namespace Extension {
 namespace Internal {
@@ -54,8 +52,6 @@ public:
 };
 
 } } }  /* namespace Inkscape, Extension, Implementation */
-
-#endif /* HAVE_CAIRO_PDF */
 
 #endif /* !EXTENSION_INTERNAL_CAIRO_PS_OUT_H */
 

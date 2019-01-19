@@ -36,7 +36,6 @@
 #cmakedefine ENABLE_OSX_APP_LOCATIONS 1
 
 /* Whether the Cairo PDF backend is available */
-#cmakedefine HAVE_CAIRO_PDF 1
 #cmakedefine PANGO_ENABLE_ENGINE 1
 
 /* Build with GDL 3.6 or higher */

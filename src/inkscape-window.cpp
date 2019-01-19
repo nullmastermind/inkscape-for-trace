@@ -18,12 +18,26 @@
 #include "inkscape-window.h"
 #include "inkscape.h"   // SP_ACTIVE_DESKTOP
 #include "shortcuts.h"
+#include "inkscape-application.h"
 
 #include "widgets/desktop-widget.h"
 
 InkscapeWindow::InkscapeWindow(SPDocument* document)
     : _document(document)
 {
+    if (!_document) {
+        std::cerr << "InkscapeWindow::InkscapeWindow: null document!" << std::endl;
+        return;
+    }
+
+    Glib::RefPtr<Gio::Application> gio_app = Gio::Application::get_default();
+    Glib::RefPtr<Gtk::Application> app = Glib::RefPtr<Gtk::Application>::cast_dynamic(gio_app);
+    if (app) {
+        set_application(app);  // Same as Gtk::Application::add_window()
+    } else {
+        std::cerr << "InkscapeWindow::InkscapeWindow:: Didn't get app!" << std::endl;
+    }
+
     set_resizable(true);
 
     // Callbacks
