@@ -36,11 +36,16 @@ class InkscapeWindow : public Gtk::ApplicationWindow {
 
 public:
     InkscapeWindow(SPDocument* document);
-    void set_desktop_widget(SPDesktopWidget* desktop_widget); // Temp: We should be creating desktop in constructor!
+
+    SPDesktop*       get_desktop()        { return _desktop; }
+    SPDesktopWidget* get_desktop_widget() { return _desktop_widget; }
 
 private:
     SPDocument* _document;
     SPDesktop*  _desktop;
+    SPDesktopWidget* _desktop_widget;
+
+    Gtk::Box*   _mainbox;  // Remove after we don't need set_desktop_widget()
 
     // Callbacks
     bool key_press(GdkEventKey* event);

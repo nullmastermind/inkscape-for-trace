@@ -92,65 +92,6 @@ static void sp_ui_menu_item_set_name(GtkWidget *data,
 static void sp_recent_open(GtkRecentChooser *, gpointer);
 
 void
-sp_create_window(SPViewWidget *vw, bool editable)
-{
-    g_return_if_fail(vw != nullptr);
-    g_return_if_fail(SP_IS_VIEW_WIDGET(vw));
-
-    SPDesktopWidget *desktop_widget = reinterpret_cast<SPDesktopWidget*>(vw);
-    SPDesktop* desktop = desktop_widget->desktop;
-    SPDocument* document = desktop->getDocument();
-
-    InkscapeWindow* win = new InkscapeWindow(document);
-    win->set_desktop_widget(desktop_widget);
-
-    if (editable) {
-        g_object_set_data(G_OBJECT(vw), "window", win);
-
-
-        desktop_widget->window = win;
-
-        win->set_data("desktop", desktop);
-        win->set_data("desktopwidget", desktop_widget);
-
-        win->signal_delete_event().connect(sigc::mem_fun(*(SPDesktop*)vw->view, &SPDesktop::onDeleteUI));
-        win->signal_window_state_event().connect(sigc::mem_fun(*desktop, &SPDesktop::onWindowStateEvent));
-        win->signal_focus_in_event().connect(sigc::mem_fun(*desktop_widget, &SPDesktopWidget::onFocusInEvent));
-
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        int window_geometry = prefs->getInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE);
-        if (window_geometry == PREFS_WINDOW_GEOMETRY_LAST) {
-            gint pw = prefs->getInt("/desktop/geometry/width", -1);
-            gint ph = prefs->getInt("/desktop/geometry/height", -1);
-            gint px = prefs->getInt("/desktop/geometry/x", -1);
-            gint py = prefs->getInt("/desktop/geometry/y", -1);
-            gint full = prefs->getBool("/desktop/geometry/fullscreen");
-            gint maxed = prefs->getBool("/desktop/geometry/maximized");
-            if (pw>0 && ph>0) {
-                Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_at_point(px, py);
-                pw = std::min(pw, monitor_geometry.get_width());
-                ph = std::min(ph, monitor_geometry.get_height());
-                desktop->setWindowSize(pw, ph);
-                desktop->setWindowPosition(Geom::Point(px, py));
-            }
-            if (maxed) {
-                win->maximize();
-            }
-            if (full) {
-                win->fullscreen();
-            }
-        }
-    }
-
-    win->show();
-
-    // needed because the first ACTIVATE_DESKTOP was sent when there was no window yet
-    if ( SP_IS_DESKTOP_WIDGET(vw) ) {
-        INKSCAPE.reactivate_desktop(SP_DESKTOP_WIDGET(vw)->desktop);
-    }
-}
-
-void
 sp_ui_new_view()
 {
     SPDocument *document;
@@ -159,12 +100,7 @@ sp_ui_new_view()
     document = SP_ACTIVE_DOCUMENT;
     if (!document) return;
 
-    dtw = sp_desktop_widget_new(sp_document_namedview(document, nullptr));
-    g_return_if_fail(dtw != nullptr);
-
-    sp_create_window(dtw, TRUE);
-    sp_namedview_window_from_document(static_cast<SPDesktop*>(dtw->view));
-    sp_namedview_update_layers_from_document(static_cast<SPDesktop*>(dtw->view));
+    auto win = new InkscapeWindow(document);
 }
 
 void sp_ui_reload()
@@ -204,17 +140,8 @@ void sp_ui_reload()
             continue;
         }
 
-        dtw = sp_desktop_widget_new(sp_document_namedview(document, nullptr));
-        if (dtw == nullptr) {
-            ++i;
-            continue;
-        }
-        sp_create_window(dtw, TRUE);
-        SPDesktop *desktop = static_cast<SPDesktop *>(dtw->view);
-        if (desktop) {
-            sp_namedview_window_from_document(desktop);
-            sp_namedview_update_layers_from_document(desktop);
-        }
+        auto win = new InkscapeWindow(document);
+
         dt->destroyWidget();
         i++;
     }

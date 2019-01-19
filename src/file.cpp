@@ -35,6 +35,7 @@
 #include <gtkmm.h>
 
 #include "file.h"
+#include "inkscape-window.h"
 
 #include "desktop.h"
 #include "document-undo.h"
@@ -142,13 +143,8 @@ SPDesktop *sp_file_new(const std::string &templ)
     if (olddesktop)
         olddesktop->setWaitingCursor();
 
-    SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, nullptr)); // TODO this will trigger broken link warnings, etc.
-    g_return_val_if_fail(dtw != nullptr, NULL);
-    sp_create_window(dtw, TRUE);
-    SPDesktop* desktop = static_cast<SPDesktop *>(dtw->view);
-
-    sp_namedview_window_from_document(desktop);
-    sp_namedview_update_layers_from_document(desktop);
+    InkscapeWindow* win = new InkscapeWindow(doc);
+    SPDesktop* desktop = win->get_desktop();
 
 #ifdef WITH_DBUS
     Inkscape::Extension::Dbus::dbus_init_desktop_interface(desktop);
@@ -246,10 +242,8 @@ bool sp_file_open(const Glib::ustring &uri,
             doc->emitResizedSignal(doc->getWidth().value("px"), doc->getHeight().value("px"));
         } else {
 
-            // Create a whole new desktop and window
-            SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, nullptr)); // TODO this will trigger broken link warnings, etc.
-            sp_create_window(dtw, TRUE);
-            desktop = static_cast<SPDesktop*>(dtw->view);
+            InkscapeWindow* win = new InkscapeWindow(doc);
+            desktop = win->get_desktop();
         }
 
         doc->virgin = FALSE;
@@ -281,10 +275,6 @@ bool sp_file_open(const Glib::ustring &uri,
         }
 
         // ------------------ Window options ---------------
-
-        // Resize the window to match the document properties
-        sp_namedview_window_from_document(desktop);
-        sp_namedview_update_layers_from_document(desktop);
 
         // Lock Guides
         SPNamedView *nv = desktop->namedview;

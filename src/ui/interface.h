@@ -20,8 +20,6 @@
 
 #include <glibmm/ustring.h>
 
-class SPViewWidget;
-
 typedef struct _GtkWidget GtkWidget;
 
 namespace Inkscape {
@@ -33,11 +31,6 @@ class View;
 } // namespace View
 } // namespace UI
 } // namespace Inkscape
-
-/**
- *  Create a new document window.
- */
-void sp_create_window (SPViewWidget *vw, bool editable);
 
 /**
  * \param widget unused
