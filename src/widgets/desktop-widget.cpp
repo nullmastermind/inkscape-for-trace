@@ -1636,11 +1636,10 @@ void SPDesktopWidget::setToolboxPosition(Glib::ustring const& id, GtkPositionTyp
 }
 
 
-SPViewWidget *sp_desktop_widget_new( SPNamedView *namedview )
+SPDesktopWidget *sp_desktop_widget_new( SPNamedView *namedview )
 {
     SPDesktopWidget* dtw = SPDesktopWidget::createInstance(namedview);
-
-    return SP_VIEW_WIDGET(dtw);
+    return dtw;
 }
 
 SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)

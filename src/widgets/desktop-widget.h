@@ -63,9 +63,9 @@ class SelectedStyle;
 #define SP_IS_DESKTOP_WIDGET_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE ((k), SP_TYPE_DESKTOP_WIDGET))
 
 /**
- * Create a new SPViewWidget (which happens to be a SPDesktopWidget).
+ * Create a new SPDesktopWidget
  */
-SPViewWidget *sp_desktop_widget_new(SPNamedView *namedview);
+SPDesktopWidget *sp_desktop_widget_new(SPNamedView *namedview);
 
 void sp_desktop_widget_show_decorations(SPDesktopWidget *dtw, gboolean show);
 void sp_desktop_widget_update_hruler (SPDesktopWidget *dtw);
