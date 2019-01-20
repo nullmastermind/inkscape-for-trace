@@ -84,7 +84,7 @@ private:
 
 protected:
     NodeToolbar(SPDesktop *desktop);
-    ~NodeToolbar();
+    ~NodeToolbar() override;
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);

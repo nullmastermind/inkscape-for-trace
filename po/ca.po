@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-01-17 00:47+0100\n"
+"POT-Creation-Date: 2019-01-20 11:29+0100\n"
 "PO-Revision-Date: 2019-01-03 10:17+0100\n"
 "Last-Translator: \n"
 "Language-Team: Catalan <gnome@llistes.softcatala.org>\n"
@@ -4535,7 +4535,7 @@ msgstr "Longitud base de l'eix z"
 
 #: ../src/display/canvas-axonomgrid.cpp:282
 #: ../src/ui/dialog/inkscape-preferences.cpp:1109
-#: ../src/ui/toolbar/box3d-toolbar.cpp:303
+#: ../src/ui/toolbar/box3d-toolbar.cpp:89
 msgid "Angle X:"
 msgstr "Angle X:"
 
@@ -4546,7 +4546,7 @@ msgstr "Angle de l'eix x"
 
 #: ../src/display/canvas-axonomgrid.cpp:284
 #: ../src/ui/dialog/inkscape-preferences.cpp:1110
-#: ../src/ui/toolbar/box3d-toolbar.cpp:382
+#: ../src/ui/toolbar/box3d-toolbar.cpp:174
 msgid "Angle Z:"
 msgstr "Angle Z:"
 
@@ -5064,10 +5064,10 @@ msgstr "Llindar adaptatiu"
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:58
 #: ../src/ui/dialog/object-attributes.cpp:59
 #: ../src/ui/dialog/object-attributes.cpp:67
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:397
-#: ../src/ui/toolbar/eraser-toolbar.cpp:186
-#: ../src/ui/toolbar/spray-toolbar.cpp:293
-#: ../src/ui/toolbar/tweak-toolbar.cpp:129 ../src/ui/widget/page-sizer.cpp:62
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:105
+#: ../src/ui/toolbar/eraser-toolbar.cpp:115
+#: ../src/ui/toolbar/spray-toolbar.cpp:93
+#: ../src/ui/toolbar/tweak-toolbar.cpp:95 ../src/ui/widget/page-sizer.cpp:62
 #: ../share/extensions/foldablebox.inx.h:2
 msgid "Width:"
 msgstr "Amplada:"
@@ -5082,7 +5082,7 @@ msgid "Height:"
 msgstr "Alçada:"
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:44
-#: ../src/ui/toolbar/measure-toolbar.cpp:346
+#: ../src/ui/toolbar/measure-toolbar.cpp:296
 #: ../share/extensions/printing_marks.inx.h:12
 msgid "Offset:"
 msgstr "Desplaçament:"
@@ -5335,7 +5335,7 @@ msgstr "Rotació del mapa de colors"
 #: ../src/extension/internal/bitmap/cycleColormap.cpp:40
 #: ../src/extension/internal/bitmap/spread.cpp:40
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:46
-#: ../src/ui/toolbar/spray-toolbar.cpp:405
+#: ../src/ui/toolbar/spray-toolbar.cpp:215
 msgid "Amount:"
 msgstr "Quantitat:"
 
@@ -5523,7 +5523,7 @@ msgstr ""
 #: ../src/extension/internal/filter/blurs.h:334
 #: ../src/extension/internal/filter/transparency.h:280
 #: ../src/ui/dialog/clonetiler.cpp:794 ../src/ui/dialog/clonetiler.cpp:925
-#: ../src/ui/toolbar/tweak-toolbar.cpp:325
+#: ../src/ui/toolbar/tweak-toolbar.cpp:297
 #: ../share/extensions/interp_att_g.inx.h:20
 msgid "Opacity"
 msgstr "Opacitat"
@@ -5653,7 +5653,7 @@ msgstr "Llindar"
 
 #: ../src/extension/internal/bitmap/threshold.cpp:41
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:47
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:159
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:106
 msgid "Threshold:"
 msgstr "Llindar:"
 
@@ -5713,130 +5713,130 @@ msgstr "Nombre de còpies expandides/contretes de l'objecte"
 msgid "Generate from Path"
 msgstr "Genera des del camí"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:329
+#: ../src/extension/internal/cairo-ps-out.cpp:330
 #: ../share/extensions/ps_input.inx.h:3
 msgid "PostScript"
 msgstr "Postscript"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:331
-#: ../src/extension/internal/cairo-ps-out.cpp:373
+#: ../src/extension/internal/cairo-ps-out.cpp:332
+#: ../src/extension/internal/cairo-ps-out.cpp:374
 msgid "Restrict to PS level:"
 msgstr "Restringeix al nivell de PS:"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:332
-#: ../src/extension/internal/cairo-ps-out.cpp:374
+#: ../src/extension/internal/cairo-ps-out.cpp:333
+#: ../src/extension/internal/cairo-ps-out.cpp:375
 msgid "PostScript level 3"
 msgstr "PostScript nivell 3"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:333
-#: ../src/extension/internal/cairo-ps-out.cpp:375
+#: ../src/extension/internal/cairo-ps-out.cpp:334
+#: ../src/extension/internal/cairo-ps-out.cpp:376
 msgid "PostScript level 2"
 msgstr "PostScript nivell 2"
-
-#: ../src/extension/internal/cairo-ps-out.cpp:335
-#: ../src/extension/internal/cairo-ps-out.cpp:377
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:254
-msgid "Text output options:"
-msgstr "Opcions de sortida del text::"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:336
 #: ../src/extension/internal/cairo-ps-out.cpp:378
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:255
-msgid "Embed fonts"
-msgstr "Tipografia incrustada"
+msgid "Text output options:"
+msgstr "Opcions de sortida del text::"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:337
 #: ../src/extension/internal/cairo-ps-out.cpp:379
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:256
-msgid "Convert text to paths"
-msgstr "Converteix el text en camins"
+msgid "Embed fonts"
+msgstr "Tipografia incrustada"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:338
 #: ../src/extension/internal/cairo-ps-out.cpp:380
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:257
+msgid "Convert text to paths"
+msgstr "Converteix el text en camins"
+
+#: ../src/extension/internal/cairo-ps-out.cpp:339
+#: ../src/extension/internal/cairo-ps-out.cpp:381
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:258
 msgid "Omit text in PDF and create LaTeX file"
 msgstr "Omet el text del PDF i crea un fitxer LaTeX"
-
-#: ../src/extension/internal/cairo-ps-out.cpp:340
-#: ../src/extension/internal/cairo-ps-out.cpp:382
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:259
-msgid "Rasterize filter effects"
-msgstr "Rasteritza els efectes del filtre"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:341
 #: ../src/extension/internal/cairo-ps-out.cpp:383
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:260
-msgid "Resolution for rasterization (dpi):"
-msgstr "Resolució de la rasterització (ppp):"
+msgid "Rasterize filter effects"
+msgstr "Rasteritza els efectes del filtre"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:342
 #: ../src/extension/internal/cairo-ps-out.cpp:384
-msgid "Output page size"
-msgstr "Mida de la pàgina de sortida"
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:261
+msgid "Resolution for rasterization (dpi):"
+msgstr "Resolució de la rasterització (ppp):"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:343
 #: ../src/extension/internal/cairo-ps-out.cpp:385
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:262
-msgid "Use document's page size"
-msgstr "Usa la mida de la pàgina del document"
+msgid "Output page size"
+msgstr "Mida de la pàgina de sortida"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:344
 #: ../src/extension/internal/cairo-ps-out.cpp:386
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:263
+msgid "Use document's page size"
+msgstr "Usa la mida de la pàgina del document"
+
+#: ../src/extension/internal/cairo-ps-out.cpp:345
+#: ../src/extension/internal/cairo-ps-out.cpp:387
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:264
 msgid "Use exported object's size"
 msgstr "Usa la mida de l'objecte exportat"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:346
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:265
+#: ../src/extension/internal/cairo-ps-out.cpp:347
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:266
 msgid "Bleed/margin (mm):"
 msgstr "Sagnat/marge (mm):"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:347
-#: ../src/extension/internal/cairo-ps-out.cpp:389
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:266
+#: ../src/extension/internal/cairo-ps-out.cpp:348
+#: ../src/extension/internal/cairo-ps-out.cpp:390
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:267
 msgid "Limit export to the object with ID:"
 msgstr "Limita l'exportació a l'objecte amb ID:"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:351
+#: ../src/extension/internal/cairo-ps-out.cpp:352
 #: ../share/extensions/ps_input.inx.h:2
 msgid "PostScript (*.ps)"
 msgstr "PostScript (*.ps)"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:352
+#: ../src/extension/internal/cairo-ps-out.cpp:353
 msgid "PostScript File"
 msgstr "Fitxer PostScript"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:371
+#: ../src/extension/internal/cairo-ps-out.cpp:372
 #: ../share/extensions/eps_input.inx.h:3
 msgid "Encapsulated PostScript"
 msgstr "Postscript encapsulat"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:388
+#: ../src/extension/internal/cairo-ps-out.cpp:389
 msgid "Bleed/margin (mm)"
 msgstr "Sagnat/marge (mm)"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:393
+#: ../src/extension/internal/cairo-ps-out.cpp:394
 #: ../share/extensions/eps_input.inx.h:2
 msgid "Encapsulated PostScript (*.eps)"
 msgstr "Postscript encapsulat (*.eps)"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:394
+#: ../src/extension/internal/cairo-ps-out.cpp:395
 msgid "Encapsulated PostScript File"
 msgstr "Fitxer Postscript encapsulat"
 
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:248
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:249
 msgid "Restrict to PDF version:"
 msgstr "Restringeix a la versió PDF:"
 
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:250
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:251
 msgid "PDF 1.5"
 msgstr "PDF 1.5"
 
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:252
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:253
 msgid "PDF 1.4"
 msgstr "PDF 1.4"
 
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:261
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:262
 msgid "Output page size:"
 msgstr "Mida pàgina sortida:"
 
@@ -5884,7 +5884,7 @@ msgstr "de %i"
 #: ../src/ui/dialog/livepatheffect-add.cpp:27
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:30
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:36
-#: ../src/ui/dialog/ocaldialogs.cpp:1086 ../src/ui/interface.cpp:1430
+#: ../src/ui/dialog/ocaldialogs.cpp:1086 ../src/ui/interface.cpp:866
 #: ../src/widgets/desktop-widget.cpp:1101
 #: ../src/widgets/desktop-widget.cpp:1150
 msgid "_Cancel"
@@ -6419,7 +6419,7 @@ msgstr "Difusa"
 
 #: ../src/extension/internal/filter/bumps.h:99
 #: ../src/extension/internal/filter/bumps.h:330
-#: ../src/ui/toolbar/rect-toolbar.cpp:338 ../src/ui/tools/measure-tool.cpp:1227
+#: ../src/ui/toolbar/rect-toolbar.cpp:140 ../src/ui/tools/measure-tool.cpp:1227
 #: ../src/ui/widget/page-sizer.cpp:63 ../share/extensions/interp_att_g.inx.h:15
 msgid "Height"
 msgstr "Alçada"
@@ -6432,7 +6432,7 @@ msgstr "Alçada"
 #: ../src/extension/internal/filter/paint.h:87
 #: ../src/extension/internal/filter/paint.h:593
 #: ../src/extension/internal/filter/paint.h:708
-#: ../src/ui/toolbar/tweak-toolbar.cpp:309 ../src/ui/tools/flood-tool.cpp:95
+#: ../src/ui/toolbar/tweak-toolbar.cpp:282 ../src/ui/tools/flood-tool.cpp:95
 #: ../src/ui/widget/color-icc-selector.cpp:177
 #: ../src/ui/widget/color-scales.cpp:416 ../src/ui/widget/color-scales.cpp:417
 msgid "Lightness"
@@ -6441,7 +6441,7 @@ msgstr "Lluminositat"
 #: ../src/extension/internal/filter/bumps.h:101
 #: ../src/extension/internal/filter/bumps.h:332
 #: ../src/live_effects/lpe-measure-segments.cpp:71
-#: ../src/ui/toolbar/measure-toolbar.cpp:320
+#: ../src/ui/toolbar/measure-toolbar.cpp:260
 msgid "Precision"
 msgstr "Precisió"
 
@@ -6631,7 +6631,7 @@ msgstr "Canal de pintura"
 #: ../src/extension/internal/filter/color.h:1575
 #: ../src/extension/internal/filter/paint.h:88 ../src/filter-enums.cpp:67
 #: ../src/ui/dialog/inkscape-preferences.cpp:1298
-#: ../src/ui/toolbar/tweak-toolbar.cpp:293 ../src/ui/tools/flood-tool.cpp:94
+#: ../src/ui/toolbar/tweak-toolbar.cpp:267 ../src/ui/tools/flood-tool.cpp:94
 #: ../src/ui/widget/color-icc-selector.cpp:173
 #: ../src/ui/widget/color-icc-selector.cpp:178
 #: ../src/ui/widget/color-scales.cpp:412 ../src/ui/widget/color-scales.cpp:413
@@ -6939,8 +6939,8 @@ msgstr "Ombres"
 #: ../src/live_effects/effect.cpp:144
 #: ../src/live_effects/lpe-transform_2pts.cpp:41
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1030
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1044
-#: ../src/ui/toolbar/measure-toolbar.cpp:346
+#: ../src/ui/toolbar/gradient-toolbar.cpp:545
+#: ../src/ui/toolbar/measure-toolbar.cpp:296
 msgid "Offset"
 msgstr "Desplaçament"
 
@@ -7082,7 +7082,7 @@ msgid "Hard Light"
 msgstr "Llum forta"
 
 #: ../src/extension/internal/filter/color.h:1585 ../src/filter-enums.cpp:66
-#: ../src/ui/toolbar/tweak-toolbar.cpp:277 ../src/ui/tools/flood-tool.cpp:93
+#: ../src/ui/toolbar/tweak-toolbar.cpp:252 ../src/ui/tools/flood-tool.cpp:93
 #: ../src/ui/widget/color-icc-selector.cpp:172
 #: ../src/ui/widget/color-icc-selector.cpp:176
 #: ../src/ui/widget/color-scales.cpp:407 ../src/ui/widget/color-scales.cpp:408
@@ -7323,11 +7323,10 @@ msgid "Open"
 msgstr "Obre"
 
 #: ../src/extension/internal/filter/morphology.h:66
-#: ../src/ui/toolbar/rect-toolbar.cpp:322
-#: ../src/ui/toolbar/spray-toolbar.cpp:293
-#: ../src/ui/toolbar/tweak-toolbar.cpp:129
-#: ../src/ui/tools/measure-tool.cpp:1233 ../src/ui/widget/page-sizer.cpp:62
-#: ../share/extensions/interp_att_g.inx.h:14
+#: ../src/ui/toolbar/rect-toolbar.cpp:116
+#: ../src/ui/toolbar/spray-toolbar.cpp:93
+#: ../src/ui/toolbar/tweak-toolbar.cpp:95 ../src/ui/tools/measure-tool.cpp:1233
+#: ../src/ui/widget/page-sizer.cpp:62 ../share/extensions/interp_att_g.inx.h:14
 msgid "Width"
 msgstr "Amplada"
 
@@ -7564,7 +7563,7 @@ msgstr ""
 
 #: ../src/extension/internal/filter/paint.h:332
 #: ../src/ui/dialog/align-and-distribute.cpp:1066
-#: ../src/widgets/desktop-widget.cpp:1921
+#: ../src/widgets/desktop-widget.cpp:1920
 msgid "Drawing"
 msgstr "Dibuix"
 
@@ -8078,7 +8077,7 @@ msgstr "Renderització"
 #: ../src/extension/internal/grid.cpp:204
 #: ../src/ui/dialog/document-properties.cpp:152
 #: ../src/ui/dialog/inkscape-preferences.cpp:1118
-#: ../src/widgets/toolbox.cpp:1462
+#: ../src/widgets/toolbox.cpp:1464
 msgid "Grids"
 msgstr "Graelles"
 
@@ -8582,48 +8581,48 @@ msgstr "Actualitza el document"
 #. TRANSLATORS: translate this into "default-<yourcodename>.svg" (for instance, default-fr.svg)
 #. and double-check that share/templates/create_defaults.pl contains a translation for your language
 #. If in doubt about this, ask a developer.
-#: ../src/file.cpp:170
+#: ../src/file.cpp:166
 msgid "default.svg"
 msgstr "default-ca.svg"
 
-#: ../src/file.cpp:270
+#: ../src/file.cpp:264
 msgid "Broken links have been changed to point to existing files."
 msgstr ""
 "Els enllaços trencats han estat modificats per què apuntin als fitxers "
 "existents."
 
-#: ../src/file.cpp:299 ../src/file.cpp:1303
+#: ../src/file.cpp:289 ../src/file.cpp:1293
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "No s'ha pogut carregar el fitxer demanat %s"
 
-#: ../src/file.cpp:325
+#: ../src/file.cpp:315
 msgid "Document not saved yet.  Cannot revert."
 msgstr "No s'ha desat el document. És irreversible."
 
-#: ../src/file.cpp:331
+#: ../src/file.cpp:321
 msgid "Changes will be lost! Are you sure you want to reload document %1?"
 msgstr ""
 "Es perdran els canvis. Esteu segur que voleu tornar a carregar el document "
 "%1?"
 
-#: ../src/file.cpp:357
+#: ../src/file.cpp:347
 msgid "Document reverted."
 msgstr "S'ha recuperat el document anterior."
 
-#: ../src/file.cpp:359
+#: ../src/file.cpp:349
 msgid "Document not reverted."
 msgstr "No s'ha recuperat el document anterior."
 
-#: ../src/file.cpp:509
+#: ../src/file.cpp:499
 msgid "Select file to open"
 msgstr "Seleccioneu el fitxer per obrir"
 
-#: ../src/file.cpp:591
+#: ../src/file.cpp:581
 msgid "Clean up document"
 msgstr "Neteja el document"
 
-#: ../src/file.cpp:598
+#: ../src/file.cpp:588
 #, c-format
 msgid "Removed <b>%i</b> unused definition in &lt;defs&gt;."
 msgid_plural "Removed <b>%i</b> unused definitions in &lt;defs&gt;."
@@ -8631,11 +8630,11 @@ msgstr[0] "S'ha esborrat <b>%i</b>definició sense fer servir a &lt;defs&gt;."
 msgstr[1] ""
 "S'han esborrat <b>%i</b>definicions sense fer servir a &lt;defs&gt;."
 
-#: ../src/file.cpp:603
+#: ../src/file.cpp:593
 msgid "No unused definitions in &lt;defs&gt;."
 msgstr "No hi ha definicions sense fer servir a &lt;defs&gt;."
 
-#: ../src/file.cpp:637
+#: ../src/file.cpp:627
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
@@ -8644,13 +8643,13 @@ msgstr ""
 "No s'ha trobat cap extensió de l'Inkscape per desar el document (%s). És "
 "possible que es desconegui l'extensió del fitxer."
 
-#: ../src/file.cpp:638 ../src/file.cpp:648 ../src/file.cpp:657
-#: ../src/file.cpp:664 ../src/file.cpp:669 ../src/file.cpp:681
-#: ../src/file.cpp:691
+#: ../src/file.cpp:628 ../src/file.cpp:638 ../src/file.cpp:647
+#: ../src/file.cpp:654 ../src/file.cpp:659 ../src/file.cpp:671
+#: ../src/file.cpp:681
 msgid "Document not saved."
 msgstr "No s'ha desat el document."
 
-#: ../src/file.cpp:647
+#: ../src/file.cpp:637
 #, c-format
 msgid ""
 "File %s is write protected. Please remove write protection and try again."
@@ -8658,12 +8657,12 @@ msgstr ""
 "El fitxer %s està protegit contra escriptura. Traieu la protecció i torneu-"
 "ho a provar."
 
-#: ../src/file.cpp:656 ../src/file.cpp:690
+#: ../src/file.cpp:646 ../src/file.cpp:680
 #, c-format
 msgid "File %s could not be saved."
 msgstr "No s'ha pogut desar el fitxer %s."
 
-#: ../src/file.cpp:668
+#: ../src/file.cpp:658
 #, c-format
 msgid ""
 "File could not be saved:\n"
@@ -8672,7 +8671,7 @@ msgstr ""
 "El fitxer no es pot desar:\n"
 "No s'ha trobat cap objecte amb ID: «%s»."
 
-#: ../src/file.cpp:678
+#: ../src/file.cpp:668
 #, c-format
 msgid ""
 "File %s could not be saved.\n"
@@ -8685,49 +8684,49 @@ msgstr ""
 "La extensió ha retornat la següent informació addicional:\n"
 "«%s»"
 
-#: ../src/file.cpp:713 ../src/file.cpp:715
+#: ../src/file.cpp:703 ../src/file.cpp:705
 msgid "Document saved."
 msgstr "S'ha desat el document."
 
 #. We are saving for the first time; create a unique default filename
-#: ../src/file.cpp:773 ../src/file.cpp:1462
+#: ../src/file.cpp:763 ../src/file.cpp:1452
 msgid "drawing"
 msgstr "Dibuix"
 
-#: ../src/file.cpp:778
+#: ../src/file.cpp:768
 msgid "drawing-%1"
 msgstr "dibuix-%1"
 
-#: ../src/file.cpp:795
+#: ../src/file.cpp:785
 msgid "Select file to save a copy to"
 msgstr "Seleccioneu el fitxer per desar-ne una còpia"
 
-#: ../src/file.cpp:797
+#: ../src/file.cpp:787
 msgid "Select file to save to"
 msgstr "Seleccioneu el fitxer per desar"
 
-#: ../src/file.cpp:902 ../src/file.cpp:904
+#: ../src/file.cpp:892 ../src/file.cpp:894
 msgid "No changes need to be saved."
 msgstr "No hi ha cap canvi per desar."
 
-#: ../src/file.cpp:923
+#: ../src/file.cpp:913
 msgid "Saving document..."
 msgstr "S'està desant el document..."
 
-#: ../src/file.cpp:1300 ../src/ui/dialog/inkscape-preferences.cpp:1831
+#: ../src/file.cpp:1290 ../src/ui/dialog/inkscape-preferences.cpp:1831
 #: ../src/ui/dialog/ocaldialogs.cpp:1088
 msgid "Import"
 msgstr "Importa"
 
-#: ../src/file.cpp:1350
+#: ../src/file.cpp:1340
 msgid "Select file to import"
 msgstr "Seleccioneu el fitxer per importar"
 
-#: ../src/file.cpp:1483
+#: ../src/file.cpp:1473
 msgid "Select file to export to"
 msgstr "Seleccioneu el fitxer per exportar"
 
-#: ../src/file.cpp:1736
+#: ../src/file.cpp:1726
 msgid "Import Clip Art"
 msgstr "Importa Clip Art"
 
@@ -8855,7 +8854,7 @@ msgid "Arithmetic"
 msgstr "Aritmètic"
 
 #: ../src/filter-enums.cpp:121 ../src/selection-chemistry.cpp:564
-#: ../src/ui/dialog/objects.cpp:1884
+#: ../src/ui/dialog/objects.cpp:1887
 msgid "Duplicate"
 msgstr "Duplica"
 
@@ -9609,11 +9608,11 @@ msgstr "Transforma per 2 punts"
 
 #: ../src/live_effects/effect.cpp:123
 #: ../src/live_effects/lpe-show_handles.cpp:31
-#: ../src/ui/toolbar/mesh-toolbar.cpp:508
+#: ../src/ui/toolbar/mesh-toolbar.cpp:362
 msgid "Show handles"
 msgstr "Mostra les nanses"
 
-#: ../src/live_effects/effect.cpp:125 ../src/ui/toolbar/pencil-toolbar.cpp:145
+#: ../src/live_effects/effect.cpp:125 ../src/ui/toolbar/pencil-toolbar.cpp:315
 msgid "BSpline"
 msgstr "BSpline"
 
@@ -10616,7 +10615,7 @@ msgid "Reverses the second path order"
 msgstr "Inverteix l'ordre del segon camí"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:32
-#: ../src/ui/toolbar/text-toolbar.cpp:2207
+#: ../src/ui/toolbar/text-toolbar.cpp:503
 #: ../share/extensions/render_barcode_qrcode.inx.h:5
 msgid "Auto"
 msgstr "Automàtic"
@@ -10802,7 +10801,7 @@ msgstr "Bisellat"
 #: ../src/live_effects/lpe-jointype.cpp:48
 #: ../src/live_effects/lpe-powerstroke.cpp:162
 #: ../src/live_effects/lpe-taperstroke.cpp:64
-#: ../src/ui/toolbar/star-toolbar.cpp:560
+#: ../src/ui/toolbar/star-toolbar.cpp:191
 msgid "Rounded"
 msgstr "Arrodonit"
 
@@ -11256,7 +11255,7 @@ msgid "Hide Points"
 msgstr "Amaga els punts"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:59
-#: ../src/ui/toolbar/text-toolbar.cpp:2164
+#: ../src/ui/toolbar/text-toolbar.cpp:461
 msgid "Horizontal"
 msgstr "Horitzontal"
 
@@ -11617,10 +11616,10 @@ msgstr "Y des del nus mig"
 
 #. Name
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:56
-#: ../src/ui/toolbar/eraser-toolbar.cpp:165
-#: ../src/ui/toolbar/pencil-toolbar.cpp:168
-#: ../src/ui/toolbar/spray-toolbar.cpp:385
-#: ../src/ui/toolbar/tweak-toolbar.cpp:245
+#: ../src/ui/toolbar/eraser-toolbar.cpp:95
+#: ../src/ui/toolbar/pencil-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:198
+#: ../src/ui/toolbar/tweak-toolbar.cpp:222
 msgid "Mode"
 msgstr "Mode"
 
@@ -11916,7 +11915,7 @@ msgid "Zero width"
 msgstr "Amplada zero"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:166
-#: ../src/ui/toolbar/pencil-toolbar.cpp:139
+#: ../src/ui/toolbar/pencil-toolbar.cpp:309
 msgid "Spiro"
 msgstr "Espiral"
 
@@ -12356,13 +12355,13 @@ msgstr "Cap"
 
 #: ../src/live_effects/lpe-ruler.cpp:31
 #: ../src/live_effects/lpe-transform_2pts.cpp:38
-#: ../src/ui/toolbar/arc-toolbar.cpp:495 ../src/ui/tools/measure-tool.cpp:745
+#: ../src/ui/toolbar/arc-toolbar.cpp:160 ../src/ui/tools/measure-tool.cpp:745
 msgid "Start"
 msgstr "Inici"
 
 #: ../src/live_effects/lpe-ruler.cpp:32
 #: ../src/live_effects/lpe-transform_2pts.cpp:39
-#: ../src/ui/toolbar/arc-toolbar.cpp:508 ../src/ui/tools/measure-tool.cpp:746
+#: ../src/ui/toolbar/arc-toolbar.cpp:177 ../src/ui/tools/measure-tool.cpp:746
 msgid "End"
 msgstr "Fi"
 
@@ -12876,7 +12875,7 @@ msgstr "Actiu"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:81
 #: ../src/live_effects/parameter/originalpatharray.cpp:104
-#: ../src/ui/dialog/attrdialog.cpp:96
+#: ../src/ui/dialog/attrdialog.cpp:105
 #: ../src/ui/dialog/inkscape-preferences.cpp:1902
 #: ../src/ui/widget/page-sizer.cpp:97 ../src/widgets/gradient-selector.cpp:138
 msgid "Name"
@@ -12892,13 +12891,13 @@ msgstr "Suprimeix l'element"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:170
 #: ../src/live_effects/parameter/originalpatharray.cpp:211
-#: ../src/ui/dialog/objects.cpp:1845
+#: ../src/ui/dialog/objects.cpp:1848
 msgid "Move Down"
 msgstr "Mou cap avall"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:182
 #: ../src/live_effects/parameter/originalpatharray.cpp:223
-#: ../src/ui/dialog/objects.cpp:1853
+#: ../src/ui/dialog/objects.cpp:1856
 msgid "Move Up"
 msgstr "Mou cap amunt"
 
@@ -12924,7 +12923,7 @@ msgid "Link to path"
 msgstr "Associa al camí"
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:89
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1090
+#: ../src/ui/toolbar/gradient-toolbar.cpp:591
 msgid "Reverse"
 msgstr "Inverteix"
 
@@ -13119,11 +13118,11 @@ msgstr "a %s"
 msgid "without URI"
 msgstr "sense URI"
 
-#: ../src/object/sp-ellipse.cpp:389 ../src/ui/toolbar/arc-toolbar.cpp:527
+#: ../src/object/sp-ellipse.cpp:389 ../src/ui/toolbar/arc-toolbar.cpp:204
 msgid "Slice"
 msgstr "Divideix"
 
-#: ../src/object/sp-ellipse.cpp:392 ../src/ui/toolbar/arc-toolbar.cpp:539
+#: ../src/object/sp-ellipse.cpp:392 ../src/ui/toolbar/arc-toolbar.cpp:216
 msgid "Chord"
 msgstr "Corda"
 
@@ -13134,7 +13133,7 @@ msgstr "Arc"
 #. Ellipse
 #: ../src/object/sp-ellipse.cpp:399 ../src/object/sp-ellipse.cpp:406
 #: ../src/ui/dialog/inkscape-preferences.cpp:459
-#: ../src/ui/toolbar/pencil-toolbar.cpp:225
+#: ../src/ui/toolbar/pencil-toolbar.cpp:421
 msgid "Ellipse"
 msgstr "El·lipse"
 
@@ -13225,7 +13224,7 @@ msgstr "[mala referència]: %s"
 msgid "%d &#215; %d: %s"
 msgstr "%d &#215; %d: %s"
 
-#: ../src/object/sp-item-group.cpp:305 ../src/ui/dialog/objects.cpp:1908
+#: ../src/object/sp-item-group.cpp:305 ../src/ui/dialog/objects.cpp:1911
 msgid "Group"
 msgstr "Agrupa"
 
@@ -13240,7 +13239,7 @@ msgid "of <b>%d</b> objects"
 msgstr "d'<b>%d</b> objectes"
 
 #: ../src/object/sp-item-group.cpp:647 ../src/selection-chemistry.cpp:900
-#: ../src/ui/dialog/objects.cpp:1909
+#: ../src/ui/dialog/objects.cpp:1912
 msgid "Ungroup"
 msgstr "Desagrupa"
 
@@ -13346,11 +13345,11 @@ msgstr "amb %3f voltes"
 
 #. Star
 #: ../src/object/sp-star.cpp:227 ../src/ui/dialog/inkscape-preferences.cpp:463
-#: ../src/ui/toolbar/star-toolbar.cpp:493
+#: ../src/ui/toolbar/star-toolbar.cpp:115
 msgid "Star"
 msgstr "Estel"
 
-#: ../src/object/sp-star.cpp:228 ../src/ui/toolbar/star-toolbar.cpp:487
+#: ../src/object/sp-star.cpp:228 ../src/ui/toolbar/star-toolbar.cpp:109
 msgid "Polygon"
 msgstr "Polígon"
 
@@ -13763,12 +13762,13 @@ msgstr "Suprimeix el text"
 msgid "<b>Nothing</b> was deleted."
 msgstr "No s'ha suprimit <b>res</b>."
 
+#. TODO: Is this label correct?
 #: ../src/selection-chemistry.cpp:415 ../src/ui/dialog/swatches.cpp:283
-#: ../src/ui/toolbar/eraser-toolbar.cpp:146
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1066
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1080
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1094
-#: ../src/ui/toolbar/node-toolbar.cpp:401 ../src/ui/tools/text-tool.cpp:996
+#: ../src/ui/toolbar/eraser-toolbar.cpp:76
+#: ../src/ui/toolbar/gradient-toolbar.cpp:569
+#: ../src/ui/toolbar/gradient-toolbar.cpp:582
+#: ../src/ui/toolbar/gradient-toolbar.cpp:596
+#: ../src/ui/toolbar/node-toolbar.cpp:307 ../src/ui/tools/text-tool.cpp:996
 msgid "Delete"
 msgstr "Suprimeix"
 
@@ -14164,7 +14164,7 @@ msgid "Select <b>object(s)</b> to create clippath or mask from."
 msgstr ""
 "Seleccioneu <b>objectes</b> per fer-ne un camí de retall o una màscara."
 
-#: ../src/selection-chemistry.cpp:3904 ../src/ui/dialog/objects.cpp:1915
+#: ../src/selection-chemistry.cpp:3904 ../src/ui/dialog/objects.cpp:1918
 msgid "Create Clip Group"
 msgstr "Crea un grup del clip"
 
@@ -14782,7 +14782,7 @@ msgid "Create _Link"
 msgstr "_Crea un enllaç"
 
 #. Set mask
-#: ../src/ui/contextmenu.cpp:456 ../src/ui/dialog/objects.cpp:1923
+#: ../src/ui/contextmenu.cpp:456 ../src/ui/dialog/objects.cpp:1926
 msgid "Set Mask"
 msgstr "Estableix la màscara"
 
@@ -14921,7 +14921,7 @@ msgstr "about.svg"
 
 #. TRANSLATORS: Put here your name (and other national contributors')
 #. one per line in the form of: name surname (email). Use \n for newline.
-#: ../src/ui/dialog/aboutbox.cpp:180
+#: ../src/ui/dialog/aboutbox.cpp:178
 msgid "translator-credits"
 msgstr ""
 "Quico Llach (quico@softcatala.org), 2000\n"
@@ -14962,12 +14962,12 @@ msgstr "_V:"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:506
 #: ../src/ui/dialog/align-and-distribute.cpp:924
-#: ../src/ui/toolbar/connector-toolbar.cpp:409
+#: ../src/ui/toolbar/connector-toolbar.cpp:192
 msgid "Remove overlaps"
 msgstr "Suprimeix les superposicions"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:538
-#: ../src/ui/toolbar/connector-toolbar.cpp:235
+#: ../src/ui/toolbar/connector-toolbar.cpp:397
 msgid "Arrange connector network"
 msgstr "Organitza la xarxa de connectors"
 
@@ -14996,7 +14996,7 @@ msgid "Rearrange"
 msgstr "Reorganitza"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:925
-#: ../src/widgets/toolbox.cpp:1364
+#: ../src/widgets/toolbox.cpp:1366
 msgid "Nodes"
 msgstr "Nodes"
 
@@ -15108,7 +15108,7 @@ msgid "Distribute baselines of texts vertically"
 msgstr "Distribueix verticalment les línies de base dels textos"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1017
-#: ../src/ui/toolbar/connector-toolbar.cpp:371
+#: ../src/ui/toolbar/connector-toolbar.cpp:150
 msgid "Nicely arrange selected connector network"
 msgstr "Organitza la xarxa de connectors seleccionada"
 
@@ -15181,7 +15181,7 @@ msgstr "L'objecte més petit"
 #: ../src/ui/dialog/align-and-distribute.cpp:1065
 #: ../src/ui/dialog/document-properties.cpp:150
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1424
-#: ../src/widgets/desktop-widget.cpp:1917
+#: ../src/widgets/desktop-widget.cpp:1916
 #: ../share/extensions/empty_page.inx.h:1
 #: ../share/extensions/voronoi2svg.inx.h:10
 msgid "Page"
@@ -15203,28 +15203,28 @@ msgstr "Valor mínim"
 msgid "Max value"
 msgstr "Valor màxim"
 
-#: ../src/ui/dialog/attrdialog.cpp:80 ../src/ui/dialog/cssdialog.cpp:62
+#: ../src/ui/dialog/attrdialog.cpp:89 ../src/ui/dialog/cssdialog.cpp:62
 msgid "Add a new attribute"
 msgstr "Afegeix un atribut nou"
 
-#: ../src/ui/dialog/attrdialog.cpp:94
+#: ../src/ui/dialog/attrdialog.cpp:103
 msgid "Attribute Name"
 msgstr "Nom de l'atribut"
 
-#: ../src/ui/dialog/attrdialog.cpp:116
+#: ../src/ui/dialog/attrdialog.cpp:125
 msgid "Attribute Value"
 msgstr "Valor de l'atribut"
 
-#: ../src/ui/dialog/attrdialog.cpp:119 ../src/ui/widget/color-scales.cpp:452
+#: ../src/ui/dialog/attrdialog.cpp:128 ../src/ui/widget/color-scales.cpp:452
 #: ../src/ui/widget/color-scales.cpp:453
 msgid "Value"
 msgstr "Valor"
 
-#: ../src/ui/dialog/attrdialog.cpp:201
+#: ../src/ui/dialog/attrdialog.cpp:209
 msgid "<b>Click</b> attribute to edit."
 msgstr "<b>Cliqueu</b> l'atribut per editar."
 
-#: ../src/ui/dialog/attrdialog.cpp:206
+#: ../src/ui/dialog/attrdialog.cpp:214
 #, c-format
 msgid ""
 "Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
@@ -15233,15 +15233,15 @@ msgstr ""
 "S'ha seleccionat l'atribut <b>%s</b>. Premeu <b>Ctrl+Retorn</b> en acabar "
 "d'editar per confirmar els canvis."
 
-#: ../src/ui/dialog/attrdialog.cpp:264 ../src/ui/dialog/attrdialog.cpp:287
+#: ../src/ui/dialog/attrdialog.cpp:282 ../src/ui/dialog/attrdialog.cpp:310
 msgid "Delete attribute"
 msgstr "Suprimeix l'atribut"
 
-#: ../src/ui/dialog/attrdialog.cpp:322
+#: ../src/ui/dialog/attrdialog.cpp:356
 msgid "Rename attribute"
 msgstr "Canvia el nom del atribut"
 
-#: ../src/ui/dialog/attrdialog.cpp:348
+#: ../src/ui/dialog/attrdialog.cpp:381
 msgid "Change attribute value"
 msgstr "Canvia el valor de l'atribut"
 
@@ -16345,7 +16345,7 @@ msgstr "_Suprimeix"
 msgid "Remove selected grid."
 msgstr "Suprimeix la graella seleccionada."
 
-#: ../src/ui/dialog/document-properties.cpp:151 ../src/widgets/toolbox.cpp:1471
+#: ../src/ui/dialog/document-properties.cpp:151 ../src/widgets/toolbox.cpp:1473
 msgid "Guides"
 msgstr "Guies"
 
@@ -16471,7 +16471,7 @@ msgstr "<b>Fitxers de scripts incrustats:</b>"
 
 #. Name
 #: ../src/ui/dialog/document-properties.cpp:882
-#: ../src/ui/dialog/objects.cpp:1885 ../src/ui/toolbar/gradient-toolbar.cpp:870
+#: ../src/ui/dialog/objects.cpp:1888 ../src/ui/toolbar/gradient-toolbar.cpp:377
 msgid "New"
 msgstr "Nou"
 
@@ -16561,8 +16561,8 @@ msgstr "_Selecció"
 msgid "_Custom"
 msgstr "_Personalitzat"
 
-#: ../src/ui/dialog/export.cpp:135 ../src/ui/toolbar/measure-toolbar.cpp:304
-#: ../src/ui/toolbar/measure-toolbar.cpp:312
+#: ../src/ui/dialog/export.cpp:135 ../src/ui/toolbar/measure-toolbar.cpp:244
+#: ../src/ui/toolbar/measure-toolbar.cpp:252
 #: ../share/extensions/render_gears.inx.h:6
 msgid "Units:"
 msgstr "Unitats:"
@@ -16900,7 +16900,7 @@ msgid "Document"
 msgstr "Document"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1428 ../src/verbs.cpp:174
-#: ../src/widgets/desktop-widget.cpp:1925
+#: ../src/widgets/desktop-widget.cpp:1924
 #: ../share/extensions/printing_marks.inx.h:18
 msgid "Selection"
 msgstr "Selecció"
@@ -17802,7 +17802,7 @@ msgstr "Estels"
 msgid "Spirals"
 msgstr "Espirals"
 
-#: ../src/ui/dialog/find.cpp:92 ../src/widgets/toolbox.cpp:1372
+#: ../src/ui/dialog/find.cpp:92 ../src/widgets/toolbox.cpp:1374
 msgid "Paths"
 msgstr "Camins"
 
@@ -18765,7 +18765,7 @@ msgstr "Organitza en una graella"
 #: ../src/ui/dialog/grid-arrange-tab.cpp:565
 #: ../src/ui/dialog/object-attributes.cpp:57
 #: ../src/ui/dialog/object-attributes.cpp:65
-#: ../src/ui/toolbar/node-toolbar.cpp:581 ../src/ui/widget/page-sizer.cpp:60
+#: ../src/ui/toolbar/node-toolbar.cpp:480 ../src/ui/widget/page-sizer.cpp:60
 #: ../src/widgets/desktop-widget.cpp:650
 msgid "X:"
 msgstr "X:"
@@ -18777,7 +18777,7 @@ msgstr "Espaiat horitzontal entre columnes."
 #: ../src/ui/dialog/grid-arrange-tab.cpp:566
 #: ../src/ui/dialog/object-attributes.cpp:58
 #: ../src/ui/dialog/object-attributes.cpp:66
-#: ../src/ui/toolbar/node-toolbar.cpp:598 ../src/ui/widget/page-sizer.cpp:61
+#: ../src/ui/toolbar/node-toolbar.cpp:500 ../src/ui/widget/page-sizer.cpp:61
 #: ../src/widgets/desktop-widget.cpp:651
 msgid "Y:"
 msgstr "Y:"
@@ -21226,7 +21226,7 @@ msgstr "Selecció"
 
 #. Transforms options
 #: ../src/ui/dialog/inkscape-preferences.cpp:1520
-#: ../src/ui/toolbar/select-toolbar.cpp:558
+#: ../src/ui/toolbar/select-toolbar.cpp:343
 msgid "Scale stroke width"
 msgstr "Escala el gruix del contorn"
 
@@ -21247,24 +21247,24 @@ msgid "Preserved"
 msgstr "Preservat"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1528
-#: ../src/ui/toolbar/select-toolbar.cpp:559
+#: ../src/ui/toolbar/select-toolbar.cpp:344
 msgid "When scaling objects, scale the stroke width by the same proportion"
 msgstr ""
 "En escalar objectes, escala el gruix del contorn en la mateixa proporció"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1530
-#: ../src/ui/toolbar/select-toolbar.cpp:570
+#: ../src/ui/toolbar/select-toolbar.cpp:355
 msgid "When scaling rectangles, scale the radii of rounded corners"
 msgstr ""
 "En escalar els rectangles, escala el radi de les cantonades arrodonides"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1532
-#: ../src/ui/toolbar/select-toolbar.cpp:581
+#: ../src/ui/toolbar/select-toolbar.cpp:366
 msgid "Move gradients (in fill or stroke) along with the objects"
 msgstr "Mou els degradats (en emplenat o contorn) juntament amb els objectes"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1534
-#: ../src/ui/toolbar/select-toolbar.cpp:592
+#: ../src/ui/toolbar/select-toolbar.cpp:377
 msgid "Move patterns (in fill or stroke) along with the objects"
 msgstr "Mou els patrons (en emplenat o contorn) juntament amb els objectes"
 
@@ -21935,7 +21935,7 @@ msgstr "Renderització"
 
 #. Note: /options/bitmapoversample removed with Cairo renderer
 #: ../src/ui/dialog/inkscape-preferences.cpp:1813
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:602 ../src/verbs.cpp:155
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:351 ../src/verbs.cpp:155
 msgid "Edit"
 msgstr "Edita"
 
@@ -22463,11 +22463,11 @@ msgstr ""
 "tota la «pantalla», o a una única «finestra» (normalment amb focus)"
 
 #: ../src/ui/dialog/input.cpp:1439
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:545
-#: ../src/ui/toolbar/spray-toolbar.cpp:307
-#: ../src/ui/toolbar/spray-toolbar.cpp:421
-#: ../src/ui/toolbar/spray-toolbar.cpp:470
-#: ../src/ui/toolbar/tweak-toolbar.cpp:363
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:298
+#: ../src/ui/toolbar/spray-toolbar.cpp:112
+#: ../src/ui/toolbar/spray-toolbar.cpp:235
+#: ../src/ui/toolbar/spray-toolbar.cpp:290
+#: ../src/ui/toolbar/tweak-toolbar.cpp:339
 msgid "Pressure"
 msgstr "Pressió"
 
@@ -22594,12 +22594,12 @@ msgstr "Bloca la capa"
 msgid "Unlock layer"
 msgstr "Desbloca la capa"
 
-#: ../src/ui/dialog/layers.cpp:610 ../src/ui/dialog/objects.cpp:871
+#: ../src/ui/dialog/layers.cpp:610 ../src/ui/dialog/objects.cpp:874
 #: ../src/verbs.cpp:1489
 msgid "Toggle layer solo"
 msgstr "Només aquesta capa"
 
-#: ../src/ui/dialog/layers.cpp:613 ../src/ui/dialog/objects.cpp:874
+#: ../src/ui/dialog/layers.cpp:613 ../src/ui/dialog/objects.cpp:877
 #: ../src/verbs.cpp:1513
 msgid "Lock other layers"
 msgstr "Bloca altres capes"
@@ -22986,94 +22986,98 @@ msgstr "Amaga l'objecte"
 msgid "Unhide object"
 msgstr "Mostra l'objecte"
 
-#: ../src/ui/dialog/objects.cpp:901
+#: ../src/ui/dialog/objects.cpp:432
+msgid "no-id"
+msgstr ""
+
+#: ../src/ui/dialog/objects.cpp:904
 msgid "Unhide objects"
 msgstr "Mostra objectes"
 
-#: ../src/ui/dialog/objects.cpp:901
+#: ../src/ui/dialog/objects.cpp:904
 msgid "Hide objects"
 msgstr "Amaga objectes"
 
-#: ../src/ui/dialog/objects.cpp:921
+#: ../src/ui/dialog/objects.cpp:924
 msgid "Lock objects"
 msgstr "Bloca objectes"
 
-#: ../src/ui/dialog/objects.cpp:921
+#: ../src/ui/dialog/objects.cpp:924
 msgid "Unlock objects"
 msgstr "Desbloca objectes"
 
-#: ../src/ui/dialog/objects.cpp:933
+#: ../src/ui/dialog/objects.cpp:936
 msgid "Layer to group"
 msgstr "Capa a agrupar"
 
-#: ../src/ui/dialog/objects.cpp:933
+#: ../src/ui/dialog/objects.cpp:936
 msgid "Group to layer"
 msgstr "Agrupa a la capa"
 
-#: ../src/ui/dialog/objects.cpp:1131
+#: ../src/ui/dialog/objects.cpp:1134
 msgid "Moved objects"
 msgstr "Objectes moguts"
 
-#: ../src/ui/dialog/objects.cpp:1380 ../src/ui/dialog/tags.cpp:831
+#: ../src/ui/dialog/objects.cpp:1383 ../src/ui/dialog/tags.cpp:831
 #: ../src/ui/dialog/tags.cpp:838
 msgid "Rename object"
 msgstr "Reanomena l'objecte"
 
-#: ../src/ui/dialog/objects.cpp:1486
+#: ../src/ui/dialog/objects.cpp:1489
 msgid "Set object highlight color"
 msgstr "Estableix el color ressaltat de l'objecte"
 
-#: ../src/ui/dialog/objects.cpp:1496
+#: ../src/ui/dialog/objects.cpp:1499
 msgid "Set object opacity"
 msgstr "Estableix l'opacitat de l'objecte"
 
-#: ../src/ui/dialog/objects.cpp:1525
+#: ../src/ui/dialog/objects.cpp:1528
 msgid "Set object blend mode"
 msgstr "Estableix el mode de barreja de l'objecte"
 
-#: ../src/ui/dialog/objects.cpp:1595
+#: ../src/ui/dialog/objects.cpp:1598
 msgid "Set object blur"
 msgstr "Estableix la difuminació de l'objecte"
 
-#: ../src/ui/dialog/objects.cpp:1661
+#: ../src/ui/dialog/objects.cpp:1664
 msgctxt "Visibility"
 msgid "V"
 msgstr "V"
 
-#: ../src/ui/dialog/objects.cpp:1662
+#: ../src/ui/dialog/objects.cpp:1665
 msgctxt "Lock"
 msgid "L"
 msgstr "L"
 
-#: ../src/ui/dialog/objects.cpp:1663
+#: ../src/ui/dialog/objects.cpp:1666
 msgctxt "Type"
 msgid "T"
 msgstr "T"
 
-#: ../src/ui/dialog/objects.cpp:1664
+#: ../src/ui/dialog/objects.cpp:1667
 msgctxt "Clip and mask"
 msgid "CM"
 msgstr "CM"
 
-#: ../src/ui/dialog/objects.cpp:1665
+#: ../src/ui/dialog/objects.cpp:1668
 msgctxt "Highlight"
 msgid "HL"
 msgstr "HL"
 
-#: ../src/ui/dialog/objects.cpp:1666
+#: ../src/ui/dialog/objects.cpp:1669
 msgid "Label"
 msgstr "Etiqueta"
 
 #. In order to get tooltips on header, we must create our own label.
-#: ../src/ui/dialog/objects.cpp:1694
+#: ../src/ui/dialog/objects.cpp:1697
 msgid "Toggle visibility of Layer, Group, or Object."
 msgstr "Commuta la visibilitat de la capa, grup o objecte."
 
-#: ../src/ui/dialog/objects.cpp:1707
+#: ../src/ui/dialog/objects.cpp:1710
 msgid "Toggle lock of Layer, Group, or Object."
 msgstr "Commuta el bloqueig de la capa, grup o objecte."
 
-#: ../src/ui/dialog/objects.cpp:1719
+#: ../src/ui/dialog/objects.cpp:1722
 msgid ""
 "Type: Layer, Group, or Object. Clicking on Layer or Group icon, toggles "
 "between the two types."
@@ -23081,11 +23085,11 @@ msgstr ""
 "Tipus: capa, grup o objecte. En fer clic a la icona de la capa o grup, "
 "commuta entre els dos tipus."
 
-#: ../src/ui/dialog/objects.cpp:1738
+#: ../src/ui/dialog/objects.cpp:1741
 msgid "Is object clipped and/or masked?"
 msgstr "És un objecte escapçat o emmascarat?"
 
-#: ../src/ui/dialog/objects.cpp:1749
+#: ../src/ui/dialog/objects.cpp:1752
 msgid ""
 "Highlight color of outline in Node tool. Click to set. If alpha is zero, use "
 "inherited color."
@@ -23093,7 +23097,7 @@ msgstr ""
 "Ressalta el color del contorn en l'eina node. Feu clic per definir. Si "
 "l'alfa és igual a zero, utilitza el color heretat."
 
-#: ../src/ui/dialog/objects.cpp:1760
+#: ../src/ui/dialog/objects.cpp:1763
 msgid ""
 "Layer/Group/Object label (inkscape:label). Double-click to set. Default "
 "value is object 'id'."
@@ -23101,78 +23105,78 @@ msgstr ""
 "Capa/Grup /Etiqueta de l'objecte (inkscape:label). Fer doble clic a "
 "establir. El valor per defecte és l'objecte «id»."
 
-#: ../src/ui/dialog/objects.cpp:1822
+#: ../src/ui/dialog/objects.cpp:1825
 msgid "Add layer..."
 msgstr "Afegeix capa..."
 
-#: ../src/ui/dialog/objects.cpp:1829
+#: ../src/ui/dialog/objects.cpp:1832
 msgid "Remove object"
 msgstr "Suprimeix l'objecte"
 
-#: ../src/ui/dialog/objects.cpp:1837
+#: ../src/ui/dialog/objects.cpp:1840
 msgid "Move To Bottom"
 msgstr "Mou a la part inferior"
 
-#: ../src/ui/dialog/objects.cpp:1861
+#: ../src/ui/dialog/objects.cpp:1864
 msgid "Move To Top"
 msgstr "Mou a la part superior"
 
-#: ../src/ui/dialog/objects.cpp:1869
+#: ../src/ui/dialog/objects.cpp:1872
 msgid "Collapse All"
 msgstr "Col·lapsa-ho tot"
 
-#: ../src/ui/dialog/objects.cpp:1883
+#: ../src/ui/dialog/objects.cpp:1886
 msgid "Rename"
 msgstr "Canvia el nom"
 
-#: ../src/ui/dialog/objects.cpp:1889
+#: ../src/ui/dialog/objects.cpp:1892
 msgid "Solo"
 msgstr "Solo"
 
-#: ../src/ui/dialog/objects.cpp:1890
+#: ../src/ui/dialog/objects.cpp:1893
 msgid "Show All"
 msgstr "Mostra-ho tot"
 
-#: ../src/ui/dialog/objects.cpp:1891
+#: ../src/ui/dialog/objects.cpp:1894
 msgid "Hide All"
 msgstr "Amaga-ho tot"
 
-#: ../src/ui/dialog/objects.cpp:1895
+#: ../src/ui/dialog/objects.cpp:1898
 msgid "Lock Others"
 msgstr "Bloca els altres"
 
-#: ../src/ui/dialog/objects.cpp:1896
+#: ../src/ui/dialog/objects.cpp:1899
 msgid "Lock All"
 msgstr "Bloqueja-ho tot"
 
 #. LockAndHide
-#: ../src/ui/dialog/objects.cpp:1897 ../src/verbs.cpp:3263
+#: ../src/ui/dialog/objects.cpp:1900 ../src/verbs.cpp:3263
 msgid "Unlock All"
 msgstr "Desbloca-ho tot"
 
-#: ../src/ui/dialog/objects.cpp:1902
+#: ../src/ui/dialog/objects.cpp:1905
 msgid "Up"
 msgstr "Amunt"
 
-#: ../src/ui/dialog/objects.cpp:1904
+#: ../src/ui/dialog/objects.cpp:1907
 msgid "Down"
 msgstr "Avall"
 
-#: ../src/ui/dialog/objects.cpp:1913
+#: ../src/ui/dialog/objects.cpp:1916
 msgid "Set Clip"
 msgstr "Estableix l'àrea de retall"
 
 #. will never be implemented
 #. _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_INVERSE_CLIPPATH, 0, "Set Inverse Clip", (int)BUTTON_SETINVCLIP ) );
-#: ../src/ui/dialog/objects.cpp:1919
+#: ../src/ui/dialog/objects.cpp:1922
 msgid "Unset Clip"
 msgstr "Clip no definit"
 
-#: ../src/ui/dialog/objects.cpp:1924
+#: ../src/ui/dialog/objects.cpp:1927
 msgid "Unset Mask"
 msgstr "Màscara no definida"
 
-#: ../src/ui/dialog/objects.cpp:1946
+#: ../src/ui/dialog/objects.cpp:1949
 msgid "Select Highlight Color"
 msgstr "Selecciona el color ressaltat"
 
@@ -24565,7 +24569,7 @@ msgid "nodeAsInXMLdialogTooltip|Delete node"
 msgstr "Suprimeix el node"
 
 #: ../src/ui/dialog/xml-tree.cpp:67 ../src/ui/dialog/xml-tree.cpp:123
-#: ../src/ui/dialog/xml-tree.cpp:754
+#: ../src/ui/dialog/xml-tree.cpp:758
 msgid "Duplicate node"
 msgstr "Duplica el node"
 
@@ -24579,22 +24583,22 @@ msgid "Drag to reorder nodes"
 msgstr "Arrossegueu per reordenar els nodes"
 
 #: ../src/ui/dialog/xml-tree.cpp:141 ../src/ui/dialog/xml-tree.cpp:142
-#: ../src/ui/dialog/xml-tree.cpp:864
+#: ../src/ui/dialog/xml-tree.cpp:868
 msgid "Unindent node"
 msgstr "Desfés sagnat de node"
 
 #: ../src/ui/dialog/xml-tree.cpp:149 ../src/ui/dialog/xml-tree.cpp:150
-#: ../src/ui/dialog/xml-tree.cpp:842
+#: ../src/ui/dialog/xml-tree.cpp:846
 msgid "Indent node"
 msgstr "Fes sagnat de node"
 
 #: ../src/ui/dialog/xml-tree.cpp:157 ../src/ui/dialog/xml-tree.cpp:158
-#: ../src/ui/dialog/xml-tree.cpp:793
+#: ../src/ui/dialog/xml-tree.cpp:797
 msgid "Raise node"
 msgstr "Puja el node"
 
 #: ../src/ui/dialog/xml-tree.cpp:165 ../src/ui/dialog/xml-tree.cpp:166
-#: ../src/ui/dialog/xml-tree.cpp:811
+#: ../src/ui/dialog/xml-tree.cpp:815
 msgid "Lower node"
 msgstr "Baixa el node"
 
@@ -24612,84 +24616,84 @@ msgstr ""
 "<b>Cliqueu</b> per seleccionar nodes, i <b>arrossegueu</b> per organitzar-"
 "los."
 
-#: ../src/ui/dialog/xml-tree.cpp:458
+#: ../src/ui/dialog/xml-tree.cpp:462
 msgid "Drag XML subtree"
 msgstr "Arrossega el subarbre XML"
 
-#: ../src/ui/dialog/xml-tree.cpp:724
+#: ../src/ui/dialog/xml-tree.cpp:728
 msgid "Create new element node"
 msgstr "Crea un nou node d'element"
 
-#: ../src/ui/dialog/xml-tree.cpp:739
+#: ../src/ui/dialog/xml-tree.cpp:743
 msgid "Create new text node"
 msgstr "Crea un nou node de text"
 
-#: ../src/ui/dialog/xml-tree.cpp:771
+#: ../src/ui/dialog/xml-tree.cpp:775
 msgid "nodeAsInXMLinHistoryDialog|Delete node"
 msgstr "Suprimeix el node"
 
-#: ../src/ui/interface.cpp:767
+#: ../src/ui/drag-and-drop.cpp:159 ../src/ui/drag-and-drop.cpp:245
+#: ../src/ui/drag-and-drop.cpp:348 ../src/ui/widget/selected-style.cpp:531
+msgid "Drop color"
+msgstr "Deixa anar un color"
+
+#: ../src/ui/drag-and-drop.cpp:198 ../src/ui/drag-and-drop.cpp:308
+msgid "Drop color on gradient"
+msgstr "Deixa anar un color en el degradat"
+
+#: ../src/ui/drag-and-drop.cpp:363
+msgid "Could not parse SVG data"
+msgstr "No s'han pogut analitzar les dades SVG"
+
+#: ../src/ui/drag-and-drop.cpp:402
+msgid "Drop SVG"
+msgstr "Deixa anar un SVG"
+
+#: ../src/ui/drag-and-drop.cpp:419
+msgid "Drop Symbol"
+msgstr "Deixa anar símbol"
+
+#: ../src/ui/drag-and-drop.cpp:442
+msgid "Drop bitmap image"
+msgstr "Deixa anar una imatge de mapa de bits"
+
+#: ../src/ui/interface.cpp:598
 msgctxt "Interface setup"
 msgid "Default"
 msgstr "Per defecte"
 
-#: ../src/ui/interface.cpp:767
+#: ../src/ui/interface.cpp:598
 msgid "Default interface setup"
 msgstr "Configuració de la interfície predefinida"
 
-#: ../src/ui/interface.cpp:768
+#: ../src/ui/interface.cpp:599
 msgctxt "Interface setup"
 msgid "Custom"
 msgstr "Personalitzat"
 
-#: ../src/ui/interface.cpp:768
+#: ../src/ui/interface.cpp:599
 msgid "Setup for custom task"
 msgstr "Defineix la tasca personalitzada"
 
-#: ../src/ui/interface.cpp:769
+#: ../src/ui/interface.cpp:600
 msgctxt "Interface setup"
 msgid "Wide"
 msgstr "Ample"
 
-#: ../src/ui/interface.cpp:769
+#: ../src/ui/interface.cpp:600
 msgid "Setup for widescreen work"
 msgstr "Configuració per pantalles amples"
 
-#: ../src/ui/interface.cpp:905
+#: ../src/ui/interface.cpp:736
 #, c-format
 msgid "Verb \"%s\" Unknown"
 msgstr "No es coneix el verb «%s»"
 
-#: ../src/ui/interface.cpp:940
+#: ../src/ui/interface.cpp:771
 msgid "Open _Recent"
 msgstr "Obre'n un _recent"
 
-#: ../src/ui/interface.cpp:1048 ../src/ui/interface.cpp:1134
-#: ../src/ui/interface.cpp:1237 ../src/ui/widget/selected-style.cpp:531
-msgid "Drop color"
-msgstr "Deixa anar un color"
-
-#: ../src/ui/interface.cpp:1087 ../src/ui/interface.cpp:1197
-msgid "Drop color on gradient"
-msgstr "Deixa anar un color en el degradat"
-
-#: ../src/ui/interface.cpp:1252
-msgid "Could not parse SVG data"
-msgstr "No s'han pogut analitzar les dades SVG"
-
-#: ../src/ui/interface.cpp:1291
-msgid "Drop SVG"
-msgstr "Deixa anar un SVG"
-
-#: ../src/ui/interface.cpp:1308
-msgid "Drop Symbol"
-msgstr "Deixa anar símbol"
-
-#: ../src/ui/interface.cpp:1331
-msgid "Drop bitmap image"
-msgstr "Deixa anar una imatge de mapa de bits"
-
-#: ../src/ui/interface.cpp:1424
+#: ../src/ui/interface.cpp:860
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">A file named \"%s\" already exists. Do "
@@ -24703,7 +24707,7 @@ msgstr ""
 "El fitxer ja existeix a «%s». En reemplaçar-lo se sobreescriuran els seus "
 "continguts."
 
-#: ../src/ui/interface.cpp:1431 ../share/extensions/web-set-att.inx.h:21
+#: ../src/ui/interface.cpp:867 ../share/extensions/web-set-att.inx.h:21
 #: ../share/extensions/web-transmit-att.inx.h:19
 msgid "Replace"
 msgstr "Reemplaça"
@@ -24936,12 +24940,12 @@ msgid "Duplicate nodes"
 msgstr "Duplica els nodes"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:419
-#: ../src/ui/toolbar/node-toolbar.cpp:408
+#: ../src/ui/toolbar/node-toolbar.cpp:314
 msgid "Join nodes"
 msgstr "Uneix els nodes"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:426
-#: ../src/ui/toolbar/node-toolbar.cpp:419
+#: ../src/ui/toolbar/node-toolbar.cpp:325
 msgid "Break nodes"
 msgstr "Trenca els nodes"
 
@@ -25223,7 +25227,7 @@ msgstr "Gira la nansa"
 
 #. We need to call MPM's method because it could have been our last node
 #: ../src/ui/tool/path-manipulator.cpp:1561
-#: ../src/ui/toolbar/node-toolbar.cpp:397
+#: ../src/ui/toolbar/node-toolbar.cpp:303
 msgid "Delete node"
 msgstr "Suprimeix el node"
 
@@ -25362,264 +25366,258 @@ msgstr ""
 "<b>Centre de rotació</b>: arrossegueu per canviar l'origen de les "
 "transformacions"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:140
-msgid "Ellipse: Change radius"
-msgstr "El·lipse: canvia els radis"
-
-#: ../src/ui/toolbar/arc-toolbar.cpp:206
-msgid "Arc: Change start/end"
-msgstr "Arc: canvia inici/final"
-
-#: ../src/ui/toolbar/arc-toolbar.cpp:274
-msgid "Arc: Changed arc type"
-msgstr "Arc: s'ha canviat el tipus d'arc"
-
-#: ../src/ui/toolbar/arc-toolbar.cpp:409 ../src/ui/toolbar/arc-toolbar.cpp:448
-#: ../src/ui/toolbar/rect-toolbar.cpp:265
-#: ../src/ui/toolbar/rect-toolbar.cpp:304
-#: ../src/ui/toolbar/spiral-toolbar.cpp:215
-#: ../src/ui/toolbar/spiral-toolbar.cpp:239
-#: ../src/ui/toolbar/star-toolbar.cpp:392
-#: ../src/ui/toolbar/star-toolbar.cpp:472
+#: ../src/ui/toolbar/arc-toolbar.cpp:104 ../src/ui/toolbar/arc-toolbar.cpp:507
+#: ../src/ui/toolbar/rect-toolbar.cpp:106
+#: ../src/ui/toolbar/rect-toolbar.cpp:356
+#: ../src/ui/toolbar/spiral-toolbar.cpp:90
+#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/star-toolbar.cpp:95 ../src/ui/toolbar/star-toolbar.cpp:532
 msgid "<b>New:</b>"
 msgstr "<b>Nou:</b>"
 
-#. FIXME: implement averaging of all parameters for multiple selected
-#. gtk_label_set_markup(GTK_LABEL(l), _("<b>Average:</b>"));
-#: ../src/ui/toolbar/arc-toolbar.cpp:412 ../src/ui/toolbar/arc-toolbar.cpp:429
-#: ../src/ui/toolbar/rect-toolbar.cpp:273
-#: ../src/ui/toolbar/rect-toolbar.cpp:291
-#: ../src/ui/toolbar/spiral-toolbar.cpp:217
-#: ../src/ui/toolbar/spiral-toolbar.cpp:228
-#: ../src/ui/toolbar/star-toolbar.cpp:394
-msgid "<b>Change:</b>"
-msgstr "<b>Canvi:</b>"
-
-#: ../src/ui/toolbar/arc-toolbar.cpp:459 ../src/ui/toolbar/rect-toolbar.cpp:354
+#: ../src/ui/toolbar/arc-toolbar.cpp:114 ../src/ui/toolbar/rect-toolbar.cpp:163
 msgid "Horizontal radius"
 msgstr "Radi horitzontal"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:459 ../src/ui/toolbar/rect-toolbar.cpp:354
+#: ../src/ui/toolbar/arc-toolbar.cpp:114 ../src/ui/toolbar/rect-toolbar.cpp:163
 msgid "Rx:"
 msgstr "Rx:"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:459
+#: ../src/ui/toolbar/arc-toolbar.cpp:114
 msgid "Horizontal radius of the circle, ellipse, or arc"
 msgstr "Radi horitzontal del cercle, el·lipse o arc"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:475 ../src/ui/toolbar/rect-toolbar.cpp:368
+#: ../src/ui/toolbar/arc-toolbar.cpp:135 ../src/ui/toolbar/rect-toolbar.cpp:185
 msgid "Vertical radius"
 msgstr "Radi vertical"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:475 ../src/ui/toolbar/rect-toolbar.cpp:368
+#: ../src/ui/toolbar/arc-toolbar.cpp:135 ../src/ui/toolbar/rect-toolbar.cpp:185
 msgid "Ry:"
 msgstr "Ry:"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:475
+#: ../src/ui/toolbar/arc-toolbar.cpp:135
 msgid "Vertical radius of the circle, ellipse, or arc"
 msgstr "Radi vertical del cercle, el·lipse o arc"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:488 ../src/ui/toolbar/lpe-toolbar.cpp:400
-#: ../src/ui/toolbar/node-toolbar.cpp:611
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:180
-#: ../src/ui/toolbar/rect-toolbar.cpp:379
-#: ../src/ui/toolbar/select-toolbar.cpp:524
-#: ../src/ui/toolbar/text-toolbar.cpp:2322
+#: ../src/ui/toolbar/arc-toolbar.cpp:153 ../src/ui/toolbar/lpe-toolbar.cpp:208
+#: ../src/ui/toolbar/node-toolbar.cpp:517
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:130
+#: ../src/ui/toolbar/rect-toolbar.cpp:204
+#: ../src/ui/toolbar/select-toolbar.cpp:317
+#: ../src/ui/toolbar/text-toolbar.cpp:611
 msgid "Units"
 msgstr "Unitats"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:495
+#: ../src/ui/toolbar/arc-toolbar.cpp:160
 msgid "Start:"
 msgstr "Inici:"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:496
+#: ../src/ui/toolbar/arc-toolbar.cpp:161
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr "L'angle (en graus) de l'horitzontal al punt d'inici de l'arc"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:508
+#: ../src/ui/toolbar/arc-toolbar.cpp:177
 msgid "End:"
 msgstr "Fi:"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:509
+#: ../src/ui/toolbar/arc-toolbar.cpp:178
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr "L'angle (en graus) de l'horitzontal al punt final de l'arc"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:528
+#: ../src/ui/toolbar/arc-toolbar.cpp:205
 msgid "Switch to slice (closed shape with two radii)"
 msgstr "Commuta a dividir (forma tancada amb dos radis)"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:533
+#: ../src/ui/toolbar/arc-toolbar.cpp:210
 msgid "Arc (Open)"
 msgstr "Arc (obert)"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:534
+#: ../src/ui/toolbar/arc-toolbar.cpp:211
 msgid "Switch to arc (unclosed shape)"
 msgstr "Commuta a un arc (forma no tancada)"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:540
+#: ../src/ui/toolbar/arc-toolbar.cpp:217
 msgid "Switch to chord (closed shape)"
 msgstr "Commuta a una corda (forma tancada)"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:565
+#: ../src/ui/toolbar/arc-toolbar.cpp:241
 msgid "Make whole"
 msgstr "Fes sencer"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:566
+#: ../src/ui/toolbar/arc-toolbar.cpp:242
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "Fes una el·lipse sencera, ni un arc ni un segment"
 
-#. TODO: use the correct axis here, too
-#: ../src/ui/toolbar/box3d-toolbar.cpp:234
-msgid "3D Box: Change perspective (angle of infinite axis)"
-msgstr "Capsa 3D: canvia la perspectiva (angle d'eixos infinits)"
+#: ../src/ui/toolbar/arc-toolbar.cpp:317
+msgid "Ellipse: Change radius"
+msgstr "El·lipse: canvia els radis"
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:303
+#: ../src/ui/toolbar/arc-toolbar.cpp:371
+msgid "Arc: Change start/end"
+msgstr "Arc: canvia inici/final"
+
+#: ../src/ui/toolbar/arc-toolbar.cpp:427
+msgid "Arc: Changed arc type"
+msgstr "Arc: s'ha canviat el tipus d'arc"
+
+#. FIXME: implement averaging of all parameters for multiple selected
+#. gtk_label_set_markup(GTK_LABEL(l), _("<b>Average:</b>"));
+#: ../src/ui/toolbar/arc-toolbar.cpp:510 ../src/ui/toolbar/arc-toolbar.cpp:524
+#: ../src/ui/toolbar/rect-toolbar.cpp:360
+#: ../src/ui/toolbar/rect-toolbar.cpp:375
+#: ../src/ui/toolbar/spiral-toolbar.cpp:263
+#: ../src/ui/toolbar/spiral-toolbar.cpp:274
+#: ../src/ui/toolbar/star-toolbar.cpp:534
+msgid "<b>Change:</b>"
+msgstr "<b>Canvi:</b>"
+
+#: ../src/ui/toolbar/box3d-toolbar.cpp:89
 msgid "Angle in X direction"
 msgstr "Angle en la direcció X"
 
 #. Translators: PL is short for 'perspective line'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:305
+#: ../src/ui/toolbar/box3d-toolbar.cpp:91
 msgid "Angle of PLs in X direction"
 msgstr "Angle de les LP en la direcció X"
 
 #. Translators: VP is short for 'vanishing point'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:327
+#: ../src/ui/toolbar/box3d-toolbar.cpp:117
 msgid "State of VP in X direction"
 msgstr "Estat del PE en la direcció X"
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:328
+#: ../src/ui/toolbar/box3d-toolbar.cpp:118
 msgid "Toggle VP in X direction between 'finite' and 'infinite' (=parallel)"
 msgstr ""
 "Commuta el punt d'escapada en la direcció X entre «finit» i "
 "«infinit» (=paral·lel)"
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:343
+#: ../src/ui/toolbar/box3d-toolbar.cpp:132
 msgid "Angle in Y direction"
 msgstr "Angle en la direcció Y"
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:343
+#: ../src/ui/toolbar/box3d-toolbar.cpp:132
 msgid "Angle Y:"
 msgstr "Angle Y:"
 
 #. Translators: PL is short for 'perspective line'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:345
+#: ../src/ui/toolbar/box3d-toolbar.cpp:134
 msgid "Angle of PLs in Y direction"
 msgstr "Angle de les LP en la direcció Y"
 
 #. Translators: VP is short for 'vanishing point'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:366
+#: ../src/ui/toolbar/box3d-toolbar.cpp:159
 msgid "State of VP in Y direction"
 msgstr "Estat del PE en la direcció Y"
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:367
+#: ../src/ui/toolbar/box3d-toolbar.cpp:160
 msgid "Toggle VP in Y direction between 'finite' and 'infinite' (=parallel)"
 msgstr ""
 "Commuta el punt d'escapada en la direcció Y entre «finit» i "
 "«infinit» (=paral·lel)"
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:382
+#: ../src/ui/toolbar/box3d-toolbar.cpp:174
 msgid "Angle in Z direction"
 msgstr "Angle en la direcció Z"
 
 #. Translators: PL is short for 'perspective line'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:384
+#: ../src/ui/toolbar/box3d-toolbar.cpp:176
 msgid "Angle of PLs in Z direction"
 msgstr "Angle de les LP en la direcció Z"
 
 #. Translators: VP is short for 'vanishing point'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:405
+#: ../src/ui/toolbar/box3d-toolbar.cpp:201
 msgid "State of VP in Z direction"
 msgstr "Estat del PE en la direcció Z"
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:406
+#: ../src/ui/toolbar/box3d-toolbar.cpp:202
 msgid "Toggle VP in Z direction between 'finite' and 'infinite' (=parallel)"
 msgstr ""
 "Commuta el punt volàtil en la direcció Z entre «finit» i "
 "«infinit» (=paral·lel)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:213
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:254
-msgid "No preset"
-msgstr "Cap valor predefinit"
+#. TODO: use the correct axis here, too
+#: ../src/ui/toolbar/box3d-toolbar.cpp:242
+msgid "3D Box: Change perspective (angle of infinite axis)"
+msgstr "Capsa 3D: canvia la perspectiva (angle d'eixos infinits)"
 
 #. Width
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:394
-#: ../src/ui/toolbar/eraser-toolbar.cpp:183
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
+#: ../src/ui/toolbar/eraser-toolbar.cpp:112
 msgid "(hairline)"
 msgstr "(línia fina)"
 
 #. Mean
 #. Rotation
 #. Scale
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:394
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:427
-#: ../src/ui/toolbar/eraser-toolbar.cpp:183
-#: ../src/ui/toolbar/pencil-toolbar.cpp:556
-#: ../src/ui/toolbar/spray-toolbar.cpp:290
-#: ../src/ui/toolbar/spray-toolbar.cpp:319
-#: ../src/ui/toolbar/spray-toolbar.cpp:335
-#: ../src/ui/toolbar/spray-toolbar.cpp:402
-#: ../src/ui/toolbar/spray-toolbar.cpp:432
-#: ../src/ui/toolbar/spray-toolbar.cpp:450
-#: ../src/ui/toolbar/spray-toolbar.cpp:599
-#: ../src/ui/toolbar/tweak-toolbar.cpp:126
-#: ../src/ui/toolbar/tweak-toolbar.cpp:143
-#: ../src/ui/toolbar/tweak-toolbar.cpp:341
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:147
+#: ../src/ui/toolbar/eraser-toolbar.cpp:112
+#: ../src/ui/toolbar/pencil-toolbar.cpp:171
+#: ../src/ui/toolbar/spray-toolbar.cpp:90
+#: ../src/ui/toolbar/spray-toolbar.cpp:122
+#: ../src/ui/toolbar/spray-toolbar.cpp:143
+#: ../src/ui/toolbar/spray-toolbar.cpp:212
+#: ../src/ui/toolbar/spray-toolbar.cpp:244
+#: ../src/ui/toolbar/spray-toolbar.cpp:266
+#: ../src/ui/toolbar/spray-toolbar.cpp:409
+#: ../src/ui/toolbar/tweak-toolbar.cpp:92
+#: ../src/ui/toolbar/tweak-toolbar.cpp:115
+#: ../src/ui/toolbar/tweak-toolbar.cpp:312
 msgid "(default)"
 msgstr "(per defecte)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:394
-#: ../src/ui/toolbar/eraser-toolbar.cpp:183
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
+#: ../src/ui/toolbar/eraser-toolbar.cpp:112
 msgid "(broad stroke)"
 msgstr "(traç ample)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:397
-#: ../src/ui/toolbar/eraser-toolbar.cpp:186
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:105
+#: ../src/ui/toolbar/eraser-toolbar.cpp:115
 msgid "Pen Width"
 msgstr "Amplada de la ploma"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:398
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:106
 msgid "The width of the calligraphic pen (relative to the visible canvas area)"
 msgstr ""
 "L'amplada de la ploma cal·ligràfica (relativa a l'àrea visible del llenç)"
 
 #. Thinning
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(speed blows up stroke)"
 msgstr "(com més ràpid, més ample)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(slight widening)"
 msgstr "(lleugerament ampliat)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(constant width)"
 msgstr "(amplada constant)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(slight thinning, default)"
 msgstr "(lleugerament aprimat, per defecte)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(speed deflates stroke)"
 msgstr "(la velocitat aprima el traç)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:414
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:128
 msgid "Stroke Thinning"
 msgstr "Aprimament del traç"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:414
-#: ../src/ui/toolbar/eraser-toolbar.cpp:219
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:128
+#: ../src/ui/toolbar/eraser-toolbar.cpp:150
 msgid "Thinning:"
 msgstr "Aprima:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:415
-#: ../src/ui/toolbar/eraser-toolbar.cpp:220
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:129
+#: ../src/ui/toolbar/eraser-toolbar.cpp:151
 msgid ""
 "How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 "
 "makes them broader, 0 makes width independent of velocity)"
@@ -25628,28 +25626,28 @@ msgstr ""
 "que 0 el fa més gros, i amb 0 no afecta l'amplada)"
 
 #. Angle
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:427
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:147
 msgid "(left edge up)"
 msgstr "(vora esquerra sup)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:427
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:147
 msgid "(horizontal)"
 msgstr "(horitzontal)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:427
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:147
 msgid "(right edge up)"
 msgstr "(vora dreta sup)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:430
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:150
 msgid "Pen Angle"
 msgstr "Angle de la ploma"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:430
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:150
 #: ../share/extensions/motion.inx.h:3 ../share/extensions/restack.inx.h:5
 msgid "Angle:"
 msgstr "Angle:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:431
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:151
 msgid ""
 "The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if "
 "fixation = 0)"
@@ -25658,27 +25656,27 @@ msgstr ""
 "la fixació és 0)"
 
 #. Fixation
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:445
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:169
 msgid "(perpendicular to stroke, \"brush\")"
 msgstr "(perpendicular al traç, «pinzell»)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:445
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:169
 msgid "(almost fixed, default)"
 msgstr "(gairebé fix, per defecte)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:445
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:169
 msgid "(fixed by Angle, \"pen\")"
 msgstr "(fixat per l'angle, «ploma»)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:448
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:172
 msgid "Fixation"
 msgstr "Fixació"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:448
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:172
 msgid "Fixation:"
 msgstr "Fixació:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:449
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:173
 msgid ""
 "Angle behavior (0 = nib always perpendicular to stroke direction, 100 = "
 "fixed angle)"
@@ -25687,37 +25685,37 @@ msgstr ""
 "traç, 100 = angle fixat)"
 
 #. Cap Rounding
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:461
-#: ../src/ui/toolbar/eraser-toolbar.cpp:234
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:191
+#: ../src/ui/toolbar/eraser-toolbar.cpp:169
 msgid "(blunt caps, default)"
 msgstr "(fi de línia esmussat, pred.)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:461
-#: ../src/ui/toolbar/eraser-toolbar.cpp:234
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:191
+#: ../src/ui/toolbar/eraser-toolbar.cpp:169
 msgid "(slightly bulging)"
 msgstr "(lleugerament atapeït)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:461
-#: ../src/ui/toolbar/eraser-toolbar.cpp:234
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:191
+#: ../src/ui/toolbar/eraser-toolbar.cpp:169
 msgid "(approximately round)"
 msgstr "(aproximadament rodó)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:461
-#: ../src/ui/toolbar/eraser-toolbar.cpp:234
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:191
+#: ../src/ui/toolbar/eraser-toolbar.cpp:169
 msgid "(long protruding caps)"
 msgstr "(extrem de línia allargat)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:465
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:195
 msgid "Cap rounding"
 msgstr "Arrodoniment del fi de línia"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:465
-#: ../src/ui/toolbar/eraser-toolbar.cpp:238
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:195
+#: ../src/ui/toolbar/eraser-toolbar.cpp:173
 msgid "Caps:"
 msgstr "Fi de línia:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:466
-#: ../src/ui/toolbar/eraser-toolbar.cpp:239
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:196
+#: ../src/ui/toolbar/eraser-toolbar.cpp:174
 msgid ""
 "Increase to make caps at the ends of strokes protrude more (0 = no caps, 1 = "
 "round caps)"
@@ -25726,105 +25724,105 @@ msgstr ""
 "sense fi de línia, 1 = arrodonit)"
 
 #. Tremor
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:478
-#: ../src/ui/toolbar/eraser-toolbar.cpp:253
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:214
+#: ../src/ui/toolbar/eraser-toolbar.cpp:192
 msgid "(smooth line)"
 msgstr "(línia suau)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:478
-#: ../src/ui/toolbar/eraser-toolbar.cpp:253
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:214
+#: ../src/ui/toolbar/eraser-toolbar.cpp:192
 msgid "(slight tremor)"
 msgstr "(tremolor lleugera)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:478
-#: ../src/ui/toolbar/eraser-toolbar.cpp:253
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:214
+#: ../src/ui/toolbar/eraser-toolbar.cpp:192
 msgid "(noticeable tremor)"
 msgstr "(tremolor notable)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:478
-#: ../src/ui/toolbar/eraser-toolbar.cpp:253
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:214
+#: ../src/ui/toolbar/eraser-toolbar.cpp:192
 msgid "(maximum tremor)"
 msgstr "(tremolor màxima)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:481
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:217
 msgid "Stroke Tremor"
 msgstr "Tremolor del traç"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:481
-#: ../src/ui/toolbar/eraser-toolbar.cpp:256
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:217
+#: ../src/ui/toolbar/eraser-toolbar.cpp:195
 msgid "Tremor:"
 msgstr "Tremolor:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:482
-#: ../src/ui/toolbar/eraser-toolbar.cpp:257
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:218
+#: ../src/ui/toolbar/eraser-toolbar.cpp:196
 msgid "Increase to make strokes rugged and trembling"
 msgstr "Incrementa perquè els traços siguin irregulars"
 
 #. Wiggle
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:496
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:238
 msgid "(no wiggle)"
 msgstr "(sense desviació)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:496
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:238
 msgid "(slight deviation)"
 msgstr "(lleugera desviació)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:496
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:238
 msgid "(wild waves and curls)"
 msgstr "(grans ones)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:499
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:241
 msgid "Pen Wiggle"
 msgstr "Sacseig de la ploma"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:499
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:241
 msgid "Wiggle:"
 msgstr "Sacseja:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:500
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:242
 msgid "Increase to make the pen waver and wiggle"
 msgstr "Incrementa perquè la ploma es mogui en múltiples direccions"
 
 #. Mass
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:513
-#: ../src/ui/toolbar/eraser-toolbar.cpp:273
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:261
+#: ../src/ui/toolbar/eraser-toolbar.cpp:215
 msgid "(no inertia)"
 msgstr "(sense inèrcia)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:513
-#: ../src/ui/toolbar/eraser-toolbar.cpp:273
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:261
+#: ../src/ui/toolbar/eraser-toolbar.cpp:215
 msgid "(slight smoothing, default)"
 msgstr "(suavitzat lleuger, per defecte)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:513
-#: ../src/ui/toolbar/eraser-toolbar.cpp:273
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:261
+#: ../src/ui/toolbar/eraser-toolbar.cpp:215
 msgid "(noticeable lagging)"
 msgstr "(retard notable)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:513
-#: ../src/ui/toolbar/eraser-toolbar.cpp:273
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:261
+#: ../src/ui/toolbar/eraser-toolbar.cpp:215
 msgid "(maximum inertia)"
 msgstr "(inèrcia màxima)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:516
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:264
 msgid "Pen Mass"
 msgstr "Cota de la ploma"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:516
-#: ../src/ui/toolbar/eraser-toolbar.cpp:276
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:264
+#: ../src/ui/toolbar/eraser-toolbar.cpp:218
 msgid "Mass:"
 msgstr "Cota:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:517
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:265
 msgid "Increase to make the pen drag behind, as if slowed by inertia"
 msgstr ""
 "Incrementeu per arrossegar la ploma, com si la inèrcia la fes anar lenta"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:532
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:286
 msgid "Trace Background"
 msgstr "Traça el fons"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:533
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:287
 msgid ""
 "Trace the lightness of the background by the width of the pen (white - "
 "minimum width, black - maximum width)"
@@ -25832,130 +25830,135 @@ msgstr ""
 "Traça la lluminositat del fons segons l'amplada de la ploma (blanc - amplada "
 "mínima, negre - amplada màxima)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:546
-#: ../src/ui/toolbar/eraser-toolbar.cpp:204
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:299
+#: ../src/ui/toolbar/eraser-toolbar.cpp:137
 msgid "Use the pressure of the input device to alter the width of the pen"
 msgstr ""
 "Usa la pressió del dispositiu d'entrada per modificar l'amplada de la ploma"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:558
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:310
 msgid "Tilt"
 msgstr "Inclinació"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:559
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:311
 msgid "Use the tilt of the input device to alter the angle of the pen's nib"
 msgstr ""
 "Usa la inclinació del dispositiu d'entrada per modificar l'angle de la ploma"
 
 #. Name
 #. Label
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:580
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:331
 msgid "Choose a preset"
 msgstr "Selecciona un valor predefinit"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:598
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:347
 msgid "Add/Edit Profile"
 msgstr "Afegeix/Edita el perfil"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:599
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:348
 msgid "Add or edit calligraphic profile"
 msgstr "Afegeix o edita el perfil de cal·ligrafia"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:117
-msgid "Set connector type: orthogonal"
-msgstr "Defineix el tipus de connector: ortogonal"
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:506
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:601
+msgid "No preset"
+msgstr "Cap valor predefinit"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:117
-msgid "Set connector type: polyline"
-msgstr "Defineix el tipus de connector: polilínia"
-
-#: ../src/ui/toolbar/connector-toolbar.cpp:164
-msgid "Change connector curvature"
-msgstr "Canvia la curvatura del connector"
-
-#: ../src/ui/toolbar/connector-toolbar.cpp:213
-msgid "Change connector spacing"
-msgstr "Canvia l'espaiat del connector"
-
-#: ../src/ui/toolbar/connector-toolbar.cpp:311
+#: ../src/ui/toolbar/connector-toolbar.cpp:81
 msgid "Avoid"
 msgstr "Evita"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:312
+#: ../src/ui/toolbar/connector-toolbar.cpp:82
 #: ../src/ui/tools/connector-tool.cpp:1321
 msgid "Make connectors avoid selected objects"
 msgstr "Els connectors tenen en compte els objectes seleccionats"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:321
+#: ../src/ui/toolbar/connector-toolbar.cpp:91
 msgid "Ignore"
 msgstr "Ignora"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:322
+#: ../src/ui/toolbar/connector-toolbar.cpp:92
 #: ../src/ui/tools/connector-tool.cpp:1322
 msgid "Make connectors ignore selected objects"
 msgstr "Els connectors ignoren els objectes seleccionats"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:332
+#: ../src/ui/toolbar/connector-toolbar.cpp:102
 msgid "Orthogonal"
 msgstr "Ortogonal"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:333
+#: ../src/ui/toolbar/connector-toolbar.cpp:103
 msgid "Make connector orthogonal or polyline"
 msgstr "Fa el connector ortogonal o polilínia"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:347
+#: ../src/ui/toolbar/connector-toolbar.cpp:116
 msgid "Connector Curvature"
 msgstr "Curvatura del connector"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:347
+#: ../src/ui/toolbar/connector-toolbar.cpp:116
 msgid "Curvature:"
 msgstr "Curvatura:"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:348
+#: ../src/ui/toolbar/connector-toolbar.cpp:117
 msgid "The amount of connectors curvature"
 msgstr "Defineix la curvatura del connector"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:358
+#: ../src/ui/toolbar/connector-toolbar.cpp:132
 msgid "Connector Spacing"
 msgstr "Espaiat del connector"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:358
+#: ../src/ui/toolbar/connector-toolbar.cpp:132
 msgid "Spacing:"
 msgstr "Espaiat:"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:359
+#: ../src/ui/toolbar/connector-toolbar.cpp:133
 msgid "The amount of space left around objects by auto-routing connectors"
 msgstr ""
 "La quantitat d'espai que queda al voltant dels objectes en girar "
 "automàticament els connectors"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:370
+#: ../src/ui/toolbar/connector-toolbar.cpp:149
 msgid "Graph"
 msgstr "Graf"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:380
+#: ../src/ui/toolbar/connector-toolbar.cpp:159
 msgid "Connector Length"
 msgstr "Longitud del connector"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:380
+#: ../src/ui/toolbar/connector-toolbar.cpp:159
 msgid "Length:"
 msgstr "Longitud:"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:381
+#: ../src/ui/toolbar/connector-toolbar.cpp:160
 msgid "Ideal length for connectors when layout is applied"
 msgstr "Longitud ideal per als connectors quan s'aplica la disposició"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:393
+#: ../src/ui/toolbar/connector-toolbar.cpp:176
 msgid "Downwards"
 msgstr "Cap a sota"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:394
+#: ../src/ui/toolbar/connector-toolbar.cpp:177
 msgid "Make connectors with end-markers (arrows) point downwards"
 msgstr "Fes que els connectors amb marcadors finals (fletxes) apuntin abaix"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:410
+#: ../src/ui/toolbar/connector-toolbar.cpp:193
 msgid "Do not allow overlapping shapes"
 msgstr "No permetis que se superposin les formes"
+
+#: ../src/ui/toolbar/connector-toolbar.cpp:279
+msgid "Set connector type: orthogonal"
+msgstr "Defineix el tipus de connector: ortogonal"
+
+#: ../src/ui/toolbar/connector-toolbar.cpp:279
+msgid "Set connector type: polyline"
+msgstr "Defineix el tipus de connector: polilínia"
+
+#: ../src/ui/toolbar/connector-toolbar.cpp:326
+msgid "Change connector curvature"
+msgstr "Canvia la curvatura del connector"
+
+#: ../src/ui/toolbar/connector-toolbar.cpp:374
+msgid "Change connector spacing"
+msgstr "Canvia l'espaiat del connector"
 
 #: ../src/ui/toolbar/dropper-toolbar.cpp:70
 msgid "Pick"
@@ -25980,69 +25983,69 @@ msgstr ""
 "Si s'ha seleccionat amb transparència, l'assigna a la selecció com a "
 "transparència de contorn o emplenat"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:147
+#: ../src/ui/toolbar/eraser-toolbar.cpp:77
 msgid "Delete objects touched by eraser"
 msgstr "Suprimeix els objectes tocats per la goma d'esborrar"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:152
+#: ../src/ui/toolbar/eraser-toolbar.cpp:82
 msgid "Cut"
 msgstr "Retalla"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:153
+#: ../src/ui/toolbar/eraser-toolbar.cpp:83
 msgid "Cut out from paths and shapes"
 msgstr "Retalla dels camins i formes"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:158
+#: ../src/ui/toolbar/eraser-toolbar.cpp:88
 msgid "Clip"
 msgstr "Retalla"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:159
+#: ../src/ui/toolbar/eraser-toolbar.cpp:89
 msgid "Clip from objects"
 msgstr "Retalla des dels objectes"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:183
+#: ../src/ui/toolbar/eraser-toolbar.cpp:112
 msgid "(no width)"
 msgstr "(sense amplada)"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:187
+#: ../src/ui/toolbar/eraser-toolbar.cpp:116
 msgid "The width of the eraser pen (relative to the visible canvas area)"
 msgstr "L'amplada de la goma d'esborrar (relativa a l'àrea visible del llenç)"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:203
+#: ../src/ui/toolbar/eraser-toolbar.cpp:136
 msgid "Eraser Pressure"
 msgstr "Pressió de la goma d'esborrar"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:219
+#: ../src/ui/toolbar/eraser-toolbar.cpp:150
 msgid "Eraser Stroke Thinning"
 msgstr "Aprimament del traç de la goma d'esborrar"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:238
+#: ../src/ui/toolbar/eraser-toolbar.cpp:173
 msgid "Eraser Cap rounding"
 msgstr "Arrodoniment del fi de línia de la goma d'esborrar"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:256
+#: ../src/ui/toolbar/eraser-toolbar.cpp:195
 msgid "EraserStroke Tremor"
 msgstr "Tremolor del traç de la goma d'esborrar"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:276
+#: ../src/ui/toolbar/eraser-toolbar.cpp:218
 msgid "Eraser Mass"
 msgstr "Massa de la goma d'esborrar"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:277
+#: ../src/ui/toolbar/eraser-toolbar.cpp:219
 msgid "Increase to make the eraser drag behind, as if slowed by inertia"
 msgstr ""
 "Incrementeu per arrossegar la goma d'esborrar, com si la inèrcia la fes anar "
 "lenta"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:293
-#: ../src/ui/toolbar/eraser-toolbar.cpp:294
+#: ../src/ui/toolbar/eraser-toolbar.cpp:238
+#: ../src/ui/toolbar/eraser-toolbar.cpp:239
 msgid "Break apart cut items"
 msgstr "Separa els elements tallats"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:138
 #: ../src/ui/toolbar/gradient-toolbar.cpp:158
-#: ../src/ui/toolbar/gradient-toolbar.cpp:534
-#: ../src/ui/toolbar/gradient-toolbar.cpp:933
+#: ../src/ui/toolbar/gradient-toolbar.cpp:438
+#: ../src/ui/toolbar/gradient-toolbar.cpp:1055
 msgid "No gradient"
 msgstr "Sense degradat"
 
@@ -26054,90 +26057,68 @@ msgstr "No s'ha seleccionat res"
 msgid "Multiple gradients"
 msgstr "Múltiples degradats"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:544
-#: ../src/widgets/gradient-vector.cpp:566
-msgid "No stops in gradient"
-msgstr "No hi ha aturades en el degradat"
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:654
-msgid "Multiple stops"
-msgstr "Aturades múltiples"
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:737
-msgid "Assign gradient to object"
-msgstr "Assigna un degradat a un objecte"
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:765
-msgid "Set gradient repeat"
-msgstr "Estableix la repetició del degradat"
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:828
-#: ../src/widgets/gradient-vector.cpp:674
-msgid "Change gradient stop offset"
-msgstr "Canvia el desplaçament de la fase del degradat"
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:857
+#: ../src/ui/toolbar/gradient-toolbar.cpp:364
 msgid "linear"
 msgstr "lineal"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:858
+#: ../src/ui/toolbar/gradient-toolbar.cpp:365
 msgid "Create linear gradient"
 msgstr "Crea un degradat lineal"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:863
+#: ../src/ui/toolbar/gradient-toolbar.cpp:370
 msgid "radial"
 msgstr "Radial"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:864
+#: ../src/ui/toolbar/gradient-toolbar.cpp:371
 msgid "Create radial (elliptic or circular) gradient"
 msgstr "Crea un degradat lineal (el·líptic o circular)"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:895
-#: ../src/ui/toolbar/mesh-toolbar.cpp:417
+#: ../src/ui/toolbar/gradient-toolbar.cpp:401
+#: ../src/ui/toolbar/mesh-toolbar.cpp:264
 msgid "fill"
 msgstr "omple"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:896
-#: ../src/ui/toolbar/mesh-toolbar.cpp:418
+#: ../src/ui/toolbar/gradient-toolbar.cpp:402
+#: ../src/ui/toolbar/mesh-toolbar.cpp:265
 msgid "Create gradient in the fill"
 msgstr "Crea el degradat en l'emplenat"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:901
-#: ../src/ui/toolbar/mesh-toolbar.cpp:423
+#: ../src/ui/toolbar/gradient-toolbar.cpp:407
+#: ../src/ui/toolbar/mesh-toolbar.cpp:270
 msgid "stroke"
 msgstr "traç"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:902
-#: ../src/ui/toolbar/mesh-toolbar.cpp:424
+#: ../src/ui/toolbar/gradient-toolbar.cpp:408
+#: ../src/ui/toolbar/mesh-toolbar.cpp:271
 msgid "Create gradient in the stroke"
 msgstr "Crea el degradat en el contorn"
 
 #. Name
-#: ../src/ui/toolbar/gradient-toolbar.cpp:940
+#: ../src/ui/toolbar/gradient-toolbar.cpp:445
 msgid "Select"
 msgstr "Selecciona"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:967
+#: ../src/ui/toolbar/gradient-toolbar.cpp:471
 msgctxt "Gradient repeat type"
 msgid "None"
 msgstr "Cap"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:973
+#: ../src/ui/toolbar/gradient-toolbar.cpp:477
 msgid "Reflected"
 msgstr "Reflectit"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:979
+#: ../src/ui/toolbar/gradient-toolbar.cpp:483
 msgid "Direct"
 msgstr "Directe"
 
 #. Name
-#: ../src/ui/toolbar/gradient-toolbar.cpp:986
+#: ../src/ui/toolbar/gradient-toolbar.cpp:490
 msgid "Repeat"
 msgstr "Repeteix"
 
 #. Label
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
-#: ../src/ui/toolbar/gradient-toolbar.cpp:988
+#: ../src/ui/toolbar/gradient-toolbar.cpp:492
 msgid ""
 "Whether to fill with flat color beyond the ends of the gradient vector "
 "(spreadMethod=\"pad\"), or repeat the gradient in the same direction "
@@ -26149,70 +26130,92 @@ msgstr ""
 "(spreadMethod=\"repeat\"), o repeteix el degradat en direccions alternants "
 "oposades (spreadMethod=\"reflect\")"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1015
+#: ../src/ui/toolbar/gradient-toolbar.cpp:518
 msgid "No stops"
 msgstr "Sense aturades"
 
 #. Name
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1022
+#: ../src/ui/toolbar/gradient-toolbar.cpp:525
 msgid "Stops"
 msgstr "Aturades"
 
 #. Label
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1044
+#: ../src/ui/toolbar/gradient-toolbar.cpp:545
 #: ../src/widgets/gradient-vector.cpp:851
 msgctxt "Gradient"
 msgid "Offset:"
 msgstr "Desplaçament:"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1044
+#: ../src/ui/toolbar/gradient-toolbar.cpp:545
 msgid "Offset of selected stop"
 msgstr "Desplaçament de la fase seleccionada"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1062
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1063
+#: ../src/ui/toolbar/gradient-toolbar.cpp:565
+#: ../src/ui/toolbar/gradient-toolbar.cpp:566
 msgid "Insert new stop"
 msgstr "Insereix una fase nova"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1076
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1077
+#: ../src/ui/toolbar/gradient-toolbar.cpp:578
+#: ../src/ui/toolbar/gradient-toolbar.cpp:579
 #: ../src/widgets/gradient-vector.cpp:837
 msgid "Delete stop"
 msgstr "Suprimeix la fase"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1091
+#: ../src/ui/toolbar/gradient-toolbar.cpp:592
 msgid "Reverse the direction of the gradient"
 msgstr "Canvia la direcció del degradat"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1105
+#: ../src/ui/toolbar/gradient-toolbar.cpp:605
 msgid "Link gradients"
 msgstr "Enllaça degradats"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1106
+#: ../src/ui/toolbar/gradient-toolbar.cpp:606
 msgid "Link gradients to change all related gradients"
 msgstr "Enllaça degradats per canviar tots els degradats esmentats"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:275
+#: ../src/ui/toolbar/gradient-toolbar.cpp:666
+msgid "Assign gradient to object"
+msgstr "Assigna un degradat a un objecte"
+
+#: ../src/ui/toolbar/gradient-toolbar.cpp:712
+msgid "Set gradient repeat"
+msgstr "Estableix la repetició del degradat"
+
+#: ../src/ui/toolbar/gradient-toolbar.cpp:843
+#: ../src/widgets/gradient-vector.cpp:674
+msgid "Change gradient stop offset"
+msgstr "Canvia el desplaçament de la fase del degradat"
+
+#: ../src/ui/toolbar/gradient-toolbar.cpp:1065
+#: ../src/widgets/gradient-vector.cpp:566
+msgid "No stops in gradient"
+msgstr "No hi ha aturades en el degradat"
+
+#: ../src/ui/toolbar/gradient-toolbar.cpp:1191
+msgid "Multiple stops"
+msgstr "Aturades múltiples"
+
+#: ../src/ui/toolbar/lpe-toolbar.cpp:86
 msgid "All inactive"
 msgstr "Tots inactius"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:276
+#: ../src/ui/toolbar/lpe-toolbar.cpp:87
 msgid "No geometric tool is active"
 msgstr "No hi ha cap eina geomètrica activada"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:314
+#: ../src/ui/toolbar/lpe-toolbar.cpp:124
 msgid "Show limiting bounding box"
 msgstr "Mostra la capsa contenidora"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:315
+#: ../src/ui/toolbar/lpe-toolbar.cpp:125
 msgid "Show bounding box (used to cut infinite lines)"
 msgstr "Mostra la capsa contenidora (utilitzada per tallar línies infinites)"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:326
+#: ../src/ui/toolbar/lpe-toolbar.cpp:136
 msgid "Get limiting bounding box from selection"
 msgstr "Defineix la capsa contenidora a partir de la selecció"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:327
+#: ../src/ui/toolbar/lpe-toolbar.cpp:137
 msgid ""
 "Set limiting bounding box (used to cut infinite lines) to the bounding box "
 "of current selection"
@@ -26220,183 +26223,326 @@ msgstr ""
 "Defineix la capsa contenidora (utilitzada per tallar línies infinites) a "
 "partir de la selecció"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:345
+#: ../src/ui/toolbar/lpe-toolbar.cpp:154
 msgid "Closed"
 msgstr "Tancat"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:351
+#: ../src/ui/toolbar/lpe-toolbar.cpp:160
 msgid "Open start"
 msgstr "Inici obert"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:357
+#: ../src/ui/toolbar/lpe-toolbar.cpp:166
 msgid "Open end"
 msgstr "Final obert"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:363
+#: ../src/ui/toolbar/lpe-toolbar.cpp:172
 msgid "Open both"
 msgstr "Tots dos oberts"
 
 #. Name
 #. Label
-#: ../src/ui/toolbar/lpe-toolbar.cpp:371
+#: ../src/ui/toolbar/lpe-toolbar.cpp:180
 #, fuzzy
 msgid "Choose a line segment type"
 msgstr "Selecciona un tipus de segment de línia"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:389
+#: ../src/ui/toolbar/lpe-toolbar.cpp:197
 msgid "Display measuring info"
 msgstr "Mostra la informació de les mesures"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:390
+#: ../src/ui/toolbar/lpe-toolbar.cpp:198
 msgid "Display measuring info for selected items"
 msgstr "Mostra la informació de les mesures de l'element seleccionat"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:410
+#: ../src/ui/toolbar/lpe-toolbar.cpp:217
 msgid "Open LPE dialog"
 msgstr "Obre el diàleg EET"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:411
+#: ../src/ui/toolbar/lpe-toolbar.cpp:218
 msgid "Open LPE dialog (to adapt parameters numerically)"
 msgstr "Obre el diàleg LPE (per adaptar els paràmetres numèricament)"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:157
+#: ../src/ui/toolbar/measure-toolbar.cpp:84
 msgid "Start and end measures inactive."
 msgstr "Mesures d'inici i fi inactives."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:159
+#: ../src/ui/toolbar/measure-toolbar.cpp:86
 msgid "Start and end measures active."
 msgstr "Mesures d'inici i fi actives."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:175
+#: ../src/ui/toolbar/measure-toolbar.cpp:102
 msgid "Measures only selected."
 msgstr "Només s'han seleccionat les mesures."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:177
+#: ../src/ui/toolbar/measure-toolbar.cpp:104
 msgid "Measure all."
 msgstr "Mesura-ho tot."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:193
+#: ../src/ui/toolbar/measure-toolbar.cpp:120
 msgid "Show all crossings."
 msgstr "Mostra tots els encreuaments."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:195
+#: ../src/ui/toolbar/measure-toolbar.cpp:122
 msgid "Show visible crossings."
 msgstr "Mostra els encreuaments."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:211
+#: ../src/ui/toolbar/measure-toolbar.cpp:138
 msgid "Use all layers in the measure."
 msgstr "Utilitza totes les capes en la mesura."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:213
+#: ../src/ui/toolbar/measure-toolbar.cpp:140
 msgid "Use current layer in the measure."
 msgstr "Utilitza la capa actual en la mesura."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:229
+#: ../src/ui/toolbar/measure-toolbar.cpp:156
 msgid "Compute all elements."
 msgstr "Calcula tots els elements."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:231
+#: ../src/ui/toolbar/measure-toolbar.cpp:158
 msgid "Compute max length."
 msgstr "Calcula la llargada màxima."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:292
-#: ../src/ui/toolbar/text-toolbar.cpp:2043
+#: ../src/ui/toolbar/measure-toolbar.cpp:227
+#: ../src/ui/toolbar/text-toolbar.cpp:345
 msgid "Font Size"
 msgstr "Mida de la tipografia"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:292
+#: ../src/ui/toolbar/measure-toolbar.cpp:227
 msgid "Font Size:"
 msgstr "Mida de la tipografia:"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:293
+#: ../src/ui/toolbar/measure-toolbar.cpp:228
 msgid "The font size to be used in the measurement labels"
 msgstr "La mida de la tipografia a usar en les etiquetes de mesura"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:304
-#: ../src/ui/toolbar/measure-toolbar.cpp:312
+#: ../src/ui/toolbar/measure-toolbar.cpp:244
+#: ../src/ui/toolbar/measure-toolbar.cpp:252
 msgid "The units to be used for the measurements"
 msgstr "Les unitats a usar en les mesures"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:320
+#: ../src/ui/toolbar/measure-toolbar.cpp:260
 #: ../share/extensions/measure.inx.h:14
 msgid "Precision:"
 msgstr "Precisió:"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:321
+#: ../src/ui/toolbar/measure-toolbar.cpp:261
 msgid "Decimal precision of measure"
 msgstr "Estableix la precisió decimal de la mesura"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:333
+#: ../src/ui/toolbar/measure-toolbar.cpp:278
 msgid "Scale %"
 msgstr "Escala %"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:333
+#: ../src/ui/toolbar/measure-toolbar.cpp:278
 msgid "Scale %:"
 msgstr "Escala %:"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:334
+#: ../src/ui/toolbar/measure-toolbar.cpp:279
 msgid "Scale the results"
 msgstr "Escala els resultats"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:347
+#: ../src/ui/toolbar/measure-toolbar.cpp:297
 msgid "Mark dimension offset"
 msgstr "Marca el desplaçament de la dimensió"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:359
-#: ../src/ui/toolbar/measure-toolbar.cpp:360
+#: ../src/ui/toolbar/measure-toolbar.cpp:314
+#: ../src/ui/toolbar/measure-toolbar.cpp:315
 msgid "Measure only selected"
 msgstr "Mesura només els seleccionats"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:371
-#: ../src/ui/toolbar/measure-toolbar.cpp:372
+#: ../src/ui/toolbar/measure-toolbar.cpp:326
+#: ../src/ui/toolbar/measure-toolbar.cpp:327
 msgid "Ignore first and last"
 msgstr "Ignora primer i darrer"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:382
-#: ../src/ui/toolbar/measure-toolbar.cpp:383
+#: ../src/ui/toolbar/measure-toolbar.cpp:337
+#: ../src/ui/toolbar/measure-toolbar.cpp:338
 msgid "Show hidden intersections"
 msgstr "Mostra interseccions ocultes"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:393
-#: ../src/ui/toolbar/measure-toolbar.cpp:394
+#: ../src/ui/toolbar/measure-toolbar.cpp:348
+#: ../src/ui/toolbar/measure-toolbar.cpp:349
 msgid "Show measures between items"
 msgstr "Mostra les mesures entre elements"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:404
-#: ../src/ui/toolbar/measure-toolbar.cpp:405
+#: ../src/ui/toolbar/measure-toolbar.cpp:359
+#: ../src/ui/toolbar/measure-toolbar.cpp:360
 msgid "Measure all layers"
 msgstr "Mesura totes les capes"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:415
-#: ../src/ui/toolbar/measure-toolbar.cpp:416
+#: ../src/ui/toolbar/measure-toolbar.cpp:370
+#: ../src/ui/toolbar/measure-toolbar.cpp:371
 msgid "Reverse measure"
 msgstr "Mesura inversa"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:425
-#: ../src/ui/toolbar/measure-toolbar.cpp:426
+#: ../src/ui/toolbar/measure-toolbar.cpp:380
+#: ../src/ui/toolbar/measure-toolbar.cpp:381
 msgid "Phantom measure"
 msgstr "Mesura fantasma"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:435
-#: ../src/ui/toolbar/measure-toolbar.cpp:436
+#: ../src/ui/toolbar/measure-toolbar.cpp:390
+#: ../src/ui/toolbar/measure-toolbar.cpp:391
 msgid "To guides"
 msgstr "A les guies"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:445
-#: ../src/ui/toolbar/measure-toolbar.cpp:446
+#: ../src/ui/toolbar/measure-toolbar.cpp:400
+#: ../src/ui/toolbar/measure-toolbar.cpp:401
 msgid "Mark Dimension"
 msgstr "Marca la dimensió"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:455
-#: ../src/ui/toolbar/measure-toolbar.cpp:456
+#: ../src/ui/toolbar/measure-toolbar.cpp:410
+#: ../src/ui/toolbar/measure-toolbar.cpp:411
 msgid "Convert to item"
 msgstr "Converteix l'element"
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:270
-msgid "Set mesh type"
-msgstr "Estableix el tipus de malla"
+#: ../src/ui/toolbar/mesh-toolbar.cpp:227
+msgid "normal"
+msgstr "normal"
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:343
+#: ../src/ui/toolbar/mesh-toolbar.cpp:228
+msgid "Create mesh gradient"
+msgstr "Crea un degradat en forma de malla"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:233
+msgid "conical"
+msgstr "cònic"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:234
+msgid "Create conical gradient"
+msgstr "Crea un degradat cònic"
+
+#. Name
+#: ../src/ui/toolbar/mesh-toolbar.cpp:240
+msgid "New:"
+msgstr "Nova:"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:297
+msgid "Rows"
+msgstr "Files"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:297
+#: ../share/extensions/guides_creator.inx.h:5
+#: ../share/extensions/layout_nup.inx.h:12
+msgid "Rows:"
+msgstr "Files:"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:297
+msgid "Number of rows in new mesh"
+msgstr "Nombre de files a la nova malla"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:318
+msgid "Columns"
+msgstr "Columnes"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:318
+#: ../share/extensions/guides_creator.inx.h:4
+msgid "Columns:"
+msgstr "Columnes:"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:318
+msgid "Number of columns in new mesh"
+msgstr "Nombre de columnes a la nova malla"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:337
+msgid "Edit Fill"
+msgstr "Edita l'emplenat"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:338
+msgid "Edit fill mesh"
+msgstr "Edita l'emplenat de la malla"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:349
+msgid "Edit Stroke"
+msgstr "Edita el traç"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:350
+msgid "Edit stroke mesh"
+msgstr "Edita el traç de la malla"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:361
+#: ../src/ui/toolbar/node-toolbar.cpp:426
+msgid "Show Handles"
+msgstr "Mostra les nanses"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:375
+#: ../src/ui/toolbar/mesh-toolbar.cpp:376
+msgid "WARNING: Mesh SVG Syntax Subject to Change"
+msgstr "ADVERTÈNCIA: malla SVG sintaxi subjecte a canvis"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:393
+msgctxt "Type"
+msgid "Coons"
+msgstr "Coons"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:399
+msgid "Bicubic"
+msgstr "Bicúbic"
+
+#. Name
+#: ../src/ui/toolbar/mesh-toolbar.cpp:407
+msgid "Smoothing"
+msgstr "Suavitzat"
+
+#. Label
+#: ../src/ui/toolbar/mesh-toolbar.cpp:408
+msgid "Coons: no smothing. Bicubic: smothing across patch boundaries."
+msgstr "Coons: sense suavitzat. Bicúbic: suavitzar als límits del pedaç."
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:426
+msgid "Toggle Sides"
+msgstr "Commuta les cares"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:427
+msgid "Toggle selected sides between Beziers and lines."
+msgstr "Commuta les cares seleccionades entre Béziers i línies."
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:430
+msgid "Toggle side:"
+msgstr "Commuta la cara:"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:437
+msgid "Make elliptical"
+msgstr "Fes-ho el·líptic"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:438
+msgid ""
+"Make selected sides elliptical by changing length of handles. Works best if "
+"handles already approximate ellipse."
+msgstr ""
+"Fes les cares seleccionades el·líptiques canviant la longitud dels punts de "
+"control. Funciona millor si les nanses ja s'aproximen a una el·lipse."
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:441
+msgid "Make elliptical:"
+msgstr "Fes-ho el·líptic:"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:448
+msgid "Pick colors:"
+msgstr "Escolliu colors:"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:449
+msgid "Pick colors for selected corner nodes from underneath mesh."
+msgstr ""
+"Escolliu els colors de les cantonades dels nodes seleccionats sota de la "
+"malla."
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:452
+msgid "Pick Color"
+msgstr "Escolliu un color"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:460
+msgid "Scale mesh to bounding box:"
+msgstr "Escala la malla a la capsa contenidora:"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:461
+msgid "Scale mesh to fit inside bounding box."
+msgstr "Escala la malla a la capsa contenidora intern."
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:464
+msgid "Fit mesh"
+msgstr "Encabeix a la malla"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:642
 msgid ""
 "Mesh gradients are part of SVG 2:\n"
 "* Syntax may change.\n"
@@ -26412,355 +26558,212 @@ msgstr ""
 "Per a web: convertir a bitmap (Edita->Fes una copia del bitmap).\n"
 "Per imprimir: exportar a PDF."
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:379
-msgid "normal"
-msgstr "normal"
+#: ../src/ui/toolbar/mesh-toolbar.cpp:674
+msgid "Set mesh type"
+msgstr "Estableix el tipus de malla"
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:380
-msgid "Create mesh gradient"
-msgstr "Crea un degradat en forma de malla"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:385
-msgid "conical"
-msgstr "cònic"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:386
-msgid "Create conical gradient"
-msgstr "Crea un degradat cònic"
-
-#. Name
-#: ../src/ui/toolbar/mesh-toolbar.cpp:392
-msgid "New:"
-msgstr "Nova:"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:451
-msgid "Rows"
-msgstr "Files"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:451
-#: ../share/extensions/guides_creator.inx.h:5
-#: ../share/extensions/layout_nup.inx.h:12
-msgid "Rows:"
-msgstr "Files:"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:451
-msgid "Number of rows in new mesh"
-msgstr "Nombre de files a la nova malla"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:467
-msgid "Columns"
-msgstr "Columnes"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:467
-#: ../share/extensions/guides_creator.inx.h:4
-msgid "Columns:"
-msgstr "Columnes:"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:467
-msgid "Number of columns in new mesh"
-msgstr "Nombre de columnes a la nova malla"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:481
-msgid "Edit Fill"
-msgstr "Edita l'emplenat"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:482
-msgid "Edit fill mesh"
-msgstr "Edita l'emplenat de la malla"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:494
-msgid "Edit Stroke"
-msgstr "Edita el traç"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:495
-msgid "Edit stroke mesh"
-msgstr "Edita el traç de la malla"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:507
-#: ../src/ui/toolbar/node-toolbar.cpp:521
-msgid "Show Handles"
-msgstr "Mostra les nanses"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:524
-#: ../src/ui/toolbar/mesh-toolbar.cpp:525
-msgid "WARNING: Mesh SVG Syntax Subject to Change"
-msgstr "ADVERTÈNCIA: malla SVG sintaxi subjecte a canvis"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:542
-msgctxt "Type"
-msgid "Coons"
-msgstr "Coons"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:548
-msgid "Bicubic"
-msgstr "Bicúbic"
-
-#. Name
-#: ../src/ui/toolbar/mesh-toolbar.cpp:556
-msgid "Smoothing"
-msgstr "Suavitzat"
-
-#. Label
-#: ../src/ui/toolbar/mesh-toolbar.cpp:557
-msgid "Coons: no smothing. Bicubic: smothing across patch boundaries."
-msgstr "Coons: sense suavitzat. Bicúbic: suavitzar als límits del pedaç."
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:576
-msgid "Toggle Sides"
-msgstr "Commuta les cares"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:577
-msgid "Toggle selected sides between Beziers and lines."
-msgstr "Commuta les cares seleccionades entre Béziers i línies."
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:580
-msgid "Toggle side:"
-msgstr "Commuta la cara:"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:587
-msgid "Make elliptical"
-msgstr "Fes-ho el·líptic"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:588
-msgid ""
-"Make selected sides elliptical by changing length of handles. Works best if "
-"handles already approximate ellipse."
-msgstr ""
-"Fes les cares seleccionades el·líptiques canviant la longitud dels punts de "
-"control. Funciona millor si les nanses ja s'aproximen a una el·lipse."
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:591
-msgid "Make elliptical:"
-msgstr "Fes-ho el·líptic:"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:598
-msgid "Pick colors:"
-msgstr "Escolliu colors:"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:599
-msgid "Pick colors for selected corner nodes from underneath mesh."
-msgstr ""
-"Escolliu els colors de les cantonades dels nodes seleccionats sota de la "
-"malla."
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:602
-msgid "Pick Color"
-msgstr "Escolliu un color"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:610
-msgid "Scale mesh to bounding box:"
-msgstr "Escala la malla a la capsa contenidora:"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:611
-msgid "Scale mesh to fit inside bounding box."
-msgstr "Escala la malla a la capsa contenidora intern."
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:614
-msgid "Fit mesh"
-msgstr "Encabeix a la malla"
-
-#: ../src/ui/toolbar/node-toolbar.cpp:341
+#: ../src/ui/toolbar/node-toolbar.cpp:247
 msgid "Insert node"
 msgstr "Insereix un node"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:342
+#: ../src/ui/toolbar/node-toolbar.cpp:248
 msgid "Insert new nodes into selected segments"
 msgstr "Insereix nous nodes en els segments seleccionats"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:345
+#: ../src/ui/toolbar/node-toolbar.cpp:251
 msgid "Insert"
 msgstr "Insereix"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:356
+#: ../src/ui/toolbar/node-toolbar.cpp:262
 msgid "Insert node at min X"
 msgstr "Insereix un node al mínim X"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:357
+#: ../src/ui/toolbar/node-toolbar.cpp:263
 msgid "Insert new nodes at min X into selected segments"
 msgstr "Insereix nous nodes al mínim X dins dels segments seleccionats"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:360
+#: ../src/ui/toolbar/node-toolbar.cpp:266
 msgid "Insert min X"
 msgstr "Insereix mínim X"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:366
+#: ../src/ui/toolbar/node-toolbar.cpp:272
 msgid "Insert node at max X"
 msgstr "Insereix un node al màxim X"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:367
+#: ../src/ui/toolbar/node-toolbar.cpp:273
 msgid "Insert new nodes at max X into selected segments"
 msgstr "Insereix nous nodes al màxim X dins dels segments seleccionats"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:370
+#: ../src/ui/toolbar/node-toolbar.cpp:276
 msgid "Insert max X"
 msgstr "Insereix un màxim X"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:376
+#: ../src/ui/toolbar/node-toolbar.cpp:282
 msgid "Insert node at min Y"
 msgstr "Insereix un node al mínim Y"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:377
+#: ../src/ui/toolbar/node-toolbar.cpp:283
 msgid "Insert new nodes at min Y into selected segments"
 msgstr "Insereix nous nodes al mínim Y dins dels segments seleccionats"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:380
+#: ../src/ui/toolbar/node-toolbar.cpp:286
 msgid "Insert min Y"
 msgstr "Insereix un mínim Y"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:386
+#: ../src/ui/toolbar/node-toolbar.cpp:292
 msgid "Insert node at max Y"
 msgstr "Insereix un node al màxim Y"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:387
+#: ../src/ui/toolbar/node-toolbar.cpp:293
 msgid "Insert new nodes at max Y into selected segments"
 msgstr "Insereix nous nodes al màxim Y dins dels segments seleccionats"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:390
+#: ../src/ui/toolbar/node-toolbar.cpp:296
 msgid "Insert max Y"
 msgstr "Insereix un màxim Y"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:398
+#: ../src/ui/toolbar/node-toolbar.cpp:304
 msgid "Delete selected nodes"
 msgstr "Suprimeix els nodes seleccionats"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:409
+#: ../src/ui/toolbar/node-toolbar.cpp:315
 msgid "Join selected nodes"
 msgstr "Uneix els nodes seleccionats"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:412
+#: ../src/ui/toolbar/node-toolbar.cpp:318
 msgid "Join"
 msgstr "Uneix"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:420
+#: ../src/ui/toolbar/node-toolbar.cpp:326
 msgid "Break path at selected nodes"
 msgstr "Trenca el camí en els nodes seleccionats"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:430
+#: ../src/ui/toolbar/node-toolbar.cpp:336
 msgid "Join with segment"
 msgstr "Uneix amb un segment"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:431
+#: ../src/ui/toolbar/node-toolbar.cpp:337
 msgid "Join selected endnodes with a new segment"
 msgstr "Uneix els nodes finals seleccionats amb un nou segment"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:440
+#: ../src/ui/toolbar/node-toolbar.cpp:346
 msgid "Delete segment"
 msgstr "Suprimeix el segment"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:441
+#: ../src/ui/toolbar/node-toolbar.cpp:347
 msgid "Delete segment between two non-endpoint nodes"
 msgstr "Suprimeix el segment entre dos nodes no finals"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:450
+#: ../src/ui/toolbar/node-toolbar.cpp:356
 msgid "Node Cusp"
 msgstr "Afila un node"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:451
+#: ../src/ui/toolbar/node-toolbar.cpp:357
 msgid "Make selected nodes corner"
 msgstr "Fes una cantonada amb els nodes seleccionats"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:460
+#: ../src/ui/toolbar/node-toolbar.cpp:366
 msgid "Node Smooth"
 msgstr "Suavitza un node"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:461
+#: ../src/ui/toolbar/node-toolbar.cpp:367
 msgid "Make selected nodes smooth"
 msgstr "Suavitza els nodes seleccionats"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:470
+#: ../src/ui/toolbar/node-toolbar.cpp:376
 msgid "Node Symmetric"
 msgstr "Node simètric"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:471
+#: ../src/ui/toolbar/node-toolbar.cpp:377
 msgid "Make selected nodes symmetric"
 msgstr "Fes els nodes seleccionats simètrics"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:480
+#: ../src/ui/toolbar/node-toolbar.cpp:386
 msgid "Node Auto"
 msgstr "Node auto"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:481
+#: ../src/ui/toolbar/node-toolbar.cpp:387
 msgid "Make selected nodes auto-smooth"
 msgstr "Suavitza automàticament els nodes seleccionats"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:490
+#: ../src/ui/toolbar/node-toolbar.cpp:396
 msgid "Node Line"
 msgstr "Línia de nodes"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:491
+#: ../src/ui/toolbar/node-toolbar.cpp:397
 msgid "Make selected segments lines"
 msgstr "Converteix els segments seleccionats en línies"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:500
+#: ../src/ui/toolbar/node-toolbar.cpp:406
 msgid "Node Curve"
 msgstr "Corba de nodes"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:501
+#: ../src/ui/toolbar/node-toolbar.cpp:407
 msgid "Make selected segments curves"
 msgstr "Converteix els segments seleccionats en corbes"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:510
+#: ../src/ui/toolbar/node-toolbar.cpp:416
 msgid "Show Transform Handles"
 msgstr "Mostra les nanses de transformació"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:511
+#: ../src/ui/toolbar/node-toolbar.cpp:417
 msgid "Show transformation handles for selected nodes"
 msgstr "Mostra les nanses de transformació dels nodes seleccionats"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:522
+#: ../src/ui/toolbar/node-toolbar.cpp:427
 msgid "Show Bezier handles of selected nodes"
 msgstr "Mostra les nanses Bézier dels nodes seleccionats"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:532
+#: ../src/ui/toolbar/node-toolbar.cpp:436
 msgid "Show Outline"
 msgstr "Mostra el contorn"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:533
+#: ../src/ui/toolbar/node-toolbar.cpp:437
 msgid "Show path outline (without path effects)"
 msgstr "Mostra el contorn del camí (sense efectes de camí)"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:555
+#: ../src/ui/toolbar/node-toolbar.cpp:457
 msgid "Edit clipping paths"
 msgstr "Edita els camins de retall"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:556
+#: ../src/ui/toolbar/node-toolbar.cpp:458
 msgid "Show clipping path(s) of selected object(s)"
 msgstr "Mostra els camins de retall dels objectes"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:566
+#: ../src/ui/toolbar/node-toolbar.cpp:467
 msgid "Edit masks"
 msgstr "Edita les màscares"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:567
+#: ../src/ui/toolbar/node-toolbar.cpp:468
 msgid "Show mask(s) of selected object(s)"
 msgstr "Mostra les màscares dels objectes seleccionats"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:581
+#: ../src/ui/toolbar/node-toolbar.cpp:480
 msgid "X coordinate:"
 msgstr "Coordenada X:"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:581
+#: ../src/ui/toolbar/node-toolbar.cpp:480
 msgid "X coordinate of selected node(s)"
 msgstr "Coordenada X dels nodes seleccionats"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:598
+#: ../src/ui/toolbar/node-toolbar.cpp:500
 msgid "Y coordinate:"
 msgstr "Coordenada Y:"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:598
+#: ../src/ui/toolbar/node-toolbar.cpp:500
 msgid "Y coordinate of selected node(s)"
 msgstr "Coordenada Y dels nodes seleccionats"
 
 #. Name
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:137
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:85
 msgid "Fill by"
 msgstr "Omple segons"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:159
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:106
 msgid "Fill Threshold"
 msgstr "Llindar d'emplenat"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:160
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:107
 msgid ""
 "The maximum allowed difference between the clicked pixel and the neighboring "
 "pixels to be counted in the fill"
@@ -26768,15 +26771,15 @@ msgstr ""
 "La màxima diferència permesa entre el píxel clicat i els píxels dels "
 "voltants que es comptaran en l'emplenat"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:188
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:138
 msgid "Grow/shrink by"
 msgstr "Augmenta/encongeix"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:188
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:138
 msgid "Grow/shrink by:"
 msgstr "Augmenta/encongeix:"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:189
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:139
 msgid ""
 "The amount to grow (positive) or shrink (negative) the created fill path"
 msgstr ""
@@ -26784,18 +26787,18 @@ msgstr ""
 "creat"
 
 #. Name
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:215
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:171
 msgid "Close gaps"
 msgstr "Tapa els forats"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:236
-#: ../src/ui/toolbar/pencil-toolbar.cpp:580
-#: ../src/ui/toolbar/spiral-toolbar.cpp:290
-#: ../src/ui/toolbar/star-toolbar.cpp:588
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:191
+#: ../src/ui/toolbar/pencil-toolbar.cpp:199
+#: ../src/ui/toolbar/spiral-toolbar.cpp:158
+#: ../src/ui/toolbar/star-toolbar.cpp:229
 msgid "Defaults"
 msgstr "Per defecte"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:237
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:192
 msgid ""
 "Reset paint bucket parameters to defaults (use Inkscape Preferences > Tools "
 "to change defaults)"
@@ -26803,133 +26806,56 @@ msgstr ""
 "Reinicialitza les opcions per defecte del cubell (useu Preferències > Eines "
 "per canviar els valors per defecte)"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:133
-msgid "Bezier"
-msgstr "Bézier"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:134
-msgid "Create regular Bezier path"
-msgstr "Crea un camí Bézier normal"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:140
-msgid "Create Spiro path"
-msgstr "Crea un camí espiral"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:146
-msgid "Create BSpline path"
-msgstr "Crea un camí BSpline"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:152
-msgid "Zigzag"
-msgstr "Zigzag"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:153
-msgid "Create a sequence of straight line segments"
-msgstr "Crea una seqüència de segments rectes"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:158
-msgid "Paraxial"
-msgstr "Paraxial"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:159
-msgid "Create a sequence of paraxial line segments"
-msgstr "Crea una seqüència de segments paraxials"
-
-#. Label
-#: ../src/ui/toolbar/pencil-toolbar.cpp:169
-msgid "Mode of new lines drawn by this tool"
-msgstr "Mode de línies noves dibuixades amb aquesta eina"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:184
-#: ../src/ui/toolbar/pencil-toolbar.cpp:185
-msgid "LPE spiro or bspline flatten"
-msgstr "LPE espiral o bspline aplanat"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:222
-msgctxt "Freehand shape"
-msgid "None"
-msgstr "Cap"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:223
-msgid "Triangle in"
-msgstr "Triangle cap endins"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:224
-msgid "Triangle out"
-msgstr "Triangle cap enfora"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:226
-msgid "From clipboard"
-msgstr "Des del porta-retalls"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:227
-msgid "Bend from clipboard"
-msgstr "Corba des del porta-retalls"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:228
-msgid "Last applied"
-msgstr "Última utilitzada"
-
-#. Name
-#: ../src/ui/toolbar/pencil-toolbar.cpp:250
-msgid "Shape"
-msgstr "Forma"
-
-#. Label
-#: ../src/ui/toolbar/pencil-toolbar.cpp:251
-msgid "Shape of new paths drawn by this tool"
-msgstr "Figura de camins nous dibuixats per aquesta eina"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:503
+#: ../src/ui/toolbar/pencil-toolbar.cpp:110
 msgid "Min pressure"
 msgstr "Pressió mínima"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:503
+#: ../src/ui/toolbar/pencil-toolbar.cpp:110
 msgid "Min:"
 msgstr "Mín:"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:503
+#: ../src/ui/toolbar/pencil-toolbar.cpp:110
 msgid "Min percent of pressure"
 msgstr "Percentatge mínim de pressió"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:521
+#: ../src/ui/toolbar/pencil-toolbar.cpp:132
 msgid "Max pressure"
 msgstr "Pressió màxima"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:521
+#: ../src/ui/toolbar/pencil-toolbar.cpp:132
 msgid "Max:"
 msgstr "Màx:"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:521
+#: ../src/ui/toolbar/pencil-toolbar.cpp:132
 msgid "Max percent of pressure"
 msgstr "Percentatge màxim de pressió"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:538
-#: ../src/ui/toolbar/pencil-toolbar.cpp:539
+#: ../src/ui/toolbar/pencil-toolbar.cpp:153
+#: ../src/ui/toolbar/pencil-toolbar.cpp:154
 msgid "Use pressure input"
 msgstr "Utilitza l'entrada de pressió"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:556
+#: ../src/ui/toolbar/pencil-toolbar.cpp:171
 msgid "(many nodes, rough)"
 msgstr "(molts nodes, brut)"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:556
+#: ../src/ui/toolbar/pencil-toolbar.cpp:171
 msgid "(few nodes, smooth)"
 msgstr "(pocs nodes, suau)"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:559
+#: ../src/ui/toolbar/pencil-toolbar.cpp:174
 msgid "Smoothing:"
 msgstr "Suavitzat:"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:559
+#: ../src/ui/toolbar/pencil-toolbar.cpp:174
 msgid "Smoothing: "
 msgstr "Suavitzat: "
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:560
+#: ../src/ui/toolbar/pencil-toolbar.cpp:175
 msgid "How much smoothing (simplifying) is applied to the line"
 msgstr "Quantitat de suavitzat (simplificat) s'aplicarà a la línia"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:581
+#: ../src/ui/toolbar/pencil-toolbar.cpp:200
 msgid ""
 "Reset pencil parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -26937,71 +26863,144 @@ msgstr ""
 "Recupera les opcions per defecte del llapis (utilitzeu Preferències > Eines "
 "per canviar els valors per defecte)"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:590
-#: ../src/ui/toolbar/pencil-toolbar.cpp:591
+#: ../src/ui/toolbar/pencil-toolbar.cpp:209
+#: ../src/ui/toolbar/pencil-toolbar.cpp:210
 msgid "LPE based interactive simplify"
 msgstr "Simplifica la interacció basada en LPE"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:608
-#: ../src/ui/toolbar/pencil-toolbar.cpp:609
+#: ../src/ui/toolbar/pencil-toolbar.cpp:226
+#: ../src/ui/toolbar/pencil-toolbar.cpp:227
 msgid "LPE simplify flatten"
 msgstr "LPE aplanat simplificat"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:124
-msgid "Change rectangle"
-msgstr "Canvia el rectangle"
+#: ../src/ui/toolbar/pencil-toolbar.cpp:303
+msgid "Bezier"
+msgstr "Bézier"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:322
+#: ../src/ui/toolbar/pencil-toolbar.cpp:304
+msgid "Create regular Bezier path"
+msgstr "Crea un camí Bézier normal"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:310
+msgid "Create Spiro path"
+msgstr "Crea un camí espiral"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:316
+msgid "Create BSpline path"
+msgstr "Crea un camí BSpline"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:322
+msgid "Zigzag"
+msgstr "Zigzag"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:323
+msgid "Create a sequence of straight line segments"
+msgstr "Crea una seqüència de segments rectes"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:328
+msgid "Paraxial"
+msgstr "Paraxial"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:329
+msgid "Create a sequence of paraxial line segments"
+msgstr "Crea una seqüència de segments paraxials"
+
+#. Label
+#: ../src/ui/toolbar/pencil-toolbar.cpp:339
+msgid "Mode of new lines drawn by this tool"
+msgstr "Mode de línies noves dibuixades amb aquesta eina"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:354
+#: ../src/ui/toolbar/pencil-toolbar.cpp:355
+msgid "LPE spiro or bspline flatten"
+msgstr "LPE espiral o bspline aplanat"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:418
+msgctxt "Freehand shape"
+msgid "None"
+msgstr "Cap"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:419
+msgid "Triangle in"
+msgstr "Triangle cap endins"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:420
+msgid "Triangle out"
+msgstr "Triangle cap enfora"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:422
+msgid "From clipboard"
+msgstr "Des del porta-retalls"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:423
+msgid "Bend from clipboard"
+msgstr "Corba des del porta-retalls"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:424
+msgid "Last applied"
+msgstr "Última utilitzada"
+
+#. Name
+#: ../src/ui/toolbar/pencil-toolbar.cpp:446
+msgid "Shape"
+msgstr "Forma"
+
+#. Label
+#: ../src/ui/toolbar/pencil-toolbar.cpp:447
+msgid "Shape of new paths drawn by this tool"
+msgstr "Figura de camins nous dibuixats per aquesta eina"
+
+#: ../src/ui/toolbar/rect-toolbar.cpp:116
 msgid "W:"
 msgstr "A:"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:322
+#: ../src/ui/toolbar/rect-toolbar.cpp:116
 msgid "Width of rectangle"
 msgstr "Amplada del rectangle"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:338
+#: ../src/ui/toolbar/rect-toolbar.cpp:140
 msgid "H:"
 msgstr "H:"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:338
+#: ../src/ui/toolbar/rect-toolbar.cpp:140
 msgid "Height of rectangle"
 msgstr "Alçada del rectangle"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:351
-#: ../src/ui/toolbar/rect-toolbar.cpp:365
+#: ../src/ui/toolbar/rect-toolbar.cpp:160
+#: ../src/ui/toolbar/rect-toolbar.cpp:182
 msgid "not rounded"
 msgstr "sense arrodonir"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:354
+#: ../src/ui/toolbar/rect-toolbar.cpp:163
 msgid "Horizontal radius of rounded corners"
 msgstr "Radi horitzontal de les cantonades arrodonides"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:368
+#: ../src/ui/toolbar/rect-toolbar.cpp:185
 msgid "Vertical radius of rounded corners"
 msgstr "Radi vertical de les cantonades arrodonides"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:386
+#: ../src/ui/toolbar/rect-toolbar.cpp:211
 msgid "Not rounded"
 msgstr "Sense arrodonir"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:387
+#: ../src/ui/toolbar/rect-toolbar.cpp:212
 msgid "Make corners sharp"
 msgstr "Afila les cantonades"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:261
-msgid "Transform by toolbar"
-msgstr "Transforma mitjançant la barra d'eines"
+#: ../src/ui/toolbar/rect-toolbar.cpp:267
+msgid "Change rectangle"
+msgstr "Canvia el rectangle"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:279
+#: ../src/ui/toolbar/select-toolbar.cpp:66
 msgid "Now <b>stroke width</b> is <b>scaled</b> when objects are scaled."
 msgstr "<b>S'escalarà l'amplada del contorn</b> quan s'escalin els objectes."
 
-#: ../src/ui/toolbar/select-toolbar.cpp:281
+#: ../src/ui/toolbar/select-toolbar.cpp:68
 msgid "Now <b>stroke width</b> is <b>not scaled</b> when objects are scaled."
 msgstr ""
 "<b>No s'escalarà l'amplada del contorn</b> quan s'escalin els objectes."
 
-#: ../src/ui/toolbar/select-toolbar.cpp:292
+#: ../src/ui/toolbar/select-toolbar.cpp:79
 msgid ""
 "Now <b>rounded rectangle corners</b> are <b>scaled</b> when rectangles are "
 "scaled."
@@ -27009,7 +27008,7 @@ msgstr ""
 "<b>S'escalaran les cantonades arrodonides dels rectangles</b> quan s'escalin "
 "els objectes."
 
-#: ../src/ui/toolbar/select-toolbar.cpp:294
+#: ../src/ui/toolbar/select-toolbar.cpp:81
 msgid ""
 "Now <b>rounded rectangle corners</b> are <b>not scaled</b> when rectangles "
 "are scaled."
@@ -27017,7 +27016,7 @@ msgstr ""
 "<b>No s'escalaran les cantonades arrodonides dels rectangles</b> quan "
 "s'escalin els objectes."
 
-#: ../src/ui/toolbar/select-toolbar.cpp:305
+#: ../src/ui/toolbar/select-toolbar.cpp:92
 msgid ""
 "Now <b>gradients</b> are <b>transformed</b> along with their objects when "
 "those are transformed (moved, scaled, rotated, or skewed)."
@@ -27025,7 +27024,7 @@ msgstr ""
 "Es <b>transformaran</b> els <b>degradats</b> juntament amb els seus objectes "
 "quan es transformin (moguts, escalat, girats o distorsionats)."
 
-#: ../src/ui/toolbar/select-toolbar.cpp:307
+#: ../src/ui/toolbar/select-toolbar.cpp:94
 msgid ""
 "Now <b>gradients</b> remain <b>fixed</b> when objects are transformed "
 "(moved, scaled, rotated, or skewed)."
@@ -27033,7 +27032,7 @@ msgstr ""
 "Els <b>degradats</b> romandran <b>fixes</b> quan els objectes es transformin "
 "(moguts, escalats, girats o distorsionats)."
 
-#: ../src/ui/toolbar/select-toolbar.cpp:318
+#: ../src/ui/toolbar/select-toolbar.cpp:105
 msgid ""
 "Now <b>patterns</b> are <b>transformed</b> along with their objects when "
 "those are transformed (moved, scaled, rotated, or skewed)."
@@ -27041,7 +27040,7 @@ msgstr ""
 "Es <b>transformaran</b> els <b>patrons</b> juntament amb els seus objectes "
 "quan es transformin (moguts, escalats, girats o distorsionats)."
 
-#: ../src/ui/toolbar/select-toolbar.cpp:320
+#: ../src/ui/toolbar/select-toolbar.cpp:107
 msgid ""
 "Now <b>patterns</b> remain <b>fixed</b> when objects are transformed (moved, "
 "scaled, rotated, or skewed)."
@@ -27050,185 +27049,185 @@ msgstr ""
 "(moguts, escalat, girats o distorsionats)."
 
 #. name
-#: ../src/ui/toolbar/select-toolbar.cpp:434
+#: ../src/ui/toolbar/select-toolbar.cpp:220
 msgctxt "Select toolbar"
 msgid "X position"
 msgstr "Posició X"
 
 #. label
-#: ../src/ui/toolbar/select-toolbar.cpp:435
+#: ../src/ui/toolbar/select-toolbar.cpp:221
 msgctxt "Select toolbar"
 msgid "X:"
 msgstr "X:"
 
 #. shortLabel
-#: ../src/ui/toolbar/select-toolbar.cpp:436
+#: ../src/ui/toolbar/select-toolbar.cpp:222
 msgctxt "Select toolbar"
 msgid "Horizontal coordinate of selection"
 msgstr "Coordenada horitzontal de la selecció"
 
 #. name
-#: ../src/ui/toolbar/select-toolbar.cpp:453
+#: ../src/ui/toolbar/select-toolbar.cpp:241
 msgctxt "Select toolbar"
 msgid "Y position"
 msgstr "Posició Y"
 
 #. label
-#: ../src/ui/toolbar/select-toolbar.cpp:454
+#: ../src/ui/toolbar/select-toolbar.cpp:242
 msgctxt "Select toolbar"
 msgid "Y:"
 msgstr "Y:"
 
 #. shortLabel
-#: ../src/ui/toolbar/select-toolbar.cpp:455
+#: ../src/ui/toolbar/select-toolbar.cpp:243
 msgctxt "Select toolbar"
 msgid "Vertical coordinate of selection"
 msgstr "Coordenada vertical de la selecció"
 
 #. name
-#: ../src/ui/toolbar/select-toolbar.cpp:472
+#: ../src/ui/toolbar/select-toolbar.cpp:262
 msgctxt "Select toolbar"
 msgid "Width"
 msgstr "Amplada"
 
 #. label
-#: ../src/ui/toolbar/select-toolbar.cpp:473
+#: ../src/ui/toolbar/select-toolbar.cpp:263
 msgctxt "Select toolbar"
 msgid "W:"
 msgstr "A:"
 
 #. shortLabel
-#: ../src/ui/toolbar/select-toolbar.cpp:474
+#: ../src/ui/toolbar/select-toolbar.cpp:264
 msgctxt "Select toolbar"
 msgid "Width of selection"
 msgstr "Amplada de la selecció"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:492
+#: ../src/ui/toolbar/select-toolbar.cpp:284
 msgid "Lock width and height"
 msgstr "Bloca l'amplada i l'alçada"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:493
+#: ../src/ui/toolbar/select-toolbar.cpp:285
 msgid "When locked, change both width and height by the same proportion"
 msgstr ""
 "Quan estigui blocat, canvia l'amplada i l'alçada en la mateixa proporció"
 
 #. name
-#: ../src/ui/toolbar/select-toolbar.cpp:504
+#: ../src/ui/toolbar/select-toolbar.cpp:295
 msgctxt "Select toolbar"
 msgid "Height"
 msgstr "Alçada"
 
 #. label
-#: ../src/ui/toolbar/select-toolbar.cpp:505
+#: ../src/ui/toolbar/select-toolbar.cpp:296
 msgctxt "Select toolbar"
 msgid "H:"
 msgstr "H:"
 
 #. shortLabel
-#: ../src/ui/toolbar/select-toolbar.cpp:506
+#: ../src/ui/toolbar/select-toolbar.cpp:297
 msgctxt "Select toolbar"
 msgid "Height of selection"
 msgstr "Alçada de la selecció"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:569
+#: ../src/ui/toolbar/select-toolbar.cpp:354
 msgid "Scale rounded corners"
 msgstr "Escala les cantonades arrodonides"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:580
+#: ../src/ui/toolbar/select-toolbar.cpp:365
 msgid "Move gradients"
 msgstr "Mou els degradats"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:591
+#: ../src/ui/toolbar/select-toolbar.cpp:376
 msgid "Move patterns"
 msgstr "Mou els patrons"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:97
-msgid "Change spiral"
-msgstr "Canvia l'espiral"
+#: ../src/ui/toolbar/select-toolbar.cpp:505
+msgid "Transform by toolbar"
+msgstr "Transforma mitjançant la barra d'eines"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:247
+#: ../src/ui/toolbar/spiral-toolbar.cpp:97
 msgid "just a curve"
 msgstr "només una corba"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:247
+#: ../src/ui/toolbar/spiral-toolbar.cpp:97
 msgid "one full revolution"
 msgstr "una revolució sencera"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:250
+#: ../src/ui/toolbar/spiral-toolbar.cpp:100
 msgid "Number of turns"
 msgstr "Nombre de girs"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:250
+#: ../src/ui/toolbar/spiral-toolbar.cpp:100
 msgid "Turns:"
 msgstr "Girs:"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:250
+#: ../src/ui/toolbar/spiral-toolbar.cpp:100
 msgid "Number of revolutions"
 msgstr "Nombre de revolucions"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "circle"
 msgstr "cercle"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "edge is much denser"
 msgstr "El costat és molt més dens"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "edge is denser"
 msgstr "El costat és més dens"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "even"
 msgstr "homogeni"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "center is denser"
 msgstr "el centre és més dens"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "center is much denser"
 msgstr "fes el centre més dens"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:264
+#: ../src/ui/toolbar/spiral-toolbar.cpp:120
 msgid "Divergence"
 msgstr "Divergència"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:264
+#: ../src/ui/toolbar/spiral-toolbar.cpp:120
 msgid "Divergence:"
 msgstr "Divergència:"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:264
+#: ../src/ui/toolbar/spiral-toolbar.cpp:120
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
 msgstr ""
 "Quanta densitat han de tenir les revolucions externes. 1 vol dir uniformement"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:275
+#: ../src/ui/toolbar/spiral-toolbar.cpp:137
 msgid "starts from center"
 msgstr "comença des del centre"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:275
+#: ../src/ui/toolbar/spiral-toolbar.cpp:137
 msgid "starts mid-way"
 msgstr "comença a mig camí"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:275
+#: ../src/ui/toolbar/spiral-toolbar.cpp:137
 msgid "starts near edge"
 msgstr "comença a prop de la vora"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:278
+#: ../src/ui/toolbar/spiral-toolbar.cpp:140
 msgid "Inner radius"
 msgstr "Radi intern"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:278
+#: ../src/ui/toolbar/spiral-toolbar.cpp:140
 msgid "Inner radius:"
 msgstr "Radi intern:"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:278
+#: ../src/ui/toolbar/spiral-toolbar.cpp:140
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr "Radi de la revolució més interna (relatiu a la mida de l'espiral)"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:291
-#: ../src/ui/toolbar/star-toolbar.cpp:589
+#: ../src/ui/toolbar/spiral-toolbar.cpp:159
+#: ../src/ui/toolbar/star-toolbar.cpp:230
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -27236,135 +27235,139 @@ msgstr ""
 "Reinicialitza les opcions per defecte de la forma (useu Preferències > Eines "
 "per canviar els valors per defecte)"
 
+#: ../src/ui/toolbar/spiral-toolbar.cpp:210
+msgid "Change spiral"
+msgstr "Canvia l'espiral"
+
 #. Width
-#: ../src/ui/toolbar/spray-toolbar.cpp:290
+#: ../src/ui/toolbar/spray-toolbar.cpp:90
 msgid "(narrow spray)"
 msgstr "(esprai petit)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:290
+#: ../src/ui/toolbar/spray-toolbar.cpp:90
 msgid "(broad spray)"
 msgstr "(esprai gros)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:293
+#: ../src/ui/toolbar/spray-toolbar.cpp:93
 msgid "The width of the spray area (relative to the visible canvas area)"
 msgstr ""
 "L'amplada de l'àrea afectada per l'esprai (relativa a l'àrea visible del "
 "llenç)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:308
+#: ../src/ui/toolbar/spray-toolbar.cpp:113
 msgid "Use the pressure of the input device to alter the width of spray area"
 msgstr ""
 "Usa la pressió del dispositiu d'entrada per modificar l'amplada de l'àrea de "
 "l'esprai"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:319
+#: ../src/ui/toolbar/spray-toolbar.cpp:122
 msgid "(maximum mean)"
 msgstr "(mediana màxima)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:322
+#: ../src/ui/toolbar/spray-toolbar.cpp:125
 msgid "Focus"
 msgstr "Focus"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:322
+#: ../src/ui/toolbar/spray-toolbar.cpp:125
 msgid "Focus:"
 msgstr "Focus:"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:322
+#: ../src/ui/toolbar/spray-toolbar.cpp:125
 msgid "0 to spray a spot; increase to enlarge the ring radius"
 msgstr "0 per fer esprai a un punt. Incrementeu-lo per fer més gran el radi"
 
 #. Standard_deviation
-#: ../src/ui/toolbar/spray-toolbar.cpp:335
+#: ../src/ui/toolbar/spray-toolbar.cpp:143
 msgid "(minimum scatter)"
 msgstr "(dispersió mínima)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:335
+#: ../src/ui/toolbar/spray-toolbar.cpp:143
 msgid "(maximum scatter)"
 msgstr "(dispersió màxima)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:146
 msgctxt "Spray tool"
 msgid "Scatter"
 msgstr "Dispersió"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:146
 msgctxt "Spray tool"
 msgid "Scatter:"
 msgstr "Dispersió:"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:146
 msgid "Increase to scatter sprayed objects"
 msgstr "Incrementeu-lo per dispersar els objectes amb l'esprai"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:358 ../src/ui/tools/spray-tool.cpp:1353
+#: ../src/ui/toolbar/spray-toolbar.cpp:171 ../src/ui/tools/spray-tool.cpp:1353
 msgid "Spray with copies"
 msgstr "Esprai de còpies"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:359
+#: ../src/ui/toolbar/spray-toolbar.cpp:172
 msgid "Spray copies of the initial selection"
 msgstr "Fes servir còpies de la selecció inicial per l'esprai"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:364 ../src/ui/tools/spray-tool.cpp:1357
+#: ../src/ui/toolbar/spray-toolbar.cpp:177 ../src/ui/tools/spray-tool.cpp:1357
 msgid "Spray with clones"
 msgstr "Esprai de clons"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:365
+#: ../src/ui/toolbar/spray-toolbar.cpp:178
 msgid "Spray clones of the initial selection"
 msgstr "Fes servir clons de la selecció inicial per l'esprai"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:371
+#: ../src/ui/toolbar/spray-toolbar.cpp:184
 msgid "Spray single path"
 msgstr "Fes servir un camí per l'esprai"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:372
+#: ../src/ui/toolbar/spray-toolbar.cpp:185
 msgid "Spray objects in a single path"
 msgstr "Utilitza l'esprai d'objectes al llarg d'un camí"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:378
+#: ../src/ui/toolbar/spray-toolbar.cpp:191
 msgid "Delete sprayed items"
 msgstr "Suprimeix els elements dispersats amb l'esprai"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:379
+#: ../src/ui/toolbar/spray-toolbar.cpp:192
 msgid "Delete sprayed items from selection"
 msgstr "Suprimeix de la selecció els elements dispersats amb l'esprai"
 
 #. Population
-#: ../src/ui/toolbar/spray-toolbar.cpp:402
+#: ../src/ui/toolbar/spray-toolbar.cpp:212
 msgid "(low population)"
 msgstr "(població reduïda)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:402
+#: ../src/ui/toolbar/spray-toolbar.cpp:212
 msgid "(high population)"
 msgstr "(població elevada)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:405
+#: ../src/ui/toolbar/spray-toolbar.cpp:215
 msgid "Amount"
 msgstr "Quantitat"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:406
+#: ../src/ui/toolbar/spray-toolbar.cpp:216
 msgid "Adjusts the number of items sprayed per click"
 msgstr "Ajusta el nombre d'elements que es dispersen amb l'esprai a cada clic"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:422
+#: ../src/ui/toolbar/spray-toolbar.cpp:236
 msgid ""
 "Use the pressure of the input device to alter the amount of sprayed objects"
 msgstr ""
 "Usa la pressió del dispositiu d'entrada per modificar el nombre d'objectes "
 "dispersats amb l'esprai"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:432
+#: ../src/ui/toolbar/spray-toolbar.cpp:244
 msgid "(high rotation variation)"
 msgstr "(molta variació de rotació)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:435
+#: ../src/ui/toolbar/spray-toolbar.cpp:247
 msgid "Rotation"
 msgstr "Rotació"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:435
+#: ../src/ui/toolbar/spray-toolbar.cpp:247
 msgid "Rotation:"
 msgstr "Rotació:"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:437
+#: ../src/ui/toolbar/spray-toolbar.cpp:249
 #, no-c-format
 msgid ""
 "Variation of the rotation of the sprayed objects; 0% for the same rotation "
@@ -27373,21 +27376,21 @@ msgstr ""
 "Variació de la rotació dels objectes amb l'esprai. 0% per utilitzar la "
 "mateixa rotació que l'objecte original"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:450
+#: ../src/ui/toolbar/spray-toolbar.cpp:266
 msgid "(high scale variation)"
 msgstr "(molta variació de l'escala)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:453
+#: ../src/ui/toolbar/spray-toolbar.cpp:269
 msgctxt "Spray tool"
 msgid "Scale"
 msgstr "Escala"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:453
+#: ../src/ui/toolbar/spray-toolbar.cpp:269
 msgctxt "Spray tool"
 msgid "Scale:"
 msgstr "Escala:"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:455
+#: ../src/ui/toolbar/spray-toolbar.cpp:271
 #, no-c-format
 msgid ""
 "Variation in the scale of the sprayed objects; 0% for the same scale than "
@@ -27396,14 +27399,14 @@ msgstr ""
 "Variació de l'escala dels objectes amb l'esprai. 0% per utilitzar la mateixa "
 "mida de l'objecte original."
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:471
+#: ../src/ui/toolbar/spray-toolbar.cpp:291
 msgid "Use the pressure of the input device to alter the scale of new items"
 msgstr ""
 "Usa la pressió del dispositiu d'entrada per modificar l'escala dels elements "
 "nous"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:483
-#: ../src/ui/toolbar/spray-toolbar.cpp:484
+#: ../src/ui/toolbar/spray-toolbar.cpp:302
+#: ../src/ui/toolbar/spray-toolbar.cpp:303
 msgid ""
 "Pick color from the drawing. You can use clonetiler trace dialog for "
 "advanced effects. In clone mode original fill or stroke colors must be unset."
@@ -27412,550 +27415,482 @@ msgstr ""
 "de rajoles per a efectes avançats. En el farcit original del mode clone o "
 "els colors del traç han de ser desactivats."
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:496
-#: ../src/ui/toolbar/spray-toolbar.cpp:497
+#: ../src/ui/toolbar/spray-toolbar.cpp:314
+#: ../src/ui/toolbar/spray-toolbar.cpp:315
 msgid "Pick from center instead average area."
 msgstr "Tria des del centre en comptes de l'àrea mitjana."
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:509
-#: ../src/ui/toolbar/spray-toolbar.cpp:510
+#: ../src/ui/toolbar/spray-toolbar.cpp:326
+#: ../src/ui/toolbar/spray-toolbar.cpp:327
 msgid "Inverted pick value, retaining color in advanced trace mode"
 msgstr "Valor triat invertit, reté el color en el mode de traça"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:522
-#: ../src/ui/toolbar/spray-toolbar.cpp:523
+#: ../src/ui/toolbar/spray-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:339
 msgid "Apply picked color to fill"
 msgstr "Aplica el color escollit a l'emplenat"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:535
-#: ../src/ui/toolbar/spray-toolbar.cpp:536
+#: ../src/ui/toolbar/spray-toolbar.cpp:350
+#: ../src/ui/toolbar/spray-toolbar.cpp:351
 msgid "Apply picked color to stroke"
 msgstr "Aplica el color escollit al traç"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:548
-#: ../src/ui/toolbar/spray-toolbar.cpp:549
+#: ../src/ui/toolbar/spray-toolbar.cpp:362
+#: ../src/ui/toolbar/spray-toolbar.cpp:363
 msgid "No overlap between colors"
 msgstr "No sobreposis entre colors"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:561
-#: ../src/ui/toolbar/spray-toolbar.cpp:562
+#: ../src/ui/toolbar/spray-toolbar.cpp:374
+#: ../src/ui/toolbar/spray-toolbar.cpp:375
 msgid "Apply over transparent areas"
 msgstr "Aplica sobre les àrees transparents"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:574
-#: ../src/ui/toolbar/spray-toolbar.cpp:575
+#: ../src/ui/toolbar/spray-toolbar.cpp:386
+#: ../src/ui/toolbar/spray-toolbar.cpp:387
 msgid "Apply over no transparent areas"
 msgstr "Aplica sobre les àrees no transparents"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:587
-#: ../src/ui/toolbar/spray-toolbar.cpp:588
+#: ../src/ui/toolbar/spray-toolbar.cpp:398
+#: ../src/ui/toolbar/spray-toolbar.cpp:399
 msgid "Prevent overlapping objects"
 msgstr "Evita la sobreposició d'objectes"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:599
+#: ../src/ui/toolbar/spray-toolbar.cpp:409
 msgid "(minimum offset)"
 msgstr "(desplaçament mínim)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:599
+#: ../src/ui/toolbar/spray-toolbar.cpp:409
 msgid "(maximum offset)"
 msgstr "(desplaçament màxim)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:602
+#: ../src/ui/toolbar/spray-toolbar.cpp:412
 msgid "Offset %"
 msgstr "Desplaçament %"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:602
+#: ../src/ui/toolbar/spray-toolbar.cpp:412
 msgid "Offset %:"
 msgstr "Desplaçament %:"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:603
+#: ../src/ui/toolbar/spray-toolbar.cpp:413
 msgid "Increase to segregate objects more (value in percent)"
 msgstr "Incrementa per segregar més els objectes (valor en percentatge)"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:101
-msgid "Star: Change number of corners"
-msgstr "Estel: canvia el nombre de cantonades"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:154
-msgid "Star: Change spoke ratio"
-msgstr "Estel: canvia la relació de punxes"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:200
-msgid "Make polygon"
-msgstr "Fes un polígon"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:200
-msgid "Make star"
-msgstr "Fes un estel"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:239
-msgid "Star: Change rounding"
-msgstr "Estel: canvia l'arrodoniment"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:279
-msgid "Star: Change randomization"
-msgstr "Estel: canvia l'aleatorització"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:488
+#: ../src/ui/toolbar/star-toolbar.cpp:110
 msgid "Regular polygon (with one handle) instead of a star"
 msgstr "Polígon regular (amb un punt de control) en comptes d'un estel"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:494
+#: ../src/ui/toolbar/star-toolbar.cpp:116
 msgid "Star instead of a regular polygon (with one handle)"
 msgstr "Estel en comptes d'un polígon regular (amb un punt de control)"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:516
+#: ../src/ui/toolbar/star-toolbar.cpp:137
 msgid "triangle/tri-star"
 msgstr "triangle/estrella de tres punts"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:516
+#: ../src/ui/toolbar/star-toolbar.cpp:137
 msgid "square/quad-star"
 msgstr "quadrat/estrella de quatre punts"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:516
+#: ../src/ui/toolbar/star-toolbar.cpp:137
 msgid "pentagon/five-pointed star"
 msgstr "pentàgon/estrella de cinc punts"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:516
+#: ../src/ui/toolbar/star-toolbar.cpp:137
 msgid "hexagon/six-pointed star"
 msgstr "hexàgon/estrella de sis punts"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:519
+#: ../src/ui/toolbar/star-toolbar.cpp:140
 msgid "Corners"
 msgstr "Cantonades"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:519
+#: ../src/ui/toolbar/star-toolbar.cpp:140
 msgid "Corners:"
 msgstr "Cantonades:"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:519
+#: ../src/ui/toolbar/star-toolbar.cpp:140
 msgid "Number of corners of a polygon or star"
 msgstr "Nombre de cantonades d'un polígon o un estel"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "thin-ray star"
 msgstr "estrella de puntes fines"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "pentagram"
 msgstr "pentagrama"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "hexagram"
 msgstr "hexagrama"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "heptagram"
 msgstr "heptagrama"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "octagram"
 msgstr "octograma"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "regular polygon"
 msgstr "polígon regular"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:535
+#: ../src/ui/toolbar/star-toolbar.cpp:162
 msgid "Spoke ratio"
 msgstr "Relació de punxes"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:535
+#: ../src/ui/toolbar/star-toolbar.cpp:162
 msgid "Spoke ratio:"
 msgstr "Radi de la punxa:"
 
 #. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
 #. Base radius is the same for the closest handle.
-#: ../src/ui/toolbar/star-toolbar.cpp:538
+#: ../src/ui/toolbar/star-toolbar.cpp:165
 msgid "Base radius to tip radius ratio"
 msgstr "Distància al centre del punt de control més llunyà"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
-#: ../src/ui/toolbar/star-toolbar.cpp:557
+#: ../src/ui/toolbar/star-toolbar.cpp:187
+#: ../src/ui/toolbar/star-toolbar.cpp:188
 msgid "stretched"
 msgstr "estirat"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
+#: ../src/ui/toolbar/star-toolbar.cpp:187
 msgid "twisted"
 msgstr "corbat"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
+#: ../src/ui/toolbar/star-toolbar.cpp:187
 msgid "slightly pinched"
 msgstr "lleugerament cenyit"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
+#: ../src/ui/toolbar/star-toolbar.cpp:187
 msgid "NOT rounded"
 msgstr "Sense arrodonir"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
+#: ../src/ui/toolbar/star-toolbar.cpp:187
 msgid "slightly rounded"
 msgstr "lleugerament arrodonit"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:557
+#: ../src/ui/toolbar/star-toolbar.cpp:188
 msgid "visibly rounded"
 msgstr "bastant arrodonit"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:557
+#: ../src/ui/toolbar/star-toolbar.cpp:188
 msgid "well rounded"
 msgstr "ben arrodonit"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:557
+#: ../src/ui/toolbar/star-toolbar.cpp:188
 msgid "amply rounded"
 msgstr "molt arrodonit"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:557
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:188
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 msgid "blown up"
 msgstr "explotat"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:560
+#: ../src/ui/toolbar/star-toolbar.cpp:191
 msgid "Rounded:"
 msgstr "Arrodoniment:"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:560
+#: ../src/ui/toolbar/star-toolbar.cpp:191
 msgid "How much rounded are the corners (0 for sharp)"
 msgstr "Arrodoniment de les cantonades (0=sense arrodonir)"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 msgid "NOT randomized"
 msgstr "Sense aleatoritzar"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 msgid "slightly irregular"
 msgstr "lleugerament irregular"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 msgid "visibly randomized"
 msgstr "visiblement aleatori"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 msgid "strongly randomized"
 msgstr "molt aleatoritzat"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:575
+#: ../src/ui/toolbar/star-toolbar.cpp:211
 msgid "Randomized"
 msgstr "Aleatoritzat"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:575
+#: ../src/ui/toolbar/star-toolbar.cpp:211
 msgid "Randomized:"
 msgstr "Aleatorització:"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:575
+#: ../src/ui/toolbar/star-toolbar.cpp:211
 msgid "Scatter randomly the corners and angles"
 msgstr "Distribueix a l'atzar les cantonades i els angles"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:184
-msgid "Text: Change font family"
-msgstr "Text: canvia la tipografia"
+#: ../src/ui/toolbar/star-toolbar.cpp:281
+msgid "Make polygon"
+msgstr "Fes un polígon"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:278
-msgid "Text: Change font size"
-msgstr "Text: canvia la mida de la lletra"
+#: ../src/ui/toolbar/star-toolbar.cpp:281
+msgid "Make star"
+msgstr "Fes un estel"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:323
-msgid "Text: Change font style"
-msgstr "Text: canvia l'estil de la tipografia"
+#: ../src/ui/toolbar/star-toolbar.cpp:326
+msgid "Star: Change number of corners"
+msgstr "Estel: canvia el nombre de cantonades"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:362
-msgid "Text: Unset line height."
-msgstr "Text: desassigna l'alçada de la línia."
+#: ../src/ui/toolbar/star-toolbar.cpp:378
+msgid "Star: Change spoke ratio"
+msgstr "Estel: canvia la relació de punxes"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:439
-msgid "Text: Change superscript or subscript"
-msgstr "Text: canvia el superíndex o el subíndex"
+#: ../src/ui/toolbar/star-toolbar.cpp:416
+msgid "Star: Change rounding"
+msgstr "Estel: canvia l'arrodoniment"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:580
-msgid "Text: Change alignment"
-msgstr "Text: canvia l'alineació"
+#: ../src/ui/toolbar/star-toolbar.cpp:455
+msgid "Star: Change randomization"
+msgstr "Estel: canvia l'aleatorització"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:713
-msgid "Text: Change line-height"
-msgstr "Text: canvia l'alçada de la línia"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:877
-msgid "Text: Change line-height unit"
-msgstr "Text: canvia la unitat d'alçada de la línia"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1057
-msgid "Text: Change line spacing mode"
-msgstr "Text: canvia el mode d'interlineat"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1094
-msgid "Text: Change word-spacing"
-msgstr "Text: canvia l'espai entre paraules"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1134
-msgid "Text: Change letter-spacing"
-msgstr "Text: canvia l'espai entre lletres"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1172
-msgid "Text: Change dx (kern)"
-msgstr "Text: canvia el dx (interlletratge)"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1206
-msgid "Text: Change dy"
-msgstr "Text: canvia el dy"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1241
-msgid "Text: Change rotate"
-msgstr "Text: canvia la rotació"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1292
-msgid "Text: Change writing mode"
-msgstr "Text: canvia el mode d'escriptura"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1346
-msgid "Text: Change orientation"
-msgstr "Text: canvia l'orientació"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1394
-msgid "Text: Change direction"
-msgstr "Text: canvia la direcció"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1583
-#: ../src/ui/toolbar/text-toolbar.cpp:2040
-#: ../src/ui/widget/font-selector.cpp:32 ../src/ui/widget/font-selector.cpp:137
-msgid "Font size"
-msgstr "Mida de la lletra"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1992
+#: ../src/ui/toolbar/text-toolbar.cpp:295
 msgid "Font Family"
 msgstr "Tipografia"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1993
+#: ../src/ui/toolbar/text-toolbar.cpp:296
 msgid "Select Font Family (Alt-X to access)"
 msgstr "Selecciona la tipografia (Alt+X per accedir-hi)"
 
 #. Focus widget
 #. Enable entry completion
-#: ../src/ui/toolbar/text-toolbar.cpp:2003
+#: ../src/ui/toolbar/text-toolbar.cpp:306
 msgid "Select all text with this font-family"
 msgstr "Selecciona tot el text amb aquesta tipografia"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2007
+#: ../src/ui/toolbar/text-toolbar.cpp:310
 msgid "Font not found on system"
 msgstr "No s'ha trobat la tipografia al sistema"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2065
+#: ../src/ui/toolbar/text-toolbar.cpp:342
+#: ../src/ui/toolbar/text-toolbar.cpp:2221
+#: ../src/ui/widget/font-selector.cpp:32 ../src/ui/widget/font-selector.cpp:137
+msgid "Font size"
+msgstr "Mida de la lletra"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:366
 msgid "Font Style"
 msgstr "Estil de la tipografia"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2066
+#: ../src/ui/toolbar/text-toolbar.cpp:367
 msgid "Font style"
 msgstr "Estil de tipografia"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2083
+#: ../src/ui/toolbar/text-toolbar.cpp:383
 msgid "Toggle Superscript"
 msgstr "Commuta superíndex"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2084
+#: ../src/ui/toolbar/text-toolbar.cpp:384
 msgid "Toggle superscript"
 msgstr "Commuta l'estil superíndex"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2096
+#: ../src/ui/toolbar/text-toolbar.cpp:395
 msgid "Toggle Subscript"
 msgstr "Commuta subíndex"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2097
+#: ../src/ui/toolbar/text-toolbar.cpp:396
 msgid "Toggle subscript"
 msgstr "Commuta l'estil subíndex"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2115
-#: ../src/ui/toolbar/text-toolbar.cpp:2116
+#: ../src/ui/toolbar/text-toolbar.cpp:413
+#: ../src/ui/toolbar/text-toolbar.cpp:414
 msgid "Align left"
 msgstr "Alinea a l'esquerra"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2121
-#: ../src/ui/toolbar/text-toolbar.cpp:2122
+#: ../src/ui/toolbar/text-toolbar.cpp:419
+#: ../src/ui/toolbar/text-toolbar.cpp:420
 msgid "Align center"
 msgstr "Alinea al centre"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2127
-#: ../src/ui/toolbar/text-toolbar.cpp:2128
+#: ../src/ui/toolbar/text-toolbar.cpp:425
+#: ../src/ui/toolbar/text-toolbar.cpp:426
 msgid "Align right"
 msgstr "Alinea a la dreta"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2133
+#: ../src/ui/toolbar/text-toolbar.cpp:431
 msgid "Justify"
 msgstr "Justifica"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2134
+#: ../src/ui/toolbar/text-toolbar.cpp:432
 msgid "Justify (only flowed text)"
 msgstr "Justifica (només el text flotant)"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2140
+#: ../src/ui/toolbar/text-toolbar.cpp:438
 msgid "Alignment"
 msgstr "Alineació"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2141
+#: ../src/ui/toolbar/text-toolbar.cpp:439
 msgid "Text alignment"
 msgstr "Alineació del text"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2165
+#: ../src/ui/toolbar/text-toolbar.cpp:462
 msgid "Horizontal text"
 msgstr "Text horitzontal"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2170
+#: ../src/ui/toolbar/text-toolbar.cpp:467
 msgid "Vertical — RL"
 msgstr "Vertical — DE"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2171
+#: ../src/ui/toolbar/text-toolbar.cpp:468
 msgid "Vertical text — lines: right to left"
 msgstr "Text vertical — línies: dreta a esquerra"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2176
+#: ../src/ui/toolbar/text-toolbar.cpp:473
 msgid "Vertical — LR"
 msgstr "Vertical — ED"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2177
+#: ../src/ui/toolbar/text-toolbar.cpp:474
 msgid "Vertical text — lines: left to right"
 msgstr "Text vertical — línies: esquerra a dreta"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2183
+#: ../src/ui/toolbar/text-toolbar.cpp:480
 msgid "Writing mode"
 msgstr "Mode d'escriptura"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2184
+#: ../src/ui/toolbar/text-toolbar.cpp:481
 msgid "Block progression"
 msgstr "Progrés del bloc"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2208
+#: ../src/ui/toolbar/text-toolbar.cpp:504
 msgid "Auto glyph orientation"
 msgstr "Orientació automàtica del glif"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2213
+#: ../src/ui/toolbar/text-toolbar.cpp:509
 msgid "Upright"
 msgstr "Vertical"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2214
+#: ../src/ui/toolbar/text-toolbar.cpp:510
 msgid "Upright glyph orientation"
 msgstr "Orientació vertical del glif"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2219
+#: ../src/ui/toolbar/text-toolbar.cpp:515
 msgid "Sideways"
 msgstr "De costat"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2220
+#: ../src/ui/toolbar/text-toolbar.cpp:516
 msgid "Sideways glyph orientation"
 msgstr "Orienta el glif de costat"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2226
+#: ../src/ui/toolbar/text-toolbar.cpp:522
 msgid "Text orientation"
 msgstr "Orientació del text"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2227
+#: ../src/ui/toolbar/text-toolbar.cpp:523
 msgid "Text (glyph) orientation in vertical text."
 msgstr "Orientació del text (glif) en text vertical."
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2251
+#: ../src/ui/toolbar/text-toolbar.cpp:545
 msgid "LTR"
 msgstr "LTR"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2252
+#: ../src/ui/toolbar/text-toolbar.cpp:546
 msgid "Left to right text"
 msgstr "Text d'esquerra a dreta"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2257
+#: ../src/ui/toolbar/text-toolbar.cpp:551
 msgid "RTL"
 msgstr "RTL"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2258
+#: ../src/ui/toolbar/text-toolbar.cpp:552
 msgid "Right to left text"
 msgstr "Text dreta a esquerra"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2264
+#: ../src/ui/toolbar/text-toolbar.cpp:558
 msgid "Text direction"
 msgstr "Direcció del text"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2265
+#: ../src/ui/toolbar/text-toolbar.cpp:559
 msgid "Text direction for normally horizontal text."
 msgstr "Direcció del text pel text horitzontal normal."
 
 #. Drop down menu
-#: ../src/ui/toolbar/text-toolbar.cpp:2291
+#: ../src/ui/toolbar/text-toolbar.cpp:575
 msgid "Smaller spacing"
 msgstr "Menys espai"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2291
-#: ../src/ui/toolbar/text-toolbar.cpp:2379
-#: ../src/ui/toolbar/text-toolbar.cpp:2410
+#: ../src/ui/toolbar/text-toolbar.cpp:575
+#: ../src/ui/toolbar/text-toolbar.cpp:666
+#: ../src/ui/toolbar/text-toolbar.cpp:699
 msgctxt "Text tool"
 msgid "Normal"
 msgstr "Normal"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2291
+#: ../src/ui/toolbar/text-toolbar.cpp:575
 msgid "Larger spacing"
 msgstr "Més espai"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2296
+#: ../src/ui/toolbar/text-toolbar.cpp:580
 msgid "Line Height"
 msgstr "Alçada de la línia"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2297
+#: ../src/ui/toolbar/text-toolbar.cpp:581
 msgid "Line:"
 msgstr "Línia:"
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2298
+#: ../src/ui/toolbar/text-toolbar.cpp:582
 msgid "Spacing between baselines"
 msgstr "Espai entre les línies de base"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2337
+#: ../src/ui/toolbar/text-toolbar.cpp:625
 msgid "Adaptive"
 msgstr "Adaptable"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2338
+#: ../src/ui/toolbar/text-toolbar.cpp:626
 msgid "Line spacing adapts to font size."
 msgstr "Espaiat entre línies adaptat a la mida del tipus de lletra."
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2343
+#: ../src/ui/toolbar/text-toolbar.cpp:631
 #: ../share/extensions/polyhedron_3d.inx.h:54
 msgid "Minimum"
 msgstr "Mínim"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2344
+#: ../src/ui/toolbar/text-toolbar.cpp:632
 msgid "Line spacing adapts to fonts size with set minimum spacing."
 msgstr ""
 "L'espaiat de línies s'adapta a la mida dels tipus de lletra amb l'espaiat "
 "mínim establert."
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2348
+#: ../src/ui/toolbar/text-toolbar.cpp:636
 msgid "Even"
 msgstr "Uniforme"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2349
+#: ../src/ui/toolbar/text-toolbar.cpp:637
 msgid "Lines evenly spaced."
 msgstr "Línies separades uniformement."
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2354
+#: ../src/ui/toolbar/text-toolbar.cpp:642
 msgid "Adjustable ☠"
 msgstr "Ajustable ☠"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2355
+#: ../src/ui/toolbar/text-toolbar.cpp:643
 msgid "Line spacing fully adjustable"
 msgstr "Espaiat de línia totalment ajustable"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2361
+#: ../src/ui/toolbar/text-toolbar.cpp:649
 msgid "Line Spacing Mode"
 msgstr "Mode d'espaiat de línia"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2362
+#: ../src/ui/toolbar/text-toolbar.cpp:650
 msgid ""
 "How should multiple baselines be spaced?\n"
 " Adaptive: Line spacing adapts to font size.\n"
@@ -27970,110 +27905,110 @@ msgstr ""
 " Ajustable: sense restriccions."
 
 #. Drop down menu
-#: ../src/ui/toolbar/text-toolbar.cpp:2379
-#: ../src/ui/toolbar/text-toolbar.cpp:2410
+#: ../src/ui/toolbar/text-toolbar.cpp:666
+#: ../src/ui/toolbar/text-toolbar.cpp:699
 msgid "Negative spacing"
 msgstr "Espaiat negatiu"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2379
-#: ../src/ui/toolbar/text-toolbar.cpp:2410
+#: ../src/ui/toolbar/text-toolbar.cpp:666
+#: ../src/ui/toolbar/text-toolbar.cpp:699
 msgid "Positive spacing"
 msgstr "Espaiat positiu"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2384
+#: ../src/ui/toolbar/text-toolbar.cpp:671
 msgid "Word spacing"
 msgstr "Espai entre paraules"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2385
+#: ../src/ui/toolbar/text-toolbar.cpp:672
 msgid "Word:"
 msgstr "Paraula:"
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2386
+#: ../src/ui/toolbar/text-toolbar.cpp:673
 msgid "Spacing between words (px)"
 msgstr "Espai entre paraules (px)"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2415
+#: ../src/ui/toolbar/text-toolbar.cpp:704
 msgid "Letter spacing"
 msgstr "Espai entre lletres"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2416
+#: ../src/ui/toolbar/text-toolbar.cpp:705
 msgid "Letter:"
 msgstr "Lletra:"
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2417
+#: ../src/ui/toolbar/text-toolbar.cpp:706
 msgid "Spacing between letters (px)"
 msgstr "Espai entre lletres (px)"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2446
+#: ../src/ui/toolbar/text-toolbar.cpp:736
 msgid "Kerning"
 msgstr "Interlletratge"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2447
+#: ../src/ui/toolbar/text-toolbar.cpp:737
 msgid "Kern:"
 msgstr "Interlletratge:"
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2448
+#: ../src/ui/toolbar/text-toolbar.cpp:738
 msgid "Horizontal kerning (px)"
 msgstr "Interlletratge horitzontal (px)"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2477
+#: ../src/ui/toolbar/text-toolbar.cpp:768
 msgid "Vertical Shift"
 msgstr "Desplaçament vertical"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2478
+#: ../src/ui/toolbar/text-toolbar.cpp:769
 msgid "Vert:"
 msgstr "Vert:"
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2479
+#: ../src/ui/toolbar/text-toolbar.cpp:770
 msgid "Vertical shift (px)"
 msgstr "Desplaçament vertical (px)"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2508
+#: ../src/ui/toolbar/text-toolbar.cpp:800
 msgid "Letter rotation"
 msgstr "Rotació de la lletra"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2509
+#: ../src/ui/toolbar/text-toolbar.cpp:801
 msgid "Rot:"
 msgstr "Rot:"
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2510
+#: ../src/ui/toolbar/text-toolbar.cpp:802
 msgid "Character rotation (degrees)"
 msgstr "Rotació dels caràcters (graus)"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2534
+#: ../src/ui/toolbar/text-toolbar.cpp:827
 msgid "Unset line height"
 msgstr "Desassigna l'alçada de la línia"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2535
+#: ../src/ui/toolbar/text-toolbar.cpp:828
 msgid "If enabled, line height is set on part of selection. Click to unset."
 msgstr ""
 "Si està habilitat, l'alçada de la línia s'estableix en part de la selecció. "
 "Feu clic per desactivar-ho."
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2547
+#: ../src/ui/toolbar/text-toolbar.cpp:839
 msgid "Show outer style"
 msgstr "Mostra l'estil exterior"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2548
+#: ../src/ui/toolbar/text-toolbar.cpp:840
 msgid ""
 "Show style of outermost text element. The 'font-size' and 'line-height' "
 "values of the outermost text element determine the minimum line spacing in "
@@ -28083,216 +28018,284 @@ msgstr ""
 "«line-height» de l'element de text més exterior determinen l'espaiat mínim "
 "de les línies al bloc."
 
+#: ../src/ui/toolbar/text-toolbar.cpp:914
+msgid "Text: Change font family"
+msgstr "Text: canvia la tipografia"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1010
+msgid "Text: Change font size"
+msgstr "Text: canvia la mida de la lletra"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1055
+msgid "Text: Change font style"
+msgstr "Text: canvia l'estil de la tipografia"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1139
+msgid "Text: Change superscript or subscript"
+msgstr "Text: canvia el superíndex o el subíndex"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1281
+msgid "Text: Change alignment"
+msgstr "Text: canvia l'alineació"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1336
+msgid "Text: Change writing mode"
+msgstr "Text: canvia el mode d'escriptura"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1391
+msgid "Text: Change orientation"
+msgstr "Text: canvia l'orientació"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1440
+msgid "Text: Change direction"
+msgstr "Text: canvia la direcció"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1509
+msgid "Text: Change line-height"
+msgstr "Text: canvia l'alçada de la línia"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1669
+msgid "Text: Change line-height unit"
+msgstr "Text: canvia la unitat d'alçada de la línia"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1841
+msgid "Text: Change line spacing mode"
+msgstr "Text: canvia el mode d'interlineat"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1879
+msgid "Text: Change word-spacing"
+msgstr "Text: canvia l'espai entre paraules"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1920
+msgid "Text: Change letter-spacing"
+msgstr "Text: canvia l'espai entre lletres"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1958
+msgid "Text: Change dx (kern)"
+msgstr "Text: canvia el dx (interlletratge)"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1993
+msgid "Text: Change dy"
+msgstr "Text: canvia el dy"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:2029
+msgid "Text: Change rotate"
+msgstr "Text: canvia la rotació"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:2056
+msgid "Text: Unset line height."
+msgstr "Text: desassigna l'alçada de la línia."
+
 #. Width
-#: ../src/ui/toolbar/tweak-toolbar.cpp:126
+#: ../src/ui/toolbar/tweak-toolbar.cpp:92
 msgid "(pinch tweak)"
 msgstr "(deforma suau)"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:126
+#: ../src/ui/toolbar/tweak-toolbar.cpp:92
 msgid "(broad tweak)"
 msgstr "(deforma fort)"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:129
+#: ../src/ui/toolbar/tweak-toolbar.cpp:95
 msgid "The width of the tweak area (relative to the visible canvas area)"
 msgstr ""
 "L'amplada de l'àrea de deformació (relativa a l'àrea visible del llenç)"
 
 #. Force
-#: ../src/ui/toolbar/tweak-toolbar.cpp:143
+#: ../src/ui/toolbar/tweak-toolbar.cpp:115
 msgid "(minimum force)"
 msgstr "(força mínima)"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:143
+#: ../src/ui/toolbar/tweak-toolbar.cpp:115
 msgid "(maximum force)"
 msgstr "(força màxima)"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:146
+#: ../src/ui/toolbar/tweak-toolbar.cpp:118
 msgid "Force"
 msgstr "Força"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:146
+#: ../src/ui/toolbar/tweak-toolbar.cpp:118
 msgid "Force:"
 msgstr "Força:"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:146
+#: ../src/ui/toolbar/tweak-toolbar.cpp:118
 msgid "The force of the tweak action"
 msgstr "La força de la deformació"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:166
+#: ../src/ui/toolbar/tweak-toolbar.cpp:143
 msgid "Move mode"
 msgstr "Mode mou"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:167
+#: ../src/ui/toolbar/tweak-toolbar.cpp:144
 msgid "Move objects in any direction"
 msgstr "Mou els objectes en qualsevol direcció"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:172
+#: ../src/ui/toolbar/tweak-toolbar.cpp:149
 msgid "Move in/out mode"
 msgstr "Mode mou cap a/des de"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:173
+#: ../src/ui/toolbar/tweak-toolbar.cpp:150
 msgid "Move objects towards cursor; with Shift from cursor"
 msgstr ""
 "Mou els objectes cap al cursor o bé des del cursor amb la tecla Majúscules"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:178
+#: ../src/ui/toolbar/tweak-toolbar.cpp:155
 msgid "Move jitter mode"
 msgstr "Mode mou sacsejant"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:179
+#: ../src/ui/toolbar/tweak-toolbar.cpp:156
 msgid "Move objects in random directions"
 msgstr "Mou els objectes en una direcció aleatòria"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:184
+#: ../src/ui/toolbar/tweak-toolbar.cpp:161
 msgid "Scale mode"
 msgstr "Mode amplia/redueix"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:185
+#: ../src/ui/toolbar/tweak-toolbar.cpp:162
 msgid "Shrink objects, with Shift enlarge"
 msgstr ""
 "Amplia la mida dels objectes o bé els encongeix amb la tecla Majúscules"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:190
+#: ../src/ui/toolbar/tweak-toolbar.cpp:167
 msgid "Rotate mode"
 msgstr "Mode gira"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:191
+#: ../src/ui/toolbar/tweak-toolbar.cpp:168
 msgid "Rotate objects, with Shift counterclockwise"
 msgstr ""
 "Gira els objectes en sentit horari, amb Majúscules els gira en sentit "
 "antihorari"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:196
+#: ../src/ui/toolbar/tweak-toolbar.cpp:173
 msgid "Duplicate/delete mode"
 msgstr "Mode duplica/suprimeix"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:197
+#: ../src/ui/toolbar/tweak-toolbar.cpp:174
 msgid "Duplicate objects, with Shift delete"
 msgstr "Duplica els objectes o bé els suprimeix amb la tecla Majúscules"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:202
+#: ../src/ui/toolbar/tweak-toolbar.cpp:179
 msgid "Push mode"
 msgstr "Mode empeny"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:203
+#: ../src/ui/toolbar/tweak-toolbar.cpp:180
 msgid "Push parts of paths in any direction"
 msgstr "Empeny les parts del camí en qualsevol direcció"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:208
+#: ../src/ui/toolbar/tweak-toolbar.cpp:185
 msgid "Shrink/grow mode"
 msgstr "Mode amplia/redueix camins"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:209
+#: ../src/ui/toolbar/tweak-toolbar.cpp:186
 msgid "Shrink (inset) parts of paths; with Shift grow (outset)"
 msgstr ""
 "Encongeix (contrau) les parts internes dels camins o bé les amplia amb la "
 "tecla Majúscules"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:214
+#: ../src/ui/toolbar/tweak-toolbar.cpp:191
 msgid "Attract/repel mode"
 msgstr "Mode atrau/repèl"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:215
+#: ../src/ui/toolbar/tweak-toolbar.cpp:192
 msgid "Attract parts of paths towards cursor; with Shift from cursor"
 msgstr ""
 "Atrau els camins cap al cursor o bé els repel·leix amb la tecla Majúscules"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:220
+#: ../src/ui/toolbar/tweak-toolbar.cpp:197
 msgid "Roughen mode"
 msgstr "Mode arruga"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:221
+#: ../src/ui/toolbar/tweak-toolbar.cpp:198
 msgid "Roughen parts of paths"
 msgstr "Arruga els camins"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:226
+#: ../src/ui/toolbar/tweak-toolbar.cpp:203
 msgid "Color paint mode"
 msgstr "Mode pinta amb el color"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:227
+#: ../src/ui/toolbar/tweak-toolbar.cpp:204
 msgid "Paint the tool's color upon selected objects"
 msgstr "Pinta amb el color de l'eina sobre els objectes seleccionats"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:232
+#: ../src/ui/toolbar/tweak-toolbar.cpp:209
 msgid "Color jitter mode"
 msgstr "Mode sacseja el color"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:233
+#: ../src/ui/toolbar/tweak-toolbar.cpp:210
 msgid "Jitter the colors of selected objects"
 msgstr "Sacseja el color dels objectes seleccionats"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:238
+#: ../src/ui/toolbar/tweak-toolbar.cpp:215
 msgid "Blur mode"
 msgstr "Mode desenfoca"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:239
+#: ../src/ui/toolbar/tweak-toolbar.cpp:216
 msgid "Blur selected objects more; with Shift, blur less"
 msgstr ""
 "Desenfoca encara més els objectes seleccionats o bé desenfoca menys amb la "
 "tecla Majúscules"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:266
+#: ../src/ui/toolbar/tweak-toolbar.cpp:242
 msgid "Channels:"
 msgstr "Canals:"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:278
+#: ../src/ui/toolbar/tweak-toolbar.cpp:253
 msgid "In color mode, act on objects' hue"
 msgstr "En el mode de color, actua sobre el to de l'objecte"
 
 #. TRANSLATORS:  "H" here stands for hue
-#: ../src/ui/toolbar/tweak-toolbar.cpp:282
+#: ../src/ui/toolbar/tweak-toolbar.cpp:257
 msgctxt "Hue"
 msgid "H"
 msgstr "T"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:294
+#: ../src/ui/toolbar/tweak-toolbar.cpp:268
 msgid "In color mode, act on objects' saturation"
 msgstr "En el mode de color, actua sobre la saturació de l'objecte"
 
 #. TRANSLATORS: "S" here stands for Saturation
-#: ../src/ui/toolbar/tweak-toolbar.cpp:298
+#: ../src/ui/toolbar/tweak-toolbar.cpp:272
 msgctxt "Saturation"
 msgid "S"
 msgstr "S"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:310
+#: ../src/ui/toolbar/tweak-toolbar.cpp:283
 msgid "In color mode, act on objects' lightness"
 msgstr "En el mode de color, actua sobre la lluminositat de l'objecte"
 
 #. TRANSLATORS: "L" here stands for Lightness
-#: ../src/ui/toolbar/tweak-toolbar.cpp:314
+#: ../src/ui/toolbar/tweak-toolbar.cpp:287
 msgctxt "Lightness"
 msgid "L"
 msgstr "L"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:326
+#: ../src/ui/toolbar/tweak-toolbar.cpp:298
 msgid "In color mode, act on objects' opacity"
 msgstr "En el mode de color, actua en l'opacitat de l'objecte"
 
 #. TRANSLATORS: "O" here stands for Opacity
-#: ../src/ui/toolbar/tweak-toolbar.cpp:330
+#: ../src/ui/toolbar/tweak-toolbar.cpp:302
 msgctxt "Opacity"
 msgid "O"
 msgstr "O"
 
 #. Fidelity
-#: ../src/ui/toolbar/tweak-toolbar.cpp:341
+#: ../src/ui/toolbar/tweak-toolbar.cpp:312
 msgid "(rough, simplified)"
 msgstr "(aproximat, simplificat)"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:341
+#: ../src/ui/toolbar/tweak-toolbar.cpp:312
 msgid "(fine, but many nodes)"
 msgstr "(exacte, però amb massa nodes)"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:344
+#: ../src/ui/toolbar/tweak-toolbar.cpp:315
 msgid "Fidelity"
 msgstr "Fidelitat"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:344
+#: ../src/ui/toolbar/tweak-toolbar.cpp:315
 msgid "Fidelity:"
 msgstr "Fidelitat:"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:345
+#: ../src/ui/toolbar/tweak-toolbar.cpp:316
 msgid ""
 "Low fidelity simplifies paths; high fidelity preserves path features but may "
 "generate a lot of new nodes"
@@ -28300,7 +28303,7 @@ msgstr ""
 "Una fidelitat baixa simplifica els camins; una fidelitat alta preserva les "
 "propietats del camí però pot generar una gran quantitat de nodes"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:364
+#: ../src/ui/toolbar/tweak-toolbar.cpp:340
 msgid "Use the pressure of the input device to alter the force of tweak action"
 msgstr ""
 "Usa la pressió del dispositiu d'entrada per modificar la força de l'àrea de "
@@ -33560,7 +33563,7 @@ msgstr "_Desa com a SVG de l'Inkscape"
 msgid "Note:"
 msgstr "Nota:"
 
-#: ../src/widgets/desktop-widget.cpp:2330
+#: ../src/widgets/desktop-widget.cpp:2329
 msgid "Create guide"
 msgstr "Crea una guia"
 
@@ -33975,133 +33978,133 @@ msgstr "TBD"
 msgid "Style of Paint Bucket fill objects"
 msgstr "Estil dels objectes d'emplenat del cubell"
 
-#: ../src/widgets/toolbox.cpp:1318
+#: ../src/widgets/toolbox.cpp:1320
 msgid "Bounding box"
 msgstr "Capsa contenidora"
 
-#: ../src/widgets/toolbox.cpp:1318
+#: ../src/widgets/toolbox.cpp:1320
 msgid "Snap bounding boxes"
 msgstr "Ajusta a la capsa contenidora"
 
-#: ../src/widgets/toolbox.cpp:1327
+#: ../src/widgets/toolbox.cpp:1329
 msgid "Bounding box edges"
 msgstr "Vores de la capsa contenidora"
 
-#: ../src/widgets/toolbox.cpp:1327
+#: ../src/widgets/toolbox.cpp:1329
 msgid "Snap to edges of a bounding box"
 msgstr "Ajusta a les vores de la capsa contenidora"
 
-#: ../src/widgets/toolbox.cpp:1336
+#: ../src/widgets/toolbox.cpp:1338
 msgid "Bounding box corners"
 msgstr "Cantonades de la capsa contenidora"
 
-#: ../src/widgets/toolbox.cpp:1336
+#: ../src/widgets/toolbox.cpp:1338
 msgid "Snap bounding box corners"
 msgstr "Ajusta les vores de la capsa contenidora"
 
-#: ../src/widgets/toolbox.cpp:1345
+#: ../src/widgets/toolbox.cpp:1347
 msgid "BBox Edge Midpoints"
 msgstr "Punt mig del costat de la capsa"
 
-#: ../src/widgets/toolbox.cpp:1345
+#: ../src/widgets/toolbox.cpp:1347
 msgid "Snap midpoints of bounding box edges"
 msgstr "Ajusta al punt mig dels costats de la capsa contenidora"
 
-#: ../src/widgets/toolbox.cpp:1355
+#: ../src/widgets/toolbox.cpp:1357
 msgid "BBox Centers"
 msgstr "Centre de la capsa"
 
-#: ../src/widgets/toolbox.cpp:1355
+#: ../src/widgets/toolbox.cpp:1357
 msgid "Snapping centers of bounding boxes"
 msgstr "Ajusta els centres de les capses contenidores"
 
-#: ../src/widgets/toolbox.cpp:1364
+#: ../src/widgets/toolbox.cpp:1366
 msgid "Snap nodes, paths, and handles"
 msgstr "Ajusta els nodes, camins, i nanses"
 
-#: ../src/widgets/toolbox.cpp:1372
+#: ../src/widgets/toolbox.cpp:1374
 msgid "Snap to paths"
 msgstr "Ajusta als camins"
 
-#: ../src/widgets/toolbox.cpp:1381
+#: ../src/widgets/toolbox.cpp:1383
 msgid "Path intersections"
 msgstr "Interseccions del camí"
 
-#: ../src/widgets/toolbox.cpp:1381
+#: ../src/widgets/toolbox.cpp:1383
 msgid "Snap to path intersections"
 msgstr "Ajusta a les interseccions del camí"
 
-#: ../src/widgets/toolbox.cpp:1390
+#: ../src/widgets/toolbox.cpp:1392
 msgid "To nodes"
 msgstr "Als nodes"
 
-#: ../src/widgets/toolbox.cpp:1390
+#: ../src/widgets/toolbox.cpp:1392
 msgid "Snap cusp nodes, incl. rectangle corners"
 msgstr "Ajusta nodes en punta, incloses les vores dels rectangles"
 
-#: ../src/widgets/toolbox.cpp:1399
+#: ../src/widgets/toolbox.cpp:1401
 msgid "Smooth nodes"
 msgstr "Nodes suaus"
 
-#: ../src/widgets/toolbox.cpp:1399
+#: ../src/widgets/toolbox.cpp:1401
 msgid "Snap smooth nodes, incl. quadrant points of ellipses"
 msgstr "Ajusta a nodes suaus, inclosos punts del quadrant d'el·lipses"
 
-#: ../src/widgets/toolbox.cpp:1408
+#: ../src/widgets/toolbox.cpp:1410
 msgid "Line Midpoints"
 msgstr "Punts mig de la línia"
 
-#: ../src/widgets/toolbox.cpp:1408
+#: ../src/widgets/toolbox.cpp:1410
 msgid "Snap midpoints of line segments"
 msgstr "Ajusta els punts mig de cada segment"
 
-#: ../src/widgets/toolbox.cpp:1417
+#: ../src/widgets/toolbox.cpp:1419
 msgid "Others"
 msgstr "Altres"
 
-#: ../src/widgets/toolbox.cpp:1417
+#: ../src/widgets/toolbox.cpp:1419
 msgid "Snap other points (centers, guide origins, gradient handles, etc.)"
 msgstr ""
 "Ajusta altres punts (centres, orígens guia, punts de control de degradat, "
 "etc. )"
 
-#: ../src/widgets/toolbox.cpp:1425
+#: ../src/widgets/toolbox.cpp:1427
 msgid "Object Centers"
 msgstr "Centres dels objectes"
 
-#: ../src/widgets/toolbox.cpp:1425
+#: ../src/widgets/toolbox.cpp:1427
 msgid "Snap centers of objects"
 msgstr "Ajusta als centres dels objectes"
 
-#: ../src/widgets/toolbox.cpp:1434
+#: ../src/widgets/toolbox.cpp:1436
 msgid "Rotation Centers"
 msgstr "Centres de rotació"
 
-#: ../src/widgets/toolbox.cpp:1434
+#: ../src/widgets/toolbox.cpp:1436
 msgid "Snap an item's rotation center"
 msgstr "Ajusta el centre de rotació de l'element"
 
-#: ../src/widgets/toolbox.cpp:1443
+#: ../src/widgets/toolbox.cpp:1445
 msgid "Text baseline"
 msgstr "Línia base del text"
 
-#: ../src/widgets/toolbox.cpp:1443
+#: ../src/widgets/toolbox.cpp:1445
 msgid "Snap text anchors and baselines"
 msgstr "Ajusta les àncores del text i les línies base"
 
-#: ../src/widgets/toolbox.cpp:1453
+#: ../src/widgets/toolbox.cpp:1455
 msgid "Page border"
 msgstr "Vora de la pàgina"
 
-#: ../src/widgets/toolbox.cpp:1453
+#: ../src/widgets/toolbox.cpp:1455
 msgid "Snap to the page border"
 msgstr "Ajusta a la vora de la pàgina"
 
-#: ../src/widgets/toolbox.cpp:1462
+#: ../src/widgets/toolbox.cpp:1464
 msgid "Snap to grids"
 msgstr "Ajusta a les graelles"
 
-#: ../src/widgets/toolbox.cpp:1471
+#: ../src/widgets/toolbox.cpp:1473
 msgid "Snap guides"
 msgstr "Ajusta a les guies"
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-01-17 00:47+0100\n"
+"POT-Creation-Date: 2019-01-20 11:29+0100\n"
 "PO-Revision-Date: 2016-11-23 18:10+0800\n"
 "Last-Translator: Dongjun Wu <ziyawu@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@linux.org.tw>\n"
@@ -4483,7 +4483,7 @@ msgstr "Z 軸的基本長度"
 
 #: ../src/display/canvas-axonomgrid.cpp:282
 #: ../src/ui/dialog/inkscape-preferences.cpp:1109
-#: ../src/ui/toolbar/box3d-toolbar.cpp:303
+#: ../src/ui/toolbar/box3d-toolbar.cpp:89
 msgid "Angle X:"
 msgstr "X 角度："
 
@@ -4494,7 +4494,7 @@ msgstr "X 軸的角度"
 
 #: ../src/display/canvas-axonomgrid.cpp:284
 #: ../src/ui/dialog/inkscape-preferences.cpp:1110
-#: ../src/ui/toolbar/box3d-toolbar.cpp:382
+#: ../src/ui/toolbar/box3d-toolbar.cpp:174
 msgid "Angle Z:"
 msgstr "Z 角度："
 
@@ -5004,10 +5004,10 @@ msgstr "可調整臨界值"
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:58
 #: ../src/ui/dialog/object-attributes.cpp:59
 #: ../src/ui/dialog/object-attributes.cpp:67
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:397
-#: ../src/ui/toolbar/eraser-toolbar.cpp:186
-#: ../src/ui/toolbar/spray-toolbar.cpp:293
-#: ../src/ui/toolbar/tweak-toolbar.cpp:129 ../src/ui/widget/page-sizer.cpp:62
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:105
+#: ../src/ui/toolbar/eraser-toolbar.cpp:115
+#: ../src/ui/toolbar/spray-toolbar.cpp:93
+#: ../src/ui/toolbar/tweak-toolbar.cpp:95 ../src/ui/widget/page-sizer.cpp:62
 #: ../share/extensions/foldablebox.inx.h:2
 msgid "Width:"
 msgstr "寬度："
@@ -5022,7 +5022,7 @@ msgid "Height:"
 msgstr "高度："
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:44
-#: ../src/ui/toolbar/measure-toolbar.cpp:346
+#: ../src/ui/toolbar/measure-toolbar.cpp:296
 #: ../share/extensions/printing_marks.inx.h:12
 msgid "Offset:"
 msgstr "偏移："
@@ -5272,7 +5272,7 @@ msgstr "循環色彩對應"
 #: ../src/extension/internal/bitmap/cycleColormap.cpp:40
 #: ../src/extension/internal/bitmap/spread.cpp:40
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:46
-#: ../src/ui/toolbar/spray-toolbar.cpp:405
+#: ../src/ui/toolbar/spray-toolbar.cpp:215
 msgid "Amount:"
 msgstr "數量："
 
@@ -5447,7 +5447,7 @@ msgstr "風格化點陣圖，產生像用油畫繪製的效果"
 #: ../src/extension/internal/filter/blurs.h:334
 #: ../src/extension/internal/filter/transparency.h:280
 #: ../src/ui/dialog/clonetiler.cpp:794 ../src/ui/dialog/clonetiler.cpp:925
-#: ../src/ui/toolbar/tweak-toolbar.cpp:325
+#: ../src/ui/toolbar/tweak-toolbar.cpp:297
 #: ../share/extensions/interp_att_g.inx.h:20
 msgid "Opacity"
 msgstr "不透明度"
@@ -5563,7 +5563,7 @@ msgstr "高反差"
 
 #: ../src/extension/internal/bitmap/threshold.cpp:41
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:47
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:159
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:106
 msgid "Threshold:"
 msgstr "臨界值："
 
@@ -5621,130 +5621,130 @@ msgstr "要製作內縮 (外擴) 物件的複製物件數量"
 msgid "Generate from Path"
 msgstr "從路徑生成"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:329
+#: ../src/extension/internal/cairo-ps-out.cpp:330
 #: ../share/extensions/ps_input.inx.h:3
 msgid "PostScript"
 msgstr "PostScript"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:331
-#: ../src/extension/internal/cairo-ps-out.cpp:373
+#: ../src/extension/internal/cairo-ps-out.cpp:332
+#: ../src/extension/internal/cairo-ps-out.cpp:374
 msgid "Restrict to PS level:"
 msgstr "限定 PS 等級："
 
-#: ../src/extension/internal/cairo-ps-out.cpp:332
-#: ../src/extension/internal/cairo-ps-out.cpp:374
+#: ../src/extension/internal/cairo-ps-out.cpp:333
+#: ../src/extension/internal/cairo-ps-out.cpp:375
 msgid "PostScript level 3"
 msgstr "Postscript 等級 3"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:333
-#: ../src/extension/internal/cairo-ps-out.cpp:375
+#: ../src/extension/internal/cairo-ps-out.cpp:334
+#: ../src/extension/internal/cairo-ps-out.cpp:376
 msgid "PostScript level 2"
 msgstr "Postscript 等級 2"
-
-#: ../src/extension/internal/cairo-ps-out.cpp:335
-#: ../src/extension/internal/cairo-ps-out.cpp:377
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:254
-msgid "Text output options:"
-msgstr "文字輸出選項："
 
 #: ../src/extension/internal/cairo-ps-out.cpp:336
 #: ../src/extension/internal/cairo-ps-out.cpp:378
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:255
-msgid "Embed fonts"
-msgstr "內嵌字型"
+msgid "Text output options:"
+msgstr "文字輸出選項："
 
 #: ../src/extension/internal/cairo-ps-out.cpp:337
 #: ../src/extension/internal/cairo-ps-out.cpp:379
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:256
-msgid "Convert text to paths"
-msgstr "將文字轉成路徑"
+msgid "Embed fonts"
+msgstr "內嵌字型"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:338
 #: ../src/extension/internal/cairo-ps-out.cpp:380
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:257
+msgid "Convert text to paths"
+msgstr "將文字轉成路徑"
+
+#: ../src/extension/internal/cairo-ps-out.cpp:339
+#: ../src/extension/internal/cairo-ps-out.cpp:381
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:258
 msgid "Omit text in PDF and create LaTeX file"
 msgstr "省略 PDF 中的文字並建立 LaTeX 檔"
-
-#: ../src/extension/internal/cairo-ps-out.cpp:340
-#: ../src/extension/internal/cairo-ps-out.cpp:382
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:259
-msgid "Rasterize filter effects"
-msgstr "點陣濾鏡特效"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:341
 #: ../src/extension/internal/cairo-ps-out.cpp:383
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:260
-msgid "Resolution for rasterization (dpi):"
-msgstr "點陣化的解析度 (dpi)："
+msgid "Rasterize filter effects"
+msgstr "點陣濾鏡特效"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:342
 #: ../src/extension/internal/cairo-ps-out.cpp:384
-msgid "Output page size"
-msgstr "輸出頁面尺寸"
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:261
+msgid "Resolution for rasterization (dpi):"
+msgstr "點陣化的解析度 (dpi)："
 
 #: ../src/extension/internal/cairo-ps-out.cpp:343
 #: ../src/extension/internal/cairo-ps-out.cpp:385
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:262
-msgid "Use document's page size"
-msgstr "使用文件的頁面尺寸"
+msgid "Output page size"
+msgstr "輸出頁面尺寸"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:344
 #: ../src/extension/internal/cairo-ps-out.cpp:386
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:263
+msgid "Use document's page size"
+msgstr "使用文件的頁面尺寸"
+
+#: ../src/extension/internal/cairo-ps-out.cpp:345
+#: ../src/extension/internal/cairo-ps-out.cpp:387
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:264
 msgid "Use exported object's size"
 msgstr "使用匯出物件的尺寸"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:346
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:265
+#: ../src/extension/internal/cairo-ps-out.cpp:347
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:266
 msgid "Bleed/margin (mm):"
 msgstr "出血/邊距 (公釐)："
 
-#: ../src/extension/internal/cairo-ps-out.cpp:347
-#: ../src/extension/internal/cairo-ps-out.cpp:389
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:266
+#: ../src/extension/internal/cairo-ps-out.cpp:348
+#: ../src/extension/internal/cairo-ps-out.cpp:390
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:267
 msgid "Limit export to the object with ID:"
 msgstr "限制使用 ID 匯出此物件："
 
-#: ../src/extension/internal/cairo-ps-out.cpp:351
+#: ../src/extension/internal/cairo-ps-out.cpp:352
 #: ../share/extensions/ps_input.inx.h:2
 msgid "PostScript (*.ps)"
 msgstr "Postscript (*.ps)"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:352
+#: ../src/extension/internal/cairo-ps-out.cpp:353
 msgid "PostScript File"
 msgstr "Postscript 檔案"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:371
+#: ../src/extension/internal/cairo-ps-out.cpp:372
 #: ../share/extensions/eps_input.inx.h:3
 msgid "Encapsulated PostScript"
 msgstr "封裝的 Postscript"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:388
+#: ../src/extension/internal/cairo-ps-out.cpp:389
 msgid "Bleed/margin (mm)"
 msgstr "出血/邊距 (公釐)"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:393
+#: ../src/extension/internal/cairo-ps-out.cpp:394
 #: ../share/extensions/eps_input.inx.h:2
 msgid "Encapsulated PostScript (*.eps)"
 msgstr "封裝的 Postscript (*.eps)"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:394
+#: ../src/extension/internal/cairo-ps-out.cpp:395
 msgid "Encapsulated PostScript File"
 msgstr "封裝的 PostScript 檔案"
 
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:248
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:249
 msgid "Restrict to PDF version:"
 msgstr "限定 PDF 版本："
 
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:250
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:251
 msgid "PDF 1.5"
 msgstr "PDF 1.5"
 
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:252
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:253
 msgid "PDF 1.4"
 msgstr "PDF 1.4"
 
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:261
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:262
 msgid "Output page size:"
 msgstr "輸出頁面尺寸："
 
@@ -5792,7 +5792,7 @@ msgstr "超過 %i"
 #: ../src/ui/dialog/livepatheffect-add.cpp:27
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:30
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:36
-#: ../src/ui/dialog/ocaldialogs.cpp:1086 ../src/ui/interface.cpp:1430
+#: ../src/ui/dialog/ocaldialogs.cpp:1086 ../src/ui/interface.cpp:866
 #: ../src/widgets/desktop-widget.cpp:1101
 #: ../src/widgets/desktop-widget.cpp:1150
 msgid "_Cancel"
@@ -6324,7 +6324,7 @@ msgstr "漫射"
 
 #: ../src/extension/internal/filter/bumps.h:99
 #: ../src/extension/internal/filter/bumps.h:330
-#: ../src/ui/toolbar/rect-toolbar.cpp:338 ../src/ui/tools/measure-tool.cpp:1227
+#: ../src/ui/toolbar/rect-toolbar.cpp:140 ../src/ui/tools/measure-tool.cpp:1227
 #: ../src/ui/widget/page-sizer.cpp:63 ../share/extensions/interp_att_g.inx.h:15
 msgid "Height"
 msgstr "高度"
@@ -6337,7 +6337,7 @@ msgstr "高度"
 #: ../src/extension/internal/filter/paint.h:87
 #: ../src/extension/internal/filter/paint.h:593
 #: ../src/extension/internal/filter/paint.h:708
-#: ../src/ui/toolbar/tweak-toolbar.cpp:309 ../src/ui/tools/flood-tool.cpp:95
+#: ../src/ui/toolbar/tweak-toolbar.cpp:282 ../src/ui/tools/flood-tool.cpp:95
 #: ../src/ui/widget/color-icc-selector.cpp:177
 #: ../src/ui/widget/color-scales.cpp:416 ../src/ui/widget/color-scales.cpp:417
 msgid "Lightness"
@@ -6346,7 +6346,7 @@ msgstr "亮度"
 #: ../src/extension/internal/filter/bumps.h:101
 #: ../src/extension/internal/filter/bumps.h:332
 #: ../src/live_effects/lpe-measure-segments.cpp:71
-#: ../src/ui/toolbar/measure-toolbar.cpp:320
+#: ../src/ui/toolbar/measure-toolbar.cpp:260
 msgid "Precision"
 msgstr "精確度"
 
@@ -6536,7 +6536,7 @@ msgstr "色版塗繪"
 #: ../src/extension/internal/filter/color.h:1575
 #: ../src/extension/internal/filter/paint.h:88 ../src/filter-enums.cpp:67
 #: ../src/ui/dialog/inkscape-preferences.cpp:1298
-#: ../src/ui/toolbar/tweak-toolbar.cpp:293 ../src/ui/tools/flood-tool.cpp:94
+#: ../src/ui/toolbar/tweak-toolbar.cpp:267 ../src/ui/tools/flood-tool.cpp:94
 #: ../src/ui/widget/color-icc-selector.cpp:173
 #: ../src/ui/widget/color-icc-selector.cpp:178
 #: ../src/ui/widget/color-scales.cpp:412 ../src/ui/widget/color-scales.cpp:413
@@ -6843,8 +6843,8 @@ msgstr "陰影"
 #: ../src/live_effects/effect.cpp:144
 #: ../src/live_effects/lpe-transform_2pts.cpp:41
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1030
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1044
-#: ../src/ui/toolbar/measure-toolbar.cpp:346
+#: ../src/ui/toolbar/gradient-toolbar.cpp:545
+#: ../src/ui/toolbar/measure-toolbar.cpp:296
 msgid "Offset"
 msgstr "偏移"
 
@@ -6986,7 +6986,7 @@ msgid "Hard Light"
 msgstr "實光"
 
 #: ../src/extension/internal/filter/color.h:1585 ../src/filter-enums.cpp:66
-#: ../src/ui/toolbar/tweak-toolbar.cpp:277 ../src/ui/tools/flood-tool.cpp:93
+#: ../src/ui/toolbar/tweak-toolbar.cpp:252 ../src/ui/tools/flood-tool.cpp:93
 #: ../src/ui/widget/color-icc-selector.cpp:172
 #: ../src/ui/widget/color-icc-selector.cpp:176
 #: ../src/ui/widget/color-scales.cpp:407 ../src/ui/widget/color-scales.cpp:408
@@ -7226,11 +7226,10 @@ msgid "Open"
 msgstr "開啟"
 
 #: ../src/extension/internal/filter/morphology.h:66
-#: ../src/ui/toolbar/rect-toolbar.cpp:322
-#: ../src/ui/toolbar/spray-toolbar.cpp:293
-#: ../src/ui/toolbar/tweak-toolbar.cpp:129
-#: ../src/ui/tools/measure-tool.cpp:1233 ../src/ui/widget/page-sizer.cpp:62
-#: ../share/extensions/interp_att_g.inx.h:14
+#: ../src/ui/toolbar/rect-toolbar.cpp:116
+#: ../src/ui/toolbar/spray-toolbar.cpp:93
+#: ../src/ui/toolbar/tweak-toolbar.cpp:95 ../src/ui/tools/measure-tool.cpp:1233
+#: ../src/ui/widget/page-sizer.cpp:62 ../share/extensions/interp_att_g.inx.h:14
 msgid "Width"
 msgstr "寬度"
 
@@ -7466,7 +7465,7 @@ msgstr "將圖像轉換成用垂直線及水平線產生的版畫效果"
 
 #: ../src/extension/internal/filter/paint.h:332
 #: ../src/ui/dialog/align-and-distribute.cpp:1066
-#: ../src/widgets/desktop-widget.cpp:1921
+#: ../src/widgets/desktop-widget.cpp:1920
 msgid "Drawing"
 msgstr "繪畫"
 
@@ -7973,7 +7972,7 @@ msgstr "圖形繪算"
 #: ../src/extension/internal/grid.cpp:204
 #: ../src/ui/dialog/document-properties.cpp:152
 #: ../src/ui/dialog/inkscape-preferences.cpp:1118
-#: ../src/widgets/toolbox.cpp:1462
+#: ../src/widgets/toolbox.cpp:1464
 msgid "Grids"
 msgstr "格線"
 
@@ -8445,55 +8444,55 @@ msgstr "儲存文件"
 #. TRANSLATORS: translate this into "default-<yourcodename>.svg" (for instance, default-fr.svg)
 #. and double-check that share/templates/create_defaults.pl contains a translation for your language
 #. If in doubt about this, ask a developer.
-#: ../src/file.cpp:170
+#: ../src/file.cpp:166
 msgid "default.svg"
 msgstr "default-zh_TW.svg"
 
-#: ../src/file.cpp:270
+#: ../src/file.cpp:264
 msgid "Broken links have been changed to point to existing files."
 msgstr "無效的連結已變成指向現有檔案。"
 
-#: ../src/file.cpp:299 ../src/file.cpp:1303
+#: ../src/file.cpp:289 ../src/file.cpp:1293
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "載入所要求的檔案 %s 失敗"
 
-#: ../src/file.cpp:325
+#: ../src/file.cpp:315
 msgid "Document not saved yet.  Cannot revert."
 msgstr "檔案尚未儲存，無法回復。"
 
-#: ../src/file.cpp:331
+#: ../src/file.cpp:321
 msgid "Changes will be lost! Are you sure you want to reload document %1?"
 msgstr "變更將會遺失！你確定要重新載入檔案 %1？"
 
-#: ../src/file.cpp:357
+#: ../src/file.cpp:347
 msgid "Document reverted."
 msgstr "檔案已回復。"
 
-#: ../src/file.cpp:359
+#: ../src/file.cpp:349
 msgid "Document not reverted."
 msgstr "檔案尚未回復。"
 
-#: ../src/file.cpp:509
+#: ../src/file.cpp:499
 msgid "Select file to open"
 msgstr "選擇要開啟的檔案"
 
-#: ../src/file.cpp:591
+#: ../src/file.cpp:581
 msgid "Clean up document"
 msgstr "清理文件"
 
-#: ../src/file.cpp:598
+#: ../src/file.cpp:588
 #, c-format
 msgid "Removed <b>%i</b> unused definition in &lt;defs&gt;."
 msgid_plural "Removed <b>%i</b> unused definitions in &lt;defs&gt;."
 msgstr[0] "已從 &lt;defs&gt; 移除 <b>%i</b> 項未使用的定義。"
 msgstr[1] "已從 &lt;defs&gt; 移除 <b>%i</b> 項未使用的定義。"
 
-#: ../src/file.cpp:603
+#: ../src/file.cpp:593
 msgid "No unused definitions in &lt;defs&gt;."
 msgstr "在 &lt;defs&gt; 沒有未使用的定義。"
 
-#: ../src/file.cpp:637
+#: ../src/file.cpp:627
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
@@ -8501,31 +8500,31 @@ msgid ""
 msgstr ""
 "找不到 Inkscape 擴充功能來儲存檔案 (%s) 。這可能是因不明的副檔名所導致。"
 
-#: ../src/file.cpp:638 ../src/file.cpp:648 ../src/file.cpp:657
-#: ../src/file.cpp:664 ../src/file.cpp:669 ../src/file.cpp:681
-#: ../src/file.cpp:691
+#: ../src/file.cpp:628 ../src/file.cpp:638 ../src/file.cpp:647
+#: ../src/file.cpp:654 ../src/file.cpp:659 ../src/file.cpp:671
+#: ../src/file.cpp:681
 msgid "Document not saved."
 msgstr "檔案未儲存。"
 
-#: ../src/file.cpp:647
+#: ../src/file.cpp:637
 #, c-format
 msgid ""
 "File %s is write protected. Please remove write protection and try again."
 msgstr "檔案 %s 具有寫入保護。請移除寫入保護後再試一次。"
 
-#: ../src/file.cpp:656 ../src/file.cpp:690
+#: ../src/file.cpp:646 ../src/file.cpp:680
 #, c-format
 msgid "File %s could not be saved."
 msgstr "無法儲存檔案 %s。"
 
-#: ../src/file.cpp:668
+#: ../src/file.cpp:658
 #, c-format
 msgid ""
 "File could not be saved:\n"
 "No object with ID '%s' found."
 msgstr ""
 
-#: ../src/file.cpp:678
+#: ../src/file.cpp:668
 #, c-format
 msgid ""
 "File %s could not be saved.\n"
@@ -8534,49 +8533,49 @@ msgid ""
 "'%s'"
 msgstr ""
 
-#: ../src/file.cpp:713 ../src/file.cpp:715
+#: ../src/file.cpp:703 ../src/file.cpp:705
 msgid "Document saved."
 msgstr "檔案已儲存"
 
 #. We are saving for the first time; create a unique default filename
-#: ../src/file.cpp:773 ../src/file.cpp:1462
+#: ../src/file.cpp:763 ../src/file.cpp:1452
 msgid "drawing"
 msgstr "圖畫"
 
-#: ../src/file.cpp:778
+#: ../src/file.cpp:768
 msgid "drawing-%1"
 msgstr "圖畫-%1"
 
-#: ../src/file.cpp:795
+#: ../src/file.cpp:785
 msgid "Select file to save a copy to"
 msgstr "選擇要儲存副本的檔案"
 
-#: ../src/file.cpp:797
+#: ../src/file.cpp:787
 msgid "Select file to save to"
 msgstr "選擇要儲存的檔案"
 
-#: ../src/file.cpp:902 ../src/file.cpp:904
+#: ../src/file.cpp:892 ../src/file.cpp:894
 msgid "No changes need to be saved."
 msgstr "沒有任何改變需要儲存。"
 
-#: ../src/file.cpp:923
+#: ../src/file.cpp:913
 msgid "Saving document..."
 msgstr "儲存檔案中..."
 
-#: ../src/file.cpp:1300 ../src/ui/dialog/inkscape-preferences.cpp:1831
+#: ../src/file.cpp:1290 ../src/ui/dialog/inkscape-preferences.cpp:1831
 #: ../src/ui/dialog/ocaldialogs.cpp:1088
 msgid "Import"
 msgstr "匯入"
 
-#: ../src/file.cpp:1350
+#: ../src/file.cpp:1340
 msgid "Select file to import"
 msgstr "選擇要匯入的檔案"
 
-#: ../src/file.cpp:1483
+#: ../src/file.cpp:1473
 msgid "Select file to export to"
 msgstr "選擇要匯出的檔案"
 
-#: ../src/file.cpp:1736
+#: ../src/file.cpp:1726
 msgid "Import Clip Art"
 msgstr "匯入美工圖"
 
@@ -8704,7 +8703,7 @@ msgid "Arithmetic"
 msgstr "算數 (Arithmetic)"
 
 #: ../src/filter-enums.cpp:121 ../src/selection-chemistry.cpp:564
-#: ../src/ui/dialog/objects.cpp:1884
+#: ../src/ui/dialog/objects.cpp:1887
 msgid "Duplicate"
 msgstr "再製"
 
@@ -9425,11 +9424,11 @@ msgstr "依 2 點變形"
 
 #: ../src/live_effects/effect.cpp:123
 #: ../src/live_effects/lpe-show_handles.cpp:31
-#: ../src/ui/toolbar/mesh-toolbar.cpp:508
+#: ../src/ui/toolbar/mesh-toolbar.cpp:362
 msgid "Show handles"
 msgstr "顯示控制柄"
 
-#: ../src/live_effects/effect.cpp:125 ../src/ui/toolbar/pencil-toolbar.cpp:145
+#: ../src/live_effects/effect.cpp:125 ../src/ui/toolbar/pencil-toolbar.cpp:315
 msgid "BSpline"
 msgstr "貝氏雲形線"
 
@@ -10484,7 +10483,7 @@ msgid "Reverses the second path order"
 msgstr "反轉第二條路徑順序"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:32
-#: ../src/ui/toolbar/text-toolbar.cpp:2207
+#: ../src/ui/toolbar/text-toolbar.cpp:503
 #: ../share/extensions/render_barcode_qrcode.inx.h:5
 msgid "Auto"
 msgstr "自動"
@@ -10670,7 +10669,7 @@ msgstr "斜角"
 #: ../src/live_effects/lpe-jointype.cpp:48
 #: ../src/live_effects/lpe-powerstroke.cpp:162
 #: ../src/live_effects/lpe-taperstroke.cpp:64
-#: ../src/ui/toolbar/star-toolbar.cpp:560
+#: ../src/ui/toolbar/star-toolbar.cpp:191
 msgid "Rounded"
 msgstr "圓角"
 
@@ -11072,7 +11071,7 @@ msgid "Hide Points"
 msgstr "隱藏點"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:59
-#: ../src/ui/toolbar/text-toolbar.cpp:2164
+#: ../src/ui/toolbar/text-toolbar.cpp:461
 msgid "Horizontal"
 msgstr "水平"
 
@@ -11440,10 +11439,10 @@ msgstr "從中間環結起始的 Y"
 
 #. Name
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:56
-#: ../src/ui/toolbar/eraser-toolbar.cpp:165
-#: ../src/ui/toolbar/pencil-toolbar.cpp:168
-#: ../src/ui/toolbar/spray-toolbar.cpp:385
-#: ../src/ui/toolbar/tweak-toolbar.cpp:245
+#: ../src/ui/toolbar/eraser-toolbar.cpp:95
+#: ../src/ui/toolbar/pencil-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:198
+#: ../src/ui/toolbar/tweak-toolbar.cpp:222
 msgid "Mode"
 msgstr "模式"
 
@@ -11735,7 +11734,7 @@ msgid "Zero width"
 msgstr "凹端"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:166
-#: ../src/ui/toolbar/pencil-toolbar.cpp:139
+#: ../src/ui/toolbar/pencil-toolbar.cpp:309
 msgid "Spiro"
 msgstr "螺旋"
 
@@ -12169,13 +12168,13 @@ msgstr "無"
 
 #: ../src/live_effects/lpe-ruler.cpp:31
 #: ../src/live_effects/lpe-transform_2pts.cpp:38
-#: ../src/ui/toolbar/arc-toolbar.cpp:495 ../src/ui/tools/measure-tool.cpp:745
+#: ../src/ui/toolbar/arc-toolbar.cpp:160 ../src/ui/tools/measure-tool.cpp:745
 msgid "Start"
 msgstr "開始"
 
 #: ../src/live_effects/lpe-ruler.cpp:32
 #: ../src/live_effects/lpe-transform_2pts.cpp:39
-#: ../src/ui/toolbar/arc-toolbar.cpp:508 ../src/ui/tools/measure-tool.cpp:746
+#: ../src/ui/toolbar/arc-toolbar.cpp:177 ../src/ui/tools/measure-tool.cpp:746
 msgid "End"
 msgstr "結束"
 
@@ -12681,7 +12680,7 @@ msgstr "所有非使用中的工具"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:81
 #: ../src/live_effects/parameter/originalpatharray.cpp:104
-#: ../src/ui/dialog/attrdialog.cpp:96
+#: ../src/ui/dialog/attrdialog.cpp:105
 #: ../src/ui/dialog/inkscape-preferences.cpp:1902
 #: ../src/ui/widget/page-sizer.cpp:97 ../src/widgets/gradient-selector.cpp:138
 msgid "Name"
@@ -12699,13 +12698,13 @@ msgstr "移除項目/集合"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:170
 #: ../src/live_effects/parameter/originalpatharray.cpp:211
-#: ../src/ui/dialog/objects.cpp:1845
+#: ../src/ui/dialog/objects.cpp:1848
 msgid "Move Down"
 msgstr "向下移"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:182
 #: ../src/live_effects/parameter/originalpatharray.cpp:223
-#: ../src/ui/dialog/objects.cpp:1853
+#: ../src/ui/dialog/objects.cpp:1856
 msgid "Move Up"
 msgstr "向上移"
 
@@ -12735,7 +12734,7 @@ msgid "Link to path"
 msgstr "連結到路徑"
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:89
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1090
+#: ../src/ui/toolbar/gradient-toolbar.cpp:591
 msgid "Reverse"
 msgstr "反轉"
 
@@ -12940,12 +12939,12 @@ msgstr "到 %s"
 msgid "without URI"
 msgstr "不含 URI"
 
-#: ../src/object/sp-ellipse.cpp:389 ../src/ui/toolbar/arc-toolbar.cpp:527
+#: ../src/object/sp-ellipse.cpp:389 ../src/ui/toolbar/arc-toolbar.cpp:204
 #, fuzzy
 msgid "Slice"
 msgstr "切片"
 
-#: ../src/object/sp-ellipse.cpp:392 ../src/ui/toolbar/arc-toolbar.cpp:539
+#: ../src/object/sp-ellipse.cpp:392 ../src/ui/toolbar/arc-toolbar.cpp:216
 msgid "Chord"
 msgstr ""
 
@@ -12956,7 +12955,7 @@ msgstr "弧"
 #. Ellipse
 #: ../src/object/sp-ellipse.cpp:399 ../src/object/sp-ellipse.cpp:406
 #: ../src/ui/dialog/inkscape-preferences.cpp:459
-#: ../src/ui/toolbar/pencil-toolbar.cpp:225
+#: ../src/ui/toolbar/pencil-toolbar.cpp:421
 msgid "Ellipse"
 msgstr "橢圓形"
 
@@ -13045,7 +13044,7 @@ msgstr "[不良的參考]: %s"
 msgid "%d &#215; %d: %s"
 msgstr "%d &#215; %d: %s"
 
-#: ../src/object/sp-item-group.cpp:305 ../src/ui/dialog/objects.cpp:1908
+#: ../src/object/sp-item-group.cpp:305 ../src/ui/dialog/objects.cpp:1911
 msgid "Group"
 msgstr "群組"
 
@@ -13060,7 +13059,7 @@ msgid "of <b>%d</b> objects"
 msgstr "屬於 <b>%d</b> 個物件"
 
 #: ../src/object/sp-item-group.cpp:647 ../src/selection-chemistry.cpp:900
-#: ../src/ui/dialog/objects.cpp:1909
+#: ../src/ui/dialog/objects.cpp:1912
 msgid "Ungroup"
 msgstr "解散群組"
 
@@ -13166,11 +13165,11 @@ msgstr "有 %3f 個圈"
 
 #. Star
 #: ../src/object/sp-star.cpp:227 ../src/ui/dialog/inkscape-preferences.cpp:463
-#: ../src/ui/toolbar/star-toolbar.cpp:493
+#: ../src/ui/toolbar/star-toolbar.cpp:115
 msgid "Star"
 msgstr "星形"
 
-#: ../src/object/sp-star.cpp:228 ../src/ui/toolbar/star-toolbar.cpp:487
+#: ../src/object/sp-star.cpp:228 ../src/ui/toolbar/star-toolbar.cpp:109
 msgid "Polygon"
 msgstr "多邊形"
 
@@ -13579,12 +13578,13 @@ msgstr "刪除文字"
 msgid "<b>Nothing</b> was deleted."
 msgstr "<b>沒有</b>刪除物件。"
 
+#. TODO: Is this label correct?
 #: ../src/selection-chemistry.cpp:415 ../src/ui/dialog/swatches.cpp:283
-#: ../src/ui/toolbar/eraser-toolbar.cpp:146
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1066
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1080
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1094
-#: ../src/ui/toolbar/node-toolbar.cpp:401 ../src/ui/tools/text-tool.cpp:996
+#: ../src/ui/toolbar/eraser-toolbar.cpp:76
+#: ../src/ui/toolbar/gradient-toolbar.cpp:569
+#: ../src/ui/toolbar/gradient-toolbar.cpp:582
+#: ../src/ui/toolbar/gradient-toolbar.cpp:596
+#: ../src/ui/toolbar/node-toolbar.cpp:307 ../src/ui/tools/text-tool.cpp:996
 msgid "Delete"
 msgstr "刪除"
 
@@ -13973,7 +13973,7 @@ msgstr "建立點陣圖"
 msgid "Select <b>object(s)</b> to create clippath or mask from."
 msgstr "選擇要從其中建立剪裁路徑或遮罩的<b>物件</b>。"
 
-#: ../src/selection-chemistry.cpp:3904 ../src/ui/dialog/objects.cpp:1915
+#: ../src/selection-chemistry.cpp:3904 ../src/ui/dialog/objects.cpp:1918
 msgid "Create Clip Group"
 msgstr "建立裁剪群組"
 
@@ -14585,7 +14585,7 @@ msgid "Create _Link"
 msgstr "建立連結(_L)"
 
 #. Set mask
-#: ../src/ui/contextmenu.cpp:456 ../src/ui/dialog/objects.cpp:1923
+#: ../src/ui/contextmenu.cpp:456 ../src/ui/dialog/objects.cpp:1926
 msgid "Set Mask"
 msgstr "設定遮罩"
 
@@ -14724,7 +14724,7 @@ msgstr "about.svg"
 
 #. TRANSLATORS: Put here your name (and other national contributors')
 #. one per line in the form of: name surname (email). Use \n for newline.
-#: ../src/ui/dialog/aboutbox.cpp:180
+#: ../src/ui/dialog/aboutbox.cpp:178
 msgid "translator-credits"
 msgstr ""
 "趙惟倫 (william.chao@ossii.com.tw)\n"
@@ -14764,12 +14764,12 @@ msgstr "垂直(_V)："
 
 #: ../src/ui/dialog/align-and-distribute.cpp:506
 #: ../src/ui/dialog/align-and-distribute.cpp:924
-#: ../src/ui/toolbar/connector-toolbar.cpp:409
+#: ../src/ui/toolbar/connector-toolbar.cpp:192
 msgid "Remove overlaps"
 msgstr "移除重疊"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:538
-#: ../src/ui/toolbar/connector-toolbar.cpp:235
+#: ../src/ui/toolbar/connector-toolbar.cpp:397
 msgid "Arrange connector network"
 msgstr "排列連接線網路"
 
@@ -14798,7 +14798,7 @@ msgid "Rearrange"
 msgstr "重新排列"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:925
-#: ../src/widgets/toolbox.cpp:1364
+#: ../src/widgets/toolbox.cpp:1366
 msgid "Nodes"
 msgstr "節點"
 
@@ -14909,7 +14909,7 @@ msgid "Distribute baselines of texts vertically"
 msgstr "垂直分佈文字基準線"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1017
-#: ../src/ui/toolbar/connector-toolbar.cpp:371
+#: ../src/ui/toolbar/connector-toolbar.cpp:150
 msgid "Nicely arrange selected connector network"
 msgstr "精確排列選擇的連接線網路"
 
@@ -14977,7 +14977,7 @@ msgstr "最小物件"
 #: ../src/ui/dialog/align-and-distribute.cpp:1065
 #: ../src/ui/dialog/document-properties.cpp:150
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1424
-#: ../src/widgets/desktop-widget.cpp:1917
+#: ../src/widgets/desktop-widget.cpp:1916
 #: ../share/extensions/empty_page.inx.h:1
 #: ../share/extensions/voronoi2svg.inx.h:10
 msgid "Page"
@@ -14999,47 +14999,47 @@ msgstr "最小值"
 msgid "Max value"
 msgstr "最大值"
 
-#: ../src/ui/dialog/attrdialog.cpp:80 ../src/ui/dialog/cssdialog.cpp:62
+#: ../src/ui/dialog/attrdialog.cpp:89 ../src/ui/dialog/cssdialog.cpp:62
 #, fuzzy
 msgid "Add a new attribute"
 msgstr "變更屬性"
 
-#: ../src/ui/dialog/attrdialog.cpp:94
+#: ../src/ui/dialog/attrdialog.cpp:103
 #, fuzzy
 msgid "Attribute Name"
 msgstr "屬性名稱(_N)"
 
-#: ../src/ui/dialog/attrdialog.cpp:116
+#: ../src/ui/dialog/attrdialog.cpp:125
 #, fuzzy
 msgid "Attribute Value"
 msgstr "屬性值(_V)"
 
-#: ../src/ui/dialog/attrdialog.cpp:119 ../src/ui/widget/color-scales.cpp:452
+#: ../src/ui/dialog/attrdialog.cpp:128 ../src/ui/widget/color-scales.cpp:452
 #: ../src/ui/widget/color-scales.cpp:453
 msgid "Value"
 msgstr "數值"
 
-#: ../src/ui/dialog/attrdialog.cpp:201
+#: ../src/ui/dialog/attrdialog.cpp:209
 msgid "<b>Click</b> attribute to edit."
 msgstr "<b>點擊</b>屬性來編輯。"
 
-#: ../src/ui/dialog/attrdialog.cpp:206
+#: ../src/ui/dialog/attrdialog.cpp:214
 #, c-format
 msgid ""
 "Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
 "commit changes."
 msgstr "已選擇屬性 <b>%s</b>。編輯完成時按下 <b>Ctrl+Enter</b> 以提交變更。"
 
-#: ../src/ui/dialog/attrdialog.cpp:264 ../src/ui/dialog/attrdialog.cpp:287
+#: ../src/ui/dialog/attrdialog.cpp:282 ../src/ui/dialog/attrdialog.cpp:310
 msgid "Delete attribute"
 msgstr "刪除屬性"
 
-#: ../src/ui/dialog/attrdialog.cpp:322
+#: ../src/ui/dialog/attrdialog.cpp:356
 #, fuzzy
 msgid "Rename attribute"
 msgstr "移除屬性"
 
-#: ../src/ui/dialog/attrdialog.cpp:348
+#: ../src/ui/dialog/attrdialog.cpp:381
 #, fuzzy
 msgid "Change attribute value"
 msgstr "變更屬性"
@@ -16102,7 +16102,7 @@ msgstr "移除(_R)"
 msgid "Remove selected grid."
 msgstr "移除選擇的格線。"
 
-#: ../src/ui/dialog/document-properties.cpp:151 ../src/widgets/toolbox.cpp:1471
+#: ../src/ui/dialog/document-properties.cpp:151 ../src/widgets/toolbox.cpp:1473
 msgid "Guides"
 msgstr "參考線"
 
@@ -16229,7 +16229,7 @@ msgstr "<b>內嵌的腳本檔案：</b>"
 
 #. Name
 #: ../src/ui/dialog/document-properties.cpp:882
-#: ../src/ui/dialog/objects.cpp:1885 ../src/ui/toolbar/gradient-toolbar.cpp:870
+#: ../src/ui/dialog/objects.cpp:1888 ../src/ui/toolbar/gradient-toolbar.cpp:377
 msgid "New"
 msgstr "新增"
 
@@ -16319,8 +16319,8 @@ msgstr "選擇範圍(_S)"
 msgid "_Custom"
 msgstr "自訂(_C)"
 
-#: ../src/ui/dialog/export.cpp:135 ../src/ui/toolbar/measure-toolbar.cpp:304
-#: ../src/ui/toolbar/measure-toolbar.cpp:312
+#: ../src/ui/dialog/export.cpp:135 ../src/ui/toolbar/measure-toolbar.cpp:244
+#: ../src/ui/toolbar/measure-toolbar.cpp:252
 #: ../share/extensions/render_gears.inx.h:6
 msgid "Units:"
 msgstr "單位："
@@ -16656,7 +16656,7 @@ msgid "Document"
 msgstr "文件"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1428 ../src/verbs.cpp:174
-#: ../src/widgets/desktop-widget.cpp:1925
+#: ../src/widgets/desktop-widget.cpp:1924
 #: ../share/extensions/printing_marks.inx.h:18
 msgid "Selection"
 msgstr "選擇範圍"
@@ -17509,7 +17509,7 @@ msgstr "星形"
 msgid "Spirals"
 msgstr "螺旋形"
 
-#: ../src/ui/dialog/find.cpp:92 ../src/widgets/toolbox.cpp:1372
+#: ../src/ui/dialog/find.cpp:92 ../src/widgets/toolbox.cpp:1374
 msgid "Paths"
 msgstr "路徑"
 
@@ -18467,7 +18467,7 @@ msgstr "排列成網格"
 #: ../src/ui/dialog/grid-arrange-tab.cpp:565
 #: ../src/ui/dialog/object-attributes.cpp:57
 #: ../src/ui/dialog/object-attributes.cpp:65
-#: ../src/ui/toolbar/node-toolbar.cpp:581 ../src/ui/widget/page-sizer.cpp:60
+#: ../src/ui/toolbar/node-toolbar.cpp:480 ../src/ui/widget/page-sizer.cpp:60
 #: ../src/widgets/desktop-widget.cpp:650
 msgid "X:"
 msgstr "X："
@@ -18479,7 +18479,7 @@ msgstr "每欄之間的水平間隔距離 。"
 #: ../src/ui/dialog/grid-arrange-tab.cpp:566
 #: ../src/ui/dialog/object-attributes.cpp:58
 #: ../src/ui/dialog/object-attributes.cpp:66
-#: ../src/ui/toolbar/node-toolbar.cpp:598 ../src/ui/widget/page-sizer.cpp:61
+#: ../src/ui/toolbar/node-toolbar.cpp:500 ../src/ui/widget/page-sizer.cpp:61
 #: ../src/widgets/desktop-widget.cpp:651
 msgid "Y:"
 msgstr "Y："
@@ -20787,7 +20787,7 @@ msgstr "選取"
 
 #. Transforms options
 #: ../src/ui/dialog/inkscape-preferences.cpp:1520
-#: ../src/ui/toolbar/select-toolbar.cpp:558
+#: ../src/ui/toolbar/select-toolbar.cpp:343
 msgid "Scale stroke width"
 msgstr "縮放邊框寬度"
 
@@ -20808,22 +20808,22 @@ msgid "Preserved"
 msgstr "保存"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1528
-#: ../src/ui/toolbar/select-toolbar.cpp:559
+#: ../src/ui/toolbar/select-toolbar.cpp:344
 msgid "When scaling objects, scale the stroke width by the same proportion"
 msgstr "縮放物件時，以相同比例縮放邊框寬度"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1530
-#: ../src/ui/toolbar/select-toolbar.cpp:570
+#: ../src/ui/toolbar/select-toolbar.cpp:355
 msgid "When scaling rectangles, scale the radii of rounded corners"
 msgstr "縮放矩形時，同時縮放圓角的半徑"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1532
-#: ../src/ui/toolbar/select-toolbar.cpp:581
+#: ../src/ui/toolbar/select-toolbar.cpp:366
 msgid "Move gradients (in fill or stroke) along with the objects"
 msgstr "隨著物件移動漸層 (填充或邊框)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1534
-#: ../src/ui/toolbar/select-toolbar.cpp:592
+#: ../src/ui/toolbar/select-toolbar.cpp:377
 msgid "Move patterns (in fill or stroke) along with the objects"
 msgstr "隨著物件移動圖樣 (填充或邊框)"
 
@@ -21442,7 +21442,7 @@ msgstr "圖形繪算"
 
 #. Note: /options/bitmapoversample removed with Cairo renderer
 #: ../src/ui/dialog/inkscape-preferences.cpp:1813
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:602 ../src/verbs.cpp:155
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:351 ../src/verbs.cpp:155
 msgid "Edit"
 msgstr "編輯"
 
@@ -21979,11 +21979,11 @@ msgstr ""
 "中的視窗)"
 
 #: ../src/ui/dialog/input.cpp:1439
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:545
-#: ../src/ui/toolbar/spray-toolbar.cpp:307
-#: ../src/ui/toolbar/spray-toolbar.cpp:421
-#: ../src/ui/toolbar/spray-toolbar.cpp:470
-#: ../src/ui/toolbar/tweak-toolbar.cpp:363
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:298
+#: ../src/ui/toolbar/spray-toolbar.cpp:112
+#: ../src/ui/toolbar/spray-toolbar.cpp:235
+#: ../src/ui/toolbar/spray-toolbar.cpp:290
+#: ../src/ui/toolbar/tweak-toolbar.cpp:339
 msgid "Pressure"
 msgstr "壓力"
 
@@ -22110,12 +22110,12 @@ msgstr "鎖定圖層"
 msgid "Unlock layer"
 msgstr "解除鎖定圖層"
 
-#: ../src/ui/dialog/layers.cpp:610 ../src/ui/dialog/objects.cpp:871
+#: ../src/ui/dialog/layers.cpp:610 ../src/ui/dialog/objects.cpp:874
 #: ../src/verbs.cpp:1489
 msgid "Toggle layer solo"
 msgstr "切換圖層單獨顯示"
 
-#: ../src/ui/dialog/layers.cpp:613 ../src/ui/dialog/objects.cpp:874
+#: ../src/ui/dialog/layers.cpp:613 ../src/ui/dialog/objects.cpp:877
 #: ../src/verbs.cpp:1513
 msgid "Lock other layers"
 msgstr "鎖定其他圖層"
@@ -22498,94 +22498,98 @@ msgstr "隱藏物件"
 msgid "Unhide object"
 msgstr "取消隱藏物件"
 
-#: ../src/ui/dialog/objects.cpp:901
+#: ../src/ui/dialog/objects.cpp:432
+msgid "no-id"
+msgstr ""
+
+#: ../src/ui/dialog/objects.cpp:904
 msgid "Unhide objects"
 msgstr "取消隱藏物件"
 
-#: ../src/ui/dialog/objects.cpp:901
+#: ../src/ui/dialog/objects.cpp:904
 msgid "Hide objects"
 msgstr "隱藏物件"
 
-#: ../src/ui/dialog/objects.cpp:921
+#: ../src/ui/dialog/objects.cpp:924
 msgid "Lock objects"
 msgstr "鎖定物件"
 
-#: ../src/ui/dialog/objects.cpp:921
+#: ../src/ui/dialog/objects.cpp:924
 msgid "Unlock objects"
 msgstr "解除鎖定物件"
 
-#: ../src/ui/dialog/objects.cpp:933
+#: ../src/ui/dialog/objects.cpp:936
 msgid "Layer to group"
 msgstr "圖層轉成群組"
 
-#: ../src/ui/dialog/objects.cpp:933
+#: ../src/ui/dialog/objects.cpp:936
 msgid "Group to layer"
 msgstr "群組轉成圖層"
 
-#: ../src/ui/dialog/objects.cpp:1131
+#: ../src/ui/dialog/objects.cpp:1134
 msgid "Moved objects"
 msgstr "移動的物件"
 
-#: ../src/ui/dialog/objects.cpp:1380 ../src/ui/dialog/tags.cpp:831
+#: ../src/ui/dialog/objects.cpp:1383 ../src/ui/dialog/tags.cpp:831
 #: ../src/ui/dialog/tags.cpp:838
 msgid "Rename object"
 msgstr "重新命名物件"
 
-#: ../src/ui/dialog/objects.cpp:1486
+#: ../src/ui/dialog/objects.cpp:1489
 msgid "Set object highlight color"
 msgstr "設定物件高亮度顯示顏色"
 
-#: ../src/ui/dialog/objects.cpp:1496
+#: ../src/ui/dialog/objects.cpp:1499
 msgid "Set object opacity"
 msgstr "設定物件不透明度"
 
-#: ../src/ui/dialog/objects.cpp:1525
+#: ../src/ui/dialog/objects.cpp:1528
 msgid "Set object blend mode"
 msgstr "設定物件混合模式"
 
-#: ../src/ui/dialog/objects.cpp:1595
+#: ../src/ui/dialog/objects.cpp:1598
 msgid "Set object blur"
 msgstr "設定物件模糊"
 
-#: ../src/ui/dialog/objects.cpp:1661
+#: ../src/ui/dialog/objects.cpp:1664
 msgctxt "Visibility"
 msgid "V"
 msgstr "可見度(V)"
 
-#: ../src/ui/dialog/objects.cpp:1662
+#: ../src/ui/dialog/objects.cpp:1665
 msgctxt "Lock"
 msgid "L"
 msgstr "鎖定(L)"
 
-#: ../src/ui/dialog/objects.cpp:1663
+#: ../src/ui/dialog/objects.cpp:1666
 msgctxt "Type"
 msgid "T"
 msgstr "類型(T)"
 
-#: ../src/ui/dialog/objects.cpp:1664
+#: ../src/ui/dialog/objects.cpp:1667
 msgctxt "Clip and mask"
 msgid "CM"
 msgstr "裁剪和遮罩(CM)"
 
-#: ../src/ui/dialog/objects.cpp:1665
+#: ../src/ui/dialog/objects.cpp:1668
 msgctxt "Highlight"
 msgid "HL"
 msgstr "高亮度顯示(HL)"
 
-#: ../src/ui/dialog/objects.cpp:1666
+#: ../src/ui/dialog/objects.cpp:1669
 msgid "Label"
 msgstr "標籤"
 
 #. In order to get tooltips on header, we must create our own label.
-#: ../src/ui/dialog/objects.cpp:1694
+#: ../src/ui/dialog/objects.cpp:1697
 msgid "Toggle visibility of Layer, Group, or Object."
 msgstr "切換圖層、群組、物件的隱現狀態。"
 
-#: ../src/ui/dialog/objects.cpp:1707
+#: ../src/ui/dialog/objects.cpp:1710
 msgid "Toggle lock of Layer, Group, or Object."
 msgstr "開啟/關閉圖層、群組、物件的鎖定狀態。"
 
-#: ../src/ui/dialog/objects.cpp:1719
+#: ../src/ui/dialog/objects.cpp:1722
 msgid ""
 "Type: Layer, Group, or Object. Clicking on Layer or Group icon, toggles "
 "between the two types."
@@ -22593,96 +22597,96 @@ msgstr ""
 "類型：圖層、群組或物件。在圖層或圖群組圖示上點擊滑鼠左鍵，可在兩種類型之間進"
 "行切換。"
 
-#: ../src/ui/dialog/objects.cpp:1738
+#: ../src/ui/dialog/objects.cpp:1741
 msgid "Is object clipped and/or masked?"
 msgstr "物件有套用裁剪或遮罩嗎？"
 
-#: ../src/ui/dialog/objects.cpp:1749
+#: ../src/ui/dialog/objects.cpp:1752
 msgid ""
 "Highlight color of outline in Node tool. Click to set. If alpha is zero, use "
 "inherited color."
 msgstr ""
 "節點工具中外框的高亮度顯示顏色。點擊可設定。如果透明值為零，使用繼承的顏色。"
 
-#: ../src/ui/dialog/objects.cpp:1760
+#: ../src/ui/dialog/objects.cpp:1763
 msgid ""
 "Layer/Group/Object label (inkscape:label). Double-click to set. Default "
 "value is object 'id'."
 msgstr ""
 "圖層/群組/物件標籤 (inkscape:label)。點擊兩下可設定。預設值是物件「識別碼」。"
 
-#: ../src/ui/dialog/objects.cpp:1822
+#: ../src/ui/dialog/objects.cpp:1825
 msgid "Add layer..."
 msgstr "加入圖層..."
 
-#: ../src/ui/dialog/objects.cpp:1829
+#: ../src/ui/dialog/objects.cpp:1832
 msgid "Remove object"
 msgstr "移除物件"
 
-#: ../src/ui/dialog/objects.cpp:1837
+#: ../src/ui/dialog/objects.cpp:1840
 msgid "Move To Bottom"
 msgstr "移到最下層"
 
-#: ../src/ui/dialog/objects.cpp:1861
+#: ../src/ui/dialog/objects.cpp:1864
 msgid "Move To Top"
 msgstr "移到最上層"
 
-#: ../src/ui/dialog/objects.cpp:1869
+#: ../src/ui/dialog/objects.cpp:1872
 msgid "Collapse All"
 msgstr "全部折疊"
 
-#: ../src/ui/dialog/objects.cpp:1883
+#: ../src/ui/dialog/objects.cpp:1886
 msgid "Rename"
 msgstr "重新命名"
 
-#: ../src/ui/dialog/objects.cpp:1889
+#: ../src/ui/dialog/objects.cpp:1892
 msgid "Solo"
 msgstr "單獨顯示"
 
-#: ../src/ui/dialog/objects.cpp:1890
+#: ../src/ui/dialog/objects.cpp:1893
 msgid "Show All"
 msgstr "顯示全部"
 
-#: ../src/ui/dialog/objects.cpp:1891
+#: ../src/ui/dialog/objects.cpp:1894
 msgid "Hide All"
 msgstr "隱藏全部"
 
-#: ../src/ui/dialog/objects.cpp:1895
+#: ../src/ui/dialog/objects.cpp:1898
 msgid "Lock Others"
 msgstr "鎖定其他"
 
-#: ../src/ui/dialog/objects.cpp:1896
+#: ../src/ui/dialog/objects.cpp:1899
 msgid "Lock All"
 msgstr "鎖定全部"
 
 #. LockAndHide
-#: ../src/ui/dialog/objects.cpp:1897 ../src/verbs.cpp:3263
+#: ../src/ui/dialog/objects.cpp:1900 ../src/verbs.cpp:3263
 msgid "Unlock All"
 msgstr "全部解除鎖定"
 
-#: ../src/ui/dialog/objects.cpp:1902
+#: ../src/ui/dialog/objects.cpp:1905
 msgid "Up"
 msgstr "上移"
 
-#: ../src/ui/dialog/objects.cpp:1904
+#: ../src/ui/dialog/objects.cpp:1907
 msgid "Down"
 msgstr "下移"
 
-#: ../src/ui/dialog/objects.cpp:1913
+#: ../src/ui/dialog/objects.cpp:1916
 msgid "Set Clip"
 msgstr "設定裁剪"
 
 #. will never be implemented
 #. _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_INVERSE_CLIPPATH, 0, "Set Inverse Clip", (int)BUTTON_SETINVCLIP ) );
-#: ../src/ui/dialog/objects.cpp:1919
+#: ../src/ui/dialog/objects.cpp:1922
 msgid "Unset Clip"
 msgstr "取消設定裁剪"
 
-#: ../src/ui/dialog/objects.cpp:1924
+#: ../src/ui/dialog/objects.cpp:1927
 msgid "Unset Mask"
 msgstr "取消設定遮罩"
 
-#: ../src/ui/dialog/objects.cpp:1946
+#: ../src/ui/dialog/objects.cpp:1949
 msgid "Select Highlight Color"
 msgstr "選取高亮度顯示顏色"
 
@@ -24050,7 +24054,7 @@ msgid "nodeAsInXMLdialogTooltip|Delete node"
 msgstr "刪除節點"
 
 #: ../src/ui/dialog/xml-tree.cpp:67 ../src/ui/dialog/xml-tree.cpp:123
-#: ../src/ui/dialog/xml-tree.cpp:754
+#: ../src/ui/dialog/xml-tree.cpp:758
 msgid "Duplicate node"
 msgstr "再製節點"
 
@@ -24065,22 +24069,22 @@ msgid "Drag to reorder nodes"
 msgstr "拖曳可重新排列節點"
 
 #: ../src/ui/dialog/xml-tree.cpp:141 ../src/ui/dialog/xml-tree.cpp:142
-#: ../src/ui/dialog/xml-tree.cpp:864
+#: ../src/ui/dialog/xml-tree.cpp:868
 msgid "Unindent node"
 msgstr "不內縮節點"
 
 #: ../src/ui/dialog/xml-tree.cpp:149 ../src/ui/dialog/xml-tree.cpp:150
-#: ../src/ui/dialog/xml-tree.cpp:842
+#: ../src/ui/dialog/xml-tree.cpp:846
 msgid "Indent node"
 msgstr "內縮節點"
 
 #: ../src/ui/dialog/xml-tree.cpp:157 ../src/ui/dialog/xml-tree.cpp:158
-#: ../src/ui/dialog/xml-tree.cpp:793
+#: ../src/ui/dialog/xml-tree.cpp:797
 msgid "Raise node"
 msgstr "提升節點"
 
 #: ../src/ui/dialog/xml-tree.cpp:165 ../src/ui/dialog/xml-tree.cpp:166
-#: ../src/ui/dialog/xml-tree.cpp:811
+#: ../src/ui/dialog/xml-tree.cpp:815
 msgid "Lower node"
 msgstr "降低節點"
 
@@ -24098,84 +24102,84 @@ msgstr "樣式(_S)"
 msgid "<b>Click</b> to select nodes, <b>drag</b> to rearrange."
 msgstr "<b>點擊</b>可選取節點，<b>拖曳</b>可重新排列。"
 
-#: ../src/ui/dialog/xml-tree.cpp:458
+#: ../src/ui/dialog/xml-tree.cpp:462
 msgid "Drag XML subtree"
 msgstr "拖曳 XML 子目錄"
 
-#: ../src/ui/dialog/xml-tree.cpp:724
+#: ../src/ui/dialog/xml-tree.cpp:728
 msgid "Create new element node"
 msgstr "建立新的元件節點"
 
-#: ../src/ui/dialog/xml-tree.cpp:739
+#: ../src/ui/dialog/xml-tree.cpp:743
 msgid "Create new text node"
 msgstr "建立新的文字節點"
 
-#: ../src/ui/dialog/xml-tree.cpp:771
+#: ../src/ui/dialog/xml-tree.cpp:775
 msgid "nodeAsInXMLinHistoryDialog|Delete node"
 msgstr "刪除節點"
 
-#: ../src/ui/interface.cpp:767
+#: ../src/ui/drag-and-drop.cpp:159 ../src/ui/drag-and-drop.cpp:245
+#: ../src/ui/drag-and-drop.cpp:348 ../src/ui/widget/selected-style.cpp:531
+msgid "Drop color"
+msgstr "丟棄顏色"
+
+#: ../src/ui/drag-and-drop.cpp:198 ../src/ui/drag-and-drop.cpp:308
+msgid "Drop color on gradient"
+msgstr "丟棄漸層上的顏色"
+
+#: ../src/ui/drag-and-drop.cpp:363
+msgid "Could not parse SVG data"
+msgstr "無法解析 SVG 資料"
+
+#: ../src/ui/drag-and-drop.cpp:402
+msgid "Drop SVG"
+msgstr "丟棄 SVG"
+
+#: ../src/ui/drag-and-drop.cpp:419
+msgid "Drop Symbol"
+msgstr "丟棄符號"
+
+#: ../src/ui/drag-and-drop.cpp:442
+msgid "Drop bitmap image"
+msgstr "丟棄點陣圖影像"
+
+#: ../src/ui/interface.cpp:598
 msgctxt "Interface setup"
 msgid "Default"
 msgstr "預設"
 
-#: ../src/ui/interface.cpp:767
+#: ../src/ui/interface.cpp:598
 msgid "Default interface setup"
 msgstr "預設的介面設定"
 
-#: ../src/ui/interface.cpp:768
+#: ../src/ui/interface.cpp:599
 msgctxt "Interface setup"
 msgid "Custom"
 msgstr "自訂"
 
-#: ../src/ui/interface.cpp:768
+#: ../src/ui/interface.cpp:599
 msgid "Setup for custom task"
 msgstr "自訂工作設定"
 
-#: ../src/ui/interface.cpp:769
+#: ../src/ui/interface.cpp:600
 msgctxt "Interface setup"
 msgid "Wide"
 msgstr "寬螢幕"
 
-#: ../src/ui/interface.cpp:769
+#: ../src/ui/interface.cpp:600
 msgid "Setup for widescreen work"
 msgstr "寬螢幕工作設定"
 
-#: ../src/ui/interface.cpp:905
+#: ../src/ui/interface.cpp:736
 #, c-format
 msgid "Verb \"%s\" Unknown"
 msgstr "動詞「%s」不明"
 
-#: ../src/ui/interface.cpp:940
+#: ../src/ui/interface.cpp:771
 msgid "Open _Recent"
 msgstr "最近開啟(_R)"
 
-#: ../src/ui/interface.cpp:1048 ../src/ui/interface.cpp:1134
-#: ../src/ui/interface.cpp:1237 ../src/ui/widget/selected-style.cpp:531
-msgid "Drop color"
-msgstr "丟棄顏色"
-
-#: ../src/ui/interface.cpp:1087 ../src/ui/interface.cpp:1197
-msgid "Drop color on gradient"
-msgstr "丟棄漸層上的顏色"
-
-#: ../src/ui/interface.cpp:1252
-msgid "Could not parse SVG data"
-msgstr "無法解析 SVG 資料"
-
-#: ../src/ui/interface.cpp:1291
-msgid "Drop SVG"
-msgstr "丟棄 SVG"
-
-#: ../src/ui/interface.cpp:1308
-msgid "Drop Symbol"
-msgstr "丟棄符號"
-
-#: ../src/ui/interface.cpp:1331
-msgid "Drop bitmap image"
-msgstr "丟棄點陣圖影像"
-
-#: ../src/ui/interface.cpp:1424
+#: ../src/ui/interface.cpp:860
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">A file named \"%s\" already exists. Do "
@@ -24188,7 +24192,7 @@ msgstr ""
 "\n"
 "檔案已存在\"%s\"。 取代將會覆寫檔案的內容。"
 
-#: ../src/ui/interface.cpp:1431 ../share/extensions/web-set-att.inx.h:21
+#: ../src/ui/interface.cpp:867 ../share/extensions/web-set-att.inx.h:21
 #: ../share/extensions/web-transmit-att.inx.h:19
 msgid "Replace"
 msgstr "取代"
@@ -24413,12 +24417,12 @@ msgid "Duplicate nodes"
 msgstr "再製節點"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:419
-#: ../src/ui/toolbar/node-toolbar.cpp:408
+#: ../src/ui/toolbar/node-toolbar.cpp:314
 msgid "Join nodes"
 msgstr "合併節點"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:426
-#: ../src/ui/toolbar/node-toolbar.cpp:419
+#: ../src/ui/toolbar/node-toolbar.cpp:325
 msgid "Break nodes"
 msgstr "拆開節點"
 
@@ -24682,7 +24686,7 @@ msgstr "旋轉控制"
 
 #. We need to call MPM's method because it could have been our last node
 #: ../src/ui/tool/path-manipulator.cpp:1561
-#: ../src/ui/toolbar/node-toolbar.cpp:397
+#: ../src/ui/toolbar/node-toolbar.cpp:303
 msgid "Delete node"
 msgstr "刪除節點"
 
@@ -24810,262 +24814,256 @@ msgctxt "Transform handle tip"
 msgid "<b>Rotation center</b>: drag to change the origin of transforms"
 msgstr "<b>旋轉中心點</b>：拖曳可變更變形原點"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:140
-msgid "Ellipse: Change radius"
-msgstr ""
-
-#: ../src/ui/toolbar/arc-toolbar.cpp:206
-msgid "Arc: Change start/end"
-msgstr "弧：變更起點 / 終點"
-
-#: ../src/ui/toolbar/arc-toolbar.cpp:274
-#, fuzzy
-msgid "Arc: Changed arc type"
-msgstr "弧：變更起點 / 終點"
-
-#: ../src/ui/toolbar/arc-toolbar.cpp:409 ../src/ui/toolbar/arc-toolbar.cpp:448
-#: ../src/ui/toolbar/rect-toolbar.cpp:265
-#: ../src/ui/toolbar/rect-toolbar.cpp:304
-#: ../src/ui/toolbar/spiral-toolbar.cpp:215
-#: ../src/ui/toolbar/spiral-toolbar.cpp:239
-#: ../src/ui/toolbar/star-toolbar.cpp:392
-#: ../src/ui/toolbar/star-toolbar.cpp:472
+#: ../src/ui/toolbar/arc-toolbar.cpp:104 ../src/ui/toolbar/arc-toolbar.cpp:507
+#: ../src/ui/toolbar/rect-toolbar.cpp:106
+#: ../src/ui/toolbar/rect-toolbar.cpp:356
+#: ../src/ui/toolbar/spiral-toolbar.cpp:90
+#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/star-toolbar.cpp:95 ../src/ui/toolbar/star-toolbar.cpp:532
 msgid "<b>New:</b>"
 msgstr "<b>新增：</b>"
 
-#. FIXME: implement averaging of all parameters for multiple selected
-#. gtk_label_set_markup(GTK_LABEL(l), _("<b>Average:</b>"));
-#: ../src/ui/toolbar/arc-toolbar.cpp:412 ../src/ui/toolbar/arc-toolbar.cpp:429
-#: ../src/ui/toolbar/rect-toolbar.cpp:273
-#: ../src/ui/toolbar/rect-toolbar.cpp:291
-#: ../src/ui/toolbar/spiral-toolbar.cpp:217
-#: ../src/ui/toolbar/spiral-toolbar.cpp:228
-#: ../src/ui/toolbar/star-toolbar.cpp:394
-msgid "<b>Change:</b>"
-msgstr "<b>變更：</b>"
-
-#: ../src/ui/toolbar/arc-toolbar.cpp:459 ../src/ui/toolbar/rect-toolbar.cpp:354
+#: ../src/ui/toolbar/arc-toolbar.cpp:114 ../src/ui/toolbar/rect-toolbar.cpp:163
 msgid "Horizontal radius"
 msgstr "水平半徑"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:459 ../src/ui/toolbar/rect-toolbar.cpp:354
+#: ../src/ui/toolbar/arc-toolbar.cpp:114 ../src/ui/toolbar/rect-toolbar.cpp:163
 msgid "Rx:"
 msgstr "X 半徑："
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:459
+#: ../src/ui/toolbar/arc-toolbar.cpp:114
 #, fuzzy
 msgid "Horizontal radius of the circle, ellipse, or arc"
 msgstr "圓角的水平半徑"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:475 ../src/ui/toolbar/rect-toolbar.cpp:368
+#: ../src/ui/toolbar/arc-toolbar.cpp:135 ../src/ui/toolbar/rect-toolbar.cpp:185
 msgid "Vertical radius"
 msgstr "垂直半徑"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:475 ../src/ui/toolbar/rect-toolbar.cpp:368
+#: ../src/ui/toolbar/arc-toolbar.cpp:135 ../src/ui/toolbar/rect-toolbar.cpp:185
 msgid "Ry:"
 msgstr "Y 半徑："
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:475
+#: ../src/ui/toolbar/arc-toolbar.cpp:135
 #, fuzzy
 msgid "Vertical radius of the circle, ellipse, or arc"
 msgstr "建立圓形﹑橢圓形與弧形"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:488 ../src/ui/toolbar/lpe-toolbar.cpp:400
-#: ../src/ui/toolbar/node-toolbar.cpp:611
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:180
-#: ../src/ui/toolbar/rect-toolbar.cpp:379
-#: ../src/ui/toolbar/select-toolbar.cpp:524
-#: ../src/ui/toolbar/text-toolbar.cpp:2322
+#: ../src/ui/toolbar/arc-toolbar.cpp:153 ../src/ui/toolbar/lpe-toolbar.cpp:208
+#: ../src/ui/toolbar/node-toolbar.cpp:517
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:130
+#: ../src/ui/toolbar/rect-toolbar.cpp:204
+#: ../src/ui/toolbar/select-toolbar.cpp:317
+#: ../src/ui/toolbar/text-toolbar.cpp:611
 msgid "Units"
 msgstr "單位"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:495
+#: ../src/ui/toolbar/arc-toolbar.cpp:160
 msgid "Start:"
 msgstr "起點："
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:496
+#: ../src/ui/toolbar/arc-toolbar.cpp:161
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr "從水平到弧形起點的角度 (單位為度)"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:508
+#: ../src/ui/toolbar/arc-toolbar.cpp:177
 msgid "End:"
 msgstr "終點："
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:509
+#: ../src/ui/toolbar/arc-toolbar.cpp:178
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr "從水平到弧形終點的角度 (單位為度)"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:528
+#: ../src/ui/toolbar/arc-toolbar.cpp:205
 #, fuzzy
 msgid "Switch to slice (closed shape with two radii)"
 msgstr "切換為線段 (用兩個半徑變成封閉的形狀)"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:533
+#: ../src/ui/toolbar/arc-toolbar.cpp:210
 msgid "Arc (Open)"
 msgstr ""
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:534
+#: ../src/ui/toolbar/arc-toolbar.cpp:211
 msgid "Switch to arc (unclosed shape)"
 msgstr "切換為弧形 (未閉合形狀)"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:540
+#: ../src/ui/toolbar/arc-toolbar.cpp:217
 #, fuzzy
 msgid "Switch to chord (closed shape)"
 msgstr "切換為弧形 (未閉合形狀)"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:565
+#: ../src/ui/toolbar/arc-toolbar.cpp:241
 msgid "Make whole"
 msgstr "完整形狀"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:566
+#: ../src/ui/toolbar/arc-toolbar.cpp:242
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "讓此形狀變成完整橢圓形，而不是弧形或線段"
 
-#. TODO: use the correct axis here, too
-#: ../src/ui/toolbar/box3d-toolbar.cpp:234
-msgid "3D Box: Change perspective (angle of infinite axis)"
-msgstr "立方體：變更透視 (無限軸的角度)"
+#: ../src/ui/toolbar/arc-toolbar.cpp:317
+msgid "Ellipse: Change radius"
+msgstr ""
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:303
+#: ../src/ui/toolbar/arc-toolbar.cpp:371
+msgid "Arc: Change start/end"
+msgstr "弧：變更起點 / 終點"
+
+#: ../src/ui/toolbar/arc-toolbar.cpp:427
+#, fuzzy
+msgid "Arc: Changed arc type"
+msgstr "弧：變更起點 / 終點"
+
+#. FIXME: implement averaging of all parameters for multiple selected
+#. gtk_label_set_markup(GTK_LABEL(l), _("<b>Average:</b>"));
+#: ../src/ui/toolbar/arc-toolbar.cpp:510 ../src/ui/toolbar/arc-toolbar.cpp:524
+#: ../src/ui/toolbar/rect-toolbar.cpp:360
+#: ../src/ui/toolbar/rect-toolbar.cpp:375
+#: ../src/ui/toolbar/spiral-toolbar.cpp:263
+#: ../src/ui/toolbar/spiral-toolbar.cpp:274
+#: ../src/ui/toolbar/star-toolbar.cpp:534
+msgid "<b>Change:</b>"
+msgstr "<b>變更：</b>"
+
+#: ../src/ui/toolbar/box3d-toolbar.cpp:89
 msgid "Angle in X direction"
 msgstr "X 方向的角度"
 
 #. Translators: PL is short for 'perspective line'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:305
+#: ../src/ui/toolbar/box3d-toolbar.cpp:91
 msgid "Angle of PLs in X direction"
 msgstr "平行線 (PLs) X 方向的角度"
 
 #. Translators: VP is short for 'vanishing point'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:327
+#: ../src/ui/toolbar/box3d-toolbar.cpp:117
 msgid "State of VP in X direction"
 msgstr "消逝點 (VP) X 方向的狀態"
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:328
+#: ../src/ui/toolbar/box3d-toolbar.cpp:118
 msgid "Toggle VP in X direction between 'finite' and 'infinite' (=parallel)"
 msgstr "切換消逝點 (VP) X 方向為「有限」或「無限」(=平行)"
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:343
+#: ../src/ui/toolbar/box3d-toolbar.cpp:132
 msgid "Angle in Y direction"
 msgstr "Y 方向的角度"
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:343
+#: ../src/ui/toolbar/box3d-toolbar.cpp:132
 msgid "Angle Y:"
 msgstr "角度 Y："
 
 #. Translators: PL is short for 'perspective line'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:345
+#: ../src/ui/toolbar/box3d-toolbar.cpp:134
 msgid "Angle of PLs in Y direction"
 msgstr "平行線 (PLs) Y 方向的角度"
 
 #. Translators: VP is short for 'vanishing point'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:366
+#: ../src/ui/toolbar/box3d-toolbar.cpp:159
 msgid "State of VP in Y direction"
 msgstr "消逝點 (VP) Y 方向的狀態"
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:367
+#: ../src/ui/toolbar/box3d-toolbar.cpp:160
 msgid "Toggle VP in Y direction between 'finite' and 'infinite' (=parallel)"
 msgstr "切換消逝點 (VP) Y 方向為「有限」或「無限」(=平行)"
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:382
+#: ../src/ui/toolbar/box3d-toolbar.cpp:174
 msgid "Angle in Z direction"
 msgstr "Z 方向的角度"
 
 #. Translators: PL is short for 'perspective line'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:384
+#: ../src/ui/toolbar/box3d-toolbar.cpp:176
 msgid "Angle of PLs in Z direction"
 msgstr "平行線 (PLs) Z 方向的角度"
 
 #. Translators: VP is short for 'vanishing point'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:405
+#: ../src/ui/toolbar/box3d-toolbar.cpp:201
 msgid "State of VP in Z direction"
 msgstr "消逝點 (VP) Z 方向的狀態"
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:406
+#: ../src/ui/toolbar/box3d-toolbar.cpp:202
 msgid "Toggle VP in Z direction between 'finite' and 'infinite' (=parallel)"
 msgstr "切換消逝點 (VP) Z 方向為「有限」或「無限」(=平行)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:213
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:254
-msgid "No preset"
-msgstr "無外形"
+#. TODO: use the correct axis here, too
+#: ../src/ui/toolbar/box3d-toolbar.cpp:242
+msgid "3D Box: Change perspective (angle of infinite axis)"
+msgstr "立方體：變更透視 (無限軸的角度)"
 
 #. Width
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:394
-#: ../src/ui/toolbar/eraser-toolbar.cpp:183
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
+#: ../src/ui/toolbar/eraser-toolbar.cpp:112
 msgid "(hairline)"
 msgstr "(髮絲線)"
 
 #. Mean
 #. Rotation
 #. Scale
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:394
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:427
-#: ../src/ui/toolbar/eraser-toolbar.cpp:183
-#: ../src/ui/toolbar/pencil-toolbar.cpp:556
-#: ../src/ui/toolbar/spray-toolbar.cpp:290
-#: ../src/ui/toolbar/spray-toolbar.cpp:319
-#: ../src/ui/toolbar/spray-toolbar.cpp:335
-#: ../src/ui/toolbar/spray-toolbar.cpp:402
-#: ../src/ui/toolbar/spray-toolbar.cpp:432
-#: ../src/ui/toolbar/spray-toolbar.cpp:450
-#: ../src/ui/toolbar/spray-toolbar.cpp:599
-#: ../src/ui/toolbar/tweak-toolbar.cpp:126
-#: ../src/ui/toolbar/tweak-toolbar.cpp:143
-#: ../src/ui/toolbar/tweak-toolbar.cpp:341
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:147
+#: ../src/ui/toolbar/eraser-toolbar.cpp:112
+#: ../src/ui/toolbar/pencil-toolbar.cpp:171
+#: ../src/ui/toolbar/spray-toolbar.cpp:90
+#: ../src/ui/toolbar/spray-toolbar.cpp:122
+#: ../src/ui/toolbar/spray-toolbar.cpp:143
+#: ../src/ui/toolbar/spray-toolbar.cpp:212
+#: ../src/ui/toolbar/spray-toolbar.cpp:244
+#: ../src/ui/toolbar/spray-toolbar.cpp:266
+#: ../src/ui/toolbar/spray-toolbar.cpp:409
+#: ../src/ui/toolbar/tweak-toolbar.cpp:92
+#: ../src/ui/toolbar/tweak-toolbar.cpp:115
+#: ../src/ui/toolbar/tweak-toolbar.cpp:312
 msgid "(default)"
 msgstr "(預設)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:394
-#: ../src/ui/toolbar/eraser-toolbar.cpp:183
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
+#: ../src/ui/toolbar/eraser-toolbar.cpp:112
 msgid "(broad stroke)"
 msgstr "(寬筆畫)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:397
-#: ../src/ui/toolbar/eraser-toolbar.cpp:186
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:105
+#: ../src/ui/toolbar/eraser-toolbar.cpp:115
 msgid "Pen Width"
 msgstr "筆寬"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:398
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:106
 msgid "The width of the calligraphic pen (relative to the visible canvas area)"
 msgstr "美工筆的寬度 (相對於可見畫布區域)"
 
 #. Thinning
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(speed blows up stroke)"
 msgstr "(迅速放大筆畫)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(slight widening)"
 msgstr "(輕微拓寬)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(constant width)"
 msgstr "(固定寬度)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(slight thinning, default)"
 msgstr "(輕微變細，預設)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(speed deflates stroke)"
 msgstr "(快速縮小畫筆)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:414
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:128
 msgid "Stroke Thinning"
 msgstr "筆畫變細"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:414
-#: ../src/ui/toolbar/eraser-toolbar.cpp:219
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:128
+#: ../src/ui/toolbar/eraser-toolbar.cpp:150
 msgid "Thinning:"
 msgstr "變細："
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:415
-#: ../src/ui/toolbar/eraser-toolbar.cpp:220
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:129
+#: ../src/ui/toolbar/eraser-toolbar.cpp:151
 msgid ""
 "How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 "
 "makes them broader, 0 makes width independent of velocity)"
@@ -25074,321 +25072,326 @@ msgstr ""
 "無關)"
 
 #. Angle
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:427
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:147
 msgid "(left edge up)"
 msgstr "(左邊抬高)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:427
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:147
 msgid "(horizontal)"
 msgstr "(水平)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:427
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:147
 msgid "(right edge up)"
 msgstr "(右邊抬高)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:430
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:150
 msgid "Pen Angle"
 msgstr "筆尖角度"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:430
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:150
 #: ../share/extensions/motion.inx.h:3 ../share/extensions/restack.inx.h:5
 msgid "Angle:"
 msgstr "角度："
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:431
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:151
 msgid ""
 "The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if "
 "fixation = 0)"
 msgstr "筆尖的角度 (單位為度；0 = 水平；若固定=0 則沒有任何作用)"
 
 #. Fixation
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:445
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:169
 msgid "(perpendicular to stroke, \"brush\")"
 msgstr "(直立畫筆，「筆刷」)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:445
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:169
 msgid "(almost fixed, default)"
 msgstr "(幾乎固定，預設)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:445
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:169
 msgid "(fixed by Angle, \"pen\")"
 msgstr "(固定角度，「筆」)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:448
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:172
 msgid "Fixation"
 msgstr "固定"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:448
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:172
 msgid "Fixation:"
 msgstr "固定："
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:449
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:173
 msgid ""
 "Angle behavior (0 = nib always perpendicular to stroke direction, 100 = "
 "fixed angle)"
 msgstr "角度行為 (0 = 筆尖始終和筆畫方向垂直，100 = 固定的角度)"
 
 #. Cap Rounding
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:461
-#: ../src/ui/toolbar/eraser-toolbar.cpp:234
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:191
+#: ../src/ui/toolbar/eraser-toolbar.cpp:169
 msgid "(blunt caps, default)"
 msgstr "(鈍線端，預設)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:461
-#: ../src/ui/toolbar/eraser-toolbar.cpp:234
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:191
+#: ../src/ui/toolbar/eraser-toolbar.cpp:169
 msgid "(slightly bulging)"
 msgstr "(輕微膨脹)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:461
-#: ../src/ui/toolbar/eraser-toolbar.cpp:234
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:191
+#: ../src/ui/toolbar/eraser-toolbar.cpp:169
 msgid "(approximately round)"
 msgstr "(近似圓線端)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:461
-#: ../src/ui/toolbar/eraser-toolbar.cpp:234
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:191
+#: ../src/ui/toolbar/eraser-toolbar.cpp:169
 msgid "(long protruding caps)"
 msgstr "(長凸端)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:465
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:195
 msgid "Cap rounding"
 msgstr "線端圓角"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:465
-#: ../src/ui/toolbar/eraser-toolbar.cpp:238
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:195
+#: ../src/ui/toolbar/eraser-toolbar.cpp:173
 msgid "Caps:"
 msgstr "線端："
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:466
-#: ../src/ui/toolbar/eraser-toolbar.cpp:239
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:196
+#: ../src/ui/toolbar/eraser-toolbar.cpp:174
 msgid ""
 "Increase to make caps at the ends of strokes protrude more (0 = no caps, 1 = "
 "round caps)"
 msgstr "增加這項數值可使筆畫結束的線端更加凸出 (0 = 無線端，1 = 圓線端)"
 
 #. Tremor
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:478
-#: ../src/ui/toolbar/eraser-toolbar.cpp:253
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:214
+#: ../src/ui/toolbar/eraser-toolbar.cpp:192
 msgid "(smooth line)"
 msgstr "(平滑直線)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:478
-#: ../src/ui/toolbar/eraser-toolbar.cpp:253
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:214
+#: ../src/ui/toolbar/eraser-toolbar.cpp:192
 msgid "(slight tremor)"
 msgstr "(輕微顫抖)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:478
-#: ../src/ui/toolbar/eraser-toolbar.cpp:253
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:214
+#: ../src/ui/toolbar/eraser-toolbar.cpp:192
 msgid "(noticeable tremor)"
 msgstr "(明顯顫抖)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:478
-#: ../src/ui/toolbar/eraser-toolbar.cpp:253
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:214
+#: ../src/ui/toolbar/eraser-toolbar.cpp:192
 msgid "(maximum tremor)"
 msgstr "(最小顫抖)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:481
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:217
 msgid "Stroke Tremor"
 msgstr "邊框顫抖"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:481
-#: ../src/ui/toolbar/eraser-toolbar.cpp:256
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:217
+#: ../src/ui/toolbar/eraser-toolbar.cpp:195
 msgid "Tremor:"
 msgstr "顫抖："
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:482
-#: ../src/ui/toolbar/eraser-toolbar.cpp:257
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:218
+#: ../src/ui/toolbar/eraser-toolbar.cpp:196
 msgid "Increase to make strokes rugged and trembling"
 msgstr "增加這項數值可使筆畫粗糙與顫抖"
 
 #. Wiggle
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:496
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:238
 msgid "(no wiggle)"
 msgstr "(無擺動)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:496
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:238
 msgid "(slight deviation)"
 msgstr "(輕微偏差)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:496
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:238
 msgid "(wild waves and curls)"
 msgstr "(雜亂波形與捲曲)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:499
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:241
 msgid "Pen Wiggle"
 msgstr "筆尖擺動"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:499
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:241
 msgid "Wiggle:"
 msgstr "擺動："
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:500
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:242
 msgid "Increase to make the pen waver and wiggle"
 msgstr "增加這項數值可使筆畫波動和擺動"
 
 #. Mass
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:513
-#: ../src/ui/toolbar/eraser-toolbar.cpp:273
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:261
+#: ../src/ui/toolbar/eraser-toolbar.cpp:215
 msgid "(no inertia)"
 msgstr "(無慣性)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:513
-#: ../src/ui/toolbar/eraser-toolbar.cpp:273
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:261
+#: ../src/ui/toolbar/eraser-toolbar.cpp:215
 msgid "(slight smoothing, default)"
 msgstr "(輕微平滑，預設)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:513
-#: ../src/ui/toolbar/eraser-toolbar.cpp:273
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:261
+#: ../src/ui/toolbar/eraser-toolbar.cpp:215
 msgid "(noticeable lagging)"
 msgstr "(明顯遲鈍)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:513
-#: ../src/ui/toolbar/eraser-toolbar.cpp:273
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:261
+#: ../src/ui/toolbar/eraser-toolbar.cpp:215
 msgid "(maximum inertia)"
 msgstr "(最大慣性)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:516
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:264
 msgid "Pen Mass"
 msgstr "筆的質量"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:516
-#: ../src/ui/toolbar/eraser-toolbar.cpp:276
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:264
+#: ../src/ui/toolbar/eraser-toolbar.cpp:218
 msgid "Mass:"
 msgstr "質量："
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:517
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:265
 msgid "Increase to make the pen drag behind, as if slowed by inertia"
 msgstr "增加這項數值可使筆畫拖延，就像因慣性而減慢"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:532
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:286
 msgid "Trace Background"
 msgstr "描繪背景"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:533
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:287
 msgid ""
 "Trace the lightness of the background by the width of the pen (white - "
 "minimum width, black - maximum width)"
 msgstr "用筆尖寬度來描繪背景的亮度 (白 - 最小寬度，黑 - 最大寬度)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:546
-#: ../src/ui/toolbar/eraser-toolbar.cpp:204
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:299
+#: ../src/ui/toolbar/eraser-toolbar.cpp:137
 msgid "Use the pressure of the input device to alter the width of the pen"
 msgstr "利用輸入裝置的壓力來改變筆尖寬度"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:558
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:310
 msgid "Tilt"
 msgstr "傾斜"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:559
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:311
 msgid "Use the tilt of the input device to alter the angle of the pen's nib"
 msgstr "利用輸入裝置的傾斜來改變筆尖角度"
 
 #. Name
 #. Label
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:580
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:331
 msgid "Choose a preset"
 msgstr "選擇外形"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:598
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:347
 msgid "Add/Edit Profile"
 msgstr "加入/編輯描述檔"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:599
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:348
 msgid "Add or edit calligraphic profile"
 msgstr "加入或編輯書法描述檔"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:117
-msgid "Set connector type: orthogonal"
-msgstr "設定連接線類型：直角線"
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:506
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:601
+msgid "No preset"
+msgstr "無外形"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:117
-msgid "Set connector type: polyline"
-msgstr "設定連接線類型：折線"
-
-#: ../src/ui/toolbar/connector-toolbar.cpp:164
-msgid "Change connector curvature"
-msgstr "變更連接線曲率"
-
-#: ../src/ui/toolbar/connector-toolbar.cpp:213
-msgid "Change connector spacing"
-msgstr "變更連接線間距"
-
-#: ../src/ui/toolbar/connector-toolbar.cpp:311
+#: ../src/ui/toolbar/connector-toolbar.cpp:81
 msgid "Avoid"
 msgstr "避開"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:312
+#: ../src/ui/toolbar/connector-toolbar.cpp:82
 #: ../src/ui/tools/connector-tool.cpp:1321
 msgid "Make connectors avoid selected objects"
 msgstr "使連接線避開選取的物件"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:321
+#: ../src/ui/toolbar/connector-toolbar.cpp:91
 msgid "Ignore"
 msgstr "忽略"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:322
+#: ../src/ui/toolbar/connector-toolbar.cpp:92
 #: ../src/ui/tools/connector-tool.cpp:1322
 msgid "Make connectors ignore selected objects"
 msgstr "使連接線忽略選取的物件"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:332
+#: ../src/ui/toolbar/connector-toolbar.cpp:102
 msgid "Orthogonal"
 msgstr "直角線"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:333
+#: ../src/ui/toolbar/connector-toolbar.cpp:103
 msgid "Make connector orthogonal or polyline"
 msgstr "使連接線為直角線或折線"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:347
+#: ../src/ui/toolbar/connector-toolbar.cpp:116
 msgid "Connector Curvature"
 msgstr "連接線曲率"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:347
+#: ../src/ui/toolbar/connector-toolbar.cpp:116
 msgid "Curvature:"
 msgstr "曲率："
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:348
+#: ../src/ui/toolbar/connector-toolbar.cpp:117
 msgid "The amount of connectors curvature"
 msgstr "連接線的彎曲程度"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:358
+#: ../src/ui/toolbar/connector-toolbar.cpp:132
 msgid "Connector Spacing"
 msgstr "連接線間距"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:358
+#: ../src/ui/toolbar/connector-toolbar.cpp:132
 msgid "Spacing:"
 msgstr "間距："
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:359
+#: ../src/ui/toolbar/connector-toolbar.cpp:133
 msgid "The amount of space left around objects by auto-routing connectors"
 msgstr "自動路線規劃連接線在物件周圍留下的間隔距離"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:370
+#: ../src/ui/toolbar/connector-toolbar.cpp:149
 msgid "Graph"
 msgstr "圖形"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:380
+#: ../src/ui/toolbar/connector-toolbar.cpp:159
 msgid "Connector Length"
 msgstr "連接線長度"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:380
+#: ../src/ui/toolbar/connector-toolbar.cpp:159
 msgid "Length:"
 msgstr "長度："
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:381
+#: ../src/ui/toolbar/connector-toolbar.cpp:160
 msgid "Ideal length for connectors when layout is applied"
 msgstr "套用版面時連接線的理想長度"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:393
+#: ../src/ui/toolbar/connector-toolbar.cpp:176
 msgid "Downwards"
 msgstr "向下"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:394
+#: ../src/ui/toolbar/connector-toolbar.cpp:177
 msgid "Make connectors with end-markers (arrows) point downwards"
 msgstr "使連接線含有指向下方的終點標記 (箭頭)"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:410
+#: ../src/ui/toolbar/connector-toolbar.cpp:193
 msgid "Do not allow overlapping shapes"
 msgstr "不允許重疊的形狀"
+
+#: ../src/ui/toolbar/connector-toolbar.cpp:279
+msgid "Set connector type: orthogonal"
+msgstr "設定連接線類型：直角線"
+
+#: ../src/ui/toolbar/connector-toolbar.cpp:279
+msgid "Set connector type: polyline"
+msgstr "設定連接線類型：折線"
+
+#: ../src/ui/toolbar/connector-toolbar.cpp:326
+msgid "Change connector curvature"
+msgstr "變更連接線曲率"
+
+#: ../src/ui/toolbar/connector-toolbar.cpp:374
+msgid "Change connector spacing"
+msgstr "變更連接線間距"
 
 #: ../src/ui/toolbar/dropper-toolbar.cpp:70
 msgid "Pick"
@@ -25411,68 +25414,68 @@ msgid ""
 "If alpha was picked, assign it to selection as fill or stroke transparency"
 msgstr "若拾取透明 (alpha)，將數值指定給選取區作為填色或邊框透明度"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:147
+#: ../src/ui/toolbar/eraser-toolbar.cpp:77
 #, fuzzy
 msgid "Delete objects touched by eraser"
 msgstr "刪除被橡皮擦觸碰到的物件"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:152
+#: ../src/ui/toolbar/eraser-toolbar.cpp:82
 msgid "Cut"
 msgstr "剪切"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:153
+#: ../src/ui/toolbar/eraser-toolbar.cpp:83
 msgid "Cut out from paths and shapes"
 msgstr "從物件和形狀中切掉"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:158
+#: ../src/ui/toolbar/eraser-toolbar.cpp:88
 msgid "Clip"
 msgstr "裁剪"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:159
+#: ../src/ui/toolbar/eraser-toolbar.cpp:89
 msgid "Clip from objects"
 msgstr "裁剪物件"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:183
+#: ../src/ui/toolbar/eraser-toolbar.cpp:112
 msgid "(no width)"
 msgstr "(無寬度)"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:187
+#: ../src/ui/toolbar/eraser-toolbar.cpp:116
 msgid "The width of the eraser pen (relative to the visible canvas area)"
 msgstr "橡皮擦的寬度 (相對於可見畫布區域)"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:203
+#: ../src/ui/toolbar/eraser-toolbar.cpp:136
 msgid "Eraser Pressure"
 msgstr "橡皮擦壓力"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:219
+#: ../src/ui/toolbar/eraser-toolbar.cpp:150
 msgid "Eraser Stroke Thinning"
 msgstr "橡皮擦筆畫變細"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:238
+#: ../src/ui/toolbar/eraser-toolbar.cpp:173
 msgid "Eraser Cap rounding"
 msgstr "橡皮擦線端圓角"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:256
+#: ../src/ui/toolbar/eraser-toolbar.cpp:195
 msgid "EraserStroke Tremor"
 msgstr "橡皮擦筆畫顫抖"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:276
+#: ../src/ui/toolbar/eraser-toolbar.cpp:218
 msgid "Eraser Mass"
 msgstr "橡皮擦質量"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:277
+#: ../src/ui/toolbar/eraser-toolbar.cpp:219
 msgid "Increase to make the eraser drag behind, as if slowed by inertia"
 msgstr "增加這項數值可使筆畫拖動延緩，就像因慣性而減慢"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:293
-#: ../src/ui/toolbar/eraser-toolbar.cpp:294
+#: ../src/ui/toolbar/eraser-toolbar.cpp:238
+#: ../src/ui/toolbar/eraser-toolbar.cpp:239
 msgid "Break apart cut items"
 msgstr "打散項目"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:138
 #: ../src/ui/toolbar/gradient-toolbar.cpp:158
-#: ../src/ui/toolbar/gradient-toolbar.cpp:534
-#: ../src/ui/toolbar/gradient-toolbar.cpp:933
+#: ../src/ui/toolbar/gradient-toolbar.cpp:438
+#: ../src/ui/toolbar/gradient-toolbar.cpp:1055
 msgid "No gradient"
 msgstr "無漸層"
 
@@ -25485,90 +25488,68 @@ msgstr "沒有選取項目"
 msgid "Multiple gradients"
 msgstr "多重漸層"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:544
-#: ../src/widgets/gradient-vector.cpp:566
-msgid "No stops in gradient"
-msgstr "漸層沒有停止點"
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:654
-msgid "Multiple stops"
-msgstr "多個停止點"
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:737
-msgid "Assign gradient to object"
-msgstr "指定漸層到物件"
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:765
-msgid "Set gradient repeat"
-msgstr "設定漸層重複"
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:828
-#: ../src/widgets/gradient-vector.cpp:674
-msgid "Change gradient stop offset"
-msgstr "變更漸層停止點偏移"
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:857
+#: ../src/ui/toolbar/gradient-toolbar.cpp:364
 msgid "linear"
 msgstr "線性"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:858
+#: ../src/ui/toolbar/gradient-toolbar.cpp:365
 msgid "Create linear gradient"
 msgstr "建立線性漸層"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:863
+#: ../src/ui/toolbar/gradient-toolbar.cpp:370
 msgid "radial"
 msgstr "放射狀"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:864
+#: ../src/ui/toolbar/gradient-toolbar.cpp:371
 msgid "Create radial (elliptic or circular) gradient"
 msgstr "建立放射狀 (橢圓或圓形) 漸層"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:895
-#: ../src/ui/toolbar/mesh-toolbar.cpp:417
+#: ../src/ui/toolbar/gradient-toolbar.cpp:401
+#: ../src/ui/toolbar/mesh-toolbar.cpp:264
 msgid "fill"
 msgstr "填充"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:896
-#: ../src/ui/toolbar/mesh-toolbar.cpp:418
+#: ../src/ui/toolbar/gradient-toolbar.cpp:402
+#: ../src/ui/toolbar/mesh-toolbar.cpp:265
 msgid "Create gradient in the fill"
 msgstr "在填充中建立漸層"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:901
-#: ../src/ui/toolbar/mesh-toolbar.cpp:423
+#: ../src/ui/toolbar/gradient-toolbar.cpp:407
+#: ../src/ui/toolbar/mesh-toolbar.cpp:270
 msgid "stroke"
 msgstr "邊框"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:902
-#: ../src/ui/toolbar/mesh-toolbar.cpp:424
+#: ../src/ui/toolbar/gradient-toolbar.cpp:408
+#: ../src/ui/toolbar/mesh-toolbar.cpp:271
 msgid "Create gradient in the stroke"
 msgstr "在邊框中建立漸層"
 
 #. Name
-#: ../src/ui/toolbar/gradient-toolbar.cpp:940
+#: ../src/ui/toolbar/gradient-toolbar.cpp:445
 msgid "Select"
 msgstr "選取"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:967
+#: ../src/ui/toolbar/gradient-toolbar.cpp:471
 msgctxt "Gradient repeat type"
 msgid "None"
 msgstr "無"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:973
+#: ../src/ui/toolbar/gradient-toolbar.cpp:477
 msgid "Reflected"
 msgstr "逆向"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:979
+#: ../src/ui/toolbar/gradient-toolbar.cpp:483
 msgid "Direct"
 msgstr "正向"
 
 #. Name
-#: ../src/ui/toolbar/gradient-toolbar.cpp:986
+#: ../src/ui/toolbar/gradient-toolbar.cpp:490
 msgid "Repeat"
 msgstr "重複"
 
 #. Label
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
-#: ../src/ui/toolbar/gradient-toolbar.cpp:988
+#: ../src/ui/toolbar/gradient-toolbar.cpp:492
 msgid ""
 "Whether to fill with flat color beyond the ends of the gradient vector "
 "(spreadMethod=\"pad\"), or repeat the gradient in the same direction "
@@ -25578,256 +25559,420 @@ msgstr ""
 "是否在漸層向量的末端之後用平面顏色填充 (展開方式=「填補」)，或以相同方向重複"
 "漸層 (展開方式=「重複」)，或以相反方向重複漸層 (展開方式=「反射」)"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1015
+#: ../src/ui/toolbar/gradient-toolbar.cpp:518
 msgid "No stops"
 msgstr "無停止點"
 
 #. Name
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1022
+#: ../src/ui/toolbar/gradient-toolbar.cpp:525
 msgid "Stops"
 msgstr "停止點"
 
 #. Label
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1044
+#: ../src/ui/toolbar/gradient-toolbar.cpp:545
 #: ../src/widgets/gradient-vector.cpp:851
 msgctxt "Gradient"
 msgid "Offset:"
 msgstr "偏移："
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1044
+#: ../src/ui/toolbar/gradient-toolbar.cpp:545
 msgid "Offset of selected stop"
 msgstr "選取停止點的偏移"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1062
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1063
+#: ../src/ui/toolbar/gradient-toolbar.cpp:565
+#: ../src/ui/toolbar/gradient-toolbar.cpp:566
 msgid "Insert new stop"
 msgstr "插入新停止點"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1076
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1077
+#: ../src/ui/toolbar/gradient-toolbar.cpp:578
+#: ../src/ui/toolbar/gradient-toolbar.cpp:579
 #: ../src/widgets/gradient-vector.cpp:837
 msgid "Delete stop"
 msgstr "刪除停止點"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1091
+#: ../src/ui/toolbar/gradient-toolbar.cpp:592
 msgid "Reverse the direction of the gradient"
 msgstr "反轉漸層的方向"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1105
+#: ../src/ui/toolbar/gradient-toolbar.cpp:605
 msgid "Link gradients"
 msgstr "連結漸層"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1106
+#: ../src/ui/toolbar/gradient-toolbar.cpp:606
 msgid "Link gradients to change all related gradients"
 msgstr "連結漸層以改變全部相關聯的漸層"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:275
+#: ../src/ui/toolbar/gradient-toolbar.cpp:666
+msgid "Assign gradient to object"
+msgstr "指定漸層到物件"
+
+#: ../src/ui/toolbar/gradient-toolbar.cpp:712
+msgid "Set gradient repeat"
+msgstr "設定漸層重複"
+
+#: ../src/ui/toolbar/gradient-toolbar.cpp:843
+#: ../src/widgets/gradient-vector.cpp:674
+msgid "Change gradient stop offset"
+msgstr "變更漸層停止點偏移"
+
+#: ../src/ui/toolbar/gradient-toolbar.cpp:1065
+#: ../src/widgets/gradient-vector.cpp:566
+msgid "No stops in gradient"
+msgstr "漸層沒有停止點"
+
+#: ../src/ui/toolbar/gradient-toolbar.cpp:1191
+msgid "Multiple stops"
+msgstr "多個停止點"
+
+#: ../src/ui/toolbar/lpe-toolbar.cpp:86
 msgid "All inactive"
 msgstr "所有非使用中的工具"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:276
+#: ../src/ui/toolbar/lpe-toolbar.cpp:87
 msgid "No geometric tool is active"
 msgstr "沒有使用中的幾何圖形工具"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:314
+#: ../src/ui/toolbar/lpe-toolbar.cpp:124
 msgid "Show limiting bounding box"
 msgstr "顯示限制邊界框"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:315
+#: ../src/ui/toolbar/lpe-toolbar.cpp:125
 msgid "Show bounding box (used to cut infinite lines)"
 msgstr "顯示邊界框 (用於剪切無限長直線)"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:326
+#: ../src/ui/toolbar/lpe-toolbar.cpp:136
 msgid "Get limiting bounding box from selection"
 msgstr "從選取區中取得限制邊界框"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:327
+#: ../src/ui/toolbar/lpe-toolbar.cpp:137
 msgid ""
 "Set limiting bounding box (used to cut infinite lines) to the bounding box "
 "of current selection"
 msgstr "將限制邊界框 (用於剪切無限長的直線) 設為目前選取區的邊界框"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:345
+#: ../src/ui/toolbar/lpe-toolbar.cpp:154
 msgid "Closed"
 msgstr "閉合"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:351
+#: ../src/ui/toolbar/lpe-toolbar.cpp:160
 msgid "Open start"
 msgstr "打開起點"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:357
+#: ../src/ui/toolbar/lpe-toolbar.cpp:166
 msgid "Open end"
 msgstr "打開終點"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:363
+#: ../src/ui/toolbar/lpe-toolbar.cpp:172
 msgid "Open both"
 msgstr "打開兩端"
 
 #. Name
 #. Label
-#: ../src/ui/toolbar/lpe-toolbar.cpp:371
+#: ../src/ui/toolbar/lpe-toolbar.cpp:180
 #, fuzzy
 msgid "Choose a line segment type"
 msgstr "選擇直線線段類型"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:389
+#: ../src/ui/toolbar/lpe-toolbar.cpp:197
 msgid "Display measuring info"
 msgstr "顯示測量資訊"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:390
+#: ../src/ui/toolbar/lpe-toolbar.cpp:198
 msgid "Display measuring info for selected items"
 msgstr "顯示選取項目的測量資訊"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:410
+#: ../src/ui/toolbar/lpe-toolbar.cpp:217
 msgid "Open LPE dialog"
 msgstr "開啟即時路徑特效對話窗"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:411
+#: ../src/ui/toolbar/lpe-toolbar.cpp:218
 msgid "Open LPE dialog (to adapt parameters numerically)"
 msgstr "開啟即時路徑特效對話窗 (調整參數)"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:157
+#: ../src/ui/toolbar/measure-toolbar.cpp:84
 msgid "Start and end measures inactive."
 msgstr "起始和結束測量已停止。"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:159
+#: ../src/ui/toolbar/measure-toolbar.cpp:86
 msgid "Start and end measures active."
 msgstr "起始和結束測量啟動中。"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:175
+#: ../src/ui/toolbar/measure-toolbar.cpp:102
 #, fuzzy
 msgid "Measures only selected."
 msgstr "只改變選取的節點"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:177
+#: ../src/ui/toolbar/measure-toolbar.cpp:104
 #, fuzzy
 msgid "Measure all."
 msgstr "測量路徑"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:193
+#: ../src/ui/toolbar/measure-toolbar.cpp:120
 msgid "Show all crossings."
 msgstr "顯示全部交叉點。"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:195
+#: ../src/ui/toolbar/measure-toolbar.cpp:122
 msgid "Show visible crossings."
 msgstr "顯示可見的交叉點。"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:211
+#: ../src/ui/toolbar/measure-toolbar.cpp:138
 msgid "Use all layers in the measure."
 msgstr "測量使用全部圖層。"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:213
+#: ../src/ui/toolbar/measure-toolbar.cpp:140
 msgid "Use current layer in the measure."
 msgstr "測量使用目前圖層。"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:229
+#: ../src/ui/toolbar/measure-toolbar.cpp:156
 msgid "Compute all elements."
 msgstr "計算全部元件。"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:231
+#: ../src/ui/toolbar/measure-toolbar.cpp:158
 msgid "Compute max length."
 msgstr "計算最大長度"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:292
-#: ../src/ui/toolbar/text-toolbar.cpp:2043
+#: ../src/ui/toolbar/measure-toolbar.cpp:227
+#: ../src/ui/toolbar/text-toolbar.cpp:345
 msgid "Font Size"
 msgstr "字型大小"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:292
+#: ../src/ui/toolbar/measure-toolbar.cpp:227
 msgid "Font Size:"
 msgstr "字型大小:"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:293
+#: ../src/ui/toolbar/measure-toolbar.cpp:228
 msgid "The font size to be used in the measurement labels"
 msgstr "測量標籤使用的字型大小"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:304
-#: ../src/ui/toolbar/measure-toolbar.cpp:312
+#: ../src/ui/toolbar/measure-toolbar.cpp:244
+#: ../src/ui/toolbar/measure-toolbar.cpp:252
 msgid "The units to be used for the measurements"
 msgstr "用於測量的單位"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:320
+#: ../src/ui/toolbar/measure-toolbar.cpp:260
 #: ../share/extensions/measure.inx.h:14
 msgid "Precision:"
 msgstr "精確度："
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:321
+#: ../src/ui/toolbar/measure-toolbar.cpp:261
 msgid "Decimal precision of measure"
 msgstr "測量的十進制精準度"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:333
+#: ../src/ui/toolbar/measure-toolbar.cpp:278
 msgid "Scale %"
 msgstr "縮放 %"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:333
+#: ../src/ui/toolbar/measure-toolbar.cpp:278
 msgid "Scale %:"
 msgstr "縮放 %："
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:334
+#: ../src/ui/toolbar/measure-toolbar.cpp:279
 msgid "Scale the results"
 msgstr "縮放結果"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:347
+#: ../src/ui/toolbar/measure-toolbar.cpp:297
 #, fuzzy
 msgid "Mark dimension offset"
 msgstr "標記尺寸標註"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:359
-#: ../src/ui/toolbar/measure-toolbar.cpp:360
+#: ../src/ui/toolbar/measure-toolbar.cpp:314
+#: ../src/ui/toolbar/measure-toolbar.cpp:315
 #, fuzzy
 msgid "Measure only selected"
 msgstr "只改變選取的節點"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:371
-#: ../src/ui/toolbar/measure-toolbar.cpp:372
+#: ../src/ui/toolbar/measure-toolbar.cpp:326
+#: ../src/ui/toolbar/measure-toolbar.cpp:327
 msgid "Ignore first and last"
 msgstr "忽略第一個點和最後一個點"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:382
-#: ../src/ui/toolbar/measure-toolbar.cpp:383
+#: ../src/ui/toolbar/measure-toolbar.cpp:337
+#: ../src/ui/toolbar/measure-toolbar.cpp:338
 msgid "Show hidden intersections"
 msgstr "顯示隱藏的交叉點"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:393
-#: ../src/ui/toolbar/measure-toolbar.cpp:394
+#: ../src/ui/toolbar/measure-toolbar.cpp:348
+#: ../src/ui/toolbar/measure-toolbar.cpp:349
 msgid "Show measures between items"
 msgstr "顯示項目之間的測量值"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:404
-#: ../src/ui/toolbar/measure-toolbar.cpp:405
+#: ../src/ui/toolbar/measure-toolbar.cpp:359
+#: ../src/ui/toolbar/measure-toolbar.cpp:360
 msgid "Measure all layers"
 msgstr "測量所有圖層"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:415
-#: ../src/ui/toolbar/measure-toolbar.cpp:416
+#: ../src/ui/toolbar/measure-toolbar.cpp:370
+#: ../src/ui/toolbar/measure-toolbar.cpp:371
 msgid "Reverse measure"
 msgstr "反向測量"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:425
-#: ../src/ui/toolbar/measure-toolbar.cpp:426
+#: ../src/ui/toolbar/measure-toolbar.cpp:380
+#: ../src/ui/toolbar/measure-toolbar.cpp:381
 msgid "Phantom measure"
 msgstr "假體測量"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:435
-#: ../src/ui/toolbar/measure-toolbar.cpp:436
+#: ../src/ui/toolbar/measure-toolbar.cpp:390
+#: ../src/ui/toolbar/measure-toolbar.cpp:391
 msgid "To guides"
 msgstr "到參考線"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:445
-#: ../src/ui/toolbar/measure-toolbar.cpp:446
+#: ../src/ui/toolbar/measure-toolbar.cpp:400
+#: ../src/ui/toolbar/measure-toolbar.cpp:401
 msgid "Mark Dimension"
 msgstr "標記尺寸標註"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:455
-#: ../src/ui/toolbar/measure-toolbar.cpp:456
+#: ../src/ui/toolbar/measure-toolbar.cpp:410
+#: ../src/ui/toolbar/measure-toolbar.cpp:411
 msgid "Convert to item"
 msgstr "轉換成項目"
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:270
-msgid "Set mesh type"
-msgstr "設定網面類型"
+#: ../src/ui/toolbar/mesh-toolbar.cpp:227
+msgid "normal"
+msgstr "標準"
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:343
+#: ../src/ui/toolbar/mesh-toolbar.cpp:228
+msgid "Create mesh gradient"
+msgstr "建立網面漸層"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:233
+msgid "conical"
+msgstr "圓錐"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:234
+msgid "Create conical gradient"
+msgstr "建立圓錐形漸層"
+
+#. Name
+#: ../src/ui/toolbar/mesh-toolbar.cpp:240
+msgid "New:"
+msgstr "新增："
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:297
+msgid "Rows"
+msgstr "列"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:297
+#: ../share/extensions/guides_creator.inx.h:5
+#: ../share/extensions/layout_nup.inx.h:12
+msgid "Rows:"
+msgstr "列數："
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:297
+msgid "Number of rows in new mesh"
+msgstr "新網面的列數"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:318
+msgid "Columns"
+msgstr "欄"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:318
+#: ../share/extensions/guides_creator.inx.h:4
+msgid "Columns:"
+msgstr "欄數："
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:318
+msgid "Number of columns in new mesh"
+msgstr "新網面的欄數"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:337
+msgid "Edit Fill"
+msgstr "編輯填色"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:338
+msgid "Edit fill mesh"
+msgstr "編輯填色網面"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:349
+msgid "Edit Stroke"
+msgstr "編輯邊框"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:350
+msgid "Edit stroke mesh"
+msgstr "編輯邊框網面"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:361
+#: ../src/ui/toolbar/node-toolbar.cpp:426
+msgid "Show Handles"
+msgstr "顯示控制柄"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:375
+#: ../src/ui/toolbar/mesh-toolbar.cpp:376
+msgid "WARNING: Mesh SVG Syntax Subject to Change"
+msgstr "警告：變更網面 SVG 語法主題"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:393
+msgctxt "Type"
+msgid "Coons"
+msgstr "孔斯"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:399
+msgid "Bicubic"
+msgstr "雙立方"
+
+#. Name
+#: ../src/ui/toolbar/mesh-toolbar.cpp:407
+#, fuzzy
+msgid "Smoothing"
+msgstr "平滑："
+
+#. Label
+#: ../src/ui/toolbar/mesh-toolbar.cpp:408
+#, fuzzy
+msgid "Coons: no smothing. Bicubic: smothing across patch boundaries."
+msgstr "孔斯：無平滑化。雙立方：平滑路徑邊界相交部分。"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:426
+msgid "Toggle Sides"
+msgstr "切換邊"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:427
+msgid "Toggle selected sides between Beziers and lines."
+msgstr "邊在貝茲和線條之間切換"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:430
+msgid "Toggle side:"
+msgstr "切換邊："
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:437
+msgid "Make elliptical"
+msgstr "橢圓化"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:438
+msgid ""
+"Make selected sides elliptical by changing length of handles. Works best if "
+"handles already approximate ellipse."
+msgstr ""
+"變更控制柄長度以將選擇的邊橢圓化。若控制柄已經接近橢圓形的時候效果最好。"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:441
+msgid "Make elliptical:"
+msgstr "橢圓化："
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:448
+msgid "Pick colors:"
+msgstr "拾取顏色："
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:449
+msgid "Pick colors for selected corner nodes from underneath mesh."
+msgstr "讓選擇的邊角頂點拾取網面下面的顏色。"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:452
+msgid "Pick Color"
+msgstr "拾取顏色"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:460
+msgid "Scale mesh to bounding box:"
+msgstr "將網面縮放成邊界框大小："
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:461
+msgid "Scale mesh to fit inside bounding box."
+msgstr "縮放網面以符合邊界框大小。"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:464
+msgid "Fit mesh"
+msgstr "填充網面"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:642
 msgid ""
 "Mesh gradients are part of SVG 2:\n"
 "* Syntax may change.\n"
@@ -25843,967 +25988,825 @@ msgstr ""
 "網頁用途：轉換成點陣圖 (編輯->建立點陣圖複製物件)。\n"
 "列印用途：匯出成 PDF。"
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:379
-msgid "normal"
-msgstr "標準"
+#: ../src/ui/toolbar/mesh-toolbar.cpp:674
+msgid "Set mesh type"
+msgstr "設定網面類型"
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:380
-msgid "Create mesh gradient"
-msgstr "建立網面漸層"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:385
-msgid "conical"
-msgstr "圓錐"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:386
-msgid "Create conical gradient"
-msgstr "建立圓錐形漸層"
-
-#. Name
-#: ../src/ui/toolbar/mesh-toolbar.cpp:392
-msgid "New:"
-msgstr "新增："
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:451
-msgid "Rows"
-msgstr "列"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:451
-#: ../share/extensions/guides_creator.inx.h:5
-#: ../share/extensions/layout_nup.inx.h:12
-msgid "Rows:"
-msgstr "列數："
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:451
-msgid "Number of rows in new mesh"
-msgstr "新網面的列數"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:467
-msgid "Columns"
-msgstr "欄"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:467
-#: ../share/extensions/guides_creator.inx.h:4
-msgid "Columns:"
-msgstr "欄數："
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:467
-msgid "Number of columns in new mesh"
-msgstr "新網面的欄數"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:481
-msgid "Edit Fill"
-msgstr "編輯填色"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:482
-msgid "Edit fill mesh"
-msgstr "編輯填色網面"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:494
-msgid "Edit Stroke"
-msgstr "編輯邊框"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:495
-msgid "Edit stroke mesh"
-msgstr "編輯邊框網面"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:507
-#: ../src/ui/toolbar/node-toolbar.cpp:521
-msgid "Show Handles"
-msgstr "顯示控制柄"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:524
-#: ../src/ui/toolbar/mesh-toolbar.cpp:525
-msgid "WARNING: Mesh SVG Syntax Subject to Change"
-msgstr "警告：變更網面 SVG 語法主題"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:542
-msgctxt "Type"
-msgid "Coons"
-msgstr "孔斯"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:548
-msgid "Bicubic"
-msgstr "雙立方"
-
-#. Name
-#: ../src/ui/toolbar/mesh-toolbar.cpp:556
-#, fuzzy
-msgid "Smoothing"
-msgstr "平滑："
-
-#. Label
-#: ../src/ui/toolbar/mesh-toolbar.cpp:557
-#, fuzzy
-msgid "Coons: no smothing. Bicubic: smothing across patch boundaries."
-msgstr "孔斯：無平滑化。雙立方：平滑路徑邊界相交部分。"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:576
-msgid "Toggle Sides"
-msgstr "切換邊"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:577
-msgid "Toggle selected sides between Beziers and lines."
-msgstr "邊在貝茲和線條之間切換"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:580
-msgid "Toggle side:"
-msgstr "切換邊："
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:587
-msgid "Make elliptical"
-msgstr "橢圓化"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:588
-msgid ""
-"Make selected sides elliptical by changing length of handles. Works best if "
-"handles already approximate ellipse."
-msgstr ""
-"變更控制柄長度以將選擇的邊橢圓化。若控制柄已經接近橢圓形的時候效果最好。"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:591
-msgid "Make elliptical:"
-msgstr "橢圓化："
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:598
-msgid "Pick colors:"
-msgstr "拾取顏色："
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:599
-msgid "Pick colors for selected corner nodes from underneath mesh."
-msgstr "讓選擇的邊角頂點拾取網面下面的顏色。"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:602
-msgid "Pick Color"
-msgstr "拾取顏色"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:610
-msgid "Scale mesh to bounding box:"
-msgstr "將網面縮放成邊界框大小："
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:611
-msgid "Scale mesh to fit inside bounding box."
-msgstr "縮放網面以符合邊界框大小。"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:614
-msgid "Fit mesh"
-msgstr "填充網面"
-
-#: ../src/ui/toolbar/node-toolbar.cpp:341
+#: ../src/ui/toolbar/node-toolbar.cpp:247
 msgid "Insert node"
 msgstr "插入節點"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:342
+#: ../src/ui/toolbar/node-toolbar.cpp:248
 msgid "Insert new nodes into selected segments"
 msgstr "插入新節點到選取的線段"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:345
+#: ../src/ui/toolbar/node-toolbar.cpp:251
 msgid "Insert"
 msgstr "插入"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:356
+#: ../src/ui/toolbar/node-toolbar.cpp:262
 msgid "Insert node at min X"
 msgstr "於最小 X 位置插入節點"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:357
+#: ../src/ui/toolbar/node-toolbar.cpp:263
 msgid "Insert new nodes at min X into selected segments"
 msgstr "於最小 X 位置插入新節點到選取的線段"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:360
+#: ../src/ui/toolbar/node-toolbar.cpp:266
 msgid "Insert min X"
 msgstr "插入最小 X 位置"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:366
+#: ../src/ui/toolbar/node-toolbar.cpp:272
 msgid "Insert node at max X"
 msgstr "於最大 X 位置插入節點"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:367
+#: ../src/ui/toolbar/node-toolbar.cpp:273
 msgid "Insert new nodes at max X into selected segments"
 msgstr "於最大 X 位置插入新節點到選取的線段"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:370
+#: ../src/ui/toolbar/node-toolbar.cpp:276
 msgid "Insert max X"
 msgstr "插入最大 X 位置"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:376
+#: ../src/ui/toolbar/node-toolbar.cpp:282
 msgid "Insert node at min Y"
 msgstr "於最小 Y 位置插入節點"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:377
+#: ../src/ui/toolbar/node-toolbar.cpp:283
 msgid "Insert new nodes at min Y into selected segments"
 msgstr "於最小 Y 位置插入新節點到選取的線段"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:380
+#: ../src/ui/toolbar/node-toolbar.cpp:286
 msgid "Insert min Y"
 msgstr "插入最小 Y 位置"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:386
+#: ../src/ui/toolbar/node-toolbar.cpp:292
 msgid "Insert node at max Y"
 msgstr "於最大 Y 位置插入節點"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:387
+#: ../src/ui/toolbar/node-toolbar.cpp:293
 msgid "Insert new nodes at max Y into selected segments"
 msgstr "於最大 Y 位置插入新節點到選取的線段"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:390
+#: ../src/ui/toolbar/node-toolbar.cpp:296
 msgid "Insert max Y"
 msgstr "插入最大 Y 位置"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:398
+#: ../src/ui/toolbar/node-toolbar.cpp:304
 msgid "Delete selected nodes"
 msgstr "刪除選取的節點"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:409
+#: ../src/ui/toolbar/node-toolbar.cpp:315
 msgid "Join selected nodes"
 msgstr "合併選取的節點"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:412
+#: ../src/ui/toolbar/node-toolbar.cpp:318
 msgid "Join"
 msgstr "合併"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:420
+#: ../src/ui/toolbar/node-toolbar.cpp:326
 msgid "Break path at selected nodes"
 msgstr "從選取的節點上拆開路徑"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:430
+#: ../src/ui/toolbar/node-toolbar.cpp:336
 msgid "Join with segment"
 msgstr "用線段合併"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:431
+#: ../src/ui/toolbar/node-toolbar.cpp:337
 msgid "Join selected endnodes with a new segment"
 msgstr "用新線段合併選取的末端節點"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:440
+#: ../src/ui/toolbar/node-toolbar.cpp:346
 msgid "Delete segment"
 msgstr "刪除線段"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:441
+#: ../src/ui/toolbar/node-toolbar.cpp:347
 msgid "Delete segment between two non-endpoint nodes"
 msgstr "刪除兩個非末端節點之間的線段"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:450
+#: ../src/ui/toolbar/node-toolbar.cpp:356
 msgid "Node Cusp"
 msgstr "節點尖銳"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:451
+#: ../src/ui/toolbar/node-toolbar.cpp:357
 msgid "Make selected nodes corner"
 msgstr "使選取的節點變銳角"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:460
+#: ../src/ui/toolbar/node-toolbar.cpp:366
 msgid "Node Smooth"
 msgstr "節點平滑"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:461
+#: ../src/ui/toolbar/node-toolbar.cpp:367
 msgid "Make selected nodes smooth"
 msgstr "使選取的節點平滑"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:470
+#: ../src/ui/toolbar/node-toolbar.cpp:376
 msgid "Node Symmetric"
 msgstr "節點對稱"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:471
+#: ../src/ui/toolbar/node-toolbar.cpp:377
 msgid "Make selected nodes symmetric"
 msgstr "使選取的節點對稱"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:480
+#: ../src/ui/toolbar/node-toolbar.cpp:386
 msgid "Node Auto"
 msgstr "節點自動平滑"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:481
+#: ../src/ui/toolbar/node-toolbar.cpp:387
 msgid "Make selected nodes auto-smooth"
 msgstr "使選取的節點自動平滑"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:490
+#: ../src/ui/toolbar/node-toolbar.cpp:396
 msgid "Node Line"
 msgstr "節點直線"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:491
+#: ../src/ui/toolbar/node-toolbar.cpp:397
 msgid "Make selected segments lines"
 msgstr "使選取的線段變直線"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:500
+#: ../src/ui/toolbar/node-toolbar.cpp:406
 msgid "Node Curve"
 msgstr "節點曲線"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:501
+#: ../src/ui/toolbar/node-toolbar.cpp:407
 msgid "Make selected segments curves"
 msgstr "使選取的線段變曲線"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:510
+#: ../src/ui/toolbar/node-toolbar.cpp:416
 msgid "Show Transform Handles"
 msgstr "顯示變形控制點"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:511
+#: ../src/ui/toolbar/node-toolbar.cpp:417
 msgid "Show transformation handles for selected nodes"
 msgstr "顯示選擇節點的變形控制點"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:522
+#: ../src/ui/toolbar/node-toolbar.cpp:427
 msgid "Show Bezier handles of selected nodes"
 msgstr "顯示選擇節點的貝茲曲線控制柄"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:532
+#: ../src/ui/toolbar/node-toolbar.cpp:436
 msgid "Show Outline"
 msgstr "顯示輪廓"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:533
+#: ../src/ui/toolbar/node-toolbar.cpp:437
 msgid "Show path outline (without path effects)"
 msgstr "顯示路徑輪廓 (無路徑特效)"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:555
+#: ../src/ui/toolbar/node-toolbar.cpp:457
 msgid "Edit clipping paths"
 msgstr "編輯裁剪路徑"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:556
+#: ../src/ui/toolbar/node-toolbar.cpp:458
 msgid "Show clipping path(s) of selected object(s)"
 msgstr "顯示選取物件的裁剪路徑"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:566
+#: ../src/ui/toolbar/node-toolbar.cpp:467
 msgid "Edit masks"
 msgstr "編輯遮罩"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:567
+#: ../src/ui/toolbar/node-toolbar.cpp:468
 msgid "Show mask(s) of selected object(s)"
 msgstr "顯示選取物件的遮罩"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:581
+#: ../src/ui/toolbar/node-toolbar.cpp:480
 msgid "X coordinate:"
 msgstr "X 坐標："
 
-#: ../src/ui/toolbar/node-toolbar.cpp:581
+#: ../src/ui/toolbar/node-toolbar.cpp:480
 msgid "X coordinate of selected node(s)"
 msgstr "選取節點的 X 坐標"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:598
+#: ../src/ui/toolbar/node-toolbar.cpp:500
 msgid "Y coordinate:"
 msgstr "Y 坐標："
 
-#: ../src/ui/toolbar/node-toolbar.cpp:598
+#: ../src/ui/toolbar/node-toolbar.cpp:500
 msgid "Y coordinate of selected node(s)"
 msgstr "選取節點的 Y 坐標"
 
 #. Name
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:137
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:85
 msgid "Fill by"
 msgstr "填充"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:159
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:106
 msgid "Fill Threshold"
 msgstr "填充臨界值"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:160
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:107
 msgid ""
 "The maximum allowed difference between the clicked pixel and the neighboring "
 "pixels to be counted in the fill"
 msgstr "在填充裡計算點擊像素和鄰近像素之間容許的最大誤差值"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:188
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:138
 msgid "Grow/shrink by"
 msgstr "擴張 / 收縮"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:188
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:138
 msgid "Grow/shrink by:"
 msgstr "擴張 / 收縮："
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:189
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:139
 msgid ""
 "The amount to grow (positive) or shrink (negative) the created fill path"
 msgstr "要擴張 (正值) 或收縮 (負值) 填充路徑的程度"
 
 #. Name
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:215
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:171
 msgid "Close gaps"
 msgstr "閉合缺口"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:236
-#: ../src/ui/toolbar/pencil-toolbar.cpp:580
-#: ../src/ui/toolbar/spiral-toolbar.cpp:290
-#: ../src/ui/toolbar/star-toolbar.cpp:588
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:191
+#: ../src/ui/toolbar/pencil-toolbar.cpp:199
+#: ../src/ui/toolbar/spiral-toolbar.cpp:158
+#: ../src/ui/toolbar/star-toolbar.cpp:229
 msgid "Defaults"
 msgstr "預設值"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:237
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:192
 msgid ""
 "Reset paint bucket parameters to defaults (use Inkscape Preferences > Tools "
 "to change defaults)"
 msgstr "將油漆桶參數重設為預設值 (可在 Inkscape 偏好設定 > 工具 變更預設值)"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:133
-msgid "Bezier"
-msgstr "貝茲"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:134
-msgid "Create regular Bezier path"
-msgstr "建立規則的貝茲路徑"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:140
-msgid "Create Spiro path"
-msgstr "建立螺旋路徑"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:146
-msgid "Create BSpline path"
-msgstr "建立貝氏雲形線路徑"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:152
-msgid "Zigzag"
-msgstr "曲折"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:153
-msgid "Create a sequence of straight line segments"
-msgstr "建立一條連續的直線線段"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:158
-msgid "Paraxial"
-msgstr "近軸"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:159
-msgid "Create a sequence of paraxial line segments"
-msgstr "建立一條連續的近軸線段"
-
-#. Label
-#: ../src/ui/toolbar/pencil-toolbar.cpp:169
-msgid "Mode of new lines drawn by this tool"
-msgstr "用此工具繪製新線條的模式"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:184
-#: ../src/ui/toolbar/pencil-toolbar.cpp:185
-#, fuzzy
-msgid "LPE spiro or bspline flatten"
-msgstr "LPE 簡化平坦"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:222
-msgctxt "Freehand shape"
-msgid "None"
-msgstr "無"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:223
-msgid "Triangle in"
-msgstr "內三角"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:224
-msgid "Triangle out"
-msgstr "外三角"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:226
-msgid "From clipboard"
-msgstr "從剪貼簿"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:227
-msgid "Bend from clipboard"
-msgstr "從剪貼簿套用彎曲"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:228
-msgid "Last applied"
-msgstr "最近套用的"
-
-#. Name
-#: ../src/ui/toolbar/pencil-toolbar.cpp:250
-#, fuzzy
-msgid "Shape"
-msgstr "形狀"
-
-#. Label
-#: ../src/ui/toolbar/pencil-toolbar.cpp:251
-msgid "Shape of new paths drawn by this tool"
-msgstr "用這個工具繪製的新路徑形狀"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:503
+#: ../src/ui/toolbar/pencil-toolbar.cpp:110
 #, fuzzy
 msgid "Min pressure"
 msgstr "壓力"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:503
+#: ../src/ui/toolbar/pencil-toolbar.cpp:110
 msgid "Min:"
 msgstr ""
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:503
+#: ../src/ui/toolbar/pencil-toolbar.cpp:110
 #, fuzzy
 msgid "Min percent of pressure"
 msgstr "此資源的說明"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:521
+#: ../src/ui/toolbar/pencil-toolbar.cpp:132
 #, fuzzy
 msgid "Max pressure"
 msgstr "壓力"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:521
+#: ../src/ui/toolbar/pencil-toolbar.cpp:132
 msgid "Max:"
 msgstr ""
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:521
+#: ../src/ui/toolbar/pencil-toolbar.cpp:132
 #, fuzzy
 msgid "Max percent of pressure"
 msgstr "棉紙上蠟染的紋理"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:538
-#: ../src/ui/toolbar/pencil-toolbar.cpp:539
+#: ../src/ui/toolbar/pencil-toolbar.cpp:153
+#: ../src/ui/toolbar/pencil-toolbar.cpp:154
 #, fuzzy
 msgid "Use pressure input"
 msgstr "橡皮擦壓力"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:556
+#: ../src/ui/toolbar/pencil-toolbar.cpp:171
 msgid "(many nodes, rough)"
 msgstr "(節點多，粗糙)"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:556
+#: ../src/ui/toolbar/pencil-toolbar.cpp:171
 msgid "(few nodes, smooth)"
 msgstr "(節點少，平滑)"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:559
+#: ../src/ui/toolbar/pencil-toolbar.cpp:174
 msgid "Smoothing:"
 msgstr "平滑："
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:559
+#: ../src/ui/toolbar/pencil-toolbar.cpp:174
 msgid "Smoothing: "
 msgstr "平滑："
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:560
+#: ../src/ui/toolbar/pencil-toolbar.cpp:175
 msgid "How much smoothing (simplifying) is applied to the line"
 msgstr "套用到線條的平滑 (簡化) 程度"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:581
+#: ../src/ui/toolbar/pencil-toolbar.cpp:200
 msgid ""
 "Reset pencil parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
 msgstr "將鉛筆參數重設為預設值 (可在 Inkscape 偏好設定 > 工具 變更預設值)"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:590
-#: ../src/ui/toolbar/pencil-toolbar.cpp:591
+#: ../src/ui/toolbar/pencil-toolbar.cpp:209
+#: ../src/ui/toolbar/pencil-toolbar.cpp:210
 msgid "LPE based interactive simplify"
 msgstr "互動式簡化的即時路徑特效 (LPE)"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:608
-#: ../src/ui/toolbar/pencil-toolbar.cpp:609
+#: ../src/ui/toolbar/pencil-toolbar.cpp:226
+#: ../src/ui/toolbar/pencil-toolbar.cpp:227
 msgid "LPE simplify flatten"
 msgstr "LPE 簡化平坦"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:124
-msgid "Change rectangle"
-msgstr "變更矩形"
+#: ../src/ui/toolbar/pencil-toolbar.cpp:303
+msgid "Bezier"
+msgstr "貝茲"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:322
+#: ../src/ui/toolbar/pencil-toolbar.cpp:304
+msgid "Create regular Bezier path"
+msgstr "建立規則的貝茲路徑"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:310
+msgid "Create Spiro path"
+msgstr "建立螺旋路徑"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:316
+msgid "Create BSpline path"
+msgstr "建立貝氏雲形線路徑"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:322
+msgid "Zigzag"
+msgstr "曲折"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:323
+msgid "Create a sequence of straight line segments"
+msgstr "建立一條連續的直線線段"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:328
+msgid "Paraxial"
+msgstr "近軸"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:329
+msgid "Create a sequence of paraxial line segments"
+msgstr "建立一條連續的近軸線段"
+
+#. Label
+#: ../src/ui/toolbar/pencil-toolbar.cpp:339
+msgid "Mode of new lines drawn by this tool"
+msgstr "用此工具繪製新線條的模式"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:354
+#: ../src/ui/toolbar/pencil-toolbar.cpp:355
+#, fuzzy
+msgid "LPE spiro or bspline flatten"
+msgstr "LPE 簡化平坦"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:418
+msgctxt "Freehand shape"
+msgid "None"
+msgstr "無"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:419
+msgid "Triangle in"
+msgstr "內三角"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:420
+msgid "Triangle out"
+msgstr "外三角"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:422
+msgid "From clipboard"
+msgstr "從剪貼簿"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:423
+msgid "Bend from clipboard"
+msgstr "從剪貼簿套用彎曲"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:424
+msgid "Last applied"
+msgstr "最近套用的"
+
+#. Name
+#: ../src/ui/toolbar/pencil-toolbar.cpp:446
+#, fuzzy
+msgid "Shape"
+msgstr "形狀"
+
+#. Label
+#: ../src/ui/toolbar/pencil-toolbar.cpp:447
+msgid "Shape of new paths drawn by this tool"
+msgstr "用這個工具繪製的新路徑形狀"
+
+#: ../src/ui/toolbar/rect-toolbar.cpp:116
 msgid "W:"
 msgstr "寬："
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:322
+#: ../src/ui/toolbar/rect-toolbar.cpp:116
 msgid "Width of rectangle"
 msgstr "矩形寬度"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:338
+#: ../src/ui/toolbar/rect-toolbar.cpp:140
 msgid "H:"
 msgstr "高："
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:338
+#: ../src/ui/toolbar/rect-toolbar.cpp:140
 msgid "Height of rectangle"
 msgstr "矩形高度"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:351
-#: ../src/ui/toolbar/rect-toolbar.cpp:365
+#: ../src/ui/toolbar/rect-toolbar.cpp:160
+#: ../src/ui/toolbar/rect-toolbar.cpp:182
 msgid "not rounded"
 msgstr "無圓角"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:354
+#: ../src/ui/toolbar/rect-toolbar.cpp:163
 msgid "Horizontal radius of rounded corners"
 msgstr "圓角的水平半徑"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:368
+#: ../src/ui/toolbar/rect-toolbar.cpp:185
 msgid "Vertical radius of rounded corners"
 msgstr "圓角的垂直半徑"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:386
+#: ../src/ui/toolbar/rect-toolbar.cpp:211
 msgid "Not rounded"
 msgstr "無圓角"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:387
+#: ../src/ui/toolbar/rect-toolbar.cpp:212
 msgid "Make corners sharp"
 msgstr "使頂角變尖銳"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:261
-msgid "Transform by toolbar"
-msgstr "用工具列變形"
+#: ../src/ui/toolbar/rect-toolbar.cpp:267
+msgid "Change rectangle"
+msgstr "變更矩形"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:279
+#: ../src/ui/toolbar/select-toolbar.cpp:66
 msgid "Now <b>stroke width</b> is <b>scaled</b> when objects are scaled."
 msgstr "物件縮放時<b>邊框寬度</b>會隨著<b>縮放</b>。"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:281
+#: ../src/ui/toolbar/select-toolbar.cpp:68
 msgid "Now <b>stroke width</b> is <b>not scaled</b> when objects are scaled."
 msgstr "物件縮放<b>邊框寬度不會隨著縮放</b>。"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:292
+#: ../src/ui/toolbar/select-toolbar.cpp:79
 msgid ""
 "Now <b>rounded rectangle corners</b> are <b>scaled</b> when rectangles are "
 "scaled."
 msgstr "矩形縮放時<b>圓角矩形的圓角</b>會隨著<b>縮放</b>。"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:294
+#: ../src/ui/toolbar/select-toolbar.cpp:81
 msgid ""
 "Now <b>rounded rectangle corners</b> are <b>not scaled</b> when rectangles "
 "are scaled."
 msgstr "矩形縮放時<b>圓角矩形的圓角不會隨著縮放</b>。"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:305
+#: ../src/ui/toolbar/select-toolbar.cpp:92
 msgid ""
 "Now <b>gradients</b> are <b>transformed</b> along with their objects when "
 "those are transformed (moved, scaled, rotated, or skewed)."
 msgstr "<b>漸層</b>會隨著物件 (移動、縮放、旋轉或傾斜) <b>變形</b>。"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:307
+#: ../src/ui/toolbar/select-toolbar.cpp:94
 msgid ""
 "Now <b>gradients</b> remain <b>fixed</b> when objects are transformed "
 "(moved, scaled, rotated, or skewed)."
 msgstr "<b>漸層</b>不會隨著物件 (移動、縮放、旋轉或傾斜) <b>變形</b>。"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:318
+#: ../src/ui/toolbar/select-toolbar.cpp:105
 msgid ""
 "Now <b>patterns</b> are <b>transformed</b> along with their objects when "
 "those are transformed (moved, scaled, rotated, or skewed)."
 msgstr "<b>圖樣</b>會隨著物件 (移動、縮放、旋轉或傾斜) <b>變形</b>。"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:320
+#: ../src/ui/toolbar/select-toolbar.cpp:107
 msgid ""
 "Now <b>patterns</b> remain <b>fixed</b> when objects are transformed (moved, "
 "scaled, rotated, or skewed)."
 msgstr "<b>圖樣</b>不會隨著物件 (移動、縮放、旋轉或傾斜) <b>變形</b>。"
 
 #. name
-#: ../src/ui/toolbar/select-toolbar.cpp:434
+#: ../src/ui/toolbar/select-toolbar.cpp:220
 msgctxt "Select toolbar"
 msgid "X position"
 msgstr "X 位置"
 
 #. label
-#: ../src/ui/toolbar/select-toolbar.cpp:435
+#: ../src/ui/toolbar/select-toolbar.cpp:221
 msgctxt "Select toolbar"
 msgid "X:"
 msgstr "X："
 
 #. shortLabel
-#: ../src/ui/toolbar/select-toolbar.cpp:436
+#: ../src/ui/toolbar/select-toolbar.cpp:222
 msgctxt "Select toolbar"
 msgid "Horizontal coordinate of selection"
 msgstr "選取區的水平坐標"
 
 #. name
-#: ../src/ui/toolbar/select-toolbar.cpp:453
+#: ../src/ui/toolbar/select-toolbar.cpp:241
 msgctxt "Select toolbar"
 msgid "Y position"
 msgstr "Y 位置"
 
 #. label
-#: ../src/ui/toolbar/select-toolbar.cpp:454
+#: ../src/ui/toolbar/select-toolbar.cpp:242
 msgctxt "Select toolbar"
 msgid "Y:"
 msgstr "Y："
 
 #. shortLabel
-#: ../src/ui/toolbar/select-toolbar.cpp:455
+#: ../src/ui/toolbar/select-toolbar.cpp:243
 msgctxt "Select toolbar"
 msgid "Vertical coordinate of selection"
 msgstr "選取區的垂直坐標"
 
 #. name
-#: ../src/ui/toolbar/select-toolbar.cpp:472
+#: ../src/ui/toolbar/select-toolbar.cpp:262
 msgctxt "Select toolbar"
 msgid "Width"
 msgstr "寬度"
 
 #. label
-#: ../src/ui/toolbar/select-toolbar.cpp:473
+#: ../src/ui/toolbar/select-toolbar.cpp:263
 msgctxt "Select toolbar"
 msgid "W:"
 msgstr "寬："
 
 #. shortLabel
-#: ../src/ui/toolbar/select-toolbar.cpp:474
+#: ../src/ui/toolbar/select-toolbar.cpp:264
 msgctxt "Select toolbar"
 msgid "Width of selection"
 msgstr "選取區寬度"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:492
+#: ../src/ui/toolbar/select-toolbar.cpp:284
 msgid "Lock width and height"
 msgstr "鎖定寬度和高度"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:493
+#: ../src/ui/toolbar/select-toolbar.cpp:285
 msgid "When locked, change both width and height by the same proportion"
 msgstr "鎖定時，寬度和高度會同時按照相同比例改變"
 
 #. name
-#: ../src/ui/toolbar/select-toolbar.cpp:504
+#: ../src/ui/toolbar/select-toolbar.cpp:295
 msgctxt "Select toolbar"
 msgid "Height"
 msgstr "高度"
 
 #. label
-#: ../src/ui/toolbar/select-toolbar.cpp:505
+#: ../src/ui/toolbar/select-toolbar.cpp:296
 msgctxt "Select toolbar"
 msgid "H:"
 msgstr "高："
 
 #. shortLabel
-#: ../src/ui/toolbar/select-toolbar.cpp:506
+#: ../src/ui/toolbar/select-toolbar.cpp:297
 msgctxt "Select toolbar"
 msgid "Height of selection"
 msgstr "選取區高度"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:569
+#: ../src/ui/toolbar/select-toolbar.cpp:354
 msgid "Scale rounded corners"
 msgstr "縮放圓角"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:580
+#: ../src/ui/toolbar/select-toolbar.cpp:365
 msgid "Move gradients"
 msgstr "移動漸層"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:591
+#: ../src/ui/toolbar/select-toolbar.cpp:376
 msgid "Move patterns"
 msgstr "移動圖樣"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:97
-msgid "Change spiral"
-msgstr "變更螺旋形"
+#: ../src/ui/toolbar/select-toolbar.cpp:505
+msgid "Transform by toolbar"
+msgstr "用工具列變形"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:247
+#: ../src/ui/toolbar/spiral-toolbar.cpp:97
 msgid "just a curve"
 msgstr "曲線"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:247
+#: ../src/ui/toolbar/spiral-toolbar.cpp:97
 msgid "one full revolution"
 msgstr "全轉"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:250
+#: ../src/ui/toolbar/spiral-toolbar.cpp:100
 msgid "Number of turns"
 msgstr "圈數"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:250
+#: ../src/ui/toolbar/spiral-toolbar.cpp:100
 msgid "Turns:"
 msgstr "圈數："
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:250
+#: ../src/ui/toolbar/spiral-toolbar.cpp:100
 msgid "Number of revolutions"
 msgstr "旋轉數量"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "circle"
 msgstr "圓形"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "edge is much denser"
 msgstr "邊緣很密集"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "edge is denser"
 msgstr "邊緣較密集"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "even"
 msgstr "偶數"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "center is denser"
 msgstr "中心較密集"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "center is much denser"
 msgstr "中心很密集"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:264
+#: ../src/ui/toolbar/spiral-toolbar.cpp:120
 msgid "Divergence"
 msgstr "發散度"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:264
+#: ../src/ui/toolbar/spiral-toolbar.cpp:120
 msgid "Divergence:"
 msgstr "發散度："
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:264
+#: ../src/ui/toolbar/spiral-toolbar.cpp:120
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
 msgstr "外層旋轉的緊密 / 稀疏程度；1 = 均勻"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:275
+#: ../src/ui/toolbar/spiral-toolbar.cpp:137
 msgid "starts from center"
 msgstr "從中心開始"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:275
+#: ../src/ui/toolbar/spiral-toolbar.cpp:137
 msgid "starts mid-way"
 msgstr "中途開始"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:275
+#: ../src/ui/toolbar/spiral-toolbar.cpp:137
 msgid "starts near edge"
 msgstr "邊緣附近開始"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:278
+#: ../src/ui/toolbar/spiral-toolbar.cpp:140
 msgid "Inner radius"
 msgstr "內徑"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:278
+#: ../src/ui/toolbar/spiral-toolbar.cpp:140
 msgid "Inner radius:"
 msgstr "內徑："
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:278
+#: ../src/ui/toolbar/spiral-toolbar.cpp:140
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr "最內層的旋轉半徑 (相對於螺旋形的大小)"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:291
-#: ../src/ui/toolbar/star-toolbar.cpp:589
+#: ../src/ui/toolbar/spiral-toolbar.cpp:159
+#: ../src/ui/toolbar/star-toolbar.cpp:230
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
 msgstr "將形狀參數重設為預設值 (可在 Inkscape 偏好設定 > 工具 變更預設值)"
 
+#: ../src/ui/toolbar/spiral-toolbar.cpp:210
+msgid "Change spiral"
+msgstr "變更螺旋形"
+
 #. Width
-#: ../src/ui/toolbar/spray-toolbar.cpp:290
+#: ../src/ui/toolbar/spray-toolbar.cpp:90
 msgid "(narrow spray)"
 msgstr "(狹窄噴灑)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:290
+#: ../src/ui/toolbar/spray-toolbar.cpp:90
 msgid "(broad spray)"
 msgstr "(寬闊噴灑)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:293
+#: ../src/ui/toolbar/spray-toolbar.cpp:93
 msgid "The width of the spray area (relative to the visible canvas area)"
 msgstr "噴灑範圍的寬度 (相對於可見畫布區域)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:308
+#: ../src/ui/toolbar/spray-toolbar.cpp:113
 msgid "Use the pressure of the input device to alter the width of spray area"
 msgstr "利用輸入裝置的壓力來改變噴灑區域的寬度"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:319
+#: ../src/ui/toolbar/spray-toolbar.cpp:122
 msgid "(maximum mean)"
 msgstr "(最大平均值)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:322
+#: ../src/ui/toolbar/spray-toolbar.cpp:125
 msgid "Focus"
 msgstr "集中"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:322
+#: ../src/ui/toolbar/spray-toolbar.cpp:125
 msgid "Focus:"
 msgstr "集中："
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:322
+#: ../src/ui/toolbar/spray-toolbar.cpp:125
 msgid "0 to spray a spot; increase to enlarge the ring radius"
 msgstr "0 可噴灑斑點；增加數值可加大環形半徑"
 
 #. Standard_deviation
-#: ../src/ui/toolbar/spray-toolbar.cpp:335
+#: ../src/ui/toolbar/spray-toolbar.cpp:143
 msgid "(minimum scatter)"
 msgstr "(散佈最小值)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:335
+#: ../src/ui/toolbar/spray-toolbar.cpp:143
 msgid "(maximum scatter)"
 msgstr "(散佈最大值)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:146
 msgctxt "Spray tool"
 msgid "Scatter"
 msgstr "散佈"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:146
 msgctxt "Spray tool"
 msgid "Scatter:"
 msgstr "散佈:"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:146
 msgid "Increase to scatter sprayed objects"
 msgstr "增加數值可散佈噴灑的物件"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:358 ../src/ui/tools/spray-tool.cpp:1353
+#: ../src/ui/toolbar/spray-toolbar.cpp:171 ../src/ui/tools/spray-tool.cpp:1353
 msgid "Spray with copies"
 msgstr "用複製物件噴灑"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:359
+#: ../src/ui/toolbar/spray-toolbar.cpp:172
 msgid "Spray copies of the initial selection"
 msgstr "噴灑最初選取物件的複製物件"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:364 ../src/ui/tools/spray-tool.cpp:1357
+#: ../src/ui/toolbar/spray-toolbar.cpp:177 ../src/ui/tools/spray-tool.cpp:1357
 msgid "Spray with clones"
 msgstr "用仿製物件噴灑"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:365
+#: ../src/ui/toolbar/spray-toolbar.cpp:178
 msgid "Spray clones of the initial selection"
 msgstr "噴灑最初選取物件的仿製物件"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:371
+#: ../src/ui/toolbar/spray-toolbar.cpp:184
 msgid "Spray single path"
 msgstr "噴灑單一路徑"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:372
+#: ../src/ui/toolbar/spray-toolbar.cpp:185
 msgid "Spray objects in a single path"
 msgstr "用單一路徑噴灑物件"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:378
+#: ../src/ui/toolbar/spray-toolbar.cpp:191
 msgid "Delete sprayed items"
 msgstr "刪除噴灑的項目"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:379
+#: ../src/ui/toolbar/spray-toolbar.cpp:192
 msgid "Delete sprayed items from selection"
 msgstr "從選取區刪除噴灑的項目"
 
 #. Population
-#: ../src/ui/toolbar/spray-toolbar.cpp:402
+#: ../src/ui/toolbar/spray-toolbar.cpp:212
 msgid "(low population)"
 msgstr "(低總體)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:402
+#: ../src/ui/toolbar/spray-toolbar.cpp:212
 msgid "(high population)"
 msgstr "(高總體)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:405
+#: ../src/ui/toolbar/spray-toolbar.cpp:215
 msgid "Amount"
 msgstr "數量"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:406
+#: ../src/ui/toolbar/spray-toolbar.cpp:216
 msgid "Adjusts the number of items sprayed per click"
 msgstr "調整每次點擊噴灑項目的數量"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:422
+#: ../src/ui/toolbar/spray-toolbar.cpp:236
 msgid ""
 "Use the pressure of the input device to alter the amount of sprayed objects"
 msgstr "使用輸入裝置的壓力來改變噴灑物件的數量"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:432
+#: ../src/ui/toolbar/spray-toolbar.cpp:244
 msgid "(high rotation variation)"
 msgstr "(高旋轉變化量)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:435
+#: ../src/ui/toolbar/spray-toolbar.cpp:247
 msgid "Rotation"
 msgstr "旋轉"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:435
+#: ../src/ui/toolbar/spray-toolbar.cpp:247
 msgid "Rotation:"
 msgstr "旋轉："
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:437
+#: ../src/ui/toolbar/spray-toolbar.cpp:249
 #, no-c-format
 msgid ""
 "Variation of the rotation of the sprayed objects; 0% for the same rotation "
 "than the original object"
 msgstr "噴灑物件的旋轉變化量；0% 代表除了原始物件外旋轉角度都相同"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:450
+#: ../src/ui/toolbar/spray-toolbar.cpp:266
 msgid "(high scale variation)"
 msgstr "(高縮放變化量)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:453
+#: ../src/ui/toolbar/spray-toolbar.cpp:269
 msgctxt "Spray tool"
 msgid "Scale"
 msgstr "縮放"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:453
+#: ../src/ui/toolbar/spray-toolbar.cpp:269
 msgctxt "Spray tool"
 msgid "Scale:"
 msgstr "縮放："
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:455
+#: ../src/ui/toolbar/spray-toolbar.cpp:271
 #, no-c-format
 msgid ""
 "Variation in the scale of the sprayed objects; 0% for the same scale than "
 "the original object"
 msgstr "噴灑物件的縮放變化量；0% 代表除了原始物件外縮放量都相同"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:471
+#: ../src/ui/toolbar/spray-toolbar.cpp:291
 msgid "Use the pressure of the input device to alter the scale of new items"
 msgstr "利用輸入裝置的壓力來改變新項目的尺寸"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:483
-#: ../src/ui/toolbar/spray-toolbar.cpp:484
+#: ../src/ui/toolbar/spray-toolbar.cpp:302
+#: ../src/ui/toolbar/spray-toolbar.cpp:303
 msgid ""
 "Pick color from the drawing. You can use clonetiler trace dialog for "
 "advanced effects. In clone mode original fill or stroke colors must be unset."
@@ -26811,557 +26814,486 @@ msgstr ""
 "從圖畫中拾取顏色。你能使用鋪排彷製描繪對話框的進階特效。在仿製模式中原始填充"
 "或邊框必須是「未設定」狀態。"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:496
-#: ../src/ui/toolbar/spray-toolbar.cpp:497
+#: ../src/ui/toolbar/spray-toolbar.cpp:314
+#: ../src/ui/toolbar/spray-toolbar.cpp:315
 msgid "Pick from center instead average area."
 msgstr "從中心點拾取，而不是平均範圍。"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:509
-#: ../src/ui/toolbar/spray-toolbar.cpp:510
+#: ../src/ui/toolbar/spray-toolbar.cpp:326
+#: ../src/ui/toolbar/spray-toolbar.cpp:327
 msgid "Inverted pick value, retaining color in advanced trace mode"
 msgstr "反轉拾取數值，在進階描繪模式中保留顏色"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:522
-#: ../src/ui/toolbar/spray-toolbar.cpp:523
+#: ../src/ui/toolbar/spray-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:339
 msgid "Apply picked color to fill"
 msgstr "套用拾取顏色到填充"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:535
-#: ../src/ui/toolbar/spray-toolbar.cpp:536
+#: ../src/ui/toolbar/spray-toolbar.cpp:350
+#: ../src/ui/toolbar/spray-toolbar.cpp:351
 msgid "Apply picked color to stroke"
 msgstr "套用拾取顏色到邊框"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:548
-#: ../src/ui/toolbar/spray-toolbar.cpp:549
+#: ../src/ui/toolbar/spray-toolbar.cpp:362
+#: ../src/ui/toolbar/spray-toolbar.cpp:363
 msgid "No overlap between colors"
 msgstr "顏色之間不重疊"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:561
-#: ../src/ui/toolbar/spray-toolbar.cpp:562
+#: ../src/ui/toolbar/spray-toolbar.cpp:374
+#: ../src/ui/toolbar/spray-toolbar.cpp:375
 msgid "Apply over transparent areas"
 msgstr "套用涵蓋透明區域"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:574
-#: ../src/ui/toolbar/spray-toolbar.cpp:575
+#: ../src/ui/toolbar/spray-toolbar.cpp:386
+#: ../src/ui/toolbar/spray-toolbar.cpp:387
 msgid "Apply over no transparent areas"
 msgstr "套用不含透明區域"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:587
-#: ../src/ui/toolbar/spray-toolbar.cpp:588
+#: ../src/ui/toolbar/spray-toolbar.cpp:398
+#: ../src/ui/toolbar/spray-toolbar.cpp:399
 msgid "Prevent overlapping objects"
 msgstr "避免重疊物件"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:599
+#: ../src/ui/toolbar/spray-toolbar.cpp:409
 msgid "(minimum offset)"
 msgstr "(最小偏移)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:599
+#: ../src/ui/toolbar/spray-toolbar.cpp:409
 msgid "(maximum offset)"
 msgstr "(最大偏移)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:602
+#: ../src/ui/toolbar/spray-toolbar.cpp:412
 msgid "Offset %"
 msgstr "偏移 %"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:602
+#: ../src/ui/toolbar/spray-toolbar.cpp:412
 msgid "Offset %:"
 msgstr "偏移 %："
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:603
+#: ../src/ui/toolbar/spray-toolbar.cpp:413
 msgid "Increase to segregate objects more (value in percent)"
 msgstr "分離物件增加更多偏移 (數值單位為百分比)"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:101
-msgid "Star: Change number of corners"
-msgstr "星形：變更頂角數量"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:154
-msgid "Star: Change spoke ratio"
-msgstr "星形：變更輪輻比"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:200
-msgid "Make polygon"
-msgstr "製作多邊形"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:200
-msgid "Make star"
-msgstr "製作星形"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:239
-msgid "Star: Change rounding"
-msgstr "星形：變更圓角"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:279
-msgid "Star: Change randomization"
-msgstr "星形：變更隨機"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:488
+#: ../src/ui/toolbar/star-toolbar.cpp:110
 msgid "Regular polygon (with one handle) instead of a star"
 msgstr "規則多邊形 (具有一個控制點) 而非星形"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:494
+#: ../src/ui/toolbar/star-toolbar.cpp:116
 msgid "Star instead of a regular polygon (with one handle)"
 msgstr "星形而非規則多邊形 (具有一個控制點)"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:516
+#: ../src/ui/toolbar/star-toolbar.cpp:137
 msgid "triangle/tri-star"
 msgstr "三角形 / 三角星"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:516
+#: ../src/ui/toolbar/star-toolbar.cpp:137
 msgid "square/quad-star"
 msgstr "四邊形 / 四角星"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:516
+#: ../src/ui/toolbar/star-toolbar.cpp:137
 msgid "pentagon/five-pointed star"
 msgstr "五邊形 / 五角星"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:516
+#: ../src/ui/toolbar/star-toolbar.cpp:137
 msgid "hexagon/six-pointed star"
 msgstr "六邊形 / 六角星"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:519
+#: ../src/ui/toolbar/star-toolbar.cpp:140
 msgid "Corners"
 msgstr "頂角"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:519
+#: ../src/ui/toolbar/star-toolbar.cpp:140
 msgid "Corners:"
 msgstr "頂角："
 
-#: ../src/ui/toolbar/star-toolbar.cpp:519
+#: ../src/ui/toolbar/star-toolbar.cpp:140
 msgid "Number of corners of a polygon or star"
 msgstr "多邊形或星形的頂角數量"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "thin-ray star"
 msgstr "光芒星"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "pentagram"
 msgstr "五角形"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "hexagram"
 msgstr "六角形"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "heptagram"
 msgstr "七角形"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "octagram"
 msgstr "八角形"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "regular polygon"
 msgstr "規則多邊形"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:535
+#: ../src/ui/toolbar/star-toolbar.cpp:162
 msgid "Spoke ratio"
 msgstr "輪輻比"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:535
+#: ../src/ui/toolbar/star-toolbar.cpp:162
 msgid "Spoke ratio:"
 msgstr "輪輻比："
 
 #. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
 #. Base radius is the same for the closest handle.
-#: ../src/ui/toolbar/star-toolbar.cpp:538
+#: ../src/ui/toolbar/star-toolbar.cpp:165
 msgid "Base radius to tip radius ratio"
 msgstr "基礎半徑和尖端半徑的比率"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
-#: ../src/ui/toolbar/star-toolbar.cpp:557
+#: ../src/ui/toolbar/star-toolbar.cpp:187
+#: ../src/ui/toolbar/star-toolbar.cpp:188
 msgid "stretched"
 msgstr "伸展"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
+#: ../src/ui/toolbar/star-toolbar.cpp:187
 msgid "twisted"
 msgstr "扭曲"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
+#: ../src/ui/toolbar/star-toolbar.cpp:187
 msgid "slightly pinched"
 msgstr "輕微地擠壓"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
+#: ../src/ui/toolbar/star-toolbar.cpp:187
 msgid "NOT rounded"
 msgstr "無圓角"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
+#: ../src/ui/toolbar/star-toolbar.cpp:187
 msgid "slightly rounded"
 msgstr "輕微地圓角"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:557
+#: ../src/ui/toolbar/star-toolbar.cpp:188
 msgid "visibly rounded"
 msgstr "明顯地圓角"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:557
+#: ../src/ui/toolbar/star-toolbar.cpp:188
 msgid "well rounded"
 msgstr "適當地圓角"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:557
+#: ../src/ui/toolbar/star-toolbar.cpp:188
 msgid "amply rounded"
 msgstr "充分地圓角"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:557
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:188
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 msgid "blown up"
 msgstr "放大"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:560
+#: ../src/ui/toolbar/star-toolbar.cpp:191
 msgid "Rounded:"
 msgstr "圓角："
 
-#: ../src/ui/toolbar/star-toolbar.cpp:560
+#: ../src/ui/toolbar/star-toolbar.cpp:191
 msgid "How much rounded are the corners (0 for sharp)"
 msgstr "頂角圓角化的程度 (0 代表尖銳)"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 msgid "NOT randomized"
 msgstr "不隨機"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 msgid "slightly irregular"
 msgstr "輕微地不規則"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 msgid "visibly randomized"
 msgstr "明顯地隨機"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 msgid "strongly randomized"
 msgstr "強烈地隨機"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:575
+#: ../src/ui/toolbar/star-toolbar.cpp:211
 msgid "Randomized"
 msgstr "隨機"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:575
+#: ../src/ui/toolbar/star-toolbar.cpp:211
 msgid "Randomized:"
 msgstr "隨機："
 
-#: ../src/ui/toolbar/star-toolbar.cpp:575
+#: ../src/ui/toolbar/star-toolbar.cpp:211
 msgid "Scatter randomly the corners and angles"
 msgstr "隨機散佈頂角和角度"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:184
-msgid "Text: Change font family"
-msgstr "文字：變更字族"
+#: ../src/ui/toolbar/star-toolbar.cpp:281
+msgid "Make polygon"
+msgstr "製作多邊形"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:278
-msgid "Text: Change font size"
-msgstr "文字：變更字型尺寸"
+#: ../src/ui/toolbar/star-toolbar.cpp:281
+msgid "Make star"
+msgstr "製作星形"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:323
-msgid "Text: Change font style"
-msgstr "文字：變更字體"
+#: ../src/ui/toolbar/star-toolbar.cpp:326
+msgid "Star: Change number of corners"
+msgstr "星形：變更頂角數量"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:362
-#, fuzzy
-msgid "Text: Unset line height."
-msgstr "文字：變更列高"
+#: ../src/ui/toolbar/star-toolbar.cpp:378
+msgid "Star: Change spoke ratio"
+msgstr "星形：變更輪輻比"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:439
-msgid "Text: Change superscript or subscript"
-msgstr "文字：變更上標或下標"
+#: ../src/ui/toolbar/star-toolbar.cpp:416
+msgid "Star: Change rounding"
+msgstr "星形：變更圓角"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:580
-msgid "Text: Change alignment"
-msgstr "文字：變更對齊"
+#: ../src/ui/toolbar/star-toolbar.cpp:455
+msgid "Star: Change randomization"
+msgstr "星形：變更隨機"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:713
-msgid "Text: Change line-height"
-msgstr "文字：變更列高"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:877
-msgid "Text: Change line-height unit"
-msgstr "文字：變更列高單位"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1057
-#, fuzzy
-msgid "Text: Change line spacing mode"
-msgstr "文字：變更書寫模式"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1094
-msgid "Text: Change word-spacing"
-msgstr "文字：變更單字間距"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1134
-msgid "Text: Change letter-spacing"
-msgstr "文字：變更字母間距"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1172
-msgid "Text: Change dx (kern)"
-msgstr "文字：變更 X 方向距離 (字母緊排)"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1206
-msgid "Text: Change dy"
-msgstr "文字：變更 Y 方向距離"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1241
-msgid "Text: Change rotate"
-msgstr "文字：變更旋轉"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1292
-msgid "Text: Change writing mode"
-msgstr "文字：變更書寫模式"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1346
-msgid "Text: Change orientation"
-msgstr "文字：變更方向"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1394
-#, fuzzy
-msgid "Text: Change direction"
-msgstr "文字：變更方向"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1583
-#: ../src/ui/toolbar/text-toolbar.cpp:2040
-#: ../src/ui/widget/font-selector.cpp:32 ../src/ui/widget/font-selector.cpp:137
-msgid "Font size"
-msgstr "字型大小"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1992
+#: ../src/ui/toolbar/text-toolbar.cpp:295
 msgid "Font Family"
 msgstr "字族"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1993
+#: ../src/ui/toolbar/text-toolbar.cpp:296
 msgid "Select Font Family (Alt-X to access)"
 msgstr "選擇字族 (按 Alt+X 存取)"
 
 #. Focus widget
 #. Enable entry completion
-#: ../src/ui/toolbar/text-toolbar.cpp:2003
+#: ../src/ui/toolbar/text-toolbar.cpp:306
 msgid "Select all text with this font-family"
 msgstr "選擇所有屬於該字族的文字"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2007
+#: ../src/ui/toolbar/text-toolbar.cpp:310
 msgid "Font not found on system"
 msgstr "系統上找不到字型"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2065
+#: ../src/ui/toolbar/text-toolbar.cpp:342
+#: ../src/ui/toolbar/text-toolbar.cpp:2221
+#: ../src/ui/widget/font-selector.cpp:32 ../src/ui/widget/font-selector.cpp:137
+msgid "Font size"
+msgstr "字型大小"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:366
 msgid "Font Style"
 msgstr "字型樣式"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2066
+#: ../src/ui/toolbar/text-toolbar.cpp:367
 msgid "Font style"
 msgstr "字型樣式"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2083
+#: ../src/ui/toolbar/text-toolbar.cpp:383
 msgid "Toggle Superscript"
 msgstr "切換上標"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2084
+#: ../src/ui/toolbar/text-toolbar.cpp:384
 msgid "Toggle superscript"
 msgstr "切換上標"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2096
+#: ../src/ui/toolbar/text-toolbar.cpp:395
 msgid "Toggle Subscript"
 msgstr "切換下標"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2097
+#: ../src/ui/toolbar/text-toolbar.cpp:396
 msgid "Toggle subscript"
 msgstr "切換下標"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2115
-#: ../src/ui/toolbar/text-toolbar.cpp:2116
+#: ../src/ui/toolbar/text-toolbar.cpp:413
+#: ../src/ui/toolbar/text-toolbar.cpp:414
 msgid "Align left"
 msgstr "靠左對齊"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2121
-#: ../src/ui/toolbar/text-toolbar.cpp:2122
+#: ../src/ui/toolbar/text-toolbar.cpp:419
+#: ../src/ui/toolbar/text-toolbar.cpp:420
 msgid "Align center"
 msgstr "置中"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2127
-#: ../src/ui/toolbar/text-toolbar.cpp:2128
+#: ../src/ui/toolbar/text-toolbar.cpp:425
+#: ../src/ui/toolbar/text-toolbar.cpp:426
 msgid "Align right"
 msgstr "靠右對齊"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2133
+#: ../src/ui/toolbar/text-toolbar.cpp:431
 msgid "Justify"
 msgstr "左右對齊"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2134
+#: ../src/ui/toolbar/text-toolbar.cpp:432
 msgid "Justify (only flowed text)"
 msgstr "左右對齊 (僅流動文字)"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2140
+#: ../src/ui/toolbar/text-toolbar.cpp:438
 msgid "Alignment"
 msgstr "對齊"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2141
+#: ../src/ui/toolbar/text-toolbar.cpp:439
 msgid "Text alignment"
 msgstr "文字對齊"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2165
+#: ../src/ui/toolbar/text-toolbar.cpp:462
 msgid "Horizontal text"
 msgstr "橫書"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2170
+#: ../src/ui/toolbar/text-toolbar.cpp:467
 msgid "Vertical — RL"
 msgstr "直向 — 右到左"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2171
+#: ../src/ui/toolbar/text-toolbar.cpp:468
 msgid "Vertical text — lines: right to left"
 msgstr "直向文字 — 文字列：從右到左"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2176
+#: ../src/ui/toolbar/text-toolbar.cpp:473
 msgid "Vertical — LR"
 msgstr "直向 — 左到右"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2177
+#: ../src/ui/toolbar/text-toolbar.cpp:474
 msgid "Vertical text — lines: left to right"
 msgstr "直向文字 — 文字列：從左到右"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2183
+#: ../src/ui/toolbar/text-toolbar.cpp:480
 msgid "Writing mode"
 msgstr "書寫模式"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2184
+#: ../src/ui/toolbar/text-toolbar.cpp:481
 msgid "Block progression"
 msgstr "文字區塊"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2208
+#: ../src/ui/toolbar/text-toolbar.cpp:504
 msgid "Auto glyph orientation"
 msgstr "自動文字方向"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2213
+#: ../src/ui/toolbar/text-toolbar.cpp:509
 msgid "Upright"
 msgstr "右上"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2214
+#: ../src/ui/toolbar/text-toolbar.cpp:510
 msgid "Upright glyph orientation"
 msgstr "右上文字方向"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2219
+#: ../src/ui/toolbar/text-toolbar.cpp:515
 msgid "Sideways"
 msgstr "側面"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2220
+#: ../src/ui/toolbar/text-toolbar.cpp:516
 msgid "Sideways glyph orientation"
 msgstr "側面文字方向"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2226
+#: ../src/ui/toolbar/text-toolbar.cpp:522
 msgid "Text orientation"
 msgstr "文字方向"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2227
+#: ../src/ui/toolbar/text-toolbar.cpp:523
 msgid "Text (glyph) orientation in vertical text."
 msgstr "直向文字的文字 (字) 方向。"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2251
+#: ../src/ui/toolbar/text-toolbar.cpp:545
 msgid "LTR"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2252
+#: ../src/ui/toolbar/text-toolbar.cpp:546
 #, fuzzy
 msgid "Left to right text"
 msgstr "從左到右"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2257
+#: ../src/ui/toolbar/text-toolbar.cpp:551
 msgid "RTL"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2258
+#: ../src/ui/toolbar/text-toolbar.cpp:552
 #, fuzzy
 msgid "Right to left text"
 msgstr "從右到左"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2264
+#: ../src/ui/toolbar/text-toolbar.cpp:558
 #, fuzzy
 msgid "Text direction"
 msgstr "文字方向："
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2265
+#: ../src/ui/toolbar/text-toolbar.cpp:559
 msgid "Text direction for normally horizontal text."
 msgstr ""
 
 #. Drop down menu
-#: ../src/ui/toolbar/text-toolbar.cpp:2291
+#: ../src/ui/toolbar/text-toolbar.cpp:575
 msgid "Smaller spacing"
 msgstr "縮小間距"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2291
-#: ../src/ui/toolbar/text-toolbar.cpp:2379
-#: ../src/ui/toolbar/text-toolbar.cpp:2410
+#: ../src/ui/toolbar/text-toolbar.cpp:575
+#: ../src/ui/toolbar/text-toolbar.cpp:666
+#: ../src/ui/toolbar/text-toolbar.cpp:699
 msgctxt "Text tool"
 msgid "Normal"
 msgstr "標準"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2291
+#: ../src/ui/toolbar/text-toolbar.cpp:575
 msgid "Larger spacing"
 msgstr "加大間距"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2296
+#: ../src/ui/toolbar/text-toolbar.cpp:580
 msgid "Line Height"
 msgstr "行高"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2297
+#: ../src/ui/toolbar/text-toolbar.cpp:581
 msgid "Line:"
 msgstr "行："
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2298
+#: ../src/ui/toolbar/text-toolbar.cpp:582
 msgid "Spacing between baselines"
 msgstr "基本線的間隔距離"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2337
+#: ../src/ui/toolbar/text-toolbar.cpp:625
 #, fuzzy
 msgid "Adaptive"
 msgstr "相對"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2338
+#: ../src/ui/toolbar/text-toolbar.cpp:626
 msgid "Line spacing adapts to font size."
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2343
+#: ../src/ui/toolbar/text-toolbar.cpp:631
 #: ../share/extensions/polyhedron_3d.inx.h:54
 msgid "Minimum"
 msgstr "最小"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2344
+#: ../src/ui/toolbar/text-toolbar.cpp:632
 msgid "Line spacing adapts to fonts size with set minimum spacing."
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2348
+#: ../src/ui/toolbar/text-toolbar.cpp:636
 msgid "Even"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2349
+#: ../src/ui/toolbar/text-toolbar.cpp:637
 msgid "Lines evenly spaced."
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2354
+#: ../src/ui/toolbar/text-toolbar.cpp:642
 #, fuzzy
 msgid "Adjustable ☠"
 msgstr "調整透明"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2355
+#: ../src/ui/toolbar/text-toolbar.cpp:643
 msgid "Line spacing fully adjustable"
 msgstr ""
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2361
+#: ../src/ui/toolbar/text-toolbar.cpp:649
 #, fuzzy
 msgid "Line Spacing Mode"
 msgstr "行距："
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2362
+#: ../src/ui/toolbar/text-toolbar.cpp:650
 msgid ""
 "How should multiple baselines be spaced?\n"
 " Adaptive: Line spacing adapts to font size.\n"
@@ -27371,322 +27303,393 @@ msgid ""
 msgstr ""
 
 #. Drop down menu
-#: ../src/ui/toolbar/text-toolbar.cpp:2379
-#: ../src/ui/toolbar/text-toolbar.cpp:2410
+#: ../src/ui/toolbar/text-toolbar.cpp:666
+#: ../src/ui/toolbar/text-toolbar.cpp:699
 msgid "Negative spacing"
 msgstr "負間距"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2379
-#: ../src/ui/toolbar/text-toolbar.cpp:2410
+#: ../src/ui/toolbar/text-toolbar.cpp:666
+#: ../src/ui/toolbar/text-toolbar.cpp:699
 msgid "Positive spacing"
 msgstr "正間距"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2384
+#: ../src/ui/toolbar/text-toolbar.cpp:671
 msgid "Word spacing"
 msgstr "單字間距"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2385
+#: ../src/ui/toolbar/text-toolbar.cpp:672
 msgid "Word:"
 msgstr "單字："
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2386
+#: ../src/ui/toolbar/text-toolbar.cpp:673
 msgid "Spacing between words (px)"
 msgstr "單字之間的距離 (px)"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2415
+#: ../src/ui/toolbar/text-toolbar.cpp:704
 msgid "Letter spacing"
 msgstr "字距："
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2416
+#: ../src/ui/toolbar/text-toolbar.cpp:705
 msgid "Letter:"
 msgstr "字母："
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2417
+#: ../src/ui/toolbar/text-toolbar.cpp:706
 msgid "Spacing between letters (px)"
 msgstr "字母之間的距離 (px)"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2446
+#: ../src/ui/toolbar/text-toolbar.cpp:736
 msgid "Kerning"
 msgstr "字母緊排"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2447
+#: ../src/ui/toolbar/text-toolbar.cpp:737
 msgid "Kern:"
 msgstr "字母緊排："
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2448
+#: ../src/ui/toolbar/text-toolbar.cpp:738
 msgid "Horizontal kerning (px)"
 msgstr "水平字母緊排 (px)"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2477
+#: ../src/ui/toolbar/text-toolbar.cpp:768
 msgid "Vertical Shift"
 msgstr "垂直位移"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2478
+#: ../src/ui/toolbar/text-toolbar.cpp:769
 msgid "Vert:"
 msgstr "垂直："
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2479
+#: ../src/ui/toolbar/text-toolbar.cpp:770
 msgid "Vertical shift (px)"
 msgstr "垂直位移 (px)"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2508
+#: ../src/ui/toolbar/text-toolbar.cpp:800
 msgid "Letter rotation"
 msgstr "字母旋轉"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2509
+#: ../src/ui/toolbar/text-toolbar.cpp:801
 msgid "Rot:"
 msgstr "旋轉："
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2510
+#: ../src/ui/toolbar/text-toolbar.cpp:802
 msgid "Character rotation (degrees)"
 msgstr "字元旋轉 (度)"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2534
+#: ../src/ui/toolbar/text-toolbar.cpp:827
 #, fuzzy
 msgid "Unset line height"
 msgstr "對齊右邊"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2535
+#: ../src/ui/toolbar/text-toolbar.cpp:828
 msgid "If enabled, line height is set on part of selection. Click to unset."
 msgstr ""
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2547
+#: ../src/ui/toolbar/text-toolbar.cpp:839
 #, fuzzy
 msgid "Show outer style"
 msgstr "朦朧的外斜角"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2548
+#: ../src/ui/toolbar/text-toolbar.cpp:840
 msgid ""
 "Show style of outermost text element. The 'font-size' and 'line-height' "
 "values of the outermost text element determine the minimum line spacing in "
 "the block."
 msgstr ""
 
+#: ../src/ui/toolbar/text-toolbar.cpp:914
+msgid "Text: Change font family"
+msgstr "文字：變更字族"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1010
+msgid "Text: Change font size"
+msgstr "文字：變更字型尺寸"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1055
+msgid "Text: Change font style"
+msgstr "文字：變更字體"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1139
+msgid "Text: Change superscript or subscript"
+msgstr "文字：變更上標或下標"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1281
+msgid "Text: Change alignment"
+msgstr "文字：變更對齊"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1336
+msgid "Text: Change writing mode"
+msgstr "文字：變更書寫模式"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1391
+msgid "Text: Change orientation"
+msgstr "文字：變更方向"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1440
+#, fuzzy
+msgid "Text: Change direction"
+msgstr "文字：變更方向"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1509
+msgid "Text: Change line-height"
+msgstr "文字：變更列高"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1669
+msgid "Text: Change line-height unit"
+msgstr "文字：變更列高單位"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1841
+#, fuzzy
+msgid "Text: Change line spacing mode"
+msgstr "文字：變更書寫模式"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1879
+msgid "Text: Change word-spacing"
+msgstr "文字：變更單字間距"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1920
+msgid "Text: Change letter-spacing"
+msgstr "文字：變更字母間距"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1958
+msgid "Text: Change dx (kern)"
+msgstr "文字：變更 X 方向距離 (字母緊排)"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1993
+msgid "Text: Change dy"
+msgstr "文字：變更 Y 方向距離"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:2029
+msgid "Text: Change rotate"
+msgstr "文字：變更旋轉"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:2056
+#, fuzzy
+msgid "Text: Unset line height."
+msgstr "文字：變更列高"
+
 #. Width
-#: ../src/ui/toolbar/tweak-toolbar.cpp:126
+#: ../src/ui/toolbar/tweak-toolbar.cpp:92
 msgid "(pinch tweak)"
 msgstr "(擠壓微調)"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:126
+#: ../src/ui/toolbar/tweak-toolbar.cpp:92
 msgid "(broad tweak)"
 msgstr "(大範圍微調)"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:129
+#: ../src/ui/toolbar/tweak-toolbar.cpp:95
 msgid "The width of the tweak area (relative to the visible canvas area)"
 msgstr "微調範圍的寬度 (相對於可見畫布區域)"
 
 #. Force
-#: ../src/ui/toolbar/tweak-toolbar.cpp:143
+#: ../src/ui/toolbar/tweak-toolbar.cpp:115
 msgid "(minimum force)"
 msgstr "(最小力道)"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:143
+#: ../src/ui/toolbar/tweak-toolbar.cpp:115
 msgid "(maximum force)"
 msgstr "(最大力道)"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:146
+#: ../src/ui/toolbar/tweak-toolbar.cpp:118
 msgid "Force"
 msgstr "力道"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:146
+#: ../src/ui/toolbar/tweak-toolbar.cpp:118
 msgid "Force:"
 msgstr "力道："
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:146
+#: ../src/ui/toolbar/tweak-toolbar.cpp:118
 msgid "The force of the tweak action"
 msgstr "微調動作的力道"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:166
+#: ../src/ui/toolbar/tweak-toolbar.cpp:143
 msgid "Move mode"
 msgstr "移動模式"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:167
+#: ../src/ui/toolbar/tweak-toolbar.cpp:144
 msgid "Move objects in any direction"
 msgstr "以任意方向移動物件"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:172
+#: ../src/ui/toolbar/tweak-toolbar.cpp:149
 msgid "Move in/out mode"
 msgstr "內移 / 外移模式"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:173
+#: ../src/ui/toolbar/tweak-toolbar.cpp:150
 msgid "Move objects towards cursor; with Shift from cursor"
 msgstr "朝向游標移動物件；按著 Shift 反方向移動"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:178
+#: ../src/ui/toolbar/tweak-toolbar.cpp:155
 msgid "Move jitter mode"
 msgstr "抖動模式"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:179
+#: ../src/ui/toolbar/tweak-toolbar.cpp:156
 msgid "Move objects in random directions"
 msgstr "以隨機方向移動物件"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:184
+#: ../src/ui/toolbar/tweak-toolbar.cpp:161
 msgid "Scale mode"
 msgstr "縮放模式"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:185
+#: ../src/ui/toolbar/tweak-toolbar.cpp:162
 msgid "Shrink objects, with Shift enlarge"
 msgstr "收縮物件，按著 Shift 擴張"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:190
+#: ../src/ui/toolbar/tweak-toolbar.cpp:167
 msgid "Rotate mode"
 msgstr "旋轉模式"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:191
+#: ../src/ui/toolbar/tweak-toolbar.cpp:168
 msgid "Rotate objects, with Shift counterclockwise"
 msgstr "旋轉物件，按著 Shift 逆時針旋轉"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:196
+#: ../src/ui/toolbar/tweak-toolbar.cpp:173
 msgid "Duplicate/delete mode"
 msgstr "再製 / 刪除模式"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:197
+#: ../src/ui/toolbar/tweak-toolbar.cpp:174
 msgid "Duplicate objects, with Shift delete"
 msgstr "再製物件，按著 Shift 刪除"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:202
+#: ../src/ui/toolbar/tweak-toolbar.cpp:179
 msgid "Push mode"
 msgstr "推壓模式"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:203
+#: ../src/ui/toolbar/tweak-toolbar.cpp:180
 msgid "Push parts of paths in any direction"
 msgstr "以任意方向推壓路徑"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:208
+#: ../src/ui/toolbar/tweak-toolbar.cpp:185
 msgid "Shrink/grow mode"
 msgstr "收縮 / 膨脹模式"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:209
+#: ../src/ui/toolbar/tweak-toolbar.cpp:186
 msgid "Shrink (inset) parts of paths; with Shift grow (outset)"
 msgstr "收縮 (內縮) 路徑的部份；按著 Shift 膨脹 (外擴)"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:214
+#: ../src/ui/toolbar/tweak-toolbar.cpp:191
 msgid "Attract/repel mode"
 msgstr "吸引 / 排斥模式"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:215
+#: ../src/ui/toolbar/tweak-toolbar.cpp:192
 msgid "Attract parts of paths towards cursor; with Shift from cursor"
 msgstr "朝向游標吸引部份路徑；按著 Shift 反方向"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:220
+#: ../src/ui/toolbar/tweak-toolbar.cpp:197
 msgid "Roughen mode"
 msgstr "粗糙模式"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:221
+#: ../src/ui/toolbar/tweak-toolbar.cpp:198
 msgid "Roughen parts of paths"
 msgstr "將部份路徑粗糙化"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:226
+#: ../src/ui/toolbar/tweak-toolbar.cpp:203
 msgid "Color paint mode"
 msgstr "顏色塗繪模式"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:227
+#: ../src/ui/toolbar/tweak-toolbar.cpp:204
 msgid "Paint the tool's color upon selected objects"
 msgstr "對選取的物件塗繪此工具的顏色"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:232
+#: ../src/ui/toolbar/tweak-toolbar.cpp:209
 msgid "Color jitter mode"
 msgstr "顏色抖動模式"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:233
+#: ../src/ui/toolbar/tweak-toolbar.cpp:210
 msgid "Jitter the colors of selected objects"
 msgstr "抖動選取物件的顏色"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:238
+#: ../src/ui/toolbar/tweak-toolbar.cpp:215
 msgid "Blur mode"
 msgstr "模糊模式"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:239
+#: ../src/ui/toolbar/tweak-toolbar.cpp:216
 msgid "Blur selected objects more; with Shift, blur less"
 msgstr "使選取的物件更為模糊；按著 Shift，減少模糊"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:266
+#: ../src/ui/toolbar/tweak-toolbar.cpp:242
 msgid "Channels:"
 msgstr "色版："
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:278
+#: ../src/ui/toolbar/tweak-toolbar.cpp:253
 msgid "In color mode, act on objects' hue"
 msgstr "在顏色模式裡，影響物件的色相"
 
 #. TRANSLATORS:  "H" here stands for hue
-#: ../src/ui/toolbar/tweak-toolbar.cpp:282
+#: ../src/ui/toolbar/tweak-toolbar.cpp:257
 msgctxt "Hue"
 msgid "H"
 msgstr "色相"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:294
+#: ../src/ui/toolbar/tweak-toolbar.cpp:268
 msgid "In color mode, act on objects' saturation"
 msgstr "在顏色模式裡，影響物件的飽和度"
 
 #. TRANSLATORS: "S" here stands for Saturation
-#: ../src/ui/toolbar/tweak-toolbar.cpp:298
+#: ../src/ui/toolbar/tweak-toolbar.cpp:272
 msgctxt "Saturation"
 msgid "S"
 msgstr "飽和度"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:310
+#: ../src/ui/toolbar/tweak-toolbar.cpp:283
 msgid "In color mode, act on objects' lightness"
 msgstr "在顏色模式，影響物件的亮度"
 
 #. TRANSLATORS: "L" here stands for Lightness
-#: ../src/ui/toolbar/tweak-toolbar.cpp:314
+#: ../src/ui/toolbar/tweak-toolbar.cpp:287
 msgctxt "Lightness"
 msgid "L"
 msgstr "明度"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:326
+#: ../src/ui/toolbar/tweak-toolbar.cpp:298
 msgid "In color mode, act on objects' opacity"
 msgstr "在顏色模式，影響物件的不透明度"
 
 #. TRANSLATORS: "O" here stands for Opacity
-#: ../src/ui/toolbar/tweak-toolbar.cpp:330
+#: ../src/ui/toolbar/tweak-toolbar.cpp:302
 msgctxt "Opacity"
 msgid "O"
 msgstr "不透明度"
 
 #. Fidelity
-#: ../src/ui/toolbar/tweak-toolbar.cpp:341
+#: ../src/ui/toolbar/tweak-toolbar.cpp:312
 msgid "(rough, simplified)"
 msgstr "(粗糙，精簡的)"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:341
+#: ../src/ui/toolbar/tweak-toolbar.cpp:312
 msgid "(fine, but many nodes)"
 msgstr "(精細，但節點多)"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:344
+#: ../src/ui/toolbar/tweak-toolbar.cpp:315
 msgid "Fidelity"
 msgstr "精確度"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:344
+#: ../src/ui/toolbar/tweak-toolbar.cpp:315
 msgid "Fidelity:"
 msgstr "精確度："
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:345
+#: ../src/ui/toolbar/tweak-toolbar.cpp:316
 msgid ""
 "Low fidelity simplifies paths; high fidelity preserves path features but may "
 "generate a lot of new nodes"
 msgstr "精確度低是簡化路徑；精確度高是保留路徑特徵，但可能會生成很多新節點"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:364
+#: ../src/ui/toolbar/tweak-toolbar.cpp:340
 msgid "Use the pressure of the input device to alter the force of tweak action"
 msgstr "使用輸入裝置的壓力來改變微調動作的力道"
 
@@ -32794,7 +32797,7 @@ msgstr "另存為 Inkscape _SVG"
 msgid "Note:"
 msgstr "備註:"
 
-#: ../src/widgets/desktop-widget.cpp:2330
+#: ../src/widgets/desktop-widget.cpp:2329
 msgid "Create guide"
 msgstr "建立參考線"
 
@@ -33200,131 +33203,131 @@ msgstr "待定"
 msgid "Style of Paint Bucket fill objects"
 msgstr "油漆桶填充物件的樣式"
 
-#: ../src/widgets/toolbox.cpp:1318
+#: ../src/widgets/toolbox.cpp:1320
 msgid "Bounding box"
 msgstr "邊界框"
 
-#: ../src/widgets/toolbox.cpp:1318
+#: ../src/widgets/toolbox.cpp:1320
 msgid "Snap bounding boxes"
 msgstr "貼齊邊界框"
 
-#: ../src/widgets/toolbox.cpp:1327
+#: ../src/widgets/toolbox.cpp:1329
 msgid "Bounding box edges"
 msgstr "邊界框邊緣"
 
-#: ../src/widgets/toolbox.cpp:1327
+#: ../src/widgets/toolbox.cpp:1329
 msgid "Snap to edges of a bounding box"
 msgstr "貼齊到邊界框邊緣"
 
-#: ../src/widgets/toolbox.cpp:1336
+#: ../src/widgets/toolbox.cpp:1338
 msgid "Bounding box corners"
 msgstr "邊界框頂點"
 
-#: ../src/widgets/toolbox.cpp:1336
+#: ../src/widgets/toolbox.cpp:1338
 msgid "Snap bounding box corners"
 msgstr "貼齊邊界框頂點"
 
-#: ../src/widgets/toolbox.cpp:1345
+#: ../src/widgets/toolbox.cpp:1347
 msgid "BBox Edge Midpoints"
 msgstr "邊界框邊緣中點"
 
-#: ../src/widgets/toolbox.cpp:1345
+#: ../src/widgets/toolbox.cpp:1347
 msgid "Snap midpoints of bounding box edges"
 msgstr "貼齊邊界框邊緣中點"
 
-#: ../src/widgets/toolbox.cpp:1355
+#: ../src/widgets/toolbox.cpp:1357
 msgid "BBox Centers"
 msgstr "邊界框中心"
 
-#: ../src/widgets/toolbox.cpp:1355
+#: ../src/widgets/toolbox.cpp:1357
 msgid "Snapping centers of bounding boxes"
 msgstr "貼齊邊界框中心"
 
-#: ../src/widgets/toolbox.cpp:1364
+#: ../src/widgets/toolbox.cpp:1366
 msgid "Snap nodes, paths, and handles"
 msgstr "貼齊節點、路徑及控制點"
 
-#: ../src/widgets/toolbox.cpp:1372
+#: ../src/widgets/toolbox.cpp:1374
 msgid "Snap to paths"
 msgstr "貼齊路徑"
 
-#: ../src/widgets/toolbox.cpp:1381
+#: ../src/widgets/toolbox.cpp:1383
 msgid "Path intersections"
 msgstr "路徑交點"
 
-#: ../src/widgets/toolbox.cpp:1381
+#: ../src/widgets/toolbox.cpp:1383
 msgid "Snap to path intersections"
 msgstr "貼齊路徑交點"
 
-#: ../src/widgets/toolbox.cpp:1390
+#: ../src/widgets/toolbox.cpp:1392
 msgid "To nodes"
 msgstr "節點"
 
-#: ../src/widgets/toolbox.cpp:1390
+#: ../src/widgets/toolbox.cpp:1392
 msgid "Snap cusp nodes, incl. rectangle corners"
 msgstr "貼齊尖角節點，包括矩形頂點"
 
-#: ../src/widgets/toolbox.cpp:1399
+#: ../src/widgets/toolbox.cpp:1401
 msgid "Smooth nodes"
 msgstr "平滑節點"
 
-#: ../src/widgets/toolbox.cpp:1399
+#: ../src/widgets/toolbox.cpp:1401
 msgid "Snap smooth nodes, incl. quadrant points of ellipses"
 msgstr "貼齊平滑節點，包括橢圓形的象限點"
 
-#: ../src/widgets/toolbox.cpp:1408
+#: ../src/widgets/toolbox.cpp:1410
 msgid "Line Midpoints"
 msgstr "直線中點"
 
-#: ../src/widgets/toolbox.cpp:1408
+#: ../src/widgets/toolbox.cpp:1410
 msgid "Snap midpoints of line segments"
 msgstr "貼齊直線線段的中點"
 
-#: ../src/widgets/toolbox.cpp:1417
+#: ../src/widgets/toolbox.cpp:1419
 msgid "Others"
 msgstr "其他"
 
-#: ../src/widgets/toolbox.cpp:1417
+#: ../src/widgets/toolbox.cpp:1419
 msgid "Snap other points (centers, guide origins, gradient handles, etc.)"
 msgstr "貼齊其他點 (中心點、參考線原點、漸層控制點等)"
 
-#: ../src/widgets/toolbox.cpp:1425
+#: ../src/widgets/toolbox.cpp:1427
 msgid "Object Centers"
 msgstr "物件中心"
 
-#: ../src/widgets/toolbox.cpp:1425
+#: ../src/widgets/toolbox.cpp:1427
 msgid "Snap centers of objects"
 msgstr "貼齊物件中心"
 
-#: ../src/widgets/toolbox.cpp:1434
+#: ../src/widgets/toolbox.cpp:1436
 msgid "Rotation Centers"
 msgstr "旋轉中心"
 
-#: ../src/widgets/toolbox.cpp:1434
+#: ../src/widgets/toolbox.cpp:1436
 msgid "Snap an item's rotation center"
 msgstr "貼齊項目的旋轉中心"
 
-#: ../src/widgets/toolbox.cpp:1443
+#: ../src/widgets/toolbox.cpp:1445
 msgid "Text baseline"
 msgstr "文字基線"
 
-#: ../src/widgets/toolbox.cpp:1443
+#: ../src/widgets/toolbox.cpp:1445
 msgid "Snap text anchors and baselines"
 msgstr "貼齊文字錨點和基準線"
 
-#: ../src/widgets/toolbox.cpp:1453
+#: ../src/widgets/toolbox.cpp:1455
 msgid "Page border"
 msgstr "頁邊"
 
-#: ../src/widgets/toolbox.cpp:1453
+#: ../src/widgets/toolbox.cpp:1455
 msgid "Snap to the page border"
 msgstr "貼齊頁面邊緣"
 
-#: ../src/widgets/toolbox.cpp:1462
+#: ../src/widgets/toolbox.cpp:1464
 msgid "Snap to grids"
 msgstr "貼齊格線"
 
-#: ../src/widgets/toolbox.cpp:1471
+#: ../src/widgets/toolbox.cpp:1473
 msgid "Snap guides"
 msgstr "貼齊參考線"
 

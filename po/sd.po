@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-01-17 00:47+0100\n"
+"POT-Creation-Date: 2019-01-20 11:29+0100\n"
 "PO-Revision-Date: 2013-09-07 15:37+0530\n"
 "Last-Translator: Nasreen <nasreen_saifee@hotmail.com>\n"
 "Language-Team: Hindi <Indlinux>\n"
@@ -4913,7 +4913,7 @@ msgstr " z- محور جي آدار جي ڊيگهە "
 
 #: ../src/display/canvas-axonomgrid.cpp:282
 #: ../src/ui/dialog/inkscape-preferences.cpp:1109
-#: ../src/ui/toolbar/box3d-toolbar.cpp:303
+#: ../src/ui/toolbar/box3d-toolbar.cpp:89
 msgid "Angle X:"
 msgstr "ڪنڊ X: "
 
@@ -4924,7 +4924,7 @@ msgstr " x- محور جي ڪنڊ "
 
 #: ../src/display/canvas-axonomgrid.cpp:284
 #: ../src/ui/dialog/inkscape-preferences.cpp:1110
-#: ../src/ui/toolbar/box3d-toolbar.cpp:382
+#: ../src/ui/toolbar/box3d-toolbar.cpp:174
 msgid "Angle Z:"
 msgstr "ڪنڊ Z: "
 
@@ -5451,10 +5451,10 @@ msgstr "موافقت واري دڪي "
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:58
 #: ../src/ui/dialog/object-attributes.cpp:59
 #: ../src/ui/dialog/object-attributes.cpp:67
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:397
-#: ../src/ui/toolbar/eraser-toolbar.cpp:186
-#: ../src/ui/toolbar/spray-toolbar.cpp:293
-#: ../src/ui/toolbar/tweak-toolbar.cpp:129 ../src/ui/widget/page-sizer.cpp:62
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:105
+#: ../src/ui/toolbar/eraser-toolbar.cpp:115
+#: ../src/ui/toolbar/spray-toolbar.cpp:93
+#: ../src/ui/toolbar/tweak-toolbar.cpp:95 ../src/ui/widget/page-sizer.cpp:62
 #: ../share/extensions/foldablebox.inx.h:2
 msgid "Width:"
 msgstr "ويڪر: "
@@ -5469,7 +5469,7 @@ msgid "Height:"
 msgstr "اوچائي: "
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:44
-#: ../src/ui/toolbar/measure-toolbar.cpp:346
+#: ../src/ui/toolbar/measure-toolbar.cpp:296
 #: ../share/extensions/printing_marks.inx.h:12
 msgid "Offset:"
 msgstr "آفسيٽ: "
@@ -5724,7 +5724,7 @@ msgstr "گولاڪار رنگ جو نقشو "
 #: ../src/extension/internal/bitmap/cycleColormap.cpp:40
 #: ../src/extension/internal/bitmap/spread.cpp:40
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:46
-#: ../src/ui/toolbar/spray-toolbar.cpp:405
+#: ../src/ui/toolbar/spray-toolbar.cpp:215
 msgid "Amount:"
 msgstr "مقدارُ: "
 
@@ -5907,7 +5907,7 @@ msgstr ""
 #: ../src/extension/internal/filter/blurs.h:334
 #: ../src/extension/internal/filter/transparency.h:280
 #: ../src/ui/dialog/clonetiler.cpp:794 ../src/ui/dialog/clonetiler.cpp:925
-#: ../src/ui/toolbar/tweak-toolbar.cpp:325
+#: ../src/ui/toolbar/tweak-toolbar.cpp:297
 #: ../share/extensions/interp_att_g.inx.h:20
 msgid "Opacity"
 msgstr "غير شفافيت "
@@ -6035,7 +6035,7 @@ msgstr "حد"
 
 #: ../src/extension/internal/bitmap/threshold.cpp:41
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:47
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:159
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:106
 msgid "Threshold:"
 msgstr "حد: "
 
@@ -6094,138 +6094,138 @@ msgstr "بڻائڻ لاءِ شئە جي انسيٽ/آئوٽ سيٽ ڪاپين ج
 msgid "Generate from Path"
 msgstr "راهە مان خلقيو "
 
-#: ../src/extension/internal/cairo-ps-out.cpp:329
+#: ../src/extension/internal/cairo-ps-out.cpp:330
 #: ../share/extensions/ps_input.inx.h:3
 msgid "PostScript"
 msgstr "پوسٽ اِسڪرپٽ "
 
-#: ../src/extension/internal/cairo-ps-out.cpp:331
-#: ../src/extension/internal/cairo-ps-out.cpp:373
+#: ../src/extension/internal/cairo-ps-out.cpp:332
+#: ../src/extension/internal/cairo-ps-out.cpp:374
 msgid "Restrict to PS level:"
 msgstr "PS سطح تائين محدود ڪريو "
 
-#: ../src/extension/internal/cairo-ps-out.cpp:332
-#: ../src/extension/internal/cairo-ps-out.cpp:374
+#: ../src/extension/internal/cairo-ps-out.cpp:333
+#: ../src/extension/internal/cairo-ps-out.cpp:375
 msgid "PostScript level 3"
 msgstr "پوسٽ اِسڪرپٽ سطح ٣ "
 
-#: ../src/extension/internal/cairo-ps-out.cpp:333
-#: ../src/extension/internal/cairo-ps-out.cpp:375
+#: ../src/extension/internal/cairo-ps-out.cpp:334
+#: ../src/extension/internal/cairo-ps-out.cpp:376
 msgid "PostScript level 2"
 msgstr "پوسٽ اِسڪرپٽ سطح ٢ "
-
-#: ../src/extension/internal/cairo-ps-out.cpp:335
-#: ../src/extension/internal/cairo-ps-out.cpp:377
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:254
-#, fuzzy
-msgid "Text output options:"
-msgstr "متن/ورئينٽيشن "
 
 #: ../src/extension/internal/cairo-ps-out.cpp:336
 #: ../src/extension/internal/cairo-ps-out.cpp:378
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:255
 #, fuzzy
-msgid "Embed fonts"
-msgstr "لٽيل ريسٽرس "
+msgid "Text output options:"
+msgstr "متن/ورئينٽيشن "
 
 #: ../src/extension/internal/cairo-ps-out.cpp:337
 #: ../src/extension/internal/cairo-ps-out.cpp:379
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:256
 #, fuzzy
-msgid "Convert text to paths"
-msgstr "متن راهن ۾ بدلايو "
+msgid "Embed fonts"
+msgstr "لٽيل ريسٽرس "
 
 #: ../src/extension/internal/cairo-ps-out.cpp:338
 #: ../src/extension/internal/cairo-ps-out.cpp:380
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:257
 #, fuzzy
+msgid "Convert text to paths"
+msgstr "متن راهن ۾ بدلايو "
+
+#: ../src/extension/internal/cairo-ps-out.cpp:339
+#: ../src/extension/internal/cairo-ps-out.cpp:381
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:258
+#, fuzzy
 msgid "Omit text in PDF and create LaTeX file"
 msgstr "PDF+LaTeX:PDF  مان متن ڪڍي ڇڏيو ۽  LaTeX فائل خلقو "
-
-#: ../src/extension/internal/cairo-ps-out.cpp:340
-#: ../src/extension/internal/cairo-ps-out.cpp:382
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:259
-msgid "Rasterize filter effects"
-msgstr "فلٽر جا اَثر جو روپ بدلايو "
 
 #: ../src/extension/internal/cairo-ps-out.cpp:341
 #: ../src/extension/internal/cairo-ps-out.cpp:383
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:260
-msgid "Resolution for rasterization (dpi):"
-msgstr "روپ بدلائڻ(dpi) لاءِ ٺهراءُ "
+msgid "Rasterize filter effects"
+msgstr "فلٽر جا اَثر جو روپ بدلايو "
 
 #: ../src/extension/internal/cairo-ps-out.cpp:342
 #: ../src/extension/internal/cairo-ps-out.cpp:384
-#, fuzzy
-msgid "Output page size"
-msgstr "صفحي جو آڪار سيٽ ڪريو "
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:261
+msgid "Resolution for rasterization (dpi):"
+msgstr "روپ بدلائڻ(dpi) لاءِ ٺهراءُ "
 
 #: ../src/extension/internal/cairo-ps-out.cpp:343
 #: ../src/extension/internal/cairo-ps-out.cpp:385
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:262
 #, fuzzy
-msgid "Use document's page size"
+msgid "Output page size"
 msgstr "صفحي جو آڪار سيٽ ڪريو "
 
 #: ../src/extension/internal/cairo-ps-out.cpp:344
 #: ../src/extension/internal/cairo-ps-out.cpp:386
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:263
+#, fuzzy
+msgid "Use document's page size"
+msgstr "صفحي جو آڪار سيٽ ڪريو "
+
+#: ../src/extension/internal/cairo-ps-out.cpp:345
+#: ../src/extension/internal/cairo-ps-out.cpp:387
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:264
 msgid "Use exported object's size"
 msgstr ""
 
-#: ../src/extension/internal/cairo-ps-out.cpp:346
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:265
+#: ../src/extension/internal/cairo-ps-out.cpp:347
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:266
 #, fuzzy
 msgid "Bleed/margin (mm):"
 msgstr "سمڻ وارو حاشيو "
 
-#: ../src/extension/internal/cairo-ps-out.cpp:347
-#: ../src/extension/internal/cairo-ps-out.cpp:389
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:266
+#: ../src/extension/internal/cairo-ps-out.cpp:348
+#: ../src/extension/internal/cairo-ps-out.cpp:390
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:267
 msgid "Limit export to the object with ID:"
 msgstr "آءِ ڊيءَ سان شئە جي حد جي روانگي طئە ڪريو: "
 
-#: ../src/extension/internal/cairo-ps-out.cpp:351
+#: ../src/extension/internal/cairo-ps-out.cpp:352
 #: ../share/extensions/ps_input.inx.h:2
 msgid "PostScript (*.ps)"
 msgstr "پوسٽ اِسڪرپٽ (*.ps) "
 
-#: ../src/extension/internal/cairo-ps-out.cpp:352
+#: ../src/extension/internal/cairo-ps-out.cpp:353
 msgid "PostScript File"
 msgstr "پوسٽ اِسڪرپٽ فائل "
 
-#: ../src/extension/internal/cairo-ps-out.cpp:371
+#: ../src/extension/internal/cairo-ps-out.cpp:372
 #: ../share/extensions/eps_input.inx.h:3
 msgid "Encapsulated PostScript"
 msgstr "سوڙهي ڪيل پوسٽ اِسڪرپت "
 
-#: ../src/extension/internal/cairo-ps-out.cpp:388
+#: ../src/extension/internal/cairo-ps-out.cpp:389
 #, fuzzy
 msgid "Bleed/margin (mm)"
 msgstr "سمڻ وارو حاشيو "
 
-#: ../src/extension/internal/cairo-ps-out.cpp:393
+#: ../src/extension/internal/cairo-ps-out.cpp:394
 #: ../share/extensions/eps_input.inx.h:2
 msgid "Encapsulated PostScript (*.eps)"
 msgstr "سوڙهي ڪيل پوسٽ اِسڪرپٽ (*.eps) "
 
-#: ../src/extension/internal/cairo-ps-out.cpp:394
+#: ../src/extension/internal/cairo-ps-out.cpp:395
 msgid "Encapsulated PostScript File"
 msgstr "سوڙهي ڪيل پوسٽ اِسڪرپٽ جي فائل "
 
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:248
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:249
 msgid "Restrict to PDF version:"
 msgstr "PDF سنسڪرڻ تائين محدود ڪريو "
 
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:250
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:251
 msgid "PDF 1.5"
 msgstr "PDF 1.5"
 
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:252
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:253
 msgid "PDF 1.4"
 msgstr "PDF 1.4"
 
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:261
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:262
 #, fuzzy
 msgid "Output page size:"
 msgstr "صفحي جو آڪار سيٽ ڪريو "
@@ -6275,7 +6275,7 @@ msgstr "%i منجها "
 #: ../src/ui/dialog/livepatheffect-add.cpp:27
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:30
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:36
-#: ../src/ui/dialog/ocaldialogs.cpp:1086 ../src/ui/interface.cpp:1430
+#: ../src/ui/dialog/ocaldialogs.cpp:1086 ../src/ui/interface.cpp:866
 #: ../src/widgets/desktop-widget.cpp:1101
 #: ../src/widgets/desktop-widget.cpp:1150
 #, fuzzy
@@ -6844,7 +6844,7 @@ msgstr "روشني ڦهلايو "
 
 #: ../src/extension/internal/filter/bumps.h:99
 #: ../src/extension/internal/filter/bumps.h:330
-#: ../src/ui/toolbar/rect-toolbar.cpp:338 ../src/ui/tools/measure-tool.cpp:1227
+#: ../src/ui/toolbar/rect-toolbar.cpp:140 ../src/ui/tools/measure-tool.cpp:1227
 #: ../src/ui/widget/page-sizer.cpp:63 ../share/extensions/interp_att_g.inx.h:15
 msgid "Height"
 msgstr "اوچائي "
@@ -6857,7 +6857,7 @@ msgstr "اوچائي "
 #: ../src/extension/internal/filter/paint.h:87
 #: ../src/extension/internal/filter/paint.h:593
 #: ../src/extension/internal/filter/paint.h:708
-#: ../src/ui/toolbar/tweak-toolbar.cpp:309 ../src/ui/tools/flood-tool.cpp:95
+#: ../src/ui/toolbar/tweak-toolbar.cpp:282 ../src/ui/tools/flood-tool.cpp:95
 #: ../src/ui/widget/color-icc-selector.cpp:177
 #: ../src/ui/widget/color-scales.cpp:416 ../src/ui/widget/color-scales.cpp:417
 msgid "Lightness"
@@ -6866,7 +6866,7 @@ msgstr "چمڪ "
 #: ../src/extension/internal/filter/bumps.h:101
 #: ../src/extension/internal/filter/bumps.h:332
 #: ../src/live_effects/lpe-measure-segments.cpp:71
-#: ../src/ui/toolbar/measure-toolbar.cpp:320
+#: ../src/ui/toolbar/measure-toolbar.cpp:260
 #, fuzzy
 msgid "Precision"
 msgstr "چٽائي "
@@ -7087,7 +7087,7 @@ msgstr "پينٽنگ "
 #: ../src/extension/internal/filter/color.h:1575
 #: ../src/extension/internal/filter/paint.h:88 ../src/filter-enums.cpp:67
 #: ../src/ui/dialog/inkscape-preferences.cpp:1298
-#: ../src/ui/toolbar/tweak-toolbar.cpp:293 ../src/ui/tools/flood-tool.cpp:94
+#: ../src/ui/toolbar/tweak-toolbar.cpp:267 ../src/ui/tools/flood-tool.cpp:94
 #: ../src/ui/widget/color-icc-selector.cpp:173
 #: ../src/ui/widget/color-icc-selector.cpp:178
 #: ../src/ui/widget/color-scales.cpp:412 ../src/ui/widget/color-scales.cpp:413
@@ -7427,8 +7427,8 @@ msgstr "شيڊ "
 #: ../src/live_effects/effect.cpp:144
 #: ../src/live_effects/lpe-transform_2pts.cpp:41
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1030
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1044
-#: ../src/ui/toolbar/measure-toolbar.cpp:346
+#: ../src/ui/toolbar/gradient-toolbar.cpp:545
+#: ../src/ui/toolbar/measure-toolbar.cpp:296
 msgid "Offset"
 msgstr "آفسيٽ "
 
@@ -7583,7 +7583,7 @@ msgid "Hard Light"
 msgstr "تيز روشني "
 
 #: ../src/extension/internal/filter/color.h:1585 ../src/filter-enums.cpp:66
-#: ../src/ui/toolbar/tweak-toolbar.cpp:277 ../src/ui/tools/flood-tool.cpp:93
+#: ../src/ui/toolbar/tweak-toolbar.cpp:252 ../src/ui/tools/flood-tool.cpp:93
 #: ../src/ui/widget/color-icc-selector.cpp:172
 #: ../src/ui/widget/color-icc-selector.cpp:176
 #: ../src/ui/widget/color-scales.cpp:407 ../src/ui/widget/color-scales.cpp:408
@@ -7843,11 +7843,10 @@ msgid "Open"
 msgstr "کوليو۔۔۔ "
 
 #: ../src/extension/internal/filter/morphology.h:66
-#: ../src/ui/toolbar/rect-toolbar.cpp:322
-#: ../src/ui/toolbar/spray-toolbar.cpp:293
-#: ../src/ui/toolbar/tweak-toolbar.cpp:129
-#: ../src/ui/tools/measure-tool.cpp:1233 ../src/ui/widget/page-sizer.cpp:62
-#: ../share/extensions/interp_att_g.inx.h:14
+#: ../src/ui/toolbar/rect-toolbar.cpp:116
+#: ../src/ui/toolbar/spray-toolbar.cpp:93
+#: ../src/ui/toolbar/tweak-toolbar.cpp:95 ../src/ui/tools/measure-tool.cpp:1233
+#: ../src/ui/widget/page-sizer.cpp:62 ../share/extensions/interp_att_g.inx.h:14
 #, fuzzy
 msgid "Width"
 msgstr ""
@@ -8127,7 +8126,7 @@ msgstr "عمودي ۽ اُفقي ليڪن سان رچيل اُڪير سان عڪ
 
 #: ../src/extension/internal/filter/paint.h:332
 #: ../src/ui/dialog/align-and-distribute.cpp:1066
-#: ../src/widgets/desktop-widget.cpp:1921
+#: ../src/widgets/desktop-widget.cpp:1920
 msgid "Drawing"
 msgstr "نقش"
 
@@ -8678,7 +8677,7 @@ msgstr "موٽايو"
 #: ../src/extension/internal/grid.cpp:204
 #: ../src/ui/dialog/document-properties.cpp:152
 #: ../src/ui/dialog/inkscape-preferences.cpp:1118
-#: ../src/widgets/toolbox.cpp:1462
+#: ../src/widgets/toolbox.cpp:1464
 msgid "Grids"
 msgstr "ڄار "
 
@@ -9160,59 +9159,59 @@ msgstr "دستاويز سانڍيو "
 #. TRANSLATORS: translate this into "default-<yourcodename>.svg" (for instance, default-fr.svg)
 #. and double-check that share/templates/create_defaults.pl contains a translation for your language
 #. If in doubt about this, ask a developer.
-#: ../src/file.cpp:170
+#: ../src/file.cpp:166
 msgid "default.svg"
 msgstr "ڊيفالٽ svg "
 
-#: ../src/file.cpp:270
+#: ../src/file.cpp:264
 msgid "Broken links have been changed to point to existing files."
 msgstr ""
 
-#: ../src/file.cpp:299 ../src/file.cpp:1303
+#: ../src/file.cpp:289 ../src/file.cpp:1293
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "گهربل فائم  %s لوڊ ڪرڻ ۾ ناڪام ٿيا "
 
-#: ../src/file.cpp:325
+#: ../src/file.cpp:315
 msgid "Document not saved yet.  Cannot revert."
 msgstr "دستاويز اڃا سانڍيو ڪونە ويو آهي۔ موٽائي نٿو سگهجي "
 
-#: ../src/file.cpp:331
+#: ../src/file.cpp:321
 #, fuzzy
 msgid "Changes will be lost! Are you sure you want to reload document %1?"
 msgstr ""
 "تبديليون گم ٿي وينديون! ڇا توهانکي پڪ آهي تە توهين دستاويز %s وري لوڊ ڪرڻ "
 "چاهيو ٿا؟ "
 
-#: ../src/file.cpp:357
+#: ../src/file.cpp:347
 msgid "Document reverted."
 msgstr "دستاويز واپس ڪيو ويو "
 
-#: ../src/file.cpp:359
+#: ../src/file.cpp:349
 msgid "Document not reverted."
 msgstr "دستاويز واپس ڪونە ڪيو ويو۔ "
 
-#: ../src/file.cpp:509
+#: ../src/file.cpp:499
 msgid "Select file to open"
 msgstr "کولڻ لاءِ فائل چونڊيو "
 
-#: ../src/file.cpp:591
+#: ../src/file.cpp:581
 #, fuzzy
 msgid "Clean up document"
 msgstr "دستاويز سانڍيو "
 
-#: ../src/file.cpp:598
+#: ../src/file.cpp:588
 #, c-format
 msgid "Removed <b>%i</b> unused definition in &lt;defs&gt;."
 msgid_plural "Removed <b>%i</b> unused definitions in &lt;defs&gt;."
 msgstr[0] ""
 msgstr[1] "<b>%i</b> अप्रयुक्त परिभाषाएँ &lt;defs&gt; में हटाया."
 
-#: ../src/file.cpp:603
+#: ../src/file.cpp:593
 msgid "No unused definitions in &lt;defs&gt;."
 msgstr "defs ۾ ڪابە اِستعمال نە ڪيل وصف ناهي "
 
-#: ../src/file.cpp:637
+#: ../src/file.cpp:627
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
@@ -9221,32 +9220,32 @@ msgstr ""
 "دستاويز (%s) سانڍڻ لاءِ ڪوبە اِنڪسڪيپ وستار ڪونە مليو۔ اهو نامعلوم فائل جي "
 "نالي جي وستار سبب ٿيو هوندو۔ "
 
-#: ../src/file.cpp:638 ../src/file.cpp:648 ../src/file.cpp:657
-#: ../src/file.cpp:664 ../src/file.cpp:669 ../src/file.cpp:681
-#: ../src/file.cpp:691
+#: ../src/file.cpp:628 ../src/file.cpp:638 ../src/file.cpp:647
+#: ../src/file.cpp:654 ../src/file.cpp:659 ../src/file.cpp:671
+#: ../src/file.cpp:681
 msgid "Document not saved."
 msgstr "دستاويز ڪونە سانڍيو ويو "
 
-#: ../src/file.cpp:647
+#: ../src/file.cpp:637
 #, c-format
 msgid ""
 "File %s is write protected. Please remove write protection and try again."
 msgstr ""
 "فائل %s لکاوٽ محفوض آهي۔ مهرباني ڪري مفوض لکاوٽ ڪڍي ڇڏيو ۽ وري ڪوشش ڪريو۔ "
 
-#: ../src/file.cpp:656 ../src/file.cpp:690
+#: ../src/file.cpp:646 ../src/file.cpp:680
 #, c-format
 msgid "File %s could not be saved."
 msgstr "%s  فائل سانڍجي نە سگهي۔ "
 
-#: ../src/file.cpp:668
+#: ../src/file.cpp:658
 #, c-format
 msgid ""
 "File could not be saved:\n"
 "No object with ID '%s' found."
 msgstr ""
 
-#: ../src/file.cpp:678
+#: ../src/file.cpp:668
 #, c-format
 msgid ""
 "File %s could not be saved.\n"
@@ -9255,51 +9254,51 @@ msgid ""
 "'%s'"
 msgstr ""
 
-#: ../src/file.cpp:713 ../src/file.cpp:715
+#: ../src/file.cpp:703 ../src/file.cpp:705
 msgid "Document saved."
 msgstr "دستاويز سانڍيو ويو "
 
 #. We are saving for the first time; create a unique default filename
-#: ../src/file.cpp:773 ../src/file.cpp:1462
+#: ../src/file.cpp:763 ../src/file.cpp:1452
 #, fuzzy
 msgid "drawing"
 msgstr "%s  نقش "
 
-#: ../src/file.cpp:778
+#: ../src/file.cpp:768
 #, fuzzy
 msgid "drawing-%1"
 msgstr "%s  نقش "
 
-#: ../src/file.cpp:795
+#: ../src/file.cpp:785
 msgid "Select file to save a copy to"
 msgstr "ڪاپي سانڍڻ لاءِ فائل چونڊيو "
 
-#: ../src/file.cpp:797
+#: ../src/file.cpp:787
 msgid "Select file to save to"
 msgstr "سانڍڻ لاءِ فائل چونڊيو "
 
-#: ../src/file.cpp:902 ../src/file.cpp:904
+#: ../src/file.cpp:892 ../src/file.cpp:894
 msgid "No changes need to be saved."
 msgstr "ڪابە تبديل سانڍڻ جي ضرورت ڪانهي "
 
-#: ../src/file.cpp:923
+#: ../src/file.cpp:913
 msgid "Saving document..."
 msgstr "دستاويز سانڍي پيو "
 
-#: ../src/file.cpp:1300 ../src/ui/dialog/inkscape-preferences.cpp:1831
+#: ../src/file.cpp:1290 ../src/ui/dialog/inkscape-preferences.cpp:1831
 #: ../src/ui/dialog/ocaldialogs.cpp:1088
 msgid "Import"
 msgstr "آمد "
 
-#: ../src/file.cpp:1350
+#: ../src/file.cpp:1340
 msgid "Select file to import"
 msgstr "آمد لاءِ فائل چونڊيو "
 
-#: ../src/file.cpp:1483
+#: ../src/file.cpp:1473
 msgid "Select file to export to"
 msgstr "روانگيءَ لاءِ فائل چونڊيو "
 
-#: ../src/file.cpp:1736
+#: ../src/file.cpp:1726
 #, fuzzy
 msgid "Import Clip Art"
 msgstr "آمد/روانگي"
@@ -9436,7 +9435,7 @@ msgid "Arithmetic"
 msgstr "اَنگي حساب "
 
 #: ../src/filter-enums.cpp:121 ../src/selection-chemistry.cpp:564
-#: ../src/ui/dialog/objects.cpp:1884
+#: ../src/ui/dialog/objects.cpp:1887
 msgid "Duplicate"
 msgstr "نقل "
 
@@ -10190,12 +10189,12 @@ msgstr "لاهن جو روپ بدلايو "
 
 #: ../src/live_effects/effect.cpp:123
 #: ../src/live_effects/lpe-show_handles.cpp:31
-#: ../src/ui/toolbar/mesh-toolbar.cpp:508
+#: ../src/ui/toolbar/mesh-toolbar.cpp:362
 #, fuzzy
 msgid "Show handles"
 msgstr "هينڊل ڏيکاريو "
 
-#: ../src/live_effects/effect.cpp:125 ../src/ui/toolbar/pencil-toolbar.cpp:145
+#: ../src/live_effects/effect.cpp:125 ../src/ui/toolbar/pencil-toolbar.cpp:315
 #, fuzzy
 msgid "BSpline"
 msgstr "ليڪون "
@@ -11311,7 +11310,7 @@ msgid "Reverses the second path order"
 msgstr ""
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:32
-#: ../src/ui/toolbar/text-toolbar.cpp:2207
+#: ../src/ui/toolbar/text-toolbar.cpp:503
 #: ../share/extensions/render_barcode_qrcode.inx.h:5
 msgid "Auto"
 msgstr "خودڪار "
@@ -11510,7 +11509,7 @@ msgstr "گونيا"
 #: ../src/live_effects/lpe-jointype.cpp:48
 #: ../src/live_effects/lpe-powerstroke.cpp:162
 #: ../src/live_effects/lpe-taperstroke.cpp:64
-#: ../src/ui/toolbar/star-toolbar.cpp:560
+#: ../src/ui/toolbar/star-toolbar.cpp:191
 msgid "Rounded"
 msgstr "گولاڪار "
 
@@ -11940,7 +11939,7 @@ msgid "Hide Points"
 msgstr "نقطا "
 
 #: ../src/live_effects/lpe-measure-segments.cpp:59
-#: ../src/ui/toolbar/text-toolbar.cpp:2164
+#: ../src/ui/toolbar/text-toolbar.cpp:461
 msgid "Horizontal"
 msgstr "اُفقي "
 
@@ -12317,10 +12316,10 @@ msgstr ""
 
 #. Name
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:56
-#: ../src/ui/toolbar/eraser-toolbar.cpp:165
-#: ../src/ui/toolbar/pencil-toolbar.cpp:168
-#: ../src/ui/toolbar/spray-toolbar.cpp:385
-#: ../src/ui/toolbar/tweak-toolbar.cpp:245
+#: ../src/ui/toolbar/eraser-toolbar.cpp:95
+#: ../src/ui/toolbar/pencil-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:198
+#: ../src/ui/toolbar/tweak-toolbar.cpp:222
 msgid "Mode"
 msgstr "ڍنگ "
 
@@ -12635,7 +12634,7 @@ msgid "Zero width"
 msgstr "گهڪي جي ويڪر "
 
 #: ../src/live_effects/lpe-powerstroke.cpp:166
-#: ../src/ui/toolbar/pencil-toolbar.cpp:139
+#: ../src/ui/toolbar/pencil-toolbar.cpp:309
 msgid "Spiro"
 msgstr "اِسپائرو "
 
@@ -13101,13 +13100,13 @@ msgstr "ڪجهە بە نە "
 
 #: ../src/live_effects/lpe-ruler.cpp:31
 #: ../src/live_effects/lpe-transform_2pts.cpp:38
-#: ../src/ui/toolbar/arc-toolbar.cpp:495 ../src/ui/tools/measure-tool.cpp:745
+#: ../src/ui/toolbar/arc-toolbar.cpp:160 ../src/ui/tools/measure-tool.cpp:745
 msgid "Start"
 msgstr "شروع "
 
 #: ../src/live_effects/lpe-ruler.cpp:32
 #: ../src/live_effects/lpe-transform_2pts.cpp:39
-#: ../src/ui/toolbar/arc-toolbar.cpp:508 ../src/ui/tools/measure-tool.cpp:746
+#: ../src/ui/toolbar/arc-toolbar.cpp:177 ../src/ui/tools/measure-tool.cpp:746
 msgid "End"
 msgstr "ختم "
 
@@ -13663,7 +13662,7 @@ msgstr "سڀ غير متحرڪ "
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:81
 #: ../src/live_effects/parameter/originalpatharray.cpp:104
-#: ../src/ui/dialog/attrdialog.cpp:96
+#: ../src/ui/dialog/attrdialog.cpp:105
 #: ../src/ui/dialog/inkscape-preferences.cpp:1902
 #: ../src/ui/widget/page-sizer.cpp:97 ../src/widgets/gradient-selector.cpp:138
 msgid "Name"
@@ -13681,14 +13680,14 @@ msgstr "اَثر ڪڍي ڇڏيو  "
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:170
 #: ../src/live_effects/parameter/originalpatharray.cpp:211
-#: ../src/ui/dialog/objects.cpp:1845
+#: ../src/ui/dialog/objects.cpp:1848
 #, fuzzy
 msgid "Move Down"
 msgstr "ڍنگ هلايو "
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:182
 #: ../src/live_effects/parameter/originalpatharray.cpp:223
-#: ../src/ui/dialog/objects.cpp:1853
+#: ../src/ui/dialog/objects.cpp:1856
 #, fuzzy
 msgid "Move Up"
 msgstr "هلايو"
@@ -13719,7 +13718,7 @@ msgid "Link to path"
 msgstr "راهە لاءِ ڪڙي "
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:89
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1090
+#: ../src/ui/toolbar/gradient-toolbar.cpp:591
 #, fuzzy
 msgid "Reverse"
 msgstr "موٽ کارايو "
@@ -13907,12 +13906,12 @@ msgstr ""
 msgid "without URI"
 msgstr "URI بنا ڪڙي جوڙيو"
 
-#: ../src/object/sp-ellipse.cpp:389 ../src/ui/toolbar/arc-toolbar.cpp:527
+#: ../src/object/sp-ellipse.cpp:389 ../src/ui/toolbar/arc-toolbar.cpp:204
 #, fuzzy
 msgid "Slice"
 msgstr "سلائسر "
 
-#: ../src/object/sp-ellipse.cpp:392 ../src/ui/toolbar/arc-toolbar.cpp:539
+#: ../src/object/sp-ellipse.cpp:392 ../src/ui/toolbar/arc-toolbar.cpp:216
 msgid "Chord"
 msgstr ""
 
@@ -13924,7 +13923,7 @@ msgstr "عربي "
 #. Ellipse
 #: ../src/object/sp-ellipse.cpp:399 ../src/object/sp-ellipse.cpp:406
 #: ../src/ui/dialog/inkscape-preferences.cpp:459
-#: ../src/ui/toolbar/pencil-toolbar.cpp:225
+#: ../src/ui/toolbar/pencil-toolbar.cpp:421
 msgid "Ellipse"
 msgstr "بيضوي شڪل"
 
@@ -14020,7 +14019,7 @@ msgstr "تاري جون ترجيحون "
 msgid "%d &#215; %d: %s"
 msgstr "عڪس %d &#215; %d: %s "
 
-#: ../src/object/sp-item-group.cpp:305 ../src/ui/dialog/objects.cpp:1908
+#: ../src/object/sp-item-group.cpp:305 ../src/ui/dialog/objects.cpp:1911
 msgid "Group"
 msgstr "گروپ "
 
@@ -14035,7 +14034,7 @@ msgid "of <b>%d</b> objects"
 msgstr "ڪابە شئە نە "
 
 #: ../src/object/sp-item-group.cpp:647 ../src/selection-chemistry.cpp:900
-#: ../src/ui/dialog/objects.cpp:1909
+#: ../src/ui/dialog/objects.cpp:1912
 msgid "Ungroup"
 msgstr "گروپ ٽوڙيو"
 
@@ -14143,11 +14142,11 @@ msgstr "%3f گهماون سان اسپائريل"
 
 #. Star
 #: ../src/object/sp-star.cpp:227 ../src/ui/dialog/inkscape-preferences.cpp:463
-#: ../src/ui/toolbar/star-toolbar.cpp:493
+#: ../src/ui/toolbar/star-toolbar.cpp:115
 msgid "Star"
 msgstr "تارو"
 
-#: ../src/object/sp-star.cpp:228 ../src/ui/toolbar/star-toolbar.cpp:487
+#: ../src/object/sp-star.cpp:228 ../src/ui/toolbar/star-toolbar.cpp:109
 msgid "Polygon"
 msgstr "گهڻ ڪنڊو"
 
@@ -14575,12 +14574,13 @@ msgstr "خارج ڪري ڇڏيو"
 msgid "<b>Nothing</b> was deleted."
 msgstr "ڪجهە بە خارج نە ڪيو ويو"
 
+#. TODO: Is this label correct?
 #: ../src/selection-chemistry.cpp:415 ../src/ui/dialog/swatches.cpp:283
-#: ../src/ui/toolbar/eraser-toolbar.cpp:146
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1066
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1080
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1094
-#: ../src/ui/toolbar/node-toolbar.cpp:401 ../src/ui/tools/text-tool.cpp:996
+#: ../src/ui/toolbar/eraser-toolbar.cpp:76
+#: ../src/ui/toolbar/gradient-toolbar.cpp:569
+#: ../src/ui/toolbar/gradient-toolbar.cpp:582
+#: ../src/ui/toolbar/gradient-toolbar.cpp:596
+#: ../src/ui/toolbar/node-toolbar.cpp:307 ../src/ui/tools/text-tool.cpp:996
 msgid "Delete"
 msgstr "خارج ڪريو "
 
@@ -14993,7 +14993,7 @@ msgstr "بٽميپ خلقيو"
 msgid "Select <b>object(s)</b> to create clippath or mask from."
 msgstr "شئە (شيون) چونڊيو جنهن (جن) سان ڪلپ جي راهە يا مکؤٽو خلقڻو آهي"
 
-#: ../src/selection-chemistry.cpp:3904 ../src/ui/dialog/objects.cpp:1915
+#: ../src/selection-chemistry.cpp:3904 ../src/ui/dialog/objects.cpp:1918
 #, fuzzy
 msgid "Create Clip Group"
 msgstr "ڪلون خلقيو "
@@ -15621,7 +15621,7 @@ msgid "Create _Link"
 msgstr "ڪڙي خلقيو "
 
 #. Set mask
-#: ../src/ui/contextmenu.cpp:456 ../src/ui/dialog/objects.cpp:1923
+#: ../src/ui/contextmenu.cpp:456 ../src/ui/dialog/objects.cpp:1926
 msgid "Set Mask"
 msgstr "مکؤٽو سيٽ ڪريو "
 
@@ -15765,7 +15765,7 @@ msgstr "svg بابت "
 
 #. TRANSLATORS: Put here your name (and other national contributors')
 #. one per line in the form of: name surname (email). Use \n for newline.
-#: ../src/ui/dialog/aboutbox.cpp:180
+#: ../src/ui/dialog/aboutbox.cpp:178
 msgid "translator-credits"
 msgstr "ترجمان جو يوگدان "
 
@@ -15803,12 +15803,12 @@ msgstr "_V:"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:506
 #: ../src/ui/dialog/align-and-distribute.cpp:924
-#: ../src/ui/toolbar/connector-toolbar.cpp:409
+#: ../src/ui/toolbar/connector-toolbar.cpp:192
 msgid "Remove overlaps"
 msgstr "هڪ ٻئي مٿان چڙهيل ڪڏي ڇڏيو "
 
 #: ../src/ui/dialog/align-and-distribute.cpp:538
-#: ../src/ui/toolbar/connector-toolbar.cpp:235
+#: ../src/ui/toolbar/connector-toolbar.cpp:397
 msgid "Arrange connector network"
 msgstr "ڳنڍيندڙ نيٽورڪ سلسلي ۾ رکو "
 
@@ -15837,7 +15837,7 @@ msgid "Rearrange"
 msgstr "نئين سر سلسلو ڏيو "
 
 #: ../src/ui/dialog/align-and-distribute.cpp:925
-#: ../src/widgets/toolbox.cpp:1364
+#: ../src/widgets/toolbox.cpp:1366
 msgid "Nodes"
 msgstr "ثنڍيون "
 
@@ -15948,7 +15948,7 @@ msgid "Distribute baselines of texts vertically"
 msgstr "متن جون آڌار ريکائون ورهايو "
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1017
-#: ../src/ui/toolbar/connector-toolbar.cpp:371
+#: ../src/ui/toolbar/connector-toolbar.cpp:150
 msgid "Nicely arrange selected connector network"
 msgstr "چونڊيل ڳنڍيندڙ نيٽ ورڪ کي سٺي نموني سلسلو ڏيو "
 
@@ -16018,7 +16018,7 @@ msgstr "سڀين کان ننڍي شئە "
 #: ../src/ui/dialog/align-and-distribute.cpp:1065
 #: ../src/ui/dialog/document-properties.cpp:150
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1424
-#: ../src/widgets/desktop-widget.cpp:1917
+#: ../src/widgets/desktop-widget.cpp:1916
 #: ../share/extensions/empty_page.inx.h:1
 #: ../share/extensions/voronoi2svg.inx.h:10
 msgid "Page"
@@ -16044,31 +16044,31 @@ msgstr "ڪرننگ ملهە: "
 msgid "Max value"
 msgstr "ملهە صاف ڪري ڇڏيو "
 
-#: ../src/ui/dialog/attrdialog.cpp:80 ../src/ui/dialog/cssdialog.cpp:62
+#: ../src/ui/dialog/attrdialog.cpp:89 ../src/ui/dialog/cssdialog.cpp:62
 #, fuzzy
 msgid "Add a new attribute"
 msgstr "لاڳاپو رکندڙ بدلايو "
 
-#: ../src/ui/dialog/attrdialog.cpp:94
+#: ../src/ui/dialog/attrdialog.cpp:103
 #, fuzzy
 msgid "Attribute Name"
 msgstr "لاڳاپو رکندڙ جو نالو "
 
-#: ../src/ui/dialog/attrdialog.cpp:116
+#: ../src/ui/dialog/attrdialog.cpp:125
 #, fuzzy
 msgid "Attribute Value"
 msgstr "لاڳاپو رکندڙ جو ملهُە "
 
-#: ../src/ui/dialog/attrdialog.cpp:119 ../src/ui/widget/color-scales.cpp:452
+#: ../src/ui/dialog/attrdialog.cpp:128 ../src/ui/widget/color-scales.cpp:452
 #: ../src/ui/widget/color-scales.cpp:453
 msgid "Value"
 msgstr "ملهە "
 
-#: ../src/ui/dialog/attrdialog.cpp:201
+#: ../src/ui/dialog/attrdialog.cpp:209
 msgid "<b>Click</b> attribute to edit."
 msgstr "سمپادن لاءِ لاڳاپو رکندڙ ٿي ڪلڪ ڪريو "
 
-#: ../src/ui/dialog/attrdialog.cpp:206
+#: ../src/ui/dialog/attrdialog.cpp:214
 #, c-format
 msgid ""
 "Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
@@ -16077,16 +16077,16 @@ msgstr ""
 "لاڳاپو رکندڙ %s چونڊيو ويو۔ بدلاو لاڳو ڪرڻ لاءِ جڏهن سمپادن ڪيو وڃي ٿو تڏهن "
 "ڪنٽرول + اينٽر دٻايو۔ "
 
-#: ../src/ui/dialog/attrdialog.cpp:264 ../src/ui/dialog/attrdialog.cpp:287
+#: ../src/ui/dialog/attrdialog.cpp:282 ../src/ui/dialog/attrdialog.cpp:310
 msgid "Delete attribute"
 msgstr "لاڳاپو رکندڙ خارج ڪريو "
 
-#: ../src/ui/dialog/attrdialog.cpp:322
+#: ../src/ui/dialog/attrdialog.cpp:356
 #, fuzzy
 msgid "Rename attribute"
 msgstr "لاڳاپو رکندڙ سيٽ ڪريو "
 
-#: ../src/ui/dialog/attrdialog.cpp:348
+#: ../src/ui/dialog/attrdialog.cpp:381
 #, fuzzy
 msgid "Change attribute value"
 msgstr "لاڳاپو رکندڙ بدلايو "
@@ -17195,7 +17195,7 @@ msgstr "ڪڍي ڇڏيو "
 msgid "Remove selected grid."
 msgstr "چونڊيل ڄار ڪڍي ڇڏيو "
 
-#: ../src/ui/dialog/document-properties.cpp:151 ../src/widgets/toolbox.cpp:1471
+#: ../src/ui/dialog/document-properties.cpp:151 ../src/widgets/toolbox.cpp:1473
 msgid "Guides"
 msgstr "رهنما "
 
@@ -17329,7 +17329,7 @@ msgstr "ٻاهريون اِسڪرپٽ جون فائلون: "
 
 #. Name
 #: ../src/ui/dialog/document-properties.cpp:882
-#: ../src/ui/dialog/objects.cpp:1885 ../src/ui/toolbar/gradient-toolbar.cpp:870
+#: ../src/ui/dialog/objects.cpp:1888 ../src/ui/toolbar/gradient-toolbar.cpp:377
 msgid "New"
 msgstr "نئون "
 
@@ -17428,8 +17428,8 @@ msgstr "چونڊ "
 msgid "_Custom"
 msgstr "هلي چلي "
 
-#: ../src/ui/dialog/export.cpp:135 ../src/ui/toolbar/measure-toolbar.cpp:304
-#: ../src/ui/toolbar/measure-toolbar.cpp:312
+#: ../src/ui/dialog/export.cpp:135 ../src/ui/toolbar/measure-toolbar.cpp:244
+#: ../src/ui/toolbar/measure-toolbar.cpp:252
 #: ../share/extensions/render_gears.inx.h:6
 msgid "Units:"
 msgstr "ايڪا: "
@@ -17776,7 +17776,7 @@ msgid "Document"
 msgstr "دستاويز "
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1428 ../src/verbs.cpp:174
-#: ../src/widgets/desktop-widget.cpp:1925
+#: ../src/widgets/desktop-widget.cpp:1924
 #: ../share/extensions/printing_marks.inx.h:18
 msgid "Selection"
 msgstr "چونڊ "
@@ -18676,7 +18676,7 @@ msgstr "تارا "
 msgid "Spirals"
 msgstr "نانگ ور "
 
-#: ../src/ui/dialog/find.cpp:92 ../src/widgets/toolbox.cpp:1372
+#: ../src/ui/dialog/find.cpp:92 ../src/widgets/toolbox.cpp:1374
 msgid "Paths"
 msgstr "رستا "
 
@@ -19657,7 +19657,7 @@ msgstr "قطارون: "
 #: ../src/ui/dialog/grid-arrange-tab.cpp:565
 #: ../src/ui/dialog/object-attributes.cpp:57
 #: ../src/ui/dialog/object-attributes.cpp:65
-#: ../src/ui/toolbar/node-toolbar.cpp:581 ../src/ui/widget/page-sizer.cpp:60
+#: ../src/ui/toolbar/node-toolbar.cpp:480 ../src/ui/widget/page-sizer.cpp:60
 #: ../src/widgets/desktop-widget.cpp:650
 msgid "X:"
 msgstr "X:"
@@ -19670,7 +19670,7 @@ msgstr "ڪالمن جي وچ ۾ اُفقي وٿي (px ايڪا) "
 #: ../src/ui/dialog/grid-arrange-tab.cpp:566
 #: ../src/ui/dialog/object-attributes.cpp:58
 #: ../src/ui/dialog/object-attributes.cpp:66
-#: ../src/ui/toolbar/node-toolbar.cpp:598 ../src/ui/widget/page-sizer.cpp:61
+#: ../src/ui/toolbar/node-toolbar.cpp:500 ../src/ui/widget/page-sizer.cpp:61
 #: ../src/widgets/desktop-widget.cpp:651
 msgid "Y:"
 msgstr "Y:"
@@ -22133,7 +22133,7 @@ msgstr "چونڊ ڪري پيو "
 
 #. Transforms options
 #: ../src/ui/dialog/inkscape-preferences.cpp:1520
-#: ../src/ui/toolbar/select-toolbar.cpp:558
+#: ../src/ui/toolbar/select-toolbar.cpp:343
 msgid "Scale stroke width"
 msgstr "گهڪي جي ويڪر ماپيو "
 
@@ -22154,22 +22154,22 @@ msgid "Preserved"
 msgstr "سانڍيو "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1528
-#: ../src/ui/toolbar/select-toolbar.cpp:559
+#: ../src/ui/toolbar/select-toolbar.cpp:344
 msgid "When scaling objects, scale the stroke width by the same proportion"
 msgstr "شيون ماپڻ وقت ساڳيءَ سراسريءَ ۾ گهڪو ماپيو "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1530
-#: ../src/ui/toolbar/select-toolbar.cpp:570
+#: ../src/ui/toolbar/select-toolbar.cpp:355
 msgid "When scaling rectangles, scale the radii of rounded corners"
 msgstr "گوني ڪنڊ چؤڪنڊا ماپڻ وقت گولاڪار ڪنڊن جي ريڊي ماپيو "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1532
-#: ../src/ui/toolbar/select-toolbar.cpp:581
+#: ../src/ui/toolbar/select-toolbar.cpp:366
 msgid "Move gradients (in fill or stroke) along with the objects"
 msgstr "شين سان گڏ لاهە (ڀراو يا گهڪي ۾) هلايو "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1534
-#: ../src/ui/toolbar/select-toolbar.cpp:592
+#: ../src/ui/toolbar/select-toolbar.cpp:377
 msgid "Move patterns (in fill or stroke) along with the objects"
 msgstr "شين سان گڏ نمونا (ڀراو يا گهڪي ۾) هلايو "
 
@@ -22847,7 +22847,7 @@ msgstr "موٽائڻ "
 
 #. Note: /options/bitmapoversample removed with Cairo renderer
 #: ../src/ui/dialog/inkscape-preferences.cpp:1813
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:602 ../src/verbs.cpp:155
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:351 ../src/verbs.cpp:155
 #, fuzzy
 msgid "Edit"
 msgstr "سمپادن "
@@ -23404,11 +23404,11 @@ msgid ""
 msgstr ""
 
 #: ../src/ui/dialog/input.cpp:1439
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:545
-#: ../src/ui/toolbar/spray-toolbar.cpp:307
-#: ../src/ui/toolbar/spray-toolbar.cpp:421
-#: ../src/ui/toolbar/spray-toolbar.cpp:470
-#: ../src/ui/toolbar/tweak-toolbar.cpp:363
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:298
+#: ../src/ui/toolbar/spray-toolbar.cpp:112
+#: ../src/ui/toolbar/spray-toolbar.cpp:235
+#: ../src/ui/toolbar/spray-toolbar.cpp:290
+#: ../src/ui/toolbar/tweak-toolbar.cpp:339
 msgid "Pressure"
 msgstr "دٻاءُ "
 
@@ -23539,12 +23539,12 @@ msgstr "پرت کي ڪرف ڏيو "
 msgid "Unlock layer"
 msgstr "پرت جو ڪرف کوليو "
 
-#: ../src/ui/dialog/layers.cpp:610 ../src/ui/dialog/objects.cpp:871
+#: ../src/ui/dialog/layers.cpp:610 ../src/ui/dialog/objects.cpp:874
 #: ../src/verbs.cpp:1489
 msgid "Toggle layer solo"
 msgstr "اڪيليءَ سطح ٽوگل ڪريو "
 
-#: ../src/ui/dialog/layers.cpp:613 ../src/ui/dialog/objects.cpp:874
+#: ../src/ui/dialog/layers.cpp:613 ../src/ui/dialog/objects.cpp:877
 #: ../src/verbs.cpp:1513
 #, fuzzy
 msgid "Lock other layers"
@@ -23948,217 +23948,221 @@ msgstr "شئە لڪايو "
 msgid "Unhide object"
 msgstr "لڪل شئە کولي ڏيکاريو"
 
-#: ../src/ui/dialog/objects.cpp:901
+#: ../src/ui/dialog/objects.cpp:432
+msgid "no-id"
+msgstr ""
+
+#: ../src/ui/dialog/objects.cpp:904
 #, fuzzy
 msgid "Unhide objects"
 msgstr "لڪل شئە کولي ڏيکاريو"
 
-#: ../src/ui/dialog/objects.cpp:901
+#: ../src/ui/dialog/objects.cpp:904
 #, fuzzy
 msgid "Hide objects"
 msgstr "شئە لڪايو "
 
-#: ../src/ui/dialog/objects.cpp:921
+#: ../src/ui/dialog/objects.cpp:924
 #, fuzzy
 msgid "Lock objects"
 msgstr "شئە کي ڪلف لڳيو "
 
-#: ../src/ui/dialog/objects.cpp:921
+#: ../src/ui/dialog/objects.cpp:924
 #, fuzzy
 msgid "Unlock objects"
 msgstr "شئە جو ڪلف گوليو "
 
-#: ../src/ui/dialog/objects.cpp:933
+#: ../src/ui/dialog/objects.cpp:936
 #, fuzzy
 msgid "Layer to group"
 msgstr "سطح جو مٿ "
 
-#: ../src/ui/dialog/objects.cpp:933
+#: ../src/ui/dialog/objects.cpp:936
 #, fuzzy
 msgid "Group to layer"
 msgstr "سطح جو نقل ڪريو "
 
-#: ../src/ui/dialog/objects.cpp:1131
+#: ../src/ui/dialog/objects.cpp:1134
 #, fuzzy
 msgid "Moved objects"
 msgstr "ڪابە شئە نە "
 
-#: ../src/ui/dialog/objects.cpp:1380 ../src/ui/dialog/tags.cpp:831
+#: ../src/ui/dialog/objects.cpp:1383 ../src/ui/dialog/tags.cpp:831
 #: ../src/ui/dialog/tags.cpp:838
 #, fuzzy
 msgid "Rename object"
 msgstr "لڪل شئە کولي ڏيکاريو"
 
-#: ../src/ui/dialog/objects.cpp:1486
+#: ../src/ui/dialog/objects.cpp:1489
 #, fuzzy
 msgid "Set object highlight color"
 msgstr "شئە جو عنوان سيٽ ڪريو "
 
-#: ../src/ui/dialog/objects.cpp:1496
+#: ../src/ui/dialog/objects.cpp:1499
 #, fuzzy
 msgid "Set object opacity"
 msgstr "شئە جو عنوان سيٽ ڪريو "
 
-#: ../src/ui/dialog/objects.cpp:1525
+#: ../src/ui/dialog/objects.cpp:1528
 #, fuzzy
 msgid "Set object blend mode"
 msgstr "شئە جي چٽڪي سيٽ ڪريو "
 
-#: ../src/ui/dialog/objects.cpp:1595
+#: ../src/ui/dialog/objects.cpp:1598
 #, fuzzy
 msgid "Set object blur"
 msgstr "شئە جي چٽڪي سيٽ ڪريو "
 
-#: ../src/ui/dialog/objects.cpp:1661
+#: ../src/ui/dialog/objects.cpp:1664
 msgctxt "Visibility"
 msgid "V"
 msgstr ""
 
-#: ../src/ui/dialog/objects.cpp:1662
+#: ../src/ui/dialog/objects.cpp:1665
 #, fuzzy
 msgctxt "Lock"
 msgid "L"
 msgstr "L"
 
-#: ../src/ui/dialog/objects.cpp:1663
+#: ../src/ui/dialog/objects.cpp:1666
 msgctxt "Type"
 msgid "T"
 msgstr ""
 
-#: ../src/ui/dialog/objects.cpp:1664
+#: ../src/ui/dialog/objects.cpp:1667
 #, fuzzy
 msgctxt "Clip and mask"
 msgid "CM"
 msgstr "CMS"
 
-#: ../src/ui/dialog/objects.cpp:1665
+#: ../src/ui/dialog/objects.cpp:1668
 #, fuzzy
 msgctxt "Highlight"
 msgid "HL"
 msgstr "HSL"
 
-#: ../src/ui/dialog/objects.cpp:1666
+#: ../src/ui/dialog/objects.cpp:1669
 #, fuzzy
 msgid "Label"
 msgstr "چٽڪي: "
 
 #. In order to get tooltips on header, we must create our own label.
-#: ../src/ui/dialog/objects.cpp:1694
+#: ../src/ui/dialog/objects.cpp:1697
 msgid "Toggle visibility of Layer, Group, or Object."
 msgstr ""
 
-#: ../src/ui/dialog/objects.cpp:1707
+#: ../src/ui/dialog/objects.cpp:1710
 msgid "Toggle lock of Layer, Group, or Object."
 msgstr ""
 
-#: ../src/ui/dialog/objects.cpp:1719
+#: ../src/ui/dialog/objects.cpp:1722
 msgid ""
 "Type: Layer, Group, or Object. Clicking on Layer or Group icon, toggles "
 "between the two types."
 msgstr ""
 
-#: ../src/ui/dialog/objects.cpp:1738
+#: ../src/ui/dialog/objects.cpp:1741
 msgid "Is object clipped and/or masked?"
 msgstr ""
 
-#: ../src/ui/dialog/objects.cpp:1749
+#: ../src/ui/dialog/objects.cpp:1752
 msgid ""
 "Highlight color of outline in Node tool. Click to set. If alpha is zero, use "
 "inherited color."
 msgstr ""
 
-#: ../src/ui/dialog/objects.cpp:1760
+#: ../src/ui/dialog/objects.cpp:1763
 msgid ""
 "Layer/Group/Object label (inkscape:label). Double-click to set. Default "
 "value is object 'id'."
 msgstr ""
 
-#: ../src/ui/dialog/objects.cpp:1822
+#: ../src/ui/dialog/objects.cpp:1825
 #, fuzzy
 msgid "Add layer..."
 msgstr "سطح شامل ڪريو "
 
-#: ../src/ui/dialog/objects.cpp:1829
+#: ../src/ui/dialog/objects.cpp:1832
 #, fuzzy
 msgid "Remove object"
 msgstr "فانٽ ڪڍي ڇڏيو "
 
-#: ../src/ui/dialog/objects.cpp:1837
+#: ../src/ui/dialog/objects.cpp:1840
 #, fuzzy
 msgid "Move To Bottom"
 msgstr "تر تائين هيٺ آڻيو "
 
-#: ../src/ui/dialog/objects.cpp:1861
+#: ../src/ui/dialog/objects.cpp:1864
 #, fuzzy
 msgid "Move To Top"
 msgstr "ڍنگ هلايو "
 
-#: ../src/ui/dialog/objects.cpp:1869
+#: ../src/ui/dialog/objects.cpp:1872
 #, fuzzy
 msgid "Collapse All"
 msgstr "سڀ صاف ڪري ڇڏيو "
 
-#: ../src/ui/dialog/objects.cpp:1883
+#: ../src/ui/dialog/objects.cpp:1886
 #, fuzzy
 msgid "Rename"
 msgstr "نئين سر نالو ڏيو "
 
-#: ../src/ui/dialog/objects.cpp:1889
+#: ../src/ui/dialog/objects.cpp:1892
 msgid "Solo"
 msgstr ""
 
-#: ../src/ui/dialog/objects.cpp:1890
+#: ../src/ui/dialog/objects.cpp:1893
 #, fuzzy
 msgid "Show All"
 msgstr "ڏيکاريو "
 
-#: ../src/ui/dialog/objects.cpp:1891
+#: ../src/ui/dialog/objects.cpp:1894
 #, fuzzy
 msgid "Hide All"
 msgstr "سڀ ظاهر ڪريو "
 
-#: ../src/ui/dialog/objects.cpp:1895
+#: ../src/ui/dialog/objects.cpp:1898
 #, fuzzy
 msgid "Lock Others"
 msgstr "پرت کي ڪرف ڏيو "
 
-#: ../src/ui/dialog/objects.cpp:1896
+#: ../src/ui/dialog/objects.cpp:1899
 #, fuzzy
 msgid "Lock All"
 msgstr "سڀني جو ڪلف کوليو "
 
 #. LockAndHide
-#: ../src/ui/dialog/objects.cpp:1897 ../src/verbs.cpp:3263
+#: ../src/ui/dialog/objects.cpp:1900 ../src/verbs.cpp:3263
 msgid "Unlock All"
 msgstr "سڀني جو ڪلف کوليو "
 
-#: ../src/ui/dialog/objects.cpp:1902
+#: ../src/ui/dialog/objects.cpp:1905
 msgid "Up"
 msgstr "مٿي "
 
-#: ../src/ui/dialog/objects.cpp:1904
+#: ../src/ui/dialog/objects.cpp:1907
 #, fuzzy
 msgid "Down"
 msgstr "هيٺيئن پاسي "
 
-#: ../src/ui/dialog/objects.cpp:1913
+#: ../src/ui/dialog/objects.cpp:1916
 #, fuzzy
 msgid "Set Clip"
 msgstr "سيٽ ڪريو "
 
 #. will never be implemented
 #. _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_INVERSE_CLIPPATH, 0, "Set Inverse Clip", (int)BUTTON_SETINVCLIP ) );
-#: ../src/ui/dialog/objects.cpp:1919
+#: ../src/ui/dialog/objects.cpp:1922
 #, fuzzy
 msgid "Unset Clip"
 msgstr "سيٽ ڪريو "
 
-#: ../src/ui/dialog/objects.cpp:1924
+#: ../src/ui/dialog/objects.cpp:1927
 #, fuzzy
 msgid "Unset Mask"
 msgstr "مکؤٽو سيٽ ڪريو "
 
-#: ../src/ui/dialog/objects.cpp:1946
+#: ../src/ui/dialog/objects.cpp:1949
 #, fuzzy
 msgid "Select Highlight Color"
 msgstr "رنگ نمايا ڪريو "
@@ -25650,7 +25654,7 @@ msgid "nodeAsInXMLdialogTooltip|Delete node"
 msgstr "nodeAsInXMLdialogTooltip| خارج ڪريو "
 
 #: ../src/ui/dialog/xml-tree.cpp:67 ../src/ui/dialog/xml-tree.cpp:123
-#: ../src/ui/dialog/xml-tree.cpp:754
+#: ../src/ui/dialog/xml-tree.cpp:758
 msgid "Duplicate node"
 msgstr "نوڊ جو نقل "
 
@@ -25665,22 +25669,22 @@ msgid "Drag to reorder nodes"
 msgstr "نوڊس کي نئين سرسلسلو ڏيڻ لاءِ گهليو "
 
 #: ../src/ui/dialog/xml-tree.cpp:141 ../src/ui/dialog/xml-tree.cpp:142
-#: ../src/ui/dialog/xml-tree.cpp:864
+#: ../src/ui/dialog/xml-tree.cpp:868
 msgid "Unindent node"
 msgstr "بنا ڏندي واري نوڊ "
 
 #: ../src/ui/dialog/xml-tree.cpp:149 ../src/ui/dialog/xml-tree.cpp:150
-#: ../src/ui/dialog/xml-tree.cpp:842
+#: ../src/ui/dialog/xml-tree.cpp:846
 msgid "Indent node"
 msgstr "ڏندي واري نوڊ "
 
 #: ../src/ui/dialog/xml-tree.cpp:157 ../src/ui/dialog/xml-tree.cpp:158
-#: ../src/ui/dialog/xml-tree.cpp:793
+#: ../src/ui/dialog/xml-tree.cpp:797
 msgid "Raise node"
 msgstr "اوچي نود "
 
 #: ../src/ui/dialog/xml-tree.cpp:165 ../src/ui/dialog/xml-tree.cpp:166
-#: ../src/ui/dialog/xml-tree.cpp:811
+#: ../src/ui/dialog/xml-tree.cpp:815
 msgid "Lower node"
 msgstr "هيٺاهين نود "
 
@@ -25698,89 +25702,89 @@ msgstr "نمونو: "
 msgid "<b>Click</b> to select nodes, <b>drag</b> to rearrange."
 msgstr "نوڊس چونڊڻ لاءِ ڪلڪ ڪريو، نئين سر سلسلو ڏيڻ لاءِ گهليو "
 
-#: ../src/ui/dialog/xml-tree.cpp:458
+#: ../src/ui/dialog/xml-tree.cpp:462
 msgid "Drag XML subtree"
 msgstr "XML سبٽري گهليو "
 
-#: ../src/ui/dialog/xml-tree.cpp:724
+#: ../src/ui/dialog/xml-tree.cpp:728
 msgid "Create new element node"
 msgstr "نئين عناصر نوڊ خلقيو "
 
-#: ../src/ui/dialog/xml-tree.cpp:739
+#: ../src/ui/dialog/xml-tree.cpp:743
 msgid "Create new text node"
 msgstr "نئين متن نوڊ خلقيو"
 
-#: ../src/ui/dialog/xml-tree.cpp:771
+#: ../src/ui/dialog/xml-tree.cpp:775
 msgid "nodeAsInXMLinHistoryDialog|Delete node"
 msgstr "nodeAsInXMLinHistoryDialog| خارج ڪريو "
 
-#: ../src/ui/interface.cpp:767
+#: ../src/ui/drag-and-drop.cpp:159 ../src/ui/drag-and-drop.cpp:245
+#: ../src/ui/drag-and-drop.cpp:348 ../src/ui/widget/selected-style.cpp:531
+msgid "Drop color"
+msgstr "ڊراپ ڪلر "
+
+#: ../src/ui/drag-and-drop.cpp:198 ../src/ui/drag-and-drop.cpp:308
+msgid "Drop color on gradient"
+msgstr "لاهە تي ڊراپ ڪلر "
+
+#: ../src/ui/drag-and-drop.cpp:363
+msgid "Could not parse SVG data"
+msgstr "SVG سامگريءَ جي وصف نە ڏيئي سگهيو "
+
+#: ../src/ui/drag-and-drop.cpp:402
+msgid "Drop SVG"
+msgstr "ڊراپ SVG "
+
+#: ../src/ui/drag-and-drop.cpp:419
+#, fuzzy
+msgid "Drop Symbol"
+msgstr "کمير علامتون "
+
+#: ../src/ui/drag-and-drop.cpp:442
+msgid "Drop bitmap image"
+msgstr "ڊراپ بٽميپ عڪس "
+
+#: ../src/ui/interface.cpp:598
 #, fuzzy
 msgctxt "Interface setup"
 msgid "Default"
 msgstr "ڊيفالٽ "
 
-#: ../src/ui/interface.cpp:767
+#: ../src/ui/interface.cpp:598
 msgid "Default interface setup"
 msgstr "ڊيفالٽ اِنٽرفيس سيٽئپ "
 
-#: ../src/ui/interface.cpp:768
+#: ../src/ui/interface.cpp:599
 #, fuzzy
 msgctxt "Interface setup"
 msgid "Custom"
 msgstr "روايت "
 
-#: ../src/ui/interface.cpp:768
+#: ../src/ui/interface.cpp:599
 #, fuzzy
 msgid "Setup for custom task"
 msgstr "روايتي ڪاريە سيٽ ڪريو "
 
-#: ../src/ui/interface.cpp:769
+#: ../src/ui/interface.cpp:600
 #, fuzzy
 msgctxt "Interface setup"
 msgid "Wide"
 msgstr "ويڪرو "
 
-#: ../src/ui/interface.cpp:769
+#: ../src/ui/interface.cpp:600
 msgid "Setup for widescreen work"
 msgstr "ويڪريءَ اِسڪرن جي ڪاريە لاءِ سيٽئپ"
 
-#: ../src/ui/interface.cpp:905
+#: ../src/ui/interface.cpp:736
 #, c-format
 msgid "Verb \"%s\" Unknown"
 msgstr "فعل  \"%s\"  نامعلوم "
 
-#: ../src/ui/interface.cpp:940
+#: ../src/ui/interface.cpp:771
 msgid "Open _Recent"
 msgstr "تارو کوليو "
 
-#: ../src/ui/interface.cpp:1048 ../src/ui/interface.cpp:1134
-#: ../src/ui/interface.cpp:1237 ../src/ui/widget/selected-style.cpp:531
-msgid "Drop color"
-msgstr "ڊراپ ڪلر "
-
-#: ../src/ui/interface.cpp:1087 ../src/ui/interface.cpp:1197
-msgid "Drop color on gradient"
-msgstr "لاهە تي ڊراپ ڪلر "
-
-#: ../src/ui/interface.cpp:1252
-msgid "Could not parse SVG data"
-msgstr "SVG سامگريءَ جي وصف نە ڏيئي سگهيو "
-
-#: ../src/ui/interface.cpp:1291
-msgid "Drop SVG"
-msgstr "ڊراپ SVG "
-
-#: ../src/ui/interface.cpp:1308
-#, fuzzy
-msgid "Drop Symbol"
-msgstr "کمير علامتون "
-
-#: ../src/ui/interface.cpp:1331
-msgid "Drop bitmap image"
-msgstr "ڊراپ بٽميپ عڪس "
-
-#: ../src/ui/interface.cpp:1424
+#: ../src/ui/interface.cpp:860
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">A file named \"%s\" already exists. Do "
@@ -25793,7 +25797,7 @@ msgstr ""
 " اِها فائل  \"%s\" ۾ اڳ ۾ ئي مؤجود آهي۔ بدلائڻ سان اِهو ان جا موضوع ان مٿان "
 "لکي ڇڏيندو۔"
 
-#: ../src/ui/interface.cpp:1431 ../share/extensions/web-set-att.inx.h:21
+#: ../src/ui/interface.cpp:867 ../share/extensions/web-set-att.inx.h:21
 #: ../share/extensions/web-transmit-att.inx.h:19
 msgid "Replace"
 msgstr "بدلايو "
@@ -26027,12 +26031,12 @@ msgid "Duplicate nodes"
 msgstr "ڳنڍين جو نقل ڪريو "
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:419
-#: ../src/ui/toolbar/node-toolbar.cpp:408
+#: ../src/ui/toolbar/node-toolbar.cpp:314
 msgid "Join nodes"
 msgstr "ڳنڍيون ڳنڍيو "
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:426
-#: ../src/ui/toolbar/node-toolbar.cpp:419
+#: ../src/ui/toolbar/node-toolbar.cpp:325
 msgid "Break nodes"
 msgstr "ڳنڍيون ٽوڙيو "
 
@@ -26306,7 +26310,7 @@ msgstr "هينڊل گهمايو "
 
 #. We need to call MPM's method because it could have been our last node
 #: ../src/ui/tool/path-manipulator.cpp:1561
-#: ../src/ui/toolbar/node-toolbar.cpp:397
+#: ../src/ui/toolbar/node-toolbar.cpp:303
 msgid "Delete node"
 msgstr "ڳنڍ خارج ڪريو "
 
@@ -26448,262 +26452,256 @@ msgctxt "Transform handle tip"
 msgid "<b>Rotation center</b>: drag to change the origin of transforms"
 msgstr "گهماو جو مرڪز: بدليل روپن جو مول بدلائڻ لاءِ گهليو "
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:140
-msgid "Ellipse: Change radius"
-msgstr ""
-
-#: ../src/ui/toolbar/arc-toolbar.cpp:206
-msgid "Arc: Change start/end"
-msgstr "قؤس: شروعات/"
-
-#: ../src/ui/toolbar/arc-toolbar.cpp:274
-#, fuzzy
-msgid "Arc: Changed arc type"
-msgstr "قؤس: شروعات/"
-
-#: ../src/ui/toolbar/arc-toolbar.cpp:409 ../src/ui/toolbar/arc-toolbar.cpp:448
-#: ../src/ui/toolbar/rect-toolbar.cpp:265
-#: ../src/ui/toolbar/rect-toolbar.cpp:304
-#: ../src/ui/toolbar/spiral-toolbar.cpp:215
-#: ../src/ui/toolbar/spiral-toolbar.cpp:239
-#: ../src/ui/toolbar/star-toolbar.cpp:392
-#: ../src/ui/toolbar/star-toolbar.cpp:472
+#: ../src/ui/toolbar/arc-toolbar.cpp:104 ../src/ui/toolbar/arc-toolbar.cpp:507
+#: ../src/ui/toolbar/rect-toolbar.cpp:106
+#: ../src/ui/toolbar/rect-toolbar.cpp:356
+#: ../src/ui/toolbar/spiral-toolbar.cpp:90
+#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/star-toolbar.cpp:95 ../src/ui/toolbar/star-toolbar.cpp:532
 msgid "<b>New:</b>"
 msgstr "نئون: "
 
-#. FIXME: implement averaging of all parameters for multiple selected
-#. gtk_label_set_markup(GTK_LABEL(l), _("<b>Average:</b>"));
-#: ../src/ui/toolbar/arc-toolbar.cpp:412 ../src/ui/toolbar/arc-toolbar.cpp:429
-#: ../src/ui/toolbar/rect-toolbar.cpp:273
-#: ../src/ui/toolbar/rect-toolbar.cpp:291
-#: ../src/ui/toolbar/spiral-toolbar.cpp:217
-#: ../src/ui/toolbar/spiral-toolbar.cpp:228
-#: ../src/ui/toolbar/star-toolbar.cpp:394
-msgid "<b>Change:</b>"
-msgstr "بدلايو: "
-
-#: ../src/ui/toolbar/arc-toolbar.cpp:459 ../src/ui/toolbar/rect-toolbar.cpp:354
+#: ../src/ui/toolbar/arc-toolbar.cpp:114 ../src/ui/toolbar/rect-toolbar.cpp:163
 msgid "Horizontal radius"
 msgstr "اُفقي ترجيا "
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:459 ../src/ui/toolbar/rect-toolbar.cpp:354
+#: ../src/ui/toolbar/arc-toolbar.cpp:114 ../src/ui/toolbar/rect-toolbar.cpp:163
 msgid "Rx:"
 msgstr "Rx:"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:459
+#: ../src/ui/toolbar/arc-toolbar.cpp:114
 #, fuzzy
 msgid "Horizontal radius of the circle, ellipse, or arc"
 msgstr "گولاڪار ڪنڊن جي اُفقي ترجيا "
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:475 ../src/ui/toolbar/rect-toolbar.cpp:368
+#: ../src/ui/toolbar/arc-toolbar.cpp:135 ../src/ui/toolbar/rect-toolbar.cpp:185
 msgid "Vertical radius"
 msgstr "عمودي ترجيا "
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:475 ../src/ui/toolbar/rect-toolbar.cpp:368
+#: ../src/ui/toolbar/arc-toolbar.cpp:135 ../src/ui/toolbar/rect-toolbar.cpp:185
 msgid "Ry:"
 msgstr "Ry:"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:475
+#: ../src/ui/toolbar/arc-toolbar.cpp:135
 #, fuzzy
 msgid "Vertical radius of the circle, ellipse, or arc"
 msgstr "گول بيضوي شڪليون ۽ قؤس خلقيو "
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:488 ../src/ui/toolbar/lpe-toolbar.cpp:400
-#: ../src/ui/toolbar/node-toolbar.cpp:611
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:180
-#: ../src/ui/toolbar/rect-toolbar.cpp:379
-#: ../src/ui/toolbar/select-toolbar.cpp:524
-#: ../src/ui/toolbar/text-toolbar.cpp:2322
+#: ../src/ui/toolbar/arc-toolbar.cpp:153 ../src/ui/toolbar/lpe-toolbar.cpp:208
+#: ../src/ui/toolbar/node-toolbar.cpp:517
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:130
+#: ../src/ui/toolbar/rect-toolbar.cpp:204
+#: ../src/ui/toolbar/select-toolbar.cpp:317
+#: ../src/ui/toolbar/text-toolbar.cpp:611
 msgid "Units"
 msgstr "ايڪا "
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:495
+#: ../src/ui/toolbar/arc-toolbar.cpp:160
 msgid "Start:"
 msgstr "شروعات: "
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:496
+#: ../src/ui/toolbar/arc-toolbar.cpp:161
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr "اُفقيءَ کان قؤس جي شروعاتي نقطي تائين ڪنڊ (ڊگرين ۾) "
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:508
+#: ../src/ui/toolbar/arc-toolbar.cpp:177
 msgid "End:"
 msgstr "آخري "
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:509
+#: ../src/ui/toolbar/arc-toolbar.cpp:178
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr "اُفقيءَ کان قؤس جي آخري نقطي تائين ڪنڊ (ڊگرين ۾) "
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:528
+#: ../src/ui/toolbar/arc-toolbar.cpp:205
 #, fuzzy
 msgid "Switch to slice (closed shape with two radii)"
 msgstr "جزي ۾ وڃو (ٻن ريڊي سان بند آڪارُ) "
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:533
+#: ../src/ui/toolbar/arc-toolbar.cpp:210
 msgid "Arc (Open)"
 msgstr ""
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:534
+#: ../src/ui/toolbar/arc-toolbar.cpp:211
 msgid "Switch to arc (unclosed shape)"
 msgstr "قؤس ۾ وڃو (کليل آڪارُ) "
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:540
+#: ../src/ui/toolbar/arc-toolbar.cpp:217
 #, fuzzy
 msgid "Switch to chord (closed shape)"
 msgstr "قؤس ۾ وڃو (کليل آڪارُ) "
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:565
+#: ../src/ui/toolbar/arc-toolbar.cpp:241
 msgid "Make whole"
 msgstr "سمورو ٺاهيو "
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:566
+#: ../src/ui/toolbar/arc-toolbar.cpp:242
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "سموريءَ بيضوي شڪل جو اڪار ٺاهيو، قؤس يا جزو نە "
 
-#. TODO: use the correct axis here, too
-#: ../src/ui/toolbar/box3d-toolbar.cpp:234
-msgid "3D Box: Change perspective (angle of infinite axis)"
-msgstr "٣ ڊي باڪس: منظر بدلايو (لامحدود محورن ۾ ڪنڊ) "
+#: ../src/ui/toolbar/arc-toolbar.cpp:317
+msgid "Ellipse: Change radius"
+msgstr ""
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:303
+#: ../src/ui/toolbar/arc-toolbar.cpp:371
+msgid "Arc: Change start/end"
+msgstr "قؤس: شروعات/"
+
+#: ../src/ui/toolbar/arc-toolbar.cpp:427
+#, fuzzy
+msgid "Arc: Changed arc type"
+msgstr "قؤس: شروعات/"
+
+#. FIXME: implement averaging of all parameters for multiple selected
+#. gtk_label_set_markup(GTK_LABEL(l), _("<b>Average:</b>"));
+#: ../src/ui/toolbar/arc-toolbar.cpp:510 ../src/ui/toolbar/arc-toolbar.cpp:524
+#: ../src/ui/toolbar/rect-toolbar.cpp:360
+#: ../src/ui/toolbar/rect-toolbar.cpp:375
+#: ../src/ui/toolbar/spiral-toolbar.cpp:263
+#: ../src/ui/toolbar/spiral-toolbar.cpp:274
+#: ../src/ui/toolbar/star-toolbar.cpp:534
+msgid "<b>Change:</b>"
+msgstr "بدلايو: "
+
+#: ../src/ui/toolbar/box3d-toolbar.cpp:89
 msgid "Angle in X direction"
 msgstr "X ڏس ۾ ڪند "
 
 #. Translators: PL is short for 'perspective line'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:305
+#: ../src/ui/toolbar/box3d-toolbar.cpp:91
 msgid "Angle of PLs in X direction"
 msgstr "X ڏس ۾ PLs  جي ڪنڊ "
 
 #. Translators: VP is short for 'vanishing point'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:327
+#: ../src/ui/toolbar/box3d-toolbar.cpp:117
 msgid "State of VP in X direction"
 msgstr "X ڏس ۾ VP جي حالت "
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:328
+#: ../src/ui/toolbar/box3d-toolbar.cpp:118
 msgid "Toggle VP in X direction between 'finite' and 'infinite' (=parallel)"
 msgstr "VP  کي X ڏس ۾ 'محدود' ۽ لامحدود (= سمانانتر) جي وچ ۾ ٽوگل ڪريو "
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:343
+#: ../src/ui/toolbar/box3d-toolbar.cpp:132
 msgid "Angle in Y direction"
 msgstr "Y ڏس ۾ ڪنڊ "
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:343
+#: ../src/ui/toolbar/box3d-toolbar.cpp:132
 msgid "Angle Y:"
 msgstr "ڪند Y: "
 
 #. Translators: PL is short for 'perspective line'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:345
+#: ../src/ui/toolbar/box3d-toolbar.cpp:134
 msgid "Angle of PLs in Y direction"
 msgstr "Y ڏس ۾ PLs جي ڪنڊ "
 
 #. Translators: VP is short for 'vanishing point'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:366
+#: ../src/ui/toolbar/box3d-toolbar.cpp:159
 msgid "State of VP in Y direction"
 msgstr "Y ڏس ۾ VP جي حالت "
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:367
+#: ../src/ui/toolbar/box3d-toolbar.cpp:160
 msgid "Toggle VP in Y direction between 'finite' and 'infinite' (=parallel)"
 msgstr "VP کي Y  ڏس ۾ 'محدود'  ۽ 'لامحدود'  (سمانانتر) جي وچ ۾ ٽوگل ڪريو "
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:382
+#: ../src/ui/toolbar/box3d-toolbar.cpp:174
 msgid "Angle in Z direction"
 msgstr "Z ڏس ۾ ڪنڊ "
 
 #. Translators: PL is short for 'perspective line'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:384
+#: ../src/ui/toolbar/box3d-toolbar.cpp:176
 msgid "Angle of PLs in Z direction"
 msgstr "Z ڏس ۾ PLs جي ڪنڊ "
 
 #. Translators: VP is short for 'vanishing point'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:405
+#: ../src/ui/toolbar/box3d-toolbar.cpp:201
 msgid "State of VP in Z direction"
 msgstr "Z ڏس ۾ VP جي حالت "
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:406
+#: ../src/ui/toolbar/box3d-toolbar.cpp:202
 msgid "Toggle VP in Z direction between 'finite' and 'infinite' (=parallel)"
 msgstr "VP کي Z ڏس ۾ 'محدود' ۽ 'لامحدود' (= سمانانتر) جي وچ ۾ ٽوگل ڪريو "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:213
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:254
-msgid "No preset"
-msgstr "اڳ ۾ سيٽ ڪيل ڪجهە بە "
+#. TODO: use the correct axis here, too
+#: ../src/ui/toolbar/box3d-toolbar.cpp:242
+msgid "3D Box: Change perspective (angle of infinite axis)"
+msgstr "٣ ڊي باڪس: منظر بدلايو (لامحدود محورن ۾ ڪنڊ) "
 
 #. Width
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:394
-#: ../src/ui/toolbar/eraser-toolbar.cpp:183
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
+#: ../src/ui/toolbar/eraser-toolbar.cpp:112
 msgid "(hairline)"
 msgstr "(سنهين ليڪ) "
 
 #. Mean
 #. Rotation
 #. Scale
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:394
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:427
-#: ../src/ui/toolbar/eraser-toolbar.cpp:183
-#: ../src/ui/toolbar/pencil-toolbar.cpp:556
-#: ../src/ui/toolbar/spray-toolbar.cpp:290
-#: ../src/ui/toolbar/spray-toolbar.cpp:319
-#: ../src/ui/toolbar/spray-toolbar.cpp:335
-#: ../src/ui/toolbar/spray-toolbar.cpp:402
-#: ../src/ui/toolbar/spray-toolbar.cpp:432
-#: ../src/ui/toolbar/spray-toolbar.cpp:450
-#: ../src/ui/toolbar/spray-toolbar.cpp:599
-#: ../src/ui/toolbar/tweak-toolbar.cpp:126
-#: ../src/ui/toolbar/tweak-toolbar.cpp:143
-#: ../src/ui/toolbar/tweak-toolbar.cpp:341
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:147
+#: ../src/ui/toolbar/eraser-toolbar.cpp:112
+#: ../src/ui/toolbar/pencil-toolbar.cpp:171
+#: ../src/ui/toolbar/spray-toolbar.cpp:90
+#: ../src/ui/toolbar/spray-toolbar.cpp:122
+#: ../src/ui/toolbar/spray-toolbar.cpp:143
+#: ../src/ui/toolbar/spray-toolbar.cpp:212
+#: ../src/ui/toolbar/spray-toolbar.cpp:244
+#: ../src/ui/toolbar/spray-toolbar.cpp:266
+#: ../src/ui/toolbar/spray-toolbar.cpp:409
+#: ../src/ui/toolbar/tweak-toolbar.cpp:92
+#: ../src/ui/toolbar/tweak-toolbar.cpp:115
+#: ../src/ui/toolbar/tweak-toolbar.cpp:312
 msgid "(default)"
 msgstr "(ڊيفالٽ) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:394
-#: ../src/ui/toolbar/eraser-toolbar.cpp:183
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
+#: ../src/ui/toolbar/eraser-toolbar.cpp:112
 msgid "(broad stroke)"
 msgstr "(ويڪرو گهڪو) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:397
-#: ../src/ui/toolbar/eraser-toolbar.cpp:186
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:105
+#: ../src/ui/toolbar/eraser-toolbar.cpp:115
 msgid "Pen Width"
 msgstr "قلم جي ويڪر "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:398
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:106
 msgid "The width of the calligraphic pen (relative to the visible canvas area)"
 msgstr "خوش نويسي پين جي ويڪر (نظر ايندڙ ڪينواس جي کيتر موجب) "
 
 #. Thinning
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(speed blows up stroke)"
 msgstr "رفتار گهڪي ڦنڊائي ٿي) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(slight widening)"
 msgstr "(ٿورو ويڪرو ڪرڻ) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(constant width)"
 msgstr "(اَچل ويڪر) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(slight thinning, default)"
 msgstr "(ٿورو سنهو ڪرڻ، ڊيفالٽ) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(speed deflates stroke)"
 msgstr "(رفتار گهڪي کي سُسائي ٿي) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:414
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:128
 msgid "Stroke Thinning"
 msgstr "گهڪي کي سنهڙو ڪرڻ "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:414
-#: ../src/ui/toolbar/eraser-toolbar.cpp:219
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:128
+#: ../src/ui/toolbar/eraser-toolbar.cpp:150
 msgid "Thinning:"
 msgstr "سنهڙو ڪرڻ "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:415
-#: ../src/ui/toolbar/eraser-toolbar.cpp:220
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:129
+#: ../src/ui/toolbar/eraser-toolbar.cpp:151
 msgid ""
 "How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 "
 "makes them broader, 0 makes width independent of velocity)"
@@ -26712,92 +26710,92 @@ msgstr ""
 "کي ويڪرو ڪري ٿو، 0 وير کي رفتار کان خودمختيار بڻائي ٿو۔) "
 
 #. Angle
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:427
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:147
 msgid "(left edge up)"
 msgstr "(کاٻو ڪنارو مٿي) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:427
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:147
 msgid "(horizontal)"
 msgstr "(اُفقي) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:427
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:147
 msgid "(right edge up)"
 msgstr "(کاٻو ڪنارو مٿي) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:430
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:150
 msgid "Pen Angle"
 msgstr "قلم جي ڪنڊ "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:430
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:150
 #: ../share/extensions/motion.inx.h:3 ../share/extensions/restack.inx.h:5
 msgid "Angle:"
 msgstr "ڪنڊ: "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:431
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:151
 msgid ""
 "The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if "
 "fixation = 0)"
 msgstr "قلم جي نب جي ڪنڊ (ڊگرين ۾؛ 0 = اُفقي، اَگر ٿر = 0 تە ڪوبە اَثر نٿو پوي) "
 
 #. Fixation
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:445
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:169
 msgid "(perpendicular to stroke, \"brush\")"
 msgstr "گهڪي ڏانهن اُڀو، \"برش\") "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:445
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:169
 msgid "(almost fixed, default)"
 msgstr "(لڳ ڀڳ مقرر ڪيل، ڊيفالٽ) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:445
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:169
 msgid "(fixed by Angle, \"pen\")"
 msgstr "(ڪند دواران مقرر ڪيل، \"قلم\") "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:448
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:172
 msgid "Fixation"
 msgstr "ٿر ڪرڻ "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:448
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:172
 msgid "Fixation:"
 msgstr "ٿر ڪرڻ: "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:449
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:173
 msgid ""
 "Angle behavior (0 = nib always perpendicular to stroke direction, 100 = "
 "fixed angle)"
 msgstr "ڪنڊ جو وهنوار ( 0 = گهڪي جي ڏس ۾ نب هيمشهە اُڀي، و ٿر ڪنڊ) "
 
 #. Cap Rounding
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:461
-#: ../src/ui/toolbar/eraser-toolbar.cpp:234
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:191
+#: ../src/ui/toolbar/eraser-toolbar.cpp:169
 msgid "(blunt caps, default)"
 msgstr "(ڪند ڪيپس، ڊيفالٽ) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:461
-#: ../src/ui/toolbar/eraser-toolbar.cpp:234
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:191
+#: ../src/ui/toolbar/eraser-toolbar.cpp:169
 msgid "(slightly bulging)"
 msgstr "(ٿورو اُڀريل) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:461
-#: ../src/ui/toolbar/eraser-toolbar.cpp:234
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:191
+#: ../src/ui/toolbar/eraser-toolbar.cpp:169
 msgid "(approximately round)"
 msgstr "(لڳ ڀڳ گولُ) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:461
-#: ../src/ui/toolbar/eraser-toolbar.cpp:234
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:191
+#: ../src/ui/toolbar/eraser-toolbar.cpp:169
 msgid "(long protruding caps)"
 msgstr "ڊگها ٻار نڪتل ڪيپس "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:465
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:195
 msgid "Cap rounding"
 msgstr "ڪيپ گول ڪرڻ "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:465
-#: ../src/ui/toolbar/eraser-toolbar.cpp:238
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:195
+#: ../src/ui/toolbar/eraser-toolbar.cpp:173
 msgid "Caps:"
 msgstr "ڪيپس: "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:466
-#: ../src/ui/toolbar/eraser-toolbar.cpp:239
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:196
+#: ../src/ui/toolbar/eraser-toolbar.cpp:174
 msgid ""
 "Increase to make caps at the ends of strokes protrude more (0 = no caps, 1 = "
 "round caps)"
@@ -26806,104 +26804,104 @@ msgstr ""
 "ڪيپ)"
 
 #. Tremor
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:478
-#: ../src/ui/toolbar/eraser-toolbar.cpp:253
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:214
+#: ../src/ui/toolbar/eraser-toolbar.cpp:192
 msgid "(smooth line)"
 msgstr "(لسي ليڪ) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:478
-#: ../src/ui/toolbar/eraser-toolbar.cpp:253
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:214
+#: ../src/ui/toolbar/eraser-toolbar.cpp:192
 msgid "(slight tremor)"
 msgstr "(ٿورو ڪنپڻ) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:478
-#: ../src/ui/toolbar/eraser-toolbar.cpp:253
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:214
+#: ../src/ui/toolbar/eraser-toolbar.cpp:192
 msgid "(noticeable tremor)"
 msgstr "(ڌيان ڇڪائيندڙ ڪنبڻ) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:478
-#: ../src/ui/toolbar/eraser-toolbar.cpp:253
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:214
+#: ../src/ui/toolbar/eraser-toolbar.cpp:192
 msgid "(maximum tremor)"
 msgstr "(وڌ ۾ وڌ ڪنبڻ) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:481
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:217
 msgid "Stroke Tremor"
 msgstr "گهڪي جو ڪنبڻ"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:481
-#: ../src/ui/toolbar/eraser-toolbar.cpp:256
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:217
+#: ../src/ui/toolbar/eraser-toolbar.cpp:195
 msgid "Tremor:"
 msgstr "ڪنبڻ"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:482
-#: ../src/ui/toolbar/eraser-toolbar.cpp:257
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:218
+#: ../src/ui/toolbar/eraser-toolbar.cpp:196
 msgid "Increase to make strokes rugged and trembling"
 msgstr "گهڪا کهرا ۽ ڪنبندڙ بڻائڻ لاء وڌايو "
 
 #. Wiggle
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:496
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:238
 msgid "(no wiggle)"
 msgstr "(لڏڻ نە) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:496
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:238
 msgid "(slight deviation)"
 msgstr "(ٿورو ڀٽڪاءُ) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:496
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:238
 msgid "(wild waves and curls)"
 msgstr "تيز لهرون ۽ ڇلا) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:499
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:241
 msgid "Pen Wiggle"
 msgstr "پين جو لڏڻ: "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:499
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:241
 msgid "Wiggle:"
 msgstr "لڏڻ: "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:500
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:242
 msgid "Increase to make the pen waver and wiggle"
 msgstr "قلم مهرائيندڙ ۽ لڏندڙ بڻائڻ لاء وڌايو "
 
 #. Mass
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:513
-#: ../src/ui/toolbar/eraser-toolbar.cpp:273
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:261
+#: ../src/ui/toolbar/eraser-toolbar.cpp:215
 msgid "(no inertia)"
 msgstr "(ڪابە اَچرتا نە) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:513
-#: ../src/ui/toolbar/eraser-toolbar.cpp:273
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:261
+#: ../src/ui/toolbar/eraser-toolbar.cpp:215
 msgid "(slight smoothing, default)"
 msgstr "(ٿورو لسو: ڊيفالٽ) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:513
-#: ../src/ui/toolbar/eraser-toolbar.cpp:273
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:261
+#: ../src/ui/toolbar/eraser-toolbar.cpp:215
 msgid "(noticeable lagging)"
 msgstr "(ڌيان ڇڪائيندڙ ليگنگ) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:513
-#: ../src/ui/toolbar/eraser-toolbar.cpp:273
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:261
+#: ../src/ui/toolbar/eraser-toolbar.cpp:215
 msgid "(maximum inertia)"
 msgstr "(وڌ ۾ وڌ اَچرتا) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:516
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:264
 msgid "Pen Mass"
 msgstr "قلم جو ميڙ "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:516
-#: ../src/ui/toolbar/eraser-toolbar.cpp:276
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:264
+#: ../src/ui/toolbar/eraser-toolbar.cpp:218
 msgid "Mass:"
 msgstr " ميڙ:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:517
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:265
 msgid "Increase to make the pen drag behind, as if slowed by inertia"
 msgstr "قلم پٺتي گهلجڻ ٺاهڻ لاءِ وڌايو، جئن تە جڙتا دواران سلهو ڪيل "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:532
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:286
 msgid "Trace Background"
 msgstr "پس منظر جو پتو لڳايو "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:533
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:287
 msgid ""
 "Trace the lightness of the background by the width of the pen (white - "
 "minimum width, black - maximum width)"
@@ -26911,128 +26909,133 @@ msgstr ""
 "قلم جي ويڪر دواران پس منظر جي هلڪيپڻ جو پتو لڳايو (اَڇو - گهٽ ۾ گهٽ ويڪر، "
 "ڪارو - وڌ ۾ وڌ ويڪر) "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:546
-#: ../src/ui/toolbar/eraser-toolbar.cpp:204
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:299
+#: ../src/ui/toolbar/eraser-toolbar.cpp:137
 msgid "Use the pressure of the input device to alter the width of the pen"
 msgstr "قلم جي ويڪر بدلائڻ لاءِ اِنپٽ اُپڪرڻ جي دٻاو جو اِستعمال ڪريو "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:558
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:310
 msgid "Tilt"
 msgstr "جهڪاءُ "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:559
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:311
 msgid "Use the tilt of the input device to alter the angle of the pen's nib"
 msgstr "قلم جي نب جي ڪنڊ بدلائڻ لاءِ اِنپٽ اُپڪرڻ جي جهڪاو جو اِستعمال ڪريو "
 
 #. Name
 #. Label
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:580
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:331
 msgid "Choose a preset"
 msgstr "پريسيٽ چونڊيو "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:598
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:347
 #, fuzzy
 msgid "Add/Edit Profile"
 msgstr "پروفائل جي ڪڙي جوڙيو "
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:599
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:348
 #, fuzzy
 msgid "Add or edit calligraphic profile"
 msgstr "نون خوش نويس گهڪن جو نمونو "
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:117
-msgid "Set connector type: orthogonal"
-msgstr "ڳنڍيندڙ جو قسم سيٽ ڪريو: اِنٿو گونل "
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:506
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:601
+msgid "No preset"
+msgstr "اڳ ۾ سيٽ ڪيل ڪجهە بە "
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:117
-msgid "Set connector type: polyline"
-msgstr "ڳنڍيندڙ جو قسم سيٽ ڪريو: پوليلائن "
-
-#: ../src/ui/toolbar/connector-toolbar.cpp:164
-msgid "Change connector curvature"
-msgstr "ڳنڍيندڙ پيچ بدلايو "
-
-#: ../src/ui/toolbar/connector-toolbar.cpp:213
-msgid "Change connector spacing"
-msgstr "ڳنڍيندڙ وٿي ڏيڻ بدلايو "
-
-#: ../src/ui/toolbar/connector-toolbar.cpp:311
+#: ../src/ui/toolbar/connector-toolbar.cpp:81
 msgid "Avoid"
 msgstr "ڇڏي ڏيو"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:312
+#: ../src/ui/toolbar/connector-toolbar.cpp:82
 #: ../src/ui/tools/connector-tool.cpp:1321
 msgid "Make connectors avoid selected objects"
 msgstr "ڳنڍيدڙن کي چونڊ ڪيل شين کان بچايو "
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:321
+#: ../src/ui/toolbar/connector-toolbar.cpp:91
 msgid "Ignore"
 msgstr "نظر اَنداز ڪريو "
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:322
+#: ../src/ui/toolbar/connector-toolbar.cpp:92
 #: ../src/ui/tools/connector-tool.cpp:1322
 msgid "Make connectors ignore selected objects"
 msgstr "ڳنڍيدڙن کي چونديل شيون ريٽي ڇڏڻ ڏيو "
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:332
+#: ../src/ui/toolbar/connector-toolbar.cpp:102
 msgid "Orthogonal"
 msgstr "ارٿو گونل "
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:333
+#: ../src/ui/toolbar/connector-toolbar.cpp:103
 msgid "Make connector orthogonal or polyline"
 msgstr "ڳنڍيندڙ کي ارٿو گونل يا پوليلائن ٺاهيو "
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:347
+#: ../src/ui/toolbar/connector-toolbar.cpp:116
 msgid "Connector Curvature"
 msgstr "ڳنڍيندڙ پيچ "
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:347
+#: ../src/ui/toolbar/connector-toolbar.cpp:116
 msgid "Curvature:"
 msgstr "پيچ "
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:348
+#: ../src/ui/toolbar/connector-toolbar.cpp:117
 msgid "The amount of connectors curvature"
 msgstr "ڳنڍيندڙ پيچ جو تعداد "
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:358
+#: ../src/ui/toolbar/connector-toolbar.cpp:132
 msgid "Connector Spacing"
 msgstr "ڳنڍيندڙ جي وٿي "
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:358
+#: ../src/ui/toolbar/connector-toolbar.cpp:132
 msgid "Spacing:"
 msgstr "وٿي ڏيڻ: "
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:359
+#: ../src/ui/toolbar/connector-toolbar.cpp:133
 msgid "The amount of space left around objects by auto-routing connectors"
 msgstr "خودڪار - روٽنگ ڳنڍيندڙ دواران شين جي آسپاس ڇڏيل وٿين جو تعداد "
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:370
+#: ../src/ui/toolbar/connector-toolbar.cpp:149
 msgid "Graph"
 msgstr "گراف "
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:380
+#: ../src/ui/toolbar/connector-toolbar.cpp:159
 msgid "Connector Length"
 msgstr "ڳنڍيندڙ جي ڊيگهە "
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:380
+#: ../src/ui/toolbar/connector-toolbar.cpp:159
 msgid "Length:"
 msgstr "ڊيگهە "
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:381
+#: ../src/ui/toolbar/connector-toolbar.cpp:160
 msgid "Ideal length for connectors when layout is applied"
 msgstr "ليئائوٽ لاثو ڪرڻ وقت ڳنڍيندڙن لاءِ آدرش ڊيگهە "
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:393
+#: ../src/ui/toolbar/connector-toolbar.cpp:176
 msgid "Downwards"
 msgstr "هيٺيئن پاسي "
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:394
+#: ../src/ui/toolbar/connector-toolbar.cpp:177
 msgid "Make connectors with end-markers (arrows) point downwards"
 msgstr "اينڊ مارڪرس (تيرن) سان هيٺئين پاسي رکي ڳنڍيندڙ ٺاهيو "
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:410
+#: ../src/ui/toolbar/connector-toolbar.cpp:193
 msgid "Do not allow overlapping shapes"
 msgstr "هڪ ٻئي مٿان چڙهندڙ آڪارن کي اِجازت نە ڏيو "
+
+#: ../src/ui/toolbar/connector-toolbar.cpp:279
+msgid "Set connector type: orthogonal"
+msgstr "ڳنڍيندڙ جو قسم سيٽ ڪريو: اِنٿو گونل "
+
+#: ../src/ui/toolbar/connector-toolbar.cpp:279
+msgid "Set connector type: polyline"
+msgstr "ڳنڍيندڙ جو قسم سيٽ ڪريو: پوليلائن "
+
+#: ../src/ui/toolbar/connector-toolbar.cpp:326
+msgid "Change connector curvature"
+msgstr "ڳنڍيندڙ پيچ بدلايو "
+
+#: ../src/ui/toolbar/connector-toolbar.cpp:374
+msgid "Change connector spacing"
+msgstr "ڳنڍيندڙ وٿي ڏيڻ بدلايو "
 
 #: ../src/ui/toolbar/dropper-toolbar.cpp:70
 msgid "Pick"
@@ -27057,79 +27060,79 @@ msgstr ""
 "اگر الفا چونڊيو ويو هو تە اها ڀراو يا گهڪي جي شفافيت جي روپ ۾ چونڊڻ لاءِ مقرر "
 "ڪريو "
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:147
+#: ../src/ui/toolbar/eraser-toolbar.cpp:77
 #, fuzzy
 msgid "Delete objects touched by eraser"
 msgstr "رٻڙ دواران ڇهيل شيون خارج ڪريو "
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:152
+#: ../src/ui/toolbar/eraser-toolbar.cpp:82
 msgid "Cut"
 msgstr "ڪٽيو "
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:153
+#: ../src/ui/toolbar/eraser-toolbar.cpp:83
 #, fuzzy
 msgid "Cut out from paths and shapes"
 msgstr "ترجي راهە ٽڪرن ۾ ڪٽيو "
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:158
+#: ../src/ui/toolbar/eraser-toolbar.cpp:88
 #, fuzzy
 msgid "Clip"
 msgstr "ڪلپ ۾: "
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:159
+#: ../src/ui/toolbar/eraser-toolbar.cpp:89
 #, fuzzy
 msgid "Clip from objects"
 msgstr "شين مان ڪٽي ڇڏيو "
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:183
+#: ../src/ui/toolbar/eraser-toolbar.cpp:112
 #, fuzzy
 msgid "(no width)"
 msgstr "گهڪي جي ويڪر "
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:187
+#: ../src/ui/toolbar/eraser-toolbar.cpp:116
 msgid "The width of the eraser pen (relative to the visible canvas area)"
 msgstr "رٻڙ قلم جي ويڪر (نظر ايندڙ ڪينواس جي کيتر موجب) "
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:203
+#: ../src/ui/toolbar/eraser-toolbar.cpp:136
 #, fuzzy
 msgid "Eraser Pressure"
 msgstr "رٻڙ جون ترجيحون "
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:219
+#: ../src/ui/toolbar/eraser-toolbar.cpp:150
 #, fuzzy
 msgid "Eraser Stroke Thinning"
 msgstr "گهڪي کي سنهڙو ڪرڻ "
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:238
+#: ../src/ui/toolbar/eraser-toolbar.cpp:173
 #, fuzzy
 msgid "Eraser Cap rounding"
 msgstr "ڪيپ گول ڪرڻ "
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:256
+#: ../src/ui/toolbar/eraser-toolbar.cpp:195
 #, fuzzy
 msgid "EraserStroke Tremor"
 msgstr "گهڪي جو ڪنبڻ"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:276
+#: ../src/ui/toolbar/eraser-toolbar.cpp:218
 #, fuzzy
 msgid "Eraser Mass"
 msgstr "رٻڙ"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:277
+#: ../src/ui/toolbar/eraser-toolbar.cpp:219
 #, fuzzy
 msgid "Increase to make the eraser drag behind, as if slowed by inertia"
 msgstr "قلم پٺتي گهلجڻ ٺاهڻ لاءِ وڌايو، جئن تە جڙتا دواران سلهو ڪيل "
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:293
-#: ../src/ui/toolbar/eraser-toolbar.cpp:294
+#: ../src/ui/toolbar/eraser-toolbar.cpp:238
+#: ../src/ui/toolbar/eraser-toolbar.cpp:239
 #, fuzzy
 msgid "Break apart cut items"
 msgstr "ڌار ڌار ڪريو "
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:138
 #: ../src/ui/toolbar/gradient-toolbar.cpp:158
-#: ../src/ui/toolbar/gradient-toolbar.cpp:534
-#: ../src/ui/toolbar/gradient-toolbar.cpp:933
+#: ../src/ui/toolbar/gradient-toolbar.cpp:438
+#: ../src/ui/toolbar/gradient-toolbar.cpp:1055
 #, fuzzy
 msgid "No gradient"
 msgstr "لاهە هلايو "
@@ -27144,99 +27147,75 @@ msgstr "ڪجهە بە نە چونڊيو ويو "
 msgid "Multiple gradients"
 msgstr "لاهە هلايو "
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:544
-#: ../src/widgets/gradient-vector.cpp:566
-msgid "No stops in gradient"
-msgstr "لاهە ۾ رڪاوٽون ناهن "
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:654
-#, fuzzy
-msgid "Multiple stops"
-msgstr "گهڻا نمونا "
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:737
-msgid "Assign gradient to object"
-msgstr "شئە لاءِ لاهە مقرر ڪريو "
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:765
-#, fuzzy
-msgid "Set gradient repeat"
-msgstr "گهڪي تي لاهە سيٽ ڪريو "
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:828
-#: ../src/widgets/gradient-vector.cpp:674
-msgid "Change gradient stop offset"
-msgstr "لاهە رڪاوٽ آفسيٽ بدلايو "
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:857
+#: ../src/ui/toolbar/gradient-toolbar.cpp:364
 #, fuzzy
 msgid "linear"
 msgstr "سڌي ليڪ ۾ خطي "
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:858
+#: ../src/ui/toolbar/gradient-toolbar.cpp:365
 msgid "Create linear gradient"
 msgstr "سڌي ليڪ ۾ خطيءَ وارو لاهە خلقيو "
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:863
+#: ../src/ui/toolbar/gradient-toolbar.cpp:370
 msgid "radial"
 msgstr ""
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:864
+#: ../src/ui/toolbar/gradient-toolbar.cpp:371
 msgid "Create radial (elliptic or circular) gradient"
 msgstr "ڪرڻي وارو (بضوي يا گول) لاهە خلقيو "
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:895
-#: ../src/ui/toolbar/mesh-toolbar.cpp:417
+#: ../src/ui/toolbar/gradient-toolbar.cpp:401
+#: ../src/ui/toolbar/mesh-toolbar.cpp:264
 #, fuzzy
 msgid "fill"
 msgstr "ڀريل "
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:896
-#: ../src/ui/toolbar/mesh-toolbar.cpp:418
+#: ../src/ui/toolbar/gradient-toolbar.cpp:402
+#: ../src/ui/toolbar/mesh-toolbar.cpp:265
 msgid "Create gradient in the fill"
 msgstr "ڀراو ۾ لاهە خلقيو "
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:901
-#: ../src/ui/toolbar/mesh-toolbar.cpp:423
+#: ../src/ui/toolbar/gradient-toolbar.cpp:407
+#: ../src/ui/toolbar/mesh-toolbar.cpp:270
 #, fuzzy
 msgid "stroke"
 msgstr "گهڪو "
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:902
-#: ../src/ui/toolbar/mesh-toolbar.cpp:424
+#: ../src/ui/toolbar/gradient-toolbar.cpp:408
+#: ../src/ui/toolbar/mesh-toolbar.cpp:271
 msgid "Create gradient in the stroke"
 msgstr "گهڪي ۾ لاهە خلقيو "
 
 #. Name
-#: ../src/ui/toolbar/gradient-toolbar.cpp:940
+#: ../src/ui/toolbar/gradient-toolbar.cpp:445
 msgid "Select"
 msgstr "چونڊيو "
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:967
+#: ../src/ui/toolbar/gradient-toolbar.cpp:471
 #, fuzzy
 msgctxt "Gradient repeat type"
 msgid "None"
 msgstr "ڪجهە بە نە "
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:973
+#: ../src/ui/toolbar/gradient-toolbar.cpp:477
 #, fuzzy
 msgid "Reflected"
 msgstr "منعڪس "
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:979
+#: ../src/ui/toolbar/gradient-toolbar.cpp:483
 #, fuzzy
 msgid "Direct"
 msgstr "سڌو "
 
 #. Name
-#: ../src/ui/toolbar/gradient-toolbar.cpp:986
+#: ../src/ui/toolbar/gradient-toolbar.cpp:490
 #, fuzzy
 msgid "Repeat"
 msgstr "دهرايو: "
 
 #. Label
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
-#: ../src/ui/toolbar/gradient-toolbar.cpp:988
+#: ../src/ui/toolbar/gradient-toolbar.cpp:492
 msgid ""
 "Whether to fill with flat color beyond the ends of the gradient vector "
 "(spreadMethod=\"pad\"), or repeat the gradient in the same direction "
@@ -27247,77 +27226,101 @@ msgstr ""
 "\"پيڊ=\")، يا ساڳيءَ ڏس ۾ لاهە دهرايو (ڦهلاو جو طرقو = \"دهرائڻ\"، يا اُبتڙ "
 "ڏسن ۾ وري وٽيءَ دهرايو (ڦهلائڻ جو طريقو =\" عڪس وجهڻ\") "
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1015
+#: ../src/ui/toolbar/gradient-toolbar.cpp:518
 #, fuzzy
 msgid "No stops"
 msgstr "ڪوبە گهڪو نە "
 
 #. Name
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1022
+#: ../src/ui/toolbar/gradient-toolbar.cpp:525
 #, fuzzy
 msgid "Stops"
 msgstr "روڪيو "
 
 #. Label
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1044
+#: ../src/ui/toolbar/gradient-toolbar.cpp:545
 #: ../src/widgets/gradient-vector.cpp:851
 #, fuzzy
 msgctxt "Gradient"
 msgid "Offset:"
 msgstr "آفسيٽ: "
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1044
+#: ../src/ui/toolbar/gradient-toolbar.cpp:545
 #, fuzzy
 msgid "Offset of selected stop"
 msgstr "چونڊيل راهون آئوٽسيٽ ڪريو "
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1062
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1063
+#: ../src/ui/toolbar/gradient-toolbar.cpp:565
+#: ../src/ui/toolbar/gradient-toolbar.cpp:566
 #, fuzzy
 msgid "Insert new stop"
 msgstr "ڳنڍ وجهو "
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1076
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1077
+#: ../src/ui/toolbar/gradient-toolbar.cpp:578
+#: ../src/ui/toolbar/gradient-toolbar.cpp:579
 #: ../src/widgets/gradient-vector.cpp:837
 msgid "Delete stop"
 msgstr "رڪاوٽ خارج ڪريو "
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1091
+#: ../src/ui/toolbar/gradient-toolbar.cpp:592
 #, fuzzy
 msgid "Reverse the direction of the gradient"
 msgstr "لاهە جون رڪاوٽون سمپادت ڪريو "
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1105
+#: ../src/ui/toolbar/gradient-toolbar.cpp:605
 #, fuzzy
 msgid "Link gradients"
 msgstr "سڌي ليڪ ۾ خطيءَ وارو لاهە "
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1106
+#: ../src/ui/toolbar/gradient-toolbar.cpp:606
 msgid "Link gradients to change all related gradients"
 msgstr ""
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:275
+#: ../src/ui/toolbar/gradient-toolbar.cpp:666
+msgid "Assign gradient to object"
+msgstr "شئە لاءِ لاهە مقرر ڪريو "
+
+#: ../src/ui/toolbar/gradient-toolbar.cpp:712
+#, fuzzy
+msgid "Set gradient repeat"
+msgstr "گهڪي تي لاهە سيٽ ڪريو "
+
+#: ../src/ui/toolbar/gradient-toolbar.cpp:843
+#: ../src/widgets/gradient-vector.cpp:674
+msgid "Change gradient stop offset"
+msgstr "لاهە رڪاوٽ آفسيٽ بدلايو "
+
+#: ../src/ui/toolbar/gradient-toolbar.cpp:1065
+#: ../src/widgets/gradient-vector.cpp:566
+msgid "No stops in gradient"
+msgstr "لاهە ۾ رڪاوٽون ناهن "
+
+#: ../src/ui/toolbar/gradient-toolbar.cpp:1191
+#, fuzzy
+msgid "Multiple stops"
+msgstr "گهڻا نمونا "
+
+#: ../src/ui/toolbar/lpe-toolbar.cpp:86
 msgid "All inactive"
 msgstr "سڀ غير متحرڪ "
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:276
+#: ../src/ui/toolbar/lpe-toolbar.cpp:87
 msgid "No geometric tool is active"
 msgstr "ڪوبە جاميٽرڪ اُپڪرڻ متحرڪ ناهي "
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:314
+#: ../src/ui/toolbar/lpe-toolbar.cpp:124
 msgid "Show limiting bounding box"
 msgstr "حد مقرر ڪندڙ بائونڊنگ باڪس ڏيکاريو "
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:315
+#: ../src/ui/toolbar/lpe-toolbar.cpp:125
 msgid "Show bounding box (used to cut infinite lines)"
 msgstr "بائنڊنگ باڪس ڏيکاريو (بيحد ليڪون ڪٽڻ لاءِ ڪتب ايندڙ) "
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:326
+#: ../src/ui/toolbar/lpe-toolbar.cpp:136
 msgid "Get limiting bounding box from selection"
 msgstr "چونڊ مان حد مقرر ڪندڙ بائنڊنگ باڪس حاصل ڪريو "
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:327
+#: ../src/ui/toolbar/lpe-toolbar.cpp:137
 msgid ""
 "Set limiting bounding box (used to cut infinite lines) to the bounding box "
 "of current selection"
@@ -27325,203 +27328,363 @@ msgstr ""
 "مؤجودهە چونڊ جي بائنڊنگ باڪس ۾ حد مقرر ڪندڙ بائنڊنگ باڪس سيٽ ڪريو (بيحد لڪون "
 "ڪٽڻ لاءِ ڪتب ايندڙ) "
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:345
+#: ../src/ui/toolbar/lpe-toolbar.cpp:154
 msgid "Closed"
 msgstr "بند ڪيل "
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:351
+#: ../src/ui/toolbar/lpe-toolbar.cpp:160
 msgid "Open start"
 msgstr "شروعات کوليو "
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:357
+#: ../src/ui/toolbar/lpe-toolbar.cpp:166
 msgid "Open end"
 msgstr "پڇاري کوليو "
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:363
+#: ../src/ui/toolbar/lpe-toolbar.cpp:172
 msgid "Open both"
 msgstr "ٻئي کوليو "
 
 #. Name
 #. Label
-#: ../src/ui/toolbar/lpe-toolbar.cpp:371
+#: ../src/ui/toolbar/lpe-toolbar.cpp:180
 #, fuzzy
 msgid "Choose a line segment type"
 msgstr "ليڪ جي جزن جو قسم چونڊيو "
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:389
+#: ../src/ui/toolbar/lpe-toolbar.cpp:197
 msgid "Display measuring info"
 msgstr "ماپڻ جي معلومات ڏيکاريو "
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:390
+#: ../src/ui/toolbar/lpe-toolbar.cpp:198
 msgid "Display measuring info for selected items"
 msgstr "چونڊيل شين لاءِ ماپڻ جي معلومات ڏيکاريو "
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:410
+#: ../src/ui/toolbar/lpe-toolbar.cpp:217
 msgid "Open LPE dialog"
 msgstr "LPE گفتو کوليو "
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:411
+#: ../src/ui/toolbar/lpe-toolbar.cpp:218
 msgid "Open LPE dialog (to adapt parameters numerically)"
 msgstr "LPE گفتو کوليو (پئمانا انگي روپن ۾ اَپنائڻ) "
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:157
+#: ../src/ui/toolbar/measure-toolbar.cpp:84
 msgid "Start and end measures inactive."
 msgstr ""
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:159
+#: ../src/ui/toolbar/measure-toolbar.cpp:86
 msgid "Start and end measures active."
 msgstr ""
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:175
+#: ../src/ui/toolbar/measure-toolbar.cpp:102
 #, fuzzy
 msgid "Measures only selected."
 msgstr "چونڊيل ڳنڍيون ڳنڍيو "
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:177
+#: ../src/ui/toolbar/measure-toolbar.cpp:104
 #, fuzzy
 msgid "Measure all."
 msgstr "راهە ماپيو "
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:193
+#: ../src/ui/toolbar/measure-toolbar.cpp:120
 #, fuzzy
 msgid "Show all crossings."
 msgstr "سڀني پرتن ۾ چونڊيو "
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:195
+#: ../src/ui/toolbar/measure-toolbar.cpp:122
 msgid "Show visible crossings."
 msgstr ""
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:211
+#: ../src/ui/toolbar/measure-toolbar.cpp:138
 msgid "Use all layers in the measure."
 msgstr ""
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:213
+#: ../src/ui/toolbar/measure-toolbar.cpp:140
 #, fuzzy
 msgid "Use current layer in the measure."
 msgstr "مؤجود مٿ تائين مٿي چاڙهيو "
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:229
+#: ../src/ui/toolbar/measure-toolbar.cpp:156
 #, fuzzy
 msgid "Compute all elements."
 msgstr "tutorial-elements.svg"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:231
+#: ../src/ui/toolbar/measure-toolbar.cpp:158
 #, fuzzy
 msgid "Compute max length."
 msgstr "راهە جي ڊيگهە "
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:292
-#: ../src/ui/toolbar/text-toolbar.cpp:2043
+#: ../src/ui/toolbar/measure-toolbar.cpp:227
+#: ../src/ui/toolbar/text-toolbar.cpp:345
 msgid "Font Size"
 msgstr "فانٽ جو آڪار"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:292
+#: ../src/ui/toolbar/measure-toolbar.cpp:227
 #, fuzzy
 msgid "Font Size:"
 msgstr "فانٽ جو آڪار"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:293
+#: ../src/ui/toolbar/measure-toolbar.cpp:228
 msgid "The font size to be used in the measurement labels"
 msgstr ""
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:304
-#: ../src/ui/toolbar/measure-toolbar.cpp:312
+#: ../src/ui/toolbar/measure-toolbar.cpp:244
+#: ../src/ui/toolbar/measure-toolbar.cpp:252
 msgid "The units to be used for the measurements"
 msgstr ""
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:320
+#: ../src/ui/toolbar/measure-toolbar.cpp:260
 #: ../share/extensions/measure.inx.h:14
 msgid "Precision:"
 msgstr "چٽائي "
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:321
+#: ../src/ui/toolbar/measure-toolbar.cpp:261
 msgid "Decimal precision of measure"
 msgstr ""
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:333
+#: ../src/ui/toolbar/measure-toolbar.cpp:278
 #, fuzzy
 msgid "Scale %"
 msgstr "ماپيو"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:333
+#: ../src/ui/toolbar/measure-toolbar.cpp:278
 #, fuzzy
 msgid "Scale %:"
 msgstr "ماپ: "
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:334
+#: ../src/ui/toolbar/measure-toolbar.cpp:279
 msgid "Scale the results"
 msgstr ""
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:347
+#: ../src/ui/toolbar/measure-toolbar.cpp:297
 #, fuzzy
 msgid "Mark dimension offset"
 msgstr "آيام "
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:359
-#: ../src/ui/toolbar/measure-toolbar.cpp:360
+#: ../src/ui/toolbar/measure-toolbar.cpp:314
+#: ../src/ui/toolbar/measure-toolbar.cpp:315
 #, fuzzy
 msgid "Measure only selected"
 msgstr "چونڊيل ڳنڍيون ڳنڍيو "
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:371
-#: ../src/ui/toolbar/measure-toolbar.cpp:372
+#: ../src/ui/toolbar/measure-toolbar.cpp:326
+#: ../src/ui/toolbar/measure-toolbar.cpp:327
 #, fuzzy
 msgid "Ignore first and last"
 msgstr "هنن طئە ڪيل ترتيبن کي نظرانداز ڪريو ۽ روانگيءَ جا اِشارا اِستعمال ڪريو؟ "
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:382
-#: ../src/ui/toolbar/measure-toolbar.cpp:383
+#: ../src/ui/toolbar/measure-toolbar.cpp:337
+#: ../src/ui/toolbar/measure-toolbar.cpp:338
 #, fuzzy
 msgid "Show hidden intersections"
 msgstr "رهنما چيرڻ "
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:393
-#: ../src/ui/toolbar/measure-toolbar.cpp:394
+#: ../src/ui/toolbar/measure-toolbar.cpp:348
+#: ../src/ui/toolbar/measure-toolbar.cpp:349
 #, fuzzy
 msgid "Show measures between items"
 msgstr "نقلن جي وچ جي وٿي "
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:404
-#: ../src/ui/toolbar/measure-toolbar.cpp:405
+#: ../src/ui/toolbar/measure-toolbar.cpp:359
+#: ../src/ui/toolbar/measure-toolbar.cpp:360
 #, fuzzy
 msgid "Measure all layers"
 msgstr "سڀني پرتن ۾ چونڊيو "
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:415
-#: ../src/ui/toolbar/measure-toolbar.cpp:416
+#: ../src/ui/toolbar/measure-toolbar.cpp:370
+#: ../src/ui/toolbar/measure-toolbar.cpp:371
 #, fuzzy
 msgid "Reverse measure"
 msgstr "راهە پلٽايو "
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:425
-#: ../src/ui/toolbar/measure-toolbar.cpp:426
+#: ../src/ui/toolbar/measure-toolbar.cpp:380
+#: ../src/ui/toolbar/measure-toolbar.cpp:381
 msgid "Phantom measure"
 msgstr ""
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:435
-#: ../src/ui/toolbar/measure-toolbar.cpp:436
+#: ../src/ui/toolbar/measure-toolbar.cpp:390
+#: ../src/ui/toolbar/measure-toolbar.cpp:391
 #, fuzzy
 msgid "To guides"
 msgstr "رهنما ڏيکاريو "
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:445
-#: ../src/ui/toolbar/measure-toolbar.cpp:446
+#: ../src/ui/toolbar/measure-toolbar.cpp:400
+#: ../src/ui/toolbar/measure-toolbar.cpp:401
 #, fuzzy
 msgid "Mark Dimension"
 msgstr "آيام "
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:455
-#: ../src/ui/toolbar/measure-toolbar.cpp:456
+#: ../src/ui/toolbar/measure-toolbar.cpp:410
+#: ../src/ui/toolbar/measure-toolbar.cpp:411
 #, fuzzy
 msgid "Convert to item"
 msgstr "بريل ۾ بدلايو "
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:270
+#: ../src/ui/toolbar/mesh-toolbar.cpp:227
 #, fuzzy
-msgid "Set mesh type"
-msgstr "متن جي نموني موجب سيٽ ڪريو "
+msgid "normal"
+msgstr "ساڌارڻ "
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:343
+#: ../src/ui/toolbar/mesh-toolbar.cpp:228
+#, fuzzy
+msgid "Create mesh gradient"
+msgstr "سڌي ليڪ ۾ خطيءَ وارو لاهە خلقيو "
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:233
+msgid "conical"
+msgstr ""
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:234
+#, fuzzy
+msgid "Create conical gradient"
+msgstr "سڌي ليڪ ۾ خطيءَ وارو لاهە خلقيو "
+
+#. Name
+#: ../src/ui/toolbar/mesh-toolbar.cpp:240
+msgid "New:"
+msgstr ""
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:297
+#, fuzzy
+msgid "Rows"
+msgstr "قطارون "
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:297
+#: ../share/extensions/guides_creator.inx.h:5
+#: ../share/extensions/layout_nup.inx.h:12
+msgid "Rows:"
+msgstr "قطارون "
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:297
+#, fuzzy
+msgid "Number of rows in new mesh"
+msgstr "قطارون جو تعداد "
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:318
+#, fuzzy
+msgid "Columns"
+msgstr "ڪالم: "
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:318
+#: ../share/extensions/guides_creator.inx.h:4
+#, fuzzy
+msgid "Columns:"
+msgstr "ڪالم: "
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:318
+#, fuzzy
+msgid "Number of columns in new mesh"
+msgstr "ڪالمن جو تعداد "
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:337
+#, fuzzy
+msgid "Edit Fill"
+msgstr "ڀراءُ سمپادت ڪريو۔۔۔ "
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:338
+#, fuzzy
+msgid "Edit fill mesh"
+msgstr "ڀراءُ سمپادت ڪريو۔۔۔ "
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:349
+#, fuzzy
+msgid "Edit Stroke"
+msgstr "گهڪو سمپادت ڪريو۔۔۔ "
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:350
+#, fuzzy
+msgid "Edit stroke mesh"
+msgstr "گهڪو سمپادت ڪريو۔۔۔ "
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:361
+#: ../src/ui/toolbar/node-toolbar.cpp:426
+msgid "Show Handles"
+msgstr "هينڊل ڏيکاريو "
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:375
+#: ../src/ui/toolbar/mesh-toolbar.cpp:376
+msgid "WARNING: Mesh SVG Syntax Subject to Change"
+msgstr ""
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:393
+msgctxt "Type"
+msgid "Coons"
+msgstr ""
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:399
+msgid "Bicubic"
+msgstr ""
+
+#. Name
+#: ../src/ui/toolbar/mesh-toolbar.cpp:407
+#, fuzzy
+msgid "Smoothing"
+msgstr "لسو ڪري پيو "
+
+#. Label
+#: ../src/ui/toolbar/mesh-toolbar.cpp:408
+msgid "Coons: no smothing. Bicubic: smothing across patch boundaries."
+msgstr ""
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:426
+#, fuzzy
+msgid "Toggle Sides"
+msgstr "بولڊ ٽوگل ڪريو "
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:427
+msgid "Toggle selected sides between Beziers and lines."
+msgstr ""
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:430
+#, fuzzy
+msgid "Toggle side:"
+msgstr "بولڊ ٽوگل ڪريو "
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:437
+#, fuzzy
+msgid "Make elliptical"
+msgstr "اِٽيلڪ بڻايو "
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:438
+msgid ""
+"Make selected sides elliptical by changing length of handles. Works best if "
+"handles already approximate ellipse."
+msgstr ""
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:441
+#, fuzzy
+msgid "Make elliptical:"
+msgstr "اِٽيلڪ بڻايو "
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:448
+#, fuzzy
+msgid "Pick colors:"
+msgstr "مهني جو رنگ: "
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:449
+msgid "Pick colors for selected corner nodes from underneath mesh."
+msgstr ""
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:452
+#, fuzzy
+msgid "Pick Color"
+msgstr "رنگ ڀريو "
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:460
+#, fuzzy
+msgid "Scale mesh to bounding box:"
+msgstr "حد مقرر ڪندڙ بائونڊنگ باڪس ڏيکاريو "
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:461
+#, fuzzy
+msgid "Scale mesh to fit inside bounding box."
+msgstr "حد مقرر ڪندڙ بائونڊنگ باڪس ڏيکاريو "
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:464
+#, fuzzy
+msgid "Fit mesh"
+msgstr "ڀراءُ سمپادت ڪريو۔۔۔ "
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:642
 msgid ""
 "Mesh gradients are part of SVG 2:\n"
 "* Syntax may change.\n"
@@ -27531,385 +27694,225 @@ msgid ""
 "For print: export to PDF."
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:379
+#: ../src/ui/toolbar/mesh-toolbar.cpp:674
 #, fuzzy
-msgid "normal"
-msgstr "ساڌارڻ "
+msgid "Set mesh type"
+msgstr "متن جي نموني موجب سيٽ ڪريو "
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:380
-#, fuzzy
-msgid "Create mesh gradient"
-msgstr "سڌي ليڪ ۾ خطيءَ وارو لاهە خلقيو "
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:385
-msgid "conical"
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:386
-#, fuzzy
-msgid "Create conical gradient"
-msgstr "سڌي ليڪ ۾ خطيءَ وارو لاهە خلقيو "
-
-#. Name
-#: ../src/ui/toolbar/mesh-toolbar.cpp:392
-msgid "New:"
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:451
-#, fuzzy
-msgid "Rows"
-msgstr "قطارون "
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:451
-#: ../share/extensions/guides_creator.inx.h:5
-#: ../share/extensions/layout_nup.inx.h:12
-msgid "Rows:"
-msgstr "قطارون "
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:451
-#, fuzzy
-msgid "Number of rows in new mesh"
-msgstr "قطارون جو تعداد "
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:467
-#, fuzzy
-msgid "Columns"
-msgstr "ڪالم: "
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:467
-#: ../share/extensions/guides_creator.inx.h:4
-#, fuzzy
-msgid "Columns:"
-msgstr "ڪالم: "
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:467
-#, fuzzy
-msgid "Number of columns in new mesh"
-msgstr "ڪالمن جو تعداد "
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:481
-#, fuzzy
-msgid "Edit Fill"
-msgstr "ڀراءُ سمپادت ڪريو۔۔۔ "
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:482
-#, fuzzy
-msgid "Edit fill mesh"
-msgstr "ڀراءُ سمپادت ڪريو۔۔۔ "
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:494
-#, fuzzy
-msgid "Edit Stroke"
-msgstr "گهڪو سمپادت ڪريو۔۔۔ "
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:495
-#, fuzzy
-msgid "Edit stroke mesh"
-msgstr "گهڪو سمپادت ڪريو۔۔۔ "
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:507
-#: ../src/ui/toolbar/node-toolbar.cpp:521
-msgid "Show Handles"
-msgstr "هينڊل ڏيکاريو "
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:524
-#: ../src/ui/toolbar/mesh-toolbar.cpp:525
-msgid "WARNING: Mesh SVG Syntax Subject to Change"
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:542
-msgctxt "Type"
-msgid "Coons"
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:548
-msgid "Bicubic"
-msgstr ""
-
-#. Name
-#: ../src/ui/toolbar/mesh-toolbar.cpp:556
-#, fuzzy
-msgid "Smoothing"
-msgstr "لسو ڪري پيو "
-
-#. Label
-#: ../src/ui/toolbar/mesh-toolbar.cpp:557
-msgid "Coons: no smothing. Bicubic: smothing across patch boundaries."
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:576
-#, fuzzy
-msgid "Toggle Sides"
-msgstr "بولڊ ٽوگل ڪريو "
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:577
-msgid "Toggle selected sides between Beziers and lines."
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:580
-#, fuzzy
-msgid "Toggle side:"
-msgstr "بولڊ ٽوگل ڪريو "
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:587
-#, fuzzy
-msgid "Make elliptical"
-msgstr "اِٽيلڪ بڻايو "
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:588
-msgid ""
-"Make selected sides elliptical by changing length of handles. Works best if "
-"handles already approximate ellipse."
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:591
-#, fuzzy
-msgid "Make elliptical:"
-msgstr "اِٽيلڪ بڻايو "
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:598
-#, fuzzy
-msgid "Pick colors:"
-msgstr "مهني جو رنگ: "
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:599
-msgid "Pick colors for selected corner nodes from underneath mesh."
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:602
-#, fuzzy
-msgid "Pick Color"
-msgstr "رنگ ڀريو "
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:610
-#, fuzzy
-msgid "Scale mesh to bounding box:"
-msgstr "حد مقرر ڪندڙ بائونڊنگ باڪس ڏيکاريو "
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:611
-#, fuzzy
-msgid "Scale mesh to fit inside bounding box."
-msgstr "حد مقرر ڪندڙ بائونڊنگ باڪس ڏيکاريو "
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:614
-#, fuzzy
-msgid "Fit mesh"
-msgstr "ڀراءُ سمپادت ڪريو۔۔۔ "
-
-#: ../src/ui/toolbar/node-toolbar.cpp:341
+#: ../src/ui/toolbar/node-toolbar.cpp:247
 msgid "Insert node"
 msgstr "ڳنڍ وجهو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:342
+#: ../src/ui/toolbar/node-toolbar.cpp:248
 msgid "Insert new nodes into selected segments"
 msgstr "چونڊيل عناسرن ۾ نيون ڳنڍيون وجهو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:345
+#: ../src/ui/toolbar/node-toolbar.cpp:251
 msgid "Insert"
 msgstr "وجهو"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:356
+#: ../src/ui/toolbar/node-toolbar.cpp:262
 #, fuzzy
 msgid "Insert node at min X"
 msgstr "ڳنڍ وجهو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:357
+#: ../src/ui/toolbar/node-toolbar.cpp:263
 #, fuzzy
 msgid "Insert new nodes at min X into selected segments"
 msgstr "چونڊيل عناسرن ۾ نيون ڳنڍيون وجهو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:360
+#: ../src/ui/toolbar/node-toolbar.cpp:266
 #, fuzzy
 msgid "Insert min X"
 msgstr "ڳنڍ وجهو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:366
+#: ../src/ui/toolbar/node-toolbar.cpp:272
 #, fuzzy
 msgid "Insert node at max X"
 msgstr "ڳنڍ وجهو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:367
+#: ../src/ui/toolbar/node-toolbar.cpp:273
 #, fuzzy
 msgid "Insert new nodes at max X into selected segments"
 msgstr "چونڊيل عناسرن ۾ نيون ڳنڍيون وجهو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:370
+#: ../src/ui/toolbar/node-toolbar.cpp:276
 #, fuzzy
 msgid "Insert max X"
 msgstr "وجهو"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:376
+#: ../src/ui/toolbar/node-toolbar.cpp:282
 #, fuzzy
 msgid "Insert node at min Y"
 msgstr "ڳنڍ وجهو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:377
+#: ../src/ui/toolbar/node-toolbar.cpp:283
 #, fuzzy
 msgid "Insert new nodes at min Y into selected segments"
 msgstr "چونڊيل عناسرن ۾ نيون ڳنڍيون وجهو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:380
+#: ../src/ui/toolbar/node-toolbar.cpp:286
 #, fuzzy
 msgid "Insert min Y"
 msgstr "ڳنڍ وجهو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:386
+#: ../src/ui/toolbar/node-toolbar.cpp:292
 #, fuzzy
 msgid "Insert node at max Y"
 msgstr "ڳنڍ وجهو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:387
+#: ../src/ui/toolbar/node-toolbar.cpp:293
 #, fuzzy
 msgid "Insert new nodes at max Y into selected segments"
 msgstr "چونڊيل عناسرن ۾ نيون ڳنڍيون وجهو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:390
+#: ../src/ui/toolbar/node-toolbar.cpp:296
 #, fuzzy
 msgid "Insert max Y"
 msgstr "وجهو"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:398
+#: ../src/ui/toolbar/node-toolbar.cpp:304
 msgid "Delete selected nodes"
 msgstr "چونڊيل ڳنڍيون خارج ڪريو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:409
+#: ../src/ui/toolbar/node-toolbar.cpp:315
 msgid "Join selected nodes"
 msgstr "چونڊيل ڳنڍيون ڳنڍيو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:412
+#: ../src/ui/toolbar/node-toolbar.cpp:318
 msgid "Join"
 msgstr " ڳنڍيو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:420
+#: ../src/ui/toolbar/node-toolbar.cpp:326
 msgid "Break path at selected nodes"
 msgstr "چونڊيل ڳنڍين تي راهە ٽوڙيو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:430
+#: ../src/ui/toolbar/node-toolbar.cpp:336
 msgid "Join with segment"
 msgstr "جزي سان ڳنڍيو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:431
+#: ../src/ui/toolbar/node-toolbar.cpp:337
 msgid "Join selected endnodes with a new segment"
 msgstr "نئين جزي سان چونڊيل اخري ڳنڍيون ڳنڍيون "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:440
+#: ../src/ui/toolbar/node-toolbar.cpp:346
 msgid "Delete segment"
 msgstr "جزا خارج ڪريو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:441
+#: ../src/ui/toolbar/node-toolbar.cpp:347
 msgid "Delete segment between two non-endpoint nodes"
 msgstr "ٻين غير آخري نقطي وارين، ڳنڍين جي وچ ۾ جزو خارج ڪريو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:450
+#: ../src/ui/toolbar/node-toolbar.cpp:356
 msgid "Node Cusp"
 msgstr "ڳنڍ جو سرو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:451
+#: ../src/ui/toolbar/node-toolbar.cpp:357
 msgid "Make selected nodes corner"
 msgstr "چونڊيل ڳنڍين جي ڪنڊ ٺاهيو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:460
+#: ../src/ui/toolbar/node-toolbar.cpp:366
 msgid "Node Smooth"
 msgstr "ڳنڍ لسي "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:461
+#: ../src/ui/toolbar/node-toolbar.cpp:367
 msgid "Make selected nodes smooth"
 msgstr "چونڊيل ڳنڍيون لسيون لسيون ڪريو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:470
+#: ../src/ui/toolbar/node-toolbar.cpp:376
 msgid "Node Symmetric"
 msgstr "هڪ سمان ڳنڍ "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:471
+#: ../src/ui/toolbar/node-toolbar.cpp:377
 msgid "Make selected nodes symmetric"
 msgstr "چونڊيل ڳنڍيون هڪ سمان بڻايو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:480
+#: ../src/ui/toolbar/node-toolbar.cpp:386
 msgid "Node Auto"
 msgstr "ڳنڍ خودڪار "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:481
+#: ../src/ui/toolbar/node-toolbar.cpp:387
 msgid "Make selected nodes auto-smooth"
 msgstr "چونڊيل ڳنڍيون خودڪار- لسيون ڪريو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:490
+#: ../src/ui/toolbar/node-toolbar.cpp:396
 msgid "Node Line"
 msgstr "ڳنڍ جي ليڪ "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:491
+#: ../src/ui/toolbar/node-toolbar.cpp:397
 msgid "Make selected segments lines"
 msgstr "چونڊيل جزن جون ليڪون ٺاهيو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:500
+#: ../src/ui/toolbar/node-toolbar.cpp:406
 msgid "Node Curve"
 msgstr "ڳنڍ جو موڙ "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:501
+#: ../src/ui/toolbar/node-toolbar.cpp:407
 msgid "Make selected segments curves"
 msgstr "چونڊيل جزن جا موڙ ٺاهيو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:510
+#: ../src/ui/toolbar/node-toolbar.cpp:416
 msgid "Show Transform Handles"
 msgstr "روپ بدلڻ جا هينڊل ڏيکاريو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:511
+#: ../src/ui/toolbar/node-toolbar.cpp:417
 msgid "Show transformation handles for selected nodes"
 msgstr "چونڊيل ڳنڍين لاءِ روپ بدلڻ جا هينڊل ڏيکاريو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:522
+#: ../src/ui/toolbar/node-toolbar.cpp:427
 msgid "Show Bezier handles of selected nodes"
 msgstr "چونڊيل ڳنڍين جا بيزئر هينڊل ڏيکاريو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:532
+#: ../src/ui/toolbar/node-toolbar.cpp:436
 msgid "Show Outline"
 msgstr "روپريکا ڏيکاريو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:533
+#: ../src/ui/toolbar/node-toolbar.cpp:437
 msgid "Show path outline (without path effects)"
 msgstr "راهە جي روپريکا ڏيکاريو (راهە جي اَثرن بنا) "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:555
+#: ../src/ui/toolbar/node-toolbar.cpp:457
 msgid "Edit clipping paths"
 msgstr "ڪلپنگ راهون سمپادت ڪريو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:556
+#: ../src/ui/toolbar/node-toolbar.cpp:458
 msgid "Show clipping path(s) of selected object(s)"
 msgstr "چونڊيل شئە (شين) جي ڪلپنگ راهە (جون ڪلپنگ راهون) ڏيکاريو"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:566
+#: ../src/ui/toolbar/node-toolbar.cpp:467
 msgid "Edit masks"
 msgstr " مکؤٽو سمپادت ڪريو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:567
+#: ../src/ui/toolbar/node-toolbar.cpp:468
 msgid "Show mask(s) of selected object(s)"
 msgstr "چونڊيل شئە (شين) جو مکؤٽو (جا مکؤٽا) ڏيکاريو "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:581
+#: ../src/ui/toolbar/node-toolbar.cpp:480
 msgid "X coordinate:"
 msgstr "X مساوي: "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:581
+#: ../src/ui/toolbar/node-toolbar.cpp:480
 msgid "X coordinate of selected node(s)"
 msgstr "چونڊيل ڳنڍ (ڳنڍين) جو X مساوي "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:598
+#: ../src/ui/toolbar/node-toolbar.cpp:500
 msgid "Y coordinate:"
 msgstr "Y مساوي "
 
-#: ../src/ui/toolbar/node-toolbar.cpp:598
+#: ../src/ui/toolbar/node-toolbar.cpp:500
 msgid "Y coordinate of selected node(s)"
 msgstr "چونڊيل ڳنڍ (ڳنڍين) جو Y  مساوي "
 
 #. Name
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:137
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:85
 msgid "Fill by"
 msgstr "دواران ڀريو "
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:159
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:106
 msgid "Fill Threshold"
 msgstr "دڪي ڀريو "
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:160
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:107
 msgid ""
 "The maximum allowed difference between the clicked pixel and the neighboring "
 "pixels to be counted in the fill"
@@ -27917,32 +27920,32 @@ msgstr ""
 "ڪلڪ ڪيل پڪسل ۽ پاسي جي پڪسلن جي وچ ۾ وڌ ۾ وڌ اِجازت مليل فرق ڀراو ۾ ڳڻيو "
 "ويندو۔ "
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:188
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:138
 msgid "Grow/shrink by"
 msgstr "دواران وڌايو/سُسايو "
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:188
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:138
 msgid "Grow/shrink by:"
 msgstr "دواران وڌايو/سُسايو "
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:189
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:139
 msgid ""
 "The amount to grow (positive) or shrink (negative) the created fill path"
 msgstr "خلقيل ڀراو جي راهە جي واڌ (شفي) يا سوس (نفي) جو تعداد "
 
 #. Name
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:215
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:171
 msgid "Close gaps"
 msgstr "خال بند ڪريو "
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:236
-#: ../src/ui/toolbar/pencil-toolbar.cpp:580
-#: ../src/ui/toolbar/spiral-toolbar.cpp:290
-#: ../src/ui/toolbar/star-toolbar.cpp:588
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:191
+#: ../src/ui/toolbar/pencil-toolbar.cpp:199
+#: ../src/ui/toolbar/spiral-toolbar.cpp:158
+#: ../src/ui/toolbar/star-toolbar.cpp:229
 msgid "Defaults"
 msgstr "ڊيفالٽس "
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:237
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:192
 msgid ""
 "Reset paint bucket parameters to defaults (use Inkscape Preferences > Tools "
 "to change defaults)"
@@ -27950,143 +27953,61 @@ msgstr ""
 "پينٽ بالٽي جي ڊيفالٽ روپ ۾ نئين سر سيٽ ڪريو (اِنڪسڪيپ ترجيحون > ڊيفالٽسن "
 "بدلائڻ لاءِ اُپڪرڻ) "
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:133
-msgid "Bezier"
-msgstr "بيزئر "
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:134
-msgid "Create regular Bezier path"
-msgstr "نيمائتي بيزئر راهە خلقيو "
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:140
-msgid "Create Spiro path"
-msgstr "اِسپائرو راهە خلقيو "
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:146
-#, fuzzy
-msgid "Create BSpline path"
-msgstr "اِسپائرو راهە خلقيو "
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:152
-msgid "Zigzag"
-msgstr "آڏي ترڇي "
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:153
-msgid "Create a sequence of straight line segments"
-msgstr "سڌي ليڪ جي جزن جو سلسلو خلقيو "
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:158
-msgid "Paraxial"
-msgstr "پيرا ڪسئل "
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:159
-msgid "Create a sequence of paraxial line segments"
-msgstr "پيرا ڪسئل ليڪ جي جزن جو سلسلو خلقيو "
-
-#. Label
-#: ../src/ui/toolbar/pencil-toolbar.cpp:169
-msgid "Mode of new lines drawn by this tool"
-msgstr "هن اُپڪرڻ سان نيون ليڪون ڪڍڻ جو ڍنگ "
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:184
-#: ../src/ui/toolbar/pencil-toolbar.cpp:185
-msgid "LPE spiro or bspline flatten"
-msgstr ""
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:222
-#, fuzzy
-msgctxt "Freehand shape"
-msgid "None"
-msgstr "ڪجهە بە نە "
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:223
-msgid "Triangle in"
-msgstr "ٽڪنڊي ۾ "
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:224
-msgid "Triangle out"
-msgstr "ٽڪنڊي کان ٻاهر "
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:226
-msgid "From clipboard"
-msgstr "ڪلپ بورڊ مان: "
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:227
-#, fuzzy
-msgid "Bend from clipboard"
-msgstr "ڪلپ بورڊ مان: "
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:228
-#, fuzzy
-msgid "Last applied"
-msgstr "آخري سلائڊ "
-
-#. Name
-#: ../src/ui/toolbar/pencil-toolbar.cpp:250
-#, fuzzy
-msgid "Shape"
-msgstr "آڪار "
-
-#. Label
-#: ../src/ui/toolbar/pencil-toolbar.cpp:251
-msgid "Shape of new paths drawn by this tool"
-msgstr "هن اُپڪرڻ سان نين راهن جي نقشن جي آڪارُ "
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:503
+#: ../src/ui/toolbar/pencil-toolbar.cpp:110
 #, fuzzy
 msgid "Min pressure"
 msgstr "دٻاءُ "
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:503
+#: ../src/ui/toolbar/pencil-toolbar.cpp:110
 msgid "Min:"
 msgstr ""
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:503
+#: ../src/ui/toolbar/pencil-toolbar.cpp:110
 #, fuzzy
 msgid "Min percent of pressure"
 msgstr "هن دستاويز جي موضوع جو مختصر ليکو"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:521
+#: ../src/ui/toolbar/pencil-toolbar.cpp:132
 #, fuzzy
 msgid "Max pressure"
 msgstr "دٻاءُ "
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:521
+#: ../src/ui/toolbar/pencil-toolbar.cpp:132
 msgid "Max:"
 msgstr ""
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:521
+#: ../src/ui/toolbar/pencil-toolbar.cpp:132
 #, fuzzy
 msgid "Max percent of pressure"
 msgstr "ٽشو اُڻت تي ميڻ جي ڇپائي "
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:538
-#: ../src/ui/toolbar/pencil-toolbar.cpp:539
+#: ../src/ui/toolbar/pencil-toolbar.cpp:153
+#: ../src/ui/toolbar/pencil-toolbar.cpp:154
 #, fuzzy
 msgid "Use pressure input"
 msgstr "رٻڙ جون ترجيحون "
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:556
+#: ../src/ui/toolbar/pencil-toolbar.cpp:171
 msgid "(many nodes, rough)"
 msgstr "(گهڻيون ڳنڍيون، کهرو) "
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:556
+#: ../src/ui/toolbar/pencil-toolbar.cpp:171
 msgid "(few nodes, smooth)"
 msgstr "(ٿوريون ڳنڍيون، لسو) "
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:559
+#: ../src/ui/toolbar/pencil-toolbar.cpp:174
 msgid "Smoothing:"
 msgstr "لسو ڪري پيو "
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:559
+#: ../src/ui/toolbar/pencil-toolbar.cpp:174
 msgid "Smoothing: "
 msgstr "لسو ڪري پيو:"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:560
+#: ../src/ui/toolbar/pencil-toolbar.cpp:175
 msgid "How much smoothing (simplifying) is applied to the line"
 msgstr "لائين کي ڪيترو لسو (آسان) لاڳو ڪيو وڃي ٿو "
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:581
+#: ../src/ui/toolbar/pencil-toolbar.cpp:200
 msgid ""
 "Reset pencil parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -28094,21 +28015,99 @@ msgstr ""
 "پنسل پئمانا ڊيفالٽس روپ ۾ نئين سر سيٽ ڪريو (اِنڪسڪيپ ترجيحون > ڊيفالٽس بدلائڻ "
 "لاءِ اُپڪرڻ اِستعمال ڪريو "
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:590
-#: ../src/ui/toolbar/pencil-toolbar.cpp:591
+#: ../src/ui/toolbar/pencil-toolbar.cpp:209
+#: ../src/ui/toolbar/pencil-toolbar.cpp:210
 msgid "LPE based interactive simplify"
 msgstr ""
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:608
-#: ../src/ui/toolbar/pencil-toolbar.cpp:609
+#: ../src/ui/toolbar/pencil-toolbar.cpp:226
+#: ../src/ui/toolbar/pencil-toolbar.cpp:227
 msgid "LPE simplify flatten"
 msgstr ""
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:124
-msgid "Change rectangle"
-msgstr "گوني ڪنڊ چؤڪنڊو بدلايو "
+#: ../src/ui/toolbar/pencil-toolbar.cpp:303
+msgid "Bezier"
+msgstr "بيزئر "
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:322
+#: ../src/ui/toolbar/pencil-toolbar.cpp:304
+msgid "Create regular Bezier path"
+msgstr "نيمائتي بيزئر راهە خلقيو "
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:310
+msgid "Create Spiro path"
+msgstr "اِسپائرو راهە خلقيو "
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:316
+#, fuzzy
+msgid "Create BSpline path"
+msgstr "اِسپائرو راهە خلقيو "
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:322
+msgid "Zigzag"
+msgstr "آڏي ترڇي "
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:323
+msgid "Create a sequence of straight line segments"
+msgstr "سڌي ليڪ جي جزن جو سلسلو خلقيو "
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:328
+msgid "Paraxial"
+msgstr "پيرا ڪسئل "
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:329
+msgid "Create a sequence of paraxial line segments"
+msgstr "پيرا ڪسئل ليڪ جي جزن جو سلسلو خلقيو "
+
+#. Label
+#: ../src/ui/toolbar/pencil-toolbar.cpp:339
+msgid "Mode of new lines drawn by this tool"
+msgstr "هن اُپڪرڻ سان نيون ليڪون ڪڍڻ جو ڍنگ "
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:354
+#: ../src/ui/toolbar/pencil-toolbar.cpp:355
+msgid "LPE spiro or bspline flatten"
+msgstr ""
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:418
+#, fuzzy
+msgctxt "Freehand shape"
+msgid "None"
+msgstr "ڪجهە بە نە "
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:419
+msgid "Triangle in"
+msgstr "ٽڪنڊي ۾ "
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:420
+msgid "Triangle out"
+msgstr "ٽڪنڊي کان ٻاهر "
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:422
+msgid "From clipboard"
+msgstr "ڪلپ بورڊ مان: "
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:423
+#, fuzzy
+msgid "Bend from clipboard"
+msgstr "ڪلپ بورڊ مان: "
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:424
+#, fuzzy
+msgid "Last applied"
+msgstr "آخري سلائڊ "
+
+#. Name
+#: ../src/ui/toolbar/pencil-toolbar.cpp:446
+#, fuzzy
+msgid "Shape"
+msgstr "آڪار "
+
+#. Label
+#: ../src/ui/toolbar/pencil-toolbar.cpp:447
+msgid "Shape of new paths drawn by this tool"
+msgstr "هن اُپڪرڻ سان نين راهن جي نقشن جي آڪارُ "
+
+#: ../src/ui/toolbar/rect-toolbar.cpp:116
 #, fuzzy
 msgid "W:"
 msgstr ""
@@ -28117,52 +28116,52 @@ msgstr ""
 "#-#-#-#-#  sd.po (inkscape)  #-#-#-#-#\n"
 " W:"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:322
+#: ../src/ui/toolbar/rect-toolbar.cpp:116
 msgid "Width of rectangle"
 msgstr "گوني ڪنڊ چؤڪنڊي جي ويڪر "
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:338
+#: ../src/ui/toolbar/rect-toolbar.cpp:140
 msgid "H:"
 msgstr "H:"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:338
+#: ../src/ui/toolbar/rect-toolbar.cpp:140
 msgid "Height of rectangle"
 msgstr "گوني ڪنڊ چؤڪنڊي اوچائي "
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:351
-#: ../src/ui/toolbar/rect-toolbar.cpp:365
+#: ../src/ui/toolbar/rect-toolbar.cpp:160
+#: ../src/ui/toolbar/rect-toolbar.cpp:182
 msgid "not rounded"
 msgstr "گولاڪار ناهي "
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:354
+#: ../src/ui/toolbar/rect-toolbar.cpp:163
 msgid "Horizontal radius of rounded corners"
 msgstr "گولاڪار ڪنڊن جي اُفقي ترجيا "
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:368
+#: ../src/ui/toolbar/rect-toolbar.cpp:185
 msgid "Vertical radius of rounded corners"
 msgstr "گولاڪار ڪنڊن جي عومدي ترجيا "
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:386
+#: ../src/ui/toolbar/rect-toolbar.cpp:211
 msgid "Not rounded"
 msgstr "گولاڪار ناهي "
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:387
+#: ../src/ui/toolbar/rect-toolbar.cpp:212
 msgid "Make corners sharp"
 msgstr "ڪنڊون تکيون بڻايو "
 
-#: ../src/ui/toolbar/select-toolbar.cpp:261
-msgid "Transform by toolbar"
-msgstr "اوزار پٽيءَ سان روپ ڦيرڻ "
+#: ../src/ui/toolbar/rect-toolbar.cpp:267
+msgid "Change rectangle"
+msgstr "گوني ڪنڊ چؤڪنڊو بدلايو "
 
-#: ../src/ui/toolbar/select-toolbar.cpp:279
+#: ../src/ui/toolbar/select-toolbar.cpp:66
 msgid "Now <b>stroke width</b> is <b>scaled</b> when objects are scaled."
 msgstr "هاڻي جڏهن شيون ماپيون وڃن ٿيون تڏهن گهڪي جي ويڪر ماپي وڃي ٿي "
 
-#: ../src/ui/toolbar/select-toolbar.cpp:281
+#: ../src/ui/toolbar/select-toolbar.cpp:68
 msgid "Now <b>stroke width</b> is <b>not scaled</b> when objects are scaled."
 msgstr "هاڻي جڏهن شيون ماپيون وڃن ٿيون تڏهن گهڪي جي ويڪر نٿي ماپي وڃي "
 
-#: ../src/ui/toolbar/select-toolbar.cpp:292
+#: ../src/ui/toolbar/select-toolbar.cpp:79
 msgid ""
 "Now <b>rounded rectangle corners</b> are <b>scaled</b> when rectangles are "
 "scaled."
@@ -28170,7 +28169,7 @@ msgstr ""
 "هاڻي جڏهن گوني ڪنڊ چوڪنڊا ماپيا وڃن ٿا تڏهن گول گوني ڪنڊ چوڪنڊي جون ڪنڊون "
 "ماپيو وڃن ٿيون "
 
-#: ../src/ui/toolbar/select-toolbar.cpp:294
+#: ../src/ui/toolbar/select-toolbar.cpp:81
 msgid ""
 "Now <b>rounded rectangle corners</b> are <b>not scaled</b> when rectangles "
 "are scaled."
@@ -28178,7 +28177,7 @@ msgstr ""
 "هاڻي جڏهن گوني ڪنڊ چوڪنڊا ماپيا وڃن ٿا تڏهن گول گوني ڪنڊ چؤڪنڊي جون ڪنڊون "
 "نٿون ماپيون وڃن "
 
-#: ../src/ui/toolbar/select-toolbar.cpp:305
+#: ../src/ui/toolbar/select-toolbar.cpp:92
 msgid ""
 "Now <b>gradients</b> are <b>transformed</b> along with their objects when "
 "those are transformed (moved, scaled, rotated, or skewed)."
@@ -28186,7 +28185,7 @@ msgstr ""
 "هاڻي لاهن جو پنهنجي شين سميت روپ بدلايو وڃي ٿو، جڏهن اُنهن جو روپ بدلايو وڃي "
 "ٿو (هلايل، ماپيل، گهمايل، يا ترڇو ڪيل) "
 
-#: ../src/ui/toolbar/select-toolbar.cpp:307
+#: ../src/ui/toolbar/select-toolbar.cpp:94
 msgid ""
 "Now <b>gradients</b> remain <b>fixed</b> when objects are transformed "
 "(moved, scaled, rotated, or skewed)."
@@ -28194,7 +28193,7 @@ msgstr ""
 "شين جو روپ بدلائڻ وقت هاڻي لاهە ٺهرايل رهن ٿا۔ (هلايل، ماپيل، گهمايل، يا "
 "ترڇو ڪيل) "
 
-#: ../src/ui/toolbar/select-toolbar.cpp:318
+#: ../src/ui/toolbar/select-toolbar.cpp:105
 msgid ""
 "Now <b>patterns</b> are <b>transformed</b> along with their objects when "
 "those are transformed (moved, scaled, rotated, or skewed)."
@@ -28202,7 +28201,7 @@ msgstr ""
 "نمونن جو روپ بدلائڻ وقت هاڻي پنهنجي شين سميت اُنهن جو روپ بدلايو وڃي ٿو۔ "
 "(هلايل، ماپيل، گهمايل، يا ترڇو ڪيل) "
 
-#: ../src/ui/toolbar/select-toolbar.cpp:320
+#: ../src/ui/toolbar/select-toolbar.cpp:107
 msgid ""
 "Now <b>patterns</b> remain <b>fixed</b> when objects are transformed (moved, "
 "scaled, rotated, or skewed)."
@@ -28211,49 +28210,49 @@ msgstr ""
 "گهمايل يا ترڇا ڪيل) "
 
 #. name
-#: ../src/ui/toolbar/select-toolbar.cpp:434
+#: ../src/ui/toolbar/select-toolbar.cpp:220
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "X position"
 msgstr "X  حالت "
 
 #. label
-#: ../src/ui/toolbar/select-toolbar.cpp:435
+#: ../src/ui/toolbar/select-toolbar.cpp:221
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "X:"
 msgstr "X:"
 
 #. shortLabel
-#: ../src/ui/toolbar/select-toolbar.cpp:436
+#: ../src/ui/toolbar/select-toolbar.cpp:222
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "Horizontal coordinate of selection"
 msgstr "چونڊ جو اُفقي مساوي "
 
 #. name
-#: ../src/ui/toolbar/select-toolbar.cpp:453
+#: ../src/ui/toolbar/select-toolbar.cpp:241
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "Y position"
 msgstr "Y حالت "
 
 #. label
-#: ../src/ui/toolbar/select-toolbar.cpp:454
+#: ../src/ui/toolbar/select-toolbar.cpp:242
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "Y:"
 msgstr "Y:"
 
 #. shortLabel
-#: ../src/ui/toolbar/select-toolbar.cpp:455
+#: ../src/ui/toolbar/select-toolbar.cpp:243
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "Vertical coordinate of selection"
 msgstr "چونڊ جو عمودي مساوي "
 
 #. name
-#: ../src/ui/toolbar/select-toolbar.cpp:472
+#: ../src/ui/toolbar/select-toolbar.cpp:262
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "Width"
@@ -28266,7 +28265,7 @@ msgstr ""
 "ويڪر "
 
 #. label
-#: ../src/ui/toolbar/select-toolbar.cpp:473
+#: ../src/ui/toolbar/select-toolbar.cpp:263
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "W:"
@@ -28277,139 +28276,139 @@ msgstr ""
 " W:"
 
 #. shortLabel
-#: ../src/ui/toolbar/select-toolbar.cpp:474
+#: ../src/ui/toolbar/select-toolbar.cpp:264
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "Width of selection"
 msgstr "چونڊ جي ويڪر "
 
-#: ../src/ui/toolbar/select-toolbar.cpp:492
+#: ../src/ui/toolbar/select-toolbar.cpp:284
 msgid "Lock width and height"
 msgstr "ويڪر ۽ اوچائيءَ کي ڪلف ڏيو "
 
-#: ../src/ui/toolbar/select-toolbar.cpp:493
+#: ../src/ui/toolbar/select-toolbar.cpp:285
 msgid "When locked, change both width and height by the same proportion"
 msgstr "ڪلف ڏنل وقت، ويڪر ۽ اوچائيءَ ٻنهي کي سمان سراسريءَ ۾ بدلايو "
 
 #. name
-#: ../src/ui/toolbar/select-toolbar.cpp:504
+#: ../src/ui/toolbar/select-toolbar.cpp:295
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "Height"
 msgstr "اوچائي "
 
 #. label
-#: ../src/ui/toolbar/select-toolbar.cpp:505
+#: ../src/ui/toolbar/select-toolbar.cpp:296
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "H:"
 msgstr "H:"
 
 #. shortLabel
-#: ../src/ui/toolbar/select-toolbar.cpp:506
+#: ../src/ui/toolbar/select-toolbar.cpp:297
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "Height of selection"
 msgstr "چونڊ جي اوچائي "
 
-#: ../src/ui/toolbar/select-toolbar.cpp:569
+#: ../src/ui/toolbar/select-toolbar.cpp:354
 msgid "Scale rounded corners"
 msgstr "گول پاتل ڪنڊون ماپيو "
 
-#: ../src/ui/toolbar/select-toolbar.cpp:580
+#: ../src/ui/toolbar/select-toolbar.cpp:365
 msgid "Move gradients"
 msgstr "لاهە هلايو "
 
-#: ../src/ui/toolbar/select-toolbar.cpp:591
+#: ../src/ui/toolbar/select-toolbar.cpp:376
 msgid "Move patterns"
 msgstr "نمونا هلايو "
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:97
-msgid "Change spiral"
-msgstr "پيچدار بدلايو "
+#: ../src/ui/toolbar/select-toolbar.cpp:505
+msgid "Transform by toolbar"
+msgstr "اوزار پٽيءَ سان روپ ڦيرڻ "
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:247
+#: ../src/ui/toolbar/spiral-toolbar.cpp:97
 msgid "just a curve"
 msgstr "فقط هڪ موڙ "
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:247
+#: ../src/ui/toolbar/spiral-toolbar.cpp:97
 msgid "one full revolution"
 msgstr "هڪ پورو بدلاءُ "
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:250
+#: ../src/ui/toolbar/spiral-toolbar.cpp:100
 msgid "Number of turns"
 msgstr "موڙن جو تعداد "
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:250
+#: ../src/ui/toolbar/spiral-toolbar.cpp:100
 msgid "Turns:"
 msgstr "موڙ: "
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:250
+#: ../src/ui/toolbar/spiral-toolbar.cpp:100
 msgid "Number of revolutions"
 msgstr "بدلاون جو تعداد "
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "circle"
 msgstr "گول "
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "edge is much denser"
 msgstr "ڪنار ڪافي وڌيڪ گهاٽي آهي "
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "edge is denser"
 msgstr "ڪنار وڌيڪ گهاٽي "
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "even"
 msgstr "برابر "
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "center is denser"
 msgstr "مرڪز وڌيڪ گهاٽو آهي "
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "center is much denser"
 msgstr "مرڪز ڪافي وڌيڪ گهاٽو آهي "
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:264
+#: ../src/ui/toolbar/spiral-toolbar.cpp:120
 msgid "Divergence"
 msgstr "ٽڙڻ پکڙڻ "
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:264
+#: ../src/ui/toolbar/spiral-toolbar.cpp:120
 msgid "Divergence:"
 msgstr "ٽڙڻ پکڙڻ "
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:264
+#: ../src/ui/toolbar/spiral-toolbar.cpp:120
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
 msgstr "ٻاهرايان ڦيرا ڪيترا گهاٽا/ڇڊا آهن؛ 1 = هڪ سمان "
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:275
+#: ../src/ui/toolbar/spiral-toolbar.cpp:137
 msgid "starts from center"
 msgstr "مرڪز مان شروع ٿئي ٿو "
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:275
+#: ../src/ui/toolbar/spiral-toolbar.cpp:137
 msgid "starts mid-way"
 msgstr "وچين رستي مان شروع ٿئي ٿو "
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:275
+#: ../src/ui/toolbar/spiral-toolbar.cpp:137
 msgid "starts near edge"
 msgstr "ڪنار جي ڀرسان شروع ٿئي ٿو "
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:278
+#: ../src/ui/toolbar/spiral-toolbar.cpp:140
 msgid "Inner radius"
 msgstr "اَندرين ترجيا "
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:278
+#: ../src/ui/toolbar/spiral-toolbar.cpp:140
 msgid "Inner radius:"
 msgstr "اَندرين ترجيا: "
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:278
+#: ../src/ui/toolbar/spiral-toolbar.cpp:140
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr "تمام اندرئين بدلاو جي ترجيا (پيچيدار آڪار سان لاڳاپيل) "
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:291
-#: ../src/ui/toolbar/star-toolbar.cpp:589
+#: ../src/ui/toolbar/spiral-toolbar.cpp:159
+#: ../src/ui/toolbar/star-toolbar.cpp:230
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -28417,751 +28416,682 @@ msgstr ""
 "آڪار جي پئمانن کي ڊيفالٽس ۾ نئين سر سيٽ ڪريو (اِنسڪيپ ترجيحون> ڊيفالئس ۾ "
 "بدلائڻ لاءِ ساڌن)  "
 
+#: ../src/ui/toolbar/spiral-toolbar.cpp:210
+msgid "Change spiral"
+msgstr "پيچدار بدلايو "
+
 #. Width
-#: ../src/ui/toolbar/spray-toolbar.cpp:290
+#: ../src/ui/toolbar/spray-toolbar.cpp:90
 msgid "(narrow spray)"
 msgstr "(سوڙهو اِسپري) "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:290
+#: ../src/ui/toolbar/spray-toolbar.cpp:90
 msgid "(broad spray)"
 msgstr "(ويڪرو اِسپري) "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:293
+#: ../src/ui/toolbar/spray-toolbar.cpp:93
 msgid "The width of the spray area (relative to the visible canvas area)"
 msgstr "اِسپري کيتر جي ويڪر (نظر ايندڙ ڪينواس کيتر موجب) "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:308
+#: ../src/ui/toolbar/spray-toolbar.cpp:113
 #, fuzzy
 msgid "Use the pressure of the input device to alter the width of spray area"
 msgstr "قلم جي ويڪر بدلائڻ لاءِ اِنپٽ اُپڪرڻ جي دٻاو جو اِستعمال ڪريو "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:319
+#: ../src/ui/toolbar/spray-toolbar.cpp:122
 msgid "(maximum mean)"
 msgstr "(وڌ ۾ وڌ اؤست) "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:322
+#: ../src/ui/toolbar/spray-toolbar.cpp:125
 msgid "Focus"
 msgstr "فوڪس "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:322
+#: ../src/ui/toolbar/spray-toolbar.cpp:125
 msgid "Focus:"
 msgstr "فوڪس: "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:322
+#: ../src/ui/toolbar/spray-toolbar.cpp:125
 #, fuzzy
 msgid "0 to spray a spot; increase to enlarge the ring radius"
 msgstr "چٽي کي اِسپري ڪرڻ لاءِ 0۔ رنگ ترجيا وڏي ڪرڻ لاءِ وڌايو "
 
 #. Standard_deviation
-#: ../src/ui/toolbar/spray-toolbar.cpp:335
+#: ../src/ui/toolbar/spray-toolbar.cpp:143
 msgid "(minimum scatter)"
 msgstr "(گهٽ ۾ گهٽ بکراءُ) "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:335
+#: ../src/ui/toolbar/spray-toolbar.cpp:143
 msgid "(maximum scatter)"
 msgstr "(وڌ ۾ وڌ بکراءُ) "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:146
 #, fuzzy
 msgctxt "Spray tool"
 msgid "Scatter"
 msgstr "ڦهلايو"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:146
 #, fuzzy
 msgctxt "Spray tool"
 msgid "Scatter:"
 msgstr "ڦهلايو"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:146
 #, fuzzy
 msgid "Increase to scatter sprayed objects"
 msgstr "اِسپري ڪيل شين کي بکرائڻ لاءِ وڌايو "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:358 ../src/ui/tools/spray-tool.cpp:1353
+#: ../src/ui/toolbar/spray-toolbar.cpp:171 ../src/ui/tools/spray-tool.cpp:1353
 msgid "Spray with copies"
 msgstr "ڪاپين سان اِسپري ڪريو"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:359
+#: ../src/ui/toolbar/spray-toolbar.cpp:172
 msgid "Spray copies of the initial selection"
 msgstr "شروعاتي چونڊ جا نقل اِسپري ڪريو "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:364 ../src/ui/tools/spray-tool.cpp:1357
+#: ../src/ui/toolbar/spray-toolbar.cpp:177 ../src/ui/tools/spray-tool.cpp:1357
 msgid "Spray with clones"
 msgstr "ڪلونن سان اِسپري ڪريو "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:365
+#: ../src/ui/toolbar/spray-toolbar.cpp:178
 msgid "Spray clones of the initial selection"
 msgstr "شروعاتي چونڊ جا ڪلون اِسپري ڪريو "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:371
+#: ../src/ui/toolbar/spray-toolbar.cpp:184
 msgid "Spray single path"
 msgstr "وحد راهە اِسپري ڪريو "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:372
+#: ../src/ui/toolbar/spray-toolbar.cpp:185
 msgid "Spray objects in a single path"
 msgstr "واحد راهە ۾ شيون اِسپري ڪريو "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:378
+#: ../src/ui/toolbar/spray-toolbar.cpp:191
 #, fuzzy
 msgid "Delete sprayed items"
 msgstr "لاهە جي روڪ ڪڍي ڇڏيو "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:379
+#: ../src/ui/toolbar/spray-toolbar.cpp:192
 #, fuzzy
 msgid "Delete sprayed items from selection"
 msgstr "چونڊ مان موڙ حاصل ڪريو۔۔۔ "
 
 #. Population
-#: ../src/ui/toolbar/spray-toolbar.cpp:402
+#: ../src/ui/toolbar/spray-toolbar.cpp:212
 msgid "(low population)"
 msgstr "(گهٽ آبادي) "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:402
+#: ../src/ui/toolbar/spray-toolbar.cpp:212
 msgid "(high population)"
 msgstr "(وڌيڪ آبادي) "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:405
+#: ../src/ui/toolbar/spray-toolbar.cpp:215
 msgid "Amount"
 msgstr "مقدارُ "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:406
+#: ../src/ui/toolbar/spray-toolbar.cpp:216
 #, fuzzy
 msgid "Adjusts the number of items sprayed per click"
 msgstr "في ڪلڪ اِسپري ڪيل شين جو تعداد ٺهڪائي ٿو "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:422
+#: ../src/ui/toolbar/spray-toolbar.cpp:236
 #, fuzzy
 msgid ""
 "Use the pressure of the input device to alter the amount of sprayed objects"
 msgstr "اِسپري ڪيل شين جو مقدار بدلائڻ لاءِ اِنپٽ اُپڪرڻ جو دٻاءُ اِستعمال ڪريو "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:432
+#: ../src/ui/toolbar/spray-toolbar.cpp:244
 msgid "(high rotation variation)"
 msgstr "(اوچ  گهماو جو تفاوت) "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:435
+#: ../src/ui/toolbar/spray-toolbar.cpp:247
 msgid "Rotation"
 msgstr "گهماءُ "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:435
+#: ../src/ui/toolbar/spray-toolbar.cpp:247
 msgid "Rotation:"
 msgstr "گهماءُ: "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:437
+#: ../src/ui/toolbar/spray-toolbar.cpp:249
 #, fuzzy, no-c-format
 msgid ""
 "Variation of the rotation of the sprayed objects; 0% for the same rotation "
 "than the original object"
 msgstr "اِسپري ڪيل شين جي گهماو جو فرق مول شئە جي ڀيٽ ۾ سمان گهماو لاءِ 0%۔ "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:450
+#: ../src/ui/toolbar/spray-toolbar.cpp:266
 msgid "(high scale variation)"
 msgstr "(اوچ ماپ جو تفاوت) "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:453
+#: ../src/ui/toolbar/spray-toolbar.cpp:269
 #, fuzzy
 msgctxt "Spray tool"
 msgid "Scale"
 msgstr "ماپيو"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:453
+#: ../src/ui/toolbar/spray-toolbar.cpp:269
 #, fuzzy
 msgctxt "Spray tool"
 msgid "Scale:"
 msgstr "ماپ: "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:455
+#: ../src/ui/toolbar/spray-toolbar.cpp:271
 #, fuzzy, no-c-format
 msgid ""
 "Variation in the scale of the sprayed objects; 0% for the same scale than "
 "the original object"
 msgstr "اِسپري ڪيل شين جي ماپ ۾ فرق مول شئە جي ڀيٽ ۾ سمان ماپ لاءِ  0%  "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:471
+#: ../src/ui/toolbar/spray-toolbar.cpp:291
 #, fuzzy
 msgid "Use the pressure of the input device to alter the scale of new items"
 msgstr "قلم جي ويڪر بدلائڻ لاءِ اِنپٽ اُپڪرڻ جي دٻاو جو اِستعمال ڪريو "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:483
-#: ../src/ui/toolbar/spray-toolbar.cpp:484
+#: ../src/ui/toolbar/spray-toolbar.cpp:302
+#: ../src/ui/toolbar/spray-toolbar.cpp:303
 msgid ""
 "Pick color from the drawing. You can use clonetiler trace dialog for "
 "advanced effects. In clone mode original fill or stroke colors must be unset."
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:496
-#: ../src/ui/toolbar/spray-toolbar.cpp:497
+#: ../src/ui/toolbar/spray-toolbar.cpp:314
+#: ../src/ui/toolbar/spray-toolbar.cpp:315
 msgid "Pick from center instead average area."
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:509
-#: ../src/ui/toolbar/spray-toolbar.cpp:510
+#: ../src/ui/toolbar/spray-toolbar.cpp:326
+#: ../src/ui/toolbar/spray-toolbar.cpp:327
 msgid "Inverted pick value, retaining color in advanced trace mode"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:522
-#: ../src/ui/toolbar/spray-toolbar.cpp:523
+#: ../src/ui/toolbar/spray-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:339
 #, fuzzy
 msgid "Apply picked color to fill"
 msgstr "ڀراو ۾ آخري چونڊيل رنگ اِستعمال ڪريو "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:535
-#: ../src/ui/toolbar/spray-toolbar.cpp:536
+#: ../src/ui/toolbar/spray-toolbar.cpp:350
+#: ../src/ui/toolbar/spray-toolbar.cpp:351
 #, fuzzy
 msgid "Apply picked color to stroke"
 msgstr "گهڪي ۾ آخري چونڊيل رنگ اِستعمال ڪريو "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:548
-#: ../src/ui/toolbar/spray-toolbar.cpp:549
+#: ../src/ui/toolbar/spray-toolbar.cpp:362
+#: ../src/ui/toolbar/spray-toolbar.cpp:363
 msgid "No overlap between colors"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:561
-#: ../src/ui/toolbar/spray-toolbar.cpp:562
+#: ../src/ui/toolbar/spray-toolbar.cpp:374
+#: ../src/ui/toolbar/spray-toolbar.cpp:375
 msgid "Apply over transparent areas"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:574
-#: ../src/ui/toolbar/spray-toolbar.cpp:575
+#: ../src/ui/toolbar/spray-toolbar.cpp:386
+#: ../src/ui/toolbar/spray-toolbar.cpp:387
 msgid "Apply over no transparent areas"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:587
-#: ../src/ui/toolbar/spray-toolbar.cpp:588
+#: ../src/ui/toolbar/spray-toolbar.cpp:398
+#: ../src/ui/toolbar/spray-toolbar.cpp:399
 #, fuzzy
 msgid "Prevent overlapping objects"
 msgstr "مهرباني ڪري شئە چونڊيو"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:599
+#: ../src/ui/toolbar/spray-toolbar.cpp:409
 #, fuzzy
 msgid "(minimum offset)"
 msgstr "(سڀني کان گهٽ زورُ) "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:599
+#: ../src/ui/toolbar/spray-toolbar.cpp:409
 #, fuzzy
 msgid "(maximum offset)"
 msgstr "(سڀني کان وڌيڪ زورُ) "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:602
+#: ../src/ui/toolbar/spray-toolbar.cpp:412
 #, fuzzy
 msgid "Offset %"
 msgstr "آفسيٽ "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:602
+#: ../src/ui/toolbar/spray-toolbar.cpp:412
 #, fuzzy
 msgid "Offset %:"
 msgstr "آفسيٽ: "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:603
+#: ../src/ui/toolbar/spray-toolbar.cpp:413
 msgid "Increase to segregate objects more (value in percent)"
 msgstr ""
 
-#: ../src/ui/toolbar/star-toolbar.cpp:101
-msgid "Star: Change number of corners"
-msgstr "تارو: ڪنڊن جو عدد بدليو"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:154
-msgid "Star: Change spoke ratio"
-msgstr "تارو: اسپوڪ سراسري بدلايو "
-
-#: ../src/ui/toolbar/star-toolbar.cpp:200
-msgid "Make polygon"
-msgstr "گهڻ ڪنڍو ٺاهيو "
-
-#: ../src/ui/toolbar/star-toolbar.cpp:200
-msgid "Make star"
-msgstr "تارو بڻايو "
-
-#: ../src/ui/toolbar/star-toolbar.cpp:239
-msgid "Star: Change rounding"
-msgstr "تارو: گولاڪار بدلايو "
-
-#: ../src/ui/toolbar/star-toolbar.cpp:279
-msgid "Star: Change randomization"
-msgstr "تارو: بيترتيب ڪرڻ بدلايو۔ "
-
-#: ../src/ui/toolbar/star-toolbar.cpp:488
+#: ../src/ui/toolbar/star-toolbar.cpp:110
 msgid "Regular polygon (with one handle) instead of a star"
 msgstr "تاري بدران نيمائتو گڻڪنڊو (هڪ هينڊل سان) "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:494
+#: ../src/ui/toolbar/star-toolbar.cpp:116
 msgid "Star instead of a regular polygon (with one handle)"
 msgstr "نيمائتي گهڻڪندي بدران تارو (هڪ هينڊل سان) "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:516
+#: ../src/ui/toolbar/star-toolbar.cpp:137
 msgid "triangle/tri-star"
 msgstr "ٽڪنڊو/ ٽنڪنڊن وارو تارو "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:516
+#: ../src/ui/toolbar/star-toolbar.cpp:137
 msgid "square/quad-star"
 msgstr "چورس/چئن ڪنڊن وارو تارو "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:516
+#: ../src/ui/toolbar/star-toolbar.cpp:137
 msgid "pentagon/five-pointed star"
 msgstr "پنج ڪنڊو/ پنجن نقطن وارو  تارو "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:516
+#: ../src/ui/toolbar/star-toolbar.cpp:137
 msgid "hexagon/six-pointed star"
 msgstr "ڇهە ڪنڊو/ڇهن نقطن وارو تارو "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:519
+#: ../src/ui/toolbar/star-toolbar.cpp:140
 msgid "Corners"
 msgstr "ڪنڊون "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:519
+#: ../src/ui/toolbar/star-toolbar.cpp:140
 msgid "Corners:"
 msgstr "ڪنڊون: "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:519
+#: ../src/ui/toolbar/star-toolbar.cpp:140
 msgid "Number of corners of a polygon or star"
 msgstr "گهڻڪنڊي يا تاري جي ڪنڊن جو تعداد "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "thin-ray star"
 msgstr "باريڪ - ڪرڻي وارو تارو "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "pentagram"
 msgstr "پينٽاگرام "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "hexagram"
 msgstr "هيڪساگرام "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "heptagram"
 msgstr "هيپٽاگرام "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "octagram"
 msgstr "اوڪٽاگرام "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "regular polygon"
 msgstr "نيمائتو گهڻڪنڊو "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:535
+#: ../src/ui/toolbar/star-toolbar.cpp:162
 msgid "Spoke ratio"
 msgstr "اِسپوڪ سراسري "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:535
+#: ../src/ui/toolbar/star-toolbar.cpp:162
 msgid "Spoke ratio:"
 msgstr "اسپوڪ سراسري "
 
 #. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
 #. Base radius is the same for the closest handle.
-#: ../src/ui/toolbar/star-toolbar.cpp:538
+#: ../src/ui/toolbar/star-toolbar.cpp:165
 msgid "Base radius to tip radius ratio"
 msgstr "آڌار ترجيا کان چوٽيءَ واري ترجيا جي سراسري "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
-#: ../src/ui/toolbar/star-toolbar.cpp:557
+#: ../src/ui/toolbar/star-toolbar.cpp:187
+#: ../src/ui/toolbar/star-toolbar.cpp:188
 msgid "stretched"
 msgstr "ڦهلايا "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
+#: ../src/ui/toolbar/star-toolbar.cpp:187
 msgid "twisted"
 msgstr "موڙيل "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
+#: ../src/ui/toolbar/star-toolbar.cpp:187
 msgid "slightly pinched"
 msgstr "ٿورو ڪٽيل "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
+#: ../src/ui/toolbar/star-toolbar.cpp:187
 msgid "NOT rounded"
 msgstr "گولاڪار ناهي "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
+#: ../src/ui/toolbar/star-toolbar.cpp:187
 msgid "slightly rounded"
 msgstr "ٿورو گولاڪارُ "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:557
+#: ../src/ui/toolbar/star-toolbar.cpp:188
 msgid "visibly rounded"
 msgstr "نظر ايندڙ گولاڪار "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:557
+#: ../src/ui/toolbar/star-toolbar.cpp:188
 msgid "well rounded"
 msgstr "سٺو گولاڪار "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:557
+#: ../src/ui/toolbar/star-toolbar.cpp:188
 msgid "amply rounded"
 msgstr "ڪشادو گولاڪار "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:557
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:188
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 msgid "blown up"
 msgstr "اُڏائي ڇڏيل "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:560
+#: ../src/ui/toolbar/star-toolbar.cpp:191
 msgid "Rounded:"
 msgstr "گولاڪار: "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:560
+#: ../src/ui/toolbar/star-toolbar.cpp:191
 msgid "How much rounded are the corners (0 for sharp)"
 msgstr "ڪنڊون ڪيتريون گولاڪار آهن (تيز لاءِ 0) "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 msgid "NOT randomized"
 msgstr "بيترتيب ڪيل ناهي "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 msgid "slightly irregular"
 msgstr "ٿورو بي قاعدي "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 msgid "visibly randomized"
 msgstr "نظر ايندڙ بيترتيب ڪيل "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 msgid "strongly randomized"
 msgstr "پختي نموني بيترتيب ڪيل "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:575
+#: ../src/ui/toolbar/star-toolbar.cpp:211
 msgid "Randomized"
 msgstr "بيترتيب ڪيل "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:575
+#: ../src/ui/toolbar/star-toolbar.cpp:211
 msgid "Randomized:"
 msgstr "بيترتيب ڪيل "
 
-#: ../src/ui/toolbar/star-toolbar.cpp:575
+#: ../src/ui/toolbar/star-toolbar.cpp:211
 msgid "Scatter randomly the corners and angles"
 msgstr "ڪنڊون ۽ ڪوڻ بيترتيب نموني پکيڙيو "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:184
-msgid "Text: Change font family"
-msgstr "متن: فانٽ جو پريوار بدلايو "
+#: ../src/ui/toolbar/star-toolbar.cpp:281
+msgid "Make polygon"
+msgstr "گهڻ ڪنڍو ٺاهيو "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:278
-msgid "Text: Change font size"
-msgstr "متن: فانٽ جو آڪار بدلايو "
+#: ../src/ui/toolbar/star-toolbar.cpp:281
+msgid "Make star"
+msgstr "تارو بڻايو "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:323
-msgid "Text: Change font style"
-msgstr "متن: فانٽ جو نمونو بدلايو "
+#: ../src/ui/toolbar/star-toolbar.cpp:326
+msgid "Star: Change number of corners"
+msgstr "تارو: ڪنڊن جو عدد بدليو"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:362
-#, fuzzy
-msgid "Text: Unset line height."
-msgstr "متن: ليڪ جي اوچائي بدلايو "
+#: ../src/ui/toolbar/star-toolbar.cpp:378
+msgid "Star: Change spoke ratio"
+msgstr "تارو: اسپوڪ سراسري بدلايو "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:439
-msgid "Text: Change superscript or subscript"
-msgstr "متن: مکيە اسڪرپٽ يا گؤڻ اِسڪرپٽ بدلايو "
+#: ../src/ui/toolbar/star-toolbar.cpp:416
+msgid "Star: Change rounding"
+msgstr "تارو: گولاڪار بدلايو "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:580
-msgid "Text: Change alignment"
-msgstr "متن: تربيت بدلايو "
+#: ../src/ui/toolbar/star-toolbar.cpp:455
+msgid "Star: Change randomization"
+msgstr "تارو: بيترتيب ڪرڻ بدلايو۔ "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:713
-msgid "Text: Change line-height"
-msgstr "متن: ليڪ جي اوچائي بدلايو "
-
-#: ../src/ui/toolbar/text-toolbar.cpp:877
-#, fuzzy
-msgid "Text: Change line-height unit"
-msgstr "متن: ليڪ جي اوچائي بدلايو "
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1057
-#, fuzzy
-msgid "Text: Change line spacing mode"
-msgstr "اورئينٽيشن بدلايو "
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1094
-msgid "Text: Change word-spacing"
-msgstr "متن:  لفظن جي وچ جي وٿي بدلايو "
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1134
-msgid "Text: Change letter-spacing"
-msgstr "متن: اکرن جي وچ جي وٿي بدلايو "
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1172
-msgid "Text: Change dx (kern)"
-msgstr "متن: dx (ڪرن) بدلايو "
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1206
-msgid "Text: Change dy"
-msgstr "متن:  dy بدلايو "
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1241
-msgid "Text: Change rotate"
-msgstr "متن: گهماءُ بدلايو "
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1292
-#, fuzzy
-msgid "Text: Change writing mode"
-msgstr "اورئينٽيشن بدلايو "
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1346
-msgid "Text: Change orientation"
-msgstr "اورئينٽيشن بدلايو "
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1394
-#, fuzzy
-msgid "Text: Change direction"
-msgstr "اورئينٽيشن بدلايو "
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1583
-#: ../src/ui/toolbar/text-toolbar.cpp:2040
-#: ../src/ui/widget/font-selector.cpp:32 ../src/ui/widget/font-selector.cpp:137
-#, fuzzy
-msgid "Font size"
-msgstr "فانٽ جو آڪار: "
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1992
+#: ../src/ui/toolbar/text-toolbar.cpp:295
 msgid "Font Family"
 msgstr "فانٽ پريوار "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1993
+#: ../src/ui/toolbar/text-toolbar.cpp:296
 msgid "Select Font Family (Alt-X to access)"
 msgstr "فانٽ پريوار بدلايو (Alt-X لنگهە ۾) "
 
 #. Focus widget
 #. Enable entry completion
-#: ../src/ui/toolbar/text-toolbar.cpp:2003
+#: ../src/ui/toolbar/text-toolbar.cpp:306
 msgid "Select all text with this font-family"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2007
+#: ../src/ui/toolbar/text-toolbar.cpp:310
 msgid "Font not found on system"
 msgstr "سرشتي ۾ فانٽ نە مليو "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2065
+#: ../src/ui/toolbar/text-toolbar.cpp:342
+#: ../src/ui/toolbar/text-toolbar.cpp:2221
+#: ../src/ui/widget/font-selector.cpp:32 ../src/ui/widget/font-selector.cpp:137
+#, fuzzy
+msgid "Font size"
+msgstr "فانٽ جو آڪار: "
+
+#: ../src/ui/toolbar/text-toolbar.cpp:366
 #, fuzzy
 msgid "Font Style"
 msgstr "فانٽ جو آڪار"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2066
+#: ../src/ui/toolbar/text-toolbar.cpp:367
 #, fuzzy
 msgid "Font style"
 msgstr "فانٽ جو آڪار: "
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2083
+#: ../src/ui/toolbar/text-toolbar.cpp:383
 msgid "Toggle Superscript"
 msgstr "مکيە اِسڪرپٽ ٽوگل ڪريو "
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2084
+#: ../src/ui/toolbar/text-toolbar.cpp:384
 msgid "Toggle superscript"
 msgstr "مکيە اسڪرپٽ ٽوگل ڪريو "
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2096
+#: ../src/ui/toolbar/text-toolbar.cpp:395
 msgid "Toggle Subscript"
 msgstr "گؤڻ اِسڪرپٽ ٽوگل ڪريو "
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2097
+#: ../src/ui/toolbar/text-toolbar.cpp:396
 msgid "Toggle subscript"
 msgstr "گؤڻ اِسڪرپٽ ٽوگل ڪريو "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2115
-#: ../src/ui/toolbar/text-toolbar.cpp:2116
+#: ../src/ui/toolbar/text-toolbar.cpp:413
+#: ../src/ui/toolbar/text-toolbar.cpp:414
 msgid "Align left"
 msgstr "کاٻي پاسي تربيت ڏيو "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2121
-#: ../src/ui/toolbar/text-toolbar.cpp:2122
+#: ../src/ui/toolbar/text-toolbar.cpp:419
+#: ../src/ui/toolbar/text-toolbar.cpp:420
 msgid "Align center"
 msgstr "مرڪز ۾ تربيت ڏيو "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2127
-#: ../src/ui/toolbar/text-toolbar.cpp:2128
+#: ../src/ui/toolbar/text-toolbar.cpp:425
+#: ../src/ui/toolbar/text-toolbar.cpp:426
 msgid "Align right"
 msgstr "ساڄي پاسي تربيت ڏيو "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2133
+#: ../src/ui/toolbar/text-toolbar.cpp:431
 msgid "Justify"
 msgstr "ملائي بيهاريو"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2134
+#: ../src/ui/toolbar/text-toolbar.cpp:432
 msgid "Justify (only flowed text)"
 msgstr "ملائي بيهاريو (فقط پرواهت متن) "
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2140
+#: ../src/ui/toolbar/text-toolbar.cpp:438
 msgid "Alignment"
 msgstr "سڌائي "
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2141
+#: ../src/ui/toolbar/text-toolbar.cpp:439
 msgid "Text alignment"
 msgstr "متن جي سڌائي "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2165
+#: ../src/ui/toolbar/text-toolbar.cpp:462
 msgid "Horizontal text"
 msgstr "اُفقي متن "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2170
+#: ../src/ui/toolbar/text-toolbar.cpp:467
 #, fuzzy
 msgid "Vertical — RL"
 msgstr "عمودي "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2171
+#: ../src/ui/toolbar/text-toolbar.cpp:468
 msgid "Vertical text — lines: right to left"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2176
+#: ../src/ui/toolbar/text-toolbar.cpp:473
 #, fuzzy
 msgid "Vertical — LR"
 msgstr "عمودي "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2177
+#: ../src/ui/toolbar/text-toolbar.cpp:474
 msgid "Vertical text — lines: left to right"
 msgstr ""
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2183
+#: ../src/ui/toolbar/text-toolbar.cpp:480
 #, fuzzy
 msgid "Writing mode"
 msgstr "نقش جو ڍنگ "
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2184
+#: ../src/ui/toolbar/text-toolbar.cpp:481
 msgid "Block progression"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2208
+#: ../src/ui/toolbar/text-toolbar.cpp:504
 #, fuzzy
 msgid "Auto glyph orientation"
 msgstr "اورئينٽيشن جي راهە جي پوئواري ڪريو "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2213
+#: ../src/ui/toolbar/text-toolbar.cpp:509
 #, fuzzy
 msgid "Upright"
 msgstr "وڌيڪ چمڪندڙ "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2214
+#: ../src/ui/toolbar/text-toolbar.cpp:510
 #, fuzzy
 msgid "Upright glyph orientation"
 msgstr "متن/ورئينٽيشن "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2219
+#: ../src/ui/toolbar/text-toolbar.cpp:515
 msgid "Sideways"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2220
+#: ../src/ui/toolbar/text-toolbar.cpp:516
 #, fuzzy
 msgid "Sideways glyph orientation"
 msgstr "اورئينٽيشن جي راهە جي پوئواري ڪريو "
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2226
+#: ../src/ui/toolbar/text-toolbar.cpp:522
 msgid "Text orientation"
 msgstr "متن/ورئينٽيشن "
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2227
+#: ../src/ui/toolbar/text-toolbar.cpp:523
 msgid "Text (glyph) orientation in vertical text."
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2251
+#: ../src/ui/toolbar/text-toolbar.cpp:545
 msgid "LTR"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2252
+#: ../src/ui/toolbar/text-toolbar.cpp:546
 #, fuzzy
 msgid "Left to right text"
 msgstr "کاٻي کان ساڄي (0)"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2257
+#: ../src/ui/toolbar/text-toolbar.cpp:551
 msgid "RTL"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2258
+#: ../src/ui/toolbar/text-toolbar.cpp:552
 #, fuzzy
 msgid "Right to left text"
 msgstr "ساڄي کان کاٻي  (180) "
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2264
+#: ../src/ui/toolbar/text-toolbar.cpp:558
 #, fuzzy
 msgid "Text direction"
 msgstr "نشان جو طرف: "
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2265
+#: ../src/ui/toolbar/text-toolbar.cpp:559
 msgid "Text direction for normally horizontal text."
 msgstr ""
 
 #. Drop down menu
-#: ../src/ui/toolbar/text-toolbar.cpp:2291
+#: ../src/ui/toolbar/text-toolbar.cpp:575
 msgid "Smaller spacing"
 msgstr "ننڍيري وٿي "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2291
-#: ../src/ui/toolbar/text-toolbar.cpp:2379
-#: ../src/ui/toolbar/text-toolbar.cpp:2410
+#: ../src/ui/toolbar/text-toolbar.cpp:575
+#: ../src/ui/toolbar/text-toolbar.cpp:666
+#: ../src/ui/toolbar/text-toolbar.cpp:699
 #, fuzzy
 msgctxt "Text tool"
 msgid "Normal"
 msgstr "ساڌارڻ "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2291
+#: ../src/ui/toolbar/text-toolbar.cpp:575
 msgid "Larger spacing"
 msgstr "وڌيري وٿي "
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2296
+#: ../src/ui/toolbar/text-toolbar.cpp:580
 msgid "Line Height"
 msgstr "سٽ جي اوچائي "
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2297
+#: ../src/ui/toolbar/text-toolbar.cpp:581
 msgid "Line:"
 msgstr "سٽ: "
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2298
+#: ../src/ui/toolbar/text-toolbar.cpp:582
 #, fuzzy
 msgid "Spacing between baselines"
 msgstr "سٽن جي وچ ۾ وٿي ڏيڻ (ٽائيمس فانٽ آڪارُ) "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2337
+#: ../src/ui/toolbar/text-toolbar.cpp:625
 #, fuzzy
 msgid "Adaptive"
 msgstr "سان واسطو رکندڙ: "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2338
+#: ../src/ui/toolbar/text-toolbar.cpp:626
 msgid "Line spacing adapts to font size."
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2343
+#: ../src/ui/toolbar/text-toolbar.cpp:631
 #: ../share/extensions/polyhedron_3d.inx.h:54
 msgid "Minimum"
 msgstr "گهٽ ۾ گهٽ "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2344
+#: ../src/ui/toolbar/text-toolbar.cpp:632
 msgid "Line spacing adapts to fonts size with set minimum spacing."
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2348
+#: ../src/ui/toolbar/text-toolbar.cpp:636
 msgid "Even"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2349
+#: ../src/ui/toolbar/text-toolbar.cpp:637
 msgid "Lines evenly spaced."
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2354
+#: ../src/ui/toolbar/text-toolbar.cpp:642
 #, fuzzy
 msgid "Adjustable ☠"
 msgstr "رنگ ٺهڪايو "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2355
+#: ../src/ui/toolbar/text-toolbar.cpp:643
 msgid "Line spacing fully adjustable"
 msgstr ""
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2361
+#: ../src/ui/toolbar/text-toolbar.cpp:649
 #, fuzzy
 msgid "Line Spacing Mode"
 msgstr "سٽن جي وچ ۾ وٿي ڏيڻ "
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2362
+#: ../src/ui/toolbar/text-toolbar.cpp:650
 msgid ""
 "How should multiple baselines be spaced?\n"
 " Adaptive: Line spacing adapts to font size.\n"
@@ -29171,320 +29101,393 @@ msgid ""
 msgstr ""
 
 #. Drop down menu
-#: ../src/ui/toolbar/text-toolbar.cpp:2379
-#: ../src/ui/toolbar/text-toolbar.cpp:2410
+#: ../src/ui/toolbar/text-toolbar.cpp:666
+#: ../src/ui/toolbar/text-toolbar.cpp:699
 msgid "Negative spacing"
 msgstr "نفي وٿي ڏيڻ "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2379
-#: ../src/ui/toolbar/text-toolbar.cpp:2410
+#: ../src/ui/toolbar/text-toolbar.cpp:666
+#: ../src/ui/toolbar/text-toolbar.cpp:699
 msgid "Positive spacing"
 msgstr "شفي وٿي ڏين "
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2384
+#: ../src/ui/toolbar/text-toolbar.cpp:671
 msgid "Word spacing"
 msgstr "لفظن جي وچ ۾ وٿي ڏيڻ "
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2385
+#: ../src/ui/toolbar/text-toolbar.cpp:672
 msgid "Word:"
 msgstr "لفظ: "
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2386
+#: ../src/ui/toolbar/text-toolbar.cpp:673
 msgid "Spacing between words (px)"
 msgstr "لفظن جي وچ ۾ وتي ڏيڻ  (px)"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2415
+#: ../src/ui/toolbar/text-toolbar.cpp:704
 msgid "Letter spacing"
 msgstr "اکرن ۾ وٿي ڏيڻ "
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2416
+#: ../src/ui/toolbar/text-toolbar.cpp:705
 msgid "Letter:"
 msgstr "اَکرُ: "
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2417
+#: ../src/ui/toolbar/text-toolbar.cpp:706
 msgid "Spacing between letters (px)"
 msgstr "اکرن جي وچ ۾ وٿي ڏيڻ  (px) "
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2446
+#: ../src/ui/toolbar/text-toolbar.cpp:736
 msgid "Kerning"
 msgstr "ڪرننگ "
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2447
+#: ../src/ui/toolbar/text-toolbar.cpp:737
 msgid "Kern:"
 msgstr "ڪرن: "
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2448
+#: ../src/ui/toolbar/text-toolbar.cpp:738
 msgid "Horizontal kerning (px)"
 msgstr "اُفقي ڪرننگ  (px) "
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2477
+#: ../src/ui/toolbar/text-toolbar.cpp:768
 msgid "Vertical Shift"
 msgstr "عمودي شفٽ "
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2478
+#: ../src/ui/toolbar/text-toolbar.cpp:769
 msgid "Vert:"
 msgstr "عمودي: "
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2479
+#: ../src/ui/toolbar/text-toolbar.cpp:770
 msgid "Vertical shift (px)"
 msgstr "عمودي شفٽ  (px) "
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2508
+#: ../src/ui/toolbar/text-toolbar.cpp:800
 msgid "Letter rotation"
 msgstr "اکرن جو گهماءُ "
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2509
+#: ../src/ui/toolbar/text-toolbar.cpp:801
 msgid "Rot:"
 msgstr " گهماءُ "
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2510
+#: ../src/ui/toolbar/text-toolbar.cpp:802
 msgid "Character rotation (degrees)"
 msgstr "حرفن جو گهماءُ (دگريون) "
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2534
+#: ../src/ui/toolbar/text-toolbar.cpp:827
 #, fuzzy
 msgid "Unset line height"
 msgstr "سٽن کي ساڄي پاسي ترتيب ڏيو "
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2535
+#: ../src/ui/toolbar/text-toolbar.cpp:828
 msgid "If enabled, line height is set on part of selection. Click to unset."
 msgstr ""
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2547
+#: ../src/ui/toolbar/text-toolbar.cpp:839
 #, fuzzy
 msgid "Show outer style"
 msgstr "پاڇي واري ٻاهرين گونيا"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2548
+#: ../src/ui/toolbar/text-toolbar.cpp:840
 msgid ""
 "Show style of outermost text element. The 'font-size' and 'line-height' "
 "values of the outermost text element determine the minimum line spacing in "
 "the block."
 msgstr ""
 
+#: ../src/ui/toolbar/text-toolbar.cpp:914
+msgid "Text: Change font family"
+msgstr "متن: فانٽ جو پريوار بدلايو "
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1010
+msgid "Text: Change font size"
+msgstr "متن: فانٽ جو آڪار بدلايو "
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1055
+msgid "Text: Change font style"
+msgstr "متن: فانٽ جو نمونو بدلايو "
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1139
+msgid "Text: Change superscript or subscript"
+msgstr "متن: مکيە اسڪرپٽ يا گؤڻ اِسڪرپٽ بدلايو "
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1281
+msgid "Text: Change alignment"
+msgstr "متن: تربيت بدلايو "
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1336
+#, fuzzy
+msgid "Text: Change writing mode"
+msgstr "اورئينٽيشن بدلايو "
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1391
+msgid "Text: Change orientation"
+msgstr "اورئينٽيشن بدلايو "
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1440
+#, fuzzy
+msgid "Text: Change direction"
+msgstr "اورئينٽيشن بدلايو "
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1509
+msgid "Text: Change line-height"
+msgstr "متن: ليڪ جي اوچائي بدلايو "
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1669
+#, fuzzy
+msgid "Text: Change line-height unit"
+msgstr "متن: ليڪ جي اوچائي بدلايو "
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1841
+#, fuzzy
+msgid "Text: Change line spacing mode"
+msgstr "اورئينٽيشن بدلايو "
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1879
+msgid "Text: Change word-spacing"
+msgstr "متن:  لفظن جي وچ جي وٿي بدلايو "
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1920
+msgid "Text: Change letter-spacing"
+msgstr "متن: اکرن جي وچ جي وٿي بدلايو "
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1958
+msgid "Text: Change dx (kern)"
+msgstr "متن: dx (ڪرن) بدلايو "
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1993
+msgid "Text: Change dy"
+msgstr "متن:  dy بدلايو "
+
+#: ../src/ui/toolbar/text-toolbar.cpp:2029
+msgid "Text: Change rotate"
+msgstr "متن: گهماءُ بدلايو "
+
+#: ../src/ui/toolbar/text-toolbar.cpp:2056
+#, fuzzy
+msgid "Text: Unset line height."
+msgstr "متن: ليڪ جي اوچائي بدلايو "
+
 #. Width
-#: ../src/ui/toolbar/tweak-toolbar.cpp:126
+#: ../src/ui/toolbar/tweak-toolbar.cpp:92
 msgid "(pinch tweak)"
 msgstr "(ٿورڙو مروڙو) "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:126
+#: ../src/ui/toolbar/tweak-toolbar.cpp:92
 msgid "(broad tweak)"
 msgstr "(ويڪرو مروڙو) "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:129
+#: ../src/ui/toolbar/tweak-toolbar.cpp:95
 msgid "The width of the tweak area (relative to the visible canvas area)"
 msgstr "مروڙي جي کيتر جي ويڪر (نظر ايندڙ ڪينواس جي کيتر موجب) "
 
 #. Force
-#: ../src/ui/toolbar/tweak-toolbar.cpp:143
+#: ../src/ui/toolbar/tweak-toolbar.cpp:115
 msgid "(minimum force)"
 msgstr "(سڀني کان گهٽ زورُ) "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:143
+#: ../src/ui/toolbar/tweak-toolbar.cpp:115
 msgid "(maximum force)"
 msgstr "(سڀني کان وڌيڪ زورُ) "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:146
+#: ../src/ui/toolbar/tweak-toolbar.cpp:118
 msgid "Force"
 msgstr "زورُ "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:146
+#: ../src/ui/toolbar/tweak-toolbar.cpp:118
 msgid "Force:"
 msgstr "زور: "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:146
+#: ../src/ui/toolbar/tweak-toolbar.cpp:118
 msgid "The force of the tweak action"
 msgstr "مروڙڻ جي ڪاريە جو زور "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:166
+#: ../src/ui/toolbar/tweak-toolbar.cpp:143
 msgid "Move mode"
 msgstr "ڍنگ هلايو "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:167
+#: ../src/ui/toolbar/tweak-toolbar.cpp:144
 msgid "Move objects in any direction"
 msgstr "ڪنهن بە ڏس ۾ شيون هلايو "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:172
+#: ../src/ui/toolbar/tweak-toolbar.cpp:149
 msgid "Move in/out mode"
 msgstr "ڍنگ اَندڊر/ٻاهر هلايو "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:173
+#: ../src/ui/toolbar/tweak-toolbar.cpp:150
 msgid "Move objects towards cursor; with Shift from cursor"
 msgstr "ڪرسر مان شفٽ سان شيون ڪرسر ڏانهن هلايو "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:178
+#: ../src/ui/toolbar/tweak-toolbar.cpp:155
 msgid "Move jitter mode"
 msgstr "جٽر ڍنگ هلايو "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:179
+#: ../src/ui/toolbar/tweak-toolbar.cpp:156
 msgid "Move objects in random directions"
 msgstr "بيترتيب ڏسن ۾ شيون هلايو "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:184
+#: ../src/ui/toolbar/tweak-toolbar.cpp:161
 msgid "Scale mode"
 msgstr "ڍنگ ماپيو "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:185
+#: ../src/ui/toolbar/tweak-toolbar.cpp:162
 msgid "Shrink objects, with Shift enlarge"
 msgstr "شفٽ ڦهلائڻ سان، شيون سوڙهو ڪريو "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:190
+#: ../src/ui/toolbar/tweak-toolbar.cpp:167
 msgid "Rotate mode"
 msgstr "ڍنگ گهمايو "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:191
+#: ../src/ui/toolbar/tweak-toolbar.cpp:168
 msgid "Rotate objects, with Shift counterclockwise"
 msgstr "گهڙيءَ جي ڏس جي اُبتڙ شفٽ سان شيون گهمايو "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:196
+#: ../src/ui/toolbar/tweak-toolbar.cpp:173
 msgid "Duplicate/delete mode"
 msgstr "ڍنگ جو نقل ڪريو/ڍنگ خارج ڪريو "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:197
+#: ../src/ui/toolbar/tweak-toolbar.cpp:174
 msgid "Duplicate objects, with Shift delete"
 msgstr "شفٽ خارج ڪرڻ سان، شين جي نقل ڪريو "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:202
+#: ../src/ui/toolbar/tweak-toolbar.cpp:179
 msgid "Push mode"
 msgstr "ڍنگ کي ڏڪيو "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:203
+#: ../src/ui/toolbar/tweak-toolbar.cpp:180
 msgid "Push parts of paths in any direction"
 msgstr "ڪنهن بە ڏس ۾ راهن جا حصا ڌڪيو "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:208
+#: ../src/ui/toolbar/tweak-toolbar.cpp:185
 msgid "Shrink/grow mode"
 msgstr "ڍنگ سوڙهو ڪريو/ وڌايو "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:209
+#: ../src/ui/toolbar/tweak-toolbar.cpp:186
 msgid "Shrink (inset) parts of paths; with Shift grow (outset)"
 msgstr "شفٽ وڌائڻ سان (آئوٽسيٽ)، راهن جا حصا (اِنسيٽ) سوڙها ڪريو "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:214
+#: ../src/ui/toolbar/tweak-toolbar.cpp:191
 msgid "Attract/repel mode"
 msgstr "ڍنگ آڪرشت ڪريو/ هٽايو"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:215
+#: ../src/ui/toolbar/tweak-toolbar.cpp:192
 msgid "Attract parts of paths towards cursor; with Shift from cursor"
 msgstr "راهن جا حصا ڪرسر طرف آڪرشت ڪريو؛ سرسر وٽان شفٽ سان "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:220
+#: ../src/ui/toolbar/tweak-toolbar.cpp:197
 msgid "Roughen mode"
 msgstr "گهرو ڍنگ "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:221
+#: ../src/ui/toolbar/tweak-toolbar.cpp:198
 msgid "Roughen parts of paths"
 msgstr "راهن جا حصا کهرا ڪريو "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:226
+#: ../src/ui/toolbar/tweak-toolbar.cpp:203
 msgid "Color paint mode"
 msgstr "رنگ جي پينٽ جو ڍنگ "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:227
+#: ../src/ui/toolbar/tweak-toolbar.cpp:204
 msgid "Paint the tool's color upon selected objects"
 msgstr "چونڊيل شين تي اُپڪرڻ جو رنگ پينٽ ڪريو "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:232
+#: ../src/ui/toolbar/tweak-toolbar.cpp:209
 msgid "Color jitter mode"
 msgstr "رنگ ڪنبڻ جو ڍنگ "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:233
+#: ../src/ui/toolbar/tweak-toolbar.cpp:210
 msgid "Jitter the colors of selected objects"
 msgstr "چونڊيل شين جا رنگ ڪنبايو "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:238
+#: ../src/ui/toolbar/tweak-toolbar.cpp:215
 msgid "Blur mode"
 msgstr "ڌنڌلو ڍنگ "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:239
+#: ../src/ui/toolbar/tweak-toolbar.cpp:216
 msgid "Blur selected objects more; with Shift, blur less"
 msgstr "چونڊيل شيون وڌيڪ ڌنڌليون ڪريو، شفٽ سان، گهٽ ڌنڌلو "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:266
+#: ../src/ui/toolbar/tweak-toolbar.cpp:242
 msgid "Channels:"
 msgstr "چئنل "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:278
+#: ../src/ui/toolbar/tweak-toolbar.cpp:253
 msgid "In color mode, act on objects' hue"
 msgstr "رنگ جي ڍنگ ۾، شين جي رنگ تي ڪم ڪريو "
 
 #. TRANSLATORS:  "H" here stands for hue
-#: ../src/ui/toolbar/tweak-toolbar.cpp:282
+#: ../src/ui/toolbar/tweak-toolbar.cpp:257
 #, fuzzy
 msgctxt "Hue"
 msgid "H"
 msgstr "H"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:294
+#: ../src/ui/toolbar/tweak-toolbar.cpp:268
 msgid "In color mode, act on objects' saturation"
 msgstr "رنگ جي ڍنگ ۾، شين جي تراوت تي ڪم ڪريو "
 
 #. TRANSLATORS: "S" here stands for Saturation
-#: ../src/ui/toolbar/tweak-toolbar.cpp:298
+#: ../src/ui/toolbar/tweak-toolbar.cpp:272
 #, fuzzy
 msgctxt "Saturation"
 msgid "S"
 msgstr "S"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:310
+#: ../src/ui/toolbar/tweak-toolbar.cpp:283
 msgid "In color mode, act on objects' lightness"
 msgstr "رنگ جي ڍنگ ۾، شين جي چمڪ تي ڪم ڪريو "
 
 #. TRANSLATORS: "L" here stands for Lightness
-#: ../src/ui/toolbar/tweak-toolbar.cpp:314
+#: ../src/ui/toolbar/tweak-toolbar.cpp:287
 #, fuzzy
 msgctxt "Lightness"
 msgid "L"
 msgstr "L"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:326
+#: ../src/ui/toolbar/tweak-toolbar.cpp:298
 msgid "In color mode, act on objects' opacity"
 msgstr "رنگ جي ڍنگ ۾ شين جي غيرشفافت تي ڪم ڪريو "
 
 #. TRANSLATORS: "O" here stands for Opacity
-#: ../src/ui/toolbar/tweak-toolbar.cpp:330
+#: ../src/ui/toolbar/tweak-toolbar.cpp:302
 #, fuzzy
 msgctxt "Opacity"
 msgid "O"
 msgstr "O"
 
 #. Fidelity
-#: ../src/ui/toolbar/tweak-toolbar.cpp:341
+#: ../src/ui/toolbar/tweak-toolbar.cpp:312
 msgid "(rough, simplified)"
 msgstr "(کهرو، آسان بڻايل) "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:341
+#: ../src/ui/toolbar/tweak-toolbar.cpp:312
 msgid "(fine, but many nodes)"
 msgstr "(سٺو، پر گهڻيون ڳنڍيون) "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:344
+#: ../src/ui/toolbar/tweak-toolbar.cpp:315
 msgid "Fidelity"
 msgstr "تد روپتا "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:344
+#: ../src/ui/toolbar/tweak-toolbar.cpp:315
 msgid "Fidelity:"
 msgstr "تد روپتا "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:345
+#: ../src/ui/toolbar/tweak-toolbar.cpp:316
 msgid ""
 "Low fidelity simplifies paths; high fidelity preserves path features but may "
 "generate a lot of new nodes"
@@ -29492,7 +29495,7 @@ msgstr ""
 "گهٽ تد روپتا راهن کي آسان بڻائي تي، اوچ تدروپتا راهە جون خاصيتون محفوظ رکي "
 "ٿي پر تمام گهڻيون ڳنڍيون خلقي سگهي ٿي "
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:364
+#: ../src/ui/toolbar/tweak-toolbar.cpp:340
 msgid "Use the pressure of the input device to alter the force of tweak action"
 msgstr "مروڙڻ جي ڪاريە جو زور بدلائڻ لاءِ اِنپٽ اُپڪرڻ جو دٻاءُ اِستعمال ڪريو "
 
@@ -34796,7 +34799,7 @@ msgstr "SVG جيان سانڍيو "
 msgid "Note:"
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:2330
+#: ../src/widgets/desktop-widget.cpp:2329
 msgid "Create guide"
 msgstr "رهنما خلقيو "
 
@@ -35242,140 +35245,140 @@ msgstr "TBD"
 msgid "Style of Paint Bucket fill objects"
 msgstr "رنگ جي بالٽيءَ جي ڀراو جي شين جو نمونو "
 
-#: ../src/widgets/toolbox.cpp:1318
+#: ../src/widgets/toolbox.cpp:1320
 msgid "Bounding box"
 msgstr "پائونڊنگ باڪس "
 
-#: ../src/widgets/toolbox.cpp:1318
+#: ../src/widgets/toolbox.cpp:1320
 #, fuzzy
 msgid "Snap bounding boxes"
 msgstr "بائونڊنگ باڪس جون ڪنڊون ڪٽيو "
 
-#: ../src/widgets/toolbox.cpp:1327
+#: ../src/widgets/toolbox.cpp:1329
 msgid "Bounding box edges"
 msgstr "بائونڊنگ باڪس جا ڪنارا "
 
-#: ../src/widgets/toolbox.cpp:1327
+#: ../src/widgets/toolbox.cpp:1329
 msgid "Snap to edges of a bounding box"
 msgstr "بائونڊنگ باڪس جا ڪنارا ڪٽيو "
 
-#: ../src/widgets/toolbox.cpp:1336
+#: ../src/widgets/toolbox.cpp:1338
 msgid "Bounding box corners"
 msgstr "بائونڊنگ باڪس جون ڪنڊون "
 
-#: ../src/widgets/toolbox.cpp:1336
+#: ../src/widgets/toolbox.cpp:1338
 msgid "Snap bounding box corners"
 msgstr "بائونڊنگ باڪس جون ڪنڊون ڪٽيو "
 
-#: ../src/widgets/toolbox.cpp:1345
+#: ../src/widgets/toolbox.cpp:1347
 msgid "BBox Edge Midpoints"
 msgstr "بي باڪس جي ڪناري جا وچ جا نقطا "
 
-#: ../src/widgets/toolbox.cpp:1345
+#: ../src/widgets/toolbox.cpp:1347
 #, fuzzy
 msgid "Snap midpoints of bounding box edges"
 msgstr "بائنڊنگ باڪس جي ڪنارن جي وچ جي نقطن کان ۽ اوس تائين ڪٽيو "
 
-#: ../src/widgets/toolbox.cpp:1355
+#: ../src/widgets/toolbox.cpp:1357
 msgid "BBox Centers"
 msgstr "بي باڪس جو مرڪز "
 
-#: ../src/widgets/toolbox.cpp:1355
+#: ../src/widgets/toolbox.cpp:1357
 #, fuzzy
 msgid "Snapping centers of bounding boxes"
 msgstr "بائنڊنگ باڪس جي مرڪزن کان ۽ اوس تائين ڪٽيو "
 
-#: ../src/widgets/toolbox.cpp:1364
+#: ../src/widgets/toolbox.cpp:1366
 #, fuzzy
 msgid "Snap nodes, paths, and handles"
 msgstr "ڳنڍيون ۽ هينڊل ڪٽيو "
 
-#: ../src/widgets/toolbox.cpp:1372
+#: ../src/widgets/toolbox.cpp:1374
 msgid "Snap to paths"
 msgstr "راهون ڪٽيو "
 
-#: ../src/widgets/toolbox.cpp:1381
+#: ../src/widgets/toolbox.cpp:1383
 msgid "Path intersections"
 msgstr "راهە جي وچ ۾ وڍ "
 
-#: ../src/widgets/toolbox.cpp:1381
+#: ../src/widgets/toolbox.cpp:1383
 msgid "Snap to path intersections"
 msgstr "راهە جي وچ ۾ وڍن کي ڪٽيو "
 
-#: ../src/widgets/toolbox.cpp:1390
+#: ../src/widgets/toolbox.cpp:1392
 msgid "To nodes"
 msgstr "To nodes"
 
-#: ../src/widgets/toolbox.cpp:1390
+#: ../src/widgets/toolbox.cpp:1392
 msgid "Snap cusp nodes, incl. rectangle corners"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1399
+#: ../src/widgets/toolbox.cpp:1401
 msgid "Smooth nodes"
 msgstr "لسيون ڳنڍيون "
 
-#: ../src/widgets/toolbox.cpp:1399
+#: ../src/widgets/toolbox.cpp:1401
 msgid "Snap smooth nodes, incl. quadrant points of ellipses"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1408
+#: ../src/widgets/toolbox.cpp:1410
 msgid "Line Midpoints"
 msgstr "ليڪ جي وچ جا نقطا "
 
-#: ../src/widgets/toolbox.cpp:1408
+#: ../src/widgets/toolbox.cpp:1410
 #, fuzzy
 msgid "Snap midpoints of line segments"
 msgstr "ليڪ جي جزن جي وچ جي نقطن کان ۽ تائين ڪٽيو "
 
-#: ../src/widgets/toolbox.cpp:1417
+#: ../src/widgets/toolbox.cpp:1419
 #, fuzzy
 msgid "Others"
 msgstr "ٻيو "
 
-#: ../src/widgets/toolbox.cpp:1417
+#: ../src/widgets/toolbox.cpp:1419
 msgid "Snap other points (centers, guide origins, gradient handles, etc.)"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1425
+#: ../src/widgets/toolbox.cpp:1427
 msgid "Object Centers"
 msgstr "شئە جا مرڪز "
 
-#: ../src/widgets/toolbox.cpp:1425
+#: ../src/widgets/toolbox.cpp:1427
 #, fuzzy
 msgid "Snap centers of objects"
 msgstr "مرڪزن جي شين کان ۽ اوس تائين ڪٽيو "
 
-#: ../src/widgets/toolbox.cpp:1434
+#: ../src/widgets/toolbox.cpp:1436
 msgid "Rotation Centers"
 msgstr "گهماو جا مرڪز "
 
-#: ../src/widgets/toolbox.cpp:1434
+#: ../src/widgets/toolbox.cpp:1436
 #, fuzzy
 msgid "Snap an item's rotation center"
 msgstr "شئە جي گهماو جي مرڪز کان ۽ اوس تائين ڪٽيو "
 
-#: ../src/widgets/toolbox.cpp:1443
+#: ../src/widgets/toolbox.cpp:1445
 msgid "Text baseline"
 msgstr "متن جي آڌار ريکا "
 
-#: ../src/widgets/toolbox.cpp:1443
+#: ../src/widgets/toolbox.cpp:1445
 #, fuzzy
 msgid "Snap text anchors and baselines"
 msgstr "متن جي آڌار ريکائن کي ترتيب ڏيو "
 
-#: ../src/widgets/toolbox.cpp:1453
+#: ../src/widgets/toolbox.cpp:1455
 msgid "Page border"
 msgstr "صفحي جو ڪنارو "
 
-#: ../src/widgets/toolbox.cpp:1453
+#: ../src/widgets/toolbox.cpp:1455
 msgid "Snap to the page border"
 msgstr "صفحي جو ڪنارو ڪٽيو "
 
-#: ../src/widgets/toolbox.cpp:1462
+#: ../src/widgets/toolbox.cpp:1464
 msgid "Snap to grids"
 msgstr "ڳنڍيون ڪٽيو "
 
-#: ../src/widgets/toolbox.cpp:1471
+#: ../src/widgets/toolbox.cpp:1473
 #, fuzzy
 msgid "Snap guides"
 msgstr "رهنما ڪٽيو "

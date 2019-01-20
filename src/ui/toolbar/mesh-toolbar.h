@@ -77,7 +77,7 @@ protected:
           _edit_fill_pusher(nullptr)
     {}
 
-    ~MeshToolbar();
+    ~MeshToolbar() override;
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);

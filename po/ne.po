@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-01-17 00:47+0100\n"
+"POT-Creation-Date: 2019-01-20 11:29+0100\n"
 "PO-Revision-Date: 2006-11-05 17:47+0100\n"
 "Last-Translator: Mahesh subedi <submanesh@hotmail.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -4814,7 +4814,7 @@ msgstr ""
 
 #: ../src/display/canvas-axonomgrid.cpp:282
 #: ../src/ui/dialog/inkscape-preferences.cpp:1109
-#: ../src/ui/toolbar/box3d-toolbar.cpp:303
+#: ../src/ui/toolbar/box3d-toolbar.cpp:89
 #, fuzzy
 msgid "Angle X:"
 msgstr "कोण:"
@@ -4826,7 +4826,7 @@ msgstr ""
 
 #: ../src/display/canvas-axonomgrid.cpp:284
 #: ../src/ui/dialog/inkscape-preferences.cpp:1110
-#: ../src/ui/toolbar/box3d-toolbar.cpp:382
+#: ../src/ui/toolbar/box3d-toolbar.cpp:174
 #, fuzzy
 msgid "Angle Z:"
 msgstr "कोण:"
@@ -5393,10 +5393,10 @@ msgstr "थ्रेसहोल्ड:"
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:58
 #: ../src/ui/dialog/object-attributes.cpp:59
 #: ../src/ui/dialog/object-attributes.cpp:67
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:397
-#: ../src/ui/toolbar/eraser-toolbar.cpp:186
-#: ../src/ui/toolbar/spray-toolbar.cpp:293
-#: ../src/ui/toolbar/tweak-toolbar.cpp:129 ../src/ui/widget/page-sizer.cpp:62
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:105
+#: ../src/ui/toolbar/eraser-toolbar.cpp:115
+#: ../src/ui/toolbar/spray-toolbar.cpp:93
+#: ../src/ui/toolbar/tweak-toolbar.cpp:95 ../src/ui/widget/page-sizer.cpp:62
 #: ../share/extensions/foldablebox.inx.h:2
 msgid "Width:"
 msgstr "चौडाई:"
@@ -5411,7 +5411,7 @@ msgid "Height:"
 msgstr "उचाई:"
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:44
-#: ../src/ui/toolbar/measure-toolbar.cpp:346
+#: ../src/ui/toolbar/measure-toolbar.cpp:296
 #: ../share/extensions/printing_marks.inx.h:12
 msgid "Offset:"
 msgstr "अफसेट:"
@@ -5684,7 +5684,7 @@ msgstr ""
 #: ../src/extension/internal/bitmap/cycleColormap.cpp:40
 #: ../src/extension/internal/bitmap/spread.cpp:40
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:46
-#: ../src/ui/toolbar/spray-toolbar.cpp:405
+#: ../src/ui/toolbar/spray-toolbar.cpp:215
 #, fuzzy
 msgid "Amount:"
 msgstr "फन्ट"
@@ -5885,7 +5885,7 @@ msgstr ""
 #: ../src/extension/internal/filter/blurs.h:334
 #: ../src/extension/internal/filter/transparency.h:280
 #: ../src/ui/dialog/clonetiler.cpp:794 ../src/ui/dialog/clonetiler.cpp:925
-#: ../src/ui/toolbar/tweak-toolbar.cpp:325
+#: ../src/ui/toolbar/tweak-toolbar.cpp:297
 #: ../share/extensions/interp_att_g.inx.h:20
 msgid "Opacity"
 msgstr "अस्पष्टता"
@@ -6016,7 +6016,7 @@ msgstr "थ्रेसहोल्ड:"
 
 #: ../src/extension/internal/bitmap/threshold.cpp:41
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:47
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:159
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:106
 msgid "Threshold:"
 msgstr "थ्रेसहोल्ड:"
 
@@ -6084,147 +6084,147 @@ msgstr "अस्पष्ट सिमुलेट गर्ने बनाउ
 msgid "Generate from Path"
 msgstr "बाटो बाट उत्पन्न गर्नुहोस्"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:329
+#: ../src/extension/internal/cairo-ps-out.cpp:330
 #: ../share/extensions/ps_input.inx.h:3
 #, fuzzy
 msgid "PostScript"
 msgstr "पोस्टस्क्रिप्ट"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:331
-#: ../src/extension/internal/cairo-ps-out.cpp:373
-msgid "Restrict to PS level:"
-msgstr ""
-
 #: ../src/extension/internal/cairo-ps-out.cpp:332
 #: ../src/extension/internal/cairo-ps-out.cpp:374
-#, fuzzy
-msgid "PostScript level 3"
-msgstr "पोस्टस्क्रिप्ट फाइल"
+msgid "Restrict to PS level:"
+msgstr ""
 
 #: ../src/extension/internal/cairo-ps-out.cpp:333
 #: ../src/extension/internal/cairo-ps-out.cpp:375
 #, fuzzy
-msgid "PostScript level 2"
+msgid "PostScript level 3"
 msgstr "पोस्टस्क्रिप्ट फाइल"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:335
-#: ../src/extension/internal/cairo-ps-out.cpp:377
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:254
+#: ../src/extension/internal/cairo-ps-out.cpp:334
+#: ../src/extension/internal/cairo-ps-out.cpp:376
 #, fuzzy
-msgid "Text output options:"
-msgstr "पृष्ठ अभिमुखिकरण:"
+msgid "PostScript level 2"
+msgstr "पोस्टस्क्रिप्ट फाइल"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:336
 #: ../src/extension/internal/cairo-ps-out.cpp:378
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:255
 #, fuzzy
-msgid "Embed fonts"
-msgstr "सम्मिलित सबै छविहरू"
+msgid "Text output options:"
+msgstr "पृष्ठ अभिमुखिकरण:"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:337
 #: ../src/extension/internal/cairo-ps-out.cpp:379
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:256
 #, fuzzy
-msgid "Convert text to paths"
-msgstr "पाठलाई बाटोमा रुपान्तरण गर्नुहोस्"
+msgid "Embed fonts"
+msgstr "सम्मिलित सबै छविहरू"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:338
 #: ../src/extension/internal/cairo-ps-out.cpp:380
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:257
+#, fuzzy
+msgid "Convert text to paths"
+msgstr "पाठलाई बाटोमा रुपान्तरण गर्नुहोस्"
+
+#: ../src/extension/internal/cairo-ps-out.cpp:339
+#: ../src/extension/internal/cairo-ps-out.cpp:381
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:258
 msgid "Omit text in PDF and create LaTeX file"
 msgstr ""
-
-#: ../src/extension/internal/cairo-ps-out.cpp:340
-#: ../src/extension/internal/cairo-ps-out.cpp:382
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:259
-#, fuzzy
-msgid "Rasterize filter effects"
-msgstr "साइज टाँस्नुहोस्"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:341
 #: ../src/extension/internal/cairo-ps-out.cpp:383
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:260
 #, fuzzy
-msgid "Resolution for rasterization (dpi):"
-msgstr "बिटम्यापको सुझावित रिजोलुसन (डट प्रति इन्च)"
+msgid "Rasterize filter effects"
+msgstr "साइज टाँस्नुहोस्"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:342
 #: ../src/extension/internal/cairo-ps-out.cpp:384
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:261
 #, fuzzy
-msgid "Output page size"
-msgstr "पृष्ठ साइज:"
+msgid "Resolution for rasterization (dpi):"
+msgstr "बिटम्यापको सुझावित रिजोलुसन (डट प्रति इन्च)"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:343
 #: ../src/extension/internal/cairo-ps-out.cpp:385
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:262
 #, fuzzy
-msgid "Use document's page size"
+msgid "Output page size"
 msgstr "पृष्ठ साइज:"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:344
 #: ../src/extension/internal/cairo-ps-out.cpp:386
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:263
+#, fuzzy
+msgid "Use document's page size"
+msgstr "पृष्ठ साइज:"
+
+#: ../src/extension/internal/cairo-ps-out.cpp:345
+#: ../src/extension/internal/cairo-ps-out.cpp:387
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:264
 msgid "Use exported object's size"
 msgstr ""
 
-#: ../src/extension/internal/cairo-ps-out.cpp:346
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:265
+#: ../src/extension/internal/cairo-ps-out.cpp:347
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:266
 #, fuzzy
 msgid "Bleed/margin (mm):"
 msgstr "बेभेल जोड"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:347
-#: ../src/extension/internal/cairo-ps-out.cpp:389
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:266
+#: ../src/extension/internal/cairo-ps-out.cpp:348
+#: ../src/extension/internal/cairo-ps-out.cpp:390
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:267
 msgid "Limit export to the object with ID:"
 msgstr ""
 
-#: ../src/extension/internal/cairo-ps-out.cpp:351
+#: ../src/extension/internal/cairo-ps-out.cpp:352
 #: ../share/extensions/ps_input.inx.h:2
 #, fuzzy
 msgid "PostScript (*.ps)"
 msgstr "पोस्टस्क्रिप्ट (*.ps)"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:352
+#: ../src/extension/internal/cairo-ps-out.cpp:353
 #, fuzzy
 msgid "PostScript File"
 msgstr "पोस्टस्क्रिप्ट फाइल"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:371
+#: ../src/extension/internal/cairo-ps-out.cpp:372
 #: ../share/extensions/eps_input.inx.h:3
 #, fuzzy
 msgid "Encapsulated PostScript"
 msgstr "इनक्याप्सुलेट गरिएको पोस्टस्क्रिप्ट"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:388
+#: ../src/extension/internal/cairo-ps-out.cpp:389
 #, fuzzy
 msgid "Bleed/margin (mm)"
 msgstr "बेभेल जोड"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:393
+#: ../src/extension/internal/cairo-ps-out.cpp:394
 #: ../share/extensions/eps_input.inx.h:2
 #, fuzzy
 msgid "Encapsulated PostScript (*.eps)"
 msgstr "इनक्याप्सुलेट गरिएको पोस्टक्रिप्ट (*.eps)"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:394
+#: ../src/extension/internal/cairo-ps-out.cpp:395
 #, fuzzy
 msgid "Encapsulated PostScript File"
 msgstr "इनक्याप्सुलेट गरिएको पोस्टस्क्रिप्ट फाइल"
 
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:248
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:249
 msgid "Restrict to PDF version:"
 msgstr ""
 
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:250
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:251
 msgid "PDF 1.5"
 msgstr ""
 
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:252
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:253
 msgid "PDF 1.4"
 msgstr ""
 
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:261
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:262
 #, fuzzy
 msgid "Output page size:"
 msgstr "पृष्ठ साइज:"
@@ -6275,7 +6275,7 @@ msgstr "whirl को मात्रा"
 #: ../src/ui/dialog/livepatheffect-add.cpp:27
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:30
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:36
-#: ../src/ui/dialog/ocaldialogs.cpp:1086 ../src/ui/interface.cpp:1430
+#: ../src/ui/dialog/ocaldialogs.cpp:1086 ../src/ui/interface.cpp:866
 #: ../src/widgets/desktop-widget.cpp:1101
 #: ../src/widgets/desktop-widget.cpp:1150
 #, fuzzy
@@ -6855,7 +6855,7 @@ msgstr "रङहरू:"
 
 #: ../src/extension/internal/filter/bumps.h:99
 #: ../src/extension/internal/filter/bumps.h:330
-#: ../src/ui/toolbar/rect-toolbar.cpp:338 ../src/ui/tools/measure-tool.cpp:1227
+#: ../src/ui/toolbar/rect-toolbar.cpp:140 ../src/ui/tools/measure-tool.cpp:1227
 #: ../src/ui/widget/page-sizer.cpp:63 ../share/extensions/interp_att_g.inx.h:15
 #, fuzzy
 msgid "Height"
@@ -6869,7 +6869,7 @@ msgstr "उचाई:"
 #: ../src/extension/internal/filter/paint.h:87
 #: ../src/extension/internal/filter/paint.h:593
 #: ../src/extension/internal/filter/paint.h:708
-#: ../src/ui/toolbar/tweak-toolbar.cpp:309 ../src/ui/tools/flood-tool.cpp:95
+#: ../src/ui/toolbar/tweak-toolbar.cpp:282 ../src/ui/tools/flood-tool.cpp:95
 #: ../src/ui/widget/color-icc-selector.cpp:177
 #: ../src/ui/widget/color-scales.cpp:416 ../src/ui/widget/color-scales.cpp:417
 msgid "Lightness"
@@ -6878,7 +6878,7 @@ msgstr "चम्किलोपना"
 #: ../src/extension/internal/filter/bumps.h:101
 #: ../src/extension/internal/filter/bumps.h:332
 #: ../src/live_effects/lpe-measure-segments.cpp:71
-#: ../src/ui/toolbar/measure-toolbar.cpp:320
+#: ../src/ui/toolbar/measure-toolbar.cpp:260
 #, fuzzy
 msgid "Precision"
 msgstr "वर्णन"
@@ -7102,7 +7102,7 @@ msgstr "जिनोम मुद्रण"
 #: ../src/extension/internal/filter/color.h:1575
 #: ../src/extension/internal/filter/paint.h:88 ../src/filter-enums.cpp:67
 #: ../src/ui/dialog/inkscape-preferences.cpp:1298
-#: ../src/ui/toolbar/tweak-toolbar.cpp:293 ../src/ui/tools/flood-tool.cpp:94
+#: ../src/ui/toolbar/tweak-toolbar.cpp:267 ../src/ui/tools/flood-tool.cpp:94
 #: ../src/ui/widget/color-icc-selector.cpp:173
 #: ../src/ui/widget/color-icc-selector.cpp:178
 #: ../src/ui/widget/color-scales.cpp:412 ../src/ui/widget/color-scales.cpp:413
@@ -7448,8 +7448,8 @@ msgstr "आकारहरू"
 #: ../src/live_effects/effect.cpp:144
 #: ../src/live_effects/lpe-transform_2pts.cpp:41
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1030
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1044
-#: ../src/ui/toolbar/measure-toolbar.cpp:346
+#: ../src/ui/toolbar/gradient-toolbar.cpp:545
+#: ../src/ui/toolbar/measure-toolbar.cpp:296
 #, fuzzy
 msgid "Offset"
 msgstr "अफसेटहरू"
@@ -7608,7 +7608,7 @@ msgid "Hard Light"
 msgstr "उचाई:"
 
 #: ../src/extension/internal/filter/color.h:1585 ../src/filter-enums.cpp:66
-#: ../src/ui/toolbar/tweak-toolbar.cpp:277 ../src/ui/tools/flood-tool.cpp:93
+#: ../src/ui/toolbar/tweak-toolbar.cpp:252 ../src/ui/tools/flood-tool.cpp:93
 #: ../src/ui/widget/color-icc-selector.cpp:172
 #: ../src/ui/widget/color-icc-selector.cpp:176
 #: ../src/ui/widget/color-scales.cpp:407 ../src/ui/widget/color-scales.cpp:408
@@ -7885,11 +7885,10 @@ msgid "Open"
 msgstr "खोल्नुहोस्..."
 
 #: ../src/extension/internal/filter/morphology.h:66
-#: ../src/ui/toolbar/rect-toolbar.cpp:322
-#: ../src/ui/toolbar/spray-toolbar.cpp:293
-#: ../src/ui/toolbar/tweak-toolbar.cpp:129
-#: ../src/ui/tools/measure-tool.cpp:1233 ../src/ui/widget/page-sizer.cpp:62
-#: ../share/extensions/interp_att_g.inx.h:14
+#: ../src/ui/toolbar/rect-toolbar.cpp:116
+#: ../src/ui/toolbar/spray-toolbar.cpp:93
+#: ../src/ui/toolbar/tweak-toolbar.cpp:95 ../src/ui/tools/measure-tool.cpp:1233
+#: ../src/ui/widget/page-sizer.cpp:62 ../share/extensions/interp_att_g.inx.h:14
 #, fuzzy
 msgid "Width"
 msgstr "चौडाई:"
@@ -8162,7 +8161,7 @@ msgstr ""
 
 #: ../src/extension/internal/filter/paint.h:332
 #: ../src/ui/dialog/align-and-distribute.cpp:1066
-#: ../src/widgets/desktop-widget.cpp:1921
+#: ../src/widgets/desktop-widget.cpp:1920
 msgid "Drawing"
 msgstr "रेखाचित्र"
 
@@ -8728,7 +8727,7 @@ msgstr "रेन्डर"
 #: ../src/extension/internal/grid.cpp:204
 #: ../src/ui/dialog/document-properties.cpp:152
 #: ../src/ui/dialog/inkscape-preferences.cpp:1118
-#: ../src/widgets/toolbox.cpp:1462
+#: ../src/widgets/toolbox.cpp:1464
 #, fuzzy
 msgid "Grids"
 msgstr "ग्रिड"
@@ -9228,58 +9227,58 @@ msgstr "कागजात बचत गर्नुहोस्"
 #. TRANSLATORS: translate this into "default-<yourcodename>.svg" (for instance, default-fr.svg)
 #. and double-check that share/templates/create_defaults.pl contains a translation for your language
 #. If in doubt about this, ask a developer.
-#: ../src/file.cpp:170
+#: ../src/file.cpp:166
 msgid "default.svg"
 msgstr "default.svg"
 
-#: ../src/file.cpp:270
+#: ../src/file.cpp:264
 msgid "Broken links have been changed to point to existing files."
 msgstr ""
 
-#: ../src/file.cpp:299 ../src/file.cpp:1303
+#: ../src/file.cpp:289 ../src/file.cpp:1293
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "अनुरोध गरिएको फाइल %s लोड गर्न असफल"
 
-#: ../src/file.cpp:325
+#: ../src/file.cpp:315
 msgid "Document not saved yet.  Cannot revert."
 msgstr "कागजात अहिले सम्म बचत गरिएको छैन  पछाडि फर्काउन सकिदैन ।"
 
-#: ../src/file.cpp:331
+#: ../src/file.cpp:321
 #, fuzzy
 msgid "Changes will be lost! Are you sure you want to reload document %1?"
 msgstr ""
 "परिवर्तनहरू हराउने छ !  के तपाईँले कागजात %s पुन: लोड गर्न चाहनुमा निश्चित हुनुहुन्छ ?"
 
-#: ../src/file.cpp:357
+#: ../src/file.cpp:347
 msgid "Document reverted."
 msgstr "कागजात पछाडि फर्काइयो ।"
 
-#: ../src/file.cpp:359
+#: ../src/file.cpp:349
 msgid "Document not reverted."
 msgstr "कागजात पछाडि फर्काइएन ।"
 
-#: ../src/file.cpp:509
+#: ../src/file.cpp:499
 msgid "Select file to open"
 msgstr "खोल्न फाइल चयन गर्नुहोस्"
 
-#: ../src/file.cpp:591
+#: ../src/file.cpp:581
 #, fuzzy
 msgid "Clean up document"
 msgstr "कागजात बचत गर्नुहोस्"
 
-#: ../src/file.cpp:598
+#: ../src/file.cpp:588
 #, c-format
 msgid "Removed <b>%i</b> unused definition in &lt;defs&gt;."
 msgid_plural "Removed <b>%i</b> unused definitions in &lt;defs&gt;."
 msgstr[0] "&lt;defs&gt; मा प्रयोग नगरिएको <b>%i</b> परिभाषा हटाइयो ।"
 msgstr[1] "&lt;defs&gt; मा प्रयोग नगरिएको <b>%i</b> परिभाषाहरू हटाइयो ।"
 
-#: ../src/file.cpp:603
+#: ../src/file.cpp:593
 msgid "No unused definitions in &lt;defs&gt;."
 msgstr "&lt;defs&gt; मा कुनै प्रयोग नगरिएको परिभाषाहरू छैन ।"
 
-#: ../src/file.cpp:637
+#: ../src/file.cpp:627
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
@@ -9288,31 +9287,31 @@ msgstr ""
 "कागजात (%s) बचत गर्न कुनै पनि Inkscape विस्तार फेला परेन ।  यो सायद एउटा अज्ञात "
 "फाइलनाम विस्तारका कारणले भएको हुन सक्दछ ।"
 
-#: ../src/file.cpp:638 ../src/file.cpp:648 ../src/file.cpp:657
-#: ../src/file.cpp:664 ../src/file.cpp:669 ../src/file.cpp:681
-#: ../src/file.cpp:691
+#: ../src/file.cpp:628 ../src/file.cpp:638 ../src/file.cpp:647
+#: ../src/file.cpp:654 ../src/file.cpp:659 ../src/file.cpp:671
+#: ../src/file.cpp:681
 msgid "Document not saved."
 msgstr "कागजात बचत गरिएको छैन ।"
 
-#: ../src/file.cpp:647
+#: ../src/file.cpp:637
 #, c-format
 msgid ""
 "File %s is write protected. Please remove write protection and try again."
 msgstr ""
 
-#: ../src/file.cpp:656 ../src/file.cpp:690
+#: ../src/file.cpp:646 ../src/file.cpp:680
 #, c-format
 msgid "File %s could not be saved."
 msgstr "फाइल %s बचत गर्न सकेन ।"
 
-#: ../src/file.cpp:668
+#: ../src/file.cpp:658
 #, c-format
 msgid ""
 "File could not be saved:\n"
 "No object with ID '%s' found."
 msgstr ""
 
-#: ../src/file.cpp:678
+#: ../src/file.cpp:668
 #, c-format
 msgid ""
 "File %s could not be saved.\n"
@@ -9321,55 +9320,55 @@ msgid ""
 "'%s'"
 msgstr ""
 
-#: ../src/file.cpp:713 ../src/file.cpp:715
+#: ../src/file.cpp:703 ../src/file.cpp:705
 msgid "Document saved."
 msgstr "कागजात बचत गरियो ।"
 
 #. We are saving for the first time; create a unique default filename
-#: ../src/file.cpp:773 ../src/file.cpp:1462
+#: ../src/file.cpp:763 ../src/file.cpp:1452
 #, fuzzy
 msgid "drawing"
 msgstr "रेखाचित्र %s"
 
-#: ../src/file.cpp:778
+#: ../src/file.cpp:768
 #, fuzzy
 msgid "drawing-%1"
 msgstr "रेखाचित्र %s"
 
-#: ../src/file.cpp:795
+#: ../src/file.cpp:785
 #, fuzzy
 msgid "Select file to save a copy to"
 msgstr "यसमा बचत गर्न फाइल चयन गर्नुहोस्"
 
-#: ../src/file.cpp:797
+#: ../src/file.cpp:787
 msgid "Select file to save to"
 msgstr "यसमा बचत गर्न फाइल चयन गर्नुहोस्"
 
-#: ../src/file.cpp:902 ../src/file.cpp:904
+#: ../src/file.cpp:892 ../src/file.cpp:894
 msgid "No changes need to be saved."
 msgstr "कुनै पनि परिवर्तनहरू बचत गर्न आवश्यक छैन ।"
 
-#: ../src/file.cpp:923
+#: ../src/file.cpp:913
 #, fuzzy
 msgid "Saving document..."
 msgstr "कागजात बचत गर्नुहोस्"
 
-#: ../src/file.cpp:1300 ../src/ui/dialog/inkscape-preferences.cpp:1831
+#: ../src/file.cpp:1290 ../src/ui/dialog/inkscape-preferences.cpp:1831
 #: ../src/ui/dialog/ocaldialogs.cpp:1088
 #, fuzzy
 msgid "Import"
 msgstr "आयात गर्नुहोस्..."
 
-#: ../src/file.cpp:1350
+#: ../src/file.cpp:1340
 msgid "Select file to import"
 msgstr "आयात गर्न फाइल चयन गर्नुहोस्"
 
-#: ../src/file.cpp:1483
+#: ../src/file.cpp:1473
 #, fuzzy
 msgid "Select file to export to"
 msgstr "आयात गर्न फाइल चयन गर्नुहोस्"
 
-#: ../src/file.cpp:1736
+#: ../src/file.cpp:1726
 #, fuzzy
 msgid "Import Clip Art"
 msgstr "आयात गर्नुहोस्..."
@@ -9520,7 +9519,7 @@ msgid "Arithmetic"
 msgstr ""
 
 #: ../src/filter-enums.cpp:121 ../src/selection-chemistry.cpp:564
-#: ../src/ui/dialog/objects.cpp:1884
+#: ../src/ui/dialog/objects.cpp:1887
 msgid "Duplicate"
 msgstr "नक्कल गर्नुहोस्"
 
@@ -10288,12 +10287,12 @@ msgstr "ग्राडिएन्टहरू रुपान्तरण ग�
 
 #: ../src/live_effects/effect.cpp:123
 #: ../src/live_effects/lpe-show_handles.cpp:31
-#: ../src/ui/toolbar/mesh-toolbar.cpp:508
+#: ../src/ui/toolbar/mesh-toolbar.cpp:362
 #, fuzzy
 msgid "Show handles"
 msgstr "ह्यान्डलहरू कोर्नुहोस्"
 
-#: ../src/live_effects/effect.cpp:125 ../src/ui/toolbar/pencil-toolbar.cpp:145
+#: ../src/live_effects/effect.cpp:125 ../src/ui/toolbar/pencil-toolbar.cpp:315
 #, fuzzy
 msgid "BSpline"
 msgstr "रुपरेखा"
@@ -11425,7 +11424,7 @@ msgid "Reverses the second path order"
 msgstr "ग्राडिएन्टको रोकहरू सम्पादन गर्नुहोस्"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:32
-#: ../src/ui/toolbar/text-toolbar.cpp:2207
+#: ../src/ui/toolbar/text-toolbar.cpp:503
 #: ../share/extensions/render_barcode_qrcode.inx.h:5
 #, fuzzy
 msgid "Auto"
@@ -11626,7 +11625,7 @@ msgstr "चक्र"
 #: ../src/live_effects/lpe-jointype.cpp:48
 #: ../src/live_effects/lpe-powerstroke.cpp:162
 #: ../src/live_effects/lpe-taperstroke.cpp:64
-#: ../src/ui/toolbar/star-toolbar.cpp:560
+#: ../src/ui/toolbar/star-toolbar.cpp:191
 #, fuzzy
 msgid "Rounded"
 msgstr "घुमाउरो:"
@@ -12122,7 +12121,7 @@ msgid "Hide Points"
 msgstr "बिन्दुहरू"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:59
-#: ../src/ui/toolbar/text-toolbar.cpp:2164
+#: ../src/ui/toolbar/text-toolbar.cpp:461
 #, fuzzy
 msgid "Horizontal"
 msgstr "तेर्सो"
@@ -12503,10 +12502,10 @@ msgstr ""
 
 #. Name
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:56
-#: ../src/ui/toolbar/eraser-toolbar.cpp:165
-#: ../src/ui/toolbar/pencil-toolbar.cpp:168
-#: ../src/ui/toolbar/spray-toolbar.cpp:385
-#: ../src/ui/toolbar/tweak-toolbar.cpp:245
+#: ../src/ui/toolbar/eraser-toolbar.cpp:95
+#: ../src/ui/toolbar/pencil-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:198
+#: ../src/ui/toolbar/tweak-toolbar.cpp:222
 #, fuzzy
 msgid "Mode"
 msgstr "सार्नुहोस्"
@@ -12834,7 +12833,7 @@ msgid "Zero width"
 msgstr "पृष्ठ चौडाई"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:166
-#: ../src/ui/toolbar/pencil-toolbar.cpp:139
+#: ../src/ui/toolbar/pencil-toolbar.cpp:309
 #, fuzzy
 msgid "Spiro"
 msgstr "स्पाइरल"
@@ -13307,14 +13306,14 @@ msgstr "कुनै पनि होइन"
 
 #: ../src/live_effects/lpe-ruler.cpp:31
 #: ../src/live_effects/lpe-transform_2pts.cpp:38
-#: ../src/ui/toolbar/arc-toolbar.cpp:495 ../src/ui/tools/measure-tool.cpp:745
+#: ../src/ui/toolbar/arc-toolbar.cpp:160 ../src/ui/tools/measure-tool.cpp:745
 #, fuzzy
 msgid "Start"
 msgstr "सुरू गर्नुहोस्:"
 
 #: ../src/live_effects/lpe-ruler.cpp:32
 #: ../src/live_effects/lpe-transform_2pts.cpp:39
-#: ../src/ui/toolbar/arc-toolbar.cpp:508 ../src/ui/tools/measure-tool.cpp:746
+#: ../src/ui/toolbar/arc-toolbar.cpp:177 ../src/ui/tools/measure-tool.cpp:746
 #, fuzzy
 msgid "End"
 msgstr "समाप्त:"
@@ -13890,7 +13889,7 @@ msgstr "गतिवर्द्धन:"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:81
 #: ../src/live_effects/parameter/originalpatharray.cpp:104
-#: ../src/ui/dialog/attrdialog.cpp:96
+#: ../src/ui/dialog/attrdialog.cpp:105
 #: ../src/ui/dialog/inkscape-preferences.cpp:1902
 #: ../src/ui/widget/page-sizer.cpp:97 ../src/widgets/gradient-selector.cpp:138
 #, fuzzy
@@ -13909,14 +13908,14 @@ msgstr "स्ट्रोक हटाउनुहोस्"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:170
 #: ../src/live_effects/parameter/originalpatharray.cpp:211
-#: ../src/ui/dialog/objects.cpp:1845
+#: ../src/ui/dialog/objects.cpp:1848
 #, fuzzy
 msgid "Move Down"
 msgstr "नोड घटाउनुहोस्"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:182
 #: ../src/live_effects/parameter/originalpatharray.cpp:223
-#: ../src/ui/dialog/objects.cpp:1853
+#: ../src/ui/dialog/objects.cpp:1856
 #, fuzzy
 msgid "Move Up"
 msgstr "बान्की"
@@ -13948,7 +13947,7 @@ msgid "Link to path"
 msgstr "वस्तु बाटोहरुलाई सटाउनुहोस्"
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:89
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1090
+#: ../src/ui/toolbar/gradient-toolbar.cpp:591
 #, fuzzy
 msgid "Reverse"
 msgstr "फर्काउनुहोस्"
@@ -14146,12 +14145,12 @@ msgstr ""
 msgid "without URI"
 msgstr "URI बिना <b>लिङ्क</b>"
 
-#: ../src/object/sp-ellipse.cpp:389 ../src/ui/toolbar/arc-toolbar.cpp:527
+#: ../src/object/sp-ellipse.cpp:389 ../src/ui/toolbar/arc-toolbar.cpp:204
 #, fuzzy
 msgid "Slice"
 msgstr "बान्की"
 
-#: ../src/object/sp-ellipse.cpp:392 ../src/ui/toolbar/arc-toolbar.cpp:539
+#: ../src/object/sp-ellipse.cpp:392 ../src/ui/toolbar/arc-toolbar.cpp:216
 msgid "Chord"
 msgstr ""
 
@@ -14163,7 +14162,7 @@ msgstr "उत्पत्ति X:"
 #. Ellipse
 #: ../src/object/sp-ellipse.cpp:399 ../src/object/sp-ellipse.cpp:406
 #: ../src/ui/dialog/inkscape-preferences.cpp:459
-#: ../src/ui/toolbar/pencil-toolbar.cpp:225
+#: ../src/ui/toolbar/pencil-toolbar.cpp:421
 msgid "Ellipse"
 msgstr "दीर्घवृत"
 
@@ -14261,7 +14260,7 @@ msgstr "तारा प्राथमिकताहरू"
 msgid "%d &#215; %d: %s"
 msgstr "<b>छवि</b> %d &#215; %d: %s"
 
-#: ../src/object/sp-item-group.cpp:305 ../src/ui/dialog/objects.cpp:1908
+#: ../src/object/sp-item-group.cpp:305 ../src/ui/dialog/objects.cpp:1911
 msgid "Group"
 msgstr "समूह"
 
@@ -14276,7 +14275,7 @@ msgid "of <b>%d</b> objects"
 msgstr "<b>%d</b> वस्तुको <b>समूह</b>"
 
 #: ../src/object/sp-item-group.cpp:647 ../src/selection-chemistry.cpp:900
-#: ../src/ui/dialog/objects.cpp:1909
+#: ../src/ui/dialog/objects.cpp:1912
 #, fuzzy
 msgid "Ungroup"
 msgstr "समूह छुट्याउनुहोस्"
@@ -14385,11 +14384,11 @@ msgstr "%3f turns संग <b>स्पाइरल</b>"
 
 #. Star
 #: ../src/object/sp-star.cpp:227 ../src/ui/dialog/inkscape-preferences.cpp:463
-#: ../src/ui/toolbar/star-toolbar.cpp:493
+#: ../src/ui/toolbar/star-toolbar.cpp:115
 msgid "Star"
 msgstr "तारा"
 
-#: ../src/object/sp-star.cpp:228 ../src/ui/toolbar/star-toolbar.cpp:487
+#: ../src/object/sp-star.cpp:228 ../src/ui/toolbar/star-toolbar.cpp:109
 msgid "Polygon"
 msgstr "बहुभुज"
 
@@ -14847,12 +14846,13 @@ msgstr "नोड मेट्नुहोस्"
 msgid "<b>Nothing</b> was deleted."
 msgstr "<b>केहि पनि</b> पत्ता लागेन ।"
 
+#. TODO: Is this label correct?
 #: ../src/selection-chemistry.cpp:415 ../src/ui/dialog/swatches.cpp:283
-#: ../src/ui/toolbar/eraser-toolbar.cpp:146
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1066
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1080
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1094
-#: ../src/ui/toolbar/node-toolbar.cpp:401 ../src/ui/tools/text-tool.cpp:996
+#: ../src/ui/toolbar/eraser-toolbar.cpp:76
+#: ../src/ui/toolbar/gradient-toolbar.cpp:569
+#: ../src/ui/toolbar/gradient-toolbar.cpp:582
+#: ../src/ui/toolbar/gradient-toolbar.cpp:596
+#: ../src/ui/toolbar/node-toolbar.cpp:307 ../src/ui/tools/text-tool.cpp:996
 #, fuzzy
 msgid "Delete"
 msgstr "मेट्नुहोस्"
@@ -15293,7 +15293,7 @@ msgstr "स्पाइरलहरू सिर्जना गर्नुह�
 msgid "Select <b>object(s)</b> to create clippath or mask from."
 msgstr "यसबाट क्लिप बाटो वा मास्क सिर्जना गर्न <b>वस्तु(हरू)</b> चयन गर्नुहोस् ।"
 
-#: ../src/selection-chemistry.cpp:3904 ../src/ui/dialog/objects.cpp:1915
+#: ../src/selection-chemistry.cpp:3904 ../src/ui/dialog/objects.cpp:1918
 #, fuzzy
 msgid "Create Clip Group"
 msgstr "क्लोन सिर्जना गर्नुहोस्"
@@ -15960,7 +15960,7 @@ msgid "Create _Link"
 msgstr "लिङ्क सिर्जना गर्नुहोस्"
 
 #. Set mask
-#: ../src/ui/contextmenu.cpp:456 ../src/ui/dialog/objects.cpp:1923
+#: ../src/ui/contextmenu.cpp:456 ../src/ui/dialog/objects.cpp:1926
 #, fuzzy
 msgid "Set Mask"
 msgstr "ताराहरू"
@@ -16111,7 +16111,7 @@ msgstr "about.svg"
 
 #. TRANSLATORS: Put here your name (and other national contributors')
 #. one per line in the form of: name surname (email). Use \n for newline.
-#: ../src/ui/dialog/aboutbox.cpp:180
+#: ../src/ui/dialog/aboutbox.cpp:178
 #, fuzzy
 msgid "translator-credits"
 msgstr "अनुवादकहरू"
@@ -16150,12 +16150,12 @@ msgstr "V:"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:506
 #: ../src/ui/dialog/align-and-distribute.cpp:924
-#: ../src/ui/toolbar/connector-toolbar.cpp:409
+#: ../src/ui/toolbar/connector-toolbar.cpp:192
 msgid "Remove overlaps"
 msgstr "ओभरल्याप हटाउनुहोस्"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:538
-#: ../src/ui/toolbar/connector-toolbar.cpp:235
+#: ../src/ui/toolbar/connector-toolbar.cpp:397
 #, fuzzy
 msgid "Arrange connector network"
 msgstr "चयन गरिएको योजक सज्जाल राम्रो संग मिलाउनुहोस्"
@@ -16191,7 +16191,7 @@ msgid "Rearrange"
 msgstr "कोण"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:925
-#: ../src/widgets/toolbox.cpp:1364
+#: ../src/widgets/toolbox.cpp:1366
 msgid "Nodes"
 msgstr "नोडहरू"
 
@@ -16316,7 +16316,7 @@ msgid "Distribute baselines of texts vertically"
 msgstr "पाठहरुको आधाररेखा एङ्करहरू ठाडो रुपमा वितरण गर्नुहोस्"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1017
-#: ../src/ui/toolbar/connector-toolbar.cpp:371
+#: ../src/ui/toolbar/connector-toolbar.cpp:150
 msgid "Nicely arrange selected connector network"
 msgstr "चयन गरिएको योजक सज्जाल राम्रो संग मिलाउनुहोस्"
 
@@ -16389,7 +16389,7 @@ msgstr "पाठ वस्तुहरू खोजी गर्नुहोस
 #: ../src/ui/dialog/align-and-distribute.cpp:1065
 #: ../src/ui/dialog/document-properties.cpp:150
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1424
-#: ../src/widgets/desktop-widget.cpp:1917
+#: ../src/widgets/desktop-widget.cpp:1916
 #: ../share/extensions/empty_page.inx.h:1
 #: ../share/extensions/voronoi2svg.inx.h:10
 msgid "Page"
@@ -16415,31 +16415,31 @@ msgstr "मानहरू खाली गर्नुहोस्"
 msgid "Max value"
 msgstr "मानहरू खाली गर्नुहोस्"
 
-#: ../src/ui/dialog/attrdialog.cpp:80 ../src/ui/dialog/cssdialog.cpp:62
+#: ../src/ui/dialog/attrdialog.cpp:89 ../src/ui/dialog/cssdialog.cpp:62
 #, fuzzy
 msgid "Add a new attribute"
 msgstr "विशेषता सेट गर्नुहोस्"
 
-#: ../src/ui/dialog/attrdialog.cpp:94
+#: ../src/ui/dialog/attrdialog.cpp:103
 #, fuzzy
 msgid "Attribute Name"
 msgstr "विशेषता नाम"
 
-#: ../src/ui/dialog/attrdialog.cpp:116
+#: ../src/ui/dialog/attrdialog.cpp:125
 #, fuzzy
 msgid "Attribute Value"
 msgstr "विशेषता मान"
 
-#: ../src/ui/dialog/attrdialog.cpp:119 ../src/ui/widget/color-scales.cpp:452
+#: ../src/ui/dialog/attrdialog.cpp:128 ../src/ui/widget/color-scales.cpp:452
 #: ../src/ui/widget/color-scales.cpp:453
 msgid "Value"
 msgstr "मान"
 
-#: ../src/ui/dialog/attrdialog.cpp:201
+#: ../src/ui/dialog/attrdialog.cpp:209
 msgid "<b>Click</b> attribute to edit."
 msgstr "विशेषता सम्पादन गर्न <b>क्लिक गर्नुहोस्</b>"
 
-#: ../src/ui/dialog/attrdialog.cpp:206
+#: ../src/ui/dialog/attrdialog.cpp:214
 #, c-format
 msgid ""
 "Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
@@ -16447,16 +16447,16 @@ msgid ""
 msgstr ""
 "विशेषता <b>%s</b> चयन गरियो । परिवर्तनहरू कमिट गर्दा <b>Ctrl+Enter</b> थिच्नुहोस् ।"
 
-#: ../src/ui/dialog/attrdialog.cpp:264 ../src/ui/dialog/attrdialog.cpp:287
+#: ../src/ui/dialog/attrdialog.cpp:282 ../src/ui/dialog/attrdialog.cpp:310
 msgid "Delete attribute"
 msgstr "विशेषता मेट्नुहोस्"
 
-#: ../src/ui/dialog/attrdialog.cpp:322
+#: ../src/ui/dialog/attrdialog.cpp:356
 #, fuzzy
 msgid "Rename attribute"
 msgstr "विशेषता सेट गर्नुहोस्"
 
-#: ../src/ui/dialog/attrdialog.cpp:348
+#: ../src/ui/dialog/attrdialog.cpp:381
 #, fuzzy
 msgid "Change attribute value"
 msgstr "विशेषता सेट गर्नुहोस्"
@@ -17593,7 +17593,7 @@ msgstr "हटाउनुहोस्"
 msgid "Remove selected grid."
 msgstr "चयन गरिएको राख्नुहोस्"
 
-#: ../src/ui/dialog/document-properties.cpp:151 ../src/widgets/toolbox.cpp:1471
+#: ../src/ui/dialog/document-properties.cpp:151 ../src/widgets/toolbox.cpp:1473
 #, fuzzy
 msgid "Guides"
 msgstr "मार्गदर्शकहरू"
@@ -17739,7 +17739,7 @@ msgstr "बाटोदर्शकहरुमा स्न्याप बि�
 
 #. Name
 #: ../src/ui/dialog/document-properties.cpp:882
-#: ../src/ui/dialog/objects.cpp:1885 ../src/ui/toolbar/gradient-toolbar.cpp:870
+#: ../src/ui/dialog/objects.cpp:1888 ../src/ui/toolbar/gradient-toolbar.cpp:377
 #, fuzzy
 msgid "New"
 msgstr "नयाँ"
@@ -17844,8 +17844,8 @@ msgstr "चयन"
 msgid "_Custom"
 msgstr "अनुकूलन गर्नुहोस्"
 
-#: ../src/ui/dialog/export.cpp:135 ../src/ui/toolbar/measure-toolbar.cpp:304
-#: ../src/ui/toolbar/measure-toolbar.cpp:312
+#: ../src/ui/dialog/export.cpp:135 ../src/ui/toolbar/measure-toolbar.cpp:244
+#: ../src/ui/toolbar/measure-toolbar.cpp:252
 #: ../share/extensions/render_gears.inx.h:6
 msgid "Units:"
 msgstr "एकाईहरू:"
@@ -18206,7 +18206,7 @@ msgid "Document"
 msgstr "कागजात बचत गरियो ।"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1428 ../src/verbs.cpp:174
-#: ../src/widgets/desktop-widget.cpp:1925
+#: ../src/widgets/desktop-widget.cpp:1924
 #: ../share/extensions/printing_marks.inx.h:18
 msgid "Selection"
 msgstr "चयन"
@@ -19087,7 +19087,7 @@ msgstr "ताराहरू"
 msgid "Spirals"
 msgstr "स्पाइरल"
 
-#: ../src/ui/dialog/find.cpp:92 ../src/widgets/toolbox.cpp:1372
+#: ../src/ui/dialog/find.cpp:92 ../src/widgets/toolbox.cpp:1374
 msgid "Paths"
 msgstr "बाटोहरू"
 
@@ -20134,7 +20134,7 @@ msgstr ""
 #: ../src/ui/dialog/grid-arrange-tab.cpp:565
 #: ../src/ui/dialog/object-attributes.cpp:57
 #: ../src/ui/dialog/object-attributes.cpp:65
-#: ../src/ui/toolbar/node-toolbar.cpp:581 ../src/ui/widget/page-sizer.cpp:60
+#: ../src/ui/toolbar/node-toolbar.cpp:480 ../src/ui/widget/page-sizer.cpp:60
 #: ../src/widgets/desktop-widget.cpp:650
 msgid "X:"
 msgstr "X:"
@@ -20147,7 +20147,7 @@ msgstr "स्तम्भहरू बिचमा तेर्सो खाल
 #: ../src/ui/dialog/grid-arrange-tab.cpp:566
 #: ../src/ui/dialog/object-attributes.cpp:58
 #: ../src/ui/dialog/object-attributes.cpp:66
-#: ../src/ui/toolbar/node-toolbar.cpp:598 ../src/ui/widget/page-sizer.cpp:61
+#: ../src/ui/toolbar/node-toolbar.cpp:500 ../src/ui/widget/page-sizer.cpp:61
 #: ../src/widgets/desktop-widget.cpp:651
 msgid "Y:"
 msgstr "Y:"
@@ -22584,7 +22584,7 @@ msgstr "चयन गर्दै"
 
 #. Transforms options
 #: ../src/ui/dialog/inkscape-preferences.cpp:1520
-#: ../src/ui/toolbar/select-toolbar.cpp:558
+#: ../src/ui/toolbar/select-toolbar.cpp:343
 msgid "Scale stroke width"
 msgstr "स्ट्रोक चौडाई मापन गर्नुहोस्"
 
@@ -22605,22 +22605,22 @@ msgid "Preserved"
 msgstr "सुरक्षित"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1528
-#: ../src/ui/toolbar/select-toolbar.cpp:559
+#: ../src/ui/toolbar/select-toolbar.cpp:344
 msgid "When scaling objects, scale the stroke width by the same proportion"
 msgstr "वस्तुहरू मापन गर्दा, उहि अनुपात द्वारा स्ट्रोक चौडाइ मापन गर्नुहोस्"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1530
-#: ../src/ui/toolbar/select-toolbar.cpp:570
+#: ../src/ui/toolbar/select-toolbar.cpp:355
 msgid "When scaling rectangles, scale the radii of rounded corners"
 msgstr "आयातहरू मापन गर्दा, घुमाउरो कुनाहरुको radii मापन गर्नुहोस्"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1532
-#: ../src/ui/toolbar/select-toolbar.cpp:581
+#: ../src/ui/toolbar/select-toolbar.cpp:366
 msgid "Move gradients (in fill or stroke) along with the objects"
 msgstr "वस्तुहरू संग (भर्ने वा स्ट्रोकमा) ग्राडिएन्टहरू रुपान्तरण गर्नुहोस्"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1534
-#: ../src/ui/toolbar/select-toolbar.cpp:592
+#: ../src/ui/toolbar/select-toolbar.cpp:377
 msgid "Move patterns (in fill or stroke) along with the objects"
 msgstr "वस्तुहरू संग (भर्ने वा स्ट्रोक मा) बान्कीहरू रुपान्तरण गर्नुहोस्"
 
@@ -23278,7 +23278,7 @@ msgstr "रेन्डर"
 
 #. Note: /options/bitmapoversample removed with Cairo renderer
 #: ../src/ui/dialog/inkscape-preferences.cpp:1813
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:602 ../src/verbs.cpp:155
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:351 ../src/verbs.cpp:155
 #, fuzzy
 msgid "Edit"
 msgstr "सम्पादन"
@@ -23842,11 +23842,11 @@ msgid ""
 msgstr ""
 
 #: ../src/ui/dialog/input.cpp:1439
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:545
-#: ../src/ui/toolbar/spray-toolbar.cpp:307
-#: ../src/ui/toolbar/spray-toolbar.cpp:421
-#: ../src/ui/toolbar/spray-toolbar.cpp:470
-#: ../src/ui/toolbar/tweak-toolbar.cpp:363
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:298
+#: ../src/ui/toolbar/spray-toolbar.cpp:112
+#: ../src/ui/toolbar/spray-toolbar.cpp:235
+#: ../src/ui/toolbar/spray-toolbar.cpp:290
+#: ../src/ui/toolbar/tweak-toolbar.cpp:339
 #, fuzzy
 msgid "Pressure"
 msgstr "सुरक्षित"
@@ -23986,13 +23986,13 @@ msgstr "तह न्युन गर्नुहोस्"
 msgid "Unlock layer"
 msgstr "तह न्युन गर्नुहोस्"
 
-#: ../src/ui/dialog/layers.cpp:610 ../src/ui/dialog/objects.cpp:871
+#: ../src/ui/dialog/layers.cpp:610 ../src/ui/dialog/objects.cpp:874
 #: ../src/verbs.cpp:1489
 #, fuzzy
 msgid "Toggle layer solo"
 msgstr "हालको तह पारदर्शिता टगल गर्नुहोस्"
 
-#: ../src/ui/dialog/layers.cpp:613 ../src/ui/dialog/objects.cpp:874
+#: ../src/ui/dialog/layers.cpp:613 ../src/ui/dialog/objects.cpp:877
 #: ../src/verbs.cpp:1513
 #, fuzzy
 msgid "Lock other layers"
@@ -24413,219 +24413,223 @@ msgstr "वस्तुहरू छैन"
 msgid "Unhide object"
 msgstr "लुकाइएको वस्तुहरू उपेक्षा गर्नुहोस्"
 
-#: ../src/ui/dialog/objects.cpp:901
+#: ../src/ui/dialog/objects.cpp:432
+msgid "no-id"
+msgstr ""
+
+#: ../src/ui/dialog/objects.cpp:904
 #, fuzzy
 msgid "Unhide objects"
 msgstr "लुकाइएको वस्तुहरू उपेक्षा गर्नुहोस्"
 
-#: ../src/ui/dialog/objects.cpp:901
+#: ../src/ui/dialog/objects.cpp:904
 #, fuzzy
 msgid "Hide objects"
 msgstr "वस्तुहरू छैन"
 
-#: ../src/ui/dialog/objects.cpp:921
+#: ../src/ui/dialog/objects.cpp:924
 #, fuzzy
 msgid "Lock objects"
 msgstr "वस्तुहरू छैन"
 
-#: ../src/ui/dialog/objects.cpp:921
+#: ../src/ui/dialog/objects.cpp:924
 #, fuzzy
 msgid "Unlock objects"
 msgstr "ताल्चा लगाइएको वस्तुहरू उपेक्षा गर्नुहोस्"
 
-#: ../src/ui/dialog/objects.cpp:933
+#: ../src/ui/dialog/objects.cpp:936
 #, fuzzy
 msgid "Layer to group"
 msgstr "माथितिर तह"
 
-#: ../src/ui/dialog/objects.cpp:933
+#: ../src/ui/dialog/objects.cpp:936
 #, fuzzy
 msgid "Group to layer"
 msgstr "तह न्युन गर्नुहोस्"
 
-#: ../src/ui/dialog/objects.cpp:1131
+#: ../src/ui/dialog/objects.cpp:1134
 #, fuzzy
 msgid "Moved objects"
 msgstr "वस्तुहरू छैन"
 
-#: ../src/ui/dialog/objects.cpp:1380 ../src/ui/dialog/tags.cpp:831
+#: ../src/ui/dialog/objects.cpp:1383 ../src/ui/dialog/tags.cpp:831
 #: ../src/ui/dialog/tags.cpp:838
 #, fuzzy
 msgid "Rename object"
 msgstr "नोड बढाउनुहोस्"
 
-#: ../src/ui/dialog/objects.cpp:1486
+#: ../src/ui/dialog/objects.cpp:1489
 #, fuzzy
 msgid "Set object highlight color"
 msgstr "स्ट्रोक शैली"
 
-#: ../src/ui/dialog/objects.cpp:1496
+#: ../src/ui/dialog/objects.cpp:1499
 #, fuzzy
 msgid "Set object opacity"
 msgstr "स्ट्रोक शैली"
 
-#: ../src/ui/dialog/objects.cpp:1525
+#: ../src/ui/dialog/objects.cpp:1528
 #, fuzzy
 msgid "Set object blend mode"
 msgstr "स्ट्रोक शैली"
 
-#: ../src/ui/dialog/objects.cpp:1595
+#: ../src/ui/dialog/objects.cpp:1598
 #, fuzzy
 msgid "Set object blur"
 msgstr "स्ट्रोक शैली"
 
-#: ../src/ui/dialog/objects.cpp:1661
+#: ../src/ui/dialog/objects.cpp:1664
 msgctxt "Visibility"
 msgid "V"
 msgstr ""
 
-#: ../src/ui/dialog/objects.cpp:1662
+#: ../src/ui/dialog/objects.cpp:1665
 #, fuzzy
 msgctxt "Lock"
 msgid "L"
 msgstr "L"
 
-#: ../src/ui/dialog/objects.cpp:1663
+#: ../src/ui/dialog/objects.cpp:1666
 msgctxt "Type"
 msgid "T"
 msgstr ""
 
-#: ../src/ui/dialog/objects.cpp:1664
+#: ../src/ui/dialog/objects.cpp:1667
 #, fuzzy
 msgctxt "Clip and mask"
 msgid "CM"
 msgstr "CMYK"
 
-#: ../src/ui/dialog/objects.cpp:1665
+#: ../src/ui/dialog/objects.cpp:1668
 #, fuzzy
 msgctxt "Highlight"
 msgid "HL"
 msgstr "HSL"
 
-#: ../src/ui/dialog/objects.cpp:1666
+#: ../src/ui/dialog/objects.cpp:1669
 #, fuzzy
 msgid "Label"
 msgstr "लेबुल"
 
 #. In order to get tooltips on header, we must create our own label.
-#: ../src/ui/dialog/objects.cpp:1694
+#: ../src/ui/dialog/objects.cpp:1697
 #, fuzzy
 msgid "Toggle visibility of Layer, Group, or Object."
 msgstr "हालको तह न्युन गर्नुहोस्"
 
-#: ../src/ui/dialog/objects.cpp:1707
+#: ../src/ui/dialog/objects.cpp:1710
 msgid "Toggle lock of Layer, Group, or Object."
 msgstr ""
 
-#: ../src/ui/dialog/objects.cpp:1719
+#: ../src/ui/dialog/objects.cpp:1722
 msgid ""
 "Type: Layer, Group, or Object. Clicking on Layer or Group icon, toggles "
 "between the two types."
 msgstr ""
 
-#: ../src/ui/dialog/objects.cpp:1738
+#: ../src/ui/dialog/objects.cpp:1741
 msgid "Is object clipped and/or masked?"
 msgstr ""
 
-#: ../src/ui/dialog/objects.cpp:1749
+#: ../src/ui/dialog/objects.cpp:1752
 msgid ""
 "Highlight color of outline in Node tool. Click to set. If alpha is zero, use "
 "inherited color."
 msgstr ""
 
-#: ../src/ui/dialog/objects.cpp:1760
+#: ../src/ui/dialog/objects.cpp:1763
 msgid ""
 "Layer/Group/Object label (inkscape:label). Double-click to set. Default "
 "value is object 'id'."
 msgstr ""
 
-#: ../src/ui/dialog/objects.cpp:1822
+#: ../src/ui/dialog/objects.cpp:1825
 #, fuzzy
 msgid "Add layer..."
 msgstr "तह थप्नुहोस्..."
 
-#: ../src/ui/dialog/objects.cpp:1829
+#: ../src/ui/dialog/objects.cpp:1832
 #, fuzzy
 msgid "Remove object"
 msgstr "भर्ने हटाउनुहोस्"
 
-#: ../src/ui/dialog/objects.cpp:1837
+#: ../src/ui/dialog/objects.cpp:1840
 #, fuzzy
 msgid "Move To Bottom"
 msgstr "तल सम्म न्युन गर्नुहोस्"
 
-#: ../src/ui/dialog/objects.cpp:1861
+#: ../src/ui/dialog/objects.cpp:1864
 #, fuzzy
 msgid "Move To Top"
 msgstr "नोड घटाउनुहोस्"
 
-#: ../src/ui/dialog/objects.cpp:1869
+#: ../src/ui/dialog/objects.cpp:1872
 #, fuzzy
 msgid "Collapse All"
 msgstr "सबै खाली गर्नुहोस्"
 
-#: ../src/ui/dialog/objects.cpp:1883
+#: ../src/ui/dialog/objects.cpp:1886
 #, fuzzy
 msgid "Rename"
 msgstr "पुन: नामकरण गर्नुहोस्"
 
-#: ../src/ui/dialog/objects.cpp:1889
+#: ../src/ui/dialog/objects.cpp:1892
 msgid "Solo"
 msgstr ""
 
-#: ../src/ui/dialog/objects.cpp:1890
+#: ../src/ui/dialog/objects.cpp:1893
 #, fuzzy
 msgid "Show All"
 msgstr "देखाउनुहोस्:"
 
-#: ../src/ui/dialog/objects.cpp:1891
+#: ../src/ui/dialog/objects.cpp:1894
 #, fuzzy
 msgid "Hide All"
 msgstr "तह बढाउनुहोस्"
 
-#: ../src/ui/dialog/objects.cpp:1895
+#: ../src/ui/dialog/objects.cpp:1898
 #, fuzzy
 msgid "Lock Others"
 msgstr "तह न्युन गर्नुहोस्"
 
-#: ../src/ui/dialog/objects.cpp:1896
+#: ../src/ui/dialog/objects.cpp:1899
 #, fuzzy
 msgid "Lock All"
 msgstr "तह न्युन गर्नुहोस्"
 
 #. LockAndHide
-#: ../src/ui/dialog/objects.cpp:1897 ../src/verbs.cpp:3263
+#: ../src/ui/dialog/objects.cpp:1900 ../src/verbs.cpp:3263
 #, fuzzy
 msgid "Unlock All"
 msgstr "तह न्युन गर्नुहोस्"
 
-#: ../src/ui/dialog/objects.cpp:1902
+#: ../src/ui/dialog/objects.cpp:1905
 #, fuzzy
 msgid "Up"
 msgstr "माथि"
 
-#: ../src/ui/dialog/objects.cpp:1904
+#: ../src/ui/dialog/objects.cpp:1907
 msgid "Down"
 msgstr ""
 
-#: ../src/ui/dialog/objects.cpp:1913
+#: ../src/ui/dialog/objects.cpp:1916
 #, fuzzy
 msgid "Set Clip"
 msgstr "अनसेट भर्ने"
 
 #. will never be implemented
 #. _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_INVERSE_CLIPPATH, 0, "Set Inverse Clip", (int)BUTTON_SETINVCLIP ) );
-#: ../src/ui/dialog/objects.cpp:1919
+#: ../src/ui/dialog/objects.cpp:1922
 #, fuzzy
 msgid "Unset Clip"
 msgstr "अनसेट भर्ने"
 
-#: ../src/ui/dialog/objects.cpp:1924
+#: ../src/ui/dialog/objects.cpp:1927
 #, fuzzy
 msgid "Unset Mask"
 msgstr "ताराहरू"
 
-#: ../src/ui/dialog/objects.cpp:1946
+#: ../src/ui/dialog/objects.cpp:1949
 #, fuzzy
 msgid "Select Highlight Color"
 msgstr "हाइलाइट रङ:"
@@ -26142,7 +26146,7 @@ msgid "nodeAsInXMLdialogTooltip|Delete node"
 msgstr ""
 
 #: ../src/ui/dialog/xml-tree.cpp:67 ../src/ui/dialog/xml-tree.cpp:123
-#: ../src/ui/dialog/xml-tree.cpp:754
+#: ../src/ui/dialog/xml-tree.cpp:758
 msgid "Duplicate node"
 msgstr "नक्कल नोड"
 
@@ -26157,22 +26161,22 @@ msgid "Drag to reorder nodes"
 msgstr "नोडहरू फेरि क्रमबद्ध गर्न तान्नुहोस्"
 
 #: ../src/ui/dialog/xml-tree.cpp:141 ../src/ui/dialog/xml-tree.cpp:142
-#: ../src/ui/dialog/xml-tree.cpp:864
+#: ../src/ui/dialog/xml-tree.cpp:868
 msgid "Unindent node"
 msgstr "नोडको इन्डेन्ट हटाउनुहोस्"
 
 #: ../src/ui/dialog/xml-tree.cpp:149 ../src/ui/dialog/xml-tree.cpp:150
-#: ../src/ui/dialog/xml-tree.cpp:842
+#: ../src/ui/dialog/xml-tree.cpp:846
 msgid "Indent node"
 msgstr "इन्डेन्ट नोड"
 
 #: ../src/ui/dialog/xml-tree.cpp:157 ../src/ui/dialog/xml-tree.cpp:158
-#: ../src/ui/dialog/xml-tree.cpp:793
+#: ../src/ui/dialog/xml-tree.cpp:797
 msgid "Raise node"
 msgstr "नोड बढाउनुहोस्"
 
 #: ../src/ui/dialog/xml-tree.cpp:165 ../src/ui/dialog/xml-tree.cpp:166
-#: ../src/ui/dialog/xml-tree.cpp:811
+#: ../src/ui/dialog/xml-tree.cpp:815
 msgid "Lower node"
 msgstr "नोड घटाउनुहोस्"
 
@@ -26190,94 +26194,94 @@ msgstr "शैलि: "
 msgid "<b>Click</b> to select nodes, <b>drag</b> to rearrange."
 msgstr "नोडहरू चयन गर्न <b>क्लिक गर्नुहोस्</b>, पुन: मिलाउन <b>तान्नुहोस्</b> ।"
 
-#: ../src/ui/dialog/xml-tree.cpp:458
+#: ../src/ui/dialog/xml-tree.cpp:462
 msgid "Drag XML subtree"
 msgstr ""
 
-#: ../src/ui/dialog/xml-tree.cpp:724
+#: ../src/ui/dialog/xml-tree.cpp:728
 #, fuzzy
 msgid "Create new element node"
 msgstr "नयाँ तत्व नोड"
 
-#: ../src/ui/dialog/xml-tree.cpp:739
+#: ../src/ui/dialog/xml-tree.cpp:743
 #, fuzzy
 msgid "Create new text node"
 msgstr "नयाँ पाठ नोड"
 
-#: ../src/ui/dialog/xml-tree.cpp:771
+#: ../src/ui/dialog/xml-tree.cpp:775
 msgid "nodeAsInXMLinHistoryDialog|Delete node"
 msgstr ""
 
-#: ../src/ui/interface.cpp:767
+#: ../src/ui/drag-and-drop.cpp:159 ../src/ui/drag-and-drop.cpp:245
+#: ../src/ui/drag-and-drop.cpp:348 ../src/ui/widget/selected-style.cpp:531
+#, fuzzy
+msgid "Drop color"
+msgstr "रङ प्रतिलिपि बनाउनुहोस्"
+
+#: ../src/ui/drag-and-drop.cpp:198 ../src/ui/drag-and-drop.cpp:308
+#, fuzzy
+msgid "Drop color on gradient"
+msgstr "ग्राडिएन्टमा रोकहरू छैन"
+
+#: ../src/ui/drag-and-drop.cpp:363
+msgid "Could not parse SVG data"
+msgstr "SVG डेटा पद वर्णन गर्न सकेन"
+
+#: ../src/ui/drag-and-drop.cpp:402
+msgid "Drop SVG"
+msgstr ""
+
+#: ../src/ui/drag-and-drop.cpp:419
+#, fuzzy
+msgid "Drop Symbol"
+msgstr "रङ प्रतिलिपि बनाउनुहोस्"
+
+#: ../src/ui/drag-and-drop.cpp:442
+#, fuzzy
+msgid "Drop bitmap image"
+msgstr "<image> रुपमा बिटम्याप आयात गर्नुहोस्"
+
+#: ../src/ui/interface.cpp:598
 #, fuzzy
 msgctxt "Interface setup"
 msgid "Default"
 msgstr "पूर्वनिर्धारित"
 
-#: ../src/ui/interface.cpp:767
+#: ../src/ui/interface.cpp:598
 #, fuzzy
 msgid "Default interface setup"
 msgstr "पूर्वनिर्धारित"
 
-#: ../src/ui/interface.cpp:768
+#: ../src/ui/interface.cpp:599
 #, fuzzy
 msgctxt "Interface setup"
 msgid "Custom"
 msgstr "अनुकूलन गर्नुहोस्"
 
-#: ../src/ui/interface.cpp:768
+#: ../src/ui/interface.cpp:599
 msgid "Setup for custom task"
 msgstr ""
 
-#: ../src/ui/interface.cpp:769
+#: ../src/ui/interface.cpp:600
 #, fuzzy
 msgctxt "Interface setup"
 msgid "Wide"
 msgstr "लुकाउनुहोस्"
 
-#: ../src/ui/interface.cpp:769
+#: ../src/ui/interface.cpp:600
 msgid "Setup for widescreen work"
 msgstr ""
 
-#: ../src/ui/interface.cpp:905
+#: ../src/ui/interface.cpp:736
 #, c-format
 msgid "Verb \"%s\" Unknown"
 msgstr "क्रिया \"%s\" अज्ञात"
 
-#: ../src/ui/interface.cpp:940
+#: ../src/ui/interface.cpp:771
 msgid "Open _Recent"
 msgstr "हालैको खोल्नुहोस्"
 
-#: ../src/ui/interface.cpp:1048 ../src/ui/interface.cpp:1134
-#: ../src/ui/interface.cpp:1237 ../src/ui/widget/selected-style.cpp:531
-#, fuzzy
-msgid "Drop color"
-msgstr "रङ प्रतिलिपि बनाउनुहोस्"
-
-#: ../src/ui/interface.cpp:1087 ../src/ui/interface.cpp:1197
-#, fuzzy
-msgid "Drop color on gradient"
-msgstr "ग्राडिएन्टमा रोकहरू छैन"
-
-#: ../src/ui/interface.cpp:1252
-msgid "Could not parse SVG data"
-msgstr "SVG डेटा पद वर्णन गर्न सकेन"
-
-#: ../src/ui/interface.cpp:1291
-msgid "Drop SVG"
-msgstr ""
-
-#: ../src/ui/interface.cpp:1308
-#, fuzzy
-msgid "Drop Symbol"
-msgstr "रङ प्रतिलिपि बनाउनुहोस्"
-
-#: ../src/ui/interface.cpp:1331
-#, fuzzy
-msgid "Drop bitmap image"
-msgstr "<image> रुपमा बिटम्याप आयात गर्नुहोस्"
-
-#: ../src/ui/interface.cpp:1424
+#: ../src/ui/interface.cpp:860
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">A file named \"%s\" already exists. Do "
@@ -26286,7 +26290,7 @@ msgid ""
 "The file already exists in \"%s\". Replacing it will overwrite its contents."
 msgstr ""
 
-#: ../src/ui/interface.cpp:1431 ../share/extensions/web-set-att.inx.h:21
+#: ../src/ui/interface.cpp:867 ../share/extensions/web-set-att.inx.h:21
 #: ../share/extensions/web-transmit-att.inx.h:19
 #, fuzzy
 msgid "Replace"
@@ -26521,13 +26525,13 @@ msgid "Duplicate nodes"
 msgstr "नक्कल नोड"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:419
-#: ../src/ui/toolbar/node-toolbar.cpp:408
+#: ../src/ui/toolbar/node-toolbar.cpp:314
 #, fuzzy
 msgid "Join nodes"
 msgstr "अन्त्य नोड"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:426
-#: ../src/ui/toolbar/node-toolbar.cpp:419
+#: ../src/ui/toolbar/node-toolbar.cpp:325
 #, fuzzy
 msgid "Break nodes"
 msgstr "नोड घटाउनुहोस्"
@@ -26814,7 +26818,7 @@ msgstr "आयात"
 
 #. We need to call MPM's method because it could have been our last node
 #: ../src/ui/tool/path-manipulator.cpp:1561
-#: ../src/ui/toolbar/node-toolbar.cpp:397
+#: ../src/ui/toolbar/node-toolbar.cpp:303
 msgid "Delete node"
 msgstr "नोड मेट्नुहोस्"
 
@@ -26953,300 +26957,293 @@ msgctxt "Transform handle tip"
 msgid "<b>Rotation center</b>: drag to change the origin of transforms"
 msgstr ""
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:140
-msgid "Ellipse: Change radius"
-msgstr ""
-
-#: ../src/ui/toolbar/arc-toolbar.cpp:206
-msgid "Arc: Change start/end"
-msgstr ""
-
-#: ../src/ui/toolbar/arc-toolbar.cpp:274
-#, fuzzy
-msgid "Arc: Changed arc type"
-msgstr "मास्टर अस्पष्टता"
-
-#: ../src/ui/toolbar/arc-toolbar.cpp:409 ../src/ui/toolbar/arc-toolbar.cpp:448
-#: ../src/ui/toolbar/rect-toolbar.cpp:265
-#: ../src/ui/toolbar/rect-toolbar.cpp:304
-#: ../src/ui/toolbar/spiral-toolbar.cpp:215
-#: ../src/ui/toolbar/spiral-toolbar.cpp:239
-#: ../src/ui/toolbar/star-toolbar.cpp:392
-#: ../src/ui/toolbar/star-toolbar.cpp:472
+#: ../src/ui/toolbar/arc-toolbar.cpp:104 ../src/ui/toolbar/arc-toolbar.cpp:507
+#: ../src/ui/toolbar/rect-toolbar.cpp:106
+#: ../src/ui/toolbar/rect-toolbar.cpp:356
+#: ../src/ui/toolbar/spiral-toolbar.cpp:90
+#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/star-toolbar.cpp:95 ../src/ui/toolbar/star-toolbar.cpp:532
 msgid "<b>New:</b>"
 msgstr "<b>नयाँ:</b>"
 
-#. FIXME: implement averaging of all parameters for multiple selected
-#. gtk_label_set_markup(GTK_LABEL(l), _("<b>Average:</b>"));
-#: ../src/ui/toolbar/arc-toolbar.cpp:412 ../src/ui/toolbar/arc-toolbar.cpp:429
-#: ../src/ui/toolbar/rect-toolbar.cpp:273
-#: ../src/ui/toolbar/rect-toolbar.cpp:291
-#: ../src/ui/toolbar/spiral-toolbar.cpp:217
-#: ../src/ui/toolbar/spiral-toolbar.cpp:228
-#: ../src/ui/toolbar/star-toolbar.cpp:394
-msgid "<b>Change:</b>"
-msgstr "<b>परिवर्तन गर्नुहोस्:</b>"
-
-#: ../src/ui/toolbar/arc-toolbar.cpp:459 ../src/ui/toolbar/rect-toolbar.cpp:354
+#: ../src/ui/toolbar/arc-toolbar.cpp:114 ../src/ui/toolbar/rect-toolbar.cpp:163
 #, fuzzy
 msgid "Horizontal radius"
 msgstr "तेर्सो खाली स्थान"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:459 ../src/ui/toolbar/rect-toolbar.cpp:354
+#: ../src/ui/toolbar/arc-toolbar.cpp:114 ../src/ui/toolbar/rect-toolbar.cpp:163
 msgid "Rx:"
 msgstr "Rx:"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:459
+#: ../src/ui/toolbar/arc-toolbar.cpp:114
 #, fuzzy
 msgid "Horizontal radius of the circle, ellipse, or arc"
 msgstr "घुमाउरो कुनाहरुको तेर्सो रेडियस"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:475 ../src/ui/toolbar/rect-toolbar.cpp:368
+#: ../src/ui/toolbar/arc-toolbar.cpp:135 ../src/ui/toolbar/rect-toolbar.cpp:185
 #, fuzzy
 msgid "Vertical radius"
 msgstr "ठाडो खाली स्थान"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:475 ../src/ui/toolbar/rect-toolbar.cpp:368
+#: ../src/ui/toolbar/arc-toolbar.cpp:135 ../src/ui/toolbar/rect-toolbar.cpp:185
 msgid "Ry:"
 msgstr "Ry:"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:475
+#: ../src/ui/toolbar/arc-toolbar.cpp:135
 #, fuzzy
 msgid "Vertical radius of the circle, ellipse, or arc"
 msgstr "वृतहरू, दीर्धवृतहरू, र चापहरू सिर्जना गर्नुहोस्"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:488 ../src/ui/toolbar/lpe-toolbar.cpp:400
-#: ../src/ui/toolbar/node-toolbar.cpp:611
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:180
-#: ../src/ui/toolbar/rect-toolbar.cpp:379
-#: ../src/ui/toolbar/select-toolbar.cpp:524
-#: ../src/ui/toolbar/text-toolbar.cpp:2322
+#: ../src/ui/toolbar/arc-toolbar.cpp:153 ../src/ui/toolbar/lpe-toolbar.cpp:208
+#: ../src/ui/toolbar/node-toolbar.cpp:517
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:130
+#: ../src/ui/toolbar/rect-toolbar.cpp:204
+#: ../src/ui/toolbar/select-toolbar.cpp:317
+#: ../src/ui/toolbar/text-toolbar.cpp:611
 msgid "Units"
 msgstr "एकाइहरू"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:495
+#: ../src/ui/toolbar/arc-toolbar.cpp:160
 msgid "Start:"
 msgstr "सुरू गर्नुहोस्:"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:496
+#: ../src/ui/toolbar/arc-toolbar.cpp:161
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr ""
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:508
+#: ../src/ui/toolbar/arc-toolbar.cpp:177
 msgid "End:"
 msgstr "समाप्त:"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:509
+#: ../src/ui/toolbar/arc-toolbar.cpp:178
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr ""
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:528
+#: ../src/ui/toolbar/arc-toolbar.cpp:205
 msgid "Switch to slice (closed shape with two radii)"
 msgstr ""
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:533
+#: ../src/ui/toolbar/arc-toolbar.cpp:210
 msgid "Arc (Open)"
 msgstr ""
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:534
+#: ../src/ui/toolbar/arc-toolbar.cpp:211
 msgid "Switch to arc (unclosed shape)"
 msgstr ""
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:540
+#: ../src/ui/toolbar/arc-toolbar.cpp:217
 #, fuzzy
 msgid "Switch to chord (closed shape)"
 msgstr "सामान्य प्रर्दशन मोडमा स्विच गर्नुहोस्"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:565
+#: ../src/ui/toolbar/arc-toolbar.cpp:241
 msgid "Make whole"
 msgstr "सम्पूर्ण बनाउनुहोस्"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:566
+#: ../src/ui/toolbar/arc-toolbar.cpp:242
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "एउटा पूर्ण दीर्धवृत बनाउनुहोस्, चाप वा खण्ड होइन"
 
-#. TODO: use the correct axis here, too
-#: ../src/ui/toolbar/box3d-toolbar.cpp:234
-msgid "3D Box: Change perspective (angle of infinite axis)"
+#: ../src/ui/toolbar/arc-toolbar.cpp:317
+msgid "Ellipse: Change radius"
 msgstr ""
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:303
+#: ../src/ui/toolbar/arc-toolbar.cpp:371
+msgid "Arc: Change start/end"
+msgstr ""
+
+#: ../src/ui/toolbar/arc-toolbar.cpp:427
+#, fuzzy
+msgid "Arc: Changed arc type"
+msgstr "मास्टर अस्पष्टता"
+
+#. FIXME: implement averaging of all parameters for multiple selected
+#. gtk_label_set_markup(GTK_LABEL(l), _("<b>Average:</b>"));
+#: ../src/ui/toolbar/arc-toolbar.cpp:510 ../src/ui/toolbar/arc-toolbar.cpp:524
+#: ../src/ui/toolbar/rect-toolbar.cpp:360
+#: ../src/ui/toolbar/rect-toolbar.cpp:375
+#: ../src/ui/toolbar/spiral-toolbar.cpp:263
+#: ../src/ui/toolbar/spiral-toolbar.cpp:274
+#: ../src/ui/toolbar/star-toolbar.cpp:534
+msgid "<b>Change:</b>"
+msgstr "<b>परिवर्तन गर्नुहोस्:</b>"
+
+#: ../src/ui/toolbar/box3d-toolbar.cpp:89
 msgid "Angle in X direction"
 msgstr ""
 
 #. Translators: PL is short for 'perspective line'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:305
+#: ../src/ui/toolbar/box3d-toolbar.cpp:91
 msgid "Angle of PLs in X direction"
 msgstr ""
 
 #. Translators: VP is short for 'vanishing point'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:327
+#: ../src/ui/toolbar/box3d-toolbar.cpp:117
 msgid "State of VP in X direction"
 msgstr ""
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:328
+#: ../src/ui/toolbar/box3d-toolbar.cpp:118
 msgid "Toggle VP in X direction between 'finite' and 'infinite' (=parallel)"
 msgstr ""
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:343
+#: ../src/ui/toolbar/box3d-toolbar.cpp:132
 msgid "Angle in Y direction"
 msgstr ""
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:343
+#: ../src/ui/toolbar/box3d-toolbar.cpp:132
 #, fuzzy
 msgid "Angle Y:"
 msgstr "कोण:"
 
 #. Translators: PL is short for 'perspective line'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:345
+#: ../src/ui/toolbar/box3d-toolbar.cpp:134
 msgid "Angle of PLs in Y direction"
 msgstr ""
 
 #. Translators: VP is short for 'vanishing point'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:366
+#: ../src/ui/toolbar/box3d-toolbar.cpp:159
 msgid "State of VP in Y direction"
 msgstr ""
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:367
+#: ../src/ui/toolbar/box3d-toolbar.cpp:160
 msgid "Toggle VP in Y direction between 'finite' and 'infinite' (=parallel)"
 msgstr ""
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:382
+#: ../src/ui/toolbar/box3d-toolbar.cpp:174
 msgid "Angle in Z direction"
 msgstr ""
 
 #. Translators: PL is short for 'perspective line'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:384
+#: ../src/ui/toolbar/box3d-toolbar.cpp:176
 msgid "Angle of PLs in Z direction"
 msgstr ""
 
 #. Translators: VP is short for 'vanishing point'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:405
+#: ../src/ui/toolbar/box3d-toolbar.cpp:201
 msgid "State of VP in Z direction"
 msgstr ""
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:406
+#: ../src/ui/toolbar/box3d-toolbar.cpp:202
 msgid "Toggle VP in Z direction between 'finite' and 'infinite' (=parallel)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:213
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:254
-#, fuzzy
-msgid "No preset"
-msgstr "पूर्वावलोकन"
+#. TODO: use the correct axis here, too
+#: ../src/ui/toolbar/box3d-toolbar.cpp:242
+msgid "3D Box: Change perspective (angle of infinite axis)"
+msgstr ""
 
 #. Width
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:394
-#: ../src/ui/toolbar/eraser-toolbar.cpp:183
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
+#: ../src/ui/toolbar/eraser-toolbar.cpp:112
 msgid "(hairline)"
 msgstr ""
 
 #. Mean
 #. Rotation
 #. Scale
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:394
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:427
-#: ../src/ui/toolbar/eraser-toolbar.cpp:183
-#: ../src/ui/toolbar/pencil-toolbar.cpp:556
-#: ../src/ui/toolbar/spray-toolbar.cpp:290
-#: ../src/ui/toolbar/spray-toolbar.cpp:319
-#: ../src/ui/toolbar/spray-toolbar.cpp:335
-#: ../src/ui/toolbar/spray-toolbar.cpp:402
-#: ../src/ui/toolbar/spray-toolbar.cpp:432
-#: ../src/ui/toolbar/spray-toolbar.cpp:450
-#: ../src/ui/toolbar/spray-toolbar.cpp:599
-#: ../src/ui/toolbar/tweak-toolbar.cpp:126
-#: ../src/ui/toolbar/tweak-toolbar.cpp:143
-#: ../src/ui/toolbar/tweak-toolbar.cpp:341
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:147
+#: ../src/ui/toolbar/eraser-toolbar.cpp:112
+#: ../src/ui/toolbar/pencil-toolbar.cpp:171
+#: ../src/ui/toolbar/spray-toolbar.cpp:90
+#: ../src/ui/toolbar/spray-toolbar.cpp:122
+#: ../src/ui/toolbar/spray-toolbar.cpp:143
+#: ../src/ui/toolbar/spray-toolbar.cpp:212
+#: ../src/ui/toolbar/spray-toolbar.cpp:244
+#: ../src/ui/toolbar/spray-toolbar.cpp:266
+#: ../src/ui/toolbar/spray-toolbar.cpp:409
+#: ../src/ui/toolbar/tweak-toolbar.cpp:92
+#: ../src/ui/toolbar/tweak-toolbar.cpp:115
+#: ../src/ui/toolbar/tweak-toolbar.cpp:312
 #, fuzzy
 msgid "(default)"
 msgstr "पूर्वनिर्धारित"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:394
-#: ../src/ui/toolbar/eraser-toolbar.cpp:183
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
+#: ../src/ui/toolbar/eraser-toolbar.cpp:112
 #, fuzzy
 msgid "(broad stroke)"
 msgstr " (stroke)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:397
-#: ../src/ui/toolbar/eraser-toolbar.cpp:186
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:105
+#: ../src/ui/toolbar/eraser-toolbar.cpp:115
 #, fuzzy
 msgid "Pen Width"
 msgstr "पृष्ठ चौडाई"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:398
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:106
 msgid "The width of the calligraphic pen (relative to the visible canvas area)"
 msgstr "हस्तलेखन कलमको चौडाइ (दृश्यात्मक क्यानभास क्षेत्रमा सम्बन्धित)"
 
 #. Thinning
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(speed blows up stroke)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(slight widening)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 #, fuzzy
 msgid "(constant width)"
 msgstr "मुद्रण गन्तब्य"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(slight thinning, default)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(speed deflates stroke)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:414
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:128
 #, fuzzy
 msgid "Stroke Thinning"
 msgstr "स्ट्रोक रङ् लगाउनु"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:414
-#: ../src/ui/toolbar/eraser-toolbar.cpp:219
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:128
+#: ../src/ui/toolbar/eraser-toolbar.cpp:150
 msgid "Thinning:"
 msgstr "पातलो बनाउदै:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:415
-#: ../src/ui/toolbar/eraser-toolbar.cpp:220
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:129
+#: ../src/ui/toolbar/eraser-toolbar.cpp:151
 msgid ""
 "How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 "
 "makes them broader, 0 makes width independent of velocity)"
 msgstr ""
 
 #. Angle
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:427
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:147
 msgid "(left edge up)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:427
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:147
 #, fuzzy
 msgid "(horizontal)"
 msgstr "तेर्सो"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:427
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:147
 msgid "(right edge up)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:430
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:150
 #, fuzzy
 msgid "Pen Angle"
 msgstr "कोण"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:430
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:150
 #: ../share/extensions/motion.inx.h:3 ../share/extensions/restack.inx.h:5
 msgid "Angle:"
 msgstr "कोण:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:431
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:151
 msgid ""
 "The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if "
 "fixation = 0)"
@@ -27254,318 +27251,324 @@ msgstr ""
 "कलमको निबको कोण (डिग्रीहरुमा; ० = तेर्सो; यदि स्थितिकरण = ० छ भने कुनै प्रभाव हुदैन)"
 
 #. Fixation
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:445
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:169
 msgid "(perpendicular to stroke, \"brush\")"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:445
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:169
 msgid "(almost fixed, default)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:445
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:169
 msgid "(fixed by Angle, \"pen\")"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:448
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:172
 #, fuzzy
 msgid "Fixation"
 msgstr "स्थिरीकरण:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:448
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:172
 msgid "Fixation:"
 msgstr "स्थिरीकरण:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:449
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:173
 msgid ""
 "Angle behavior (0 = nib always perpendicular to stroke direction, 100 = "
 "fixed angle)"
 msgstr ""
 
 #. Cap Rounding
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:461
-#: ../src/ui/toolbar/eraser-toolbar.cpp:234
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:191
+#: ../src/ui/toolbar/eraser-toolbar.cpp:169
 #, fuzzy
 msgid "(blunt caps, default)"
 msgstr "पूर्वनिर्धारितको रुपमा सेट गर्नुहोस्"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:461
-#: ../src/ui/toolbar/eraser-toolbar.cpp:234
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:191
+#: ../src/ui/toolbar/eraser-toolbar.cpp:169
 msgid "(slightly bulging)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:461
-#: ../src/ui/toolbar/eraser-toolbar.cpp:234
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:191
+#: ../src/ui/toolbar/eraser-toolbar.cpp:169
 msgid "(approximately round)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:461
-#: ../src/ui/toolbar/eraser-toolbar.cpp:234
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:191
+#: ../src/ui/toolbar/eraser-toolbar.cpp:169
 msgid "(long protruding caps)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:465
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:195
 #, fuzzy
 msgid "Cap rounding"
 msgstr "नघुमेको"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:465
-#: ../src/ui/toolbar/eraser-toolbar.cpp:238
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:195
+#: ../src/ui/toolbar/eraser-toolbar.cpp:173
 #, fuzzy
 msgid "Caps:"
 msgstr "क्याप:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:466
-#: ../src/ui/toolbar/eraser-toolbar.cpp:239
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:196
+#: ../src/ui/toolbar/eraser-toolbar.cpp:174
 msgid ""
 "Increase to make caps at the ends of strokes protrude more (0 = no caps, 1 = "
 "round caps)"
 msgstr ""
 
 #. Tremor
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:478
-#: ../src/ui/toolbar/eraser-toolbar.cpp:253
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:214
+#: ../src/ui/toolbar/eraser-toolbar.cpp:192
 #, fuzzy
 msgid "(smooth line)"
 msgstr "मिहिन"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:478
-#: ../src/ui/toolbar/eraser-toolbar.cpp:253
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:214
+#: ../src/ui/toolbar/eraser-toolbar.cpp:192
 msgid "(slight tremor)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:478
-#: ../src/ui/toolbar/eraser-toolbar.cpp:253
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:214
+#: ../src/ui/toolbar/eraser-toolbar.cpp:192
 msgid "(noticeable tremor)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:478
-#: ../src/ui/toolbar/eraser-toolbar.cpp:253
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:214
+#: ../src/ui/toolbar/eraser-toolbar.cpp:192
 msgid "(maximum tremor)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:481
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:217
 #, fuzzy
 msgid "Stroke Tremor"
 msgstr "अन्तिममा चयन गरिएको रङ"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:481
-#: ../src/ui/toolbar/eraser-toolbar.cpp:256
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:217
+#: ../src/ui/toolbar/eraser-toolbar.cpp:195
 msgid "Tremor:"
 msgstr "थरथराहट:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:482
-#: ../src/ui/toolbar/eraser-toolbar.cpp:257
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:218
+#: ../src/ui/toolbar/eraser-toolbar.cpp:196
 msgid "Increase to make strokes rugged and trembling"
 msgstr ""
 
 #. Wiggle
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:496
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:238
 msgid "(no wiggle)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:496
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:238
 #, fuzzy
 msgid "(slight deviation)"
 msgstr "मुद्रण गन्तव्य"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:496
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:238
 msgid "(wild waves and curls)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:499
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:241
 #, fuzzy
 msgid "Pen Wiggle"
 msgstr "शीर्षक:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:499
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:241
 #, fuzzy
 msgid "Wiggle:"
 msgstr "शीर्षक:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:500
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:242
 msgid "Increase to make the pen waver and wiggle"
 msgstr ""
 
 #. Mass
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:513
-#: ../src/ui/toolbar/eraser-toolbar.cpp:273
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:261
+#: ../src/ui/toolbar/eraser-toolbar.cpp:215
 #, fuzzy
 msgid "(no inertia)"
 msgstr "(शुन्य सूचक)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:513
-#: ../src/ui/toolbar/eraser-toolbar.cpp:273
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:261
+#: ../src/ui/toolbar/eraser-toolbar.cpp:215
 msgid "(slight smoothing, default)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:513
-#: ../src/ui/toolbar/eraser-toolbar.cpp:273
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:261
+#: ../src/ui/toolbar/eraser-toolbar.cpp:215
 msgid "(noticeable lagging)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:513
-#: ../src/ui/toolbar/eraser-toolbar.cpp:273
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:261
+#: ../src/ui/toolbar/eraser-toolbar.cpp:215
 msgid "(maximum inertia)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:516
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:264
 #, fuzzy
 msgid "Pen Mass"
 msgstr "समूह:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:516
-#: ../src/ui/toolbar/eraser-toolbar.cpp:276
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:264
+#: ../src/ui/toolbar/eraser-toolbar.cpp:218
 msgid "Mass:"
 msgstr "समूह:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:517
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:265
 msgid "Increase to make the pen drag behind, as if slowed by inertia"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:532
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:286
 #, fuzzy
 msgid "Trace Background"
 msgstr "पृष्ठभूमि:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:533
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:287
 msgid ""
 "Trace the lightness of the background by the width of the pen (white - "
 "minimum width, black - maximum width)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:546
-#: ../src/ui/toolbar/eraser-toolbar.cpp:204
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:299
+#: ../src/ui/toolbar/eraser-toolbar.cpp:137
 msgid "Use the pressure of the input device to alter the width of the pen"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:558
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:310
 #, fuzzy
 msgid "Tilt"
 msgstr "शीर्षक"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:559
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:311
 msgid "Use the tilt of the input device to alter the angle of the pen's nib"
 msgstr ""
 
 #. Name
 #. Label
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:580
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:331
 #, fuzzy
 msgid "Choose a preset"
 msgstr "पूर्वावलोकन"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:598
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:347
 #, fuzzy
 msgid "Add/Edit Profile"
 msgstr "लिङ्क गुणहरू"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:599
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:348
 #, fuzzy
 msgid "Add or edit calligraphic profile"
 msgstr "हस्तलेखन लाइनहरू कोर्नुहोस्"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:117
-msgid "Set connector type: orthogonal"
-msgstr ""
-
-#: ../src/ui/toolbar/connector-toolbar.cpp:117
-msgid "Set connector type: polyline"
-msgstr ""
-
-#: ../src/ui/toolbar/connector-toolbar.cpp:164
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:506
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:601
 #, fuzzy
-msgid "Change connector curvature"
-msgstr "योजकहरू सिर्जना गर्नुहोस्"
+msgid "No preset"
+msgstr "पूर्वावलोकन"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:213
-#, fuzzy
-msgid "Change connector spacing"
-msgstr "योजकहरू सिर्जना गर्नुहोस्"
-
-#: ../src/ui/toolbar/connector-toolbar.cpp:311
+#: ../src/ui/toolbar/connector-toolbar.cpp:81
 msgid "Avoid"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:312
+#: ../src/ui/toolbar/connector-toolbar.cpp:82
 #: ../src/ui/tools/connector-tool.cpp:1321
 msgid "Make connectors avoid selected objects"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:321
+#: ../src/ui/toolbar/connector-toolbar.cpp:91
 #, fuzzy
 msgid "Ignore"
 msgstr "कुनै पनि होइन"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:322
+#: ../src/ui/toolbar/connector-toolbar.cpp:92
 #: ../src/ui/tools/connector-tool.cpp:1322
 msgid "Make connectors ignore selected objects"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:332
+#: ../src/ui/toolbar/connector-toolbar.cpp:102
 msgid "Orthogonal"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:333
+#: ../src/ui/toolbar/connector-toolbar.cpp:103
 msgid "Make connector orthogonal or polyline"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:347
+#: ../src/ui/toolbar/connector-toolbar.cpp:116
 #, fuzzy
 msgid "Connector Curvature"
 msgstr "योजक प्राथमिकताहरू"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:347
+#: ../src/ui/toolbar/connector-toolbar.cpp:116
 #, fuzzy
 msgid "Curvature:"
 msgstr "सर्जक"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:348
+#: ../src/ui/toolbar/connector-toolbar.cpp:117
 msgid "The amount of connectors curvature"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:358
+#: ../src/ui/toolbar/connector-toolbar.cpp:132
 #, fuzzy
 msgid "Connector Spacing"
 msgstr "योजकहरू सिर्जना गर्नुहोस्"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:358
+#: ../src/ui/toolbar/connector-toolbar.cpp:132
 msgid "Spacing:"
 msgstr "खाली स्थान:"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:359
+#: ../src/ui/toolbar/connector-toolbar.cpp:133
 msgid "The amount of space left around objects by auto-routing connectors"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:370
+#: ../src/ui/toolbar/connector-toolbar.cpp:149
 #, fuzzy
 msgid "Graph"
 msgstr "बर्नुहोस्"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:380
+#: ../src/ui/toolbar/connector-toolbar.cpp:159
 #, fuzzy
 msgid "Connector Length"
 msgstr "योजक"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:380
+#: ../src/ui/toolbar/connector-toolbar.cpp:159
 #, fuzzy
 msgid "Length:"
 msgstr "स्केल लम्बाइ"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:381
+#: ../src/ui/toolbar/connector-toolbar.cpp:160
 msgid "Ideal length for connectors when layout is applied"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:393
+#: ../src/ui/toolbar/connector-toolbar.cpp:176
 msgid "Downwards"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:394
+#: ../src/ui/toolbar/connector-toolbar.cpp:177
 msgid "Make connectors with end-markers (arrows) point downwards"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:410
+#: ../src/ui/toolbar/connector-toolbar.cpp:193
 msgid "Do not allow overlapping shapes"
 msgstr ""
+
+#: ../src/ui/toolbar/connector-toolbar.cpp:279
+msgid "Set connector type: orthogonal"
+msgstr ""
+
+#: ../src/ui/toolbar/connector-toolbar.cpp:279
+msgid "Set connector type: polyline"
+msgstr ""
+
+#: ../src/ui/toolbar/connector-toolbar.cpp:326
+#, fuzzy
+msgid "Change connector curvature"
+msgstr "योजकहरू सिर्जना गर्नुहोस्"
+
+#: ../src/ui/toolbar/connector-toolbar.cpp:374
+#, fuzzy
+msgid "Change connector spacing"
+msgstr "योजकहरू सिर्जना गर्नुहोस्"
 
 #: ../src/ui/toolbar/dropper-toolbar.cpp:70
 #, fuzzy
@@ -27588,80 +27591,80 @@ msgid ""
 "If alpha was picked, assign it to selection as fill or stroke transparency"
 msgstr ""
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:147
+#: ../src/ui/toolbar/eraser-toolbar.cpp:77
 #, fuzzy
 msgid "Delete objects touched by eraser"
 msgstr "बढाउन <b>वस्तु(हरू)</b> चयन गर्नुहोस् ।"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:152
+#: ../src/ui/toolbar/eraser-toolbar.cpp:82
 #, fuzzy
 msgid "Cut"
 msgstr "काट्नुहोस्"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:153
+#: ../src/ui/toolbar/eraser-toolbar.cpp:83
 #, fuzzy
 msgid "Cut out from paths and shapes"
 msgstr "तलको बाटो टुक्राहरुमा काट्नुहोस्"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:158
+#: ../src/ui/toolbar/eraser-toolbar.cpp:88
 #, fuzzy
 msgid "Clip"
 msgstr "क्लिप"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:159
+#: ../src/ui/toolbar/eraser-toolbar.cpp:89
 #, fuzzy
 msgid "Clip from objects"
 msgstr "बान्कीमा वस्तुहरू"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:183
+#: ../src/ui/toolbar/eraser-toolbar.cpp:112
 #, fuzzy
 msgid "(no width)"
 msgstr "पृष्ठ चौडाई"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:187
+#: ../src/ui/toolbar/eraser-toolbar.cpp:116
 #, fuzzy
 msgid "The width of the eraser pen (relative to the visible canvas area)"
 msgstr "हस्तलेखन कलमको चौडाइ (दृश्यात्मक क्यानभास क्षेत्रमा सम्बन्धित)"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:203
+#: ../src/ui/toolbar/eraser-toolbar.cpp:136
 #, fuzzy
 msgid "Eraser Pressure"
 msgstr "तारा प्राथमिकताहरू"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:219
+#: ../src/ui/toolbar/eraser-toolbar.cpp:150
 #, fuzzy
 msgid "Eraser Stroke Thinning"
 msgstr "स्ट्रोक रङ् लगाउनु"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:238
+#: ../src/ui/toolbar/eraser-toolbar.cpp:173
 #, fuzzy
 msgid "Eraser Cap rounding"
 msgstr "नघुमेको"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:256
+#: ../src/ui/toolbar/eraser-toolbar.cpp:195
 #, fuzzy
 msgid "EraserStroke Tremor"
 msgstr "अन्तिममा चयन गरिएको रङ"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:276
+#: ../src/ui/toolbar/eraser-toolbar.cpp:218
 #, fuzzy
 msgid "Eraser Mass"
 msgstr "बढाउनुहोस्"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:277
+#: ../src/ui/toolbar/eraser-toolbar.cpp:219
 msgid "Increase to make the eraser drag behind, as if slowed by inertia"
 msgstr ""
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:293
-#: ../src/ui/toolbar/eraser-toolbar.cpp:294
+#: ../src/ui/toolbar/eraser-toolbar.cpp:238
+#: ../src/ui/toolbar/eraser-toolbar.cpp:239
 #, fuzzy
 msgid "Break apart cut items"
 msgstr "अलग विच्छेद गर्नुहोस्"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:138
 #: ../src/ui/toolbar/gradient-toolbar.cpp:158
-#: ../src/ui/toolbar/gradient-toolbar.cpp:534
-#: ../src/ui/toolbar/gradient-toolbar.cpp:933
+#: ../src/ui/toolbar/gradient-toolbar.cpp:438
+#: ../src/ui/toolbar/gradient-toolbar.cpp:1055
 #, fuzzy
 msgid "No gradient"
 msgstr "नोड ह्यान्डलहरू अनियमित पार्नुहोस्"
@@ -27676,101 +27679,75 @@ msgstr "केहि चयन गरिएको छैन"
 msgid "Multiple gradients"
 msgstr "नोड ह्यान्डलहरू अनियमित पार्नुहोस्"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:544
-#: ../src/widgets/gradient-vector.cpp:566
-msgid "No stops in gradient"
-msgstr "ग्राडिएन्टमा रोकहरू छैन"
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:654
-#, fuzzy
-msgid "Multiple stops"
-msgstr "बहुविध शैलीहरू"
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:737
-#, fuzzy
-msgid "Assign gradient to object"
-msgstr "वस्तुहरू पंक्तिबद्ध गर्नुहोस् र वितरण गर्नुहोस्"
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:765
-#, fuzzy
-msgid "Set gradient repeat"
-msgstr "स्ट्रोकमा ग्राडिएन्ट सिर्जना गर्नुहोस्"
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:828
-#: ../src/widgets/gradient-vector.cpp:674
-#, fuzzy
-msgid "Change gradient stop offset"
-msgstr "रेखात्मक ग्राडिएन्ट स्ट्रोक"
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:857
+#: ../src/ui/toolbar/gradient-toolbar.cpp:364
 #, fuzzy
 msgid "linear"
 msgstr "रेखा"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:858
+#: ../src/ui/toolbar/gradient-toolbar.cpp:365
 msgid "Create linear gradient"
 msgstr "रेखात्मक ग्राडिएन्ट सिर्जना गर्नुहोस्"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:863
+#: ../src/ui/toolbar/gradient-toolbar.cpp:370
 msgid "radial"
 msgstr ""
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:864
+#: ../src/ui/toolbar/gradient-toolbar.cpp:371
 msgid "Create radial (elliptic or circular) gradient"
 msgstr "अर्धव्यासको (दीर्धवृत्ताकार वा वृत्ताकार) ग्राडिएन्ट सिर्जना गर्नुहोस्"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:895
-#: ../src/ui/toolbar/mesh-toolbar.cpp:417
+#: ../src/ui/toolbar/gradient-toolbar.cpp:401
+#: ../src/ui/toolbar/mesh-toolbar.cpp:264
 #, fuzzy
 msgid "fill"
 msgstr "तेस्रो अफसेट"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:896
-#: ../src/ui/toolbar/mesh-toolbar.cpp:418
+#: ../src/ui/toolbar/gradient-toolbar.cpp:402
+#: ../src/ui/toolbar/mesh-toolbar.cpp:265
 msgid "Create gradient in the fill"
 msgstr "भर्नेमा ग्राडिएन्ट सिर्जना गर्नुहोस्"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:901
-#: ../src/ui/toolbar/mesh-toolbar.cpp:423
+#: ../src/ui/toolbar/gradient-toolbar.cpp:407
+#: ../src/ui/toolbar/mesh-toolbar.cpp:270
 #, fuzzy
 msgid "stroke"
 msgstr "स्ट्रोक चौडाइ"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:902
-#: ../src/ui/toolbar/mesh-toolbar.cpp:424
+#: ../src/ui/toolbar/gradient-toolbar.cpp:408
+#: ../src/ui/toolbar/mesh-toolbar.cpp:271
 msgid "Create gradient in the stroke"
 msgstr "स्ट्रोकमा ग्राडिएन्ट सिर्जना गर्नुहोस्"
 
 #. Name
-#: ../src/ui/toolbar/gradient-toolbar.cpp:940
+#: ../src/ui/toolbar/gradient-toolbar.cpp:445
 msgid "Select"
 msgstr "चयन गर्नुहोस्"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:967
+#: ../src/ui/toolbar/gradient-toolbar.cpp:471
 #, fuzzy
 msgctxt "Gradient repeat type"
 msgid "None"
 msgstr "कुनै पनि होइन"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:973
+#: ../src/ui/toolbar/gradient-toolbar.cpp:477
 #, fuzzy
 msgid "Reflected"
 msgstr "प्रतिबिम्बित"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:979
+#: ../src/ui/toolbar/gradient-toolbar.cpp:483
 #, fuzzy
 msgid "Direct"
 msgstr "प्रत्यक्ष"
 
 #. Name
-#: ../src/ui/toolbar/gradient-toolbar.cpp:986
+#: ../src/ui/toolbar/gradient-toolbar.cpp:490
 #, fuzzy
 msgid "Repeat"
 msgstr "दोहोर्याउनुहोस्:"
 
 #. Label
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
-#: ../src/ui/toolbar/gradient-toolbar.cpp:988
+#: ../src/ui/toolbar/gradient-toolbar.cpp:492
 msgid ""
 "Whether to fill with flat color beyond the ends of the gradient vector "
 "(spreadMethod=\"pad\"), or repeat the gradient in the same direction "
@@ -27781,288 +27758,474 @@ msgstr ""
 "उहि दिशामा ग्राडिएन्ट दोहर्याउनुहोस् (spreadMethod=\"repeat\"), वा वैकल्पिक विपरित "
 "दिशामा ग्राडिएन्ट दोहर्याउनुहोस् (spreadMethod=\"reflect\")"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1015
+#: ../src/ui/toolbar/gradient-toolbar.cpp:518
 #, fuzzy
 msgid "No stops"
 msgstr "स्ट्रोक होइन"
 
 #. Name
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1022
+#: ../src/ui/toolbar/gradient-toolbar.cpp:525
 #, fuzzy
 msgid "Stops"
 msgstr "सेट"
 
 #. Label
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1044
+#: ../src/ui/toolbar/gradient-toolbar.cpp:545
 #: ../src/widgets/gradient-vector.cpp:851
 #, fuzzy
 msgctxt "Gradient"
 msgid "Offset:"
 msgstr "अफसेट:"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1044
+#: ../src/ui/toolbar/gradient-toolbar.cpp:545
 #, fuzzy
 msgid "Offset of selected stop"
 msgstr "चयन गरिएको बाटोहरू आउटसेट गर्नुहोस्"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1062
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1063
+#: ../src/ui/toolbar/gradient-toolbar.cpp:565
+#: ../src/ui/toolbar/gradient-toolbar.cpp:566
 #, fuzzy
 msgid "Insert new stop"
 msgstr "इन्डेन्ट नोड"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1076
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1077
+#: ../src/ui/toolbar/gradient-toolbar.cpp:578
+#: ../src/ui/toolbar/gradient-toolbar.cpp:579
 #: ../src/widgets/gradient-vector.cpp:837
 msgid "Delete stop"
 msgstr "रोक मेट्नुहोस्"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1091
+#: ../src/ui/toolbar/gradient-toolbar.cpp:592
 #, fuzzy
 msgid "Reverse the direction of the gradient"
 msgstr "ग्राडिएन्टको रोकहरू सम्पादन गर्नुहोस्"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1105
+#: ../src/ui/toolbar/gradient-toolbar.cpp:605
 #, fuzzy
 msgid "Link gradients"
 msgstr "रेखात्मक ग्राडिएन्ट"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1106
+#: ../src/ui/toolbar/gradient-toolbar.cpp:606
 msgid "Link gradients to change all related gradients"
 msgstr ""
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:275
+#: ../src/ui/toolbar/gradient-toolbar.cpp:666
+#, fuzzy
+msgid "Assign gradient to object"
+msgstr "वस्तुहरू पंक्तिबद्ध गर्नुहोस् र वितरण गर्नुहोस्"
+
+#: ../src/ui/toolbar/gradient-toolbar.cpp:712
+#, fuzzy
+msgid "Set gradient repeat"
+msgstr "स्ट्रोकमा ग्राडिएन्ट सिर्जना गर्नुहोस्"
+
+#: ../src/ui/toolbar/gradient-toolbar.cpp:843
+#: ../src/widgets/gradient-vector.cpp:674
+#, fuzzy
+msgid "Change gradient stop offset"
+msgstr "रेखात्मक ग्राडिएन्ट स्ट्रोक"
+
+#: ../src/ui/toolbar/gradient-toolbar.cpp:1065
+#: ../src/widgets/gradient-vector.cpp:566
+msgid "No stops in gradient"
+msgstr "ग्राडिएन्टमा रोकहरू छैन"
+
+#: ../src/ui/toolbar/gradient-toolbar.cpp:1191
+#, fuzzy
+msgid "Multiple stops"
+msgstr "बहुविध शैलीहरू"
+
+#: ../src/ui/toolbar/lpe-toolbar.cpp:86
 msgid "All inactive"
 msgstr ""
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:276
+#: ../src/ui/toolbar/lpe-toolbar.cpp:87
 msgid "No geometric tool is active"
 msgstr ""
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:314
+#: ../src/ui/toolbar/lpe-toolbar.cpp:124
 #, fuzzy
 msgid "Show limiting bounding box"
 msgstr "विपरित बाउन्डिङ् बाकस किनारा"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:315
+#: ../src/ui/toolbar/lpe-toolbar.cpp:125
 msgid "Show bounding box (used to cut infinite lines)"
 msgstr ""
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:326
+#: ../src/ui/toolbar/lpe-toolbar.cpp:136
 #, fuzzy
 msgid "Get limiting bounding box from selection"
 msgstr "चयन बाट क्लिपिङ् बाटो हटाउनुहोस्"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:327
+#: ../src/ui/toolbar/lpe-toolbar.cpp:137
 #, fuzzy
 msgid ""
 "Set limiting bounding box (used to cut infinite lines) to the bounding box "
 "of current selection"
 msgstr "वस्तुहरुमा बाउन्डिङ् बाकसहरू सटाउनुहोस्"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:345
+#: ../src/ui/toolbar/lpe-toolbar.cpp:154
 #, fuzzy
 msgid "Closed"
 msgstr "बन्द गर्नुहोस्"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:351
+#: ../src/ui/toolbar/lpe-toolbar.cpp:160
 #, fuzzy
 msgid "Open start"
 msgstr "चाप खोल्नुहोस्"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:357
+#: ../src/ui/toolbar/lpe-toolbar.cpp:166
 #, fuzzy
 msgid "Open end"
 msgstr "हालैको खोल्नुहोस्"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:363
+#: ../src/ui/toolbar/lpe-toolbar.cpp:172
 msgid "Open both"
 msgstr ""
 
 #. Name
 #. Label
-#: ../src/ui/toolbar/lpe-toolbar.cpp:371
+#: ../src/ui/toolbar/lpe-toolbar.cpp:180
 #, fuzzy
 msgid "Choose a line segment type"
 msgstr "पूर्वावलोकन"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:389
+#: ../src/ui/toolbar/lpe-toolbar.cpp:197
 #, fuzzy
 msgid "Display measuring info"
 msgstr "प्रर्दशन मोड"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:390
+#: ../src/ui/toolbar/lpe-toolbar.cpp:198
 msgid "Display measuring info for selected items"
 msgstr ""
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:410
+#: ../src/ui/toolbar/lpe-toolbar.cpp:217
 msgid "Open LPE dialog"
 msgstr ""
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:411
+#: ../src/ui/toolbar/lpe-toolbar.cpp:218
 msgid "Open LPE dialog (to adapt parameters numerically)"
 msgstr ""
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:157
+#: ../src/ui/toolbar/measure-toolbar.cpp:84
 msgid "Start and end measures inactive."
 msgstr ""
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:159
+#: ../src/ui/toolbar/measure-toolbar.cpp:86
 msgid "Start and end measures active."
 msgstr ""
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:175
+#: ../src/ui/toolbar/measure-toolbar.cpp:102
 #, fuzzy
 msgid "Measures only selected."
 msgstr "चयन गरिएको अन्त्य नोडहरू जोड्नुहोस्"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:177
+#: ../src/ui/toolbar/measure-toolbar.cpp:104
 #, fuzzy
 msgid "Measure all."
 msgstr "बाटो नाप्नुहोस्"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:193
+#: ../src/ui/toolbar/measure-toolbar.cpp:120
 #, fuzzy
 msgid "Show all crossings."
 msgstr "सबै तहहरुमा चयन गर्नुहोस्"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:195
+#: ../src/ui/toolbar/measure-toolbar.cpp:122
 msgid "Show visible crossings."
 msgstr ""
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:211
+#: ../src/ui/toolbar/measure-toolbar.cpp:138
 msgid "Use all layers in the measure."
 msgstr ""
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:213
+#: ../src/ui/toolbar/measure-toolbar.cpp:140
 #, fuzzy
 msgid "Use current layer in the measure."
 msgstr "हालको तह माथि तिर बढाउनुहोस्"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:229
+#: ../src/ui/toolbar/measure-toolbar.cpp:156
 #, fuzzy
 msgid "Compute all elements."
 msgstr "tutorial-elements.svg"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:231
+#: ../src/ui/toolbar/measure-toolbar.cpp:158
 #, fuzzy
 msgid "Compute max length."
 msgstr "बाटोमा राख्नुहोस्"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:292
-#: ../src/ui/toolbar/text-toolbar.cpp:2043
+#: ../src/ui/toolbar/measure-toolbar.cpp:227
+#: ../src/ui/toolbar/text-toolbar.cpp:345
 #, fuzzy
 msgid "Font Size"
 msgstr "फन्ट साइज"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:292
+#: ../src/ui/toolbar/measure-toolbar.cpp:227
 #, fuzzy
 msgid "Font Size:"
 msgstr "फन्ट साइज"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:293
+#: ../src/ui/toolbar/measure-toolbar.cpp:228
 msgid "The font size to be used in the measurement labels"
 msgstr ""
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:304
-#: ../src/ui/toolbar/measure-toolbar.cpp:312
+#: ../src/ui/toolbar/measure-toolbar.cpp:244
+#: ../src/ui/toolbar/measure-toolbar.cpp:252
 msgid "The units to be used for the measurements"
 msgstr ""
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:320
+#: ../src/ui/toolbar/measure-toolbar.cpp:260
 #: ../share/extensions/measure.inx.h:14
 #, fuzzy
 msgid "Precision:"
 msgstr "वर्णन"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:321
+#: ../src/ui/toolbar/measure-toolbar.cpp:261
 msgid "Decimal precision of measure"
 msgstr ""
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:333
+#: ../src/ui/toolbar/measure-toolbar.cpp:278
 #, fuzzy
 msgid "Scale %"
 msgstr "स्केल"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:333
+#: ../src/ui/toolbar/measure-toolbar.cpp:278
 #, fuzzy
 msgid "Scale %:"
 msgstr "स्केल"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:334
+#: ../src/ui/toolbar/measure-toolbar.cpp:279
 msgid "Scale the results"
 msgstr ""
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:347
+#: ../src/ui/toolbar/measure-toolbar.cpp:297
 #, fuzzy
 msgid "Mark dimension offset"
 msgstr "भाग"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:359
-#: ../src/ui/toolbar/measure-toolbar.cpp:360
+#: ../src/ui/toolbar/measure-toolbar.cpp:314
+#: ../src/ui/toolbar/measure-toolbar.cpp:315
 #, fuzzy
 msgid "Measure only selected"
 msgstr "चयन गरिएको अन्त्य नोडहरू जोड्नुहोस्"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:371
-#: ../src/ui/toolbar/measure-toolbar.cpp:372
+#: ../src/ui/toolbar/measure-toolbar.cpp:326
+#: ../src/ui/toolbar/measure-toolbar.cpp:327
 #, fuzzy
 msgid "Ignore first and last"
 msgstr "लुकाइएको वस्तुहरू उपेक्षा गर्नुहोस्"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:382
-#: ../src/ui/toolbar/measure-toolbar.cpp:383
+#: ../src/ui/toolbar/measure-toolbar.cpp:337
+#: ../src/ui/toolbar/measure-toolbar.cpp:338
 #, fuzzy
 msgid "Show hidden intersections"
 msgstr "प्रतिच्छेदन"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:393
-#: ../src/ui/toolbar/measure-toolbar.cpp:394
+#: ../src/ui/toolbar/measure-toolbar.cpp:348
+#: ../src/ui/toolbar/measure-toolbar.cpp:349
 #, fuzzy
 msgid "Show measures between items"
 msgstr "लाइनहरू बिचको खाली ठाउँ"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:404
-#: ../src/ui/toolbar/measure-toolbar.cpp:405
+#: ../src/ui/toolbar/measure-toolbar.cpp:359
+#: ../src/ui/toolbar/measure-toolbar.cpp:360
 #, fuzzy
 msgid "Measure all layers"
 msgstr "सबै तहहरुमा चयन गर्नुहोस्"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:415
-#: ../src/ui/toolbar/measure-toolbar.cpp:416
+#: ../src/ui/toolbar/measure-toolbar.cpp:370
+#: ../src/ui/toolbar/measure-toolbar.cpp:371
 #, fuzzy
 msgid "Reverse measure"
 msgstr "फर्काउनुहोस्"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:425
-#: ../src/ui/toolbar/measure-toolbar.cpp:426
+#: ../src/ui/toolbar/measure-toolbar.cpp:380
+#: ../src/ui/toolbar/measure-toolbar.cpp:381
 msgid "Phantom measure"
 msgstr ""
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:435
-#: ../src/ui/toolbar/measure-toolbar.cpp:436
+#: ../src/ui/toolbar/measure-toolbar.cpp:390
+#: ../src/ui/toolbar/measure-toolbar.cpp:391
 #, fuzzy
 msgid "To guides"
 msgstr "बाटोदर्शकहरू देखाउनुहोस्"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:445
-#: ../src/ui/toolbar/measure-toolbar.cpp:446
+#: ../src/ui/toolbar/measure-toolbar.cpp:400
+#: ../src/ui/toolbar/measure-toolbar.cpp:401
 #, fuzzy
 msgid "Mark Dimension"
 msgstr "भाग"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:455
-#: ../src/ui/toolbar/measure-toolbar.cpp:456
+#: ../src/ui/toolbar/measure-toolbar.cpp:410
+#: ../src/ui/toolbar/measure-toolbar.cpp:411
 #, fuzzy
 msgid "Convert to item"
 msgstr "पाठमा रुपान्तरण गर्नुहोस्"
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:270
+#: ../src/ui/toolbar/mesh-toolbar.cpp:227
 #, fuzzy
-msgid "Set mesh type"
-msgstr "स्ट्रोक शैली"
+msgid "normal"
+msgstr "सामान्य"
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:343
+#: ../src/ui/toolbar/mesh-toolbar.cpp:228
+#, fuzzy
+msgid "Create mesh gradient"
+msgstr "रेखात्मक ग्राडिएन्ट सिर्जना गर्नुहोस्"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:233
+msgid "conical"
+msgstr ""
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:234
+#, fuzzy
+msgid "Create conical gradient"
+msgstr "रेखात्मक ग्राडिएन्ट सिर्जना गर्नुहोस्"
+
+#. Name
+#: ../src/ui/toolbar/mesh-toolbar.cpp:240
+msgid "New:"
+msgstr ""
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:297
+#, fuzzy
+msgid "Rows"
+msgstr "पङ्क्तिहरू:"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:297
+#: ../share/extensions/guides_creator.inx.h:5
+#: ../share/extensions/layout_nup.inx.h:12
+#, fuzzy
+msgid "Rows:"
+msgstr "पङ्क्तिहरू:"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:297
+#, fuzzy
+msgid "Number of rows in new mesh"
+msgstr "पङ्क्तहरुको सङ्ख्या"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:318
+#, fuzzy
+msgid "Columns"
+msgstr "स्तम्भहरू:"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:318
+#: ../share/extensions/guides_creator.inx.h:4
+#, fuzzy
+msgid "Columns:"
+msgstr "स्तम्भहरू:"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:318
+#, fuzzy
+msgid "Number of columns in new mesh"
+msgstr "स्तम्भहरुको सङ्ख्या"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:337
+#, fuzzy
+msgid "Edit Fill"
+msgstr "भर्ने सम्पादन गर्नुहोस्..."
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:338
+#, fuzzy
+msgid "Edit fill mesh"
+msgstr "भर्ने सम्पादन गर्नुहोस्..."
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:349
+#, fuzzy
+msgid "Edit Stroke"
+msgstr "स्ट्रोक सम्पादन गर्नुहोस्..."
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:350
+#, fuzzy
+msgid "Edit stroke mesh"
+msgstr "स्ट्रोक सम्पादन गर्नुहोस्..."
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:361
+#: ../src/ui/toolbar/node-toolbar.cpp:426
+#, fuzzy
+msgid "Show Handles"
+msgstr "ह्यान्डलहरू कोर्नुहोस्"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:375
+#: ../src/ui/toolbar/mesh-toolbar.cpp:376
+msgid "WARNING: Mesh SVG Syntax Subject to Change"
+msgstr ""
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:393
+msgctxt "Type"
+msgid "Coons"
+msgstr ""
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:399
+msgid "Bicubic"
+msgstr ""
+
+#. Name
+#: ../src/ui/toolbar/mesh-toolbar.cpp:407
+#, fuzzy
+msgid "Smoothing"
+msgstr "महिन"
+
+#. Label
+#: ../src/ui/toolbar/mesh-toolbar.cpp:408
+msgid "Coons: no smothing. Bicubic: smothing across patch boundaries."
+msgstr ""
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:426
+#, fuzzy
+msgid "Toggle Sides"
+msgstr "कोण"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:427
+msgid "Toggle selected sides between Beziers and lines."
+msgstr ""
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:430
+#, fuzzy
+msgid "Toggle side:"
+msgstr "कोण"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:437
+msgid "Make elliptical"
+msgstr ""
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:438
+msgid ""
+"Make selected sides elliptical by changing length of handles. Works best if "
+"handles already approximate ellipse."
+msgstr ""
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:441
+msgid "Make elliptical:"
+msgstr ""
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:448
+#, fuzzy
+msgid "Pick colors:"
+msgstr "रङ प्रतिलिपि बनाउनुहोस्"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:449
+msgid "Pick colors for selected corner nodes from underneath mesh."
+msgstr ""
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:452
+#, fuzzy
+msgid "Pick Color"
+msgstr "फ्ल्याट रङ"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:460
+#, fuzzy
+msgid "Scale mesh to bounding box:"
+msgstr "विपरित बाउन्डिङ् बाकस किनारा"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:461
+#, fuzzy
+msgid "Scale mesh to fit inside bounding box."
+msgstr "विपरित बाउन्डिङ् बाकस किनारा"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:464
+#, fuzzy
+msgid "Fit mesh"
+msgstr "भर्ने सम्पादन गर्नुहोस्..."
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:642
 msgid ""
 "Mesh gradients are part of SVG 2:\n"
 "* Syntax may change.\n"
@@ -28072,446 +28235,286 @@ msgid ""
 "For print: export to PDF."
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:379
+#: ../src/ui/toolbar/mesh-toolbar.cpp:674
 #, fuzzy
-msgid "normal"
-msgstr "सामान्य"
+msgid "Set mesh type"
+msgstr "स्ट्रोक शैली"
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:380
-#, fuzzy
-msgid "Create mesh gradient"
-msgstr "रेखात्मक ग्राडिएन्ट सिर्जना गर्नुहोस्"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:385
-msgid "conical"
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:386
-#, fuzzy
-msgid "Create conical gradient"
-msgstr "रेखात्मक ग्राडिएन्ट सिर्जना गर्नुहोस्"
-
-#. Name
-#: ../src/ui/toolbar/mesh-toolbar.cpp:392
-msgid "New:"
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:451
-#, fuzzy
-msgid "Rows"
-msgstr "पङ्क्तिहरू:"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:451
-#: ../share/extensions/guides_creator.inx.h:5
-#: ../share/extensions/layout_nup.inx.h:12
-#, fuzzy
-msgid "Rows:"
-msgstr "पङ्क्तिहरू:"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:451
-#, fuzzy
-msgid "Number of rows in new mesh"
-msgstr "पङ्क्तहरुको सङ्ख्या"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:467
-#, fuzzy
-msgid "Columns"
-msgstr "स्तम्भहरू:"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:467
-#: ../share/extensions/guides_creator.inx.h:4
-#, fuzzy
-msgid "Columns:"
-msgstr "स्तम्भहरू:"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:467
-#, fuzzy
-msgid "Number of columns in new mesh"
-msgstr "स्तम्भहरुको सङ्ख्या"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:481
-#, fuzzy
-msgid "Edit Fill"
-msgstr "भर्ने सम्पादन गर्नुहोस्..."
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:482
-#, fuzzy
-msgid "Edit fill mesh"
-msgstr "भर्ने सम्पादन गर्नुहोस्..."
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:494
-#, fuzzy
-msgid "Edit Stroke"
-msgstr "स्ट्रोक सम्पादन गर्नुहोस्..."
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:495
-#, fuzzy
-msgid "Edit stroke mesh"
-msgstr "स्ट्रोक सम्पादन गर्नुहोस्..."
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:507
-#: ../src/ui/toolbar/node-toolbar.cpp:521
-#, fuzzy
-msgid "Show Handles"
-msgstr "ह्यान्डलहरू कोर्नुहोस्"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:524
-#: ../src/ui/toolbar/mesh-toolbar.cpp:525
-msgid "WARNING: Mesh SVG Syntax Subject to Change"
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:542
-msgctxt "Type"
-msgid "Coons"
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:548
-msgid "Bicubic"
-msgstr ""
-
-#. Name
-#: ../src/ui/toolbar/mesh-toolbar.cpp:556
-#, fuzzy
-msgid "Smoothing"
-msgstr "महिन"
-
-#. Label
-#: ../src/ui/toolbar/mesh-toolbar.cpp:557
-msgid "Coons: no smothing. Bicubic: smothing across patch boundaries."
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:576
-#, fuzzy
-msgid "Toggle Sides"
-msgstr "कोण"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:577
-msgid "Toggle selected sides between Beziers and lines."
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:580
-#, fuzzy
-msgid "Toggle side:"
-msgstr "कोण"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:587
-msgid "Make elliptical"
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:588
-msgid ""
-"Make selected sides elliptical by changing length of handles. Works best if "
-"handles already approximate ellipse."
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:591
-msgid "Make elliptical:"
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:598
-#, fuzzy
-msgid "Pick colors:"
-msgstr "रङ प्रतिलिपि बनाउनुहोस्"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:599
-msgid "Pick colors for selected corner nodes from underneath mesh."
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:602
-#, fuzzy
-msgid "Pick Color"
-msgstr "फ्ल्याट रङ"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:610
-#, fuzzy
-msgid "Scale mesh to bounding box:"
-msgstr "विपरित बाउन्डिङ् बाकस किनारा"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:611
-#, fuzzy
-msgid "Scale mesh to fit inside bounding box."
-msgstr "विपरित बाउन्डिङ् बाकस किनारा"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:614
-#, fuzzy
-msgid "Fit mesh"
-msgstr "भर्ने सम्पादन गर्नुहोस्..."
-
-#: ../src/ui/toolbar/node-toolbar.cpp:341
+#: ../src/ui/toolbar/node-toolbar.cpp:247
 #, fuzzy
 msgid "Insert node"
 msgstr "इन्डेन्ट नोड"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:342
+#: ../src/ui/toolbar/node-toolbar.cpp:248
 msgid "Insert new nodes into selected segments"
 msgstr "चयन गरिएको खण्डहरुमा नयाँ नोडहरू घुसाउनुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:345
+#: ../src/ui/toolbar/node-toolbar.cpp:251
 #, fuzzy
 msgid "Insert"
 msgstr "उल्टो पार्नुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:356
+#: ../src/ui/toolbar/node-toolbar.cpp:262
 #, fuzzy
 msgid "Insert node at min X"
 msgstr "इन्डेन्ट नोड"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:357
+#: ../src/ui/toolbar/node-toolbar.cpp:263
 #, fuzzy
 msgid "Insert new nodes at min X into selected segments"
 msgstr "चयन गरिएको खण्डहरुमा नयाँ नोडहरू घुसाउनुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:360
+#: ../src/ui/toolbar/node-toolbar.cpp:266
 #, fuzzy
 msgid "Insert min X"
 msgstr "इन्डेन्ट नोड"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:366
+#: ../src/ui/toolbar/node-toolbar.cpp:272
 #, fuzzy
 msgid "Insert node at max X"
 msgstr "इन्डेन्ट नोड"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:367
+#: ../src/ui/toolbar/node-toolbar.cpp:273
 #, fuzzy
 msgid "Insert new nodes at max X into selected segments"
 msgstr "चयन गरिएको खण्डहरुमा नयाँ नोडहरू घुसाउनुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:370
+#: ../src/ui/toolbar/node-toolbar.cpp:276
 #, fuzzy
 msgid "Insert max X"
 msgstr "उल्टो पार्नुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:376
+#: ../src/ui/toolbar/node-toolbar.cpp:282
 #, fuzzy
 msgid "Insert node at min Y"
 msgstr "इन्डेन्ट नोड"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:377
+#: ../src/ui/toolbar/node-toolbar.cpp:283
 #, fuzzy
 msgid "Insert new nodes at min Y into selected segments"
 msgstr "चयन गरिएको खण्डहरुमा नयाँ नोडहरू घुसाउनुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:380
+#: ../src/ui/toolbar/node-toolbar.cpp:286
 #, fuzzy
 msgid "Insert min Y"
 msgstr "इन्डेन्ट नोड"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:386
+#: ../src/ui/toolbar/node-toolbar.cpp:292
 #, fuzzy
 msgid "Insert node at max Y"
 msgstr "इन्डेन्ट नोड"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:387
+#: ../src/ui/toolbar/node-toolbar.cpp:293
 #, fuzzy
 msgid "Insert new nodes at max Y into selected segments"
 msgstr "चयन गरिएको खण्डहरुमा नयाँ नोडहरू घुसाउनुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:390
+#: ../src/ui/toolbar/node-toolbar.cpp:296
 #, fuzzy
 msgid "Insert max Y"
 msgstr "उल्टो पार्नुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:398
+#: ../src/ui/toolbar/node-toolbar.cpp:304
 msgid "Delete selected nodes"
 msgstr "चयन गरिएको नोडहरू मेट्नुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:409
+#: ../src/ui/toolbar/node-toolbar.cpp:315
 #, fuzzy
 msgid "Join selected nodes"
 msgstr "चयन गरिएको अन्त्य नोडहरू जोड्नुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:412
+#: ../src/ui/toolbar/node-toolbar.cpp:318
 #, fuzzy
 msgid "Join"
 msgstr "जोड्नुहोस्:"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:420
+#: ../src/ui/toolbar/node-toolbar.cpp:326
 msgid "Break path at selected nodes"
 msgstr "चयन गरिएको नोडहरुमा बाटो विच्छेद गर्नुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:430
+#: ../src/ui/toolbar/node-toolbar.cpp:336
 #, fuzzy
 msgid "Join with segment"
 msgstr "नयाँ खण्ड संग चयन गरिएको अन्त्य नोडहरू जोड्नुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:431
+#: ../src/ui/toolbar/node-toolbar.cpp:337
 msgid "Join selected endnodes with a new segment"
 msgstr "नयाँ खण्ड संग चयन गरिएको अन्त्य नोडहरू जोड्नुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:440
+#: ../src/ui/toolbar/node-toolbar.cpp:346
 #, fuzzy
 msgid "Delete segment"
 msgstr "चयन मेट्नुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:441
+#: ../src/ui/toolbar/node-toolbar.cpp:347
 #, fuzzy
 msgid "Delete segment between two non-endpoint nodes"
 msgstr "अन्त्यबिन्दु बिहिन नोडहरू बिचमा बाटोहरू विभाजन गर्नुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:450
+#: ../src/ui/toolbar/node-toolbar.cpp:356
 #, fuzzy
 msgid "Node Cusp"
 msgstr "नोडहरू"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:451
+#: ../src/ui/toolbar/node-toolbar.cpp:357
 msgid "Make selected nodes corner"
 msgstr "चयन गरिएको नोड कुना बनाउनुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:460
+#: ../src/ui/toolbar/node-toolbar.cpp:366
 #, fuzzy
 msgid "Node Smooth"
 msgstr "महिन"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:461
+#: ../src/ui/toolbar/node-toolbar.cpp:367
 msgid "Make selected nodes smooth"
 msgstr "चयन गरिएको नोडहरुलाई मिहिन बनाउनुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:470
+#: ../src/ui/toolbar/node-toolbar.cpp:376
 #, fuzzy
 msgid "Node Symmetric"
 msgstr "सममिति"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:471
+#: ../src/ui/toolbar/node-toolbar.cpp:377
 msgid "Make selected nodes symmetric"
 msgstr "चयन गरिएको नोडहरू सममिति बनाउनुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:480
+#: ../src/ui/toolbar/node-toolbar.cpp:386
 #, fuzzy
 msgid "Node Auto"
 msgstr "नोड सम्पादन"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:481
+#: ../src/ui/toolbar/node-toolbar.cpp:387
 #, fuzzy
 msgid "Make selected nodes auto-smooth"
 msgstr "चयन गरिएको नोडहरुलाई मिहिन बनाउनुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:490
+#: ../src/ui/toolbar/node-toolbar.cpp:396
 #, fuzzy
 msgid "Node Line"
 msgstr "लाइनहरू"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:491
+#: ../src/ui/toolbar/node-toolbar.cpp:397
 msgid "Make selected segments lines"
 msgstr "चयन गरिएको खण्डहरू रेखाहरू बनाउनुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:500
+#: ../src/ui/toolbar/node-toolbar.cpp:406
 #, fuzzy
 msgid "Node Curve"
 msgstr "पूर्वावलोकन छैन"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:501
+#: ../src/ui/toolbar/node-toolbar.cpp:407
 msgid "Make selected segments curves"
 msgstr "चयन गरिएको खण्डहरू लाई वक्ररेखाहरू बनाउनुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:510
+#: ../src/ui/toolbar/node-toolbar.cpp:416
 #, fuzzy
 msgid "Show Transform Handles"
 msgstr "ह्यान्डलहरू कोर्नुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:511
+#: ../src/ui/toolbar/node-toolbar.cpp:417
 #, fuzzy
 msgid "Show transformation handles for selected nodes"
 msgstr "चयन गरिएको नोडहरुको बेजियर ह्यान्डलहरू देखाउनुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:522
+#: ../src/ui/toolbar/node-toolbar.cpp:427
 #, fuzzy
 msgid "Show Bezier handles of selected nodes"
 msgstr "चयन गरिएको नोडहरुको बेजियर ह्यान्डलहरू देखाउनुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:532
+#: ../src/ui/toolbar/node-toolbar.cpp:436
 #, fuzzy
 msgid "Show Outline"
 msgstr "रुपरेखा"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:533
+#: ../src/ui/toolbar/node-toolbar.cpp:437
 #, fuzzy
 msgid "Show path outline (without path effects)"
 msgstr "कागजको चौडाइ"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:555
+#: ../src/ui/toolbar/node-toolbar.cpp:457
 #, fuzzy
 msgid "Edit clipping paths"
 msgstr "बाटो बन्द"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:556
+#: ../src/ui/toolbar/node-toolbar.cpp:458
 #, fuzzy
 msgid "Show clipping path(s) of selected object(s)"
 msgstr "बाटो बन्द"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:566
+#: ../src/ui/toolbar/node-toolbar.cpp:467
 #, fuzzy
 msgid "Edit masks"
 msgstr "ताराहरू"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:567
+#: ../src/ui/toolbar/node-toolbar.cpp:468
 #, fuzzy
 msgid "Show mask(s) of selected object(s)"
 msgstr "चयन गरिएको वस्तुहरू नक्कल गर्नुहोस्"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:581
+#: ../src/ui/toolbar/node-toolbar.cpp:480
 #, fuzzy
 msgid "X coordinate:"
 msgstr "कर्सर समन्वयहरू"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:581
+#: ../src/ui/toolbar/node-toolbar.cpp:480
 #, fuzzy
 msgid "X coordinate of selected node(s)"
 msgstr "चयनको तेर्सो समन्वय"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:598
+#: ../src/ui/toolbar/node-toolbar.cpp:500
 #, fuzzy
 msgid "Y coordinate:"
 msgstr "कर्सर समन्वयहरू"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:598
+#: ../src/ui/toolbar/node-toolbar.cpp:500
 #, fuzzy
 msgid "Y coordinate of selected node(s)"
 msgstr "चयनको तेर्सो समन्वय"
 
 #. Name
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:137
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:85
 #, fuzzy
 msgid "Fill by"
 msgstr "भर्नुहोस्"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:159
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:106
 #, fuzzy
 msgid "Fill Threshold"
 msgstr "थ्रेसहोल्ड:"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:160
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:107
 msgid ""
 "The maximum allowed difference between the clicked pixel and the neighboring "
 "pixels to be counted in the fill"
 msgstr ""
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:188
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:138
 msgid "Grow/shrink by"
 msgstr ""
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:188
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:138
 msgid "Grow/shrink by:"
 msgstr ""
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:189
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:139
 msgid ""
 "The amount to grow (positive) or shrink (negative) the created fill path"
 msgstr ""
 
 #. Name
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:215
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:171
 #, fuzzy
 msgid "Close gaps"
 msgstr "खाली गर्नुहोस्"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:236
-#: ../src/ui/toolbar/pencil-toolbar.cpp:580
-#: ../src/ui/toolbar/spiral-toolbar.cpp:290
-#: ../src/ui/toolbar/star-toolbar.cpp:588
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:191
+#: ../src/ui/toolbar/pencil-toolbar.cpp:199
+#: ../src/ui/toolbar/spiral-toolbar.cpp:158
+#: ../src/ui/toolbar/star-toolbar.cpp:229
 msgid "Defaults"
 msgstr "पूर्वनिर्धारित"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:237
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:192
 #, fuzzy
 msgid ""
 "Reset paint bucket parameters to defaults (use Inkscape Preferences > Tools "
@@ -28520,150 +28523,63 @@ msgstr ""
 "पूर्वनिर्धारितमा आकार परामितिहरू रिसेट गर्नुहोस् (Inkscape प्राथमिकताहरू प्रयोग गर्नुहोस् "
 "> पूर्वनिर्धारितहरू परिवर्तन गर्न उपकरणहरू)"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:133
-msgid "Bezier"
-msgstr ""
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:134
-#, fuzzy
-msgid "Create regular Bezier path"
-msgstr "नयाँ बाटो सिर्जना गर्दै"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:140
-#, fuzzy
-msgid "Create Spiro path"
-msgstr "स्पाइरलहरू सिर्जना गर्नुहोस्"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:146
-#, fuzzy
-msgid "Create BSpline path"
-msgstr "स्पाइरलहरू सिर्जना गर्नुहोस्"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:152
-msgid "Zigzag"
-msgstr ""
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:153
-msgid "Create a sequence of straight line segments"
-msgstr ""
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:158
-#, fuzzy
-msgid "Paraxial"
-msgstr "आंशिक"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:159
-msgid "Create a sequence of paraxial line segments"
-msgstr ""
-
-#. Label
-#: ../src/ui/toolbar/pencil-toolbar.cpp:169
-msgid "Mode of new lines drawn by this tool"
-msgstr ""
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:184
-#: ../src/ui/toolbar/pencil-toolbar.cpp:185
-msgid "LPE spiro or bspline flatten"
-msgstr ""
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:222
-#, fuzzy
-msgctxt "Freehand shape"
-msgid "None"
-msgstr "कुनै पनि होइन"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:223
-#, fuzzy
-msgid "Triangle in"
-msgstr "कोण"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:224
-#, fuzzy
-msgid "Triangle out"
-msgstr "कोण"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:226
-msgid "From clipboard"
-msgstr ""
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:227
-#, fuzzy
-msgid "Bend from clipboard"
-msgstr "क्लिपबोर्डमा चयन काट्नुहोस्"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:228
-#, fuzzy
-msgid "Last applied"
-msgstr "साइज टाँस्नुहोस्"
-
-#. Name
-#: ../src/ui/toolbar/pencil-toolbar.cpp:250
-#, fuzzy
-msgid "Shape"
-msgstr "आकारहरू"
-
-#. Label
-#: ../src/ui/toolbar/pencil-toolbar.cpp:251
-msgid "Shape of new paths drawn by this tool"
-msgstr ""
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:503
+#: ../src/ui/toolbar/pencil-toolbar.cpp:110
 #, fuzzy
 msgid "Min pressure"
 msgstr "सुरक्षित"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:503
+#: ../src/ui/toolbar/pencil-toolbar.cpp:110
 msgid "Min:"
 msgstr ""
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:503
+#: ../src/ui/toolbar/pencil-toolbar.cpp:110
 #, fuzzy
 msgid "Min percent of pressure"
 msgstr "यो कागजातको सामग्रीको एउटा छोटो खाता"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:521
+#: ../src/ui/toolbar/pencil-toolbar.cpp:132
 #, fuzzy
 msgid "Max pressure"
 msgstr "सुरक्षित"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:521
+#: ../src/ui/toolbar/pencil-toolbar.cpp:132
 msgid "Max:"
 msgstr ""
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:521
+#: ../src/ui/toolbar/pencil-toolbar.cpp:132
 msgid "Max percent of pressure"
 msgstr ""
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:538
-#: ../src/ui/toolbar/pencil-toolbar.cpp:539
+#: ../src/ui/toolbar/pencil-toolbar.cpp:153
+#: ../src/ui/toolbar/pencil-toolbar.cpp:154
 #, fuzzy
 msgid "Use pressure input"
 msgstr "तारा प्राथमिकताहरू"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:556
+#: ../src/ui/toolbar/pencil-toolbar.cpp:171
 msgid "(many nodes, rough)"
 msgstr ""
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:556
+#: ../src/ui/toolbar/pencil-toolbar.cpp:171
 #, fuzzy
 msgid "(few nodes, smooth)"
 msgstr "चयन गरिएको नोडहरुलाई मिहिन बनाउनुहोस्"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:559
+#: ../src/ui/toolbar/pencil-toolbar.cpp:174
 #, fuzzy
 msgid "Smoothing:"
 msgstr "महिन"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:559
+#: ../src/ui/toolbar/pencil-toolbar.cpp:174
 #, fuzzy
 msgid "Smoothing: "
 msgstr "महिन"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:560
+#: ../src/ui/toolbar/pencil-toolbar.cpp:175
 msgid "How much smoothing (simplifying) is applied to the line"
 msgstr ""
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:581
+#: ../src/ui/toolbar/pencil-toolbar.cpp:200
 #, fuzzy
 msgid ""
 "Reset pencil parameters to defaults (use Inkscape Preferences > Tools to "
@@ -28672,85 +28588,167 @@ msgstr ""
 "पूर्वनिर्धारितमा आकार परामितिहरू रिसेट गर्नुहोस् (Inkscape प्राथमिकताहरू प्रयोग गर्नुहोस् "
 "> पूर्वनिर्धारितहरू परिवर्तन गर्न उपकरणहरू)"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:590
-#: ../src/ui/toolbar/pencil-toolbar.cpp:591
+#: ../src/ui/toolbar/pencil-toolbar.cpp:209
+#: ../src/ui/toolbar/pencil-toolbar.cpp:210
 msgid "LPE based interactive simplify"
 msgstr ""
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:608
-#: ../src/ui/toolbar/pencil-toolbar.cpp:609
+#: ../src/ui/toolbar/pencil-toolbar.cpp:226
+#: ../src/ui/toolbar/pencil-toolbar.cpp:227
 msgid "LPE simplify flatten"
 msgstr ""
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:124
-#, fuzzy
-msgid "Change rectangle"
-msgstr "आयातहरू खोजी गर्नुहोस्"
+#: ../src/ui/toolbar/pencil-toolbar.cpp:303
+msgid "Bezier"
+msgstr ""
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:322
+#: ../src/ui/toolbar/pencil-toolbar.cpp:304
+#, fuzzy
+msgid "Create regular Bezier path"
+msgstr "नयाँ बाटो सिर्जना गर्दै"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:310
+#, fuzzy
+msgid "Create Spiro path"
+msgstr "स्पाइरलहरू सिर्जना गर्नुहोस्"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:316
+#, fuzzy
+msgid "Create BSpline path"
+msgstr "स्पाइरलहरू सिर्जना गर्नुहोस्"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:322
+msgid "Zigzag"
+msgstr ""
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:323
+msgid "Create a sequence of straight line segments"
+msgstr ""
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:328
+#, fuzzy
+msgid "Paraxial"
+msgstr "आंशिक"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:329
+msgid "Create a sequence of paraxial line segments"
+msgstr ""
+
+#. Label
+#: ../src/ui/toolbar/pencil-toolbar.cpp:339
+msgid "Mode of new lines drawn by this tool"
+msgstr ""
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:354
+#: ../src/ui/toolbar/pencil-toolbar.cpp:355
+msgid "LPE spiro or bspline flatten"
+msgstr ""
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:418
+#, fuzzy
+msgctxt "Freehand shape"
+msgid "None"
+msgstr "कुनै पनि होइन"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:419
+#, fuzzy
+msgid "Triangle in"
+msgstr "कोण"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:420
+#, fuzzy
+msgid "Triangle out"
+msgstr "कोण"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:422
+msgid "From clipboard"
+msgstr ""
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:423
+#, fuzzy
+msgid "Bend from clipboard"
+msgstr "क्लिपबोर्डमा चयन काट्नुहोस्"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:424
+#, fuzzy
+msgid "Last applied"
+msgstr "साइज टाँस्नुहोस्"
+
+#. Name
+#: ../src/ui/toolbar/pencil-toolbar.cpp:446
+#, fuzzy
+msgid "Shape"
+msgstr "आकारहरू"
+
+#. Label
+#: ../src/ui/toolbar/pencil-toolbar.cpp:447
+msgid "Shape of new paths drawn by this tool"
+msgstr ""
+
+#: ../src/ui/toolbar/rect-toolbar.cpp:116
 msgid "W:"
 msgstr "W:"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:322
+#: ../src/ui/toolbar/rect-toolbar.cpp:116
 msgid "Width of rectangle"
 msgstr "आयातको चौडाई"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:338
+#: ../src/ui/toolbar/rect-toolbar.cpp:140
 msgid "H:"
 msgstr "H:"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:338
+#: ../src/ui/toolbar/rect-toolbar.cpp:140
 msgid "Height of rectangle"
 msgstr "आयातको उचाई"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:351
-#: ../src/ui/toolbar/rect-toolbar.cpp:365
+#: ../src/ui/toolbar/rect-toolbar.cpp:160
+#: ../src/ui/toolbar/rect-toolbar.cpp:182
 #, fuzzy
 msgid "not rounded"
 msgstr "नघुमेको"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:354
+#: ../src/ui/toolbar/rect-toolbar.cpp:163
 msgid "Horizontal radius of rounded corners"
 msgstr "घुमाउरो कुनाहरुको तेर्सो रेडियस"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:368
+#: ../src/ui/toolbar/rect-toolbar.cpp:185
 msgid "Vertical radius of rounded corners"
 msgstr "घुमाउरो कुनाहरुको ठाडो रेडियस"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:386
+#: ../src/ui/toolbar/rect-toolbar.cpp:211
 msgid "Not rounded"
 msgstr "नघुमेको"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:387
+#: ../src/ui/toolbar/rect-toolbar.cpp:212
 msgid "Make corners sharp"
 msgstr "कुनाहरू तिखो बनाउनुहोस्"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:261
+#: ../src/ui/toolbar/rect-toolbar.cpp:267
 #, fuzzy
-msgid "Transform by toolbar"
-msgstr "बान्कीहरू रपान्तरण गर्नुहोस्"
+msgid "Change rectangle"
+msgstr "आयातहरू खोजी गर्नुहोस्"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:279
+#: ../src/ui/toolbar/select-toolbar.cpp:66
 msgid "Now <b>stroke width</b> is <b>scaled</b> when objects are scaled."
 msgstr "अहिले <b>स्ट्रोक चौडाई</b> मापन <b>गरियो</b> जब वस्तुहरू मापन गरिन्छ ।"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:281
+#: ../src/ui/toolbar/select-toolbar.cpp:68
 msgid "Now <b>stroke width</b> is <b>not scaled</b> when objects are scaled."
 msgstr "अहिले <b>स्ट्रोक चौडाइ</b> मापन <b>गरिएको छैन</b> जब वस्तुहरू मापन गरिन्छ ।"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:292
+#: ../src/ui/toolbar/select-toolbar.cpp:79
 msgid ""
 "Now <b>rounded rectangle corners</b> are <b>scaled</b> when rectangles are "
 "scaled."
 msgstr "अहिले <b>घुमाउरो आयात कुनाहरू</b> मापन <b>गरिन्छ</b> जब आयातहरू मापन गरिन्छ ।"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:294
+#: ../src/ui/toolbar/select-toolbar.cpp:81
 msgid ""
 "Now <b>rounded rectangle corners</b> are <b>not scaled</b> when rectangles "
 "are scaled."
 msgstr "अहिले <b>घुमाउरो आयात कुनाहरू</b> मापन <b>गरिदैन</b> जब आयातहरू मापन गरिदैन ।"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:305
+#: ../src/ui/toolbar/select-toolbar.cpp:92
 msgid ""
 "Now <b>gradients</b> are <b>transformed</b> along with their objects when "
 "those are transformed (moved, scaled, rotated, or skewed)."
@@ -28758,7 +28756,7 @@ msgstr ""
 "अहिले <b>ग्राडिएन्टहरू</b> तिनिहरुको वस्तुहरू संग <b>रुपान्तरण गरिन्छ</b> जब तिनिहरू "
 "रुपान्तरण गरिन्छ (सारिएको, मापन गरिएको, घुमाउरो, वा स्क्युड)"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:307
+#: ../src/ui/toolbar/select-toolbar.cpp:94
 msgid ""
 "Now <b>gradients</b> remain <b>fixed</b> when objects are transformed "
 "(moved, scaled, rotated, or skewed)."
@@ -28766,221 +28764,221 @@ msgstr ""
 "अहिले जब वस्तुहरू रुपान्तरण गरिन्छ (सारिएको, मापन गरिएको, घुमाउरो, वा स्क्युड) "
 "<b>ग्राडिएन्टहरू</b> स्थिर <b>रहन्छ</b> ।"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:318
+#: ../src/ui/toolbar/select-toolbar.cpp:105
 msgid ""
 "Now <b>patterns</b> are <b>transformed</b> along with their objects when "
 "those are transformed (moved, scaled, rotated, or skewed)."
 msgstr ""
 
-#: ../src/ui/toolbar/select-toolbar.cpp:320
+#: ../src/ui/toolbar/select-toolbar.cpp:107
 msgid ""
 "Now <b>patterns</b> remain <b>fixed</b> when objects are transformed (moved, "
 "scaled, rotated, or skewed)."
 msgstr ""
 
 #. name
-#: ../src/ui/toolbar/select-toolbar.cpp:434
+#: ../src/ui/toolbar/select-toolbar.cpp:220
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "X position"
 msgstr "स्थिति:"
 
 #. label
-#: ../src/ui/toolbar/select-toolbar.cpp:435
+#: ../src/ui/toolbar/select-toolbar.cpp:221
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "X:"
 msgstr "X:"
 
 #. shortLabel
-#: ../src/ui/toolbar/select-toolbar.cpp:436
+#: ../src/ui/toolbar/select-toolbar.cpp:222
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "Horizontal coordinate of selection"
 msgstr "चयनको तेर्सो समन्वय"
 
 #. name
-#: ../src/ui/toolbar/select-toolbar.cpp:453
+#: ../src/ui/toolbar/select-toolbar.cpp:241
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "Y position"
 msgstr "स्थिति:"
 
 #. label
-#: ../src/ui/toolbar/select-toolbar.cpp:454
+#: ../src/ui/toolbar/select-toolbar.cpp:242
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "Y:"
 msgstr "Y:"
 
 #. shortLabel
-#: ../src/ui/toolbar/select-toolbar.cpp:455
+#: ../src/ui/toolbar/select-toolbar.cpp:243
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "Vertical coordinate of selection"
 msgstr "चयनको तेर्सो समन्वय"
 
 #. name
-#: ../src/ui/toolbar/select-toolbar.cpp:472
+#: ../src/ui/toolbar/select-toolbar.cpp:262
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "Width"
 msgstr "चौडाई:"
 
 #. label
-#: ../src/ui/toolbar/select-toolbar.cpp:473
+#: ../src/ui/toolbar/select-toolbar.cpp:263
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "W:"
 msgstr "W:"
 
 #. shortLabel
-#: ../src/ui/toolbar/select-toolbar.cpp:474
+#: ../src/ui/toolbar/select-toolbar.cpp:264
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "Width of selection"
 msgstr "चयनको चौडाई"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:492
+#: ../src/ui/toolbar/select-toolbar.cpp:284
 #, fuzzy
 msgid "Lock width and height"
 msgstr "चौडाई, उचाइ: "
 
-#: ../src/ui/toolbar/select-toolbar.cpp:493
+#: ../src/ui/toolbar/select-toolbar.cpp:285
 msgid "When locked, change both width and height by the same proportion"
 msgstr "ताल्चा लगाएको बेलामा, उहि अनुपातमा दुबै चौडाइ र उचाइहरू परिवर्तन गर्नुहोस्"
 
 #. name
-#: ../src/ui/toolbar/select-toolbar.cpp:504
+#: ../src/ui/toolbar/select-toolbar.cpp:295
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "Height"
 msgstr "उचाई:"
 
 #. label
-#: ../src/ui/toolbar/select-toolbar.cpp:505
+#: ../src/ui/toolbar/select-toolbar.cpp:296
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "H:"
 msgstr "H:"
 
 #. shortLabel
-#: ../src/ui/toolbar/select-toolbar.cpp:506
+#: ../src/ui/toolbar/select-toolbar.cpp:297
 #, fuzzy
 msgctxt "Select toolbar"
 msgid "Height of selection"
 msgstr "चयनको उचाई"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:569
+#: ../src/ui/toolbar/select-toolbar.cpp:354
 #, fuzzy
 msgid "Scale rounded corners"
 msgstr "आयातहरुमा घुमाउरो कुनाहरू मापन गर्नुहोस्"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:580
+#: ../src/ui/toolbar/select-toolbar.cpp:365
 #, fuzzy
 msgid "Move gradients"
 msgstr "नोड ह्यान्डलहरू अनियमित पार्नुहोस्"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:591
+#: ../src/ui/toolbar/select-toolbar.cpp:376
 #, fuzzy
 msgid "Move patterns"
 msgstr "बान्की"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:97
+#: ../src/ui/toolbar/select-toolbar.cpp:505
 #, fuzzy
-msgid "Change spiral"
-msgstr "स्पाइरलहरू सिर्जना गर्नुहोस्"
+msgid "Transform by toolbar"
+msgstr "बान्कीहरू रपान्तरण गर्नुहोस्"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:247
+#: ../src/ui/toolbar/spiral-toolbar.cpp:97
 msgid "just a curve"
 msgstr ""
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:247
+#: ../src/ui/toolbar/spiral-toolbar.cpp:97
 #, fuzzy
 msgid "one full revolution"
 msgstr "परिक्रमणहरुको सङ्ख्या"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:250
+#: ../src/ui/toolbar/spiral-toolbar.cpp:100
 #, fuzzy
 msgid "Number of turns"
 msgstr "पङ्क्तहरुको सङ्ख्या"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:250
+#: ../src/ui/toolbar/spiral-toolbar.cpp:100
 msgid "Turns:"
 msgstr "मोडहरू:"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:250
+#: ../src/ui/toolbar/spiral-toolbar.cpp:100
 msgid "Number of revolutions"
 msgstr "परिक्रमणहरुको सङ्ख्या"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 #, fuzzy
 msgid "circle"
 msgstr "वृत्त"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "edge is much denser"
 msgstr ""
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "edge is denser"
 msgstr ""
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 #, fuzzy
 msgid "even"
 msgstr "हरियो"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 #, fuzzy
 msgid "center is denser"
 msgstr "केन्द्र लाइनहरू"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "center is much denser"
 msgstr ""
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:264
+#: ../src/ui/toolbar/spiral-toolbar.cpp:120
 #, fuzzy
 msgid "Divergence"
 msgstr "विचलन:"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:264
+#: ../src/ui/toolbar/spiral-toolbar.cpp:120
 msgid "Divergence:"
 msgstr "विचलन:"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:264
+#: ../src/ui/toolbar/spiral-toolbar.cpp:120
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
 msgstr ""
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:275
+#: ../src/ui/toolbar/spiral-toolbar.cpp:137
 #, fuzzy
 msgid "starts from center"
 msgstr "हालको तह बढाउनुहोस्"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:275
+#: ../src/ui/toolbar/spiral-toolbar.cpp:137
 msgid "starts mid-way"
 msgstr ""
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:275
+#: ../src/ui/toolbar/spiral-toolbar.cpp:137
 msgid "starts near edge"
 msgstr ""
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:278
+#: ../src/ui/toolbar/spiral-toolbar.cpp:140
 #, fuzzy
 msgid "Inner radius"
 msgstr "भित्रि अर्धव्यास:"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:278
+#: ../src/ui/toolbar/spiral-toolbar.cpp:140
 msgid "Inner radius:"
 msgstr "भित्रि अर्धव्यास:"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:278
+#: ../src/ui/toolbar/spiral-toolbar.cpp:140
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr "सबभन्दा भित्रको परिक्रमणको अर्धव्यास (स्पाइरल साइज संग सम्बन्धित)"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:291
-#: ../src/ui/toolbar/star-toolbar.cpp:589
+#: ../src/ui/toolbar/spiral-toolbar.cpp:159
+#: ../src/ui/toolbar/star-toolbar.cpp:230
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -28988,799 +28986,724 @@ msgstr ""
 "पूर्वनिर्धारितमा आकार परामितिहरू रिसेट गर्नुहोस् (Inkscape प्राथमिकताहरू प्रयोग गर्नुहोस् "
 "> पूर्वनिर्धारितहरू परिवर्तन गर्न उपकरणहरू)"
 
+#: ../src/ui/toolbar/spiral-toolbar.cpp:210
+#, fuzzy
+msgid "Change spiral"
+msgstr "स्पाइरलहरू सिर्जना गर्नुहोस्"
+
 #. Width
-#: ../src/ui/toolbar/spray-toolbar.cpp:290
+#: ../src/ui/toolbar/spray-toolbar.cpp:90
 #, fuzzy
 msgid "(narrow spray)"
 msgstr "न्युन गर्नुहोस्"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:290
+#: ../src/ui/toolbar/spray-toolbar.cpp:90
 #, fuzzy
 msgid "(broad spray)"
 msgstr " (stroke)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:293
+#: ../src/ui/toolbar/spray-toolbar.cpp:93
 #, fuzzy
 msgid "The width of the spray area (relative to the visible canvas area)"
 msgstr "हस्तलेखन कलमको चौडाइ (दृश्यात्मक क्यानभास क्षेत्रमा सम्बन्धित)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:308
+#: ../src/ui/toolbar/spray-toolbar.cpp:113
 msgid "Use the pressure of the input device to alter the width of spray area"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:319
+#: ../src/ui/toolbar/spray-toolbar.cpp:122
 msgid "(maximum mean)"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:322
+#: ../src/ui/toolbar/spray-toolbar.cpp:125
 #, fuzzy
 msgid "Focus"
 msgstr "cusp"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:322
+#: ../src/ui/toolbar/spray-toolbar.cpp:125
 #, fuzzy
 msgid "Focus:"
 msgstr "स्रोत"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:322
+#: ../src/ui/toolbar/spray-toolbar.cpp:125
 msgid "0 to spray a spot; increase to enlarge the ring radius"
 msgstr ""
 
 #. Standard_deviation
-#: ../src/ui/toolbar/spray-toolbar.cpp:335
+#: ../src/ui/toolbar/spray-toolbar.cpp:143
 #, fuzzy
 msgid "(minimum scatter)"
 msgstr "न्यूनतम साइज"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:335
+#: ../src/ui/toolbar/spray-toolbar.cpp:143
 msgid "(maximum scatter)"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:146
 #, fuzzy
 msgctxt "Spray tool"
 msgid "Scatter"
 msgstr "बान्की"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:146
 #, fuzzy
 msgctxt "Spray tool"
 msgid "Scatter:"
 msgstr "बान्की"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:146
 msgid "Increase to scatter sprayed objects"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:358 ../src/ui/tools/spray-tool.cpp:1353
+#: ../src/ui/toolbar/spray-toolbar.cpp:171 ../src/ui/tools/spray-tool.cpp:1353
 #, fuzzy
 msgid "Spray with copies"
 msgstr "लाइनहरू बिचको खाली ठाउँ"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:359
+#: ../src/ui/toolbar/spray-toolbar.cpp:172
 #, fuzzy
 msgid "Spray copies of the initial selection"
 msgstr "चयनमा रुपानत्रण लागू गर्नुहोस्"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:364 ../src/ui/tools/spray-tool.cpp:1357
+#: ../src/ui/toolbar/spray-toolbar.cpp:177 ../src/ui/tools/spray-tool.cpp:1357
 #, fuzzy
 msgid "Spray with clones"
 msgstr "क्लोनहरू खोजी गर्नुहोस्"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:365
+#: ../src/ui/toolbar/spray-toolbar.cpp:178
 #, fuzzy
 msgid "Spray clones of the initial selection"
 msgstr "चयनको क्लोनहरू टायल गर्नुहोस् र सिर्जना गर्नुहोस्"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:371
+#: ../src/ui/toolbar/spray-toolbar.cpp:184
 #, fuzzy
 msgid "Spray single path"
 msgstr "चयन बाट क्लिपिङ् बाटो हटाउनुहोस्"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:372
+#: ../src/ui/toolbar/spray-toolbar.cpp:185
 msgid "Spray objects in a single path"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:378
+#: ../src/ui/toolbar/spray-toolbar.cpp:191
 #, fuzzy
 msgid "Delete sprayed items"
 msgstr "रोक मेट्नुहोस्"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:379
+#: ../src/ui/toolbar/spray-toolbar.cpp:192
 #, fuzzy
 msgid "Delete sprayed items from selection"
 msgstr "चयन बाट मास्क हटाउनुहोस्"
 
 #. Population
-#: ../src/ui/toolbar/spray-toolbar.cpp:402
+#: ../src/ui/toolbar/spray-toolbar.cpp:212
 msgid "(low population)"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:402
+#: ../src/ui/toolbar/spray-toolbar.cpp:212
 #, fuzzy
 msgid "(high population)"
 msgstr "मुद्रण गन्तव्य"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:405
+#: ../src/ui/toolbar/spray-toolbar.cpp:215
 #, fuzzy
 msgid "Amount"
 msgstr "फन्ट"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:406
+#: ../src/ui/toolbar/spray-toolbar.cpp:216
 msgid "Adjusts the number of items sprayed per click"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:422
+#: ../src/ui/toolbar/spray-toolbar.cpp:236
 msgid ""
 "Use the pressure of the input device to alter the amount of sprayed objects"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:432
+#: ../src/ui/toolbar/spray-toolbar.cpp:244
 #, fuzzy
 msgid "(high rotation variation)"
 msgstr "मुद्रण गन्तव्य"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:435
+#: ../src/ui/toolbar/spray-toolbar.cpp:247
 #, fuzzy
 msgid "Rotation"
 msgstr "परिक्रमण"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:435
+#: ../src/ui/toolbar/spray-toolbar.cpp:247
 #, fuzzy
 msgid "Rotation:"
 msgstr "परिक्रमण"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:437
+#: ../src/ui/toolbar/spray-toolbar.cpp:249
 #, no-c-format
 msgid ""
 "Variation of the rotation of the sprayed objects; 0% for the same rotation "
 "than the original object"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:450
+#: ../src/ui/toolbar/spray-toolbar.cpp:266
 #, fuzzy
 msgid "(high scale variation)"
 msgstr "मुद्रण गन्तव्य"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:453
+#: ../src/ui/toolbar/spray-toolbar.cpp:269
 #, fuzzy
 msgctxt "Spray tool"
 msgid "Scale"
 msgstr "स्केल"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:453
+#: ../src/ui/toolbar/spray-toolbar.cpp:269
 #, fuzzy
 msgctxt "Spray tool"
 msgid "Scale:"
 msgstr "स्केल"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:455
+#: ../src/ui/toolbar/spray-toolbar.cpp:271
 #, no-c-format
 msgid ""
 "Variation in the scale of the sprayed objects; 0% for the same scale than "
 "the original object"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:471
+#: ../src/ui/toolbar/spray-toolbar.cpp:291
 msgid "Use the pressure of the input device to alter the scale of new items"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:483
-#: ../src/ui/toolbar/spray-toolbar.cpp:484
+#: ../src/ui/toolbar/spray-toolbar.cpp:302
+#: ../src/ui/toolbar/spray-toolbar.cpp:303
 msgid ""
 "Pick color from the drawing. You can use clonetiler trace dialog for "
 "advanced effects. In clone mode original fill or stroke colors must be unset."
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:496
-#: ../src/ui/toolbar/spray-toolbar.cpp:497
+#: ../src/ui/toolbar/spray-toolbar.cpp:314
+#: ../src/ui/toolbar/spray-toolbar.cpp:315
 msgid "Pick from center instead average area."
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:509
-#: ../src/ui/toolbar/spray-toolbar.cpp:510
+#: ../src/ui/toolbar/spray-toolbar.cpp:326
+#: ../src/ui/toolbar/spray-toolbar.cpp:327
 msgid "Inverted pick value, retaining color in advanced trace mode"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:522
-#: ../src/ui/toolbar/spray-toolbar.cpp:523
+#: ../src/ui/toolbar/spray-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:339
 #, fuzzy
 msgid "Apply picked color to fill"
 msgstr "अन्तिममा चयन गरिएको रङ"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:535
-#: ../src/ui/toolbar/spray-toolbar.cpp:536
+#: ../src/ui/toolbar/spray-toolbar.cpp:350
+#: ../src/ui/toolbar/spray-toolbar.cpp:351
 #, fuzzy
 msgid "Apply picked color to stroke"
 msgstr "अन्तिममा चयन गरिएको रङ"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:548
-#: ../src/ui/toolbar/spray-toolbar.cpp:549
+#: ../src/ui/toolbar/spray-toolbar.cpp:362
+#: ../src/ui/toolbar/spray-toolbar.cpp:363
 msgid "No overlap between colors"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:561
-#: ../src/ui/toolbar/spray-toolbar.cpp:562
+#: ../src/ui/toolbar/spray-toolbar.cpp:374
+#: ../src/ui/toolbar/spray-toolbar.cpp:375
 msgid "Apply over transparent areas"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:574
-#: ../src/ui/toolbar/spray-toolbar.cpp:575
+#: ../src/ui/toolbar/spray-toolbar.cpp:386
+#: ../src/ui/toolbar/spray-toolbar.cpp:387
 msgid "Apply over no transparent areas"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:587
-#: ../src/ui/toolbar/spray-toolbar.cpp:588
+#: ../src/ui/toolbar/spray-toolbar.cpp:398
+#: ../src/ui/toolbar/spray-toolbar.cpp:399
 #, fuzzy
 msgid "Prevent overlapping objects"
 msgstr "चयन गरिएको वस्तुहरू नक्कल गर्नुहोस्"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:599
+#: ../src/ui/toolbar/spray-toolbar.cpp:409
 #, fuzzy
 msgid "(minimum offset)"
 msgstr "न्यूनतम साइज"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:599
+#: ../src/ui/toolbar/spray-toolbar.cpp:409
 #, fuzzy
 msgid "(maximum offset)"
 msgstr "न्यूनतम साइज"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:602
+#: ../src/ui/toolbar/spray-toolbar.cpp:412
 #, fuzzy
 msgid "Offset %"
 msgstr "अफसेटहरू"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:602
+#: ../src/ui/toolbar/spray-toolbar.cpp:412
 #, fuzzy
 msgid "Offset %:"
 msgstr "अफसेट:"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:603
+#: ../src/ui/toolbar/spray-toolbar.cpp:413
 msgid "Increase to segregate objects more (value in percent)"
 msgstr ""
 
-#: ../src/ui/toolbar/star-toolbar.cpp:101
-msgid "Star: Change number of corners"
-msgstr ""
-
-#: ../src/ui/toolbar/star-toolbar.cpp:154
-#, fuzzy
-msgid "Star: Change spoke ratio"
-msgstr "रुपान्तरण भण्डार गर्नुहोस्:"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:200
-#, fuzzy
-msgid "Make polygon"
-msgstr "सम्पूर्ण बनाउनुहोस्"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:200
-#, fuzzy
-msgid "Make star"
-msgstr "स्पाइरलहरू सिर्जना गर्नुहोस्"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:239
-msgid "Star: Change rounding"
-msgstr ""
-
-#: ../src/ui/toolbar/star-toolbar.cpp:279
-#, fuzzy
-msgid "Star: Change randomization"
-msgstr "रुपान्तरण भण्डार गर्नुहोस्:"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:488
+#: ../src/ui/toolbar/star-toolbar.cpp:110
 msgid "Regular polygon (with one handle) instead of a star"
 msgstr "ताराको सट्टामा नियमित बहुभुज (एउटा ह्यान्डल संग)"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:494
+#: ../src/ui/toolbar/star-toolbar.cpp:116
 #, fuzzy
 msgid "Star instead of a regular polygon (with one handle)"
 msgstr "ताराको सट्टामा नियमित बहुभुज (एउटा ह्यान्डल संग)"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:516
+#: ../src/ui/toolbar/star-toolbar.cpp:137
 msgid "triangle/tri-star"
 msgstr ""
 
-#: ../src/ui/toolbar/star-toolbar.cpp:516
+#: ../src/ui/toolbar/star-toolbar.cpp:137
 msgid "square/quad-star"
 msgstr ""
 
-#: ../src/ui/toolbar/star-toolbar.cpp:516
+#: ../src/ui/toolbar/star-toolbar.cpp:137
 msgid "pentagon/five-pointed star"
 msgstr ""
 
-#: ../src/ui/toolbar/star-toolbar.cpp:516
+#: ../src/ui/toolbar/star-toolbar.cpp:137
 msgid "hexagon/six-pointed star"
 msgstr ""
 
-#: ../src/ui/toolbar/star-toolbar.cpp:519
+#: ../src/ui/toolbar/star-toolbar.cpp:140
 #, fuzzy
 msgid "Corners"
 msgstr "कुनाहरू:"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:519
+#: ../src/ui/toolbar/star-toolbar.cpp:140
 msgid "Corners:"
 msgstr "कुनाहरू:"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:519
+#: ../src/ui/toolbar/star-toolbar.cpp:140
 msgid "Number of corners of a polygon or star"
 msgstr "बहुभुज वा ताराको कुनाहरुको सङ्ख्या"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "thin-ray star"
 msgstr ""
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "pentagram"
 msgstr ""
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "hexagram"
 msgstr ""
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "heptagram"
 msgstr ""
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "octagram"
 msgstr ""
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 #, fuzzy
 msgid "regular polygon"
 msgstr "सम्पूर्ण बनाउनुहोस्"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:535
+#: ../src/ui/toolbar/star-toolbar.cpp:162
 #, fuzzy
 msgid "Spoke ratio"
 msgstr "बोलेको अनुपात:"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:535
+#: ../src/ui/toolbar/star-toolbar.cpp:162
 msgid "Spoke ratio:"
 msgstr "बोलेको अनुपात:"
 
 #. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
 #. Base radius is the same for the closest handle.
-#: ../src/ui/toolbar/star-toolbar.cpp:538
+#: ../src/ui/toolbar/star-toolbar.cpp:165
 msgid "Base radius to tip radius ratio"
 msgstr "रेडियस अनुपात टिप गर्न आधार रेडियस"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
-#: ../src/ui/toolbar/star-toolbar.cpp:557
+#: ../src/ui/toolbar/star-toolbar.cpp:187
+#: ../src/ui/toolbar/star-toolbar.cpp:188
 msgid "stretched"
 msgstr ""
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
+#: ../src/ui/toolbar/star-toolbar.cpp:187
 msgid "twisted"
 msgstr ""
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
+#: ../src/ui/toolbar/star-toolbar.cpp:187
 msgid "slightly pinched"
 msgstr ""
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
+#: ../src/ui/toolbar/star-toolbar.cpp:187
 #, fuzzy
 msgid "NOT rounded"
 msgstr "नघुमेको"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
+#: ../src/ui/toolbar/star-toolbar.cpp:187
 #, fuzzy
 msgid "slightly rounded"
 msgstr "नघुमेको"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:557
+#: ../src/ui/toolbar/star-toolbar.cpp:188
 #, fuzzy
 msgid "visibly rounded"
 msgstr "नघुमेको"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:557
+#: ../src/ui/toolbar/star-toolbar.cpp:188
 #, fuzzy
 msgid "well rounded"
 msgstr "नघुमेको"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:557
+#: ../src/ui/toolbar/star-toolbar.cpp:188
 #, fuzzy
 msgid "amply rounded"
 msgstr "नघुमेको"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:557
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:188
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 msgid "blown up"
 msgstr ""
 
-#: ../src/ui/toolbar/star-toolbar.cpp:560
+#: ../src/ui/toolbar/star-toolbar.cpp:191
 msgid "Rounded:"
 msgstr "घुमाउरो:"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:560
+#: ../src/ui/toolbar/star-toolbar.cpp:191
 msgid "How much rounded are the corners (0 for sharp)"
 msgstr ""
 
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 #, fuzzy
 msgid "NOT randomized"
 msgstr "अनियमित गरिएको:"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 msgid "slightly irregular"
 msgstr ""
 
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 #, fuzzy
 msgid "visibly randomized"
 msgstr "अनियमित गरिएको:"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 #, fuzzy
 msgid "strongly randomized"
 msgstr "अनियमित गरिएको:"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:575
+#: ../src/ui/toolbar/star-toolbar.cpp:211
 #, fuzzy
 msgid "Randomized"
 msgstr "अनियमित गरिएको:"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:575
+#: ../src/ui/toolbar/star-toolbar.cpp:211
 msgid "Randomized:"
 msgstr "अनियमित गरिएको:"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:575
+#: ../src/ui/toolbar/star-toolbar.cpp:211
 msgid "Scatter randomly the corners and angles"
 msgstr "कुनाहरू र कोणहरू अनियमित रुपमा फिजाउनुहोस्"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:184
-msgid "Text: Change font family"
+#: ../src/ui/toolbar/star-toolbar.cpp:281
+#, fuzzy
+msgid "Make polygon"
+msgstr "सम्पूर्ण बनाउनुहोस्"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:281
+#, fuzzy
+msgid "Make star"
+msgstr "स्पाइरलहरू सिर्जना गर्नुहोस्"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:326
+msgid "Star: Change number of corners"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:278
-msgid "Text: Change font size"
+#: ../src/ui/toolbar/star-toolbar.cpp:378
+#, fuzzy
+msgid "Star: Change spoke ratio"
+msgstr "रुपान्तरण भण्डार गर्नुहोस्:"
+
+#: ../src/ui/toolbar/star-toolbar.cpp:416
+msgid "Star: Change rounding"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:323
-msgid "Text: Change font style"
-msgstr ""
-
-#: ../src/ui/toolbar/text-toolbar.cpp:362
+#: ../src/ui/toolbar/star-toolbar.cpp:455
 #, fuzzy
-msgid "Text: Unset line height."
-msgstr "पृष्ठ अभिमुखिकरण:"
+msgid "Star: Change randomization"
+msgstr "रुपान्तरण भण्डार गर्नुहोस्:"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:439
-msgid "Text: Change superscript or subscript"
-msgstr ""
-
-#: ../src/ui/toolbar/text-toolbar.cpp:580
-msgid "Text: Change alignment"
-msgstr ""
-
-#: ../src/ui/toolbar/text-toolbar.cpp:713
-#, fuzzy
-msgid "Text: Change line-height"
-msgstr "पृष्ठ अभिमुखिकरण:"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:877
-#, fuzzy
-msgid "Text: Change line-height unit"
-msgstr "पृष्ठ अभिमुखिकरण:"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1057
-#, fuzzy
-msgid "Text: Change line spacing mode"
-msgstr "पृष्ठ अभिमुखिकरण:"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1094
-#, fuzzy
-msgid "Text: Change word-spacing"
-msgstr "पृष्ठ अभिमुखिकरण:"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1134
-#, fuzzy
-msgid "Text: Change letter-spacing"
-msgstr "खालीस्थान सेट गर्नुहोस्:"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1172
-#, fuzzy
-msgid "Text: Change dx (kern)"
-msgstr "खालीस्थान सेट गर्नुहोस्:"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1206
-#, fuzzy
-msgid "Text: Change dy"
-msgstr "पृष्ठ अभिमुखिकरण:"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1241
-#, fuzzy
-msgid "Text: Change rotate"
-msgstr "पृष्ठ अभिमुखिकरण:"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1292
-#, fuzzy
-msgid "Text: Change writing mode"
-msgstr "पृष्ठ अभिमुखिकरण:"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1346
-#, fuzzy
-msgid "Text: Change orientation"
-msgstr "पृष्ठ अभिमुखिकरण:"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1394
-#, fuzzy
-msgid "Text: Change direction"
-msgstr "पृष्ठ अभिमुखिकरण:"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1583
-#: ../src/ui/toolbar/text-toolbar.cpp:2040
-#: ../src/ui/widget/font-selector.cpp:32 ../src/ui/widget/font-selector.cpp:137
-#, fuzzy
-msgid "Font size"
-msgstr "फन्ट साइज:"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1992
+#: ../src/ui/toolbar/text-toolbar.cpp:295
 #, fuzzy
 msgid "Font Family"
 msgstr "फन्ट परिवार"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1993
+#: ../src/ui/toolbar/text-toolbar.cpp:296
 #, fuzzy
 msgid "Select Font Family (Alt-X to access)"
 msgstr "फन्ट परिवार"
 
 #. Focus widget
 #. Enable entry completion
-#: ../src/ui/toolbar/text-toolbar.cpp:2003
+#: ../src/ui/toolbar/text-toolbar.cpp:306
 msgid "Select all text with this font-family"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2007
+#: ../src/ui/toolbar/text-toolbar.cpp:310
 msgid "Font not found on system"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2065
+#: ../src/ui/toolbar/text-toolbar.cpp:342
+#: ../src/ui/toolbar/text-toolbar.cpp:2221
+#: ../src/ui/widget/font-selector.cpp:32 ../src/ui/widget/font-selector.cpp:137
+#, fuzzy
+msgid "Font size"
+msgstr "फन्ट साइज:"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:366
 #, fuzzy
 msgid "Font Style"
 msgstr "फन्ट साइज"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2066
+#: ../src/ui/toolbar/text-toolbar.cpp:367
 #, fuzzy
 msgid "Font style"
 msgstr "फन्ट साइज"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2083
+#: ../src/ui/toolbar/text-toolbar.cpp:383
 msgid "Toggle Superscript"
 msgstr ""
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2084
+#: ../src/ui/toolbar/text-toolbar.cpp:384
 msgid "Toggle superscript"
 msgstr ""
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2096
+#: ../src/ui/toolbar/text-toolbar.cpp:395
 msgid "Toggle Subscript"
 msgstr ""
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2097
+#: ../src/ui/toolbar/text-toolbar.cpp:396
 #, fuzzy
 msgid "Toggle subscript"
 msgstr "पोस्टस्क्रिप्ट"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2115
-#: ../src/ui/toolbar/text-toolbar.cpp:2116
+#: ../src/ui/toolbar/text-toolbar.cpp:413
+#: ../src/ui/toolbar/text-toolbar.cpp:414
 msgid "Align left"
 msgstr "बायाँ पंक्तिबद्ध गर्नुहोस्"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2121
-#: ../src/ui/toolbar/text-toolbar.cpp:2122
+#: ../src/ui/toolbar/text-toolbar.cpp:419
+#: ../src/ui/toolbar/text-toolbar.cpp:420
 #, fuzzy
 msgid "Align center"
 msgstr "बायाँ पंक्तिबद्ध गर्नुहोस्"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2127
-#: ../src/ui/toolbar/text-toolbar.cpp:2128
+#: ../src/ui/toolbar/text-toolbar.cpp:425
+#: ../src/ui/toolbar/text-toolbar.cpp:426
 msgid "Align right"
 msgstr "दायाँ पंक्तिबद्ध गर्नुहोस्"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2133
+#: ../src/ui/toolbar/text-toolbar.cpp:431
 msgid "Justify"
 msgstr "समरेखन गर्नुहोस्"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2134
+#: ../src/ui/toolbar/text-toolbar.cpp:432
 #, fuzzy
 msgid "Justify (only flowed text)"
 msgstr "प्रवाह भएको पाठ"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2140
+#: ../src/ui/toolbar/text-toolbar.cpp:438
 #, fuzzy
 msgid "Alignment"
 msgstr "बायाँ पंक्तिबद्ध गर्नुहोस्"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2141
+#: ../src/ui/toolbar/text-toolbar.cpp:439
 #, fuzzy
 msgid "Text alignment"
 msgstr "पाठ आगत"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2165
+#: ../src/ui/toolbar/text-toolbar.cpp:462
 msgid "Horizontal text"
 msgstr "तेर्सो पाठ"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2170
+#: ../src/ui/toolbar/text-toolbar.cpp:467
 #, fuzzy
 msgid "Vertical — RL"
 msgstr "ठाडो"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2171
+#: ../src/ui/toolbar/text-toolbar.cpp:468
 msgid "Vertical text — lines: right to left"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2176
+#: ../src/ui/toolbar/text-toolbar.cpp:473
 #, fuzzy
 msgid "Vertical — LR"
 msgstr "ठाडो"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2177
+#: ../src/ui/toolbar/text-toolbar.cpp:474
 msgid "Vertical text — lines: left to right"
 msgstr ""
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2183
+#: ../src/ui/toolbar/text-toolbar.cpp:480
 #, fuzzy
 msgid "Writing mode"
 msgstr "रेखाचित्र"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2184
+#: ../src/ui/toolbar/text-toolbar.cpp:481
 msgid "Block progression"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2208
+#: ../src/ui/toolbar/text-toolbar.cpp:504
 #, fuzzy
 msgid "Auto glyph orientation"
 msgstr "पृष्ठ अभिमुखिकरण:"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2213
+#: ../src/ui/toolbar/text-toolbar.cpp:509
 #, fuzzy
 msgid "Upright"
 msgstr "चम्किलोपन"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2214
+#: ../src/ui/toolbar/text-toolbar.cpp:510
 #, fuzzy
 msgid "Upright glyph orientation"
 msgstr "पृष्ठ अभिमुखिकरण:"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2219
+#: ../src/ui/toolbar/text-toolbar.cpp:515
 msgid "Sideways"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2220
+#: ../src/ui/toolbar/text-toolbar.cpp:516
 #, fuzzy
 msgid "Sideways glyph orientation"
 msgstr "पृष्ठ अभिमुखिकरण:"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2226
+#: ../src/ui/toolbar/text-toolbar.cpp:522
 #, fuzzy
 msgid "Text orientation"
 msgstr "पृष्ठ अभिमुखिकरण:"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2227
+#: ../src/ui/toolbar/text-toolbar.cpp:523
 msgid "Text (glyph) orientation in vertical text."
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2251
+#: ../src/ui/toolbar/text-toolbar.cpp:545
 msgid "LTR"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2252
+#: ../src/ui/toolbar/text-toolbar.cpp:546
 #, fuzzy
 msgid "Left to right text"
 msgstr "स्केल लम्बाइ"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2257
+#: ../src/ui/toolbar/text-toolbar.cpp:551
 msgid "RTL"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2258
+#: ../src/ui/toolbar/text-toolbar.cpp:552
 #, fuzzy
 msgid "Right to left text"
 msgstr "दायाँ कोण"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2264
+#: ../src/ui/toolbar/text-toolbar.cpp:558
 #, fuzzy
 msgid "Text direction"
 msgstr "लाइन खालीस्थान:"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2265
+#: ../src/ui/toolbar/text-toolbar.cpp:559
 msgid "Text direction for normally horizontal text."
 msgstr ""
 
 #. Drop down menu
-#: ../src/ui/toolbar/text-toolbar.cpp:2291
+#: ../src/ui/toolbar/text-toolbar.cpp:575
 #, fuzzy
 msgid "Smaller spacing"
 msgstr "खालीस्थान सेट गर्नुहोस्:"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2291
-#: ../src/ui/toolbar/text-toolbar.cpp:2379
-#: ../src/ui/toolbar/text-toolbar.cpp:2410
+#: ../src/ui/toolbar/text-toolbar.cpp:575
+#: ../src/ui/toolbar/text-toolbar.cpp:666
+#: ../src/ui/toolbar/text-toolbar.cpp:699
 #, fuzzy
 msgctxt "Text tool"
 msgid "Normal"
 msgstr "सामान्य"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2291
+#: ../src/ui/toolbar/text-toolbar.cpp:575
 #, fuzzy
 msgid "Larger spacing"
 msgstr "लाइन खालीस्थान:"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2296
+#: ../src/ui/toolbar/text-toolbar.cpp:580
 #, fuzzy
 msgid "Line Height"
 msgstr "उचाई:"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2297
+#: ../src/ui/toolbar/text-toolbar.cpp:581
 #, fuzzy
 msgid "Line:"
 msgstr "रेखा"
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2298
+#: ../src/ui/toolbar/text-toolbar.cpp:582
 #, fuzzy
 msgid "Spacing between baselines"
 msgstr "लाइनहरू बिचको खाली ठाउँ"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2337
+#: ../src/ui/toolbar/text-toolbar.cpp:625
 #, fuzzy
 msgid "Adaptive"
 msgstr "संग सम्बन्धित: "
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2338
+#: ../src/ui/toolbar/text-toolbar.cpp:626
 msgid "Line spacing adapts to font size."
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2343
+#: ../src/ui/toolbar/text-toolbar.cpp:631
 #: ../share/extensions/polyhedron_3d.inx.h:54
 #, fuzzy
 msgid "Minimum"
 msgstr "न्यूनतम साइज"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2344
+#: ../src/ui/toolbar/text-toolbar.cpp:632
 msgid "Line spacing adapts to fonts size with set minimum spacing."
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2348
+#: ../src/ui/toolbar/text-toolbar.cpp:636
 msgid "Even"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2349
+#: ../src/ui/toolbar/text-toolbar.cpp:637
 msgid "Lines evenly spaced."
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2354
+#: ../src/ui/toolbar/text-toolbar.cpp:642
 #, fuzzy
 msgid "Adjustable ☠"
 msgstr "मास्टर अस्पष्टता"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2355
+#: ../src/ui/toolbar/text-toolbar.cpp:643
 msgid "Line spacing fully adjustable"
 msgstr ""
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2361
+#: ../src/ui/toolbar/text-toolbar.cpp:649
 #, fuzzy
 msgid "Line Spacing Mode"
 msgstr "लाइन खालीस्थान:"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2362
+#: ../src/ui/toolbar/text-toolbar.cpp:650
 msgid ""
 "How should multiple baselines be spaced?\n"
 " Adaptive: Line spacing adapts to font size.\n"
@@ -29790,368 +29713,448 @@ msgid ""
 msgstr ""
 
 #. Drop down menu
-#: ../src/ui/toolbar/text-toolbar.cpp:2379
-#: ../src/ui/toolbar/text-toolbar.cpp:2410
+#: ../src/ui/toolbar/text-toolbar.cpp:666
+#: ../src/ui/toolbar/text-toolbar.cpp:699
 #, fuzzy
 msgid "Negative spacing"
 msgstr "खालीस्थान सेट गर्नुहोस्:"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2379
-#: ../src/ui/toolbar/text-toolbar.cpp:2410
+#: ../src/ui/toolbar/text-toolbar.cpp:666
+#: ../src/ui/toolbar/text-toolbar.cpp:699
 #, fuzzy
 msgid "Positive spacing"
 msgstr "लाइन खालीस्थान:"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2384
+#: ../src/ui/toolbar/text-toolbar.cpp:671
 #, fuzzy
 msgid "Word spacing"
 msgstr "खालीस्थान सेट गर्नुहोस्:"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2385
+#: ../src/ui/toolbar/text-toolbar.cpp:672
 #, fuzzy
 msgid "Word:"
 msgstr "सार्नुहोस्"
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2386
+#: ../src/ui/toolbar/text-toolbar.cpp:673
 #, fuzzy
 msgid "Spacing between words (px)"
 msgstr "अक्षरहरू बिचको खाली ठाउँ"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2415
+#: ../src/ui/toolbar/text-toolbar.cpp:704
 #, fuzzy
 msgid "Letter spacing"
 msgstr "खालीस्थान सेट गर्नुहोस्:"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2416
+#: ../src/ui/toolbar/text-toolbar.cpp:705
 #, fuzzy
 msgid "Letter:"
 msgstr "स्केल लम्बाइ"
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2417
+#: ../src/ui/toolbar/text-toolbar.cpp:706
 #, fuzzy
 msgid "Spacing between letters (px)"
 msgstr "अक्षरहरू बिचको खाली ठाउँ"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2446
+#: ../src/ui/toolbar/text-toolbar.cpp:736
 #, fuzzy
 msgid "Kerning"
 msgstr "रेखाचित्र"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2447
+#: ../src/ui/toolbar/text-toolbar.cpp:737
 #, fuzzy
 msgid "Kern:"
 msgstr "प्रयोगकर्ता नाम:"
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2448
+#: ../src/ui/toolbar/text-toolbar.cpp:738
 #, fuzzy
 msgid "Horizontal kerning (px)"
 msgstr "तेर्सो पाठ"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2477
+#: ../src/ui/toolbar/text-toolbar.cpp:768
 #, fuzzy
 msgid "Vertical Shift"
 msgstr "ठाडो पाठ"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2478
+#: ../src/ui/toolbar/text-toolbar.cpp:769
 #, fuzzy
 msgid "Vert:"
 msgstr "उल्टो पार्नुहोस्:"
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2479
+#: ../src/ui/toolbar/text-toolbar.cpp:770
 #, fuzzy
 msgid "Vertical shift (px)"
 msgstr "ठाडो अफसेट"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2508
+#: ../src/ui/toolbar/text-toolbar.cpp:800
 #, fuzzy
 msgid "Letter rotation"
 msgstr "खालीस्थान सेट गर्नुहोस्:"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2509
+#: ../src/ui/toolbar/text-toolbar.cpp:801
 #, fuzzy
 msgid "Rot:"
 msgstr "भूमिका:"
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2510
+#: ../src/ui/toolbar/text-toolbar.cpp:802
 #, fuzzy
 msgid "Character rotation (degrees)"
 msgstr "परिक्रमण"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2534
+#: ../src/ui/toolbar/text-toolbar.cpp:827
 #, fuzzy
 msgid "Unset line height"
 msgstr "लाइनहरू दायाँ पङ्क्तिबद्ध गर्नुहोस्"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2535
+#: ../src/ui/toolbar/text-toolbar.cpp:828
 msgid "If enabled, line height is set on part of selection. Click to unset."
 msgstr ""
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2547
+#: ../src/ui/toolbar/text-toolbar.cpp:839
 #, fuzzy
 msgid "Show outer style"
 msgstr "अल्फा (अस्पष्टता)"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2548
+#: ../src/ui/toolbar/text-toolbar.cpp:840
 msgid ""
 "Show style of outermost text element. The 'font-size' and 'line-height' "
 "values of the outermost text element determine the minimum line spacing in "
 "the block."
 msgstr ""
 
+#: ../src/ui/toolbar/text-toolbar.cpp:914
+msgid "Text: Change font family"
+msgstr ""
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1010
+msgid "Text: Change font size"
+msgstr ""
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1055
+msgid "Text: Change font style"
+msgstr ""
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1139
+msgid "Text: Change superscript or subscript"
+msgstr ""
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1281
+msgid "Text: Change alignment"
+msgstr ""
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1336
+#, fuzzy
+msgid "Text: Change writing mode"
+msgstr "पृष्ठ अभिमुखिकरण:"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1391
+#, fuzzy
+msgid "Text: Change orientation"
+msgstr "पृष्ठ अभिमुखिकरण:"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1440
+#, fuzzy
+msgid "Text: Change direction"
+msgstr "पृष्ठ अभिमुखिकरण:"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1509
+#, fuzzy
+msgid "Text: Change line-height"
+msgstr "पृष्ठ अभिमुखिकरण:"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1669
+#, fuzzy
+msgid "Text: Change line-height unit"
+msgstr "पृष्ठ अभिमुखिकरण:"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1841
+#, fuzzy
+msgid "Text: Change line spacing mode"
+msgstr "पृष्ठ अभिमुखिकरण:"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1879
+#, fuzzy
+msgid "Text: Change word-spacing"
+msgstr "पृष्ठ अभिमुखिकरण:"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1920
+#, fuzzy
+msgid "Text: Change letter-spacing"
+msgstr "खालीस्थान सेट गर्नुहोस्:"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1958
+#, fuzzy
+msgid "Text: Change dx (kern)"
+msgstr "खालीस्थान सेट गर्नुहोस्:"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1993
+#, fuzzy
+msgid "Text: Change dy"
+msgstr "पृष्ठ अभिमुखिकरण:"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:2029
+#, fuzzy
+msgid "Text: Change rotate"
+msgstr "पृष्ठ अभिमुखिकरण:"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:2056
+#, fuzzy
+msgid "Text: Unset line height."
+msgstr "पृष्ठ अभिमुखिकरण:"
+
 #. Width
-#: ../src/ui/toolbar/tweak-toolbar.cpp:126
+#: ../src/ui/toolbar/tweak-toolbar.cpp:92
 msgid "(pinch tweak)"
 msgstr ""
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:126
+#: ../src/ui/toolbar/tweak-toolbar.cpp:92
 #, fuzzy
 msgid "(broad tweak)"
 msgstr " (stroke)"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:129
+#: ../src/ui/toolbar/tweak-toolbar.cpp:95
 #, fuzzy
 msgid "The width of the tweak area (relative to the visible canvas area)"
 msgstr "हस्तलेखन कलमको चौडाइ (दृश्यात्मक क्यानभास क्षेत्रमा सम्बन्धित)"
 
 #. Force
-#: ../src/ui/toolbar/tweak-toolbar.cpp:143
+#: ../src/ui/toolbar/tweak-toolbar.cpp:115
 msgid "(minimum force)"
 msgstr ""
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:143
+#: ../src/ui/toolbar/tweak-toolbar.cpp:115
 msgid "(maximum force)"
 msgstr ""
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:146
+#: ../src/ui/toolbar/tweak-toolbar.cpp:118
 #, fuzzy
 msgid "Force"
 msgstr "स्रोत"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:146
+#: ../src/ui/toolbar/tweak-toolbar.cpp:118
 #, fuzzy
 msgid "Force:"
 msgstr "स्रोत"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:146
+#: ../src/ui/toolbar/tweak-toolbar.cpp:118
 msgid "The force of the tweak action"
 msgstr ""
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:166
+#: ../src/ui/toolbar/tweak-toolbar.cpp:143
 #, fuzzy
 msgid "Move mode"
 msgstr "नोड घटाउनुहोस्"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:167
+#: ../src/ui/toolbar/tweak-toolbar.cpp:144
 #, fuzzy
 msgid "Move objects in any direction"
 msgstr "कुनै पनि per-object चयन निशान छैन"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:172
+#: ../src/ui/toolbar/tweak-toolbar.cpp:149
 #, fuzzy
 msgid "Move in/out mode"
 msgstr "नोड घटाउनुहोस्"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:173
+#: ../src/ui/toolbar/tweak-toolbar.cpp:150
 msgid "Move objects towards cursor; with Shift from cursor"
 msgstr ""
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:178
+#: ../src/ui/toolbar/tweak-toolbar.cpp:155
 #, fuzzy
 msgid "Move jitter mode"
 msgstr "नोड बढाउनुहोस्"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:179
+#: ../src/ui/toolbar/tweak-toolbar.cpp:156
 msgid "Move objects in random directions"
 msgstr ""
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:184
+#: ../src/ui/toolbar/tweak-toolbar.cpp:161
 #, fuzzy
 msgid "Scale mode"
 msgstr "नोड बढाउनुहोस्"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:185
+#: ../src/ui/toolbar/tweak-toolbar.cpp:162
 #, fuzzy
 msgid "Shrink objects, with Shift enlarge"
 msgstr "स्ट्रोक शैली"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:190
+#: ../src/ui/toolbar/tweak-toolbar.cpp:167
 #, fuzzy
 msgid "Rotate mode"
 msgstr "नोड बढाउनुहोस्"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:191
+#: ../src/ui/toolbar/tweak-toolbar.cpp:168
 #, fuzzy
 msgid "Rotate objects, with Shift counterclockwise"
 msgstr "चयन 90&#176; घडिको विपरित दिशामा घुमाउनुहोस्"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:196
+#: ../src/ui/toolbar/tweak-toolbar.cpp:173
 #, fuzzy
 msgid "Duplicate/delete mode"
 msgstr "नक्कल नोड"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:197
+#: ../src/ui/toolbar/tweak-toolbar.cpp:174
 msgid "Duplicate objects, with Shift delete"
 msgstr ""
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:202
+#: ../src/ui/toolbar/tweak-toolbar.cpp:179
 msgid "Push mode"
 msgstr ""
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:203
+#: ../src/ui/toolbar/tweak-toolbar.cpp:180
 msgid "Push parts of paths in any direction"
 msgstr ""
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:208
+#: ../src/ui/toolbar/tweak-toolbar.cpp:185
 #, fuzzy
 msgid "Shrink/grow mode"
 msgstr "अन्त्य नोड"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:209
+#: ../src/ui/toolbar/tweak-toolbar.cpp:186
 #, fuzzy
 msgid "Shrink (inset) parts of paths; with Shift grow (outset)"
 msgstr "चयन गरिएको बाटोहरुलाई सहायक बाटोहरू भित्र विच्छेद गर्नुहोस्"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:214
+#: ../src/ui/toolbar/tweak-toolbar.cpp:191
 #, fuzzy
 msgid "Attract/repel mode"
 msgstr "विशेषता नाम"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:215
+#: ../src/ui/toolbar/tweak-toolbar.cpp:192
 msgid "Attract parts of paths towards cursor; with Shift from cursor"
 msgstr ""
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:220
+#: ../src/ui/toolbar/tweak-toolbar.cpp:197
 #, fuzzy
 msgid "Roughen mode"
 msgstr "अन्त्य नोड"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:221
+#: ../src/ui/toolbar/tweak-toolbar.cpp:198
 msgid "Roughen parts of paths"
 msgstr ""
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:226
+#: ../src/ui/toolbar/tweak-toolbar.cpp:203
 #, fuzzy
 msgid "Color paint mode"
 msgstr "पृष्ठ किनाराको रङ"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:227
+#: ../src/ui/toolbar/tweak-toolbar.cpp:204
 #, fuzzy
 msgid "Paint the tool's color upon selected objects"
 msgstr "चयन गरिएको वस्तुहरू नक्कल गर्नुहोस्"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:232
+#: ../src/ui/toolbar/tweak-toolbar.cpp:209
 #, fuzzy
 msgid "Color jitter mode"
 msgstr "नोड बढाउनुहोस्"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:233
+#: ../src/ui/toolbar/tweak-toolbar.cpp:210
 #, fuzzy
 msgid "Jitter the colors of selected objects"
 msgstr "चयन गरिएको वस्तुहरू नक्कल गर्नुहोस्"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:238
+#: ../src/ui/toolbar/tweak-toolbar.cpp:215
 #, fuzzy
 msgid "Blur mode"
 msgstr "अन्त्य नोड"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:239
+#: ../src/ui/toolbar/tweak-toolbar.cpp:216
 #, fuzzy
 msgid "Blur selected objects more; with Shift, blur less"
 msgstr "चयन गरिएको वस्तुहरू तेर्सो तरिकाले फ्लिप गर्नुहोस्"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:266
+#: ../src/ui/toolbar/tweak-toolbar.cpp:242
 #, fuzzy
 msgid "Channels:"
 msgstr "रद्द गर्नुहोस्"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:278
+#: ../src/ui/toolbar/tweak-toolbar.cpp:253
 msgid "In color mode, act on objects' hue"
 msgstr ""
 
 #. TRANSLATORS:  "H" here stands for hue
-#: ../src/ui/toolbar/tweak-toolbar.cpp:282
+#: ../src/ui/toolbar/tweak-toolbar.cpp:257
 #, fuzzy
 msgctxt "Hue"
 msgid "H"
 msgstr "H:"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:294
+#: ../src/ui/toolbar/tweak-toolbar.cpp:268
 msgid "In color mode, act on objects' saturation"
 msgstr ""
 
 #. TRANSLATORS: "S" here stands for Saturation
-#: ../src/ui/toolbar/tweak-toolbar.cpp:298
+#: ../src/ui/toolbar/tweak-toolbar.cpp:272
 #, fuzzy
 msgctxt "Saturation"
 msgid "S"
 msgstr "S"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:310
+#: ../src/ui/toolbar/tweak-toolbar.cpp:283
 msgid "In color mode, act on objects' lightness"
 msgstr ""
 
 #. TRANSLATORS: "L" here stands for Lightness
-#: ../src/ui/toolbar/tweak-toolbar.cpp:314
+#: ../src/ui/toolbar/tweak-toolbar.cpp:287
 #, fuzzy
 msgctxt "Lightness"
 msgid "L"
 msgstr "L"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:326
+#: ../src/ui/toolbar/tweak-toolbar.cpp:298
 msgid "In color mode, act on objects' opacity"
 msgstr ""
 
 #. TRANSLATORS: "O" here stands for Opacity
-#: ../src/ui/toolbar/tweak-toolbar.cpp:330
+#: ../src/ui/toolbar/tweak-toolbar.cpp:302
 #, fuzzy
 msgctxt "Opacity"
 msgid "O"
 msgstr "O:"
 
 #. Fidelity
-#: ../src/ui/toolbar/tweak-toolbar.cpp:341
+#: ../src/ui/toolbar/tweak-toolbar.cpp:312
 msgid "(rough, simplified)"
 msgstr ""
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:341
+#: ../src/ui/toolbar/tweak-toolbar.cpp:312
 msgid "(fine, but many nodes)"
 msgstr ""
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:344
+#: ../src/ui/toolbar/tweak-toolbar.cpp:315
 #, fuzzy
 msgid "Fidelity"
 msgstr "पहिचायक"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:344
+#: ../src/ui/toolbar/tweak-toolbar.cpp:315
 msgid "Fidelity:"
 msgstr ""
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:345
+#: ../src/ui/toolbar/tweak-toolbar.cpp:316
 msgid ""
 "Low fidelity simplifies paths; high fidelity preserves path features but may "
 "generate a lot of new nodes"
 msgstr ""
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:364
+#: ../src/ui/toolbar/tweak-toolbar.cpp:340
 msgid "Use the pressure of the input device to alter the force of tweak action"
 msgstr ""
 
@@ -35633,7 +35636,7 @@ msgstr "%s - Inkscape"
 msgid "Note:"
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:2330
+#: ../src/widgets/desktop-widget.cpp:2329
 #, fuzzy
 msgid "Create guide"
 msgstr "क्लोन सिर्जना गर्नुहोस्"
@@ -36090,158 +36093,158 @@ msgstr ""
 msgid "Style of Paint Bucket fill objects"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1318
+#: ../src/widgets/toolbox.cpp:1320
 #, fuzzy
 msgid "Bounding box"
 msgstr "बाटोदर्शकहरुमा बाउन्डिङ् बाकसहरू सटाउनुहोस्"
 
-#: ../src/widgets/toolbox.cpp:1318
+#: ../src/widgets/toolbox.cpp:1320
 #, fuzzy
 msgid "Snap bounding boxes"
 msgstr "बाटोदर्शकहरुमा बाउन्डिङ् बाकसहरू सटाउनुहोस्"
 
-#: ../src/widgets/toolbox.cpp:1327
+#: ../src/widgets/toolbox.cpp:1329
 #, fuzzy
 msgid "Bounding box edges"
 msgstr "बाटोदर्शकहरुमा बाउन्डिङ् बाकसहरू सटाउनुहोस्"
 
-#: ../src/widgets/toolbox.cpp:1327
+#: ../src/widgets/toolbox.cpp:1329
 #, fuzzy
 msgid "Snap to edges of a bounding box"
 msgstr "ग्रिडमा बाउन्डिङ् बाकसहरू सटाउनुहोस्"
 
-#: ../src/widgets/toolbox.cpp:1336
+#: ../src/widgets/toolbox.cpp:1338
 #, fuzzy
 msgid "Bounding box corners"
 msgstr "बाटोदर्शकहरुमा बाउन्डिङ् बाकसहरू सटाउनुहोस्"
 
-#: ../src/widgets/toolbox.cpp:1336
+#: ../src/widgets/toolbox.cpp:1338
 #, fuzzy
 msgid "Snap bounding box corners"
 msgstr "बाटोदर्शकहरुमा बाउन्डिङ् बाकसहरू सटाउनुहोस्"
 
-#: ../src/widgets/toolbox.cpp:1345
+#: ../src/widgets/toolbox.cpp:1347
 msgid "BBox Edge Midpoints"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1345
+#: ../src/widgets/toolbox.cpp:1347
 #, fuzzy
 msgid "Snap midpoints of bounding box edges"
 msgstr "ग्रिडमा बाउन्डिङ् बाकसहरू सटाउनुहोस्"
 
-#: ../src/widgets/toolbox.cpp:1355
+#: ../src/widgets/toolbox.cpp:1357
 #, fuzzy
 msgid "BBox Centers"
 msgstr "केन्द्र"
 
-#: ../src/widgets/toolbox.cpp:1355
+#: ../src/widgets/toolbox.cpp:1357
 #, fuzzy
 msgid "Snapping centers of bounding boxes"
 msgstr "वस्तुहरुमा बाउन्डिङ् बाकसहरू सटाउनुहोस्"
 
-#: ../src/widgets/toolbox.cpp:1364
+#: ../src/widgets/toolbox.cpp:1366
 #, fuzzy
 msgid "Snap nodes, paths, and handles"
 msgstr "नोड ह्यान्डलहरू अनियमित पार्नुहोस्"
 
-#: ../src/widgets/toolbox.cpp:1372
+#: ../src/widgets/toolbox.cpp:1374
 #, fuzzy
 msgid "Snap to paths"
 msgstr "वस्तु बाटोहरुलाई सटाउनुहोस्"
 
-#: ../src/widgets/toolbox.cpp:1381
+#: ../src/widgets/toolbox.cpp:1383
 #, fuzzy
 msgid "Path intersections"
 msgstr "प्रतिच्छेदन"
 
-#: ../src/widgets/toolbox.cpp:1381
+#: ../src/widgets/toolbox.cpp:1383
 #, fuzzy
 msgid "Snap to path intersections"
 msgstr "नोडहरू वस्तुहरुमा सटाउनुहोस्"
 
-#: ../src/widgets/toolbox.cpp:1390
+#: ../src/widgets/toolbox.cpp:1392
 #, fuzzy
 msgid "To nodes"
 msgstr "नोड घटाउनुहोस्"
 
-#: ../src/widgets/toolbox.cpp:1390
+#: ../src/widgets/toolbox.cpp:1392
 msgid "Snap cusp nodes, incl. rectangle corners"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1399
+#: ../src/widgets/toolbox.cpp:1401
 #, fuzzy
 msgid "Smooth nodes"
 msgstr "महिन"
 
-#: ../src/widgets/toolbox.cpp:1399
+#: ../src/widgets/toolbox.cpp:1401
 msgid "Snap smooth nodes, incl. quadrant points of ellipses"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1408
+#: ../src/widgets/toolbox.cpp:1410
 #, fuzzy
 msgid "Line Midpoints"
 msgstr "लाइन चौडाई"
 
-#: ../src/widgets/toolbox.cpp:1408
+#: ../src/widgets/toolbox.cpp:1410
 #, fuzzy
 msgid "Snap midpoints of line segments"
 msgstr "ग्रिडमा बाउन्डिङ् बाकसहरू सटाउनुहोस्"
 
-#: ../src/widgets/toolbox.cpp:1417
+#: ../src/widgets/toolbox.cpp:1419
 #, fuzzy
 msgid "Others"
 msgstr "मिटर"
 
-#: ../src/widgets/toolbox.cpp:1417
+#: ../src/widgets/toolbox.cpp:1419
 msgid "Snap other points (centers, guide origins, gradient handles, etc.)"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1425
+#: ../src/widgets/toolbox.cpp:1427
 #, fuzzy
 msgid "Object Centers"
 msgstr "वस्तु गुणहरू"
 
-#: ../src/widgets/toolbox.cpp:1425
+#: ../src/widgets/toolbox.cpp:1427
 #, fuzzy
 msgid "Snap centers of objects"
 msgstr "नोडहरू वस्तुहरुमा सटाउनुहोस्"
 
-#: ../src/widgets/toolbox.cpp:1434
+#: ../src/widgets/toolbox.cpp:1436
 #, fuzzy
 msgid "Rotation Centers"
 msgstr "परिक्रमण"
 
-#: ../src/widgets/toolbox.cpp:1434
+#: ../src/widgets/toolbox.cpp:1436
 #, fuzzy
 msgid "Snap an item's rotation center"
 msgstr "खोजीमा लुकाइएको वस्तुहरू पनि समावेश गर्नुहोस्"
 
-#: ../src/widgets/toolbox.cpp:1443
+#: ../src/widgets/toolbox.cpp:1445
 #, fuzzy
 msgid "Text baseline"
 msgstr "बायाँतिर पंक्तिबद्ध गर्नुहोस्"
 
-#: ../src/widgets/toolbox.cpp:1443
+#: ../src/widgets/toolbox.cpp:1445
 #, fuzzy
 msgid "Snap text anchors and baselines"
 msgstr "बायाँतिर पंक्तिबद्ध गर्नुहोस्"
 
-#: ../src/widgets/toolbox.cpp:1453
+#: ../src/widgets/toolbox.cpp:1455
 #, fuzzy
 msgid "Page border"
 msgstr "पृष्ठ किनारा रङ"
 
-#: ../src/widgets/toolbox.cpp:1453
+#: ../src/widgets/toolbox.cpp:1455
 #, fuzzy
 msgid "Snap to the page border"
 msgstr "पृष्ठ किनारा देखाउनुहोस्"
 
-#: ../src/widgets/toolbox.cpp:1462
+#: ../src/widgets/toolbox.cpp:1464
 #, fuzzy
 msgid "Snap to grids"
 msgstr "<b>ग्रिड स्न्यापिङ्</b>"
 
-#: ../src/widgets/toolbox.cpp:1471
+#: ../src/widgets/toolbox.cpp:1473
 #, fuzzy
 msgid "Snap guides"
 msgstr "बाटोदर्शकहरुमा स्न्याप बिन्दुहरू"

@@ -54,7 +54,7 @@ private:
 
 protected:
     SelectToolbar(SPDesktop *desktop);
-    ~SelectToolbar();
+    ~SelectToolbar() override;
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);

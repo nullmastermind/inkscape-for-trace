@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-01-17 00:47+0100\n"
+"POT-Creation-Date: 2019-01-20 11:29+0100\n"
 "PO-Revision-Date: 2019-01-14 12:18+0100\n"
 "Last-Translator: Gyuris Gellért <bubu@ujevangelizacio.hu>\n"
 "Language-Team: Hungarian (https://www.transifex.com/fsf-hu/teams/77907/hu/)\n"
@@ -4530,7 +4530,7 @@ msgstr "A z tengely alaphosszúsága"
 
 #: ../src/display/canvas-axonomgrid.cpp:282
 #: ../src/ui/dialog/inkscape-preferences.cpp:1109
-#: ../src/ui/toolbar/box3d-toolbar.cpp:303
+#: ../src/ui/toolbar/box3d-toolbar.cpp:89
 msgid "Angle X:"
 msgstr "X-szög:"
 
@@ -4541,7 +4541,7 @@ msgstr "Az x tengely szöge"
 
 #: ../src/display/canvas-axonomgrid.cpp:284
 #: ../src/ui/dialog/inkscape-preferences.cpp:1110
-#: ../src/ui/toolbar/box3d-toolbar.cpp:382
+#: ../src/ui/toolbar/box3d-toolbar.cpp:174
 msgid "Angle Z:"
 msgstr "Z-szög:"
 
@@ -5061,10 +5061,10 @@ msgstr "Igazodó küszöb"
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:58
 #: ../src/ui/dialog/object-attributes.cpp:59
 #: ../src/ui/dialog/object-attributes.cpp:67
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:397
-#: ../src/ui/toolbar/eraser-toolbar.cpp:186
-#: ../src/ui/toolbar/spray-toolbar.cpp:293
-#: ../src/ui/toolbar/tweak-toolbar.cpp:129 ../src/ui/widget/page-sizer.cpp:62
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:105
+#: ../src/ui/toolbar/eraser-toolbar.cpp:115
+#: ../src/ui/toolbar/spray-toolbar.cpp:93
+#: ../src/ui/toolbar/tweak-toolbar.cpp:95 ../src/ui/widget/page-sizer.cpp:62
 #: ../share/extensions/foldablebox.inx.h:2
 msgid "Width:"
 msgstr "Szélesség:"
@@ -5079,7 +5079,7 @@ msgid "Height:"
 msgstr "Magasság:"
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:44
-#: ../src/ui/toolbar/measure-toolbar.cpp:346
+#: ../src/ui/toolbar/measure-toolbar.cpp:296
 #: ../share/extensions/printing_marks.inx.h:12
 msgid "Offset:"
 msgstr "Pozíció:"
@@ -5329,7 +5329,7 @@ msgstr "Színtérkép eltolása"
 #: ../src/extension/internal/bitmap/cycleColormap.cpp:40
 #: ../src/extension/internal/bitmap/spread.cpp:40
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:46
-#: ../src/ui/toolbar/spray-toolbar.cpp:405
+#: ../src/ui/toolbar/spray-toolbar.cpp:215
 msgid "Amount:"
 msgstr "Mennyiség:"
 
@@ -5515,7 +5515,7 @@ msgstr "A kijelölt bitképek stilizálása úgy, hogy olajjal festettnek tűnje
 #: ../src/extension/internal/filter/blurs.h:334
 #: ../src/extension/internal/filter/transparency.h:280
 #: ../src/ui/dialog/clonetiler.cpp:794 ../src/ui/dialog/clonetiler.cpp:925
-#: ../src/ui/toolbar/tweak-toolbar.cpp:325
+#: ../src/ui/toolbar/tweak-toolbar.cpp:297
 #: ../share/extensions/interp_att_g.inx.h:20
 msgid "Opacity"
 msgstr "Átlátszatlanság"
@@ -5641,7 +5641,7 @@ msgstr "Küszöb"
 
 #: ../src/extension/internal/bitmap/threshold.cpp:41
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:47
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:159
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:106
 msgid "Threshold:"
 msgstr "Küszöb:"
 
@@ -5699,130 +5699,130 @@ msgstr "Az objektumról készítendő zsugorított illetve nyújtott másolatok 
 msgid "Generate from Path"
 msgstr "Létrehozás útvonal alapján"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:329
+#: ../src/extension/internal/cairo-ps-out.cpp:330
 #: ../share/extensions/ps_input.inx.h:3
 msgid "PostScript"
 msgstr "PostScript"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:331
-#: ../src/extension/internal/cairo-ps-out.cpp:373
+#: ../src/extension/internal/cairo-ps-out.cpp:332
+#: ../src/extension/internal/cairo-ps-out.cpp:374
 msgid "Restrict to PS level:"
 msgstr "PS-szintre való korlátozás:"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:332
-#: ../src/extension/internal/cairo-ps-out.cpp:374
+#: ../src/extension/internal/cairo-ps-out.cpp:333
+#: ../src/extension/internal/cairo-ps-out.cpp:375
 msgid "PostScript level 3"
 msgstr "PostScript, 3-as szint"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:333
-#: ../src/extension/internal/cairo-ps-out.cpp:375
+#: ../src/extension/internal/cairo-ps-out.cpp:334
+#: ../src/extension/internal/cairo-ps-out.cpp:376
 msgid "PostScript level 2"
 msgstr "PostScript, 2-es szint"
-
-#: ../src/extension/internal/cairo-ps-out.cpp:335
-#: ../src/extension/internal/cairo-ps-out.cpp:377
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:254
-msgid "Text output options:"
-msgstr "Szövegkezelés:"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:336
 #: ../src/extension/internal/cairo-ps-out.cpp:378
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:255
-msgid "Embed fonts"
-msgstr "Betűtípusok beágyazása"
+msgid "Text output options:"
+msgstr "Szövegkezelés:"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:337
 #: ../src/extension/internal/cairo-ps-out.cpp:379
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:256
-msgid "Convert text to paths"
-msgstr "Szövegek átalakítása útvonalakká"
+msgid "Embed fonts"
+msgstr "Betűtípusok beágyazása"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:338
 #: ../src/extension/internal/cairo-ps-out.cpp:380
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:257
+msgid "Convert text to paths"
+msgstr "Szövegek átalakítása útvonalakká"
+
+#: ../src/extension/internal/cairo-ps-out.cpp:339
+#: ../src/extension/internal/cairo-ps-out.cpp:381
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:258
 msgid "Omit text in PDF and create LaTeX file"
 msgstr "Szövegek kihagyása és LaTeX-fájl készítése"
-
-#: ../src/extension/internal/cairo-ps-out.cpp:340
-#: ../src/extension/internal/cairo-ps-out.cpp:382
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:259
-msgid "Rasterize filter effects"
-msgstr "Szűrőeffektusok raszterizálása"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:341
 #: ../src/extension/internal/cairo-ps-out.cpp:383
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:260
-msgid "Resolution for rasterization (dpi):"
-msgstr "Raszterizálási felbontás (DPI):"
+msgid "Rasterize filter effects"
+msgstr "Szűrőeffektusok raszterizálása"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:342
 #: ../src/extension/internal/cairo-ps-out.cpp:384
-msgid "Output page size"
-msgstr "Kimeneti lapméret"
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:261
+msgid "Resolution for rasterization (dpi):"
+msgstr "Raszterizálási felbontás (DPI):"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:343
 #: ../src/extension/internal/cairo-ps-out.cpp:385
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:262
-msgid "Use document's page size"
-msgstr "Dokumentum lapmérete"
+msgid "Output page size"
+msgstr "Kimeneti lapméret"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:344
 #: ../src/extension/internal/cairo-ps-out.cpp:386
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:263
+msgid "Use document's page size"
+msgstr "Dokumentum lapmérete"
+
+#: ../src/extension/internal/cairo-ps-out.cpp:345
+#: ../src/extension/internal/cairo-ps-out.cpp:387
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:264
 msgid "Use exported object's size"
 msgstr "Exportált objektum mérete"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:346
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:265
+#: ../src/extension/internal/cairo-ps-out.cpp:347
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:266
 msgid "Bleed/margin (mm):"
 msgstr "Kifutó/margó (mm):"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:347
-#: ../src/extension/internal/cairo-ps-out.cpp:389
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:266
+#: ../src/extension/internal/cairo-ps-out.cpp:348
+#: ../src/extension/internal/cairo-ps-out.cpp:390
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:267
 msgid "Limit export to the object with ID:"
 msgstr "Exportálás korlátozása egy objektumra (ID):"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:351
+#: ../src/extension/internal/cairo-ps-out.cpp:352
 #: ../share/extensions/ps_input.inx.h:2
 msgid "PostScript (*.ps)"
 msgstr "PostScript (*.ps)"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:352
+#: ../src/extension/internal/cairo-ps-out.cpp:353
 msgid "PostScript File"
 msgstr "PostScript-fájl"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:371
+#: ../src/extension/internal/cairo-ps-out.cpp:372
 #: ../share/extensions/eps_input.inx.h:3
 msgid "Encapsulated PostScript"
 msgstr "Encapsulated PostScript"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:388
+#: ../src/extension/internal/cairo-ps-out.cpp:389
 msgid "Bleed/margin (mm)"
 msgstr "Kifutó/margó (mm)"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:393
+#: ../src/extension/internal/cairo-ps-out.cpp:394
 #: ../share/extensions/eps_input.inx.h:2
 msgid "Encapsulated PostScript (*.eps)"
 msgstr "Encapsulated PostScript (*.eps)"
 
-#: ../src/extension/internal/cairo-ps-out.cpp:394
+#: ../src/extension/internal/cairo-ps-out.cpp:395
 msgid "Encapsulated PostScript File"
 msgstr "Encapsulated PostScript-fájl"
 
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:248
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:249
 msgid "Restrict to PDF version:"
 msgstr "PDF-verzióra való korlátozás:"
 
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:250
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:251
 msgid "PDF 1.5"
 msgstr "PDF 1.5"
 
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:252
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:253
 msgid "PDF 1.4"
 msgstr "PDF 1.4"
 
-#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:261
+#: ../src/extension/internal/cairo-renderer-pdf-out.cpp:262
 msgid "Output page size:"
 msgstr "Kimeneti lapméret:"
 
@@ -5870,7 +5870,7 @@ msgstr "(összesen: %i)"
 #: ../src/ui/dialog/livepatheffect-add.cpp:27
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:30
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:36
-#: ../src/ui/dialog/ocaldialogs.cpp:1086 ../src/ui/interface.cpp:1430
+#: ../src/ui/dialog/ocaldialogs.cpp:1086 ../src/ui/interface.cpp:866
 #: ../src/widgets/desktop-widget.cpp:1101
 #: ../src/widgets/desktop-widget.cpp:1150
 msgid "_Cancel"
@@ -6403,7 +6403,7 @@ msgstr "Szórt"
 
 #: ../src/extension/internal/filter/bumps.h:99
 #: ../src/extension/internal/filter/bumps.h:330
-#: ../src/ui/toolbar/rect-toolbar.cpp:338 ../src/ui/tools/measure-tool.cpp:1227
+#: ../src/ui/toolbar/rect-toolbar.cpp:140 ../src/ui/tools/measure-tool.cpp:1227
 #: ../src/ui/widget/page-sizer.cpp:63 ../share/extensions/interp_att_g.inx.h:15
 msgid "Height"
 msgstr "Magasság"
@@ -6416,7 +6416,7 @@ msgstr "Magasság"
 #: ../src/extension/internal/filter/paint.h:87
 #: ../src/extension/internal/filter/paint.h:593
 #: ../src/extension/internal/filter/paint.h:708
-#: ../src/ui/toolbar/tweak-toolbar.cpp:309 ../src/ui/tools/flood-tool.cpp:95
+#: ../src/ui/toolbar/tweak-toolbar.cpp:282 ../src/ui/tools/flood-tool.cpp:95
 #: ../src/ui/widget/color-icc-selector.cpp:177
 #: ../src/ui/widget/color-scales.cpp:416 ../src/ui/widget/color-scales.cpp:417
 msgid "Lightness"
@@ -6425,7 +6425,7 @@ msgstr "Fényesség"
 #: ../src/extension/internal/filter/bumps.h:101
 #: ../src/extension/internal/filter/bumps.h:332
 #: ../src/live_effects/lpe-measure-segments.cpp:71
-#: ../src/ui/toolbar/measure-toolbar.cpp:320
+#: ../src/ui/toolbar/measure-toolbar.cpp:260
 msgid "Precision"
 msgstr "Pontosság"
 
@@ -6615,7 +6615,7 @@ msgstr "Csatorna festés"
 #: ../src/extension/internal/filter/color.h:1575
 #: ../src/extension/internal/filter/paint.h:88 ../src/filter-enums.cpp:67
 #: ../src/ui/dialog/inkscape-preferences.cpp:1298
-#: ../src/ui/toolbar/tweak-toolbar.cpp:293 ../src/ui/tools/flood-tool.cpp:94
+#: ../src/ui/toolbar/tweak-toolbar.cpp:267 ../src/ui/tools/flood-tool.cpp:94
 #: ../src/ui/widget/color-icc-selector.cpp:173
 #: ../src/ui/widget/color-icc-selector.cpp:178
 #: ../src/ui/widget/color-scales.cpp:412 ../src/ui/widget/color-scales.cpp:413
@@ -6922,8 +6922,8 @@ msgstr "Árnyékok"
 #: ../src/live_effects/effect.cpp:144
 #: ../src/live_effects/lpe-transform_2pts.cpp:41
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1030
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1044
-#: ../src/ui/toolbar/measure-toolbar.cpp:346
+#: ../src/ui/toolbar/gradient-toolbar.cpp:545
+#: ../src/ui/toolbar/measure-toolbar.cpp:296
 msgid "Offset"
 msgstr "Eltolás"
 
@@ -7067,7 +7067,7 @@ msgid "Hard Light"
 msgstr "Erős fény"
 
 #: ../src/extension/internal/filter/color.h:1585 ../src/filter-enums.cpp:66
-#: ../src/ui/toolbar/tweak-toolbar.cpp:277 ../src/ui/tools/flood-tool.cpp:93
+#: ../src/ui/toolbar/tweak-toolbar.cpp:252 ../src/ui/tools/flood-tool.cpp:93
 #: ../src/ui/widget/color-icc-selector.cpp:172
 #: ../src/ui/widget/color-icc-selector.cpp:176
 #: ../src/ui/widget/color-scales.cpp:407 ../src/ui/widget/color-scales.cpp:408
@@ -7308,11 +7308,10 @@ msgid "Open"
 msgstr "Nyílt"
 
 #: ../src/extension/internal/filter/morphology.h:66
-#: ../src/ui/toolbar/rect-toolbar.cpp:322
-#: ../src/ui/toolbar/spray-toolbar.cpp:293
-#: ../src/ui/toolbar/tweak-toolbar.cpp:129
-#: ../src/ui/tools/measure-tool.cpp:1233 ../src/ui/widget/page-sizer.cpp:62
-#: ../share/extensions/interp_att_g.inx.h:14
+#: ../src/ui/toolbar/rect-toolbar.cpp:116
+#: ../src/ui/toolbar/spray-toolbar.cpp:93
+#: ../src/ui/toolbar/tweak-toolbar.cpp:95 ../src/ui/tools/measure-tool.cpp:1233
+#: ../src/ui/widget/page-sizer.cpp:62 ../share/extensions/interp_att_g.inx.h:14
 msgid "Width"
 msgstr "Szélesség"
 
@@ -7548,7 +7547,7 @@ msgstr "Gravírozott függőleges és vízszintes vonalakká alakítja a képet"
 
 #: ../src/extension/internal/filter/paint.h:332
 #: ../src/ui/dialog/align-and-distribute.cpp:1066
-#: ../src/widgets/desktop-widget.cpp:1921
+#: ../src/widgets/desktop-widget.cpp:1920
 msgid "Drawing"
 msgstr "Rajz"
 
@@ -8062,7 +8061,7 @@ msgstr "Megjelenítés"
 #: ../src/extension/internal/grid.cpp:204
 #: ../src/ui/dialog/document-properties.cpp:152
 #: ../src/ui/dialog/inkscape-preferences.cpp:1118
-#: ../src/widgets/toolbox.cpp:1462
+#: ../src/widgets/toolbox.cpp:1464
 msgid "Grids"
 msgstr "Rácsok"
 
@@ -8568,58 +8567,58 @@ msgstr "Dokumentum frissítése"
 #. TRANSLATORS: translate this into "default-<yourcodename>.svg" (for instance, default-fr.svg)
 #. and double-check that share/templates/create_defaults.pl contains a translation for your language
 #. If in doubt about this, ask a developer.
-#: ../src/file.cpp:170
+#: ../src/file.cpp:166
 msgid "default.svg"
 msgstr "default-hu.svg"
 
-#: ../src/file.cpp:270
+#: ../src/file.cpp:264
 msgid "Broken links have been changed to point to existing files."
 msgstr ""
 "A törött linkek módosítva lettek, hogy a létező fájlokra hivatkozzanak."
 
-#: ../src/file.cpp:299 ../src/file.cpp:1303
+#: ../src/file.cpp:289 ../src/file.cpp:1293
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "Nem sikerült betölteni a kért fájlt (%s)"
 
-#: ../src/file.cpp:325
+#: ../src/file.cpp:315
 msgid "Document not saved yet.  Cannot revert."
 msgstr "A dokumentum még nem volt mentve. Visszaállítás nem végezhető."
 
-#: ../src/file.cpp:331
+#: ../src/file.cpp:321
 msgid "Changes will be lost! Are you sure you want to reload document %1?"
 msgstr ""
 "A módosítások elvesznek. Biztos, hogy újra be kívánja tölteni a "
 "dokumentumot: \"%1\"?"
 
-#: ../src/file.cpp:357
+#: ../src/file.cpp:347
 msgid "Document reverted."
 msgstr "A dokumentum visszaállítva."
 
-#: ../src/file.cpp:359
+#: ../src/file.cpp:349
 msgid "Document not reverted."
 msgstr "A dokumentum nem lett visszaállítva."
 
-#: ../src/file.cpp:509
+#: ../src/file.cpp:499
 msgid "Select file to open"
 msgstr "Válassza ki a megnyitandó fájlt"
 
-#: ../src/file.cpp:591
+#: ../src/file.cpp:581
 msgid "Clean up document"
 msgstr "Dokumentum tisztítása"
 
-#: ../src/file.cpp:598
+#: ../src/file.cpp:588
 #, c-format
 msgid "Removed <b>%i</b> unused definition in &lt;defs&gt;."
 msgid_plural "Removed <b>%i</b> unused definitions in &lt;defs&gt;."
 msgstr[0] "<b>%i</b> felhasználatlan &lt;defs&gt;-definíció eltávolítva."
 msgstr[1] "<b>%i</b> felhasználatlan &lt;defs&gt;-definíció eltávolítva."
 
-#: ../src/file.cpp:603
+#: ../src/file.cpp:593
 msgid "No unused definitions in &lt;defs&gt;."
 msgstr "Nincs felhasználatlan &lt;defs&gt;-definíció."
 
-#: ../src/file.cpp:637
+#: ../src/file.cpp:627
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
@@ -8628,13 +8627,13 @@ msgstr ""
 "Nem található a dokumentum (%s) mentésére használható Inkscape-kiterjesztés. "
 "Elképzelhető, hogy a fájlkiterjesztés ismeretlen."
 
-#: ../src/file.cpp:638 ../src/file.cpp:648 ../src/file.cpp:657
-#: ../src/file.cpp:664 ../src/file.cpp:669 ../src/file.cpp:681
-#: ../src/file.cpp:691
+#: ../src/file.cpp:628 ../src/file.cpp:638 ../src/file.cpp:647
+#: ../src/file.cpp:654 ../src/file.cpp:659 ../src/file.cpp:671
+#: ../src/file.cpp:681
 msgid "Document not saved."
 msgstr "A dokumentum nem lett elmentve."
 
-#: ../src/file.cpp:647
+#: ../src/file.cpp:637
 #, c-format
 msgid ""
 "File %s is write protected. Please remove write protection and try again."
@@ -8642,12 +8641,12 @@ msgstr ""
 "A(z) \"%s\" fájl írásvédett. Távolítsa el az írásvédelmet, majd próbálkozzon "
 "újra."
 
-#: ../src/file.cpp:656 ../src/file.cpp:690
+#: ../src/file.cpp:646 ../src/file.cpp:680
 #, c-format
 msgid "File %s could not be saved."
 msgstr "Nem sikerült elmenteni a(z) %s fájlt."
 
-#: ../src/file.cpp:668
+#: ../src/file.cpp:658
 #, c-format
 msgid ""
 "File could not be saved:\n"
@@ -8656,7 +8655,7 @@ msgstr ""
 "A fájlt nem lehetett menteni:\n"
 "Nem található „%s” azonosítójú objektum."
 
-#: ../src/file.cpp:678
+#: ../src/file.cpp:668
 #, c-format
 msgid ""
 "File %s could not be saved.\n"
@@ -8669,49 +8668,49 @@ msgstr ""
 "A következő további információkat adta vissza a kiterjesztés kimenete:\n"
 "„%s”"
 
-#: ../src/file.cpp:713 ../src/file.cpp:715
+#: ../src/file.cpp:703 ../src/file.cpp:705
 msgid "Document saved."
 msgstr "A dokumentum elmentve."
 
 #. We are saving for the first time; create a unique default filename
-#: ../src/file.cpp:773 ../src/file.cpp:1462
+#: ../src/file.cpp:763 ../src/file.cpp:1452
 msgid "drawing"
 msgstr "rajz"
 
-#: ../src/file.cpp:778
+#: ../src/file.cpp:768
 msgid "drawing-%1"
 msgstr "rajz-%1"
 
-#: ../src/file.cpp:795
+#: ../src/file.cpp:785
 msgid "Select file to save a copy to"
 msgstr "Adja meg a példány mentéséhez használandó fájlnevet"
 
-#: ../src/file.cpp:797
+#: ../src/file.cpp:787
 msgid "Select file to save to"
 msgstr "Adja meg a mentési fájlnevet"
 
-#: ../src/file.cpp:902 ../src/file.cpp:904
+#: ../src/file.cpp:892 ../src/file.cpp:894
 msgid "No changes need to be saved."
 msgstr "Nincs elmentést igénylő módosítás."
 
-#: ../src/file.cpp:923
+#: ../src/file.cpp:913
 msgid "Saving document..."
 msgstr "Dokumentum mentése..."
 
-#: ../src/file.cpp:1300 ../src/ui/dialog/inkscape-preferences.cpp:1831
+#: ../src/file.cpp:1290 ../src/ui/dialog/inkscape-preferences.cpp:1831
 #: ../src/ui/dialog/ocaldialogs.cpp:1088
 msgid "Import"
 msgstr "Importálás"
 
-#: ../src/file.cpp:1350
+#: ../src/file.cpp:1340
 msgid "Select file to import"
 msgstr "Válassza ki az importálandó fájlt"
 
-#: ../src/file.cpp:1483
+#: ../src/file.cpp:1473
 msgid "Select file to export to"
 msgstr "Adja meg a fájlt, amelybe exportálni kíván"
 
-#: ../src/file.cpp:1736
+#: ../src/file.cpp:1726
 msgid "Import Clip Art"
 msgstr "Importálás Clip Art gyűjteményből"
 
@@ -8839,7 +8838,7 @@ msgid "Arithmetic"
 msgstr "Aritmetikai"
 
 #: ../src/filter-enums.cpp:121 ../src/selection-chemistry.cpp:564
-#: ../src/ui/dialog/objects.cpp:1884
+#: ../src/ui/dialog/objects.cpp:1887
 msgid "Duplicate"
 msgstr "Kettőzés"
 
@@ -9571,11 +9570,11 @@ msgstr "Transzformáció 2 ponttal"
 
 #: ../src/live_effects/effect.cpp:123
 #: ../src/live_effects/lpe-show_handles.cpp:31
-#: ../src/ui/toolbar/mesh-toolbar.cpp:508
+#: ../src/ui/toolbar/mesh-toolbar.cpp:362
 msgid "Show handles"
 msgstr "Vezérlőelemek megjelenítése"
 
-#: ../src/live_effects/effect.cpp:125 ../src/ui/toolbar/pencil-toolbar.cpp:145
+#: ../src/live_effects/effect.cpp:125 ../src/ui/toolbar/pencil-toolbar.cpp:315
 msgid "BSpline"
 msgstr "B-spline"
 
@@ -10584,7 +10583,7 @@ msgid "Reverses the second path order"
 msgstr "A második útvonal sorrendjének megfordítása"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:32
-#: ../src/ui/toolbar/text-toolbar.cpp:2207
+#: ../src/ui/toolbar/text-toolbar.cpp:503
 #: ../share/extensions/render_barcode_qrcode.inx.h:5
 msgid "Auto"
 msgstr "Automatikus"
@@ -10769,7 +10768,7 @@ msgstr "Fazettás"
 #: ../src/live_effects/lpe-jointype.cpp:48
 #: ../src/live_effects/lpe-powerstroke.cpp:162
 #: ../src/live_effects/lpe-taperstroke.cpp:64
-#: ../src/ui/toolbar/star-toolbar.cpp:560
+#: ../src/ui/toolbar/star-toolbar.cpp:191
 msgid "Rounded"
 msgstr "Lekerekítettség"
 
@@ -11223,7 +11222,7 @@ msgid "Hide Points"
 msgstr "Pontok elrejtése"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:59
-#: ../src/ui/toolbar/text-toolbar.cpp:2164
+#: ../src/ui/toolbar/text-toolbar.cpp:461
 msgid "Horizontal"
 msgstr "Vízszintes"
 
@@ -11582,10 +11581,10 @@ msgstr "Y a középcsomótól"
 
 #. Name
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:56
-#: ../src/ui/toolbar/eraser-toolbar.cpp:165
-#: ../src/ui/toolbar/pencil-toolbar.cpp:168
-#: ../src/ui/toolbar/spray-toolbar.cpp:385
-#: ../src/ui/toolbar/tweak-toolbar.cpp:245
+#: ../src/ui/toolbar/eraser-toolbar.cpp:95
+#: ../src/ui/toolbar/pencil-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:198
+#: ../src/ui/toolbar/tweak-toolbar.cpp:222
 msgid "Mode"
 msgstr "Üzemmód"
 
@@ -11881,7 +11880,7 @@ msgid "Zero width"
 msgstr "Nulla szélesség"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:166
-#: ../src/ui/toolbar/pencil-toolbar.cpp:139
+#: ../src/ui/toolbar/pencil-toolbar.cpp:309
 msgid "Spiro"
 msgstr "Spiro"
 
@@ -12321,13 +12320,13 @@ msgstr "Nincs"
 
 #: ../src/live_effects/lpe-ruler.cpp:31
 #: ../src/live_effects/lpe-transform_2pts.cpp:38
-#: ../src/ui/toolbar/arc-toolbar.cpp:495 ../src/ui/tools/measure-tool.cpp:745
+#: ../src/ui/toolbar/arc-toolbar.cpp:160 ../src/ui/tools/measure-tool.cpp:745
 msgid "Start"
 msgstr "Kezdet"
 
 #: ../src/live_effects/lpe-ruler.cpp:32
 #: ../src/live_effects/lpe-transform_2pts.cpp:39
-#: ../src/ui/toolbar/arc-toolbar.cpp:508 ../src/ui/tools/measure-tool.cpp:746
+#: ../src/ui/toolbar/arc-toolbar.cpp:177 ../src/ui/tools/measure-tool.cpp:746
 msgid "End"
 msgstr "Vég"
 
@@ -12843,7 +12842,7 @@ msgstr "Aktív"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:81
 #: ../src/live_effects/parameter/originalpatharray.cpp:104
-#: ../src/ui/dialog/attrdialog.cpp:96
+#: ../src/ui/dialog/attrdialog.cpp:105
 #: ../src/ui/dialog/inkscape-preferences.cpp:1902
 #: ../src/ui/widget/page-sizer.cpp:97 ../src/widgets/gradient-selector.cpp:138
 msgid "Name"
@@ -12859,13 +12858,13 @@ msgstr "Elem eltávolítása"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:170
 #: ../src/live_effects/parameter/originalpatharray.cpp:211
-#: ../src/ui/dialog/objects.cpp:1845
+#: ../src/ui/dialog/objects.cpp:1848
 msgid "Move Down"
 msgstr "Lejjebb helyezés"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:182
 #: ../src/live_effects/parameter/originalpatharray.cpp:223
-#: ../src/ui/dialog/objects.cpp:1853
+#: ../src/ui/dialog/objects.cpp:1856
 msgid "Move Up"
 msgstr "Feljebb helyezés"
 
@@ -12891,7 +12890,7 @@ msgid "Link to path"
 msgstr "Útvonalhoz való kapcsolás"
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:89
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1090
+#: ../src/ui/toolbar/gradient-toolbar.cpp:591
 msgid "Reverse"
 msgstr "Fordított"
 
@@ -13092,11 +13091,11 @@ msgstr "ide: %s"
 msgid "without URI"
 msgstr "URI nélkül"
 
-#: ../src/object/sp-ellipse.cpp:389 ../src/ui/toolbar/arc-toolbar.cpp:527
+#: ../src/object/sp-ellipse.cpp:389 ../src/ui/toolbar/arc-toolbar.cpp:204
 msgid "Slice"
 msgstr "Szelet"
 
-#: ../src/object/sp-ellipse.cpp:392 ../src/ui/toolbar/arc-toolbar.cpp:539
+#: ../src/object/sp-ellipse.cpp:392 ../src/ui/toolbar/arc-toolbar.cpp:216
 msgid "Chord"
 msgstr "Húr"
 
@@ -13107,7 +13106,7 @@ msgstr "Ív"
 #. Ellipse
 #: ../src/object/sp-ellipse.cpp:399 ../src/object/sp-ellipse.cpp:406
 #: ../src/ui/dialog/inkscape-preferences.cpp:459
-#: ../src/ui/toolbar/pencil-toolbar.cpp:225
+#: ../src/ui/toolbar/pencil-toolbar.cpp:421
 msgid "Ellipse"
 msgstr "Ellipszis"
 
@@ -13198,7 +13197,7 @@ msgstr "[rossz hivatkozás]: %s"
 msgid "%d &#215; %d: %s"
 msgstr "%d &#215; %d: %s"
 
-#: ../src/object/sp-item-group.cpp:305 ../src/ui/dialog/objects.cpp:1908
+#: ../src/object/sp-item-group.cpp:305 ../src/ui/dialog/objects.cpp:1911
 msgid "Group"
 msgstr "Csoport"
 
@@ -13213,7 +13212,7 @@ msgid "of <b>%d</b> objects"
 msgstr "<b>%d</b> objektumból"
 
 #: ../src/object/sp-item-group.cpp:647 ../src/selection-chemistry.cpp:900
-#: ../src/ui/dialog/objects.cpp:1909
+#: ../src/ui/dialog/objects.cpp:1912
 msgid "Ungroup"
 msgstr "Csoport szétbontása"
 
@@ -13319,11 +13318,11 @@ msgstr "%3f fordulattal"
 
 #. Star
 #: ../src/object/sp-star.cpp:227 ../src/ui/dialog/inkscape-preferences.cpp:463
-#: ../src/ui/toolbar/star-toolbar.cpp:493
+#: ../src/ui/toolbar/star-toolbar.cpp:115
 msgid "Star"
 msgstr "Csillag"
 
-#: ../src/object/sp-star.cpp:228 ../src/ui/toolbar/star-toolbar.cpp:487
+#: ../src/object/sp-star.cpp:228 ../src/ui/toolbar/star-toolbar.cpp:109
 msgid "Polygon"
 msgstr "Sokszög"
 
@@ -13735,12 +13734,13 @@ msgstr "Szöveg törlése"
 msgid "<b>Nothing</b> was deleted."
 msgstr "<b>Nem történt</b> törlés."
 
+#. TODO: Is this label correct?
 #: ../src/selection-chemistry.cpp:415 ../src/ui/dialog/swatches.cpp:283
-#: ../src/ui/toolbar/eraser-toolbar.cpp:146
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1066
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1080
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1094
-#: ../src/ui/toolbar/node-toolbar.cpp:401 ../src/ui/tools/text-tool.cpp:996
+#: ../src/ui/toolbar/eraser-toolbar.cpp:76
+#: ../src/ui/toolbar/gradient-toolbar.cpp:569
+#: ../src/ui/toolbar/gradient-toolbar.cpp:582
+#: ../src/ui/toolbar/gradient-toolbar.cpp:596
+#: ../src/ui/toolbar/node-toolbar.cpp:307 ../src/ui/tools/text-tool.cpp:996
 msgid "Delete"
 msgstr "Törlés"
 
@@ -14139,7 +14139,7 @@ msgstr ""
 "Jelölje ki a vágóútvonal illetve a maszk létrehozásához használandó "
 "<b>objektumokat</b>."
 
-#: ../src/selection-chemistry.cpp:3904 ../src/ui/dialog/objects.cpp:1915
+#: ../src/selection-chemistry.cpp:3904 ../src/ui/dialog/objects.cpp:1918
 msgid "Create Clip Group"
 msgstr "Vágócsoport létrehozása"
 
@@ -14771,7 +14771,7 @@ msgid "Create _Link"
 msgstr "_Hivatkozás létrehozása"
 
 #. Set mask
-#: ../src/ui/contextmenu.cpp:456 ../src/ui/dialog/objects.cpp:1923
+#: ../src/ui/contextmenu.cpp:456 ../src/ui/dialog/objects.cpp:1926
 msgid "Set Mask"
 msgstr "Maszk beállítása"
 
@@ -14910,7 +14910,7 @@ msgstr "about.svg"
 
 #. TRANSLATORS: Put here your name (and other national contributors')
 #. one per line in the form of: name surname (email). Use \n for newline.
-#: ../src/ui/dialog/aboutbox.cpp:180
+#: ../src/ui/dialog/aboutbox.cpp:178
 msgid "translator-credits"
 msgstr ""
 "Bíró Árpád <biro.arpad at gmail dot com>\n"
@@ -14954,12 +14954,12 @@ msgstr "_F:"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:506
 #: ../src/ui/dialog/align-and-distribute.cpp:924
-#: ../src/ui/toolbar/connector-toolbar.cpp:409
+#: ../src/ui/toolbar/connector-toolbar.cpp:192
 msgid "Remove overlaps"
 msgstr "Átfedések eltávolítása"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:538
-#: ../src/ui/toolbar/connector-toolbar.cpp:235
+#: ../src/ui/toolbar/connector-toolbar.cpp:397
 msgid "Arrange connector network"
 msgstr "Kapocshálózat elrendezése"
 
@@ -14988,7 +14988,7 @@ msgid "Rearrange"
 msgstr "Átrendezés"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:925
-#: ../src/widgets/toolbox.cpp:1364
+#: ../src/widgets/toolbox.cpp:1366
 msgid "Nodes"
 msgstr "Csomópontok"
 
@@ -15099,7 +15099,7 @@ msgid "Distribute baselines of texts vertically"
 msgstr "A szövegek alapvonalainak függőleges elrendezése"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1017
-#: ../src/ui/toolbar/connector-toolbar.cpp:371
+#: ../src/ui/toolbar/connector-toolbar.cpp:150
 msgid "Nicely arrange selected connector network"
 msgstr "A kijelölt kapocshálózat elrendezése"
 
@@ -15170,7 +15170,7 @@ msgstr "Legkisebb objektum"
 #: ../src/ui/dialog/align-and-distribute.cpp:1065
 #: ../src/ui/dialog/document-properties.cpp:150
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1424
-#: ../src/widgets/desktop-widget.cpp:1917
+#: ../src/widgets/desktop-widget.cpp:1916
 #: ../share/extensions/empty_page.inx.h:1
 #: ../share/extensions/voronoi2svg.inx.h:10
 msgid "Page"
@@ -15192,28 +15192,28 @@ msgstr "Minimumérték"
 msgid "Max value"
 msgstr "Maximumérték"
 
-#: ../src/ui/dialog/attrdialog.cpp:80 ../src/ui/dialog/cssdialog.cpp:62
+#: ../src/ui/dialog/attrdialog.cpp:89 ../src/ui/dialog/cssdialog.cpp:62
 msgid "Add a new attribute"
 msgstr "Új tulajdonság hozzáadása"
 
-#: ../src/ui/dialog/attrdialog.cpp:94
+#: ../src/ui/dialog/attrdialog.cpp:103
 msgid "Attribute Name"
 msgstr "Tulajdonságnév"
 
-#: ../src/ui/dialog/attrdialog.cpp:116
+#: ../src/ui/dialog/attrdialog.cpp:125
 msgid "Attribute Value"
 msgstr "Tulajdonság értéke"
 
-#: ../src/ui/dialog/attrdialog.cpp:119 ../src/ui/widget/color-scales.cpp:452
+#: ../src/ui/dialog/attrdialog.cpp:128 ../src/ui/widget/color-scales.cpp:452
 #: ../src/ui/widget/color-scales.cpp:453
 msgid "Value"
 msgstr "Érték"
 
-#: ../src/ui/dialog/attrdialog.cpp:201
+#: ../src/ui/dialog/attrdialog.cpp:209
 msgid "<b>Click</b> attribute to edit."
 msgstr "Egy tulajdonság szerkesztéséhez <b>kattintson</b> rá arra."
 
-#: ../src/ui/dialog/attrdialog.cpp:206
+#: ../src/ui/dialog/attrdialog.cpp:214
 #, c-format
 msgid ""
 "Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
@@ -15223,15 +15223,15 @@ msgstr ""
 "nyomja le a <b>Ctrl+Enter</b> billentyűkombinációt a módosítások "
 "érvényesítéséhez."
 
-#: ../src/ui/dialog/attrdialog.cpp:264 ../src/ui/dialog/attrdialog.cpp:287
+#: ../src/ui/dialog/attrdialog.cpp:282 ../src/ui/dialog/attrdialog.cpp:310
 msgid "Delete attribute"
 msgstr "Tulajdonság törlése"
 
-#: ../src/ui/dialog/attrdialog.cpp:322
+#: ../src/ui/dialog/attrdialog.cpp:356
 msgid "Rename attribute"
 msgstr "Tulajdonságok átnevezése"
 
-#: ../src/ui/dialog/attrdialog.cpp:348
+#: ../src/ui/dialog/attrdialog.cpp:381
 msgid "Change attribute value"
 msgstr "Tulajdonság értékének módosítása"
 
@@ -16348,7 +16348,7 @@ msgstr "_Eltávolítás"
 msgid "Remove selected grid."
 msgstr "A kijelölt rács törlése."
 
-#: ../src/ui/dialog/document-properties.cpp:151 ../src/widgets/toolbox.cpp:1471
+#: ../src/ui/dialog/document-properties.cpp:151 ../src/widgets/toolbox.cpp:1473
 msgid "Guides"
 msgstr "Segédvonalak"
 
@@ -16474,7 +16474,7 @@ msgstr "<b>Beágyazott szkriptfájlok:</b>"
 
 #. Name
 #: ../src/ui/dialog/document-properties.cpp:882
-#: ../src/ui/dialog/objects.cpp:1885 ../src/ui/toolbar/gradient-toolbar.cpp:870
+#: ../src/ui/dialog/objects.cpp:1888 ../src/ui/toolbar/gradient-toolbar.cpp:377
 msgid "New"
 msgstr "Új"
 
@@ -16564,8 +16564,8 @@ msgstr "_Kijelölés"
 msgid "_Custom"
 msgstr "Egyén_i"
 
-#: ../src/ui/dialog/export.cpp:135 ../src/ui/toolbar/measure-toolbar.cpp:304
-#: ../src/ui/toolbar/measure-toolbar.cpp:312
+#: ../src/ui/dialog/export.cpp:135 ../src/ui/toolbar/measure-toolbar.cpp:244
+#: ../src/ui/toolbar/measure-toolbar.cpp:252
 #: ../share/extensions/render_gears.inx.h:6
 msgid "Units:"
 msgstr "Mértékegység:"
@@ -16901,7 +16901,7 @@ msgid "Document"
 msgstr "Dokumentum"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1428 ../src/verbs.cpp:174
-#: ../src/widgets/desktop-widget.cpp:1925
+#: ../src/widgets/desktop-widget.cpp:1924
 #: ../share/extensions/printing_marks.inx.h:18
 msgid "Selection"
 msgstr "Kijelölés"
@@ -17800,7 +17800,7 @@ msgstr "Csillagok"
 msgid "Spirals"
 msgstr "Spirálok"
 
-#: ../src/ui/dialog/find.cpp:92 ../src/widgets/toolbox.cpp:1372
+#: ../src/ui/dialog/find.cpp:92 ../src/widgets/toolbox.cpp:1374
 msgid "Paths"
 msgstr "Útvonalak"
 
@@ -18760,7 +18760,7 @@ msgstr "Rácsra való igazítás"
 #: ../src/ui/dialog/grid-arrange-tab.cpp:565
 #: ../src/ui/dialog/object-attributes.cpp:57
 #: ../src/ui/dialog/object-attributes.cpp:65
-#: ../src/ui/toolbar/node-toolbar.cpp:581 ../src/ui/widget/page-sizer.cpp:60
+#: ../src/ui/toolbar/node-toolbar.cpp:480 ../src/ui/widget/page-sizer.cpp:60
 #: ../src/widgets/desktop-widget.cpp:650
 msgid "X:"
 msgstr "X:"
@@ -18772,7 +18772,7 @@ msgstr "Vízszintes helykihagyás az oszlopok közt."
 #: ../src/ui/dialog/grid-arrange-tab.cpp:566
 #: ../src/ui/dialog/object-attributes.cpp:58
 #: ../src/ui/dialog/object-attributes.cpp:66
-#: ../src/ui/toolbar/node-toolbar.cpp:598 ../src/ui/widget/page-sizer.cpp:61
+#: ../src/ui/toolbar/node-toolbar.cpp:500 ../src/ui/widget/page-sizer.cpp:61
 #: ../src/widgets/desktop-widget.cpp:651
 msgid "Y:"
 msgstr "Y:"
@@ -21241,7 +21241,7 @@ msgstr "Kijelölés"
 
 #. Transforms options
 #: ../src/ui/dialog/inkscape-preferences.cpp:1520
-#: ../src/ui/toolbar/select-toolbar.cpp:558
+#: ../src/ui/toolbar/select-toolbar.cpp:343
 msgid "Scale stroke width"
 msgstr "Körvonalszélesség átméretezése"
 
@@ -21262,28 +21262,28 @@ msgid "Preserved"
 msgstr "Megőrizve"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1528
-#: ../src/ui/toolbar/select-toolbar.cpp:559
+#: ../src/ui/toolbar/select-toolbar.cpp:344
 msgid "When scaling objects, scale the stroke width by the same proportion"
 msgstr ""
 "Objektumok átméretezésekor a körvonalszélesség is legyen - azonos arányban - "
 "átméretezve"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1530
-#: ../src/ui/toolbar/select-toolbar.cpp:570
+#: ../src/ui/toolbar/select-toolbar.cpp:355
 msgid "When scaling rectangles, scale the radii of rounded corners"
 msgstr ""
 "Téglalapok átméretezésekor a lekerekített csúcsok sugarai is legyenek "
 "átméretezve"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1532
-#: ../src/ui/toolbar/select-toolbar.cpp:581
+#: ../src/ui/toolbar/select-toolbar.cpp:366
 msgid "Move gradients (in fill or stroke) along with the objects"
 msgstr ""
 "Színátmenetek áthelyezése (kitöltésben vagy körvonalban) az objektumokkal "
 "együtt"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1534
-#: ../src/ui/toolbar/select-toolbar.cpp:592
+#: ../src/ui/toolbar/select-toolbar.cpp:377
 msgid "Move patterns (in fill or stroke) along with the objects"
 msgstr ""
 "Minták áthelyezése (kitöltésben vagy körvonalban) az objektumokkal együtt"
@@ -21969,7 +21969,7 @@ msgstr "Megjelenítés"
 
 #. Note: /options/bitmapoversample removed with Cairo renderer
 #: ../src/ui/dialog/inkscape-preferences.cpp:1813
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:602 ../src/verbs.cpp:155
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:351 ../src/verbs.cpp:155
 msgid "Edit"
 msgstr "Szerkesztés"
 
@@ -22494,11 +22494,11 @@ msgstr ""
 "vagy csak a fókuszban lévő ablakhoz lehet rendelni"
 
 #: ../src/ui/dialog/input.cpp:1439
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:545
-#: ../src/ui/toolbar/spray-toolbar.cpp:307
-#: ../src/ui/toolbar/spray-toolbar.cpp:421
-#: ../src/ui/toolbar/spray-toolbar.cpp:470
-#: ../src/ui/toolbar/tweak-toolbar.cpp:363
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:298
+#: ../src/ui/toolbar/spray-toolbar.cpp:112
+#: ../src/ui/toolbar/spray-toolbar.cpp:235
+#: ../src/ui/toolbar/spray-toolbar.cpp:290
+#: ../src/ui/toolbar/tweak-toolbar.cpp:339
 msgid "Pressure"
 msgstr "Nyomás"
 
@@ -22625,12 +22625,12 @@ msgstr "Réteg zárolása"
 msgid "Unlock layer"
 msgstr "Réteg feloldása"
 
-#: ../src/ui/dialog/layers.cpp:610 ../src/ui/dialog/objects.cpp:871
+#: ../src/ui/dialog/layers.cpp:610 ../src/ui/dialog/objects.cpp:874
 #: ../src/verbs.cpp:1489
 msgid "Toggle layer solo"
 msgstr "Réteg egyedüliségének átkapcsolása"
 
-#: ../src/ui/dialog/layers.cpp:613 ../src/ui/dialog/objects.cpp:874
+#: ../src/ui/dialog/layers.cpp:613 ../src/ui/dialog/objects.cpp:877
 #: ../src/verbs.cpp:1513
 msgid "Lock other layers"
 msgstr "Más rétegek zárolása"
@@ -23014,94 +23014,98 @@ msgstr "Objektum elrejtése"
 msgid "Unhide object"
 msgstr "Objektum rejtettségének megszüntetése"
 
-#: ../src/ui/dialog/objects.cpp:901
+#: ../src/ui/dialog/objects.cpp:432
+msgid "no-id"
+msgstr ""
+
+#: ../src/ui/dialog/objects.cpp:904
 msgid "Unhide objects"
 msgstr "Objektumok rejtettségének megszüntetése"
 
-#: ../src/ui/dialog/objects.cpp:901
+#: ../src/ui/dialog/objects.cpp:904
 msgid "Hide objects"
 msgstr "Objektumok elrejtése"
 
-#: ../src/ui/dialog/objects.cpp:921
+#: ../src/ui/dialog/objects.cpp:924
 msgid "Lock objects"
 msgstr "Objektumok zárolása"
 
-#: ../src/ui/dialog/objects.cpp:921
+#: ../src/ui/dialog/objects.cpp:924
 msgid "Unlock objects"
 msgstr "Objektumok feloldása"
 
-#: ../src/ui/dialog/objects.cpp:933
+#: ../src/ui/dialog/objects.cpp:936
 msgid "Layer to group"
 msgstr "Réteg átalakítása csoporttá"
 
-#: ../src/ui/dialog/objects.cpp:933
+#: ../src/ui/dialog/objects.cpp:936
 msgid "Group to layer"
 msgstr "Csoport átalakítása réteggé"
 
-#: ../src/ui/dialog/objects.cpp:1131
+#: ../src/ui/dialog/objects.cpp:1134
 msgid "Moved objects"
 msgstr "Átmozgatott objektumok"
 
-#: ../src/ui/dialog/objects.cpp:1380 ../src/ui/dialog/tags.cpp:831
+#: ../src/ui/dialog/objects.cpp:1383 ../src/ui/dialog/tags.cpp:831
 #: ../src/ui/dialog/tags.cpp:838
 msgid "Rename object"
 msgstr "Objektum átnevezése"
 
-#: ../src/ui/dialog/objects.cpp:1486
+#: ../src/ui/dialog/objects.cpp:1489
 msgid "Set object highlight color"
 msgstr "Objektum kijelölési színének beállítása"
 
-#: ../src/ui/dialog/objects.cpp:1496
+#: ../src/ui/dialog/objects.cpp:1499
 msgid "Set object opacity"
 msgstr "Objektum átlátszatlanságának beállítása"
 
-#: ../src/ui/dialog/objects.cpp:1525
+#: ../src/ui/dialog/objects.cpp:1528
 msgid "Set object blend mode"
 msgstr "Objektum színkeverési módjának beállítása"
 
-#: ../src/ui/dialog/objects.cpp:1595
+#: ../src/ui/dialog/objects.cpp:1598
 msgid "Set object blur"
 msgstr "Objektum elmosásának beállítása"
 
-#: ../src/ui/dialog/objects.cpp:1661
+#: ../src/ui/dialog/objects.cpp:1664
 msgctxt "Visibility"
 msgid "V"
 msgstr "L"
 
-#: ../src/ui/dialog/objects.cpp:1662
+#: ../src/ui/dialog/objects.cpp:1665
 msgctxt "Lock"
 msgid "L"
 msgstr "Z"
 
-#: ../src/ui/dialog/objects.cpp:1663
+#: ../src/ui/dialog/objects.cpp:1666
 msgctxt "Type"
 msgid "T"
 msgstr "T"
 
-#: ../src/ui/dialog/objects.cpp:1664
+#: ../src/ui/dialog/objects.cpp:1667
 msgctxt "Clip and mask"
 msgid "CM"
 msgstr "VM"
 
-#: ../src/ui/dialog/objects.cpp:1665
+#: ../src/ui/dialog/objects.cpp:1668
 msgctxt "Highlight"
 msgid "HL"
 msgstr "K"
 
-#: ../src/ui/dialog/objects.cpp:1666
+#: ../src/ui/dialog/objects.cpp:1669
 msgid "Label"
 msgstr "Címke"
 
 #. In order to get tooltips on header, we must create our own label.
-#: ../src/ui/dialog/objects.cpp:1694
+#: ../src/ui/dialog/objects.cpp:1697
 msgid "Toggle visibility of Layer, Group, or Object."
 msgstr "Réteg, csoport, objektum láthatóságának átváltása."
 
-#: ../src/ui/dialog/objects.cpp:1707
+#: ../src/ui/dialog/objects.cpp:1710
 msgid "Toggle lock of Layer, Group, or Object."
 msgstr "Réteg, csoport, objektum zárolásának átváltása."
 
-#: ../src/ui/dialog/objects.cpp:1719
+#: ../src/ui/dialog/objects.cpp:1722
 msgid ""
 "Type: Layer, Group, or Object. Clicking on Layer or Group icon, toggles "
 "between the two types."
@@ -23109,11 +23113,11 @@ msgstr ""
 "Típus: réteg, csoport vagy objektum. A réteg és a csoport ikonra való "
 "kattintással lehet átváltani a két típus között."
 
-#: ../src/ui/dialog/objects.cpp:1738
+#: ../src/ui/dialog/objects.cpp:1741
 msgid "Is object clipped and/or masked?"
 msgstr "Az objektum vágott és/vagy maszkolt?"
 
-#: ../src/ui/dialog/objects.cpp:1749
+#: ../src/ui/dialog/objects.cpp:1752
 msgid ""
 "Highlight color of outline in Node tool. Click to set. If alpha is zero, use "
 "inherited color."
@@ -23121,7 +23125,7 @@ msgstr ""
 "A kontúr kijelölési színe a csomópont eszközben. Kattintásra szerkeszthető. "
 "Ha az alfa nulla, örökölt színt érdemes használni."
 
-#: ../src/ui/dialog/objects.cpp:1760
+#: ../src/ui/dialog/objects.cpp:1763
 msgid ""
 "Layer/Group/Object label (inkscape:label). Double-click to set. Default "
 "value is object 'id'."
@@ -23129,78 +23133,78 @@ msgstr ""
 "Réteg, csoport, objektum címke (inkscape:label). Dupla kattintásra "
 "szerkeszthető. Az alapértelmezett érték az objektum ID-je."
 
-#: ../src/ui/dialog/objects.cpp:1822
+#: ../src/ui/dialog/objects.cpp:1825
 msgid "Add layer..."
 msgstr "Réteg hozzáadása..."
 
-#: ../src/ui/dialog/objects.cpp:1829
+#: ../src/ui/dialog/objects.cpp:1832
 msgid "Remove object"
 msgstr "Objektum eltávolítása"
 
-#: ../src/ui/dialog/objects.cpp:1837
+#: ../src/ui/dialog/objects.cpp:1840
 msgid "Move To Bottom"
 msgstr "Alulra helyezés"
 
-#: ../src/ui/dialog/objects.cpp:1861
+#: ../src/ui/dialog/objects.cpp:1864
 msgid "Move To Top"
 msgstr "Felülre helyezés"
 
-#: ../src/ui/dialog/objects.cpp:1869
+#: ../src/ui/dialog/objects.cpp:1872
 msgid "Collapse All"
 msgstr "Összes összecsukása"
 
-#: ../src/ui/dialog/objects.cpp:1883
+#: ../src/ui/dialog/objects.cpp:1886
 msgid "Rename"
 msgstr "Átnevezés"
 
-#: ../src/ui/dialog/objects.cpp:1889
+#: ../src/ui/dialog/objects.cpp:1892
 msgid "Solo"
 msgstr "Szóló"
 
-#: ../src/ui/dialog/objects.cpp:1890
+#: ../src/ui/dialog/objects.cpp:1893
 msgid "Show All"
 msgstr "Összes megjelenítése"
 
-#: ../src/ui/dialog/objects.cpp:1891
+#: ../src/ui/dialog/objects.cpp:1894
 msgid "Hide All"
 msgstr "Összes elrejtése"
 
-#: ../src/ui/dialog/objects.cpp:1895
+#: ../src/ui/dialog/objects.cpp:1898
 msgid "Lock Others"
 msgstr "Többi zárolása"
 
-#: ../src/ui/dialog/objects.cpp:1896
+#: ../src/ui/dialog/objects.cpp:1899
 msgid "Lock All"
 msgstr "Összes zárolása"
 
 #. LockAndHide
-#: ../src/ui/dialog/objects.cpp:1897 ../src/verbs.cpp:3263
+#: ../src/ui/dialog/objects.cpp:1900 ../src/verbs.cpp:3263
 msgid "Unlock All"
 msgstr "Minden objektum feloldása"
 
-#: ../src/ui/dialog/objects.cpp:1902
+#: ../src/ui/dialog/objects.cpp:1905
 msgid "Up"
 msgstr "Fel"
 
-#: ../src/ui/dialog/objects.cpp:1904
+#: ../src/ui/dialog/objects.cpp:1907
 msgid "Down"
 msgstr "Le"
 
-#: ../src/ui/dialog/objects.cpp:1913
+#: ../src/ui/dialog/objects.cpp:1916
 msgid "Set Clip"
 msgstr "Vágás beállítása"
 
 #. will never be implemented
 #. _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_INVERSE_CLIPPATH, 0, "Set Inverse Clip", (int)BUTTON_SETINVCLIP ) );
-#: ../src/ui/dialog/objects.cpp:1919
+#: ../src/ui/dialog/objects.cpp:1922
 msgid "Unset Clip"
 msgstr "Vágás megszüntetése"
 
-#: ../src/ui/dialog/objects.cpp:1924
+#: ../src/ui/dialog/objects.cpp:1927
 msgid "Unset Mask"
 msgstr "Maszk megszüntetése"
 
-#: ../src/ui/dialog/objects.cpp:1946
+#: ../src/ui/dialog/objects.cpp:1949
 msgid "Select Highlight Color"
 msgstr "Kijelölési szín kiválasztása"
 
@@ -24583,7 +24587,7 @@ msgid "nodeAsInXMLdialogTooltip|Delete node"
 msgstr "Csomópont törlése"
 
 #: ../src/ui/dialog/xml-tree.cpp:67 ../src/ui/dialog/xml-tree.cpp:123
-#: ../src/ui/dialog/xml-tree.cpp:754
+#: ../src/ui/dialog/xml-tree.cpp:758
 msgid "Duplicate node"
 msgstr "Csomópont kettőzése"
 
@@ -24597,22 +24601,22 @@ msgid "Drag to reorder nodes"
 msgstr "A csomópontok átrendezhetők az egérrel"
 
 #: ../src/ui/dialog/xml-tree.cpp:141 ../src/ui/dialog/xml-tree.cpp:142
-#: ../src/ui/dialog/xml-tree.cpp:864
+#: ../src/ui/dialog/xml-tree.cpp:868
 msgid "Unindent node"
 msgstr "Csomópontot egy szinttel kijjebb"
 
 #: ../src/ui/dialog/xml-tree.cpp:149 ../src/ui/dialog/xml-tree.cpp:150
-#: ../src/ui/dialog/xml-tree.cpp:842
+#: ../src/ui/dialog/xml-tree.cpp:846
 msgid "Indent node"
 msgstr "Csomópontot egy szinttel beljebb"
 
 #: ../src/ui/dialog/xml-tree.cpp:157 ../src/ui/dialog/xml-tree.cpp:158
-#: ../src/ui/dialog/xml-tree.cpp:793
+#: ../src/ui/dialog/xml-tree.cpp:797
 msgid "Raise node"
 msgstr "Csomópontot eggyel feljebb"
 
 #: ../src/ui/dialog/xml-tree.cpp:165 ../src/ui/dialog/xml-tree.cpp:166
-#: ../src/ui/dialog/xml-tree.cpp:811
+#: ../src/ui/dialog/xml-tree.cpp:815
 msgid "Lower node"
 msgstr "Csomópontot eggyel lejjebb"
 
@@ -24629,84 +24633,84 @@ msgid "<b>Click</b> to select nodes, <b>drag</b> to rearrange."
 msgstr ""
 "Csomópontok kijelölése: <b>kattintással</b>. Átrendezés: <b>húzással</b>."
 
-#: ../src/ui/dialog/xml-tree.cpp:458
+#: ../src/ui/dialog/xml-tree.cpp:462
 msgid "Drag XML subtree"
 msgstr "XML-al-fa húzása"
 
-#: ../src/ui/dialog/xml-tree.cpp:724
+#: ../src/ui/dialog/xml-tree.cpp:728
 msgid "Create new element node"
 msgstr "Új elemcsomópont létrehozása"
 
-#: ../src/ui/dialog/xml-tree.cpp:739
+#: ../src/ui/dialog/xml-tree.cpp:743
 msgid "Create new text node"
 msgstr "Új szövegcsomópont létrehozása"
 
-#: ../src/ui/dialog/xml-tree.cpp:771
+#: ../src/ui/dialog/xml-tree.cpp:775
 msgid "nodeAsInXMLinHistoryDialog|Delete node"
 msgstr "Csomópont törlése"
 
-#: ../src/ui/interface.cpp:767
+#: ../src/ui/drag-and-drop.cpp:159 ../src/ui/drag-and-drop.cpp:245
+#: ../src/ui/drag-and-drop.cpp:348 ../src/ui/widget/selected-style.cpp:531
+msgid "Drop color"
+msgstr "Szín ejtése"
+
+#: ../src/ui/drag-and-drop.cpp:198 ../src/ui/drag-and-drop.cpp:308
+msgid "Drop color on gradient"
+msgstr "Szín ejtése a színátmenetre"
+
+#: ../src/ui/drag-and-drop.cpp:363
+msgid "Could not parse SVG data"
+msgstr "Nem sikerült értelmezni az SVG-adatokat"
+
+#: ../src/ui/drag-and-drop.cpp:402
+msgid "Drop SVG"
+msgstr "SVG ejtése"
+
+#: ../src/ui/drag-and-drop.cpp:419
+msgid "Drop Symbol"
+msgstr "Szimbólum ejtése"
+
+#: ../src/ui/drag-and-drop.cpp:442
+msgid "Drop bitmap image"
+msgstr "Bitkép ejtése"
+
+#: ../src/ui/interface.cpp:598
 msgctxt "Interface setup"
 msgid "Default"
 msgstr "Alapértelmezés"
 
-#: ../src/ui/interface.cpp:767
+#: ../src/ui/interface.cpp:598
 msgid "Default interface setup"
 msgstr "Alapértelmezett felületbeállítás"
 
-#: ../src/ui/interface.cpp:768
+#: ../src/ui/interface.cpp:599
 msgctxt "Interface setup"
 msgid "Custom"
 msgstr "Egyéni"
 
-#: ../src/ui/interface.cpp:768
+#: ../src/ui/interface.cpp:599
 msgid "Setup for custom task"
 msgstr "Egyéni feladat beállítása"
 
-#: ../src/ui/interface.cpp:769
+#: ../src/ui/interface.cpp:600
 msgctxt "Interface setup"
 msgid "Wide"
 msgstr "Széles"
 
-#: ../src/ui/interface.cpp:769
+#: ../src/ui/interface.cpp:600
 msgid "Setup for widescreen work"
 msgstr "Beállítás széles képernyős munkához"
 
-#: ../src/ui/interface.cpp:905
+#: ../src/ui/interface.cpp:736
 #, c-format
 msgid "Verb \"%s\" Unknown"
 msgstr "Ismeretlen funkció: „%s”"
 
-#: ../src/ui/interface.cpp:940
+#: ../src/ui/interface.cpp:771
 msgid "Open _Recent"
 msgstr "Leg_utóbbi megnyitása"
 
-#: ../src/ui/interface.cpp:1048 ../src/ui/interface.cpp:1134
-#: ../src/ui/interface.cpp:1237 ../src/ui/widget/selected-style.cpp:531
-msgid "Drop color"
-msgstr "Szín ejtése"
-
-#: ../src/ui/interface.cpp:1087 ../src/ui/interface.cpp:1197
-msgid "Drop color on gradient"
-msgstr "Szín ejtése a színátmenetre"
-
-#: ../src/ui/interface.cpp:1252
-msgid "Could not parse SVG data"
-msgstr "Nem sikerült értelmezni az SVG-adatokat"
-
-#: ../src/ui/interface.cpp:1291
-msgid "Drop SVG"
-msgstr "SVG ejtése"
-
-#: ../src/ui/interface.cpp:1308
-msgid "Drop Symbol"
-msgstr "Szimbólum ejtése"
-
-#: ../src/ui/interface.cpp:1331
-msgid "Drop bitmap image"
-msgstr "Bitkép ejtése"
-
-#: ../src/ui/interface.cpp:1424
+#: ../src/ui/interface.cpp:860
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">A file named \"%s\" already exists. Do "
@@ -24720,7 +24724,7 @@ msgstr ""
 "A megadott nevű fájl már létezik itt: \"%s\". A lecserélés felül fogja írni "
 "annak tartalmát."
 
-#: ../src/ui/interface.cpp:1431 ../share/extensions/web-set-att.inx.h:21
+#: ../src/ui/interface.cpp:867 ../share/extensions/web-set-att.inx.h:21
 #: ../share/extensions/web-transmit-att.inx.h:19
 msgid "Replace"
 msgstr "Lecserélés"
@@ -24952,12 +24956,12 @@ msgid "Duplicate nodes"
 msgstr "Csomópontok duplikálása"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:419
-#: ../src/ui/toolbar/node-toolbar.cpp:408
+#: ../src/ui/toolbar/node-toolbar.cpp:314
 msgid "Join nodes"
 msgstr "Csomópontok összekapcsolása"
 
 #: ../src/ui/tool/multi-path-manipulator.cpp:426
-#: ../src/ui/toolbar/node-toolbar.cpp:419
+#: ../src/ui/toolbar/node-toolbar.cpp:325
 msgid "Break nodes"
 msgstr "Csomópontok szétbontása"
 
@@ -25238,7 +25242,7 @@ msgstr "Forgatási vezérlőelem"
 
 #. We need to call MPM's method because it could have been our last node
 #: ../src/ui/tool/path-manipulator.cpp:1561
-#: ../src/ui/toolbar/node-toolbar.cpp:397
+#: ../src/ui/toolbar/node-toolbar.cpp:303
 msgid "Delete node"
 msgstr "Csomópont törlése"
 
@@ -25372,264 +25376,258 @@ msgid "<b>Rotation center</b>: drag to change the origin of transforms"
 msgstr ""
 "<b>Forgatási középpont</b>: transzformációk origójának módosítása: húzással"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:140
-msgid "Ellipse: Change radius"
-msgstr "Ellipszis: sugár módosítása"
-
-#: ../src/ui/toolbar/arc-toolbar.cpp:206
-msgid "Arc: Change start/end"
-msgstr "Ellipszisív: kezdet/vég módosítása"
-
-#: ../src/ui/toolbar/arc-toolbar.cpp:274
-msgid "Arc: Changed arc type"
-msgstr "Körív: ív típusának módosítása"
-
-#: ../src/ui/toolbar/arc-toolbar.cpp:409 ../src/ui/toolbar/arc-toolbar.cpp:448
-#: ../src/ui/toolbar/rect-toolbar.cpp:265
-#: ../src/ui/toolbar/rect-toolbar.cpp:304
-#: ../src/ui/toolbar/spiral-toolbar.cpp:215
-#: ../src/ui/toolbar/spiral-toolbar.cpp:239
-#: ../src/ui/toolbar/star-toolbar.cpp:392
-#: ../src/ui/toolbar/star-toolbar.cpp:472
+#: ../src/ui/toolbar/arc-toolbar.cpp:104 ../src/ui/toolbar/arc-toolbar.cpp:507
+#: ../src/ui/toolbar/rect-toolbar.cpp:106
+#: ../src/ui/toolbar/rect-toolbar.cpp:356
+#: ../src/ui/toolbar/spiral-toolbar.cpp:90
+#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/star-toolbar.cpp:95 ../src/ui/toolbar/star-toolbar.cpp:532
 msgid "<b>New:</b>"
 msgstr "<b>Új:</b>"
 
-#. FIXME: implement averaging of all parameters for multiple selected
-#. gtk_label_set_markup(GTK_LABEL(l), _("<b>Average:</b>"));
-#: ../src/ui/toolbar/arc-toolbar.cpp:412 ../src/ui/toolbar/arc-toolbar.cpp:429
-#: ../src/ui/toolbar/rect-toolbar.cpp:273
-#: ../src/ui/toolbar/rect-toolbar.cpp:291
-#: ../src/ui/toolbar/spiral-toolbar.cpp:217
-#: ../src/ui/toolbar/spiral-toolbar.cpp:228
-#: ../src/ui/toolbar/star-toolbar.cpp:394
-msgid "<b>Change:</b>"
-msgstr "<b>Módosítás:</b>"
-
-#: ../src/ui/toolbar/arc-toolbar.cpp:459 ../src/ui/toolbar/rect-toolbar.cpp:354
+#: ../src/ui/toolbar/arc-toolbar.cpp:114 ../src/ui/toolbar/rect-toolbar.cpp:163
 msgid "Horizontal radius"
 msgstr "Vízszintes sugár"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:459 ../src/ui/toolbar/rect-toolbar.cpp:354
+#: ../src/ui/toolbar/arc-toolbar.cpp:114 ../src/ui/toolbar/rect-toolbar.cpp:163
 msgid "Rx:"
 msgstr "Rx:"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:459
+#: ../src/ui/toolbar/arc-toolbar.cpp:114
 msgid "Horizontal radius of the circle, ellipse, or arc"
 msgstr "Kör, ellipszis vagy körív vízszintes sugara"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:475 ../src/ui/toolbar/rect-toolbar.cpp:368
+#: ../src/ui/toolbar/arc-toolbar.cpp:135 ../src/ui/toolbar/rect-toolbar.cpp:185
 msgid "Vertical radius"
 msgstr "Függőleges sugár"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:475 ../src/ui/toolbar/rect-toolbar.cpp:368
+#: ../src/ui/toolbar/arc-toolbar.cpp:135 ../src/ui/toolbar/rect-toolbar.cpp:185
 msgid "Ry:"
 msgstr "Ry:"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:475
+#: ../src/ui/toolbar/arc-toolbar.cpp:135
 msgid "Vertical radius of the circle, ellipse, or arc"
 msgstr "Kör, ellipszis vagy körív függőleges sugara"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:488 ../src/ui/toolbar/lpe-toolbar.cpp:400
-#: ../src/ui/toolbar/node-toolbar.cpp:611
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:180
-#: ../src/ui/toolbar/rect-toolbar.cpp:379
-#: ../src/ui/toolbar/select-toolbar.cpp:524
-#: ../src/ui/toolbar/text-toolbar.cpp:2322
+#: ../src/ui/toolbar/arc-toolbar.cpp:153 ../src/ui/toolbar/lpe-toolbar.cpp:208
+#: ../src/ui/toolbar/node-toolbar.cpp:517
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:130
+#: ../src/ui/toolbar/rect-toolbar.cpp:204
+#: ../src/ui/toolbar/select-toolbar.cpp:317
+#: ../src/ui/toolbar/text-toolbar.cpp:611
 msgid "Units"
 msgstr "Mértékegység"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:495
+#: ../src/ui/toolbar/arc-toolbar.cpp:160
 msgid "Start:"
 msgstr "Kezdet:"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:496
+#: ../src/ui/toolbar/arc-toolbar.cpp:161
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr "Az ellipszisív kezdőpontjának szöge a vízszintestől számítva (fokban)"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:508
+#: ../src/ui/toolbar/arc-toolbar.cpp:177
 msgid "End:"
 msgstr "Vég:"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:509
+#: ../src/ui/toolbar/arc-toolbar.cpp:178
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr "Az ellipszisív végpontjának szöge a vízszintestől számítva (fokban)"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:528
+#: ../src/ui/toolbar/arc-toolbar.cpp:205
 msgid "Switch to slice (closed shape with two radii)"
 msgstr "Váltás szeletre (zárt alakzat két sugárral)"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:533
+#: ../src/ui/toolbar/arc-toolbar.cpp:210
 msgid "Arc (Open)"
 msgstr "Körív (nyitott)"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:534
+#: ../src/ui/toolbar/arc-toolbar.cpp:211
 msgid "Switch to arc (unclosed shape)"
 msgstr "Váltás ellipszisívre (lezáratlan alakzat)"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:540
+#: ../src/ui/toolbar/arc-toolbar.cpp:217
 msgid "Switch to chord (closed shape)"
 msgstr "Váltás húrra (zárt alakzat)"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:565
+#: ../src/ui/toolbar/arc-toolbar.cpp:241
 msgid "Make whole"
 msgstr "Kiegészítés"
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:566
+#: ../src/ui/toolbar/arc-toolbar.cpp:242
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "Az alakzat teljes ellipszissé tétele (hogy ne ív illetve cikk legyen)"
 
-#. TODO: use the correct axis here, too
-#: ../src/ui/toolbar/box3d-toolbar.cpp:234
-msgid "3D Box: Change perspective (angle of infinite axis)"
-msgstr "3D téglatest: perspektíva módosítása (a végtelen tengely szöge)"
+#: ../src/ui/toolbar/arc-toolbar.cpp:317
+msgid "Ellipse: Change radius"
+msgstr "Ellipszis: sugár módosítása"
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:303
+#: ../src/ui/toolbar/arc-toolbar.cpp:371
+msgid "Arc: Change start/end"
+msgstr "Ellipszisív: kezdet/vég módosítása"
+
+#: ../src/ui/toolbar/arc-toolbar.cpp:427
+msgid "Arc: Changed arc type"
+msgstr "Körív: ív típusának módosítása"
+
+#. FIXME: implement averaging of all parameters for multiple selected
+#. gtk_label_set_markup(GTK_LABEL(l), _("<b>Average:</b>"));
+#: ../src/ui/toolbar/arc-toolbar.cpp:510 ../src/ui/toolbar/arc-toolbar.cpp:524
+#: ../src/ui/toolbar/rect-toolbar.cpp:360
+#: ../src/ui/toolbar/rect-toolbar.cpp:375
+#: ../src/ui/toolbar/spiral-toolbar.cpp:263
+#: ../src/ui/toolbar/spiral-toolbar.cpp:274
+#: ../src/ui/toolbar/star-toolbar.cpp:534
+msgid "<b>Change:</b>"
+msgstr "<b>Módosítás:</b>"
+
+#: ../src/ui/toolbar/box3d-toolbar.cpp:89
 msgid "Angle in X direction"
 msgstr "X iránybeli szög"
 
 #. Translators: PL is short for 'perspective line'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:305
+#: ../src/ui/toolbar/box3d-toolbar.cpp:91
 msgid "Angle of PLs in X direction"
 msgstr "Perspektívavonalak szöge X irányban"
 
 #. Translators: VP is short for 'vanishing point'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:327
+#: ../src/ui/toolbar/box3d-toolbar.cpp:117
 msgid "State of VP in X direction"
 msgstr "Az X irányú távlatpont állapota"
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:328
+#: ../src/ui/toolbar/box3d-toolbar.cpp:118
 msgid "Toggle VP in X direction between 'finite' and 'infinite' (=parallel)"
 msgstr ""
 "Az X irányú távlatpont átkapcsolása \"véges\" és \"végtelen\" (azaz "
 "párhuzamos) közt"
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:343
+#: ../src/ui/toolbar/box3d-toolbar.cpp:132
 msgid "Angle in Y direction"
 msgstr "Y iránybeli szög"
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:343
+#: ../src/ui/toolbar/box3d-toolbar.cpp:132
 msgid "Angle Y:"
 msgstr "Y-szög:"
 
 #. Translators: PL is short for 'perspective line'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:345
+#: ../src/ui/toolbar/box3d-toolbar.cpp:134
 msgid "Angle of PLs in Y direction"
 msgstr "Perspektívavonalak szöge Y irányban"
 
 #. Translators: VP is short for 'vanishing point'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:366
+#: ../src/ui/toolbar/box3d-toolbar.cpp:159
 msgid "State of VP in Y direction"
 msgstr "Az Y irányú távlatpont állapota"
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:367
+#: ../src/ui/toolbar/box3d-toolbar.cpp:160
 msgid "Toggle VP in Y direction between 'finite' and 'infinite' (=parallel)"
 msgstr ""
 "Az Y irányú távlatpont átkapcsolása \"véges\" és \"végtelen\" (azaz "
 "párhuzamos) közt"
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:382
+#: ../src/ui/toolbar/box3d-toolbar.cpp:174
 msgid "Angle in Z direction"
 msgstr "Z iránybeli szög"
 
 #. Translators: PL is short for 'perspective line'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:384
+#: ../src/ui/toolbar/box3d-toolbar.cpp:176
 msgid "Angle of PLs in Z direction"
 msgstr "Perspektívavonalak szöge Z irányban"
 
 #. Translators: VP is short for 'vanishing point'
-#: ../src/ui/toolbar/box3d-toolbar.cpp:405
+#: ../src/ui/toolbar/box3d-toolbar.cpp:201
 msgid "State of VP in Z direction"
 msgstr "A Z irányú távlatpont állapota"
 
-#: ../src/ui/toolbar/box3d-toolbar.cpp:406
+#: ../src/ui/toolbar/box3d-toolbar.cpp:202
 msgid "Toggle VP in Z direction between 'finite' and 'infinite' (=parallel)"
 msgstr ""
 "A Z irányú távlatpont átkapcsolása \"véges\" és \"végtelen\" (azaz "
 "párhuzamos) közt"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:213
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:254
-msgid "No preset"
-msgstr "Nincs előbeállítás"
+#. TODO: use the correct axis here, too
+#: ../src/ui/toolbar/box3d-toolbar.cpp:242
+msgid "3D Box: Change perspective (angle of infinite axis)"
+msgstr "3D téglatest: perspektíva módosítása (a végtelen tengely szöge)"
 
 #. Width
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:394
-#: ../src/ui/toolbar/eraser-toolbar.cpp:183
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
+#: ../src/ui/toolbar/eraser-toolbar.cpp:112
 msgid "(hairline)"
 msgstr "(hajszálvékony)"
 
 #. Mean
 #. Rotation
 #. Scale
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:394
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:427
-#: ../src/ui/toolbar/eraser-toolbar.cpp:183
-#: ../src/ui/toolbar/pencil-toolbar.cpp:556
-#: ../src/ui/toolbar/spray-toolbar.cpp:290
-#: ../src/ui/toolbar/spray-toolbar.cpp:319
-#: ../src/ui/toolbar/spray-toolbar.cpp:335
-#: ../src/ui/toolbar/spray-toolbar.cpp:402
-#: ../src/ui/toolbar/spray-toolbar.cpp:432
-#: ../src/ui/toolbar/spray-toolbar.cpp:450
-#: ../src/ui/toolbar/spray-toolbar.cpp:599
-#: ../src/ui/toolbar/tweak-toolbar.cpp:126
-#: ../src/ui/toolbar/tweak-toolbar.cpp:143
-#: ../src/ui/toolbar/tweak-toolbar.cpp:341
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:147
+#: ../src/ui/toolbar/eraser-toolbar.cpp:112
+#: ../src/ui/toolbar/pencil-toolbar.cpp:171
+#: ../src/ui/toolbar/spray-toolbar.cpp:90
+#: ../src/ui/toolbar/spray-toolbar.cpp:122
+#: ../src/ui/toolbar/spray-toolbar.cpp:143
+#: ../src/ui/toolbar/spray-toolbar.cpp:212
+#: ../src/ui/toolbar/spray-toolbar.cpp:244
+#: ../src/ui/toolbar/spray-toolbar.cpp:266
+#: ../src/ui/toolbar/spray-toolbar.cpp:409
+#: ../src/ui/toolbar/tweak-toolbar.cpp:92
+#: ../src/ui/toolbar/tweak-toolbar.cpp:115
+#: ../src/ui/toolbar/tweak-toolbar.cpp:312
 msgid "(default)"
 msgstr "(alapértelmezett)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:394
-#: ../src/ui/toolbar/eraser-toolbar.cpp:183
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
+#: ../src/ui/toolbar/eraser-toolbar.cpp:112
 msgid "(broad stroke)"
 msgstr "(széles körvonal)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:397
-#: ../src/ui/toolbar/eraser-toolbar.cpp:186
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:105
+#: ../src/ui/toolbar/eraser-toolbar.cpp:115
 msgid "Pen Width"
 msgstr "Tollszélesség"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:398
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:106
 msgid "The width of the calligraphic pen (relative to the visible canvas area)"
 msgstr ""
 "A művészi toll szélessége (a látható rajzvászon-területhez viszonyítva)"
 
 #. Thinning
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(speed blows up stroke)"
 msgstr "(a sebesség erősen szélesíti a körvonalt)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(slight widening)"
 msgstr "(enyhe szélesedés)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(constant width)"
 msgstr "(állandó szélesség)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(slight thinning, default)"
 msgstr "(enyhe keskenyedés, alapértelmezett)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:411
-#: ../src/ui/toolbar/eraser-toolbar.cpp:216
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/eraser-toolbar.cpp:147
 msgid "(speed deflates stroke)"
 msgstr "(a sebesség erősen keskenyíti a körvonalt)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:414
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:128
 msgid "Stroke Thinning"
 msgstr "Körvonal-keskenyítés"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:414
-#: ../src/ui/toolbar/eraser-toolbar.cpp:219
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:128
+#: ../src/ui/toolbar/eraser-toolbar.cpp:150
 msgid "Thinning:"
 msgstr "Keskenyítés:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:415
-#: ../src/ui/toolbar/eraser-toolbar.cpp:220
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:129
+#: ../src/ui/toolbar/eraser-toolbar.cpp:151
 msgid ""
 "How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 "
 "makes them broader, 0 makes width independent of velocity)"
@@ -25639,28 +25637,28 @@ msgstr ""
 "szélesebbet; 0 esetén pedig nem függ a szélesség a sebességtől)"
 
 #. Angle
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:427
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:147
 msgid "(left edge up)"
 msgstr "(a bal oldali szél van fent)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:427
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:147
 msgid "(horizontal)"
 msgstr "(vízszintes)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:427
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:147
 msgid "(right edge up)"
 msgstr "(a jobb oldali szél van fent)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:430
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:150
 msgid "Pen Angle"
 msgstr "A toll szöge"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:430
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:150
 #: ../share/extensions/motion.inx.h:3 ../share/extensions/restack.inx.h:5
 msgid "Angle:"
 msgstr "Szög:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:431
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:151
 msgid ""
 "The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if "
 "fixation = 0)"
@@ -25669,27 +25667,27 @@ msgstr ""
 "értéke 0, akkor nincs hatása)"
 
 #. Fixation
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:445
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:169
 msgid "(perpendicular to stroke, \"brush\")"
 msgstr "(merőleges a körvonalra, \"ecset\")"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:445
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:169
 msgid "(almost fixed, default)"
 msgstr "(majdnem rögzített, alapértelmezés)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:445
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:169
 msgid "(fixed by Angle, \"pen\")"
 msgstr "(szögben rögzített, \"toll\")"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:448
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:172
 msgid "Fixation"
 msgstr "Rögzítettség"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:448
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:172
 msgid "Fixation:"
 msgstr "Rögzítettség:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:449
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:173
 msgid ""
 "Angle behavior (0 = nib always perpendicular to stroke direction, 100 = "
 "fixed angle)"
@@ -25698,37 +25696,37 @@ msgstr ""
 "100: rögzített szög)"
 
 #. Cap Rounding
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:461
-#: ../src/ui/toolbar/eraser-toolbar.cpp:234
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:191
+#: ../src/ui/toolbar/eraser-toolbar.cpp:169
 msgid "(blunt caps, default)"
 msgstr "(tompa vonalvégek, alapértelmezett)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:461
-#: ../src/ui/toolbar/eraser-toolbar.cpp:234
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:191
+#: ../src/ui/toolbar/eraser-toolbar.cpp:169
 msgid "(slightly bulging)"
 msgstr "(enyhén kidudorodó)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:461
-#: ../src/ui/toolbar/eraser-toolbar.cpp:234
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:191
+#: ../src/ui/toolbar/eraser-toolbar.cpp:169
 msgid "(approximately round)"
 msgstr "(nagyjából kerek)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:461
-#: ../src/ui/toolbar/eraser-toolbar.cpp:234
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:191
+#: ../src/ui/toolbar/eraser-toolbar.cpp:169
 msgid "(long protruding caps)"
 msgstr "(hosszan kiálló vonalvégek)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:465
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:195
 msgid "Cap rounding"
 msgstr "Vonalvég-lekerekítés"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:465
-#: ../src/ui/toolbar/eraser-toolbar.cpp:238
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:195
+#: ../src/ui/toolbar/eraser-toolbar.cpp:173
 msgid "Caps:"
 msgstr "Vonalvég:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:466
-#: ../src/ui/toolbar/eraser-toolbar.cpp:239
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:196
+#: ../src/ui/toolbar/eraser-toolbar.cpp:174
 msgid ""
 "Increase to make caps at the ends of strokes protrude more (0 = no caps, 1 = "
 "round caps)"
@@ -25737,105 +25735,105 @@ msgstr ""
 "1: lekerekített vonalvégek)"
 
 #. Tremor
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:478
-#: ../src/ui/toolbar/eraser-toolbar.cpp:253
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:214
+#: ../src/ui/toolbar/eraser-toolbar.cpp:192
 msgid "(smooth line)"
 msgstr "(sima vonal)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:478
-#: ../src/ui/toolbar/eraser-toolbar.cpp:253
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:214
+#: ../src/ui/toolbar/eraser-toolbar.cpp:192
 msgid "(slight tremor)"
 msgstr "(enyhe remegés)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:478
-#: ../src/ui/toolbar/eraser-toolbar.cpp:253
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:214
+#: ../src/ui/toolbar/eraser-toolbar.cpp:192
 msgid "(noticeable tremor)"
 msgstr "(észrevehető remegés)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:478
-#: ../src/ui/toolbar/eraser-toolbar.cpp:253
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:214
+#: ../src/ui/toolbar/eraser-toolbar.cpp:192
 msgid "(maximum tremor)"
 msgstr "(maximális remegés)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:481
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:217
 msgid "Stroke Tremor"
 msgstr "Körvonal remegése"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:481
-#: ../src/ui/toolbar/eraser-toolbar.cpp:256
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:217
+#: ../src/ui/toolbar/eraser-toolbar.cpp:195
 msgid "Tremor:"
 msgstr "Remegés:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:482
-#: ../src/ui/toolbar/eraser-toolbar.cpp:257
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:218
+#: ../src/ui/toolbar/eraser-toolbar.cpp:196
 msgid "Increase to make strokes rugged and trembling"
 msgstr "Nagyobb érték esetén a vonalak egyenetlenebbek és remegőbbek"
 
 #. Wiggle
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:496
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:238
 msgid "(no wiggle)"
 msgstr "(nincs tekeredés)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:496
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:238
 msgid "(slight deviation)"
 msgstr "(enyhe elhajlás)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:496
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:238
 msgid "(wild waves and curls)"
 msgstr "(vad hullámok és csavarodások)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:499
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:241
 msgid "Pen Wiggle"
 msgstr "A toll tekeredése"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:499
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:241
 msgid "Wiggle:"
 msgstr "Tekeredés:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:500
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:242
 msgid "Increase to make the pen waver and wiggle"
 msgstr "Nagyobb érték esetén a toll hullámzóbban és tekergőbben mozog"
 
 #. Mass
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:513
-#: ../src/ui/toolbar/eraser-toolbar.cpp:273
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:261
+#: ../src/ui/toolbar/eraser-toolbar.cpp:215
 msgid "(no inertia)"
 msgstr "(nincs tehetetlenség)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:513
-#: ../src/ui/toolbar/eraser-toolbar.cpp:273
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:261
+#: ../src/ui/toolbar/eraser-toolbar.cpp:215
 msgid "(slight smoothing, default)"
 msgstr "(enyhe simítás, alapértelmezett)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:513
-#: ../src/ui/toolbar/eraser-toolbar.cpp:273
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:261
+#: ../src/ui/toolbar/eraser-toolbar.cpp:215
 msgid "(noticeable lagging)"
 msgstr "(észrevehető késleltetés)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:513
-#: ../src/ui/toolbar/eraser-toolbar.cpp:273
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:261
+#: ../src/ui/toolbar/eraser-toolbar.cpp:215
 msgid "(maximum inertia)"
 msgstr "(maximális tehetetlenség)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:516
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:264
 msgid "Pen Mass"
 msgstr "A toll tömege"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:516
-#: ../src/ui/toolbar/eraser-toolbar.cpp:276
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:264
+#: ../src/ui/toolbar/eraser-toolbar.cpp:218
 msgid "Mass:"
 msgstr "Tömeg:"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:517
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:265
 msgid "Increase to make the pen drag behind, as if slowed by inertia"
 msgstr ""
 "Nagyobb érték esetén a toll mozgása vontatott, mintha tehetetlenség lassítaná"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:532
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:286
 msgid "Trace Background"
 msgstr "Háttér követése"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:533
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:287
 msgid ""
 "Trace the lightness of the background by the width of the pen (white - "
 "minimum width, black - maximum width)"
@@ -25843,128 +25841,133 @@ msgstr ""
 "A háttér fényességének követése a toll szélességével (fehér: minimális "
 "szélesség, fekete: maximális szélesség)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:546
-#: ../src/ui/toolbar/eraser-toolbar.cpp:204
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:299
+#: ../src/ui/toolbar/eraser-toolbar.cpp:137
 msgid "Use the pressure of the input device to alter the width of the pen"
 msgstr ""
 "A beviteli eszköz nyomásának használata a tollszélesség változtatásához"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:558
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:310
 msgid "Tilt"
 msgstr "Dőlés"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:559
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:311
 msgid "Use the tilt of the input device to alter the angle of the pen's nib"
 msgstr ""
 "A beviteli eszköz dőlésének használata a tollhegy szögének változtatásához"
 
 #. Name
 #. Label
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:580
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:331
 msgid "Choose a preset"
 msgstr "Válasszon előbeállítást"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:598
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:347
 msgid "Add/Edit Profile"
 msgstr "Profil hozzáadása/szerkesztése"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:599
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:348
 msgid "Add or edit calligraphic profile"
 msgstr "Művészi profil hozzáadása vagy szerkesztése"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:117
-msgid "Set connector type: orthogonal"
-msgstr "Kapocstípus beállítása: derékszögű"
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:506
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:601
+msgid "No preset"
+msgstr "Nincs előbeállítás"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:117
-msgid "Set connector type: polyline"
-msgstr "Kapocstípus beállítása: kapcsolódó vonalak"
-
-#: ../src/ui/toolbar/connector-toolbar.cpp:164
-msgid "Change connector curvature"
-msgstr "Kapocs görbületének módosítása"
-
-#: ../src/ui/toolbar/connector-toolbar.cpp:213
-msgid "Change connector spacing"
-msgstr "Kapcsok helykihagyásának módosítása"
-
-#: ../src/ui/toolbar/connector-toolbar.cpp:311
+#: ../src/ui/toolbar/connector-toolbar.cpp:81
 msgid "Avoid"
 msgstr "Elkerülés"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:312
+#: ../src/ui/toolbar/connector-toolbar.cpp:82
 #: ../src/ui/tools/connector-tool.cpp:1321
 msgid "Make connectors avoid selected objects"
 msgstr "A kapcsok kerüljék ki a kijelölt objektumokat"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:321
+#: ../src/ui/toolbar/connector-toolbar.cpp:91
 msgid "Ignore"
 msgstr "Figyelmen kívül hagyás"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:322
+#: ../src/ui/toolbar/connector-toolbar.cpp:92
 #: ../src/ui/tools/connector-tool.cpp:1322
 msgid "Make connectors ignore selected objects"
 msgstr "A kapcsok hagyják figyelmen kívül a kijelölt objektumokat"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:332
+#: ../src/ui/toolbar/connector-toolbar.cpp:102
 msgid "Orthogonal"
 msgstr "Derékszögű"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:333
+#: ../src/ui/toolbar/connector-toolbar.cpp:103
 msgid "Make connector orthogonal or polyline"
 msgstr "A kapocs derékszögű legyen vagy kapcsolódó vonalakból álljon"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:347
+#: ../src/ui/toolbar/connector-toolbar.cpp:116
 msgid "Connector Curvature"
 msgstr "Kapocsgörbület"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:347
+#: ../src/ui/toolbar/connector-toolbar.cpp:116
 msgid "Curvature:"
 msgstr "Görbület:"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:348
+#: ../src/ui/toolbar/connector-toolbar.cpp:117
 msgid "The amount of connectors curvature"
 msgstr "A kapcsok görbületének mértéke"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:358
+#: ../src/ui/toolbar/connector-toolbar.cpp:132
 msgid "Connector Spacing"
 msgstr "Helykihagyás a kapcsoknál"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:358
+#: ../src/ui/toolbar/connector-toolbar.cpp:132
 msgid "Spacing:"
 msgstr "Helykihagyás:"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:359
+#: ../src/ui/toolbar/connector-toolbar.cpp:133
 msgid "The amount of space left around objects by auto-routing connectors"
 msgstr "Az objektumok körül a kapcsok elvezetésekor hagyandó hely mennyisége"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:370
+#: ../src/ui/toolbar/connector-toolbar.cpp:149
 msgid "Graph"
 msgstr "Gráf"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:380
+#: ../src/ui/toolbar/connector-toolbar.cpp:159
 msgid "Connector Length"
 msgstr "Kapocshossz"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:380
+#: ../src/ui/toolbar/connector-toolbar.cpp:159
 msgid "Length:"
 msgstr "Hossz:"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:381
+#: ../src/ui/toolbar/connector-toolbar.cpp:160
 msgid "Ideal length for connectors when layout is applied"
 msgstr "Kapcsok ideális hossza az elrendezés alkalmazásakor"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:393
+#: ../src/ui/toolbar/connector-toolbar.cpp:176
 msgid "Downwards"
 msgstr "Lefelé"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:394
+#: ../src/ui/toolbar/connector-toolbar.cpp:177
 msgid "Make connectors with end-markers (arrows) point downwards"
 msgstr "A vég-jelölőkkel rendelkező kapcsok (nyilak) mutassanak lefelé"
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:410
+#: ../src/ui/toolbar/connector-toolbar.cpp:193
 msgid "Do not allow overlapping shapes"
 msgstr "Átfedő alakzatok ne legyenek engedélyezve"
+
+#: ../src/ui/toolbar/connector-toolbar.cpp:279
+msgid "Set connector type: orthogonal"
+msgstr "Kapocstípus beállítása: derékszögű"
+
+#: ../src/ui/toolbar/connector-toolbar.cpp:279
+msgid "Set connector type: polyline"
+msgstr "Kapocstípus beállítása: kapcsolódó vonalak"
+
+#: ../src/ui/toolbar/connector-toolbar.cpp:326
+msgid "Change connector curvature"
+msgstr "Kapocs görbületének módosítása"
+
+#: ../src/ui/toolbar/connector-toolbar.cpp:374
+msgid "Change connector spacing"
+msgstr "Kapcsok helykihagyásának módosítása"
 
 #: ../src/ui/toolbar/dropper-toolbar.cpp:70
 msgid "Pick"
@@ -25989,67 +25992,67 @@ msgstr ""
 "Ha lett leolvasva alfa-érték, akkor az legyen hozzárendelve a kijelöléshez "
 "kitöltés- vagy körvonal-átlátszóságként"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:147
+#: ../src/ui/toolbar/eraser-toolbar.cpp:77
 msgid "Delete objects touched by eraser"
 msgstr "Radír által megérintett objektumok törlése"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:152
+#: ../src/ui/toolbar/eraser-toolbar.cpp:82
 msgid "Cut"
 msgstr "Kivágás"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:153
+#: ../src/ui/toolbar/eraser-toolbar.cpp:83
 msgid "Cut out from paths and shapes"
 msgstr "Kivágás útvonalakból és alakzatokból"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:158
+#: ../src/ui/toolbar/eraser-toolbar.cpp:88
 msgid "Clip"
 msgstr "Vágás"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:159
+#: ../src/ui/toolbar/eraser-toolbar.cpp:89
 msgid "Clip from objects"
 msgstr "Kivágás az objektumokból"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:183
+#: ../src/ui/toolbar/eraser-toolbar.cpp:112
 msgid "(no width)"
 msgstr "(nincs szélesség)"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:187
+#: ../src/ui/toolbar/eraser-toolbar.cpp:116
 msgid "The width of the eraser pen (relative to the visible canvas area)"
 msgstr "A radír szélessége (a látható rajzvászon-területhez viszonyítva)"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:203
+#: ../src/ui/toolbar/eraser-toolbar.cpp:136
 msgid "Eraser Pressure"
 msgstr "Radírnyomás"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:219
+#: ../src/ui/toolbar/eraser-toolbar.cpp:150
 msgid "Eraser Stroke Thinning"
 msgstr "Radír körvonal-keskenyítése"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:238
+#: ../src/ui/toolbar/eraser-toolbar.cpp:173
 msgid "Eraser Cap rounding"
 msgstr "Radír vonalvég-lekerekítése"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:256
+#: ../src/ui/toolbar/eraser-toolbar.cpp:195
 msgid "EraserStroke Tremor"
 msgstr "Radír körvonal-remegése"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:276
+#: ../src/ui/toolbar/eraser-toolbar.cpp:218
 msgid "Eraser Mass"
 msgstr "Radírtömeg"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:277
+#: ../src/ui/toolbar/eraser-toolbar.cpp:219
 msgid "Increase to make the eraser drag behind, as if slowed by inertia"
 msgstr "Növelve a radír húzása késik, mintha lassítaná a tehetetlenség"
 
-#: ../src/ui/toolbar/eraser-toolbar.cpp:293
-#: ../src/ui/toolbar/eraser-toolbar.cpp:294
+#: ../src/ui/toolbar/eraser-toolbar.cpp:238
+#: ../src/ui/toolbar/eraser-toolbar.cpp:239
 msgid "Break apart cut items"
 msgstr "Vágott elemek szétbontása"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:138
 #: ../src/ui/toolbar/gradient-toolbar.cpp:158
-#: ../src/ui/toolbar/gradient-toolbar.cpp:534
-#: ../src/ui/toolbar/gradient-toolbar.cpp:933
+#: ../src/ui/toolbar/gradient-toolbar.cpp:438
+#: ../src/ui/toolbar/gradient-toolbar.cpp:1055
 msgid "No gradient"
 msgstr "Nincs színátmenet"
 
@@ -26061,90 +26064,68 @@ msgstr "Semmi nincs kijelölve"
 msgid "Multiple gradients"
 msgstr "Több színátmenet"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:544
-#: ../src/widgets/gradient-vector.cpp:566
-msgid "No stops in gradient"
-msgstr "Nincs fázis a színátmenetben"
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:654
-msgid "Multiple stops"
-msgstr "Több fázis"
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:737
-msgid "Assign gradient to object"
-msgstr "Színátmenet hozzárendelése egy objektumhoz"
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:765
-msgid "Set gradient repeat"
-msgstr "Színátmenet ismétlődésének beállítása"
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:828
-#: ../src/widgets/gradient-vector.cpp:674
-msgid "Change gradient stop offset"
-msgstr "Színátmenet-fázis eltolásának módosítása"
-
-#: ../src/ui/toolbar/gradient-toolbar.cpp:857
+#: ../src/ui/toolbar/gradient-toolbar.cpp:364
 msgid "linear"
 msgstr "lineáris"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:858
+#: ../src/ui/toolbar/gradient-toolbar.cpp:365
 msgid "Create linear gradient"
 msgstr "Lineáris színátmenet létrehozása"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:863
+#: ../src/ui/toolbar/gradient-toolbar.cpp:370
 msgid "radial"
 msgstr "sugárirányú"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:864
+#: ../src/ui/toolbar/gradient-toolbar.cpp:371
 msgid "Create radial (elliptic or circular) gradient"
 msgstr "Sugárirányú (ellipszis vagy kör alakú) színátmenet létrehozása"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:895
-#: ../src/ui/toolbar/mesh-toolbar.cpp:417
+#: ../src/ui/toolbar/gradient-toolbar.cpp:401
+#: ../src/ui/toolbar/mesh-toolbar.cpp:264
 msgid "fill"
 msgstr "kitöltés"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:896
-#: ../src/ui/toolbar/mesh-toolbar.cpp:418
+#: ../src/ui/toolbar/gradient-toolbar.cpp:402
+#: ../src/ui/toolbar/mesh-toolbar.cpp:265
 msgid "Create gradient in the fill"
 msgstr "Színátmenet létrehozása a kitöltésben"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:901
-#: ../src/ui/toolbar/mesh-toolbar.cpp:423
+#: ../src/ui/toolbar/gradient-toolbar.cpp:407
+#: ../src/ui/toolbar/mesh-toolbar.cpp:270
 msgid "stroke"
 msgstr "körvonal"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:902
-#: ../src/ui/toolbar/mesh-toolbar.cpp:424
+#: ../src/ui/toolbar/gradient-toolbar.cpp:408
+#: ../src/ui/toolbar/mesh-toolbar.cpp:271
 msgid "Create gradient in the stroke"
 msgstr "Színátmenet létrehozása a körvonalban"
 
 #. Name
-#: ../src/ui/toolbar/gradient-toolbar.cpp:940
+#: ../src/ui/toolbar/gradient-toolbar.cpp:445
 msgid "Select"
 msgstr "Kijelölés"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:967
+#: ../src/ui/toolbar/gradient-toolbar.cpp:471
 msgctxt "Gradient repeat type"
 msgid "None"
 msgstr "Nincs"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:973
+#: ../src/ui/toolbar/gradient-toolbar.cpp:477
 msgid "Reflected"
 msgstr "Tükrözött"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:979
+#: ../src/ui/toolbar/gradient-toolbar.cpp:483
 msgid "Direct"
 msgstr "Közvetlen"
 
 #. Name
-#: ../src/ui/toolbar/gradient-toolbar.cpp:986
+#: ../src/ui/toolbar/gradient-toolbar.cpp:490
 msgid "Repeat"
 msgstr "Ismétlődés"
 
 #. Label
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
-#: ../src/ui/toolbar/gradient-toolbar.cpp:988
+#: ../src/ui/toolbar/gradient-toolbar.cpp:492
 msgid ""
 "Whether to fill with flat color beyond the ends of the gradient vector "
 "(spreadMethod=\"pad\"), or repeat the gradient in the same direction "
@@ -26157,71 +26138,93 @@ msgstr ""
 "pedig ismétlődjön az átmenet ellentétesen, azaz váltakozó irányban "
 "(spreadMethod=\"reflect\", tükrözéses ismétlődés)"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1015
+#: ../src/ui/toolbar/gradient-toolbar.cpp:518
 msgid "No stops"
 msgstr "Nincs fázis"
 
 #. Name
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1022
+#: ../src/ui/toolbar/gradient-toolbar.cpp:525
 msgid "Stops"
 msgstr "Fázisok"
 
 #. Label
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1044
+#: ../src/ui/toolbar/gradient-toolbar.cpp:545
 #: ../src/widgets/gradient-vector.cpp:851
 msgctxt "Gradient"
 msgid "Offset:"
 msgstr "Eltolás:"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1044
+#: ../src/ui/toolbar/gradient-toolbar.cpp:545
 msgid "Offset of selected stop"
 msgstr "Kijelölt fázis eltolása"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1062
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1063
+#: ../src/ui/toolbar/gradient-toolbar.cpp:565
+#: ../src/ui/toolbar/gradient-toolbar.cpp:566
 msgid "Insert new stop"
 msgstr "Új fázis beszúrása"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1076
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1077
+#: ../src/ui/toolbar/gradient-toolbar.cpp:578
+#: ../src/ui/toolbar/gradient-toolbar.cpp:579
 #: ../src/widgets/gradient-vector.cpp:837
 msgid "Delete stop"
 msgstr "Fázis törlése"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1091
+#: ../src/ui/toolbar/gradient-toolbar.cpp:592
 msgid "Reverse the direction of the gradient"
 msgstr "Színátmenet irányának megfordítása"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1105
+#: ../src/ui/toolbar/gradient-toolbar.cpp:605
 msgid "Link gradients"
 msgstr "Színátmenetek összekapcsolása"
 
-#: ../src/ui/toolbar/gradient-toolbar.cpp:1106
+#: ../src/ui/toolbar/gradient-toolbar.cpp:606
 msgid "Link gradients to change all related gradients"
 msgstr "Színátmenetek összekapcsolása az együttes módosításukért"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:275
+#: ../src/ui/toolbar/gradient-toolbar.cpp:666
+msgid "Assign gradient to object"
+msgstr "Színátmenet hozzárendelése egy objektumhoz"
+
+#: ../src/ui/toolbar/gradient-toolbar.cpp:712
+msgid "Set gradient repeat"
+msgstr "Színátmenet ismétlődésének beállítása"
+
+#: ../src/ui/toolbar/gradient-toolbar.cpp:843
+#: ../src/widgets/gradient-vector.cpp:674
+msgid "Change gradient stop offset"
+msgstr "Színátmenet-fázis eltolásának módosítása"
+
+#: ../src/ui/toolbar/gradient-toolbar.cpp:1065
+#: ../src/widgets/gradient-vector.cpp:566
+msgid "No stops in gradient"
+msgstr "Nincs fázis a színátmenetben"
+
+#: ../src/ui/toolbar/gradient-toolbar.cpp:1191
+msgid "Multiple stops"
+msgstr "Több fázis"
+
+#: ../src/ui/toolbar/lpe-toolbar.cpp:86
 msgid "All inactive"
 msgstr "Mindegyik inaktív"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:276
+#: ../src/ui/toolbar/lpe-toolbar.cpp:87
 msgid "No geometric tool is active"
 msgstr "Egyik geometriai eszköz sem aktív"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:314
+#: ../src/ui/toolbar/lpe-toolbar.cpp:124
 msgid "Show limiting bounding box"
 msgstr "Korlátozó határoló téglalap megjelenítése"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:315
+#: ../src/ui/toolbar/lpe-toolbar.cpp:125
 msgid "Show bounding box (used to cut infinite lines)"
 msgstr ""
 "Határoló téglalap megjelenítése (végtelen vonalak vágására használatos)"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:326
+#: ../src/ui/toolbar/lpe-toolbar.cpp:136
 msgid "Get limiting bounding box from selection"
 msgstr "Korlátozó határoló téglalap meghatározása a kijelölésből"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:327
+#: ../src/ui/toolbar/lpe-toolbar.cpp:137
 msgid ""
 "Set limiting bounding box (used to cut infinite lines) to the bounding box "
 "of current selection"
@@ -26229,184 +26232,327 @@ msgstr ""
 "Korlátozó határoló téglalap beállítása (végtelen vonalak vágására "
 "használatos) az aktuális kijelölés határoló téglalapjára"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:345
+#: ../src/ui/toolbar/lpe-toolbar.cpp:154
 msgid "Closed"
 msgstr "Lezárt"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:351
+#: ../src/ui/toolbar/lpe-toolbar.cpp:160
 msgid "Open start"
 msgstr "Nyitott kezdet"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:357
+#: ../src/ui/toolbar/lpe-toolbar.cpp:166
 msgid "Open end"
 msgstr "Nyitott vég"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:363
+#: ../src/ui/toolbar/lpe-toolbar.cpp:172
 msgid "Open both"
 msgstr "Mindkettő nyitott"
 
 #. Name
 #. Label
-#: ../src/ui/toolbar/lpe-toolbar.cpp:371
+#: ../src/ui/toolbar/lpe-toolbar.cpp:180
 msgid "Choose a line segment type"
 msgstr "Vonalszakasz-típus kijelölése"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:389
+#: ../src/ui/toolbar/lpe-toolbar.cpp:197
 msgid "Display measuring info"
 msgstr "Mérési információ megjelenítése"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:390
+#: ../src/ui/toolbar/lpe-toolbar.cpp:198
 msgid "Display measuring info for selected items"
 msgstr "Mérési információ megjelenítése a kijelölt elemekről"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:410
+#: ../src/ui/toolbar/lpe-toolbar.cpp:217
 msgid "Open LPE dialog"
 msgstr "\"Élő útvonaleffektus\" párbeszédablak megnyitása"
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:411
+#: ../src/ui/toolbar/lpe-toolbar.cpp:218
 msgid "Open LPE dialog (to adapt parameters numerically)"
 msgstr ""
 "\"Élő útvonaleffektus\" párbeszédablak megnyitása (a paraméterek számszerű "
 "beállításához)"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:157
+#: ../src/ui/toolbar/measure-toolbar.cpp:84
 msgid "Start and end measures inactive."
 msgstr "Az első és az utolsó pont mérése inaktív."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:159
+#: ../src/ui/toolbar/measure-toolbar.cpp:86
 msgid "Start and end measures active."
 msgstr "Az első és az utolsó pont mérése aktív."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:175
+#: ../src/ui/toolbar/measure-toolbar.cpp:102
 msgid "Measures only selected."
 msgstr "Csak a kijelöltek mérése."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:177
+#: ../src/ui/toolbar/measure-toolbar.cpp:104
 msgid "Measure all."
 msgstr "Összes mérése."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:193
+#: ../src/ui/toolbar/measure-toolbar.cpp:120
 msgid "Show all crossings."
 msgstr "Minden metszés megjelenítése."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:195
+#: ../src/ui/toolbar/measure-toolbar.cpp:122
 msgid "Show visible crossings."
 msgstr "Látható metszések megjelenítése."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:211
+#: ../src/ui/toolbar/measure-toolbar.cpp:138
 msgid "Use all layers in the measure."
 msgstr "Minden réteg belefoglalása a mérésbe."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:213
+#: ../src/ui/toolbar/measure-toolbar.cpp:140
 msgid "Use current layer in the measure."
 msgstr "Csak az aktuális rétegen való mérés."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:229
+#: ../src/ui/toolbar/measure-toolbar.cpp:156
 msgid "Compute all elements."
 msgstr "Minden elem kiszámítása."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:231
+#: ../src/ui/toolbar/measure-toolbar.cpp:158
 msgid "Compute max length."
 msgstr "Teljes hosszúság kiszámítása."
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:292
-#: ../src/ui/toolbar/text-toolbar.cpp:2043
+#: ../src/ui/toolbar/measure-toolbar.cpp:227
+#: ../src/ui/toolbar/text-toolbar.cpp:345
 msgid "Font Size"
 msgstr "Betűtípus-méret"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:292
+#: ../src/ui/toolbar/measure-toolbar.cpp:227
 msgid "Font Size:"
 msgstr "Betűméret:"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:293
+#: ../src/ui/toolbar/measure-toolbar.cpp:228
 msgid "The font size to be used in the measurement labels"
 msgstr "A mérés címkéjében alkalmazandó betűméret"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:304
-#: ../src/ui/toolbar/measure-toolbar.cpp:312
+#: ../src/ui/toolbar/measure-toolbar.cpp:244
+#: ../src/ui/toolbar/measure-toolbar.cpp:252
 msgid "The units to be used for the measurements"
 msgstr "A mérés során alkalmazandó mértékegység"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:320
+#: ../src/ui/toolbar/measure-toolbar.cpp:260
 #: ../share/extensions/measure.inx.h:14
 msgid "Precision:"
 msgstr "Pontosság:"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:321
+#: ../src/ui/toolbar/measure-toolbar.cpp:261
 msgid "Decimal precision of measure"
 msgstr "A mérés tizedespontossága"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:333
+#: ../src/ui/toolbar/measure-toolbar.cpp:278
 msgid "Scale %"
 msgstr "Méretezési %"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:333
+#: ../src/ui/toolbar/measure-toolbar.cpp:278
 msgid "Scale %:"
 msgstr "Méretezési %:"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:334
+#: ../src/ui/toolbar/measure-toolbar.cpp:279
 msgid "Scale the results"
 msgstr "Az eredmény méretezése"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:347
+#: ../src/ui/toolbar/measure-toolbar.cpp:297
 msgid "Mark dimension offset"
 msgstr "Jel eltolási mérete"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:359
-#: ../src/ui/toolbar/measure-toolbar.cpp:360
+#: ../src/ui/toolbar/measure-toolbar.cpp:314
+#: ../src/ui/toolbar/measure-toolbar.cpp:315
 msgid "Measure only selected"
 msgstr "Csak a kijelöltek mérése"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:371
-#: ../src/ui/toolbar/measure-toolbar.cpp:372
+#: ../src/ui/toolbar/measure-toolbar.cpp:326
+#: ../src/ui/toolbar/measure-toolbar.cpp:327
 msgid "Ignore first and last"
 msgstr "Első és utolsó kizárása"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:382
-#: ../src/ui/toolbar/measure-toolbar.cpp:383
+#: ../src/ui/toolbar/measure-toolbar.cpp:337
+#: ../src/ui/toolbar/measure-toolbar.cpp:338
 msgid "Show hidden intersections"
 msgstr "Rejtett metszések megjelenítése"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:393
-#: ../src/ui/toolbar/measure-toolbar.cpp:394
+#: ../src/ui/toolbar/measure-toolbar.cpp:348
+#: ../src/ui/toolbar/measure-toolbar.cpp:349
 msgid "Show measures between items"
 msgstr "Elemek közti mérések megjelenítése"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:404
-#: ../src/ui/toolbar/measure-toolbar.cpp:405
+#: ../src/ui/toolbar/measure-toolbar.cpp:359
+#: ../src/ui/toolbar/measure-toolbar.cpp:360
 msgid "Measure all layers"
 msgstr "Összes réteg mérése"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:415
-#: ../src/ui/toolbar/measure-toolbar.cpp:416
+#: ../src/ui/toolbar/measure-toolbar.cpp:370
+#: ../src/ui/toolbar/measure-toolbar.cpp:371
 msgid "Reverse measure"
 msgstr "Fordított mérés"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:425
-#: ../src/ui/toolbar/measure-toolbar.cpp:426
+#: ../src/ui/toolbar/measure-toolbar.cpp:380
+#: ../src/ui/toolbar/measure-toolbar.cpp:381
 msgid "Phantom measure"
 msgstr "Szellemkép létrehozása a mérésből"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:435
-#: ../src/ui/toolbar/measure-toolbar.cpp:436
+#: ../src/ui/toolbar/measure-toolbar.cpp:390
+#: ../src/ui/toolbar/measure-toolbar.cpp:391
 msgid "To guides"
 msgstr "Segédvonalakká alakítás"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:445
-#: ../src/ui/toolbar/measure-toolbar.cpp:446
+#: ../src/ui/toolbar/measure-toolbar.cpp:400
+#: ../src/ui/toolbar/measure-toolbar.cpp:401
 msgid "Mark Dimension"
 msgstr "Méretjelzés készítése"
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:455
-#: ../src/ui/toolbar/measure-toolbar.cpp:456
+#: ../src/ui/toolbar/measure-toolbar.cpp:410
+#: ../src/ui/toolbar/measure-toolbar.cpp:411
 msgid "Convert to item"
 msgstr "Elemmé alakítás"
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:270
-msgid "Set mesh type"
-msgstr "Háló típusának módosítása"
+#: ../src/ui/toolbar/mesh-toolbar.cpp:227
+msgid "normal"
+msgstr "normál"
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:343
+#: ../src/ui/toolbar/mesh-toolbar.cpp:228
+msgid "Create mesh gradient"
+msgstr "Színátmenetes-háló létrehozása"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:233
+msgid "conical"
+msgstr "kúpos"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:234
+msgid "Create conical gradient"
+msgstr "Kúpos színátmenet létrehozása"
+
+#. Name
+#: ../src/ui/toolbar/mesh-toolbar.cpp:240
+msgid "New:"
+msgstr "Új:"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:297
+msgid "Rows"
+msgstr "Sorok"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:297
+#: ../share/extensions/guides_creator.inx.h:5
+#: ../share/extensions/layout_nup.inx.h:12
+msgid "Rows:"
+msgstr "Sorok:"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:297
+msgid "Number of rows in new mesh"
+msgstr "Sorok száma egy új hálóban"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:318
+msgid "Columns"
+msgstr "Oszlopok"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:318
+#: ../share/extensions/guides_creator.inx.h:4
+msgid "Columns:"
+msgstr "Oszlopok:"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:318
+msgid "Number of columns in new mesh"
+msgstr "Oszlopok száma egy új hálóban"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:337
+msgid "Edit Fill"
+msgstr "Kitöltés szerkesztése"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:338
+msgid "Edit fill mesh"
+msgstr "Kitöltés hálójának szerkesztése"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:349
+msgid "Edit Stroke"
+msgstr "Körvonal szerkesztése"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:350
+msgid "Edit stroke mesh"
+msgstr "Körvonal hálójának szerkesztése"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:361
+#: ../src/ui/toolbar/node-toolbar.cpp:426
+msgid "Show Handles"
+msgstr "Vezérlőelemek megjelenítése"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:375
+#: ../src/ui/toolbar/mesh-toolbar.cpp:376
+msgid "WARNING: Mesh SVG Syntax Subject to Change"
+msgstr "FIGYELMEZTETÉS: háló SVG-szintaxisa"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:393
+msgctxt "Type"
+msgid "Coons"
+msgstr "Coons-foltok"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:399
+msgid "Bicubic"
+msgstr "Bikubikus"
+
+#. Name
+#: ../src/ui/toolbar/mesh-toolbar.cpp:407
+msgid "Smoothing"
+msgstr "Simítás"
+
+#. Label
+#: ../src/ui/toolbar/mesh-toolbar.cpp:408
+msgid "Coons: no smothing. Bicubic: smothing across patch boundaries."
+msgstr ""
+"Coons-foltok: nincs simítás. Bikubikus: simítás a hálófolt határai mentén."
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:426
+msgid "Toggle Sides"
+msgstr "Oldalak átkapcsolása"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:427
+msgid "Toggle selected sides between Beziers and lines."
+msgstr "Kijelölt oldalak átkapcsolása Bézier-görbék és vonalak között."
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:430
+msgid "Toggle side:"
+msgstr "Oldal átkapcsolása:"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:437
+msgid "Make elliptical"
+msgstr "Ellipszis alakúvá alakítás"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:438
+msgid ""
+"Make selected sides elliptical by changing length of handles. Works best if "
+"handles already approximate ellipse."
+msgstr ""
+"A kijelölt oldal ellipszis alakúvá tétele a vezérlőelemek hosszúságának "
+"módosításával. Akkor működik a legjobban, ha a vezérlőelemek körülbelül "
+"ellipszist formálnak."
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:441
+msgid "Make elliptical:"
+msgstr "Elliptikussá tétel:"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:448
+msgid "Pick colors:"
+msgstr "Színek leolvasása:"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:449
+msgid "Pick colors for selected corner nodes from underneath mesh."
+msgstr "Színek leolvasása a kijelölt hálópontok számára a háló alól."
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:452
+msgid "Pick Color"
+msgstr "Szín leolvasása"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:460
+msgid "Scale mesh to bounding box:"
+msgstr "Háló méretezése a határoló téglalaphoz:"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:461
+msgid "Scale mesh to fit inside bounding box."
+msgstr "Háló átméretezése, hogy beleférjen a határoló téglalapba."
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:464
+msgid "Fit mesh"
+msgstr "Háló illesztése"
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:642
 msgid ""
 "Mesh gradients are part of SVG 2:\n"
 "* Syntax may change.\n"
@@ -26422,360 +26568,217 @@ msgstr ""
 "Webre: Átalakítás bitképre (Szerkesztés→Bitkép-másolat készítése)\n"
 "Nyomtatáshoz: exportálás PDF-be."
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:379
-msgid "normal"
-msgstr "normál"
+#: ../src/ui/toolbar/mesh-toolbar.cpp:674
+msgid "Set mesh type"
+msgstr "Háló típusának módosítása"
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:380
-msgid "Create mesh gradient"
-msgstr "Színátmenetes-háló létrehozása"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:385
-msgid "conical"
-msgstr "kúpos"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:386
-msgid "Create conical gradient"
-msgstr "Kúpos színátmenet létrehozása"
-
-#. Name
-#: ../src/ui/toolbar/mesh-toolbar.cpp:392
-msgid "New:"
-msgstr "Új:"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:451
-msgid "Rows"
-msgstr "Sorok"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:451
-#: ../share/extensions/guides_creator.inx.h:5
-#: ../share/extensions/layout_nup.inx.h:12
-msgid "Rows:"
-msgstr "Sorok:"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:451
-msgid "Number of rows in new mesh"
-msgstr "Sorok száma egy új hálóban"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:467
-msgid "Columns"
-msgstr "Oszlopok"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:467
-#: ../share/extensions/guides_creator.inx.h:4
-msgid "Columns:"
-msgstr "Oszlopok:"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:467
-msgid "Number of columns in new mesh"
-msgstr "Oszlopok száma egy új hálóban"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:481
-msgid "Edit Fill"
-msgstr "Kitöltés szerkesztése"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:482
-msgid "Edit fill mesh"
-msgstr "Kitöltés hálójának szerkesztése"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:494
-msgid "Edit Stroke"
-msgstr "Körvonal szerkesztése"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:495
-msgid "Edit stroke mesh"
-msgstr "Körvonal hálójának szerkesztése"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:507
-#: ../src/ui/toolbar/node-toolbar.cpp:521
-msgid "Show Handles"
-msgstr "Vezérlőelemek megjelenítése"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:524
-#: ../src/ui/toolbar/mesh-toolbar.cpp:525
-msgid "WARNING: Mesh SVG Syntax Subject to Change"
-msgstr "FIGYELMEZTETÉS: háló SVG-szintaxisa"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:542
-msgctxt "Type"
-msgid "Coons"
-msgstr "Coons-foltok"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:548
-msgid "Bicubic"
-msgstr "Bikubikus"
-
-#. Name
-#: ../src/ui/toolbar/mesh-toolbar.cpp:556
-msgid "Smoothing"
-msgstr "Simítás"
-
-#. Label
-#: ../src/ui/toolbar/mesh-toolbar.cpp:557
-msgid "Coons: no smothing. Bicubic: smothing across patch boundaries."
-msgstr ""
-"Coons-foltok: nincs simítás. Bikubikus: simítás a hálófolt határai mentén."
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:576
-msgid "Toggle Sides"
-msgstr "Oldalak átkapcsolása"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:577
-msgid "Toggle selected sides between Beziers and lines."
-msgstr "Kijelölt oldalak átkapcsolása Bézier-görbék és vonalak között."
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:580
-msgid "Toggle side:"
-msgstr "Oldal átkapcsolása:"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:587
-msgid "Make elliptical"
-msgstr "Ellipszis alakúvá alakítás"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:588
-msgid ""
-"Make selected sides elliptical by changing length of handles. Works best if "
-"handles already approximate ellipse."
-msgstr ""
-"A kijelölt oldal ellipszis alakúvá tétele a vezérlőelemek hosszúságának "
-"módosításával. Akkor működik a legjobban, ha a vezérlőelemek körülbelül "
-"ellipszist formálnak."
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:591
-msgid "Make elliptical:"
-msgstr "Elliptikussá tétel:"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:598
-msgid "Pick colors:"
-msgstr "Színek leolvasása:"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:599
-msgid "Pick colors for selected corner nodes from underneath mesh."
-msgstr "Színek leolvasása a kijelölt hálópontok számára a háló alól."
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:602
-msgid "Pick Color"
-msgstr "Szín leolvasása"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:610
-msgid "Scale mesh to bounding box:"
-msgstr "Háló méretezése a határoló téglalaphoz:"
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:611
-msgid "Scale mesh to fit inside bounding box."
-msgstr "Háló átméretezése, hogy beleférjen a határoló téglalapba."
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:614
-msgid "Fit mesh"
-msgstr "Háló illesztése"
-
-#: ../src/ui/toolbar/node-toolbar.cpp:341
+#: ../src/ui/toolbar/node-toolbar.cpp:247
 msgid "Insert node"
 msgstr "Csomópont beszúrása"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:342
+#: ../src/ui/toolbar/node-toolbar.cpp:248
 msgid "Insert new nodes into selected segments"
 msgstr "Új csomópontok felvétele a kijelölt szakaszokra"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:345
+#: ../src/ui/toolbar/node-toolbar.cpp:251
 msgid "Insert"
 msgstr "Beszúrás"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:356
+#: ../src/ui/toolbar/node-toolbar.cpp:262
 msgid "Insert node at min X"
 msgstr "Csomópont beszúrása: min. X"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:357
+#: ../src/ui/toolbar/node-toolbar.cpp:263
 msgid "Insert new nodes at min X into selected segments"
 msgstr ""
 "Új csomópont beszúrása a kijelölt szakasz legalacsonyabb X koordinátájához."
 
-#: ../src/ui/toolbar/node-toolbar.cpp:360
+#: ../src/ui/toolbar/node-toolbar.cpp:266
 msgid "Insert min X"
 msgstr "Beszúrás minimális X-re"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:366
+#: ../src/ui/toolbar/node-toolbar.cpp:272
 msgid "Insert node at max X"
 msgstr "Csomópont beszúrása: max. X"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:367
+#: ../src/ui/toolbar/node-toolbar.cpp:273
 msgid "Insert new nodes at max X into selected segments"
 msgstr ""
 "Új csomópont beszúrása a kijelölt szakasz legmagasabb X koordinátájához"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:370
+#: ../src/ui/toolbar/node-toolbar.cpp:276
 msgid "Insert max X"
 msgstr "Beszúrás maximális X-re"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:376
+#: ../src/ui/toolbar/node-toolbar.cpp:282
 msgid "Insert node at min Y"
 msgstr "Csomópont beszúrása: min. Y"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:377
+#: ../src/ui/toolbar/node-toolbar.cpp:283
 msgid "Insert new nodes at min Y into selected segments"
 msgstr ""
 "Új csomópont beszúrása a kijelölt szakasz legalacsonyabb Y koordinátájához"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:380
+#: ../src/ui/toolbar/node-toolbar.cpp:286
 msgid "Insert min Y"
 msgstr "Beszúrás minimális Y-ra"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:386
+#: ../src/ui/toolbar/node-toolbar.cpp:292
 msgid "Insert node at max Y"
 msgstr "Csomópont beszúrása: max. Y"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:387
+#: ../src/ui/toolbar/node-toolbar.cpp:293
 msgid "Insert new nodes at max Y into selected segments"
 msgstr ""
 "Új csomópont beszúrása a kijelölt szakasz legmagasabb Y koordinátájához"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:390
+#: ../src/ui/toolbar/node-toolbar.cpp:296
 msgid "Insert max Y"
 msgstr "Beszúrás maximális Y-ra"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:398
+#: ../src/ui/toolbar/node-toolbar.cpp:304
 msgid "Delete selected nodes"
 msgstr "A kijelölt csomópontok törlése"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:409
+#: ../src/ui/toolbar/node-toolbar.cpp:315
 msgid "Join selected nodes"
 msgstr "Kijelölt csomópontok összekapcsolása"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:412
+#: ../src/ui/toolbar/node-toolbar.cpp:318
 msgid "Join"
 msgstr "Összekapcsolás"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:420
+#: ../src/ui/toolbar/node-toolbar.cpp:326
 msgid "Break path at selected nodes"
 msgstr "Útvonal elvágása a kijelölt csomópontoknál"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:430
+#: ../src/ui/toolbar/node-toolbar.cpp:336
 msgid "Join with segment"
 msgstr "Összekapcsolás szakasszal"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:431
+#: ../src/ui/toolbar/node-toolbar.cpp:337
 msgid "Join selected endnodes with a new segment"
 msgstr "Kijelölt végpontok összekapcsolása egy új szakasszal"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:440
+#: ../src/ui/toolbar/node-toolbar.cpp:346
 msgid "Delete segment"
 msgstr "Szakasz törlése"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:441
+#: ../src/ui/toolbar/node-toolbar.cpp:347
 msgid "Delete segment between two non-endpoint nodes"
 msgstr "Szakasz törlése két nem végponti csomópont közt"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:450
+#: ../src/ui/toolbar/node-toolbar.cpp:356
 msgid "Node Cusp"
 msgstr "Csomópontot csúccsá"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:451
+#: ../src/ui/toolbar/node-toolbar.cpp:357
 msgid "Make selected nodes corner"
 msgstr "A kijelölt csomópontok csúccsá tétele"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:460
+#: ../src/ui/toolbar/node-toolbar.cpp:366
 msgid "Node Smooth"
 msgstr "Csomópontot ívessé"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:461
+#: ../src/ui/toolbar/node-toolbar.cpp:367
 msgid "Make selected nodes smooth"
 msgstr "A kijelölt csomópontok ívessé tétele"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:470
+#: ../src/ui/toolbar/node-toolbar.cpp:376
 msgid "Node Symmetric"
 msgstr "Csomópontot szimmetrikussá"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:471
+#: ../src/ui/toolbar/node-toolbar.cpp:377
 msgid "Make selected nodes symmetric"
 msgstr "A kijelölt csomópontok szimmetrikussá tétele"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:480
+#: ../src/ui/toolbar/node-toolbar.cpp:386
 msgid "Node Auto"
 msgstr "Csomópontot auto-ívessé"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:481
+#: ../src/ui/toolbar/node-toolbar.cpp:387
 msgid "Make selected nodes auto-smooth"
 msgstr "A kijelölt csomópontok auto-ívessé tétele"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:490
+#: ../src/ui/toolbar/node-toolbar.cpp:396
 msgid "Node Line"
 msgstr "Szakaszt egyenessé"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:491
+#: ../src/ui/toolbar/node-toolbar.cpp:397
 msgid "Make selected segments lines"
 msgstr "A kijelölt szakaszok egyenesekké alakítása"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:500
+#: ../src/ui/toolbar/node-toolbar.cpp:406
 msgid "Node Curve"
 msgstr "Szakaszt görbévé"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:501
+#: ../src/ui/toolbar/node-toolbar.cpp:407
 msgid "Make selected segments curves"
 msgstr "A kijelölt szakaszok görbékké alakítása"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:510
+#: ../src/ui/toolbar/node-toolbar.cpp:416
 msgid "Show Transform Handles"
 msgstr "Transzformációs vezérlőelemek megjelenítése"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:511
+#: ../src/ui/toolbar/node-toolbar.cpp:417
 msgid "Show transformation handles for selected nodes"
 msgstr "A kijelölt csomópontok transzformációs vezérlőelemeinek megjelenítése"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:522
+#: ../src/ui/toolbar/node-toolbar.cpp:427
 msgid "Show Bezier handles of selected nodes"
 msgstr "A kijelölt csomópontok Bézier-vezérlőelemeinek megjelenítése"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:532
+#: ../src/ui/toolbar/node-toolbar.cpp:436
 msgid "Show Outline"
 msgstr "Kontúr megjelenítése"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:533
+#: ../src/ui/toolbar/node-toolbar.cpp:437
 msgid "Show path outline (without path effects)"
 msgstr "Az útvonal kontúrjának megjelenítése (útvonaleffektusok nélkül)"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:555
+#: ../src/ui/toolbar/node-toolbar.cpp:457
 msgid "Edit clipping paths"
 msgstr "Vágóútvonalak szerkesztése"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:556
+#: ../src/ui/toolbar/node-toolbar.cpp:458
 msgid "Show clipping path(s) of selected object(s)"
 msgstr ""
 "A kijelölt objektumok vágóútvonalának, illetve vágóútvonalainak megjelenítése"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:566
+#: ../src/ui/toolbar/node-toolbar.cpp:467
 msgid "Edit masks"
 msgstr "Maszkok szerkesztése"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:567
+#: ../src/ui/toolbar/node-toolbar.cpp:468
 msgid "Show mask(s) of selected object(s)"
 msgstr "A kijelölt objektumok maszkjának, illetve maszkjainak megjelenítése"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:581
+#: ../src/ui/toolbar/node-toolbar.cpp:480
 msgid "X coordinate:"
 msgstr "X koordináta:"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:581
+#: ../src/ui/toolbar/node-toolbar.cpp:480
 msgid "X coordinate of selected node(s)"
 msgstr "A kijelölt csomópontok X koordinátája"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:598
+#: ../src/ui/toolbar/node-toolbar.cpp:500
 msgid "Y coordinate:"
 msgstr "Y koordináta:"
 
-#: ../src/ui/toolbar/node-toolbar.cpp:598
+#: ../src/ui/toolbar/node-toolbar.cpp:500
 msgid "Y coordinate of selected node(s)"
 msgstr "A kijelölt csomópontok Y koordinátája"
 
 #. Name
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:137
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:85
 msgid "Fill by"
 msgstr "Kitöltés"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:159
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:106
 msgid "Fill Threshold"
 msgstr "Kitöltési küszöb"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:160
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:107
 msgid ""
 "The maximum allowed difference between the clicked pixel and the neighboring "
 "pixels to be counted in the fill"
@@ -26783,15 +26786,15 @@ msgstr ""
 "A kitöltésbe való bekerüléshez megengedett maximális eltérés az egérmutató "
 "alatti képpont és a szomszédos képpontok közt"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:188
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:138
 msgid "Grow/shrink by"
 msgstr "Növelés/csökkentés:"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:188
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:138
 msgid "Grow/shrink by:"
 msgstr "Növelés/csökkentés:"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:189
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:139
 msgid ""
 "The amount to grow (positive) or shrink (negative) the created fill path"
 msgstr ""
@@ -26799,18 +26802,18 @@ msgstr ""
 "kell a létrehozott kitöltési útvonalat"
 
 #. Name
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:215
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:171
 msgid "Close gaps"
 msgstr "Lezárandó rések"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:236
-#: ../src/ui/toolbar/pencil-toolbar.cpp:580
-#: ../src/ui/toolbar/spiral-toolbar.cpp:290
-#: ../src/ui/toolbar/star-toolbar.cpp:588
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:191
+#: ../src/ui/toolbar/pencil-toolbar.cpp:199
+#: ../src/ui/toolbar/spiral-toolbar.cpp:158
+#: ../src/ui/toolbar/star-toolbar.cpp:229
 msgid "Defaults"
 msgstr "Alapértelmezések"
 
-#: ../src/ui/toolbar/paintbucket-toolbar.cpp:237
+#: ../src/ui/toolbar/paintbucket-toolbar.cpp:192
 msgid ""
 "Reset paint bucket parameters to defaults (use Inkscape Preferences > Tools "
 "to change defaults)"
@@ -26819,133 +26822,56 @@ msgstr ""
 "(az alapértelmezések módosítása az Inkscape-beállítások > Eszközök "
 "funkcióval lehetséges)"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:133
-msgid "Bezier"
-msgstr "Bézier"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:134
-msgid "Create regular Bezier path"
-msgstr "Normál Bézier-útvonal létrehozása"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:140
-msgid "Create Spiro path"
-msgstr "Spiro-útvonal létrehozása"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:146
-msgid "Create BSpline path"
-msgstr "B-spline útvonal létrehozása"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:152
-msgid "Zigzag"
-msgstr "Cikcakk"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:153
-msgid "Create a sequence of straight line segments"
-msgstr "Egyenes vonalszakaszok sorozatának létrehozása"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:158
-msgid "Paraxial"
-msgstr "Tengelymenti"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:159
-msgid "Create a sequence of paraxial line segments"
-msgstr "Tengelymenti vonalszakaszok sorozatának létrehozása"
-
-#. Label
-#: ../src/ui/toolbar/pencil-toolbar.cpp:169
-msgid "Mode of new lines drawn by this tool"
-msgstr "Az ezen eszközzel rajzolt új vonalak módja"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:184
-#: ../src/ui/toolbar/pencil-toolbar.cpp:185
-msgid "LPE spiro or bspline flatten"
-msgstr "Élő útvonaleffektus spiro vagy B-spline lapítás"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:222
-msgctxt "Freehand shape"
-msgid "None"
-msgstr "Nincs"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:223
-msgid "Triangle in"
-msgstr "Háromszög, befelé"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:224
-msgid "Triangle out"
-msgstr "Háromszög, kifelé"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:226
-msgid "From clipboard"
-msgstr "A vágólapról"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:227
-msgid "Bend from clipboard"
-msgstr "Hajlítás a vágólapról"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:228
-msgid "Last applied"
-msgstr "Legutóbb alkalmazott"
-
-#. Name
-#: ../src/ui/toolbar/pencil-toolbar.cpp:250
-msgid "Shape"
-msgstr "Alakzat"
-
-#. Label
-#: ../src/ui/toolbar/pencil-toolbar.cpp:251
-msgid "Shape of new paths drawn by this tool"
-msgstr "Az ezen eszközzel rajzolt új útvonalak alakja"
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:503
+#: ../src/ui/toolbar/pencil-toolbar.cpp:110
 msgid "Min pressure"
 msgstr "Minimális nyomás"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:503
+#: ../src/ui/toolbar/pencil-toolbar.cpp:110
 msgid "Min:"
 msgstr "Min.:"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:503
+#: ../src/ui/toolbar/pencil-toolbar.cpp:110
 msgid "Min percent of pressure"
 msgstr "Nyomás minimális százaléka"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:521
+#: ../src/ui/toolbar/pencil-toolbar.cpp:132
 msgid "Max pressure"
 msgstr "Maximális nyomás"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:521
+#: ../src/ui/toolbar/pencil-toolbar.cpp:132
 msgid "Max:"
 msgstr "Max.:"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:521
+#: ../src/ui/toolbar/pencil-toolbar.cpp:132
 msgid "Max percent of pressure"
 msgstr "Nyomás maximális százaléka"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:538
-#: ../src/ui/toolbar/pencil-toolbar.cpp:539
+#: ../src/ui/toolbar/pencil-toolbar.cpp:153
+#: ../src/ui/toolbar/pencil-toolbar.cpp:154
 msgid "Use pressure input"
 msgstr "Nyomásbevitel alkalmazása"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:556
+#: ../src/ui/toolbar/pencil-toolbar.cpp:171
 msgid "(many nodes, rough)"
 msgstr "(sok csomópont, durva)"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:556
+#: ../src/ui/toolbar/pencil-toolbar.cpp:171
 msgid "(few nodes, smooth)"
 msgstr "(néhány csomópont, simított)"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:559
+#: ../src/ui/toolbar/pencil-toolbar.cpp:174
 msgid "Smoothing:"
 msgstr "Simítás:"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:559
+#: ../src/ui/toolbar/pencil-toolbar.cpp:174
 msgid "Smoothing: "
 msgstr "Simítás: "
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:560
+#: ../src/ui/toolbar/pencil-toolbar.cpp:175
 msgid "How much smoothing (simplifying) is applied to the line"
 msgstr "Mekkora simítás (egyszerűsítés) van alkalmazva a vonalra"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:581
+#: ../src/ui/toolbar/pencil-toolbar.cpp:200
 msgid ""
 "Reset pencil parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -26954,74 +26880,147 @@ msgstr ""
 "alapértelmezések módosítása az Inkscape-beállítások > Eszközök funkcióval "
 "lehetséges)"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:590
-#: ../src/ui/toolbar/pencil-toolbar.cpp:591
+#: ../src/ui/toolbar/pencil-toolbar.cpp:209
+#: ../src/ui/toolbar/pencil-toolbar.cpp:210
 msgid "LPE based interactive simplify"
 msgstr "Élő útvonaleffektus-alapú interaktív egyszerűsítés"
 
-#: ../src/ui/toolbar/pencil-toolbar.cpp:608
-#: ../src/ui/toolbar/pencil-toolbar.cpp:609
+#: ../src/ui/toolbar/pencil-toolbar.cpp:226
+#: ../src/ui/toolbar/pencil-toolbar.cpp:227
 msgid "LPE simplify flatten"
 msgstr "Élő útvonaleffektus-alapú egyszerűsítő lapítás"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:124
-msgid "Change rectangle"
-msgstr "Téglalap módosítása"
+#: ../src/ui/toolbar/pencil-toolbar.cpp:303
+msgid "Bezier"
+msgstr "Bézier"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:322
+#: ../src/ui/toolbar/pencil-toolbar.cpp:304
+msgid "Create regular Bezier path"
+msgstr "Normál Bézier-útvonal létrehozása"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:310
+msgid "Create Spiro path"
+msgstr "Spiro-útvonal létrehozása"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:316
+msgid "Create BSpline path"
+msgstr "B-spline útvonal létrehozása"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:322
+msgid "Zigzag"
+msgstr "Cikcakk"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:323
+msgid "Create a sequence of straight line segments"
+msgstr "Egyenes vonalszakaszok sorozatának létrehozása"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:328
+msgid "Paraxial"
+msgstr "Tengelymenti"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:329
+msgid "Create a sequence of paraxial line segments"
+msgstr "Tengelymenti vonalszakaszok sorozatának létrehozása"
+
+#. Label
+#: ../src/ui/toolbar/pencil-toolbar.cpp:339
+msgid "Mode of new lines drawn by this tool"
+msgstr "Az ezen eszközzel rajzolt új vonalak módja"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:354
+#: ../src/ui/toolbar/pencil-toolbar.cpp:355
+msgid "LPE spiro or bspline flatten"
+msgstr "Élő útvonaleffektus spiro vagy B-spline lapítás"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:418
+msgctxt "Freehand shape"
+msgid "None"
+msgstr "Nincs"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:419
+msgid "Triangle in"
+msgstr "Háromszög, befelé"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:420
+msgid "Triangle out"
+msgstr "Háromszög, kifelé"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:422
+msgid "From clipboard"
+msgstr "A vágólapról"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:423
+msgid "Bend from clipboard"
+msgstr "Hajlítás a vágólapról"
+
+#: ../src/ui/toolbar/pencil-toolbar.cpp:424
+msgid "Last applied"
+msgstr "Legutóbb alkalmazott"
+
+#. Name
+#: ../src/ui/toolbar/pencil-toolbar.cpp:446
+msgid "Shape"
+msgstr "Alakzat"
+
+#. Label
+#: ../src/ui/toolbar/pencil-toolbar.cpp:447
+msgid "Shape of new paths drawn by this tool"
+msgstr "Az ezen eszközzel rajzolt új útvonalak alakja"
+
+#: ../src/ui/toolbar/rect-toolbar.cpp:116
 msgid "W:"
 msgstr "Sz:"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:322
+#: ../src/ui/toolbar/rect-toolbar.cpp:116
 msgid "Width of rectangle"
 msgstr "A téglalap szélessége"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:338
+#: ../src/ui/toolbar/rect-toolbar.cpp:140
 msgid "H:"
 msgstr "M:"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:338
+#: ../src/ui/toolbar/rect-toolbar.cpp:140
 msgid "Height of rectangle"
 msgstr "A téglalap magassága"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:351
-#: ../src/ui/toolbar/rect-toolbar.cpp:365
+#: ../src/ui/toolbar/rect-toolbar.cpp:160
+#: ../src/ui/toolbar/rect-toolbar.cpp:182
 msgid "not rounded"
 msgstr "nem lekerekített"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:354
+#: ../src/ui/toolbar/rect-toolbar.cpp:163
 msgid "Horizontal radius of rounded corners"
 msgstr "A lekerekített csúcsok vízszintes sugara"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:368
+#: ../src/ui/toolbar/rect-toolbar.cpp:185
 msgid "Vertical radius of rounded corners"
 msgstr "A lekerekített csúcsok függőleges sugara"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:386
+#: ../src/ui/toolbar/rect-toolbar.cpp:211
 msgid "Not rounded"
 msgstr "Nem lekerekített"
 
-#: ../src/ui/toolbar/rect-toolbar.cpp:387
+#: ../src/ui/toolbar/rect-toolbar.cpp:212
 msgid "Make corners sharp"
 msgstr "A csúcsok szögletessé tétele"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:261
-msgid "Transform by toolbar"
-msgstr "Transzformáció az eszköztárral"
+#: ../src/ui/toolbar/rect-toolbar.cpp:267
+msgid "Change rectangle"
+msgstr "Téglalap módosítása"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:279
+#: ../src/ui/toolbar/select-toolbar.cpp:66
 msgid "Now <b>stroke width</b> is <b>scaled</b> when objects are scaled."
 msgstr ""
 "A <b>körvonalszélesség</b> a továbbiakban <b>átméreteződik</b> az objektumok "
 "átméretezésekor."
 
-#: ../src/ui/toolbar/select-toolbar.cpp:281
+#: ../src/ui/toolbar/select-toolbar.cpp:68
 msgid "Now <b>stroke width</b> is <b>not scaled</b> when objects are scaled."
 msgstr ""
 "A <b>körvonalszélesség</b> a továbbiakban <b>nem méreteződik át</b> az "
 "objektumok átméretezésekor."
 
-#: ../src/ui/toolbar/select-toolbar.cpp:292
+#: ../src/ui/toolbar/select-toolbar.cpp:79
 msgid ""
 "Now <b>rounded rectangle corners</b> are <b>scaled</b> when rectangles are "
 "scaled."
@@ -27029,7 +27028,7 @@ msgstr ""
 "A <b>lekerekített téglalap-csúcsok</b> a továbbiakban <b>átméreteződnek</b> "
 "a téglalapok átméretezésekor."
 
-#: ../src/ui/toolbar/select-toolbar.cpp:294
+#: ../src/ui/toolbar/select-toolbar.cpp:81
 msgid ""
 "Now <b>rounded rectangle corners</b> are <b>not scaled</b> when rectangles "
 "are scaled."
@@ -27037,7 +27036,7 @@ msgstr ""
 "A <b>lekerekített téglalap-csúcsok</b> a továbbiakban <b>nem méreteződnek "
 "át</b> a téglalapok átméretezésekor."
 
-#: ../src/ui/toolbar/select-toolbar.cpp:305
+#: ../src/ui/toolbar/select-toolbar.cpp:92
 msgid ""
 "Now <b>gradients</b> are <b>transformed</b> along with their objects when "
 "those are transformed (moved, scaled, rotated, or skewed)."
@@ -27046,7 +27045,7 @@ msgstr ""
 "(áthelyezés, méretezés, forgatás, nyírás) <b>transzformálásra kerülnek</b> "
 "az objektumaikkal együtt."
 
-#: ../src/ui/toolbar/select-toolbar.cpp:307
+#: ../src/ui/toolbar/select-toolbar.cpp:94
 msgid ""
 "Now <b>gradients</b> remain <b>fixed</b> when objects are transformed "
 "(moved, scaled, rotated, or skewed)."
@@ -27054,7 +27053,7 @@ msgstr ""
 "A <b>színátmenetek</b> a továbbiakban az objektumok transzformációjakor "
 "(áthelyezés, méretezés, forgatás, nyírás) <b>rögzítve</b> maradnak."
 
-#: ../src/ui/toolbar/select-toolbar.cpp:318
+#: ../src/ui/toolbar/select-toolbar.cpp:105
 msgid ""
 "Now <b>patterns</b> are <b>transformed</b> along with their objects when "
 "those are transformed (moved, scaled, rotated, or skewed)."
@@ -27063,7 +27062,7 @@ msgstr ""
 "(áthelyezés, méretezés, forgatás, nyírás) <b>transzformálásra kerülnek</b> "
 "az objektumaikkal együtt."
 
-#: ../src/ui/toolbar/select-toolbar.cpp:320
+#: ../src/ui/toolbar/select-toolbar.cpp:107
 msgid ""
 "Now <b>patterns</b> remain <b>fixed</b> when objects are transformed (moved, "
 "scaled, rotated, or skewed)."
@@ -27072,186 +27071,186 @@ msgstr ""
 "(áthelyezés, méretezés, forgatás, nyírás) <b>rögzítve</b> maradnak."
 
 #. name
-#: ../src/ui/toolbar/select-toolbar.cpp:434
+#: ../src/ui/toolbar/select-toolbar.cpp:220
 msgctxt "Select toolbar"
 msgid "X position"
 msgstr "X-pozíció"
 
 #. label
-#: ../src/ui/toolbar/select-toolbar.cpp:435
+#: ../src/ui/toolbar/select-toolbar.cpp:221
 msgctxt "Select toolbar"
 msgid "X:"
 msgstr "X:"
 
 #. shortLabel
-#: ../src/ui/toolbar/select-toolbar.cpp:436
+#: ../src/ui/toolbar/select-toolbar.cpp:222
 msgctxt "Select toolbar"
 msgid "Horizontal coordinate of selection"
 msgstr "A kijelölés vízszintes koordinátája"
 
 #. name
-#: ../src/ui/toolbar/select-toolbar.cpp:453
+#: ../src/ui/toolbar/select-toolbar.cpp:241
 msgctxt "Select toolbar"
 msgid "Y position"
 msgstr "Y-pozíció"
 
 #. label
-#: ../src/ui/toolbar/select-toolbar.cpp:454
+#: ../src/ui/toolbar/select-toolbar.cpp:242
 msgctxt "Select toolbar"
 msgid "Y:"
 msgstr "Y:"
 
 #. shortLabel
-#: ../src/ui/toolbar/select-toolbar.cpp:455
+#: ../src/ui/toolbar/select-toolbar.cpp:243
 msgctxt "Select toolbar"
 msgid "Vertical coordinate of selection"
 msgstr "A kijelölés függőleges koordinátája"
 
 #. name
-#: ../src/ui/toolbar/select-toolbar.cpp:472
+#: ../src/ui/toolbar/select-toolbar.cpp:262
 msgctxt "Select toolbar"
 msgid "Width"
 msgstr "Szélesség"
 
 #. label
-#: ../src/ui/toolbar/select-toolbar.cpp:473
+#: ../src/ui/toolbar/select-toolbar.cpp:263
 msgctxt "Select toolbar"
 msgid "W:"
 msgstr "Sz:"
 
 #. shortLabel
-#: ../src/ui/toolbar/select-toolbar.cpp:474
+#: ../src/ui/toolbar/select-toolbar.cpp:264
 msgctxt "Select toolbar"
 msgid "Width of selection"
 msgstr "A kijelölés szélessége"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:492
+#: ../src/ui/toolbar/select-toolbar.cpp:284
 msgid "Lock width and height"
 msgstr "Szélesség és magasság zárolása"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:493
+#: ../src/ui/toolbar/select-toolbar.cpp:285
 msgid "When locked, change both width and height by the same proportion"
 msgstr ""
 "Zárolt állapot esetén: a szélesség és a magasság azonos arányban való "
 "módosítása"
 
 #. name
-#: ../src/ui/toolbar/select-toolbar.cpp:504
+#: ../src/ui/toolbar/select-toolbar.cpp:295
 msgctxt "Select toolbar"
 msgid "Height"
 msgstr "Magasság"
 
 #. label
-#: ../src/ui/toolbar/select-toolbar.cpp:505
+#: ../src/ui/toolbar/select-toolbar.cpp:296
 msgctxt "Select toolbar"
 msgid "H:"
 msgstr "M:"
 
 #. shortLabel
-#: ../src/ui/toolbar/select-toolbar.cpp:506
+#: ../src/ui/toolbar/select-toolbar.cpp:297
 msgctxt "Select toolbar"
 msgid "Height of selection"
 msgstr "A kijelölés magassága"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:569
+#: ../src/ui/toolbar/select-toolbar.cpp:354
 msgid "Scale rounded corners"
 msgstr "Lekerekített csúcsok átméretezése"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:580
+#: ../src/ui/toolbar/select-toolbar.cpp:365
 msgid "Move gradients"
 msgstr "Színátmenetek áthelyezése"
 
-#: ../src/ui/toolbar/select-toolbar.cpp:591
+#: ../src/ui/toolbar/select-toolbar.cpp:376
 msgid "Move patterns"
 msgstr "Minták áthelyezése"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:97
-msgid "Change spiral"
-msgstr "Spirál módosítása"
+#: ../src/ui/toolbar/select-toolbar.cpp:505
+msgid "Transform by toolbar"
+msgstr "Transzformáció az eszköztárral"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:247
+#: ../src/ui/toolbar/spiral-toolbar.cpp:97
 msgid "just a curve"
 msgstr "csak ív"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:247
+#: ../src/ui/toolbar/spiral-toolbar.cpp:97
 msgid "one full revolution"
 msgstr "egy teljes körbefordulás"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:250
+#: ../src/ui/toolbar/spiral-toolbar.cpp:100
 msgid "Number of turns"
 msgstr "A fordulatok száma"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:250
+#: ../src/ui/toolbar/spiral-toolbar.cpp:100
 msgid "Turns:"
 msgstr "Fordulatok:"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:250
+#: ../src/ui/toolbar/spiral-toolbar.cpp:100
 msgid "Number of revolutions"
 msgstr "A körbefordulások száma"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "circle"
 msgstr "kör"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "edge is much denser"
 msgstr "az objektum széle sokkal sűrűbb"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "edge is denser"
 msgstr "az objektum széle sűrűbb"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "even"
 msgstr "egyenletes"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "center is denser"
 msgstr "a középpont sűrűbb"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:261
+#: ../src/ui/toolbar/spiral-toolbar.cpp:117
 msgid "center is much denser"
 msgstr "a középpont sokkal sűrűbb"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:264
+#: ../src/ui/toolbar/spiral-toolbar.cpp:120
 msgid "Divergence"
 msgstr "Tágulás"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:264
+#: ../src/ui/toolbar/spiral-toolbar.cpp:120
 msgid "Divergence:"
 msgstr "Tágulás:"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:264
+#: ../src/ui/toolbar/spiral-toolbar.cpp:120
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
 msgstr ""
 "Mennyivel sűrűbbek illetve ritkábbak a külső fordulatok; 1 = egyenletes"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:275
+#: ../src/ui/toolbar/spiral-toolbar.cpp:137
 msgid "starts from center"
 msgstr "a középpontból indul"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:275
+#: ../src/ui/toolbar/spiral-toolbar.cpp:137
 msgid "starts mid-way"
 msgstr "félútról indul"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:275
+#: ../src/ui/toolbar/spiral-toolbar.cpp:137
 msgid "starts near edge"
 msgstr "az objektum szélének közeléből indul"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:278
+#: ../src/ui/toolbar/spiral-toolbar.cpp:140
 msgid "Inner radius"
 msgstr "Belső sugár"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:278
+#: ../src/ui/toolbar/spiral-toolbar.cpp:140
 msgid "Inner radius:"
 msgstr "Belső sugár:"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:278
+#: ../src/ui/toolbar/spiral-toolbar.cpp:140
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr "A legbelső fordulat sugara (a spirál méretéhez viszonyítva)"
 
-#: ../src/ui/toolbar/spiral-toolbar.cpp:291
-#: ../src/ui/toolbar/star-toolbar.cpp:589
+#: ../src/ui/toolbar/spiral-toolbar.cpp:159
+#: ../src/ui/toolbar/star-toolbar.cpp:230
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -27260,134 +27259,138 @@ msgstr ""
 "alapértelmezések módosítása az Inkscape-beállítások > Eszközök funkcióval "
 "lehetséges)"
 
+#: ../src/ui/toolbar/spiral-toolbar.cpp:210
+msgid "Change spiral"
+msgstr "Spirál módosítása"
+
 #. Width
-#: ../src/ui/toolbar/spray-toolbar.cpp:290
+#: ../src/ui/toolbar/spray-toolbar.cpp:90
 msgid "(narrow spray)"
 msgstr "(keskeny festékszóró)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:290
+#: ../src/ui/toolbar/spray-toolbar.cpp:90
 msgid "(broad spray)"
 msgstr "(széles festékszóró)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:293
+#: ../src/ui/toolbar/spray-toolbar.cpp:93
 msgid "The width of the spray area (relative to the visible canvas area)"
 msgstr ""
 "A felfestési terület szélessége (a látható rajzvászon-területhez viszonyítva)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:308
+#: ../src/ui/toolbar/spray-toolbar.cpp:113
 msgid "Use the pressure of the input device to alter the width of spray area"
 msgstr ""
 "A beviteli eszköz nyomásának használata a permetezési terület szélességének "
 "változtatásához"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:319
+#: ../src/ui/toolbar/spray-toolbar.cpp:122
 msgid "(maximum mean)"
 msgstr "(maximális középérték)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:322
+#: ../src/ui/toolbar/spray-toolbar.cpp:125
 msgid "Focus"
 msgstr "Fókusz"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:322
+#: ../src/ui/toolbar/spray-toolbar.cpp:125
 msgid "Focus:"
 msgstr "Fókusz:"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:322
+#: ../src/ui/toolbar/spray-toolbar.cpp:125
 msgid "0 to spray a spot; increase to enlarge the ring radius"
 msgstr "0: folt permetezése; növelés esetén nagyobb lesz a gyűrű sugara"
 
 #. Standard_deviation
-#: ../src/ui/toolbar/spray-toolbar.cpp:335
+#: ../src/ui/toolbar/spray-toolbar.cpp:143
 msgid "(minimum scatter)"
 msgstr "(minimális szétszórás)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:335
+#: ../src/ui/toolbar/spray-toolbar.cpp:143
 msgid "(maximum scatter)"
 msgstr "(maximális szétszórás)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:146
 msgctxt "Spray tool"
 msgid "Scatter"
 msgstr "Szétszórás"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:146
 msgctxt "Spray tool"
 msgid "Scatter:"
 msgstr "Szétszórás:"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:146
 msgid "Increase to scatter sprayed objects"
 msgstr "A permetezett objektumok szétszórásának növelése"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:358 ../src/ui/tools/spray-tool.cpp:1353
+#: ../src/ui/toolbar/spray-toolbar.cpp:171 ../src/ui/tools/spray-tool.cpp:1353
 msgid "Spray with copies"
 msgstr "Másolatok felfestése"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:359
+#: ../src/ui/toolbar/spray-toolbar.cpp:172
 msgid "Spray copies of the initial selection"
 msgstr "A kezdeti kijelölés másolatainak felfestése"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:364 ../src/ui/tools/spray-tool.cpp:1357
+#: ../src/ui/toolbar/spray-toolbar.cpp:177 ../src/ui/tools/spray-tool.cpp:1357
 msgid "Spray with clones"
 msgstr "Klónok felfestése"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:365
+#: ../src/ui/toolbar/spray-toolbar.cpp:178
 msgid "Spray clones of the initial selection"
 msgstr "A kezdeti kijelölés klónjainak felfestése"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:371
+#: ../src/ui/toolbar/spray-toolbar.cpp:184
 msgid "Spray single path"
 msgstr "Egyetlen útvonal felfestése"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:372
+#: ../src/ui/toolbar/spray-toolbar.cpp:185
 msgid "Spray objects in a single path"
 msgstr "Objektumok felfestése egyetlen útvonalban"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:378
+#: ../src/ui/toolbar/spray-toolbar.cpp:191
 msgid "Delete sprayed items"
 msgstr "Permetezett elemek törlése"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:379
+#: ../src/ui/toolbar/spray-toolbar.cpp:192
 msgid "Delete sprayed items from selection"
 msgstr "Permetezett elemek törlése a kijelölésből"
 
 #. Population
-#: ../src/ui/toolbar/spray-toolbar.cpp:402
+#: ../src/ui/toolbar/spray-toolbar.cpp:212
 msgid "(low population)"
 msgstr "(kicsi elemszám)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:402
+#: ../src/ui/toolbar/spray-toolbar.cpp:212
 msgid "(high population)"
 msgstr "(nagy elemszám)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:405
+#: ../src/ui/toolbar/spray-toolbar.cpp:215
 msgid "Amount"
 msgstr "Mennyiség"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:406
+#: ../src/ui/toolbar/spray-toolbar.cpp:216
 msgid "Adjusts the number of items sprayed per click"
 msgstr "A kattintásonként permetezett elemek számának beállítása"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:422
+#: ../src/ui/toolbar/spray-toolbar.cpp:236
 msgid ""
 "Use the pressure of the input device to alter the amount of sprayed objects"
 msgstr ""
 "A beviteli eszköz nyomásának használata a permetezett objektumok számának "
 "változtatásához"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:432
+#: ../src/ui/toolbar/spray-toolbar.cpp:244
 msgid "(high rotation variation)"
 msgstr "(magas elforgatási ingadozás)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:435
+#: ../src/ui/toolbar/spray-toolbar.cpp:247
 msgid "Rotation"
 msgstr "Elforgatás"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:435
+#: ../src/ui/toolbar/spray-toolbar.cpp:247
 msgid "Rotation:"
 msgstr "Elforgatás:"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:437
+#: ../src/ui/toolbar/spray-toolbar.cpp:249
 #, no-c-format
 msgid ""
 "Variation of the rotation of the sprayed objects; 0% for the same rotation "
@@ -27396,21 +27399,21 @@ msgstr ""
 "A permetezett objektumok elforgatásbeli ingadozása; a 0% az eredeti "
 "objektuméval megegyező elforgatást jelent"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:450
+#: ../src/ui/toolbar/spray-toolbar.cpp:266
 msgid "(high scale variation)"
 msgstr "(magas méretbeli ingadozás)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:453
+#: ../src/ui/toolbar/spray-toolbar.cpp:269
 msgctxt "Spray tool"
 msgid "Scale"
 msgstr "Méretezés"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:453
+#: ../src/ui/toolbar/spray-toolbar.cpp:269
 msgctxt "Spray tool"
 msgid "Scale:"
 msgstr "Méretezés:"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:455
+#: ../src/ui/toolbar/spray-toolbar.cpp:271
 #, no-c-format
 msgid ""
 "Variation in the scale of the sprayed objects; 0% for the same scale than "
@@ -27419,14 +27422,14 @@ msgstr ""
 "A permetezett objektumok méretezési ingadozása; a 0% az eredeti objektuméval "
 "megegyező méretet jelent"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:471
+#: ../src/ui/toolbar/spray-toolbar.cpp:291
 msgid "Use the pressure of the input device to alter the scale of new items"
 msgstr ""
 "A beviteli eszköz nyomásának használata az új elemek méretezésének "
 "változtatásához"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:483
-#: ../src/ui/toolbar/spray-toolbar.cpp:484
+#: ../src/ui/toolbar/spray-toolbar.cpp:302
+#: ../src/ui/toolbar/spray-toolbar.cpp:303
 msgid ""
 "Pick color from the drawing. You can use clonetiler trace dialog for "
 "advanced effects. In clone mode original fill or stroke colors must be unset."
@@ -27435,550 +27438,482 @@ msgstr ""
 "párbeszédlak használható. A klónozási mód alkalmazásakor az eredeti kitöltés "
 "és körvonal színe beállítatlan kell maradjon."
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:496
-#: ../src/ui/toolbar/spray-toolbar.cpp:497
+#: ../src/ui/toolbar/spray-toolbar.cpp:314
+#: ../src/ui/toolbar/spray-toolbar.cpp:315
 msgid "Pick from center instead average area."
 msgstr "Leolvasás középről az átlagolt terület helyett."
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:509
-#: ../src/ui/toolbar/spray-toolbar.cpp:510
+#: ../src/ui/toolbar/spray-toolbar.cpp:326
+#: ../src/ui/toolbar/spray-toolbar.cpp:327
 msgid "Inverted pick value, retaining color in advanced trace mode"
 msgstr ""
 "Leolvasott szín invertálása, megőrizve a színt a speciális vektorizáló módban"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:522
-#: ../src/ui/toolbar/spray-toolbar.cpp:523
+#: ../src/ui/toolbar/spray-toolbar.cpp:338
+#: ../src/ui/toolbar/spray-toolbar.cpp:339
 msgid "Apply picked color to fill"
 msgstr "Leolvasott szín alkalmazása a kitöltésre"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:535
-#: ../src/ui/toolbar/spray-toolbar.cpp:536
+#: ../src/ui/toolbar/spray-toolbar.cpp:350
+#: ../src/ui/toolbar/spray-toolbar.cpp:351
 msgid "Apply picked color to stroke"
 msgstr "Leolvasott szín alkalmazása a körvonalra"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:548
-#: ../src/ui/toolbar/spray-toolbar.cpp:549
+#: ../src/ui/toolbar/spray-toolbar.cpp:362
+#: ../src/ui/toolbar/spray-toolbar.cpp:363
 msgid "No overlap between colors"
 msgstr "Színek átfedése nélkül"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:561
-#: ../src/ui/toolbar/spray-toolbar.cpp:562
+#: ../src/ui/toolbar/spray-toolbar.cpp:374
+#: ../src/ui/toolbar/spray-toolbar.cpp:375
 msgid "Apply over transparent areas"
 msgstr "Alkalmazás átlátszó területek felett"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:574
-#: ../src/ui/toolbar/spray-toolbar.cpp:575
+#: ../src/ui/toolbar/spray-toolbar.cpp:386
+#: ../src/ui/toolbar/spray-toolbar.cpp:387
 msgid "Apply over no transparent areas"
 msgstr "Alkalmazás nem átlátszó területek felett"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:587
-#: ../src/ui/toolbar/spray-toolbar.cpp:588
+#: ../src/ui/toolbar/spray-toolbar.cpp:398
+#: ../src/ui/toolbar/spray-toolbar.cpp:399
 msgid "Prevent overlapping objects"
 msgstr "Objektumok átfedésének megakadályozása"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:599
+#: ../src/ui/toolbar/spray-toolbar.cpp:409
 msgid "(minimum offset)"
 msgstr "(minimális eltolás)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:599
+#: ../src/ui/toolbar/spray-toolbar.cpp:409
 msgid "(maximum offset)"
 msgstr "(maximális eltolás)"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:602
+#: ../src/ui/toolbar/spray-toolbar.cpp:412
 msgid "Offset %"
 msgstr "Eltolás %"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:602
+#: ../src/ui/toolbar/spray-toolbar.cpp:412
 msgid "Offset %:"
 msgstr "Eltolás %:"
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:603
+#: ../src/ui/toolbar/spray-toolbar.cpp:413
 msgid "Increase to segregate objects more (value in percent)"
 msgstr "Az objektumok elkülönülésének növelése (százalékos érték)"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:101
-msgid "Star: Change number of corners"
-msgstr "Csillag: csúcsok számának módosítása"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:154
-msgid "Star: Change spoke ratio"
-msgstr "Csillag: ágarány módosítása"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:200
-msgid "Make polygon"
-msgstr "Sokszöggé tevés"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:200
-msgid "Make star"
-msgstr "Csillaggá tevés"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:239
-msgid "Star: Change rounding"
-msgstr "Csillag: lekerekítettség módosítása"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:279
-msgid "Star: Change randomization"
-msgstr "Csillag: véletlenszerűség módosítása"
-
-#: ../src/ui/toolbar/star-toolbar.cpp:488
+#: ../src/ui/toolbar/star-toolbar.cpp:110
 msgid "Regular polygon (with one handle) instead of a star"
 msgstr "Csillag helyett (1 vezérlőelemmel rendelkező) szabályos sokszög"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:494
+#: ../src/ui/toolbar/star-toolbar.cpp:116
 msgid "Star instead of a regular polygon (with one handle)"
 msgstr "Szabályos sokszög helyett (1 vezérlőelemmel rendelkező) csillag"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:516
+#: ../src/ui/toolbar/star-toolbar.cpp:137
 msgid "triangle/tri-star"
 msgstr "háromszög/háromágú csillag"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:516
+#: ../src/ui/toolbar/star-toolbar.cpp:137
 msgid "square/quad-star"
 msgstr "négyzet/négyágú csillag"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:516
+#: ../src/ui/toolbar/star-toolbar.cpp:137
 msgid "pentagon/five-pointed star"
 msgstr "ötszög/ötágú csillag"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:516
+#: ../src/ui/toolbar/star-toolbar.cpp:137
 msgid "hexagon/six-pointed star"
 msgstr "hatszög/hatágú csillag"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:519
+#: ../src/ui/toolbar/star-toolbar.cpp:140
 msgid "Corners"
 msgstr "Csúcsok"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:519
+#: ../src/ui/toolbar/star-toolbar.cpp:140
 msgid "Corners:"
 msgstr "Csúcsok:"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:519
+#: ../src/ui/toolbar/star-toolbar.cpp:140
 msgid "Number of corners of a polygon or star"
 msgstr "A sokszög illetve csillag csúcsainak száma"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "thin-ray star"
 msgstr "vékony ágú csillag"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "pentagram"
 msgstr "pentagram"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "hexagram"
 msgstr "hexagram"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "heptagram"
 msgstr "heptagram"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "octagram"
 msgstr "oktagram"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:532
+#: ../src/ui/toolbar/star-toolbar.cpp:159
 msgid "regular polygon"
 msgstr "szabályos sokszög"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:535
+#: ../src/ui/toolbar/star-toolbar.cpp:162
 msgid "Spoke ratio"
 msgstr "Ágarány"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:535
+#: ../src/ui/toolbar/star-toolbar.cpp:162
 msgid "Spoke ratio:"
 msgstr "Ágarány:"
 
 #. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
 #. Base radius is the same for the closest handle.
-#: ../src/ui/toolbar/star-toolbar.cpp:538
+#: ../src/ui/toolbar/star-toolbar.cpp:165
 msgid "Base radius to tip radius ratio"
 msgstr "Az alapponti és a csúcsponti sugár aránya"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
-#: ../src/ui/toolbar/star-toolbar.cpp:557
+#: ../src/ui/toolbar/star-toolbar.cpp:187
+#: ../src/ui/toolbar/star-toolbar.cpp:188
 msgid "stretched"
 msgstr "nyújtott"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
+#: ../src/ui/toolbar/star-toolbar.cpp:187
 msgid "twisted"
 msgstr "görbített"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
+#: ../src/ui/toolbar/star-toolbar.cpp:187
 msgid "slightly pinched"
 msgstr "enyhén hajlított"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
+#: ../src/ui/toolbar/star-toolbar.cpp:187
 msgid "NOT rounded"
 msgstr "NEM lekerekített"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:556
+#: ../src/ui/toolbar/star-toolbar.cpp:187
 msgid "slightly rounded"
 msgstr "enyhén lekerekített"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:557
+#: ../src/ui/toolbar/star-toolbar.cpp:188
 msgid "visibly rounded"
 msgstr "láthatóan lekerekített"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:557
+#: ../src/ui/toolbar/star-toolbar.cpp:188
 msgid "well rounded"
 msgstr "eléggé lekerekített"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:557
+#: ../src/ui/toolbar/star-toolbar.cpp:188
 msgid "amply rounded"
 msgstr "erősen lekerekített"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:557
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:188
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 msgid "blown up"
 msgstr "felfújt"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:560
+#: ../src/ui/toolbar/star-toolbar.cpp:191
 msgid "Rounded:"
 msgstr "Lekerekítettség:"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:560
+#: ../src/ui/toolbar/star-toolbar.cpp:191
 msgid "How much rounded are the corners (0 for sharp)"
 msgstr "Mennyire lekerekítettek a sarkok (0: hegyesek)"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 msgid "NOT randomized"
 msgstr "NEM véletlenszerűsített"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 msgid "slightly irregular"
 msgstr "kissé szabálytalan"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 msgid "visibly randomized"
 msgstr "láthatóan véletlenszerűsített"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:572
+#: ../src/ui/toolbar/star-toolbar.cpp:208
 msgid "strongly randomized"
 msgstr "erősen véletlenszerűsített"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:575
+#: ../src/ui/toolbar/star-toolbar.cpp:211
 msgid "Randomized"
 msgstr "Véletlenszerűsített"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:575
+#: ../src/ui/toolbar/star-toolbar.cpp:211
 msgid "Randomized:"
 msgstr "Véletlenszerűség:"
 
-#: ../src/ui/toolbar/star-toolbar.cpp:575
+#: ../src/ui/toolbar/star-toolbar.cpp:211
 msgid "Scatter randomly the corners and angles"
 msgstr "A csúcsok és a szögek véletlenszerű elrendezése"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:184
-msgid "Text: Change font family"
-msgstr "Szöveg: betűtípus-család módosítása"
+#: ../src/ui/toolbar/star-toolbar.cpp:281
+msgid "Make polygon"
+msgstr "Sokszöggé tevés"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:278
-msgid "Text: Change font size"
-msgstr "Szöveg: betűméret módosítása"
+#: ../src/ui/toolbar/star-toolbar.cpp:281
+msgid "Make star"
+msgstr "Csillaggá tevés"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:323
-msgid "Text: Change font style"
-msgstr "Szöveg: betűstílus módosítása"
+#: ../src/ui/toolbar/star-toolbar.cpp:326
+msgid "Star: Change number of corners"
+msgstr "Csillag: csúcsok számának módosítása"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:362
-msgid "Text: Unset line height."
-msgstr "Szöveg: sormagasság beállításának törlése."
+#: ../src/ui/toolbar/star-toolbar.cpp:378
+msgid "Star: Change spoke ratio"
+msgstr "Csillag: ágarány módosítása"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:439
-msgid "Text: Change superscript or subscript"
-msgstr "Szöveg: felső index vagy alsó index módosítása"
+#: ../src/ui/toolbar/star-toolbar.cpp:416
+msgid "Star: Change rounding"
+msgstr "Csillag: lekerekítettség módosítása"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:580
-msgid "Text: Change alignment"
-msgstr "Szöveg: igazítás módosítása"
+#: ../src/ui/toolbar/star-toolbar.cpp:455
+msgid "Star: Change randomization"
+msgstr "Csillag: véletlenszerűség módosítása"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:713
-msgid "Text: Change line-height"
-msgstr "Szöveg: sormagasság módosítása"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:877
-msgid "Text: Change line-height unit"
-msgstr "Szöveg: sormagasság mértékegységének módosítása"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1057
-msgid "Text: Change line spacing mode"
-msgstr "Szöveg: sortávolságmód módosítása"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1094
-msgid "Text: Change word-spacing"
-msgstr "Szöveg: szótávolság módosítása"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1134
-msgid "Text: Change letter-spacing"
-msgstr "Szöveg: betűtávolság módosítása"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1172
-msgid "Text: Change dx (kern)"
-msgstr "Szöveg: dx módosítása (alávágás)"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1206
-msgid "Text: Change dy"
-msgstr "Szöveg: dy módosítása"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1241
-msgid "Text: Change rotate"
-msgstr "Szöveg: elforgatás módosítása"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1292
-msgid "Text: Change writing mode"
-msgstr "Szöveg: írásmód módosítása"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1346
-msgid "Text: Change orientation"
-msgstr "Szöveg: tájolás módosítása"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1394
-msgid "Text: Change direction"
-msgstr "Szöveg Irány módosítása"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1583
-#: ../src/ui/toolbar/text-toolbar.cpp:2040
-#: ../src/ui/widget/font-selector.cpp:32 ../src/ui/widget/font-selector.cpp:137
-msgid "Font size"
-msgstr "Betűméret"
-
-#: ../src/ui/toolbar/text-toolbar.cpp:1992
+#: ../src/ui/toolbar/text-toolbar.cpp:295
 msgid "Font Family"
 msgstr "Betűtípus-család"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1993
+#: ../src/ui/toolbar/text-toolbar.cpp:296
 msgid "Select Font Family (Alt-X to access)"
 msgstr "Betűtípus-család kiválasztása (elérés: Alt+X)"
 
 #. Focus widget
 #. Enable entry completion
-#: ../src/ui/toolbar/text-toolbar.cpp:2003
+#: ../src/ui/toolbar/text-toolbar.cpp:306
 msgid "Select all text with this font-family"
 msgstr "Minden szöveg kijelölése ezzel a betűtípus-családdal"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2007
+#: ../src/ui/toolbar/text-toolbar.cpp:310
 msgid "Font not found on system"
 msgstr "Ilyen betűtípus nem található a rendszeren"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2065
+#: ../src/ui/toolbar/text-toolbar.cpp:342
+#: ../src/ui/toolbar/text-toolbar.cpp:2221
+#: ../src/ui/widget/font-selector.cpp:32 ../src/ui/widget/font-selector.cpp:137
+msgid "Font size"
+msgstr "Betűméret"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:366
 msgid "Font Style"
 msgstr "Betűstílus"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2066
+#: ../src/ui/toolbar/text-toolbar.cpp:367
 msgid "Font style"
 msgstr "Betűstílus"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2083
+#: ../src/ui/toolbar/text-toolbar.cpp:383
 msgid "Toggle Superscript"
 msgstr "Felső index átkapcsolása"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2084
+#: ../src/ui/toolbar/text-toolbar.cpp:384
 msgid "Toggle superscript"
 msgstr "Felső index átkapcsolása"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2096
+#: ../src/ui/toolbar/text-toolbar.cpp:395
 msgid "Toggle Subscript"
 msgstr "Alsó index átkapcsolása"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2097
+#: ../src/ui/toolbar/text-toolbar.cpp:396
 msgid "Toggle subscript"
 msgstr "Alsó index átkapcsolása"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2115
-#: ../src/ui/toolbar/text-toolbar.cpp:2116
+#: ../src/ui/toolbar/text-toolbar.cpp:413
+#: ../src/ui/toolbar/text-toolbar.cpp:414
 msgid "Align left"
 msgstr "Balra igazítás"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2121
-#: ../src/ui/toolbar/text-toolbar.cpp:2122
+#: ../src/ui/toolbar/text-toolbar.cpp:419
+#: ../src/ui/toolbar/text-toolbar.cpp:420
 msgid "Align center"
 msgstr "Középre igazítás"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2127
-#: ../src/ui/toolbar/text-toolbar.cpp:2128
+#: ../src/ui/toolbar/text-toolbar.cpp:425
+#: ../src/ui/toolbar/text-toolbar.cpp:426
 msgid "Align right"
 msgstr "Jobbra igazítás"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2133
+#: ../src/ui/toolbar/text-toolbar.cpp:431
 msgid "Justify"
 msgstr "Sorkizárás"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2134
+#: ../src/ui/toolbar/text-toolbar.cpp:432
 msgid "Justify (only flowed text)"
 msgstr "Sorkizárás (csak tördelt szövegre)"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2140
+#: ../src/ui/toolbar/text-toolbar.cpp:438
 msgid "Alignment"
 msgstr "Igazítás"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2141
+#: ../src/ui/toolbar/text-toolbar.cpp:439
 msgid "Text alignment"
 msgstr "Szövegigazítás"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2165
+#: ../src/ui/toolbar/text-toolbar.cpp:462
 msgid "Horizontal text"
 msgstr "Vízszintes szöveg"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2170
+#: ../src/ui/toolbar/text-toolbar.cpp:467
 msgid "Vertical — RL"
 msgstr "Függőleges ‒ JB"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2171
+#: ../src/ui/toolbar/text-toolbar.cpp:468
 msgid "Vertical text — lines: right to left"
 msgstr "Függőleges szöveg ‒ sorok: jobbról balra"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2176
+#: ../src/ui/toolbar/text-toolbar.cpp:473
 msgid "Vertical — LR"
 msgstr "Függőleges ‒ BJ"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2177
+#: ../src/ui/toolbar/text-toolbar.cpp:474
 msgid "Vertical text — lines: left to right"
 msgstr "Függőleges szöveg ‒ sorok: balról jobbra"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2183
+#: ../src/ui/toolbar/text-toolbar.cpp:480
 msgid "Writing mode"
 msgstr "Írásmód"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2184
+#: ../src/ui/toolbar/text-toolbar.cpp:481
 msgid "Block progression"
 msgstr "Szövegblokk-haladás"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2208
+#: ../src/ui/toolbar/text-toolbar.cpp:504
 msgid "Auto glyph orientation"
 msgstr "Automatikus betűkészletjel-tájolás"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2213
+#: ../src/ui/toolbar/text-toolbar.cpp:509
 msgid "Upright"
 msgstr "Függőleges"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2214
+#: ../src/ui/toolbar/text-toolbar.cpp:510
 msgid "Upright glyph orientation"
 msgstr "Függőleges betűkészletjel-tájolás"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2219
+#: ../src/ui/toolbar/text-toolbar.cpp:515
 msgid "Sideways"
 msgstr "Oldalirányú"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2220
+#: ../src/ui/toolbar/text-toolbar.cpp:516
 msgid "Sideways glyph orientation"
 msgstr "Oldalirányú betűkészletjel-tájolás"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2226
+#: ../src/ui/toolbar/text-toolbar.cpp:522
 msgid "Text orientation"
 msgstr "Szövegtájolás"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2227
+#: ../src/ui/toolbar/text-toolbar.cpp:523
 msgid "Text (glyph) orientation in vertical text."
 msgstr "Szöveg- (betűkészletjel) tájolás függőleges szövegben."
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2251
+#: ../src/ui/toolbar/text-toolbar.cpp:545
 msgid "LTR"
 msgstr "B‒J"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2252
+#: ../src/ui/toolbar/text-toolbar.cpp:546
 msgid "Left to right text"
 msgstr "Balról jobbra irányú szöveg"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2257
+#: ../src/ui/toolbar/text-toolbar.cpp:551
 msgid "RTL"
 msgstr "J‒B"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2258
+#: ../src/ui/toolbar/text-toolbar.cpp:552
 msgid "Right to left text"
 msgstr "Jobbról balra irányú szöveg"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2264
+#: ../src/ui/toolbar/text-toolbar.cpp:558
 msgid "Text direction"
 msgstr "Szövegirány"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2265
+#: ../src/ui/toolbar/text-toolbar.cpp:559
 msgid "Text direction for normally horizontal text."
 msgstr "A normál vízszintes szöveg iránya."
 
 #. Drop down menu
-#: ../src/ui/toolbar/text-toolbar.cpp:2291
+#: ../src/ui/toolbar/text-toolbar.cpp:575
 msgid "Smaller spacing"
 msgstr "Kisebb helykihagyás"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2291
-#: ../src/ui/toolbar/text-toolbar.cpp:2379
-#: ../src/ui/toolbar/text-toolbar.cpp:2410
+#: ../src/ui/toolbar/text-toolbar.cpp:575
+#: ../src/ui/toolbar/text-toolbar.cpp:666
+#: ../src/ui/toolbar/text-toolbar.cpp:699
 msgctxt "Text tool"
 msgid "Normal"
 msgstr "Normál"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2291
+#: ../src/ui/toolbar/text-toolbar.cpp:575
 msgid "Larger spacing"
 msgstr "Nagyobb helykihagyás"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2296
+#: ../src/ui/toolbar/text-toolbar.cpp:580
 msgid "Line Height"
 msgstr "Sormagasság"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2297
+#: ../src/ui/toolbar/text-toolbar.cpp:581
 msgid "Line:"
 msgstr "Sor:"
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2298
+#: ../src/ui/toolbar/text-toolbar.cpp:582
 msgid "Spacing between baselines"
 msgstr "Alapvonalak közötti távolság"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2337
+#: ../src/ui/toolbar/text-toolbar.cpp:625
 msgid "Adaptive"
 msgstr "Igazodó"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2338
+#: ../src/ui/toolbar/text-toolbar.cpp:626
 msgid "Line spacing adapts to font size."
 msgstr "Sortávolság igazodik a betűmérethez."
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2343
+#: ../src/ui/toolbar/text-toolbar.cpp:631
 #: ../share/extensions/polyhedron_3d.inx.h:54
 msgid "Minimum"
 msgstr "Minimum"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2344
+#: ../src/ui/toolbar/text-toolbar.cpp:632
 msgid "Line spacing adapts to fonts size with set minimum spacing."
 msgstr ""
 "A sortávolság igazodik a betűmérethez a minimális térköz beállításával."
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2348
+#: ../src/ui/toolbar/text-toolbar.cpp:636
 msgid "Even"
 msgstr "Egyenletes"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2349
+#: ../src/ui/toolbar/text-toolbar.cpp:637
 msgid "Lines evenly spaced."
 msgstr "Vonalak egyenletes elosztása."
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2354
+#: ../src/ui/toolbar/text-toolbar.cpp:642
 msgid "Adjustable ☠"
 msgstr "Állítható ☠"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2355
+#: ../src/ui/toolbar/text-toolbar.cpp:643
 msgid "Line spacing fully adjustable"
 msgstr "Sortávolság teljes mértékben állítható"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2361
+#: ../src/ui/toolbar/text-toolbar.cpp:649
 msgid "Line Spacing Mode"
 msgstr "Sortávolság módja"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2362
+#: ../src/ui/toolbar/text-toolbar.cpp:650
 msgid ""
 "How should multiple baselines be spaced?\n"
 " Adaptive: Line spacing adapts to font size.\n"
@@ -27993,109 +27928,109 @@ msgstr ""
 "Állítható: Nincsenek korlátozások."
 
 #. Drop down menu
-#: ../src/ui/toolbar/text-toolbar.cpp:2379
-#: ../src/ui/toolbar/text-toolbar.cpp:2410
+#: ../src/ui/toolbar/text-toolbar.cpp:666
+#: ../src/ui/toolbar/text-toolbar.cpp:699
 msgid "Negative spacing"
 msgstr "Negatív helykihagyás"
 
-#: ../src/ui/toolbar/text-toolbar.cpp:2379
-#: ../src/ui/toolbar/text-toolbar.cpp:2410
+#: ../src/ui/toolbar/text-toolbar.cpp:666
+#: ../src/ui/toolbar/text-toolbar.cpp:699
 msgid "Positive spacing"
 msgstr "Pozitív helykihagyás"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2384
+#: ../src/ui/toolbar/text-toolbar.cpp:671
 msgid "Word spacing"
 msgstr "Szótávolság"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2385
+#: ../src/ui/toolbar/text-toolbar.cpp:672
 msgid "Word:"
 msgstr "Szó:"
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2386
+#: ../src/ui/toolbar/text-toolbar.cpp:673
 msgid "Spacing between words (px)"
 msgstr "Helykihagyás a szavak között (px)"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2415
+#: ../src/ui/toolbar/text-toolbar.cpp:704
 msgid "Letter spacing"
 msgstr "Betűtávolság"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2416
+#: ../src/ui/toolbar/text-toolbar.cpp:705
 msgid "Letter:"
 msgstr "Betű:"
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2417
+#: ../src/ui/toolbar/text-toolbar.cpp:706
 msgid "Spacing between letters (px)"
 msgstr "Helykihagyás a betűk között (px)"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2446
+#: ../src/ui/toolbar/text-toolbar.cpp:736
 msgid "Kerning"
 msgstr "Alávágás"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2447
+#: ../src/ui/toolbar/text-toolbar.cpp:737
 msgid "Kern:"
 msgstr "Alávágás:"
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2448
+#: ../src/ui/toolbar/text-toolbar.cpp:738
 msgid "Horizontal kerning (px)"
 msgstr "Vízszintes alávágás (px)"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2477
+#: ../src/ui/toolbar/text-toolbar.cpp:768
 msgid "Vertical Shift"
 msgstr "Függőleges eltolás"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2478
+#: ../src/ui/toolbar/text-toolbar.cpp:769
 msgid "Vert:"
 msgstr "Függőleges:"
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2479
+#: ../src/ui/toolbar/text-toolbar.cpp:770
 msgid "Vertical shift (px)"
 msgstr "Függőleges eltolás (px)"
 
 #. name
-#: ../src/ui/toolbar/text-toolbar.cpp:2508
+#: ../src/ui/toolbar/text-toolbar.cpp:800
 msgid "Letter rotation"
 msgstr "Betűelforgatás"
 
 #. label
-#: ../src/ui/toolbar/text-toolbar.cpp:2509
+#: ../src/ui/toolbar/text-toolbar.cpp:801
 msgid "Rot:"
 msgstr "Elforgatás:"
 
 #. short label
-#: ../src/ui/toolbar/text-toolbar.cpp:2510
+#: ../src/ui/toolbar/text-toolbar.cpp:802
 msgid "Character rotation (degrees)"
 msgstr "Karakter-elforgatás (fok)"
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2534
+#: ../src/ui/toolbar/text-toolbar.cpp:827
 msgid "Unset line height"
 msgstr "Sotávolság beállításának törlése"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2535
+#: ../src/ui/toolbar/text-toolbar.cpp:828
 msgid "If enabled, line height is set on part of selection. Click to unset."
 msgstr ""
 "Bejelölve a sortávolság be lesz állítva a kijelölésen. Rákattintva törlődik."
 
 #. Name
-#: ../src/ui/toolbar/text-toolbar.cpp:2547
+#: ../src/ui/toolbar/text-toolbar.cpp:839
 msgid "Show outer style"
 msgstr "Külső stílus megjelenítése"
 
 #. Label
-#: ../src/ui/toolbar/text-toolbar.cpp:2548
+#: ../src/ui/toolbar/text-toolbar.cpp:840
 msgid ""
 "Show style of outermost text element. The 'font-size' and 'line-height' "
 "values of the outermost text element determine the minimum line spacing in "
@@ -28104,223 +28039,291 @@ msgstr ""
 "A legkülsőbb elem stílusának megjelenítése. A legkülsőbb elem „font-size” és "
 "„line-height” értéke határozza meg a szövegblokk minimális sortávolságát."
 
+#: ../src/ui/toolbar/text-toolbar.cpp:914
+msgid "Text: Change font family"
+msgstr "Szöveg: betűtípus-család módosítása"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1010
+msgid "Text: Change font size"
+msgstr "Szöveg: betűméret módosítása"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1055
+msgid "Text: Change font style"
+msgstr "Szöveg: betűstílus módosítása"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1139
+msgid "Text: Change superscript or subscript"
+msgstr "Szöveg: felső index vagy alsó index módosítása"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1281
+msgid "Text: Change alignment"
+msgstr "Szöveg: igazítás módosítása"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1336
+msgid "Text: Change writing mode"
+msgstr "Szöveg: írásmód módosítása"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1391
+msgid "Text: Change orientation"
+msgstr "Szöveg: tájolás módosítása"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1440
+msgid "Text: Change direction"
+msgstr "Szöveg Irány módosítása"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1509
+msgid "Text: Change line-height"
+msgstr "Szöveg: sormagasság módosítása"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1669
+msgid "Text: Change line-height unit"
+msgstr "Szöveg: sormagasság mértékegységének módosítása"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1841
+msgid "Text: Change line spacing mode"
+msgstr "Szöveg: sortávolságmód módosítása"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1879
+msgid "Text: Change word-spacing"
+msgstr "Szöveg: szótávolság módosítása"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1920
+msgid "Text: Change letter-spacing"
+msgstr "Szöveg: betűtávolság módosítása"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1958
+msgid "Text: Change dx (kern)"
+msgstr "Szöveg: dx módosítása (alávágás)"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:1993
+msgid "Text: Change dy"
+msgstr "Szöveg: dy módosítása"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:2029
+msgid "Text: Change rotate"
+msgstr "Szöveg: elforgatás módosítása"
+
+#: ../src/ui/toolbar/text-toolbar.cpp:2056
+msgid "Text: Unset line height."
+msgstr "Szöveg: sormagasság beállításának törlése."
+
 #. Width
-#: ../src/ui/toolbar/tweak-toolbar.cpp:126
+#: ../src/ui/toolbar/tweak-toolbar.cpp:92
 msgid "(pinch tweak)"
 msgstr "(manipulálás kis területen)"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:126
+#: ../src/ui/toolbar/tweak-toolbar.cpp:92
 msgid "(broad tweak)"
 msgstr "(manipulálás nagy területen)"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:129
+#: ../src/ui/toolbar/tweak-toolbar.cpp:95
 msgid "The width of the tweak area (relative to the visible canvas area)"
 msgstr ""
 "A manipulálási terület szélessége (a látható rajzvászon-területhez "
 "viszonyítva)"
 
 #. Force
-#: ../src/ui/toolbar/tweak-toolbar.cpp:143
+#: ../src/ui/toolbar/tweak-toolbar.cpp:115
 msgid "(minimum force)"
 msgstr "(minimális erő)"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:143
+#: ../src/ui/toolbar/tweak-toolbar.cpp:115
 msgid "(maximum force)"
 msgstr "(maximális erő)"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:146
+#: ../src/ui/toolbar/tweak-toolbar.cpp:118
 msgid "Force"
 msgstr "Erő"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:146
+#: ../src/ui/toolbar/tweak-toolbar.cpp:118
 msgid "Force:"
 msgstr "Erő:"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:146
+#: ../src/ui/toolbar/tweak-toolbar.cpp:118
 msgid "The force of the tweak action"
 msgstr "A manipulálás ereje"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:166
+#: ../src/ui/toolbar/tweak-toolbar.cpp:143
 msgid "Move mode"
 msgstr "Áthelyezési üzemmód"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:167
+#: ../src/ui/toolbar/tweak-toolbar.cpp:144
 msgid "Move objects in any direction"
 msgstr "Objektumok elmozdítása bármely irányban"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:172
+#: ../src/ui/toolbar/tweak-toolbar.cpp:149
 msgid "Move in/out mode"
 msgstr "Befelé/kifelé mozdítási üzemmód"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:173
+#: ../src/ui/toolbar/tweak-toolbar.cpp:150
 msgid "Move objects towards cursor; with Shift from cursor"
 msgstr ""
 "Objektumok elmozdítása a kurzor felé; a Shift billentyű lenyomása esetén a "
 "kurzor felől"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:178
+#: ../src/ui/toolbar/tweak-toolbar.cpp:155
 msgid "Move jitter mode"
 msgstr "Véletlenszerű elmozdítási üzemmód"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:179
+#: ../src/ui/toolbar/tweak-toolbar.cpp:156
 msgid "Move objects in random directions"
 msgstr "Objektumok elmozdítása véletlenszerű irányokban"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:184
+#: ../src/ui/toolbar/tweak-toolbar.cpp:161
 msgid "Scale mode"
 msgstr "Átméretezési üzemmód"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:185
+#: ../src/ui/toolbar/tweak-toolbar.cpp:162
 msgid "Shrink objects, with Shift enlarge"
 msgstr "Objektumok csökkentése; a Shift billentyű lenyomása esetén növelés"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:190
+#: ../src/ui/toolbar/tweak-toolbar.cpp:167
 msgid "Rotate mode"
 msgstr "Elforgatási üzemmód"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:191
+#: ../src/ui/toolbar/tweak-toolbar.cpp:168
 msgid "Rotate objects, with Shift counterclockwise"
 msgstr ""
 "Objektumok elforgatása; a Shift billentyű lenyomása esetén az óramutató "
 "járásával ellentétes irányban"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:196
+#: ../src/ui/toolbar/tweak-toolbar.cpp:173
 msgid "Duplicate/delete mode"
 msgstr "Kettőzési/törlési üzemmód"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:197
+#: ../src/ui/toolbar/tweak-toolbar.cpp:174
 msgid "Duplicate objects, with Shift delete"
 msgstr "Objektumok kettőzése; a Shift billentyű lenyomása esetén törlés"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:202
+#: ../src/ui/toolbar/tweak-toolbar.cpp:179
 msgid "Push mode"
 msgstr "Eltolási üzemmód"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:203
+#: ../src/ui/toolbar/tweak-toolbar.cpp:180
 msgid "Push parts of paths in any direction"
 msgstr "Útvonalak részeinek eltolása bármely irányba"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:208
+#: ../src/ui/toolbar/tweak-toolbar.cpp:185
 msgid "Shrink/grow mode"
 msgstr "Csökkentési/növelési üzemmód"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:209
+#: ../src/ui/toolbar/tweak-toolbar.cpp:186
 msgid "Shrink (inset) parts of paths; with Shift grow (outset)"
 msgstr ""
 "Útvonalak részeinek csökkentése (zsugorítása); a Shift billentyű lenyomása "
 "esetén növelés (nyújtás)"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:214
+#: ../src/ui/toolbar/tweak-toolbar.cpp:191
 msgid "Attract/repel mode"
 msgstr "Vonzási/taszítási üzemmód"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:215
+#: ../src/ui/toolbar/tweak-toolbar.cpp:192
 msgid "Attract parts of paths towards cursor; with Shift from cursor"
 msgstr ""
 "Útvonalak részeinek vonzása a kurzor felé; a Shift billentyű lenyomása "
 "esetén taszítás a kurzor felől"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:220
+#: ../src/ui/toolbar/tweak-toolbar.cpp:197
 msgid "Roughen mode"
 msgstr "Durvábbá tevési üzemmód"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:221
+#: ../src/ui/toolbar/tweak-toolbar.cpp:198
 msgid "Roughen parts of paths"
 msgstr "Útvonalak részeinek durvábbá tevése"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:226
+#: ../src/ui/toolbar/tweak-toolbar.cpp:203
 msgid "Color paint mode"
 msgstr "Színfestési üzemmód"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:227
+#: ../src/ui/toolbar/tweak-toolbar.cpp:204
 msgid "Paint the tool's color upon selected objects"
 msgstr "Az eszköz színének festése a kijelölt objektumokra"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:232
+#: ../src/ui/toolbar/tweak-toolbar.cpp:209
 msgid "Color jitter mode"
 msgstr "Véletlenszerű színmódosítási üzemmód"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:233
+#: ../src/ui/toolbar/tweak-toolbar.cpp:210
 msgid "Jitter the colors of selected objects"
 msgstr "A kijelölt objektumok színeinek véletlenszerű módosítása"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:238
+#: ../src/ui/toolbar/tweak-toolbar.cpp:215
 msgid "Blur mode"
 msgstr "Elmosási üzemmód"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:239
+#: ../src/ui/toolbar/tweak-toolbar.cpp:216
 msgid "Blur selected objects more; with Shift, blur less"
 msgstr ""
 "A kijelölt objektumok elmosásának növelése; a Shift billentyű lenyomása "
 "esetén az elmosás csökkentése"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:266
+#: ../src/ui/toolbar/tweak-toolbar.cpp:242
 msgid "Channels:"
 msgstr "Csatornák:"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:278
+#: ../src/ui/toolbar/tweak-toolbar.cpp:253
 msgid "In color mode, act on objects' hue"
 msgstr ""
 "Színezési mód esetén: az eszköznek legyen hatása az objektumok árnyalatára"
 
 #. TRANSLATORS:  "H" here stands for hue
-#: ../src/ui/toolbar/tweak-toolbar.cpp:282
+#: ../src/ui/toolbar/tweak-toolbar.cpp:257
 msgctxt "Hue"
 msgid "H"
 msgstr "H"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:294
+#: ../src/ui/toolbar/tweak-toolbar.cpp:268
 msgid "In color mode, act on objects' saturation"
 msgstr ""
 "Színezési mód esetén: az eszköznek legyen hatása az objektumok telítettségére"
 
 #. TRANSLATORS: "S" here stands for Saturation
-#: ../src/ui/toolbar/tweak-toolbar.cpp:298
+#: ../src/ui/toolbar/tweak-toolbar.cpp:272
 msgctxt "Saturation"
 msgid "S"
 msgstr "S"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:310
+#: ../src/ui/toolbar/tweak-toolbar.cpp:283
 msgid "In color mode, act on objects' lightness"
 msgstr ""
 "Színezési mód esetén: az eszköznek legyen hatása az objektumok fényességére"
 
 #. TRANSLATORS: "L" here stands for Lightness
-#: ../src/ui/toolbar/tweak-toolbar.cpp:314
+#: ../src/ui/toolbar/tweak-toolbar.cpp:287
 msgctxt "Lightness"
 msgid "L"
 msgstr "L"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:326
+#: ../src/ui/toolbar/tweak-toolbar.cpp:298
 msgid "In color mode, act on objects' opacity"
 msgstr ""
 "Színezési mód esetén: az eszköznek legyen hatása az objektumok "
 "átlátszatlanságára (alfa)"
 
 #. TRANSLATORS: "O" here stands for Opacity
-#: ../src/ui/toolbar/tweak-toolbar.cpp:330
+#: ../src/ui/toolbar/tweak-toolbar.cpp:302
 msgctxt "Opacity"
 msgid "O"
 msgstr "Á"
 
 #. Fidelity
-#: ../src/ui/toolbar/tweak-toolbar.cpp:341
+#: ../src/ui/toolbar/tweak-toolbar.cpp:312
 msgid "(rough, simplified)"
 msgstr "(durva, egyszerűsített)"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:341
+#: ../src/ui/toolbar/tweak-toolbar.cpp:312
 msgid "(fine, but many nodes)"
 msgstr "(finom, de sok csomópont)"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:344
+#: ../src/ui/toolbar/tweak-toolbar.cpp:315
 msgid "Fidelity"
 msgstr "Pontosság"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:344
+#: ../src/ui/toolbar/tweak-toolbar.cpp:315
 msgid "Fidelity:"
 msgstr "Pontosság:"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:345
+#: ../src/ui/toolbar/tweak-toolbar.cpp:316
 msgid ""
 "Low fidelity simplifies paths; high fidelity preserves path features but may "
 "generate a lot of new nodes"
@@ -28328,7 +28331,7 @@ msgstr ""
 "Az alacsony pontosság egyszerűsíti az útvonalakat; a magas pontosság megőrzi "
 "az útvonal tulajdonságait, de sok új csomópontot hozhat létre"
 
-#: ../src/ui/toolbar/tweak-toolbar.cpp:364
+#: ../src/ui/toolbar/tweak-toolbar.cpp:340
 msgid "Use the pressure of the input device to alter the force of tweak action"
 msgstr ""
 "A beviteli eszköz nyomásának használata a manipulálás erejének "
@@ -33578,7 +33581,7 @@ msgstr "Mentés _Inkscape SVG-ként"
 msgid "Note:"
 msgstr "Megjegyzés:"
 
-#: ../src/widgets/desktop-widget.cpp:2330
+#: ../src/widgets/desktop-widget.cpp:2329
 msgid "Create guide"
 msgstr "Segédvonal létrehozása"
 
@@ -33997,144 +34000,144 @@ msgstr "TBD"
 msgid "Style of Paint Bucket fill objects"
 msgstr "Területkitöltési objektumok stílusa"
 
-#: ../src/widgets/toolbox.cpp:1318
+#: ../src/widgets/toolbox.cpp:1320
 msgid "Bounding box"
 msgstr "Határoló téglalap"
 
-#: ../src/widgets/toolbox.cpp:1318
+#: ../src/widgets/toolbox.cpp:1320
 msgid "Snap bounding boxes"
 msgstr "Határoló téglalap sarkainak illesztése"
 
-#: ../src/widgets/toolbox.cpp:1327
+#: ../src/widgets/toolbox.cpp:1329
 msgid "Bounding box edges"
 msgstr "Határoló téglalap szélei"
 
-#: ../src/widgets/toolbox.cpp:1327
+#: ../src/widgets/toolbox.cpp:1329
 msgid "Snap to edges of a bounding box"
 msgstr "Határoló téglalap széleihez való illesztés"
 
-#: ../src/widgets/toolbox.cpp:1336
+#: ../src/widgets/toolbox.cpp:1338
 msgid "Bounding box corners"
 msgstr "Határoló téglalap sarkai"
 
-#: ../src/widgets/toolbox.cpp:1336
+#: ../src/widgets/toolbox.cpp:1338
 msgid "Snap bounding box corners"
 msgstr "Határoló téglalap sarkainak illesztése"
 
-#: ../src/widgets/toolbox.cpp:1345
+#: ../src/widgets/toolbox.cpp:1347
 msgid "BBox Edge Midpoints"
 msgstr "Határoló téglalap széleinek középpontjai"
 
-#: ../src/widgets/toolbox.cpp:1345
+#: ../src/widgets/toolbox.cpp:1347
 msgid "Snap midpoints of bounding box edges"
 msgstr ""
 "Határoló téglalap széleinek középpontjainak illesztése, továbbá ezen "
 "középpontokhoz való illesztés"
 
-#: ../src/widgets/toolbox.cpp:1355
+#: ../src/widgets/toolbox.cpp:1357
 msgid "BBox Centers"
 msgstr "Határoló téglalapok középpontjai"
 
-#: ../src/widgets/toolbox.cpp:1355
+#: ../src/widgets/toolbox.cpp:1357
 msgid "Snapping centers of bounding boxes"
 msgstr ""
 "Határoló téglalapok középpontjainak illesztése, továbbá ezen középpontokhoz "
 "való illesztés"
 
-#: ../src/widgets/toolbox.cpp:1364
+#: ../src/widgets/toolbox.cpp:1366
 msgid "Snap nodes, paths, and handles"
 msgstr "Csomópontok vagy vezérlőelemek illesztése"
 
-#: ../src/widgets/toolbox.cpp:1372
+#: ../src/widgets/toolbox.cpp:1374
 msgid "Snap to paths"
 msgstr "Útvonalakhoz való illesztés"
 
-#: ../src/widgets/toolbox.cpp:1381
+#: ../src/widgets/toolbox.cpp:1383
 msgid "Path intersections"
 msgstr "Útvonal-metszetek"
 
-#: ../src/widgets/toolbox.cpp:1381
+#: ../src/widgets/toolbox.cpp:1383
 msgid "Snap to path intersections"
 msgstr "Útvonal-metszetekhez való illesztés"
 
-#: ../src/widgets/toolbox.cpp:1390
+#: ../src/widgets/toolbox.cpp:1392
 msgid "To nodes"
 msgstr "Csomópontokhoz"
 
-#: ../src/widgets/toolbox.cpp:1390
+#: ../src/widgets/toolbox.cpp:1392
 msgid "Snap cusp nodes, incl. rectangle corners"
 msgstr "Csúcs-csomópontok illesztése, beleértve a téglalap-csomópontokat"
 
-#: ../src/widgets/toolbox.cpp:1399
+#: ../src/widgets/toolbox.cpp:1401
 msgid "Smooth nodes"
 msgstr "Íves csomópontok"
 
-#: ../src/widgets/toolbox.cpp:1399
+#: ../src/widgets/toolbox.cpp:1401
 msgid "Snap smooth nodes, incl. quadrant points of ellipses"
 msgstr ""
 "Íves csomópontok illesztése, beleértve az ellipszisek negyedelőpontjait"
 
-#: ../src/widgets/toolbox.cpp:1408
+#: ../src/widgets/toolbox.cpp:1410
 msgid "Line Midpoints"
 msgstr "Vonalak középpontjai"
 
-#: ../src/widgets/toolbox.cpp:1408
+#: ../src/widgets/toolbox.cpp:1410
 msgid "Snap midpoints of line segments"
 msgstr ""
 "Vonalszakaszok középpontjainak illesztése, továbbá ezen középpontokhoz való "
 "illesztés"
 
-#: ../src/widgets/toolbox.cpp:1417
+#: ../src/widgets/toolbox.cpp:1419
 msgid "Others"
 msgstr "Egyebek"
 
-#: ../src/widgets/toolbox.cpp:1417
+#: ../src/widgets/toolbox.cpp:1419
 msgid "Snap other points (centers, guide origins, gradient handles, etc.)"
 msgstr ""
 "Egyéb pontok illesztése (középpontok, segédvonal-origók, színátmenet-"
 "vezérlőelemek, stb.)"
 
-#: ../src/widgets/toolbox.cpp:1425
+#: ../src/widgets/toolbox.cpp:1427
 msgid "Object Centers"
 msgstr "Objektumok középpontjai"
 
-#: ../src/widgets/toolbox.cpp:1425
+#: ../src/widgets/toolbox.cpp:1427
 msgid "Snap centers of objects"
 msgstr ""
 "Objektumok középpontjainak illesztése, továbbá ezen középpontokhoz való "
 "illesztés"
 
-#: ../src/widgets/toolbox.cpp:1434
+#: ../src/widgets/toolbox.cpp:1436
 msgid "Rotation Centers"
 msgstr "Elforgatási középpontok"
 
-#: ../src/widgets/toolbox.cpp:1434
+#: ../src/widgets/toolbox.cpp:1436
 msgid "Snap an item's rotation center"
 msgstr ""
 "Elem elforgatási középpontjának illesztése, továbbá ezen középponthoz való "
 "illesztés"
 
-#: ../src/widgets/toolbox.cpp:1443
+#: ../src/widgets/toolbox.cpp:1445
 msgid "Text baseline"
 msgstr "Szöveg-alapvonal"
 
-#: ../src/widgets/toolbox.cpp:1443
+#: ../src/widgets/toolbox.cpp:1445
 msgid "Snap text anchors and baselines"
 msgstr "Szöveg-alapvonalak igazítása"
 
-#: ../src/widgets/toolbox.cpp:1453
+#: ../src/widgets/toolbox.cpp:1455
 msgid "Page border"
 msgstr "Lapkeret"
 
-#: ../src/widgets/toolbox.cpp:1453
+#: ../src/widgets/toolbox.cpp:1455
 msgid "Snap to the page border"
 msgstr "Lapkerethez való illesztés"
 
-#: ../src/widgets/toolbox.cpp:1462
+#: ../src/widgets/toolbox.cpp:1464
 msgid "Snap to grids"
 msgstr "Rácsokhoz való illesztés"
 
-#: ../src/widgets/toolbox.cpp:1471
+#: ../src/widgets/toolbox.cpp:1473
 msgid "Snap guides"
 msgstr "Segédvonalakhoz való illesztés"
 

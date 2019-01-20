@@ -86,7 +86,7 @@ protected:
         _repr(nullptr)
     {}
 
-    ~StarToolbar();
+    ~StarToolbar() override;
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);

@@ -92,7 +92,7 @@ protected:
         : Toolbar(desktop),
         _repr(nullptr)
     {}
-    ~Box3DToolbar();
+    ~Box3DToolbar() override;
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);

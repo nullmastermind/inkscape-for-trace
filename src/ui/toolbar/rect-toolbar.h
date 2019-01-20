@@ -91,7 +91,7 @@ private:
 
 protected:
     RectToolbar(SPDesktop *desktop);
-    ~RectToolbar();
+    ~RectToolbar() override;
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);

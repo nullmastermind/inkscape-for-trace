@@ -91,7 +91,7 @@ protected:
           _simplify(nullptr)
     {}
 
-    ~PencilToolbar();
+    ~PencilToolbar() override;
 
 public:
     static GtkWidget * prep_pencil(SPDesktop *desktop, GtkActionGroup* mainActions);

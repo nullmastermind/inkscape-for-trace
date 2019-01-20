@@ -83,7 +83,7 @@ protected:
           _freeze(false)
     {}
 
-    ~EraserToolbar();
+    ~EraserToolbar() override;
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);

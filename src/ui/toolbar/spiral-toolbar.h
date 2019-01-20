@@ -73,7 +73,7 @@ protected:
         _repr(nullptr)
     {}
 
-    ~SpiralToolbar();
+    ~SpiralToolbar() override;
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);

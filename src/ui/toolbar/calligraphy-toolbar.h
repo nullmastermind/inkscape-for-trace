@@ -90,7 +90,7 @@ protected:
         : Toolbar(desktop)
     {}
 
-    ~CalligraphyToolbar();
+    ~CalligraphyToolbar() override;
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);

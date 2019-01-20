@@ -96,7 +96,7 @@ private:
 
 protected:
     ArcToolbar(SPDesktop *desktop);
-    ~ArcToolbar();
+    ~ArcToolbar() override;
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);

@@ -84,7 +84,7 @@ private:
 
 protected:
     LPEToolbar(SPDesktop *desktop);
-    ~LPEToolbar();
+    ~LPEToolbar() override;
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);

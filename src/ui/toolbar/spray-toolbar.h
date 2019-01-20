@@ -109,7 +109,7 @@ protected:
         Toolbar(desktop)
     {}
 
-    ~SprayToolbar();
+    ~SprayToolbar() override;
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
