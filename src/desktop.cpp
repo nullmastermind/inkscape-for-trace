@@ -35,6 +35,7 @@
 #include "device-manager.h"
 #include "document-undo.h"
 #include "event-log.h"
+#include "inkscape-window.h"
 #include "layer-fns.h"
 #include "layer-manager.h"
 #include "message-context.h"
@@ -681,12 +682,14 @@ SPDesktop::change_document (SPDocument *theDocument)
 
     /* update the rulers, connect the desktop widget's signal to the new namedview etc.
        (this can probably be done in a better way) */
-    Gtk::Window *parent = this->getToplevel();
+    InkscapeWindow *parent = this->getInkscapeWindow();
     g_assert(parent != nullptr);
-    SPDesktopWidget *dtw = (SPDesktopWidget *) parent->get_data("desktopwidget");
+    SPDesktopWidget *dtw = parent->get_desktop_widget();
     if (dtw) {
         dtw->desktop = this;
         dtw->updateNamedview();
+    } else {
+        std::cerr << "SPDesktop::change_document: failed to get desktop widget!" << std::endl;
     }
 
     _namedview_modified (namedview, SP_OBJECT_MODIFIED_FLAG, this);
@@ -1375,6 +1378,16 @@ Gtk::Window*
 SPDesktop::getToplevel( )
 {
     return _widget->getWindow();
+}
+
+InkscapeWindow*
+SPDesktop::getInkscapeWindow( )
+{
+    InkscapeWindow* window = dynamic_cast<InkscapeWindow*>(_widget->getWindow());
+    if (!window) {
+        std::cerr << "SPDesktop::getInkscapeWindow: Failed to get window." << std::endl;
+    }
+    return window;
 }
 
 void

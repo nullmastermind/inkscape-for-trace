@@ -24,18 +24,20 @@
 
 #include <cstddef>
 #include <sigc++/sigc++.h>
+#include <glibmm/ustring.h>
 
 #include <2geom/affine.h>
 #include <2geom/transforms.h>
 #include <2geom/rect.h>
 
-#include "ui/view/view.h"
-#include "display/rendermode.h"
-#include <glibmm/ustring.h>
-
 #include "preferences.h"
+
+#include "display/rendermode.h"
+
 #include "object/sp-gradient.h" // TODO refactor enums out to their own .h file
+
 #include "ui/dialog/print.h"
+#include "ui/view/view.h"
 
 class SPCSSAttr;
 struct SPCanvas;
@@ -58,6 +60,8 @@ class SPNamedView;
 class SPObject;
 class SPStyle;
 typedef struct _DocumentInterface DocumentInterface;//struct DocumentInterface;
+
+class InkscapeWindow;
 
 namespace Gtk
 {
@@ -373,7 +377,8 @@ public:
     void setWindowPosition (Geom::Point p);
     void setWindowSize (gint w, gint h);
     void setWindowTransient (void* p, int transient_policy=1);
-    Gtk::Window* getToplevel();
+    Gtk::Window* getToplevel();  // To be removed in favor of getInkscapeWindow
+    InkscapeWindow* getInkscapeWindow();
     void presentWindow();
     bool showInfoDialog( Glib::ustring const &message );
     bool warnDialog (Glib::ustring const &text);

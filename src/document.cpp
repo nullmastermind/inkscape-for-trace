@@ -49,6 +49,7 @@
 #include "id-clash.h"
 #include "inkscape-version.h"
 #include "inkscape.h"
+#include "inkscape-window.h"
 #include "profile-manager.h"
 #include "rdf.h"
 
@@ -1825,9 +1826,9 @@ bool SPDocument::isSeeking() const {
 void SPDocument::setModifiedSinceSave(bool modified) {
     this->modified_since_save = modified;
     if (SP_ACTIVE_DESKTOP) {
-        Gtk::Window *parent = SP_ACTIVE_DESKTOP->getToplevel();
-        if (parent) { // during load, SP_ACTIVE_DESKTOP may be !nullptr, but parent might still be nullptr
-            SPDesktopWidget *dtw = static_cast<SPDesktopWidget *>(parent->get_data("desktopwidget"));
+        InkscapeWindow *window = SP_ACTIVE_DESKTOP->getInkscapeWindow();
+        if (window) { // during load, SP_ACTIVE_DESKTOP may be !nullptr, but parent might still be nullptr
+            SPDesktopWidget *dtw = window->get_desktop_widget();
             dtw->updateTitle( this->getName() );
         }
     }

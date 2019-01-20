@@ -38,6 +38,7 @@
 #include "display/sp-canvas.h"
 #include "helper/sp-marshal.h"
 #include "inkscape.h"
+#include "inkscape-window.h"
 #include "preferences.h"
 #include "sodipodi-ctrlrect.h"
 #include "ui/tools/tool-base.h"
@@ -2392,8 +2393,8 @@ int SPCanvas::paint()
         arena = SP_CANVAS_ARENA(desktop->drawing);
         rm = arena->drawing.renderMode();
         if (split) {
-            auto window = desktop->getToplevel();
-            auto dtw = static_cast<SPDesktopWidget *>(window->get_data("desktopwidget"));
+            auto window = desktop->getInkscapeWindow();
+            auto dtw = window->get_desktop_widget();
             bool hasrullers = prefs->getBool(desktop->is_fullscreen() ? "/fullscreen/rulers/state" : "/window/rulers/state");
             int hruler_gap = hasrullers ? dtw->get_hruler_thickness() : 1;
             int vruler_gap = hasrullers ? dtw->get_vruler_thickness() : 1;
