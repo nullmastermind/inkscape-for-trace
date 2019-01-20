@@ -61,7 +61,7 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     // Menu bar
 
     // Desktop widget (=> MultiPaned)
-    _desktop_widget = sp_desktop_widget_new(sp_document_namedview(document, nullptr));
+    _desktop_widget = sp_desktop_widget_new(_document);
     gtk_container_add(GTK_CONTAINER(_mainbox->gobj()), GTK_WIDGET(_desktop_widget));
     gtk_widget_show(GTK_WIDGET(_desktop_widget));
     _desktop = _desktop_widget->desktop;

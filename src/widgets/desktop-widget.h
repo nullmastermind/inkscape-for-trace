@@ -28,6 +28,7 @@
 typedef struct _EgeColorProfTracker EgeColorProfTracker;
 struct SPCanvas;
 struct SPCanvasItem;
+class SPDocument;
 class SPDesktop;
 struct SPDesktopWidget;
 class SPObject;
@@ -65,7 +66,7 @@ class SelectedStyle;
 /**
  * Create a new SPDesktopWidget
  */
-SPDesktopWidget *sp_desktop_widget_new(SPNamedView *namedview);
+SPDesktopWidget *sp_desktop_widget_new(SPDocument* document);
 
 void sp_desktop_widget_show_decorations(SPDesktopWidget *dtw, gboolean show);
 void sp_desktop_widget_update_hruler (SPDesktopWidget *dtw);
@@ -276,7 +277,7 @@ public:
     Inkscape::UI::Widget::Dock* getDock();
 
     static GType getType();
-    static SPDesktopWidget* createInstance(SPNamedView *namedview);
+    static SPDesktopWidget* createInstance(SPDocument *document);
 
     void updateNamedview();
     void update_guides_lock();

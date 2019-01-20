@@ -1636,15 +1636,17 @@ void SPDesktopWidget::setToolboxPosition(Glib::ustring const& id, GtkPositionTyp
 }
 
 
-SPDesktopWidget *sp_desktop_widget_new( SPNamedView *namedview )
+SPDesktopWidget *sp_desktop_widget_new(SPDocument *document)
 {
-    SPDesktopWidget* dtw = SPDesktopWidget::createInstance(namedview);
+    SPDesktopWidget* dtw = SPDesktopWidget::createInstance(document);
     return dtw;
 }
 
-SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
+SPDesktopWidget* SPDesktopWidget::createInstance(SPDocument *document)
 {
     SPDesktopWidget *dtw = static_cast<SPDesktopWidget*>(g_object_new(SP_TYPE_DESKTOP_WIDGET, nullptr));
+
+    SPNamedView *namedview = sp_document_namedview(document, nullptr);
 
     dtw->_dt2r = 1. / namedview->display_units->factor;
 
