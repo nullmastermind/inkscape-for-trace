@@ -81,8 +81,6 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     g_object_set_data(G_OBJECT(_desktop_widget), "window", this);
     _desktop_widget->window = this;
 
-    set_data("desktop", _desktop);
-
     signal_delete_event().connect(      sigc::mem_fun(*_desktop, &SPDesktop::onDeleteUI));
     signal_window_state_event().connect(sigc::mem_fun(*_desktop, &SPDesktop::onWindowStateEvent));
     signal_focus_in_event().connect(sigc::mem_fun(*_desktop_widget, &SPDesktopWidget::onFocusInEvent));
