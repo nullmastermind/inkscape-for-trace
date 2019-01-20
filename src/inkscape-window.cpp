@@ -62,6 +62,7 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
 
     // Desktop widget (=> MultiPaned)
     _desktop_widget = sp_desktop_widget_new(_document);
+    _desktop_widget->window = this;
     gtk_container_add(GTK_CONTAINER(_mainbox->gobj()), GTK_WIDGET(_desktop_widget));
     gtk_widget_show(GTK_WIDGET(_desktop_widget));
     _desktop = _desktop_widget->desktop;
@@ -77,9 +78,6 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
 
 
     // ============ Stuff to be cleaned up ===========
-
-    g_object_set_data(G_OBJECT(_desktop_widget), "window", this);
-    _desktop_widget->window = this;
 
     signal_delete_event().connect(      sigc::mem_fun(*_desktop, &SPDesktop::onDeleteUI));
     signal_window_state_event().connect(sigc::mem_fun(*_desktop, &SPDesktop::onWindowStateEvent));
