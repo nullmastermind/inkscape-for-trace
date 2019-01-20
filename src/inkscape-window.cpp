@@ -72,47 +72,21 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     // Status bar
 
     // ================== Callbacks ==================
-    signal_key_press_event().connect(sigc::mem_fun(*this, &InkscapeWindow::key_press));
+    signal_key_press_event().connect(   sigc::mem_fun(*this, &InkscapeWindow::key_press));
+    signal_delete_event().connect(      sigc::mem_fun(*_desktop, &SPDesktop::onDeleteUI));
+    signal_window_state_event().connect(sigc::mem_fun(*_desktop, &SPDesktop::onWindowStateEvent));
+    signal_focus_in_event().connect(    sigc::mem_fun(*_desktop_widget, &SPDesktopWidget::onFocusInEvent));
 
     // =================== Actions ===================
 
-
-    // ============ Stuff to be cleaned up ===========
-
-    signal_delete_event().connect(      sigc::mem_fun(*_desktop, &SPDesktop::onDeleteUI));
-    signal_window_state_event().connect(sigc::mem_fun(*_desktop, &SPDesktop::onWindowStateEvent));
-    signal_focus_in_event().connect(sigc::mem_fun(*_desktop_widget, &SPDesktopWidget::onFocusInEvent));
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int window_geometry = prefs->getInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE);
-    if (window_geometry == PREFS_WINDOW_GEOMETRY_LAST) {
-        gint pw = prefs->getInt("/desktop/geometry/width", -1);
-        gint ph = prefs->getInt("/desktop/geometry/height", -1);
-        gint px = prefs->getInt("/desktop/geometry/x", -1);
-        gint py = prefs->getInt("/desktop/geometry/y", -1);
-        gint full = prefs->getBool("/desktop/geometry/fullscreen");
-        gint maxed = prefs->getBool("/desktop/geometry/maximized");
-        if (pw>0 && ph>0) {
-            Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_at_point(px, py);
-            pw = std::min(pw, monitor_geometry.get_width());
-            ph = std::min(ph, monitor_geometry.get_height());
-            _desktop->setWindowSize(pw, ph);
-            _desktop->setWindowPosition(Geom::Point(px, py));
-        }
-        if (maxed) {
-            maximize();
-        }
-        if (full) {
-            fullscreen();
-        }
-    }
 
     // ================ Window Options ==============
 
     show(); // Must show before resize!
 
     // Resize the window to match the document properties
-    sp_namedview_window_from_document(_desktop);
+    sp_namedview_window_from_document(_desktop); // This should probably be a member function here.
+
     sp_namedview_update_layers_from_document(_desktop);
 
 }
