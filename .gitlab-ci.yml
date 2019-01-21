@@ -7,7 +7,15 @@ variables:
   GIT_DEPTH: "10"
   GIT_SUBMODULE_STRATEGY: recursive
 
-# Building inkscape
+#######################
+#                     #
+#  Building inkscape  #
+#                     #
+#######################
+# Linux, Appimage, mac. Windows is handled in .appveyor.yml
+
+    ### On linux...
+
 inkscape:linux:
   stage: build
   except:
@@ -35,6 +43,8 @@ inkscape:linux:
     paths:
       - build/
 
+    ### + Appimage (custom script, cf generate.sh)
+
 appimage:linux:
   stage: build
   except:
@@ -55,6 +65,8 @@ appimage:linux:
     paths:
       - Inkscape*.AppImage*
 
+    ### On mac... (this needs a custom mac runner)
+ 
 inkscape:mac:
   stage: build
   tags:
@@ -95,6 +107,15 @@ inkscape:mac:
   allow_failure: true
 
 
+###########################
+#                         #
+#  Various code checkers  #
+#                         #
+###########################
+
+  ### This script checks for *merge requests* that they conform to the code style. It allows failures.
+  # cf ./_clang-format and https://inkscape.org/develop/coding-style/
+
 codequality:
   stage: build
   except:
@@ -107,6 +128,9 @@ codequality:
     - if [[ -s clang_format_diff ]]; then false; fi
   allow_failure: true
 
+    ### We embed script from third party libraries, that we sometimes update from their source. Hence we should NEVER modify them here before submitting the patch upstream!
+    # Ideally, we should remove all this code and use them as packaged libraries. Unfortunately this check only works for merge requests. 
+
 codeprotect:
   stage: build
   except:
@@ -116,59 +140,7 @@ codeprotect:
     - git diff FETCH_HEAD -U0 --no-color src/2geom/ src/3rdparty/adaptagrams/ src/3rdparty/libdepixelize src/3rdparty/libuemf | tee forbidden
     - if [[ -s forbidden ]]; then echo "This commit modifies files that are in an dependency library. Make sure you update upstream first, *then* force the merge in Inkscape."; false; fi
 
-clangtidy:linux:
-  stage: build
-  except:
-    - schedules
-  script:
-    - mkdir -p build && cd build
-    - cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX:PATH=$PWD/install_dir/ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-    - run-clang-tidy -fix -header-filter='.*' > /dev/null && git checkout ../src/3rdparty/ ../src/2geom/
-    - git diff | tee clang_tidy_diff
-    - if [[ -s clang_tidy_diff ]]; then false; fi
-
-source-doc:
-  stage: build
-  only:
-    variables:
-      - $SCHEDULED_JOB_NAME == "source-doc"
-  script:
-    - cd buildtools
-    - doxygen Doxyfile
-    - doxygen Doxyfile-extensions
-    - cd ..
-  artifacts:
-    paths:
-      - doc/doxygen
-      - doc/doxygen-extensions
-
-# This job is a static analysis build by clang.
-# It takes MORE THAN 3 HOURS, and depending on worker sometimes 4 hours.
-# Make sure the timeout of the build is big enough
-clang:
-  stage: build
-  only:
-    variables:
-      - $SCHEDULED_JOB_NAME == "clang"
-  script:
-    - apt-get update -yqq && apt-get install -y clang
-    - mkdir -p clang-build
-    - cd clang-build
-    - scan-build cmake .. -DCMAKE_BUILD_TYPE=Debug
-    - VERBOSE=1 scan-build -o ../scan make -j2
-  artifacts:
-    paths:
-      - scan/
-
-test:linux:
-  stage: test
-  except:
-    - schedules
-  dependencies:
-    - inkscape:linux
-  script:
-    - cd build
-    - ctest -V
+  #### All files should have a licence
 
 check-license-headers:
   stage: build
@@ -176,6 +148,8 @@ check-license-headers:
     - schedules
   script:
     - python buildtools/check_license_headers.py
+
+    ### Verify that the list of the files containing strings to be translated is up to date
 
 translations:
   stage: build
@@ -210,9 +184,76 @@ translations:
       - po/
     when: always
 
+  ### clang-tidy is an utility to check that some c++ code good practices and patterns are respected. We use it at 1% of its possibilities (only when it suggests fixes).
+
+clangtidy:linux:
+  stage: build
+  except:
+    - schedules
+  script:
+    - mkdir -p build && cd build
+    - cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX:PATH=$PWD/install_dir/ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+    - run-clang-tidy -fix -header-filter='.*' > /dev/null && git checkout ../src/3rdparty/ ../src/2geom/
+    - git diff | tee clang_tidy_diff
+    - if [[ -s clang_tidy_diff ]]; then false; fi
+
+    ### scan-build is a static analysis tool. This job is *slow*.
+
+clang:
+  stage: build
+  only:
+    variables:
+      - $SCHEDULED_JOB_NAME == "clang"
+  script:
+    - apt-get update -yqq && apt-get install -y clang
+    - mkdir -p clang-build
+    - cd clang-build
+    - scan-build cmake .. -DCMAKE_BUILD_TYPE=Debug
+    - VERBOSE=1 scan-build -o ../scan make -j2
+  artifacts:
+    paths:
+      - scan/
+
+    ### doxygen
+
+source-doc:
+  stage: build
+  only:
+    variables:
+      - $SCHEDULED_JOB_NAME == "source-doc"
+  script:
+    - cd buildtools
+    - doxygen Doxyfile
+    - doxygen Doxyfile-extensions
+    - cd ..
+  artifacts:
+    paths:
+      - doc/doxygen
+      - doc/doxygen-extensions
+
+################
+#              #
+#  Unit tests  #
+#              #
+################
+test:linux:
+  stage: test
+  except:
+    - schedules
+  dependencies:
+    - inkscape:linux
+  script:
+    - cd build
+    - ctest -V
+
+
 # uploads the clang scan to user.gitlab.io/inkscape/
 pages:
   stage: deploy
+  cache:
+    key: "cache-pages"
+    paths:
+      - public
   only:
     - schedules
   dependencies:
