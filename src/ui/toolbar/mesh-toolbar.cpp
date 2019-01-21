@@ -297,11 +297,9 @@ MeshToolbar::prep(SPDesktop * desktop, GtkActionGroup* mainActions)
                                          _("Rows"), _("Rows:"), _("Number of rows in new mesh"),
                                          "/tools/mesh/mesh_rows", 1,
                                          GTK_WIDGET(desktop->canvas),
-                                         nullptr, // dataKludge
                                          FALSE, nullptr,
                                          1, 20, 1, 1,
                                          labels, values, 0,
-                                         nullptr, // callback
                                          nullptr /*unit tracker*/,
                                          1.0, 0 );
         toolbar->_row_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
@@ -318,11 +316,9 @@ MeshToolbar::prep(SPDesktop * desktop, GtkActionGroup* mainActions)
                                          _("Columns"), _("Columns:"), _("Number of columns in new mesh"),
                                          "/tools/mesh/mesh_cols", 1,
                                          GTK_WIDGET(desktop->canvas),
-                                         nullptr, // dataKludge
                                          FALSE, nullptr,
                                          1, 20, 1, 1,
                                          labels, values, 0,
-                                         nullptr, // callback
                                          nullptr /*unit tracker*/,
                                          1.0, 0 );
         toolbar->_col_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));

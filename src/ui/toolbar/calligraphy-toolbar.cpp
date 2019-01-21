@@ -106,11 +106,9 @@ CalligraphyToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                               _("The width of the calligraphic pen (relative to the visible canvas area)"),
                                                               "/tools/calligraphic/width", 15,
                                                               GTK_WIDGET(desktop->canvas),
-                                                              nullptr, // dataKludge
                                                               TRUE, "altx-calligraphy",
                                                               1, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              nullptr, // callback
                                                               nullptr /*unit tracker*/, 1, 0 );
         toolbar->_width_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         toolbar->_width_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &CalligraphyToolbar::width_value_changed));
@@ -129,11 +127,9 @@ CalligraphyToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                               _("How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 makes them broader, 0 makes width independent of velocity)"),
                                                               "/tools/calligraphic/thinning", 10,
                                                               GTK_WIDGET(desktop->canvas),
-                                                              nullptr, // dataKludge
                                                               FALSE, nullptr,
                                                               -100, 100, 1, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              nullptr, // callback
                                                               nullptr /*unit tracker*/, 1, 0);
         toolbar->_thinning_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         toolbar->_thinning_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &CalligraphyToolbar::velthin_value_changed));
@@ -151,11 +147,9 @@ CalligraphyToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                            _("The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if fixation = 0)"),
                                                            "/tools/calligraphic/angle", 30,
                                                            GTK_WIDGET(desktop->canvas),
-                                                           nullptr, // dataKludge
                                                            TRUE, "calligraphy-angle",
                                                            -90.0, 90.0, 1.0, 10.0,
                                                            labels, values, G_N_ELEMENTS(labels),
-                                                           nullptr, // callback
                                                            nullptr /*unit tracker*/, 1, 0 );
         toolbar->_angle_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_angle_action));
         toolbar->_angle_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &CalligraphyToolbar::angle_value_changed));
@@ -173,11 +167,9 @@ CalligraphyToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                               _("Angle behavior (0 = nib always perpendicular to stroke direction, 100 = fixed angle)"),
                                                               "/tools/calligraphic/flatness", 90,
                                                               GTK_WIDGET(desktop->canvas),
-                                                              nullptr, // dataKludge
                                                               FALSE, nullptr,
                                                               0.0, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              nullptr, // callback
                                                               nullptr /*unit tracker*/, 1, 0);
         toolbar->_fixation_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         toolbar->_fixation_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &CalligraphyToolbar::flatness_value_changed));
@@ -196,11 +188,9 @@ CalligraphyToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                               _("Increase to make caps at the ends of strokes protrude more (0 = no caps, 1 = round caps)"),
                                                               "/tools/calligraphic/cap_rounding", 0.0,
                                                               GTK_WIDGET(desktop->canvas),
-                                                              nullptr, // dataKludge
                                                               FALSE, nullptr,
                                                               0.0, 5.0, 0.01, 0.1,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              nullptr, // callback
                                                               nullptr /*unit tracker*/, 0.01, 2 );
         toolbar->_cap_rounding_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         toolbar->_cap_rounding_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &CalligraphyToolbar::cap_rounding_value_changed));
@@ -218,11 +208,9 @@ CalligraphyToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                               _("Increase to make strokes rugged and trembling"),
                                                               "/tools/calligraphic/tremor", 0.0,
                                                               GTK_WIDGET(desktop->canvas),
-                                                              nullptr, // dataKludge
                                                               FALSE, nullptr,
                                                               0.0, 100, 1, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              nullptr, // callback
                                                               nullptr /*unit tracker*/, 1, 0);
 
         toolbar->_tremor_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
@@ -242,11 +230,9 @@ CalligraphyToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                               _("Increase to make the pen waver and wiggle"),
                                                               "/tools/calligraphic/wiggle", 0.0,
                                                               GTK_WIDGET(desktop->canvas),
-                                                              nullptr, // dataKludge
                                                               FALSE, nullptr,
                                                               0.0, 100, 1, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              nullptr, // callback
                                                               nullptr /*unit tracker*/, 1, 0);
         toolbar->_wiggle_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         toolbar->_wiggle_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &CalligraphyToolbar::wiggle_value_changed));
@@ -265,11 +251,9 @@ CalligraphyToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                               _("Increase to make the pen drag behind, as if slowed by inertia"),
                                                               "/tools/calligraphic/mass", 2.0,
                                                               GTK_WIDGET(desktop->canvas),
-                                                              nullptr, // dataKludge
                                                               FALSE, nullptr,
                                                               0.0, 100, 1, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              nullptr, // callback
                                                               nullptr /*unit tracker*/, 1, 0);
         toolbar->_mass_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         toolbar->_mass_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &CalligraphyToolbar::mass_value_changed));

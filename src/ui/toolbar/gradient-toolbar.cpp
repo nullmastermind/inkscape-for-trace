@@ -545,11 +545,9 @@ GradientToolbar::prep(SPDesktop * desktop, GtkActionGroup* mainActions)
                                                             _("Offset"), C_("Gradient", "Offset:"), _("Offset of selected stop"),
                                                             "/tools/gradient/stopoffset", 0,
                                                             GTK_WIDGET(desktop->canvas),
-                                                            nullptr, // dataKludge
                                                             FALSE, nullptr,
                                                             0.0, 1.0, 0.01, 0.1,
                                                             nullptr, nullptr, 0,
-                                                            nullptr, // callback
                                                             nullptr /*unit tracker*/,
                                                             0.01, 2, 1.0);
 

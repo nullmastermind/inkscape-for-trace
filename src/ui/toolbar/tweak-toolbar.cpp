@@ -95,11 +95,9 @@ TweakToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                               _("Width"), _("Width:"), _("The width of the tweak area (relative to the visible canvas area)"),
                                                               "/tools/tweak/width", 15,
                                                               GTK_WIDGET(desktop->canvas),
-                                                              nullptr, // dataKludge
                                                               TRUE, "altx-tweak",
                                                               1, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              nullptr, // callback
                                                               nullptr /*unit tracker*/, 0.01, 0, 100 );
 
         holder->_adj_tweak_width = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
@@ -118,11 +116,9 @@ TweakToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                               _("Force"), _("Force:"), _("The force of the tweak action"),
                                                               "/tools/tweak/force", 20,
                                                               GTK_WIDGET(desktop->canvas),
-                                                              nullptr, // dataKludge
                                                               TRUE, "tweak-force",
                                                               1, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              nullptr, // callback
                                                               nullptr /*unit tracker*/, 0.01, 0, 100 );
         holder->_adj_tweak_force = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         holder->_adj_tweak_force->signal_value_changed().connect(sigc::mem_fun(*holder, &TweakToolbar::tweak_force_value_changed));
@@ -316,11 +312,9 @@ TweakToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                             _("Low fidelity simplifies paths; high fidelity preserves path features but may generate a lot of new nodes"),
                                                             "/tools/tweak/fidelity", 50,
                                                             GTK_WIDGET(desktop->canvas),
-                                                            nullptr, // dataKludge
                                                             TRUE, "tweak-fidelity",
                                                             1, 100, 1.0, 10.0,
                                                             labels, values, G_N_ELEMENTS(labels),
-                                                            nullptr, // callback
                                                             nullptr /*unit tracker*/, 0.01, 0, 100 );
 
         holder->_adj_tweak_fidelity = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_tweak_fidelity));

@@ -223,11 +223,9 @@ SelectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             "/tools/select/X",                    /* path */ 
             0.0,                                  /* def(default) */ 
             GTK_WIDGET(desktop->canvas),          /* focusTarget */ 
-            nullptr,                              /* dataKludge */
             TRUE, "altx",                         /* altx, altx_mark */ 
             -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP, /* lower, upper, step, page */ 
             nullptr, nullptr, 0,                  /* descrLabels, descrValues, descrCount */
-            nullptr,                              /* callback */
             holder->_tracker,                     /* unit_tracker */
             SPIN_STEP, 3, 1);                     /* climb, digits, factor */
 
@@ -244,11 +242,9 @@ SelectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             "/tools/select/Y",                    /* path */
             0.0,                                  /* def(default) */
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
-            nullptr,                              /* dataKludge */
             TRUE, "altx",                         /* altx, altx_mark */
             -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP, /* lower, upper, step, page */
             nullptr, nullptr, 0,                              /* descrLabels, descrValues, descrCount */
-            nullptr,                              /* callback */
             holder->_tracker,                     /* unit_tracker */
             SPIN_STEP, 3, 1);                     /* climb, digits, factor */              
 
@@ -265,11 +261,9 @@ SelectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             "/tools/select/width",                /* path */                      
             0.0,                                  /* def(default) */
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
-            nullptr,                              /* dataKludge */
             TRUE, "altx",                         /* altx, altx_mark */
             0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,  /* lower, upper, step, page */
             nullptr, nullptr, 0,                              /* descrLabels, descrValues, descrCount */
-            nullptr,                              /* callback */
             holder->_tracker,                     /* unit_tracker */
             SPIN_STEP, 3, 1);                     /* climb, digits, factor */
 
@@ -298,11 +292,9 @@ SelectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             "/tools/select/height",               /* path */                      
             0.0,                                  /* def(default) */
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
-            nullptr,                              /* dataKludge */
             TRUE, "altx",                         /* altx, altx_mark */
             0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,  /* lower, upper, step, page */
             nullptr, nullptr, 0,                              /* descrLabels, descrValues, descrCount */
-            nullptr,                              /* callback */
             holder->_tracker,                     /* unit_tracker */
             SPIN_STEP, 3, 1);                     /* climb, digits, factor */
 

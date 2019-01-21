@@ -583,12 +583,10 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             "/tools/text/lineheight",             /* preferences path */
             0.0,                                  /* default */
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
-            nullptr,                              /* dataKludge */
             FALSE,                                /* set alt-x keyboard shortcut? */
             nullptr,                              /* altx_mark */
             0.0, 1000.0, 0.1, 1.0,                /* lower, upper, step (arrow up/down), page up/down */
             labels, values, G_N_ELEMENTS(labels), /* drop down menu */
-            nullptr,                              /* callback */
             nullptr, // tracker,                  /* unit tracker */
             0.1,                                  /* step (used?) */
             2,                                    /* digits to show */
@@ -674,12 +672,10 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             "/tools/text/wordspacing",            /* preferences path */
             0.0,                                  /* default */
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
-            nullptr,                              /* dataKludge */
             FALSE,                                /* set alt-x keyboard shortcut? */
             nullptr,                                 /* altx_mark */
             -100.0, 100.0, 0.01, 0.10,            /* lower, upper, step (arrow up/down), page up/down */
             labels, values, G_N_ELEMENTS(labels), /* drop down menu */
-            nullptr,                              /* callback */
             nullptr,                                 /* unit tracker */
             0.1,                                  /* step (used?) */
             2,                                    /* digits to show */
@@ -707,12 +703,10 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             "/tools/text/letterspacing",          /* preferences path */
             0.0,                                  /* default */
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
-            nullptr,                              /* dataKludge */
             FALSE,                                /* set alt-x keyboard shortcut? */
             nullptr,                                 /* altx_mark */
             -100.0, 100.0, 0.01, 0.10,            /* lower, upper, step (arrow up/down), page up/down */
             labels, values, G_N_ELEMENTS(labels), /* drop down menu */
-            nullptr,                              /* callback */
             nullptr,                                 /* unit tracker */
             0.1,                                  /* step (used?) */
             2,                                    /* digits to show */
@@ -739,12 +733,10 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             "/tools/text/dx",                     /* preferences path */
             0.0,                                  /* default */
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
-            nullptr,                              /* dataKludge */
             FALSE,                                /* set alt-x keyboard shortcut? */
             nullptr,                              /* altx_mark */
             -100.0, 100.0, 0.01, 0.1,             /* lower, upper, step (arrow up/down), page up/down */
             labels, values, G_N_ELEMENTS(labels), /* drop down menu */
-            nullptr,                              /* callback */
             nullptr,                              /* unit tracker */
             0.1,                                  /* step (used?) */
             2,                                    /* digits to show */
@@ -771,12 +763,10 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             "/tools/text/dy",                     /* preferences path */
             0.0,                                  /* default */
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
-            nullptr,                              /* dataKludge */
             FALSE,                                /* set alt-x keyboard shortcut? */
             nullptr,                                 /* altx_mark */
             -100.0, 100.0, 0.01, 0.1,             /* lower, upper, step (arrow up/down), page up/down */
             labels, values, G_N_ELEMENTS(labels), /* drop down menu */
-            nullptr,                              /* callback */
             nullptr,                                 /* unit tracker */
             0.1,                                  /* step (used?) */
             2,                                    /* digits to show */
@@ -803,12 +793,10 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             "/tools/text/rotation",               /* preferences path */
             0.0,                                  /* default */
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
-            nullptr,                              /* dataKludge */
             FALSE,                                /* set alt-x keyboard shortcut? */
             nullptr,                                 /* altx_mark */
             -180.0, 180.0, 0.1, 1.0,              /* lower, upper, step (arrow up/down), page up/down */
             labels, values, G_N_ELEMENTS(labels), /* drop down menu */
-            nullptr,                              /* callback */
             nullptr,                                 /* unit tracker */
             0.1,                                  /* step (used?) */
             2,                                    /* digits to show */

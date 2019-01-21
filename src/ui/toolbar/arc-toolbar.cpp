@@ -114,11 +114,9 @@ ArcToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                         _("Horizontal radius"), _("Rx:"), _("Horizontal radius of the circle, ellipse, or arc"),
                                                         "/tools/shapes/arc/rx", 0,
                                                         GTK_WIDGET(desktop->canvas),
-                                                        nullptr, // dataKludge
                                                         TRUE, "altx-arc",
                                                         0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                                         labels, values, G_N_ELEMENTS(labels),
-                                                        nullptr, // callback
                                                         toolbar->_tracker);
         toolbar->_rx_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_rx_action));
         toolbar->_rx_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*toolbar, &ArcToolbar::value_changed),
@@ -135,11 +133,9 @@ ArcToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                         _("Vertical radius"), _("Ry:"), _("Vertical radius of the circle, ellipse, or arc"),
                                                         "/tools/shapes/arc/ry", 0,
                                                         GTK_WIDGET(desktop->canvas),
-                                                        nullptr, // dataKludge
                                                         FALSE, nullptr,
                                                         0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                                         labels, values, G_N_ELEMENTS(labels),
-                                                        nullptr, // callback
                                                         toolbar->_tracker);
         toolbar->_ry_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_ry_action));
         toolbar->_ry_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*toolbar, &ArcToolbar::value_changed),
@@ -161,11 +157,9 @@ ArcToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                          _("The angle (in degrees) from the horizontal to the arc's start point"),
                                          "/tools/shapes/arc/start", 0.0,
                                          GTK_WIDGET(desktop->canvas),
-                                         nullptr,
                                          TRUE, "altx-arc",
                                          -360.0, 360.0, 1.0, 10.0,
-                                         nullptr, nullptr, 0,
-                                         nullptr // callback
+                                         nullptr, nullptr, 0
                                          );
         toolbar->_start_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
@@ -178,11 +172,9 @@ ArcToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                          _("The angle (in degrees) from the horizontal to the arc's end point"),
                                          "/tools/shapes/arc/end", 0.0,
                                          GTK_WIDGET(desktop->canvas),
-                                         nullptr, // dataKludge
                                          FALSE, nullptr,
                                          -360.0, 360.0, 1.0, 10.0,
-                                         nullptr, nullptr, 0,
-                                         nullptr // callback
+                                         nullptr, nullptr, 0
                                          );
         toolbar->_end_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );

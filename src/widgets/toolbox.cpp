@@ -714,11 +714,9 @@ EgeAdjustmentAction * create_adjustment_action( gchar const *name,
                                                        gchar const *label, gchar const *shortLabel, gchar const *tooltip,
                                                        Glib::ustring const &path, gdouble def,
                                                        GtkWidget *focusTarget,
-                                                       GObject * /* dataKludge */,
                                                        gboolean altx, gchar const *altx_mark,
                                                        gdouble lower, gdouble upper, gdouble step, gdouble page,
                                                        gchar const** descrLabels, gdouble const* descrValues, guint descrCount,
-                                                       void (*callback)(GtkAdjustment *, GObject *),
                                                        Inkscape::UI::Widget::UnitTracker *unit_tracker,
                                                        gdouble climb/* = 0.1*/, guint digits/* = 3*/, double factor/* = 1.0*/ )
 {
@@ -731,8 +729,6 @@ EgeAdjustmentAction * create_adjustment_action( gchar const *name,
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     GtkAdjustment* adj = GTK_ADJUSTMENT( gtk_adjustment_new( prefs->getDouble(path, def) * factor,
                                                              lower, upper, step, page, 0 ) );
-
-//    g_signal_connect( G_OBJECT(adj), "value-changed", G_CALLBACK(callback), dataKludge );
 
     EgeAdjustmentAction* act = ege_adjustment_action_new( adj, name, label, tooltip, nullptr, climb, digits, unit_tracker );
     if ( shortLabel ) {
@@ -750,15 +746,6 @@ EgeAdjustmentAction * create_adjustment_action( gchar const *name,
     if ( altx && altx_mark ) {
         g_object_set( G_OBJECT(act), "self-id", altx_mark, NULL );
     }
-
-    /*
-     * TODO: Is this ever used?
-    if ( dataKludge ) {
-        // Rather lame, but it's the only place where we need to get the entry name
-        // but we don't have an Entry
-        g_object_set_data( dataKludge, prefs->getEntry(path).getEntryName().data(), adj );
-    }
-    */
 
     if (unit_tracker) {
         unit_tracker->addAdjustment(adj);

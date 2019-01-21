@@ -110,11 +110,9 @@ PencilToolbar::prep_pencil(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                           _("Min pressure"), _("Min:"), _("Min percent of pressure"),
                                                           "/tools/freehand/pencil/minpressure", 0,
                                                           GTK_WIDGET(desktop->canvas),
-                                                          nullptr, // dataKludge
                                                           FALSE, nullptr,
                                                           0, 100, 1, 0,
                                                           nullptr, nullptr, 0,
-                                                          nullptr, // callback
                                                           nullptr, 0 ,0);
         
         toolbar->_minpressure_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_minpressure));
@@ -132,11 +130,9 @@ PencilToolbar::prep_pencil(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                           _("Max pressure"), _("Max:"), _("Max percent of pressure"),
                                                           "/tools/freehand/pencil/maxpressure", 100,
                                                           GTK_WIDGET(desktop->canvas),
-                                                          nullptr, // dataKludge
                                                           FALSE, nullptr,
                                                           0, 100, 1, 0,
                                                           nullptr, nullptr, 0,
-                                                          nullptr, // callback
                                                           nullptr, 0 ,0);
         toolbar->_maxpressure_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_maxpressure));
         toolbar->_maxpressure_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &PencilToolbar::maxpressure_value_changed));
@@ -176,11 +172,9 @@ PencilToolbar::prep_pencil(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                               "/tools/freehand/pencil/tolerance",
                                                               3.0,
                                                               GTK_WIDGET(desktop->canvas),
-                                                              nullptr, // dataKludge
                                                               TRUE, "altx-pencil",
                                                               1, 100.0, 0.5, 1.0,
                                                               labels, values, G_N_ELEMENTS(labels),
-                                                              nullptr, // callback
                                                               nullptr /*unit tracker*/,
                                                               1, 2);
 

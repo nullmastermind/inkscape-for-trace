@@ -480,11 +480,9 @@ NodeToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                             _("X coordinate:"), _("X:"), _("X coordinate of selected node(s)"),
                                                             "/tools/nodes/Xcoord", 0,
                                                             GTK_WIDGET(desktop->canvas),
-                                                            nullptr, // dataKludge
                                                             TRUE, "altx-nodes",
                                                             -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                                             labels, values, G_N_ELEMENTS(labels),
-                                                            nullptr, // callback
                                                             holder->_tracker );
         holder->_nodes_x_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_nodes_x_action));
         holder->_nodes_x_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &NodeToolbar::value_changed), Geom::X));
@@ -500,11 +498,9 @@ NodeToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                             _("Y coordinate:"), _("Y:"), _("Y coordinate of selected node(s)"),
                                                             "/tools/nodes/Ycoord", 0,
                                                             GTK_WIDGET(desktop->canvas),
-                                                            nullptr, // dataKludge
                                                             FALSE, nullptr,
                                                             -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                                             labels, values, G_N_ELEMENTS(labels),
-                                                            nullptr, // callback
                                                             holder->_tracker );
         holder->_nodes_y_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_nodes_y_action));
         holder->_nodes_y_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &NodeToolbar::value_changed), Geom::Y));

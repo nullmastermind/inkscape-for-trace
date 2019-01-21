@@ -140,11 +140,9 @@ StarToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                          _("Corners"), _("Corners:"), _("Number of corners of a polygon or star"),
                                          "/tools/shapes/star/magnitude", 3,
                                          GTK_WIDGET(desktop->canvas),
-                                         nullptr, // dataKludge
                                          FALSE, nullptr,
                                          3, 1024, 1, 5,
                                          labels, values, G_N_ELEMENTS(labels),
-                                         nullptr, // callback
                                          nullptr /*unit tracker*/,
                                          1.0, 0 );
 
@@ -165,11 +163,9 @@ StarToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                          _("Base radius to tip radius ratio"),
                                          "/tools/shapes/star/proportion", 0.5,
                                          GTK_WIDGET(desktop->canvas),
-                                         nullptr, // dataKludge
                                          FALSE, nullptr,
                                          0.01, 1.0, 0.01, 0.1,
-                                         labels, values, G_N_ELEMENTS(labels),
-                                         nullptr // callback
+                                         labels, values, G_N_ELEMENTS(labels)
                                          );
         holder->_spoke_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_prop_action));
         holder->_spoke_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &StarToolbar::proportion_value_changed));
@@ -191,11 +187,9 @@ StarToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                          _("Rounded"), _("Rounded:"), _("How much rounded are the corners (0 for sharp)"),
                                          "/tools/shapes/star/rounded", 0.0,
                                          GTK_WIDGET(desktop->canvas),
-                                         nullptr, // dataKludge
                                          FALSE, nullptr,
                                          -10.0, 10.0, 0.01, 0.1,
-                                         labels, values, G_N_ELEMENTS(labels),
-                                         nullptr // callback
+                                         labels, values, G_N_ELEMENTS(labels)
                                          );
         holder->_roundedness_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         holder->_roundedness_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &StarToolbar::rounded_value_changed));
@@ -211,11 +205,9 @@ StarToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                          _("Randomized"), _("Randomized:"), _("Scatter randomly the corners and angles"),
                                          "/tools/shapes/star/randomized", 0.0,
                                          GTK_WIDGET(desktop->canvas),
-                                         nullptr, // dataKludge
                                          FALSE, nullptr,
                                          -10.0, 10.0, 0.001, 0.01,
                                          labels, values, G_N_ELEMENTS(labels),
-                                         nullptr, // callback
                                          nullptr /*unit tracker*/, 0.1, 3 );
         holder->_randomization_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         holder->_randomization_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &StarToolbar::randomized_value_changed));

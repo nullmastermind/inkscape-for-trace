@@ -116,11 +116,9 @@ RectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                           _("Width"), _("W:"), _("Width of rectangle"),
                                                           "/tools/shapes/rect/width", 0,
                                                           GTK_WIDGET(desktop->canvas),
-                                                          nullptr, // dataKludge
                                                           TRUE, "altx-rect",
                                                           0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                                           labels, values, G_N_ELEMENTS(labels),
-                                                          nullptr, // callback
                                                           holder->_tracker);
 
         holder->_width_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_width_action));
@@ -140,11 +138,9 @@ RectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                            _("Height"), _("H:"), _("Height of rectangle"),
                                                            "/tools/shapes/rect/height", 0,
                                                            GTK_WIDGET(desktop->canvas),
-                                                           nullptr, // dataKludge
                                                            FALSE, nullptr,
                                                            0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                                            labels, values, G_N_ELEMENTS(labels),
-                                                           nullptr, // callback
                                                            holder->_tracker);
         holder->_height_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_height_action));
         holder->_height_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &RectToolbar::value_changed),
@@ -163,11 +159,9 @@ RectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                          _("Horizontal radius"), _("Rx:"), _("Horizontal radius of rounded corners"),
                                          "/tools/shapes/rect/rx", 0,
                                          GTK_WIDGET(desktop->canvas),
-                                         nullptr, // dataKludge
                                          FALSE, nullptr,
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
-                                         nullptr, // callback
                                          holder->_tracker);
         holder->_rx_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         holder->_rx_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &RectToolbar::value_changed),
@@ -185,11 +179,9 @@ RectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                          _("Vertical radius"), _("Ry:"), _("Vertical radius of rounded corners"),
                                          "/tools/shapes/rect/ry", 0,
                                          GTK_WIDGET(desktop->canvas),
-                                         nullptr, // dataKludge
                                          FALSE, nullptr,
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
-                                         nullptr, // callback
                                          holder->_tracker);
         holder->_ry_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         holder->_ry_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &RectToolbar::value_changed),
