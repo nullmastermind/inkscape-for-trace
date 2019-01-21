@@ -67,6 +67,16 @@ spinbutton entry {
     padding-right:0;
 }
 
+GtkSpinButton button {
+	-gtk-icon-style: symbolic;
+	color:inherit;
+}
+
+spinbutton button {
+	-gtk-icon-style: symbolic;
+	color:inherit;
+}
+
 GtkSpinButton undershoot {
 	outline-style : none;
 }
