@@ -1446,7 +1446,7 @@ sel_matches_node_real (CRSelEng * a_this, CRSimpleSel * a_sel,
  *case, *a_len is set to the actual number of ruleset found.
  *@return CR_BAD_PARAM_ERROR in case any of the given parameter are
  *bad (e.g null pointer).
- *@return CR_ERROR if any other error occured.
+ *@return CR_ERROR if any other error occurred.
  */
 static enum CRStatus
 cr_sel_eng_get_matched_rulesets_real (CRSelEng * a_this,

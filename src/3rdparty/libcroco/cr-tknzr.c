@@ -524,7 +524,7 @@ cr_tknzr_parse_comment (CRTknzr * a_this,
  *Error code can be either CR_PARSING_ERROR if the string 
  *parsed just doesn't
  *respect the production or another error if a 
- *lower level error occured.
+ *lower level error occurred.
  */
 static enum CRStatus
 cr_tknzr_parse_unicode_escape (CRTknzr * a_this, 

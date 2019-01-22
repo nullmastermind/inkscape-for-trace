@@ -71,7 +71,7 @@ cr_prop_list_allocate (void)
  *Appends a property list to the current one.
  *
  *Returns the resulting prop list, or NULL if an error
- *occured
+ *occurred
  */
 CRPropList *
 cr_prop_list_append (CRPropList * a_this, CRPropList * a_to_append)
