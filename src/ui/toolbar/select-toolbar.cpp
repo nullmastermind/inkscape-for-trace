@@ -149,11 +149,6 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
     _update(false)
 {}
 
-SelectToolbar::~SelectToolbar()
-{
-    delete _tracker;
-}
-
 GtkWidget *
 SelectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
 {
@@ -225,7 +220,7 @@ SelectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             TRUE, "altx",                         /* altx, altx_mark */ 
             -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP, /* lower, upper, step, page */ 
             nullptr, nullptr, 0,                  /* descrLabels, descrValues, descrCount */
-            holder->_tracker,                     /* unit_tracker */
+            holder->_tracker.get(),               /* unit_tracker */
             SPIN_STEP, 3, 1);                     /* climb, digits, factor */
     ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
 
@@ -244,7 +239,7 @@ SelectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             TRUE, "altx",                         /* altx, altx_mark */
             -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP, /* lower, upper, step, page */
             nullptr, nullptr, 0,                              /* descrLabels, descrValues, descrCount */
-            holder->_tracker,                     /* unit_tracker */
+            holder->_tracker.get(),               /* unit_tracker */
             SPIN_STEP, 3, 1);                     /* climb, digits, factor */              
     ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
 
@@ -263,7 +258,7 @@ SelectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             TRUE, "altx",                         /* altx, altx_mark */
             0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,  /* lower, upper, step, page */
             nullptr, nullptr, 0,                              /* descrLabels, descrValues, descrCount */
-            holder->_tracker,                     /* unit_tracker */
+            holder->_tracker.get(),               /* unit_tracker */
             SPIN_STEP, 3, 1);                     /* climb, digits, factor */
     ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
 
@@ -294,7 +289,7 @@ SelectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             TRUE, "altx",                         /* altx, altx_mark */
             0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,  /* lower, upper, step, page */
             nullptr, nullptr, 0,                              /* descrLabels, descrValues, descrCount */
-            holder->_tracker,                     /* unit_tracker */
+            holder->_tracker.get(),               /* unit_tracker */
             SPIN_STEP, 3, 1);                     /* climb, digits, factor */
     ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
     holder->_adj_h = Glib::wrap(GTK_ADJUSTMENT(ege_adjustment_action_get_adjustment(eact)));

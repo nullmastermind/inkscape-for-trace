@@ -34,7 +34,7 @@ namespace Toolbar {
 
 class SelectToolbar : public Toolbar {
 private:
-    UI::Widget::UnitTracker *_tracker;
+    std::unique_ptr<UI::Widget::UnitTracker> _tracker;
 
     Glib::RefPtr<Gtk::Adjustment>  _adj_x;
     Glib::RefPtr<Gtk::Adjustment>  _adj_y;
@@ -54,7 +54,6 @@ private:
 
 protected:
     SelectToolbar(SPDesktop *desktop);
-    ~SelectToolbar() override;
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
