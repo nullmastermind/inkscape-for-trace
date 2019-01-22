@@ -15,6 +15,8 @@
 
 #include <glibmm/i18n.h>
 
+#include <gtkmm/separatortoolitem.h>
+
 #include <2geom/rect.h>
 
 #include "select-toolbar.h"
@@ -22,9 +24,6 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "widgets/ink-action.h"
-#include "widgets/ink-toggle-action.h"
-#include "widgets/toolbox.h"
 #include "inkscape.h"
 #include "message-stack.h"
 #include "selection-chemistry.h"
@@ -41,6 +40,7 @@
 #include "ui/icon-names.h"
 #include "ui/widget/ink-select-one-action.h"
 #include "ui/widget/spinbutton.h"
+#include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
 
 #include "widgets/ege-adjustment-action.h"
@@ -54,69 +54,6 @@ using Inkscape::Util::unit_table;
 
 
 
-// toggle button callbacks and updaters
-
-static void toggle_stroke( GtkToggleAction* act, gpointer data )
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gboolean active = gtk_toggle_action_get_active(act);
-    prefs->setBool("/options/transform/stroke", active);
-    SPDesktop *desktop = static_cast<SPDesktop *>(data);
-    if ( active ) {
-        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>stroke width</b> is <b>scaled</b> when objects are scaled."));
-    } else {
-        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>stroke width</b> is <b>not scaled</b> when objects are scaled."));
-    }
-}
-
-static void toggle_corners( GtkToggleAction* act, gpointer data)
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gboolean active = gtk_toggle_action_get_active(act);
-    prefs->setBool("/options/transform/rectcorners", active);
-    SPDesktop *desktop = static_cast<SPDesktop *>(data);
-    if ( active ) {
-        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>rounded rectangle corners</b> are <b>scaled</b> when rectangles are scaled."));
-    } else {
-        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>rounded rectangle corners</b> are <b>not scaled</b> when rectangles are scaled."));
-    }
-}
-
-static void toggle_gradient( GtkToggleAction *act, gpointer data )
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gboolean active = gtk_toggle_action_get_active(act);
-    prefs->setBool("/options/transform/gradient", active);
-    SPDesktop *desktop = static_cast<SPDesktop *>(data);
-    if ( active ) {
-        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>gradients</b> are <b>transformed</b> along with their objects when those are transformed (moved, scaled, rotated, or skewed)."));
-    } else {
-        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>gradients</b> remain <b>fixed</b> when objects are transformed (moved, scaled, rotated, or skewed)."));
-    }
-}
-
-static void toggle_pattern( GtkToggleAction* act, gpointer data )
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gboolean active = gtk_toggle_action_get_active(act);
-    prefs->setInt("/options/transform/pattern", active);
-    SPDesktop *desktop = static_cast<SPDesktop *>(data);
-    if ( active ) {
-        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>patterns</b> are <b>transformed</b> along with their objects when those are transformed (moved, scaled, rotated, or skewed)."));
-    } else {
-        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>patterns</b> remain <b>fixed</b> when objects are transformed (moved, scaled, rotated, or skewed)."));
-    }
-}
-
-static void toggle_lock( GtkToggleAction *act, gpointer /*data*/ ) {
-    gboolean active = gtk_toggle_action_get_active( act );
-    if ( active ) {
-        g_object_set( G_OBJECT(act), "iconId", INKSCAPE_ICON("object-locked"), NULL );
-    } else {
-        g_object_set( G_OBJECT(act), "iconId", INKSCAPE_ICON("object-unlocked"), NULL );
-    }
-}
-
 static void trigger_sp_action( GtkAction* /*act*/, gpointer user_data )
 {
     SPAction* targetAction = SP_ACTION(user_data);
@@ -125,249 +62,183 @@ static void trigger_sp_action( GtkAction* /*act*/, gpointer user_data )
     }
 }
 
-static GtkAction* create_action_for_verb( Inkscape::Verb* verb, Inkscape::UI::View::View* view, GtkIconSize size )
-{
-    GtkAction* act = nullptr;
-
-    SPAction* targetAction = verb->get_action(Inkscape::ActionContext(view));
-    InkAction* inky = ink_action_new( verb->get_id(), verb->get_name(), verb->get_tip(), verb->get_image(), size  );
-    act = GTK_ACTION(inky);
-
-    g_signal_connect( G_OBJECT(inky), "activate", G_CALLBACK(trigger_sp_action), targetAction );
-
-    return act;
-}
-
 namespace Inkscape {
 namespace UI {
 namespace Toolbar {
 
 SelectToolbar::SelectToolbar(SPDesktop *desktop) :
     Toolbar(desktop),
-    _context_actions(new std::vector<GtkAction*>()),
     _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR)),
-    _update(false)
-{}
-
-GtkWidget *
-SelectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
+    _update(false),
+    _lock_btn(Gtk::manage(new Gtk::ToggleToolButton())),
+    _transform_stroke_btn(Gtk::manage(new Gtk::ToggleToolButton())),
+    _transform_corners_btn(Gtk::manage(new Gtk::ToggleToolButton())),
+    _transform_gradient_btn(Gtk::manage(new Gtk::ToggleToolButton())),
+    _transform_pattern_btn(Gtk::manage(new Gtk::ToggleToolButton()))
 {
-    auto holder = new SelectToolbar(desktop);
-
-    Inkscape::UI::View::View *view = desktop;
-    GtkIconSize secondarySize = Inkscape::UI::ToolboxFactory::prefToSize("/toolbox/secondary", 1);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    GtkAction* act = nullptr;
+    auto select_all_button               = add_toolbutton_for_verb(SP_VERB_EDIT_SELECT_ALL);
+    auto select_all_in_all_layers_button = add_toolbutton_for_verb(SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS);
+    auto deselect_button                 = add_toolbutton_for_verb(SP_VERB_EDIT_DESELECT);
+    _context_items.push_back(deselect_button);
 
-    holder->_selection_actions = mainActions; // temporary
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 
-    act = create_action_for_verb( Inkscape::Verb::get(SP_VERB_EDIT_SELECT_ALL), view, secondarySize );
-    gtk_action_group_add_action( holder->_selection_actions, act );
-    act = create_action_for_verb( Inkscape::Verb::get(SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS), view, secondarySize );
-    gtk_action_group_add_action( holder->_selection_actions, act );
-    act = create_action_for_verb( Inkscape::Verb::get(SP_VERB_EDIT_DESELECT), view, secondarySize );
-    gtk_action_group_add_action( holder->_selection_actions, act );
-    holder->_context_actions->push_back( act );
+    auto object_rotate_90_ccw_button     = add_toolbutton_for_verb(SP_VERB_OBJECT_ROTATE_90_CCW);
+    _context_items.push_back(object_rotate_90_ccw_button);
 
-    act = create_action_for_verb( Inkscape::Verb::get(SP_VERB_OBJECT_ROTATE_90_CCW), view, secondarySize );
-    gtk_action_group_add_action( holder->_selection_actions, act );
-    holder->_context_actions->push_back( act );
-    act = create_action_for_verb( Inkscape::Verb::get(SP_VERB_OBJECT_ROTATE_90_CW), view, secondarySize );
-    gtk_action_group_add_action( holder->_selection_actions, act );
-    holder->_context_actions->push_back( act );
-    act = create_action_for_verb( Inkscape::Verb::get(SP_VERB_OBJECT_FLIP_HORIZONTAL), view, secondarySize );
-    gtk_action_group_add_action( holder->_selection_actions, act );
-    holder->_context_actions->push_back( act );
-    act = create_action_for_verb( Inkscape::Verb::get(SP_VERB_OBJECT_FLIP_VERTICAL), view, secondarySize );
-    gtk_action_group_add_action( holder->_selection_actions, act );
-    holder->_context_actions->push_back( act );
+    auto object_rotate_90_cw_button      = add_toolbutton_for_verb(SP_VERB_OBJECT_ROTATE_90_CW);
+    _context_items.push_back(object_rotate_90_cw_button);
 
-    act = create_action_for_verb( Inkscape::Verb::get(SP_VERB_SELECTION_TO_BACK), view, secondarySize );
-    gtk_action_group_add_action( holder->_selection_actions, act );
-    holder->_context_actions->push_back( act );
-    act = create_action_for_verb( Inkscape::Verb::get(SP_VERB_SELECTION_LOWER), view, secondarySize );
-    gtk_action_group_add_action( holder->_selection_actions, act );
-    holder->_context_actions->push_back( act );
-    act = create_action_for_verb( Inkscape::Verb::get(SP_VERB_SELECTION_RAISE), view, secondarySize );
-    gtk_action_group_add_action( holder->_selection_actions, act );
-    holder->_context_actions->push_back( act );
-    act = create_action_for_verb( Inkscape::Verb::get(SP_VERB_SELECTION_TO_FRONT), view, secondarySize );
-    gtk_action_group_add_action( holder->_selection_actions, act );
-    holder->_context_actions->push_back( act );
+    auto object_flip_horizontal_button   = add_toolbutton_for_verb(SP_VERB_OBJECT_FLIP_HORIZONTAL);
+    _context_items.push_back(object_flip_horizontal_button);
 
-    // Create the parent widget for x y w h tracker.
-    // The vb frame holds all other widgets and is used to set sensitivity depending on selection state.
-    auto vb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_box_set_homogeneous(GTK_BOX(vb), FALSE);
-    gtk_widget_show(vb);
+    auto object_flip_vertical_button     = add_toolbutton_for_verb(SP_VERB_OBJECT_FLIP_VERTICAL);
+    _context_items.push_back(object_flip_vertical_button);
 
-    // Create the units menu.
-    holder->_tracker->addUnit(unit_table.getUnit("%"));
-    holder->_tracker->setActiveUnit( desktop->getNamedView()->display_units );
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 
-    EgeAdjustmentAction* eact = nullptr;
+    auto selection_to_back_button        = add_toolbutton_for_verb(SP_VERB_SELECTION_TO_BACK);
+    _context_items.push_back(selection_to_back_button);
 
-    // four spinbuttons
+    auto selection_lower_button          = add_toolbutton_for_verb(SP_VERB_SELECTION_LOWER);
+    _context_items.push_back(selection_lower_button);
 
-    eact = create_adjustment_action(
-            "XAction",                            /* name */ 
-            C_("Select toolbar", "X position"),   /* label */ 
-            C_("Select toolbar", "X:"),           /* shortLabel */ 
-            C_("Select toolbar", "Horizontal coordinate of selection"), /* tooltip */ 
-            "/tools/select/X",                    /* path */ 
-            0.0,                                  /* def(default) */ 
-            TRUE, "altx",                         /* altx, altx_mark */ 
-            -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP, /* lower, upper, step, page */ 
-            nullptr, nullptr, 0,                  /* descrLabels, descrValues, descrCount */
-            holder->_tracker.get(),               /* unit_tracker */
-            SPIN_STEP, 3, 1);                     /* climb, digits, factor */
-    ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
+    auto selection_raise_button          = add_toolbutton_for_verb(SP_VERB_SELECTION_RAISE);
+    _context_items.push_back(selection_raise_button);
 
-    holder->_adj_x = Glib::wrap(GTK_ADJUSTMENT(ege_adjustment_action_get_adjustment(eact)));
-    holder->_adj_x->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &SelectToolbar::any_value_changed), holder->_adj_x));
-    gtk_action_group_add_action( holder->_selection_actions, GTK_ACTION(eact) );
-    holder->_context_actions->push_back( GTK_ACTION(eact) );
+    auto selection_to_front_button       = add_toolbutton_for_verb(SP_VERB_SELECTION_TO_FRONT);
+    _context_items.push_back(selection_to_front_button);
 
-    eact = create_adjustment_action(
-            "YAction",                            /* name */
-            C_("Select toolbar", "Y position"),   /* label */
-            C_("Select toolbar", "Y:"),           /* shortLabel */
-            C_("Select toolbar", "Vertical coordinate of selection"), /* tooltip */
-            "/tools/select/Y",                    /* path */
-            0.0,                                  /* def(default) */
-            TRUE, "altx",                         /* altx, altx_mark */
-            -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP, /* lower, upper, step, page */
-            nullptr, nullptr, 0,                              /* descrLabels, descrValues, descrCount */
-            holder->_tracker.get(),               /* unit_tracker */
-            SPIN_STEP, 3, 1);                     /* climb, digits, factor */              
-    ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 
-    holder->_adj_y = Glib::wrap(GTK_ADJUSTMENT(ege_adjustment_action_get_adjustment(eact)));
-    holder->_adj_y->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &SelectToolbar::any_value_changed), holder->_adj_y));
-    gtk_action_group_add_action( holder->_selection_actions, GTK_ACTION(eact) );
-    holder->_context_actions->push_back( GTK_ACTION(eact) );
+    _tracker->addUnit(unit_table.getUnit("%"));
+    _tracker->setActiveUnit( desktop->getNamedView()->display_units );
 
-    eact = create_adjustment_action(
-            "WidthAction",                        /* name */
-            C_("Select toolbar", "Width"),        /* label */
-            C_("Select toolbar", "W:"),           /* shortLabel */
-            C_("Select toolbar", "Width of selection"), /* tooltip */
-            "/tools/select/width",                /* path */                      
-            0.0,                                  /* def(default) */
-            TRUE, "altx",                         /* altx, altx_mark */
-            0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,  /* lower, upper, step, page */
-            nullptr, nullptr, 0,                              /* descrLabels, descrValues, descrCount */
-            holder->_tracker.get(),               /* unit_tracker */
-            SPIN_STEP, 3, 1);                     /* climb, digits, factor */
-    ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
+    // x-value control
+    auto x_val = prefs->getDouble("/tools/select/X", 0.0);
+    _adj_x = Gtk::Adjustment::create(x_val, -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
+    _adj_x->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &SelectToolbar::any_value_changed), _adj_x));
+    _tracker->addAdjustment(_adj_x->gobj());
 
-    holder->_adj_w = Glib::wrap(GTK_ADJUSTMENT(ege_adjustment_action_get_adjustment(eact)));
-    holder->_adj_w->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &SelectToolbar::any_value_changed), holder->_adj_w));
-    gtk_action_group_add_action( holder->_selection_actions, GTK_ACTION(eact) );
-    holder->_context_actions->push_back( GTK_ACTION(eact) );
+    auto x_btn = Gtk::manage(new UI::Widget::SpinButtonToolItem("select-x",
+                                                                C_("Select toolbar", "X:"),
+                                                                _adj_x,
+                                                                SPIN_STEP, 3));
+    x_btn->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
+    x_btn->set_all_tooltip_text(C_("Select toolbar", "Horizontal coordinate of selection"));
+    _context_items.push_back(x_btn);
+    add(*x_btn);
+
+    // y-value control
+    auto y_val = prefs->getDouble("/tools/select/Y", 0.0);
+    _adj_y = Gtk::Adjustment::create(y_val, -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
+    _adj_y->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &SelectToolbar::any_value_changed), _adj_y));
+    _tracker->addAdjustment(_adj_y->gobj());
+
+    auto y_btn = Gtk::manage(new UI::Widget::SpinButtonToolItem("select-y",
+                                                                C_("Select toolbar", "Y:"),
+                                                                _adj_y,
+                                                                SPIN_STEP, 3));
+    y_btn->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
+    y_btn->set_all_tooltip_text(C_("Select toolbar", "Vertical coordinate of selection"));
+    _context_items.push_back(y_btn);
+    add(*y_btn);
+
+    // width-value control
+    auto w_val = prefs->getDouble("/tools/select/width", 0.0);
+    _adj_w = Gtk::Adjustment::create(w_val, 0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
+    _adj_w->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &SelectToolbar::any_value_changed), _adj_w));
+    _tracker->addAdjustment(_adj_w->gobj());
+
+    auto w_btn = Gtk::manage(new UI::Widget::SpinButtonToolItem("select-width",
+                                                                C_("Select toolbar", "W:"),
+                                                                _adj_w,
+                                                                SPIN_STEP, 3));
+    w_btn->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
+    w_btn->set_all_tooltip_text(C_("Select toolbar", "Width of selection"));
+    _context_items.push_back(w_btn);
+    add(*w_btn);
 
     // lock toggle
-    {
-    holder->_lock = GTK_TOGGLE_ACTION(ink_toggle_action_new( "LockAction",
-                                                            _("Lock width and height"),
-                                                            _("When locked, change both width and height by the same proportion"),
-                                                            INKSCAPE_ICON("object-unlocked"),
-                                                            GTK_ICON_SIZE_MENU ));
-    gtk_action_set_short_label( GTK_ACTION(holder->_lock), "Lock" );
-    g_signal_connect_after( G_OBJECT(holder->_lock), "toggled", G_CALLBACK(toggle_lock), desktop) ;
-    gtk_action_group_add_action( mainActions, GTK_ACTION(holder->_lock) );
-    }
+    _lock_btn->set_label(_("Lock width and height"));
+    _lock_btn->set_tooltip_text(_("When locked, change both width and height by the same proportion"));
+    _lock_btn->set_icon_name(INKSCAPE_ICON("object-unlocked"));
+    _lock_btn->signal_toggled().connect(sigc::mem_fun(*this, &SelectToolbar::toggle_lock));
+    add(*_lock_btn);
 
-    eact = create_adjustment_action(
-            "HeightAction",                       /* name */
-            C_("Select toolbar", "Height"),       /* label */
-            C_("Select toolbar", "H:"),           /* shortLabel */
-            C_("Select toolbar", "Height of selection"), /* tooltip */
-            "/tools/select/height",               /* path */                      
-            0.0,                                  /* def(default) */
-            TRUE, "altx",                         /* altx, altx_mark */
-            0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,  /* lower, upper, step, page */
-            nullptr, nullptr, 0,                              /* descrLabels, descrValues, descrCount */
-            holder->_tracker.get(),               /* unit_tracker */
-            SPIN_STEP, 3, 1);                     /* climb, digits, factor */
-    ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
-    holder->_adj_h = Glib::wrap(GTK_ADJUSTMENT(ege_adjustment_action_get_adjustment(eact)));
-    holder->_adj_h->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &SelectToolbar::any_value_changed), holder->_adj_h));
-    gtk_action_group_add_action( holder->_selection_actions, GTK_ACTION(eact) );
-    holder->_context_actions->push_back( GTK_ACTION(eact) );
+    // height-value control
+    auto h_val = prefs->getDouble("/tools/select/height", 0.0);
+    _adj_h = Gtk::Adjustment::create(h_val, 0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
+    _adj_h->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &SelectToolbar::any_value_changed), _adj_h));
+    _tracker->addAdjustment(_adj_h->gobj());
 
-    // Add the units menu.
-    {
-        InkSelectOneAction* act = holder->_tracker->createAction( "UnitsAction", _("Units"), ("") );
-        gtk_action_group_add_action( holder->_selection_actions, act->gobj() );
-    }
+    auto h_btn = Gtk::manage(new UI::Widget::SpinButtonToolItem("select-height",
+                                                                C_("Select toolbar", "H:"),
+                                                                _adj_h,
+                                                                SPIN_STEP, 3));
+    h_btn->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
+    h_btn->set_all_tooltip_text(C_("Select toolbar", "Height of selection"));
+    _context_items.push_back(h_btn);
+    add(*h_btn);
+
+    // units menu
+    auto unit_menu = _tracker->createAction( "UnitsAction", _("Units"), ("") );
+    auto unit_menu_ti = unit_menu->create_tool_item();
+    add(*unit_menu_ti);
+
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
+
+    _transform_stroke_btn->set_label(_("Scale stroke width"));
+    _transform_stroke_btn->set_tooltip_text(_("When scaling objects, scale the stroke width by the same proportion"));
+    _transform_stroke_btn->set_icon_name(INKSCAPE_ICON("transform-affect-stroke"));
+    _transform_stroke_btn->set_active(prefs->getBool("/options/transform/stroke", true));
+    _transform_stroke_btn->signal_toggled().connect(sigc::mem_fun(*this, &SelectToolbar::toggle_stroke));
+    add(*_transform_stroke_btn);
+
+    _transform_corners_btn->set_label(_("Scale rounded corners"));
+    _transform_corners_btn->set_tooltip_text(_("When scaling rectangles, scale the radii of rounded corners"));
+    _transform_corners_btn->set_icon_name(INKSCAPE_ICON("transform-affect-rounded-corners"));
+    _transform_corners_btn->set_active(prefs->getBool("/options/transform/rectcorners", true));
+    _transform_corners_btn->signal_toggled().connect(sigc::mem_fun(*this, &SelectToolbar::toggle_corners));
+    add(*_transform_corners_btn);
+
+    _transform_gradient_btn->set_label(_("Move gradients"));
+    _transform_gradient_btn->set_tooltip_text(_("Move gradients (in fill or stroke) along with the objects"));
+    _transform_gradient_btn->set_icon_name(INKSCAPE_ICON("transform-affect-gradient"));
+    _transform_gradient_btn->set_active(prefs->getBool("/options/transform/gradient", true));
+    _transform_gradient_btn->signal_toggled().connect(sigc::mem_fun(*this, &SelectToolbar::toggle_gradient));
+    add(*_transform_gradient_btn);
+
+    _transform_pattern_btn->set_label(_("Move patterns"));
+    _transform_pattern_btn->set_tooltip_text(_("Move patterns (in fill or stroke) along with the objects"));
+    _transform_pattern_btn->set_icon_name(INKSCAPE_ICON("transform-affect-pattern"));
+    _transform_pattern_btn->set_active(prefs->getBool("/options/transform/pattern", true));
+    _transform_pattern_btn->signal_toggled().connect(sigc::mem_fun(*this, &SelectToolbar::toggle_pattern));
+    add(*_transform_pattern_btn);
 
     // Force update when selection changes.
-    INKSCAPE.signal_selection_modified.connect(sigc::mem_fun(*holder, &SelectToolbar::on_inkscape_selection_modified));
-    INKSCAPE.signal_selection_changed.connect(sigc::mem_fun(*holder, &SelectToolbar::on_inkscape_selection_changed));
+    INKSCAPE.signal_selection_modified.connect(sigc::mem_fun(*this, &SelectToolbar::on_inkscape_selection_modified));
+    INKSCAPE.signal_selection_changed.connect (sigc::mem_fun(*this, &SelectToolbar::on_inkscape_selection_changed));
 
     // Update now.
-    holder->layout_widget_update(SP_ACTIVE_DESKTOP ? SP_ACTIVE_DESKTOP->getSelection() : nullptr);
+    layout_widget_update(SP_ACTIVE_DESKTOP ? SP_ACTIVE_DESKTOP->getSelection() : nullptr);
 
-    for (auto & contextAction : *holder->_context_actions) {
-        if ( gtk_action_is_sensitive(contextAction) ) {
-            gtk_action_set_sensitive( contextAction, FALSE );
+    for (auto item : _context_items) {
+        if ( item->is_sensitive() ) {
+            item->set_sensitive(false);
         }
     }
 
-    // Insert vb into the toolbar.
-    GtkToolItem *vb_toolitem = gtk_tool_item_new();
-    gtk_container_add(GTK_CONTAINER(vb_toolitem), vb);
-    holder->insert(*Glib::wrap(vb_toolitem), -1);
+    show_all();
+}
 
-    // "Transform with object" buttons
-    {
-
-    InkToggleAction* itact = ink_toggle_action_new( "transform_stroke",
-                                                    _("Scale stroke width"),
-                                                    _("When scaling objects, scale the stroke width by the same proportion"),
-                                                    "transform-affect-stroke",
-                                                    secondarySize );
-    gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(itact), prefs->getBool("/options/transform/stroke", true) );
-    g_signal_connect_after( G_OBJECT(itact), "toggled", G_CALLBACK(toggle_stroke), desktop) ;
-    gtk_action_group_add_action( mainActions, GTK_ACTION(itact) );
-    }
-
-    {
-    InkToggleAction* itact = ink_toggle_action_new( "transform_corners",
-                                                    _("Scale rounded corners"),
-                                                    _("When scaling rectangles, scale the radii of rounded corners"),
-                                                    "transform-affect-rounded-corners",
-                                                    secondarySize );
-    gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(itact), prefs->getBool("/options/transform/rectcorners", true) );
-    g_signal_connect_after( G_OBJECT(itact), "toggled", G_CALLBACK(toggle_corners), desktop) ;
-    gtk_action_group_add_action( mainActions, GTK_ACTION(itact) );
-    }
-
-    {
-    InkToggleAction* itact = ink_toggle_action_new( "transform_gradient",
-                                                    _("Move gradients"),
-                                                    _("Move gradients (in fill or stroke) along with the objects"),
-                                                    "transform-affect-gradient",
-                                                    secondarySize );
-    gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(itact), prefs->getBool("/options/transform/gradient", true) );
-    g_signal_connect_after( G_OBJECT(itact), "toggled", G_CALLBACK(toggle_gradient), desktop) ;
-    gtk_action_group_add_action( mainActions, GTK_ACTION(itact) );
-    }
-
-    {
-    InkToggleAction* itact = ink_toggle_action_new( "transform_pattern",
-                                                    _("Move patterns"),
-                                                    _("Move patterns (in fill or stroke) along with the objects"),
-                                                    "transform-affect-pattern",
-                                                    secondarySize );
-    gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(itact), prefs->getBool("/options/transform/pattern", true) );
-    g_signal_connect_after( G_OBJECT(itact), "toggled", G_CALLBACK(toggle_pattern), desktop) ;
-    gtk_action_group_add_action( mainActions, GTK_ACTION(itact) );
-    }
-
-    return GTK_WIDGET(holder->gobj());
+GtkWidget *
+SelectToolbar::create(SPDesktop *desktop)
+{
+    auto toolbar = new SelectToolbar(desktop);
+    return GTK_WIDGET(toolbar->gobj());
 }
 
 void
@@ -434,7 +305,7 @@ SelectToolbar::any_value_changed(Glib::RefPtr<Gtk::Adjustment>& adj)
     }
 
     // Keep proportions if lock is on
-    if ( gtk_toggle_action_get_active(_lock) ) {
+    if ( _lock_btn->get_active() ) {
         if (adj == _adj_h) {
             x1 = x0 + yrel * bbox_user->dimensions()[Geom::X];
         } else if (adj == _adj_w) {
@@ -562,16 +433,76 @@ void
 SelectToolbar::on_inkscape_selection_changed(Inkscape::Selection *selection)
 {
     if (_desktop->getSelection() == selection) { // only respond to changes in our desktop
-        gboolean setActive = (selection && !selection->isEmpty());
-        if ( _context_actions ) {
-            for (auto & contextAction : *_context_actions) {
-                if ( setActive != gtk_action_is_sensitive(contextAction) ) {
-                    gtk_action_set_sensitive( contextAction, setActive );
-                }
+        bool setActive = (selection && !selection->isEmpty());
+
+        for (auto item : _context_items) {
+            if ( setActive != item->get_sensitive() ) {
+                item->set_sensitive(setActive);
             }
         }
 
         layout_widget_update(selection);
+    }
+}
+
+void
+SelectToolbar::toggle_lock() {
+    if ( _lock_btn->get_active() ) {
+        _lock_btn->set_icon_name(INKSCAPE_ICON("object-locked"));
+    } else {
+        _lock_btn->set_icon_name(INKSCAPE_ICON("object-unlocked"));
+    }
+}
+
+void
+SelectToolbar::toggle_stroke()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool active = _transform_stroke_btn->get_active();
+    prefs->setBool("/options/transform/stroke", active);
+    if ( active ) {
+        _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>stroke width</b> is <b>scaled</b> when objects are scaled."));
+    } else {
+        _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>stroke width</b> is <b>not scaled</b> when objects are scaled."));
+    }
+}
+
+void
+SelectToolbar::toggle_corners()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool active = _transform_corners_btn->get_active();
+    prefs->setBool("/options/transform/rectcorners", active);
+    if ( active ) {
+        _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>rounded rectangle corners</b> are <b>scaled</b> when rectangles are scaled."));
+    } else {
+        _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>rounded rectangle corners</b> are <b>not scaled</b> when rectangles are scaled."));
+    }
+}
+
+void
+SelectToolbar::toggle_gradient()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool active = _transform_gradient_btn->get_active();
+    prefs->setBool("/options/transform/gradient", active);
+    if ( active ) {
+        _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>gradients</b> are <b>transformed</b> along with their objects when those are transformed (moved, scaled, rotated, or skewed)."));
+    } else {
+        _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>gradients</b> remain <b>fixed</b> when objects are transformed (moved, scaled, rotated, or skewed)."));
+    }
+}
+
+void
+SelectToolbar::toggle_pattern()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool active = _transform_pattern_btn->get_active();
+    prefs->setInt("/options/transform/pattern", active);
+    if ( active ) {
+        _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>patterns</b> are <b>transformed</b> along with their objects when those are transformed (moved, scaled, rotated, or skewed)."));
+    } else {
+        _desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Now <b>patterns</b> remain <b>fixed</b> when objects are transformed (moved, scaled, rotated, or skewed)."));
     }
 }
 

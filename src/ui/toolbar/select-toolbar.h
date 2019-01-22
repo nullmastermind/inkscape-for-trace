@@ -40,10 +40,14 @@ private:
     Glib::RefPtr<Gtk::Adjustment>  _adj_y;
     Glib::RefPtr<Gtk::Adjustment>  _adj_w;
     Glib::RefPtr<Gtk::Adjustment>  _adj_h;
-    GtkToggleAction               *_lock;
+    Gtk::ToggleToolButton         *_lock_btn;
+    Gtk::ToggleToolButton         *_transform_stroke_btn;
+    Gtk::ToggleToolButton         *_transform_corners_btn;
+    Gtk::ToggleToolButton         *_transform_gradient_btn;
+    Gtk::ToggleToolButton         *_transform_pattern_btn;
 
     GtkActionGroup *_selection_actions;
-    std::vector<GtkAction *> *_context_actions;
+    std::vector<Gtk::ToolItem *> _context_items;
 
     bool _update;
 
@@ -51,12 +55,17 @@ private:
     void layout_widget_update(Inkscape::Selection *sel);
     void on_inkscape_selection_modified(Inkscape::Selection *selection, guint flags);
     void on_inkscape_selection_changed(Inkscape::Selection *selection);
+    void toggle_lock();
+    void toggle_stroke();
+    void toggle_corners();
+    void toggle_gradient();
+    void toggle_pattern();
 
 protected:
     SelectToolbar(SPDesktop *desktop);
 
 public:
-    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+    static GtkWidget * create(SPDesktop *desktop);
 };
 
 }

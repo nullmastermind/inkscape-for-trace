@@ -1,4 +1,5 @@
 <ui>
+<!--
   <toolbar name='SelectToolbar'>
     <toolitem action='EditSelectAll' />
     <toolitem action='EditSelectAllInAllLayers' />
@@ -26,7 +27,7 @@
     <toolitem action='transform_gradient' />
     <toolitem action='transform_pattern' />
   </toolbar>
-
+-->
   <toolbar name='NodeToolbar'>
     <separator />
     <toolitem action='NodeInsertAction'>
