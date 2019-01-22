@@ -115,11 +115,11 @@ EraserToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                     _("Pen Width"), _("Width:"),
                                                     _("The width of the eraser pen (relative to the visible canvas area)"),
                                                     "/tools/eraser/width", 15,
-                                                    GTK_WIDGET(desktop->canvas),
                                                     TRUE, "altx-eraser",
                                                     0, 100, 1.0, 10.0,
                                                     labels, values, G_N_ELEMENTS(labels),
                                                     nullptr /*unit tracker*/, 1, 0);
+        ege_adjustment_action_set_focuswidget(toolbar->_width, GTK_WIDGET(desktop->canvas));
         toolbar->_width_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_width));
         toolbar->_width_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &EraserToolbar::width_value_changed));
         ege_adjustment_action_set_appearance( toolbar->_width, TOOLBAR_SLIDER_HINT );
@@ -148,11 +148,11 @@ EraserToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                        _("Eraser Stroke Thinning"), _("Thinning:"),
                                                        _("How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 makes them broader, 0 makes width independent of velocity)"),
                                                        "/tools/eraser/thinning", 10,
-                                                       GTK_WIDGET(desktop->canvas),
                                                        FALSE, nullptr,
                                                        -100, 100, 1, 10.0,
                                                        labels, values, G_N_ELEMENTS(labels),
                                                        nullptr /*unit tracker*/, 1, 0);
+        ege_adjustment_action_set_focuswidget(toolbar->_thinning, GTK_WIDGET(desktop->canvas));
         toolbar->_thinning_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_thinning));
         toolbar->_thinning_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &EraserToolbar::velthin_value_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_thinning) );
@@ -169,11 +169,11 @@ EraserToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                            _("Eraser Cap rounding"), _("Caps:"),
                                                            _("Increase to make caps at the ends of strokes protrude more (0 = no caps, 1 = round caps)"),
                                                            "/tools/eraser/cap_rounding", 0.0,
-                                                           GTK_WIDGET(desktop->canvas),
                                                            FALSE, nullptr,
                                                            0.0, 5.0, 0.01, 0.1,
                                                            labels, values, G_N_ELEMENTS(labels),
                                                            nullptr /*unit tracker*/, 0.01, 2 );
+        ege_adjustment_action_set_focuswidget(toolbar->_cap_rounding, GTK_WIDGET(desktop->canvas));
         toolbar->_cap_rounding_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_cap_rounding));
         toolbar->_cap_rounding_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &EraserToolbar::cap_rounding_value_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_cap_rounding) );
@@ -189,11 +189,11 @@ EraserToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                      _("EraserStroke Tremor"), _("Tremor:"),
                                                      _("Increase to make strokes rugged and trembling"),
                                                      "/tools/eraser/tremor", 0.0,
-                                                     GTK_WIDGET(desktop->canvas),
                                                      FALSE, nullptr,
                                                      0.0, 100, 1, 10.0,
                                                      labels, values, G_N_ELEMENTS(labels),
                                                      nullptr /*unit tracker*/, 1, 0);
+        ege_adjustment_action_set_focuswidget(toolbar->_tremor, GTK_WIDGET(desktop->canvas));
         toolbar->_tremor_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_tremor));
         toolbar->_tremor_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &EraserToolbar::tremor_value_changed));
 
@@ -210,11 +210,11 @@ EraserToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                    _("Eraser Mass"), _("Mass:"),
                                                    _("Increase to make the eraser drag behind, as if slowed by inertia"),
                                                    "/tools/eraser/mass", 10.0,
-                                                   GTK_WIDGET(desktop->canvas),
                                                    FALSE, nullptr,
                                                    0.0, 100, 1, 10.0,
                                                    labels, values, G_N_ELEMENTS(labels),
                                                    nullptr /*unit tracker*/, 1, 0);
+        ege_adjustment_action_set_focuswidget(toolbar->_mass, GTK_WIDGET(desktop->canvas));
         toolbar->_mass_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_mass));
         toolbar->_mass_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &EraserToolbar::mass_value_changed));
         ege_adjustment_action_set_appearance( toolbar->_mass, TOOLBAR_SLIDER_HINT );

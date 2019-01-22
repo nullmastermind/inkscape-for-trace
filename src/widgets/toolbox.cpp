@@ -713,7 +713,6 @@ static GtkWidget* createCustomSlider( GtkAdjustment *adjustment, gdouble climbRa
 EgeAdjustmentAction * create_adjustment_action( gchar const *name,
                                                        gchar const *label, gchar const *shortLabel, gchar const *tooltip,
                                                        Glib::ustring const &path, gdouble def,
-                                                       GtkWidget *focusTarget,
                                                        gboolean altx, gchar const *altx_mark,
                                                        gdouble lower, gdouble upper, gdouble step, gdouble page,
                                                        gchar const** descrLabels, gdouble const* descrValues, guint descrCount,
@@ -737,10 +736,6 @@ EgeAdjustmentAction * create_adjustment_action( gchar const *name,
 
     if ( (descrCount > 0) && descrLabels && descrValues ) {
         ege_adjustment_action_set_descriptions( act, descrLabels, descrValues, descrCount );
-    }
-
-    if ( focusTarget ) {
-        ege_adjustment_action_set_focuswidget( act, focusTarget );
     }
 
     if ( altx && altx_mark ) {
@@ -1019,8 +1014,6 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             // just defines behaviour.
             GtkWidget* kludge = aux_toolboxes[i].prep_func(desktop, mainActions->gobj());
             gtk_widget_set_name( kludge, "Kludge" );
-            // g_object_set_data( G_OBJECT(kludge), "dtw", desktop->canvas);
-            // g_object_set_data( G_OBJECT(kludge), "desktop", desktop);
             dataHolders[aux_toolboxes[i].type_name] = kludge;
         } else {
 

@@ -296,12 +296,12 @@ MeshToolbar::prep(SPDesktop * desktop, GtkActionGroup* mainActions)
         eact = create_adjustment_action( "MeshRowAction",
                                          _("Rows"), _("Rows:"), _("Number of rows in new mesh"),
                                          "/tools/mesh/mesh_rows", 1,
-                                         GTK_WIDGET(desktop->canvas),
                                          FALSE, nullptr,
                                          1, 20, 1, 1,
                                          labels, values, 0,
                                          nullptr /*unit tracker*/,
                                          1.0, 0 );
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         toolbar->_row_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         toolbar->_row_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &MeshToolbar::row_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
@@ -315,12 +315,12 @@ MeshToolbar::prep(SPDesktop * desktop, GtkActionGroup* mainActions)
         eact = create_adjustment_action( "MeshColumnAction",
                                          _("Columns"), _("Columns:"), _("Number of columns in new mesh"),
                                          "/tools/mesh/mesh_cols", 1,
-                                         GTK_WIDGET(desktop->canvas),
                                          FALSE, nullptr,
                                          1, 20, 1, 1,
                                          labels, values, 0,
                                          nullptr /*unit tracker*/,
                                          1.0, 0 );
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         toolbar->_col_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         toolbar->_col_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &MeshToolbar::col_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );

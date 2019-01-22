@@ -139,12 +139,12 @@ StarToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         eact = create_adjustment_action( "MagnitudeAction",
                                          _("Corners"), _("Corners:"), _("Number of corners of a polygon or star"),
                                          "/tools/shapes/star/magnitude", 3,
-                                         GTK_WIDGET(desktop->canvas),
                                          FALSE, nullptr,
                                          3, 1024, 1, 5,
                                          labels, values, G_N_ELEMENTS(labels),
                                          nullptr /*unit tracker*/,
                                          1.0, 0 );
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
 
         holder->_magnitude_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         holder->_magnitude_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &StarToolbar::magnitude_value_changed));
@@ -162,11 +162,11 @@ StarToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                          // Base radius is the same for the closest handle.
                                          _("Base radius to tip radius ratio"),
                                          "/tools/shapes/star/proportion", 0.5,
-                                         GTK_WIDGET(desktop->canvas),
                                          FALSE, nullptr,
                                          0.01, 1.0, 0.01, 0.1,
                                          labels, values, G_N_ELEMENTS(labels)
                                          );
+        ege_adjustment_action_set_focuswidget(holder->_prop_action, GTK_WIDGET(desktop->canvas));
         holder->_spoke_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_prop_action));
         holder->_spoke_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &StarToolbar::proportion_value_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(holder->_prop_action) );
@@ -186,11 +186,11 @@ StarToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         eact = create_adjustment_action( "RoundednessAction",
                                          _("Rounded"), _("Rounded:"), _("How much rounded are the corners (0 for sharp)"),
                                          "/tools/shapes/star/rounded", 0.0,
-                                         GTK_WIDGET(desktop->canvas),
                                          FALSE, nullptr,
                                          -10.0, 10.0, 0.01, 0.1,
                                          labels, values, G_N_ELEMENTS(labels)
                                          );
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         holder->_roundedness_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         holder->_roundedness_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &StarToolbar::rounded_value_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
@@ -204,11 +204,11 @@ StarToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         eact = create_adjustment_action( "RandomizationAction",
                                          _("Randomized"), _("Randomized:"), _("Scatter randomly the corners and angles"),
                                          "/tools/shapes/star/randomized", 0.0,
-                                         GTK_WIDGET(desktop->canvas),
                                          FALSE, nullptr,
                                          -10.0, 10.0, 0.001, 0.01,
                                          labels, values, G_N_ELEMENTS(labels),
                                          nullptr /*unit tracker*/, 0.1, 3 );
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         holder->_randomization_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         holder->_randomization_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &StarToolbar::randomized_value_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );

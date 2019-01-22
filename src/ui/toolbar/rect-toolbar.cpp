@@ -115,11 +115,11 @@ RectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         holder->_width_action = create_adjustment_action( "RectWidthAction",
                                                           _("Width"), _("W:"), _("Width of rectangle"),
                                                           "/tools/shapes/rect/width", 0,
-                                                          GTK_WIDGET(desktop->canvas),
                                                           TRUE, "altx-rect",
                                                           0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                                           labels, values, G_N_ELEMENTS(labels),
                                                           holder->_tracker);
+        ege_adjustment_action_set_focuswidget(holder->_width_action, GTK_WIDGET(desktop->canvas));
 
         holder->_width_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_width_action));
         holder->_width_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &RectToolbar::value_changed),
@@ -137,11 +137,11 @@ RectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         holder->_height_action = create_adjustment_action( "RectHeightAction",
                                                            _("Height"), _("H:"), _("Height of rectangle"),
                                                            "/tools/shapes/rect/height", 0,
-                                                           GTK_WIDGET(desktop->canvas),
                                                            FALSE, nullptr,
                                                            0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                                            labels, values, G_N_ELEMENTS(labels),
                                                            holder->_tracker);
+        ege_adjustment_action_set_focuswidget(holder->_height_action, GTK_WIDGET(desktop->canvas));
         holder->_height_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_height_action));
         holder->_height_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &RectToolbar::value_changed),
                                                                        holder->_height_adj,
@@ -158,11 +158,11 @@ RectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         eact = create_adjustment_action( "RadiusXAction",
                                          _("Horizontal radius"), _("Rx:"), _("Horizontal radius of rounded corners"),
                                          "/tools/shapes/rect/rx", 0,
-                                         GTK_WIDGET(desktop->canvas),
                                          FALSE, nullptr,
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          holder->_tracker);
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         holder->_rx_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         holder->_rx_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &RectToolbar::value_changed),
                                                                    holder->_rx_adj,
@@ -178,11 +178,11 @@ RectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         eact = create_adjustment_action( "RadiusYAction",
                                          _("Vertical radius"), _("Ry:"), _("Vertical radius of rounded corners"),
                                          "/tools/shapes/rect/ry", 0,
-                                         GTK_WIDGET(desktop->canvas),
                                          FALSE, nullptr,
                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                          labels, values, G_N_ELEMENTS(labels),
                                          holder->_tracker);
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         holder->_ry_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         holder->_ry_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &RectToolbar::value_changed),
                                                                    holder->_ry_adj,

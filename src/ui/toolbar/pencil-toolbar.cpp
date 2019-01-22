@@ -109,12 +109,12 @@ PencilToolbar::prep_pencil(SPDesktop *desktop, GtkActionGroup* mainActions)
         toolbar->_minpressure = create_adjustment_action( "MinPressureAction",
                                                           _("Min pressure"), _("Min:"), _("Min percent of pressure"),
                                                           "/tools/freehand/pencil/minpressure", 0,
-                                                          GTK_WIDGET(desktop->canvas),
                                                           FALSE, nullptr,
                                                           0, 100, 1, 0,
                                                           nullptr, nullptr, 0,
                                                           nullptr, 0 ,0);
         
+        ege_adjustment_action_set_focuswidget(toolbar->_minpressure, GTK_WIDGET(desktop->canvas));
         toolbar->_minpressure_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_minpressure));
         toolbar->_minpressure_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &PencilToolbar::minpressure_value_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_minpressure) );
@@ -129,11 +129,11 @@ PencilToolbar::prep_pencil(SPDesktop *desktop, GtkActionGroup* mainActions)
         toolbar->_maxpressure = create_adjustment_action( "MaxPressureAction",
                                                           _("Max pressure"), _("Max:"), _("Max percent of pressure"),
                                                           "/tools/freehand/pencil/maxpressure", 100,
-                                                          GTK_WIDGET(desktop->canvas),
                                                           FALSE, nullptr,
                                                           0, 100, 1, 0,
                                                           nullptr, nullptr, 0,
                                                           nullptr, 0 ,0);
+        ege_adjustment_action_set_focuswidget(toolbar->_maxpressure, GTK_WIDGET(desktop->canvas));
         toolbar->_maxpressure_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_maxpressure));
         toolbar->_maxpressure_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &PencilToolbar::maxpressure_value_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_maxpressure) );
@@ -171,12 +171,12 @@ PencilToolbar::prep_pencil(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                               _("How much smoothing (simplifying) is applied to the line"),
                                                               "/tools/freehand/pencil/tolerance",
                                                               3.0,
-                                                              GTK_WIDGET(desktop->canvas),
                                                               TRUE, "altx-pencil",
                                                               1, 100.0, 0.5, 1.0,
                                                               labels, values, G_N_ELEMENTS(labels),
                                                               nullptr /*unit tracker*/,
                                                               1, 2);
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
 
         toolbar->_tolerance_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         toolbar->_tolerance_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &PencilToolbar::tolerance_value_changed));

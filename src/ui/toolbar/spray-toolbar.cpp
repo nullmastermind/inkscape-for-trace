@@ -92,11 +92,11 @@ SprayToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         EgeAdjustmentAction *eact = create_adjustment_action( "SprayWidthAction",
                                                               _("Width"), _("Width:"), _("The width of the spray area (relative to the visible canvas area)"),
                                                               "/tools/spray/width", 15,
-                                                              GTK_WIDGET(desktop->canvas),
                                                               true, "altx-spray",
                                                               1, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
                                                               nullptr /*unit tracker*/, 1, 0 );
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         holder->_width_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         holder->_width_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &SprayToolbar::width_value_changed));
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
@@ -122,11 +122,11 @@ SprayToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         EgeAdjustmentAction *eact = create_adjustment_action( "SprayMeanAction",
                                                               _("Focus"), _("Focus:"), _("0 to spray a spot; increase to enlarge the ring radius"),
                                                               "/tools/spray/mean", 0,
-                                                              GTK_WIDGET(desktop->canvas),
                                                               true, "spray-mean",
                                                               0, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
                                                               nullptr /*unit tracker*/, 1, 0 );
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         holder->_mean_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         holder->_mean_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &SprayToolbar::mean_value_changed));
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
@@ -141,11 +141,11 @@ SprayToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         EgeAdjustmentAction *eact = create_adjustment_action( "SprayStandard_deviationAction",
                                                               C_("Spray tool", "Scatter"), C_("Spray tool", "Scatter:"), _("Increase to scatter sprayed objects"),
                                                               "/tools/spray/standard_deviation", 70,
-                                                              GTK_WIDGET(desktop->canvas),
                                                               true, "spray-standard_deviation",
                                                               1, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
                                                               nullptr /*unit tracker*/, 1, 0 );
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         holder->_sd_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         holder->_sd_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &SprayToolbar::standard_deviation_value_changed));
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
@@ -209,11 +209,11 @@ SprayToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                               _("Amount"), _("Amount:"),
                                                               _("Adjusts the number of items sprayed per click"),
                                                               "/tools/spray/population", 70,
-                                                              GTK_WIDGET(desktop->canvas),
                                                               true, "spray-population",
                                                               1, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
                                                               nullptr /*unit tracker*/, 1, 0 );
+        ege_adjustment_action_set_focuswidget(holder->_spray_population, GTK_WIDGET(desktop->canvas));
         holder->_population_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_spray_population));
         holder->_population_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &SprayToolbar::population_value_changed));
         ege_adjustment_action_set_appearance( holder->_spray_population, TOOLBAR_SLIDER_HINT );
@@ -240,11 +240,11 @@ SprayToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                             // xgettext:no-c-format
                                                             _("Variation of the rotation of the sprayed objects; 0% for the same rotation than the original object"),
                                                             "/tools/spray/rotation_variation", 0,
-                                                            GTK_WIDGET(desktop->canvas),
                                                             true, "spray-rotation",
                                                             0, 100, 1.0, 10.0,
                                                             labels, values, G_N_ELEMENTS(labels),
                                                             nullptr /*unit tracker*/, 1, 0 );
+        ege_adjustment_action_set_focuswidget(holder->_spray_rotation, GTK_WIDGET(desktop->canvas));
         holder->_rotation_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_spray_rotation));
         holder->_rotation_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &SprayToolbar::rotation_value_changed));
         ege_adjustment_action_set_appearance(holder->_spray_rotation, TOOLBAR_SLIDER_HINT );
@@ -260,11 +260,11 @@ SprayToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                               // xgettext:no-c-format
                                                               _("Variation in the scale of the sprayed objects; 0% for the same scale than the original object"),
                                                               "/tools/spray/scale_variation", 0,
-                                                              GTK_WIDGET(desktop->canvas),
                                                               true, "spray-scale",
                                                               0, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
                                                               nullptr /*unit tracker*/, 1, 0 );
+        ege_adjustment_action_set_focuswidget(holder->_spray_scale, GTK_WIDGET(desktop->canvas));
         holder->_scale_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_spray_scale));
         holder->_scale_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &SprayToolbar::scale_value_changed));
         ege_adjustment_action_set_appearance( holder->_spray_scale, TOOLBAR_SLIDER_HINT );
@@ -400,11 +400,11 @@ SprayToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                          _("Offset %"), _("Offset %:"),
                                          _("Increase to segregate objects more (value in percent)"),
                                          "/tools/spray/offset", 100,
-                                         GTK_WIDGET(desktop->canvas),
                                          FALSE, nullptr,
                                          0, 1000, 1, 4,
                                          labels, values, G_N_ELEMENTS(labels),
                                          nullptr, 0 , 0);
+        ege_adjustment_action_set_focuswidget(holder->_offset, GTK_WIDGET(desktop->canvas));
         holder->_offset_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_offset));
         holder->_offset_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &SprayToolbar::offset_value_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(holder->_offset) );

@@ -479,11 +479,11 @@ NodeToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         holder->_nodes_x_action = create_adjustment_action( "NodeXAction",
                                                             _("X coordinate:"), _("X:"), _("X coordinate of selected node(s)"),
                                                             "/tools/nodes/Xcoord", 0,
-                                                            GTK_WIDGET(desktop->canvas),
                                                             TRUE, "altx-nodes",
                                                             -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                                             labels, values, G_N_ELEMENTS(labels),
                                                             holder->_tracker );
+        ege_adjustment_action_set_focuswidget(holder->_nodes_x_action, GTK_WIDGET(desktop->canvas));
         holder->_nodes_x_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_nodes_x_action));
         holder->_nodes_x_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &NodeToolbar::value_changed), Geom::X));
         gtk_action_set_sensitive( GTK_ACTION(holder->_nodes_x_action), FALSE );
@@ -497,11 +497,11 @@ NodeToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         holder->_nodes_y_action = create_adjustment_action( "NodeYAction",
                                                             _("Y coordinate:"), _("Y:"), _("Y coordinate of selected node(s)"),
                                                             "/tools/nodes/Ycoord", 0,
-                                                            GTK_WIDGET(desktop->canvas),
                                                             FALSE, nullptr,
                                                             -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                                             labels, values, G_N_ELEMENTS(labels),
                                                             holder->_tracker );
+        ege_adjustment_action_set_focuswidget(holder->_nodes_y_action, GTK_WIDGET(desktop->canvas));
         holder->_nodes_y_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_nodes_y_action));
         holder->_nodes_y_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &NodeToolbar::value_changed), Geom::Y));
         gtk_action_set_sensitive( GTK_ACTION(holder->_nodes_y_action), FALSE );

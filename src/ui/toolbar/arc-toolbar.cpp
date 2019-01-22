@@ -113,11 +113,11 @@ ArcToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         toolbar->_rx_action = create_adjustment_action( "ArcRadiusXAction",
                                                         _("Horizontal radius"), _("Rx:"), _("Horizontal radius of the circle, ellipse, or arc"),
                                                         "/tools/shapes/arc/rx", 0,
-                                                        GTK_WIDGET(desktop->canvas),
                                                         TRUE, "altx-arc",
                                                         0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                                         labels, values, G_N_ELEMENTS(labels),
                                                         toolbar->_tracker);
+        ege_adjustment_action_set_focuswidget(toolbar->_rx_action, GTK_WIDGET(desktop->canvas));
         toolbar->_rx_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_rx_action));
         toolbar->_rx_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*toolbar, &ArcToolbar::value_changed),
                                                                     toolbar->_rx_adj, "rx"));
@@ -132,11 +132,11 @@ ArcToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         toolbar->_ry_action = create_adjustment_action( "ArcRadiusYAction",
                                                         _("Vertical radius"), _("Ry:"), _("Vertical radius of the circle, ellipse, or arc"),
                                                         "/tools/shapes/arc/ry", 0,
-                                                        GTK_WIDGET(desktop->canvas),
                                                         FALSE, nullptr,
                                                         0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
                                                         labels, values, G_N_ELEMENTS(labels),
                                                         toolbar->_tracker);
+        ege_adjustment_action_set_focuswidget(toolbar->_ry_action, GTK_WIDGET(desktop->canvas));
         toolbar->_ry_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_ry_action));
         toolbar->_ry_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*toolbar, &ArcToolbar::value_changed),
                                                                     toolbar->_ry_adj, "ry"));
@@ -156,11 +156,11 @@ ArcToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                          _("Start"), _("Start:"),
                                          _("The angle (in degrees) from the horizontal to the arc's start point"),
                                          "/tools/shapes/arc/start", 0.0,
-                                         GTK_WIDGET(desktop->canvas),
                                          TRUE, "altx-arc",
                                          -360.0, 360.0, 1.0, 10.0,
                                          nullptr, nullptr, 0
                                          );
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         toolbar->_start_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
     }
@@ -171,11 +171,11 @@ ArcToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                          _("End"), _("End:"),
                                          _("The angle (in degrees) from the horizontal to the arc's end point"),
                                          "/tools/shapes/arc/end", 0.0,
-                                         GTK_WIDGET(desktop->canvas),
                                          FALSE, nullptr,
                                          -360.0, 360.0, 1.0, 10.0,
                                          nullptr, nullptr, 0
                                          );
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         toolbar->_end_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
     }

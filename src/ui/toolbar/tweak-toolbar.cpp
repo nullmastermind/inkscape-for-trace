@@ -94,12 +94,11 @@ TweakToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         EgeAdjustmentAction *eact = create_adjustment_action( "TweakWidthAction",
                                                               _("Width"), _("Width:"), _("The width of the tweak area (relative to the visible canvas area)"),
                                                               "/tools/tweak/width", 15,
-                                                              GTK_WIDGET(desktop->canvas),
                                                               TRUE, "altx-tweak",
                                                               1, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
                                                               nullptr /*unit tracker*/, 0.01, 0, 100 );
-
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         holder->_adj_tweak_width = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         holder->_adj_tweak_width->signal_value_changed().connect(sigc::mem_fun(*holder, &TweakToolbar::tweak_width_value_changed));
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
@@ -115,11 +114,11 @@ TweakToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         EgeAdjustmentAction *eact = create_adjustment_action( "TweakForceAction",
                                                               _("Force"), _("Force:"), _("The force of the tweak action"),
                                                               "/tools/tweak/force", 20,
-                                                              GTK_WIDGET(desktop->canvas),
                                                               TRUE, "tweak-force",
                                                               1, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
                                                               nullptr /*unit tracker*/, 0.01, 0, 100 );
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         holder->_adj_tweak_force = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         holder->_adj_tweak_force->signal_value_changed().connect(sigc::mem_fun(*holder, &TweakToolbar::tweak_force_value_changed));
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
@@ -311,12 +310,11 @@ TweakToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                             _("Fidelity"), _("Fidelity:"),
                                                             _("Low fidelity simplifies paths; high fidelity preserves path features but may generate a lot of new nodes"),
                                                             "/tools/tweak/fidelity", 50,
-                                                            GTK_WIDGET(desktop->canvas),
                                                             TRUE, "tweak-fidelity",
                                                             1, 100, 1.0, 10.0,
                                                             labels, values, G_N_ELEMENTS(labels),
                                                             nullptr /*unit tracker*/, 0.01, 0, 100 );
-
+        ege_adjustment_action_set_focuswidget(holder->_tweak_fidelity, GTK_WIDGET(desktop->canvas));
         holder->_adj_tweak_fidelity = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_tweak_fidelity));
         holder->_adj_tweak_fidelity->signal_value_changed().connect(sigc::mem_fun(*holder, &TweakToolbar::tweak_fidelity_value_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(holder->_tweak_fidelity) );

@@ -544,13 +544,12 @@ GradientToolbar::prep(SPDesktop * desktop, GtkActionGroup* mainActions)
         toolbar->_offset_action = create_adjustment_action( "GradientEditOffsetAction",
                                                             _("Offset"), C_("Gradient", "Offset:"), _("Offset of selected stop"),
                                                             "/tools/gradient/stopoffset", 0,
-                                                            GTK_WIDGET(desktop->canvas),
                                                             FALSE, nullptr,
                                                             0.0, 1.0, 0.01, 0.1,
                                                             nullptr, nullptr, 0,
                                                             nullptr /*unit tracker*/,
                                                             0.01, 2, 1.0);
-
+        ege_adjustment_action_set_focuswidget(toolbar->_offset_action, GTK_WIDGET(desktop->canvas));
         toolbar->_offset_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_offset_action));
         toolbar->_offset_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &GradientToolbar::stop_offset_adjustment_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_offset_action) );

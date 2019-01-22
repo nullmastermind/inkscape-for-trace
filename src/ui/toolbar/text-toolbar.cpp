@@ -582,7 +582,6 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             _("Spacing between baselines"),       /* tooltip */
             "/tools/text/lineheight",             /* preferences path */
             0.0,                                  /* default */
-            GTK_WIDGET(desktop->canvas),          /* focusTarget */
             FALSE,                                /* set alt-x keyboard shortcut? */
             nullptr,                              /* altx_mark */
             0.0, 1000.0, 0.1, 1.0,                /* lower, upper, step (arrow up/down), page up/down */
@@ -592,6 +591,7 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             2,                                    /* digits to show */
             1.0                                   /* factor (multiplies default) */
             );
+        ege_adjustment_action_set_focuswidget(toolbar->_line_height_action, GTK_WIDGET(desktop->canvas));
 
         toolbar->_line_height_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_line_height_action));
         toolbar->_line_height_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::lineheight_value_changed));
@@ -671,7 +671,6 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             _("Spacing between words (px)"),      /* tooltip */
             "/tools/text/wordspacing",            /* preferences path */
             0.0,                                  /* default */
-            GTK_WIDGET(desktop->canvas),          /* focusTarget */
             FALSE,                                /* set alt-x keyboard shortcut? */
             nullptr,                                 /* altx_mark */
             -100.0, 100.0, 0.01, 0.10,            /* lower, upper, step (arrow up/down), page up/down */
@@ -681,6 +680,7 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             2,                                    /* digits to show */
             1.0                                   /* factor (multiplies default) */
             );
+        ege_adjustment_action_set_focuswidget(toolbar->_word_spacing_action, GTK_WIDGET(desktop->canvas));
 
         toolbar->_word_spacing_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_word_spacing_action));
         toolbar->_word_spacing_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::wordspacing_value_changed));
@@ -702,7 +702,6 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             _("Spacing between letters (px)"),    /* tooltip */
             "/tools/text/letterspacing",          /* preferences path */
             0.0,                                  /* default */
-            GTK_WIDGET(desktop->canvas),          /* focusTarget */
             FALSE,                                /* set alt-x keyboard shortcut? */
             nullptr,                                 /* altx_mark */
             -100.0, 100.0, 0.01, 0.10,            /* lower, upper, step (arrow up/down), page up/down */
@@ -712,6 +711,7 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             2,                                    /* digits to show */
             1.0                                   /* factor (multiplies default) */
             );
+        ege_adjustment_action_set_focuswidget(toolbar->_letter_spacing_action, GTK_WIDGET(desktop->canvas));
         toolbar->_letter_spacing_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_letter_spacing_action));
         toolbar->_letter_spacing_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::letterspacing_value_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_letter_spacing_action) );
@@ -732,7 +732,6 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             _("Horizontal kerning (px)"),         /* tooltip */
             "/tools/text/dx",                     /* preferences path */
             0.0,                                  /* default */
-            GTK_WIDGET(desktop->canvas),          /* focusTarget */
             FALSE,                                /* set alt-x keyboard shortcut? */
             nullptr,                              /* altx_mark */
             -100.0, 100.0, 0.01, 0.1,             /* lower, upper, step (arrow up/down), page up/down */
@@ -742,6 +741,7 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             2,                                    /* digits to show */
             1.0                                   /* factor (multiplies default) */
             );
+        ege_adjustment_action_set_focuswidget(toolbar->_dx_action, GTK_WIDGET(desktop->canvas));
         toolbar->_dx_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_dx_action));
         toolbar->_dx_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::dx_value_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_dx_action) );
@@ -762,7 +762,6 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             _("Vertical shift (px)"),             /* tooltip */
             "/tools/text/dy",                     /* preferences path */
             0.0,                                  /* default */
-            GTK_WIDGET(desktop->canvas),          /* focusTarget */
             FALSE,                                /* set alt-x keyboard shortcut? */
             nullptr,                                 /* altx_mark */
             -100.0, 100.0, 0.01, 0.1,             /* lower, upper, step (arrow up/down), page up/down */
@@ -772,6 +771,7 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             2,                                    /* digits to show */
             1.0                                   /* factor (multiplies default) */
             );
+        ege_adjustment_action_set_focuswidget(toolbar->_dy_action, GTK_WIDGET(desktop->canvas));
         toolbar->_dy_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_dy_action));
         toolbar->_dy_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::dy_value_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_dy_action) );
@@ -792,7 +792,6 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             _("Character rotation (degrees)"),    /* tooltip */
             "/tools/text/rotation",               /* preferences path */
             0.0,                                  /* default */
-            GTK_WIDGET(desktop->canvas),          /* focusTarget */
             FALSE,                                /* set alt-x keyboard shortcut? */
             nullptr,                                 /* altx_mark */
             -180.0, 180.0, 0.1, 1.0,              /* lower, upper, step (arrow up/down), page up/down */
@@ -802,6 +801,7 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             2,                                    /* digits to show */
             1.0                                   /* factor (multiplies default) */
             );
+        ege_adjustment_action_set_focuswidget(toolbar->_rotation_action, GTK_WIDGET(desktop->canvas));
         toolbar->_rotation_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_rotation_action));
         toolbar->_rotation_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::rotation_value_changed));
         gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_rotation_action) );

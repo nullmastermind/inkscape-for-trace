@@ -222,12 +222,12 @@ SelectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             C_("Select toolbar", "Horizontal coordinate of selection"), /* tooltip */ 
             "/tools/select/X",                    /* path */ 
             0.0,                                  /* def(default) */ 
-            GTK_WIDGET(desktop->canvas),          /* focusTarget */ 
             TRUE, "altx",                         /* altx, altx_mark */ 
             -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP, /* lower, upper, step, page */ 
             nullptr, nullptr, 0,                  /* descrLabels, descrValues, descrCount */
             holder->_tracker,                     /* unit_tracker */
             SPIN_STEP, 3, 1);                     /* climb, digits, factor */
+    ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
 
     holder->_adj_x = Glib::wrap(GTK_ADJUSTMENT(ege_adjustment_action_get_adjustment(eact)));
     holder->_adj_x->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &SelectToolbar::any_value_changed), holder->_adj_x));
@@ -241,12 +241,12 @@ SelectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             C_("Select toolbar", "Vertical coordinate of selection"), /* tooltip */
             "/tools/select/Y",                    /* path */
             0.0,                                  /* def(default) */
-            GTK_WIDGET(desktop->canvas),          /* focusTarget */
             TRUE, "altx",                         /* altx, altx_mark */
             -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP, /* lower, upper, step, page */
             nullptr, nullptr, 0,                              /* descrLabels, descrValues, descrCount */
             holder->_tracker,                     /* unit_tracker */
             SPIN_STEP, 3, 1);                     /* climb, digits, factor */              
+    ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
 
     holder->_adj_y = Glib::wrap(GTK_ADJUSTMENT(ege_adjustment_action_get_adjustment(eact)));
     holder->_adj_y->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &SelectToolbar::any_value_changed), holder->_adj_y));
@@ -260,12 +260,12 @@ SelectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             C_("Select toolbar", "Width of selection"), /* tooltip */
             "/tools/select/width",                /* path */                      
             0.0,                                  /* def(default) */
-            GTK_WIDGET(desktop->canvas),          /* focusTarget */
             TRUE, "altx",                         /* altx, altx_mark */
             0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,  /* lower, upper, step, page */
             nullptr, nullptr, 0,                              /* descrLabels, descrValues, descrCount */
             holder->_tracker,                     /* unit_tracker */
             SPIN_STEP, 3, 1);                     /* climb, digits, factor */
+    ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
 
     holder->_adj_w = Glib::wrap(GTK_ADJUSTMENT(ege_adjustment_action_get_adjustment(eact)));
     holder->_adj_w->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &SelectToolbar::any_value_changed), holder->_adj_w));
@@ -291,14 +291,12 @@ SelectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
             C_("Select toolbar", "Height of selection"), /* tooltip */
             "/tools/select/height",               /* path */                      
             0.0,                                  /* def(default) */
-            GTK_WIDGET(desktop->canvas),          /* focusTarget */
             TRUE, "altx",                         /* altx, altx_mark */
             0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,  /* lower, upper, step, page */
             nullptr, nullptr, 0,                              /* descrLabels, descrValues, descrCount */
             holder->_tracker,                     /* unit_tracker */
             SPIN_STEP, 3, 1);                     /* climb, digits, factor */
-
-
+    ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
     holder->_adj_h = Glib::wrap(GTK_ADJUSTMENT(ege_adjustment_action_get_adjustment(eact)));
     holder->_adj_h->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &SelectToolbar::any_value_changed), holder->_adj_h));
     gtk_action_group_add_action( holder->_selection_actions, GTK_ACTION(eact) );

@@ -90,11 +90,11 @@ Box3DToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                             // Translators: PL is short for 'perspective line'
                                                             _("Angle of PLs in X direction"),
                                                             "/tools/shapes/3dbox/box3d_angle_x", 30,
-                                                            GTK_WIDGET(desktop->canvas),
                                                             TRUE, "altx-box3d",
                                                             -360.0, 360.0, 1.0, 10.0,
                                                             labels, values, G_N_ELEMENTS(labels)
                                                             );
+        ege_adjustment_action_set_focuswidget(holder->_angle_x_action, GTK_WIDGET(desktop->canvas));
         holder->_angle_x_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_angle_x_action));
         holder->_angle_x_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &Box3DToolbar::angle_value_changed),
                                                                         holder->_angle_x_adj, Proj::X));
@@ -131,11 +131,11 @@ Box3DToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                          // Translators: PL is short for 'perspective line'
                                          _("Angle of PLs in Y direction"),
                                          "/tools/shapes/3dbox/box3d_angle_y", 30,
-                                         GTK_WIDGET(desktop->canvas),
                                          FALSE, nullptr,
                                          -360.0, 360.0, 1.0, 10.0,
                                          labels, values, G_N_ELEMENTS(labels)
                                          );
+        ege_adjustment_action_set_focuswidget(holder->_angle_y_action, GTK_WIDGET(desktop->canvas));
         holder->_angle_y_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_angle_y_action));
         holder->_angle_y_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &Box3DToolbar::angle_value_changed),
                                                                         holder->_angle_y_adj, Proj::Y));
@@ -171,11 +171,11 @@ Box3DToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                          // Translators: PL is short for 'perspective line'
                                          _("Angle of PLs in Z direction"),
                                          "/tools/shapes/3dbox/box3d_angle_z", 30,
-                                         GTK_WIDGET(desktop->canvas),
                                          FALSE, nullptr,
                                          -360.0, 360.0, 1.0, 10.0,
                                          labels, values, G_N_ELEMENTS(labels)
                                          );
+        ege_adjustment_action_set_focuswidget(holder->_angle_z_action, GTK_WIDGET(desktop->canvas));
         holder->_angle_z_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_angle_z_action));
         holder->_angle_z_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &Box3DToolbar::angle_value_changed),
                                                                         holder->_angle_z_adj, Proj::Z));

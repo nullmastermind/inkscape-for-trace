@@ -99,11 +99,11 @@ SpiralToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         eact = create_adjustment_action( "SpiralRevolutionAction",
                                          _("Number of turns"), _("Turns:"), _("Number of revolutions"),
                                          "/tools/shapes/spiral/revolution", 3.0,
-                                         GTK_WIDGET(desktop->canvas),
                                          TRUE, "altx-spiral",
                                          0.01, 1024.0, 0.1, 1.0,
                                          labels, values, G_N_ELEMENTS(labels),
                                          nullptr /*unit tracker*/, 1, 2);
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         toolbar->_revolution_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         toolbar->_revolution_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*toolbar, &SpiralToolbar::value_changed),
                                                                             toolbar->_revolution_adj, "revolution"));
@@ -117,11 +117,11 @@ SpiralToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         eact = create_adjustment_action( "SpiralExpansionAction",
                                          _("Divergence"), _("Divergence:"), _("How much denser/sparser are outer revolutions; 1 = uniform"),
                                          "/tools/shapes/spiral/expansion", 1.0,
-                                         GTK_WIDGET(desktop->canvas),
                                          FALSE, nullptr,
                                          0.0, 1000.0, 0.01, 1.0,
                                          labels, values, G_N_ELEMENTS(labels)
                                          );
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         toolbar->_expansion_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         toolbar->_expansion_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*toolbar, &SpiralToolbar::value_changed),
                                                                            toolbar->_expansion_adj, "expansion"));
@@ -135,11 +135,11 @@ SpiralToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
         eact = create_adjustment_action( "SpiralT0Action",
                                          _("Inner radius"), _("Inner radius:"), _("Radius of the innermost revolution (relative to the spiral size)"),
                                          "/tools/shapes/spiral/t0", 0.0,
-                                         GTK_WIDGET(desktop->canvas),
                                          FALSE, nullptr,
                                          0.0, 0.999, 0.01, 1.0,
                                          labels, values, G_N_ELEMENTS(labels)
                                          );
+        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
         toolbar->_t0_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
         toolbar->_t0_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*toolbar, &SpiralToolbar::value_changed),
                                                                     toolbar->_t0_adj, "t0"));
