@@ -231,8 +231,8 @@ cr_input_new_from_uri (const gchar * a_file_uri, enum CREncoding a_enc)
                                 /*we reached eof */
                                 loop = FALSE;
                         } else {
-                                /*a pb occured !! */
-                                cr_utils_trace_debug ("an io error occured");
+                                /*a pb occurred !! */
+                                cr_utils_trace_debug ("an io error occurred");
                                 status = CR_ERROR;
                                 goto cleanup;
                         }
@@ -874,7 +874,7 @@ cr_input_peek_byte2 (CRInput const * a_this, gulong a_offset, gboolean * a_eof)
  *Gets the memory address of the byte located at a given offset
  *in the input stream.
  *
- *Returns the address, otherwise NULL if an error occured.
+ *Returns the address, otherwise NULL if an error occurred.
  */
 guchar *
 cr_input_get_byte_addr (CRInput * a_this, gulong a_offset)

@@ -278,7 +278,7 @@ save(Extension *key, SPDocument *doc, gchar const *filename, bool setextension, 
     }
 
     // test if the file exists and is writable
-    // the test only checks the file attributes and might pass where ACL does not allow to write
+    // the test only checks the file attributes and might pass where ACL does not allow writes
     if (Inkscape::IO::file_test(filename, G_FILE_TEST_EXISTS) && !Inkscape::IO::file_is_writable(filename)) {
         g_free(fileName);
         throw Output::file_read_only();

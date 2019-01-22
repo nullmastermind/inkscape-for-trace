@@ -15,7 +15,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gtkmm/window.h>
+#include <gtkmm.h>
+
 #include "message.h"
 #include "ui/view/view-widget.h"
 #include "ui/view/edit-widget-interface.h"
@@ -32,16 +33,6 @@ class SPDocument;
 class SPDesktop;
 struct SPDesktopWidget;
 class SPObject;
-
-namespace Gtk {
-    class Box;
-    class EventBox;
-    class Grid;
-    class MenuBar;
-    class Scrollbar;
-    class SpinButton;
-    class ToggleButton;
-}
 
 namespace Inkscape {
 namespace UI {
@@ -107,7 +98,6 @@ private:
 
     Gtk::Box *_hbox;
 
-    Gtk::MenuBar *_menubar;
     Gtk::Box     *_statusbar;
 
     Inkscape::UI::Dialog::SwatchesPanel *_panels;

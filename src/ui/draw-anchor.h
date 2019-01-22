@@ -30,7 +30,7 @@ class SPCurve;
 struct SPCanvasItem;
 
 /// The drawing anchor.
-/// \todo Make this a regular knot, this will allow to set statusbar tips.
+/// \todo Make this a regular knot, this will allow setting statusbar tips.
 struct SPDrawAnchor { 
     Inkscape::UI::Tools::FreehandBase *dc;
     SPCurve *curve;

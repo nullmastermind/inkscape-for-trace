@@ -25,21 +25,6 @@
 # include "config.h"  // only include where actually required!
 #endif
 
-#include <gtkmm/cssprovider.h>
-#include <gtkmm/menubar.h>
-#include <gtkmm/messagedialog.h>
-#include <gtkmm/paned.h>
-#include <gtkmm/scrollbar.h>
-#include <gtkmm/separator.h>
-#include <gtkmm/separatormenuitem.h>
-
-#include <gdkmm/types.h>
-#if GTK_CHECK_VERSION(3,20,0)
-#include <gdkmm/seat.h>
-#else
-#include <gdkmm/devicemanager.h>
-#endif
-
 #include <2geom/rect.h>
 
 #include "attributes.h"
@@ -1445,12 +1430,6 @@ void SPDesktopWidget::layoutWidgets()
         pref_root = "/window/";
     }
 
-    if (!prefs->getBool(pref_root + "menu/state", true)) {
-        dtw->_menubar->hide();
-    } else {
-        dtw->_menubar->show_all();
-    }
-
     if (!prefs->getBool(pref_root + "commands/state", true)) {
         gtk_widget_hide (dtw->commands_toolbox);
     } else {
@@ -1657,11 +1636,6 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPDocument *document)
 
     dtw->layer_selector->setDesktop(dtw->desktop);
 
-    dtw->_menubar = Glib::wrap(GTK_MENU_BAR(sp_ui_main_menubar (dtw->desktop)));
-    dtw->_menubar->set_name("MenuBar");
-    dtw->_menubar->show_all();
-
-    dtw->_vbox->pack_start(*dtw->_menubar, false, false);
     dtw->layoutWidgets();
 
     std::vector<GtkWidget *> toolboxes;
@@ -2089,21 +2063,6 @@ SPDesktopWidget::toggle_color_prof_adj()
         }
     }
 }
-
-/* Unused
-void
-sp_spw_toggle_menubar (SPDesktopWidget *dtw, bool is_fullscreen)
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (dtw->_menubar->get_visible()) {
-        dtw->_menubar->hide();
-        prefs->setBool(is_fullscreen ? "/fullscreen/menu/state" : "/window/menu/state", false);
-    } else {
-        dtw->_menubar->show_all();
-        prefs->setBool(is_fullscreen ? "/fullscreen/menu/state" : "/window/menu/state", true);
-    }
-}
-*/
 
 static void
 set_adjustment (Glib::RefPtr<Gtk::Adjustment> &adj, double l, double u, double ps, double si, double pi)

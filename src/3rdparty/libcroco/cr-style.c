@@ -1528,7 +1528,7 @@ set_prop_font_size_from_value (CRStyle * a_style, CRTerm * a_value)
 			a_style->font_size.sv.type = INHERITED_FONT_SIZE;
 
                 } else {
-                        cr_utils_trace_info ("Unknow value of font-size") ;
+                        cr_utils_trace_info ("Unknown value of font-size") ;
                         status = init_style_font_size_field (a_style);
                         return CR_UNKNOWN_PROP_VAL_ERROR;
                 }

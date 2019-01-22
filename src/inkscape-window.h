@@ -45,7 +45,8 @@ private:
     SPDesktop*  _desktop;
     SPDesktopWidget* _desktop_widget;
 
-    Gtk::Box*   _mainbox;  // Remove after we don't need set_desktop_widget()
+    Gtk::Box*      _mainbox;
+    Gtk::MenuBar*  _menubar;
 
     // Callbacks
     bool key_press(GdkEventKey* event);

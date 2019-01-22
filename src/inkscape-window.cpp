@@ -23,6 +23,7 @@
 #include "object/sp-namedview.h"  // TODO Remove need for this!
 
 #include "ui/drag-and-drop.h"  // Move to canvas?
+#include "ui/interface.h" // main menu
 #include "ui/monitor.h" // get_monitor_geometry_at_point()
 
 #include "ui/drag-and-drop.h"
@@ -53,23 +54,28 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
      // =============== Build interface ===============
 
     // Main box
-    _mainbox = Gtk::manage(new Gtk::Box);
+    _mainbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     _mainbox->set_name("DesktopMainBox");
     _mainbox->show();
     add(*_mainbox);
 
-    // Menu bar
-
     // Desktop widget (=> MultiPaned)
     _desktop_widget = sp_desktop_widget_new(_document);
     _desktop_widget->window = this;
-    gtk_container_add(GTK_CONTAINER(_mainbox->gobj()), GTK_WIDGET(_desktop_widget));
     gtk_widget_show(GTK_WIDGET(_desktop_widget));
     _desktop = _desktop_widget->desktop;
+
+    // Menu bar (must come after desktop widget creation as we need _desktop)
+    _menubar = Glib::wrap(GTK_MENU_BAR(sp_ui_main_menubar(_desktop)));
+    _menubar->set_name("MenuBar");
+    _menubar->show_all();
 
     // Pallet
 
     // Status bar
+
+    _mainbox->pack_start(*_menubar, false, false);
+    gtk_box_pack_start(GTK_BOX(_mainbox->gobj()), GTK_WIDGET(_desktop_widget), true, true, 0); // Can't use Glib::wrap()
 
     // ================== Callbacks ==================
     signal_key_press_event().connect(   sigc::mem_fun(*this, &InkscapeWindow::key_press));

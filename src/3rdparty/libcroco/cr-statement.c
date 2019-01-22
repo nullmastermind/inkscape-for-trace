@@ -1210,14 +1210,14 @@ cr_statement_at_media_rule_parse_from_buf (const guchar * a_buf,
         parser = cr_parser_new_from_buf ((guchar*)a_buf, strlen ((const char *) a_buf), 
                                          a_enc, FALSE);
         if (!parser) {
-                cr_utils_trace_info ("Instanciation of the parser failed");
+                cr_utils_trace_info ("Instantiation of the parser failed");
                 goto cleanup;
         }
 
         sac_handler = cr_doc_handler_new ();
         if (!sac_handler) {
                 cr_utils_trace_info
-                        ("Instanciation of the sac handler failed");
+                        ("Instantiation of the sac handler failed");
                 goto cleanup;
         }
 
@@ -1396,7 +1396,7 @@ cr_statement_at_import_rule_parse_from_buf (const guchar * a_buf,
         parser = cr_parser_new_from_buf ((guchar*)a_buf, strlen ((const char *) a_buf),
                                          a_encoding, FALSE);
         if (!parser) {
-                cr_utils_trace_info ("Instanciation of parser failed.");
+                cr_utils_trace_info ("Instantiation of parser failed.");
                 goto cleanup;
         }
 
@@ -1523,14 +1523,14 @@ cr_statement_at_page_rule_parse_from_buf (const guchar * a_buf,
         parser = cr_parser_new_from_buf ((guchar*)a_buf, strlen ((const char *) a_buf),
                                          a_encoding, FALSE);
         if (!parser) {
-                cr_utils_trace_info ("Instanciation of the parser failed.");
+                cr_utils_trace_info ("Instantiation of the parser failed.");
                 goto cleanup;
         }
 
         sac_handler = cr_doc_handler_new ();
         if (!sac_handler) {
                 cr_utils_trace_info
-                        ("Instanciation of the sac handler failed.");
+                        ("Instantiation of the sac handler failed.");
                 goto cleanup;
         }
 
@@ -1639,7 +1639,7 @@ cr_statement_at_charset_rule_parse_from_buf (const guchar * a_buf,
         parser = cr_parser_new_from_buf ((guchar*)a_buf, strlen ((const char *) a_buf),
                                          a_encoding, FALSE);
         if (!parser) {
-                cr_utils_trace_info ("Instanciation of the parser failed.");
+                cr_utils_trace_info ("Instantiation of the parser failed.");
                 goto cleanup;
         }
 
