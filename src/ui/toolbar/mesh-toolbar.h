@@ -46,9 +46,9 @@ private:
     Glib::RefPtr<Gtk::Adjustment> _row_adj;
     Glib::RefPtr<Gtk::Adjustment> _col_adj;
 
-    UI::PrefPusher *_edit_fill_pusher;
-    UI::PrefPusher *_edit_stroke_pusher;
-    UI::PrefPusher *_show_handles_pusher;
+    std::unique_ptr<UI::PrefPusher> _edit_fill_pusher;
+    std::unique_ptr<UI::PrefPusher> _edit_stroke_pusher;
+    std::unique_ptr<UI::PrefPusher> _show_handles_pusher;
 
     sigc::connection c_selection_changed;
     sigc::connection c_selection_modified;
@@ -76,8 +76,6 @@ protected:
         : Toolbar(desktop),
           _edit_fill_pusher(nullptr)
     {}
-
-    ~MeshToolbar() override;
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);

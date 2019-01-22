@@ -191,14 +191,6 @@ static void mesh_toolbox_watch_ec(SPDesktop* dt, Inkscape::UI::Tools::ToolBase* 
 namespace Inkscape {
 namespace UI {
 namespace Toolbar {
-
-MeshToolbar::~MeshToolbar()
-{
-    if(_edit_fill_pusher) delete _edit_fill_pusher;
-    if(_edit_stroke_pusher) delete _edit_stroke_pusher;
-    if(_show_handles_pusher) delete _show_handles_pusher;
-}
-
 /**
  * Mesh auxiliary toolbar construction and setup.
  * Don't forget to add to XML in widgets/toolbox.cpp!
@@ -335,7 +327,7 @@ MeshToolbar::prep(SPDesktop * desktop, GtkActionGroup* mainActions)
                                                       INKSCAPE_ICON("object-fill"),
                                                       secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        toolbar->_edit_fill_pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/edit_fill");
+        toolbar->_edit_fill_pusher.reset(new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/edit_fill"));
         g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(toggle_fill_stroke), (gpointer)toolbar);
     }
 
@@ -347,7 +339,7 @@ MeshToolbar::prep(SPDesktop * desktop, GtkActionGroup* mainActions)
                                                       INKSCAPE_ICON("object-stroke"),
                                                       secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        toolbar->_edit_stroke_pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/edit_stroke");
+        toolbar->_edit_stroke_pusher.reset(new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/edit_stroke"));
         g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(toggle_fill_stroke), (gpointer)toolbar);
     }
 
@@ -359,7 +351,7 @@ MeshToolbar::prep(SPDesktop * desktop, GtkActionGroup* mainActions)
                                                       INKSCAPE_ICON("show-node-handles"),
                                                       secondarySize );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        toolbar->_show_handles_pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/show_handles");
+        toolbar->_show_handles_pusher.reset(new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/show_handles"));
         g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(toggle_handles), nullptr);
     }
 

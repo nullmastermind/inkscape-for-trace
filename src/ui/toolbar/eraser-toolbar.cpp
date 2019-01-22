@@ -52,11 +52,6 @@ using Inkscape::UI::PrefPusher;
 namespace Inkscape {
 namespace UI {
 namespace Toolbar {
-EraserToolbar::~EraserToolbar()
-{
-    if(_pressure_pusher) delete _pressure_pusher;
-}
-
 GtkWidget *
 EraserToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
 {
@@ -136,7 +131,7 @@ EraserToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                        INKSCAPE_ICON("draw-use-pressure"),
                                                        GTK_ICON_SIZE_MENU );
         gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_usepressure ) );
-        toolbar->_pressure_pusher = new PrefPusher(GTK_TOGGLE_ACTION(toolbar->_usepressure), "/tools/eraser/usepressure", update_presets_list, (gpointer)toolbar);
+        toolbar->_pressure_pusher.reset(new PrefPusher(GTK_TOGGLE_ACTION(toolbar->_usepressure), "/tools/eraser/usepressure", update_presets_list, (gpointer)toolbar));
     }
 
 

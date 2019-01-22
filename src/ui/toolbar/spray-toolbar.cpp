@@ -72,12 +72,6 @@ Inkscape::UI::Dialog::CloneTiler *get_clone_tiler_panel(SPDesktop *desktop)
 namespace Inkscape {
 namespace UI {
 namespace Toolbar {
-SprayToolbar::~SprayToolbar()
-{
-    delete _usepressurewidth_pusher;
-    delete _usepressurepopulation_pusher;
-}
-
 GtkWidget *
 SprayToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
 {
@@ -112,7 +106,7 @@ SprayToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                       INKSCAPE_ICON("draw-use-pressure"),
                                                       GTK_ICON_SIZE_MENU );
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
-        holder->_usepressurewidth_pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/spray/usepressurewidth");
+        holder->_usepressurewidth_pusher.reset(new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/spray/usepressurewidth"));
     }
     
     {
@@ -229,7 +223,7 @@ SprayToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                       INKSCAPE_ICON("draw-use-pressure"),
                                                       GTK_ICON_SIZE_MENU );
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
-        holder->_usepressurepopulation_pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/spray/usepressurepopulation");
+        holder->_usepressurepopulation_pusher.reset(new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/spray/usepressurepopulation"));
     }
 
     {   /* Rotation */
