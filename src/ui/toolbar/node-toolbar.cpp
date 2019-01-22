@@ -215,7 +215,8 @@ namespace Toolbar {
 
 NodeToolbar::NodeToolbar(SPDesktop *desktop)
     : Toolbar(desktop),
-    _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
+    _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR)),
+    _freeze(false)
 {}
 
 GtkWidget *
