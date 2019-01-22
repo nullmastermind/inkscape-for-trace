@@ -58,11 +58,6 @@ LPEToolbar::LPEToolbar(SPDesktop *desktop)
     _tracker->setActiveUnit(_desktop->getNamedView()->display_units);
 }
 
-LPEToolbar::~LPEToolbar()
-{
-    delete _tracker;
-}
-
 GtkWidget *
 LPEToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
 {

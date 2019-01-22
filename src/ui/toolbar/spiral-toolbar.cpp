@@ -74,7 +74,6 @@ SpiralToolbar::~SpiralToolbar()
 
     if(_connection) {
         _connection->disconnect();
-        delete _connection;
     }
 }
 
@@ -158,8 +157,8 @@ SpiralToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
     }
 
 
-    toolbar->_connection = new sigc::connection(
-        desktop->getSelection()->connectChanged(sigc::mem_fun(*toolbar, &SpiralToolbar::selection_changed)));
+    toolbar->_connection.reset(new sigc::connection(
+        desktop->getSelection()->connectChanged(sigc::mem_fun(*toolbar, &SpiralToolbar::selection_changed))));
 
     return GTK_WIDGET(toolbar->gobj());
 }

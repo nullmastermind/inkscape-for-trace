@@ -64,7 +64,7 @@ private:
                          GObject   *obj);
     void selection_changed(Inkscape::Selection *selection);
 
-    sigc::connection *_connection;
+    std::unique_ptr<sigc::connection> _connection;
 
 protected:
     SpiralToolbar(SPDesktop *desktop) :

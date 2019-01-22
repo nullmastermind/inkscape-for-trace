@@ -58,35 +58,9 @@ std::vector<Glib::ustring> get_presets_list() {
     return presets;
 }
 
-
-#if 0
-static gchar const *const widget_names[] = {
-    "width",
-    "mass",
-    "wiggle",
-    "angle",
-    "thinning",
-    "tremor",
-    "flatness",
-    "cap_rounding",
-    "usepressure",
-    "tracebackground",
-    "usetilt"
-};
-#endif
-
-
-
 namespace Inkscape {
 namespace UI {
 namespace Toolbar {
-
-CalligraphyToolbar::~CalligraphyToolbar()
-{
-    if(_tracebackground_pusher) delete _tracebackground_pusher;
-    if(_usepressure_pusher)     delete _usepressure_pusher;
-    if(_usetilt_pusher)         delete _usetilt_pusher;
-}
 
 GtkWidget *
 CalligraphyToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
@@ -272,7 +246,7 @@ CalligraphyToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                                GTK_ICON_SIZE_MENU );
             toolbar->_widget_map["tracebackground"] = G_OBJECT(toolbar->_tracebackground);
             gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_tracebackground ) );
-            toolbar->_tracebackground_pusher = new PrefPusher(GTK_TOGGLE_ACTION(toolbar->_tracebackground), "/tools/calligraphic/tracebackground", update_presets_list, gpointer(toolbar));
+            toolbar->_tracebackground_pusher.reset(new PrefPusher(GTK_TOGGLE_ACTION(toolbar->_tracebackground), "/tools/calligraphic/tracebackground", update_presets_list, gpointer(toolbar)));
         }
 
         /* Use Pressure button */
@@ -284,7 +258,7 @@ CalligraphyToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                            GTK_ICON_SIZE_MENU );
             toolbar->_widget_map["usepressure"] = G_OBJECT(toolbar->_usepressure);
             gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_usepressure ) );
-            toolbar->_usepressure_pusher = new PrefPusher(GTK_TOGGLE_ACTION(toolbar->_usepressure), "/tools/calligraphic/usepressure", update_presets_list, gpointer(toolbar));
+            toolbar->_usepressure_pusher.reset(new PrefPusher(GTK_TOGGLE_ACTION(toolbar->_usepressure), "/tools/calligraphic/usepressure", update_presets_list, gpointer(toolbar)));
         }
 
         /* Use Tilt button */
@@ -296,7 +270,7 @@ CalligraphyToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
                                                        GTK_ICON_SIZE_MENU );
             toolbar->_widget_map["usetilt"] = G_OBJECT(toolbar->_usetilt);
             gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_usetilt ) );
-            toolbar->_usetilt_pusher = new PrefPusher(GTK_TOGGLE_ACTION(toolbar->_usetilt), "/tools/calligraphic/usetilt", update_presets_list, gpointer(toolbar));
+            toolbar->_usetilt_pusher.reset(new PrefPusher(GTK_TOGGLE_ACTION(toolbar->_usetilt), "/tools/calligraphic/usetilt", update_presets_list, gpointer(toolbar)));
             g_signal_connect_after( G_OBJECT(toolbar->_usetilt), "toggled", G_CALLBACK(tilt_state_changed), toolbar );
             gtk_action_set_sensitive( GTK_ACTION(toolbar->_angle_action), !prefs->getBool("/tools/calligraphic/usetilt", true) );
             gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(toolbar->_usetilt), prefs->getBool("/tools/calligraphic/usetilt", true) );

@@ -53,7 +53,7 @@ class UnitTracker;
 namespace Toolbar {
 class LPEToolbar : public Toolbar {
 private:
-    UI::Widget::UnitTracker *_tracker;
+    std::unique_ptr<UI::Widget::UnitTracker> _tracker;
     InkSelectOneAction *_mode_action;
     InkSelectOneAction *_line_segment_action;
     InkSelectOneAction *_units_action;
@@ -84,7 +84,6 @@ private:
 
 protected:
     LPEToolbar(SPDesktop *desktop);
-    ~LPEToolbar() override;
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
