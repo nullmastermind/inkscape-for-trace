@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
+
 /**
  * @file
  * Inkscape toolbar definitions and general utility functions.
@@ -120,9 +121,6 @@ enum BarId {
 
 #define BAR_ID_KEY "BarIdValue"
 #define HANDLE_POS_MARK "x-inkscape-pos"
-
-static GtkWidget *sp_empty_toolbox_new(SPDesktop *desktop);
-
 
 GtkIconSize ToolboxFactory::prefToSize( Glib::ustring const &path, int base ) {
     static GtkIconSize sizeChoices[] = {
@@ -937,17 +935,12 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             GtkWidget* kludge = aux_toolboxes[i].prep_func(desktop, mainActions->gobj());
             gtk_widget_set_name( kludge, "Kludge" );
             dataHolders[aux_toolboxes[i].type_name] = kludge;
-        } else {
+        } else if (aux_toolboxes[i].create_func) {
 
             // For the "create" method, directly create a "real" toolbar,
             // which contains visible, fully functional widgets.  Note that
             // this should also contain any swatches that are needed.
-            GtkWidget *sub_toolbox = nullptr;
-            if (aux_toolboxes[i].create_func == nullptr) {
-                sub_toolbox = sp_empty_toolbox_new(desktop);
-            } else {
-                sub_toolbox = aux_toolboxes[i].create_func(desktop);
-            }
+            GtkWidget *sub_toolbox = aux_toolboxes[i].create_func(desktop);
             gtk_widget_set_name( sub_toolbox, "SubToolBox" );
             gtk_size_group_add_widget( grouper, sub_toolbox );
 
@@ -960,6 +953,8 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             //       so that we can store a list of toolbars, rather than using
             //       GObject data
             g_object_set_data(G_OBJECT(toolbox), aux_toolboxes[i].data_name, sub_toolbox);
+        } else {
+            g_warning("Could not create toolbox %s", aux_toolboxes[i].ui_name);
         }
     }
 
@@ -1515,18 +1510,6 @@ void ToolboxFactory::showAuxToolbox(GtkWidget *toolbox_toplevel)
     gtk_widget_show(toolbox);
 
     gtk_widget_show_all(shown_toolbox);
-}
-
-static GtkWidget *sp_empty_toolbox_new(SPDesktop *desktop)
-{
-    GtkWidget *tbl = gtk_toolbar_new();
-    g_object_set_data(G_OBJECT(tbl), "dtw", desktop->canvas);
-    g_object_set_data(G_OBJECT(tbl), "desktop", desktop);
-
-    gtk_widget_show_all(tbl);
-    sp_set_font_size_smaller (tbl);
-
-    return tbl;
 }
 
 #define MODE_LABEL_WIDTH 70
