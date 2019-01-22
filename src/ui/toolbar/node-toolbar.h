@@ -54,13 +54,13 @@ class UnitTracker;
 namespace Toolbar {
 class NodeToolbar : public Toolbar {
 private:
-    UI::Widget::UnitTracker *_tracker;
+    std::unique_ptr<UI::Widget::UnitTracker> _tracker;
 
-    PrefPusher *_pusher_show_transform_handles;
-    PrefPusher *_pusher_show_handles;
-    PrefPusher *_pusher_show_outline;
-    PrefPusher *_pusher_edit_clipping_paths;
-    PrefPusher *_pusher_edit_masks;
+    std::unique_ptr<PrefPusher> _pusher_show_transform_handles;
+    std::unique_ptr<PrefPusher> _pusher_show_handles;
+    std::unique_ptr<PrefPusher> _pusher_show_outline;
+    std::unique_ptr<PrefPusher> _pusher_edit_clipping_paths;
+    std::unique_ptr<PrefPusher> _pusher_edit_masks;
 
     InkAction *_nodes_lpeedit;
 
@@ -84,7 +84,6 @@ private:
 
 protected:
     NodeToolbar(SPDesktop *desktop);
-    ~NodeToolbar() override;
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
