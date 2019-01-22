@@ -78,10 +78,7 @@ private:
                                    gpointer         data);
 
 protected:
-    EraserToolbar(SPDesktop *desktop)
-        : Toolbar(desktop),
-          _freeze(false)
-    {}
+    EraserToolbar(SPDesktop *desktop);
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);

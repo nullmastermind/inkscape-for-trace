@@ -37,6 +37,7 @@
 #include "ui/dialog/clonetiler.h"
 #include "ui/dialog/dialog-manager.h"
 #include "ui/dialog/panel-dialog.h"
+#include "ui/pref-pusher.h"
 #include "ui/widget/ink-select-one-action.h"
 #include "ui/icon-names.h"
 
@@ -72,6 +73,10 @@ Inkscape::UI::Dialog::CloneTiler *get_clone_tiler_panel(SPDesktop *desktop)
 namespace Inkscape {
 namespace UI {
 namespace Toolbar {
+SprayToolbar::SprayToolbar(SPDesktop *desktop) :
+    Toolbar(desktop)
+{}
+
 GtkWidget *
 SprayToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
 {

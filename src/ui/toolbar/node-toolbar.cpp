@@ -43,6 +43,7 @@
 #include "object/sp-namedview.h"
 
 #include "ui/icon-names.h"
+#include "ui/pref-pusher.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tools/node-tool.h"

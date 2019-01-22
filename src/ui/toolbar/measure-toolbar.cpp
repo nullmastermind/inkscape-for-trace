@@ -49,7 +49,6 @@ using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::Util::Unit;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
-using Inkscape::UI::PrefPusher;
 using Inkscape::UI::Tools::MeasureTool;
 
 //########################

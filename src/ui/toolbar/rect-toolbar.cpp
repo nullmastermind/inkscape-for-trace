@@ -56,7 +56,6 @@ using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
-using Inkscape::UI::PrefPusher;
 using Inkscape::Util::Unit;
 using Inkscape::Util::Quantity;
 using Inkscape::Util::unit_table;

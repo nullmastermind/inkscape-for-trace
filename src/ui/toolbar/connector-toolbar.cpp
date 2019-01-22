@@ -55,7 +55,6 @@
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
-using Inkscape::UI::PrefPusher;
 
 static Inkscape::XML::NodeEventVector connector_tb_repr_events = {
     nullptr, /* child_added */

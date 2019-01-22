@@ -105,9 +105,7 @@ private:
                                            gpointer         user_data);
 
 protected:
-    SprayToolbar(SPDesktop *desktop) :
-        Toolbar(desktop)
-    {}
+    SprayToolbar(SPDesktop *desktop);
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);

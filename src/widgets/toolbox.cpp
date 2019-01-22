@@ -102,7 +102,6 @@
 
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
-using Inkscape::UI::PrefPusher;
 using Inkscape::UI::ToolboxFactory;
 using Inkscape::UI::Tools::ToolBase;
 
@@ -379,84 +378,7 @@ void VerbAction::on_activate()
     }
 }
 
-/* Global text entry widgets necessary for update */
-/* GtkWidget *dropper_rgb_entry,
-          *dropper_opacity_entry ; */
-// should be made a private member once this is converted to class
-
-void delete_connection(GObject * /*obj*/, sigc::connection *connection)
-{
-    connection->disconnect();
-    delete connection;
-}
-
-void purge_repr_listener( GObject* /*obj*/, GObject* tbl )
-{
-    Inkscape::XML::Node* oldrepr = reinterpret_cast<Inkscape::XML::Node *>( g_object_get_data( tbl, "repr" ) );
-    if (oldrepr) { // remove old listener
-        sp_repr_remove_listener_by_data(oldrepr, tbl);
-        Inkscape::GC::release(oldrepr);
-        oldrepr = nullptr;
-        g_object_set_data( tbl, "repr", nullptr );
-    }
-}
-
-PrefPusher::PrefPusher( GtkToggleAction *act, Glib::ustring const &path, void (*callback)(gpointer), gpointer cbData ) :
-    Observer(path),
-    act(act),
-    callback(callback),
-    cbData(cbData),
-    freeze(false)
-{
-    g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggleCB), this);
-    freeze = true;
-    gtk_toggle_action_set_active( act, Inkscape::Preferences::get()->getBool(observed_path) );
-    freeze = false;
-
-    Inkscape::Preferences::get()->addObserver(*this);
-}
-
-PrefPusher::~PrefPusher()
-{
-    Inkscape::Preferences::get()->removeObserver(*this);
-}
-
-void PrefPusher::toggleCB( GtkToggleAction * /*act*/, PrefPusher *self )
-{
-    if (self) {
-        self->handleToggled();
-    }
-}
-
-void PrefPusher::handleToggled()
-{
-    if (!freeze) {
-        freeze = true;
-        Inkscape::Preferences::get()->setBool(observed_path, gtk_toggle_action_get_active( act ));
-        if (callback) {
-            (*callback)(cbData);
-        }
-        freeze = false;
-    }
-}
-
-void PrefPusher::notify(Inkscape::Preferences::Entry const &newVal)
-{
-    bool newBool = newVal.getBool();
-    bool oldBool = gtk_toggle_action_get_active(act);
-
-    if (!freeze && (newBool != oldBool)) {
-        gtk_toggle_action_set_active( act, newBool );
-    }
-}
-
-void delete_prefspusher(GObject * /*obj*/, PrefPusher *watcher )
-{
-    delete watcher;
-}
-
 // ------------------------------------------------------
-
 
 GtkToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick(GtkWidget *t, GtkIconSize size, Inkscape::UI::Widget::ButtonType type,
                                                              Inkscape::Verb *verb, Inkscape::Verb *doubleclick_verb,

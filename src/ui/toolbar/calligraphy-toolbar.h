@@ -86,9 +86,7 @@ private:
     static void tilt_state_changed( GtkToggleAction *act, gpointer data );
     
 protected:
-    CalligraphyToolbar(SPDesktop *desktop)
-        : Toolbar(desktop)
-    {}
+    CalligraphyToolbar(SPDesktop *desktop);
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);

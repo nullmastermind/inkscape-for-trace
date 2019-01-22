@@ -9,6 +9,7 @@ set(ui_SRC
 	icon-loader.cpp
 	interface.cpp
         monitor.cpp
+        pref-pusher.cpp
 	previewholder.cpp
 	selected-color.cpp
 	shape-editor.cpp
@@ -224,14 +225,15 @@ set(ui_SRC
 	icon-names.h
 	icon-loader.h
 	interface.h
-    monitor.h
+        monitor.h
+        pref-pusher.h
 	previewable.h
 	previewholder.h
 	selected-color.h
 	shape-editor.h
 	tool-factory.h
 	tools-switch.h
-    util.h
+        util.h
 	uxmanager.h
 
 	cache/svg_preview_cache.h

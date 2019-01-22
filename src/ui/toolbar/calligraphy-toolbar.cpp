@@ -36,6 +36,7 @@
 #include "widgets/ink-toggle-action.h"
 #include "widgets/toolbox.h"
 #include "ui/icon-names.h"
+#include "ui/pref-pusher.h"
 #include "ui/uxmanager.h"
 #include "ui/widget/ink-select-one-action.h"
 
@@ -61,6 +62,10 @@ std::vector<Glib::ustring> get_presets_list() {
 namespace Inkscape {
 namespace UI {
 namespace Toolbar {
+
+CalligraphyToolbar::CalligraphyToolbar(SPDesktop *desktop)
+    : Toolbar(desktop)
+{}
 
 GtkWidget *
 CalligraphyToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)

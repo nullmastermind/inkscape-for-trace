@@ -38,20 +38,21 @@
 #include "widgets/toolbox.h"
 #include "ui/widget/ink-select-one-action.h"
 #include "ui/icon-names.h"
+#include "ui/pref-pusher.h"
 #include "ui/tools/eraser-tool.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
 using Inkscape::UI::PrefPusher;
 
-//########################
-//##       Eraser       ##
-//########################
-
-
 namespace Inkscape {
 namespace UI {
 namespace Toolbar {
+EraserToolbar::EraserToolbar(SPDesktop *desktop)
+    : Toolbar(desktop),
+    _freeze(false)
+{}
+
 GtkWidget *
 EraserToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
 {

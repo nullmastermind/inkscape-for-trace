@@ -40,6 +40,7 @@
 #include "object/sp-ellipse.h"
 
 #include "ui/icon-names.h"
+#include "ui/pref-pusher.h"
 #include "ui/tools/arc-tool.h"
 #include "ui/uxmanager.h"
 #include "ui/widget/ink-select-one-action.h"

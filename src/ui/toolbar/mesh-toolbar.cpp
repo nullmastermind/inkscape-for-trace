@@ -39,6 +39,7 @@
 #include "svg/css-ostringstream.h"
 
 #include "ui/icon-names.h"
+#include "ui/pref-pusher.h"
 #include "ui/tools/gradient-tool.h"
 #include "ui/tools/mesh-tool.h"
 #include "ui/widget/color-preview.h"
@@ -191,6 +192,11 @@ static void mesh_toolbox_watch_ec(SPDesktop* dt, Inkscape::UI::Tools::ToolBase* 
 namespace Inkscape {
 namespace UI {
 namespace Toolbar {
+MeshToolbar::MeshToolbar(SPDesktop *desktop)
+    : Toolbar(desktop),
+    _edit_fill_pusher(nullptr)
+{}
+
 /**
  * Mesh auxiliary toolbar construction and setup.
  * Don't forget to add to XML in widgets/toolbox.cpp!

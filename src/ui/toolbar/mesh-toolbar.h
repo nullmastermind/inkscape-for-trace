@@ -72,10 +72,7 @@ private:
     void type_changed(int mode);
 
 protected:
-    MeshToolbar(SPDesktop *desktop)
-        : Toolbar(desktop),
-          _edit_fill_pusher(nullptr)
-    {}
+    MeshToolbar(SPDesktop *desktop);
 
 public:
     static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);

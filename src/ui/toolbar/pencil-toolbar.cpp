@@ -60,7 +60,6 @@
 
 using Inkscape::UI::UXManager;
 using Inkscape::UI::ToolboxFactory;
-using Inkscape::UI::PrefPusher;
 
 
 /*
