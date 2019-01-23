@@ -10,8 +10,6 @@
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
-using std::memcpy;
-
 namespace Inkscape {
 namespace LivePathEffect {
 

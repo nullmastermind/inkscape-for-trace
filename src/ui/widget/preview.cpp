@@ -36,8 +36,6 @@
  * ***** END LICENSE BLOCK ***** */
 
 #include <algorithm>
-using std::min;
-
 #include <gdkmm/general.h>
 #include "preview.h"
 #include "preferences.h"
@@ -272,7 +270,7 @@ Preview::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
             context->render_arrow(cr,
                                   G_PI, // Down-pointing arrow
                                   area.x, area.y,
-                                  min(area.width, area.height)
+                                  std::min(area.width, area.height)
                                  );
         }
 
@@ -286,7 +284,7 @@ Preview::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
             context->render_arrow(cr,
                                   G_PI, // Down-pointing arrow
                                   otherArea.x, otherArea.y,
-                                  min(otherArea.width, otherArea.height)
+                                  std::min(otherArea.width, otherArea.height)
                                  );
         }
 
@@ -300,7 +298,7 @@ Preview::on_draw(const Cairo::RefPtr<Cairo::Context> &cr)
             context->render_arrow(cr,
                                   1.5*G_PI, // Left-pointing arrow
                                   otherArea.x, otherArea.y,
-                                  min(otherArea.width, otherArea.height)
+                                  std::min(otherArea.width, otherArea.height)
                                  );
         }
 

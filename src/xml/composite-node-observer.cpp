@@ -161,8 +161,6 @@ void CompositeNodeObserver::addListener(NodeEventVector const &vector,
 
 namespace {
 
-using std::find_if;
-using Algorithms::find_if_before;
 typedef CompositeNodeObserver::ObserverRecord ObserverRecord;
 typedef CompositeNodeObserver::ObserverRecordList ObserverRecordList;
 
@@ -205,7 +203,7 @@ bool remove_one(ObserverRecordList &observers, unsigned &/*marked_count*/,
         return true;
     }
 
-    ObserverRecordList::iterator found=find_if_before(
+    ObserverRecordList::iterator found=Algorithms::find_if_before(
         observers.begin(), observers.end(),
         unmarked_record_satisfying<Predicate>(p)
     );
@@ -233,7 +231,7 @@ void remove_all_marked(ObserverRecordList &observers, unsigned &marked_count)
 
     iter = observers.begin();
     while (marked_count) {
-        iter = find_if_before(iter, observers.end(), is_marked);
+        iter = Algorithms::find_if_before(iter, observers.end(), is_marked);
         observers.erase_after(iter);
         --marked_count;
     }

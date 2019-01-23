@@ -10,12 +10,11 @@
 
 #include <algorithm>
 #include <2geom/coord.h>
+#include <vector>
 
 #include "remove-last.h"
 #include "sp-guide.h"
 #include "sp-item-rm-unsatisfied-cns.h"
-
-using std::vector;
 
 void sp_item_rm_unsatisfied_cns(SPItem &item)
 {

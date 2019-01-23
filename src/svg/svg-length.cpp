@@ -16,6 +16,7 @@
 #include <string>
 #include <glib.h>
 #include <iostream>
+#include <vector>
 
 #include "svg.h"
 #include "stringstream.h"

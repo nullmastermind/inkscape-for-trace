@@ -21,6 +21,8 @@
 #include <gdkmm/general.h>
 #include <glibmm/fileutils.h>
 #include <glibmm/i18n.h>
+#include <list>
+#include <vector>
 
 //Inkscape includes
 #include "display/cairo-utils.h"
@@ -34,7 +36,6 @@
 #include "util/units.h"
 
 
-using namespace std;
 using namespace Glib;
 using namespace Cairo;
 using namespace Gdk::Cairo;
@@ -184,7 +185,7 @@ FileOpenDialogImplWin32::~FileOpenDialogImplWin32()
 
 void FileOpenDialogImplWin32::addFilterMenu(Glib::ustring name, Glib::ustring pattern)
 {
-    list<Filter> filter_list;
+    std::list<Filter> filter_list;
 
     int extension_index = 0;
     int filter_length = 1;
@@ -210,7 +211,7 @@ void FileOpenDialogImplWin32::addFilterMenu(Glib::ustring name, Glib::ustring pa
     _filter = new wchar_t[filter_length];
     wchar_t *filterptr = _filter;
 
-    for(list<Filter>::iterator filter_iterator = filter_list.begin();
+    for(std::list<Filter>::iterator filter_iterator = filter_list.begin();
         filter_iterator != filter_list.end(); ++filter_iterator)
     {
         const Filter &filter = *filter_iterator;
@@ -242,7 +243,7 @@ void FileOpenDialogImplWin32::addFilterMenu(Glib::ustring name, Glib::ustring pa
 
 void FileOpenDialogImplWin32::createFilterMenu()
 {
-    list<Filter> filter_list;
+    std::list<Filter> filter_list;
 
     int extension_index = 0;
     int filter_length = 1;
@@ -427,7 +428,7 @@ void FileOpenDialogImplWin32::createFilterMenu()
     _filter = new wchar_t[filter_length];
     wchar_t *filterptr = _filter;
 
-    for(list<Filter>::iterator filter_iterator = filter_list.begin();
+    for(std::list<Filter>::iterator filter_iterator = filter_list.begin();
         filter_iterator != filter_list.end(); ++filter_iterator)
     {
         const Filter &filter = *filter_iterator;
@@ -1609,7 +1610,7 @@ FileSaveDialogImplWin32::~FileSaveDialogImplWin32()
 
 void FileSaveDialogImplWin32::createFilterMenu()
 {
-    list<Filter> filter_list;
+    std::list<Filter> filter_list;
 
     knownExtensions.clear();
 
@@ -1655,7 +1656,7 @@ void FileSaveDialogImplWin32::createFilterMenu()
     _filter = new wchar_t[filter_length];
     wchar_t *filterptr = _filter;
 
-    for(list<Filter>::iterator filter_iterator = filter_list.begin();
+    for(std::list<Filter>::iterator filter_iterator = filter_list.begin();
         filter_iterator != filter_list.end(); ++filter_iterator)
     {
         const Filter &filter = *filter_iterator;
@@ -1685,7 +1686,7 @@ void FileSaveDialogImplWin32::createFilterMenu()
 
 void FileSaveDialogImplWin32::addFileType(Glib::ustring name, Glib::ustring pattern)
 {
-    list<Filter> filter_list;
+    std::list<Filter> filter_list;
 
     knownExtensions.clear();
 
@@ -1716,7 +1717,7 @@ void FileSaveDialogImplWin32::addFileType(Glib::ustring name, Glib::ustring patt
     _filter = new wchar_t[filter_length];
     wchar_t *filterptr = _filter;
 
-    for(list<Filter>::iterator filter_iterator = filter_list.begin();
+    for(std::list<Filter>::iterator filter_iterator = filter_list.begin();
         filter_iterator != filter_list.end(); ++filter_iterator)
     {
         const Filter &filter = *filter_iterator;

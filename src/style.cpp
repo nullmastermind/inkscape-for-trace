@@ -26,6 +26,7 @@
 #include <string>
 #include <algorithm>
 #include <unordered_map>
+#include <vector>
 
 #include <glibmm/regex.h>
 
@@ -51,7 +52,6 @@
 #include "xml/simple-document.h"
 
 using Inkscape::CSSOStringStream;
-using std::vector;
 
 #define BMAX 8192
 

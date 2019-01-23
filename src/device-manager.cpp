@@ -11,6 +11,7 @@
 #include "device-manager.h"
 
 #include <set>
+#include <vector>
 
 #include "preferences.h"
 

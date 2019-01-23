@@ -10,6 +10,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <vector>
 #include "widgets/desktop-widget.h"
 
 #include "uxmanager.h"
@@ -17,9 +18,6 @@
 #include "ui/monitor.h"
 #include "util/ege-tags.h"
 #include "widgets/toolbox.h"
-
-
-using std::vector;
 
 class TrackItem
 {
@@ -33,8 +31,8 @@ public:
     std::vector<GtkWidget*> boxes;
 };
 
-static vector<SPDesktop*> desktops;
-static vector<SPDesktopWidget*> dtws;
+static std::vector<SPDesktop*> desktops;
+static std::vector<SPDesktopWidget*> dtws;
 static std::map<SPDesktop*, TrackItem> trackedBoxes;
 
 
@@ -82,7 +80,7 @@ public:
     void addTrack( SPDesktopWidget* dtw ) override;
     void delTrack( SPDesktopWidget* dtw ) override;
 
-    void connectToDesktop( vector<GtkWidget *> const & toolboxes, SPDesktop *desktop ) override;
+    void connectToDesktop( std::vector<GtkWidget *> const & toolboxes, SPDesktop *desktop ) override;
 
     gint getDefaultTask( SPDesktop *desktop ) override;
     void setTask(SPDesktop* dt, gint val) override;
@@ -199,20 +197,20 @@ void UXManagerImpl::addTrack( SPDesktopWidget* dtw )
 
 void UXManagerImpl::delTrack( SPDesktopWidget* dtw )
 {
-    vector<SPDesktopWidget*>::iterator iter = std::find(dtws.begin(), dtws.end(), dtw);
+    std::vector<SPDesktopWidget*>::iterator iter = std::find(dtws.begin(), dtws.end(), dtw);
     if (iter != dtws.end()) {
         dtws.erase(iter);
     }
 }
 
-void UXManagerImpl::connectToDesktop( vector<GtkWidget *> const & toolboxes, SPDesktop *desktop )
+void UXManagerImpl::connectToDesktop( std::vector<GtkWidget *> const & toolboxes, SPDesktop *desktop )
 {
     if (!desktop)
     {
         return;
     }
     TrackItem &tracker = trackedBoxes[desktop];
-    vector<GtkWidget*>& tracked = tracker.boxes;
+    std::vector<GtkWidget*>& tracked = tracker.boxes;
     tracker.destroyConn = desktop->connectDestroy(&desktopDestructHandler);
 
     for (auto toolbox : toolboxes) {

@@ -107,8 +107,6 @@ static SPObject *last_elder_layer(SPObject *root, SPObject *layer) {
  *  @returns NULL if there are no further layers under \a root
  */
 SPObject *next_layer(SPObject *root, SPObject *layer) {
-    using std::find_if;
-
     g_return_val_if_fail(layer != nullptr, NULL);
     SPObject *result = nullptr;
 

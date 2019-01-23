@@ -12,7 +12,6 @@
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
-using std::vector;
 using namespace Geom;
 
 class Gear {

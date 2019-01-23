@@ -8,31 +8,28 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-
+#include <vector>
 #include "satisfied-guide-cns.h"
 
 #include "sp-item-update-cns.h"
 #include "sp-guide.h"
-
-using std::find;
-using std::vector;
 
 void sp_item_update_cns(SPItem &item, SPDesktop const &desktop)
 {
     std::vector<Inkscape::SnapCandidatePoint> snappoints;
     item.getSnappoints(snappoints, nullptr);
     /* TODO: Implement the ordering. */
-    vector<SPGuideConstraint> found_cns;
+    std::vector<SPGuideConstraint> found_cns;
     satisfied_guide_cns(desktop, snappoints, found_cns);
     /* effic: It might be nice to avoid an n^2 algorithm, but in practice n will be
        small enough that it's still usually more efficient. */
 
-    for (vector<SPGuideConstraint>::const_iterator fi(found_cns.begin()),
+    for (std::vector<SPGuideConstraint>::const_iterator fi(found_cns.begin()),
              fiEnd(found_cns.end());
          fi != fiEnd; ++fi)
     {
         SPGuideConstraint const &cn = *fi;
-        if ( find(item.constraints.begin(),
+        if ( std::find(item.constraints.begin(),
                   item.constraints.end(),
                   cn)
              == item.constraints.end() )

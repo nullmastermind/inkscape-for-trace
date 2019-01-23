@@ -16,7 +16,10 @@
 #include <algorithm>
 #include <cstring>
 #include <iostream>
+#include <list>
 #include <map>
+#include <string>
+#include <valarray>
 #include <vector>
 
 #include <2geom/transforms.h>
@@ -36,7 +39,6 @@
 #include "object/sp-path.h"
 #include "style.h"
 
-using namespace std;
 using namespace cola;
 using namespace vpsc;
 
@@ -52,19 +54,19 @@ bool isConnector(SPItem const * const item) {
 }
 
 struct CheckProgress: TestConvergence {
-    CheckProgress(double d, unsigned i, list<SPItem*> & selected, Rectangles & rs,
-            map<string, unsigned> & nodelookup)
+    CheckProgress(double d, unsigned i, std::list<SPItem*> & selected, Rectangles & rs,
+            std::map<std::string, unsigned> & nodelookup)
         : TestConvergence(d, i)
         , selected(selected)
         , rs(rs)
         , nodelookup(nodelookup)
     {}
-    bool operator()(const double new_stress, valarray<double> & X, valarray<double> & Y) override {
+    bool operator()(const double new_stress, std::valarray<double> & X, std::valarray<double> & Y) override {
         /* This is where, if we wanted to animate the layout, we would need to update
          * the positions of all objects and redraw the canvas and maybe sleep a bit
          cout << "stress="<<new_stress<<endl;
         cout << "x[0]="<<rs[0]->getMinX()<<endl;
-        for (list<SPItem *>::iterator it(selected.begin());
+        for (std::list<SPItem *>::iterator it(selected.begin());
             it != selected.end();
             ++it)
         {
@@ -80,16 +82,16 @@ struct CheckProgress: TestConvergence {
         */
         return TestConvergence::operator()(new_stress, X, Y);
     }
-    list<SPItem*> & selected;
+    std::list<SPItem*> & selected;
     Rectangles & rs;
-    map<string, unsigned> & nodelookup;
+    std::map<std::string, unsigned> & nodelookup;
 };
 
 /**
  * Scans the items list and places those items that are
  * not connectors in filtered
  */
-void filterConnectors(std::vector<SPItem*> const & items, list<SPItem*> & filtered) {
+void filterConnectors(std::vector<SPItem*> const & items, std::list<SPItem*> & filtered) {
     for (SPItem * item: items) {
         if (!isConnector(item)) {
             filtered.push_back(item);
@@ -105,7 +107,7 @@ void filterConnectors(std::vector<SPItem*> const & items, list<SPItem*> & filter
 void graphlayout(std::vector<SPItem*> const & items) {
     if (items.empty()) return;
 
-    list<SPItem*> selected;
+    std::list<SPItem*> selected;
     filterConnectors(items, selected);
 
     if (selected.size() < 2) return;
@@ -116,9 +118,9 @@ void graphlayout(std::vector<SPItem*> const & items) {
     double spacing = 0;
     if (desktop) spacing = desktop->namedview->connector_spacing + 0.1;
 
-    map<string, unsigned> nodelookup;
+    std::map<std::string, unsigned> nodelookup;
     Rectangles rs;
-    vector<Edge> es;
+    std::vector<Edge> es;
     for (SPItem * item: selected) {
         Geom::OptRect const item_box = item->desktopVisualBounds();
         if (item_box) {
@@ -145,11 +147,11 @@ void graphlayout(std::vector<SPItem*> const & items) {
     bool avoid_overlaps = prefs->getBool("/tools/connector/avoidoverlaplayout");
 
     for (SPItem * item: selected) {
-        map<string, unsigned>::iterator i_iter=nodelookup.find(item->getId());
+        std::map<std::string, unsigned>::iterator i_iter=nodelookup.find(item->getId());
         if (i_iter == nodelookup.end()) continue;
         unsigned u = i_iter->second;
-        vector<SPItem*> nlist = item->avoidRef->getAttachedConnectors(Avoid::runningFrom);
-        list<SPItem*> connectors;
+        std::vector<SPItem*> nlist = item->avoidRef->getAttachedConnectors(Avoid::runningFrom);
+        std::list<SPItem*> connectors;
 
         connectors.insert(connectors.end(), nlist.begin(), nlist.end());
 
@@ -172,7 +174,7 @@ void graphlayout(std::vector<SPItem*> const & items) {
 
             // If iv not in nodelookup we again treat the connector
             // as disconnected and continue
-            map<string, unsigned>::iterator v_pair = nodelookup.find(iv->getId());
+            std::map<std::string, unsigned>::iterator v_pair = nodelookup.find(iv->getId());
             if (v_pair != nodelookup.end()) {
                 unsigned v = v_pair->second;
                 //cout << "Edge: (" << u <<","<<v<<")"<<endl;
@@ -187,7 +189,7 @@ void graphlayout(std::vector<SPItem*> const & items) {
         }
     }
     EdgeLengths elengths(es.size(), 1);
-    vector<Component*> cs;
+    std::vector<Component*> cs;
     connectedComponents(rs, es, cs);
     for (Component * c: cs) {
         if (c->edges.size() < 2) continue;
@@ -201,7 +203,7 @@ void graphlayout(std::vector<SPItem*> const & items) {
 
     for (SPItem * item: selected) {
         if (!isConnector(item)) {
-            map<string, unsigned>::iterator i = nodelookup.find(item->getId());
+            std::map<std::string, unsigned>::iterator i = nodelookup.find(item->getId());
             if (i != nodelookup.end()) {
                 Rectangle * r = rs[i->second];
                 Geom::OptRect item_box = item->desktopVisualBounds();
