@@ -13,6 +13,8 @@
 #ifndef SEEN_INKSCAPE_DEBUG_EVENT_H
 #define SEEN_INKSCAPE_DEBUG_EVENT_H
 
+#include <memory>
+#include <string>
 #include <utility>
 #include "util/share.h"
 
@@ -41,14 +43,14 @@ public:
     struct PropertyPair {
     public:
         PropertyPair() = default;
-        PropertyPair(char const *n, Util::ptr_shared v)
-        : name(n), value(v) {}
+        PropertyPair(char const *n, std::shared_ptr<std::string>&& v)
+        : name(n), value(std::move(v)) {}
         PropertyPair(char const *n, char const *v)
         : name(n),
-          value(Util::share_string(v)) {}
+          value(std::move(std::make_shared<std::string>(v))) {}
 
         char const *name;
-        Util::ptr_shared value;
+        std::shared_ptr<std::string> value;
     };
 
     static Category category() { return OTHER; }

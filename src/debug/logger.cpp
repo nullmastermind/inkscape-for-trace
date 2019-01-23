@@ -27,7 +27,7 @@ bool Logger::_category_mask[Event::N_CATEGORIES];
 
 namespace {
 
-static void write_escaped_value(std::ostream &os, Util::ptr_shared value) {
+static void write_escaped_value(std::ostream &os, char const *value) {
     for ( char const *current=value ; *current ; ++current ) {
         switch (*current) {
         case '&':
@@ -133,7 +133,7 @@ typedef SimpleEvent<Event::CORE> CoreEvent;
 
 class SessionEvent : public CoreEvent {
 public:
-    SessionEvent() : CoreEvent(Util::share_static_string("session")) {
+    SessionEvent() : CoreEvent("session") {
         _addProperty("inkscape-version", Inkscape::version_string);
     }
 };
@@ -173,7 +173,7 @@ void Logger::_start(Event const &event) {
     for ( unsigned i = 0 ; i < property_count ; i++ ) {
         Event::PropertyPair property=event.property(i);
         log_stream << " " << property.name << "=\"";
-        write_escaped_value(log_stream, property.value);
+        write_escaped_value(log_stream, property.value->c_str());
         log_stream << "\"";
     }
 

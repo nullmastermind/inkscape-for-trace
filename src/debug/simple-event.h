@@ -14,6 +14,8 @@
 #define SEEN_INKSCAPE_DEBUG_SIMPLE_EVENT_H
 
 #include <cstdarg>
+#include <memory>
+#include <string>
 #include <vector>
 #include <glib.h> // g_assert()
 
@@ -43,11 +45,15 @@ public:
     void generateChildEvents() const override {}
 
 protected:
+    // TODO: change all call sites for this method, and remove it.
     void _addProperty(char const *name, Util::ptr_shared value) {
-        _properties.push_back(PropertyPair(name, value));
+        _properties.push_back(PropertyPair(name, std::move(std::make_shared<std::string>(value.pointer()))));
+    }
+    void _addProperty(char const *name, std::shared_ptr<std::string>&& value) {
+        _properties.push_back(PropertyPair(name, std::move(value)));
     }
     void _addProperty(char const *name, char const *value) {
-        _addProperty(name, Util::share_string(value));
+        _addProperty(name, std::move(std::make_shared<std::string>(value)));
     }
     void _addProperty(char const *name, long value) {
         _addFormattedProperty(name, "%ld", value);
@@ -55,7 +61,7 @@ protected:
 
 private:
     char const *_name;
-    std::vector<PropertyPair, GC::Alloc<PropertyPair, GC::AUTO> > _properties;
+    std::vector<PropertyPair> _properties;
 
     void _addFormattedProperty(char const *name, char const *format, ...)
     {
