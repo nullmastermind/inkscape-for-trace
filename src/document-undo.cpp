@@ -98,7 +98,6 @@ namespace {
 
 using Inkscape::Debug::Event;
 using Inkscape::Debug::SimpleEvent;
-using Inkscape::Util::share_static_string;
 using Inkscape::Debug::timestamp;
 using Inkscape::Verb;
 
@@ -108,18 +107,16 @@ class CommitEvent : public InteractionEvent {
 public:
 
     CommitEvent(SPDocument *doc, const gchar *key, const unsigned int type)
-    : InteractionEvent(share_static_string("commit"))
+    : InteractionEvent("commit")
     {
-        _addProperty(share_static_string("timestamp"), timestamp());
-        gchar *serial = g_strdup_printf("%lu", doc->serial());
-        _addProperty(share_static_string("document"), serial);
-        g_free(serial);
+        _addProperty("timestamp", timestamp().pointer());
+        _addProperty("document", doc->serial());
         Verb *verb = Verb::get(type);
         if (verb) {
-            _addProperty(share_static_string("context"), verb->get_id());
+            _addProperty("context", verb->get_id());
         }
         if (key) {
-            _addProperty(share_static_string("merge-key"), key);
+            _addProperty("merge-key", key);
         }
     }
 };

@@ -20,7 +20,6 @@
 #include <glib.h> // g_assert()
 
 #include "debug/event.h"
-#include "util/share.h"
 
 namespace Inkscape {
 
@@ -45,10 +44,6 @@ public:
     void generateChildEvents() const override {}
 
 protected:
-    // TODO: change all call sites for this method, and remove it.
-    void _addProperty(char const *name, Util::ptr_shared value) {
-        _properties.push_back(PropertyPair(name, std::move(std::make_shared<std::string>(value.pointer()))));
-    }
     void _addProperty(char const *name, std::shared_ptr<std::string>&& value) {
         _properties.push_back(PropertyPair(name, std::move(value)));
     }

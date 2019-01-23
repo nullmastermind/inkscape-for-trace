@@ -202,26 +202,26 @@ typedef Debug::SimpleEvent<Debug::Event::REFCOUNT> BaseRefCountEvent;
 
 class RefCountEvent : public BaseRefCountEvent {
 public:
-    RefCountEvent(SPObject *object, int bias, Util::ptr_shared name)
+    RefCountEvent(SPObject *object, int bias, char const *name)
     : BaseRefCountEvent(name)
     {
-        _addProperty("object", Util::format("%p", object));
-        _addProperty("class", Debug::demangle(g_type_name(G_TYPE_FROM_INSTANCE(object))));
-        _addProperty("new-refcount", Util::format("%d", G_OBJECT(object)->ref_count + bias));
+        _addProperty("object", Util::format("%p", object).pointer());
+        _addProperty("class", Debug::demangle(g_type_name(G_TYPE_FROM_INSTANCE(object))).pointer());
+        _addProperty("new-refcount", Util::format("%d", G_OBJECT(object)->ref_count + bias).pointer());
     }
 };
 
 class RefEvent : public RefCountEvent {
 public:
     RefEvent(SPObject *object)
-    : RefCountEvent(object, 1, Util::share_static_string("sp-object-ref"))
+    : RefCountEvent(object, 1, "sp-object-ref")
     {}
 };
 
 class UnrefEvent : public RefCountEvent {
 public:
     UnrefEvent(SPObject *object)
-    : RefCountEvent(object, -1, Util::share_static_string("sp-object-unref"))
+    : RefCountEvent(object, -1, "sp-object-unref")
     {}
 };
 

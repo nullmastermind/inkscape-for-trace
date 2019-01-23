@@ -35,7 +35,7 @@ namespace XML {
 
 namespace {
 
-Util::ptr_shared stringify_node(Node const &node) {
+std::shared_ptr<std::string> stringify_node(Node const &node) {
     gchar *string;
     switch (node.type()) {
     case ELEMENT_NODE: {
@@ -58,16 +58,16 @@ Util::ptr_shared stringify_node(Node const &node) {
     default:
         string = g_strdup_printf("unknown(%p)", &node);
     }
-    Util::ptr_shared result=Util::share_string(string);
+    std::shared_ptr<std::string> result = std::make_shared<std::string>(string);
     g_free(string);
-    return result;
+    return std::move(result);
 }
 
 typedef Debug::SimpleEvent<Debug::Event::XML> DebugXML;
 
 class DebugXMLNode : public DebugXML {
 public:
-    DebugXMLNode(Node const &node, Util::ptr_shared name)
+    DebugXMLNode(Node const &node, char const *name)
     : DebugXML(name)
     {
         _addProperty("node", stringify_node(node));
@@ -77,17 +77,17 @@ public:
 class DebugAddChild : public DebugXMLNode {
 public:
     DebugAddChild(Node const &node, Node const &child, Node const *prev)
-    : DebugXMLNode(node, Util::share_static_string("add-child"))
+    : DebugXMLNode(node, "add-child")
     {
         _addProperty("child", stringify_node(child));
-        _addProperty("position", Util::format("%d", ( prev ? prev->position() + 1 : 0 )));
+        _addProperty("position", prev ? prev->position() + 1 : 0 );
     }
 };
 
 class DebugRemoveChild : public DebugXMLNode {
 public:
     DebugRemoveChild(Node const &node, Node const &child)
-    : DebugXMLNode(node, Util::share_static_string("remove-child"))
+    : DebugXMLNode(node, "remove-child")
     {
         _addProperty("child", stringify_node(child));
     }
@@ -97,7 +97,7 @@ class DebugSetChildPosition : public DebugXMLNode {
 public:
     DebugSetChildPosition(Node const &node, Node const &child,
                           Node const *old_prev, Node const *new_prev)
-    : DebugXMLNode(node, Util::share_static_string("set-child-position"))
+    : DebugXMLNode(node, "set-child-position")
     {
         _addProperty("child", stringify_node(child));
 
@@ -107,7 +107,7 @@ public:
             --position;
         }
 
-        _addProperty("position", Util::format("%d", position));
+        _addProperty("position", position);
     }
 };
 
@@ -115,16 +115,16 @@ class DebugSetContent : public DebugXMLNode {
 public:
     DebugSetContent(Node const &node,
                     Util::ptr_shared content)
-    : DebugXMLNode(node, Util::share_static_string("set-content"))
+    : DebugXMLNode(node, "set-content")
     {
-        _addProperty("content", content);
+        _addProperty("content", content.pointer());
     }
 };
 
 class DebugClearContent : public DebugXMLNode {
 public:
     DebugClearContent(Node const &node)
-    : DebugXMLNode(node, Util::share_static_string("clear-content"))
+    : DebugXMLNode(node, "clear-content")
     {}
 };
 
@@ -133,19 +133,19 @@ public:
     DebugSetAttribute(Node const &node,
                       GQuark name,
                       Util::ptr_shared value)
-    : DebugXMLNode(node, Util::share_static_string("set-attribute"))
+    : DebugXMLNode(node, "set-attribute")
     {
-        _addProperty("name", Util::share_static_string(g_quark_to_string(name)));
-        _addProperty("value", value);
+        _addProperty("name", g_quark_to_string(name));
+        _addProperty("value", value.pointer());
     }
 };
 
 class DebugClearAttribute : public DebugXMLNode {
 public:
     DebugClearAttribute(Node const &node, GQuark name)
-    : DebugXMLNode(node, Util::share_static_string("clear-attribute"))
+    : DebugXMLNode(node, "clear-attribute")
     {
-        _addProperty("name", Util::share_static_string(g_quark_to_string(name)));
+        _addProperty("name", g_quark_to_string(name));
     }
 };
 
@@ -154,7 +154,6 @@ public:
 using Util::ptr_shared;
 using Util::share_string;
 using Util::share_unsafe;
-using Util::share_static_string;
 using Util::List;
 using Util::MutableList;
 using Util::cons;

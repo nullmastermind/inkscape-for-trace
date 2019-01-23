@@ -28,27 +28,27 @@ typedef Debug::SimpleEvent<Debug::Event::REFCOUNT> RefCountEvent;
 class BaseAnchorEvent : public RefCountEvent {
 public:
     BaseAnchorEvent(Anchored const *object, int bias,
-                    Util::ptr_shared name)
+                    char const *name)
     : RefCountEvent(name)
     {
-        _addProperty("base", Util::format("%p", Core::base(const_cast<Anchored *>(object))));
-        _addProperty("pointer", Util::format("%p", object));
-        _addProperty("class", Debug::demangle(typeid(*object).name()));
-        _addProperty("new-refcount", Util::format("%d", object->_anchored_refcount() + bias));
+        _addProperty("base", Util::format("%p", Core::base(const_cast<Anchored *>(object))).pointer());
+        _addProperty("pointer", Util::format("%p", object).pointer());
+        _addProperty("class", Debug::demangle(typeid(*object).name()).pointer());
+        _addProperty("new-refcount", object->_anchored_refcount() + bias);
     }
 };
 
 class AnchorEvent : public BaseAnchorEvent {
 public:
     AnchorEvent(Anchored const *object)
-    : BaseAnchorEvent(object, 1, Util::share_static_string("gc-anchor"))
+    : BaseAnchorEvent(object, 1, "gc-anchor")
     {}
 };
 
 class ReleaseEvent : public BaseAnchorEvent {
 public:
     ReleaseEvent(Anchored const *object)
-    : BaseAnchorEvent(object, -1, Util::share_static_string("gc-release"))
+    : BaseAnchorEvent(object, -1, "gc-release")
     {}
 };
 

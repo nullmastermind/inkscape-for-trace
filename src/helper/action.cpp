@@ -105,7 +105,6 @@ namespace {
 
 using Inkscape::Debug::SimpleEvent;
 using Inkscape::Debug::Event;
-using Inkscape::Util::share_static_string;
 using Inkscape::Debug::timestamp;
 
 typedef SimpleEvent<Event::INTERACTION> ActionEventBase;
@@ -113,14 +112,14 @@ typedef SimpleEvent<Event::INTERACTION> ActionEventBase;
 class ActionEvent : public ActionEventBase {
 public:
     ActionEvent(SPAction const *action)
-    : ActionEventBase(share_static_string("action"))
+    : ActionEventBase("action")
     {
-        _addProperty(share_static_string("timestamp"), timestamp());
+        _addProperty("timestamp", timestamp().pointer());
         SPDocument *document = action->context.getDocument();
         if (document) {
-            _addProperty(share_static_string("document"), document->serial());
+            _addProperty("document", document->serial());
         }
-        _addProperty(share_static_string("verb"), action->id);
+        _addProperty("verb", action->id);
     }
 };
 

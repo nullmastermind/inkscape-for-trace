@@ -40,11 +40,11 @@ typedef Debug::SimpleEvent<Debug::Event::FINALIZERS> BaseEvent;
 class FinalizerEvent : public BaseEvent {
 public:
     FinalizerEvent(Finalized *object)
-    : BaseEvent(Util::share_static_string("gc-finalizer"))
+    : BaseEvent("gc-finalizer")
     {
-        _addProperty("base", Util::format("%p", Core::base(object)));
-        _addProperty("pointer", Util::format("%p", object));
-        _addProperty("class", Util::share_static_string(typeid(*object).name()));
+        _addProperty("base", Util::format("%p", Core::base(object)).pointer());
+        _addProperty("pointer", Util::format("%p", object).pointer());
+        _addProperty("class", typeid(*object).name());
     }
 };
 
