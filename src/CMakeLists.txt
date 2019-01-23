@@ -200,7 +200,6 @@ set(inkscape_SRC
   style-enums.h
   style-internal.h
   style.h
-  svg-profile.h
   syseq.h
   text-chemistry.h
   text-editing.h
