@@ -159,7 +159,7 @@ void Logger::init() {
 }
 
 void Logger::_start(Event const &event) {
-    Util::ptr_shared name=event.name();
+    char const *name=event.name();
 
     if (empty_tag) {
         log_stream << ">\n";
@@ -167,19 +167,19 @@ void Logger::_start(Event const &event) {
 
     write_indent(log_stream, tag_stack().size());
 
-    log_stream << "<" << name.pointer();
+    log_stream << "<" << name;
 
     unsigned property_count=event.propertyCount();
     for ( unsigned i = 0 ; i < property_count ; i++ ) {
         Event::PropertyPair property=event.property(i);
-        log_stream << " " << property.name.pointer() << "=\"";
+        log_stream << " " << property.name << "=\"";
         write_escaped_value(log_stream, property.value);
         log_stream << "\"";
     }
 
     log_stream.flush();
 
-    tag_stack().push_back(name);
+    tag_stack().push_back(Util::share_string(name));
     empty_tag = true;
 
     event.generateChildEvents();

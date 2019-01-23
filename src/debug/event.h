@@ -41,23 +41,22 @@ public:
     struct PropertyPair {
     public:
         PropertyPair() = default;
-        PropertyPair(Util::ptr_shared n, Util::ptr_shared v)
-        : name(n), value(v) {}
         PropertyPair(char const *n, Util::ptr_shared v)
-        : name(Util::share_string(n)), value(v) {}
-        PropertyPair(Util::ptr_shared n, char const *v)
-        : name(n), value(Util::share_string(v)) {}
+        : name(n), value(v) {}
         PropertyPair(char const *n, char const *v)
-        : name(Util::share_string(n)),
+        : name(n),
           value(Util::share_string(v)) {}
 
-        Util::ptr_shared name;
+        char const *name;
         Util::ptr_shared value;
     };
 
     static Category category() { return OTHER; }
 
-    virtual Util::ptr_shared name() const=0;
+    // To reduce allocations, we assume the name here is always allocated statically and will never
+    // need to be deallocated.  It would be nice to be able to assert that during the creation of
+    // the Event though.
+    virtual char const *name() const=0;
     virtual unsigned propertyCount() const=0;
     virtual PropertyPair property(unsigned property) const=0;
 

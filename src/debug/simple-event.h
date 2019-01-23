@@ -27,15 +27,14 @@ namespace Debug {
 template <Event::Category C=Event::OTHER>
 class SimpleEvent : public Event {
 public:
-    explicit SimpleEvent(Util::ptr_shared name) : _name(name) {}
-    explicit SimpleEvent(char const *name) : _name(Util::share_string(name)) {}
+    explicit SimpleEvent(char const *name) : _name(name) {}
 
     // default copy
     // default assign
 
     static Category category() { return C; }
 
-    Util::ptr_shared name() const override { return _name; }
+    char const *name() const override { return _name; }
     unsigned propertyCount() const override { return _properties.size(); }
     PropertyPair property(unsigned property) const override {
         return _properties[property];
@@ -44,32 +43,21 @@ public:
     void generateChildEvents() const override {}
 
 protected:
-    void _addProperty(Util::ptr_shared name,
-                      Util::ptr_shared value)
-    {
+    void _addProperty(char const *name, Util::ptr_shared value) {
         _properties.push_back(PropertyPair(name, value));
     }
-    void _addProperty(Util::ptr_shared name, char const *value) {
+    void _addProperty(char const *name, char const *value) {
         _addProperty(name, Util::share_string(value));
     }
-    void _addProperty(char const *name, Util::ptr_shared value) {
-        _addProperty(Util::share_string(name), value);
-    }
-    void _addProperty(char const *name, char const *value) {
-        _addProperty(Util::share_string(name), Util::share_string(value));
-    }
-    void _addProperty(Util::ptr_shared name, long value) {
-        _addFormattedProperty(name, "%ld", value);
-    }
     void _addProperty(char const *name, long value) {
-        _addProperty(Util::share_string(name), value);
+        _addFormattedProperty(name, "%ld", value);
     }
 
 private:
-    Util::ptr_shared _name;
+    char const *_name;
     std::vector<PropertyPair, GC::Alloc<PropertyPair, GC::AUTO> > _properties;
 
-    void _addFormattedProperty(Util::ptr_shared name, char const *format, ...)
+    void _addFormattedProperty(char const *name, char const *format, ...)
     {
         va_list args;
         va_start(args, format);
