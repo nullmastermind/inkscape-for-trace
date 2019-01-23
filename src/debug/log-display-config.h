@@ -13,8 +13,6 @@
 #ifndef SEEN_INKSCAPE_DEBUG_LOG_DISPLAY_CONFIG_H
 #define SEEN_INKSCAPE_DEBUG_LOG_DISPLAY_CONFIG_H
 
-#include "util/share.h"
-
 namespace Inkscape {
 
 namespace Debug {

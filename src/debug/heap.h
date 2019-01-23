@@ -14,7 +14,6 @@
 #define SEEN_INKSCAPE_DEBUG_HEAP_H
 
 #include <cstddef>
-#include "util/share.h"
 
 namespace Inkscape {
 
@@ -37,7 +36,7 @@ public:
 
     virtual int features() const=0;
 
-    virtual Util::ptr_shared name() const=0;
+    virtual char const *name() const=0;
     virtual Stats stats() const=0;
     virtual void force_collect()=0;
 };

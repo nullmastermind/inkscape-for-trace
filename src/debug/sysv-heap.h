@@ -24,8 +24,8 @@ public:
     
     int features() const override;
 
-    Util::ptr_shared name() const override {
-        return Util::share_static_string("standard malloc()");
+    char const *name() const override {
+        return "standard malloc()";
     }
     Stats stats() const override;
     void force_collect() override {}

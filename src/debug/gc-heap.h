@@ -24,8 +24,8 @@ public:
     int features() const override {
         return SIZE_AVAILABLE | USED_AVAILABLE | GARBAGE_COLLECTED;
     }
-    Util::ptr_shared name() const override {
-        return Util::share_static_string("libgc");
+    char const *name() const override {
+        return "libgc";
     }
     Heap::Stats stats() const override {
         Stats stats;
