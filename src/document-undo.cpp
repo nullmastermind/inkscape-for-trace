@@ -109,7 +109,7 @@ public:
     CommitEvent(SPDocument *doc, const gchar *key, const unsigned int type)
     : InteractionEvent("commit")
     {
-        _addProperty("timestamp", timestamp().pointer());
+        _addProperty("timestamp", timestamp());
         _addProperty("document", doc->serial());
         Verb *verb = Verb::get(type);
         if (verb) {

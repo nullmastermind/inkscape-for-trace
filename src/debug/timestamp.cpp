@@ -13,6 +13,8 @@
 
 #include <glib.h>
 #include <glibmm/ustring.h>
+#include <memory>
+#include <string>
 #include "debug/simple-event.h"
 #include "timestamp.h"
 
@@ -20,14 +22,13 @@ namespace Inkscape {
 
 namespace Debug {
 
-Util::ptr_shared timestamp() {
-    Util::ptr_shared result;
+std::shared_ptr<std::string> timestamp() {
     GTimeVal timestamp;
     g_get_current_time(&timestamp);
     gchar *value = g_strdup_printf( "%d.%06d", static_cast<gint>(timestamp.tv_sec), static_cast<gint>(timestamp.tv_usec) );
-    result = Util::share_string(value);
+    std::shared_ptr<std::string> result = std::make_shared<std::string>(value);
     g_free(value);
-    return result;
+    return std::move(result);
 }
 
 }

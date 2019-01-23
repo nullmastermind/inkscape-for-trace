@@ -114,7 +114,7 @@ public:
     ActionEvent(SPAction const *action)
     : ActionEventBase("action")
     {
-        _addProperty("timestamp", timestamp().pointer());
+        _addProperty("timestamp", timestamp());
         SPDocument *document = action->context.getDocument();
         if (document) {
             _addProperty("document", document->serial());

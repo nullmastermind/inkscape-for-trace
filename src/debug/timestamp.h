@@ -13,13 +13,14 @@
 #ifndef SEEN_INKSCAPE_DEBUG_TIMESTAMP_H
 #define SEEN_INKSCAPE_DEBUG_TIMESTAMP_H
 
-#include "util/share.h"
+#include <memory>
+#include <string>
 
 namespace Inkscape {
 
 namespace Debug {
 
-Util::ptr_shared timestamp();
+std::shared_ptr<std::string> timestamp();
 
 }
 
