@@ -13,9 +13,10 @@
 #include <cstdio>
 #include <cstring>
 #include <map>
+#include <memory>
+#include <string>
 #include "debug/demangle.h"
 #include "util/format.h"
-#include "inkgc/gc-alloc.h"
 
 namespace Inkscape {
 
@@ -46,23 +47,19 @@ struct string_less_than {
     }
 };
 
-typedef std::map<char const *, char const *, string_less_than> MangleCache;
+typedef std::map<char const *, std::shared_ptr<std::string>, string_less_than> MangleCache;
 MangleCache mangle_cache;
 
 }
 
-Util::ptr_shared demangle(char const *name) {
+std::shared_ptr<std::string> demangle(char const *name) {
     MangleCache::iterator found=mangle_cache.find(name);
-
-    char const *result;
     if ( found != mangle_cache.end() ) {
-        result = (*found).second;
-    } else {
-        result = demangle_helper(name);
-        mangle_cache[name] = result;
+        return (*found).second;
     }
 
-    return Util::share_unsafe(result);
+    char const *result = demangle_helper(name);
+    return mangle_cache[name] = std::make_shared<std::string>(result);
 }
 
 }

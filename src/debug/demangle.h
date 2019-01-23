@@ -13,13 +13,14 @@
 #ifndef SEEN_INKSCAPE_DEBUG_DEMANGLE_H
 #define SEEN_INKSCAPE_DEBUG_DEMANGLE_H
 
-#include "util/share.h"
+#include <memory>
+#include <string>
 
 namespace Inkscape {
 
 namespace Debug {
 
-Util::ptr_shared demangle(char const *name);
+std::shared_ptr<std::string> demangle(char const *name);
 
 }
 

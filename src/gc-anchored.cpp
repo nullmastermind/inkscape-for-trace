@@ -33,7 +33,7 @@ public:
     {
         _addProperty("base", Util::format("%p", Core::base(const_cast<Anchored *>(object))).pointer());
         _addProperty("pointer", Util::format("%p", object).pointer());
-        _addProperty("class", Debug::demangle(typeid(*object).name()).pointer());
+        _addProperty("class", std::move(Debug::demangle(typeid(*object).name())));
         _addProperty("new-refcount", object->_anchored_refcount() + bias);
     }
 };
