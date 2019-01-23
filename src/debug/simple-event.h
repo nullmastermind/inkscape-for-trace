@@ -19,8 +19,8 @@
 #include <vector>
 #include <glib.h> // g_assert()
 
-#include "inkgc/gc-alloc.h"
 #include "debug/event.h"
+#include "util/share.h"
 
 namespace Inkscape {
 

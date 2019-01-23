@@ -11,12 +11,13 @@
  */
 
 #include <fstream>
+#include <memory>
+#include <string>
 #include <vector>
 #include <glib.h>
 #include "inkscape-version.h"
 #include "debug/logger.h"
 #include "debug/simple-event.h"
-#include "inkgc/gc-alloc.h"
 
 namespace Inkscape {
 
@@ -59,7 +60,7 @@ static void write_indent(std::ostream &os, unsigned depth) {
 
 static std::ofstream log_stream;
 static bool empty_tag=false;
-typedef std::vector<Util::ptr_shared, GC::Alloc<Util::ptr_shared, GC::MANUAL> > TagStack;
+typedef std::vector<std::shared_ptr<std::string>> TagStack;
 static TagStack &tag_stack() {
     static TagStack stack;
     return stack;
@@ -179,14 +180,14 @@ void Logger::_start(Event const &event) {
 
     log_stream.flush();
 
-    tag_stack().push_back(Util::share_string(name));
+    tag_stack().push_back(std::make_shared<std::string>(name));
     empty_tag = true;
 
     event.generateChildEvents();
 }
 
 void Logger::_skip() {
-    tag_stack().push_back(Util::ptr_shared());
+    tag_stack().push_back(nullptr);
 }
 
 void Logger::_finish() {
@@ -195,7 +196,7 @@ void Logger::_finish() {
             log_stream << "/>\n";
         } else {
             write_indent(log_stream, tag_stack().size() - 1);
-            log_stream << "</" << tag_stack().back().pointer() << ">\n";
+            log_stream << "</" << tag_stack().back()->c_str() << ">\n";
         }
         log_stream.flush();
 
