@@ -100,7 +100,7 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "query-x",             'X', N_("Query: X coordinate of drawing or object (if specified by --query-id)."),            "");
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "query-y",             'Y', N_("Query: Y coordinate of drawing or object (if specified by --query-id)."),            "");
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "query-width",         'W', N_("Query: Width of drawing or object (if specified by --query-id)."),                   "");
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "query-height",        'H', N_("Query: Heightof drawing or object (if specified by --query-id)."),                   "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "query-height",        'H', N_("Query: Height of drawing or object (if specified by --query-id)."),                   "");
 
     // Processing
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "vacuum-defs",        '\0', N_("Process: Remove unused definitions from the <defs> section(s) of document."),        "");
