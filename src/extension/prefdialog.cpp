@@ -179,13 +179,13 @@ PrefDialog::preview_toggle () {
     bool modified = document->isModifiedSinceSave();
     if(_param_preview->get_bool(nullptr, nullptr)) {
         if (_exEnv == nullptr) {
-            set_modal(true);
+            set_modal(false);
             _exEnv = new ExecutionEnv(_effect, SP_ACTIVE_DESKTOP, nullptr, false, false);
             _effect->set_execution_env(_exEnv);
             _exEnv->run();
         }
     } else {
-        set_modal(false);
+        set_modal(true);
         if (_exEnv != nullptr) {
             _exEnv->cancel();
             _exEnv->undo();
