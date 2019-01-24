@@ -31,7 +31,7 @@
   <screenshots>
     <screenshot type="default">
       <image>https://media.inkscape.org/media/resources/file/Screenshot_Freedom_Machine_Inkscape_master_FB3NeUU.png</image>
-      <_caption>Main application window</_caption>
+      <caption>Main application window</caption>
     </screenshot>
   </screenshots>
   <releases>
