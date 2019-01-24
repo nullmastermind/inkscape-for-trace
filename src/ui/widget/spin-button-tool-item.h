@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef SEEN_SPIN_BUTTON_TOOL_ITEM_H
 #define SEEN_SPIN_BUTTON_TOOL_ITEM_H
 
@@ -47,10 +48,10 @@ private:
                                                   double                 value);
 
 protected:
-    virtual bool on_create_menu_proxy() override;
+    bool on_create_menu_proxy() override;
 
 public:
-    SpinButtonToolItem(const Glib::ustring&           name,
+    SpinButtonToolItem(const Glib::ustring           name,
                        const Glib::ustring&           label_text,
                        Glib::RefPtr<Gtk::Adjustment>& adjustment,
                        double                         climb_rate = 0.1,

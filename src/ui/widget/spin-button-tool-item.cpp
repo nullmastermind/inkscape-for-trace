@@ -1,8 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 #include "spin-button-tool-item.h"
 
 #include <gtkmm/box.h>
 #include <gtkmm/radiomenuitem.h>
 #include <gtkmm/toolbar.h>
+
+#include <utility>
 
 #include "spinbutton.h"
 
@@ -336,13 +340,13 @@ SpinButtonToolItem::on_create_menu_proxy()
  * \param[in] climb_rate The climb rate for the spin button (default = 0)
  * \param[in] digits     Number of decimal places to display
  */
-SpinButtonToolItem::SpinButtonToolItem(const Glib::ustring&           name,
+SpinButtonToolItem::SpinButtonToolItem(const Glib::ustring            name,
                                        const Glib::ustring&           label_text,
                                        Glib::RefPtr<Gtk::Adjustment>& adjustment,
                                        double                         climb_rate,
                                        double                         digits)
     : _btn(Gtk::manage(new SpinButton(adjustment, climb_rate, digits))),
-      _name(name),
+      _name(std::move(name)),
       _label_text(label_text),
       _last_val(0.0),
       _transfer_focus(false),
