@@ -13,7 +13,7 @@ Exec=inkscape %F
 TryExec=inkscape
 Terminal=false
 StartupNotify=true
-Icon=inkscape
+Icon=org.inkscape.Inkscape
 X-Ayatana-Desktop-Shortcuts=Drawing
 
 [X-Drawing Shortcut Group]
