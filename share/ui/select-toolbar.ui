@@ -1,33 +1,4 @@
 <ui>
-<!--
-  <toolbar name='SelectToolbar'>
-    <toolitem action='EditSelectAll' />
-    <toolitem action='EditSelectAllInAllLayers' />
-    <toolitem action='EditDeselect' />
-    <separator />
-    <toolitem action='ObjectRotate90CCW' />
-    <toolitem action='ObjectRotate90' />
-    <toolitem action='ObjectFlipHorizontally' />
-    <toolitem action='ObjectFlipVertically' />
-    <separator />
-    <toolitem action='SelectionToBack' />
-    <toolitem action='SelectionLower' />
-    <toolitem action='SelectionRaise' />
-    <toolitem action='SelectionToFront' />
-    <separator />
-    <toolitem action='XAction' />
-    <toolitem action='YAction' />
-    <toolitem action='WidthAction' />
-    <toolitem action='LockAction' />
-    <toolitem action='HeightAction' />
-    <toolitem action='UnitsAction' />
-    <separator />
-    <toolitem action='transform_stroke' />
-    <toolitem action='transform_corners' />
-    <toolitem action='transform_gradient' />
-    <toolitem action='transform_pattern' />
-  </toolbar>
--->
   <toolbar name='NodeToolbar'>
     <separator />
     <toolitem action='NodeInsertAction'>

@@ -19,8 +19,6 @@
 
 class SPDesktop;
 
-typedef struct _GtkActionGroup GtkActionGroup;
-
 namespace Inkscape {
 class Selection;
 
@@ -46,7 +44,6 @@ private:
     Gtk::ToggleToolButton         *_transform_gradient_btn;
     Gtk::ToggleToolButton         *_transform_pattern_btn;
 
-    GtkActionGroup *_selection_actions;
     std::vector<Gtk::ToolItem *> _context_items;
 
     bool _update;

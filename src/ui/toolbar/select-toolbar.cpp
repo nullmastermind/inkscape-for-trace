@@ -13,13 +13,14 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "select-toolbar.h"
+
 #include <glibmm/i18n.h>
 
+#include <gtkmm/adjustment.h>
 #include <gtkmm/separatortoolitem.h>
 
 #include <2geom/rect.h>
-
-#include "select-toolbar.h"
 
 #include "desktop.h"
 #include "document-undo.h"
@@ -31,19 +32,14 @@
 
 #include "display/sp-canvas.h"
 
-#include "helper/action-context.h"
-#include "helper/action.h"
-
 #include "object/sp-item-transform.h"
 #include "object/sp-namedview.h"
 
 #include "ui/icon-names.h"
 #include "ui/widget/ink-select-one-action.h"
-#include "ui/widget/spinbutton.h"
 #include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
 
-#include "widgets/ege-adjustment-action.h"
 #include "widgets/widget-sizes.h"
 
 using Inkscape::UI::Widget::UnitTracker;
@@ -51,16 +47,6 @@ using Inkscape::Util::Unit;
 using Inkscape::Util::Quantity;
 using Inkscape::DocumentUndo;
 using Inkscape::Util::unit_table;
-
-
-
-static void trigger_sp_action( GtkAction* /*act*/, gpointer user_data )
-{
-    SPAction* targetAction = SP_ACTION(user_data);
-    if ( targetAction ) {
-        sp_action_perform( targetAction, nullptr );
-    }
-}
 
 namespace Inkscape {
 namespace UI {
