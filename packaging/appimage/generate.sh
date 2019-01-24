@@ -25,7 +25,7 @@ cp ../packaging/appimage/AppRun appdir/AppRun ; chmod +x appdir/AppRun
 ( cd appdir/usr/lib/ ; ln -s ../* . ) # FIXME: Why is this needed?
 ( cd appdir/ ; ln -s usr/* . ) # FIXME: Why is this needed?
 cp ./appdir/usr/share/icons/hicolor/256x256/apps/inkscape.png ./appdir/
-sed -i -e 's|^Icon=.*|Icon=inkscape|g' ./appdir/usr/share/applications/inkscape.desktop # FIXME
+sed -i -e 's|^Icon=.*|Icon=org.inkscape.Inkscape|g' ./appdir/usr/share/applications/org.inkscape.Inkscape.desktop # FIXME
 cd appdir/
 
 ########################################################################
@@ -73,7 +73,7 @@ cd -
 wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
 chmod a+x linuxdeployqt-continuous-x86_64.AppImage
 
-./linuxdeployqt-continuous-x86_64.AppImage --appimage-extract-and-run appdir/usr/share/applications/inkscape.desktop \
+./linuxdeployqt-continuous-x86_64.AppImage --appimage-extract-and-run appdir/usr/share/applications/org.inkscape.Inkscape.desktop \
   -appimage -unsupported-bundle-everything -executable=appdir/usr/bin/inkview \
   -executable=appdir/usr/lib/inkscape/libinkscape_base.so \
   -executable=$(readlink -f appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-xpm.so) \

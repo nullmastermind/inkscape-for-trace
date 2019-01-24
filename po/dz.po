@@ -21,35 +21,35 @@ msgstr ""
 "X-Poedit-Country: Bhutan\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: ../inkscape.appdata.xml.in.h:1
+#: ../org.inkscape.Inkscape.appdata.xml.in.h:1
 #, fuzzy
 msgid "Main application window"
 msgstr "སྒོ་སྒྲིག་རྫུན་མ།(_a)"
 
-#: ../inkscape.desktop.in.h:1
+#: ../org.inkscape.Inkscape.desktop.in.h:1
 #, fuzzy
 msgid "Inkscape"
 msgstr "ཨིངཀིསི་ཀེབ་སྤང་།"
 
-#: ../inkscape.desktop.in.h:2
+#: ../org.inkscape.Inkscape.desktop.in.h:2
 #, fuzzy
 msgid "Vector Graphics Editor"
 msgstr "ཨིཀིསིཀེཔི་ སི་ཝི་ཇི་ མཉམ་ཐིག་གི་པར་རིས་མཁན།"
 
-#: ../inkscape.desktop.in.h:3
+#: ../org.inkscape.Inkscape.desktop.in.h:3
 #, fuzzy
 msgid "Inkscape Vector Graphics Editor"
 msgstr "ཨིཀིསིཀེཔི་ སི་ཝི་ཇི་ མཉམ་ཐིག་གི་པར་རིས་མཁན།"
 
-#: ../inkscape.desktop.in.h:4
+#: ../org.inkscape.Inkscape.desktop.in.h:4
 msgid "Create and edit Scalable Vector Graphics images"
 msgstr "ཆ་ཚད་འཇལ་བཏུབ་པའི་མཉམ་ཐིག་ཚད་རིས་ཀྱི་གཟུགས་བརྙན་ཚུ་གསར་བསྐྲུན་དང་ཞུན་དག་འབད།"
 
-#: ../inkscape.desktop.in.h:5
+#: ../org.inkscape.Inkscape.desktop.in.h:5
 msgid "image;editor;vector;drawing;"
 msgstr ""
 
-#: ../inkscape.desktop.in.h:6
+#: ../org.inkscape.Inkscape.desktop.in.h:6
 #, fuzzy
 msgid "New Drawing"
 msgstr "པར་རིས།"

@@ -1,9 +1,9 @@
 if(UNIX)
     #The install directive for the binaries and libraries are found in src/CMakeList.txt
     install(FILES
-      ${CMAKE_BINARY_DIR}/inkscape.desktop
+      ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.desktop
       DESTINATION ${SHARE_INSTALL}/applications)
-    install(FILES ${CMAKE_BINARY_DIR}/inkscape.appdata.xml
+    install(FILES ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.appdata.xml
       DESTINATION ${SHARE_INSTALL}/metainfo)
 endif()
 
@@ -21,7 +21,7 @@ if(WIN32)
 
   install(DIRECTORY doc
     DESTINATION .)
-    
+
   # devlibs and mingw dlls
 
   # There are differences in the devlibs for 64-Bit and 32-Bit build environments.

@@ -12,7 +12,7 @@ description: >
  etc.) and great care is taken in designing a streamlined interface.
  It is very easy to edit nodes, perform complex path operations, trace
  bitmaps and much more.
- 
+
  We also aim to maintain a thriving user and developer community by using
  open, community-oriented development.
 confinement: strict
@@ -155,7 +155,7 @@ apps:
       - x11
       - wayland
       - removable-media
-    desktop: share/applications/inkscape.desktop
+    desktop: share/applications/org.inkscape.Inkscape.desktop
   viewer:
     command: desktop-launch ${SNAP}/snapcraft.sh inkview
     plugs:

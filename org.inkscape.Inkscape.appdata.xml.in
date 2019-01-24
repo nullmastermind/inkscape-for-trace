@@ -3,7 +3,7 @@
 <!-- SPDX-License-Identifier: GPL-2.0-or-later -->
 <component type="desktop">
   <id>org.inkscape.Inkscape</id>
-  <launchable type="desktop-id">inkscape.desktop</launchable>
+  <launchable type="desktop-id">org.inkscape.Inkscape.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <translation type="gettext">inkscape</translation>

@@ -10,7 +10,7 @@ Maintainer: The Inkscape team <inkscape-devel@lists.sourceforge.net>
 Packager: Aaron Spike <aaron@ekips.org>
 AutopackageTarget: 1.2
 PackageFileName: inkscape-$SOFTWAREVERSION.x86.package
-PackageDesktop: share/applications/inkscape.desktop
+PackageDesktop: share/applications/org.inkscape.Inkscape.desktop
 
 [BuildPrepare]
 if [ ! -x configure ]; then
@@ -23,7 +23,7 @@ PATH=/usr/local/src/inkscape/extra/static/bin:$PATH
 PKG_CONFIG_PATH=/usr/local/src/inkscape/extra/static/lib/pkgconfig:/usr/local/lib/pkgconfig:/usr/lib/pkgconfig
 CPPFLAGS="-fno-stack-protector -I/usr/local/src/inkscape/extra/static/include"
 LDFLAGS="-L/usr/local/src/inkscape/extra/static/lib"
-CXX="ccache apg++" 
+CXX="ccache apg++"
 export PATH PKG_CONFIG_PATH CPPFLAGS LDFLAGS CXX
 prepareBuild --enable-binreloc --enable-lcms
 
@@ -52,7 +52,7 @@ removeOwningPackage $PREFIX/bin/inkscape
 installExe bin/inkscape bin/inkview
 installMan 1 man/man1/*
 installIcon share/pixmaps/inkscape.png
-installMenuItem "Graphics" share/applications/inkscape.desktop
+installMenuItem "Graphics" share/applications/org.inkscape.Inkscape.desktop
 
 copyFiles --nobackup share/locale $PREFIX/share
 copyFiles share/inkscape $PREFIX/share
@@ -60,4 +60,3 @@ copyFiles share/inkscape $PREFIX/share
 
 [Uninstall]
 uninstallFromLog
-

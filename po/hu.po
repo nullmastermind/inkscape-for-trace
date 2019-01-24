@@ -22,33 +22,33 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.1.1\n"
 
-#: ../inkscape.appdata.xml.in.h:1
+#: ../org.inkscape.Inkscape.appdata.xml.in.h:1
 msgid "Main application window"
 msgstr "Fő alkalmazásablak"
 
-#: ../inkscape.desktop.in.h:1
+#: ../org.inkscape.Inkscape.desktop.in.h:1
 msgid "Inkscape"
 msgstr "Inkscape"
 
-#: ../inkscape.desktop.in.h:2
+#: ../org.inkscape.Inkscape.desktop.in.h:2
 msgid "Vector Graphics Editor"
 msgstr "Vektorgrafikai szerkesztő"
 
-#: ../inkscape.desktop.in.h:3
+#: ../org.inkscape.Inkscape.desktop.in.h:3
 msgid "Inkscape Vector Graphics Editor"
 msgstr "Inkscape - vektorgrafikai szerkesztő"
 
-#: ../inkscape.desktop.in.h:4
+#: ../org.inkscape.Inkscape.desktop.in.h:4
 msgid "Create and edit Scalable Vector Graphics images"
 msgstr ""
 "Scalable Vector Graphics (méretezhető vektorgrafika, SVG)-képek létrehozása "
 "és szerkesztése"
 
-#: ../inkscape.desktop.in.h:5
+#: ../org.inkscape.Inkscape.desktop.in.h:5
 msgid "image;editor;vector;drawing;"
 msgstr "kép;szerkesztő;vektor;rajzolás;"
 
-#: ../inkscape.desktop.in.h:6
+#: ../org.inkscape.Inkscape.desktop.in.h:6
 msgid "New Drawing"
 msgstr "Új rajz"
 
