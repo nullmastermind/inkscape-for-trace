@@ -51,7 +51,7 @@ removeOwningPackage $PREFIX/bin/inkscape
 [Install]
 installExe bin/inkscape bin/inkview
 installMan 1 man/man1/*
-installIcon share/pixmaps/inkscape.png
+installIcon share/pixmaps/org.inkscape.Inkscape.png
 installMenuItem "Graphics" share/applications/org.inkscape.Inkscape.desktop
 
 copyFiles --nobackup share/locale $PREFIX/share

@@ -24,7 +24,7 @@ make DESTDIR=appdir -j$(nproc) install ; find appdir/
 cp ../packaging/appimage/AppRun appdir/AppRun ; chmod +x appdir/AppRun
 ( cd appdir/usr/lib/ ; ln -s ../* . ) # FIXME: Why is this needed?
 ( cd appdir/ ; ln -s usr/* . ) # FIXME: Why is this needed?
-cp ./appdir/usr/share/icons/hicolor/256x256/apps/inkscape.png ./appdir/
+cp ./appdir/usr/share/icons/application/256x256/org.inkscape.Inkscape.png ./appdir/
 sed -i -e 's|^Icon=.*|Icon=org.inkscape.Inkscape|g' ./appdir/usr/share/applications/org.inkscape.Inkscape.desktop # FIXME
 cd appdir/
 
