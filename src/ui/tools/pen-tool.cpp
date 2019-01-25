@@ -917,6 +917,8 @@ void PenTool::_lastpointMove(gdouble x, gdouble y) {
     if (this->npoints != 5)
         return;
 
+	y *= -this->desktop->yaxisdir();
+
     // green
     if (!this->green_curve->is_unset()) {
         this->green_curve->last_point_additive_move( Geom::Point(x,y) );
