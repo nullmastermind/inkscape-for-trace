@@ -67,16 +67,6 @@ spinbutton entry {
     padding-right:0;
 }
 
-GtkSpinButton button {
-	-gtk-icon-style: symbolic;
-	color:inherit;
-}
-
-spinbutton button {
-	-gtk-icon-style: symbolic;
-	color:inherit;
-}
-
 GtkSpinButton undershoot {
 	outline-style : none;
 }
@@ -85,7 +75,44 @@ spinbutton undershoot {
 	outline-style : none;
 }
 
+.lpeinfo{
+    font-size:16px;
+    padding:20px;
+    }
+    #lpedialogselector,
+    #lpedialogselector .frame,
+    #lpedialogselector .searchbar {
+    border-bottom-width:0;
+    border-top-width:0;
+    outline-width:0;
+    border-left-width:0;
+    border-right-width:0;
+}
 
+#lpeflow GtkFlowBoxChild,
+#lpeflow flowboxchild{
+    border-width:0px;
+    border-radius:6px;
+    margin:10px;
+    margin-bottom:30px;
+    padding-bottom:10px;
+    background-color:@theme_bg_color;
+    color:@theme_fg_color;
+}
+
+#lpeflow GtkFlowBoxChild.lpeactive,
+#lpeflow flowboxchild.lpeactive{
+    background-color:@theme_fg_color;
+    color:@theme_bg_color;
+    margin-bottom:0px;
+    padding-bottom:10px;
+    outline:none;
+}
+
+#lpeflow GtkFlowBoxChild.lpeactive *,
+#lpeflow flowboxchild.lpeactive *{
+    color:inherit;
+}
 
 SPRuler {
     background-color: @theme_bg_color;
