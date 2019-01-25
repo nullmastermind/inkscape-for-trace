@@ -54,18 +54,6 @@ void sp_ui_import_files(gchar *buffer);
  */
 unsigned int sp_ui_close_all ();
 
-/**
- * Build the main tool bar.
- *
- * Currently the main tool bar is built as a dynamic XML menu using
- * \c sp_ui_build_dyn_menus.  This function builds the bar, and then
- * pass it to get items attached to it.
- *
- * @param  view  View to build the bar for
- */
-GtkWidget *sp_ui_main_menubar (Inkscape::UI::View::View *view);
-
-void sp_menu_append_recent_documents (GtkWidget *menu);
 void sp_ui_dialog_title_string (Inkscape::Verb * verb, char* c);
 
 Glib::ustring getLayoutPrefPath( Inkscape::UI::View::View *view );

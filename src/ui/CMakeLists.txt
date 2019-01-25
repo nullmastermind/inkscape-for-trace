@@ -21,6 +21,8 @@ set(ui_SRC
 
 	cache/svg_preview_cache.cpp
 
+        desktop/menubar.cpp
+
 	tool/control-point-selection.cpp
 	tool/control-point.cpp
 	tool/curve-drag-point.cpp
@@ -238,6 +240,8 @@ set(ui_SRC
 	uxmanager.h
 
 	cache/svg_preview_cache.h
+
+        desktop/menubar.cpp
 
 	dialog/aboutbox.h
 	dialog/align-and-distribute.h

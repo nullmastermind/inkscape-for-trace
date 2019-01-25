@@ -26,6 +26,8 @@
 #include "ui/interface.h" // main menu
 #include "ui/monitor.h" // get_monitor_geometry_at_point()
 
+#include "ui/desktop/menubar.h"
+
 #include "ui/drag-and-drop.h"
 
 #include "widgets/desktop-widget.h"
@@ -66,7 +68,7 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     _desktop = _desktop_widget->desktop;
 
     // Menu bar (must come after desktop widget creation as we need _desktop)
-    _menubar = Glib::wrap(GTK_MENU_BAR(sp_ui_main_menubar(_desktop)));
+    _menubar = build_menubar(_desktop);
     _menubar->set_name("MenuBar");
     _menubar->show_all();
 

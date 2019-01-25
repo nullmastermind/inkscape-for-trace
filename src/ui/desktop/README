@@ -1,0 +1,27 @@
+
+
+This directory contains code related to the Inkscape desktop, that is
+code that is directly used by the InkscapeWindow class and in linking
+the desktop to the canvas. It should not contain basic widgets,
+dialogs, toolbars, etc.
+
+To do:
+
+* widgets/desktop-widget.h/cpp should disappear with code ending up in either
+  InkscapeWindow.h/cpp or desktop.h/cpp (or in new files).
+
+* ui/view/view-widget.h/cpp should disappear ('view' should be member of window)
+
+* desktop.h/cpp should only contain code that links the desktop to the canvas.
+
+* Convert GUI to use actions where possible.
+
+* Future Structure:
+    Main menu bar   (menubar.h/.cpp)
+    Tool bar
+    Multipaned widget containing
+        Dialogs
+        Tools
+        Canvas
+    Palatte (maybe turn into dialog).
+    Status bar
