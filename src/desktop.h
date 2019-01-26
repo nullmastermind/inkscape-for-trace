@@ -417,6 +417,7 @@ public:
     void toggleToolbar(gchar const *toolbar_name);
 
     bool is_iconified();
+    bool is_darktheme();
     bool is_maximized();
     bool is_fullscreen();
     bool is_focusMode();
