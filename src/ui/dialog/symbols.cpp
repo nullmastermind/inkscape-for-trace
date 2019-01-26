@@ -186,7 +186,6 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   icon_view = new Gtk::IconView(static_cast<Glib::RefPtr<Gtk::TreeModel> >(store));
   //icon_view->set_text_column(  columns->symbol_id  );
   icon_view->set_tooltip_column( 1 );
-  icon_view->set_name( "symbolsView" );
   icon_view->set_pixbuf_column( columns->symbol_image );
   // Giving the iconview a small minimum size will help users understand
   // What the dialog does.
@@ -214,6 +213,8 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   overlay->set_hexpand();
   overlay->set_vexpand();
   overlay->add(* scroller);
+  overlay->get_style_context()->add_class("colorbright");
+  overlay->get_style_context()->add_class("backgroundbright");
   scroller->set_size_request(100, 250);
   table->attach(*Gtk::manage(overlay),0,row,2,1);
 
@@ -227,7 +228,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
       iconsize = Gtk::IconSize().register_new(Glib::ustring("ICON_SIZE_DIALOG_EXTRA"), 110, 110);
   }
   overlay_icon = sp_get_icon_image("searching", iconsize);
-  overlay_icon->set_name("iconinverse");
+  overlay_icon->get_style_context()->add_class("iconsymbolic");
   overlay_icon->set_halign(Gtk::ALIGN_CENTER );
   overlay_icon->set_valign(Gtk::ALIGN_START );
   overlay_icon->set_margin_top(45);

@@ -70,8 +70,9 @@ protected:
 private:
     Gtk::Button       _add_button;
     Gtk::Button       _close_button;
+    Gtk::Dialog *_LPEDialogSelector;
     Glib::RefPtr<Gtk::Builder> _builder;
-    Gtk::FlowBox * _LPESelectorFlowBox;
+    Gtk::FlowBox *_LPESelectorFlowBox;
     Gtk::SearchEntry *_LPEFilter;
     Gtk::Label *_LPEInfo;
     Gtk::Box *_LPESelector;

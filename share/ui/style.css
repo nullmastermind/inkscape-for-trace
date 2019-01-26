@@ -26,7 +26,6 @@
  *
  */
 
-
 /* Our own custom shades... better not to use.
  * Lightest to darkest based on linear rgb.
  */
@@ -40,6 +39,121 @@
 @define-color bg_color6  #898989;
 @define-color bg_color7  #636363;
 @define-color bg_color8  #000000; /* Black */
+
+ /* Inkscape CSS helper
+  * to add a class to a widget do some thing like
+  * widget->get_style_context()->add_class("mycoolclass");
+  * we define a bunch of helper CSS styles
+  * Ecah Inkscape desktop has a class in top level window
+  * call "dark" so you can style using 2 clases with or without 
+  * "dark" by this way you can always know if the UI is in dark mode
+  * Also added some helper clases:
+  * ::::::: Color based 
+  * ::::::: apply to colors
+  * ::::::: scope widget and all his childs
+  * ".colordefault" use default window color
+  * ".colorinverse" invert window colors
+  * ".colorbright" force bright colors no matter the UI is dark or bright
+  * ".colordark" same but dark
+  * ::::::: Background based 
+  * ::::::: apply to backgrounds
+  * ::::::: scope widget and all his childs
+  * ".backgrounddefault" use default window color
+  * ".backgroundinverse" invert window colors
+  * ".backgroundbright" force bright colors no matter the UI is dark or bright
+  * ".backgrounddark" same but dark
+  * :::::::: Icon Based.
+  * :::::::: apply to color (foreground)
+  * :::::::: scope widget and all nested images
+  * ".iconsymbolic" Force icon symbolic
+  * ".iconregular" Force colorfull icons
+  * ".iconcolordefault" Theme color default
+  * ".iconcolorinverse" Inverse color from theme
+  * ".iconcolorbright, Force clear icon
+  * ".iconcolordark" Force dark icon
+  * ".iconcolornamed" Icon in prefs selected color;
+  * ".iconcolornamedinverse" Icon in inverse color from prefs"
+  * :::::::: Combo box.
+  * "..combobright" Combo bright
+  */
+
+.colordefault, 
+.colordefault *{ 
+    color: @theme_fg_color; 
+}
+
+.colorinverse, 
+.colorinverse *{ 
+    color: @theme_bg_color; 
+}
+.colorbright,
+.colorbright *{
+    color: @theme_fg_color; 
+}
+.dark .colorbright, 
+.dark .colorbright *{
+    color: @theme_bg_color; 
+}
+.colordark, 
+.colordark *{
+    color: @theme_bg_color; 
+}
+.dark .colordark,
+.dark .colordark *{
+    color: @theme_fg_color;
+}
+.backgrounddefault, 
+.backgrounddefault *{ 
+    background-color: @theme_bg_color; 
+    background-image:image(@theme_bg_color);
+}
+.backgroundinverse, 
+.backgroundinverse *{ 
+    background-color: @theme_fg_color; 
+    background-image:image(@theme_fg_color);
+}
+.backgroundbright,
+.backgroundbright *{
+    background-color: @theme_bg_color;
+    background-image:image(@theme_bg_color);
+}
+.dark .backgroundbright, 
+.dark .backgroundbright *{
+    background-color: @theme_fg_color;
+    background-image:image(@theme_fg_color);
+}
+.backgrounddark, 
+.backgrounddark *{
+    background-color: @theme_fg_color;
+    background-image:image(@theme_fg_color);
+}
+.dark .backgrounddark,
+.dark .backgrounddark *{
+    background-color: @theme_bg_color;
+    background-image:image(@theme_bg_color);
+}
+.iconsymbolic,
+.iconsymbolic image{
+    -gtk-icon-style: symbolic;
+}
+.iconregular,
+.iconregular image{
+    -gtk-icon-style: regular;
+}
+
+.combobright *{
+    color: @theme_fg_color; 
+    background-color: @theme_bg_color;
+    background-image:image(@theme_bg_color);
+    border-radius:4px;
+}
+.dark .combobright *{
+    color: @theme_bg_color; 
+    background-color: @theme_fg_color;
+    background-image:image(@theme_fg_color);
+    border-radius:4px;
+}
+
 
 /* 'GtkWidget' for Gtk  <= 3.18   */
 /* 'widget'    for Gtk  <= 3.19.2 */   
@@ -78,10 +192,10 @@ spinbutton undershoot {
 .lpeinfo{
     font-size:16px;
     padding:20px;
-    }
-    #lpedialogselector,
-    #lpedialogselector .frame,
-    #lpedialogselector .searchbar {
+}
+#lpedialogselector,
+#lpedialogselector .frame,
+#lpedialogselector .searchbar {
     border-bottom-width:0;
     border-top-width:0;
     outline-width:0;
@@ -96,22 +210,18 @@ spinbutton undershoot {
     margin:10px;
     margin-bottom:30px;
     padding-bottom:10px;
-    background-color:@theme_bg_color;
-    color:@theme_fg_color;
 }
 
 #lpeflow GtkFlowBoxChild.lpeactive,
 #lpeflow flowboxchild.lpeactive{
-    background-color:@theme_fg_color;
-    color:@theme_bg_color;
     margin-bottom:0px;
     padding-bottom:10px;
     outline:none;
 }
 
-#lpeflow GtkFlowBoxChild.lpeactive *,
-#lpeflow flowboxchild.lpeactive *{
-    color:inherit;
+
+#LPEDialogSelector .frame{
+    border-width:0;
 }
 
 SPRuler {
@@ -217,15 +327,3 @@ combobox window.popup scrolledwindow treeview separator {
 	padding : 0 ;
 	outline-style : none;
 }
-
-
-
-#symbolsView,
-#markerCombo button,
-#markerCombo menu,
-#dashCombo button,
-#dashCombo menu{
-    background-image:image(rgb(230,230,230));
-    color:rgb(0,0,0);
-}
-

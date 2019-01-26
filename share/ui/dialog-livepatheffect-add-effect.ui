@@ -2,7 +2,7 @@
 <!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkBox" id="LPESelectorItem">
+  <object class="GtkBox" id="LPESelectorEffect">
     <property name="width_request">200</property>
     <property name="visible">True</property>
     <property name="can_focus">True</property>
@@ -71,7 +71,7 @@
             <property name="can_focus">False</property>
             <property name="halign">end</property>
             <property name="pixel_size">30</property>
-            <property name="icon_name">draw-star</property>
+            <property name="icon_name">draw-star-outline</property>
             <property name="icon_size">2</property>
             <style>
               <class name="fab"/>
@@ -112,7 +112,7 @@
       </packing>
     </child>
     <style>
-      <class name="lpeselectoritem"/>
+      <class name="lpeselectoreffect"/>
     </style>
   </object>
 </interface>
