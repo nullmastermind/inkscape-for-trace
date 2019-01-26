@@ -857,7 +857,7 @@ void ToolboxFactory::setOrientation(GtkWidget* toolbox, GtkOrientation orientati
 void setup_tool_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 {
     setupToolboxCommon( toolbox, desktop,
-            "toolbar-tool.ui",
+            "tool-toolbar.ui",
             "/ui/ToolToolbar",
             "/toolbox/tools/small");
 }
@@ -905,12 +905,12 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
     Glib::RefPtr<Gtk::ActionGroup> mainActions = create_or_fetch_actions( desktop );
 
     // The UI Manager creates widgets based on the definitions in the
-    // "toolbar-select.ui" file.  This is only used with the "prep"
+    // "select-toolbar.ui" file.  This is only used with the "prep"
     // method of toolbar-creation
     GtkUIManager* mgr = gtk_ui_manager_new();
     GError *err = nullptr;
     gtk_ui_manager_insert_action_group( mgr, mainActions->gobj(), 0 );
-    Glib::ustring filename = get_filename(UIS, "toolbar-select.ui");
+    Glib::ustring filename = get_filename(UIS, "select-toolbar.ui");
     guint ret = gtk_ui_manager_add_ui_from_file(mgr, filename.c_str(), &err);
     if(err) {
       g_warning("Failed to load aux toolbar %s: %s", filename.c_str(), err->message);
@@ -1061,7 +1061,7 @@ void update_aux_toolbox(SPDesktop * /*desktop*/, ToolBase *eventcontext, GtkWidg
 void setup_commands_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 {
     setupToolboxCommon( toolbox, desktop,
-            "toolbar-commands.ui",
+            "commands-toolbar.ui",
             "/ui/CommandsToolbar",
             "/toolbox/small" );
 }
@@ -1375,7 +1375,7 @@ void setup_snap_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
     }
 
     setupToolboxCommon( toolbox, desktop,
-            "toolbar-snap.ui",
+            "snap-toolbar.ui",
             "/ui/SnapToolbar",
             "/toolbox/secondary" );
 }

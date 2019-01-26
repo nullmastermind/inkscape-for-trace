@@ -12,14 +12,10 @@
 #ifndef INKSCAPE_DIALOG_LIVEPATHEFFECT_ADD_H
 #define INKSCAPE_DIALOG_LIVEPATHEFFECT_ADD_H
 
-#include <gtkmm/box.h>
-#include <gtkmm/builder.h>
-#include <gtkmm/label.h>
-#include <gtkmm/flowbox.h>
-#include <gtkmm/stylecontext.h>
-#include <gtkmm/flowboxchild.h>
-#include <gtkmm/searchentry.h>
 #include <gtkmm/dialog.h>
+#include <gtkmm/liststore.h>
+#include <gtkmm/treeview.h>
+#include <gtkmm/scrolledwindow.h>
 #include "live_effects/effect-enum.h"
 
 class SPDesktop;
@@ -41,23 +37,31 @@ public:
      * Show the dialog
      */
     static void show(SPDesktop *desktop);
+
+    /**
+     * Returns true is the "Add" button was pressed
+     */
     static bool isApplied() {
-        return false;
+        return instance().applied;
     }
 
-    static const Util::EnumData<LivePathEffect::EffectType>* getActiveData(){return NULL;};
+    /**
+     * Return the data associated with the currently selected item
+     */
+    static const Util::EnumData<LivePathEffect::EffectType>* getActiveData();
+
 protected:
+
     /**
      * Close button was clicked
      */
     void onClose();
-    bool on_filter(Gtk::FlowBoxChild *child);
-    void on_search();
-    void on_activate(Gtk::FlowBoxChild *child);
+
     /**
      * Add button was clicked
      */
     void onAdd();
+
     /**
      * Tree was clicked
      */
@@ -68,17 +72,37 @@ protected:
      */
     void onKeyEvent(GdkEventKey* evt);
 private:
-    Gtk::Button       _add_button;
-    Gtk::Button       _close_button;
-    Gtk::Dialog *_LPEDialogSelector;
-    Glib::RefPtr<Gtk::Builder> _builder;
-    Gtk::FlowBox *_LPESelectorFlowBox;
-    Gtk::SearchEntry *_LPEFilter;
-    Gtk::Label *_LPEInfo;
-    Gtk::Box *_LPESelector;
-    guint _visiblelpe;    
-    class Effect;
-    const LivePathEffect::EnumEffectDataConverter<LivePathEffect::EffectType>& converter;
+
+    Gtk::TreeView     effectlist_treeview;
+    Gtk::ScrolledWindow scrolled_window;
+    Gtk::Button       add_button;
+    Gtk::Button       close_button;
+
+    class ModelColumns : public Gtk::TreeModel::ColumnRecord
+    {
+      public:
+        ModelColumns()
+        {
+            add(name);
+            //add(desc);
+            add(data);
+        }
+        ~ModelColumns() override = default;
+
+        Gtk::TreeModelColumn<Glib::ustring> name;
+        /**
+         * TODO - Get detailed descriptions of each Effect to show in the dialog
+         */
+        //Gtk::TreeModelColumn<Glib::ustring> desc;
+        Gtk::TreeModelColumn<const Util::EnumData<LivePathEffect::EffectType>*> data;
+    };
+
+    ModelColumns _columns;
+    Glib::RefPtr<Gtk::ListStore> effectlist_store;
+    const Util::EnumDataConverter<LivePathEffect::EffectType>& converter;
+
+    bool applied;
+
     static LivePathEffectAdd &instance() {
         static LivePathEffectAdd instance_;
         return instance_;

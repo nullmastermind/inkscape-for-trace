@@ -676,9 +676,9 @@ User interface customization
     reconfigured by users. Only one is currently supported (filter editor).
   • The contents of the menus can be configured by customizing the menus.xml
     file.
-  • Toolbar contents for the command bar (toolbar-commands.ui), the snap bar
-    (toolbar-snap.ui), the tool controls bars for each tool
-    (toolbar-select.ui), the toolbox (tool-toolbar.ui) is now configurable.
+  • Toolbar contents for the command bar (commands-toolbar.ui), the snap bar
+    (snap-toolbar.ui), the tool controls bars for each tool
+    (select-toolbar.ui), the toolbox (tool-toolbar.ui) is now configurable.
   • The file keybindings.rc allows you to... (TODO: do what? What does it do in
     comparison to keys.xml? Seems to not work at all... seems to be ancient.
     Can be deleted?)
