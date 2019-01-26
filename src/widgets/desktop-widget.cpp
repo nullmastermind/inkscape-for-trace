@@ -898,9 +898,9 @@ sp_desktop_widget_realize (GtkWidget *widget)
         g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
         bool dark = gtkApplicationPreferDarkTheme || Glib::ustring(gtkThemeName).find(":dark") != -1;
         if (!dark) {
-			Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
-			Gdk::RGBA rgba;
-			bool background_set = stylecontext->lookup_color("theme_bg_color", rgba);
+            Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
+            Gdk::RGBA rgba;
+            bool background_set = stylecontext->lookup_color("theme_bg_color", rgba);
             if (background_set && rgba.get_red() + rgba.get_green() + rgba.get_blue() < 1.0) {
                 dark = true;
             }

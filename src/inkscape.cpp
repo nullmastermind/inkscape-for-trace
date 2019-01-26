@@ -434,20 +434,18 @@ Application::add_gtk_css()
         g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
         g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
         g_object_set(settings, "gtk-application-prefer-dark-theme",
-                        prefs->getBool("/theme/darkTheme", gtkApplicationPreferDarkTheme), NULL);
+                     prefs->getBool("/theme/darkTheme", gtkApplicationPreferDarkTheme), NULL);
         prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName));
         if (prefs->getString("/theme/gtkTheme") != "") {
             g_object_set(settings, "gtk-theme-name", prefs->getString("/theme/gtkTheme").c_str(), NULL);
-        }
-        else {
+        } else {
             prefs->setString("/theme/gtkTheme", Glib::ustring(gtkThemeName));
         }
 
         Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
         if (themeiconname != "") {
             g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
-        } 
-        else {
+        } else {
             prefs->setString("/theme/iconTheme", Glib::ustring(gtkIconThemeName));
         }
         g_object_get(settings, "gtk-font-name", &gtk_font_name, NULL);
