@@ -342,6 +342,7 @@ public:
     void zoom_page_width();
     void zoom_drawing();
     void zoom_selection();
+    void zoom_center_page();
 
     double current_zoom() const { return _current_affine.getZoom(); }
 

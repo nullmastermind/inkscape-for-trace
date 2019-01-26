@@ -226,6 +226,9 @@ override) the bindings in the main default.xml.
   <bind key="4" action="ZoomDrawing" display="true" />
   <bind key="4" modifiers="Shift" action="ZoomDrawing" />
   <bind key="KP_4" action="ZoomDrawing" />
+  <bind key="4" modifiers="Primary" action="ZoomCenterPage"  display="true"/>
+  <bind key="4" modifiers="Primary" action="ZoomCenterPage" />
+  <bind key="KP_4" modifiers="Primary" action="ZoomCenterPage" />
   <bind key="5" action="ZoomPage" display="true" />
   <bind key="5" modifiers="Shift" action="ZoomPage" />
   <bind key="KP_5" action="ZoomPage" />

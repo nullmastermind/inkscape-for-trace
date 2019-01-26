@@ -53,6 +53,7 @@ ZoomToolbar::ZoomToolbar(SPDesktop *desktop)
     add_toolbutton_for_verb(SP_VERB_ZOOM_DRAWING);
     add_toolbutton_for_verb(SP_VERB_ZOOM_PAGE);
     add_toolbutton_for_verb(SP_VERB_ZOOM_PAGE_WIDTH);
+    add_toolbutton_for_verb(SP_VERB_ZOOM_CENTER_PAGE);
 
     add_separator();
 

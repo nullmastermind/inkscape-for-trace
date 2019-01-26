@@ -1064,6 +1064,14 @@ SPDesktop::zoom_selection()
     set_display_area(*d, 10);
 }
 
+/**
+ * Centre Page in window, without zooming
+ */
+void SPDesktop::zoom_center_page()
+{
+	zoom_absolute_center_point(Geom::Point(doc()->getWidth().value("px")/2, doc()->getHeight().value("px")/2), this->current_zoom()); 
+}
+
 
 /**
  * Performs a quick zoom into what the user is working on.
