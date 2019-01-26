@@ -44,7 +44,6 @@
 #include "selection.h"
 #include "shortcuts.h"
 #include "verbs.h"
-#include "inkscape-window.h"
 
 #include "display/canvas-grid.h"
 #include "display/nr-filter-gaussian.h"
@@ -728,24 +727,23 @@ void InkscapePreferences::symbolicAddClass()
     // is more understandable than record previously applied
     Glib::ustring style = get_filename(UIS, "style.css");
     if (!style.empty()) {
-      auto provider = Gtk::CssProvider::create();
+        auto provider = Gtk::CssProvider::create();
 
-      // From 3.16, throws an error which we must catch.
-      try {
-          provider->load_from_path (style);
-      }
-#if GTK_CHECK_VERSION(3,16,0)
-      // Gtk::CssProviderError not defined until 3.16.
-      catch (const Gtk::CssProviderError& ex)
-      {
-          g_critical("CSSProviderError::load_from_path(): failed to load '%s'\n(%s)",
-                 style.c_str(), ex.what().c_str());
-      }
+        // From 3.16, throws an error which we must catch.
+        try {
+            provider->load_from_path(style);
+        }
+#if GTK_CHECK_VERSION(3, 16, 0)
+        // Gtk::CssProviderError not defined until 3.16.
+        catch (const Gtk::CssProviderError &ex) {
+            g_critical("CSSProviderError::load_from_path(): failed to load '%s'\n(%s)", style.c_str(),
+                       ex.what().c_str());
+        }
 #else
-      catch (...)
-      {}
+        catch (...) {
+        }
 #endif
-      Gtk::StyleContext::add_provider_for_screen (screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
 }
 void InkscapePreferences::themeChange()
@@ -757,15 +755,15 @@ void InkscapePreferences::themeChange()
     gchar *gtkThemeName;
     gboolean gtkApplicationPreferDarkTheme;
     Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
-    GtkSettings *settings = gtk_settings_get_default(); 
+    GtkSettings *settings = gtk_settings_get_default();
     if (window && settings) {
         g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
         g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
         bool dark = gtkApplicationPreferDarkTheme || Glib::ustring(gtkThemeName).find(":dark") != -1;
         if (!dark) {
-			Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
-			Gdk::RGBA rgba;
-			bool background_set = stylecontext->lookup_color("theme_bg_color", rgba);
+            Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
+            Gdk::RGBA rgba;
+            bool background_set = stylecontext->lookup_color("theme_bg_color", rgba);
             if (background_set && rgba.get_red() + rgba.get_green() + rgba.get_blue() < 1.0) {
                 dark = true;
             }

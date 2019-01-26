@@ -12,11 +12,15 @@
 #ifndef INKSCAPE_DIALOG_LIVEPATHEFFECT_ADD_H
 #define INKSCAPE_DIALOG_LIVEPATHEFFECT_ADD_H
 
-#include <gtkmm/dialog.h>
-#include <gtkmm/liststore.h>
-#include <gtkmm/treeview.h>
-#include <gtkmm/scrolledwindow.h>
 #include "live_effects/effect-enum.h"
+#include <gtkmm/box.h>
+#include <gtkmm/builder.h>
+#include <gtkmm/dialog.h>
+#include <gtkmm/flowbox.h>
+#include <gtkmm/flowboxchild.h>
+#include <gtkmm/label.h>
+#include <gtkmm/searchentry.h>
+#include <gtkmm/stylecontext.h>
 
 class SPDesktop;
 
@@ -37,21 +41,11 @@ public:
      * Show the dialog
      */
     static void show(SPDesktop *desktop);
+    static bool isApplied() { return false; }
 
-    /**
-     * Returns true is the "Add" button was pressed
-     */
-    static bool isApplied() {
-        return instance().applied;
-    }
+    static const Util::EnumData<LivePathEffect::EffectType> *getActiveData() { return NULL; };
 
-    /**
-     * Return the data associated with the currently selected item
-     */
-    static const Util::EnumData<LivePathEffect::EffectType>* getActiveData();
-
-protected:
-
+  protected:
     /**
      * Close button was clicked
      */
@@ -72,21 +66,22 @@ protected:
      */
     void onKeyEvent(GdkEventKey* evt);
 private:
-    Gtk::Button       _add_button;
-    Gtk::Button       _close_button;
-    Gtk::Dialog *_LPEDialogSelector;
-    Glib::RefPtr<Gtk::Builder> _builder;
-    Gtk::FlowBox *_LPESelectorFlowBox;
-    Gtk::SearchEntry *_LPEFilter;
-    Gtk::Label *_LPEInfo;
-    Gtk::Box *_LPESelector;
-    guint _visiblelpe;    
-    class Effect;
-    const LivePathEffect::EnumEffectDataConverter<LivePathEffect::EffectType>& converter;
-    static LivePathEffectAdd &instance() {
-        static LivePathEffectAdd instance_;
-        return instance_;
-    }
+  Gtk::Button _add_button;
+  Gtk::Button _close_button;
+  Gtk::Dialog *_LPEDialogSelector;
+  Glib::RefPtr<Gtk::Builder> _builder;
+  Gtk::FlowBox *_LPESelectorFlowBox;
+  Gtk::SearchEntry *_LPEFilter;
+  Gtk::Label *_LPEInfo;
+  Gtk::Box *_LPESelector;
+  guint _visiblelpe;
+  class Effect;
+  const LivePathEffect::EnumEffectDataConverter<LivePathEffect::EffectType> &converter;
+  static LivePathEffectAdd &instance()
+  {
+      static LivePathEffectAdd instance_;
+      return instance_;
+  }
     LivePathEffectAdd(LivePathEffectAdd const &) = delete; // no copy
     LivePathEffectAdd &operator=(LivePathEffectAdd const &) = delete; // no assign
 };

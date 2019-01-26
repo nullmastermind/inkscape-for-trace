@@ -160,8 +160,8 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {TEXT_LABEL,            N_("Text label"),                      "text_label"},
 #endif
 
-};
-const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
+
+const EnumEffectDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData) / sizeof(*LPETypeData));
 
 int
 Effect::acceptsNumClicks(EffectType type) {
