@@ -72,37 +72,17 @@ protected:
      */
     void onKeyEvent(GdkEventKey* evt);
 private:
-
-    Gtk::TreeView     effectlist_treeview;
-    Gtk::ScrolledWindow scrolled_window;
-    Gtk::Button       add_button;
-    Gtk::Button       close_button;
-
-    class ModelColumns : public Gtk::TreeModel::ColumnRecord
-    {
-      public:
-        ModelColumns()
-        {
-            add(name);
-            //add(desc);
-            add(data);
-        }
-        ~ModelColumns() override = default;
-
-        Gtk::TreeModelColumn<Glib::ustring> name;
-        /**
-         * TODO - Get detailed descriptions of each Effect to show in the dialog
-         */
-        //Gtk::TreeModelColumn<Glib::ustring> desc;
-        Gtk::TreeModelColumn<const Util::EnumData<LivePathEffect::EffectType>*> data;
-    };
-
-    ModelColumns _columns;
-    Glib::RefPtr<Gtk::ListStore> effectlist_store;
-    const Util::EnumDataConverter<LivePathEffect::EffectType>& converter;
-
-    bool applied;
-
+    Gtk::Button       _add_button;
+    Gtk::Button       _close_button;
+    Gtk::Dialog *_LPEDialogSelector;
+    Glib::RefPtr<Gtk::Builder> _builder;
+    Gtk::FlowBox *_LPESelectorFlowBox;
+    Gtk::SearchEntry *_LPEFilter;
+    Gtk::Label *_LPEInfo;
+    Gtk::Box *_LPESelector;
+    guint _visiblelpe;    
+    class Effect;
+    const LivePathEffect::EnumEffectDataConverter<LivePathEffect::EffectType>& converter;
     static LivePathEffectAdd &instance() {
         static LivePathEffectAdd instance_;
         return instance_;

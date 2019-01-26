@@ -23,44 +23,43 @@ namespace UI {
 namespace Dialog {
 
 LivePathEffectAdd::LivePathEffectAdd() :
-    add_button(_("_Add"), true),
-    close_button(_("_Cancel"), true),
-    converter(Inkscape::LivePathEffect::LPETypeConverter),
-    applied(false)
+    converter(Inkscape::LivePathEffect::LPETypeConverter)
 {
-    set_title(_("Add Path Effect"));
+    const std::string req_widgets[] = {"LPEDialogSelector", "LPESelector", "LPESelectorFlowBox"};
+    Glib::ustring gladefile = get_filename(Inkscape::IO::Resource::UIS, "dialog-livepatheffect-add.ui");
+    try {
+        _builder = Gtk::Builder::create_from_file(gladefile);
+    } catch(const Glib::Error& ex) {
+        g_warning("Glade file loading failed for filter effect dialog");
+        return;
+    }
 
-    /**
-     * Scrolled Window
-     */
-    scrolled_window.add(effectlist_treeview);
-    scrolled_window.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-    scrolled_window.set_shadow_type(Gtk::SHADOW_IN);
-    scrolled_window.set_size_request(250, 200);
-    scrolled_window.set_can_focus();
-
-    /**
-     * Effect Store and Tree
-     */
-    effectlist_store = Gtk::ListStore::create(_columns);
-    effectlist_store->set_sort_column (_columns.name, Gtk::SORT_ASCENDING );
-
-    effectlist_treeview.set_model(effectlist_store);
-    effectlist_treeview.set_headers_visible(false);
-    effectlist_treeview.append_column("Name", _columns.name);
-    //effectlist_treeview.set_activates_default(true);
-
+    Gtk::Object* test;
+    for(std::string w:req_widgets) {
+        _builder->get_widget(w,test);
+        if(!test){
+            g_warning("Required widget %s does not exist", w.c_str());
+            return;
+        }
+    }
+    _builder->get_widget("LPEDialogSelector", _LPEDialogSelector);
     /**
      * Initialize Effect list
      */
-    int show = LivePathEffect::ATTACH_PATH;
-#ifdef LPE_ENABLE_TEST_EFFECTS
-    //TODO: Handle when showing the experimental effects without setting flag
-    show = LivePathEffect::ANGLE_BISECTOR;
-#elif WITH_LPETOOL
-    //TODO: Handle when showing the experimental effects without setting flag
-    show = LivePathEffect::ANGLE_BISECTOR;
-#endif
+    _builder->get_widget("LPESelectorFlowBox", _LPESelectorFlowBox);
+    _builder->get_widget("LPEFilter", _LPEFilter);
+    _builder->get_widget("LPEInfo", _LPEInfo);
+    _LPEFilter->signal_search_changed().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_search));
+    const std::string le_widgets[] = {"LPESelectorEffect", "LPEName","LPEDescription"};
+    Glib::ustring le_gladefile = get_filename(Inkscape::IO::Resource::UIS, "dialog-livepatheffect-add-effect.ui");
+    for(int i = 0; i < static_cast<int>(converter._length); ++i) {
+        
+        try {
+            _builder = Gtk::Builder::create_from_file(le_gladefile);
+        } catch(const Glib::Error& ex) {
+            g_warning("Glade file loading failed for filter effect dialog");
+            return;
+        }
 
     for(int i = 0; i < static_cast<int>(converter._length); ++i) {
         Gtk::TreeModel::Row row = *(effectlist_store->append());
@@ -71,14 +70,55 @@ LivePathEffectAdd::LivePathEffectAdd() :
             Glib::RefPtr<Gtk::TreeSelection> select = effectlist_treeview.get_selection();
             select->select(row);
         }
+        const LivePathEffect::EnumEffectData<LivePathEffect::EffectType>* data = &converter.data(i);
+        Gtk::Label * LPEName;
+        _builder->get_widget("LPEName", LPEName);
+        Glib::ustring newid = "LPEName_" + Glib::ustring::format(i);
+        (*LPEName).set_name(newid);
+        (*LPEName).set_text(converter.get_label(data->id).c_str());
+        Gtk::Label * LPEDescription;
+        _builder->get_widget("LPEDescription", LPEDescription);
+        newid = "LPEDescription_" + Glib::ustring::format(i);
+        (*LPEDescription).set_name(newid);
+        (*LPEDescription).set_text(converter.get_description(data->id));
+        Gtk::Image * LPEIcon;
+        _builder->get_widget("LPEIcon", LPEIcon);
+        newid = "LPEIcon_" + Glib::ustring::format(i);
+        (*LPEIcon).set_name(newid);
+        (*LPEIcon).set_from_icon_name(converter.get_icon(data->id),Gtk::BuiltinIconSize(Gtk::ICON_SIZE_DIALOG));
+        Gtk::Box * LPESelectorEffect;
+        _builder->get_widget("LPESelectorEffect", LPESelectorEffect);
+        newid = "LPESelectorEffect" + Glib::ustring::format(i);
+        (*LPESelectorEffect).set_name(newid);
+        _LPESelectorFlowBox->insert(*LPESelectorEffect, i);
     }
+    _visiblelpe = _LPESelectorFlowBox->get_children().size();
+    _LPESelectorFlowBox->signal_child_activated().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_activate));
+    _LPEDialogSelector->set_title(_("Live Efects Selector"));
+    _LPEDialogSelector->show_all_children();
+    _LPEInfo->set_visible(false);
+}
 
-    /**
-     * Buttons
-     */
-    //close_button.set_can_default();
-    add_button.set_use_underline(true);
-    add_button.set_can_default();
+void LivePathEffectAdd::on_activate(Gtk::FlowBoxChild *child){
+    for (auto i:_LPESelectorFlowBox->get_children()) {
+        Gtk::FlowBoxChild * leitem = dynamic_cast<Gtk::FlowBoxChild *>(i);
+        leitem->get_style_context()->remove_class("lpeactive");
+        leitem->get_style_context()->remove_class("colorinverse");
+        leitem->get_style_context()->remove_class("backgroundinverse");
+        Gtk::Box *box = dynamic_cast<Gtk::Box *>(leitem->get_child());
+        if (box) {
+            std::vector<Gtk::Widget*> contents = box->get_children();
+            Gtk::Box *actions = dynamic_cast<Gtk::Box *>(contents[3]);
+            if (actions) {
+                actions->set_visible(false);
+            }
+        }
+    }
+    child->get_style_context()->add_class("lpeactive");
+    child->get_style_context()->add_class("colorinverse");
+    child->get_style_context()->add_class("backgroundinverse");
+    child->show_all_children();
+}
 
     auto mainVBox = get_content_area();
 
@@ -109,7 +149,7 @@ void LivePathEffectAdd::onAdd()
 
 void LivePathEffectAdd::onClose()
 {
-    hide();
+    _LPEDialogSelector->hide();
 }
 
 void LivePathEffectAdd::onKeyEvent(GdkEventKey* evt)
@@ -146,12 +186,7 @@ LivePathEffectAdd::getActiveData()
 void LivePathEffectAdd::show(SPDesktop *desktop)
 {
     LivePathEffectAdd &dial = instance();
-    dial.applied=false;
-    dial.set_modal(true);
-    desktop->setWindowTransient (dial.gobj());
-    dial.property_destroy_with_parent() = true;
-    dial.effectlist_treeview.grab_focus();
-    dial.run();
+    dial._LPEDialogSelector->run();
 }
 
 } // namespace Dialog
