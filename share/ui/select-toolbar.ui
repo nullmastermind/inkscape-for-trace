@@ -118,6 +118,7 @@
     <toolitem action='StarResetAction' />
   </toolbar>
 
+<!--
   <toolbar name='RectToolbar'>
     <toolitem action='RectStateAction' />
     <toolitem action='RectWidthAction' />
@@ -128,6 +129,7 @@
     <separator />
     <toolitem action='RectResetAction' />
   </toolbar>
+-->
 
   <toolbar name='3DBoxToolbar'>
     <toolitem action='3DBoxAngleXAction' />

@@ -38,8 +38,11 @@ class SPRect;
 
 typedef struct _EgeAdjustmentAction EgeAdjustmentAction;
 typedef struct _EgeOutputAction EgeOutputAction;
-typedef struct _GtkActionGroup GtkActionGroup;
 typedef struct _InkAction InkAction;
+
+namespace Gtk {
+class Toolbutton;
+}
 
 namespace Inkscape {
 class Selection;
@@ -54,22 +57,25 @@ class ToolBase;
 }
 
 namespace Widget {
+class LabelToolItem;
+class SpinButtonToolItem;
 class UnitTracker;
 }
 
 namespace Toolbar {
 class RectToolbar : public Toolbar {
 private:
-    EgeOutputAction *_mode_action;
-
     UI::Widget::UnitTracker *_tracker;
 
     XML::Node *_repr;
     SPItem *_item;
 
-    EgeAdjustmentAction *_width_action;
-    EgeAdjustmentAction *_height_action;
-    InkAction *_not_rounded;
+    UI::Widget::LabelToolItem      *_mode_item;
+    UI::Widget::SpinButtonToolItem *_width_item;
+    UI::Widget::SpinButtonToolItem *_height_item;
+    UI::Widget::SpinButtonToolItem *_rx_item;
+    UI::Widget::SpinButtonToolItem *_ry_item;
+    Gtk::ToolButton *_not_rounded;
 
     Glib::RefPtr<Gtk::Adjustment> _width_adj;
     Glib::RefPtr<Gtk::Adjustment> _height_adj;
@@ -84,8 +90,7 @@ private:
                        void (SPRect::*setter)(gdouble));
 
     void sensitivize();
-    static void defaults(GtkWidget *widget,
-                         GObject   *obj);
+    void defaults();
     void watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
     void selection_changed(Inkscape::Selection *selection);
 
@@ -94,7 +99,7 @@ protected:
     ~RectToolbar() override;
 
 public:
-    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+    static GtkWidget * create(SPDesktop *desktop);
 
     static void event_attr_changed(Inkscape::XML::Node *repr,
                                    gchar const         *name,

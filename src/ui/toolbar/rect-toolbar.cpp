@@ -25,15 +25,16 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gtk/gtk.h>
+#include "rect-toolbar.h"
+
 #include <glibmm/i18n.h>
 
-#include "rect-toolbar.h"
+#include <gtkmm/separatortoolitem.h>
+#include <gtkmm/toolbutton.h>
 
 #include "desktop.h"
 #include "document-undo.h"
 #include "inkscape.h"
-#include "widgets/toolbox.h"
 #include "verbs.h"
 
 #include "object/sp-namedview.h"
@@ -43,10 +44,11 @@
 #include "ui/tools/rect-tool.h"
 #include "ui/uxmanager.h"
 #include "ui/widget/ink-select-one-action.h"
+#include "ui/widget/label-tool-item.h"
+#include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
 
 #include "widgets/ege-adjustment-action.h"
-#include "widgets/ege-output-action.h"
 #include "widgets/ink-action.h"
 #include "widgets/widget-sizes.h"
 
@@ -55,7 +57,6 @@
 using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
-using Inkscape::UI::ToolboxFactory;
 using Inkscape::Util::Unit;
 using Inkscape::Util::Quantity;
 using Inkscape::Util::unit_table;
@@ -76,12 +77,127 @@ RectToolbar::RectToolbar(SPDesktop *desktop)
     : Toolbar(desktop),
       _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR)),
       _freeze(false),
-      _single(true)
+      _single(true),
+      _repr(nullptr),
+      _mode_item(Gtk::manage(new UI::Widget::LabelToolItem(_("<b>New:</b>"))))
 {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
     // rx/ry units menu: create
     //tracker->addUnit( SP_UNIT_PERCENT, 0 );
     // fixme: add % meaning per cent of the width/height
     _tracker->setActiveUnit(unit_table.getUnit("px"));
+    _mode_item->set_use_markup(true);
+
+    /* W */
+    {
+        auto width_val = prefs->getDouble("/tools/shapes/rect/width", 0);
+        _width_adj = Gtk::Adjustment::create(width_val, 0, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
+        _width_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("rect-width", _("W:"), _width_adj));
+        _width_item->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
+        _width_item->set_all_tooltip_text(_("Width of rectangle"));
+    
+        _width_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &RectToolbar::value_changed),
+                                                              _width_adj,
+                                                              "width",
+                                                              &SPRect::setVisibleWidth));
+        _tracker->addAdjustment(_width_adj->gobj());
+        _width_item->set_sensitive(false);
+
+        gchar const* labels[] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
+        gdouble values[] = {1, 2, 3, 5, 10, 20, 50, 100, 200, 500};
+
+    //    holder->_width_action = create_adjustment_action( "RectWidthAction",
+      //                                                    _("Width"), _("W:"),
+        //                                                  TRUE, "altx-rect",
+          //                                                labels, values, G_N_ELEMENTS(labels),
+    }
+
+    /* H */
+    {
+        auto height_val = prefs->getDouble("/tools/shapes/rect/height", 0);
+
+        _height_adj = Gtk::Adjustment::create(height_val, 0, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
+        _height_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &RectToolbar::value_changed),
+                                                               _height_adj,
+                                                               "height",
+                                                               &SPRect::setVisibleHeight));
+        _tracker->addAdjustment(_height_adj->gobj());
+
+        gchar const* labels[] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
+        gdouble values[] = {1, 2, 3, 5, 10, 20, 50, 100, 200, 500};
+        _height_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("rect-height", _("H:"), _height_adj));
+        _height_item->set_all_tooltip_text(_("Height of rectangle"));
+        _height_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _height_item->set_sensitive(false);
+
+//        holder->_height_action = create_adjustment_action( "RectHeightAction",
+       //                                                    FALSE, nullptr,
+        //                                                   labels, values, G_N_ELEMENTS(labels),
+    }
+
+    /* rx */
+    {
+        gchar const* labels[] = {_("not rounded"), nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
+        gdouble values[] = {0.5, 1, 2, 3, 5, 10, 20, 50, 100};
+        auto rx_val = prefs->getDouble("/tools/shapes/rect/rx", 0);
+        _rx_adj = Gtk::Adjustment::create(rx_val, 0, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
+        _rx_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &RectToolbar::value_changed),
+                                                           _rx_adj,
+                                                           "rx",
+                                                           &SPRect::setVisibleRx));
+        _tracker->addAdjustment(_rx_adj->gobj());
+        _rx_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("rect-rx", _("Rx:"), _rx_adj));
+        _rx_item->set_all_tooltip_text(_("Horizontal radius of rounded corners"));
+        _rx_item->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
+//        eact = create_adjustment_action( "RadiusXAction",
+//                                         labels, values, G_N_ELEMENTS(labels),
+    }
+
+    /* ry */
+    {
+        gchar const* labels[] = {_("not rounded"), nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
+        gdouble values[] = {0.5, 1, 2, 3, 5, 10, 20, 50, 100};
+        auto ry_val = prefs->getDouble("/tools/shapes/rect/ry", 0);
+        _ry_adj = Gtk::Adjustment::create(ry_val, 0, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
+        _ry_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &RectToolbar::value_changed),
+                                                           _ry_adj,
+                                                           "ry",
+                                                           &SPRect::setVisibleRy));
+        _tracker->addAdjustment(_ry_adj->gobj());
+        _ry_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("rect-ry", _("Ry:"), _ry_adj));
+        _ry_item->set_all_tooltip_text(_("Vertical radius of rounded corners"));
+        _ry_item->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
+        //eact = create_adjustment_action( "RadiusYAction",
+        //                                 labels, values, G_N_ELEMENTS(labels),
+    }
+
+    // add the units menu
+    auto unit_menu = _tracker->createAction( "RectUnitsAction", _("Units"), ("") );
+    auto unit_menu_ti = unit_menu->create_tool_item();
+
+    /* Reset */
+    {
+        _not_rounded = Gtk::manage(new Gtk::ToolButton(_("Not rounded")));
+        _not_rounded->set_tooltip_text(_("Make corners sharp"));
+        _not_rounded->set_icon_name(INKSCAPE_ICON("rectangle-make-corners-sharp"));
+        _not_rounded->signal_clicked().connect(sigc::mem_fun(*this, &RectToolbar::defaults));
+        _not_rounded->set_sensitive(true);
+    }
+
+    add(*_mode_item);
+    add(*_width_item);
+    add(*_height_item);
+    add(*_rx_item);
+    add(*_ry_item);
+    add(*unit_menu_ti);
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
+    add(*_not_rounded);
+    show_all();
+    
+    sensitivize();
+
+    _desktop->connectEventContextChanged(sigc::mem_fun(*this, &RectToolbar::watch_ec));
 }
 
 RectToolbar::~RectToolbar()
@@ -94,125 +210,10 @@ RectToolbar::~RectToolbar()
 }
 
 GtkWidget *
-RectToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
+RectToolbar::create(SPDesktop *desktop)
 {
-    auto holder = new RectToolbar(desktop);
-
-    EgeAdjustmentAction* eact = nullptr;
-    GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
-
-    {
-        holder->_mode_action = ege_output_action_new( "RectStateAction", _("<b>New:</b>"), "", nullptr );
-        ege_output_action_set_use_markup( holder->_mode_action, TRUE );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( holder->_mode_action ) );
-    }
-
-    /* W */
-    {
-        gchar const* labels[] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
-        gdouble values[] = {1, 2, 3, 5, 10, 20, 50, 100, 200, 500};
-        holder->_width_action = create_adjustment_action( "RectWidthAction",
-                                                          _("Width"), _("W:"), _("Width of rectangle"),
-                                                          "/tools/shapes/rect/width", 0,
-                                                          TRUE, "altx-rect",
-                                                          0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
-                                                          labels, values, G_N_ELEMENTS(labels),
-                                                          holder->_tracker);
-        ege_adjustment_action_set_focuswidget(holder->_width_action, GTK_WIDGET(desktop->canvas));
-
-        holder->_width_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_width_action));
-        holder->_width_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &RectToolbar::value_changed),
-                                                                      holder->_width_adj,
-                                                                      "width",
-                                                                      &SPRect::setVisibleWidth));
-        gtk_action_set_sensitive( GTK_ACTION(holder->_width_action), FALSE );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(holder->_width_action) );
-    }
-
-    /* H */
-    {
-        gchar const* labels[] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
-        gdouble values[] = {1, 2, 3, 5, 10, 20, 50, 100, 200, 500};
-        holder->_height_action = create_adjustment_action( "RectHeightAction",
-                                                           _("Height"), _("H:"), _("Height of rectangle"),
-                                                           "/tools/shapes/rect/height", 0,
-                                                           FALSE, nullptr,
-                                                           0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
-                                                           labels, values, G_N_ELEMENTS(labels),
-                                                           holder->_tracker);
-        ege_adjustment_action_set_focuswidget(holder->_height_action, GTK_WIDGET(desktop->canvas));
-        holder->_height_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_height_action));
-        holder->_height_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &RectToolbar::value_changed),
-                                                                       holder->_height_adj,
-                                                                       "height",
-                                                                       &SPRect::setVisibleHeight));
-        gtk_action_set_sensitive( GTK_ACTION(holder->_height_action), FALSE );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(holder->_height_action) );
-    }
-
-    /* rx */
-    {
-        gchar const* labels[] = {_("not rounded"), nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
-        gdouble values[] = {0.5, 1, 2, 3, 5, 10, 20, 50, 100};
-        eact = create_adjustment_action( "RadiusXAction",
-                                         _("Horizontal radius"), _("Rx:"), _("Horizontal radius of rounded corners"),
-                                         "/tools/shapes/rect/rx", 0,
-                                         FALSE, nullptr,
-                                         0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
-                                         labels, values, G_N_ELEMENTS(labels),
-                                         holder->_tracker);
-        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
-        holder->_rx_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
-        holder->_rx_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &RectToolbar::value_changed),
-                                                                   holder->_rx_adj,
-                                                                   "rx",
-                                                                   &SPRect::setVisibleRx));
-        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
-    }
-
-    /* ry */
-    {
-        gchar const* labels[] = {_("not rounded"), nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
-        gdouble values[] = {0.5, 1, 2, 3, 5, 10, 20, 50, 100};
-        eact = create_adjustment_action( "RadiusYAction",
-                                         _("Vertical radius"), _("Ry:"), _("Vertical radius of rounded corners"),
-                                         "/tools/shapes/rect/ry", 0,
-                                         FALSE, nullptr,
-                                         0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
-                                         labels, values, G_N_ELEMENTS(labels),
-                                         holder->_tracker);
-        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
-        holder->_ry_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
-        holder->_ry_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*holder, &RectToolbar::value_changed),
-                                                                   holder->_ry_adj,
-                                                                   "ry",
-                                                                   &SPRect::setVisibleRy));
-        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
-    }
-
-    // add the units menu
-    {
-        InkSelectOneAction* act = holder->_tracker->createAction( "RectUnitsAction", _("Units"), ("") );
-        gtk_action_group_add_action( mainActions, act->gobj() );
-    }
-
-    /* Reset */
-    {
-        holder->_not_rounded = ink_action_new( "RectResetAction",
-                                               _("Not rounded"),
-                                               _("Make corners sharp"),
-                                               INKSCAPE_ICON("rectangle-make-corners-sharp"),
-                                               secondarySize );
-        g_signal_connect_after( G_OBJECT(holder->_not_rounded), "activate", G_CALLBACK(&RectToolbar::defaults), holder );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(holder->_not_rounded) );
-        gtk_action_set_sensitive( GTK_ACTION(holder->_not_rounded), TRUE );
-    }
-
-    holder->sensitivize();
-
-    desktop->connectEventContextChanged(sigc::mem_fun(*holder, &RectToolbar::watch_ec));
-
-    return GTK_WIDGET(holder->gobj());
+    auto toolbar = new RectToolbar(desktop);
+    return GTK_WIDGET(toolbar->gobj());
 }
 
 void
@@ -265,27 +266,25 @@ void
 RectToolbar::sensitivize()
 {
     if (_rx_adj->get_value() == 0 && _ry_adj->get_value() == 0 && _single) { // only for a single selected rect (for now)
-        gtk_action_set_sensitive( GTK_ACTION(_not_rounded), FALSE );
+        _not_rounded->set_sensitive(false);
     } else {
-        gtk_action_set_sensitive( GTK_ACTION(_not_rounded), TRUE );
+        _not_rounded->set_sensitive(true);
     }
 }
 
 void
-RectToolbar::defaults( GtkWidget * /*widget*/, GObject *obj)
+RectToolbar::defaults()
 {
-    auto toolbar = reinterpret_cast<RectToolbar*>(obj);
-
-    toolbar->_rx_adj->set_value(0.0);
-    toolbar->_ry_adj->set_value(0.0);
+    _rx_adj->set_value(0.0);
+    _ry_adj->set_value(0.0);
 
 #if !GTK_CHECK_VERSION(3,18,0)
     // this is necessary if the previous value was 0, but we still need to run the callback to change all selected objects
-    toolbar->_rx_adj->value_changed();
-    toolbar->_ry_adj->value_changed();
+    _rx_adj->value_changed();
+    _ry_adj->value_changed();
 #endif
 
-    toolbar->sensitivize();
+    sensitivize();
 }
 
 void
@@ -344,14 +343,14 @@ RectToolbar::selection_changed(Inkscape::Selection *selection)
     _single = false;
 
     if (n_selected == 0) {
-        gtk_action_set_label(GTK_ACTION(_mode_action), _("<b>New:</b>"));
-        gtk_action_set_sensitive(GTK_ACTION(_width_action), FALSE);
-        gtk_action_set_sensitive(GTK_ACTION(_height_action), FALSE);
+        _mode_item->set_markup(_("<b>New:</b>"));
+        _width_item->set_sensitive(false);
+        _height_item->set_sensitive(false);
     } else if (n_selected == 1) {
-        gtk_action_set_label(GTK_ACTION(_mode_action), _("<b>Change:</b>"));
+        _mode_item->set_markup(_("<b>Change:</b>"));
         _single = true;
-        gtk_action_set_sensitive(GTK_ACTION(_width_action), TRUE);
-        gtk_action_set_sensitive(GTK_ACTION(_height_action), TRUE);
+        _width_item->set_sensitive(true);
+        _height_item->set_sensitive(true);
 
         if (repr) {
             _repr = repr;
@@ -363,7 +362,7 @@ RectToolbar::selection_changed(Inkscape::Selection *selection)
     } else {
         // FIXME: implement averaging of all parameters for multiple selected
         //gtk_label_set_markup(GTK_LABEL(l), _("<b>Average:</b>"));
-        gtk_action_set_label(GTK_ACTION(_mode_action), _("<b>Change:</b>"));
+        _mode_item->set_markup(_("<b>Change:</b>"));
         sensitivize();
     }
 }

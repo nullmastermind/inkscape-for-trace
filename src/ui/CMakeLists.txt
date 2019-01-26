@@ -180,6 +180,7 @@ set(ui_SRC
 	widget/ink-select-one-action.cpp
 	widget/ink-spinscale.cpp
 	widget/insertordericon.cpp
+        widget/label-tool-item.cpp
 	widget/labelled.cpp
 	widget/layer-selector.cpp
 	widget/layertypeicon.cpp
@@ -411,6 +412,7 @@ set(ui_SRC
     widget/ink-flow-box.h
 	widget/ink-select-one-action.h
 	widget/ink-spinscale.h
+        widget/label-tool-item.h
 	widget/labelled.h
 	widget/layer-selector.h
 	widget/layertypeicon.h

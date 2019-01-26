@@ -203,7 +203,7 @@ static struct {
       SP_VERB_INVALID, nullptr, nullptr},
     { "/tools/shapes/star",   "star_toolbox",   nullptr, Inkscape::UI::Toolbar::StarToolbar::prep,              "StarToolbar",
       SP_VERB_CONTEXT_STAR_PREFS,   "/tools/shapes/star",     N_("Style of new stars")},
-    { "/tools/shapes/rect",   "rect_toolbox",   nullptr, Inkscape::UI::Toolbar::RectToolbar::prep,              "RectToolbar",
+    { "/tools/shapes/rect",   "rect_toolbox",   Inkscape::UI::Toolbar::RectToolbar::create, nullptr,             "RectToolbar",
       SP_VERB_CONTEXT_RECT_PREFS,   "/tools/shapes/rect",     N_("Style of new rectangles")},
     { "/tools/shapes/3dbox",  "3dbox_toolbox",  nullptr, Inkscape::UI::Toolbar::Box3DToolbar::prep,             "3DBoxToolbar",
       SP_VERB_CONTEXT_3DBOX_PREFS,  "/tools/shapes/3dbox",    N_("Style of new 3D boxes")},

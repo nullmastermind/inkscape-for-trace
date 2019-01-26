@@ -51,7 +51,7 @@ protected:
     bool on_create_menu_proxy() override;
 
 public:
-    SpinButtonToolItem(const Glib::ustring           name,
+    SpinButtonToolItem(const Glib::ustring            name,
                        const Glib::ustring&           label_text,
                        Glib::RefPtr<Gtk::Adjustment>& adjustment,
                        double                         climb_rate = 0.1,
