@@ -386,14 +386,21 @@ Application::add_gtk_css()
         int colorset_inverse = colorset ^ 0xffffff00;
         gchar colornamed_inverse[64];
         sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
-        css_str += "*{ -gtk-icon-style: symbolic;}";
-        css_str += "image{ color:";
-        css_str += colornamed;
-        css_str += ";}";
-        css_str += "#iconinverse{ color:";
-        css_str += colornamed_inverse;
-        css_str += ";}";
-        css_str += "#iconregular{ -gtk-icon-style: regular;}";
+        if (prefs->getBool("/theme/symbolicIconsDefaultColor", true)) {
+            css_str += "*{ -gtk-icon-style: symbolic;}";
+            css_str += "image{ color: @theme_fg_color}";
+            css_str += "iconinverse{ color: @theme_bg_color;}";
+            css_str += "iconregular{ -gtk-icon-style: regular;}";
+        } else {
+            css_str += "*{ -gtk-icon-style: symbolic;}";
+            css_str += "image{ color:";
+            css_str += colornamed;
+            css_str += ";}";
+            css_str += "#iconinverse{ color:";
+            css_str += colornamed_inverse;
+            css_str += ";}";
+            css_str += "#iconregular{ -gtk-icon-style: regular;}";
+        }
     } else {
         css_str += "*{-gtk-icon-style: regular;}";
     }

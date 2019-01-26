@@ -590,6 +590,7 @@ private:
   void themeChange();
   void symbolicThemeCheck();
   void symbolicAddClass();
+  void symbolicDefaultColor();
   InkscapePreferences();
   InkscapePreferences(InkscapePreferences const &d);
   InkscapePreferences operator=(InkscapePreferences const &d);
