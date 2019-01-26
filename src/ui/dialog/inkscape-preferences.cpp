@@ -646,10 +646,41 @@ void InkscapePreferences::symbolicThemeCheck()
         }
     }
 }
+void InkscapePreferences::symbolicDefaultColor(){
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setBool("/theme/symbolicIconsDefaultColor", true);
+    auto const screen = Gdk::Screen::get_default();
+    auto provider = Gtk::CssProvider::create();
+    Glib::ustring css_str = "";
+    if (prefs->getBool("/theme/symbolicIcons", false)) {
+        css_str += "*{ -gtk-icon-style: symbolic;}";
+        css_str += "image{ color: @theme_fg_color}";
+        css_str += "iconinverse{ color: @theme_bg_color;}";
+        css_str += "iconregular{ -gtk-icon-style: regular;}";
+    } else {
+        css_str += "*{-gtk-icon-style: regular;}";
+    }
+    // From 3.16, throws an error which we must catch.
+    try {
+        provider->load_from_data(css_str);
+    }
+#if GTK_CHECK_VERSION(3, 16, 0)
+    // Gtk::CssProviderError not defined until 3.16.
+    catch (const Gtk::CssProviderError &ex) {
+        g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
+    }
+#else
+    catch (...) {
+    }
+#endif
+    Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+}
 
 void InkscapePreferences::symbolicAddClass()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setBool("/theme/symbolicIconsDefaultColor", false);
     auto const screen = Gdk::Screen::get_default();
     auto provider = Gtk::CssProvider::create();
     Glib::ustring css_str = "";
@@ -923,10 +954,16 @@ void InkscapePreferences::initPageUI()
     _symbolic_icons.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicAddClass));
     _page_theme.add_line(true, "", _symbolic_icons, "", "", true),
     _symbolic_color.init(_("Color for symbolic icons:"), "/theme/symbolicColor", 0x000000ff);
-    Gtk::Button *_apply_color = new Gtk::Button(_("Apply color"));
-    _apply_color->set_tooltip_text(_("Apply color to symbolic icons)"));
-    _apply_color->signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicAddClass));
-    _page_theme.add_line(false, "", _symbolic_color, _("Color for symbolic icons"), "", false, _apply_color);
+    Gtk::Button *apply_color = new Gtk::Button(_("Apply color"));
+    apply_color->set_tooltip_text(_("Apply color to symbolic icons)"));
+    apply_color->signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicAddClass));
+    Gtk::Button *theme_decide_color = new Gtk::Button(_("Theme decides"));
+    theme_decide_color->set_tooltip_text(_("Theme decide symbolic icon color)"));
+    theme_decide_color->signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicDefaultColor));
+    Gtk::Box *icon_buttons = Gtk::manage(new Gtk::Box());
+    icon_buttons->pack_start(*apply_color, true, true, 4);
+    icon_buttons->pack_start(*theme_decide_color, true, true, 4);
+    _page_theme.add_line(false, "", _symbolic_color, _("Color for symbolic icons"), "", false, icon_buttons);
     {
         Glib::ustring sizeLabels[] = { C_("Icon size", "Larger"), C_("Icon size", "Large"), C_("Icon size", "Small"),
                                        C_("Icon size", "Smaller") };
