@@ -386,7 +386,6 @@ Application::add_gtk_css()
     int colorset_inverse = colorset ^ 0xffffff00;
     sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
     if (prefs->getBool("/theme/symbolicIcons", false)) {
-<<<<<<< HEAD
         int colorset = prefs->getInt("/theme/symbolicColor", 0x000000ff);
         gchar colornamed[64];
         sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
@@ -409,12 +408,6 @@ Application::add_gtk_css()
             css_str += ";}";
             css_str += "#iconregular{ -gtk-icon-style: regular;}";
         }
-=======
-        css_str += "*{ -gtk-icon-style: symbolic;}";
-        css_str += "image{ color:";
-        css_str += colornamed;
-        css_str += ";}";
->>>>>>> Adding styling refactoring, moving after to other branch the CSS part
     } else {
         css_str += "*{-gtk-icon-style: regular;}";
     }
