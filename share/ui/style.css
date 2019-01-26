@@ -143,15 +143,15 @@
  }
  
  .combobright *{
-     color: @theme_fg_color; 
-     background-color: @theme_bg_color;
-     background-image:image(@theme_bg_color);
+     color: @theme_text_color; 
+     background-color: @theme_base_color;
+     background-image:image(@theme_base_color);
      border-radius:4px;
  }
  .dark .combobright *{
-     color: @theme_bg_color; 
-     background-color: @theme_fg_color;
-     background-image:image(@theme_fg_color);
+     color: @theme_base_color; 
+     background-color: @theme_text_color;
+     background-image:image(@theme_text_color);
      border-radius:4px;
  }
  
