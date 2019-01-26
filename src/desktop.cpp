@@ -1307,6 +1307,12 @@ SPDesktop::iconify()
 }
 
 bool
+SPDesktop::is_darktheme()
+{
+    return getToplevel()->get_style_context()->has_class("dark");
+}
+
+bool
 SPDesktop::is_maximized()
 {
     return 0!=(window_state & GDK_WINDOW_STATE_MAXIMIZED);
