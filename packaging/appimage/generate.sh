@@ -61,7 +61,7 @@ mkdir -p etc/fonts/
 cp /etc/fonts/fonts.conf etc/fonts/
 
 # Bundle Python
-apt-get download libpython2.7-stdlib python2.7 python2.7-minimal libpython2.7-minimal python-lxml
+apt-get download libpython2.7-stdlib python2.7 python2.7-minimal libpython2.7-minimal python-lxml python-numpy python-scour
 find *.deb -exec dpkg-deb -x {} . \;
 rm *deb
 cd -
