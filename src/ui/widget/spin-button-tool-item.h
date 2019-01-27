@@ -49,6 +49,7 @@ private:
 
 protected:
     bool on_create_menu_proxy() override;
+    void on_grab_focus() override;
 
 public:
     SpinButtonToolItem(const Glib::ustring            name,

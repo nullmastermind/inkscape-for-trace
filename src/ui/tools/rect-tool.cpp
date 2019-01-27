@@ -283,7 +283,7 @@ bool RectTool::root_handler(GdkEvent* event) {
         case GDK_KEY_x:
         case GDK_KEY_X:
             if (MOD__ALT_ONLY(event)) {
-                desktop->setToolboxFocusTo ("altx-rect");
+                desktop->setToolboxFocusTo("rect-width");
                 ret = TRUE;
             }
             break;

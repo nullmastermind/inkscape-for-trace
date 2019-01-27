@@ -144,6 +144,42 @@ gpointer sp_search_by_data_recursive(GtkWidget *w, gpointer key)
 }
 
 /**
+ * Returns a named descendent of parent, which has the given name, or nullptr if there's none.
+ *
+ * \param[in] parent The widget to search
+ * \param[in] name   The name of the desired child widget
+ *
+ * \return The specified child widget, or nullptr if it cannot be found
+ */
+Gtk::Widget *
+sp_search_by_name_recursive(Gtk::Widget *parent, const Glib::ustring& name)
+{
+    auto parent_bin = dynamic_cast<Gtk::Bin *>(parent);
+    auto parent_container = dynamic_cast<Gtk::Container *>(parent);
+
+    if (parent && parent->get_name() == name) {
+        return parent;
+    }
+    else if (parent_bin) {
+        auto child = parent_bin->get_child();
+        return sp_search_by_name_recursive(child, name);
+    }
+    else if (parent_container) {
+        auto children = parent_container->get_children();
+
+        for (auto child : children) {
+            auto tmp = sp_search_by_name_recursive(child, name);
+
+            if (tmp) {
+                return tmp;
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+/**
  * Returns the descendant of w which has the given key and value pair, or NULL if there's none.
  */
 GtkWidget *sp_search_by_value_recursive(GtkWidget *w, gchar *key, gchar *value)

@@ -35,6 +35,8 @@ void sp_set_font_size_smaller (GtkWidget *w);
 gpointer sp_search_by_data_recursive(GtkWidget *w, gpointer data);
 GtkWidget *sp_search_by_value_recursive(GtkWidget *w, gchar *key, gchar *value);
 
+Gtk::Widget * sp_search_by_name_recursive(Gtk::Widget          *parent,
+                                          const Glib::ustring&  name);
 #endif
 
 /*

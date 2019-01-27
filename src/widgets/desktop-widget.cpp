@@ -1515,10 +1515,17 @@ void SPDesktopWidget::layoutWidgets()
 void
 SPDesktopWidget::setToolboxFocusTo (const gchar* label)
 {
-    gpointer hb = sp_search_by_data_recursive(aux_toolbox, (gpointer) label);
-    if (hb && GTK_IS_WIDGET(hb))
+    // First try looking for a named widget
+    auto hb = sp_search_by_name_recursive(Glib::wrap(aux_toolbox), label);
+
+    // Fallback to looking for a named data member (deprecated)
+    if (!hb) {
+        hb = Glib::wrap(GTK_WIDGET(sp_search_by_data_recursive(aux_toolbox, (gpointer) label)));
+    }
+
+    if (hb)
     {
-        gtk_widget_grab_focus(GTK_WIDGET(hb));
+        hb->grab_focus();
     }
 }
 

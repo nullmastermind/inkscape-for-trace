@@ -109,7 +109,6 @@ RectToolbar::RectToolbar(SPDesktop *desktop)
 
     //    holder->_width_action = create_adjustment_action( "RectWidthAction",
       //                                                    _("Width"), _("W:"),
-        //                                                  TRUE, "altx-rect",
           //                                                labels, values, G_N_ELEMENTS(labels),
     }
 
@@ -132,7 +131,6 @@ RectToolbar::RectToolbar(SPDesktop *desktop)
         _height_item->set_sensitive(false);
 
 //        holder->_height_action = create_adjustment_action( "RectHeightAction",
-       //                                                    FALSE, nullptr,
         //                                                   labels, values, G_N_ELEMENTS(labels),
     }
 

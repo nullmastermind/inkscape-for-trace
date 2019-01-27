@@ -354,6 +354,7 @@ SpinButtonToolItem::SpinButtonToolItem(const Glib::ustring            name,
 {
     set_margin_start(3);
     set_margin_end(3);
+    set_name(_name);
 
     // Handle button events
     auto btn_focus_in_event_cb = sigc::mem_fun(*this, &SpinButtonToolItem::on_btn_focus_in_event);
@@ -377,6 +378,15 @@ SpinButtonToolItem::SpinButtonToolItem(const Glib::ustring            name,
     hbox->pack_start(*_btn);
     add(*hbox);
     show_all();
+}
+
+/**
+ * \brief Transfers focus to the child spinbutton by default
+ */
+void
+SpinButtonToolItem::on_grab_focus()
+{
+    grab_button_focus();
 }
 
 /**
