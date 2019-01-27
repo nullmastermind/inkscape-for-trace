@@ -948,17 +948,52 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             // this should also contain any swatches that are needed.
             GtkWidget *sub_toolbox = aux_toolboxes[i].create_func(desktop);
             gtk_widget_set_name( sub_toolbox, "SubToolBox" );
-            gtk_size_group_add_widget( grouper, sub_toolbox );
+
+            auto holder = gtk_grid_new();
+            gtk_grid_attach(GTK_GRID(holder), sub_toolbox, 0, 0, 1, 1);
+
+            // This part is just for styling
+            if ( prefs->getBool( "/toolbox/icononly", true) ) {
+                gtk_toolbar_set_style( GTK_TOOLBAR(sub_toolbox), GTK_TOOLBAR_ICONS );
+            }
+
+            GtkIconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/small");
+            gtk_toolbar_set_icon_size( GTK_TOOLBAR(sub_toolbox), static_cast<GtkIconSize>(toolboxSize) );
+            gtk_widget_set_hexpand(sub_toolbox, TRUE);
+
+            // Add a swatch widget if one was specified
+            if ( aux_toolboxes[i].swatch_verb_id != SP_VERB_INVALID ) {
+                auto swatch = new Inkscape::UI::Widget::StyleSwatch( nullptr, _(aux_toolboxes[i].swatch_tip) );
+                swatch->setDesktop( desktop );
+                swatch->setClickVerb( aux_toolboxes[i].swatch_verb_id );
+                swatch->setWatchedTool( aux_toolboxes[i].swatch_tool, true );
+
+#if GTKMM_CHECK_VERSION(3,12,0)
+                swatch->set_margin_start(AUX_BETWEEN_BUTTON_GROUPS);
+                swatch->set_margin_end(AUX_BETWEEN_BUTTON_GROUPS);
+#else
+                swatch->set_margin_left(AUX_BETWEEN_BUTTON_GROUPS);
+                swatch->set_margin_right(AUX_BETWEEN_BUTTON_GROUPS);
+#endif
+
+                swatch->set_margin_top(AUX_SPACING);
+                swatch->set_margin_bottom(AUX_SPACING);
+
+                auto swatch_ = GTK_WIDGET( swatch->gobj() );
+                gtk_grid_attach( GTK_GRID(holder), swatch_, 1, 0, 1, 1);
+            }
 
             // Add the new toolbar into the toolbox (i.e., make it the visible toolbar)
             // and also store a pointer to it inside the toolbox.  This allows the
             // active toolbar to be changed.
-            gtk_container_add(GTK_CONTAINER(toolbox), sub_toolbox);
+            gtk_container_add(GTK_CONTAINER(toolbox), holder);
+            gtk_size_group_add_widget(grouper, holder);
+            sp_set_font_size_smaller( holder );
 
             // TODO: We could make the toolbox a custom subclass of GtkEventBox
             //       so that we can store a list of toolbars, rather than using
             //       GObject data
-            g_object_set_data(G_OBJECT(toolbox), aux_toolboxes[i].data_name, sub_toolbox);
+            g_object_set_data(G_OBJECT(toolbox), aux_toolboxes[i].data_name, holder);
         } else {
             g_warning("Could not create toolbox %s", aux_toolboxes[i].ui_name);
         }
@@ -996,7 +1031,6 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             tmp = nullptr;
 
             // This part is just for styling
-            // TODO: Should we include this in the "create" method too?
             if ( prefs->getBool( "/toolbox/icononly", true) ) {
                 gtk_toolbar_set_style( GTK_TOOLBAR(toolBar), GTK_TOOLBAR_ICONS );
             }
@@ -1007,7 +1041,6 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             gtk_grid_attach( GTK_GRID(holder), toolBar, 0, 0, 1, 1);
 
             // Add a swatch widget if one was specified
-            // TODO: Should this be in the "create" method too?
             if ( aux_toolboxes[i].swatch_verb_id != SP_VERB_INVALID ) {
                 Inkscape::UI::Widget::StyleSwatch *swatch = new Inkscape::UI::Widget::StyleSwatch( nullptr, _(aux_toolboxes[i].swatch_tip) );
                 swatch->setDesktop( desktop );
