@@ -974,7 +974,7 @@ void InkscapePreferences::initPageUI()
     _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
     _dark_theme.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
     // Icons
-    _page_theme.add_group_header(_("Display icons, press reload icons or restart to apply"));
+    _page_theme.add_group_header(_("Display icons"));
     {
         using namespace Inkscape::IO::Resource;
         auto folders = get_foldernames(ICONS, { "application" });
@@ -1014,9 +1014,10 @@ void InkscapePreferences::initPageUI()
     theme_decide_color->set_tooltip_text(_("Theme decide symbolic icon color)"));
     theme_decide_color->signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicDefaultColor));
     Gtk::Box *icon_buttons = Gtk::manage(new Gtk::Box());
+    icon_buttons->pack_start(_symbolic_color, true, true, 4);
     icon_buttons->pack_start(*apply_color, true, true, 4);
     icon_buttons->pack_start(*theme_decide_color, true, true, 4);
-    _page_theme.add_line(false, "", _symbolic_color, _("Color for symbolic icons"), "", false, icon_buttons);
+    _page_theme.add_line(false,_("Color for symbolic icons:"), *icon_buttons, "", _("Color for symbolic icons, theme based or custom. Some icon color changes need reload"), false );
     {
         Glib::ustring sizeLabels[] = { C_("Icon size", "Larger"), C_("Icon size", "Large"), C_("Icon size", "Small"),
                                        C_("Icon size", "Smaller") };
