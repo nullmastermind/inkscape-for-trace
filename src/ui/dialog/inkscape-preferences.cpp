@@ -34,6 +34,7 @@
 #include "cms-system.h"
 #include "document.h"
 #include "enums.h"
+#include "inkscape-window.h"
 #include "inkscape.h"
 #include "message-stack.h"
 #include "path-prefix.h"
@@ -59,6 +60,7 @@
 #include "svg/svg-color.h"
 #include "ui/interface.h"
 #include "ui/widget/style-swatch.h"
+#include "widgets/desktop-widget.h"
 
 #ifdef HAVE_ASPELL
 # include <aspell.h>
@@ -654,7 +656,7 @@ void InkscapePreferences::symbolicDefaultColor(){
     Glib::ustring css_str = "";
     if (prefs->getBool("/theme/symbolicIcons", false)) {
         css_str += "*{ -gtk-icon-style: symbolic;}";
-        css_str += "image{ color: @theme_fg_color}";
+        css_str += ".dark,.bright,.dark image,.bright image{ color: @theme_fg_color;}";
         css_str += "iconinverse{ color: @theme_bg_color;}";
         css_str += "iconregular{ -gtk-icon-style: regular;}";
     } else {
@@ -679,30 +681,35 @@ void InkscapePreferences::symbolicDefaultColor(){
 
 void InkscapePreferences::symbolicAddClass()
 {
+    using namespace Inkscape::IO::Resource;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool("/theme/symbolicIconsDefaultColor", false);
     auto const screen = Gdk::Screen::get_default();
     auto provider = Gtk::CssProvider::create();
     Glib::ustring css_str = "";
+
+    gchar colornamed[64];
+    gchar colornamed_inverse[64];
+    int colorset = prefs->getInt("/theme/symbolicColor", 0x000000ff);
+    sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
+    // Use in case the special widgets have inverse theme background and symbolic
+    int colorset_inverse = colorset ^ 0xffffff00;
+    sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
     if (prefs->getBool("/theme/symbolicIcons", false)) {
-        int colorset = prefs->getInt("/theme/symbolicColor", 0x000000ff);
-        gchar colornamed[64];
-        sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
-        // Use in case the special widgets have inverse theme background and symbolic
-        int colorset_inverse = colorset ^ 0xffffff00;
-        gchar colornamed_inverse[64];
-        sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
         css_str += "*{ -gtk-icon-style: symbolic;}";
-        css_str += "image{ color:";
+        css_str += ".dark *,.bright *{ color:  @theme_fg_color;}";
+        css_str += ".dark,.bright,.dark image,.bright image{ color:";
         css_str += colornamed;
         css_str += ";}";
-        css_str += "iconinverse{ color:";
-        css_str += colornamed_inverse;
-        css_str += ";}";
-        css_str += "iconregular{ -gtk-icon-style: regular;}";
     } else {
         css_str += "*{-gtk-icon-style: regular;}";
     }
+    css_str += ".iconcolornamed, .iconcolornamed image{ color:";
+    css_str += colornamed;
+    css_str += ";}";
+    css_str += ".iconcolornamedinverse, .colornamedinverse image{ color:";
+    css_str += colornamed_inverse;
+    css_str += ";}";
     // From 3.16, throws an error which we must catch.
     try {
         provider->load_from_data(css_str);
@@ -717,6 +724,28 @@ void InkscapePreferences::symbolicAddClass()
     }
 #endif
     Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    // we want a tiny file with 3 or 4 lines, so we can load without removing context
+    // is more understandable than record previously applied
+    Glib::ustring style = get_filename(UIS, "style.css");
+    if (!style.empty()) {
+        auto provider = Gtk::CssProvider::create();
+
+        // From 3.16, throws an error which we must catch.
+        try {
+            provider->load_from_path(style);
+        }
+#if GTK_CHECK_VERSION(3, 16, 0)
+        // Gtk::CssProviderError not defined until 3.16.
+        catch (const Gtk::CssProviderError &ex) {
+            g_critical("CSSProviderError::load_from_path(): failed to load '%s'\n(%s)", style.c_str(),
+                       ex.what().c_str());
+        }
+#else
+        catch (...) {
+        }
+#endif
+        Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
 }
 void InkscapePreferences::themeChange()
 {
@@ -724,6 +753,30 @@ void InkscapePreferences::themeChange()
     g_object_set(gtk_settings_get_default(), "gtk-theme-name", prefs->getString("/theme/gtkTheme").c_str(), NULL);
     g_object_set(gtk_settings_get_default(), "gtk-application-prefer-dark-theme",
                  prefs->getBool("/theme/darkTheme", false), NULL);
+    gchar *gtkThemeName;
+    gboolean gtkApplicationPreferDarkTheme;
+    Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
+    GtkSettings *settings = gtk_settings_get_default();
+    if (window && settings) {
+        g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
+        g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
+        bool dark = gtkApplicationPreferDarkTheme || Glib::ustring(gtkThemeName).find(":dark") != -1;
+        if (!dark) {
+            Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
+            Gdk::RGBA rgba;
+            bool background_set = stylecontext->lookup_color("theme_bg_color", rgba);
+            if (background_set && rgba.get_red() + rgba.get_green() + rgba.get_blue() < 1.0) {
+                dark = true;
+            }
+        }
+        if (dark) {
+            window->get_style_context()->add_class("dark");
+            window->get_style_context()->remove_class("bright");
+        } else {
+            window->get_style_context()->add_class("bright");
+            window->get_style_context()->remove_class("dark");
+        }
+    }
 }
 
 void InkscapePreferences::initPageUI()

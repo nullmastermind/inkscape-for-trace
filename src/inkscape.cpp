@@ -378,6 +378,13 @@ Application::add_gtk_css()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     auto provider = Gtk::CssProvider::create();
     Glib::ustring css_str = "";
+    gchar colornamed[64];
+    gchar colornamed_inverse[64];
+    int colorset = prefs->getInt("/theme/symbolicColor", 0x000000ff);
+    sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
+    // Use in case the special widgets have inverse theme background and symbolic
+    int colorset_inverse = colorset ^ 0xffffff00;
+    sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
     if (prefs->getBool("/theme/symbolicIcons", false)) {
         int colorset = prefs->getInt("/theme/symbolicColor", 0x000000ff);
         gchar colornamed[64];
@@ -388,12 +395,13 @@ Application::add_gtk_css()
         sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
         if (prefs->getBool("/theme/symbolicIconsDefaultColor", true)) {
             css_str += "*{ -gtk-icon-style: symbolic;}";
-            css_str += "image{ color: @theme_fg_color}";
+            css_str += ".dark,.bright,.dark image,.bright image{ color: @theme_fg_color}";
             css_str += "iconinverse{ color: @theme_bg_color;}";
             css_str += "iconregular{ -gtk-icon-style: regular;}";
         } else {
             css_str += "*{ -gtk-icon-style: symbolic;}";
-            css_str += "image{ color:";
+            css_str += ".dark *,.bright *{ color:  @theme_fg_color;}";
+            css_str += ".dark,.bright,.dark image,.bright image{ color:";
             css_str += colornamed;
             css_str += ";}";
             css_str += "#iconinverse{ color:";
@@ -404,9 +412,36 @@ Application::add_gtk_css()
     } else {
         css_str += "*{-gtk-icon-style: regular;}";
     }
-    GtkSettings *settings = gtk_settings_get_default();
+    css_str += ".iconcolornamed, .iconcolornamed image{ color:";
+    css_str += colornamed;
+    css_str += ";}";
+    css_str += ".iconcolornamedinverse, .colornamedinverse image{ color:";
+    css_str += colornamed_inverse;
+    css_str += ";}";
     const gchar *gtk_font_name = "";
+    const gchar *gtkThemeName;
+    const gchar *gtkIconThemeName;
+    gboolean gtkApplicationPreferDarkTheme;
+    GtkSettings *settings = gtk_settings_get_default();
     if (settings) {
+        g_object_get(settings, "gtk-icon-theme-name", &gtkIconThemeName, NULL);
+        g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
+        g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
+        g_object_set(settings, "gtk-application-prefer-dark-theme",
+                     prefs->getBool("/theme/darkTheme", gtkApplicationPreferDarkTheme), NULL);
+        prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName));
+        if (prefs->getString("/theme/gtkTheme") != "") {
+            g_object_set(settings, "gtk-theme-name", prefs->getString("/theme/gtkTheme").c_str(), NULL);
+        } else {
+            prefs->setString("/theme/gtkTheme", Glib::ustring(gtkThemeName));
+        }
+
+        Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+        if (themeiconname != "") {
+            g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
+        } else {
+            prefs->setString("/theme/iconTheme", Glib::ustring(gtkIconThemeName));
+        }
         g_object_get(settings, "gtk-font-name", &gtk_font_name, NULL);
     }
     if (!strncmp(gtk_font_name, "Cantarell", 9)) {
@@ -509,33 +544,6 @@ Application::Application(const char* argv, bool use_gui) :
         icon_theme->prepend_search_path(get_path_ustring(USER, ICONS));
         add_gtk_css();
         /* Load the preferences and menus */
-        GtkSettings *settings = gtk_settings_get_default();
-        if (settings) {
-            const gchar *gtkThemeName;
-            const gchar *gtkIconThemeName;
-            gboolean gtkApplicationPreferDarkTheme;
-            g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
-            g_object_get(settings, "gtk-icon-theme-name", &gtkIconThemeName, NULL);
-            g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
-            g_object_set(settings, "gtk-application-prefer-dark-theme",
-                         prefs->getBool("/theme/darkTheme", gtkApplicationPreferDarkTheme), NULL);
-            prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName));
-            if (prefs->getString("/theme/gtkTheme") != "") {
-                g_object_set(settings, "gtk-theme-name", prefs->getString("/theme/gtkTheme").c_str(), NULL);
-            }
-            else {
-                prefs->setString("/theme/gtkTheme", Glib::ustring(gtkThemeName));
-            }
-
-            Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
-            if (themeiconname != "") {
-                g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
-            } 
-            else {
-                prefs->setString("/theme/iconTheme", Glib::ustring(gtkIconThemeName));
-            }
-        }
-
         load_menus();
         Inkscape::DeviceManager::getManager().loadConfig();
     }

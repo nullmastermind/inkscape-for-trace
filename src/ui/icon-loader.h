@@ -13,16 +13,17 @@
 #define SEEN_INK_ICON_LOADER_H
 
 #include <gdkmm/pixbuf.h>
-#include <gtkmm/box.h>
 #include <gtkmm/image.h>
 
-Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size);
-Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, Gtk::BuiltinIconSize icon_size);
-Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, Gtk::IconSize icon_size);
-Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, GtkIconSize icon_size);
-Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gchar const *prefs_sice);
+Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, gint size);
 Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, Gtk::BuiltinIconSize icon_size);
 Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, Gtk::IconSize icon_size);
 Gtk::Image *sp_get_icon_image(Glib::ustring icon_name, gchar const *prefs_sice);
-GtkWidget *sp_get_icon_image(Glib::ustring icon_name, GtkIconSize icon_size);
-#endif // SEEN_INK_STOCK_ITEMS_H
+GtkWidget  *sp_get_icon_image(Glib::ustring icon_name, GtkIconSize icon_size);
+Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size);
+Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, Gtk::IconSize icon_size);
+Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, Gtk::BuiltinIconSize icon_size);
+Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, GtkIconSize icon_size);
+Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gchar const *prefs_sice);
+
+#endif // SEEN_INK_ICON_LOADER_H

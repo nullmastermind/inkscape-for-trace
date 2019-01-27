@@ -693,7 +693,6 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
         }
         overallTimer = nullptr;
     }
-
     // Ensure that ruler ranges are updated correctly whenever the canvas table
     // is resized
     dtw->_canvas_tbl_size_allocate_connection = dtw->_canvas_tbl->signal_size_allocate().connect(sigc::mem_fun(dtw, &SPDesktopWidget::canvas_tbl_size_allocate));
@@ -890,6 +889,30 @@ sp_desktop_widget_realize (GtkWidget *widget)
     dtw->desktop->set_display_area (d, 10);
 
     dtw->updateNamedview();
+    gchar *gtkThemeName;
+    gboolean gtkApplicationPreferDarkTheme;
+    GtkSettings *settings = gtk_settings_get_default();
+    Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
+    if (settings && window) {
+        g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
+        g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
+        bool dark = gtkApplicationPreferDarkTheme || Glib::ustring(gtkThemeName).find(":dark") != -1;
+        if (!dark) {
+            Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
+            Gdk::RGBA rgba;
+            bool background_set = stylecontext->lookup_color("theme_bg_color", rgba);
+            if (background_set && rgba.get_red() + rgba.get_green() + rgba.get_blue() < 1.0) {
+                dark = true;
+            }
+        }
+        if (dark) {
+            window->get_style_context()->add_class("dark");
+            window->get_style_context()->remove_class("bright");
+        } else {
+            window->get_style_context()->add_class("bright");
+            window->get_style_context()->remove_class("dark");
+        }
+    }
 }
 
 /* This is just to provide access to common functionality from sp_desktop_widget_realize() above
