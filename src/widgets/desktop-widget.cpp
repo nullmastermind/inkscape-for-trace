@@ -907,7 +907,9 @@ sp_desktop_widget_realize (GtkWidget *widget)
         }
         if (dark) {
             window->get_style_context()->add_class("dark");
+            window->get_style_context()->remove_class("bright");
         } else {
+            window->get_style_context()->add_class("bright");
             window->get_style_context()->remove_class("dark");
         }
     }

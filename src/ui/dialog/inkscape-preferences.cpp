@@ -656,7 +656,7 @@ void InkscapePreferences::symbolicDefaultColor(){
     Glib::ustring css_str = "";
     if (prefs->getBool("/theme/symbolicIcons", false)) {
         css_str += "*{ -gtk-icon-style: symbolic;}";
-        css_str += "image{ color: @theme_fg_color}";
+        css_str += ".dark,.bright,.dark image,.bright image{ color: @theme_fg_color;}";
         css_str += "iconinverse{ color: @theme_bg_color;}";
         css_str += "iconregular{ -gtk-icon-style: regular;}";
     } else {
@@ -697,7 +697,8 @@ void InkscapePreferences::symbolicAddClass()
     sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
     if (prefs->getBool("/theme/symbolicIcons", false)) {
         css_str += "*{ -gtk-icon-style: symbolic;}";
-        css_str += "image{ color:";
+        css_str += ".dark *,.bright *{ color:  @theme_fg_color;}";
+        css_str += ".dark,.bright,.dark image,.bright image{ color:";
         css_str += colornamed;
         css_str += ";}";
     } else {
@@ -770,7 +771,9 @@ void InkscapePreferences::themeChange()
         }
         if (dark) {
             window->get_style_context()->add_class("dark");
+            window->get_style_context()->remove_class("bright");
         } else {
+            window->get_style_context()->add_class("bright");
             window->get_style_context()->remove_class("dark");
         }
     }
