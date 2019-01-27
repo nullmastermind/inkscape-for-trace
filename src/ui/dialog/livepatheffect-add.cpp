@@ -150,28 +150,22 @@ bool LivePathEffectAdd::on_filter(Gtk::FlowBoxChild *child)
     return false;
 }
 
-    mainVBox->pack_start(scrolled_window, true, true);
-    add_action_widget(close_button, Gtk::RESPONSE_CLOSE);
-    add_action_widget(add_button, Gtk::RESPONSE_APPLY);
-
-    
-    /**
-     * Signal handlers
-     */
-    effectlist_treeview.signal_button_press_event().connect_notify( sigc::mem_fun(*this, &LivePathEffectAdd::onButtonEvent) );
-    effectlist_treeview.signal_key_press_event().connect_notify(sigc::mem_fun(*this, &LivePathEffectAdd::onKeyEvent));
-    close_button.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectAdd::onClose));
-    add_button.signal_clicked().connect(sigc::mem_fun(*this, &LivePathEffectAdd::onAdd));
-    signal_delete_event().connect( sigc::bind_return(sigc::hide(sigc::mem_fun(*this, &LivePathEffectAdd::onClose)), true ) );
-
-    add_button.grab_default();
-
-    show_all_children();
+void LivePathEffectAdd::on_search()
+{
+    _visiblelpe = 0;
+    _LPESelectorFlowBox->set_filter_func(sigc::mem_fun(*this, &LivePathEffectAdd::on_filter));
+    if (_visiblelpe == 0) {
+        _LPEInfo->set_text(_("Your search do a empty result, please try again"));
+        _LPEInfo->set_visible(true);
+        _LPEInfo->get_style_context()->add_class("lpeinfowarn");
+    } else {
+        _LPEInfo->set_visible(false);
+        _LPEInfo->get_style_context()->remove_class("lpeinfowarn");
+    }
 }
 
 void LivePathEffectAdd::onAdd()
 {
-    applied = true;
     onClose();
 }
 
@@ -186,27 +180,6 @@ void LivePathEffectAdd::onKeyEvent(GdkEventKey* evt)
          onClose();
     }
 }
-
-void LivePathEffectAdd::onButtonEvent(GdkEventButton* evt)
-{
-    // Double click on tree is same as clicking the add button
-    if (evt->type == GDK_2BUTTON_PRESS) {
-        onAdd();
-    }
-}
-
-const Util::EnumData<LivePathEffect::EffectType>*
-LivePathEffectAdd::getActiveData()
-{
-    Gtk::TreeModel::iterator iter = instance().effectlist_treeview.get_selection()->get_selected();
-    if ( iter ) {
-        Gtk::TreeModel::Row row = *iter;
-        return row[instance()._columns.data];
-    }
-
-    return nullptr;
-}
-
 
 void LivePathEffectAdd::show(SPDesktop *desktop)
 {

@@ -78,10 +78,6 @@ enum EffectType {
     INVALID_LPE // This must be last (I made it such that it is not needed anymore I think..., Don't trust on it being last. - johan)
 };
 
-<<<<<<< HEAD
-extern const Util::EnumData<EffectType> LPETypeData[];  /// defined in effect.cpp
-extern const Util::EnumDataConverter<EffectType> LPETypeConverter; /// defined in effect.cpp
-=======
 template <typename E>
 struct EnumEffectData {
     E id;
@@ -983,7 +979,6 @@ const EnumEffectData<EffectType> LPETypeData[] = {
 
 extern const EnumEffectData<EffectType> LPETypeData[];  /// defined in effect.cpp
 extern const EnumEffectDataConverter<EffectType> LPETypeConverter; /// defined in effect.cpp
->>>>>>> fixing coding style and translation and merge from master
 
 } //namespace LivePathEffect
 } //namespace Inkscape

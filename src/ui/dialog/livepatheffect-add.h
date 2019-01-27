@@ -50,12 +50,13 @@ public:
      * Close button was clicked
      */
     void onClose();
-
+    bool on_filter(Gtk::FlowBoxChild *child);
+    void on_search();
+    void on_activate(Gtk::FlowBoxChild *child);
     /**
      * Add button was clicked
      */
     void onAdd();
-
     /**
      * Tree was clicked
      */

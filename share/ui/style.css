@@ -190,108 +190,161 @@
      outline-style : none;
  }
  
+ 
+GtkSpinButton entry {
+    padding-left: 2px;
+    padding-right:0;
+}
+
+spinbutton entry {
+    padding-left: 2px;
+    padding-right:0;
+}
+
+GtkSpinButton undershoot {
+	outline-style : none;
+}
+
+spinbutton undershoot {
+	outline-style : none;
+}
+
+.lpeinfo{
+    font-size:16px;
+    padding:20px;
+}
+#lpedialogselector,
+#lpedialogselector .frame,
+#lpedialogselector .searchbar {
+    border-bottom-width:0;
+    border-top-width:0;
+    outline-width:0;
+    border-left-width:0;
+    border-right-width:0;
+}
+
+#lpeflow GtkFlowBoxChild,
+#lpeflow flowboxchild{
+    border-width:0px;
+    border-radius:6px;
+    margin:10px;
+    margin-bottom:30px;
+    padding-bottom:10px;
+}
+
+#lpeflow GtkFlowBoxChild.lpeactive,
+#lpeflow flowboxchild.lpeactive{
+    margin-bottom:0px;
+    padding-bottom:10px;
+    outline:none;
+}
+
+
+#LPEDialogSelector .frame{
+    border-width:0;
+}
   
- SPRuler {
-     background-color: @theme_bg_color;
-     color:            @theme_fg_color;
- }
- 
- ruler-widget {
-     background-color: @theme_bg_color;
-     color:            @theme_fg_color;
- }
- 
- /* The actual canvas (Inkscape's drawing area). */
- SPCanvas {
-     background-color: white;
- }
- 
- combobox window.popup scrolledwindow treeview separator {
- }
- 
- #font_selector_family {
- }
- 
- #TextFontFamilyAction_combobox {
-     -GtkComboBox-appears-as-list: true;
- }
- 
- #LockGuides,
- #StickyZoom,
- #CMS_Adjust {
-     padding: 0;
- }
- 
- /* Keep palette scrollbar from generating warnings. */
- #PreviewHolderScroller .vertical slider {
-     min-height: 15px;
- }
- 
- /* Override minimum size of container children for palette. */
- #ColorItemPreview {
-   min-height: 5px;
-   min-width:  5px;
- }
- 
- /* Reduce width of Fill and Stroke dialog */
- #ColorModeButton {
-     padding-left: 0;
-     padding-right: 0;
- }
- 
- /* Reduce width of +/- buttons. */
- .up, .down {
-     padding-left: 0;
-     padding-right: 0;
- }
- 
- /* InkSpinScale */
- #InkSpinScale {
-   background : @theme_bg_color;
-   border : 1px black;
-   border-radius: 3px;
-   padding: 0px;
- }
- 
- #InkSpinScale spinbutton {
-   border-color: #eee;
-   border-width: 0 0 0 0;
-   border-radius: 0 3px 3px 0;
-   box-shadow: none;
-   padding: 0 0 0 1px;
-   min-height : 10px;
- }
- 
- /* Hide slider */
- #InkSpinScale slider {
-     background: none;
-     border:     none;
-     outline:    none;
-     min-width:  0px;
-     min-height: 0px;
-     padding:    0px;
-     margin:     0px;
- }
- 
- #InkSpinScale slider, #InkSpinScale highlight {
-     border-top-right-radius : 0;
-     border-bottom-right-radius : 0;
- }
- 
- #InkSpinScale scale {
-     padding: 0px;
- }
- 
- #InkSpinScale trough {
-     min-height: 30px;
- }
- 
- #InkSpinScale box.active {
-   box-shadow: 0 0 0 1px  rgb(74,144,217);
- }
- 
- #InkSpinScale spinbutton entry {
-     padding : 0 ;
-     outline-style : none;
- }
- 
+SPRuler {
+    background-color: @theme_bg_color;
+    color:            @theme_fg_color;
+}
+
+ruler-widget {
+    background-color: @theme_bg_color;
+    color:            @theme_fg_color;
+}
+
+/* The actual canvas (Inkscape's drawing area). */
+SPCanvas {
+    background-color: white;
+}
+
+combobox window.popup scrolledwindow treeview separator {
+}
+
+#font_selector_family {
+}
+
+#TextFontFamilyAction_combobox {
+    -GtkComboBox-appears-as-list: true;
+}
+
+#LockGuides,
+#StickyZoom,
+#CMS_Adjust {
+    padding: 0;
+}
+
+/* Keep palette scrollbar from generating warnings. */
+#PreviewHolderScroller .vertical slider {
+    min-height: 15px;
+}
+
+/* Override minimum size of container children for palette. */
+#ColorItemPreview {
+    min-height: 5px;
+    min-width:  5px;
+}
+
+/* Reduce width of Fill and Stroke dialog */
+#ColorModeButton {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Reduce width of +/- buttons. */
+.up, .down {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* InkSpinScale */
+#InkSpinScale {
+    background : @theme_bg_color;
+    border : 1px black;
+    border-radius: 3px;
+    padding: 0px;
+}
+
+#InkSpinScale spinbutton {
+    border-color: #eee;
+    border-width: 0 0 0 0;
+    border-radius: 0 3px 3px 0;
+    box-shadow: none;
+    padding: 0 0 0 1px;
+    min-height : 10px;
+}
+
+/* Hide slider */
+#InkSpinScale slider {
+    background: none;
+    border:     none;
+    outline:    none;
+    min-width:  0px;
+    min-height: 0px;
+    padding:    0px;
+    margin:     0px;
+}
+
+#InkSpinScale slider, #InkSpinScale highlight {
+    border-top-right-radius : 0;
+    border-bottom-right-radius : 0;
+}
+
+#InkSpinScale scale {
+    padding: 0px;
+}
+
+#InkSpinScale trough {
+    min-height: 30px;
+}
+
+#InkSpinScale box.active {
+    box-shadow: 0 0 0 1px  rgb(74,144,217);
+}
+
+#InkSpinScale spinbutton entry {
+    padding : 0 ;
+    outline-style : none;
+}
+

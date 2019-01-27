@@ -1294,12 +1294,6 @@ SPDesktop::is_iconified()
     return 0!=(window_state & GDK_WINDOW_STATE_ICONIFIED);
 }
 
-bool
-SPDesktop::is_darktheme()
-{
-    return getToplevel()->get_style_context()->has_class("dark");
-}
-
 void
 SPDesktop::iconify()
 {
