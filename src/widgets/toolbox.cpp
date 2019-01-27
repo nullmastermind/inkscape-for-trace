@@ -201,7 +201,7 @@ static struct {
       SP_VERB_INVALID, nullptr, nullptr},
     { "/tools/measure",   "measure_toolbox",   nullptr, Inkscape::UI::Toolbar::MeasureToolbar::prep,              "MeasureToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
-    { "/tools/shapes/star",   "star_toolbox",   nullptr, Inkscape::UI::Toolbar::StarToolbar::prep,              "StarToolbar",
+    { "/tools/shapes/star",   "star_toolbox",   Inkscape::UI::Toolbar::StarToolbar::create,   nullptr,  "StarToolbar",
       SP_VERB_CONTEXT_STAR_PREFS,   "/tools/shapes/star",     N_("Style of new stars")},
     { "/tools/shapes/rect",   "rect_toolbox",   Inkscape::UI::Toolbar::RectToolbar::create, nullptr,             "RectToolbar",
       SP_VERB_CONTEXT_RECT_PREFS,   "/tools/shapes/rect",     N_("Style of new rectangles")},

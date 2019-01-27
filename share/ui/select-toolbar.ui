@@ -106,31 +106,6 @@
     <toolitem action='MeasureOffsetAction' />
   </toolbar>
 
-  <toolbar name='StarToolbar'>
-    <toolitem action='StarStateAction' />
-    <toolitem action='FlatAction' />
-    <separator />
-    <toolitem action='MagnitudeAction' />
-    <toolitem action='SpokeAction' />
-    <toolitem action='RoundednessAction' />
-    <toolitem action='RandomizationAction' />
-    <separator />
-    <toolitem action='StarResetAction' />
-  </toolbar>
-
-<!--
-  <toolbar name='RectToolbar'>
-    <toolitem action='RectStateAction' />
-    <toolitem action='RectWidthAction' />
-    <toolitem action='RectHeightAction' />
-    <toolitem action='RadiusXAction' />
-    <toolitem action='RadiusYAction' />
-    <toolitem action='RectUnitsAction' />
-    <separator />
-    <toolitem action='RectResetAction' />
-  </toolbar>
--->
-
   <toolbar name='3DBoxToolbar'>
     <toolitem action='3DBoxAngleXAction' />
     <toolitem action='3DBoxVPXStateAction' />

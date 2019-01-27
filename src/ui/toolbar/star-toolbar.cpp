@@ -25,14 +25,15 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "star-toolbar.h"
+
 #include <glibmm/i18n.h>
 
-#include "star-toolbar.h"
+#include <gtkmm/radiotoolbutton.h>
+#include <gtkmm/separatortoolitem.h>
 
 #include "desktop.h"
 #include "document-undo.h"
-#include "widgets/ink-action.h"
-#include "widgets/toolbox.h"
 #include "selection.h"
 #include "verbs.h"
 
@@ -41,21 +42,13 @@
 #include "ui/icon-names.h"
 #include "ui/tools/star-tool.h"
 #include "ui/uxmanager.h"
-#include "ui/widget/ink-select-one-action.h"
-
-#include "widgets/ege-adjustment-action.h"
-#include "widgets/ege-output-action.h"
+#include "ui/widget/label-tool-item.h"
+#include "ui/widget/spin-button-tool-item.h"
 
 #include "xml/node-event-vector.h"
 
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
-using Inkscape::UI::ToolboxFactory;
-
-
-//########################
-//##       Star         ##
-//########################
 
 static Inkscape::XML::NodeEventVector star_tb_repr_events =
 {
@@ -69,6 +62,130 @@ static Inkscape::XML::NodeEventVector star_tb_repr_events =
 namespace Inkscape {
 namespace UI {
 namespace Toolbar {
+StarToolbar::StarToolbar(SPDesktop *desktop) :
+    Toolbar(desktop),
+    _mode_item(Gtk::manage(new UI::Widget::LabelToolItem(_("<b>New:</b>")))),
+    _repr(nullptr)
+{
+    _mode_item->set_use_markup(true);
+    add(*_mode_item);
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool isFlatSided = prefs->getBool("/tools/shapes/star/isflatsided", true);
+
+    /* Flatsided checkbox */
+    {
+        Gtk::RadioToolButton::Group flat_item_group;
+
+        auto flat_polygon_button = Gtk::manage(new Gtk::RadioToolButton(flat_item_group, _("Polygon")));
+        flat_polygon_button->set_tooltip_text(_("Regular polygon (with one handle) instead of a star"));
+        flat_polygon_button->set_icon_name(INKSCAPE_ICON("draw-polygon"));
+        _flat_item_buttons.push_back(flat_polygon_button);
+
+        auto flat_star_button = Gtk::manage(new Gtk::RadioToolButton(flat_item_group, _("Star")));
+        flat_star_button->set_tooltip_text(_("Star instead of a regular polygon (with one handle)"));
+        flat_star_button->set_icon_name(INKSCAPE_ICON("draw-star"));
+        _flat_item_buttons.push_back(flat_star_button);
+
+        _flat_item_buttons[ isFlatSided ? 0 : 1 ]->set_active();
+
+        int btn_index = 0;
+
+        for (auto btn : _flat_item_buttons)
+        {
+            add(*btn);
+            btn->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &StarToolbar::side_mode_changed), btn_index++));
+        }
+    }
+
+    add(*Gtk::manage(new Gtk::SeparatorToolItem()));
+
+    /* Magnitude */
+    {
+        std::vector<Glib::ustring> labels = {_("triangle/tri-star"), _("square/quad-star"), _("pentagon/five-pointed star"), _("hexagon/six-pointed star"), "", "", "", "", ""};
+        std::vector<double>        values = {                     3,                     4,                               5,                             6, 7,   8, 10, 12, 20};
+        auto magnitude_val = prefs->getDouble("/tools/shapes/star/magnitude", 3);
+        _magnitude_adj = Gtk::Adjustment::create(magnitude_val, 3, 1024, 1, 5);
+        _magnitude_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("star-magnitude", _("Corners:"), _magnitude_adj, 1.0, 0));
+        _magnitude_item->set_tooltip_text(_("Number of corners of a polygon or star"));
+        _magnitude_item->set_custom_numeric_menu_data(values, labels);
+        _magnitude_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _magnitude_adj->signal_value_changed().connect(sigc::mem_fun(*this, &StarToolbar::magnitude_value_changed));
+        _magnitude_item->set_sensitive(true);
+        add(*_magnitude_item);
+    }
+
+    /* Spoke ratio */
+    {
+        std::vector<Glib::ustring> labels = {_("thin-ray star"),  "", _("pentagram"), _("hexagram"), _("heptagram"), _("octagram"), _("regular polygon")};
+        std::vector<double>        values = {              0.01, 0.2,          0.382,         0.577,          0.692,         0.765,                    1};
+        auto prop_val = prefs->getDouble("/tools/shapes/star/proportion", 0.5);
+        _spoke_adj = Gtk::Adjustment::create(prop_val, 0.01, 1.0, 0.01, 0.1);
+        _spoke_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("star-spoke", _("Spoke ratio:"), _spoke_adj));
+        // TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
+        // Base radius is the same for the closest handle.
+        _spoke_item->set_tooltip_text(_("Base radius to tip radius ratio"));
+        _spoke_item->set_custom_numeric_menu_data(values, labels);
+        _spoke_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _spoke_adj->signal_value_changed().connect(sigc::mem_fun(*this, &StarToolbar::proportion_value_changed));
+
+        if ( !isFlatSided ) {
+            _spoke_item->set_visible(true);
+        } else {
+            _spoke_item->set_visible(false);
+        }
+
+        add(*_spoke_item);
+    }
+
+    /* Roundedness */
+    {
+        std::vector<Glib::ustring> labels = {_("stretched"), _("twisted"), _("slightly pinched"), _("NOT rounded"), _("slightly rounded"),
+                                 _("visibly rounded"), _("well rounded"), _("amply rounded"), "", _("stretched"), _("blown up")};
+        std::vector<double> values = {-1, -0.2, -0.03, 0, 0.05, 0.1, 0.2, 0.3, 0.5, 1, 10};
+        auto roundedness_val = prefs->getDouble("/tools/shapes/star/rounded", 0.0);
+        _roundedness_adj = Gtk::Adjustment::create(roundedness_val, -10.0, 10.0, 0.01, 0.1);
+        _roundedness_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("star-roundedness", _("Rounded:"), _roundedness_adj));
+        _roundedness_item->set_tooltip_text(_("How rounded are the corners (0 for sharp)"));
+        _roundedness_item->set_custom_numeric_menu_data(values, labels);
+        _roundedness_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _roundedness_adj->signal_value_changed().connect(sigc::mem_fun(*this, &StarToolbar::rounded_value_changed));
+        _roundedness_item->set_sensitive(true);
+        add(*_roundedness_item);
+    }
+
+    /* Randomization */
+    {
+        std::vector<Glib::ustring> labels = {_("NOT randomized"), _("slightly irregular"), _("visibly randomized"), _("strongly randomized"), _("blown up")};
+        std::vector<double>        values = {                  0,                    0.01,                     0.1,                      0.5,            10};
+        auto randomized_val = prefs->getDouble("/tools/shapes/star/randomized", 0.0);
+        _randomization_adj = Gtk::Adjustment::create(randomized_val, -10.0, 10.0, 0.001, 0.01);
+        _randomization_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("star-randomized", _("Randomized:"), _randomization_adj, 0.1, 3));
+        _randomization_item->set_tooltip_text(_("Scatter randomly the corners and angles"));
+        _randomization_item->set_custom_numeric_menu_data(values, labels);
+        _randomization_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _randomization_adj->signal_value_changed().connect(sigc::mem_fun(*this, &StarToolbar::randomized_value_changed));
+        _randomization_item->set_sensitive(true);
+        add(*_randomization_item);
+    }
+
+    add(*Gtk::manage(new Gtk::SeparatorToolItem()));
+    
+    /* Reset */
+    {
+        _reset_item = Gtk::manage(new Gtk::ToolButton(_("Defaults")));
+        _reset_item->set_icon_name(INKSCAPE_ICON("edit-clear"));
+        _reset_item->set_tooltip_text(_("Reset shape parameters to defaults (use Inkscape Preferences > Tools to change defaults)"));
+        _reset_item->signal_clicked().connect(sigc::mem_fun(*this, &StarToolbar::defaults));
+        _reset_item->set_sensitive(true);
+        add(*_reset_item);
+    }
+
+    desktop->connectEventContextChanged(sigc::mem_fun(*this, &StarToolbar::watch_ec));
+
+    show_all();
+}
+
 StarToolbar::~StarToolbar()
 {
     if (_repr) { // remove old listener
@@ -79,156 +196,10 @@ StarToolbar::~StarToolbar()
 }
 
 GtkWidget *
-StarToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
+StarToolbar::create(SPDesktop *desktop)
 {
-    auto holder = new StarToolbar(desktop);
-
-    GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool isFlatSided = prefs->getBool("/tools/shapes/star/isflatsided", true);
-
-    EgeAdjustmentAction* eact = nullptr;
-
-    {
-        holder->_mode_action = ege_output_action_new( "StarStateAction", _("<b>New:</b>"), "", nullptr );
-        ege_output_action_set_use_markup( holder->_mode_action, TRUE );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( holder->_mode_action ) );
-    }
-
-    /* Flatsided checkbox */
-    {
-        InkSelectOneActionColumns columns;
-
-        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
-
-        Gtk::TreeModel::Row row;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Polygon");
-        row[columns.col_tooltip  ] = _("Regular polygon (with one handle) instead of a star");
-        row[columns.col_icon     ] = INKSCAPE_ICON("draw-polygon");
-        row[columns.col_sensitive] = true;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Star");
-        row[columns.col_tooltip  ] = _("Star instead of a regular polygon (with one handle)");
-        row[columns.col_icon     ] = INKSCAPE_ICON("draw-star");
-        row[columns.col_sensitive] = true;
-
-        holder->_flat_action =
-            InkSelectOneAction::create( "FlatAction",        // Name
-                                        (""),                // Label
-                                        (""),                // Tooltip
-                                        "Not Used",          // Icon
-                                        store );             // Tree store
-        holder->_flat_action->use_radio( true );
-        holder->_flat_action->use_label( false );
-        holder->_flat_action->set_active( isFlatSided ? 0 : 1 );
-
-        gtk_action_group_add_action( mainActions, GTK_ACTION( holder->_flat_action->gobj() ));
-
-        holder->_flat_action->signal_changed().connect(sigc::mem_fun(*holder, &StarToolbar::side_mode_changed));
-    }
-
-    /* Magnitude */
-    {
-        gchar const* labels[] = {_("triangle/tri-star"), _("square/quad-star"), _("pentagon/five-pointed star"), _("hexagon/six-pointed star"), nullptr, nullptr, nullptr, nullptr, nullptr};
-        gdouble values[] = {3, 4, 5, 6, 7, 8, 10, 12, 20};
-        eact = create_adjustment_action( "MagnitudeAction",
-                                         _("Corners"), _("Corners:"), _("Number of corners of a polygon or star"),
-                                         "/tools/shapes/star/magnitude", 3,
-                                         FALSE, nullptr,
-                                         3, 1024, 1, 5,
-                                         labels, values, G_N_ELEMENTS(labels),
-                                         nullptr /*unit tracker*/,
-                                         1.0, 0 );
-        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
-
-        holder->_magnitude_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
-        holder->_magnitude_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &StarToolbar::magnitude_value_changed));
-        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
-        gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
-    }
-
-    /* Spoke ratio */
-    {
-        gchar const* labels[] = {_("thin-ray star"), nullptr, _("pentagram"), _("hexagram"), _("heptagram"), _("octagram"), _("regular polygon")};
-        gdouble values[] = {0.01, 0.2, 0.382, 0.577, 0.692, 0.765, 1};
-        holder->_prop_action = create_adjustment_action( "SpokeAction",
-                                         _("Spoke ratio"), _("Spoke ratio:"),
-                                         // TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
-                                         // Base radius is the same for the closest handle.
-                                         _("Base radius to tip radius ratio"),
-                                         "/tools/shapes/star/proportion", 0.5,
-                                         FALSE, nullptr,
-                                         0.01, 1.0, 0.01, 0.1,
-                                         labels, values, G_N_ELEMENTS(labels)
-                                         );
-        ege_adjustment_action_set_focuswidget(holder->_prop_action, GTK_WIDGET(desktop->canvas));
-        holder->_spoke_adj = Glib::wrap(ege_adjustment_action_get_adjustment(holder->_prop_action));
-        holder->_spoke_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &StarToolbar::proportion_value_changed));
-        gtk_action_group_add_action( mainActions, GTK_ACTION(holder->_prop_action) );
-
-        if ( !isFlatSided ) {
-            gtk_action_set_visible( GTK_ACTION(holder->_prop_action), TRUE );
-        } else {
-            gtk_action_set_visible( GTK_ACTION(holder->_prop_action), FALSE );
-        }
-    }
-
-    /* Roundedness */
-    {
-        gchar const* labels[] = {_("stretched"), _("twisted"), _("slightly pinched"), _("NOT rounded"), _("slightly rounded"),
-                                 _("visibly rounded"), _("well rounded"), _("amply rounded"), nullptr, _("stretched"), _("blown up")};
-        gdouble values[] = {-1, -0.2, -0.03, 0, 0.05, 0.1, 0.2, 0.3, 0.5, 1, 10};
-        eact = create_adjustment_action( "RoundednessAction",
-                                         _("Rounded"), _("Rounded:"), _("How much rounded are the corners (0 for sharp)"),
-                                         "/tools/shapes/star/rounded", 0.0,
-                                         FALSE, nullptr,
-                                         -10.0, 10.0, 0.01, 0.1,
-                                         labels, values, G_N_ELEMENTS(labels)
-                                         );
-        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
-        holder->_roundedness_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
-        holder->_roundedness_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &StarToolbar::rounded_value_changed));
-        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
-        gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
-    }
-
-    /* Randomization */
-    {
-        gchar const* labels[] = {_("NOT randomized"), _("slightly irregular"), _("visibly randomized"), _("strongly randomized"), _("blown up")};
-        gdouble values[] = {0, 0.01, 0.1, 0.5, 10};
-        eact = create_adjustment_action( "RandomizationAction",
-                                         _("Randomized"), _("Randomized:"), _("Scatter randomly the corners and angles"),
-                                         "/tools/shapes/star/randomized", 0.0,
-                                         FALSE, nullptr,
-                                         -10.0, 10.0, 0.001, 0.01,
-                                         labels, values, G_N_ELEMENTS(labels),
-                                         nullptr /*unit tracker*/, 0.1, 3 );
-        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
-        holder->_randomization_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
-        holder->_randomization_adj->signal_value_changed().connect(sigc::mem_fun(*holder, &StarToolbar::randomized_value_changed));
-        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
-        gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
-    }
-
-    /* Reset */
-    {
-        InkAction* inky = ink_action_new( "StarResetAction",
-                                          _("Defaults"),
-                                          _("Reset shape parameters to defaults (use Inkscape Preferences > Tools to change defaults)"),
-                                          INKSCAPE_ICON("edit-clear"),
-                                          GTK_ICON_SIZE_SMALL_TOOLBAR);
-        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(StarToolbar::defaults), holder);
-        gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-        gtk_action_set_sensitive( GTK_ACTION(inky), TRUE );
-    }
-
-    desktop->connectEventContextChanged(sigc::mem_fun(*holder, &StarToolbar::watch_ec));
-
-    return GTK_WIDGET(holder->gobj());
+    auto toolbar = new StarToolbar(desktop);
+    return GTK_WIDGET(toolbar->gobj());
 }
 
 void
@@ -252,8 +223,8 @@ StarToolbar::side_mode_changed(int mode)
     Inkscape::Selection *selection = _desktop->getSelection();
     bool modmade = false;
 
-    if ( _prop_action ) {
-        gtk_action_set_visible( GTK_ACTION(_prop_action), !flat );
+    if (_spoke_item) {
+        _spoke_item->set_visible(!flat);
     }
 
     auto itemlist= selection->items();
@@ -450,14 +421,11 @@ StarToolbar::randomized_value_changed()
 }
 
 void
-StarToolbar::defaults(GtkWidget * /*widget*/, gpointer user_data)
+StarToolbar::defaults()
 {
-    auto toolbar = reinterpret_cast<StarToolbar *>(user_data);
 
     // FIXME: in this and all other _default functions, set some flag telling the value_changed
     // callbacks to lump all the changes for all selected objects in one undo step
-
-    GtkAdjustment *adj = nullptr;
 
     // fixme: make settable in prefs!
     gint mag = 5;
@@ -466,20 +434,20 @@ StarToolbar::defaults(GtkWidget * /*widget*/, gpointer user_data)
     gdouble randomized = 0;
     gdouble rounded = 0;
 
-    toolbar->_flat_action->set_active ( flat ? 0 : 1 );
+    _flat_item_buttons[ flat ? 0 : 1 ]->set_active();
 
-    gtk_action_set_visible( GTK_ACTION(toolbar->_prop_action), !flat );
+    _spoke_item->set_visible(!flat);
 
-    toolbar->_magnitude_adj->set_value(mag);
-    toolbar->_spoke_adj->set_value(prop);
-    toolbar->_roundedness_adj->set_value(rounded);
-    toolbar->_randomization_adj->set_value(randomized);
+    _magnitude_adj->set_value(mag);
+    _spoke_adj->set_value(prop);
+    _roundedness_adj->set_value(rounded);
+    _randomization_adj->set_value(randomized);
 
 #if !GTK_CHECK_VERSION(3,18,0)
-    toolbar->_magnitude_adj->value_changed();
-    toolbar->_spoke_adj->value_changed();
-    toolbar->_roundedness_adj->value_changed();
-    toolbar->_randomization_adj->value_changed();
+    _magnitude_adj->value_changed();
+    _spoke_adj->value_changed();
+    _roundedness_adj->value_changed();
+    _randomization_adj->value_changed();
 #endif
 }
 
@@ -520,9 +488,9 @@ StarToolbar::selection_changed(Inkscape::Selection *selection)
     }
 
     if (n_selected == 0) {
-        gtk_action_set_label(GTK_ACTION(_mode_action), _("<b>New:</b>"));
+        _mode_item->set_markup(_("<b>New:</b>"));
     } else if (n_selected == 1) {
-        gtk_action_set_label(GTK_ACTION(_mode_action), _("<b>Change:</b>"));
+        _mode_item->set_markup(_("<b>Change:</b>"));
 
         if (repr) {
             _repr = repr;
@@ -566,11 +534,11 @@ StarToolbar::event_attr_changed(Inkscape::XML::Node *repr, gchar const *name,
     } else if (!strcmp(name, "inkscape:flatsided")) {
         char const *flatsides = repr->attribute("inkscape:flatsided");
         if ( flatsides && !strcmp(flatsides,"false") ) {
-            toolbar->_flat_action->set_active(1);
-            gtk_action_set_visible( GTK_ACTION(toolbar->_prop_action), TRUE );
+            toolbar->_flat_item_buttons[1]->set_active();
+            toolbar->_spoke_item->set_visible(true);
         } else {
-            toolbar->_flat_action->set_active(0);
-            gtk_action_set_visible( GTK_ACTION(toolbar->_prop_action), FALSE );
+            toolbar->_flat_item_buttons[0]->set_active();
+            toolbar->_spoke_item->set_visible(false);
         }
     } else if ((!strcmp(name, "sodipodi:r1") || !strcmp(name, "sodipodi:r2")) && (!isFlatSided) ) {
         gdouble r1 = 1.0;

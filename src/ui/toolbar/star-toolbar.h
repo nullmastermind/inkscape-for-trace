@@ -32,12 +32,12 @@
 
 #include <gtkmm/adjustment.h>
 
-class InkSelectOneAction;
 class SPDesktop;
 
-typedef struct _EgeAdjustmentAction EgeAdjustmentAction;
-typedef struct _EgeOutputAction EgeOutputAction;
-typedef struct _GtkActionGroup GtkActionGroup;
+namespace Gtk {
+class RadioToolButton;
+class ToolButton;
+}
 
 namespace Inkscape {
 class Selection;
@@ -51,12 +51,21 @@ namespace Tools {
 class ToolBase;
 }
 
+namespace Widget {
+class LabelToolItem;
+class SpinButtonToolItem;
+}
+
 namespace Toolbar {
 class StarToolbar : public Toolbar {
 private:
-    EgeOutputAction *_mode_action;
-    InkSelectOneAction *_flat_action;
-    EgeAdjustmentAction *_prop_action;
+    UI::Widget::LabelToolItem *_mode_item;
+    std::vector<Gtk::RadioToolButton *> _flat_item_buttons;
+    UI::Widget::SpinButtonToolItem *_magnitude_item;
+    UI::Widget::SpinButtonToolItem *_spoke_item;
+    UI::Widget::SpinButtonToolItem *_roundedness_item;
+    UI::Widget::SpinButtonToolItem *_randomization_item;
+    Gtk::ToolButton *_reset_item;
 
     XML::Node *_repr;
 
@@ -73,23 +82,16 @@ private:
     void proportion_value_changed();
     void rounded_value_changed();
     void randomized_value_changed();
-
-    static void defaults(GtkWidget *widget,
-                         gpointer   user_data);
-
+    void defaults();
     void watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
     void selection_changed(Inkscape::Selection *selection);
 
 protected:
-    StarToolbar(SPDesktop *desktop) :
-        Toolbar(desktop),
-        _repr(nullptr)
-    {}
-
+    StarToolbar(SPDesktop *desktop);
     ~StarToolbar() override;
 
 public:
-    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+    static GtkWidget * create(SPDesktop *desktop);
 
     static void event_attr_changed(Inkscape::XML::Node *repr,
                                    gchar const         *name,

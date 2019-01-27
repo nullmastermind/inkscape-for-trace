@@ -48,7 +48,6 @@
 #include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
 
-#include "widgets/ege-adjustment-action.h"
 #include "widgets/ink-action.h"
 #include "widgets/widget-sizes.h"
 
