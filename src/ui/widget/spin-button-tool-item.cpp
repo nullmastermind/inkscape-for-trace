@@ -10,8 +10,6 @@
 
 #include "spinbutton.h"
 
-typedef std::vector< std::pair<double, Glib::ustring> > NumericMenuData;
-
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -292,10 +290,8 @@ SpinButtonToolItem::create_numeric_menu()
     // For digits = 2, we get epsilon = 0.9 * 10^-2 = 0.009 etc...
     auto epsilon = 0.9 * pow(10.0, -float(digits));
 
-    // For now, set some fixed values based on the adjustment's
+    // Start by setting some fixed values based on the adjustment's
     // parameters.
-    //
-    // TODO: Allow custom values for the list to be specified
     NumericMenuData values;
     values.push_back(std::make_pair(upper,            ""));
     values.push_back(std::make_pair(adj_value + page, ""));
@@ -304,6 +300,15 @@ SpinButtonToolItem::create_numeric_menu()
     values.push_back(std::make_pair(adj_value - step, ""));
     values.push_back(std::make_pair(adj_value - page, ""));
     values.push_back(std::make_pair(lower,            ""));
+
+    // Now add any custom items
+    for (auto custom_data : _custom_menu_data) {
+        values.push_back(custom_data);
+    }
+
+    // Sort the numeric menu items into reverse numerical order (largest at top of menu)
+    std::sort   (begin(values), end(values));
+    std::reverse(begin(values), end(values));
 
     for (auto value : values)
     {
@@ -477,6 +482,25 @@ SpinButtonToolItem::grab_button_focus()
 {
     _btn->grab_focus();
 }
+
+void
+SpinButtonToolItem::set_custom_numeric_menu_items(std::vector<double>&        values,
+                                                  std::vector<Glib::ustring>& labels)
+{
+    if(values.size() != labels.size()) {
+        g_warning("Cannot add custom menu items.  Value and label arrays are different sizes");
+        return;
+    }
+
+    _custom_menu_data.clear();
+
+    int i = 0;
+
+    for (auto value : values) {
+        _custom_menu_data.push_back(std::make_pair(value, labels[i++]));
+    }
+}
+
 } // namespace Widget
 } // namespace UI
 } // namespace Inkscape

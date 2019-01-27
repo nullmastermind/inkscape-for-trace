@@ -25,6 +25,8 @@ class SpinButton;
 class SpinButtonToolItem : public Gtk::ToolItem
 {
 private:
+    typedef std::vector< std::pair<double, Glib::ustring> > NumericMenuData;
+
     Glib::ustring  _name;           ///< A unique ID for the widget (NOT translatable)
     SpinButton    *_btn;            ///< The spin-button within the widget
     Glib::ustring  _label_text;     ///< A string to use in labels for the widget (translatable)
@@ -33,6 +35,9 @@ private:
 
     /** A widget that grabs focus when this one loses it */
     Gtk::Widget * _focus_widget;
+
+    // Custom values and labels to add to the numeric popup-menu
+    NumericMenuData _custom_menu_data;
 
     // Event handlers
     bool on_btn_focus_in_event(GdkEventFocus  *focus_event);
@@ -67,6 +72,9 @@ public:
     void set_all_tooltip_text(const Glib::ustring& text);
     void set_focus_widget(Gtk::Widget *widget);
     void grab_button_focus();
+
+    void set_custom_numeric_menu_items(std::vector<double>&        values,
+                                       std::vector<Glib::ustring>& labels);
 };
 } // namespace Widget
 } // namespace UI
