@@ -484,10 +484,10 @@ SpinButtonToolItem::grab_button_focus()
 }
 
 void
-SpinButtonToolItem::set_custom_numeric_menu_items(std::vector<double>&        values,
-                                                  std::vector<Glib::ustring>& labels)
+SpinButtonToolItem::set_custom_numeric_menu_data(std::vector<double>&              values,
+                                                 const std::vector<Glib::ustring>& labels)
 {
-    if(values.size() != labels.size()) {
+    if(values.size() != labels.size() && !labels.empty()) {
         g_warning("Cannot add custom menu items.  Value and label arrays are different sizes");
         return;
     }
@@ -497,7 +497,12 @@ SpinButtonToolItem::set_custom_numeric_menu_items(std::vector<double>&        va
     int i = 0;
 
     for (auto value : values) {
-        _custom_menu_data.push_back(std::make_pair(value, labels[i++]));
+        if(labels.empty()) {
+            _custom_menu_data.push_back(std::make_pair(value, ""));
+        }
+        else {
+            _custom_menu_data.push_back(std::make_pair(value, labels[i++]));
+        }
     }
 }
 

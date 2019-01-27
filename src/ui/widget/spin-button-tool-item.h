@@ -73,8 +73,8 @@ public:
     void set_focus_widget(Gtk::Widget *widget);
     void grab_button_focus();
 
-    void set_custom_numeric_menu_items(std::vector<double>&        values,
-                                       std::vector<Glib::ustring>& labels);
+    void set_custom_numeric_menu_data(std::vector<double>&              values,
+                                      const std::vector<Glib::ustring>& labels = std::vector<Glib::ustring>());
 };
 } // namespace Widget
 } // namespace UI

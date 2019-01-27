@@ -104,12 +104,8 @@ RectToolbar::RectToolbar(SPDesktop *desktop)
         _tracker->addAdjustment(_width_adj->gobj());
         _width_item->set_sensitive(false);
 
-        gchar const* labels[] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
-        gdouble values[] = {1, 2, 3, 5, 10, 20, 50, 100, 200, 500};
-
-    //    holder->_width_action = create_adjustment_action( "RectWidthAction",
-      //                                                    _("Width"), _("W:"),
-          //                                                labels, values, G_N_ELEMENTS(labels),
+        std::vector<double> values = {1, 2, 3, 5, 10, 20, 50, 100, 200, 500};
+        _width_item->set_custom_numeric_menu_data(values);
     }
 
     /* H */
@@ -123,21 +119,18 @@ RectToolbar::RectToolbar(SPDesktop *desktop)
                                                                &SPRect::setVisibleHeight));
         _tracker->addAdjustment(_height_adj->gobj());
 
-        gchar const* labels[] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
-        gdouble values[] = {1, 2, 3, 5, 10, 20, 50, 100, 200, 500};
+        std::vector<double> values = { 1,  2,  3,  5, 10, 20, 50, 100, 200, 500};
         _height_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("rect-height", _("H:"), _height_adj));
+        _height_item->set_custom_numeric_menu_data(values);
         _height_item->set_all_tooltip_text(_("Height of rectangle"));
         _height_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _height_item->set_sensitive(false);
-
-//        holder->_height_action = create_adjustment_action( "RectHeightAction",
-        //                                                   labels, values, G_N_ELEMENTS(labels),
     }
 
     /* rx */
     {
-        gchar const* labels[] = {_("not rounded"), nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
-        gdouble values[] = {0.5, 1, 2, 3, 5, 10, 20, 50, 100};
+        std::vector<Glib::ustring> labels = {_("not rounded"), "", "", "", "", "", "", "",  ""};
+        std::vector<double>        values = {             0.5,  1,  2,  3,  5, 10, 20, 50, 100};
         auto rx_val = prefs->getDouble("/tools/shapes/rect/rx", 0);
         _rx_adj = Gtk::Adjustment::create(rx_val, 0, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
         _rx_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &RectToolbar::value_changed),
@@ -148,14 +141,13 @@ RectToolbar::RectToolbar(SPDesktop *desktop)
         _rx_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("rect-rx", _("Rx:"), _rx_adj));
         _rx_item->set_all_tooltip_text(_("Horizontal radius of rounded corners"));
         _rx_item->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
-//        eact = create_adjustment_action( "RadiusXAction",
-//                                         labels, values, G_N_ELEMENTS(labels),
+        _rx_item->set_custom_numeric_menu_data(values, labels);
     }
 
     /* ry */
     {
-        gchar const* labels[] = {_("not rounded"), nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
-        gdouble values[] = {0.5, 1, 2, 3, 5, 10, 20, 50, 100};
+        std::vector<Glib::ustring> labels = {_("not rounded"), "", "", "", "", "", "", "",  ""};
+        std::vector<double>        values = {             0.5,  1,  2,  3,  5, 10, 20, 50, 100};
         auto ry_val = prefs->getDouble("/tools/shapes/rect/ry", 0);
         _ry_adj = Gtk::Adjustment::create(ry_val, 0, 1e6, SPIN_STEP, SPIN_PAGE_STEP);
         _ry_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &RectToolbar::value_changed),
@@ -166,8 +158,7 @@ RectToolbar::RectToolbar(SPDesktop *desktop)
         _ry_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("rect-ry", _("Ry:"), _ry_adj));
         _ry_item->set_all_tooltip_text(_("Vertical radius of rounded corners"));
         _ry_item->set_focus_widget(Glib::wrap(GTK_WIDGET(_desktop->canvas)));
-        //eact = create_adjustment_action( "RadiusYAction",
-        //                                 labels, values, G_N_ELEMENTS(labels),
+        _ry_item->set_custom_numeric_menu_data(values, labels);
     }
 
     // add the units menu
