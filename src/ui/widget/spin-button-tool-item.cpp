@@ -365,7 +365,7 @@ SpinButtonToolItem::SpinButtonToolItem(const Glib::ustring            name,
     set_name(_name);
 
     // Handle popup menu
-    signal_popup_menu().connect(sigc::mem_fun(*this, &SpinButtonToolItem::on_popup_menu), false);
+    _btn->signal_popup_menu().connect(sigc::mem_fun(*this, &SpinButtonToolItem::on_popup_menu), false);
 
     // Handle button events
     auto btn_focus_in_event_cb = sigc::mem_fun(*this, &SpinButtonToolItem::on_btn_focus_in_event);
@@ -412,7 +412,16 @@ SpinButtonToolItem::do_popup_menu(GdkEventButton *button_event)
     auto menu = create_numeric_menu();
     menu->attach_to_widget(*_btn);
     menu->show_all();
-    menu->popup(button_event->button, button_event->time);
+
+    int button = 0;
+    int time   = gtk_get_current_event_time();
+
+    if (button_event) {
+        button = button_event->button;
+        time   = button_event->time;
+    }
+
+    menu->popup(button, time);
 }
 
 /**
@@ -421,8 +430,8 @@ SpinButtonToolItem::do_popup_menu(GdkEventButton *button_event)
 bool
 SpinButtonToolItem::on_popup_menu()
 {
-    g_message("POP!!");
-    return false;
+    do_popup_menu(nullptr);
+    return true;
 }
 
 /**
