@@ -358,13 +358,13 @@ SpinButtonToolItem::SpinButtonToolItem(const Glib::ustring            name,
 
     // Handle button events
     auto btn_focus_in_event_cb = sigc::mem_fun(*this, &SpinButtonToolItem::on_btn_focus_in_event);
-    _btn->signal_focus_in_event().connect(btn_focus_in_event_cb);
+    _btn->signal_focus_in_event().connect(btn_focus_in_event_cb, false);
 
     auto btn_focus_out_event_cb = sigc::mem_fun(*this, &SpinButtonToolItem::on_btn_focus_out_event);
-    _btn->signal_focus_out_event().connect(btn_focus_out_event_cb);
+    _btn->signal_focus_out_event().connect(btn_focus_out_event_cb, false);
 
     auto btn_key_press_event_cb = sigc::mem_fun(*this, &SpinButtonToolItem::on_btn_key_press_event);
-    _btn->signal_key_press_event().connect(btn_key_press_event_cb);
+    _btn->signal_key_press_event().connect(btn_key_press_event_cb, false);
 
     _btn->add_events(Gdk::KEY_PRESS_MASK);
 
