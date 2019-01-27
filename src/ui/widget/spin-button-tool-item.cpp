@@ -252,24 +252,14 @@ SpinButtonToolItem::create_numeric_menu_item(Gtk::RadioButtonGroup *group,
 }
 
 /**
- * \brief Create a menu-item in response to the "create-menu-proxy" signal
+ * \brief Create a menu containing fixed numeric options for the adjustment
  *
- * \detail This is an override for the default Gtk::ToolItem handler so
- *         we don't need to explicitly connect this to the signal. It
- *         runs if the toolitem is unable to fit on the toolbar, and
- *         must be represented by a menu item instead.
+ * \details Each of these values represents a snap-point for the adjustment's value
  */
-bool
-SpinButtonToolItem::on_create_menu_proxy()
+Gtk::Menu *
+SpinButtonToolItem::create_numeric_menu()
 {
-    // The main menu-item.  It just contains the label that normally appears
-    // next to the spin-button, and an indicator for a sub-menu.
-    auto menu_item = Gtk::manage(new Gtk::MenuItem(_label_text));
-
-    // A sub-menu containing fixed numeric options for the
-    // adjustment. Each of these represent "snap-points" for the
-    // adjustment's value.
-    auto sub_menu = Gtk::manage(new Gtk::Menu());
+    auto numeric_menu = Gtk::manage(new Gtk::Menu());
 
     Gtk::RadioMenuItem::Group group;
 
@@ -306,7 +296,7 @@ SpinButtonToolItem::on_create_menu_proxy()
         auto value = lower + i * step;
 
         auto numeric_menu_item = create_numeric_menu_item(&group, value);
-        sub_menu->append(*numeric_menu_item);
+        numeric_menu->append(*numeric_menu_item);
 
         if (fabs(adj_value - value) < epsilon) {
             // If the adjustment value is very close to the value of this menu item,
@@ -319,12 +309,30 @@ SpinButtonToolItem::on_create_menu_proxy()
             // Alternatively, if the adjustment value is between this and the
             // next item, then insert another menu item here
             auto active_menu_item = create_numeric_menu_item(&group, adj_value);
-            sub_menu->append(*active_menu_item);
+            numeric_menu->append(*active_menu_item);
             active_menu_item->set_active();
         }
     }
 
-    menu_item->set_submenu(*sub_menu);
+    return numeric_menu;
+}
+
+/**
+ * \brief Create a menu-item in response to the "create-menu-proxy" signal
+ *
+ * \detail This is an override for the default Gtk::ToolItem handler so
+ *         we don't need to explicitly connect this to the signal. It
+ *         runs if the toolitem is unable to fit on the toolbar, and
+ *         must be represented by a menu item instead.
+ */
+bool
+SpinButtonToolItem::on_create_menu_proxy()
+{
+    // The main menu-item.  It just contains the label that normally appears
+    // next to the spin-button, and an indicator for a sub-menu.
+    auto menu_item = Gtk::manage(new Gtk::MenuItem(_label_text));
+    auto numeric_menu = create_numeric_menu();
+    menu_item->set_submenu(*numeric_menu);
 
     set_proxy_menu_item(_name, *menu_item);
 
@@ -356,6 +364,9 @@ SpinButtonToolItem::SpinButtonToolItem(const Glib::ustring            name,
     set_margin_end(3);
     set_name(_name);
 
+    // Handle popup menu
+    signal_popup_menu().connect(sigc::mem_fun(*this, &SpinButtonToolItem::on_popup_menu), false);
+
     // Handle button events
     auto btn_focus_in_event_cb = sigc::mem_fun(*this, &SpinButtonToolItem::on_btn_focus_in_event);
     _btn->signal_focus_in_event().connect(btn_focus_in_event_cb, false);
@@ -365,6 +376,9 @@ SpinButtonToolItem::SpinButtonToolItem(const Glib::ustring            name,
 
     auto btn_key_press_event_cb = sigc::mem_fun(*this, &SpinButtonToolItem::on_btn_key_press_event);
     _btn->signal_key_press_event().connect(btn_key_press_event_cb, false);
+
+    auto btn_button_press_event_cb = sigc::mem_fun(*this, &SpinButtonToolItem::on_btn_button_press_event);
+    _btn->signal_button_press_event().connect(btn_button_press_event_cb, false);
 
     _btn->add_events(Gdk::KEY_PRESS_MASK);
 
@@ -378,6 +392,37 @@ SpinButtonToolItem::SpinButtonToolItem(const Glib::ustring            name,
     hbox->pack_start(*_btn);
     add(*hbox);
     show_all();
+}
+
+bool
+SpinButtonToolItem::on_btn_button_press_event(GdkEventButton *button_event)
+{
+    if (gdk_event_triggers_context_menu((GdkEvent *)button_event) &&
+            button_event->type == GDK_BUTTON_PRESS) {
+        do_popup_menu(button_event);
+        return true;
+    }
+
+    return false;
+}
+
+void
+SpinButtonToolItem::do_popup_menu(GdkEventButton *button_event)
+{
+    auto menu = create_numeric_menu();
+    menu->attach_to_widget(*_btn);
+    menu->show_all();
+    menu->popup(button_event->button, button_event->time);
+}
+
+/**
+ * \brief Create a popup menu
+ */
+bool
+SpinButtonToolItem::on_popup_menu()
+{
+    g_message("POP!!");
+    return false;
 }
 
 /**
