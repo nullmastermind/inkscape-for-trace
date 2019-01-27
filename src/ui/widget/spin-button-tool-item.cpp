@@ -269,7 +269,8 @@ SpinButtonToolItem::create_numeric_menu()
     auto lower = adj->get_lower();
     auto upper = adj->get_upper();
     auto range = upper - lower;
-    auto step = range/4.0;
+    auto step = adj->get_step_increment();
+    auto page = adj->get_page_increment();
 
     auto digits = _btn->get_digits();
 
@@ -283,18 +284,22 @@ SpinButtonToolItem::create_numeric_menu()
     // For digits = 2, we get epsilon = 0.9 * 10^-2 = 0.009 etc...
     auto epsilon = 0.9 * pow(10.0, -float(digits));
 
-    // For now, let's just set some fixed values at 25% intervals
-    // along the adjustment's range.
+    // For now, set some fixed values based on the adjustment's
+    // parameters.
     //
-    // TODO: Allow values for the list to be specified
+    // TODO: Allow custom values for the list to be specified
     // TODO: Allow descriptions to be added
-    // TODO: Make the range of values depend on current value?
+    std::vector<double> values;
+    values.push_back(upper);
+    values.push_back(adj_value + page);
+    values.push_back(adj_value + step);
+    values.push_back(adj_value);
+    values.push_back(adj_value - step);
+    values.push_back(adj_value - page);
+    values.push_back(lower);
 
-    for (unsigned int i = 0; i < 5; ++i)
+    for (auto value : values)
     {
-        // Get the value for this item and represent it as a string
-        auto value = lower + i * step;
-
         auto numeric_menu_item = create_numeric_menu_item(&group, value);
         numeric_menu->append(*numeric_menu_item);
 
@@ -302,15 +307,6 @@ SpinButtonToolItem::create_numeric_menu()
             // If the adjustment value is very close to the value of this menu item,
             // make this menu item active
             numeric_menu_item->set_active();
-        }
-        else if (adj_value > value + epsilon &&
-                 adj_value < value + step - epsilon)
-        {
-            // Alternatively, if the adjustment value is between this and the
-            // next item, then insert another menu item here
-            auto active_menu_item = create_numeric_menu_item(&group, adj_value);
-            numeric_menu->append(*active_menu_item);
-            active_menu_item->set_active();
         }
     }
 
