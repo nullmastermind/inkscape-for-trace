@@ -50,7 +50,8 @@ private:
     Gtk::Menu * create_numeric_menu();
 
     Gtk::RadioMenuItem * create_numeric_menu_item(Gtk::RadioButtonGroup *group,
-                                                  double                 value);
+                                                  double                 value,
+                                                  const Glib::ustring&   label = "");
 
 protected:
     bool on_create_menu_proxy() override;

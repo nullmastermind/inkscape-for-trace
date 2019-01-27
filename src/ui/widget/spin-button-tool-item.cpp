@@ -10,6 +10,8 @@
 
 #include "spinbutton.h"
 
+typedef std::vector< std::pair<double, Glib::ustring> > NumericMenuData;
+
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -236,11 +238,17 @@ SpinButtonToolItem::on_numeric_menu_item_toggled(double value)
 
 Gtk::RadioMenuItem *
 SpinButtonToolItem::create_numeric_menu_item(Gtk::RadioButtonGroup *group,
-                                             double                 value)
+                                             double                 value,
+                                             const Glib::ustring&   label)
 {
     // Represent the value as a string
     std::ostringstream ss;
     ss << value;
+
+    // Append the label if specified
+    if (!label.empty()) {
+        ss << ": " << label;
+    }
 
     auto numeric_option = Gtk::manage(new Gtk::RadioMenuItem(*group, ss.str()));
 
@@ -288,22 +296,21 @@ SpinButtonToolItem::create_numeric_menu()
     // parameters.
     //
     // TODO: Allow custom values for the list to be specified
-    // TODO: Allow descriptions to be added
-    std::vector<double> values;
-    values.push_back(upper);
-    values.push_back(adj_value + page);
-    values.push_back(adj_value + step);
-    values.push_back(adj_value);
-    values.push_back(adj_value - step);
-    values.push_back(adj_value - page);
-    values.push_back(lower);
+    NumericMenuData values;
+    values.push_back(std::make_pair(upper,            ""));
+    values.push_back(std::make_pair(adj_value + page, ""));
+    values.push_back(std::make_pair(adj_value + step, ""));
+    values.push_back(std::make_pair(adj_value,        ""));
+    values.push_back(std::make_pair(adj_value - step, ""));
+    values.push_back(std::make_pair(adj_value - page, ""));
+    values.push_back(std::make_pair(lower,            ""));
 
     for (auto value : values)
     {
-        auto numeric_menu_item = create_numeric_menu_item(&group, value);
+        auto numeric_menu_item = create_numeric_menu_item(&group, value.first, value.second);
         numeric_menu->append(*numeric_menu_item);
 
-        if (fabs(adj_value - value) < epsilon) {
+        if (fabs(adj_value - value.first) < epsilon) {
             // If the adjustment value is very close to the value of this menu item,
             // make this menu item active
             numeric_menu_item->set_active();
