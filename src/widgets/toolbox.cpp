@@ -658,6 +658,12 @@ EgeAdjustmentAction * create_adjustment_action( gchar const *name,
         ege_adjustment_action_set_descriptions( act, descrLabels, descrValues, descrCount );
     }
 
+    // The EgeAdjustmentAction class uses this to create a data member
+    // with the specified name, that simply points to the object itself.
+    // It appears to only be used by the DesktopWidget to find the named
+    // object
+    //
+    // TODO: Get rid of this and look up widgets by name instead.
     if ( altx && altx_mark ) {
         g_object_set( G_OBJECT(act), "self-id", altx_mark, NULL );
     }
