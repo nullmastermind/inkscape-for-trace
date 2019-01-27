@@ -209,7 +209,7 @@ static struct {
       SP_VERB_CONTEXT_3DBOX_PREFS,  "/tools/shapes/3dbox",    N_("Style of new 3D boxes")},
     { "/tools/shapes/arc",    "arc_toolbox",    nullptr, Inkscape::UI::Toolbar::ArcToolbar::prep,               "ArcToolbar",
       SP_VERB_CONTEXT_ARC_PREFS,    "/tools/shapes/arc",      N_("Style of new ellipses")},
-    { "/tools/shapes/spiral", "spiral_toolbox", nullptr, Inkscape::UI::Toolbar::SpiralToolbar::prep,            "SpiralToolbar",
+    { "/tools/shapes/spiral", "spiral_toolbox", Inkscape::UI::Toolbar::SpiralToolbar::create, nullptr,           "SpiralToolbar",
       SP_VERB_CONTEXT_SPIRAL_PREFS, "/tools/shapes/spiral",   N_("Style of new spirals")},
     { "/tools/freehand/pencil", "pencil_toolbox", nullptr, Inkscape::UI::Toolbar::PencilToolbar::prep_pencil,   "PencilToolbar",
       SP_VERB_CONTEXT_PENCIL_PREFS, "/tools/freehand/pencil", N_("Style of new paths created by Pencil")},

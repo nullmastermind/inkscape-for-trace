@@ -254,7 +254,7 @@ bool SpiralTool::root_handler(GdkEvent* event) {
                 case GDK_KEY_x:
                 case GDK_KEY_X:
                     if (MOD__ALT_ONLY(event)) {
-                        desktop->setToolboxFocusTo ("altx-spiral");
+                        desktop->setToolboxFocusTo ("spiral-revolutions");
                         ret = TRUE;
                     }
                     break;

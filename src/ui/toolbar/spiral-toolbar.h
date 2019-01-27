@@ -34,8 +34,9 @@
 
 class SPDesktop;
 
-typedef struct _EgeOutputAction EgeOutputAction;
-typedef struct _GtkActionGroup GtkActionGroup;
+namespace Gtk {
+class ToolButton;
+}
 
 namespace Inkscape {
 class Selection;
@@ -45,10 +46,21 @@ class Node;
 }
 
 namespace UI {
+namespace Widget {
+class LabelToolItem;
+class SpinButtonToolItem;
+}
+
 namespace Toolbar {
 class SpiralToolbar : public Toolbar {
 private:
-    EgeOutputAction *_mode_action;
+    UI::Widget::LabelToolItem *_mode_item;
+
+    UI::Widget::SpinButtonToolItem *_revolution_item;
+    UI::Widget::SpinButtonToolItem *_expansion_item;
+    UI::Widget::SpinButtonToolItem *_t0_item;
+
+    Gtk::ToolButton *_reset_item;
 
     Glib::RefPtr<Gtk::Adjustment> _revolution_adj;
     Glib::RefPtr<Gtk::Adjustment> _expansion_adj;
@@ -60,23 +72,17 @@ private:
 
     void value_changed(Glib::RefPtr<Gtk::Adjustment> &adj,
                        Glib::ustring const           &value_name);
-    static void defaults(GtkWidget *widget,
-                         GObject   *obj);
+    void defaults();
     void selection_changed(Inkscape::Selection *selection);
 
     std::unique_ptr<sigc::connection> _connection;
 
 protected:
-    SpiralToolbar(SPDesktop *desktop) :
-        Toolbar(desktop),
-        _freeze(false),
-        _repr(nullptr)
-    {}
-
+    SpiralToolbar(SPDesktop *desktop);
     ~SpiralToolbar() override;
 
 public:
-    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+    static GtkWidget * create(SPDesktop *desktop);
 
     static void event_attr_changed(Inkscape::XML::Node *repr,
                                    gchar const         *name,

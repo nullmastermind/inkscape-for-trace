@@ -115,15 +115,6 @@
     <toolitem action='3DBoxVPZStateAction' />
   </toolbar>
 
-  <toolbar name='SpiralToolbar'>
-    <toolitem action='SpiralStateAction' />
-    <toolitem action='SpiralRevolutionAction' />
-    <toolitem action='SpiralExpansionAction' />
-    <toolitem action='SpiralT0Action' />
-    <separator />
-    <toolitem action='SpiralResetAction' />
-  </toolbar>
-
   <toolbar name='PenToolbar'>
     <toolitem action='FreehandModeActionPen' />
     <separator />

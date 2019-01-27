@@ -25,32 +25,31 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gtk/gtk.h>
+#include "spiral-toolbar.h"
+
 #include <glibmm/i18n.h>
 
-#include "spiral-toolbar.h"
+#include <gtkmm/separatortoolitem.h>
+#include <gtkmm/toolbutton.h>
 
 #include "desktop.h"
 #include "document-undo.h"
 #include "selection.h"
-#include "widgets/toolbox.h"
 #include "verbs.h"
 
 #include "object/sp-spiral.h"
 
 #include "ui/icon-names.h"
 #include "ui/uxmanager.h"
+#include "ui/widget/label-tool-item.h"
+#include "ui/widget/spin-button-tool-item.h"
 
-#include "widgets/ege-adjustment-action.h"
-#include "widgets/ege-output-action.h"
-#include "widgets/ink-action.h"
 #include "widgets/spinbutton-events.h"
 
 #include "xml/node-event-vector.h"
 
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
-using Inkscape::UI::ToolboxFactory;
 
 static Inkscape::XML::NodeEventVector spiral_tb_repr_events = {
     nullptr, /* child_added */
@@ -63,6 +62,82 @@ static Inkscape::XML::NodeEventVector spiral_tb_repr_events = {
 namespace Inkscape {
 namespace UI {
 namespace Toolbar {
+SpiralToolbar::SpiralToolbar(SPDesktop *desktop) :
+        Toolbar(desktop),
+        _freeze(false),
+        _repr(nullptr)
+{
+    auto prefs = Inkscape::Preferences::get();
+
+    {
+        _mode_item = Gtk::manage(new UI::Widget::LabelToolItem(_("<b>New:</b>")));
+        _mode_item->set_use_markup(true);
+        add(*_mode_item);
+    }
+
+    /* Revolution */
+    {
+        std::vector<Glib::ustring> labels = {_("just a curve"),  "", _("one full revolution"), "", "", "", "", "", "",  ""};
+        std::vector<double>        values = {             0.01, 0.5,                        1,  2,  3,  5, 10, 20, 50, 100};
+        auto revolution_val = prefs->getDouble("/tools/shapes/spiral/revolution", 3.0);
+        _revolution_adj = Gtk::Adjustment::create(revolution_val, 0.01, 1024.0, 0.1, 1.0);
+        _revolution_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("spiral-revolutions", _("Turns:"), _revolution_adj, 1, 2));
+        _revolution_item->set_tooltip_text(_("Number of revolutions"));
+        _revolution_item->set_custom_numeric_menu_data(values, labels);
+        _revolution_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _revolution_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &SpiralToolbar::value_changed),
+                                                                   _revolution_adj, "revolution"));
+        add(*_revolution_item);
+    }
+
+    /* Expansion */
+    {
+        std::vector<Glib::ustring> labels = {_("circle"), _("edge is much denser"), _("edge is denser"), _("even"), _("center is denser"), _("center is much denser"), ""};
+        std::vector<double>        values = {          0,                      0.1,                 0.5,         1,                   1.5,                          5, 20};
+        auto expansion_val = prefs->getDouble("/tools/shapes/spiral/expansion", 1.0);
+        _expansion_adj = Gtk::Adjustment::create(expansion_val, 0.0, 1000.0, 0.01, 1.0);
+
+        _expansion_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("spiral-expansion", _("Divergence:"), _expansion_adj));
+        _expansion_item->set_tooltip_text(_("How much denser/sparser are outer revolutions; 1 = uniform"));
+        _expansion_item->set_custom_numeric_menu_data(values, labels);
+        _expansion_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _expansion_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &SpiralToolbar::value_changed),
+                                                                  _expansion_adj, "expansion"));
+        add(*_expansion_item);
+    }
+
+    /* T0 */
+    {
+        std::vector<Glib::ustring> labels = {_("starts from center"), _("starts mid-way"), _("starts near edge")};
+        std::vector<double>        values = {                      0,                 0.5,                   0.9};
+        auto t0_val = prefs->getDouble("/tools/shapes/spiral/t0", 0.0);
+        _t0_adj = Gtk::Adjustment::create(t0_val, 0.0, 0.999, 0.01, 1.0);
+        _t0_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("spiral-t0", _("Inner radius:"), _t0_adj));
+        _t0_item->set_tooltip_text(_("Radius of the innermost revolution (relative to the spiral size)"));
+        _t0_item->set_custom_numeric_menu_data(values, labels);
+        _t0_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _t0_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*this, &SpiralToolbar::value_changed),
+                                                           _t0_adj, "t0"));
+        add(*_t0_item);
+    }
+
+    add(*Gtk::manage(new Gtk::SeparatorToolItem()));
+
+    /* Reset */
+    {
+        _reset_item = Gtk::manage(new Gtk::ToolButton(_("Defaults")));
+        _reset_item->set_icon_name(INKSCAPE_ICON("edit-clear"));
+        _reset_item->set_tooltip_text(_("Reset shape parameters to defaults (use Inkscape Preferences > Tools to change defaults)"));
+        _reset_item->signal_clicked().connect(sigc::mem_fun(*this, &SpiralToolbar::defaults));
+        add(*_reset_item);
+    }
+
+    _connection.reset(new sigc::connection(
+        desktop->getSelection()->connectChanged(sigc::mem_fun(*this, &SpiralToolbar::selection_changed))));
+
+    show_all();
+}
+
 SpiralToolbar::~SpiralToolbar()
 {
     if(_repr) {
@@ -77,88 +152,9 @@ SpiralToolbar::~SpiralToolbar()
 }
 
 GtkWidget *
-SpiralToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
+SpiralToolbar::create(SPDesktop *desktop)
 {
     auto toolbar = new SpiralToolbar(desktop);
-
-    EgeAdjustmentAction* eact = nullptr;
-    GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
-
-    {
-        toolbar->_mode_action = ege_output_action_new( "SpiralStateAction", _("<b>New:</b>"), "", nullptr );
-        ege_output_action_set_use_markup( toolbar->_mode_action, TRUE );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_mode_action ) );
-    }
-
-    /* Revolution */
-    {
-        gchar const* labels[] = {_("just a curve"), nullptr, _("one full revolution"), nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
-        gdouble values[] = {0.01, 0.5, 1, 2, 3, 5, 10, 20, 50, 100};
-        eact = create_adjustment_action( "SpiralRevolutionAction",
-                                         _("Number of turns"), _("Turns:"), _("Number of revolutions"),
-                                         "/tools/shapes/spiral/revolution", 3.0,
-                                         TRUE, "altx-spiral",
-                                         0.01, 1024.0, 0.1, 1.0,
-                                         labels, values, G_N_ELEMENTS(labels),
-                                         nullptr /*unit tracker*/, 1, 2);
-        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
-        toolbar->_revolution_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
-        toolbar->_revolution_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*toolbar, &SpiralToolbar::value_changed),
-                                                                            toolbar->_revolution_adj, "revolution"));
-        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
-    }
-
-    /* Expansion */
-    {
-        gchar const* labels[] = {_("circle"), _("edge is much denser"), _("edge is denser"), _("even"), _("center is denser"), _("center is much denser"), nullptr};
-        gdouble values[] = {0, 0.1, 0.5, 1, 1.5, 5, 20};
-        eact = create_adjustment_action( "SpiralExpansionAction",
-                                         _("Divergence"), _("Divergence:"), _("How much denser/sparser are outer revolutions; 1 = uniform"),
-                                         "/tools/shapes/spiral/expansion", 1.0,
-                                         FALSE, nullptr,
-                                         0.0, 1000.0, 0.01, 1.0,
-                                         labels, values, G_N_ELEMENTS(labels)
-                                         );
-        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
-        toolbar->_expansion_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
-        toolbar->_expansion_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*toolbar, &SpiralToolbar::value_changed),
-                                                                           toolbar->_expansion_adj, "expansion"));
-        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
-    }
-
-    /* T0 */
-    {
-        gchar const* labels[] = {_("starts from center"), _("starts mid-way"), _("starts near edge")};
-        gdouble values[] = {0, 0.5, 0.9};
-        eact = create_adjustment_action( "SpiralT0Action",
-                                         _("Inner radius"), _("Inner radius:"), _("Radius of the innermost revolution (relative to the spiral size)"),
-                                         "/tools/shapes/spiral/t0", 0.0,
-                                         FALSE, nullptr,
-                                         0.0, 0.999, 0.01, 1.0,
-                                         labels, values, G_N_ELEMENTS(labels)
-                                         );
-        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
-        toolbar->_t0_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
-        toolbar->_t0_adj->signal_value_changed().connect(sigc::bind(sigc::mem_fun(*toolbar, &SpiralToolbar::value_changed),
-                                                                    toolbar->_t0_adj, "t0"));
-        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
-    }
-
-    /* Reset */
-    {
-        InkAction* inky = ink_action_new( "SpiralResetAction",
-                                          _("Defaults"),
-                                          _("Reset shape parameters to defaults (use Inkscape Preferences > Tools to change defaults)"),
-                                          INKSCAPE_ICON("edit-clear"),
-                                          secondarySize );
-        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(&SpiralToolbar::defaults), toolbar );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
-    }
-
-
-    toolbar->_connection.reset(new sigc::connection(
-        desktop->getSelection()->connectChanged(sigc::mem_fun(*toolbar, &SpiralToolbar::selection_changed))));
-
     return GTK_WIDGET(toolbar->gobj());
 }
 
@@ -206,26 +202,24 @@ SpiralToolbar::value_changed(Glib::RefPtr<Gtk::Adjustment> &adj,
 }
 
 void
-SpiralToolbar::defaults(GtkWidget * /*widget*/, GObject *obj)
+SpiralToolbar::defaults()
 {
-    auto toolbar = reinterpret_cast<SpiralToolbar *>(obj);
-
     // fixme: make settable
     gdouble rev = 3;
     gdouble exp = 1.0;
     gdouble t0 = 0.0;
 
-    toolbar->_revolution_adj->set_value(rev);
-    toolbar->_expansion_adj->set_value(exp);
-    toolbar->_t0_adj->set_value(t0);
+    _revolution_adj->set_value(rev);
+    _expansion_adj->set_value(exp);
+    _t0_adj->set_value(t0);
 
 #if !GTK_CHECK_VERSION(3,18,0)
-    toolbar->_revolution_adj->value_changed();
-    toolbar->_expansion_adj->value_changed();
-    toolbar->_t0_adj->value_changed();
+    _revolution_adj->value_changed();
+    _expansion_adj->value_changed();
+    _t0_adj->value_changed();
 #endif
 
-    if(toolbar->_desktop->canvas) gtk_widget_grab_focus(GTK_WIDGET(toolbar->_desktop->canvas));
+    if(_desktop->canvas) gtk_widget_grab_focus(GTK_WIDGET(_desktop->canvas));
 }
 
 void
@@ -250,9 +244,9 @@ SpiralToolbar::selection_changed(Inkscape::Selection *selection)
     }
 
     if (n_selected == 0) {
-        gtk_action_set_label(GTK_ACTION(_mode_action), _("<b>New:</b>"));
+        _mode_item->set_markup(_("<b>New:</b>"));
     } else if (n_selected == 1) {
-        gtk_action_set_label(GTK_ACTION(_mode_action), _("<b>Change:</b>"));
+        _mode_item->set_markup(_("<b>Change:</b>"));
 
         if (repr) {
             _repr = repr;
@@ -263,7 +257,7 @@ SpiralToolbar::selection_changed(Inkscape::Selection *selection)
     } else {
         // FIXME: implement averaging of all parameters for multiple selected
         //gtk_label_set_markup(GTK_LABEL(l), _("<b>Average:</b>"));
-        gtk_action_set_label(GTK_ACTION(_mode_action), _("<b>Change:</b>"));
+        _mode_item->set_markup(_("<b>Change:</b>"));
     }
 }
 
