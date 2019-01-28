@@ -429,6 +429,7 @@ Application::add_gtk_css()
         g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
         g_object_set(settings, "gtk-application-prefer-dark-theme",
                      prefs->getBool("/theme/darkTheme", gtkApplicationPreferDarkTheme), NULL);
+        prefs->setString("/theme/defaultTheme", Glib::ustring(gtkThemeName));
         prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName));
         if (prefs->getString("/theme/gtkTheme") != "") {
             g_object_set(settings, "gtk-theme-name", prefs->getString("/theme/gtkTheme").c_str(), NULL);

@@ -962,7 +962,8 @@ void InkscapePreferences::initPageUI()
             labels.emplace_back(theme);
             values.emplace_back(theme);
         }
-
+        labels.emplace_back(_("Use system theme"));
+        values.push_back(prefs->getString("/theme/defaultTheme"));
         g_list_free(list);
         g_hash_table_destroy(t);
 
