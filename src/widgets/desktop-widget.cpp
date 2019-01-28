@@ -66,6 +66,9 @@
 #include "ui/widget/selected-style.h"
 #include "ui/widget/unit-tracker.h"
 
+// TEMP
+#include "ui/desktop/menubar.h"
+
 #include "util/ege-appear-time-tracker.h"
 #include "util/units.h"
 
@@ -1665,6 +1668,12 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPDocument *document)
     dtw->modified_connection = namedview->connectModified(sigc::mem_fun(*dtw, &SPDesktopWidget::namedviewModified));
 
     dtw->layer_selector->setDesktop(dtw->desktop);
+
+    // TEMP
+    dtw->_menubar = build_menubar(dtw->desktop);
+    dtw->_menubar->set_name("MenuBar");
+    dtw->_menubar->show_all();
+    dtw->_vbox->pack_start(*dtw->_menubar, false, false);
 
     dtw->layoutWidgets();
 

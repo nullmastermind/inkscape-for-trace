@@ -98,6 +98,7 @@ private:
 
     Gtk::Box *_hbox;
 
+    Gtk::MenuBar *_menubar;  // TEMP
     Gtk::Box     *_statusbar;
 
     Inkscape::UI::Dialog::SwatchesPanel *_panels;

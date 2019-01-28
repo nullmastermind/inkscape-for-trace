@@ -68,15 +68,15 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     _desktop = _desktop_widget->desktop;
 
     // Menu bar (must come after desktop widget creation as we need _desktop)
-    _menubar = build_menubar(_desktop);
-    _menubar->set_name("MenuBar");
-    _menubar->show_all();
+    // _menubar = build_menubar(_desktop);
+    // _menubar->set_name("MenuBar");
+    // _menubar->show_all();
 
     // Pallet
 
     // Status bar
 
-    _mainbox->pack_start(*_menubar, false, false);
+    // _mainbox->pack_start(*_menubar, false, false);
     gtk_box_pack_start(GTK_BOX(_mainbox->gobj()), GTK_WIDGET(_desktop_widget), true, true, 0); // Can't use Glib::wrap()
 
     // ================== Callbacks ==================
