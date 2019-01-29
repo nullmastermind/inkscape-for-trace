@@ -233,7 +233,7 @@ static struct {
     { "/tools/mesh", "mesh_toolbox", nullptr, Inkscape::UI::Toolbar::MeshToolbar::prep, "MeshToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
 #if HAVE_POTRACE
-    { "/tools/paintbucket",  "paintbucket_toolbox",  nullptr, Inkscape::UI::Toolbar::PaintbucketToolbar::prep, "PaintbucketToolbar",
+    { "/tools/paintbucket",  "paintbucket_toolbox", Inkscape::UI::Toolbar::PaintbucketToolbar::create, nullptr, "PaintbucketToolbar",
       SP_VERB_CONTEXT_PAINTBUCKET_PREFS, "/tools/paintbucket", N_("Style of Paint Bucket fill objects")},
 #else
     { "/tools/paintbucket",  "paintbucket_toolbox",  0, NULL, "PaintbucketToolbar", SP_VERB_NONE, "/tools/paintbucket", N_("Disabled")},

@@ -167,37 +167,6 @@
     <separator />
   </toolbar>
 
-  <toolbar name='PaintbucketToolbar'>
-    <toolitem action='ChannelsAction' />
-    <toolitem action='ThresholdAction' />
-    <separator />
-    <toolitem action='OffsetAction' />
-    <toolitem action='PaintbucketUnitsAction' />
-    <separator />
-    <toolitem action='AutoGapAction' />
-    <separator />
-    <toolitem action='PaintbucketResetAction' />
-  </toolbar>
-
-  <!--
-  <toolbar name='EraserToolbar'>
-    <toolitem action='EraserModeAction' />
-    <separator />
-    <toolitem action='EraserWidthAction' />
-    <toolitem action='EraserPressureAction' />
-    <separator />
-    <toolitem action='EraserThinningAction' />
-    <separator />
-    <toolitem action='EraserCapRoundingAction' />
-    <separator />
-    <toolitem action='EraserTremorAction' />
-    <separator />
-    <toolitem action='EraserMassAction' />
-    <separator />
-    <toolitem action='EraserBreakAppart' />
-  </toolbar>
--->
-
   <toolbar name='TextToolbar'>
     <toolitem action='TextFontFamilyAction' />
     <toolitem action='TextFontStyleAction' />

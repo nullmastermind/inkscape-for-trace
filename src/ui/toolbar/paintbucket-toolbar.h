@@ -32,10 +32,11 @@
 
 #include <gtkmm/adjustment.h>
 
-class InkSelectOneAction;
 class SPDesktop;
 
-typedef struct _GtkActionGroup GtkActionGroup;
+namespace Gtk {
+class ComboBoxText;
+}
 
 namespace Inkscape {
 namespace UI {
@@ -46,25 +47,25 @@ class UnitTracker;
 namespace Toolbar {
 class PaintbucketToolbar : public Toolbar {
 private:
-    InkSelectOneAction *_channels_action;
-    InkSelectOneAction *_autogap_action;
+    Gtk::ComboBoxText *_channels_cbt;
+    Gtk::ComboBoxText *_autogap_cbt;
 
     Glib::RefPtr<Gtk::Adjustment> _threshold_adj;
     Glib::RefPtr<Gtk::Adjustment> _offset_adj;
 
     UI::Widget::UnitTracker *_tracker;
 
-    void channels_changed(int channels);
+    void channels_changed();
     void threshold_changed();
     void offset_changed();
-    void autogap_changed(int autogap);
-    static void defaults(GtkWidget *widget, gpointer data);
+    void autogap_changed();
+    void defaults();
 
 protected:
     PaintbucketToolbar(SPDesktop *desktop);
 
 public:
-    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+    static GtkWidget * create(SPDesktop *desktop);
 };
 
 }
