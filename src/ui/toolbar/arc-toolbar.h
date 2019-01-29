@@ -36,10 +36,10 @@ class InkSelectOneAction;
 class SPDesktop;
 class SPItem;
 
-typedef struct _EgeAdjustmentAction EgeAdjustmentAction;
-typedef struct _EgeOutputAction EgeOutputAction;
-typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _InkAction InkAction;
+namespace Gtk {
+class RadioToolButton;
+class ToolButton;
+}
 
 namespace Inkscape {
 class Selection;
@@ -54,6 +54,8 @@ class ToolBase;
 }
 
 namespace Widget {
+class LabelToolItem;
+class SpinButtonToolItem;
 class UnitTracker;
 }
 
@@ -62,13 +64,13 @@ class ArcToolbar : public Toolbar {
 private:
     UI::Widget::UnitTracker *_tracker;
 
-    EgeAdjustmentAction *_rx_action;
-    EgeAdjustmentAction *_ry_action;
+    UI::Widget::SpinButtonToolItem *_rx_item;
+    UI::Widget::SpinButtonToolItem *_ry_item;
 
-    EgeOutputAction *_mode_action;
+    UI::Widget::LabelToolItem *_mode_item;
 
-    InkSelectOneAction *_type_action;
-    InkAction *_make_whole;
+    std::vector<Gtk::RadioToolButton *> _type_buttons;
+    Gtk::ToolButton *_make_whole;
 
     Glib::RefPtr<Gtk::Adjustment> _rx_adj;
     Glib::RefPtr<Gtk::Adjustment> _ry_adj;
@@ -87,7 +89,7 @@ private:
                                 gchar const                    *value_name,
                                 Glib::RefPtr<Gtk::Adjustment>&  other_adj);
     void type_changed( int type );
-    static void defaults(GtkWidget *, GObject *obj);
+    void defaults();
     void sensitivize( double v1, double v2 );
     void check_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
     void selection_changed(Inkscape::Selection *selection);
@@ -99,7 +101,7 @@ protected:
     ~ArcToolbar() override;
 
 public:
-    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+    static GtkWidget * create(SPDesktop *desktop);
     static void event_attr_changed(Inkscape::XML::Node *repr,
                                    gchar const         *name,
                                    gchar const         *old_value,
