@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="color-picker-16px-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="0.6002936" inkscape:cx="732.67439" inkscape:cy="-567.94603" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="matrix(1,0,0,0.999998,-318,-929.40475)" id="color-picker-16px" inkscape:label="00148">
+      <g transform="matrix(1,0,0,0.9972457,136.9998,752.8939)" id="g34059" inkscape:label="stock-tool-color-picker">
+        <path inkscape:connector-curvature="0" id="rect33857" d="m -59.002187,-40 h 14.004374 C -44.445025,-40 -44,-39.554975 -44,-39.002187 v 14.004374 C -44,-24.445025 -44.445025,-24 -44.997813,-24 H -59.002187 C -59.554975,-24 -60,-24.445025 -60,-24.997813 V -39.002187 C -60,-39.554975 -59.554975,-40 -59.002187,-40 Z" style="opacity:0;fill:none" transform="translate(241.0002,217)"/>
+        <path inkscape:connector-curvature="0" d="m 191.6122,182.4047 -4.2202,5.6634 -1.6941,1.4926 -0.6977,-0.5607 0.9963,-2.0533 4.2202,-5.6634 z" id="path3620" style="opacity:1"/>
+        <path inkscape:connector-curvature="0" d="m 185.0002,189.5745 c 0,0 -1.4772,0.6685 -1.4654,2.0797 0.015,1.758 2.6601,1.8435 2.7433,0.2845 0.048,-0.891 -1.2779,-2.3642 -1.2779,-2.3642 z" id="path4352" style="opacity:1"/>
+        <path inkscape:connector-curvature="0" d="m 187.6465,181.4304 4.6492,3.5274 0.7045,-0.9258 -1.3947,-1.0581 c 2.8037,-0.7933 4.7199,-4.1749 2.8602,-5.5859 -1.8596,-1.4109 -4.7057,1.2652 -4.7199,4.1749 l -1.3948,-1.0582 z" id="path3583" style="opacity:1"/>
+      </g>
+    </g>
+    </svg>

@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="clonetiler_per_column_color-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="0.6002936" inkscape:cx="732.67439" inkscape:cy="-567.94603" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="matrix(1,0,0,0.999067,-678,-771.64133)" id="clonetiler_per_column_color" inkscape:label="00256">
+      <path inkscape:connector-curvature="0" id="rect27515" d="m 772.83185,-694 h 15.06066 c 0.2602,0 0.46967,0.20947 0.46967,0.46967 v 15.06066 c 0,0.2602 -0.20947,0.46967 -0.46967,0.46967 h -15.06066 c -0.26019,0 -0.46967,-0.20947 -0.46967,-0.46967 v -15.06066 c 0,-0.2602 0.20948,-0.46967 0.46967,-0.46967 z" style="opacity:0;fill:none" transform="rotate(90)"/>
+      <path inkscape:connector-curvature="0" id="rect27517" d="m -682,-786.36218 h 2 v 12 h -2 z" style="opacity:1" transform="scale(-1)"/>
+      <path inkscape:connector-curvature="0" id="path27519" d="m 684,774.3622 h 2 v 10 l -2,2 z" style="opacity:1"/>
+      <path inkscape:connector-curvature="0" id="path27521" d="m 688,774.3622 h 2 v 6 l -2,2 z" style="opacity:1"/>
+      <g id="g27523" transform="matrix(0.8746234,0,0,0.8917833,709.929,762.917)">
+        <path inkscape:connector-curvature="0" d="m -28.5,27.5711 c 3.11114,0.0011 2.79359,-3.32336 4.30417,-4.24898 1.75047,-1.07262 3.28449,0.25648 3.59075,1.35029 0.38645,1.38019 -0.33782,2.50869 -1.30032,3.11895 -1.84636,1.17068 -6.30004,0.89871 -6.5946,-0.22026 z" id="path27525"/>
+      </g>
+      <path inkscape:connector-curvature="0" id="path27527" d="m 694,777.7684 c -1.0139,1.0613 -2.0888,2.3376 -3.75,4.625 1.0036,0.0377 1.8651,0.6887 2.3125,1.625 0.532,-0.5735 1.0096,-1.1419 1.4375,-1.6562 z" style="opacity:1"/>
+    </g>
+    </svg>

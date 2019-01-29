@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="draw-eraser-16px-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="0.6002936" inkscape:cx="732.67439" inkscape:cy="-567.94603" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="translate(-317,-991.3622)" id="draw-eraser-16px" inkscape:label="00152">
+      <g transform="translate(255.9998,774.3622)" id="g34168" inkscape:label="stock-tool-eraser">
+        <path inkscape:connector-curvature="0" id="rect34148" d="m -180,0 h 16 v 16 h -16 z" style="opacity:0;fill:none" transform="translate(241.0002,217)"/>
+        <path inkscape:connector-curvature="0" style="opacity:1" d="m 72.15645,218 c -0.0789,0.016 -0.1595,0.07 -0.21875,0.125 l -4.28125,4 4.03125,4.3437 4.15625,-3.875 c 0.23699,-0.2214 0.17839,-0.6828 -0.125,-1.0312 L 72.9377,218.3437 C 72.71016,218.0824 72.39301,217.9517 72.15645,218 Z" id="path4066"/>
+        <path inkscape:connector-curvature="0" style="opacity:1" d="m 66.5002,223.2187 -2.34375,2.1875 c -0.23699,0.2215 -0.20964,0.6829 0.0937,1.0313 l 2.8125,3.2187 c 0.30339,0.3485 0.73176,0.4402 0.96875,0.2188 l 2.46875,-2.3125 -4,-4.3438 z" id="rect34152"/>
+        <path inkscape:connector-curvature="0" id="rect34161" d="m 69.7002,231 c -0.3878,0 -0.7,0.223 -0.7,0.5 0,0.277 0.3122,0.5 0.7,0.5 h 1.4 4.2 0.7 v -0.5 -0.5 h -0.7 -4.2 z" style="opacity:1"/>
+        <path style="opacity:1" d="m 64.3002,231 c 0.3878,0 0.7,0.223 0.7,0.5 0,0.277 -0.3122,0.5 -0.7,0.5 -2.1,0 -2,0 -2.3,0 v -0.5 -0.5 c 0,0 0.2,0 2.3,0 z" id="path34166" inkscape:connector-curvature="0"/>
+      </g>
+    </g>
+    </svg>

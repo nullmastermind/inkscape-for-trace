@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg1"
+   width="12.01931"
+   height="12.01931"
+  >
+  <sodipodi:namedview
+     id="base"
+     showgrid="true"
+     gridspacingy="1pt"
+     gridspacingx="1pt"
+     gridoriginy="0pt"
+     gridoriginx="0pt"
+  />
+  <defs id="defs3">
+
+  </defs>
+<g id="connector-new-connpoint" inkscape:label="#g6061" transform="translate(-577,-360.9807158)">
+  <path d="m 578.0001,371.9603 a 10,10 0 0 1 2.9594,-7.0618 10,10 0 0 1 7.0871,-2.8984 L 588,372 Z" id="path6018" sodipodi:cx="588" sodipodi:cy="372" sodipodi:end="4.717045" sodipodi:rx="10" sodipodi:ry="10" sodipodi:start="3.145564" sodipodi:type="arc" style="fill:#b0c5da;fill-rule:evenodd;stroke:#0000ff;stroke-miterlimit:1.5"/>
+  <rect height="12.01931" id="rect5199" style="fill:none" width="12.01931" x="577" y="360.9807"/>
+  <rect height="3" id="rect5202" style="fill:#ff7777;fill-rule:evenodd;stroke:#ff0000;stroke-width:0.9999995;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0;stroke-opacity:0.9411765" width="3" x="580" y="363"/>
+</g>
+
+</svg>

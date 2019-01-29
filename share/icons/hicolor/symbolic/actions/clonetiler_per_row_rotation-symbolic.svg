@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="clonetiler_per_row_rotation-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="0.6002936" inkscape:cx="732.67439" inkscape:cy="-567.94603" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="matrix(0.995772,0,0,1,-615.31951,-743.36218)" id="clonetiler_per_row_rotation" inkscape:label="00249">
+      <path inkscape:connector-curvature="0" id="rect23348" d="m 743.83185,-634 h 15.06066 c 0.2602,0 0.46967,0.20947 0.46967,0.46967 v 15.06066 c 0,0.2602 -0.20947,0.46967 -0.46967,0.46967 h -15.06066 c -0.26019,0 -0.46967,-0.20947 -0.46967,-0.46967 v -15.06066 c 0,-0.2602 0.20948,-0.46967 0.46967,-0.46967 z" style="opacity:0;fill:none" transform="rotate(90)"/>
+      <path inkscape:connector-curvature="0" id="rect23350" d="m 743.36218,-630 h 2 v 12 h -2 z" style="opacity:1" transform="rotate(90)"/>
+      <path inkscape:connector-curvature="0" id="rect23362" d="m 181.77769,-967.52307 h 2 v 12 h -2 z" style="opacity:1" transform="rotate(129.689)"/>
+      <path inkscape:connector-curvature="0" id="path23370" d="m 627.9687,747.1509 a 0.950095,0.9493217 0 0 1 1.0938,-0.7806 c 2.2558,0 3.9375,2.0628 3.9375,4.4339 0,1.5386 -0.6989,2.9474 -1.8125,3.747 l 1.8125,1.811 h -5 v -1.7486 -0.0936 a 0.950095,0.9493217 0 0 1 0,-0.4684 v -0.6869 -1.9984 l 1.8125,1.811 c 0.009,-0.004 0.0226,0.004 0.0313,0 0.7288,-0.3704 1.2812,-1.2542 1.2812,-2.373 0,-1.4917 -1.0046,-2.5604 -2.0625,-2.5604 a 0.950095,0.9493217 0 0 1 -1.0938,-1.0929 z" style="opacity:1"/>
+    </g>
+    </svg>
