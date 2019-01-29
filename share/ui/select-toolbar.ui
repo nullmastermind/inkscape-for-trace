@@ -106,15 +106,6 @@
     <toolitem action='MeasureOffsetAction' />
   </toolbar>
 
-  <toolbar name='3DBoxToolbar'>
-    <toolitem action='3DBoxAngleXAction' />
-    <toolitem action='3DBoxVPXStateAction' />
-    <toolitem action='3DBoxAngleYAction' />
-    <toolitem action='3DBoxVPYStateAction' />
-    <toolitem action='3DBoxAngleZAction' />
-    <toolitem action='3DBoxVPZStateAction' />
-  </toolbar>
-
   <toolbar name='PenToolbar'>
     <toolitem action='FreehandModeActionPen' />
     <separator />

@@ -49,6 +49,10 @@ class Node;
 }
 
 namespace UI {
+namespace Widget {
+class SpinButtonToolItem;
+}
+
 namespace Tools {
 class ToolBase;
 }
@@ -56,46 +60,42 @@ class ToolBase;
 namespace Toolbar {
 class Box3DToolbar : public Toolbar {
 private:
-    EgeAdjustmentAction *_angle_x_action;
-    EgeAdjustmentAction *_angle_y_action;
-    EgeAdjustmentAction *_angle_z_action;
+    UI::Widget::SpinButtonToolItem *_angle_x_item;
+    UI::Widget::SpinButtonToolItem *_angle_y_item;
+    UI::Widget::SpinButtonToolItem *_angle_z_item;
 
     Glib::RefPtr<Gtk::Adjustment> _angle_x_adj;
     Glib::RefPtr<Gtk::Adjustment> _angle_y_adj;
     Glib::RefPtr<Gtk::Adjustment> _angle_z_adj;
 
-    InkToggleAction *_vp_x_state_action;
-    InkToggleAction *_vp_y_state_action;
-    InkToggleAction *_vp_z_state_action;
+    Gtk::ToggleToolButton *_vp_x_state_item;
+    Gtk::ToggleToolButton *_vp_y_state_item;
+    Gtk::ToggleToolButton *_vp_z_state_item;
 
     XML::Node *_repr;
     bool _freeze;
 
     void angle_value_changed(Glib::RefPtr<Gtk::Adjustment> &adj,
                              Proj::Axis                     axis);
-    static void vp_state_changed(GtkToggleAction *act,
-                                 Proj::Axis       axis);
+    void vp_state_changed(Proj::Axis axis);
     void check_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
     void selection_changed(Inkscape::Selection *selection);
     void resync_toolbar(Inkscape::XML::Node *persp_repr);
     void set_button_and_adjustment(Persp3D                        *persp,
                                    Proj::Axis                      axis,
                                    Glib::RefPtr<Gtk::Adjustment>&  adj,
-                                   GtkAction                      *act,
-                                   GtkToggleAction                *tact);
+                                   UI::Widget::SpinButtonToolItem *spin_btn,
+                                   Gtk::ToggleToolButton          *toggle_btn);
     double normalize_angle(double a);
 
     sigc::connection _changed;
 
 protected:
-    Box3DToolbar(SPDesktop *desktop)
-        : Toolbar(desktop),
-        _repr(nullptr)
-    {}
+    Box3DToolbar(SPDesktop *desktop);
     ~Box3DToolbar() override;
 
 public:
-    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+    static GtkWidget * create(SPDesktop *desktop);
     static void event_attr_changed(Inkscape::XML::Node *repr,
                                    gchar const         *name,
                                    gchar const         *old_value,

@@ -205,7 +205,7 @@ static struct {
       SP_VERB_CONTEXT_STAR_PREFS,   "/tools/shapes/star",     N_("Style of new stars")},
     { "/tools/shapes/rect",   "rect_toolbox",   Inkscape::UI::Toolbar::RectToolbar::create, nullptr,             "RectToolbar",
       SP_VERB_CONTEXT_RECT_PREFS,   "/tools/shapes/rect",     N_("Style of new rectangles")},
-    { "/tools/shapes/3dbox",  "3dbox_toolbox",  nullptr, Inkscape::UI::Toolbar::Box3DToolbar::prep,             "3DBoxToolbar",
+    { "/tools/shapes/3dbox",  "3dbox_toolbox",  Inkscape::UI::Toolbar::Box3DToolbar::create, nullptr,            "3DBoxToolbar",
       SP_VERB_CONTEXT_3DBOX_PREFS,  "/tools/shapes/3dbox",    N_("Style of new 3D boxes")},
     { "/tools/shapes/arc",    "arc_toolbox",    nullptr, Inkscape::UI::Toolbar::ArcToolbar::prep,               "ArcToolbar",
       SP_VERB_CONTEXT_ARC_PREFS,    "/tools/shapes/arc",      N_("Style of new ellipses")},
