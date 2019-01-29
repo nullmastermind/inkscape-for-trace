@@ -32,29 +32,31 @@
 
 #include <gtkmm/adjustment.h>
 
-class InkSelectOneAction;
 class SPDesktop;
 
-typedef struct _EgeAdjustmentAction EgeAdjustmentAction;
-typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _InkToggleAction InkToggleAction;
+namespace Gtk {
+class SeparatorToolItem;
+}
 
 namespace Inkscape {
 namespace UI {
-class PrefPusher;
+class SimplePrefPusher;
+
+namespace Widget {
+class SpinButtonToolItem;
+}
 
 namespace Toolbar {
 class EraserToolbar : public Toolbar {
 private:
-    InkSelectOneAction  *_eraser_mode_action;
-    EgeAdjustmentAction *_width;
-    EgeAdjustmentAction *_mass;
-    EgeAdjustmentAction *_thinning;
-    EgeAdjustmentAction *_cap_rounding;
-    EgeAdjustmentAction *_tremor;
+    UI::Widget::SpinButtonToolItem *_width;
+    UI::Widget::SpinButtonToolItem *_mass;
+    UI::Widget::SpinButtonToolItem *_thinning;
+    UI::Widget::SpinButtonToolItem *_cap_rounding;
+    UI::Widget::SpinButtonToolItem *_tremor;
 
-    InkToggleAction *_usepressure;
-    InkToggleAction *_split;
+    Gtk::ToggleToolButton *_usepressure;
+    Gtk::ToggleToolButton *_split;
 
     Glib::RefPtr<Gtk::Adjustment> _width_adj;
     Glib::RefPtr<Gtk::Adjustment> _mass_adj;
@@ -62,7 +64,9 @@ private:
     Glib::RefPtr<Gtk::Adjustment> _cap_rounding_adj;
     Glib::RefPtr<Gtk::Adjustment> _tremor_adj;
 
-    std::unique_ptr<PrefPusher> _pressure_pusher;
+    std::unique_ptr<SimplePrefPusher> _pressure_pusher;
+
+    std::vector<Gtk::SeparatorToolItem *> _separators;
 
     bool _freeze;
 
@@ -74,14 +78,14 @@ private:
     void cap_rounding_value_changed();
     void tremor_value_changed();
     static void update_presets_list(gpointer data);
-    static void toggle_break_apart(GtkToggleAction *act,
-                                   gpointer         data);
+    void toggle_break_apart();
+    void usepressure_toggled();
 
 protected:
     EraserToolbar(SPDesktop *desktop);
 
 public:
-    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+    static GtkWidget * create(SPDesktop *desktop);
 };
 
 }

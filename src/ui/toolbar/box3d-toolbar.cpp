@@ -48,7 +48,6 @@
 
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
-using Inkscape::UI::PrefPusher;
 
 static Inkscape::XML::NodeEventVector box3d_persp_tb_repr_events =
 {

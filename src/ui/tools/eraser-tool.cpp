@@ -535,7 +535,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
                     this->width = 1.0;
                 }
 
-                sp_erc_update_toolbox (desktop, "altx-eraser", this->width * 100); // the same spinbutton is for alt+x
+                sp_erc_update_toolbox (desktop, "eraser-width", this->width * 100); // the same spinbutton is for alt+x
                 ret = TRUE;
             }
             break;
@@ -549,7 +549,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
                     this->width = 0.01;
                 }
 
-                sp_erc_update_toolbox (desktop, "altx-eraser", this->width * 100);
+                sp_erc_update_toolbox (desktop, "eraser-width", this->width * 100);
                 ret = TRUE;
             }
             break;
@@ -557,21 +557,21 @@ bool EraserTool::root_handler(GdkEvent* event) {
         case GDK_KEY_Home:
         case GDK_KEY_KP_Home:
             this->width = 0.01;
-            sp_erc_update_toolbox (desktop, "altx-eraser", this->width * 100);
+            sp_erc_update_toolbox (desktop, "eraser-width", this->width * 100);
             ret = TRUE;
             break;
 
         case GDK_KEY_End:
         case GDK_KEY_KP_End:
             this->width = 1.0;
-            sp_erc_update_toolbox (desktop, "altx-eraser", this->width * 100);
+            sp_erc_update_toolbox (desktop, "eraser-width", this->width * 100);
             ret = TRUE;
             break;
 
         case GDK_KEY_x:
         case GDK_KEY_X:
             if (MOD__ALT_ONLY(event)) {
-                desktop->setToolboxFocusTo ("altx-eraser");
+                desktop->setToolboxFocusTo ("eraser-width");
                 ret = TRUE;
             }
             break;

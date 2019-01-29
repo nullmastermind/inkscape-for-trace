@@ -179,6 +179,7 @@
     <toolitem action='PaintbucketResetAction' />
   </toolbar>
 
+  <!--
   <toolbar name='EraserToolbar'>
     <toolitem action='EraserModeAction' />
     <separator />
@@ -195,6 +196,7 @@
     <separator />
     <toolitem action='EraserBreakAppart' />
   </toolbar>
+-->
 
   <toolbar name='TextToolbar'>
     <toolitem action='TextFontFamilyAction' />

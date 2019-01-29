@@ -1,18 +1,23 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
-#ifndef SEEN_PREF_PUSHER_H
-#define SEEN_PREF_PUSHER_H
+#ifndef SEEN_SIMPLE_PREF_PUSHER_H
+#define SEEN_SIMPLE_PREF_PUSHER_H
 
 #include "preferences.h"
 
-typedef struct _GtkToggleAction GtkToggleAction;
+namespace Gtk {
+class ToggleToolButton;
+}
 
 namespace Inkscape {
 namespace UI {
 
 /**
- * A simple mediator class that keeps UI controls matched to the preference values they set.
+ * A simple mediator class that sets the state of a Gtk::ToggleToolButton when
+ * a preference is changed.  Unlike the PrefPusher class, this does not provide
+ * the reverse process, so you still need to write your own handler for the
+ * "toggled" signal on the ToggleToolButton.
  */
-class PrefPusher : public Inkscape::Preferences::Observer
+class SimplePrefPusher : public Inkscape::Preferences::Observer
 {
 public:
     /**
@@ -25,15 +30,13 @@ public:
      * @param callback function to invoke when changes are pushed.
      * @param cbData data to be passed on to the callback function.
      */
-    PrefPusher( GtkToggleAction       *act,
-                Glib::ustring const &  path,
-                void (*callback)(gpointer) = nullptr,
-                gpointer cbData = nullptr );
+    SimplePrefPusher(Gtk::ToggleToolButton *btn,
+                     Glib::ustring const &  path);
 
     /**
      * Destructor that unregisters the preference callback.
      */
-    ~PrefPusher() override;
+    ~SimplePrefPusher() override;
 
     /**
      * Callback method invoked when the preference setting changes.
@@ -42,25 +45,7 @@ public:
 
 
 private:
-    /**
-     * Callback hook invoked when the widget changes.
-     *
-     * @param act the toggle action widget that was changed.
-     * @param self the PrefPusher instance the callback was registered to.
-     */
-   static void toggleCB( GtkToggleAction *act, PrefPusher *self );
-
-    /**
-     * Method to handle the widget change.
-     *
-     * @details Sets the observed path, based on the state of the toggle button
-     *          and then runs the callback function
-     */
-    void handleToggled();
-
-    GtkToggleAction *act;
-    void (*callback)(gpointer);
-    gpointer cbData;
+    Gtk::ToggleToolButton *_btn;
     bool freeze;
 };
 
