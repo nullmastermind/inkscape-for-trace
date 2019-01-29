@@ -193,21 +193,6 @@
     <toolitem action='LPEOpenLPEDialogAction' />
   </toolbar>
 
-  <toolbar name='GradientToolbar'>
-    <toolitem action='GradientNewTypeAction' />
-    <toolitem action='GradientNewFillStrokeAction' />
-    <separator />
-    <toolitem action='GradientSelectGradientAction' />
-    <toolitem action='GradientEditLinkAction' />
-    <toolitem action='GradientEditReverseAction' />
-    <toolitem action='GradientSelectSpreadAction' />
-    <separator />
-    <toolitem action='GradientStopAction' />
-    <toolitem action='GradientEditOffsetAction' />
-    <toolitem action='GradientEditAddAction' />
-    <toolitem action='GradientEditDeleteAction' />
-  </toolbar>
-
   <toolbar name='MeshToolbar'>
     <toolitem action='MeshNewTypeAction' />
     <toolitem action='MeshNewFillStrokeAction' />
