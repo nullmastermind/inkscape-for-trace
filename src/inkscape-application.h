@@ -43,8 +43,27 @@ public:
     virtual int  on_handle_local_options(const Glib::RefPtr<Glib::VariantDict>& options) = 0;
     virtual void on_new() = 0;
     virtual void on_quit() = 0;
-    SPDocument* get_active_document() { return _active_document; };
-    Inkscape::Selection* get_active_selection(); // { return _active_selection; };
+
+    // Gio::Actions need to know what document, selection, view to work on.
+    // In headless mode, these are set for each file processed.
+    // With GUI, these are set everytime the cursor enters an InkscapeWindow.
+    SPDocument*           get_active_document() { return _active_document; };
+    void                  set_active_document(SPDocument* document) { _active_document = document; };
+
+    Inkscape::Selection*  get_active_selection() { return _active_selection; }
+    void                  set_active_selection(Inkscape::Selection* selection)
+                                                               {_active_selection = selection;};
+
+    // A view should track selection and canvas to document transform matrix. This is partially
+    // redundant with the selection functions above. Maybe we should get rid of view altogether.
+    Inkscape::UI::View::View* get_active_view() { return _active_view; }
+    void                  set_active_view(Inkscape::UI::View::View* view) { _active_view = view; }
+
+    // These are needed to cast Glib::RefPtr<Gtk::Application> to Glib::RefPtr<InkscapeApplication>,
+    // Presumably, Gtk/Gio::Application takes care of ref counting in ConcreteInkscapeApplication
+    // so we just provide dummies (and there is only one application in the application!).
+    void reference()   { /*printf("reference()\n"  );*/ }
+    void unreference() { /*printf("unreference()\n");*/ }
 
 protected:
     bool _with_gui;
@@ -57,8 +76,9 @@ protected:
     std::map<SPDocument*, std::vector<InkscapeWindow*> > _documents;
 
     // We keep track of these things so we don't need a window to find them (for headless operation).
-    SPDocument* _active_document;
-    Inkscape::Selection* active_selection;  // This should be a view once view doesn't depend on GUI.
+    SPDocument*               _active_document;
+    Inkscape::Selection*      _active_selection;
+    Inkscape::UI::View::View* _active_view;
 
     InkFileExportCmd _file_export;
 
@@ -67,7 +87,7 @@ protected:
 };
 
 // T can be either:
-//   Gio::Application (window server is not present) or
+//   Gio::Application (window server is not present, required for CI testing) or
 //   Gtk::Application (window server is present).
 // With Gtk::Application, one can still run "headless" by not creating any windows.
 template <class T> class ConcreteInkscapeApplication : public T, public InkscapeApplication

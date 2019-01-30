@@ -19,6 +19,7 @@
 
 #include <gtkmm.h>
 
+class InkscapeApplication;
 class SPDocument;
 class SPDesktop;
 class SPDesktopWidget;
@@ -40,16 +41,20 @@ public:
     SPDesktop*       get_desktop()        { return _desktop; }
     SPDesktopWidget* get_desktop_widget() { return _desktop_widget; }
 
+    void change_document(SPDocument* document);
+
 private:
-    SPDocument* _document;
-    SPDesktop*  _desktop;
-    SPDesktopWidget* _desktop_widget;
+    Glib::RefPtr<InkscapeApplication> _app;
+    SPDocument*          _document;
+    SPDesktop*           _desktop;
+    SPDesktopWidget*     _desktop_widget;
 
     Gtk::Box*      _mainbox;
     Gtk::MenuBar*  _menubar;
 
     // Callbacks
-    bool key_press(GdkEventKey* event);
+    bool key_press(GdkEventKey* event); // Not override!
+    bool on_focus_in_event(GdkEventFocus* event) override;
 };
 
 #endif // INKSCAPE_WINDOW_H

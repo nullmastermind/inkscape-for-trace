@@ -19,6 +19,7 @@
 #include "inkscape.h"   // SP_ACTIVE_DESKTOP
 #include "enums.h"      // PREFS_WINDOW_GEOMETRY_NONE
 #include "shortcuts.h"
+#include "inkscape-application.h"
 
 #include "object/sp-namedview.h"  // TODO Remove need for this!
 
@@ -40,11 +41,11 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
         return;
     }
 
-    // Register window with application.
     Glib::RefPtr<Gio::Application> gio_app = Gio::Application::get_default();
-    Glib::RefPtr<Gtk::Application> app = Glib::RefPtr<Gtk::Application>::cast_dynamic(gio_app);
-    if (app) {
-        set_application(app);  // Same as Gtk::Application::add_window()
+    Glib::RefPtr<Gtk::Application> gtk_app = Glib::RefPtr<Gtk::Application>::cast_dynamic(gio_app);
+    _app = Glib::RefPtr<InkscapeApplication>::cast_dynamic(gtk_app);
+    if (gtk_app) {
+        set_application(gtk_app);  // Same as Gtk::Application::add_window()
     } else {
         std::cerr << "InkscapeWindow::InkscapeWindow:: Didn't get app!" << std::endl;
     }
@@ -99,11 +100,38 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
 
 }
 
+// Change a document, leaving desktop/view the same. (Eventually move all code here.)
+void
+InkscapeWindow::change_document(SPDocument* document)
+{
+    _document = document;
+    if (_app) {
+        _app->set_active_document(_document);
+    } else {
+        std::cerr << "Inkscapewindow::change_document: app is nullptr!" << std::endl;
+    }
+}
+
+// We don't override on_key_press() as it steals key strokes from text tool.
 bool
 InkscapeWindow::key_press(GdkEventKey* event)
 {
     unsigned shortcut = sp_shortcut_get_for_event(event);
     return sp_shortcut_invoke (shortcut, _desktop);
+}
+
+bool
+InkscapeWindow::on_focus_in_event(GdkEventFocus* event)
+{
+    if (_app) {
+        _app->set_active_document(_document);
+        _app->set_active_view(_desktop);
+        _app->set_active_selection(_desktop->selection);
+    } else {
+        std::cerr << "Inkscapewindow::on_focus_in_event: app is nullptr!" << std::endl;
+    }
+
+    return true;
 }
 
 /*

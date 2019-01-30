@@ -37,7 +37,7 @@ class View;
   used to take as parameters in their methods. Why is this? They almost
   always seemed to cast straight to an SPDesktop* - so shouldn't we actually
   be storing an SPDesktop*? Is there a case where a non-SPDesktop
-  UI::View::View is used by the actions?
+  UI::View::View is used by the actions? YES: Command-line wihtout GUI.
   
   ActionContext is designed to be copyable, so it may be used with stack
   storage if required. */

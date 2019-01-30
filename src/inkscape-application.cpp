@@ -43,7 +43,14 @@ using Inkscape::IO::Resource::UIS;
 // flags are set. If the open flag is set and the command line not, the all the remainng arguments
 // after calling on_handle_local_options() are assumed to be filenames.
 
-InkscapeApplication::InkscapeApplication() : _with_gui(true), _batch_process(false), _use_shell(false) {}
+InkscapeApplication::InkscapeApplication()
+    : _with_gui(true)
+    , _batch_process(false)
+    , _use_shell(false)
+    , _active_document(nullptr)
+    , _active_selection(nullptr)
+    , _active_view(nullptr)
+{}
 
 template<class T>
 ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
@@ -154,13 +161,6 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     T::register_application();
 }
 
-Inkscape::Selection*
-InkscapeApplication::get_active_selection()
-{
-    Inkscape::ActionContext context = INKSCAPE.action_context_for_document(_active_document);
-    return context.getSelection();
-}
-
 template<class T>
 void
 ConcreteInkscapeApplication<T>::on_startup()
@@ -268,6 +268,7 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
             }
 
         } else {
+
             // Open file
             bool cancelled = false;
             SPDocument *doc = ink_file_open(file, cancelled);
@@ -275,6 +276,10 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
 
             // Add to Inkscape::Application...
             INKSCAPE.add_document(doc);
+            // ActionContext should be removed once verbs are gone but we use it for now.
+            Inkscape::ActionContext context = INKSCAPE.action_context_for_document(doc);
+            set_active_selection(context.getSelection());
+            set_active_view(     context.getView()     );
 
             doc->ensureUpToDate(); // Or queries don't work!
 
@@ -294,6 +299,8 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
             }
 
             _active_document = nullptr;
+            _active_selection = nullptr;
+            _active_view = nullptr;
 
             // Close file
             INKSCAPE.remove_document(doc);

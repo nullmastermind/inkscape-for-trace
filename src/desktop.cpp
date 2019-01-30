@@ -684,6 +684,7 @@ SPDesktop::change_document (SPDocument *theDocument)
        (this can probably be done in a better way) */
     InkscapeWindow *parent = this->getInkscapeWindow();
     g_assert(parent != nullptr);
+    parent->change_document(theDocument);
     SPDesktopWidget *dtw = parent->get_desktop_widget();
     if (dtw) {
         dtw->desktop = this;
