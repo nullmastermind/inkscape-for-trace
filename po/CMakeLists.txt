@@ -42,20 +42,23 @@ if(UNIX)
         )
     endif()
     add_custom_target(inkscape_appdata ALL DEPENDS ${CMAKE_BINARY_DIR}/org.inkscape.Inkscape.appdata.xml)
-endif()
-
-# update inkscape.pot
-if(INTLTOOL-UPDATE)
-    add_custom_command(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/inkscape.pot
-        COMMAND sh -c "${INTLTOOL-UPDATE} --pot --gettext-package=inkscape"
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    )
-    set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/inkscape.pot PROPERTIES GENERATED TRUE)
-
-    add_custom_target(inkscape_pot ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/inkscape.pot)
-    add_dependencies(inkscape_pot filters_svg_h)
-    add_dependencies(inkscape_pot palettes_h)
-    add_dependencies(inkscape_pot patterns_svg_h)
-    add_dependencies(inkscape_pot symbols_h)
-    add_dependencies(inkscape_pot templates_h)
+    if(GETTEXT_MSGMERGE_EXECUTABLE)
+        SET(_potFile ${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}.pot)
+        add_custom_target(inkscape_pot ALL DEPENDS ${_potFile})
+        set_source_files_properties(${_potFile} PROPERTIES GENERATED TRUE)
+        add_dependencies(inkscape_pot filters_svg_h)
+        add_dependencies(inkscape_pot palettes_h)
+        add_dependencies(inkscape_pot patterns_svg_h)
+        add_dependencies(inkscape_pot symbols_h)
+        add_dependencies(inkscape_pot templates_h)
+        ADD_CUSTOM_COMMAND(OUTPUT ${_potFile}
+            COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE}    -L Desktop --from-code=UTF-8 -ktranslatable -k_ -kN_ -o ${_potFile} ${CMAKE_CURRENT_SOURCE_DIR}/../org.inkscape.Inkscape.appdata.xml.in
+            COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -L Desktop --from-code=UTF-8 -ktranslatable -k_ -kN_ -o ${_potFile} ${CMAKE_CURRENT_SOURCE_DIR}/../org.inkscape.Inkscape.desktop.in
+            COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -L Glade   --from-code=UTF-8 -ktranslatable -k_ -kN_ -o ${_potFile} -f ${CMAKE_CURRENT_SOURCE_DIR}/POTFILES.xml.in
+            COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -L Python  --from-code=UTF-8 -ktranslatable -k_ -kN_ -o ${_potFile} -f ${CMAKE_CURRENT_SOURCE_DIR}/POTFILES.py.in
+            COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j            --from-code=UTF-8 -ktranslatable -k_ -kN_ -o ${_potFile} -f ${CMAKE_CURRENT_SOURCE_DIR}/POTFILES.in
+            COMMENT "Extract translatable messages to ${_potFile}"
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
+        )
+    endif()
 endif()
