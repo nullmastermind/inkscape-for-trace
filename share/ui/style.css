@@ -209,10 +209,6 @@ spinbutton undershoot {
 	outline-style : none;
 }
 
-.lpeinfo{
-    font-size:16px;
-    padding:20px;
-}
 #lpedialogselector,
 #lpedialogselector .frame,
 #lpedialogselector .searchbar {
@@ -239,9 +235,25 @@ spinbutton undershoot {
     outline:none;
 }
 
-
 #LPEDialogSelector .frame{
     border-width:0;
+}
+
+.lpename{
+    font-size:22px;
+    margin-bottom:20px;
+}
+.lpeinfo{
+    font-size:16px;
+    padding:20px;
+}
+
+#LPESelectorEffectInfo{
+padding:15px;
+}
+#LPESelectorEffectInfoName{
+font-weight:bold;
+padding:15px;
 }
   
 SPRuler {

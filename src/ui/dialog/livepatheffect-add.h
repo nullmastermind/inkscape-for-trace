@@ -15,7 +15,10 @@
 #include "live_effects/effect-enum.h"
 #include <gtkmm/box.h>
 #include <gtkmm/builder.h>
+#include <gtkmm/image.h>
+#include <gtkmm/eventbox.h>
 #include <gtkmm/dialog.h>
+#include <gtkmm/popover.h>
 #include <gtkmm/flowbox.h>
 #include <gtkmm/flowboxchild.h>
 #include <gtkmm/label.h>
@@ -53,6 +56,7 @@ public:
     bool on_filter(Gtk::FlowBoxChild *child);
     void on_search();
     void on_activate(Gtk::FlowBoxChild *child);
+    bool pop_description(GdkEventButton* evt, Glib::RefPtr<Gtk::Builder> builder_effect);
     /**
      * Add button was clicked
      */
@@ -72,6 +76,7 @@ private:
   Gtk::Dialog *_LPEDialogSelector;
   Glib::RefPtr<Gtk::Builder> _builder;
   Gtk::FlowBox *_LPESelectorFlowBox;
+  Gtk::Popover *_LPESelectorEffectInfo;
   Gtk::SearchEntry *_LPEFilter;
   Gtk::Label *_LPEInfo;
   Gtk::Box *_LPESelector;
