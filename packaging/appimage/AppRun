@@ -39,6 +39,7 @@ export PATH="${HERE}"/usr/bin/:"${HERE}"/usr/sbin/:"${HERE}"/usr/games/:"${HERE}
 ############################################################################################
 
 export PYTHONHOME="$HERE/usr/"
+export PYTHONPATH="$HERE/usr/share/inkscape/extensions/:$PYTHONPATH"
 
 ############################################################################################
 # Run experimental bundle that bundles everything if a private ld-linux-x86-64.so.2 is there
