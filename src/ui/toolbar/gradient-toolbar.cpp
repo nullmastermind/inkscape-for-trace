@@ -943,7 +943,7 @@ GradientToolbar::selection_changed(Inkscape::Selection * /*selection*/)
 
         _stop_cb->set_sensitive( gr_selected && !gr_multi);
 
-        int stop = update_stop_list (gr_selected, nullptr, gr_multi);
+        update_stop_list (gr_selected, nullptr, gr_multi);
         select_stop_by_draggers(gr_selected, ev);
     }
 

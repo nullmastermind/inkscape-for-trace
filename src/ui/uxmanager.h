@@ -38,12 +38,11 @@ public:
 
     virtual bool isWidescreen() const = 0;
 
-protected:
-    UXManager();
-
-private:
     UXManager( UXManager const & ) = delete;
     UXManager & operator=( UXManager const & ) = delete;
+
+protected:
+    UXManager();
 };
 
 } // namespace UI

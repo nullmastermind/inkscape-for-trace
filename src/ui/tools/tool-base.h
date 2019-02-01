@@ -152,6 +152,9 @@ public:
 
     virtual ~ToolBase();
 
+    ToolBase(const ToolBase&) = delete;
+    ToolBase& operator=(const ToolBase&) = delete;
+
     Inkscape::Preferences::Observer *pref_observer;
     Glib::RefPtr<Gdk::Cursor> cursor;
 
@@ -230,8 +233,6 @@ protected:
     bool sp_event_context_knot_mouseover() const;
 
 private:
-	ToolBase(const ToolBase&) = delete;
-	ToolBase& operator=(const ToolBase&) = delete;
         bool _keyboardMove(GdkEventKey const &event, Geom::Point const &dir);
 
         

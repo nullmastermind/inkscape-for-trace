@@ -50,6 +50,9 @@ public:
     URIReference(SPObject *owner);
     URIReference(SPDocument *owner_document);
 
+    /* Definition-less to prevent accidental use. */
+    void operator=(URIReference const& ref) = delete;
+
     /**
      * Destructor.  Calls shutdown() if the reference has not been
      * shut down yet.
@@ -138,9 +141,6 @@ private:
 
     void _setObject(SPObject *object);
     void _release(SPObject *object);
-
-    void operator=(URIReference const& ref) = delete;
-    /* Private and definition-less to prevent accidental use. */
 };
 
 }

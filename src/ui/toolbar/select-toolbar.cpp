@@ -64,8 +64,8 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    auto select_all_button               = add_toolbutton_for_verb(SP_VERB_EDIT_SELECT_ALL);
-    auto select_all_in_all_layers_button = add_toolbutton_for_verb(SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS);
+    add_toolbutton_for_verb(SP_VERB_EDIT_SELECT_ALL);
+    add_toolbutton_for_verb(SP_VERB_EDIT_SELECT_ALL_IN_ALL_LAYERS);
     auto deselect_button                 = add_toolbutton_for_verb(SP_VERB_EDIT_DESELECT);
     _context_items.push_back(deselect_button);
 

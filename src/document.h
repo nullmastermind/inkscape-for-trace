@@ -230,9 +230,6 @@ public:
     void setModifiedSinceSave(bool const modified = true);
 
 private:
-    SPDocument(SPDocument const &) = delete; // no copy
-    void operator=(SPDocument const &) = delete; // no assign
-
     Persp3D *current_persp3d; /**< Currently 'active' perspective (to which, e.g., newly created boxes are attached) */
     Persp3DImpl *current_persp3d_impl;
 
@@ -242,6 +239,9 @@ private:
     SPDocument *_parent_document;
 
 public:
+    SPDocument(SPDocument const &) = delete; // no copy
+    void operator=(SPDocument const &) = delete; // no assign
+
     sigc::connection connectReconstructionStart(ReconstructionStart::slot_type slot);
     sigc::connection connectReconstructionFinish(ReconstructionFinish::slot_type slot);
     void emitReconstructionStart();

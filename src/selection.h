@@ -70,6 +70,11 @@ public:
     Selection(LayerModel *layers, SPDesktop *desktop);
     ~Selection() override;
 
+    /** no copy. */
+    Selection(Selection const &) = delete;
+    /** no assign. */
+    void operator=(Selection const &) = delete;
+
     /**
      * Returns the layer model the selection is bound to (works in console or GUI mode)
      *
@@ -77,8 +82,6 @@ public:
      * layer model for GUI mode
      */
     LayerModel *layers() { return _layers; }
-
-
 
     /**
      * Returns active layer for selection (currentLayer or its parent).
@@ -207,11 +210,6 @@ protected:
     void _releaseSignals(SPObject* object) override;
 
 private:
-    /** no copy. */
-    Selection(Selection const &) = delete;
-    /** no assign. */
-    void operator=(Selection const &) = delete;
-
     /** Issues modification notification signals. */
     static int _emit_modified(Selection *selection);
     /** Schedules an item modification signal to be sent. */

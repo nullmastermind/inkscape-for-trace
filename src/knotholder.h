@@ -50,6 +50,8 @@ public:
     KnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler);
     virtual ~KnotHolder();
 
+    KnotHolder() = delete; // declared but not defined
+
     void update_knots();
     void unselect_knots();
     void knot_mousedown_handler(SPKnot *knot, unsigned int state);
@@ -89,9 +91,6 @@ protected:
     bool dragging;
 
     Geom::Affine _edit_transform;
-
-private:
-    KnotHolder() = delete; // declared but not defined
 };
 
 /**

@@ -55,6 +55,9 @@ public:
         return ( _anchor ? _anchor->refcount : 0 );
     }
 
+    Anchored(Anchored const &) = delete; // no copy
+    void operator=(Anchored const &) = delete; // no assign
+
 protected:
     Anchored() : _anchor(nullptr) { anchor(); } // initial refcount of one
     virtual ~Anchored() = default;
@@ -73,9 +76,6 @@ private:
 
     Anchor *_new_anchor() const;
     void _free_anchor(Anchor *anchor) const;
-
-    Anchored(Anchored const &) = delete; // no copy
-    void operator=(Anchored const &) = delete; // no assign
 };
 
 /**

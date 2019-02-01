@@ -274,7 +274,6 @@ SpinButtonToolItem::create_numeric_menu()
     auto adj_value = adj->get_value();
     auto lower = adj->get_lower();
     auto upper = adj->get_upper();
-    auto range = upper - lower;
     auto step = adj->get_step_increment();
     auto page = adj->get_page_increment();
 

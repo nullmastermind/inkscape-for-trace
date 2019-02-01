@@ -105,9 +105,9 @@ private:
     void on_changed_combobox();
     void on_toggled_radiomenu(int n);
 
-    ComboToolItem(const Glib::ustring &group_label,
-                  const Glib::ustring &tooltip,
-                  const Glib::ustring &stock_id,
+    ComboToolItem(Glib::ustring group_label,
+                  Glib::ustring tooltip,
+                  Glib::ustring stock_id,
                   Glib::RefPtr<Gtk::ListStore> store );
 };
 }

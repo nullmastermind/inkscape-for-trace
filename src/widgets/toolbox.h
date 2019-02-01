@@ -64,7 +64,6 @@ public:
     static GtkIconSize prefToSize(Glib::ustring const &path, int base = 0 );
     static Gtk::IconSize prefToSize_mm(Glib::ustring const &path, int base = 0);
 
-  private:
     ToolboxFactory() = delete;
 };
 

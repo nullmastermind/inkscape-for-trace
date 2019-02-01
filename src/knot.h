@@ -44,6 +44,9 @@ public:
     SPKnot(SPDesktop *desktop, char const *tip);
     virtual ~SPKnot();
 
+    SPKnot(SPKnot const&) = delete;
+    SPKnot& operator=(SPKnot const&) = delete;
+
     int ref_count; // FIXME encapsulation
 
     SPDesktop *desktop;   /**< Desktop we are on. */
@@ -153,9 +156,6 @@ public:
     Geom::Point position() const;
 
 private:
-    SPKnot(SPKnot const&) = delete;
-    SPKnot& operator=(SPKnot const&) = delete;
-
     /**
      * Set knot control state (dragging/mouseover/normal).
      */

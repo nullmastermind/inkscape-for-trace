@@ -48,6 +48,10 @@ public:
 
   ~SpinButton() override = default;;
 
+  // noncopyable
+  SpinButton(const SpinButton&) = delete;
+  SpinButton& operator=(const SpinButton&) = delete;
+
   void setUnitMenu(UnitMenu* unit_menu) { _unit_menu = unit_menu; };
   
   void addUnitTracker(UnitTracker* ut) { _unit_tracker = ut; };
@@ -87,11 +91,6 @@ protected:
      * Undo the editing, by resetting the value upon when the spinbutton got focus.
      */
     void undo();
-
-private:
-  // noncopyable
-  SpinButton(const SpinButton&) = delete;
-  SpinButton& operator=(const SpinButton&) = delete;
 };
 
 } // namespace Widget

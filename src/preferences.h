@@ -261,6 +261,10 @@ public:
 
     };
 
+    // disable copying
+    Preferences(Preferences const &) = delete;
+    Preferences operator=(Preferences const &) = delete;
+
     // utility methods
 
     /**
@@ -587,10 +591,6 @@ private:
     void _keySplit(Glib::ustring const &pref_path, Glib::ustring &node_key, Glib::ustring &attr_key);
     XML::Node *_getNode(Glib::ustring const &pref_path, bool create=false);
     XML::Node *_findObserverNode(Glib::ustring const &pref_path, Glib::ustring &node_key, Glib::ustring &attr_key, bool create);
-
-    // disable copying
-    Preferences(Preferences const &) = delete;
-    Preferences operator=(Preferences const &) = delete;
 
     std::string _prefs_filename; ///< Full filename (with directory) of the prefs file
     Glib::ustring _lastErrPrimary; ///< Last primary error message, if any.
