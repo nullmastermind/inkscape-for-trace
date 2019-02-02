@@ -339,7 +339,14 @@ void ObjectProperties::update()
         _label_id.set_markup_with_mnemonic(_("_ID:") + Glib::ustring(" "));
 
         /* Label */
-        _entry_label.set_text(obj->defaultLabel());
+        char const *currentlabel = obj->label();
+        char const *placeholder = "";
+        if (!currentlabel) {
+            currentlabel = "";
+            placeholder = obj->defaultLabel();
+        }
+        _entry_label.set_text(currentlabel);
+        _entry_label.set_placeholder_text(placeholder);
         _entry_label.set_sensitive(TRUE);
 
         /* Title */
@@ -421,7 +428,8 @@ void ObjectProperties::_labelChanged()
      * using the widget's label text
      */
     SPObject *obj = static_cast<SPObject*>(item);
-    if (label.compare(obj->defaultLabel())) {
+    char const *currentlabel = obj->label();
+    if (label.compare(currentlabel ? currentlabel : "")) {
         obj->setLabel(label.c_str());
         DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_ITEM,
                 _("Set object label"));
