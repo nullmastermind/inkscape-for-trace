@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16">
+<sodipodi:namedview 
+    objecttolerance="10" 
+    gridtolerance="10" 
+    guidetolerance="10" 
+    id="namedview" 
+    showgrid="true" 
+    inkscape:zoom="27.166187"
+    inkscape:cx="7.4837792"
+    inkscape:cy="8.9906751"
+    inkscape:window-x="0" 
+    inkscape:window-y="27"> 
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <metadata
+     id="metadata1906">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+        <dc:title>LiveEffect Icons proposal</dc:title>
+        <dc:date>13 Jan 2019</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Ramón Miranda</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>see the license tab</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>icon ui</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:description>This is a contribution with Inkscape Project from
+Ramon Miranda www.ramonmiranda.com (design and SVG file)
+Jabiertxo (SVG stuff to integrate them in UI)</dc:description>
+        <dc:publisher>
+          <cc:Agent>
+            <dc:title></dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:identifier></dc:identifier>
+        <dc:source />
+        <dc:relation />
+        <dc:language>-</dc:language>
+        <dc:coverage />
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Ramon Miranda
+Jabier Arraiza</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g inkscape:groupmode="layer"
+     id="layercompo"
+     inkscape:label="curvestitching">
+        <path 
+            id="rect22048" 
+            d="M 0,0 H 16 V 16 H 0 Z" 
+            style="opacity:0;fill:none" />
+        <path
+           id="path9609"
+           d="M 6.528792,1.86744 C 5.128667,3.403067 3.556832,4.726102 1.617044,5.64925 L 1.896123,6.236196 C 3.930678,5.268003 5.570455,3.882699 7.00866,2.305263 Z M 7.830731,2.901794 C 6.607591,4.591127 5.189553,6.088782 3.360662,7.230378 L 3.704846,7.781007 C 5.62243,6.584 7.100371,5.017221 8.356519,3.282259 Z M 8.763827,5.618607 C 7.274628,6.938659 6.112664,7.891918 4.158581,8.542606 L 4.365027,9.160195 C 6.422495,8.475064 7.662567,7.463356 9.195921,6.10424 Z m 1.825853,1.46072 C 8.975073,8.397033 7.219016,9.480689 5.159801,10.11356 l 0.191169,0.6214 c 2.159273,-0.6636 3.991495,-1.797572 5.64976,-3.150905 z m 0.76043,1.586134 C 9.855508,10.15672 8.973709,10.78616 6.96656,11.64124 l 0.254329,0.5984 c 2.102296,-0.8956 3.054071,-1.58476 4.588121,-3.115279 z m 1.76153,0.899907 C 11.71074,11.1046 10.74336,11.75586 8.802017,12.68317 l 0.281043,0.58697 c 2.03591,-0.97245 3.06954,-1.68598 4.50843,-3.26691 z"
+           style="opacity:1;" />
+        <path
+           id="path9610"
+           d="m 6.069891,1.6036 0.3288,0.12039 0.267731,-0.7284503 -0.328908,-0.12039 z m 0.990363,0.386194 0.516258,0.290609 0.0862,0.07256 L 8.163622,1.758362 8.050689,1.662704 8.022319,1.63979 7.989948,1.620695 7.441282,1.312882 Z M 8.169151,2.831033 8.389017,3.106366 8.559236,3.419907 9.241731,3.047098 9.058182,2.710606 9.041815,2.681873 9.021265,2.65514 8.77723,2.347363 Z m 0.678767,1.256148 0.0091,0.01273 0.0091,0.01455 v 0.01273 L 9.072658,4.800191 9.816325,4.570759 9.600285,3.871006 v -0.01455 l -0.009,-0.01273 -0.0182,-0.04019 z m 0.466556,1.468394 0.120391,0.344075 0.009,0.01819 0.009,0.01637 0.17203,0.374737 0.705495,-0.323035 -0.1644,-0.363279 -0.009,-0.01091 -0.10893,-0.311686 z m -9.0491993,0.911945 0.328908,0.120572 0.267623,-0.728505 -0.3288,-0.12039 z M 1.255619,6.853695 1.76995,7.142468 1.85615,7.214848 2.359006,6.622117 2.244254,6.526278 2.217884,6.501727 2.185514,6.483542 1.636739,6.175674 Z m 8.771971,0.172038 0.094,0.149124 0.0182,0.02455 0.0185,0.02255 0.39575,0.453135 0.58501,-0.510493 -0.37472,-0.428276 -0.0784,-0.124391 z M 2.364535,7.694916 2.586347,7.974104 2.754565,8.283827 3.437169,7.910963 3.253529,7.574508 3.237162,7.544137 3.216612,7.519587 2.971886,7.211828 Z m 8.814055,0.539172 0.19686,0.160581 0.0215,0.01855 0.0264,0.01637 0.4473,0.269583 0.39959,-0.667219 -0.43209,-0.260093 -0.1644,-0.135666 z m 1.42049,0.852733 0.71314,0.311577 0.30972,-0.71312 -0.71117,-0.309722 z m -9.555779,-0.135848 0.0091,0.01455 v 0.0091 L 3.266568,9.664747 4.01024,9.437243 3.794193,8.735562 3.7851,8.721013 V 8.706465 L 3.766914,8.666274 Z M 14.08662,9.658437 14.82648,9.891709 15.06171,9.151744 14.3198,8.91662 Z m -10.576762,0.759043 0.12039,0.34604 0.0091,0.0164 0.0091,0.0182 0.170037,0.37472 0.70745,-0.32318 -0.1644,-0.35564 -0.114752,-0.33078 z m 0.71312,1.47217 0.09402,0.14731 0.01637,0.0264 0.02146,0.0226 0.395777,0.45313 0.584983,-0.51234 -0.372754,-0.42643 -0.0802,-0.1262 z m 1.150997,1.20827 0.195007,0.16058 0.02255,0.0185 0.02455,0.0164 0.449316,0.26764 L 6.464996,12.89569 6.038684,12.63951 5.868465,12.49802 Z M 6.794468,13.95063 7.507697,14.26035 7.817419,13.54918 7.10419,13.23751 Z M 8.282012,14.52232 9.021865,14.75559 9.257098,14.01563 8.51519,13.7805 Z"
+           style="opacity:0.5;" />
+    </g>
+</svg>

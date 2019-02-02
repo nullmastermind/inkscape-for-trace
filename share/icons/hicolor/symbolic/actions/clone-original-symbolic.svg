@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16">
+<sodipodi:namedview 
+    objecttolerance="10" 
+    gridtolerance="10" 
+    guidetolerance="10" 
+    id="namedview" 
+    showgrid="true" 
+    inkscape:zoom="27.166187"
+    inkscape:cx="7.4837792"
+    inkscape:cy="8.9906751"
+    inkscape:window-x="0" 
+    inkscape:window-y="27"> 
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <metadata
+     id="metadata1906">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+        <dc:title>LiveEffect Icons proposal</dc:title>
+        <dc:date>13 Jan 2019</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Ramón Miranda</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>see the license tab</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>icon ui</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:description>This is a contribution with Inkscape Project from
+Ramon Miranda www.ramonmiranda.com (design and SVG file)
+Jabiertxo (SVG stuff to integrate them in UI)</dc:description>
+        <dc:publisher>
+          <cc:Agent>
+            <dc:title></dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:identifier></dc:identifier>
+        <dc:source />
+        <dc:relation />
+        <dc:language>-</dc:language>
+        <dc:coverage />
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Ramon Miranda
+Jabier Arraiza</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g inkscape:groupmode="layer"
+     id="layercompo"
+     inkscape:label="clone-original">
+        <path 
+            id="rect22048" 
+            d="M 0,0 H 16 V 16 H 0 Z" 
+            style="opacity:0;fill:none" />
+        <path
+           id="path9609"
+           d="M 3.308594 1.03125 C 3.147714 1.010082 2.979395 1.052572 2.841797 1.162109 C 2.566602 1.381183 2.513745 1.792887 2.726562 2.076172 C 2.75923 2.119656 2.80341 2.147224 2.84375 2.179688 L 2.337891 3.419922 L 2.378906 3.441406 C 2.362174 3.443202 2.351116 3.44138 2.333984 3.443359 L 2.96875 5.494141 L 1.640625 7.179688 L 3.787109 7.208984 L 4.978516 8.992188 L 5.669922 6.960938 L 7.734375 6.378906 L 6.017578 5.09375 L 6.101562 2.949219 L 4.347656 4.1875 C 3.823246 3.914269 3.90707 3.359991 2.652344 3.423828 L 3.105469 2.306641 C 3.27948 2.34265 3.464715 2.313184 3.615234 2.193359 C 3.890431 1.974285 3.941333 1.562582 3.728516 1.279297 C 3.622107 1.137655 3.469473 1.052418 3.308594 1.03125 z M 3.271484 1.326172 C 3.35834 1.337601 3.441402 1.382932 3.5 1.460938 C 3.6172 1.616945 3.58905 1.836391 3.4375 1.957031 C 3.285948 2.077677 3.074225 2.050541 2.957031 1.894531 C 2.839831 1.738524 2.866028 1.519078 3.017578 1.398438 C 3.093354 1.338115 3.184629 1.314742 3.271484 1.326172 z"
+           style="opacity:1;" />
+        <path
+           id="path9609"
+           d="M 12.41672,12.14931 10.30137,12.50971 9.399035,14.4566 8.402591,12.55614 6.27215,12.29959 C 6.759405,10.753 7.27044,11.16193 7.77167,10.76465 L 7.357326,8.659194 9.280535,9.610961 11.1549,8.566272 10.84397,10.68947 Z"
+           style="opacity:0.6;" />
+        <path
+           id="path9609"
+           d="M 11.68752,7.485922 10.79825,6.15493 9.197693,6.132916 10.18875,4.875887 9.715083,3.346853 C 10.91669,3.208004 10.79372,3.680502 11.21684,3.900958 l 1.30783,-0.92298 -0.063,1.599484 1.28194,0.958601 -1.54065,0.43443 z"
+           style="opacity:0.3;" />
+    </g>
+</svg>
