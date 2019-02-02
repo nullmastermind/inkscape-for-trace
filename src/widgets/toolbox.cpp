@@ -193,7 +193,7 @@ static struct {
       SP_VERB_INVALID, nullptr, nullptr},
     { "/tools/nodes",   "node_toolbox",   nullptr, Inkscape::UI::Toolbar::NodeToolbar::prep,              "NodeToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
-    { "/tools/tweak",   "tweak_toolbox",   nullptr, Inkscape::UI::Toolbar::TweakToolbar::prep,              "TweakToolbar",
+    { "/tools/tweak",   "tweak_toolbox",   Inkscape::UI::Toolbar::TweakToolbar::create, nullptr,          "TweakToolbar",
       SP_VERB_CONTEXT_TWEAK_PREFS, "/tools/tweak", N_("Color/opacity used for color tweaking")},
     { "/tools/spray",   "spray_toolbox",   nullptr, Inkscape::UI::Toolbar::SprayToolbar::prep,              "SprayToolbar",
       SP_VERB_INVALID, nullptr, nullptr},

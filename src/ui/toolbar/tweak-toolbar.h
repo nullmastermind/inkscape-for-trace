@@ -30,45 +30,55 @@
 
 #include "toolbar.h"
 
-class InkSelectOneAction;
 class SPDesktop;
 
-typedef struct _EgeAdjustmentAction EgeAdjustmentAction;
-typedef struct _EgeOutputAction EgeOutputAction;
-typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _InkToggleAction InkToggleAction;
+namespace Gtk {
+class RadioToolButton;
+}
 
 namespace Inkscape {
 namespace UI {
+namespace Widget {
+class LabelToolItem;
+class SpinButtonToolItem;
+}
+
 namespace Toolbar {
 class TweakToolbar : public Toolbar {
 private:
-    Glib::RefPtr<Gtk::Adjustment> _adj_tweak_width;
-    Glib::RefPtr<Gtk::Adjustment> _adj_tweak_force;
-    Glib::RefPtr<Gtk::Adjustment> _adj_tweak_fidelity;
+    UI::Widget::SpinButtonToolItem *_width_item;
+    UI::Widget::SpinButtonToolItem *_force_item;
+    UI::Widget::SpinButtonToolItem *_fidelity_item;
 
-    InkSelectOneAction *_tweak_tool_mode;
+    Gtk::ToggleToolButton *_pressure_item;
 
-    EgeOutputAction *_tweak_channels_label;
-    InkToggleAction *_tweak_doh;
-    InkToggleAction *_tweak_dos;
-    InkToggleAction *_tweak_dol;
-    InkToggleAction *_tweak_doo;
+    Glib::RefPtr<Gtk::Adjustment> _width_adj;
+    Glib::RefPtr<Gtk::Adjustment> _force_adj;
+    Glib::RefPtr<Gtk::Adjustment> _fidelity_adj;
 
-    EgeAdjustmentAction *_tweak_fidelity;
+    std::vector<Gtk::RadioToolButton *> _mode_buttons;
 
-    void tweak_width_value_changed();
-    void tweak_force_value_changed();
-    void tweak_mode_changed(int mode);
-    void tweak_fidelity_value_changed();
+    UI::Widget::LabelToolItem *_channels_label;
+    Gtk::ToggleToolButton *_doh_item;
+    Gtk::ToggleToolButton *_dos_item;
+    Gtk::ToggleToolButton *_dol_item;
+    Gtk::ToggleToolButton *_doo_item;
+
+    void width_value_changed();
+    void force_value_changed();
+    void mode_changed(int mode);
+    void fidelity_value_changed();
+    void pressure_state_changed();
+    void toggle_doh();
+    void toggle_dos();
+    void toggle_dol();
+    void toggle_doo();
 
 protected:
-    TweakToolbar(SPDesktop *_desktop)
-        : Toolbar(_desktop)
-    {}
+    TweakToolbar(SPDesktop *desktop);
 
 public:
-    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+    static GtkWidget * create(SPDesktop *desktop);
 };
 }
 }

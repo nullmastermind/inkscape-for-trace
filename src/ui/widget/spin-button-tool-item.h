@@ -67,7 +67,7 @@ public:
                        const Glib::ustring&           label_text,
                        Glib::RefPtr<Gtk::Adjustment>& adjustment,
                        double                         climb_rate = 0.1,
-                       double                         digits     = 3);
+                       int                            digits     = 3);
 
     void set_all_tooltip_text(const Glib::ustring& text);
     void set_focus_widget(Gtk::Widget *widget);
@@ -75,6 +75,7 @@ public:
 
     void set_custom_numeric_menu_data(std::vector<double>&              values,
                                       const std::vector<Glib::ustring>& labels = std::vector<Glib::ustring>());
+    Glib::RefPtr<Gtk::Adjustment> get_adjustment();
 };
 } // namespace Widget
 } // namespace UI

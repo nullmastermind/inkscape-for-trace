@@ -64,6 +64,7 @@
 #include "ui/widget/ink-select-one-action.h"
 #include "ui/widget/layer-selector.h"
 #include "ui/widget/selected-style.h"
+#include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
 
 // TEMP
@@ -1535,19 +1536,22 @@ SPDesktopWidget::setToolboxFocusTo (const gchar* label)
 void
 SPDesktopWidget::setToolboxAdjustmentValue (gchar const *id, double value)
 {
-    GtkAdjustment *a = nullptr;
-    gpointer hb = sp_search_by_data_recursive (aux_toolbox, (gpointer) id);
-    if (hb && GTK_IS_WIDGET(hb)) {
-        if (GTK_IS_SPIN_BUTTON(hb))
-            a = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(hb));
-        else if (GTK_IS_RANGE(hb))
-            a = gtk_range_get_adjustment (GTK_RANGE(hb));
+    // First try looking for a named widget
+    auto hb = sp_search_by_name_recursive(Glib::wrap(aux_toolbox), id);
+
+    // Fallback to looking for a named data member (deprecated)
+    if (!hb) {
+        hb = Glib::wrap(GTK_WIDGET(sp_search_by_data_recursive(aux_toolbox, (gpointer)id)));
     }
 
-    if (a)
-        gtk_adjustment_set_value (a, value);
-    else
-        g_warning ("Could not find GtkAdjustment for %s\n", id);
+    if (hb) {
+        auto sb = dynamic_cast<Inkscape::UI::Widget::SpinButtonToolItem *>(hb);
+        auto a = sb->get_adjustment();
+
+        if(a) a->set_value(value);
+    }
+
+    else g_warning ("Could not find GtkAdjustment for %s\n", id);
 }
 
 void

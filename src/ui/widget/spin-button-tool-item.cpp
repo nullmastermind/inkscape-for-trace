@@ -359,7 +359,7 @@ SpinButtonToolItem::SpinButtonToolItem(const Glib::ustring            name,
                                        const Glib::ustring&           label_text,
                                        Glib::RefPtr<Gtk::Adjustment>& adjustment,
                                        double                         climb_rate,
-                                       double                         digits)
+                                       int                            digits)
     : _btn(Gtk::manage(new SpinButton(adjustment, climb_rate, digits))),
       _name(std::move(name)),
       _label_text(label_text),
@@ -505,6 +505,11 @@ SpinButtonToolItem::set_custom_numeric_menu_data(std::vector<double>&           
     }
 }
 
+Glib::RefPtr<Gtk::Adjustment>
+SpinButtonToolItem::get_adjustment()
+{
+    return _btn->get_adjustment();
+}
 } // namespace Widget
 } // namespace UI
 } // namespace Inkscape

@@ -41,22 +41,6 @@
     <toolitem action='NodesShowHelperpath' />
   </toolbar>
 
-  <toolbar name='TweakToolbar'>
-    <toolitem action='TweakWidthAction' />
-    <toolitem action='TweakForceAction' />
-    <toolitem action='TweakPressureAction' />
-    <separator />
-    <toolitem action='TweakModeAction' />
-    <separator />
-    <toolitem action='TweakFidelityAction' />
-    <separator />
-    <toolitem action='TweakChannelsLabel' />
-    <toolitem action='TweakDoH' />
-    <toolitem action='TweakDoS' />
-    <toolitem action='TweakDoL' />
-    <toolitem action='TweakDoO' />
-  </toolbar>
-
   <toolbar name='SprayToolbar'>
     <toolitem action='SprayModeAction' />
     <separator />
