@@ -27,6 +27,9 @@ public:
     TemporaryItem(SPCanvasItem *item, unsigned int lifetime, bool destroy_on_deselect = false);
     virtual ~TemporaryItem();
 
+    TemporaryItem(const TemporaryItem&) = delete;
+    TemporaryItem& operator=(const TemporaryItem&) = delete;
+
     sigc::signal<void, TemporaryItem *> signal_timeout;
 
 protected:
@@ -37,10 +40,6 @@ protected:
     bool destroy_on_deselect; // only destroy when parent item is deselected, not when mouse leaves
 
     static int _timeout(void* data); ///< callback for when lifetime expired
-
-private:
-    TemporaryItem(const TemporaryItem&) = delete;
-    TemporaryItem& operator=(const TemporaryItem&) = delete;
 };
 
 } //namespace Display

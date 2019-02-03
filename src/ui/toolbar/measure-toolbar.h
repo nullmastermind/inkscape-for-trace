@@ -34,8 +34,6 @@
 
 class SPDesktop;
 
-typedef struct _GtkActionGroup GtkActionGroup;
-
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -51,17 +49,39 @@ private:
     Glib::RefPtr<Gtk::Adjustment> _scale_adj;
     Glib::RefPtr<Gtk::Adjustment> _offset_adj;
 
+    Gtk::ToggleToolButton *_only_selected_item;
+    Gtk::ToggleToolButton *_ignore_1st_and_last_item;
+    Gtk::ToggleToolButton *_inbetween_item;
+    Gtk::ToggleToolButton *_show_hidden_item;
+    Gtk::ToggleToolButton *_all_layers_item;
+
+    Gtk::ToolButton *_reverse_item;
+    Gtk::ToolButton *_to_phantom_item;
+    Gtk::ToolButton *_to_guides_item;
+    Gtk::ToolButton *_to_item_item;
+    Gtk::ToolButton *_mark_dimension_item;
+
     void fontsize_value_changed();
     void unit_changed(int notUsed);
     void precision_value_changed();
     void scale_value_changed();
     void offset_value_changed();
+    void toggle_only_selected();
+    void toggle_ignore_1st_and_last();
+    void toggle_show_hidden();
+    void toggle_show_in_between();
+    void toggle_all_layers();
+    void reverse_knots();
+    void to_phantom();
+    void to_guides();
+    void to_item();
+    void to_mark_dimension();
 
 protected:
     MeasureToolbar(SPDesktop *desktop);
 
 public:
-    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+    static GtkWidget * create(SPDesktop *desktop);
 };
 
 }

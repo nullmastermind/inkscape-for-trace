@@ -4,7 +4,6 @@ add_subdirectory(gimp)
 set(widgets_SRC
 	desktop-widget.cpp
 	ege-adjustment-action.cpp
-	ege-output-action.cpp
 	ege-paint-def.cpp
 	fill-style.cpp
 	gradient-image.cpp
@@ -30,7 +29,6 @@ set(widgets_SRC
 	# Headers
 	desktop-widget.h
 	ege-adjustment-action.h
-	ege-output-action.h
 	ege-paint-def.h
 	fill-n-stroke-factory.h
 	fill-style.h

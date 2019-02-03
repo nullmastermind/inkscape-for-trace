@@ -69,27 +69,6 @@
     <toolitem action='SprayPickCenterAction' />
   </toolbar>
 
-  <toolbar name='MeasureToolbar'>
-    <toolitem action='MeasureFontSizeAction' />
-    <toolitem action='MeasurePrecisionAction' />
-    <toolitem action='MeasureScaleAction' />
-    <toolitem action='measure_units_label' />
-    <toolitem action='MeasureUnitsAction' />
-    <separator />
-    <toolitem action='MeasureOnlySelected' />
-    <toolitem action='MeasureIgnore1stAndLast' />
-    <toolitem action='MeasureInBettween' />
-    <toolitem action='MeasureShowHidden' />
-    <toolitem action='MeasureAllLayers' />
-    <separator />
-    <toolitem action='MeasureReverse' />
-    <toolitem action='MeasureToPhantom' />
-    <toolitem action='MeasureToGuides' />
-    <toolitem action='MeasureToItem' />
-    <toolitem action='MeasureMarkDimension' />
-    <toolitem action='MeasureOffsetAction' />
-  </toolbar>
-
   <toolbar name='PenToolbar'>
     <toolitem action='FreehandModeActionPen' />
     <separator />
