@@ -1069,7 +1069,7 @@ SPDesktop::zoom_selection()
  */
 void SPDesktop::zoom_center_page()
 {
-	zoom_absolute_center_point(Geom::Point(doc()->getWidth().value("px")/2, doc()->getHeight().value("px")/2), this->current_zoom()); 
+    zoom_absolute_center_point(Geom::Point(doc()->getWidth().value("px")/2, doc()->getHeight().value("px")/2), this->current_zoom()); 
 }
 
 

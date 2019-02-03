@@ -1928,7 +1928,7 @@ SPDesktopWidget::zoom_populate_popup(Gtk::Menu *menu)
     item_selection->signal_activate().connect(sigc::mem_fun(desktop, &SPDesktop::zoom_selection));
     menu->append(*item_selection);
 
-	auto item_center_page = Gtk::manage(new Gtk::MenuItem(_("Centre Page")));
+    auto item_center_page = Gtk::manage(new Gtk::MenuItem(_("Centre Page")));
     item_center_page->signal_activate().connect(sigc::mem_fun(desktop, &SPDesktop::zoom_center_page));
     menu->append(*item_center_page);
 
