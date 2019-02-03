@@ -111,10 +111,10 @@ InkscapeWindow::change_document(SPDocument* document)
     }
 }
 
-// We don't override on_key_press() as it steals key strokes from text tool.
 bool
 InkscapeWindow::on_key_press_event(GdkEventKey* event)
 {
+    // Need to call base class method first or text tool won't work!
     bool done = Gtk::Window::on_key_press_event(event);
     if (done) {
         return true;
