@@ -53,7 +53,7 @@ private:
     Gtk::MenuBar*  _menubar;
 
     // Callbacks
-    bool key_press(GdkEventKey* event); // Not override!
+    bool on_key_press_event(GdkEventKey* event) override;
     bool on_focus_in_event(GdkEventFocus* event) override;
 };
 
