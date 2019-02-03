@@ -20,7 +20,7 @@
 #include "unit-tracker.h"
 
 #include "ink-select-one-action.h"
-
+#include "combo-tool-item.h"
 
 #define COLUMN_STRING 0
 
@@ -68,6 +68,7 @@ UnitTracker::UnitTracker(UnitType unit_type) :
 UnitTracker::~UnitTracker()
 {
     _actionList.clear();
+    _combo_list.clear();
 
     // Unhook weak references to GtkAdjustments
     for (auto i : _adjList) {
@@ -152,6 +153,9 @@ void UnitTracker::setFullVal(GtkAdjustment *adj, gdouble val)
     _priorValues[adj] = val;
 }
 
+/**
+ * \deprecated Use create_tool_item instead
+ */
 InkSelectOneAction *UnitTracker::createAction(Glib::ustring const &name,
                                      Glib::ustring const &label,
                                      Glib::ustring const &tooltip)
@@ -169,6 +173,16 @@ InkSelectOneAction *UnitTracker::createAction(Glib::ustring const &name,
     _actionList.push_back(act);
 
     return act;
+}
+
+ComboToolItem *
+UnitTracker::create_tool_item(Glib::ustring const &label,
+                              Glib::ustring const &tooltip)
+{
+    auto combo = ComboToolItem::create(label, tooltip, "NotUsed", _store);
+    combo->signal_changed().connect(sigc::mem_fun(*this, &UnitTracker::_unitChangedCB));
+    _combo_list.push_back(combo);
+    return combo;    
 }
 
 void UnitTracker::_unitChangedCB(int active)
@@ -260,6 +274,10 @@ void UnitTracker::_setActive(gint active)
 
         for (auto act: _actionList) {
             act->set_active (active);
+        }
+
+        for (auto combo : _combo_list) {
+            if(combo) combo->set_active(active);
         }
 
         _activeUnitInitialized = true;

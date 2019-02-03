@@ -37,6 +37,7 @@ typedef struct _GtkListStore  GtkListStore;
 namespace Inkscape {
 namespace UI {
 namespace Widget {
+class ComboToolItem;
 
 class UnitTracker {
 public:
@@ -58,11 +59,13 @@ public:
                                      Glib::ustring const &label,
                                      Glib::ustring const &tooltip);
 
+    ComboToolItem *create_tool_item(Glib::ustring const &label,
+                                    Glib::ustring const &tooltip);
+
 protected:
     UnitType _type;
 
 private:
-
     // Callbacks
     void _unitChangedCB(int active);
     static void _actionFinalizedCB(gpointer data, GObject *where_the_object_was);
@@ -82,6 +85,7 @@ private:
 
     Glib::RefPtr<Gtk::ListStore> _store;
     std::vector<InkSelectOneAction*> _actionList;
+    std::vector<ComboToolItem *> _combo_list;
     std::vector<GtkAdjustment*> _adjList;
     std::map <GtkAdjustment *, gdouble> _priorValues;
 };

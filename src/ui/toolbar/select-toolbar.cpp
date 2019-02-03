@@ -36,6 +36,7 @@
 #include "object/sp-namedview.h"
 
 #include "ui/icon-names.h"
+#include "ui/widget/combo-tool-item.h"
 #include "ui/widget/ink-select-one-action.h"
 #include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
@@ -170,9 +171,8 @@ SelectToolbar::SelectToolbar(SPDesktop *desktop) :
     add(*h_btn);
 
     // units menu
-    auto unit_menu = _tracker->createAction( "UnitsAction", _("Units"), ("") );
-    auto unit_menu_ti = unit_menu->create_tool_item();
-    add(*unit_menu_ti);
+    auto unit_menu = _tracker->create_tool_item(_("Units"), ("") );
+    add(*unit_menu);
 
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 

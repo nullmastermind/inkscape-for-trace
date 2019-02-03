@@ -43,12 +43,11 @@
 #include "ui/icon-names.h"
 #include "ui/tools/rect-tool.h"
 #include "ui/uxmanager.h"
-#include "ui/widget/ink-select-one-action.h"
+#include "ui/widget/combo-tool-item.h"
 #include "ui/widget/label-tool-item.h"
 #include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
 
-#include "widgets/ink-action.h"
 #include "widgets/widget-sizes.h"
 
 #include "xml/node-event-vector.h"
@@ -161,8 +160,7 @@ RectToolbar::RectToolbar(SPDesktop *desktop)
     }
 
     // add the units menu
-    auto unit_menu = _tracker->createAction( "RectUnitsAction", _("Units"), ("") );
-    auto unit_menu_ti = unit_menu->create_tool_item();
+    auto unit_menu_ti = _tracker->create_tool_item(_("Units"), (""));
 
     /* Reset */
     {

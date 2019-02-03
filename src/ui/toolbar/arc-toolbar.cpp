@@ -44,7 +44,7 @@
 #include "ui/pref-pusher.h"
 #include "ui/tools/arc-tool.h"
 #include "ui/uxmanager.h"
-#include "ui/widget/ink-select-one-action.h"
+#include "ui/widget/combo-tool-item.h"
 #include "ui/widget/label-tool-item.h"
 #include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
@@ -121,8 +121,7 @@ ArcToolbar::ArcToolbar(SPDesktop *desktop) :
 
     // add the units menu
     {
-        auto act = _tracker->createAction( "ArcUnitsAction", _("Units"), ("") );
-        auto unit_menu = act->create_tool_item();
+        auto unit_menu = _tracker->create_tool_item(_("Units"), ("") );
         add(*unit_menu);
     }
 

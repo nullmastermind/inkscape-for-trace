@@ -38,7 +38,7 @@
 
 #include "ui/icon-names.h"
 #include "ui/tools/measure-tool.h"
-#include "ui/widget/ink-select-one-action.h"
+#include "ui/widget/combo-tool-item.h"
 #include "ui/widget/label-tool-item.h"
 #include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
@@ -117,9 +117,8 @@ MeasureToolbar::MeasureToolbar(SPDesktop *desktop)
 
     /* units menu */
     {
-        auto act = _tracker->createAction( "MeasureUnitsAction", _("Units:"), _("The units to be used for the measurements") );
-        act->signal_changed_after().connect(sigc::mem_fun(*this, &MeasureToolbar::unit_changed));
-        auto ti = act->create_tool_item();
+        auto ti = _tracker->create_tool_item(_("Units:"), _("The units to be used for the measurements") );
+        ti->signal_changed().connect(sigc::mem_fun(*this, &MeasureToolbar::unit_changed));
         add(*ti);
     }
 

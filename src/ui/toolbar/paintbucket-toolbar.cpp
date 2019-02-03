@@ -38,7 +38,7 @@
 #include "ui/icon-names.h"
 #include "ui/tools/flood-tool.h"
 #include "ui/uxmanager.h"
-#include "ui/widget/ink-select-one-action.h"
+#include "ui/widget/combo-tool-item.h"
 #include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
 
@@ -108,8 +108,7 @@ PaintbucketToolbar::PaintbucketToolbar(SPDesktop *desktop)
     }
 
     {
-        auto act = _tracker->createAction( "PaintbucketUnitsAction", _("Units"), ("") );
-        auto unit_menu = act->create_tool_item();
+        auto unit_menu = _tracker->create_tool_item(_("Units"), (""));
         add(*unit_menu);
     }
 
