@@ -12,19 +12,53 @@
     <property name="orientation">vertical</property>
     <property name="baseline_position">top</property>
     <child>
-      <object class="GtkImage" id="LPEIcon">
+      <object class="GtkOverlay">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="halign">center</property>
-        <property name="valign">start</property>
-        <property name="pixel_size">80</property>
-        <property name="icon_name">align-vertical-baseline</property>
-        <property name="icon_size">6</property>
+        <child>
+          <object class="GtkImage" id="LPEIcon">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">center</property>
+            <property name="valign">start</property>
+            <property name="pixel_size">80</property>
+            <property name="icon_name">align-vertical-baseline</property>
+            <property name="icon_size">6</property>
+          </object>
+          <packing>
+            <property name="index">1</property>
+          </packing>
+        </child>
+        <child type="overlay">
+          <object class="GtkEventBox" id="LPESelectorEffectFavLauncherTop">
+            <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
+            <property name="halign">end</property>
+            <property name="valign">start</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">start</property>
+                <property name="valign">start</property>
+                <property name="pixel_size">30</property>
+                <property name="icon_name">draw-star</property>
+                <property name="icon_size">2</property>
+                <style>
+                  <class name="fab"/>
+                </style>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="index">2</property>
+          </packing>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>
-        <property name="fill">False</property>
-        <property name="position">1</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
       </packing>
     </child>
     <child>
@@ -57,7 +91,7 @@
         <property name="expand">False</property>
         <property name="fill">False</property>
         <property name="padding">10</property>
-        <property name="position">2</property>
+        <property name="position">3</property>
       </packing>
     </child>
     <child>
@@ -91,20 +125,25 @@
           </packing>
         </child>
         <child>
-          <object class="GtkImage">
+          <object class="GtkEventBox" id="LPESelectorEffectFavLauncher">
+            <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">end</property>
-            <property name="pixel_size">30</property>
-            <property name="icon_name">draw-star-outline</property>
-            <property name="icon_size">2</property>
-            <style>
-              <class name="fab"/>
-            </style>
+            <child>
+              <object class="GtkImage">
+                <property name="can_focus">False</property>
+                <property name="halign">end</property>
+                <property name="pixel_size">30</property>
+                <property name="icon_name">draw-star-outline</property>
+                <property name="icon_size">2</property>
+                <style>
+                  <class name="fab"/>
+                </style>
+              </object>
+            </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="pack_type">end</property>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
             <property name="position">1</property>
             <property name="non_homogeneous">True</property>
           </packing>
@@ -134,6 +173,20 @@
         <property name="fill">False</property>
         <property name="pack_type">end</property>
         <property name="position">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="LPEExperimental">
+        <property name="label" translatable="yes">Experimental</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="no_show_all">True</property>
+        <property name="draw_indicator">True</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">5</property>
       </packing>
     </child>
     <style>

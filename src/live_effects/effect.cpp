@@ -109,6 +109,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         GEARS
@@ -122,6 +123,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , false  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         PATTERN_ALONG_PATH
@@ -135,6 +137,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     }, // for historic reasons, this effect is called skeletal(strokes) in Inkscape:SVG
     {
         CURVE_STITCH
@@ -148,6 +151,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
 /* 0.47 */
     {
@@ -162,6 +166,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         KNOT
@@ -175,6 +180,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         CONSTRUCT_GRID
@@ -188,6 +194,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         SPIRO
@@ -201,6 +208,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         ENVELOPE
@@ -214,6 +222,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         INTERPOLATE
@@ -227,6 +236,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         ROUGH_HATCHES
@@ -240,6 +250,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         SKETCH
@@ -253,6 +264,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         RULER
@@ -266,6 +278,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
 /* 0.91 */
     {
@@ -280,6 +293,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         CLONE_ORIGINAL
@@ -293,6 +307,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
 /* 0.92 */
     {
@@ -307,6 +322,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         LATTICE2
@@ -320,6 +336,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         PERSPECTIVE_ENVELOPE
@@ -333,6 +350,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         INTERPOLATE_POINTS
@@ -346,6 +364,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         TRANSFORM_2PTS
@@ -359,6 +378,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         SHOW_HANDLES
@@ -372,6 +392,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         ROUGHEN
@@ -385,6 +406,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         BSPLINE
@@ -398,6 +420,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         JOIN_TYPE
@@ -411,6 +434,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         TAPER_STROKE
@@ -424,6 +448,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         MIRROR_SYMMETRY
@@ -437,6 +462,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         COPY_ROTATE
@@ -450,6 +476,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
 /* Ponyscape -> Inkscape 0.92*/
     {
@@ -464,6 +491,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         FILL_BETWEEN_STROKES
@@ -477,6 +505,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         FILL_BETWEEN_MANY
@@ -490,6 +519,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         ELLIPSE_5PTS
@@ -503,6 +533,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         BOUNDING_BOX
@@ -516,6 +547,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
 /* 1.0 */
     {
@@ -530,6 +562,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         FILLET_CHAMFER
@@ -543,6 +576,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         BOOL_OP
@@ -556,6 +590,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         EMBRODERY_STITCH
@@ -569,6 +604,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         POWERCLIP
@@ -582,6 +618,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         POWERMASK
@@ -595,6 +632,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         PTS2ELLIPSE
@@ -608,6 +646,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         OFFSET
@@ -621,6 +660,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
     {
         DASH_STROKE
@@ -634,6 +674,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , false //experimental
     },
 #ifdef LPE_ENABLE_TEST_EFFECTS
     {
@@ -648,6 +689,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , true //experimental
     },
     {
         ANGLE_BISECTOR
@@ -661,6 +703,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , true //experimental
     },
     {
         CIRCLE_WITH_RADIUS
@@ -674,6 +717,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , true //experimental
     },
     {
         CIRCLE_3PTS
@@ -687,6 +731,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , true //experimental
     },
     {
         DYNASTROKE
@@ -700,6 +745,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , true //experimental
     },
     {
         EXTRUDE
@@ -713,6 +759,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , true //experimental
     },
     {
         LATTICE
@@ -726,6 +773,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , true //experimental
     },
     {
         LINE_SEGMENT
@@ -739,6 +787,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , true //experimental
     },
     {
         PARALLEL
@@ -752,6 +801,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , true //experimental
     },
     {
         PATH_LENGTH
@@ -765,6 +815,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , true //experimental
     },
     {
         PERP_BISECTOR
@@ -778,6 +829,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , true //experimental
     },
     {
         RECURSIVE_SKELETON
@@ -791,6 +843,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , true //experimental
     },
     {
         TANGENT_TO_CURVE
@@ -804,6 +857,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , true //experimental
     },
     {
         TEXT_LABEL
@@ -817,6 +871,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_use
         , false //on_image
         , false //on_text
+        , true //experimental
     },
 #endif
 

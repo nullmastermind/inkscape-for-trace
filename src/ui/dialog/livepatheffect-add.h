@@ -20,10 +20,14 @@
 #include <gtkmm/dialog.h>
 #include <gtkmm/popover.h>
 #include <gtkmm/flowbox.h>
+#include <gtkmm/switch.h>
 #include <gtkmm/flowboxchild.h>
+#include <gtkmm/scrolledwindow.h>
 #include <gtkmm/label.h>
 #include <gtkmm/searchentry.h>
 #include <gtkmm/stylecontext.h>
+#include <gtkmm/overlay.h>
+#include <gtkmm/adjustment.h>
 
 class SPDesktop;
 
@@ -35,10 +39,10 @@ namespace Dialog {
  * A dialog widget to list the live path effects that can be added
  *
  */
-class LivePathEffectAdd : public Gtk::Dialog {
+class LivePathEffectAdd {
 public:
     LivePathEffectAdd();
-    ~LivePathEffectAdd() override = default;
+    ~LivePathEffectAdd(){};
 
     /**
      * Show the dialog
@@ -54,9 +58,12 @@ public:
      */
     void onClose();
     bool on_filter(Gtk::FlowBoxChild *child);
+    int  on_sort(Gtk::FlowBoxChild *child1, Gtk::FlowBoxChild *child2);
     void on_search();
     void on_activate(Gtk::FlowBoxChild *child);
     bool pop_description(GdkEventButton* evt, Glib::RefPtr<Gtk::Builder> builder_effect);
+    bool fav_toggler(GdkEventButton* evt, Glib::RefPtr<Gtk::Builder> builder_effect);
+    void reload_effect_list();
     /**
      * Add button was clicked
      */
@@ -77,7 +84,9 @@ private:
   Glib::RefPtr<Gtk::Builder> _builder;
   Gtk::FlowBox *_LPESelectorFlowBox;
   Gtk::Popover *_LPESelectorEffectInfo;
+  Gtk::Switch * _LPEExperimentals;
   Gtk::SearchEntry *_LPEFilter;
+  Gtk::ScrolledWindow *_LPEScrolled;
   Gtk::Label *_LPEInfo;
   Gtk::Box *_LPESelector;
   guint _visiblelpe;

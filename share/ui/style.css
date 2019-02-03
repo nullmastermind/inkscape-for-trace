@@ -239,9 +239,29 @@ spinbutton undershoot {
     border-width:0;
 }
 
+#lpeflow GtkFlowBoxChild,
+#lpeflow flowboxchild{
+    border-width:0px;
+    border-radius:6px;
+    margin:10px;
+    padding:10px;
+    margin-bottom:30px;
+    padding-bottom:10px;
+}
+  
+#lpeflow GtkFlowBoxChild.lpeactive,
+#lpeflow flowboxchild.lpeactive{
+    margin-bottom:0px;
+    padding-bottom:10px;
+    outline:none;
+}
+.lpefav{
+    background-color: @theme_base_color;
+    padding-bottom:0px;
+}
 .lpename{
     font-size:22px;
-    margin-bottom:20px;
+    margin-bottom:5px;
 }
 .lpeinfo{
     font-size:16px;
