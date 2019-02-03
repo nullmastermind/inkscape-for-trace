@@ -187,7 +187,7 @@ unsigned int PrintWmf::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
     U_PAIRF *ps = U_PAIRF_set(dwInchesX, dwInchesY);
     rec = U_WMRHEADER_set(ps, 1200); // Example: drawing is A4 horizontal,  1200 dpi
     if (!rec) {
-        g_error("Fatal programming error in PrintWmf::begin at WMRSETMAPMODE");
+        g_error("Fatal programming error in PrintWmf::begin at WMRHEADER");
     }
     (void) wmf_header_append((U_METARECORD *)rec, wt, 1);
     free(ps);
