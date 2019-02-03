@@ -81,7 +81,6 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     gtk_box_pack_start(GTK_BOX(_mainbox->gobj()), GTK_WIDGET(_desktop_widget), true, true, 0); // Can't use Glib::wrap()
 
     // ================== Callbacks ==================
-    signal_key_press_event().connect(   sigc::mem_fun(*this, &InkscapeWindow::key_press));
     signal_delete_event().connect(      sigc::mem_fun(*_desktop, &SPDesktop::onDeleteUI));
     signal_window_state_event().connect(sigc::mem_fun(*_desktop, &SPDesktop::onWindowStateEvent));
     signal_focus_in_event().connect(    sigc::mem_fun(*_desktop_widget, &SPDesktopWidget::onFocusInEvent));
@@ -112,10 +111,15 @@ InkscapeWindow::change_document(SPDocument* document)
     }
 }
 
-// We don't override on_key_press() as it steals key strokes from text tool.
 bool
-InkscapeWindow::key_press(GdkEventKey* event)
+InkscapeWindow::on_key_press_event(GdkEventKey* event)
 {
+    // Need to call base class method first or text tool won't work!
+    bool done = Gtk::Window::on_key_press_event(event);
+    if (done) {
+        return true;
+    }
+
     unsigned shortcut = sp_shortcut_get_for_event(event);
     return sp_shortcut_invoke (shortcut, _desktop);
 }
@@ -131,7 +135,7 @@ InkscapeWindow::on_focus_in_event(GdkEventFocus* event)
         std::cerr << "Inkscapewindow::on_focus_in_event: app is nullptr!" << std::endl;
     }
 
-    return true;
+    return Gtk::ApplicationWindow::on_focus_in_event(event);
 }
 
 /*
