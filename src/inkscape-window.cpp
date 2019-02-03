@@ -131,7 +131,7 @@ InkscapeWindow::on_focus_in_event(GdkEventFocus* event)
         std::cerr << "Inkscapewindow::on_focus_in_event: app is nullptr!" << std::endl;
     }
 
-    return true;
+    return Gtk::ApplicationWindow::on_focus_in_event(event);
 }
 
 /*
