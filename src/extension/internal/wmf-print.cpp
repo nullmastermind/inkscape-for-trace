@@ -186,38 +186,44 @@ unsigned int PrintWmf::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
 
     U_PAIRF *ps = U_PAIRF_set(dwInchesX, dwInchesY);
     rec = U_WMRHEADER_set(ps, 1200); // Example: drawing is A4 horizontal,  1200 dpi
+    free(ps);
     if (!rec) {
-        g_error("Fatal programming error in PrintWmf::begin at WMRHEADER");
+        g_warning("Failed in PrintWmf::begin at WMRHEADER");
+        return -1;
     }
     (void) wmf_header_append((U_METARECORD *)rec, wt, 1);
-    free(ps);
 
     rec = U_WMRSETWINDOWEXT_set(point16_set(dwPxX, dwPxY));
     if (!rec || wmf_append((U_METARECORD *)rec, wt, U_REC_FREE)) {
-        g_error("Fatal programming error in PrintWmf::begin at WMRSETWINDOWEXT");
+        g_warning("Failed in PrintWmf::begin at WMRSETWINDOWEXT");
+        return -1;
     }
 
     rec = U_WMRSETWINDOWORG_set(point16_set(0, 0));
     if (!rec || wmf_append((U_METARECORD *)rec, wt, U_REC_FREE)) {
-        g_error("Fatal programming error in PrintWmf::begin at WMRSETWINDOWORG");
+        g_warning("Failed in PrintWmf::begin at WMRSETWINDOWORG");
+        return -1;
     }
 
     rec = U_WMRSETMAPMODE_set(U_MM_ANISOTROPIC);
     if (!rec || wmf_append((U_METARECORD *)rec, wt, U_REC_FREE)) {
-        g_error("Fatal programming error in PrintWmf::begin at WMRSETMAPMODE");
+        g_warning("Failed in PrintWmf::begin at WMRSETMAPMODE");
+        return -1;
     }
 
     /* set some parameters, else the program that reads the WMF may default to other values */
 
     rec = U_WMRSETBKMODE_set(U_TRANSPARENT);
     if (!rec || wmf_append((U_METARECORD *)rec, wt, U_REC_FREE)) {
-        g_error("Fatal programming error in PrintWmf::begin at U_WMRSETBKMODE");
+        g_warning("Failed in PrintWmf::begin at U_WMRSETBKMODE");
+        return -1;
     }
 
     hpolyfillmode = U_WINDING;
     rec = U_WMRSETPOLYFILLMODE_set(U_WINDING);
     if (!rec || wmf_append((U_METARECORD *)rec, wt, U_REC_FREE)) {
-        g_error("Fatal programming error in PrintWmf::begin at U_WMRSETPOLYFILLMODE");
+        g_warning("Failed in PrintWmf::begin at U_WMRSETPOLYFILLMODE");
+        return -1;
     }
 
     // Text alignment:  (only changed if RTL text is encountered )
@@ -226,24 +232,28 @@ unsigned int PrintWmf::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
     //   - for this reason, the WMF text alignment must always be TA_BASELINE|TA_LEFT.
     rec = U_WMRSETTEXTALIGN_set(U_TA_BASELINE | U_TA_LEFT);
     if (!rec || wmf_append((U_METARECORD *)rec, wt, U_REC_FREE)) {
-        g_error("Fatal programming error in PrintWmf::begin at U_WMRSETTEXTALIGN_set");
+        g_warning("Failed in PrintWmf::begin at U_WMRSETTEXTALIGN_set");
+        return -1;
     }
 
     htextcolor_rgb[0] = htextcolor_rgb[1] = htextcolor_rgb[2] = 0.0;
     rec = U_WMRSETTEXTCOLOR_set(U_RGB(0, 0, 0));
     if (!rec || wmf_append((U_METARECORD *)rec, wt, U_REC_FREE)) {
-        g_error("Fatal programming error in PrintWmf::begin at U_WMRSETTEXTCOLOR_set");
+        g_warning("Failed in PrintWmf::begin at U_WMRSETTEXTCOLOR_set");
+        return -1;
     }
 
     rec = U_WMRSETROP2_set(U_R2_COPYPEN);
     if (!rec || wmf_append((U_METARECORD *)rec, wt, U_REC_FREE)) {
-        g_error("Fatal programming error in PrintWmf::begin at U_WMRSETROP2");
+        g_warning("Failed in PrintWmf::begin at U_WMRSETROP2");
+        return -1;
     }
 
     hmiterlimit = 5;
     rec = wmiterlimit_set(5);
     if (!rec || wmf_append((U_METARECORD *)rec, wt, U_REC_FREE)) {
-        g_error("Fatal programming error in PrintWmf::begin at wmiterlimit_set");
+        g_warning("Failed in PrintWmf::begin at wmiterlimit_set");
+        return -1;
     }
 
 
@@ -252,14 +262,16 @@ unsigned int PrintWmf::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
     uint32_t   Pen;
     rec = wcreatepenindirect_set(&Pen, wht, up);
     if (!rec || wmf_append((U_METARECORD *)rec, wt, U_REC_FREE)) {
-        g_error("Fatal programming error in PrintWmf::begin at wcreatepenindirect_set");
+        g_warning("Failed in PrintWmf::begin at wcreatepenindirect_set");
+        return -1;
     }
 
     // create a null pen.  If no specific pen is set, this is used
     up = U_PEN_set(U_PS_NULL, 1, colorref_set(0, 0, 0));
     rec = wcreatepenindirect_set(&hpen_null, wht, up);
     if (!rec || wmf_append((U_METARECORD *)rec, wt, U_REC_FREE)) {
-        g_error("Fatal programming error in PrintWmf::begin at wcreatepenindirect_set");
+        g_warning("Failed in PrintWmf::begin at wcreatepenindirect_set");
+        return -1;
     }
     destroy_pen(); // make this pen active
 
@@ -267,7 +279,8 @@ unsigned int PrintWmf::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
     U_WLOGBRUSH lb = U_WLOGBRUSH_set(U_BS_NULL, U_RGB(0, 0, 0), U_HS_HORIZONTAL);
     rec = wcreatebrushindirect_set(&hbrush_null, wht, lb);
     if (!rec || wmf_append((U_METARECORD *)rec, wt, U_REC_FREE)) {
-        g_error("Fatal programming error in PrintWmf::begin at wcreatebrushindirect_set");
+        g_warning("Failed in PrintWmf::begin at wcreatebrushindirect_set");
+        return -1;
     }
     destroy_brush(); // make this brush active
 
