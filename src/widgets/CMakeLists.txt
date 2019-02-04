@@ -12,7 +12,6 @@ set(widgets_SRC
 	ink-action.cpp
 	ink-comboboxentry-action.cpp
 	ink-toggle-action.cpp
-	ink-tool-menu-action.cpp
 	paint-selector.cpp
 	sp-attribute-widget.cpp
 	sp-color-selector.cpp
@@ -37,7 +36,6 @@ set(widgets_SRC
 	ink-action.h
 	ink-comboboxentry-action.h
 	ink-toggle-action.h
-	ink-tool-menu-action.h
 	paint-selector.h
 	sp-attribute-widget.h
 	sp-color-selector.h

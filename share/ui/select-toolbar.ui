@@ -1,46 +1,4 @@
 <ui>
-  <toolbar name='NodeToolbar'>
-    <separator />
-    <toolitem action='NodeInsertAction'>
-      <menu action='NodeInsertActionMenu'>
-        <menuitem action='NodeInsertActionMinX' />
-        <menuitem action='NodeInsertActionMaxX' />
-        <menuitem action='NodeInsertActionMinY' />
-        <menuitem action='NodeInsertActionMaxY' />
-      </menu>
-    </toolitem>
-    <toolitem action='NodeDeleteAction' />
-    <separator />
-    <toolitem action='NodeJoinAction' />
-    <toolitem action='NodeBreakAction' />
-    <separator />
-    <toolitem action='NodeJoinSegmentAction' />
-    <toolitem action='NodeDeleteSegmentAction' />
-    <separator />
-    <toolitem action='NodeCuspAction' />
-    <toolitem action='NodeSmoothAction' />
-    <toolitem action='NodeSymmetricAction' />
-    <toolitem action='NodeAutoAction' />
-    <separator />
-    <toolitem action='NodeLineAction' />
-    <toolitem action='NodeCurveAction' />
-    <separator />
-    <toolitem action='ObjectToPath' />
-    <toolitem action='StrokeToPath' />
-    <separator />
-    <toolitem action='NodeXAction' />
-    <toolitem action='NodeYAction' />
-    <toolitem action='NodeUnitsAction' />
-    <separator />
-    <toolitem action='ObjectEditClipPathAction' />
-    <toolitem action='ObjectEditMaskPathAction' />
-    <toolitem action='EditNextPathEffectParameter' />
-    <separator />
-    <toolitem action='NodesShowTransformHandlesAction' />
-    <toolitem action='NodesShowHandlesAction' />
-    <toolitem action='NodesShowHelperpath' />
-  </toolbar>
-
   <toolbar name='SprayToolbar'>
     <toolitem action='SprayModeAction' />
     <separator />
@@ -193,6 +151,4 @@
     <toolitem action='ConnectorDirectedAction' />
     <toolitem action='ConnectorOverlapAction' />
   </toolbar>
-
 </ui>
-

@@ -143,6 +143,8 @@ public:
      */
     Node(NodeSharedData const &data, Geom::Point const &pos);
 
+    Node(Node const &) = delete;
+
     void move(Geom::Point const &p) override;
     void transform(Geom::Affine const &m) override;
     Geom::Rect bounds() const override;
@@ -230,7 +232,6 @@ protected:
 
 private:
 
-    Node(Node const &) = delete;
     void _fixNeighbors(Geom::Point const &old_pos, Geom::Point const &new_pos);
     void _updateAutoHandles();
 
@@ -313,7 +314,7 @@ public:
         _node = (_node?_node->ln_prev:nullptr);
         return *this;
     }
-    bool operator==(self const &other) const { if(&other){return _node == other._node;} else{return false;} }
+    bool operator==(self const &other) const { return _node == other._node; }
     N &operator*() const { return *static_cast<N*>(_node); }
     inline operator bool() const; // define after NodeList
     /// Get a pointer to the underlying node. Equivalent to <code>&*i</code>.
@@ -363,6 +364,10 @@ public:
     NodeList(SubpathList &_list);
 
     ~NodeList();
+
+    // no copy or assign
+    NodeList(NodeList const &) = delete;
+    void operator=(NodeList const &) = delete;
 
     // iterators
     iterator begin() { return iterator(ln_next); }
@@ -432,9 +437,6 @@ public:
     static NodeList &get(Node *n);
     static NodeList &get(iterator const &i);
 private:
-    // no copy or assign
-    NodeList(NodeList const &) = delete;
-    void operator=(NodeList const &) = delete;
 
     SubpathList &_list;
     bool _closed;
