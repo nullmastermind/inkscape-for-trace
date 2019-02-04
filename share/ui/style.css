@@ -219,14 +219,14 @@ spinbutton undershoot {
     border-right-width:0;
 }
 
-#lpeflow GtkFlowBoxChild,
-#lpeflow flowboxchild{
-    border-width:0px;
-    border-radius:6px;
-    margin:10px;
-    margin-bottom:30px;
-    padding-bottom:10px;
-}
+    #lpeflow GtkFlowBoxChild,
+    #lpeflow flowboxchild{
+        border-width:0px;
+        border-radius:6px;
+        margin:10px;
+        margin-bottom:30px;
+        padding-bottom:10px;
+    }
 
 #lpeflow GtkFlowBoxChild.lpeactive,
 #lpeflow flowboxchild.lpeactive{
@@ -268,7 +268,7 @@ spinbutton undershoot {
     padding:20px;
 }
 
-#LPESelectorEffectInfo{
+#LPESelectorEffectInfoPop{
 padding:15px;
 }
 #LPESelectorEffectInfoName{

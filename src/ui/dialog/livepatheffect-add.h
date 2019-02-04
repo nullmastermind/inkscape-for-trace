@@ -42,7 +42,7 @@ namespace Dialog {
 class LivePathEffectAdd {
 public:
     LivePathEffectAdd();
-    ~LivePathEffectAdd(){};
+    ~LivePathEffectAdd()= default;;
 
     /**
      * Show the dialog
@@ -63,6 +63,8 @@ public:
     void on_activate(Gtk::FlowBoxChild *child);
     bool pop_description(GdkEventButton* evt, Glib::RefPtr<Gtk::Builder> builder_effect);
     bool fav_toggler(GdkEventButton* evt, Glib::RefPtr<Gtk::Builder> builder_effect);
+    bool mouseover(GdkEventCrossing* evt, GtkWidget *wdg);
+    bool mouseout(GdkEventCrossing* evt, GtkWidget *wdg);
     void reload_effect_list();
     /**
      * Add button was clicked
@@ -83,7 +85,7 @@ private:
   Gtk::Dialog *_LPEDialogSelector;
   Glib::RefPtr<Gtk::Builder> _builder;
   Gtk::FlowBox *_LPESelectorFlowBox;
-  Gtk::Popover *_LPESelectorEffectInfo;
+  Gtk::Popover *_LPESelectorEffectInfoPop;
   Gtk::Switch * _LPEExperimentals;
   Gtk::SearchEntry *_LPEFilter;
   Gtk::ScrolledWindow *_LPEScrolled;

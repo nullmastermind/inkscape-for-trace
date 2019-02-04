@@ -126,8 +126,8 @@
             </child>
             <child>
               <object class="GtkLabel" id="LPEInfo">
-                <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
                 <property name="label" translatable="yes">Message</property>
                 <property name="justify">center</property>
                 <property name="ellipsize">end</property>
@@ -160,9 +160,10 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="column_spacing">10</property>
-                        <property name="row_spacing">10</property>
-                        <property name="min_children_per_line">4</property>
+                        <property name="column_spacing">2</property>
+                        <property name="row_spacing">2</property>
+                        <property name="min_children_per_line">3</property>
+                        <property name="max_children_per_line">20</property>
                       </object>
                     </child>
                   </object>
@@ -191,9 +192,8 @@
       <class name="colordefault"/>
     </style>
   </object>
-  <object class="GtkPopover" id="LPESelectorEffectInfo">
-    <property name="name">LPESelectorEffectInfo</property>
-    <property name="visible">True</property>
+  <object class="GtkPopover" id="LPESelectorEffectInfoPop">
+    <property name="name">LPESelectorEffectInfoPop</property>
     <property name="can_focus">False</property>
     <property name="no_show_all">True</property>
     <property name="valign">start</property>
