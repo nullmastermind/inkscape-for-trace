@@ -5,12 +5,11 @@
   <object class="GtkEventBox" id="LPESelectorEffect">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="halign">end</property>
+    <property name="halign">center</property>
     <property name="valign">start</property>
     <property name="visible_window">False</property>
     <child>
       <object class="GtkBox" id="LPESelectorEffectBox">
-        <property name="width_request">200</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="double_buffered">False</property>
@@ -28,7 +27,7 @@
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">start</property>
-                <property name="pixel_size">80</property>
+                <property name="pixel_size">60</property>
                 <property name="icon_name">align-vertical-baseline</property>
                 <property name="icon_size">6</property>
               </object>
@@ -50,7 +49,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
-                    <property name="pixel_size">30</property>
+                    <property name="pixel_size">20</property>
                     <property name="icon_name">draw-star</property>
                     <property name="icon_size">2</property>
                     <style>
@@ -96,7 +95,6 @@
             <property name="label" translatable="yes">Description</property>
             <property name="justify">center</property>
             <property name="wrap">True</property>
-            <property name="max_width_chars">20</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -141,7 +139,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
-                    <property name="pixel_size">30</property>
+                    <property name="pixel_size">20</property>
                     <property name="icon_name">infopop-outline</property>
                     <property name="icon_size">2</property>
                     <style>
@@ -172,7 +170,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
                     <property name="valign">start</property>
-                    <property name="pixel_size">30</property>
+                    <property name="pixel_size">20</property>
                     <property name="icon_name">draw-star-outline</property>
                     <property name="icon_size">2</property>
                     <style>
@@ -202,7 +200,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
-                    <property name="pixel_size">30</property>
+                    <property name="pixel_size">20</property>
                     <property name="icon_name">on</property>
                     <property name="icon_size">2</property>
                     <style>

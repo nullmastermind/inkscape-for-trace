@@ -245,7 +245,7 @@ spinbutton undershoot {
     border-radius:6px;
     margin:10px;
     padding:10px;
-    margin-bottom:30px;
+    margin-bottom:20px;
     padding-bottom:10px;
 }
   
@@ -260,7 +260,7 @@ spinbutton undershoot {
     padding-bottom:0px;
 }
 .lpename{
-    font-size:22px;
+    font-size:16px;
     margin-bottom:5px;
 }
 .lpeinfo{
