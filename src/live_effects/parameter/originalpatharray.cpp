@@ -159,7 +159,7 @@ void OriginalPathArrayParam::on_visible_toggled(const Glib::ustring& path)
     param_write_to_repr(full);
     g_free(full);
     DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                       _("Toggle path parameter to path"));
+                       _("Toggle path parameter visibility"));
 }
 
 void OriginalPathArrayParam::param_set_default()
