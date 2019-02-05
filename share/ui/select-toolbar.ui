@@ -27,30 +27,6 @@
     <toolitem action='SprayPickCenterAction' />
   </toolbar>
 
-  <toolbar name='PenToolbar'>
-    <toolitem action='FreehandModeActionPen' />
-    <separator />
-    <toolitem action='FlattenSpiroBsplinePen' />
-    <separator />
-    <toolitem action='SetPenShapeAction'/>
-  </toolbar>
-
-  <toolbar name='PencilToolbar'>
-    <toolitem action='FreehandModeActionPencil' />
-    <separator />
-    <toolitem action='FlattenSpiroBsplinePencil' />
-    <separator />
-    <toolitem action='PencilPressureAction' />
-    <toolitem action='MinPressureAction' />
-    <toolitem action='MaxPressureAction' />
-    <separator />
-    <toolitem action='PencilToleranceAction' />
-    <toolitem action='PencilLpeSimplify' />
-    <toolitem action='PencilLpeSimplifyFlatten' />
-    <separator />
-    <toolitem action='SetPencilShapeAction'/>
-  </toolbar>
-
   <toolbar name='CalligraphyToolbar'>
     <separator />
     <toolitem action='SetProfileAction'/>

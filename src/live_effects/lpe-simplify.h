@@ -19,6 +19,8 @@ class LPESimplify : public Effect , GroupBBoxEffect {
 public:
     LPESimplify(LivePathEffectObject *lpeobject);
     ~LPESimplify() override;
+    LPESimplify(const LPESimplify &) = delete;
+    LPESimplify &operator=(const LPESimplify &) = delete;
 
     void doEffect(SPCurve *curve) override;
 
@@ -48,10 +50,6 @@ private:
     double radius_helper_nodes;
     Geom::PathVector hp;
     Geom::OptRect bbox;
-
-    LPESimplify(const LPESimplify &) = delete;
-    LPESimplify &operator=(const LPESimplify &) = delete;
-
 };
 
 }; //namespace LivePathEffect

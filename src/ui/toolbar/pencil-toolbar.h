@@ -32,13 +32,7 @@
 
 #include <gtkmm/adjustment.h>
 
-class InkSelectOneAction;
 class SPDesktop;
-
-typedef struct _EgeAdjustmentAction EgeAdjustmentAction;
-typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _InkAction InkAction;
-typedef struct _InkToggleAction InkToggleAction;
 
 namespace Inkscape {
 namespace XML {
@@ -46,19 +40,28 @@ class Node;
 }
 
 namespace UI {
+namespace Widget {
+class LabelToolItem;
+class SpinButtonToolItem;
+}
+
 namespace Toolbar {
 class PencilToolbar : public Toolbar {
 private:
-    EgeAdjustmentAction *_minpressure;
-    EgeAdjustmentAction *_maxpressure;
+    std::vector<Gtk::RadioToolButton *> _mode_buttons;
+
+    Gtk::ToggleToolButton *_pressure_item;
+    UI::Widget::SpinButtonToolItem *_minpressure;
+    UI::Widget::SpinButtonToolItem *_maxpressure;
 
     XML::Node *_repr;
-    InkAction *_flatten_spiro_bspline;
-    InkAction *_flatten_simplify;
+    Gtk::ToolButton *_flatten_spiro_bspline;
+    Gtk::ToolButton *_flatten_simplify;
 
-    InkSelectOneAction *_shape_action;
+    Gtk::ToolItem *_shape_item;
+    Gtk::ComboBoxText *_shape_combo;
 
-    InkToggleAction *_simplify;
+    Gtk::ToggleToolButton *_simplify;
 
     bool _freeze;
 
@@ -66,36 +69,27 @@ private:
     Glib::RefPtr<Gtk::Adjustment> _maxpressure_adj;
     Glib::RefPtr<Gtk::Adjustment> _tolerance_adj;
 
-    void add_freehand_mode_toggle(GtkActionGroup* mainActions,
-                                  bool tool_is_pencil);
-    void freehand_mode_changed(int mode);
+    void add_freehand_mode_toggle(bool tool_is_pencil);
+    void mode_changed(int mode);
     Glib::ustring const freehand_tool_name();
     void minpressure_value_changed();
     void maxpressure_value_changed();
-    static void use_pencil_pressure(InkToggleAction *itact,
-                                    gpointer         data);
+    void use_pencil_pressure();
     void tolerance_value_changed();
-    void freehand_add_advanced_shape_options(GtkActionGroup* mainActions, bool tool_is_pencil);
-    void freehand_change_shape(int shape);
-    static void defaults(GtkWidget *widget, GObject *obj);
-    static void freehand_simplify_lpe(InkToggleAction* itact, GObject *data);
-    static void simplify_flatten(GtkWidget *widget, GObject *data);
-    static void flatten_spiro_bspline(GtkWidget *widget, gpointer data);
+    void add_advanced_shape_options(bool tool_is_pencil);
+    void change_shape();
+    void simplify_lpe();
+    void simplify_flatten();
+    void flatten_spiro_bspline();
 
 protected:
-    PencilToolbar(SPDesktop *desktop)
-        : Toolbar(desktop),
-          _repr(nullptr),
-          _freeze(false),
-          _flatten_simplify(nullptr),
-          _simplify(nullptr)
-    {}
-
+    PencilToolbar(SPDesktop *desktop,
+                  bool       pencil_mode);
     ~PencilToolbar() override;
 
 public:
-    static GtkWidget * prep_pencil(SPDesktop *desktop, GtkActionGroup* mainActions);
-    static GtkWidget * prep_pen(SPDesktop *desktop, GtkActionGroup* mainActions);
+    static GtkWidget * create_pencil(SPDesktop *desktop);
+    static GtkWidget * create_pen(SPDesktop *desktop);
 };
 }
 }

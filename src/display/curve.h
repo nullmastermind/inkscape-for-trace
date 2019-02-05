@@ -32,6 +32,10 @@ public:
 
     virtual ~SPCurve();
 
+    // Don't implement these:
+    SPCurve(const SPCurve&) = delete;
+    SPCurve& operator=(const SPCurve&) = delete;
+
     void set_pathvector(Geom::PathVector const & new_pathv);
     Geom::PathVector const & get_pathvector() const;
 
@@ -86,11 +90,6 @@ protected:
     size_t _refcount;
 
     Geom::PathVector _pathv;
-
-private:
-    // Don't implement these:
-    SPCurve(const SPCurve&) = delete;
-    SPCurve& operator=(const SPCurve&) = delete;
 };
 
 #endif // !SEEN_DISPLAY_CURVE_H

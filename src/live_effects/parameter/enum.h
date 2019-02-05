@@ -39,6 +39,8 @@ public:
     };
 
     ~EnumParam() override = default;;
+    EnumParam(const EnumParam&) = delete;
+    EnumParam& operator=(const EnumParam&) = delete;
 
     Gtk::Widget * param_newWidget() override {
         Inkscape::UI::Widget::RegisteredEnum<E> *regenum = Gtk::manage ( 
@@ -98,9 +100,6 @@ public:
     }
 
 private:
-    EnumParam(const EnumParam&) = delete;
-    EnumParam& operator=(const EnumParam&) = delete;
-
     E value;
     E defvalue;
     bool sorted;

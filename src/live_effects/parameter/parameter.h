@@ -56,6 +56,9 @@ public:
                 Effect* effect);
     virtual ~Parameter() = default;;
 
+    Parameter(const Parameter&) = delete;
+    Parameter& operator=(const Parameter&) = delete;
+
     virtual bool param_readSVGValue(const gchar * strvalue) = 0;   // returns true if new value is valid / accepted.
     virtual gchar * param_getSVGValue() const = 0;
     virtual gchar * param_getDefaultSVGValue() const = 0;
@@ -92,10 +95,6 @@ protected:
     Effect* param_effect;
 
     void param_write_to_repr(const char * svgd);
-
-private:
-    Parameter(const Parameter&) = delete;
-    Parameter& operator=(const Parameter&) = delete;
 };
 
 
@@ -108,6 +107,8 @@ public:
                 Effect* effect,
                 gdouble default_value = 1.0);
     ~ScalarParam() override;
+    ScalarParam(const ScalarParam&) = delete;
+    ScalarParam& operator=(const ScalarParam&) = delete;
 
     bool param_readSVGValue(const gchar * strvalue) override;
     gchar * param_getSVGValue() const override;
@@ -140,10 +141,6 @@ protected:
     double inc_page;
     bool add_slider;
     bool _set_undo;
-
-private:
-    ScalarParam(const ScalarParam&) = delete;
-    ScalarParam& operator=(const ScalarParam&) = delete;
 };
 
 } //namespace LivePathEffect

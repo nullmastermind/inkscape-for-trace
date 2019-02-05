@@ -36,6 +36,8 @@ public:
                char const * icon_inactive = nullptr,
                GtkIconSize icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR);
     ~ToggleButtonParam() override;
+    ToggleButtonParam(const ToggleButtonParam&) = delete;
+    ToggleButtonParam& operator=(const ToggleButtonParam&) = delete;
 
     Gtk::Widget * param_newWidget() override;
 
@@ -56,9 +58,6 @@ public:
     void param_update_default(const gchar * default_value) override;
 
 private:
-    ToggleButtonParam(const ToggleButtonParam&) = delete;
-    ToggleButtonParam& operator=(const ToggleButtonParam&) = delete;
-
     void refresh_button();
     bool value;
     bool defvalue;

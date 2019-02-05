@@ -211,9 +211,9 @@ static struct {
       SP_VERB_CONTEXT_ARC_PREFS,    "/tools/shapes/arc",      N_("Style of new ellipses")},
     { "/tools/shapes/spiral", "spiral_toolbox", Inkscape::UI::Toolbar::SpiralToolbar::create, nullptr,           "SpiralToolbar",
       SP_VERB_CONTEXT_SPIRAL_PREFS, "/tools/shapes/spiral",   N_("Style of new spirals")},
-    { "/tools/freehand/pencil", "pencil_toolbox", nullptr, Inkscape::UI::Toolbar::PencilToolbar::prep_pencil,   "PencilToolbar",
+    { "/tools/freehand/pencil", "pencil_toolbox", Inkscape::UI::Toolbar::PencilToolbar::create_pencil, nullptr,  "PencilToolbar",
       SP_VERB_CONTEXT_PENCIL_PREFS, "/tools/freehand/pencil", N_("Style of new paths created by Pencil")},
-    { "/tools/freehand/pen", "pen_toolbox", nullptr,       Inkscape::UI::Toolbar::PencilToolbar::prep_pen,      "PenToolbar",
+    { "/tools/freehand/pen", "pen_toolbox", Inkscape::UI::Toolbar::PencilToolbar::create_pen, nullptr,     "PenToolbar",
       SP_VERB_CONTEXT_PEN_PREFS,    "/tools/freehand/pen",    N_("Style of new paths created by Pen")},
     { "/tools/calligraphic", "calligraphy_toolbox", nullptr, Inkscape::UI::Toolbar::CalligraphyToolbar::prep,"CalligraphyToolbar",
       SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS, "/tools/calligraphic", N_("Style of new calligraphic strokes")},
@@ -236,7 +236,7 @@ static struct {
     { "/tools/paintbucket",  "paintbucket_toolbox", Inkscape::UI::Toolbar::PaintbucketToolbar::create, nullptr, "PaintbucketToolbar",
       SP_VERB_CONTEXT_PAINTBUCKET_PREFS, "/tools/paintbucket", N_("Style of Paint Bucket fill objects")},
 #else
-    { "/tools/paintbucket",  "paintbucket_toolbox",  0, NULL, "PaintbucketToolbar", SP_VERB_NONE, "/tools/paintbucket", N_("Disabled")},
+    { "/tools/paintbucket",  "paintbucket_toolbox",  nullptr, nullptr, "PaintbucketToolbar", SP_VERB_NONE, "/tools/paintbucket", N_("Disabled")},
 #endif
     { nullptr, nullptr, nullptr, nullptr, nullptr, SP_VERB_INVALID, nullptr, nullptr }
 };

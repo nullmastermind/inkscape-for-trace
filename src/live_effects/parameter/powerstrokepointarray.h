@@ -30,6 +30,9 @@ public:
                 Effect* effect);
     ~PowerStrokePointArrayParam() override;
 
+    PowerStrokePointArrayParam(const PowerStrokePointArrayParam&) = delete;
+    PowerStrokePointArrayParam& operator=(const PowerStrokePointArrayParam&) = delete;
+
     Gtk::Widget * param_newWidget() override;
 
     void param_transform_multiply(Geom::Affine const& postmul, bool /*set*/) override;
@@ -54,9 +57,6 @@ public:
     friend class PowerStrokePointArrayParamKnotHolderEntity;
 
 private:
-    PowerStrokePointArrayParam(const PowerStrokePointArrayParam&) = delete;
-    PowerStrokePointArrayParam& operator=(const PowerStrokePointArrayParam&) = delete;
-
     SPKnotShapeType knot_shape;
     SPKnotModeType knot_mode;
     guint32 knot_color;

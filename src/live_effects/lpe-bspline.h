@@ -18,6 +18,8 @@ class LPEBSpline : public Effect {
 public:
     LPEBSpline(LivePathEffectObject *lpeobject);
     ~LPEBSpline() override;
+    LPEBSpline(const LPEBSpline &) = delete;
+    LPEBSpline &operator=(const LPEBSpline &) = delete;
 
     LPEPathFlashType pathFlashType() const override
     {
@@ -43,10 +45,6 @@ private:
     BoolParam apply_with_weight;
     BoolParam only_selected;
     ScalarParam weight;
-
-    LPEBSpline(const LPEBSpline &) = delete;
-    LPEBSpline &operator=(const LPEBSpline &) = delete;
-
 };
 void sp_bspline_do_effect(SPCurve *curve, double helper_size);
 

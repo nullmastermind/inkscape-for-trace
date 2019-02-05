@@ -59,6 +59,8 @@ public:
     static void createAndApply(EffectType type, SPDocument *doc, SPItem *item);
 
     virtual ~Effect();
+    Effect(const Effect&) = delete;
+    Effect& operator=(const Effect&) = delete;
 
     EffectType effectType() const;
 
@@ -187,9 +189,6 @@ private:
 
     bool is_ready;
     bool defaultsopen;
-
-    Effect(const Effect&) = delete;
-    Effect& operator=(const Effect&) = delete;
 };
 
 } //namespace LivePathEffect

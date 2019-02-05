@@ -25,7 +25,8 @@ class LPEPowerStroke : public Effect {
 public:
     LPEPowerStroke(LivePathEffectObject *lpeobject);
     ~LPEPowerStroke() override;
-
+    LPEPowerStroke(const LPEPowerStroke&) = delete;
+    LPEPowerStroke& operator=(const LPEPowerStroke&) = delete;
     
     Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
     void doBeforeEffect(SPLPEItem const *lpeItem) override;
@@ -46,8 +47,6 @@ private:
     EnumParam<unsigned> linejoin_type;
     ScalarParam miter_limit;
     EnumParam<unsigned> end_linecap_type;
-    LPEPowerStroke(const LPEPowerStroke&) = delete;
-    LPEPowerStroke& operator=(const LPEPowerStroke&) = delete;
 };
 
 } //namespace LivePathEffect

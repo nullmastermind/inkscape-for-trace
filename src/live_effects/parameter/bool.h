@@ -28,6 +28,8 @@ public:
                Effect* effect,
                bool default_value = false);
     ~BoolParam() override;
+    BoolParam(const BoolParam&) = delete;
+    BoolParam& operator=(const BoolParam&) = delete;
 
     Gtk::Widget * param_newWidget() override;
 
@@ -43,9 +45,6 @@ public:
     inline operator bool() const { return value; };
 
 private:
-    BoolParam(const BoolParam&) = delete;
-    BoolParam& operator=(const BoolParam&) = delete;
-
     bool value;
     bool defvalue;
 };

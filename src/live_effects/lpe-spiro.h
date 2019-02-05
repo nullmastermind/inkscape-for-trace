@@ -18,14 +18,12 @@ class LPESpiro : public Effect {
 public:
     LPESpiro(LivePathEffectObject *lpeobject);
     ~LPESpiro() override;
+    LPESpiro(const LPESpiro&) = delete;
+    LPESpiro& operator=(const LPESpiro&) = delete;
 
     LPEPathFlashType pathFlashType() const override { return SUPPRESS_FLASH; }
 
     void doEffect(SPCurve * curve) override;
-
-private:
-    LPESpiro(const LPESpiro&) = delete;
-    LPESpiro& operator=(const LPESpiro&) = delete;
 };
 
 void sp_spiro_do_effect(SPCurve *curve);

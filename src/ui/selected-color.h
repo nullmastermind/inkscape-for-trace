@@ -30,6 +30,10 @@ public:
     SelectedColor();
     virtual ~SelectedColor();
 
+    // By default, disallow copy constructor and assignment operator
+    SelectedColor(SelectedColor const &obj) = delete;
+    SelectedColor& operator=(SelectedColor const &obj) = delete;
+
     void setColor(SPColor const &color);
     SPColor color() const;
 
@@ -50,11 +54,8 @@ public:
     sigc::signal<void> signal_dragged;
     sigc::signal<void> signal_released;
     sigc::signal<void> signal_changed;
-private:
-    // By default, disallow copy constructor and assignment operator
-    SelectedColor(SelectedColor const &obj) = delete;
-    SelectedColor& operator=(SelectedColor const &obj) = delete;
 
+private:
     SPColor _color;
     /**
      * Color alpha value guaranteed to be in [0, 1].
