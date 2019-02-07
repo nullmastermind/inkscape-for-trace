@@ -2602,13 +2602,13 @@ Verb *Verb::_base_verbs[] = {
                  INKSCAPE_ICON("document-save-as")),
     new FileVerb(SP_VERB_FILE_SAVE_A_COPY, "FileSaveACopy", N_("Save a Cop_y..."),
                  N_("Save a copy of the document under a new name"), nullptr),
-    new FileVerb(SP_VERB_FILE_SAVE_TEMPLATE, "FileSaveTemplate", N_("Save template ..."),
+    new FileVerb(SP_VERB_FILE_SAVE_TEMPLATE, "FileSaveTemplate", N_("Save Template..."),
                  N_("Save a copy of the document as template"), nullptr),
     new FileVerb(SP_VERB_FILE_PRINT, "FilePrint", N_("_Print..."), N_("Print document"),
                  INKSCAPE_ICON("document-print")),
     // TRANSLATORS: "Vacuum Defs" means "Clean up defs" (so as to remove unused definitions)
     new FileVerb(
-        SP_VERB_FILE_VACUUM, "FileVacuum", N_("Clean _up document"),
+        SP_VERB_FILE_VACUUM, "FileVacuum", N_("Clean _Up Document"),
         N_("Remove unused definitions (such as gradients or clipping paths) from the &lt;defs&gt; of the document"),
         INKSCAPE_ICON("document-cleanup")),
     new FileVerb(SP_VERB_FILE_IMPORT, "FileImport", N_("_Import..."),
@@ -2756,7 +2756,7 @@ Verb *Verb::_base_verbs[] = {
     new SelectionVerb(SP_VERB_SELECTION_UNGROUP, "SelectionUnGroup", N_("_Ungroup"), N_("Ungroup selected groups"),
                       INKSCAPE_ICON("object-ungroup")),
     new SelectionVerb(SP_VERB_SELECTION_UNGROUP_POP_SELECTION, "SelectionUnGroupPopSelection",
-                      N_("_Pop selected objects out of group"), N_("Pop selected objects out of group"),
+                      N_("_Pop Selected Objects out of Group"), N_("Pop selected objects out of group"),
                       INKSCAPE_ICON("object-ungroup-pop-selection")),
 
     new SelectionVerb(SP_VERB_SELECTION_TEXTTOPATH, "SelectionTextToPath", N_("_Put on Path"), N_("Put text on path"),
@@ -2887,7 +2887,7 @@ Verb *Verb::_base_verbs[] = {
                   nullptr),
     new LayerVerb(SP_VERB_LAYER_TOGGLE_LOCK, "LayerToggleLock", N_("_Lock/Unlock Current Layer"),
                   N_("Toggle lock on current layer"), nullptr),
-    new LayerVerb(SP_VERB_LAYER_TOGGLE_HIDE, "LayerToggleHide", N_("_Show/hide Current Layer"),
+    new LayerVerb(SP_VERB_LAYER_TOGGLE_HIDE, "LayerToggleHide", N_("_Show/Hide Current Layer"),
                   N_("Toggle visibility of current layer"), nullptr),
 
     // Object
@@ -3126,7 +3126,7 @@ Verb *Verb::_base_verbs[] = {
     new ZoomVerb(SP_VERB_VIEW_TOGGLE_XRAY, "ViewXRayToggle", N_("Toggle _XRay Mode"), N_("XRay around cursor"),
                  nullptr),
 
-    new ZoomVerb(SP_VERB_VIEW_CMS_TOGGLE, "ViewCmsToggle", N_("Color-managed view"),
+    new ZoomVerb(SP_VERB_VIEW_CMS_TOGGLE, "ViewCmsToggle", N_("Color-Managed View"),
                  N_("Toggle color-managed display for this document window"), INKSCAPE_ICON("color-management")),
 
     new ZoomVerb(SP_VERB_VIEW_ICON_PREVIEW, "ViewIconPreview", N_("Ico_n Preview..."),
@@ -3197,11 +3197,11 @@ Verb *Verb::_base_verbs[] = {
                    INKSCAPE_ICON("dialog-layers")),
     new DialogVerb(SP_VERB_DIALOG_OBJECTS, "DialogObjects", N_("Object_s..."), N_("View Objects"),
                    INKSCAPE_ICON("dialog-layers")),
-    new DialogVerb(SP_VERB_DIALOG_TAGS, "DialogTags", N_("Selection se_ts..."), N_("View Tags"),
+    new DialogVerb(SP_VERB_DIALOG_TAGS, "DialogTags", N_("Selection Se_ts..."), N_("View Tags"),
                    INKSCAPE_ICON("edit-select-all-layers")),
     new DialogVerb(SP_VERB_DIALOG_STYLE, "DialogStyle", N_("Style Dialog..."), N_("View Style Dialog"), nullptr),
     new DialogVerb(SP_VERB_DIALOG_CSS, "DialogCss", N_("Css Dialog..."), N_("View Css Dialog"), nullptr),
-    new DialogVerb(SP_VERB_DIALOG_LIVE_PATH_EFFECT, "DialogLivePathEffect", N_("Path E_ffects ..."),
+    new DialogVerb(SP_VERB_DIALOG_LIVE_PATH_EFFECT, "DialogLivePathEffect", N_("Path E_ffects..."),
                    N_("Manage, edit, and apply path effects"), INKSCAPE_ICON("dialog-path-effects")),
     new DialogVerb(SP_VERB_DIALOG_FILTER_EFFECTS, "DialogFilterEffects", N_("Filter _Editor..."),
                    N_("Manage, edit, and apply SVG filters"), INKSCAPE_ICON("dialog-filters")),
