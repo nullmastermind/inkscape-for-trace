@@ -2662,7 +2662,7 @@ Verb *Verb::_base_verbs[] = {
                  N_("Remove any filters from selected objects"), nullptr),
     new EditVerb(SP_VERB_EDIT_DELETE, "EditDelete", N_("_Delete"), N_("Delete selection"),
                  INKSCAPE_ICON("edit-delete")),
-    new EditVerb(SP_VERB_EDIT_DUPLICATE, "EditDuplicate", N_("Duplic_ate"), N_("Duplicate selected objects"),
+    new EditVerb(SP_VERB_EDIT_DUPLICATE, "EditDuplicate", N_("Duplic_ate"), N_("Duplicate Selected Objects"),
                  INKSCAPE_ICON("edit-duplicate")),
     new EditVerb(SP_VERB_EDIT_CLONE, "EditClone", N_("Create Clo_ne"),
                  N_("Create a clone (a copy linked to the original) of selected object"), INKSCAPE_ICON("edit-clone")),

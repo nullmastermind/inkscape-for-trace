@@ -111,7 +111,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     mi->show();
     append(*mi);//insert(*mi,positionOfLastDialog++);
 
-    mi = Gtk::manage(new Gtk::MenuItem(_("Unhide objects below"),true));
+    mi = Gtk::manage(new Gtk::MenuItem(_("Unhide Objects Below"),true));
     mi->signal_activate().connect(sigc::bind<std::vector< SPItem * > >(sigc::mem_fun(*this, &ContextMenu::UnHideBelow), down_items));
     if (!has_down_hidden) {
         mi->set_sensitive(false);
@@ -127,7 +127,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     mi->show();
     append(*mi);//insert(*mi,positionOfLastDialog++);
 
-    mi = Gtk::manage(new Gtk::MenuItem(_("Unlock objects below"),true));
+    mi = Gtk::manage(new Gtk::MenuItem(_("Unlock Objects Below"),true));
     mi->signal_activate().connect(sigc::bind<std::vector< SPItem * > >(sigc::mem_fun(*this, &ContextMenu::UnLockBelow), down_items));
     if (!has_down_locked) {
         mi->set_sensitive(false);
