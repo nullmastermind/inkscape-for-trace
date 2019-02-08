@@ -88,7 +88,7 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
 
     // Query
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "version",             'V', N_("Print: Inkscape version."),                                                          "");
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "extensions-directory",'x', N_("Print: Extensions directory."),                                                      "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "extension-directory", 'x', N_("Print: Extensions directory."),                                                      "");
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "verb-list",          '\0', N_("Print: List verbs."),                                                                "");
 
     // Interface
@@ -572,8 +572,8 @@ ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib:
         return EXIT_SUCCESS;
     }
 
-    if (options->contains("extensions-directory")) {
-        T::activate_action("extensions-directory");
+    if (options->contains("extension-directory")) {
+        T::activate_action("extension-directory");
         return EXIT_SUCCESS;
     }
 
