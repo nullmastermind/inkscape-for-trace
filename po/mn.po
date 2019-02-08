@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2006-11-05 17:55+0100\n"
 "Last-Translator: Sanlig Badral <badral@openmn.org>\n"
 "Language-Team: Mongolian <openmn-gnome@lists.sf.net>\n"
@@ -1252,7 +1252,7 @@ msgstr "Улаан:"
 #: ../share/filters/filters.svg.h:779 ../share/filters/filters.svg.h:783
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr ""
 
 #: ../share/filters/filters.svg.h:428
@@ -15628,25 +15628,25 @@ msgstr "Өнгөөр будах"
 
 #: ../src/ui/contextmenu.cpp:106
 #, fuzzy
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "Сонгосон объектийг хувилах"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
 #, fuzzy
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "Салангид бус зангилаа"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
 #, fuzzy
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "Сонгосон объектуудийг бүлэг болгох"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
 #, fuzzy
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "Сонгогдсон объектууд"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -15703,13 +15703,13 @@ msgstr "Строк хэв"
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
 #, fuzzy
-msgid "Object type"
+msgid "Object Type"
 msgstr "Объект"
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
 #, fuzzy
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr "Зангилааг доошлуулах"
 
 #. Create link
@@ -32428,7 +32428,7 @@ msgstr "Шинэ нэрээр документийг хадгалах"
 
 #: ../src/verbs.cpp:2605
 #, fuzzy
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "Өөр нэрээр хадгалах..."
 
 #: ../src/verbs.cpp:2606
@@ -32447,7 +32447,7 @@ msgstr "Документийг хэвлэх"
 
 #: ../src/verbs.cpp:2611
 #, fuzzy
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "Документ хадгалах"
 
 #: ../src/verbs.cpp:2612
@@ -32670,7 +32670,7 @@ msgid "Duplic_ate"
 msgstr "Хувилах"
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr "Сонгосон объектийг хувилах"
 
 #: ../src/verbs.cpp:2667
@@ -33012,7 +33012,7 @@ msgstr "Сонгосон бүлгийг бүлэг бус болгох"
 
 #: ../src/verbs.cpp:2759
 #, fuzzy
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr "Сонгосон объектуудийг бүлэг болгох"
 
 #: ../src/verbs.cpp:2759
@@ -33499,7 +33499,7 @@ msgstr "Документдэх бүх объектийг сонгох"
 
 #: ../src/verbs.cpp:2890
 #, fuzzy
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "Ирмэгийн үзүүлэх"
 
 #: ../src/verbs.cpp:2891
@@ -34435,7 +34435,7 @@ msgid "XRay around cursor"
 msgstr ""
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr ""
 
 #: ../src/verbs.cpp:3130
@@ -34675,7 +34675,7 @@ msgstr "Объект"
 
 #: ../src/verbs.cpp:3200
 #, fuzzy
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr "Сонгох"
 
 #: ../src/verbs.cpp:3200
@@ -34702,7 +34702,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:3204
 #, fuzzy
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "Строк хэв"
 
 #: ../src/verbs.cpp:3205
@@ -43496,17 +43496,17 @@ msgstr "Томруулах"
 
 #: ../share/ui/menus.xml.h:8
 #, fuzzy
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "Дүрслэх"
 
 #: ../share/ui/menus.xml.h:9
 #, fuzzy
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "Дүрслэх"
 
 #: ../share/ui/menus.xml.h:10
 #, fuzzy
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "Чиглэл:"
 
 #: ../share/ui/menus.xml.h:11

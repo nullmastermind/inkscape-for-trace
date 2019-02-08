@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2018-10-12 13:34+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <translation-team-is@lists.sourceforge.net>\n"
@@ -1135,7 +1135,7 @@ msgstr "Myndasögusmurning"
 #: ../share/filters/filters.svg.h:779 ../share/filters/filters.svg.h:783
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr "Gervilegar þrívíddaráferðir"
 
 #: ../share/filters/filters.svg.h:428
@@ -14465,22 +14465,22 @@ msgid "Go to parent"
 msgstr "Fara í forvera"
 
 #: ../src/ui/contextmenu.cpp:106
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "Fela valda hluti"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "Birta hluti fyrir neðan"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "Læsa völdum hlutum"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "Aflæsa hlutum fyrir neðan"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -14528,12 +14528,12 @@ msgstr "Stíll útlínu"
 
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
-msgid "Object type"
+msgid "Object Type"
 msgstr "Tegund hlutar"
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr "_Flytja á lag ..."
 
 #. Create link
@@ -30225,7 +30225,7 @@ msgid "Save a copy of the document under a new name"
 msgstr "Vista afrit af skjalinu með nýju heiti"
 
 #: ../src/verbs.cpp:2605
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "Vista sniðmát ..."
 
 #: ../src/verbs.cpp:2606
@@ -30241,7 +30241,7 @@ msgid "Print document"
 msgstr "Prenta skjal"
 
 #: ../src/verbs.cpp:2611
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "_Hreinsa skjalið"
 
 #: ../src/verbs.cpp:2612
@@ -30442,7 +30442,7 @@ msgid "Duplic_ate"
 msgstr "Tvöf_alda"
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr "Tvöfalda valda hluti"
 
 #: ../src/verbs.cpp:2667
@@ -30744,7 +30744,7 @@ msgid "Ungroup selected groups"
 msgstr "Skipta upp völdum hópum"
 
 #: ../src/verbs.cpp:2759
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr "_Henda völdum hlutum út úr hóp"
 
 #: ../src/verbs.cpp:2759
@@ -31180,7 +31180,7 @@ msgid "Toggle lock on current layer"
 msgstr "Víxla læsingu þessa lags"
 
 #: ../src/verbs.cpp:2890
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "_Birta/Fela núverandi lag"
 
 #: ../src/verbs.cpp:2891
@@ -32017,7 +32017,7 @@ msgid "XRay around cursor"
 msgstr " undir bendli"
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr "Litstýrð sýn"
 
 #: ../src/verbs.cpp:3130
@@ -32241,7 +32241,7 @@ msgid "View Objects"
 msgstr "Skoða hluti"
 
 #: ../src/verbs.cpp:3200
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr "Myndvalsse_tt..."
 
 #: ../src/verbs.cpp:3200
@@ -32265,7 +32265,7 @@ msgid "View Css Dialog"
 msgstr "Skoða CSS-samskiptaglugga"
 
 #: ../src/verbs.cpp:3204
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "_Ferilbrellur ..."
 
 #: ../src/verbs.cpp:3205
@@ -40443,15 +40443,15 @@ msgid "_Zoom"
 msgstr "Aðdrá_ttur"
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "_Birtingarhamur"
 
 #: ../share/ui/menus.xml.h:9
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "_Litbirtingarhamur"
 
 #: ../share/ui/menus.xml.h:10
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "Stefna _myndflatar"
 
 #: ../share/ui/menus.xml.h:11

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2011-03-12 09:19+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Gezer (Hebrew)\n"
@@ -1223,7 +1223,7 @@ msgstr "גולות קרמיות"
 #: ../share/filters/filters.svg.h:779 ../share/filters/filters.svg.h:783
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr ""
 
 #: ../share/filters/filters.svg.h:428
@@ -15344,25 +15344,25 @@ msgstr "עלייה לתיקיית האב"
 
 #: ../src/ui/contextmenu.cpp:106
 #, fuzzy
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "שכפול הפריטים הנבחרים"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
 #, fuzzy
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "הצגת הפריט"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
 #, fuzzy
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "קיבוץ הפריטים הנבחרים"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
 #, fuzzy
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "שחרור פריט"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -15418,13 +15418,13 @@ msgstr "סגנון ק_ו המתאר"
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
 #, fuzzy
-msgid "Object type"
+msgid "Object Type"
 msgstr "סוג הפריט:"
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
 #, fuzzy
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr "הנמכת שכבה"
 
 #. Create link
@@ -31750,7 +31750,7 @@ msgstr "שמירת עותק של המסמך תחת שם חדש"
 
 #: ../src/verbs.cpp:2605
 #, fuzzy
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "ד_גימות..."
 
 #: ../src/verbs.cpp:2606
@@ -31768,7 +31768,7 @@ msgstr "הדפסת המסמך"
 
 #: ../src/verbs.cpp:2611
 #, fuzzy
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "לא ניתן להגדיר מסמך"
 
 #: ../src/verbs.cpp:2612
@@ -31973,7 +31973,7 @@ msgid "Duplic_ate"
 msgstr "_שכפול"
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr "שכפול הפריטים הנבחרים"
 
 #: ../src/verbs.cpp:2667
@@ -32290,7 +32290,7 @@ msgstr "פירוק הקבוצות הנבחרות"
 
 #: ../src/verbs.cpp:2759
 #, fuzzy
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr "קיבוץ הפריטים הנבחרים"
 
 #: ../src/verbs.cpp:2759
@@ -32753,7 +32753,7 @@ msgstr "בידוד השכבה הנוכחית"
 
 #: ../src/verbs.cpp:2890
 #, fuzzy
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "ה_צגה/הסתרה של השכבות האחרות"
 
 #: ../src/verbs.cpp:2891
@@ -33637,7 +33637,7 @@ msgid "XRay around cursor"
 msgstr " תחת סמן העכבר"
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr "תצוגה מנוהלת־צבע"
 
 #: ../src/verbs.cpp:3130
@@ -33867,7 +33867,7 @@ msgstr "פריטים"
 
 #: ../src/verbs.cpp:3200
 #, fuzzy
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr "בחירה"
 
 #: ../src/verbs.cpp:3200
@@ -33894,7 +33894,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:3204
 #, fuzzy
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "עורך א_פקטי הנתיבים..."
 
 #: ../src/verbs.cpp:3205
@@ -42537,16 +42537,16 @@ msgid "_Zoom"
 msgstr "ת_קריב"
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "מ_צב תצוגה"
 
 #: ../share/ui/menus.xml.h:9
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "מ_צב הצגת צבע"
 
 #: ../share/ui/menus.xml.h:10
 #, fuzzy
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "_כיוון הדף:"
 
 #: ../share/ui/menus.xml.h:11

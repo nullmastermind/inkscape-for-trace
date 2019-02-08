@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2019-01-18 22:06+0100\n"
 "Last-Translator: Sylvain Chiron <chironsylvain@orange.fr>\n"
 "Language-Team: français <>\n"
@@ -1181,7 +1181,7 @@ msgstr "Crème BD"
 #: ../share/filters/filters.svg.h:779 ../share/filters/filters.svg.h:783
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr "Ombrages 3D non réalistes"
 
 #: ../share/filters/filters.svg.h:428
@@ -14785,22 +14785,22 @@ msgid "Go to parent"
 msgstr "Sélectionner le parent"
 
 #: ../src/ui/contextmenu.cpp:106
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "Cacher les objets sélectionnés"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "Montrer les objets en dessous"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "Verrouiller les objets sélectionnés"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "Déverrouiller les objets en dessous"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -14848,12 +14848,12 @@ msgstr "Style de contour"
 
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
-msgid "Object type"
+msgid "Object Type"
 msgstr "Types d'objet"
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr "_Déplacer vers le calque..."
 
 #. Create link
@@ -31187,7 +31187,7 @@ msgid "Save a copy of the document under a new name"
 msgstr "Enregistrer une copie du document sous un nouveau nom"
 
 #: ../src/verbs.cpp:2605
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "Enregistrer un _modèle..."
 
 #: ../src/verbs.cpp:2606
@@ -31203,7 +31203,7 @@ msgid "Print document"
 msgstr "Imprimer le document"
 
 #: ../src/verbs.cpp:2611
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "Nettoyer le doc_ument"
 
 #: ../src/verbs.cpp:2612
@@ -31417,7 +31417,7 @@ msgid "Duplic_ate"
 msgstr "Dupli_quer"
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr "Dupliquer les objets sélectionnés"
 
 #: ../src/verbs.cpp:2667
@@ -31730,7 +31730,7 @@ msgid "Ungroup selected groups"
 msgstr "Dégrouper les groupes sélectionnés"
 
 #: ../src/verbs.cpp:2759
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr "_Sortir les objets sélectionnés du groupe"
 
 #: ../src/verbs.cpp:2759
@@ -32177,7 +32177,7 @@ msgid "Toggle lock on current layer"
 msgstr "Changer l'état du verrou sur le calque actif"
 
 #: ../src/verbs.cpp:2890
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "Afficher/_masquer le calque actif"
 
 #: ../src/verbs.cpp:2891
@@ -33023,7 +33023,7 @@ msgid "XRay around cursor"
 msgstr "Rendu aux rayons X autour du curseur"
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr "Affichage avec gestion des couleurs"
 
 #: ../src/verbs.cpp:3130
@@ -33251,7 +33251,7 @@ msgid "View Objects"
 msgstr "Afficher les objets"
 
 #: ../src/verbs.cpp:3200
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr "Ensembles de sélection..."
 
 #: ../src/verbs.cpp:3200
@@ -33275,7 +33275,7 @@ msgid "View Css Dialog"
 msgstr "Gérer les feuilles de style CSS"
 
 #: ../src/verbs.cpp:3204
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "E_ffets de chemin..."
 
 #: ../src/verbs.cpp:3205
@@ -42039,15 +42039,15 @@ msgid "_Zoom"
 msgstr "_Zoom"
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "Mode d'_affichage"
 
 #: ../share/ui/menus.xml.h:9
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "Mode d'_affichage des couleurs"
 
 #: ../share/ui/menus.xml.h:10
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "Orientation de la page"
 
 #: ../share/ui/menus.xml.h:11

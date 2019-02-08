@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2013-09-26 07:10+0530\n"
 "Last-Translator: \n"
 "Language-Team: Kannada\n"
@@ -1214,7 +1214,7 @@ msgstr "ಕಾಮಿಕ್ಸ್ ಕೆನೆ"
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
 #, fuzzy
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr "ನೈಜವಲ್ಲದ ೩ಡಿ ಶೇಡರುಗಳು"
 
 #: ../share/filters/filters.svg.h:428
@@ -15329,25 +15329,25 @@ msgstr "ಮೂಲಕ್ಕೆ ತೆರಳು"
 
 #: ../src/ui/contextmenu.cpp:106
 #, fuzzy
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "ಆಯ್ಕೆ ಮಾಡಿದ ವಸ್ತುಗಳ ನಕಲು ಪ್ರತಿಗಳನ್ನು ಮಾಡಿ"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
 #, fuzzy
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "ವಸ್ತುವನ್ನು ಕಾಣಿಸಿ"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
 #, fuzzy
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "ಆಯ್ದ ವಸ್ತುಗಳನ್ನು ಗುಂಪುಗೂಡಿಸಿ"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
 #, fuzzy
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "ವಸ್ತುವನ್ನು ಮುಕ್ತಗೊಳಿಸಿ"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -15403,12 +15403,12 @@ msgstr "ಗೆರೆಯ ಶೈಲಿ (_y)"
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
 #, fuzzy
-msgid "Object type"
+msgid "Object Type"
 msgstr "ವಸ್ತುವಿನ ಬಗೆ:"
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr ""
 
 #. Create link
@@ -30354,8 +30354,8 @@ msgstr "%s. <b>ಬಣ್ಣಗಳನ್ನು ಯಾದೃಚ್ಛಿಕಗೊ�
 msgid ""
 "%s. Drag or click to <b>increase blur</b>; with Shift to <b>decrease</b>."
 msgstr ""
-"%s. <b>ಮಬ್ಬನ್ನು ಹೆಚ್ಚಿಸಲು</b> ಎಳೆಯಿರಿ ಅಥವ ಕ್ಲಿಕ್ ಮಾಡಿ; <b>ಕಡಿಮೆ ಮಾಡಲು</b> ಶಿಫ್ಟ್‍"
-"ನೊಂದಿಗೆ."
+"%s. <b>ಮಬ್ಬನ್ನು ಹೆಚ್ಚಿಸಲು</b> ಎಳೆಯಿರಿ ಅಥವ ಕ್ಲಿಕ್ ಮಾಡಿ; <b>ಕಡಿಮೆ ಮಾಡಲು</b> "
+"ಶಿಫ್ಟ್‍ನೊಂದಿಗೆ."
 
 #: ../src/ui/tools/tweak-tool.cpp:1195
 msgid "<b>Nothing selected!</b> Select objects to tweak."
@@ -31950,7 +31950,7 @@ msgstr "ದಸ್ತಾವೇಜಿನ ಒಂದು ಪ್ರತಿಯನ್ನ�
 
 #: ../src/verbs.cpp:2605
 #, fuzzy
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "ಒಂದು ಪ್ರತಿಯನ್ನು ಉಳಿಸಿ (_y)..."
 
 #: ../src/verbs.cpp:2606
@@ -31968,7 +31968,7 @@ msgstr "ದಸ್ತಾವೇಜನ್ನು ಮುದ್ರಿಸಿ"
 
 #: ../src/verbs.cpp:2611
 #, fuzzy
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "ದಸ್ತಾವೇಜನ್ನು ಸಿದ್ಧಗೊಳಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ"
 
 #: ../src/verbs.cpp:2612
@@ -32178,7 +32178,7 @@ msgid "Duplic_ate"
 msgstr "ನಕಲು ಪ್ರತಿ (_a)"
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr "ಆಯ್ಕೆ ಮಾಡಿದ ವಸ್ತುಗಳ ನಕಲು ಪ್ರತಿಗಳನ್ನು ಮಾಡಿ"
 
 #: ../src/verbs.cpp:2667
@@ -32501,7 +32501,7 @@ msgstr "ಆಯ್ದ ಗುಂಪುಗಳನ್ನು ಚದುರಿಸಿ"
 
 #: ../src/verbs.cpp:2759
 #, fuzzy
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr "ಆಯ್ದ ವಸ್ತುಗಳನ್ನು ಗುಂಪುಗೂಡಿಸಿ"
 
 #: ../src/verbs.cpp:2759
@@ -32967,7 +32967,7 @@ msgstr "ಪ್ರಸಕ್ತ ಪದರವನ್ನು ಒಂಟಿಯಾಗಿ�
 
 #: ../src/verbs.cpp:2890
 #, fuzzy
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "ಇತರೆ ಪದರಗಳನ್ನು ತೋರಿಸಿ/ಅಡಗಿಸಿ (_S)"
 
 #: ../src/verbs.cpp:2891
@@ -33855,7 +33855,7 @@ msgid "XRay around cursor"
 msgstr " ತೆರೆಸೂಚಕದ ಅಡಿಯಲ್ಲಿ"
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr "ಬಣ್ಣ-ನಿರ್ವಹಣಾ ನೋಟ"
 
 #: ../src/verbs.cpp:3130
@@ -34090,7 +34090,7 @@ msgstr "ವಸ್ತುಗಳು"
 
 #: ../src/verbs.cpp:3200
 #, fuzzy
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr "ಆಯ್ಕೆ"
 
 #: ../src/verbs.cpp:3200
@@ -34117,7 +34117,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:3204
 #, fuzzy
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "ಮಾರ್ಗದ ಪರಿಣಾಮದ ಸಂಪಾದಕ (_f)..."
 
 #: ../src/verbs.cpp:3205
@@ -42869,16 +42869,16 @@ msgid "_Zoom"
 msgstr "ಗಾತ್ರ ಬದಲಿಸು (_Z)"
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "ಪ್ರದರ್ಶಕದ ಕ್ರಮ (_D)"
 
 #: ../share/ui/menus.xml.h:9
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "ಬಣ್ಣ ಪ್ರದರ್ಶಕದ ಕ್ರಮ (_C)"
 
 #: ../share/ui/menus.xml.h:10
 #, fuzzy
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "ಪಠ್ಯದ ವಾಲಿಕೆ"
 
 #: ../share/ui/menus.xml.h:11

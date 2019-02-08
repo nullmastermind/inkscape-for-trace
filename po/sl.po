@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.49.x\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2012-05-03 01:13+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Martin Srebotnjak <miles@filmsi.net>\n"
@@ -1165,7 +1165,7 @@ msgstr "Strip, kremasto"
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
 #, fuzzy
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr "Nerealistično 3D-senčenje"
 
 #: ../share/filters/filters.svg.h:428
@@ -15206,25 +15206,25 @@ msgstr "Pojdi do starša"
 
 #: ../src/ui/contextmenu.cpp:106
 #, fuzzy
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "Podvoji izbrane predmete"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
 #, fuzzy
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "Razkrij predmet"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
 #, fuzzy
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "Združi izbrane predmete v skupino"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
 #, fuzzy
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "Odkleni predmet"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -15280,13 +15280,13 @@ msgstr "_Slog poteze"
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
 #, fuzzy
-msgid "Object type"
+msgid "Object Type"
 msgstr "Vrste predmetov"
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
 #, fuzzy
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr "Spusti plast"
 
 #. Create link
@@ -31817,7 +31817,7 @@ msgstr "Shrani kopijo dokumenta pod novim imenom"
 
 #: ../src/verbs.cpp:2605
 #, fuzzy
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "I_zvlečki ..."
 
 #: ../src/verbs.cpp:2606
@@ -31835,7 +31835,7 @@ msgstr "Natisni dokument"
 
 #: ../src/verbs.cpp:2611
 #, fuzzy
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "Dokumenta ni mogoče vzpostaviti"
 
 #: ../src/verbs.cpp:2612
@@ -32047,7 +32047,7 @@ msgid "Duplic_ate"
 msgstr "Podvo_ji"
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr "Podvoji izbrane predmete"
 
 #: ../src/verbs.cpp:2667
@@ -32358,7 +32358,7 @@ msgstr "Razdruži izbrane skupine"
 
 #: ../src/verbs.cpp:2759
 #, fuzzy
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr "Združi izbrane predmete v skupino"
 
 #: ../src/verbs.cpp:2759
@@ -32818,7 +32818,7 @@ msgid "Toggle lock on current layer"
 msgstr "Zakleni/odkleni trenutno plast"
 
 #: ../src/verbs.cpp:2890
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "_Pokaži/skrij trenutno plast"
 
 #: ../src/verbs.cpp:2891
@@ -33698,7 +33698,7 @@ msgid "XRay around cursor"
 msgstr " pod kazalcem"
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr "Barvno upravljani pogled"
 
 #: ../src/verbs.cpp:3130
@@ -33929,7 +33929,7 @@ msgstr "Predmete"
 
 #: ../src/verbs.cpp:3200
 #, fuzzy
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr "Izbor"
 
 #: ../src/verbs.cpp:3200
@@ -33955,7 +33955,7 @@ msgid "View Css Dialog"
 msgstr ""
 
 #: ../src/verbs.cpp:3204
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "U_činki poti ..."
 
 #: ../src/verbs.cpp:3205
@@ -42580,16 +42580,16 @@ msgid "_Zoom"
 msgstr "P_ovečava"
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "_Način prikaza"
 
 #: ../share/ui/menus.xml.h:9
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "Način prikazovanja _barv"
 
 #: ../share/ui/menus.xml.h:10
 #, fuzzy
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "Usmerjenost besedila"
 
 #: ../share/ui/menus.xml.h:11

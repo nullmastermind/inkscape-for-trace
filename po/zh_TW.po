@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2016-11-23 18:10+0800\n"
 "Last-Translator: Dongjun Wu <ziyawu@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@linux.org.tw>\n"
@@ -1137,7 +1137,7 @@ msgstr "漫畫式奶油"
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
 #, fuzzy
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr "非逼真立體材質"
 
 #: ../share/filters/filters.svg.h:428
@@ -14488,25 +14488,25 @@ msgstr "前往上一層"
 
 #: ../src/ui/contextmenu.cpp:106
 #, fuzzy
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "再製選取的物件"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
 #, fuzzy
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "取消隱藏物件"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
 #, fuzzy
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "群組選取的物件"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
 #, fuzzy
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "解除鎖定物件"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -14554,12 +14554,12 @@ msgstr "邊框樣式"
 
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
-msgid "Object type"
+msgid "Object Type"
 msgstr "物件類型"
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr "移至圖層(_M)..."
 
 #. Create link
@@ -30246,7 +30246,7 @@ msgstr "以新的名稱儲存文件"
 
 #: ../src/verbs.cpp:2605
 #, fuzzy
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "範本(_T)..."
 
 #: ../src/verbs.cpp:2606
@@ -30263,7 +30263,7 @@ msgid "Print document"
 msgstr "列印文件"
 
 #: ../src/verbs.cpp:2611
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "清理文件(_U)"
 
 #: ../src/verbs.cpp:2612
@@ -30461,7 +30461,7 @@ msgid "Duplic_ate"
 msgstr "再製(_A)"
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr "再製選取的物件"
 
 #: ../src/verbs.cpp:2667
@@ -30761,7 +30761,7 @@ msgid "Ungroup selected groups"
 msgstr "解散選取的群組"
 
 #: ../src/verbs.cpp:2759
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr "將選取物件脫離群組(_P)"
 
 #: ../src/verbs.cpp:2759
@@ -31192,7 +31192,7 @@ msgid "Toggle lock on current layer"
 msgstr "開啟 / 關閉鎖定目前圖層"
 
 #: ../src/verbs.cpp:2890
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "顯示 / 隱藏目前圖層(_S)"
 
 #: ../src/verbs.cpp:2891
@@ -32036,7 +32036,7 @@ msgid "XRay around cursor"
 msgstr "於游標下"
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr "色彩管理檢視"
 
 #: ../src/verbs.cpp:3130
@@ -32256,7 +32256,7 @@ msgid "View Objects"
 msgstr "檢視物件"
 
 #: ../src/verbs.cpp:3200
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr "選取集合(_T)..."
 
 #: ../src/verbs.cpp:3200
@@ -32281,7 +32281,7 @@ msgid "View Css Dialog"
 msgstr ""
 
 #: ../src/verbs.cpp:3204
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "路徑特效(_F)..."
 
 #: ../src/verbs.cpp:3205
@@ -40703,16 +40703,16 @@ msgid "_Zoom"
 msgstr "畫面縮放(_Z)"
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "顯示模式(_D)"
 
 #: ../share/ui/menus.xml.h:9
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "色彩顯示模式(_C)"
 
 #: ../share/ui/menus.xml.h:10
 #, fuzzy
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "頁面方向："
 
 #: ../share/ui/menus.xml.h:11

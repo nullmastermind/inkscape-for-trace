@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2014-11-17 16:36+0100\n"
 "Last-Translator: Christoffer Holmstedt <christoffer.holmstedt@gmail.com>\n"
 "Language-Team: Svenska <tp-sv@listor.tp-sv.se>\n"
@@ -1254,7 +1254,7 @@ msgstr "Icke rundad"
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
 #, fuzzy
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr "Orealistiska 3D-skuggningar"
 
 #: ../share/filters/filters.svg.h:428
@@ -15819,25 +15819,25 @@ msgstr "Gå till förälder"
 
 #: ../src/ui/contextmenu.cpp:106
 #, fuzzy
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "Duplicera markerade objekt"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
 #, fuzzy
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "Visa objekt"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
 #, fuzzy
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "Gruppera markerade objekt"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
 #, fuzzy
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "Lås upp objekt"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -15889,13 +15889,13 @@ msgstr "Linjestil"
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
 #, fuzzy
-msgid "Object type"
+msgid "Object Type"
 msgstr "Objekttyp"
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
 #, fuzzy
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr "Sänk lager"
 
 #. Create link
@@ -32847,7 +32847,7 @@ msgstr "Spara kopia av dokument med nytt namn"
 
 #: ../src/verbs.cpp:2605
 #, fuzzy
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "Mallar..."
 
 #: ../src/verbs.cpp:2606
@@ -32864,7 +32864,7 @@ msgid "Print document"
 msgstr "Skriv ut dokument"
 
 #: ../src/verbs.cpp:2611
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "Rensa oanvända definitioner"
 
 #: ../src/verbs.cpp:2612
@@ -33079,7 +33079,7 @@ msgid "Duplic_ate"
 msgstr "Duplicera"
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr "Duplicera markerade objekt"
 
 #: ../src/verbs.cpp:2667
@@ -33408,7 +33408,7 @@ msgstr "Avgruppera markerade grupper"
 
 #: ../src/verbs.cpp:2759
 #, fuzzy
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr "Gruppera markerade objekt"
 
 #: ../src/verbs.cpp:2759
@@ -33860,7 +33860,7 @@ msgid "Toggle lock on current layer"
 msgstr "Växla nuvarande lager (låst/upplåst)"
 
 #: ../src/verbs.cpp:2890
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "Visa/dölj aktivt lager"
 
 #: ../src/verbs.cpp:2891
@@ -34795,7 +34795,7 @@ msgstr " under muspekaren"
 
 #: ../src/verbs.cpp:3129
 #, fuzzy
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr "Färghanterad display"
 
 #: ../src/verbs.cpp:3130
@@ -35036,7 +35036,7 @@ msgstr "Objekt"
 
 #: ../src/verbs.cpp:3200
 #, fuzzy
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr "Markering"
 
 #: ../src/verbs.cpp:3200
@@ -35063,7 +35063,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:3204
 #, fuzzy
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "Slingeffektseditor..."
 
 #: ../src/verbs.cpp:3205
@@ -44037,17 +44037,17 @@ msgid "_Zoom"
 msgstr "Zooma"
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "Visningsläge"
 
 #: ../share/ui/menus.xml.h:9
 #, fuzzy
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "Visningsläge"
 
 #: ../share/ui/menus.xml.h:10
 #, fuzzy
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "Sidorientering:"
 
 #: ../share/ui/menus.xml.h:11

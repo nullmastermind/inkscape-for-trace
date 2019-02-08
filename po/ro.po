@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.92.x\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2017-06-07 18:12+0200\n"
 "Last-Translator: Cristian Secară <cristi AT secarica DOT ro>\n"
 "Language-Team: \n"
@@ -1146,7 +1146,7 @@ msgstr ""
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
 #, fuzzy
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr "Umbrare 3D nerealiste"
 
 #: ../share/filters/filters.svg.h:428
@@ -14653,25 +14653,25 @@ msgstr ""
 
 #: ../src/ui/contextmenu.cpp:106
 #, fuzzy
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "Duplică obiectele selectate"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
 #, fuzzy
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "Fă vizibile obiectele"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
 #, fuzzy
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "Grupează obiectele selectate"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
 #, fuzzy
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "Deblochează obiectele"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -14719,12 +14719,12 @@ msgstr "Stil de contur"
 
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
-msgid "Object type"
+msgid "Object Type"
 msgstr "Tip de obiect"
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr "­­_Mută pe stratul ..."
 
 #. Create link
@@ -30636,7 +30636,7 @@ msgstr "Salvează o copie a documentului cu un alt nume"
 
 #: ../src/verbs.cpp:2605
 #, fuzzy
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "_Nou din șablon..."
 
 #: ../src/verbs.cpp:2606
@@ -30653,7 +30653,7 @@ msgid "Print document"
 msgstr "Tipărește documentul"
 
 #: ../src/verbs.cpp:2611
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "C_urăță documentul"
 
 #: ../src/verbs.cpp:2612
@@ -30866,7 +30866,7 @@ msgid "Duplic_ate"
 msgstr "_Duplică"
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr "Duplică obiectele selectate"
 
 #: ../src/verbs.cpp:2667
@@ -31176,7 +31176,7 @@ msgid "Ungroup selected groups"
 msgstr "Degrupează grupurile selectate"
 
 #: ../src/verbs.cpp:2759
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr ""
 
 #: ../src/verbs.cpp:2759
@@ -31625,7 +31625,7 @@ msgid "Toggle lock on current layer"
 msgstr "Comută blocarea pe stratul curent"
 
 #: ../src/verbs.cpp:2890
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "Arată _sau ascunde stratul curent"
 
 #: ../src/verbs.cpp:2891
@@ -32485,7 +32485,7 @@ msgid "XRay around cursor"
 msgstr " sub cursor"
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr "Vizualizare cu gestionare de culori"
 
 #: ../src/verbs.cpp:3130
@@ -32716,7 +32716,7 @@ msgid "View Objects"
 msgstr "Vizualizează obiectele"
 
 #: ../src/verbs.cpp:3200
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr ""
 
 #: ../src/verbs.cpp:3200
@@ -32741,7 +32741,7 @@ msgid "View Css Dialog"
 msgstr ""
 
 #: ../src/verbs.cpp:3204
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "E_fecte de traseu..."
 
 #: ../src/verbs.cpp:3205
@@ -40882,16 +40882,16 @@ msgid "_Zoom"
 msgstr "_Zoom"
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "Mo_d de afișare"
 
 #: ../share/ui/menus.xml.h:9
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "Mod de afișare a _culorilor"
 
 #: ../share/ui/menus.xml.h:10
 #, fuzzy
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "Orientare de pagină:"
 
 #: ../share/ui/menus.xml.h:11
