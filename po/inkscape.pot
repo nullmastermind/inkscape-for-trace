@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 12:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14181,7 +14181,7 @@ msgid "Go to parent"
 msgstr ""
 
 #: ../src/ui/contextmenu.cpp:106
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr ""
 
 #. insert(*mi,positionOfLastDialog++);
@@ -14191,7 +14191,7 @@ msgstr ""
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr ""
 
 #. insert(*mi,positionOfLastDialog++);
@@ -14244,12 +14244,12 @@ msgstr ""
 
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
-msgid "Object type"
+msgid "Object Type"
 msgstr ""
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr ""
 
 #. Create link
@@ -29432,7 +29432,7 @@ msgid "Save a copy of the document under a new name"
 msgstr ""
 
 #: ../src/verbs.cpp:2605
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr ""
 
 #: ../src/verbs.cpp:2606
@@ -29448,7 +29448,7 @@ msgid "Print document"
 msgstr ""
 
 #: ../src/verbs.cpp:2611
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr ""
 
 #: ../src/verbs.cpp:2612
@@ -29942,7 +29942,7 @@ msgid "Ungroup selected groups"
 msgstr ""
 
 #: ../src/verbs.cpp:2759
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr ""
 
 #: ../src/verbs.cpp:2759
@@ -30373,7 +30373,7 @@ msgid "Toggle lock on current layer"
 msgstr ""
 
 #: ../src/verbs.cpp:2890
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr ""
 
 #: ../src/verbs.cpp:2891
@@ -31200,7 +31200,7 @@ msgid "XRay around cursor"
 msgstr ""
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr ""
 
 #: ../src/verbs.cpp:3130
@@ -31418,7 +31418,7 @@ msgid "View Objects"
 msgstr ""
 
 #: ../src/verbs.cpp:3200
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr ""
 
 #: ../src/verbs.cpp:3200
@@ -31442,7 +31442,7 @@ msgid "View Css Dialog"
 msgstr ""
 
 #: ../src/verbs.cpp:3204
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr ""
 
 #: ../src/verbs.cpp:3205
@@ -39419,15 +39419,15 @@ msgid "_Zoom"
 msgstr ""
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr ""
 
 #: ../share/ui/menus.xml.h:9
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr ""
 
 #: ../share/ui/menus.xml.h:10
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr ""
 
 #: ../share/ui/menus.xml.h:11
