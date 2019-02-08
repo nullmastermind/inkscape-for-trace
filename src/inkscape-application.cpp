@@ -252,6 +252,57 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
     on_startup2();
 
     for (auto file : files) {
+        // Open file
+        bool cancelled = false;
+        SPDocument *doc = ink_file_open(file, cancelled);
+        if (!doc) continue;
+
+        // Add to Inkscape::Application...
+        INKSCAPE.add_document(doc);
+        // ActionContext should be removed once verbs are gone but we use it for now.
+        Inkscape::ActionContext context = INKSCAPE.action_context_for_document(doc);
+        set_active_selection(context.getSelection());
+        set_active_view(     context.getView()     );
+
+        doc->ensureUpToDate(); // Or queries don't work!
+
+        // Add to our application
+        _active_document = doc;
+
+        // process_file(file);
+        for (auto action: _command_line_actions) {
+            Gio::Application::activate_action( action.first, action.second );
+        }
+
+        if (_use_shell) {
+            shell2();
+        } else {
+            // Save... can't use action yet.
+            _file_export.do_export(doc, file->get_path());
+        }
+
+        _active_document = nullptr;
+        _active_selection = nullptr;
+        _active_view = nullptr;
+
+        // Close file
+        INKSCAPE.remove_document(doc);
+        delete doc;
+    }
+
+    //Call the base class's implementation:
+    // Gtk::Application::on_open(files, hint);
+}
+
+// Open document window for each file. Either this or on_activate() is called.
+// type_vec_files == std::vector<Glib::RefPtr<Gio::File> >
+template<>
+void
+ConcreteInkscapeApplication<Gtk::Application>::on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint)
+{
+    on_startup2();
+
+    for (auto file : files) {
         if (_with_gui) {
             // Create a window for each file.
             SPDesktop* desktop = create_window(file);
@@ -265,6 +316,9 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
             // but we need to rewrite most of the window handling code so do this for now.
             if (_batch_process) {
                 desktop->getToplevel()->hide();
+                std::vector<Gtk::Window*> windows = get_windows();
+                remove_window(*windows[0]);  // There should be only one window (added in InkscapeWindow constructor).
+                                             // Eventually create_window() should return a pointer to the window, not the desktop.
             }
 
         } else {
@@ -333,24 +387,24 @@ ConcreteInkscapeApplication<T>::create_window(const Glib::RefPtr<Gio::File>& fil
 }
 
 
+// This is identical to the function above. We comment it out for now (otherwise it must be moved before on_open().
+// template<>
+// SPDesktop*
+// ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<Gio::File>& file)
+// {
+//     SPDesktop* desktop = nullptr;
+//     if (file) {
+//         sp_file_open(file->get_parse_name(), nullptr, false, true);
+//         desktop = SP_ACTIVE_DESKTOP;
+//     } else {
+//         desktop = sp_file_new_default();
+//     }
 
-template<>
-SPDesktop*
-ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<Gio::File>& file)
-{
-    SPDesktop* desktop = nullptr;
-    if (file) {
-        sp_file_open(file->get_parse_name(), nullptr, false, true);
-        desktop = SP_ACTIVE_DESKTOP;
-    } else {
-        desktop = sp_file_new_default();
-    }
+//     _active_document = desktop->getDocument();
+//     // _documents.push_back(desktop->getDocument());
 
-    _active_document = desktop->getDocument();
-    // _documents.push_back(desktop->getDocument());
-
-    return (desktop); // Temp: Need to track desktop for shell mode.
-}
+//     return (desktop); // Temp: Need to track desktop for shell mode.
+// }
 
 template<class T>
 void
