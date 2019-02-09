@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-08 13:32+0000\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-02-09 19:35+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12433,6 +12433,7 @@ msgstr ""
 #: ../src/ui/dialog/attrdialog.cpp:105
 #: ../src/ui/dialog/inkscape-preferences.cpp:1994
 #: ../src/ui/widget/page-sizer.cpp:97 ../src/widgets/gradient-selector.cpp:138
+#: ../share/ui/filter-editor.glade:234
 msgid "Name"
 msgstr ""
 
@@ -12618,7 +12619,7 @@ msgstr ""
 
 #. ## Add a menu for clear()
 #: ../src/menus-skeleton.h:23 ../src/ui/dialog/debug.cpp:71
-#: ../share/ui/menus.xml.h:1
+#: ../share/ui/inkscape-application.xml:7
 msgid "_File"
 msgstr ""
 
@@ -16505,7 +16506,7 @@ msgstr ""
 #. Tag
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1327
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1000 ../src/verbs.cpp:2593
-#: ../src/verbs.cpp:2937
+#: ../src/verbs.cpp:2937 ../share/ui/inkscape-application.xml:10
 msgid "_New"
 msgstr ""
 
@@ -17048,7 +17049,6 @@ msgid "Sele_ction"
 msgstr ""
 
 #: ../src/ui/dialog/find.cpp:67 ../src/ui/dialog/text-edit.cpp:66
-#: ../share/ui/menus.xml.h:18
 msgid "_Text"
 msgstr ""
 
@@ -22537,7 +22537,7 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: ../src/ui/dialog/styledialog.cpp:886
+#: ../src/ui/dialog/styledialog.cpp:886 ../share/ui/filter-editor.glade:280
 msgid "Add"
 msgstr ""
 
@@ -29497,7 +29497,7 @@ msgstr ""
 msgid "Close this document window"
 msgstr ""
 
-#: ../src/verbs.cpp:2628
+#: ../src/verbs.cpp:2628 ../share/ui/inkscape-application.xml:15
 msgid "_Quit"
 msgstr ""
 
@@ -29553,7 +29553,7 @@ msgstr ""
 msgid "Apply the style of the copied object to selection"
 msgstr ""
 
-#: ../src/verbs.cpp:2643 ../share/ui/menus.xml.h:3
+#: ../src/verbs.cpp:2643
 msgid "Paste Si_ze"
 msgstr ""
 
@@ -30471,7 +30471,7 @@ msgstr ""
 msgid "Apply inverse mask to selection (using the topmost object as mask)"
 msgstr ""
 
-#: ../src/verbs.cpp:2922 ../src/verbs.cpp:2932 ../share/ui/menus.xml.h:2
+#: ../src/verbs.cpp:2922 ../src/verbs.cpp:2932
 msgid "_Edit"
 msgstr ""
 
@@ -39402,74 +39402,82 @@ msgstr ""
 msgid "XAML Input"
 msgstr ""
 
-#: ../share/ui/menus.xml.h:4
-msgid "Clo_ne"
+#: ../share/ui/filter-editor.glade:18
+msgid "test1"
 msgstr ""
 
-#: ../share/ui/menus.xml.h:5
-msgid "Select Sa_me"
+#: ../share/ui/filter-editor.glade:19
+msgid "a"
 msgstr ""
 
-#: ../share/ui/menus.xml.h:6
-msgid "_View"
+#: ../share/ui/filter-editor.glade:24
+msgid "test2"
 msgstr ""
 
-#: ../share/ui/menus.xml.h:7
-msgid "_Zoom"
+#: ../share/ui/filter-editor.glade:25
+msgid "b"
 msgstr ""
 
-#: ../share/ui/menus.xml.h:8
-msgid "_Display Mode"
+#: ../share/ui/filter-editor.glade:30
+msgid "test3"
 msgstr ""
 
-#: ../share/ui/menus.xml.h:9
-msgid "_Color Display Mode"
+#: ../share/ui/filter-editor.glade:31
+msgid "c"
 msgstr ""
 
-#: ../share/ui/menus.xml.h:10
-msgid "_Canvas Orientation"
+#: ../share/ui/filter-editor.glade:50
+msgid "whatever"
 msgstr ""
 
-#: ../share/ui/menus.xml.h:11
-msgid "Sh_ow/Hide"
+#: ../share/ui/filter-editor.glade:53
+msgid "second choice"
 msgstr ""
 
-#: ../share/ui/menus.xml.h:12
-msgid "_Layer"
+#: ../share/ui/filter-editor.glade:70
+msgid "filter1"
 msgstr ""
 
-#: ../share/ui/menus.xml.h:13
-msgid "_Object"
+#: ../share/ui/filter-editor.glade:71
+msgid "filter2"
 msgstr ""
 
-#: ../share/ui/menus.xml.h:14
-msgid "Cli_p"
+#: ../share/ui/filter-editor.glade:84
+msgid "FER: "
 msgstr ""
 
-#: ../share/ui/menus.xml.h:15
-msgid "Mas_k"
+#: ../share/ui/filter-editor.glade:96
+msgid "X: "
 msgstr ""
 
-#: ../share/ui/menus.xml.h:16
-msgid "Patter_n"
+#: ../share/ui/filter-editor.glade:122
+msgid "Y: "
 msgstr ""
 
-#: ../share/ui/menus.xml.h:17
-msgid "_Path"
+#: ../share/ui/filter-editor.glade:146
+msgid "W: "
 msgstr ""
 
-#: ../share/ui/menus.xml.h:19
-msgid "Filter_s"
+#: ../share/ui/filter-editor.glade:170
+msgid "H: "
 msgstr ""
 
-#: ../share/ui/menus.xml.h:20
-msgid "Exte_nsions"
+#: ../share/ui/filter-editor.glade:222
+msgid "Effect"
 msgstr ""
 
-#: ../share/ui/menus.xml.h:21
+#: ../share/ui/filter-editor.glade:246
+msgid "Origin(s)"
+msgstr ""
+
+#: ../share/ui/filter-editor.glade:345
+msgid "This effect does this and that."
+msgstr ""
+
+#: ../share/ui/inkscape-application.xml:22
 msgid "_Help"
 msgstr ""
 
-#: ../share/ui/menus.xml.h:22
-msgid "Tutorials"
+#: ../share/ui/inkscape-application.xml:25
+msgid "_About"
 msgstr ""
