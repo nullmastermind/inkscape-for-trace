@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2011-12-09 16:58+0530\n"
 "Last-Translator: \n"
 "Language-Team: Hindi <Indlinux>\n"
@@ -1217,7 +1217,7 @@ msgstr "कमिक्स क्रिम "
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
 #, fuzzy
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr "मोखथांनङै 3D शेडार "
 
 #: ../share/filters/filters.svg.h:428
@@ -15525,25 +15525,25 @@ msgstr "पेरेन्टआव थां "
 
 #: ../src/ui/contextmenu.cpp:106
 #, fuzzy
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "सायखखानाय बेसादफोरखौ डुप्लिकेट खालाम"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
 #, fuzzy
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "बेसादखौ दिन्थि "
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
 #, fuzzy
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "सायखखानाय बेसादफोरखौ हानजा खालाम"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
 #, fuzzy
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "बेसादखौ आनलक खालाम "
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -15599,12 +15599,12 @@ msgstr "स्ट्रकनि आदब "
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
 #, fuzzy
-msgid "Object type"
+msgid "Object Type"
 msgstr "बेसादनि रोखोम:"
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr ""
 
 #. Create link
@@ -32266,7 +32266,7 @@ msgstr "फोरमान बिलाइनि मोनसे कपिखौ
 
 #: ../src/verbs.cpp:2605
 #, fuzzy
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "मोनसे कपि थिना दोन"
 
 #: ../src/verbs.cpp:2606
@@ -32284,7 +32284,7 @@ msgstr "फोरमान बिलाइ साफाय"
 
 #: ../src/verbs.cpp:2611
 #, fuzzy
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "फोरमान बिलाइखौ सेट आप खालामनो हायाखै"
 
 #: ../src/verbs.cpp:2612
@@ -32492,7 +32492,7 @@ msgid "Duplic_ate"
 msgstr "डुप्लिकेट खालाम"
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr "सायखखानाय बेसादफोरखौ डुप्लिकेट खालाम"
 
 #: ../src/verbs.cpp:2667
@@ -32809,7 +32809,7 @@ msgstr "सायखखानाय बेसादफोरखौ हानज�
 
 #: ../src/verbs.cpp:2759
 #, fuzzy
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr "सायखखानाय बेसादफोरखौ हानजा खालाम"
 
 #: ../src/verbs.cpp:2759
@@ -33272,7 +33272,7 @@ msgstr "दानि थोरफोखौ मोनसेल' खालाम"
 
 #: ../src/verbs.cpp:2890
 #, fuzzy
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "गुबुन थोरफोखौ दिन्थि/दोनखोमा"
 
 #: ../src/verbs.cpp:2891
@@ -34157,7 +34157,7 @@ msgid "XRay around cursor"
 msgstr "कार्सरनि सिङाव "
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr "गाब-सामलायनाय नुथाइ"
 
 #: ../src/verbs.cpp:3130
@@ -34385,7 +34385,7 @@ msgstr "बेसादफोर"
 
 #: ../src/verbs.cpp:3200
 #, fuzzy
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr "सायखनाय"
 
 #: ../src/verbs.cpp:3200
@@ -34412,7 +34412,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:3204
 #, fuzzy
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "लामा गोहोम सुजुगिरि..."
 
 #: ../src/verbs.cpp:3205
@@ -43173,16 +43173,16 @@ msgid "_Zoom"
 msgstr "जुम"
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "दिन्थिफुंनाय म'ड"
 
 #: ../share/ui/menus.xml.h:9
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "गाब दिन्थिफुंनाय म'ड"
 
 #: ../share/ui/menus.xml.h:10
 #, fuzzy
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "फरा अरियेन्टेसन"
 
 #: ../share/ui/menus.xml.h:11

@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.92\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2019-01-06 05:21+0300\n"
 "Last-Translator: Alexandre Prokoudine <alexandre.prokoudine@gmail.com>\n"
 "Language-Team: русский <gnome-cyr@lists.gnome.org>\n"
@@ -1160,7 +1160,7 @@ msgstr "Комиксовый крем"
 #: ../share/filters/filters.svg.h:779 ../share/filters/filters.svg.h:783
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr "Нереалистичные 3D-шейдеры"
 
 #: ../share/filters/filters.svg.h:428
@@ -14713,22 +14713,22 @@ msgid "Go to parent"
 msgstr "На уровень выше"
 
 #: ../src/ui/contextmenu.cpp:106
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "Скрыть выбранные объекты"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "Показать объекты ниже"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "Блокировка выбранных объектов"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "Разблокировать объекты ниже"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -14776,12 +14776,12 @@ msgstr "Стиль обводки"
 
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
-msgid "Object type"
+msgid "Object Type"
 msgstr "Тип объекта"
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr "Пере_местить на слой..."
 
 #. Create link
@@ -31002,7 +31002,7 @@ msgid "Save a copy of the document under a new name"
 msgstr "Сохранить копию документа под другим именем"
 
 #: ../src/verbs.cpp:2605
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "Сохранить шаблон…"
 
 #: ../src/verbs.cpp:2606
@@ -31018,7 +31018,7 @@ msgid "Print document"
 msgstr "Напечатать документ"
 
 #: ../src/verbs.cpp:2611
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "Под_чистить документ"
 
 #: ../src/verbs.cpp:2612
@@ -31227,7 +31227,7 @@ msgid "Duplic_ate"
 msgstr "Проду_блировать"
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr "Продублировать выделенные объекты"
 
 #: ../src/verbs.cpp:2667
@@ -31533,7 +31533,7 @@ msgid "Ungroup selected groups"
 msgstr "Разгруппировать выделенные группы"
 
 #: ../src/verbs.cpp:2759
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr "И_звлечь выделение из группы"
 
 #: ../src/verbs.cpp:2759
@@ -31968,7 +31968,7 @@ msgid "Toggle lock on current layer"
 msgstr "Переключить заблокированность активного слоя"
 
 #: ../src/verbs.cpp:2890
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "Пока_зать/скрыть текущий слой"
 
 #: ../src/verbs.cpp:2891
@@ -32813,7 +32813,7 @@ msgid "XRay around cursor"
 msgstr " под курсором"
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr "Цветоуправляемое отображение"
 
 #: ../src/verbs.cpp:3130
@@ -33036,7 +33036,7 @@ msgid "View Objects"
 msgstr "Просмотреть объекты"
 
 #: ../src/verbs.cpp:3200
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr "Наборы выде_лений..."
 
 #: ../src/verbs.cpp:3200
@@ -33060,7 +33060,7 @@ msgid "View Css Dialog"
 msgstr "Просмотр CSS диалог"
 
 #: ../src/verbs.cpp:3204
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "_Контурные эффекты..."
 
 #: ../src/verbs.cpp:3205
@@ -41726,16 +41726,16 @@ msgid "_Zoom"
 msgstr "_Масштаб"
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "Подробность просмотр_а"
 
 #: ../share/ui/menus.xml.h:9
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "_Цветность просмотра"
 
 #: ../share/ui/menus.xml.h:10
 #, fuzzy
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "Ориентация холста:"
 
 #: ../share/ui/menus.xml.h:11

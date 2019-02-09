@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2013-09-07 15:37+0530\n"
 "Last-Translator: Nasreen <nasreen_saifee@hotmail.com>\n"
 "Language-Team: Hindi <Indlinux>\n"
@@ -1216,7 +1216,7 @@ msgstr "ڪامڪس ڪريم "
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
 #, fuzzy
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr "خيالي  3D شيڊر "
 
 #: ../share/filters/filters.svg.h:428
@@ -15514,25 +15514,25 @@ msgstr "مول ۾ وڃو "
 
 #: ../src/ui/contextmenu.cpp:106
 #, fuzzy
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "چونڊيل شيون نقل ڪريو "
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
 #, fuzzy
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "لڪل شئە کولي ڏيکاريو"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
 #, fuzzy
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "چونڊيل شين جو گروپ بڻايو "
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
 #, fuzzy
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "شئە جو ڪلف گوليو "
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -15588,12 +15588,12 @@ msgstr "گهڪي جو نمونو "
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
 #, fuzzy
-msgid "Object type"
+msgid "Object Type"
 msgstr "شئە جو قسم:"
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr ""
 
 #. Create link
@@ -32092,7 +32092,7 @@ msgstr "نئين نالي تخت دستاويز جو نقل سانڍيو "
 
 #: ../src/verbs.cpp:2605
 #, fuzzy
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "نقل سانڍيو "
 
 #: ../src/verbs.cpp:2606
@@ -32110,7 +32110,7 @@ msgstr "دستاويز ڇاپيو "
 
 #: ../src/verbs.cpp:2611
 #, fuzzy
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "دستاويز سيٽ نە ٿي سگهيو "
 
 #: ../src/verbs.cpp:2612
@@ -32314,7 +32314,7 @@ msgid "Duplic_ate"
 msgstr "نقل ڪريو "
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr "چونڊيل شيون نقل ڪريو "
 
 #: ../src/verbs.cpp:2667
@@ -32630,7 +32630,7 @@ msgstr "چونڊيل گروپ ٽوڙيو "
 
 #: ../src/verbs.cpp:2759
 #, fuzzy
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr "چونڊيل شين جو گروپ بڻايو "
 
 #: ../src/verbs.cpp:2759
@@ -33093,7 +33093,7 @@ msgstr "مؤجودهە سطح کي اڪيلو ڪريو "
 
 #: ../src/verbs.cpp:2890
 #, fuzzy
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "ٻيون سطحون ڏيکاريو/لڪايو "
 
 #: ../src/verbs.cpp:2891
@@ -33984,7 +33984,7 @@ msgid "XRay around cursor"
 msgstr "ڪرسر هيٺان "
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr "رنگ۔۔۔ اِنتظام ڪيل منظر "
 
 #: ../src/verbs.cpp:3130
@@ -34214,7 +34214,7 @@ msgstr "شيون "
 
 #: ../src/verbs.cpp:3200
 #, fuzzy
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr "چونڊ "
 
 #: ../src/verbs.cpp:3200
@@ -34241,7 +34241,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:3204
 #, fuzzy
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "راهە جي اَثر جو سمپادڪ "
 
 #: ../src/verbs.cpp:3205
@@ -42965,16 +42965,16 @@ msgid "_Zoom"
 msgstr "زوم "
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "ڏيک جو ڍنگ "
 
 #: ../share/ui/menus.xml.h:9
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "رنگ جي ڏيک جو ڍنگ "
 
 #: ../share/ui/menus.xml.h:10
 #, fuzzy
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "متن/ورئينٽيشن "
 
 #: ../share/ui/menus.xml.h:11

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.92\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2016-06-10 15:31+0100\n"
 "Last-Translator: Firas Hanife <FirasHanife@gmail.com>\n"
 "Language-Team: \n"
@@ -1153,7 +1153,7 @@ msgstr "Fumetto crema"
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
 #, fuzzy
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr "Shader 3D non realistici"
 
 #: ../share/filters/filters.svg.h:428
@@ -14825,25 +14825,25 @@ msgstr "Livello superiore"
 
 #: ../src/ui/contextmenu.cpp:106
 #, fuzzy
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "Duplica gli oggetti selezionati"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
 #, fuzzy
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "Mostra oggetti"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
 #, fuzzy
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "Raggruppa gli oggetti selezionati"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
 #, fuzzy
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "Sblocca oggetti"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -14891,12 +14891,12 @@ msgstr "Stile contorno"
 
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
-msgid "Object type"
+msgid "Object Type"
 msgstr "Tipo oggetto"
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr "_Sposta a livello..."
 
 #. Create link
@@ -31225,7 +31225,7 @@ msgstr "Salva una copia del documento con un nuovo nome"
 
 #: ../src/verbs.cpp:2605
 #, fuzzy
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "_Modelli..."
 
 #: ../src/verbs.cpp:2606
@@ -31242,7 +31242,7 @@ msgid "Print document"
 msgstr "Stampa il documento"
 
 #: ../src/verbs.cpp:2611
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "P_ulisci documento"
 
 #: ../src/verbs.cpp:2612
@@ -31452,7 +31452,7 @@ msgid "Duplic_ate"
 msgstr "Duplic_a"
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr "Duplica gli oggetti selezionati"
 
 #: ../src/verbs.cpp:2667
@@ -31771,7 +31771,7 @@ msgid "Ungroup selected groups"
 msgstr "Divide il gruppo selezionato"
 
 #: ../src/verbs.cpp:2759
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr "_Estrai gli oggetti selezionati dal gruppo"
 
 #: ../src/verbs.cpp:2759
@@ -32220,7 +32220,7 @@ msgid "Toggle lock on current layer"
 msgstr "Imposta il blocco del livello attuale"
 
 #: ../src/verbs.cpp:2890
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "_Mostra/Nascondi livello attuale"
 
 #: ../src/verbs.cpp:2891
@@ -33076,7 +33076,7 @@ msgid "XRay around cursor"
 msgstr " sotto il cursore"
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr "Gestione del colore"
 
 #: ../src/verbs.cpp:3130
@@ -33305,7 +33305,7 @@ msgid "View Objects"
 msgstr "Visualizza oggetti"
 
 #: ../src/verbs.cpp:3200
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr "Set di selezione..."
 
 #: ../src/verbs.cpp:3200
@@ -33330,7 +33330,7 @@ msgid "View Css Dialog"
 msgstr ""
 
 #: ../src/verbs.cpp:3204
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "E_ffetti su tracciato..."
 
 #: ../src/verbs.cpp:3205
@@ -41845,16 +41845,16 @@ msgid "_Zoom"
 msgstr "_Ingrandimento"
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "Modalità _visualizzazione"
 
 #: ../share/ui/menus.xml.h:9
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "Modalità _colore schermo"
 
 #: ../share/ui/menus.xml.h:10
 #, fuzzy
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "Orientamento della pagina:"
 
 #: ../share/ui/menus.xml.h:11

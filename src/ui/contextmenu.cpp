@@ -103,7 +103,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     }
     Gtk::MenuItem* mi;
 
-    mi = Gtk::manage(new Gtk::MenuItem(_("Hide selected objects"),true));
+    mi = Gtk::manage(new Gtk::MenuItem(_("Hide Selected Objects"),true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::HideSelected));
     if (_desktop->selection->isEmpty()) {
         mi->set_sensitive(false);
@@ -111,7 +111,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     mi->show();
     append(*mi);//insert(*mi,positionOfLastDialog++);
 
-    mi = Gtk::manage(new Gtk::MenuItem(_("Unhide objects below"),true));
+    mi = Gtk::manage(new Gtk::MenuItem(_("Unhide Objects Below"),true));
     mi->signal_activate().connect(sigc::bind<std::vector< SPItem * > >(sigc::mem_fun(*this, &ContextMenu::UnHideBelow), down_items));
     if (!has_down_hidden) {
         mi->set_sensitive(false);
@@ -119,7 +119,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     mi->show();
     append(*mi);//insert(*mi,positionOfLastDialog++);
 
-    mi = Gtk::manage(new Gtk::MenuItem(_("Lock selected objects"),true));
+    mi = Gtk::manage(new Gtk::MenuItem(_("Lock Selected Objects"),true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::LockSelected));
     if (_desktop->selection->isEmpty()) {
         mi->set_sensitive(false);
@@ -127,7 +127,7 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     mi->show();
     append(*mi);//insert(*mi,positionOfLastDialog++);
 
-    mi = Gtk::manage(new Gtk::MenuItem(_("Unlock objects below"),true));
+    mi = Gtk::manage(new Gtk::MenuItem(_("Unlock Objects Below"),true));
     mi->signal_activate().connect(sigc::bind<std::vector< SPItem * > >(sigc::mem_fun(*this, &ContextMenu::UnLockBelow), down_items));
     if (!has_down_locked) {
         mi->set_sensitive(false);
@@ -413,14 +413,14 @@ void ContextMenu::MakeItemMenu ()
     select_same_submenu->append(*mi);
 
     /* Select same stroke style */
-    mi = Gtk::manage(new Gtk::MenuItem(_("Object type"), true));
+    mi = Gtk::manage(new Gtk::MenuItem(_("Object Type"), true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SelectSameObjectType));
     mi->set_sensitive(!SP_IS_ANCHOR(_item));
     mi->show();
     select_same_submenu->append(*mi);
 
     /* Move to layer */
-    mi = Gtk::manage(new Gtk::MenuItem(_("_Move to layer ..."), true));
+    mi = Gtk::manage(new Gtk::MenuItem(_("_Move to Layer..."), true));
     if (_desktop->selection->isEmpty()) {
         mi->set_sensitive(FALSE);
     } else {

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2011-05-13 10:30+0530\n"
 "Last-Translator: Sangeeta <sk@gma.co>\n"
 "Language-Team: Maithili\n"
@@ -1213,7 +1213,7 @@ msgstr "कोमिक्स क्रीम"
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
 #, fuzzy
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr "अवास्तविक 3D शेडर  "
 
 #: ../share/filters/filters.svg.h:428
@@ -15260,25 +15260,25 @@ msgstr "मूल मे जाउ  "
 
 #: ../src/ui/contextmenu.cpp:106
 #, fuzzy
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "चुनलका वस्तु क' नकल करू "
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
 #, fuzzy
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "वस्तु केँ देखाउ "
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
 #, fuzzy
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "चुनलका वस्तु क' समूह बनाउ "
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
 #, fuzzy
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "वस्तु केँ खोलू "
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -15334,12 +15334,12 @@ msgstr "स्ट्रोक स्टाइल (_y)"
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
 #, fuzzy
-msgid "Object type"
+msgid "Object Type"
 msgstr "वस्तु क' प्रकार "
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr ""
 
 #. Create link
@@ -31760,7 +31760,7 @@ msgstr "एकटा नवीन नाम क' तहत दस्ताबे
 
 #: ../src/verbs.cpp:2605
 #, fuzzy
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "एकटा कापी केँ सहेजू "
 
 #: ../src/verbs.cpp:2606
@@ -31778,7 +31778,7 @@ msgstr "दस्ताबेज केँ प्रिंट करू "
 
 #: ../src/verbs.cpp:2611
 #, fuzzy
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "दस्ताबेज केँ व्यवस्थित नहि कएल जाए सकल "
 
 #: ../src/verbs.cpp:2612
@@ -31983,7 +31983,7 @@ msgid "Duplic_ate"
 msgstr "नकल (_a)"
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr "चुनलका वस्तु क' नकल करू "
 
 #: ../src/verbs.cpp:2667
@@ -32297,7 +32297,7 @@ msgstr "चुनलका समूह केँ असमूहीकृत �
 
 #: ../src/verbs.cpp:2759
 #, fuzzy
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr "चुनलका वस्तु क' समूह बनाउ "
 
 #: ../src/verbs.cpp:2759
@@ -32758,7 +32758,7 @@ msgstr "वर्तमान स्तर केँ असगर करू "
 
 #: ../src/verbs.cpp:2890
 #, fuzzy
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "आन स्तर केँ नुकाउ/देखाउ (_S)"
 
 #: ../src/verbs.cpp:2891
@@ -33643,7 +33643,7 @@ msgid "XRay around cursor"
 msgstr "कर्सर क' नीच्चाँ"
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr "रंग-प्रबंधित दृश्य "
 
 #: ../src/verbs.cpp:3130
@@ -33872,7 +33872,7 @@ msgstr "वस्तु "
 
 #: ../src/verbs.cpp:3200
 #, fuzzy
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr "चयन "
 
 #: ../src/verbs.cpp:3200
@@ -33899,7 +33899,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:3204
 #, fuzzy
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "पाठ प्रभाव संपादक (_f)..."
 
 #: ../src/verbs.cpp:3205
@@ -42606,16 +42606,16 @@ msgid "_Zoom"
 msgstr "जूम (_Z)"
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "डिस्प्ले मोड (_D)"
 
 #: ../share/ui/menus.xml.h:9
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "रंग डिस्प्ले मोड (_C)"
 
 #: ../share/ui/menus.xml.h:10
 #, fuzzy
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "पाठ अभिमुखन "
 
 #: ../share/ui/menus.xml.h:11

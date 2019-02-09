@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bg\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2007-11-13 12:30+0200\n"
 "Last-Translator: GIMP <vdachev@gmail.com>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
@@ -1254,7 +1254,7 @@ msgstr "незаоблени"
 #: ../share/filters/filters.svg.h:779 ../share/filters/filters.svg.h:783
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr ""
 
 #: ../share/filters/filters.svg.h:428
@@ -15782,25 +15782,25 @@ msgstr "Отиване до родителската"
 
 #: ../src/ui/contextmenu.cpp:106
 #, fuzzy
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "Дублира избраните обекти"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
 #, fuzzy
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "Показване на обекта"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
 #, fuzzy
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "Групира избраните обекти"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
 #, fuzzy
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "Отключване на обекта"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -15856,13 +15856,13 @@ msgstr "_Стил на очертаване"
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
 #, fuzzy
-msgid "Object type"
+msgid "Object Type"
 msgstr "Обект"
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
 #, fuzzy
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr "Снижаване на слоя"
 
 #. Create link
@@ -32828,7 +32828,7 @@ msgstr "Запазване копие на документа под ново и
 
 #: ../src/verbs.cpp:2605
 #, fuzzy
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "_Палитри..."
 
 #: ../src/verbs.cpp:2606
@@ -32846,7 +32846,7 @@ msgstr "Отпечатване на документа"
 
 #: ../src/verbs.cpp:2611
 #, fuzzy
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "Не може да бъде зададен източник за отпечатване: %s"
 
 #: ../src/verbs.cpp:2612
@@ -33055,7 +33055,7 @@ msgid "Duplic_ate"
 msgstr "_Дублиране"
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr "Дублира избраните обекти"
 
 #: ../src/verbs.cpp:2667
@@ -33377,7 +33377,7 @@ msgstr "Освобождава избраните групи"
 
 #: ../src/verbs.cpp:2759
 #, fuzzy
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr "Групира избраните обекти"
 
 #: ../src/verbs.cpp:2759
@@ -33848,7 +33848,7 @@ msgstr "Снижава текущия слой"
 
 #: ../src/verbs.cpp:2890
 #, fuzzy
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "Показва или скрива скалата на работната площ"
 
 #: ../src/verbs.cpp:2891
@@ -34756,7 +34756,7 @@ msgstr " под показалеца"
 
 #: ../src/verbs.cpp:3129
 #, fuzzy
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr "Управление на цветовете"
 
 #: ../src/verbs.cpp:3130
@@ -34996,7 +34996,7 @@ msgstr "Обекти"
 
 #: ../src/verbs.cpp:3200
 #, fuzzy
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr "Избраното"
 
 #: ../src/verbs.cpp:3200
@@ -35023,7 +35023,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:3204
 #, fuzzy
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "Ефекти на пътеки..."
 
 #: ../src/verbs.cpp:3205
@@ -43908,17 +43908,17 @@ msgid "_Zoom"
 msgstr "_Увеличение"
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "_Режим на показване"
 
 #: ../share/ui/menus.xml.h:9
 #, fuzzy
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "_Режим на показване"
 
 #: ../share/ui/menus.xml.h:10
 #, fuzzy
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "Ориентация на страницата:"
 
 #: ../share/ui/menus.xml.h:11

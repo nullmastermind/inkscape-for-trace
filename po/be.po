@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape 0.47+devel\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2010-06-19 23:31+0300\n"
 "Last-Translator: Hleb Valoshka <375gnu@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -1242,7 +1242,7 @@ msgstr "Коміксавыя вяршкі"
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
 #, fuzzy
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr "Нерэалістычныя абʼёмныя рэтушэры"
 
 #: ../share/filters/filters.svg.h:428
@@ -15654,25 +15654,25 @@ msgstr "Перайсьці да бацькоўскага"
 
 #: ../src/ui/contextmenu.cpp:106
 #, fuzzy
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "Падвоіць вылучаныя абʼекты"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
 #, fuzzy
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "Паказаць абʼект"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
 #, fuzzy
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "Ґрупаваць вылучаныя абʼекты"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
 #, fuzzy
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "Адамкнуць абʼект"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -15728,13 +15728,13 @@ msgstr "_Стыль контуру"
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
 #, fuzzy
-msgid "Object type"
+msgid "Object Type"
 msgstr "Тып абʼекта"
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
 #, fuzzy
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr "Апусьціць пласт"
 
 #. Create link
@@ -32450,7 +32450,7 @@ msgstr "Захаваць копію дакумэнта з новай назва�
 
 #: ../src/verbs.cpp:2605
 #, fuzzy
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "_Прыклады…"
 
 #: ../src/verbs.cpp:2606
@@ -32468,7 +32468,7 @@ msgstr "Надрукаваць дакумэнт"
 
 #: ../src/verbs.cpp:2611
 #, fuzzy
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "Немагчыма падрыхтаваць дакумант"
 
 #: ../src/verbs.cpp:2612
@@ -32679,7 +32679,7 @@ msgid "Duplic_ate"
 msgstr "_Падвоіць"
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr "Падвоіць вылучаныя абʼекты"
 
 #: ../src/verbs.cpp:2667
@@ -33004,7 +33004,7 @@ msgstr "Разґрупаваць вылучаныя ґрупы"
 
 #: ../src/verbs.cpp:2759
 #, fuzzy
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr "Ґрупаваць вылучаныя абʼекты"
 
 #: ../src/verbs.cpp:2759
@@ -33470,7 +33470,7 @@ msgstr "Толькі бягучы пласт"
 
 #: ../src/verbs.cpp:2890
 #, fuzzy
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "С_хаваць/паказваць іншыя пласты"
 
 #: ../src/verbs.cpp:2891
@@ -34363,7 +34363,7 @@ msgid "XRay around cursor"
 msgstr " пад курсорам"
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr "Прагляд з кіраваньнем колерамі"
 
 #: ../src/verbs.cpp:3130
@@ -34598,7 +34598,7 @@ msgstr "Абʼекты"
 
 #: ../src/verbs.cpp:3200
 #, fuzzy
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr "Вылучэньне"
 
 #: ../src/verbs.cpp:3200
@@ -34625,7 +34625,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:3204
 #, fuzzy
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "Рэдактар эфэктаў шляхоў…"
 
 #: ../src/verbs.cpp:3205
@@ -43525,17 +43525,17 @@ msgid "_Zoom"
 msgstr "_Маштаб"
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "_Рэжым паказу"
 
 #: ../share/ui/menus.xml.h:9
 #, fuzzy
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "_Рэжым паказу"
 
 #: ../share/ui/menus.xml.h:10
 #, fuzzy
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "Арыентацыя старонкі:"
 
 #: ../share/ui/menus.xml.h:11
