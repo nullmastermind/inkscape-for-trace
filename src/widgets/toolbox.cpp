@@ -215,7 +215,7 @@ static struct {
       SP_VERB_CONTEXT_PENCIL_PREFS, "/tools/freehand/pencil", N_("Style of new paths created by Pencil")},
     { "/tools/freehand/pen", "pen_toolbox", Inkscape::UI::Toolbar::PencilToolbar::create_pen, nullptr,     "PenToolbar",
       SP_VERB_CONTEXT_PEN_PREFS,    "/tools/freehand/pen",    N_("Style of new paths created by Pen")},
-    { "/tools/calligraphic", "calligraphy_toolbox", nullptr, Inkscape::UI::Toolbar::CalligraphyToolbar::prep,"CalligraphyToolbar",
+    { "/tools/calligraphic", "calligraphy_toolbox", Inkscape::UI::Toolbar::CalligraphyToolbar::create, nullptr, "CalligraphyToolbar",
       SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS, "/tools/calligraphic", N_("Style of new calligraphic strokes")},
     { "/tools/eraser", "eraser_toolbox", Inkscape::UI::Toolbar::EraserToolbar::create, nullptr, "EraserToolbar",
       SP_VERB_CONTEXT_ERASER_PREFS, "/tools/eraser", _("TBD")},

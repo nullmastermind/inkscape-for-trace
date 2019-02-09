@@ -27,28 +27,6 @@
     <toolitem action='SprayPickCenterAction' />
   </toolbar>
 
-  <toolbar name='CalligraphyToolbar'>
-    <separator />
-    <toolitem action='SetProfileAction'/>
-    <toolitem action='ProfileEditAction'/>
-    <separator />
-    <toolitem action='CalligraphyWidthAction' />
-    <toolitem action='PressureAction' />
-    <toolitem action='TraceAction' />
-    <toolitem action='ThinningAction' />
-    <separator />
-    <toolitem action='AngleAction' />
-    <toolitem action='TiltAction' />
-    <toolitem action='FixationAction' />
-    <separator />
-    <toolitem action='CapRoundingAction' />
-    <separator />
-    <toolitem action='TremorAction' />
-    <toolitem action='WiggleAction' />
-    <toolitem action='MassAction' />
-    <separator />
-  </toolbar>
-
   <toolbar name='TextToolbar'>
     <toolitem action='TextFontFamilyAction' />
     <toolitem action='TextFontStyleAction' />

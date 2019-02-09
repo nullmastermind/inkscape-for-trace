@@ -811,7 +811,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                 this->width += 0.01;
                 if (this->width > 1.0)
                     this->width = 1.0;
-                sp_ddc_update_toolbox (desktop, "altx-calligraphy", this->width * 100); // the same spinbutton is for alt+x
+                sp_ddc_update_toolbox (desktop, "calligraphy-width", this->width * 100); // the same spinbutton is for alt+x
                 ret = TRUE;
             }
             break;
@@ -821,26 +821,26 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                 this->width -= 0.01;
                 if (this->width < 0.01)
                     this->width = 0.01;
-                sp_ddc_update_toolbox (desktop, "altx-calligraphy", this->width * 100);
+                sp_ddc_update_toolbox (desktop, "calligraphy-width", this->width * 100);
                 ret = TRUE;
             }
             break;
         case GDK_KEY_Home:
         case GDK_KEY_KP_Home:
             this->width = 0.01;
-            sp_ddc_update_toolbox (desktop, "altx-calligraphy", this->width * 100);
+            sp_ddc_update_toolbox (desktop, "calligraphy-width", this->width * 100);
             ret = TRUE;
             break;
         case GDK_KEY_End:
         case GDK_KEY_KP_End:
             this->width = 1.0;
-            sp_ddc_update_toolbox (desktop, "altx-calligraphy", this->width * 100);
+            sp_ddc_update_toolbox (desktop, "calligraphy-width", this->width * 100);
             ret = TRUE;
             break;
         case GDK_KEY_x:
         case GDK_KEY_X:
             if (MOD__ALT_ONLY(event)) {
-                desktop->setToolboxFocusTo ("altx-calligraphy");
+                desktop->setToolboxFocusTo ("calligraphy-width");
                 ret = TRUE;
             }
             break;

@@ -31,16 +31,19 @@
 #include "toolbar.h"
 #include <gtkmm/adjustment.h>
 
-class InkSelectOneAction;
 class SPDesktop;
 
-typedef struct _EgeAdjustmentAction EgeAdjustmentAction;
-typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _InkToggleAction InkToggleAction;
+namespace Gtk {
+class ComboBoxText;
+}
 
 namespace Inkscape {
 namespace UI {
-class PrefPusher;
+class SimplePrefPusher;
+
+namespace Widget {
+class SpinButtonToolItem;
+}
 
 namespace Toolbar {
 
@@ -48,8 +51,8 @@ class CalligraphyToolbar : public Toolbar {
 private:
     bool _presets_blocked;
 
-    EgeAdjustmentAction *_angle_action;
-    InkSelectOneAction *_profile_selector;
+    UI::Widget::SpinButtonToolItem *_angle_item;
+    Gtk::ComboBoxText *_profile_selector_combo;
 
     std::map<Glib::ustring, GObject *> _widget_map;
 
@@ -61,13 +64,13 @@ private:
     Glib::RefPtr<Gtk::Adjustment> _tremor_adj;
     Glib::RefPtr<Gtk::Adjustment> _fixation_adj;
     Glib::RefPtr<Gtk::Adjustment> _cap_rounding_adj;
-    InkToggleAction *_usepressure;
-    InkToggleAction *_tracebackground;
-    InkToggleAction *_usetilt;
+    Gtk::ToggleToolButton *_usepressure;
+    Gtk::ToggleToolButton *_tracebackground;
+    Gtk::ToggleToolButton *_usetilt;
 
-    std::unique_ptr<PrefPusher> _tracebackground_pusher;
-    std::unique_ptr<PrefPusher> _usepressure_pusher;
-    std::unique_ptr<PrefPusher> _usetilt_pusher;
+    std::unique_ptr<SimplePrefPusher> _tracebackground_pusher;
+    std::unique_ptr<SimplePrefPusher> _usepressure_pusher;
+    std::unique_ptr<SimplePrefPusher> _usetilt_pusher;
 
     void width_value_changed();
     void velthin_value_changed();
@@ -78,18 +81,19 @@ private:
     void wiggle_value_changed();
     void mass_value_changed();
     void build_presets_list();
-    void change_profile(int mode);
+    void change_profile();
     void save_profile(GtkWidget *widget);
-
-    static void edit_profile(GtkAction *act, gpointer data);
-    static void update_presets_list(gpointer data);
-    static void tilt_state_changed( GtkToggleAction *act, gpointer data );
+    void edit_profile();
+    void update_presets_list();
+    void tilt_state_changed();
+    void on_pref_toggled(Gtk::ToggleToolButton *item,
+                         const Glib::ustring&   path);
     
 protected:
     CalligraphyToolbar(SPDesktop *desktop);
 
 public:
-    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+    static GtkWidget * create(SPDesktop *desktop);
 };
 
 }
