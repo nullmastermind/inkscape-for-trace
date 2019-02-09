@@ -25,18 +25,18 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "connector-toolbar.h"
+
 #include <glibmm/i18n.h>
 
-#include "connector-toolbar.h"
+#include <gtkmm/separatortoolitem.h>
+
 #include "conn-avoid-ref.h"
 
 #include "desktop.h"
 #include "document-undo.h"
 #include "enums.h"
 #include "graphlayout.h"
-#include "widgets/ink-action.h"
-#include "widgets/ink-toggle-action.h"
-#include "widgets/toolbox.h"
 #include "inkscape.h"
 #include "verbs.h"
 
@@ -46,15 +46,14 @@
 #include "ui/icon-names.h"
 #include "ui/tools/connector-tool.h"
 #include "ui/uxmanager.h"
+#include "ui/widget/spin-button-tool-item.h"
 
-#include "widgets/ege-adjustment-action.h"
 #include "widgets/spinbutton-events.h"
 
 #include "xml/node-event-vector.h"
 
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
-using Inkscape::UI::ToolboxFactory;
 
 static Inkscape::XML::NodeEventVector connector_tb_repr_events = {
     nullptr, /* child_added */
@@ -67,131 +66,101 @@ static Inkscape::XML::NodeEventVector connector_tb_repr_events = {
 namespace Inkscape {
 namespace UI {
 namespace Toolbar {
-GtkWidget *
-ConnectorToolbar::prep( SPDesktop *desktop, GtkActionGroup* mainActions)
+ConnectorToolbar::ConnectorToolbar(SPDesktop *desktop)
+    : Toolbar(desktop),
+    _freeze(false),
+    _repr(nullptr)
 {
-    auto toolbar = new ConnectorToolbar(desktop);
-
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
     {
-        InkAction* inky = ink_action_new( "ConnectorAvoidAction",
-                                          _("Avoid"),
-                                          _("Make connectors avoid selected objects"),
-                                          INKSCAPE_ICON("connector-avoid"),
-                                          secondarySize );
-        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(path_set_avoid), (gpointer)toolbar);
-        gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
+        auto avoid_item = Gtk::manage(new Gtk::ToolButton(_("Avoid")));
+        avoid_item->set_tooltip_text(_("Make connectors avoid selected objects"));
+        avoid_item->set_icon_name(INKSCAPE_ICON("connector-avoid"));
+        avoid_item->signal_clicked().connect(sigc::mem_fun(*this, &ConnectorToolbar::path_set_avoid));
+        add(*avoid_item);
     }
 
     {
-        InkAction* inky = ink_action_new( "ConnectorIgnoreAction",
-                                          _("Ignore"),
-                                          _("Make connectors ignore selected objects"),
-                                          INKSCAPE_ICON("connector-ignore"),
-                                          secondarySize );
-        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(path_set_ignore), (gpointer)toolbar);
-        gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
+        auto ignore_item = Gtk::manage(new Gtk::ToolButton(_("Ignore")));
+        ignore_item->set_tooltip_text(_("Make connectors ignore selected objects"));
+        ignore_item->set_icon_name(INKSCAPE_ICON("connector-ignore"));
+        ignore_item->signal_clicked().connect(sigc::mem_fun(*this, &ConnectorToolbar::path_set_ignore));
+        add(*ignore_item);
     }
 
     // Orthogonal connectors toggle button
     {
-        toolbar->_orthogonal = ink_toggle_action_new( "ConnectorOrthogonalAction",
-                                                      _("Orthogonal"),
-                                                      _("Make connector orthogonal or polyline"),
-                                                      INKSCAPE_ICON("connector-orthogonal"),
-                                                      GTK_ICON_SIZE_MENU );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_orthogonal ) );
+        _orthogonal = add_toggle_button(_("Orthogonal"),
+                                        _("Make connector orthogonal or polyline"));
+        _orthogonal->set_icon_name(INKSCAPE_ICON("connector-orthogonal"));
 
         bool tbuttonstate = prefs->getBool("/tools/connector/orthogonal");
-        gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(toolbar->_orthogonal), ( tbuttonstate ? TRUE : FALSE ));
-        g_signal_connect_after( G_OBJECT(toolbar->_orthogonal), "toggled", G_CALLBACK(orthogonal_toggled), (gpointer)toolbar );
+        _orthogonal->set_active(( tbuttonstate ? TRUE : FALSE ));
+        _orthogonal->signal_toggled().connect(sigc::mem_fun(*this, &ConnectorToolbar::orthogonal_toggled));
     }
 
-    EgeAdjustmentAction* eact = nullptr;
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
+
     // Curvature spinbox
-    eact = create_adjustment_action( "ConnectorCurvatureAction",
-                                    _("Connector Curvature"), _("Curvature:"),
-                                    _("The amount of connectors curvature"),
-                                    "/tools/connector/curvature", defaultConnCurvature,
-                                    TRUE, "inkscape:connector-curvature",
-                                    0, 100, 1.0, 10.0,
-                                    nullptr, nullptr, 0,
-                                    nullptr /*unit tracker*/, 1, 0 );
-    ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
-    toolbar->_curvature_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
-    toolbar->_curvature_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &ConnectorToolbar::curvature_changed));
-    gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
+    auto curvature_val = prefs->getDouble("/tools/connector/curvature", defaultConnCurvature);
+    _curvature_adj = Gtk::Adjustment::create(curvature_val, 0, 100, 1.0, 10.0);
+    auto curvature_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("inkscape:connector-curvature", _("Curvature:"), _curvature_adj, 1, 0));
+    curvature_item->set_tooltip_text(_("The amount of connectors curvature"));
+    curvature_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+    _curvature_adj->signal_value_changed().connect(sigc::mem_fun(*this, &ConnectorToolbar::curvature_changed));
+    add(*curvature_item);
 
     // Spacing spinbox
-    eact = create_adjustment_action( "ConnectorSpacingAction",
-                                    _("Connector Spacing"), _("Spacing:"),
-                                    _("The amount of space left around objects by auto-routing connectors"),
-                                    "/tools/connector/spacing", defaultConnSpacing,
-                                    TRUE, "inkscape:connector-spacing",
-                                    0, 100, 1.0, 10.0,
-                                    nullptr, nullptr, 0,
-                                    nullptr /*unit tracker*/, 1, 0 );
-    ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
-    toolbar->_spacing_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
-    toolbar->_spacing_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &ConnectorToolbar::spacing_changed));
-    gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
+    auto spacing_val = prefs->getDouble("/tools/connector/spacing", defaultConnSpacing);
+    _spacing_adj = Gtk::Adjustment::create(spacing_val, 0, 100, 1.0, 10.0);
+    auto spacing_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("inkscape:connector-spacing", _("Spacing:"), _spacing_adj, 1, 0));
+    spacing_item->set_tooltip_text(_("The amount of space left around objects by auto-routing connectors"));
+    spacing_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+    _spacing_adj->signal_value_changed().connect(sigc::mem_fun(*this, &ConnectorToolbar::spacing_changed));
+    add(*spacing_item);
 
     // Graph (connector network) layout
     {
-        InkAction* inky = ink_action_new( "ConnectorGraphAction",
-                                          _("Graph"),
-                                          _("Nicely arrange selected connector network"),
-                                          INKSCAPE_ICON("distribute-graph"),
-                                          secondarySize );
-        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(graph_layout), (gpointer)toolbar);
-        gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
+        auto graph_item = Gtk::manage(new Gtk::ToolButton(_("Graph")));
+        graph_item->set_tooltip_text(_("Nicely arrange selected connector network"));
+        graph_item->set_icon_name(INKSCAPE_ICON("distribute-graph"));
+        graph_item->signal_clicked().connect(sigc::mem_fun(*this, &ConnectorToolbar::graph_layout));
+        add(*graph_item);
     }
 
     // Default connector length spinbox
-    eact = create_adjustment_action( "ConnectorLengthAction",
-                                     _("Connector Length"), _("Length:"),
-                                     _("Ideal length for connectors when layout is applied"),
-                                     "/tools/connector/length", 100,
-                                     TRUE, "inkscape:connector-length",
-                                     10, 1000, 10.0, 100.0,
-                                     nullptr, nullptr, 0,
-                                     nullptr /*unit tracker*/, 1, 0 );
-    ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
-    toolbar->_length_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
-    toolbar->_length_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &ConnectorToolbar::length_changed));
-    gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
+    auto length_val = prefs->getDouble("/tools/connector/length", 100);
+    _length_adj = Gtk::Adjustment::create(length_val, 10, 1000, 10.0, 100.0);
+    auto length_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("inkscape:connector-length", _("Length:"), _length_adj, 1, 0));
+    length_item->set_tooltip_text(_("Ideal length for connectors when layout is applied"));
+    length_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+    _length_adj->signal_value_changed().connect(sigc::mem_fun(*this, &ConnectorToolbar::length_changed));
+    add(*length_item);
 
     // Directed edges toggle button
     {
-        InkToggleAction* act = ink_toggle_action_new( "ConnectorDirectedAction",
-                                                      _("Downwards"),
-                                                      _("Make connectors with end-markers (arrows) point downwards"),
-                                                      INKSCAPE_ICON("distribute-graph-directed"),
-                                                      GTK_ICON_SIZE_MENU );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
+        _directed_item = add_toggle_button(_("Downwards"),
+                                           _("Make connectors with end-markers (arrows) point downwards"));
+        _directed_item->set_icon_name(INKSCAPE_ICON("distribute-graph-directed"));
 
         bool tbuttonstate = prefs->getBool("/tools/connector/directedlayout");
-        gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(act), ( tbuttonstate ? TRUE : FALSE ));
+        _directed_item->set_active(tbuttonstate ? TRUE : FALSE);
 
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(directed_graph_layout_toggled), (gpointer)toolbar);
-        desktop->getSelection()->connectChanged(sigc::mem_fun(*toolbar, &ConnectorToolbar::selection_changed));
+        _directed_item->signal_toggled().connect(sigc::mem_fun(*this, &ConnectorToolbar::directed_graph_layout_toggled));
+        desktop->getSelection()->connectChanged(sigc::mem_fun(*this, &ConnectorToolbar::selection_changed));
     }
 
     // Avoid overlaps toggle button
     {
-        InkToggleAction* act = ink_toggle_action_new( "ConnectorOverlapAction",
-                                                      _("Remove overlaps"),
-                                                      _("Do not allow overlapping shapes"),
-                                                      INKSCAPE_ICON("distribute-remove-overlaps"),
-                                                      GTK_ICON_SIZE_MENU );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
+        _overlap_item = add_toggle_button(_("Remove overlaps"),
+                                          _("Do not allow overlapping shapes"));
+        _overlap_item->set_icon_name(INKSCAPE_ICON("distribute-remove-overlaps"));
 
         bool tbuttonstate = prefs->getBool("/tools/connector/avoidoverlaplayout");
-        gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(act), (tbuttonstate ? TRUE : FALSE ));
+        _overlap_item->set_active(tbuttonstate ? TRUE : FALSE);
 
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(nooverlaps_graph_layout_toggled), (gpointer)toolbar);
+        _overlap_item->signal_toggled().connect(sigc::mem_fun(*this, &ConnectorToolbar::nooverlaps_graph_layout_toggled));
     }
 
     // Code to watch for changes to the connector-spacing attribute in
@@ -199,19 +168,26 @@ ConnectorToolbar::prep( SPDesktop *desktop, GtkActionGroup* mainActions)
     Inkscape::XML::Node *repr = desktop->namedview->getRepr();
     g_assert(repr != nullptr);
 
-    if(toolbar->_repr) {
-        toolbar->_repr->removeListenerByData(toolbar);
-        Inkscape::GC::release(toolbar->_repr);
-        toolbar->_repr = nullptr;
+    if(_repr) {
+        _repr->removeListenerByData(this);
+        Inkscape::GC::release(_repr);
+        _repr = nullptr;
     }
 
     if (repr) {
-        toolbar->_repr = repr;
-        Inkscape::GC::anchor(toolbar->_repr);
-        toolbar->_repr->addListener(&connector_tb_repr_events, toolbar);
-        toolbar->_repr->synthesizeEvents(&connector_tb_repr_events, toolbar);
+        _repr = repr;
+        Inkscape::GC::anchor(_repr);
+        _repr->addListener(&connector_tb_repr_events, this);
+        _repr->synthesizeEvents(&connector_tb_repr_events, this);
     }
 
+    show_all();
+}
+
+GtkWidget *
+ConnectorToolbar::create( SPDesktop *desktop)
+{
+    auto toolbar = new ConnectorToolbar(desktop);
     return GTK_WIDGET(toolbar->gobj());
 } // end of ConnectorToolbar::prep()
 
@@ -228,30 +204,29 @@ ConnectorToolbar::path_set_ignore()
 }
 
 void
-ConnectorToolbar::orthogonal_toggled( GtkToggleAction* act, gpointer data)
+ConnectorToolbar::orthogonal_toggled()
 {
-    auto toolbar = reinterpret_cast<ConnectorToolbar *>(data);
-    SPDocument *doc = toolbar->_desktop->getDocument();
+    auto doc = _desktop->getDocument();
 
     if (!DocumentUndo::getUndoSensitive(doc)) {
         return;
     }
 
     // quit if run by the _changed callbacks
-    if (toolbar->_freeze) {
+    if (_freeze) {
         return;
     }
 
     // in turn, prevent callbacks from responding
-    toolbar->_freeze = true;
+    _freeze = true;
 
-    bool is_orthog = gtk_toggle_action_get_active( act );
+    bool is_orthog = _orthogonal->get_active();
     gchar orthog_str[] = "orthogonal";
     gchar polyline_str[] = "polyline";
     gchar *value = is_orthog ? orthog_str : polyline_str ;
 
     bool modmade = false;
-    auto itemlist= toolbar->_desktop->getSelection()->items();
+    auto itemlist= _desktop->getSelection()->items();
     for(auto i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
 
@@ -272,7 +247,7 @@ ConnectorToolbar::orthogonal_toggled( GtkToggleAction* act, gpointer data)
                        is_orthog ? _("Set connector type: orthogonal"): _("Set connector type: polyline"));
     }
 
-    toolbar->_freeze = false;
+    _freeze = false;
 }
 
 void
@@ -398,12 +373,10 @@ ConnectorToolbar::length_changed()
 }
 
 void
-ConnectorToolbar::directed_graph_layout_toggled(GtkToggleAction *act,
-                                                gpointer         data)
+ConnectorToolbar::directed_graph_layout_toggled()
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool("/tools/connector/directedlayout",
-                gtk_toggle_action_get_active( act ));
+    auto prefs = Inkscape::Preferences::get();
+    prefs->setBool("/tools/connector/directedlayout", _directed_item->get_active());
 }
 
 void
@@ -414,18 +387,18 @@ ConnectorToolbar::selection_changed(Inkscape::Selection *selection)
     {
         gdouble curvature = SP_PATH(item)->connEndPair.getCurvature();
         bool is_orthog = SP_PATH(item)->connEndPair.isOrthogonal();
-        gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(_orthogonal), is_orthog);
+        _orthogonal->set_active(is_orthog);
         _curvature_adj->set_value(curvature);
     }
 
 }
 
 void
-ConnectorToolbar::nooverlaps_graph_layout_toggled( GtkToggleAction* act, gpointer /* data */)
+ConnectorToolbar::nooverlaps_graph_layout_toggled()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool("/tools/connector/avoidoverlaplayout",
-                gtk_toggle_action_get_active( act ));
+                _overlap_item->get_active());
 }
 
 void

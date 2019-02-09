@@ -92,17 +92,4 @@
     <separator />
     <toolitem action='MeshSmoothAction' />
   </toolbar>
-
-  <toolbar name='ConnectorToolbar'>
-    <toolitem action='ConnectorAvoidAction' />
-    <toolitem action='ConnectorIgnoreAction' />
-    <toolitem action='ConnectorOrthogonalAction' />
-    <separator />
-    <toolitem action='ConnectorCurvatureAction' />
-    <toolitem action='ConnectorSpacingAction' />
-    <toolitem action='ConnectorGraphAction' />
-    <toolitem action='ConnectorLengthAction' />
-    <toolitem action='ConnectorDirectedAction' />
-    <toolitem action='ConnectorOverlapAction' />
-  </toolbar>
 </ui>

@@ -34,8 +34,9 @@
 
 class SPDesktop;
 
-typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _InkToggleAction InkToggleAction;
+namespace Gtk {
+class ToolButton;
+}
 
 namespace Inkscape {
 class Selection;
@@ -48,7 +49,9 @@ namespace UI {
 namespace Toolbar {
 class ConnectorToolbar : public Toolbar {
 private:
-    InkToggleAction *_orthogonal;
+    Gtk::ToggleToolButton *_orthogonal;
+    Gtk::ToggleToolButton *_directed_item;
+    Gtk::ToggleToolButton *_overlap_item;
 
     Glib::RefPtr<Gtk::Adjustment> _curvature_adj;
     Glib::RefPtr<Gtk::Adjustment> _spacing_adj;
@@ -58,30 +61,22 @@ private:
 
     Inkscape::XML::Node *_repr;
 
-    static void path_set_avoid();
-    static void path_set_ignore();
-    static void orthogonal_toggled(GtkToggleAction *act,
-                                   gpointer         data);
-    static void graph_layout();
-    static void directed_graph_layout_toggled  (GtkToggleAction *act,
-                                                gpointer         data);
-    static void nooverlaps_graph_layout_toggled(GtkToggleAction *act,
-                                                gpointer         data);
-
+    void path_set_avoid();
+    void path_set_ignore();
+    void orthogonal_toggled();
+    void graph_layout();
+    void directed_graph_layout_toggled();
+    void nooverlaps_graph_layout_toggled();
     void curvature_changed();
     void spacing_changed();
     void length_changed();
     void selection_changed(Inkscape::Selection *selection);
 
 protected:
-    ConnectorToolbar(SPDesktop *desktop)
-        : Toolbar(desktop),
-          _freeze(false),
-          _repr(nullptr)
-    {}
+    ConnectorToolbar(SPDesktop *desktop);
 
 public:
-    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+    static GtkWidget * create(SPDesktop *desktop);
 
     static void event_attr_changed(Inkscape::XML::Node *repr,
                                    gchar const         *name,

@@ -226,7 +226,7 @@ static struct {
       SP_VERB_INVALID, nullptr, nullptr},
     { "/tools/dropper", "dropper_toolbox", Inkscape::UI::Toolbar::DropperToolbar::create, nullptr,         "DropperToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
-    { "/tools/connector", "connector_toolbox", nullptr, Inkscape::UI::Toolbar::ConnectorToolbar::prep,   "ConnectorToolbar",
+    { "/tools/connector", "connector_toolbox", Inkscape::UI::Toolbar::ConnectorToolbar::create, nullptr,  "ConnectorToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
     { "/tools/gradient", "gradient_toolbox", Inkscape::UI::Toolbar::GradientToolbar::create, nullptr, "GradientToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
