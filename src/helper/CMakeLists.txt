@@ -21,6 +21,7 @@ set(helper_SRC
 	pixbuf-ops.cpp
 	png-write.cpp
 	stock-items.cpp
+        verb-action.cpp
 	#units-test.cpp
 
 	# we generate this file and it's .h counter-part
@@ -42,6 +43,7 @@ set(helper_SRC
 	pixbuf-ops.h
 	png-write.h
 	stock-items.h
+        verb-action.h
 )
 
 set_source_files_properties(sp_marshal_SRC PROPERTIES GENERATED true)

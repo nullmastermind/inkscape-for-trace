@@ -38,13 +38,13 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "inkscape.h"
-#include "shortcuts.h"
 #include "verbs.h"
 
 #include "ink-action.h"
 #include "ink-toggle-action.h"
 
 #include "helper/action.h"
+#include "helper/verb-action.h"
 
 #include "include/gtkmm_version.h"
 
@@ -254,173 +254,6 @@ static void update_aux_toolbox(SPDesktop *desktop, ToolBase *eventcontext, GtkWi
 
 static void setup_commands_toolbox(GtkWidget *toolbox, SPDesktop *desktop);
 static void update_commands_toolbox(SPDesktop *desktop, ToolBase *eventcontext, GtkWidget *toolbox);
-
-static GtkToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick( GtkWidget *t, GtkIconSize size, Inkscape::UI::Widget::ButtonType type,
-                                                                     Inkscape::Verb *verb, Inkscape::Verb *doubleclick_verb,
-                                                                     Inkscape::UI::View::View *view);
-
-class VerbAction : public Gtk::Action {
-public:
-    static Glib::RefPtr<VerbAction> create(Inkscape::Verb* verb, Inkscape::Verb* verb2, Inkscape::UI::View::View *view);
-
-    ~VerbAction() override;
-    virtual void set_active(bool active = true);
-
-protected:
-    Gtk::Widget* create_menu_item_vfunc() override;
-    Gtk::Widget* create_tool_item_vfunc() override;
-
-    void connect_proxy_vfunc(Gtk::Widget* proxy) override;
-    void disconnect_proxy_vfunc(Gtk::Widget* proxy) override;
-
-    void on_activate() override;
-
-private:
-    Inkscape::Verb* verb;
-    Inkscape::Verb* verb2;
-    Inkscape::UI::View::View *view;
-    bool active;
-
-    VerbAction(Inkscape::Verb* verb, Inkscape::Verb* verb2, Inkscape::UI::View::View *view);
-};
-
-
-Glib::RefPtr<VerbAction> VerbAction::create(Inkscape::Verb* verb, Inkscape::Verb* verb2, Inkscape::UI::View::View *view)
-{
-    Glib::RefPtr<VerbAction> result;
-    SPAction *action = verb->get_action(Inkscape::ActionContext(view));
-    if ( action ) {
-        //SPAction* action2 = verb2 ? verb2->get_action(Inkscape::ActionContext(view)) : 0;
-        result = Glib::RefPtr<VerbAction>(new VerbAction(verb, verb2, view));
-    }
-
-    return result;
-}
-
-VerbAction::VerbAction(Inkscape::Verb* verb, Inkscape::Verb* verb2, Inkscape::UI::View::View *view) :
-    Gtk::Action(Glib::ustring(verb->get_id()), verb->get_image(), Glib::ustring(g_dpgettext2(nullptr, "ContextVerb", verb->get_name())), Glib::ustring(_(verb->get_tip()))),
-    verb(verb),
-    verb2(verb2),
-    view(view),
-    active(false)
-{
-}
-
-VerbAction::~VerbAction()
-= default;
-
-Gtk::Widget* VerbAction::create_menu_item_vfunc()
-{
-    Gtk::Widget* widg = Gtk::Action::create_menu_item_vfunc();
-//     g_message("create_menu_item_vfunc() = %p  for '%s'", widg, verb->get_id());
-    return widg;
-}
-
-Gtk::Widget* VerbAction::create_tool_item_vfunc()
-{
-//     Gtk::Widget* widg = Gtk::Action::create_tool_item_vfunc();
-    GtkIconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/tools/small");
-    GtkWidget* toolbox = nullptr;
-    auto holder = Glib::wrap(sp_toolbox_button_item_new_from_verb_with_doubleclick( toolbox, toolboxSize,
-                                                                                    Inkscape::UI::Widget::BUTTON_TYPE_TOGGLE,
-                                                                                    verb,
-                                                                                    verb2,
-                                                                                    view ));
-
-    auto button_widget = static_cast<Inkscape::UI::Widget::Button *>(holder->get_child());
-
-    if ( active ) {
-        button_widget->toggle_set_down(active);
-    }
-    button_widget->show_all();
-
-//     g_message("create_tool_item_vfunc() = %p  for '%s'", holder, verb->get_id());
-    return holder;
-}
-
-void VerbAction::connect_proxy_vfunc(Gtk::Widget* proxy)
-{
-//     g_message("connect_proxy_vfunc(%p)  for '%s'", proxy, verb->get_id());
-    Gtk::Action::connect_proxy_vfunc(proxy);
-}
-
-void VerbAction::disconnect_proxy_vfunc(Gtk::Widget* proxy)
-{
-//     g_message("disconnect_proxy_vfunc(%p)  for '%s'", proxy, verb->get_id());
-    Gtk::Action::disconnect_proxy_vfunc(proxy);
-}
-
-void VerbAction::set_active(bool active)
-{
-    this->active = active;
-    Glib::SListHandle<Gtk::Widget*> proxies = get_proxies();
-    for (auto proxie : proxies) {
-        Gtk::ToolItem* ti = dynamic_cast<Gtk::ToolItem*>(proxie);
-        if (ti) {
-            // *should* have one child that is the Inkscape::UI::Widget::Button
-            auto child = dynamic_cast<Inkscape::UI::Widget::Button *>(ti->get_child());
-            if (child) {
-                child->toggle_set_down(active);
-            }
-        }
-    }
-}
-
-void VerbAction::on_activate()
-{
-    if ( verb ) {
-        SPAction *action = verb->get_action(Inkscape::ActionContext(view));
-        if ( action ) {
-            sp_action_perform(action, nullptr);
-        }
-    }
-}
-
-// ------------------------------------------------------
-
-GtkToolItem * sp_toolbox_button_item_new_from_verb_with_doubleclick(GtkWidget *t, GtkIconSize size, Inkscape::UI::Widget::ButtonType type,
-                                                             Inkscape::Verb *verb, Inkscape::Verb *doubleclick_verb,
-                                                             Inkscape::UI::View::View *view)
-{
-    SPAction *action = verb->get_action(Inkscape::ActionContext(view));
-    if (!action) {
-        return nullptr;
-    }
-
-    SPAction *doubleclick_action;
-    if (doubleclick_verb) {
-        doubleclick_action = doubleclick_verb->get_action(Inkscape::ActionContext(view));
-    } else {
-        doubleclick_action = nullptr;
-    }
-
-    /* fixme: Handle sensitive/unsensitive */
-    /* fixme: Implement Inkscape::UI::Widget::Button construction from action */
-    auto b = Gtk::manage(new Inkscape::UI::Widget::Button(size, type, action, doubleclick_action));
-    b->show();
-    auto b_toolitem = Gtk::manage(new Gtk::ToolItem());
-    b_toolitem->add(*b);
-
-    unsigned int shortcut = sp_shortcut_get_primary(verb);
-    if (shortcut != GDK_KEY_VoidSymbol) {
-        gchar *key = sp_shortcut_get_label(shortcut);
-        gchar *tip = g_strdup_printf ("%s (%s)", action->tip, key);
-        if ( t ) {
-           gtk_toolbar_insert(GTK_TOOLBAR(t), b_toolitem->gobj(), -1);
-           b->set_tooltip_text(tip);
-        }
-        g_free(tip);
-        g_free(key);
-    } else {
-        if ( t ) {
-            gtk_toolbar_insert(GTK_TOOLBAR(t), b_toolitem->gobj(), -1);
-            b->set_tooltip_text(action->tip);
-        }
-    }
-
-    return GTK_TOOL_ITEM(b_toolitem->gobj());
-}
-
 
 static void trigger_sp_action( GtkAction* /*act*/, gpointer user_data )
 {
