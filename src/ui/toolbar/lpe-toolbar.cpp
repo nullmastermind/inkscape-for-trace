@@ -25,17 +25,20 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "live_effects/lpe-line_segment.h"
 #include "lpe-toolbar.h"
+
+#include <gtkmm/radiotoolbutton.h>
+#include <gtkmm/separatortoolitem.h>
+
+#include "live_effects/lpe-line_segment.h"
 
 #include "helper/action-context.h"
 #include "helper/action.h"
 
-#include "widgets/ink-toggle-action.h"
-
+#include "ui/icon-names.h"
 #include "ui/tools-switch.h"
 #include "ui/tools/lpe-tool.h"
-#include "ui/widget/ink-select-one-action.h"
+#include "ui/widget/combo-tool-item.h"
 #include "ui/widget/unit-tracker.h"
 
 using Inkscape::UI::Widget::UnitTracker;
@@ -56,170 +59,124 @@ LPEToolbar::LPEToolbar(SPDesktop *desktop)
       _currentlpeitem(nullptr)
 {
     _tracker->setActiveUnit(_desktop->getNamedView()->display_units);
-}
 
-GtkWidget *
-LPEToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
-{
-    auto toolbar = new LPEToolbar(desktop);
-    Unit const *unit = toolbar->_tracker->getActiveUnit();
-    g_return_val_if_fail(unit != nullptr, nullptr);
+    auto unit = _tracker->getActiveUnit();
+    g_return_if_fail(unit != nullptr);
 
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    auto prefs = Inkscape::Preferences::get();
     prefs->setString("/tools/lpetool/unit", unit->abbr);
 
-    /** Automatically create a list of LPEs that get added to the toolbar **/
+    /* Automatically create a list of LPEs that get added to the toolbar **/
     {
-        InkSelectOneActionColumns columns;
-
-        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
-
-        Gtk::TreeModel::Row row;
+        Gtk::RadioToolButton::Group mode_group;
 
         // The first toggle button represents the state that no subtool is active.
-        row = *(store->append());
-        row[columns.col_label    ] = _("All inactive");
-        row[columns.col_tooltip  ] = _("No geometric tool is active");
-        row[columns.col_icon     ] = "draw-geometry-inactive";
-        row[columns.col_sensitive] = true;
+        auto inactive_mode_btn = Gtk::manage(new Gtk::RadioToolButton(mode_group, _("All inactive")));
+        inactive_mode_btn->set_tooltip_text(_("No geometric tool is active"));
+        inactive_mode_btn->set_icon_name(INKSCAPE_ICON("draw-geometry-inactive"));
+        _mode_buttons.push_back(inactive_mode_btn);
 
         Inkscape::LivePathEffect::EffectType type;
         for (int i = 1; i < num_subtools; ++i) { // i == 0 ia INVALIDE_LPE.
 
             type =  lpesubtools[i].type;
 
-            row = *(store->append());
-            row[columns.col_label    ] = Inkscape::LivePathEffect::LPETypeConverter.get_label(type);
-            row[columns.col_tooltip  ] = _(Inkscape::LivePathEffect::LPETypeConverter.get_label(type).c_str());
-            row[columns.col_icon     ] = lpesubtools[i].icon_name;
-            row[columns.col_sensitive] = true;
+            auto btn = Gtk::manage(new Gtk::RadioToolButton(mode_group, Inkscape::LivePathEffect::LPETypeConverter.get_label(type)));
+            btn->set_tooltip_text(_(Inkscape::LivePathEffect::LPETypeConverter.get_label(type).c_str()));
+            btn->set_icon_name(lpesubtools[i].icon_name);
+            _mode_buttons.push_back(btn);
         }
 
-        toolbar->_mode_action =
-            InkSelectOneAction::create( "LPEToolModeAction",    // Name
-                                        (""),                // Label
-                                        (""),                // Tooltip
-                                        "Not Used",          // Icon
-                                        store );             // Tree store
+        int btn_idx = 0;
+        for (auto btn : _mode_buttons) {
+            btn->set_sensitive(true);
+            add(*btn);
+            btn->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &LPEToolbar::mode_changed), btn_idx++));
+        }
 
-        toolbar->_mode_action->use_radio( true );
-        toolbar->_mode_action->use_icon( true );
-        toolbar->_mode_action->use_label( false );
         int mode = prefs->getInt("/tools/lpetool/mode", 0);
-        toolbar->_mode_action->set_active( mode );
-
-        gtk_action_group_add_action( mainActions, toolbar->_mode_action->gobj() );
-
-        toolbar->_mode_action->signal_changed().connect(sigc::mem_fun(*toolbar, &LPEToolbar::mode_changed));
+        _mode_buttons[mode]->set_active();
     }
+
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 
     /* Show limiting bounding box */
     {
-        InkToggleAction* act = ink_toggle_action_new( "LPEShowBBoxAction",
-                                                      _("Show limiting bounding box"),
-                                                      _("Show bounding box (used to cut infinite lines)"),
-                                                      "show-bounding-box",
-                                                      GTK_ICON_SIZE_MENU );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggle_show_bbox), desktop );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool( "/tools/lpetool/show_bbox", true ) );
+        _show_bbox_item = add_toggle_button(_("Show limiting bounding box"),
+                                            _("Show bounding box (used to cut infinite lines)"));
+        _show_bbox_item->set_icon_name(INKSCAPE_ICON("show-bounding-box"));
+        _show_bbox_item->signal_toggled().connect(sigc::mem_fun(*this, &LPEToolbar::toggle_show_bbox));
+        _show_bbox_item->set_active(prefs->getBool( "/tools/lpetool/show_bbox", true ));
     }
 
     /* Set limiting bounding box to bbox of current selection */
     {
-        InkToggleAction* act = ink_toggle_action_new( "LPEBBoxFromSelectionAction",
-                                                      _("Get limiting bounding box from selection"),
-                                                      _("Set limiting bounding box (used to cut infinite lines) to the bounding box of current selection"),
-                                                      "draw-geometry-set-bounding-box",
-                                                      GTK_ICON_SIZE_MENU );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggle_set_bbox), desktop );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), FALSE );
+        // TODO: Shouldn't this just be a button (not toggle button)?
+        _bbox_from_selection_item = add_toggle_button(_("Get limiting bounding box from selection"),
+                                                      _("Set limiting bounding box (used to cut infinite lines) to the bounding box of current selection"));
+        _bbox_from_selection_item->set_icon_name(INKSCAPE_ICON("draw-geometry-set-bounding-box"));
+        _bbox_from_selection_item->signal_toggled().connect(sigc::mem_fun(*this, &LPEToolbar::toggle_set_bbox));
+        _bbox_from_selection_item->set_active(false);
     }
+
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 
     /* Combo box to choose line segment type */
     {
-        InkSelectOneActionColumns columns;
+        _line_segment_combo = Gtk::manage(new Gtk::ComboBoxText());
+        _line_segment_combo->append(_("Closed"));
+        _line_segment_combo->append(_("Open start"));
+        _line_segment_combo->append(_("Open end"));
+        _line_segment_combo->append(_("Open both"));
 
-        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
+        _line_segment_combo->set_tooltip_text(_("Choose a line segment type"));
 
-        Gtk::TreeModel::Row row;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Closed");
-        row[columns.col_tooltip  ] = ("");
-        row[columns.col_icon     ] = "NotUsed";
-        row[columns.col_sensitive] = true;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Open start");
-        row[columns.col_tooltip  ] = ("");
-        row[columns.col_icon     ] = "NotUsed";
-        row[columns.col_sensitive] = true;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Open end");
-        row[columns.col_tooltip  ] = ("");
-        row[columns.col_icon     ] = "NotUsed";
-        row[columns.col_sensitive] = true;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Open both");
-        row[columns.col_tooltip  ] = ("");
-        row[columns.col_icon     ] = "NotUsed";
-        row[columns.col_sensitive] = true;
-
-        toolbar->_line_segment_action =
-            InkSelectOneAction::create( "LPELineSegmentAction", // Name
-                                        (""),                   // Label
-                                        _("Choose a line segment type"), // Tooltip
-                                        "Not Used",             // Icon
-                                        store );                // Tree store
-
-        toolbar->_line_segment_action->use_radio( false );
-        toolbar->_line_segment_action->use_icon( false );
-        toolbar->_line_segment_action->use_label( true );
-        toolbar->_line_segment_action->set_sensitive( false );
-
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_line_segment_action->gobj() ));
-
-        toolbar->_line_segment_action->signal_changed().connect(sigc::mem_fun(*toolbar, &LPEToolbar::change_line_segment_type));
+        auto line_segment_ti = Gtk::manage(new Gtk::ToolItem());
+        line_segment_ti->add(*_line_segment_combo);
+        add(*line_segment_ti);
+        _line_segment_combo->signal_changed().connect(sigc::mem_fun(*this, &LPEToolbar::change_line_segment_type));
     }
+
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 
     /* Display measuring info for selected items */
     {
-        InkToggleAction* act = ink_toggle_action_new( "LPEMeasuringAction",
-                                                      _("Display measuring info"),
-                                                      _("Display measuring info for selected items"),
-                                                      "draw-geometry-show-measuring-info",
-                                                      GTK_ICON_SIZE_MENU );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggle_show_measuring_info), toolbar );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool( "/tools/lpetool/show_measuring_info", true ) );
+        _measuring_item = add_toggle_button(_("Display measuring info"),
+                                            _("Display measuring info for selected items"));
+        _measuring_item->set_icon_name(INKSCAPE_ICON("draw-geometry-show-measuring-info"));
+        _measuring_item->signal_toggled().connect(sigc::mem_fun(*this, &LPEToolbar::toggle_show_measuring_info));
+        _measuring_item->set_active( prefs->getBool( "/tools/lpetool/show_measuring_info", true ) );
     }
 
     // Add the units menu
     {
-        toolbar->_units_action = toolbar->_tracker->createAction( "LPEToolUnitsAction", _("Units"), ("") );
-        gtk_action_group_add_action( mainActions, toolbar->_units_action->gobj() );
-        toolbar->_units_action->signal_changed_after().connect(sigc::mem_fun(*toolbar, &LPEToolbar::unit_changed));
-        toolbar->_units_action->set_sensitive( prefs->getBool("/tools/lpetool/show_measuring_info", true));
+        _units_item = _tracker->create_tool_item(_("Units"), ("") );
+        add(*_units_item);
+        _units_item->signal_changed_after().connect(sigc::mem_fun(*this, &LPEToolbar::unit_changed));
+        _units_item->set_sensitive( prefs->getBool("/tools/lpetool/show_measuring_info", true));
     }
+
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 
     /* Open LPE dialog (to adapt parameters numerically) */
     {
-        InkToggleAction* act = ink_toggle_action_new( "LPEOpenLPEDialogAction",
-                                                      _("Open LPE dialog"),
-                                                      _("Open LPE dialog (to adapt parameters numerically)"),
-                                                      "dialog-geometry",
-                                                      GTK_ICON_SIZE_MENU );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(open_lpe_dialog), desktop );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), FALSE );
+        // TODO: Shouldn't this be a regular Gtk::ToolButton (not toggle)?
+        _open_lpe_dialog_item = add_toggle_button(_("Open LPE dialog"),
+                                                  _("Open LPE dialog (to adapt parameters numerically)"));
+        _open_lpe_dialog_item->set_icon_name(INKSCAPE_ICON("dialog-geometry"));
+        _open_lpe_dialog_item->signal_toggled().connect(sigc::mem_fun(*this, &LPEToolbar::open_lpe_dialog));
+        _open_lpe_dialog_item->set_active(false);
     }
 
-    desktop->connectEventContextChanged(sigc::mem_fun(*toolbar, &LPEToolbar::watch_ec));
+    desktop->connectEventContextChanged(sigc::mem_fun(*this, &LPEToolbar::watch_ec));
 
+    show_all();
+}
+
+GtkWidget *
+LPEToolbar::create(SPDesktop *desktop)
+{
+    auto toolbar = new LPEToolbar(desktop);
     return GTK_WIDGET(toolbar->gobj());
 }
 
@@ -245,7 +202,7 @@ LPEToolbar::mode_changed(int mode)
         bool success = lpetool_try_construction(lc, type);
         if (success) {
             // since the construction was already performed, we set the state back to inactive
-            _mode_action->set_active(0);
+            _mode_buttons[0]->set_active();
             mode = 0;
         } else {
             // switch to the chosen subtool
@@ -262,50 +219,49 @@ LPEToolbar::mode_changed(int mode)
 }
 
 void
-LPEToolbar::toggle_show_bbox(GtkToggleAction *act, gpointer data) {
-    SPDesktop *desktop = static_cast<SPDesktop *>(data);
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+LPEToolbar::toggle_show_bbox() {
+    auto prefs = Inkscape::Preferences::get();
 
-    bool show = gtk_toggle_action_get_active( act );
+    bool show = _show_bbox_item->get_active();
     prefs->setBool("/tools/lpetool/show_bbox",  show);
 
-    if (tools_isactive(desktop, TOOLS_LPETOOL)) {
-        LpeTool *lc = SP_LPETOOL_CONTEXT(desktop->event_context);
+    if (tools_isactive(_desktop, TOOLS_LPETOOL)) {
+        LpeTool *lc = SP_LPETOOL_CONTEXT(_desktop->event_context);
         lpetool_context_reset_limiting_bbox(lc);
     }
 }
 
 void
-LPEToolbar::toggle_set_bbox(GtkToggleAction *act, gpointer data)
+LPEToolbar::toggle_set_bbox()
 {
-    SPDesktop *desktop = static_cast<SPDesktop *>(data);
-    Inkscape::Selection *selection = desktop->selection;
+    auto selection = _desktop->selection;
 
-    Geom::OptRect bbox = selection->visualBounds();
+    auto bbox = selection->visualBounds();
 
     if (bbox) {
         Geom::Point A(bbox->min());
         Geom::Point B(bbox->max());
 
-        A *= desktop->doc2dt();
-        B *= desktop->doc2dt();
+        A *= _desktop->doc2dt();
+        B *= _desktop->doc2dt();
 
         // TODO: should we provide a way to store points in prefs?
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        auto prefs = Inkscape::Preferences::get();
         prefs->setDouble("/tools/lpetool/bbox_upperleftx", A[Geom::X]);
         prefs->setDouble("/tools/lpetool/bbox_upperlefty", A[Geom::Y]);
         prefs->setDouble("/tools/lpetool/bbox_lowerrightx", B[Geom::X]);
         prefs->setDouble("/tools/lpetool/bbox_lowerrighty", B[Geom::Y]);
 
-        lpetool_context_reset_limiting_bbox(SP_LPETOOL_CONTEXT(desktop->event_context));
+        lpetool_context_reset_limiting_bbox(SP_LPETOOL_CONTEXT(_desktop->event_context));
     }
 
-    gtk_toggle_action_set_active(act, false);
+    _bbox_from_selection_item->set_active(false);
 }
 
 void
-LPEToolbar::change_line_segment_type(int mode)
+LPEToolbar::change_line_segment_type()
 {
+    int mode = _line_segment_combo->get_active_row_number();
     using namespace Inkscape::LivePathEffect;
 
     // quit if run by the attr_changed listener
@@ -326,23 +282,21 @@ LPEToolbar::change_line_segment_type(int mode)
 }
 
 void
-LPEToolbar::toggle_show_measuring_info(GtkToggleAction *act, gpointer data)
+LPEToolbar::toggle_show_measuring_info()
 {
-    auto toolbar = reinterpret_cast<LPEToolbar *>(data);
-
-    if (!tools_isactive(toolbar->_desktop, TOOLS_LPETOOL)) {
+    if (!tools_isactive(_desktop, TOOLS_LPETOOL)) {
         return;
     }
 
-    bool show = gtk_toggle_action_get_active( act );
+    bool show = _measuring_item->get_active();
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool("/tools/lpetool/show_measuring_info",  show);
 
-    LpeTool *lc = SP_LPETOOL_CONTEXT(toolbar->_desktop->event_context);
+    LpeTool *lc = SP_LPETOOL_CONTEXT(_desktop->event_context);
     lpetool_show_measuring_info(lc, show);
 
-    toolbar->_units_action->set_sensitive( show );
+    _units_item->set_sensitive( show );
 }
 
 void
@@ -361,14 +315,12 @@ LPEToolbar::unit_changed(int /* NotUsed */)
 }
 
 void
-LPEToolbar::open_lpe_dialog(GtkToggleAction *act, gpointer data)
+LPEToolbar::open_lpe_dialog()
 {
-    SPDesktop *desktop = static_cast<SPDesktop *>(data);
-
-    if (tools_isactive(desktop, TOOLS_LPETOOL)) {
-        sp_action_perform(Inkscape::Verb::get(SP_VERB_DIALOG_LIVE_PATH_EFFECT)->get_action(Inkscape::ActionContext(desktop)), nullptr);
+    if (tools_isactive(_desktop, TOOLS_LPETOOL)) {
+        sp_action_perform(Inkscape::Verb::get(SP_VERB_DIALOG_LIVE_PATH_EFFECT)->get_action(Inkscape::ActionContext(_desktop)), nullptr);
     }
-    gtk_toggle_action_set_active(act, false);
+    _open_lpe_dialog_item->set_active(false);
 }
 
 void
@@ -419,18 +371,18 @@ LPEToolbar::sel_changed(Inkscape::Selection *selection)
             LPELineSegment *lpels = static_cast<LPELineSegment*>(lpe);
             _currentlpe = lpe;
             _currentlpeitem = lpeitem;
-            _line_segment_action->set_sensitive(true);
-            _line_segment_action->set_active( lpels->end_type.get_value() );
+            _line_segment_combo->set_sensitive(true);
+            _line_segment_combo->set_active( lpels->end_type.get_value() );
         } else {
             _currentlpe = nullptr;
             _currentlpeitem = nullptr;
-            _line_segment_action->set_sensitive(false);
+            _line_segment_combo->set_sensitive(false);
         }
 
     } else {
         _currentlpe = nullptr;
         _currentlpeitem = nullptr;
-        _line_segment_action->set_sensitive(false);
+        _line_segment_combo->set_sensitive(false);
     }
 }
 

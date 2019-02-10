@@ -26,20 +26,6 @@
     <toolitem action='TextDirectionAction' />
   </toolbar>
 
-  <toolbar name='LPEToolToolbar'>
-    <toolitem action='LPEToolModeAction' />
-    <separator />
-    <toolitem action='LPEShowBBoxAction' />
-    <toolitem action='LPEBBoxFromSelectionAction' />
-    <separator />
-    <toolitem action='LPELineSegmentAction' />
-    <separator />
-    <toolitem action='LPEMeasuringAction' />
-    <toolitem action='LPEToolUnitsAction' />
-    <separator />
-    <toolitem action='LPEOpenLPEDialogAction' />
-  </toolbar>
-
   <toolbar name='MeshToolbar'>
     <toolitem action='MeshNewTypeAction' />
     <toolitem action='MeshNewFillStrokeAction' />

@@ -219,7 +219,7 @@ static struct {
       SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS, "/tools/calligraphic", N_("Style of new calligraphic strokes")},
     { "/tools/eraser", "eraser_toolbox", Inkscape::UI::Toolbar::EraserToolbar::create, nullptr, "EraserToolbar",
       SP_VERB_CONTEXT_ERASER_PREFS, "/tools/eraser", _("TBD")},
-    { "/tools/lpetool", "lpetool_toolbox", nullptr, Inkscape::UI::Toolbar::LPEToolbar::prep, "LPEToolToolbar",
+    { "/tools/lpetool", "lpetool_toolbox", Inkscape::UI::Toolbar::LPEToolbar::create, nullptr, "LPEToolToolbar",
       SP_VERB_CONTEXT_LPETOOL_PREFS, "/tools/lpetool", _("TBD")},
     // If you change TextToolbar here, change it also in desktop-widget.cpp
     { "/tools/text",   "text_toolbox",   nullptr, Inkscape::UI::Toolbar::TextToolbar::prep, "TextToolbar",

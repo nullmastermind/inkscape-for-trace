@@ -30,13 +30,17 @@
 
 #include "toolbar.h"
 
-class InkSelectOneAction;
 class SPDesktop;
 class SPLPEItem;
 
-typedef struct _GtkActionGroup GtkActionGroup;
+namespace Gtk {
+class ComboBoxText;
+class RadioToolButton;
+}
 
 namespace Inkscape {
+class Selection;
+
 namespace LivePathEffect {
 class Effect;
 }
@@ -47,6 +51,7 @@ class ToolBase;
 }
 
 namespace Widget {
+class ComboToolItem;
 class UnitTracker;
 }
 
@@ -54,9 +59,13 @@ namespace Toolbar {
 class LPEToolbar : public Toolbar {
 private:
     std::unique_ptr<UI::Widget::UnitTracker> _tracker;
-    InkSelectOneAction *_mode_action;
-    InkSelectOneAction *_line_segment_action;
-    InkSelectOneAction *_units_action;
+    std::vector<Gtk::RadioToolButton *> _mode_buttons;
+    Gtk::ToggleToolButton *_show_bbox_item;
+    Gtk::ToggleToolButton *_bbox_from_selection_item;
+    Gtk::ToggleToolButton *_measuring_item;
+    Gtk::ToggleToolButton *_open_lpe_dialog_item;
+    Gtk::ComboBoxText     *_line_segment_combo;
+    UI::Widget::ComboToolItem *_units_item;
 
     bool _freeze;
 
@@ -70,23 +79,19 @@ private:
     void unit_changed(int not_used);
     void sel_modified(Inkscape::Selection *selection, guint flags);
     void sel_changed(Inkscape::Selection *selection);
-    void change_line_segment_type(int mode);
+    void change_line_segment_type();
     void watch_ec(SPDesktop* desktop, UI::Tools::ToolBase* ec);
 
-    static void toggle_show_bbox(GtkToggleAction *act,
-                                 gpointer         data);
-    static void toggle_set_bbox(GtkToggleAction *act,
-                                gpointer         data);
-    static void toggle_show_measuring_info(GtkToggleAction *act,
-                                           gpointer         data);
-    static void open_lpe_dialog(GtkToggleAction *act,
-                                gpointer         data);
+    void toggle_show_bbox();
+    void toggle_set_bbox();
+    void toggle_show_measuring_info();
+    void open_lpe_dialog();
 
 protected:
     LPEToolbar(SPDesktop *desktop);
 
 public:
-    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+    static GtkWidget * create(SPDesktop *desktop);
 };
 
 }
