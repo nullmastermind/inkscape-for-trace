@@ -13,11 +13,14 @@
  */
 
 #include <glibmm.h>
+#include <glibmm/i18n.h>
 
 #include "file.h"
 #include "help.h"
+#include "io/sys.h"
 #include "path-prefix.h"
 #include "ui/dialog/aboutbox.h"
+#include "ui/interface.h"
 
 void sp_help_about()
 {
@@ -28,7 +31,13 @@ void sp_help_open_tutorial(GtkMenuItem *, void* data)
 {
     gchar const *name = static_cast<gchar const *>(data);
     gchar *c = g_build_filename(INKSCAPE_TUTORIALSDIR, name, NULL);
-    sp_file_open(c, nullptr, false, false);
+    if (Inkscape::IO::file_test(c, G_FILE_TEST_EXISTS)) {
+        sp_file_open(c, nullptr, false, false);
+    } else {
+        sp_ui_error_dialog(_("The tutorial files are not installed.\nFor Linux, you may need to install "
+                             "'inkscape-tutorials'; for Windows, please re-run the setup and select 'Tutorials'.\nThe "
+                             "tutorials can also be found online at https://inkscape.org/learn/tutorials/"));
+    }
     g_free(c);
 }
 

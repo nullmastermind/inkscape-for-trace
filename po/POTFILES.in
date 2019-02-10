@@ -107,6 +107,7 @@ src/file.cpp
 src/filter-enums.cpp
 src/gradient-chemistry.cpp
 src/gradient-drag.cpp
+src/help.cpp
 src/helper/gettext.cpp
 src/helper/gettext.h
 src/helper/verb-action.cpp
