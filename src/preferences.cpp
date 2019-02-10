@@ -126,6 +126,15 @@ void Preferences::_loadDefaults()
     // No maximise for Quartz, see lp:1302627
     setInt("/options/defaultwindowsize/value", -1);
 #endif
+
+    // Raw string literal cannot contain translatable strings. Fortunately, we only translate
+    // caligraphy presets.
+    setString("/tools/calligraphic/preset/cp0/name", _("Dip pen"));
+    setString("/tools/calligraphic/preset/cp1/name", _("Marker"));
+    setString("/tools/calligraphic/preset/cp2/name", _("Brush"));
+    setString("/tools/calligraphic/preset/cp3/name", _("Wiggly"));
+    setString("/tools/calligraphic/preset/cp4/name", _("Splotchy"));
+    setString("/tools/calligraphic/preset/cp5/name", _("Tracing"));
 }
 
 /**
