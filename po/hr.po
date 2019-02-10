@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2019-01-10 14:51+0100\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: \n"
@@ -1146,7 +1146,7 @@ msgstr "Strip krema"
 #: ../share/filters/filters.svg.h:779 ../share/filters/filters.svg.h:783
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr "Nerealno 3D sjenjčanje"
 
 #: ../share/filters/filters.svg.h:428
@@ -14550,22 +14550,22 @@ msgid "Go to parent"
 msgstr "Idi na nadređeni objekt"
 
 #: ../src/ui/contextmenu.cpp:106
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "Sakrij odabrane objekte"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "Prikaži objekte ispod"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "Zaključaj odabrane objekte"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "Otključaj objekte ispod"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -14613,12 +14613,12 @@ msgstr "Stil poteza"
 
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
-msgid "Object type"
+msgid "Object Type"
 msgstr "Vrsta objekta"
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr "_Premjesti na sloj …"
 
 #. Create link
@@ -30663,7 +30663,7 @@ msgid "Save a copy of the document under a new name"
 msgstr "Spremi kopiju dokumenta pod novim imenom"
 
 #: ../src/verbs.cpp:2605
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "Spremi predložak …"
 
 #: ../src/verbs.cpp:2606
@@ -30679,7 +30679,7 @@ msgid "Print document"
 msgstr "Ispiši dokument"
 
 #: ../src/verbs.cpp:2611
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "_Počisti dokument"
 
 #: ../src/verbs.cpp:2612
@@ -30879,7 +30879,7 @@ msgid "Duplic_ate"
 msgstr "Dupliciraj"
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr "Dupliciraj odabrane objekte"
 
 #: ../src/verbs.cpp:2667
@@ -31187,7 +31187,7 @@ msgid "Ungroup selected groups"
 msgstr "Razgrupiraj odabrane grupe"
 
 #: ../src/verbs.cpp:2759
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr "_Otpusti odabrane objekte iz grupe"
 
 #: ../src/verbs.cpp:2759
@@ -31623,7 +31623,7 @@ msgid "Toggle lock on current layer"
 msgstr "Otključaj/Zaključaj lokot aktivnog sloja"
 
 #: ../src/verbs.cpp:2890
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "_Prikaži/Sakrij aktivni sloj"
 
 #: ../src/verbs.cpp:2891
@@ -32455,7 +32455,7 @@ msgid "XRay around cursor"
 msgstr "Rendgen oko pokazivača"
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr "Prikaz s uređenim bojama"
 
 #: ../src/verbs.cpp:3130
@@ -32677,7 +32677,7 @@ msgid "View Objects"
 msgstr "Prikaži objekte"
 
 #: ../src/verbs.cpp:3200
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr "Skupine _odabira …"
 
 #: ../src/verbs.cpp:3200
@@ -32701,7 +32701,7 @@ msgid "View Css Dialog"
 msgstr "Prikaži dijalog CSS-a"
 
 #: ../src/verbs.cpp:3204
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "E_fekti staza …"
 
 #: ../src/verbs.cpp:3205
@@ -41342,15 +41342,15 @@ msgid "_Zoom"
 msgstr "Z_umiranje"
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "_Način prikaza"
 
 #: ../share/ui/menus.xml.h:9
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "_Način prikaza boja"
 
 #: ../share/ui/menus.xml.h:10
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "Orijentacija radne površine"
 
 #: ../share/ui/menus.xml.h:11

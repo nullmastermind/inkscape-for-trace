@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2017-02-13 12:13+0000\n"
 "Last-Translator: Tim Sheridan <tghs@tghs.net>\n"
 "Language-Team: British English <en@li.org>\n"
@@ -269,9 +269,8 @@ msgid "Sharpen edges and boundaries within the object, force=0.3"
 msgstr "Sharpen edges and boundaries within the object, force=0.3"
 
 #: ../share/filters/filters.svg.h:74
-#, fuzzy
 msgid "Oil Painting"
-msgstr "Oil painting"
+msgstr "Oil Painting"
 
 #: ../share/filters/filters.svg.h:75 ../share/filters/filters.svg.h:79
 #: ../share/filters/filters.svg.h:83 ../share/filters/filters.svg.h:447
@@ -1145,9 +1144,8 @@ msgstr "Comics Cream"
 #: ../share/filters/filters.svg.h:779 ../share/filters/filters.svg.h:783
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
-#, fuzzy
-msgid "Non-realistic 3D Shaders"
-msgstr "Non realistic 3D shaders"
+msgid "Non-Realistic 3D Shaders"
+msgstr "Non-Realistic 3D shaders"
 
 #: ../share/filters/filters.svg.h:428
 msgid "Comics shader with creamy waves transparency"
@@ -1166,9 +1164,8 @@ msgstr ""
 "lines at their crossings"
 
 #: ../share/filters/filters.svg.h:434
-#, fuzzy
 msgid "Dark and Glow"
-msgstr "Dark And Glow"
+msgstr "Dark and Glow"
 
 #: ../share/filters/filters.svg.h:436
 msgid "Darkens the edge with an inner blur and adds a flexible glow"
@@ -1514,9 +1511,8 @@ msgid "Pixellize"
 msgstr "Pixellise"
 
 #: ../share/filters/filters.svg.h:591
-#, fuzzy
 msgid "Pixel Tools"
-msgstr "Pixel tools"
+msgstr "Pixel Tools"
 
 #: ../share/filters/filters.svg.h:592
 msgid "Reduce or remove antialiasing around shapes"
@@ -1981,9 +1977,8 @@ msgstr ""
 "Render Cyan, Magenta and Yellow channels with a colourisable background"
 
 #: ../share/filters/filters.svg.h:834
-#, fuzzy
 msgid "Contouring Table"
-msgstr "Contouring table"
+msgstr "Contouring Table"
 
 #: ../share/filters/filters.svg.h:836
 msgid "Blurred multiple contours for objects"
@@ -1998,9 +1993,8 @@ msgid "Converts blurred contour to posterized steps"
 msgstr "Converts blurred contour to posterised steps"
 
 #: ../share/filters/filters.svg.h:842
-#, fuzzy
 msgid "Contouring Discrete"
-msgstr "Contouring discrete"
+msgstr "Contouring Discrete"
 
 #: ../share/filters/filters.svg.h:844
 msgid "Sharp multiple contour for objects"
@@ -6977,9 +6971,8 @@ msgstr ""
 "backgrounds"
 
 #: ../src/extension/internal/filter/color.h:1485
-#, fuzzy
 msgid "Quadritone Fantasy"
-msgstr "Quadritone fantasy"
+msgstr "Quadritone Fantasy"
 
 #: ../src/extension/internal/filter/color.h:1487
 msgid "Hue distribution (°)"
@@ -7674,9 +7667,8 @@ msgid "Simple posterizing effect"
 msgstr "Simple posterising effect"
 
 #: ../src/extension/internal/filter/protrusions.h:49
-#, fuzzy
 msgid "Snow Crest"
-msgstr "Snow crest"
+msgstr "Snow Crest"
 
 #: ../src/extension/internal/filter/protrusions.h:51
 msgid "Drift Size"
@@ -14656,27 +14648,23 @@ msgid "Go to parent"
 msgstr "Go to parent"
 
 #: ../src/ui/contextmenu.cpp:106
-#, fuzzy
-msgid "Hide selected objects"
-msgstr "Duplicate selected objects"
+msgid "Hide Selected Objects"
+msgstr "Hide Selected Objects"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
-#, fuzzy
-msgid "Unhide objects below"
-msgstr "Unhide objects"
+msgid "Unhide Objects Below"
+msgstr "Unhide Objects Below"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
-#, fuzzy
-msgid "Lock selected objects"
-msgstr "Group selected objects"
+msgid "Lock Selected Objects"
+msgstr "Lock Selected Objects"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
-#, fuzzy
-msgid "Unlock objects below"
-msgstr "Unlock objects"
+msgid "Unlock Objects Below"
+msgstr "Unlock Objects Below"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
 #: ../src/ui/contextmenu.cpp:154
@@ -14723,13 +14711,13 @@ msgstr "Stroke Style"
 
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
-msgid "Object type"
-msgstr "Object type"
+msgid "Object Type"
+msgstr "Object Type"
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
-msgid "_Move to layer ..."
-msgstr "_Move to layer ..."
+msgid "_Move to Layer..."
+msgstr "_Move to Layer..."
 
 #. Create link
 #: ../src/ui/contextmenu.cpp:433
@@ -30751,9 +30739,8 @@ msgid "Save a copy of the document under a new name"
 msgstr "Save a copy of the document under a new name"
 
 #: ../src/verbs.cpp:2605
-#, fuzzy
-msgid "Save template ..."
-msgstr "_Templates..."
+msgid "Save Template..."
+msgstr "Save Template..."
 
 #: ../src/verbs.cpp:2606
 #, fuzzy
@@ -30769,8 +30756,8 @@ msgid "Print document"
 msgstr "Print document"
 
 #: ../src/verbs.cpp:2611
-msgid "Clean _up document"
-msgstr "Clean _up document"
+msgid "Clean _Up Document"
+msgstr "Clean _Up Document"
 
 #: ../src/verbs.cpp:2612
 msgid ""
@@ -30973,8 +30960,8 @@ msgid "Duplic_ate"
 msgstr "Duplic_ate"
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
-msgstr "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
+msgstr "Duplicate Selected Objects"
 
 #: ../src/verbs.cpp:2667
 msgid "Create Clo_ne"
@@ -31286,8 +31273,8 @@ msgid "Ungroup selected groups"
 msgstr "Ungroup selected groups"
 
 #: ../src/verbs.cpp:2759
-msgid "_Pop selected objects out of group"
-msgstr "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
+msgstr "_Pop Selected Objects out of Group"
 
 #: ../src/verbs.cpp:2759
 msgid "Pop selected objects out of group"
@@ -31731,8 +31718,8 @@ msgid "Toggle lock on current layer"
 msgstr "Toggle lock on current layer"
 
 #: ../src/verbs.cpp:2890
-msgid "_Show/hide Current Layer"
-msgstr "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
+msgstr "_Show/Hide Current Layer"
 
 #: ../src/verbs.cpp:2891
 msgid "Toggle visibility of current layer"
@@ -32579,8 +32566,8 @@ msgid "XRay around cursor"
 msgstr " under cursor"
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
-msgstr "Colour-managed view"
+msgid "Color-Managed View"
+msgstr "Colour-Managed View"
 
 #: ../src/verbs.cpp:3130
 msgid "Toggle color-managed display for this document window"
@@ -32803,8 +32790,8 @@ msgid "View Objects"
 msgstr "View Objects"
 
 #: ../src/verbs.cpp:3200
-msgid "Selection se_ts..."
-msgstr "Selection se_ts..."
+msgid "Selection Se_ts..."
+msgstr "Selection Se_ts..."
 
 #: ../src/verbs.cpp:3200
 msgid "View Tags"
@@ -32828,8 +32815,8 @@ msgid "View Css Dialog"
 msgstr ""
 
 #: ../src/verbs.cpp:3204
-msgid "Path E_ffects ..."
-msgstr "Path E_ffects ..."
+msgid "Path E_ffects..."
+msgstr "Path E_ffects..."
 
 #: ../src/verbs.cpp:3205
 msgid "Manage, edit, and apply path effects"
@@ -41416,17 +41403,16 @@ msgid "_Zoom"
 msgstr "_Zoom"
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
-msgstr "_Display mode"
+msgid "_Display Mode"
+msgstr "_Display Mode"
 
 #: ../share/ui/menus.xml.h:9
-msgid "_Color display mode"
-msgstr "_Colour display mode"
+msgid "_Color Display Mode"
+msgstr "_Colour Display Mode"
 
 #: ../share/ui/menus.xml.h:10
-#, fuzzy
-msgid "_Canvas orientation"
-msgstr "Page orientation:"
+msgid "_Canvas Orientation"
+msgstr "_Canvas Orientation:"
 
 #: ../share/ui/menus.xml.h:11
 msgid "Sh_ow/Hide"

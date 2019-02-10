@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2009-07-09 22:04+0100\n"
 "Last-Translator: Aleksandar Marković <alleksandar.markovic@gmail.com>\n"
 "Language-Team: Serbian <gnom@prevod.org>\n"
@@ -1231,7 +1231,7 @@ msgstr "Stripski krem"
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
 #, fuzzy
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr "Nerelaistična senčenja"
 
 #: ../share/filters/filters.svg.h:428
@@ -15465,25 +15465,25 @@ msgstr "Prelazak na roditeljski sloj"
 
 #: ../src/ui/contextmenu.cpp:106
 #, fuzzy
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "Udvostručuje izabrane objekte"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
 #, fuzzy
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "Objekat prikazan"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
 #, fuzzy
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "Grupiše izabrane objekte"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
 #, fuzzy
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "Objekat otključan"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -15534,12 +15534,12 @@ msgstr "_Stilom linije"
 
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
-msgid "Object type"
+msgid "Object Type"
 msgstr "_Vrstom objekta"
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr "_Premesti na sloj..."
 
 #. Create link
@@ -32179,7 +32179,7 @@ msgstr "Čuva kopiju dokumenta pod novim imenom"
 
 #: ../src/verbs.cpp:2605
 #, fuzzy
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "Nova pomoću _šablona..."
 
 #: ../src/verbs.cpp:2606
@@ -32196,7 +32196,7 @@ msgid "Print document"
 msgstr "Štampa dokument"
 
 #: ../src/verbs.cpp:2611
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "O_čisti dokument"
 
 #: ../src/verbs.cpp:2612
@@ -32400,7 +32400,7 @@ msgid "Duplic_ate"
 msgstr "Ud_vostruči"
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr "Udvostručuje izabrane objekte"
 
 #: ../src/verbs.cpp:2667
@@ -32717,7 +32717,7 @@ msgstr "Rastavlja izabrane grupe u pojedinačne objekte"
 
 #: ../src/verbs.cpp:2759
 #, fuzzy
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr "Grupiše izabrane objekte"
 
 #: ../src/verbs.cpp:2759
@@ -33163,7 +33163,7 @@ msgid "Toggle lock on current layer"
 msgstr "Menja stanje zaključanosti trenutnog sloja"
 
 #: ../src/verbs.cpp:2890
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "_Prikaži/sakrij trenutni sloj"
 
 #: ../src/verbs.cpp:2891
@@ -34031,7 +34031,7 @@ msgid "XRay around cursor"
 msgstr " pod kursorom"
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr "Prikaz prilagođenim bojama"
 
 #: ../src/verbs.cpp:3130
@@ -34262,7 +34262,7 @@ msgstr "Objekat"
 
 #: ../src/verbs.cpp:3200
 #, fuzzy
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr "Izbor"
 
 #: ../src/verbs.cpp:3200
@@ -34288,7 +34288,7 @@ msgid "View Css Dialog"
 msgstr ""
 
 #: ../src/verbs.cpp:3204
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "_Efekti linije..."
 
 #: ../src/verbs.cpp:3205
@@ -43056,16 +43056,16 @@ msgid "_Zoom"
 msgstr "Uve_ćanje"
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "_Režim prikaza"
 
 #: ../share/ui/menus.xml.h:9
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "_Režim prikaza boje"
 
 #: ../share/ui/menus.xml.h:10
 #, fuzzy
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "Orijentacija strane:"
 
 #: ../share/ui/menus.xml.h:11

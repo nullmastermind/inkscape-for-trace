@@ -5,7 +5,7 @@
   <id>org.inkscape.Inkscape</id>
   <launchable type="desktop-id">org.inkscape.Inkscape.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>GPL-2.0+</project_license>
+  <project_license>GPL-2.0-or-later</project_license>
   <translation type="gettext">inkscape</translation>
   <name>Inkscape</name>
   <summary>Vector Graphics Editor</summary>
@@ -24,10 +24,14 @@
       open, community-oriented development.
     </p>
   </description>
+  <categories>
+    <category>Graphics</category>
+  </categories>
   <url type="homepage">https://inkscape.org</url>
   <url type="bugtracker">https://inkscape.org/contribute/report-bugs</url>
-  <url type="donation">https://inkscape.org/support-us/donate</url>
   <url type="help">https://inkscape.org/learn</url>
+  <url type="donation">https://inkscape.org/support-us/donate</url>
+  <url type="translate">https://inkscape.org/contribute/translations</url>
   <screenshots>
     <screenshot type="default">
       <image>https://media.inkscape.org/media/resources/file/Screenshot_Freedom_Machine_Inkscape_master_FB3NeUU.png</image>
@@ -35,6 +39,18 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.92.4" date="2019-01-16">
+      <description>
+        <ul>
+          <li>Improvements to the align and distribute tool</li>
+          <li>Support for piping standard input and output</li>
+          <li>The color slider can be constrained to stepped values</li>
+          <li>Performance improvements</li>
+          <li>Many bugfixes</li>
+          <li>And many more! See the full list at http://wiki.inkscape.org/wiki/index.php/Release_notes/0.92.4</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.92.3" date="2018-03-23">
       <description>
         <ul>

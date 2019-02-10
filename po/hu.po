@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2019-01-14 12:18+0100\n"
 "Last-Translator: Gyuris Gellért <bubu@ujevangelizacio.hu>\n"
 "Language-Team: Hungarian (https://www.transifex.com/fsf-hu/teams/77907/hu/)\n"
@@ -1159,7 +1159,7 @@ msgstr "Képregény, krémes"
 #: ../share/filters/filters.svg.h:779 ../share/filters/filters.svg.h:783
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr "Nem valósághű 3D árnyalók"
 
 #: ../share/filters/filters.svg.h:428
@@ -14680,22 +14680,22 @@ msgid "Go to parent"
 msgstr "Ugrás a szülőre"
 
 #: ../src/ui/contextmenu.cpp:106
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "Kijelölt objektumok elrejtése"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "Alábbi objektumok rejtettségének megszüntetése"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "Kijelölt objektumok zárolása"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "Alábbi objektumok zárolásának megszüntetése"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -14743,12 +14743,12 @@ msgstr "Körvonalstílus"
 
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
-msgid "Object type"
+msgid "Object Type"
 msgstr "Objektumtípus"
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr "_Áthelyezés rétegre ..."
 
 #. Create link
@@ -30979,7 +30979,7 @@ msgid "Save a copy of the document under a new name"
 msgstr "Egy példány mentése a dokumentumból új névvel"
 
 #: ../src/verbs.cpp:2605
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "Sablon mentése ..."
 
 #: ../src/verbs.cpp:2606
@@ -30995,7 +30995,7 @@ msgid "Print document"
 msgstr "Dokumentum nyomtatása"
 
 #: ../src/verbs.cpp:2611
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "Dokumentum _tisztítása"
 
 #: ../src/verbs.cpp:2612
@@ -31202,7 +31202,7 @@ msgid "Duplic_ate"
 msgstr "Kettő_zés"
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr "A kijelölt objektumok kettőzése"
 
 #: ../src/verbs.cpp:2667
@@ -31514,7 +31514,7 @@ msgid "Ungroup selected groups"
 msgstr "A kijelölt csoportok szétbontása"
 
 #: ../src/verbs.cpp:2759
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr "Kijelölt objektumok ki_pöckölése a csoportból"
 
 #: ../src/verbs.cpp:2759
@@ -31954,7 +31954,7 @@ msgid "Toggle lock on current layer"
 msgstr "Az aktuális réteg zárolásának átkapcsolása"
 
 #: ../src/verbs.cpp:2890
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "_Aktuális réteg megjelenítése/elrejtése"
 
 #: ../src/verbs.cpp:2891
@@ -32808,7 +32808,7 @@ msgid "XRay around cursor"
 msgstr "XRay a kurzor körül"
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr "Színkezelési nézet"
 
 #: ../src/verbs.cpp:3130
@@ -33041,7 +33041,7 @@ msgid "View Objects"
 msgstr "Objektumok megjelenítése"
 
 #: ../src/verbs.cpp:3200
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr "_Kijelöléskészletek..."
 
 #: ../src/verbs.cpp:3200
@@ -33065,7 +33065,7 @@ msgid "View Css Dialog"
 msgstr "CSS-párbeszédablak megjelenítése"
 
 #: ../src/verbs.cpp:3204
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "Útvonal_effektusok…"
 
 #: ../src/verbs.cpp:3205
@@ -41822,15 +41822,15 @@ msgid "_Zoom"
 msgstr "Nag_yítás"
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "Megjelenítési mó_d"
 
 #: ../share/ui/menus.xml.h:9
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "_Színes megjelenítési mód"
 
 #: ../share/ui/menus.xml.h:10
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "_Vászontájolás"
 
 #: ../share/ui/menus.xml.h:11

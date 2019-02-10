@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2016-12-31 14:38+0200\n"
 "Last-Translator: Jānis Eisaks <je@dv.lv>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
@@ -1150,7 +1150,7 @@ msgstr "Krēmkrāsas komikss"
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
 #, fuzzy
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr "Nereālie 3D ēnotāji"
 
 #: ../share/filters/filters.svg.h:428
@@ -14721,25 +14721,25 @@ msgstr "Pāriet pie vecāka"
 
 #: ../src/ui/contextmenu.cpp:106
 #, fuzzy
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "Dublēt iezīmētos objektus"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
 #, fuzzy
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "Parādīt objektus"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
 #, fuzzy
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "Grupēt iezīmētos objektus"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
 #, fuzzy
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "Atslēgt objektus"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -14787,12 +14787,12 @@ msgstr "Apmales stils"
 
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
-msgid "Object type"
+msgid "Object Type"
 msgstr "Objekta tips"
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr "Pārvietot uz slāni..."
 
 #. Create link
@@ -30967,7 +30967,7 @@ msgstr "Saglabāt pašreizējā dokumenta kopiju ar jaunu nosaukumu"
 
 #: ../src/verbs.cpp:2605
 #, fuzzy
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "Saga_taves..."
 
 #: ../src/verbs.cpp:2606
@@ -30984,7 +30984,7 @@ msgid "Print document"
 msgstr "Drukāt dokumentu"
 
 #: ../src/verbs.cpp:2611
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "Uzkopt dokumentu"
 
 #: ../src/verbs.cpp:2612
@@ -31189,7 +31189,7 @@ msgid "Duplic_ate"
 msgstr "Du_blēt"
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr "Dublēt iezīmētos objektus"
 
 #: ../src/verbs.cpp:2667
@@ -31501,7 +31501,7 @@ msgid "Ungroup selected groups"
 msgstr "Atgrupēt iezīmētās grupas"
 
 #: ../src/verbs.cpp:2759
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr "Izcelt atlasītos objektu ārā no gru_pas"
 
 #: ../src/verbs.cpp:2759
@@ -31938,7 +31938,7 @@ msgid "Toggle lock on current layer"
 msgstr "Pārslēdz pašreizējā slāņa slēdzeni"
 
 #: ../src/verbs.cpp:2890
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "Paslēpt/rādīt pašreizējo slāni"
 
 #: ../src/verbs.cpp:2891
@@ -32790,7 +32790,7 @@ msgid "XRay around cursor"
 msgstr " zem kursora"
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr "Skats ar krāsu vadību"
 
 #: ../src/verbs.cpp:3130
@@ -33017,7 +33017,7 @@ msgid "View Objects"
 msgstr "Skatīt objektus"
 
 #: ../src/verbs.cpp:3200
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr "A_tlases kopas..."
 
 #: ../src/verbs.cpp:3200
@@ -33042,7 +33042,7 @@ msgid "View Css Dialog"
 msgstr ""
 
 #: ../src/verbs.cpp:3204
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "Ceļa e_fekti..."
 
 #: ../src/verbs.cpp:3205
@@ -41668,16 +41668,16 @@ msgid "_Zoom"
 msgstr "Tālummaiņa"
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "Ekrāna režīms"
 
 #: ../share/ui/menus.xml.h:9
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "_Krāsu ekrāna režīms"
 
 #: ../share/ui/menus.xml.h:10
 #, fuzzy
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "Lapas orientācija"
 
 #: ../share/ui/menus.xml.h:11

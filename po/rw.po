@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2006-11-05 18:09+0100\n"
 "Last-Translator: Steve Murphy <murf@e-tools.com>\n"
 "Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
@@ -1508,7 +1508,7 @@ msgstr "Umutuku:"
 #: ../share/filters/filters.svg.h:779 ../share/filters/filters.svg.h:783
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr ""
 
 #: ../share/filters/filters.svg.h:428
@@ -17712,25 +17712,25 @@ msgstr ""
 
 #: ../src/ui/contextmenu.cpp:106
 #, fuzzy
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "Byahiswemo Ibintu"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
 #, fuzzy
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "Ibintu"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
 #, fuzzy
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "Byahiswemo Ibintu"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
 #, fuzzy
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "Ibintu"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -17791,7 +17791,7 @@ msgstr "IMISUSIRE"
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
 #, fuzzy
-msgid "Object type"
+msgid "Object Type"
 msgstr "Igikoresho"
 
 # #-#-#-#-#  officecfg.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -17803,7 +17803,7 @@ msgstr "Igikoresho"
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
 #, fuzzy
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr "Ntoya"
 
 # 1246
@@ -36715,7 +36715,7 @@ msgstr "Kubika Inyandiko Gishya Izina:"
 
 #: ../src/verbs.cpp:2605
 #, fuzzy
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "Bika nka..."
 
 #: ../src/verbs.cpp:2606
@@ -36738,7 +36738,7 @@ msgstr "Gucapa Inyandiko"
 # sch/source\ui\app\strings.src:STR_SAVE_DOCUMENT.text
 #: ../src/verbs.cpp:2611
 #, fuzzy
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "Kubika inyandiko"
 
 #: ../src/verbs.cpp:2612
@@ -36967,7 +36967,7 @@ msgstr "Gusubiramo"
 
 #: ../src/verbs.cpp:2665
 #, fuzzy
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr "Byahiswemo Ibintu"
 
 # 1246
@@ -37367,7 +37367,7 @@ msgstr "Byahiswemo Itsinda"
 
 #: ../src/verbs.cpp:2759
 #, fuzzy
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr "Byahiswemo Ibintu"
 
 #: ../src/verbs.cpp:2759
@@ -37875,7 +37875,7 @@ msgstr "Umubarendanga Bya i KIGEZWEHO Ipaji"
 
 #: ../src/verbs.cpp:2890
 #, fuzzy
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "Imbibi"
 
 #: ../src/verbs.cpp:2891
@@ -38853,7 +38853,7 @@ msgid "XRay around cursor"
 msgstr ""
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr ""
 
 #: ../src/verbs.cpp:3130
@@ -39110,7 +39110,7 @@ msgstr "Igikoresho"
 # sc/source\ui\src\miscdlgs.src:RID_SCDLG_INSCONT.FL_FRAME.text
 #: ../src/verbs.cpp:3200
 #, fuzzy
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr "Ihitamo"
 
 # #-#-#-#-#  offmgr.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -39149,7 +39149,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:3204
 #, fuzzy
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "IMISUSIRE"
 
 #: ../src/verbs.cpp:3205
@@ -49082,18 +49082,18 @@ msgstr "Ihindurangano"
 # offmgr/source\offapp\dialog\optgdlg.src:OFA_TP_VIEW.GB_APPEARANCE.text
 #: ../share/ui/menus.xml.h:8
 #, fuzzy
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "Kugaragaza"
 
 # offmgr/source\offapp\dialog\optgdlg.src:OFA_TP_VIEW.GB_APPEARANCE.text
 #: ../share/ui/menus.xml.h:9
 #, fuzzy
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "Kugaragaza"
 
 #: ../share/ui/menus.xml.h:10
 #, fuzzy
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "Icyerekezo:"
 
 #: ../share/ui/menus.xml.h:11

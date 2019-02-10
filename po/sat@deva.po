@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2013-06-25 12:08+0530\n"
 "Last-Translator: Louni Kandulna <kandulna.louni@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1217,7 +1217,7 @@ msgstr "कॉमिक्स क्रीम"
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
 #, fuzzy
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr "बाङ सारियाक् 3डी  उमुलाक्  "
 
 #: ../share/filters/filters.svg.h:428
@@ -15436,25 +15436,25 @@ msgstr "मुल रे चालाव"
 
 #: ../src/ui/contextmenu.cpp:106
 #, fuzzy
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "बाछावाक जिनिस रेयाक् नोकोल मे"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
 #, fuzzy
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "जिनिस उकु सोदोर मे"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
 #, fuzzy
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "बाछावाक  जिनिस को  रेयाक् दोल तेयार मे"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
 #, fuzzy
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "जिनिस रेयाक् कुलुप झिज"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -15510,12 +15510,12 @@ msgstr "स्ट्रोक हुना़र"
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
 #, fuzzy
-msgid "Object type"
+msgid "Object Type"
 msgstr "जिनिस रेयाक् रोकोम  "
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr ""
 
 #. Create link
@@ -32123,7 +32123,7 @@ msgstr "मित् नावा ञुतुम भितिर दोलि�
 
 #: ../src/verbs.cpp:2605
 #, fuzzy
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "मित् नोकोल सांचाव मे . "
 
 #: ../src/verbs.cpp:2606
@@ -32141,7 +32141,7 @@ msgstr "दोलिल  प्रिंट मे"
 
 #: ../src/verbs.cpp:2611
 #, fuzzy
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "दोलिल बेबोसता बाङ दाड़ेयाक् ना"
 
 #: ../src/verbs.cpp:2612
@@ -32348,7 +32348,7 @@ msgid "Duplic_ate"
 msgstr "नोक़ोल "
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr "बाछावाक जिनिस रेयाक् नोकोल मे"
 
 #: ../src/verbs.cpp:2667
@@ -32668,7 +32668,7 @@ msgstr "बाचावाक दोल को दोल छाडाय मे"
 
 #: ../src/verbs.cpp:2759
 #, fuzzy
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr "बाछावाक  जिनिस को  रेयाक् दोल तेयार मे"
 
 #: ../src/verbs.cpp:2759
@@ -33131,7 +33131,7 @@ msgstr "नितोगाक् आटाल को एकलाय मे . "
 
 #: ../src/verbs.cpp:2890
 #, fuzzy
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "_एटाक् आटाल को उकुय मे /उदुग मे"
 
 #: ../src/verbs.cpp:2891
@@ -34027,7 +34027,7 @@ msgid "XRay around cursor"
 msgstr "कर्सर रेयाक् लातार"
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr "रोङ बेबोसता ञेलोगाक"
 
 #: ../src/verbs.cpp:3130
@@ -34259,7 +34259,7 @@ msgstr "जिनिस को"
 
 #: ../src/verbs.cpp:3200
 #, fuzzy
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr "बाछाव"
 
 #: ../src/verbs.cpp:3200
@@ -34286,7 +34286,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:3204
 #, fuzzy
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "होर पोरभाव सासापड़ावाक . ..."
 
 #: ../src/verbs.cpp:3205
@@ -43116,17 +43116,17 @@ msgid "_Zoom"
 msgstr "_हुडिञ माराङ तेयार"
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "_उदुक् सोदोर ओबोसता"
 
 #: ../share/ui/menus.xml.h:9
 #, fuzzy
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "_उदुक् सोदोर ओबोसता"
 
 #: ../share/ui/menus.xml.h:10
 #, fuzzy
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "ओनोल ओरियान टेसोन   . "
 
 #: ../share/ui/menus.xml.h:11

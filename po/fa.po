@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-05 20:33+0100\n"
+"POT-Creation-Date: 2019-02-08 13:32+0000\n"
 "PO-Revision-Date: 2010-03-29 23:38+0330\n"
 "Last-Translator: Ali Ghanavatian <ghanvatian.ali@gmail.com>\n"
 "Language-Team: Farsi <fa@li.org>\n"
@@ -1209,7 +1209,7 @@ msgstr "کارتون کرمی"
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
 #, fuzzy
-msgid "Non-realistic 3D Shaders"
+msgid "Non-Realistic 3D Shaders"
 msgstr "سایه‌زن‌های ۳بعدی غیر واقعی"
 
 #: ../share/filters/filters.svg.h:428
@@ -14951,25 +14951,25 @@ msgstr ""
 
 #: ../src/ui/contextmenu.cpp:106
 #, fuzzy
-msgid "Hide selected objects"
+msgid "Hide Selected Objects"
 msgstr "گروه‌بندی اشیاء انتخاب شده"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
 #, fuzzy
-msgid "Unhide objects below"
+msgid "Unhide Objects Below"
 msgstr "_شئ"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
 #, fuzzy
-msgid "Lock selected objects"
+msgid "Lock Selected Objects"
 msgstr "گروه‌بندی اشیاء انتخاب شده"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
 #, fuzzy
-msgid "Unlock objects below"
+msgid "Unlock Objects Below"
 msgstr "_شئ"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
@@ -15024,13 +15024,13 @@ msgstr "خط حاشیه به _مسیر"
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
 #, fuzzy
-msgid "Object type"
+msgid "Object Type"
 msgstr "_شئ"
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
 #, fuzzy
-msgid "_Move to layer ..."
+msgid "_Move to Layer..."
 msgstr "لایه حذف شد."
 
 #. Create link
@@ -30748,7 +30748,7 @@ msgstr "ذخیره کردن یک کپی از سند با اسمی جدید"
 
 #: ../src/verbs.cpp:2605
 #, fuzzy
-msgid "Save template ..."
+msgid "Save Template..."
 msgstr "_سواچ‌ها..."
 
 #: ../src/verbs.cpp:2606
@@ -30766,7 +30766,7 @@ msgstr "چاپ سند"
 
 #: ../src/verbs.cpp:2611
 #, fuzzy
-msgid "Clean _up document"
+msgid "Clean _Up Document"
 msgstr "ذخیره سند"
 
 #: ../src/verbs.cpp:2612
@@ -30970,7 +30970,7 @@ msgid "Duplic_ate"
 msgstr "تک_ثیر"
 
 #: ../src/verbs.cpp:2665
-msgid "Duplicate selected objects"
+msgid "Duplicate Selected Objects"
 msgstr ""
 
 #: ../src/verbs.cpp:2667
@@ -31284,7 +31284,7 @@ msgstr "منفرد سازی گروه‌های انتخاب شده"
 
 #: ../src/verbs.cpp:2759
 #, fuzzy
-msgid "_Pop selected objects out of group"
+msgid "_Pop Selected Objects out of Group"
 msgstr "گروه‌بندی اشیاء انتخاب شده"
 
 #: ../src/verbs.cpp:2759
@@ -31748,7 +31748,7 @@ msgstr "پایین آوردن لایه‌ی فعلی"
 
 #: ../src/verbs.cpp:2890
 #, fuzzy
-msgid "_Show/hide Current Layer"
+msgid "_Show/Hide Current Layer"
 msgstr "_حذف لایه‌ی فعلی"
 
 #: ../src/verbs.cpp:2891
@@ -32623,7 +32623,7 @@ msgid "XRay around cursor"
 msgstr ""
 
 #: ../src/verbs.cpp:3129
-msgid "Color-managed view"
+msgid "Color-Managed View"
 msgstr "نمایش مدیریت-رنگ"
 
 #: ../src/verbs.cpp:3130
@@ -32853,7 +32853,7 @@ msgstr "_شئ"
 
 #: ../src/verbs.cpp:3200
 #, fuzzy
-msgid "Selection se_ts..."
+msgid "Selection Se_ts..."
 msgstr "انت_خاب"
 
 #: ../src/verbs.cpp:3200
@@ -32879,7 +32879,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:3204
 #, fuzzy
-msgid "Path E_ffects ..."
+msgid "Path E_ffects..."
 msgstr "ویرایشگر افکت مسیر..."
 
 #: ../src/verbs.cpp:3205
@@ -41223,17 +41223,17 @@ msgid "_Zoom"
 msgstr "ز_وم"
 
 #: ../share/ui/menus.xml.h:8
-msgid "_Display mode"
+msgid "_Display Mode"
 msgstr "حالت _نمایش"
 
 #: ../share/ui/menus.xml.h:9
 #, fuzzy
-msgid "_Color display mode"
+msgid "_Color Display Mode"
 msgstr "حالت _نمایش"
 
 #: ../share/ui/menus.xml.h:10
 #, fuzzy
-msgid "_Canvas orientation"
+msgid "_Canvas Orientation"
 msgstr "ف_صل مشترک"
 
 #: ../share/ui/menus.xml.h:11

@@ -103,7 +103,7 @@
        <verb verb-id="ZoomPrev" />
        <verb verb-id="ZoomNext" />
      </submenu>
-       <submenu _name="_Display mode">
+       <submenu _name="_Display Mode">
          <verb verb-id="ViewModeToggle"/>
          <verb verb-id="ViewModeNormal" radio="yes" default="yes"/>
          <verb verb-id="ViewModeNoFilters" radio="yes"/>
@@ -113,7 +113,7 @@
          <!--verb verb-id="ViewModePrintColorsPreview" radio="yes"/-->
          <!--verb verb-id="DialogPrintColorsPreview" /-->
        </submenu>
-       <submenu _name="_Color display mode">
+       <submenu _name="_Color Display Mode">
          <verb verb-id="ViewColorModeToggle"/>
          <verb verb-id="ViewColorModeNormal" radio="yes" default="yes"/>
          <verb verb-id="ViewColorModeGrayscale" radio="yes"/>
@@ -121,7 +121,7 @@
          <!--verb verb-id="ViewColorModePrintColorsPreview" radio="yes"/-->
          <!--verb verb-id="DialogPrintColorsPreview" /-->
        </submenu>
-       <submenu _name="_Canvas orientation">
+       <submenu _name="_Canvas Orientation">
          <verb verb-id="FlipHorizontal"/>
          <verb verb-id="FlipVertical"/>
          <verb verb-id="FlipNone"/>

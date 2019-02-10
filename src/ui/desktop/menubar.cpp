@@ -464,7 +464,7 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                 recentchoosermenu->signal_item_activated().connect(
                     sigc::bind<Gtk::RecentChooserMenu*>(sigc::ptr_fun(&sp_recent_open), recentchoosermenu));
 
-                Gtk::MenuItem* menuitem = Gtk::manage(new Gtk::MenuItem(_("Open _Recent")));
+                Gtk::MenuItem* menuitem = Gtk::manage(new Gtk::MenuItem(_("Open _Recent"), true));
                 menuitem->set_submenu(*recentchoosermenu);
                 menu->append(*menuitem);
                 continue;
