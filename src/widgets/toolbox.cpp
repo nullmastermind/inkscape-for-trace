@@ -230,7 +230,7 @@ static struct {
       SP_VERB_INVALID, nullptr, nullptr},
     { "/tools/gradient", "gradient_toolbox", Inkscape::UI::Toolbar::GradientToolbar::create, nullptr, "GradientToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
-    { "/tools/mesh", "mesh_toolbox", nullptr, Inkscape::UI::Toolbar::MeshToolbar::prep, "MeshToolbar",
+    { "/tools/mesh", "mesh_toolbox", Inkscape::UI::Toolbar::MeshToolbar::create, nullptr, "MeshToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
 #if HAVE_POTRACE
     { "/tools/paintbucket",  "paintbucket_toolbox", Inkscape::UI::Toolbar::PaintbucketToolbar::create, nullptr, "PaintbucketToolbar",

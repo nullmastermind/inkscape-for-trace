@@ -19,36 +19,44 @@
 
 #include <gtkmm/adjustment.h>
 
-class InkSelectOneAction;
 class SPDesktop;
 class SPObject;
 
-typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _InkToggleAction InkToggleAction;
+namespace Gtk {
+class ComboBoxText;
+class RadioToolButton;
+}
 
 namespace Inkscape {
 class Selection;
 
 namespace UI {
-class PrefPusher;
+class SimplePrefPusher;
 
 namespace Tools {
 class ToolBase;
 }
 
+namespace Widget {
+class SpinButtonToolItem;
+}
+
 namespace Toolbar {
 class MeshToolbar : public Toolbar {
 private:
-    InkSelectOneAction *_new_type_mode;
-    InkSelectOneAction *_new_fillstroke_mode;
-    InkSelectOneAction *_select_type_action;
+    std::vector<Gtk::RadioToolButton *> _new_type_buttons;
+    std::vector<Gtk::RadioToolButton *> _new_fillstroke_buttons;
+    Gtk::ComboBoxText *_select_type_combo;
+
+    Gtk::ToggleToolButton *_edit_fill_item;
+    Gtk::ToggleToolButton *_edit_stroke_item;
 
     Glib::RefPtr<Gtk::Adjustment> _row_adj;
     Glib::RefPtr<Gtk::Adjustment> _col_adj;
 
-    std::unique_ptr<UI::PrefPusher> _edit_fill_pusher;
-    std::unique_ptr<UI::PrefPusher> _edit_stroke_pusher;
-    std::unique_ptr<UI::PrefPusher> _show_handles_pusher;
+    std::unique_ptr<UI::SimplePrefPusher> _edit_fill_pusher;
+    std::unique_ptr<UI::SimplePrefPusher> _edit_stroke_pusher;
+    std::unique_ptr<UI::SimplePrefPusher> _show_handles_pusher;
 
     sigc::connection c_selection_changed;
     sigc::connection c_selection_modified;
@@ -60,22 +68,26 @@ private:
     void new_fillstroke_changed(int mode);
     void row_changed();
     void col_changed();
-    static void toggle_fill_stroke(InkToggleAction *act, gpointer data);
+    void toggle_fill_stroke();
     void selection_changed(Inkscape::Selection *selection);
-    static void toggle_handles();
+    void toggle_handles();
     void watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
     void selection_modified(Inkscape::Selection *selection, guint flags);
     void drag_selection_changed(gpointer dragger);
     void defs_release(SPObject *defs);
     void defs_modified(SPObject *defs, guint flags);
-    static void warning_popup();
-    void type_changed(int mode);
+    void warning_popup();
+    void type_changed();
+    void toggle_sides();
+    void make_elliptical();
+    void pick_colors();
+    void fit_mesh();
 
 protected:
     MeshToolbar(SPDesktop *desktop);
 
 public:
-    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+    static GtkWidget * create(SPDesktop *desktop);
 };
 
 }

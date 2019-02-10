@@ -15,20 +15,21 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <glibmm/i18n.h>
-#include <gtkmm.h>
-
 #include "mesh-toolbar.h"
+
+#include <glibmm/i18n.h>
+
+#include <gtkmm/comboboxtext.h>
+#include <gtkmm/messagedialog.h>
+#include <gtkmm/radiotoolbutton.h>
+#include <gtkmm/separatortoolitem.h>
 
 #include "desktop-style.h"
 #include "desktop.h"
 #include "document-undo.h"
 #include "gradient-chemistry.h"
 #include "gradient-drag.h"
-#include "widgets/ink-action.h"
-#include "widgets/ink-toggle-action.h"
 #include "inkscape.h"
-#include "widgets/toolbox.h"
 #include "verbs.h"
 
 #include "object/sp-defs.h"
@@ -39,27 +40,19 @@
 #include "svg/css-ostringstream.h"
 
 #include "ui/icon-names.h"
-#include "ui/pref-pusher.h"
+#include "ui/simple-pref-pusher.h"
 #include "ui/tools/gradient-tool.h"
 #include "ui/tools/mesh-tool.h"
 #include "ui/widget/color-preview.h"
-#include "ui/widget/ink-select-one-action.h"
+#include "ui/widget/spin-button-tool-item.h"
 
-#include "widgets/ege-adjustment-action.h"
 #include "widgets/gradient-image.h"
 #include "widgets/spinbutton-events.h"
 
 using Inkscape::DocumentUndo;
-using Inkscape::UI::ToolboxFactory;
-using Inkscape::UI::PrefPusher;
 using Inkscape::UI::Tools::MeshTool;
 
 static bool blocked = false;
-
-//########################
-//##        Mesh        ##
-//########################
-
 
 // Get a list of selected meshes taking into account fill/stroke toggles
 std::vector<SPMeshGradient *>  ms_get_dt_selected_gradients(Inkscape::Selection *selection)
@@ -154,38 +147,6 @@ static MeshTool *get_mesh_tool()
     return tool;
 }
 
-static void ms_toggle_sides()
-{
-    MeshTool *mt = get_mesh_tool();
-    if (mt) {
-        sp_mesh_context_corner_operation( mt, MG_CORNER_SIDE_TOGGLE );
-    }
-}
-
-static void ms_make_elliptical()
-{
-    MeshTool *mt = get_mesh_tool();
-    if (mt) {
-        sp_mesh_context_corner_operation( mt, MG_CORNER_SIDE_ARC );
-    }
-}
-
-static void ms_pick_colors()
-{
-    MeshTool *mt = get_mesh_tool();
-    if (mt) {
-        sp_mesh_context_corner_operation( mt, MG_CORNER_COLOR_PICK );
-    }
-}
-
-static void ms_fit_mesh()
-{
-    MeshTool *mt = get_mesh_tool();
-    if (mt) {
-        sp_mesh_context_fit_mesh_in_bbox( mt );
-    }
-}
-
 
 static void mesh_toolbox_watch_ec(SPDesktop* dt, Inkscape::UI::Tools::ToolBase* ec, GObject* holder);
 
@@ -195,7 +156,189 @@ namespace Toolbar {
 MeshToolbar::MeshToolbar(SPDesktop *desktop)
     : Toolbar(desktop),
     _edit_fill_pusher(nullptr)
-{}
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
+    /* New mesh: normal or conical */
+    {
+        add_label(_("New:"));
+
+        Gtk::RadioToolButton::Group new_type_group;
+
+        auto normal_type_btn = Gtk::manage(new Gtk::RadioToolButton(new_type_group, _("normal")));
+        normal_type_btn->set_tooltip_text(_("Create mesh gradient"));
+        normal_type_btn->set_icon_name(INKSCAPE_ICON("paint-gradient-mesh"));
+        _new_type_buttons.push_back(normal_type_btn);
+
+        auto conical_type_btn = Gtk::manage(new Gtk::RadioToolButton(new_type_group, _("conical")));
+        conical_type_btn->set_tooltip_text(_("Create conical gradient"));
+        conical_type_btn->set_icon_name(INKSCAPE_ICON("paint-gradient-conical"));
+        _new_type_buttons.push_back(conical_type_btn);
+
+        int btn_idx = 0;
+        for (auto btn : _new_type_buttons) {
+            add(*btn);
+            btn->set_sensitive();
+            btn->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &MeshToolbar::new_geometry_changed), btn_idx++));
+        }
+
+        gint mode = prefs->getInt("/tools/mesh/mesh_geometry", SP_MESH_GEOMETRY_NORMAL);
+        _new_type_buttons[mode]->set_active();
+    }
+
+    /* New gradient on fill or stroke*/
+    {
+        Gtk::RadioToolButton::Group new_fillstroke_group;
+
+        auto fill_button = Gtk::manage(new Gtk::RadioToolButton(new_fillstroke_group, _("fill")));
+        fill_button->set_tooltip_text(_("Create gradient in the fill"));
+        fill_button->set_icon_name(INKSCAPE_ICON("object-fill"));
+        _new_fillstroke_buttons.push_back(fill_button);
+
+        auto stroke_btn = Gtk::manage(new Gtk::RadioToolButton(new_fillstroke_group, _("stroke")));
+        stroke_btn->set_tooltip_text(_("Create gradient in the stroke"));
+        stroke_btn->set_icon_name(INKSCAPE_ICON("object-stroke"));
+        _new_fillstroke_buttons.push_back(stroke_btn);
+
+        int btn_idx = 0;
+        for(auto btn : _new_fillstroke_buttons) {
+            add(*btn);
+            btn->set_sensitive(true);
+            btn->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &MeshToolbar::new_fillstroke_changed), btn_idx++));
+        }
+
+        gint mode = prefs->getInt("/tools/mesh/newfillorstroke");
+        _new_fillstroke_buttons[mode]->set_active();
+    }
+
+    /* Number of mesh rows */
+    {
+        std::vector<double> values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        auto rows_val = prefs->getDouble("/tools/mesh/mesh_rows", 1);
+        _row_adj = Gtk::Adjustment::create(rows_val, 1, 20, 1, 1);
+        auto row_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("mesh-row", _("Rows:"), _row_adj, 1.0, 0));
+        row_item->set_tooltip_text(_("Number of rows in new mesh"));
+        row_item->set_custom_numeric_menu_data(values);
+        row_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _row_adj->signal_value_changed().connect(sigc::mem_fun(*this, &MeshToolbar::row_changed));
+        add(*row_item);
+        row_item->set_sensitive(true);
+    }
+
+    /* Number of mesh columns */
+    {
+        std::vector<double> values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        auto col_val = prefs->getDouble("/tools/mesh/mesh_cols", 1);
+        _col_adj = Gtk::Adjustment::create(col_val, 1, 20, 1, 1);
+        auto col_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("mesh-col", _("Columns:"), _col_adj, 1.0, 0));
+        col_item->set_tooltip_text(_("Number of columns in new mesh"));
+        col_item->set_custom_numeric_menu_data(values);
+        col_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _col_adj->signal_value_changed().connect(sigc::mem_fun(*this, &MeshToolbar::col_changed));
+        add(*col_item);
+        col_item->set_sensitive(true);
+    }
+
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
+
+    // TODO: These were disabled in the UI file.  Either activate or delete
+#if 0
+    /* Edit fill mesh */
+    {
+        _edit_fill_item = add_toggle_button(_("Edit Fill"),
+                                            _("Edit fill mesh"));
+        _edit_fill_item->set_icon_name(INKSCAPE_ICON("object-fill"));
+        _edit_fill_pusher.reset(new UI::SimplePrefPusher(_edit_fill_item, "/tools/mesh/edit_fill"));
+        _edit_fill_item->signal_toggled().connect(sigc::mem_fun(*this, &MeshToolbar::toggle_fill_stroke));
+    }
+
+    /* Edit stroke mesh */
+    {
+        _edit_stroke_item = add_toggle_button(_("Edit Stroke"),
+                                              _("Edit stroke mesh"));
+        _edit_stroke_item->set_icon_name(INKSCAPE_ICON("object-stroke"));
+        _edit_stroke_pusher.reset(new UI::SimplePrefPusher(_edit_stroke_item, "/tools/mesh/edit_stroke"));
+        _edit_stroke_item->signal_toggled().connect(sigc::mem_fun(*this, &MeshToolbar::toggle_fill_stroke));
+    }
+
+    /* Show/hide side and tensor handles */
+    {
+        auto show_handles_item = add_toggle_button(_("Show Handles"),
+                                                   _("Show handles"));
+        show_handles_item->set_icon_name(INKSCAPE_ICON("show-node-handles"));
+        _show_handles_pusher.reset(new UI::SimplePrefPusher(show_handles_item, "/tools/mesh/show_handles"));
+        show_handles_item->signal_toggled().connect(sigc::mem_fun(*this, &MeshToolbar::toggle_handles));
+    }
+#endif
+
+    desktop->connectEventContextChanged(sigc::mem_fun(*this, &MeshToolbar::watch_ec));
+
+    {
+        auto btn = Gtk::manage(new Gtk::ToolButton(_("Toggle Sides")));
+        btn->set_tooltip_text(_("Toggle selected sides between Beziers and lines."));
+        btn->set_icon_name(INKSCAPE_ICON("node-segment-line"));
+        btn->signal_clicked().connect(sigc::mem_fun(*this, &MeshToolbar::toggle_sides));
+        add(*btn);
+    }
+
+    {
+        auto btn = Gtk::manage(new Gtk::ToolButton(_("Make elliptical")));
+        btn->set_tooltip_text(_("Make selected sides elliptical by changing length of handles. Works best if handles already approximate ellipse."));
+        btn->set_icon_name(INKSCAPE_ICON("node-segment-curve"));
+        btn->signal_clicked().connect(sigc::mem_fun(*this, &MeshToolbar::make_elliptical));
+        add(*btn);
+    }
+
+    {
+        auto btn = Gtk::manage(new Gtk::ToolButton(_("Pick colors:")));
+        btn->set_tooltip_text(_("Pick colors for selected corner nodes from underneath mesh."));
+        btn->set_icon_name(INKSCAPE_ICON("color-picker"));
+        btn->signal_clicked().connect(sigc::mem_fun(*this, &MeshToolbar::pick_colors));
+        add(*btn);
+    }
+
+
+    {
+        auto btn = Gtk::manage(new Gtk::ToolButton(_("Scale mesh to bounding box:")));
+        btn->set_tooltip_text(_("Scale mesh to fit inside bounding box."));
+        btn->set_icon_name(INKSCAPE_ICON("mesh-gradient-fit"));
+        btn->signal_clicked().connect(sigc::mem_fun(*this, &MeshToolbar::fit_mesh));
+        add(*btn);
+    }
+
+    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
+
+    /* Warning */
+    {
+        auto btn = Gtk::manage(new Gtk::ToolButton(_("WARNING: Mesh SVG Syntax Subject to Change")));
+        btn->set_tooltip_text(_("WARNING: Mesh SVG Syntax Subject to Change"));
+        btn->set_icon_name(INKSCAPE_ICON("dialog-warning"));
+        add(*btn);
+        btn->signal_clicked().connect(sigc::mem_fun(*this, &MeshToolbar::warning_popup));
+        btn->set_sensitive(true);
+    }
+
+    /* Type */
+    {
+        add_label(_("Smoothing:"));
+        _select_type_combo = Gtk::manage(new Gtk::ComboBoxText());
+        _select_type_combo->append(C_("Type", "Coons"));
+        _select_type_combo->append(_("Bicubic"));
+
+        // TRANSLATORS: Type of Smoothing. See https://en.wikipedia.org/wiki/Coons_patch
+        _select_type_combo->set_tooltip_text(_("Coons: no smothing. Bicubic: smothing across patch boundaries."));
+        _select_type_combo->set_sensitive( false );
+        _select_type_combo->set_active( 0 );
+
+        auto item = Gtk::manage(new Gtk::ToolItem());
+        item->add(*_select_type_combo);
+        add(*item);
+
+        _select_type_combo->signal_changed().connect(sigc::mem_fun(*this, &MeshToolbar::type_changed));
+    }
+
+    show_all();
+}
 
 /**
  * Mesh auxiliary toolbar construction and setup.
@@ -203,263 +346,9 @@ MeshToolbar::MeshToolbar(SPDesktop *desktop)
  *
  */
 GtkWidget *
-MeshToolbar::prep(SPDesktop * desktop, GtkActionGroup* mainActions)
+MeshToolbar::create(SPDesktop * desktop)
 {
     auto toolbar = new MeshToolbar(desktop);
-
-    GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
-
-    EgeAdjustmentAction* eact = nullptr;
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
-    /* New mesh: normal or conical */
-    {
-        InkSelectOneActionColumns columns;
-
-        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
-
-        Gtk::TreeModel::Row row;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("normal");
-        row[columns.col_tooltip  ] = _("Create mesh gradient");
-        row[columns.col_icon     ] = INKSCAPE_ICON("paint-gradient-mesh");
-        row[columns.col_sensitive] = true;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("conical");
-        row[columns.col_tooltip  ] = _("Create conical gradient");
-        row[columns.col_icon     ] = INKSCAPE_ICON("paint-gradient-conical");
-        row[columns.col_sensitive] = true;
-
-        toolbar->_new_type_mode =
-            InkSelectOneAction::create( "MeshNewTypeAction", // Name
-                                        _("New:"),           // Label
-                                        "",                  // Tooltip
-                                        "Not Used",          // Icon
-                                        store );             // Tree store
-
-        toolbar->_new_type_mode->use_radio( true );
-        toolbar->_new_type_mode->use_group_label( true );
-        gint mode = prefs->getInt("/tools/mesh/mesh_geometry", SP_MESH_GEOMETRY_NORMAL);
-        toolbar->_new_type_mode->set_active( mode );
-
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_new_type_mode->gobj() ));
-
-        toolbar->_new_type_mode->signal_changed().connect(sigc::mem_fun(*toolbar, &MeshToolbar::new_geometry_changed));
-    }
-
-    /* New gradient on fill or stroke*/
-    {
-        InkSelectOneActionColumns columns;
-
-        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
-
-        Gtk::TreeModel::Row row;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("fill");
-        row[columns.col_tooltip  ] = _("Create gradient in the fill");
-        row[columns.col_icon     ] = INKSCAPE_ICON("object-fill");
-        row[columns.col_sensitive] = true;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("stroke");
-        row[columns.col_tooltip  ] = _("Create gradient in the stroke");
-        row[columns.col_icon     ] = INKSCAPE_ICON("object-stroke");
-        row[columns.col_sensitive] = true;
-
-        toolbar->_new_fillstroke_mode =
-            InkSelectOneAction::create( "MeshNewFillStrokeAction", // Name
-                                        "",                  // Label
-                                        "",                  // Tooltip
-                                        "Not Used",          // Icon
-                                        store );             // Tree store
-
-        toolbar->_new_fillstroke_mode->use_radio( true );
-        toolbar->_new_fillstroke_mode->use_group_label( false );
-        gint mode = prefs->getInt("/tools/mesh/newfillorstroke");
-        toolbar->_new_fillstroke_mode->set_active( mode );
-
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_new_fillstroke_mode->gobj() ));
-
-        toolbar->_new_fillstroke_mode->signal_changed().connect(sigc::mem_fun(*toolbar, &MeshToolbar::new_fillstroke_changed));
-    }
-
-    /* Number of mesh rows */
-    {
-        gchar const** labels = nullptr;
-        gdouble values[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        eact = create_adjustment_action( "MeshRowAction",
-                                         _("Rows"), _("Rows:"), _("Number of rows in new mesh"),
-                                         "/tools/mesh/mesh_rows", 1,
-                                         FALSE, nullptr,
-                                         1, 20, 1, 1,
-                                         labels, values, 0,
-                                         nullptr /*unit tracker*/,
-                                         1.0, 0 );
-        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
-        toolbar->_row_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
-        toolbar->_row_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &MeshToolbar::row_changed));
-        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
-        gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
-    }
-
-    /* Number of mesh columns */
-    {
-        gchar const** labels = nullptr;
-        gdouble values[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        eact = create_adjustment_action( "MeshColumnAction",
-                                         _("Columns"), _("Columns:"), _("Number of columns in new mesh"),
-                                         "/tools/mesh/mesh_cols", 1,
-                                         FALSE, nullptr,
-                                         1, 20, 1, 1,
-                                         labels, values, 0,
-                                         nullptr /*unit tracker*/,
-                                         1.0, 0 );
-        ege_adjustment_action_set_focuswidget(eact, GTK_WIDGET(desktop->canvas));
-        toolbar->_col_adj = Glib::wrap(ege_adjustment_action_get_adjustment(eact));
-        toolbar->_col_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &MeshToolbar::col_changed));
-        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
-        gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
-    }
-
-    /* Edit fill mesh */
-    {
-        InkToggleAction* act = ink_toggle_action_new( "MeshEditFillAction",
-                                                      _("Edit Fill"),
-                                                      _("Edit fill mesh"),
-                                                      INKSCAPE_ICON("object-fill"),
-                                                      secondarySize );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        toolbar->_edit_fill_pusher.reset(new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/edit_fill"));
-        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(toggle_fill_stroke), (gpointer)toolbar);
-    }
-
-    /* Edit stroke mesh */
-    {
-        InkToggleAction* act = ink_toggle_action_new( "MeshEditStrokeAction",
-                                                      _("Edit Stroke"),
-                                                      _("Edit stroke mesh"),
-                                                      INKSCAPE_ICON("object-stroke"),
-                                                      secondarySize );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        toolbar->_edit_stroke_pusher.reset(new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/edit_stroke"));
-        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(toggle_fill_stroke), (gpointer)toolbar);
-    }
-
-    /* Show/hide side and tensor handles */
-    {
-        InkToggleAction* act = ink_toggle_action_new( "MeshShowHandlesAction",
-                                                      _("Show Handles"),
-                                                      _("Show handles"),
-                                                      INKSCAPE_ICON("show-node-handles"),
-                                                      secondarySize );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        toolbar->_show_handles_pusher.reset(new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/mesh/show_handles"));
-        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(toggle_handles), nullptr);
-    }
-
-    desktop->connectEventContextChanged(sigc::mem_fun(*toolbar, &MeshToolbar::watch_ec));
-
-    /* Warning */
-    {
-        InkAction* act = ink_action_new( "MeshWarningAction",
-                                         _("WARNING: Mesh SVG Syntax Subject to Change"),
-                                         _("WARNING: Mesh SVG Syntax Subject to Change"),
-                                         INKSCAPE_ICON("dialog-warning"),
-                                         secondarySize );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
-        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(warning_popup), (gpointer)toolbar );
-        gtk_action_set_sensitive( GTK_ACTION(act), TRUE );
-    }
-
-    /* Type */
-    {
-        InkSelectOneActionColumns columns;
-
-        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
-
-        Gtk::TreeModel::Row row;
-
-        row = *(store->append());
-        row[columns.col_label    ] = C_("Type", "Coons");
-        row[columns.col_tooltip  ] = "";
-        row[columns.col_icon     ] = "NotUsed";
-        row[columns.col_sensitive] = true;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Bicubic");
-        row[columns.col_tooltip  ] = "";
-        row[columns.col_icon     ] = "NotUsed";
-        row[columns.col_sensitive] = true;
-
-        // TRANSLATORS: Type of Smoothing. See https://en.wikipedia.org/wiki/Coons_patch
-        toolbar->_select_type_action =
-            InkSelectOneAction::create( "MeshSmoothAction",  // Name
-                                        _("Smoothing"),      // Label
-                                        _("Coons: no smothing. Bicubic: smothing across patch boundaries."),               // Tooltip
-                                        "Not Used",          // Icon
-                                        store );             // Tree store
-
-        toolbar->_select_type_action->use_radio( false );
-        toolbar->_select_type_action->use_label( true );
-        toolbar->_select_type_action->use_icon( false );
-        toolbar->_select_type_action->use_group_label( true );
-        toolbar->_select_type_action->set_sensitive( false );
-        toolbar->_select_type_action->set_active( 0 );
-
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_select_type_action->gobj() ));
-
-        toolbar->_select_type_action->signal_changed().connect(sigc::mem_fun(*toolbar, &MeshToolbar::type_changed));
-    }
-
-    {
-        InkAction* act = ink_action_new( "MeshToggleSidesAction",
-                                         _("Toggle Sides"),
-                                         _("Toggle selected sides between Beziers and lines."),
-                                         INKSCAPE_ICON("node-segment-line"),
-                                         secondarySize );
-        g_object_set( act, "short_label", _("Toggle side:"), NULL );
-        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(ms_toggle_sides), 0 );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
-    }
-
-    {
-        InkAction* act = ink_action_new( "MeshMakeEllipticalAction",
-                                         _("Make elliptical"),
-                                         _("Make selected sides elliptical by changing length of handles. Works best if handles already approximate ellipse."),
-                                         INKSCAPE_ICON("node-segment-curve"),
-                                         secondarySize );
-        g_object_set( act, "short_label", _("Make elliptical:"), NULL );
-        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(ms_make_elliptical), 0 );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
-    }
-
-    {
-        InkAction* act = ink_action_new( "MeshPickColorsAction",
-                                         _("Pick colors:"),
-                                         _("Pick colors for selected corner nodes from underneath mesh."),
-                                         INKSCAPE_ICON("color-picker"),
-                                         secondarySize );
-        g_object_set( act, "short_label", _("Pick Color"), NULL );
-        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(ms_pick_colors), 0 );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
-    }
-
-
-    {
-        InkAction* act = ink_action_new( "MeshFitInBoundingBoxAction",
-                                         _("Scale mesh to bounding box:"),
-                                         _("Scale mesh to fit inside bounding box."),
-                                         INKSCAPE_ICON("mesh-gradient-fit"),
-                                         secondarySize );
-        g_object_set( act, "short_label", _("Fit mesh"), NULL );
-        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(ms_fit_mesh), 0 );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
-    }
-
     return GTK_WIDGET(toolbar->gobj());
 }
 
@@ -514,16 +403,19 @@ MeshToolbar::col_changed()
 }
 
 void
-MeshToolbar::toggle_fill_stroke(InkToggleAction * /*act*/, gpointer data)
+MeshToolbar::toggle_fill_stroke()
 {
-    auto toolbar = reinterpret_cast<MeshToolbar *>(data);
+    auto prefs = Inkscape::Preferences::get();
+    prefs->setBool("tools/mesh/edit_fill", _edit_fill_item->get_active());
+    prefs->setBool("tools/mesh/edit_stroke", _edit_stroke_item->get_active());
+
     MeshTool *mt = get_mesh_tool();
     if (mt) {
         GrDrag *drag = mt->_grdrag;
         drag->updateDraggers();
         drag->updateLines();
         drag->updateLevels();
-        toolbar->selection_changed(nullptr); // Need to update Type widget
+        selection_changed(nullptr); // Need to update Type widget
     }
 }
 
@@ -621,10 +513,10 @@ MeshToolbar::selection_changed(Inkscape::Selection * /* selection */)
         ms_read_selection( selection, ms_selected, ms_selected_multi, ms_type, ms_type_multi );
         // std::cout << "   type: " << ms_type << std::endl;
         
-        if (_select_type_action) {
-            _select_type_action->set_sensitive(!ms_type_multi);
+        if (_select_type_combo) {
+            _select_type_combo->set_sensitive(!ms_type_multi);
             blocked = TRUE;
-            _select_type_action->set_active(ms_type);
+            _select_type_combo->set_active(ms_type);
             blocked = FALSE;
         }
     }
@@ -642,15 +534,16 @@ MeshToolbar::warning_popup()
     Gtk::MessageDialog dialog(msg, false, Gtk::MESSAGE_WARNING,
                               Gtk::BUTTONS_OK, true);
     dialog.run();
-
 }
 
 /**
  * Sets mesh type: Coons, Bicubic
  */
 void
-MeshToolbar::type_changed(int mode)
+MeshToolbar::type_changed()
 {
+    int mode = _select_type_combo->get_active_row_number();
+
     if (blocked) {
         return;
     }
@@ -668,6 +561,43 @@ MeshToolbar::type_changed(int mode)
         DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_MESH,_("Set mesh type"));
     }
 }
+
+void
+MeshToolbar::toggle_sides()
+{
+    MeshTool *mt = get_mesh_tool();
+    if (mt) {
+        sp_mesh_context_corner_operation( mt, MG_CORNER_SIDE_TOGGLE );
+    }
+}
+
+void
+MeshToolbar::make_elliptical()
+{
+    MeshTool *mt = get_mesh_tool();
+    if (mt) {
+        sp_mesh_context_corner_operation( mt, MG_CORNER_SIDE_ARC );
+    }
+}
+
+void
+MeshToolbar::pick_colors()
+{
+    MeshTool *mt = get_mesh_tool();
+    if (mt) {
+        sp_mesh_context_corner_operation( mt, MG_CORNER_COLOR_PICK );
+    }
+}
+
+void
+MeshToolbar::fit_mesh()
+{
+    MeshTool *mt = get_mesh_tool();
+    if (mt) {
+        sp_mesh_context_fit_mesh_in_bbox( mt );
+    }
+}
+
 
 }
 }

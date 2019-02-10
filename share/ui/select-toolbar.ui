@@ -25,29 +25,4 @@
     <toolitem action='TextOrientationAction' />
     <toolitem action='TextDirectionAction' />
   </toolbar>
-
-  <toolbar name='MeshToolbar'>
-    <toolitem action='MeshNewTypeAction' />
-    <toolitem action='MeshNewFillStrokeAction' />
-    <toolitem action='MeshRowAction' />
-    <toolitem action='MeshColumnAction' />
-    <separator />
-<!--
-    <toolitem action='MeshEditFillAction' />
-    <toolitem action='MeshEditStrokeAction' />
-    <toolitem action='MeshShowHandlesAction' />
--->
-    <toolitem action='MeshToggleSidesAction' />
-    <toolitem action='MeshMakeEllipticalAction' />
-    <toolitem action='MeshPickColorsAction' />
-    <toolitem action='MeshFitInBoundingBoxAction' />
-    <separator />
-    <toolitem action='MeshShowHandlesAction' />
-    <toolitem action='MeshEditFillAction' />
-    <toolitem action='MeshEditStrokeAction' />
-    <separator />
-    <toolitem action='MeshWarningAction' />
-    <separator />
-    <toolitem action='MeshSmoothAction' />
-  </toolbar>
 </ui>
