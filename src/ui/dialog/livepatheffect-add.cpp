@@ -119,17 +119,22 @@ LivePathEffectAdd::LivePathEffectAdd()
         builder_effect->get_widget("LPEIcon", LPEIcon);
         LPEIcon->set_from_icon_name(converter.get_icon(data->id), Gtk::BuiltinIconSize(Gtk::ICON_SIZE_DIALOG));
         Gtk::EventBox *LPESelectorEffectEventInfo;
-        //LPESelectorEffectEventFav->add_events(Gdk::BUTTON_PRESS_MASK);  
         builder_effect->get_widget("LPESelectorEffectEventInfo", LPESelectorEffectEventInfo);
         LPESelectorEffectEventInfo->signal_button_press_event().connect(sigc::bind<Glib::RefPtr<Gtk::Builder> >(sigc::mem_fun(*this, &LivePathEffectAdd::pop_description), builder_effect));
         Gtk::EventBox *LPESelectorEffectEventFav;
         builder_effect->get_widget("LPESelectorEffectEventFav", LPESelectorEffectEventFav);
-       // LPESelectorEffectEventFav->add_events(Gdk::BUTTON_PRESS_MASK);    
+        if (sp_has_fav(LPEName->get_text())){
+            Gtk::Image *fav = dynamic_cast<Gtk::Image *>(LPESelectorEffectEventFav->get_child());
+            fav->set_from_icon_name("draw-star", Gtk::IconSize(25));
+        }
         Gtk::EventBox *LPESelectorEffectEventFavTop;
         builder_effect->get_widget("LPESelectorEffectEventFavTop", LPESelectorEffectEventFavTop);
-        //LPESelectorEffectFavTop->add_events(Gdk::BUTTON_PRESS_MASK);    
-        LPESelectorEffectEventFav   ->signal_button_press_event().connect(sigc::bind<Glib::RefPtr<Gtk::Builder> >(sigc::mem_fun(*this, &LivePathEffectAdd::fav_toggler), builder_effect));
+        LPESelectorEffectEventFav->signal_button_press_event().connect(sigc::bind<Glib::RefPtr<Gtk::Builder> >(sigc::mem_fun(*this, &LivePathEffectAdd::fav_toggler), builder_effect));
         LPESelectorEffectEventFavTop->signal_button_press_event().connect(sigc::bind<Glib::RefPtr<Gtk::Builder> >(sigc::mem_fun(*this, &LivePathEffectAdd::fav_toggler), builder_effect));
+        Gtk::ButtonBox *LPESelectorButtonBox;
+        builder_effect->get_widget("LPESelectorButtonBox", LPESelectorButtonBox);
+        LPESelectorButtonBox->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(LPESelectorEffect->gobj())));
+        LPESelectorButtonBox->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseout), GTK_WIDGET(LPESelectorEffect->gobj())));
         LPESelectorEffect->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(LPESelectorEffect->gobj())));
         LPESelectorEffect->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseout), GTK_WIDGET(LPESelectorEffect->gobj())));
         _LPESelectorFlowBox->insert(*LPESelectorEffect, i);
@@ -212,6 +217,7 @@ bool LivePathEffectAdd::fav_toggler(GdkEventButton* evt, Glib::RefPtr<Gtk::Build
             //favimg->set_from_icon_name("draw-star-outline", Gtk::IconSize(30));
             LPESelectorEffectEventFavTop->set_visible(false);
             LPESelectorEffectEventFavTop->hide();
+            LPESelectorEffectFav->set_from_icon_name("draw-star-outline", Gtk::IconSize(25));
             sp_remove_fav(LPEName->get_text());
             LPESelectorEffect->get_parent()->get_style_context()->remove_class("lpefav");
             _LPESelectorFlowBox->invalidate_sort();
@@ -219,6 +225,7 @@ bool LivePathEffectAdd::fav_toggler(GdkEventButton* evt, Glib::RefPtr<Gtk::Build
             //favimg->set_from_icon_name("draw-star", Gtk::IconSize(30));
             LPESelectorEffectEventFavTop->set_visible(true);
             LPESelectorEffectEventFavTop->show();
+            LPESelectorEffectFav->set_from_icon_name("draw-star", Gtk::IconSize(25));
             sp_add_fav(LPEName->get_text());
             LPESelectorEffect->get_parent()->get_style_context()->add_class("lpefav");
             Glib::RefPtr< Gtk::Adjustment > vadjust = _LPEScrolled->get_vadjustment();
@@ -231,6 +238,7 @@ bool LivePathEffectAdd::fav_toggler(GdkEventButton* evt, Glib::RefPtr<Gtk::Build
 
 bool LivePathEffectAdd::on_filter(Gtk::FlowBoxChild *child)
 {
+    child->set_valign(Gtk::ALIGN_START);
     Gtk::EventBox *eventbox = dynamic_cast<Gtk::EventBox *>(child->get_child());
     if (eventbox) {
         Gtk::Box *box = dynamic_cast<Gtk::Box *>(eventbox->get_child());

@@ -118,7 +118,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButtonBox">
+          <object class="GtkButtonBox" id="LPESelectorButtonBox">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">center</property>
@@ -139,7 +139,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
                     <property name="valign">start</property>
-                    <property name="pixel_size">20</property>
+                    <property name="pixel_size">23</property>
                     <property name="icon_name">infopop-outline</property>
                     <property name="icon_size">2</property>
                     <style>
@@ -170,7 +170,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">center</property>
                     <property name="valign">start</property>
-                    <property name="pixel_size">20</property>
+                    <property name="pixel_size">23</property>
                     <property name="icon_name">draw-star-outline</property>
                     <property name="icon_size">2</property>
                     <style>
@@ -200,7 +200,7 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="valign">start</property>
-                    <property name="pixel_size">20</property>
+                    <property name="pixel_size">23</property>
                     <property name="icon_name">on</property>
                     <property name="icon_size">2</property>
                     <style>
