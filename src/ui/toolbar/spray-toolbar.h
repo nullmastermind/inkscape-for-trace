@@ -32,16 +32,19 @@
 
 #include <gtkmm/adjustment.h>
 
-class InkSelectOneAction;
 class SPDesktop;
 
-typedef struct _EgeAdjustmentAction EgeAdjustmentAction;
-typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _InkToggleAction InkToggleAction;
+namespace Gtk {
+class RadioToolButton;
+}
 
 namespace Inkscape {
 namespace UI {
-class PrefPusher;
+class SimplePrefPusher;
+
+namespace Widget {
+class SpinButtonToolItem;
+}
 
 namespace Toolbar {
 class SprayToolbar : public Toolbar {
@@ -54,24 +57,24 @@ private:
     Glib::RefPtr<Gtk::Adjustment> _offset_adj;
     Glib::RefPtr<Gtk::Adjustment> _scale_adj;
 
-    std::unique_ptr<PrefPusher> _usepressurewidth_pusher;
-    std::unique_ptr<PrefPusher> _usepressurepopulation_pusher;
+    std::unique_ptr<SimplePrefPusher> _usepressurewidth_pusher;
+    std::unique_ptr<SimplePrefPusher> _usepressurepopulation_pusher;
 
-    InkSelectOneAction *_spray_tool_mode;
-    EgeAdjustmentAction *_spray_population;
-    EgeAdjustmentAction *_spray_rotation;
-    EgeAdjustmentAction *_spray_scale;
-    InkToggleAction * _usepressurescale;
-    InkToggleAction *_picker;
-    InkToggleAction *_pick_center;
-    InkToggleAction *_pick_inverse_value;
-    InkToggleAction *_pick_fill;
-    InkToggleAction *_pick_stroke;
-    InkToggleAction *_pick_no_overlap;
-    InkToggleAction *_over_transparent;
-    InkToggleAction *_over_no_transparent;
-    InkToggleAction *_no_overlap;
-    EgeAdjustmentAction *_offset;
+    std::vector<Gtk::RadioToolButton *> _mode_buttons;
+    UI::Widget::SpinButtonToolItem *_spray_population;
+    UI::Widget::SpinButtonToolItem *_spray_rotation;
+    UI::Widget::SpinButtonToolItem *_spray_scale;
+    Gtk::ToggleToolButton *_usepressurescale;
+    Gtk::ToggleToolButton *_picker;
+    Gtk::ToggleToolButton *_pick_center;
+    Gtk::ToggleToolButton *_pick_inverse_value;
+    Gtk::ToggleToolButton *_pick_fill;
+    Gtk::ToggleToolButton *_pick_stroke;
+    Gtk::ToggleToolButton *_pick_no_overlap;
+    Gtk::ToggleToolButton *_over_transparent;
+    Gtk::ToggleToolButton *_over_no_transparent;
+    Gtk::ToggleToolButton *_no_overlap;
+    UI::Widget::SpinButtonToolItem *_offset;
 
     void width_value_changed();
     void mean_value_changed();
@@ -83,32 +86,17 @@ private:
     void update_widgets();
     void scale_value_changed();
     void offset_value_changed();
-    static void toggle_no_overlap         (GtkToggleAction *toggleaction,
-                                           gpointer         user_data);
-    static void toggle_pressure_scale     (GtkToggleAction *toggleaction,
-                                           gpointer         user_data);
-    static void toggle_over_no_transparent(GtkToggleAction *toggleaction,
-                                           gpointer         user_data);
-    static void toggle_over_transparent   (GtkToggleAction *toggleaction,
-                                           gpointer         user_data);
-    static void toggle_picker             (GtkToggleAction *toggleaction,
-                                           gpointer         user_data);
-    static void toggle_pick_center        (GtkToggleAction *toggleaction,
-                                           gpointer         user_data);
-    static void toggle_pick_fill          (GtkToggleAction *toggleaction,
-                                           gpointer         user_data);
-    static void toggle_pick_stroke        (GtkToggleAction *toggleaction,
-                                           gpointer         user_data);
-    static void toggle_pick_no_overlap    (GtkToggleAction *toggleaction,
-                                           gpointer         user_data);
-    static void toggle_pick_inverse_value (GtkToggleAction *toggleaction,
-                                           gpointer         user_data);
+    void on_pref_toggled(Gtk::ToggleToolButton *btn,
+                         const Glib::ustring&   path);
+    void toggle_no_overlap();
+    void toggle_pressure_scale();
+    void toggle_picker();
 
 protected:
     SprayToolbar(SPDesktop *desktop);
 
 public:
-    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+    static GtkWidget * create(SPDesktop *desktop);
 };
 }
 }

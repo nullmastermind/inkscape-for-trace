@@ -1422,7 +1422,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
                             this->width = 1.0;
                         }
                         // The same spinbutton is for alt+x
-                        desktop->setToolboxAdjustmentValue("altx-spray", this->width * 100);
+                        desktop->setToolboxAdjustmentValue("spray-width", this->width * 100);
                         sp_spray_update_area(this);
                         ret = TRUE;
                     }
@@ -1434,7 +1434,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
                         if (this->width < 0.01) {
                             this->width = 0.01;
                         }
-                        desktop->setToolboxAdjustmentValue("altx-spray", this->width * 100);
+                        desktop->setToolboxAdjustmentValue("spray-width", this->width * 100);
                         sp_spray_update_area(this);
                         ret = TRUE;
                     }
@@ -1442,21 +1442,21 @@ bool SprayTool::root_handler(GdkEvent* event) {
                 case GDK_KEY_Home:
                 case GDK_KEY_KP_Home:
                     this->width = 0.01;
-                    desktop->setToolboxAdjustmentValue("altx-spray", this->width * 100);
+                    desktop->setToolboxAdjustmentValue("spray-width", this->width * 100);
                     sp_spray_update_area(this);
                     ret = TRUE;
                     break;
                 case GDK_KEY_End:
                 case GDK_KEY_KP_End:
                     this->width = 1.0;
-                    desktop->setToolboxAdjustmentValue("altx-spray", this->width * 100);
+                    desktop->setToolboxAdjustmentValue("spray-width", this->width * 100);
                     sp_spray_update_area(this);
                     ret = TRUE;
                     break;
                 case GDK_KEY_x:
                 case GDK_KEY_X:
                     if (MOD__ALT_ONLY(event)) {
-                        desktop->setToolboxFocusTo("altx-spray");
+                        desktop->setToolboxFocusTo("spray-width");
                         ret = TRUE;
                     }
                     break;
