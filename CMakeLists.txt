@@ -114,7 +114,7 @@ option(WITH_LIBVISIO "Compile with support of libvisio for Microsoft Visio Diagr
 option(WITH_LIBWPG "Compile with support of libwpg for WordPerfect Graphics" ON)
 option(WITH_NLS "Compile with Native Language Support (using gettext)" ON)
 option(WITH_YAML "Compile with YAML support (enables xverbs)" ON)
-option(WITH_JEMALLOC "Compile with JEMALLOC support" ON)
+option(WITH_JEMALLOC "Compile with JEMALLOC support" OFF)
 
 option(WITH_FUZZ "Compile for fuzzing purpose (use 'make fuzz' only)" OFF)
 mark_as_advanced(WITH_FUZZ)

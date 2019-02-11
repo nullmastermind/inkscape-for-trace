@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-08 13:32+0000\n"
+"POT-Creation-Date: 2019-02-11 11:52+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4978,9 +4978,9 @@ msgstr ""
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:58
 #: ../src/ui/dialog/object-attributes.cpp:59
 #: ../src/ui/dialog/object-attributes.cpp:67
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:84
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:95
 #: ../src/ui/toolbar/eraser-toolbar.cpp:102
-#: ../src/ui/toolbar/spray-toolbar.cpp:92
+#: ../src/ui/toolbar/spray-toolbar.cpp:119
 #: ../src/ui/toolbar/tweak-toolbar.cpp:59 ../src/ui/widget/page-sizer.cpp:62
 #: ../share/extensions/foldablebox.inx.h:2
 msgid "Width:"
@@ -5246,7 +5246,7 @@ msgstr ""
 #: ../src/extension/internal/bitmap/cycleColormap.cpp:40
 #: ../src/extension/internal/bitmap/spread.cpp:40
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:46
-#: ../src/ui/toolbar/spray-toolbar.cpp:208
+#: ../src/ui/toolbar/spray-toolbar.cpp:145
 msgid "Amount:"
 msgstr ""
 
@@ -7192,8 +7192,8 @@ msgid "Open"
 msgstr ""
 
 #: ../src/extension/internal/filter/morphology.h:66
-#: ../src/ui/toolbar/spray-toolbar.cpp:92 ../src/ui/tools/measure-tool.cpp:1233
-#: ../src/ui/widget/page-sizer.cpp:62 ../share/extensions/interp_att_g.inx.h:14
+#: ../src/ui/tools/measure-tool.cpp:1233 ../src/ui/widget/page-sizer.cpp:62
+#: ../share/extensions/interp_att_g.inx.h:14
 msgid "Width"
 msgstr ""
 
@@ -7719,6 +7719,7 @@ msgstr ""
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2761
 #: ../src/ui/dialog/input.cpp:918 ../src/ui/toolbar/eraser-toolbar.cpp:59
 #: ../src/ui/toolbar/pencil-toolbar.cpp:263
+#: ../src/ui/toolbar/spray-toolbar.cpp:77
 #: ../src/ui/toolbar/tweak-toolbar.cpp:98 ../share/extensions/extrude.inx.h:2
 #: ../share/extensions/triangle.inx.h:8
 msgid "Mode:"
@@ -7935,7 +7936,7 @@ msgstr ""
 #: ../src/extension/internal/grid.cpp:204
 #: ../src/ui/dialog/document-properties.cpp:152
 #: ../src/ui/dialog/inkscape-preferences.cpp:1210
-#: ../src/widgets/toolbox.cpp:1400
+#: ../src/widgets/toolbox.cpp:1233
 msgid "Grids"
 msgstr ""
 
@@ -9328,7 +9329,7 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:123
 #: ../src/live_effects/lpe-show_handles.cpp:31
-#: ../src/ui/toolbar/mesh-toolbar.cpp:356
+#: ../src/ui/toolbar/mesh-toolbar.cpp:267
 msgid "Show handles"
 msgstr ""
 
@@ -11228,9 +11229,7 @@ msgstr ""
 msgid "Y from middle knot"
 msgstr ""
 
-#. Name
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:56
-#: ../src/ui/toolbar/spray-toolbar.cpp:191
 msgid "Mode"
 msgstr ""
 
@@ -13046,7 +13045,33 @@ msgstr ""
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr ""
 
-#: ../src/preferences.cpp:138
+#. Raw string literal cannot contain translatable strings. Fortunately, we only translate
+#. caligraphy presets.
+#: ../src/preferences.cpp:132
+msgid "Dip pen"
+msgstr ""
+
+#: ../src/preferences.cpp:133
+msgid "Marker"
+msgstr ""
+
+#: ../src/preferences.cpp:134
+msgid "Brush"
+msgstr ""
+
+#: ../src/preferences.cpp:135
+msgid "Wiggly"
+msgstr ""
+
+#: ../src/preferences.cpp:136
+msgid "Splotchy"
+msgstr ""
+
+#: ../src/preferences.cpp:137
+msgid "Tracing"
+msgstr ""
+
+#: ../src/preferences.cpp:147
 msgid ""
 "Inkscape will run with default settings, and new settings will not be saved. "
 msgstr ""
@@ -13054,7 +13079,7 @@ msgstr ""
 #. the creation failed
 #. _reportError(Glib::ustring::compose(_("Cannot create profile directory %1."),
 #. Glib::filename_to_utf8(_prefs_dir)), not_saved);
-#: ../src/preferences.cpp:154
+#: ../src/preferences.cpp:163
 #, c-format
 msgid "Cannot create profile directory %s."
 msgstr ""
@@ -13062,7 +13087,7 @@ msgstr ""
 #. The profile dir is not actually a directory
 #. _reportError(Glib::ustring::compose(_("%1 is not a valid directory."),
 #. Glib::filename_to_utf8(_prefs_dir)), not_saved);
-#: ../src/preferences.cpp:163
+#: ../src/preferences.cpp:172
 #, c-format
 msgid "%s is not a valid directory."
 msgstr ""
@@ -13070,36 +13095,36 @@ msgstr ""
 #. The write failed.
 #. _reportError(Glib::ustring::compose(_("Failed to create the preferences file %1."),
 #. Glib::filename_to_utf8(_prefs_filename)), not_saved);
-#: ../src/preferences.cpp:182
+#: ../src/preferences.cpp:191
 #, c-format
 msgid "Failed to create the preferences file %s."
 msgstr ""
 
-#: ../src/preferences.cpp:218
+#: ../src/preferences.cpp:227
 #, c-format
 msgid "The preferences file %s is not a regular file."
 msgstr ""
 
-#: ../src/preferences.cpp:228
+#: ../src/preferences.cpp:237
 #, c-format
 msgid "The preferences file %s could not be read."
 msgstr ""
 
-#: ../src/preferences.cpp:239
+#: ../src/preferences.cpp:248
 #, c-format
 msgid "The preferences file %s is not a valid XML document."
 msgstr ""
 
-#: ../src/preferences.cpp:248
+#: ../src/preferences.cpp:257
 #, c-format
 msgid "The file %s is not a valid Inkscape preferences file."
 msgstr ""
 
-#: ../src/preferences.cpp:298
+#: ../src/preferences.cpp:307
 msgid "Preferences file was deleted."
 msgstr ""
 
-#: ../src/preferences.cpp:299
+#: ../src/preferences.cpp:308
 msgid "There was an error trying to delete the preferences file."
 msgstr ""
 
@@ -14462,12 +14487,12 @@ msgstr ""
 
 #: ../src/ui/dialog/align-and-distribute.cpp:506
 #: ../src/ui/dialog/align-and-distribute.cpp:924
-#: ../src/ui/toolbar/connector-toolbar.cpp:185
+#: ../src/ui/toolbar/connector-toolbar.cpp:156
 msgid "Remove overlaps"
 msgstr ""
 
 #: ../src/ui/dialog/align-and-distribute.cpp:538
-#: ../src/ui/toolbar/connector-toolbar.cpp:390
+#: ../src/ui/toolbar/connector-toolbar.cpp:365
 msgid "Arrange connector network"
 msgstr ""
 
@@ -14496,7 +14521,7 @@ msgid "Rearrange"
 msgstr ""
 
 #: ../src/ui/dialog/align-and-distribute.cpp:925
-#: ../src/widgets/toolbox.cpp:1302
+#: ../src/widgets/toolbox.cpp:1135
 msgid "Nodes"
 msgstr ""
 
@@ -14607,7 +14632,7 @@ msgid "Distribute baselines of texts vertically"
 msgstr ""
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1017
-#: ../src/ui/toolbar/connector-toolbar.cpp:145
+#: ../src/ui/toolbar/connector-toolbar.cpp:126
 msgid "Nicely arrange selected connector network"
 msgstr ""
 
@@ -15786,7 +15811,7 @@ msgstr ""
 msgid "Remove selected grid."
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:151 ../src/widgets/toolbox.cpp:1409
+#: ../src/ui/dialog/document-properties.cpp:151 ../src/widgets/toolbox.cpp:1242
 msgid "Guides"
 msgstr ""
 
@@ -17124,7 +17149,7 @@ msgstr ""
 msgid "Spirals"
 msgstr ""
 
-#: ../src/ui/dialog/find.cpp:92 ../src/widgets/toolbox.cpp:1310
+#: ../src/ui/dialog/find.cpp:92 ../src/widgets/toolbox.cpp:1143
 msgid "Paths"
 msgstr ""
 
@@ -20980,8 +21005,7 @@ msgid "Rendering"
 msgstr ""
 
 #. Note: /options/bitmapoversample removed with Cairo renderer
-#: ../src/ui/dialog/inkscape-preferences.cpp:1905
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:313 ../src/verbs.cpp:155
+#: ../src/ui/dialog/inkscape-preferences.cpp:1905 ../src/verbs.cpp:155
 msgid "Edit"
 msgstr ""
 
@@ -21474,10 +21498,10 @@ msgid ""
 msgstr ""
 
 #: ../src/ui/dialog/input.cpp:1439
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:260
-#: ../src/ui/toolbar/spray-toolbar.cpp:109
-#: ../src/ui/toolbar/spray-toolbar.cpp:226
-#: ../src/ui/toolbar/spray-toolbar.cpp:277
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:108
+#: ../src/ui/toolbar/spray-toolbar.cpp:131
+#: ../src/ui/toolbar/spray-toolbar.cpp:157
+#: ../src/ui/toolbar/spray-toolbar.cpp:202
 #: ../src/ui/toolbar/tweak-toolbar.cpp:87
 msgid "Pressure"
 msgstr ""
@@ -24211,7 +24235,7 @@ msgstr ""
 
 #. add the units menu
 #. units menu
-#: ../src/ui/toolbar/arc-toolbar.cpp:124 ../src/ui/toolbar/lpe-toolbar.cpp:203
+#: ../src/ui/toolbar/arc-toolbar.cpp:124 ../src/ui/toolbar/lpe-toolbar.cpp:153
 #: ../src/ui/toolbar/node-toolbar.cpp:289
 #: ../src/ui/toolbar/paintbucket-toolbar.cpp:111
 #: ../src/ui/toolbar/rect-toolbar.cpp:163
@@ -24334,174 +24358,183 @@ msgstr ""
 msgid "3D Box: Change perspective (angle of infinite axis)"
 msgstr ""
 
-#. Width
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:67
+msgid "Choose a preset"
+msgstr ""
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:80
+msgid "Add/Edit Profile"
+msgstr ""
+
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:81
+msgid "Add or edit calligraphic profile"
+msgstr ""
+
+#. Width
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:91
 #: ../src/ui/toolbar/eraser-toolbar.cpp:98
 msgid "(hairline)"
 msgstr ""
 
-#. Mean
 #. Rotation
 #. Scale
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:81
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:122
+#. Mean
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:91
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:150
 #: ../src/ui/toolbar/eraser-toolbar.cpp:98
 #: ../src/ui/toolbar/pencil-toolbar.cpp:161
-#: ../src/ui/toolbar/spray-toolbar.cpp:89
-#: ../src/ui/toolbar/spray-toolbar.cpp:119
-#: ../src/ui/toolbar/spray-toolbar.cpp:138
-#: ../src/ui/toolbar/spray-toolbar.cpp:205
-#: ../src/ui/toolbar/spray-toolbar.cpp:235
-#: ../src/ui/toolbar/spray-toolbar.cpp:255
-#: ../src/ui/toolbar/spray-toolbar.cpp:396
+#: ../src/ui/toolbar/spray-toolbar.cpp:115
+#: ../src/ui/toolbar/spray-toolbar.cpp:141
+#: ../src/ui/toolbar/spray-toolbar.cpp:169
+#: ../src/ui/toolbar/spray-toolbar.cpp:185
+#: ../src/ui/toolbar/spray-toolbar.cpp:213
+#: ../src/ui/toolbar/spray-toolbar.cpp:229
+#: ../src/ui/toolbar/spray-toolbar.cpp:289
 #: ../src/ui/toolbar/tweak-toolbar.cpp:54
 #: ../src/ui/toolbar/tweak-toolbar.cpp:71
 #: ../src/ui/toolbar/tweak-toolbar.cpp:181
 msgid "(default)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:81
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:91
 #: ../src/ui/toolbar/eraser-toolbar.cpp:98
 msgid "(broad stroke)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:84
-msgid "Pen Width"
-msgstr ""
-
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:85
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:96
 msgid "The width of the calligraphic pen (relative to the visible canvas area)"
 msgstr ""
 
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:109
+#: ../src/ui/toolbar/eraser-toolbar.cpp:116
+msgid "Use the pressure of the input device to alter the width of the pen"
+msgstr ""
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:120
+msgid "Trace Background"
+msgstr ""
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:121
+msgid ""
+"Trace the lightness of the background by the width of the pen (white - "
+"minimum width, black - maximum width)"
+msgstr ""
+
 #. Thinning
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:132
 #: ../src/ui/toolbar/eraser-toolbar.cpp:127
 msgid "(speed blows up stroke)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:132
 #: ../src/ui/toolbar/eraser-toolbar.cpp:127
 msgid "(slight widening)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:132
 #: ../src/ui/toolbar/eraser-toolbar.cpp:127
 msgid "(constant width)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:132
 #: ../src/ui/toolbar/eraser-toolbar.cpp:127
 msgid "(slight thinning, default)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:102
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:132
 #: ../src/ui/toolbar/eraser-toolbar.cpp:127
 msgid "(speed deflates stroke)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:105
-msgid "Stroke Thinning"
-msgstr ""
-
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:105
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:136
 #: ../src/ui/toolbar/eraser-toolbar.cpp:131
 msgid "Thinning:"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:106
-#: ../src/ui/toolbar/eraser-toolbar.cpp:132
-msgid ""
-"How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 "
-"makes them broader, 0 makes width independent of velocity)"
-msgstr ""
-
 #. Angle
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:122
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:150
 msgid "(left edge up)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:122
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:150
 msgid "(horizontal)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:122
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:150
 msgid "(right edge up)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
-msgid "Pen Angle"
-msgstr ""
-
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:125
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:154
 #: ../share/extensions/motion.inx.h:3 ../share/extensions/restack.inx.h:5
 msgid "Angle:"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:126
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:155
 msgid ""
 "The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if "
 "fixation = 0)"
 msgstr ""
 
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:166
+msgid "Tilt"
+msgstr ""
+
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:167
+msgid "Use the tilt of the input device to alter the angle of the pen's nib"
+msgstr ""
+
 #. Fixation
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:142
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:178
 msgid "(perpendicular to stroke, \"brush\")"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:142
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:178
 msgid "(almost fixed, default)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:142
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:178
 msgid "(fixed by Angle, \"pen\")"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:145
-msgid "Fixation"
-msgstr ""
-
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:145
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:182
 msgid "Fixation:"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:146
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:183
 msgid ""
 "Angle behavior (0 = nib always perpendicular to stroke direction, 100 = "
 "fixed angle)"
 msgstr ""
 
 #. Cap Rounding
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:162
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:196
 #: ../src/ui/toolbar/eraser-toolbar.cpp:145
 msgid "(blunt caps, default)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:162
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:196
 #: ../src/ui/toolbar/eraser-toolbar.cpp:145
 msgid "(slightly bulging)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:162
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:196
 #: ../src/ui/toolbar/eraser-toolbar.cpp:145
 msgid "(approximately round)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:162
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:196
 #: ../src/ui/toolbar/eraser-toolbar.cpp:145
 msgid "(long protruding caps)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:166
-msgid "Cap rounding"
-msgstr ""
-
 #. TRANSLATORS: "cap" means "end" (both start and finish) here
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:166
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:200
 #: ../src/ui/toolbar/eraser-toolbar.cpp:150
 msgid "Caps:"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:167
+#. TRANSLATORS: "cap" means "end" (both start and finish) here
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:203
 #: ../src/ui/toolbar/eraser-toolbar.cpp:151
 msgid ""
 "Increase to make caps at the ends of strokes protrude more (0 = no caps, 1 = "
@@ -24509,232 +24542,171 @@ msgid ""
 msgstr ""
 
 #. Tremor
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:183
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:216
 #: ../src/ui/toolbar/eraser-toolbar.cpp:164
 msgid "(smooth line)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:183
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:216
 #: ../src/ui/toolbar/eraser-toolbar.cpp:164
 msgid "(slight tremor)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:183
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:216
 #: ../src/ui/toolbar/eraser-toolbar.cpp:164
 msgid "(noticeable tremor)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:183
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:216
 #: ../src/ui/toolbar/eraser-toolbar.cpp:164
 msgid "(maximum tremor)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:186
-msgid "Stroke Tremor"
-msgstr ""
-
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:186
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:220
 #: ../src/ui/toolbar/eraser-toolbar.cpp:168
 msgid "Tremor:"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:187
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:221
 #: ../src/ui/toolbar/eraser-toolbar.cpp:169
 msgid "Increase to make strokes rugged and trembling"
 msgstr ""
 
 #. Wiggle
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:204
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:233
 msgid "(no wiggle)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:204
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:233
 msgid "(slight deviation)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:204
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:233
 msgid "(wild waves and curls)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:207
-msgid "Pen Wiggle"
-msgstr ""
-
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:207
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:237
 msgid "Wiggle:"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:208
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:238
 msgid "Increase to make the pen waver and wiggle"
 msgstr ""
 
 #. Mass
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:225
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:250
 #: ../src/ui/toolbar/eraser-toolbar.cpp:185
 msgid "(no inertia)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:225
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:250
 #: ../src/ui/toolbar/eraser-toolbar.cpp:185
 msgid "(slight smoothing, default)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:225
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:250
 #: ../src/ui/toolbar/eraser-toolbar.cpp:185
 msgid "(noticeable lagging)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:225
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:250
 #: ../src/ui/toolbar/eraser-toolbar.cpp:185
 msgid "(maximum inertia)"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:228
-msgid "Pen Mass"
-msgstr ""
-
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:228
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:254
 #: ../src/ui/toolbar/eraser-toolbar.cpp:188
 msgid "Mass:"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:229
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:255
 msgid "Increase to make the pen drag behind, as if slowed by inertia"
 msgstr ""
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:248
-msgid "Trace Background"
-msgstr ""
-
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:249
-msgid ""
-"Trace the lightness of the background by the width of the pen (white - "
-"minimum width, black - maximum width)"
-msgstr ""
-
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:261
-#: ../src/ui/toolbar/eraser-toolbar.cpp:116
-msgid "Use the pressure of the input device to alter the width of the pen"
-msgstr ""
-
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:272
-msgid "Tilt"
-msgstr ""
-
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:273
-msgid "Use the tilt of the input device to alter the angle of the pen's nib"
-msgstr ""
-
-#. Name
-#. Label
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:293
-msgid "Choose a preset"
-msgstr ""
-
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:309
-msgid "Add/Edit Profile"
-msgstr ""
-
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:310
-msgid "Add or edit calligraphic profile"
-msgstr ""
-
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:468
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:563
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:417
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:508
 msgid "No preset"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:80
+#: ../src/ui/toolbar/connector-toolbar.cpp:77
 msgid "Avoid"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:81
+#: ../src/ui/toolbar/connector-toolbar.cpp:78
 #: ../src/ui/tools/connector-tool.cpp:1321
 msgid "Make connectors avoid selected objects"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:90
+#: ../src/ui/toolbar/connector-toolbar.cpp:85
 msgid "Ignore"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:91
+#: ../src/ui/toolbar/connector-toolbar.cpp:86
 #: ../src/ui/tools/connector-tool.cpp:1322
 msgid "Make connectors ignore selected objects"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:101
+#: ../src/ui/toolbar/connector-toolbar.cpp:94
 msgid "Orthogonal"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:102
+#: ../src/ui/toolbar/connector-toolbar.cpp:95
 msgid "Make connector orthogonal or polyline"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:115
-msgid "Connector Curvature"
-msgstr ""
-
-#: ../src/ui/toolbar/connector-toolbar.cpp:115
+#: ../src/ui/toolbar/connector-toolbar.cpp:108
 msgid "Curvature:"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:116
+#: ../src/ui/toolbar/connector-toolbar.cpp:109
 msgid "The amount of connectors curvature"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:129
-msgid "Connector Spacing"
-msgstr ""
-
-#: ../src/ui/toolbar/connector-toolbar.cpp:129
+#: ../src/ui/toolbar/connector-toolbar.cpp:117
 msgid "Spacing:"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:130
+#: ../src/ui/toolbar/connector-toolbar.cpp:118
 msgid "The amount of space left around objects by auto-routing connectors"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:144
+#: ../src/ui/toolbar/connector-toolbar.cpp:125
 msgid "Graph"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:154
-msgid "Connector Length"
-msgstr ""
-
-#: ../src/ui/toolbar/connector-toolbar.cpp:154
+#: ../src/ui/toolbar/connector-toolbar.cpp:135
 msgid "Length:"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:155
+#: ../src/ui/toolbar/connector-toolbar.cpp:136
 msgid "Ideal length for connectors when layout is applied"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:169
+#: ../src/ui/toolbar/connector-toolbar.cpp:143
 msgid "Downwards"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:170
+#: ../src/ui/toolbar/connector-toolbar.cpp:144
 msgid "Make connectors with end-markers (arrows) point downwards"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:186
+#: ../src/ui/toolbar/connector-toolbar.cpp:157
 msgid "Do not allow overlapping shapes"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:272
+#: ../src/ui/toolbar/connector-toolbar.cpp:247
 msgid "Set connector type: orthogonal"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:272
+#: ../src/ui/toolbar/connector-toolbar.cpp:247
 msgid "Set connector type: polyline"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:319
+#: ../src/ui/toolbar/connector-toolbar.cpp:294
 msgid "Change connector curvature"
 msgstr ""
 
-#: ../src/ui/toolbar/connector-toolbar.cpp:367
+#: ../src/ui/toolbar/connector-toolbar.cpp:342
 msgid "Change connector spacing"
 msgstr ""
 
@@ -24789,6 +24761,12 @@ msgstr ""
 msgid "Eraser Pressure"
 msgstr ""
 
+#: ../src/ui/toolbar/eraser-toolbar.cpp:132
+msgid ""
+"How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 "
+"makes them broader, 0 makes width independent of velocity)"
+msgstr ""
+
 #: ../src/ui/toolbar/eraser-toolbar.cpp:190
 msgid "Increase to make the eraser drag behind, as if slowed by inertia"
 msgstr ""
@@ -24813,9 +24791,8 @@ msgstr ""
 msgid "Multiple gradients"
 msgstr ""
 
-#. Name
 #: ../src/ui/toolbar/gradient-toolbar.cpp:344
-#: ../src/ui/toolbar/mesh-toolbar.cpp:238
+#: ../src/ui/toolbar/mesh-toolbar.cpp:164
 msgid "New:"
 msgstr ""
 
@@ -24836,22 +24813,22 @@ msgid "Create radial (elliptic or circular) gradient"
 msgstr ""
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:374
-#: ../src/ui/toolbar/mesh-toolbar.cpp:262
+#: ../src/ui/toolbar/mesh-toolbar.cpp:193
 msgid "fill"
 msgstr ""
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:375
-#: ../src/ui/toolbar/mesh-toolbar.cpp:263
+#: ../src/ui/toolbar/mesh-toolbar.cpp:194
 msgid "Create gradient in the fill"
 msgstr ""
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:379
-#: ../src/ui/toolbar/mesh-toolbar.cpp:268
+#: ../src/ui/toolbar/mesh-toolbar.cpp:198
 msgid "stroke"
 msgstr ""
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:380
-#: ../src/ui/toolbar/mesh-toolbar.cpp:269
+#: ../src/ui/toolbar/mesh-toolbar.cpp:199
 msgid "Create gradient in the stroke"
 msgstr ""
 
@@ -24949,67 +24926,68 @@ msgstr ""
 msgid "Multiple stops"
 msgstr ""
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:81
+#. The first toggle button represents the state that no subtool is active.
+#: ../src/ui/toolbar/lpe-toolbar.cpp:74
 msgid "All inactive"
 msgstr ""
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:82
+#: ../src/ui/toolbar/lpe-toolbar.cpp:75
 msgid "No geometric tool is active"
 msgstr ""
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:119
+#: ../src/ui/toolbar/lpe-toolbar.cpp:105
 msgid "Show limiting bounding box"
 msgstr ""
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:120
+#: ../src/ui/toolbar/lpe-toolbar.cpp:106
 msgid "Show bounding box (used to cut infinite lines)"
 msgstr ""
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:131
+#. TODO: Shouldn't this just be a button (not toggle button)?
+#: ../src/ui/toolbar/lpe-toolbar.cpp:115
 msgid "Get limiting bounding box from selection"
 msgstr ""
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:132
+#: ../src/ui/toolbar/lpe-toolbar.cpp:116
 msgid ""
 "Set limiting bounding box (used to cut infinite lines) to the bounding box "
 "of current selection"
 msgstr ""
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:149
+#: ../src/ui/toolbar/lpe-toolbar.cpp:127
 msgid "Closed"
 msgstr ""
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:155
+#: ../src/ui/toolbar/lpe-toolbar.cpp:128
 msgid "Open start"
 msgstr ""
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:161
+#: ../src/ui/toolbar/lpe-toolbar.cpp:129
 msgid "Open end"
 msgstr ""
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:167
+#: ../src/ui/toolbar/lpe-toolbar.cpp:130
 msgid "Open both"
 msgstr ""
 
-#. Name
-#. Label
-#: ../src/ui/toolbar/lpe-toolbar.cpp:175
+#: ../src/ui/toolbar/lpe-toolbar.cpp:132
 msgid "Choose a line segment type"
 msgstr ""
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:192
+#: ../src/ui/toolbar/lpe-toolbar.cpp:144
 msgid "Display measuring info"
 msgstr ""
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:193
+#: ../src/ui/toolbar/lpe-toolbar.cpp:145
 msgid "Display measuring info for selected items"
 msgstr ""
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:212
+#. TODO: Shouldn't this be a regular Gtk::ToolButton (not toggle)?
+#: ../src/ui/toolbar/lpe-toolbar.cpp:164
 msgid "Open LPE dialog"
 msgstr ""
 
-#: ../src/ui/toolbar/lpe-toolbar.cpp:213
+#: ../src/ui/toolbar/lpe-toolbar.cpp:165
 msgid "Open LPE dialog (to adapt parameters numerically)"
 msgstr ""
 
@@ -25137,145 +25115,121 @@ msgstr ""
 msgid "Use current layer in the measure."
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:225
+#: ../src/ui/toolbar/mesh-toolbar.cpp:168
 msgid "normal"
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:226
+#: ../src/ui/toolbar/mesh-toolbar.cpp:169
 msgid "Create mesh gradient"
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:231
+#: ../src/ui/toolbar/mesh-toolbar.cpp:173
 msgid "conical"
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:232
+#: ../src/ui/toolbar/mesh-toolbar.cpp:174
 msgid "Create conical gradient"
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:295
-msgid "Rows"
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:295
+#: ../src/ui/toolbar/mesh-toolbar.cpp:219
 #: ../share/extensions/guides_creator.inx.h:5
 #: ../share/extensions/layout_nup.inx.h:12
 msgid "Rows:"
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:295
+#: ../src/ui/toolbar/mesh-toolbar.cpp:220
 msgid "Number of rows in new mesh"
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:314
-msgid "Columns"
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:314
+#: ../src/ui/toolbar/mesh-toolbar.cpp:233
 #: ../share/extensions/guides_creator.inx.h:4
 msgid "Columns:"
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:314
+#: ../src/ui/toolbar/mesh-toolbar.cpp:234
 msgid "Number of columns in new mesh"
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:331
+#: ../src/ui/toolbar/mesh-toolbar.cpp:248
 msgid "Edit Fill"
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:332
+#: ../src/ui/toolbar/mesh-toolbar.cpp:249
 msgid "Edit fill mesh"
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:343
+#: ../src/ui/toolbar/mesh-toolbar.cpp:257
 msgid "Edit Stroke"
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:344
+#: ../src/ui/toolbar/mesh-toolbar.cpp:258
 msgid "Edit stroke mesh"
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:355
+#: ../src/ui/toolbar/mesh-toolbar.cpp:266
 #: ../src/ui/toolbar/node-toolbar.cpp:333
 msgid "Show Handles"
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:369
-#: ../src/ui/toolbar/mesh-toolbar.cpp:370
-msgid "WARNING: Mesh SVG Syntax Subject to Change"
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:387
-msgctxt "Type"
-msgid "Coons"
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:393
-msgid "Bicubic"
-msgstr ""
-
-#. Name
-#: ../src/ui/toolbar/mesh-toolbar.cpp:401
-msgid "Smoothing"
-msgstr ""
-
-#. Label
-#: ../src/ui/toolbar/mesh-toolbar.cpp:402
-msgid "Coons: no smothing. Bicubic: smothing across patch boundaries."
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:420
+#: ../src/ui/toolbar/mesh-toolbar.cpp:277
 msgid "Toggle Sides"
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:421
+#: ../src/ui/toolbar/mesh-toolbar.cpp:278
 msgid "Toggle selected sides between Beziers and lines."
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:424
-msgid "Toggle side:"
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:431
+#: ../src/ui/toolbar/mesh-toolbar.cpp:285
 msgid "Make elliptical"
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:432
+#: ../src/ui/toolbar/mesh-toolbar.cpp:286
 msgid ""
 "Make selected sides elliptical by changing length of handles. Works best if "
 "handles already approximate ellipse."
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:435
-msgid "Make elliptical:"
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:442
+#: ../src/ui/toolbar/mesh-toolbar.cpp:293
 msgid "Pick colors:"
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:443
+#: ../src/ui/toolbar/mesh-toolbar.cpp:294
 msgid "Pick colors for selected corner nodes from underneath mesh."
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:446
-msgid "Pick Color"
-msgstr ""
-
-#: ../src/ui/toolbar/mesh-toolbar.cpp:454
+#: ../src/ui/toolbar/mesh-toolbar.cpp:302
 msgid "Scale mesh to bounding box:"
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:455
+#: ../src/ui/toolbar/mesh-toolbar.cpp:303
 msgid "Scale mesh to fit inside bounding box."
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:458
-msgid "Fit mesh"
+#: ../src/ui/toolbar/mesh-toolbar.cpp:313
+#: ../src/ui/toolbar/mesh-toolbar.cpp:314
+msgid "WARNING: Mesh SVG Syntax Subject to Change"
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:636
+#: ../src/ui/toolbar/mesh-toolbar.cpp:323
+#: ../src/ui/toolbar/pencil-toolbar.cpp:165
+msgid "Smoothing:"
+msgstr ""
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:325
+msgctxt "Type"
+msgid "Coons"
+msgstr ""
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:326
+msgid "Bicubic"
+msgstr ""
+
+#. TRANSLATORS: Type of Smoothing. See https://en.wikipedia.org/wiki/Coons_patch
+#: ../src/ui/toolbar/mesh-toolbar.cpp:329
+msgid "Coons: no smothing. Bicubic: smothing across patch boundaries."
+msgstr ""
+
+#: ../src/ui/toolbar/mesh-toolbar.cpp:528
 msgid ""
 "Mesh gradients are part of SVG 2:\n"
 "* Syntax may change.\n"
@@ -25285,7 +25239,7 @@ msgid ""
 "For print: export to PDF."
 msgstr ""
 
-#: ../src/ui/toolbar/mesh-toolbar.cpp:668
+#: ../src/ui/toolbar/mesh-toolbar.cpp:561
 msgid "Set mesh type"
 msgstr ""
 
@@ -25524,10 +25478,6 @@ msgstr ""
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:161
 msgid "(few nodes, smooth)"
-msgstr ""
-
-#: ../src/ui/toolbar/pencil-toolbar.cpp:165
-msgid "Smoothing:"
 msgstr ""
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:166
@@ -25848,225 +25798,199 @@ msgstr ""
 msgid "Change spiral"
 msgstr ""
 
-#. Width
-#: ../src/ui/toolbar/spray-toolbar.cpp:89
-msgid "(narrow spray)"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:89
-msgid "(broad spray)"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:92
-msgid "The width of the spray area (relative to the visible canvas area)"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:110
-msgid "Use the pressure of the input device to alter the width of spray area"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:119
-msgid "(maximum mean)"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:122
-msgid "Focus"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:122
-msgid "Focus:"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:122
-msgid "0 to spray a spot; increase to enlarge the ring radius"
-msgstr ""
-
-#. Standard_deviation
-#: ../src/ui/toolbar/spray-toolbar.cpp:138
-msgid "(minimum scatter)"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:138
-msgid "(maximum scatter)"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:141
-msgctxt "Spray tool"
-msgid "Scatter"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:141
-msgctxt "Spray tool"
-msgid "Scatter:"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:141
-msgid "Increase to scatter sprayed objects"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:164 ../src/ui/tools/spray-tool.cpp:1353
+#: ../src/ui/toolbar/spray-toolbar.cpp:81 ../src/ui/tools/spray-tool.cpp:1353
 msgid "Spray with copies"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:165
+#: ../src/ui/toolbar/spray-toolbar.cpp:82
 msgid "Spray copies of the initial selection"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:170 ../src/ui/tools/spray-tool.cpp:1357
+#: ../src/ui/toolbar/spray-toolbar.cpp:86 ../src/ui/tools/spray-tool.cpp:1357
 msgid "Spray with clones"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:171
+#: ../src/ui/toolbar/spray-toolbar.cpp:87
 msgid "Spray clones of the initial selection"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:177
+#: ../src/ui/toolbar/spray-toolbar.cpp:92
 msgid "Spray single path"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:178
+#: ../src/ui/toolbar/spray-toolbar.cpp:93
 msgid "Spray objects in a single path"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:184
+#: ../src/ui/toolbar/spray-toolbar.cpp:98
 msgid "Delete sprayed items"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:185
+#: ../src/ui/toolbar/spray-toolbar.cpp:99
 msgid "Delete sprayed items from selection"
 msgstr ""
 
+#. Width
+#: ../src/ui/toolbar/spray-toolbar.cpp:115
+msgid "(narrow spray)"
+msgstr ""
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:115
+msgid "(broad spray)"
+msgstr ""
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:120
+msgid "The width of the spray area (relative to the visible canvas area)"
+msgstr ""
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:132
+msgid "Use the pressure of the input device to alter the width of spray area"
+msgstr ""
+
 #. Population
-#: ../src/ui/toolbar/spray-toolbar.cpp:205
+#: ../src/ui/toolbar/spray-toolbar.cpp:141
 msgid "(low population)"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:205
+#: ../src/ui/toolbar/spray-toolbar.cpp:141
 msgid "(high population)"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:208
-msgid "Amount"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:209
+#: ../src/ui/toolbar/spray-toolbar.cpp:146
 msgid "Adjusts the number of items sprayed per click"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:227
+#: ../src/ui/toolbar/spray-toolbar.cpp:158
 msgid ""
 "Use the pressure of the input device to alter the amount of sprayed objects"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:235
+#: ../src/ui/toolbar/spray-toolbar.cpp:169
 msgid "(high rotation variation)"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:238
-msgid "Rotation"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:238
+#: ../src/ui/toolbar/spray-toolbar.cpp:173
 msgid "Rotation:"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:240
+#: ../src/ui/toolbar/spray-toolbar.cpp:175
 #, no-c-format
 msgid ""
 "Variation of the rotation of the sprayed objects; 0% for the same rotation "
 "than the original object"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:255
+#: ../src/ui/toolbar/spray-toolbar.cpp:185
 msgid "(high scale variation)"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:258
-msgctxt "Spray tool"
-msgid "Scale"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:258
+#: ../src/ui/toolbar/spray-toolbar.cpp:189
 msgctxt "Spray tool"
 msgid "Scale:"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:260
+#: ../src/ui/toolbar/spray-toolbar.cpp:191
 #, no-c-format
 msgid ""
 "Variation in the scale of the sprayed objects; 0% for the same scale than "
 "the original object"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:278
+#: ../src/ui/toolbar/spray-toolbar.cpp:203
 msgid "Use the pressure of the input device to alter the scale of new items"
 msgstr ""
 
+#. Standard_deviation
+#: ../src/ui/toolbar/spray-toolbar.cpp:213
+msgid "(minimum scatter)"
+msgstr ""
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:213
+msgid "(maximum scatter)"
+msgstr ""
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:217
+msgctxt "Spray tool"
+msgid "Scatter:"
+msgstr ""
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:218
+msgid "Increase to scatter sprayed objects"
+msgstr ""
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:229
+msgid "(maximum mean)"
+msgstr ""
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:233
+msgid "Focus:"
+msgstr ""
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:234
+msgid "0 to spray a spot; increase to enlarge the ring radius"
+msgstr ""
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:247
+#: ../src/ui/toolbar/spray-toolbar.cpp:248
+msgid "Apply over no transparent areas"
+msgstr ""
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:258
+#: ../src/ui/toolbar/spray-toolbar.cpp:259
+msgid "Apply over transparent areas"
+msgstr ""
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:269
+#: ../src/ui/toolbar/spray-toolbar.cpp:270
+msgid "No overlap between colors"
+msgstr ""
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:280
+#: ../src/ui/toolbar/spray-toolbar.cpp:281
+msgid "Prevent overlapping objects"
+msgstr ""
+
 #: ../src/ui/toolbar/spray-toolbar.cpp:289
-#: ../src/ui/toolbar/spray-toolbar.cpp:290
+msgid "(minimum offset)"
+msgstr ""
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:289
+msgid "(maximum offset)"
+msgstr ""
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:293
+msgid "Offset %:"
+msgstr ""
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:294
+msgid "Increase to segregate objects more (value in percent)"
+msgstr ""
+
+#: ../src/ui/toolbar/spray-toolbar.cpp:305
+#: ../src/ui/toolbar/spray-toolbar.cpp:306
 msgid ""
 "Pick color from the drawing. You can use clonetiler trace dialog for "
 "advanced effects. In clone mode original fill or stroke colors must be unset."
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:301
-#: ../src/ui/toolbar/spray-toolbar.cpp:302
-msgid "Pick from center instead average area."
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:313
 #: ../src/ui/toolbar/spray-toolbar.cpp:314
-msgid "Inverted pick value, retaining color in advanced trace mode"
+#: ../src/ui/toolbar/spray-toolbar.cpp:315
+msgid "Apply picked color to fill"
 msgstr ""
 
 #: ../src/ui/toolbar/spray-toolbar.cpp:325
 #: ../src/ui/toolbar/spray-toolbar.cpp:326
-msgid "Apply picked color to fill"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:337
-#: ../src/ui/toolbar/spray-toolbar.cpp:338
 msgid "Apply picked color to stroke"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:349
-#: ../src/ui/toolbar/spray-toolbar.cpp:350
-msgid "No overlap between colors"
+#: ../src/ui/toolbar/spray-toolbar.cpp:336
+#: ../src/ui/toolbar/spray-toolbar.cpp:337
+msgid "Inverted pick value, retaining color in advanced trace mode"
 msgstr ""
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:361
-#: ../src/ui/toolbar/spray-toolbar.cpp:362
-msgid "Apply over transparent areas"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:373
-#: ../src/ui/toolbar/spray-toolbar.cpp:374
-msgid "Apply over no transparent areas"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:385
-#: ../src/ui/toolbar/spray-toolbar.cpp:386
-msgid "Prevent overlapping objects"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:396
-msgid "(minimum offset)"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:396
-msgid "(maximum offset)"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:399
-msgid "Offset %"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:399
-msgid "Offset %:"
-msgstr ""
-
-#: ../src/ui/toolbar/spray-toolbar.cpp:400
-msgid "Increase to segregate objects more (value in percent)"
+#: ../src/ui/toolbar/spray-toolbar.cpp:347
+#: ../src/ui/toolbar/spray-toolbar.cpp:348
+msgid "Pick from center instead of average area."
 msgstr ""
 
 #: ../src/ui/toolbar/star-toolbar.cpp:81
@@ -32184,131 +32108,131 @@ msgstr ""
 msgid "Style of Paint Bucket fill objects"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1256
+#: ../src/widgets/toolbox.cpp:1089
 msgid "Bounding box"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1256
+#: ../src/widgets/toolbox.cpp:1089
 msgid "Snap bounding boxes"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1265
+#: ../src/widgets/toolbox.cpp:1098
 msgid "Bounding box edges"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1265
+#: ../src/widgets/toolbox.cpp:1098
 msgid "Snap to edges of a bounding box"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1274
+#: ../src/widgets/toolbox.cpp:1107
 msgid "Bounding box corners"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1274
+#: ../src/widgets/toolbox.cpp:1107
 msgid "Snap bounding box corners"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1283
+#: ../src/widgets/toolbox.cpp:1116
 msgid "BBox Edge Midpoints"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1283
+#: ../src/widgets/toolbox.cpp:1116
 msgid "Snap midpoints of bounding box edges"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1293
+#: ../src/widgets/toolbox.cpp:1126
 msgid "BBox Centers"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1293
+#: ../src/widgets/toolbox.cpp:1126
 msgid "Snapping centers of bounding boxes"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1302
+#: ../src/widgets/toolbox.cpp:1135
 msgid "Snap nodes, paths, and handles"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1310
+#: ../src/widgets/toolbox.cpp:1143
 msgid "Snap to paths"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1319
+#: ../src/widgets/toolbox.cpp:1152
 msgid "Path intersections"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1319
+#: ../src/widgets/toolbox.cpp:1152
 msgid "Snap to path intersections"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1328
+#: ../src/widgets/toolbox.cpp:1161
 msgid "To nodes"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1328
+#: ../src/widgets/toolbox.cpp:1161
 msgid "Snap cusp nodes, incl. rectangle corners"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1337
+#: ../src/widgets/toolbox.cpp:1170
 msgid "Smooth nodes"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1337
+#: ../src/widgets/toolbox.cpp:1170
 msgid "Snap smooth nodes, incl. quadrant points of ellipses"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1346
+#: ../src/widgets/toolbox.cpp:1179
 msgid "Line Midpoints"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1346
+#: ../src/widgets/toolbox.cpp:1179
 msgid "Snap midpoints of line segments"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1355
+#: ../src/widgets/toolbox.cpp:1188
 msgid "Others"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1355
+#: ../src/widgets/toolbox.cpp:1188
 msgid "Snap other points (centers, guide origins, gradient handles, etc.)"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1363
+#: ../src/widgets/toolbox.cpp:1196
 msgid "Object Centers"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1363
+#: ../src/widgets/toolbox.cpp:1196
 msgid "Snap centers of objects"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1372
+#: ../src/widgets/toolbox.cpp:1205
 msgid "Rotation Centers"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1372
+#: ../src/widgets/toolbox.cpp:1205
 msgid "Snap an item's rotation center"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1381
+#: ../src/widgets/toolbox.cpp:1214
 msgid "Text baseline"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1381
+#: ../src/widgets/toolbox.cpp:1214
 msgid "Snap text anchors and baselines"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1391
+#: ../src/widgets/toolbox.cpp:1224
 msgid "Page border"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1391
+#: ../src/widgets/toolbox.cpp:1224
 msgid "Snap to the page border"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1400
+#: ../src/widgets/toolbox.cpp:1233
 msgid "Snap to grids"
 msgstr ""
 
-#: ../src/widgets/toolbox.cpp:1409
+#: ../src/widgets/toolbox.cpp:1242
 msgid "Snap guides"
 msgstr ""
 

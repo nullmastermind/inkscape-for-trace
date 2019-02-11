@@ -21,6 +21,7 @@ list(APPEND INKSCAPE_CXX_FLAGS "-std=c++11")
 # Errors for common mistakes
 list(APPEND INKSCAPE_CXX_FLAGS "-Werror=format")                # e.g.: printf("%s", std::string("foo"))
 list(APPEND INKSCAPE_CXX_FLAGS "-Werror=format-security")       # e.g.: printf(variable);
+list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection")
 
 # Define the flags for profiling if desired:
 if(WITH_PROFILING)
@@ -363,6 +364,9 @@ endif()
 list(REMOVE_DUPLICATES INKSCAPE_CXX_FLAGS)
 foreach(flag ${INKSCAPE_CXX_FLAGS})
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flag}" CACHE STRING "" FORCE)
+endforeach()
+foreach(flag ${INKSCAPE_CXX_FLAGS_DEBUG})
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${flag}" CACHE STRING "" FORCE)
 endforeach()
 
 # Some linkers, like gold, don't find symbols recursively. So we have to link against X11 explicitly
