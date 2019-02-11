@@ -107,7 +107,7 @@ gchar *sp_action_get_title(SPAction const *action)
     for (unsigned si = 0 ; ; si++)  {
         int const c = src[si];
         // Ignore Unicode Character "…" (U+2026)
-        if ( c == '\xE2' && si + 2 <= len && src[si+1] == '\x80' && src[si+2] == '\xA6' ) {
+        if ( c == '\xE2' && si + 2 < len && src[si+1] == '\x80' && src[si+2] == '\xA6' ) {
             si += 2;
         } else if ( c != '_' && c != '.' ) {
             ret[ri] = c;
