@@ -21,8 +21,13 @@ list(APPEND INKSCAPE_CXX_FLAGS "-std=c++11")
 # Errors for common mistakes
 list(APPEND INKSCAPE_CXX_FLAGS "-Werror=format")                # e.g.: printf("%s", std::string("foo"))
 list(APPEND INKSCAPE_CXX_FLAGS "-Werror=format-security")       # e.g.: printf(variable);
-list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong -grecord-gcc-switches -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection")
-
+list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-D_FORTIFY_SOURCE=2")
+if (CMAKE_COMPILER_IS_GNUCC)
+list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-fexceptions -fstack-protector-strong -grecord-gcc-switches -fasynchronous-unwind-tables")
+if(CXX_COMPILER_VERSION VERSION_GREATER 8.0)
+list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-fstack-clash-protection -fcf-protection")
+endif()
+endif()
 # Define the flags for profiling if desired:
 if(WITH_PROFILING)
     set(BUILD_SHARED_LIBS off)
