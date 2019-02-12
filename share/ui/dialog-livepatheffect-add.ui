@@ -90,8 +90,12 @@
                     </child>
                     <child>
                       <object class="GtkSwitch" id="LPEExperimentals">
+                        <property name="name">LPEExperimentals</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="active">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -103,13 +107,55 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_left">10</property>
-                        <property name="label" translatable="yes">Experimental effects</property>
+                        <property name="label" translatable="yes">Hide Experimentals</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
+                        <property name="padding">5</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSeparator">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="padding">5</property>
                         <property name="position">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEventBox" id="LPESelectorEffectEventFavShow">
+                        <property name="name">LPESelectorEffectEventFavShow</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="no_show_all">True</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <child>
+                          <object class="GtkImage" id="LPESelectorEffectFavShowImage">
+                            <property name="name">LPESelectorEffectFavShowImage</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">center</property>
+                            <property name="valign">center</property>
+                            <property name="pixel_size">27</property>
+                            <property name="icon_name">draw-star-outline</property>
+                            <property name="icon_size">2</property>
+                            <style>
+                              <class name="fab"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">5</property>
                       </packing>
                     </child>
                   </object>
@@ -162,8 +208,8 @@
                         <property name="no_show_all">True</property>
                         <property name="column_spacing">1</property>
                         <property name="row_spacing">1</property>
-                        <property name="min_children_per_line">1</property>
-                        <property name="max_children_per_line">300</property>
+                        <property name="min_children_per_line">3</property>
+                        <property name="max_children_per_line">30</property>
                       </object>
                     </child>
                   </object>

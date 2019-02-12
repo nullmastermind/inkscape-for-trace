@@ -255,6 +255,15 @@ spinbutton undershoot {
     padding-bottom:10px;
     outline:none;
 }
+
+/*#LPEExperimentals.active{*/
+/*background-color:#C42A13;*/
+/*border-color:#C42A13;*/
+/*}*/
+/*#LPEExperimentals.active slider{*/
+/*border-color:#C42A13;*/
+/*}*/
+
 .lpeactive #LPESelectorEffectFavTop{
     opacity:0;
 }
