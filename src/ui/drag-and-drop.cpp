@@ -78,7 +78,7 @@ static guint nui_drop_target_entries = G_N_ELEMENTS(ui_drop_target_entries);
 
 /* Drag and Drop */
 void
-sp_ui_drag_data_received(GtkWidget *widget,
+ink_drag_data_received(GtkWidget *widget,
                          GdkDragContext *drag_context,
                          gint x, gint y,
                          GtkSelectionData *data,
@@ -447,7 +447,7 @@ sp_ui_drag_data_received(GtkWidget *widget,
 
 #include "ui/tools/gradient-tool.h"
 
-void sp_ui_drag_motion( GtkWidget */*widget*/,
+void ink_drag_motion( GtkWidget */*widget*/,
                         GdkDragContext */*drag_context*/,
                         gint /*x*/, gint /*y*/,
                         GtkSelectionData */*data*/,
@@ -462,7 +462,7 @@ void sp_ui_drag_motion( GtkWidget */*widget*/,
 //     g_message("drag-n-drop motion (%4d, %4d)  at %d", x, y, event_time);
 }
 
-static void sp_ui_drag_leave( GtkWidget */*widget*/,
+static void ink_drag_leave( GtkWidget */*widget*/,
                               GdkDragContext */*drag_context*/,
                               guint /*event_time*/,
                               gpointer /*user_data*/ )
@@ -471,7 +471,7 @@ static void sp_ui_drag_leave( GtkWidget */*widget*/,
 }
 
 void
-sp_ui_drag_setup(Gtk::Widget* win)
+ink_drag_setup(Gtk::Widget* win)
 {
     if ( completeDropTargets == nullptr || completeDropTargetsCount == 0 )
     {
@@ -507,17 +507,17 @@ sp_ui_drag_setup(Gtk::Widget* win)
 
     g_signal_connect(G_OBJECT(win->gobj()),
                      "drag_data_received",
-                     G_CALLBACK(sp_ui_drag_data_received),
+                     G_CALLBACK(ink_drag_data_received),
                      NULL);
 
     g_signal_connect(G_OBJECT(win->gobj()),
                      "drag_motion",
-                     G_CALLBACK(sp_ui_drag_motion),
+                     G_CALLBACK(ink_drag_motion),
                      NULL);
 
     g_signal_connect(G_OBJECT(win->gobj()),
                      "drag_leave",
-                     G_CALLBACK(sp_ui_drag_leave),
+                     G_CALLBACK(ink_drag_leave),
                      NULL);
 }
 

@@ -16,23 +16,23 @@
 
 #include <gtkmm.h>
 
-void sp_ui_drag_setup(Gtk::Widget* win);
+void ink_drag_setup(Gtk::Widget* win);
 
-static void sp_ui_drag_data_received(GtkWidget *widget,
+static void ink_drag_data_received(GtkWidget *widget,
                                      GdkDragContext *drag_context,
                                      gint x, gint y,
                                      GtkSelectionData *data,
                                      guint info,
                                      guint event_time,
                                      gpointer user_data);
-static void sp_ui_drag_motion( GtkWidget *widget,
+static void ink_drag_motion( GtkWidget *widget,
                                GdkDragContext *drag_context,
                                gint x, gint y,
                                GtkSelectionData *data,
                                guint info,
                                guint event_time,
                                gpointer user_data );
-static void sp_ui_drag_leave( GtkWidget *widget,
+static void ink_drag_leave( GtkWidget *widget,
                               GdkDragContext *drag_context,
                               guint event_time,
                               gpointer user_data );

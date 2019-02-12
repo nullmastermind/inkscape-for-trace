@@ -52,7 +52,7 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
 
     set_resizable(true);
 
-    sp_ui_drag_setup(this);
+    ink_drag_setup(this);
 
      // =============== Build interface ===============
 
