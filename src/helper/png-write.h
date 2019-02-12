@@ -15,6 +15,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <glib.h> // Only for gchar.
+
 #include <2geom/forward.h>
 
 class SPDocument;

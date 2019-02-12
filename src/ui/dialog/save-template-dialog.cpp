@@ -11,7 +11,6 @@
 #include "save-template-dialog.h"
 #include "file.h"
 #include "io/resource.h"
-#include "ui/interface.h"
 
 #include <glibmm/i18n.h>
 

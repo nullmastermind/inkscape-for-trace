@@ -56,7 +56,6 @@
 #include "ui/dialog/swatches.h"
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
-#include "ui/interface.h"
 #include "ui/tools/box3d-tool.h"
 #include "ui/uxmanager.h"
 #include "ui/widget/button.h"

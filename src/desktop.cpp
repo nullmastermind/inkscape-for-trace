@@ -62,7 +62,7 @@
 #include "object/sp-root.h"
 
 #include "ui/dialog/dialog-manager.h"
-#include "ui/interface.h"
+#include "ui/interface.h"  // Only for getLayoutPrefPath
 #include "ui/tool-factory.h"
 #include "ui/tools/box3d-tool.h"
 #include "ui/tools/select-tool.h"

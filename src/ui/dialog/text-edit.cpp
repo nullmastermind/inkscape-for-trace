@@ -50,7 +50,6 @@ extern "C" {
 #include "svg/css-ostringstream.h"
 
 #include "ui/icon-names.h"
-#include "ui/interface.h"
 #include "ui/widget/font-selector.h"
 
 #include "util/units.h"

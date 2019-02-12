@@ -20,7 +20,6 @@
 #include "helper/action.h"
 #include "shortcuts.h"
 #include "ui/icon-loader.h"
-#include "ui/interface.h"
 
 namespace Inkscape {
 namespace UI {

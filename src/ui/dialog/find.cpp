@@ -45,7 +45,6 @@
 #include "object/sp-use.h"
 
 #include "ui/dialog-events.h"
-#include "ui/interface.h"
 
 #include "xml/attribute-record.h"
 #include "xml/node-iterators.h"

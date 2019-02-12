@@ -20,7 +20,6 @@
 #include "inkscape.h"
 #include "desktop.h"
 #include "ui/dialog-events.h"
-#include "ui/interface.h"
 #include "verbs.h"
 
 namespace Inkscape {

@@ -60,7 +60,6 @@
 #include "object/sp-tspan.h"
 #include "style.h"
 
-#include "ui/interface.h"
 #include "ui/shape-editor.h"
 
  

@@ -48,7 +48,6 @@
 #include "object/sp-use.h"
 
 #include "ui/icon-names.h"
-#include "ui/interface.h"
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/unit-menu.h"
 

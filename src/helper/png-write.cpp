@@ -14,25 +14,30 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <png.h>
-#include "ui/interface.h"
+
 #include <2geom/rect.h>
 #include <2geom/transforms.h>
-#include "png-write.h"
-#include "io/sys.h"
-#include "display/drawing.h"
-#include "display/drawing-context.h"
-#include "display/cairo-utils.h"
+
+#include <png.h>
+
 #include "document.h"
+#include "inkscape.h"
+#include "png-write.h"
 #include "preferences.h"
 #include "rdf.h"
-#include "util/units.h"
 
-#include "inkscape.h"
+#include "display/cairo-utils.h"
+#include "display/drawing-context.h"
+#include "display/drawing.h"
 
+#include "io/sys.h"
+
+#include "object/sp-defs.h"
 #include "object/sp-item.h"
 #include "object/sp-root.h"
-#include "object/sp-defs.h"
+
+#include "ui/interface.h"
+#include "util/units.h"
 
 /* This is an example of how to use libpng to read and write PNG files.
  * The file libpng.txt is much more verbose then this.  If you have not

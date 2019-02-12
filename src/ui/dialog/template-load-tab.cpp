@@ -21,7 +21,6 @@
 
 #include "extension/db.h"
 #include "inkscape.h"
-#include "ui/interface.h"
 #include "file.h"
 #include "path-prefix.h"
 

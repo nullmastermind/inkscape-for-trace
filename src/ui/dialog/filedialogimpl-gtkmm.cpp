@@ -42,7 +42,6 @@
 #include "io/sys.h"
 
 #include "ui/dialog-events.h"
-#include "ui/interface.h"
 #include "ui/view/svg-view-widget.h"
 
 // Routines from file.cpp

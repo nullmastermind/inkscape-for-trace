@@ -26,7 +26,7 @@
 
 #include "ui/tools-switch.h"
 #include "ui/tools/text-tool.h"
-#include "ui/interface.h"
+
 #include "text-editing.h"
 #include "selection-chemistry.h"
 #include "display/curve.h"

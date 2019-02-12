@@ -20,7 +20,6 @@
 #include "path-prefix.h"
 #include "preferences.h"
 #include "ui/icon-loader.h"
-#include "ui/interface.h"
 
 #include <gtkmm/notebook.h>
 #include <gtkmm/spinner.h>

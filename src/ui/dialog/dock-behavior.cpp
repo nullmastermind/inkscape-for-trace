@@ -14,7 +14,6 @@
 #include "dock-behavior.h"
 #include "inkscape.h"
 #include "desktop.h"
-#include "ui/interface.h"
 #include "ui/widget/dock.h"
 #include "verbs.h"
 #include "dialog.h"
