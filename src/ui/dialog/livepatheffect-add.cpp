@@ -83,6 +83,7 @@ LivePathEffectAdd::LivePathEffectAdd()
         g_warning("Glade file loading failed for filter effect dialog");
         return;
     }
+    _showfavs = false;
     _builder->get_widget("LPEDialogSelector", _LPEDialogSelector);
     _builder->get_widget("LPESelectorFlowBox", _LPESelectorFlowBox);
     _builder->get_widget("LPESelectorEffectInfoPop", _LPESelectorEffectInfoPop);
@@ -90,6 +91,7 @@ LivePathEffectAdd::LivePathEffectAdd()
     _builder->get_widget("LPEInfo", _LPEInfo);
     _builder->get_widget("LPEExperimentals", _LPEExperimentals);
     _builder->get_widget("LPEScrolled", _LPEScrolled);
+    _builder->get_widget("LPESelectorEffectEventFavShow", _LPESelectorEffectEventFavShow);
     _LPEFilter->signal_search_changed().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_search));
     _LPESelectorFlowBox->signal_child_activated().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_activate));
     _LPEDialogSelector->add_events(Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK |  Gdk::ENTER_NOTIFY_MASK | Gdk::LEAVE_NOTIFY_MASK );    
@@ -137,10 +139,14 @@ LivePathEffectAdd::LivePathEffectAdd()
         LPESelectorButtonBox->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseout), GTK_WIDGET(LPESelectorEffect->gobj())));
         LPESelectorEffect->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(LPESelectorEffect->gobj())));
         LPESelectorEffect->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseout), GTK_WIDGET(LPESelectorEffect->gobj())));
+        
         _LPESelectorFlowBox->insert(*LPESelectorEffect, i);
     }
     _visiblelpe = _LPESelectorFlowBox->get_children().size();
     _LPEInfo->set_visible(false);
+    _LPESelectorEffectEventFavShow->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(_LPESelectorEffectEventFavShow->gobj())));
+    _LPESelectorEffectEventFavShow->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseout), GTK_WIDGET(_LPESelectorEffectEventFavShow->gobj())));
+    _LPESelectorEffectEventFavShow->signal_button_press_event().connect(sigc::mem_fun(*this, &LivePathEffectAdd::show_fav_toggler));
     _LPESelectorFlowBox->set_sort_func(sigc::mem_fun(*this, &LivePathEffectAdd::on_sort));
     _LPESelectorFlowBox->set_filter_func(sigc::mem_fun(*this, &LivePathEffectAdd::on_filter));
     _LPEExperimentals->property_active().signal_changed().connect(sigc::mem_fun(*this, &LivePathEffectAdd::reload_effect_list));
@@ -214,15 +220,12 @@ bool LivePathEffectAdd::fav_toggler(GdkEventButton* evt, Glib::RefPtr<Gtk::Build
     builder_effect->get_widget("LPESelectorEffectEventFavTop", LPESelectorEffectEventFavTop);
     if (LPESelectorEffectFav && LPESelectorEffectEventFavTop) {
         if (sp_has_fav(LPEName->get_text())){
-            //favimg->set_from_icon_name("draw-star-outline", Gtk::IconSize(30));
             LPESelectorEffectEventFavTop->set_visible(false);
             LPESelectorEffectEventFavTop->hide();
             LPESelectorEffectFav->set_from_icon_name("draw-star-outline", Gtk::IconSize(25));
             sp_remove_fav(LPEName->get_text());
             LPESelectorEffect->get_parent()->get_style_context()->remove_class("lpefav");
-            _LPESelectorFlowBox->invalidate_sort();
         } else {
-            //favimg->set_from_icon_name("draw-star", Gtk::IconSize(30));
             LPESelectorEffectEventFavTop->set_visible(true);
             LPESelectorEffectEventFavTop->show();
             LPESelectorEffectFav->set_from_icon_name("draw-star", Gtk::IconSize(25));
@@ -230,9 +233,23 @@ bool LivePathEffectAdd::fav_toggler(GdkEventButton* evt, Glib::RefPtr<Gtk::Build
             LPESelectorEffect->get_parent()->get_style_context()->add_class("lpefav");
             Glib::RefPtr< Gtk::Adjustment > vadjust = _LPEScrolled->get_vadjustment();
             vadjust->set_value(vadjust->get_lower());    
-            _LPESelectorFlowBox->invalidate_sort();
         }
     }
+    return true;
+}
+
+bool LivePathEffectAdd::show_fav_toggler(GdkEventButton* evt)
+{
+    _showfavs = !_showfavs;
+    Gtk::Image *favimage = dynamic_cast<Gtk::Image *>(_LPESelectorEffectEventFavShow->get_child());
+    if (favimage) {
+        if (_showfavs) {
+            favimage->set_from_icon_name("draw-star", Gtk::IconSize(favimage->get_pixel_size()));
+        } else {
+            favimage->set_from_icon_name("draw-star-outline", Gtk::IconSize(favimage->get_pixel_size()));
+        }
+    }
+    _LPESelectorFlowBox->invalidate_filter();
     return true;
 }
 
@@ -244,9 +261,13 @@ bool LivePathEffectAdd::on_filter(Gtk::FlowBoxChild *child)
         Gtk::Box *box = dynamic_cast<Gtk::Box *>(eventbox->get_child());
         if (box) {
             std::vector<Gtk::Widget *> contents = box->get_children();
+            Gtk::Label *lpename = dynamic_cast<Gtk::Label *>(contents[1]);
+            if (!sp_has_fav(lpename->get_text()) && _showfavs){
+                return false;
+            }
             Gtk::ToggleButton *experimental = dynamic_cast<Gtk::ToggleButton *>(contents[3]);
             if (experimental) {
-                if (experimental->get_active() && !_LPEExperimentals->get_active()) {
+                if (experimental->get_active() && _LPEExperimentals->get_active()) {
                     return false;
                 }
             }
@@ -254,7 +275,6 @@ bool LivePathEffectAdd::on_filter(Gtk::FlowBoxChild *child)
                 _visiblelpe++;
                 return true;
             }
-            Gtk::Label *lpename = dynamic_cast<Gtk::Label *>(contents[1]);
             if (lpename) {
                 size_t s = lpename->get_text().uppercase().find(_LPEFilter->get_text().uppercase(), 0);
                 if (s != -1) {
@@ -277,6 +297,11 @@ bool LivePathEffectAdd::on_filter(Gtk::FlowBoxChild *child)
 
 void LivePathEffectAdd::reload_effect_list()
 {
+    /* if(_LPEExperimentals->get_active()) {
+        _LPEExperimentals->get_style_context()->add_class("active");
+    } else {
+        _LPEExperimentals->get_style_context()->remove_class("active");
+    } */
     _LPESelectorFlowBox->invalidate_filter();
 }
 
@@ -337,13 +362,13 @@ int LivePathEffectAdd::on_sort(Gtk::FlowBoxChild *child1, Gtk::FlowBoxChild *chi
     effect.push_back(name1);
     effect.push_back(name2);
     sort(effect.begin(), effect.end());
-    if (sp_has_fav(name1) && sp_has_fav(name2)) {
+/*     if (sp_has_fav(name1) && sp_has_fav(name2)) {
         return effect[0] == name1?-1:1;
     } 
     if (sp_has_fav(name1)) {
         return -1;
-    }
-    if (effect[0] == name1 && !sp_has_fav(name2)) {
+    } */
+    if (effect[0] == name1) {//&& !sp_has_fav(name2)) {
         return -1;
     }
     return 1;

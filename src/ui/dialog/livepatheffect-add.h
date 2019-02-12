@@ -63,6 +63,7 @@ public:
     void on_activate(Gtk::FlowBoxChild *child);
     bool pop_description(GdkEventButton* evt, Glib::RefPtr<Gtk::Builder> builder_effect);
     bool fav_toggler(GdkEventButton* evt, Glib::RefPtr<Gtk::Builder> builder_effect);
+    bool show_fav_toggler(GdkEventButton* evt);
     bool mouseover(GdkEventCrossing* evt, GtkWidget *wdg);
     bool mouseout(GdkEventCrossing* evt, GtkWidget *wdg);
     void reload_effect_list();
@@ -86,12 +87,14 @@ private:
   Glib::RefPtr<Gtk::Builder> _builder;
   Gtk::FlowBox *_LPESelectorFlowBox;
   Gtk::Popover *_LPESelectorEffectInfoPop;
+  Gtk::EventBox *_LPESelectorEffectEventFavShow;
   Gtk::Switch * _LPEExperimentals;
   Gtk::SearchEntry *_LPEFilter;
   Gtk::ScrolledWindow *_LPEScrolled;
   Gtk::Label *_LPEInfo;
   Gtk::Box *_LPESelector;
   guint _visiblelpe;
+  bool _showfavs;
   class Effect;
   const LivePathEffect::EnumEffectDataConverter<LivePathEffect::EffectType> &converter;
   static LivePathEffectAdd &instance()
