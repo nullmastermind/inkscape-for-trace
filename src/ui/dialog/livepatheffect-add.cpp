@@ -225,14 +225,15 @@ bool LivePathEffectAdd::fav_toggler(GdkEventButton* evt, Glib::RefPtr<Gtk::Build
             LPESelectorEffectFav->set_from_icon_name("draw-star-outline", Gtk::IconSize(25));
             sp_remove_fav(LPEName->get_text());
             LPESelectorEffect->get_parent()->get_style_context()->remove_class("lpefav");
+            if (_showfavs){
+                reload_effect_list();
+            }
         } else {
             LPESelectorEffectEventFavTop->set_visible(true);
             LPESelectorEffectEventFavTop->show();
             LPESelectorEffectFav->set_from_icon_name("draw-star", Gtk::IconSize(25));
             sp_add_fav(LPEName->get_text());
             LPESelectorEffect->get_parent()->get_style_context()->add_class("lpefav");
-            Glib::RefPtr< Gtk::Adjustment > vadjust = _LPEScrolled->get_vadjustment();
-            vadjust->set_value(vadjust->get_lower());    
         }
     }
     return true;
@@ -249,7 +250,7 @@ bool LivePathEffectAdd::show_fav_toggler(GdkEventButton* evt)
             favimage->set_from_icon_name("draw-star-outline", Gtk::IconSize(favimage->get_pixel_size()));
         }
     }
-    _LPESelectorFlowBox->invalidate_filter();
+    reload_effect_list();
     return true;
 }
 
@@ -302,20 +303,52 @@ void LivePathEffectAdd::reload_effect_list()
     } else {
         _LPEExperimentals->get_style_context()->remove_class("active");
     } */
+    _visiblelpe = 0;
     _LPESelectorFlowBox->invalidate_filter();
+    if (_showfavs) {
+        if (_visiblelpe == 0) {
+            _LPEInfo->set_text(_("You dont have any favorites jet, please disable the favorites star"));
+            _LPEInfo->set_visible(true);
+            _LPEInfo->get_style_context()->add_class("lpeinfowarn");
+        } else {
+            _LPEInfo->set_text(_("This is your favorite effects"));
+            _LPEInfo->set_visible(true);
+            _LPEInfo->get_style_context()->add_class("lpeinfowarn");
+        }
+    } else {
+        _LPEInfo->set_text(_("Your search do a empty result, please try again"));
+        _LPEInfo->set_visible(false);
+        _LPEInfo->get_style_context()->remove_class("lpeinfowarn");
+    }
 }
 
 void LivePathEffectAdd::on_search()
 {
     _visiblelpe = 0;
     _LPESelectorFlowBox->invalidate_filter();
-    if (_visiblelpe == 0) {
-        _LPEInfo->set_text(_("Your search do a empty result, please try again"));
-        _LPEInfo->set_visible(true);
-        _LPEInfo->get_style_context()->add_class("lpeinfowarn");
+    if (_showfavs) {
+        if (_visiblelpe == 0) {
+            _LPEInfo->set_text(_("Your search do a empty result, please try again"));
+            _LPEInfo->set_visible(true);
+            _LPEInfo->get_style_context()->add_class("lpeinfowarn");
+        } else {
+            if (_LPEFilter->get_text().empty()) {
+                _LPEInfo->set_text(_("This is your favorite effects"));
+            } else {
+                _LPEInfo->set_text(_("This is your favorite effects search result"));
+            }
+            _LPEInfo->set_visible(true);
+            _LPEInfo->get_style_context()->add_class("lpeinfowarn");
+        }
     } else {
-        _LPEInfo->set_visible(false);
-        _LPEInfo->get_style_context()->remove_class("lpeinfowarn");
+        if (_visiblelpe == 0) {
+            _LPEInfo->set_text(_("Your search do a empty result, please try again"));
+            _LPEInfo->set_visible(true);
+            _LPEInfo->get_style_context()->add_class("lpeinfowarn");
+        } else {
+            _LPEInfo->set_visible(false);
+            _LPEInfo->get_style_context()->remove_class("lpeinfowarn");
+        }
     }
 }
 
