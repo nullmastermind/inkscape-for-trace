@@ -59,6 +59,9 @@ public:
     Inkscape::UI::View::View* get_active_view() { return _active_view; }
     void                  set_active_view(Inkscape::UI::View::View* view) { _active_view = view; }
 
+    // Update all windows connected to a document.
+    void update_windows(SPDocument* document);
+
     // These are needed to cast Glib::RefPtr<Gtk::Application> to Glib::RefPtr<InkscapeApplication>,
     // Presumably, Gtk/Gio::Application takes care of ref counting in ConcreteInkscapeApplication
     // so we just provide dummies (and there is only one application in the application!).

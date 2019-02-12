@@ -131,6 +131,7 @@ InkscapeWindow::on_focus_in_event(GdkEventFocus* event)
         _app->set_active_document(_document);
         _app->set_active_view(_desktop);
         _app->set_active_selection(_desktop->selection);
+        // _app->update_windows(_document);
     } else {
         std::cerr << "Inkscapewindow::on_focus_in_event: app is nullptr!" << std::endl;
     }

@@ -52,6 +52,19 @@ InkscapeApplication::InkscapeApplication()
     , _active_view(nullptr)
 {}
 
+void
+InkscapeApplication::update_windows(SPDocument* document)
+{
+    // Find windows:
+    auto it = _documents.find( document );
+    if (it != _documents.end()) {
+        std::vector<InkscapeWindow*> windows = it->second;
+        std::cout << "InkscapeApplication::update_windows: windows: " << windows.size() << std::endl;
+    } else {
+        std::cout << "InkscapeApplication::update_windows: no windows found" << std::endl;
+    }
+}
+
 template<class T>
 ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     : T("org.inkscape.application.with_gui",
