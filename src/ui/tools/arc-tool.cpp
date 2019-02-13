@@ -392,16 +392,39 @@ void ArcTool::drag(Geom::Point pt, guint state) {
 
     if (state & GDK_CONTROL_MASK) {
         int ratio_x, ratio_y;
+        bool is_golden_ratio = false;
 
         if (fabs (rdimx) > fabs (rdimy)) {
+            if (fabs(rdimx / rdimy - goldenratio) < 1e-6) {
+                is_golden_ratio = true;
+            }
+
             ratio_x = (int) rint (rdimx / rdimy);
             ratio_y = 1;
         } else {
+            if (fabs(rdimy / rdimx - goldenratio) < 1e-6) {
+                is_golden_ratio = true;
+            }
+
             ratio_x = 1;
             ratio_y = (int) rint (rdimy / rdimx);
         }
 
-        this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Ellipse</b>: %s &#215; %s (constrained to ratio %d:%d); with <b>Shift</b> to draw around the starting point"), xs.c_str(), ys.c_str(), ratio_x, ratio_y);
+        if (!is_golden_ratio) {
+            this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE,
+                    _("<b>Ellipse</b>: %s &#215; %s (constrained to ratio %d:%d); with <b>Shift</b> to draw around the starting point"),
+                    xs.c_str(), ys.c_str(), ratio_x, ratio_y);
+        } else {
+            if (ratio_y == 1) {
+                this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE,
+                        _("<b>Ellipse</b>: %s &#215; %s (constrained to golden ratio 1.618 : 1); with <b>Shift</b> to draw around the starting point"),
+                        xs.c_str(), ys.c_str());
+            } else {
+                this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE,
+                        _("<b>Ellipse</b>: %s &#215; %s (constrained to golden ratio 1 : 1.618); with <b>Shift</b> to draw around the starting point"),
+                        xs.c_str(), ys.c_str());
+            }
+        }
     } else {
         this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Ellipse</b>: %s &#215; %s; with <b>Ctrl</b> to make square or integer-ratio ellipse; with <b>Shift</b> to draw around the starting point"), xs.c_str(), ys.c_str());
     }
