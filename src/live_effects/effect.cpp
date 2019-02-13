@@ -106,7 +106,6 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -116,11 +115,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Gears") //label
         , "gears" //key
         , "gears" //icon
-        , N_("Create configurable gears") //description
+        , N_("Create configurable gears based on points in path") //description
         , true  //on_path
         , true  //on_shape
-        , false  //on_group
-        , false  //on_use
+        , true  //on_group
         , false //on_image
         , false //on_text
         , false //experimental
@@ -130,11 +128,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Pattern Along Path") //label
         , "skeletal" //key
         , "skeletal" //icon
-        , N_("transform a tiem along path with or without repeating") //description
+        , N_("Transform a element along path with optional repeating") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -144,11 +141,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Stitch Sub-Paths") //label
         , "curvestitching" //key
         , "curvestitching" //icon
-        , N_("curvestitching") //description
+        , N_("Create a stich between sup-paths") //description
         , true  //on_path
-        , true  //on_shape
+        , false  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -159,11 +155,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("VonKoch") //label
         , "vonkoch" //key
         , "vonkoch" //icon
-        , N_("vonkoch") //description
+        , N_("Create VonKoch fractal") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -173,11 +168,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Knot") //label
         , "knot" //key
         , "knot" //icon
-        , N_("knot") //description
+        , N_("Create holes in self-intersecions like Celtic knots") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -187,11 +181,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Construct grid") //label
         , "construct_grid" //key
         , "construct-grid" //icon
-        , N_("construct_grid") //description
+        , N_("Create a (perspective) grid using points of item") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -201,11 +194,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Spiro spline") //label
         , "spiro" //key
         , "spiro" //icon
-        , N_("spiro") //description
+        , N_("Add Spiro bsplie to a path, this usualy is added on path creation and not directly from here") //description
         , true  //on_path
-        , true  //on_shape
-        , true  //on_group
-        , true  //on_use
+        , false  //on_shape
+        , false  //on_group
         , false //on_image
         , false //on_text
         , false //experimental
@@ -215,11 +207,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Envelope Deformation") //label
         , "envelope" //key
         , "envelope" //icon
-        , N_("Envelope Deformation") //description
+        , N_("Deform a item changing his contourn bounds") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -229,11 +220,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Interpolate Sub-Paths") //label
         , "interpolate" //key
         , "interpolate" //icon
-        , N_("Interpolate Sub-Paths") //description
+        , N_("Add to a path with multiple subpats and interpolate inbetween") //description
         , true  //on_path
-        , true  //on_shape
-        , true  //on_group
-        , true  //on_use
+        , false  //on_shape
+        , false  //on_group
         , false //on_image
         , false //on_text
         , false //experimental
@@ -243,11 +233,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Hatches (rough)") //label
         , "rough_hatches" //key
         , "rough-hatches" //icon
-        , N_("Hatches (rough)") //description
+        , N_("Create a weaby line rough hatches in the fill of item") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -257,11 +246,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Sketch") //label
         , "sketch" //key
         , "sketch" //icon
-        , N_("Sketch") //description
+        , N_("Sketch item strokes in a flexible way") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -271,11 +259,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Ruler") //label
         , "ruler" //key
         , "ruler" //icon
-        , N_("Ruler") //description
+        , N_("Create a ruler trought the borders with the stroke style") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -286,11 +273,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Power stroke") //label
         , "powerstroke" //key
         , "powerstroke" //icon
-        , N_("Power stroke") //description
+        , N_("Add variable width to paths with power stroke") //description
         , true  //on_path
-        , true  //on_shape
-        , true  //on_group
-        , true  //on_use
+        , false  //on_shape
+        , false  //on_group
         , false //on_image
         , false //on_text
         , false //experimental
@@ -300,11 +286,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Clone original") //label
         , "clone_original" //key
         , "clone-original" //icon
-        , N_("Clone original") //description
+        , N_("Make the selected item a clone of other, allowin cloning particular attributes and styles") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -315,11 +300,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Simplify") //label
         , "simplify" //key
         , "simplify" //icon
-        , N_("Simplify") //description
+        , N_("Simplify the path, and show the improvements") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -329,11 +313,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Lattice Deformation 2") //label
         , "lattice2" //key
         , "lattice2" //icon
-        , N_("Lattice Deformation 2") //description
+        , N_("Deform a item based on a grid") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -343,11 +326,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Perspective/Envelope") //label
         , "perspective-envelope" //key wrong key with "-" retain because historic
         , "perspective-envelope" //icon
-        , N_("Perspective/Envelope") //description
+        , N_("Perspective or envelope a item by 4 corner ponts") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -357,11 +339,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Interpolate points") //label
         , "interpolate_points" //key
         , "interpolate-points" //icon
-        , N_("Interpolate points") //description
+        , N_("Interpolate points creating diferent conxions between: straight, smooth...") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -371,11 +352,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Transform by 2 points") //label
         , "transform_2pts" //key
         , "transform-2pts" //icon
-        , N_("Transform by 2 points") //description
+        , N_("Transform a item based in two points, perfect to fit a path between 2 separated paths.") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -385,11 +365,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Show handles") //label
         , "show_handles" //key
         , "show-handles" //icon
-        , N_("Show handles") //description
+        , N_("Show handles of element, perfect to temporsty show path handles and nodes") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -399,11 +378,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Roughen") //label
         , "roughen" //key
         , "roughen" //icon
-        , N_("Roughen") //description
+        , N_("Roughen a item so looks a slight more natural or handcrafted or totaly deformed.") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -413,11 +391,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("BSpline") //label
         , "bspline" //key
         , "bspline" //icon
-        , N_("BSpline") //description
+        , N_("Add BSpline bsplie to a path, this usualy is added on path creation and not directly from here") //description
         , true  //on_path
-        , true  //on_shape
-        , true  //on_group
-        , true  //on_use
+        , false  //on_shape
+        , false  //on_group
         , false //on_image
         , false //on_text
         , false //experimental
@@ -427,11 +404,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Join type") //label
         , "join_type" //key
         , "join-type" //icon
-        , N_("Join type") //description
+        , N_("Join type convert a path stroke to a real fill path, act lice conbert stroke to path but non destructive. Also have the extrapolated arc option for line joins") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -441,11 +417,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Taper stroke") //label
         , "taper_stroke" //key
         , "taper-stroke" //icon
-        , N_("Taper stroke") //description
+        , N_("Thin starting and/or ending of paths") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -455,11 +430,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Mirror symmetry") //label
         , "mirror_symmetry" //key
         , "mirror-symmetry" //icon
-        , N_("Mirror symmetry") //description
+        , N_("Mirror symmetry items, optionaly fussing this and spliting to handle diferent propertyes") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -469,11 +443,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Rotate copies") //label
         , "copy_rotate" //key
         , "copy-rotate" //icon
-        , N_("Rotate copies") //description
+        , N_("Rotate copies, optionaly fussing this and spliting to handle diferent propertyes") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -484,11 +457,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Attach path") //label
         , "attach_path" //key
         , "attach-path" //icon
-        , N_("Attach path") //description
+        , N_("Join starting and/or ending paths to current path") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -498,11 +470,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Fill between strokes") //label
         , "fill_between_strokes" //key
         , "fill-between-strokes" //icon
-        , N_("Fill between strokes") //description
+        , N_("Create a updateable fill between 2 diferent paths") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -512,11 +483,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Fill between many") //label
         , "fill_between_many" //key
         , "fill-between-many" //icon
-        , N_("Fill between many") //description
+        , N_("Create a updateable fill between many diferent paths") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -526,11 +496,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Ellipse by 5 points") //label
         , "ellipse_5pts" //key
         , "ellipse-5pts" //icon
-        , N_("Ellipse by 5 points") //description
+        , N_("Create a ellipse by a path with 5 points") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -540,11 +509,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Bounding Box") //label
         , "bounding_box" //key
         , "bounding-box" //icon
-        , N_("Bounding Box") //description
+        , N_("Create a bounding box item to apply to another linked element") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -555,11 +523,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Measure Segments") //label
         , "measure_segments" //key
         , "measure-segments" //icon
-        , N_("Measure Segments") //description
+        , N_("Measure segments, add lines, units, projections...") //description
         , true  //on_path
         , true  //on_shape
-        , true  //on_group
-        , true  //on_use
+        , false  //on_group
         , false //on_image
         , false //on_text
         , false //experimental
@@ -569,11 +536,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Fillet/Chamfer") //label
         , "fillet_chamfer" //key
         , "fillet-chamfer" //icon
-        , N_("Fillet/Chamfer") //description
+        , N_("Fillet or chamfer the corners of your path or shape") //description
         , true  //on_path
         , true  //on_shape
-        , true  //on_group
-        , true  //on_use
+        , false  //on_group
         , false //on_image
         , false //on_text
         , false //experimental
@@ -583,11 +549,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Boolean operation") //label
         , "bool_op" //key
         , "bool-op" //icon
-        , N_("Boolean operation") //description
+        , N_("Non destructive boolean operations") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -601,7 +566,6 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -611,11 +575,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Power clip") //label
         , "powerclip" //key
         , "powerclip" //icon
-        , N_("Power clip") //description
+        , N_("Power clip alows to reverse a clip, fatten it...") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -625,11 +588,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Power mask") //label
         , "powermask" //key
         , "powermask" //icon
-        , N_("Power mask") //description
+        , N_("Power mask allow to inverse the mask, make negative..") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -639,11 +601,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Ellipse from points") //label
         , "pts2ellipse" //key
         , "pts2ellipse" //icon
-        , N_("Ellipse from points") //description
+        , N_("Ellipse from points in the item") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -653,11 +614,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Offset") //label
         , "offset" //key
         , "offset" //icon
-        , N_("Offset") //description
+        , N_("Offset a ittem also with line joins cusp") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -667,11 +627,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Dash Stroke") //label
         , "dash_stroke" //key
         , "dash-stroke" //icon
-        , N_("Dash Stroke") //description
+        , N_("Dash Stroke that fit exatly") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , false //experimental
@@ -686,7 +645,6 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , true //experimental
@@ -700,7 +658,6 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , true //experimental
@@ -714,7 +671,6 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , true //experimental
@@ -728,7 +684,6 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , true //experimental
@@ -742,7 +697,6 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , true //experimental
@@ -756,7 +710,6 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , true //experimental
@@ -770,7 +723,6 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , true //experimental
@@ -784,7 +736,6 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , true //experimental
@@ -798,7 +749,6 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , true //experimental
@@ -812,7 +762,6 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , true //experimental
@@ -826,7 +775,6 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , true //experimental
@@ -840,7 +788,6 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , true //experimental
@@ -854,7 +801,6 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , true //experimental
@@ -868,7 +814,6 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true  //on_path
         , true  //on_shape
         , true  //on_group
-        , true  //on_use
         , false //on_image
         , false //on_text
         , true //experimental

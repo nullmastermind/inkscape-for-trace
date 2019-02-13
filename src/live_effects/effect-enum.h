@@ -85,7 +85,6 @@ struct EnumEffectData {
     const bool on_path;
     const bool on_shape;
     const bool on_group;
-    const bool on_use;
     const bool on_image;
     const bool on_text;
     const bool experimental;
@@ -224,16 +223,6 @@ class EnumEffectDataConverter {
         for (unsigned int i = 0; i < _length; ++i) {
             if (_data[i].id == id)
                 return _data[i].shape;
-        }
-
-        return false;
-    }
-
-    const bool get_on_use(const E id) const
-    {
-        for (unsigned int i = 0; i < _length; ++i) {
-            if (_data[i].id == id)
-                return _data[i].use;
         }
 
         return false;
