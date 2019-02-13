@@ -6095,7 +6095,7 @@ msgstr "Azimut (°)"
 #: ../src/extension/internal/filter/bevels.h:140
 #: ../src/extension/internal/filter/bevels.h:224
 msgid "Lighting color"
-msgstr "Couleur d'éclairage :"
+msgstr "Couleur d'éclairage"
 
 #: ../src/extension/internal/filter/bevels.h:63
 #: ../src/extension/internal/filter/bevels.h:144
@@ -9118,24 +9118,25 @@ msgid "Print: Extensions directory."
 msgstr "Afficher : dossier des extensions."
 
 #: ../src/inkscape-application.cpp:92
-#, fuzzy
 msgid "Print: List verbs."
 msgstr "Afficher : lister les verbes."
 
 #. Interface
 #: ../src/inkscape-application.cpp:95
 msgid "GUI: With graphical interface."
-msgstr "GUI : avec interface graphique"
+msgstr "GUI : avec interface graphique."
 
 #: ../src/inkscape-application.cpp:96
 msgid "GUI: Console only."
-msgstr "GUI : console seulement"
+msgstr "GUI : console seulement."
 
 #: ../src/inkscape-application.cpp:97
 msgid ""
 "GUI: Close window after processing actions (needed as some verbs require "
 "GUI)."
 msgstr ""
+"GUI : fermer la fenêtre après le traitement des actions (utile parce que "
+"certains verbes nécessitent l'interface graphique)."
 
 #. Open/Import
 #: ../src/inkscape-application.cpp:100
@@ -9211,9 +9212,8 @@ msgstr ""
 "virgules."
 
 #: ../src/inkscape-application.cpp:115
-#, fuzzy
 msgid "Process: Verb(s) to call when Inkscape opens."
-msgstr "Traitement : verbe sélectionné au démarrage d'Inkscape."
+msgstr "Traitement : verbes sélectionnés au démarrage d'Inkscape."
 
 #: ../src/inkscape-application.cpp:115
 msgid "VERB-ID[;VERB-ID]*"
@@ -9410,17 +9410,14 @@ msgid "VALUE"
 msgstr "VALEUR"
 
 #: ../src/inkscape-application.cpp:148
-#, fuzzy
 msgid "Process: xverb command file."
-msgstr "Traitement : fichier de commande xverb."
+msgstr "Traitement : fichier de commandes xverb."
 
 #: ../src/inkscape-application.cpp:148
-#, fuzzy
 msgid "XVERBS-FILENAME"
 msgstr "NOM_DE_FICHIER_XVERBS"
 
 #: ../src/inkscape-application.cpp:152
-#, fuzzy
 msgid "D-Bus: Enter a listening loop for D-Bus messages in console mode."
 msgstr ""
 "D-Bus : saisir une boucle d'écoute pour les messages D-Bus en mode console."
@@ -9620,9 +9617,8 @@ msgid "Power stroke"
 msgstr "Contour dynamique"
 
 #: ../src/live_effects/effect.cpp:116 ../src/selection-chemistry.cpp:2956
-#, fuzzy
 msgid "Clone original"
-msgstr "Cloner le chemin original"
+msgstr "Cloner l'élément original"
 
 #: ../src/live_effects/effect.cpp:119
 msgid "Lattice Deformation 2"
@@ -10006,7 +10002,6 @@ msgid "positive"
 msgstr "positif"
 
 #: ../src/live_effects/lpe-bool.cpp:57
-#, fuzzy
 msgid "from curve"
 msgstr "depuis la courbe"
 
@@ -10056,7 +10051,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-bool.cpp:77
 msgid "Fill type operand:"
-msgstr ""
+msgstr "Opérande type de remplissage :"
 
 #: ../src/live_effects/lpe-bool.cpp:77
 msgid "Fill type (winding mode) for operand path"
@@ -10639,9 +10634,8 @@ msgid "Close path"
 msgstr "Referme le chemin"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:40
-#, fuzzy
 msgid "Autoreverse"
-msgstr "Inverser"
+msgstr "Inversion automatique"
 
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:21
 msgid "Second path:"
@@ -11288,7 +11282,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-lattice2.cpp:230
 msgid "Reset grid"
-msgstr "Réinitaliser la grille"
+msgstr "Réinitialiser la grille"
 
 #: ../src/live_effects/lpe-lattice2.cpp:266
 #: ../src/live_effects/lpe-lattice2.cpp:284
@@ -12500,9 +12494,8 @@ msgid "Show path"
 msgstr "Afficher le chemin"
 
 #: ../src/live_effects/lpe-show_handles.cpp:33
-#, fuzzy
 msgid "Show center of node"
-msgstr "Afficher le centre du nœud"
+msgstr "Afficher le centre des nœuds"
 
 #: ../src/live_effects/lpe-show_handles.cpp:34
 msgid "Show original"
@@ -13004,7 +12997,7 @@ msgstr "Lier les paramètres de chemin au chemin"
 #: ../src/live_effects/parameter/originalpatharray.cpp:162
 #, fuzzy
 msgid "Toggle path parameter visibility"
-msgstr "Lier les paramètres de chemin au chemin"
+msgstr "Basculer la visibilité des paramètres de chemin"
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:199
 msgid "Remove Path"
@@ -13029,7 +13022,7 @@ msgstr "Lier les paramètres de chemin au chemin"
 
 #: ../src/live_effects/parameter/path.cpp:221
 msgid "Edit on-canvas"
-msgstr "Éditer sur la zone de travail"
+msgstr "Modifier sur la zone de travail"
 
 #: ../src/live_effects/parameter/path.cpp:233
 msgid "Copy path"
@@ -13427,26 +13420,24 @@ msgstr "Polygone"
 #: ../src/object/sp-star.cpp:235
 #, c-format
 msgid "with %d vertex"
-msgstr "%d branche"
+msgstr "%d sommet"
 
 #: ../src/object/sp-star.cpp:235
 #, c-format
 msgid "with %d vertices"
-msgstr "à %d branche"
+msgstr "à %d sommets"
 
 #: ../src/object/sp-switch.cpp:64
 msgid "Conditional Group"
 msgstr "Groupe conditionnel"
 
 #: ../src/object/sp-text.cpp:323
-#, fuzzy
 msgid "Auto-wrapped text"
-msgstr "Ajouter le texte"
+msgstr "Texte auto-adapté"
 
 #: ../src/object/sp-text.cpp:325
-#, fuzzy
 msgid "Text in-a-shape"
-msgstr "Encadrer du texte dans une forme"
+msgstr "Texte dans une forme"
 
 #: ../src/object/sp-text.cpp:327 ../src/verbs.cpp:346
 #: ../share/extensions/lorem_ipsum.inx.h:8
@@ -13611,7 +13602,7 @@ msgstr "%s n'est pas un dossier valide."
 #: ../src/preferences.cpp:182
 #, c-format
 msgid "Failed to create the preferences file %s."
-msgstr "Échec lors de la création du fichier du fichier de préférences %s."
+msgstr "Échec lors de la création du fichier de préférences %s."
 
 #: ../src/preferences.cpp:218
 #, c-format
@@ -13634,14 +13625,12 @@ msgid "The file %s is not a valid Inkscape preferences file."
 msgstr "%s n'est pas un fichier de préférences valide."
 
 #: ../src/preferences.cpp:298
-#, fuzzy
 msgid "Preferences file was deleted."
-msgstr "Le fichier de préférences %s n'a pas pu être lu."
+msgstr "Le fichier de préférences a été supprimé."
 
 #: ../src/preferences.cpp:299
-#, fuzzy
 msgid "There was an error trying to delete the preferences file."
-msgstr "Échec lors de la création du fichier du fichier de préférences %s."
+msgstr "Échec lors de la suppression du fichier de préférences %s."
 
 #: ../src/rdf.cpp:178
 msgid "CC Attribution"
@@ -13679,7 +13668,7 @@ msgstr "ArtLibre"
 
 #: ../src/rdf.cpp:218
 msgid "Open Font License"
-msgstr "Open Font Licence (Licence de police libre)"
+msgstr "Open Font License (Licence de police libre)"
 
 #. Create the Title label and edit control
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/linking.html#AElementXLinkTitleAttribute
@@ -13921,9 +13910,8 @@ msgid "Lower to bottom"
 msgstr "Descendre à l'arrière-plan"
 
 #: ../src/selection-chemistry.cpp:1158
-#, fuzzy
 msgid "Select <b>object(s)</b> to stack up."
-msgstr "Sélectionner des <b>objets</b> à monter au premier plan."
+msgstr "Sélectionner des <b>objets</b> à monter."
 
 #: ../src/selection-chemistry.cpp:1169
 msgid "We hit top."
@@ -13936,9 +13924,8 @@ msgid "stack up"
 msgstr "monter"
 
 #: ../src/selection-chemistry.cpp:1182
-#, fuzzy
 msgid "Select <b>object(s)</b> to stack down."
-msgstr "Sélectionner des <b>objets</b> à combiner."
+msgstr "Sélectionner des <b>objets</b> à descendre."
 
 #: ../src/selection-chemistry.cpp:1193
 msgid "We hit bottom."
@@ -14776,9 +14763,8 @@ msgid "Clipboard does not contain a path."
 msgstr "Le presse-papier ne contient pas de chemin."
 
 #: ../src/ui/clipboard.cpp:690
-#, fuzzy
 msgid "Clipboard does not contain any."
-msgstr "Le presse-papier ne contient pas de chemin."
+msgstr "Le presse-papier est vide."
 
 #: ../src/ui/contextmenu.cpp:65
 msgid "Go to parent"
@@ -14849,7 +14835,7 @@ msgstr "Style de contour"
 #. Select same stroke style
 #: ../src/ui/contextmenu.cpp:416
 msgid "Object Type"
-msgstr "Types d'objet"
+msgstr "Type d'objet"
 
 #. Move to layer
 #: ../src/ui/contextmenu.cpp:423
@@ -14927,7 +14913,7 @@ msgstr "_Propriétés de l'image..."
 #. Edit externally
 #: ../src/ui/contextmenu.cpp:702
 msgid "Edit Externally..."
-msgstr "Éditer avec un logiciel externe..."
+msgstr "Modifier avec un logiciel externe..."
 
 #. Trace Bitmap
 #. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
@@ -15344,7 +15330,7 @@ msgstr "Valeur"
 
 #: ../src/ui/dialog/attrdialog.cpp:209
 msgid "<b>Click</b> attribute to edit."
-msgstr "<b>Cliquer</b> sur les attributs pour pouvoir les éditer."
+msgstr "<b>Cliquer</b> sur les attributs pour pouvoir les modifier."
 
 #: ../src/ui/dialog/attrdialog.cpp:214
 #, c-format
@@ -15352,8 +15338,8 @@ msgid ""
 "Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
 "commit changes."
 msgstr ""
-"Attribut <b>%s</b> sélectionné. Appuyer sur <b>Ctrl+Enter</b> après édition "
-"pour valider."
+"Attribut <b>%s</b> sélectionné. Appuyer sur <b>Ctrl+Entrée</b> après "
+"modification pour valider."
 
 #: ../src/ui/dialog/attrdialog.cpp:282 ../src/ui/dialog/attrdialog.cpp:310
 msgid "Delete attribute"
@@ -15370,7 +15356,7 @@ msgstr "Modifier la valeur de l'attribut"
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:31
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:118
 msgid "Edit profile"
-msgstr "Éditer un profil"
+msgstr "Modifier un profil"
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:39
 msgid "Profile name:"
@@ -16182,9 +16168,8 @@ msgid "Set fill color from swatch"
 msgstr "Appliquer une couleur de fond à partir de l'échantillon"
 
 #: ../src/ui/dialog/cssdialog.cpp:151
-#, fuzzy
 msgid "<b>Click</b> CSS property to edit."
-msgstr "<b>Cliquer</b> sur les attributs pour pouvoir les éditer."
+msgstr "<b>Cliquer</b> sur un attribut CSS pour pouvoir le modifier."
 
 #: ../src/ui/dialog/cssdialog.cpp:156
 #, fuzzy, c-format
@@ -16192,8 +16177,8 @@ msgid ""
 "Property <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
 "commit changes."
 msgstr ""
-"Attribut <b>%s</b> sélectionné. Appuyer sur <b>Ctrl+Enter</b> après édition "
-"pour valider."
+"Attribut <b>%s</b> sélectionné. Appuyer sur <b>Ctrl+Entrée</b> après "
+"modification pour valider."
 
 #: ../src/ui/dialog/debug.cpp:66
 msgid "Messages"
@@ -19085,13 +19070,13 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:223
 msgid "Enable gradient editing"
-msgstr "Activer l'édition de dégradé"
+msgstr "Activer la modification de dégradé"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:224
 msgid "Whether selected objects display gradient editing controls"
 msgstr ""
-"Si coché, les objets sélectionnés affichent leurs poignées d'édition de "
-"dégradés"
+"Si coché, les objets sélectionnés affichent leurs poignées de modification "
+"de dégradés"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:229
 msgid "Conversion to guides uses edges instead of bounding box"
@@ -19410,7 +19395,7 @@ msgstr "Afficher temporairement le contour des chemins sélectionnés"
 msgid "Show temporary outline even when a path is selected for editing"
 msgstr ""
 "Affiche temporairement le contour même lorsqu'un chemin est sélectionné pour "
-"édition"
+"modification"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:420
 msgid "_Flash time:"
@@ -19428,7 +19413,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:421
 msgid "Editing preferences"
-msgstr "Préférences d'édition"
+msgstr "Préférences de modification"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:422
 msgid "Show transform handles for single nodes"
@@ -19705,9 +19690,9 @@ msgid ""
 "When on, the Gradient Edit button in the Fill & Stroke dialog will show the "
 "legacy Gradient Editor dialog, when off the Gradient Tool will be used"
 msgstr ""
-"Si coché, le bouton d'édition de dégradé dans la boîte de dialogue Fond et "
-"contour affichera l'ancien formulaire d'édition de dégradé ; si décoché, "
-"l'outil Dégradé sera utilisé"
+"Si coché, le bouton de modification de dégradé dans la boîte de dialogue "
+"Fond et contour affichera l'ancien formulaire de modification de dégradé ; "
+"si décoché, l'outil Dégradé sera utilisé"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:565
 msgid "Linear gradient _angle:"
@@ -20704,7 +20689,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1266
 msgid "Add label comments to printing output"
-msgstr "Ajouter les labels de commentaires à l'impression"
+msgstr "Ajouter les étiquettes à l'impression"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1268
 msgid ""
@@ -20712,7 +20697,7 @@ msgid ""
 "rendered output for an object with its label"
 msgstr ""
 "Si coché, un commentaire est ajouté à l'impression brute, signalant le rendu "
-"d'un objet avec son label"
+"d'un objet avec son étiquette"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1270
 msgid "Add default metadata to new documents"
@@ -21000,15 +20985,15 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1357
 msgid "Editing"
-msgstr "Lors de l'édition"
+msgstr "Lors de la modification"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1358
 msgid ""
 "Check attributes and style properties while editing SVG files (may slow down "
 "Inkscape, mostly useful for debugging)"
 msgstr ""
-"Vérifier les attributs et les propriétés de style lors de l'édition des "
-"fichiers SVG (peut ralentir Inkscape, à utiliser principalement pour le "
+"Vérifier les attributs et les propriétés de style lors de la modification "
+"des fichiers SVG (peut ralentir Inkscape, à utiliser principalement pour le "
 "débogage)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1359
@@ -22419,9 +22404,8 @@ msgid "System info"
 msgstr "Informations système"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2395
-#, fuzzy
 msgid "Reset Preferences"
-msgstr "Préférences : Texte"
+msgstr "Réinitialiser les préférences"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2398
 msgid "User preferences: "
@@ -23313,7 +23297,7 @@ msgid ""
 "Layer/Group/Object label (inkscape:label). Double-click to set. Default "
 "value is object 'id'."
 msgstr ""
-"Libellé du calque/groupe/objet (inkscape:label). Double-cliquer pour "
+"Étiquette du calque/groupe/objet (inkscape:label). Double-cliquer pour "
 "définir. La valeur par défaut est l'ID de l'objet."
 
 #: ../src/ui/dialog/objects.cpp:1825
@@ -26271,7 +26255,7 @@ msgstr "Lier et modifier tous les dégradés associés"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:441
 msgid "Reverse the direction of the gradient"
-msgstr "Inverser la direction du dégradé"
+msgstr "Inverser le sens du dégradé"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:450
 msgid "Repeat"
@@ -28238,7 +28222,7 @@ msgstr "Mode poussée"
 
 #: ../src/ui/toolbar/tweak-toolbar.cpp:132
 msgid "Push parts of paths in any direction"
-msgstr "Pousse le chemin dans le sens du curseur"
+msgstr "Pousse le chemin dans la direction du curseur"
 
 #: ../src/ui/toolbar/tweak-toolbar.cpp:136
 msgid "Shrink/grow mode"
@@ -29077,7 +29061,7 @@ msgstr ""
 "de ce point. Maj+clic pour créer un point de rebroussement"
 
 #: ../src/ui/tools/pen-tool.cpp:1807
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;; with <b>Shift+Click</b> cusp node,"
 "<b>ALT</b> move previous, <b>Enter</b> or <b>Shift+Enter</b> to finish"
@@ -31188,7 +31172,7 @@ msgstr "Enregistrer une copie du document sous un nouveau nom"
 
 #: ../src/verbs.cpp:2605
 msgid "Save Template..."
-msgstr "Enregistrer un _modèle..."
+msgstr "Enregistrer un modèle..."
 
 #: ../src/verbs.cpp:2606
 msgid "Save a copy of the document as template"
@@ -31810,7 +31794,6 @@ msgid "Cut the bottom path's stroke into pieces, removing fill"
 msgstr "Couper le contour du chemin du dessous, et supprimer son fond"
 
 #: ../src/verbs.cpp:2787
-#, fuzzy
 msgid "_Grow"
 msgstr "Grossir"
 
@@ -31823,7 +31806,6 @@ msgid "_Grow on screen"
 msgstr "Grossir à l'écran"
 
 #: ../src/verbs.cpp:2790
-#, fuzzy
 msgid "Make selected objects bigger relative to screen"
 msgstr "Augmenter la taille des objets sélectionnés relativement à l'écran"
 
@@ -31836,7 +31818,6 @@ msgid "Double the size of selected objects"
 msgstr "Doubler la taille des objets sélectionnés"
 
 #: ../src/verbs.cpp:2793
-#, fuzzy
 msgid "_Shrink"
 msgstr "Réduire"
 
@@ -31845,22 +31826,18 @@ msgid "Make selected objects smaller"
 msgstr "Diminuer la taille des objets sélectionnés"
 
 #: ../src/verbs.cpp:2795
-#, fuzzy
 msgid "_Shrink on screen"
 msgstr "Réduire à l'écran"
 
 #: ../src/verbs.cpp:2796
-#, fuzzy
 msgid "Make selected objects smaller relative to screen"
 msgstr "Diminuer la taille des objets sélectionnés relativement à l'écran"
 
 #: ../src/verbs.cpp:2797
-#, fuzzy
 msgid "_Halve size"
 msgstr "Réduire de moitié"
 
 #: ../src/verbs.cpp:2798
-#, fuzzy
 msgid "Halve the size of selected objects"
 msgstr "Diviser par deux la taille des objets sélectionnés"
 
@@ -33018,7 +32995,6 @@ msgid "Toggle _XRay Mode"
 msgstr "Mode rayons _X"
 
 #: ../src/verbs.cpp:3126
-#, fuzzy
 msgid "XRay around cursor"
 msgstr "Rendu aux rayons X autour du curseur"
 
@@ -34860,14 +34836,14 @@ msgstr "Commande Inkscape introuvable.\n"
 
 #: ../share/extensions/jessyInk_masterSlide.py:54
 msgid "Layer not found. Removed current master slide selection.\n"
-msgstr "Calque non trouvé. Sélection glissée maître actuelle supprimée.\n"
+msgstr "Calque non trouvé. Diapositive maîtresse active supprimée.\n"
 
 #: ../share/extensions/jessyInk_masterSlide.py:56
 msgid ""
 "More than one layer with this name found. Removed current master slide "
 "selection.\n"
 msgstr ""
-"Plus d'un calque avec ce nom a été trouvé. Sélection glissée maître actuelle "
+"Plus d'un calque avec ce nom a été trouvé. Diapositive maîtresse active "
 "supprimée.\n"
 
 #: ../share/extensions/jessyInk_summary.py:68
@@ -35745,7 +35721,7 @@ msgid ""
 msgstr ""
 "Cette extension remplace les nœuds de la sélection par des points numérotés "
 "en fonction des options suivantes :\n"
-"  * Taille de police : taille du label de numéro de nœud (20px, 12pt...).\n"
+"  * Taille de police : taille du libellé de numéro de nœud (20px, 12pt...).\n"
 "  * Taille de point : diamètre des points placés sur les nœuds du chemin "
 "(10px, 2mm...)\n"
 "  * Numéro du nœud de départ : premier numéro de la séquence, assigné au "
@@ -47019,3 +46995,4 @@ msgstr "_Didacticiels"
 #~ msgstr ""
 #~ "<b>%u sur %u nœuds</b> sélectionnés. Cliquer-glisser pour sélectionner "
 #~ "des nœuds, cliquer libérer la sélection"
+
