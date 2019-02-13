@@ -92,6 +92,7 @@ LivePathEffectAdd::LivePathEffectAdd()
     _builder->get_widget("LPEExperimentals", _LPEExperimentals);
     _builder->get_widget("LPEScrolled", _LPEScrolled);
     _builder->get_widget("LPESelectorEffectEventFavShow", _LPESelectorEffectEventFavShow);
+    _builder->get_widget("LPESelectorEffectInfoEventBox", _LPESelectorEffectInfoEventBox);
     _LPEFilter->signal_search_changed().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_search));
     _LPESelectorFlowBox->signal_child_activated().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_activate));
     _LPEDialogSelector->add_events(Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK |  Gdk::ENTER_NOTIFY_MASK | Gdk::LEAVE_NOTIFY_MASK );    
@@ -139,7 +140,6 @@ LivePathEffectAdd::LivePathEffectAdd()
         LPESelectorButtonBox->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseout), GTK_WIDGET(LPESelectorEffect->gobj())));
         LPESelectorEffect->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(LPESelectorEffect->gobj())));
         LPESelectorEffect->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseout), GTK_WIDGET(LPESelectorEffect->gobj())));
-        
         _LPESelectorFlowBox->insert(*LPESelectorEffect, i);
     }
     _visiblelpe = _LPESelectorFlowBox->get_children().size();
@@ -147,10 +147,25 @@ LivePathEffectAdd::LivePathEffectAdd()
     _LPESelectorEffectEventFavShow->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(_LPESelectorEffectEventFavShow->gobj())));
     _LPESelectorEffectEventFavShow->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseout), GTK_WIDGET(_LPESelectorEffectEventFavShow->gobj())));
     _LPESelectorEffectEventFavShow->signal_button_press_event().connect(sigc::mem_fun(*this, &LivePathEffectAdd::show_fav_toggler));
+    _LPESelectorEffectInfoEventBox->signal_button_press_event().connect(sigc::mem_fun(*this, &LivePathEffectAdd::hide_pop_description));
+    _LPESelectorEffectInfoEventBox->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(_LPESelectorEffectInfoEventBox->gobj())));
+    _LPESelectorEffectInfoEventBox->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseout), GTK_WIDGET(_LPESelectorEffectInfoEventBox->gobj())));
     _LPESelectorFlowBox->set_sort_func(sigc::mem_fun(*this, &LivePathEffectAdd::on_sort));
     _LPESelectorFlowBox->set_filter_func(sigc::mem_fun(*this, &LivePathEffectAdd::on_filter));
     _LPEExperimentals->property_active().signal_changed().connect(sigc::mem_fun(*this, &LivePathEffectAdd::reload_effect_list));
     _LPEDialogSelector->show_all_children();
+    int width;
+    int height;
+    int original_width;
+    int original_height;
+    _LPEDialogSelector->get_default_size (original_width, original_height);
+    _LPEDialogSelector->get_size (width, height);
+    if( width == original_width  && height == original_height ){
+        Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
+        window->get_size (width, height);
+        _LPEDialogSelector->resize(std::min(width - 300, 1800), height - 300);
+        reload_effect_list();
+    }
 }
 
 void LivePathEffectAdd::on_activate(Gtk::FlowBoxChild *child)
@@ -205,6 +220,12 @@ bool LivePathEffectAdd::pop_description(GdkEventButton* evt, Glib::RefPtr<Gtk::B
     
     _LPESelectorEffectInfoPop->show();
     
+    return true;
+}
+
+bool LivePathEffectAdd::hide_pop_description(GdkEventButton* evt)
+{
+    _LPESelectorEffectInfoPop->hide();
     return true;
 }
 
@@ -319,6 +340,12 @@ void LivePathEffectAdd::reload_effect_list()
         _LPEInfo->set_text(_("Your search do a empty result, please try again"));
         _LPEInfo->set_visible(false);
         _LPEInfo->get_style_context()->remove_class("lpeinfowarn");
+    }
+    if (!_showfavs &&
+        _LPEFilter->get_text().empty() &&
+        _LPEDialogSelector->get_allocated_height() - 200 > _LPESelectorFlowBox->get_allocated_height()) 
+    {
+        _LPEDialogSelector->resize(_LPEDialogSelector->get_allocated_width(), _LPESelectorFlowBox->get_allocated_height() + 200);
     }
 }
 

@@ -614,7 +614,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Offset") //label
         , "offset" //key
         , "offset" //icon
-        , N_("Offset a ittem also with line joins cusp") //description
+        , N_("Offset a item also with line joins cusp") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group

@@ -62,6 +62,7 @@ public:
     void on_search();
     void on_activate(Gtk::FlowBoxChild *child);
     bool pop_description(GdkEventButton* evt, Glib::RefPtr<Gtk::Builder> builder_effect);
+    bool hide_pop_description(GdkEventButton* evt);
     bool fav_toggler(GdkEventButton* evt, Glib::RefPtr<Gtk::Builder> builder_effect);
     bool show_fav_toggler(GdkEventButton* evt);
     bool mouseover(GdkEventCrossing* evt, GtkWidget *wdg);
@@ -88,6 +89,7 @@ private:
   Gtk::FlowBox *_LPESelectorFlowBox;
   Gtk::Popover *_LPESelectorEffectInfoPop;
   Gtk::EventBox *_LPESelectorEffectEventFavShow;
+  Gtk::EventBox *_LPESelectorEffectInfoEventBox;
   Gtk::Switch * _LPEExperimentals;
   Gtk::SearchEntry *_LPEFilter;
   Gtk::ScrolledWindow *_LPEScrolled;
