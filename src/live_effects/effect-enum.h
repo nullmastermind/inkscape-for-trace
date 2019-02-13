@@ -192,7 +192,7 @@ class EnumEffectDataConverter {
     {
         for (unsigned int i = 0; i < _length; ++i) {
             if (_data[i].id == id)
-                return _data[i].path;
+                return _data[i].on_path;
         }
 
         return false;
@@ -202,7 +202,7 @@ class EnumEffectDataConverter {
     {
         for (unsigned int i = 0; i < _length; ++i) {
             if (_data[i].id == id)
-                return _data[i].shape;
+                return _data[i].on_shape;
         }
 
         return false;
@@ -212,7 +212,17 @@ class EnumEffectDataConverter {
     {
         for (unsigned int i = 0; i < _length; ++i) {
             if (_data[i].id == id)
-                return _data[i].group;
+                return _data[i].on_group;
+        }
+
+        return false;
+    }
+
+    const bool get_on_image(const E id) const
+    {
+        for (unsigned int i = 0; i < _length; ++i) {
+            if (_data[i].id == id)
+                return _data[i].on_image;
         }
 
         return false;
@@ -222,7 +232,7 @@ class EnumEffectDataConverter {
     {
         for (unsigned int i = 0; i < _length; ++i) {
             if (_data[i].id == id)
-                return _data[i].shape;
+                return _data[i].on_text;
         }
 
         return false;

@@ -17,6 +17,9 @@
 #include "io/resource.h"
 #include "live_effects/effect.h"
 #include "livepatheffect-add.h"
+#include "object/sp-path.h"
+#include "object/sp-shape.h"
+#include "object/sp-item-group.h"
 #include <glibmm/i18n.h>
 #include "preferences.h"
 
@@ -83,8 +86,30 @@ LivePathEffectAdd::LivePathEffectAdd()
         g_warning("Glade file loading failed for filter effect dialog");
         return;
     }
-    _showfavs = false;
     _builder->get_widget("LPEDialogSelector", _LPEDialogSelector);
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    Inkscape::Selection *sel = desktop->getSelection();
+    if ( sel && !sel->isEmpty() ) {
+        SPItem *item = sel->singleItem();
+        if (item) {
+            SPShape *shape = dynamic_cast<SPShape *>(item);
+            SPPath  *path  = dynamic_cast<SPPath *>(item);
+            SPGroup  *group  = dynamic_cast<SPGroup *>(item);
+            _item_type = "";
+            if (group) {
+                _item_type = "group";
+            } else if (shape) {
+                _item_type = "shape";
+            } else if (path){
+                _item_type = "path";
+            } else {
+                _LPEDialogSelector->hide();
+                return;
+            }
+        }
+    }
+    _showfavs = false;
+
     _builder->get_widget("LPESelectorFlowBox", _LPESelectorFlowBox);
     _builder->get_widget("LPESelectorEffectInfoPop", _LPESelectorEffectInfoPop);
     _builder->get_widget("LPEFilter", _LPEFilter);
@@ -105,9 +130,25 @@ LivePathEffectAdd::LivePathEffectAdd()
             g_warning("Glade file loading failed for filter effect dialog");
             return;
         }
+        const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *data = &converter.data(i);
+        bool disable = false;
+        if (_item_type == "group" && !converter.get_on_group(data->id)) {
+            disable = true;
+        } else if (_item_type == "shape" && !converter.get_on_shape(data->id)) {
+            disable = true;
+        } else if (_item_type == "path" && !converter.get_on_path(data->id)) {
+            disable = true;
+        }
         Gtk::EventBox *LPESelectorEffect;
         builder_effect->get_widget("LPESelectorEffect", LPESelectorEffect);
-        const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *data = &converter.data(i);
+        if (disable) {
+             LPESelectorEffect->get_parent()->get_style_context()->add_class("lpedisabled");
+        } else {
+             LPESelectorEffect->get_parent()->get_style_context()->remove_class("lpedisabled");
+        }
+        Gtk::Overlay * LPEOverlay;
+        builder_effect->get_widget("LPEOverlay", LPEOverlay);
+        LPEOverlay->signal_button_press_event().connect(sigc::bind<Glib::RefPtr<Gtk::Builder>, const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> * >(sigc::mem_fun(*this, &LivePathEffectAdd::apply), builder_effect, &converter.data(i)));
         Gtk::Label *LPEName;
         builder_effect->get_widget("LPEName", LPEName);
         LPEName->set_text(converter.get_label(data->id).c_str());
@@ -134,6 +175,10 @@ LivePathEffectAdd::LivePathEffectAdd()
         builder_effect->get_widget("LPESelectorEffectEventFavTop", LPESelectorEffectEventFavTop);
         LPESelectorEffectEventFav->signal_button_press_event().connect(sigc::bind<Glib::RefPtr<Gtk::Builder> >(sigc::mem_fun(*this, &LivePathEffectAdd::fav_toggler), builder_effect));
         LPESelectorEffectEventFavTop->signal_button_press_event().connect(sigc::bind<Glib::RefPtr<Gtk::Builder> >(sigc::mem_fun(*this, &LivePathEffectAdd::fav_toggler), builder_effect));
+        
+        Gtk::EventBox *LPESelectorEffectEventApply;
+        builder_effect->get_widget("LPESelectorEffectEventApply", LPESelectorEffectEventApply);
+        LPESelectorEffectEventApply->signal_button_press_event().connect(Glib::RefPtr<Gtk::Builder>, sigc::bind<const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> * >(sigc::mem_fun(*this, &LivePathEffectAdd::apply), builder_effect, &converter.data(i)));
         Gtk::ButtonBox *LPESelectorButtonBox;
         builder_effect->get_widget("LPESelectorButtonBox", LPESelectorButtonBox);
         LPESelectorButtonBox->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(LPESelectorEffect->gobj())));
@@ -161,13 +206,16 @@ LivePathEffectAdd::LivePathEffectAdd()
     _LPEDialogSelector->get_default_size (original_width, original_height);
     _LPEDialogSelector->get_size (width, height);
     if( width == original_width  && height == original_height ){
-        Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
+        Gtk::Window *window = desktop->getToplevel();
         window->get_size (width, height);
         _LPEDialogSelector->resize(std::min(width - 300, 1800), height - 300);
-        reload_effect_list();
     }
 }
-
+const LivePathEffect::EnumEffectData<LivePathEffect::EffectType>*
+LivePathEffectAdd::getActiveData()
+{
+    return instance()._to_add;
+}
 void LivePathEffectAdd::on_activate(Gtk::FlowBoxChild *child)
 {
     for (auto i : _LPESelectorFlowBox->get_children()) {
@@ -272,6 +320,21 @@ bool LivePathEffectAdd::show_fav_toggler(GdkEventButton* evt)
         }
     }
     reload_effect_list();
+    return true;
+}
+
+bool LivePathEffectAdd::apply(GdkEventButton* evt, Glib::RefPtr<Gtk::Builder> builder_effect, const LivePathEffect::EnumEffectData<LivePathEffect::EffectType>* to_add)
+{
+    _to_add = to_add;
+    Gtk::EventBox *LPESelectorEffect;
+    builder_effect->get_widget("LPESelectorEffect", LPESelectorEffect);
+    if(!LPESelectorEffect->get_parent()->get_style_context()->has_class("lpeactive" ||
+        LPESelectorEffect->get_parent()->get_style_context()->has_class("lpedisabled")) 
+    {
+        return true;
+    }
+    _LPEDialogSelector->response(Gtk::RESPONSE_APPLY);
+    _LPEDialogSelector->hide();
     return true;
 }
 

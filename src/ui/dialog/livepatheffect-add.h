@@ -50,7 +50,7 @@ public:
     static void show(SPDesktop *desktop);
     static bool isApplied() { return false; }
 
-    static const Util::EnumData<LivePathEffect::EffectType> *getActiveData() { return NULL; };
+   static const LivePathEffect::EnumEffectData<LivePathEffect::EffectType>* getActiveData();
 
   protected:
     /**
@@ -64,6 +64,7 @@ public:
     bool pop_description(GdkEventButton* evt, Glib::RefPtr<Gtk::Builder> builder_effect);
     bool hide_pop_description(GdkEventButton* evt);
     bool fav_toggler(GdkEventButton* evt, Glib::RefPtr<Gtk::Builder> builder_effect);
+    bool apply(GdkEventButton* evt, Glib::RefPtr<Gtk::Builder> builder_effect, const LivePathEffect::EnumEffectData<LivePathEffect::EffectType>* to_add);
     bool show_fav_toggler(GdkEventButton* evt);
     bool mouseover(GdkEventCrossing* evt, GtkWidget *wdg);
     bool mouseout(GdkEventCrossing* evt, GtkWidget *wdg);
@@ -96,6 +97,8 @@ private:
   Gtk::Label *_LPEInfo;
   Gtk::Box *_LPESelector;
   guint _visiblelpe;
+  Glib::ustring _item_type;
+  const LivePathEffect::EnumEffectData<LivePathEffect::EffectType>* _to_add;
   bool _showfavs;
   class Effect;
   const LivePathEffect::EnumEffectDataConverter<LivePathEffect::EffectType> &converter;

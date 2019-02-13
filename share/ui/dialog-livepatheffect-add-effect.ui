@@ -18,7 +18,8 @@
         <property name="orientation">vertical</property>
         <property name="baseline_position">top</property>
         <child>
-          <object class="GtkOverlay">
+          <object class="GtkOverlay" id="LPEOverlay">
+            <property name="name">LPEOverlay</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>

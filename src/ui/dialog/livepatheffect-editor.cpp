@@ -432,7 +432,7 @@ LivePathEffectEditor::onAdd()
 
                 SPDocument *doc = current_desktop->doc();
 
-                const Util::EnumData<LivePathEffect::EffectType>* data = LivePathEffectAdd::getActiveData();
+                const LivePathEffect::EnumEffectData<LivePathEffect::EffectType>* data = LivePathEffectAdd::getActiveData();
                 if (!data) {
                     return;
                 }
