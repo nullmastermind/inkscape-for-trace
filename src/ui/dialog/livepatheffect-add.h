@@ -97,7 +97,7 @@ private:
   Gtk::Popover *_LPESelectorEffectInfoPop;
   Gtk::EventBox *_LPESelectorEffectEventFavShow;
   Gtk::EventBox *_LPESelectorEffectInfoEventBox;
-  Gtk::Switch * _LPEExperimentals;
+  Gtk::Switch *_LPEExperimental;
   Gtk::SearchEntry *_LPEFilter;
   Gtk::ScrolledWindow *_LPEScrolled;
   Gtk::Label *_LPEInfo;

@@ -284,6 +284,10 @@ spinbutton undershoot {
     opacity:0.3;
 }
 
+#LPEExperimental image{
+color: transparent;
+}
+
 #LPESelectorEffectInfoPop{
 padding:15px;
 }

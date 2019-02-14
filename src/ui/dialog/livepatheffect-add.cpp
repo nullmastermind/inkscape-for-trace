@@ -116,7 +116,7 @@ LivePathEffectAdd::LivePathEffectAdd()
     _builder->get_widget("LPESelectorEffectInfoPop", _LPESelectorEffectInfoPop);
     _builder->get_widget("LPEFilter", _LPEFilter);
     _builder->get_widget("LPEInfo", _LPEInfo);
-    _builder->get_widget("LPEExperimentals", _LPEExperimentals);
+    _builder->get_widget("LPEExperimental", _LPEExperimental);
     _builder->get_widget("LPEScrolled", _LPEScrolled);
     _builder->get_widget("LPESelectorEffectEventFavShow", _LPESelectorEffectEventFavShow);
     _builder->get_widget("LPESelectorEffectInfoEventBox", _LPESelectorEffectInfoEventBox);
@@ -199,7 +199,7 @@ LivePathEffectAdd::LivePathEffectAdd()
     _LPESelectorEffectInfoEventBox->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseout), GTK_WIDGET(_LPESelectorEffectInfoEventBox->gobj())));
     _LPESelectorFlowBox->set_sort_func(sigc::mem_fun(*this, &LivePathEffectAdd::on_sort));
     _LPESelectorFlowBox->set_filter_func(sigc::mem_fun(*this, &LivePathEffectAdd::on_filter));
-    _LPEExperimentals->property_active().signal_changed().connect(sigc::mem_fun(*this, &LivePathEffectAdd::reload_effect_list));
+    _LPEExperimental->property_active().signal_changed().connect(sigc::mem_fun(*this, &LivePathEffectAdd::reload_effect_list));
     _LPEDialogSelector->show_all_children();
     int width;
     int height;
@@ -359,7 +359,7 @@ bool LivePathEffectAdd::on_filter(Gtk::FlowBoxChild *child)
             }
             Gtk::ToggleButton *experimental = dynamic_cast<Gtk::ToggleButton *>(contents[3]);
             if (experimental) {
-                if (experimental->get_active() && _LPEExperimentals->get_active()) {
+                if (experimental->get_active() && _LPEExperimental->get_active()) {
                     return false;
                 }
             }
@@ -389,10 +389,10 @@ bool LivePathEffectAdd::on_filter(Gtk::FlowBoxChild *child)
 
 void LivePathEffectAdd::reload_effect_list()
 {
-    /* if(_LPEExperimentals->get_active()) {
-        _LPEExperimentals->get_style_context()->add_class("active");
+    /* if(_LPEExperimental->get_active()) {
+        _LPEExperimental->get_style_context()->add_class("active");
     } else {
-        _LPEExperimentals->get_style_context()->remove_class("active");
+        _LPEExperimental->get_style_context()->remove_class("active");
     } */
     _visiblelpe = 0;
     _LPESelectorFlowBox->invalidate_filter();
