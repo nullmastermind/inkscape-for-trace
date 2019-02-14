@@ -81,6 +81,7 @@ struct EnumEffectData {
     const Glib::ustring label;
     const Glib::ustring key;
     const Glib::ustring icon;
+    const Glib::ustring untranslated_label;
     const Glib::ustring description;
     const bool on_path;
     const bool on_shape;
@@ -173,6 +174,16 @@ class EnumEffectDataConverter {
         for (unsigned int i = 0; i < _length; ++i) {
             if (_data[i].id == id)
                 return _data[i].icon;
+        }
+
+        return empty_string;
+    }
+
+    const Glib::ustring &get_untranslated_label(const E id) const
+    {
+        for (unsigned int i = 0; i < _length; ++i) {
+            if (_data[i].id == id)
+                return _data[i].untranslated_label;
         }
 
         return empty_string;

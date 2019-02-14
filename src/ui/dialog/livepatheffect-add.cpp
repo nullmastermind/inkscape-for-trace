@@ -90,28 +90,6 @@ LivePathEffectAdd::LivePathEffectAdd()
         return;
     }
     _builder->get_widget("LPEDialogSelector", _LPEDialogSelector);
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    Inkscape::Selection *sel = desktop->getSelection();
-    if ( sel && !sel->isEmpty() ) {
-        SPItem *item = sel->singleItem();
-        if (item) {
-            SPShape *shape = dynamic_cast<SPShape *>(item);
-            SPPath  *path  = dynamic_cast<SPPath *>(item);
-            SPGroup  *group  = dynamic_cast<SPGroup *>(item);
-            _item_type = "";
-            if (group) {
-                _item_type = "group";
-            } else if (shape) {
-                _item_type = "shape";
-            } else if (path){
-                _item_type = "path";
-            } else {
-                _LPEDialogSelector->hide();
-                return;
-            }
-        }
-    }
-
     _builder->get_widget("LPESelectorFlowBox", _LPESelectorFlowBox);
     _builder->get_widget("LPESelectorEffectInfoPop", _LPESelectorEffectInfoPop);
     _builder->get_widget("LPEFilter", _LPEFilter);
@@ -133,20 +111,18 @@ LivePathEffectAdd::LivePathEffectAdd()
             return;
         }
         const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *data = &converter.data(i);
-        bool disable = false;
-        if (_item_type == "group" && !converter.get_on_group(data->id)) {
-            disable = true;
-        } else if (_item_type == "shape" && !converter.get_on_shape(data->id)) {
-            disable = true;
-        } else if (_item_type == "path" && !converter.get_on_path(data->id)) {
-            disable = true;
-        }
         Gtk::EventBox *LPESelectorEffect;
         builder_effect->get_widget("LPESelectorEffect", LPESelectorEffect);
         LPESelectorEffect->signal_button_press_event().connect(sigc::bind<Glib::RefPtr<Gtk::Builder>, const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> * >(sigc::mem_fun(*this, &LivePathEffectAdd::apply), builder_effect, &converter.data(i)));
         Gtk::Label *LPEName;
         builder_effect->get_widget("LPEName", LPEName);
-        LPEName->set_text(converter.get_label(data->id).c_str());
+        const Glib::ustring label = converter.get_label(data->id);
+        const Glib::ustring untranslated_label = converter.get_untranslated_label(data->id);
+        if (untranslated_label == label) {
+            LPEName->set_text(label);
+        } else {
+            LPEName->set_markup((label + "\n<span size='x-small'>" + untranslated_label + "</span>").c_str());
+        }
         Gtk::Label *LPEDescription;
         builder_effect->get_widget("LPEDescription", LPEDescription);
         LPEDescription->set_text(converter.get_description(data->id));
@@ -183,11 +159,6 @@ LivePathEffectAdd::LivePathEffectAdd()
         LPESelectorEffect->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(LPESelectorEffect->gobj())));
         LPESelectorEffect->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseout), GTK_WIDGET(LPESelectorEffect->gobj())));
         _LPESelectorFlowBox->insert(*LPESelectorEffect, i);
-        if (disable) {
-             LPESelectorEffect->get_parent()->get_style_context()->add_class("lpedisabled");
-        } else {
-             LPESelectorEffect->get_parent()->get_style_context()->remove_class("lpedisabled");
-        }
     }
     _visiblelpe = _LPESelectorFlowBox->get_children().size();
     _LPEInfo->set_visible(false);
@@ -197,21 +168,9 @@ LivePathEffectAdd::LivePathEffectAdd()
     _LPESelectorEffectInfoEventBox->signal_button_press_event().connect(sigc::mem_fun(*this, &LivePathEffectAdd::hide_pop_description));
     _LPESelectorEffectInfoEventBox->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(_LPESelectorEffectInfoEventBox->gobj())));
     _LPESelectorEffectInfoEventBox->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseout), GTK_WIDGET(_LPESelectorEffectInfoEventBox->gobj())));
-    _LPESelectorFlowBox->set_sort_func(sigc::mem_fun(*this, &LivePathEffectAdd::on_sort));
     _LPESelectorFlowBox->set_filter_func(sigc::mem_fun(*this, &LivePathEffectAdd::on_filter));
     _LPEExperimental->property_active().signal_changed().connect(sigc::mem_fun(*this, &LivePathEffectAdd::reload_effect_list));
     _LPEDialogSelector->show_all_children();
-    int width;
-    int height;
-    int width_2;
-    int height_2;
-    _LPEDialogSelector->get_default_size (width_2, height_2);
-    _LPEDialogSelector->get_size (width, height);
-    if( width == width_2  && height == height_2 ){
-        Gtk::Window *window = desktop->getToplevel();
-        window->get_size (width, height);
-        _LPEDialogSelector->resize(std::min( width - 300, 1440), std::min( height - 300, 900));
-    }
 }
 const LivePathEffect::EnumEffectData<LivePathEffect::EffectType>*
 LivePathEffectAdd::getActiveData()
@@ -345,8 +304,24 @@ bool LivePathEffectAdd::apply(GdkEventButton* evt, Glib::RefPtr<Gtk::Builder> bu
     return true;
 }
 
+
+
 bool LivePathEffectAdd::on_filter(Gtk::FlowBoxChild *child)
 {
+    const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *data = &converter.data(child->get_index());
+    bool disable = false;
+    if (_item_type == "group" && !converter.get_on_group(data->id)) {
+        disable = true;
+    } else if (_item_type == "shape" && !converter.get_on_shape(data->id)) {
+        disable = true;
+    } else if (_item_type == "path" && !converter.get_on_path(data->id)) {
+        disable = true;
+    }
+    if (disable) {
+        child->get_style_context()->add_class("lpedisabled");
+    } else {
+        child->get_style_context()->remove_class("lpedisabled");
+    }
     child->set_valign(Gtk::ALIGN_START);
     Gtk::EventBox *eventbox = dynamic_cast<Gtk::EventBox *>(child->get_child());
     if (eventbox) {
@@ -511,9 +486,41 @@ void LivePathEffectAdd::onKeyEvent(GdkEventKey* evt)
 void LivePathEffectAdd::show(SPDesktop *desktop)
 {
     LivePathEffectAdd &dial = instance();
+    Inkscape::Selection *sel = desktop->getSelection();
+    if ( sel && !sel->isEmpty() ) {
+        SPItem *item = sel->singleItem();
+        if (item) {
+            SPShape *shape = dynamic_cast<SPShape *>(item);
+            SPPath  *path  = dynamic_cast<SPPath  *>(item);
+            SPGroup *group = dynamic_cast<SPGroup *>(item);
+            dial._item_type = "";
+            if (group) {
+                dial._item_type = "group";
+            } else if (path) {
+                dial._item_type = "path";
+            } else if (shape){
+                dial._item_type = "shape";
+            } else {
+                dial._LPEDialogSelector->hide();
+                return;
+            }
+        }
+    }
+    int width;
+    int height;
+    int width_2;
+    int height_2;
+    dial._LPEDialogSelector->get_default_size (width_2, height_2);
+    dial._LPEDialogSelector->get_size (width, height);
+    if( width == width_2  && height == height_2 ){
+        Gtk::Window *window = desktop->getToplevel();
+        window->get_size (width, height);
+        dial._LPEDialogSelector->resize(std::min( width - 300, 1440), std::min( height - 300, 900));
+    }
     dial._applied=false;
+    dial._LPESelectorFlowBox->unset_sort_func();
     dial._LPESelectorFlowBox->invalidate_filter();
-    dial._LPESelectorFlowBox->invalidate_sort();
+    dial._LPESelectorFlowBox->set_sort_func(sigc::mem_fun(dial, &LivePathEffectAdd::on_sort));
     Glib::RefPtr< Gtk::Adjustment > vadjust = dial._LPEScrolled->get_vadjustment();
     vadjust->set_value(vadjust->get_lower());
     dial._LPEDialogSelector->run();
