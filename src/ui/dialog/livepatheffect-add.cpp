@@ -14,14 +14,15 @@
 #endif
 
 #include "desktop.h"
+#include "preferences.h"
 #include "io/resource.h"
 #include "live_effects/effect.h"
 #include "livepatheffect-add.h"
 #include "object/sp-path.h"
 #include "object/sp-shape.h"
 #include "object/sp-item-group.h"
+#include <math.h>
 #include <glibmm/i18n.h>
-#include "preferences.h"
 
 namespace Inkscape {
 namespace UI {
@@ -78,6 +79,8 @@ LivePathEffectAdd::mouseout(GdkEventCrossing* evt, GtkWidget *wdg)
 
 LivePathEffectAdd::LivePathEffectAdd()
     : converter(Inkscape::LivePathEffect::LPETypeConverter)
+    , _applied(false)
+    , _showfavs(false)
 {
     Glib::ustring gladefile = get_filename(Inkscape::IO::Resource::UIS, "dialog-livepatheffect-add.ui");
     try {
@@ -108,7 +111,6 @@ LivePathEffectAdd::LivePathEffectAdd()
             }
         }
     }
-    _showfavs = false;
 
     _builder->get_widget("LPESelectorFlowBox", _LPESelectorFlowBox);
     _builder->get_widget("LPESelectorEffectInfoPop", _LPESelectorEffectInfoPop);
@@ -141,14 +143,7 @@ LivePathEffectAdd::LivePathEffectAdd()
         }
         Gtk::EventBox *LPESelectorEffect;
         builder_effect->get_widget("LPESelectorEffect", LPESelectorEffect);
-        if (disable) {
-             LPESelectorEffect->get_parent()->get_style_context()->add_class("lpedisabled");
-        } else {
-             LPESelectorEffect->get_parent()->get_style_context()->remove_class("lpedisabled");
-        }
-        Gtk::Overlay * LPEOverlay;
-        builder_effect->get_widget("LPEOverlay", LPEOverlay);
-        LPEOverlay->signal_button_press_event().connect(sigc::bind<Glib::RefPtr<Gtk::Builder>, const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> * >(sigc::mem_fun(*this, &LivePathEffectAdd::apply), builder_effect, &converter.data(i)));
+        LPESelectorEffect->signal_button_press_event().connect(sigc::bind<Glib::RefPtr<Gtk::Builder>, const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> * >(sigc::mem_fun(*this, &LivePathEffectAdd::apply), builder_effect, &converter.data(i)));
         Gtk::Label *LPEName;
         builder_effect->get_widget("LPEName", LPEName);
         LPEName->set_text(converter.get_label(data->id).c_str());
@@ -178,7 +173,9 @@ LivePathEffectAdd::LivePathEffectAdd()
         
         Gtk::EventBox *LPESelectorEffectEventApply;
         builder_effect->get_widget("LPESelectorEffectEventApply", LPESelectorEffectEventApply);
-        LPESelectorEffectEventApply->signal_button_press_event().connect(Glib::RefPtr<Gtk::Builder>, sigc::bind<const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> * >(sigc::mem_fun(*this, &LivePathEffectAdd::apply), builder_effect, &converter.data(i)));
+        LPESelectorEffectEventApply->signal_button_press_event().connect(sigc::bind<Glib::RefPtr<Gtk::Builder>, const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> * >(sigc::mem_fun(*this, &LivePathEffectAdd::apply), builder_effect, &converter.data(i)));
+        LPESelectorEffectEventApply->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(LPESelectorEffectEventApply->gobj())));
+        LPESelectorEffectEventApply->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseout), GTK_WIDGET(LPESelectorEffectEventApply->gobj())));
         Gtk::ButtonBox *LPESelectorButtonBox;
         builder_effect->get_widget("LPESelectorButtonBox", LPESelectorButtonBox);
         LPESelectorButtonBox->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(LPESelectorEffect->gobj())));
@@ -186,6 +183,11 @@ LivePathEffectAdd::LivePathEffectAdd()
         LPESelectorEffect->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(LPESelectorEffect->gobj())));
         LPESelectorEffect->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseout), GTK_WIDGET(LPESelectorEffect->gobj())));
         _LPESelectorFlowBox->insert(*LPESelectorEffect, i);
+        if (disable) {
+             LPESelectorEffect->get_parent()->get_style_context()->add_class("lpedisabled");
+        } else {
+             LPESelectorEffect->get_parent()->get_style_context()->remove_class("lpedisabled");
+        }
     }
     _visiblelpe = _LPESelectorFlowBox->get_children().size();
     _LPEInfo->set_visible(false);
@@ -201,14 +203,14 @@ LivePathEffectAdd::LivePathEffectAdd()
     _LPEDialogSelector->show_all_children();
     int width;
     int height;
-    int original_width;
-    int original_height;
-    _LPEDialogSelector->get_default_size (original_width, original_height);
+    int width_2;
+    int height_2;
+    _LPEDialogSelector->get_default_size (width_2, height_2);
     _LPEDialogSelector->get_size (width, height);
-    if( width == original_width  && height == original_height ){
+    if( width == width_2  && height == height_2 ){
         Gtk::Window *window = desktop->getToplevel();
         window->get_size (width, height);
-        _LPEDialogSelector->resize(std::min(width - 300, 1800), height - 300);
+        _LPEDialogSelector->resize(std::min( width - 300, 1440), std::min( height - 300, 900));
     }
 }
 const LivePathEffect::EnumEffectData<LivePathEffect::EffectType>*
@@ -328,11 +330,16 @@ bool LivePathEffectAdd::apply(GdkEventButton* evt, Glib::RefPtr<Gtk::Builder> bu
     _to_add = to_add;
     Gtk::EventBox *LPESelectorEffect;
     builder_effect->get_widget("LPESelectorEffect", LPESelectorEffect);
-    if(!LPESelectorEffect->get_parent()->get_style_context()->has_class("lpeactive" ||
-        LPESelectorEffect->get_parent()->get_style_context()->has_class("lpedisabled")) 
+    if(!LPESelectorEffect->get_parent()->get_style_context()->has_class("lpeactive") ||
+        LPESelectorEffect->get_parent()->get_style_context()->has_class("lpedisabled"))
     {
+        Gtk::FlowBoxChild * child = dynamic_cast<Gtk::FlowBoxChild *>(LPESelectorEffect->get_parent());
+        if (child) {
+            on_activate(child);
+        }
         return true;
     }
+    _applied = true;
     _LPEDialogSelector->response(Gtk::RESPONSE_APPLY);
     _LPEDialogSelector->hide();
     return true;
@@ -403,12 +410,6 @@ void LivePathEffectAdd::reload_effect_list()
         _LPEInfo->set_text(_("Your search do a empty result, please try again"));
         _LPEInfo->set_visible(false);
         _LPEInfo->get_style_context()->remove_class("lpeinfowarn");
-    }
-    if (!_showfavs &&
-        _LPEFilter->get_text().empty() &&
-        _LPEDialogSelector->get_allocated_height() - 200 > _LPESelectorFlowBox->get_allocated_height()) 
-    {
-        _LPEDialogSelector->resize(_LPEDialogSelector->get_allocated_width(), _LPESelectorFlowBox->get_allocated_height() + 200);
     }
 }
 
@@ -497,18 +498,11 @@ int LivePathEffectAdd::on_sort(Gtk::FlowBoxChild *child1, Gtk::FlowBoxChild *chi
     return 1;
 }
 
-void LivePathEffectAdd::onAdd()
-{
-    onClose();
-}
 
 void LivePathEffectAdd::onClose() { _LPEDialogSelector->hide(); }
 
 void LivePathEffectAdd::onKeyEvent(GdkEventKey* evt)
 {
-    if (evt->keyval == GDK_KEY_Return) {
-         onAdd();
-    }
     if (evt->keyval == GDK_KEY_Escape) {
          onClose();
     }
@@ -517,6 +511,7 @@ void LivePathEffectAdd::onKeyEvent(GdkEventKey* evt)
 void LivePathEffectAdd::show(SPDesktop *desktop)
 {
     LivePathEffectAdd &dial = instance();
+    dial._applied=false;
     dial._LPESelectorFlowBox->invalidate_filter();
     dial._LPESelectorFlowBox->invalidate_sort();
     Glib::RefPtr< Gtk::Adjustment > vadjust = dial._LPEScrolled->get_vadjustment();

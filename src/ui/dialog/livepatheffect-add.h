@@ -25,6 +25,7 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/label.h>
 #include <gtkmm/searchentry.h>
+#include <gtkmm/viewport.h>
 #include <gtkmm/stylecontext.h>
 #include <gtkmm/overlay.h>
 #include <gtkmm/adjustment.h>
@@ -48,9 +49,14 @@ public:
      * Show the dialog
      */
     static void show(SPDesktop *desktop);
-    static bool isApplied() { return false; }
+    /**
+     * Returns true is the "Add" button was pressed
+     */
+    static bool isApplied() {
+        return instance()._applied;
+    }
 
-   static const LivePathEffect::EnumEffectData<LivePathEffect::EffectType>* getActiveData();
+    static const LivePathEffect::EnumEffectData<LivePathEffect::EffectType>* getActiveData();
 
   protected:
     /**
@@ -100,6 +106,7 @@ private:
   Glib::ustring _item_type;
   const LivePathEffect::EnumEffectData<LivePathEffect::EffectType>* _to_add;
   bool _showfavs;
+  bool _applied;
   class Effect;
   const LivePathEffect::EnumEffectDataConverter<LivePathEffect::EffectType> &converter;
   static LivePathEffectAdd &instance()

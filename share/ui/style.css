@@ -279,9 +279,11 @@ spinbutton undershoot {
     font-size:16px;
     padding:20px;
 }
+
 .lpedisabled{
-    opacity:0.5;
+    opacity:0.3;
 }
+
 #LPESelectorEffectInfoPop{
 padding:15px;
 }
