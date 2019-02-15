@@ -25,7 +25,7 @@
 #include "live_effects/lpe-constructgrid.h"
 #include "live_effects/lpe-copy_rotate.h"
 #include "live_effects/lpe-curvestitch.h"
-#include "live_effects/lpe-dash-stroke.h"
+#include "live_effects/lpe-dashed-stroke.h"
 #include "live_effects/lpe-dynastroke.h"
 #include "live_effects/lpe-ellipse_5pts.h"
 #include "live_effects/lpe-envelope.h"
@@ -1059,8 +1059,8 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
         case PTS2ELLIPSE:
             neweffect = static_cast<Effect*> ( new LPEPts2Ellipse(lpeobj) );
             break;
-        case DASH_STROKE:
-            neweffect = static_cast<Effect*> ( new LPEDashStroke(lpeobj) );
+        case DASHED_STROKE:
+            neweffect = static_cast<Effect*> ( new LPEDashedStroke(lpeobj) );
             break;
         default:
             g_warning("LivePathEffect::Effect::New called with invalid patheffect type (%d)", lpenr);

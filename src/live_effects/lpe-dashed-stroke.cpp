@@ -2,7 +2,7 @@
 /*
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-#include "live_effects/lpe-dash-stroke.h"
+#include "live_effects/lpe-dashed-stroke.h"
 #include "2geom/pathvector.h"
 #include "2geom/path.h"
 #include "helper/geom.h"
