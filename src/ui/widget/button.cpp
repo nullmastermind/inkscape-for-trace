@@ -52,8 +52,8 @@ Button::get_preferred_width_vfunc(int &minimal_width, int &natural_width) const
 
     auto context = get_style_context();
 
-    auto padding = context->get_padding(Gtk::STATE_FLAG_NORMAL);
-    auto border = context->get_border(Gtk::STATE_FLAG_NORMAL);
+    auto padding = context->get_padding(context->get_state());
+    auto border = context->get_border(context->get_state());
 
     minimal_width += MAX(2, padding.get_left() + padding.get_right() + border.get_left() + border.get_right());
     natural_width += MAX(2, padding.get_left() + padding.get_right() + border.get_left() + border.get_right());
@@ -73,8 +73,8 @@ Button::get_preferred_height_vfunc(int &minimal_height, int &natural_height) con
 
     auto context = get_style_context();
 
-    auto padding = context->get_padding(Gtk::STATE_FLAG_NORMAL);
-    auto border = context->get_border(Gtk::STATE_FLAG_NORMAL);
+    auto padding = context->get_padding(context->get_state());
+    auto border = context->get_border(context->get_state());
 
     minimal_height += MAX(2, padding.get_top() + padding.get_bottom() + border.get_top() + border.get_bottom());
     natural_height += MAX(2, padding.get_top() + padding.get_bottom() + border.get_top() + border.get_bottom());
