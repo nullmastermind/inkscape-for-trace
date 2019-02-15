@@ -13,7 +13,7 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
-LPEDashStroke::LPEDashStroke(LivePathEffectObject *lpeobject)
+LPEDashedStroke::LPEDashedStroke(LivePathEffectObject *lpeobject)
     : Effect(lpeobject),
     numberdashes(_("Number of dashes"), _("Number of dashes"), "numberdashes", &wr, this, 3),
     holefactor(_("Hole factor"), _("Hole factor"), "holefactor", &wr, this, 0.0),
@@ -37,16 +37,16 @@ LPEDashStroke::LPEDashStroke(LivePathEffectObject *lpeobject)
     message.param_set_min_height(30);
 }
 
-LPEDashStroke::~LPEDashStroke() = default;
+LPEDashedStroke::~LPEDashedStroke() = default;
 
 void
-LPEDashStroke::doBeforeEffect (SPLPEItem const* lpeitem){
+LPEDashedStroke::doBeforeEffect (SPLPEItem const* lpeitem){
 }
 
 ///Calculate the time in curve_in with a real time of A
 //TODO: find a better place to it
 double 
-LPEDashStroke::timeAtLength(double const A, Geom::Path const &segment)
+LPEDashedStroke::timeAtLength(double const A, Geom::Path const &segment)
 {
     if ( A == 0 || segment[0].isDegenerate()) {
         return 0;
@@ -59,7 +59,7 @@ LPEDashStroke::timeAtLength(double const A, Geom::Path const &segment)
 ///Calculate the time in curve_in with a real time of A
 //TODO: find a better place to it
 double 
-LPEDashStroke::timeAtLength(double const A, Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2)
+LPEDashedStroke::timeAtLength(double const A, Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2)
 {
     if ( A == 0 || pwd2.size() == 0) {
         return 0;
@@ -74,7 +74,7 @@ LPEDashStroke::timeAtLength(double const A, Geom::Piecewise<Geom::D2<Geom::SBasi
 }
 
 Geom::PathVector
-LPEDashStroke::doEffect_path(Geom::PathVector const & path_in){
+LPEDashedStroke::doEffect_path(Geom::PathVector const & path_in){
     Geom::PathVector const pv = pathv_to_linear_and_cubic_beziers(path_in);
     Geom::PathVector result;
     for (const auto & path_it : pv) {

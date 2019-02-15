@@ -344,7 +344,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "perspective-envelope" //key wrong key with "-" retain because historic
         , "perspective-envelope" //icon
         , "Perspective/Envelope" //untranslated name
-        , N_("Perspective or envelope a item by 4 corner ponts") //description
+        , N_("Transform the object to fit into a shape with four corners, either by stretching it or creating the illusion of a 3D-perspective.") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
@@ -358,7 +358,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "interpolate_points" //key
         , "interpolate-points" //icon
         , "Interpolate points" //untranslated name
-        , N_("Interpolate points creating diferent conxions between: straight, smooth...") //description
+        , N_("Connect the nodes of the path (e.g. corresponding to data points) by different types of lines.") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
@@ -386,7 +386,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "show_handles" //key
         , "show-handles" //icon
         , "Show handles" //untranslated name
-        , N_("Show handles of element, perfect to temporsty show path handles and nodes") //description
+        , N_("Draw the handles and nodes of paths (replaces the original styling with a black stroke).") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
@@ -400,7 +400,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "roughen" //key
         , "roughen" //icon
         , "Roughen" //untranslated name
-        , N_("Roughen a item so looks a slight more natural or handcrafted or totaly deformed.") //description
+        , N_("Roughen an object by adding and randomly shifting new nodes.") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
@@ -414,7 +414,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "bspline" //key
         , "bspline" //icon
         , "BSpline" //untranslated name
-        , N_("Add BSpline bsplie to a path, this usualy is added on path creation and not directly from here") //description
+        , N_("Create a BSpline that molds into the path's corners. This effect is usually used directly on the canvas with the BSpline mode of the drawing tools.") //description
         , true  //on_path
         , false  //on_shape
         , false  //on_group
@@ -428,7 +428,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "join_type" //key
         , "join-type" //icon
         , "Join type" //untranslated name
-        , N_("Join type convert a path stroke to a real fill path, act lice conbert stroke to path but non destructive. Also have the extrapolated arc option for line joins") //description
+        , N_("Select among various join types for a path's corner nodes (mitre, rounded, extrapolated arc, ...)") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
@@ -485,7 +485,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "attach_path" //key
         , "attach-path" //icon
         , "Attach path" //untranslated name
-        , N_("Join starting and/or ending paths to current path") //description
+        , N_("Glue the current path's ends to a specific position on one or two other paths.") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
@@ -499,7 +499,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "fill_between_strokes" //key
         , "fill-between-strokes" //icon
         , "Fill between strokes" //untranslated name
-        , N_("Create a updateable fill between 2 diferent paths") //description
+        , N_("Turn the path into a fill between two other open paths (e.g. between two paths with PowerStroke applied to them)") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
@@ -513,7 +513,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "fill_between_many" //key
         , "fill-between-many" //icon
         , "Fill between many" //untranslated name
-        , N_("Create a updateable fill between many diferent paths") //description
+        , N_("Turn the path into a fill between multiple other open paths (e.g. between paths with PowerStroke applied to them)") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
@@ -527,7 +527,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "ellipse_5pts" //key
         , "ellipse-5pts" //icon
         , "Ellipse by 5 points" //untranslated name
-        , N_("Create a ellipse by a path with 5 points") //description
+        , N_("Create an ellipse from 5 nodes on its circumference.") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
@@ -556,7 +556,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "measure_segments" //key
         , "measure-segments" //icon
         , "Measure Segments" //untranslated name
-        , N_("Measure segments, add lines, units, projections...") //description
+        , N_("Add dimensioning for distances between nodes, optionally with projection and many other configuration options.") //description
         , true  //on_path
         , true  //on_shape
         , false  //on_group
@@ -654,7 +654,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "offset" //key
         , "offset" //icon
         , "Offset" //untranslated name
-        , N_("Offset a item also with line joins cusp") //description
+        , N_("Offset the path, optionally keeping cusp corners cusp.") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
@@ -663,12 +663,12 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , false //experimental
     },
     {
-        DASH_STROKE
-        , N_("Dash Stroke") //label
-        , "dash_stroke" //key
-        , "dash-stroke" //icon
-        , "Dash Stroke" //untranslated name
-        , N_("Dash Stroke that fit exatly") //description
+        DASHED_STROKE
+        , N_("Dashed Stroke") //label
+        , "dashed_stroke" //key
+        , "dashed-stroke" //icon
+        , "Dashed Stroke" //untranslated name
+        , N_("Add a dashed stroke whose dashes end exactly on a node, optionally with the same number of dashes per path segment.") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group

@@ -159,6 +159,7 @@ LivePathEffectAdd::LivePathEffectAdd()
         LPESelectorEffect->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(LPESelectorEffect->gobj())));
         LPESelectorEffect->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseout), GTK_WIDGET(LPESelectorEffect->gobj())));
         _LPESelectorFlowBox->insert(*LPESelectorEffect, i);
+        LPESelectorEffect->get_parent()->get_style_context()->add_class(("LPEIndex" + Glib::ustring::format(i)).c_str());
     }
     _visiblelpe = _LPESelectorFlowBox->get_children().size();
     _LPEInfo->set_visible(false);
@@ -168,7 +169,6 @@ LivePathEffectAdd::LivePathEffectAdd()
     _LPESelectorEffectInfoEventBox->signal_button_press_event().connect(sigc::mem_fun(*this, &LivePathEffectAdd::hide_pop_description));
     _LPESelectorEffectInfoEventBox->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(_LPESelectorEffectInfoEventBox->gobj())));
     _LPESelectorEffectInfoEventBox->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(sigc::mem_fun(*this, &LivePathEffectAdd::mouseout), GTK_WIDGET(_LPESelectorEffectInfoEventBox->gobj())));
-    _LPESelectorFlowBox->set_filter_func(sigc::mem_fun(*this, &LivePathEffectAdd::on_filter));
     _LPEExperimental->property_active().signal_changed().connect(sigc::mem_fun(*this, &LivePathEffectAdd::reload_effect_list));
     _LPEDialogSelector->show_all_children();
 }
@@ -308,7 +308,16 @@ bool LivePathEffectAdd::apply(GdkEventButton* evt, Glib::RefPtr<Gtk::Builder> bu
 
 bool LivePathEffectAdd::on_filter(Gtk::FlowBoxChild *child)
 {
-    const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *data = &converter.data(child->get_index());
+    std::vector<Glib::ustring> classes = child->get_style_context()->list_classes();
+    int pos = 0;
+    for (auto childclass:classes) {
+        size_t s = childclass.find("LPEIndex", 0);
+        if (s != -1) {
+            childclass = childclass.erase(0,8);
+            pos = std::stoi(childclass);
+        }
+    }
+    const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *data = &converter.data(pos);
     bool disable = false;
     if (_item_type == "group" && !converter.get_on_group(data->id)) {
         disable = true;
@@ -515,11 +524,13 @@ void LivePathEffectAdd::show(SPDesktop *desktop)
     if( width == width_2  && height == height_2 ){
         Gtk::Window *window = desktop->getToplevel();
         window->get_size (width, height);
+        std::cout << "dsdgsgdsdgsgdgdsgsdgsdgds" << std::endl;
         dial._LPEDialogSelector->resize(std::min( width - 300, 1440), std::min( height - 300, 900));
     }
     dial._applied=false;
     dial._LPESelectorFlowBox->unset_sort_func();
-    dial._LPESelectorFlowBox->invalidate_filter();
+    dial._LPESelectorFlowBox->unset_filter_func();
+    dial._LPESelectorFlowBox->set_filter_func(sigc::mem_fun(dial, &LivePathEffectAdd::on_filter));
     dial._LPESelectorFlowBox->set_sort_func(sigc::mem_fun(dial, &LivePathEffectAdd::on_sort));
     Glib::RefPtr< Gtk::Adjustment > vadjust = dial._LPEScrolled->get_vadjustment();
     vadjust->set_value(vadjust->get_lower());

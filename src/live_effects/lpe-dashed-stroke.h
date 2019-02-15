@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
-#ifndef INKSCAPE_LPE_DASH_STROKE_H
-#define INKSCAPE_LPE_DASH_STROKE_H
+#ifndef INKSCAPE_LPE_DASHED_STROKE_H
+#define INKSCAPE_LPE_DASHED_STROKE_H
 
 /*
- * Inkscape::LPEDashStroke
+ * Inkscape::LPEDashedStroke
  *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
@@ -14,10 +14,10 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
-class LPEDashStroke : public Effect {
+class LPEDashedStroke : public Effect {
 public:
-    LPEDashStroke(LivePathEffectObject *lpeobject);
-    ~LPEDashStroke() override;
+    LPEDashedStroke(LivePathEffectObject *lpeobject);
+    ~LPEDashedStroke() override;
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
     Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
     double timeAtLength(double const A, Geom::Path const &segment);

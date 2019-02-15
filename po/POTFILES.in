@@ -129,7 +129,7 @@ src/live_effects/lpe-clone-original.cpp
 src/live_effects/lpe-constructgrid.cpp
 src/live_effects/lpe-copy_rotate.cpp
 src/live_effects/lpe-curvestitch.cpp
-src/live_effects/lpe-dash-stroke.cpp
+src/live_effects/lpe-dashed-stroke.cpp
 src/live_effects/lpe-ellipse_5pts.cpp
 src/live_effects/lpe-embrodery-stitch.cpp
 src/live_effects/lpe-envelope.cpp

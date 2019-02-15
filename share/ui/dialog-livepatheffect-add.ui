@@ -10,7 +10,7 @@
     <property name="can_default">True</property>
     <property name="title" translatable="yes">Live Path Effects Selector</property>
     <property name="modal">True</property>
-    <property name="window_position">center-on-parent</property>
+    <property name="window_position">center-always</property>
     <property name="default_width">999</property>
     <property name="default_height">999</property>
     <property name="destroy_with_parent">True</property>

@@ -14,7 +14,7 @@ set(live_effects_SRC
 	lpe-constructgrid.cpp
 	lpe-copy_rotate.cpp
 	lpe-curvestitch.cpp
-	lpe-dash-stroke.cpp
+	lpe-dashed-stroke.cpp
 	lpe-dynastroke.cpp
 	lpe-ellipse_5pts.cpp
 	lpe-embrodery-stitch.cpp
@@ -107,7 +107,7 @@ set(live_effects_SRC
 	lpe-constructgrid.h
 	lpe-copy_rotate.h
 	lpe-curvestitch.h
-	lpe-dash-stroke.h
+	lpe-dashed-stroke.h
 	lpe-dynastroke.h
 	lpe-ellipse_5pts.h
 	lpe-embrodery-stitch.h
