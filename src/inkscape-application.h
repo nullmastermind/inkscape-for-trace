@@ -96,6 +96,9 @@ protected:
 template <class T> class ConcreteInkscapeApplication : public T, public InkscapeApplication
 {
 public:
+    static ConcreteInkscapeApplication<T>& get_instance();
+
+private:
     ConcreteInkscapeApplication();
 
 public:

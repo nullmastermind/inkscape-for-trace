@@ -41,6 +41,9 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
         return;
     }
 
+    ConcreteInkscapeApplication<Gtk::Application>& my_app =
+    ConcreteInkscapeApplication<Gtk::Application>::get_instance();
+
     Glib::RefPtr<Gio::Application> gio_app = Gio::Application::get_default();
     Glib::RefPtr<Gtk::Application> gtk_app = Glib::RefPtr<Gtk::Application>::cast_dynamic(gio_app);
     _app = Glib::RefPtr<InkscapeApplication>::cast_dynamic(gtk_app);

@@ -52,6 +52,11 @@ InkscapeApplication::InkscapeApplication()
     , _active_view(nullptr)
 {}
 
+/** Update windows in response to:
+ *  - New active window
+ *  - Document change
+ *  - Selection change
+ */
 void
 InkscapeApplication::update_windows(SPDocument* document)
 {
@@ -60,9 +65,19 @@ InkscapeApplication::update_windows(SPDocument* document)
     if (it != _documents.end()) {
         std::vector<InkscapeWindow*> windows = it->second;
         std::cout << "InkscapeApplication::update_windows: windows: " << windows.size() << std::endl;
+        // Loop over InkscapeWindows.
+        // Loop over DialogWindows. TBD
     } else {
         std::cout << "InkscapeApplication::update_windows: no windows found" << std::endl;
     }
+}
+
+template<class T>
+ConcreteInkscapeApplication<T>&
+ConcreteInkscapeApplication<T>::get_instance()
+{
+    static ConcreteInkscapeApplication<T> instance;
+    return instance;
 }
 
 template<class T>

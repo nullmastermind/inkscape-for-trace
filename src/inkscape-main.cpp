@@ -21,9 +21,9 @@ int main(int argc, char *argv[])
 {
 
     if (gtk_init_check(NULL, NULL))
-        return (new ConcreteInkscapeApplication<Gtk::Application>())->run(argc, argv);
+        return (ConcreteInkscapeApplication<Gtk::Application>::get_instance()).run(argc, argv);
     else
-        return (new ConcreteInkscapeApplication<Gio::Application>())->run(argc, argv);
+        return (ConcreteInkscapeApplication<Gio::Application>::get_instance()).run(argc, argv);
 }
 
 /*
