@@ -19,7 +19,8 @@
 
 #include <gtkmm.h>
 
-class InkscapeApplication;
+#include "inkscape-application.h"
+
 class SPDocument;
 class SPDesktop;
 class SPDesktopWidget;
@@ -44,7 +45,8 @@ public:
     void change_document(SPDocument* document);
 
 private:
-    Glib::RefPtr<InkscapeApplication> _app;
+    ConcreteInkscapeApplication<Gtk::Application>* _app;
+
     SPDocument*          _document;
     SPDesktop*           _desktop;
     SPDesktopWidget*     _desktop_widget;

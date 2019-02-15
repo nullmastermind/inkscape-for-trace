@@ -35,23 +35,15 @@
 
 InkscapeWindow::InkscapeWindow(SPDocument* document)
     : _document(document)
+    , _app(nullptr)
 {
     if (!_document) {
         std::cerr << "InkscapeWindow::InkscapeWindow: null document!" << std::endl;
         return;
     }
 
-    ConcreteInkscapeApplication<Gtk::Application>& my_app =
-    ConcreteInkscapeApplication<Gtk::Application>::get_instance();
-
-    Glib::RefPtr<Gio::Application> gio_app = Gio::Application::get_default();
-    Glib::RefPtr<Gtk::Application> gtk_app = Glib::RefPtr<Gtk::Application>::cast_dynamic(gio_app);
-    _app = Glib::RefPtr<InkscapeApplication>::cast_dynamic(gtk_app);
-    if (gtk_app) {
-        set_application(gtk_app);  // Same as Gtk::Application::add_window()
-    } else {
-        std::cerr << "InkscapeWindow::InkscapeWindow:: Didn't get app!" << std::endl;
-    }
+    _app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
+    _app->add_window(*this);
 
     set_resizable(true);
 
