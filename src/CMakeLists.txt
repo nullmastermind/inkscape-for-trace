@@ -216,6 +216,23 @@ set(inkscape_SRC
   inkscape-window.h
   inkscape-window.cpp
 
+  inkscape-application.h
+  inkscape-application.cpp
+  actions/actions-base.h
+  actions/actions-base.cpp
+  actions/actions-helper.h
+  actions/actions-helper.cpp
+  actions/actions-output.h
+  actions/actions-output.cpp
+  actions/actions-selection.h
+  actions/actions-selection.cpp
+  actions/actions-transform.h
+  actions/actions-transform.cpp
+
+  inkview-application.h
+  inkview-application.cpp
+  inkview-window.h
+  inkview-window.cpp
 )
   
 # -----------------------------------------------------------------------------
@@ -281,25 +298,9 @@ set(inkscape_SRC
 # -----------------------------------------------------------------------------
 set(main_SRC
   inkscape-main.cpp
-  inkscape-application.h
-  inkscape-application.cpp
-  actions/actions-base.h
-  actions/actions-base.cpp
-  actions/actions-helper.h
-  actions/actions-helper.cpp
-  actions/actions-output.h
-  actions/actions-output.cpp
-  actions/actions-selection.h
-  actions/actions-selection.cpp
-  actions/actions-transform.h
-  actions/actions-transform.cpp
 )
 set(view_SRC
   inkview-main.cpp
-  inkview-application.h
-  inkview-application.cpp
-  inkview-window.h
-  inkview-window.cpp
 )
 
 if(WIN32)
