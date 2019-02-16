@@ -160,9 +160,7 @@ SPDesktop *sp_file_new(const std::string &templ)
 
 Glib::ustring sp_file_default_template_uri()
 {
-    // TRANSLATORS: translate this into "default-<yourcodename>.svg" (for instance, default-fr.svg) 
-    // and double-check that share/templates/create_defaults.pl contains a translation for your language
-    // If in doubt about this, ask a developer.
+    // TRANSLATORS: translate this into "default.<your_language_code>.svg" (for instance, default.fr.svg)
     return Inkscape::IO::Resource::get_filename(TEMPLATES, "default.svg", _("default.svg"));
 }
 

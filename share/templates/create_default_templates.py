@@ -53,7 +53,7 @@ for language in languages:
 
     # now create localized version of English template file (if we have a translation)
     template_file = source_dir + '/share/templates/default.svg'
-    output_file = binary_dir + '/share/templates/default-' + language + '.svg'
+    output_file = binary_dir + '/share/templates/default.' + language + '.svg'
 
     if os.path.isfile(output_file):
         os.remove(output_file)

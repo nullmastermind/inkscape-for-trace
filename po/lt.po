@@ -9158,12 +9158,10 @@ msgstr "N"
 msgid "Update Document"
 msgstr "Išsaugoti dokumentą"
 
-#. TRANSLATORS: translate this into "default-<yourcodename>.svg" (for instance, default-fr.svg)
-#. and double-check that share/templates/create_defaults.pl contains a translation for your language
-#. If in doubt about this, ask a developer.
+#. TRANSLATORS: translate this into "default.<your_language_code>.svg" (for instance, default.fr.svg)
 #: ../src/file.cpp:166
 msgid "default.svg"
-msgstr "default-lt.svg"
+msgstr "default.lt.svg"
 
 #: ../src/file.cpp:264
 msgid "Broken links have been changed to point to existing files."
