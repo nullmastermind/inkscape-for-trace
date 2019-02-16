@@ -444,7 +444,7 @@ void SVGPreview::showTooLarge(long fileLength)
              id="mountainDroplet"/>
   </g>
   <text xml:space="preserve" x="200" y="280"
-        style="font-size:20px;font-weight:bold;text-anchor:middle">%s</text>
+        style="font-size:20px;font-weight:bold;text-anchor:middle">%.1f MB</text>
   <text xml:space="preserve" x="200" y="360"
         style="font-size:20px;font-weight:bold;text-anchor:middle">%s</text>
 </svg>
@@ -472,7 +472,6 @@ bool SVGPreview::set(Glib::ustring &fileName, int dialogType)
         showNoPreview();
         return false;
     }
-
 
     if (Glib::file_test(fileName, Glib::FILE_TEST_IS_DIR)) {
         showNoPreview();
