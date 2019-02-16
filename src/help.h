@@ -18,7 +18,7 @@ typedef struct _GtkMenuItem GtkMenuItem;
  * Help/About window.
  */
 void sp_help_about();
-void sp_help_open_tutorial(GtkMenuItem * /*unused*/, void* data);
+void sp_help_open_tutorial(Glib::ustring name);
 
 #endif // !SEEN_HELP_H
 

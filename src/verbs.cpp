@@ -2305,20 +2305,11 @@ void HelpVerb::perform(SPAction *action, void *data)
         case SP_VERB_HELP_ABOUT:
             sp_help_about();
             break;
-        case SP_VERB_HELP_ABOUT_EXTENSIONS: {
+        case SP_VERB_HELP_ABOUT_EXTENSIONS:
             // Inkscape::UI::Dialogs::ExtensionsPanel *panel = new Inkscape::UI::Dialogs::ExtensionsPanel();
             // panel->set_full(true);
             // show_panel( *panel, "dialogs.aboutextensions", SP_VERB_HELP_ABOUT_EXTENSIONS );
             break;
-        }
-
-        /*
-        case SP_VERB_SHOW_LICENSE:
-            // TRANSLATORS: See "tutorial-basic.svg" comment.
-            sp_help_open_tutorial(NULL, (gpointer) _("gpl-2.svg"));
-            break;
-        */
-
         case SP_VERB_HELP_MEMORY:
             INKSCAPE.dialogs_unhide();
             dt->_dlg_mgr->showDialog("Memory");
@@ -2336,45 +2327,35 @@ void TutorialVerb::perform(SPAction *action, void *data)
     g_return_if_fail(ensure_desktop_valid(action));
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_TUTORIAL_BASIC:
-            // TRANSLATORS: If you have translated the tutorial-basic.en.svgz file to your language,
-            // then translate this string as "tutorial-basic.LANG.svgz" (where LANG is your language
-            // code); otherwise leave as "tutorial-basic.svg".
-            sp_help_open_tutorial(nullptr, (gpointer)_("tutorial-basic.svg"));
+            sp_help_open_tutorial("tutorial-basic");
             break;
         case SP_VERB_TUTORIAL_SHAPES:
-            // TRANSLATORS: See "tutorial-basic.svg" comment.
-            sp_help_open_tutorial(nullptr, (gpointer)_("tutorial-shapes.svg"));
+            sp_help_open_tutorial("tutorial-shapes");
             break;
         case SP_VERB_TUTORIAL_ADVANCED:
-            // TRANSLATORS: See "tutorial-basic.svg" comment.
-            sp_help_open_tutorial(nullptr, (gpointer)_("tutorial-advanced.svg"));
+            sp_help_open_tutorial("tutorial-advanced");
             break;
 
 #if HAVE_POTRACE
         case SP_VERB_TUTORIAL_TRACING:
-            // TRANSLATORS: See "tutorial-basic.svg" comment.
-            sp_help_open_tutorial(nullptr, (gpointer)_("tutorial-tracing.svg"));
+            sp_help_open_tutorial("tutorial-tracing");
             break;
 #endif
 
         case SP_VERB_TUTORIAL_TRACING_PIXELART:
-            sp_help_open_tutorial(nullptr, (gpointer)_("tutorial-tracing-pixelart.svg"));
+            sp_help_open_tutorial("tutorial-tracing-pixelart");
             break;
         case SP_VERB_TUTORIAL_CALLIGRAPHY:
-            // TRANSLATORS: See "tutorial-basic.svg" comment.
-            sp_help_open_tutorial(nullptr, (gpointer)_("tutorial-calligraphy.svg"));
+            sp_help_open_tutorial("tutorial-calligraphy");
             break;
         case SP_VERB_TUTORIAL_INTERPOLATE:
-            // TRANSLATORS: See "tutorial-basic.svg" comment.
-            sp_help_open_tutorial(nullptr, (gpointer)_("tutorial-interpolate.svg"));
+            sp_help_open_tutorial("tutorial-interpolate");
             break;
         case SP_VERB_TUTORIAL_DESIGN:
-            // TRANSLATORS: See "tutorial-basic.svg" comment.
-            sp_help_open_tutorial(nullptr, (gpointer)_("tutorial-elements.svg"));
+            sp_help_open_tutorial("tutorial-elements");
             break;
         case SP_VERB_TUTORIAL_TIPS:
-            // TRANSLATORS: See "tutorial-basic.svg" comment.
-            sp_help_open_tutorial(nullptr, (gpointer)_("tutorial-tips.svg"));
+            sp_help_open_tutorial("tutorial-tips");
             break;
         default:
             break;
