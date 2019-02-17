@@ -12,18 +12,23 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifndef CSSDIALOG_H
-#define CSSDIALOG_H
+#ifndef SEEN_UI_DIALOGS_CSSDIALOG_H
+#define SEEN_UI_DIALOGS_CSSDIALOG_H
+
+#include "desktop.h"
+#include "message.h"
 
 
 #include <glibmm/regex.h>
 #include <gtkmm/treeview.h>
+<<<<<<< HEAD
+=======
+#include <gtkmm/dialog.h>
+>>>>>>> Fix compiling issues
 #include <gtkmm/liststore.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treeview.h>
 #include <ui/widget/panel.h>
-
-#include "desktop.h"
 
 #define CSS_DIALOG(obj) (dynamic_cast<Inkscape::UI::Dialog::CssDialog*>((Inkscape::UI::Dialog::CssDialog*)obj))
 #define REMOVE_SPACES(x) x.erase(0, x.find_first_not_of(' ')); x.erase(x.find_last_not_of(' ') + 1);

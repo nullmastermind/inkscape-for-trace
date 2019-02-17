@@ -16,12 +16,13 @@
 
 #include "message-context.h"
 #include "message-stack.h"
-#include "selection.h"
 #include "style.h"
+#include "selection.h"
 #include "style-internal.h"
-#include "verbs.h"
+
 #include "ui/icon-loader.h"
 #include "ui/widget/iconrenderer.h"
+#include "verbs.h"
 
 #include "xml/node-event-vector.h"
 #include "xml/attribute-record.h"
@@ -78,6 +79,11 @@ CssDialog::CssDialog():
     addRenderer->add_icon("edit-delete");
     addRenderer->signal_activated().connect(sigc::mem_fun(*this, &CssDialog::onPropertyDelete));
 
+    _message_stack = std::make_shared<Inkscape::MessageStack>();
+    _message_context = std::unique_ptr<Inkscape::MessageContext>(new Inkscape::MessageContext(_message_stack));
+    _message_changed_connection =
+        _message_stack->connectChanged(sigc::bind(sigc::ptr_fun(_set_status_message), GTK_WIDGET(status.gobj())));
+
     int addCol = _treeView.append_column("", *addRenderer) - 1;
     Gtk::TreeViewColumn *col = _treeView.get_column(addCol);
     if (col) {
@@ -118,23 +124,23 @@ CssDialog::CssDialog():
         _attrCol->set_sort_column(_cssColumns._styleAttrVal);
     }
 
-    status.set_halign(Gtk::ALIGN_START);
-    status.set_valign(Gtk::ALIGN_CENTER);
-    status.set_size_request(1, -1);
-    status.set_markup("");
-    status.set_line_wrap(true);
-    status_box.pack_start(status, TRUE, TRUE, 0);
-    _getContents()->pack_end(status_box, false, false, 2);
+    renderer = Gtk::manage(new Gtk::CellRendererText());
+    renderer->property_editable() = true;
+    int sheetColNum = _treeView.append_column("Actual", *renderer) - 1;
+    _sheetCol = _treeView.get_column(sheetColNum);
+    if (_sheetCol) {
+        _sheetCol->add_attribute(renderer->property_text(), _cssColumns._styleSheetVal);
+        _sheetCol->add_attribute(renderer->property_foreground_rgba(), _cssColumns.label_color);
+        _sheetCol->set_sort_column(_cssColumns._styleSheetVal);
+    }
 
-    _message_stack = std::make_shared<Inkscape::MessageStack>();
-    _message_context = std::unique_ptr<Inkscape::MessageContext>(new Inkscape::MessageContext(_message_stack));
-    _message_changed_connection =
-        _message_stack->connectChanged(sigc::bind(sigc::ptr_fun(_set_status_message), GTK_WIDGET(status.gobj())));
+    // Set the inital sort column (and direction) to place real attributes at the top.
+    _store->set_sort_column (_cssColumns.deleteButton, Gtk::SORT_DESCENDING);
+
     _getContents()->pack_start(*_scrolledWindow, Gtk::PACK_EXPAND_WIDGET);
 
     css_reset_context(0);
     setDesktop(getDesktop());
-
 }
 
 /**
@@ -144,11 +150,18 @@ CssDialog::CssDialog():
 CssDialog::~CssDialog()
 {
     setDesktop(nullptr);
+    _repr = nullptr;
     _message_changed_connection.disconnect();
     _message_context = nullptr;
     _message_stack = nullptr;
     _message_changed_connection.~connection();
-    _repr = nullptr;
+}
+
+void CssDialog::_set_status_message(Inkscape::MessageType /*type*/, const gchar *message, GtkWidget *widget)
+{
+    if (widget) {
+        gtk_label_set_markup(GTK_LABEL(widget), message ? message : "");
+    }
 }
 
 
@@ -163,7 +176,6 @@ void CssDialog::setDesktop(SPDesktop* desktop)
 }
 
 /**
-
  * @brief CssDialog::setRepr
  *
  * Set the internal xml object that I'm working on right now.
@@ -273,8 +285,25 @@ void CssDialog::onAttrChanged(Inkscape::XML::Node *repr, const gchar * name, con
                 row[_cssColumns.deleteButton] = false;
             }
         }
+    }
+}
 
+ /*
+ * Sets the CSSDialog status bar, depending on which attr is selected.
+ */
+void CssDialog::css_reset_context(gint css)
+{
+    if (css == 0) {
+        _message_context->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> CSS property to edit."));
+    } else {
+        const gchar *name = g_quark_to_string(css);
+        _message_context->setF(
+            Inkscape::NORMAL_MESSAGE,
+            _("Property <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to commit changes."), name);
+    }
+}
 
+/**
  * @brief CssDialog::setStyleProperty
  *
  * Set or delete a single property in the style attribute.

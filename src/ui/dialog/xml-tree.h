@@ -10,8 +10,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifndef SEEN_DIALOGS_XML_TREE_H
-#define SEEN_DIALOGS_XML_TREE_H
+#ifndef SEEN_UI_DIALOGS_XML_TREE_H
+#define SEEN_UI_DIALOGS_XML_TREE_H
 
 #include <memory>
 
@@ -221,6 +221,9 @@ private:
     Gtk::Button *create_button;
 
     Gtk::VBox node_box;
+    Gtk::VBox attr_box;
+    Gtk::VBox selectors_box;
+    Gtk::VBox styles_box;
     Gtk::HBox status_box;
     Gtk::Label status;
     Gtk::Toolbar tree_toolbar;

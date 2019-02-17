@@ -41,8 +41,6 @@
 #include "ui/tools/tool-base.h"
 
 #include "widgets/sp-xmlview-tree.h"
-#include "ui/dialog/attrdialog.h"
-#include "ui/dialog/cssdialog.h"
 
 namespace Inkscape {
 namespace UI {
@@ -197,8 +195,12 @@ XmlTree::XmlTree() :
     lower_node_button.signal_clicked().connect(sigc::mem_fun(*this, &XmlTree::cmd_lower_node));
 
     styles = new CssDialog;
-    css_box.pack_start(*styles);
-    flowbox_content->insert(&css_box, _("_Styles"), FLOWBOX_PAGE_STYLES, false, 200);
+    styles_box.pack_start(*styles);
+    flowbox_content->insert(&styles_box, _("_Styles"), FLOWBOX_PAGE_STYLES, false, 200);
+
+    selectors = new StyleDialog;
+    selectors_box.pack_start(*selectors);
+    flowbox_content->insert(&selectors_box, _("S_electors"), FLOWBOX_PAGE_SELECTORS, false, 200);
 
     desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &XmlTree::set_tree_desktop) );
     deskTrack.connect(GTK_WIDGET(gobj()));
@@ -356,9 +358,11 @@ void XmlTree::propagate_tree_select(Inkscape::XML::Node *repr)
     {
         attributes->setRepr(repr);
         styles->setRepr(repr);
+        //selectors->setRepr(repr);
     } else {
         attributes->setRepr(nullptr);
         styles->setRepr(nullptr);
+        //selectors->setRepr(nullptr);
     }
 }
 

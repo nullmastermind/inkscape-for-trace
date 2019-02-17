@@ -10,8 +10,8 @@
  * Released under GNU GPLv2 or later, read the file 'COPYING' for more information
  */
 
-#ifndef ATTRDIALOG_H
-#define ATTRDIALOG_H
+#ifndef SEEN_UI_DIALOGS_ATTRDIALOG_H
+#define SEEN_UI_DIALOGS_ATTRDIALOG_H
 
 #include "desktop.h"
 #include "message.h"
