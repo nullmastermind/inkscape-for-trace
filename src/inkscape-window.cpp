@@ -85,11 +85,14 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
 
     // ================ Window Options ==============
 
-    show(); // Must show before resize!
-
     // Resize the window to match the document properties
     sp_namedview_window_from_document(_desktop); // This should probably be a member function here.
+    
+    // Must show before setting zoom and view! (crashes otherwise)
+    // Should show after resizing/moving to allow window manager to correct an invalid windows size/position
+    show();
 
+    sp_namedview_zoom_and_view_from_document(_desktop);
     sp_namedview_update_layers_from_document(_desktop);
 
 }

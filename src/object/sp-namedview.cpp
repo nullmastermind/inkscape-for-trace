@@ -750,9 +750,28 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
     // restore window size and position stored with the document
     Gtk::Window *win = desktop->getToplevel();
     g_assert(win);
+
     if (window_geometry == PREFS_WINDOW_GEOMETRY_LAST) {
-        // do nothing, as we already have code for that in interface.cpp
-        // TODO: Probably should not do similar things in two places
+        gint pw = prefs->getInt("/desktop/geometry/width", -1);
+        gint ph = prefs->getInt("/desktop/geometry/height", -1);
+        gint px = prefs->getInt("/desktop/geometry/x", -1);
+        gint py = prefs->getInt("/desktop/geometry/y", -1);
+        gint full = prefs->getBool("/desktop/geometry/fullscreen");
+        gint maxed = prefs->getBool("/desktop/geometry/maximized");
+        if (pw>0 && ph>0) {
+            
+            Gdk::Rectangle monitor_geometry = Inkscape::UI::get_monitor_geometry_at_point(px, py);
+            pw = std::min(pw, monitor_geometry.get_width());
+            ph = std::min(ph, monitor_geometry.get_height());
+            desktop->setWindowSize(pw, ph);
+            desktop->setWindowPosition(Geom::Point(px, py));
+        }
+        if (maxed) {
+            win->maximize();
+        }
+        if (full) {
+            win->fullscreen();
+        }
     } else if ((window_geometry == PREFS_WINDOW_GEOMETRY_FILE && nv->window_maximized) ||
                (new_document && (default_size == PREFS_WINDOW_SIZE_MAXIMIZED))) {
         win->maximize();
@@ -812,17 +831,23 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
     // Cancel any history of transforms up to this point (must be before call to zoom).
     desktop->clear_transform_history();
 
-    // restore zoom and view
+    if (show_dialogs) {
+        desktop->show_dialogs();
+    }
+}
+
+/*
+ * Restores zoom and view from the document settings
+ */
+void sp_namedview_zoom_and_view_from_document(SPDesktop *desktop)
+{
+    SPNamedView *nv = desktop->namedview;
     if (nv->zoom != 0 && nv->zoom != HUGE_VAL && !IS_NAN(nv->zoom)
         && nv->cx != HUGE_VAL && !IS_NAN(nv->cx)
         && nv->cy != HUGE_VAL && !IS_NAN(nv->cy)) {
         desktop->zoom_absolute_center_point( Geom::Point(nv->cx, nv->cy), nv->zoom );
     } else if (desktop->getDocument()) { // document without saved zoom, zoom to its page
         desktop->zoom_page();
-    }
-
-    if (show_dialogs) {
-        desktop->show_dialogs();
     }
 }
 

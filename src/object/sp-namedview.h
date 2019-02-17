@@ -121,6 +121,7 @@ SPNamedView *sp_document_namedview(SPDocument *document, char const *name);
 SPNamedView const *sp_document_namedview(SPDocument const *document, char const *name);
 
 void sp_namedview_window_from_document(SPDesktop *desktop);
+void sp_namedview_zoom_and_view_from_document(SPDesktop *desktop);
 void sp_namedview_document_from_window(SPDesktop *desktop);
 void sp_namedview_update_layers_from_document (SPDesktop *desktop);
 
