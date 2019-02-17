@@ -414,8 +414,6 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
 
         document->ensureUpToDate(); // Or queries don't work!
 
-        // Add to our application
-
         // process_file(file);
         for (auto action: _command_line_actions) {
             Gio::Application::activate_action( action.first, action.second );
@@ -437,9 +435,6 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
 
         close_document(document);
     }
-
-    //Call the base class's implementation:
-    // Gtk::Application::on_open(files, hint);
 }
 
 // Open document window for each file. Either this or on_activate() is called.
@@ -484,8 +479,6 @@ ConcreteInkscapeApplication<Gtk::Application>::on_open(const Gio::Application::t
 
             document->ensureUpToDate(); // Or queries don't work!
 
-            // Add to our application
-
             // process_file(file);
             for (auto action: _command_line_actions) {
 		    Gio::Application::activate_action( action.first, action.second );
@@ -508,9 +501,6 @@ ConcreteInkscapeApplication<Gtk::Application>::on_open(const Gio::Application::t
             close_document(document);
         }
     }
-
-    //Call the base class's implementation:
-    // Gtk::Application::on_open(files, hint);
 }
 
 
