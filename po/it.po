@@ -4633,9 +4633,8 @@ msgstr ""
 "agganciati anche alle griglie invisibili."
 
 #: ../src/display/canvas-grid.cpp:327
-#, fuzzy
 msgid "Align to page:"
-msgstr "Allinea i margini superiori"
+msgstr "Allinea alla pagina:"
 
 #: ../src/display/canvas-grid.cpp:650
 msgid "Spacing _X:"
@@ -13286,7 +13285,7 @@ msgstr "Crea guide attorno alla pagina"
 
 #: ../src/object/sp-guide.cpp:287 ../src/verbs.cpp:2706
 msgid "Delete All Guides"
-msgstr "Cancella tutte le guide"
+msgstr "Rimuovi tutte le guide"
 
 #. Guide has probably been deleted and no longer has an attached namedview.
 #: ../src/object/sp-guide.cpp:511
@@ -16369,9 +16368,8 @@ msgid "Show or hide guides"
 msgstr "Mostra o nasconde le guide"
 
 #: ../src/ui/dialog/document-properties.cpp:116
-#, fuzzy
 msgid "Lock all guides"
-msgstr "Tutte le guide sono bloccate"
+msgstr "Blocca tutte le guide"
 
 #: ../src/ui/dialog/document-properties.cpp:116 ../src/verbs.cpp:2709
 #: ../src/widgets/desktop-widget.cpp:373
@@ -16403,14 +16401,12 @@ msgid "Color of a guideline when it is under mouse"
 msgstr "Colore di una guida quando è sotto il mouse"
 
 #: ../src/ui/dialog/document-properties.cpp:119
-#, fuzzy
 msgid "Create guides around the page"
 msgstr "Crea guide attorno alla pagina"
 
 #: ../src/ui/dialog/document-properties.cpp:120
-#, fuzzy
 msgid "Delete all guides"
-msgstr "Cancella tutte le guide"
+msgstr "Rimuovi tutte le guide"
 
 #. ---------------------------------------------------------------
 #: ../src/ui/dialog/document-properties.cpp:122
@@ -23702,19 +23698,16 @@ msgid "Failed to set CairoRenderContext"
 msgstr "Impossibile impostare CairoRenderContext"
 
 #: ../src/ui/dialog/save-template-dialog.cpp:22
-#, fuzzy
 msgid "Save Document as Template"
-msgstr "Salva il documento con un nuovo nome"
+msgstr "Salva il documento come modello"
 
 #: ../src/ui/dialog/save-template-dialog.cpp:23
-#, fuzzy
 msgid "Name: "
-msgstr "Nome:"
+msgstr "Nome: "
 
 #: ../src/ui/dialog/save-template-dialog.cpp:24
-#, fuzzy
 msgid "Author: "
-msgstr "_Autori"
+msgstr "Autore: "
 
 #: ../src/ui/dialog/save-template-dialog.cpp:25
 #: ../src/ui/dialog/template-widget.cpp:128
@@ -30362,9 +30355,8 @@ msgid "Resi_ze page to content..."
 msgstr "Ridi_mensiona pagina a contenuto..."
 
 #: ../src/ui/widget/page-sizer.cpp:262
-#, fuzzy
 msgid "_Resize page to drawing or selection (Ctrl+Shift+R)"
-msgstr "_Ridimensiona pagina a disegno o selezione"
+msgstr "_Ridimensiona pagina a disegno o selezione (Ctrl+Maiusc+R)"
 
 #: ../src/ui/widget/page-sizer.cpp:263
 msgid ""
@@ -31110,14 +31102,12 @@ msgid "Save a copy of the document under a new name"
 msgstr "Salva una copia del documento con un nuovo nome"
 
 #: ../src/verbs.cpp:2586
-#, fuzzy
 msgid "Save Template..."
-msgstr "_Modelli..."
+msgstr "Salva come modello..."
 
 #: ../src/verbs.cpp:2587
-#, fuzzy
 msgid "Save a copy of the document as template"
-msgstr "Salva una copia del documento con un nuovo nome"
+msgstr "Salva una copia del documento come modello"
 
 #: ../src/verbs.cpp:2588
 msgid "_Print..."
@@ -32737,33 +32727,28 @@ msgid "Reset canvas rotation to zero"
 msgstr ""
 
 #: ../src/verbs.cpp:3044
-#, fuzzy
 msgid "Flip Horizontally"
 msgstr "Rifletti orizzontalmente"
 
 #: ../src/verbs.cpp:3044
-#, fuzzy
 msgid "Flip canvas horizontally"
-msgstr "Rifletti nodi orizzontalmente"
+msgstr "Riflette orizzontalmente il canvas"
 
 #: ../src/verbs.cpp:3046
-#, fuzzy
 msgid "Flip Vertically"
 msgstr "Rifletti verticalmente"
 
 #: ../src/verbs.cpp:3046
-#, fuzzy
 msgid "Flip canvas vertically"
-msgstr "Rifletti nodi verticalmente"
+msgstr "Riflette verticalmente il canvas"
 
 #: ../src/verbs.cpp:3048
-#, fuzzy
 msgid "Reset Flip"
-msgstr "Reimposta griglia"
+msgstr "Reimposta riflessione"
 
 #: ../src/verbs.cpp:3048
 msgid "Undo any flip"
-msgstr ""
+msgstr "Annulla le riflessioni applicate al canvas"
 
 #. WHY ARE THE FOLLOWING ZoomVerbs???
 #. View
@@ -41739,9 +41724,8 @@ msgid "_Color Display Mode"
 msgstr "Modalità _colore schermo"
 
 #: ../share/ui/menus.xml.h:10
-#, fuzzy
 msgid "_Canvas Orientation"
-msgstr "Orientamento della pagina:"
+msgstr "Orientamento _canvas:"
 
 #: ../share/ui/menus.xml.h:11
 msgid "Sh_ow/Hide"
