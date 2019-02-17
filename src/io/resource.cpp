@@ -18,6 +18,7 @@
 #include <shlobj.h> // for SHGetSpecialFolderLocation
 #endif
 
+#include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
 #include <glibmm/stringutils.h>
 #include <glibmm/fileutils.h>
@@ -140,30 +141,37 @@ Glib::ustring get_path_ustring(Domain domain, Type type, char const *filename)
  * Same as get_path, but checks for file's existence and falls back
  * from USER to SYSTEM modes.
  *
- *  type - The type of file to get, such as extension, template, ui etc
- *  filename - The filename to get, i.e. preferences.xml
- *  locale - The local language version of the file (if needed)
+ *  type      - The type of file to get, such as extension, template, ui etc
+ *  filename  - The filename to get, i.e. preferences.xml
+ *  localized - Prefer a localized version of the file, i.e. default.de.svg instead of default.svg.
+ *              (will use gettext to determine the preferred language of the user)
  */
-Glib::ustring get_filename(Type type, char const *filename, char const *locale)
+Glib::ustring get_filename(Type type, char const *filename, bool localized)
 {
     Glib::ustring result;
 
-    if(locale != nullptr) {
-      char *user_locale = _get_path(USER, type, locale);
-      char *sys_locale = _get_path(SYSTEM, type, locale);
+    // TRANSLATORS: 'en' is an ISO 639-1 language code.
+    // Replace with language code for your language, i.e. the name of your .po file
+    if (localized && strcmp(_("en"), "en")) {
+        Glib::ustring localized_filename = filename;
+        localized_filename.insert(localized_filename.rfind('.'), ".");
+        localized_filename.insert(localized_filename.rfind('.'), _("en"));
 
-      if (file_test(user_locale, G_FILE_TEST_EXISTS)) {
-          result = Glib::ustring(user_locale);
-      } else if(file_test(sys_locale, G_FILE_TEST_EXISTS)) {
-          result = Glib::ustring(sys_locale);
-      }
-      g_free(user_locale);
-      g_free(sys_locale);
+        char *user_locale = _get_path(USER, type, localized_filename.c_str());
+        char *sys_locale = _get_path(SYSTEM, type, localized_filename.c_str());
 
-      if(!result.empty()) {
-          g_info("Using translated resource file: %s", result.c_str());
-          return result;
-      }
+        if (file_test(user_locale, G_FILE_TEST_EXISTS)) {
+            result = Glib::ustring(user_locale);
+        } else if(file_test(sys_locale, G_FILE_TEST_EXISTS)) {
+            result = Glib::ustring(sys_locale);
+        }
+        g_free(user_locale);
+        g_free(sys_locale);
+
+        if(!result.empty()) {
+            g_info("Using translated resource file: %s", result.c_str());
+            return result;
+        }
     }
 
     char *user_filename = _get_path(USER, type, filename);

@@ -35,11 +35,8 @@ void sp_help_about()
 void sp_help_open_tutorial(Glib::ustring name)
 {
     Glib::ustring filename = name + ".svg";
-    // TRANSLATORS: 'en' is a ISO 639-1 language code.
-    // Replace with language code for your language (i.e. the name of your .po file)
-    Glib::ustring filename_localized = name + "." + _("en") + ".svg";
-    
-    filename = get_filename(TUTORIALS, filename.c_str(), filename_localized.c_str());
+
+    filename = get_filename(TUTORIALS, filename.c_str(), true);
     if (!filename.empty()) {
         sp_file_open(filename.c_str(), nullptr, false, false);
     } else {
