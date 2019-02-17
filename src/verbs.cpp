@@ -100,12 +100,16 @@ using Inkscape::UI::Dialog::ActionAlign;
 gchar *sp_action_get_title(SPAction const *action)
 {
     char const *src = action->name;
-    gchar *ret = g_new(gchar, strlen(src) + 1);
+    size_t const len = strlen(src);
+    gchar *ret = g_new(gchar, len + 1);
     unsigned ri = 0;
 
     for (unsigned si = 0 ; ; si++)  {
         int const c = src[si];
-        if ( c != '_' && c != '.' ) {
+        // Ignore Unicode Character "…" (U+2026)
+        if ( c == '\xE2' && si + 2 < len && src[si+1] == '\x80' && src[si+2] == '\xA6' ) {
+            si += 2;
+        } else if ( c != '_' && c != '.' ) {
             ret[ri] = c;
             ri++;
             if (c == '\0') {
