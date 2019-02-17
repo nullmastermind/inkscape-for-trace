@@ -59,6 +59,14 @@ public:
     Inkscape::UI::View::View* get_active_view() { return _active_view; }
     void                  set_active_view(Inkscape::UI::View::View* view) { _active_view = view; }
 
+    SPDocument*           open_document(const Glib::RefPtr<Gio::File>& file);
+    void                  close_document(SPDocument* document);
+
+    void                  fix_document(SPDocument* document);
+
+    InkscapeWindow*       open_window(SPDocument* document);
+    void                  close_window(InkscapeWindow* window);
+
     // Update all windows connected to a document.
     void update_windows(SPDocument* document);
 

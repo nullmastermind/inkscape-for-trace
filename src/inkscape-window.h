@@ -39,6 +39,7 @@ class InkscapeWindow : public Gtk::ApplicationWindow {
 public:
     InkscapeWindow(SPDocument* document);
 
+    SPDocument*      get_document()       { return _document; }
     SPDesktop*       get_desktop()        { return _desktop; }
     SPDesktopWidget* get_desktop_widget() { return _desktop_widget; }
 
