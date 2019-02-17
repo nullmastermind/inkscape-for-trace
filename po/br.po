@@ -9466,6 +9466,12 @@ msgstr "Diouzh ar restr"
 msgid "Fixup broken links"
 msgstr "Ratreañ an ereoù torret"
 
+#. TRANSLATORS: 'en' is an ISO 639-1 language code.
+#. Replace with language code for your language, i.e. the name of your .po file
+#: ../src/io/resource.cpp:155 ../src/io/resource.cpp:158
+msgid "en"
+msgstr "br"
+
 #: ../src/knot.cpp:344
 msgid "Node or handle drag canceled."
 msgstr "Dilezet eo bet rikladur ar c'hlom pe an dornell."

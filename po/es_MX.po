@@ -10129,6 +10129,12 @@ msgstr "_Propiedades del enlace"
 msgid "Fixup broken links"
 msgstr ""
 
+#. TRANSLATORS: 'en' is an ISO 639-1 language code.
+#. Replace with language code for your language, i.e. the name of your .po file
+#: ../src/io/resource.cpp:155 ../src/io/resource.cpp:158
+msgid "en"
+msgstr "es_MX"
+
 #: ../src/knot.cpp:344
 #, fuzzy
 msgid "Node or handle drag canceled."

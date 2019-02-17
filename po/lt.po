@@ -10066,6 +10066,12 @@ msgstr "Susieti profilį"
 msgid "Fixup broken links"
 msgstr ""
 
+#. TRANSLATORS: 'en' is an ISO 639-1 language code.
+#. Replace with language code for your language, i.e. the name of your .po file
+#: ../src/io/resource.cpp:155 ../src/io/resource.cpp:158
+msgid "en"
+msgstr "lt"
+
 #: ../src/knot.cpp:344
 msgid "Node or handle drag canceled."
 msgstr "Mazgo ar valdiklio tempimas nutrauktas."

@@ -9854,6 +9854,12 @@ msgstr "ផ្ទុក​ពី​ឯកសារ"
 msgid "Fixup broken links"
 msgstr ""
 
+#. TRANSLATORS: 'en' is an ISO 639-1 language code.
+#. Replace with language code for your language, i.e. the name of your .po file
+#: ../src/io/resource.cpp:155 ../src/io/resource.cpp:158
+msgid "en"
+msgstr "km"
+
 #: ../src/knot.cpp:344
 msgid "Node or handle drag canceled."
 msgstr "ការ​អូស​ថ្នាំង ឬ​ចំណុច​ទាញ​ត្រូវ​បាន​បោះបង់ ។"

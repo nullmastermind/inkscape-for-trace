@@ -9852,6 +9852,12 @@ msgstr "கோப்பிலிருந்து ஏற்றவும்"
 msgid "Fixup broken links"
 msgstr ""
 
+#. TRANSLATORS: 'en' is an ISO 639-1 language code.
+#. Replace with language code for your language, i.e. the name of your .po file
+#: ../src/io/resource.cpp:155 ../src/io/resource.cpp:158
+msgid "en"
+msgstr "ta"
+
 #: ../src/knot.cpp:344
 msgid "Node or handle drag canceled."
 msgstr "முனை அல்லது கையாளும் இழுத்தல் ரத்துசெய்யப்பட்டது."

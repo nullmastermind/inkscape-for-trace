@@ -9405,6 +9405,12 @@ msgstr "No datnes"
 msgid "Fixup broken links"
 msgstr "Labot nederīgās saites"
 
+#. TRANSLATORS: 'en' is an ISO 639-1 language code.
+#. Replace with language code for your language, i.e. the name of your .po file
+#: ../src/io/resource.cpp:155 ../src/io/resource.cpp:158
+msgid "en"
+msgstr "lv"
+
 #: ../src/knot.cpp:344
 msgid "Node or handle drag canceled."
 msgstr "Mezgla vai tura vilkšana atcelta."

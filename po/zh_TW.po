@@ -9295,6 +9295,12 @@ msgstr "從檔案載入"
 msgid "Fixup broken links"
 msgstr "修復損壞的連結"
 
+#. TRANSLATORS: 'en' is an ISO 639-1 language code.
+#. Replace with language code for your language, i.e. the name of your .po file
+#: ../src/io/resource.cpp:155 ../src/io/resource.cpp:158
+msgid "en"
+msgstr "zh_TW"
+
 #: ../src/knot.cpp:344
 msgid "Node or handle drag canceled."
 msgstr "已取消拖曳節點或控制點。"
