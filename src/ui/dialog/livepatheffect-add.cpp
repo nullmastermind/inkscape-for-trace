@@ -545,7 +545,6 @@ void LivePathEffectAdd::show(SPDesktop *desktop)
     if (width == width_2 && height == height_2) {
         Gtk::Window *window = desktop->getToplevel();
         window->get_size(width, height);
-        std::cout << "dsdgsgdsdgsgdgdsgsdgsdgds" << std::endl;
         dial._LPEDialogSelector->resize(std::min(width - 300, 1440), std::min(height - 300, 900));
     }
     dial._applied = false;
