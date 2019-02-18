@@ -213,6 +213,13 @@ SPGuide *SPGuide::createSPGuide(SPDocument *doc, Geom::Point const &pt1, Geom::P
     double newy = pt1.y();
 
     SPRoot *root = doc->getRoot();
+
+    // <sodipodi:guide> stores inverted y-axis coordinates
+    if (!SP_ACTIVE_DESKTOP || SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+        newy = doc->getHeight().value("px") - newy;
+        n[Geom::Y] *= -1.0;
+    }
+
     if( root->viewBox_set ) {
         // check to see if scaling is uniform
         if(Geom::are_near((root->viewBox.width() * root->height.computed) / (root->width.computed * root->viewBox.height()), 1.0, Geom::EPSILON)) {
@@ -223,12 +230,6 @@ SPGuide *SPGuide::createSPGuide(SPDocument *doc, Geom::Point const &pt1, Geom::P
             newx = newx * root->viewBox.width()  / root->width.computed;
             newy = newy * root->viewBox.height() / root->height.computed;
         }
-    }
-
-    // <sodipodi:guide> stores inverted y-axis coordinates
-    if (!SP_ACTIVE_DESKTOP || SP_ACTIVE_DESKTOP->is_yaxisdown()) {
-        newy = doc->getHeight().value("px") - newy;
-        n[Geom::Y] *= -1.0;
     }
 
     sp_repr_set_point(repr, "position", Geom::Point( newx, newy ));
