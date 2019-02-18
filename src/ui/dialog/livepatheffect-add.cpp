@@ -50,13 +50,15 @@ void sp_add_fav(Glib::ustring effect)
 
 void sp_remove_fav(Glib::ustring effect)
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring favlist = prefs->getString("/dialogs/livepatheffect/favs");
-    effect += ";";
-    size_t pos = favlist.find(effect);
-    if (pos != std::string::npos) {
-        favlist.erase(pos, effect.length());
-        prefs->setString("/dialogs/livepatheffect/favs", favlist);
+    if (sp_has_fav(effect)) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        Glib::ustring favlist = prefs->getString("/dialogs/livepatheffect/favs");
+        effect += ";";
+        size_t pos = favlist.find(effect);
+        if (pos != std::string::npos) {
+            favlist.erase(pos, effect.length());
+            prefs->setString("/dialogs/livepatheffect/favs", favlist);
+        }
     }
 }
 
@@ -484,9 +486,24 @@ int LivePathEffectAdd::on_sort(Gtk::FlowBoxChild *child1, Gtk::FlowBoxChild *chi
             std::vector<Gtk::Widget *> contents = box->get_children();
             Gtk::Label *lpename = dynamic_cast<Gtk::Label *>(contents[1]);
             name2 = lpename->get_text();
+            Gtk::Overlay *overlay = dynamic_cast<Gtk::Overlay *>(contents[0]);
+            if (overlay) {
+                std::vector<Gtk::Widget *> contents_overlay = overlay->get_children();
+                Gtk::EventBox *LPESelectorEffectEventFavTop = dynamic_cast<Gtk::EventBox *>(contents_overlay[1]);
+                if (LPESelectorEffectEventFavTop) {
+                    if (sp_has_fav(name2)) {
+                        LPESelectorEffectEventFavTop->set_visible(true);
+                        LPESelectorEffectEventFavTop->show();
+                        child1->get_style_context()->add_class("lpefav");
+                    } else {
+                        LPESelectorEffectEventFavTop->set_visible(false);
+                        LPESelectorEffectEventFavTop->hide();
+                        child1->get_style_context()->remove_class("lpefav");
+                    }
+                }
+            }
         }
     }
-
     std::vector<Glib::ustring> effect;
     effect.push_back(name1);
     effect.push_back(name2);
@@ -516,6 +533,7 @@ void LivePathEffectAdd::onKeyEvent(GdkEventKey *evt)
 void LivePathEffectAdd::show(SPDesktop *desktop)
 {
     LivePathEffectAdd &dial = instance();
+    dial._LPEDialogSelector->hide();
     Inkscape::Selection *sel = desktop->getSelection();
     if (sel && !sel->isEmpty()) {
         SPItem *item = sel->singleItem();
@@ -554,6 +572,7 @@ void LivePathEffectAdd::show(SPDesktop *desktop)
     dial._LPESelectorFlowBox->set_sort_func(sigc::mem_fun(dial, &LivePathEffectAdd::on_sort));
     Glib::RefPtr<Gtk::Adjustment> vadjust = dial._LPEScrolled->get_vadjustment();
     vadjust->set_value(vadjust->get_lower());
+    dial._LPEDialogSelector->show();
     dial._LPEDialogSelector->run();
     dial._LPEDialogSelector->hide();
 }
