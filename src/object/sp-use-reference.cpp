@@ -25,7 +25,7 @@
 
 bool SPUseReference::_acceptObject(SPObject * const obj) const
 {
-	return URIReference::_acceptObject(obj);
+    return URIReference::_acceptObject(obj);
 }
 
 
@@ -208,17 +208,15 @@ void SPUsePath::refresh_source()
     
     SPItem *item = SP_ITEM(refobj);
 
-    if (SP_IS_SHAPE(item))
-    {
-        originalPath = SP_SHAPE(item)->getCurve()->copy();
-    }
-    else if (SP_IS_TEXT(item))
-    {
+    if (SP_IS_SHAPE(item)) {
+        SPCurve *originalCurve = SP_SHAPE(item)->getCurve();
+        if (originalCurve != nullptr) {
+            originalPath = originalCurve->copy();
+        } else {
+            sourceDirty = true;
+        }
+    } else if (SP_IS_TEXT(item)) {
         originalPath = SP_TEXT(item)->getNormalizedBpath()->copy();
-    }
-    else
-    {
-        return;
     }
 }
 
