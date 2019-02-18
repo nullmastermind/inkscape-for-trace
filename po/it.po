@@ -8284,22 +8284,20 @@ msgid "SVG Input"
 msgstr "Input SVG"
 
 #: ../src/extension/internal/svg.cpp:637
-#, fuzzy
 msgid "SVG Image Import Type:"
-msgstr "Modalità importazione immagine:"
+msgstr "Modalità importazione SVG:"
 
 #: ../src/extension/internal/svg.cpp:638
-#, fuzzy
 msgid "Include SVG image as editable object(s) in the current file"
-msgstr "Mostra tutti gli oggetti nel livello attuale"
+msgstr "Include SVG come oggetto modificabile nel file attuale"
 
 #: ../src/extension/internal/svg.cpp:639
 msgid "Embed the SVG file in a image tag (not editable in this document)"
-msgstr ""
+msgstr "Incorpora SVG in un tag immagine (non modificabile nel documento)"
 
 #: ../src/extension/internal/svg.cpp:640
 msgid "Link the SVG file in a image tag (not editable in this document)."
-msgstr ""
+msgstr "Collega SVG in un tag immagine (non modificabile nel documento)"
 
 #: ../src/extension/internal/svg.cpp:653
 msgid "Scalable Vector Graphic (*.svg)"
@@ -13223,13 +13221,12 @@ msgid "without URI"
 msgstr "senza URI"
 
 #: ../src/object/sp-ellipse.cpp:389 ../src/ui/toolbar/arc-toolbar.cpp:160
-#, fuzzy
 msgid "Slice"
-msgstr "Sciame"
+msgstr "Sezione"
 
 #: ../src/object/sp-ellipse.cpp:392 ../src/ui/toolbar/arc-toolbar.cpp:170
 msgid "Chord"
-msgstr ""
+msgstr "Corda"
 
 #: ../src/object/sp-ellipse.cpp:395
 msgid "Arc"
@@ -14856,9 +14853,8 @@ msgid "Go to parent"
 msgstr "Livello superiore"
 
 #: ../src/ui/contextmenu.cpp:106
-#, fuzzy
 msgid "Hide Selected Objects"
-msgstr "Duplica gli oggetti selezionati"
+msgstr "Nascondi gli oggetti selezionati"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
@@ -14868,9 +14864,8 @@ msgstr "Mostra oggetti"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
-#, fuzzy
 msgid "Lock Selected Objects"
-msgstr "Raggruppa gli oggetti selezionati"
+msgstr "Blocca gli oggetti selezionati"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
@@ -25636,9 +25631,8 @@ msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr "L'angolo (in gradi) tra l'orizzontale e il punto iniziale dell'arco"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:161
-#, fuzzy
 msgid "Switch to slice (closed shape with two radii)"
-msgstr "Commuta in segmento (forma chiusa con due raggi)"
+msgstr "Trasforma in sezione (forma chiusa con due raggi)"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:165
 msgid "Arc (Open)"
@@ -25649,9 +25643,8 @@ msgid "Switch to arc (unclosed shape)"
 msgstr "Trasforma in arco (forma aperta)"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:171
-#, fuzzy
 msgid "Switch to chord (closed shape)"
-msgstr "Trasforma in arco (forma aperta)"
+msgstr "Trasforma in corda (forma chiusa)"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:191
 msgid "Make whole"
@@ -25663,16 +25656,15 @@ msgstr "Rende la forma in un'ellisse intero, non un arco o un segmento"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:282
 msgid "Ellipse: Change radius"
-msgstr ""
+msgstr "Ellisse: Modifica raggio"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:336
 msgid "Arc: Change start/end"
 msgstr "Arco: Modifica inizio/fine"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:392
-#, fuzzy
 msgid "Arc: Changed arc type"
-msgstr "Arco: Modifica inizio/fine"
+msgstr "Arco: Modifica tipo arco"
 
 #. FIXME: implement averaging of all parameters for multiple selected
 #. gtk_label_set_markup(GTK_LABEL(l), _("<b>Average:</b>"));
@@ -26135,7 +26127,6 @@ msgstr ""
 "di riempimento o contorno"
 
 #: ../src/ui/toolbar/eraser-toolbar.cpp:66
-#, fuzzy
 msgid "Delete objects touched by eraser"
 msgstr "Cancella oggetti toccati dalla gomma"
 
@@ -26144,9 +26135,8 @@ msgid "Cut"
 msgstr "Taglia"
 
 #: ../src/ui/toolbar/eraser-toolbar.cpp:71
-#, fuzzy
 msgid "Cut out from paths and shapes"
-msgstr "Taglia il tracciato inferiore in pezzi"
+msgstr "Taglia tracciati e forme in parti"
 
 #: ../src/ui/toolbar/eraser-toolbar.cpp:75
 #, fuzzy
@@ -26445,9 +26435,8 @@ msgstr "L'unità da usare per lo strumento di misurazione"
 
 #: ../src/ui/toolbar/measure-toolbar.cpp:129
 #: ../src/ui/toolbar/measure-toolbar.cpp:130
-#, fuzzy
 msgid "Measure only selected"
-msgstr "Modifica solo i nodi selezionati"
+msgstr "Misura solo oggetti selezionati"
 
 #: ../src/ui/toolbar/measure-toolbar.cpp:138
 #: ../src/ui/toolbar/measure-toolbar.cpp:139
@@ -27587,7 +27576,6 @@ msgid "Rounded:"
 msgstr "Arrotondamento:"
 
 #: ../src/ui/toolbar/star-toolbar.cpp:149
-#, fuzzy
 msgid "How rounded are the corners (0 for sharp)"
 msgstr "Il grado di arrotondamento dei vertici (0 per gli spigoli)"
 
@@ -27808,9 +27796,8 @@ msgstr "Da destra a sinistra"
 
 #. Name
 #: ../src/ui/toolbar/text-toolbar.cpp:557
-#, fuzzy
 msgid "Text direction"
-msgstr "Direzione testo:"
+msgstr "Direzione testo"
 
 #. Label
 #: ../src/ui/toolbar/text-toolbar.cpp:558
@@ -27845,18 +27832,16 @@ msgstr "Linea:"
 
 #. short label
 #: ../src/ui/toolbar/text-toolbar.cpp:581
-#, fuzzy
 msgid "Spacing between baselines"
-msgstr "Spaziatura tra le linee tipografiche (volte dimensione carattere)"
+msgstr "Spaziatura tra le linee tipografiche"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:622
-#, fuzzy
 msgid "Adaptive"
-msgstr "Relativo"
+msgstr "Adattivo"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:623
 msgid "Line spacing adapts to font size."
-msgstr ""
+msgstr "Spaziatura tra le linee è adattata alla dimensione carattere."
 
 #: ../src/ui/toolbar/text-toolbar.cpp:628
 #: ../share/extensions/polyhedron_3d.inx.h:54
@@ -28056,9 +28041,8 @@ msgid "Text: Change line-height unit"
 msgstr "Testo: Cambia unità spaziatura linee"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:1828
-#, fuzzy
 msgid "Text: Change line spacing mode"
-msgstr "Testo: Cambia modalità scrittura"
+msgstr "Testo: Cambia modalità spaziatura linee"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:1866
 msgid "Text: Change word-spacing"
@@ -29158,10 +29142,10 @@ msgid "Create rectangle"
 msgstr "Crea rettangolo"
 
 #: ../src/ui/tools/select-tool.cpp:154
-#, fuzzy
 msgid "Click selection to toggle scale/rotation handles (or Shift+s)"
 msgstr ""
-"Clicca la selezione per alternare le maniglie di ridimensionamento/rotazione"
+"Clicca la selezione per alternare le maniglie di ridimensionamento/rotazione "
+"(o Maiusc+S)"
 
 #: ../src/ui/tools/select-tool.cpp:155
 msgid ""
@@ -41725,7 +41709,7 @@ msgstr "Modalità _colore schermo"
 
 #: ../share/ui/menus.xml.h:10
 msgid "_Canvas Orientation"
-msgstr "Orientamento _canvas:"
+msgstr "Orientamento _canvas"
 
 #: ../share/ui/menus.xml.h:11
 msgid "Sh_ow/Hide"
