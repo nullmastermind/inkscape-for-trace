@@ -1300,11 +1300,7 @@ SPDesktop::iconify()
     _widget->setIconified();
 }
 
-bool
-SPDesktop::is_darktheme()
-{
-    return getToplevel()->get_style_context()->has_class("dark");
-}
+bool SPDesktop::is_darktheme() { return getToplevel()->get_style_context()->has_class("dark"); }
 
 bool
 SPDesktop::is_maximized()

@@ -13,22 +13,22 @@
 #define INKSCAPE_DIALOG_LIVEPATHEFFECT_ADD_H
 
 #include "live_effects/effect-enum.h"
+#include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
 #include <gtkmm/builder.h>
-#include <gtkmm/image.h>
-#include <gtkmm/eventbox.h>
 #include <gtkmm/dialog.h>
-#include <gtkmm/popover.h>
+#include <gtkmm/eventbox.h>
 #include <gtkmm/flowbox.h>
-#include <gtkmm/switch.h>
 #include <gtkmm/flowboxchild.h>
-#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/image.h>
 #include <gtkmm/label.h>
-#include <gtkmm/searchentry.h>
-#include <gtkmm/viewport.h>
-#include <gtkmm/stylecontext.h>
 #include <gtkmm/overlay.h>
-#include <gtkmm/adjustment.h>
+#include <gtkmm/popover.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/searchentry.h>
+#include <gtkmm/stylecontext.h>
+#include <gtkmm/switch.h>
+#include <gtkmm/viewport.h>
 
 class SPDesktop;
 
@@ -41,9 +41,10 @@ namespace Dialog {
  *
  */
 class LivePathEffectAdd {
-public:
+  public:
     LivePathEffectAdd();
-    ~LivePathEffectAdd()= default;;
+    ~LivePathEffectAdd() = default;
+    ;
 
     /**
      * Show the dialog
@@ -52,11 +53,9 @@ public:
     /**
      * Returns true is the "Add" button was pressed
      */
-    static bool isApplied() {
-        return instance()._applied;
-    }
+    static bool isApplied() { return instance()._applied; }
 
-    static const LivePathEffect::EnumEffectData<LivePathEffect::EffectType>* getActiveData();
+    static const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *getActiveData();
 
   protected:
     /**
@@ -64,16 +63,17 @@ public:
      */
     void onClose();
     bool on_filter(Gtk::FlowBoxChild *child);
-    int  on_sort(Gtk::FlowBoxChild *child1, Gtk::FlowBoxChild *child2);
+    int on_sort(Gtk::FlowBoxChild *child1, Gtk::FlowBoxChild *child2);
     void on_search();
     void on_activate(Gtk::FlowBoxChild *child);
-    bool pop_description(GdkEventButton* evt, Glib::RefPtr<Gtk::Builder> builder_effect);
-    bool hide_pop_description(GdkEventButton* evt);
-    bool fav_toggler(GdkEventButton* evt, Glib::RefPtr<Gtk::Builder> builder_effect);
-    bool apply(GdkEventButton* evt, Glib::RefPtr<Gtk::Builder> builder_effect, const LivePathEffect::EnumEffectData<LivePathEffect::EffectType>* to_add);
-    bool show_fav_toggler(GdkEventButton* evt);
-    bool mouseover(GdkEventCrossing* evt, GtkWidget *wdg);
-    bool mouseout(GdkEventCrossing* evt, GtkWidget *wdg);
+    bool pop_description(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> builder_effect);
+    bool hide_pop_description(GdkEventButton *evt);
+    bool fav_toggler(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> builder_effect);
+    bool apply(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> builder_effect,
+               const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *to_add);
+    bool show_fav_toggler(GdkEventButton *evt);
+    bool mouseover(GdkEventCrossing *evt, GtkWidget *wdg);
+    bool mouseout(GdkEventCrossing *evt, GtkWidget *wdg);
     void reload_effect_list();
     /**
      * Add button was clicked
@@ -104,7 +104,7 @@ private:
   Gtk::Box *_LPESelector;
   guint _visiblelpe;
   Glib::ustring _item_type;
-  const LivePathEffect::EnumEffectData<LivePathEffect::EffectType>* _to_add;
+  const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *_to_add;
   bool _showfavs;
   bool _applied;
   class Effect;
@@ -114,8 +114,8 @@ private:
       static LivePathEffectAdd instance_;
       return instance_;
   }
-    LivePathEffectAdd(LivePathEffectAdd const &) = delete; // no copy
-    LivePathEffectAdd &operator=(LivePathEffectAdd const &) = delete; // no assign
+  LivePathEffectAdd(LivePathEffectAdd const &) = delete;            // no copy
+  LivePathEffectAdd &operator=(LivePathEffectAdd const &) = delete; // no assign
 };
  
 } // namespace Dialog

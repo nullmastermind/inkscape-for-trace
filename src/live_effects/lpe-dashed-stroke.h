@@ -15,7 +15,7 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 class LPEDashedStroke : public Effect {
-public:
+  public:
     LPEDashedStroke(LivePathEffectObject *lpeobject);
     ~LPEDashedStroke() override;
     void doBeforeEffect (SPLPEItem const* lpeitem) override;

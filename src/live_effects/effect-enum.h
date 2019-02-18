@@ -72,7 +72,8 @@ enum EffectType {
     RECURSIVE_SKELETON,
     TANGENT_TO_CURVE,
     TEXT_LABEL,
-    INVALID_LPE // This must be last (I made it such that it is not needed anymore I think..., Don't trust on it being last. - johan)
+    INVALID_LPE // This must be last (I made it such that it is not needed anymore I think..., Don't trust on it being
+                // last. - johan)
 };
 
 template <typename E>
@@ -267,7 +268,7 @@ class EnumEffectDataConverter {
     const EnumEffectData<E> *_data;
 };
 
-extern const EnumEffectData<EffectType> LPETypeData[];  /// defined in effect.cpp
+extern const EnumEffectData<EffectType> LPETypeData[];             /// defined in effect.cpp
 extern const EnumEffectDataConverter<EffectType> LPETypeConverter; /// defined in effect.cpp
 
 } //namespace LivePathEffect
