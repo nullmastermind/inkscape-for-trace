@@ -16,36 +16,31 @@
 
 #include "message-context.h"
 #include "message-stack.h"
-#include "style.h"
 #include "selection.h"
 #include "style-internal.h"
+#include "style.h"
 
 #include "ui/icon-loader.h"
 #include "ui/widget/iconrenderer.h"
 #include "verbs.h"
 
-#include "xml/node-event-vector.h"
 #include "xml/attribute-record.h"
+#include "xml/node-event-vector.h"
 #include <glibmm/i18n.h>
 
 #include <glibmm/i18n.h>
 
-static void on_attr_changed (Inkscape::XML::Node * repr,
-                             const gchar * name,
-                             const gchar * /*old_value*/,
-                             const gchar * new_value,
-                             bool /*is_interactive*/,
-                             gpointer data)
+static void on_attr_changed(Inkscape::XML::Node *repr, const gchar *name, const gchar * /*old_value*/,
+                            const gchar *new_value, bool /*is_interactive*/, gpointer data)
 {
     CSS_DIALOG(data)->onAttrChanged(repr, name, new_value);
 }
 
 Inkscape::XML::NodeEventVector css_repr_events = {
-    nullptr, /* child_added */
-    nullptr, /* child_removed */
-    on_attr_changed,
-    nullptr, /* content_changed */
-    nullptr  /* order_changed */
+    nullptr,                  /* child_added */
+    nullptr,                  /* child_removed */
+    on_attr_changed, nullptr, /* content_changed */
+    nullptr                   /* order_changed */
 };
 
 namespace Inkscape {
@@ -61,10 +56,10 @@ namespace Dialog {
  * and clicking 'Enter' updates the property with changes reflected in the
  * drawing.
  */
-CssDialog::CssDialog():
-    UI::Widget::Panel("/dialogs/css", SP_VERB_DIALOG_CSS),
-    _desktop(nullptr),
-    _repr(nullptr)
+CssDialog::CssDialog()
+    : UI::Widget::Panel("/dialogs/css", SP_VERB_DIALOG_CSS)
+    , _desktop(nullptr)
+    , _repr(nullptr)
 {
     set_size_request(20, 15);
     _treeView.set_headers_visible(true);
@@ -135,7 +130,7 @@ CssDialog::CssDialog():
     }
 
     // Set the inital sort column (and direction) to place real attributes at the top.
-    _store->set_sort_column (_cssColumns.deleteButton, Gtk::SORT_DESCENDING);
+    _store->set_sort_column(_cssColumns.deleteButton, Gtk::SORT_DESCENDING);
 
     _getContents()->pack_start(*_scrolledWindow, Gtk::PACK_EXPAND_WIDGET);
 
@@ -180,9 +175,10 @@ void CssDialog::setDesktop(SPDesktop* desktop)
  *
  * Set the internal xml object that I'm working on right now.
  */
-void CssDialog::setRepr(Inkscape::XML::Node * repr)
+void CssDialog::setRepr(Inkscape::XML::Node *repr)
 {
-    if ( repr == _repr ) return;
+    if (repr == _repr)
+        return;
     if (_repr) {
         _store->clear();
         _repr->removeListenerByData(this);
@@ -210,11 +206,12 @@ std::map<Glib::ustring, Glib::ustring> CssDialog::parseStyle(Glib::ustring style
     REMOVE_SPACES(style_string); // We'd use const, but we need to trip spaces
     std::vector<Glib::ustring> props = r_props->split(style_string);
 
-    for (auto const token: props) {
-        if (token.empty()) break;
+    for (auto const token : props) {
+        if (token.empty())
+            break;
         std::vector<Glib::ustring> pair = r_pair->split(token);
 
-        if( pair.size() > 1) {
+        if (pair.size() > 1) {
             ret[pair[0]] = pair[1];
         }
     }
@@ -230,8 +227,8 @@ std::map<Glib::ustring, Glib::ustring> CssDialog::parseStyle(Glib::ustring style
 Glib::ustring CssDialog::compileStyle(std::map<Glib::ustring, Glib::ustring> props)
 {
     auto ret = Glib::ustring("");
-    for (auto const pair: props) {
-        if(!pair.first.empty() && !pair.second.empty()) {
+    for (auto const pair : props) {
+        if (!pair.first.empty() && !pair.second.empty()) {
             ret += pair.first;
             ret += ":";
             ret += pair.second;
@@ -247,24 +244,25 @@ Glib::ustring CssDialog::compileStyle(std::map<Glib::ustring, Glib::ustring> pro
  *
  * This is called when the XML has an updated attribute (we only care about style)
  */
-void CssDialog::onAttrChanged(Inkscape::XML::Node *repr, const gchar * name, const gchar * new_value)
+void CssDialog::onAttrChanged(Inkscape::XML::Node *repr, const gchar *name, const gchar *new_value)
 {
-    if(strcmp(name, "style")!=0) return;
+    if (strcmp(name, "style") != 0)
+        return;
 
     // Clear the list and return if the new_value is empty
     _store->clear();
-    if(!new_value || new_value[0] == 0) return;
+    if (!new_value || new_value[0] == 0)
+        return;
 
     // Get the object's style attribute and it's calculated properties
     SPDocument *document = this->_desktop->doc();
     SPObject *obj = document->getObjectByRepr(repr);
-    //std::vector<SPIBase *> calc_prop = obj->style->properties();
+    // std::vector<SPIBase *> calc_prop = obj->style->properties();
 
     // Get a dictionary lookup of the style in the attribute
     std::map<Glib::ustring, Glib::ustring> attr_prop = parseStyle(new_value);
 
-    for (auto iter: obj->style->properties())
-    {
+    for (auto iter : obj->style->properties()) {
         if (iter->style && iter->style_src != SP_STYLE_SRC_UNSET) {
             Gtk::TreeModel::Row row = *(_store->append());
             // Delete is available to attribute properties only in attr mode.
@@ -288,7 +286,7 @@ void CssDialog::onAttrChanged(Inkscape::XML::Node *repr, const gchar * name, con
     }
 }
 
- /*
+/*
  * Sets the CSSDialog status bar, depending on which attr is selected.
  */
 void CssDialog::css_reset_context(gint css)
@@ -314,27 +312,22 @@ bool CssDialog::setStyleProperty(Glib::ustring name, Glib::ustring value)
     std::map<Glib::ustring, Glib::ustring> properties = parseStyle(original);
 
     bool updated = false;
-    if(value != nullptr && !value.empty())
-    {
-        if(properties[name] != value)
-        {
+    if (value != nullptr && !value.empty()) {
+        if (properties[name] != value) {
             // Set value (create or update)
             properties[name] = value;
             updated = true;
         }
-    }
-    else if (properties.count(name))
-    {
+    } else if (properties.count(name)) {
         // Delete value
         properties.erase(name);
         updated = true;
     }
 
-    if (updated)
-    {
+    if (updated) {
         auto new_styles = this->compileStyle(properties);
         this->_repr->setAttribute("style", new_styles, false);
-        //this->setUndo(_("Delete style property"));
+        // this->setUndo(_("Delete style property"));
     }
     return updated;
 }
@@ -358,7 +351,7 @@ void CssDialog::onPropertyDelete(Glib::ustring path)
  */
 bool CssDialog::onPropertyCreate(GdkEventButton *event)
 {
-    if(event->type == GDK_BUTTON_RELEASE && event->button == 1 && this->_repr) {
+    if (event->type == GDK_BUTTON_RELEASE && event->button == 1 && this->_repr) {
         Gtk::TreeIter iter = _store->append();
         Gtk::TreeModel::Path path = (Gtk::TreeModel::Path)iter;
         _treeView.set_cursor(path, *_propCol, true);

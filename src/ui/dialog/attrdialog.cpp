@@ -63,10 +63,10 @@ namespace Dialog {
  * A treeview whose each row corresponds to an XML attribute of a selected node
  * New attribute can be added by clicking '+' at bottom of the attr pane. '-'
  */
-AttrDialog::AttrDialog():
-    UI::Widget::Panel("/dialogs/attr", SP_VERB_DIALOG_ATTR),
-    _desktop(nullptr),
-    _repr(nullptr)
+AttrDialog::AttrDialog()
+    : UI::Widget::Panel("/dialogs/attr", SP_VERB_DIALOG_ATTR)
+    , _desktop(nullptr)
+    , _repr(nullptr)
 {
     set_size_request(20, 15);
     _mainBox.pack_start(_scrolledWindow, Gtk::PACK_EXPAND_WIDGET);

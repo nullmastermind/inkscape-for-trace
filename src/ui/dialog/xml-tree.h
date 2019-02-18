@@ -25,11 +25,11 @@
 #include <gtkmm/textview.h>
 #include <gtkmm/toolbar.h>
 
+#include "message.h"
 #include "ui/dialog/attrdialog.h"
 #include "ui/dialog/cssdialog.h"
-#include "ui/dialog/styledialog.h"
 #include "ui/dialog/desktop-tracker.h"
-#include "message.h"
+#include "ui/dialog/styledialog.h"
 
 class SPDesktop;
 class SPObject;
@@ -184,6 +184,7 @@ private:
         FLOWBOX_PAGE_NODES,
         FLOWBOX_PAGE_ATTRS,
         FLOWBOX_PAGE_STYLES,
+        FLOWBOX_PAGE_SELECTORS,
     };
 
     /**

@@ -53,8 +53,7 @@ public:
 
     static StyleDialog &getInstance() { return *new StyleDialog(); }
 
-private:
-
+  private:
     // Monitor <style> element for changes.
     class NodeObserver;
 

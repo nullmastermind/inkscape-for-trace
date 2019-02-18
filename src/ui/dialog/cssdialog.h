@@ -18,20 +18,17 @@
 #include "desktop.h"
 #include "message.h"
 
-
 #include <glibmm/regex.h>
-#include <gtkmm/treeview.h>
-<<<<<<< HEAD
-=======
 #include <gtkmm/dialog.h>
->>>>>>> Fix compiling issues
 #include <gtkmm/liststore.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treeview.h>
 #include <ui/widget/panel.h>
 
-#define CSS_DIALOG(obj) (dynamic_cast<Inkscape::UI::Dialog::CssDialog*>((Inkscape::UI::Dialog::CssDialog*)obj))
-#define REMOVE_SPACES(x) x.erase(0, x.find_first_not_of(' ')); x.erase(x.find_last_not_of(' ') + 1);
+#define CSS_DIALOG(obj) (dynamic_cast<Inkscape::UI::Dialog::CssDialog *>((Inkscape::UI::Dialog::CssDialog *)obj))
+#define REMOVE_SPACES(x)                                                                                               \
+    x.erase(0, x.find_first_not_of(' '));                                                                              \
+    x.erase(x.find_last_not_of(' ') + 1);
 
 namespace Inkscape {
 class MessageStack;
@@ -58,15 +55,15 @@ public:
     class CssColumns : public Gtk::TreeModel::ColumnRecord {
     public:
         CssColumns() {
-	  add(deleteButton);
-	  add(label);
-	  add(_styleSheetVal);
-	  add(_styleAttrVal);
-	  add(label_color);
-	  add(attr_color);
-	  add(attr_strike);
-	  add(editable);
-	}
+            add(deleteButton);
+            add(label);
+            add(_styleSheetVal);
+            add(_styleAttrVal);
+            add(label_color);
+            add(attr_color);
+            add(attr_strike);
+            add(editable);
+        }
         Gtk::TreeModelColumn<bool> deleteButton;
         Gtk::TreeModelColumn<Glib::ustring> label;
         Gtk::TreeModelColumn<Glib::ustring> _styleAttrVal;
@@ -103,23 +100,20 @@ public:
 
     // Variables - Inkscape
     SPDesktop* _desktop;
-    Inkscape::XML::Node* _repr;
+    Inkscape::XML::Node *_repr;
 
     // Helper functions
     void setDesktop(SPDesktop* desktop) override;
-    void setRepr(Inkscape::XML::Node * repr);
+    void setRepr(Inkscape::XML::Node *repr);
 
     // Parsing functions
     std::map<Glib::ustring, Glib::ustring> parseStyle(Glib::ustring style_string);
     Glib::ustring compileStyle(std::map<Glib::ustring, Glib::ustring> props);
 
-
-     */
     // Signal handlers
-    void onAttrChanged(Inkscape::XML::Node *repr, const gchar * name, const gchar * new_value);
+    void onAttrChanged(Inkscape::XML::Node *repr, const gchar *name, const gchar *new_value);
 
-private:
-
+  private:
     Glib::RefPtr<Glib::Regex> r_props = Glib::Regex::create("\\s*;\\s*");
     Glib::RefPtr<Glib::Regex> r_pair = Glib::Regex::create("\\s*:\\s*");
 
@@ -127,6 +121,11 @@ private:
     void onPropertyDelete(Glib::ustring path);
     bool setStyleProperty(Glib::ustring name, Glib::ustring value);
 
+    /**
+     * Signal handlers
+     */
+    sigc::connection _message_changed_connection;
+    bool _addProperty(GdkEventButton *event);
 };
 
 

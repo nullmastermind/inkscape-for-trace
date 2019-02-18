@@ -358,11 +358,11 @@ void XmlTree::propagate_tree_select(Inkscape::XML::Node *repr)
     {
         attributes->setRepr(repr);
         styles->setRepr(repr);
-        //selectors->setRepr(repr);
+        // selectors->setRepr(repr);
     } else {
         attributes->setRepr(nullptr);
         styles->setRepr(nullptr);
-        //selectors->setRepr(nullptr);
+        // selectors->setRepr(nullptr);
     }
 }
 

@@ -397,7 +397,7 @@ Inkscape::XML::Node* StyleDialog::_getStyleTextNode()
  */
 void StyleDialog::_readStyleElement()
 {
-    g_debug("StyleDialog::_readStyleElement: updating %s", (_updating?"true":"false"));
+    g_debug("StyleDialog::_readStyleElement: updating %s", (_updating ? "true" : "false"));
 
     if (_updating) return; // Don't read if we wrote style element.
     _updating = true;
@@ -1098,7 +1098,7 @@ void StyleDialog::_buttonEventsSelectObjs(GdkEventButton* event )
  */
 void StyleDialog::_selectRow()
 {
-    g_debug("StyleDialog::_selectRow: updating: %s", (_updating?"true":"false"));
+    g_debug("StyleDialog::_selectRow: updating: %s", (_updating ? "true" : "false"));
 
     if (_updating || !getDesktop()) return; // Avoid updating if we have set row via dialog.
 

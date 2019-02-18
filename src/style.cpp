@@ -478,7 +478,7 @@ SPStyle::~SPStyle() {
     fill_ps_changed_connection.disconnect();
     stroke_ps_changed_connection.disconnect();
 
-// The following should be moved into SPIPaint and SPIFilter
+    // The following should be moved into SPIPaint and SPIFilter
     if (fill.value.href) {
         fill_ps_modified_connection.disconnect();
     }
@@ -501,10 +501,7 @@ SPStyle::~SPStyle() {
     // std::cout << "SPStyle::~SPStyle(): Exit\n" << std::endl;
 }
 
-const std::vector<SPIBase *> SPStyle::properties()
-{
-    return this->_properties;
-}
+const std::vector<SPIBase *> SPStyle::properties() { return this->_properties; }
 
 void
 SPStyle::clear(SPAttributeEnum id) {
