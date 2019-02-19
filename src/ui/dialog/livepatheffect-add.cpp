@@ -199,6 +199,7 @@ LivePathEffectAdd::LivePathEffectAdd()
     int height;
     window->get_size(width, height);
     _LPEDialogSelector->resize(std::min(width - 300, 1440), std::min(height - 300, 900));
+    _LPEDialogSelector->set_transient_for(*window);	
     _LPEDialogSelector->show_all_children();
 }
 const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *LivePathEffectAdd::getActiveData()
