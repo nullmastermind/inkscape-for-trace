@@ -25,8 +25,17 @@
 #include "preferences.h"
 
 #include "object/sp-object.h"
+
+// Following are needed to limit the source of updating font data to text and containers.
 #include "object/sp-root.h"
-#include "object/sp-namedview.h"
+#include "object/sp-object-group.h"
+#include "object/sp-anchor.h"
+#include "object/sp-text.h"
+#include "object/sp-tspan.h"
+#include "object/sp-textpath.h"
+#include "object/sp-tref.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-flowdiv.h"
 
 #include "xml/repr.h"
 
@@ -413,9 +422,20 @@ void FontLister::update_font_data_recursive(SPObject& r, std::map<Glib::ustring,
     }
     pango_font_description_free(descr);
 
-    for (auto& child: r.children) {
-        if (SP_IS_NAMEDVIEW(&r)) continue;
-        update_font_data_recursive(child, font_data);
+    if (SP_IS_GROUP(&r)    ||
+        SP_IS_ANCHOR(&r)   ||
+        SP_IS_ROOT(&r)     ||
+        SP_IS_TEXT(&r)     ||
+        SP_IS_TSPAN(&r)    ||
+        SP_IS_TEXTPATH(&r) ||
+        SP_IS_TREF(&r)     ||
+        SP_IS_FLOWTEXT(&r) ||
+        SP_IS_FLOWDIV(&r)  ||
+        SP_IS_FLOWPARA(&r) ||
+        SP_IS_FLOWLINE(&r)) {
+        for (auto& child: r.children) {
+            update_font_data_recursive(child, font_data);
+        }
     }
 }
 
