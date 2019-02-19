@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-02-18 16:25+0100\n"
+"POT-Creation-Date: 2019-02-19 20:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -5758,9 +5758,9 @@ msgstr ""
 #: ../src/extension/prefdialog.cpp:78
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:51
 #: ../src/ui/dialog/export.cpp:917 ../src/ui/dialog/export.cpp:1301
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:668
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:979
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1535
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:251
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:562
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1118
 #: ../src/ui/dialog/guides.cpp:167 ../src/ui/dialog/layer-properties.cpp:43
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:30
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:36
@@ -5778,10 +5778,8 @@ msgstr ""
 msgid "_OK"
 msgstr ""
 
-#. Fill in the template
 #: ../src/extension/internal/cdr-input.cpp:227
 #: ../src/extension/internal/vsd-input.cpp:227
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:377
 msgid "No preview"
 msgstr ""
 
@@ -7708,7 +7706,7 @@ msgid "Source:"
 msgstr ""
 
 #: ../src/extension/internal/filter/transparency.h:57
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1476
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1059
 msgid "Background"
 msgstr ""
 
@@ -8615,7 +8613,7 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
-#: ../src/filter-enums.cpp:98 ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1496
+#: ../src/filter-enums.cpp:98 ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1079
 msgid "Destination"
 msgstr ""
 
@@ -15119,7 +15117,7 @@ msgstr ""
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1065
 #: ../src/ui/dialog/document-properties.cpp:150
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1422
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1005
 #: ../src/widgets/desktop-widget.cpp:1918
 #: ../share/extensions/empty_page.inx.h:1
 #: ../share/extensions/voronoi2svg.inx.h:10
@@ -15198,8 +15196,8 @@ msgstr ""
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:60
 #: ../src/ui/dialog/export.cpp:1302
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:980
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1536
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:563
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1119
 #: ../src/ui/dialog/input.cpp:912 ../src/verbs.cpp:2585
 #: ../src/widgets/desktop-widget.cpp:1111
 msgid "_Save"
@@ -16665,101 +16663,97 @@ msgstr ""
 msgid "Parameters"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:459
-msgid "Too large for preview"
-msgstr ""
-
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:541
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:124
 msgid "Enable preview"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:546
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:129
 msgid "Export as SVG 1.1 per settings in Preference Dialog."
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:669
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:252
 msgid "_Open"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:689
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:701
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:703
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:710
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:724
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:272
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:284
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:286
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:293
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:307
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:265
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:396
 msgid "All Files"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:707
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:721
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:290
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:304
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:266
 msgid "All Inkscape Files"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:714
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:727
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:297
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:310
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:267
 msgid "All Images"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:717
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:730
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:300
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:313
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:268
 msgid "All Vectors"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:720
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:733
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:303
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:316
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:269
 msgid "All Bitmaps"
 msgstr ""
 
 #. ###### File options
 #. ###### Do we want the .xxx extension automatically added?
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:921
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1485
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:504
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1068
 msgid "Append filename extension automatically"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1104
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1357
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:687
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:940
 msgid "Guess from extension"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1376
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:959
 msgid "Left edge of source"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1377
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:960
 msgid "Top edge of source"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1378
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:961
 msgid "Right edge of source"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1379
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:962
 msgid "Bottom edge of source"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1380
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:963
 msgid "Source width"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1381
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:964
 msgid "Source height"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1382
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:965
 msgid "Destination width"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1383
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:966
 msgid "Destination height"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1384
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:967
 msgid "Resolution (dots per inch)"
 msgstr ""
 
@@ -16767,32 +16761,32 @@ msgstr ""
 #. ## EXTRA WIDGET -- SOURCE SIDE
 #. #########################################
 #. ##### Export options buttons/spinners, etc
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1418
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1001
 #: ../share/extensions/docinfo.inx.h:4 ../share/extensions/dpi90to96.inx.h:2
 #: ../share/extensions/dpi96to90.inx.h:2
 msgid "Document"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1426 ../src/verbs.cpp:178
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1009 ../src/verbs.cpp:178
 #: ../src/widgets/desktop-widget.cpp:1926
 #: ../share/extensions/printing_marks.inx.h:18
 msgid "Selection"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1430
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1013
 msgctxt "Export dialog"
 msgid "Custom"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1450
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1033
 msgid "Source"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1470
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1053
 msgid "Cairo"
 msgstr ""
 
-#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1473
+#: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1056
 msgid "Antialias"
 msgstr ""
 
@@ -22087,22 +22081,22 @@ msgctxt "Layers"
 msgid "Top"
 msgstr ""
 
-#: ../src/ui/dialog/livepatheffect-add.cpp:406
+#: ../src/ui/dialog/livepatheffect-add.cpp:413
 msgid "You dont have any favorites jet, please disable the favorites star"
 msgstr ""
 
-#: ../src/ui/dialog/livepatheffect-add.cpp:410
-#: ../src/ui/dialog/livepatheffect-add.cpp:432
+#: ../src/ui/dialog/livepatheffect-add.cpp:417
+#: ../src/ui/dialog/livepatheffect-add.cpp:439
 msgid "This is your favorite effects"
 msgstr ""
 
-#: ../src/ui/dialog/livepatheffect-add.cpp:415
-#: ../src/ui/dialog/livepatheffect-add.cpp:427
-#: ../src/ui/dialog/livepatheffect-add.cpp:441
+#: ../src/ui/dialog/livepatheffect-add.cpp:422
+#: ../src/ui/dialog/livepatheffect-add.cpp:434
+#: ../src/ui/dialog/livepatheffect-add.cpp:448
 msgid "Your search do a empty result, please try again"
 msgstr ""
 
-#: ../src/ui/dialog/livepatheffect-add.cpp:434
+#: ../src/ui/dialog/livepatheffect-add.cpp:441
 msgid "This is your favorite effects search result"
 msgstr ""
 
