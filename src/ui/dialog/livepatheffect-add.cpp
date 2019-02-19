@@ -83,7 +83,6 @@ LivePathEffectAdd::LivePathEffectAdd()
     : converter(Inkscape::LivePathEffect::LPETypeConverter)
     , _applied(false)
     , _showfavs(false)
-    , _started(true)
 {
     Glib::ustring gladefile = get_filename(Inkscape::IO::Resource::UIS, "dialog-livepatheffect-add.ui");
     try {
@@ -195,6 +194,11 @@ LivePathEffectAdd::LivePathEffectAdd()
         sigc::mem_fun(*this, &LivePathEffectAdd::mouseout), GTK_WIDGET(_LPESelectorEffectInfoEventBox->gobj())));
     _LPEExperimental->property_active().signal_changed().connect(
         sigc::mem_fun(*this, &LivePathEffectAdd::reload_effect_list));
+    Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
+    int width;
+    int height;
+    window->get_size(width, height);
+    _LPEDialogSelector->resize(std::min(width - 300, 1440), std::min(height - 300, 900));
     _LPEDialogSelector->show_all_children();
 }
 const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *LivePathEffectAdd::getActiveData()
@@ -534,7 +538,6 @@ void LivePathEffectAdd::onKeyEvent(GdkEventKey *evt)
 void LivePathEffectAdd::show(SPDesktop *desktop)
 {
     LivePathEffectAdd &dial = instance();
-    dial._LPEDialogSelector->hide();
     Inkscape::Selection *sel = desktop->getSelection();
     if (sel && !sel->isEmpty()) {
         SPItem *item = sel->singleItem();
@@ -554,14 +557,6 @@ void LivePathEffectAdd::show(SPDesktop *desktop)
                 return;
             }
         }
-    }
-    if (dial._started) {
-        dial._started = false;
-        Gtk::Window *window = desktop->getToplevel();
-        int width;
-        int height;
-        window->get_size(width, height);
-        dial._LPEDialogSelector->resize(std::min(width - 300, 1440), std::min(height - 300, 900));
     }
     dial._applied = false;
     dial._LPESelectorFlowBox->unset_sort_func();
