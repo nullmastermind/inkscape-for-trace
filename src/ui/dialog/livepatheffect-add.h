@@ -107,6 +107,7 @@ private:
   const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *_to_add;
   bool _showfavs;
   bool _applied;
+  bool _started;
   class Effect;
   const LivePathEffect::EnumEffectDataConverter<LivePathEffect::EffectType> &converter;
   static LivePathEffectAdd &instance()

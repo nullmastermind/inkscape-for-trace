@@ -83,6 +83,7 @@ LivePathEffectAdd::LivePathEffectAdd()
     : converter(Inkscape::LivePathEffect::LPETypeConverter)
     , _applied(false)
     , _showfavs(false)
+    , _started(true)
 {
     Glib::ustring gladefile = get_filename(Inkscape::IO::Resource::UIS, "dialog-livepatheffect-add.ui");
     try {
@@ -554,14 +555,11 @@ void LivePathEffectAdd::show(SPDesktop *desktop)
             }
         }
     }
-    int width;
-    int height;
-    int width_2;
-    int height_2;
-    dial._LPEDialogSelector->get_default_size(width_2, height_2);
-    dial._LPEDialogSelector->get_size(width, height);
-    if (width == width_2 && height == height_2) {
+    if (dial._started) {
+        dial._started = false;
         Gtk::Window *window = desktop->getToplevel();
+        int width;
+        int height;
         window->get_size(width, height);
         dial._LPEDialogSelector->resize(std::min(width - 300, 1440), std::min(height - 300, 900));
     }
