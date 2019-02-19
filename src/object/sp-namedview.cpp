@@ -819,11 +819,7 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
 #endif
             desktop->setWindowSize(w, h);
             if (move_to_screen) {
-                // Hiding window will close app if it's last window. If we really need to hide it
-                // here, we need to up the reference count of the application before hiding, and lower after showing.
-                // win->hide();
                 desktop->setWindowPosition(Geom::Point(nv->window_x, nv->window_y));
-                // win->show();
             }
         }
     }

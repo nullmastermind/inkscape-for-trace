@@ -85,11 +85,15 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
 
     // ================ Window Options ==============
 
+    // Make sure the GdkWindow is fully initialized before resizing/moving
+    // (ensures the monitor it'll be shown on is known)
+    realize();
+
     // Resize the window to match the document properties
     sp_namedview_window_from_document(_desktop); // This should probably be a member function here.
-    
+
     // Must show before setting zoom and view! (crashes otherwise)
-    // Should show after resizing/moving to allow window manager to correct an invalid windows size/position
+    // Showing after resizing/moving allows the window manager to correct an invalid size/position of the window
     show();
 
     sp_namedview_zoom_and_view_from_document(_desktop);
