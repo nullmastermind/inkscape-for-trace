@@ -12,7 +12,7 @@
 #ifndef INKSCAPE_SEEN_UI_DIALOG_TEMPLATE_WIDGET_H
 #define INKSCAPE_SEEN_UI_DIALOG_TEMPLATE_WIDGET_H
 
-#include "filedialogimpl-gtkmm.h"
+#include "svg-preview.h"
 
 #include <gtkmm/box.h>
 
