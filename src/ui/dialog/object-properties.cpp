@@ -315,7 +315,7 @@ void ObjectProperties::update()
         return;
     }
     _blocked = true;
-    _cb_aspect_ratio.set_active(item->getAttribute("preserveAspectRatio") == "true");
+    _cb_aspect_ratio.set_active(strcmp(item->getAttribute("preserveAspectRatio"), "true") == 0);
     _cb_lock.set_active(item->isLocked());           /* Sensitive */
     _cb_hide.set_active(item->isExplicitlyHidden()); /* Hidden */
     

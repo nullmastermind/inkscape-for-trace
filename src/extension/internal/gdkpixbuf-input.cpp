@@ -51,9 +51,9 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
     Glib::ustring scale = prefs->getString("/dialogs/import/scale");
 
     // If we asked about import preferences, get values and update preferences.
-    if( ask ) {
+    if (ask) {
         ask       = !mod->get_param_bool("do_not_ask");
-        forcexdpi = (mod->get_param_optiongroup("dpi") == "from_default");
+        forcexdpi = (strcmp(mod->get_param_optiongroup("dpi"), "from_default") == 0);
         link      =  mod->get_param_optiongroup("link");
         scale     =  mod->get_param_optiongroup("scale");
 

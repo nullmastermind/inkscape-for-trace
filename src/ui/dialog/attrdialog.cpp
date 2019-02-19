@@ -236,7 +236,7 @@ void AttrDialog::onAttrChanged(Inkscape::XML::Node *repr, const gchar * name, co
     }
     if (new_value) {
         if ((repr->type() == Inkscape::XML::TEXT_NODE || repr->type() == Inkscape::XML::COMMENT_NODE) &&
-             name != "content") 
+             strcmp(name, "content") != 0)
         {
             return;   
         } else {
