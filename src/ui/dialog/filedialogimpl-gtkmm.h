@@ -30,7 +30,7 @@
 #include <cerrno>
 
 #include "filedialog.h"
-
+#include "svg-preview.h"
 
 namespace Gtk {
 class Expander;
@@ -62,10 +62,6 @@ void
 findExpanderWidgets(Gtk::Container *parent,
                     std::vector<Gtk::Expander *> &result);
 
-/*#########################################################################
-### SVG Preview Widget
-#########################################################################*/
-
 class FileType
 {
     public:
@@ -74,62 +70,6 @@ class FileType
     Glib::ustring name;
     Glib::ustring pattern;
     Inkscape::Extension::Extension *extension;
-};
-
-/**
- * Simple class for displaying an SVG file in the "preview widget."
- * Currently, this is just a wrapper of the sp_svg_view Gtk widget.
- * Hopefully we will eventually replace with a pure Gtkmm widget.
- */
-class SVGPreview : public Gtk::VBox
-{
-public:
-
-    SVGPreview();
-
-    ~SVGPreview() override;
-
-    bool setDocument(SPDocument *doc);
-
-    bool setFileName(Glib::ustring &fileName);
-
-    bool setFromMem(char const *xmlBuffer);
-
-    bool set(Glib::ustring &fileName, int dialogType);
-
-    bool setURI(URI &uri);
-
-    /**
-     * Show image embedded in SVG
-     */
-    void showImage(Glib::ustring &fileName);
-
-    /**
-     * Show the "No preview" image
-     */
-    void showNoPreview();
-
-    /**
-     * Show the "Too large" image
-     */
-    void showTooLarge(long fileLength);
-
-private:
-    /**
-     * The svg document we are currently showing
-     */
-    SPDocument *document;
-
-    /**
-     * The sp_svg_view widget
-     */
-    Inkscape::UI::View::SVGViewWidget *viewer;
-
-    /**
-     * are we currently showing the "no preview" image?
-     */
-    bool showingNoPreview;
-
 };
 
 /*#########################################################################
