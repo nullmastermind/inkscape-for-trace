@@ -279,14 +279,6 @@ StyleDialog::StyleDialog() :
 
     _getContents()->pack_start(_paned, Gtk::PACK_EXPAND_WIDGET);
 
-    // Dialog size request
-    Gtk::Requisition sreq1, sreq2;
-    get_preferred_size(sreq1, sreq2);
-    int minWidth = 300;
-    int minHeight = 300;
-    minWidth  = (sreq2.width  > minWidth  ? sreq2.width  : minWidth );
-    minHeight = (sreq2.height > minHeight ? sreq2.height : minHeight);
-    set_size_request(minWidth, minHeight);
 
     // Signal handlers
     _treeView.signal_button_release_event().connect(   // Needs to be release, not press.
