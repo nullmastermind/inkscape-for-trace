@@ -407,7 +407,25 @@ LivePathEffectEditor::setDesktop(SPDesktop *desktop)
     }
 }
 
-
+void
+LivePathEffectEditor::rectsToCurves(SPItem* topitem, SPItem *item)
+{
+    Inkscape::Selection *sel = _getSelection();
+    if ( dynamic_cast<SPRect *>(item) ) {
+        sel->clear();
+        sel->set(item);
+        sel->toCurves();
+        if (topitem == item) {
+            return;
+        }
+    } else if( SPGroup *group = dynamic_cast<SPGroup *>(item)){
+        std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
+        for (auto sub_item : item_list) {
+            rectsToCurves(topitem, sub_item);
+        }
+    }
+    sel->set(topitem);
+}
 
 
 /*########################################################################
@@ -437,12 +455,8 @@ LivePathEffectEditor::onAdd()
                 if (!data) {
                     return;
                 }
-
-                // If item is a SPRect, convert it to path first:
-                if ( dynamic_cast<SPRect *>(item) ) {
-                    sel->toCurves();
-                    item = sel->singleItem(); // get new item
-                }
+                rectsToCurves(item, item);
+                item = sel->singleItem(); // get new item
 
                 LivePathEffect::Effect::createAndApply(data->key.c_str(), doc, item);
 

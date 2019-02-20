@@ -927,6 +927,7 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, Inkscape::LivePa
 {
     std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
     for (auto sub_item : item_list) {
+        std::cout << sub_item << "aaaa" << std::endl;
         SPGroup *sub_group = dynamic_cast<SPGroup *>(sub_item);
         if (sub_group) {
             sp_group_perform_patheffect(sub_group, top_group, lpe, write);
