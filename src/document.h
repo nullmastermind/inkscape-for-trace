@@ -128,9 +128,9 @@ public:
     CRStyleSheet *style_sheet;
 
 protected:
-    char *uri;   ///< A filename (not a URI yet), or NULL
-    char *base;  ///< To be used for resolving relative hrefs.
-    char *name;  ///< basename(uri) or other human-readable label for the document.
+    char *document_uri;   ///< A filename (not a URI yet), or NULL
+    char *document_base;  ///< To be used for resolving relative hrefs.
+    char *document_name;  ///< basename(uri) or other human-readable label for the document.
 
 public:
 
@@ -163,15 +163,15 @@ public:
     Inkscape::XML::Document const *getReprDoc() const { return rdoc; }
 
     /** A filename (not a URI yet), or NULL */
-    char const *getURI() const { return uri; }
-    void setUri(char const *uri);
+    char const *getDocumentURI() const { return document_uri; }
+    void setDocumentUri(char const *document_uri);
 
     /** To be used for resolving relative hrefs. */
-    char const *getBase() const { return base; };
-    void setBase( char const* base );
+    char const *getDocumentBase() const { return document_base; };
+    void setDocumentBase( char const* document_base );
 
     /** basename(uri) or other human-readable label for the document. */
-    char const* getName() const { return name; }
+    char const* getDocumentName() const { return document_name; }
 
     /** Return the main defs object for the document. */
     SPDefs *getDefs();

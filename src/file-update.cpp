@@ -253,7 +253,7 @@ bool sp_file_save_backup( Glib::ustring uri ) {
 void sp_file_convert_dpi(SPDocument *doc)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring uri = doc->getURI();
+    Glib::ustring uri = doc->getDocumentURI();
     SPRoot *root = doc->getRoot();
 
     // See if we need to offer the user a fix for the 90->96 px per inch change.
@@ -335,7 +335,7 @@ void sp_file_convert_dpi(SPDocument *doc)
             scale_dialog.set_border_width(10);
             scale_dialog.set_resizable(false);
             Gtk::Label explanation;
-            explanation.set_markup(Glib::ustring("<b>") + doc->getName() + "</b>\n" +
+            explanation.set_markup(Glib::ustring("<b>") + doc->getDocumentName() + "</b>\n" +
                                    _("was created in an older version of Inkscape (90 DPI) and we need "
                                      "to make it compatible with newer versions (96 DPI). Tell us about this file:\n"));
             explanation.set_line_wrap(true);

@@ -127,7 +127,7 @@ InkviewWindow::create_file_list(const std::vector<Glib::RefPtr<Gio::File > >& fi
 void
 InkviewWindow::update_title()
 {
-    Glib::ustring title(_documents[_index]->getName());
+    Glib::ustring title(_documents[_index]->getDocumentName());
 
     if (_documents.size() > 1) {
         title += Glib::ustring::compose("  (%1/%2)", _index+1, _documents.size());

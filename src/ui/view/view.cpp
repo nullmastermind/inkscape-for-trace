@@ -121,7 +121,7 @@ void View::setDocument(SPDocument *doc) {
         _doc->connectURISet(sigc::bind(sigc::ptr_fun(&_onDocumentURISet), this));
     _document_resized_connection = 
         _doc->connectResized(sigc::bind(sigc::ptr_fun(&_onDocumentResized), this));
-    _document_uri_set_signal.emit( _doc->getURI() );
+    _document_uri_set_signal.emit( _doc->getDocumentURI() );
 }
 
 }}}

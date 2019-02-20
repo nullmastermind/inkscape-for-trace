@@ -2041,7 +2041,7 @@ void OdfOutput::save(Inkscape::Extension::Output */*mod*/, SPDocument *doc, gcha
 {
     reset();
 
-    docBaseUri = Inkscape::URI::from_dirname(doc->getBase()).str();
+    docBaseUri = Inkscape::URI::from_dirname(doc->getDocumentBase()).str();
 
     ZipFile zf;
     preprocess(zf, doc->rroot);

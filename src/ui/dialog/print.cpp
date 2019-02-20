@@ -46,7 +46,7 @@ Print::Print(SPDocument *doc, SPItem *base) :
     _printop = Gtk::PrintOperation::create();
 
     // set up dialog title, based on document name
-    const Glib::ustring jobname = _doc->getName() ? _doc->getName() : _("SVG Document");
+    const Glib::ustring jobname = _doc->getDocumentName() ? _doc->getDocumentName() : _("SVG Document");
     Glib::ustring title = _("Print");
     title += " ";
     title += jobname;

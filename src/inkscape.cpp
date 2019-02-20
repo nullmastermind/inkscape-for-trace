@@ -695,7 +695,7 @@ Application::crash_handler (int /*signum*/)
 
             /* originally, the document name was retrieved from
              * the sodipod:docname attribute */
-            docname = doc->getName();
+            docname = doc->getDocumentName();
             if (docname) {
                 /* Removes an emergency save suffix if present: /(.*)\.[0-9_]*\.[0-9_]*\.[~\.]*$/\1/ */
                 const char* d0 = strrchr ((char*)docname, '.');
@@ -722,7 +722,7 @@ Application::crash_handler (int /*signum*/)
 
             // Find a location
             const char* locations[] = {
-                doc->getBase(),
+                doc->getDocumentBase(),
                 g_get_home_dir(),
                 g_get_tmp_dir(),
                 curdir,
@@ -746,7 +746,7 @@ Application::crash_handler (int /*signum*/)
                 savednames.push_back(g_strdup (c));
                 fclose (file);
             } else {
-                failednames.push_back((doc->getName()) ? g_strdup(doc->getName()) : g_strdup (_("Untitled document")));
+                failednames.push_back((doc->getDocumentName()) ? g_strdup(doc->getDocumentName()) : g_strdup (_("Untitled document")));
             }
             count++;
         }

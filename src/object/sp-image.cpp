@@ -345,7 +345,7 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
             }
             this->dpi = svgdpi;
             pixbuf = sp_image_repr_read_image(this->getRepr()->attribute("xlink:href"),
-                                              this->getRepr()->attribute("sodipodi:absref"), doc->getBase(), svgdpi);
+                                              this->getRepr()->attribute("sodipodi:absref"), doc->getDocumentBase(), svgdpi);
 
             if (pixbuf) {
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
@@ -557,7 +557,7 @@ gchar* SPImage::description() const {
             svgdpi = atof(this->getRepr()->attribute("inkscape:svg-dpi"));
         }
         pb = sp_image_repr_read_image(this->getRepr()->attribute("xlink:href"),
-                                      this->getRepr()->attribute("sodipodi:absref"), this->document->getBase(), svgdpi);
+                                      this->getRepr()->attribute("sodipodi:absref"), this->document->getDocumentBase(), svgdpi);
 
         if (pb) {
             ret = g_strdup_printf(_("%d &#215; %d: %s"),

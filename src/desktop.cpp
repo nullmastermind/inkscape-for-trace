@@ -522,7 +522,7 @@ void SPDesktop::_setDisplayMode(Inkscape::RenderMode mode) {
         _split_canvas = false;
     }
     redrawDesktop();
-    _widget->setTitle( this->getDocument()->getName() );
+    _widget->setTitle( this->getDocument()->getDocumentName() );
 }
 void SPDesktop::_setDisplayColorMode(Inkscape::ColorMode mode) {
     // reload grayscale matrix from prefs
@@ -543,7 +543,7 @@ void SPDesktop::_setDisplayColorMode(Inkscape::ColorMode mode) {
     canvas->_colorrendermode = mode;
     _display_color_mode = mode;
     redrawDesktop();
-    _widget->setTitle( this->getDocument()->getName() );
+    _widget->setTitle( this->getDocument()->getDocumentName() );
 }
 
 void SPDesktop::displayModeToggle() {

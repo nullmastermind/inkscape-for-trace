@@ -1271,7 +1271,7 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
             }
 
             if (SP_ACTIVE_DOCUMENT) {
-                _clipboardSPDoc->setBase(SP_ACTIVE_DOCUMENT->getBase());
+                _clipboardSPDoc->setDocumentBase(SP_ACTIVE_DOCUMENT->getDocumentBase());
             }
 
             (*out)->save(_clipboardSPDoc, filename, true);

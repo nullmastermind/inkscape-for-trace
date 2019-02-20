@@ -375,7 +375,7 @@ Glib::ustring sp_shortcut_get_file_path()
 
     if (open_path.empty()) {
         /* Grab document directory */
-        const gchar* docURI = SP_ACTIVE_DOCUMENT->getURI();
+        const gchar* docURI = SP_ACTIVE_DOCUMENT->getDocumentURI();
         if (docURI) {
             open_path = Glib::path_get_dirname(docURI);
             open_path.append(G_DIR_SEPARATOR_S);

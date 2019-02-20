@@ -3634,7 +3634,7 @@ void ObjectSet::createBitmapCopy()
 
     // Create the filename.
     gchar *const basename = g_strdup_printf("%s-%s-%u.png",
-                                            doc->getName(),
+                                            doc->getDocumentName(),
                                             items_[0]->getRepr()->attribute("id"),
                                             current);
     // Imagemagick is known not to handle spaces in filenames, so we replace anything but letters,
@@ -3643,8 +3643,8 @@ void ObjectSet::createBitmapCopy()
 
     // Build the complete path by adding document base dir, if set, otherwise home dir
     gchar *directory = nullptr;
-    if ( doc->getURI() ) {
-        directory = g_path_get_dirname( doc->getURI() );
+    if ( doc->getDocumentURI() ) {
+        directory = g_path_get_dirname( doc->getDocumentURI() );
     }
     if (directory == nullptr) {
         directory = Inkscape::IO::Resource::homedir_path(nullptr);

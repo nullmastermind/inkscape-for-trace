@@ -130,7 +130,7 @@ void URIReference::attach(const URI &uri)
 
     // The path contains references to separate document files to load.
     if (document && uri.getPath() && !skip) {
-        char const *base = document->getBase();
+        char const *base = document->getDocumentBase();
         auto absuri = URI::from_href_and_basedir(uri.str().c_str(), base);
         std::string path;
 

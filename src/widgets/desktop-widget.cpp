@@ -930,7 +930,7 @@ void SPDesktopWidget::updateNamedview()
     modified_connection = desktop->namedview->connectModified(sigc::mem_fun(*this, &SPDesktopWidget::namedviewModified));
     namedviewModified(desktop->namedview, SP_OBJECT_MODIFIED_FLAG);
 
-    updateTitle( desktop->doc()->getName() );
+    updateTitle( desktop->doc()->getDocumentName() );
 }
 
 /**
@@ -1094,7 +1094,7 @@ SPDesktopWidget::shutdown()
             Glib::ustring message = g_markup_printf_escaped(
                 _("<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before closing?</span>\n\n"
                   "If you close without saving, your changes will be discarded."),
-                doc->getName());
+                doc->getDocumentName());
             Gtk::MessageDialog dialog = Gtk::MessageDialog(*toplevel_window, message, true, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_NONE);
             dialog.property_destroy_with_parent() = true;
 
@@ -1141,7 +1141,7 @@ SPDesktopWidget::shutdown()
             Glib::ustring message = g_markup_printf_escaped(
                 _("<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a format that may cause data loss!</span>\n\n"
                   "Do you want to save this file as Inkscape SVG?"),
-                doc->getName() ? doc->getName() : "Unnamed");
+                doc->getDocumentName() ? doc->getDocumentName() : "Unnamed");
             Gtk::MessageDialog dialog = Gtk::MessageDialog(*toplevel_window, message, true, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_NONE);
             dialog.property_destroy_with_parent() = true;
 

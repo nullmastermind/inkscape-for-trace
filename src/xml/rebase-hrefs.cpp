@@ -136,7 +136,7 @@ void Inkscape::XML::rebase_hrefs(SPDocument *const doc, gchar const *const new_b
 {
     using Inkscape::URI;
 
-    std::string old_base_url_str = URI::from_dirname(doc->getBase()).str();
+    std::string old_base_url_str = URI::from_dirname(doc->getDocumentBase()).str();
     std::string new_base_url_str;
 
     if (new_base) {
@@ -206,7 +206,7 @@ void Inkscape::XML::rebase_hrefs(SPDocument *const doc, gchar const *const new_b
         ir->setAttribute("xlink:href", href_str);
     }
 
-    doc->setBase(new_base);
+    doc->setDocumentBase(new_base);
 }
 
 

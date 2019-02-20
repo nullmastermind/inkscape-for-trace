@@ -931,7 +931,7 @@ Svg::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
     }
 
     if (!sp_repr_save_rebased_file(rdoc, filename, SP_SVG_NS_URI,
-                                   doc->getBase(), //
+                                   doc->getDocumentBase(), //
                                    m_detachbase ? nullptr : filename)) {
         throw Inkscape::Extension::Output::save_failed();
     }

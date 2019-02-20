@@ -350,7 +350,7 @@ void ColorProfile::set(SPAttributeEnum key, gchar const *value) {
                         g_warning("this has no document.  using active");
                     }
                     //# 1.  Get complete URI of document
-                    gchar const *docbase = doc->getURI();
+                    gchar const *docbase = doc->getDocumentURI();
 
                     Inkscape::URI docUri("");
                     if (docbase) { // The file has already been saved

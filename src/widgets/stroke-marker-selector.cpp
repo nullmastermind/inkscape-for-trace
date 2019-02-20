@@ -408,7 +408,7 @@ void
 MarkerComboBox::update_marker_image(gchar const *mname)
 {
     gchar *cache_name = g_strconcat(combo_id, mname, NULL);
-    Glib::ustring key = svg_preview_cache.cache_key(doc->getURI(), cache_name, 24);
+    Glib::ustring key = svg_preview_cache.cache_key(doc->getDocumentURI(), cache_name, 24);
     g_free (cache_name);
     svg_preview_cache.remove_preview_from_cache(key);
 
@@ -519,7 +519,7 @@ MarkerComboBox::create_marker_image(unsigned psize, gchar const *mname,
 
     /* Update to renderable state */
     gchar *cache_name = g_strconcat(combo_id, mname, NULL);
-    Glib::ustring key = svg_preview_cache.cache_key(source->getURI(), cache_name, psize);
+    Glib::ustring key = svg_preview_cache.cache_key(source->getDocumentURI(), cache_name, psize);
     g_free (cache_name);
     GdkPixbuf *pixbuf = svg_preview_cache.get_preview_from_cache(key); // no ref created
 

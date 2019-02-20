@@ -823,8 +823,8 @@ void ContextMenu::ImageEdit()
 
         if (Glib::path_is_absolute(name)) {
             fullname = name;
-        } else if (SP_ACTIVE_DOCUMENT->getBase()) {
-            fullname = Glib::build_filename(SP_ACTIVE_DOCUMENT->getBase(), name);
+        } else if (SP_ACTIVE_DOCUMENT->getDocumentBase()) {
+            fullname = Glib::build_filename(SP_ACTIVE_DOCUMENT->getDocumentBase(), name);
         } else {
             fullname = Glib::build_filename(Glib::get_current_dir(), name);
         }

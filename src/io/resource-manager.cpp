@@ -232,7 +232,7 @@ std::vector<Glib::ustring> ResourceManagerImpl::findBrokenLinks( SPDocument *doc
                             uniques.insert(href);
                         }
                     } else {
-                        std::string combined = Glib::build_filename(doc->getBase(), uri);
+                        std::string combined = Glib::build_filename(doc->getDocumentBase(), uri);
                         if ( !Glib::file_test(combined, Glib::FILE_TEST_EXISTS) ) {
                             result.emplace_back(href);
                             uniques.insert(href);
@@ -328,7 +328,7 @@ bool ResourceManagerImpl::fixupBrokenLinks(SPDocument *doc)
     bool changed = false;
     if ( doc ) {
         // TODO debug g_message("FIXUP FIXUP FIXUP FIXUP FIXUP FIXUP FIXUP FIXUP FIXUP FIXUP");
-        // TODO debug g_message("      base is [%s]", doc->getBase());
+        // TODO debug g_message("      base is [%s]", doc->getDocumentBase());
 
         std::vector<Glib::ustring> brokenHrefs = findBrokenLinks(doc);
         if ( !brokenHrefs.empty() ) {
@@ -338,7 +338,7 @@ bool ResourceManagerImpl::fixupBrokenLinks(SPDocument *doc)
             }
         }
 
-        std::map<Glib::ustring, Glib::ustring> mapping = locateLinks(doc->getBase(), brokenHrefs);
+        std::map<Glib::ustring, Glib::ustring> mapping = locateLinks(doc->getDocumentBase(), brokenHrefs);
         for ( std::map<Glib::ustring, Glib::ustring>::iterator it = mapping.begin(); it != mapping.end(); ++it )
         {
             // TODO debug g_message("     [%s] ==> {%s}", it->first.c_str(), it->second.c_str());

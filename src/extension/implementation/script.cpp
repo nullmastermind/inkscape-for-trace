@@ -522,7 +522,7 @@ SPDocument *Script::open(Inkscape::Extension::Input *module,
     } // data_read
 
     if (mydoc != nullptr) {
-        mydoc->setBase(nullptr);
+        mydoc->setDocumentBase(nullptr);
         mydoc->changeUriAndHrefs(filenameArg);
     }
 

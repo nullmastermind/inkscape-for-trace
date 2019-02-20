@@ -441,10 +441,10 @@ void Export::setTargetDesktop(SPDesktop *desktop)
  */
 void Export::set_default_filename () {
 
-    if ( SP_ACTIVE_DOCUMENT && SP_ACTIVE_DOCUMENT->getURI() )
+    if ( SP_ACTIVE_DOCUMENT && SP_ACTIVE_DOCUMENT->getDocumentURI() )
     {
         SPDocument * doc = SP_ACTIVE_DOCUMENT;
-        const gchar *uri = doc->getURI();
+        const gchar *uri = doc->getDocumentURI();
         const gchar *text_extension = get_file_save_extension (Inkscape::Extension::FILE_SAVE_METHOD_SAVE_AS).c_str();
         Inkscape::Extension::Output * oextension = nullptr;
 
@@ -561,7 +561,7 @@ Glib::ustring Export::create_filepath_from_id (Glib::ustring id, const Glib::ust
 
     if (directory.empty()) {
         /* Grab document directory */
-        const gchar* docURI = SP_ACTIVE_DOCUMENT->getURI();
+        const gchar* docURI = SP_ACTIVE_DOCUMENT->getDocumentURI();
         if (docURI) {
             directory = Glib::path_get_dirname(docURI);
         }
@@ -952,8 +952,8 @@ Glib::ustring Export::absolutize_path_from_document_location (SPDocument *doc, c
 {
     Glib::ustring path;
     //Make relative paths go from the document location, if possible:
-    if (!Glib::path_is_absolute(filename) && doc->getURI()) {
-        Glib::ustring dirname = Glib::path_get_dirname(doc->getURI());
+    if (!Glib::path_is_absolute(filename) && doc->getDocumentURI()) {
+        Glib::ustring dirname = Glib::path_get_dirname(doc->getDocumentURI());
         if (!dirname.empty()) {
             path = Glib::build_filename(dirname, filename);
         }
@@ -1236,7 +1236,7 @@ void Export::onExport ()
                 Inkscape::XML::Node * repr = *i;
                 const gchar * temp_string;
                 Glib::ustring dir = Glib::path_get_dirname(filename.c_str());
-                const gchar* docURI=SP_ACTIVE_DOCUMENT->getURI();
+                const gchar* docURI=SP_ACTIVE_DOCUMENT->getDocumentURI();
                 Glib::ustring docdir;
                 if (docURI)
                 {

@@ -192,14 +192,14 @@ import_style_cb (CRDocHandler *a_handler,
         std::cerr << "import_style_cb: No document style sheet!" << std::endl;
         return;
     }
-    if (!document->getURI()) {
+    if (!document->getDocumentURI()) {
         std::cerr << "import_style_cb: Document URI is NULL" << std::endl;
         return;
     }
 
     // Get file
     Glib::ustring import_file =
-        Inkscape::IO::Resource::get_filename (document->getURI(), a_uri->stryng->str);
+        Inkscape::IO::Resource::get_filename (document->getDocumentURI(), a_uri->stryng->str);
 
     // Parse file
     CRStyleSheet *stylesheet = cr_stylesheet_new (nullptr);
@@ -332,7 +332,7 @@ end_font_face_cb(CRDocHandler *a_handler)
         std::cerr << "end_font_face_cb: No document!" << std::endl;
         return;
     }
-    if (!document->getURI()) {
+    if (!document->getDocumentURI()) {
         std::cerr << "end_font_face_cb: Document URI is NULL" << std::endl;
         return;
     }
@@ -357,7 +357,7 @@ end_font_face_cb(CRDocHandler *a_handler)
 
                     // Get file
                     Glib::ustring ttf_file =
-                        Inkscape::IO::Resource::get_filename (document->getURI(), value);
+                        Inkscape::IO::Resource::get_filename (document->getDocumentURI(), value);
 
                     if (!ttf_file.empty()) {
                         font_factory *factory = font_factory::Default();
