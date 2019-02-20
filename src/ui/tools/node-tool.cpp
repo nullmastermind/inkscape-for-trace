@@ -221,8 +221,9 @@ void NodeTool::setup() {
             sigc::mem_fun(this, &NodeTool::handleControlUiStyleChange)
     );
     this->helperpath_tmpitem = nullptr;
-    this->_selected_nodes = new Inkscape::UI::ControlPointSelection(this->desktop, this->_transform_handle_group);
-
+    if (this->_transform_handle_group) {
+        this->_selected_nodes = new Inkscape::UI::ControlPointSelection(this->desktop, this->_transform_handle_group);
+    }
     data.node_data.selection = this->_selected_nodes;
 
     this->_multipath = new Inkscape::UI::MultiPathManipulator(data, this->_selection_changed_connection);
