@@ -16,7 +16,7 @@
  */
 
 #ifndef __SVG_PREVIEW_H__
-#define __SVG_PREIVEW_H__
+#define __SVG_PREVIEW_H__
 
 //Gtk includes
 #include <gtkmm.h>
