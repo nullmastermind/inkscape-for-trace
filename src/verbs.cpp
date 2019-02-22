@@ -1407,7 +1407,7 @@ void LayerVerb::perform(SPAction *action, void *data)
         case SP_VERB_LAYER_DUPLICATE: {
             if ( dt->currentLayer() != dt->currentRoot() ) {
 
-                dt->selection->duplicate(true,true);
+                dt->selection->duplicate(true, true);
 
                 DocumentUndo::done(dt->getDocument(), SP_VERB_LAYER_DUPLICATE,
                                    _("Duplicate layer"));
@@ -1422,23 +1422,37 @@ void LayerVerb::perform(SPAction *action, void *data)
         case SP_VERB_LAYER_DELETE: {
             if ( dt->currentLayer() != dt->currentRoot() ) {
                 dt->getSelection()->clear();
-                SPObject *old_layer=dt->currentLayer();
+                SPObject *old_layer = dt->currentLayer();
+                SPObject *old_parent = old_layer->parent;
+                SPObject *old_parent_parent = (old_parent != nullptr) ? old_parent->parent : nullptr;
 
-                SPObject *survivor=Inkscape::next_layer(dt->currentRoot(), old_layer);
-                if (!survivor) {
-                    survivor = Inkscape::previous_layer(dt->currentRoot(), old_layer);
+                SPObject *survivor = Inkscape::previous_layer(dt->currentRoot(), old_layer);
+                if (survivor != nullptr && survivor->parent == old_layer) {
+                    while (survivor != nullptr &&
+                           survivor->parent != old_parent &&
+                           survivor->parent != old_parent_parent)
+                    {
+                        survivor = Inkscape::previous_layer(dt->currentRoot(), survivor);
+                    }
                 }
 
-                if (survivor == old_layer->lastChild()) {
-                    //oops: layer_fns messed up. BADLY.
-		    survivor = nullptr;
-	       	}
+                if (survivor == nullptr || (survivor->parent != old_parent && survivor->parent != old_layer)) {
+                    survivor = Inkscape::next_layer(dt->currentRoot(), old_layer);
+                    while (survivor != nullptr &&
+                           survivor != old_parent &&
+                           survivor->parent != old_parent)
+                    {
+                        survivor = Inkscape::next_layer(dt->currentRoot(), survivor);
+                    }
+                }
+
                 // Deleting the old layer before switching layers is a hack to trigger the
                 // listeners of the deletion event (as happens when old_layer is deleted using the
                 // xml editor).  See
                 // http://sourceforge.net/tracker/index.php?func=detail&aid=1339397&group_id=93438&atid=604306
                 //
                 old_layer->deleteObject();
+
                 if (survivor) {
                     dt->setCurrentLayer(survivor);
                 }
