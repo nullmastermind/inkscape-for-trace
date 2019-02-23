@@ -921,9 +921,9 @@ gboolean
 document_interface_save (DocumentInterface *doc_interface, GError **error)
 {
     SPDocument * doc = doc_interface->target.getDocument();
-    printf("1:  %s\n2:  %s\n3:  %s\n", doc->getURI(), doc->getBase(), doc->getName());
-    if (doc->getURI())
-      return document_interface_save_as (doc_interface, doc->getURI(), error);
+    printf("1:  %s\n2:  %s\n3:  %s\n", doc->getDocumentURI(), doc->getDocumentBase(), doc->getDocumentName());
+    if (doc->getDocumentURI())
+      return document_interface_save_as (doc_interface, doc->getDocumentURI(), error);
     return FALSE;
 }
 
