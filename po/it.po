@@ -15272,9 +15272,8 @@ msgstr "Nascondi gli oggetti selezionati"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:114
-#, fuzzy
 msgid "Unhide Objects Below"
-msgstr "Mostra oggetti"
+msgstr "Mostra oggetti sottostanti"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:122
@@ -15283,9 +15282,8 @@ msgstr "Blocca gli oggetti selezionati"
 
 #. insert(*mi,positionOfLastDialog++);
 #: ../src/ui/contextmenu.cpp:130
-#, fuzzy
 msgid "Unlock Objects Below"
-msgstr "Sblocca oggetti"
+msgstr "Blocca oggetti sottostanti"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
 #: ../src/ui/contextmenu.cpp:154
@@ -22556,9 +22554,8 @@ msgid "Edit"
 msgstr "Modifica"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1905
-#, fuzzy
 msgid "Automatically reload images"
-msgstr "Ricarica automaticamente bitmap"
+msgstr "Ricarica automaticamente immagini"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1907
 msgid "Automatically reload linked images when file is changed on disk"
@@ -22570,9 +22567,8 @@ msgid "_Bitmap editor:"
 msgstr "Editor _bitmap:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1911
-#, fuzzy
 msgid "_SVG editor:"
-msgstr "Editor _bitmap:"
+msgstr "Editor _SVG:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1913
 #: ../share/extensions/guillotine.inx.h:5 ../share/extensions/plotter.inx.h:72
@@ -22678,9 +22674,8 @@ msgstr ""
 "di un riquadro rosso con una x. Utile per la vettorizzazione manuale."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1964
-#, fuzzy
 msgid "Imported Images"
-msgstr "Incorpora immagini"
+msgstr "Immagini importate"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1976
 msgid ""
@@ -22828,103 +22823,88 @@ msgid "System info"
 msgstr "Informazione sistema"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2394
-#, fuzzy
 msgid "Reset Preferences"
-msgstr "Preferenze testo"
+msgstr "Reimposta preferenze"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2397
 msgid "User preferences: "
-msgstr "Preferenze utente: "
+msgstr "Preferenze: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2398
-#, fuzzy
 msgid "Location of the user’s preferences file"
-msgstr "Locazione del file di preferenze dell'utente"
+msgstr "Locazione del file delle preferenze"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2400
-#, fuzzy
 msgid "Open preferences folder"
-msgstr "Apre le preferenze per lo strumento «Nodo»"
+msgstr "Apre la locazione delle preferenze"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2401
 msgid "User config: "
-msgstr "Configurazione utente:"
+msgstr "Configurazione: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2401
 msgid "Location of users configuration"
-msgstr "Locazione della configurazione utente"
+msgstr "Locazione della configurazione"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2404
-#, fuzzy
 msgid "Open extensions folder"
-msgstr "Estensioni utente: "
+msgstr "Apre la locazione delle estensioni"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2405
 msgid "User extensions: "
-msgstr "Estensioni utente: "
+msgstr "Estensioni: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2406
-#, fuzzy
 msgid "Location of the user’s extensions"
-msgstr "Locazione delle estensioni dell'utente"
+msgstr "Locazione delle estensioni"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2408
 msgid "Open themes folder"
-msgstr ""
+msgstr "Apre la locazione dei temi"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2409
-#, fuzzy
 msgid "User themes: "
-msgstr "Cache utente: "
+msgstr "Temi: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2409
-#, fuzzy
 msgid "Location of the user’s themes"
-msgstr "Locazione delle estensioni dell'utente"
+msgstr "Locazione dei temi"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2412
 msgid "Open icons folder"
-msgstr ""
+msgstr "Apre la locazione delle icone"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2413
-#, fuzzy
 msgid "User icons: "
-msgstr "Configurazione utente:"
+msgstr "Icone: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2413
-#, fuzzy
 msgid "Location of the user’s icons"
-msgstr "Locazione delle estensioni dell'utente"
+msgstr "Locazione delle icone"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2416
-#, fuzzy
 msgid "Open templates folder"
-msgstr "nessun modello selezionato"
+msgstr "Apre la locazione dei modelli"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2417
-#, fuzzy
 msgid "User templates: "
-msgstr "_Modelli..."
+msgstr "Modelli: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2418
-#, fuzzy
 msgid "Location of the user’s templates"
-msgstr "Locazione delle estensioni dell'utente"
+msgstr "Locazione dei modelli"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2421
-#, fuzzy
 msgid "Open symbols folder"
-msgstr "Nessun oggetto trovato"
+msgstr "Apre la locazione dei simboli"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2422
-#, fuzzy
 msgid "User symbols: "
-msgstr "Simboli Khmer"
+msgstr "Simboli: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2422
-#, fuzzy
 msgid "Location of the user’s symbols"
-msgstr "Locazione delle estensioni dell'utente"
+msgstr "Locazione dei simboli"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2426
 #, fuzzy
@@ -22947,14 +22927,13 @@ msgid "Open keyboard shortcuts folder"
 msgstr "Importa scorciatoie da tastiera personalizzate da un file"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2432
-#, fuzzy
 msgid "User keys: "
-msgstr "Cache utente: "
+msgstr "Scorciatoie: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2433
 #, fuzzy
 msgid "Location of the user’s keyboard mapping files"
-msgstr "Locazione del file di preferenze dell'utente"
+msgstr "Locazione dei file di mappatura delle scorciatoie da tastiera"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2436
 msgid "Open user interface folder"
@@ -22972,12 +22951,11 @@ msgstr "Locazione del file di preferenze dell'utente"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2442
 msgid "User cache: "
-msgstr "Cache utente: "
+msgstr "Cache: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2442
-#, fuzzy
 msgid "Location of user’s cache"
-msgstr "Locazione della cache dell'utente"
+msgstr "Locazione della cache"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2450
 msgid "Temporary files: "
