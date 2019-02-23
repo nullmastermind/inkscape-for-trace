@@ -2728,12 +2728,13 @@ void SPCanvas::setBackgroundColor(guint32 rgba) {
     addIdle();
 }
 
-void SPCanvas::setBackgroundCheckerboard() {
+void SPCanvas::setBackgroundCheckerboard(guint32 rgba)
+{
     if (_background_is_checkerboard) return;
     if (_background) {
         cairo_pattern_destroy(_background);
     }
-    _background = ink_cairo_pattern_create_checkerboard();
+    _background = ink_cairo_pattern_create_checkerboard(rgba);
     _background_is_checkerboard = true;
     dirtyAll();
     addIdle();

@@ -91,7 +91,7 @@ struct SPCanvas {
     SPCanvasGroup *getRoot();
 
     void setBackgroundColor(guint32 rgba);
-    void setBackgroundCheckerboard();
+    void setBackgroundCheckerboard(guint32 rgba = 0xC4C4C4FF);
 
     /// Returns new canvas as widget.
     static GtkWidget *createAA();

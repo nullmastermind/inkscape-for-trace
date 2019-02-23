@@ -173,7 +173,7 @@ double srgb_to_linear( const double c );
 int ink_cairo_surface_srgb_to_linear(cairo_surface_t *surface);
 int ink_cairo_surface_linear_to_srgb(cairo_surface_t *surface);
 
-cairo_pattern_t *ink_cairo_pattern_create_checkerboard();
+cairo_pattern_t *ink_cairo_pattern_create_checkerboard(guint32 rgba = 0xC4C4C4FF);
 
 GdkPixbuf *ink_pixbuf_create_from_cairo_surface(cairo_surface_t *s);
 void convert_pixels_pixbuf_to_argb32(guchar *data, int w, int h, int rs);

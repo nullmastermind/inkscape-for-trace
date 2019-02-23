@@ -1280,18 +1280,29 @@ int ink_cairo_surface_linear_to_srgb(cairo_surface_t *surface)
 }
 
 cairo_pattern_t *
-ink_cairo_pattern_create_checkerboard()
+ink_cairo_pattern_create_checkerboard(guint32 rgba)
 {
     int const w = 6;
     int const h = 6;
+
+    double r = SP_RGBA32_R_F(rgba);
+    double g = SP_RGBA32_G_F(rgba);
+    double b = SP_RGBA32_B_F(rgba);
+
+    float hsl[3];
+    SPColor::rgb_to_hsl_floatv(hsl, r, g, b);    
+    hsl[2] += hsl[2] < 0.08 ? 0.08 : -0.08; // 0.08 = 0.77-0.69, the original checkerboard colors.
+
+    float rgb2[3];
+    SPColor::hsl_to_rgb_floatv(rgb2, hsl[0], hsl[1], hsl[2]);
 
     cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 2*w, 2*h);
 
     cairo_t *ct = cairo_create(s);
     cairo_set_operator(ct, CAIRO_OPERATOR_SOURCE);
-    cairo_set_source_rgb(ct, 0.77, 0.77, 0.77);
+    cairo_set_source_rgb(ct, r, g, b);
     cairo_paint(ct);
-    cairo_set_source_rgb(ct, 0.69, 0.69, 0.69);
+    cairo_set_source_rgb(ct, rgb2[0], rgb2[1], rgb2[2]);
     cairo_rectangle(ct, 0, 0, w, h);
     cairo_rectangle(ct, w, h, w, h);
     cairo_fill(ct);

@@ -1874,7 +1874,7 @@ static void _namedview_modified (SPObject *obj, guint flags, SPDesktop *desktop)
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         if (nv->pagecheckerboard) {
-            desktop->canvas->setBackgroundCheckerboard();
+            desktop->canvas->setBackgroundCheckerboard(nv->pagecolor);
         } else {
             desktop->canvas->setBackgroundColor(nv->pagecolor);
         }
