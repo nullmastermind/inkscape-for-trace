@@ -29,7 +29,7 @@
 #include "selcue.h"
 
 #include "object/sp-item.h"
-
+#include "display/guideline.h"
 
 class  SPKnot;
 class  SPDesktop;
@@ -63,6 +63,7 @@ public:
     void scale(Geom::Point &pt, unsigned int state);
     void skew(SPSelTransHandle const &handle, Geom::Point &pt, unsigned int state);
     void rotate(Geom::Point &pt, unsigned int state);
+    void align(guint state, SPSelTransHandle const &handle);
     int request(SPSelTransHandle const &handle, Geom::Point &pt, unsigned int state);
     int scaleRequest(Geom::Point &pt, unsigned int state);
     int stretchRequest(SPSelTransHandle const &handle, Geom::Point &pt, unsigned int state);
@@ -124,7 +125,8 @@ private:
 
     enum State {
         STATE_SCALE, //scale or stretch
-        STATE_ROTATE //rotate or skew
+        STATE_ROTATE, //rotate or skew
+        STATE_ALIGN //on canvas align
     };
 
     SPDesktop *_desktop;

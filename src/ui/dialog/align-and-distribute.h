@@ -199,7 +199,7 @@ private :
     guint _index;
     AlignAndDistribute &_dialog;
 
-    static const Coeffs _allCoeffs[11];
+    static const Coeffs _allCoeffs[19];
 
 };
 

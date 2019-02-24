@@ -41,6 +41,9 @@
 #include "display/snap-indicator.h"
 #include "display/sodipodi-ctrl.h"
 #include "display/sp-ctrlline.h"
+#include "display/guideline.h"
+
+#include "helper/action.h"
 
 #include "object/sp-item-transform.h"
 #include "object/sp-namedview.h"
@@ -222,6 +225,8 @@ void Inkscape::SelTrans::increaseState()
 {
     if (_state == STATE_SCALE) {
         _state = STATE_ROTATE;
+    } else if (_state == STATE_ROTATE) {
+        _state = STATE_ALIGN;
     } else {
         _state = STATE_SCALE;
     }
@@ -603,6 +608,8 @@ void Inkscape::SelTrans::_updateHandles()
     if ( _state == STATE_SCALE ) {
         _showHandles(HANDLE_STRETCH);
         _showHandles(HANDLE_SCALE);
+    } else if(_state == STATE_ALIGN) {
+       _showHandles(HANDLE_ALIGN);
     } else {
         _showHandles(HANDLE_SKEW);
         _showHandles(HANDLE_ROTATE);
@@ -666,8 +673,9 @@ void Inkscape::SelTrans::_makeHandles()
         knots[i]->setSize(13);
         knots[i]->setAnchor(hands[i].anchor);
         knots[i]->setMode(SP_CTRL_MODE_XOR);
-        knots[i]->setFill(info.color[0], info.color[1], info.color[2],info.color[1]);
+        knots[i]->setFill(info.color[0], info.color[1], info.color[2], info.color[1]);
         knots[i]->setStroke(info.color[3], info.color[4], info.color[5], info.color[4]);
+
         knots[i]->setPixbuf(handles[hands[i].control]);
         knots[i]->updateCtrl();
 
@@ -733,6 +741,8 @@ void Inkscape::SelTrans::handleClick(SPKnot */*knot*/, guint state, SPSelTransHa
                                    _("Reset center"));
             }
             break;
+        case HANDLE_ALIGN:
+            align(state, handle);
         default:
             break;
     }
@@ -792,6 +802,8 @@ void Inkscape::SelTrans::handleNewEvent(SPKnot *knot, Geom::Point *position, gui
             break;
         case HANDLE_CENTER:
             setCenter(*position);
+            break;
+        case HANDLE_ALIGN:
             break;
     }
 }
@@ -1094,6 +1106,8 @@ gboolean Inkscape::SelTrans::request(SPSelTransHandle const &handle, Geom::Point
             return rotateRequest(pt, state);
         case HANDLE_CENTER:
             return centerRequest(pt, state);
+        case HANDLE_ALIGN:
+            break; // Do nothing, no dragging
     }
     return FALSE;
 }
@@ -1327,6 +1341,32 @@ gboolean Inkscape::SelTrans::centerRequest(Geom::Point &pt, guint state)
     _message_context.setF(Inkscape::NORMAL_MESSAGE, _("Move <b>center</b> to %s, %s"),
             xs.c_str(), ys.c_str());
     return TRUE;
+}
+
+void Inkscape::SelTrans::align(guint state, SPSelTransHandle const &handle)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool sel_as_group = prefs->getBool("/dialogs/align/sel-as-groups");
+    int align_to = prefs->getInt("/dialogs/align/align-to", 6);
+
+    int verb_id = -1;
+    if (state & GDK_SHIFT_MASK) {
+        verb_id = AlignVerb[handle.control + AlignHandleToVerb + AlignShiftVerb];
+    } else {
+        verb_id = AlignVerb[handle.control + AlignHandleToVerb];
+    }
+    if(verb_id >= 0) {
+        prefs->setBool("/dialogs/align/sel-as-groups", (state & GDK_CONTROL_MASK) != 0);
+        prefs->setInt("/dialogs/align/align-to", 6);
+        Inkscape::Verb *verb = Inkscape::Verb::get( verb_id );
+        g_assert( verb != NULL );
+        SPAction *action = verb->get_action((Inkscape::UI::View::View *) this->_desktop);
+        sp_action_perform (action, NULL);
+    }
+
+    // Set the special align point and settings back to nothing so we don't interfere
+    prefs->setBool("/dialogs/align/sel-as-groups", sel_as_group);
+    prefs->setInt("/dialogs/align/align-to", align_to);
 }
 
 /*

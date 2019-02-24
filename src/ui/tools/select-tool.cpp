@@ -59,7 +59,7 @@
 
 using Inkscape::DocumentUndo;
 
-GdkPixbuf *handles[13];
+GdkPixbuf *handles[23];
 
 namespace Inkscape {
 namespace UI {
@@ -112,6 +112,9 @@ SelectTool::SelectTool()
     sp_load_handles(4, 4, handle_rotate_xpm);
     sp_load_handles(8, 4, handle_skew_xpm);
     sp_load_handles(12, 1, handle_center_xpm);
+    sp_load_handles(13, 4, handle_align_xpm);
+    sp_load_handles(17, 1, handle_align_center_xpm);
+    sp_load_handles(18, 4, handle_align_corner_xpm);
 }
 
 //static gint xp = 0, yp = 0; // where drag started

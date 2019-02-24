@@ -17,6 +17,7 @@
 #include <gdk/gdk.h>
 
 #include "enums.h"
+#include "verbs.h"
 
 typedef unsigned int guint32;
 
@@ -24,23 +25,53 @@ namespace Inkscape {
     class SelTrans;
 }
 
-guint32 const DEF_COLOR[] = { 0xff, 0xff6600, 0xff6600, 0xff, 0xff, 0xff };
-guint32 const CEN_COLOR[] = { 0x0, 0x0, 0x0, 0xff, 0xff0000b0, 0xff0000b0 };
+// Colours are RRGGBBAA:      FILL,       OVER&DRAG,  STROKE,     OVER&DRAG
+guint32 const DEF_COLOR[] = { 0x000000ff, 0x00ff6600, 0x000000ff, 0x000000ff };
+guint32 const CEN_COLOR[] = { 0x00000000, 0x00000000, 0x000000ff, 0xff0000b0 };
 
 enum SPSelTransType {
     HANDLE_STRETCH,
     HANDLE_SCALE,
     HANDLE_SKEW,
     HANDLE_ROTATE,
-    HANDLE_CENTER
+    HANDLE_CENTER,
+    HANDLE_ALIGN
 };
+
+// Which handle does what in the alignment (clicking)
+const int AlignVerb[18] = {
+    // Left Click
+    SP_VERB_ALIGN_VERTICAL_TOP,
+    SP_VERB_ALIGN_HORIZONTAL_RIGHT,
+    SP_VERB_ALIGN_VERTICAL_BOTTOM,
+    SP_VERB_ALIGN_HORIZONTAL_LEFT,
+    SP_VERB_ALIGN_VERTICAL_CENTER,
+    SP_VERB_ALIGN_BOTH_BOTTOM_LEFT,
+    SP_VERB_ALIGN_BOTH_BOTTOM_RIGHT,
+    SP_VERB_ALIGN_BOTH_TOP_RIGHT,
+    SP_VERB_ALIGN_BOTH_TOP_LEFT,
+    // Shift Click
+    SP_VERB_ALIGN_VERTICAL_BOTTOM_TO_ANCHOR,
+    SP_VERB_ALIGN_HORIZONTAL_LEFT_TO_ANCHOR,
+    SP_VERB_ALIGN_VERTICAL_TOP_TO_ANCHOR,
+    SP_VERB_ALIGN_HORIZONTAL_RIGHT_TO_ANCHOR,
+    SP_VERB_ALIGN_HORIZONTAL_CENTER,
+    SP_VERB_ALIGN_BOTH_TOP_RIGHT_TO_ANCHOR,
+    SP_VERB_ALIGN_BOTH_TOP_LEFT_TO_ANCHOR,
+    SP_VERB_ALIGN_BOTH_BOTTOM_LEFT_TO_ANCHOR,
+    SP_VERB_ALIGN_BOTH_BOTTOM_RIGHT_TO_ANCHOR,
+};
+// Ofset from the index in the handle list to the index in the verb list.
+const int AlignHandleToVerb = -13;
+// Offset for moving from Left click to Shift Click
+const int AlignShiftVerb = 9;
 
 struct SPSelTransTypeInfo {
         guint32 const *color;
         char const *tip;
 };
 // One per handle type in order
-extern SPSelTransTypeInfo const handtypes[5];
+extern SPSelTransTypeInfo const handtypes[6];
 
 struct SPSelTransHandle;
 
@@ -52,8 +83,8 @@ struct SPSelTransHandle {
 	gdouble x, y;
 };
 // These are 4 * each handle type + 1 for center
-int const NUMHANDS = 17;
-extern SPSelTransHandle const hands[17];
+int const NUMHANDS = 26;
+extern SPSelTransHandle const hands[NUMHANDS];
 
 #endif // SEEN_SP_SELTRANS_HANDLES_H
 

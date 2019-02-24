@@ -106,7 +106,7 @@ void ActionAlign::do_node_action(Inkscape::UI::Tools::NodeTool *nt, int verb)
             prefs->setInt("/dialogs/align/align-nodes-to", MIN_NODE );
             nt->_multipath->alignNodes(Geom::X);
             break;
-        case SP_VERB_ALIGN_VERTICAL_HORIZONTAL_CENTER:
+        case SP_VERB_ALIGN_BOTH_CENTER:
             nt->_multipath->alignNodes(Geom::X);
             nt->_multipath->alignNodes(Geom::Y);
             break;
@@ -162,6 +162,7 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
 
     if(focus)
         b = focus->desktopPreferredBounds();
+
     g_return_if_fail(b);
 
     if (horiz == Selection::HORIZONTAL && desktop->is_yaxisdown()) {
@@ -213,7 +214,7 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
 }
 
 
-ActionAlign::Coeffs const ActionAlign::_allCoeffs[11] = {
+ActionAlign::Coeffs const ActionAlign::_allCoeffs[19] = {
     {1., 0., 0., 0., 0., 1., 0., 0., SP_VERB_ALIGN_HORIZONTAL_RIGHT_TO_ANCHOR},
     {1., 0., 0., 0., 1., 0., 0., 0., SP_VERB_ALIGN_HORIZONTAL_LEFT},
     {.5, .5, 0., 0., .5, .5, 0., 0., SP_VERB_ALIGN_HORIZONTAL_CENTER},
@@ -224,7 +225,15 @@ ActionAlign::Coeffs const ActionAlign::_allCoeffs[11] = {
     {0., 0., .5, .5, 0., 0., .5, .5, SP_VERB_ALIGN_VERTICAL_CENTER},
     {0., 0., 1., 0., 0., 0., 1., 0., SP_VERB_ALIGN_VERTICAL_BOTTOM},
     {0., 0., 1., 0., 0., 0., 0., 1., SP_VERB_ALIGN_VERTICAL_TOP_TO_ANCHOR},
-    {.5, .5, .5, .5, .5, .5, .5, .5, SP_VERB_ALIGN_VERTICAL_HORIZONTAL_CENTER}
+    {1., 0., 0., 1., 1., 0., 0., 1., SP_VERB_ALIGN_BOTH_TOP_LEFT},
+    {0., 1., 0., 1., 0., 1., 0., 1., SP_VERB_ALIGN_BOTH_TOP_RIGHT},
+    {0., 1., 1., 0., 0., 1., 1., 0., SP_VERB_ALIGN_BOTH_BOTTOM_RIGHT},
+    {1., 0., 1., 0., 1., 0., 1., 0., SP_VERB_ALIGN_BOTH_BOTTOM_LEFT},
+    {0., 1., 1., 0., 1., 0., 0., 1., SP_VERB_ALIGN_BOTH_TOP_LEFT_TO_ANCHOR},
+    {1., 0., 1., 0., 0., 1., 0., 1., SP_VERB_ALIGN_BOTH_TOP_RIGHT_TO_ANCHOR},
+    {1., 0., 0., 1., 0., 1., 1., 0., SP_VERB_ALIGN_BOTH_BOTTOM_RIGHT_TO_ANCHOR},
+    {0., 1., 0., 1., 1., 0., 1., 0., SP_VERB_ALIGN_BOTH_BOTTOM_LEFT_TO_ANCHOR},
+    {.5, .5, .5, .5, .5, .5, .5, .5, SP_VERB_ALIGN_BOTH_CENTER}
 };
 
 void ActionAlign::do_verb_action(SPDesktop *desktop, int verb)

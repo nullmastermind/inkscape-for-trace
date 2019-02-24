@@ -1817,7 +1817,15 @@ void ContextVerb::perform(SPAction *action, void *data)
         case SP_VERB_ALIGN_VERTICAL_CENTER:
         case SP_VERB_ALIGN_VERTICAL_BOTTOM:
         case SP_VERB_ALIGN_VERTICAL_TOP_TO_ANCHOR:
-        case SP_VERB_ALIGN_VERTICAL_HORIZONTAL_CENTER:
+        case SP_VERB_ALIGN_BOTH_TOP_LEFT:
+        case SP_VERB_ALIGN_BOTH_TOP_RIGHT:
+        case SP_VERB_ALIGN_BOTH_BOTTOM_RIGHT:
+        case SP_VERB_ALIGN_BOTH_BOTTOM_LEFT:
+        case SP_VERB_ALIGN_BOTH_TOP_LEFT_TO_ANCHOR:
+        case SP_VERB_ALIGN_BOTH_TOP_RIGHT_TO_ANCHOR:
+        case SP_VERB_ALIGN_BOTH_BOTTOM_RIGHT_TO_ANCHOR:
+        case SP_VERB_ALIGN_BOTH_BOTTOM_LEFT_TO_ANCHOR:
+        case SP_VERB_ALIGN_BOTH_CENTER:
             ActionAlign::do_verb_action(dt, verb);
             break;
 
@@ -3221,8 +3229,40 @@ Verb *Verb::_base_verbs[] = {
     new ContextVerb(SP_VERB_ALIGN_VERTICAL_TOP_TO_ANCHOR, "AlignVerticalTopToAnchor",
                     N_("Align top edges of objects to the bottom edge of the anchor"),
                     N_("Align top edges of objects to the bottom edge of the anchor"),
+                    INKSCAPE_ICON("align-vertical-top")),
+    new ContextVerb(SP_VERB_ALIGN_BOTH_TOP_LEFT, "AlignBothTopLeft",
+                    N_("Align edges of objects to the top-left corner of the anchor"),
+                    N_("Align edges of objects to the top-left corner of the anchor"),
                     INKSCAPE_ICON("align-vertical-top-to-anchor")),
-    new ContextVerb(SP_VERB_ALIGN_VERTICAL_HORIZONTAL_CENTER, "AlignVerticalHorizontalCenter",
+    new ContextVerb(SP_VERB_ALIGN_BOTH_TOP_RIGHT, "AlignBothTopRight",
+                    N_("Align edges of objects to the top-right corner of the anchor"),
+                    N_("Align edges of objects to the top-right corner of the anchor"),
+                    INKSCAPE_ICON("align-vertical-top-to-anchor")),
+    new ContextVerb(SP_VERB_ALIGN_BOTH_BOTTOM_RIGHT, "AlignBothBottomRight",
+                    N_("Align edges of objects to the bottom-right corner of the anchor"),
+                    N_("Align edges of objects to the bottom-right corner of the anchor"),
+                    INKSCAPE_ICON("align-vertical-bottom-to-anchor")),
+    new ContextVerb(SP_VERB_ALIGN_BOTH_BOTTOM_LEFT, "AlignBothBottomLeft",
+                    N_("Align edges of objects to the bottom-left corner of the anchor"),
+                    N_("Align edges of objects to the bottom-left corner of the anchor"),
+                    INKSCAPE_ICON("align-vertical-bottom-to-anchor")),
+    new ContextVerb(SP_VERB_ALIGN_BOTH_TOP_LEFT_TO_ANCHOR, "AlignBothTopLeftToAnchor",
+                    N_("Align edges of objects to the top-left corner of the anchor"),
+                    N_("Align edges of objects to the top-left corner of the anchor"),
+                    INKSCAPE_ICON("align-vertical-top-to-anchor")),
+    new ContextVerb(SP_VERB_ALIGN_BOTH_TOP_RIGHT_TO_ANCHOR, "AlignBothTopRightToAnchor",
+                    N_("Align edges of objects to the top-right corner of the anchor"),
+                    N_("Align edges of objects to the top-right corner of the anchor"),
+                    INKSCAPE_ICON("align-vertical-top-to-anchor")),
+    new ContextVerb(SP_VERB_ALIGN_BOTH_BOTTOM_RIGHT_TO_ANCHOR, "AlignBothBottomRightToAnchor",
+                    N_("Align edges of objects to the bottom-right corner of the anchor"),
+                    N_("Align edges of objects to the bottom-right corner of the anchor"),
+                    INKSCAPE_ICON("align-vertical-bottom-to-anchor")),
+    new ContextVerb(SP_VERB_ALIGN_BOTH_BOTTOM_LEFT_TO_ANCHOR, "AlignBothBottomLeftToAnchor",
+                    N_("Align edges of objects to the bottom-left corner of the anchor"),
+                    N_("Align edges of objects to the bottom-left corner of the anchor"),
+                    INKSCAPE_ICON("align-vertical-bottom-to-anchor")),
+    new ContextVerb(SP_VERB_ALIGN_BOTH_CENTER, "AlignVerticalHorizontalCenter",
                     N_("Center on horizontal and vertical axis"), N_("Center on horizontal and vertical axis"),
                     INKSCAPE_ICON("align-vertical-center")),
 
