@@ -35,7 +35,8 @@ enum SPSelTransType {
     HANDLE_SKEW,
     HANDLE_ROTATE,
     HANDLE_CENTER,
-    HANDLE_ALIGN
+    HANDLE_ALIGN,
+    HANDLE_CENTER_ALIGN
 };
 
 // Which handle does what in the alignment (clicking)
@@ -71,7 +72,7 @@ struct SPSelTransTypeInfo {
         char const *tip;
 };
 // One per handle type in order
-extern SPSelTransTypeInfo const handtypes[6];
+extern SPSelTransTypeInfo const handtypes[7];
 
 struct SPSelTransHandle;
 

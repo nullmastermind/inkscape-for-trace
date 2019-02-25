@@ -613,6 +613,7 @@ void Inkscape::SelTrans::_updateHandles()
         _showHandles(HANDLE_SCALE);
     } else if(_state == STATE_ALIGN) {
        _showHandles(HANDLE_ALIGN);
+       _showHandles(HANDLE_CENTER_ALIGN);
     } else {
         _showHandles(HANDLE_SKEW);
         _showHandles(HANDLE_ROTATE);
@@ -745,6 +746,7 @@ void Inkscape::SelTrans::handleClick(SPKnot */*knot*/, guint state, SPSelTransHa
             }
             break;
         case HANDLE_ALIGN:
+        case HANDLE_CENTER_ALIGN:
             align(state, handle);
         default:
             break;
@@ -807,6 +809,7 @@ void Inkscape::SelTrans::handleNewEvent(SPKnot *knot, Geom::Point *position, gui
             setCenter(*position);
             break;
         case HANDLE_ALIGN:
+        case HANDLE_CENTER_ALIGN:
             break;
     }
 }
@@ -1110,6 +1113,7 @@ gboolean Inkscape::SelTrans::request(SPSelTransHandle const &handle, Geom::Point
         case HANDLE_CENTER:
             return centerRequest(pt, state);
         case HANDLE_ALIGN:
+        case HANDLE_CENTER_ALIGN:
             break; // Do nothing, no dragging
     }
     return FALSE;
