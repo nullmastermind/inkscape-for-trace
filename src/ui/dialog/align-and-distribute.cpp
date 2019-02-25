@@ -938,8 +938,7 @@ AlignAndDistribute::AlignAndDistribute()
       _removeOverlapTable(),
       _nodesTable(),
       _anchorLabel(_("Relative to: ")),
-      _anchorLabelNode(_("Relative to: ")),
-      _selgrpLabel(_("_Treat selection as group: "), true)
+      _anchorLabelNode(_("Relative to: "))
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -1085,17 +1084,30 @@ AlignAndDistribute::AlignAndDistribute()
     _comboNode.set_active(prefs->getInt("/dialogs/align/align-nodes-to", 2));
     _comboNode.signal_changed().connect(sigc::mem_fun(*this, &AlignAndDistribute::on_node_ref_change));
 
+    Gtk::Image* selgrp_icon = Gtk::manage(new Gtk::Image());
+    selgrp_icon = sp_get_icon_image("align-sel-as-group", Gtk::ICON_SIZE_LARGE_TOOLBAR);
+    _selgrp.add(*selgrp_icon);
+
+    _selgrp.set_active(prefs->getBool("/dialogs/align/sel-as-groups"));
+    _selgrp.set_relief(Gtk::RELIEF_NONE);
+    _selgrp.set_tooltip_text(_("Treat selection as group"));
+    _selgrp.signal_toggled().connect(sigc::mem_fun(*this, &AlignAndDistribute::on_selgrp_toggled));
+    _anchorBox.pack_end(_selgrp, false, false);
     _anchorBox.pack_end(_combo, false, false);
     _anchorBox.pack_end(_anchorLabel, false, false);
 
     _anchorBoxNode.pack_end(_comboNode, false, false);
     _anchorBoxNode.pack_end(_anchorLabelNode, false, false);
 
-    _selgrpLabel.set_mnemonic_widget(_selgrp);
-    _selgrpBox.pack_end(_selgrp, false, false);
-    _selgrpBox.pack_end(_selgrpLabel, false, false);
-    _selgrp.set_active(prefs->getBool("/dialogs/align/sel-as-groups"));
-    _selgrp.signal_toggled().connect(sigc::mem_fun(*this, &AlignAndDistribute::on_selgrp_toggled));
+    Gtk::Image* oncanvas_icon = Gtk::manage(new Gtk::Image());
+    oncanvas_icon = sp_get_icon_image("align-on-canvas", Gtk::ICON_SIZE_LARGE_TOOLBAR);
+    _oncanvas.add(*oncanvas_icon);
+
+    _oncanvas.set_relief(Gtk::RELIEF_NONE);
+    _oncanvas.set_tooltip_text(_("Enable on-canvas alignment handles."));
+    _anchorBox.pack_start(_oncanvas, false, false);
+    _oncanvas.set_active(prefs->getBool("/dialogs/align/oncanvas"));
+    _oncanvas.signal_toggled().connect(sigc::mem_fun(*this, &AlignAndDistribute::on_oncanvas_toggled));
 
     // Right align the buttons
     _alignTableBox.pack_end(_alignTable, false, false);
@@ -1186,8 +1198,12 @@ void AlignAndDistribute::on_selgrp_toggled(){
     //Make blink the master
 }
 
+void AlignAndDistribute::on_oncanvas_toggled(){
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setInt("/dialogs/align/oncanvas", _oncanvas.get_active());
 
-
+    //Make blink the master
+}
 
 void AlignAndDistribute::setMode(bool nodeEdit)
 {

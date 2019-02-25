@@ -223,9 +223,12 @@ void Inkscape::SelTrans::resetState()
 
 void Inkscape::SelTrans::increaseState()
 {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool show_align = prefs->getBool("/dialogs/align/oncanvas", false);
+        
     if (_state == STATE_SCALE) {
         _state = STATE_ROTATE;
-    } else if (_state == STATE_ROTATE) {
+    } else if (_state == STATE_ROTATE && show_align) {
         _state = STATE_ALIGN;
     } else {
         _state = STATE_SCALE;
