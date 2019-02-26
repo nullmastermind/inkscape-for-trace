@@ -60,12 +60,15 @@ FontSelector::FontSelector (bool with_size, bool with_variations)
     style_treecolumn.pack_start (style_cell, false);
     style_treecolumn.add_attribute (style_cell, "text", 0);
     style_treecolumn.set_cell_data_func (style_cell, sigc::mem_fun(*this, &FontSelector::style_cell_data_func));
+    style_treecolumn.set_max_width (200);
     style_treecolumn.set_title ("Face");
 
     style_treeview.set_model (font_lister->get_style_list());
-    style_treeview.set_name ("FontSelector: Style");
+    style_treeview.set_name ("FontSelectorStyle");
     style_treeview.append_column ("CSS", font_lister->FontStyleList.cssStyle);
     style_treeview.append_column (style_treecolumn);
+
+    style_treeview.get_column(0)->set_max_width (200);
 
     style_scroll.set_policy (Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
     style_scroll.add (style_treeview);
@@ -74,7 +77,7 @@ FontSelector::FontSelector (bool with_size, bool with_variations)
     style_frame.add (style_scroll);
 
     // Size
-    size_combobox.set_name ("FontSelector: Size");
+    size_combobox.set_name ("FontSelectorSize");
     set_sizes();
     size_combobox.set_active_text( "18" );
 
@@ -82,7 +85,7 @@ FontSelector::FontSelector (bool with_size, bool with_variations)
     // Do nothing.
 
     // Grid
-    set_name ("FontSelector: Grid");
+    set_name ("FontSelectorGrid");
     attach (family_frame,  0, 0, 1, 2);
     attach (style_frame,   1, 0, 2, 1);
     if (with_size) { // Glyph panel does not use size.
