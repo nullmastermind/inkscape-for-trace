@@ -168,12 +168,18 @@ if(WIN32)
     PATTERN "fonts.conf" EXCLUDE)
   install(FILES ${MINGW_PATH}/share/fontconfig/conf.avail/70-no-bitmaps.conf
     DESTINATION etc/fonts/conf.d)
-  # adjust fonts.conf to store font cache in AppData
-  set(cachedir_default "\\t^<cachedir^>/var/cache/fontconfig^</cachedir^>") # the '^' are needed to escape angle brackets on Windows command shell
-  set(cachedir_appdata "\\t^<cachedir^>LOCAL_APPDATA_FONTCONFIG_CACHE^</cachedir^>")
+  # adjust fonts.conf
+  #   - add "%localappdata%\Microsoft\Windows\Fonts" as font dir
+  #     which is the default path for fonts installed per-user in Windows 10 (version 1809)
+  #   - store font cache in non-temporary directory in "%localappdata%\fontconfig\cache" 
+  set(fontdir_default    "\\t^<dir^>WINDOWSFONTDIR^</dir^>")  # the '^' are needed to escape angle brackets on Windows command shell
+  set(fontdir_additional "\\t^<dir^>~/AppData/Local/Microsoft/Windows/Fonts^</dir^>")
+  set(cachedir_default   "\\t^<cachedir^>/var/cache/fontconfig^</cachedir^>")
+  set(cachedir_appdata   "\\t^<cachedir^>LOCAL_APPDATA_FONTCONFIG_CACHE^</cachedir^>")
   add_custom_command(
     OUTPUT ${CMAKE_BINARY_DIR}/etc/fonts/fonts.conf
-    COMMAND sed 's!${cachedir_default}!${cachedir_appdata}\\n${cachedir_default}!' ${MINGW_PATH}/etc/fonts/fonts.conf  > ${CMAKE_BINARY_DIR}/etc/fonts/fonts.conf
+    COMMAND sed 's!${fontdir_default}!${fontdir_default}\\n${fontdir_additional}!' ${MINGW_PATH}/etc/fonts/fonts.conf |
+            sed 's!${cachedir_default}!${cachedir_appdata}\\n${cachedir_default}!' > ${CMAKE_BINARY_DIR}/etc/fonts/fonts.conf
     MAIN_DEPENDENCY ${MINGW_PATH}/etc/fonts/fonts.conf
   )
   add_custom_target(fonts_conf ALL DEPENDS ${CMAKE_BINARY_DIR}/etc/fonts/fonts.conf)
