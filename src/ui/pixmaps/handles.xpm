@@ -1,4 +1,4 @@
-/* XPM North-West */
+/* XPM */
 static char const *handle_scale_xpm[] = {
 "13 13 3 1",
 " 	c None",
@@ -18,7 +18,7 @@ static char const *handle_scale_xpm[] = {
 "     ....... ",
 "             "};
 
-/* XPM Vertical */
+/* XPM */
 static char const *handle_stretch_xpm[] = {
 "13 13 3 1",
 " 	c None",
@@ -38,7 +38,7 @@ static char const *handle_stretch_xpm[] = {
 "             ",
 "             "};
 
-/* XPM North-West */
+/* XPM */
 static char const *handle_rotate_xpm[] = {
 "13 13 3 1",
 " 	c None",
@@ -58,7 +58,7 @@ static char const *handle_rotate_xpm[] = {
 "   ...       ",
 "    .        "};
 
-/* XPM North */
+/* XPM */
 static char const *handle_skew_xpm[] = {
 "13 13 3 1",
 " 	c None",
@@ -101,11 +101,9 @@ static char const *handle_center_xpm[] = {
 /* XPM */
 static char const *handle_align_xpm[] = {
 "13 13 3 1",
-"      c None",
-".     c #000000",
-"+     c #FFFFFF",
-"             ",
-"             ",
+" 	c None",
+".	c #000000",
+"+	c #FFFFFF",
 "             ",
 "             ",
 "             ",
@@ -114,47 +112,48 @@ static char const *handle_align_xpm[] = {
 "   .+++++.   ",
 "    .+++.    ",
 "     .+.     ",
-"      +      ",
-" ........... ",
+"      .      ",
+".............",
+".+++++++++++.",
+".............",
 "             "};
 
 /* XPM */
 static char const *handle_align_center_xpm[] = {
 "13 13 3 1",
-"      c None",
-".     c #000000",
-"+     c #FFFFFF",
-"  .........  ",
-"   .+++++.   ",
-".   .+++.   .",
-"..   .+.   ..",
-".+.   .   .+.",
-".++.  .  .++.",
-".+++.....+++.",
-".++.  .  .++.",
-".+.   .   .+.",
-"..   .+.   ..",
-".   .+++.   .",
-"   .+++++.   ",
-"  .........  "};
+" 	c None",
+".	c #000000",
+"+	c #FFFFFF",
+".............",
+".+++++++++++.",
+".+.........+.",
+".+.   +   .+.",
+".+.   +   .+.",
+".+.   +   .+.",
+".+.+++++++.+.",
+".+.   +   .+.",
+".+.   +   .+.",
+".+.   +   .+.",
+".+.........+.",
+".+++++++++++.",
+"............."};
 
 /* XPM */
 static char const *handle_align_corner_xpm[] = {
 "13 13 3 1",
-"      c None",
-".     c #000000",
-"+     c #FFFFFF",
-"             ",
-"             ",
-"       .   . ",
-"      ..   . ",
-"     .+.   . ",
-"    .++.   . ",
-"   .+++.   . ",
-"  ......   . ",
-"        .  . ",
-"         . . ",
-"          .. ",
-" ........... ",
-"             "};
-
+" 	c None",
+".	c #000000",
+"+	c #FFFFFF",
+"       .     ",
+"      ..  ...",
+"     .+.  .+.",
+"    .++.  .+.",
+"   .+++.  .+.",
+"  .++++.  .+.",
+" .+++++.  .+.",
+"........  .+.",
+"          .+.",
+"          .+.",
+" ..........+.",
+" .++++++++++.",
+" ............"};
