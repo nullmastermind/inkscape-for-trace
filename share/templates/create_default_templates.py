@@ -29,8 +29,8 @@ binary_dir = sys.argv[2]
 gmofiles = glob.glob(binary_dir + '/po/*.gmo')
 
 languages = gmofiles
-languages = [language.split('/')[-1] for language in languages]  # split filename from path
-languages = [language.split('.')[-2] for language in languages]  # split extension
+languages = [os.path.basename(language) for language in languages]  # split filename from path
+languages = [os.path.splitext(language)[0] for language in languages]  # split extension
 
 
 # process each language sequentially
