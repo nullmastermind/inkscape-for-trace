@@ -64,18 +64,18 @@ public:
     void _nodeAdded(   Inkscape::XML::Node &repr );
     void _nodeRemoved( Inkscape::XML::Node &repr );
     void _nodeChanged( Inkscape::XML::Node &repr );
-
     // Data structure
+    enum coltype {OBJECT,SELECTOR,UNHANDLED};
     class ModelColumns : public Gtk::TreeModel::ColumnRecord {
     public:
         ModelColumns() {
             add(_colSelector);
-            add(_colIsSelector);
+            add(_colType);
             add(_colObj);
             add(_colProperties);
         }
         Gtk::TreeModelColumn<Glib::ustring> _colSelector;       // Selector or matching object id.
-        Gtk::TreeModelColumn<bool> _colIsSelector;              // Selector row or child object row.
+        Gtk::TreeModelColumn<gint> _colType;               // Selector row or child object row.
         Gtk::TreeModelColumn<std::vector<SPObject *> > _colObj; // List of matching objects.
         Gtk::TreeModelColumn<Glib::ustring> _colProperties;     // List of properties.
     };
@@ -133,6 +133,7 @@ public:
 
     // Variables
     bool _updating;  // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
+    bool _block_drag;
     Inkscape::XML::Node *_textNode; // Track so we know when to add a NodeObserver.
 
     // Signals and handlers - External

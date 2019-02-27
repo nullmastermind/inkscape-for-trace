@@ -98,6 +98,7 @@ CssDialog::CssDialog()
     }
 
     Gtk::CellRendererText *renderer = Gtk::manage(new Gtk::CellRendererText());
+    _treeView.set_reorderable(false);
     renderer->property_editable() = true;
     int nameColNum = _treeView.append_column("Property", *renderer) - 1;
     _propCol = _treeView.get_column(nameColNum);
