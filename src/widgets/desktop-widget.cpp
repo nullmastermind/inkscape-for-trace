@@ -486,8 +486,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     gtk_widget_set_can_focus (GTK_WIDGET (dtw->_canvas), TRUE);
 
-    sp_ruler_add_track_widget (SP_RULER(dtw->_hruler->gobj()), GTK_WIDGET(dtw->_canvas));
-    sp_ruler_add_track_widget (SP_RULER(dtw->_vruler->gobj()), GTK_WIDGET(dtw->_canvas));
+    sp_ruler_add_track_widget(SP_RULER(dtw->_hruler->gobj()), GTK_WIDGET(dtw->_canvas));
+    sp_ruler_add_track_widget(SP_RULER(dtw->_vruler->gobj()), GTK_WIDGET(dtw->_canvas));
     auto css_provider  = gtk_css_provider_new();
     auto style_context = gtk_widget_get_style_context(GTK_WIDGET(dtw->_canvas));
 
@@ -531,7 +531,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     } else {
         dtw->_canvas_tbl->set_hexpand(true);
         dtw->_canvas_tbl->set_vexpand(true);
-        gtk_grid_attach(GTK_GRID(tbl_wrapper), GTK_WIDGET (dtw->_canvas_tbl->gobj()), 1, 1, 1, 1);
+        tbl_wrapper->attach(*(dtw->_canvas_tbl), 1, 1, 1, 1);
     }
 
     // connect scrollbar signals
@@ -745,6 +745,10 @@ SPDesktopWidget::dispose(GObject *object)
         dtw->desktop->destroy();
         Inkscape::GC::release (dtw->desktop);
         dtw->desktop = nullptr;
+        
+        // Rulers
+        sp_ruler_remove_track_widget(SP_RULER(dtw->_hruler->gobj()), GTK_WIDGET(dtw->_canvas));
+        sp_ruler_remove_track_widget(SP_RULER(dtw->_vruler->gobj()), GTK_WIDGET(dtw->_canvas));
     }
 
     dtw->modified_connection.~connection();

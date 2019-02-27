@@ -276,20 +276,23 @@ sp_ruler_init (SPRuler *ruler)
 static void
 sp_ruler_dispose (GObject *object)
 {
-  SPRuler        *ruler = SP_RULER (object);
-  SPRulerPrivate *priv  = SP_RULER_GET_PRIVATE (ruler);
+    SPRuler        *ruler = SP_RULER(object);
+    SPRulerPrivate *priv  = SP_RULER_GET_PRIVATE(ruler);
 
-  for (auto i:*(priv->track_widgets))
-    sp_ruler_remove_track_widget (ruler, i);
+    if (ruler == nullptr || priv == nullptr || priv->track_widgets == nullptr) { return; }
 
-  if (priv->pos_redraw_idle_id)
-    {
-      g_source_remove (priv->pos_redraw_idle_id);
-      priv->pos_redraw_idle_id = 0;
+    while (!priv->track_widgets->empty()) {
+        sp_ruler_remove_track_widget(ruler, *(priv->track_widgets->begin()));
     }
-  delete priv->track_widgets;
 
-  G_OBJECT_CLASS (parent_class)->dispose (object);
+    if (priv->pos_redraw_idle_id) {
+        g_source_remove(priv->pos_redraw_idle_id);
+        priv->pos_redraw_idle_id = 0;
+    }
+    delete priv->track_widgets;
+    priv->track_widgets = nullptr;
+
+    G_OBJECT_CLASS (parent_class)->dispose(object);
 }
 
 
@@ -861,8 +864,8 @@ sp_ruler_event_to_widget_coords (GtkWidget *widget,
 
 static gboolean
 sp_ruler_track_widget_motion_notify (GtkWidget      *widget,
-		                     GdkEventMotion *mevent,
-				     SPRuler        *ruler)
+                                     GdkEventMotion *mevent,
+                                     SPRuler        *ruler)
 {
   gint widget_x;
   gint widget_y;
@@ -919,25 +922,23 @@ sp_ruler_add_track_widget (SPRuler   *ruler,
  */
 void
 sp_ruler_remove_track_widget (SPRuler   *ruler,
-		              GtkWidget *widget)
+                              GtkWidget *widget)
 {
-  SPRulerPrivate *priv;
-
   g_return_if_fail (SP_IS_RULER   (ruler));
   g_return_if_fail (GTK_IS_WIDGET (ruler));
 
-  priv = SP_RULER_GET_PRIVATE (ruler);
+  SPRulerPrivate *priv = SP_RULER_GET_PRIVATE (ruler);
 
-  g_return_if_fail (priv->track_widgets->find(widget)!=priv->track_widgets->end());
+  g_return_if_fail(priv->track_widgets->find(widget)!=priv->track_widgets->end());
+  
+  g_signal_handlers_disconnect_by_func (widget,
+                                        (gpointer) G_CALLBACK (sp_ruler_track_widget_motion_notify),
+                                        ruler);
+  g_signal_handlers_disconnect_by_func (widget,
+                                        (gpointer) G_CALLBACK (sp_ruler_remove_track_widget),
+                                        ruler);
 
   priv->track_widgets->erase(widget);
-
-  g_signal_handlers_disconnect_by_func (widget,
-		                        (gpointer) G_CALLBACK (sp_ruler_track_widget_motion_notify),
-					ruler);
-  g_signal_handlers_disconnect_by_func (widget,
-		                        (gpointer) G_CALLBACK (sp_ruler_remove_track_widget),
-					ruler);
 }
 
 /**
