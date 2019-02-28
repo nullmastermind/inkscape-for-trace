@@ -315,7 +315,7 @@ bool DropperTool::root_handler(GdkEvent* event) {
                 } else {
                     if (prefs->getBool("/tools/dropper/onetimepick", false)) {
                         // "One time" pick from Fill/Stroke dialog stroke page, always apply fill or stroke (ignore <Shift> key)
-                        //fill = (prefs->getInt("/dialogs/fillstroke/page", 0) == 0)  ? true : false;
+                        stroke = (prefs->getInt("/dialogs/fillstroke/page", 0) == 0) ? false : true;
                     }
                 }
 
