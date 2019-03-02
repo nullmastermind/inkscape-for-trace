@@ -113,11 +113,6 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
             _minpressure->set_tooltip_text(_("Min percent of pressure"));
             _minpressure->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
             _minpressure_adj->signal_value_changed().connect(sigc::mem_fun(*this, &PencilToolbar::minpressure_value_changed));
-            if (prefs->getInt("/tools/freehand/pencil/freehand-mode", 0) == 3) {
-                _minpressure->set_visible(true);
-            } else {
-                _minpressure->set_visible(false);
-            }
         }
         /* max pressure */
         {
@@ -127,11 +122,6 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
             _maxpressure->set_tooltip_text(_("Max percent of pressure"));
             _maxpressure->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
             _maxpressure_adj->signal_value_changed().connect(sigc::mem_fun(*this, &PencilToolbar::maxpressure_value_changed));
-            if (prefs->getInt("/tools/freehand/pencil/freehand-mode", 0) == 3) {
-                _maxpressure->set_visible(true);
-            } else {
-                _maxpressure->set_visible(false);
-            }
         }
 
         /* Use pressure */
@@ -139,19 +129,16 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
             _pressure_item = add_toggle_button(_("Use pressure input"),
                                                _("Use pressure input"));
             _pressure_item->set_icon_name(INKSCAPE_ICON("draw-use-pressure"));
-            bool pressure = prefs->getBool(freehand_tool_name() + "/pressure", false);
+            bool oldPressureMode = prefs->getIntLimited("/tools/freehand/pencil/freehand-mode", 0, 0, 3) == 3;
+            bool pressure = prefs->getBool(freehand_tool_name() + "/pressure", oldPressureMode);
+            if (oldPressureMode && pressure) {
+                prefs->setBool(freehand_tool_name() + "/pressure", true);
+            }
             _pressure_item->set_active(pressure);
             _pressure_item->signal_toggled().connect(sigc::mem_fun(*this, &PencilToolbar::use_pencil_pressure));
 
             add(*_minpressure);
             add(*_maxpressure);
-            if (pressure) {
-                _minpressure->set_visible(true);
-                _maxpressure->set_visible(true);
-            } else {
-                _minpressure->set_visible(false);
-                _maxpressure->set_visible(false);
-            }
         }
 
         add(* Gtk::manage(new Gtk::SeparatorToolItem()));
@@ -178,13 +165,9 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
             _simplify->set_icon_name(INKSCAPE_ICON("interactive_simplify"));
             _simplify->set_active(prefs->getInt("/tools/freehand/pencil/simplify", 0));
             _simplify->signal_toggled().connect(sigc::mem_fun(*this, &PencilToolbar::simplify_lpe));
-            guint freehandMode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
-            if (freehandMode == 2) {
-                _simplify->set_visible(false);
-            } else {
-                _simplify->set_visible(true);
-            }
+
         }
+
         /* LPE simplify flatten */
         {
             _flatten_simplify = Gtk::manage(new Gtk::ToolButton(_("LPE simplify flatten")));
@@ -192,12 +175,6 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
             _flatten_simplify->set_icon_name(INKSCAPE_ICON("flatten"));
             _flatten_simplify->signal_clicked().connect(sigc::mem_fun(*this, &PencilToolbar::simplify_flatten));
             add(*_flatten_simplify);
-            guint freehandMode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
-            if (freehandMode == 2 || !prefs->getInt("/tools/freehand/pencil/simplify", 0)) {
-                _flatten_simplify->set_visible(false);
-            } else {
-                _flatten_simplify->set_visible(true);
-            }
         }
 
         add(* Gtk::manage(new Gtk::SeparatorToolItem()));
@@ -207,6 +184,35 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
     add_advanced_shape_options(pencil_mode);
 
     show_all();
+
+    // Elements must be hidden after show_all() is called
+    guint freehandMode = prefs->getInt(( pencil_mode ?
+                                         "/tools/freehand/pencil/freehand-mode" :
+                                         "/tools/freehand/pen/freehand-mode" ), 0);
+    if (freehandMode != 1 && freehandMode != 2) {
+        _flatten_spiro_bspline->set_visible(false);
+    }
+
+    if (pencil_mode) {
+        /* Pressure */
+        if (!prefs->getBool(freehand_tool_name() + "/pressure", false)) {
+            _minpressure->set_visible(false);
+            _maxpressure->set_visible(false);
+        }
+
+        /* LPE simplify based tolerance */
+        if (freehandMode == 2) {
+            _simplify->set_visible(false);
+        }
+
+        /* LPE simplify flatten */
+        if (freehandMode == 2 || !prefs->getInt("/tools/freehand/pencil/simplify", 0)) {
+            _flatten_simplify->set_visible(false);
+        }
+
+        /* Advanced shape options */
+        _shape_item->set_visible(!prefs->getBool("/tools/freehand/pencil/pressure", false));
+    }
 }
 
 GtkWidget *
@@ -302,9 +308,6 @@ PencilToolbar::add_freehand_mode_toggle(bool tool_is_pencil)
     }
 
     auto prefs = Inkscape::Preferences::get();
-    guint freehandMode = prefs->getInt(( tool_is_pencil ?
-                                         "/tools/freehand/pencil/freehand-mode" :
-                                         "/tools/freehand/pen/freehand-mode" ), 0);
 
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 
@@ -315,13 +318,12 @@ PencilToolbar::add_freehand_mode_toggle(bool tool_is_pencil)
     _flatten_spiro_bspline->signal_clicked().connect(sigc::mem_fun(*this, &PencilToolbar::flatten_spiro_bspline));
     add(*_flatten_spiro_bspline);
 
+    guint freehandMode = prefs->getInt(( tool_is_pencil ?
+                                         "/tools/freehand/pencil/freehand-mode" :
+                                         "/tools/freehand/pen/freehand-mode" ), 0);
+    // freehandMode range is (0,5] for the pen tool, (0,3] for the pencil tool
+    // freehandMode = 3 is an old way of signifying pressure, set it to 0.
     _mode_buttons[(freehandMode < _mode_buttons.size()) ? freehandMode : 0]->set_active();
-
-    if (freehandMode == 1 || freehandMode == 2) {
-        _flatten_spiro_bspline->set_visible(true);
-    } else {
-        _flatten_spiro_bspline->set_visible(false);
-    }
 }
 
 void
@@ -390,7 +392,6 @@ PencilToolbar::add_advanced_shape_options(bool tool_is_pencil)
         _("Last applied")
     };
 
-
     for (auto item:freehand_shape_dropdown_items_list) {
         _shape_combo->append(item);
     }
@@ -402,10 +403,6 @@ PencilToolbar::add_advanced_shape_options(bool tool_is_pencil)
     _shape_combo->set_active( shape );
 
     hbox->add(*_shape_combo);
-
-    bool hide = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0) == 3 ||
-        (tool_is_pencil && prefs->getBool("/tools/freehand/pencil/pressure", false));
-    _shape_item->set_visible( !hide );
 
     _shape_combo->signal_changed().connect(sigc::mem_fun(*this, &PencilToolbar::change_shape));
 

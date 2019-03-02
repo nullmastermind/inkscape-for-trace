@@ -355,8 +355,8 @@ SprayToolbar::SprayToolbar(SPDesktop *desktop) :
     
     gint mode = prefs->getInt("/tools/spray/mode", 1);
     _mode_buttons[mode]->set_active();
-    init();
     show_all();
+    init();
 }
 
 GtkWidget *

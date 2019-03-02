@@ -202,7 +202,8 @@ bool PencilTool::_handleButtonPress(GdkEventButton const &bevent) {
         pencil_drag_origin_w = Geom::Point(bevent.x,bevent.y);
         pencil_within_tolerance = true;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        tablet_enabled = prefs->getBool("/tools/freehand/pencil/pressure", false);
+        tablet_enabled = prefs->getBool("/tools/freehand/pencil/pressure", false) ||
+                         prefs->getInt("/tools/freehand/pencil/freehand-mode", 0) == 3;
         switch (this->_state) {
             case SP_PENCIL_CONTEXT_ADDLINE:
                 /* Current segment will be finished with release */

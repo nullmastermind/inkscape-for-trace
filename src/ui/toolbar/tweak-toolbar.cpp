@@ -189,10 +189,6 @@ TweakToolbar::TweakToolbar(SPDesktop *desktop)
         _fidelity_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _fidelity_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TweakToolbar::fidelity_value_changed));
         add(*_fidelity_item);
-        _fidelity_item->set_visible(true);
-        if (mode == Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT || mode == Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {
-            _fidelity_item->set_visible(false);
-        }
     }
 
     add(* Gtk::manage(new Gtk::SeparatorToolItem()));
@@ -201,9 +197,6 @@ TweakToolbar::TweakToolbar(SPDesktop *desktop)
         _channels_label = Gtk::manage(new UI::Widget::LabelToolItem(_("Channels:")));
         _channels_label->set_use_markup(true);
         add(*_channels_label);
-        if (mode != Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT && mode != Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {
-            _channels_label->set_visible(false);
-        }
     }
 
     {
@@ -212,9 +205,6 @@ TweakToolbar::TweakToolbar(SPDesktop *desktop)
                                       _("In color mode, act on object's hue"));
         _doh_item->signal_toggled().connect(sigc::mem_fun(*this, &TweakToolbar::toggle_doh));
         _doh_item->set_active(prefs->getBool("/tools/tweak/doh", true));
-        if (mode != Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT && mode != Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {
-            _doh_item->set_visible(false);
-        }
     }
     {
         //TRANSLATORS:  "S" here stands for saturation
@@ -222,9 +212,6 @@ TweakToolbar::TweakToolbar(SPDesktop *desktop)
                                       _("In color mode, act on object's saturation"));
         _dos_item->signal_toggled().connect(sigc::mem_fun(*this, &TweakToolbar::toggle_dos));
         _dos_item->set_active(prefs->getBool("/tools/tweak/dos", true));
-        if (mode != Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT && mode != Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {
-            _dos_item->set_visible(false);
-        }
     }
     {
         //TRANSLATORS:  "S" here stands for saturation
@@ -232,9 +219,6 @@ TweakToolbar::TweakToolbar(SPDesktop *desktop)
                                       _("In color mode, act on object's lightness"));
         _dol_item->signal_toggled().connect(sigc::mem_fun(*this, &TweakToolbar::toggle_dol));
         _dol_item->set_active(prefs->getBool("/tools/tweak/dol", true));
-        if (mode != Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT && mode != Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {
-            _dol_item->set_visible(false);
-        }
     }
     {
         //TRANSLATORS:  "O" here stands for opacity
@@ -242,13 +226,21 @@ TweakToolbar::TweakToolbar(SPDesktop *desktop)
                                       _("In color mode, act on object's opacity"));
         _doo_item->signal_toggled().connect(sigc::mem_fun(*this, &TweakToolbar::toggle_doo));
         _doo_item->set_active(prefs->getBool("/tools/tweak/doo", true));
-        if (mode != Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT && mode != Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {
-            _doo_item->set_visible(false);
-        }
     }
 
     _mode_buttons[mode]->set_active();
     show_all();
+
+    // Elements must be hidden after show_all() is called
+    if (mode == Inkscape::UI::Tools::TWEAK_MODE_COLORPAINT || mode == Inkscape::UI::Tools::TWEAK_MODE_COLORJITTER) {
+        _fidelity_item->set_visible(false);
+    } else {
+        _channels_label->set_visible(false);
+        _doh_item->set_visible(false);
+        _dos_item->set_visible(false);
+        _dol_item->set_visible(false);
+        _doo_item->set_visible(false);
+    }
 }
 
 GtkWidget *

@@ -129,12 +129,6 @@ StarToolbar::StarToolbar(SPDesktop *desktop) :
         _spoke_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _spoke_adj->signal_value_changed().connect(sigc::mem_fun(*this, &StarToolbar::proportion_value_changed));
 
-        if ( !isFlatSided ) {
-            _spoke_item->set_visible(true);
-        } else {
-            _spoke_item->set_visible(false);
-        }
-
         add(*_spoke_item);
     }
 
@@ -184,6 +178,7 @@ StarToolbar::StarToolbar(SPDesktop *desktop) :
     desktop->connectEventContextChanged(sigc::mem_fun(*this, &StarToolbar::watch_ec));
 
     show_all();
+    _spoke_item->set_visible(!isFlatSided);
 }
 
 StarToolbar::~StarToolbar()
