@@ -192,28 +192,18 @@ clangtidy:linux:
     - schedules
     - branches@inkscape/inkscape
   script:
-    - mkdir -p build && cd build
-    - cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX:PATH=$PWD/install_dir/ -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
     - git fetch https://gitlab.com/inkscape/inkscape.git
     # "borrow" a 2geom file to dump header includes
-    - git diff FETCH_HEAD --name-only | grep '^src/.*\.h$' || true | sed 's/^src/#include"../;s/$/"/' | tee ../src/2geom/geom.cpp
+    - git diff FETCH_HEAD --name-only | (grep '^src/.*\.h$' || true) | sed 's/^src/#include"../;s/$/"/' | tee src/2geom/geom.cpp
     - git diff FETCH_HEAD --name-only | grep '^src/.*\.cpp$' | tee clang_tidy_files
-    - run-clang-tidy -fix -header-filter='.*' $(cat clang_tidy_files) > /dev/null
-    # revert all fixes in protected directories
-    - git checkout ../src/3rdparty/ ../src/2geom/
-    - git diff | tee clang_tidy_diff
-    - if [[ -s clang_tidy_diff ]]; then false; fi
+    - bash buildtools/clangtidy-helper.sh $(cat clang_tidy_files)
 
 clangtidyfull:linux:
   stage: build
   only:
     - branches@inkscape/inkscape
   script:
-    - mkdir -p build && cd build
-    - cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-    - run-clang-tidy -fix -header-filter='.*' > /dev/null && git checkout ../src/3rdparty/ ../src/2geom/
-    - git diff | tee clang_tidy_diff
-    - if [[ -s clang_tidy_diff ]]; then false; fi
+    - bash buildtools/clangtidy-helper.sh
 
     ### scan-build is a static analysis tool. This job is *slow*.
 
