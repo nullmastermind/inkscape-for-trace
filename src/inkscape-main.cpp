@@ -15,10 +15,18 @@
 #endif
 
 #include "inkscape-application.h"
+#include "path-prefix.h"
 
+static void set_extensions_env()
+{
+    gchar *pythonpath = get_extensions_path();
+    g_setenv("PYTHONPATH", pythonpath, true);
+    g_free(pythonpath);
+}
 
 int main(int argc, char *argv[])
 {
+    set_extensions_env();
 
     if (gtk_init_check(NULL, NULL))
         return (ConcreteInkscapeApplication<Gtk::Application>::get_instance()).run(argc, argv);
