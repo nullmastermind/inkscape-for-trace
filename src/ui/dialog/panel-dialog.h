@@ -82,35 +82,15 @@ public:
     inline void present() override;
 
 private:
+    template <typename T>
+    static PanelDialog<Behavior> *_create();
+
     inline void _presentDialog();
 
     PanelDialog() = delete;
     PanelDialog(PanelDialog<Behavior> const &d) = delete;                      // no copy
     PanelDialog<Behavior>& operator=(PanelDialog<Behavior> const &d) = delete; // no assign
 };
-
-
-template <>
-class PanelDialog<Behavior::FloatingBehavior> :
-        public PanelDialogBase, public Inkscape::UI::Dialog::Dialog {
-
-public:
-    inline PanelDialog(UI::Widget::Panel &contents, char const *prefs_path, int const verb_num);
-
-    ~PanelDialog() override = default;
-
-    template <typename T>
-    static PanelDialog<Behavior::FloatingBehavior> *create();
-
-    inline void present() override;
-
-private:
-    PanelDialog() = delete;
-    PanelDialog(PanelDialog<Behavior::FloatingBehavior> const &d) = delete; // no copy
-    PanelDialog<Behavior::FloatingBehavior>&
-    operator=(PanelDialog<Behavior::FloatingBehavior> const &d) = delete;   // no assign
-};
-
 
 
 void PanelDialogBase::_propagateDocumentReplaced(SPDesktop *desktop, SPDocument *document)
@@ -156,6 +136,12 @@ PanelDialog<B>::PanelDialog(Widget::Panel &panel, char const *prefs_path, int co
 template <typename B> template <typename P>
 PanelDialog<B> *PanelDialog<B>::create()
 {
+    return _create<P>();
+}
+
+template <typename B> template <typename P>
+PanelDialog<B> *PanelDialog<B>::_create()
+{
     UI::Widget::Panel &panel = P::getInstance();
     return new PanelDialog<B>(panel, panel.getPrefsPath(), panel.getVerb());
 }
@@ -172,42 +158,27 @@ void PanelDialog<B>::_presentDialog()
     Dialog::present();
 }
 
-PanelDialog<Behavior::FloatingBehavior>::PanelDialog(UI::Widget::Panel &panel, char const *prefs_path,
-                                                     int const verb_num) :
-    PanelDialogBase(panel, prefs_path, verb_num),
-    Dialog(&Behavior::FloatingBehavior::create, prefs_path, verb_num)
-{
-    Gtk::Box *vbox = get_vbox();
-    _panel.signalResponse().connect(sigc::mem_fun(*this, &PanelDialog::_handleResponse));
-
-    vbox->pack_start(_panel, true, true, 0);
-
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-
-    _propagateDesktopActivated(desktop);
-
-    _document_replaced_connection =
-        desktop->connectDocumentReplaced(sigc::mem_fun(*this, &PanelDialog::_propagateDocumentReplaced));
-
-    show_all_children();
-}
-
+template <> inline
 void PanelDialog<Behavior::FloatingBehavior>::present()
 {
     Dialog::present();
     _panel.present();
 }
 
+template <> inline
+void PanelDialog<Behavior::FloatingBehavior>::_presentDialog()
+{
+}
+
 /**
  * Specialized factory method for panel dialogs with floating behavior in order to make them work as
  * singletons, i.e. allow them track the current active desktop.
  */
+template <>
 template <typename P>
 PanelDialog<Behavior::FloatingBehavior> *PanelDialog<Behavior::FloatingBehavior>::create()
 {
-    UI::Widget::Panel &panel = P::getInstance();
-    PanelDialog<Behavior::FloatingBehavior> *instance =
-        new PanelDialog<Behavior::FloatingBehavior>(panel, panel.getPrefsPath(), panel.getVerb());
+    auto instance = _create<P>();
 
     INKSCAPE.signal_activate_desktop.connect(
             sigc::mem_fun(*instance, &PanelDialog<Behavior::FloatingBehavior>::_propagateDesktopActivated)
