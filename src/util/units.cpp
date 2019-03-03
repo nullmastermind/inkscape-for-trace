@@ -45,8 +45,6 @@ enum UnitCode {
     UNIT_CODE_MM = MAKE_UNIT_CODE('m','m'),
     UNIT_CODE_CM = MAKE_UNIT_CODE('c','m'),
     UNIT_CODE_IN = MAKE_UNIT_CODE('i','n'),
-    UNIT_CODE_FT = MAKE_UNIT_CODE('f','t'),
-    UNIT_CODE_MT = MAKE_UNIT_CODE('m',' '),
     UNIT_CODE_EM = MAKE_UNIT_CODE('e','m'),
     UNIT_CODE_EX = MAKE_UNIT_CODE('e','x'),
     UNIT_CODE_PERCENT = MAKE_UNIT_CODE('%',0)
@@ -64,7 +62,7 @@ inline unsigned make_unit_code(char const *str) {
 }
 
 
-
+// This must match SVGLength::Unit
 unsigned const svg_length_lookup[] = {
     0,
     UNIT_CODE_PX,
@@ -73,8 +71,6 @@ unsigned const svg_length_lookup[] = {
     UNIT_CODE_MM,
     UNIT_CODE_CM,
     UNIT_CODE_IN,
-    UNIT_CODE_FT,
-    UNIT_CODE_MT,
     UNIT_CODE_EM,
     UNIT_CODE_EX,
     UNIT_CODE_PERCENT
