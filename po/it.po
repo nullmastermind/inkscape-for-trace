@@ -15481,20 +15481,20 @@ msgid "Open _Recent"
 msgstr "Apri _recenti"
 
 #: ../src/ui/dialog/aboutbox.cpp:88
-#, fuzzy
 msgid "Inkscape website"
-msgstr "Inkscape: _Base"
+msgstr "Sito di Inkscape"
 
 #: ../src/ui/dialog/aboutbox.cpp:90
 msgid "© 2019 Inkscape Developers"
-msgstr ""
+msgstr "© 2019 Sviluppatori di Inkscape"
 
 #: ../src/ui/dialog/aboutbox.cpp:91
-#, fuzzy
 msgid ""
 "Open Source Scalable Vector Graphics Editor\n"
 "Draw Freely."
-msgstr "Crea e modifica immagini Scalable Vector Graphics"
+msgstr ""
+"Editor SVG open source\n"
+"Draw Freely."
 
 #. TRANSLATORS: This is the filename of the `About Inkscape' picture in
 #. the `screens' directory.  Thus the translation of "about.svg" should be
@@ -20667,40 +20667,34 @@ msgstr ""
 
 #. Theme
 #: ../src/ui/dialog/inkscape-preferences.cpp:917
-#, fuzzy
 msgid "Theme changes"
-msgstr "Cambiamento rela_tivo"
+msgstr "Impostazioni tema"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:964
-#, fuzzy
 msgid "Use system theme"
-msgstr "Elimina segmento"
+msgstr "Utilizza tema predefinito"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:970
-#, fuzzy
 msgid "Change Gtk theme:"
-msgstr "Modifica larghezza"
+msgstr "Cambia tema Gtk:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:973
 #: ../src/ui/dialog/inkscape-preferences.cpp:974
 msgid "Use dark theme"
-msgstr ""
+msgstr "Utilizza tema scuro"
 
 #. Icons
 #: ../src/ui/dialog/inkscape-preferences.cpp:977
-#, fuzzy
 msgid "Display icons"
-msgstr "_Unità visualizzata:"
+msgstr "Icone"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1000
-#, fuzzy
 msgid "Use system icons"
-msgstr "Elimina segmento"
+msgstr "Utilizza icone predefinite"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1003
-#, fuzzy
 msgid "Change icon theme:"
-msgstr "Tema icone: "
+msgstr "Cambia tema icone:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1006
 msgid "Use symbolic icons"
@@ -20810,15 +20804,15 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1046
 msgid "Reload icons"
-msgstr ""
+msgstr "Ricarica icone"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1047
 msgid "Apply icon changes (may take a few seconds)"
-msgstr ""
+msgstr "Applica modifiche alle icone (richiede qualche secondo)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1050
 msgid "Theme"
-msgstr ""
+msgstr "Tema"
 
 #. Windows
 #: ../src/ui/dialog/inkscape-preferences.cpp:1053
@@ -21448,7 +21442,7 @@ msgstr "Output SVG"
 #. SVG 2 Fallbacks
 #: ../src/ui/dialog/inkscape-preferences.cpp:1366
 msgid "SVG 2"
-msgstr ""
+msgstr "SVG 2"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1367
 msgid "Insert SVG 1.1 fallback in text."
@@ -21469,7 +21463,7 @@ msgstr ""
 #. SVG Export Options (SVG 2 -> SVG 1)
 #: ../src/ui/dialog/inkscape-preferences.cpp:1374
 msgid "SVG 2 to SVG 1.1"
-msgstr ""
+msgstr "SVG 2 a SVG 1.1"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1376
 msgid "Replace markers with 'auto_start_reverse'."
@@ -21488,9 +21482,8 @@ msgid "SVG 2 allows markers to automatically match stroke color."
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1382
-#, fuzzy
 msgid "SVG export"
-msgstr "Editor _bitmap:"
+msgstr "Esportazione SVG"
 
 #. TRANSLATORS: see http://www.newsandtech.com/issues/2004/03-04/pt/03-04_rendering.htm
 #: ../src/ui/dialog/inkscape-preferences.cpp:1389
@@ -22135,9 +22128,8 @@ msgstr ""
 
 #. defaultscale is limited to 1000 in select-context.cpp: use the same limit here
 #: ../src/ui/dialog/inkscape-preferences.cpp:1713
-#, fuzzy
 msgid "&gt; and &lt; _scale by:"
-msgstr "> e < _ridimensionano di:"
+msgstr "&gt; and &lt; _ridimensionano di:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1714
 msgid "Pressing > or < scales selection up or down by this increment"
@@ -22212,14 +22204,12 @@ msgstr ""
 "dell'ingrandimento rimpiccioliscono o ingrandiscono di questo fattore"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1735
-#, fuzzy
 msgid "_Rotate canvas by:"
-msgstr "La _rotazione scatta ogni:"
+msgstr "_Ruota canvas di:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1736
-#, fuzzy
 msgid "Rotate canvas clockwise and counter-clockwise by this amount."
-msgstr "Ruota in senso antiorario"
+msgstr "Ruota canvas a scatti di questa quantità in senso orario e antiorario."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1737
 msgid "Steps"
