@@ -303,7 +303,7 @@ CanvasGrid::newWidget()
 
     _rcb_enabled = Gtk::manage( new Inkscape::UI::Widget::RegisteredCheckButton(
             _("_Enabled"),
-            _("Determines whether to snap to this grid or not. Can be 'on' for invisible grids."),
+            _("Makes the grid available for working with on the canvas."),
             "enabled", _wr, false, repr, doc) );
 
     _rcb_snap_visible_only = Gtk::manage( new Inkscape::UI::Widget::RegisteredCheckButton(
