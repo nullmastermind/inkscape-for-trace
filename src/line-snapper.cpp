@@ -33,17 +33,16 @@ void Inkscape::LineSnapper::freeSnap(IntermSnapResults &isr,
     /* Get the lines that we will try to snap to */
     const LineList lines = _getSnapLines(p.getPoint());
 
-    for (LineList::const_iterator i = lines.begin(); i != lines.end(); ++i) {
-        Geom::Point const p1 = i->second; // point at guide/grid line
-        Geom::Point const p2 = p1 + Geom::rot90(i->first); // 2nd point at guide/grid line
-        // std::cout << "  line through " << i->second << " with normal " << i->first;
-        assert(i->first != Geom::Point(0,0)); // we cannot project on an linesegment of zero length
+    for (const auto & line : lines) {
+        Geom::Point const p1 = line.second; // point at guide/grid line
+        Geom::Point const p2 = p1 + Geom::rot90(line.first); // 2nd point at guide/grid line
+        assert(line.first != Geom::Point(0,0)); // we cannot project on an linesegment of zero length
 
         Geom::Point const p_proj = Geom::projection(p.getPoint(), Geom::Line(p1, p2));
         Geom::Coord const dist = Geom::L2(p_proj - p.getPoint());
         //Store any line that's within snapping range
         if (dist < getSnapperTolerance()) {
-            _addSnappedLine(isr, p_proj, dist, p.getSourceType(), p.getSourceNum(), i->first, i->second);
+            _addSnappedLine(isr, p_proj, dist, p.getSourceType(), p.getSourceNum(), line.first, line.second);
             // For any line that's within range, we will also look at it's "point on line" p1. For guides
             // this point coincides with its origin; for grids this is of no use, but we cannot
             // discern between grids and guides here
@@ -79,10 +78,7 @@ void Inkscape::LineSnapper::freeSnap(IntermSnapResults &isr,
                     }
                 }
             }
-
-            // std::cout << " -> distance = " << dist;
         }
-        // std::cout << std::endl;
     }
 }
 
