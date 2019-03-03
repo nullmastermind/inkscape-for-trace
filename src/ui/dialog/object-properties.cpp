@@ -60,7 +60,7 @@ ObjectProperties::ObjectProperties()
     , _label_image_rendering(_("_Image Rendering:"), true)
     , _cb_hide(_("_Hide"), true)
     , _cb_lock(_("L_ock"), true)
-    , _cb_aspect_ratio(_("Pereserve Ratio"), true)
+    , _cb_aspect_ratio(_("Preserve Ratio"), true)
     , _attr_table(Gtk::manage(new SPAttributeTable()))
     , _desktop(nullptr)
 {
@@ -315,7 +315,7 @@ void ObjectProperties::update()
         return;
     }
     _blocked = true;
-    _cb_aspect_ratio.set_active(strcmp(item->getAttribute("preserveAspectRatio"), "true") == 0);
+    _cb_aspect_ratio.set_active(g_strcmp0(item->getAttribute("preserveAspectRatio"), "none") != 0);
     _cb_lock.set_active(item->isLocked());           /* Sensitive */
     _cb_hide.set_active(item->isExplicitlyHidden()); /* Hidden */
     
@@ -514,10 +514,9 @@ void ObjectProperties::_aspectRatioToggled()
 
     _blocked = true;
 
-    item->setLocked(_cb_aspect_ratio.get_active());
     const char *active;
     if (_cb_aspect_ratio.get_active()) {
-        active = "true";
+        active = "xMidYMid";
     }
     else {
         active = "none";
