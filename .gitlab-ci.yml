@@ -200,6 +200,8 @@ clangtidy:linux:
 
 clangtidyfull:linux:
   stage: build
+  except:
+    - schedules
   only:
     - branches@inkscape/inkscape
   script:
