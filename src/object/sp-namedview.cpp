@@ -275,7 +275,7 @@ void SPNamedView::release() {
 
 void SPNamedView::set(SPAttributeEnum key, const gchar* value) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool global_snapping = prefs->getBool("/options/snapdefault/value", false);
+    bool global_snapping = prefs->getBool("/options/snapdefault/value", true);
     switch (key) {
     case SP_ATTR_VIEWONLY:
             this->editable = (!value);

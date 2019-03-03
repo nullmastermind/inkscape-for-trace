@@ -1665,9 +1665,9 @@ void InkscapePreferences::initPageBehavior()
     // Snapping options
     _page_snapping.add_group_header( _("Snap defaults"));
 
-    _snap_default.init( _("Enabled in new document"), "/options/snapdefault/value", false);
+    _snap_default.init( _("Enable snapping in new documents"), "/options/snapdefault/value", true);
     _page_snapping.add_line( true, "", _snap_default, "",
-                             _("When creating a new document, or opening a non-inkscape svg, what should global snapping be set to."));
+                             _("Initial state of snapping in new documents and non-Inkscape SVGs. Snap status is subsequently saved per-document."));
 
     _page_snapping.add_group_header( _("Snap indicator"));
 
