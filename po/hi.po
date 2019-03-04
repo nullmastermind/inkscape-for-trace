@@ -40,9 +40,8 @@ msgid "image;editor;vector;drawing;"
 msgstr ""
 
 #: ../org.inkscape.Inkscape.desktop.in.h:6
-#, fuzzy
 msgid "New Drawing"
-msgstr "रेखाचित्र"
+msgstr "नया चित्र"
 
 #: ../share/filters/filters.svg.h:2
 #, fuzzy
@@ -71,17 +70,16 @@ msgid "Same as Matte jelly but with more controls"
 msgstr "मैटे जेली के समान लेकिन अधिक नियंत्रण के साथ "
 
 #: ../share/filters/filters.svg.h:6
-#, fuzzy
 msgid "Metal Casting"
 msgstr "धातु की ढलाई"
 
 #: ../share/filters/filters.svg.h:8
 msgid "Smooth drop-like bevel with metallic finish"
-msgstr "धात्विक फिनिश के साथ चिकनी-ढलान जैसा कटाव"
+msgstr "चिकना बूँद सा कटाव, धातुई फिनिश के साथ"
 
 #: ../share/filters/filters.svg.h:10
 msgid "Apparition"
-msgstr "परछाई"
+msgstr "छाया"
 
 #: ../share/filters/filters.svg.h:11 ../share/filters/filters.svg.h:323
 #: ../share/filters/filters.svg.h:655
@@ -91,25 +89,23 @@ msgstr "परछाई"
 #: ../src/extension/internal/filter/blurs.h:268
 #: ../src/extension/internal/filter/blurs.h:352
 msgid "Blurs"
-msgstr "धब्बे"
+msgstr "धुंधलापन"
 
 #: ../share/filters/filters.svg.h:12
 msgid "Edges are partly feathered out"
-msgstr "किनारे आंशिक रूप से परों से ढंके हुए हैं"
+msgstr "किनारे आंशिक रूप से धूमिल"
 
 #: ../share/filters/filters.svg.h:14
-#, fuzzy
 msgid "Jigsaw Piece"
-msgstr "आरे का टुकड़ा"
+msgstr "जिगसॉ टुकड़े"
 
 #: ../share/filters/filters.svg.h:16
 msgid "Low, sharp bevel"
 msgstr "निम्न, तीक्ष्ण कटाव"
 
 #: ../share/filters/filters.svg.h:18
-#, fuzzy
 msgid "Rubber Stamp"
-msgstr "रबर स्टाम्प"
+msgstr "रबर की मोहर"
 
 #: ../share/filters/filters.svg.h:19 ../share/filters/filters.svg.h:43
 #: ../share/filters/filters.svg.h:47 ../share/filters/filters.svg.h:51
@@ -134,10 +130,9 @@ msgstr "ऊपरी आवरण"
 
 #: ../share/filters/filters.svg.h:20
 msgid "Random whiteouts inside"
-msgstr "भीतर बेतरतीब व्हाइटआउट"
+msgstr "अनियमित भीतरी अभाव"
 
 #: ../share/filters/filters.svg.h:22
-#, fuzzy
 msgid "Ink Bleed"
 msgstr "इंक ब्लीड"
 
@@ -148,7 +143,7 @@ msgstr "उभार"
 
 #: ../share/filters/filters.svg.h:24
 msgid "Inky splotches underneath the object"
-msgstr "वस्तु के नीचे स्याही के धब्बे"
+msgstr "वस्तु के नीचे स्याही की फैलावट"
 
 #: ../share/filters/filters.svg.h:26
 msgid "Fire"
@@ -156,7 +151,7 @@ msgstr "आग"
 
 #: ../share/filters/filters.svg.h:28
 msgid "Edges of object are on fire"
-msgstr "वस्तु के किनारे आग पर हैं"
+msgstr "वस्तु-सीमा पर आग का प्रभाव"
 
 #: ../share/filters/filters.svg.h:30
 msgid "Bloom"
@@ -164,7 +159,7 @@ msgstr "कोंपल"
 
 #: ../share/filters/filters.svg.h:32
 msgid "Soft, cushion-like bevel with matte highlights"
-msgstr "मैटे उभारों के साथ मुलायम, गद्दे-जैसा कटाव "
+msgstr "मैटे उभारों के साथ मुलायम, गद्दे समान कटाव "
 
 #: ../share/filters/filters.svg.h:34
 #, fuzzy
@@ -187,11 +182,11 @@ msgstr "लहर"
 #: ../src/extension/internal/filter/distort.h:97
 #: ../src/extension/internal/filter/distort.h:206
 msgid "Distort"
-msgstr "विकृत "
+msgstr "विकृत करें"
 
 #: ../share/filters/filters.svg.h:40
 msgid "Horizontal rippling of edges"
-msgstr "किनारों की क्षैतिज छोटी लहर "
+msgstr "सीमाओं का आड़ा लेहरीकरण"
 
 #: ../share/filters/filters.svg.h:42
 msgid "Speckle"
@@ -199,16 +194,15 @@ msgstr "चित्ती "
 
 #: ../share/filters/filters.svg.h:44
 msgid "Fill object with sparse translucent specks"
-msgstr "वस्तु को छिटपुट पारभासी चित्तियों से भरें "
+msgstr "वस्तु को छिटपुट पारभासी चित्तियों से भरें"
 
 #: ../share/filters/filters.svg.h:46
-#, fuzzy
 msgid "Oil Slick"
-msgstr "तेल की चिकनाई"
+msgstr "तैलीय परत"
 
 #: ../share/filters/filters.svg.h:48
 msgid "Rainbow-colored semitransparent oily splotches"
-msgstr "इंद्रधनुषी-रंग वाला अर्द्ध-पारदर्शी तैलीय धब्बे"
+msgstr "इंद्रधनुषी-रंग वाले अर्द्ध-पारदर्शी तैलीय धब्बे"
 
 #: ../share/filters/filters.svg.h:50
 msgid "Frost"
@@ -219,7 +213,6 @@ msgid "Flake-like white splotches"
 msgstr "पपड़ी-सफ़ेद धब्बों की तरह"
 
 #: ../share/filters/filters.svg.h:54
-#, fuzzy
 msgid "Leopard Fur"
 msgstr "तेंदुए की खाल"
 
@@ -251,7 +244,7 @@ msgstr "बादल"
 
 #: ../share/filters/filters.svg.h:64
 msgid "Airy, fluffy, sparse white clouds"
-msgstr "हल्के-फुल्के रोयेंदार, छिटपुट सफ़ेद बादल"
+msgstr "हवादार, छिटपुट सफ़ेद बादल"
 
 #: ../share/filters/filters.svg.h:66
 #: ../src/extension/internal/bitmap/sharpen.cpp:39
@@ -262,27 +255,24 @@ msgstr "तीक्ष्ण करें"
 #: ../share/filters/filters.svg.h:87 ../share/filters/filters.svg.h:295
 #: ../share/filters/filters.svg.h:415
 #: ../src/extension/internal/filter/image.h:63
-#, fuzzy
 msgid "Image Effects"
-msgstr "छवि के प्रभाव"
+msgstr "छवि प्रभाव"
 
 #: ../share/filters/filters.svg.h:68
 msgid "Sharpen edges and boundaries within the object, force=0.15"
-msgstr "वस्तु के भीतर किनारों और हाशियों को तीक्ष्ण करें, बल=0.15 "
+msgstr "वस्तु के भीतरी किनारों तथा सीमाओं को तीक्ष्ण करें, बल=0.15 "
 
 #: ../share/filters/filters.svg.h:70
-#, fuzzy
 msgid "Sharpen More"
-msgstr "और अधिक तीक्ष्ण करें "
+msgstr "अधिक तीक्ष्ण करें "
 
 #: ../share/filters/filters.svg.h:72
 msgid "Sharpen edges and boundaries within the object, force=0.3"
-msgstr "वस्तु के भीतर किनारों और हाशियों को तीक्ष्ण करें, बल=0.3"
+msgstr "वस्तु के भीतरी किनारों तथा सीमाओं को तीक्ष्ण करें, बल=0.3"
 
 #: ../share/filters/filters.svg.h:74
-#, fuzzy
 msgid "Oil Painting"
-msgstr "तेल चित्रकारी"
+msgstr "तैल चित्र"
 
 #: ../share/filters/filters.svg.h:75 ../share/filters/filters.svg.h:79
 #: ../share/filters/filters.svg.h:83 ../share/filters/filters.svg.h:447
@@ -302,11 +292,11 @@ msgstr "तेल चित्रकारी"
 #: ../src/extension/internal/filter/paint.h:878
 #: ../src/extension/internal/filter/paint.h:982
 msgid "Image Paint and Draw"
-msgstr ""
+msgstr "छवि रंगन एवं चित्रकारी"
 
 #: ../share/filters/filters.svg.h:76
 msgid "Simulate oil painting style"
-msgstr "तेल चित्रकारी शैली की नक़ल "
+msgstr "तेल चित्रकारी शैली की नक़ल करें"
 
 #. Pencil
 #: ../share/filters/filters.svg.h:78
@@ -328,7 +318,7 @@ msgstr "रंगीन किनारों का पता लगाएं �
 
 #: ../share/filters/filters.svg.h:86
 msgid "Age"
-msgstr "उम्र"
+msgstr "पुराना करें "
 
 #: ../share/filters/filters.svg.h:88
 msgid "Imitate aged photograph"
@@ -353,25 +343,23 @@ msgstr "बनावट "
 
 #: ../share/filters/filters.svg.h:92
 msgid "Bulging, knotty, slick 3D surface"
-msgstr "उभरा हुआ, गांठदार, चिकनी 3डी सतह "
+msgstr "उभरा हुआ, गांठदार, चिकनी तीन आयामी सतह "
 
 #: ../share/filters/filters.svg.h:94
-#, fuzzy
 msgid "Barbed Wire"
 msgstr "कंटीला तार "
 
 #: ../share/filters/filters.svg.h:96
 msgid "Gray bevelled wires with drop shadows"
-msgstr "ड्रॉप शैडो के साथ धूसर प्रवणित तार"
+msgstr "ड्रॉप शैडो के साथ धूसर तारें"
 
 #: ../share/filters/filters.svg.h:98
-#, fuzzy
 msgid "Swiss Cheese"
 msgstr "स्विस पनीर"
 
 #: ../share/filters/filters.svg.h:100
 msgid "Random inner-bevel holes"
-msgstr "बेतरतीब भीतरी-उठाव वाले छिद्र"
+msgstr "अनियमित भीतरी-उठाव वाले छिद्र"
 
 #: ../share/filters/filters.svg.h:102
 #, fuzzy
@@ -380,7 +368,7 @@ msgstr "नीला पनीर"
 
 #: ../share/filters/filters.svg.h:104
 msgid "Marble-like bluish speckles"
-msgstr "संगमरमर-नीले धब्बों की तरह"
+msgstr "संगमरमरी नीले धब्बों"
 
 #: ../share/filters/filters.svg.h:106
 msgid "Button"
@@ -411,19 +399,17 @@ msgstr "रिसता हुआ"
 
 #: ../share/filters/filters.svg.h:116
 msgid "Random paint streaks downwards"
-msgstr "नीचे की ओर पेंट की बेतरतीब धारी"
+msgstr "नीचे की ओर पेंट की अनियमित धारियां"
 
 #: ../share/filters/filters.svg.h:118
-#, fuzzy
 msgid "Jam Spread"
-msgstr "जाम फैला"
+msgstr "जैम फैलाव"
 
 #: ../share/filters/filters.svg.h:120
 msgid "Glossy clumpy jam spread"
-msgstr "चिकना भारी जाम फैला "
+msgstr "चमकदार गुच्छेदार जैम फैलाव"
 
 #: ../share/filters/filters.svg.h:122
-#, fuzzy
 msgid "Pixel Smear"
 msgstr "पिक्सेल धब्बा"
 
@@ -432,7 +418,6 @@ msgid "Van Gogh painting effect for bitmaps"
 msgstr "बिटमैप्स के लिए वान गॉग पेंटिंग प्रभाव"
 
 #: ../share/filters/filters.svg.h:126
-#, fuzzy
 msgid "Cracked Glass"
 msgstr "टूटी हुई कांच "
 
@@ -465,10 +450,9 @@ msgstr "उभार"
 
 #: ../share/filters/filters.svg.h:132
 msgid "Flexible bubbles effect with some displacement"
-msgstr "कुछ विस्थापन के साथ लचीला बुलबुलेदार प्रभाव "
+msgstr "कुछ विस्थापन के साथ लचीले बुलबुलों का प्रभाव "
 
 #: ../share/filters/filters.svg.h:134
-#, fuzzy
 msgid "Glowing Bubble"
 msgstr "चमकदार बुलबुले"
 
