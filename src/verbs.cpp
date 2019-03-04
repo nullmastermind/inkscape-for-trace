@@ -2056,8 +2056,11 @@ void ZoomVerb::perform(SPAction *action, void *data)
             sp_namedview_toggle_guides(doc, repr);
             break;
         case SP_VERB_TOGGLE_SNAPPING:
+        {
+            DocumentUndo::ScopedInsensitive _no_undo(doc);
             dt->toggleSnapGlobal();
             break;
+        }
         case SP_VERB_TOGGLE_GRID:
             dt->toggleGrids();
             break;
