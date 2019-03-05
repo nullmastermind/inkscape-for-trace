@@ -95,6 +95,7 @@ public:
 
     void setOrigin(Geom::Point const &origin_px); /**< writes new origin (specified in px units) to SVG */
     Geom::Point origin;     /**< Origin of the grid */
+
     guint32 color;        /**< Color for normal lines */
     guint32 empcolor;     /**< Color for emphasis lines */
     gint empspacing;      /**< Spacing between emphasis lines */
@@ -127,6 +128,7 @@ protected:
 
     Inkscape::UI::Widget::Registry _wr;
     bool visible;
+    bool render_dotted;
 
     GridType gridtype;
 
@@ -137,6 +139,7 @@ protected:
     Inkscape::UI::Widget::RegisteredCheckButton *_rcb_enabled;
     Inkscape::UI::Widget::RegisteredCheckButton *_rcb_snap_visible_only;
     Inkscape::UI::Widget::RegisteredCheckButton *_rcb_visible;
+    Inkscape::UI::Widget::RegisteredCheckButton *_rcb_dotted;
     Inkscape::UI::Widget::AlignmentSelector     *_as_alignment;
 
 private:
@@ -173,8 +176,6 @@ private:
 
     void updateWidgets();
 
-    bool render_dotted;
-
     Inkscape::UI::Widget::RegisteredUnitMenu *_rumg;
     Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_ox;
     Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_oy;
@@ -183,7 +184,6 @@ private:
     Inkscape::UI::Widget::RegisteredColorPicker *_rcp_gcol;
     Inkscape::UI::Widget::RegisteredColorPicker *_rcp_gmcol;
     Inkscape::UI::Widget::RegisteredSuffixedInteger *_rsi;
-    Inkscape::UI::Widget::RegisteredCheckButton *_rcb_dotted;
 };
 
 

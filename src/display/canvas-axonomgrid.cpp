@@ -261,10 +261,6 @@ CanvasAxonomGrid::onReprAttrChanged(Inkscape::XML::Node */*repr*/, gchar const *
 Gtk::Widget *
 CanvasAxonomGrid::newSpecificWidget()
 {
-    auto table = Gtk::manage(new Gtk::Grid());
-    table->set_row_spacing(2);
-    table->set_column_spacing(2);
-
     _wr.setUpdating (true);
 
     _rumg = Gtk::manage( new Inkscape::UI::Widget::RegisteredUnitMenu(
@@ -329,18 +325,18 @@ CanvasAxonomGrid::newSpecificWidget()
     _rsu_ox->setProgrammatically = false;
     _rsu_oy->setProgrammatically = false;
 
-    Gtk::VBox *right = new Gtk::VBox();
-    right->pack_start(*_rumg);
-    right->pack_start(*_rsu_ox);
-    right->pack_start(*_rsu_oy);
-    right->pack_start(*_rsu_sy);
-    right->pack_start(*_rsu_ax);
-    right->pack_start(*_rsu_az);
-    right->pack_start(*_rcp_gcol);
-    right->pack_start(*_rcp_gmcol);
-    right->pack_start(*_rsi);
+    Gtk::VBox *column = new Gtk::VBox();
+    column->pack_start(*_rumg, true, false, 2);
+    column->pack_start(*_rsu_ox, true, false, 2);
+    column->pack_start(*_rsu_oy, true, false, 2);
+    column->pack_start(*_rsu_sy, true, false, 2);
+    column->pack_start(*_rsu_ax, true, false, 2);
+    column->pack_start(*_rsu_az, true, false, 2);
+    column->pack_start(*_rcp_gcol, true, false, 2);
+    column->pack_start(*_rcp_gmcol, true, false, 2);
+    column->pack_start(*_rsi, true, false, 2);
 
-    return right;
+    return column;
 }
 
 

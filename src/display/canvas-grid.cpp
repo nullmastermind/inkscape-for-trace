@@ -299,7 +299,7 @@ CanvasGrid::newWidget()
     str += getName();
     str += "</b>";
     namelabel->set_markup(str);
-    vbox->pack_start(*namelabel, true, true);
+    vbox->pack_start(*namelabel, false, false);
 
     _rcb_enabled = Gtk::manage( new Inkscape::UI::Widget::RegisteredCheckButton(
             _("_Enabled"),
@@ -309,33 +309,46 @@ CanvasGrid::newWidget()
     _rcb_snap_visible_only = Gtk::manage( new Inkscape::UI::Widget::RegisteredCheckButton(
             _("Snap to visible _grid lines only"),
             _("When zoomed out, not all grid lines will be displayed. Only the visible ones will be snapped to"),
-            "snapvisiblegridlinesonly", _wr, true, repr, doc) );
+            "snapvisiblegridlinesonly", _wr, false, repr, doc) );
 
     _rcb_visible = Gtk::manage( new Inkscape::UI::Widget::RegisteredCheckButton(
             _("_Visible"),
             _("Determines whether the grid is displayed or not. Objects are still snapped to invisible grids."),
-            "visible", _wr, true, repr, doc) );
-
-    vbox->pack_start(*_rcb_enabled, true, true);
-    vbox->pack_start(*_rcb_visible, true, true);
-    vbox->pack_start(*_rcb_snap_visible_only, true, true);
+            "visible", _wr, false, repr, doc) );
 
     _as_alignment = Gtk::manage( new Inkscape::UI::Widget::AlignmentSelector() );
     _as_alignment->on_alignmentClicked().connect(sigc::mem_fun(*this, &CanvasGrid::align_clicked));
 
     Gtk::VBox *left = new Gtk::VBox();
+    left->pack_start(*_rcb_enabled, false, false);
+    left->pack_start(*_rcb_visible, false, false);
+    left->pack_start(*_rcb_snap_visible_only, false, false);
+
+    if (getGridType() == GRID_RECTANGULAR) {
+        _rcb_dotted = Gtk::manage( new Inkscape::UI::Widget::RegisteredCheckButton(
+                _("_Show dots instead of lines"), _("If set, displays dots at gridpoints instead of gridlines"),
+                "dotted", _wr, false, repr, doc) );
+        _rcb_dotted->setActive(render_dotted);
+        left->pack_start(*_rcb_dotted, false, false);
+    }
+
     left->pack_start(*Gtk::manage(new Gtk::Label(_("Align to page:"))), false, false);
     left->pack_start(*_as_alignment, false, false);
 
-    Gtk::HBox *outer = new Gtk::HBox();
-    outer->pack_start(*left, true, true);
-    outer->pack_start(*newSpecificWidget(), false, false);
-    vbox->pack_start(*outer, true, true);
+    auto right = newSpecificWidget();
+
+    Gtk::HBox *inner = new Gtk::HBox();
+    inner->pack_start(*left, true, true, 2);
+    inner->pack_start(*right, false, false, 2);
+    vbox->pack_start(*inner, false, false);
 
     std::list<Gtk::Widget*> slaves;
-    slaves.push_back(_rcb_visible);
-    slaves.push_back(_rcb_snap_visible_only);
-    slaves.push_back(outer);
+    for (auto &item : left->get_children()) {
+        if (item != _rcb_enabled) {
+            slaves.push_back(item);
+        }
+    }
+    slaves.push_back(right);
     _rcb_enabled->setSlaveWidgets(slaves);
 
     // set widget values
@@ -679,10 +692,6 @@ CanvasXYGrid::newSpecificWidget()
     _rsu_sy->setDigits(5);
     _rsu_sy->setIncrements(0.1, 1.0);
 
-    _rcb_dotted = Gtk::manage( new Inkscape::UI::Widget::RegisteredCheckButton(
-            _("_Show dots instead of lines"), _("If set, displays dots at gridpoints instead of gridlines"),
-            "dotted", _wr, false, repr, doc) );
-
     // set widget values
     _rumg->setUnit (gridunit->abbr);
 
@@ -704,8 +713,6 @@ CanvasXYGrid::newSpecificWidget()
     _rcp_gmcol->setRgba32 (empcolor);
     _rsi->setValue (empspacing);
 
-    _rcb_dotted->setActive(render_dotted);
-
     _wr.setUpdating (false);
 
     _rsu_ox->setProgrammatically = false;
@@ -713,18 +720,17 @@ CanvasXYGrid::newSpecificWidget()
     _rsu_sx->setProgrammatically = false;
     _rsu_sy->setProgrammatically = false;
 
-    Gtk::VBox *right = new Gtk::VBox();
-    right->pack_start(*_rumg);
-    right->pack_start(*_rsu_ox);
-    right->pack_start(*_rsu_oy);
-    right->pack_start(*_rsu_sx);
-    right->pack_start(*_rsu_sy);
-    right->pack_start(*_rcp_gcol);
-    right->pack_start(*_rcp_gmcol);
-    right->pack_start(*_rsi);
-    right->pack_start(*_rcb_dotted);
+    Gtk::VBox *column = new Gtk::VBox();
+    column->pack_start(*_rumg, true, false, 2);
+    column->pack_start(*_rsu_ox, true, false, 2);
+    column->pack_start(*_rsu_oy, true, false, 2);
+    column->pack_start(*_rsu_sx, true, false, 2);
+    column->pack_start(*_rsu_sy, true, false, 2);
+    column->pack_start(*_rcp_gcol, true, false, 2);
+    column->pack_start(*_rcp_gmcol, true, false, 2);
+    column->pack_start(*_rsi, true, false, 2);
 
-    return right;
+    return column;
 }
 
 
@@ -956,7 +962,6 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
 
                 // Set dash pattern and color.
                 if (render_dotted) {
-
                     // alpha needs to be larger than in the line case to maintain a similar
                     // visual impact but setting it to the maximal value makes the dots
                     // dominant in some cases. Solution, increase the alpha by a factor of
