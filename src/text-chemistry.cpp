@@ -511,6 +511,7 @@ flowtext_to_text()
     }
 
     bool did = false;
+    bool ignored = false;
 
     std::vector<Inkscape::XML::Node*> reprs;
     std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
@@ -522,10 +523,8 @@ flowtext_to_text()
             continue;
 
         if (!SP_FLOWTEXT(item)->layout.outputExists()) {
-            desktop->getMessageStack()->
-                flash(Inkscape::WARNING_MESSAGE, 
-                      _("The flowed text(s) must be <b>visible</b> in order to be converted."));
-            return;
+            ignored = true;
+            continue;
         }
 
         Inkscape::XML::Node *repr = SP_FLOWTEXT(item)->getAsText();
@@ -547,12 +546,17 @@ flowtext_to_text()
         reprs.push_back(repr);
     }
 
-
     if (did) {
         DocumentUndo::done(desktop->getDocument(), 
                            SP_VERB_OBJECT_FLOWTEXT_TO_TEXT,
                            _("Convert flowed text to text"));
         selection->setReprList(reprs);        
+    } else if (ignored) {
+        // no message for (did && ignored) because it is immediately overwritten
+        desktop->getMessageStack()->
+            flash(Inkscape::ERROR_MESSAGE,
+                  _("Flowed text(s) must be <b>visible</b> in order to be converted."));
+
     } else {
         desktop->getMessageStack()->
             flash(Inkscape::ERROR_MESSAGE,
