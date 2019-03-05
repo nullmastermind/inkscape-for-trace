@@ -172,7 +172,10 @@ FloatingBehavior::onShowF12()
 }
 
 void
-FloatingBehavior::onShutdown() {}
+FloatingBehavior::onShutdown()
+{
+    _dialog.save_status(!_dialog._user_hidden, 1, GDL_DOCK_TOP); // Make sure 1 == DockItem::FLOATING_STATE
+}
 
 void
 FloatingBehavior::onDesktopActivated (SPDesktop *desktop)
