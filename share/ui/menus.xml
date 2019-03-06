@@ -99,6 +99,7 @@
        <verb verb-id="ZoomDrawing" />
        <verb verb-id="ZoomPage" />
        <verb verb-id="ZoomPageWidth" />
+       <verb verb-id="ZoomCenterPage" />
        <separator/>
        <verb verb-id="ZoomPrev" />
        <verb verb-id="ZoomNext" />

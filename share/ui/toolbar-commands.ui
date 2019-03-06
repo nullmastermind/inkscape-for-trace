@@ -18,6 +18,7 @@
     <toolitem action='ZoomSelection' />
     <toolitem action='ZoomDrawing' />
     <toolitem action='ZoomPage' />
+    <toolitem action='ZoomCenterPage' />
     <separator />
     <toolitem action='EditDuplicate' />
     <toolitem action='EditClone' />

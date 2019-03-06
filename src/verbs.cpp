@@ -1956,6 +1956,9 @@ void ZoomVerb::perform(SPAction *action, void *data)
         case SP_VERB_ZOOM_PREV:
             dt->prev_transform();
             break;
+        case SP_VERB_ZOOM_CENTER_PAGE:
+            dt->zoom_center_page();
+            break;
         case SP_VERB_ROTATE_CW:
         {
             gint mul = 1 + Inkscape::UI::Tools::gobble_key_events( GDK_KEY_parenleft, 0);
@@ -2987,6 +2990,8 @@ Verb *Verb::_base_verbs[] = {
                  INKSCAPE_ICON("zoom-fit-drawing")),
     new ZoomVerb(SP_VERB_ZOOM_SELECTION, "ZoomSelection", N_("_Selection"), N_("Zoom to fit selection in window"),
                  INKSCAPE_ICON("zoom-fit-selection")),
+    new ZoomVerb(SP_VERB_ZOOM_CENTER_PAGE, "ZoomCenterPage", N_("_Center _Page"), N_("Center page in window"),
+                 INKSCAPE_ICON("zoom-center-page")),
 
     new ZoomVerb(SP_VERB_ROTATE_CW, "RotateClockwise", N_("Rotate Clockwise"), N_("Rotate canvas clockwise"), nullptr),
     new ZoomVerb(SP_VERB_ROTATE_CCW, "RotateCounterClockwise", N_("Rotate Counter-Clockwise"),

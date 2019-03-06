@@ -339,7 +339,8 @@ static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* deskto
         SP_VERB_ZOOM_PAGE,
         SP_VERB_ZOOM_PAGE_WIDTH,
         SP_VERB_ZOOM_PREV,
-        SP_VERB_ZOOM_SELECTION
+        SP_VERB_ZOOM_SELECTION,
+        SP_VERB_ZOOM_CENTER_PAGE
     };
 
     GtkIconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/small");
