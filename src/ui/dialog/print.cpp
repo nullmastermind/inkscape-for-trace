@@ -55,22 +55,27 @@ Print::Print(SPDocument *doc, SPItem *base) :
     _printop->set_unit(Gtk::UNIT_POINTS);
     Glib::RefPtr<Gtk::PageSetup> page_setup = Gtk::PageSetup::create();
 
-    // get document width, height, and orientation
-    // height must be larger than width, as in GTK+'s known paper sizes
-    gdouble doc_width;
-    gdouble doc_height;
+    // Default to a custom paper size, in case we can't find a more specific size
+    gdouble doc_width = _doc->getWidth().value("pt");
+    gdouble doc_height = _doc->getHeight().value("pt");
+    page_setup->set_paper_size(
+            Gtk::PaperSize("custom", "custom", doc_width, doc_height, Gtk::UNIT_POINTS));
+
+    // Some print drivers, like the EPSON's ESC/P-R CUPS driver, don't accept custom
+    // page sizes, so we'll try to find a known page size.
+    // GTK+'s known paper sizes always have a longer height than width, so we'll rotate
+    // the page and set its orientation to landscape as necessary in order to match a paper size.
+    // Unfortunately, some printers, like Epilog laser cutters, don't understand landscape
+    // mode.
+    // As a compromise, we'll only rotate the page if we actually find a matching paper size,
+    // since laser cutter beds tend to be custom sizes.
+    Gtk::PageOrientation orientation = Gtk::PAGE_ORIENTATION_PORTRAIT;
     if (_doc->getWidth().value("pt") > _doc->getHeight().value("pt")) {
-        page_setup->set_orientation(Gtk::PAGE_ORIENTATION_LANDSCAPE);
-        doc_width = _doc->getHeight().value("pt");
-        doc_height = _doc->getWidth().value("pt");
-    } else {
-        page_setup->set_orientation(Gtk::PAGE_ORIENTATION_PORTRAIT);
-        doc_width = _doc->getWidth().value("pt");
-        doc_height = _doc->getHeight().value("pt");
+        orientation = Gtk::PAGE_ORIENTATION_REVERSE_LANDSCAPE;
+        std::swap(doc_width, doc_height);
     }
 
     // attempt to match document size against known paper sizes
-    Gtk::PaperSize paper_size("custom", "custom", doc_width, doc_height, Gtk::UNIT_POINTS);
     std::vector<Gtk::PaperSize> known_sizes = Gtk::PaperSize::get_paper_sizes(false);
     for (auto& size : known_sizes) {
         if (fabs(size.get_width(Gtk::UNIT_POINTS) - doc_width) >= 1.0) {
@@ -82,11 +87,11 @@ Print::Print(SPDocument *doc, SPItem *base) :
             continue;
         }
         // size matches
-        paper_size = size;
+        page_setup->set_paper_size(size);
+        page_setup->set_orientation(orientation);
         break;
     }
 
-    page_setup->set_paper_size(paper_size);
     _printop->set_default_page_setup(page_setup);
     _printop->set_use_full_page(true);
 
