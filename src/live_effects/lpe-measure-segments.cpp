@@ -64,39 +64,39 @@ static const Util::EnumDataConverter<OrientationMethod> OMConverter(OrientationM
 
 LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    unit(_("Unit"), _("Unit"), "unit", &wr, this, "mm"),
-    orientation(_("Orientation"), _("Orientation method"), "orientation", OMConverter, &wr, this, OM_PARALLEL, false),
-    coloropacity(_("Color and opacity"), _("Set color and opacity of the measurements"), "coloropacity", &wr, this, 0x000000ff),
-    fontbutton(_("Font"), _("Font Selector"), "fontbutton", &wr, this),
-    precision(_("Precision"), _("Precision"), "precision", &wr, this, 2),
-    fix_overlaps(_("Fix overlaps °"), _("Min angle where overlaps are fixed, 180° not fixed"), "fix_overlaps", &wr, this, 0),
-    position(_("Position"), _("Position"), "position", &wr, this, 5),
-    text_top_bottom(_("Text top/bottom"), _("Text top/bottom"), "text_top_bottom", &wr, this, 0),
-    helpline_distance(_("Helpline distance"), _("Helpline distance"), "helpline_distance", &wr, this, 0.0),
-    helpline_overlap(_("Helpline overlap"), _("Helpline overlap"), "helpline_overlap", &wr, this, 2.0),
-    line_width(_("Line width"), _("Line width. DIM line group standard are 0.25 or 0.35"), "line_width", &wr, this, 0.25),
+    unit(_("Unit"), _("Unit of measurement"), "unit", &wr, this, "mm"),
+    orientation(_("Orientation"), _("Orientation of the line and labels"), "orientation", OMConverter, &wr, this, OM_PARALLEL, false),
+    coloropacity(_("Color and opacity"), _("Set color and opacity of the dimensions"), "coloropacity", &wr, this, 0x000000ff),
+    fontbutton(_("Font"), _("Select font for labels"), "fontbutton", &wr, this),
+    precision(_("Precision"), _("Number of digits after the decimal point"), "precision", &wr, this, 2),
+    fix_overlaps(_("Merge overlaps °"), _("Minimum angle at which overlapping dimension lines are merged into one, use 180° to disable merging"), "fix_overlaps", &wr, this, 0),
+    position(_("Position"), _("Distance of dimension line from the path"), "position", &wr, this, 5),
+    text_top_bottom(_("Label position"), _("Distance of the labels from the dimension line"), "text_top_bottom", &wr, this, 0),
+    helpline_distance(_("Help line distance"), _("Distance of the perpendicular lines from the path"), "helpline_distance", &wr, this, 0.0),
+    helpline_overlap(_("Help line elongation"), _("Distance of the perpendicular lines' ends from the dimension line"), "helpline_overlap", &wr, this, 2.0),
+    line_width(_("Line width"), _("Dimension line width. DIN standard: 0.25 or 0.35 mm"), "line_width", &wr, this, 0.25),
     scale(_("Scale"), _("Scaling factor"), "scale", &wr, this, 1.0),
     
-    format(_("Format"), _("Format the number ex:{measure} {unit}, return to save"), "format", &wr, this,"{measure}{unit}"),
-    blacklist(_("Blacklist"), _("Optional segment index that exclude measurement, comma limited, you can add more LPE like this to fill the holes"), "blacklist", &wr, this,""),
-    whitelist(_("Inverse blacklist"), _("Blacklist as whitelist"), "whitelist", &wr, this, false),
-    showindex(_("Show measure number"), _("Show measurement number in text label for blacklisting"), "showindex", &wr, this, false),
-    arrows_outside(_("Arrows outside"), _("Arrows outside"), "arrows_outside", &wr, this, false),
-    flip_side(_("Flip side"), _("Flip side"), "flip_side", &wr, this, false),
-    scale_sensitive(_("Scale sensitive"), _("Constrained scale sensitive to transformed containers"), "scale_sensitive", &wr, this, true),
-    local_locale(_("Local Number Format"), _("Local number format"), "local_locale", &wr, this, true),
-    rotate_anotation(_("Rotate Annotation"), _("Rotate Annotation"), "rotate_anotation", &wr, this, true),
-    hide_back(_("Hide if label over"), _("Hide DIN line if label over"), "hide_back", &wr, this, true),
-    hide_arrows(_("Hide arrows"), _("Hide arrows"), "hide_arrows", &wr, this, false),
-    smallx100(_("Multiply lower 1"), _("Multiply by 100 less than 1"), "smallx100", &wr, this, false),
-    linked_items(_("Linked items:"), _("Items that generate a measured projection with its nodes"), "linked_items", &wr, this),
-    distance_projection(_("Distance"), _("Distance away from nearest point"), "distance_projection", &wr, this, 20.0),
-    angle_projection(_("Angle of projection"), _("Angle of projection"), "angle_projection", &wr, this, 0.0),
-    active_projection(_("Activate projection"), _("Active projection mode"), "active_projection", &wr, this, false),
-    avoid_overlapping(_("Avoid overlap measurements"), _("Turn doesn't fit measurements"), "avoid_overlapping", &wr, this, true),
-    onbbox(_("Measure bounding box"), _("Measure geometric bounding box"), "onbbox", &wr, this, false),
-    bboxonly(_("Only bounding box"), _("Measure only bbox and hide nodes"), "bboxonly", &wr, this, false),
-    centers(_("Project center"), _("Use centers as measurement"), "centers", &wr, this, false),
+    format(_("Label format"), _("Label text format, available variables: {measure}, {unit}"), "format", &wr, this,"{measure}{unit}"),
+    blacklist(_("Blacklist segments"), _("Comma-separated list of indices of segments that should not be measured. You can use another LPE with different parameters to measure these."), "blacklist", &wr, this,""),
+    whitelist(_("Invert blacklist"), _("Use the blacklist as whitelist"), "whitelist", &wr, this, false),
+    showindex(_("Show segment index"), _("Display the index of the segments in the text label for easier blacklisting"), "showindex", &wr, this, false),
+    arrows_outside(_("Arrows outside"), _("Draw arrows pointing in the opposite direction outside the dimension line"), "arrows_outside", &wr, this, false),
+    flip_side(_("Flip side"), _("Draw dimension lines and labels on the other side of the path"), "flip_side", &wr, this, false),
+    scale_sensitive(_("Scale sensitive"), _("When the path is grouped and the group is then scaled, adjust the dimensions."), "scale_sensitive", &wr, this, true),
+    local_locale(_("Localize number format"), _("Use localized number formatting, e.g. '1,0' instead of '1.0' with German locale"), "local_locale", &wr, this, true),
+    rotate_anotation(_("Rotate labels"), _("Labels are parallel to the dimension line"), "rotate_anotation", &wr, this, true),
+    hide_back(_("Hide line under label"), _("Hide the dimension line where the label overlaps it"), "hide_back", &wr, this, true),
+    hide_arrows(_("Hide arrows"), _("Don't show any arrows"), "hide_arrows", &wr, this, false),
+    smallx100(_("Multiply values < 1"), _("Multiply values smaller than 1 by 100 and leave out the unit"), "smallx100", &wr, this, false),
+    linked_items(_("Linked objects:"), _("Objects whose nodes are projected onto the path and generate new measurements"), "linked_items", &wr, this),
+    distance_projection(_("Distance"), _("Distance of the dimension lines from the outermost node"), "distance_projection", &wr, this, 20.0),
+    angle_projection(_("Angle of projection"), _("Angle of projection in 90° steps"), "angle_projection", &wr, this, 0.0),
+    active_projection(_("Activate projection"), _("Activate projection mode"), "active_projection", &wr, this, false),
+    avoid_overlapping(_("Avoid label overlap"), _("Rotate labels if the segment is shorter than the label"), "avoid_overlapping", &wr, this, true),
+    onbbox(_("Measure bounding box"), _("Add measurements for the geometrical bounding box"), "onbbox", &wr, this, false),
+    bboxonly(_("Only bounding box"), _("Measure only the geometrical bounding box"), "bboxonly", &wr, this, false),
+    centers(_("Add object center"), _("Add the projected object center"), "centers", &wr, this, false),
     maxmin(_("Only max and min"), _("Compute only max/min projection values"), "maxmin", &wr, this, false),
     helpdata(_("Help"), _("Measure segments help"), "helpdata", &wr, this, "", "")
 {
@@ -181,17 +181,19 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     previous_size = 0;
     pagenumber = 0;
     helpdata.param_update_default(_("<b><big>General</big></b>\n"
-                        "Measure display and positioning\n\n"
+                        "Display and position dimension lines and labels\n\n"
                         "<b><big>Projection</big></b>\n"
                         "Show a line with measurements based on the selected items\n\n"
                         "<b><big>Options</big></b>\n"
-                        "That usually don't change much\n\n"
+                        "Options for color, precision, label formatting and display\n\n"
                         "<b><big>Tips</big></b>\n"
-                        "<b><i>Style Dialog</i></b> Styling using XML editor to find appropriate classes or ID's\n"
-                        "<b><i>Blacklists</i></b> This allow hiding some segments or projection steps to measure\n"
-                        "<b><i>Multiple Measures</i></b> In the same object, in conjunction of blacklists, "
-                        "allow measures with different orientations or a extra projection \n"
-                        "<b><i>Set Defaults</i></b> Remember all LPE has it in the bottom"));
+                        "<b><i>Custom styling:</i></b> To further customize the styles, "
+                        "use the XML editor to find out the class or ID, then use the "
+                        "Style dialog to apply a new style.\n"
+                        "<b><i>Blacklists:</i></b> allow to hide some segments or projection steps.\n"
+                        "<b><i>Multiple Measure LPEs:</i></b> In the same object, in conjunction with blacklists,"
+                        "this allows for labels and measurements with different orientations or additional projections.\n"
+                        "<b><i>Set Defaults:</i></b> For every LPE, default values can be set at the bottom."));
 }
 
 LPEMeasureSegments::~LPEMeasureSegments() {
