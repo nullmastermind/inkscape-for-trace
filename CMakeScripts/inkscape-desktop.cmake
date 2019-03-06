@@ -11,7 +11,7 @@ set(INKSCAPE_MIMETYPE "image/svg+xml;image/svg+xml-compressed;application/vnd.co
 if (ENABLE_BINRELOC)
   set(INKSCAPE_ICONPATH "\${SNAP}/share/inkscape/branding/inkscape.svg")
 else()
-  set(INKSCAPE_ICONPATH "inkscape")
+  set(INKSCAPE_ICONPATH "org.inkscape.Inkscape")
 endif()
 
 configure_file(${INKSCAPE_BINARY_DIR}/org.inkscape.Inkscape.desktop.template.in ${INKSCAPE_BINARY_DIR}/org.inkscape.Inkscape.desktop)
