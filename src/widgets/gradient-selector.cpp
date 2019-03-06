@@ -16,6 +16,7 @@
 
 #include <glibmm/i18n.h>
 #include <gtkmm/treeview.h>
+#include <vector>
 
 #include "document-undo.h"
 #include "document.h"
@@ -213,7 +214,6 @@ static void sp_gradient_selector_dispose(GObject *object)
 
     if ( sel->safelyInit ) {
         sel->safelyInit = false;
-        using std::vector;
         sel->nonsolid.~vector<GtkWidget*>();
         sel->swatch_widgets.~vector<GtkWidget*>();
     }

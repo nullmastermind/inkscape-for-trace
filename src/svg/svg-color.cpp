@@ -35,6 +35,7 @@
 #include "color.h"
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
+#include <vector>
 #include "object/color-profile.h"
 
 #include "document.h"
@@ -44,13 +45,9 @@
 
 #include "cms-system.h"
 
-using std::sprintf;
-using std::string;
-using Inkscape::CMSSystem;
-
 struct SPSVGColor {
     unsigned long rgb;
-    const string name;
+    const std::string name;
 };
 
 /*
@@ -207,7 +204,7 @@ static SPSVGColor const sp_svg_color_named[] = {
     { 0x9ACD32, "yellowgreen" }
 };
 
-static std::map<string, unsigned long> sp_svg_create_color_hash();
+static std::map<std::string, unsigned long> sp_svg_create_color_hash();
 
 guint32 sp_svg_read_color(gchar const *str, guint32 const dfl)
 {
@@ -216,7 +213,7 @@ guint32 sp_svg_read_color(gchar const *str, guint32 const dfl)
 
 static guint32 internal_sp_svg_read_color(gchar const *str, gchar const **end_ptr, guint32 def)
 {
-    static std::map<string, unsigned long> colors;
+    static std::map<std::string, unsigned long> colors;
     guint32 val = 0;
 
     if (str == nullptr) return def;
@@ -382,8 +379,8 @@ static guint32 internal_sp_svg_read_color(gchar const *str, gchar const **end_pt
         }
         c[31] = '\0';
 
-        if (colors.count(string(c))) {
-            val = colors[string(c)];
+        if (colors.count(std::string(c))) {
+            val = colors[std::string(c)];
         }
         else {
             return def;
@@ -462,12 +459,12 @@ static void rgb24_to_css(char *const buf, unsigned const rgb24)
         default: {
             if ((rgb24 & 0xf0f0f) * 0x11 == rgb24) {
                 /* Can use the shorter three-digit form #rgb instead of #rrggbb. */
-                sprintf(buf, "#%x%x%x",
+                std::sprintf(buf, "#%x%x%x",
                         (rgb24 >> 16) & 0xf,
                         (rgb24 >> 8) & 0xf,
                         rgb24 & 0xf);
             } else {
-                sprintf(buf, "#%06x", rgb24);
+                std::sprintf(buf, "#%06x", rgb24);
             }
             break;
         }
@@ -500,10 +497,10 @@ void sp_svg_write_color(gchar *buf, unsigned const buflen, guint32 const rgba32)
     }
 }
 
-static std::map<string, unsigned long>
+static std::map<std::string, unsigned long>
 sp_svg_create_color_hash()
 {
-    std::map<string, unsigned long> colors;
+    std::map<std::string, unsigned long> colors;
 
     for (const auto & i : sp_svg_color_named) {
         colors[i.name] = i.rgb;
@@ -524,7 +521,7 @@ g_message("profile name: %s", icc->colorProfile.c_str());
             if ( trans ) {
                 std::vector<colorspace::Component> comps = colorspace::getColorSpaceInfo( prof );
 
-                size_t count = CMSSystem::getChannelCount( prof );
+                size_t count = Inkscape::CMSSystem::getChannelCount( prof );
                 size_t cap = std::min(count, comps.size());
                 guchar color_in[4];
                 for (size_t i = 0; i < cap; i++) {
@@ -532,7 +529,7 @@ g_message("profile name: %s", icc->colorProfile.c_str());
                     g_message("input[%d]: %d", (int)i, (int)color_in[i]);
                 }
 
-                CMSSystem::doTransform( trans, color_in, color_out, 1 );
+                Inkscape::CMSSystem::doTransform( trans, color_in, color_out, 1 );
 g_message("transform to sRGB done");
             }
             *r = color_out[0];

@@ -15,6 +15,7 @@
 
 #include <cmath>
 #include <cstdio>
+#include <vector>
 
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
@@ -29,7 +30,6 @@
 #define return_val_if_fail(x, val) if (!(x)) { printf("assertion failed: " #x); return val; }
 
 using Inkscape::CSSOStringStream;
-using std::vector;
 
 static bool profileMatches( SVGICCColor const* first, SVGICCColor const* second );
 
@@ -205,7 +205,7 @@ std::string SPColor::toString() const
             css << " ";
         }
         css << "icc-color(" << icc->colorProfile;
-        for (vector<double>::const_iterator i(icc->colors.begin()),
+        for (std::vector<double>::const_iterator i(icc->colors.begin()),
                  iEnd(icc->colors.end());
              i != iEnd; ++i) {
             css << ", " << *i;

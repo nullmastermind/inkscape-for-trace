@@ -18,6 +18,7 @@
 
 #include <cstring>
 #include <string>
+#include <vector>
 
 #include <boost/range/adaptor/transformed.hpp>
 
@@ -43,12 +44,6 @@
 #include "debug/demangle.h"
 #include "util/format.h"
 #include "util/longest-common-suffix.h"
-
-using std::memcpy;
-using std::strchr;
-using std::strcmp;
-using std::strlen;
-using std::strstr;
 
 #define noSP_OBJECT_DEBUG_CASCADE
 
@@ -736,7 +731,7 @@ void SPObject::invoke_build(SPDocument *document, Inkscape::XML::Node *repr, uns
                 }
 
                 /* Redefine ID, if required */
-                if ((id == nullptr) || (strcmp(id, this->getId()) != 0)) {
+                if ((id == nullptr) || (std::strcmp(id, this->getId()) != 0)) {
                     this->repr->setAttribute("id", this->getId());
                 }
             } else if (id) {
@@ -944,17 +939,17 @@ void SPObject::set(SPAttributeEnum key, gchar const* value) {
             object->_default_label = nullptr;
             break;
         case SP_ATTR_INKSCAPE_COLLECT:
-            if ( value && !strcmp(value, "always") ) {
+            if ( value && !std::strcmp(value, "always") ) {
                 object->setCollectionPolicy(SPObject::ALWAYS_COLLECT);
             } else {
                 object->setCollectionPolicy(SPObject::COLLECT_WITH_PARENT);
             }
             break;
         case SP_ATTR_XML_SPACE:
-            if (value && !strcmp(value, "preserve")) {
+            if (value && !std::strcmp(value, "preserve")) {
                 object->xml_space.value = SP_XML_SPACE_PRESERVE;
                 object->xml_space.set = TRUE;
-            } else if (value && !strcmp(value, "default")) {
+            } else if (value && !std::strcmp(value, "default")) {
                 object->xml_space.value = SP_XML_SPACE_DEFAULT;
                 object->xml_space.set = TRUE;
             } else if (object->parent) {
@@ -1410,7 +1405,7 @@ sp_object_get_unique_id(SPObject    *object,
     gchar const *name = object->getRepr()->name();
     g_assert(name != nullptr);
 
-    gchar const *local = strchr(name, ':');
+    gchar const *local = std::strchr(name, ':');
     if (local) {
         name = local + 1;
     }
@@ -1421,10 +1416,10 @@ sp_object_get_unique_id(SPObject    *object,
         }
     }
 
-    size_t const name_len = strlen(name);
+    size_t const name_len = std::strlen(name);
     size_t const buflen = name_len + (sizeof(count) * 10 / 4) + 1;
     gchar *const buf = (gchar *) g_malloc(buflen);
-    memcpy(buf, name, name_len);
+    std::memcpy(buf, name, name_len);
     gchar *const count_buf = buf + name_len;
     size_t const count_buflen = buflen - name_len;
     do {
@@ -1567,7 +1562,7 @@ SPObject* SPObject::findFirstChild(gchar const *tagname) const
     for (auto& child: const_cast<SPObject*>(this)->children)
     {
         if (child.repr->type() == Inkscape::XML::ELEMENT_NODE &&
-            !strcmp(child.repr->name(), tagname)) {
+            !std::strcmp(child.repr->name(), tagname)) {
             return &child;
         }
     }

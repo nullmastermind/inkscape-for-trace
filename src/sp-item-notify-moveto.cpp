@@ -12,14 +12,13 @@
  */
 
 #include <2geom/transforms.h>
+#include <vector>
 
 #include "sp-item-notify-moveto.h"
 
 #include "object/sp-guide.h"
 #include "object/sp-item.h"
 #include "object/sp-item-rm-unsatisfied-cns.h"
-
-using std::vector;
 
 #define return_if_fail(test) if (!(test)) { printf("WARNING: assertion '%s' failed", #test); return; }
 

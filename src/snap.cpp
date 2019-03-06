@@ -17,6 +17,7 @@
  */
 
 #include <utility>
+#include <vector>
 
 #include <2geom/transforms.h>
 
@@ -36,7 +37,6 @@
 
 #include "ui/tools/tool-base.h"
 
-using std::vector;
 using Inkscape::Util::round_to_upper_multiple_plus;
 using Inkscape::Util::round_to_lower_multiple_plus;
 

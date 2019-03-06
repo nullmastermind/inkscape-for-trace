@@ -19,6 +19,7 @@
 #include <algorithm>
 #include <cstring>
 #include <string>
+#include <vector>
 
 #include "display/sp-canvas.h"
 #include "display/guideline.h"
@@ -40,7 +41,6 @@
 #include "verbs.h"
 
 using Inkscape::DocumentUndo;
-using std::vector;
 
 SPGuide::SPGuide()
     : SPObject()
@@ -406,7 +406,7 @@ void SPGuide::moveto(Geom::Point const point_on_line, bool const commit)
     }
 
 /*  DISABLED CODE BECAUSE  SPGuideAttachment  IS NOT USE AT THE MOMENT (johan)
-    for (vector<SPGuideAttachment>::const_iterator i(attached_items.begin()),
+    for (std::vector<SPGuideAttachment>::const_iterator i(attached_items.begin()),
              iEnd(attached_items.end());
          i != iEnd; ++i)
     {
@@ -445,7 +445,7 @@ void SPGuide::set_normal(Geom::Point const normal_to_line, bool const commit)
     }
 
 /*  DISABLED CODE BECAUSE  SPGuideAttachment  IS NOT USE AT THE MOMENT (johan)
-    for (vector<SPGuideAttachment>::const_iterator i(attached_items.begin()),
+    for (std::vector<SPGuideAttachment>::const_iterator i(attached_items.begin()),
              iEnd(attached_items.end());
          i != iEnd; ++i)
     {
@@ -550,7 +550,7 @@ void sp_guide_remove(SPGuide *guide)
 {
     g_assert(SP_IS_GUIDE(guide));
 
-    for (vector<SPGuideAttachment>::const_iterator i(guide->attached_items.begin()),
+    for (std::vector<SPGuideAttachment>::const_iterator i(guide->attached_items.begin()),
              iEnd(guide->attached_items.end());
          i != iEnd; ++i)
     {

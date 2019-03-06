@@ -19,6 +19,7 @@
  */
 #include <clocale>
 #include <string>
+#include <vector>
 
 #include <gtkmm.h>
 
@@ -64,7 +65,6 @@
 
  
 using Inkscape::DocumentUndo;
-using namespace std;
 
 int sp_file_convert_dpi_method_commandline = -1; // Unset
 
@@ -85,9 +85,9 @@ void fix_blank_line(SPObject *o)
 
     SPIFontSize fontsize = o->style->font_size;
     SPILengthOrNormal lineheight = o->style->line_height;
-    vector<SPObject *> cl = o->childList(false);
+    std::vector<SPObject *> cl = o->childList(false);
     bool beginning = true;
-    for (vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci) {
+    for (std::vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci) {
         SPObject *i = *ci;
         if ((SP_IS_TSPAN(i) && is_line(i)) || SP_IS_FLOWPARA(i) || SP_IS_FLOWDIV(i)) {
             if (sp_text_get_length((SPItem *)i) <= 1) { // empty line
@@ -116,8 +116,8 @@ void fix_line_spacing(SPObject *o)
 {
     SPILengthOrNormal lineheight = o->style->line_height;
     bool inner = false;
-    vector<SPObject *> cl = o->childList(false);
-    for (vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci) {
+    std::vector<SPObject *> cl = o->childList(false);
+    for (std::vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci) {
         SPObject *i = *ci;
         if ((SP_IS_TSPAN(i) && is_line(i)) || SP_IS_FLOWPARA(i) || SP_IS_FLOWDIV(i)) {
             // if no line-height attribute, set it
@@ -138,10 +138,10 @@ void fix_line_spacing(SPObject *o)
 
 void fix_font_name(SPObject *o)
 {
-    vector<SPObject *> cl = o->childList(false);
-    for (vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci)
+    std::vector<SPObject *> cl = o->childList(false);
+    for (std::vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci)
         fix_font_name(*ci);
-    string prev = o->style->font_family.value ? o->style->font_family.value : o->style->font_family.value_default;
+    std::string prev = o->style->font_family.value ? o->style->font_family.value : o->style->font_family.value_default;
     if (prev == "Sans")
         o->style->font_family.read("sans-serif");
     else if (prev == "Serif")
@@ -157,8 +157,8 @@ void fix_font_size(SPObject *o)
     if (!fontsize.set)
         return;
     bool inner = false;
-    vector<SPObject *> cl = o->childList(false);
-    for (vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci) {
+    std::vector<SPObject *> cl = o->childList(false);
+    for (std::vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci) {
         SPObject *i = *ci;
         fix_font_size(i);
         if ((SP_IS_TSPAN(i) && is_line(i)) || SP_IS_FLOWPARA(i) || SP_IS_FLOWDIV(i)) {
@@ -181,8 +181,8 @@ void sp_file_text_run_recursive(void (*f)(SPObject *), SPObject *o)
     if (SP_IS_TEXT(o) || SP_IS_FLOWTEXT(o))
         f(o);
     else {
-        vector<SPObject *> cl = o->childList(false);
-        for (vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci)
+        std::vector<SPObject *> cl = o->childList(false);
+        for (std::vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci)
             sp_file_text_run_recursive(f, *ci);
     }
 }

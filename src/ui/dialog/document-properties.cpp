@@ -23,6 +23,7 @@
 # include "config.h"  // only include where actually required!
 #endif
 
+#include <vector>
 #include "style.h"
 #include "rdf.h"
 #include "verbs.h"
@@ -46,8 +47,6 @@
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 #include "object/color-profile.h"
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-
-using std::pair;
 
 namespace Inkscape {
 namespace UI {

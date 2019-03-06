@@ -22,6 +22,7 @@
  */
 
 #include <numeric>
+#include <vector>
 
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
@@ -66,7 +67,6 @@
 
 
 using Inkscape::DocumentUndo;
-using namespace std;
 
 #define DDC_RED_RGBA 0xff0000ff
 #define DYNA_MIN_WIDTH 1.0e-6

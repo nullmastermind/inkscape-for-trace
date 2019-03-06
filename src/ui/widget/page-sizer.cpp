@@ -27,9 +27,6 @@
 #include "object/sp-root.h"
 #include "io/resource.h"
 
-using std::pair;
-using Inkscape::Util::unit_table;
-
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -133,7 +130,7 @@ PageSizer::PageSizer(Registry & _wr)
             snprintf(formatBuf, 79, "%0.1f x %0.1f", width, height);
             Glib::ustring desc = formatBuf;
             desc.append(" " + std::string(line[3]));
-            PaperSize paper(name, width, height, unit_table.getUnit(line[3]));
+            PaperSize paper(name, width, height, Inkscape::Util::unit_table.getUnit(line[3]));
             _paperSizeTable[name] = paper;
             Gtk::TreeModel::Row row = *(_paperSizeListStore->append());
             row[_paperSizeListColumns.nameColumn] = name;
@@ -450,12 +447,9 @@ PageSizer::updateFitMarginsUI(Inkscape::XML::Node *nv_repr)
 Gtk::ListStore::iterator
 PageSizer::find_paper_size (Inkscape::Util::Quantity w, Inkscape::Util::Quantity h) const
 {
-    using Inkscape::Util::Quantity;
-    using std::swap;
-
     // The code below assumes that w < h, so make sure that's the case:
     if ( h < w ) {
-        swap(h,w);
+        std::swap(h,w);
     }
 
     g_return_val_if_fail(w <= h, _paperSizeListStore->children().end());
@@ -464,8 +458,8 @@ PageSizer::find_paper_size (Inkscape::Util::Quantity w, Inkscape::Util::Quantity
     for (iter = _paperSizeTable.begin() ;
          iter != _paperSizeTable.end() ; ++iter) {
         PaperSize paper = iter->second;
-        Quantity smallX (paper.smaller, paper.unit);
-        Quantity largeX (paper.larger, paper.unit);
+        Inkscape::Util::Quantity smallX (paper.smaller, paper.unit);
+        Inkscape::Util::Quantity largeX (paper.larger, paper.unit);
 
         g_return_val_if_fail(smallX.quantity < largeX.quantity + 0.001, _paperSizeListStore->children().end());
 

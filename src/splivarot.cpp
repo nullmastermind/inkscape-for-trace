@@ -466,9 +466,8 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
     // reverse if needed
     // note that the selection list keeps its order
     if ( reverseOrderForOp ) {
-        using std::swap;
-        swap(originaux[0], originaux[1]);
-        swap(origWind[0], origWind[1]);
+        std::swap(originaux[0], originaux[1]);
+        std::swap(origWind[0], origWind[1]);
     }
 
     // and work
