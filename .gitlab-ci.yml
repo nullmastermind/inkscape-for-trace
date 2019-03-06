@@ -37,6 +37,7 @@ inkscape:linux:
     - make -j3 install
     - make -j3 tests
     - cpack -G DEB
+    - rm -rf src _CPack_Packages # exclude from artifacts
     - cd ..
   artifacts:
     expire_in: 1 year
