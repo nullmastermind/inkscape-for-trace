@@ -31,9 +31,6 @@ namespace Inkscape {
 namespace Extension {
 namespace Internal {
 
-bool PrintMetafile::_ppt_fontfix_read = false;
-PrintMetafile::FontfixMap PrintMetafile::_ppt_fixable_fonts;
-
 PrintMetafile::~PrintMetafile()
 {
 #ifndef G_OS_WIN32
@@ -42,6 +39,28 @@ PrintMetafile::~PrintMetafile()
 #endif
     return;
 }
+
+static std::map<Glib::ustring, FontfixParams> _ppt_fixable_fonts = {
+         {{"Arial"},                    { 0.05,  -0.055, -0.065}},
+         {{"Times New Roman"},          { 0.05,  -0.055, -0.065}},
+         {{"Lucida Sans"},              {-0.025, -0.055, -0.065}},
+         {{"Sans"},                     { 0.05,  -0.055, -0.065}},
+         {{"Microsoft Sans Serif"},     {-0.05,  -0.055, -0.065}},
+         {{"Serif"},                    { 0.05,  -0.055, -0.065}},
+         {{"Garamond"},                 { 0.05,  -0.055, -0.065}},
+         {{"Century Schoolbook"},       { 0.25,   0.025,  0.025}},
+         {{"Verdana"},                  { 0.025,  0.0,    0.0}},
+         {{"Tahoma"},                   { 0.045,  0.025,  0.025}},
+         {{"Symbol"},                   { 0.025,  0.0,    0.0}},
+         {{"Wingdings"},                { 0.05,   0.0,    0.0}},
+         {{"Zapf Dingbats"},            { 0.025,  0.0,    0.0}},
+         {{"Convert To Symbol"},        { 0.025,  0.0,    0.0}},
+         {{"Convert To Wingdings"},     { 0.05,   0.0,    0.0}},
+         {{"Convert To Zapf Dingbats"}, { 0.025,  0.0,    0.0}},
+         {{"Sylfaen"},                  { 0.1,    0.0,    0.0}},
+         {{"Palatino Linotype"},        { 0.175,  0.125,  0.125}},
+         {{"Segoe UI"},                 { 0.1,    0.0,    0.0}},
+};
 
 bool PrintMetafile::textToPath(Inkscape::Extension::Print *ext)
 {
@@ -66,60 +85,12 @@ unsigned int PrintMetafile::release(Inkscape::Extension::Print * /*mod*/)
     return 1;
 }
 
-bool PrintMetafile::_load_ppt_fontfix_data()   //this is not called by any other source files
-{
-    static bool ppt_fontfix_available = false;
-
-    if (_ppt_fontfix_read) return ppt_fontfix_available;
-    _ppt_fontfix_read = true;
-
-    // add default entry
-    _ppt_fixable_fonts.insert(std::make_pair(Glib::ustring(""), FontfixParams()));
-
-    std::string fontfix_path = Glib::build_filename(INKSCAPE_EXTENSIONDIR, "fontfix.conf");
-    std::ifstream fontfix_file(fontfix_path.c_str(), std::ios::in);
-
-    if (!fontfix_file.is_open()) {
-        g_warning("Unable to open PowerPoint fontfix file: %s\n"
-                  "PowerPoint ungrouping compensation in WMF/EMF export will not be available.",
-                  fontfix_path.c_str());
-        return (ppt_fontfix_available = false);
-    }
-
-    char *oldlocale = g_strdup(setlocale(LC_NUMERIC, nullptr));
-    setlocale(LC_NUMERIC, "C");
-
-    std::string instr;
-    while (std::getline(fontfix_file, instr)) {
-        if (instr[0] == '#') {
-            continue;
-        }
-        // not a comment, get the 4 values from the line
-        FontfixParams params;
-        char fontname[128];
-        int elements = sscanf(instr.c_str(), "%lf %lf %lf %127[^\n]",
-                              &params.f1, &params.f2, &params.f3, &fontname[0]);
-        if (elements != 4) {
-            g_warning("Malformed line in %s: %s\n", fontfix_path.c_str(), instr.c_str());
-            continue;
-        }
-        _ppt_fixable_fonts.insert(std::make_pair(Glib::ustring(fontname), params));
-    }
-    fontfix_file.close(); // not strictly necessary
-
-    setlocale(LC_NUMERIC, oldlocale);
-    g_free(oldlocale);
-    return (ppt_fontfix_available = true);
-}
-
 // Finds font fix parameters for the given fontname.
 void PrintMetafile::_lookup_ppt_fontfix(Glib::ustring const &fontname, FontfixParams &params)
 {
-    if (!_ppt_fontfix_read) _load_ppt_fontfix_data();
-
-    FontfixMap::iterator f = _ppt_fixable_fonts.find(fontname);
-    if (f != _ppt_fixable_fonts.end()) {
-        params = f->second;
+    auto it = _ppt_fixable_fonts.find(fontname);
+    if (it!=_ppt_fixable_fonts.end()) {
+        params = it->second;
     }
 }
 

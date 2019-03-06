@@ -2180,8 +2180,6 @@ unsigned int PrintEmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
 
 void PrintEmf::init()
 {
-    _load_ppt_fontfix_data();
-
     /* EMF print */
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"

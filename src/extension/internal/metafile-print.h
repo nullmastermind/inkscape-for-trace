@@ -38,7 +38,6 @@ struct FontfixParams {
     double f1;         //Vertical (rotating) offset factor (* font height)
     double f2;         //Vertical (nonrotating) offset factor (* font height)
     double f3;         //Horizontal (nonrotating) offset factor (* font height)
-    FontfixParams() : f1(0), f2(0), f3(0) {}
 };
 
 class PrintMetafile
@@ -84,7 +83,6 @@ protected:
 
     GRADVALUES gv;
 
-    static bool _load_ppt_fontfix_data(); 
     static void _lookup_ppt_fontfix(Glib::ustring const &fontname, FontfixParams &);
     static U_COLORREF _gethexcolor(uint32_t color);
     static uint32_t _translate_weight(unsigned inkweight);
@@ -109,11 +107,6 @@ protected:
     virtual void destroy_brush() = 0;
     virtual int  create_pen(SPStyle const *style, const Geom::Affine &transform) = 0;
     virtual void destroy_pen() = 0;
-
-private:
-    typedef std::map<Glib::ustring, FontfixParams> FontfixMap;
-    static FontfixMap _ppt_fixable_fonts;
-    static bool _ppt_fontfix_read;
 };
 
 } // namespace Internal

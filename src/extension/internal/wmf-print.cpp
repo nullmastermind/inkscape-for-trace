@@ -1563,8 +1563,6 @@ unsigned int PrintWmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
 
 void PrintWmf::init()
 {
-    _load_ppt_fontfix_data();
-
     /* WMF print */
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
