@@ -47,6 +47,7 @@
 #include "ui/tools/tool-base.h"
 #include "ui/widget/color-preview.h"
 
+#include "widgets/ege-paint-def.h"
 #include "widgets/gradient-image.h"
 #include "widgets/spinbutton-events.h"
 #include "widgets/spw-utilities.h"
@@ -98,7 +99,7 @@ struct DropTracker {
 
 /* Drag and Drop */
 enum ui_drop_target_info {
-    APP_X_COLOR
+    APP_OSWB_COLOR
 };
 
 //TODO: warning: deprecated conversion from string constant to ‘gchar*’
@@ -108,7 +109,7 @@ enum ui_drop_target_info {
 // code, those warnings are actually desired. They say "Hey! Fix this". We
 // definitely don't want to hide/ignore them. --JonCruz
 static const GtkTargetEntry ui_drop_target_entries [] = {
-    {g_strdup("application/x-color"), 0, APP_X_COLOR}
+    {g_strdup("application/x-oswb-color"), 0, APP_OSWB_COLOR}
 };
 
 static guint nui_drop_target_entries = G_N_ELEMENTS(ui_drop_target_entries);
@@ -508,30 +509,38 @@ void SelectedStyle::dragDataReceived( GtkWidget */*widget*/,
 {
     DropTracker* tracker = (DropTracker*)user_data;
 
-    switch ( (int)tracker->item ) {
-        case SS_FILL:
-        case SS_STROKE:
-        {
-            if (gtk_selection_data_get_length(data) == 8 ) {
-                gchar c[64];
-                // Careful about endian issues.
-                guint16* dataVals = (guint16*)gtk_selection_data_get_data(data);
-                sp_svg_write_color( c, sizeof(c),
-                                    SP_RGBA32_U_COMPOSE(
-                                        0x0ff & (dataVals[0] >> 8),
-                                        0x0ff & (dataVals[1] >> 8),
-                                        0x0ff & (dataVals[2] >> 8),
-                                        0xff // can't have transparency in the color itself
-                                        //0x0ff & (data->data[3] >> 8),
-                                        ));
-                SPCSSAttr *css = sp_repr_css_attr_new();
-                sp_repr_css_set_property( css, (tracker->item == SS_FILL) ? "fill":"stroke", c );
-                sp_desktop_set_style( tracker->parent->_desktop, css );
-                sp_repr_css_attr_unref( css );
-                DocumentUndo::done( tracker->parent->_desktop->getDocument(), SP_VERB_NONE, _("Drop color"));
+    // copied from drag-and-drop.cpp, case APP_OSWB_COLOR
+    bool worked = false;
+    Glib::ustring colorspec;
+    if (gtk_selection_data_get_format(data) == 8) {
+        ege::PaintDef color;
+        worked = color.fromMIMEData("application/x-oswb-color",
+                                    reinterpret_cast<char const *>(gtk_selection_data_get_data(data)),
+                                    gtk_selection_data_get_length(data),
+                                    gtk_selection_data_get_format(data));
+        if (worked) {
+            if (color.getType() == ege::PaintDef::CLEAR) {
+                colorspec = ""; // TODO check if this is sufficient
+            } else if (color.getType() == ege::PaintDef::NONE) {
+                colorspec = "none";
+            } else {
+                unsigned int r = color.getR();
+                unsigned int g = color.getG();
+                unsigned int b = color.getB();
+
+                gchar* tmp = g_strdup_printf("#%02x%02x%02x", r, g, b);
+                colorspec = tmp;
+                g_free(tmp);
             }
         }
-        break;
+    }
+    if (worked) {
+        SPCSSAttr *css = sp_repr_css_attr_new();
+        sp_repr_css_set_property(css, (tracker->item == SS_FILL) ? "fill":"stroke", colorspec.c_str());
+
+        sp_desktop_set_style(tracker->parent->_desktop, css);
+        sp_repr_css_attr_unref(css);
+        DocumentUndo::done(tracker->parent->_desktop->getDocument(), SP_VERB_NONE, _("Drop color"));
     }
 }
 
