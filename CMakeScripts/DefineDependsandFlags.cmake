@@ -23,6 +23,7 @@ list(APPEND INKSCAPE_CXX_FLAGS "-Werror=format")                # e.g.: printf("
 list(APPEND INKSCAPE_CXX_FLAGS "-Werror=format-security")       # e.g.: printf(variable);
 list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-D_FORTIFY_SOURCE=2")
 if (CMAKE_COMPILER_IS_GNUCC)
+list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-Og")                     # for _FORTIFY_SOURCE
 list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-fexceptions -fstack-protector-strong -grecord-gcc-switches -fasynchronous-unwind-tables")
 if(CXX_COMPILER_VERSION VERSION_GREATER 8.0)
 list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-fstack-clash-protection -fcf-protection")
