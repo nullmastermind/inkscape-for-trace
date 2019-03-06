@@ -51,11 +51,6 @@ cp /usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/* usr/lib/x86_64-linux-gnu/g
 cp /usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders.cache usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/
 sed -i -e 's|/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders/||g' usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders.cache
 
-# Optionally bundle Gtk+ themes
-apt-get download gnome-themes-extra gnome-themes-extra-data adwaita-icon-theme-full
-find *.deb -exec dpkg-deb -x {} . \;
-rm *deb
-
 # Bundle fontconfig settings
 mkdir -p etc/fonts/
 cp /etc/fonts/fonts.conf etc/fonts/
@@ -90,7 +85,6 @@ chmod a+x linuxdeployqt-continuous-x86_64.AppImage
   -executable=$(readlink -f appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-gif.so) \
   -executable=$(readlink -f appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-bmp.so) \
   -executable=$(readlink -f appdir/usr/lib/x86_64-linux-gnu/gdk-pixbuf-*/*/loaders/libpixbufloader-ani.so) \
-  -executable=$(readlink -f appdir/usr/lib/x86_64-linux-gnu/gtk-*/*/engines/libadwaita.so) \
   -executable=appdir/usr/bin/python2.7
 
 mv Inkscape*.AppImage* ../
