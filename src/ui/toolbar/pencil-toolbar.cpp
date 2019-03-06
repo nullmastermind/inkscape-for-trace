@@ -315,7 +315,7 @@ PencilToolbar::add_freehand_mode_toggle(bool tool_is_pencil)
     _flatten_spiro_bspline->signal_clicked().connect(sigc::mem_fun(*this, &PencilToolbar::flatten_spiro_bspline));
     add(*_flatten_spiro_bspline);
 
-    _mode_buttons[freehandMode]->set_active();
+    _mode_buttons[(freehandMode < _mode_buttons.size()) ? freehandMode : 0]->set_active();
 
     if (freehandMode == 1 || freehandMode == 2) {
         _flatten_spiro_bspline->set_visible(true);
