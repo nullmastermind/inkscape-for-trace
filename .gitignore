@@ -24,3 +24,22 @@ inkscape_devel_source.tar.bz2
 /*.snap
 /*_source.tar.bz2
 
+# CMake stuff
+CMakeFiles/
+Makefile
+cmake_install.cmake
+CMakeCache.txt
+CPackConfig.cmake
+CPackSourceConfig.cmake
+cmake_uninstall.cmake
+
+# Translations
+po/*.gmo
+
+# Generated Man pages
+man/*.1
+man/*.pod
+man/*.tmp
+
+# Generated C files
+src/helper/sp-marshal.*
