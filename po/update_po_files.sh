@@ -30,6 +30,7 @@ while read FILENAME; do
       echo "Could not merge \"$FILENAME.old\"."
     else
       rm "$FILENAME".old
+      msgfmt -c "$FILENAME"
     fi
   else
     echo "Could not rename \"$FILENAME\". File skipped."
