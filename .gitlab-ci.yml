@@ -98,7 +98,7 @@ inkscape:mac:
   script:
     - mkdir -p build
     - cd build
-    - cmake .. -DCMAKE_PREFIX_PATH="/usr/local/opt/gettext;/usr/local/opt/imagemagick@6/;/usr/local/opt/icu4c/" -DWITH_OPENMP=OFF -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug
+    - cmake .. -DCMAKE_PREFIX_PATH="/usr/local/opt/gettext;/usr/local/opt/imagemagick@6/;/usr/local/opt/icu4c/;/usr/local/opt/libffi/" -DWITH_OPENMP=OFF -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug
     - make -j1
     - cd ..
   artifacts:
