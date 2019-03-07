@@ -609,30 +609,29 @@ void InkscapePreferences::symbolicThemeCheck()
 {
     using namespace Inkscape::IO::Resource;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    auto folders = get_foldernames(ICONS, { "application" });
     bool symbolic = false;
-    bool default_icon_theme = true;
-    for (auto &folder : folders) {
-        auto path = folder;
-        const size_t last_slash_idx = folder.find_last_of("\\/");
-        if (std::string::npos != last_slash_idx) {
-            folder.erase(0, last_slash_idx + 1);
-        }
-        if (folder == prefs->getString("/theme/iconTheme")) {
-#ifdef _WIN32
-            path += g_win32_locale_filename_from_utf8("/symbolic/actions");
-#else
-            path += "/symbolic/actions";
-#endif
-            default_icon_theme = false;
-            std::vector<Glib::ustring> symbolic_icons = get_filenames(path, { ".svg" }, {});
-            if (symbolic_icons.size() > 0) {
-                symbolic = true;
-                symbolic_icons.clear();
+    if (prefs->getString("/theme/defaultIconTheme") != prefs->getString("/theme/iconTheme")) {
+        auto folders = get_foldernames(ICONS, { "application" });
+        for (auto &folder : folders) {
+            auto path = folder;
+            const size_t last_slash_idx = folder.find_last_of("\\/");
+            if (std::string::npos != last_slash_idx) {
+                folder.erase(0, last_slash_idx + 1);
+            }
+            if (folder == prefs->getString("/theme/iconTheme")) {
+    #ifdef _WIN32
+                path += g_win32_locale_filename_from_utf8("/symbolic/actions");
+    #else
+                path += "/symbolic/actions";
+    #endif
+                std::vector<Glib::ustring> symbolic_icons = get_filenames(path, { ".svg" }, {});
+                if (symbolic_icons.size() > 0) {
+                    symbolic = true;
+                    symbolic_icons.clear();
+                }
             }
         }
-    }
-    if (default_icon_theme) {
+    } else {
         symbolic = true;
     }
     if (_symbolic_icons.get_parent()) {
@@ -642,12 +641,12 @@ void InkscapePreferences::symbolicThemeCheck()
             _symbolic_color.get_parent()->hide();
         }
         else {
-
             _symbolic_icons.get_parent()->show();
             _symbolic_color.get_parent()->show();
         }
     }
 }
+
 void InkscapePreferences::symbolicDefaultColor(){
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool("/theme/symbolicIconsDefaultColor", true);
@@ -1005,19 +1004,21 @@ void InkscapePreferences::initPageUI()
     }
     _symbolic_icons.init(_("Use symbolic icons"), "/theme/symbolicIcons", true);
     _symbolic_icons.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicAddClass));
-    _page_theme.add_line(true, "", _symbolic_icons, "", "", true),
+    _page_theme.add_line(true, "", _symbolic_icons, "", "", true);
     _symbolic_color.init(_("Color for symbolic icons:"), "/theme/symbolicColor", 0x000000ff);
-    Gtk::Button *apply_color = new Gtk::Button(_("Apply color"));
+    Gtk::Label *_symbolic_color_label = Gtk::manage(new Gtk::Label(_("Color for symbolic icons:")));
+    Gtk::Button *apply_color = Gtk::manage(new Gtk::Button(_("Apply color")));
     apply_color->set_tooltip_text(_("Apply color to symbolic icons)"));
     apply_color->signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicAddClass));
-    Gtk::Button *theme_decide_color = new Gtk::Button(_("Theme decides"));
+    Gtk::Button *theme_decide_color = Gtk::manage(new Gtk::Button(_("Theme decides")));
     theme_decide_color->set_tooltip_text(_("Theme decide symbolic icon color)"));
     theme_decide_color->signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicDefaultColor));
     Gtk::Box *icon_buttons = Gtk::manage(new Gtk::Box());
+    icon_buttons->pack_start(*_symbolic_color_label, true, true, 4);
     icon_buttons->pack_start(_symbolic_color, true, true, 4);
     icon_buttons->pack_start(*apply_color, true, true, 4);
     icon_buttons->pack_start(*theme_decide_color, true, true, 4);
-    _page_theme.add_line(false,_("Color for symbolic icons:"), *icon_buttons, "", _("Color for symbolic icons, theme based or custom. Some icon color changes need reload"), false );
+    _page_theme.add_line(false,"", *icon_buttons, "", _("Color for symbolic icons, theme based or custom. Some icon color changes need reload"), false );
     {
         Glib::ustring sizeLabels[] = { C_("Icon size", "Larger"), C_("Icon size", "Large"), C_("Icon size", "Small"),
                                        C_("Icon size", "Smaller") };
@@ -1041,12 +1042,9 @@ void InkscapePreferences::initPageUI()
         int menu_icons_values[] = {1, -1, 0};
         _menu_icons.init("/theme/menuIcons", menu_icons_labels, menu_icons_values, G_N_ELEMENTS(menu_icons_labels), 0);
         _page_theme.add_line(false, _("Show icons in menus:"), _menu_icons, "",
-                             _("You can either enable or disable all icons in menus. By default the theme determines which icons to display by using the 'show-icons' attribute in its 'menus.xml' file."), false);
+                             _("You can either enable or disable all icons in menus. By default the theme determines which icons to display by using the 'show-icons' attribute in its 'menus.xml' file. (requires restart)"), false);
     }
-    _apply_theme.set_label(_("Reload icons"));
-    _apply_theme.set_tooltip_text(_("Apply icon changes (may take a few seconds)"));
-    _page_theme.add_line(false, "", _apply_theme, "<span size=\"small\">Reloading icons will close all windows and open them again. No data will be lost.</span>", "", false);
-    _apply_theme.signal_clicked().connect(sigc::ptr_fun(sp_ui_reload));
+
     this->AddPage(_page_theme, _("Theme"), iter_ui, PREFS_PAGE_UI_THEME);
     symbolicThemeCheck();
     // Windows

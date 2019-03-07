@@ -66,53 +66,6 @@ sp_ui_new_view()
     auto win = new InkscapeWindow(document);
 }
 
-void sp_ui_reload()
-{
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_UI_THEME);
-    Inkscape::UI::Dialog::Dialog *prefs_dialog = SP_ACTIVE_DESKTOP->_dlg_mgr->getDialog("InkscapePreferences");
-    if (prefs_dialog) {
-        prefs_dialog->hide();
-    }
-    int window_geometry = prefs->getInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_NONE);
-    if (GtkSettings *settings = gtk_settings_get_default()) {
-        Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
-        if (themeiconname != "") {
-            g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
-        }
-    }
-    prefs->setInt("/options/savewindowgeometry/value", PREFS_WINDOW_GEOMETRY_LAST);
-    prefs->save();
-    std::list<SPDesktop *> desktops;
-    INKSCAPE.get_all_desktops(desktops);
-    std::list<SPDesktop *>::iterator i = desktops.begin();
-    while (i != desktops.end()) {
-        SPDesktop *dt = *i;
-        if (dt == nullptr) {
-            ++i;
-            continue;
-        }
-        dt->storeDesktopPosition();
-        SPDocument *document;
-        SPViewWidget *dtw;
-
-        document = dt->getDocument();
-        if (!document) {
-            ++i;
-            continue;
-        }
-
-        auto win = new InkscapeWindow(document);
-
-        dt->destroyWidget();
-        i++;
-    }
-    SP_ACTIVE_DESKTOP->_dlg_mgr->showDialog("InkscapePreferences");
-    INKSCAPE.add_gtk_css();
-    prefs->setInt("/options/savewindowgeometry/value", window_geometry);
-}
-
 void
 sp_ui_close_view(GtkWidget */*widget*/)
 {
