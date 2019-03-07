@@ -158,7 +158,7 @@ translations:
     - schedules
   script:
     # make sure dependencies for inkscape.pot are up-to-date
-    - mkdir build && cd build && cmake .. && make inkscape_pot && cd ..
+    - mkdir build && cd build && cmake .. && make inkscape_pot && cd .. || exit 1
     - cd po/
 
     # update POTFILES.in
@@ -167,7 +167,7 @@ translations:
     - grep -v "^#" POTFILES.in > POTFILES.in.2
 
     # update inkscape.pot and sync all .po files
-    - intltool-update --pot && mv untitled.pot inkscape.pot
+    - intltool-update --pot --gettext-package=inkscape
     - ./update_po_files.sh
 
     # check if POTFILES.in should be updated in the repo (shall we automate this?)
