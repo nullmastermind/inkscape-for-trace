@@ -1525,12 +1525,11 @@ void PathManipulator::_setGeometry()
 /** Figure out in what attribute to store the nodetype string. */
 Glib::ustring PathManipulator::_nodetypesKey()
 {
-    // temporary fix
-    // if (_lpe_key.empty())
-    if (false)
-        return ("sodipodi:nodetypes");
-    else
-        return (_lpe_key + "-nodetypes");
+    if (_lpe_key.empty()) {
+        return "sodipodi:nodetypes";
+    } else {
+        return _lpe_key + "-nodetypes";
+    }
 }
 
 /** Return the XML node we are editing.
