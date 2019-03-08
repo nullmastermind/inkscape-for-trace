@@ -76,6 +76,7 @@ bool LivePathEffectAdd::mouseout(GdkEventCrossing *evt, GtkWidget *wdg)
 {
     GdkWindow *window = gtk_widget_get_window(wdg);
     gdk_window_set_cursor(window, nullptr);
+    hide_pop_description(evt);
     return true;
 }
 
@@ -140,7 +141,7 @@ LivePathEffectAdd::LivePathEffectAdd()
         LPEIcon->set_from_icon_name(converter.get_icon(data->id), Gtk::BuiltinIconSize(Gtk::ICON_SIZE_DIALOG));
         Gtk::EventBox *LPESelectorEffectEventInfo;
         builder_effect->get_widget("LPESelectorEffectEventInfo", LPESelectorEffectEventInfo);
-        LPESelectorEffectEventInfo->signal_button_press_event().connect(sigc::bind<Glib::RefPtr<Gtk::Builder>>(
+        LPESelectorEffectEventInfo->signal_enter_notify_event().connect(sigc::bind<Glib::RefPtr<Gtk::Builder>>(
             sigc::mem_fun(*this, &LivePathEffectAdd::pop_description), builder_effect));
         Gtk::EventBox *LPESelectorEffectEventFav;
         builder_effect->get_widget("LPESelectorEffectEventFav", LPESelectorEffectEventFav);
@@ -186,7 +187,7 @@ LivePathEffectAdd::LivePathEffectAdd()
         sigc::mem_fun(*this, &LivePathEffectAdd::mouseout), GTK_WIDGET(_LPESelectorEffectEventFavShow->gobj())));
     _LPESelectorEffectEventFavShow->signal_button_press_event().connect(
         sigc::mem_fun(*this, &LivePathEffectAdd::show_fav_toggler));
-    _LPESelectorEffectInfoEventBox->signal_button_press_event().connect(
+    _LPESelectorEffectInfoEventBox->signal_leave_notify_event().connect(
         sigc::mem_fun(*this, &LivePathEffectAdd::hide_pop_description));
     _LPESelectorEffectInfoEventBox->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(
         sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(_LPESelectorEffectInfoEventBox->gobj())));
@@ -231,7 +232,7 @@ void LivePathEffectAdd::on_activate(Gtk::FlowBoxChild *child)
     child->show_all_children();
 }
 
-bool LivePathEffectAdd::pop_description(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> builder_effect)
+bool LivePathEffectAdd::pop_description(GdkEventCrossing *evt, Glib::RefPtr<Gtk::Builder> builder_effect)
 {
     Gtk::Image *LPESelectorEffectInfo;
     builder_effect->get_widget("LPESelectorEffectInfo", LPESelectorEffectInfo);
@@ -261,7 +262,7 @@ bool LivePathEffectAdd::pop_description(GdkEventButton *evt, Glib::RefPtr<Gtk::B
     return true;
 }
 
-bool LivePathEffectAdd::hide_pop_description(GdkEventButton *evt)
+bool LivePathEffectAdd::hide_pop_description(GdkEventCrossing *evt)
 {
     _LPESelectorEffectInfoPop->hide();
     return true;
