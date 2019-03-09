@@ -150,47 +150,55 @@ Glib::ustring get_filename(Type type, char const *filename, bool localized)
 {
     Glib::ustring result;
 
+    char *user_filename = nullptr;
+    char *sys_filename = nullptr;
+    char *user_filename_localized = nullptr;
+    char *sys_filename_localized = nullptr;
+
     // TRANSLATORS: 'en' is an ISO 639-1 language code.
     // Replace with language code for your language, i.e. the name of your .po file
-    if (localized && strcmp(_("en"), "en")) {
+    localized = localized && strcmp(_("en"), "en");
+
+    if (localized) {
         Glib::ustring localized_filename = filename;
         localized_filename.insert(localized_filename.rfind('.'), ".");
         localized_filename.insert(localized_filename.rfind('.'), _("en"));
 
-        char *user_locale = _get_path(USER, type, localized_filename.c_str());
-        char *sys_locale = _get_path(SYSTEM, type, localized_filename.c_str());
-
-        if (file_test(user_locale, G_FILE_TEST_EXISTS)) {
-            result = Glib::ustring(user_locale);
-        } else if(file_test(sys_locale, G_FILE_TEST_EXISTS)) {
-            result = Glib::ustring(sys_locale);
-        }
-        g_free(user_locale);
-        g_free(sys_locale);
-
-        if(!result.empty()) {
-            g_info("Using translated resource file: %s", result.c_str());
-            return result;
-        }
+        user_filename_localized = _get_path(USER, type, localized_filename.c_str());
+        sys_filename_localized = _get_path(SYSTEM, type, localized_filename.c_str());
     }
+    user_filename = _get_path(USER, type, filename);
+    sys_filename = _get_path(SYSTEM, type, filename);
 
-    char *user_filename = _get_path(USER, type, filename);
-    char *sys_filename = _get_path(SYSTEM, type, filename);
-
-    if (file_test(user_filename, G_FILE_TEST_EXISTS)) {
+    // impose the following load order:
+    //   USER (localized) > USER > SYSTEM (localized) > SYSTEM
+    if (localized && file_test(user_filename_localized, G_FILE_TEST_EXISTS)) {
+        result = Glib::ustring(user_filename_localized);
+        g_info("Found localized version of resource file '%s' in profile directory:\n\t%s", filename, result.c_str());
+    } else if (file_test(user_filename, G_FILE_TEST_EXISTS)) {
         result = Glib::ustring(user_filename);
-    } else if(file_test(sys_filename, G_FILE_TEST_EXISTS)) {
+        g_info("Found resource file '%s' in profile directory:\n\t%s", filename, result.c_str());
+    } else if (localized && file_test(sys_filename_localized, G_FILE_TEST_EXISTS)) {
+        result = Glib::ustring(sys_filename_localized);
+        g_info("Found localized version of resource file '%s' in system directory:\n\t%s", filename, result.c_str());
+    } else if (file_test(sys_filename, G_FILE_TEST_EXISTS)) {
         result = Glib::ustring(sys_filename);
+        g_info("Found resource file '%s' in system directory:\n\t%s", filename, result.c_str());
     } else {
-        g_warning("Failed to load resource: %s from %s or %s", filename, user_filename, sys_filename);
-    }
-
-    if(!result.empty()) {
-        g_info("Using resource file: %s", result.c_str());
+        if (localized) {
+            g_warning("Failed to find resource file '%s'. Looked in:\n\t%s\n\t%s\n\t%s\n\t%s",
+                      filename, user_filename_localized, user_filename, sys_filename_localized, sys_filename);
+        } else {
+            g_warning("Failed to find resource file '%s'. Looked in:\n\t%s\n\t%s",
+                      filename, user_filename, sys_filename);
+        }
     }
 
     g_free(user_filename);
     g_free(sys_filename);
+    g_free(user_filename_localized);
+    g_free(sys_filename_localized);
+
     return result;
 }
 
