@@ -1008,8 +1008,7 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
     auto encodedName = Glib::uri_escape_string(name);
     encodedName.append(".svg");
 
-    auto filename =  Inkscape::IO::Resource::get_path_ustring(USER, TEMPLATES,
-        encodedName.c_str());
+    auto filename = Inkscape::IO::Resource::get_path_ustring(USER, TEMPLATES, encodedName.c_str());
 
     auto operation_confirmed = sp_ui_overwrite_file(filename.c_str());
 
@@ -1020,9 +1019,14 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
             Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
 
         if (isDefault) {
+            // save as "default.svg" by default (so it works intependent of UI language)unless
+            // a localized template like "default.de.svg" is already present (which overrides "default.svg")
+            Glib::ustring default_svg_localized = Glib::ustring("default.") + _("en") + ".svg";
+            filename = Inkscape::IO::Resource::get_path_ustring(USER, TEMPLATES, default_svg_localized.c_str());
 
-            filename =  Inkscape::IO::Resource::get_path_ustring(USER,
-                TEMPLATES, "default.svg");
+            if (!Inkscape::IO::file_test(filename.c_str(), G_FILE_TEST_EXISTS)) {
+                filename = Inkscape::IO::Resource::get_path_ustring(USER, TEMPLATES, "default.svg");
+            }
 
             file_save(parentWindow, document, filename,
                 Inkscape::Extension::db.get(".svg"), false, false,
