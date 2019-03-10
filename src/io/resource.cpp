@@ -375,14 +375,8 @@ char *profile_path(const char *filename)
 {
     static const gchar *prefdir = nullptr;
 
-
     if (!prefdir) {
-        // First check for a custom environment variable for a "portable app"
-        gchar const *val = g_getenv("INKSCAPE_PORTABLE_PROFILE_DIR");
-        if (val) {
-            prefdir = g_strdup(val);
-        }
-        // Then check for a custom user environment variable
+        // Check if profile directory is overriden using environment variable
         gchar const *userenv = g_getenv("INKSCAPE_PROFILE_DIR");
         if (userenv) {
             prefdir = g_strdup(userenv);
