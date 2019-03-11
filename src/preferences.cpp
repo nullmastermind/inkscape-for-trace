@@ -129,12 +129,16 @@ void Preferences::_loadDefaults()
 
     // Raw string literal cannot contain translatable strings. Fortunately, we only translate
     // caligraphy presets.
-    setString("/tools/calligraphic/preset/cp0/name", _("Dip pen"));
-    setString("/tools/calligraphic/preset/cp1/name", _("Marker"));
-    setString("/tools/calligraphic/preset/cp2/name", _("Brush"));
-    setString("/tools/calligraphic/preset/cp3/name", _("Wiggly"));
-    setString("/tools/calligraphic/preset/cp4/name", _("Splotchy"));
-    setString("/tools/calligraphic/preset/cp5/name", _("Tracing"));
+    // Note: actual translation is done in CalligraphyToolbar::build_presets_list(), we just
+    // mark the strings as translatable here (see GitLab issue 128):
+    Glib::ustring dummy_array[] = {
+        _("Dip pen"),
+        _("Marker"),
+        _("Brush"),
+        _("Wiggly"),
+        _("Splotchy"),
+        _("Tracing")
+    };
 }
 
 /**
