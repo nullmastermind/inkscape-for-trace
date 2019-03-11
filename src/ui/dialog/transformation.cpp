@@ -73,7 +73,7 @@ Transformation::Transformation()
                                "", "transform-rotate", &_units_rotate),
       _scalar_skew_horizontal (_("_Horizontal:"), _("Horizontal skew angle (positive = counterclockwise), or absolute displacement, or percentage displacement"), UNIT_TYPE_LINEAR,
                                "", "transform-skew-horizontal", &_units_skew),
-      _scalar_skew_vertical   (_("_Vertical:"),  _("Vertical skew angle (positive = counterclockwise), or absolute displacement, or percentage displacement"),  UNIT_TYPE_LINEAR,
+      _scalar_skew_vertical   (_("_Vertical:"),  _("Vertical skew angle (positive = clockwise), or absolute displacement, or percentage displacement"),  UNIT_TYPE_LINEAR,
                                "", "transform-skew-vertical", &_units_skew),
 
       _scalar_transform_a     ("_A:", _("Transformation matrix element A")),
@@ -129,13 +129,6 @@ Transformation::Transformation()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _check_apply_separately.set_active(prefs->getBool("/dialogs/transformation/applyseparately"));
     _check_apply_separately.signal_toggled().connect(sigc::mem_fun(*this, &Transformation::onApplySeparatelyToggled));
-
-    // make icons match desktop rotation direction
-    if (!getDesktop()->is_yaxisdown()) {
-        _scalar_move_vertical.flipIconVertically();
-        _scalar_rotate.flipIconVertically();
-        _scalar_skew_vertical.flipIconVertically();
-    }
 
     // make sure all spinbuttons activate Apply on pressing Enter
       ((Gtk::Entry *) (_scalar_move_horizontal.getWidget()))->set_activates_default(true);
@@ -634,6 +627,9 @@ void Transformation::applyPageMove(Inkscape::Selection *selection)
 {
     double x = _scalar_move_horizontal.getValue("px");
     double y = _scalar_move_vertical.getValue("px");
+    if (_check_move_relative.get_active()) {
+        y *= getDesktop()->yaxisdir();
+    }
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (!prefs->getBool("/dialogs/transformation/applyseparately")) {
@@ -809,6 +805,7 @@ void Transformation::applyPageSkew(Inkscape::Selection *selection)
             if (!_units_skew.isAbsolute()) { // percentage
                 double skewX = _scalar_skew_horizontal.getValue("%");
                 double skewY = _scalar_skew_vertical.getValue("%");
+                skewY *= getDesktop()->yaxisdir();
                 if (fabs(0.01*skewX*0.01*skewY - 1.0) < Geom::EPSILON) {
                     getDesktop()->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Transform matrix is singular, <b>not used</b>."));
                     return;
@@ -826,10 +823,12 @@ void Transformation::applyPageSkew(Inkscape::Selection *selection)
                 }
                 double skewX = tan(-angleX);
                 double skewY = tan(angleY);
+                skewY *= getDesktop()->yaxisdir();
                 sp_item_skew_rel (item, skewX, skewY);
             } else { // absolute displacement
                 double skewX = _scalar_skew_horizontal.getValue("px");
                 double skewY = _scalar_skew_vertical.getValue("px");
+                skewY *= getDesktop()->yaxisdir();
                 Geom::OptRect bbox = item->desktopPreferredBounds();
                 if (bbox) {
                     double width = bbox->dimensions()[Geom::X];
@@ -853,6 +852,7 @@ void Transformation::applyPageSkew(Inkscape::Selection *selection)
             if (!_units_skew.isAbsolute()) { // percentage
                 double skewX = _scalar_skew_horizontal.getValue("%");
                 double skewY = _scalar_skew_vertical.getValue("%");
+                skewY *= getDesktop()->yaxisdir();
                 if (fabs(0.01*skewX*0.01*skewY - 1.0) < Geom::EPSILON) {
                     getDesktop()->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Transform matrix is singular, <b>not used</b>."));
                     return;
@@ -870,10 +870,12 @@ void Transformation::applyPageSkew(Inkscape::Selection *selection)
                 }
                 double skewX = tan(-angleX);
                 double skewY = tan(angleY);
+                skewY *= getDesktop()->yaxisdir();
                 selection->skewRelative(*center, skewX, skewY);
             } else { // absolute displacement
                 double skewX = _scalar_skew_horizontal.getValue("px");
                 double skewY = _scalar_skew_vertical.getValue("px");
+                skewY *= getDesktop()->yaxisdir();
                 if (fabs(skewX*skewY - width*height) < Geom::EPSILON) {
                     getDesktop()->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Transform matrix is singular, <b>not used</b>."));
                     return;

@@ -74,11 +74,6 @@ Labelled::setTooltipText(const Glib::ustring &tooltip)
     _widget->set_tooltip_text(tooltip);
 }
 
-void Labelled::flipIconVertically()
-{
-    _icon->set(_icon->get_pixbuf()->flip(false));
-}
-
 bool Labelled::on_mnemonic_activate ( bool group_cycling )
 {
     return _widget->mnemonic_activate ( group_cycling );
