@@ -1247,8 +1247,8 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
             Geom::Point origin (_clipboardSPDoc->getRoot()->x.computed, _clipboardSPDoc->getRoot()->y.computed);
             Geom::Rect area = Geom::Rect(origin, origin + _clipboardSPDoc->getDimensions());
 
-            unsigned long int width = (unsigned long int) (Inkscape::Util::Quantity::convert(area.width(), "px", "in") * dpi + 0.5);
-            unsigned long int height = (unsigned long int) (Inkscape::Util::Quantity::convert(area.height(), "in", "px") * dpi + 0.5);
+            unsigned long int width = (unsigned long int) (area.width() + 0.5);
+            unsigned long int height = (unsigned long int) (area.height() + 0.5);
 
             // read from namedview
             Inkscape::XML::Node *nv = sp_repr_lookup_name (_clipboardSPDoc->rroot, "sodipodi:namedview");
