@@ -226,7 +226,7 @@ IconPreviewPanel::IconPreviewPanel() :
     }
 
     iconBox.pack_start(splitter);
-    splitter.pack1( *magBox, true, true );
+    splitter.pack1( *magBox, true, false );
     UI::Widget::Frame *actuals = Gtk::manage(new UI::Widget::Frame (_("Actual Size:")));
     actuals->add(*verts);
     splitter.pack2( *actuals, false, false );
@@ -341,7 +341,7 @@ void IconPreviewPanel::refreshPreview()
 #endif //ICON_VERBOSE
         // Do not refresh too quickly
         queueRefresh();
-    } else if ( desktop ) {
+    } else if ( desktop && desktop->doc() ) {
 #if ICON_VERBOSE
         g_message( "%s Refreshing preview.", getTimestr().c_str() );
 #endif // ICON_VERBOSE
@@ -641,7 +641,8 @@ void IconPreviewPanel::renderPreview( SPObject* obj )
         } else {
             memset( pixMem[i], 0, sizes[i] * stride );
         }
-        images[i]->queue_draw();
+        images[i]->set(images[i]->get_pixbuf());
+        // images[i]->queue_draw();
     }
     updateMagnify();
 
@@ -658,8 +659,8 @@ void IconPreviewPanel::updateMagnify()
     Glib::RefPtr<Gdk::Pixbuf> buf = images[hot]->get_pixbuf()->scale_simple( 128, 128, Gdk::INTERP_NEAREST );
     magLabel.set_label( *labels[hot] );
     magnified.set( buf );
-    magnified.queue_draw();
-    magnified.get_parent()->queue_draw();
+    // magnified.queue_draw();
+    // magnified.get_parent()->queue_draw();
 }
 
 } //namespace Dialogs
