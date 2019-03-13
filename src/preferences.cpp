@@ -127,18 +127,6 @@ void Preferences::_loadDefaults()
     setInt("/options/defaultwindowsize/value", -1);
 #endif
 
-    // Raw string literal cannot contain translatable strings. Fortunately, we only translate
-    // caligraphy presets.
-    // Note: actual translation is done in CalligraphyToolbar::build_presets_list(), we just
-    // mark the strings as translatable here (see GitLab issue 128):
-    Glib::ustring dummy_array[] = {
-        _("Dip pen"),
-        _("Marker"),
-        _("Brush"),
-        _("Wiggly"),
-        _("Splotchy"),
-        _("Tracing")
-    };
 }
 
 /**

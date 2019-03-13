@@ -504,6 +504,18 @@ R"=====(
 
 #define PREFERENCES_SKELETON_SIZE (sizeof(preferences_skeleton) - 1)
 
+// Raw string literal cannot contain translatable strings. Fortunately, we only translate
+// caligraphy presets.
+// Note: actual translation is done in CalligraphyToolbar::build_presets_list(), we just
+// mark the strings as translatable here (see GitLab issue 128):
+Glib::ustring calligraphy_name_array[] = {
+    _("Dip pen"),
+    _("Marker"),
+    _("Brush"),
+    _("Wiggly"),
+    _("Splotchy"),
+    _("Tracing")
+};
 
 #endif /* !SEEN_PREFERENCES_SKELETON_H */
 
