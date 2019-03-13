@@ -79,7 +79,8 @@ Dock::Dock(Gtk::Orientation orientation)
     _paned->pack2(_filler,                            true,   false);
     //                                                resize, shrink
 
-    _dock_box = Gtk::manage(new Gtk::Box(orientation));
+    _dock_box = Gtk::manage(new Gtk::Box(orientation == Gtk::ORIENTATION_HORIZONTAL ?
+                                         Gtk::ORIENTATION_VERTICAL : Gtk::ORIENTATION_HORIZONTAL));
     _dock_box->set_name("DockBox");
     _dock_box->pack_start(*_paned, Gtk::PACK_EXPAND_WIDGET);
     _dock_box->pack_end(*Gtk::manage(Glib::wrap(GTK_WIDGET(_gdl_dock_bar))), Gtk::PACK_SHRINK);
