@@ -17,9 +17,8 @@ if(WIN32)
 else()
   set(INKSCAPE_DATADIR "${CMAKE_INSTALL_PREFIX}/share")
 
-  # TODO: check and change this to correct value:
   if(NOT PACKAGE_LOCALE_DIR)
-    set(PACKAGE_LOCALE_DIR "${CMAKE_INSTALL_PREFIX}/share/locale") # packagers might overwrite this
+    set(PACKAGE_LOCALE_DIR "share/locale") # packagers might overwrite this
   endif(NOT PACKAGE_LOCALE_DIR)
 
   if(NOT SHARE_INSTALL)

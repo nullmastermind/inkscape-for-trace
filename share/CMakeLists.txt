@@ -17,4 +17,9 @@ add_subdirectory(pixmaps)
 add_subdirectory(tutorials)
 add_subdirectory(ui)
 
-install(DIRECTORY extensions DESTINATION ${INKSCAPE_SHARE_INSTALL})
+install(DIRECTORY extensions DESTINATION ${INKSCAPE_SHARE_INSTALL} 
+	PATTERN ".git*" EXCLUDE 
+	PATTERN "tests" EXCLUDE
+	PATTERN "*.pyc" EXCLUDE
+	)
+
