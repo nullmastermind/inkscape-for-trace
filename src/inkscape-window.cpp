@@ -99,6 +99,11 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     sp_namedview_zoom_and_view_from_document(_desktop);
     sp_namedview_update_layers_from_document(_desktop);
 
+    SPNamedView *nv = _desktop->namedview;
+    if (nv && nv->lockguides) {
+        nv->lockGuides();
+    }
+
 }
 
 // Change a document, leaving desktop/view the same. (Eventually move all code here.)
@@ -133,7 +138,7 @@ InkscapeWindow::on_focus_in_event(GdkEventFocus* event)
         _app->set_active_document(_document);
         _app->set_active_view(_desktop);
         _app->set_active_selection(_desktop->selection);
-        // _app->update_windows(_document);
+        _app->windows_update(_document);
     } else {
         std::cerr << "Inkscapewindow::on_focus_in_event: app is nullptr!" << std::endl;
     }

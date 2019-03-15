@@ -62,17 +62,6 @@ void sp_file_exit ();
 ######################*/
 
 /**
- * Opens a new file and window from the given URI
- */
-
-bool sp_file_open(
-    const Glib::ustring &uri,
-    Inkscape::Extension::Extension *key,
-    bool add_to_recent = true,
-    bool replace_empty = true
-    );
-
-/**
  * Displays a file open dialog. Calls sp_file_open on
  * an OK.
  */

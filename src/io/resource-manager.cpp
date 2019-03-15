@@ -338,7 +338,12 @@ bool ResourceManagerImpl::fixupBrokenLinks(SPDocument *doc)
             }
         }
 
-        std::map<Glib::ustring, Glib::ustring> mapping = locateLinks(doc->getDocumentBase(), brokenHrefs);
+        Glib::ustring base;
+        if (doc->getDocumentBase()) {
+            base = doc->getDocumentBase();
+        }
+
+        std::map<Glib::ustring, Glib::ustring> mapping = locateLinks(base, brokenHrefs);
         for ( std::map<Glib::ustring, Glib::ustring>::iterator it = mapping.begin(); it != mapping.end(); ++it )
         {
             // TODO debug g_message("     [%s] ==> {%s}", it->first.c_str(), it->second.c_str());

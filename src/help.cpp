@@ -15,7 +15,8 @@
 #include <glibmm.h>
 #include <glibmm/i18n.h>
 
-#include "file.h"
+#include "inkscape-application.h"
+
 #include "help.h"
 #include "io/resource.h"
 #include "io/sys.h"
@@ -38,7 +39,9 @@ void sp_help_open_tutorial(Glib::ustring name)
 
     filename = get_filename(TUTORIALS, filename.c_str(), true);
     if (!filename.empty()) {
-        sp_file_open(filename.c_str(), nullptr, false, false);
+        Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(filename);
+        ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
+        app->create_window(file, false, false);
     } else {
         sp_ui_error_dialog(_("The tutorial files are not installed.\nFor Linux, you may need to install "
                              "'inkscape-tutorials'; for Windows, please re-run the setup and select 'Tutorials'.\nThe "

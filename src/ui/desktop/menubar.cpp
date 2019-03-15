@@ -24,7 +24,8 @@
 #include <iostream>
 
 #include "inkscape.h"
-#include "file.h"  // sp_file_open
+#include "inkscape-application.h" // Open recent
+
 #include "message-context.h"
 #include "shortcuts.h"
 
@@ -322,9 +323,9 @@ sp_recent_open(Gtk::RecentChooser* recentchooser)
 
     Glib::RefPtr<Gio::File> file = Gio::File::create_for_uri(uri);
 
-    // To do: change sp_file_open to use Gio::File.
-    // To do: get rid of sp_file_open
-    sp_file_open(file->get_parse_name(), nullptr);
+    ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
+
+    app->create_window(file);
 }
 
 // =================== Main Menu ================

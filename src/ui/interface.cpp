@@ -63,7 +63,9 @@ sp_ui_new_view()
     document = SP_ACTIVE_DOCUMENT;
     if (!document) return;
 
-    auto win = new InkscapeWindow(document);
+    ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
+
+    InkscapeWindow* win = app->window_open (document);
 }
 
 void
@@ -79,45 +81,46 @@ sp_ui_close_view(GtkWidget */*widget*/)
         return; // Shutdown operation has been canceled, so do nothing
     }
 
+    ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
+
+    InkscapeWindow* window = SP_ACTIVE_DESKTOP->getInkscapeWindow();
+
     // If closing the last document, open a new document so Inkscape doesn't quit.
     std::list<SPDesktop *> desktops;
     INKSCAPE.get_all_desktops(desktops);
     if (desktops.size() == 1) {
-        Glib::ustring templateUri = sp_file_default_template_uri();
-        SPDocument *doc = SPDocument::createNewDoc( templateUri.empty() ? nullptr : templateUri.c_str(), TRUE, true );
-        // Set viewBox if it doesn't exist
-        if (!doc->getRoot()->viewBox_set) {
-            doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc->getDisplayUnit()), doc->getHeight().value(doc->getDisplayUnit())));
+
+        SPDocument* old_document = window->get_document();
+
+        Glib::ustring template_path = sp_file_default_template_uri();
+        SPDocument *doc = app->document_new (template_path);
+
+        app->document_swap (window, doc);
+
+        if (app->document_window_count(old_document) == 0) {
+            app->document_close(old_document);
         }
-        dt->change_document(doc);
+
+        // Are these necessary?
         sp_namedview_window_from_document(dt);
         sp_namedview_update_layers_from_document(dt);
-        return;
-    }
 
-    // Shutdown can proceed; use the stored reference to the desktop here instead of the current SP_ACTIVE_DESKTOP,
-    // because the user might have changed the focus in the meantime (see bug #381357 on Launchpad)
-    dt->destroyWidget();
+    } else {
+
+        app->destroy_window (window);
+    }
 }
 
 
 unsigned int
 sp_ui_close_all()
 {
-    /* Iterate through all the windows, destroying each in the order they
-       become active */
-    while (SP_ACTIVE_DESKTOP) {
-        SPDesktop *dt = SP_ACTIVE_DESKTOP;
-        if (dt->shutdown()) {
-            /* The user canceled the operation, so end doing the close */
-            return FALSE;
-        }
-        // Shutdown can proceed; use the stored reference to the desktop here instead of the current SP_ACTIVE_DESKTOP,
-        // because the user might have changed the focus in the meantime (see bug #381357 on Launchpad)
-        dt->destroyWidget();
-    }
 
-    return TRUE;
+    ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
+
+    app->destroy_all();
+
+    return true;
 }
 
 

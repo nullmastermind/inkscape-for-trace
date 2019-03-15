@@ -84,7 +84,7 @@ void View::_close() {
         _document_resized_connection.disconnect();
         if (INKSCAPE.remove_document(_doc)) {
             // this was the last view of this document, so delete it
-            delete _doc;
+            // delete _doc;  Delete now handled in Inkscape::Application
         }
         _doc = nullptr;
     }
@@ -110,7 +110,7 @@ void View::setDocument(SPDocument *doc) {
         _document_resized_connection.disconnect();
         if (INKSCAPE.remove_document(_doc)) {
             // this was the last view of this document, so delete it
-            delete _doc;
+            // delete _doc; Delete now handled in Inkscape::Application
         }
     }
 

@@ -59,22 +59,34 @@ public:
     Inkscape::UI::View::View* get_active_view() { return _active_view; }
     void                  set_active_view(Inkscape::UI::View::View* view) { _active_view = view; }
 
-    SPDocument*           open_document(const Glib::RefPtr<Gio::File>& file);
-    void                  close_document(SPDocument* document);
+    /****** Document ******/
+    /* Except for document_fix(), these should not require a GUI! */
+    void                  document_add(SPDocument* document);
 
-    void                  fix_document(SPDocument* document);
+    SPDocument*           document_new(const std::string &Template);
+    SPDocument*           document_open(const Glib::RefPtr<Gio::File>& file);
+    bool                  document_swap(InkscapeWindow* window, SPDocument* document);
+    bool                  document_revert(SPDocument* document);
+    void                  document_close(SPDocument* document);
+    unsigned              document_window_count(SPDocument* document);
 
-    InkscapeWindow*       open_window(SPDocument* document);
-    void                  close_window(InkscapeWindow* window);
+    void                  document_fix(InkscapeWindow* window);
+
+    /******* Window *******/
+    InkscapeWindow*       window_open(SPDocument* document);
+    void                  window_close(InkscapeWindow* window);
 
     // Update all windows connected to a document.
-    void update_windows(SPDocument* document);
+    void                  windows_update(SPDocument* document);
+
+    /******* Debug ********/
+    void                  dump();
 
     // These are needed to cast Glib::RefPtr<Gtk::Application> to Glib::RefPtr<InkscapeApplication>,
     // Presumably, Gtk/Gio::Application takes care of ref counting in ConcreteInkscapeApplication
     // so we just provide dummies (and there is only one application in the application!).
-    void reference()   { /*printf("reference()\n"  );*/ }
-    void unreference() { /*printf("unreference()\n");*/ }
+    // void reference()   { /*printf("reference()\n"  );*/ }
+    // void unreference() { /*printf("unreference()\n");*/ }
 
 protected:
     bool _with_gui;
@@ -111,13 +123,16 @@ private:
 
 public:
     InkFileExportCmd* file_export() override { return &_file_export; }
+    SPDesktop* create_window(const Glib::RefPtr<Gio::File>& file = Glib::RefPtr<Gio::File>(),
+                             bool add_to_recent = true, bool replace_empty = true);
+    bool       destroy_window(InkscapeWindow* window);
+    void       destroy_all();
 
 protected:
     void on_startup()  override;
     void on_startup2() override;
     void on_activate() override;
     void on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint) override;
-    SPDesktop* create_window(const Glib::RefPtr<Gio::File>& file = Glib::RefPtr<Gio::File>());
     void parse_actions(const Glib::ustring& input, action_vector_t& action_vector);
 
 private:

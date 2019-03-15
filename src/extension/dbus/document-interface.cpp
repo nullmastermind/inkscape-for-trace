@@ -20,9 +20,9 @@
 #include <string.h>
 
 #include <dbus/dbus-glib.h>
-#include <dbus/dbus-glib.h>
 
 //#include "2geom/svg-path-parser.h" //get_node_coordinates
+#include "inkscape-application.h"  // create_window()
 
 #include "application-interface.h"
 #include "desktop-style.h" //sp_desktop_get_style
@@ -930,12 +930,21 @@ document_interface_save (DocumentInterface *doc_interface, GError **error)
 gboolean document_interface_load(DocumentInterface *doc_interface, 
                                  gchar *filename, GError ** /*error*/)
 {
+    if (!filename) {
+        return false;
+    }
+
     SPDesktop *desk = doc_interface->target.getDesktop();
     if (desk) {
         desktop_ensure_active(desk);
     }
-    const Glib::ustring file(filename);
-    sp_file_open(file, NULL, TRUE, TRUE);
+
+    Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(filename);
+
+    ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
+
+    app->create_window(file);
+
     if (doc_interface->updates) {
         Inkscape::DocumentUndo::done(doc_interface->target.getDocument(),  SP_VERB_FILE_OPEN, "Opened File");
     }

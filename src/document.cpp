@@ -216,7 +216,6 @@ SPDocument::~SPDocument() {
 
     // This is at the end of the destructor, because preceding code adds new orphans to the queue
     collectOrphans();
-
 }
 
 sigc::connection SPDocument::connectDestroy(sigc::signal<void>::slot_type slot)
@@ -460,6 +459,10 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     ));
     document->oldSignalsConnected = true;
 
+
+    // ************* Fix Document **************
+    // Move to separate function?
+
     /** Fix baseline spacing (pre-92 files) **/
     if ( (!sp_no_convert_text_baseline_spacing)
          && sp_version_inside_range( document->root->version.inkscape, 0, 1, 0, 92 ) ) {
@@ -471,9 +474,15 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
         sp_file_convert_font_name(document);
     }
 
-    /** Fix dpi (pre-92 files) **/
+    /** Fix dpi (pre-92 files). With GUI fixed in Inkscape::Application::fix_document. **/
     if ( !(INKSCAPE.use_gui()) && sp_version_inside_range( document->root->version.inkscape, 0, 1, 0, 92 ) ) {
         sp_file_convert_dpi(document);
+    }
+
+    // Update LPE's   See: Related bug:#1769679 #18
+    SPDefs * defs = document->getDefs();
+    if (defs) {
+        defs->emitModified(SP_OBJECT_MODIFIED_CASCADE);
     }
 
     return document;
@@ -513,7 +522,6 @@ SPDocument *SPDocument::createChildDoc(std::string const &document_uri)
         } else {
             path = document_uri;
         }
-        std::cout << "Added document_base: '" << path << std::endl;
         document = createNewDoc(path.c_str(), false, false, this);
     }
     return document;
@@ -780,6 +788,17 @@ Geom::Rect SPDocument::getViewBox() const
         viewBox = Geom::Rect::from_xywh( 0, 0, getWidth().value("px"), getHeight().value("px"));
     }
     return viewBox;
+}
+
+/**
+ * Set default viewbox calculated from document properties.
+ */
+void SPDocument::setViewBox()
+{
+    setViewBox(Geom::Rect(0,
+                          0,
+                          getWidth().value(getDisplayUnit()),
+                          getHeight().value(getDisplayUnit())));
 }
 
 void SPDocument::setViewBox(const Geom::Rect &viewBox)

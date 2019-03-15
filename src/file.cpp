@@ -35,6 +35,7 @@
 #include <gtkmm.h>
 
 #include "file.h"
+#include "inkscape-application.h"
 #include "inkscape-window.h"
 
 #include "desktop.h"
@@ -123,37 +124,23 @@ static void sp_file_add_recent(gchar const *uri)
 
 /**
  * Create a blank document and add it to the desktop
+ * Input: empty string or template file name.
  */
 SPDesktop *sp_file_new(const std::string &templ)
 {
-    SPDocument *doc = SPDocument::createNewDoc( !templ.empty() ? templ.c_str() : nullptr , TRUE, true );
-    g_return_val_if_fail(doc != nullptr, NULL);
+    ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
 
-    // Remove all the template info from xml tree
-    Inkscape::XML::Node *myRoot = doc->getReprRoot();
-    Inkscape::XML::Node *nodeToRemove = sp_repr_lookup_name(myRoot, "inkscape:_templateinfo");
-    if (nodeToRemove != nullptr){
-        DocumentUndo::setUndoSensitive(doc, false);
-        sp_repr_unparent(nodeToRemove);
-        delete nodeToRemove;
-        DocumentUndo::setUndoSensitive(doc, true);
+    SPDocument* doc = app->document_new (templ);
+    if (!doc) {
+        std::cerr << "sp_file_new: failed to open document: " << templ << std::endl;
     }
+    InkscapeWindow* win = app->window_open (doc);
 
-    SPDesktop *olddesktop = SP_ACTIVE_DESKTOP;
-    if (olddesktop)
-        olddesktop->setWaitingCursor();
-
-    InkscapeWindow* win = new InkscapeWindow(doc);
     SPDesktop* desktop = win->get_desktop();
 
 #ifdef WITH_DBUS
     Inkscape::Extension::Dbus::dbus_init_desktop_interface(desktop);
 #endif
-
-    if (olddesktop)
-        olddesktop->clearWaitingCursor();
-    if (desktop)
-        desktop->clearWaitingCursor();
 
     return desktop;
 }
@@ -194,105 +181,6 @@ sp_file_exit()
 
 
 
-/*######################
-## O P E N
-######################*/
-
-/**
- *  Open a file, add the document to the desktop
- *
- *  \param replace_empty if true, and the current desktop is empty, this document
- *  will replace the empty one.
- */
-bool sp_file_open(const Glib::ustring &uri,
-                  Inkscape::Extension::Extension *key,
-                  bool add_to_recent,
-                  bool replace_empty)
-{
-    if (!INKSCAPE.use_gui()) {
-        std::cerr << "sp_file_open requires GUI, use ink_file_open() instead." << std::endl;
-        return false;
-    }
-
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop) {
-        desktop->setWaitingCursor();
-    }
-
-    bool cancelled = false;
-    Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(uri);
-    SPDocument* doc = ink_file_open(file, cancelled);
-
-    if (desktop) {
-        desktop->clearWaitingCursor();
-    }
-
-    if (doc) {
-
-        SPDocument *existing = desktop ? desktop->getDocument() : nullptr;
-
-        if (existing && existing->virgin && replace_empty) {
-
-            // If the current desktop is empty, open the document there
-            doc->ensureUpToDate(); // TODO this will trigger broken link warnings, etc.
-            desktop->change_document(doc);
-            doc->emitResizedSignal(doc->getWidth().value("px"), doc->getHeight().value("px"));
-        } else {
-
-            InkscapeWindow* win = new InkscapeWindow(doc);
-            desktop = win->get_desktop();
-        }
-
-        doc->virgin = FALSE;
-
-        if (add_to_recent) {
-            sp_file_add_recent( doc->getDocumentURI() );
-        }
-
-        // ---------------  Fix up document ----------------
-
-        // Fix DPI (90->96)
-        if (sp_version_inside_range(doc->getRoot()->version.inkscape, 0, 1, 0, 92)) {
-            sp_file_convert_dpi(doc);
-        }
-
-        // Perform a fixup pass for hrefs.
-        if ( Inkscape::ResourceManager::getManager().fixupBrokenLinks(doc) ) {
-            Glib::ustring msg = _("Broken links have been changed to point to existing files.");
-            desktop->showInfoDialog(msg);
-        }
-
-        // Check for font substitutions
-        Inkscape::UI::Dialog::FontSubstitution::getInstance().checkFontSubstitutions(doc);
-
-        // Update LPE's   See: Related bug:#1769679 #18
-        SPDefs * defs = dynamic_cast<SPDefs *>(doc->getDefs());
-        if (defs && !existing) {
-            defs->emitModified(SP_OBJECT_MODIFIED_CASCADE);
-        }
-
-        // ------------------ Window options ---------------
-
-        // Lock Guides
-        SPNamedView *nv = desktop->namedview;
-        if (nv->lockguides) {
-            nv->lockGuides();
-        }
-
-        return true;
-
-    } else if (!cancelled) {
-        gchar *safeUri = Inkscape::IO::sanitizeString(uri.c_str());
-        gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), safeUri);
-        sp_ui_error_dialog(text);
-        g_free(text);
-        g_free(safeUri);
-        return false;
-    }
-
-    return false;
-}
-
 /**
  *  Handle prompting user for "do you want to revert"?  Revert on "OK"
  */
@@ -322,22 +210,10 @@ void sp_file_revert_dialog()
         }
     }
 
-    bool reverted;
+    bool reverted = false;
     if (do_revert) {
-        // Allow overwriting of current document.
-        doc->virgin = TRUE;
-
-        // remember current zoom and view
-        double zoom = desktop->current_zoom();
-        Geom::Point c = desktop->get_display_area().midpoint();
-
-        reverted = sp_file_open(uri,nullptr);
-        if (reverted) {
-            // restore zoom and view
-            desktop->zoom_absolute_center_point(c, zoom);
-        }
-    } else {
-        reverted = false;
+        ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
+        reverted = app->document_revert (doc);
     }
 
     if (reverted) {
@@ -507,6 +383,8 @@ sp_file_open_dialog(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*d
         return;
     }
 
+    // FIXME: This is silly to have separate code paths for opening one vs many files!
+
     //# User selected something.  Get name and type
     Glib::ustring fileName = openDialogInstance->getFilename();
 
@@ -519,6 +397,8 @@ sp_file_open_dialog(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*d
     //# We no longer need the file dialog object - delete it
     delete openDialogInstance;
     openDialogInstance = nullptr;
+
+    ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
 
     //# Iterate through filenames if more than 1
     if (flist.size() > 1)
@@ -536,7 +416,9 @@ sp_file_open_dialog(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*d
 #ifdef INK_DUMP_FILENAME_CONV
             g_message("Opening File %s\n", fileName.c_str());
 #endif
-            sp_file_open(fileName, fileType);
+
+            Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(fileName);
+            app->create_window (file);
         }
 
         return;
@@ -556,7 +438,8 @@ sp_file_open_dialog(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*d
         open_path.append(G_DIR_SEPARATOR_S);
         prefs->setString("/dialogs/open/path", open_path);
 
-        sp_file_open(fileName, fileType);
+        Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(fileName);
+        app->create_window (file);
     }
 
     return;

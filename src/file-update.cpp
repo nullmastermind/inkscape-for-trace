@@ -492,51 +492,8 @@ void sp_file_convert_dpi(SPDocument *doc)
                 prefs->setBool("/options/transform/gradient", transform_gradient);
 
                 did_scaling = true;
-/*
-
-// There used to be 2 "experimental" scaling methods in trunk. Considering that the method in .92.x appear to work, so I'm commenting those.
-
-                // Save preferences
-                Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-                bool onlysensitive = prefs->getBool("/options/kbselection/onlysensitive",true);
-                bool onlyvisible   = prefs->getBool("/options/kbselection/onlyvisible",  true);
-
-                prefs->setBool("/options/kbselection/onlysensitive", false);
-                prefs->setBool("/options/kbselection/onlyvisible",   false);
-
-                Inkscape::Selection *selection = desktop->getSelection();
-                Inkscape::SelectionHelper::selectAllInAll( desktop );
-                            
-//method 1 ...
-                selection->group();
-                SPItem * group = selection->singleItem();
-                if (group) {
-                    group->setAttribute("transform","scale(1.06666667,1.06666667)");
-                } else {
-                    std::cerr << "sp_file_open: Failed to get group!" << std::endl;
-                }
-                selection->clear();
-                selection->add( group );
-                selection->ungroup();
-                            
-// OR method 2...                            
-
-                double height = root->height.computed;
-                selection->setScaleRelative( Geom::Point(0,height), Geom::Scale(96.0/90.0,96.0/90.0) );
-
-... end method 2
-
-                selection->clear();
-
-                prefs->setBool("/options/kbselection/onlysensitive", onlysensitive);
-                prefs->setBool("/options/kbselection/onlyvisible",   onlyvisible  );
-
-                did_scaling = true;
-*/
-
-
-
             }
+
         } else { // FILE_DPI_UNCHANGED
             if (need_fix_units)
                 need_fix_grid_mm = true;

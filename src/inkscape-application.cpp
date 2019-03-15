@@ -16,11 +16,22 @@
 #include "inkscape-window.h"
 
 #include "inkscape.h"             // Inkscape::Application
-#include "inkgc/gc-core.h"        // Garbage Collecting init
-#include "ui/widget/panel.h"      // Panel prep
-#include "file.h"                 // File open and window creation.
-#include "io/file.h"              // File open (command line).
 #include "desktop.h"              // Access to window
+#include "file.h"                 // sp_file_convert_dpi
+
+#include "inkgc/gc-core.h"        // Garbage Collecting init
+
+#include "io/file.h"              // File open (command line).
+#include "io/resource.h"          // TEMPLATE
+#include "io/resource-manager.h"  // Fix up references.
+
+#include "object/sp-root.h"       // Inkscape version.
+
+#include "ui/dialog/font-substitution.h"  // Warn user about font substitution.
+#include "ui/widget/panel.h"      // Panel prep
+#include "widgets/desktop-widget.h" // Close without saving dialog
+
+#include "util/units.h"           // Redimension window
 
 #include "actions/actions-base.h"      // Actions
 #include "actions/actions-output.h"    // Actions
@@ -53,61 +64,254 @@ InkscapeApplication::InkscapeApplication()
     , _active_view(nullptr)
 {}
 
- // Open a document, add it to app.
+// Add document to app.
+void
+InkscapeApplication::document_add(SPDocument* document)
+{
+    if (document) {
+        auto it = _documents.find(document);
+        if (it == _documents.end()) {
+            _documents[document] = std::vector<InkscapeWindow*>();
+        } else {
+            // Should never happen.
+            std::cerr << "InkscapeApplication::add_document: Document already opened!" << std::endl;
+        }
+    } else {
+        // Should never happen!
+        std::cerr << "InkscapeApplication::add_document: No document!" << std::endl;
+    }
+}
+
+// New document, add it to app. TODO: This should really be open_document with option to strip template data.
 SPDocument*
-InkscapeApplication::open_document(const Glib::RefPtr<Gio::File>& file)
+InkscapeApplication::document_new(const std::string &Template)
+{
+    // Open file
+    SPDocument *document = ink_file_new(Template);
+    if (document) {
+        document_add(document);
+
+        // Set viewBox if it doesn't exist.
+        if (!document->getRoot()->viewBox_set) {
+            document->setViewBox();
+        }
+
+    } else {
+        std::cerr << "InkscapeApplication::new_document: failed to open new document!" << std::endl;
+    }
+
+    return document;
+}
+
+
+// Open a document, add it to app.
+SPDocument*
+InkscapeApplication::document_open(const Glib::RefPtr<Gio::File>& file)
 {
     // Open file
     bool cancelled = false;
     SPDocument *document = ink_file_open(file, cancelled);
 
     if (document) {
-        auto it = _documents.find(document);
-        if (it == _documents.end()) {
-            _documents[document] = std::vector<InkscapeWindow*>();
-        } else {
-            std::cerr << "ConcreteInkscapeApplication<T>::open_document: Document already opened: " << file->get_parse_name() << std::endl;
-        }
+        document->virgin = false; // Prevents replacing document in same window during file open.
+
+        document_add (document);
     } else {
-        std::cerr << "ConcreteInkscapeApplication<T>::open_document: Failed to open: " << file->get_parse_name() << std::endl;
+        std::cerr << "InkscapeApplication::open_document: Failed to open: " << file->get_parse_name() << std::endl;
     }
 
     return document;
 }
 
-// Close a document, remove from app. No checking is done on modified status, etc.
+
+/** Swap out one document for another in a window... maybe this should disappear.
+ *  Does not delete old document!
+ */
+bool
+InkscapeApplication::document_swap(InkscapeWindow* window, SPDocument* document)
+{
+    if (!document || !window) {
+        std::cerr << "InkscapeAppliation::swap_document: Missing window or document!" << std::endl;
+        return false;
+    }
+
+    SPDesktop* desktop = window->get_desktop();
+    SPDocument* old_document = window->get_document();
+    desktop->change_document(document);
+    document->emitResizedSignal(document->getWidth().value("px"), document->getHeight().value("px"));
+
+    // We need to move window from the old document to the new document.
+
+    // Find old document
+    auto it = _documents.find(old_document);
+    if (it != _documents.end()) {
+
+        // Remove window from document map.
+        auto it2 = std::find(it->second.begin(), it->second.end(), window);
+        if (it2 != it->second.end()) {
+            it->second.erase(it2);
+        } else {
+            std::cerr << "InkscapeApplication::swap_document: Window not found!" << std::endl;
+        }
+
+    } else {
+        std::cerr << "InkscapeApplication::swap_document: Document not in map!" << std::endl;
+    }
+
+    // Find new document
+    it = _documents.find(document);
+    if (it != _documents.end()) {
+        it->second.push_back(window);
+    } else {
+        std::cerr << "InkscapeApplication::swap_document: Document not in map!" << std::endl;
+    }
+
+    // To be removed (add/delete once per window)!
+    INKSCAPE.add_document(document);
+    INKSCAPE.remove_document(old_document);
+
+    // ActionContext should be removed once verbs are gone but we use it for now.
+    Inkscape::ActionContext context = INKSCAPE.action_context_for_document(document);
+    _active_document  = document;
+    _active_selection = context.getSelection();
+    _active_view      = context.getView();
+
+    return true;
+}
+
+/** Revert document: open saved document and swap it for each window.
+ */
+bool
+InkscapeApplication::document_revert(SPDocument* document)
+{
+    // Find saved document.
+    gchar const *path = document->getDocumentURI();
+    if (!path) {
+        std::cerr << "InkscapeApplication::revert_document: Document never saved, cannot revert." << std::endl;
+        return false;
+    }
+
+    // Open saved document.
+    Glib::RefPtr<Gio::File> file = Gio::File::create_for_path(document->getDocumentURI());
+    SPDocument* new_document = document_open (file);
+    if (!new_document) {
+        std::cerr << "InkscapeApplication::revert_document: Cannot open saved document!" << std::endl;
+        return false;
+    }
+
+    // Allow overwriting current document.
+    document->virgin = true;
+
+    auto it = _documents.find(document);
+    if (it != _documents.end()) {
+
+        // Swap reverted document in all windows.
+        for (auto it2 : it->second) {
+
+            SPDesktop* desktop = it2->get_desktop();
+
+            // Remember current zoom and view.
+            double zoom = desktop->current_zoom();
+            Geom::Point c = desktop->get_display_area().midpoint();
+
+            bool reverted = document_swap (it2, new_document);
+
+            if (reverted) {
+                desktop->zoom_absolute_center_point (c, zoom);
+            } else {
+                std::cerr << "InkscapeApplication::revert_document: Revert failed!" << std::endl;
+            }
+        }
+
+        document_close (document);
+
+    } else {
+        std::cerr << "InkscapeApplication::revert_document: Document not found!" << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+
+
+/** Close a document, remove from app. No checking is done on modified status, etc.
+ */
 void
-InkscapeApplication::close_document(SPDocument* document)
+InkscapeApplication::document_close(SPDocument* document)
 {
     if (document) {
+
         auto it = _documents.find(document);
         if (it != _documents.end()) {
             if (it->second.size() != 0) {
-                std::cerr << "ConcreteInkscapeApplication<T>::close_document: Window vector not empty!" << std::endl;
+                std::cerr << "InkscapeApplication::close_document: Window vector not empty!" << std::endl;
             }
             _documents.erase(it);
         } else {
-            std::cerr << "ConcreteInkscapeApplication<T>::close_document: Document not registered with application." << std::endl;
+            std::cerr << "InkscapeApplication::close_document: Document not registered with application." << std::endl;
         }
 
         delete document;
 
     } else {
-        std::cerr << "ConcreteInkscapeApplication<T>::close_document: No document!" << std::endl;
+        std::cerr << "InkscapeApplication::close_document: No document!" << std::endl;
     }
 }
 
-// Fix up a document if necessary.
-void
-InkscapeApplication::fix_document(SPDocument* document)
+
+/** Return number of windows with document.
+ */
+unsigned
+InkscapeApplication::document_window_count(SPDocument* document)
 {
-    // TODO
+    unsigned count = 0;
+
+    auto it = _documents.find(document);
+    if (it != _documents.end()) {
+        count = it->second.size();
+    } else {
+        std::cerr << "InkscapeApplication::document_window_count: Document not in map!" << std::endl;
+    }
+
+    return count;
 }
 
+/** Fix up a document if necessary (Only fixes that require GUI).
+ */
+void
+InkscapeApplication::document_fix(InkscapeWindow* window)
+{
+    // Most fixes are handled when document is opened in SPDocument::createDoc().
+    // But some require the GUI to be present. These are handled here.
+
+    if (_with_gui) {
+
+        SPDocument* document = window->get_document();
+
+        // Perform a fixup pass for hrefs.
+        if ( Inkscape::ResourceManager::getManager().fixupBrokenLinks(document) ) {
+            Glib::ustring msg = _("Broken links have been changed to point to existing files.");
+            SPDesktop* desktop = window->get_desktop();
+            if (desktop != nullptr) {
+                desktop->showInfoDialog(msg);
+            }
+        }
+
+        // Fix dpi (pre-92 files).
+        if ( sp_version_inside_range( document->getRoot()->version.inkscape, 0, 1, 0, 92 ) ) {
+            sp_file_convert_dpi(document);
+        }
+
+        // Check for font substitutions, requires text to have been rendered.
+        Inkscape::UI::Dialog::FontSubstitution::getInstance().checkFontSubstitutions(document);
+    }
+}
+
+
 // Take an already open document and create a new window, adding window to document map.
-// Document fix-up should already be done.
 InkscapeWindow*
-InkscapeApplication::open_window(SPDocument* document)
+InkscapeApplication::window_open(SPDocument* document)
 {
     InkscapeWindow* window = new InkscapeWindow(document);
     // TODO Add window to application. (Instead of in InkscapeWindow constructor.)
@@ -127,33 +331,41 @@ InkscapeApplication::open_window(SPDocument* document)
     if (it != _documents.end()) {
         it->second.push_back(window);
     } else {
-        std::cerr << "ConcreteInkscapeApplication<T>::add_window: document not in map!" << std::endl;
+        std::cerr << "InkscapeApplication::open_window: Document not in map!" << std::endl;
     }
+
+    document_fix(window); // May need flag to prevent this from being called more than once.
 
     return window;
 }
 
 
+// Close a window. Does not delete document.
 void
-InkscapeApplication::close_window(InkscapeWindow* window)
+InkscapeApplication::window_close(InkscapeWindow* window)
 {
+    // std::cout << "InkscapeApplication::close_window" << std::endl;
+    // dump();
+
     if (window) {
 
         SPDocument* document = window->get_document();
         if (document) {
 
-            // To be removed!
-            INKSCAPE.remove_document(document);
+            // To be removed (remove once per window)!
+            bool last = INKSCAPE.remove_document(document);
 
             _active_selection = nullptr;
             _active_view      = nullptr;
             _active_document  = nullptr;
 
+            // Remove window from document map.
             auto it = _documents.find(document);
             if (it != _documents.end()) {
                 auto it2 = std::find(it->second.begin(), it->second.end(), window);
                 if (it2 != it->second.end()) {
                     it->second.erase(it2);
+                    delete window; // Results in call to SPDesktop::destroy()
                 } else {
                     std::cerr << "ConcreteInkscapeApplication<T>::close_window: window not found!" << std::endl;
                 }
@@ -164,11 +376,11 @@ InkscapeApplication::close_window(InkscapeWindow* window)
             std::cerr << "ConcreteInkscapeApplication<T>::close_window: No document!" << std::endl;
         }
 
-        // TODO Remove window from application.
-
     } else {
         std::cerr << "ConcreteInkscapeApplication<T>::close_window: No window!" << std::endl;
     }
+
+    // dump();
 }
 
 
@@ -178,19 +390,35 @@ InkscapeApplication::close_window(InkscapeWindow* window)
  *  - Selection change
  */
 void
-InkscapeApplication::update_windows(SPDocument* document)
+InkscapeApplication::windows_update(SPDocument* document)
 {
     // Find windows:
     auto it = _documents.find( document );
     if (it != _documents.end()) {
         std::vector<InkscapeWindow*> windows = it->second;
-        std::cout << "InkscapeApplication::update_windows: windows: " << windows.size() << std::endl;
+        // std::cout << "InkscapeApplication::update_windows: windows size: " << windows.size() << std::endl;
         // Loop over InkscapeWindows.
         // Loop over DialogWindows. TBD
     } else {
-        std::cout << "InkscapeApplication::update_windows: no windows found" << std::endl;
+        // std::cout << "InkscapeApplication::update_windows: no windows found" << std::endl;
     }
 }
+
+/** Debug function
+ */
+void
+InkscapeApplication::dump()
+{
+    std::cout << "InkscapeApplication::dump()" << std::endl;
+    std::cout << "  Documents: " << _documents.size() << std::endl;
+    for (auto i : _documents) {
+        std::cout << "    Document: " << (i.first->getDocumentName()?i.first->getDocumentName():"unnamed") << std::endl;
+        for (auto j : i.second) {
+            std::cout << "      Window: " << j->get_title() << std::endl;
+        }
+    }
+}
+
 
 template<class T>
 ConcreteInkscapeApplication<T>&
@@ -369,6 +597,177 @@ ConcreteInkscapeApplication<Gtk::Application>::on_startup2()
     }
 }
 
+/** We should not create a window if T is Gio::Applicaton.
+*/
+template<class T>
+SPDesktop*
+ConcreteInkscapeApplication<T>::create_window(const Glib::RefPtr<Gio::File>& file,
+                                              bool add_to_recent,
+                                              bool replace_empty)
+{
+    std::cerr << "ConcreteInkscapeApplication<T>::create_window: Should not be called!";
+    return nullptr;
+}
+
+
+/** Create a window given a Gio::File. This is what most functions should call.
+    The booleans are only false when opening a help file.
+*/
+template<>
+SPDesktop*
+ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<Gio::File>& file,
+                                                             bool add_to_recent,
+                                                             bool replace_empty)
+{
+    SPDesktop* desktop = nullptr;
+
+    if (file) {
+        SPDocument* document = document_open (file);
+        if (document) {
+
+            if (add_to_recent) {
+
+                auto recentmanager = Gtk::RecentManager::get_default();
+                Gtk::RecentManager::Data data;
+                data.app_name = g_get_prgname(); // Must match Gtk::RecentFilter in menubar.cpp
+                data.mime_type = "image"; // We don't know if we opened an SVG! (image/svg+xml).
+                recentmanager->add_item (file->get_uri(), data);
+            }
+
+            // TODO Remove this code... handle document replacement elsewhere.
+            SPDocument* old_document = _active_document;
+            if (replace_empty && old_document && old_document->virgin) {
+                // virgin == true => an empty document (template).
+
+                // Is there a better place for this? It requires GUI.
+                document->ensureUpToDate(); // TODO this will trigger broken line warnings, etc.
+
+                InkscapeWindow* window = dynamic_cast<InkscapeWindow*>(get_active_window());
+                if (window) {
+                    document_swap (window, document);
+
+                    // Delete old document if no longer attached to any window.
+                    auto it = _documents.find (old_document);
+                    if (it != _documents.end()) {
+                        if (it->second.size() == 0) {
+                            document_close (old_document);
+                        }
+                    }
+
+                    document->emitResizedSignal(document->getWidth().value("px"), document->getHeight().value("px"));
+                    desktop = window->get_desktop();
+                } else {
+                    std::cerr << "ConcreteInkscapeApplication<T>::create_window: Failed to find active window!" << std::endl;
+                }
+            } else {
+                InkscapeWindow* window = window_open (document);
+                desktop = window->get_desktop();
+            }
+
+
+        } else {
+            std::cerr << "ConcreteInkscapeApplication<T>::create_window: Failed to load: "
+                      << file->get_parse_name() << std::endl;
+        }
+
+    } else {
+        std::string Template =
+            Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::TEMPLATES, "default.svg", true);
+        SPDocument* document = document_new (Template);
+        if (document) {
+            InkscapeWindow* window = window_open (document);
+            desktop = window->get_desktop();
+        } else {
+            std::cerr << "ConcreteInkscapeApplication<T>::create_window: Failed to open default template! " << Template << std::endl;
+        }
+    }
+
+    if (desktop) {
+        _active_document = desktop->getDocument();
+#ifdef WITH_DBUS
+        Inkscape::Extension::Dbus::dbus_init_desktop_interface(desktop);
+#endif
+    } else {
+        std::cerr << "ConcreteInkscapeApplication<T>::create_window: Failed to create desktop!" << std::endl;
+    }
+
+    return (desktop); // Temp: Need to track desktop for shell mode.
+}
+
+/** No need to destroy window if T is Gio::Application.
+ */
+template<class T>
+bool
+ConcreteInkscapeApplication<T>::destroy_window(InkscapeWindow* window)
+{
+    std::cerr << "ConcreteInkscapeApplication<T>::destroy_window: Should not be called!";
+    return false;
+}
+
+/** Destroy a window. Aborts if document needs saving.
+ *  Returns true if window destroyed.
+ */
+template<>
+bool
+ConcreteInkscapeApplication<Gtk::Application>::destroy_window(InkscapeWindow* window)
+{
+    SPDocument* document = window->get_document();
+
+    // Remove document if no windows left.
+    if (document) {
+        auto it = _documents.find(document);
+        if (it != _documents.end()) {
+
+            // If only one window for document:
+            if (it->second.size() == 1) {
+                // Check if document needs saving.
+                bool abort = window->get_desktop_widget()->shutdown();
+                if (abort) {
+                    return false;
+                }
+            }
+
+            window_close(window);
+
+            if (it->second.size() == 0) {
+                document_close (document);
+            }
+
+        } else {
+            std::cerr << "ConcreteInkscapeApplication<Gtk::Application>::destroy_window: Could not find document!" << std::endl;
+        }
+    }
+
+    // Debug
+    // auto windows = get_windows();
+    // std::cout << "destroy_windows: app windows size: " << windows.size() << std::endl;
+
+    return true;
+}
+
+/* Close all windows and exit.
+**/
+template<class T>
+void
+ConcreteInkscapeApplication<T>::destroy_all()
+{
+    std::cerr << "ConcreteInkscapeApplication<T>::destroy_all: Should not be called!";
+}
+
+template<>
+void
+ConcreteInkscapeApplication<Gtk::Application>::destroy_all()
+{
+    while (_documents.size() != 0) {
+        auto it = _documents.begin();
+        while (it->second.size() != 0) {
+            auto it2 = it->second.begin();
+            if (!destroy_window (*it2)) return; // If destroy aborted, we need to stop exit.
+        }
+    }
+}
+
+
 // Open document window with default document. Either this or on_open() is called.
 template<class T>
 void
@@ -401,7 +800,7 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
 
     for (auto file : files) {
         // Open file
-        SPDocument *document = open_document(file);
+        SPDocument *document = document_open (file);
         if (!document) continue;
 
         // Add to Inkscape::Application...
@@ -433,7 +832,7 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
         // Close file
         INKSCAPE.remove_document(document);
 
-        close_document(document);
+        document_close (document);
     }
 }
 
@@ -466,7 +865,7 @@ ConcreteInkscapeApplication<Gtk::Application>::on_open(const Gio::Application::t
         } else {
 
             // Open file
-            SPDocument *document = open_document(file);
+            SPDocument *document = document_open (file);
             if (!document) continue;
 
             // Add to Inkscape::Application...
@@ -498,51 +897,10 @@ ConcreteInkscapeApplication<Gtk::Application>::on_open(const Gio::Application::t
             // Close file
             INKSCAPE.remove_document(document);
 
-            close_document(document);
+            document_close (document);
         }
     }
 }
-
-
-
-template<class T>
-SPDesktop*
-ConcreteInkscapeApplication<T>::create_window(const Glib::RefPtr<Gio::File>& file)
-{
-    SPDesktop* desktop = nullptr;
-    if (file) {
-        sp_file_open(file->get_parse_name(), nullptr, false, true);
-        desktop = SP_ACTIVE_DESKTOP;
-    } else {
-        desktop = sp_file_new_default();
-    }
-
-    _active_document = desktop->getDocument();
-    // _documents.push_back(desktop->getDocument());
-
-    return (desktop); // Temp: Need to track desktop for shell mode.
-}
-
-
-// This is identical to the function above. We comment it out for now (otherwise it must be moved before on_open().
-// template<>
-// SPDesktop*
-// ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<Gio::File>& file)
-// {
-//     SPDesktop* desktop = nullptr;
-//     if (file) {
-//         sp_file_open(file->get_parse_name(), nullptr, false, true);
-//         desktop = SP_ACTIVE_DESKTOP;
-//     } else {
-//         desktop = sp_file_new_default();
-//     }
-
-//     _active_document = desktop->getDocument();
-//     // _documents.push_back(desktop->getDocument());
-
-//     return (desktop); // Temp: Need to track desktop for shell mode.
-// }
-
 
 template<class T>
 void
