@@ -9237,7 +9237,7 @@ msgstr "AMPLADA"
 msgid "Export: Bitmap height in pixels (overrides --export-dpi)."
 msgstr ""
 "Exporta: l'amplada del mapa de bits exportat en píxels (sobreescriu --export-"
-"dpi)"
+"dpi)."
 
 #: ../src/inkscape-application.cpp:279
 msgid "HEIGHT"
@@ -9263,7 +9263,7 @@ msgstr ""
 #. BSx
 #: ../src/inkscape-application.cpp:284
 msgid "Export: Remove items in the Inkscape namespace."
-msgstr "Exporta: suprimeix elements en el nom d'espai de l'Inkscape"
+msgstr "Exporta: suprimeix elements en el nom d'espai de l'Inkscape."
 
 #. xSx
 #: ../src/inkscape-application.cpp:285
@@ -9774,7 +9774,7 @@ msgid ""
 "black stroke)."
 msgstr ""
 "Dibuixa les nanses i els nodes dels camins (reemplaça l'estil original amb "
-"una traç negre)."
+"un traç negre)."
 
 #. label
 #. key
@@ -13617,7 +13617,7 @@ msgstr "%d &#215; %d: %s"
 
 #: ../src/object/sp-item-group.cpp:305 ../src/ui/dialog/objects.cpp:1911
 msgid "Group"
-msgstr "Agrupa"
+msgstr "Grup"
 
 #: ../src/object/sp-item-group.cpp:311 ../src/object/sp-switch.cpp:70
 #, c-format
@@ -13627,7 +13627,7 @@ msgstr "d'<b>%d</b> objecte"
 #: ../src/object/sp-item-group.cpp:311 ../src/object/sp-switch.cpp:70
 #, c-format
 msgid "of <b>%d</b> objects"
-msgstr "d'<b>%d</b> objectes"
+msgstr "de <b>%d</b> objectes"
 
 #: ../src/object/sp-item-group.cpp:647 ../src/selection-chemistry.cpp:900
 #: ../src/ui/dialog/objects.cpp:1912
@@ -22327,7 +22327,7 @@ msgstr "Radi renderització dels raigs X:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1848
 msgid "XRay mode radius preview"
-msgstr "Previsualització del radio del mode raigs X"
+msgstr "Previsualització del radi del mode raigs X"
 
 #. blur quality
 #. filter quality
@@ -26838,7 +26838,7 @@ msgstr ""
 "* La sintaxi pot canviar\n"
 "* La implementació als navegadors web no està garantida\n"
 "\n"
-"Per a web: convertir a bitmap (Edita->Fes una copia del bitmap).\n"
+"Per a web: convertir a bitmap (Edita->Fes una còpia del bitmap).\n"
 "Per imprimir: exportar a PDF."
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:561
