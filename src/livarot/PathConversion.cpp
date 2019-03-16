@@ -825,9 +825,10 @@ void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
     Geom::Scale const ar(rx, ry);
     Geom::Rotate cb(sang);
     Geom::Rotate cbangle(angle*M_PI/180.0);
+
     if (wise) {
 
-        double const incr = -0.1;
+        double const incr = -0.1/sqrt(ar.vector().length());
         if ( sang < eang ) {
             sang += 2*M_PI;
         }
@@ -839,7 +840,7 @@ void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
 
     } else {
 
-        double const incr = 0.1;
+        double const incr = 0.1/sqrt(ar.vector().length());
         if ( sang > eang ) {
             sang -= 2*M_PI;
         }
@@ -969,9 +970,9 @@ void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
     Geom::Scale const ar(rx, ry);
     Geom::Rotate cb(sang);
     Geom::Rotate cbangle(angle*M_PI/180.0);
-    if (wise) {
 
-        double const incr = -0.1;
+    if (wise) {
+        double const incr = -0.1/sqrt(ar.vector().length());
         if ( sang < eang ) {
             sang += 2*M_PI;
         }
@@ -983,7 +984,7 @@ void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
 
     } else {
 
-        double const incr = 0.1;
+        double const incr = 0.1/sqrt(ar.vector().length());
         if ( sang > eang ) {
             sang -= 2 * M_PI;
         }
@@ -1090,7 +1091,7 @@ void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
     Geom::Rotate cbangle(angle*M_PI/180.0);
     if (wise) {
 
-        double const incr = -0.1;
+        double const incr = -0.1/sqrt(ar.vector().length());
         if ( sang < eang ) {
             sang += 2*M_PI;
         }
@@ -1101,7 +1102,7 @@ void Path::DoArc(Geom::Point const &iS, Geom::Point const &iE,
         }
 
     } else {
-        double const incr = 0.1;
+        double const incr = 0.1/sqrt(ar.vector().length());
         if ( sang > eang ) {
             sang -= 2*M_PI;
         }
