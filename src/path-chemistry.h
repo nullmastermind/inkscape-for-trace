@@ -23,6 +23,8 @@ class ObjectSet;
 namespace XML {
 class Node;
 } // namespace XML
+
+void copy_object_properties(XML::Node *dest, XML::Node const *src);
 } // namespace Inkscape
 
 typedef unsigned int guint32;

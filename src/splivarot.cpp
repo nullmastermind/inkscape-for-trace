@@ -34,6 +34,7 @@
 #include "document.h"
 #include "layer-model.h"
 #include "message-stack.h"
+#include "path-chemistry.h"
 #include "selection.h"
 #include "text-editing.h"
 #include "verbs.h"
@@ -727,19 +728,10 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
     gint pos = repr_source->position();
     Inkscape::XML::Node *parent = repr_source->parent();
     gchar const *id = repr_source->attribute("id");
-    gchar const *style = repr_source->attribute("style");
-    gchar const *mask = repr_source->attribute("mask");
-    gchar const *clip_path = repr_source->attribute("clip-path");
-    gchar *title = source->title();
-    gchar *desc = source->desc();
     // remove source paths
     clear();
     for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
-        // if this is the bottommost object,
-        if (!strcmp(reinterpret_cast<SPObject *>(*l)->getRepr()->attribute("id"), id)) {
-            // delete it so that its clones don't get alerted; this object will be restored shortly, with the same id
-            (*l)->deleteObject(false);
-        } else {
+        if ((*l) != item_source) {
             // delete the object for real, so that its clones can take appropriate action
             (*l)->deleteObject();
         }
@@ -778,11 +770,14 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
 
             Inkscape::XML::Document *xml_doc = doc->getReprDoc();
             Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
-            repr->setAttribute("style", style);
-            if (mask)
-                repr->setAttribute("mask", mask);
-            if (clip_path)
-                repr->setAttribute("clip-path", clip_path);
+
+            Inkscape::copy_object_properties(repr, repr_source);
+
+            // Delete source on last iteration (after we don't need repr_source anymore). As a consequence, the last
+            // item will inherit the original's id.
+            if (i + 1 == nbRP) {
+                item_source->deleteObject(false);
+            }
 
             repr->setAttribute("d", d);
             g_free(d);
@@ -798,11 +793,6 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
 
                 sp_repr_css_attr_unref(css);
             }
-
-            // we assign the same id on all pieces, but it on adding to document, it will be changed on all except one
-            // this means it's basically random which of the pieces inherits the original's id and clones
-            // a better algorithm might figure out e.g. the biggest piece
-            repr->setAttribute("id", id);
 
             repr->setAttribute("transform", transform);
 
@@ -824,27 +814,18 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
 
         Inkscape::XML::Document *xml_doc = doc->getReprDoc();
         Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
-        repr->setAttribute("style", style);
 
-        if ( mask )
-            repr->setAttribute("mask", mask);
+        Inkscape::copy_object_properties(repr, repr_source);
 
-        if ( clip_path )
-            repr->setAttribute("clip-path", clip_path);
+        // delete it so that its clones don't get alerted; this object will be restored shortly, with the same id
+        item_source->deleteObject(false);
 
         repr->setAttribute("d", d);
         g_free(d);
 
         repr->setAttribute("transform", transform);
 
-        repr->setAttribute("id", id);
         parent->appendChild(repr);
-        if (title) {
-            doc->getObjectByRepr(repr)->setTitle(title);
-        }
-        if (desc) {
-            doc->getObjectByRepr(repr)->setDesc(desc);
-        }
         repr->setPosition(pos > 0 ? pos : 0);
 
         add(doc->getObjectByRepr(repr));
@@ -852,8 +833,6 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
     }
 
     g_free(transform);
-    if (title) g_free(title);
-    if (desc) g_free(desc);
 
     delete res;
 
@@ -1260,8 +1239,6 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
 
         Geom::Affine const transform(item->transform);
         float const scale = transform.descrim();
-        gchar const *mask = item->getRepr()->attribute("mask");
-        gchar const *clip_path = item->getRepr()->attribute("clip-path");
 
         Path *orig = new Path;
         Path *res = new Path;
@@ -1375,12 +1352,6 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
         gint pos = item->getRepr()->position();
         // remember parent
         Inkscape::XML::Node *parent = item->getRepr()->parent();
-        // remember id
-        char const *id = item->getRepr()->attribute("id");
-        // remember title
-        gchar *title = item->title();
-        // remember description
-        gchar *desc = item->desc();
         
         if (res->descr_cmd.size() > 1) { // if there's 0 or 1 node left, drop this path altogether
 
@@ -1399,15 +1370,13 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
                 gchar *str = orig->svg_dump_path();
                 stroke->setAttribute("d", str);
                 g_free(str);
-
-                if (mask)
-                    stroke->setAttribute("mask", mask);
-                if (clip_path)
-                    stroke->setAttribute("clip-path", clip_path);
             }
 
             if (SP_IS_SHAPE(item)) {
                 Inkscape::XML::Node *g_repr = xml_doc->createElement("svg:g");
+                Inkscape::copy_object_properties(g_repr, item->getRepr());
+                // drop copied style, children will be re-styled (stroke becomes fill)
+                g_repr->setAttribute("style", nullptr);
 
                 // add the group to the parent
                 parent->appendChild(g_repr);
@@ -1427,23 +1396,11 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
                         gchar *str = sp_svg_write_path( pathv );
                         fill->setAttribute("d", str);
                         g_free(str);
-
-                        if (mask)
-                            fill->setAttribute("mask", mask);
-                        if (clip_path)
-                            fill->setAttribute("clip-path", clip_path);
                     }
                 }
-                // restore title, description, id, transform
-                g_repr->setAttribute("id", id);
+                // restore transform
                 SPItem *newitem = (SPItem *) doc->getObjectByRepr(g_repr);
                 newitem->doWriteTransform(transform);
-                if (title) {
-                	newitem->setTitle(title);
-                }
-                if (desc) {
-                	newitem->setDesc(desc);
-                }
                 SPShape *shape = SP_SHAPE(item);
 
                 Geom::PathVector const & pathv = curve->get_pathvector();
@@ -1525,12 +1482,6 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
                                                                  Geom::Scale(i_style->stroke_width.computed), transform,
                                                                  markers, xml_doc, doc, desktop, legacy);
                         }
-                    }
-                    if (!legacy) {
-                        if (mask)
-                            markers->setAttribute("mask", mask);
-                        if (clip_path)
-                            markers->setAttribute("clip-path", clip_path);
                     }
                 }
 
@@ -1665,15 +1616,6 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
             }
         }
 
-        if (title) {
-            g_free(title);
-            title = nullptr;
-        }
-        if (desc) {
-            g_free(desc);
-            desc = nullptr;
-        }
-
         delete res;
         delete orig;
     }
@@ -1796,9 +1738,6 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
 
     item->doWriteTransform(Geom::identity());
 
-    //XML Tree being used directly here while it shouldn't be...
-    gchar *style = g_strdup(item->getRepr()->attribute("style"));
-
     // remember the position of the item
     gint pos = item->getRepr()->position();
 
@@ -1820,7 +1759,6 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
     Path *orig = Path_for_item(item, true, false);
     if (orig == nullptr)
     {
-        g_free(style);
         curve->unref();
         return;
     }
@@ -1873,13 +1811,20 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
 
         delete res;
         delete orig;
-        g_free(style);
         return;
     }
 
     {
         Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
         Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
+
+        if (!updating) {
+            Inkscape::copy_object_properties(repr, item->getRepr());
+        } else {
+            gchar const *style = item->getRepr()->attribute("style");
+            repr->setAttribute("style", style);
+        }
+
         repr->setAttribute("sodipodi:type", "inkscape:offset");
         sp_repr_set_svg_double(repr, "inkscape:radius", ( expand > 0
                                                           ? o_width
@@ -1902,9 +1847,9 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
             g_free((void *) uri);
         } else {
             repr->setAttribute("inkscape:href", nullptr);
+            // delete original
+            item->deleteObject(false);
         }
-
-        repr->setAttribute("style", style);
 
         // add the new repr to the parent
         parent->appendChild(repr);
@@ -1915,10 +1860,7 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
         SPItem *nitem = reinterpret_cast<SPItem *>(desktop->getDocument()->getObjectByRepr(repr));
 
         if ( !updating ) {
-            // delete original, apply the transform to the offset
-            const char *n_id = item->getRepr()->attribute("id");
-            item->deleteObject(false);
-            repr->setAttribute("id", n_id);
+            // apply the transform to the offset
             nitem->doWriteTransform(transform);
         }
 
@@ -1939,8 +1881,6 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
 
     delete res;
     delete orig;
-
-    g_free(style);
 }
 
 
@@ -1989,8 +1929,6 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
 
         item->doWriteTransform(Geom::identity());
 
-        gchar *style = g_strdup(item->getRepr()->attribute("style"));
-
         float o_width = 0;
         float o_miter = 0;
         JoinType o_join = join_straight;
@@ -2021,7 +1959,6 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
 
         Path *orig = Path_for_item(item, false);
         if (orig == nullptr) {
-            g_free(style);
             curve->unref();
             continue;
         }
@@ -2104,18 +2041,21 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
         gint pos = item->getRepr()->position();
         // remember parent
         Inkscape::XML::Node *parent = item->getRepr()->parent();
-        // remember id
-        char const *id = item->getRepr()->attribute("id");
 
         selection->remove(item);
-        item->deleteObject(false);
+
+        Inkscape::XML::Node *repr = nullptr;
 
         if (res->descr_cmd.size() > 1) { // if there's 0 or 1 node left, drop this path altogether
             Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
-            Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
+            repr = xml_doc->createElement("svg:path");
 
-            repr->setAttribute("style", style);
+            Inkscape::copy_object_properties(repr, item->getRepr());
+        }
 
+        item->deleteObject(false);
+
+        if (repr) {
             gchar *str = res->svg_dump_path();
             repr->setAttribute("d", str);
             g_free(str);
@@ -2130,8 +2070,6 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
 
             // reapply the transform
             newitem->doWriteTransform(transform);
-
-            repr->setAttribute("id", id);
 
             selection->add(repr);
 
@@ -2201,29 +2139,17 @@ sp_selected_path_simplify_item(SPDesktop *desktop,
     */
     item->doWriteTransform(Geom::identity());
 
-    gchar *style = g_strdup(item->getRepr()->attribute("style"));
-    gchar *mask = g_strdup(item->getRepr()->attribute("mask"));
-    gchar *clip_path = g_strdup(item->getRepr()->attribute("clip-path"));
-
     // remember the position of the item
     gint pos = item->getRepr()->position();
     // remember parent
     Inkscape::XML::Node *parent = item->getRepr()->parent();
-    // remember id
-    char const *id = item->getRepr()->attribute("id");
     // remember path effect
     char const *patheffect = item->getRepr()->attribute("inkscape:path-effect");
-    // remember title
-    gchar *title = item->title();
-    // remember description
-    gchar *desc = item->desc();
     
     //If a group was selected, to not change the selection list
     if (modifySelection) {
         selection->remove(item);
     }
-
-    item->deleteObject(false);
 
     if ( justCoalesce ) {
         orig->Coalesce(threshold * size);
@@ -2235,19 +2161,10 @@ sp_selected_path_simplify_item(SPDesktop *desktop,
     Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
 
-    // restore style, mask and clip-path
-    repr->setAttribute("style", style);
-    g_free(style);
+    // restore attributes
+    Inkscape::copy_object_properties(repr, item->getRepr());
 
-    if ( mask ) {
-        repr->setAttribute("mask", mask);
-        g_free(mask);
-    }
-
-    if ( clip_path ) {
-        repr->setAttribute("clip-path", clip_path);
-        g_free(clip_path);
-    }
+    item->deleteObject(false);
 
     // restore path effect
     repr->setAttribute("inkscape:path-effect", patheffect);
@@ -2260,9 +2177,6 @@ sp_selected_path_simplify_item(SPDesktop *desktop,
         repr->setAttribute("d", str);
     g_free(str);
 
-    // restore id
-    repr->setAttribute("id", id);
-
     // add the new repr to the parent
     parent->appendChild(repr);
 
@@ -2274,16 +2188,6 @@ sp_selected_path_simplify_item(SPDesktop *desktop,
     // reapply the transform
     newitem->doWriteTransform(transform);
 
-    // restore title & description
-    if (title) {
-    	newitem->setTitle(title);
-        g_free(title);
-    }
-    if (desc) {
-    	newitem->setDesc(desc);
-        g_free(desc);
-    }
-    
     //If we are not in a selected group
     if (modifySelection)
         selection->add(repr);
