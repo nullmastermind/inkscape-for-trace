@@ -2097,7 +2097,6 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
     _freeze = true;
 
     Inkscape::FontLister* fontlister = Inkscape::FontLister::get_instance();
-    fontlister->update_font_list (SP_ACTIVE_DESKTOP->getDocument());
     fontlister->selection_update();
 
     // Update font list, but only if widget already created.
