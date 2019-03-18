@@ -124,7 +124,7 @@ public:
     /**
      * Get fontspec based on current settings. (Does not handle size, yet.)
      */
-    Glib::ustring get_fontspec();
+    Glib::ustring get_fontspec(bool use_variations = true);
 
     /**
      * Get font size. Could be merged with fontspec.

@@ -93,7 +93,6 @@ FontVariations::update (Glib::ustring& font_spec) {
 
 void
 FontVariations::fill_css( SPCSSAttr *css ) {
-    std::cout << "FontVariations::fill_css" << std::endl;
 
     // Eventually will want to favor using 'font-weight', etc. but at the moment these
     // can't handle "fractional" values. See CSS Fonts Module Level 4.
