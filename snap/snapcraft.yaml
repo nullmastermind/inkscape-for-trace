@@ -56,7 +56,6 @@ parts:
       - libpango1.0-dev
       - libpoppler-glib-dev
       - libpoppler-private-dev
-      - libpopt-dev
       - libpotrace-dev
       - librevenge-dev
       - libsigc++-2.0-dev

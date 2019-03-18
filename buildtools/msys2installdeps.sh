@@ -44,7 +44,6 @@ $ARCH-ninja
 eval pacman -S $PACMAN_OPTIONS \
 $ARCH-gc \
 $ARCH-gsl \
-$ARCH-popt \
 $ARCH-libxslt \
 $ARCH-boost \
 $ARCH-gtk3 \
