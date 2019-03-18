@@ -60,19 +60,20 @@ FontSelector::FontSelector (bool with_size, bool with_variations)
     style_treecolumn.pack_start (style_cell, false);
     style_treecolumn.add_attribute (style_cell, "text", 0);
     style_treecolumn.set_cell_data_func (style_cell, sigc::mem_fun(*this, &FontSelector::style_cell_data_func));
-    style_treecolumn.set_max_width (200);
     style_treecolumn.set_title ("Face");
+    style_treecolumn.set_resizable (true);
 
     style_treeview.set_model (font_lister->get_style_list());
     style_treeview.set_name ("FontSelectorStyle");
     style_treeview.append_column ("CSS", font_lister->FontStyleList.cssStyle);
     style_treeview.append_column (style_treecolumn);
 
-    style_treeview.get_column(0)->set_max_width (200);
+    style_treeview.get_column(0)->set_resizable (true);
 
-    style_scroll.set_policy (Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+    style_scroll.set_policy (Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     style_scroll.add (style_treeview);
 
+    style_frame.set_hexpand (true);
     style_frame.set_vexpand (true);
     style_frame.add (style_scroll);
 
@@ -82,7 +83,9 @@ FontSelector::FontSelector (bool with_size, bool with_variations)
     size_combobox.set_active_text( "18" );
 
     // Font Variations
-    // Do nothing.
+    font_variations.set_vexpand (true);
+    font_variations_scroll.set_policy (Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+    font_variations_scroll.add (font_variations);
 
     // Grid
     set_name ("FontSelectorGrid");
@@ -93,7 +96,7 @@ FontSelector::FontSelector (bool with_size, bool with_variations)
         attach (size_combobox, 2, 1, 1, 1);
     }
     if (with_variations) { // Glyphs panel does not use variations.
-        attach (font_variations, 0, 2, 3, 1);
+        attach (font_variations_scroll, 0, 2, 3, 1);
     }
 
     // Add signals

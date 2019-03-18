@@ -88,6 +88,7 @@ protected:
     Gtk::ComboBoxText   size_combobox;
 
     // Font variations
+    Gtk::ScrolledWindow font_variations_scroll;
     FontVariations      font_variations;
 
 private:
