@@ -17,6 +17,7 @@
 # tareefm <tareef.m@gmail.com>, 2012
 # صفا الفليج <safaalfulaij@hotmail.com>, 2012
 # tareefm <tareef.m@gmail.com>, 2012
+# Abdelhak Sidi Ali Mebarek <abdelhakcpm@gmail.com>,2019
 msgid ""
 msgstr ""
 "Project-Id-Version: Arabic Inkscape\n"
@@ -51,7 +52,7 @@ msgstr "إنشاء و تحرير الرسومات الشعاعية"
 
 #: ../org.inkscape.Inkscape.desktop.in.h:5
 msgid "image;editor;vector;drawing;"
-msgstr ""
+msgstr "صورة;محرّر;شعاع;رسم;"
 
 #: ../org.inkscape.Inkscape.desktop.in.h:6
 msgid "New Drawing"
@@ -1246,7 +1247,7 @@ msgstr "نسيج البالون المغشّى بالحفر"
 
 #: ../share/filters/filters.svg.h:470
 msgid "Embossed Leather"
-msgstr ""
+msgstr "جلد منقوش"
 
 #: ../share/filters/filters.svg.h:472
 msgid ""
@@ -1264,7 +1265,7 @@ msgstr ""
 
 #: ../share/filters/filters.svg.h:478
 msgid "Plastify"
-msgstr ""
+msgstr "تحويل إلى شكل بلاستيك"
 
 #: ../share/filters/filters.svg.h:480
 msgid ""
@@ -1371,7 +1372,7 @@ msgstr "ملء وشفافية"
 
 #: ../share/filters/filters.svg.h:524
 msgid "Convert to a colorizable transparent positive or negative"
-msgstr ""
+msgstr "تحويل إلى شفّاف قابل للتلوين الإيجابي أو السلبي"
 
 #: ../share/filters/filters.svg.h:526
 msgid "Saturation Map"
@@ -1433,11 +1434,11 @@ msgstr "تأثير معدني لامع لأي لون"
 
 #: ../share/filters/filters.svg.h:554
 msgid "Deep Colors Plastic"
-msgstr ""
+msgstr "ألوان بلاستيك غامقة"
 
 #: ../share/filters/filters.svg.h:556
 msgid "Transparent plastic with deep colors"
-msgstr ""
+msgstr "بلاستيك شفّاف ذات ألوان غامقة"
 
 #: ../share/filters/filters.svg.h:558
 msgid "Melted Jelly Matte"
@@ -1457,7 +1458,7 @@ msgstr ""
 
 #: ../share/filters/filters.svg.h:566
 msgid "Combined Lighting"
-msgstr ""
+msgstr "أضواء مدمجة"
 
 #: ../share/filters/filters.svg.h:568
 #: ../src/extension/internal/filter/bevels.h:232
@@ -1498,7 +1499,7 @@ msgstr ""
 
 #: ../share/filters/filters.svg.h:586
 msgid "Fluorescence"
-msgstr ""
+msgstr "إستشعاع"
 
 #: ../share/filters/filters.svg.h:588
 msgid "Oversaturate colors which can be fluorescent in real world"
@@ -1506,7 +1507,7 @@ msgstr ""
 
 #: ../share/filters/filters.svg.h:590
 msgid "Pixellize"
-msgstr ""
+msgstr "بكسِل"
 
 #: ../share/filters/filters.svg.h:591
 #, fuzzy
@@ -1587,11 +1588,11 @@ msgstr ""
 
 #: ../share/filters/filters.svg.h:630
 msgid "Hue to White"
-msgstr ""
+msgstr "تحويل درجة لون نحو الأبيض"
 
 #: ../share/filters/filters.svg.h:632
 msgid "Fades hue progressively to white"
-msgstr ""
+msgstr "تلاشي درجة لون نحو الأبيض تدريجيا"
 
 #: ../share/filters/filters.svg.h:634
 #: ../src/extension/internal/bitmap/swirl.cpp:38
@@ -1625,7 +1626,7 @@ msgstr "تعبئة الخلفية"
 
 #: ../share/filters/filters.svg.h:648
 msgid "Adds a colorizable opaque background"
-msgstr ""
+msgstr "إضافة خلفية غير شفافة قابلة للتلوين"
 
 #: ../share/filters/filters.svg.h:650
 msgid "Flatten Transparency"
@@ -1633,7 +1634,7 @@ msgstr "شفافية مسطحة"
 
 #: ../share/filters/filters.svg.h:652
 msgid "Adds a white opaque background"
-msgstr ""
+msgstr "إضافة خلفية بيضاء غير شفافة"
 
 #: ../share/filters/filters.svg.h:654
 msgid "Blur Double"
@@ -1837,7 +1838,7 @@ msgstr "معدن حاد"
 
 #: ../share/filters/filters.svg.h:764
 msgid "Chrome effect with darkened edges"
-msgstr ""
+msgstr "تأثير كروم مع حافّات مظلمة"
 
 #: ../share/filters/filters.svg.h:766
 msgid "Brush Draw"
@@ -1849,7 +1850,7 @@ msgstr "نقش على الكروم"
 
 #: ../share/filters/filters.svg.h:772
 msgid "Embossed chrome effect"
-msgstr ""
+msgstr "تأثير كروم منقوش"
 
 #: ../share/filters/filters.svg.h:774
 msgid "Contour Emboss"
@@ -1893,7 +1894,7 @@ msgstr ""
 
 #: ../share/filters/filters.svg.h:794
 msgid "Frosted Glass"
-msgstr ""
+msgstr "زجاج مثلّج"
 
 #: ../share/filters/filters.svg.h:796
 msgid "Satiny glass effect"
@@ -1957,7 +1958,7 @@ msgstr ""
 
 #: ../share/filters/filters.svg.h:826
 msgid "Trichrome"
-msgstr ""
+msgstr "ثلاثي الألوان"
 
 #: ../share/filters/filters.svg.h:828
 msgid "Like Duochrome but with three colors"
@@ -2649,31 +2650,31 @@ msgstr "أخضر ربيعي متوسط (#00FA9A)"
 #: ../share/palettes/palettes.h:108
 msgctxt "Palette"
 msgid "mediumaquamarine (#66CDAA)"
-msgstr "ازرق مخضر معتدل (#66CDAA)"
+msgstr "زبرجد متوسط (#66CDAA)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:109
 msgctxt "Palette"
 msgid "aquamarine (#7FFFD4)"
-msgstr ""
+msgstr "زبرجد (#7FFFD4)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:110
 msgctxt "Palette"
 msgid "turquoise (#40E0D0)"
-msgstr ""
+msgstr "فيروز (#40E0D0)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:111
 msgctxt "Palette"
 msgid "lightseagreen (#20B2AA)"
-msgstr ""
+msgstr "أخضر بحر فاتح (#20B2AA)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:112
 msgctxt "Palette"
 msgid "mediumturquoise (#48D1CC)"
-msgstr ""
+msgstr "فيروز متوسط (#48D1CC)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:113
@@ -2685,7 +2686,7 @@ msgstr ""
 #: ../share/palettes/palettes.h:114
 msgctxt "Palette"
 msgid "paleturquoise (#AFEEEE)"
-msgstr ""
+msgstr "فيروز باهت (#AFEEEE)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:115
@@ -2697,7 +2698,7 @@ msgstr "أزرق مخضَر (#008080)"
 #: ../share/palettes/palettes.h:116
 msgctxt "Palette"
 msgid "darkcyan (#008B8B)"
-msgstr ""
+msgstr "سماوي داكن (#008B8B)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:117
@@ -2721,7 +2722,7 @@ msgstr "سماوي (#F0FFFF)"
 #: ../share/palettes/palettes.h:120
 msgctxt "Palette"
 msgid "darkturquoise (#00CED1)"
-msgstr ""
+msgstr "فيروز داكن(#00CED1)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:121
@@ -3175,83 +3176,83 @@ msgstr "أسود فحمي"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 1:1"
-msgstr "شرائط 1: 1"
+msgstr "شرائط 1:1"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 1:1 white"
-msgstr ""
+msgstr "شرائط 1:1 بيضاء"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 1:1.5"
-msgstr " شرائط  1:1.5 "
+msgstr "شرائط  1:1.5"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 1:1.5 white"
-msgstr ""
+msgstr "شرائط 1:1.5 بيضاء"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 1:2"
-msgstr "شرائط 1: 2"
+msgstr "شرائط 1:2"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 1:2 white"
-msgstr ""
+msgstr "شرائط 1:2 بيضاء"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 1:3"
-msgstr "شرائط 1: 3"
+msgstr "شرائط 1:3"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 1:3 white"
-msgstr ""
+msgstr "شرائط 1:3 بيضاء"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 1:4"
-msgstr "شرائط 1: 4"
+msgstr "شرائط 1:4"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 1:4 white"
-msgstr ""
+msgstr "شرائط 1:4 بيضاء"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 1:5"
-msgstr "شرائط 1: 5"
+msgstr "شرائط 1:5"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 1:5 white"
-msgstr ""
+msgstr "شرائط 1:5 بيضاء"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 1:8"
-msgstr "شرائط 1: 8"
+msgstr "شرائط 1:8"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 1:8 white"
-msgstr ""
+msgstr "شرائط 1:8 بيضاء"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 1:10"
-msgstr "شرائط 1: 10 "
+msgstr "شرائط 1:10 "
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 1:10 white"
-msgstr ""
+msgstr "شرائط 1:10 بيضاء"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 1:16"
-msgstr ""
+msgstr "شرائط 1:16"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 1:16 white"
-msgstr ""
+msgstr "شرائط 1:16 بيضاء"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 1:32"
-msgstr ""
+msgstr "شرائط 1:32"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 1:32 white"
-msgstr ""
+msgstr "شرائط 1:32 بيضاء"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 1:64"
@@ -3259,19 +3260,19 @@ msgstr "1:64 شرائط"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 2:1"
-msgstr "شرائط 2: 1"
+msgstr "شرائط 2:1"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 2:1 white"
-msgstr ""
+msgstr "شرائط 2:1 بيضاء"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 4:1"
-msgstr "شرائط 4: 1"
+msgstr "شرائط 4:1"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Stripes 4:1 white"
-msgstr ""
+msgstr "شرائط 4:1 بيضاء"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Checkerboard"
@@ -3287,27 +3288,27 @@ msgstr ""
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Polka dots, small"
-msgstr ""
+msgstr "نقاط بولكا، ضغيرة"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Polka dots, small white"
-msgstr ""
+msgstr "نقاط بولكا، صغيرة بيضاء"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Polka dots, medium"
-msgstr ""
+msgstr "نقاط بولكا، متوسطة"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Polka dots, medium white"
-msgstr ""
+msgstr "نقاط بولكا، متوسطة بيضاء"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Polka dots, large"
-msgstr ""
+msgstr "نقاط بولكا، كبيرة"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Polka dots, large white"
-msgstr ""
+msgstr "نقاط بولكا، كبيرة بيضاء"
 
 #: ../share/patterns/patterns.svg.h:1
 msgid "Wavy"
@@ -3907,7 +3908,7 @@ msgstr ""
 #: ../share/symbols/symbols.h:160
 msgctxt "Symbol"
 msgid "Sort"
-msgstr ""
+msgstr "الترتيب"
 
 #. Symbols: FlowSymbols.svg
 #: ../share/symbols/symbols.h:161
@@ -3961,7 +3962,7 @@ msgstr ""
 #: ../share/symbols/symbols.h:169
 msgctxt "Symbol"
 msgid "Magnetic Disk (Database)"
-msgstr ""
+msgstr "ديسك مغتاطيسي (قاعدة البيانات)"
 
 #. Symbols: FlowSymbols.svg
 #: ../share/symbols/symbols.h:170
@@ -4231,7 +4232,7 @@ msgstr ""
 #: ../share/symbols/symbols.h:243 ../share/symbols/symbols.h:244
 msgctxt "Symbol"
 msgid "Recycling"
-msgstr ""
+msgstr "إعادة التدوير"
 
 #. Symbols: MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:247 ../share/symbols/symbols.h:248
@@ -4380,12 +4381,12 @@ msgid "A4 leaflet 3-fold"
 msgstr ""
 
 #: ../share/templates/templates.h:1
-msgid "CD Label 120mmx120mm "
-msgstr " 120mmx120mm "
+msgid "CD Label 120mmx120mm"
+msgstr "ملصق قرص مضغوط 120ممx120مم"
 
 #: ../share/templates/templates.h:1
 msgid "Simple CD Label template with disc's pattern."
-msgstr ""
+msgstr "نملصق قرص مضغوط بسيط مع نموذج القرص"
 
 #: ../share/templates/templates.h:1
 msgid "CD label 120x120 disc disk"
@@ -4685,7 +4686,7 @@ msgstr "تقاطع مسار المعلَم"
 
 #: ../src/display/snap-indicator.cpp:125
 msgid "clip-path"
-msgstr ""
+msgstr "مسار القص"
 
 #: ../src/display/snap-indicator.cpp:128
 msgid "mask-path"
@@ -4745,11 +4746,11 @@ msgstr "خط النص الأساسي"
 
 #: ../src/display/snap-indicator.cpp:171
 msgid "constrained angle"
-msgstr ""
+msgstr "زاوية مقيّدة"
 
 #: ../src/display/snap-indicator.cpp:174
 msgid "constraint"
-msgstr ""
+msgstr "قيد"
 
 #: ../src/display/snap-indicator.cpp:188
 msgid "Bounding box corner"
@@ -4926,7 +4927,7 @@ msgstr "لم يُعثر على اسم معرّف لها."
 
 #: ../src/extension/extension.cpp:279
 msgid "the XML description of it got lost."
-msgstr ""
+msgstr "الوصف XML فقِد."
 
 #: ../src/extension/extension.cpp:283
 msgid "no implementation was defined for the extension."
@@ -4998,7 +4999,7 @@ msgstr ""
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:40
 msgid "Adaptive Threshold"
-msgstr ""
+msgstr "عتبة تكييفية"
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:42
 #: ../src/extension/internal/bitmap/raise.cpp:43
@@ -5070,7 +5071,7 @@ msgstr "الخطوط الأفقية"
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:50
 msgid "Apply adaptive thresholding to selected bitmap(s)"
-msgstr ""
+msgstr "تفعيل العتبة التكييفية في الصور المختارة"
 
 #: ../src/extension/internal/bitmap/addNoise.cpp:46
 msgid "Add Noise"
@@ -5367,7 +5368,7 @@ msgstr "نقطة بيضاﺀ:"
 #: ../src/extension/internal/bitmap/level.cpp:46
 #: ../src/extension/internal/bitmap/levelChannel.cpp:68
 msgid "Gamma Correction:"
-msgstr ""
+msgstr "تصحيح غاما:"
 
 #: ../src/extension/internal/bitmap/level.cpp:52
 msgid ""
@@ -5626,7 +5627,7 @@ msgstr "إنشاﺀ من المسار"
 #: ../src/extension/internal/cairo-ps-out.cpp:330
 #: ../share/extensions/ps_input.inx.h:3
 msgid "PostScript"
-msgstr ""
+msgstr "PostScript"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:332
 #: ../src/extension/internal/cairo-ps-out.cpp:374
@@ -5668,7 +5669,7 @@ msgstr "تحويل النصوص إلى مسارات"
 #: ../src/extension/internal/cairo-ps-out.cpp:381
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:258
 msgid "Omit text in PDF and create LaTeX file"
-msgstr ""
+msgstr "حذف النصوص من الPDF و  خلق ملف LaTeX"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:341
 #: ../src/extension/internal/cairo-ps-out.cpp:383
@@ -5685,7 +5686,7 @@ msgstr ""
 #: ../src/extension/internal/cairo-ps-out.cpp:343
 #: ../src/extension/internal/cairo-ps-out.cpp:385
 msgid "Output page size"
-msgstr ""
+msgstr "حجم الصفحة المنتوجة"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:344
 #: ../src/extension/internal/cairo-ps-out.cpp:386
@@ -5713,11 +5714,11 @@ msgstr "تقييد الاستخراج للكائنات ذات الهوية:"
 #: ../src/extension/internal/cairo-ps-out.cpp:352
 #: ../share/extensions/ps_input.inx.h:2
 msgid "PostScript (*.ps)"
-msgstr ""
+msgstr "PostScript (*.ps)"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:353
 msgid "PostScript File"
-msgstr ""
+msgstr "ملف PostScript"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:372
 #: ../share/extensions/eps_input.inx.h:3
@@ -5751,7 +5752,7 @@ msgstr ""
 
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:262
 msgid "Output page size:"
-msgstr ""
+msgstr "حجم صفحة الإنتاج:"
 
 #. Dialog settings
 #: ../src/extension/internal/cdr-input.cpp:113
@@ -6101,7 +6102,7 @@ msgstr "تلاشي"
 #: ../src/extension/internal/filter/blurs.h:192
 #: ../src/extension/internal/filter/textures.h:75
 msgid "Blend:"
-msgstr ""
+msgstr "المزج:"
 
 #: ../src/extension/internal/filter/blurs.h:193
 #: ../src/extension/internal/filter/blurs.h:340
@@ -6118,7 +6119,7 @@ msgstr ""
 #: ../src/extension/internal/filter/transparency.h:64
 #: ../src/filter-enums.cpp:56
 msgid "Darken"
-msgstr ""
+msgstr "ظلّم"
 
 #: ../src/extension/internal/filter/blurs.h:194
 #: ../src/extension/internal/filter/blurs.h:341
@@ -6171,7 +6172,7 @@ msgstr "مضاعفة"
 #: ../src/extension/internal/filter/transparency.h:65
 #: ../src/filter-enums.cpp:57
 msgid "Lighten"
-msgstr ""
+msgstr "فتّح"
 
 #: ../src/extension/internal/filter/blurs.h:205
 msgid "Combine vertical and horizontal blur"
@@ -6245,7 +6246,7 @@ msgstr "طبيعي"
 
 #: ../src/extension/internal/filter/blurs.h:345
 msgid "Blend to background"
-msgstr ""
+msgstr "دمج إلى الخلفية"
 
 #: ../src/extension/internal/filter/blurs.h:355
 msgid "Blur eroded by white or transparency"
@@ -6471,7 +6472,7 @@ msgstr "إضاءة"
 
 #: ../src/extension/internal/filter/bumps.h:335
 msgid "Lighting blend:"
-msgstr ""
+msgstr "مزج مفتِّح:"
 
 #: ../src/extension/internal/filter/bumps.h:342
 msgid "Highlight blend:"
@@ -6529,7 +6530,7 @@ msgstr "مرشّح السطوع"
 
 #: ../src/extension/internal/filter/color.h:155
 msgid "Channel Painting"
-msgstr ""
+msgstr "تلوين القناة"
 
 #: ../src/extension/internal/filter/color.h:159
 #: ../src/extension/internal/filter/color.h:334
@@ -6603,11 +6604,11 @@ msgstr "محاكاة أسلوب اللوحات الزيتية"
 
 #: ../src/extension/internal/filter/color.h:331
 msgid "Color Shift"
-msgstr ""
+msgstr "تغيير اللون"
 
 #: ../src/extension/internal/filter/color.h:333
 msgid "Shift (°)"
-msgstr ""
+msgstr "تغيير (°)"
 
 #: ../src/extension/internal/filter/color.h:342
 msgid "Rotate and desaturate hue"
@@ -6628,12 +6629,12 @@ msgstr ""
 #: ../src/extension/internal/filter/color.h:401
 #: ../src/extension/internal/filter/color.h:1489
 msgid "Blend 1:"
-msgstr ""
+msgstr "مزج 1:"
 
 #: ../src/extension/internal/filter/color.h:408
 #: ../src/extension/internal/filter/color.h:1495
 msgid "Blend 2:"
-msgstr ""
+msgstr "مزج 2:"
 
 #: ../src/extension/internal/filter/color.h:427
 msgid "Blend image or object with a flood color"
@@ -6675,11 +6676,11 @@ msgstr ""
 
 #: ../src/extension/internal/filter/color.h:586
 msgid "Duochrome"
-msgstr ""
+msgstr "ثنائي الألوان"
 
 #: ../src/extension/internal/filter/color.h:590
 msgid "Fluorescence level"
-msgstr ""
+msgstr "مستوى الاستشعاع"
 
 #: ../src/extension/internal/filter/color.h:591
 msgid "Swap:"
@@ -6740,7 +6741,7 @@ msgstr " اللون الأصفر"
 
 #: ../src/extension/internal/filter/color.h:721
 msgid "Background blend mode:"
-msgstr ""
+msgstr "أسلوب مزج الخلفية:"
 
 #: ../src/extension/internal/filter/color.h:726
 msgid "Channel to alpha"
@@ -6847,7 +6848,7 @@ msgstr "الظِلال"
 #: ../src/live_effects/lpe-transform_2pts.cpp:41
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1030
 msgid "Offset"
-msgstr ""
+msgstr "الأوفست"
 
 #: ../src/extension/internal/filter/color.h:1129
 msgid "Modify lights and shadows separately"
@@ -6867,7 +6868,7 @@ msgstr ""
 
 #: ../src/extension/internal/filter/color.h:1271
 msgid "Red offset"
-msgstr ""
+msgstr "أوفست اللون الأحمر"
 
 #: ../src/extension/internal/filter/color.h:1272
 #: ../src/extension/internal/filter/color.h:1275
@@ -6896,11 +6897,11 @@ msgstr "ص"
 
 #: ../src/extension/internal/filter/color.h:1274
 msgid "Green offset"
-msgstr ""
+msgstr "أوفست اللون الأخضر"
 
 #: ../src/extension/internal/filter/color.h:1277
 msgid "Blue offset"
-msgstr ""
+msgstr "أوفست اللون الأزرق"
 
 #: ../src/extension/internal/filter/color.h:1292
 msgid ""
@@ -6914,15 +6915,15 @@ msgstr ""
 
 #: ../src/extension/internal/filter/color.h:1383
 msgid "Cyan offset"
-msgstr ""
+msgstr "أوفست اللون السماوي"
 
 #: ../src/extension/internal/filter/color.h:1386
 msgid "Magenta offset"
-msgstr ""
+msgstr "أوفست اللون الأرجواني"
 
 #: ../src/extension/internal/filter/color.h:1389
 msgid "Yellow offset"
-msgstr ""
+msgstr "أوفست اللون الأصفر"
 
 #: ../src/extension/internal/filter/color.h:1404
 msgid ""
@@ -6945,19 +6946,19 @@ msgstr "ألوان"
 
 #: ../src/extension/internal/filter/color.h:1509
 msgid "Replace hue by two colors"
-msgstr ""
+msgstr "إستبدال درجة اللون بلونين"
 
 #: ../src/extension/internal/filter/color.h:1568
 #, fuzzy
 msgid "Simple blend"
-msgstr "مثال نص"
+msgstr "مزج بسيط"
 
 #: ../src/extension/internal/filter/color.h:1571
 #: ../src/extension/internal/filter/paint.h:594
 #: ../src/extension/internal/filter/paint.h:862
 #: ../src/ui/widget/filter-effect-chooser.cpp:24
 msgid "Blend mode:"
-msgstr "وضع المزج:"
+msgstr "أسلوب المزج:"
 
 #: ../src/extension/internal/filter/color.h:1577 ../src/filter-enums.cpp:64
 #: ../src/splivarot.cpp:84
@@ -7037,7 +7038,7 @@ msgstr ""
 
 #: ../src/extension/internal/filter/color.h:1752
 msgid "Global blend:"
-msgstr ""
+msgstr "المزج العام:"
 
 #: ../src/extension/internal/filter/color.h:1758
 msgid "Glow"
@@ -7045,15 +7046,15 @@ msgstr "توّهج"
 
 #: ../src/extension/internal/filter/color.h:1759
 msgid "Glow blend:"
-msgstr ""
+msgstr "مزج التوهّج:"
 
 #: ../src/extension/internal/filter/color.h:1764
 msgid "Local light"
-msgstr ""
+msgstr "ضوء محلّي"
 
 #: ../src/extension/internal/filter/color.h:1765
 msgid "Global light"
-msgstr ""
+msgstr "ضوء عام"
 
 #: ../src/extension/internal/filter/color.h:1768
 msgid "Hue distribution (°):"
@@ -7481,7 +7482,7 @@ msgstr "امسح"
 
 #: ../src/extension/internal/filter/paint.h:345
 msgid "Melt"
-msgstr ""
+msgstr "إنصهار"
 
 #: ../src/extension/internal/filter/paint.h:351
 #: ../src/extension/internal/filter/paint.h:713
@@ -7507,7 +7508,7 @@ msgstr "تحويل الصّور إلى رسومات دوكروم"
 
 #: ../src/extension/internal/filter/paint.h:495
 msgid "Electrize"
-msgstr ""
+msgstr "كهرب"
 
 #: ../src/extension/internal/filter/paint.h:498
 #: ../src/extension/internal/filter/paint.h:853
@@ -7645,11 +7646,11 @@ msgstr ""
 
 #: ../src/extension/internal/filter/shadows.h:63
 msgid "Horizontal offset (px)"
-msgstr ""
+msgstr "الأوفست الأفقي (بكس)"
 
 #: ../src/extension/internal/filter/shadows.h:64
 msgid "Vertical offset (px)"
-msgstr ""
+msgstr "الأوفست الشاقةلي (بكس)"
 
 #: ../src/extension/internal/filter/shadows.h:65
 msgid "Shadow type:"
@@ -8635,7 +8636,7 @@ msgstr "طلاء الحاشية"
 
 #: ../src/filter-enums.cpp:63
 msgid "Soft Light"
-msgstr ""
+msgstr "ضوء ناعم"
 
 #: ../src/filter-enums.cpp:79
 msgid "Matrix"
@@ -8951,7 +8952,7 @@ msgstr "اختر ملفا لاستيراده"
 
 #: ../src/inkscape-application.cpp:248
 msgid "PAGE"
-msgstr ""
+msgstr "الصفحة"
 
 #: ../src/inkscape-application.cpp:249
 msgid ""
@@ -9197,7 +9198,7 @@ msgstr ""
 #: ../src/inkscape-application.cpp:296
 #, fuzzy
 msgid "XVERBS-FILENAME"
-msgstr "اسم الملف"
+msgstr "اسم الملف XVERBS"
 
 #: ../src/inkscape-application.cpp:300
 msgid "D-Bus: Enter a listening loop for D-Bus messages in console mode."
@@ -9261,11 +9262,11 @@ msgstr ""
 #: ../src/inkview-application.cpp:62
 #, fuzzy
 msgid "Print: Inkview version."
-msgstr "طباعة رقم نسخة إنكسكيب"
+msgstr "طباعة رقم نسخة إنكفيو"
 
 #: ../src/inkview-application.cpp:63
 msgid "Launch in fullscreen mode"
-msgstr ""
+msgstr "ابدأ في وضع ملء الشاشة"
 
 #: ../src/inkview-application.cpp:64
 #, fuzzy
@@ -9476,7 +9477,7 @@ msgstr "املأ الكائن ببقع شفافة متناثرة"
 
 #: ../src/live_effects/effect.cpp:257
 msgid "Sketch"
-msgstr ""
+msgstr "رسم تخطيطي"
 
 #. label
 #. key
@@ -9597,7 +9598,7 @@ msgstr ""
 #: ../src/live_effects/lpe-show_handles.cpp:31
 #: ../src/ui/toolbar/mesh-toolbar.cpp:267
 msgid "Show handles"
-msgstr ""
+msgstr "إظهار المقابض"
 
 #. label
 #. key
@@ -9659,7 +9660,7 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:455
 msgid "Mirror symmetry"
-msgstr ""
+msgstr "مرآة التناظر"
 
 #. label
 #. key
@@ -9741,7 +9742,7 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:540
 msgid "Bounding Box"
-msgstr ""
+msgstr "العلبة المحيطة"
 
 #. label
 #. key
@@ -9769,7 +9770,7 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:569
 msgid "Fillet/Chamfer"
-msgstr ""
+msgstr "زاوية مستديرة/شطف"
 
 #. label
 #. key
@@ -10011,7 +10012,7 @@ msgstr ""
 #: ../src/live_effects/effect.cpp:1543 ../src/live_effects/effect.cpp:1600
 #, fuzzy
 msgid "Update"
-msgstr "_تحديث"
+msgstr "تحديث"
 
 #: ../src/live_effects/effect.cpp:1544 ../src/live_effects/effect.cpp:1603
 msgid "<b>Default value:</b> <s>"
@@ -10088,7 +10089,7 @@ msgstr ""
 #. , true
 #: ../src/live_effects/lpe-attach-path.cpp:24
 msgid "End path:"
-msgstr ""
+msgstr "نهاية المسار:"
 
 #: ../src/live_effects/lpe-attach-path.cpp:24
 msgid "Path to attach to the end of this path"
@@ -10096,7 +10097,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-attach-path.cpp:25
 msgid "End path position:"
-msgstr ""
+msgstr "موقع نهاية المسار:"
 
 #: ../src/live_effects/lpe-attach-path.cpp:25
 msgid "Position to attach path end to"
@@ -10208,12 +10209,12 @@ msgstr "زوجي"
 
 #: ../src/live_effects/lpe-bool.cpp:55 ../src/live_effects/lpe-bool.cpp:64
 msgid "non-zero"
-msgstr ""
+msgstr "غير معدوم"
 
 #: ../src/live_effects/lpe-bool.cpp:56 ../src/live_effects/lpe-bool.cpp:65
 #, fuzzy
 msgid "positive"
-msgstr "مركّب"
+msgstr "موجب"
 
 #: ../src/live_effects/lpe-bool.cpp:57
 #, fuzzy
@@ -10363,7 +10364,7 @@ msgstr ""
 #: ../src/live_effects/lpe-clone-original.cpp:31
 #, fuzzy
 msgid "No shape"
-msgstr "لا تبديل"
+msgstr "ليس هناك شكل"
 
 #: ../src/live_effects/lpe-clone-original.cpp:32
 #: ../src/live_effects/lpe-fill-between-many.cpp:27
@@ -10383,7 +10384,7 @@ msgstr ""
 #: ../src/live_effects/lpe-clone-original.cpp:40
 #, fuzzy
 msgid "Linked Item:"
-msgstr "المسار الموصول:"
+msgstr "العنصر الموصول:"
 
 #: ../src/live_effects/lpe-clone-original.cpp:40
 msgid "Item from which to take the original data"
@@ -10392,7 +10393,7 @@ msgstr ""
 #: ../src/live_effects/lpe-clone-original.cpp:41
 #, fuzzy
 msgid "Shape linked"
-msgstr "غير مربوطين"
+msgstr "الشكل موصول"
 
 #: ../src/live_effects/lpe-clone-original.cpp:44
 #, fuzzy
@@ -10965,8 +10966,9 @@ msgstr ""
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:212
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:60
+#, fuzzy
 msgid "Fillet"
-msgstr ""
+msgstr "زاوية مستديرة"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:217
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:62
@@ -10976,12 +10978,12 @@ msgstr ""
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:223
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:64
 msgid "Chamfer"
-msgstr ""
+msgstr "شطف"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:228
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:66
 msgid "Inverse chamfer"
-msgstr ""
+msgstr "شطق معكوس"
 
 #: ../src/live_effects/lpe-gears.cpp:209
 msgid "_Teeth:"
@@ -11012,7 +11014,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-interpolate.cpp:30
 msgid "Trajectory:"
-msgstr ""
+msgstr "مسار:"
 
 #: ../src/live_effects/lpe-interpolate.cpp:30
 msgid "Path along which intermediate steps are created."
@@ -12070,7 +12072,7 @@ msgstr "اختر نوع التشويه"
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:50
 msgid "Top Left"
-msgstr ""
+msgstr "أعلى يسار"
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:50
 msgid "Top Left - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
@@ -12078,7 +12080,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:51
 msgid "Top Right"
-msgstr ""
+msgstr "أعلى يمين"
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:51
 msgid "Top Right - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
@@ -12086,7 +12088,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:52
 msgid "Down Left"
-msgstr ""
+msgstr "أسفل يسار"
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:52
 msgid "Down Left - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
@@ -12094,7 +12096,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:53
 msgid "Down Right"
-msgstr ""
+msgstr "أسفل يمين"
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:53
 msgid "Down Right - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
@@ -12157,7 +12159,7 @@ msgstr "عتامة الخلفية"
 
 #: ../src/live_effects/lpe-powermask.cpp:41
 msgid "Set color and opacity of the background"
-msgstr ""
+msgstr "تحديد لون و شفافية الخلفية"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:127
 msgid "CubicBezierSmooth"
@@ -12179,7 +12181,7 @@ msgstr "حلزون"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:172
 msgid "Offset points"
-msgstr ""
+msgstr "نقاط الأوفست"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:173
 msgid "Sort points"
@@ -12953,7 +12955,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:32
 msgid "Elastic"
-msgstr ""
+msgstr "مطّاطي"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:32
 #, fuzzy
@@ -13010,13 +13012,12 @@ msgid "Offset from knots"
 msgstr ""
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:42
-#, fuzzy
 msgid "First Knot"
-msgstr "مساعدة أولية"
+msgstr "العقدة الأولى"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:43
 msgid "Last Knot"
-msgstr ""
+msgstr "العقدة الأخيرة"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:44
 #, fuzzy
@@ -13755,7 +13756,7 @@ msgstr "<b>لا كائنات</b> لتحويلها إلى مسار في الاخ�
 
 #: ../src/path-chemistry.cpp:638
 msgid "Select <b>path(s)</b> to reverse."
-msgstr ""
+msgstr "إختر <b>المسار(ات)</b> لعكسها"
 
 #: ../src/path-chemistry.cpp:646
 msgid "Reversing paths..."
@@ -13767,7 +13768,7 @@ msgstr "عكس المسار"
 
 #: ../src/path-chemistry.cpp:687
 msgid "<b>No paths</b> to reverse in the selection."
-msgstr ""
+msgstr "لم يتم إخيار أي مسار للعكس"
 
 #. Raw string literal cannot contain translatable strings. Fortunately, we only translate
 #. caligraphy presets.
