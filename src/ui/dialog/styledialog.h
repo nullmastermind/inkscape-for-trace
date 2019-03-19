@@ -70,11 +70,13 @@ public:
     public:
         ModelColumns() {
             add(_colSelector);
+            add(_colExpand);
             add(_colType);
             add(_colObj);
             add(_colProperties);
         }
         Gtk::TreeModelColumn<Glib::ustring> _colSelector;       // Selector or matching object id.
+        Gtk::TreeModelColumn<bool> _colExpand;       // Open/Close store row.
         Gtk::TreeModelColumn<gint> _colType;               // Selector row or child object row.
         Gtk::TreeModelColumn<std::vector<SPObject *> > _colObj; // List of matching objects.
         Gtk::TreeModelColumn<Glib::ustring> _colProperties;     // List of properties.
@@ -133,7 +135,6 @@ public:
 
     // Variables
     bool _updating;  // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
-    bool _block_drag;
     Inkscape::XML::Node *_textNode; // Track so we know when to add a NodeObserver.
 
     // Signals and handlers - External
@@ -144,6 +145,9 @@ public:
     void _handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
     void _handleDesktopChanged(SPDesktop* desktop);
     void _handleSelectionChanged();
+    void _rowExpand(const Gtk::TreeModel::iterator& iter, const Gtk::TreeModel::Path& path);
+    void _rowCollapse(const Gtk::TreeModel::iterator& iter, const Gtk::TreeModel::Path& path);
+    void _closeDialog(Gtk::Dialog *textDialogPtr);
 
     DesktopTracker _desktopTracker;
 
