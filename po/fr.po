@@ -9592,10 +9592,10 @@ msgstr "Motif suivant un chemin"
 #. label
 #. key
 #. icon
-#. untranslated name
+#. fuzzy
 #: ../src/live_effects/effect.cpp:134
 msgid "Place one or more copies of another path along the path."
-msgstr ""
+msgstr "Placer une copie ou plus d'un autre chemin suivant le chemin."
 
 #: ../src/live_effects/effect.cpp:144
 msgid "Stitch Sub-Paths"
@@ -9604,11 +9604,12 @@ msgstr "Relier les sous-chemins"
 #. label
 #. key
 #. icon
-#. untranslated name
+#. fuzzy
 #: ../src/live_effects/effect.cpp:148
 msgid ""
 "Draw perpendicular lines between subpaths of a path, like rungs of a ladder."
-msgstr ""
+msgstr "Dessiner des lignes perpendiculaires entre les sous-chemins d'un chemin"
+"comme des marches d'une échelle"
 
 #: ../src/live_effects/effect.cpp:159
 msgid "VonKoch"
@@ -9621,7 +9622,7 @@ msgstr "Von Koch"
 #: ../src/live_effects/effect.cpp:163
 #, fuzzy
 msgid "Create VonKoch fractal"
-msgstr "Créer un rectangle"
+msgstr "Créer une fractale Von Koch"
 
 #: ../src/live_effects/effect.cpp:173
 msgid "Knot"
@@ -9646,7 +9647,7 @@ msgstr "Grille de conception"
 #. untranslated name
 #: ../src/live_effects/effect.cpp:191
 msgid "Create a (perspective) grid from a 3-node path."
-msgstr ""
+msgstr "Créer une grille (de perspective) depuis un chemin à 3 noeuds"
 
 #: ../src/live_effects/effect.cpp:201
 msgid "Spiro spline"
@@ -9669,10 +9670,10 @@ msgstr "Déformation par enveloppe"
 #. label
 #. key
 #. icon
-#. untranslated name
+#. fuzzy
 #: ../src/live_effects/effect.cpp:219
 msgid "Adjust the shape of an object by transforming paths on its four sides."
-msgstr ""
+msgstr "Ajuster la forme d'un objet en transformant les chemins sur ses quatres côtés"
 
 #: ../src/live_effects/effect.cpp:229
 msgid "Interpolate Sub-Paths"
@@ -9814,7 +9815,7 @@ msgstr "Transformation par deux points"
 #. untranslated name
 #: ../src/live_effects/effect.cpp:375
 msgid "Scale, stretch and rotate an object by two handles."
-msgstr ""
+msgstr "Redimensionner, étirer, et pivoter un objet avec deux poignées"
 
 #: ../src/live_effects/effect.cpp:385
 #: ../src/live_effects/lpe-show_handles.cpp:31
@@ -9960,7 +9961,7 @@ msgstr "Ellipse par cinq points"
 #. untranslated name
 #: ../src/live_effects/effect.cpp:530
 msgid "Create an ellipse from 5 nodes on its circumference."
-msgstr ""
+msgstr "Créer une ellipse depuis 5 noeuds de sa circonférence"
 
 #: ../src/live_effects/effect.cpp:540
 msgid "Bounding Box"
@@ -10015,7 +10016,8 @@ msgstr "Opération booléenne"
 msgid ""
 "Cut, union, subtract, intersect and divide a path non-destructively with "
 "another path."
-msgstr ""
+msgstr "Découpe, union, soustraction, intersection, et division d'un chemin"
+"de façon non-destructive avec un autre chemin."
 
 #. label
 #. key
@@ -10035,7 +10037,7 @@ msgstr "Découpe avancée"
 #. untranslated name
 #: ../src/live_effects/effect.cpp:615
 msgid "Power clip alows to reverse a clip, fatten it..."
-msgstr ""
+msgstr "La découpe avancée permet d'inverser une découpe, l'aplatir,..."
 
 #: ../src/live_effects/effect.cpp:625
 msgid "Power mask"
@@ -10047,7 +10049,7 @@ msgstr "Masque avancé"
 #. untranslated name
 #: ../src/live_effects/effect.cpp:629
 msgid "Power mask allow to inverse the mask, make negative.."
-msgstr ""
+msgstr "Le masque avancé permet d'inverser un masque, d'en créer un négatif,..."
 
 #: ../src/live_effects/effect.cpp:639
 msgid "Ellipse from points"
@@ -10056,10 +10058,11 @@ msgstr "Ellipse à partir de points"
 #. label
 #. key
 #. icon
-#. untranslated name
+#. fuzzy
 #: ../src/live_effects/effect.cpp:643
 msgid "Draw a circle, ellipse, arc or slice based on the nodes of a path."
-msgstr ""
+msgstr "Dessiner un cercle, une ellipse, un arc, ou une tranche basé sur"
+"les noeuds d'un chemin"
 
 #. label
 #. key
@@ -19998,7 +20001,7 @@ msgstr ""
 #: ../src/ui/dialog/inkscape-preferences.cpp:513
 #, fuzzy
 msgid "Use SVG2 auto-flowed text"
-msgstr "Créer un texte encadré"
+msgstr "Créer un texte encadré (SVG2)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:514
 msgid ""
@@ -20673,7 +20676,7 @@ msgstr "Changement de thème"
 #: ../src/ui/dialog/inkscape-preferences.cpp:964
 #, fuzzy
 msgid "Use system theme"
-msgstr "Utiliser les icônes système"
+msgstr "Utiliser le thème du système"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:970
 msgid "Change Gtk theme:"
@@ -20688,7 +20691,7 @@ msgstr "Utiliser le thème foncé"
 #: ../src/ui/dialog/inkscape-preferences.cpp:977
 #, fuzzy
 msgid "Display icons"
-msgstr "_Unité par défaut :"
+msgstr "Icones d'affichage"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1000
 msgid "Use system icons"
@@ -24230,7 +24233,7 @@ msgstr "Ajuster le crénage"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:465
 #, fuzzy
 msgid "Font Attributes"
-msgstr "Attributs de fonte"
+msgstr "Attributs de polices"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:466
 #, fuzzy
@@ -26558,7 +26561,7 @@ msgstr "Découper chemins et formes"
 #: ../src/ui/toolbar/eraser-toolbar.cpp:75
 #, fuzzy
 msgid "Clip"
-msgstr "Chemin de découpe"
+msgstr "Découper"
 
 #: ../src/ui/toolbar/eraser-toolbar.cpp:76
 msgid "Clip from objects"
@@ -42915,7 +42918,7 @@ msgstr "_Didacticiels"
 
 #, fuzzy
 #~ msgid "Change arc"
-#~ msgstr "Modifier le flou"
+#~ msgstr "Modifier l'arc"
 
 #~ msgid "Pick opacity"
 #~ msgstr "Capturer l'opacité"
@@ -43224,9 +43227,8 @@ msgstr "_Didacticiels"
 #~ msgid "CSS helpers*"
 #~ msgstr "Aimanter aux chemins de découpe"
 
-#, fuzzy
 #~ msgid "CSS anotation*"
-#~ msgstr "Saturation"
+#~ msgstr "Annotation CSS"
 
 #, fuzzy
 #~ msgid "CSS arrows*"
@@ -44942,7 +44944,7 @@ msgstr "_Didacticiels"
 
 #, fuzzy
 #~ msgid "Iterations:"
-#~ msgstr "Saturation :"
+#~ msgstr "Itérations:"
 
 #~ msgid "recursivity"
 #~ msgstr "récursivité"
@@ -44965,11 +44967,11 @@ msgstr "_Didacticiels"
 
 #, fuzzy
 #~ msgid "Point param:"
-#~ msgstr "Pointe vers :"
+#~ msgstr "Paramètres du point:"
 
 #, fuzzy
 #~ msgid "Path param:"
-#~ msgstr "Données de chemin"
+#~ msgstr "Paramètres de chemin:"
 
 #~ msgid "<b>Color</b>"
 #~ msgstr "<b>Couleur</b>"
@@ -45734,67 +45736,67 @@ msgstr "_Didacticiels"
 
 #, fuzzy
 #~ msgid "Angle 0"
-#~ msgstr "Angle"
+#~ msgstr "Angle 0"
 
 #, fuzzy
 #~ msgid "Angle 120"
-#~ msgstr "Angle"
+#~ msgstr "Angle 120"
 
 #, fuzzy
 #~ msgid "Angle 135"
-#~ msgstr "Angle"
+#~ msgstr "Angle 135"
 
 #, fuzzy
 #~ msgid "Angle 150"
-#~ msgstr "Angle"
+#~ msgstr "Angle 150"
 
 #, fuzzy
 #~ msgid "Angle 180"
-#~ msgstr "Angle"
+#~ msgstr "Angle 180"
 
 #, fuzzy
 #~ msgid "Angle 210"
-#~ msgstr "Angle"
+#~ msgstr "Angle 210"
 
 #, fuzzy
 #~ msgid "Angle 225"
-#~ msgstr "Angle"
+#~ msgstr "Angle 225"
 
 #, fuzzy
 #~ msgid "Angle 240"
-#~ msgstr "Angle"
+#~ msgstr "Angle 240"
 
 #, fuzzy
 #~ msgid "Angle 270"
-#~ msgstr "Angle"
+#~ msgstr "Angle 270"
 
 #, fuzzy
 #~ msgid "Angle 30"
-#~ msgstr "Angle"
+#~ msgstr "Angle 30"
 
 #, fuzzy
 #~ msgid "Angle 300"
-#~ msgstr "Angle"
+#~ msgstr "Angle 300"
 
 #, fuzzy
 #~ msgid "Angle 315"
-#~ msgstr "Angle"
+#~ msgstr "Angle 315"
 
 #, fuzzy
 #~ msgid "Angle 330"
-#~ msgstr "Angle"
+#~ msgstr "Angle 330"
 
 #, fuzzy
 #~ msgid "Angle 45"
-#~ msgstr "Angle"
+#~ msgstr "Angle 45"
 
 #, fuzzy
 #~ msgid "Angle 60"
-#~ msgstr "Angle"
+#~ msgstr "Angle 60"
 
 #, fuzzy
 #~ msgid "Angle 90"
-#~ msgstr "Angle"
+#~ msgstr "Angle 90"
 
 #, fuzzy
 #~ msgid "Display Format: "
@@ -46450,7 +46452,7 @@ msgstr "_Didacticiels"
 
 #, fuzzy
 #~ msgid "Size and position"
-#~ msgstr "Rendre les positions aléatoires"
+#~ msgstr "Taille et position"
 
 #, fuzzy
 #~ msgid "Snap ancestors"
@@ -46546,7 +46548,7 @@ msgstr "_Didacticiels"
 
 #, fuzzy
 #~ msgid "Smooth all"
-#~ msgstr "Adoucir"
+#~ msgstr "Tout adoucir"
 
 #~ msgid "When the original is deleted, its clones:"
 #~ msgstr "Lors que l'original est supprimé, ses clones :"
