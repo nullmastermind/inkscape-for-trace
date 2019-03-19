@@ -374,7 +374,7 @@ Glib::ustring Find::find_replace(const gchar *str, const gchar *find, const gcha
 
 gsize Find::find_strcmp_pos(const gchar *str, const gchar *find, bool exact, bool casematch, gsize start/*=0*/)
 {
-    Glib::ustring ustr = str;
+    Glib::ustring ustr = str ? str : "";
     Glib::ustring ufind = find;
 
     if (!casematch) {
