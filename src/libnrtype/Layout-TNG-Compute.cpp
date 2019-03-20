@@ -278,7 +278,7 @@ class Layout::Calculator
 
 #ifdef DEBUG_LAYOUT_TNG_COMPUTE
     static void dumpPangoItemsOut(ParagraphInfo *para);
-    static void dumpUnbrokenSpans(ParagraphInfo *para){
+    static void dumpUnbrokenSpans(ParagraphInfo *para);
 #endif //DEBUG_LAYOUT_TNG_COMPUTE
 
 public:
@@ -605,6 +605,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
 
                     // Use set "y" attribute
                     new_line.baseline_y = it_chunk->broken_spans.front().start.iter_span->y.computed;
+
                     // Save baseline
                     _flow._lines.back().baseline_y = new_line.baseline_y;
 
@@ -1745,7 +1746,7 @@ bool Layout::Calculator::_buildChunksInScanRun(ParagraphInfo const &para,
  *
  * Input: para->first_input_index, para->pango_items
  */
-static void Layout::Calculator::dumpPangoItemsOut(ParagraphInfo *para){
+void Layout::Calculator::dumpPangoItemsOut(ParagraphInfo *para){
     std::cout << "Pango items: " << para->pango_items.size() << std::endl;
     font_factory * factory = font_factory::Default();
     for(unsigned pidx = 0 ; pidx < para->pango_items.size(); pidx++){
@@ -1766,7 +1767,7 @@ static void Layout::Calculator::dumpPangoItemsOut(ParagraphInfo *para){
  *
  * Input: para->first_input_index, para->pango_items
  */
-static void Layout::Calculator::dumpUnbrokenSpans(ParagraphInfo *para){
+void Layout::Calculator::dumpUnbrokenSpans(ParagraphInfo *para){
     std::cout << "Unbroken Spans: " << para->unbroken_spans.size() << std::endl;
     for(unsigned uidx = 0 ; uidx < para->unbroken_spans.size(); uidx++){
         std::cout 
