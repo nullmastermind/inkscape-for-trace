@@ -61,6 +61,12 @@ void LogBuilder::setAttribute(Node &node, GQuark name,
     _log = _log->optimizeOne();
 }
 
+void LogBuilder::setElementName(Node& node, GQuark old_name, GQuark new_name)
+{
+    _log = new Inkscape::XML::EventChgElementName(&node, old_name, new_name, _log);
+    _log = _log->optimizeOne();
+}
+
 }
 }
 

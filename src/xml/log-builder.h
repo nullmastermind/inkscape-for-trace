@@ -63,6 +63,8 @@ public:
     void setAttribute(Node &node, GQuark name,
                       Util::ptr_shared old_value,
                       Util::ptr_shared new_value);
+
+    void setElementName(Node& node, GQuark old_name, GQuark new_name);
     /*@}*/
 
 private:

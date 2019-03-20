@@ -212,16 +212,15 @@ public:
                       value.empty() ? nullptr : value.c_str(), is_interactive);
     }
     //@}
-
     /**
-     * @brief Directly set the integer GQuark code for the name of the node
+     * @brief Set the integer GQuark code for the name of the node.
      *
-     * This function is a hack to easily move elements with no namespace to the SVG namespace.
      * Do not use this function unless you really have a good reason.
      *
-     * @param code The integer value corresponding to the string to be set as the name of this node
+     * @param code The integer value corresponding to the string to be set as
+     *        the name of this node
      */
-    virtual void setCodeUnsafe(int code)=0;
+    virtual void setCodeUnsafe(int code) = 0;
     
     /*@}*/
 

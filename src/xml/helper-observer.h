@@ -36,6 +36,7 @@ public:
     void notifyChildOrderChanged(Node&, Node&, Node*, Node*) override;
     void notifyContentChanged(Node&, Util::ptr_shared, Util::ptr_shared) override;
     void notifyAttributeChanged(Node&, GQuark, Util::ptr_shared, Util::ptr_shared) override;
+    void notifyElementNameChanged(Node&, GQuark, GQuark) override;
     sigc::signal<void>& signal_changed();
 private:
     sigc::signal<void> _signal_changed;

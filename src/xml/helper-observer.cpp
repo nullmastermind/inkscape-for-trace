@@ -62,6 +62,11 @@ void SignalObserver::notifyContentChanged(XML::Node&, Util::ptr_shared, Util::pt
 void SignalObserver::notifyAttributeChanged(XML::Node&, GQuark, Util::ptr_shared, Util::ptr_shared)
 { signal_changed()(); }
 
+void SignalObserver::notifyElementNameChanged(Node&, GQuark, GQuark)
+{
+    signal_changed()();
+}
+
 sigc::signal<void>& SignalObserver::signal_changed()
 {
     return _signal_changed;

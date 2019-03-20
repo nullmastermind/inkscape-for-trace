@@ -145,6 +145,22 @@ public:
         INK_UNUSED(old_value);
         INK_UNUSED(new_value);
     }
+
+    /**
+     * @brief Element name change callback.
+     *
+     * This method is called whenever an element node's name is changed.
+     *
+     * @param node The changed XML node.
+     * @param old_name GQuark corresponding to the old element name.
+     * @param new_name GQuark corresponding to the new element name.
+     */
+    virtual void notifyElementNameChanged(Node& node, GQuark old_name, GQuark new_name) {
+        INK_UNUSED(node);
+        INK_UNUSED(old_name);
+        INK_UNUSED(new_name);
+    }
+
 };
 
 } // namespace XML

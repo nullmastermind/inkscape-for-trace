@@ -250,8 +250,8 @@ Inkscape::XML::Node *SPGenericEllipse::write(Inkscape::XML::Document *xml_doc, I
         }
     }
 
-    if( type != new_type ) {
-        switch( new_type ) {
+    if (type != new_type) {
+        switch (new_type) {
             case SP_GENERIC_ELLIPSE_ARC:
                 repr->setCodeUnsafe(g_quark_from_string("svg:path"));
                 break;
@@ -265,10 +265,6 @@ Inkscape::XML::Node *SPGenericEllipse::write(Inkscape::XML::Document *xml_doc, I
                 std::cerr << "SPGenericEllipse::write(): unknown type." << std::endl;
         }
         type = new_type;
-
-        // FIXME: The XML dialog won't update the element name. We need
-        // a notifyElementNameChanged callback added to the XML observers
-        // to trigger a refresh.
     }
 
     // std::cout << "  type: " << g_quark_to_string( repr->code() ) << std::endl;

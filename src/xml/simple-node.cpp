@@ -149,6 +149,15 @@ public:
     }
 };
 
+class DebugSetElementName : public DebugXMLNode {
+public:
+    DebugSetElementName(Node const& node, GQuark name)
+    : DebugXMLNode(node, "set-name")
+    {
+        _addProperty("name", g_quark_to_string(name));
+    }
+};
+
 }
 
 using Util::ptr_shared;
@@ -397,6 +406,21 @@ SimpleNode::setAttribute(gchar const *name, gchar const *value, bool const /*is_
         //g_warning( "setAttribute notified: %s: %s: %s: %s", name, element.c_str(), old_value, new_value ); 
     }
     g_free( cleaned_value );
+}
+
+void SimpleNode::setCodeUnsafe(int code) {
+    GQuark old_code = static_cast<GQuark>(_name);
+    GQuark new_code = static_cast<GQuark>(code);
+
+    Debug::EventTracker<> tracker;
+    tracker.set<DebugSetElementName>(*this, new_code);
+
+    _name = static_cast<int>(new_code);
+
+    if (new_code != old_code) {
+        _document->logger()->notifyElementNameChanged(*this, old_code, new_code);
+        _observers.notifyElementNameChanged(*this, old_code, new_code);
+    }
 }
 
 void SimpleNode::addChild(Node *generic_child, Node *generic_ref) {

@@ -101,6 +101,17 @@ void CompositeNodeObserver::notifyAttributeChanged(
     _finishIteration();
 }
 
+void CompositeNodeObserver::notifyElementNameChanged(Node& node, GQuark old_name, GQuark new_name)
+{
+    _startIteration();
+    for (auto& iter : _active) {
+        if (!iter.marked) {
+            iter.observer.notifyElementNameChanged(node, old_name, new_name);
+        }
+    }
+    _finishIteration();
+}
+
 void CompositeNodeObserver::add(NodeObserver &observer) {
     if (_iterating) {
         _pending.push_back(ObserverRecord(observer));
@@ -146,6 +157,12 @@ public:
     void notifyAttributeChanged(Node &node, GQuark name, Util::ptr_shared old_value, Util::ptr_shared new_value) override {
         if (vector.attr_changed) {
             vector.attr_changed(&node, g_quark_to_string(name), old_value, new_value, false, data);
+        }
+    }
+
+    void notifyElementNameChanged(Node& node, GQuark old_name, GQuark new_name) override {
+        if (vector.element_name_changed) {
+            vector.element_name_changed(&node, g_quark_to_string(old_name), g_quark_to_string(new_name), data);
         }
     }
 };

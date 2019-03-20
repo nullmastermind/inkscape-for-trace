@@ -38,9 +38,7 @@ class SimpleNode
 public:
     char const *name() const override;
     int code() const override { return _name; }
-    void setCodeUnsafe(int code) override {
-        _name = code;
-    }
+    void setCodeUnsafe(int code) override;
 
     Document *document() override { return _document; }
     Document const *document() const override {

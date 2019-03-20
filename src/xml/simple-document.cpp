@@ -115,9 +115,15 @@ void SimpleDocument::notifyAttributeChanged(Node &node,
     }
 }
 
+void SimpleDocument::notifyElementNameChanged(Node& node, GQuark old_name, GQuark new_name)
+{
+    if (_in_transaction) {
+        _log_builder.setElementName(node, old_name, new_name);
+    }
 }
 
-}
+} // end namespace XML
+} // end namespace Inkscape
 
 /*
   Local Variables:

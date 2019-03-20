@@ -33,6 +33,8 @@ static void element_child_added (Inkscape::XML::Node * repr, Inkscape::XML::Node
 static void element_attr_changed (Inkscape::XML::Node * repr, const gchar * key, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data);
 static void element_child_removed (Inkscape::XML::Node * repr, Inkscape::XML::Node * child, Inkscape::XML::Node * ref, gpointer data);
 static void element_order_changed (Inkscape::XML::Node * repr, Inkscape::XML::Node * child, Inkscape::XML::Node * oldref, Inkscape::XML::Node * newref, gpointer data);
+static void element_name_changed (Inkscape::XML::Node* repr, gchar const* oldname, gchar const* newname, gpointer data);
+static void element_attr_or_name_change_update(Inkscape::XML::Node* repr, NodeData* data);
 
 static void text_content_changed (Inkscape::XML::Node * repr, const gchar * old_content, const gchar * new_content, gpointer data);
 static void comment_content_changed (Inkscape::XML::Node * repr, const gchar * old_content, const gchar * new_content, gpointer data);
@@ -56,7 +58,8 @@ static const Inkscape::XML::NodeEventVector element_repr_events = {
         element_child_removed,
         element_attr_changed,
         nullptr, /* content_changed */
-        element_order_changed
+        element_order_changed,
+        element_name_changed
 };
 
 static const Inkscape::XML::NodeEventVector text_repr_events = {
@@ -64,7 +67,8 @@ static const Inkscape::XML::NodeEventVector text_repr_events = {
         nullptr, /* child_removed */
         nullptr, /* attr_changed */
         text_content_changed,
-        nullptr  /* order_changed */
+        nullptr  /* order_changed */,
+        nullptr  /* element_name_changed */
 };
 
 static const Inkscape::XML::NodeEventVector comment_repr_events = {
@@ -72,7 +76,8 @@ static const Inkscape::XML::NodeEventVector comment_repr_events = {
         nullptr, /* child_removed */
         nullptr, /* attr_changed */
         comment_content_changed,
-        nullptr  /* order_changed */
+        nullptr  /* order_changed */,
+        nullptr  /* element_name_changed */
 };
 
 static const Inkscape::XML::NodeEventVector pi_repr_events = {
@@ -80,7 +85,8 @@ static const Inkscape::XML::NodeEventVector pi_repr_events = {
         nullptr, /* child_removed */
         nullptr, /* attr_changed */
         pi_content_changed,
-        nullptr  /* order_changed */
+        nullptr  /* order_changed */,
+        nullptr  /* element_name_changed */
 };
 
 GtkWidget *sp_xmlview_tree_new(Inkscape::XML::Node * repr, void * /*factory*/, void * /*data*/)
@@ -228,32 +234,50 @@ void element_child_added (Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node * 
     add_node (data->tree, &data_iter, &before, child);
 }
 
-void element_attr_changed(Inkscape::XML::Node * repr, const gchar * key, const gchar * /*old_value*/, const gchar * new_value, bool /*is_interactive*/, gpointer ptr)
+void element_attr_changed(
+        Inkscape::XML::Node* repr, gchar const* key,
+        gchar const* /*old_value*/, gchar const* /*new_value*/, bool /*is_interactive*/,
+        gpointer ptr)
 {
-    NodeData *data = static_cast<NodeData *>(ptr);
-    gchar *label;
-
-    if (data->tree->blocked) return;
-
     if (0 != strcmp (key, "id") && 0 != strcmp (key, "inkscape:label"))
         return;
+    element_attr_or_name_change_update(repr, static_cast<NodeData*>(ptr));
+}
 
-    new_value = repr->attribute("id");
-    const gchar *layer = repr->attribute("inkscape:label");
+void element_name_changed(
+        Inkscape::XML::Node* repr,
+        gchar const* /*oldname*/, gchar const* /*newname*/, gpointer ptr)
+{
+    element_attr_or_name_change_update(repr, static_cast<NodeData*>(ptr));
+}
 
-    if (new_value && layer) {
-        label = g_strdup_printf ("<%s id=\"%s\" inkscape:label=\"%s\">", repr->name(), new_value, layer);
-    } else if (new_value) {
-        label = g_strdup_printf ("<%s id=\"%s\">", repr->name(), new_value);
+void element_attr_or_name_change_update(Inkscape::XML::Node* repr, NodeData* data)
+{
+    if (data->tree->blocked) {
+        return;
+    }
+
+    gchar const* node_name = repr->name();
+    gchar const* id_value = repr->attribute("id");
+    gchar const* label_value = repr->attribute("inkscape:label");
+    gchar* display_text;
+
+    if (id_value && label_value) {
+        display_text = g_strdup_printf ("<%s id=\"%s\" inkscape:label=\"%s\">", node_name, id_value, label_value);
+    } else if (id_value) {
+        display_text = g_strdup_printf ("<%s id=\"%s\">", node_name, id_value);
+    } else if (label_value) {
+        display_text = g_strdup_printf ("<%s inkscape:label=\"%s\">", node_name, label_value);
     } else {
-        label = g_strdup_printf ("<%s>", repr->name());
+        display_text = g_strdup_printf ("<%s>", node_name);
     }
 
     GtkTreeIter iter;
     if (tree_ref_to_iter(data->tree, &iter,  data->rowref)) {
-        gtk_tree_store_set (GTK_TREE_STORE(data->tree->store), &iter, STORE_TEXT_COL, label, -1);
+        gtk_tree_store_set (GTK_TREE_STORE(data->tree->store), &iter, STORE_TEXT_COL, display_text, -1);
     }
-    g_free (label);
+
+    g_free(display_text);
 }
 
 void element_child_removed(Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node * child, Inkscape::XML::Node * /*ref*/, gpointer ptr)

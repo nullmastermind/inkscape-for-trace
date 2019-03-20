@@ -120,6 +120,11 @@ public:
     {
         node.setContent(new_value);
     }
+
+    void notifyElementNameChanged(Node& node, GQuark /*old_value*/, GQuark new_value) override
+    {
+        node.setCodeUnsafe(new_value);
+    }
 };
 
 }
@@ -180,6 +185,12 @@ void Inkscape::XML::EventChgOrder::_undoOne(
     observer.notifyChildOrderChanged(*this->repr, *this->child, this->newref, this->oldref);
 }
 
+void Inkscape::XML::EventChgElementName::_undoOne(
+    Inkscape::XML::NodeObserver& observer
+) const {
+    observer.notifyElementNameChanged(*this->repr, this->new_name, this->old_name);
+}
+
 void Inkscape::XML::replay_log_to_observer(
     Inkscape::XML::Event const *log,
     Inkscape::XML::NodeObserver &observer
@@ -237,6 +248,12 @@ void Inkscape::XML::EventChgOrder::_replayOne(
     Inkscape::XML::NodeObserver &observer
 ) const {
     observer.notifyChildOrderChanged(*this->repr, *this->child, this->oldref, this->newref);
+}
+
+void Inkscape::XML::EventChgElementName::_replayOne(
+    Inkscape::XML::NodeObserver &observer
+) const {
+    observer.notifyElementNameChanged(*this->repr, this->new_name, this->old_name);
 }
 
 Inkscape::XML::Event *
@@ -398,6 +415,17 @@ Inkscape::XML::Event *Inkscape::XML::EventChgOrder::_optimizeOne() {
     }
 }
 
+Inkscape::XML::Event* Inkscape::XML::EventChgElementName::_optimizeOne() {
+    auto next_chg_element_name = dynamic_cast<Inkscape::XML::EventChgElementName*>(this->next);
+    if (next_chg_element_name && next_chg_element_name->repr == this->repr) {
+        // Combine name changes to the same element.
+        this->old_name = next_chg_element_name->old_name;
+        this->next = next_chg_element_name->next;
+        delete next_chg_element_name;
+    }
+    return this;
+}
+
 namespace {
 
 class LogPrinter : public Inkscape::XML::NodeObserver {
@@ -481,6 +509,12 @@ public:
         } else {
             g_warning("Event: Unset content of %s", node_to_string(node).c_str());
         }
+    }
+
+    void notifyElementNameChanged(Node& node, GQuark old_value, GQuark new_value) override
+    {
+        g_warning("Event: Changed name of %s from %s to %s\n",
+                node_to_string(node).c_str(), g_quark_to_string(old_value), g_quark_to_string(new_value));
     }
 };
 
