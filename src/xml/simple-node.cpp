@@ -415,7 +415,7 @@ void SimpleNode::setCodeUnsafe(int code) {
     Debug::EventTracker<> tracker;
     tracker.set<DebugSetElementName>(*this, new_code);
 
-    _name = new_code;
+    _name = static_cast<int>(new_code);
 
     if (new_code != old_code) {
         _document->logger()->notifyElementNameChanged(*this, old_code, new_code);
