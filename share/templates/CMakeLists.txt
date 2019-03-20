@@ -23,7 +23,7 @@ endforeach(pofile)
 
 add_custom_command(
   OUTPUT default_templates.timestamp
-  COMMAND ./create_default_templates.py ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR}
+  COMMAND python ./create_default_templates.py ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR}
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/default.svg ${CMAKE_CURRENT_SOURCE_DIR}/create_default_templates.py ${GMOFILES}
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   COMMENT "Generating localized default templates"

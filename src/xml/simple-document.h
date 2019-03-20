@@ -61,6 +61,8 @@ public:
                                 Util::ptr_shared old_value,
                                 Util::ptr_shared new_value) override;
 
+    void notifyElementNameChanged(Node& node, GQuark old_name, GQuark new_name) override;
+
 protected:
     SimpleDocument(SimpleDocument const &doc)
     : Node(), SimpleNode(doc), Document(), NodeObserver(),

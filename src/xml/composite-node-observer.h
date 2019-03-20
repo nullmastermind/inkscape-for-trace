@@ -80,6 +80,8 @@ public:
                                 Util::ptr_shared old_value,
                                 Util::ptr_shared new_value) override;
 
+    void notifyElementNameChanged(Node& node, GQuark old_name, GQuark new_name) override;
+
 private:
     unsigned _iterating;
     ObserverRecordList _active;

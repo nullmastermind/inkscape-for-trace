@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-03-15 21:54+1300\n"
+"POT-Creation-Date: 2019-03-20 20:07+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4796,21 +4796,21 @@ msgstr ""
 msgid " to "
 msgstr ""
 
-#: ../src/document.cpp:555
+#: ../src/document.cpp:563
 #, c-format
 msgid "New document %d"
 msgstr ""
 
-#: ../src/document.cpp:560
+#: ../src/document.cpp:568
 #, c-format
 msgid "Memory document %d"
 msgstr ""
 
-#: ../src/document.cpp:589
+#: ../src/document.cpp:597
 msgid "Memory document %1"
 msgstr ""
 
-#: ../src/document.cpp:899
+#: ../src/document.cpp:918
 #, c-format
 msgid "Unnamed document %d"
 msgstr ""
@@ -5763,7 +5763,7 @@ msgstr ""
 #: ../src/ui/dialog/guides.cpp:167 ../src/ui/dialog/layer-properties.cpp:43
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:30
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:36
-#: ../src/ui/dialog/ocaldialogs.cpp:1085 ../src/ui/interface.cpp:237
+#: ../src/ui/dialog/ocaldialogs.cpp:1085 ../src/ui/interface.cpp:240
 #: ../src/widgets/desktop-widget.cpp:1114
 #: ../src/widgets/desktop-widget.cpp:1161
 msgid "_Cancel"
@@ -6925,7 +6925,7 @@ msgid "Blend mode:"
 msgstr ""
 
 #: ../src/extension/internal/filter/color.h:1577 ../src/filter-enums.cpp:64
-#: ../src/splivarot.cpp:84
+#: ../src/splivarot.cpp:85
 msgid "Difference"
 msgstr ""
 
@@ -6960,7 +6960,7 @@ msgid "Hue"
 msgstr ""
 
 #: ../src/extension/internal/filter/color.h:1586 ../src/filter-enums.cpp:65
-#: ../src/splivarot.cpp:91
+#: ../src/splivarot.cpp:92
 msgid "Exclusion"
 msgstr ""
 
@@ -7435,7 +7435,7 @@ msgstr ""
 #: ../src/extension/internal/filter/paint.h:497
 #: ../src/extension/internal/filter/paint.h:591
 #: ../src/extension/internal/filter/paint.h:977
-#: ../src/live_effects/effect.cpp:315 ../src/splivarot.cpp:2392
+#: ../src/live_effects/effect.cpp:315 ../src/splivarot.cpp:2296
 msgid "Simplify"
 msgstr ""
 
@@ -8385,86 +8385,77 @@ msgstr ""
 
 #. Look for SPNamedView and SPDefs loop
 #. desktop->getDocument()->ensureUpToDate();  // Does not update box3d!
-#: ../src/file-update.cpp:633
+#: ../src/file-update.cpp:590
 msgid "Update Document"
 msgstr ""
 
-#: ../src/file.cpp:261
-msgid "Broken links have been changed to point to existing files."
-msgstr ""
-
-#: ../src/file.cpp:286 ../src/file.cpp:1294
-#, c-format
-msgid "Failed to load the requested file %s"
-msgstr ""
-
-#: ../src/file.cpp:312
+#: ../src/file.cpp:200
 msgid "Document not saved yet.  Cannot revert."
 msgstr ""
 
-#: ../src/file.cpp:318
+#: ../src/file.cpp:206
 msgid "Changes will be lost! Are you sure you want to reload document %1?"
 msgstr ""
 
-#: ../src/file.cpp:344
+#: ../src/file.cpp:220
 msgid "Document reverted."
 msgstr ""
 
-#: ../src/file.cpp:346
+#: ../src/file.cpp:222
 msgid "Document not reverted."
 msgstr ""
 
-#: ../src/file.cpp:496
+#: ../src/file.cpp:372
 msgid "Select file to open"
 msgstr ""
 
-#: ../src/file.cpp:578
+#: ../src/file.cpp:461
 msgid "Clean up document"
 msgstr ""
 
-#: ../src/file.cpp:585
+#: ../src/file.cpp:468
 #, c-format
 msgid "Removed <b>%i</b> unused definition in &lt;defs&gt;."
 msgid_plural "Removed <b>%i</b> unused definitions in &lt;defs&gt;."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/file.cpp:590
+#: ../src/file.cpp:473
 msgid "No unused definitions in &lt;defs&gt;."
 msgstr ""
 
-#: ../src/file.cpp:624
+#: ../src/file.cpp:507
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown filename extension."
 msgstr ""
 
-#: ../src/file.cpp:625 ../src/file.cpp:635 ../src/file.cpp:644
-#: ../src/file.cpp:651 ../src/file.cpp:656 ../src/file.cpp:668
-#: ../src/file.cpp:678
+#: ../src/file.cpp:508 ../src/file.cpp:518 ../src/file.cpp:527
+#: ../src/file.cpp:534 ../src/file.cpp:539 ../src/file.cpp:551
+#: ../src/file.cpp:561
 msgid "Document not saved."
 msgstr ""
 
-#: ../src/file.cpp:634
+#: ../src/file.cpp:517
 #, c-format
 msgid ""
 "File %s is write protected. Please remove write protection and try again."
 msgstr ""
 
-#: ../src/file.cpp:643 ../src/file.cpp:677
+#: ../src/file.cpp:526 ../src/file.cpp:560
 #, c-format
 msgid "File %s could not be saved."
 msgstr ""
 
-#: ../src/file.cpp:655
+#: ../src/file.cpp:538
 #, c-format
 msgid ""
 "File could not be saved:\n"
 "No object with ID '%s' found."
 msgstr ""
 
-#: ../src/file.cpp:665
+#: ../src/file.cpp:548
 #, c-format
 msgid ""
 "File %s could not be saved.\n"
@@ -8473,32 +8464,32 @@ msgid ""
 "'%s'"
 msgstr ""
 
-#: ../src/file.cpp:700 ../src/file.cpp:702
+#: ../src/file.cpp:583 ../src/file.cpp:585
 msgid "Document saved."
 msgstr ""
 
 #. We are saving for the first time; create a unique default filename
-#: ../src/file.cpp:760 ../src/file.cpp:1453
+#: ../src/file.cpp:643 ../src/file.cpp:1336
 msgid "drawing"
 msgstr ""
 
-#: ../src/file.cpp:765
+#: ../src/file.cpp:648
 msgid "drawing-%1"
 msgstr ""
 
-#: ../src/file.cpp:782
+#: ../src/file.cpp:665
 msgid "Select file to save a copy to"
 msgstr ""
 
-#: ../src/file.cpp:784
+#: ../src/file.cpp:667
 msgid "Select file to save to"
 msgstr ""
 
-#: ../src/file.cpp:889 ../src/file.cpp:891
+#: ../src/file.cpp:772 ../src/file.cpp:774
 msgid "No changes need to be saved."
 msgstr ""
 
-#: ../src/file.cpp:910
+#: ../src/file.cpp:793
 msgid "Saving document..."
 msgstr ""
 
@@ -8506,24 +8497,29 @@ msgstr ""
 #. a localized template like "default.de.svg" is already present (which overrides "default.svg")
 #. TRANSLATORS: 'en' is an ISO 639-1 language code.
 #. Replace with language code for your language, i.e. the name of your .po file
-#: ../src/file.cpp:1024 ../src/io/resource.cpp:160 ../src/io/resource.cpp:165
+#: ../src/file.cpp:907 ../src/io/resource.cpp:160 ../src/io/resource.cpp:165
 msgid "en"
 msgstr ""
 
-#: ../src/file.cpp:1291 ../src/ui/dialog/inkscape-preferences.cpp:1920
+#: ../src/file.cpp:1174 ../src/ui/dialog/inkscape-preferences.cpp:1920
 #: ../src/ui/dialog/ocaldialogs.cpp:1087
 msgid "Import"
 msgstr ""
 
-#: ../src/file.cpp:1341
+#: ../src/file.cpp:1177
+#, c-format
+msgid "Failed to load the requested file %s"
+msgstr ""
+
+#: ../src/file.cpp:1224
 msgid "Select file to import"
 msgstr ""
 
-#: ../src/file.cpp:1474
+#: ../src/file.cpp:1357
 msgid "Select file to export to"
 msgstr ""
 
-#: ../src/file.cpp:1727
+#: ../src/file.cpp:1610
 msgid "Import Clip Art"
 msgstr ""
 
@@ -8824,7 +8820,7 @@ msgstr ""
 msgid "Delete gradient stop(s)"
 msgstr ""
 
-#: ../src/help.cpp:43
+#: ../src/help.cpp:46
 msgid ""
 "The tutorial files are not installed.\n"
 "For Linux, you may need to install 'inkscape-tutorials'; for Windows, please "
@@ -8833,7 +8829,11 @@ msgid ""
 "tutorials/"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:220
+#: ../src/inkscape-application.cpp:294
+msgid "Broken links have been changed to point to existing files."
+msgstr ""
+
+#: ../src/inkscape-application.cpp:448
 msgid "Inkscape - A Vector Drawing Program"
 msgstr ""
 
@@ -8847,296 +8847,296 @@ msgstr ""
 #. Will automatically handle character conversions.
 #. Note: OPTION_TYPE_FILENAME => std::string, OPTION_TYPE_STRING => Glib::ustring.
 #. Actions
-#: ../src/inkscape-application.cpp:234
+#: ../src/inkscape-application.cpp:462
 msgid "Actions (with optional arguments), semi-colon separated."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:234
+#: ../src/inkscape-application.cpp:462
 msgid "ACTION(:ARG)[;ACTION(:ARG)]*"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:235
+#: ../src/inkscape-application.cpp:463
 msgid "Actions: List available actions."
 msgstr ""
 
 #. Query
-#: ../src/inkscape-application.cpp:238
+#: ../src/inkscape-application.cpp:466
 msgid "Print: Inkscape version."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:239
+#: ../src/inkscape-application.cpp:467
 msgid "Print: Extensions directory."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:240
+#: ../src/inkscape-application.cpp:468
 msgid "Print: List verbs."
 msgstr ""
 
 #. Interface
-#: ../src/inkscape-application.cpp:243
+#: ../src/inkscape-application.cpp:471
 msgid "GUI: With graphical interface."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:244
+#: ../src/inkscape-application.cpp:472
 msgid "GUI: Console only."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:245
+#: ../src/inkscape-application.cpp:473
 msgid ""
 "GUI: Close window after processing actions (needed as some verbs require "
 "GUI)."
 msgstr ""
 
 #. Open/Import
-#: ../src/inkscape-application.cpp:248
+#: ../src/inkscape-application.cpp:476
 msgid "Open: PDF page to import"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:248
+#: ../src/inkscape-application.cpp:476
 msgid "PAGE"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:249
+#: ../src/inkscape-application.cpp:477
 msgid ""
 "Open: Method used to convert pre-0.92 document dpi, if needed: [none|scale-"
 "viewbox|scale-document]."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:250
+#: ../src/inkscape-application.cpp:478
 msgid "Open: Do not fix pre-0.92 document's text baseline spacing on opening."
 msgstr ""
 
 #. Query - Geometry
-#: ../src/inkscape-application.cpp:253
+#: ../src/inkscape-application.cpp:481
 msgid "Query: ID(s) of object(s) to be queried."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:253 ../src/inkscape-application.cpp:262
+#: ../src/inkscape-application.cpp:481 ../src/inkscape-application.cpp:490
 msgid "OBJECT-ID[,OBJECT-ID]*"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:254
+#: ../src/inkscape-application.cpp:482
 msgid "Query: Print bounding boxes of all objects."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:255
+#: ../src/inkscape-application.cpp:483
 msgid "Query: X coordinate of drawing or object (if specified by --query-id)."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:256
+#: ../src/inkscape-application.cpp:484
 msgid "Query: Y coordinate of drawing or object (if specified by --query-id)."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:257
+#: ../src/inkscape-application.cpp:485
 msgid "Query: Width of drawing or object (if specified by --query-id)."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:258
+#: ../src/inkscape-application.cpp:486
 msgid "Query: Height of drawing or object (if specified by --query-id)."
 msgstr ""
 
 #. Processing
-#: ../src/inkscape-application.cpp:261
+#: ../src/inkscape-application.cpp:489
 msgid ""
 "Process: Remove unused definitions from the <defs> section(s) of document."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:262
+#: ../src/inkscape-application.cpp:490
 msgid "Process: Select objects: comma separated list of IDs."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:263
+#: ../src/inkscape-application.cpp:491
 msgid "Process: Verb(s) to call when Inkscape opens."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:263
+#: ../src/inkscape-application.cpp:491
 msgid "VERB-ID[;VERB-ID]*"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:264
+#: ../src/inkscape-application.cpp:492
 msgid "Process: Start Inkscape in interactive shell mode."
 msgstr ""
 
 #. Export - File and File Type
-#: ../src/inkscape-application.cpp:267
+#: ../src/inkscape-application.cpp:495
 msgid "Export: File type:[svg,png,ps,psf,tex,emf,wmf,xaml]"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:268
+#: ../src/inkscape-application.cpp:496
 msgid "Export: File name"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:268
+#: ../src/inkscape-application.cpp:496
 msgid "EXPORT-FILENAME"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:269
+#: ../src/inkscape-application.cpp:497
 msgid "Export: Overwrite input file."
 msgstr ""
 
 #. BSP
 #. B = PNG, S = SVG, P = PS/EPS/PDF
 #. Export - Geometry
-#: ../src/inkscape-application.cpp:273
+#: ../src/inkscape-application.cpp:501
 msgid "Export: Area to export in SVG user units."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:273
+#: ../src/inkscape-application.cpp:501
 msgid "x0:y0:x1:y1"
 msgstr ""
 
 #. BSP
-#: ../src/inkscape-application.cpp:274
+#: ../src/inkscape-application.cpp:502
 msgid "Export: Area to export is drawing (not page)."
 msgstr ""
 
 #. BSP
-#: ../src/inkscape-application.cpp:275
+#: ../src/inkscape-application.cpp:503
 msgid "Export: Area to export is page."
 msgstr ""
 
 #. BSP
-#: ../src/inkscape-application.cpp:276
+#: ../src/inkscape-application.cpp:504
 msgid ""
 "Export: Margin around export area: units of page size for SVG, mm for PS/EPS/"
 "PDF."
 msgstr ""
 
 #. xSP
-#: ../src/inkscape-application.cpp:277
+#: ../src/inkscape-application.cpp:505
 msgid ""
 "Export: Snap the bitmap export area outwards to the nearest integer values."
 msgstr ""
 
 #. Bxx
-#: ../src/inkscape-application.cpp:278
+#: ../src/inkscape-application.cpp:506
 msgid "Export: Bitmap width in pixels (overrides --export-dpi)."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:278
+#: ../src/inkscape-application.cpp:506
 msgid "WIDTH"
 msgstr ""
 
 #. Bxx
-#: ../src/inkscape-application.cpp:279
+#: ../src/inkscape-application.cpp:507
 msgid "Export: Bitmap height in pixels (overrides --export-dpi)."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:279
+#: ../src/inkscape-application.cpp:507
 msgid "HEIGHT"
 msgstr ""
 
 #. Bxx
 #. Export - Options
-#: ../src/inkscape-application.cpp:282
+#: ../src/inkscape-application.cpp:510
 msgid "Export: ID(s) of object(s) to export."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:282
+#: ../src/inkscape-application.cpp:510
 msgid "OBJECT-ID[;OBJECT-ID]*"
 msgstr ""
 
 #. BSP
-#: ../src/inkscape-application.cpp:283
+#: ../src/inkscape-application.cpp:511
 msgid "Export: Hide all objects except object with ID selected by export-id."
 msgstr ""
 
 #. BSx
-#: ../src/inkscape-application.cpp:284
+#: ../src/inkscape-application.cpp:512
 msgid "Export: Remove items in the Inkscape namespace."
 msgstr ""
 
 #. xSx
-#: ../src/inkscape-application.cpp:285
+#: ../src/inkscape-application.cpp:513
 msgid ""
 "Export: Resolution for rasterization bitmaps and filters (default is 96)."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:285
+#: ../src/inkscape-application.cpp:513
 #: ../src/ui/widget/rendering-options.cpp:34
 msgid "DPI"
 msgstr ""
 
 #. BxP
-#: ../src/inkscape-application.cpp:286
+#: ../src/inkscape-application.cpp:514
 msgid ""
 "Export: Render objects without filters instead of rasterizing. (PS/EPS/PDF)"
 msgstr ""
 
 #. xxP
-#: ../src/inkscape-application.cpp:287
+#: ../src/inkscape-application.cpp:515
 msgid "Export: Convert text to paths. (PS/EPS/PDF/SVG)."
 msgstr ""
 
 #. xxP
-#: ../src/inkscape-application.cpp:288
+#: ../src/inkscape-application.cpp:516
 msgid "Export: Postscript level (2 or 3). Default is 3."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:288
+#: ../src/inkscape-application.cpp:516
 msgid "PS-Level"
 msgstr ""
 
 #. xxP
-#: ../src/inkscape-application.cpp:289
+#: ../src/inkscape-application.cpp:517
 msgid "Export: PDF level (1.4 or 1.5)"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:289
+#: ../src/inkscape-application.cpp:517
 msgid "PDF-Level"
 msgstr ""
 
 #. xxP
-#: ../src/inkscape-application.cpp:290
+#: ../src/inkscape-application.cpp:518
 msgid ""
 "Export: Export text separately to LaTeX file (PS/EPS/PDF). Include via "
 "\\input{file.tex}"
 msgstr ""
 
 #. xxP
-#: ../src/inkscape-application.cpp:291
+#: ../src/inkscape-application.cpp:519
 msgid ""
 "Export: Use stored filename and DPI hints when exporting object selected by "
 "--export-id."
 msgstr ""
 
 #. Bxx
-#: ../src/inkscape-application.cpp:292
+#: ../src/inkscape-application.cpp:520
 msgid "Export: Background color for exported bitmaps (any SVG color string)."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:292
+#: ../src/inkscape-application.cpp:520
 msgid "COLOR"
 msgstr ""
 
 #. Bxx
-#: ../src/inkscape-application.cpp:293
+#: ../src/inkscape-application.cpp:521
 msgid ""
 "Export: Background opacity for exported bitmaps (either 0.0 to 1.0 or 1 to "
 "255)."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:293
+#: ../src/inkscape-application.cpp:521
 msgid "VALUE"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:296
+#: ../src/inkscape-application.cpp:524
 msgid "Process: xverb command file."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:296
+#: ../src/inkscape-application.cpp:524
 msgid "XVERBS-FILENAME"
 msgstr ""
 
-#: ../src/inkscape-application.cpp:300
+#: ../src/inkscape-application.cpp:528
 msgid "D-Bus: Enter a listening loop for D-Bus messages in console mode."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:301
+#: ../src/inkscape-application.cpp:529
 msgid "D-Bus: Specify the D-Bus name (default is 'org.inkscape')."
 msgstr ""
 
-#: ../src/inkscape-application.cpp:301
+#: ../src/inkscape-application.cpp:529
 msgid "BUS-NAME"
 msgstr ""
 
@@ -9215,7 +9215,7 @@ msgstr ""
 msgid "Preload files"
 msgstr ""
 
-#: ../src/io/resource-manager.cpp:377
+#: ../src/io/resource-manager.cpp:382
 msgid "Fixup broken links"
 msgstr ""
 
@@ -13126,26 +13126,26 @@ msgstr ""
 msgid "without URI"
 msgstr ""
 
-#: ../src/object/sp-ellipse.cpp:389 ../src/ui/toolbar/arc-toolbar.cpp:160
+#: ../src/object/sp-ellipse.cpp:385 ../src/ui/toolbar/arc-toolbar.cpp:160
 msgid "Slice"
 msgstr ""
 
-#: ../src/object/sp-ellipse.cpp:392 ../src/ui/toolbar/arc-toolbar.cpp:170
+#: ../src/object/sp-ellipse.cpp:388 ../src/ui/toolbar/arc-toolbar.cpp:170
 msgid "Chord"
 msgstr ""
 
-#: ../src/object/sp-ellipse.cpp:395
+#: ../src/object/sp-ellipse.cpp:391
 msgid "Arc"
 msgstr ""
 
 #. Ellipse
-#: ../src/object/sp-ellipse.cpp:399 ../src/object/sp-ellipse.cpp:406
+#: ../src/object/sp-ellipse.cpp:395 ../src/object/sp-ellipse.cpp:402
 #: ../src/ui/dialog/inkscape-preferences.cpp:461
 #: ../src/ui/toolbar/pencil-toolbar.cpp:387
 msgid "Ellipse"
 msgstr ""
 
-#: ../src/object/sp-ellipse.cpp:403
+#: ../src/object/sp-ellipse.cpp:399
 msgid "Circle"
 msgstr ""
 
@@ -13463,59 +13463,59 @@ msgstr ""
 msgid "Combining paths..."
 msgstr ""
 
-#: ../src/path-chemistry.cpp:184
+#: ../src/path-chemistry.cpp:180
 msgid "Combine"
 msgstr ""
 
-#: ../src/path-chemistry.cpp:192
+#: ../src/path-chemistry.cpp:188
 msgid "<b>No path(s)</b> to combine in the selection."
 msgstr ""
 
-#: ../src/path-chemistry.cpp:204
+#: ../src/path-chemistry.cpp:200
 msgid "Select <b>path(s)</b> to break apart."
 msgstr ""
 
-#: ../src/path-chemistry.cpp:208
+#: ../src/path-chemistry.cpp:204
 msgid "Breaking apart paths..."
 msgstr ""
 
-#: ../src/path-chemistry.cpp:295
+#: ../src/path-chemistry.cpp:291
 msgid "Break apart"
 msgstr ""
 
-#: ../src/path-chemistry.cpp:299
+#: ../src/path-chemistry.cpp:295
 msgid "<b>No path(s)</b> to break apart in the selection."
 msgstr ""
 
-#: ../src/path-chemistry.cpp:307
+#: ../src/path-chemistry.cpp:303
 msgid "Select <b>object(s)</b> to convert to path."
 msgstr ""
 
-#: ../src/path-chemistry.cpp:313
+#: ../src/path-chemistry.cpp:309
 msgid "Converting objects to paths..."
 msgstr ""
 
-#: ../src/path-chemistry.cpp:336
+#: ../src/path-chemistry.cpp:332
 msgid "Object to path"
 msgstr ""
 
-#: ../src/path-chemistry.cpp:339
+#: ../src/path-chemistry.cpp:335
 msgid "<b>No objects</b> to convert to path in the selection."
 msgstr ""
 
-#: ../src/path-chemistry.cpp:638
+#: ../src/path-chemistry.cpp:594
 msgid "Select <b>path(s)</b> to reverse."
 msgstr ""
 
-#: ../src/path-chemistry.cpp:646
+#: ../src/path-chemistry.cpp:602
 msgid "Reversing paths..."
 msgstr ""
 
-#: ../src/path-chemistry.cpp:684
+#: ../src/path-chemistry.cpp:640
 msgid "Reverse path"
 msgstr ""
 
-#: ../src/path-chemistry.cpp:687
+#: ../src/path-chemistry.cpp:643
 msgid "<b>No paths</b> to reverse in the selection."
 msgstr ""
 
@@ -14407,105 +14407,105 @@ msgstr ""
 msgid "Select a file to import"
 msgstr ""
 
-#: ../src/splivarot.cpp:70
+#: ../src/splivarot.cpp:71
 msgid "Union"
 msgstr ""
 
-#: ../src/splivarot.cpp:77
+#: ../src/splivarot.cpp:78
 msgid "Intersection"
 msgstr ""
 
-#: ../src/splivarot.cpp:98
+#: ../src/splivarot.cpp:99
 msgid "Division"
 msgstr ""
 
-#: ../src/splivarot.cpp:105
+#: ../src/splivarot.cpp:106
 msgid "Cut path"
 msgstr ""
 
-#: ../src/splivarot.cpp:333
+#: ../src/splivarot.cpp:334
 msgid "Select <b>at least 1 path</b> to perform a boolean union."
 msgstr ""
 
-#: ../src/splivarot.cpp:336
+#: ../src/splivarot.cpp:337
 msgid "Select <b>at least 2 paths</b> to perform a boolean operation."
 msgstr ""
 
-#: ../src/splivarot.cpp:339
+#: ../src/splivarot.cpp:340
 msgid ""
 "One of the objects is <b>not a path</b>, cannot perform boolean operation."
 msgstr ""
 
-#: ../src/splivarot.cpp:342
+#: ../src/splivarot.cpp:343
 msgid ""
 "Unable to determine the <b>z-order</b> of the objects selected for "
 "difference, XOR, division, or path cut."
 msgstr ""
 
-#: ../src/splivarot.cpp:1689
+#: ../src/splivarot.cpp:1631
 msgid "Select <b>stroked path(s)</b> to convert stroke to path."
 msgstr ""
 
-#: ../src/splivarot.cpp:1705
+#: ../src/splivarot.cpp:1647
 msgid "Convert stroke to path"
 msgstr ""
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
-#: ../src/splivarot.cpp:1708
+#: ../src/splivarot.cpp:1650
 msgid "<b>No stroked paths</b> in the selection."
 msgstr ""
 
-#: ../src/splivarot.cpp:1779
+#: ../src/splivarot.cpp:1721
 msgid "Selected object is <b>not a path</b>, cannot inset/outset."
 msgstr ""
 
-#: ../src/splivarot.cpp:1870 ../src/splivarot.cpp:1937
+#: ../src/splivarot.cpp:1808 ../src/splivarot.cpp:1879
 msgid "Create linked offset"
 msgstr ""
 
-#: ../src/splivarot.cpp:1871 ../src/splivarot.cpp:1938
+#: ../src/splivarot.cpp:1809 ../src/splivarot.cpp:1880
 msgid "Create dynamic offset"
 msgstr ""
 
-#: ../src/splivarot.cpp:1963
+#: ../src/splivarot.cpp:1903
 msgid "Select <b>path(s)</b> to inset/outset."
 msgstr ""
 
-#: ../src/splivarot.cpp:2148
+#: ../src/splivarot.cpp:2086
 msgid "Outset path"
 msgstr ""
 
-#: ../src/splivarot.cpp:2148
+#: ../src/splivarot.cpp:2086
 msgid "Inset path"
 msgstr ""
 
-#: ../src/splivarot.cpp:2150
+#: ../src/splivarot.cpp:2088
 msgid "<b>No paths</b> to inset/outset in the selection."
 msgstr ""
 
-#: ../src/splivarot.cpp:2312
+#: ../src/splivarot.cpp:2216
 msgid "Simplifying paths (separately):"
 msgstr ""
 
-#: ../src/splivarot.cpp:2314
+#: ../src/splivarot.cpp:2218
 msgid "Simplifying paths:"
 msgstr ""
 
-#: ../src/splivarot.cpp:2351
+#: ../src/splivarot.cpp:2255
 #, c-format
 msgid "%s <b>%d</b> of <b>%d</b> paths simplified..."
 msgstr ""
 
-#: ../src/splivarot.cpp:2364
+#: ../src/splivarot.cpp:2268
 #, c-format
 msgid "<b>%d</b> paths simplified."
 msgstr ""
 
-#: ../src/splivarot.cpp:2378
+#: ../src/splivarot.cpp:2282
 msgid "Select <b>path(s)</b> to simplify."
 msgstr ""
 
-#: ../src/splivarot.cpp:2394
+#: ../src/splivarot.cpp:2298
 msgid "<b>No paths</b> to simplify in the selection."
 msgstr ""
 
@@ -14872,34 +14872,34 @@ msgstr ""
 msgid "Check Spellin_g..."
 msgstr ""
 
-#: ../src/ui/desktop/menubar.cpp:288
+#: ../src/ui/desktop/menubar.cpp:289
 msgctxt "Interface setup"
 msgid "Default"
 msgstr ""
 
-#: ../src/ui/desktop/menubar.cpp:288
+#: ../src/ui/desktop/menubar.cpp:289
 msgid "Default interface setup"
 msgstr ""
 
-#: ../src/ui/desktop/menubar.cpp:289
+#: ../src/ui/desktop/menubar.cpp:290
 msgctxt "Interface setup"
 msgid "Custom"
 msgstr ""
 
-#: ../src/ui/desktop/menubar.cpp:289
+#: ../src/ui/desktop/menubar.cpp:290
 msgid "Setup for custom task"
 msgstr ""
 
-#: ../src/ui/desktop/menubar.cpp:290
+#: ../src/ui/desktop/menubar.cpp:291
 msgctxt "Interface setup"
 msgid "Wide"
 msgstr ""
 
-#: ../src/ui/desktop/menubar.cpp:290
+#: ../src/ui/desktop/menubar.cpp:291
 msgid "Setup for widescreen work"
 msgstr ""
 
-#: ../src/ui/desktop/menubar.cpp:467
+#: ../src/ui/desktop/menubar.cpp:468
 msgid "Open _Recent"
 msgstr ""
 
@@ -24081,7 +24081,7 @@ msgstr ""
 msgid "Drop bitmap image"
 msgstr ""
 
-#: ../src/ui/interface.cpp:231
+#: ../src/ui/interface.cpp:234
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">A file named \"%s\" already exists. Do "
@@ -24090,7 +24090,7 @@ msgid ""
 "The file already exists in \"%s\". Replacing it will overwrite its contents."
 msgstr ""
 
-#: ../src/ui/interface.cpp:238 ../share/extensions/web-set-att.inx.h:21
+#: ../src/ui/interface.cpp:241 ../share/extensions/web-set-att.inx.h:21
 #: ../share/extensions/web-transmit-att.inx.h:19
 msgid "Replace"
 msgstr ""
@@ -26638,8 +26638,8 @@ msgid "Font not found on system"
 msgstr ""
 
 #: ../src/ui/toolbar/text-toolbar.cpp:341
-#: ../src/ui/toolbar/text-toolbar.cpp:2208
-#: ../src/ui/widget/font-selector.cpp:32 ../src/ui/widget/font-selector.cpp:140
+#: ../src/ui/toolbar/text-toolbar.cpp:2207
+#: ../src/ui/widget/font-selector.cpp:32 ../src/ui/widget/font-selector.cpp:143
 msgid "Font size"
 msgstr ""
 

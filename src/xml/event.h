@@ -225,6 +225,25 @@ private:
     void _replayOne(NodeObserver &observer) const override;
 };
 
+/**
+ * @brief Object representing element name change.
+ */
+class EventChgElementName : public Event {
+public:
+    EventChgElementName(Node* repr, GQuark old_name, GQuark new_name, Event* next)
+        : Event(repr, next), old_name(old_name), new_name(new_name) {}
+
+    /// GQuark corresponding to the old element name.
+    GQuark old_name;
+    /// GQuark corresponding to the new element name.
+    GQuark new_name;
+
+private:
+    Event* _optimizeOne() override;
+    void _undoOne(NodeObserver& observer) const override;
+    void _replayOne(NodeObserver& observer) const override;
+};
+
 }
 }
 
