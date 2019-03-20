@@ -121,7 +121,7 @@ public:
         node.setContent(new_value);
     }
 
-    void notifyElementNameChanged(Node& node, GQuark /*old_value*/, GQuark new_value)
+    void notifyElementNameChanged(Node& node, GQuark /*old_value*/, GQuark new_value) override
     {
         node.setCodeUnsafe(new_value);
     }
