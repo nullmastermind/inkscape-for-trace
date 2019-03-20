@@ -1149,6 +1149,7 @@ static void set_event_location(SPDesktop *desktop, GdkEvent *event) {
  */
 void sp_event_root_menu_popup(SPDesktop *desktop, SPItem *item, GdkEvent *event) {
 
+    if(this->dragging)
     // It seems the param item is the SPItem at the bottom of the z-order
     // Using the same function call used on left click in sp_select_context_item_handler() to get top of z-order
     // fixme: sp_canvas_arena should set the top z-order object as arena->active

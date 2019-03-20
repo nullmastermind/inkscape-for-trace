@@ -333,7 +333,7 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
 
                     ret = TRUE;
                 }
-            } else if (event->button.button == 3) {
+            } else if (event->button.button == 3 && !this->dragging) {
                 // right click; do not eat it so that right-click menu can appear, but cancel dragging & rubberband
                 this->sp_select_context_abort();
             }
