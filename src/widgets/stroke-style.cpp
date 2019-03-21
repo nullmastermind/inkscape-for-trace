@@ -140,7 +140,7 @@ Gtk::Widget *Inkscape::Widgets::createStrokeStyleWidget( )
 }
 
 StrokeStyle::StrokeStyle() :
-    Gtk::VBox(),
+    Gtk::Box(),
     miterLimitSpin(),
     widthSpin(),
     unitSelector(),
@@ -160,16 +160,15 @@ StrokeStyle::StrokeStyle() :
     endMarkerConn(),
     _old_unit(nullptr)
 {
-    Gtk::HBox *hb;
-    Gtk::HBox *f = new Gtk::HBox(false, 0);
-    f->show();
-    add(*f);
     table = new Gtk::Grid();
     table->set_border_width(4);
     table->set_row_spacing(4);
+    table->set_hexpand(false);
+    table->set_halign(Gtk::ALIGN_CENTER);
     table->show();
-    f->add(*table);
+    add(*table);
 
+    Gtk::HBox *hb;
     gint i = 0;
 
     //spw_label(t, C_("Stroke width", "_Width:"), 0, i);

@@ -102,7 +102,7 @@ SPObject *getMarkerObj(gchar const *n, SPDocument *doc);
 namespace Inkscape {
 class StrokeStyleButton;
 
-class StrokeStyle : public Gtk::VBox
+class StrokeStyle : public Gtk::Box
 {
 public:
     StrokeStyle();

@@ -781,7 +781,7 @@ void DocumentProperties::build_scripting()
 {
     _page_scripting->show();
     
-    _page_scripting->table().attach(_scripting_notebook, 0, 0);
+    _page_scripting->table().attach(_scripting_notebook, 0, 0, 1, 1);
 
     _scripting_notebook.append_page(*_page_external_scripts, _("External scripts"));
     _scripting_notebook.append_page(*_page_embedded_scripts, _("Embedded scripts"));

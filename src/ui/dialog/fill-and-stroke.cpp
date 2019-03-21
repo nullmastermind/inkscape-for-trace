@@ -141,9 +141,10 @@ FillAndStroke::_layoutPageStrokePaint()
 void
 FillAndStroke::_layoutPageStrokeStyle()
 {
-    //Gtk::Widget *strokeStyleWdgt = manage(Glib::wrap(sp_stroke_style_line_widget_new()));
-    //Gtk::Widget *strokeStyleWdgt = static_cast<Gtk::Widget *>(sp_stroke_style_line_widget_new());
     strokeStyleWdgt = sp_stroke_style_line_widget_new();
+    strokeStyleWdgt->set_hexpand();
+    strokeStyleWdgt->set_halign(Gtk::ALIGN_CENTER);
+
     _page_stroke_style->table().attach(*strokeStyleWdgt, 0, 0, 1, 1);
 }
 

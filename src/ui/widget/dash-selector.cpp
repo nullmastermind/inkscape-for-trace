@@ -53,6 +53,8 @@ DashSelector::DashSelector()
       preview_height(16),
       preview_lineheight(2)
 {
+    set_spacing(4);
+
     // TODO: find something more sensible here!!
     init_dashes();
 
@@ -65,7 +67,8 @@ DashSelector::DashSelector()
     dash_combo.show();
     dash_combo.signal_changed().connect( sigc::mem_fun(*this, &DashSelector::on_selection) );
 
-    this->pack_start(dash_combo, false, false, 0);
+    this->pack_start(dash_combo, true, true, 0);
+
     offset = Gtk::Adjustment::create(0.0, 0.0, 10.0, 0.1, 1.0, 0.0);
     offset->signal_value_changed().connect(sigc::mem_fun(*this, &DashSelector::offset_value_changed));
     auto sb = new Inkscape::UI::Widget::SpinButton(offset, 0.1, 2);
@@ -74,7 +77,6 @@ DashSelector::DashSelector()
     sb->show();
 
     this->pack_start(*sb, false, false, 0);
-
 
     int np=0;
     while (dashes[np]){ np++;}

@@ -91,7 +91,7 @@ void ColorScales::_initUI(SPColorScalesMode mode)
         /* Label */
         _l[i] = gtk_label_new("");
 
-	gtk_widget_set_halign(_l[i], GTK_ALIGN_END);
+        gtk_widget_set_halign(_l[i], GTK_ALIGN_START);
         gtk_widget_show(_l[i]);
 
   #if GTK_CHECK_VERSION(3, 12, 0)
@@ -138,7 +138,7 @@ void ColorScales::_initUI(SPColorScalesMode mode)
   #endif
         gtk_widget_set_margin_top(_b[i], YPAD);
         gtk_widget_set_margin_bottom(_b[i], YPAD);
-        gtk_widget_set_halign(_b[i], GTK_ALIGN_CENTER);
+        gtk_widget_set_halign(_b[i], GTK_ALIGN_END);
         gtk_widget_set_valign(_b[i], GTK_ALIGN_CENTER);
         gtk_grid_attach(GTK_GRID(t), _b[i], 2, i, 1, 1);
 
