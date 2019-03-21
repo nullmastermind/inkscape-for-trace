@@ -177,7 +177,7 @@ verbs(Glib::ustring verblist, InkscapeApplication* app)
     auto tokens = Glib::Regex::split_simple("\\s*;\\s*", verblist);
     for (auto token : tokens) {
         std::vector<Glib::ustring> parts = Glib::Regex::split_simple("\\s*:\\s*", token); // Second part is always ignored... we could implement it but better to switch to Gio::Actions
-        if (!parts[0].empty()) {
+        if (!parts.empty() && !parts[0].empty()) {
             Inkscape::Verb* verb = Inkscape::Verb::getbyid(parts[0].c_str());
             if (verb == nullptr) {
                 std::cerr << "verbs_action: Invalid verb: " << parts[0] << std::endl;
