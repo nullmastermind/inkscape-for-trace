@@ -376,7 +376,7 @@ char *profile_path(const char *filename)
     static const gchar *prefdir = nullptr;
 
     if (!prefdir) {
-        // Check if profile directory is overriden using environment variable
+        // Check if profile directory is overridden using environment variable
         gchar const *userenv = g_getenv("INKSCAPE_PROFILE_DIR");
         if (userenv) {
             prefdir = g_strdup(userenv);

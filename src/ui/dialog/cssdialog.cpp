@@ -129,7 +129,7 @@ CssDialog::CssDialog()
         _sheetCol->set_sort_column(_cssColumns._styleSheetVal);
     }
 
-    // Set the inital sort column (and direction) to place real attributes at the top.
+    // Set the initial sort column (and direction) to place real attributes at the top.
     _store->set_sort_column(_cssColumns.deleteButton, Gtk::SORT_DESCENDING);
 
     _getContents()->pack_start(*_scrolledWindow, Gtk::PACK_EXPAND_WIDGET);

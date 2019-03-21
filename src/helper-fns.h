@@ -62,7 +62,7 @@ inline bool helperfns_read_bool(gchar const *value, bool default_value){
 
 /* convert ascii representation to double
  * the function can only be used to convert numbers as given by gui elements that use localized representation
- * numbers are delimeted by space
+ * numbers are delimited by space
  * @param value ascii representation of the number
  * @return the vector of the converted numbers
  */

@@ -142,7 +142,7 @@ static bool try_shortcuts_file(char const *filename, bool const is_user_set) {
  * Usage of group 0 (i.e. the main, typically English layout) instead of simply event->keyval
  * ensures that shortcuts work regardless of the active keyboard layouts (e.g. Cyrillic).
  *
- * The effective modifiers are the modifers that were not "consumed" by the translation and
+ * The effective modifiers are the modifiers that were not "consumed" by the translation and
  * can be used by the application to define a shortcut, e.g.
  *  - when pressing "Shift+9" the resulting character is "("
  *    the shift key was "consumed" to make this character and should not be part of the shortcut

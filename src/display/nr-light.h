@@ -14,7 +14,7 @@
  * These classes provide tools to compute interesting objects relative to light
  * sources. Each class provides a constructor converting information contained
  * in a sp light object into information useful in the current setting, a
- * method to get the light vector (at a given point) and a method to get the 
+ * method to get the light vector (at a given point) and a method to get the
  * light color components (at a given point).
  */
 
@@ -47,14 +47,14 @@ class DistantLight {
          */
         DistantLight(SPFeDistantLight *light, guint32 lighting_color);
         virtual ~DistantLight();
-        
+
         /**
          * Computes the light vector of the distant light
          *
          * \param v a Fvector reference where we store the result
          */
         void light_vector(NR::Fvector &v);
-        
+
         /**
          * Computes the light components of the distant light
          *
@@ -93,7 +93,7 @@ class PointLight {
          * \param z z coordinate of the current point
          */
         void light_vector(NR::Fvector &v, double x, double y, double z);
-        
+
         /**
          * Computes the light components of the distant light
          *
@@ -138,7 +138,7 @@ class SpotLight {
 
         /**
          * Computes the light components of the distant light at the current
-         * point. We only need the light vector to compute theses
+         * point. We only need the light vector to compute these
          *
          * \param lc a Fvector reference where we store the result, X=R, Y=G, Z=B
          * \param L the light vector of the current point

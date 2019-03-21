@@ -174,7 +174,7 @@ SpinButtonToolItem::process_tab(int increment)
     // If the increment is zero, do nothing
     if(increment == 0) return true;
 
-    // Here, we're working through the widget heirarchy:
+    // Here, we're working through the widget hierarchy:
     // Toolbar
     // |- ToolItem (*this)
     //    |-> Box

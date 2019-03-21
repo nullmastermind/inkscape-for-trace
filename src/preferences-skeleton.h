@@ -83,7 +83,7 @@ R"=====(
        inkscape:window-height="480" />
   </group>
 
-  <group id="theme" 
+  <group id="theme"
        gtkTheme="" iconTheme=""  symbolicIcons="0" darkTheme="0" symbolicColor="0x000000ff" >
   </group>
 
@@ -505,7 +505,7 @@ R"=====(
 #define PREFERENCES_SKELETON_SIZE (sizeof(preferences_skeleton) - 1)
 
 // Raw string literal cannot contain translatable strings. Fortunately, we only translate
-// caligraphy presets.
+// calligraphy presets.
 // Note: actual translation is done in CalligraphyToolbar::build_presets_list(), we just
 // mark the strings as translatable here (see GitLab issue 128):
 Glib::ustring calligraphy_name_array[] = {

@@ -62,7 +62,7 @@ const int AlignVerb[36] = {
     SP_VERB_ALIGN_BOTH_BOTTOM_LEFT_TO_ANCHOR,
     SP_VERB_ALIGN_BOTH_BOTTOM_RIGHT_TO_ANCHOR,
 
-    // Oposite Canvas direction
+    // Opposite Canvas direction
     SP_VERB_ALIGN_VERTICAL_TOP,
     SP_VERB_ALIGN_HORIZONTAL_RIGHT,
     SP_VERB_ALIGN_VERTICAL_BOTTOM,

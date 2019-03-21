@@ -453,7 +453,7 @@ Application::add_gtk_css()
         css_str += "#CoordinateStatusY,";
         css_str += "#DesktopMainTable spinbutton{";
         css_str += "    font-family: sans-serif";
-        css_str += "}"; // we also can add to * but seems to me Cantarell looks better for oter places
+        css_str += "}"; // we also can add to * but seems to me Cantarell looks better for other places
     }
     // From 3.16, throws an error which we must catch.
     try {
@@ -626,7 +626,7 @@ Application::~Application()
     // gtk_main_quit ();
 }
 
-/** Sets the keyboard modifer to map to Alt.
+/** Sets the keyboard modifier to map to Alt.
  *
  * Zero switches off mapping, as does '1', which is the default.
  */

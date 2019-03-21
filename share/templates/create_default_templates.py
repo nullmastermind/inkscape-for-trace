@@ -65,7 +65,7 @@ for language in languages:
             file.write(filedata)
 
 
-# create timestamp file (indicates last sucessful creation for build system)
+# create timestamp file (indicates last successful creation for build system)
 timestamp_file = binary_dir + '/share/templates/default_templates.timestamp'
 if os.path.exists(timestamp_file):
     os.utime(timestamp_file, None)

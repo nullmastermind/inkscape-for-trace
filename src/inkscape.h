@@ -82,7 +82,7 @@ public:
     // Needs to be a guint because gdktypes.h does not define a 'no-modifier' value
     guint mapalt() const { return _mapalt; }
     
-    // Sets the keyboard modifer to map to Alt. Zero switches off mapping, as does '1', which is the default 
+    // Sets the keyboard modifier to map to Alt. Zero switches off mapping, as does '1', which is the default 
     void mapalt(guint maskvalue);
     
     guint trackalt() const { return _trackalt; }

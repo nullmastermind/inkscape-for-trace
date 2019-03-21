@@ -39,23 +39,23 @@
  @define-color bg_color6  #898989;
  @define-color bg_color7  #636363;
  @define-color bg_color8  #000000; /* Black */
- 
+
   /* Inkscape CSS helper
    * to add a class to a widget do some thing like
    * widget->get_style_context()->add_class("mycoolclass");
    * we define a bunch of helper CSS styles
    * Ecah Inkscape desktop has a class in top level window
-   * call "dark" so you can style using 2 clases with or without 
+   * call "dark" so you can style using 2 clases with or without
    * "dark" by this way you can always know if the UI is in dark mode
    * Also added some helper clases:
-   * ::::::: Color based 
+   * ::::::: Color based
    * ::::::: apply to colors
    * ::::::: scope widget and all his childs
    * ".colordefault" use default window color
    * ".colorinverse" invert window colors
    * ".colorbright" force bright colors no matter the UI is dark or bright
    * ".colordark" same but dark
-   * ::::::: Background based 
+   * ::::::: Background based
    * ::::::: apply to backgrounds
    * ::::::: scope widget and all his childs
    * ".backgrounddefault" use default window color
@@ -66,7 +66,7 @@
    * :::::::: apply to color (foreground)
    * :::::::: scope widget and all nested images
    * ".iconsymbolic" Force icon symbolic
-   * ".iconregular" Force colorfull icons
+   * ".iconregular" Force colorful icons
    * ".iconcolordefault" Theme color default
    * ".iconcolorinverse" Inverse color from theme
    * ".iconcolorbright, Force clear icon
@@ -76,41 +76,41 @@
    * :::::::: Combo box.
    * "..combobright" Combo bright
    */
- 
- .colordefault, 
- .colordefault *{ 
-     color: @theme_fg_color; 
+
+ .colordefault,
+ .colordefault *{
+     color: @theme_fg_color;
  }
- 
- .colorinverse, 
- .colorinverse *{ 
-     color: @theme_bg_color; 
+
+ .colorinverse,
+ .colorinverse *{
+     color: @theme_bg_color;
  }
  .colorbright,
  .colorbright *{
-     color: @theme_fg_color; 
+     color: @theme_fg_color;
  }
- 
- .dark .colorbright, 
+
+ .dark .colorbright,
  .dark .colorbright *{
-     color: @theme_bg_color; 
+     color: @theme_bg_color;
  }
- .colordark, 
+ .colordark,
  .colordark *{
-     color: @theme_bg_color; 
+     color: @theme_bg_color;
  }
  .dark .colordark,
  .dark .colordark *{
      color: @theme_fg_color;
  }
- .backgrounddefault, 
- .backgrounddefault *{ 
-     background-color: @theme_bg_color; 
+ .backgrounddefault,
+ .backgrounddefault *{
+     background-color: @theme_bg_color;
      background-image:image(@theme_bg_color);
  }
- .backgroundinverse, 
- .backgroundinverse *{ 
-     background-color: @theme_fg_color; 
+ .backgroundinverse,
+ .backgroundinverse *{
+     background-color: @theme_fg_color;
      background-image:image(@theme_fg_color);
  }
  .backgroundbright,
@@ -118,12 +118,12 @@
      background-color: @theme_bg_color;
      background-image:image(@theme_bg_color);
  }
- .dark .backgroundbright, 
+ .dark .backgroundbright,
  .dark .backgroundbright *{
      background-color: @theme_fg_color;
      background-image:image(@theme_fg_color);
  }
- .backgrounddark, 
+ .backgrounddark,
  .backgrounddark *{
      background-color: @theme_fg_color;
      background-image:image(@theme_fg_color);
@@ -141,56 +141,56 @@
  .iconregular image{
      -gtk-icon-style: regular;
  }
- 
+
  .combobright *{
-     color: @theme_text_color; 
+     color: @theme_text_color;
      background-color: @theme_base_color;
      background-image:image(@theme_base_color);
      border-radius:4px;
  }
  .dark .combobright *{
-     color: @theme_base_color; 
+     color: @theme_base_color;
      background-color: @theme_text_color;
      background-image:image(@theme_text_color);
      border-radius:4px;
  }
- 
- 
+
+
  /* 'GtkWidget' for Gtk  <= 3.18   */
- /* 'widget'    for Gtk  <= 3.19.2 */   
+ /* 'widget'    for Gtk  <= 3.19.2 */
  GtkWidget, widget {
  /*    font-size: 12pt; */
  }
- 
+
  GtkSpinButton {
      padding: 0;
      outline-style : none;
  }
- 
+
  spinbutton {
      padding: 0;
      outline-style : none;
  }
- 
+
  GtkSpinButton entry {
      padding-left: 2px;
      padding-right:0;
  }
- 
+
  spinbutton entry {
      padding-left: 2px;
      padding-right:0;
  }
- 
+
  GtkSpinButton undershoot {
      outline-style : none;
  }
- 
+
  spinbutton undershoot {
      outline-style : none;
  }
- 
- 
+
+
 GtkSpinButton entry {
     padding-left: 2px;
     padding-right:0;
@@ -248,7 +248,7 @@ spinbutton undershoot {
     margin-bottom:23px;
     padding-bottom:10px;
 }
-  
+
 #lpeflow GtkFlowBoxChild.lpeactive,
 #lpeflow flowboxchild.lpeactive{
     margin-bottom:0px;
@@ -296,7 +296,7 @@ padding:15px;
 font-weight:bold;
 padding:15px;
 }
-  
+
 SPRuler {
     background-color: @theme_bg_color;
     color:            @theme_fg_color;
@@ -400,4 +400,3 @@ combobox window.popup scrolledwindow treeview separator {
     padding : 0 ;
     outline-style : none;
 }
-
