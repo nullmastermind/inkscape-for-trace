@@ -19,7 +19,7 @@ bit Solaris (BE).
 
 libUEMF is released under the GPL 2 license, read the file 'COPYING' for more information
 
-Version 0.2.5, released Jan 03,   2017.
+Version 0.2.6, released Mar 21,   2019.
 
 To report bugs or provide feedback send email to David Mathog, mathog@caltech.edu.
 
@@ -377,6 +377,8 @@ History
   (Note, version numbers in files represent the libUEMF release where it was last modified, so not
   all files will show the same version numbers in each release.)
 
+0.2.6 2019-03-21
+  Fixed typo in upmf.c discovered by David Binderman.
 0.2.5 2017-01-03
   Fixed a misplaced paren in uemf.h (thanks to Tavmjong Bah for noticing it)
   Added more U_SIZE_* definitions in uemf.h for "cores" of record types with final

@@ -21,11 +21,11 @@
 
 /*
 File:      upmf.c
-Version:   0.0.12
-Date:      26-JAN-2016
+Version:   0.0.13
+Date:      21-MAR-2019
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
-Copyright: 2016 David Mathog and California Institute of Technology (Caltech)
+Copyright: 2019 David Mathog and California Institute of Technology (Caltech)
 */
 
 #ifdef __cplusplus
@@ -6529,7 +6529,7 @@ int U_PMF_POINTF_get(const char **contents, U_FLOAT *X, U_FLOAT *Y, const char *
     EMF+ manual 2.2.2.37, Microsoft name: EmfPlusPointR Object
 */
 int U_PMF_POINTR_get(const char **contents, U_FLOAT *X, U_FLOAT *Y, const char *blimit){
-    if(!contents || !*contents | !X || !Y || !blimit){ return(0); }
+    if(!contents || !*contents || !X || !Y || !blimit){ return(0); }
     int size=0;
 
     if(     U_PMF_INTEGER7_get( contents, X, blimit)){ size +=1; } 
