@@ -107,18 +107,23 @@ Transformation::Transformation()
     // Notebook for individual transformations
     contents->pack_start(_notebook, true, true);
 
+    _page_move.set_halign(Gtk::ALIGN_START);
     _notebook.append_page(_page_move, _("_Move"), true);
     layoutPageMove();
 
+    _page_scale.set_halign(Gtk::ALIGN_START);
     _notebook.append_page(_page_scale, _("_Scale"), true);
     layoutPageScale();
 
+    _page_rotate.set_halign(Gtk::ALIGN_START);
     _notebook.append_page(_page_rotate, _("_Rotate"), true);
     layoutPageRotate();
 
+    _page_skew.set_halign(Gtk::ALIGN_START);
     _notebook.append_page(_page_skew, _("Ske_w"), true);
     layoutPageSkew();
 
+    _page_transform.set_halign(Gtk::ALIGN_START);
     _notebook.append_page(_page_transform, _("Matri_x"), true);
     layoutPageTransform();
 
@@ -212,10 +217,12 @@ void Transformation::layoutPageMove()
     _scalar_move_horizontal.initScalar(-1e6, 1e6);
     _scalar_move_horizontal.setDigits(3);
     _scalar_move_horizontal.setIncrements(0.1, 1.0);
+    _scalar_move_horizontal.set_hexpand();
 
     _scalar_move_vertical.initScalar(-1e6, 1e6);
     _scalar_move_vertical.setDigits(3);
     _scalar_move_vertical.setIncrements(0.1, 1.0);
+    _scalar_move_vertical.set_hexpand();
 
     //_scalar_move_vertical.set_label_image( INKSCAPE_STOCK_ARROWS_HOR );
     
@@ -250,6 +257,7 @@ void Transformation::layoutPageScale()
     _scalar_scale_horizontal.setIncrements(0.1, 1.0);
     _scalar_scale_horizontal.setAbsoluteIsIncrement(true);
     _scalar_scale_horizontal.setPercentageIsIncrement(true);
+    _scalar_scale_horizontal.set_hexpand();
 
     _scalar_scale_vertical.initScalar(-1e6, 1e6);
     _scalar_scale_vertical.setValue(100.0, "%");
@@ -257,6 +265,7 @@ void Transformation::layoutPageScale()
     _scalar_scale_vertical.setIncrements(0.1, 1.0);
     _scalar_scale_vertical.setAbsoluteIsIncrement(true);
     _scalar_scale_vertical.setPercentageIsIncrement(true);
+    _scalar_scale_vertical.set_hexpand();
 
     _page_scale.table().attach(_scalar_scale_horizontal, 0, 0, 2, 1);
 
@@ -285,6 +294,7 @@ void Transformation::layoutPageRotate()
     _scalar_rotate.initScalar(-360.0, 360.0);
     _scalar_rotate.setDigits(3);
     _scalar_rotate.setIncrements(0.1, 1.0);
+    _scalar_rotate.set_hexpand();
 
     auto object_rotate_left_icon = Gtk::manage(sp_get_icon_image("object-rotate-left", Gtk::ICON_SIZE_SMALL_TOOLBAR));
 
@@ -335,19 +345,19 @@ void Transformation::layoutPageSkew()
     _scalar_skew_horizontal.initScalar(-1e6, 1e6);
     _scalar_skew_horizontal.setDigits(3);
     _scalar_skew_horizontal.setIncrements(0.1, 1.0);
+    _scalar_skew_horizontal.set_hexpand();
 
     _scalar_skew_vertical.initScalar(-1e6, 1e6);
     _scalar_skew_vertical.setDigits(3);
     _scalar_skew_vertical.setIncrements(0.1, 1.0);
+    _scalar_skew_vertical.set_hexpand();
 
     _page_skew.table().attach(_scalar_skew_horizontal, 0, 0, 2, 1);
+    _page_skew.table().attach(_units_skew,             2, 0, 1, 1);
+    _page_skew.table().attach(_scalar_skew_vertical,   0, 1, 2, 1);
 
     _scalar_skew_horizontal.signal_value_changed()
         .connect(sigc::mem_fun(*this, &Transformation::onSkewValueChanged));
-
-    _page_skew.table().attach(_units_skew,           2, 0, 1, 1);
-    _page_skew.table().attach(_scalar_skew_vertical, 0, 1, 2, 1);
-
     _scalar_skew_vertical.signal_value_changed()
         .connect(sigc::mem_fun(*this, &Transformation::onSkewValueChanged));
 
@@ -364,6 +374,7 @@ void Transformation::layoutPageTransform()
     _scalar_transform_a.setIncrements(0.1, 1.0);
     _scalar_transform_a.setValue(1.0);
     _scalar_transform_a.setWidthChars(6);
+    _scalar_transform_a.set_hexpand();
 
     _page_transform.table().attach(_scalar_transform_a, 0, 0, 1, 1);
 
@@ -376,6 +387,7 @@ void Transformation::layoutPageTransform()
     _scalar_transform_b.setIncrements(0.1, 1.0);
     _scalar_transform_b.setValue(0.0);
     _scalar_transform_b.setWidthChars(6);
+    _scalar_transform_b.set_hexpand();
 
     _page_transform.table().attach(_scalar_transform_b, 0, 1, 1, 1);
 
@@ -388,6 +400,7 @@ void Transformation::layoutPageTransform()
     _scalar_transform_c.setIncrements(0.1, 1.0);
     _scalar_transform_c.setValue(0.0);
     _scalar_transform_c.setWidthChars(6);
+    _scalar_transform_c.set_hexpand();
 
     _page_transform.table().attach(_scalar_transform_c, 1, 0, 1, 1);
 
@@ -401,6 +414,7 @@ void Transformation::layoutPageTransform()
     _scalar_transform_d.setIncrements(0.1, 1.0);
     _scalar_transform_d.setValue(1.0);
     _scalar_transform_d.setWidthChars(6);
+    _scalar_transform_d.set_hexpand();
 
     _page_transform.table().attach(_scalar_transform_d, 1, 1, 1, 1);
 
@@ -414,6 +428,7 @@ void Transformation::layoutPageTransform()
     _scalar_transform_e.setIncrements(0.1, 1.0);
     _scalar_transform_e.setValue(0.0);
     _scalar_transform_e.setWidthChars(6);
+    _scalar_transform_e.set_hexpand();
 
     _page_transform.table().attach(_scalar_transform_e, 2, 0, 1, 1);
 
@@ -427,6 +442,7 @@ void Transformation::layoutPageTransform()
     _scalar_transform_f.setIncrements(0.1, 1.0);
     _scalar_transform_f.setValue(0.0);
     _scalar_transform_f.setWidthChars(6);
+    _scalar_transform_f.set_hexpand();
 
     _page_transform.table().attach(_scalar_transform_f, 2, 1, 1, 1);
 
