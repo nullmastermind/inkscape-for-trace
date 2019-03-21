@@ -312,7 +312,7 @@ bool CssDialog::setStyleProperty(Glib::ustring name, Glib::ustring value)
     std::map<Glib::ustring, Glib::ustring> properties = parseStyle(original);
 
     bool updated = false;
-    if (value != nullptr && !value.empty()) {
+    if (!value.empty()) {
         if (properties[name] != value) {
             // Set value (create or update)
             properties[name] = value;
@@ -341,7 +341,7 @@ void CssDialog::onPropertyDelete(Glib::ustring path)
 {
     Gtk::TreeModel::Row row = *_store->get_iter(path);
     if (row) {
-        this->setStyleProperty(row[_cssColumns.label], nullptr);
+        this->setStyleProperty(row[_cssColumns.label], "");
     }
 }
 
