@@ -245,7 +245,7 @@ Geom::PathVector LPEPts2Ellipse::doEffect_path(Geom::PathVector const &path_in)
     // from: extension/internal/odf.cpp
     // get all points
     std::vector<Geom::Point> pts;
-    for(const auto & pit : path_in) {
+    for (const auto &pit : path_in) {
         // extract first point of this path
         pts.push_back(pit.initialPoint());
         // iterate over all curves
