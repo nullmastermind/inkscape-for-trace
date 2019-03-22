@@ -34,6 +34,7 @@ Parameter::Parameter( Glib::ustring  label, Glib::ustring  tip,
       param_label(std::move(label)),
       oncanvas_editable(false),
       widget_is_visible(true),
+      widget_is_enabled(true),
       param_tooltip(std::move(tip)),
       param_effect(effect)
 {

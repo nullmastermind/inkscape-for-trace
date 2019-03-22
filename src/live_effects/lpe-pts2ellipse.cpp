@@ -49,11 +49,11 @@ LPEPts2Ellipse::LPEPts2Ellipse(LivePathEffectObject *lpeobject)
     , gen_isometric_frame(_("_Frame (isometric rectangle)"), _("Draw parallelogram around the ellipse"),
                           "gen_isometric_frame", &wr, this, false)
     , gen_arc(_("_Arc"), _("Generate open arc (open ellipse)"), "gen_arc", &wr, this, false)
-    , other_arc(_("_Other Arc side"), _("Switch sides of the arc"), "arc_other", &wr, this, false)
-    , slice_arc(_("_Slice Arc"), _("Slice the arc"), "slice_arc", &wr, this, false)
+    , other_arc(_("_Other arc side"), _("Switch sides of the arc"), "arc_other", &wr, this, false)
+    , slice_arc(_("_Slice arc"), _("Slice the arc"), "slice_arc", &wr, this, false)
     , draw_axes(_("A_xes"), _("Draw both semi-major and semi-minor axes"), "draw_axes", &wr, this, false)
-    , rot_axes(_("Axes Rotation"), _("Axes rotation angle [deg]"), "rot_axes", &wr, this, 0)
-    , draw_ori_path(_("Source _Path"), _("Show the original source path"), "draw_ori_path", &wr, this, false)
+    , rot_axes(_("Axes rotation"), _("Axes rotation angle [deg]"), "rot_axes", &wr, this, 0)
+    , draw_ori_path(_("Source _path"), _("Show the original source path"), "draw_ori_path", &wr, this, false)
 {
     registerParameter(&method);
     registerParameter(&gen_arc);
@@ -259,11 +259,32 @@ Geom::PathVector LPEPts2Ellipse::doEffect_path(Geom::PathVector const &path_in)
         pts.pop_back();
     }
 
-    // special mode: Use first two edges, interpret them as two sides of a parallelogram and
-    // generate an ellipse residing inside the parallelogram. This effect is quite useful when
-    // generating isometric views. Hence, the name.
+    // modify GUI based on selected method
     switch (method) {
         case EM_ISOMETRIC_CIRCLE:
+        case EM_STEINER_ELLIPSE:
+        case EM_STEINER_INELLIPSE:
+            gen_arc.param_widget_is_enabled(false);
+            other_arc.param_widget_is_enabled(false);
+            slice_arc.param_widget_is_enabled(false);
+            break;
+        default:
+            gen_arc.param_widget_is_enabled(true);
+            if (gen_arc.get_value()) {
+                slice_arc.param_widget_is_enabled(true);
+                other_arc.param_widget_is_enabled(true);
+            } else {
+                other_arc.param_widget_is_enabled(false);
+                slice_arc.param_widget_is_enabled(false);
+            }
+    }
+
+    // call method specific code
+    switch (method) {
+        case EM_ISOMETRIC_CIRCLE:
+            // special mode: Use first two edges, interpret them as two sides of a parallelogram and
+            // generate an ellipse residing inside the parallelogram. This effect is quite useful when
+            // generating isometric views. Hence, the name.
             if (0 != genIsometricEllipse(pts, path_out)) {
                 return path_in;
             }

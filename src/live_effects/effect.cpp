@@ -1488,6 +1488,11 @@ Effect::newWidget()
         if ((*it)->widget_is_visible) {
             Parameter * param = *it;
             Gtk::Widget * widg = param->param_newWidget();
+            if (param->widget_is_enabled) {
+                widg->set_sensitive(true);
+            } else {
+                widg->set_sensitive(false);
+            }
             Glib::ustring * tip = param->param_getTooltip();
             if (widg) {
                 vbox->pack_start(*widg, true, true, 2);

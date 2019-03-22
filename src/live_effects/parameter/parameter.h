@@ -63,6 +63,7 @@ public:
     virtual gchar * param_getSVGValue() const = 0;
     virtual gchar * param_getDefaultSVGValue() const = 0;
     virtual void param_widget_is_visible(bool is_visible) {widget_is_visible = is_visible;}
+    virtual void param_widget_is_enabled(bool is_enabled) {widget_is_enabled = is_enabled;}
     void write_to_SVG();
  
     virtual void param_set_default() = 0;
@@ -89,6 +90,7 @@ public:
 
     bool oncanvas_editable;
     bool widget_is_visible;
+    bool widget_is_enabled;
 
 protected:
 
