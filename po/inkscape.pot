@@ -3,37 +3,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: ../share/extensions/color_HSL_adjust.inx.h:13
-#: ../share/extensions/color_custom.inx.h:8
-#: ../share/extensions/gcodetools_about.inx.h:24
-#: ../share/extensions/gcodetools_area.inx.h:5
-#: ../share/extensions/gcodetools_area.inx.h:28
-#: ../share/extensions/gcodetools_area.inx.h:52
-#: ../share/extensions/gcodetools_area.inx.h:86
-#: ../share/extensions/gcodetools_dxf_points.inx.h:4
-#: ../share/extensions/gcodetools_dxf_points.inx.h:36
-#: ../share/extensions/gcodetools_engraving.inx.h:6
-#: ../share/extensions/gcodetools_engraving.inx.h:48
-#: ../share/extensions/gcodetools_graffiti.inx.h:20
-#: ../share/extensions/gcodetools_graffiti.inx.h:65
-#: ../share/extensions/gcodetools_lathe.inx.h:11
-#: ../share/extensions/gcodetools_lathe.inx.h:25
-#: ../share/extensions/gcodetools_lathe.inx.h:59
-#: ../share/extensions/gcodetools_orientation_points.inx.h:14
-#: ../share/extensions/gcodetools_orientation_points.inx.h:30
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:10
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:44
-#: ../share/extensions/gcodetools_prepare_path_for_plasma.inx.h:18
-#: ../share/extensions/gcodetools_tools_library.inx.h:11
-#: ../share/extensions/gcodetools_tools_library.inx.h:25
-#: ../share/extensions/hershey.inx.h:41 ../share/extensions/layout_nup.inx.h:25
-#: ../share/extensions/lindenmayer.inx.h:14
-#, fuzzy, no-c-format
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-03-20 20:07+0530\n"
+"POT-Creation-Date: 2019-03-23 00:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1069,10 +1044,10 @@ msgstr ""
 #: ../src/filter-enums.cpp:68 ../src/ui/dialog/clonetiler.cpp:786
 #: ../src/ui/dialog/clonetiler.cpp:915
 #: ../src/ui/dialog/document-properties.cpp:153
-#: ../share/extensions/color_HSL_adjust.inx.h:28
+#: ../share/extensions/color_HSL_adjust.inx.h:21
 #: ../share/extensions/color_blackandwhite.inx.h:3
 #: ../share/extensions/color_brighter.inx.h:2
-#: ../share/extensions/color_custom.inx.h:25
+#: ../share/extensions/color_custom.inx.h:17
 #: ../share/extensions/color_darker.inx.h:2
 #: ../share/extensions/color_desaturate.inx.h:2
 #: ../share/extensions/color_grayscale.inx.h:2
@@ -4435,92 +4410,92 @@ msgstr ""
 msgid "No next transform."
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:267 ../src/display/canvas-grid.cpp:655
+#: ../src/display/canvas-axonomgrid.cpp:265 ../src/display/canvas-grid.cpp:656
 msgid "Grid _units:"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:269 ../src/display/canvas-grid.cpp:657
+#: ../src/display/canvas-axonomgrid.cpp:267 ../src/display/canvas-grid.cpp:658
 msgid "_Origin X:"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:269 ../src/display/canvas-grid.cpp:657
+#: ../src/display/canvas-axonomgrid.cpp:267 ../src/display/canvas-grid.cpp:658
 #: ../src/ui/dialog/inkscape-preferences.cpp:1166
 #: ../src/ui/dialog/inkscape-preferences.cpp:1191
 msgid "X coordinate of grid origin"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:272 ../src/display/canvas-grid.cpp:660
+#: ../src/display/canvas-axonomgrid.cpp:270 ../src/display/canvas-grid.cpp:661
 msgid "O_rigin Y:"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:272 ../src/display/canvas-grid.cpp:660
+#: ../src/display/canvas-axonomgrid.cpp:270 ../src/display/canvas-grid.cpp:661
 #: ../src/ui/dialog/inkscape-preferences.cpp:1167
 #: ../src/ui/dialog/inkscape-preferences.cpp:1192
 msgid "Y coordinate of grid origin"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:275 ../src/display/canvas-grid.cpp:666
+#: ../src/display/canvas-axonomgrid.cpp:273 ../src/display/canvas-grid.cpp:667
 msgid "Spacing _Y:"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:275
+#: ../src/display/canvas-axonomgrid.cpp:273
 #: ../src/ui/dialog/inkscape-preferences.cpp:1195
 msgid "Base length of z-axis"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:278
+#: ../src/display/canvas-axonomgrid.cpp:276
 #: ../src/ui/dialog/inkscape-preferences.cpp:1198
 #: ../src/ui/toolbar/box3d-toolbar.cpp:77
 msgid "Angle X:"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:278
+#: ../src/display/canvas-axonomgrid.cpp:276
 #: ../src/ui/dialog/inkscape-preferences.cpp:1198
 msgid "Angle of x-axis"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:280
+#: ../src/display/canvas-axonomgrid.cpp:278
 #: ../src/ui/dialog/inkscape-preferences.cpp:1199
 #: ../src/ui/toolbar/box3d-toolbar.cpp:140
 msgid "Angle Z:"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:280
+#: ../src/display/canvas-axonomgrid.cpp:278
 #: ../src/ui/dialog/inkscape-preferences.cpp:1199
 msgid "Angle of z-axis"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:283 ../src/display/canvas-grid.cpp:670
+#: ../src/display/canvas-axonomgrid.cpp:281 ../src/display/canvas-grid.cpp:671
 msgid "Minor grid line _color:"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:283 ../src/display/canvas-grid.cpp:670
+#: ../src/display/canvas-axonomgrid.cpp:281 ../src/display/canvas-grid.cpp:671
 #: ../src/ui/dialog/inkscape-preferences.cpp:1150
 msgid "Minor grid line color"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:283 ../src/display/canvas-grid.cpp:670
+#: ../src/display/canvas-axonomgrid.cpp:281 ../src/display/canvas-grid.cpp:671
 msgid "Color of the minor grid lines"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:286 ../src/display/canvas-grid.cpp:674
+#: ../src/display/canvas-axonomgrid.cpp:284 ../src/display/canvas-grid.cpp:675
 msgid "Ma_jor grid line color:"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:286 ../src/display/canvas-grid.cpp:674
+#: ../src/display/canvas-axonomgrid.cpp:284 ../src/display/canvas-grid.cpp:675
 #: ../src/ui/dialog/inkscape-preferences.cpp:1152
 msgid "Major grid line color"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:287 ../src/display/canvas-grid.cpp:675
+#: ../src/display/canvas-axonomgrid.cpp:285 ../src/display/canvas-grid.cpp:676
 msgid "Color of the major (highlighted) grid lines"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:291 ../src/display/canvas-grid.cpp:679
+#: ../src/display/canvas-axonomgrid.cpp:289 ../src/display/canvas-grid.cpp:680
 msgid "_Major grid line every:"
 msgstr ""
 
-#: ../src/display/canvas-axonomgrid.cpp:291 ../src/display/canvas-grid.cpp:679
+#: ../src/display/canvas-axonomgrid.cpp:289 ../src/display/canvas-grid.cpp:680
 msgid "lines"
 msgstr ""
 
@@ -4576,16 +4551,16 @@ msgstr ""
 msgid "Align to page:"
 msgstr ""
 
-#: ../src/display/canvas-grid.cpp:663
+#: ../src/display/canvas-grid.cpp:664
 msgid "Spacing _X:"
 msgstr ""
 
-#: ../src/display/canvas-grid.cpp:663
+#: ../src/display/canvas-grid.cpp:664
 #: ../src/ui/dialog/inkscape-preferences.cpp:1172
 msgid "Distance between vertical grid lines"
 msgstr ""
 
-#: ../src/display/canvas-grid.cpp:666
+#: ../src/display/canvas-grid.cpp:667
 #: ../src/ui/dialog/inkscape-preferences.cpp:1173
 msgid "Distance between horizontal grid lines"
 msgstr ""
@@ -5455,7 +5430,7 @@ msgstr ""
 #. Paint order
 #. TRANSLATORS: Paint order determines the order the 'fill', 'stroke', and 'markers are painted.
 #: ../src/extension/internal/bitmap/reduceNoise.cpp:43
-#: ../src/widgets/stroke-style.cpp:354
+#: ../src/widgets/stroke-style.cpp:353
 #: ../share/extensions/jessyInk_effects.inx.h:3
 #: ../share/extensions/jessyInk_view.inx.h:3
 #: ../share/extensions/lindenmayer.inx.h:5
@@ -5585,7 +5560,7 @@ msgstr ""
 
 #: ../src/extension/internal/bluredge.cpp:137
 #: ../share/extensions/extrude.inx.h:5
-#: ../share/extensions/generate_voronoi.inx.h:11
+#: ../share/extensions/generate_voronoi.inx.h:9
 #: ../share/extensions/interp.inx.h:9 ../share/extensions/motion.inx.h:4
 #: ../share/extensions/pathalongpath.inx.h:18
 #: ../share/extensions/pathscatter.inx.h:20
@@ -7307,11 +7282,11 @@ msgstr ""
 #: ../share/extensions/color_randomize.inx.h:2 ../share/extensions/dots.inx.h:2
 #: ../share/extensions/dxf_input.inx.h:2
 #: ../share/extensions/dxf_outlines.inx.h:2
-#: ../share/extensions/gcodetools_area.inx.h:61
-#: ../share/extensions/gcodetools_engraving.inx.h:23
-#: ../share/extensions/gcodetools_graffiti.inx.h:43
-#: ../share/extensions/gcodetools_lathe.inx.h:34
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:19
+#: ../share/extensions/gcodetools_area.inx.h:45
+#: ../share/extensions/gcodetools_engraving.inx.h:15
+#: ../share/extensions/gcodetools_graffiti.inx.h:32
+#: ../share/extensions/gcodetools_lathe.inx.h:28
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:15
 #: ../share/extensions/generate_voronoi.inx.h:2
 #: ../share/extensions/gimp_xcf.inx.h:2
 #: ../share/extensions/interp_att_g.inx.h:2
@@ -7322,8 +7297,8 @@ msgstr ""
 #: ../share/extensions/pathalongpath.inx.h:2
 #: ../share/extensions/pathscatter.inx.h:2 ../share/extensions/split.inx.h:2
 #: ../share/extensions/voronoi2svg.inx.h:2
-#: ../share/extensions/web-set-att.inx.h:2
-#: ../share/extensions/web-transmit-att.inx.h:2
+#: ../share/extensions/web_set_att.inx.h:2
+#: ../share/extensions/web_transmit_att.inx.h:2
 #: ../share/extensions/webslicer_create_group.inx.h:2
 #: ../share/extensions/webslicer_export.inx.h:2
 msgid "Options"
@@ -7902,17 +7877,17 @@ msgstr ""
 
 #: ../src/extension/internal/grid.cpp:203
 #: ../src/ui/dialog/inkscape-preferences.cpp:1957
-#: ../share/extensions/draw_from_triangle.inx.h:79
+#: ../share/extensions/draw_from_triangle.inx.h:58
 #: ../share/extensions/eqtexsvg.inx.h:4 ../share/extensions/foldablebox.inx.h:9
-#: ../share/extensions/frame.inx.h:2 ../share/extensions/funcplot.inx.h:53
+#: ../share/extensions/frame.inx.h:2 ../share/extensions/funcplot.inx.h:38
 #: ../share/extensions/grid_cartesian.inx.h:28
 #: ../share/extensions/grid_isometric.inx.h:11
 #: ../share/extensions/grid_polar.inx.h:22
 #: ../share/extensions/guides_creator.inx.h:25
-#: ../share/extensions/hershey.inx.h:70 ../share/extensions/layout_nup.inx.h:44
-#: ../share/extensions/lindenmayer.inx.h:53
+#: ../share/extensions/hershey.inx.h:52 ../share/extensions/layout_nup.inx.h:35
+#: ../share/extensions/lindenmayer.inx.h:34
 #: ../share/extensions/nicechart.inx.h:45
-#: ../share/extensions/param_curves.inx.h:39
+#: ../share/extensions/param_curves.inx.h:30
 #: ../share/extensions/perfectboundcover.inx.h:19
 #: ../share/extensions/polyhedron_3d.inx.h:56
 #: ../share/extensions/printing_marks.inx.h:20
@@ -8299,7 +8274,7 @@ msgid "_Close"
 msgstr ""
 
 #: ../src/extension/prefdialog.cpp:79 ../src/ui/dialog/text-edit.cpp:69
-#: ../src/ui/dialog/transformation.cpp:151
+#: ../src/ui/dialog/transformation.cpp:156
 msgid "_Apply"
 msgstr ""
 
@@ -10982,7 +10957,7 @@ msgstr ""
 #. corners of paths. It can be "miter", "round" or "bevel".
 #: ../src/live_effects/lpe-jointype.cpp:61
 #: ../src/live_effects/lpe-powerstroke.cpp:178
-#: ../src/widgets/stroke-style.cpp:272
+#: ../src/widgets/stroke-style.cpp:271
 msgid "Join:"
 msgstr ""
 
@@ -11405,9 +11380,10 @@ msgstr ""
 msgid "Dimension line width. DIN standard: 0.25 or 0.35 mm"
 msgstr ""
 
+#. ## Set up scale frame
 #: ../src/live_effects/lpe-measure-segments.cpp:78
 #: ../src/selection-chemistry.cpp:2274 ../src/seltrans.cpp:490
-#: ../src/ui/dialog/transformation.cpp:768 ../src/ui/widget/page-sizer.cpp:262
+#: ../src/ui/dialog/transformation.cpp:784 ../src/ui/widget/page-sizer.cpp:245
 #: ../share/extensions/interp_att_g.inx.h:16
 msgid "Scale"
 msgstr ""
@@ -11602,16 +11578,16 @@ msgstr ""
 #: ../share/extensions/draw_from_triangle.inx.h:35
 #: ../share/extensions/dxf_input.inx.h:10
 #: ../share/extensions/dxf_outlines.inx.h:24
-#: ../share/extensions/gcodetools_about.inx.h:23
-#: ../share/extensions/gcodetools_area.inx.h:85
-#: ../share/extensions/gcodetools_dxf_points.inx.h:35
-#: ../share/extensions/gcodetools_engraving.inx.h:47
-#: ../share/extensions/gcodetools_graffiti.inx.h:64
-#: ../share/extensions/gcodetools_lathe.inx.h:58
+#: ../share/extensions/gcodetools_about.inx.h:13
+#: ../share/extensions/gcodetools_area.inx.h:69
+#: ../share/extensions/gcodetools_dxf_points.inx.h:30
+#: ../share/extensions/gcodetools_engraving.inx.h:39
+#: ../share/extensions/gcodetools_graffiti.inx.h:53
+#: ../share/extensions/gcodetools_lathe.inx.h:52
 #: ../share/extensions/gcodetools_orientation_points.inx.h:13
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:43
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:39
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx.h:17
-#: ../share/extensions/gcodetools_tools_library.inx.h:24
+#: ../share/extensions/gcodetools_tools_library.inx.h:18
 #: ../share/extensions/generate_voronoi.inx.h:5
 #: ../share/extensions/gimp_xcf.inx.h:7
 #: ../share/extensions/interp_att_g.inx.h:32
@@ -11635,8 +11611,8 @@ msgstr ""
 #: ../share/extensions/pathscatter.inx.h:18
 #: ../share/extensions/restack.inx.h:25 ../share/extensions/split.inx.h:8
 #: ../share/extensions/voronoi2svg.inx.h:16
-#: ../share/extensions/web-set-att.inx.h:25
-#: ../share/extensions/web-transmit-att.inx.h:23
+#: ../share/extensions/web_set_att.inx.h:25
+#: ../share/extensions/web_transmit_att.inx.h:23
 #: ../share/extensions/webslicer_create_group.inx.h:11
 #: ../share/extensions/webslicer_export.inx.h:6
 msgid "Help"
@@ -11918,7 +11894,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:411
 #: ../src/ui/dialog/debug.cpp:75 ../src/ui/dialog/messages.cpp:45
-#: ../src/ui/dialog/transformation.cpp:144
+#: ../src/ui/dialog/transformation.cpp:149
 msgid "_Clear"
 msgstr ""
 
@@ -12023,7 +11999,7 @@ msgid "Determines the shape of the path's start"
 msgstr ""
 
 #: ../src/live_effects/lpe-powerstroke.cpp:179
-#: ../src/widgets/stroke-style.cpp:312
+#: ../src/widgets/stroke-style.cpp:311
 msgid "Maximum length of the miter (in units of stroke width)"
 msgstr ""
 
@@ -13338,7 +13314,7 @@ msgstr ""
 #. Spiral
 #: ../src/object/sp-spiral.cpp:200
 #: ../src/ui/dialog/inkscape-preferences.cpp:469
-#: ../share/extensions/gcodetools_area.inx.h:21
+#: ../share/extensions/gcodetools_area.inx.h:16
 msgid "Spiral"
 msgstr ""
 
@@ -13992,7 +13968,7 @@ msgid "Rotate 90° CW"
 msgstr ""
 
 #: ../src/selection-chemistry.cpp:1899 ../src/seltrans.cpp:493
-#: ../src/ui/dialog/transformation.cpp:794
+#: ../src/ui/dialog/transformation.cpp:810
 msgid "Rotate"
 msgstr ""
 
@@ -14013,7 +13989,7 @@ msgid "Move horizontally"
 msgstr ""
 
 #: ../src/selection-chemistry.cpp:2318 ../src/selection-chemistry.cpp:2343
-#: ../src/seltrans.cpp:487 ../src/ui/dialog/transformation.cpp:705
+#: ../src/seltrans.cpp:487 ../src/ui/dialog/transformation.cpp:721
 msgid "Move"
 msgstr ""
 
@@ -14347,7 +14323,7 @@ msgid ""
 "instead of horizontally."
 msgstr ""
 
-#: ../src/seltrans.cpp:496 ../src/ui/dialog/transformation.cpp:889
+#: ../src/seltrans.cpp:496 ../src/ui/dialog/transformation.cpp:905
 msgid "Skew"
 msgstr ""
 
@@ -16045,13 +16021,13 @@ msgstr ""
 msgid "License"
 msgstr ""
 
-#: ../src/ui/dialog/document-metadata.cpp:113
-#: ../src/ui/dialog/document-properties.cpp:1000
+#: ../src/ui/dialog/document-metadata.cpp:114
+#: ../src/ui/dialog/document-properties.cpp:977
 msgid "<b>Dublin Core Entities</b>"
 msgstr ""
 
-#: ../src/ui/dialog/document-metadata.cpp:145
-#: ../src/ui/dialog/document-properties.cpp:1046
+#: ../src/ui/dialog/document-metadata.cpp:147
+#: ../src/ui/dialog/document-properties.cpp:1024
 msgid "<b>License</b>"
 msgstr ""
 
@@ -16312,43 +16288,43 @@ msgstr ""
 msgid "Scripting"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:294
+#: ../src/ui/dialog/document-properties.cpp:264
 msgid "<b>General</b>"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:297
+#: ../src/ui/dialog/document-properties.cpp:267
 msgid "<b>Page Size</b>"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:300
+#: ../src/ui/dialog/document-properties.cpp:270
 msgid "<b>Background</b>"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:303
+#: ../src/ui/dialog/document-properties.cpp:273
 msgid "<b>Border</b>"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:306
+#: ../src/ui/dialog/document-properties.cpp:276
 msgid "<b>Display</b>"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:359
+#: ../src/ui/dialog/document-properties.cpp:331
 msgid "<b>Guides</b>"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:383
+#: ../src/ui/dialog/document-properties.cpp:362
 msgid "<b>Snap to objects</b>"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:385
+#: ../src/ui/dialog/document-properties.cpp:364
 msgid "<b>Snap to grids</b>"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:387
+#: ../src/ui/dialog/document-properties.cpp:366
 msgid "<b>Snap to guides</b>"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:389
+#: ../src/ui/dialog/document-properties.cpp:368
 msgid "<b>Miscellaneous</b>"
 msgstr ""
 
@@ -16356,13 +16332,13 @@ msgstr ""
 #. Inkscape::GC::release(defsRepr);
 #. inform the document, so we can undo
 #. Color Management
-#: ../src/ui/dialog/document-properties.cpp:550 ../src/verbs.cpp:3211
+#: ../src/ui/dialog/document-properties.cpp:530 ../src/verbs.cpp:3211
 msgid "Link Color Profile"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:629
-#: ../src/ui/dialog/document-properties.cpp:639
-#: ../src/ui/dialog/document-properties.cpp:648
+#: ../src/ui/dialog/document-properties.cpp:609
+#: ../src/ui/dialog/document-properties.cpp:619
+#: ../src/ui/dialog/document-properties.cpp:628
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1313
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:312
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:321
@@ -16370,132 +16346,132 @@ msgstr ""
 msgid "_Remove"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:681
+#: ../src/ui/dialog/document-properties.cpp:661
 msgid "Remove linked color profile"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:700
+#: ../src/ui/dialog/document-properties.cpp:680
 msgid "<b>Linked Color Profiles:</b>"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:702
+#: ../src/ui/dialog/document-properties.cpp:682
 msgid "<b>Available Color Profiles:</b>"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:704
+#: ../src/ui/dialog/document-properties.cpp:684
 msgid "Link Profile"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:707
+#: ../src/ui/dialog/document-properties.cpp:687
 msgid "Unlink Profile"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:772
+#: ../src/ui/dialog/document-properties.cpp:751
 msgid "Profile Name"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:808
+#: ../src/ui/dialog/document-properties.cpp:786
 msgid "External scripts"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:809
+#: ../src/ui/dialog/document-properties.cpp:787
 msgid "Embedded scripts"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:814
+#: ../src/ui/dialog/document-properties.cpp:792
 msgid "<b>External script files:</b>"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:816
+#: ../src/ui/dialog/document-properties.cpp:794
 msgid "Add the current file name or browse for a file"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:819
-#: ../src/ui/dialog/document-properties.cpp:884
+#: ../src/ui/dialog/document-properties.cpp:797
+#: ../src/ui/dialog/document-properties.cpp:861
 #: ../src/ui/widget/selected-style.cpp:361
 msgid "Remove"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:871
+#: ../src/ui/dialog/document-properties.cpp:848
 msgid "Filename"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:879
+#: ../src/ui/dialog/document-properties.cpp:856
 msgid "<b>Embedded script files:</b>"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:881
+#: ../src/ui/dialog/document-properties.cpp:858
 #: ../src/ui/dialog/objects.cpp:1888
 msgid "New"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:924
+#: ../src/ui/dialog/document-properties.cpp:900
 msgid "Script id"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:930
+#: ../src/ui/dialog/document-properties.cpp:906
 msgid "<b>Content:</b>"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:1026
+#: ../src/ui/dialog/document-properties.cpp:1004
 msgid "_Save as default"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:1027
+#: ../src/ui/dialog/document-properties.cpp:1005
 msgid "Save this metadata as the default metadata"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:1028
+#: ../src/ui/dialog/document-properties.cpp:1006
 msgid "Use _default"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:1029
+#: ../src/ui/dialog/document-properties.cpp:1007
 msgid "Use the previously saved default metadata here"
 msgstr ""
 
 #. inform the document, so we can undo
-#: ../src/ui/dialog/document-properties.cpp:1088
+#: ../src/ui/dialog/document-properties.cpp:1066
 msgid "Add external script..."
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:1127
+#: ../src/ui/dialog/document-properties.cpp:1105
 msgid "Select a script to load"
 msgstr ""
 
 #. inform the document, so we can undo
-#: ../src/ui/dialog/document-properties.cpp:1155
+#: ../src/ui/dialog/document-properties.cpp:1133
 msgid "Add embedded script..."
 msgstr ""
 
 #. inform the document, so we can undo
-#: ../src/ui/dialog/document-properties.cpp:1186
+#: ../src/ui/dialog/document-properties.cpp:1164
 msgid "Remove external script"
 msgstr ""
 
 #. inform the document, so we can undo
-#: ../src/ui/dialog/document-properties.cpp:1215
+#: ../src/ui/dialog/document-properties.cpp:1193
 msgid "Remove embedded script"
 msgstr ""
 
 #. TODO repr->set_content(_EmbeddedContent.get_buffer()->get_text());
 #. inform the document, so we can undo
-#: ../src/ui/dialog/document-properties.cpp:1309
+#: ../src/ui/dialog/document-properties.cpp:1287
 msgid "Edit embedded script"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:1393
+#: ../src/ui/dialog/document-properties.cpp:1371
 msgid "<b>Creation</b>"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:1394
+#: ../src/ui/dialog/document-properties.cpp:1372
 msgid "<b>Defined grids</b>"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:1640
+#: ../src/ui/dialog/document-properties.cpp:1619
 msgid "Remove grid"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:1732
+#: ../src/ui/dialog/document-properties.cpp:1711
 msgid "Changed default display unit"
 msgstr ""
 
@@ -17651,7 +17627,7 @@ msgid "Clones"
 msgstr ""
 
 #: ../src/ui/dialog/find.cpp:98 ../share/extensions/embedimage.inx.h:3
-#: ../share/extensions/extractimage.inx.h:7
+#: ../share/extensions/extractimage.inx.h:6
 #: ../share/extensions/image_attributes.inx.h:29
 msgid "Images"
 msgstr ""
@@ -17780,57 +17756,57 @@ msgstr ""
 msgid "Search offset objects"
 msgstr ""
 
-#: ../src/ui/dialog/find.cpp:863
+#: ../src/ui/dialog/find.cpp:867
 msgid "Nothing to replace"
 msgstr ""
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
-#: ../src/ui/dialog/find.cpp:904
+#: ../src/ui/dialog/find.cpp:908
 #, c-format
 msgid "<b>%d</b> object found (out of <b>%d</b>), %s match."
 msgid_plural "<b>%d</b> objects found (out of <b>%d</b>), %s match."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/ui/dialog/find.cpp:907
+#: ../src/ui/dialog/find.cpp:911
 msgid "exact"
 msgstr ""
 
-#: ../src/ui/dialog/find.cpp:907
+#: ../src/ui/dialog/find.cpp:911
 msgid "partial"
 msgstr ""
 
 #. TRANSLATORS: "%1" is replaced with the number of matches
-#: ../src/ui/dialog/find.cpp:910
+#: ../src/ui/dialog/find.cpp:914
 msgid "%1 match replaced"
 msgid_plural "%1 matches replaced"
 msgstr[0] ""
 msgstr[1] ""
 
 #. TRANSLATORS: "%1" is replaced with the number of matches
-#: ../src/ui/dialog/find.cpp:914
+#: ../src/ui/dialog/find.cpp:918
 msgid "%1 object found"
 msgid_plural "%1 objects found"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/ui/dialog/find.cpp:928
+#: ../src/ui/dialog/find.cpp:932
 msgid "Replace text or property"
 msgstr ""
 
-#: ../src/ui/dialog/find.cpp:932
+#: ../src/ui/dialog/find.cpp:936
 msgid "Nothing found"
 msgstr ""
 
-#: ../src/ui/dialog/find.cpp:937
+#: ../src/ui/dialog/find.cpp:941
 msgid "No objects found"
 msgstr ""
 
-#: ../src/ui/dialog/find.cpp:958
+#: ../src/ui/dialog/find.cpp:962
 msgid "Select an object type"
 msgstr ""
 
-#: ../src/ui/dialog/find.cpp:976
+#: ../src/ui/dialog/find.cpp:980
 msgid "Select a property"
 msgstr ""
 
@@ -22009,7 +21985,7 @@ msgstr ""
 #: ../src/ui/dialog/knot-properties.cpp:115
 #: ../src/ui/dialog/layer-properties.cpp:384
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:111
-#: ../src/ui/dialog/transformation.cpp:110
+#: ../src/ui/dialog/transformation.cpp:111
 msgid "_Move"
 msgstr ""
 
@@ -23850,7 +23826,7 @@ msgid "A_ngle:"
 msgstr ""
 
 #: ../src/ui/dialog/transformation.cpp:72
-#: ../src/ui/dialog/transformation.cpp:1012
+#: ../src/ui/dialog/transformation.cpp:1028
 msgid "Rotation angle (positive = counterclockwise)"
 msgstr ""
 
@@ -23928,53 +23904,53 @@ msgid ""
 "this matrix"
 msgstr ""
 
-#: ../src/ui/dialog/transformation.cpp:113
+#: ../src/ui/dialog/transformation.cpp:115
 msgid "_Scale"
 msgstr ""
 
-#: ../src/ui/dialog/transformation.cpp:116
+#: ../src/ui/dialog/transformation.cpp:119
 msgid "_Rotate"
 msgstr ""
 
-#: ../src/ui/dialog/transformation.cpp:119
+#: ../src/ui/dialog/transformation.cpp:123
 msgid "Ske_w"
 msgstr ""
 
-#: ../src/ui/dialog/transformation.cpp:122
+#: ../src/ui/dialog/transformation.cpp:127
 msgid "Matri_x"
 msgstr ""
 
-#: ../src/ui/dialog/transformation.cpp:146
+#: ../src/ui/dialog/transformation.cpp:151
 msgid "Reset the values on the current tab to defaults"
 msgstr ""
 
-#: ../src/ui/dialog/transformation.cpp:153
+#: ../src/ui/dialog/transformation.cpp:158
 msgid "Apply transformation to selection"
 msgstr ""
 
-#: ../src/ui/dialog/transformation.cpp:294
+#: ../src/ui/dialog/transformation.cpp:304
 msgid "Rotate in a counterclockwise direction"
 msgstr ""
 
-#: ../src/ui/dialog/transformation.cpp:301
+#: ../src/ui/dialog/transformation.cpp:311
 msgid "Rotate in a clockwise direction"
 msgstr ""
 
-#: ../src/ui/dialog/transformation.cpp:810
-#: ../src/ui/dialog/transformation.cpp:821
+#: ../src/ui/dialog/transformation.cpp:826
 #: ../src/ui/dialog/transformation.cpp:837
-#: ../src/ui/dialog/transformation.cpp:857
-#: ../src/ui/dialog/transformation.cpp:868
-#: ../src/ui/dialog/transformation.cpp:880
-#: ../src/ui/dialog/transformation.cpp:904
+#: ../src/ui/dialog/transformation.cpp:853
+#: ../src/ui/dialog/transformation.cpp:873
+#: ../src/ui/dialog/transformation.cpp:884
+#: ../src/ui/dialog/transformation.cpp:896
+#: ../src/ui/dialog/transformation.cpp:920
 msgid "Transform matrix is singular, <b>not used</b>."
 msgstr ""
 
-#: ../src/ui/dialog/transformation.cpp:920
+#: ../src/ui/dialog/transformation.cpp:936
 msgid "Edit transformation matrix"
 msgstr ""
 
-#: ../src/ui/dialog/transformation.cpp:1019
+#: ../src/ui/dialog/transformation.cpp:1035
 msgid "Rotation angle (positive = clockwise)"
 msgstr ""
 
@@ -24090,8 +24066,8 @@ msgid ""
 "The file already exists in \"%s\". Replacing it will overwrite its contents."
 msgstr ""
 
-#: ../src/ui/interface.cpp:241 ../share/extensions/web-set-att.inx.h:21
-#: ../share/extensions/web-transmit-att.inx.h:19
+#: ../src/ui/interface.cpp:241 ../share/extensions/web_set_att.inx.h:21
+#: ../share/extensions/web_transmit_att.inx.h:19
 msgid "Replace"
 msgstr ""
 
@@ -28544,11 +28520,11 @@ msgstr ""
 msgid "_V:"
 msgstr ""
 
-#: ../src/ui/widget/dash-selector.cpp:63
+#: ../src/ui/widget/dash-selector.cpp:65
 msgid "Dash pattern"
 msgstr ""
 
-#: ../src/ui/widget/dash-selector.cpp:72
+#: ../src/ui/widget/dash-selector.cpp:75
 msgid "Pattern offset"
 msgstr ""
 
@@ -29006,7 +28982,7 @@ msgid "Lock margins"
 msgstr ""
 
 #: ../src/ui/widget/page-sizer.cpp:49
-msgid "T_op margin:"
+msgid "T_op:"
 msgstr ""
 
 #: ../src/ui/widget/page-sizer.cpp:49
@@ -29077,37 +29053,43 @@ msgstr ""
 msgid "Custom size"
 msgstr ""
 
-#: ../src/ui/widget/page-sizer.cpp:210
+#: ../src/ui/widget/page-sizer.cpp:201
 msgid "Resi_ze page to content..."
 msgstr ""
 
-#: ../src/ui/widget/page-sizer.cpp:259
+#. ### margin label and lock button
+#: ../src/ui/widget/page-sizer.cpp:209
+#: ../share/extensions/guides_creator.inx.h:16
+msgid "Margins"
+msgstr ""
+
+#: ../src/ui/widget/page-sizer.cpp:236
 msgid "_Resize page to drawing or selection (Ctrl+Shift+R)"
 msgstr ""
 
-#: ../src/ui/widget/page-sizer.cpp:260
+#: ../src/ui/widget/page-sizer.cpp:237
 msgid ""
 "Resize the page to fit the current selection, or the entire drawing if there "
 "is no selection"
 msgstr ""
 
-#: ../src/ui/widget/page-sizer.cpp:280
+#: ../src/ui/widget/page-sizer.cpp:261
 msgid "_Viewbox..."
 msgstr ""
 
-#: ../src/ui/widget/page-sizer.cpp:379
+#: ../src/ui/widget/page-sizer.cpp:356
 msgid "Set page size"
 msgstr ""
 
-#: ../src/ui/widget/page-sizer.cpp:622
+#: ../src/ui/widget/page-sizer.cpp:599
 msgid "User units per "
 msgstr ""
 
-#: ../src/ui/widget/page-sizer.cpp:718
+#: ../src/ui/widget/page-sizer.cpp:695
 msgid "Set page scale"
 msgstr ""
 
-#: ../src/ui/widget/page-sizer.cpp:744
+#: ../src/ui/widget/page-sizer.cpp:721
 msgid "Set 'viewBox'"
 msgstr ""
 
@@ -32390,120 +32372,120 @@ msgctxt "Marker"
 msgid "None"
 msgstr ""
 
-#: ../src/widgets/stroke-style.cpp:187
+#: ../src/widgets/stroke-style.cpp:186
 msgid "Stroke width"
 msgstr ""
 
-#: ../src/widgets/stroke-style.cpp:189
+#: ../src/widgets/stroke-style.cpp:188
 msgctxt "Stroke width"
 msgid "_Width:"
 msgstr ""
 
 #. Dash
-#: ../src/widgets/stroke-style.cpp:215
+#: ../src/widgets/stroke-style.cpp:214
 msgid "Dashes:"
 msgstr ""
 
 #. Drop down marker selectors
 #. TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
 #. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
-#: ../src/widgets/stroke-style.cpp:235
+#: ../src/widgets/stroke-style.cpp:234
 msgid "Markers:"
 msgstr ""
 
-#: ../src/widgets/stroke-style.cpp:241
+#: ../src/widgets/stroke-style.cpp:240
 msgid "Start Markers are drawn on the first node of a path or shape"
 msgstr ""
 
-#: ../src/widgets/stroke-style.cpp:250
+#: ../src/widgets/stroke-style.cpp:249
 msgid ""
 "Mid Markers are drawn on every node of a path or shape except the first and "
 "last nodes"
 msgstr ""
 
-#: ../src/widgets/stroke-style.cpp:259
+#: ../src/widgets/stroke-style.cpp:258
 msgid "End Markers are drawn on the last node of a path or shape"
 msgstr ""
 
 #. TRANSLATORS: Round join: joining lines with a rounded corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: ../src/widgets/stroke-style.cpp:284
+#: ../src/widgets/stroke-style.cpp:283
 msgid "Round join"
 msgstr ""
 
 #. TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: ../src/widgets/stroke-style.cpp:292
+#: ../src/widgets/stroke-style.cpp:291
 msgid "Bevel join"
 msgstr ""
 
 #. TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: ../src/widgets/stroke-style.cpp:300
+#: ../src/widgets/stroke-style.cpp:299
 msgid "Miter join"
 msgstr ""
 
 #. Cap type
 #. TRANSLATORS: cap type specifies the shape for the ends of lines
 #. spw_label(t, _("_Cap:"), 0, i);
-#: ../src/widgets/stroke-style.cpp:323
+#: ../src/widgets/stroke-style.cpp:322
 msgid "Cap:"
 msgstr ""
 
 #. TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
 #. of the line; the ends of the line are square
-#: ../src/widgets/stroke-style.cpp:334
+#: ../src/widgets/stroke-style.cpp:333
 msgid "Butt cap"
 msgstr ""
 
 #. TRANSLATORS: Round cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are rounded
-#: ../src/widgets/stroke-style.cpp:341
+#: ../src/widgets/stroke-style.cpp:340
 msgid "Round cap"
 msgstr ""
 
 #. TRANSLATORS: Square cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are square
-#: ../src/widgets/stroke-style.cpp:348
+#: ../src/widgets/stroke-style.cpp:347
 msgid "Square cap"
 msgstr ""
 
-#: ../src/widgets/stroke-style.cpp:362
+#: ../src/widgets/stroke-style.cpp:361
 msgid "Fill, Stroke, Markers"
 msgstr ""
 
-#: ../src/widgets/stroke-style.cpp:366
+#: ../src/widgets/stroke-style.cpp:365
 msgid "Stroke, Fill, Markers"
 msgstr ""
 
-#: ../src/widgets/stroke-style.cpp:370
+#: ../src/widgets/stroke-style.cpp:369
 msgid "Fill, Markers, Stroke"
 msgstr ""
 
-#: ../src/widgets/stroke-style.cpp:378
+#: ../src/widgets/stroke-style.cpp:377
 msgid "Markers, Fill, Stroke"
 msgstr ""
 
-#: ../src/widgets/stroke-style.cpp:382
+#: ../src/widgets/stroke-style.cpp:381
 msgid "Stroke, Markers, Fill"
 msgstr ""
 
-#: ../src/widgets/stroke-style.cpp:386
+#: ../src/widgets/stroke-style.cpp:385
 msgid "Markers, Stroke, Fill"
 msgstr ""
 
-#: ../src/widgets/stroke-style.cpp:504
+#: ../src/widgets/stroke-style.cpp:503
 msgid "Set markers"
 msgstr ""
 
-#: ../src/widgets/stroke-style.cpp:1080 ../src/widgets/stroke-style.cpp:1169
+#: ../src/widgets/stroke-style.cpp:1079 ../src/widgets/stroke-style.cpp:1168
 msgid "Set stroke style"
 msgstr ""
 
-#: ../src/widgets/stroke-style.cpp:1301
+#: ../src/widgets/stroke-style.cpp:1300
 msgid "Set marker color"
 msgstr ""
 
@@ -32683,152 +32665,72 @@ msgstr ""
 msgid "Snap guides"
 msgstr ""
 
-#: ../share/extensions/convert2dashes.py:35
+#: ../share/extensions/convert2dashes.py:36
 msgid "Total number of objects not converted: {}\n"
 msgstr ""
 
-#: ../share/extensions/dimension.py:106
+#: ../share/extensions/dimension.py:105
 msgid "Please select an object."
 msgstr ""
 
-#: ../share/extensions/dimension.py:130
+#: ../share/extensions/dimension.py:124
 msgid "Unable to process this object.  Try changing it into a path first."
 msgstr ""
 
-#: ../share/extensions/draw_from_triangle.py:186
-#, python-brace-format
-msgid "Side Length 'a' ({0}): {1}"
-msgstr ""
-
-#: ../share/extensions/draw_from_triangle.py:187
-#, python-brace-format
-msgid "Side Length 'b' ({0}): {1}"
-msgstr ""
-
-#: ../share/extensions/draw_from_triangle.py:188
-#, python-brace-format
-msgid "Side Length 'c' ({0}): {1}"
-msgstr ""
-
-#: ../share/extensions/draw_from_triangle.py:189
-msgid "Angle 'A' (radians): {}"
-msgstr ""
-
-#: ../share/extensions/draw_from_triangle.py:190
-msgid "Angle 'B' (radians): {}"
-msgstr ""
-
-#: ../share/extensions/draw_from_triangle.py:191
-msgid "Angle 'C' (radians): {}"
-msgstr ""
-
-#: ../share/extensions/draw_from_triangle.py:192
-msgid "Semiperimeter (px): {}"
-msgstr ""
-
-#: ../share/extensions/draw_from_triangle.py:193
-#, python-brace-format
-msgid "Area ({0}^2): {1}"
-msgstr ""
-
-#: ../share/extensions/dxf_input.py:597
+#: ../share/extensions/dxf_input.py:622
 #, python-format
 msgid ""
 "%d ENTITIES of type POLYLINE encountered and ignored. Please try to convert "
 "to Release 13 format using QCad."
 msgstr ""
 
-#: ../share/extensions/dxf_outlines.py:310
-msgid ""
-"Failed to import the numpy or numpy.linalg modules. These modules are "
-"required by this extension. Please install them and try again."
-msgstr ""
-
-#: ../share/extensions/dxf_outlines.py:314
-msgid ""
-"Error: Field 'Layer match name' must be filled when using 'By name match' "
-"option"
-msgstr ""
-
-#: ../share/extensions/dxf_outlines.py:363
-#, python-format
-msgid "Warning: Layer '%s' not found!"
-msgstr ""
-
-#: ../share/extensions/embedimage.py:89
+#: ../share/extensions/embedimage.py:88
 msgid ""
 "No xlink:href or sodipodi:absref attributes found, or they do not point to "
 "an existing file! Unable to embed image."
 msgstr ""
 
-#: ../share/extensions/embedimage.py:91
+#: ../share/extensions/embedimage.py:90
 #, python-format
 msgid "Sorry we could not locate %s"
 msgstr ""
 
-#: ../share/extensions/embedimage.py:119
+#: ../share/extensions/embedimage.py:117
 #, python-format
 msgid ""
 "%s is not of type image/png, image/jpeg, image/bmp, image/gif, image/tiff, "
 "or image/x-icon"
 msgstr ""
 
-#: ../share/extensions/eqtexsvg.py:123
-msgid "empty LaTeX input. Nothing to be done"
-msgstr ""
-
-#: ../share/extensions/extrude.py:39
+#: ../share/extensions/extrude.py:43
 msgid "Need at least 2 paths selected"
 msgstr ""
 
-#: ../share/extensions/funcplot.py:42
-msgid ""
-"x-interval cannot be zero. Please modify 'Start X value' or 'End X value'"
-msgstr ""
-
-#: ../share/extensions/funcplot.py:54
-msgid ""
-"y-interval cannot be zero. Please modify 'Y value of rectangle's top' or 'Y "
-"value of rectangle's bottom'"
-msgstr ""
-
-#: ../share/extensions/funcplot.py:309
-msgid "Please select a rectangle"
-msgstr ""
-
-#: ../share/extensions/generate_voronoi.py:80
+#: ../share/extensions/generate_voronoi.py:84
 msgid "Please select an object"
 msgstr ""
 
-#: ../share/extensions/gimp_xcf.py:39
+#: ../share/extensions/gimp_xcf.py:44
 msgid "Inkscape must be installed and set in your path variable."
 msgstr ""
 
-#: ../share/extensions/gimp_xcf.py:43
+#: ../share/extensions/gimp_xcf.py:49
 msgid "Gimp must be installed and set in your path variable."
 msgstr ""
 
-#: ../share/extensions/gimp_xcf.py:47
+#: ../share/extensions/gimp_xcf.py:54
 msgid "An error occurred while processing the XCF file."
 msgstr ""
 
-#: ../share/extensions/gimp_xcf.py:93
-msgid "SVG Width not set correctly! Assuming width = 100"
-msgstr ""
-
-#: ../share/extensions/gimp_xcf.py:230
+#: ../share/extensions/gimp_xcf.py:234
 msgid "This extension requires at least one non empty layer."
 msgstr ""
 
-#: ../share/extensions/guillotine.py:230
-msgid "The sliced bitmaps have been saved as:"
-msgstr ""
-
-#: ../share/extensions/hpgl_decoder.py:49
+#: ../share/extensions/hpgl_decoder.py:45
 msgid "Movements"
 msgstr ""
 
-#: ../share/extensions/hpgl_decoder.py:50
+#: ../share/extensions/hpgl_decoder.py:46
 msgid "Pen "
 msgstr ""
 
@@ -32844,12 +32746,12 @@ msgid ""
 msgstr ""
 
 #. issue error if no paths found
-#: ../share/extensions/hpgl_output.py:60
+#: ../share/extensions/hpgl_output.py:58
 msgid ""
 "No paths where found. Please convert all objects you want to save into paths."
 msgstr ""
 
-#: ../share/extensions/inkex/bezier.py:372
+#: ../share/extensions/inkex/bezier.py:426
 msgid "Area is zero, cannot calculate Center of Mass"
 msgstr ""
 
@@ -32971,24 +32873,24 @@ msgid ""
 "instead."
 msgstr ""
 
-#: ../share/extensions/interp_att_g.py:140
+#: ../share/extensions/interp_att_g.py:143
 msgid "You selected 'Other'. Please enter an attribute to interpolate."
 msgstr ""
 
-#: ../share/extensions/interp_att_g.py:177
+#: ../share/extensions/interp_att_g.py:180
 msgid "There is no selection to interpolate"
 msgstr ""
 
-#: ../share/extensions/jessyInk_autoTexts.py:44
-#: ../share/extensions/jessyInk_effects.py:49
-#: ../share/extensions/jessyInk_export.py:94
-#: ../share/extensions/jessyInk_keyBindings.py:187
-#: ../share/extensions/jessyInk_masterSlide.py:44
-#: ../share/extensions/jessyInk_mouseHandler.py:47
-#: ../share/extensions/jessyInk_summary.py:63
-#: ../share/extensions/jessyInk_transitions.py:49
-#: ../share/extensions/jessyInk_video.py:47
-#: ../share/extensions/jessyInk_view.py:66
+#: ../share/extensions/jessyInk_autoTexts.py:37
+#: ../share/extensions/jessyInk_effects.py:42
+#: ../share/extensions/jessyInk_export.py:86
+#: ../share/extensions/jessyInk_keyBindings.py:180
+#: ../share/extensions/jessyInk_masterSlide.py:37
+#: ../share/extensions/jessyInk_mouseHandler.py:39
+#: ../share/extensions/jessyInk_summary.py:56
+#: ../share/extensions/jessyInk_transitions.py:42
+#: ../share/extensions/jessyInk_video.py:40
+#: ../share/extensions/jessyInk_view.py:60
 msgid ""
 "The JessyInk script is not installed in this SVG file or has a different "
 "version than the JessyInk extensions. Please select \"install/update...\" "
@@ -32997,208 +32899,180 @@ msgid ""
 "\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_autoTexts.py:47
+#: ../share/extensions/jessyInk_autoTexts.py:40
 msgid ""
 "To assign an effect, please select an object.\n"
 "\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_autoTexts.py:53
+#: ../share/extensions/jessyInk_autoTexts.py:46
 #, python-brace-format
 msgid ""
 "Node with id '{0}' is not a suitable text node and was therefore ignored.\n"
 "\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_effects.py:52
+#: ../share/extensions/jessyInk_effects.py:45
 msgid ""
 "No object selected. Please select the object you want to assign an effect to "
 "and then press apply.\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_export.py:80
+#: ../share/extensions/jessyInk_export.py:72
 msgid "Could not find Inkscape command.\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_masterSlide.py:54
+#: ../share/extensions/jessyInk_masterSlide.py:47
 msgid "Layer not found. Removed current master slide selection.\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_masterSlide.py:56
+#: ../share/extensions/jessyInk_masterSlide.py:49
 msgid ""
 "More than one layer with this name found. Removed current master slide "
 "selection.\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:68
+#: ../share/extensions/jessyInk_summary.py:61
 #, python-brace-format
 msgid "JessyInk script version {0} installed."
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:70
+#: ../share/extensions/jessyInk_summary.py:63
 msgid "JessyInk script installed."
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:82
+#: ../share/extensions/jessyInk_summary.py:75
 msgid ""
 "\n"
 "Master slide:"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:88
+#: ../share/extensions/jessyInk_summary.py:81
 msgid ""
 "\n"
 "Slide {0!s}:"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:93
+#: ../share/extensions/jessyInk_summary.py:86
 #, python-brace-format
 msgid "{0}Layer name: {1}"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:101
+#: ../share/extensions/jessyInk_summary.py:94
 msgid "{0}Transition in: {1} ({2!s} s)"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:103
+#: ../share/extensions/jessyInk_summary.py:96
 #, python-brace-format
 msgid "{0}Transition in: {1}"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:110
+#: ../share/extensions/jessyInk_summary.py:103
 msgid "{0}Transition out: {1} ({2!s} s)"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:112
+#: ../share/extensions/jessyInk_summary.py:105
 #, python-brace-format
 msgid "{0}Transition out: {1}"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:119
+#: ../share/extensions/jessyInk_summary.py:112
 #, python-brace-format
 msgid ""
 "\n"
 "{0}Auto-texts:"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:122
+#: ../share/extensions/jessyInk_summary.py:115
 #, python-brace-format
 msgid "{0}\t\"{1}\" (object id \"{2}\") will be replaced by \"{3}\"."
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:167
+#: ../share/extensions/jessyInk_summary.py:160
 #, python-brace-format
 msgid ""
 "\n"
 "{0}Initial effect (order number {1}):"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:169
+#: ../share/extensions/jessyInk_summary.py:162
 msgid ""
 "\n"
 "{0}Effect {1!s} (order number {2}):"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:173
+#: ../share/extensions/jessyInk_summary.py:166
 #, python-brace-format
 msgid "{0}\tView will be set according to object \"{1}\""
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:175
+#: ../share/extensions/jessyInk_summary.py:168
 #, python-brace-format
 msgid "{0}\tObject \"{1}\""
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:178
+#: ../share/extensions/jessyInk_summary.py:171
 msgid " will appear"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:180
+#: ../share/extensions/jessyInk_summary.py:173
 msgid " will disappear"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:183
+#: ../share/extensions/jessyInk_summary.py:176
 #, python-brace-format
 msgid " using effect \"{0}\""
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:186
+#: ../share/extensions/jessyInk_summary.py:179
 msgid " in {0!s} s"
 msgstr ""
 
-#: ../share/extensions/jessyInk_transitions.py:54
+#: ../share/extensions/jessyInk_transitions.py:47
 msgid "Layer not found.\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_transitions.py:56
+#: ../share/extensions/jessyInk_transitions.py:49
 msgid "More than one layer with this name found.\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_transitions.py:69
+#: ../share/extensions/jessyInk_transitions.py:62
 msgid "Please enter a layer name.\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_video.py:52
-#: ../share/extensions/jessyInk_video.py:57
+#: ../share/extensions/jessyInk_video.py:45
+#: ../share/extensions/jessyInk_video.py:50
 msgid ""
 "Could not obtain the selected layer for inclusion of the video element.\n"
 "\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_view.py:74
+#: ../share/extensions/jessyInk_view.py:68
 msgid "More than one object selected. Please select only one object.\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_view.py:78
+#: ../share/extensions/jessyInk_view.py:72
 msgid ""
 "No object selected. Please select the object you want to assign a view to "
 "and then press apply.\n"
 msgstr ""
 
-#: ../share/extensions/markers_strokepaint.py:69
+#: ../share/extensions/markers_strokepaint.py:74
 #, python-format
 msgid "No style attribute found for id: %s"
 msgstr ""
 
-#: ../share/extensions/markers_strokepaint.py:122
+#: ../share/extensions/markers_strokepaint.py:127
 #, python-format
 msgid "unable to locate marker: %s"
 msgstr ""
 
-#: ../share/extensions/measure.py:132
-msgid ""
-"Failed to import the numpy modules. These modules are required by this "
-"extension. Please install them and try again.  On a Debian-like system this "
-"can be done with the command, sudo apt-get install python-numpy."
-msgstr ""
-
-#: ../share/extensions/media_zip.py:128
-#, python-format
-msgid "Could not locate file: %s"
-msgstr ""
-
-#: ../share/extensions/media_zip.py:192 ../share/extensions/replace_font.py:127
-msgid "Didn't find any fonts in this document/selection."
-msgstr ""
-
-#: ../share/extensions/media_zip.py:195 ../share/extensions/replace_font.py:130
-#, python-format
-msgid "Found the following font only: %s"
-msgstr ""
-
-#: ../share/extensions/media_zip.py:197 ../share/extensions/replace_font.py:132
-#, python-format
-msgid ""
-"Found the following fonts:\n"
-"%s"
-msgstr ""
-
-#: ../share/extensions/pathalongpath.py:195
-#: ../share/extensions/pathscatter.py:189 ../share/extensions/perspective.py:52
+#: ../share/extensions/pathalongpath.py:196
+#: ../share/extensions/pathscatter.py:193 ../share/extensions/perspective.py:49
 msgid "This extension requires two selected paths."
 msgstr ""
 
-#: ../share/extensions/pathalongpath.py:221
+#: ../share/extensions/pathalongpath.py:222
 msgid ""
 "The total length of the pattern is too small :\n"
 "Please choose a larger object or set 'Space between copies' > 0"
@@ -33215,41 +33089,39 @@ msgstr ""
 msgid "Please first convert objects to paths!  (Got [%s].)"
 msgstr ""
 
-#: ../share/extensions/perspective.py:47
+#: ../share/extensions/perspective.py:44
 msgid ""
 "Failed to import the numpy or numpy.linalg modules. These modules are "
 "required by this extension. Please install them.  On a Debian-like system "
 "this can be done with the command, sudo apt-get install python-numpy."
 msgstr ""
 
-#: ../share/extensions/perspective.py:68 ../share/extensions/summersnight.py:53
+#: ../share/extensions/perspective.py:65 ../share/extensions/summersnight.py:55
 #, python-format
 msgid ""
 "The first selected object is of type '%s'.\n"
 "Try using the procedure Path->Object to Path."
 msgstr ""
 
-#: ../share/extensions/perspective.py:75 ../share/extensions/summersnight.py:61
+#: ../share/extensions/perspective.py:72 ../share/extensions/summersnight.py:63
 msgid ""
 "This extension requires that the second selected path be four nodes long."
 msgstr ""
 
-#: ../share/extensions/perspective.py:102
-#: ../share/extensions/summersnight.py:94
+#: ../share/extensions/perspective.py:94 ../share/extensions/summersnight.py:96
 msgid ""
 "The second selected object is a group, not a path.\n"
 "Try using the procedure Object->Ungroup."
 msgstr ""
 
-#: ../share/extensions/perspective.py:104
-#: ../share/extensions/summersnight.py:96
+#: ../share/extensions/perspective.py:96 ../share/extensions/summersnight.py:98
 msgid ""
 "The second selected object is not a path.\n"
 "Try using the procedure Path->Object to Path."
 msgstr ""
 
-#: ../share/extensions/perspective.py:106
-#: ../share/extensions/summersnight.py:99
+#: ../share/extensions/perspective.py:98
+#: ../share/extensions/summersnight.py:101
 msgid ""
 "The first selected object is not a path.\n"
 "Try using the procedure Path->Object to Path."
@@ -33290,23 +33162,23 @@ msgid ""
 "and the settings are correct."
 msgstr ""
 
-#: ../share/extensions/polyhedron_3d.py:339
+#: ../share/extensions/polyhedron_3d.py:372
 msgid "No face data found in specified file."
 msgstr ""
 
-#: ../share/extensions/polyhedron_3d.py:340
+#: ../share/extensions/polyhedron_3d.py:373
 msgid "Try selecting \"Edge Specified\" in the Model File tab.\n"
 msgstr ""
 
-#: ../share/extensions/polyhedron_3d.py:346
+#: ../share/extensions/polyhedron_3d.py:379
 msgid "No edge data found in specified file."
 msgstr ""
 
-#: ../share/extensions/polyhedron_3d.py:347
+#: ../share/extensions/polyhedron_3d.py:380
 msgid "Try selecting \"Face Specified\" in the Model File tab.\n"
 msgstr ""
 
-#: ../share/extensions/polyhedron_3d.py:457
+#: ../share/extensions/polyhedron_3d.py:490
 msgid ""
 "Failed to import the numpy module. This module is required by this "
 "extension. Please install it and try again.  On a Debian-like system this "
@@ -33314,13 +33186,13 @@ msgid ""
 msgstr ""
 
 #. we cannot generate a list of faces from the edges without a lot of computation
-#: ../share/extensions/polyhedron_3d.py:528
+#: ../share/extensions/polyhedron_3d.py:561
 msgid ""
 "Face Data Not Found. Ensure file contains face data, and check the file is "
 "imported as \"Face-Specified\" under the \"Model File\" tab.\n"
 msgstr ""
 
-#: ../share/extensions/polyhedron_3d.py:530
+#: ../share/extensions/polyhedron_3d.py:563
 msgid "Internal Error. No view type selected\n"
 msgstr ""
 
@@ -33328,120 +33200,90 @@ msgstr ""
 msgid "Failed to open default printer"
 msgstr ""
 
-#: ../share/extensions/render_barcode_datamatrix.py:203
-msgid "Unrecognised DataMatrix size"
-msgstr ""
-
-#. we have an invalid bit value
-#: ../share/extensions/render_barcode_datamatrix.py:647
-msgid "Invalid bit value, this is a bug!"
-msgstr ""
-
-#. abort if converting blank text
-#: ../share/extensions/render_barcode_datamatrix.py:670
-msgid "Please enter an input string"
-msgstr ""
-
-#: ../share/extensions/replace_font.py:120
+#: ../share/extensions/replace_font.py:121
 msgid ""
 "Couldn't find anything using that font, please ensure the spelling and "
 "spacing is correct."
 msgstr ""
 
-#: ../share/extensions/replace_font.py:174
+#: ../share/extensions/replace_font.py:128
+msgid "Didn't find any fonts in this document/selection."
+msgstr ""
+
+#: ../share/extensions/replace_font.py:131
+#, python-format
+msgid "Found the following font only: %s"
+msgstr ""
+
+#: ../share/extensions/replace_font.py:133
+#, python-format
+msgid ""
+"Found the following fonts:\n"
+"%s"
+msgstr ""
+
+#: ../share/extensions/replace_font.py:175
 msgid "There was nothing selected"
 msgstr ""
 
-#: ../share/extensions/replace_font.py:224
+#: ../share/extensions/replace_font.py:225
 msgid "Please enter a search string in the find box."
 msgstr ""
 
-#: ../share/extensions/replace_font.py:228
+#: ../share/extensions/replace_font.py:229
 msgid "Please enter a replacement font in the replace with box."
 msgstr ""
 
-#: ../share/extensions/replace_font.py:233
+#: ../share/extensions/replace_font.py:234
 msgid "Please enter a replacement font in the replace all box."
 msgstr ""
 
-#: ../share/extensions/restack.py:78
+#: ../share/extensions/restack.py:75
 msgid "There is no selection to restack."
 msgstr ""
 
-#: ../share/extensions/summersnight.py:36
+#: ../share/extensions/summersnight.py:38
 msgid ""
 "This extension requires two selected paths. \n"
 "The second path must be exactly four nodes long."
 msgstr ""
 
-#: ../share/extensions/svgcalendar.py:260
-#: ../share/extensions/svgcalendar.py:282
-msgid "You must select a correct system encoding."
-msgstr ""
-
-#: ../share/extensions/voronoi2svg.py:196
+#: ../share/extensions/voronoi2svg.py:200
 msgid "Please select objects!"
 msgstr ""
 
-#: ../share/extensions/web-set-att.py:57
-#: ../share/extensions/web-transmit-att.py:54
+#: ../share/extensions/web_set_att.py:58
+#: ../share/extensions/web_transmit_att.py:54
 msgid "You must select at least two elements."
 msgstr ""
 
-#: ../share/extensions/webslicer_create_group.py:56
+#: ../share/extensions/webslicer_create_group.py:59
 msgid ""
 "You must create and select some \"Slicer rectangles\" before trying to group."
 msgstr ""
 
-#: ../share/extensions/webslicer_create_group.py:70
+#: ../share/extensions/webslicer_create_group.py:71
 msgid ""
 "You must to select some \"Slicer rectangles\" or other \"Layout groups\"."
 msgstr ""
 
-#: ../share/extensions/webslicer_create_group.py:73
+#: ../share/extensions/webslicer_create_group.py:74
 #, python-format
 msgid "Oops... The element \"%s\" is not in the Web Slicer layer"
 msgstr ""
 
-#: ../share/extensions/webslicer_export.py:56
+#: ../share/extensions/webslicer_export.py:57
 msgid "You must give a directory to export the slices."
 msgstr ""
 
-#: ../share/extensions/webslicer_export.py:68
-#, python-format
-msgid "Can't create \"%s\"."
-msgstr ""
-
-#: ../share/extensions/webslicer_export.py:69
-#, python-format
-msgid "Error: %s"
-msgstr ""
-
-#: ../share/extensions/webslicer_export.py:72
-#, python-format
-msgid "The directory \"%s\" does not exists."
-msgstr ""
-
-#: ../share/extensions/webslicer_export.py:77
+#: ../share/extensions/webslicer_export.py:78
 msgid "No slicer layer found."
-msgstr ""
-
-#: ../share/extensions/webslicer_export.py:107
-#, python-format
-msgid "You have more than one element with \"%s\" html-id."
 msgstr ""
 
 #: ../share/extensions/webslicer_export.py:337
 msgid "You must install the ImageMagick to get JPG and GIF."
 msgstr ""
 
-#. PARAMETER PROCESSING
-#. lines of longitude are odd : abort
-#: ../share/extensions/wireframe_sphere.py:110
-msgid "Please enter an even number of lines of longitude."
-msgstr ""
-
-#. vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99
 #: ../share/extensions/addnodes.inx.h:1
 msgid "Add Nodes"
 msgstr ""
@@ -33519,6 +33361,20 @@ msgstr ""
 msgid "Random lightness"
 msgstr ""
 
+#: ../share/extensions/color_HSL_adjust.inx.h:13
+#, no-c-format
+msgid ""
+"\n"
+"Adjusts hue, saturation and lightness in the HSL representation of the "
+"selected objects's color.\n"
+"Options:\n"
+"    * Hue: rotate by degrees (wraps around).\n"
+"    * Saturation: add/subtract % (min=-100, max=100).\n"
+"    * Lightness: add/subtract % (min=-100, max=100).\n"
+"    * Random Hue/Saturation/Lightness: randomize the parameter's value.\n"
+"      "
+msgstr ""
+
 #: ../share/extensions/color_blackandwhite.inx.h:1
 msgid "Black and White"
 msgstr ""
@@ -33550,6 +33406,20 @@ msgstr ""
 
 #: ../share/extensions/color_custom.inx.h:6
 msgid "Input (r,g,b) Color Range:"
+msgstr ""
+
+#: ../share/extensions/color_custom.inx.h:8
+msgid ""
+"\n"
+"Allows you to evaluate different functions for each channel.\n"
+"r, g and b are the normalized values of the red, green and blue channels. "
+"The resulting RGB values are automatically clamped.\n"
+"\n"
+"Example (half the red, swap green and blue):\n"
+"  Red Function: r*0.5\n"
+"  Green Function: b\n"
+"  Blue Function: g\n"
+"            "
 msgstr ""
 
 #: ../share/extensions/color_darker.inx.h:1
@@ -33726,8 +33596,8 @@ msgstr ""
 msgid "Visual"
 msgstr ""
 
-#: ../share/extensions/dimension.inx.h:7 ../share/extensions/dots.inx.h:17
-#: ../share/extensions/handles.inx.h:2 ../share/extensions/measure.inx.h:48
+#: ../share/extensions/dimension.inx.h:7 ../share/extensions/dots.inx.h:13
+#: ../share/extensions/handles.inx.h:2 ../share/extensions/measure.inx.h:42
 msgid "Visualize Path"
 msgstr ""
 
@@ -33768,7 +33638,12 @@ msgstr ""
 #: ../share/extensions/dots.inx.h:8
 msgid ""
 "This extension replaces the selection's nodes with numbered dots according "
-"to the following options:"
+"to the following options:\n"
+"    * Font size: size of the node number labels (20px, 12pt...).\n"
+"    * Dot size: diameter of the dots placed at path nodes (10px, 2mm...).\n"
+"    * Starting dot number: first number in the sequence, assigned to the "
+"first node of the path.\n"
+"    * Step: numbering step between two nodes."
 msgstr ""
 
 #: ../share/extensions/dpi90to96.inx.h:1
@@ -33920,7 +33795,33 @@ msgstr ""
 msgid ""
 "This extension draws constructions about a triangle defined by the first 3 "
 "nodes of a selected path. You may select one of preset objects or create "
-"your own ones."
+"your own ones.\n"
+"            \n"
+"All units are the Inkscape's pixel unit. Angles are all in radians.\n"
+"You can specify a point by trilinear coordinates or by a triangle centre "
+"function.\n"
+"Enter as functions of the side length or angles.\n"
+"Trilinear elements should be separated by a colon: ':'.\n"
+"Side lengths are represented as 's_a', 's_b' and 's_c'.\n"
+"Angles corresponding to these are 'a_a', 'a_b', and 'a_c'.\n"
+"You can also use the semi-perimeter and area of the triangle as constants. "
+"Write 'area' or 'semiperim' for these.\n"
+"\n"
+"You can use any standard Python math function:\n"
+"ceil(x); fabs(x); floor(x); fmod(x,y); frexp(x); ldexp(x,i); \n"
+"modf(x); exp(x); log(x [, base]); log10(x); pow(x,y); sqrt(x); \n"
+"acos(x); asin(x); atan(x); atan2(y,x); hypot(x,y); \n"
+"cos(x); sin(x); tan(x); degrees(x); radians(x); \n"
+"cosh(x); sinh(x); tanh(x)\n"
+"\n"
+"Also available are the inverse trigonometric functions:\n"
+"sec(x); csc(x); cot(x)\n"
+"\n"
+"You can specify the radius of a circle around a custom point using a "
+"formula, which may also contain the side lengths, angles, etc. You can also "
+"plot the isogonal and isotomic conjugate of the point. Be aware that this "
+"may cause a divide-by-zero error for certain points.\n"
+"            "
 msgstr ""
 
 #: ../share/extensions/dxf12_outlines.inx.h:1
@@ -33969,14 +33870,22 @@ msgid "Text Font:"
 msgstr ""
 
 #: ../share/extensions/dxf_input.inx.h:11
-msgid "- AutoCAD Release 13 and newer."
+msgid ""
+"- AutoCAD Release 13 and newer.\n"
+"- for manual scaling, assume dxf drawing is in mm.\n"
+"- assume svg drawing is in pixels, at 96 dpi.\n"
+"- scale factor and origin apply only to manual scaling.\n"
+"- 'Automatic scaling' will fit the width of an A4 page.\n"
+"- 'Read from file' uses the variable $MEASUREMENT.\n"
+"- layers are preserved only on File->Open, not Import.\n"
+"- limited support for BLOCKS, use AutoCAD Explode Blocks instead, if needed."
 msgstr ""
 
-#: ../share/extensions/dxf_input.inx.h:26
+#: ../share/extensions/dxf_input.inx.h:19
 msgid "AutoCAD DXF R13 (*.dxf)"
 msgstr ""
 
-#: ../share/extensions/dxf_input.inx.h:27
+#: ../share/extensions/dxf_input.inx.h:20
 msgid "Import AutoCAD's Document Exchange Format"
 msgstr ""
 
@@ -34022,13 +33931,13 @@ msgid "px"
 msgstr ""
 
 #: ../share/extensions/dxf_outlines.inx.h:12
-#: ../share/extensions/gcodetools_area.inx.h:78
-#: ../share/extensions/gcodetools_dxf_points.inx.h:28
-#: ../share/extensions/gcodetools_engraving.inx.h:40
+#: ../share/extensions/gcodetools_area.inx.h:62
+#: ../share/extensions/gcodetools_dxf_points.inx.h:23
+#: ../share/extensions/gcodetools_engraving.inx.h:32
 #: ../share/extensions/gcodetools_graffiti.inx.h:18
-#: ../share/extensions/gcodetools_lathe.inx.h:51
+#: ../share/extensions/gcodetools_lathe.inx.h:45
 #: ../share/extensions/gcodetools_orientation_points.inx.h:11
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:36
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:32
 #: ../share/extensions/render_gears.inx.h:9
 msgid "mm"
 msgstr ""
@@ -34042,13 +33951,13 @@ msgid "m"
 msgstr ""
 
 #: ../share/extensions/dxf_outlines.inx.h:15
-#: ../share/extensions/gcodetools_area.inx.h:79
-#: ../share/extensions/gcodetools_dxf_points.inx.h:29
-#: ../share/extensions/gcodetools_engraving.inx.h:41
+#: ../share/extensions/gcodetools_area.inx.h:63
+#: ../share/extensions/gcodetools_dxf_points.inx.h:24
+#: ../share/extensions/gcodetools_engraving.inx.h:33
 #: ../share/extensions/gcodetools_graffiti.inx.h:19
-#: ../share/extensions/gcodetools_lathe.inx.h:52
+#: ../share/extensions/gcodetools_lathe.inx.h:46
 #: ../share/extensions/gcodetools_orientation_points.inx.h:12
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:37
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:33
 #: ../share/extensions/render_gears.inx.h:8
 msgid "in"
 msgstr ""
@@ -34086,14 +33995,27 @@ msgid "By name match"
 msgstr ""
 
 #: ../share/extensions/dxf_outlines.inx.h:25
-msgid "- AutoCAD Release 14 DXF format."
+msgid ""
+"- AutoCAD Release 14 DXF format.\n"
+"- The base unit parameter specifies in what unit the coordinates are output "
+"(96 px = 1 in).\n"
+"- Supported element types\n"
+"    - paths (lines and splines)\n"
+"    - rectangles\n"
+"    - clones (the crossreference to the original is lost)\n"
+"- ROBO-Master spline output is a specialized spline readable only by ROBO-"
+"Master and AutoDesk viewers, not Inkscape.\n"
+"- LWPOLYLINE output is a multiply-connected polyline, disable it to use a "
+"legacy version of the LINE output.\n"
+"- You can choose to export all layers, only visible ones or by name match "
+"(case insensitive and use comma ',' as separator)"
 msgstr ""
 
-#: ../share/extensions/dxf_outlines.inx.h:42
+#: ../share/extensions/dxf_outlines.inx.h:34
 msgid "Desktop Cutting Plotter (AutoCAD DXF R14) (*.dxf)"
 msgstr ""
 
-#: ../share/extensions/dxf_outlines.inx.h:43
+#: ../share/extensions/dxf_outlines.inx.h:35
 msgid "Desktop Cutting Plotter"
 msgstr ""
 
@@ -34265,7 +34187,10 @@ msgid "Path to save image:"
 msgstr ""
 
 #: ../share/extensions/extractimage.inx.h:4
-msgid "* Don't type the file extension, it is appended automatically."
+msgid ""
+"* Don't type the file extension, it is appended automatically.\n"
+"* A relative path (or a filename without path) is relative to the user's "
+"home directory."
 msgstr ""
 
 #: ../share/extensions/extrude.inx.h:3
@@ -34381,51 +34306,69 @@ msgid "Use"
 msgstr ""
 
 #: ../share/extensions/funcplot.inx.h:13
-msgid "Select a rectangle before calling the extension,"
+msgid ""
+"Select a rectangle before calling the extension,\n"
+"it will determine X and Y scales. If you wish to fill the area, then add x-"
+"axis endpoints.\n"
+"\n"
+"With polar coordinates:\n"
+"   Start and end X values define the angle range in radians.\n"
+"   X scale is set so that left and right edges of rectangle are at +/-1.\n"
+"   Isotropic scaling is disabled.\n"
+"   First derivative is always determined numerically."
 msgstr ""
 
-#: ../share/extensions/funcplot.inx.h:28
-#: ../share/extensions/param_curves.inx.h:17
+#: ../share/extensions/funcplot.inx.h:21
+#: ../share/extensions/param_curves.inx.h:16
 msgid "Functions"
 msgstr ""
 
-#: ../share/extensions/funcplot.inx.h:29
-#: ../share/extensions/param_curves.inx.h:18
-msgid "Standard Python math functions are available:"
+#: ../share/extensions/funcplot.inx.h:22
+#: ../share/extensions/param_curves.inx.h:17
+msgid ""
+"Standard Python math functions are available:\n"
+"\n"
+"ceil(x); fabs(x); floor(x); fmod(x,y); frexp(x); ldexp(x,i); \n"
+"modf(x); exp(x); log(x [, base]); log10(x); pow(x,y); sqrt(x); \n"
+"acos(x); asin(x); atan(x); atan2(y,x); hypot(x,y); \n"
+"cos(x); sin(x); tan(x); degrees(x); radians(x); \n"
+"cosh(x); sinh(x); tanh(x).\n"
+"\n"
+"The constants pi and e are also available."
 msgstr ""
 
-#: ../share/extensions/funcplot.inx.h:46
+#: ../share/extensions/funcplot.inx.h:31
 msgid "Function:"
 msgstr ""
 
-#: ../share/extensions/funcplot.inx.h:47
+#: ../share/extensions/funcplot.inx.h:32
 msgid "Calculate first derivative numerically"
 msgstr ""
 
-#: ../share/extensions/funcplot.inx.h:48
+#: ../share/extensions/funcplot.inx.h:33
 msgid "First derivative:"
 msgstr ""
 
-#: ../share/extensions/funcplot.inx.h:49
+#: ../share/extensions/funcplot.inx.h:34
 msgid "Clip with rectangle"
 msgstr ""
 
-#: ../share/extensions/funcplot.inx.h:50
-#: ../share/extensions/param_curves.inx.h:37
+#: ../share/extensions/funcplot.inx.h:35
+#: ../share/extensions/param_curves.inx.h:28
 msgid "Remove rectangle"
 msgstr ""
 
-#: ../share/extensions/funcplot.inx.h:51
-#: ../share/extensions/param_curves.inx.h:38
+#: ../share/extensions/funcplot.inx.h:36
+#: ../share/extensions/param_curves.inx.h:29
 msgid "Draw Axes"
 msgstr ""
 
-#: ../share/extensions/funcplot.inx.h:52
+#: ../share/extensions/funcplot.inx.h:37
 msgid "Add x-axis endpoints"
 msgstr ""
 
 #: ../share/extensions/gcodetools_about.inx.h:1
-#: ../share/extensions/gcodetools_orientation_points.inx.h:29
+#: ../share/extensions/gcodetools_orientation_points.inx.h:22
 #: ../share/extensions/output_scour.inx.h:57
 msgid "About"
 msgstr ""
@@ -34434,19 +34377,58 @@ msgstr ""
 msgid ""
 "Gcodetools was developed to make simple Gcode from Inkscape's paths. Gcode "
 "is a special format which is used in most of CNC machines. So Gcodetools "
-"allows you to use Inkscape as CAM program."
+"allows you to use Inkscape as CAM program.\n"
+"\n"
+"It can be used with a lot of machine types:\n"
+"    Mills\n"
+"    Lathes\n"
+"    Laser and Plasma cutters and engravers\n"
+"    Mill engravers\n"
+"    Plotters\n"
+"    etc.\n"
+"\n"
+"To get more info visit developers page at http://www.cnc-club.ru/gcodetools"
 msgstr ""
 
-#: ../share/extensions/gcodetools_about.inx.h:55
-#: ../share/extensions/gcodetools_area.inx.h:117
-#: ../share/extensions/gcodetools_dxf_points.inx.h:67
-#: ../share/extensions/gcodetools_engraving.inx.h:79
-#: ../share/extensions/gcodetools_graffiti.inx.h:96
-#: ../share/extensions/gcodetools_lathe.inx.h:90
-#: ../share/extensions/gcodetools_orientation_points.inx.h:49
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:75
-#: ../share/extensions/gcodetools_prepare_path_for_plasma.inx.h:49
-#: ../share/extensions/gcodetools_tools_library.inx.h:54
+#: ../share/extensions/gcodetools_about.inx.h:14
+#: ../share/extensions/gcodetools_area.inx.h:70
+#: ../share/extensions/gcodetools_dxf_points.inx.h:31
+#: ../share/extensions/gcodetools_engraving.inx.h:40
+#: ../share/extensions/gcodetools_graffiti.inx.h:54
+#: ../share/extensions/gcodetools_lathe.inx.h:53
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:40
+#: ../share/extensions/gcodetools_prepare_path_for_plasma.inx.h:18
+msgid ""
+"\n"
+"Gcodetools plug-in:\n"
+"Converts paths to Gcode (using circular interpolation), makes offset paths "
+"and engraves sharp corners using cone cutters.\n"
+"This plug-in calculates Gcode for paths using circular interpolation or "
+"linear motion when needed.\n"
+"\n"
+"Tutorials, manuals and support can be found at\n"
+"English support forum:\n"
+"    http://www.cnc-club.ru/gcodetools\n"
+"\n"
+"and Russian support forum:\n"
+"    http://www.cnc-club.ru/gcodetoolsru\n"
+"\n"
+"Credits: Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas, "
+"Chris Lusby Taylor.\n"
+"\n"
+"Gcodetools ver. 1.7\n"
+msgstr ""
+
+#: ../share/extensions/gcodetools_about.inx.h:30
+#: ../share/extensions/gcodetools_area.inx.h:86
+#: ../share/extensions/gcodetools_dxf_points.inx.h:47
+#: ../share/extensions/gcodetools_engraving.inx.h:56
+#: ../share/extensions/gcodetools_graffiti.inx.h:70
+#: ../share/extensions/gcodetools_lathe.inx.h:69
+#: ../share/extensions/gcodetools_orientation_points.inx.h:33
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:56
+#: ../share/extensions/gcodetools_prepare_path_for_plasma.inx.h:34
+#: ../share/extensions/gcodetools_tools_library.inx.h:34
 msgid "Gcodetools"
 msgstr ""
 
@@ -34466,287 +34448,327 @@ msgstr ""
 msgid "Area tool overlap (0..0.9):"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:16
+#: ../share/extensions/gcodetools_area.inx.h:5
+msgid ""
+"\n"
+"\"Create area offset\": creates several Inkscape path offsets to fill "
+"original path's area up to \"Area radius\" value.\n"
+"\n"
+"Outlines start from \"1/2 D\" up to \"Area width\" total width with \"D\" "
+"steps where D is taken from the nearest tool definition (\"Tool diameter\" "
+"value).\n"
+"Only one offset will be created if the \"Area width\" is equal to \"1/2 D"
+"\".\n"
+"            "
+msgstr ""
+
+#: ../share/extensions/gcodetools_area.inx.h:11
 msgid "Fill area"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:17
+#: ../share/extensions/gcodetools_area.inx.h:12
 msgid "Area fill angle"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:18
+#: ../share/extensions/gcodetools_area.inx.h:13
 msgid "Area fill shift"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:19
+#: ../share/extensions/gcodetools_area.inx.h:14
 msgid "Filling method"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:20
+#: ../share/extensions/gcodetools_area.inx.h:15
 msgid "Zig zag"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:22
+#: ../share/extensions/gcodetools_area.inx.h:17
 msgid "Area artifacts"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:23
+#: ../share/extensions/gcodetools_area.inx.h:18
 msgid "Artifact diameter:"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:24
+#: ../share/extensions/gcodetools_area.inx.h:19
 msgid "Action:"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:25
+#: ../share/extensions/gcodetools_area.inx.h:20
 msgid "mark with an arrow"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:26
+#: ../share/extensions/gcodetools_area.inx.h:21
 msgid "mark with style"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:27
+#: ../share/extensions/gcodetools_area.inx.h:22
 msgid "delete"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:43
-#: ../share/extensions/gcodetools_lathe.inx.h:16
+#: ../share/extensions/gcodetools_area.inx.h:23
+msgid ""
+"\n"
+"Usage:\n"
+"1. Select all Area Offsets (gray outlines)\n"
+"2. Object/Ungroup (Shift+Ctrl+G)\n"
+"3. Press Apply\n"
+"\n"
+"Suspected small objects will be marked out by colored arrows.\n"
+"            "
+msgstr ""
+
+#: ../share/extensions/gcodetools_area.inx.h:31
+#: ../share/extensions/gcodetools_lathe.inx.h:14
 #: ../share/extensions/gcodetools_path_to_gcode.inx.h:1
 msgid "Path to Gcode"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:44
-#: ../share/extensions/gcodetools_lathe.inx.h:17
+#: ../share/extensions/gcodetools_area.inx.h:32
+#: ../share/extensions/gcodetools_lathe.inx.h:15
 #: ../share/extensions/gcodetools_path_to_gcode.inx.h:2
 msgid "Biarc interpolation tolerance:"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:45
-#: ../share/extensions/gcodetools_lathe.inx.h:18
+#: ../share/extensions/gcodetools_area.inx.h:33
+#: ../share/extensions/gcodetools_lathe.inx.h:16
 #: ../share/extensions/gcodetools_path_to_gcode.inx.h:3
 msgid "Maximum splitting depth:"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:46
-#: ../share/extensions/gcodetools_lathe.inx.h:19
+#: ../share/extensions/gcodetools_area.inx.h:34
+#: ../share/extensions/gcodetools_lathe.inx.h:17
 #: ../share/extensions/gcodetools_path_to_gcode.inx.h:4
 msgid "Cutting order:"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:47
-#: ../share/extensions/gcodetools_lathe.inx.h:20
+#: ../share/extensions/gcodetools_area.inx.h:35
+#: ../share/extensions/gcodetools_lathe.inx.h:18
 #: ../share/extensions/gcodetools_path_to_gcode.inx.h:5
 msgid "Depth function:"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:48
-#: ../share/extensions/gcodetools_lathe.inx.h:21
+#: ../share/extensions/gcodetools_area.inx.h:36
+#: ../share/extensions/gcodetools_lathe.inx.h:19
 #: ../share/extensions/gcodetools_path_to_gcode.inx.h:6
 msgid "Sort paths to reduce rapid distance"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:49
-#: ../share/extensions/gcodetools_lathe.inx.h:22
+#: ../share/extensions/gcodetools_area.inx.h:37
+#: ../share/extensions/gcodetools_lathe.inx.h:20
 #: ../share/extensions/gcodetools_path_to_gcode.inx.h:7
 msgid "Subpath by subpath"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:50
-#: ../share/extensions/gcodetools_lathe.inx.h:23
+#: ../share/extensions/gcodetools_area.inx.h:38
+#: ../share/extensions/gcodetools_lathe.inx.h:21
 #: ../share/extensions/gcodetools_path_to_gcode.inx.h:8
 msgid "Path by path"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:51
-#: ../share/extensions/gcodetools_lathe.inx.h:24
+#: ../share/extensions/gcodetools_area.inx.h:39
+#: ../share/extensions/gcodetools_lathe.inx.h:22
 #: ../share/extensions/gcodetools_path_to_gcode.inx.h:9
 msgid "Pass by Pass"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:62
-#: ../share/extensions/gcodetools_engraving.inx.h:24
-#: ../share/extensions/gcodetools_graffiti.inx.h:44
-#: ../share/extensions/gcodetools_lathe.inx.h:35
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:20
+#: ../share/extensions/gcodetools_area.inx.h:40
+#: ../share/extensions/gcodetools_lathe.inx.h:23
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:10
+msgid ""
+"\n"
+"Biarc interpolation tolerance is the maximum distance between path and its "
+"approximation.\n"
+"The segment will be split into two segments if the distance between path's "
+"segment and its approximation exceeds biarc interpolation tolerance.\n"
+"For depth function c=color intensity from 0.0 (white) to 1.0 (black), d is "
+"the depth defined by orientation points, s - surface defined by orientation "
+"points.\n"
+msgstr ""
+
+#: ../share/extensions/gcodetools_area.inx.h:46
+#: ../share/extensions/gcodetools_engraving.inx.h:16
+#: ../share/extensions/gcodetools_graffiti.inx.h:33
+#: ../share/extensions/gcodetools_lathe.inx.h:29
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:16
 msgid "Scale along Z axis:"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:63
-#: ../share/extensions/gcodetools_engraving.inx.h:25
-#: ../share/extensions/gcodetools_graffiti.inx.h:45
-#: ../share/extensions/gcodetools_lathe.inx.h:36
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:21
+#: ../share/extensions/gcodetools_area.inx.h:47
+#: ../share/extensions/gcodetools_engraving.inx.h:17
+#: ../share/extensions/gcodetools_graffiti.inx.h:34
+#: ../share/extensions/gcodetools_lathe.inx.h:30
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:17
 msgid "Offset along Z axis:"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:64
-#: ../share/extensions/gcodetools_engraving.inx.h:26
-#: ../share/extensions/gcodetools_graffiti.inx.h:46
-#: ../share/extensions/gcodetools_lathe.inx.h:37
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:22
+#: ../share/extensions/gcodetools_area.inx.h:48
+#: ../share/extensions/gcodetools_engraving.inx.h:18
+#: ../share/extensions/gcodetools_graffiti.inx.h:35
+#: ../share/extensions/gcodetools_lathe.inx.h:31
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:18
 msgid "Select all paths if nothing is selected"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:65
-#: ../share/extensions/gcodetools_engraving.inx.h:27
-#: ../share/extensions/gcodetools_graffiti.inx.h:47
-#: ../share/extensions/gcodetools_lathe.inx.h:38
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:23
+#: ../share/extensions/gcodetools_area.inx.h:49
+#: ../share/extensions/gcodetools_engraving.inx.h:19
+#: ../share/extensions/gcodetools_graffiti.inx.h:36
+#: ../share/extensions/gcodetools_lathe.inx.h:32
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:19
 msgid "Minimum arc radius:"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:66
-#: ../share/extensions/gcodetools_engraving.inx.h:28
-#: ../share/extensions/gcodetools_graffiti.inx.h:48
-#: ../share/extensions/gcodetools_lathe.inx.h:39
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:24
+#: ../share/extensions/gcodetools_area.inx.h:50
+#: ../share/extensions/gcodetools_engraving.inx.h:20
+#: ../share/extensions/gcodetools_graffiti.inx.h:37
+#: ../share/extensions/gcodetools_lathe.inx.h:33
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:20
 msgid "Comment Gcode:"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:67
-#: ../share/extensions/gcodetools_engraving.inx.h:29
-#: ../share/extensions/gcodetools_graffiti.inx.h:49
-#: ../share/extensions/gcodetools_lathe.inx.h:40
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:25
+#: ../share/extensions/gcodetools_area.inx.h:51
+#: ../share/extensions/gcodetools_engraving.inx.h:21
+#: ../share/extensions/gcodetools_graffiti.inx.h:38
+#: ../share/extensions/gcodetools_lathe.inx.h:34
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:21
 msgid "Get additional comments from object's properties"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:68
-#: ../share/extensions/gcodetools_dxf_points.inx.h:18
-#: ../share/extensions/gcodetools_engraving.inx.h:30
-#: ../share/extensions/gcodetools_graffiti.inx.h:50
-#: ../share/extensions/gcodetools_lathe.inx.h:41
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:26
+#: ../share/extensions/gcodetools_area.inx.h:52
+#: ../share/extensions/gcodetools_dxf_points.inx.h:13
+#: ../share/extensions/gcodetools_engraving.inx.h:22
+#: ../share/extensions/gcodetools_graffiti.inx.h:39
+#: ../share/extensions/gcodetools_lathe.inx.h:35
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:22
 msgid "Preferences"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:69
-#: ../share/extensions/gcodetools_dxf_points.inx.h:19
-#: ../share/extensions/gcodetools_engraving.inx.h:31
-#: ../share/extensions/gcodetools_graffiti.inx.h:51
-#: ../share/extensions/gcodetools_lathe.inx.h:42
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:27
+#: ../share/extensions/gcodetools_area.inx.h:53
+#: ../share/extensions/gcodetools_dxf_points.inx.h:14
+#: ../share/extensions/gcodetools_engraving.inx.h:23
+#: ../share/extensions/gcodetools_graffiti.inx.h:40
+#: ../share/extensions/gcodetools_lathe.inx.h:36
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:23
 #: ../share/extensions/nicechart.inx.h:4
 msgid "File:"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:70
-#: ../share/extensions/gcodetools_dxf_points.inx.h:20
-#: ../share/extensions/gcodetools_engraving.inx.h:32
-#: ../share/extensions/gcodetools_graffiti.inx.h:52
-#: ../share/extensions/gcodetools_lathe.inx.h:43
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:28
+#: ../share/extensions/gcodetools_area.inx.h:54
+#: ../share/extensions/gcodetools_dxf_points.inx.h:15
+#: ../share/extensions/gcodetools_engraving.inx.h:24
+#: ../share/extensions/gcodetools_graffiti.inx.h:41
+#: ../share/extensions/gcodetools_lathe.inx.h:37
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:24
 msgid "Add numeric suffix to filename"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:71
-#: ../share/extensions/gcodetools_dxf_points.inx.h:21
-#: ../share/extensions/gcodetools_engraving.inx.h:33
-#: ../share/extensions/gcodetools_graffiti.inx.h:53
-#: ../share/extensions/gcodetools_lathe.inx.h:44
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:29
+#: ../share/extensions/gcodetools_area.inx.h:55
+#: ../share/extensions/gcodetools_dxf_points.inx.h:16
+#: ../share/extensions/gcodetools_engraving.inx.h:25
+#: ../share/extensions/gcodetools_graffiti.inx.h:42
+#: ../share/extensions/gcodetools_lathe.inx.h:38
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:25
 msgid "Directory:"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:72
-#: ../share/extensions/gcodetools_dxf_points.inx.h:22
-#: ../share/extensions/gcodetools_engraving.inx.h:34
-#: ../share/extensions/gcodetools_graffiti.inx.h:54
-#: ../share/extensions/gcodetools_lathe.inx.h:45
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:30
+#: ../share/extensions/gcodetools_area.inx.h:56
+#: ../share/extensions/gcodetools_dxf_points.inx.h:17
+#: ../share/extensions/gcodetools_engraving.inx.h:26
+#: ../share/extensions/gcodetools_graffiti.inx.h:43
+#: ../share/extensions/gcodetools_lathe.inx.h:39
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:26
 msgid "Z safe height for G00 move over blank:"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:73
-#: ../share/extensions/gcodetools_dxf_points.inx.h:23
-#: ../share/extensions/gcodetools_engraving.inx.h:35
+#: ../share/extensions/gcodetools_area.inx.h:57
+#: ../share/extensions/gcodetools_dxf_points.inx.h:18
+#: ../share/extensions/gcodetools_engraving.inx.h:27
 #: ../share/extensions/gcodetools_graffiti.inx.h:13
-#: ../share/extensions/gcodetools_lathe.inx.h:46
+#: ../share/extensions/gcodetools_lathe.inx.h:40
 #: ../share/extensions/gcodetools_orientation_points.inx.h:6
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:31
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:27
 msgid "Units (mm or in):"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:74
-#: ../share/extensions/gcodetools_dxf_points.inx.h:24
-#: ../share/extensions/gcodetools_engraving.inx.h:36
-#: ../share/extensions/gcodetools_graffiti.inx.h:55
-#: ../share/extensions/gcodetools_lathe.inx.h:47
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:32
+#: ../share/extensions/gcodetools_area.inx.h:58
+#: ../share/extensions/gcodetools_dxf_points.inx.h:19
+#: ../share/extensions/gcodetools_engraving.inx.h:28
+#: ../share/extensions/gcodetools_graffiti.inx.h:44
+#: ../share/extensions/gcodetools_lathe.inx.h:41
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:28
 msgid "Post-processor:"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:75
-#: ../share/extensions/gcodetools_dxf_points.inx.h:25
-#: ../share/extensions/gcodetools_engraving.inx.h:37
-#: ../share/extensions/gcodetools_graffiti.inx.h:56
-#: ../share/extensions/gcodetools_lathe.inx.h:48
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:33
+#: ../share/extensions/gcodetools_area.inx.h:59
+#: ../share/extensions/gcodetools_dxf_points.inx.h:20
+#: ../share/extensions/gcodetools_engraving.inx.h:29
+#: ../share/extensions/gcodetools_graffiti.inx.h:45
+#: ../share/extensions/gcodetools_lathe.inx.h:42
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:29
 msgid "Additional post-processor:"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:76
-#: ../share/extensions/gcodetools_dxf_points.inx.h:26
-#: ../share/extensions/gcodetools_engraving.inx.h:38
-#: ../share/extensions/gcodetools_graffiti.inx.h:57
-#: ../share/extensions/gcodetools_lathe.inx.h:49
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:34
+#: ../share/extensions/gcodetools_area.inx.h:60
+#: ../share/extensions/gcodetools_dxf_points.inx.h:21
+#: ../share/extensions/gcodetools_engraving.inx.h:30
+#: ../share/extensions/gcodetools_graffiti.inx.h:46
+#: ../share/extensions/gcodetools_lathe.inx.h:43
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:30
 msgid "Generate log file"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:77
-#: ../share/extensions/gcodetools_dxf_points.inx.h:27
-#: ../share/extensions/gcodetools_engraving.inx.h:39
-#: ../share/extensions/gcodetools_graffiti.inx.h:58
-#: ../share/extensions/gcodetools_lathe.inx.h:50
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:35
+#: ../share/extensions/gcodetools_area.inx.h:61
+#: ../share/extensions/gcodetools_dxf_points.inx.h:22
+#: ../share/extensions/gcodetools_engraving.inx.h:31
+#: ../share/extensions/gcodetools_graffiti.inx.h:47
+#: ../share/extensions/gcodetools_lathe.inx.h:44
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:31
 msgid "Full path to log file:"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:80
-#: ../share/extensions/gcodetools_dxf_points.inx.h:30
-#: ../share/extensions/gcodetools_engraving.inx.h:42
-#: ../share/extensions/gcodetools_graffiti.inx.h:59
-#: ../share/extensions/gcodetools_lathe.inx.h:53
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:38
+#: ../share/extensions/gcodetools_area.inx.h:64
+#: ../share/extensions/gcodetools_dxf_points.inx.h:25
+#: ../share/extensions/gcodetools_engraving.inx.h:34
+#: ../share/extensions/gcodetools_graffiti.inx.h:48
+#: ../share/extensions/gcodetools_lathe.inx.h:47
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:34
 msgctxt "GCode postprocessor"
 msgid "None"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:81
-#: ../share/extensions/gcodetools_dxf_points.inx.h:31
-#: ../share/extensions/gcodetools_engraving.inx.h:43
-#: ../share/extensions/gcodetools_graffiti.inx.h:60
-#: ../share/extensions/gcodetools_lathe.inx.h:54
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:39
+#: ../share/extensions/gcodetools_area.inx.h:65
+#: ../share/extensions/gcodetools_dxf_points.inx.h:26
+#: ../share/extensions/gcodetools_engraving.inx.h:35
+#: ../share/extensions/gcodetools_graffiti.inx.h:49
+#: ../share/extensions/gcodetools_lathe.inx.h:48
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:35
 msgid "Parameterize Gcode"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:82
-#: ../share/extensions/gcodetools_dxf_points.inx.h:32
-#: ../share/extensions/gcodetools_engraving.inx.h:44
-#: ../share/extensions/gcodetools_graffiti.inx.h:61
-#: ../share/extensions/gcodetools_lathe.inx.h:55
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:40
+#: ../share/extensions/gcodetools_area.inx.h:66
+#: ../share/extensions/gcodetools_dxf_points.inx.h:27
+#: ../share/extensions/gcodetools_engraving.inx.h:36
+#: ../share/extensions/gcodetools_graffiti.inx.h:50
+#: ../share/extensions/gcodetools_lathe.inx.h:49
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:36
 msgid "Flip y axis and parameterize Gcode"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:83
-#: ../share/extensions/gcodetools_dxf_points.inx.h:33
-#: ../share/extensions/gcodetools_engraving.inx.h:45
-#: ../share/extensions/gcodetools_graffiti.inx.h:62
-#: ../share/extensions/gcodetools_lathe.inx.h:56
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:41
+#: ../share/extensions/gcodetools_area.inx.h:67
+#: ../share/extensions/gcodetools_dxf_points.inx.h:28
+#: ../share/extensions/gcodetools_engraving.inx.h:37
+#: ../share/extensions/gcodetools_graffiti.inx.h:51
+#: ../share/extensions/gcodetools_lathe.inx.h:50
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:37
 msgid "Round all values to 4 digits"
 msgstr ""
 
-#: ../share/extensions/gcodetools_area.inx.h:84
-#: ../share/extensions/gcodetools_dxf_points.inx.h:34
-#: ../share/extensions/gcodetools_engraving.inx.h:46
-#: ../share/extensions/gcodetools_graffiti.inx.h:63
-#: ../share/extensions/gcodetools_lathe.inx.h:57
-#: ../share/extensions/gcodetools_path_to_gcode.inx.h:42
+#: ../share/extensions/gcodetools_area.inx.h:68
+#: ../share/extensions/gcodetools_dxf_points.inx.h:29
+#: ../share/extensions/gcodetools_engraving.inx.h:38
+#: ../share/extensions/gcodetools_graffiti.inx.h:52
+#: ../share/extensions/gcodetools_lathe.inx.h:51
+#: ../share/extensions/gcodetools_path_to_gcode.inx.h:38
 msgid "Fast pre-penetrate"
 msgstr ""
 
@@ -34762,15 +34784,28 @@ msgstr ""
 msgid "Convert selection:"
 msgstr ""
 
-#: ../share/extensions/gcodetools_dxf_points.inx.h:15
+#: ../share/extensions/gcodetools_dxf_points.inx.h:4
+msgid ""
+"\n"
+"\n"
+"Convert selected objects to drill points (as dxf_import plugin does). Also "
+"you can save original shape. Only the start point of each curve will be "
+"used.\n"
+"\n"
+"Also you can manually select object, open XML editor (Shift+Ctrl+X) and add "
+"or remove XML tag 'dxfpoint' with any value.\n"
+"          "
+msgstr ""
+
+#: ../share/extensions/gcodetools_dxf_points.inx.h:10
 msgid "set as dxfpoint and save shape"
 msgstr ""
 
-#: ../share/extensions/gcodetools_dxf_points.inx.h:16
+#: ../share/extensions/gcodetools_dxf_points.inx.h:11
 msgid "set as dxfpoint and draw arrow"
 msgstr ""
 
-#: ../share/extensions/gcodetools_dxf_points.inx.h:17
+#: ../share/extensions/gcodetools_dxf_points.inx.h:12
 msgid "clear dxfpoint sign"
 msgstr ""
 
@@ -34792,6 +34827,20 @@ msgstr ""
 
 #: ../share/extensions/gcodetools_engraving.inx.h:5
 msgid "Draw additional graphics to see engraving path"
+msgstr ""
+
+#: ../share/extensions/gcodetools_engraving.inx.h:6
+msgid ""
+"\n"
+"This function creates path to engrave letters or any shape with sharp "
+"angles.\n"
+"Cutter's depth as a function of radius is defined by the tool.\n"
+"Depth may be any Python expression. For instance:\n"
+"\n"
+"cone....(45 degrees)......................: w\n"
+"cone....(height/diameter=10/3)..: 10*w/3\n"
+"sphere..(radius r)...........................: math.sqrt(max(0,r**2-w**2))\n"
+"ellipse.(minor axis r, major 4r).....: math.sqrt(max(0,r**2-w**2))*4"
 msgstr ""
 
 #: ../share/extensions/gcodetools_graffiti.inx.h:1
@@ -34861,6 +34910,27 @@ msgstr ""
 msgid "in-out reference point"
 msgstr ""
 
+#: ../share/extensions/gcodetools_graffiti.inx.h:20
+msgid ""
+"\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
+"3-points mode only: do not put all three into one line (use 2-points mode "
+"instead).\n"
+"\n"
+"You can modify Z surface, Z depth values later using text tool (3rd "
+"coordinates).\n"
+"\n"
+"If there are no orientation points inside current layer they are taken from "
+"the upper layer.\n"
+"\n"
+"Do not ungroup orientation points! You can select them using double click to "
+"enter the group or by Ctrl+Click.\n"
+"\n"
+"Now press apply to create control points (independent set for each layer).\n"
+"            "
+msgstr ""
+
 #: ../share/extensions/gcodetools_lathe.inx.h:1
 msgid "Lathe"
 msgstr ""
@@ -34901,8 +34971,52 @@ msgstr ""
 msgid "Lathe modify path"
 msgstr ""
 
+#: ../share/extensions/gcodetools_lathe.inx.h:11
+msgid ""
+"\n"
+"            This function modifies path so it will be possible to be cut it "
+"with a rectangular cutter.\n"
+"        "
+msgstr ""
+
 #: ../share/extensions/gcodetools_orientation_points.inx.h:1
 msgid "Orientation points"
+msgstr ""
+
+#: ../share/extensions/gcodetools_orientation_points.inx.h:14
+msgid ""
+"\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
+"3-points mode only: do not put all three into one line (use 2-points mode "
+"instead).\n"
+"You can modify Z surface, Z depth values later using text tool (3rd "
+"coordinates).\n"
+"If there are no orientation points inside current layer, they are taken from "
+"the upper layer.\n"
+"Do not ungroup orientation points!\n"
+"You can select them using double click to enter the group or by Ctrl+Click. "
+"Now press apply to create control points (independent set for each layer).\n"
+"      "
+msgstr ""
+
+#: ../share/extensions/gcodetools_orientation_points.inx.h:23
+msgid ""
+"\n"
+"Gcodetools plug-in:\n"
+"Converts paths to Gcode (using circular interpolation), makes offset paths "
+"and engraves sharp corners using cone cutters. This plug-in calculates Gcode "
+"for paths using circular interpolation or linear motion when needed.\n"
+"\n"
+"Tutorials, manuals and support can be found at English support forum: http://"
+"www.cnc-club.ru/gcodetools and Russian support forum: http://www.cnc-club.ru/"
+"gcodetoolsru\n"
+"\n"
+"Credits: Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas, "
+"Chris Lusby Taylor.\n"
+"\n"
+"Gcodetools ver. 1.7\n"
+"      "
 msgstr ""
 
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx.h:1
@@ -35005,6 +35119,40 @@ msgstr ""
 msgid "Just check tools"
 msgstr ""
 
+#: ../share/extensions/gcodetools_tools_library.inx.h:11
+msgid ""
+"\n"
+"Selected tool type fills appropriate default values. You can change these "
+"values using the Text tool later on.\n"
+"\n"
+"The topmost (z order) tool in the active layer is used. If there is no tool "
+"inside the current layer it is taken from the upper layer.\n"
+"\n"
+"Press Apply to create new tool.\n"
+"            "
+msgstr ""
+
+#: ../share/extensions/gcodetools_tools_library.inx.h:19
+msgid ""
+"\n"
+"Gcodetools plug-in: converts paths to Gcode (using circular interpolation), "
+"makes offset paths and engraves sharp corners using cone cutters.\n"
+"This plug-in calculates Gcode for paths using circular interpolation or "
+"linear motion when needed.\n"
+"\n"
+"Tutorials, manuals and support can be found at\n"
+"English support forum:\n"
+"    http://www.cnc-club.ru/gcodetools\n"
+"\n"
+"and Russian support forum:\n"
+"    http://www.cnc-club.ru/gcodetoolsru\n"
+"\n"
+"Credits: Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas, "
+"Chris Lusby Taylor.\n"
+"\n"
+"Gcodetools ver. 1.7\n"
+msgstr ""
+
 #: ../share/extensions/generate_voronoi.inx.h:1
 msgid "Voronoi Pattern"
 msgstr ""
@@ -35020,7 +35168,12 @@ msgstr ""
 #: ../share/extensions/generate_voronoi.inx.h:6
 msgid ""
 "Generate a random pattern of Voronoi cells. The pattern will be accessible "
-"in the Fill and Stroke dialog. You must select an object or a group."
+"in the Fill and Stroke dialog. You must select an object or a group.\n"
+"\n"
+"If border is zero, the pattern will be discontinuous at the edges. Use a "
+"positive border, preferably greater than the cell size, to produce a smooth "
+"join of the pattern at the edges. Use a negative border to reduce the size "
+"of the pattern and get an empty border."
 msgstr ""
 
 #: ../share/extensions/gimp_xcf.inx.h:1
@@ -35046,10 +35199,19 @@ msgstr ""
 #: ../share/extensions/gimp_xcf.inx.h:8
 msgid ""
 "This extension exports the document to Gimp XCF format according to the "
-"following options:"
+"following options:\n"
+"    * Save Guides: convert all guides to Gimp guides.\n"
+"    * Save Grid: convert the first rectangular grid to a Gimp grid (note "
+"that the default Inkscape grid is very narrow when shown in Gimp).\n"
+"    * Save Background: add the document background to each converted layer.\n"
+"    * File Resolution: XCF file resolution, in DPI.\n"
+"\n"
+"Each first level layer is converted to a Gimp layer. Sublayers are "
+"concatenated and converted with their first level parent layer into a single "
+"Gimp layer."
 msgstr ""
 
-#: ../share/extensions/gimp_xcf.inx.h:21
+#: ../share/extensions/gimp_xcf.inx.h:15
 msgid "GIMP XCF maintaining layers (*.xcf)"
 msgstr ""
 
@@ -35333,10 +35495,6 @@ msgstr ""
 msgid "Lower right corner"
 msgstr ""
 
-#: ../share/extensions/guides_creator.inx.h:16
-msgid "Margins"
-msgstr ""
-
 #: ../share/extensions/guides_creator.inx.h:17
 msgid "Margins preset:"
 msgstr ""
@@ -35506,11 +35664,34 @@ msgid "Symbolic"
 msgstr ""
 
 #: ../share/extensions/hershey.inx.h:31
-msgid " "
+msgid ""
+" \n"
+"\n"
+"\n"
+"\n"
 msgstr ""
 
-#: ../share/extensions/hershey.inx.h:40
+#: ../share/extensions/hershey.inx.h:36
 msgid "About..."
+msgstr ""
+
+#: ../share/extensions/hershey.inx.h:37
+msgid ""
+"\n"
+"This extension renders a line of text using\n"
+"\"Hershey\" fonts for plotters, derived from \n"
+"NBS SP-424 1976-04, \"A contribution to \n"
+"computer typesetting techniques: Tables of\n"
+"Coordinates for Hershey's Repertory of\n"
+"Occidental Type Fonts and Graphic Symbols.\"\n"
+"\n"
+"These are not traditional \"outline\" fonts, \n"
+"but are instead \"single-stroke\" fonts, or\n"
+"\"engraving\" fonts where the character is\n"
+"formed by the stroke (and not the fill).\n"
+"\n"
+"For additional information, please visit:\n"
+"  www.evilmadscientist.com/go/hershey"
 msgstr ""
 
 #: ../share/extensions/hpgl_input.inx.h:1
@@ -36624,7 +36805,21 @@ msgstr ""
 msgid "Margin box"
 msgstr ""
 
-#: ../share/extensions/layout_nup.inx.h:45
+#: ../share/extensions/layout_nup.inx.h:25
+msgid ""
+"\n"
+"Parameters:\n"
+"    * Page size: width and height.\n"
+"    * Page margins: extra space around each page.\n"
+"    * Layout rows and cols.\n"
+"    * Layout size: width and height, auto calculated if one is 0.\n"
+"    * Auto calculate layout size: don't use the layout size values.\n"
+"    * Layout margins: white space around each part of the layout.\n"
+"    * Layout padding: inner padding for each part of the layout.\n"
+"      "
+msgstr ""
+
+#: ../share/extensions/layout_nup.inx.h:36
 #: ../share/extensions/perfectboundcover.inx.h:20
 #: ../share/extensions/printing_marks.inx.h:21
 #: ../share/extensions/svgcalendar.inx.h:13
@@ -36667,6 +36862,29 @@ msgstr ""
 #: ../share/extensions/lindenmayer.inx.h:12
 #, no-c-format
 msgid "Randomize angle (%):"
+msgstr ""
+
+#: ../share/extensions/lindenmayer.inx.h:14
+msgid ""
+"\n"
+"The path is generated by applying the \n"
+"substitutions of Rules to the Axiom, \n"
+"Order times. The following commands are \n"
+"recognized in Axiom and Rules:\n"
+"\n"
+"Any of A,B,C,D,E,F: draw forward \n"
+"\n"
+"Any of G,H,I,J,K,L: move forward \n"
+"\n"
+"+: turn left\n"
+"\n"
+"-: turn right\n"
+"\n"
+"|: turn 180 degrees\n"
+"\n"
+"[: remember point\n"
+"\n"
+"]: return to remembered point\n"
 msgstr ""
 
 #: ../share/extensions/lorem_ipsum.inx.h:1
@@ -36836,7 +37054,19 @@ msgstr ""
 msgid ""
 "This effect measures the length, area, or center-of-mass of the selected "
 "paths. Length and area are added as a text object with the selected units. "
-"Center-of-mass is shown as a cross symbol."
+"Center-of-mass is shown as a cross symbol.\n"
+"\n"
+"  * Text display format can be either Text-On-Path, or stand-alone text at a "
+"specified angle.\n"
+"  * The number of significant digits can be controlled by the Precision "
+"field.\n"
+"  * The Offset field controls the distance from the text to the path.\n"
+"  * The Scale factor can be used to make measurements in scaled drawings. "
+"For example, if 1 cm in the drawing equals 2.5 m in the real world, Scale "
+"must be set to 250.\n"
+"  * When calculating area, the result should be precise for polygons and "
+"Bezier curves. If a circle is used, the area may be too high by as much as "
+"0.03%."
 msgstr ""
 
 #: ../share/extensions/media_zip.inx.h:1
@@ -37376,14 +37606,15 @@ msgstr ""
 #: ../share/extensions/param_curves.inx.h:14
 msgid ""
 "Select a rectangle before calling the extension, it will determine X and Y "
-"scales."
+"scales.\n"
+"First derivatives are always determined numerically."
 msgstr ""
 
-#: ../share/extensions/param_curves.inx.h:35
+#: ../share/extensions/param_curves.inx.h:26
 msgid "X-Function:"
 msgstr ""
 
-#: ../share/extensions/param_curves.inx.h:36
+#: ../share/extensions/param_curves.inx.h:27
 msgid "Y-Function:"
 msgstr ""
 
@@ -38901,166 +39132,166 @@ msgid ""
 "Voronoi diagram. Text objects are not handled."
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:1
+#: ../share/extensions/web_set_att.inx.h:1
 msgid "Set Attributes"
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:3
+#: ../share/extensions/web_set_att.inx.h:3
 msgid "Attribute to set:"
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:4
+#: ../share/extensions/web_set_att.inx.h:4
 msgid "When should the set be done:"
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:5
+#: ../share/extensions/web_set_att.inx.h:5
 msgid "Value to set:"
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:6
-#: ../share/extensions/web-transmit-att.inx.h:5
+#: ../share/extensions/web_set_att.inx.h:6
+#: ../share/extensions/web_transmit_att.inx.h:5
 msgid "Compatibility with previews code to this event:"
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:7
+#: ../share/extensions/web_set_att.inx.h:7
 msgid "Source and destination of setting:"
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:8
-#: ../share/extensions/web-transmit-att.inx.h:7
+#: ../share/extensions/web_set_att.inx.h:8
+#: ../share/extensions/web_transmit_att.inx.h:7
 msgid "on click"
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:9
-#: ../share/extensions/web-transmit-att.inx.h:8
+#: ../share/extensions/web_set_att.inx.h:9
+#: ../share/extensions/web_transmit_att.inx.h:8
 msgid "on focus"
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:10
-#: ../share/extensions/web-transmit-att.inx.h:9
+#: ../share/extensions/web_set_att.inx.h:10
+#: ../share/extensions/web_transmit_att.inx.h:9
 msgid "on blur"
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:11
-#: ../share/extensions/web-transmit-att.inx.h:10
+#: ../share/extensions/web_set_att.inx.h:11
+#: ../share/extensions/web_transmit_att.inx.h:10
 msgid "on activate"
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:12
-#: ../share/extensions/web-transmit-att.inx.h:11
+#: ../share/extensions/web_set_att.inx.h:12
+#: ../share/extensions/web_transmit_att.inx.h:11
 msgid "on mouse down"
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:13
-#: ../share/extensions/web-transmit-att.inx.h:12
+#: ../share/extensions/web_set_att.inx.h:13
+#: ../share/extensions/web_transmit_att.inx.h:12
 msgid "on mouse up"
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:14
-#: ../share/extensions/web-transmit-att.inx.h:13
+#: ../share/extensions/web_set_att.inx.h:14
+#: ../share/extensions/web_transmit_att.inx.h:13
 msgid "on mouse over"
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:15
-#: ../share/extensions/web-transmit-att.inx.h:14
+#: ../share/extensions/web_set_att.inx.h:15
+#: ../share/extensions/web_transmit_att.inx.h:14
 msgid "on mouse move"
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:16
-#: ../share/extensions/web-transmit-att.inx.h:15
+#: ../share/extensions/web_set_att.inx.h:16
+#: ../share/extensions/web_transmit_att.inx.h:15
 msgid "on mouse out"
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:17
-#: ../share/extensions/web-transmit-att.inx.h:16
+#: ../share/extensions/web_set_att.inx.h:17
+#: ../share/extensions/web_transmit_att.inx.h:16
 msgid "on element loaded"
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:18
+#: ../share/extensions/web_set_att.inx.h:18
 msgid "The list of values must have the same size as the attributes list."
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:19
-#: ../share/extensions/web-transmit-att.inx.h:17
+#: ../share/extensions/web_set_att.inx.h:19
+#: ../share/extensions/web_transmit_att.inx.h:17
 msgid "Run it after"
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:20
-#: ../share/extensions/web-transmit-att.inx.h:18
+#: ../share/extensions/web_set_att.inx.h:20
+#: ../share/extensions/web_transmit_att.inx.h:18
 msgid "Run it before"
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:22
-#: ../share/extensions/web-transmit-att.inx.h:20
+#: ../share/extensions/web_set_att.inx.h:22
+#: ../share/extensions/web_transmit_att.inx.h:20
 msgid "The next parameter is useful when you select more than two elements"
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:23
+#: ../share/extensions/web_set_att.inx.h:23
 msgid "All selected ones set an attribute in the last one"
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:24
+#: ../share/extensions/web_set_att.inx.h:24
 msgid "The first selected sets an attribute in all others"
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:26
-#: ../share/extensions/web-transmit-att.inx.h:24
+#: ../share/extensions/web_set_att.inx.h:26
+#: ../share/extensions/web_transmit_att.inx.h:24
 msgid ""
 "This effect adds a feature visible (or usable) only on a SVG enabled web "
 "browser (like Firefox)."
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:27
+#: ../share/extensions/web_set_att.inx.h:27
 msgid ""
 "This effect sets one or more attributes in the second selected element, when "
 "a defined event occurs on the first selected element."
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:28
+#: ../share/extensions/web_set_att.inx.h:28
 msgid ""
 "If you want to set more than one attribute, you must separate this with a "
 "space, and only with a space."
 msgstr ""
 
-#: ../share/extensions/web-set-att.inx.h:29
-#: ../share/extensions/web-transmit-att.inx.h:27
+#: ../share/extensions/web_set_att.inx.h:29
+#: ../share/extensions/web_transmit_att.inx.h:27
 #: ../share/extensions/webslicer_create_group.inx.h:13
 #: ../share/extensions/webslicer_create_rect.inx.h:41
 #: ../share/extensions/webslicer_export.inx.h:8
 msgid "Web"
 msgstr ""
 
-#: ../share/extensions/web-transmit-att.inx.h:1
+#: ../share/extensions/web_transmit_att.inx.h:1
 msgid "Transmit Attributes"
 msgstr ""
 
-#: ../share/extensions/web-transmit-att.inx.h:3
+#: ../share/extensions/web_transmit_att.inx.h:3
 msgid "Attribute to transmit:"
 msgstr ""
 
-#: ../share/extensions/web-transmit-att.inx.h:4
+#: ../share/extensions/web_transmit_att.inx.h:4
 msgid "When to transmit:"
 msgstr ""
 
-#: ../share/extensions/web-transmit-att.inx.h:6
+#: ../share/extensions/web_transmit_att.inx.h:6
 msgid "Source and destination of transmitting:"
 msgstr ""
 
-#: ../share/extensions/web-transmit-att.inx.h:21
+#: ../share/extensions/web_transmit_att.inx.h:21
 msgid "All selected ones transmit to the last one"
 msgstr ""
 
-#: ../share/extensions/web-transmit-att.inx.h:22
+#: ../share/extensions/web_transmit_att.inx.h:22
 msgid "The first selected transmits to all others"
 msgstr ""
 
-#: ../share/extensions/web-transmit-att.inx.h:25
+#: ../share/extensions/web_transmit_att.inx.h:25
 msgid ""
 "This effect transmits one or more attributes from the first selected element "
 "to the second when an event occurs."
 msgstr ""
 
-#: ../share/extensions/web-transmit-att.inx.h:26
+#: ../share/extensions/web_transmit_att.inx.h:26
 msgid ""
 "If you want to transmit more than one attribute, you should separate this "
 "with a space, and only with a space."
