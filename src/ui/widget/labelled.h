@@ -58,6 +58,8 @@ public:
     void setLabelText(const Glib::ustring &str);
     void setTooltipText(const Glib::ustring &tooltip);
 
+    void set_hexpand(bool expand = true);
+
 private:
     bool on_mnemonic_activate( bool group_cycling ) override;
 

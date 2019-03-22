@@ -149,7 +149,7 @@ private:
 class RegisteredCheckButton : public RegisteredWidget<Gtk::CheckButton> {
 public:
     ~RegisteredCheckButton() override;
-    RegisteredCheckButton (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, bool right=true, Inkscape::XML::Node* repr_in=nullptr, SPDocument *doc_in=nullptr, char const *active_str = "true", char const *inactive_str = "false");
+    RegisteredCheckButton (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, bool right=false, Inkscape::XML::Node* repr_in=nullptr, SPDocument *doc_in=nullptr, char const *active_str = "true", char const *inactive_str = "false");
 
     void setActive (bool);
 

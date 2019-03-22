@@ -46,7 +46,7 @@ PageSizer::PageSizer(Registry & _wr)
       _dimensionHeight( _("_Height:"), _("Height of paper"), "height", _dimensionUnits, _wr ),
       _marginLock( _("Loc_k margins"), _("Lock margins"), "lock-margins", _wr, false, nullptr, nullptr),
       _lock_icon(),
-      _marginTop( _("T_op margin:"), _("Top margin"), "fit-margin-top", _wr ),
+      _marginTop( _("T_op:"), _("Top margin"), "fit-margin-top", _wr ),
       _marginLeft( _("L_eft:"), _("Left margin"), "fit-margin-left", _wr),
       _marginRight( _("Ri_ght:"), _("Right margin"), "fit-margin-right", _wr),
       _marginBottom( _("Botto_m:"), _("Bottom margin"), "fit-margin-bottom", _wr),
@@ -71,18 +71,18 @@ PageSizer::PageSizer(Registry & _wr)
     _marginBottom.setDigits(5);
     _scaleX.setDigits(5);
     _scaleY.setDigits(5);
-    _viewboxX.setDigits(2);
-    _viewboxY.setDigits(2);
-    _viewboxW.setDigits(2);
-    _viewboxH.setDigits(2);
+    _viewboxX.setDigits(5);
+    _viewboxY.setDigits(5);
+    _viewboxW.setDigits(5);
+    _viewboxH.setDigits(5);
     _dimensionWidth.setRange( 0.00001, 10000000 );
     _dimensionHeight.setRange( 0.00001, 10000000 );
     _scaleX.setRange( 0.00001, 100000 );
     _scaleY.setRange( 0.00001, 100000 );
-    _viewboxX.setRange( -100000, 100000 );
-    _viewboxY.setRange( -100000, 100000 );
-    _viewboxW.setRange( 0.01, 200000 );
-    _viewboxH.setRange( 0.01, 200000 );
+    _viewboxX.setRange( -10000000, 10000000 );
+    _viewboxY.setRange( -10000000, 10000000 );
+    _viewboxW.setRange( 0.00001, 10000000 );
+    _viewboxH.setRange( 0.00001, 10000000 );
 
     _scaleY.set_sensitive (false); // We only want to display Y scale.
 
@@ -112,10 +112,10 @@ PageSizer::PageSizer(Registry & _wr)
             g_warning("%s", _("Failed to create the page file."));
         }
     }
- 
+
     gchar *content = nullptr;
     if (g_file_get_contents(path, &content, nullptr, nullptr)) {
-    
+
         gchar **lines = g_strsplit_set(content, "\n", 0);
 
         for (int i = 0; lines && lines[i]; ++i) {
@@ -170,7 +170,7 @@ PageSizer::PageSizer(Registry & _wr)
         _dimensionUnits.setUnit(nv->display_units->abbr);
     }
     _wr.setUpdating (false);
-    
+
 
     //## Set up custom size frame
     _customFrame.set_label(_("Custom size"));
@@ -178,126 +178,103 @@ PageSizer::PageSizer(Registry & _wr)
     _customFrame.add(_customDimTable);
 
     _customDimTable.set_border_width(4);
-
     _customDimTable.set_row_spacing(4);
     _customDimTable.set_column_spacing(4);
 
-    _dimensionWidth.set_hexpand();
-    _dimensionWidth.set_vexpand();
+    _dimensionHeight.set_halign(Gtk::ALIGN_CENTER);
+    _dimensionUnits.set_halign(Gtk::ALIGN_END);
     _customDimTable.attach(_dimensionWidth,        0, 0, 1, 1);
+    _customDimTable.attach(_dimensionHeight,       1, 0, 1, 1);
+    _customDimTable.attach(_dimensionUnits,        2, 0, 1, 1);
 
-    _dimensionUnits.set_hexpand();
-    _dimensionUnits.set_vexpand();
-    _customDimTable.attach(_dimensionUnits,        1, 0, 1, 1);
+    _customDimTable.attach(_fitPageMarginExpander, 0, 1, 3, 1);
 
-    _dimensionHeight.set_hexpand();
-    _dimensionHeight.set_vexpand();
-    _customDimTable.attach(_dimensionHeight,       0, 1, 1, 1);
-
-    _fitPageMarginExpander.set_hexpand();
-    _fitPageMarginExpander.set_vexpand();
-    _customDimTable.attach(_fitPageMarginExpander, 0, 2, 2, 1);
-    
     _dimTabOrderList.clear();
     _dimTabOrderList.push_back(&_dimensionWidth);
     _dimTabOrderList.push_back(&_dimensionHeight);
     _dimTabOrderList.push_back(&_dimensionUnits);
     _dimTabOrderList.push_back(&_fitPageMarginExpander);
-    _customDimTable.set_focus_chain(_dimTabOrderList);    
+    _customDimTable.set_focus_chain(_dimTabOrderList);
 
     //## Set up fit page expander
     _fitPageMarginExpander.set_use_underline();
     _fitPageMarginExpander.set_label(_("Resi_ze page to content..."));
     _fitPageMarginExpander.add(_marginTable);
-    
-    //## Set up margin settings
+
     _marginTable.set_border_width(4);
     _marginTable.set_row_spacing(4);
     _marginTable.set_column_spacing(4);
 
-    _marginTop.set_halign(Gtk::ALIGN_CENTER);
-    _marginTop.set_hexpand();
-    _marginTop.set_vexpand();
-    
-    _marginTable.attach(_marginTop,     0, 0, 3, 1);
+    //### margin label and lock button
+    _marginLabel.set_markup(Glib::ustring("<b><i>") + _("Margins") + "</i></b>");
+    _marginLabel.set_halign(Gtk::ALIGN_CENTER);
 
-    _marginLeft.set_halign(Gtk::ALIGN_CENTER);
-    _marginLeft.set_hexpand();
-    _marginLeft.set_vexpand();
-    _marginTable.attach(_marginLeft,    0, 1, 1, 1);
-
-    _marginLock.set_active(false);
-    _marginLock.set_halign(Gtk::ALIGN_CENTER);
-    _marginLock.set_hexpand();
-    _marginLock.set_vexpand();
-
-    //_lock_icon = new Gtk::Image();
-    _lock_icon.set_halign(Gtk::ALIGN_CENTER);
-    _lock_icon.set_valign(Gtk::ALIGN_START);
     _lock_icon.set_from_icon_name("object-unlocked", Gtk::ICON_SIZE_LARGE_TOOLBAR);
-    _lock_icon.show();    
+    _lock_icon.show();
+    _marginLock.set_active(false);
     _marginLock.add(_lock_icon);
 
-    _marginTable.attach(_marginLock,    1, 1, 1, 1);
-    
-    _marginRight.set_halign(Gtk::ALIGN_CENTER);
-    _marginRight.set_hexpand();
-    _marginRight.set_vexpand();
-    _marginTable.attach(_marginRight,   2, 1, 1, 1);
-    
-    _marginBottom.set_halign(Gtk::ALIGN_CENTER);
-    _marginBottom.set_hexpand();
-    _marginBottom.set_vexpand();
-    _marginTable.attach(_marginBottom,  0, 2, 3, 1);
+    _marginBox.set_spacing(4);
+    _marginBox.add(_marginLabel);
+    _marginBox.add(_marginLock);
+    _marginBox.set_halign(Gtk::ALIGN_CENTER);
+    _marginTable.attach(_marginBox,      1, 1, 1, 1);
 
-    _fitPageButton.set_halign(Gtk::ALIGN_CENTER);
-    _fitPageButton.set_hexpand();
-    _fitPageButton.set_vexpand();
-    _marginTable.attach(_fitPageButton, 0, 3, 3, 1);
-    
+    //### margins
+    _marginTop.set_halign(Gtk::ALIGN_CENTER);
+    _marginLeft.set_halign(Gtk::ALIGN_START);
+    _marginRight.set_halign(Gtk::ALIGN_END);
+    _marginBottom.set_halign(Gtk::ALIGN_CENTER);
+
+    _marginTable.attach(_marginTop,      0, 0, 3, 1);
+    _marginTable.attach(_marginLeft,     0, 1, 1, 1);
+    _marginTable.attach(_marginRight,    2, 1, 1, 1);
+    _marginTable.attach(_marginBottom,   0, 2, 3, 1);
+
+    //### fit page to drawing button
     _fitPageButton.set_use_underline();
     _fitPageButton.set_label(_("_Resize page to drawing or selection (Ctrl+Shift+R)"));
     _fitPageButton.set_tooltip_text(_("Resize the page to fit the current selection, or the entire drawing if there is no selection"));
 
+    _fitPageButton.set_hexpand();
+    _fitPageButton.set_halign(Gtk::ALIGN_CENTER);
+    _marginTable.attach(_fitPageButton,  0, 3, 3, 1);
+
+
+    //## Set up scale frame
     _scaleFrame.set_label(_("Scale"));
     pack_start (_scaleFrame, false, false, 0);
     _scaleFrame.add(_scaleTable);
 
     _scaleTable.set_border_width(4);
-
     _scaleTable.set_row_spacing(4);
     _scaleTable.set_column_spacing(4);
 
-    _scaleTable.attach(_scaleX,        0, 0, 1, 1);
-    _scaleTable.attach(_scaleY,        1, 0, 1, 1);
+    _scaleTable.attach(_scaleX,          0, 0, 1, 1);
+    _scaleTable.attach(_scaleY,          1, 0, 1, 1);
+    _scaleTable.attach(_scaleLabel,      2, 0, 1, 1);
 
-    _scaleTable.attach(_scaleLabel,    2, 0, 1, 1);
     _viewboxExpander.set_hexpand();
-    _viewboxExpander.set_vexpand();
-    _scaleTable.attach(_viewboxExpander, 0, 2, 2, 1);
+    _scaleTable.attach(_viewboxExpander, 0, 2, 3, 1);
 
     _viewboxExpander.set_use_underline();
     _viewboxExpander.set_label(_("_Viewbox..."));
     _viewboxExpander.add(_viewboxTable);
 
-    _viewboxTable.set_row_spacing(2);
-    _viewboxTable.set_column_spacing(2);
+    _viewboxTable.set_border_width(4);
+    _viewboxTable.set_row_spacing(4);
+    _viewboxTable.set_column_spacing(4);
 
-    _viewboxX.set_hexpand();
-    _viewboxX.set_vexpand();
+    _viewboxX.set_halign(Gtk::ALIGN_END);
+    _viewboxY.set_halign(Gtk::ALIGN_END);
+    _viewboxW.set_halign(Gtk::ALIGN_END);
+    _viewboxH.set_halign(Gtk::ALIGN_END);
+    _viewboxSpacer.set_hexpand();
     _viewboxTable.attach(_viewboxX,      0, 0, 1, 1);
-
-    _viewboxY.set_hexpand();
-    _viewboxY.set_vexpand();
     _viewboxTable.attach(_viewboxY,      1, 0, 1, 1);
-
-    _viewboxW.set_hexpand();
-    _viewboxW.set_vexpand();
     _viewboxTable.attach(_viewboxW,      0, 1, 1, 1);
-
-    _viewboxH.set_hexpand();
-    _viewboxH.set_vexpand();
     _viewboxTable.attach(_viewboxH,      1, 1, 1, 1);
+    _viewboxTable.attach(_viewboxSpacer, 2, 0, 3, 1);
 
     _wr.setUpdating (true);
     updateScaleUI();
@@ -416,7 +393,7 @@ PageSizer::setDim (Inkscape::Util::Quantity w, Inkscape::Util::Quantity h, bool 
  * Updates the scalar widgets for the fit margins.  (Just changes the value
  * of the ui widgets to match the xml).
  */
-void 
+void
 PageSizer::updateFitMarginsUI(Inkscape::XML::Node *nv_repr)
 {
     if (!_lockMarginUpdate) {
@@ -494,7 +471,7 @@ PageSizer::fire_fit_canvas_to_selection_or_drawing()
     SPDocument *doc;
     SPNamedView *nv;
     Inkscape::XML::Node *nv_repr;
-  
+
     if ((doc = SP_ACTIVE_DESKTOP->getDocument())
         && (nv = sp_document_namedview(doc, nullptr))
         && (nv_repr = nv->getRepr())) {
@@ -654,7 +631,7 @@ PageSizer::updateScaleUI()
             _viewboxW.setValue( viewBox.width() );
             _viewboxH.setValue( viewBox.height() );
         }
-        
+
     } else {
         // Should never happen
         std::cerr << "PageSizer::updateScaleUI(): No active desktop." << std::endl;
@@ -780,7 +757,7 @@ PageSizer::on_margin_lock_changed()
 void
 PageSizer::on_margin_changed(RegisteredScalar* widg)
 {
-    double value = widg->getValue(); 
+    double value = widg->getValue();
     if (_widgetRegistry->isUpdating()) return;
     if (_marginLock.get_active() && !_lockMarginUpdate) {
         _lockMarginUpdate = true;

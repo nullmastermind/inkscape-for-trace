@@ -230,6 +230,8 @@ protected:
     Gtk::Expander        _fitPageMarginExpander;
 
     Gtk::Grid              _marginTable;
+    Gtk::Box               _marginBox;
+    Gtk::Label             _marginLabel;
     RegisteredToggleButton _marginLock;
     Gtk::Image             _lock_icon;
     RegisteredScalar       _marginTop;
@@ -256,6 +258,7 @@ protected:
     RegisteredScalar     _viewboxY;
     RegisteredScalar     _viewboxW;
     RegisteredScalar     _viewboxH;
+    Gtk::Box             _viewboxSpacer;
     bool                 _lockViewboxUpdate;
 
     //callback

@@ -261,8 +261,6 @@ CanvasAxonomGrid::onReprAttrChanged(Inkscape::XML::Node */*repr*/, gchar const *
 Gtk::Widget *
 CanvasAxonomGrid::newSpecificWidget()
 {
-    _wr.setUpdating (true);
-
     _rumg = Gtk::manage( new Inkscape::UI::Widget::RegisteredUnitMenu(
             _("Grid _units:"), "units", _wr, repr, doc) );
     _rsu_ox = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalarUnit(
@@ -299,9 +297,19 @@ CanvasAxonomGrid::newSpecificWidget()
     _rsu_sy->setDigits(5);
     _rsu_sy->setIncrements(0.1, 1.0);
 
-    _wr.setUpdating (false);
+    _rumg->set_hexpand();
+    _rsu_ox->set_hexpand();
+    _rsu_oy->set_hexpand();
+    _rsu_sy->set_hexpand();
+    _rsu_ax->set_hexpand();
+    _rsu_az->set_hexpand();
+    _rcp_gcol->set_hexpand();
+    _rcp_gmcol->set_hexpand();
+    _rsi->set_hexpand();
 
     // set widget values
+    _wr.setUpdating (true);
+
     _rumg->setUnit (gridunit->abbr);
 
     gdouble val;
@@ -322,19 +330,21 @@ CanvasAxonomGrid::newSpecificWidget()
     _rcp_gmcol->setRgba32 (empcolor);
     _rsi->setValue (empspacing);
 
+    _wr.setUpdating (false);
+
     _rsu_ox->setProgrammatically = false;
     _rsu_oy->setProgrammatically = false;
 
-    Gtk::VBox *column = new Gtk::VBox();
-    column->pack_start(*_rumg, true, false, 2);
-    column->pack_start(*_rsu_ox, true, false, 2);
-    column->pack_start(*_rsu_oy, true, false, 2);
-    column->pack_start(*_rsu_sy, true, false, 2);
-    column->pack_start(*_rsu_ax, true, false, 2);
-    column->pack_start(*_rsu_az, true, false, 2);
-    column->pack_start(*_rcp_gcol, true, false, 2);
-    column->pack_start(*_rcp_gmcol, true, false, 2);
-    column->pack_start(*_rsi, true, false, 2);
+    Gtk::Box *column = new Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4);
+    column->pack_start(*_rumg, true, false);
+    column->pack_start(*_rsu_ox, true, false);
+    column->pack_start(*_rsu_oy, true, false);
+    column->pack_start(*_rsu_sy, true, false);
+    column->pack_start(*_rsu_ax, true, false);
+    column->pack_start(*_rsu_az, true, false);
+    column->pack_start(*_rcp_gcol, true, false);
+    column->pack_start(*_rcp_gmcol, true, false);
+    column->pack_start(*_rsi, true, false);
 
     return column;
 }

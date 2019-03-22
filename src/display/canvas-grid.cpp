@@ -9,7 +9,7 @@
  *   Abhishek Sharma
  *   Jon A. Cruz <jon@joncruz.org>
  * Copyright (C) Tavmong Bah 2017 <tavmjong@free.fr>
- * 
+ *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
@@ -319,7 +319,7 @@ CanvasGrid::newWidget()
     _as_alignment = Gtk::manage( new Inkscape::UI::Widget::AlignmentSelector() );
     _as_alignment->on_alignmentClicked().connect(sigc::mem_fun(*this, &CanvasGrid::align_clicked));
 
-    Gtk::VBox *left = new Gtk::VBox();
+    Gtk::Box *left = new Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4);
     left->pack_start(*_rcb_enabled, false, false);
     left->pack_start(*_rcb_visible, false, false);
     left->pack_start(*_rcb_snap_visible_only, false, false);
@@ -336,10 +336,11 @@ CanvasGrid::newWidget()
     left->pack_start(*_as_alignment, false, false);
 
     auto right = newSpecificWidget();
+    right->set_hexpand(false);
 
-    Gtk::HBox *inner = new Gtk::HBox();
-    inner->pack_start(*left, true, true, 2);
-    inner->pack_start(*right, false, false, 2);
+    Gtk::Box *inner = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 4);
+    inner->pack_start(*left, true, true);
+    inner->pack_start(*right, false, false);
     vbox->pack_start(*inner, false, false);
 
     std::list<Gtk::Widget*> slaves;
@@ -586,7 +587,7 @@ CanvasXYGrid::readRepr()
             }
         }
     }
- 
+
     if ( (value = repr->attribute("color")) ) {
         color = (color & 0xff) | sp_svg_read_color(value, color);
     }
@@ -594,7 +595,7 @@ CanvasXYGrid::readRepr()
     if ( (value = repr->attribute("empcolor")) ) {
         empcolor = (empcolor & 0xff) | sp_svg_read_color(value, empcolor);
     }
-           
+
     if ( (value = repr->attribute("opacity")) ) {
         sp_nv_read_opacity(value, &color);
     }
@@ -678,8 +679,6 @@ CanvasXYGrid::newSpecificWidget()
     _rsi = Gtk::manage( new Inkscape::UI::Widget::RegisteredSuffixedInteger(
             _("_Major grid line every:"), "", _("lines"), "empspacing", _wr, repr, doc) );
 
-    _wr.setUpdating (true);
-
     _rsu_ox->setDigits(5);
     _rsu_ox->setIncrements(0.1, 1.0);
 
@@ -692,7 +691,18 @@ CanvasXYGrid::newSpecificWidget()
     _rsu_sy->setDigits(5);
     _rsu_sy->setIncrements(0.1, 1.0);
 
+    _rumg->set_hexpand();
+    _rsu_ox->set_hexpand();
+    _rsu_oy->set_hexpand();
+    _rsu_sx->set_hexpand();
+    _rsu_sy->set_hexpand();
+    _rcp_gcol->set_hexpand();
+    _rcp_gmcol->set_hexpand();
+    _rsi->set_hexpand();
+
     // set widget values
+    _wr.setUpdating (true);
+
     _rumg->setUnit (gridunit->abbr);
 
     gdouble val;
@@ -720,15 +730,15 @@ CanvasXYGrid::newSpecificWidget()
     _rsu_sx->setProgrammatically = false;
     _rsu_sy->setProgrammatically = false;
 
-    Gtk::VBox *column = new Gtk::VBox();
-    column->pack_start(*_rumg, true, false, 2);
-    column->pack_start(*_rsu_ox, true, false, 2);
-    column->pack_start(*_rsu_oy, true, false, 2);
-    column->pack_start(*_rsu_sx, true, false, 2);
-    column->pack_start(*_rsu_sy, true, false, 2);
-    column->pack_start(*_rcp_gcol, true, false, 2);
-    column->pack_start(*_rcp_gmcol, true, false, 2);
-    column->pack_start(*_rsi, true, false, 2);
+    Gtk::Box *column = new Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4);
+    column->pack_start(*_rumg, true, false);
+    column->pack_start(*_rsu_ox, true, false);
+    column->pack_start(*_rsu_oy, true, false);
+    column->pack_start(*_rsu_sx, true, false);
+    column->pack_start(*_rsu_sy, true, false);
+    column->pack_start(*_rcp_gcol, true, false);
+    column->pack_start(*_rcp_gmcol, true, false);
+    column->pack_start(*_rsi, true, false);
 
     return column;
 }
@@ -942,7 +952,7 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
 
         // Loop over grid lines that intersected buf rectangle.
         for (int j = start+1; j <= stop; ++j) {
-            
+
             Geom::Line grid_line = Geom::make_parallel_line( ow + j * sw[(dim+1)%2], axis );
 
             std::vector<Geom::Point> x = intersect_line_rectangle( grid_line, buf->rect );

@@ -102,6 +102,7 @@ DocumentMetadata::~DocumentMetadata()
         delete it;
 }
 
+// TODO: This duplicates code in document-properties.cpp
 void
 DocumentMetadata::build_metadata()
 {
@@ -129,6 +130,7 @@ DocumentMetadata::build_metadata()
             space->set_valign(Gtk::ALIGN_CENTER);
             _page_metadata1.attach(*space, 0, row, 1, 1);
 
+            w->_label.set_halign(Gtk::ALIGN_START);
             w->_label.set_valign(Gtk::ALIGN_CENTER);
             _page_metadata1.attach(w->_label, 1, row, 1, 1);
 

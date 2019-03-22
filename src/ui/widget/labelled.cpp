@@ -24,7 +24,7 @@ Labelled::Labelled(Glib::ustring const &label, Glib::ustring const &tooltip,
                    Glib::ustring const &icon,
                    bool mnemonic)
     : _widget(widget),
-      _label(new Gtk::Label(label, Gtk::ALIGN_END, Gtk::ALIGN_CENTER, mnemonic)),
+      _label(new Gtk::Label(label, Gtk::ALIGN_START, Gtk::ALIGN_CENTER, mnemonic)),
       _suffix(new Gtk::Label(suffix, Gtk::ALIGN_START))
 {
     g_assert(g_utf8_validate(icon.c_str(), -1, nullptr));
@@ -32,7 +32,7 @@ Labelled::Labelled(Glib::ustring const &label, Glib::ustring const &tooltip,
         _icon = Gtk::manage(sp_get_icon_image(icon, Gtk::ICON_SIZE_LARGE_TOOLBAR));
         pack_start(*_icon, Gtk::PACK_SHRINK);
     }
-    pack_start(*Gtk::manage(_label), Gtk::PACK_EXPAND_WIDGET, 6);
+    pack_start(*Gtk::manage(_label), Gtk::PACK_SHRINK, 6);
     pack_start(*Gtk::manage(_widget), Gtk::PACK_SHRINK, 6);
     if (mnemonic) {
         _label->set_mnemonic_widget(*_widget);
@@ -77,6 +77,18 @@ Labelled::setTooltipText(const Glib::ustring &tooltip)
 bool Labelled::on_mnemonic_activate ( bool group_cycling )
 {
     return _widget->mnemonic_activate ( group_cycling );
+}
+
+void
+Labelled::set_hexpand(bool expand)
+{
+    if (expand) {
+        child_property_pack_type(*_widget) = Gtk::PACK_END;
+    } else {
+        child_property_pack_type(*_widget) = Gtk::PACK_START;
+    }
+    
+    Gtk::HBox::set_hexpand(expand);
 }
 
 } // namespace Widget

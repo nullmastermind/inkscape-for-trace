@@ -89,68 +89,68 @@ DocumentProperties& DocumentProperties::getInstance()
 }
 
 DocumentProperties::DocumentProperties()
-    : UI::Widget::Panel("/dialogs/documentoptions", SP_VERB_DIALOG_NAMEDVIEW),
-      _page_page(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true))),
-      _page_guides(Gtk::manage(new UI::Widget::NotebookPage(1, 1))),
-      _page_snap(Gtk::manage(new UI::Widget::NotebookPage(1, 1))),
-      _page_cms(Gtk::manage(new UI::Widget::NotebookPage(1, 1))),
-      _page_scripting(Gtk::manage(new UI::Widget::NotebookPage(1, 1))),
-      _page_external_scripts(Gtk::manage(new UI::Widget::NotebookPage(1, 1))),
-      _page_embedded_scripts(Gtk::manage(new UI::Widget::NotebookPage(1, 1))),
-      _page_metadata1(Gtk::manage(new UI::Widget::NotebookPage(1, 1))),
-      _page_metadata2(Gtk::manage(new UI::Widget::NotebookPage(1, 1))),
+    : UI::Widget::Panel("/dialogs/documentoptions", SP_VERB_DIALOG_NAMEDVIEW)
+    , _page_page(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true)))
+    , _page_guides(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))
+    , _page_snap(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))
+    , _page_cms(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))
+    , _page_scripting(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))
+    , _page_external_scripts(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))
+    , _page_embedded_scripts(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))
+    , _page_metadata1(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))
+    , _page_metadata2(Gtk::manage(new UI::Widget::NotebookPage(1, 1)))
     //---------------------------------------------------------------
-      _rcb_antialias(_("Use antialiasing"), _("If unset, no antialiasing will be done on the drawing"), "shape-rendering", _wr, false, nullptr, nullptr, nullptr, "crispEdges"),
-      _rcb_checkerboard(_("Checkerboard background"), _("If set, use a colored checkerboard for the canvas background"), "inkscape:pagecheckerboard", _wr, false),
-      _rcb_canb(_("Show page _border"), _("If set, rectangular page border is shown"), "showborder", _wr, false),
-      _rcb_bord(_("Border on _top of drawing"), _("If set, border is always on top of the drawing"), "borderlayer", _wr, false),
-      _rcb_shad(_("_Show border shadow"), _("If set, page border shows a shadow on its right and lower side"), "inkscape:showpageshadow", _wr, false),
-      _rcp_bg(_("Back_ground color:"), _("Background color"), _("Color of the canvas background. Note: opacity is ignored except when exporting to bitmap."), "pagecolor", "inkscape:pageopacity", _wr),
-      _rcp_bord(_("Border _color:"), _("Page border color"), _("Color of the page border"), "bordercolor", "borderopacity", _wr),
-      _rum_deflt(_("Display _units:"), "inkscape:document-units", _wr),
-      _page_sizer(_wr),
+    , _rcb_antialias(_("Use antialiasing"), _("If unset, no antialiasing will be done on the drawing"), "shape-rendering", _wr, false, nullptr, nullptr, nullptr, "crispEdges")
+    , _rcb_checkerboard(_("Checkerboard background"), _("If set, use a colored checkerboard for the canvas background"), "inkscape:pagecheckerboard", _wr, false)
+    , _rcb_canb(_("Show page _border"), _("If set, rectangular page border is shown"), "showborder", _wr, false)
+    , _rcb_bord(_("Border on _top of drawing"), _("If set, border is always on top of the drawing"), "borderlayer", _wr, false)
+    , _rcb_shad(_("_Show border shadow"), _("If set, page border shows a shadow on its right and lower side"), "inkscape:showpageshadow", _wr, false)
+    , _rcp_bg(_("Back_ground color:"), _("Background color"), _("Color of the canvas background. Note: opacity is ignored except when exporting to bitmap."), "pagecolor", "inkscape:pageopacity", _wr)
+    , _rcp_bord(_("Border _color:"), _("Page border color"), _("Color of the page border"), "bordercolor", "borderopacity", _wr)
+    , _rum_deflt(_("Display _units:"), "inkscape:document-units", _wr)
+    , _page_sizer(_wr)
     //---------------------------------------------------------------
-      //General snap options
-      _rcb_sgui(_("Show _guides"), _("Show or hide guides"), "showguides", _wr),
-      _rcb_lgui(_("Lock all guides"), _("Toggle lock of all guides in the document"), "inkscape:lockguides", _wr),
-      _rcp_gui(_("Guide co_lor:"), _("Guideline color"), _("Color of guidelines"), "guidecolor", "guideopacity", _wr),
-      _rcp_hgui(_("_Highlight color:"), _("Highlighted guideline color"), _("Color of a guideline when it is under mouse"), "guidehicolor", "guidehiopacity", _wr),
-      _create_guides_btn(_("Create guides around the page")),
-      _delete_guides_btn(_("Delete all guides")),
+    //General snap options
+    , _rcb_sgui(_("Show _guides"), _("Show or hide guides"), "showguides", _wr)
+    , _rcb_lgui(_("Lock all guides"), _("Toggle lock of all guides in the document"), "inkscape:lockguides", _wr)
+    , _rcp_gui(_("Guide co_lor:"), _("Guideline color"), _("Color of guidelines"), "guidecolor", "guideopacity", _wr)
+    , _rcp_hgui(_("_Highlight color:"), _("Highlighted guideline color"), _("Color of a guideline when it is under mouse"), "guidehicolor", "guidehiopacity", _wr)
+    , _create_guides_btn(_("Create guides around the page"))
+    , _delete_guides_btn(_("Delete all guides"))
     //---------------------------------------------------------------
-    _rsu_sno(_("Snap _distance"), _("Snap only when _closer than:"), _("Always snap"),
-                  _("Snapping distance, in screen pixels, for snapping to objects"), _("Always snap to objects, regardless of their distance"),
-                  _("If set, objects only snap to another object when it's within the range specified below"),
-                  "objecttolerance", _wr),
+    , _rsu_sno(_("Snap _distance"), _("Snap only when _closer than:"), _("Always snap"),
+               _("Snapping distance, in screen pixels, for snapping to objects"), _("Always snap to objects, regardless of their distance"),
+               _("If set, objects only snap to another object when it's within the range specified below"),
+               "objecttolerance", _wr)
     //Options for snapping to grids
-    _rsu_sn(_("Snap d_istance"), _("Snap only when c_loser than:"), _("Always snap"),
-                  _("Snapping distance, in screen pixels, for snapping to grid"), _("Always snap to grids, regardless of the distance"),
-                  _("If set, objects only snap to a grid line when it's within the range specified below"),
-                  "gridtolerance", _wr),
+    , _rsu_sn(_("Snap d_istance"), _("Snap only when c_loser than:"), _("Always snap"),
+              _("Snapping distance, in screen pixels, for snapping to grid"), _("Always snap to grids, regardless of the distance"),
+              _("If set, objects only snap to a grid line when it's within the range specified below"),
+              "gridtolerance", _wr)
     //Options for snapping to guides
-    _rsu_gusn(_("Snap dist_ance"), _("Snap only when close_r than:"), _("Always snap"),
+    , _rsu_gusn(_("Snap dist_ance"), _("Snap only when close_r than:"), _("Always snap"),
                 _("Snapping distance, in screen pixels, for snapping to guides"), _("Always snap to guides, regardless of the distance"),
                 _("If set, objects only snap to a guide when it's within the range specified below"),
-                "guidetolerance", _wr),
+                "guidetolerance", _wr)
     //---------------------------------------------------------------
-      _rcb_snclp(_("Snap to clip paths"), _("When snapping to paths, then also try snapping to clip paths"), "inkscape:snap-path-clip", _wr),
-      _rcb_snmsk(_("Snap to mask paths"), _("When snapping to paths, then also try snapping to mask paths"), "inkscape:snap-path-mask", _wr),
-      _rcb_perp(_("Snap perpendicularly"), _("When snapping to paths or guides, then also try snapping perpendicularly"), "inkscape:snap-perpendicular", _wr),
-      _rcb_tang(_("Snap tangentially"), _("When snapping to paths or guides, then also try snapping tangentially"), "inkscape:snap-tangential", _wr),
+    , _rcb_snclp(_("Snap to clip paths"), _("When snapping to paths, then also try snapping to clip paths"), "inkscape:snap-path-clip", _wr)
+    , _rcb_snmsk(_("Snap to mask paths"), _("When snapping to paths, then also try snapping to mask paths"), "inkscape:snap-path-mask", _wr)
+    , _rcb_perp(_("Snap perpendicularly"), _("When snapping to paths or guides, then also try snapping perpendicularly"), "inkscape:snap-perpendicular", _wr)
+    , _rcb_tang(_("Snap tangentially"), _("When snapping to paths or guides, then also try snapping tangentially"), "inkscape:snap-tangential", _wr)
     //---------------------------------------------------------------
-      _grids_label_crea("", Gtk::ALIGN_START),
-      _grids_button_new(C_("Grid", "_New"), _("Create new grid.")),
-      _grids_button_remove(C_("Grid", "_Remove"), _("Remove selected grid.")),
-      _grids_label_def("", Gtk::ALIGN_START)
+    , _grids_label_crea("", Gtk::ALIGN_START)
+    , _grids_button_new(C_("Grid", "_New"), _("Create new grid."))
+    , _grids_button_remove(C_("Grid", "_Remove"), _("Remove selected grid."))
+    , _grids_label_def("", Gtk::ALIGN_START)
 {
     _getContents()->set_spacing (4);
     _getContents()->pack_start(_notebook, true, true);
 
     _notebook.append_page(*_page_page,      _("Page"));
     _notebook.append_page(*_page_guides,    _("Guides"));
-    _notebook.append_page(_grids_vbox,     _("Grids"));
+    _notebook.append_page(_grids_vbox,      _("Grids"));
     _notebook.append_page(*_page_snap,      _("Snap"));
-    _notebook.append_page(*_page_cms, _("Color"));
+    _notebook.append_page(*_page_cms,       _("Color"));
     _notebook.append_page(*_page_scripting, _("Scripting"));
     _notebook.append_page(*_page_metadata1, _("Metadata"));
     _notebook.append_page(*_page_metadata2, _("License"));
@@ -211,9 +211,9 @@ DocumentProperties::~DocumentProperties()
  * widget in columns 2-3; (non-0, 0) means label in columns 1-3; and
  * (non-0, non-0) means two widgets in columns 2 and 3.
  */
-inline void attach_all(Gtk::Grid &table, Gtk::Widget *const arr[], unsigned const n, int start = 0, int docum_prop_flag = 0, bool indent = false)
+void attach_all(Gtk::Grid &table, Gtk::Widget *const arr[], unsigned const n)
 {
-    for (unsigned i = 0, r = start; i < n; i += 2) {
+    for (unsigned i = 0, r = 0; i < n; i += 2) {
         if (arr[i] && arr[i+1]) {
             arr[i]->set_hexpand();
             arr[i+1]->set_hexpand();
@@ -228,44 +228,14 @@ inline void attach_all(Gtk::Grid &table, Gtk::Widget *const arr[], unsigned cons
                     // only the PageSizer in Document Properties|Page should be stretched vertically
                     yoptions = Gtk::FILL|Gtk::EXPAND;
                 }
-                if (docum_prop_flag) {
-                    // this sets the padding for subordinate widgets on the "Page" page
-                    if( indent && (i==(n-6) || i==(n-4) || i==(n-2)) ) {
-                        arr[i+1]->set_hexpand();
-#if GTKMM_CHECK_VERSION(3,12,0)
-                        arr[i+1]->set_margin_start(20);
-                        arr[i+1]->set_margin_end(20);
-#else
-                        arr[i+1]->set_margin_left(20);
-                        arr[i+1]->set_margin_right(20);
-#endif
+                arr[i+1]->set_hexpand();
 
-                        if (yoptions & Gtk::EXPAND)
-                            arr[i+1]->set_vexpand();
-                        else
-                            arr[i+1]->set_valign(Gtk::ALIGN_CENTER);
+                if (yoptions & Gtk::EXPAND)
+                    arr[i+1]->set_vexpand();
+                else
+                    arr[i+1]->set_valign(Gtk::ALIGN_CENTER);
 
-                        table.attach(*arr[i+1], 1, r, 2, 1);
-                    } else {
-                        arr[i+1]->set_hexpand();
-
-                        if (yoptions & Gtk::EXPAND)
-                            arr[i+1]->set_vexpand();
-                        else
-                            arr[i+1]->set_valign(Gtk::ALIGN_CENTER);
-
-                        table.attach(*arr[i+1], 1, r, 2, 1);
-                    }
-                } else {
-                    arr[i+1]->set_hexpand();
-
-                    if (yoptions & Gtk::EXPAND)
-                        arr[i+1]->set_vexpand();
-                    else
-                        arr[i+1]->set_valign(Gtk::ALIGN_CENTER);
-
-                    table.attach(*arr[i+1], 1, r, 2, 1);
-                }
+                table.attach(*arr[i+1], 1, r, 2, 1);
             } else if (arr[i]) {
                 Gtk::Label& label = reinterpret_cast<Gtk::Label&>(*arr[i]);
 
@@ -307,48 +277,50 @@ void DocumentProperties::build_page()
 
     _page_sizer.init();
 
+    _rcb_doc_props_left.set_border_width(4);
+    _rcb_doc_props_left.set_row_spacing(4);
+    _rcb_doc_props_left.set_column_spacing(4);
+    _rcb_doc_props_right.set_border_width(4);
+    _rcb_doc_props_right.set_row_spacing(4);
+    _rcb_doc_props_right.set_column_spacing(4);
+
     Gtk::Widget *const widget_array[] =
     {
         label_gen,            nullptr,
-        nullptr,                    &_rum_deflt,
-        //label_col,          0,
-        //_rcp_bg._label,     &_rcp_bg,
-        nullptr,                    nullptr,
+        nullptr,              &_rum_deflt,
+        nullptr,              nullptr,
         label_for,            nullptr,
-        nullptr,                    &_page_sizer,
-        nullptr,                    nullptr,
+        nullptr,              &_page_sizer,
+        nullptr,              nullptr,
         &_rcb_doc_props_left, &_rcb_doc_props_right,
     };
+    attach_all(_page_page->table(), widget_array, G_N_ELEMENTS(widget_array));
 
-    attach_all(_page_page->table(), widget_array, G_N_ELEMENTS(widget_array),0,1);
     Gtk::Widget *const widget_array_left[] =
     {
-        label_bkg,        nullptr,
-        nullptr,                &_rcb_checkerboard,
-        nullptr,                &_rcp_bg,
-        label_dsp,        nullptr,
-        nullptr,                &_rcb_antialias,
+        label_bkg,            nullptr,
+        nullptr,              &_rcb_checkerboard,
+        nullptr,              &_rcp_bg,
+        label_dsp,            nullptr,
+        nullptr,              &_rcb_antialias,
     };
+    attach_all(_rcb_doc_props_left, widget_array_left, G_N_ELEMENTS(widget_array_left));
 
-    attach_all(_rcb_doc_props_left, widget_array_left, G_N_ELEMENTS(widget_array_left),0,1);
     Gtk::Widget *const widget_array_right[] =
     {
-        label_bdr,        nullptr,
-        nullptr,                &_rcb_canb,
-        nullptr,                &_rcb_bord,
-        nullptr,                &_rcb_shad,
-        nullptr,                &_rcp_bord,
+        label_bdr,            nullptr,
+        nullptr,              &_rcb_canb,
+        nullptr,              &_rcb_bord,
+        nullptr,              &_rcb_shad,
+        nullptr,              &_rcp_bord,
     };
-    
-    attach_all(_rcb_doc_props_right, widget_array_right, G_N_ELEMENTS(widget_array_right),0,1, true);
+    attach_all(_rcb_doc_props_right, widget_array_right, G_N_ELEMENTS(widget_array_right));
 
     std::list<Gtk::Widget*> _slaveList;
     _slaveList.push_back(&_rcb_bord);
     _slaveList.push_back(&_rcb_shad);
     _slaveList.push_back(&_rcp_bord);
     _rcb_canb.setSlaveWidgets(_slaveList);
-
-    attach_all(_page_page->table(), widget_array, G_N_ELEMENTS(widget_array),0,1);
 }
 
 void DocumentProperties::build_guides()
@@ -358,18 +330,25 @@ void DocumentProperties::build_guides()
     Gtk::Label *label_gui = Gtk::manage (new Gtk::Label);
     label_gui->set_markup (_("<b>Guides</b>"));
 
+    _rcp_gui.set_hexpand();
+    _rcp_hgui.set_hexpand();
+    _rcb_sgui.set_hexpand();
+    auto inner = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL, 4));
+    inner->add(_rcb_sgui);
+    inner->add(_rcb_lgui);
+    inner->add(_rcp_gui);
+    inner->add(_rcp_hgui);
+    auto spacer = Gtk::manage(new Gtk::Label());
     Gtk::Widget *const widget_array[] =
     {
-        label_gui,        nullptr,
-        nullptr,                &_rcb_sgui,
-        nullptr,                &_rcb_lgui,
-        nullptr,                &_rcp_gui,
-        nullptr,                &_rcp_hgui,
-        nullptr,                &_create_guides_btn,
-        nullptr,                &_delete_guides_btn
+        label_gui, nullptr,
+        inner,     spacer,
+        nullptr,   nullptr,
+        nullptr,   &_create_guides_btn,
+        nullptr,   &_delete_guides_btn
     };
-
     attach_all(_page_guides->table(), widget_array, G_N_ELEMENTS(widget_array));
+    inner->set_hexpand(false);
 
     _create_guides_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::create_guides_around_page));
     _delete_guides_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::delete_all_guides));
@@ -388,24 +367,25 @@ void DocumentProperties::build_snap()
     Gtk::Label *label_m = Gtk::manage (new Gtk::Label);
     label_m->set_markup (_("<b>Miscellaneous</b>"));
 
+    auto spacer = Gtk::manage(new Gtk::Label());
+
     Gtk::Widget *const array[] =
     {
-        label_o,            nullptr,
-        nullptr,                  _rsu_sno._vbox,
-        nullptr,                  &_rcb_snclp,
-        nullptr,                  &_rcb_snmsk,
-        nullptr,                  nullptr,
-        label_gr,           nullptr,
-        nullptr,                  _rsu_sn._vbox,
-        nullptr,                  nullptr,
-        label_gu,           nullptr,
-        nullptr,                  _rsu_gusn._vbox,
-        nullptr,                  nullptr,
-        label_m,           nullptr,
-        nullptr,                  &_rcb_perp,
-        nullptr,                  &_rcb_tang
+        label_o,     nullptr,
+        nullptr,     _rsu_sno._vbox,
+        &_rcb_snclp, spacer,
+        nullptr,     &_rcb_snmsk,
+        nullptr,     nullptr,
+        label_gr,    nullptr,
+        nullptr,     _rsu_sn._vbox,
+        nullptr,     nullptr,
+        label_gu,    nullptr,
+        nullptr,     _rsu_gusn._vbox,
+        nullptr,     nullptr,
+        label_m,     nullptr,
+        nullptr,     &_rcb_perp,
+        nullptr,     &_rcb_tang
     };
-
     attach_all(_page_snap->table(), array, G_N_ELEMENTS(array));
  }
 
@@ -707,7 +687,6 @@ void DocumentProperties::build_cms()
     _unlink_btn.set_tooltip_text(_("Unlink Profile"));
     docprops_style_button(_unlink_btn, INKSCAPE_ICON("list-remove"));
 
-    _page_cms->set_spacing(4);
     gint row = 0;
 
     label_link->set_hexpand();
@@ -801,9 +780,8 @@ void DocumentProperties::build_cms()
 void DocumentProperties::build_scripting()
 {
     _page_scripting->show();
-
-    _page_scripting->set_spacing (4);
-    _page_scripting->pack_start(_scripting_notebook, true, true);
+    
+    _page_scripting->table().attach(_scripting_notebook, 0, 0);
 
     _scripting_notebook.append_page(*_page_external_scripts, _("External scripts"));
     _scripting_notebook.append_page(*_page_embedded_scripts, _("Embedded scripts"));
@@ -819,7 +797,6 @@ void DocumentProperties::build_scripting()
     _external_remove_btn.set_tooltip_text(_("Remove"));
     docprops_style_button(_external_remove_btn, INKSCAPE_ICON("list-remove"));
 
-    _page_external_scripts->set_spacing(4);
     gint row = 0;
 
     label_external->set_hexpand();
@@ -888,7 +865,6 @@ void DocumentProperties::build_scripting()
     _embed_button_box.add(_embed_new_btn);
     _embed_button_box.add(_embed_remove_btn);
 
-    _page_embedded_scripts->set_spacing(4);
     row = 0;
 
     label_embedded->set_hexpand();
@@ -990,6 +966,7 @@ void DocumentProperties::build_scripting()
     onExternalScriptSelectRow();
 }
 
+// TODO: This duplicates code in document-metadata.cpp
 void DocumentProperties::build_metadata()
 {
     using Inkscape::UI::Widget::EntityEntry;
@@ -1014,6 +991,7 @@ void DocumentProperties::build_metadata()
             space->set_valign(Gtk::ALIGN_CENTER);
             _page_metadata1->table().attach(*space, 0, row, 1, 1);
 
+            w->_label.set_halign(Gtk::ALIGN_START);
             w->_label.set_valign(Gtk::ALIGN_CENTER);
             _page_metadata1->table().attach(w->_label, 1, row, 1, 1);
 
@@ -1402,6 +1380,7 @@ void DocumentProperties::build_gridspage()
 
     _grids_space.set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
 
+    _grids_vbox.set_border_width(4);
     _grids_vbox.set_spacing(4);
     _grids_vbox.pack_start(_grids_label_crea, false, false);
     _grids_vbox.pack_start(_grids_hbox_crea, false, false);

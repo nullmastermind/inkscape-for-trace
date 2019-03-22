@@ -16693,7 +16693,7 @@ msgstr "Metadaten"
 #: ../src/ui/dialog/document-metadata.cpp:76
 #: ../src/ui/dialog/document-properties.cpp:157
 msgid "License"
-msgstr "Nutzungsbedingungen - Lizenz"
+msgstr "Lizenz"
 
 # !!!
 #: ../src/ui/dialog/document-metadata.cpp:113
