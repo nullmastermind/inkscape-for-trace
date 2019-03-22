@@ -142,6 +142,12 @@ void GuidelinePropertiesDialog::_onDelete()
                        _("Delete guide"));
 }
 
+void GuidelinePropertiesDialog::_onDuplicate()
+{
+    _guide->duplicate();
+    DocumentUndo::done(_guide->document, SP_VERB_NONE, _("Duplicate guide"));
+}
+
 void GuidelinePropertiesDialog::_response(gint response)
 {
     switch (response) {
@@ -150,6 +156,9 @@ void GuidelinePropertiesDialog::_response(gint response)
             break;
 	case -12:
             _onDelete();
+            break;
+	case -13:
+            _onDuplicate();
             break;
 	case Gtk::RESPONSE_CANCEL:
             break;
@@ -164,6 +173,7 @@ void GuidelinePropertiesDialog::_setup() {
     set_title(_("Guideline"));
     add_button(_("_OK"), Gtk::RESPONSE_OK);
     add_button(_("_Delete"), -12);
+    add_button(_("_Duplicate"), -13);
     add_button(_("_Cancel"), Gtk::RESPONSE_CANCEL);
 
     auto mainVBox = get_content_area();

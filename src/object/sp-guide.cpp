@@ -248,6 +248,10 @@ SPGuide *SPGuide::createSPGuide(SPDocument *doc, Geom::Point const &pt1, Geom::P
     return guide;
 }
 
+SPGuide *SPGuide::duplicate(){
+    return SPGuide::createSPGuide(document, point_on_line, Geom::Point(point_on_line[Geom::X] + normal_to_line[Geom::Y],point_on_line[Geom::Y] - normal_to_line[Geom::X]));
+}
+
 void sp_guide_pt_pairs_to_guides(SPDocument *doc, std::list<std::pair<Geom::Point, Geom::Point> > &pts)
 {
     for (auto & pt : pts) {

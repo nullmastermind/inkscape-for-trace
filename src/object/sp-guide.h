@@ -57,6 +57,7 @@ public:
     bool getLocked() const { return locked; }
 
     static SPGuide *createSPGuide(SPDocument *doc, Geom::Point const &pt1, Geom::Point const &pt2);
+    SPGuide *duplicate();
 
     void showSPGuide(SPCanvasGroup *group, GCallback handler);
     void hideSPGuide(SPCanvas *canvas);

@@ -52,6 +52,7 @@ protected:
 
     void _onOK();
     void _onDelete();
+    void _onDuplicate();
 
     void _response(gint response);
     void _modeChanged();
