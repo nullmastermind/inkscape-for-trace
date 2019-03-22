@@ -650,7 +650,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                         acceleration, desktop->getCanvas()));
 
                 gobble_key_events(get_latin_keyval(&event->key), GDK_CONTROL_MASK);
-                this->desktop->scroll_relative(Geom::Point(0, -i * desktop->yaxisdir()));
+                this->desktop->scroll_relative(Geom::Point(0, i));
                 ret = TRUE;
             } else {
                 ret = _keyboardMove(event->key, Geom::Point(0, -desktop->yaxisdir()));
@@ -680,7 +680,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                         acceleration, desktop->getCanvas()));
 
                 gobble_key_events(get_latin_keyval(&event->key), GDK_CONTROL_MASK);
-                this->desktop->scroll_relative(Geom::Point(0, i * desktop->yaxisdir()));
+                this->desktop->scroll_relative(Geom::Point(0, -i));
                 ret = TRUE;
             } else {
                 ret = _keyboardMove(event->key, Geom::Point(0, desktop->yaxisdir()));
