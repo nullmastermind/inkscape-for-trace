@@ -182,8 +182,13 @@ Find::Find()
     check_offsets.set_use_underline();
     check_offsets.set_tooltip_text(_("Search offset objects"));
     check_offsets.set_active(false);
+
     entry_find.getEntry()->set_width_chars(25);
+    entry_find.child_property_fill(*entry_find.getEntry()) = true;
+    entry_find.child_property_expand(*entry_find.getEntry()) = true;
     entry_replace.getEntry()->set_width_chars(25);
+    entry_replace.child_property_fill(*entry_replace.getEntry()) = true;
+    entry_replace.child_property_expand(*entry_replace.getEntry()) = true;
 
     Gtk::RadioButtonGroup grp_searchin = check_searchin_text.get_group();
     check_searchin_property.set_group(grp_searchin);
@@ -211,16 +216,15 @@ Find::Find()
     hbox_options.pack_start(vbox_options2, true, true, 4);
     frame_options.add(hbox_options);
 
-    hbox_properties1.set_homogeneous(false);
-    hbox_properties1.pack_start(check_ids, false, false, 4 );
-    hbox_properties1.pack_start(check_style, false, false, 8);
-    hbox_properties1.pack_start(check_font, false, false, 8);
-    hbox_properties2.set_homogeneous(false);
-    hbox_properties2.pack_start(check_attributevalue, false, false, 4);
-    hbox_properties2.pack_start(check_attributename, false, false, 4);
-    vbox_properties.pack_start(hbox_properties1, true, true, 0);
-    vbox_properties.pack_start(hbox_properties2, true, true, 2);
-    frame_properties.add(vbox_properties);
+    vbox_properties1.pack_start(check_ids, true, true);
+    vbox_properties1.pack_start(check_style, true, true);
+    vbox_properties1.pack_start(check_font, true, true);
+    vbox_properties2.pack_start(check_attributevalue, true, true);
+    vbox_properties2.pack_start(check_attributename, true, true);
+    vbox_properties2.set_valign(Gtk::ALIGN_START);
+    hbox_properties.pack_start(vbox_properties1, true, true, 4);
+    hbox_properties.pack_start(vbox_properties2, true, true, 4);
+    frame_properties.add(hbox_properties);
 
     vbox_types1.pack_start(check_alltypes, true, true);
     vbox_types1.pack_start(check_paths, true, true);
@@ -233,6 +237,7 @@ Find::Find()
     vbox_types2.pack_start(check_ellipses, true, true);
     vbox_types2.pack_start(check_stars, true, true);
     vbox_types2.pack_start(check_spirals, true, true);
+    vbox_types2.set_valign(Gtk::ALIGN_END);
     hbox_types.pack_start(vbox_types1, true, true, 4);
     hbox_types.pack_start(vbox_types2, true, true, 4);
     frame_types.add(hbox_types);
@@ -275,7 +280,6 @@ Find::Find()
     checkTypes.push_back(&check_ellipses);
     checkTypes.push_back(&check_stars);
     checkTypes.push_back(&check_spirals);
-    checkTypes.push_back(&check_offsets);
 
     // set signals to handle clicks
     expander_options.property_expanded().signal_changed().connect(sigc::mem_fun(*this, &Find::onExpander));
@@ -285,11 +289,11 @@ Find::Find()
     check_searchin_property.signal_clicked().connect(sigc::mem_fun(*this, &Find::onSearchinProperty));
     check_alltypes.signal_clicked().connect(sigc::mem_fun(*this, &Find::onToggleAlltypes));
 
-    for(auto & checkPropertie : checkProperties) {
-        checkPropertie->signal_clicked().connect(sigc::mem_fun(*this, &Find::onToggleCheck));
+    for (auto & checkProperty : checkProperties) {
+        checkProperty->signal_clicked().connect(sigc::mem_fun(*this, &Find::onToggleCheck));
     }
 
-    for(auto & checkType : checkTypes) {
+    for (auto & checkType : checkTypes) {
         checkType->signal_clicked().connect(sigc::mem_fun(*this, &Find::onToggleCheck));
     }
 
@@ -574,9 +578,9 @@ bool Find::item_font_match(SPItem *item, const gchar *text, bool exact, bool cas
     vFontTokenNames.emplace_back("-inkscape-font-specification:");
 
     std::vector<Glib::ustring> vStyleTokens = Glib::Regex::split_simple(";", item_style);
-    for(auto & vStyleToken : vStyleTokens) {
+    for (auto & vStyleToken : vStyleTokens) {
         Glib::ustring token = vStyleToken;
-        for(const auto & vFontTokenName : vFontTokenNames) {
+        for (const auto & vFontTokenName : vFontTokenNames) {
             if ( token.find(vFontTokenName) != std::string::npos) {
                 Glib::ustring font1 = Glib::ustring(vFontTokenName).append(text);
                 bool found = find_strcmp(token.c_str(), font1.c_str(), exact, casematch);
@@ -600,7 +604,7 @@ bool Find::item_font_match(SPItem *item, const gchar *text, bool exact, bool cas
 
     if (ret && _action_replace) {
         Glib::ustring new_item_style;
-        for(const auto & vStyleToken : vStyleTokens) {
+        for (const auto & vStyleToken : vStyleTokens) {
             new_item_style.append(vStyleToken).append(";");
         }
         new_item_style.erase(new_item_style.size()-1);
@@ -623,7 +627,7 @@ std::vector<SPItem*> Find::filter_fields (std::vector<SPItem*> &l, bool exact, b
     std::vector<SPItem*> out;
 
     if (check_searchin_text.get_active()) {
-        for(std::vector<SPItem*>::const_reverse_iterator i=in.rbegin(); in.rend() != i; ++i) {
+        for (std::vector<SPItem*>::const_reverse_iterator i=in.rbegin(); in.rend() != i; ++i) {
             SPObject *obj = *i;
             SPItem *item = dynamic_cast<SPItem *>(obj);
             g_assert(item != nullptr);
@@ -646,7 +650,7 @@ std::vector<SPItem*> Find::filter_fields (std::vector<SPItem*> &l, bool exact, b
         bool attrvalue = check_attributevalue.get_active();
 
         if (ids) {
-            for(std::vector<SPItem*>::const_reverse_iterator i=in.rbegin(); in.rend() != i; ++i) {
+            for (std::vector<SPItem*>::const_reverse_iterator i=in.rbegin(); in.rend() != i; ++i) {
                 SPObject *obj = *i;
                 SPItem *item = dynamic_cast<SPItem *>(obj);
                 if (item_id_match(item, text, exact, casematch)) {
@@ -662,7 +666,7 @@ std::vector<SPItem*> Find::filter_fields (std::vector<SPItem*> &l, bool exact, b
 
 
         if (style) {
-            for(std::vector<SPItem*>::const_reverse_iterator i=in.rbegin(); in.rend() != i; ++i) {
+            for (std::vector<SPItem*>::const_reverse_iterator i=in.rbegin(); in.rend() != i; ++i) {
                 SPObject *obj = *i;
                 SPItem *item = dynamic_cast<SPItem *>(obj);
                 g_assert(item != nullptr);
@@ -679,7 +683,7 @@ std::vector<SPItem*> Find::filter_fields (std::vector<SPItem*> &l, bool exact, b
 
 
         if (attrname) {
-            for(std::vector<SPItem*>::const_reverse_iterator i=in.rbegin(); in.rend() != i; ++i) {
+            for (std::vector<SPItem*>::const_reverse_iterator i=in.rbegin(); in.rend() != i; ++i) {
                 SPObject *obj = *i;
                 SPItem *item = dynamic_cast<SPItem *>(obj);
                 g_assert(item != nullptr);
@@ -696,7 +700,7 @@ std::vector<SPItem*> Find::filter_fields (std::vector<SPItem*> &l, bool exact, b
 
 
         if (attrvalue) {
-            for(std::vector<SPItem*>::const_reverse_iterator i=in.rbegin(); in.rend() != i; ++i) {
+            for (std::vector<SPItem*>::const_reverse_iterator i=in.rbegin(); in.rend() != i; ++i) {
                 SPObject *obj = *i;
                 SPItem *item = dynamic_cast<SPItem *>(obj);
                 g_assert(item != nullptr);
@@ -713,7 +717,7 @@ std::vector<SPItem*> Find::filter_fields (std::vector<SPItem*> &l, bool exact, b
 
 
         if (font) {
-            for(std::vector<SPItem*>::const_reverse_iterator i=in.rbegin(); in.rend() != i; ++i) {
+            for (std::vector<SPItem*>::const_reverse_iterator i=in.rbegin(); in.rend() != i; ++i) {
                 SPObject *obj = *i;
                 SPItem *item = dynamic_cast<SPItem *>(obj);
                 g_assert(item != nullptr);
@@ -755,7 +759,7 @@ bool Find::item_type_match (SPItem *item)
     } else if (dynamic_cast<SPPath *>(item) || dynamic_cast<SPLine *>(item) || dynamic_cast<SPPolyLine *>(item)) {
         return (all || check_paths.get_active());
 
-    } else if (dynamic_cast<SPText *>(item) || dynamic_cast<SPTSpan *>(item) || 
+    } else if (dynamic_cast<SPText *>(item) || dynamic_cast<SPTSpan *>(item) ||
 	           dynamic_cast<SPTRef *>(item) || dynamic_cast<SPString *>(item) ||
 			   dynamic_cast<SPFlowtext *>(item) || dynamic_cast<SPFlowdiv *>(item) ||
 			   dynamic_cast<SPFlowtspan *>(item) || dynamic_cast<SPFlowpara *>(item)) {
@@ -780,7 +784,7 @@ bool Find::item_type_match (SPItem *item)
 std::vector<SPItem*> Find::filter_types (std::vector<SPItem*> &l)
 {
     std::vector<SPItem*> n;
-    for(std::vector<SPItem*>::const_reverse_iterator i=l.rbegin(); l.rend() != i; ++i) {
+    for (std::vector<SPItem*>::const_reverse_iterator i=l.rbegin(); l.rend() != i; ++i) {
         SPObject *obj = *i;
         SPItem *item = dynamic_cast<SPItem *>(obj);
         g_assert(item != nullptr);
@@ -824,7 +828,7 @@ std::vector<SPItem*> &Find::all_items (SPObject *r, std::vector<SPItem*> &l, boo
 std::vector<SPItem*> &Find::all_selection_items (Inkscape::Selection *s, std::vector<SPItem*> &l, SPObject *ancestor, bool hidden, bool locked)
 {
 	auto itemlist= s->items();
-    for(auto i=boost::rbegin(itemlist); boost::rend(itemlist) != i; ++i) {
+    for (auto i=boost::rbegin(itemlist); boost::rend(itemlist) != i; ++i) {
         SPObject *obj = *i;
         SPItem *item = dynamic_cast<SPItem *>(obj);
         g_assert(item != nullptr);
@@ -948,8 +952,8 @@ void Find::onToggleCheck ()
     if (check_alltypes.get_active()) {
         objectok = true;
     }
-    for(int i = 0; i < 11; i++) {
-        if (checkTypes[i]->get_active()) {
+    for (auto & checkType : checkTypes) {
+        if (checkType->get_active()) {
             objectok = true;
         }
     }
@@ -965,8 +969,8 @@ void Find::onToggleCheck ()
         propertyok = true;
     } else {
 
-        for(auto & checkPropertie : checkProperties) {
-            if (checkPropertie->get_active()) {
+        for (auto & checkProperty : checkProperties) {
+            if (checkProperty->get_active()) {
                 propertyok = true;
             }
         }
@@ -987,7 +991,7 @@ void Find::onToggleCheck ()
 void Find::onToggleAlltypes ()
 {
      bool all  =check_alltypes.get_active();
-     for(auto & checkType : checkTypes) {
+     for (auto & checkType : checkTypes) {
          checkType->set_sensitive(!all);
      }
 
@@ -1008,8 +1012,8 @@ void Find::onSearchinProperty ()
 
 void Find::searchinToggle(bool on)
 {
-    for(auto & checkPropertie : checkProperties) {
-        checkPropertie->set_sensitive(on);
+    for (auto & checkProperty : checkProperties) {
+        checkProperty->set_sensitive(on);
     }
 }
 

@@ -241,9 +241,9 @@ private:
     Gtk::CheckButton    check_attributevalue;
     Gtk::CheckButton    check_style;
     Gtk::CheckButton    check_font;
-    Gtk::VBox vbox_properties;
-    Gtk::HBox hbox_properties1;
-    Gtk::HBox hbox_properties2;
+    Gtk::HBox hbox_properties;
+    Gtk::VBox vbox_properties1;
+    Gtk::VBox vbox_properties2;
     UI::Widget::Frame frame_properties;
 
     /**
