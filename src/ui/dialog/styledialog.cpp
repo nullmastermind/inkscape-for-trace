@@ -457,7 +457,7 @@ void StyleDialog::_readStyleElement()
         coltype colType = SELECTOR;
         for (auto tok : tokensplus) {
             REMOVE_SPACES(tok);
-            if (tok.find(" ") != -1) {
+            if (tok.find(" ") != -1 || tok.erase(0,1).find(".") != -1) {
                 colType = UNHANDLED;
             }
         }
@@ -961,7 +961,7 @@ void StyleDialog::_addSelector()
 
     // If class selector, add selector name to class attribute for each object
     if (selectorValue[0] == '.' && handled) {
-        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[,\\.\\s]+", selectorValue);
+        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[,\\s]+", selectorValue);
         Glib::ustring originClassName = tokens[0];
         originClassName.erase(0, 1);
         std::vector<Glib::ustring> classes = Glib::Regex::split_simple("[\\.]+", originClassName);
