@@ -965,11 +965,11 @@ void StyleDialog::_addSelector()
         Glib::ustring originClassName = tokens[0];
         originClassName.erase(0, 1);
         std::vector<Glib::ustring> classes = Glib::Regex::split_simple("[\\.]+", originClassName);
-        if (classes.length == 1)
+        if (classes.size() == 1) {
             _insertClass(objVec, classes[0]);
-    } else {
-        handled = false;
-    }
+        } else {
+            handled = false;
+        }
     }
 
     // Generate a new object vector (we could have an element selector,
