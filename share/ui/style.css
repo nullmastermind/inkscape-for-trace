@@ -297,6 +297,13 @@ font-weight:bold;
 padding:15px;
 }
 
+#XMLFlow .toggle{
+    padding-left:6;
+    padding-right:6;
+    padding-top:0;
+    padding-bottom:0;
+}
+
 SPRuler {
     background-color: @theme_bg_color;
     color:            @theme_fg_color;
