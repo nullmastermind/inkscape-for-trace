@@ -640,15 +640,12 @@ void StyleDialog::_addToSelector(Gtk::TreeModel::Row row)
 
             // Get first class (split on white space or comma)
             std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[,\\s]+", selector);
-            Glib::ustring originClassName = tokens[0];
-            originClassName.erase(0,1);
-            std::vector<Glib::ustring> classes = Glib::Regex::split_simple("[\\.]+", originClassName);
+            Glib::ustring className = tokens[0];
+            className.erase(0,1);
             Inkscape::Selection* selection = getDesktop()->getSelection();
             std::vector<SPObject *> sel_obj( selection->objects().begin(),
                                             selection->objects().end() );
-            for (auto className : classes) {
-                _insertClass( sel_obj, className );
-            }
+            _insertClass( sel_obj, className );
             std::vector<SPObject *> objVec = _getObjVec( selector );;
             for (auto& obj: sel_obj) {
 
@@ -743,22 +740,19 @@ void StyleDialog::_removeFromSelector(Gtk::TreeModel::Row row)
                 std::vector<SPObject *> objVec = row[_mColumns._colObj]; // Just one
                 // Get first class (split on white space or comma)
                 std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[,\\s]+", selector);
-                Glib::ustring originClassName = tokens[0];
-                originClassName.erase(0,1);
-                std::vector<Glib::ustring> classes = Glib::Regex::split_simple("[\\.]+", originClassName);
-                for (auto className : classes) {
-                    // Erase class name from 'class' attribute.
-                    Glib::ustring classAttr = objVec[0]->getRepr()->attribute("class");
-                    auto i = classAttr.find( className );
-                    if (i != Glib::ustring::npos) {
-                        classAttr.erase(i, className.length());
-                    }
-                    if (i != Glib::ustring::npos && classAttr[i] == ' ') {
-                        classAttr.erase(i, 1);
-                    }
-                    _store->erase(row);
-                    objVec[0]->getRepr()->setAttribute("class", classAttr);
+                Glib::ustring className = tokens[0];
+                className.erase(0,1);
+                // Erase class name from 'class' attribute.
+                Glib::ustring classAttr = objVec[0]->getRepr()->attribute("class");
+                auto i = classAttr.find( className );
+                if (i != Glib::ustring::npos) {
+                    classAttr.erase(i, className.length());
                 }
+                if (i != Glib::ustring::npos && classAttr[i] == ' ') {
+                    classAttr.erase(i, 1);
+                }
+                _store->erase(row);
+                objVec[0]->getRepr()->setAttribute("class", classAttr);
                 parent[_mColumns._colExpand] = true;
             } else {
                 // Do nothing for element selectors.
@@ -971,12 +965,14 @@ void StyleDialog::_addSelector()
 
     // If class selector, add selector name to class attribute for each object
     if (selectorValue[0] == '.' && handled) {
-        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[,\\s]+", selectorValue);
+        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[,\\.\\s]+", selectorValue);
         Glib::ustring originClassName = tokens[0];
         originClassName.erase(0,1);
         std::vector<Glib::ustring> classes = Glib::Regex::split_simple("[\\.]+", originClassName);
-        for (auto className : classes) {
-            _insertClass( objVec, className );
+        if (classes.length == 1)
+            _insertClass( objVec, classes[0]);
+        } else {
+            handled = false;
         }
     }
 
