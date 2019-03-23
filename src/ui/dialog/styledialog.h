@@ -65,7 +65,7 @@ public:
     void _nodeRemoved( Inkscape::XML::Node &repr );
     void _nodeChanged( Inkscape::XML::Node &repr );
     // Data structure
-    enum coltype {OBJECT,SELECTOR,UNHANDLED};
+    enum coltype { OBJECT, SELECTOR, UNHANDLED };
     class ModelColumns : public Gtk::TreeModel::ColumnRecord {
     public:
         ModelColumns() {
@@ -76,8 +76,8 @@ public:
             add(_colProperties);
         }
         Gtk::TreeModelColumn<Glib::ustring> _colSelector;       // Selector or matching object id.
-        Gtk::TreeModelColumn<bool> _colExpand;       // Open/Close store row.
-        Gtk::TreeModelColumn<gint> _colType;               // Selector row or child object row.
+        Gtk::TreeModelColumn<bool> _colExpand;                  // Open/Close store row.
+        Gtk::TreeModelColumn<gint> _colType;                    // Selector row or child object row.
         Gtk::TreeModelColumn<std::vector<SPObject *> > _colObj; // List of matching objects.
         Gtk::TreeModelColumn<Glib::ustring> _colProperties;     // List of properties.
     };
@@ -145,8 +145,8 @@ public:
     void _handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
     void _handleDesktopChanged(SPDesktop* desktop);
     void _handleSelectionChanged();
-    void _rowExpand(const Gtk::TreeModel::iterator& iter, const Gtk::TreeModel::Path& path);
-    void _rowCollapse(const Gtk::TreeModel::iterator& iter, const Gtk::TreeModel::Path& path);
+    void _rowExpand(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);
+    void _rowCollapse(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);
     void _closeDialog(Gtk::Dialog *textDialogPtr);
 
     DesktopTracker _desktopTracker;
