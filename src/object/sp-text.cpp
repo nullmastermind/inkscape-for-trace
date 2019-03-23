@@ -617,7 +617,7 @@ unsigned SPText::_buildLayoutInput(SPObject *object, Inkscape::Text::Layout::Opt
             // we've found 'x' and 'y' and then creating the Shape at the end.)
             if (is_horizontal()) {
                 // Horizontal text
-                SVGLength* y = attributes.getFirstYLength();
+                SVGLength* y = _getFirstYLength();
                 if (y) {
                     optional_attrs.y.push_back(*y);
                 } else {
@@ -625,14 +625,13 @@ unsigned SPText::_buildLayoutInput(SPObject *object, Inkscape::Text::Layout::Opt
                 }
             } else {
                 // Vertical text
-                SVGLength* x = attributes.getFirstXLength();
+                SVGLength* x = _getFirstXLength();
                 if (x) {
                     optional_attrs.x.push_back(*x);
                 } else {
                     std::cerr << "SPText::_buildLayoutInput: No 'x' attribute value with vertical 'inline-size'!" << std::endl;
                 }
             }
-
         }
 
         // set textLength on the entire layout, see note in TNG-Layout.h
@@ -772,6 +771,47 @@ Shape* SPText::_buildExclusionShape() const
     }
     return result;
 }
+
+
+// SVG requires one to use the first x/y value found on a child element if x/y not given on text
+// element. TODO: Recurse.
+SVGLength*
+SPText::_getFirstXLength()
+{
+    SVGLength* x = attributes.getFirstXLength();
+
+    if (!x) {
+        for (auto& child: children) {
+            if (SP_IS_TSPAN(&child)) {
+                SPTSpan *tspan = SP_TSPAN(&child);
+                x = tspan->attributes.getFirstXLength();
+                break;
+            }
+        }
+    }
+
+    return x;
+}
+
+
+SVGLength*
+SPText::_getFirstYLength()
+{
+    SVGLength* y = attributes.getFirstYLength();
+
+    if (!y) {
+        for (auto& child: children) {
+            if (SP_IS_TSPAN(&child)) {
+                SPTSpan *tspan = SP_TSPAN(&child);
+                y = tspan->attributes.getFirstYLength();
+                break;
+            }
+        }
+    }
+
+    return y;
+}
+
 
 void SPText::rebuildLayout()
 {

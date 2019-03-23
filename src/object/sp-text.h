@@ -78,6 +78,10 @@ private:
     /** Union all exlusion shapes. */
     Shape* _buildExclusionShape() const;
 
+    /** Find first x/y valuse which may be in a descendent element. */
+    SVGLength* _getFirstXLength();
+    SVGLength* _getFirstYLength();
+
 public:
     /** Optimize textpath text on next set_transform. */
     void optimizeTextpathText() {_optimizeTextpathText = true;}

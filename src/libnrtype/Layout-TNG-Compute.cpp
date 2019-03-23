@@ -560,6 +560,8 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
         new_line.baseline_y += line_height.getTypoAscent();
     }
 
+    TRACE(("    initial new_line.baseline_y: %f\n", new_line.baseline_y ));
+
     new_line.in_shape = _current_shape_index;
     _flow._lines.push_back(new_line);
 
@@ -603,12 +605,15 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                 // NOTE: for vertical text, "y" is the user-space "x" value.
                 if( it_chunk->broken_spans.front().start.iter_span->y._set ) {
 
-                    // Use set "y" attribute
+                    // Use set "y" attribute for baseline
                     new_line.baseline_y = it_chunk->broken_spans.front().start.iter_span->y.computed;
+
+                    TRACE(("      chunk new_line.baseline_y: %f\n", new_line.baseline_y ));
 
                     // Save baseline
                     _flow._lines.back().baseline_y = new_line.baseline_y;
 
+                    // Calculate new top of box... given specified baseline.
                     double top_of_line_box = new_line.baseline_y;
                     if( _block_progression == RIGHT_TO_LEFT ) {
                         // Vertical text, use em box center as baseline
@@ -620,7 +625,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                         top_of_line_box -= line_height.getTypoAscent();
                     }
                     TRACE(("      y attribute set, next line top_of_line_box: %f\n", top_of_line_box ));
-                    // Set the initial y coordinate of the next line (see above).
+                    // Set the initial y coordinate of the for this line (see above).
                     _scanline_maker->setNewYCoordinate(top_of_line_box);
                 }
 
@@ -952,10 +957,12 @@ void Layout::Calculator::_createFirstScanlineMaker()
     if (_flow._input_wrap_shapes.empty()) {
         // create the special no-wrapping infinite scanline maker
         double initial_x = 0, initial_y = 0;
-        if (!text_source->x.empty())
+        if (!text_source->x.empty()) {
             initial_x = text_source->x.front().computed;
-        if (!text_source->y.empty())
+        }
+        if (!text_source->y.empty()) {
             initial_y = text_source->y.front().computed;
+        }
         _scanline_maker = new InfiniteScanlineMaker(initial_x, initial_y, _block_progression);
         TRACE(("  wrapping disabled\n"));
     }
@@ -1878,6 +1885,33 @@ bool Layout::Calculator::calculate()
                 keep_going = false;
                 break;   // No room for text and not useful to try again at same place.
             }
+
+            // For Inkscape multi-line text (using role="line") we run into a problem if the first
+            // line is empty - namely, there is no character to attach a 'y' attribute value. The
+            // result is that the code that takes a baseline position (e.g. 'y') and finds the top
+            // of the layout box is bypassed resulting in wrongly placed text (we layout the text
+            // relative to the top of the box as this is required for text-in-a-shape). We don't
+            // know how to find the top of the box from the 'y' position until we have found the
+            // line height parameters for the given line (after calling _findChunksForLine() just
+            // above).
+            if (para.first_input_index == 0) {
+
+                // Calculate new top of box... given specified baseline.
+                double top_of_line_box = _scanline_maker->yCoordinate(); // Set in constructor.
+                if( _block_progression == RIGHT_TO_LEFT ) {
+                    // Vertical text, use em box center as baseline
+                    top_of_line_box += 0.5 * line_box_height.emSize();
+                } else if (_block_progression == LEFT_TO_RIGHT ) {
+                    // Vertical text, use em box center as baseline
+                    top_of_line_box -= 0.5 * line_box_height.emSize();
+                } else {
+                    top_of_line_box -= line_box_height.getTypoAscent();
+                }
+                TRACE(("      y attribute set, next line top_of_line_box: %f\n", top_of_line_box ));
+                // Set the initial y coordinate of the for this line (see above).
+                _scanline_maker->setNewYCoordinate(top_of_line_box);
+            }
+
             _outputLine(para, line_box_height, line_chunk_info);
             _scanline_maker->setLineHeight( line_box_height );
             _scanline_maker->completeLine(); // Increments y by line height
