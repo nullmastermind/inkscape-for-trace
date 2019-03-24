@@ -143,9 +143,8 @@ Effect::merge_menu (Inkscape::XML::Node * base,
         Inkscape::XML::Document *xml_doc;
         xml_doc = base->document();
         tomerge = xml_doc->createElement("submenu");
-        tomerge->setAttribute("name", menuname, false);
-
         mergename = _(menuname);
+        tomerge->setAttribute("name", mergename, false);
     }
 
     int position = -1;
