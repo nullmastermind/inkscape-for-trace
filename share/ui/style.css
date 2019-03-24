@@ -298,8 +298,9 @@ padding:15px;
 }
 
 #XMLFlow .toggle{
-    padding-left:6;
-    padding-right:6;
+    min-width:18px;
+    padding-left:6px;
+    padding-right:6px;
     padding-top:0;
     padding-bottom:0;
 }
