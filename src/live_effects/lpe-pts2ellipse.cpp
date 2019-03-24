@@ -726,6 +726,10 @@ int LPEPts2Ellipse::genPerspectiveEllipse(std::vector<Geom::Point> const &pts, G
     path_out.push_back(path);
 
     // 5) frames and axes
+    bool ccw_wind = false;
+    if (gen_perspective_frame.get_value() || draw_perspective_axes.get_value())
+        ccw_wind = is_ccw(pts);
+    const double ra = ccw_wind ? rot_angle : -rot_angle;
 
     // draw frame?
     if (gen_isometric_frame.get_value()) {
@@ -734,7 +738,7 @@ int LPEPts2Ellipse::genPerspectiveEllipse(std::vector<Geom::Point> const &pts, G
 
     // draw perspective frame?
     if (gen_perspective_frame.get_value()) {
-        gen_perspective_frame_paths(path_out, rot_angle, projmatrix);
+        gen_perspective_frame_paths(path_out, ra, projmatrix);
     }
 
     // draw axes?
@@ -744,7 +748,7 @@ int LPEPts2Ellipse::genPerspectiveEllipse(std::vector<Geom::Point> const &pts, G
 
     // draw perspective axes?
     if (draw_perspective_axes.get_value()) {
-        gen_perspective_axes_paths(path_out, rot_angle, projmatrix);
+        gen_perspective_axes_paths(path_out, ra, projmatrix);
     }
 
     return 0;
