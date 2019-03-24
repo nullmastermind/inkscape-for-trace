@@ -49,17 +49,29 @@ static const Util::EnumDataConverter<EllipseMethod> EMConverter(EllipseMethodDat
 
 LPEPts2Ellipse::LPEPts2Ellipse(LivePathEffectObject *lpeobject)
     : Effect(lpeobject)
-    , method(_("Method:"), _("Methods to generate the ellipse\n- Auto ellipse: fits a circle (2..4 points) or an ellipse (at least 5 points)\n- Force circle: (at least 2 points) always fit to a circle\n- Isometric circle: (3 points) use first two edges\n- Perspective circle: (4 points) circle in a square in perspective view\n- Steiner ellipse: (3 points) ellipse on a triangle\n- Steiner inellipse: (3 points) ellipse inside a triangle"), "method", EMConverter, &wr, this, EM_AUTO)
+    , method(
+          _("Method:"),
+          _("Methods to generate the ellipse\n- Auto ellipse: fits a circle (2..4 points) or an ellipse (at least 5 "
+            "points)\n- Force circle: (at least 2 points) always fit to a circle\n- Isometric circle: (3 points) use "
+            "first two edges\n- Perspective circle: (4 points) circle in a square in perspective view\n- Steiner "
+            "ellipse: (3 points) ellipse on a triangle\n- Steiner inellipse: (3 points) ellipse inside a triangle"),
+          "method", EMConverter, &wr, this, EM_AUTO)
     , gen_isometric_frame(_("_Frame (isometric rectangle)"), _("Draw parallelogram around the ellipse"),
                           "gen_isometric_frame", &wr, this, false)
-    , gen_perspective_frame(_("_Perspective square"), _("Draw square surrounding the circle in perspective view\n(only in method \"Perspective circle\")"),
-                            "gen_perspective_frame", &wr, this, false)
-    , gen_arc(_("_Arc"), _("Generate open arc (open ellipse) based on first and last point\n(only for methods \"Auto ellipse\" and \"Force circle\")"), "gen_arc", &wr, this, false)
+    , gen_perspective_frame(
+          _("_Perspective square"),
+          _("Draw square surrounding the circle in perspective view\n(only in method \"Perspective circle\")"),
+          "gen_perspective_frame", &wr, this, false)
+    , gen_arc(_("_Arc"),
+              _("Generate open arc (open ellipse) based on first and last point\n(only for methods \"Auto ellipse\" "
+                "and \"Force circle\")"),
+              "gen_arc", &wr, this, false)
     , other_arc(_("_Other arc side"), _("Switch sides of the arc"), "arc_other", &wr, this, false)
     , slice_arc(_("_Slice arc"), _("Slice the arc"), "slice_arc", &wr, this, false)
     , draw_axes(_("A_xes"), _("Draw both semi-major and semi-minor axes"), "draw_axes", &wr, this, false)
-    , draw_perspective_axes(_("Perspective axes"), _("Draw the axes in perspective view\n(only in method \"Perspective circle\")"), "draw_perspective_axes", &wr,
-                            this, false)
+    , draw_perspective_axes(_("Perspective axes"),
+                            _("Draw the axes in perspective view\n(only in method \"Perspective circle\")"),
+                            "draw_perspective_axes", &wr, this, false)
     , rot_axes(_("Axes rotation"), _("Axes rotation angle [deg]"), "rot_axes", &wr, this, 0)
     , draw_ori_path(_("Source _path"), _("Show the original source path"), "draw_ori_path", &wr, this, false)
 {
