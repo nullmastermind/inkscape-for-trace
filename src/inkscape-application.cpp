@@ -569,7 +569,7 @@ ConcreteInkscapeApplication<Gtk::Application>::on_startup2()
     add_action("quit",   sigc::mem_fun(*this, &InkscapeApplication::on_quit  ));
 
     // ========================= GUI Init =========================
-    Gtk::Window::set_default_icon_name("inkscape");
+    Gtk::Window::set_default_icon_name("org.inkscape.Inkscape");
     Inkscape::UI::Widget::Panel::prep();
 
     // ========================= Builder ==========================
