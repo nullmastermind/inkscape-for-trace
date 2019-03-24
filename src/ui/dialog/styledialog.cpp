@@ -457,7 +457,7 @@ void StyleDialog::_readStyleElement()
         coltype colType = SELECTOR;
         for (auto tok : tokensplus) {
             REMOVE_SPACES(tok);
-            if (tok.find(" ") != -1 || tok.erase(0,1).find(".") != -1) {
+            if (tok.find(" ") != -1 || tok.erase(0, 1).find(".") != -1) {
                 colType = UNHANDLED;
             }
         }
