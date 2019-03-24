@@ -14,7 +14,7 @@
 
 /* Localization directory */
 #define PACKAGE_LOCALE_DIR "${PACKAGE_LOCALE_DIR}"
-
+#define PACKAGE_LOCALE_DIR_ABSOLUTE "${CMAKE_INSTALL_PREFIX}/${PACKAGE_LOCALE_DIR}"
 
 /* Base data directory -- only path-prefix.h should use it! */
 #define INKSCAPE_DATADIR "${INKSCAPE_DATADIR}"

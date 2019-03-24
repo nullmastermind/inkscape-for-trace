@@ -46,9 +46,9 @@ void initialize_gettext() {
 # ifdef ENABLE_BINRELOC
     bindtextdomain(GETTEXT_PACKAGE, BR_LOCALEDIR(""));
 # else
-    bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
+    bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR_ABSOLUTE);
     // needed by Python/Gettext
-    g_setenv("PACKAGE_LOCALE_DIR", PACKAGE_LOCALE_DIR, TRUE);
+    g_setenv("PACKAGE_LOCALE_DIR", PACKAGE_LOCALE_DIR_ABSOLUTE, TRUE);
 # endif
 #endif
 
