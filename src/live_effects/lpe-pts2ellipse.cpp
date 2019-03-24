@@ -12,7 +12,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "live_effects/lpe-pts2ellipse.h"
+#include "lpe-pts2ellipse.h"
+
 
 #include <object/sp-item-group.h>
 #include <object/sp-item.h>
@@ -32,10 +33,13 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 static const Util::EnumData<EllipseMethod> EllipseMethodData[] = {
-    { EM_AUTO, N_("Auto ellipse"), "auto" },                          //!< (2..4 points: circle, from 5 points: ellipse)
-    { EM_CIRCLE, N_("Force circle"), "circle" },                      //!< always fit a circle
-    { EM_ISOMETRIC_CIRCLE, N_("Isometric circle"), "iso_circle" },    //!< use first two edges to generate a sheared
-                                                                      //!< ellipse
+    { EM_AUTO, N_("Auto ellipse"), "auto" },                       //!< (2..4 points: circle, from 5 points: ellipse)
+    { EM_CIRCLE, N_("Force circle"), "circle" },                   //!< always fit a circle
+    { EM_ISOMETRIC_CIRCLE, N_("Isometric circle"), "iso_circle" }, //!< use first two edges to generate a sheared
+                                                                   //!< ellipse
+    { EM_PERSPECTIVE_CIRCLE, N_("Perspective circle"), "perspective_circle" }, //!< use first three edges to generate an
+                                                                               //!< ellipse representing a distorted
+                                                                               //!< circle in perspective
     { EM_STEINER_ELLIPSE, N_("Steiner ellipse"), "steiner_ellipse" }, //!< generate a steiner ellipse from the first
                                                                       //!< three points
     { EM_STEINER_INELLIPSE, N_("Steiner inellipse"), "steiner_inellipse" } //!< generate a steiner inellipse from the
@@ -45,13 +49,17 @@ static const Util::EnumDataConverter<EllipseMethod> EMConverter(EllipseMethodDat
 
 LPEPts2Ellipse::LPEPts2Ellipse(LivePathEffectObject *lpeobject)
     : Effect(lpeobject)
-    , method(_("Method:"), _("Methods to generate the ellipse"), "method", EMConverter, &wr, this, EM_AUTO)
+    , method(_("Method:"), _("Methods to generate the ellipse\n- Auto ellipse: fits a circle (2..4 points) or an ellipse (at least 5 points)\n- Force circle: (at least 2 points) always fit to a circle\n- Isometric circle: (3 points) use first two edges\n- Perspective circle: (4 points) circle in a square in perspective view\n- Steiner ellipse: (3 points) ellipse on a triangle\n- Steiner inellipse: (3 points) ellipse inside a triangle"), "method", EMConverter, &wr, this, EM_AUTO)
     , gen_isometric_frame(_("_Frame (isometric rectangle)"), _("Draw parallelogram around the ellipse"),
                           "gen_isometric_frame", &wr, this, false)
-    , gen_arc(_("_Arc"), _("Generate open arc (open ellipse)"), "gen_arc", &wr, this, false)
+    , gen_perspective_frame(_("_Perspective square"), _("Draw square surrounding the circle in perspective view\n(only in method \"Perspective circle\")"),
+                            "gen_perspective_frame", &wr, this, false)
+    , gen_arc(_("_Arc"), _("Generate open arc (open ellipse) based on first and last point\n(only for methods \"Auto ellipse\" and \"Force circle\")"), "gen_arc", &wr, this, false)
     , other_arc(_("_Other arc side"), _("Switch sides of the arc"), "arc_other", &wr, this, false)
     , slice_arc(_("_Slice arc"), _("Slice the arc"), "slice_arc", &wr, this, false)
     , draw_axes(_("A_xes"), _("Draw both semi-major and semi-minor axes"), "draw_axes", &wr, this, false)
+    , draw_perspective_axes(_("Perspective axes"), _("Draw the axes in perspective view\n(only in method \"Perspective circle\")"), "draw_perspective_axes", &wr,
+                            this, false)
     , rot_axes(_("Axes rotation"), _("Axes rotation angle [deg]"), "rot_axes", &wr, this, 0)
     , draw_ori_path(_("Source _path"), _("Show the original source path"), "draw_ori_path", &wr, this, false)
 {
@@ -61,6 +69,8 @@ LPEPts2Ellipse::LPEPts2Ellipse(LivePathEffectObject *lpeobject)
     registerParameter(&slice_arc);
     registerParameter(&gen_isometric_frame);
     registerParameter(&draw_axes);
+    registerParameter(&gen_perspective_frame);
+    registerParameter(&draw_perspective_axes);
     registerParameter(&rot_axes);
     registerParameter(&draw_ori_path);
 
@@ -68,9 +78,16 @@ LPEPts2Ellipse::LPEPts2Ellipse(LivePathEffectObject *lpeobject)
     rot_axes.param_set_increments(1, 10);
 
     show_orig_path = true;
+
+    gsl_x = gsl_vector_alloc(8);
+    gsl_p = gsl_permutation_alloc(8);
 }
 
-LPEPts2Ellipse::~LPEPts2Ellipse() = default;
+LPEPts2Ellipse::~LPEPts2Ellipse()
+{
+    gsl_permutation_free(gsl_p);
+    gsl_vector_free(gsl_x);
+}
 
 // helper function, transforms a given value into range [0, 2pi]
 inline double range2pi(double a)
@@ -98,8 +115,7 @@ inline double calc_delta_angle(const double a0, const double a1)
     return da;
 }
 
-int unit_arc_path(Geom::Path &path_in, Geom::Affine &affine, double start = 0.0, double end = 2 * M_PI, // angles
-                  bool slice = false)
+int LPEPts2Ellipse::unit_arc_path(Geom::Path &path_in, Geom::Affine &affine, double start, double end, bool slice)
 {
     double arc_angle = calc_delta_angle(start, end);
     if (fabs(arc_angle) < 1e-9) {
@@ -159,7 +175,7 @@ int unit_arc_path(Geom::Path &path_in, Geom::Affine &affine, double start = 0.0,
     return 0;
 }
 
-void gen_iso_frame_paths(Geom::PathVector &path_out, const Geom::Affine &affine)
+void LPEPts2Ellipse::gen_iso_frame_paths(Geom::PathVector &path_out, const Geom::Affine &affine)
 {
     Geom::Path rect(Geom::Point(-1, -1));
     rect.setStitching(true);
@@ -171,7 +187,30 @@ void gen_iso_frame_paths(Geom::PathVector &path_out, const Geom::Affine &affine)
     path_out.push_back(rect);
 }
 
-void gen_axes_paths(Geom::PathVector &path_out, const Geom::Affine &affine)
+void LPEPts2Ellipse::gen_perspective_frame_paths(Geom::PathVector &path_out, const double rot_angle,
+                                                 double projmatrix[3][3])
+{
+    Geom::Point pts0[4] = { { -1.0, -1.0 }, { +1.0, -1.0 }, { +1.0, +1.0 }, { -1.0, +1.0 } };
+    // five_pts.resize(4);
+    int h = 0;
+    Geom::Affine affine2;
+    // const double rot_angle = deg2rad(rot_axes); // negative for ccw rotation
+    affine2 *= Geom::Rotate(-rot_angle);
+    for (auto &i : pts0) {
+        Geom::Point point = i;
+        point *= affine2;
+        i = projectPoint(point, projmatrix);
+    }
+
+    Geom::Path rect(pts0[0]);
+    rect.setStitching(true);
+    for (int i = 1; i < 4; i++)
+        rect.appendNew<Geom::LineSegment>(pts0[i]);
+    rect.close(true);
+    path_out.push_back(rect);
+}
+
+void LPEPts2Ellipse::gen_axes_paths(Geom::PathVector &path_out, const Geom::Affine &affine)
 {
     Geom::LineSegment clx(Geom::Point(-1, 0), Geom::Point(1, 0));
     Geom::LineSegment cly(Geom::Point(0, -1), Geom::Point(0, 1));
@@ -186,7 +225,31 @@ void gen_axes_paths(Geom::PathVector &path_out, const Geom::Affine &affine)
     path_out.push_back(ply);
 }
 
-bool is_ccw(const std::vector<Geom::Point> &pts)
+void LPEPts2Ellipse::gen_perspective_axes_paths(Geom::PathVector &path_out, const double rot_angle,
+                                                double projmatrix[3][3])
+{
+    Geom::Point pts[4];
+    int h = 0;
+    double dA = 2.0 * M_PI / 4.0; // delta Angle
+    for (auto &i : pts) {
+        const double angle = rot_angle + dA * h++;
+        const Geom::Point circle_point(sin(angle), cos(angle));
+        i = projectPoint(circle_point, projmatrix);
+    }
+    {
+        Geom::LineSegment clx(pts[0], pts[2]);
+        Geom::LineSegment cly(pts[1], pts[3]);
+
+        Geom::Path plx, ply;
+        plx.append(clx);
+        ply.append(cly);
+
+        path_out.push_back(plx);
+        path_out.push_back(ply);
+    }
+}
+
+bool LPEPts2Ellipse::is_ccw(const std::vector<Geom::Point> &pts)
 {
     // method: sum up the angles between edges
     size_t n = pts.size();
@@ -237,38 +300,33 @@ Geom::PathVector LPEPts2Ellipse::doEffect_path(Geom::PathVector const &path_in)
 {
     Geom::PathVector path_out;
 
+    // 1) draw original path?
     if (draw_ori_path.get_value()) {
         path_out.insert(path_out.end(), path_in.begin(), path_in.end());
     }
 
 
-    // from: extension/internal/odf.cpp
-    // get all points
-    std::vector<Geom::Point> pts;
+    // 2) get all points
+    // (from: extension/internal/odf.cpp)
+    points.resize(0);
     for (const auto &pit : path_in) {
         // extract first point of this path
-        pts.push_back(pit.initialPoint());
+        points.push_back(pit.initialPoint());
         // iterate over all curves
         for (const auto &cit : pit) {
-            pts.push_back(cit.finalPoint());
+            points.push_back(cit.finalPoint());
         }
     }
-
     // avoid identical start-point and end-point
-    if (pts.front() == pts.back()) {
-        pts.pop_back();
+    if (points.front() == points.back()) {
+        points.pop_back();
     }
 
-    // modify GUI based on selected method
+    // 3) modify GUI based on selected method
+    // 3.1) arc options
     switch (method) {
-        case EM_ISOMETRIC_CIRCLE:
-        case EM_STEINER_ELLIPSE:
-        case EM_STEINER_INELLIPSE:
-            gen_arc.param_widget_is_enabled(false);
-            other_arc.param_widget_is_enabled(false);
-            slice_arc.param_widget_is_enabled(false);
-            break;
-        default:
+        case EM_AUTO:
+        case EM_CIRCLE:
             gen_arc.param_widget_is_enabled(true);
             if (gen_arc.get_value()) {
                 slice_arc.param_widget_is_enabled(true);
@@ -277,30 +335,52 @@ Geom::PathVector LPEPts2Ellipse::doEffect_path(Geom::PathVector const &path_in)
                 other_arc.param_widget_is_enabled(false);
                 slice_arc.param_widget_is_enabled(false);
             }
+            break;
+        default:
+            gen_arc.param_widget_is_enabled(false);
+            other_arc.param_widget_is_enabled(false);
+            slice_arc.param_widget_is_enabled(false);
+    }
+    // 3.2) perspective options
+    switch (method) {
+        case EM_PERSPECTIVE_CIRCLE:
+            gen_perspective_frame.param_widget_is_enabled(true);
+            draw_perspective_axes.param_widget_is_enabled(true);
+            break;
+        default:
+            gen_perspective_frame.param_widget_is_enabled(false);
+            draw_perspective_axes.param_widget_is_enabled(false);
     }
 
-    // call method specific code
+    // 4) call method specific code
     switch (method) {
         case EM_ISOMETRIC_CIRCLE:
             // special mode: Use first two edges, interpret them as two sides of a parallelogram and
             // generate an ellipse residing inside the parallelogram. This effect is quite useful when
             // generating isometric views. Hence, the name.
-            if (0 != genIsometricEllipse(pts, path_out)) {
+            if (0 != genIsometricEllipse(points, path_out)) {
+                return path_in;
+            }
+            break;
+        case EM_PERSPECTIVE_CIRCLE:
+            // special mode: Use first four points, interpret them as the perspective representation of a square and
+            // draw the ellipse as it was a circle inside that square.
+            if (0 != genPerspectiveEllipse(points, path_out)) {
                 return path_in;
             }
             break;
         case EM_STEINER_ELLIPSE:
-            if (0 != genSteinerEllipse(pts, false, path_out)) {
+            if (0 != genSteinerEllipse(points, false, path_out)) {
                 return path_in;
             }
             break;
         case EM_STEINER_INELLIPSE:
-            if (0 != genSteinerEllipse(pts, true, path_out)) {
+            if (0 != genSteinerEllipse(points, true, path_out)) {
                 return path_in;
             }
             break;
         default:
-            if (0 != genFitEllipse(pts, path_out)) {
+            if (0 != genFitEllipse(points, path_out)) {
                 return path_in;
             }
     }
@@ -338,7 +418,7 @@ int LPEPts2Ellipse::genFitEllipse(std::vector<Geom::Point> const &pts, Geom::Pat
         Geom::Path path;
         unit_arc_path(path, affine);
         path_out.push_back(path);
-    } else if (pts.size() >= 5 && EM_AUTO == method) { //! only_circle.get_value()) {
+    } else if (pts.size() >= 5 && EM_AUTO == method) {
         // do ellipse
         try {
             Geom::Ellipse ellipse;
@@ -353,14 +433,9 @@ int LPEPts2Ellipse::genFitEllipse(std::vector<Geom::Point> const &pts, Geom::Pat
                 const bool ccw_wind = is_ccw(pts);
                 endpoints2angles(ccw_wind, other_arc.get_value(), p0, p1, a0, a1);
             }
-
             Geom::Path path;
             unit_arc_path(path, affine, a0, a1, slice_arc.get_value());
             path_out.push_back(path);
-
-            if (draw_axes.get_value()) {
-                gen_axes_paths(path_out, affine);
-            }
         } catch (...) {
             return -1;
         }
@@ -371,7 +446,6 @@ int LPEPts2Ellipse::genFitEllipse(std::vector<Geom::Point> const &pts, Geom::Pat
             circle.fit(pts);
             affine *= Geom::Scale(circle.radius());
             affine *= Geom::Translate(circle.center());
-
             if (gen_arc.get_value()) {
                 Geom::Point p0 = pts.front() - circle.center();
                 Geom::Point p1 = pts.back() - circle.center();
@@ -508,7 +582,7 @@ int LPEPts2Ellipse::genSteinerEllipse(std::vector<Geom::Point> const &pts, bool 
         swapped = true;
     }
 
-    // the steiner inellipse is just scaled down by 2
+    // the Steiner inellipse is just scaled down by 2
     if (gen_inellipse) {
         l0 /= 2;
         l1 /= 2;
@@ -536,6 +610,129 @@ int LPEPts2Ellipse::genSteinerEllipse(std::vector<Geom::Point> const &pts, bool 
     // draw axes?
     if (draw_axes.get_value()) {
         gen_axes_paths(path_out, affine);
+    }
+
+    return 0;
+}
+
+// identical to lpe-perspective-envelope.cpp
+Geom::Point LPEPts2Ellipse::projectPoint(Geom::Point p, double m[][3])
+{
+    Geom::Coord x = p[0];
+    Geom::Coord y = p[1];
+    return Geom::Point(Geom::Coord((x * m[0][0] + y * m[0][1] + m[0][2]) / (x * m[2][0] + y * m[2][1] + m[2][2])),
+                       Geom::Coord((x * m[1][0] + y * m[1][1] + m[1][2]) / (x * m[2][0] + y * m[2][1] + m[2][2])));
+}
+
+int LPEPts2Ellipse::genPerspectiveEllipse(std::vector<Geom::Point> const &pts, Geom::PathVector &path_out)
+{
+    using Geom::X;
+    using Geom::Y;
+    // we need at least four points!
+    if (pts.size() < 4)
+        return -1;
+
+    // 1) check if the first three edges are a valid perspective
+    // calc edge
+    Geom::Point e[] = { pts[0] - pts[1], pts[1] - pts[2], pts[2] - pts[3], pts[3] - pts[0] };
+    // calc directions
+    Geom::Coord c[] = { cross(e[0], e[1]), cross(e[1], e[2]), cross(e[2], e[3]), cross(e[3], e[0]) };
+    // is this quad not convex?
+    if (!((c[0] > 0 && c[1] > 0 && c[2] > 0 && c[3] > 0) || (c[0] < 0 && c[1] < 0 && c[2] < 0 && c[3] < 0)))
+        return -1;
+
+    // 2) solve the direct linear transformation (see e.g. lpe-perspective-envelope.cpp or
+    // https://franklinta.com/2014/09/08/computing-css-matrix3d-transforms/)
+
+    // the square points in the initial configuration (about the unit circle):
+    Geom::Point pts0[4] = { { -1.0, -1.0 }, { +1.0, -1.0 }, { +1.0, +1.0 }, { -1.0, +1.0 } };
+
+    // build equation in matrix form
+    double eqnVec[8] = { 0 };
+    double eqnMat[64] = { 0 };
+    for (unsigned int i = 0; i < 4; ++i) {
+        eqnMat[8 * (i + 0) + 0] = pts0[i][X];
+        eqnMat[8 * (i + 0) + 1] = pts0[i][Y];
+        eqnMat[8 * (i + 0) + 2] = 1;
+        eqnMat[8 * (i + 0) + 6] = -pts[i][X] * pts0[i][X];
+        eqnMat[8 * (i + 0) + 7] = -pts[i][X] * pts0[i][Y];
+        eqnMat[8 * (i + 4) + 3] = pts0[i][X];
+        eqnMat[8 * (i + 4) + 4] = pts0[i][Y];
+        eqnMat[8 * (i + 4) + 5] = 1;
+        eqnMat[8 * (i + 4) + 6] = -pts[i][Y] * pts0[i][X];
+        eqnMat[8 * (i + 4) + 7] = -pts[i][Y] * pts0[i][Y];
+        eqnVec[i] = pts[i][X];
+        eqnVec[i + 4] = pts[i][Y];
+    }
+    // solve using gsl library
+    gsl_matrix_view m = gsl_matrix_view_array(eqnMat, 8, 8);
+    gsl_vector_view b = gsl_vector_view_array(eqnVec, 8);
+    int s = 0;
+    gsl_linalg_LU_decomp(&m.matrix, gsl_p, &s);
+    gsl_linalg_LU_solve(&m.matrix, gsl_p, &b.vector, gsl_x);
+    // transfer the solution to the projection matrix for further use
+    size_t h = 0;
+    double projmatrix[3][3];
+    for (auto &matRow : projmatrix) {
+        for (double &matElement : matRow) {
+            if (h == 8) {
+                projmatrix[2][2] = 1.0;
+            } else {
+                matElement = gsl_vector_get(gsl_x, h++);
+            }
+        }
+    }
+
+    // 3) generate five points on a unit circle and project them
+    five_pts.resize(5); // reuse and avoid new/delete
+    h = 0;
+    double dA = 2.0 * M_PI / 5.0; // delta Angle
+    for (auto &i : five_pts) {
+        const double angle = dA * h++;
+        const Geom::Point circle_point(sin(angle), cos(angle));
+        i = projectPoint(circle_point, projmatrix);
+    }
+
+    // 4) fit the five points to an ellipse with the already known function inside genFitEllipse() function
+    // build up the affine transformation
+    const double rot_angle = -deg2rad(rot_axes); // negative for ccw rotation
+    Geom::Affine affine;
+    affine *= Geom::Rotate(rot_angle);
+
+    try {
+        Geom::Ellipse ellipse;
+        ellipse.fit(five_pts);
+        affine *= Geom::Scale(ellipse.ray(Geom::X), ellipse.ray(Geom::Y));
+        affine *= Geom::Rotate(ellipse.rotationAngle());
+        affine *= Geom::Translate(ellipse.center());
+    } catch (...) {
+        return -1;
+    }
+
+    Geom::Path path;
+    unit_arc_path(path, affine);
+    path_out.push_back(path);
+
+    // 5) frames and axes
+
+    // draw frame?
+    if (gen_isometric_frame.get_value()) {
+        gen_iso_frame_paths(path_out, affine);
+    }
+
+    // draw perspective frame?
+    if (gen_perspective_frame.get_value()) {
+        gen_perspective_frame_paths(path_out, rot_angle, projmatrix);
+    }
+
+    // draw axes?
+    if (draw_axes.get_value()) {
+        gen_axes_paths(path_out, affine);
+    }
+
+    // draw perspective axes?
+    if (draw_perspective_axes.get_value()) {
+        gen_perspective_axes_paths(path_out, rot_angle, projmatrix);
     }
 
     return 0;
