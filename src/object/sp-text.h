@@ -57,7 +57,7 @@ public:
     completely specified by transformations. */
     static void _adjustCoordsRecursive(SPItem *item, Geom::Affine const &m, double ex, bool is_root = true);
     static void _adjustFontsizeRecursive(SPItem *item, double ex, bool is_root = true);
-	
+
     /** discards the drawing objects representing this text. */
     void _clearFlow(Inkscape::DrawingGroup *in_arena);
 
@@ -75,10 +75,10 @@ private:
     that we don't get a spurious extra one at the end of the flow. */
     unsigned _buildLayoutInput(SPObject *object, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs, unsigned parent_attrs_offset, bool in_textpath);
 
-    /** Union all exlusion shapes. */
+    /** Union all exclusion shapes. */
     Shape* _buildExclusionShape() const;
 
-    /** Find first x/y valuse which may be in a descendent element. */
+    /** Find first x/y values which may be in a descendent element. */
     SVGLength* _getFirstXLength();
     SVGLength* _getFirstYLength();
 

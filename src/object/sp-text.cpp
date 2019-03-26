@@ -452,7 +452,7 @@ void SPText::_buildLayoutInit()
         }
         layout.strut *= style->font_size.computed;
         if (style->line_height.normal ) {
-            layout.strut.computeEffective( Inkscape::Text::Layout::LINE_HEIGHT_NORMAL ); 
+            layout.strut.computeEffective( Inkscape::Text::Layout::LINE_HEIGHT_NORMAL );
         } else if (style->line_height.unit == SP_CSS_UNIT_NONE) {
             layout.strut.computeEffective( style->line_height.computed );
         } else {
@@ -718,7 +718,7 @@ unsigned SPText::_buildLayoutInput(SPObject *object, Inkscape::Text::Layout::Opt
 
 Shape* SPText::_buildExclusionShape() const
 {
-    Shape *result = new Shape(); // Union of all exlusion shapes
+    Shape *result = new Shape(); // Union of all exclusion shapes
     Shape *shape_temp = new Shape();
 
     Glib::ustring shapeSubtract_value = style->shape_subtract.value;
@@ -732,7 +732,7 @@ Shape* SPText::_buildExclusionShape() const
         } else {
             shape_url.erase(0,5);
             shape_url.erase(shape_url.size()-1,1);
-            // std::cout << "SPText::_buildExlusionShape(): shape-inside: " << shape_url << std::endl;
+            // std::cout << "SPText::_buildExclusionShape(): shape-inside: " << shape_url << std::endl;
             SPShape *shape = dynamic_cast<SPShape *>(document->getObjectById( shape_url ));
             if ( shape ) {
                 // This code adapted from sp-flowregion.cpp: GetDest()

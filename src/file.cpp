@@ -1508,7 +1508,7 @@ sp_file_export_to_ocal_dialog(Gtk::Window &parentWindow)
         return success;
     }
 
-    // Start now the submition
+    // Start submission now
 
     // Create the uri
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();

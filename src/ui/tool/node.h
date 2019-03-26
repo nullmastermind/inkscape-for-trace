@@ -155,7 +155,7 @@ public:
      * Sets the node type and optionally restores the invariants associated with the given type.
      * @param type The type to set.
      * @param update_handles Whether to restore invariants associated with the given type.
-     *                       Passing false is useful e.g. wen initially creating the path,
+     *                       Passing false is useful e.g. when initially creating the path,
      *                       and when making cusp nodes during some node algorithms.
      *                       Pass true when used in response to an UI node type button.
      */
