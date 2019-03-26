@@ -64,10 +64,6 @@ R"=====(
     <group id="scrollbars"  state="0"/>
   </group>
 
-  <group id="documents">
-    <group id="recent"/>
-  </group>
-
   <group id="template">
     <sodipodi:namedview
        id="base"
