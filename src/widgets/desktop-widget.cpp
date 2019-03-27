@@ -885,6 +885,7 @@ sp_desktop_widget_realize (GtkWidget *widget)
 {
 
     SPDesktopWidget *dtw = SP_DESKTOP_WIDGET (widget);
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     if (GTK_WIDGET_CLASS (dtw_parent_class)->realize)
         (* GTK_WIDGET_CLASS (dtw_parent_class)->realize) (widget);
@@ -918,6 +919,13 @@ sp_desktop_widget_realize (GtkWidget *widget)
         } else {
             window->get_style_context()->add_class("bright");
             window->get_style_context()->remove_class("dark");
+        }
+        if (prefs->getBool("/theme/symbolicIcons", false)) {
+            window->get_style_context()->add_class("symbolic");
+            window->get_style_context()->remove_class("regular");
+        } else {
+            window->get_style_context()->add_class("regular");
+            window->get_style_context()->remove_class("symbolic");
         }
     }
 }

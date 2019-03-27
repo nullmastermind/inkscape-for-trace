@@ -693,14 +693,23 @@ void InkscapePreferences::symbolicAddClass()
     // Use in case the special widgets have inverse theme background and symbolic
     int colorset_inverse = colorset ^ 0xffffff00;
     sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
+    Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
     if (prefs->getBool("/theme/symbolicIcons", false)) {
         css_str += "*{ -gtk-icon-style: symbolic;}";
         css_str += ".dark *,.bright *{ color:  @theme_fg_color;}";
         css_str += ".dark,.bright,.dark image,.bright image{ color:";
         css_str += colornamed;
         css_str += ";}";
+        if (window ) {
+            window->get_style_context()->add_class("symbolic");
+            window->get_style_context()->remove_class("regular");
+        }
     } else {
         css_str += "*{-gtk-icon-style: regular;}";
+        if (window) {
+            window->get_style_context()->add_class("regular");
+            window->get_style_context()->remove_class("symbolic");
+        }
     }
     css_str += ".iconcolornamed, .iconcolornamed image{ color:";
     css_str += colornamed;
