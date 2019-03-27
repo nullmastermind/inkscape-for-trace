@@ -1580,7 +1580,6 @@ Effect::defaultParamSet()
     expander->set_use_markup(true);
     expander->add(*vbox_expander);
     expander->set_expanded(defaultsopen);
-    expander->get_style_context()->add_class("bigexpander");
     expander->property_expanded().signal_changed().connect(sigc::bind<0>(sigc::mem_fun(*this, &Effect::onDefaultsExpanderChanged), expander ));
     if (has_params) {
         Gtk::Widget *vboxwidg = dynamic_cast<Gtk::Widget *>(expander);
