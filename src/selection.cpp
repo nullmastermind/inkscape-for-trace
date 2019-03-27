@@ -128,7 +128,7 @@ std::vector<Inkscape::SnapCandidatePoint> Selection::getSnapPoints(SnapPreferenc
         for (auto iter = items.begin(); iter != items.end(); ++iter) {
             SPItem *this_item = *iter;
             this_item->getSnappoints(p, &snapprefs_dummy);
-            
+
             //Include the transformation origin for snapping
             //For a selection or group only the overall center is considered, not for each item individually
             if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_ROTATION_CENTER)) {
@@ -191,7 +191,7 @@ Selection::emptyBackup(){
 }
 
 void
-Selection::setBackup () 
+Selection::setBackup ()
 {
     SPDesktop *desktop = this->desktop();
     SPDocument *document = SP_ACTIVE_DOCUMENT;
@@ -219,8 +219,8 @@ Selection::setBackup ()
         std::list<Inkscape::UI::SelectableControlPoint *> points_list = cps->_points_list;
         for (auto & i : points_list) {
             Inkscape::UI::Node *node = dynamic_cast<Inkscape::UI::Node*>(i);
-            if (node) { 
-                std::string id = node->nodeList().subpathList().pm().item()->getId(); 
+            if (node) {
+                std::string id = node->nodeList().subpathList().pm().item()->getId();
 
                 int sp = 0;
                 bool found_sp = false;
@@ -254,7 +254,7 @@ Selection::setBackup ()
 }
 
 void
-Selection::restoreBackup() 
+Selection::restoreBackup()
 {
     SPDesktop *desktop = this->desktop();
     SPDocument *document = SP_ACTIVE_DOCUMENT;
