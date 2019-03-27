@@ -120,6 +120,14 @@ LivePathEffectAdd::LivePathEffectAdd()
         LPESelectorEffect->signal_button_press_event().connect(
             sigc::bind<Glib::RefPtr<Gtk::Builder>, const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *>(
                 sigc::mem_fun(*this, &LivePathEffectAdd::apply), builder_effect, &converter.data(i)));
+        Gtk::EventBox *LPESelectorEffectEventExpander;
+        builder_effect->get_widget("LPESelectorEffectEventExpander", LPESelectorEffectEventExpander);
+        LPESelectorEffectEventExpander->signal_button_press_event().connect(
+            sigc::bind<Glib::RefPtr<Gtk::Builder>>(sigc::mem_fun(*this, &LivePathEffectAdd::expand), builder_effect));   
+        LPESelectorEffectEventExpander->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(
+            sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(LPESelectorEffect->gobj())));
+        LPESelectorEffectEventExpander->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(
+            sigc::mem_fun(*this, &LivePathEffectAdd::mouseout), GTK_WIDGET(LPESelectorEffect->gobj())));
         Gtk::Label *LPEName;
         builder_effect->get_widget("LPEName", LPEName);
         const Glib::ustring label = converter.get_label(data->id);
@@ -219,10 +227,25 @@ void LivePathEffectAdd::on_activate(Gtk::FlowBoxChild *child)
             Gtk::Box *box = dynamic_cast<Gtk::Box *>(eventbox->get_child());
             if (box) {
                 std::vector<Gtk::Widget *> contents = box->get_children();
-                Gtk::Box *actions = dynamic_cast<Gtk::Box *>(contents[4]);
+                Gtk::Box *actions = dynamic_cast<Gtk::Box *>(contents[5]);
                 if (actions) {
                     actions->set_visible(false);
                 }
+                Gtk::EventBox *expander = dynamic_cast<Gtk::EventBox *>(contents[4]);
+                if (expander) {
+                    expander->set_visible(true);
+                }
+            }
+        }
+    }
+    Gtk::EventBox *eventbox = dynamic_cast<Gtk::EventBox *>(child->get_child());
+    if (eventbox) {
+        Gtk::Box *box = dynamic_cast<Gtk::Box *>(eventbox->get_child());
+        if (box) {
+            std::vector<Gtk::Widget *> contents = box->get_children();
+            Gtk::EventBox *expander = dynamic_cast<Gtk::EventBox *>(contents[4]);
+            if (expander) {
+                expander->set_visible(false);
             }
         }
     }
@@ -313,15 +336,13 @@ bool LivePathEffectAdd::show_fav_toggler(GdkEventButton *evt)
     reload_effect_list();
     return true;
 }
-
 bool LivePathEffectAdd::apply(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> builder_effect,
                               const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *to_add)
 {
     _to_add = to_add;
     Gtk::EventBox *LPESelectorEffect;
     builder_effect->get_widget("LPESelectorEffect", LPESelectorEffect);
-    if (!LPESelectorEffect->get_parent()->get_style_context()->has_class("lpeactive") ||
-        LPESelectorEffect->get_parent()->get_style_context()->has_class("lpedisabled")) {
+    if (LPESelectorEffect->get_parent()->get_style_context()->has_class("lpedisabled")) {
         Gtk::FlowBoxChild *child = dynamic_cast<Gtk::FlowBoxChild *>(LPESelectorEffect->get_parent());
         if (child) {
             on_activate(child);
@@ -331,6 +352,17 @@ bool LivePathEffectAdd::apply(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> bu
     _applied = true;
     _LPEDialogSelector->response(Gtk::RESPONSE_APPLY);
     _LPEDialogSelector->hide();
+    return true;
+}
+
+bool LivePathEffectAdd::expand(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> builder_effect)
+{
+    Gtk::EventBox *LPESelectorEffect;
+    builder_effect->get_widget("LPESelectorEffect", LPESelectorEffect);
+    Gtk::FlowBoxChild *child = dynamic_cast<Gtk::FlowBoxChild *>(LPESelectorEffect->get_parent());
+    if (child) {
+        on_activate(child);
+    }
     return true;
 }
 

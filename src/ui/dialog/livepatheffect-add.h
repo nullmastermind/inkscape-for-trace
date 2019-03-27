@@ -71,6 +71,7 @@ class LivePathEffectAdd {
     bool fav_toggler(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> builder_effect);
     bool apply(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> builder_effect,
                const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *to_add);
+    bool expand(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> builder_effect);
     bool show_fav_toggler(GdkEventButton *evt);
     bool mouseover(GdkEventCrossing *evt, GtkWidget *wdg);
     bool mouseout(GdkEventCrossing *evt, GtkWidget *wdg);
@@ -134,3 +135,4 @@ private:
   End:
 */
 // vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+expand
