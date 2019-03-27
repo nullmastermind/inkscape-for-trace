@@ -75,6 +75,8 @@
    * ".iconcolornamedinverse" Icon in inverse color from prefs"
    * :::::::: Combo box.
    * "..combobright" Combo bright
+   * ".regular ..." Inkscape is in regular icon mode 
+   * ".symbolic ..." Inkscape is in symbolic icon mode 
    */
 
  .colordefault,
@@ -209,72 +211,20 @@ spinbutton undershoot {
 	outline-style : none;
 }
 
-#lpedialogselector,
-#lpedialogselector .frame,
-#lpedialogselector .searchbar {
-    border-bottom-width:0;
-    border-top-width:0;
-    outline-width:0;
-    border-left-width:0;
-    border-right-width:0;
-}
-
-#lpeflow GtkFlowBoxChild,
-#lpeflow flowboxchild{
-    border-width:0px;
-    border-radius:6px;
-    margin:10px;
-    margin-bottom:30px;
-    padding-bottom:10px;
-}
-
-#lpeflow GtkFlowBoxChild.lpeactive,
-#lpeflow flowboxchild.lpeactive{
-    margin-bottom:0px;
-    padding-bottom:10px;
-    outline:none;
-}
-
-#LPEDialogSelector .frame{
-    border-width:0;
-}
-
-#lpeflow GtkFlowBoxChild,
-#lpeflow flowboxchild{
-    border-width:0px;
-    border-radius:6px;
-    margin:10px;
-    padding:10px;
-    margin-bottom:23px;
-    padding-bottom:10px;
-}
-
-#lpeflow GtkFlowBoxChild.lpeactive,
-#lpeflow flowboxchild.lpeactive{
-    margin-bottom:0px;
-    padding-bottom:10px;
-    outline:none;
-}
-
-/*#LPEExperimentals.active{*/
-/*background-color:#C42A13;*/
-/*border-color:#C42A13;*/
-/*}*/
-/*#LPEExperimentals.active slider{*/
-/*border-color:#C42A13;*/
-/*}*/
-
 .lpeactive #LPESelectorEffectFavTop{
     opacity:0;
 }
+
 .lpefav{
     background-color: @theme_base_color;
-    padding-bottom:0px;
+    padding-bottom:0;
 }
+
 .lpename{
     font-size:16px;
     margin-bottom:5px;
 }
+
 .lpeinfo{
     font-size:16px;
     padding:20px;
@@ -282,6 +232,24 @@ spinbutton undershoot {
 
 .lpedisabled{
     opacity:0.3;
+}
+
+#LPEDialogSelector,
+#LPEDialogSelector .frame,
+#LPEDialogSelector .searchbar {
+    outline-width:0;
+    border-width:0;
+}
+
+#LPESelectorFlowBox GtkFlowBoxChild,
+#LPESelectorFlowBox flowboxchild{
+    border-width:0px;
+    border-radius:6px;
+    margin:10px;
+    padding:10px;
+    margin-bottom:0px;
+    padding-bottom:10px;
+    outline:none;
 }
 
 #LPEExperimental image{
@@ -408,3 +376,10 @@ combobox window.popup scrolledwindow treeview separator {
     padding : 0 ;
     outline-style : none;
 }
+
+/*https://stackoverflow.com/questions/50076541/override-icons-used-in-the-tree-view */
+.symbolic treeview.view.bigexpander,.symbolic .bigexpander arrow {-gtk-icon-source: -gtk-icontheme("expand-symbolic");margin-right:4px;}
+.symbolic treeview.view.bigexpander:checked,.symbolic .bigexpander arrow:checked {-gtk-icon-source: -gtk-icontheme("contract-symbolic");}
+.regular treeview.view.bigexpander,.regular .bigexpander arrow {-gtk-icon-source: -gtk-icontheme("expand");margin-right:4px;}
+.regular treeview.view.bigexpander:checked,.regular .bigexpander arrow:checked {-gtk-icon-source: -gtk-icontheme("contract");}
+treeview.view.bigexpander:dir(rtl), .bigexpander:dir(rtl) arrow { margin-left:4px; margin-right:0;}

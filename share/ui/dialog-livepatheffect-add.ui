@@ -204,7 +204,7 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkFlowBox" id="LPESelectorFlowBox">
-                        <property name="name">lpeflow</property>
+                        <property name="name">LPESelectorFlowBox</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
