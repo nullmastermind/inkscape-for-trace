@@ -528,11 +528,6 @@ public:
 
 
     /**
-     * Copies values from old location to new.
-     */
-    static void migrate( std::string const& legacyDir, std::string const& prefdir );
-
-    /**
      * Access the singleton Preferences object.
      */
     static Preferences *get() {

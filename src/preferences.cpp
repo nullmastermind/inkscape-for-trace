@@ -44,29 +44,6 @@ static Inkscape::XML::Document *migrateFromDoc = nullptr;
 static Glib::ustring const RAWCACHE_CODE_NULL {"N"};
 static Glib::ustring const RAWCACHE_CODE_VALUE {"V"};
 
-// TODO clean up. Function copied from file.cpp:
-// what gets passed here is not actually an URI... it is an UTF-8 encoded filename (!)
-static void file_add_recent(gchar const *uri)
-{
-    if (!uri) {
-        g_warning("file_add_recent: uri == NULL");
-    } else {
-        GtkRecentManager *recent = gtk_recent_manager_get_default();
-        gchar *fn = g_filename_from_utf8(uri, -1, nullptr, nullptr, nullptr);
-        if (fn) {
-            if (g_file_test(fn, G_FILE_TEST_EXISTS)) {
-                gchar *uriToAdd = g_filename_to_uri(fn, nullptr, nullptr);
-                if (uriToAdd) {
-                    gtk_recent_manager_add_item(recent, uriToAdd);
-                    g_free(uriToAdd);
-                }
-            }
-            g_free(fn);
-        }
-    }
-}
-
-
 // private inner class definition
 
 /**
@@ -321,71 +298,6 @@ bool Preferences::getLastError( Glib::ustring& primary, Glib::ustring& secondary
         secondary.clear();
     }
     return result;
-}
-
-void Preferences::migrate( std::string const& legacyDir, std::string const& prefdir )
-{
-    int mode = S_IRWXU;
-#ifdef S_IRGRP
-    mode |= S_IRGRP;
-#endif
-#ifdef S_IXGRP
-    mode |= S_IXGRP;
-#endif
-#ifdef S_IXOTH
-    mode |= S_IXOTH;
-#endif
-    if ( g_mkdir_with_parents(prefdir.c_str(), mode) == -1 ) {
-    } else {
-    }
-
-    gchar * oldPrefFile = g_build_filename(legacyDir.c_str(), PREFERENCES_FILE_NAME, NULL);
-    if (oldPrefFile) {
-        if (g_file_test(oldPrefFile, G_FILE_TEST_EXISTS)) {
-            Glib::ustring errMsg;
-            Inkscape::XML::Document *oldPrefs = loadImpl( oldPrefFile, errMsg );
-            if (oldPrefs) {
-                Glib::ustring docId("documents");
-                Glib::ustring recentId("recent");
-                Inkscape::XML::Node *node = oldPrefs->root();
-                Inkscape::XML::Node *child = nullptr;
-                Inkscape::XML::Node *recentNode = nullptr;
-                if (node->attribute("version")) {
-                    node->setAttribute("version", "1");
-                }
-                for (child = node->firstChild(); child; child = child->next()) {
-                    if (docId == child->attribute("id")) {
-                        for (child = child->firstChild(); child; child = child->next()) {
-                            if (recentId == child->attribute("id")) {
-                                recentNode = child;
-                                for (child = child->firstChild(); child; child = child->next()) {
-                                    gchar const* uri = child->attribute("uri");
-                                    if (uri) {
-                                        file_add_recent(uri);
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                }
-
-                if (recentNode) {
-                    while (recentNode->firstChild()) {
-                        recentNode->removeChild(recentNode->firstChild());
-                    }
-                }
-                migrateFromDoc = oldPrefs;
-                //Inkscape::GC::release(oldPrefs);
-                oldPrefs = nullptr;
-            } else {
-                g_warning( "%s", errMsg.c_str() );
-            }
-        }
-        g_free(oldPrefFile);
-        oldPrefFile = nullptr;
-    }
 }
 
 // Now for the meat.
