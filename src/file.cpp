@@ -98,25 +98,6 @@ using Inkscape::IO::Resource::USER;
 void dump_str(gchar const *str, gchar const *prefix);
 void dump_ustr(Glib::ustring const &ustr);
 
-// what gets passed here is not actually an URI... it is an UTF-8 encoded filename (!)
-static void sp_file_add_recent(gchar const *uri)
-{
-    if(uri == nullptr) {
-        g_warning("sp_file_add_recent: uri == NULL");
-        return;
-    }
-    GtkRecentManager *recent = gtk_recent_manager_get_default();
-    gchar *fn = g_filename_from_utf8(uri, -1, nullptr, nullptr, nullptr);
-    if (fn) {
-        gchar *uri_to_add = g_filename_to_uri(fn, nullptr, nullptr);
-        if (uri_to_add) {
-            gtk_recent_manager_add_item(recent, uri_to_add);
-            g_free(uri_to_add);
-        }
-        g_free(fn);
-    }
-}
-
 
 /*######################
 ## N E W
@@ -717,7 +698,12 @@ sp_file_save_dialog(Gtk::Window &parentWindow, SPDocument *doc, Inkscape::Extens
         success = file_save(parentWindow, doc, fileName, selectionType, TRUE, !is_copy, save_method);
 
         if (success && doc->getDocumentURI()) {
-            sp_file_add_recent( doc->getDocumentURI() );
+            // getDocumentURI does not return an actual URI... it is an UTF-8 encoded filename (!)
+            std::string filename = Glib::filename_from_utf8(doc->getDocumentURI());
+            Glib::ustring uri = Glib::filename_to_uri(filename);
+
+            Glib::RefPtr<Gtk::RecentManager> recent = Gtk::RecentManager::get_default();
+            recent->add_item(uri);
         }
 
         save_path = Glib::path_get_dirname(fileName);

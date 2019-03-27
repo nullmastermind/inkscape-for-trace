@@ -445,7 +445,9 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     Inkscape::initialize_gettext();
 #endif
 
-    Glib::set_application_name(N_("Inkscape - A Vector Drawing Program"));  // After gettext() init.
+    // Don't set application name for now. We don't use it anywhere but
+    // it overrides the name used for adding recently opened files and breaks the Gtk::RecentFilter
+    // Glib::set_application_name(N_("Inkscape - A Vector Drawing Program"));  // After gettext() init.
 
     // ======================== Actions =========================
     add_actions_base(this);      // actions that are GUI independent
@@ -626,12 +628,8 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<
         if (document) {
 
             if (add_to_recent) {
-
                 auto recentmanager = Gtk::RecentManager::get_default();
-                Gtk::RecentManager::Data data;
-                data.app_name = g_get_prgname(); // Must match Gtk::RecentFilter in menubar.cpp
-                data.mime_type = "image"; // We don't know if we opened an SVG! (image/svg+xml).
-                recentmanager->add_item (file->get_uri(), data);
+                recentmanager->add_item (file->get_uri());
             }
 
             // TODO Remove this code... handle document replacement elsewhere.
