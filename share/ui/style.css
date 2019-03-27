@@ -410,7 +410,8 @@ combobox window.popup scrolledwindow treeview separator {
 }
 
 /*https://stackoverflow.com/questions/50076541/override-icons-used-in-the-tree-view */
-treeview.view.expander, expander arrow {-gtk-icon-source: -gtk-icontheme("expand-symbolic");margin-right:4px;}
-treeview.view.expander:checked, expander arrow:checked {-gtk-icon-source: -gtk-icontheme("contract-symbolic");}
-treeview.view.expander:dir(rtl), expander:dir(rtl) arrow { margin-left:4px; margin-right:0;}
-
+.symbolic treeview.view.bigexpander,.symbolic .bigexpander arrow {-gtk-icon-source: -gtk-icontheme("expand-symbolic");margin-right:4px;}
+.symbolic treeview.view.bigexpander:checked,.symbolic .bigexpander arrow:checked {-gtk-icon-source: -gtk-icontheme("contract-symbolic");}
+.regular treeview.view.bigexpander,.regular .bigexpander arrow {-gtk-icon-source: -gtk-icontheme("expand");margin-right:4px;}
+.regular treeview.view.bigexpander:checked,.regular .bigexpander arrow:checked {-gtk-icon-source: -gtk-icontheme("contract");}
+treeview.view.bigexpander:dir(rtl), .bigexpander:dir(rtl) arrow { margin-left:4px; margin-right:0;}
