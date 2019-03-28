@@ -30,6 +30,14 @@ if(EXISTS ${INKSCAPE_SOURCE_DIR}/.git)
     if(NOT INKSCAPE_SOURCE_MODIFIED STREQUAL "")
         set(INKSCAPE_REVISION "${INKSCAPE_REVISION}, custom")
     endif()
+elseif(EXISTS ${INKSCAPE_SOURCE_DIR}/debian/git-build-recipe.manifest)
+    # workaround for debian packaging in ppa (where we have no repo)
+    # TODO: figure out how to match this to standard build environments
+    execute_process(COMMAND sed -n 's/.*deb-version\\s*//p' git-build-recipe.manifest
+        WORKING_DIRECTORY ${INKSCAPE_SOURCE_DIR}/debian
+        OUTPUT_VARIABLE DEB_VERSION
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+    set(INKSCAPE_REVISION "${DEB_VERSION}")
 endif()
 
 if(NOT "${INKSCAPE_BINARY_DIR}" STREQUAL "")
