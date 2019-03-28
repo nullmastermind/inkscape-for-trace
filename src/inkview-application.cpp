@@ -14,6 +14,10 @@
  *
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"      // Defines ENABLE_NLS
+#endif
+
 #include <iostream>
 
 #include <glibmm/i18n.h>  // Internationalization
