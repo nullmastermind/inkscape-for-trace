@@ -12,6 +12,10 @@
 
 #include <glibmm/i18n.h>  // Internationalization
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"      // Defines ENABLE_NLS
+#endif
+
 #include "inkscape-application.h"
 #include "inkscape-window.h"
 
