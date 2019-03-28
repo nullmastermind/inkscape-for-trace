@@ -11,10 +11,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h" // only include where actually required!
-#endif
-
 #include "preferences.h"
 #include "ui/icon-loader.h"
 #include "ui/widget/ink-flow-box.h"

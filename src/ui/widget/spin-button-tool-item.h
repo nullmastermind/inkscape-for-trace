@@ -2,10 +2,6 @@
 #ifndef SEEN_SPIN_BUTTON_TOOL_ITEM_H
 #define SEEN_SPIN_BUTTON_TOOL_ITEM_H
 
-#if HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include <gtkmm/toolitem.h>
 
 namespace Gtk {

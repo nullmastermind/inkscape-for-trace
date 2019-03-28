@@ -15,10 +15,6 @@
 #ifndef EXTENSION_INTERNAL_CAIRO_RENDERER_PDF_OUT_H
 #define EXTENSION_INTERNAL_CAIRO_RENDERER_PDF_OUT_H
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"  // only include where actually required!
-#endif
-
 #include "extension/implementation/implementation.h"
 
 namespace Inkscape {
