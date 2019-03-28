@@ -56,7 +56,7 @@ macro(pod2man PODFILE_FULL RELEASE SECTION CENTER)
         if(GZIP)
             add_custom_command(
                 OUTPUT ${MANFILE_FULL_GZ}
-	        COMMAND ${GZIP} -k --best -n "${MANFILE_FULL}"
+	        COMMAND ${GZIP} -f -k --best -n "${MANFILE_FULL}"
 	        DEPENDS ${MANFILE_FULL}
             )
             add_custom_target(${MANPAGE_TARGET} ALL
