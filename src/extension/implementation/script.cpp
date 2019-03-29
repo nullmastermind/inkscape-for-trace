@@ -969,13 +969,6 @@ int Script::execute (const std::list<std::string> &in_command,
         // containing the script.
         working_directory = Glib::path_get_dirname(script);
         script = Glib::path_get_basename(script);
-        #ifdef G_OS_WIN32
-        // ANNOYING: glibmm does not wrap g_win32_locale_filename_from_utf8
-        gchar *workdir_s = g_win32_locale_filename_from_utf8(working_directory.data());
-        working_directory = workdir_s;
-        g_free(workdir_s);
-        #endif
-
         argv.push_back(script);
     }
 
