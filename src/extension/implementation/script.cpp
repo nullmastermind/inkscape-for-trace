@@ -13,52 +13,39 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <glib/gstdio.h>
 #include <glibmm.h>
-#include <gtkmm/messagedialog.h>
+#include <glibmm/convert.h>
+#include <glibmm/miscutils.h>
 #include <gtkmm/main.h>
+#include <gtkmm/messagedialog.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/textview.h>
-#include <glibmm/miscutils.h>
-#include <glibmm/convert.h>
-#include <unistd.h>
-
-#include <cerrno>
-#include <glib/gstdio.h>
-
 
 #include "desktop.h"
-#include "ui/dialog-events.h"
-#include "extension/effect.h"
-#include "extension/execution-env.h"
-#include "extension/output.h"
-#include "extension/input.h"
-#include "extension/db.h"
 #include "inkscape.h"
-#include "io/resource.h"
+#include "path-prefix.h"
 #include "preferences.h"
 #include "script.h"
 #include "selection.h"
+
+#include "extension/db.h"
+#include "extension/effect.h"
+#include "extension/execution-env.h"
+#include "extension/input.h"
+#include "extension/output.h"
+#include "extension/system.h"
+#include "io/resource.h"
 #include "object/sp-namedview.h"
 #include "object/sp-path.h"
-#include "extension/system.h"
-#include "ui/view/view.h"
-#include "xml/node.h"
-#include "xml/attribute-record.h"
-#include "ui/tools/node-tool.h"
+#include "ui/dialog-events.h"
+#include "ui/tool/control-point-selection.h"
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/path-manipulator.h"
-#include "ui/tool/control-point-selection.h"
-
-
-#include "path-prefix.h"
-
-#ifdef _WIN32
-#include <windows.h>
-#include <sys/stat.h>
-#endif
-
-/** This is the command buffer that gets allocated from the stack */
-#define BUFSIZE (255)
+#include "ui/tools/node-tool.h"
+#include "ui/view/view.h"
+#include "xml/attribute-record.h"
+#include "xml/node.h"
 
 /* Namespaces */
 namespace Inkscape {
