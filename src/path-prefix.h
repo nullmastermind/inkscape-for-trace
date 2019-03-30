@@ -32,6 +32,9 @@
 char *append_inkscape_datadir(const char *relative_path);
 char *get_datadir_path();
 char *get_extensions_path();
+char *get_program_name();
+char *get_program_dir();
+
 #ifdef _WIN32
 #undef INKSCAPE_DATADIR
 #define INKSCAPE_DATADIR append_inkscape_datadir(NULL)

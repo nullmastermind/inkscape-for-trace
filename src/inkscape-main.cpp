@@ -19,6 +19,16 @@
 
 static void set_extensions_env()
 {
+    // add inkscape to PATH, so the correct version is always available to extensions by simply calling "inkscape"
+    gchar *program_dir = get_program_dir();
+    if (program_dir) {
+        gchar const *path = g_getenv("PATH");
+        gchar *new_path = g_strdup_printf("%s" G_SEARCHPATH_SEPARATOR_S "%s", program_dir, path);
+        g_setenv("PATH", new_path, true);
+        g_free(new_path);
+    }
+    g_free(program_dir);
+
     // add share/inkscape/extensions to PYTHONPATH so the inkex module is found by extensions in user folder
     gchar *pythonpath = get_extensions_path();
     g_setenv("PYTHONPATH", pythonpath, true);
