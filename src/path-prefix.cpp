@@ -20,9 +20,9 @@
 #include <mach-o/dyld.h> // for _NSGetExecutablePath
 #endif
 
-#include "io/resource.h"
-#include "path-prefix.h"
 #include <glib.h>
+
+#include "path-prefix.h"
 
 /**
  * Determine the location of the Inkscape data directory (typically the share/ folder
@@ -60,42 +60,6 @@ char *append_inkscape_datadir(const char *relative_path)
     }
 
     return g_build_filename(inkscape_datadir, relative_path, NULL);
-}
-
-gchar *get_extensions_path()
-{
-    using namespace Inkscape::IO::Resource;
-    gchar const *pythonpath = g_getenv("PYTHONPATH");
-    gchar *extdir;
-    gchar *new_pythonpath;
-
-#ifdef _WIN32
-    extdir = g_win32_locale_filename_from_utf8(INKSCAPE_EXTENSIONDIR);
-#else
-    extdir = g_strdup(INKSCAPE_EXTENSIONDIR);
-#endif
-
-    // On some platforms, INKSCAPE_EXTENSIONDIR is not absolute,
-    // but relative to the directory that contains the Inkscape executable.
-    // Since we spawn Python chdir'ed into the script's directory,
-    // we need to obtain the absolute path here.
-    if (!g_path_is_absolute(extdir)) {
-        gchar *curdir = g_get_current_dir();
-        gchar *extdir_new = g_build_filename(curdir, extdir, NULL);
-        g_free(extdir);
-        g_free(curdir);
-        extdir = extdir_new;
-    }
-
-    if (pythonpath) {
-        new_pythonpath = g_strdup_printf("%s" G_SEARCHPATH_SEPARATOR_S "%s", extdir, pythonpath);
-        g_free(extdir);
-    }
-    else {
-        new_pythonpath = extdir;
-    }
-
-    return new_pythonpath;
 }
 
 /**

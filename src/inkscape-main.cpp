@@ -30,9 +30,15 @@ static void set_extensions_env()
     g_free(program_dir);
 
     // add share/inkscape/extensions to PYTHONPATH so the inkex module is found by extensions in user folder
-    gchar *pythonpath = get_extensions_path();
-    g_setenv("PYTHONPATH", pythonpath, true);
-    g_free(pythonpath);
+    gchar const *pythonpath = g_getenv("PYTHONPATH");
+    gchar *new_pythonpath;
+    if (pythonpath) {
+        new_pythonpath = g_strdup_printf("%s" G_SEARCHPATH_SEPARATOR_S "%s", INKSCAPE_EXTENSIONDIR, pythonpath);
+    } else {
+        new_pythonpath = g_strdup(INKSCAPE_EXTENSIONDIR);
+    }
+    g_setenv("PYTHONPATH", new_pythonpath, true);
+    g_free(new_pythonpath);
 
 #ifdef _WIN32
     // add inkscape directory to DLL search path so dynamically linked extension modules find their libraries
