@@ -2456,7 +2456,7 @@ void InkscapePreferences::initPageSystem()
     _sys_tmp_files.set_editable(false);
     _page_system.add_line(true, _("Temporary files: "), _sys_tmp_files, "", _("Location of the temporary files used for autosave"), true);
 
-    _sys_data.set_text( INKSCAPE_DATADIR );
+    _sys_data.set_text( INKSCAPE_DATADIR_REAL );
     _sys_data.set_editable(false);
     _page_system.add_line(true, _("Inkscape data: "), _sys_data, "", _("Location of Inkscape data"), true);
 
