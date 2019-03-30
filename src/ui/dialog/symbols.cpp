@@ -164,14 +164,6 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   search->signal_key_press_event().connect_notify(  sigc::mem_fun(*this, &SymbolsDialog::beforeSearch));
   search->signal_key_release_event().connect_notify(sigc::mem_fun(*this, &SymbolsDialog::unsensitive));
 
-#if GTKMM_CHECK_VERSION(3,12,0)
-  search->set_margin_start(10);
-  search->set_margin_end(10);
-#else
-  search->set_margin_left(10);
-  search->set_margin_right(10);
-#endif
-
   search->set_margin_bottom(6);
   search->signal_search_changed().connect(sigc::mem_fun(*this, &SymbolsDialog::clearSearch));
   table->attach(*Gtk::manage(search),0,row,2,1);

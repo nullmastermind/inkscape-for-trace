@@ -342,6 +342,7 @@ CanvasGrid::newWidget()
     inner->pack_start(*left, true, true);
     inner->pack_start(*right, false, false);
     vbox->pack_start(*inner, false, false);
+    vbox->set_border_width(4);
 
     std::list<Gtk::Widget*> slaves;
     for (auto &item : left->get_children()) {

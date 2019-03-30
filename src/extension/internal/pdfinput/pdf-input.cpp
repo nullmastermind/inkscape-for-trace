@@ -122,13 +122,16 @@ PdfImportDialog::PdfImportDialog(PDFDoc *doc, const gchar */*uri*/)
     _pageSettingsFrame = Gtk::manage(new class Inkscape::UI::Widget::Frame(_("Page settings")));
     _labelPrecision = Gtk::manage(new class Gtk::Label(_("Precision of approximating gradient meshes:")));
     _labelPrecisionWarning = Gtk::manage(new class Gtk::Label(_("<b>Note</b>: setting the precision too high may result in a large SVG file and slow performance.")));
+    _labelPrecisionWarning->set_max_width_chars(50);
 
 #ifdef HAVE_POPPLER_CAIRO
     Gtk::RadioButton::Group group;
     _importViaPoppler  = Gtk::manage(new class Gtk::RadioButton(group,_("Poppler/Cairo import")));
     _labelViaPoppler = Gtk::manage(new class Gtk::Label(_("Import via external library. Text consists of groups containing cloned glyphs where each glyph is a path. Images are stored internally. Meshes cause entire document to be rendered as a raster image.")));
+    _labelViaPoppler->set_max_width_chars(50);
     _importViaInternal = Gtk::manage(new class Gtk::RadioButton(group,_("Internal import")));
     _labelViaInternal = Gtk::manage(new class Gtk::Label(_("Import via internal (Poppler derived) library. Text is stored as text but white space is missing. Meshes are converted to tiles, the number depends on the precision set below.")));
+    _labelViaInternal->set_max_width_chars(50);
 #endif
 
     _fallbackPrecisionSlider_adj = Gtk::Adjustment::create(2, 1, 256, 1, 10, 10);

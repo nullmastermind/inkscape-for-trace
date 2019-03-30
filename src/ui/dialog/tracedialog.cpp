@@ -672,6 +672,7 @@ TraceDialogImpl::TraceDialogImpl() :
     //modeQuantFrame.set_shadow_type(Gtk::SHADOW_NONE);
     modeMultiScanFrame.add(modeMultiScanVBox);
     modePageBox.pack_start(modeMultiScanFrame, false, false, 0);
+    modePageBox.set_border_width(MARGIN);
 
     //# end multiple scan
 
@@ -743,6 +744,7 @@ TraceDialogImpl::TraceDialogImpl() :
     optionsFrame.set_label(_("Options"));
     optionsFrame.add(optionsVBox);
     optionsPageBox.pack_start(optionsFrame, false, false, 0);
+    optionsPageBox.set_border_width(MARGIN);
 
     //## end option page
 
@@ -750,9 +752,12 @@ TraceDialogImpl::TraceDialogImpl() :
 
     //### credits
 
-    potraceCreditsLabel.set_text(_("Inkscape bitmap tracing\nis based on Potrace,\ncreated by Peter Selinger\n\nhttp://potrace.sourceforge.net"));
+    potraceCreditsLabel.set_text(_("Inkscape bitmap tracing is based on Potrace, created by Peter Selinger.\n\nhttp://potrace.sourceforge.net"));
+    potraceCreditsLabel.set_line_wrap(true);
+    potraceCreditsLabel.set_halign(Gtk::ALIGN_START);
     potraceCreditsVBox.pack_start(potraceCreditsLabel, false, false, MARGIN);
 
+    potraceCreditsVBox.set_border_width(MARGIN);
     notebook.append_page(potraceCreditsVBox, _("Credits"));
 
     //### end notebook
@@ -765,13 +770,15 @@ TraceDialogImpl::TraceDialogImpl() :
 
     //#### begin right panel
 
+    rightVBox.set_border_width(MARGIN);
+
     //## SIOX
 
     sioxButton.set_label(_("SIOX _foreground selection"));
     sioxButton.set_use_underline(true);
-    sioxBox.pack_start(sioxButton, false, false, MARGIN);
+    sioxBox.pack_start(sioxButton, false, false);
     sioxButton.set_tooltip_text(_("Cover the area you want to select as the foreground"));
-    rightVBox.pack_start(sioxBox, false, false, 0);
+    rightVBox.pack_start(sioxBox, false, false);
 
     //## preview
     Gtk::HBox *previewButtonHBox = Gtk::manage(new Gtk::HBox(false, MARGIN ));

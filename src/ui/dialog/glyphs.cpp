@@ -330,6 +330,8 @@ GlyphsPanel::GlyphsPanel() :
     desktopConns()
 {
     auto table = new Gtk::Grid();
+    table->set_row_spacing(4);
+    table->set_column_spacing(4);
     _getContents()->pack_start(*Gtk::manage(table), Gtk::PACK_EXPAND_WIDGET);
     guint row = 0;
 

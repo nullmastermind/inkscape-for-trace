@@ -1046,6 +1046,7 @@ InputDialogImpl::ConfPanel::ConfPanel() :
     detailsBox.pack_start(modeBox, false, false, 6);
     detailsBox.pack_start(axisFrame, false, false);
     detailsBox.pack_start(keysFrame, false, false);
+    detailsBox.set_border_width(4);
 
     pack_start(pane, true, true);
     pack_start(useExt, Gtk::PACK_SHRINK);

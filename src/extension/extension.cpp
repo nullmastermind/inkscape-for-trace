@@ -754,11 +754,14 @@ Gtk::VBox *
 Extension::get_info_widget()
 {
     Gtk::VBox * retval = Gtk::manage(new Gtk::VBox());
+    retval->set_border_width(4);
 
     Gtk::Frame * info = Gtk::manage(new Gtk::Frame("General Extension Information"));
-    retval->pack_start(*info, true, true, 5);
+    retval->pack_start(*info, true, true, 4);
 
     auto table = Gtk::manage(new Gtk::Grid());
+    table->set_border_width(4);
+    table->set_column_spacing(4);
 
     info->add(*table);
 
@@ -766,7 +769,6 @@ Extension::get_info_widget()
     add_val(_("Name:"), _(name), table, &row);
     add_val(_("ID:"), id, table, &row);
     add_val(_("State:"), _state == STATE_LOADED ? _("Loaded") : _state == STATE_UNLOADED ? _("Unloaded") : _("Deactivated"), table, &row);
-
 
     retval->show_all();
     return retval;
@@ -778,8 +780,8 @@ void Extension::add_val(Glib::ustring labelstr, Glib::ustring valuestr, Gtk::Gri
     Gtk::Label * value;
 
     (*row)++;
-    label = Gtk::manage(new Gtk::Label(labelstr));
-    value = Gtk::manage(new Gtk::Label(valuestr));
+    label = Gtk::manage(new Gtk::Label(labelstr, Gtk::ALIGN_START));
+    value = Gtk::manage(new Gtk::Label(valuestr, Gtk::ALIGN_START));
 
     table->attach(*label, 0, (*row) - 1, 1, 1);
     table->attach(*value, 1, (*row) - 1, 1, 1);
@@ -794,10 +796,12 @@ Gtk::VBox *
 Extension::get_help_widget()
 {
     Gtk::VBox * retval = Gtk::manage(new Gtk::VBox());
+    retval->set_border_width(4);
 
     if (_help == nullptr) {
         Gtk::Label * content = Gtk::manage(new Gtk::Label(_("Currently there is no help available for this Extension.  Please look on the Inkscape website or ask on the mailing lists if you have questions regarding this extension.")));
-        retval->pack_start(*content, true, true, 5);
+        content->set_alignment(Gtk::ALIGN_START, Gtk::ALIGN_START);
+        retval->pack_start(*content, true, true, 4);
         content->set_line_wrap(true);
         content->show();
     } else {
@@ -815,7 +819,7 @@ Extension::get_params_widget()
 {
     Gtk::VBox * retval = Gtk::manage(new Gtk::VBox());
     Gtk::Widget * content = Gtk::manage(new Gtk::Label("Params"));
-    retval->pack_start(*content, true, true, 5);
+    retval->pack_start(*content, true, true, 4);
     content->show();
     retval->show();
     return retval;

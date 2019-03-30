@@ -166,6 +166,7 @@ CloneTiler::CloneTiler () :
                     // TRANSLATORS: "shift" means: the tiles will be shifted (offset) horizontally by this amount
                     // xgettext:no-c-format
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>Shift X:</b>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 2, 1);
             }
@@ -198,6 +199,7 @@ CloneTiler::CloneTiler () :
                     // TRANSLATORS: "shift" means: the tiles will be shifted (offset) vertically by this amount
                     // xgettext:no-c-format
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>Shift Y:</b>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 3, 1);
             }
@@ -229,6 +231,7 @@ CloneTiler::CloneTiler () :
             {
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>Exponent:</b>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 4, 1);
             }
@@ -251,6 +254,7 @@ CloneTiler::CloneTiler () :
                 GtkWidget *l = gtk_label_new ("");
                 // TRANSLATORS: "Alternate" is a verb here
                 gtk_label_set_markup (GTK_LABEL(l), _("<small>Alternate:</small>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 5, 1);
             }
@@ -269,6 +273,7 @@ CloneTiler::CloneTiler () :
                 GtkWidget *l = gtk_label_new ("");
                 // TRANSLATORS: "Cumulate" is a verb here
                 gtk_label_set_markup (GTK_LABEL(l), _("<small>Cumulate:</small>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 6, 1);
             }
@@ -287,6 +292,7 @@ CloneTiler::CloneTiler () :
                 GtkWidget *l = gtk_label_new ("");
                 // TRANSLATORS: "Cumulate" is a verb here
                 gtk_label_set_markup (GTK_LABEL(l), _("<small>Exclude tile:</small>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 7, 1);
             }
@@ -315,6 +321,7 @@ CloneTiler::CloneTiler () :
             {
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>Scale X:</b>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 2, 1);
             }
@@ -345,6 +352,7 @@ CloneTiler::CloneTiler () :
             {
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>Scale Y:</b>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 3, 1);
             }
@@ -375,6 +383,7 @@ CloneTiler::CloneTiler () :
             {
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>Exponent:</b>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 4, 1);
             }
@@ -395,6 +404,7 @@ CloneTiler::CloneTiler () :
             {
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>Base:</b>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 5, 1);
             }
@@ -415,6 +425,7 @@ CloneTiler::CloneTiler () :
                 GtkWidget *l = gtk_label_new ("");
                 // TRANSLATORS: "Alternate" is a verb here
                 gtk_label_set_markup (GTK_LABEL(l), _("<small>Alternate:</small>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 6, 1);
             }
@@ -433,6 +444,7 @@ CloneTiler::CloneTiler () :
                 GtkWidget *l = gtk_label_new ("");
                 // TRANSLATORS: "Cumulate" is a verb here
                 gtk_label_set_markup (GTK_LABEL(l), _("<small>Cumulate:</small>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 7, 1);
             }
@@ -461,6 +473,7 @@ CloneTiler::CloneTiler () :
             {
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>Angle:</b>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 2, 1);
             }
@@ -491,6 +504,7 @@ CloneTiler::CloneTiler () :
                 GtkWidget *l = gtk_label_new ("");
                 // TRANSLATORS: "Alternate" is a verb here
                 gtk_label_set_markup (GTK_LABEL(l), _("<small>Alternate:</small>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 3, 1);
             }
@@ -509,6 +523,7 @@ CloneTiler::CloneTiler () :
                 GtkWidget *l = gtk_label_new ("");
                 // TRANSLATORS: "Cumulate" is a verb here
                 gtk_label_set_markup (GTK_LABEL(l), _("<small>Cumulate:</small>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 4, 1);
             }
@@ -538,6 +553,7 @@ CloneTiler::CloneTiler () :
             {
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>Blur:</b>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 2, 1);
             }
@@ -564,6 +580,7 @@ CloneTiler::CloneTiler () :
                 GtkWidget *l = gtk_label_new ("");
                 // TRANSLATORS: "Alternate" is a verb here
                 gtk_label_set_markup (GTK_LABEL(l), _("<small>Alternate:</small>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 3, 1);
             }
@@ -584,6 +601,7 @@ CloneTiler::CloneTiler () :
             {
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>Opacity:</b>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 4, 1);
             }
@@ -610,6 +628,7 @@ CloneTiler::CloneTiler () :
                 GtkWidget *l = gtk_label_new ("");
                 // TRANSLATORS: "Alternate" is a verb here
                 gtk_label_set_markup (GTK_LABEL(l), _("<small>Alternate:</small>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 5, 1);
             }
@@ -654,6 +673,7 @@ CloneTiler::CloneTiler () :
             {
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>H:</b>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 2, 1);
             }
@@ -681,6 +701,7 @@ CloneTiler::CloneTiler () :
             {
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>S:</b>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 3, 1);
             }
@@ -707,6 +728,7 @@ CloneTiler::CloneTiler () :
             {
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<b>L:</b>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 4, 1);
             }
@@ -733,6 +755,7 @@ CloneTiler::CloneTiler () :
             { // alternates
                 GtkWidget *l = gtk_label_new ("");
                 gtk_label_set_markup (GTK_LABEL(l), _("<small>Alternate:</small>"));
+                gtk_label_set_xalign(GTK_LABEL(l), 0.0);
                 gtk_size_group_add_widget(table_row_labels, l);
                 table_attach (table, l, 1, 5, 1);
             }
@@ -754,6 +777,7 @@ CloneTiler::CloneTiler () :
             GtkWidget *vb = new_tab (nb, _("_Trace"));
         {
             auto hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, VB_MARGIN);
+            gtk_container_set_border_width(GTK_CONTAINER(hb), 4);
             gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
             gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
 
@@ -779,6 +803,7 @@ CloneTiler::CloneTiler () :
                 auto table = gtk_grid_new();
                 gtk_grid_set_row_spacing(GTK_GRID(table), 4);
                 gtk_grid_set_column_spacing(GTK_GRID(table), 6);
+                gtk_container_set_border_width(GTK_CONTAINER(table), 4);
                 gtk_container_add(GTK_CONTAINER(frame), table);
 
                 Gtk::RadioButtonGroup rb_group;
@@ -848,7 +873,7 @@ CloneTiler::CloneTiler () :
                 auto table = gtk_grid_new();
                 gtk_grid_set_row_spacing(GTK_GRID(table), 4);
                 gtk_grid_set_column_spacing(GTK_GRID(table), 6);
-
+                gtk_container_set_border_width(GTK_CONTAINER(table), 4);
                 gtk_container_add(GTK_CONTAINER(frame), table);
 
                 {
@@ -891,6 +916,7 @@ CloneTiler::CloneTiler () :
                 auto table = gtk_grid_new();
                 gtk_grid_set_row_spacing(GTK_GRID(table), 4);
                 gtk_grid_set_column_spacing(GTK_GRID(table), 6);
+                gtk_container_set_border_width(GTK_CONTAINER(table), 4);
                 gtk_container_add(GTK_CONTAINER(frame), table);
 
                 {
@@ -969,7 +995,6 @@ CloneTiler::CloneTiler () :
                 {
                     auto l = Gtk::manage(new Gtk::Label(""));
                     l->set_markup("&#215;");
-                    l->set_halign(Gtk::ALIGN_END);
                     _rowscols->pack_start(*l, true, true, 0);
                 }
 
@@ -1017,7 +1042,6 @@ CloneTiler::CloneTiler () :
                 {
                     auto l = Gtk::manage(new Gtk::Label(""));
                     l->set_markup("&#215;");
-                    l->set_halign(Gtk::ALIGN_END);
                     _widthheight->pack_start(*l, true, true, 0);
                 }
 
@@ -1110,7 +1134,7 @@ CloneTiler::CloneTiler () :
             }
 
             { // buttons which are enabled only when there are tiled clones
-                auto sb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+                auto sb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 4);
                 gtk_box_set_homogeneous(GTK_BOX(sb), FALSE);
                 gtk_box_pack_end (GTK_BOX (hb), sb, FALSE, FALSE, 0);
                 _buttons_on_tiles = sb;
@@ -2520,7 +2544,7 @@ Gtk::Widget * CloneTiler::checkbox(const char          *tip,
     auto const value = prefs->getBool(prefs_path + attr);
     b->set_active(value);
 
-    hb->pack_end(*b, false, true);
+    hb->pack_start(*b, false, true);
     b->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this, &CloneTiler::checkbox_toggled), b, attr));
 
     b->set_data("uncheckable", GINT_TO_POINTER(true));
@@ -2581,8 +2605,6 @@ Gtk::Widget * CloneTiler::spinbox(const char          *tip,
     {
         auto l = Gtk::manage(new Gtk::Label(""));
         l->set_markup(suffix);
-        l->set_halign(Gtk::ALIGN_END);
-        l->set_valign(Gtk::ALIGN_START);
         hb->pack_start(*l);
     }
 
@@ -2661,7 +2683,7 @@ void CloneTiler::table_attach(GtkWidget *table, Gtk::Widget *widget, float align
 void CloneTiler::table_attach(GtkWidget *table, GtkWidget *widget, float align, int row, int col)
 {
     gtk_widget_set_halign(widget, GTK_ALIGN_FILL);
-    gtk_widget_set_valign(widget, GTK_ALIGN_START);
+    gtk_widget_set_valign(widget, GTK_ALIGN_CENTER);
     gtk_grid_attach(GTK_GRID(table), widget, col, row, 1, 1);
 }
 

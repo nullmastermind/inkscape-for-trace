@@ -18,7 +18,6 @@
 #include <memory>
 
 #include <gtkmm/notebook.h>
-#include <gtkmm/sizegroup.h>
 
 #include <gtkmm/paned.h>
 #include <gtkmm/scrolledwindow.h>
@@ -296,7 +295,6 @@ private:
     class LightSourceControl;
     Settings* _settings;
     Settings* _filter_general_settings;
-    Glib::RefPtr<Gtk::SizeGroup> _sizegroup;
 
     // Color Matrix
     ColorMatrixValues* _color_matrix_values;

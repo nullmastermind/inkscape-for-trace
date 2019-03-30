@@ -114,6 +114,8 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 	angleY.setValue(180, "°");
 	parametersTable.attach(angleX, 1, 2, 1, 1);
 	parametersTable.attach(angleY, 2, 2, 1, 1);
+	parametersTable.set_row_spacing(4);
+	parametersTable.set_column_spacing(4);
 	pack_start(parametersTable, false, false);
 
 	rotateObjectsCheckBox.set_label(_("Rotate objects"));
@@ -126,6 +128,8 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 	angleY.set_sensitive(false);
 	radiusX.set_sensitive(false);
 	radiusY.set_sensitive(false);
+
+	set_border_width(4);
 }
 
 /**

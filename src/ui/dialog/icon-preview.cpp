@@ -228,6 +228,7 @@ IconPreviewPanel::IconPreviewPanel() :
     iconBox.pack_start(splitter);
     splitter.pack1( *magBox, true, false );
     UI::Widget::Frame *actuals = Gtk::manage(new UI::Widget::Frame (_("Actual Size:")));
+    actuals->set_border_width(4);
     actuals->add(*verts);
     splitter.pack2( *actuals, false, false );
 

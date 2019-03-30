@@ -205,11 +205,13 @@ DocumentProperties::~DocumentProperties()
 //========================================================================
 
 /**
- * Helper function that attaches widgets in a 3xn table. The widgets come in an
- * array that has two entries per table row. The two entries code for four
- * possible cases: (0,0) means insert space in first column; (0, non-0) means
- * widget in columns 2-3; (non-0, 0) means label in columns 1-3; and
- * (non-0, non-0) means two widgets in columns 2 and 3.
+ * Helper function that sets widgets in a 2 by n table.
+ * arr has two entries per table row. Each row is in the following form:
+ *     widget, widget -> function adds a widget in each column.
+ *     nullptr, widget -> function adds a widget that occupies the row.
+ *     label, nullptr -> function adds label that occupies the row.
+ *     nullptr, nullptr -> function adds an empty box that occupies the row.
+ * This used to be a helper function for a 3 by n table
  */
 void attach_all(Gtk::Grid &table, Gtk::Widget *const arr[], unsigned const n)
 {
@@ -219,8 +221,8 @@ void attach_all(Gtk::Grid &table, Gtk::Widget *const arr[], unsigned const n)
             arr[i+1]->set_hexpand();
             arr[i]->set_valign(Gtk::ALIGN_CENTER);
             arr[i+1]->set_valign(Gtk::ALIGN_CENTER);
-            table.attach(*arr[i],   1, r, 1, 1);
-            table.attach(*arr[i+1], 2, r, 1, 1);
+            table.attach(*arr[i],   0, r, 1, 1);
+            table.attach(*arr[i+1], 1, r, 1, 1);
         } else {
             if (arr[i+1]) {
                 Gtk::AttachOptions yoptions = (Gtk::AttachOptions)0;
@@ -235,14 +237,14 @@ void attach_all(Gtk::Grid &table, Gtk::Widget *const arr[], unsigned const n)
                 else
                     arr[i+1]->set_valign(Gtk::ALIGN_CENTER);
 
-                table.attach(*arr[i+1], 1, r, 2, 1);
+                table.attach(*arr[i+1], 0, r, 2, 1);
             } else if (arr[i]) {
                 Gtk::Label& label = reinterpret_cast<Gtk::Label&>(*arr[i]);
 
                 label.set_hexpand();
                 label.set_halign(Gtk::ALIGN_START);
                 label.set_valign(Gtk::ALIGN_CENTER);
-                table.attach(label, 0, r, 3, 1);
+                table.attach(label, 0, r, 2, 1);
             } else {
                 auto space = Gtk::manage (new Gtk::Box);
                 space->set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
@@ -329,6 +331,20 @@ void DocumentProperties::build_guides()
 
     Gtk::Label *label_gui = Gtk::manage (new Gtk::Label);
     label_gui->set_markup (_("<b>Guides</b>"));
+
+#if GTK_CHECK_VERSION(3,12,0)
+    _rum_deflt.set_margin_start(0);
+    _rcp_bg.set_margin_start(0);
+    _rcp_bord.set_margin_start(0);
+    _rcp_gui.set_margin_start(0);
+    _rcp_hgui.set_margin_start(0);
+#else
+    _rum_deflt.set_margin_left(0);
+    _rcp_bg.set_margin_left(0);
+    _rcp_bord.set_margin_left(0);
+    _rcp_gui.set_margin_left(0);
+    _rcp_hgui.set_margin_left(0);
+#endif
 
     _rcp_gui.set_hexpand();
     _rcp_hgui.set_hexpand();
@@ -977,7 +993,7 @@ void DocumentProperties::build_metadata()
     label->set_markup (_("<b>Dublin Core Entities</b>"));
     label->set_halign(Gtk::ALIGN_START);
     label->set_valign(Gtk::ALIGN_CENTER);
-    _page_metadata1->table().attach (*label, 0,0,3,1);
+    _page_metadata1->table().attach (*label, 0,0,2,1);
 
      /* add generic metadata entry areas */
     struct rdf_work_entity_t * entity;
@@ -986,18 +1002,14 @@ void DocumentProperties::build_metadata()
         if ( entity->editable == RDF_EDIT_GENERIC ) {
             EntityEntry *w = EntityEntry::create (entity, _wr);
             _rdflist.push_back (w);
-            Gtk::HBox *space = Gtk::manage (new Gtk::HBox);
-            space->set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
-            space->set_valign(Gtk::ALIGN_CENTER);
-            _page_metadata1->table().attach(*space, 0, row, 1, 1);
 
             w->_label.set_halign(Gtk::ALIGN_START);
             w->_label.set_valign(Gtk::ALIGN_CENTER);
-            _page_metadata1->table().attach(w->_label, 1, row, 1, 1);
+            _page_metadata1->table().attach(w->_label, 0, row, 1, 1);
 
             w->_packable->set_hexpand();
             w->_packable->set_valign(Gtk::ALIGN_CENTER);
-            _page_metadata1->table().attach(*w->_packable, 2, row, 1, 1);
+            _page_metadata1->table().attach(*w->_packable, 1, row, 1, 1);
         }
     }
 
@@ -1024,20 +1036,15 @@ void DocumentProperties::build_metadata()
     llabel->set_markup (_("<b>License</b>"));
     llabel->set_halign(Gtk::ALIGN_START);
     llabel->set_valign(Gtk::ALIGN_CENTER);
-    _page_metadata2->table().attach(*llabel, 0, row, 3, 1);
+    _page_metadata2->table().attach(*llabel, 0, row, 2, 1);
 
     /* add license selector pull-down and URI */
     ++row;
     _licensor.init (_wr);
-    Gtk::HBox *space = Gtk::manage (new Gtk::HBox);
-    space->set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
-
-    space->set_valign(Gtk::ALIGN_CENTER);
-    _page_metadata2->table().attach(*space, 0, row, 1, 1);
 
     _licensor.set_hexpand();
     _licensor.set_valign(Gtk::ALIGN_CENTER);
-    _page_metadata2->table().attach(_licensor, 1, row, 3, 1);
+    _page_metadata2->table().attach(_licensor, 0, row, 2, 1);
 }
 
 void DocumentProperties::addExternalScript(){

@@ -91,8 +91,9 @@ TextEdit::TextEdit()
     preview_label.set_justify (Gtk::JUSTIFY_CENTER);
     preview_label.set_line_wrap (false);
 
+    font_vbox.set_border_width(4);
     font_vbox.pack_start(font_selector, true, true);
-    font_vbox.pack_start(preview_label, false, false, 5);
+    font_vbox.pack_start(preview_label, false, false, 4);
 
     /* Features tab ---------------------------- */
 
@@ -101,8 +102,9 @@ TextEdit::TextEdit()
     preview_label2.set_justify (Gtk::JUSTIFY_CENTER);
     preview_label2.set_line_wrap (false);
 
+    feat_vbox.set_border_width(4);
     feat_vbox.pack_start(font_features, true, true);
-    feat_vbox.pack_start(preview_label2, false, false, 5);
+    feat_vbox.pack_start(preview_label2, false, false, 4);
 
     /* Text tab -------------------------------- */
     scroller.set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );

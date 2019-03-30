@@ -106,8 +106,8 @@ SvgFontsDialog::AttrEntry::AttrEntry(SvgFontsDialog* d, gchar* lbl, Glib::ustrin
     this->attr = attr;
     entry.set_tooltip_text(tooltip);
     auto label = new Gtk::Label(lbl);
-    this->add(*Gtk::manage(label));
-    this->add(entry);
+    this->pack_start(*Gtk::manage(label), false, false, 4);
+    this->pack_end(entry, true, true);
     this->show_all();
 
     entry.signal_changed().connect(sigc::mem_fun(*this, &SvgFontsDialog::AttrEntry::on_attr_changed));
@@ -153,8 +153,11 @@ SvgFontsDialog::AttrSpin::AttrSpin(SvgFontsDialog* d, gchar* lbl, Glib::ustring 
     this->dialog = d;
     this->attr = attr;
     spin.set_tooltip_text(tooltip);
-    this->add(* Gtk::manage(new Gtk::Label(lbl)) );
-    this->add(spin);
+    auto label = new Gtk::Label(lbl);
+    this->set_border_width(2);
+    this->set_spacing(6);
+    this->pack_start(*Gtk::manage(label), false, false);
+    this->pack_end(spin, true, true);
     this->show_all();
     spin.set_range(0, 4096);
     spin.set_increments(16, 0);
@@ -462,11 +465,11 @@ SPGlyph* SvgFontsDialog::get_selected_glyph()
 }
 
 Gtk::VBox* SvgFontsDialog::global_settings_tab(){
-    _font_label          = new Gtk::Label( _("Font Attributes") );
+    _font_label          = new Gtk::Label(Glib::ustring("<b>") + _("Font Attributes") + "</b>", Gtk::ALIGN_START, Gtk::ALIGN_CENTER);
     _horiz_adv_x_spin    = new AttrSpin( this, (gchar*) _("Horiz. Advance X"), _("Average amount of horizontal space each letter takes up."), SP_ATTR_HORIZ_ADV_X);
     _horiz_origin_x_spin = new AttrSpin( this, (gchar*) _("Horiz. Origin X"), _("Average horizontal origin location for each letter."), SP_ATTR_HORIZ_ORIGIN_X);
     _horiz_origin_y_spin = new AttrSpin( this, (gchar*) _("Horiz. Origin Y"), _("Average vertical origin location for each letter."), SP_ATTR_HORIZ_ORIGIN_Y);
-    _font_face_label     = new Gtk::Label( _("Font Face Attributes") );
+    _font_face_label     = new Gtk::Label(Glib::ustring("<b>") + _("Font Face Attributes") + "</b>", Gtk::ALIGN_START, Gtk::ALIGN_CENTER);
     _familyname_entry    = new AttrEntry(this, (gchar*) _("Family Name:"), _("Name of the font as it appears in font selectors and css font-family properties."), SP_PROP_FONT_FAMILY);
     _units_per_em_spin   = new AttrSpin( this, (gchar*) _("Units per em"), _("Number of display units each letter takes up."), SP_ATTR_UNITS_PER_EM);
     _ascent_spin         = new AttrSpin( this, (gchar*) _("Ascent:"),      _("Amount of space taken up by accenders like the tall line on the letter 'h'."), SP_ATTR_ASCENT);
@@ -475,18 +478,21 @@ Gtk::VBox* SvgFontsDialog::global_settings_tab(){
     _x_height_spin       = new AttrSpin( this, (gchar*) _("x Height:"),    _("The height of a lower-case letter above the baseline like the letter 'x'."), SP_ATTR_X_HEIGHT);
 
     //_descent_spin->set_range(-4096,0);
+    _font_label->set_use_markup();
+    _font_face_label->set_use_markup();
 
-    global_vbox.pack_start(*_font_label,          false, false);
-    global_vbox.pack_start(*_horiz_adv_x_spin,    false, false);
-    global_vbox.pack_start(*_horiz_origin_x_spin, false, false);
-    global_vbox.pack_start(*_horiz_origin_y_spin, false, false);
-    global_vbox.pack_start(*_font_face_label,     false, false);
-    global_vbox.pack_start(*_familyname_entry,    false, false);
-    global_vbox.pack_start(*_units_per_em_spin,   false, false);
-    global_vbox.pack_start(*_ascent_spin,         false, false);
-    global_vbox.pack_start(*_descent_spin,        false, false);
-    global_vbox.pack_start(*_cap_height_spin,     false, false);
-    global_vbox.pack_start(*_x_height_spin,       false, false);
+    global_vbox.set_border_width(2);
+    global_vbox.pack_start(*_font_label);
+    global_vbox.pack_start(*_horiz_adv_x_spin);
+    global_vbox.pack_start(*_horiz_origin_x_spin);
+    global_vbox.pack_start(*_horiz_origin_y_spin);
+    global_vbox.pack_start(*_font_face_label);
+    global_vbox.pack_start(*_familyname_entry);
+    global_vbox.pack_start(*_units_per_em_spin);
+    global_vbox.pack_start(*_ascent_spin);
+    global_vbox.pack_start(*_descent_spin);
+    global_vbox.pack_start(*_cap_height_spin);
+    global_vbox.pack_start(*_x_height_spin);
 
 /*    global_vbox->add(*AttrCombo((gchar*) _("Style:"), SP_PROP_FONT_STYLE));
     global_vbox->add(*AttrCombo((gchar*) _("Variant:"), SP_PROP_FONT_VARIANT));
@@ -796,28 +802,32 @@ Gtk::VBox* SvgFontsDialog::glyphs_tab(){
     _GlyphsList.signal_button_release_event().connect_notify(sigc::mem_fun(*this, &SvgFontsDialog::glyphs_list_button_release));
     create_glyphs_popup_menu(_GlyphsList, sigc::mem_fun(*this, &SvgFontsDialog::remove_selected_glyph));
 
-    Gtk::HBox* missing_glyph_hbox = Gtk::manage(new Gtk::HBox());
+    Gtk::HBox* missing_glyph_hbox = Gtk::manage(new Gtk::HBox(false, 4));
     Gtk::Label* missing_glyph_label = Gtk::manage(new Gtk::Label(_("Missing Glyph:")));
+    missing_glyph_hbox->set_hexpand(false);
     missing_glyph_hbox->pack_start(*missing_glyph_label, false,false);
     missing_glyph_hbox->pack_start(missing_glyph_button, false,false);
     missing_glyph_hbox->pack_start(missing_glyph_reset_button, false,false);
+
     missing_glyph_button.set_label(_("From selection..."));
     missing_glyph_button.signal_clicked().connect(sigc::mem_fun(*this, &SvgFontsDialog::missing_glyph_description_from_selected_path));
     missing_glyph_reset_button.set_label(_("Reset"));
     missing_glyph_reset_button.signal_clicked().connect(sigc::mem_fun(*this, &SvgFontsDialog::reset_missing_glyph_description));
 
+    glyphs_vbox.set_border_width(4);
+    glyphs_vbox.set_spacing(4);
     glyphs_vbox.pack_start(*missing_glyph_hbox, false,false);
 
     glyphs_vbox.add(_GlyphsListScroller);
     _GlyphsListScroller.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
-    _GlyphsListScroller.set_size_request(-1, 290);//It seems that is does not work. Why? I want a box with larger height
+    _GlyphsListScroller.set_size_request(-1, 290);
     _GlyphsListScroller.add(_GlyphsList);
     _GlyphsListStore = Gtk::ListStore::create(_GlyphsListColumns);
     _GlyphsList.set_model(_GlyphsListStore);
     _GlyphsList.append_column_editable(_("Glyph name"),      _GlyphsListColumns.glyph_name);
     _GlyphsList.append_column_editable(_("Matching string"), _GlyphsListColumns.unicode);
     _GlyphsList.append_column_numeric_editable(_("Advance"), _GlyphsListColumns.advance, "%.2f");
-    Gtk::HBox* hb = Gtk::manage(new Gtk::HBox());
+    Gtk::HBox* hb = Gtk::manage(new Gtk::HBox(false, 4));
     add_glyph_button.set_label(_("Add Glyph"));
     add_glyph_button.signal_clicked().connect(sigc::mem_fun(*this, &SvgFontsDialog::add_glyph));
 
@@ -885,13 +895,15 @@ Gtk::VBox* SvgFontsDialog::kerning_tab(){
     create_kerning_pairs_popup_menu(_KerningPairsList, sigc::mem_fun(*this, &SvgFontsDialog::remove_selected_kerning_pair));
 
 //Kerning Setup:
-    kerning_vbox.add(*Gtk::manage(new Gtk::Label(_("Kerning Setup"))));
+    kerning_vbox.set_border_width(4);
+    kerning_vbox.set_spacing(4);
+    // kerning_vbox.add(*Gtk::manage(new Gtk::Label(_("Kerning Setup"))));
     Gtk::HBox* kerning_selector = Gtk::manage(new Gtk::HBox());
-    kerning_selector->add(*Gtk::manage(new Gtk::Label(_("1st Glyph:"))));
-    kerning_selector->add(first_glyph);
-    kerning_selector->add(*Gtk::manage(new Gtk::Label(_("2nd Glyph:"))));
-    kerning_selector->add(second_glyph);
-    kerning_selector->add(add_kernpair_button);
+    kerning_selector->pack_start(*Gtk::manage(new Gtk::Label(_("1st Glyph:"))), false, false);
+    kerning_selector->pack_start(first_glyph, true, true, 4);
+    kerning_selector->pack_start(*Gtk::manage(new Gtk::Label(_("2nd Glyph:"))), false, false);
+    kerning_selector->pack_start(second_glyph, true, true, 4);
+    kerning_selector->pack_start(add_kernpair_button, true, true);
     add_kernpair_button.set_label(_("Add pair"));
     add_kernpair_button.signal_clicked().connect(sigc::mem_fun(*this, &SvgFontsDialog::add_kerning_pair));
     _KerningPairsList.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &SvgFontsDialog::on_kerning_pair_selection_changed));
@@ -899,7 +911,7 @@ Gtk::VBox* SvgFontsDialog::kerning_tab(){
 
     kerning_vbox.pack_start(*kerning_selector, false,false);
 
-    kerning_vbox.add(_KerningPairsListScroller);
+    kerning_vbox.pack_start(_KerningPairsListScroller, true,true);
     _KerningPairsListScroller.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
     _KerningPairsListScroller.add(_KerningPairsList);
     _KerningPairsListStore = Gtk::ListStore::create(_KerningPairsListColumns);
@@ -908,12 +920,13 @@ Gtk::VBox* SvgFontsDialog::kerning_tab(){
     _KerningPairsList.append_column(_("Second Unicode range"), _KerningPairsListColumns.second_glyph);
 //    _KerningPairsList.append_column_numeric_editable(_("Kerning Value"), _KerningPairsListColumns.kerning_value, "%f");
 
-    kerning_vbox.add((Gtk::Widget&) kerning_preview);
+    kerning_vbox.pack_start((Gtk::Widget&) kerning_preview, false,false);
 
-    Gtk::HBox* kerning_amount_hbox = Gtk::manage(new Gtk::HBox());
+    // kerning_slider has a big handle. Extra padding added
+    Gtk::HBox* kerning_amount_hbox = Gtk::manage(new Gtk::HBox(false, 8));
     kerning_vbox.pack_start(*kerning_amount_hbox, false,false);
-    kerning_amount_hbox->add(*Gtk::manage(new Gtk::Label(_("Kerning value:"))));
-    kerning_amount_hbox->add(*kerning_slider);
+    kerning_amount_hbox->pack_start(*Gtk::manage(new Gtk::Label(_("Kerning Value:"))), false,false);
+    kerning_amount_hbox->pack_start(*kerning_slider, true,true);
 
     kerning_preview.set_size(300 + 20, 150 + 20);
     _font_da.set_size(300 + 50 + 20, 60 + 20);
@@ -1014,7 +1027,7 @@ SvgFontsDialog::SvgFontsDialog()
 //List of SVGFonts declared in a document:
     _model = Gtk::ListStore::create(_columns);
     _FontsList.set_model(_model);
-    _FontsList.append_column_editable(_("_Font"), _columns.label);
+    _FontsList.append_column_editable(_("_Fonts"), _columns.label);
     _FontsList.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &SvgFontsDialog::on_font_selection_changed));
 
     this->update_fonts();
@@ -1030,14 +1043,14 @@ SvgFontsDialog::SvgFontsDialog()
 
 //Text Preview:
     _preview_entry.signal_changed().connect(sigc::mem_fun(*this, &SvgFontsDialog::on_preview_text_changed));
-    _getContents()->add((Gtk::Widget&) _font_da);
+    _getContents()->pack_start((Gtk::Widget&) _font_da, false, false);
     _preview_entry.set_text(_("Sample Text"));
     _font_da.set_text(_("Sample Text"));
 
-    Gtk::HBox* preview_entry_hbox = Gtk::manage(new Gtk::HBox());
-    _getContents()->add(*preview_entry_hbox);
-    preview_entry_hbox->add(*Gtk::manage(new Gtk::Label(_("Preview Text:"))));
-    preview_entry_hbox->add(_preview_entry);
+    Gtk::HBox* preview_entry_hbox = Gtk::manage(new Gtk::HBox(false, 4));
+    _getContents()->pack_start(*preview_entry_hbox, false, false); // Non-latin characters may need more height.
+    preview_entry_hbox->pack_start(*Gtk::manage(new Gtk::Label(_("Preview Text:"))), false, false);
+    preview_entry_hbox->pack_start(_preview_entry, true, true);
 
     _FontsList.signal_button_release_event().connect_notify(sigc::mem_fun(*this, &SvgFontsDialog::fonts_list_button_release));
     create_fonts_popup_menu(_FontsList, sigc::mem_fun(*this, &SvgFontsDialog::remove_selected_font));

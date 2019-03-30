@@ -108,6 +108,8 @@ Find::Find()
       deskTrack()
 
 {
+    _left_size_group = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);
+    _right_size_group = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);
     button_find.set_use_underline();
     button_find.set_tooltip_text(_("Select all objects matching the selection criteria"));
     button_replace.set_use_underline();
@@ -192,68 +194,92 @@ Find::Find()
 
     Gtk::RadioButtonGroup grp_searchin = check_searchin_text.get_group();
     check_searchin_property.set_group(grp_searchin);
-    vbox_searchin.pack_start(check_searchin_text, false, false);
-    vbox_searchin.pack_start(check_searchin_property, false, false);
+    vbox_searchin.pack_start(check_searchin_text, Gtk::PACK_SHRINK);
+    vbox_searchin.pack_start(check_searchin_property, Gtk::PACK_SHRINK);
     frame_searchin.add(vbox_searchin);
 
     Gtk::RadioButtonGroup grp_scope = check_scope_all.get_group();
     check_scope_layer.set_group(grp_scope);
     check_scope_selection.set_group(grp_scope);
-    vbox_scope.pack_start(check_scope_all, true, true);
-    vbox_scope.pack_start(check_scope_layer, true, true);
-    vbox_scope.pack_start(check_scope_selection, true, true);
+    vbox_scope.pack_start(check_scope_all, Gtk::PACK_SHRINK);
+    vbox_scope.pack_start(check_scope_layer, Gtk::PACK_SHRINK);
+    vbox_scope.pack_start(check_scope_selection, Gtk::PACK_SHRINK);
+    hbox_searchin.set_spacing(12);
+    hbox_searchin.pack_start(frame_searchin, Gtk::PACK_SHRINK);
+    hbox_searchin.pack_start(frame_scope, Gtk::PACK_SHRINK);
     frame_scope.add(vbox_scope);
 
-    hbox_searchin.set_spacing(4);
-    hbox_searchin.pack_start(frame_searchin, true, true);
-    hbox_searchin.pack_start(frame_scope, true, true);
-
-    vbox_options1.pack_start(check_case_sensitive, true, true);
-    vbox_options1.pack_start(check_include_hidden, true, true);
-    vbox_options2.pack_start(check_exact_match, true, true);
-    vbox_options2.pack_start(check_include_locked, true, true);
-    hbox_options.pack_start(vbox_options1, true, true, 4);
-    hbox_options.pack_start(vbox_options2, true, true, 4);
+    vbox_options1.pack_start(check_case_sensitive, Gtk::PACK_SHRINK);
+    vbox_options1.pack_start(check_include_hidden, Gtk::PACK_SHRINK);
+    vbox_options2.pack_start(check_exact_match, Gtk::PACK_SHRINK);
+    vbox_options2.pack_start(check_include_locked, Gtk::PACK_SHRINK);
+    _left_size_group->add_widget(check_case_sensitive);
+    _left_size_group->add_widget(check_include_hidden);
+    _right_size_group->add_widget(check_exact_match);
+    _right_size_group->add_widget(check_include_locked);
+    hbox_options.set_spacing(4);
+    hbox_options.pack_start(vbox_options1, Gtk::PACK_SHRINK);
+    hbox_options.pack_start(vbox_options2, Gtk::PACK_SHRINK);
     frame_options.add(hbox_options);
 
-    vbox_properties1.pack_start(check_ids, true, true);
-    vbox_properties1.pack_start(check_style, true, true);
-    vbox_properties1.pack_start(check_font, true, true);
-    vbox_properties2.pack_start(check_attributevalue, true, true);
-    vbox_properties2.pack_start(check_attributename, true, true);
+    vbox_properties1.pack_start(check_ids, Gtk::PACK_SHRINK);
+    vbox_properties1.pack_start(check_style, Gtk::PACK_SHRINK);
+    vbox_properties1.pack_start(check_font, Gtk::PACK_SHRINK);
+    vbox_properties2.pack_start(check_attributevalue, Gtk::PACK_SHRINK);
+    vbox_properties2.pack_start(check_attributename, Gtk::PACK_SHRINK);
     vbox_properties2.set_valign(Gtk::ALIGN_START);
-    hbox_properties.pack_start(vbox_properties1, true, true, 4);
-    hbox_properties.pack_start(vbox_properties2, true, true, 4);
+    _left_size_group->add_widget(check_ids);
+    _left_size_group->add_widget(check_style);
+    _left_size_group->add_widget(check_font);
+    _right_size_group->add_widget(check_attributevalue);
+    _right_size_group->add_widget(check_attributename);
+    hbox_properties.set_spacing(4);
+    hbox_properties.pack_start(vbox_properties1, Gtk::PACK_SHRINK);
+    hbox_properties.pack_start(vbox_properties2, Gtk::PACK_SHRINK);
     frame_properties.add(hbox_properties);
 
-    vbox_types1.pack_start(check_alltypes, true, true);
-    vbox_types1.pack_start(check_paths, true, true);
-    vbox_types1.pack_start(check_texts, true, true);
-    vbox_types1.pack_start(check_groups, true, true);
-    vbox_types1.pack_start(check_clones, true, true);
-    vbox_types1.pack_start(check_images, true, true);
-    vbox_types2.pack_start(check_offsets, true, true);
-    vbox_types2.pack_start(check_rects, true, true);
-    vbox_types2.pack_start(check_ellipses, true, true);
-    vbox_types2.pack_start(check_stars, true, true);
-    vbox_types2.pack_start(check_spirals, true, true);
+    vbox_types1.pack_start(check_alltypes, Gtk::PACK_SHRINK);
+    vbox_types1.pack_start(check_paths, Gtk::PACK_SHRINK);
+    vbox_types1.pack_start(check_texts, Gtk::PACK_SHRINK);
+    vbox_types1.pack_start(check_groups, Gtk::PACK_SHRINK);
+    vbox_types1.pack_start(check_clones, Gtk::PACK_SHRINK);
+    vbox_types1.pack_start(check_images, Gtk::PACK_SHRINK);
+    vbox_types2.pack_start(check_offsets, Gtk::PACK_SHRINK);
+    vbox_types2.pack_start(check_rects, Gtk::PACK_SHRINK);
+    vbox_types2.pack_start(check_ellipses, Gtk::PACK_SHRINK);
+    vbox_types2.pack_start(check_stars, Gtk::PACK_SHRINK);
+    vbox_types2.pack_start(check_spirals, Gtk::PACK_SHRINK);
     vbox_types2.set_valign(Gtk::ALIGN_END);
-    hbox_types.pack_start(vbox_types1, true, true, 4);
-    hbox_types.pack_start(vbox_types2, true, true, 4);
+    _left_size_group->add_widget(check_alltypes);
+    _left_size_group->add_widget(check_paths);
+    _left_size_group->add_widget(check_texts);
+    _left_size_group->add_widget(check_groups);
+    _left_size_group->add_widget(check_clones);
+    _left_size_group->add_widget(check_images);
+    _right_size_group->add_widget(check_offsets);
+    _right_size_group->add_widget(check_rects);
+    _right_size_group->add_widget(check_ellipses);
+    _right_size_group->add_widget(check_stars);
+    _right_size_group->add_widget(check_spirals);
+    hbox_types.set_spacing(4);
+    hbox_types.pack_start(vbox_types1, Gtk::PACK_SHRINK);
+    hbox_types.pack_start(vbox_types2, Gtk::PACK_SHRINK);
     frame_types.add(hbox_types);
 
-    vbox_expander.pack_start(frame_options, true, true, 4);
-    vbox_expander.pack_start(frame_properties, true, true, 4);
-    vbox_expander.pack_start(frame_types, true, true, 4);
+    vbox_expander.set_spacing(4);
+    vbox_expander.pack_start(frame_options, true, true);
+    vbox_expander.pack_start(frame_properties, true, true);
+    vbox_expander.pack_start(frame_types, true, true);
 
     expander_options.set_use_underline();
     expander_options.add(vbox_expander);
 
     box_buttons.set_layout(Gtk::BUTTONBOX_END);
-    box_buttons.set_spacing(4);
-    box_buttons.pack_start(button_find, true, true, 6);
-    box_buttons.pack_start(button_replace, true, true, 6);
-    hboxbutton_row.pack_start(status, true, true, 6);
+    box_buttons.set_spacing(6);
+    box_buttons.pack_start(button_find, true, true);
+    box_buttons.pack_start(button_replace, true, true);
+    hboxbutton_row.set_spacing(6);
+    hboxbutton_row.pack_start(status, true, true);
     hboxbutton_row.pack_end(box_buttons, true, true);
 
     Gtk::Box *contents = _getContents();

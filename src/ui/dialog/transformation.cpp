@@ -105,7 +105,7 @@ Transformation::Transformation()
     contents->set_spacing(0);
 
     // Notebook for individual transformations
-    contents->pack_start(_notebook, true, true);
+    contents->pack_start(_notebook, false, false);
 
     _page_move.set_halign(Gtk::ALIGN_START);
     _notebook.append_page(_page_move, _("_Move"), true);
@@ -130,7 +130,7 @@ Transformation::Transformation()
     _notebook.signal_switch_page().connect(sigc::mem_fun(*this, &Transformation::onSwitchPage));
 
     // Apply separately
-    contents->pack_start(_check_apply_separately, true, true);
+    contents->pack_start(_check_apply_separately, false, false);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _check_apply_separately.set_active(prefs->getBool("/dialogs/transformation/applyseparately"));
     _check_apply_separately.signal_toggled().connect(sigc::mem_fun(*this, &Transformation::onApplySeparatelyToggled));

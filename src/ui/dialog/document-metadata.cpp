@@ -64,8 +64,8 @@ DocumentMetadata::DocumentMetadata()
     _getContents()->set_spacing (4);
     _getContents()->pack_start(_notebook, true, true);
 
-    _page_metadata1.set_border_width(2);
-    _page_metadata2.set_border_width(2);
+    _page_metadata1.set_border_width(4);
+    _page_metadata2.set_border_width(4);
    
     _page_metadata1.set_column_spacing(2);
     _page_metadata2.set_column_spacing(2);
@@ -115,7 +115,7 @@ DocumentMetadata::build_metadata()
     label->set_halign(Gtk::ALIGN_START);
     label->set_valign(Gtk::ALIGN_CENTER);
 
-    _page_metadata1.attach(*label, 0, 0, 3, 1);
+    _page_metadata1.attach(*label, 0, 0, 2, 1);
 
      /* add generic metadata entry areas */
     struct rdf_work_entity_t * entity;
@@ -124,19 +124,14 @@ DocumentMetadata::build_metadata()
         if ( entity->editable == RDF_EDIT_GENERIC ) {
             EntityEntry *w = EntityEntry::create (entity, _wr);
             _rdflist.push_back (w);
-            Gtk::HBox *space = Gtk::manage (new Gtk::HBox);
-            space->set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
-
-            space->set_valign(Gtk::ALIGN_CENTER);
-            _page_metadata1.attach(*space, 0, row, 1, 1);
 
             w->_label.set_halign(Gtk::ALIGN_START);
             w->_label.set_valign(Gtk::ALIGN_CENTER);
-            _page_metadata1.attach(w->_label, 1, row, 1, 1);
+            _page_metadata1.attach(w->_label, 0, row, 1, 1);
 
             w->_packable->set_hexpand();
             w->_packable->set_valign(Gtk::ALIGN_CENTER);
-            _page_metadata1.attach(*w->_packable, 2, row, 1, 1);
+            _page_metadata1.attach(*w->_packable, 1, row, 1, 1);
         }
     }
 
@@ -147,19 +142,15 @@ DocumentMetadata::build_metadata()
     llabel->set_markup (_("<b>License</b>"));
     llabel->set_halign(Gtk::ALIGN_START);
     llabel->set_valign(Gtk::ALIGN_CENTER);
-    _page_metadata2.attach(*llabel, 0, row, 3, 1);
+    _page_metadata2.attach(*llabel, 0, row, 2, 1);
 
     /* add license selector pull-down and URI */
     ++row;
     _licensor.init (_wr);
-    Gtk::HBox *space = Gtk::manage (new Gtk::HBox);
-    space->set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
-    space->set_valign(Gtk::ALIGN_CENTER);
-    _page_metadata2.attach(*space, 0, row, 1, 1);
 
     _licensor.set_hexpand();
     _licensor.set_valign(Gtk::ALIGN_CENTER);
-    _page_metadata2.attach(_licensor, 1, row, 2, 1);
+    _page_metadata2.attach(_licensor, 1, row, 1, 1);
 }
 
 /**

@@ -143,7 +143,7 @@ FillAndStroke::_layoutPageStrokeStyle()
 {
     strokeStyleWdgt = sp_stroke_style_line_widget_new();
     strokeStyleWdgt->set_hexpand();
-    strokeStyleWdgt->set_halign(Gtk::ALIGN_CENTER);
+    strokeStyleWdgt->set_halign(Gtk::ALIGN_START);
 
     _page_stroke_style->table().attach(*strokeStyleWdgt, 0, 0, 1, 1);
 }

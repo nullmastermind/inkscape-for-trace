@@ -23,6 +23,7 @@
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/colorbutton.h>
 #include <gtkmm/eventbox.h>
+#include <gtkmm/sizegroup.h>
 #if GTK_CHECK_VERSION(3, 20, 0)
 # include <gdkmm/seat.h>
 #else
@@ -207,9 +208,11 @@ public:
     {
         g_assert(attrs.size()==default_values.size());
         g_assert(attrs.size()==tip_text.size());
+        set_spacing(4);
         for(unsigned i = 0; i < attrs.size(); ++i) {
-            _spins.push_back(new SpinButtonAttr(lower, upper, step_inc, climb_rate, digits, attrs[i], default_values[i], tip_text[i]));
-            pack_start(*_spins.back(), false, false);
+            unsigned index = attrs.size() - 1 - i;
+            _spins.push_back(new SpinButtonAttr(lower, upper, step_inc, climb_rate, digits, attrs[index], default_values[index], tip_text[index]));
+            pack_end(*_spins.back(), false, false);
         }
     }
 
@@ -250,6 +253,7 @@ public:
         _s1.signal_value_changed().connect(signal_attr_changed().make_slot());
         _s2.signal_value_changed().connect(signal_attr_changed().make_slot());
 
+        set_spacing(4);
         pack_start(_s1, false, false);
         pack_start(_s2, false, false);
     }
@@ -741,8 +745,9 @@ public:
         _size_group = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);
 
         for(int i = 0; i < _max_types; ++i) {
-            _groups[i] = new Gtk::VBox;
-            b.pack_start(*_groups[i], false, false);
+            _groups[i] = new Gtk::VBox(false, 3);
+            b.set_spacing(4);
+            b.pack_start(*_groups[i], Gtk::PACK_SHRINK);
         }
         //_current_type = 0;  If set to 0 then update_and_show() fails to update properly.
     }
@@ -967,6 +972,7 @@ public:
         return entry;
     }
 
+    Glib::RefPtr<Gtk::SizeGroup> _size_group;
 private:
     void add_attr_widget(AttrWidget* a)
     {
@@ -982,20 +988,17 @@ private:
         hb->set_spacing(12);
 
         if(label != "") {
-            Gtk::Label *lbl = Gtk::manage(new Gtk::Label(label, Gtk::ALIGN_START));
-            hb->pack_start(*lbl, false, false);
+            Gtk::Label *lbl = Gtk::manage(new Gtk::Label(label, 0.0, 0.5));
+            hb->pack_start(*lbl, Gtk::PACK_SHRINK);
             _size_group->add_widget(*lbl);
-            lbl->show();
         }
 
-        hb->pack_start(*w);
-        _groups[_current_type]->pack_start(*hb);
-        hb->show();
-        w->show();
+        hb->pack_start(*w, Gtk::PACK_EXPAND_WIDGET);
+        _groups[_current_type]->pack_start(*hb, Gtk::PACK_EXPAND_WIDGET);
+        hb->show_all();
     }
 
     std::vector<Gtk::VBox*> _groups;
-    Glib::RefPtr<Gtk::SizeGroup> _size_group;
     FilterEffectsDialog& _dialog;
     SetAttrSlot _set_attr_slot;
     std::vector<std::vector< AttrWidget*> > _attrwidgets;
@@ -1157,15 +1160,15 @@ public:
         : AttrWidget(SP_ATTR_INVALID),
           _dialog(d),
           _settings(d, _box, sigc::mem_fun(_dialog, &FilterEffectsDialog::set_child_attr_direct), LIGHT_ENDSOURCE),
-          _light_label(_("Light Source:"), Gtk::ALIGN_START),
+          _light_label(_("Light Source:"), 0.0, 0.5),
           _light_source(LightSourceConverter),
           _locked(false)
     {
-        _light_box.pack_start(_light_label, false, false);
-        _light_box.pack_start(_light_source);
+        _settings._size_group->add_widget(_light_label);
+        _light_box.pack_start(_light_label, Gtk::PACK_SHRINK);
+        _light_box.pack_start(_light_source, Gtk::PACK_EXPAND_WIDGET);
         _light_box.show_all();
         _light_box.set_spacing(12);
-        _dialog._sizegroup->add_widget(_light_label);
 
         _box.add(_light_box);
         _box.reorder_child(_light_box, 0);
@@ -1174,8 +1177,8 @@ public:
         // FIXME: these range values are complete crap
 
         _settings.type(LIGHT_DISTANT);
-        _settings.add_spinscale(0, SP_ATTR_AZIMUTH, _("Azimuth"), 0, 360, 1, 1, 0, _("Direction angle for the light source on the XY plane, in degrees"));
-        _settings.add_spinscale(0, SP_ATTR_ELEVATION, _("Elevation"), 0, 360, 1, 1, 0, _("Direction angle for the light source on the YZ plane, in degrees"));
+        _settings.add_spinscale(0, SP_ATTR_AZIMUTH, _("Azimuth:"), 0, 360, 1, 1, 0, _("Direction angle for the light source on the XY plane, in degrees"));
+        _settings.add_spinscale(0, SP_ATTR_ELEVATION, _("Elevation:"), 0, 360, 1, 1, 0, _("Direction angle for the light source on the YZ plane, in degrees"));
 
         _settings.type(LIGHT_POINT);
         _settings.add_multispinbutton(/*default x:*/ (double) 0, /*default y:*/ (double) 0, /*default z:*/ (double) 0, SP_ATTR_X, SP_ATTR_Y, SP_ATTR_Z, _("Location:"), -99999, 99999, 1, 100, 0, _("X coordinate"), _("Y coordinate"), _("Z coordinate"));
@@ -1184,10 +1187,10 @@ public:
         _settings.add_multispinbutton(/*default x:*/ (double) 0, /*default y:*/ (double) 0, /*default z:*/ (double) 0, SP_ATTR_X, SP_ATTR_Y, SP_ATTR_Z, _("Location:"), -99999, 99999, 1, 100, 0, _("X coordinate"), _("Y coordinate"), _("Z coordinate"));
         _settings.add_multispinbutton(/*default x:*/ (double) 0, /*default y:*/ (double) 0, /*default z:*/ (double) 0,
                                       SP_ATTR_POINTSATX, SP_ATTR_POINTSATY, SP_ATTR_POINTSATZ,
-                                      _("Points At"), -99999, 99999, 1, 100, 0, _("X coordinate"), _("Y coordinate"), _("Z coordinate"));
-        _settings.add_spinscale(1, SP_ATTR_SPECULAREXPONENT, _("Specular Exponent"), 1, 100, 1, 1, 0, _("Exponent value controlling the focus for the light source"));
+                                      _("Points At:"), -99999, 99999, 1, 100, 0, _("X coordinate"), _("Y coordinate"), _("Z coordinate"));
+        _settings.add_spinscale(1, SP_ATTR_SPECULAREXPONENT, _("Specular Exponent:"), 1, 100, 1, 1, 0, _("Exponent value controlling the focus for the light source"));
         //TODO: here I have used 100 degrees as default value. But spec says that if not specified, no limiting cone is applied. So, there should be a way for the user to set a "no limiting cone" option.
-        _settings.add_spinscale(100, SP_ATTR_LIMITINGCONEANGLE, _("Cone Angle"), 1, 100, 1, 1, 0, _("This is the angle between the spot light axis (i.e. the axis between the light source and the point to which it is pointing at) and the spot light cone. No light is projected outside this cone."));
+        _settings.add_spinscale(100, SP_ATTR_LIMITINGCONEANGLE, _("Cone Angle:"), 1, 100, 1, 1, 0, _("This is the angle between the spot light axis (i.e. the axis between the light source and the point to which it is pointing at) and the spot light cone. No light is projected outside this cone."));
 
         _settings.type(-1); // Force update_and_show() to show/hide windows correctly
 
@@ -2642,7 +2645,6 @@ FilterEffectsDialog::FilterEffectsDialog()
                              NR_FILTER_ENDPRIMITIVETYPE);
     _filter_general_settings = new Settings(*this, _settings_tab2, sigc::mem_fun(*this, &FilterEffectsDialog::set_filternode_attr),
                              1);
-    _sizegroup = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);
 
     // Initialize widget hierarchy
     auto hpaned = Gtk::manage(new Gtk::Paned());
@@ -2696,8 +2698,6 @@ FilterEffectsDialog::FilterEffectsDialog()
     _getContents()->pack_start(_settings_tabs, false, false);
     _settings_tabs.append_page(_settings_tab1, _("Effect parameters"));
     _settings_tabs.append_page(_settings_tab2, _("Filter General Settings"));
-
-    
     
     _primitive_list.signal_primitive_changed().connect(
         sigc::mem_fun(*this, &FilterEffectsDialog::update_settings_view));
@@ -2746,6 +2746,9 @@ void FilterEffectsDialog::init_settings_widgets()
 {
     // TODO: Find better range/climb-rate/digits values for the SpinScales,
     //       most of the current values are complete guesses!
+
+    _settings_tab1.set_border_width(4);
+    _settings_tab2.set_border_width(4);
 
     _empty_settings.set_sensitive(false);
     _settings_tab1.pack_start(_empty_settings);

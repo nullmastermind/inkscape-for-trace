@@ -89,6 +89,8 @@ FontSelector::FontSelector (bool with_size, bool with_variations)
 
     // Grid
     set_name ("FontSelectorGrid");
+    set_row_spacing(4);
+    set_column_spacing(4);
     attach (family_frame,  0, 0, 1, 2);
     attach (style_frame,   1, 0, 2, 1);
     if (with_size) { // Glyph panel does not use size.

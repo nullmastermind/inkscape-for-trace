@@ -49,11 +49,9 @@ LayerPropertiesDialog::LayerPropertiesDialog()
     // Layer name widgets
     _layer_name_entry.set_activates_default(true);
     _layer_name_label.set_label(_("Layer name:"));
-    _layer_name_label.set_halign(Gtk::ALIGN_END);
+    _layer_name_label.set_halign(Gtk::ALIGN_START);
     _layer_name_label.set_valign(Gtk::ALIGN_CENTER);
 
-    _layer_name_label.set_halign(Gtk::ALIGN_FILL);
-    _layer_name_label.set_valign(Gtk::ALIGN_FILL);
     _layout_table.attach(_layer_name_label, 0, 0, 1, 1);
     
     _layer_name_entry.set_halign(Gtk::ALIGN_FILL);
@@ -167,7 +165,7 @@ LayerPropertiesDialog::_setup_position_controls() {
     row->set_value(_dropdown_columns.name, Glib::ustring(_("As sublayer of current")));
 
     _layer_position_label.set_label(_("Position:"));
-    _layer_position_label.set_halign(Gtk::ALIGN_END);
+    _layer_position_label.set_halign(Gtk::ALIGN_START);
     _layer_position_label.set_valign(Gtk::ALIGN_CENTER);
     
     _layer_position_combo.set_halign(Gtk::ALIGN_FILL);
@@ -175,8 +173,6 @@ LayerPropertiesDialog::_setup_position_controls() {
     _layer_position_combo.set_hexpand();
     _layout_table.attach(_layer_position_combo, 1, 1, 1, 1);
 
-    _layer_position_label.set_halign(Gtk::ALIGN_FILL);
-    _layer_position_label.set_valign(Gtk::ALIGN_FILL);
     _layout_table.attach(_layer_position_label, 0, 1, 1, 1);
 
     show_all_children();

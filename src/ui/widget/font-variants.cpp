@@ -220,6 +220,14 @@ namespace Widget {
     _ligatures_grid.attach( _ligatures_label_discretionary, 1, 1, 1, 1);
     _ligatures_grid.attach( _ligatures_label_historical,    1, 2, 1, 1);
     _ligatures_grid.attach( _ligatures_label_contextual,    1, 3, 1, 1);
+
+#if GTK_CHECK_VERSION(3,12,0)
+    _ligatures_grid.set_margin_start(15);
+    _ligatures_grid.set_margin_end(15);
+#else
+    _ligatures_grid.set_margin_left(15);
+    _ligatures_grid.set_margin_right(15);
+#endif
     _ligatures_frame.add( _ligatures_grid );
     pack_start( _ligatures_frame, Gtk::PACK_SHRINK );
 
@@ -246,6 +254,14 @@ namespace Widget {
     _position_grid.attach( _position_normal, 0, 0, 1, 1);
     _position_grid.attach( _position_sub,    1, 0, 1, 1);
     _position_grid.attach( _position_super,  2, 0, 1, 1);
+
+#if GTK_CHECK_VERSION(3,12,0)
+    _position_grid.set_margin_start(15);
+    _position_grid.set_margin_end(15);
+#else
+    _position_grid.set_margin_left(15);
+    _position_grid.set_margin_right(15);
+#endif
     _position_frame.add( _position_grid );
     pack_start( _position_frame, Gtk::PACK_SHRINK );
 
@@ -288,6 +304,14 @@ namespace Widget {
     _caps_grid.attach( _caps_all_small,  1, 1, 1, 1);
     _caps_grid.attach( _caps_petite,     2, 1, 1, 1);
     _caps_grid.attach( _caps_all_petite, 3, 1, 1, 1);
+
+#if GTK_CHECK_VERSION(3,12,0)
+    _caps_grid.set_margin_start(15);
+    _caps_grid.set_margin_end(15);
+#else
+    _caps_grid.set_margin_left(15);
+    _caps_grid.set_margin_right(15);
+#endif
     _caps_frame.add( _caps_grid );
     pack_start( _caps_frame, Gtk::PACK_SHRINK );
 
@@ -359,6 +383,13 @@ namespace Widget {
     _numeric_grid.attach (_numeric_slashed_zero,         0, 4, 1, 1);
     _numeric_grid.attach (_numeric_slashed_zero_label,   1, 4, 1, 1);
 
+#if GTK_CHECK_VERSION(3,12,0)
+    _numeric_grid.set_margin_start(15);
+    _numeric_grid.set_margin_end(15);
+#else
+    _numeric_grid.set_margin_left(15);
+    _numeric_grid.set_margin_right(15);
+#endif
     _numeric_frame.add( _numeric_grid );
     pack_start( _numeric_frame, Gtk::PACK_SHRINK );
     
@@ -394,15 +425,22 @@ namespace Widget {
     _asian_grid.attach (_asian_default_variant,         0, 0, 1, 1);
     _asian_grid.attach (_asian_jis78,                   1, 0, 1, 1);
     _asian_grid.attach (_asian_jis83,                   2, 0, 1, 1);
-    _asian_grid.attach (_asian_jis90,                   3, 0, 1, 1);
-    _asian_grid.attach (_asian_jis04,                   4, 0, 1, 1);
-    _asian_grid.attach (_asian_simplified,              5, 0, 1, 1);
-    _asian_grid.attach (_asian_traditional,             6, 0, 1, 1);
-    _asian_grid.attach (_asian_default_width,           0, 1, 1, 1);
-    _asian_grid.attach (_asian_full_width,              1, 1, 1, 1);
-    _asian_grid.attach (_asian_proportional_width,      2, 1, 1, 1);
-    _asian_grid.attach (_asian_ruby,                    0, 2, 1, 1);
+    _asian_grid.attach (_asian_jis90,                   1, 1, 1, 1);
+    _asian_grid.attach (_asian_jis04,                   2, 1, 1, 1);
+    _asian_grid.attach (_asian_simplified,              1, 2, 1, 1);
+    _asian_grid.attach (_asian_traditional,             2, 2, 1, 1);
+    _asian_grid.attach (_asian_default_width,           0, 3, 1, 1);
+    _asian_grid.attach (_asian_full_width,              1, 3, 1, 1);
+    _asian_grid.attach (_asian_proportional_width,      2, 3, 1, 1);
+    _asian_grid.attach (_asian_ruby,                    0, 4, 1, 1);
 
+#if GTK_CHECK_VERSION(3,12,0)
+    _asian_grid.set_margin_start(15);
+    _asian_grid.set_margin_end(15);
+#else
+    _asian_grid.set_margin_left(15);
+    _asian_grid.set_margin_right(15);
+#endif
     _asian_frame.add( _asian_grid );
     pack_start( _asian_frame, Gtk::PACK_SHRINK );
 
@@ -438,6 +476,13 @@ namespace Widget {
     _feature_vbox.pack_start( _feature_substitutions );
     _feature_vbox.pack_start( _feature_list  );
 
+#if GTK_CHECK_VERSION(3,12,0)
+    _feature_vbox.set_margin_start(15);
+    _feature_vbox.set_margin_end(15);
+#else
+    _feature_vbox.set_margin_left(15);
+    _feature_vbox.set_margin_right(15);
+#endif
     _feature_frame.add( _feature_vbox );
     pack_start( _feature_frame, Gtk::PACK_SHRINK  );
 

@@ -147,7 +147,7 @@ Export::Export () :
     pHYs_sb(pHYs_adj, 1.0, 2),
     antialiasing_label(_("Antialiasing")),
     antialiasing_cb(),
-    hide_box(false, 5),
+    hide_box(false, 3),
     hide_export(_("Hide all except selected")),
     closeWhenDone(_("Close when complete")),
     button_box(false, 3),
@@ -276,7 +276,7 @@ Export::Export () :
                                       0.01, 100000.0, 0.1, 1.0, t, 3, 1,
                                       "", _("dpi"), 2, 0, nullptr );
 
-        singleexport_box.pack_start(size_box);
+        singleexport_box.pack_start(size_box, Gtk::PACK_SHRINK);
     }
 
     /* File entry */
@@ -295,7 +295,7 @@ Export::Export () :
         browser_im_label->pack_start(browse_image);
         browser_im_label->pack_start(browse_label);
         browse_button.add(*browser_im_label);
-        filename_box.pack_end (browse_button, false, false, 4);
+        filename_box.pack_end (browse_button, false, false);
 
         file_box.add(filename_box);
 
@@ -307,29 +307,30 @@ Export::Export () :
         // mnemonic in frame label moves focus to filename:
         flabel->set_mnemonic_widget(filename_entry);
 
-        singleexport_box.pack_start(file_box);
+        singleexport_box.pack_start(file_box, Gtk::PACK_SHRINK);
     }
 
     batch_export.set_sensitive(true);
-    batch_box.pack_start(batch_export, false, false);
+    batch_box.pack_start(batch_export, false, false, 3);
 
     hide_export.set_sensitive(true);
     hide_export.set_active (prefs->getBool("/dialogs/export/hideexceptselected/value", false));
-    hide_box.pack_start(hide_export, false, false);
+    hide_box.pack_start(hide_export, false, false, 3);
 
 
     /* Export Button row */
-    button_box.set_border_width(3);
     export_button.set_label(_("_Export"));
     export_button.set_use_underline();
     export_button.set_tooltip_text (_("Export the bitmap file with these settings"));
 
-    button_box.pack_start(closeWhenDone, true, true, 0 );
+    button_box.set_border_width(3);
+    button_box.pack_start(closeWhenDone, true, true, 0);
     button_box.pack_end(export_button, false, false, 0);
 
     /*Advanced*/
     Gtk::Label *label_advanced = Gtk::manage(new Gtk::Label(_("Advanced"),true));
     expander.set_label_widget(*label_advanced);
+    expander.set_vexpand(false);
     const char* const modes_list[]={"Gray_1", "Gray_2","Gray_4","Gray_8","Gray_16","RGB_8","RGB_16","GrayAlpha_8","GrayAlpha_16","RGBA_8","RGBA_16"};
     for(auto i : modes_list)
         bitdepth_cb.append(i);
@@ -348,8 +349,14 @@ Export::Export () :
     for(auto i : antialising_list)
         antialiasing_cb.append(i);
     antialiasing_cb.set_active_text(antialising_list[2]);
+    bitdepth_label.set_halign(Gtk::ALIGN_START);
+    zlib_label.set_halign(Gtk::ALIGN_START);
+    pHYs_label.set_halign(Gtk::ALIGN_START);
+    antialiasing_label.set_halign(Gtk::ALIGN_START);
     auto table = new Gtk::Grid();
-    gtk_container_add(GTK_CONTAINER(expander.gobj()), (GtkWidget*)(table->gobj()));
+    expander.add(*table);
+    // gtk_container_add(GTK_CONTAINER(expander.gobj()), (GtkWidget*)(table->gobj()));
+    table->set_border_width(4);
     table->attach(interlacing,0,0,1,1);
     table->attach(bitdepth_label,0,1,1,1);
     table->attach(bitdepth_cb,1,1,1,1);
@@ -364,12 +371,12 @@ Export::Export () :
     /* Main dialog */
     Gtk::Box *contents = _getContents();
     contents->set_spacing(0);
-    contents->pack_start(singleexport_box);
-    contents->pack_start(batch_box);
-    contents->pack_start(hide_box);
-    contents->pack_end(button_box, false, false);
-    contents->pack_end(_prog, Gtk::PACK_EXPAND_WIDGET);
-    contents->pack_end(expander, FALSE, FALSE,0);
+    contents->pack_start(singleexport_box, Gtk::PACK_SHRINK);
+    contents->pack_start(batch_box, Gtk::PACK_SHRINK);
+    contents->pack_start(hide_box, Gtk::PACK_SHRINK);
+    contents->pack_start(expander, Gtk::PACK_SHRINK);
+    contents->pack_end(button_box, Gtk::PACK_SHRINK);
+    contents->pack_end(_prog, Gtk::PACK_SHRINK);
 
     /* Signal handlers */
     filename_entry.signal_changed().connect( sigc::mem_fun(*this, &Export::onFilenameModified) );
@@ -507,7 +514,6 @@ Glib::RefPtr<Gtk::Adjustment> Export::createSpinbutton( gchar const * /*key*/, f
         l->set_halign(Gtk::ALIGN_END);
         l->set_valign(Gtk::ALIGN_CENTER);
         l->set_hexpand();
-        l->set_vexpand();
         t->attach(*l, x + pos, y, 1, 1);
         l->set_sensitive(sensitive);
         pos++;
@@ -515,7 +521,6 @@ Glib::RefPtr<Gtk::Adjustment> Export::createSpinbutton( gchar const * /*key*/, f
 
     auto sb = new Gtk::SpinButton(adj, 1.0, digits);
     sb->set_hexpand();
-    sb->set_vexpand();
     t->attach(*sb, x + pos, y, 1, 1);
 
     sb->set_width_chars(7);
@@ -531,7 +536,6 @@ Glib::RefPtr<Gtk::Adjustment> Export::createSpinbutton( gchar const * /*key*/, f
         l->set_halign(Gtk::ALIGN_START);
         l->set_valign(Gtk::ALIGN_CENTER);
         l->set_hexpand();
-        l->set_vexpand();
         t->attach(*l, x + pos, y, 1, 1);
         l->set_sensitive (sensitive);
         pos++;

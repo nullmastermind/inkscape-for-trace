@@ -739,6 +739,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
 
     TileBox.pack_start(*PaddingTable, false, false, MARGIN);
 
+    contents->set_border_width(4);
     contents->pack_start(TileBox);
 
     double SpacingType = prefs->getDouble("/dialogs/gridtiler/SpacingType", 15);

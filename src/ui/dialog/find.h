@@ -22,6 +22,7 @@
 #include <gtkmm/expander.h>
 #include <gtkmm/label.h>
 #include <gtkmm/radiobutton.h>
+#include <gtkmm/sizegroup.h>
 
 #include "ui/dialog/desktop-tracker.h"
 
@@ -269,6 +270,9 @@ private:
     Gtk::VBox vbox_types2;
     Gtk::HBox hbox_types;
     UI::Widget::Frame frame_types;
+
+    Glib::RefPtr<Gtk::SizeGroup> _left_size_group;
+    Glib::RefPtr<Gtk::SizeGroup> _right_size_group;
 
     /**
      * A vector of all the check option widgets for easy processing
