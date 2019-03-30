@@ -311,17 +311,6 @@ SpellCheck::init(SPDesktop *d)
     gtk_widget_set_sensitive(dictionary_combo, false);
     start_button.set_sensitive(false);
 
-#ifdef _WIN32
-    // on windows, dictionaries are in a lib/aspell-0.60 subdir off inkscape's executable dir;
-    // this is some black magick to find out the executable path to give it to aspell
-    char exeName[MAX_PATH+1];
-    GetModuleFileName(NULL, exeName, MAX_PATH);
-    char *slashPos = strrchr(exeName, '\\');
-    if (slashPos)
-        *slashPos = '\0';
-    //g_print ("Aspell prefix path: %s\n", exeName);
-#endif
-
     _stops = 0;
     _adds = 0;
     clearRects();
@@ -329,9 +318,6 @@ SpellCheck::init(SPDesktop *d)
 #ifdef HAVE_ASPELL
     {
         AspellConfig *config = new_aspell_config();
-#ifdef _WIN32
-        aspell_config_replace(config, "prefix", exeName);
-#endif
         aspell_config_replace(config, "lang", _lang.c_str());
         aspell_config_replace(config, "encoding", "UTF-8");
         AspellCanHaveError *ret = new_aspell_speller(config);
@@ -346,9 +332,6 @@ SpellCheck::init(SPDesktop *d)
 
     if (_lang2 != "") {
         AspellConfig *config = new_aspell_config();
-#ifdef _WIN32
-        aspell_config_replace(config, "prefix", exeName);
-#endif
         aspell_config_replace(config, "lang", _lang2.c_str());
         aspell_config_replace(config, "encoding", "UTF-8");
         AspellCanHaveError *ret = new_aspell_speller(config);
@@ -363,9 +346,6 @@ SpellCheck::init(SPDesktop *d)
 
     if (_lang3 != "") {
         AspellConfig *config = new_aspell_config();
-#ifdef _WIN32
-        aspell_config_replace(config, "prefix", exeName);
-#endif
         aspell_config_replace(config, "lang", _lang3.c_str());
         aspell_config_replace(config, "encoding", "UTF-8");
         AspellCanHaveError *ret = new_aspell_speller(config);
