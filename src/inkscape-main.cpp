@@ -43,7 +43,7 @@ static void set_extensions_env()
 #ifdef _WIN32
     // add inkscape directory to DLL search path so dynamically linked extension modules find their libraries
     // should be fixed in Python 3.8 (https://github.com/python/cpython/commit/2438cdf0e932a341c7613bf4323d06b91ae9f1f1)
-    gchar *installation_dir = g_win32_get_package_installation_directory_of_module(NULL);
+    gchar *installation_dir = get_program_dir();
     wchar_t *installation_dir_w = (wchar_t *)g_utf8_to_utf16(installation_dir, -1, NULL, NULL, NULL);
     SetDllDirectoryW(installation_dir_w);
     g_free(installation_dir);
