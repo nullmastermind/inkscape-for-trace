@@ -47,8 +47,6 @@ void initialize_gettext() {
     bindtextdomain(GETTEXT_PACKAGE, BR_LOCALEDIR(""));
 # else
     bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR_ABSOLUTE);
-    // needed by Python/Gettext
-    g_setenv("PACKAGE_LOCALE_DIR", PACKAGE_LOCALE_DIR_ABSOLUTE, TRUE);
 # endif
 #endif
 
