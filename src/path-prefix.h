@@ -30,7 +30,6 @@
 
 
 char *append_inkscape_datadir(const char *relative_path);
-char *get_datadir_path();
 char *get_extensions_path();
 char *get_program_name();
 char *get_program_dir();
