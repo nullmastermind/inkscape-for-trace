@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
-cmake_minimum_required(VERSION 2.8.8)
+cmake_minimum_required(VERSION 3.1.0)
 
 cmake_policy(SET CMP0003 NEW) # don't be prolific with library paths
 cmake_policy(SET CMP0005 NEW) # proper define quoting
@@ -18,9 +18,10 @@ message("Binary Dir: ${CMAKE_CURRENT_BINARY_DIR}")
 # -----------------------------------------------------------------------------
 # CMake Configuration
 # -----------------------------------------------------------------------------
-# Used in cmake 3.1+
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# set(CMAKE_CXX_EXTENSIONS OFF) # enforces -std=c++11 instead of -std=gnu++11
+                                # TODO: build currently fails with it as we actually depend on GNU compiler extensions...
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeScripts/Modules")
 

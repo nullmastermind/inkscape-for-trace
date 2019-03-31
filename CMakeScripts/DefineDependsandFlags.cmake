@@ -10,14 +10,6 @@ list(APPEND INKSCAPE_INCS ${PROJECT_SOURCE_DIR}
     ${CMAKE_BINARY_DIR}/include
 )
 
-# ----------------------------------------------------------------------------
-# Add C++11 standard compliance
-# TODO: Add a proper check for compiler compliance here
-# ----------------------------------------------------------------------------
-# this can be removed when cmake minimum is 3.1 
-# as replaced with CMAKE_CXX_STANDARD in main CMakeLists.txt
-list(APPEND INKSCAPE_CXX_FLAGS "-std=c++11")
-
 # Errors for common mistakes
 list(APPEND INKSCAPE_CXX_FLAGS "-Werror=format")                # e.g.: printf("%s", std::string("foo"))
 list(APPEND INKSCAPE_CXX_FLAGS "-Werror=format-security")       # e.g.: printf(variable);
@@ -29,6 +21,7 @@ if (CMAKE_COMPILER_IS_GNUCC)
         list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-fstack-clash-protection -fcf-protection")
     endif()
 endif()
+
 # Define the flags for profiling if desired:
 if(WITH_PROFILING)
     set(BUILD_SHARED_LIBS off)
