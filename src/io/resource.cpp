@@ -44,7 +44,6 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
         case SYSTEM: {
             gchar const* temp = nullptr;
             switch (type) {
-                case APPICONS: temp = INKSCAPE_APPICONDIR; break;
                 case EXTENSIONS: temp = INKSCAPE_EXTENSIONDIR; break;
                 case FILTERS: temp = INKSCAPE_FILTERDIR; break;
                 case FONTS: temp = INKSCAPE_FONTSDIR; break;

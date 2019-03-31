@@ -35,9 +35,7 @@
    and back into the root install dir. */
 #  define INKSCAPE_LIBPREFIX      "/../.."
 #  define INKSCAPE_DATADIR_REAL   BR_DATADIR( INKSCAPE_LIBPREFIX "/share")
-#  define INKSCAPE_APPICONDIR     BR_DATADIR( INKSCAPE_LIBPREFIX "/share/pixmaps" )
 #  define INKSCAPE_ATTRRELDIR     BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/attributes" )
-#  define INKSCAPE_BINDDIR        BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/bind" )
 #  define INKSCAPE_DOCDIR         BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/doc" )
 #  define INKSCAPE_EXAMPLESDIR    BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/examples" )
 #  define INKSCAPE_EXTENSIONDIR   BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/extensions" )
@@ -63,9 +61,7 @@
 #else
 #  ifdef _WIN32
 #    define INKSCAPE_DATADIR_REAL append_inkscape_datadir()
-#    define INKSCAPE_APPICONDIR   append_inkscape_datadir("pixmaps")
 #    define INKSCAPE_ATTRRELDIR   append_inkscape_datadir("attributes")
-#    define INKSCAPE_BINDDIR      append_inkscape_datadir("bind")
 #    define INKSCAPE_DOCDIR       append_inkscape_datadir("doc")
 #    define INKSCAPE_EXAMPLESDIR  append_inkscape_datadir("examples")
 #    define INKSCAPE_EXTENSIONDIR append_inkscape_datadir("extensions")
@@ -90,9 +86,7 @@
 #    define CREATE_PATTERNSDIR    append_inkscape_datadir("create\\patterns\\vector")
 #  elif defined ENABLE_OSX_APP_LOCATIONS // TODO: Is ENABLE_OSX_APP_LOCATIONS still in use?
 #    define INKSCAPE_DATADIR_REAL "Contents/Resources/share"
-#    define INKSCAPE_APPICONDIR   "Contents/Resources/share/pixmaps"
 #    define INKSCAPE_ATTRRELDIR   "Contents/Resources/share/inkscape/attributes"
-#    define INKSCAPE_BINDDIR      "Contents/Resources/share/inkscape/bind"
 #    define INKSCAPE_DOCDIR       "Contents/Resources/share/inkscape/doc"
 #    define INKSCAPE_EXAMPLESDIR  "Contents/Resources/share/inkscape/examples"
 #    define INKSCAPE_EXTENSIONDIR "Contents/Resources/share/inkscape/extensions"
@@ -117,7 +111,6 @@
 #    define CREATE_PATTERNSDIR   "/Library/Application Support/create/patterns/vector"
 #  else
 #    define INKSCAPE_DATADIR_REAL append_inkscape_datadir()
-#    define INKSCAPE_APPICONDIR   append_inkscape_datadir("pixmaps")
 #    define INKSCAPE_ATTRRELDIR   append_inkscape_datadir("inkscape/attributes")
 #    define INKSCAPE_BINDDIR      append_inkscape_datadir("inkscape/bind")
 #    define INKSCAPE_DOCDIR       append_inkscape_datadir("inkscape/doc")

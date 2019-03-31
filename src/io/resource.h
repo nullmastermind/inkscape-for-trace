@@ -27,7 +27,6 @@ namespace IO {
 namespace Resource {
 
 enum Type {
-    APPICONS,
     EXTENSIONS,
     FONTS,
     GRADIENTS,
