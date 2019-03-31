@@ -4,93 +4,21 @@
 # will be used as default if no environment variables are set.
 # -----------------------------------------------------------------------------
 
-# Directory containing the precompiled Inkscape libraries. Usually c:\devlibs or c:\devlibs64
-set(ENV_DEVLIBS_PATH C:/devlibs64)
-
-# Directory containing the MinGW instance used for compilation. Usually c:\mingw or c:\mingw64
-set(ENV_MINGW_PATH C:/mingw64)
-
 # -----------------------------------------------------------------------------
 # MinGW Configuration
 # -----------------------------------------------------------------------------
 message(STATUS "Configuring MinGW environment:")
 
 if("$ENV{MSYSTEM_CHOST}" STREQUAL "")
-  if("$ENV{DEVLIBS_PATH}" STREQUAL "")
-    message(STATUS "  Setting path to development libraries from ConfigEnvMinGW.cmake: ${ENV_DEVLIBS_PATH}")
-    set(DEVLIBS_PATH ${ENV_DEVLIBS_PATH})
-  else()
-    message(STATUS "  Setting path to development libraries from environment: $ENV{DEVLIBS_PATH}")
-    set(DEVLIBS_PATH $ENV{DEVLIBS_PATH})
-  endif()
-
-  if("$ENV{MINGW_PATH}" STREQUAL "")
-    message(STATUS "  Setting path to MinGW from ConfigEnvMinGW.cmake: ${ENV_MINGW_PATH}")
-    set(MINGW_PATH ${ENV_MINGW_PATH})
-  else()
-    message(STATUS "  Setting path to MinGW from environment: $ENV{MINGW_PATH}")
-    set(MINGW_PATH $ENV{MINGW_PATH})
-  endif()
-
-  # Normalize directory separator slashes.
-  string(REGEX REPLACE "\\\\" "/" DEVLIBS_PATH ${DEVLIBS_PATH})
-  string(REGEX REPLACE "\\\\" "/" MINGW_PATH ${MINGW_PATH})
+  message(WARNING "  Could not detect MinGW build environment. We recommend building with MSYS2. Proceed at your own risk!")
 else()
-  set(HAVE_MSYS2 ON)
   message(STATUS "  Detected MinGW environment provided by MSYS2")
   set(MINGW_PATH $ENV{MINGW_PREFIX})
 endif()
 
 # -----------------------------------------------------------------------------
-# DEVLIBS CHECKS
-# -----------------------------------------------------------------------------
-if(NOT HAVE_MSYS2)
-  # Directory containing the compile time .dll.a and .a files.
-  set(DEVLIBS_LIB "${DEVLIBS_PATH}/lib")
-
-  if(NOT EXISTS "${DEVLIBS_LIB}")
-    message(FATAL_ERROR "Inkscape development libraries directory does not exist: ${DEVLIBS_LIB}")
-  endif()
-
-  # Add devlibs libraries to linker path.
-  link_directories(${DEVLIBS_LIB})
-
-  set(DEVLIBS_INCLUDE ${DEVLIBS_PATH}/include)
-
-  if(NOT EXISTS ${DEVLIBS_INCLUDE})
-    message(FATAL_ERROR "Inkscape development libraries directory does not exist: ${DEVLIBS_INCLUDE}")
-  endif()
-
-  # Add general MinGW headers to compiler include path.
-  #include_directories(${DEVLIBS_INCLUDE})
-
-  # Directory containing the precompiled .dll files.
-  set(DEVLIBS_BIN ${DEVLIBS_PATH}/bin)
-
-  if(NOT EXISTS ${DEVLIBS_BIN})
-    message(FATAL_ERROR "Inkscape development binaries directory does not exist: ${DEVLIBS_BIN}")
-  endif()
-
-  # Directory containing the pkgconfig .pc files.
-  set(PKG_CONFIG_PATH "${DEVLIBS_PATH}/lib/pkgconfig")
-
-  if(NOT EXISTS "${PKG_CONFIG_PATH}")
-    message(FATAL_ERROR "pkgconfig directory does not exist: ${PKG_CONFIG_PATH}")
-  endif()
-
-  # Add the devlibs directories to the paths used to find libraries and programs.
-  list(APPEND CMAKE_PREFIX_PATH ${DEVLIBS_PATH})
-
-  # Eliminate error messages when not having mingw in the environment path variable.
-  list(APPEND CMAKE_PROGRAM_PATH  ${DEVLIBS_BIN})
-endif()
-
-# -----------------------------------------------------------------------------
 # MINGW CHECKS
 # -----------------------------------------------------------------------------
-
-# We are in a MinGW environment.
-set(HAVE_MINGW ON)
 
 # Try to determine the MinGW processor architecture.
 if(EXISTS "${MINGW_PATH}/i686-w64-mingw32")

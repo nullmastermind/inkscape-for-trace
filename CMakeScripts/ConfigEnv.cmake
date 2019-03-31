@@ -6,11 +6,6 @@ if(WIN32)
 
   include(CMakeScripts/ConfigEnvMinGW.cmake)
   
-  if(NOT HAVE_MSYS2)
-    list(INSERT CMAKE_SYSTEM_INCLUDE_PATH 0 ${DEVLIBS_PATH})
-    list(INSERT CMAKE_SYSTEM_LIBRARY_PATH 0 ${DEVLIBS_PATH})
-  endif()
-  
   set(CMAKE_C_COMPILER "${MINGW_BIN}/gcc.exe")
   set(CMAKE_CXX_COMPILER "${MINGW_BIN}/g++.exe")
   set(CMAKE_CXX_STANDARD 11)

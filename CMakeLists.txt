@@ -232,11 +232,7 @@ install(FILES
 	TRANSLATORS
 	DESTINATION ${INKSCAPE_SHARE_INSTALL}/doc)
 
-if(HAVE_MSYS2)
-  include(CMakeScripts/InstallMSYS2.cmake)
-else()
-  include(CMakeScripts/Install.cmake)
-endif()
+include(CMakeScripts/Install.cmake)
 
 # -----------------------------------------------------------------------------
 # Uninstall Target
@@ -317,17 +313,10 @@ message("WITH_JEMALLOC:           ${WITH_JEMALLOC}")
 
 if(WIN32)
 message("")
-message("HAVE_MINGW:              ${HAVE_MINGW}")
 message("HAVE_MINGW64:            ${HAVE_MINGW64}")
 message("MINGW_PATH:              ${MINGW_PATH}")
 message("MINGW_ARCH:              ${MINGW_ARCH}")
 message("MINGW_ARCH_PATH:         ${MINGW_ARCH_PATH}")
-if(NOT HAVE_MSYS2)
-message("DEVLIBS_PATH:            ${DEVLIBS_PATH}")
-message("DEVLIBS_LIB:             ${DEVLIBS_LIB}")
-message("DEVLIBS_BIN:             ${DEVLIBS_BIN}")
-message("PKG_CONFIG_PATH:         ${PKG_CONFIG_PATH}")
-endif()
 endif()
 
 message("------------------------------------------------------------------------")
