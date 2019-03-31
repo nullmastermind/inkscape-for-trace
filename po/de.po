@@ -17,7 +17,7 @@
 # Heiko Wöhrle <mail@heikowoehrle.de>, 2014.
 # Sönke Roggatz <s.roggatz@mailing-werkstatt.de>, 2015.
 # Maren Hachmann <marenhachmann@yahoo.com>, 2015, 2016.
-# Eduard Braun <eduard.braun2@gmx.de>, 2015-2016.
+# Patrick Storz <eduard.braun2@gmx.de>, 2015-2019.
 # Michael Rack <miohna@freenet.de>, 2018.
 msgid ""
 msgstr ""
@@ -15542,7 +15542,7 @@ msgstr ""
 "Stefan von Halenbach (vonHalenbach@users.sourceforge.net)\n"
 "Uwe Schöler (uschoeler@yahoo.de)\n"
 "Wolfram Strempfer (wolfram@strempfer.de)\n"
-"Eduard Braun (Eduard.Braun2@gmx.de)\n"
+"Patrick Storz (eduard.braun2@gmx.de)\n"
 "Maren Hachmann (marenhachmann@yahoo.com)"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:211

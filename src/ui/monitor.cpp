@@ -4,7 +4,7 @@
  *//*
  * Authors:
  * see git history
- *   Eduard Braun <eduard.braun2@gmx.de>
+ *   Patrick Storz <eduard.braun2@gmx.de>
  *
  * Copyright (C) 2018 Authors
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
