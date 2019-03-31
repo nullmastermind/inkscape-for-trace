@@ -127,9 +127,6 @@ include(CMakeScripts/HelperMacros.cmake) # Misc Utility Macros
 
 # -----------------------------------------------------------------------------
 # BAD HACKS, NEED TO INVESTIGATE MAKING THESE LESS BAD
-if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
-  add_definitions(-D_FORTIFY_SOURCE=2)
-endif()
 if(BUILD_SHARED_LIBS AND NOT WIN32)
     add_definitions(-fPIC)
 endif()
