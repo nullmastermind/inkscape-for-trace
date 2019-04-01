@@ -162,7 +162,7 @@ void SPAttributeTable::set_object(SPObject *object,
         for (guint i = 0; i < (attributes.size()); i++) {
             Gtk::Label *ll = new Gtk::Label (_(labels[i].c_str()));
             ll->show();
-            ll->set_halign(Gtk::ALIGN_END);
+            ll->set_halign(Gtk::ALIGN_START);
             ll->set_valign(Gtk::ALIGN_CENTER);
             ll->set_vexpand();
 #if GTKMM_CHECK_VERSION(3,12,0)

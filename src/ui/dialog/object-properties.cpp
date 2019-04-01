@@ -61,6 +61,7 @@ ObjectProperties::ObjectProperties()
     , _cb_hide(_("_Hide"), true)
     , _cb_lock(_("L_ock"), true)
     , _cb_aspect_ratio(_("Preserve Ratio"), true)
+    , _exp_interactivity(_("_Interactivity"), true)
     , _attr_table(Gtk::manage(new SPAttributeTable()))
     , _desktop(nullptr)
 {
@@ -116,13 +117,14 @@ void ObjectProperties::_init()
 
     /* Create the label for the object id */
     _label_id.set_label(_label_id.get_label() + " ");
-    _label_id.set_halign(Gtk::ALIGN_END);
+    _label_id.set_halign(Gtk::ALIGN_START);
     _label_id.set_valign(Gtk::ALIGN_CENTER);
     grid_top->attach(_label_id, 0, 0, 1, 1);
 
     /* Create the entry box for the object id */
     _entry_id.set_tooltip_text(_("The id= attribute (only letters, digits, and the characters .-_: allowed)"));
     _entry_id.set_max_length(64);
+    _entry_id.set_hexpand();
     _entry_id.set_valign(Gtk::ALIGN_CENTER);
     grid_top->attach(_entry_id, 1, 0, 1, 1);
 
@@ -136,7 +138,7 @@ void ObjectProperties::_init()
 
     /* Create the label for the object label */
     _label_label.set_label(_label_label.get_label() + " ");
-    _label_label.set_halign(Gtk::ALIGN_END);
+    _label_label.set_halign(Gtk::ALIGN_START);
     _label_label.set_valign(Gtk::ALIGN_CENTER);
     grid_top->attach(_label_label, 0, 1, 1, 1);
 
@@ -156,7 +158,7 @@ void ObjectProperties::_init()
 
     /* Create the label for the object title */
     _label_title.set_label(_label_title.get_label() + " ");
-    _label_title.set_halign(Gtk::ALIGN_END);
+    _label_title.set_halign(Gtk::ALIGN_START);
     _label_title.set_valign(Gtk::ALIGN_CENTER);
     grid_top->attach(_label_title, 0, 2, 1, 1);
 
@@ -192,7 +194,7 @@ void ObjectProperties::_init()
 
     /* Create the label for the object title */
     _label_dpi.set_label(_label_dpi.get_label() + " ");
-    _label_dpi.set_halign(Gtk::ALIGN_END);
+    _label_dpi.set_halign(Gtk::ALIGN_START);
     _label_dpi.set_valign(Gtk::ALIGN_CENTER);
     grid_top->attach(_label_dpi, 0, 3, 1, 1);
 
@@ -209,7 +211,7 @@ void ObjectProperties::_init()
     /* Image rendering */
     /* Create the label for the object ImageRendering */
     _label_image_rendering.set_label(_label_image_rendering.get_label() + " ");
-    _label_image_rendering.set_halign(Gtk::ALIGN_END);
+    _label_image_rendering.set_halign(Gtk::ALIGN_START);
     _label_image_rendering.set_valign(Gtk::ALIGN_CENTER);
     grid_top->attach(_label_image_rendering, 0, 4, 1, 1);
 
@@ -232,7 +234,7 @@ void ObjectProperties::_init()
 
     /* Check boxes */
     Gtk::HBox *hb_checkboxes = Gtk::manage(new Gtk::HBox());
-    contents->pack_start(*hb_checkboxes, FALSE, FALSE, 0);
+    contents->pack_start(*hb_checkboxes, Gtk::PACK_SHRINK, 0);
 
     auto grid_cb = Gtk::manage(new Gtk::Grid());
     grid_cb->set_row_homogeneous();
@@ -275,10 +277,9 @@ void ObjectProperties::_init()
 
     btn_set->signal_clicked().connect(sigc::mem_fun(this, &ObjectProperties::_labelChanged));
 
-    /* Create the frame for interactivity options */
-    Gtk::Label *label_interactivity = Gtk::manage(new Gtk::Label(_("_Interactivity"), true));
-    _exp_interactivity.set_label_widget(*label_interactivity);
-    contents->pack_start(_exp_interactivity, FALSE, FALSE, 0);
+    /* Interactivity options */
+    _exp_interactivity.set_vexpand(false);
+    contents->pack_start(_exp_interactivity, Gtk::PACK_SHRINK);
 
     show_all();
     update();
