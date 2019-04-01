@@ -43,6 +43,10 @@
 
 namespace Geom {
 
+#ifndef M_PI
+# define M_PI 3.14159265358979323846
+#endif
+
 Poly Poly::operator*(const Poly& p) const {
     Poly result; 
     result.resize(degree() +  p.degree()+1);

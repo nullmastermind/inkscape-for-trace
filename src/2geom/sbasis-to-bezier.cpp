@@ -437,8 +437,8 @@ void
 subpath_from_sbasis_incremental(Geom::OldPathSetBuilder &pb, D2<SBasis> B, double tol, bool initial) {
     const unsigned k = 2; // cubic bezier
     double te = B.tail_error(k);
-    assert(B[0].IS_FINITE());
-    assert(B[1].IS_FINITE());
+    assert(B[0].std::isfinite());
+    assert(B[1].std::isfinite());
 
     //std::cout << "tol = " << tol << std::endl;
     while(1) {

@@ -95,7 +95,7 @@ public:
     /// @{
     /// Check whether both endpoints are finite.
     bool isFinite() const {
-        return IS_FINITE(min()) && IS_FINITE(max());
+        return std::isfinite(min()) && std::isfinite(max());
     }
     /** @brief Map the interval [0,1] onto this one.
      * This method simply performs 1D linear interpolation between endpoints. */

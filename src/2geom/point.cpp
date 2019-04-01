@@ -74,7 +74,7 @@ namespace Geom {
 void Point::normalize() {
     double len = hypot(_pt[0], _pt[1]);
     if(len == 0) return;
-    if(IS_NAN(len)) return;
+    if(std::isnan(len)) return;
     static double const inf = HUGE_VAL;
     if(len != inf) {
         *this /= len;
@@ -132,7 +132,7 @@ Coord L1(Point const &p) {
 Coord LInfty(Point const &p) {
     Coord const a(fabs(p[0]));
     Coord const b(fabs(p[1]));
-    return ( a < b || IS_NAN(b)
+    return ( a < b || std::isnan(b)
              ? b
              : a );
 }

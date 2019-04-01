@@ -36,7 +36,11 @@
 #include <2geom/sbasis.h>
 #include <2geom/math-utils.h>
 
-namespace Geom{
+namespace Geom {
+
+#ifndef M_PI
+# define M_PI 3.14159265358979323846
+#endif
 
 /** bound the error from term truncation
  \param tail first term to chop

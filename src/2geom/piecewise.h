@@ -194,7 +194,7 @@ class Piecewise {
 
     //Offsets the piecewise domain
     inline void offsetDomain(double o) {
-        assert(IS_FINITE(o));
+        assert(std::isfinite(o));
         if(o != 0)
             for(unsigned i = 0; i <= size(); i++)
                 cuts[i] += o;

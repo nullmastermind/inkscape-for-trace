@@ -203,7 +203,7 @@ public:
     /** @brief Check whether both coordinates are finite. */
     bool isFinite() const {
         for ( unsigned i = 0 ; i < 2 ; ++i ) {
-            if(!IS_FINITE(_pt[i])) return false;
+            if(!std::isfinite(_pt[i])) return false;
         }
         return true;
     }

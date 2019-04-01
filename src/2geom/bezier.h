@@ -248,7 +248,7 @@ public:
     }
     bool isFinite() const {
         for(unsigned i = 0; i <= order(); i++) {
-            if(!IS_FINITE(c_[i])) return false;
+            if(!std::isfinite(c_[i])) return false;
         }
         return true;
     }

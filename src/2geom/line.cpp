@@ -130,7 +130,7 @@ std::vector<Coord> Line::coefficients() const
 std::vector<Coord> Line::roots(Coord v, Dim2 d) const {
     std::vector<Coord> result;
     Coord r = root(v, d);
-    if (IS_FINITE(r)) {
+    if (std::isfinite(r)) {
         result.push_back(r);
     }
     return result;

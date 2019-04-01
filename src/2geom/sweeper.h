@@ -155,7 +155,7 @@ private:
         {}
         bool operator<(Event const &other) const { return coord < other.coord; }
         bool operator==(Event const &other) const { return coord == other.coord; }
-        operator bool() const { return !IS_NAN(coord); }
+        operator bool() const { return !std::isnan(coord); }
     };
 
     static Event _get_next(std::vector<Event> &heap) {

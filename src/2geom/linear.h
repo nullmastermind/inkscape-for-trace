@@ -72,7 +72,7 @@ public:
     typedef Coord output_type;
     bool isZero(Coord eps=EPSILON) const { return are_near(a[0], 0., eps) && are_near(a[1], 0., eps); }
     bool isConstant(Coord eps=EPSILON) const { return are_near(a[0], a[1], eps); }
-    bool isFinite() const { return IS_FINITE(a[0]) && IS_FINITE(a[1]); }
+    bool isFinite() const { return std::isfinite(a[0]) && std::isfinite(a[1]); }
 
     Coord at0() const { return a[0]; }
     Coord &at0() { return a[0]; }
