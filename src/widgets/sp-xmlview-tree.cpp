@@ -365,10 +365,6 @@ void on_drag_data_received(GtkWidget * /*wgt*/, GdkDragContext * /*context*/, in
         return;
     }
 
-    if (tree->dndactive) {
-       return;
-    }
-
     GtkTreeModel *model = nullptr;
     GtkTreeIter iter;
     GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
@@ -403,7 +399,6 @@ void on_row_changed(GtkTreeModel *tree_model, GtkTreePath *path, GtkTreeIter *it
     GtkTreeIter new_parent;
     if (!gtk_tree_model_iter_parent(tree_model, &new_parent, iter)) {
         //No parent of drop location
-        g_signal_emit_by_name(G_OBJECT (tree), "tree_move", GUINT_TO_POINTER(0) );
         return;
     }
 
@@ -557,7 +552,6 @@ gboolean tree_model_iter_compare(GtkTreeModel* store, GtkTreeIter * iter1, GtkTr
 
 }
 
-
 /*
  * Disable drag and drop target on : root node and non-element nodes
  */
@@ -570,23 +564,19 @@ gboolean do_drag_motion(GtkWidget *widget, GdkDragContext *context, gint x, gint
     int action = 0;
 
     if (path) {
-        action = GDK_ACTION_MOVE;
-
         SPXMLViewTree *tree = SP_XMLVIEW_TREE(user_data);
         GtkTreeIter iter;
         gtk_tree_model_get_iter(GTK_TREE_MODEL(tree->store), &iter, path);
-        if (sp_xmlview_tree_node_get_repr (GTK_TREE_MODEL(tree->store), &iter)->type() != Inkscape::XML::ELEMENT_NODE) {
-            action = 0;
-        }
 
-        if (!gtk_tree_path_up(path)) {
-            action = 0;
-        }
-        if (!gtk_tree_path_up(path)) {
-            action = 0;
-        }
-        if (!path) {
-            action = 0;
+        // 1. only xml elements can be dragged
+        if (sp_xmlview_tree_node_get_repr (GTK_TREE_MODEL(tree->store), &iter)->type() == Inkscape::XML::ELEMENT_NODE) {
+            // 2. new roots cannot be created eg. by dragging a node off into space
+            if (gtk_tree_path_get_depth(path) > 0) {
+                // 3. elements must be at least children of the root <svg:svg> element
+                if (gtk_tree_path_up(path) && gtk_tree_path_up(path)) {
+                    action = GDK_ACTION_MOVE;
+                }
+            }
         }
     }
 
@@ -645,7 +635,6 @@ sp_xmlview_tree_node_get_repr (GtkTreeModel *model, GtkTreeIter * iter)
 
     return repr;
 }
-
 
 /*
  * Find a GtkTreeIter position in the tree by repr
