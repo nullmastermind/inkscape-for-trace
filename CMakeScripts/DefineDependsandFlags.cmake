@@ -68,6 +68,8 @@ list(APPEND INKSCAPE_INCS_SYS ${INKSCAPE_DEP_INCLUDE_DIRS})
 
 add_definitions(${INKSCAPE_DEP_CFLAGS_OTHER})
 
+find_package(DoubleConversion REQUIRED)  # lib2geom dependency
+        
 if(WITH_JEMALLOC)
     find_package(JeMalloc)
     if (JEMALLOC_FOUND)
