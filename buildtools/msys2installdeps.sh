@@ -42,6 +42,7 @@ $ARCH-ninja
 
 # install Inkscape dependencies (required)
 eval pacman -S $PACMAN_OPTIONS \
+$ARCH-double-conversion \
 $ARCH-gc \
 $ARCH-gsl \
 $ARCH-libxslt \

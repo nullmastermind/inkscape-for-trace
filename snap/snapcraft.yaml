@@ -42,6 +42,7 @@ parts:
       - libaspell-dev
       - libboost-dev
       - libcdr-dev
+      - libdouble-conversion-dev
       - libgc-dev
       - libgdl-3-dev
       - libglib2.0-dev

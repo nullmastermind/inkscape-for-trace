@@ -33,6 +33,7 @@ if(WIN32)
     ${MINGW_BIN}/libcrypto-1_[0-9]*.dll
     ${MINGW_BIN}/libcurl-[0-9]*.dll
     ${MINGW_BIN}/libdatrie-[0-9]*.dll
+    ${MINGW_BIN}/libdouble-conversion.dll
     ${MINGW_BIN}/libenchant-[0-9]*.dll
     ${MINGW_BIN}/libepoxy-[0-9]*.dll
     ${MINGW_BIN}/libexpat-[0-9]*.dll
