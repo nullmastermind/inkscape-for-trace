@@ -234,7 +234,7 @@ SPILength::read( gchar const *str ) {
         gchar *e;
         /** \todo fixme: Move this to standard place (Lauris) */
         value_tmp = g_ascii_strtod(str, &e);
-        if ( !IS_FINITE(value_tmp) ) { // fix for bug lp:935157
+        if ( !std::isfinite(value_tmp) ) { // fix for bug lp:935157
             return;
         }
         if ((gchar const *) e != str) {
@@ -383,7 +383,7 @@ SPILength::merge( const SPIBase* const parent ) {
                          * FIXME: Have separate ex ratio parameter.
                          * Get x height from libnrtype or pango.
                          */
-                        if (!IS_FINITE(value)) {
+                        if (!std::isfinite(value)) {
                           value = computed;
                           unit = SP_CSS_UNIT_NONE;
                         }

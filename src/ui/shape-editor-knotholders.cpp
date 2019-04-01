@@ -1490,7 +1490,7 @@ SpiralKnotHolderEntityOuter::knot_set(Geom::Point const &p, Geom::Point const &/
             spiral->rad = rad_new;
             spiral->t0 = pow(r0 / spiral->rad, 1.0/spiral->exp);
         }
-        if (!IS_FINITE(spiral->t0)) spiral->t0 = 0.0;
+        if (!std::isfinite(spiral->t0)) spiral->t0 = 0.0;
         spiral->t0 = CLAMP(spiral->t0, 0.0, 0.999);
     }
 

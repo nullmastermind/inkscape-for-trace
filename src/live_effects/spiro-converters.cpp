@@ -24,7 +24,7 @@ namespace Spiro {
 void
 ConverterSPCurve::moveto(double x, double y)
 {
-    if ( IS_FINITE(x) && IS_FINITE(y) ) {
+    if ( std::isfinite(x) && std::isfinite(y) ) {
         _curve.moveto(x, y);
     } else {
         SPIRO_G_MESSAGE("Spiro: moveto not finite");
@@ -34,7 +34,7 @@ ConverterSPCurve::moveto(double x, double y)
 void
 ConverterSPCurve::lineto(double x, double y, bool close_last)
 {
-    if ( IS_FINITE(x) && IS_FINITE(y) ) {
+    if ( std::isfinite(x) && std::isfinite(y) ) {
         _curve.lineto(x, y);
         if (close_last) {
             _curve.closepath();
@@ -47,7 +47,7 @@ ConverterSPCurve::lineto(double x, double y, bool close_last)
 void
 ConverterSPCurve::quadto(double xm, double ym, double x3, double y3, bool close_last)
 {
-    if ( IS_FINITE(xm) && IS_FINITE(ym) && IS_FINITE(x3) && IS_FINITE(y3) ) {
+    if ( std::isfinite(xm) && std::isfinite(ym) && std::isfinite(x3) && std::isfinite(y3) ) {
         _curve.quadto(xm, ym, x3, y3);
         if (close_last) {
             _curve.closepath();
@@ -60,7 +60,7 @@ ConverterSPCurve::quadto(double xm, double ym, double x3, double y3, bool close_
 void
 ConverterSPCurve::curveto(double x1, double y1, double x2, double y2, double x3, double y3, bool close_last)
 {
-    if ( IS_FINITE(x1) && IS_FINITE(y1) && IS_FINITE(x2) && IS_FINITE(y2) ) {
+    if ( std::isfinite(x1) && std::isfinite(y1) && std::isfinite(x2) && std::isfinite(y2) ) {
         _curve.curveto(x1, y1, x2, y2, x3, y3);
         if (close_last) {
             _curve.closepath();
@@ -80,7 +80,7 @@ ConverterPath::ConverterPath(Geom::Path &path)
 void
 ConverterPath::moveto(double x, double y)
 {
-    if ( IS_FINITE(x) && IS_FINITE(y) ) {
+    if ( std::isfinite(x) && std::isfinite(y) ) {
         _path.start(Geom::Point(x, y));
     } else {
         SPIRO_G_MESSAGE("spiro moveto not finite");
@@ -90,7 +90,7 @@ ConverterPath::moveto(double x, double y)
 void
 ConverterPath::lineto(double x, double y, bool close_last)
 {
-    if ( IS_FINITE(x) && IS_FINITE(y) ) {
+    if ( std::isfinite(x) && std::isfinite(y) ) {
         _path.appendNew<Geom::LineSegment>( Geom::Point(x, y) );
         _path.close(close_last);
     } else {
@@ -101,7 +101,7 @@ ConverterPath::lineto(double x, double y, bool close_last)
 void
 ConverterPath::quadto(double xm, double ym, double x3, double y3, bool close_last)
 {
-    if ( IS_FINITE(xm) && IS_FINITE(ym) && IS_FINITE(x3) && IS_FINITE(y3) ) {
+    if ( std::isfinite(xm) && std::isfinite(ym) && std::isfinite(x3) && std::isfinite(y3) ) {
         _path.appendNew<Geom::QuadraticBezier>(Geom::Point(xm, ym), Geom::Point(x3, y3));
         _path.close(close_last);
     } else {
@@ -112,7 +112,7 @@ ConverterPath::quadto(double xm, double ym, double x3, double y3, bool close_las
 void
 ConverterPath::curveto(double x1, double y1, double x2, double y2, double x3, double y3, bool close_last)
 {
-    if ( IS_FINITE(x1) && IS_FINITE(y1) && IS_FINITE(x2) && IS_FINITE(y2) ) {
+    if ( std::isfinite(x1) && std::isfinite(y1) && std::isfinite(x2) && std::isfinite(y2) ) {
         _path.appendNew<Geom::CubicBezier>(Geom::Point(x1, y1), Geom::Point(x2, y2), Geom::Point(x3, y3));
         _path.close(close_last);
     } else {

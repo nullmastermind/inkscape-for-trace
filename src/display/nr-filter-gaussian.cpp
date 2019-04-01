@@ -730,14 +730,14 @@ double FilterGaussian::complexity(Geom::Affine const &trans)
 
 void FilterGaussian::set_deviation(double deviation)
 {
-    if(IS_FINITE(deviation) && deviation >= 0) {
+    if(std::isfinite(deviation) && deviation >= 0) {
         _deviation_x = _deviation_y = deviation;
     }
 }
 
 void FilterGaussian::set_deviation(double x, double y)
 {
-    if(IS_FINITE(x) && x >= 0 && IS_FINITE(y) && y >= 0) {
+    if(std::isfinite(x) && x >= 0 && std::isfinite(y) && y >= 0) {
         _deviation_x = x;
         _deviation_y = y;
     }
