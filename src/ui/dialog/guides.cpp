@@ -24,6 +24,8 @@
 #include "message-context.h"
 #include "verbs.h"
 
+#include "include/gtkmm_version.h"
+
 #include "object/sp-guide.h"
 #include "object/sp-namedview.h"
 
@@ -127,6 +129,7 @@ void GuidelinePropertiesDialog::_onOK()
     const auto c = _color.get_rgba();
     unsigned r = c.get_red_u()/257, g = c.get_green_u()/257, b = c.get_blue_u()/257;
     //TODO: why 257? verify this!
+    // don't know why, but introduced: 761f7da58cd6d625b88c24eee6fae1b7fa3bfcdd
 
     _guide->set_color(r, g, b, true);
 
@@ -172,13 +175,14 @@ void GuidelinePropertiesDialog::_response(gint response)
 void GuidelinePropertiesDialog::_setup() {
     set_title(_("Guideline"));
     add_button(_("_OK"), Gtk::RESPONSE_OK);
-    add_button(_("_Delete"), -12);
     add_button(_("_Duplicate"), -13);
+    add_button(_("_Delete"), -12);
     add_button(_("_Cancel"), Gtk::RESPONSE_CANCEL);
 
     auto mainVBox = get_content_area();
     _layout_table.set_row_spacing(4);
     _layout_table.set_column_spacing(4);
+    _layout_table.set_border_width(4);
 
     mainVBox->pack_start(_layout_table, false, false, 0);
 
@@ -206,6 +210,11 @@ void GuidelinePropertiesDialog::_setup() {
     _color.set_halign(Gtk::ALIGN_FILL);
     _color.set_valign(Gtk::ALIGN_FILL);
     _color.set_hexpand();
+#if GTKMM_CHECK_VERSION(3,12,0)
+    _color.set_margin_end(6);
+#else
+    _color.set_margin_right(6);
+#endif
     _layout_table.attach(_color, 1, 3, 2, 1);
 
     // unitmenus
@@ -237,6 +246,11 @@ void GuidelinePropertiesDialog::_setup() {
 
     _unit_menu.set_halign(Gtk::ALIGN_FILL);
     _unit_menu.set_valign(Gtk::ALIGN_FILL);
+#if GTKMM_CHECK_VERSION(3,12,0)
+    _unit_menu.set_margin_end(6);
+#else
+    _unit_menu.set_margin_right(6);
+#endif
     _layout_table.attach(_unit_menu, 2, 4, 1, 1);
 
     // angle spinbutton
@@ -253,12 +267,22 @@ void GuidelinePropertiesDialog::_setup() {
     _relative_toggle.set_halign(Gtk::ALIGN_FILL);
     _relative_toggle.set_valign(Gtk::ALIGN_FILL);
     _relative_toggle.set_hexpand();
+#if GTKMM_CHECK_VERSION(3,12,0)
+    _relative_toggle.set_margin_start(6);
+#else
+    _relative_toggle.set_margin_left(6);
+#endif
     _layout_table.attach(_relative_toggle, 1, 7, 2, 1);
 
     // locked radio button
     _locked_toggle.set_halign(Gtk::ALIGN_FILL);
     _locked_toggle.set_valign(Gtk::ALIGN_FILL);
     _locked_toggle.set_hexpand();
+#if GTKMM_CHECK_VERSION(3,12,0)
+    _locked_toggle.set_margin_start(6);
+#else
+    _locked_toggle.set_margin_left(6);
+#endif
     _layout_table.attach(_locked_toggle, 1, 8, 2, 1);
 
     _relative_toggle.signal_toggled().connect(sigc::mem_fun(*this, &GuidelinePropertiesDialog::_modeChanged));

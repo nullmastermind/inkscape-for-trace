@@ -32,8 +32,18 @@ Labelled::Labelled(Glib::ustring const &label, Glib::ustring const &tooltip,
         _icon = Gtk::manage(sp_get_icon_image(icon, Gtk::ICON_SIZE_LARGE_TOOLBAR));
         pack_start(*_icon, Gtk::PACK_SHRINK);
     }
-    pack_start(*Gtk::manage(_label), Gtk::PACK_SHRINK, 6);
-    pack_start(*Gtk::manage(_widget), Gtk::PACK_SHRINK, 6);
+
+    set_spacing(6);
+    // Setting margins separately allows for more control over them
+#if GTK_CHECK_VERSION(3,12,0)
+    set_margin_start(6);
+    set_margin_end(6);
+#else
+    set_margin_left(6);
+    set_margin_right(6);
+#endif
+    pack_start(*Gtk::manage(_label), Gtk::PACK_SHRINK);
+    pack_start(*Gtk::manage(_widget), Gtk::PACK_SHRINK);
     if (mnemonic) {
         _label->set_mnemonic_widget(*_widget);
     }
@@ -82,11 +92,9 @@ bool Labelled::on_mnemonic_activate ( bool group_cycling )
 void
 Labelled::set_hexpand(bool expand)
 {
-    if (expand) {
-        child_property_pack_type(*_widget) = Gtk::PACK_END;
-    } else {
-        child_property_pack_type(*_widget) = Gtk::PACK_START;
-    }
+    // should only have 2 children, but second child may not be _widget
+    child_property_pack_type(*get_children().back()) = expand ? Gtk::PACK_END
+                                                              : Gtk::PACK_START;
     
     Gtk::HBox::set_hexpand(expand);
 }
