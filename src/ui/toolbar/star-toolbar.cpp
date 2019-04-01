@@ -295,7 +295,7 @@ void
 StarToolbar::proportion_value_changed()
 {
     if (DocumentUndo::getUndoSensitive(_desktop->getDocument())) {
-        if (!IS_NAN(_spoke_adj->get_value())) {
+        if (!std::isnan(_spoke_adj->get_value())) {
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             prefs->setDouble("/tools/shapes/star/proportion",
                 _spoke_adj->get_value());

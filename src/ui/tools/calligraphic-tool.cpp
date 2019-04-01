@@ -623,7 +623,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                                 // so _gradually_ let go attraction to prevent jerks
                                 target = (this->hatch_spacing * speed + hatch_dist * (SPEED_NORMAL - speed))/SPEED_NORMAL;
                             }
-                            if (!IS_NAN(dot) && dot < -0.5) {// flip
+                            if (!std::isnan(dot) && dot < -0.5) {// flip
                                 target = -target;
                             }
 
@@ -708,7 +708,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
                 } else {
                     // Not drawing but spacing set: gray, center snapped, fixed radius
                     Geom::Point c = (nearest + this->hatch_spacing * hatch_unit_vector) * motion_to_curve.inverse();
-                    if (!IS_NAN(c[Geom::X]) && !IS_NAN(c[Geom::Y])) {
+                    if (!std::isnan(c[Geom::X]) && !std::isnan(c[Geom::Y])) {
                         Geom::Affine const sm (Geom::Scale(this->hatch_spacing, this->hatch_spacing) * Geom::Translate(c));
                         sp_canvas_item_affine_absolute(this->hatch_area, sm);
                         sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->hatch_area), 0x7f7f7fff, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);

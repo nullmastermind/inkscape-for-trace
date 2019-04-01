@@ -182,7 +182,7 @@ CrossingPoints::CrossingPoints(Geom::PathVector const &paths) : std::vector<Cros
                     }
                     for (auto & time : times){
                         //std::cout<<"intersection "<<i<<"["<<ii<<"]("<<times[k].first<<")= "<<j<<"["<<jj<<"]("<<times[k].second<<")\n";
-                        if ( !IS_NAN(time.first) && !IS_NAN(time.second) ){
+                        if ( !std::isnan(time.first) && !std::isnan(time.second) ){
                             double zero = 1e-4;
                             if ( (i==j) && (fabs(time.first+ii - time.second-jj) <= zero) )
                             { //this is just end=start of successive curves in a path.

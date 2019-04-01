@@ -458,7 +458,7 @@ stroke_average_width (const std::vector<SPItem*> &objects)
 
         double width = item->style->stroke_width.computed * i2dt.descrim();
 
-        if ( item->style->stroke.isNone() || IS_NAN(width)) {
+        if ( item->style->stroke.isNone() || std::isnan(width)) {
             ++n_notstroked;   // do not count nonstroked objects
             continue;
         } else {
@@ -775,7 +775,7 @@ objects_query_strokewidth (const std::vector<SPItem*> &objects, SPStyle *style_r
         Geom::Affine i2d = item->i2dt_affine();
         double sw = style->stroke_width.computed * i2d.descrim();
 
-        if (!IS_NAN(sw)) {
+        if (!std::isnan(sw)) {
             if (prev_sw != -1 && fabs(sw - prev_sw) > 1e-3)
                 same_sw = false;
             prev_sw = sw;
@@ -1068,7 +1068,7 @@ objects_query_fontnumbers (const std::vector<SPItem*> &objects, SPStyle *style_r
         double doc_scale = Geom::Affine(item->i2dt_affine()).descrim();
         
         double dummy = style->font_size.computed * doc_scale; 
-        if (!IS_NAN(dummy)) {
+        if (!std::isnan(dummy)) {
             size += dummy; /// \todo FIXME: we assume non-% units here
         } else {
             no_size++;
@@ -1811,7 +1811,7 @@ objects_query_blur (const std::vector<SPItem*> &objects, SPStyle *style_res)
                     if (spblur) {
                         float num = spblur->stdDeviation.getNumber();
                         float dummy = num * i2d.descrim();
-                        if (!IS_NAN(dummy)) {
+                        if (!std::isnan(dummy)) {
                             blur_sum += dummy;
                             if (blur_prev != -1 && fabs (num - blur_prev) > 1e-2) // rather low tolerance because difference in blur radii is much harder to notice than e.g. difference in sizes
                                 same_blur = false;
