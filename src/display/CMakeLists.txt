@@ -49,7 +49,6 @@ set(display_SRC
 	nr-light.cpp
 	nr-style.cpp
 	nr-svgfonts.cpp
-	nr-svgfonts.h
 	snap-indicator.cpp
 	sodipodi-ctrl.cpp
 	sodipodi-ctrlrect.cpp
@@ -114,6 +113,7 @@ set(display_SRC
 	nr-light-types.h
 	nr-light.h
 	nr-style.h
+	nr-svgfonts.h
 	rendermode.h
 	snap-indicator.h
 	sodipodi-ctrl.h
