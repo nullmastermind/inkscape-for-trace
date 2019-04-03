@@ -376,6 +376,7 @@ void ColorScales::setMode(SPColorScalesMode mode)
     switch (mode) {
         case SP_COLOR_SCALES_MODE_RGB:
             _setRangeLimit(255.0);
+            gtk_adjustment_set_upper(_a[3], 100.0);
             gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[0]), _("_R:"));
             _s[0]->set_tooltip_text(_("Red"));
             gtk_widget_set_tooltip_text(_b[0], _("Red"));

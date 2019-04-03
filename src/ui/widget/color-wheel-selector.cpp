@@ -78,7 +78,7 @@ void ColorWheelSelector::_initUI()
     attach(*label, 0, row, 1, 1);
 
     /* Adjustment */
-    _alpha_adjustment = Gtk::Adjustment::create(0.0, 0.0, 255.0, 1.0, 10.0, 10.0);
+    _alpha_adjustment = Gtk::Adjustment::create(0.0, 0.0, 100.0, 1.0, 10.0, 10.0);
 
     /* Slider */
     _slider = Gtk::manage(new Inkscape::UI::Widget::ColorSlider(_alpha_adjustment));
@@ -135,14 +135,6 @@ void ColorWheelSelector::_adjustmentChanged()
 {
     if (_updating) {
         return;
-    }
-
-    // TODO check this. It looks questionable:
-    // if a value is entered between 0 and 1 exclusive, normalize it to (int) 0..255  or 0..100
-    gdouble value = _alpha_adjustment->get_value();
-    gdouble upper = _alpha_adjustment->get_upper();
-    if (value > 0.0 && value < 1.0) {
-        _alpha_adjustment->set_value(floor(value * upper + 0.5));
     }
 
     _color.preserveICC();
