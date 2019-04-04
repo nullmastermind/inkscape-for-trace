@@ -218,11 +218,6 @@ SPDocument::~SPDocument() {
     collectOrphans();
 }
 
-sigc::connection SPDocument::connectDestroy(sigc::signal<void>::slot_type slot)
-{
-    return destroySignal.connect(slot);
-}
-
 SPDefs *SPDocument::getDefs()
 {
     if (!root) {
@@ -972,6 +967,11 @@ void SPDocument::changeUriAndHrefs(gchar const *filename)
 void SPDocument::emitResizedSignal(gdouble width, gdouble height)
 {
     this->resized_signal.emit(width, height);
+}
+
+sigc::connection SPDocument::connectDestroy(sigc::signal<void>::slot_type slot)
+{
+    return destroySignal.connect(slot);
 }
 
 sigc::connection SPDocument::connectModified(SPDocument::ModifiedSignal::slot_type slot)
@@ -1868,11 +1868,11 @@ void SPDocument::importDefs(SPDocument *source)
     prevent_id_clashes(source, this);
     
     for (auto & defsNode : defsNodes) {
-       importDefsNode(source, const_cast<Inkscape::XML::Node *>(defsNode), target_defs);
+       _importDefsNode(source, const_cast<Inkscape::XML::Node *>(defsNode), target_defs);
     }
 }
 
-void SPDocument::importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, Inkscape::XML::Node *target_defs)
+void SPDocument::_importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, Inkscape::XML::Node *target_defs)
 {    
     int stagger=0;
 

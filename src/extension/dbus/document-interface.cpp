@@ -1071,7 +1071,7 @@ void document_interface_update(DocumentInterface *doc_interface, GError ** error
     doc->getRoot()->uflags = TRUE;
     doc->getRoot()->mflags = TRUE;
     desk->enableInteraction();
-    doc->_updateDocument();
+    doc->ensureUpToDate();
     desk->disableInteraction();
     doc->getRoot()->uflags = FALSE;
     doc->getRoot()->mflags = FALSE;
