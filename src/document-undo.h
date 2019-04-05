@@ -39,7 +39,13 @@ public:
 
     static void maybeDone(SPDocument *document, const gchar *keyconst, unsigned int event_type, Glib::ustring const &event_description);
 
-    static void resetKey(SPDocument *doc);
+private:
+    static void finish_incomplete_transaction(SPDocument &document);
+
+    static void perform_document_update(SPDocument &document);
+
+public:
+    static void resetKey(SPDocument *document);
 
     static void cancel(SPDocument *document);
 

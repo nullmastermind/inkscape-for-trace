@@ -33,6 +33,7 @@
 
 #include "3rdparty/libcroco/cr-cascade.h"
 
+#include "document-undo.h"
 #include "event.h"
 #include "gc-anchored.h"
 #include "gc-finalized.h"
@@ -237,7 +238,6 @@ public:
     static SPItem *getItemFromListAtPointBottom(unsigned int dkey, SPGroup *group, const std::vector<SPItem*> &list, Geom::Point const &p, bool take_insensitive = false);
 
 
-
     // Box tool -------------------------------
     void setCurrentPersp3D(Persp3D * const persp);
     /*
@@ -256,15 +256,12 @@ public:
         return list.size();
     }
 
+
     // Document undo/redo ----------------------
     unsigned long serial() const;  // Returns document's unique number.
-
-    /// Are we currently in a transition between two "known good" states of the document?
-    bool isSeeking() const;
-
-
-    // Document undo/redo ----------------------
+    bool isSeeking() const; // Are we in a transition between two "known good" states of document?
     void reset_key(void *dummy);
+    bool isSensitive() const { return sensitive; };
 
 
     // Garbage collecting ----------------------
@@ -307,13 +304,12 @@ public:
     CRStyleSheet *style_sheet;
 
     // File information ----------------------
-protected:
+private:
     char *document_uri;   ///< A filename (not a URI yet), or NULL
     char *document_base;  ///< To be used for resolving relative hrefs.
     char *document_name;  ///< basename(uri) or other human-readable label for the document.
 
     // Find items ----------------------------
-private:
     std::map<std::string, SPObject *> iddef;
     std::map<Inkscape::XML::Node *, SPObject *> reprdef;
 
@@ -322,12 +318,12 @@ private:
     mutable bool _node_cache_valid;
 
     // Box tool ----------------------------
-private:
     Persp3D *current_persp3d; /**< Currently 'active' perspective (to which, e.g., newly created boxes are attached) */
     Persp3DImpl *current_persp3d_impl;
 
     // Document undo/redo ----------------------
-public:
+
+    friend Inkscape::DocumentUndo;
 
     /* Undo/Redo state */
     bool sensitive; /* If we save actions to undo stack */
@@ -343,22 +339,22 @@ public:
     Inkscape::ConsoleOutputUndoObserver console_output_undo_observer;
 
     bool seeking; // Related to undo/redo/unique id
-private:
     unsigned long _serial; // Unique document number (used by undo/redo).
-
-public:
     Glib::ustring actionkey; // Last action key, used to combine actions in undo.
 
-
     // Garbage collecting ----------------------
+
     std::vector<SPObject *> _collection_queue; ///< Orphans
 
 
     /*********** Signals **************/
 
+
+public:
     void addUndoObserver(Inkscape::UndoStackObserver& observer);
     void removeUndoObserver(Inkscape::UndoStackObserver& observer);
 
+private:
     typedef sigc::signal<void, SPObject *> IDChangedSignal;
     typedef sigc::signal<void> ResourcesChangedSignal;
     typedef sigc::signal<void, unsigned> ModifiedSignal;
@@ -379,10 +375,8 @@ public:
     SPDocument::ResizedSignal resized_signal;
     SPDocument::ReconstructionStart _reconstruction_start_signal;
     SPDocument::ReconstructionFinish  _reconstruction_finish_signal;
-public:
-    SPDocument::CommitSignal commit_signal;
+    SPDocument::CommitSignal commit_signal; // Used by friend Inkscape::DocumentUndo
 
-private:
     bool oldSignalsConnected;
 
 public:
@@ -405,15 +399,13 @@ private:
     /* Resources */
     std::map<std::string, std::vector<SPObject *> > resources;
 public:
-    ResourcesChangedSignalMap resources_changed_signals;
+    ResourcesChangedSignalMap resources_changed_signals; // Used by Extension::Internal::Filter
 private:
 
     sigc::signal<void> destroySignal;
 
 public:
     void _emitModified();  // Used by SPItem
-
-public:
     void emitReconstructionStart();
     void emitReconstructionFinish();
     void emitResizedSignal(double width, double height);

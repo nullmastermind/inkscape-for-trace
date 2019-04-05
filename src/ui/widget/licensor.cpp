@@ -64,7 +64,7 @@ void LicenseItem::on_toggled()
     _wr.setUpdating (true);
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
     rdf_set_license (doc, _lic->details ? _lic : nullptr);
-    if (doc->sensitive) {
+    if (doc->isSensitive()) {
         DocumentUndo::done(doc, SP_VERB_NONE, _("Document license updated"));
     }
     _wr.setUpdating (false);

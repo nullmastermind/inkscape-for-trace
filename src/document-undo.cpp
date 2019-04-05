@@ -189,7 +189,8 @@ void Inkscape::DocumentUndo::cancel(SPDocument *doc)
 	sp_repr_begin_transaction (doc->rdoc);
 }
 
-static void finish_incomplete_transaction(SPDocument &doc) {
+// Member function for friend access to SPDocument privates.
+void Inkscape::DocumentUndo::finish_incomplete_transaction(SPDocument &doc) {
 	Inkscape::XML::Event *log=sp_repr_commit_undoable(doc.rdoc);
 	if (log || doc.partial) {
 		g_warning ("Incomplete undo transaction:");
@@ -202,7 +203,8 @@ static void finish_incomplete_transaction(SPDocument &doc) {
 	}
 }
 
-static void perform_document_update(SPDocument &doc) {
+// Member function for friend access to SPDocument privates.
+void Inkscape::DocumentUndo::perform_document_update(SPDocument &doc) {
     sp_repr_begin_transaction(doc.rdoc);
     doc.ensureUpToDate();
 
