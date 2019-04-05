@@ -26,23 +26,23 @@ namespace Internal {
 namespace Filter {
 
 Filter::Filter() :
-		Inkscape::Extension::Implementation::Implementation(),
-		_filter(nullptr) {
-	return;
+    Inkscape::Extension::Implementation::Implementation(),
+    _filter(nullptr) {
+    return;
 }
 
 Filter::Filter(gchar const * filter) :
-		Inkscape::Extension::Implementation::Implementation(),
-		_filter(filter) {
-	return;
+    Inkscape::Extension::Implementation::Implementation(),
+    _filter(filter) {
+    return;
 }
 
 Filter::~Filter () {
-	if (_filter != nullptr) {
-		_filter = nullptr;
-	}
+    if (_filter != nullptr) {
+        _filter = nullptr;
+    }
 
-	return;
+    return;
 }
 
 bool Filter::load(Inkscape::Extension::Extension * /*module*/)
@@ -63,8 +63,8 @@ gchar const *Filter::get_filter_text(Inkscape::Extension::Extension * /*ext*/)
 
 Inkscape::XML::Document *
 Filter::get_filter (Inkscape::Extension::Extension * ext) {
-	gchar const * filter = get_filter_text(ext);
-	return sp_repr_read_mem(filter, strlen(filter), nullptr);
+    gchar const * filter = get_filter_text(ext);
+    return sp_repr_read_mem(filter, strlen(filter), nullptr);
 }
 
 void
@@ -72,110 +72,110 @@ Filter::merge_filters( Inkscape::XML::Node * to, Inkscape::XML::Node * from,
 		       Inkscape::XML::Document * doc,
 		       gchar const * srcGraphic, gchar const * srcGraphicAlpha)
 {
-	if (from == nullptr) return;
+    if (from == nullptr) return;
 
-	// copy attributes
+    // copy attributes
     for ( Inkscape::Util::List<Inkscape::XML::AttributeRecord const> iter = from->attributeList() ;
           iter ; ++iter ) {
-		gchar const * attr = g_quark_to_string(iter->key);
-		//printf("Attribute List: %s\n", attr);
-		if (!strcmp(attr, "id")) continue; // nope, don't copy that one!
-		to->setAttribute(attr, from->attribute(attr));
+        gchar const * attr = g_quark_to_string(iter->key);
+        //printf("Attribute List: %s\n", attr);
+        if (!strcmp(attr, "id")) continue; // nope, don't copy that one!
+        to->setAttribute(attr, from->attribute(attr));
 
-		if (!strcmp(attr, "in") || !strcmp(attr, "in2") || !strcmp(attr, "in3")) {
-			if (srcGraphic != nullptr && !strcmp(from->attribute(attr), "SourceGraphic")) {
-				to->setAttribute(attr, srcGraphic);
-			}
+        if (!strcmp(attr, "in") || !strcmp(attr, "in2") || !strcmp(attr, "in3")) {
+            if (srcGraphic != nullptr && !strcmp(from->attribute(attr), "SourceGraphic")) {
+                to->setAttribute(attr, srcGraphic);
+            }
 
-			if (srcGraphicAlpha != nullptr && !strcmp(from->attribute(attr), "SourceAlpha")) {
-				to->setAttribute(attr, srcGraphicAlpha);
-			}
-		}
-	}
+            if (srcGraphicAlpha != nullptr && !strcmp(from->attribute(attr), "SourceAlpha")) {
+                to->setAttribute(attr, srcGraphicAlpha);
+            }
+        }
+    }
 
-	// for each child call recursively
-	for (Inkscape::XML::Node * from_child = from->firstChild();
-	          from_child != nullptr ; from_child = from_child->next()) {
-		Glib::ustring name = "svg:";
-		name += from_child->name();
+    // for each child call recursively
+    for (Inkscape::XML::Node * from_child = from->firstChild();
+         from_child != nullptr ; from_child = from_child->next()) {
+        Glib::ustring name = "svg:";
+        name += from_child->name();
 
-		Inkscape::XML::Node * to_child = doc->createElement(name.c_str());
-		to->appendChild(to_child);
-		merge_filters(to_child, from_child, doc, srcGraphic, srcGraphicAlpha);
+        Inkscape::XML::Node * to_child = doc->createElement(name.c_str());
+        to->appendChild(to_child);
+        merge_filters(to_child, from_child, doc, srcGraphic, srcGraphicAlpha);
 
-		if (from_child == from->firstChild() && !strcmp("filter", from->name()) && srcGraphic != nullptr && to_child->attribute("in") == nullptr) {
-			to_child->setAttribute("in", srcGraphic);
-		}
-    Inkscape::GC::release(to_child);
-	}
+        if (from_child == from->firstChild() && !strcmp("filter", from->name()) && srcGraphic != nullptr && to_child->attribute("in") == nullptr) {
+            to_child->setAttribute("in", srcGraphic);
+        }
+        Inkscape::GC::release(to_child);
+    }
 }
 
 #define FILTER_SRC_GRAPHIC       "fbSourceGraphic"
 #define FILTER_SRC_GRAPHIC_ALPHA "fbSourceGraphicAlpha"
 
 void Filter::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View *document,
-		    Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
+                    Inkscape::Extension::Implementation::ImplementationDocumentCache * /*docCache*/)
 {
-	Inkscape::XML::Document *filterdoc = get_filter(module);
-	if (filterdoc == nullptr) {
-		return; // could not parse the XML source of the filter; typically parser will stderr a warning
-	}
+    Inkscape::XML::Document *filterdoc = get_filter(module);
+    if (filterdoc == nullptr) {
+        return; // could not parse the XML source of the filter; typically parser will stderr a warning
+    }
 
-	//printf("Calling filter effect\n");
+    //printf("Calling filter effect\n");
     Inkscape::Selection * selection = ((SPDesktop *)document)->selection;
 
     // TODO need to properly refcount the items, at least
     std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
 
-	Inkscape::XML::Document * xmldoc = document->doc()->getReprDoc();
-	Inkscape::XML::Node * defsrepr = document->doc()->getDefs()->getRepr();
+    Inkscape::XML::Document * xmldoc = document->doc()->getReprDoc();
+    Inkscape::XML::Node * defsrepr = document->doc()->getDefs()->getRepr();
 
     for(auto spitem : items) {
-        	Inkscape::XML::Node * node = spitem->getRepr();
+        Inkscape::XML::Node * node = spitem->getRepr();
 
-		SPCSSAttr * css = sp_repr_css_attr(node, "style");
-		gchar const * filter = sp_repr_css_property(css, "filter", nullptr);
+        SPCSSAttr * css = sp_repr_css_attr(node, "style");
+        gchar const * filter = sp_repr_css_property(css, "filter", nullptr);
 
-		if (filter == nullptr) {
+        if (filter == nullptr) {
 
-			Inkscape::XML::Node * newfilterroot = xmldoc->createElement("svg:filter");
-			merge_filters(newfilterroot, filterdoc->root(), xmldoc);
-			defsrepr->appendChild(newfilterroot);
-                        document->doc()->resources_changed_signals[g_quark_from_string("filter")].emit();
+            Inkscape::XML::Node * newfilterroot = xmldoc->createElement("svg:filter");
+            merge_filters(newfilterroot, filterdoc->root(), xmldoc);
+            defsrepr->appendChild(newfilterroot);
+            document->doc()->resources_changed_signals[g_quark_from_string("filter")].emit();
 
-			Glib::ustring url = "url(#"; url += newfilterroot->attribute("id"); url += ")";
+            Glib::ustring url = "url(#"; url += newfilterroot->attribute("id"); url += ")";
 
 
-      Inkscape::GC::release(newfilterroot);
+            Inkscape::GC::release(newfilterroot);
 
-			sp_repr_css_set_property(css, "filter", url.c_str());
-			sp_repr_css_set(node, css, "style");
-		} else {
-			if (strncmp(filter, "url(#", strlen("url(#")) || filter[strlen(filter) - 1] != ')') {
-				// This is not url(#id) -- we can't handle it
-				continue;
-			}
+            sp_repr_css_set_property(css, "filter", url.c_str());
+            sp_repr_css_set(node, css, "style");
+        } else {
+            if (strncmp(filter, "url(#", strlen("url(#")) || filter[strlen(filter) - 1] != ')') {
+                // This is not url(#id) -- we can't handle it
+                continue;
+            }
 
-			gchar * lfilter = g_strndup(filter + 5, strlen(filter) - 6);
-			Inkscape::XML::Node * filternode = nullptr;
-			for (Inkscape::XML::Node * child = defsrepr->firstChild(); child != nullptr; child = child->next()) {
-				if (!strcmp(lfilter, child->attribute("id"))) {
-					filternode = child;
-					break;
-				}
-			}
-			g_free(lfilter);
+            gchar * lfilter = g_strndup(filter + 5, strlen(filter) - 6);
+            Inkscape::XML::Node * filternode = nullptr;
+            for (Inkscape::XML::Node * child = defsrepr->firstChild(); child != nullptr; child = child->next()) {
+                if (!strcmp(lfilter, child->attribute("id"))) {
+                    filternode = child;
+                    break;
+                }
+            }
+            g_free(lfilter);
 
-			// no filter
-			if (filternode == nullptr) {
-				g_warning("no assigned filter found!");
-				continue;
-			}
+            // no filter
+            if (filternode == nullptr) {
+                g_warning("no assigned filter found!");
+                continue;
+            }
 
-			if (filternode->lastChild() == nullptr) {
+            if (filternode->lastChild() == nullptr) {
                 // empty filter, we insert
                 merge_filters(filternode, filterdoc->root(), xmldoc);
-			} else {
+            } else {
                 // existing filter, we merge
                 filternode->lastChild()->setAttribute("result", FILTER_SRC_GRAPHIC);
                 Inkscape::XML::Node * alpha = xmldoc->createElement("svg:feColorMatrix");
@@ -188,8 +188,8 @@ void Filter::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::Vie
                 merge_filters(filternode, filterdoc->root(), xmldoc, FILTER_SRC_GRAPHIC, FILTER_SRC_GRAPHIC_ALPHA);
 
                 Inkscape::GC::release(alpha);
-			}
-		}
+            }
+        }
     }
 
     return;
@@ -200,21 +200,21 @@ void Filter::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::Vie
 void
 Filter::filter_init (gchar const * id, gchar const * name, gchar const * submenu, gchar const * tip, gchar const * filter)
 {
-	gchar * xml_str = g_strdup_printf(
+    gchar * xml_str = g_strdup_printf(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
-            "<name>%s</name>\n"
-            "<id>org.inkscape.effect.filter.%s</id>\n"
-            "<effect>\n"
-                "<object-type>all</object-type>\n"
-                "<effects-menu>\n"
-                    "<submenu name=\"" N_("Filters") "\" />\n"
-         						"<submenu name=\"%s\"/>\n"
-                "</effects-menu>\n"
-                "<menu-tip>%s</menu-tip>\n"
-            "</effect>\n"
+        "<name>%s</name>\n"
+        "<id>org.inkscape.effect.filter.%s</id>\n"
+        "<effect>\n"
+        "<object-type>all</object-type>\n"
+        "<effects-menu>\n"
+        "<submenu name=\"" N_("Filters") "\" />\n"
+        "<submenu name=\"%s\"/>\n"
+        "</effects-menu>\n"
+        "<menu-tip>%s</menu-tip>\n"
+        "</effect>\n"
         "</inkscape-extension>\n", name, id, submenu, tip);
     Inkscape::Extension::build_from_mem(xml_str, new Filter(filter));
-	g_free(xml_str);
+    g_free(xml_str);
     return;
 }
 
@@ -223,3 +223,13 @@ Filter::filter_init (gchar const * id, gchar const * name, gchar const * submenu
 }; /* namespace Extension */
 }; /* namespace Inkscape */
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
