@@ -1392,9 +1392,12 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
             }
         }
     }
-    if (_live_outline)
+    if (_live_outline) {
         _updateOutline();
-    _setGeometry();
+    }
+    if (_live_objects) {
+        _setGeometry();
+    }
 }
 
 /** Build one segment of the geometric representation.
