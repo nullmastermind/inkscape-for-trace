@@ -83,7 +83,7 @@ SvgBuilder::SvgBuilder(SPDocument *document, gchar *docname, XRef *xref)
     _docname = docname;
     _xref = xref;
     _xml_doc = _doc->getReprDoc();
-    _container = _root = _doc->rroot;
+    _container = _root = _doc->getReprRoot();
     _root->setAttribute("xml:space", "preserve");
     _init();
 

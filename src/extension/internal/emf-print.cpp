@@ -149,7 +149,7 @@ unsigned int PrintEmf::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
     htextalignment = U_TA_BASELINE | U_TA_LEFT;
     use_stroke = use_fill = simple_shape = usebk = false;
 
-    Inkscape::XML::Node *nv = sp_repr_lookup_name(doc->rroot, "sodipodi:namedview");
+    Inkscape::XML::Node *nv = doc->getReprNamedView();
     if (nv) {
         const char *p1 = nv->attribute("pagecolor");
         char *p2;

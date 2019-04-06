@@ -917,10 +917,11 @@ SPStyle::_mergeObjectStylesheet( SPObject const *const object ) {
     CRPropList *props = nullptr;
 
     //XML Tree being directly used here while it shouldn't be.
-    CRStatus status = cr_sel_eng_get_matched_properties_from_cascade(sel_eng,
-                                                                     object->document->style_cascade,
-                                                                     object->getRepr(),
-                                                                     &props);
+    CRStatus status =
+        cr_sel_eng_get_matched_properties_from_cascade(sel_eng,
+                                                       object->document->getStyleCascade(),
+                                                       object->getRepr(),
+                                                       &props);
     g_return_if_fail(status == CR_OK);
     /// \todo Check what errors can occur, and handle them properly.
     if (props) {

@@ -1251,7 +1251,7 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
             unsigned long int height = (unsigned long int) (area.height() + 0.5);
 
             // read from namedview
-            Inkscape::XML::Node *nv = sp_repr_lookup_name (_clipboardSPDoc->rroot, "sodipodi:namedview");
+            Inkscape::XML::Node *nv = _clipboardSPDoc->getReprNamedView();
             if (nv && nv->attribute("pagecolor")) {
                 bgcolor = sp_svg_read_color(nv->attribute("pagecolor"), 0xffffff00);
             }

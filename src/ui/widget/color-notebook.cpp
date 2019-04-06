@@ -277,7 +277,7 @@ void ColorNotebook::_updateICCButtons()
     gtk_widget_set_sensitive(_box_outofgamut, false);
     if (color.icc) {
         Inkscape::ColorProfile *target_profile =
-            SP_ACTIVE_DOCUMENT->profileManager->find(color.icc->colorProfile.c_str());
+            SP_ACTIVE_DOCUMENT->getProfileManager()->find(color.icc->colorProfile.c_str());
         if (target_profile)
             gtk_widget_set_sensitive(_box_outofgamut, target_profile->GamutCheck(color));
     }
@@ -285,7 +285,7 @@ void ColorNotebook::_updateICCButtons()
     /* update too-much-ink icon */
     gtk_widget_set_sensitive(_box_toomuchink, false);
     if (color.icc) {
-        Inkscape::ColorProfile *prof = SP_ACTIVE_DOCUMENT->profileManager->find(color.icc->colorProfile.c_str());
+        Inkscape::ColorProfile *prof = SP_ACTIVE_DOCUMENT->getProfileManager()->find(color.icc->colorProfile.c_str());
         if (prof && CMSSystem::isPrintColorSpace(prof)) {
             gtk_widget_show(GTK_WIDGET(_box_toomuchink));
             double ink_sum = 0;

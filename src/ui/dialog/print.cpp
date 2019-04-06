@@ -132,7 +132,7 @@ void Print::draw_page(const Glib::RefPtr<Gtk::PrintContext>& context, int /*page
             close(tmp_fd);
 
             guint32 bgcolor = 0x00000000;
-            Inkscape::XML::Node *nv = sp_repr_lookup_name (_workaround._doc->rroot, "sodipodi:namedview");
+            Inkscape::XML::Node *nv = _workaround._doc->getReprNamedView();
             if (nv && nv->attribute("pagecolor")){
                 bgcolor = sp_svg_read_color(nv->attribute("pagecolor"), 0xffffff00);
             }

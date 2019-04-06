@@ -117,7 +117,7 @@ InkscapeApplication::document_open(const Glib::RefPtr<Gio::File>& file)
     SPDocument *document = ink_file_open(file, cancelled);
 
     if (document) {
-        document->virgin = false; // Prevents replacing document in same window during file open.
+        document->setVirgin(false); // Prevents replacing document in same window during file open.
 
         document_add (document);
     } else {
@@ -204,7 +204,7 @@ InkscapeApplication::document_revert(SPDocument* document)
     }
 
     // Allow overwriting current document.
-    document->virgin = true;
+    document->setVirgin(true);
 
     auto it = _documents.find(document);
     if (it != _documents.end()) {
@@ -638,7 +638,7 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<
 
             // TODO Remove this code... handle document replacement elsewhere.
             SPDocument* old_document = _active_document;
-            if (replace_empty && old_document && old_document->virgin) {
+            if (replace_empty && old_document && old_document->getVirgin()) {
                 // virgin == true => an empty document (template).
 
                 // Is there a better place for this? It requires GUI.

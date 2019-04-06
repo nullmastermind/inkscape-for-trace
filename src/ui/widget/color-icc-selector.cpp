@@ -570,7 +570,7 @@ void ColorICCSelectorImpl::_switchToProfile(gchar const *name)
                 tmp.icc = new SVGICCColor();
             }
             tmp.icc->colorProfile = name;
-            Inkscape::ColorProfile *newProf = SP_ACTIVE_DOCUMENT->profileManager->find(name);
+            Inkscape::ColorProfile *newProf = SP_ACTIVE_DOCUMENT->getProfileManager()->find(name);
             if (newProf) {
                 cmsHTRANSFORM trans = newProf->getTransfFromSRGB8();
                 if (trans) {
@@ -813,7 +813,7 @@ void ColorICCSelectorImpl::_setProfile(SVGICCColor *profile)
     }
 
     if (profile) {
-        _prof = SP_ACTIVE_DOCUMENT->profileManager->find(profile->colorProfile.c_str());
+        _prof = SP_ACTIVE_DOCUMENT->getProfileManager()->find(profile->colorProfile.c_str());
         if (_prof && (asICColorProfileClassSig(_prof->getProfileClass()) != cmsSigNamedColorClass)) {
 #if HAVE_LIBLCMS1
             _profChannelCount = _cmsChannelsOf(asICColorSpaceSig(_prof->getColorSpace()));

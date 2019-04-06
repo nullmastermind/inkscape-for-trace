@@ -102,8 +102,6 @@ class SPDocument : public Inkscape::GC::Managed<>,
                    public Inkscape::GC::Anchored
 {
 
-// Note: multiple public and private sections is not a good practice, but happens
-// in this class as transitional to fixing encapsulation:
 public:
 
     /************ Functions *****************/
@@ -116,24 +114,30 @@ public:
 
 
     // Document creation ------------------
-    static SPDocument *createNewDoc(char const*uri, unsigned int keepalive,
-            bool make_new = false, SPDocument *parent=nullptr );
-    static SPDocument *createNewDocFromMem(char const*buffer, int length, unsigned int keepalive);
-           SPDocument *createChildDoc(std::string const &uri);
-
     static SPDocument *createDoc(Inkscape::XML::Document *rdoc, char const *uri,
-            char const *base, char const *name, unsigned int keepalive,
+            char const *base, char const *name, bool keepalive,
             SPDocument *parent);
+    static SPDocument *createNewDoc(char const*uri, bool keepalive,
+            bool make_new = false, SPDocument *parent=nullptr );
+    static SPDocument *createNewDocFromMem(char const*buffer, int length, bool keepalive);
+           SPDocument *createChildDoc(std::string const &uri);
 
 
     // Document status --------------------
+    void setVirgin(bool Virgin) { virgin = Virgin; }
+    bool getVirgin() { return virgin; }
+
     SPDocument *doRef();
     SPDocument *doUnref();
 
     bool isModifiedSinceSave() const { return modified_since_save; }
     void setModifiedSinceSave(bool const modified = true);
 
+    bool idle_handler();
+    bool rerouting_handler();
+
     void requestModified();
+    bool _updateDocument(); // Used by stand-alone sp_document_idle_handler
     int ensureUpToDate();
 
     bool addResource(char const *key, SPObject *object);
@@ -142,8 +146,6 @@ public:
 
     void do_change_uri(char const *const filename, bool const rebase);
     void changeUriAndHrefs(char const *uri);
-
-    bool _updateDocument(); // Used by stand-alone sp_document_idle_handler
 
 private:
     void _importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, Inkscape::XML::Node *target_defs);
@@ -156,7 +158,10 @@ public:
     /******** Getters and Setters **********/
 
     // Document structure -----------------
+    Inkscape::ProfileManager* getProfileManager() const { return profileManager; }
+    Avoid::Router* getRouter() const { return router; }
 
+    
     /** Returns our SPRoot */
     SPRoot *getRoot() { return root; }
     SPRoot const *getRoot() const { return root; }
@@ -165,22 +170,29 @@ public:
     SPDefs *getDefs();
 
     Inkscape::XML::Node *getReprRoot() { return rroot; }
+    Inkscape::XML::Node *getReprNamedView();
 
     /** Our Inkscape::XML::Document. */
     Inkscape::XML::Document *getReprDoc() { return rdoc; }
     Inkscape::XML::Document const *getReprDoc() const { return rdoc; }
 
+
     Glib::ustring getLanguage() const;
+
+    // Styling
+    CRCascade    *getStyleCascade() { return style_cascade; }
+    CRStyleSheet *getStyleSheet()   { return style_sheet; }
+    void const setStyleSheet(CRStyleSheet* sheet) { style_sheet = sheet; }
 
     // File information --------------------
 
     /** A filename (not a URI yet), or NULL */
-    char const *getDocumentURI() const { return document_uri; }
     void setDocumentUri(char const *document_uri);
+    char const *getDocumentURI() const { return document_uri; }
 
     /** To be used for resolving relative hrefs. */
-    char const *getDocumentBase() const { return document_base; };
     void setDocumentBase( char const* document_base );
+    char const *getDocumentBase() const { return document_base; };
 
     /** basename(uri) or other human-readable label for the document. */
     char const* getDocumentName() const { return document_name; }
@@ -247,7 +259,7 @@ public:
     Persp3D * getCurrentPersp3D();
 
     void setCurrentPersp3DImpl(Persp3DImpl * const persp_impl) { current_persp3d_impl = persp_impl; }
-    Persp3DImpl * getCurrentPersp3DImpl();
+    Persp3DImpl * getCurrentPersp3DImpl() { return current_persp3d_impl; }
 
     void getPerspectivesInDefs(std::vector<Persp3D*> &list) const;
     unsigned int numPerspectivesInDefs() const {
@@ -258,10 +270,10 @@ public:
 
 
     // Document undo/redo ----------------------
-    unsigned long serial() const;  // Returns document's unique number.
-    bool isSeeking() const; // Are we in a transition between two "known good" states of document?
-    void reset_key(void *dummy);
-    bool isSensitive() const { return sensitive; };
+    unsigned long serial() const { return _serial; }  // Returns document's unique number.
+    bool isSeeking() const {return seeking;} // In a transition between two "good" states of document?
+    void reset_key(void *dummy) { actionkey.clear(); }
+    bool isSensitive() const { return sensitive; }
 
 
     // Garbage collecting ----------------------
@@ -269,26 +281,26 @@ public:
     void collectOrphans();
 
 
-
     /************* Data ***************/
+private:
 
     // Document ------------------------------
-    Inkscape::ProfileManager* profileManager;
+    Inkscape::ProfileManager* profileManager;   // Color profile.
     Avoid::Router *router; // Instance of the connector router
 
     // Document status -----------------------
     int ref_count;  // Temp to check refcounting
 
-    unsigned int keepalive : 1;
-    unsigned int virgin    : 1; ///< Has the document never been touched?
-    unsigned int modified_since_save : 1;
-    unsigned modified_id; /// Handler id
+    bool keepalive; ///< false if temporary document (e.g. to generate a PNG for display in a dialog).
+    bool virgin ;   ///< Has the document never been touched?
+    bool modified_since_save;
+    sigc::connection modified_connection;
+    sigc::connection rerouting_connection;
 
     // Document structure --------------------
     Inkscape::XML::Document *rdoc; ///< Our Inkscape::XML::Document
     Inkscape::XML::Node *rroot; ///< Root element of Inkscape::XML::Document
 
-private:
     SPRoot *root;             ///< Our SPRoot
 
     // A list of svg documents being used or shown within this document
@@ -296,15 +308,11 @@ private:
     // Conversely this is a parent document because this is a child.
     SPDocument *_parent_document;
 
-public:
-    /// Connector rerouting handler ID
-    unsigned rerouting_handler_id;
-
+    // Styling
     CRCascade *style_cascade;
     CRStyleSheet *style_sheet;
 
     // File information ----------------------
-private:
     char *document_uri;   ///< A filename (not a URI yet), or NULL
     char *document_base;  ///< To be used for resolving relative hrefs.
     char *document_name;  ///< basename(uri) or other human-readable label for the document.
@@ -322,7 +330,6 @@ private:
     Persp3DImpl *current_persp3d_impl;
 
     // Document undo/redo ----------------------
-
     friend Inkscape::DocumentUndo;
 
     /* Undo/Redo state */
@@ -349,12 +356,6 @@ private:
 
     /*********** Signals **************/
 
-
-public:
-    void addUndoObserver(Inkscape::UndoStackObserver& observer);
-    void removeUndoObserver(Inkscape::UndoStackObserver& observer);
-
-private:
     typedef sigc::signal<void, SPObject *> IDChangedSignal;
     typedef sigc::signal<void> ResourcesChangedSignal;
     typedef sigc::signal<void, unsigned> ModifiedSignal;
@@ -379,7 +380,17 @@ private:
 
     bool oldSignalsConnected;
 
+    sigc::connection _selection_changed_connection;
+    sigc::connection _desktop_activated_connection;
+    sigc::connection selChangeConnection;
+    sigc::connection desktopActivatedConnection;
+
+    sigc::signal<void> destroySignal;
+
 public:
+    void addUndoObserver(Inkscape::UndoStackObserver& observer);
+    void removeUndoObserver(Inkscape::UndoStackObserver& observer);
+
     sigc::connection connectDestroy(sigc::signal<void>::slot_type slot);
     sigc::connection connectModified(ModifiedSignal::slot_type slot);
     sigc::connection connectURISet(URISetSignal::slot_type slot);
@@ -390,21 +401,10 @@ public:
     sigc::connection connectReconstructionStart(ReconstructionStart::slot_type slot);
     sigc::connection connectReconstructionFinish(ReconstructionFinish::slot_type slot);
 
-private:
-    sigc::connection _selection_changed_connection;
-    sigc::connection _desktop_activated_connection;
-    sigc::connection selChangeConnection;
-    sigc::connection desktopActivatedConnection;
-
     /* Resources */
     std::map<std::string, std::vector<SPObject *> > resources;
-public:
     ResourcesChangedSignalMap resources_changed_signals; // Used by Extension::Internal::Filter
-private:
 
-    sigc::signal<void> destroySignal;
-
-public:
     void _emitModified();  // Used by SPItem
     void emitReconstructionStart();
     void emitReconstructionFinish();

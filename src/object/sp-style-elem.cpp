@@ -188,7 +188,7 @@ import_style_cb (CRDocHandler *a_handler,
         std::cerr << "import_style_cb: No document!" << std::endl;
         return;
     }
-    if (!document->style_sheet) {
+    if (!document->getStyleSheet()) {
         std::cerr << "import_style_cb: No document style sheet!" << std::endl;
         return;
     }
@@ -207,7 +207,7 @@ import_style_cb (CRDocHandler *a_handler,
     CRStatus const parse_status =
         cr_parser_parse_file (parser, reinterpret_cast<const guchar *>(import_file.c_str()), CR_UTF_8);
     if (parse_status == CR_OK) {
-        cr_stylesheet_append_import (document->style_sheet, stylesheet);
+        cr_stylesheet_append_import (document->getStyleSheet(), stylesheet);
     } else {
         std::cerr << "import_style_cb: Could not parse: " << import_file << std::endl;
         cr_stylesheet_destroy (stylesheet);
@@ -468,14 +468,14 @@ void SPStyleElem::read_content() {
         cr_parser_parse_buf (parser, reinterpret_cast<const guchar *>(text.c_str()), text.bytes(), CR_UTF_8);
 
     if (parse_status == CR_OK) {
-        if(!document->style_sheet) {
+        if(!document->getStyleSheet()) {
             // if the style is the first style sheet that we've seen, set the document's
             // first style sheet to this style and create a cascade object with it.
-            document->style_sheet = style_sheet;
-            cr_cascade_set_sheet (document->style_cascade, document->style_sheet, ORIGIN_AUTHOR);
+            document->setStyleSheet(style_sheet);
+            cr_cascade_set_sheet (document->getStyleCascade(), document->getStyleSheet(), ORIGIN_AUTHOR);
         } else {
             // If not the first, then chain up this style_sheet
-            cr_stylesheet_append_import (document->style_sheet, style_sheet);
+            cr_stylesheet_append_import (document->getStyleSheet(), style_sheet);
         }
     } else {
         cr_stylesheet_destroy (style_sheet);
@@ -506,7 +506,7 @@ void SPStyleElem::read_content() {
     // If style sheet has changed, we need to cascade the entire object tree, top down
     // Get root, read style, loop through children
     update_style_recursively( (SPObject *)document->getRoot() );
-    // cr_stylesheet_dump (document->style_sheet, stdout);
+    // cr_stylesheet_dump (document->getStyleSheet(), stdout);
 }
 
 /**

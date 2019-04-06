@@ -314,7 +314,7 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
         bgcolor |= 0xff; // default is no opacity
     } else {
         // read from namedview
-        Inkscape::XML::Node *nv = sp_repr_lookup_name (doc->rroot, "sodipodi:namedview");
+        Inkscape::XML::Node *nv = doc->getReprNamedView();
         if (nv && nv->attribute("pagecolor")){
             bgcolor = sp_svg_read_color(nv->attribute("pagecolor"), 0xffffff00);
         }

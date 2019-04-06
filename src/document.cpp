@@ -84,8 +84,6 @@ using Inkscape::Util::unit_table;
 #define SP_DOCUMENT_REROUTING_PRIORITY (G_PRIORITY_HIGH_IDLE - 1)
 
 bool sp_no_convert_text_baseline_spacing = false;
-static gint sp_document_idle_handler(gpointer data);
-static gint sp_document_rerouting_handler(gpointer data);
 
 //gboolean sp_document_resource_list_free(gpointer key, gpointer value, gpointer data);
 
@@ -95,9 +93,9 @@ static gint doc_mem_count = 0;
 static unsigned long next_serial = 0;
 
 SPDocument::SPDocument() :
-    keepalive(FALSE),
-    virgin(TRUE),
-    modified_since_save(FALSE),
+    keepalive(false),
+    virgin(true),
+    modified_since_save(false),
     rdoc(nullptr),
     rroot(nullptr),
     root(nullptr),
@@ -108,8 +106,6 @@ SPDocument::SPDocument() :
     document_base(nullptr),
     document_name(nullptr),
     actionkey(),
-    modified_id(0),
-    rerouting_handler_id(0),
     profileManager(nullptr), // deferred until after other initialization
     router(new Avoid::Router(Avoid::PolyLineRouting|Avoid::OrthogonalRouting)),
     oldSignalsConnected(false),
@@ -195,19 +191,12 @@ SPDocument::~SPDocument() {
         document_uri = nullptr;
     }
 
-    if (modified_id) {
-        g_source_remove(modified_id);
-        modified_id = 0;
-    }
-
-    if (rerouting_handler_id) {
-        g_source_remove(rerouting_handler_id);
-        rerouting_handler_id = 0;
-    }
+    modified_connection.disconnect();
+    rerouting_connection.disconnect();
 
     if (keepalive) {
         inkscape_unref(INKSCAPE);
-        keepalive = FALSE;
+        keepalive = false;
     }
 
     if (this->current_persp3d_impl) 
@@ -216,6 +205,11 @@ SPDocument::~SPDocument() {
 
     // This is at the end of the destructor, because preceding code adds new orphans to the queue
     collectOrphans();
+}
+
+Inkscape::XML::Node *SPDocument::getReprNamedView()
+{
+    return sp_repr_lookup_name (rroot, "sodipodi:namedview");
 }
 
 SPDefs *SPDocument::getDefs()
@@ -239,10 +233,6 @@ Persp3D *SPDocument::getCurrentPersp3D() {
     current_persp3d = persp3d_document_first_persp (this);
 
     return current_persp3d;
-}
-
-Persp3DImpl *SPDocument::getCurrentPersp3DImpl() {
-    return current_persp3d_impl;
 }
 
 void SPDocument::setCurrentPersp3D(Persp3D * const persp) {
@@ -269,10 +259,6 @@ void SPDocument::initialize_current_persp3d()
 }
 **/
 
-unsigned long SPDocument::serial() const {
-    return _serial;
-}
-
 void SPDocument::queueForOrphanCollection(SPObject *object) {
     g_return_if_fail(object != nullptr);
     g_return_if_fail(object->document == this);
@@ -293,16 +279,11 @@ void SPDocument::collectOrphans() {
     }
 }
 
-void SPDocument::reset_key (void */*dummy*/)
-{
-    actionkey.clear();
-}
-
 SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
                                   gchar const *document_uri,
                                   gchar const *document_base,
                                   gchar const *document_name,
-                                  unsigned int keepalive,
+                                  bool keepalive,
                                   SPDocument *parent)
 {
     SPDocument *document = new SPDocument();
@@ -525,7 +506,7 @@ SPDocument *SPDocument::createChildDoc(std::string const &document_uri)
  * Fetches document from URI, or creates new, if NULL; public document
  * appears in document list.
  */
-SPDocument *SPDocument::createNewDoc(gchar const *document_uri, unsigned int keepalive, bool make_new, SPDocument *parent)
+SPDocument *SPDocument::createNewDoc(gchar const *document_uri, bool keepalive, bool make_new, SPDocument *parent)
 {
     Inkscape::XML::Document *rdoc = nullptr;
     gchar *document_base = nullptr;
@@ -577,7 +558,7 @@ SPDocument *SPDocument::createNewDoc(gchar const *document_uri, unsigned int kee
     return doc;
 }
 
-SPDocument *SPDocument::createNewDocFromMem(gchar const *buffer, gint length, unsigned int keepalive)
+SPDocument *SPDocument::createNewDocFromMem(gchar const *buffer, gint length, bool keepalive)
 {
     SPDocument *doc = nullptr;
 
@@ -1267,13 +1248,16 @@ Glib::ustring SPDocument::getLanguage() const
 
 void SPDocument::requestModified()
 {
-    if (!modified_id) {
-        modified_id = g_idle_add_full(SP_DOCUMENT_UPDATE_PRIORITY, 
-                sp_document_idle_handler, this, nullptr);
+    if (modified_connection.empty()) {
+        modified_connection =
+            Glib::signal_idle().connect(sigc::mem_fun(*this, &SPDocument::idle_handler),
+                                        SP_DOCUMENT_UPDATE_PRIORITY);
     }
-    if (!rerouting_handler_id) {
-        rerouting_handler_id = g_idle_add_full(SP_DOCUMENT_REROUTING_PRIORITY, 
-                sp_document_rerouting_handler, this, nullptr);
+
+    if (rerouting_connection.empty()) {
+        rerouting_connection =
+            Glib::signal_idle().connect(sigc::mem_fun(*this, &SPDocument::rerouting_handler),
+                                        SP_DOCUMENT_REROUTING_PRIORITY);
     }
 }
 
@@ -1350,31 +1334,24 @@ gint SPDocument::ensureUpToDate()
             router->processTransaction();
         }
     }
-    
-    if (modified_id) {
-        // Remove handler
-        g_source_remove(modified_id);
-        modified_id = 0;
-    }
-    if (rerouting_handler_id) {
-        // Remove handler
-        g_source_remove(rerouting_handler_id);
-        rerouting_handler_id = 0;
-    }
-    return counter>0;
+
+    // Remove handlers
+    modified_connection.disconnect();
+    rerouting_connection.disconnect();
+
+    return (counter > 0);
 }
 
 /**
  * An idle handler to update the document.  Returns true if
  * the document needs further updates.
  */
-static gint
-sp_document_idle_handler(gpointer data)
+bool
+SPDocument::idle_handler()
 {
-    SPDocument *doc = static_cast<SPDocument *>(data);
-    bool status = !doc->_updateDocument(); // method TRUE if it does NOT need further modification, so invert
+    bool status = !_updateDocument(); // method TRUE if it does NOT need further modification, so invert
     if (!status) {
-        doc->modified_id = 0;
+        modified_connection.disconnect();
     }
     return status;
 }
@@ -1382,18 +1359,16 @@ sp_document_idle_handler(gpointer data)
 /**
  * An idle handler to reroute connectors in the document.  
  */
-static gint
-sp_document_rerouting_handler(gpointer data)
+bool
+SPDocument::rerouting_handler()
 {
     // Process any queued movement actions and determine new routings for 
     // object-avoiding connectors.  Callbacks will be used to update and 
     // redraw affected connectors.
-    SPDocument *doc = static_cast<SPDocument *>(data);
-    doc->router->processTransaction();
+    router->processTransaction();
     
     // We don't need to handle rerouting again until there are further 
     // diagram updates.
-    doc->rerouting_handler_id = 0;
     return false;
 }
 
@@ -1831,10 +1806,6 @@ unsigned int SPDocument::vacuumDocument()
     // We stop if vacuum_document_recursive doesn't remove any more objects or after 100 iterations, whichever occurs first.
 
     return start - newend;
-}
-
-bool SPDocument::isSeeking() const {
-    return seeking;
 }
 
 /**

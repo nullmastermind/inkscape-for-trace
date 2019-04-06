@@ -2044,7 +2044,7 @@ void OdfOutput::save(Inkscape::Extension::Output */*mod*/, SPDocument *doc, gcha
     docBaseUri = Inkscape::URI::from_dirname(doc->getDocumentBase()).str();
 
     ZipFile zf;
-    preprocess(zf, doc->rroot);
+    preprocess(zf, doc->getReprRoot());
 
     if (!writeManifest(zf))
         {
@@ -2052,7 +2052,7 @@ void OdfOutput::save(Inkscape::Extension::Output */*mod*/, SPDocument *doc, gcha
         return;
         }
 
-    if (!writeContent(zf, doc->rroot))
+    if (!writeContent(zf, doc->getReprRoot()))
         {
         g_warning("Failed to write content");
         return;

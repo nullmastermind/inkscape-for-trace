@@ -122,7 +122,7 @@ void Box3DSide::update(SPCtx* ctx, guint flags) {
 Box3DSide * Box3DSide::createBox3DSide(SPBox3D *box)
 {
 	Box3DSide *box3d_side = nullptr;
-	Inkscape::XML::Document *xml_doc = box->document->rdoc;
+	Inkscape::XML::Document *xml_doc = box->document->getReprDoc();;
 	Inkscape::XML::Node *repr_side = xml_doc->createElement("svg:path");
 	repr_side->setAttribute("sodipodi:type", "inkscape:box3dside");
 	box3d_side = static_cast<Box3DSide *>(box->appendChildRepr(repr_side));

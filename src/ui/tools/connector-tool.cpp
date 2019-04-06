@@ -808,7 +808,7 @@ void ConnectorTool::_setSubsequentPoint(Geom::Point const p)
     Avoid::Point dst(d[Geom::X], d[Geom::Y]);
 
     if (!this->newConnRef) {
-        Avoid::Router *router = desktop->getDocument()->router;
+        Avoid::Router *router = desktop->getDocument()->getRouter();
         this->newConnRef = new Avoid::ConnRef(router);
         this->newConnRef->setEndpoint(Avoid::VertID::src, src);
         if (this->isOrthogonal)

@@ -1535,7 +1535,7 @@ static void addStop( Inkscape::XML::Node *parent, Glib::ustring const &color, gi
 SPGradient *sp_document_default_gradient_vector( SPDocument *document, SPColor const &color, bool singleStop )
 {
     SPDefs *defs = document->getDefs();
-    Inkscape::XML::Document *xml_doc = document->rdoc;
+    Inkscape::XML::Document *xml_doc = document->getReprDoc();
 
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:linearGradient");
 

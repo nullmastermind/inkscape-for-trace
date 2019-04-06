@@ -64,7 +64,7 @@ void SPConnEndPair::release()
 
     // If the document is being destroyed then the router instance
     // and the ConnRefs will have been destroyed with it.
-    const bool routerInstanceExists = (_path->document->router != nullptr);
+    const bool routerInstanceExists = (_path->document->getRouter() != nullptr);
 
     if (_connRef && routerInstanceExists) {
         _connRef->router()->deleteConnector(_connRef);
@@ -101,7 +101,7 @@ void SPConnEndPair::setAttr(unsigned const key, gchar const *const value)
 
             if (!_connRef) {
                 _connType = new_conn_type;
-                Avoid::Router *router = _path->document->router;
+                Avoid::Router *router = _path->document->getRouter();
                 _connRef = new Avoid::ConnRef(router);
                 _connRef->setRoutingType(new_conn_type == SP_CONNECTOR_POLYLINE ?
                     Avoid::ConnType_PolyLine : Avoid::ConnType_Orthogonal);

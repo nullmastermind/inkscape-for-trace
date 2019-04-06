@@ -867,7 +867,7 @@ Svg::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
 {
     g_return_if_fail(doc != nullptr);
     g_return_if_fail(filename != nullptr);
-    Inkscape::XML::Document *rdoc = doc->rdoc;
+    Inkscape::XML::Document *rdoc = doc->getReprDoc();
 
     bool const exportExtensions = ( !mod->get_id()
       || !strcmp (mod->get_id(), SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE)

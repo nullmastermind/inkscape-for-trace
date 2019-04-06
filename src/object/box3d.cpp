@@ -431,7 +431,7 @@ box3d_snap (SPBox3D *box, int id, Proj::Pt3 const &pt_proj, Proj::Pt3 const &sta
 SPBox3D * SPBox3D::createBox3D(SPItem * parent)
 {
     SPBox3D *box3d = nullptr;
-    Inkscape::XML::Document *xml_doc = parent->document->rdoc;
+    Inkscape::XML::Document *xml_doc = parent->document->getReprDoc();
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:g");
     repr->setAttribute("sodipodi:type", "inkscape:box3d");
     box3d = reinterpret_cast<SPBox3D *>(parent->appendChildRepr(repr));

@@ -61,7 +61,7 @@ SPAvoidRef::~SPAvoidRef()
 
     // If the document is being destroyed then the router instance
     // and the ShapeRefs will have been destroyed with it.
-    Router *router = item->document->router;
+    Router *router = item->document->getRouter();
 
     if (shapeRef && router) {
         router->deleteShape(shapeRef);
@@ -103,7 +103,7 @@ void SPAvoidRef::handleSettingChange()
     }
     setting = new_setting;
 
-    Router *router = item->document->router;
+    Router *router = item->document->getRouter();
 
     _transformed_connection.disconnect();
     if (new_setting) {
@@ -137,7 +137,7 @@ std::vector<SPItem *> SPAvoidRef::getAttachedShapes(const unsigned int type)
 
     Avoid::IntList shapes;
     GQuark shapeId = g_quark_from_string(item->getId());
-    item->document->router->attachedShapes(shapes, shapeId, type);
+    item->document->getRouter()->attachedShapes(shapes, shapeId, type);
 
     Avoid::IntList::iterator finish = shapes.end();
     for (Avoid::IntList::iterator i = shapes.begin(); i != finish; ++i) {
@@ -161,7 +161,7 @@ std::vector<SPItem *> SPAvoidRef::getAttachedConnectors(const unsigned int type)
 
     Avoid::IntList conns;
     GQuark shapeId = g_quark_from_string(item->getId());
-    item->document->router->attachedConns(conns, shapeId, type);
+    item->document->getRouter()->attachedConns(conns, shapeId, type);
 
     Avoid::IntList::iterator finish = conns.end();
     for (Avoid::IntList::iterator i = conns.begin(); i != finish; ++i) {
@@ -351,7 +351,7 @@ void avoid_item_move(Geom::Affine const */*mp*/, SPItem *moved_item)
     Avoid::ShapeRef *shapeRef = moved_item->avoidRef->shapeRef;
     g_assert(shapeRef);
 
-    Router *router = moved_item->document->router;
+    Router *router = moved_item->document->getRouter();
     Avoid::Polygon poly = avoid_item_poly(moved_item);
     if (!poly.empty()) {
         router->moveShape(shapeRef, poly);
