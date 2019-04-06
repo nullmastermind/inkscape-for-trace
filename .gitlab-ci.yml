@@ -74,37 +74,15 @@ inkscape:mac:
     - mac
   only:
     - branches@inkscape/inkscape
+    - branches@dehesselle/inkscape
   except:
     - schedules
-  cache:
-    key: "cache-mac"
-    paths:
-      - ccache/
-  before_script:
-    - brew update
-    - brew upgrade
-    # Tools
-    - brew install cmake intltool libtool pkg-config ccache
-    # Libraries
-    - brew install bdw-gc boost double-conversion gdl gettext gsl gtkmm3 gtkspell3 imagemagick@6 jemalloc libcdr libvisio libyaml libwpg pango poppler potrace libsoup
-    # Testing tools
-    # TODO
-    # Cleanup
-    - brew cleanup
-    # CCache Config
-    - mkdir -p ccache
-    - export CCACHE_BASEDIR=${PWD}
-    - export CCACHE_DIR=${PWD}/ccache
   script:
-    - mkdir -p build
-    - cd build
-    - cmake .. -DCMAKE_PREFIX_PATH="/usr/local/opt/gettext;/usr/local/opt/imagemagick@6/;/usr/local/opt/icu4c/;/usr/local/opt/libffi/" -DWITH_OPENMP=OFF -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug
-    - make -j1
-    - cd ..
+    - packaging/macos/210-inkscape.sh
   artifacts:
     expire_in: 1 year
     paths:
-      - build/
+      - build/Inkscape.tar.xz
   allow_failure: true
 
 
