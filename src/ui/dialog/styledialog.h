@@ -50,7 +50,18 @@ public:
     ~StyleDialog() override;
 
     static StyleDialog &getInstance() { return *new StyleDialog(); }
+    Gtk::TreeView _treeView;
+  private:
+    // Monitor <style> element for changes.
+    class NodeObserver;
 
+    // Monitor all objects for addition/removal/attribute change
+    class NodeWatcher;
+
+    std::vector<StyleDialog::NodeWatcher*> _nodeWatchers;
+    void _nodeAdded(   Inkscape::XML::Node &repr );
+    void _nodeRemoved( Inkscape::XML::Node &repr );
+    void _nodeChanged( Inkscape::XML::Node &repr );
     // Data structure
     class CssColumns : public Gtk::TreeModel::ColumnRecord {
     public:
@@ -76,51 +87,62 @@ public:
     std::unique_ptr<Inkscape::MessageContext> _message_context;
 
     // TreeView
-    Gtk::TreeView _treeView;
-    Glib::RefPtr<Gtk::ListStore> _store;
-    Gtk::TreeModel::Row _propRow;
-    Gtk::TreeViewColumn *_propCol;
-    Gtk::TreeViewColumn *_attrCol;
-    Gtk::HBox status_box;
-    Gtk::Label status;
+    Glib::RefPtr<TreeStore> _store;
 
-    /**
-     * Sets the XML status bar, depending on which attr is selected.
-     */
-    void css_reset_context(gint css);
-    static void _set_status_message(Inkscape::MessageType type, const gchar *message, GtkWidget *dialog);
+    // Widgets
+    Gtk::Paned _paned;
+    Gtk::Box   _mainBox;
+    Gtk::Box   _buttonBox;
+    Gtk::ScrolledWindow _scrolledWindow;
+    Gtk::Button* del;
+    Gtk::Button* create;
 
+    // Reading and writing the style element.
+    Inkscape::XML::Node *_getStyleTextNode();
+    void _readStyleElement();
+    void _writeStyleElement();
 
-    // Variables - Inkscape
-    SPDesktop* _desktop;
-    Inkscape::XML::Node *_repr;
+    // Update watchers
+    void _addWatcherRecursive(Inkscape::XML::Node *node);
+    void _updateWatchers();
+    
+    // Manipulate Tree
+    void _addToSelector(Gtk::TreeModel::Row row);
+    void _removeFromSelector(Gtk::TreeModel::Row row);
+    Glib::ustring _getIdList(std::vector<SPObject *>);
+    std::vector<SPObject *> _getObjVec(Glib::ustring selector);
+    void _insertClass(const std::vector<SPObject *>& objVec, const Glib::ustring& className);
+    void _selectObjects(int, int);
 
-    // Helper functions
-    void setDesktop(SPDesktop* desktop) override;
-    void setRepr(Inkscape::XML::Node *repr);
+    // Variables
+    bool _updating;  // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
+    Inkscape::XML::Node *_textNode; // Track so we know when to add a NodeObserver.
 
-    // Parsing functions
-    std::map<Glib::ustring, Glib::ustring> parseStyle(Glib::ustring style_string);
-    Glib::ustring compileStyle(std::map<Glib::ustring, Glib::ustring> props);
+    // Signals and handlers - External
+    sigc::connection _document_replaced_connection;
+    sigc::connection _desktop_changed_connection;
+    sigc::connection _selection_changed_connection;
 
-    // Signal handlers
-    void onAttrChanged(Inkscape::XML::Node *repr, const gchar *name, const gchar *new_value);
+    void _handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
+    void _handleDesktopChanged(SPDesktop* desktop);
+    void _handleSelectionChanged();
+    void _rowExpand(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);
+    void _rowCollapse(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);
+    void _closeDialog(Gtk::Dialog *textDialogPtr);
 
-  private:
-    Glib::RefPtr<Glib::Regex> r_props = Glib::Regex::create("\\s*;\\s*");
-    Glib::RefPtr<Glib::Regex> r_pair = Glib::Regex::create("\\s*:\\s*");
-    void setUndo(Glib::ustring const &event_description);
-    void valueEdited (const Glib::ustring& path, const Glib::ustring& value);
-    void nameEdited (const Glib::ustring& path, const Glib::ustring& name);
-    bool onPropertyCreate(GdkEventButton *event);
-    void onPropertyDelete(Glib::ustring path);
-    bool setStyleProperty(Glib::ustring name, Glib::ustring value);
+    DesktopTracker _desktopTracker;
 
-    /**
-     * Signal handlers
-     */
-    sigc::connection _message_changed_connection;
-    bool _addProperty(GdkEventButton *event);
+    Inkscape::XML::SignalObserver _objObserver; // Track object in selected row (for style change).
+
+    // Signal and handlers - Internal
+    void _addSelector();
+    void _delSelector();
+    bool _handleButtonEvent(GdkEventButton *event);
+    void _buttonEventsSelectObjs(GdkEventButton *event);
+    void _selectRow(); // Select row in tree when selection changed.
+
+    // GUI
+    void _styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip);
 };
 
 

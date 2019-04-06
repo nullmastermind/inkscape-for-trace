@@ -23,7 +23,6 @@
 #include "ui/icon-loader.h"
 #include "ui/widget/iconrenderer.h"
 #include "verbs.h"
-
 #include "xml/attribute-record.h"
 #include "xml/node-event-vector.h"
 #include <glibmm/i18n.h>
@@ -33,7 +32,8 @@
 static void on_attr_changed(Inkscape::XML::Node *repr, const gchar *name, const gchar * /*old_value*/,
                             const gchar *new_value, bool /*is_interactive*/, gpointer data)
 {
-    STYLE_DIALOG(data)->onAttrChanged(repr, name, new_value);
+    CSS_DIALOG(data)->onAttrChanged(repr, name, new_value);
+    CSS_DIALOG(data)->styledialog = new Inkscape::UI::Dialog::StyleDialog();
 }
 
 Inkscape::XML::NodeEventVector css_repr_events = {
@@ -65,6 +65,7 @@ StyleDialog::StyleDialog()
     _treeView.set_headers_visible(true);
     auto _scrolledWindow = new Gtk::ScrolledWindow();
     _scrolledWindow->add(_treeView);
+    _scrolledWindow->add(*styledialog);
     _scrolledWindow->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
     _store = Gtk::ListStore::create(_cssColumns);
