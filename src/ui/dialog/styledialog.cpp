@@ -83,8 +83,6 @@ StyleDialog::StyleDialog()
     Gtk::TreeViewColumn *col = _treeView.get_column(addCol);
     if (col) {
         col->add_attribute(addRenderer->property_visible(), _cssColumns.deleteButton);
-        col->set_sort_column(_cssColumns.deleteButton);
-
         Gtk::Image *add_icon = Gtk::manage(sp_get_icon_image("list-add", Gtk::ICON_SIZE_SMALL_TOOLBAR));
         col->set_clickable(true);
         col->set_widget(*add_icon);
@@ -105,33 +103,22 @@ StyleDialog::StyleDialog()
     if (_propCol) {
         _propCol->add_attribute(renderer->property_text(), _cssColumns.label);
         _propCol->add_attribute(renderer->property_foreground_rgba(), _cssColumns.label_color);
-        _propCol->set_sort_column(_cssColumns.label);
     }
-
+    renderer->signal_edited().connect(sigc::mem_fun(*this, &CssDialog::nameEdited));
     renderer = Gtk::manage(new Gtk::CellRendererText());
-    renderer->property_editable() = false;
-    int attrColNum = _treeView.append_column("Set", *renderer) - 1;
+    renderer->property_editable() = true;
+    int attrColNum = _treeView.append_column("Value", *renderer) - 1;
     _attrCol = _treeView.get_column(attrColNum);
     if (_attrCol) {
         _attrCol->add_attribute(renderer->property_text(), _cssColumns._styleAttrVal);
         _attrCol->add_attribute(renderer->property_foreground_rgba(), _cssColumns.attr_color);
-        _attrCol->add_attribute(renderer->property_strikethrough(), _cssColumns.attr_strike);
-        _attrCol->add_attribute(renderer->property_editable(), _cssColumns.editable);
-        _attrCol->set_sort_column(_cssColumns._styleAttrVal);
     }
-
+    renderer->signal_edited().connect(sigc::mem_fun(*this, &CssDialog::valueEdited));
     renderer = Gtk::manage(new Gtk::CellRendererText());
     renderer->property_editable() = true;
-    int sheetColNum = _treeView.append_column("Actual", *renderer) - 1;
-    _sheetCol = _treeView.get_column(sheetColNum);
-    if (_sheetCol) {
-        _sheetCol->add_attribute(renderer->property_text(), _cssColumns._styleSheetVal);
-        _sheetCol->add_attribute(renderer->property_foreground_rgba(), _cssColumns.label_color);
-        _sheetCol->set_sort_column(_cssColumns._styleSheetVal);
-    }
 
     // Set the initial sort column (and direction) to place real attributes at the top.
-    _store->set_sort_column(_cssColumns.deleteButton, Gtk::SORT_DESCENDING);
+    _store->set_sort_column(_cssColumns.label, Gtk::SORT_ASCENDING);
 
     _getContents()->pack_start(*_scrolledWindow, Gtk::PACK_EXPAND_WIDGET);
 
@@ -264,24 +251,24 @@ void StyleDialog::onAttrChanged(Inkscape::XML::Node *repr, const gchar *name, co
     std::map<Glib::ustring, Glib::ustring> attr_prop = parseStyle(new_value);
 
     for (auto iter : obj->style->properties()) {
-        if (iter->style && iter->style_src != SP_STYLE_SRC_UNSET) {
-            Gtk::TreeModel::Row row = *(_store->append());
-            // Delete is available to attribute properties only in attr mode.
-            row[_cssColumns.deleteButton] = iter->style_src == SP_STYLE_SRC_ATTRIBUTE;
-            row[_cssColumns.label] = iter->name;
+        if (iter->style_src != SP_STYLE_SRC_UNSET) {
             if (attr_prop.count(iter->name)) {
+                Gtk::TreeModel::Row row = *(_store->append());
+                // Delete is available to attribute properties only in attr mode.
+                row[_cssColumns.deleteButton] = iter->style_src == SP_STYLE_SRC_ATTRIBUTE;
+                row[_cssColumns.label] = iter->name;
                 row[_cssColumns._styleAttrVal] = attr_prop[iter->name];
-                if (attr_prop[iter->name] != iter->get_value()) {
-                    row[_cssColumns._styleSheetVal] = iter->get_value();
-                    row[_cssColumns.attr_color] = Gdk::RGBA("gray");
-                    row[_cssColumns.attr_strike] = true;
-                }
                 row[_cssColumns.deleteButton] = true;
-            } else {
-                row[_cssColumns._styleSheetVal] = iter->get_value();
+/*             } else if (iter->style) {
+                Gtk::TreeModel::Row row = *(_store->append());
+                // Delete is available to attribute properties only in attr mode.
+                row[_cssColumns.deleteButton] = iter->style_src == SP_STYLE_SRC_ATTRIBUTE;
+                row[_cssColumns.label] = iter->name;
+                row[_cssColumns._styleAttrVal] = iter->get_value();
                 row[_cssColumns.label_color] = Gdk::RGBA("gray");
                 row[_cssColumns.attr_color] = Gdk::RGBA("gray");
                 row[_cssColumns.deleteButton] = false;
+            */
             }
         }
     }
@@ -360,6 +347,64 @@ bool StyleDialog::onPropertyCreate(GdkEventButton *event)
         return true;
     }
     return false;
+}
+
+/**
+ * @brief CssDialog::onKeyPressed
+ * @param event_description
+ * @return
+ * Send an undo message and mark this point for undo
+ */
+void CssDialog::setUndo(Glib::ustring const &event_description)
+{
+    SPDocument *document = this->_desktop->doc();
+    DocumentUndo::done(document, SP_VERB_DIALOG_XML_EDITOR, event_description);
+}
+
+/**
+ * @brief CssDialog::nameEdited
+ * @param event
+ * @return
+ * Called when the name is edited in the TreeView editable column
+ */
+void CssDialog::nameEdited (const Glib::ustring& path, const Glib::ustring& name)
+{
+    Gtk::TreeModel::Row row = *_store->get_iter(path);
+    if(row && this->_repr) {
+        Glib::ustring old_name = row[_cssColumns.label];
+        Glib::ustring value = row[_cssColumns._styleAttrVal];
+        // Move to editing value, we set the name as a temporary store value
+        if (!old_name.empty()) {
+            // Remove old named value
+            onPropertyDelete(path);
+            setStyleProperty(name, " ");
+        }
+        if (!name.empty()) {
+            row[_cssColumns.label] = name;
+        }
+        this->setUndo(_("Rename CSS attribute"));
+    }
+}
+
+/**
+ * @brief CssDialog::valueEdited
+ * @param event
+ * @return
+ * Called when the value is edited in the TreeView editable column
+ */
+void CssDialog::valueEdited (const Glib::ustring& path, const Glib::ustring& value)
+{
+    Gtk::TreeModel::Row row = *_store->get_iter(path);
+    if(row && this->_repr) {
+        Glib::ustring name = row[_cssColumns.label];
+        if(name.empty()) return;
+        setStyleProperty(name, value);
+        if(!value.empty()) {
+            row[_cssColumns._styleAttrVal] = value;
+        }
+
+        this->setUndo(_("Change attribute value"));
+    }
 }
 
 } // namespace Dialog

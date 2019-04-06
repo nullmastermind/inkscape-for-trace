@@ -57,21 +57,15 @@ public:
         CssColumns() {
             add(deleteButton);
             add(label);
-            add(_styleSheetVal);
             add(_styleAttrVal);
             add(label_color);
             add(attr_color);
-            add(attr_strike);
-            add(editable);
         }
         Gtk::TreeModelColumn<bool> deleteButton;
         Gtk::TreeModelColumn<Glib::ustring> label;
         Gtk::TreeModelColumn<Glib::ustring> _styleAttrVal;
-        Gtk::TreeModelColumn<Glib::ustring> _styleSheetVal;
         Gtk::TreeModelColumn<Gdk::RGBA> label_color;
         Gtk::TreeModelColumn<Gdk::RGBA> attr_color;
-        Gtk::TreeModelColumn<bool> attr_strike;
-        Gtk::TreeModelColumn<bool> editable;
     };
     CssColumns _cssColumns;
 
@@ -86,7 +80,6 @@ public:
     Glib::RefPtr<Gtk::ListStore> _store;
     Gtk::TreeModel::Row _propRow;
     Gtk::TreeViewColumn *_propCol;
-    Gtk::TreeViewColumn *_sheetCol;
     Gtk::TreeViewColumn *_attrCol;
     Gtk::HBox status_box;
     Gtk::Label status;
@@ -116,7 +109,9 @@ public:
   private:
     Glib::RefPtr<Glib::Regex> r_props = Glib::Regex::create("\\s*;\\s*");
     Glib::RefPtr<Glib::Regex> r_pair = Glib::Regex::create("\\s*:\\s*");
-
+    void setUndo(Glib::ustring const &event_description);
+    void valueEdited (const Glib::ustring& path, const Glib::ustring& value);
+    void nameEdited (const Glib::ustring& path, const Glib::ustring& name);
     bool onPropertyCreate(GdkEventButton *event);
     void onPropertyDelete(Glib::ustring path);
     bool setStyleProperty(Glib::ustring name, Glib::ustring value);
