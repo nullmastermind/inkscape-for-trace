@@ -945,83 +945,6 @@ void SPDocument::changeUriAndHrefs(gchar const *filename)
     do_change_uri(filename, true);
 }
 
-void SPDocument::emitResizedSignal(gdouble width, gdouble height)
-{
-    this->resized_signal.emit(width, height);
-}
-
-sigc::connection SPDocument::connectDestroy(sigc::signal<void>::slot_type slot)
-{
-    return destroySignal.connect(slot);
-}
-
-sigc::connection SPDocument::connectModified(SPDocument::ModifiedSignal::slot_type slot)
-{
-    return modified_signal.connect(slot);
-}
-
-sigc::connection SPDocument::connectURISet(SPDocument::URISetSignal::slot_type slot)
-{
-    return uri_set_signal.connect(slot);
-}
-
-sigc::connection SPDocument::connectResized(SPDocument::ResizedSignal::slot_type slot)
-{
-    return resized_signal.connect(slot);
-}
-
-sigc::connection
-SPDocument::connectReconstructionStart(SPDocument::ReconstructionStart::slot_type slot)
-{
-    return _reconstruction_start_signal.connect(slot);
-}
-
-void
-SPDocument::emitReconstructionStart()
-{
-    // printf("Starting Reconstruction\n");
-    _reconstruction_start_signal.emit();
-    return;
-}
-
-sigc::connection
-SPDocument::connectReconstructionFinish(SPDocument::ReconstructionFinish::slot_type  slot)
-{
-    return _reconstruction_finish_signal.connect(slot);
-}
-
-void
-SPDocument::emitReconstructionFinish()
-{
-    // printf("Finishing Reconstruction\n");
-    _reconstruction_finish_signal.emit();
-    // indicates that gradients are reloaded (to rebuild the Auto palette)
-    resources_changed_signals[g_quark_from_string("gradient")].emit();
-    resources_changed_signals[g_quark_from_string("filter")].emit();
-
-
-/**    
-    // Reference to the old persp3d object is invalid after reconstruction.
-    initialize_current_persp3d();
-    
-    return;
-**/
-}
-
-sigc::connection SPDocument::connectCommit(SPDocument::CommitSignal::slot_type slot)
-{
-    return commit_signal.connect(slot);
-}
-
-
-
-void SPDocument::_emitModified() {
-    static guint const flags = SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG;
-    root->emitModified(0);
-    modified_signal.emit(flags);
-    _node_cache_valid=false;
-}
-
 void SPDocument::bindObjectToId(gchar const *id, SPObject *object) {
     GQuark idq = g_quark_from_string(id);
 
@@ -1045,18 +968,6 @@ void SPDocument::bindObjectToId(gchar const *id, SPObject *object) {
             id_changed_signals.erase(pos);
         }
     }
-}
-
-void
-SPDocument::addUndoObserver(Inkscape::UndoStackObserver& observer)
-{
-    this->undoStackObservers.add(observer);
-}
-
-void
-SPDocument::removeUndoObserver(Inkscape::UndoStackObserver& observer)
-{
-    this->undoStackObservers.remove(observer);
 }
 
 SPObject *SPDocument::getObjectById(Glib::ustring const &id) const
@@ -1084,12 +995,6 @@ SPObject *SPDocument::getObjectById(gchar const *id) const
     }
 
     return getObjectById(Glib::ustring(id));
-}
-
-sigc::connection SPDocument::connectIdChanged(gchar const *id,
-                                              SPDocument::IDChangedSignal::slot_type slot)
-{
-    return id_changed_signals[g_quark_from_string(id)].connect(slot);
 }
 
 void _getObjectsByClassRecursive(Glib::ustring const &klass, SPObject *parent, std::vector<SPObject *> &objects)
@@ -1730,13 +1635,6 @@ std::vector<SPObject *> const SPDocument::getResourceList(gchar const *key)
     return resources[key];
 }
 
-sigc::connection SPDocument::connectResourcesChanged(gchar const *key,
-                                                     SPDocument::ResourcesChangedSignal::slot_type slot)
-{
-    GQuark q = g_quark_from_string(key);
-    return resources_changed_signals[q].connect(slot);
-}
-
 /* Helpers */
 
 static unsigned int count_objects_recursive(SPObject *obj, unsigned int count)
@@ -1993,6 +1891,105 @@ void SPDocument::_importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, 
         }
     }
 }
+
+// Signals ------------------------------
+
+void
+SPDocument::addUndoObserver(Inkscape::UndoStackObserver& observer)
+{
+    this->undoStackObservers.add(observer);
+}
+
+void
+SPDocument::removeUndoObserver(Inkscape::UndoStackObserver& observer)
+{
+    this->undoStackObservers.remove(observer);
+}
+
+sigc::connection SPDocument::connectDestroy(sigc::signal<void>::slot_type slot)
+{
+    return destroySignal.connect(slot);
+}
+
+sigc::connection SPDocument::connectModified(SPDocument::ModifiedSignal::slot_type slot)
+{
+    return modified_signal.connect(slot);
+}
+
+sigc::connection SPDocument::connectURISet(SPDocument::URISetSignal::slot_type slot)
+{
+    return uri_set_signal.connect(slot);
+}
+
+sigc::connection SPDocument::connectResized(SPDocument::ResizedSignal::slot_type slot)
+{
+    return resized_signal.connect(slot);
+}
+
+sigc::connection SPDocument::connectCommit(SPDocument::CommitSignal::slot_type slot)
+{
+    return commit_signal.connect(slot);
+}
+
+sigc::connection SPDocument::connectIdChanged(gchar const *id,
+                                              SPDocument::IDChangedSignal::slot_type slot)
+{
+    return id_changed_signals[g_quark_from_string(id)].connect(slot);
+}
+
+sigc::connection SPDocument::connectResourcesChanged(gchar const *key,
+                                                     SPDocument::ResourcesChangedSignal::slot_type slot)
+{
+    GQuark q = g_quark_from_string(key);
+    return resources_changed_signals[q].connect(slot);
+}
+
+sigc::connection
+SPDocument::connectReconstructionStart(SPDocument::ReconstructionStart::slot_type slot)
+{
+    return _reconstruction_start_signal.connect(slot);
+}
+
+sigc::connection
+SPDocument::connectReconstructionFinish(SPDocument::ReconstructionFinish::slot_type  slot)
+{
+    return _reconstruction_finish_signal.connect(slot);
+}
+
+void SPDocument::_emitModified() {
+    static guint const flags = SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG;
+    root->emitModified(0);
+    modified_signal.emit(flags);
+    _node_cache_valid=false;
+}
+
+void
+SPDocument::emitReconstructionStart()
+{
+    // printf("Starting Reconstruction\n");
+    _reconstruction_start_signal.emit();
+}
+
+void
+SPDocument::emitReconstructionFinish()
+{
+    // printf("Finishing Reconstruction\n");
+    _reconstruction_finish_signal.emit();
+    // indicates that gradients are reloaded (to rebuild the Auto palette)
+    resources_changed_signals[g_quark_from_string("gradient")].emit();
+    resources_changed_signals[g_quark_from_string("filter")].emit();
+
+/**
+    // Reference to the old persp3d object is invalid after reconstruction.
+    initialize_current_persp3d();
+**/
+}
+
+void SPDocument::emitResizedSignal(gdouble width, gdouble height)
+{
+    this->resized_signal.emit(width, height);
+}
+
 
 /*
   Local Variables:
