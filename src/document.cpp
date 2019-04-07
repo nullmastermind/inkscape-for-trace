@@ -199,7 +199,7 @@ SPDocument::~SPDocument() {
         keepalive = false;
     }
 
-    if (this->current_persp3d_impl) 
+    if (this->current_persp3d_impl)
         delete this->current_persp3d_impl;
     this->current_persp3d_impl = nullptr;
 
@@ -616,7 +616,7 @@ void SPDocument::setDocumentScale( double scaleX, double scaleY ) {
     root->updateRepr();
 }
 
-/// Sets document scale (by changing viewBox, x and y scaling equal) 
+/// Sets document scale (by changing viewBox, x and y scaling equal)
 void SPDocument::setDocumentScale( double scale ) {
     setDocumentScale( scale, scale );
 }
@@ -813,13 +813,13 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
     if (root->height.unit && (root->height.unit != SVGLength::PERCENT))
         nv_units = unit_table.getUnit(root->height.unit);
     SPNamedView *nv = sp_document_namedview(this, nullptr);
-    
+
     /* in px */
     double margin_top = 0.0;
     double margin_left = 0.0;
     double margin_right = 0.0;
     double margin_bottom = 0.0;
-    
+
     if (with_margins && nv) {
         if (nv != nullptr) {
             margin_top = nv->getMarginLength("fit-margin-top", nv_units, unit_table.getUnit("px"), w, h, false);
@@ -838,11 +838,11 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
     if (y_dir > 0) {
         std::swap(margin_top, margin_bottom);
     }
-    
+
     Geom::Rect const rect_with_margins(
             rect.min() - Geom::Point(margin_left, margin_bottom),
             rect.max() + Geom::Point(margin_right, margin_top));
-    
+
     setWidthAndHeight(
         Inkscape::Util::Quantity(Inkscape::Util::Quantity::convert(rect_with_margins.width(),  "px", nv_units), nv_units),
         Inkscape::Util::Quantity(Inkscape::Util::Quantity::convert(rect_with_margins.height(), "px", nv_units), nv_units)
@@ -1135,7 +1135,7 @@ Glib::ustring SPDocument::getLanguage() const
         if ( nullptr == document_language || *document_language == 0 ) {
             document_language = getenv ("LANGUAGE");
         }
-        
+
         if ( nullptr != document_language ) {
             const char *pos = strchr(document_language, '_');
             if ( nullptr != pos ) {
@@ -1232,7 +1232,7 @@ gint SPDocument::ensureUpToDate()
             break;
         }
 
-        // After updates on the first pass we get libavoid to process all the 
+        // After updates on the first pass we get libavoid to process all the
         // changed objects and provide new routings.  This may cause some objects
             // to be modified, hence the second update pass.
         if (pass == 1) {
@@ -1262,17 +1262,17 @@ SPDocument::idle_handler()
 }
 
 /**
- * An idle handler to reroute connectors in the document.  
+ * An idle handler to reroute connectors in the document.
  */
 bool
 SPDocument::rerouting_handler()
 {
-    // Process any queued movement actions and determine new routings for 
-    // object-avoiding connectors.  Callbacks will be used to update and 
+    // Process any queued movement actions and determine new routings for
+    // object-avoiding connectors.  Callbacks will be used to update and
     // redraw affected connectors.
     router->processTransaction();
-    
-    // We don't need to handle rerouting again until there are further 
+
+    // We don't need to handle rerouting again until there are further
     // diagram updates.
     return false;
 }
@@ -1287,11 +1287,11 @@ static bool overlaps(Geom::Rect const &area, Geom::Rect const &box)
     return area.intersects(box);
 }
 
-static std::vector<SPItem*> &find_items_in_area(std::vector<SPItem*> &s, 
-                                                SPGroup *group, unsigned int dkey, 
+static std::vector<SPItem*> &find_items_in_area(std::vector<SPItem*> &s,
+                                                SPGroup *group, unsigned int dkey,
                                                 Geom::Rect const &area,
-                                                bool (*test)(Geom::Rect const &, Geom::Rect const &), 
-                                                bool take_hidden = false, 
+                                                bool (*test)(Geom::Rect const &, Geom::Rect const &),
+                                                bool take_hidden = false,
                                                 bool take_insensitive = false,
                                                 bool take_groups = true,
                                                 bool enter_groups = false)
@@ -1310,7 +1310,7 @@ static std::vector<SPItem*> &find_items_in_area(std::vector<SPItem*> &s,
                 }
             }
             Geom::OptRect box = item->desktopVisualBounds();
-            if (box && test(area, *box)                    
+            if (box && test(area, *box)
                 && (take_insensitive || !item->isLocked())
                 && (take_hidden || !item->isHidden()))
             {
@@ -1497,7 +1497,7 @@ std::vector<SPItem*> SPDocument::getItemsPartiallyInBox(unsigned int dkey, Geom:
     return find_items_in_area(x, SP_GROUP(this->root), dkey, box, overlaps, take_hidden, take_insensitive, take_groups, enter_groups);
 }
 
-std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vector<Geom::Point> points, bool all_layers, size_t limit) const 
+std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vector<Geom::Point> points, bool all_layers, size_t limit) const
 {
     std::vector<SPItem*> items;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -1543,7 +1543,7 @@ std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vecto
 }
 
 SPItem *SPDocument::getItemAtPoint( unsigned const key, Geom::Point const &p,
-                                    bool const into_groups, SPItem *upto) const 
+                                    bool const into_groups, SPItem *upto) const
 {
     // Build a flattened SVG DOM for find_item_at_point.
     std::deque<SPItem*> bak(_node_cache);
@@ -1556,7 +1556,7 @@ SPItem *SPDocument::getItemAtPoint( unsigned const key, Geom::Point const &p,
         build_flat_item_list(key, SP_GROUP(this->root), true);
         _node_cache_valid=true;
     }
-    
+
     SPItem *res = find_item_at_point(&_node_cache, key, p, upto);
     if(!into_groups)
         _node_cache = bak;
@@ -1589,7 +1589,7 @@ bool SPDocument::addResource(gchar const *key, SPObject *object)
         /*in general, do not send signal if the object has no id (yet),
         it means the object is not completely built.
         (happens when pasting swatches across documents, cf bug 1495106)
-        [this check should be more generally presend on emit() calls since 
+        [this check should be more generally presend on emit() calls since
         the backtrace is unusable with crashed from this cause]
         */
         if(object->getId() || dynamic_cast<SPGroup*>(object) )
@@ -1650,7 +1650,7 @@ static unsigned int count_objects_recursive(SPObject *obj, unsigned int count)
 
 /**
  * Count the number of objects in a given document recursively using the count_objects_recursive helper function
- * 
+ *
  * @param[in] document Pointer to the document for counting objects
  * @return Number of objects in the document
  */
@@ -1735,34 +1735,34 @@ void SPDocument::importDefs(SPDocument *source)
     std::vector<Inkscape::XML::Node const *> defsNodes = sp_repr_lookup_name_many(root, "svg:defs");
 
     prevent_id_clashes(source, this);
-    
+
     for (auto & defsNode : defsNodes) {
        _importDefsNode(source, const_cast<Inkscape::XML::Node *>(defsNode), target_defs);
     }
 }
 
 void SPDocument::_importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, Inkscape::XML::Node *target_defs)
-{    
+{
     int stagger=0;
 
     /*  Note, "clipboard" throughout the comments means "the document that is either the clipboard
         or an imported document", as importDefs is called in both contexts.
-        
+
         The order of the records in the clipboard is unpredictable and there may be both
         forward and backwards references to other records within it.  There may be definitions in
         the clipboard that duplicate definitions in the present document OR that duplicate other
         definitions in the clipboard.  (Inkscape will not have created these, but they may be read
         in from other SVG sources.)
-         
+
         There are 3 passes to clean this up:
 
         In the first find and mark definitions in the clipboard that are duplicates of those in the
         present document.  Change the ID to "RESERVED_FOR_INKSCAPE_DUPLICATE_DEF_XXXXXXXXX".
         (Inkscape will not reuse an ID, and the XXXXXXXXX keeps it from automatically creating new ones.)
         References in the clipboard to the old clipboard name are converted to the name used
-        in the current document. 
+        in the current document.
 
-        In the second find and mark definitions in the clipboard that are duplicates of earlier 
+        In the second find and mark definitions in the clipboard that are duplicates of earlier
         definitions in the clipbard.  Unfortunately this is O(n^2) and could be very slow for a large
         SVG with thousands of definitions.  As before, references are adjusted to reflect the name
         going forward.
@@ -1770,7 +1770,7 @@ void SPDocument::_importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, 
         In the final cycle copy over those records not marked with that ID.
 
         If an SVG file uses the special ID it will cause problems!
-        
+
         If this function is called because of the paste of a true clipboard the caller will have passed in a
         COPY of the clipboard items.  That is good, because this routine modifies that document.  If the calling
         behavior ever changes, so that the same document is passed in on multiple pastes, this routine will break
@@ -1782,12 +1782,12 @@ void SPDocument::_importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, 
     */
 
     std::string DuplicateDefString = "RESERVED_FOR_INKSCAPE_DUPLICATE_DEF";
-    
+
     /* First pass: remove duplicates in clipboard of definitions in document */
     for (Inkscape::XML::Node *def = defs->firstChild() ; def ; def = def->next()) {
         if(def->type() != Inkscape::XML::ELEMENT_NODE)continue;
         /* If this  clipboard has been pasted into one document, and is now being pasted into another,
-        or pasted again into the same, it will already have been processed.  If we detect that then 
+        or pasted again into the same, it will already have been processed.  If we detect that then
         skip the rest of this pass. */
         Glib::ustring defid = def->attribute("id");
         if( defid.find( DuplicateDefString ) != Glib::ustring::npos )break;
@@ -1856,7 +1856,7 @@ void SPDocument::_importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, 
         SPObject *src = source->getObjectByRepr(def);
 
         // Prevent duplication of symbols... could be more clever.
-        // The tag "_inkscape_duplicate" is added to "id" by ClipboardManagerImpl::copySymbol(). 
+        // The tag "_inkscape_duplicate" is added to "id" by ClipboardManagerImpl::copySymbol().
         // We assume that symbols are in defs section (not required by SVG spec).
         if (src && SP_IS_SYMBOL(src)) {
 
@@ -1865,7 +1865,7 @@ void SPDocument::_importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, 
             if( pos != Glib::ustring::npos ) {
 
                 // This is our symbol, now get rid of tag
-                id.erase( pos ); 
+                id.erase( pos );
 
                 // Check that it really is a duplicate
                 for (auto& trg: getDefs()->children) {
