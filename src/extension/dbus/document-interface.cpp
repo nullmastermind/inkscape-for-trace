@@ -993,7 +993,7 @@ gboolean document_interface_mark_as_unmodified(DocumentInterface *doc_interface,
 {
     SPDocument * doc = doc_interface->target.getDocument();
     if (doc) {
-        doc->modified_since_save = FALSE;
+        doc->setModifiedSinceSave(FALSE);
     }
     return TRUE;
 }
