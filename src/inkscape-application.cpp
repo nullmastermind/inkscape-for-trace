@@ -436,7 +436,11 @@ template<class T>
 ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     : T("org.inkscape.application.with_gui",
                        Gio::APPLICATION_HANDLES_OPEN | // Use default file opening.
-                       Gio::APPLICATION_NON_UNIQUE   ) // Allows different instances of Inkscape to run at same time.
+                       Gio::APPLICATION_CAN_OVERRIDE_APP_ID ) // Allows different instances of
+                                                              // Inkscape to run at same time using
+                                                              // --gapplication-app-id (useful for
+                                                              // debugging different versions of
+                                                              // Inkscape).
     , InkscapeApplication()
 {
 
