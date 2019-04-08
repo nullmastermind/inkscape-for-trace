@@ -58,4 +58,8 @@ or, for more advanced cmake settings:
 
 For example, to build inkscape with only SVG 1 support, and no SVG 2, do:
 
- $ cmake . -DWITH_SVG2=OFF
+ $ cmake .. -DWITH_SVG2=OFF
+
+Or, to build inkscape with debugging symbols, do:
+
+ $ cmake -DCMAKE_BUILD_TYPE=Debug ..
