@@ -822,7 +822,7 @@ Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
                 char *contents;
                 gsize length;
                 file->load_contents(contents, length);
-                return SPDocument::createNewDocFromMem(contents, length, 1);
+                return SPDocument::createNewDocFromMem(contents, length, true);
             } catch (Gio::Error &e) {
                 g_warning("Could not load contents of non-local URI %s\n", uri);
                 return nullptr;

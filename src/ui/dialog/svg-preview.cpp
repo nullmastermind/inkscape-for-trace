@@ -83,7 +83,7 @@ bool SVGPreview::setFromMem(char const *xmlBuffer)
         return false;
 
     gint len = (gint)strlen(xmlBuffer);
-    SPDocument *doc = SPDocument::createNewDocFromMem(xmlBuffer, len, 0);
+    SPDocument *doc = SPDocument::createNewDocFromMem(xmlBuffer, len, false);
     if (!doc) {
         g_warning("SVGView: error loading buffer '%s'\n", xmlBuffer);
         return false;

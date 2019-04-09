@@ -214,7 +214,7 @@ void CdrImportDialog::_setPreviewPage()
         return;
     }
 
-    SPDocument *doc = SPDocument::createNewDocFromMem(_vec[_current_page-1].cstr(), strlen(_vec[_current_page-1].cstr()), 0);
+    SPDocument *doc = SPDocument::createNewDocFromMem(_vec[_current_page-1].cstr(), strlen(_vec[_current_page-1].cstr()), false);
     if(!doc) {
         g_warning("CDR import: Could not create preview for page %d", _current_page);
         gchar const *no_preview_template = R"A(
@@ -225,7 +225,7 @@ void CdrImportDialog::_setPreviewPage()
           </svg>
         )A";
         gchar * no_preview = g_strdup_printf(no_preview_template, _("No preview"));
-        doc = SPDocument::createNewDocFromMem(no_preview, strlen(no_preview), 0);
+        doc = SPDocument::createNewDocFromMem(no_preview, strlen(no_preview), false);
         g_free(no_preview);
     }
 
