@@ -41,11 +41,11 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 static const Util::EnumData<ModeType> ModeTypeData[] = {
-    { MT_V, N_("Vertical Page Center"), "vertical" },
-    { MT_H, N_("Horizontal Page Center"), "horizontal" },
-    { MT_FREE, N_("Free from reflection line"), "free" },
-    { MT_X, N_("X from middle knot"), "X" },
-    { MT_Y, N_("Y from middle knot"), "Y" }
+    { MT_V, N_("Vertical page center"), "vertical" },
+    { MT_H, N_("Horizontal page center"), "horizontal" },
+    { MT_FREE, N_("Freely defined mirror line"), "free" },
+    { MT_X, N_("X coordinate of mirror line midpoint"), "X" },
+    { MT_Y, N_("Y coordinate of mirror line midpoint"), "Y" }
 };
 static const Util::EnumDataConverter<ModeType>
 MTConverter(ModeTypeData, MT_END);
@@ -53,15 +53,15 @@ MTConverter(ModeTypeData, MT_END);
 
 LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    mode(_("Mode"), _("Symmetry move mode"), "mode", MTConverter, &wr, this, MT_FREE),
-    split_gap(_("Gap on split"), _("Gap on split"), "split_gap", &wr, this, -0.001),
-    discard_orig_path(_("Discard original path"), _("Check this to only keep the mirrored part of the path"), "discard_orig_path", &wr, this, false),
-    fuse_paths(_("Fuse paths"), _("Fuse original and the reflection into a single path"), "fuse_paths", &wr, this, false),
-    oposite_fuse(_("Opposite fuse"), _("Picks the other side of the mirror as the original"), "oposite_fuse", &wr, this, false),
-    split_items(_("Split elements"), _("Split elements, this allow gradients and other paints."), "split_items", &wr, this, false),
-    start_point(_("Start mirror line"), _("Start mirror line"), "start_point", &wr, this, _("Adjust start of mirroring")),
-    end_point(_("End mirror line"), _("End mirror line"), "end_point", &wr, this, _("Adjust end of mirroring")),
-    center_point(_("Center mirror line"), _("Center mirror line"), "center_point", &wr, this, _("Adjust center of mirroring"))
+    mode(_("Mode"), _("Set mode of transformation. Either freely defined by mirror line or constrained to certain symmetry points."), "mode", MTConverter, &wr, this, MT_FREE),
+    split_gap(_("Gap on splitting"), _("Add attitional space in between split objects."), "split_gap", &wr, this, -0.001),
+    discard_orig_path(_("Discard original path"), _("Only keep mirrored part of the path, remove the original."), "discard_orig_path", &wr, this, false),
+    fuse_paths(_("Fuse paths"), _("Fuse original path and mirror image into a single path"), "fuse_paths", &wr, this, false),
+    oposite_fuse(_("Fuse opposite sides"), _("Picks the part on the other side of the mirror line as the original."), "oposite_fuse", &wr, this, false),
+    split_items(_("Split elements"), _("Split original and mirror image into separate paths. (This allows gradients and other paints.)"), "split_items", &wr, this, false),
+    start_point(_("Mirror line start"), _("Start point of mirror line"), "start_point", &wr, this, _("Adjust start point of of mirror line")),
+    end_point(_("Mirror line end"), _("End point of mirror line"), "end_point", &wr, this, _("Adjust end point of mirror line")),
+    center_point(_("Mirror line mid"), _("Center point of mirror line"), "center_point", &wr, this, _("Adjust center point of mirror line"))
 {
     show_orig_path = true;
     registerParameter(&mode);
