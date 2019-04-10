@@ -2137,7 +2137,26 @@ void InkscapePreferences::onKBTreeEdited (const Glib::ustring& path, guint accel
     }
 
     unsigned int const new_shortcut_id =  sp_shortcut_get_from_gdk_event(accel_key, accel_mods, hardware_keycode);
-    if (new_shortcut_id) {
+    if (new_shortcut_id && (new_shortcut_id != current_shortcut_id)) {
+        // check if there is currently a verb assigned to this shortcut; if yes ask if the shortcut should be reassigned
+        Inkscape::Verb *current_verb = sp_shortcut_get_verb(new_shortcut_id);
+        if (current_verb) {
+            Glib::ustring verb_name = _(current_verb->get_name());
+            Glib::ustring::size_type pos = 0;
+            while ((pos = verb_name.find('_', pos)) != verb_name.npos) { // strip mnemonics
+                verb_name.erase(pos, 1);
+            }
+            Glib::ustring message = Glib::ustring::compose(_("Keyboard shortcut \"%1\"\nis already assigned to \"%2\""),
+                                                           sp_shortcut_get_label(new_shortcut_id), verb_name);
+            Gtk::MessageDialog dialog(message, false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO, true);
+            dialog.set_title(_("Reassign shortcut?"));
+            dialog.set_secondary_text(_("Are you sure you want to reassign this shortcut?"));
+            dialog.set_transient_for(*dynamic_cast<Gtk::Window *>(get_toplevel()));
+            int response = dialog.run();
+            if (response != Gtk::RESPONSE_YES) {
+                return;
+            }
+        }
 
         // Delete current shortcut if it existed
         sp_shortcut_delete_from_file(id.c_str(), current_shortcut_id);
