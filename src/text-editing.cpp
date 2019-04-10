@@ -356,10 +356,21 @@ static SPObject* split_text_object_tree_at(SPObject *split_obj, unsigned char_in
         Inkscape::GC::release(new_node);
         split_attributes(split_obj, split_obj->getNext(), char_index);
         return split_obj->getNext();
+    } else  if (!SP_IS_TSPAN(split_obj) &&
+                !SP_IS_FLOWTSPAN(split_obj) &&
+                !SP_IS_STRING(split_obj)) {
+        std::cerr << "split_text_object_tree_at: Illegal split object type! (Illegal document structure.)" << std::endl;
+        return nullptr;
     }
 
     unsigned char_count_before = sum_sibling_text_lengths_before(split_obj);
     SPObject *duplicate_obj = split_text_object_tree_at(split_obj->parent, char_index + char_count_before);
+
+    if (duplicate_obj == nullptr) {
+        // Illegal document structure (no line break object).
+        return nullptr;
+    }
+
     // copy the split node
     Inkscape::XML::Node *new_node = duplicate_node_without_children(xml_doc, split_obj->getRepr());
     duplicate_obj->getRepr()->appendChild(new_node);
@@ -407,7 +418,7 @@ Inkscape::Text::Layout::iterator sp_te_insert_line (SPItem *item, Inkscape::Text
 
     if (split_obj == nullptr || is_line_break_object(split_obj)) {
         if (split_obj == nullptr) split_obj = item->lastChild();
-        
+
         if (SP_IS_TREF(split_obj)) {
             desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, tref_edit_message);
             return position;
@@ -420,6 +431,7 @@ Inkscape::Text::Layout::iterator sp_te_insert_line (SPItem *item, Inkscape::Text
             Inkscape::GC::release(new_node);
         }
     } else if (SP_IS_STRING(split_obj)) {
+
         // If the parent is a tref, editing on this particular string is disallowed.
         if (SP_IS_TREF(split_obj->parent)) {
             desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, tref_edit_message);
@@ -431,7 +443,14 @@ Inkscape::Text::Layout::iterator sp_te_insert_line (SPItem *item, Inkscape::Text
         for (Glib::ustring::iterator it = string->begin() ; it != split_text_iter ; ++it)
             char_index++;
         // we need to split the entire text tree into two
-        SPString *new_string = SP_STRING(split_text_object_tree_at(split_obj, char_index));
+
+        SPObject *object = split_text_object_tree_at(split_obj, char_index);
+        if (object == nullptr) {
+            // Illegal document structure
+            return position;
+        }
+
+        SPString *new_string = SP_STRING(object);
         new_string->getRepr()->setContent(&*split_text_iter.base());   // a little ugly
         string->erase(split_text_iter, string->end());
         split_obj->getRepr()->setContent(string->c_str());
