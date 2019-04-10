@@ -166,7 +166,7 @@ Application::create(const char *argv0, bool use_gui)
    if (!Application::exists()) {
         new Application(argv0, use_gui);
     } else {
-        g_assert_not_reached();
+       // g_assert_not_reached();  Can happen with InkscapeApplication
     }
 }
 
