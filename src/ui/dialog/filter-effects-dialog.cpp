@@ -254,8 +254,8 @@ public:
         _s2.signal_value_changed().connect(signal_attr_changed().make_slot());
 
         set_spacing(4);
-        pack_start(_s1, false, false);
-        pack_start(_s2, false, false);
+        pack_end(_s2, false, false);
+        pack_end(_s1, false, false);
     }
 
     Inkscape::UI::Widget::SpinButton& get_spinbutton1()
