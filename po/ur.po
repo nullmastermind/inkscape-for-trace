@@ -36,7 +36,7 @@ msgstr "اسكیلیبل ویكٹر گرافیكس امیجس تخلیق اور 
 
 #: ../org.inkscape.Inkscape.desktop.in.h:5
 msgid "image;editor;vector;drawing;"
-msgstr ""
+msgstr "تصویر؛ ایڈیٹر؛ سمتیہ؛ ڈرائنگ"
 
 #: ../org.inkscape.Inkscape.desktop.in.h:6
 #, fuzzy
@@ -1640,7 +1640,7 @@ msgstr ""
 
 #: ../share/filters/filters.svg.h:594
 msgid "Basic Diffuse Bump"
-msgstr ""
+msgstr "بنیادی داففوسی ٹکر"
 
 #: ../share/filters/filters.svg.h:596
 #, fuzzy
@@ -1649,7 +1649,7 @@ msgstr " اثرات نكالیں"
 
 #: ../share/filters/filters.svg.h:598
 msgid "Basic Specular Bump"
-msgstr ""
+msgstr "بنیادی چمکدار ٹکر"
 
 #: ../share/filters/filters.svg.h:600
 #, fuzzy
@@ -1658,11 +1658,11 @@ msgstr "اسپیكولر اكسپوننٹ"
 
 #: ../share/filters/filters.svg.h:602
 msgid "Basic Two Lights Bump"
-msgstr ""
+msgstr "بنیادی دو روشنی کا ٹکرانا"
 
 #: ../share/filters/filters.svg.h:604
 msgid "Two types of lighting emboss effect"
-msgstr ""
+msgstr "روشنی کی دو قسمیں اثر ابھاریں"
 
 #: ../share/filters/filters.svg.h:606
 #, fuzzy
@@ -1671,7 +1671,7 @@ msgstr "كینوس"
 
 #: ../share/filters/filters.svg.h:608 ../share/filters/filters.svg.h:616
 msgid "Painting canvas emboss effect"
-msgstr ""
+msgstr "پینٹنگ کینوس ابھاریں اثر"
 
 #: ../share/filters/filters.svg.h:610
 #, fuzzy
@@ -1689,7 +1689,7 @@ msgstr ""
 
 #: ../share/filters/filters.svg.h:618
 msgid "Paper Bump"
-msgstr ""
+msgstr "کاغذ ٹکر"
 
 #: ../share/filters/filters.svg.h:620
 #, fuzzy
@@ -1708,11 +1708,11 @@ msgstr "پاتھس میں متن كو تبدیل كریں"
 
 #: ../share/filters/filters.svg.h:626
 msgid "Blend Opposites"
-msgstr ""
+msgstr "فریقین مرکب"
 
 #: ../share/filters/filters.svg.h:628
 msgid "Blend an image with its hue opposite"
-msgstr ""
+msgstr "اس کا رنگ مخالف کے ساتھ ایک تصویر مرکب"
 
 #: ../share/filters/filters.svg.h:630
 #, fuzzy
@@ -1721,7 +1721,7 @@ msgstr "ہیو روٹیٹ"
 
 #: ../share/filters/filters.svg.h:632
 msgid "Fades hue progressively to white"
-msgstr ""
+msgstr "سفید کو درجہ بہ رنگ مدھم"
 
 #: ../share/filters/filters.svg.h:634
 #: ../src/extension/internal/bitmap/swirl.cpp:38
@@ -1748,7 +1748,7 @@ msgstr "پوائنٹی لسٹ HSL سینسیٹو ٹرانسپرسی دیتا ہ�
 
 #: ../share/filters/filters.svg.h:642
 msgid "Silhouette Marbled"
-msgstr ""
+msgstr "سنگ مرمر کی silhouette اپنی مرضی"
 
 #: ../share/filters/filters.svg.h:644
 msgid "Basic noise transparency texture"
@@ -1771,7 +1771,7 @@ msgstr "كینوس شفافیت"
 
 #: ../share/filters/filters.svg.h:652
 msgid "Adds a white opaque background"
-msgstr ""
+msgstr "ایک سفید مبہم پس منظر کا اضافہ کرتا ہے"
 
 #: ../share/filters/filters.svg.h:654
 #, fuzzy
@@ -1782,35 +1782,36 @@ msgstr "بلر موڈ "
 msgid ""
 "Overlays two copies with different blur amounts and modifiable blend and "
 "composite"
-msgstr ""
+msgstr "وارلایس دو نقول سے مختلف مقدار اور مودافیابلی مرکب اور  کلنک"
+"composite"
 
 #: ../share/filters/filters.svg.h:658
 msgid "Image Drawing Basic"
-msgstr ""
+msgstr "تصویر ڈرائنگ بنیادی"
 
 #: ../share/filters/filters.svg.h:660
 msgid "Enhance and redraw color edges in 1 bit black and white"
-msgstr ""
+msgstr "کو بڑھانے کے لئے اور میں 1 بٹ سیاہ اور سفید رنگ کے کناروں رادراو"
 
 #: ../share/filters/filters.svg.h:662
 msgid "Poster Draw"
-msgstr ""
+msgstr "پوسٹر ڈرا"
 
 #: ../share/filters/filters.svg.h:664
 msgid "Enhance and redraw edges around posterized areas"
-msgstr ""
+msgstr "کو بڑھانے اور کناروں پوسٹراید علاقوں کے ارد گرد ریڈراو"
 
 #: ../share/filters/filters.svg.h:666
 msgid "Cross Noise Poster"
-msgstr ""
+msgstr "شور پوسٹر پار"
 
 #: ../share/filters/filters.svg.h:668
 msgid "Overlay with a small scale screen like noise"
-msgstr ""
+msgstr "شور کی طرح ایک چھوٹے پیمانے پر سکرین کے ساتھ پوشش"
 
 #: ../share/filters/filters.svg.h:670
 msgid "Cross Noise Poster B"
-msgstr ""
+msgstr "شور پوسٹر ب کراس"
 
 #: ../share/filters/filters.svg.h:672
 #, fuzzy
@@ -1824,15 +1825,15 @@ msgstr "رنگ كو چسپاں كریں"
 
 #: ../share/filters/filters.svg.h:678
 msgid "Poster Rough"
-msgstr ""
+msgstr "خراب پوسٹر"
 
 #: ../share/filters/filters.svg.h:680
 msgid "Adds roughness to one of the two channels of the Poster paint filter"
-msgstr ""
+msgstr "ایک پوسٹر پینٹ فلٹر کے دو چینلز کی "Adds ناہمواری"
 
 #: ../share/filters/filters.svg.h:682
 msgid "Alpha Monochrome Cracked"
-msgstr ""
+msgstr "الفا مونوکروم کارروائیاں کر رہے تھے"
 
 #: ../share/filters/filters.svg.h:684 ../share/filters/filters.svg.h:688
 #: ../share/filters/filters.svg.h:692 ../share/filters/filters.svg.h:704
@@ -1872,7 +1873,7 @@ msgstr "كم اسكیل میں گریننیس جوڑیں"
 
 #: ../share/filters/filters.svg.h:702
 msgid "Duotone Turbulent"
-msgstr ""
+msgstr "دووٹونی ہنگامہ خیز"
 
 #: ../share/filters/filters.svg.h:706
 #, fuzzy
@@ -1901,7 +1902,7 @@ msgstr "لائٹ سورس:"
 
 #: ../share/filters/filters.svg.h:720
 msgid "Uses vertical specular light to draw lines"
-msgstr ""
+msgstr "عمودی چمکدار روشنی لکیریں کھینچنے کے لیے استعمال کرتا ہے"
 
 #: ../share/filters/filters.svg.h:722
 msgid "Liquid"
@@ -1954,7 +1955,7 @@ msgstr "كٹی ہوئی دھات"
 
 #: ../share/filters/filters.svg.h:744
 msgid "Satiny metal surface effect"
-msgstr ""
+msgstr ""Satiny دھاتی سطح اثر"
 
 #: ../share/filters/filters.svg.h:746
 #, fuzzy
@@ -2026,7 +2027,7 @@ msgstr "رنگین كندہ كاری"
 
 #: ../share/filters/filters.svg.h:776
 msgid "Satiny and embossed contour effect"
-msgstr ""
+msgstr "ساٹانی اور ابھرے احاطہ اثر"
 
 #: ../share/filters/filters.svg.h:778
 #, fuzzy
@@ -2035,7 +2036,7 @@ msgstr "تیز كریں"
 
 #: ../share/filters/filters.svg.h:780
 msgid "Unrealistic reflections with sharp edges"
-msgstr ""
+msgstr "غیر حقیقی متعلق تیز کناروں کے ساتھ"
 
 #: ../share/filters/filters.svg.h:782
 #, fuzzy
@@ -2044,7 +2045,7 @@ msgstr "فلیكس دھات"
 
 #: ../share/filters/filters.svg.h:784
 msgid "Deep and dark metal shading"
-msgstr ""
+msgstr "گہرے اور تاریک دھاتی شیڈنگ"
 
 #: ../share/filters/filters.svg.h:786
 #, fuzzy
@@ -2053,7 +2054,7 @@ msgstr "الومینیم"
 
 #: ../share/filters/filters.svg.h:788
 msgid "Satiny aluminium effect with embossing"
-msgstr ""
+msgstr "ایمبوسسانگ کے ساتھ ساٹانی المونیم کا اثر"
 
 #: ../share/filters/filters.svg.h:790
 #, fuzzy
@@ -2082,23 +2083,23 @@ msgstr "الفا نقاشی"
 
 #: ../share/filters/filters.svg.h:800
 msgid "Carving emboss effect"
-msgstr ""
+msgstr "نقش ابھاریں اثر"
 
 #: ../share/filters/filters.svg.h:802
 msgid "Chromolitho Alternate"
-msgstr ""
+msgstr "چرومولاٹہو متبادل"
 
 #: ../share/filters/filters.svg.h:804
 msgid "Old chromolithographic effect"
-msgstr ""
+msgstr "پرانے چرومولاٹہوگراپہاک اثر"
 
 #: ../share/filters/filters.svg.h:806
 msgid "Convoluted Bump"
-msgstr ""
+msgstr "Convoluted ٹکر"
 
 #: ../share/filters/filters.svg.h:808
 msgid "Convoluted emboss effect"
-msgstr ""
+msgstr "اونوولوٹید ابھاریں اثر"
 
 #: ../share/filters/filters.svg.h:810
 #, fuzzy
@@ -2107,15 +2108,15 @@ msgstr "ڈائورجنس"
 
 #: ../share/filters/filters.svg.h:812
 msgid "Cut out, add inner shadow and colorize some parts of an image"
-msgstr ""
+msgstr "کاٹ، اندرونی سایہ کا ا ضافہ کریں اور ایک تصویر کے کچھ حصوں کو کالورای"
 
 #: ../share/filters/filters.svg.h:814
 msgid "Litho"
-msgstr ""
+msgstr "لاٹہو"
 
 #: ../share/filters/filters.svg.h:816
 msgid "Create a two colors lithographic effect"
-msgstr ""
+msgstr "ایک دو رنگ سنگی طباعت کا اثر پیدا"
 
 #: ../share/filters/filters.svg.h:818
 #, fuzzy
@@ -2124,7 +2125,7 @@ msgstr "سیان چینل"
 
 #: ../share/filters/filters.svg.h:820
 msgid "Colorize separately the three color channels"
-msgstr ""
+msgstr "الگ الگ تین رنگ چینلز کولورازا"
 
 #: ../share/filters/filters.svg.h:822
 #, fuzzy
@@ -2133,7 +2134,7 @@ msgstr "روشنی مٹانے والا"
 
 #: ../share/filters/filters.svg.h:824
 msgid "Create a semi transparent posterized image"
-msgstr ""
+msgstr "ایک نیم شفاف پوسٹراید نقش بنائیں"
 
 #: ../share/filters/filters.svg.h:826
 #, fuzzy
@@ -2142,15 +2143,15 @@ msgstr "كروم"
 
 #: ../share/filters/filters.svg.h:828
 msgid "Like Duochrome but with three colors"
-msgstr ""
+msgstr "دووچرومی کی طرح لیکن تین رنگوں کے ساتھ"
 
 #: ../share/filters/filters.svg.h:830
 msgid "Simulate CMY"
-msgstr ""
+msgstr "کی پہ"
 
 #: ../share/filters/filters.svg.h:832
 msgid "Render Cyan, Magenta and Yellow channels with a colorizable background"
-msgstr ""
+msgstr "ایک کالوریزابلی پس منظر کے ساتھ لگائے گئے لاجوردی، ماگانت اور زرد چینل"
 
 #: ../share/filters/filters.svg.h:834
 #, fuzzy
@@ -2168,7 +2169,7 @@ msgstr ""
 
 #: ../share/filters/filters.svg.h:840
 msgid "Converts blurred contour to posterized steps"
-msgstr ""
+msgstr "نومسلم پوسٹیراید اقدام کو صورت دھندلاپن"
 
 #: ../share/filters/filters.svg.h:842
 #, fuzzy
