@@ -317,6 +317,9 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                         guide->moveto(guide->getPoint(), false);
                         guide->set_normal(guide->getNormal(), false);
                         sp_guide_remove(guide);
+
+                        Glib::wrap(GTK_WIDGET(desktop->getCanvas()))->get_window()->set_cursor(desktop->event_context->cursor);
+
                         DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE,
                                      _("Delete guide"));
                     }
@@ -377,6 +380,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                     DocumentUndo::done(doc, SP_VERB_NONE, _("Delete guide"));
                     ret = TRUE;
                     sp_event_context_discard_delayed_snap_event(desktop->event_context);
+                    Glib::wrap(GTK_WIDGET(desktop->getCanvas()))->get_window()->set_cursor(desktop->event_context->cursor);
                     break;
                 }
                 case GDK_KEY_Shift_L:
@@ -401,7 +405,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                 case GDK_KEY_Shift_R:
                 {
                     GdkDisplay *display      = gdk_display_get_default();
-                    GdkCursor  *guide_cursor = gdk_cursor_new_for_display(display, GDK_EXCHANGE);
+                    GdkCursor  *guide_cursor = gdk_cursor_new_for_display(display, GDK_HAND1);
                     gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(desktop->getCanvas())), guide_cursor);
                     g_object_unref(guide_cursor);
                     break;
