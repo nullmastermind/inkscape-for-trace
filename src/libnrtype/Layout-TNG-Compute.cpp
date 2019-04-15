@@ -1894,7 +1894,7 @@ bool Layout::Calculator::calculate()
             // know how to find the top of the box from the 'y' position until we have found the
             // line height parameters for the given line (after calling _findChunksForLine() just
             // above).
-            if (para.first_input_index == 0) {
+            if (para.first_input_index == 0 && (_flow.wrap_mode == WRAP_NONE)) {
 
                 // Calculate new top of box... given specified baseline.
                 double top_of_line_box = _scanline_maker->yCoordinate(); // Set in constructor.

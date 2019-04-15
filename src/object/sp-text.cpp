@@ -570,6 +570,11 @@ void SPText::_buildLayoutInit()
             layout.appendWrapShape( uncross );
 
             delete shape;
+
+        } else if (style->white_space.value == SP_CSS_WHITE_SPACE_PRE     ||
+                   style->white_space.value == SP_CSS_WHITE_SPACE_PREWRAP ||
+                   style->white_space.value == SP_CSS_WHITE_SPACE_PRELINE ) {
+            layout.wrap_mode = Inkscape::Text::Layout::WRAP_WHITE_SPACE;
         }
 
     } // if (style)
