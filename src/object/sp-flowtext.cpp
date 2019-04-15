@@ -338,6 +338,8 @@ void SPFlowtext::_buildLayoutInput(SPObject *root, Shape const *exclusion_shape,
 
     if (dynamic_cast<SPFlowpara *>(root)) {
 
+        layout.wrap_mode = Inkscape::Text::Layout::WRAP_SHAPE_INSIDE;
+
         layout.strut.reset();
         if (style) {
             font_instance *font = font_factory::Default()->FaceFromStyle( style );
