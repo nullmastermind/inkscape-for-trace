@@ -1588,6 +1588,9 @@ SPDesktopWidget::isToolboxButtonActive (const gchar* id)
     } else if ( GTK_IS_TOGGLE_ACTION(thing) ) {
         GtkToggleAction* act = GTK_TOGGLE_ACTION(thing);
         isActive = gtk_toggle_action_get_active( act ) != 0;
+    } else if ( GTK_IS_TOGGLE_TOOL_BUTTON(thing) ) {
+        GtkToggleToolButton *b = GTK_TOGGLE_TOOL_BUTTON(thing);
+        isActive = gtk_toggle_tool_button_get_active( b ) != 0;
     } else {
         //g_message( "Item for {%s} is of an unsupported type", id );
     }
