@@ -59,7 +59,7 @@ sp_svg_transform_read(gchar const *str, Geom::Affine *transform)
         if (str[idx] != '(') return false;
         idx++;
 
-        for (n_args = 0; ; n_args++) {
+        for (n_args = 0; n_args < 6; n_args++) {
             char c;
             char *end_ptr;
 
