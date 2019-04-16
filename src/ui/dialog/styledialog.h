@@ -46,11 +46,13 @@ namespace Dialog {
 class StyleDialog : public UI::Widget::Panel
 {
 public:
-    StyleDialog();
     ~StyleDialog() override;
+    // No default constructor, noncopyable, nonassignable
+    StyleDialog(bool stylemode = false);
+    StyleDialog(StyleDialog const &d) = delete;
+    StyleDialog operator=(StyleDialog const &d) = delete;
 
     static StyleDialog &getInstance() { return *new StyleDialog(); }
-    Gtk::TreeView _treeView;
   private:
     // Monitor <style> element for changes.
     class NodeObserver;
@@ -88,7 +90,7 @@ public:
 
     // TreeView
     Glib::RefPtr<TreeStore> _store;
-
+    Gtk::TreeView _treeView;
     // Widgets
     Gtk::Paned _paned;
     Gtk::Box   _mainBox;
@@ -116,6 +118,7 @@ public:
 
     // Variables
     bool _updating;  // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
+    bool _stylemode;  // Show dialog of items in selector widget or in css styles in CSS dialog
     Inkscape::XML::Node *_textNode; // Track so we know when to add a NodeObserver.
 
     // Signals and handlers - External
@@ -138,6 +141,7 @@ public:
     void _addSelector();
     void _delSelector();
     bool _handleButtonEvent(GdkEventButton *event);
+    //bool _showStyleSelectors(const Gtk::TreeModel::iterator& iter, std::vector<Gtk::TreeModel::Row> toshow);
     void _buttonEventsSelectObjs(GdkEventButton *event);
     void _selectRow(); // Select row in tree when selection changed.
 
