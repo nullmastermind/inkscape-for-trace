@@ -77,6 +77,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     line_width(_("Line width"), _("Dimension line width. DIN standard: 0.25 or 0.35 mm"), "line_width", &wr, this, 0.25),
     scale(_("Scale"), _("Scaling factor"), "scale", &wr, this, 1.0),
     
+    // TRANSLATORS: Don't translate "{measure}" and "{unit}" variables.
     format(_("Label format"), _("Label text format, available variables: {measure}, {unit}"), "format", &wr, this,"{measure}{unit}"),
     blacklist(_("Blacklist segments"), _("Comma-separated list of indices of segments that should not be measured. You can use another LPE with different parameters to measure these."), "blacklist", &wr, this,""),
     whitelist(_("Invert blacklist"), _("Use the blacklist as whitelist"), "whitelist", &wr, this, false),
