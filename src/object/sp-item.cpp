@@ -502,6 +502,9 @@ void SPItem::set(SPAttributeEnum key, gchar const* value) {
         case SP_ATTR_TRANSFORM_CENTER_Y:
             if (value) {
                 item->transform_center_y = g_strtod(value, nullptr);
+                if (SP_ACTIVE_DESKTOP) {
+                    item->transform_center_y *= -SP_ACTIVE_DESKTOP->yaxisdir();
+                }
             } else {
                 item->transform_center_y = 0;
             }
@@ -740,9 +743,13 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
             sp_repr_set_svg_double (repr, "inkscape:transform-center-x", item->transform_center_x);
         else
             repr->setAttribute ("inkscape:transform-center-x", nullptr);
-        if (item->transform_center_y != 0)
-            sp_repr_set_svg_double (repr, "inkscape:transform-center-y", item->transform_center_y);
-        else
+        if (item->transform_center_y != 0) {
+            auto y = item->transform_center_y;
+            if (SP_ACTIVE_DESKTOP) {
+                y *= -SP_ACTIVE_DESKTOP->yaxisdir();
+            }
+            sp_repr_set_svg_double (repr, "inkscape:transform-center-y", y);
+        } else
             repr->setAttribute ("inkscape:transform-center-y", nullptr);
     }
 
