@@ -15,8 +15,14 @@
 #ifndef SEEN_UI_DIALOGS_STYLEDIALOG_H
 #define SEEN_UI_DIALOGS_STYLEDIALOG_H
 
-#include "desktop.h"
-#include "message.h"
+#include <ui/widget/panel.h>
+#include <gtkmm/treeview.h>
+#include <gtkmm/treestore.h>
+#include <gtkmm/treemodelfilter.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/dialog.h>
+#include <gtkmm/treeselection.h>
+#include <gtkmm/paned.h>
 
 #include <glibmm/regex.h>
 #include <gtkmm/dialog.h>
@@ -52,7 +58,7 @@ public:
     StyleDialog(StyleDialog const &d) = delete;
     StyleDialog operator=(StyleDialog const &d) = delete;
 
-    static StyleDialog &getInstance() { return *new StyleDialog(); }
+    static StyleDialog &getInstance() { return *new StyleDialog(false); }
   private:
     // Monitor <style> element for changes.
     class NodeObserver;
@@ -67,18 +73,20 @@ public:
     // Data structure
     class CssColumns : public Gtk::TreeModel::ColumnRecord {
     public:
-        CssColumns() {
-            add(deleteButton);
-            add(label);
-            add(_styleAttrVal);
-            add(label_color);
-            add(attr_color);
+        ModelColumns() {
+            add(_colSelector);
+            add(_colExpand);
+            add(_colType);
+            add(_colObj);
+            add(_colProperties);
+            add(_colVisible);
         }
-        Gtk::TreeModelColumn<bool> deleteButton;
-        Gtk::TreeModelColumn<Glib::ustring> label;
-        Gtk::TreeModelColumn<Glib::ustring> _styleAttrVal;
-        Gtk::TreeModelColumn<Gdk::RGBA> label_color;
-        Gtk::TreeModelColumn<Gdk::RGBA> attr_color;
+        Gtk::TreeModelColumn<Glib::ustring> _colSelector;       // Selector or matching object id.
+        Gtk::TreeModelColumn<bool> _colExpand;                  // Open/Close store row.
+        Gtk::TreeModelColumn<gint> _colType;                    // Selector row or child object row.
+        Gtk::TreeModelColumn<std::vector<SPObject *> > _colObj; // List of matching objects.
+        Gtk::TreeModelColumn<Glib::ustring> _colProperties;     // List of properties.
+        Gtk::TreeModelColumn<bool> _colVisible;                                       // Make visible or not.
     };
     CssColumns _cssColumns;
 
@@ -89,6 +97,7 @@ public:
     std::unique_ptr<Inkscape::MessageContext> _message_context;
 
     // TreeView
+    Glib::RefPtr<Gtk::TreeModelFilter> _modelfilter;
     Glib::RefPtr<TreeStore> _store;
     Gtk::TreeView _treeView;
     // Widgets
