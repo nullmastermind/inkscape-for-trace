@@ -36,7 +36,7 @@ msgstr "اسكیلیبل ویكٹر گرافیكس امیجس تخلیق اور 
 
 #: ../org.inkscape.Inkscape.desktop.in.h:5
 msgid "image;editor;vector;drawing;"
-msgstr "تصویر؛ ایڈیٹر؛ سمتیہ؛ ڈرائنگ"
+msgstr "تصویر; ایڈیٹر; سمتیہ; ڈرائنگ;"
 
 #: ../org.inkscape.Inkscape.desktop.in.h:6
 #, fuzzy
