@@ -1829,7 +1829,7 @@ msgstr "خراب پوسٹر"
 
 #: ../share/filters/filters.svg.h:680
 msgid "Adds roughness to one of the two channels of the Poster paint filter"
-msgstr "ایک پوسٹر پینٹ فلٹر کے دو چینلز کی "Adds ناہمواری"
+msgstr "ایک پوسٹر پینٹ فلٹر کے دو چینلز کی  ناہمواری"
 
 #: ../share/filters/filters.svg.h:682
 msgid "Alpha Monochrome Cracked"
@@ -1955,7 +1955,7 @@ msgstr "كٹی ہوئی دھات"
 
 #: ../share/filters/filters.svg.h:744
 msgid "Satiny metal surface effect"
-msgstr ""Satiny دھاتی سطح اثر"
+msgstr "Satiny دھاتی سطح اثر"
 
 #: ../share/filters/filters.svg.h:746
 #, fuzzy
