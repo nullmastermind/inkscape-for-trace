@@ -205,6 +205,26 @@ void sp_file_convert_text_baseline_spacing(SPDocument *doc)
     sp_file_text_run_recursive(fix_update, doc->getRoot());
 }
 
+void _remove_style_on_empty_lines(SPObject *o)
+{
+    std::vector<SPObject *> cl = o->childList(false);
+    for (std::vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci) {
+        if (SP_IS_TSPAN(*ci) and (*ci)->childList(false).empty() and (*ci)->getAttribute("sodipodi:role")=="line" ) {
+	    (*ci)->style->clear();
+	}
+    }
+}
+
+
+
+void sp_file_remove_style_on_empty_lines(SPDocument *doc)
+{
+    sp_file_text_run_recursive(_remove_style_on_empty_lines, doc->getRoot());
+    sp_file_text_run_recursive(fix_update, doc->getRoot());
+}
+
+
+
 void sp_file_convert_font_name(SPDocument *doc)
 {
     sp_file_text_run_recursive(fix_font_name, doc->getRoot());

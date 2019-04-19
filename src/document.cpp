@@ -450,6 +450,11 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
         sp_file_convert_font_name(document);
     }
 
+    /** Fix first line spacing in legacy documents (pre-1.0 files) **/
+    if ( sp_version_inside_range( document->root->version.inkscape, 0, 1, 1, 0 ) ) {
+        sp_file_remove_style_on_empty_lines(document);
+    }
+
     /** Fix dpi (pre-92 files). With GUI fixed in Inkscape::Application::fix_document. **/
     if ( !(INKSCAPE.use_gui()) && sp_version_inside_range( document->root->version.inkscape, 0, 1, 0, 92 ) ) {
         sp_file_convert_dpi(document);

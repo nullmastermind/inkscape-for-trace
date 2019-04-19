@@ -196,6 +196,7 @@ void sp_file_vacuum (SPDocument *doc);
 void sp_file_convert_text_baseline_spacing(SPDocument *doc);
 void sp_file_convert_font_name(SPDocument *doc);
 void sp_file_convert_dpi(SPDocument *doc);
+void sp_file_remove_style_on_empty_lines(SPDocument *doc);
 enum File_DPI_Fix { FILE_DPI_UNCHANGED = 0, FILE_DPI_VIEWBOX_SCALED, FILE_DPI_DOCUMENT_SCALED };
 extern int sp_file_convert_dpi_method_commandline;
 
