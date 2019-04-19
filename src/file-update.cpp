@@ -209,9 +209,10 @@ void _remove_style_on_empty_lines(SPObject *o)
 {
     std::vector<SPObject *> cl = o->childList(false);
     for (std::vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci) {
-        if (SP_IS_TSPAN(*ci) and (*ci)->childList(false).empty() and (*ci)->getAttribute("sodipodi:role")=="line" ) {
-	    (*ci)->style->clear();
-	}
+        if (SP_IS_TSPAN(*ci) and (*ci)->childList(false).empty() and is_line(*ci)) {
+            (*ci)->removeAttribute("style");
+            (*ci)->updateRepr();
+        }
     }
 }
 
