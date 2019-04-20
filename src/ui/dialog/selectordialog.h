@@ -18,6 +18,7 @@
 #include <ui/widget/panel.h>
 #include <gtkmm/treeview.h>
 #include <gtkmm/treestore.h>
+#include <gtkmm/treemodelfilter.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/treeselection.h>
@@ -47,12 +48,11 @@ class SelectorDialog : public Widget::Panel {
 public:
     ~SelectorDialog() override;
     // No default constructor, noncopyable, nonassignable
-    SelectorDialog();
+    SelectorDialog(bool stylemode = false);
     SelectorDialog(SelectorDialog const &d) = delete;
     SelectorDialog operator=(SelectorDialog const &d) = delete;
 
-    static SelectorDialog &getInstance() { return *new SelectorDialog(); }
-
+    static SelectorDialog &getInstance() { return *new SelectorDialog(false); }
   private:
     // Monitor <style> element for changes.
     class NodeObserver;
@@ -74,12 +74,14 @@ public:
             add(_colType);
             add(_colObj);
             add(_colProperties);
+            add(_colVisible);
         }
         Gtk::TreeModelColumn<Glib::ustring> _colSelector;       // Selector or matching object id.
         Gtk::TreeModelColumn<bool> _colExpand;                  // Open/Close store row.
         Gtk::TreeModelColumn<gint> _colType;                    // Selector row or child object row.
         Gtk::TreeModelColumn<std::vector<SPObject *> > _colObj; // List of matching objects.
         Gtk::TreeModelColumn<Glib::ustring> _colProperties;     // List of properties.
+        Gtk::TreeModelColumn<bool> _colVisible;                                       // Make visible or not.
     };
     ModelColumns _mColumns;
 
@@ -98,16 +100,16 @@ public:
         void on_row_deleted(const TreeModel::Path& path) override;
 
     public:
-        static Glib::RefPtr<SelectorDialog::TreeStore> create(SelectorDialog *selectordialog);
+        static Glib::RefPtr<SelectorDialog::TreeStore> create(SelectorDialog *styledialog);
 
     private:
         SelectorDialog *_selectordialog;
     };
 
     // TreeView
-    Gtk::TreeView _treeView;
+    Glib::RefPtr<Gtk::TreeModelFilter> _modelfilter;
     Glib::RefPtr<TreeStore> _store;
-
+    Gtk::TreeView _treeView;
     // Widgets
     Gtk::Paned _paned;
     Gtk::Box   _mainBox;
@@ -135,6 +137,7 @@ public:
 
     // Variables
     bool _updating;  // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
+    bool _stylemode;  // Show dialog of items in selector widget or in css styles in CSS dialog
     Inkscape::XML::Node *_textNode; // Track so we know when to add a NodeObserver.
 
     // Signals and handlers - External
@@ -157,6 +160,7 @@ public:
     void _addSelector();
     void _delSelector();
     bool _handleButtonEvent(GdkEventButton *event);
+    //bool _showStyleSelectors(const Gtk::TreeModel::iterator& iter, std::vector<Gtk::TreeModel::Row> toshow);
     void _buttonEventsSelectObjs(GdkEventButton *event);
     void _selectRow(); // Select row in tree when selection changed.
 

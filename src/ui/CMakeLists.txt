@@ -133,9 +133,9 @@ set(ui_SRC
 	dialog/print-colors-preview-dialog.cpp
 	dialog/print.cpp
 	dialog/prototype.cpp
-	dialog/selectordialog.cpp
+    dialog/selectordialog.cpp
 	dialog/spellcheck.cpp
-    dialog/styledialog.cpp
+	dialog/styledialog.cpp
 	dialog/svg-fonts-dialog.cpp
         dialog/svg-preview.cpp
 	dialog/swatches.cpp
@@ -300,9 +300,9 @@ set(ui_SRC
 	dialog/print-colors-preview-dialog.h
 	dialog/print.h
 	dialog/prototype.h
-	dialog/selectordialog.h
+    dialog/selectordialog.h
 	dialog/spellcheck.h
-        dialog/styledialog.h
+	dialog/styledialog.h
 	dialog/svg-fonts-dialog.h
         dialog/svg-preview.h
 	dialog/swatches.h

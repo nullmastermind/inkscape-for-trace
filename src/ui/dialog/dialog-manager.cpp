@@ -125,8 +125,8 @@ DialogManager::DialogManager() {
         registerFactory("Swatches",            &create<SwatchesPanel,        FloatingBehavior>);
         registerFactory("TileDialog",          &create<ArrangeDialog,        FloatingBehavior>);
         registerFactory("Symbols",             &create<SymbolsDialog,        FloatingBehavior>);
-        registerFactory("StyleDialog",         &create<StyleDialog,          FloatingBehavior>);
-        registerFactory("SelectorDialog",      &create<SelectorDialog,       FloatingBehavior>);
+        registerFactory("SelectorDialog",      &create<SelectorDialog,          FloatingBehavior>);
+        registerFactory("StyleDialog",         &create<StyleDialog,            FloatingBehavior>);
 
 #if HAVE_POTRACE
         registerFactory("Trace",               &create<TraceDialog,          FloatingBehavior>);
@@ -167,8 +167,8 @@ DialogManager::DialogManager() {
         registerFactory("Swatches",            &create<SwatchesPanel,        DockBehavior>);
         registerFactory("TileDialog",          &create<ArrangeDialog,        DockBehavior>);
         registerFactory("Symbols",             &create<SymbolsDialog,        DockBehavior>);
-        registerFactory("StyleDialog",         &create<StyleDialog,          DockBehavior>);
         registerFactory("SelectorDialog",      &create<SelectorDialog,       DockBehavior>);
+        registerFactory("StyleDialog",         &create<StyleDialog,            DockBehavior>);
 
 #if HAVE_POTRACE
         registerFactory("Trace",               &create<TraceDialog,          DockBehavior>);
