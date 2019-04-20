@@ -739,9 +739,7 @@ void CssDialog::nameEdited (const Glib::ustring& path, const Glib::ustring& name
         if (obj) {
             for (auto & i : objVec) {
                 if (obj->getId() == i->getId()) {
-                    if (!_stylemode) {
-                        _treeView.get_selection()->select(row);
-                    }
+                    _treeView.get_selection()->select(row);
                     row[_mColumns._colVisible] = true;
                 } else if(_stylemode) {
                     row[_mColumns._colVisible] = false;
@@ -755,6 +753,7 @@ void CssDialog::nameEdited (const Glib::ustring& path, const Glib::ustring& name
     }
     if (_stylemode) {
         _modelfilter->refilter();
+        _treeView.get_selection()->unselect_all();
     }
 /*     if (_stylemode) {
         _store->foreach_iter(sigc::bind<std::vector<Gtk::TreeModel::Row> >(sigc::mem_fun(*this, &StyleDialog::_showStyleSelectors), toshow));
