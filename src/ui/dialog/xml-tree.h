@@ -214,8 +214,8 @@ private:
     SPXMLViewTree *tree;
     //SPXMLViewAttrList *attributes;
     AttrDialog *attributes;
-    CssDialog *styles;
-    StyleDialog *selectors;
+    StyleDialog *styles;
+    SelectorDialog *selectors;
 
     /* XML Node Creation pop-up window */
     Gtk::Entry *name_entry;
