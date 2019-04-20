@@ -131,7 +131,6 @@ StyleDialog::StyleDialog()
 }
 
 /**
- * @brief StyleDialog::~StyleDialog
  * Class destructor
  */
 StyleDialog::~StyleDialog()
@@ -153,7 +152,6 @@ void StyleDialog::_set_status_message(Inkscape::MessageType /*type*/, const gcha
 
 
 /**
- * @brief StyleDialog::setDesktop
  * @param desktop
  * This function sets the 'desktop' for the CSS pane.
  */
@@ -163,8 +161,6 @@ void StyleDialog::setDesktop(SPDesktop* desktop)
 }
 
 /**
- * @brief StyleDialog::setRepr
- *
  * Set the internal xml object that I'm working on right now.
  */
 void StyleDialog::setRepr(Inkscape::XML::Node *repr)
@@ -186,8 +182,6 @@ void StyleDialog::setRepr(Inkscape::XML::Node *repr)
 }
 
 /**
- * @brief StyleDialog::parseStyle
- *
  * Convert a style string into a vector map. This should be moved to style.cpp
  *
  */
@@ -211,8 +205,6 @@ std::map<Glib::ustring, Glib::ustring> StyleDialog::parseStyle(Glib::ustring sty
 }
 
 /**
- * @brief StyleDialog::compileStyle
- *
  * Turn a vector map back into a style string.
  *
  */
@@ -232,8 +224,6 @@ Glib::ustring StyleDialog::compileStyle(std::map<Glib::ustring, Glib::ustring> p
 
 
 /**
- * @brief StyleDialog::onAttrChanged
- *
  * This is called when the XML has an updated attribute (we only care about style)
  */
 void StyleDialog::onAttrChanged(Inkscape::XML::Node *repr, const gchar *name, const gchar *new_value)
@@ -294,8 +284,6 @@ void StyleDialog::css_reset_context(gint css)
 }
 
 /**
- * @brief StyleDialog::setStyleProperty
- *
  * Set or delete a single property in the style attribute.
  */
 bool StyleDialog::setStyleProperty(Glib::ustring name, Glib::ustring value)
@@ -325,8 +313,6 @@ bool StyleDialog::setStyleProperty(Glib::ustring name, Glib::ustring value)
 }
 
 /**
- * @brief StyleDialog::onPropertyDelete
- *
  * This function is a slot to signal_activated for '-' button panel.
  */
 void StyleDialog::onPropertyDelete(Glib::ustring path)
@@ -338,7 +324,6 @@ void StyleDialog::onPropertyDelete(Glib::ustring path)
 }
 
 /**
- * @brief StyleDialog::onPropertyCreate
  * This function is a slot to signal_clicked for '+' button panel.
  */
 bool StyleDialog::onPropertyCreate(GdkEventButton *event)
@@ -354,10 +339,7 @@ bool StyleDialog::onPropertyCreate(GdkEventButton *event)
 }
 
 /**
- * @brief StyleDialog::onKeyPressed
  * @param event_description
- * @return
- * Send an undo message and mark this point for undo
  */
 void StyleDialog::setUndo(Glib::ustring const &event_description)
 {
@@ -366,9 +348,8 @@ void StyleDialog::setUndo(Glib::ustring const &event_description)
 }
 
 /**
- * @brief StyleDialog::nameEdited
- * @param event
- * @return
+ * @param path
+ * @param name
  * Called when the name is edited in the TreeView editable column
  */
 void StyleDialog::nameEdited (const Glib::ustring& path, const Glib::ustring& name)

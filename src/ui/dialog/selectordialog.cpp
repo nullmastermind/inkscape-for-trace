@@ -31,8 +31,13 @@
 #include <map>
 #include <utility>
 
+<<<<<<< HEAD
 //#define DEBUG_SELECTORDIALOG
 //#define G_LOG_DOMAIN "SELECTORDIALOG"
+=======
+//#define DEBUG_selectorDialog
+//#define G_LOG_DOMAIN "selectorDialog"
+>>>>>>> Updating fixes on compiling
 
 using Inkscape::DocumentUndo;
 using Inkscape::Util::List;
@@ -53,7 +58,11 @@ namespace Dialog {
 class SelectorDialog::NodeObserver : public Inkscape::XML::NodeObserver {
 public:
     NodeObserver(SelectorDialog* selectorDialog) :
+<<<<<<< HEAD
         _selectorDialog(selectorDialog)
+=======
+        _selectordialog(selectorDialog)
+>>>>>>> Updating fixes on compiling
     {
         g_debug("SelectorDialog::NodeObserver: Constructor");
     };
@@ -62,7 +71,11 @@ public:
                                       Inkscape::Util::ptr_shared old_content,
                                       Inkscape::Util::ptr_shared new_content) override;
 
+<<<<<<< HEAD
     SelectorDialog * _selectorDialog;
+=======
+    SelectorDialog * _selectordialog;
+>>>>>>> Updating fixes on compiling
 };
 
 
@@ -73,9 +86,15 @@ SelectorDialog::NodeObserver::notifyContentChanged(
     Inkscape::Util::ptr_shared /*new_content*/ ) {
 
     g_debug("SelectorDialog::NodeObserver::notifyContentChanged");
+<<<<<<< HEAD
     _selectorDialog->_updating = false;
     _selectorDialog->_readStyleElement();
     _selectorDialog->_selectRow();
+=======
+    _selectordialog->_updating = false;
+    _selectordialog->_readStyleElement();
+    _selectordialog->_selectRow();
+>>>>>>> Updating fixes on compiling
 }
 
 
@@ -84,7 +103,11 @@ SelectorDialog::NodeObserver::notifyContentChanged(
 class SelectorDialog::NodeWatcher : public Inkscape::XML::NodeObserver {
 public:
     NodeWatcher(SelectorDialog* selectorDialog, Inkscape::XML::Node *repr) :
+<<<<<<< HEAD
         _selectorDialog(selectorDialog),
+=======
+        _selectordialog(selectorDialog),
+>>>>>>> Updating fixes on compiling
         _repr(repr)
     {
         g_debug("SelectorDialog::NodeWatcher: Constructor");
@@ -94,8 +117,13 @@ public:
                                    Inkscape::XML::Node &child,
                                    Inkscape::XML::Node */*prev*/ ) override
     {
+<<<<<<< HEAD
         if ( _selectorDialog && _repr ) {
             _selectorDialog->_nodeAdded( child );
+=======
+        if ( _selectordialog && _repr ) {
+            _selectordialog->_nodeAdded( child );
+>>>>>>> Updating fixes on compiling
         }
     }
 
@@ -103,8 +131,13 @@ public:
                                      Inkscape::XML::Node &child,
                                      Inkscape::XML::Node */*prev*/ ) override
     {
+<<<<<<< HEAD
         if ( _selectorDialog && _repr ) {
             _selectorDialog->_nodeRemoved( child );
+=======
+        if ( _selectordialog && _repr ) {
+            _selectordialog->_nodeRemoved( child );
+>>>>>>> Updating fixes on compiling
         }
     }
 
@@ -112,7 +145,11 @@ public:
                                          GQuark qname,
                                          Util::ptr_shared /*old_value*/,
                                          Util::ptr_shared /*new_value*/ ) override {
+<<<<<<< HEAD
         if ( _selectorDialog && _repr ) {
+=======
+        if ( _selectordialog && _repr ) {
+>>>>>>> Updating fixes on compiling
 
             // For the moment only care about attributes that are directly used in selectors.
             const gchar * cname = g_quark_to_string (qname );
@@ -122,12 +159,20 @@ public:
             }
 
             if ( name == "id" || name == "class" ) {
+<<<<<<< HEAD
                 _selectorDialog->_nodeChanged( node );
+=======
+                _selectordialog->_nodeChanged( node );
+>>>>>>> Updating fixes on compiling
             }
         }
     }
 
+<<<<<<< HEAD
     SelectorDialog * _selectorDialog;
+=======
+    SelectorDialog * _selectordialog;
+>>>>>>> Updating fixes on compiling
     Inkscape::XML::Node * _repr;  // Need to track if document changes.
 };
 
@@ -215,10 +260,17 @@ SelectorDialog::TreeStore::on_row_deleted(const TreeModel::Path& path)
 }
 
 
+<<<<<<< HEAD
 Glib::RefPtr<SelectorDialog::TreeStore> SelectorDialog::TreeStore::create(SelectorDialog *selectordialog)
 {
     SelectorDialog::TreeStore * store = new SelectorDialog::TreeStore();
     store->_selectordialog = selectordialog;
+=======
+Glib::RefPtr<SelectorDialog::TreeStore> SelectorDialog::TreeStore::create(SelectorDialog *selectorDialog)
+{
+    SelectorDialog::TreeStore * store = new SelectorDialog::TreeStore();
+    store->_selectordialog = selectorDialog;
+>>>>>>> Updating fixes on compiling
     store->set_column_types( store->_selectordialog->_mColumns );
     return Glib::RefPtr<SelectorDialog::TreeStore>( store );
 }
@@ -229,11 +281,20 @@ Glib::RefPtr<SelectorDialog::TreeStore> SelectorDialog::TreeStore::create(Select
  * adds selectors to treeview. _delSelector deletes the selector from the dialog.
  * Any addition/deletion of the selectors updates XML style element accordingly.
  */
+<<<<<<< HEAD
 SelectorDialog::SelectorDialog() :
     UI::Widget::Panel("/dialogs/style", SP_VERB_DIALOG_STYLE),
     _updating(false),
     _textNode(nullptr),
     _desktopTracker()
+=======
+SelectorDialog::SelectorDialog(bool stylemode) :
+    UI::Widget::Panel("/dialogs/style", SP_VERB_DIALOG_STYLE),
+    _updating(false),
+    _textNode(nullptr),
+    _desktopTracker(),
+    _stylemode(stylemode)
+>>>>>>> Updating fixes on compiling
 {
     g_debug("SelectorDialog::SelectorDialog");
 
@@ -243,9 +304,17 @@ SelectorDialog::SelectorDialog() :
     addRenderer->add_icon("edit-delete");
     addRenderer->add_icon("list-add");
     addRenderer->add_icon("object-locked");
+<<<<<<< HEAD
 
     _store = TreeStore::create(this);
     _treeView.set_model(_store);
+=======
+    
+    _store = TreeStore::create(this);
+    _modelfilter = Gtk::TreeModelFilter::create(_store);
+    _modelfilter->set_visible_column(_mColumns._colVisible);
+    _treeView.set_model(_modelfilter);
+>>>>>>> Updating fixes on compiling
     _treeView.set_headers_visible(true);
     _treeView.enable_model_drag_source();
     _treeView.enable_model_drag_dest( Gdk::ACTION_MOVE );
@@ -261,6 +330,7 @@ SelectorDialog::SelectorDialog() :
     _paned.set_orientation(Gtk::ORIENTATION_VERTICAL);
     _paned.pack1(_mainBox, Gtk::SHRINK);
     _mainBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
+<<<<<<< HEAD
     _mainBox.pack_start(_scrolledWindow, Gtk::PACK_EXPAND_WIDGET);
     _scrolledWindow.add(_treeView);
     _scrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
@@ -279,6 +349,27 @@ SelectorDialog::SelectorDialog() :
     _buttonBox.pack_start(*create, Gtk::PACK_SHRINK);
     _buttonBox.pack_start(*del, Gtk::PACK_SHRINK);
 
+=======
+    if (!_stylemode) {
+        _mainBox.pack_start(_scrolledWindow, Gtk::PACK_EXPAND_WIDGET);
+        _scrolledWindow.add(_treeView);
+        _scrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+        create = manage( new Gtk::Button() );
+        _styleButton(*create, "list-add", "Add a new CSS Selector");
+        create->signal_clicked().connect(sigc::mem_fun(*this, &SelectorDialog::_addSelector));
+
+        del = manage( new Gtk::Button() );
+        _styleButton(*del, "list-remove", "Remove a CSS Selector");
+        del->signal_clicked().connect(sigc::mem_fun(*this, &SelectorDialog::_delSelector));
+        del->set_sensitive(false);
+        _mainBox.pack_end(_buttonBox, Gtk::PACK_SHRINK);
+
+        _buttonBox.pack_start(*create, Gtk::PACK_SHRINK);
+        _buttonBox.pack_start(*del, Gtk::PACK_SHRINK);
+    } else {
+        _mainBox.pack_start(_treeView, Gtk::PACK_EXPAND_WIDGET);
+    }
+>>>>>>> Updating fixes on compiling
     _getContents()->pack_start(_paned, Gtk::PACK_EXPAND_WIDGET);
 
 
@@ -313,7 +404,11 @@ SelectorDialog::SelectorDialog() :
     _readStyleElement();
     _selectRow();
 
+<<<<<<< HEAD
     if (!_store->children().empty()) {
+=======
+    if (!_stylemode && !_store->children().empty()) {
+>>>>>>> Updating fixes on compiling
         del->set_sensitive(true);
     }
 
@@ -321,7 +416,10 @@ SelectorDialog::SelectorDialog() :
 
 
 /**
+<<<<<<< HEAD
  * @brief SelectorDialog::~SelectorDialog
+=======
+>>>>>>> Updating fixes on compiling
  * Class destructor
  */
 SelectorDialog::~SelectorDialog()
@@ -334,7 +432,10 @@ SelectorDialog::~SelectorDialog()
 
 
 /**
+<<<<<<< HEAD
  * @brief SelectorDialog::_styleTextNode
+=======
+>>>>>>> Updating fixes on compiling
  * @return Inkscape::XML::Node* pointing to a style element's text node.
  * Returns the style element's text node. If there is no style element, one is created.
  * Ditto for text node.
@@ -372,11 +473,19 @@ Inkscape::XML::Node* SelectorDialog::_getStyleTextNode()
         styleNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createElement("svg:style");
         textNode  = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
 
+<<<<<<< HEAD
         root->addChild(styleNode, nullptr);
         Inkscape::GC::release(styleNode);
 
         styleNode->appendChild(textNode);
         Inkscape::GC::release(textNode);
+=======
+        styleNode->appendChild(textNode);
+        Inkscape::GC::release(textNode);
+
+        root->addChild(styleNode, nullptr);
+        Inkscape::GC::release(styleNode);
+>>>>>>> Updating fixes on compiling
     }
 
     if (_textNode != textNode) {
@@ -390,7 +499,10 @@ Inkscape::XML::Node* SelectorDialog::_getStyleTextNode()
 
 
 /**
+<<<<<<< HEAD
  * @brief SelectorDialog::_readStyleElement
+=======
+>>>>>>> Updating fixes on compiling
  * Fill the Gtk::TreeStore from the svg:style element.
  */
 void SelectorDialog::_readStyleElement()
@@ -429,6 +541,11 @@ void SelectorDialog::_readStyleElement()
     // regex1->match(content, minfo);
 
     // Split on curly brackets. Even tokens are selectors, odd are values.
+<<<<<<< HEAD
+=======
+    std::cout << content << std::endl;
+    std::cout << "aaaaaaaaaaaaaaaaaaaaaaaaaa" << std::endl;
+>>>>>>> Updating fixes on compiling
     std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[}{]", content);
 
     // If text node is empty, return (avoids problem with negative below).
@@ -457,8 +574,12 @@ void SelectorDialog::_readStyleElement()
         coltype colType = SELECTOR;
         for (auto tok : tokensplus) {
             REMOVE_SPACES(tok);
+<<<<<<< HEAD
             if (SPAttributeRelSVG::isSVGElement(tok) || tok.find(" ") != -1 || tok[0] == '>' || tok[0] == '+' ||
                 tok[0] == '~' || tok[0] == '*' || tok.erase(0, 1).find(".") != -1) {
+=======
+            if (tok.find(" ") != -1 || tok.erase(0, 1).find(".") != -1) {
+>>>>>>> Updating fixes on compiling
                 colType = UNHANDLED;
             }
         }
@@ -486,6 +607,7 @@ void SelectorDialog::_readStyleElement()
         row[_mColumns._colType] = colType;
         row[_mColumns._colObj]        = objVec;
         row[_mColumns._colProperties] = properties;
+<<<<<<< HEAD
         // Add as children, objects that match selector.
         for (auto &obj : objVec) {
             Gtk::TreeModel::Row childrow = *(_store->append(row->children()));
@@ -494,6 +616,20 @@ void SelectorDialog::_readStyleElement()
             childrow[_mColumns._colType] = colType == UNHANDLED ? UNHANDLED : OBJECT;
             childrow[_mColumns._colObj] = std::vector<SPObject *>(1, obj);
             childrow[_mColumns._colProperties] = ""; // Unused
+=======
+        row[_mColumns._colVisible] = true;
+        if (colType == SELECTOR) {
+            // Add as children, objects that match selector.
+            for (auto &obj : objVec) {
+                Gtk::TreeModel::Row childrow = *(_store->append(row->children()));
+                childrow[_mColumns._colSelector] = "#" + Glib::ustring(obj->getId());
+                childrow[_mColumns._colExpand] = false;
+                childrow[_mColumns._colType] = OBJECT;
+                childrow[_mColumns._colObj] = std::vector<SPObject *>(1, obj);
+                childrow[_mColumns._colProperties] = ""; // Unused
+                childrow[_mColumns._colVisible] = true; // Unused
+            }
+>>>>>>> Updating fixes on compiling
         }
     }
     _updating = false;
@@ -513,7 +649,10 @@ void SelectorDialog::_rowCollapse(const Gtk::TreeModel::iterator &iter, const Gt
     row[_mColumns._colExpand] = false;
 }
 /**
+<<<<<<< HEAD
  * @brief SelectorDialog::_writeStyleElement
+=======
+>>>>>>> Updating fixes on compiling
  * Update the content of the style element as selectors (or objects) are added/removed.
  */
 void SelectorDialog::_writeStyleElement()
@@ -562,7 +701,10 @@ void SelectorDialog::_addWatcherRecursive(Inkscape::XML::Node *node) {
 }
 
 /**
+<<<<<<< HEAD
  * @brief SelectorDialog::_updateWatchers
+=======
+>>>>>>> Updating fixes on compiling
  * Update the watchers on objects.
  */
 void SelectorDialog::_updateWatchers()
@@ -588,7 +730,10 @@ void SelectorDialog::_updateWatchers()
 
 
 /**
+<<<<<<< HEAD
  * @brief SelectorDialog::_addToSelector
+=======
+>>>>>>> Updating fixes on compiling
  * @param row
  * Add selected objects on the desktop to the selector corresponding to 'row'.
  */
@@ -627,6 +772,10 @@ void SelectorDialog::_addToSelector(Gtk::TreeModel::Row row)
                     childrow[_mColumns._colType] = OBJECT;
                     childrow[_mColumns._colObj]        = std::vector<SPObject *>(1, obj);
                     childrow[_mColumns._colProperties] = "";  // Unused
+<<<<<<< HEAD
+=======
+                    childrow[_mColumns._colVisible] = true;  // Unused
+>>>>>>> Updating fixes on compiling
                 }
             }
         }
@@ -667,6 +816,10 @@ void SelectorDialog::_addToSelector(Gtk::TreeModel::Row row)
                     childrow[_mColumns._colType] = OBJECT;
                     childrow[_mColumns._colObj] = std::vector<SPObject *>(1, obj);
                     childrow[_mColumns._colProperties] = ""; // Unused
+<<<<<<< HEAD
+=======
+                    childrow[_mColumns._colVisible] = true; // Unused
+>>>>>>> Updating fixes on compiling
                 }
             }
         }
@@ -682,7 +835,10 @@ void SelectorDialog::_addToSelector(Gtk::TreeModel::Row row)
 
 
 /**
+<<<<<<< HEAD
  * @brief SelectorDialog::_removeFromSelector
+=======
+>>>>>>> Updating fixes on compiling
  * @param row
  * Remove the object corresponding to 'row' from the parent selector.
  */
@@ -692,9 +848,12 @@ void SelectorDialog::_removeFromSelector(Gtk::TreeModel::Row row)
     if (*row) {
 
         Glib::ustring objectLabel = row[_mColumns._colSelector];
+<<<<<<< HEAD
         if (row[_mColumns._colType] == UNHANDLED) {
             return;
         };
+=======
+>>>>>>> Updating fixes on compiling
         Gtk::TreeModel::iterator iter = row->parent();
         if (iter) {
             Gtk::TreeModel::Row parent = *iter;
@@ -764,7 +923,10 @@ void SelectorDialog::_removeFromSelector(Gtk::TreeModel::Row row)
 
 
 /**
+<<<<<<< HEAD
  * @brief SelectorDialog::_getIdList
+=======
+>>>>>>> Updating fixes on compiling
  * @param sel
  * @return This function returns a comma separated list of ids for objects in input vector.
  * It is used in creating an 'id' selector. It relies on objects having 'id's.
@@ -783,13 +945,17 @@ Glib::ustring SelectorDialog::_getIdList(std::vector<SPObject*> sel)
 }
 
 /**
+<<<<<<< HEAD
  * @brief SelectorDialog::_getObjVec
+=======
+>>>>>>> Updating fixes on compiling
  * @param selector: a valid CSS selector string.
  * @return objVec: a vector of pointers to SPObject's the selector matches.
  * Return a vector of all objects that selector matches.
  */
 std::vector<SPObject *> SelectorDialog::_getObjVec(Glib::ustring selector) {
 
+<<<<<<< HEAD
     std::vector<SPObject *> objVec;
     std::vector<Glib::ustring> tokensplus = Glib::Regex::split_simple("[,]+", selector);
     bool unhandled = false;
@@ -805,6 +971,10 @@ std::vector<SPObject *> SelectorDialog::_getObjVec(Glib::ustring selector) {
     if (!unhandled) {
         objVec = SP_ACTIVE_DOCUMENT->getObjectsBySelector(selector);
     }
+=======
+    std::vector<SPObject *> objVec = SP_ACTIVE_DOCUMENT->getObjectsBySelector( selector );
+
+>>>>>>> Updating fixes on compiling
     g_debug("SelectorDialog::_getObjVec: | %s |", selector.c_str());
     for (auto& obj: objVec) {
         g_debug("  %s", obj->getId() ? obj->getId() : "null");
@@ -815,7 +985,10 @@ std::vector<SPObject *> SelectorDialog::_getObjVec(Glib::ustring selector) {
 
 
 /**
+<<<<<<< HEAD
  * @brief SelectorDialog::_insertClass
+=======
+>>>>>>> Updating fixes on compiling
  * @param objs: list of objects to insert class
  * @param class: class to insert
  * Insert a class name into objects' 'class' attribute.
@@ -849,7 +1022,10 @@ void SelectorDialog::_insertClass(const std::vector<SPObject *>& objVec, const G
 
 
 /**
+<<<<<<< HEAD
  * @brief SelectorDialog::_selectObjects
+=======
+>>>>>>> Updating fixes on compiling
  * @param eventX
  * @param eventY
  * This function selects objects in the drawing corresponding to the selector
@@ -871,7 +1047,11 @@ void SelectorDialog::_selectObjects(int eventX, int eventY)
             if (iter) {
                 Gtk::TreeModel::Row row = *iter;
                 Gtk::TreeModel::Children children = row.children();
+<<<<<<< HEAD
                 if (children.empty()) {
+=======
+                if (children.empty() && !_stylemode) {
+>>>>>>> Updating fixes on compiling
                     del->set_sensitive(true);
                 }
                 std::vector<SPObject *> objVec = row[_mColumns._colObj];
@@ -886,8 +1066,11 @@ void SelectorDialog::_selectObjects(int eventX, int eventY)
 
 
 /**
+<<<<<<< HEAD
  * @brief SelectorDialog::_addSelector
  *
+=======
+>>>>>>> Updating fixes on compiling
  * This function opens a dialog to add a selector. The dialog is prefilled
  * with an 'id' selector containing a list of the id's of selected objects
  * or with a 'class' selector if no objects are selected.
@@ -958,6 +1141,7 @@ void SelectorDialog::_addSelector()
          * set to ".Class1"
          */
         selectorValue = textEditPtr->get_text();
+<<<<<<< HEAD
 
         del->set_sensitive(true);
         std::vector<Glib::ustring> tokensplus = Glib::Regex::split_simple("[,]+", selectorValue);
@@ -996,6 +1180,20 @@ void SelectorDialog::_addSelector()
             textLabelPtr->show();
         } else {
             invalid = false;
+=======
+        Glib::ustring firstWord = selectorValue.substr(0, selectorValue.find_first_of(" >+~"));
+        if (firstWord != selectorValue) {
+            handled = false;
+        }
+        if (!_stylemode) {
+            del->set_sensitive(true);
+        }
+        if (selectorValue[0] == '.' || selectorValue[0] == '#' || selectorValue[0] == '*' ||
+            SPAttributeRelSVG::isSVGElement(selectorValue)) {
+            invalid = false;
+        } else {
+            textLabelPtr->show();
+>>>>>>> Updating fixes on compiling
         }
     }
     delete textDialogPtr;
@@ -1043,7 +1241,10 @@ void SelectorDialog::_addSelector()
 void SelectorDialog::_closeDialog(Gtk::Dialog *textDialogPtr) { textDialogPtr->response(Gtk::RESPONSE_OK); }
 
 /**
+<<<<<<< HEAD
  * @brief SelectorDialog::_delSelector
+=======
+>>>>>>> Updating fixes on compiling
  * This function deletes selector when '-' at the bottom is clicked.
  * Note: If deleting a class selector, class attributes are NOT changed.
  */
@@ -1063,12 +1264,21 @@ void SelectorDialog::_delSelector()
         _store->erase(iter);
         _updating = false;
         _writeStyleElement();
+<<<<<<< HEAD
         del->set_sensitive(false);
+=======
+        if (!_stylemode) {
+            del->set_sensitive(false);
+        }
+>>>>>>> Updating fixes on compiling
     }
 }
 
 /**
+<<<<<<< HEAD
  * @brief SelectorDialog::_handleButtonEvent
+=======
+>>>>>>> Updating fixes on compiling
  * @param event
  * @return
  * Handles the event when '+' button in front of a selector name is clicked or when a '-' button in
@@ -1193,7 +1403,10 @@ SelectorDialog::_handleSelectionChanged() {
 
 
 /**
+<<<<<<< HEAD
  * @brief SelectorDialog::_buttonEventsSelectObjs
+=======
+>>>>>>> Updating fixes on compiling
  * @param event
  * This function detects single or double click on a selector in any row. Clicking
  * on a selector selects the matching objects on the desktop. A double click will
@@ -1204,7 +1417,13 @@ void SelectorDialog::_buttonEventsSelectObjs(GdkEventButton* event )
     g_debug("SelectorDialog::_buttonEventsSelectObjs");
     _treeView.get_selection()->set_mode(Gtk::SELECTION_SINGLE);
     _updating = true;
+<<<<<<< HEAD
     del->set_sensitive(true);
+=======
+    if (!_stylemode) {
+        del->set_sensitive(true);
+    }
+>>>>>>> Updating fixes on compiling
     if (event->type == GDK_BUTTON_RELEASE && event->button == 1) {
         int x = static_cast<int>(event->x);
         int y = static_cast<int>(event->y);
@@ -1215,14 +1434,23 @@ void SelectorDialog::_buttonEventsSelectObjs(GdkEventButton* event )
 
 
 /**
+<<<<<<< HEAD
  * @brief SelectorDialog::_selectRow
+=======
+>>>>>>> Updating fixes on compiling
  * This function selects the row in treeview corresponding to an object selected
  * in the drawing. If more than one row matches, the first is chosen.
  */
 void SelectorDialog::_selectRow()
 {
     g_debug("SelectorDialog::_selectRow: updating: %s", (_updating ? "true" : "false"));
+<<<<<<< HEAD
     del->set_sensitive(false);
+=======
+    if (!_stylemode) {
+        del->set_sensitive(false);
+    }
+>>>>>>> Updating fixes on compiling
     if (_updating || !getDesktop()) return; // Avoid updating if we have set row via dialog.
     if (SP_ACTIVE_DESKTOP != getDesktop()) {
         std::cerr << "SelectorDialog::_selectRow: SP_ACTIVE_DESKTOP != getDesktop()" << std::endl;
@@ -1241,6 +1469,12 @@ void SelectorDialog::_selectRow()
             for (auto & i : objVec) {
                 if (obj->getId() == i->getId()) {
                     _treeView.get_selection()->select(row);
+<<<<<<< HEAD
+=======
+                    row[_mColumns._colVisible] = true;
+                } else if(_stylemode) {
+                    row[_mColumns._colVisible] = false;
+>>>>>>> Updating fixes on compiling
                 }
             }
         }
@@ -1248,11 +1482,21 @@ void SelectorDialog::_selectRow()
             _treeView.expand_to_path(Gtk::TreePath(row));
         }
     }
+<<<<<<< HEAD
 }
 
 
 /**
  * @brief SelectorDialog::_styleButton
+=======
+    if (_stylemode) {
+        _modelfilter->refilter();
+        _treeView.get_selection()->unselect_all();
+    }
+}
+
+/**
+>>>>>>> Updating fixes on compiling
  * @param btn
  * @param iconName
  * @param tooltip
