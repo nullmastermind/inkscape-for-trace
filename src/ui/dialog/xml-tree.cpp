@@ -194,11 +194,11 @@ XmlTree::XmlTree() :
     raise_node_button.signal_clicked().connect(sigc::mem_fun(*this, &XmlTree::cmd_raise_node));
     lower_node_button.signal_clicked().connect(sigc::mem_fun(*this, &XmlTree::cmd_lower_node));
 
-    styles = new CssDialog;
+    styles = new StyleDialog;
     styles_box.pack_start(*styles);
     flowbox_content->insert(&styles_box, _("_Styles"), FLOWBOX_PAGE_STYLES, false, 200);
 
-    selectors = new StyleDialog;
+    selectors = new SelectorDialog;
     selectors_box.pack_start(*selectors);
     flowbox_content->insert(&selectors_box, _("S_electors"), FLOWBOX_PAGE_SELECTORS, false, 200);
 
