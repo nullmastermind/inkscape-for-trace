@@ -229,7 +229,6 @@ src/ui/dialog/attrdialog.cpp
 src/ui/dialog/calligraphic-profile-rename.cpp
 src/ui/dialog/clonetiler.cpp
 src/ui/dialog/color-item.cpp
-src/ui/dialog/cssdialog.cpp
 src/ui/dialog/debug.cpp
 src/ui/dialog/document-metadata.cpp
 src/ui/dialog/document-properties.cpp
@@ -266,6 +265,7 @@ src/ui/dialog/polar-arrange-tab.cpp
 src/ui/dialog/print-colors-preview-dialog.cpp
 src/ui/dialog/print.cpp
 src/ui/dialog/save-template-dialog.cpp
+src/ui/dialog/selectors.cpp
 src/ui/dialog/spellcheck.cpp
 src/ui/dialog/styledialog.cpp
 src/ui/dialog/svg-fonts-dialog.cpp
