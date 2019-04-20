@@ -32,12 +32,17 @@
 #include <utility>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 //#define DEBUG_SELECTORDIALOG
 //#define G_LOG_DOMAIN "SELECTORDIALOG"
 =======
 //#define DEBUG_selectorDialog
 //#define G_LOG_DOMAIN "selectorDialog"
 >>>>>>> Updating fixes on compiling
+=======
+//#define DEBUG_SELECTORDIALOG
+//#define G_LOG_DOMAIN "SELECTORDIALOG"
+>>>>>>> Fix merge
 
 using Inkscape::DocumentUndo;
 using Inkscape::Util::List;
@@ -57,12 +62,17 @@ namespace Dialog {
 // Keeps a watch on style element
 class SelectorDialog::NodeObserver : public Inkscape::XML::NodeObserver {
 public:
+<<<<<<< HEAD
     NodeObserver(SelectorDialog* selectorDialog) :
 <<<<<<< HEAD
         _selectorDialog(selectorDialog)
 =======
         _selectordialog(selectorDialog)
 >>>>>>> Updating fixes on compiling
+=======
+    NodeObserver(SelectorDialog* selectordialog) :
+        _selectordialog(selectordialog)
+>>>>>>> Fix merge
     {
         g_debug("SelectorDialog::NodeObserver: Constructor");
     };
@@ -102,12 +112,17 @@ SelectorDialog::NodeObserver::notifyContentChanged(
 // (Must update objects that selectors match.)
 class SelectorDialog::NodeWatcher : public Inkscape::XML::NodeObserver {
 public:
+<<<<<<< HEAD
     NodeWatcher(SelectorDialog* selectorDialog, Inkscape::XML::Node *repr) :
 <<<<<<< HEAD
         _selectorDialog(selectorDialog),
 =======
         _selectordialog(selectorDialog),
 >>>>>>> Updating fixes on compiling
+=======
+    NodeWatcher(SelectorDialog* selectordialog, Inkscape::XML::Node *repr) :
+        _selectordialog(selectordialog),
+>>>>>>> Fix merge
         _repr(repr)
     {
         g_debug("SelectorDialog::NodeWatcher: Constructor");
@@ -261,6 +276,7 @@ SelectorDialog::TreeStore::on_row_deleted(const TreeModel::Path& path)
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 Glib::RefPtr<SelectorDialog::TreeStore> SelectorDialog::TreeStore::create(SelectorDialog *selectordialog)
 {
     SelectorDialog::TreeStore * store = new SelectorDialog::TreeStore();
@@ -271,6 +287,12 @@ Glib::RefPtr<SelectorDialog::TreeStore> SelectorDialog::TreeStore::create(Select
     SelectorDialog::TreeStore * store = new SelectorDialog::TreeStore();
     store->_selectordialog = selectorDialog;
 >>>>>>> Updating fixes on compiling
+=======
+Glib::RefPtr<SelectorDialog::TreeStore> SelectorDialog::TreeStore::create(SelectorDialog *selectordialog)
+{
+    SelectorDialog::TreeStore * store = new SelectorDialog::TreeStore();
+    store->_selectordialog = selectordialog;
+>>>>>>> Fix merge
     store->set_column_types( store->_selectordialog->_mColumns );
     return Glib::RefPtr<SelectorDialog::TreeStore>( store );
 }
