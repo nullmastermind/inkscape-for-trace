@@ -52,8 +52,8 @@ namespace Dialog {
 // Keeps a watch on style element
 class SelectorDialog::NodeObserver : public Inkscape::XML::NodeObserver {
 public:
-    NodeObserver(SelectorDialog* styleDialog) :
-        _styleDialog(styleDialog)
+    NodeObserver(SelectorDialog* selectorDialog) :
+        _selectorDialog(selectorDialog)
     {
         g_debug("SelectorDialog::NodeObserver: Constructor");
     };
@@ -62,7 +62,7 @@ public:
                                       Inkscape::Util::ptr_shared old_content,
                                       Inkscape::Util::ptr_shared new_content) override;
 
-    SelectorDialog * _styleDialog;
+    SelectorDialog * _selectorDialog;
 };
 
 
@@ -73,9 +73,9 @@ SelectorDialog::NodeObserver::notifyContentChanged(
     Inkscape::Util::ptr_shared /*new_content*/ ) {
 
     g_debug("SelectorDialog::NodeObserver::notifyContentChanged");
-    _styleDialog->_updating = false;
-    _styleDialog->_readStyleElement();
-    _styleDialog->_selectRow();
+    _selectorDialog->_updating = false;
+    _selectorDialog->_readStyleElement();
+    _selectorDialog->_selectRow();
 }
 
 
@@ -83,8 +83,8 @@ SelectorDialog::NodeObserver::notifyContentChanged(
 // (Must update objects that selectors match.)
 class SelectorDialog::NodeWatcher : public Inkscape::XML::NodeObserver {
 public:
-    NodeWatcher(SelectorDialog* styleDialog, Inkscape::XML::Node *repr) :
-        _styleDialog(styleDialog),
+    NodeWatcher(SelectorDialog* selectorDialog, Inkscape::XML::Node *repr) :
+        _selectorDialog(selectorDialog),
         _repr(repr)
     {
         g_debug("SelectorDialog::NodeWatcher: Constructor");
@@ -94,8 +94,8 @@ public:
                                    Inkscape::XML::Node &child,
                                    Inkscape::XML::Node */*prev*/ ) override
     {
-        if ( _styleDialog && _repr ) {
-            _styleDialog->_nodeAdded( child );
+        if ( _selectorDialog && _repr ) {
+            _selectorDialog->_nodeAdded( child );
         }
     }
 
@@ -103,8 +103,8 @@ public:
                                      Inkscape::XML::Node &child,
                                      Inkscape::XML::Node */*prev*/ ) override
     {
-        if ( _styleDialog && _repr ) {
-            _styleDialog->_nodeRemoved( child );
+        if ( _selectorDialog && _repr ) {
+            _selectorDialog->_nodeRemoved( child );
         }
     }
 
@@ -112,7 +112,7 @@ public:
                                          GQuark qname,
                                          Util::ptr_shared /*old_value*/,
                                          Util::ptr_shared /*new_value*/ ) override {
-        if ( _styleDialog && _repr ) {
+        if ( _selectorDialog && _repr ) {
 
             // For the moment only care about attributes that are directly used in selectors.
             const gchar * cname = g_quark_to_string (qname );
@@ -122,12 +122,12 @@ public:
             }
 
             if ( name == "id" || name == "class" ) {
-                _styleDialog->_nodeChanged( node );
+                _selectorDialog->_nodeChanged( node );
             }
         }
     }
 
-    SelectorDialog * _styleDialog;
+    SelectorDialog * _selectorDialog;
     Inkscape::XML::Node * _repr;  // Need to track if document changes.
 };
 
