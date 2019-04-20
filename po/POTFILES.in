@@ -265,7 +265,7 @@ src/ui/dialog/polar-arrange-tab.cpp
 src/ui/dialog/print-colors-preview-dialog.cpp
 src/ui/dialog/print.cpp
 src/ui/dialog/save-template-dialog.cpp
-src/ui/dialog/selectors.cpp
+src/ui/dialog/selectordialog.cpp
 src/ui/dialog/spellcheck.cpp
 src/ui/dialog/styledialog.cpp
 src/ui/dialog/svg-fonts-dialog.cpp
