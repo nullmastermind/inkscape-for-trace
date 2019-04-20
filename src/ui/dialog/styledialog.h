@@ -12,171 +12,125 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifndef STYLEDIALOG_H
-#define STYLEDIALOG_H
+#ifndef SEEN_UI_DIALOGS_STYLEDIALOG_H
+#define SEEN_UI_DIALOGS_STYLEDIALOG_H
 
-#include <ui/widget/panel.h>
-#include <gtkmm/treeview.h>
-#include <gtkmm/treestore.h>
-#include <gtkmm/scrolledwindow.h>
+#include "desktop.h"
+#include "message.h"
+
+#include <glibmm/regex.h>
 #include <gtkmm/dialog.h>
-#include <gtkmm/treeselection.h>
-#include <gtkmm/paned.h>
+#include <gtkmm/liststore.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/treeview.h>
+#include <ui/widget/panel.h>
 
-#include "ui/dialog/desktop-tracker.h"
-
-#include "xml/helper-observer.h"
+#define STYLE_DIALOG(obj) (dynamic_cast<Inkscape::UI::Dialog::StyleDialog *>((Inkscape::UI::Dialog::StyleDialog *)obj))
+#define REMOVE_SPACES(x)                                                                                               \
+    x.erase(0, x.find_first_not_of(' '));                                                                              \
+    x.erase(x.find_last_not_of(' ') + 1);
 
 namespace Inkscape {
+class MessageStack;
+class MessageContext;
 namespace UI {
 namespace Dialog {
 
 /**
  * @brief The StyleDialog class
- * A list of CSS selectors will show up in this dialog. This dialog allows one to
- * add and delete selectors. Elements can be added to and removed from the selectors
- * in the dialog. Selection of any selector row selects the matching  objects in
- * the drawing and vice-versa. (Only simple selectors supported for now.)
- *
- * This class must keep two things in sync:
- *   1. The text node of the style element.
- *   2. The Gtk::TreeModel.
+ * This dialog allows to add, delete and modify CSS properties for selectors
+ * created in Style Dialog. Double clicking any selector in Style dialog, a list
+ * of CSS properties will show up in this dialog (if any exist), else new properties
+ * can be added and each new property forms a new row in this pane.
  */
-class StyleDialog : public Widget::Panel {
-
+class StyleDialog : public UI::Widget::Panel
+{
 public:
-    ~StyleDialog() override;
-    // No default constructor, noncopyable, nonassignable
     StyleDialog();
-    StyleDialog(StyleDialog const &d) = delete;
-    StyleDialog operator=(StyleDialog const &d) = delete;
+    ~StyleDialog() override;
 
     static StyleDialog &getInstance() { return *new StyleDialog(); }
 
-  private:
-    // Monitor <style> element for changes.
-    class NodeObserver;
-
-    // Monitor all objects for addition/removal/attribute change
-    class NodeWatcher;
-
-    std::vector<StyleDialog::NodeWatcher*> _nodeWatchers;
-    void _nodeAdded(   Inkscape::XML::Node &repr );
-    void _nodeRemoved( Inkscape::XML::Node &repr );
-    void _nodeChanged( Inkscape::XML::Node &repr );
     // Data structure
-    enum coltype { OBJECT, SELECTOR, UNHANDLED };
-    class ModelColumns : public Gtk::TreeModel::ColumnRecord {
+    class CssColumns : public Gtk::TreeModel::ColumnRecord {
     public:
-        ModelColumns() {
-            add(_colSelector);
-            add(_colExpand);
-            add(_colType);
-            add(_colObj);
-            add(_colProperties);
+        CssColumns() {
+            add(deleteButton);
+            add(label);
+            add(_styleSheetVal);
+            add(_styleAttrVal);
+            add(label_color);
+            add(attr_color);
+            add(attr_strike);
+            add(editable);
         }
-        Gtk::TreeModelColumn<Glib::ustring> _colSelector;       // Selector or matching object id.
-        Gtk::TreeModelColumn<bool> _colExpand;                  // Open/Close store row.
-        Gtk::TreeModelColumn<gint> _colType;                    // Selector row or child object row.
-        Gtk::TreeModelColumn<std::vector<SPObject *> > _colObj; // List of matching objects.
-        Gtk::TreeModelColumn<Glib::ustring> _colProperties;     // List of properties.
+        Gtk::TreeModelColumn<bool> deleteButton;
+        Gtk::TreeModelColumn<Glib::ustring> label;
+        Gtk::TreeModelColumn<Glib::ustring> _styleAttrVal;
+        Gtk::TreeModelColumn<Glib::ustring> _styleSheetVal;
+        Gtk::TreeModelColumn<Gdk::RGBA> label_color;
+        Gtk::TreeModelColumn<Gdk::RGBA> attr_color;
+        Gtk::TreeModelColumn<bool> attr_strike;
+        Gtk::TreeModelColumn<bool> editable;
     };
-    ModelColumns _mColumns;
+    CssColumns _cssColumns;
 
-    // Override Gtk::TreeStore to control drag-n-drop (only allow dragging and dropping of selectors).
-    // See: https://developer.gnome.org/gtkmm-tutorial/stable/sec-treeview-examples.html.en
-    //
-    // TreeStore implements simple drag and drop (DND) but there appears no way to know when a DND
-    // has been completed (other than doing the whole DND ourselves). As a hack, we use
-    // on_row_deleted to trigger write of style element.
-    class TreeStore : public Gtk::TreeStore {
-    protected:
-        TreeStore();
-        bool row_draggable_vfunc(const Gtk::TreeModel::Path& path) const override;
-        bool row_drop_possible_vfunc(const Gtk::TreeModel::Path& path,
-                                     const Gtk::SelectionData& selection_data) const override;
-        void on_row_deleted(const TreeModel::Path& path) override;
-
-    public:
-        static Glib::RefPtr<StyleDialog::TreeStore> create(StyleDialog *styledialog);
-
-    private:
-        StyleDialog *_styledialog;
-    };
+    /**
+     * Status bar
+     */
+    std::shared_ptr<Inkscape::MessageStack> _message_stack;
+    std::unique_ptr<Inkscape::MessageContext> _message_context;
 
     // TreeView
     Gtk::TreeView _treeView;
-    Glib::RefPtr<TreeStore> _store;
+    Glib::RefPtr<Gtk::ListStore> _store;
+    Gtk::TreeModel::Row _propRow;
+    Gtk::TreeViewColumn *_propCol;
+    Gtk::TreeViewColumn *_sheetCol;
+    Gtk::TreeViewColumn *_attrCol;
+    Gtk::HBox status_box;
+    Gtk::Label status;
 
-    // Widgets
-    Gtk::Paned _paned;
-    Gtk::Box   _mainBox;
-    Gtk::Box   _buttonBox;
-    Gtk::ScrolledWindow _scrolledWindow;
-    Gtk::Button* del;
-    Gtk::Button* create;
+    /**
+     * Sets the XML status bar, depending on which attr is selected.
+     */
+    void css_reset_context(gint css);
+    static void _set_status_message(Inkscape::MessageType type, const gchar *message, GtkWidget *dialog);
 
-    // Reading and writing the style element.
-    Inkscape::XML::Node *_getStyleTextNode();
-    void _readStyleElement();
-    void _writeStyleElement();
 
-    // Update watchers
-    void _addWatcherRecursive(Inkscape::XML::Node *node);
-    void _updateWatchers();
-    
-    // Manipulate Tree
-    void _addToSelector(Gtk::TreeModel::Row row);
-    void _removeFromSelector(Gtk::TreeModel::Row row);
-    Glib::ustring _getIdList(std::vector<SPObject *>);
-    std::vector<SPObject *> _getObjVec(Glib::ustring selector);
-    void _insertClass(const std::vector<SPObject *>& objVec, const Glib::ustring& className);
-    void _selectObjects(int, int);
+    // Variables - Inkscape
+    SPDesktop* _desktop;
+    Inkscape::XML::Node *_repr;
 
-    // Variables
-    bool _updating;  // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
-    Inkscape::XML::Node *_textNode; // Track so we know when to add a NodeObserver.
+    // Helper functions
+    void setDesktop(SPDesktop* desktop) override;
+    void setRepr(Inkscape::XML::Node *repr);
 
-    // Signals and handlers - External
-    sigc::connection _document_replaced_connection;
-    sigc::connection _desktop_changed_connection;
-    sigc::connection _selection_changed_connection;
+    // Parsing functions
+    std::map<Glib::ustring, Glib::ustring> parseStyle(Glib::ustring style_string);
+    Glib::ustring compileStyle(std::map<Glib::ustring, Glib::ustring> props);
 
-    void _handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
-    void _handleDesktopChanged(SPDesktop* desktop);
-    void _handleSelectionChanged();
-    void _rowExpand(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);
-    void _rowCollapse(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);
-    void _closeDialog(Gtk::Dialog *textDialogPtr);
+    // Signal handlers
+    void onAttrChanged(Inkscape::XML::Node *repr, const gchar *name, const gchar *new_value);
 
-    DesktopTracker _desktopTracker;
+  private:
+    Glib::RefPtr<Glib::Regex> r_props = Glib::Regex::create("\\s*;\\s*");
+    Glib::RefPtr<Glib::Regex> r_pair = Glib::Regex::create("\\s*:\\s*");
 
-    Inkscape::XML::SignalObserver _objObserver; // Track object in selected row (for style change).
+    bool onPropertyCreate(GdkEventButton *event);
+    void onPropertyDelete(Glib::ustring path);
+    bool setStyleProperty(Glib::ustring name, Glib::ustring value);
 
-    // Signal and handlers - Internal
-    void _addSelector();
-    void _delSelector();
-    bool _handleButtonEvent(GdkEventButton *event);
-    void _buttonEventsSelectObjs(GdkEventButton *event);
-    void _selectRow(); // Select row in tree when selection changed.
-
-    // GUI
-    void _styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip);
+    /**
+     * Signal handlers
+     */
+    sigc::connection _message_changed_connection;
+    bool _addProperty(GdkEventButton *event);
 };
 
-} // namespace Dialogc
+
+} // namespace Dialog
 } // namespace UI
 } // namespace Inkscape
 
 #endif // STYLEDIALOG_H
-
-/*
-  Local Variables:
-  mode:c++
-  c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
-  indent-tabs-mode:nil
-  fill-column:99
-  End:
-*/
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
