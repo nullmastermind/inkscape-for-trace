@@ -208,11 +208,26 @@ void sp_file_convert_text_baseline_spacing(SPDocument *doc)
 void _remove_style_on_empty_lines(SPObject *o)
 {
     std::vector<SPObject *> cl = o->childList(false);
+    bool begin = true;
+    std::string cur_y = "";
     for (std::vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci) {
-        if (SP_IS_TSPAN(*ci) and (*ci)->childList(false).empty() and is_line(*ci)) {
+        if (!SP_IS_TSPAN(*ci))
+            continue;
+        if (!is_line(*ci))
+            continue;
+        if (!(*ci)->childList(false).empty()) {
+            if (begin)
+                cur_y = (*ci)->getAttribute("y") ? (*ci)->getAttribute("y") : cur_y;
+            begin = false;
+        } else {
             (*ci)->removeAttribute("style");
             (*ci)->updateRepr();
+            if (begin) {
+                (*ci)->deleteObject();
+            }
         }
+        if (cur_y != "")
+            o->setAttribute("y", cur_y);
     }
 }
 
