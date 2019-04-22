@@ -20,6 +20,8 @@
 
 #include <glibmm/regex.h>
 #include <gtkmm/dialog.h>
+#include <gtkmm/label.h>
+#include <gtkmm/separator.h>
 #include <gtkmm/liststore.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treeview.h>
@@ -56,13 +58,13 @@ public:
     class CssColumns : public Gtk::TreeModel::ColumnRecord {
     public:
         CssColumns() {
-            add(deleteButton);
+            add(isSelector);
             add(label);
             add(_styleAttrVal);
             add(label_color);
             add(attr_color);
         }
-        Gtk::TreeModelColumn<bool> deleteButton;
+        Gtk::TreeModelColumn<bool> isSelector;
         Gtk::TreeModelColumn<Glib::ustring> label;
         Gtk::TreeModelColumn<Glib::ustring> _styleAttrVal;
         Gtk::TreeModelColumn<Gdk::RGBA> label_color;
@@ -75,7 +77,7 @@ public:
      */
     std::shared_ptr<Inkscape::MessageStack> _message_stack;
     std::unique_ptr<Inkscape::MessageContext> _message_context;
-
+    Gtk::Box *style_box;
     // TreeView
     Gtk::TreeView _treeView;
     Glib::RefPtr<Gtk::ListStore> _store;
@@ -112,7 +114,7 @@ public:
     void setUndo(Glib::ustring const &event_description);
     void valueEdited (const Glib::ustring& path, const Glib::ustring& value);
     void nameEdited (const Glib::ustring& path, const Glib::ustring& name);
-    bool onPropertyCreate(GdkEventButton *event);
+    void onPropertyCreate();
     void onPropertyDelete(Glib::ustring path);
     bool setStyleProperty(Glib::ustring name, Glib::ustring value);
     Inkscape::UI::Dialog::SelectorDialog *_selectordialog;
