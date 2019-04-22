@@ -8,13 +8,14 @@
 # Elias Norberg <elno0959 at student.su.se>, 2009
 # Jesper Öqvist <jesper@llbit.se>, 2010
 # Oscar Gustafsson <oscar.gustafsson@gmail.com>, 2018
+# Joshua Simmons <jsimmons100@hotmail.co.uk>, 2019
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2019-02-19 20:12+0100\n"
-"PO-Revision-Date: 2014-11-17 16:36+0100\n"
+"PO-Revision-Date: 2019-04-21 20:51+0100\n"
 "Last-Translator: Christoffer Holmstedt <christoffer.holmstedt@gmail.com>\n"
 "Language-Team: Svenska <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -22,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n>1);\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: ../org.inkscape.Inkscape.desktop.in.h:1
 msgid "Inkscape"
@@ -43,7 +44,7 @@ msgstr "Skapa och redigera SVG-bilder"
 
 #: ../org.inkscape.Inkscape.desktop.in.h:5
 msgid "image;editor;vector;drawing;"
-msgstr ""
+msgstr "bild; redaktör; vektor; ritning;"
 
 #: ../org.inkscape.Inkscape.desktop.in.h:6
 #, fuzzy
@@ -171,7 +172,7 @@ msgstr "Kanterna på objektet brinner"
 
 #: ../share/filters/filters.svg.h:30
 msgid "Bloom"
-msgstr ""
+msgstr "Blom"
 
 #: ../share/filters/filters.svg.h:32
 msgid "Soft, cushion-like bevel with matte highlights"
@@ -184,7 +185,7 @@ msgstr "Upphöjd kant"
 
 #: ../share/filters/filters.svg.h:36
 msgid "Ridged border with inner bevel"
-msgstr ""
+msgstr "Räfflad kant linje med inre avfasning"
 
 #: ../share/filters/filters.svg.h:38
 #, fuzzy
@@ -214,7 +215,7 @@ msgstr "Damm och repor"
 
 #: ../share/filters/filters.svg.h:44
 msgid "Fill object with sparse translucent specks"
-msgstr ""
+msgstr "Fyll föremål med glesa genomskinliga fläckar"
 
 #: ../share/filters/filters.svg.h:46
 #, fuzzy
@@ -231,7 +232,7 @@ msgstr "Frost"
 
 #: ../share/filters/filters.svg.h:52
 msgid "Flake-like white splotches"
-msgstr ""
+msgstr "flingliknande vit fläckar"
 
 #: ../share/filters/filters.svg.h:54
 #, fuzzy
@@ -317,7 +318,7 @@ msgstr "Oljemålning"
 #: ../src/extension/internal/filter/paint.h:878
 #: ../src/extension/internal/filter/paint.h:982
 msgid "Image Paint and Draw"
-msgstr ""
+msgstr "Bild måla och rita"
 
 #: ../share/filters/filters.svg.h:76
 msgid "Simulate oil painting style"
@@ -689,7 +690,7 @@ msgstr "Dra kurva"
 
 #: ../share/filters/filters.svg.h:216
 msgid "Gel Ridge with a pearlescent look"
-msgstr ""
+msgstr "Gel Ridge med Pärlemorskimrande titta"
 
 #: ../share/filters/filters.svg.h:218
 #, fuzzy
@@ -874,7 +875,7 @@ msgstr "Skakad vätska"
 
 #: ../share/filters/filters.svg.h:292
 msgid "Colorizable filling with flow inside like transparency"
-msgstr ""
+msgstr "Kolorizable fyllning med flöde inuti som transparens"
 
 #: ../share/filters/filters.svg.h:294
 #, fuzzy
@@ -991,6 +992,8 @@ msgstr "Ljusstyrka"
 msgid ""
 "Phantasmagorical turbulent wisps, like Hieronymus Bosch's Garden of Delights"
 msgstr ""
+"Phantasmagorical turbulenta stripor, som Hieronymus Bosch ' s Trädgård av "
+"läckerheter"
 
 #: ../share/filters/filters.svg.h:342
 #, fuzzy
@@ -999,7 +1002,7 @@ msgstr "Utskärning"
 
 #: ../share/filters/filters.svg.h:344
 msgid "In and out glow with a possible offset and colorizable flood"
-msgstr ""
+msgstr "In och ut glöd med en möjlig offset och kolorizable översvämning"
 
 #: ../share/filters/filters.svg.h:346
 #, fuzzy
@@ -1049,12 +1052,12 @@ msgstr "Vattenfärgseffekt"
 
 #: ../share/filters/filters.svg.h:370
 msgid "Felt"
-msgstr ""
+msgstr "Kände"
 
 #: ../share/filters/filters.svg.h:372
 msgid ""
 "Felt like texture with color turbulence and slightly darker at the edges"
-msgstr ""
+msgstr "Kändes som textur med färg turbulens och något mörkare i kanterna"
 
 #: ../share/filters/filters.svg.h:374
 #, fuzzy
@@ -1072,7 +1075,7 @@ msgstr "Färgad regnbåge"
 
 #: ../share/filters/filters.svg.h:380
 msgid "Smooth rainbow colors melted along the edges and colorizable"
-msgstr ""
+msgstr "Slät regnbåge färger smält längs kanterna och kolorizable"
 
 #: ../share/filters/filters.svg.h:382
 #, fuzzy
@@ -1081,7 +1084,7 @@ msgstr "Färgad regnbåge"
 
 #: ../share/filters/filters.svg.h:384
 msgid "Smooth rainbow colors slightly melted along the edges"
-msgstr ""
+msgstr "Slät regnbåge färger lätt smält längs kanterna och kolorizable"
 
 #: ../share/filters/filters.svg.h:386
 #, fuzzy
@@ -1090,7 +1093,7 @@ msgstr "Smält metall"
 
 #: ../share/filters/filters.svg.h:388
 msgid "Bright, polished uneven metal casting, colorizable"
-msgstr ""
+msgstr "Ljusa, polerad ojämn metall gjutning, kolorizable"
 
 #: ../share/filters/filters.svg.h:390
 #, fuzzy
@@ -1108,7 +1111,7 @@ msgstr "3D marmor"
 
 #: ../share/filters/filters.svg.h:396
 msgid "3D warped marble texture"
-msgstr ""
+msgstr "3D skev marmor konsistens"
 
 #: ../share/filters/filters.svg.h:398
 msgid "3D Wood"
@@ -1116,7 +1119,7 @@ msgstr "3D trä"
 
 #: ../share/filters/filters.svg.h:400
 msgid "3D warped, fibered wood texture"
-msgstr ""
+msgstr "3D skev, fiber trä konsistens"
 
 #: ../share/filters/filters.svg.h:402
 #, fuzzy
@@ -1125,7 +1128,7 @@ msgstr "3D pärla"
 
 #: ../share/filters/filters.svg.h:404
 msgid "3D warped, iridescent pearly shell texture"
-msgstr ""
+msgstr "3D skev, skimrande pärlskimrande skal konsistens"
 
 #: ../share/filters/filters.svg.h:406
 msgid "Tiger Fur"
@@ -1236,7 +1239,7 @@ msgstr "Sammetsbumpar"
 
 #: ../share/filters/filters.svg.h:424
 msgid "Gives Smooth Bumps velvet like"
-msgstr ""
+msgstr "Ger släta stötar sammet som"
 
 #: ../share/filters/filters.svg.h:426
 #, fuzzy
@@ -1259,7 +1262,7 @@ msgstr "Orealistiska 3D-skuggningar"
 
 #: ../share/filters/filters.svg.h:428
 msgid "Comics shader with creamy waves transparency"
-msgstr ""
+msgstr "Serier shader med krämig vågor genomskinlighet"
 
 #: ../share/filters/filters.svg.h:430
 #, fuzzy
@@ -1271,6 +1274,8 @@ msgid ""
 "Creates colorizable blotches which smoothly flow over the edges of the lines "
 "at their crossings"
 msgstr ""
+"Skapar kolorizable fläckar som smidigt flödar över kanterna på linjerna vid "
+"deras korsningar"
 
 #: ../share/filters/filters.svg.h:434
 #, fuzzy
@@ -1279,16 +1284,15 @@ msgstr "Mörkt och glöd"
 
 #: ../share/filters/filters.svg.h:436
 msgid "Darkens the edge with an inner blur and adds a flexible glow"
-msgstr ""
+msgstr "Gör kanten mörkare Med en inre oskärpa och ger en flexibel glöd"
 
 #: ../share/filters/filters.svg.h:438
-#, fuzzy
 msgid "Warped Rainbow"
-msgstr "Färgad regnbåge"
+msgstr "Warped Rainbow"
 
 #: ../share/filters/filters.svg.h:440
 msgid "Smooth rainbow colors warped along the edges and colorizable"
-msgstr ""
+msgstr "Slät regnbåge färgerna skev längs kanterna och kolorizable"
 
 #: ../share/filters/filters.svg.h:442
 #, fuzzy
@@ -1297,7 +1301,7 @@ msgstr "Grov och blank"
 
 #: ../share/filters/filters.svg.h:444
 msgid "Create a turbulent contour around"
-msgstr ""
+msgstr "Skapa en turbulent kontur runt"
 
 #: ../share/filters/filters.svg.h:446
 #, fuzzy
@@ -1315,7 +1319,7 @@ msgstr "Genomskinliga dialogrutor:"
 
 #: ../share/filters/filters.svg.h:452
 msgid "Gives a pointillist HSL sensitive transparency"
-msgstr ""
+msgstr "Ger en pointillistisk-HSL-känslig Öppenhet"
 
 #: ../share/filters/filters.svg.h:454
 #, fuzzy
@@ -1324,7 +1328,7 @@ msgstr "Genomskinliga dialogrutor:"
 
 #: ../share/filters/filters.svg.h:456
 msgid "Gives a canvas like HSL sensitive transparency."
-msgstr ""
+msgstr "Ger en duk som HSL känslig Öppenhet"
 
 #: ../share/filters/filters.svg.h:458
 #, fuzzy
@@ -1334,7 +1338,7 @@ msgstr "Genomskinliga dialogrutor:"
 #: ../share/filters/filters.svg.h:460
 msgid ""
 "Paint objects with a transparent turbulence which turns around color edges"
-msgstr ""
+msgstr "Måla object med en Öppenhet turbulens som roterar runt färg kanter"
 
 #: ../share/filters/filters.svg.h:462
 #, fuzzy
@@ -1343,7 +1347,7 @@ msgstr "Tjock färg"
 
 #: ../share/filters/filters.svg.h:464
 msgid "Thick painting effect with turbulence"
-msgstr ""
+msgstr "Tjock målnings effekt med turbulens "
 
 # TODO
 #: ../share/filters/filters.svg.h:466
@@ -1353,7 +1357,7 @@ msgstr "Utbrottsfärg"
 
 #: ../share/filters/filters.svg.h:468
 msgid "Burst balloon texture crumpled and with holes"
-msgstr ""
+msgstr "Brista ballong textur skrynklig och med hål"
 
 # TODO
 #: ../share/filters/filters.svg.h:470
@@ -1366,14 +1370,16 @@ msgid ""
 "Combine a HSL edges detection bump with a leathery or woody and colorizable "
 "texture"
 msgstr ""
+"Kombinera en HSL kanter upptäckt bula med en läderartad eller Woody och "
+"kolorizable textur"
 
 #: ../share/filters/filters.svg.h:474
 msgid "Carnaval"
-msgstr ""
+msgstr "Karnaval"
 
 #: ../share/filters/filters.svg.h:476
 msgid "White splotches evocating carnaval masks"
-msgstr ""
+msgstr "Vita fläckar som påminner om karnaval masker"
 
 #: ../share/filters/filters.svg.h:478
 #, fuzzy
@@ -1452,7 +1458,7 @@ msgstr ""
 
 #: ../share/filters/filters.svg.h:510
 msgid "Thick Acrylic"
-msgstr ""
+msgstr "Tjock akryl"
 
 #: ../share/filters/filters.svg.h:512
 #, fuzzy
@@ -1574,7 +1580,7 @@ msgstr "Ljus metallisk effekt för alla färger"
 
 #: ../share/filters/filters.svg.h:554
 msgid "Deep Colors Plastic"
-msgstr ""
+msgstr "Djupa färger plast"
 
 # TODO
 #: ../share/filters/filters.svg.h:556
@@ -1670,15 +1676,15 @@ msgstr ""
 
 #: ../share/filters/filters.svg.h:594
 msgid "Basic Diffuse Bump"
-msgstr ""
+msgstr "Grundläggande diffus bump"
 
 #: ../share/filters/filters.svg.h:596
 msgid "Matte emboss effect"
-msgstr ""
+msgstr "Matt Relief-effekt"
 
 #: ../share/filters/filters.svg.h:598
 msgid "Basic Specular Bump"
-msgstr ""
+msgstr "Grundläggande speglande bump"
 
 #: ../share/filters/filters.svg.h:600
 #, fuzzy
@@ -1687,19 +1693,19 @@ msgstr "Spekularexponent"
 
 #: ../share/filters/filters.svg.h:602
 msgid "Basic Two Lights Bump"
-msgstr ""
+msgstr "Grundläggande två ljus bump"
 
 #: ../share/filters/filters.svg.h:604
 msgid "Two types of lighting emboss effect"
-msgstr ""
+msgstr "Två typer av belysning Relief effekt"
 
 #: ../share/filters/filters.svg.h:606
 msgid "Linen Canvas"
-msgstr "Linneduk"
+msgstr "Linne kanfas"
 
 #: ../share/filters/filters.svg.h:608 ../share/filters/filters.svg.h:616
 msgid "Painting canvas emboss effect"
-msgstr ""
+msgstr "Målar duk Relief effekt"
 
 #: ../share/filters/filters.svg.h:610
 #, fuzzy
@@ -1717,13 +1723,12 @@ msgstr "Oljemålning"
 
 # TODO
 #: ../share/filters/filters.svg.h:618
-#, fuzzy
 msgid "Paper Bump"
-msgstr "Bumpar"
+msgstr "Papper Stöta"
 
 #: ../share/filters/filters.svg.h:620
 msgid "Paper like emboss effect"
-msgstr ""
+msgstr "Papper som Relief effekt"
 
 #: ../share/filters/filters.svg.h:622
 #, fuzzy
@@ -1773,7 +1778,7 @@ msgstr ""
 
 #: ../share/filters/filters.svg.h:642
 msgid "Silhouette Marbled"
-msgstr ""
+msgstr "Silhuett marmorerad"
 
 #: ../share/filters/filters.svg.h:644
 msgid "Basic noise transparency texture"
@@ -1820,7 +1825,7 @@ msgstr ""
 
 #: ../share/filters/filters.svg.h:662
 msgid "Poster Draw"
-msgstr ""
+msgstr "Affisch rita"
 
 #: ../share/filters/filters.svg.h:664
 msgid "Enhance and redraw edges around posterized areas"
@@ -1853,7 +1858,7 @@ msgstr "Klistra in färg"
 
 #: ../share/filters/filters.svg.h:678
 msgid "Poster Rough"
-msgstr ""
+msgstr "Affisch grov"
 
 #: ../share/filters/filters.svg.h:680
 msgid "Adds roughness to one of the two channels of the Poster paint filter"
@@ -1963,7 +1968,7 @@ msgstr ""
 # TODO
 #: ../share/filters/filters.svg.h:734
 msgid "Comics Draft"
-msgstr ""
+msgstr "Serietidning Utkast"
 
 #: ../share/filters/filters.svg.h:736 ../share/filters/filters.svg.h:768
 msgid "Draft painted cartoon shading with a glassy look"
@@ -1972,7 +1977,7 @@ msgstr ""
 # TODO
 #: ../share/filters/filters.svg.h:738
 msgid "Comics Fading"
-msgstr ""
+msgstr "Serietidning Blekning"
 
 #: ../share/filters/filters.svg.h:740
 msgid "Cartoon paint style with some fading at the edges"
@@ -2013,7 +2018,7 @@ msgstr "Krombalans"
 
 #: ../share/filters/filters.svg.h:756
 msgid "Dark chrome effect"
-msgstr ""
+msgstr "Mörk kromad effekt"
 
 # TODO
 #: ../share/filters/filters.svg.h:758
@@ -2078,7 +2083,7 @@ msgstr "Smält metall"
 
 #: ../share/filters/filters.svg.h:784
 msgid "Deep and dark metal shading"
-msgstr ""
+msgstr "Djup och mörk metall skuggning"
 
 #: ../share/filters/filters.svg.h:786
 #, fuzzy
@@ -2646,7 +2651,7 @@ msgstr ""
 #: ../share/palettes/palettes.h:70
 msgctxt "Palette"
 msgid "orange (#FFA500)"
-msgstr ""
+msgstr "orange (#FFA500)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:71
@@ -2688,7 +2693,7 @@ msgstr ""
 #: ../share/palettes/palettes.h:77
 msgctxt "Palette"
 msgid "gold (#FFD700)"
-msgstr ""
+msgstr "Guld (#FFD700)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:78
@@ -2718,7 +2723,7 @@ msgstr ""
 #: ../share/palettes/palettes.h:82
 msgctxt "Palette"
 msgid "beige (#F5F5DC)"
-msgstr ""
+msgstr "beige (#F5F5DC)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:83
@@ -2730,13 +2735,13 @@ msgstr ""
 #: ../share/palettes/palettes.h:84
 msgctxt "Palette"
 msgid "olive (#808000)"
-msgstr ""
+msgstr "Oliv  (#808000)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:85
 msgctxt "Palette"
 msgid "yellow (#FFFF00)"
-msgstr ""
+msgstr "gul (#FFFF00)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:86
@@ -2748,7 +2753,7 @@ msgstr ""
 #: ../share/palettes/palettes.h:87
 msgctxt "Palette"
 msgid "ivory (#FFFFF0)"
-msgstr ""
+msgstr "Elfenben (#FFFFF0)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:88
@@ -2808,7 +2813,7 @@ msgstr ""
 #: ../share/palettes/palettes.h:97
 msgctxt "Palette"
 msgid "lightgreen (#90EE90)"
-msgstr ""
+msgstr "Ljusgrön (#90EE90)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:98
@@ -2826,7 +2831,7 @@ msgstr ""
 #: ../share/palettes/palettes.h:100
 msgctxt "Palette"
 msgid "green (#008000)"
-msgstr ""
+msgstr "Grön (#008000)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:101
@@ -2886,7 +2891,7 @@ msgstr ""
 #: ../share/palettes/palettes.h:110
 msgctxt "Palette"
 msgid "turquoise (#40E0D0)"
-msgstr ""
+msgstr "Turkos (#40E0D0)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:111
@@ -2916,7 +2921,7 @@ msgstr ""
 #: ../share/palettes/palettes.h:115
 msgctxt "Palette"
 msgid "teal (#008080)"
-msgstr ""
+msgstr "Kricka (#008080)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:116
@@ -2928,7 +2933,7 @@ msgstr ""
 #: ../share/palettes/palettes.h:117
 msgctxt "Palette"
 msgid "cyan (#00FFFF)"
-msgstr ""
+msgstr "cyan (#00FFFF)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:118
@@ -2964,7 +2969,7 @@ msgstr ""
 #: ../share/palettes/palettes.h:123
 msgctxt "Palette"
 msgid "lightblue (#ADD8E6)"
-msgstr ""
+msgstr "Ljusblå  (#ADD8E6)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:124
@@ -3042,13 +3047,13 @@ msgstr ""
 #: ../share/palettes/palettes.h:136
 msgctxt "Palette"
 msgid "lavender (#E6E6FA)"
-msgstr ""
+msgstr "Lavendel (#E6E6FA)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:137
 msgctxt "Palette"
 msgid "navy (#000080)"
-msgstr ""
+msgstr "Marinblå (#000080)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:138
@@ -3066,7 +3071,7 @@ msgstr ""
 #: ../share/palettes/palettes.h:140
 msgctxt "Palette"
 msgid "blue (#0000FF)"
-msgstr ""
+msgstr "Blå (#0000FF)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:141
@@ -3108,7 +3113,7 @@ msgstr ""
 #: ../share/palettes/palettes.h:147
 msgctxt "Palette"
 msgid "indigo (#4B0082)"
-msgstr ""
+msgstr "indigo (#4B0082)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:148
@@ -3150,7 +3155,7 @@ msgstr ""
 #: ../share/palettes/palettes.h:154
 msgctxt "Palette"
 msgid "purple (#800080)"
-msgstr ""
+msgstr "Lila (#800080)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:155
@@ -3210,7 +3215,7 @@ msgstr ""
 #: ../share/palettes/palettes.h:164
 msgctxt "Palette"
 msgid "pink (#FFC0CB)"
-msgstr ""
+msgstr "Rosa  (#FFC0CB)"
 
 #. Palette: svg.gpl
 #: ../share/palettes/palettes.h:165
@@ -3249,19 +3254,19 @@ msgstr "Tvär avslutning"
 #: ../share/palettes/palettes.h:170
 msgctxt "Palette"
 msgid "Chameleon 1"
-msgstr ""
+msgstr "Kameleont 1"
 
 #. Palette: Tango-Palette.gpl
 #: ../share/palettes/palettes.h:171
 msgctxt "Palette"
 msgid "Chameleon 2"
-msgstr ""
+msgstr "Kameleont 2"
 
 #. Palette: Tango-Palette.gpl
 #: ../share/palettes/palettes.h:172
 msgctxt "Palette"
 msgid "Chameleon 3"
-msgstr ""
+msgstr "Kameleont 3"
 
 #. Palette: Tango-Palette.gpl
 #: ../share/palettes/palettes.h:173
@@ -3324,19 +3329,19 @@ msgstr ""
 #: ../share/palettes/palettes.h:182
 msgctxt "Palette"
 msgid "Chocolate 1"
-msgstr ""
+msgstr "choklad 1"
 
 #. Palette: Tango-Palette.gpl
 #: ../share/palettes/palettes.h:183
 msgctxt "Palette"
 msgid "Chocolate 2"
-msgstr ""
+msgstr "choklad 2"
 
 #. Palette: Tango-Palette.gpl
 #: ../share/palettes/palettes.h:184
 msgctxt "Palette"
 msgid "Chocolate 3"
-msgstr ""
+msgstr "choklad 3"
 
 #. Palette: Tango-Palette.gpl
 #: ../share/palettes/palettes.h:185
@@ -4160,7 +4165,7 @@ msgstr ""
 #: ../share/symbols/symbols.h:156
 msgctxt "Symbol"
 msgid "Punched Card"
-msgstr ""
+msgstr "Hålkort"
 
 #. Symbols: FlowSymbols.svg
 #: ../share/symbols/symbols.h:157
@@ -4173,7 +4178,7 @@ msgstr "Tryckläge"
 #: ../share/symbols/symbols.h:158
 msgctxt "Symbol"
 msgid "Online Storage"
-msgstr ""
+msgstr "Online lagring"
 
 #. Symbols: FlowSymbols.svg
 #: ../share/symbols/symbols.h:159
@@ -4185,7 +4190,7 @@ msgstr ""
 #: ../share/symbols/symbols.h:160
 msgctxt "Symbol"
 msgid "Sort"
-msgstr ""
+msgstr "Sortera"
 
 #. Symbols: FlowSymbols.svg
 #: ../share/symbols/symbols.h:161
@@ -4224,13 +4229,13 @@ msgstr "Läge:"
 #: ../share/symbols/symbols.h:166
 msgctxt "Symbol"
 msgid "Comment/Annotation"
-msgstr ""
+msgstr "Kommentera/anteckning"
 
 #. Symbols: FlowSymbols.svg
 #: ../share/symbols/symbols.h:167
 msgctxt "Symbol"
 msgid "Core"
-msgstr ""
+msgstr "kärna"
 
 #. Symbols: FlowSymbols.svg
 #: ../share/symbols/symbols.h:168
@@ -4254,7 +4259,7 @@ msgstr ""
 #: ../share/symbols/symbols.h:171
 msgctxt "Symbol"
 msgid "Offline Storage"
-msgstr ""
+msgstr "Offline lagring"
 
 #. Symbols: FlowSymbols.svg
 #: ../share/symbols/symbols.h:172
@@ -4272,7 +4277,7 @@ msgstr ""
 #: ../share/symbols/symbols.h:174
 msgctxt "Symbol"
 msgid "Delay"
-msgstr ""
+msgstr "Försening"
 
 #. Symbols: FlowSymbols.svg
 #: ../share/symbols/symbols.h:175
@@ -4387,7 +4392,7 @@ msgstr ""
 #: ../share/symbols/symbols.h:197 ../share/symbols/symbols.h:198
 msgctxt "Symbol"
 msgid "Boat Tour"
-msgstr ""
+msgstr "båttur"
 
 #. Symbols: MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:199 ../share/symbols/symbols.h:200
@@ -4439,13 +4444,13 @@ msgstr "Dricksvatten"
 #: ../share/symbols/symbols.h:215 ../share/symbols/symbols.h:216
 msgctxt "Symbol"
 msgid "Fishing"
-msgstr ""
+msgstr "Fiske"
 
 #. Symbols: MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:217 ../share/symbols/symbols.h:218
 msgctxt "Symbol"
 msgid "Food Service"
-msgstr ""
+msgstr "Matservering"
 
 #. Symbols: MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:219 ../share/symbols/symbols.h:220
@@ -4476,7 +4481,7 @@ msgstr ""
 #: ../share/symbols/symbols.h:227 ../share/symbols/symbols.h:228
 msgctxt "Symbol"
 msgid "Hospital"
-msgstr ""
+msgstr "Sjukhus"
 
 #. Symbols: MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:229 ../share/symbols/symbols.h:230
@@ -4631,7 +4636,7 @@ msgstr ""
 #: ../share/symbols/symbols.h:279 ../share/symbols/symbols.h:280
 msgctxt "Symbol"
 msgid "Swimming"
-msgstr ""
+msgstr "Simning"
 
 #. Symbols: MapSymbolsNPS.svg
 #: ../share/symbols/symbols.h:283 ../share/symbols/symbols.h:284
@@ -4664,7 +4669,7 @@ msgstr ""
 #: ../share/symbols/symbols.h:291
 msgctxt "Symbol"
 msgid "Blank"
-msgstr ""
+msgstr "Tom"
 
 #: ../share/templates/templates.h:1
 msgid "A4 leaflet 3-fold Roll"
@@ -5064,7 +5069,7 @@ msgstr "hörn"
 
 #: ../src/display/snap-indicator.cpp:165
 msgid "text anchor"
-msgstr ""
+msgstr "text ankare"
 
 #: ../src/display/snap-indicator.cpp:168
 #, fuzzy
@@ -5626,11 +5631,11 @@ msgstr "Öka eller minska kontrast i bitmappsbilder"
 #: ../src/extension/internal/filter/bumps.h:87
 #: ../src/extension/internal/filter/bumps.h:316
 msgid "Crop"
-msgstr ""
+msgstr "Gröda"
 
 #: ../src/extension/internal/bitmap/crop.cpp:70
 msgid "Top (px):"
-msgstr ""
+msgstr "Topp (px):"
 
 #: ../src/extension/internal/bitmap/crop.cpp:71
 #, fuzzy
@@ -6162,7 +6167,7 @@ msgstr ""
 #: ../src/extension/internal/cairo-ps-out.cpp:347
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:266
 msgid "Bleed/margin (mm):"
-msgstr ""
+msgstr "Utfall/marginal (mm):"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:348
 #: ../src/extension/internal/cairo-ps-out.cpp:390
@@ -6173,7 +6178,7 @@ msgstr "Begränsa export till objekt med ID:"
 #: ../src/extension/internal/cairo-ps-out.cpp:352
 #: ../share/extensions/ps_input.inx.h:2
 msgid "PostScript (*.ps)"
-msgstr ""
+msgstr "PostScript (*.ps)"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:353
 msgid "PostScript File"
@@ -6186,7 +6191,7 @@ msgstr "Inkapslad Postscript"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:389
 msgid "Bleed/margin (mm)"
-msgstr ""
+msgstr "Utfall/marginal (mm)"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:394
 #: ../share/extensions/eps_input.inx.h:2
@@ -6402,11 +6407,11 @@ msgstr "Sidorientering:"
 
 #: ../src/extension/internal/emf-inout.cpp:3662
 msgid "Enhanced Metafile (*.emf)"
-msgstr ""
+msgstr "Förbättrad metafil (*.emf)"
 
 #: ../src/extension/internal/emf-inout.cpp:3663
 msgid "Enhanced Metafile"
-msgstr ""
+msgstr "Förbättrad metafil"
 
 #: ../src/extension/internal/filter/bevels.h:54
 #, fuzzy
@@ -6875,7 +6880,7 @@ msgstr "Punkter"
 
 #: ../src/extension/internal/filter/bumps.h:108
 msgid "Spot"
-msgstr ""
+msgstr "Fläck"
 
 #: ../src/extension/internal/filter/bumps.h:110
 #, fuzzy
@@ -6961,7 +6966,7 @@ msgstr "Färg"
 
 #: ../src/extension/internal/filter/bumps.h:146
 msgid "All purposes bump filter"
-msgstr ""
+msgstr "Alla ändamål stöta filtrera"
 
 # TODO
 #: ../src/extension/internal/filter/bumps.h:310
@@ -7039,7 +7044,7 @@ msgstr ""
 
 #: ../src/extension/internal/filter/color.h:75
 msgid "Brilliance"
-msgstr ""
+msgstr "Briljans"
 
 #: ../src/extension/internal/filter/color.h:78
 #: ../src/extension/internal/filter/color.h:1494
@@ -7112,27 +7117,27 @@ msgstr ""
 
 #: ../src/extension/internal/filter/color.h:263
 msgid "Green weak (deuteranomaly)"
-msgstr ""
+msgstr "Grön svag (Deuteranomaly)"
 
 #: ../src/extension/internal/filter/color.h:264
 msgid "Green blind (deuteranopia)"
-msgstr ""
+msgstr "Grön blind (Deuteranopia)"
 
 #: ../src/extension/internal/filter/color.h:265
 msgid "Red weak (protanomaly)"
-msgstr ""
+msgstr "Röd svag (protanomaly)"
 
 #: ../src/extension/internal/filter/color.h:266
 msgid "Red blind (protanopia)"
-msgstr ""
+msgstr "Röd blind (protanopi)"
 
 #: ../src/extension/internal/filter/color.h:267
 msgid "Blue weak (tritanomaly)"
-msgstr ""
+msgstr "Blå svag (Tritanomaly)"
 
 #: ../src/extension/internal/filter/color.h:268
 msgid "Blue blind (tritanopia)"
-msgstr ""
+msgstr "Blå blind (tritanopi)"
 
 #: ../src/extension/internal/filter/color.h:288
 #, fuzzy
@@ -7151,7 +7156,7 @@ msgstr "_Förskjutning"
 
 #: ../src/extension/internal/filter/color.h:342
 msgid "Rotate and desaturate hue"
-msgstr ""
+msgstr "Rotera och Desaturate nyans"
 
 #: ../src/extension/internal/filter/color.h:398
 #, fuzzy
@@ -7232,11 +7237,11 @@ msgstr "Fluorescens"
 
 #: ../src/extension/internal/filter/color.h:591
 msgid "Swap:"
-msgstr ""
+msgstr "Byta:"
 
 #: ../src/extension/internal/filter/color.h:592
 msgid "No swap"
-msgstr ""
+msgstr "Ingen Byta"
 
 #: ../src/extension/internal/filter/color.h:593
 #, fuzzy
@@ -7351,7 +7356,7 @@ msgstr "0 (transparent)"
 
 #: ../src/extension/internal/filter/color.h:910
 msgid "Customize greyscale components"
-msgstr ""
+msgstr "Anpassa komponenter  gråskala"
 
 #: ../src/extension/internal/filter/color.h:982
 #: ../src/ui/widget/selected-style.cpp:270
@@ -7412,9 +7417,8 @@ msgid "Lights"
 msgstr "Höger:"
 
 #: ../src/extension/internal/filter/color.h:1120
-#, fuzzy
 msgid "Shadows"
-msgstr "Form"
+msgstr "Skuggor"
 
 #: ../src/extension/internal/filter/color.h:1121
 #: ../src/extension/internal/filter/paint.h:357 ../src/filter-enums.cpp:34
@@ -7439,7 +7443,7 @@ msgstr "Öka eller minska ljushet och kontrast"
 
 #: ../src/extension/internal/filter/color.h:1267
 msgid "Nudge RGB"
-msgstr ""
+msgstr "Knuffa RGB"
 
 #: ../src/extension/internal/filter/color.h:1271
 #, fuzzy
@@ -7468,9 +7472,8 @@ msgstr "X"
 #: ../src/extension/internal/filter/color.h:1391
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2824
 #: ../src/ui/dialog/input.cpp:1439 ../src/ui/widget/page-sizer.cpp:61
-#, fuzzy
 msgid "Y"
-msgstr "Y:"
+msgstr "Y"
 
 #: ../src/extension/internal/filter/color.h:1274
 #, fuzzy
@@ -7490,7 +7493,7 @@ msgstr ""
 
 #: ../src/extension/internal/filter/color.h:1379
 msgid "Nudge CMY"
-msgstr ""
+msgstr "Knuff CMY"
 
 #: ../src/extension/internal/filter/color.h:1383
 #, fuzzy
@@ -7552,7 +7555,7 @@ msgstr "Differens"
 
 #: ../src/extension/internal/filter/color.h:1579 ../src/filter-enums.cpp:69
 msgid "Luminosity"
-msgstr ""
+msgstr "Ljusstyrka"
 
 #. New in Compositing and Blending Level 1
 #: ../src/extension/internal/filter/color.h:1580 ../src/filter-enums.cpp:59
@@ -7801,7 +7804,7 @@ msgstr "Leta kanter"
 
 #: ../src/extension/internal/filter/image.h:52
 msgid "Detect:"
-msgstr ""
+msgstr "Upptäcka:"
 
 #: ../src/extension/internal/filter/image.h:53
 #: ../src/ui/dialog/template-load-tab.cpp:99
@@ -7830,7 +7833,7 @@ msgstr "Hitta färgkanter i objekt"
 
 #: ../src/extension/internal/filter/morphology.h:59
 msgid "Cross-smooth"
-msgstr ""
+msgstr "Korsa-slät"
 
 #: ../src/extension/internal/filter/morphology.h:62
 #: ../src/extension/internal/filter/shadows.h:67
@@ -7841,7 +7844,7 @@ msgstr "Innre sken"
 #: ../src/extension/internal/filter/morphology.h:63
 #: ../src/extension/internal/filter/shadows.h:66
 msgid "Outer"
-msgstr ""
+msgstr "Yttre"
 
 #: ../src/extension/internal/filter/morphology.h:64
 #: ../src/ui/widget/preferences-widget.cpp:892
@@ -8096,7 +8099,7 @@ msgstr "Tillägg \""
 
 #: ../src/extension/internal/filter/paint.h:101
 msgid "Grain blend:"
-msgstr ""
+msgstr "Korn blandning:"
 
 #: ../src/extension/internal/filter/paint.h:117
 msgid "Chromo effect with customizable edge drawing and graininess"
@@ -8144,7 +8147,7 @@ msgstr "Sudd"
 
 #: ../src/extension/internal/filter/paint.h:345
 msgid "Melt"
-msgstr ""
+msgstr "Smälta"
 
 #: ../src/extension/internal/filter/paint.h:351
 #: ../src/extension/internal/filter/paint.h:713
@@ -8308,11 +8311,11 @@ msgstr "Flytta slingeffekt upp"
 
 #: ../src/extension/internal/filter/paint.h:974
 msgid "Posterize Basic"
-msgstr ""
+msgstr "Posterize grundläggande"
 
 #: ../src/extension/internal/filter/paint.h:985
 msgid "Simple posterizing effect"
-msgstr ""
+msgstr "Enkel posterizing effekt"
 
 #: ../src/extension/internal/filter/protrusions.h:49
 #, fuzzy
@@ -8356,7 +8359,7 @@ msgstr "Form"
 
 #: ../src/extension/internal/filter/shadows.h:68
 msgid "Outer cutout"
-msgstr ""
+msgstr "Yttre utklipp"
 
 #: ../src/extension/internal/filter/shadows.h:69
 #, fuzzy
@@ -8509,7 +8512,7 @@ msgstr ""
 
 #: ../src/extension/internal/filter/transparency.h:342
 msgid "Silhouette"
-msgstr ""
+msgstr "Silhuett"
 
 #: ../src/extension/internal/filter/transparency.h:345
 msgid "Cutout"
@@ -8529,7 +8532,7 @@ msgstr "Släpp bitmappbild"
 #: ../src/extension/internal/gdkpixbuf-input.cpp:198
 #, c-format
 msgid "Image Import Type:"
-msgstr ""
+msgstr "Typ av bild import:"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:198
 #, c-format
@@ -8623,7 +8626,7 @@ msgstr ""
 #: ../src/extension/internal/svg.cpp:649
 #, c-format
 msgid "Don't ask again"
-msgstr ""
+msgstr "Fråga inte igen"
 
 #: ../src/extension/internal/gimpgrad.cpp:269
 #, fuzzy
@@ -8713,7 +8716,7 @@ msgstr "Rita en slinga som är ett rutnät"
 
 #: ../src/extension/internal/javafx-out.cpp:954
 msgid "JavaFX Output"
-msgstr ""
+msgstr "JavaFX Produktion"
 
 #: ../src/extension/internal/javafx-out.cpp:959
 msgid "JavaFX (*.fx)"
@@ -8721,11 +8724,11 @@ msgstr "JavaFX (*.fx)"
 
 #: ../src/extension/internal/javafx-out.cpp:960
 msgid "JavaFX Raytracer File"
-msgstr ""
+msgstr "JavaFX Raytracer-fil"
 
 #: ../src/extension/internal/latex-pstricks-out.cpp:92
 msgid "LaTeX Output"
-msgstr ""
+msgstr "LaTeX Produktion"
 
 #: ../src/extension/internal/latex-pstricks-out.cpp:97
 msgid "LaTeX With PSTricks macros (*.tex)"
@@ -8733,7 +8736,7 @@ msgstr "LaTeX med PSTricks-makron (*.tex)"
 
 #: ../src/extension/internal/latex-pstricks-out.cpp:98
 msgid "LaTeX PSTricks File"
-msgstr ""
+msgstr "LaTeX PSTricks-fil"
 
 #: ../src/extension/internal/latex-pstricks.cpp:326
 #, fuzzy
@@ -8877,8 +8880,9 @@ msgid "very fine"
 msgstr "mycket fin"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:954
+#, fuzzy
 msgid "PDF Input"
-msgstr ""
+msgstr "PDF Inmatning"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:959
 #, fuzzy
@@ -8937,7 +8941,7 @@ msgstr ""
 
 #: ../src/extension/internal/svg.cpp:653
 msgid "Scalable Vector Graphic (*.svg)"
-msgstr ""
+msgstr "Skalbar vektor grafik (*. SVG)"
 
 #: ../src/extension/internal/svg.cpp:654
 msgid "Inkscape native file format and W3C standard"
@@ -8945,7 +8949,7 @@ msgstr "Inbyggt filformat för Inkscape och W3C-standard"
 
 #: ../src/extension/internal/svg.cpp:662
 msgid "SVG Output Inkscape"
-msgstr ""
+msgstr "SVG production Inkscape"
 
 #: ../src/extension/internal/svg.cpp:667
 msgid "Inkscape SVG (*.svg)"
@@ -8970,7 +8974,7 @@ msgstr "Format för skalbar vektorgrafik som definierats av W3C"
 
 #: ../src/extension/internal/svgz.cpp:44
 msgid "SVGZ Input"
-msgstr ""
+msgstr "SVGZ indata"
 
 #: ../src/extension/internal/svgz.cpp:50 ../src/extension/internal/svgz.cpp:64
 msgid "Compressed Inkscape SVG (*.svgz)"
@@ -8982,7 +8986,7 @@ msgstr "SVG-filformat komprimerat med GZip"
 
 #: ../src/extension/internal/svgz.cpp:59 ../src/extension/internal/svgz.cpp:73
 msgid "SVGZ Output"
-msgstr ""
+msgstr "SVGZ-utdata"
 
 #: ../src/extension/internal/svgz.cpp:65
 msgid "Inkscape's native file format compressed with GZip"
@@ -8997,9 +9001,8 @@ msgid "Scalable Vector Graphics format compressed with GZip"
 msgstr "Format för skalbar vektorgrafik komprimerat med GZip"
 
 #: ../src/extension/internal/vsd-input.cpp:326
-#, fuzzy
 msgid "VSD Input"
-msgstr "SVG-indata"
+msgstr "VSD-indata"
 
 #: ../src/extension/internal/vsd-input.cpp:331
 #, fuzzy
@@ -9007,13 +9010,13 @@ msgid "Microsoft Visio Diagram (*.vsd)"
 msgstr "Dia-diagram"
 
 #: ../src/extension/internal/vsd-input.cpp:332
+#, fuzzy
 msgid "File format used by Microsoft Visio 6 and later"
-msgstr ""
+msgstr "Filformat som används av Microsoft Visio 6 och senare"
 
 #: ../src/extension/internal/vsd-input.cpp:339
-#, fuzzy
 msgid "VDX Input"
-msgstr "Inmatnings_metoder"
+msgstr "VDX indata"
 
 #: ../src/extension/internal/vsd-input.cpp:344
 #, fuzzy
@@ -9022,34 +9025,32 @@ msgstr "Microsoft XAML (*.xaml)"
 
 #: ../src/extension/internal/vsd-input.cpp:345
 msgid "File format used by Microsoft Visio 2010 and later"
-msgstr ""
+msgstr "Filformat som används av Microsoft Visio 2010 och senare"
 
 #: ../src/extension/internal/vsd-input.cpp:352
-#, fuzzy
 msgid "VSDM Input"
-msgstr "SVG-indata"
+msgstr "VSDM indata"
 
 #: ../src/extension/internal/vsd-input.cpp:357
 msgid "Microsoft Visio 2013 drawing (*.vsdm)"
-msgstr ""
+msgstr "Microsoft Visio 2013 ritning (*. vsdm)"
 
 #: ../src/extension/internal/vsd-input.cpp:358
 #: ../src/extension/internal/vsd-input.cpp:371
 msgid "File format used by Microsoft Visio 2013 and later"
-msgstr ""
+msgstr "Filformat som används av Microsoft Visio 2013 och senare"
 
 #: ../src/extension/internal/vsd-input.cpp:365
-#, fuzzy
 msgid "VSDX Input"
-msgstr "Inmatnings_metoder"
+msgstr "VSDX indata"
 
 #: ../src/extension/internal/vsd-input.cpp:370
 msgid "Microsoft Visio 2013 drawing (*.vsdx)"
-msgstr ""
+msgstr "Microsoft Visio 2013 ritning (*. vsdm)"
 
 #: ../src/extension/internal/wmf-inout.cpp:3209
 msgid "WMF Input"
-msgstr ""
+msgstr "WMF indata"
 
 #: ../src/extension/internal/wmf-inout.cpp:3214
 msgid "Windows Metafiles (*.wmf)"
@@ -9080,7 +9081,7 @@ msgstr "Rendera Windows metafil"
 
 #: ../src/extension/internal/wpg-input.cpp:158
 msgid "WPG Input"
-msgstr ""
+msgstr "WPG indata"
 
 #: ../src/extension/internal/wpg-input.cpp:163
 msgid "WordPerfect Graphics (*.wpg)"
@@ -9153,7 +9154,7 @@ msgstr "Kan inte skapa profilkatalogen %s."
 
 #: ../src/file-update.cpp:359
 msgid "More details..."
-msgstr ""
+msgstr "Fler detaljer..."
 
 #: ../src/file-update.cpp:362
 msgid ""
@@ -9187,9 +9188,8 @@ msgstr "T"
 #. Look for SPNamedView and SPDefs loop
 #. desktop->getDocument()->ensureUpToDate();  // Does not update box3d!
 #: ../src/file-update.cpp:633
-#, fuzzy
 msgid "Update Document"
-msgstr "Spara dokument"
+msgstr "Uppdatera dokument"
 
 #: ../src/file.cpp:261
 msgid "Broken links have been changed to point to existing files."
@@ -9615,7 +9615,7 @@ msgstr " (linje)"
 #: ../src/gradient-drag.cpp:1475
 #, c-format
 msgid "%s for: %s%s"
-msgstr ""
+msgstr "% s för:% s% s"
 
 #: ../src/gradient-drag.cpp:1482
 #, c-format
@@ -9710,12 +9710,12 @@ msgstr "Skriv ut tilläggsmappen och avsluta"
 
 #: ../src/inkscape-application.cpp:240
 msgid "Print: List verbs."
-msgstr ""
+msgstr "Skriv ut: lista verb."
 
 #. Interface
 #: ../src/inkscape-application.cpp:243
 msgid "GUI: With graphical interface."
-msgstr ""
+msgstr "GUI: med grafiskt gränssnitt."
 
 #: ../src/inkscape-application.cpp:244
 #, fuzzy
@@ -9736,7 +9736,7 @@ msgstr "Välj fil att importera"
 
 #: ../src/inkscape-application.cpp:248
 msgid "PAGE"
-msgstr ""
+msgstr "PAGE"
 
 #: ../src/inkscape-application.cpp:249
 msgid ""
@@ -9756,7 +9756,7 @@ msgstr "ID för det objekt vars dimensioner är begärda"
 
 #: ../src/inkscape-application.cpp:253 ../src/inkscape-application.cpp:262
 msgid "OBJECT-ID[,OBJECT-ID]*"
-msgstr ""
+msgstr "OBJEKT-ID [;OBJEKT-ID] *"
 
 #: ../src/inkscape-application.cpp:254
 msgid "Query: Print bounding boxes of all objects."
@@ -9806,7 +9806,7 @@ msgstr "Verb att anropa när Inkscape startas."
 
 #: ../src/inkscape-application.cpp:263
 msgid "VERB-ID[;VERB-ID]*"
-msgstr ""
+msgstr "VERB-ID [;VERB-ID] *"
 
 #: ../src/inkscape-application.cpp:264
 #, fuzzy
@@ -9904,7 +9904,7 @@ msgstr "ID för objektet att exportera"
 
 #: ../src/inkscape-application.cpp:282
 msgid "OBJECT-ID[;OBJECT-ID]*"
-msgstr ""
+msgstr "OBJEKT-ID [;OBJEKT-ID] *"
 
 #. BSP
 #: ../src/inkscape-application.cpp:283
@@ -9952,19 +9952,17 @@ msgid "Export: Postscript level (2 or 3). Default is 3."
 msgstr ""
 
 #: ../src/inkscape-application.cpp:288
-#, fuzzy
 msgid "PS-Level"
-msgstr "Nivå"
+msgstr "PS-nivå"
 
 #. xxP
 #: ../src/inkscape-application.cpp:289
 msgid "Export: PDF level (1.4 or 1.5)"
-msgstr ""
+msgstr "Exportera: PDF-nivå (1,4 eller 1,5)"
 
 #: ../src/inkscape-application.cpp:289
-#, fuzzy
 msgid "PDF-Level"
-msgstr "Nivå"
+msgstr "PDF-nivå"
 
 #. xxP
 #: ../src/inkscape-application.cpp:290
@@ -10103,7 +10101,7 @@ msgstr "Ändra färgdefinition"
 
 #: ../src/inkview-application.cpp:65 ../src/inkview-application.cpp:66
 msgid "NUMBER"
-msgstr ""
+msgstr "siffra"
 
 #: ../src/inkview-application.cpp:66
 #, fuzzy
@@ -10871,7 +10869,7 @@ msgstr "Uppdatera"
 
 #: ../src/live_effects/effect.cpp:1544 ../src/live_effects/effect.cpp:1603
 msgid "<b>Default value:</b> <s>"
-msgstr ""
+msgstr "<b> Standardvärde: </ b> <s>"
 
 #: ../src/live_effects/effect.cpp:1546 ../src/live_effects/effect.cpp:1614
 msgid "Set"
@@ -11144,7 +11142,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-bool.cpp:77
 msgid "Fill type operand:"
-msgstr ""
+msgstr "Fyll typ operand:"
 
 #: ../src/live_effects/lpe-bool.cpp:77
 msgid "Fill type (winding mode) for operand path"
@@ -11175,7 +11173,7 @@ msgstr "Visuell begränsningslåda"
 
 #: ../src/live_effects/lpe-bspline.cpp:31
 msgid "Steps with CTRL:"
-msgstr ""
+msgstr "Steg med CTRL:"
 
 #: ../src/live_effects/lpe-bspline.cpp:31
 msgid "Change number of steps with CTRL pressed"
@@ -11253,7 +11251,7 @@ msgstr "Alla geometriska former"
 #: ../src/live_effects/lpe-clone-original.cpp:32
 #: ../src/live_effects/lpe-fill-between-many.cpp:27
 msgid "Without LPE's"
-msgstr ""
+msgstr "Utan LPE's"
 
 #: ../src/live_effects/lpe-clone-original.cpp:33
 #: ../src/live_effects/lpe-fill-between-many.cpp:28
@@ -11264,7 +11262,7 @@ msgstr "Spirallinje"
 #: ../src/live_effects/lpe-clone-original.cpp:34
 #: ../src/live_effects/lpe-fill-between-many.cpp:29
 msgid "With LPE's"
-msgstr ""
+msgstr "Med LPE's"
 
 #: ../src/live_effects/lpe-clone-original.cpp:40
 #, fuzzy
@@ -11306,7 +11304,7 @@ msgstr "Storleken på rutnätet längs Y-axeln"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:40
 msgid "Kaleidoscope"
-msgstr ""
+msgstr "Kalejdoskop"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:41
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:59
@@ -11388,11 +11386,11 @@ msgstr "Graf"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:69
 msgid "360º Copies"
-msgstr ""
+msgstr "360 º kopior"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:69
 msgid "No rotation angle, fixed to 360º"
-msgstr ""
+msgstr "Ingen rotations vinkel, fast till 360 º"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:70
 #, fuzzy
@@ -11509,19 +11507,16 @@ msgid "Number of dashes"
 msgstr "Antal steg"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:19
-#, fuzzy
 msgid "Hole factor"
-msgstr "Skalningsfaktor"
+msgstr "Hålfaktor"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:20
-#, fuzzy
 msgid "Use segments"
-msgstr "Radera segment"
+msgstr "Använd segment"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:21
-#, fuzzy
 msgid "Half start/end"
-msgstr "Båge: Ändra start/slut"
+msgstr "Halv start/slut"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:21
 msgid "Start and end of each segment has half size"
@@ -11538,7 +11533,7 @@ msgstr ""
 #: ../src/live_effects/lpe-dashed-stroke.cpp:24
 #: ../src/live_effects/lpe-powerclip.cpp:37
 msgid "Info Box"
-msgstr ""
+msgstr "info låda"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:24
 #: ../src/live_effects/lpe-powerclip.cpp:37
@@ -11560,22 +11555,20 @@ msgid "No ellipse found for specified points"
 msgstr "Ingen kantinformation hittad i den specificerade filen."
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:30
-#, fuzzy
 msgid "no reordering"
-msgstr "Rendering"
+msgstr "ingen omordning"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:31
 msgid "zig-zag"
-msgstr ""
+msgstr "sicksack"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:32
 msgid "zig-zag, reverse first"
-msgstr ""
+msgstr "sicksack, omvänd första"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:33
-#, fuzzy
 msgid "closest"
-msgstr "Stäng"
+msgstr "närmast"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:34
 msgid "closest, reverse first"
@@ -11683,7 +11676,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:63
 msgid "Jump if longer"
-msgstr ""
+msgstr "Hoppa om längre"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:63
 #, fuzzy
@@ -11760,11 +11753,11 @@ msgstr "Slinga som skall böja ursprungsslingan"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:36
 msgid "LPE's on linked:"
-msgstr ""
+msgstr "LPE's på länkade:"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:36
 msgid "LPE's on linked"
-msgstr ""
+msgstr "LPE's på länkade"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:37
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:23
@@ -11848,7 +11841,7 @@ msgstr "Konvertera till gråskala"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:47
 msgid "Radius, in unit or %"
-msgstr ""
+msgstr "Radie, i enhet eller%"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:49
 #, fuzzy
@@ -12070,7 +12063,7 @@ msgstr "Fyrkantiga avslutning"
 #: ../src/live_effects/lpe-jointype.cpp:50
 #: ../src/live_effects/lpe-powerstroke.cpp:147
 msgid "Peak"
-msgstr ""
+msgstr "Topp"
 
 #: ../src/live_effects/lpe-jointype.cpp:59
 #, fuzzy
@@ -12216,9 +12209,8 @@ msgid "Update while moving knots (maybe slow)"
 msgstr ""
 
 #: ../src/live_effects/lpe-lattice2.cpp:41
-#, fuzzy
 msgid "Control 0:"
-msgstr "Slumpad:"
+msgstr "Kontroll 0:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:41
 #, fuzzy
@@ -12226,9 +12218,8 @@ msgid "Control 0 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:42
-#, fuzzy
 msgid "Control 1:"
-msgstr "Slumpad:"
+msgstr "Kontroll 1:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:42
 #, fuzzy
@@ -12236,9 +12227,8 @@ msgid "Control 1 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:43
-#, fuzzy
 msgid "Control 2:"
-msgstr "Slumpad:"
+msgstr "Kontroll 2:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:43
 #, fuzzy
@@ -12246,9 +12236,8 @@ msgid "Control 2 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:44
-#, fuzzy
 msgid "Control 3:"
-msgstr "Slumpad:"
+msgstr "Kontroll 3:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:44
 #, fuzzy
@@ -12256,9 +12245,8 @@ msgid "Control 3 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:45
-#, fuzzy
 msgid "Control 4:"
-msgstr "Slumpad:"
+msgstr "Kontroll 4:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:45
 #, fuzzy
@@ -12266,9 +12254,8 @@ msgid "Control 4 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:46
-#, fuzzy
 msgid "Control 5:"
-msgstr "Slumpad:"
+msgstr "Kontroll 5:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:46
 #, fuzzy
@@ -12276,9 +12263,8 @@ msgid "Control 5 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:47
-#, fuzzy
 msgid "Control 6:"
-msgstr "Slumpad:"
+msgstr "Kontroll 6:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:47
 #, fuzzy
@@ -12286,9 +12272,8 @@ msgid "Control 6 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:48
-#, fuzzy
 msgid "Control 7:"
-msgstr "Slumpad:"
+msgstr "Kontroll 7:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:48
 #, fuzzy
@@ -12296,9 +12281,8 @@ msgid "Control 7 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:49
-#, fuzzy
 msgid "Control 8x9:"
-msgstr "Slumpad:"
+msgstr "Kontroll 8x9:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:49
 #, fuzzy
@@ -12307,9 +12291,8 @@ msgid ""
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:50
-#, fuzzy
 msgid "Control 10x11:"
-msgstr "Slumpad:"
+msgstr "Kontroll 10x11:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:50
 #, fuzzy
@@ -12318,9 +12301,8 @@ msgid ""
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:51
-#, fuzzy
 msgid "Control 12:"
-msgstr "Slumpad:"
+msgstr "Kontroll 12:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:51
 #, fuzzy
@@ -12328,9 +12310,8 @@ msgid "Control 12 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:52
-#, fuzzy
 msgid "Control 13:"
-msgstr "Slumpad:"
+msgstr "Kontroll 13:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:52
 #, fuzzy
@@ -12338,9 +12319,8 @@ msgid "Control 13 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:53
-#, fuzzy
 msgid "Control 14:"
-msgstr "Slumpad:"
+msgstr "Kontroll 14:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:53
 #, fuzzy
@@ -12348,9 +12328,8 @@ msgid "Control 14 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:54
-#, fuzzy
 msgid "Control 15:"
-msgstr "Slumpad:"
+msgstr "Kontroll 15:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:54
 #, fuzzy
@@ -12358,9 +12337,8 @@ msgid "Control 15 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:55
-#, fuzzy
 msgid "Control 16:"
-msgstr "Slumpad:"
+msgstr "Kontroll 16:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:55
 #, fuzzy
@@ -12368,9 +12346,8 @@ msgid "Control 16 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:56
-#, fuzzy
 msgid "Control 17:"
-msgstr "Slumpad:"
+msgstr "Kontroll 17:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:56
 #, fuzzy
@@ -12378,9 +12355,8 @@ msgid "Control 17 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:57
-#, fuzzy
 msgid "Control 18:"
-msgstr "Slumpad:"
+msgstr "Kontroll 18:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:57
 #, fuzzy
@@ -12388,9 +12364,8 @@ msgid "Control 18 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:58
-#, fuzzy
 msgid "Control 19:"
-msgstr "Slumpad:"
+msgstr "Kontroll 19:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:58
 #, fuzzy
@@ -12398,9 +12373,8 @@ msgid "Control 19 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:59
-#, fuzzy
 msgid "Control 20x21:"
-msgstr "Slumpad:"
+msgstr "Kontroll 20x21:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:59
 #, fuzzy
@@ -12409,9 +12383,8 @@ msgid ""
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:60
-#, fuzzy
 msgid "Control 22x23:"
-msgstr "Slumpad:"
+msgstr "Kontroll 22x23:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:60
 #, fuzzy
@@ -12420,9 +12393,8 @@ msgid ""
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:61
-#, fuzzy
 msgid "Control 24x26:"
-msgstr "Slumpad:"
+msgstr "Kontroll 24x26:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:61
 #, fuzzy
@@ -12431,9 +12403,8 @@ msgid ""
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:62
-#, fuzzy
 msgid "Control 25x27:"
-msgstr "Slumpad:"
+msgstr "Kontroll 25x26:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:62
 #, fuzzy
@@ -12442,9 +12413,8 @@ msgid ""
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:63
-#, fuzzy
 msgid "Control 28x30:"
-msgstr "Slumpad:"
+msgstr "Kontroll 28x30:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:63
 #, fuzzy
@@ -12453,9 +12423,8 @@ msgid ""
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-lattice2.cpp:64
-#, fuzzy
 msgid "Control 29x31:"
-msgstr "Slumpad:"
+msgstr "Kontroll 29x31:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:64
 #, fuzzy
@@ -12465,13 +12434,16 @@ msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag
 
 #: ../src/live_effects/lpe-lattice2.cpp:65
 msgid "Control 32x33x34x35:"
-msgstr ""
+msgstr "Kontroll 32x33x34x35:"
 
 #: ../src/live_effects/lpe-lattice2.cpp:65
+#, fuzzy
 msgid ""
 "Control 32x33x34x35 - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along "
 "axes"
 msgstr ""
+"Kontroll 32x33x34x35-<b> Ctrl + Alt + klicka </b>: Reset, <b> CTRL </b>: "
+"flytta längs axlar"
 
 #: ../src/live_effects/lpe-lattice2.cpp:230
 #, fuzzy
@@ -12588,9 +12560,8 @@ msgid "Format the number ex:{measure} {unit}, return to save"
 msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:81
-#, fuzzy
 msgid "Blacklist"
-msgstr "Svart"
+msgstr "Svartlistad"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:81
 msgid ""
@@ -12638,11 +12609,11 @@ msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:87
 msgid "Local Number Format"
-msgstr ""
+msgstr "Lokalt Siffra Formatera"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:87
 msgid "Local number format"
-msgstr ""
+msgstr "Lokalt siffra formatera"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:88
 #, fuzzy
@@ -12670,7 +12641,7 @@ msgstr "Multiplicera"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:91
 msgid "Multiply by 100 less than 1"
-msgstr ""
+msgstr "Multiplicera med 100 mindre än 1"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:92
 #, fuzzy
@@ -12688,7 +12659,7 @@ msgstr "Förvräng"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:93
 msgid "Distance away from nearest point"
-msgstr ""
+msgstr "Avstånd från närmaste punkt"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:94
 #, fuzzy
@@ -12831,9 +12802,8 @@ msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:276
 #: ../src/ui/dialog/find.cpp:77
-#, fuzzy
 msgid "General"
-msgstr "<b>Allmänt</b>"
+msgstr "Allmän"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:277
 #, fuzzy
@@ -12862,11 +12832,11 @@ msgstr "Ta bort mask från markering"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:47
 msgid "X from middle knot"
-msgstr ""
+msgstr "X från mittknut"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:48
 msgid "Y from middle knot"
-msgstr ""
+msgstr "Y från mittknut"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:56
 msgid "Mode"
@@ -12945,9 +12915,8 @@ msgstr "Hitta horisontella kanter"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:65
 #: ../share/extensions/pathalongpath.inx.h:10
-#, fuzzy
 msgid "Single"
-msgstr "Enkelt"
+msgstr "Enda"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:66
 #: ../share/extensions/pathalongpath.inx.h:11
@@ -13082,9 +13051,8 @@ msgid "Select the type of deformation"
 msgstr "Dpulicera mönstret före deformation"
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:50
-#, fuzzy
 msgid "Top Left"
-msgstr "Topp, till vänster"
+msgstr "Övre vänstra"
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:50
 #, fuzzy
@@ -13092,9 +13060,8 @@ msgid "Top Left - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:51
-#, fuzzy
 msgid "Top Right"
-msgstr "Topp, till höger"
+msgstr "Överst till höger"
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:51
 #, fuzzy
@@ -13102,9 +13069,8 @@ msgid "Top Right - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr "<b>Alt</b>: lås handtags längd; <b>Ctrl+Alt</b>: flytta längs handtag"
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:52
-#, fuzzy
 msgid "Down Left"
-msgstr "Topp, till vänster"
+msgstr "Ner vänster"
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:52
 #, fuzzy
@@ -13133,9 +13099,8 @@ msgid "_Clear"
 msgstr "Rensa"
 
 #: ../src/live_effects/lpe-powerclip.cpp:32
-#, fuzzy
 msgid "Hide clip"
-msgstr "Visa allt"
+msgstr "Dölj klipp"
 
 #: ../src/live_effects/lpe-powerclip.cpp:35
 #, fuzzy
@@ -13158,15 +13123,13 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/lpe-powermask.cpp:37
-#, fuzzy
 msgid "Invert mask"
-msgstr "Invertera bild"
+msgstr "Invertera masken"
 
 #. wrap(_("Wrap mask data"), _("Wrap mask data allowing previous filters"), "wrap", &wr, this, false),
 #: ../src/live_effects/lpe-powermask.cpp:39
-#, fuzzy
 msgid "Hide mask"
-msgstr "Dölj lager"
+msgstr "Dölj mask"
 
 #: ../src/live_effects/lpe-powermask.cpp:40
 #, fuzzy
@@ -13190,9 +13153,8 @@ msgstr "Bezier"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:146
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx.h:13
-#, fuzzy
 msgid "Round"
-msgstr "Rundad"
+msgstr "Runda"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:148
 #, fuzzy
@@ -13205,9 +13167,8 @@ msgid "Spiro"
 msgstr "Spiro"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:172
-#, fuzzy
 msgid "Offset points"
-msgstr "Förskjuten slinga"
+msgstr "Offset-poäng"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:173
 #, fuzzy
@@ -13296,7 +13257,7 @@ msgstr ""
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:50
 msgid "_Arc"
-msgstr ""
+msgstr "_Båge"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:50
 msgid "Generate open arc (open ellipse)"
@@ -13324,7 +13285,7 @@ msgstr "Utför kalkeringen"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:53
 msgid "A_xes"
-msgstr ""
+msgstr "A_xes"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:53
 msgid "Draw both semi-major and semi-minor axes"
@@ -13360,7 +13321,6 @@ msgid "Variation of distance between hatches, in %."
 msgstr ""
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:220
-#, fuzzy
 msgid "Growth:"
 msgstr "Tillväxt"
 
@@ -13380,9 +13340,8 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:223
-#, fuzzy
 msgid "1st side, out:"
-msgstr "Sista sida:"
+msgstr "första sidan, ut:"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:223
 msgid ""
@@ -13473,7 +13432,7 @@ msgstr "Simulera ett penseldrag med varierande tjocklek"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:234
 msgid "Bend hatches"
-msgstr ""
+msgstr "Böj luckor"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:234
 msgid "Add a global bend to the hatches (slower)"
@@ -13668,7 +13627,6 @@ msgid "Both"
 msgstr "Både och"
 
 #: ../src/live_effects/lpe-ruler.cpp:30
-#, fuzzy
 msgctxt "Border mark"
 msgid "None"
 msgstr "Ingen"
@@ -13710,7 +13668,7 @@ msgstr "Max. längd"
 
 #: ../src/live_effects/lpe-ruler.cpp:41
 msgid "Length of major ruler marks"
-msgstr ""
+msgstr "Längd på stora linjalmarkeringar"
 
 #: ../src/live_effects/lpe-ruler.cpp:42
 #, fuzzy
@@ -13719,7 +13677,7 @@ msgstr "Max. längd"
 
 #: ../src/live_effects/lpe-ruler.cpp:42
 msgid "Length of minor ruler marks"
-msgstr ""
+msgstr "Längd på mindre linjalmarkeringar"
 
 #: ../src/live_effects/lpe-ruler.cpp:43
 #, fuzzy
@@ -13798,9 +13756,8 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/lpe-simplify.cpp:23
-#, fuzzy
 msgid "Steps:"
-msgstr "Steg"
+msgstr "Steg:"
 
 #: ../src/live_effects/lpe-simplify.cpp:23
 #, fuzzy
@@ -14293,16 +14250,14 @@ msgstr "Ta bort effekter"
 #: ../src/live_effects/parameter/originalitemarray.cpp:170
 #: ../src/live_effects/parameter/originalpatharray.cpp:211
 #: ../src/ui/dialog/objects.cpp:1848
-#, fuzzy
 msgid "Move Down"
-msgstr "Flytta"
+msgstr "Flytta ner"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:182
 #: ../src/live_effects/parameter/originalpatharray.cpp:223
 #: ../src/ui/dialog/objects.cpp:1856
-#, fuzzy
 msgid "Move Up"
-msgstr "Flytta mönster"
+msgstr "Flytta upp"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:222
 #, fuzzy
@@ -14332,14 +14287,12 @@ msgstr "Länka till slinga"
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:89
 #: ../src/ui/toolbar/gradient-toolbar.cpp:440
-#, fuzzy
 msgid "Reverse"
-msgstr "Vänd rikting"
+msgstr "Omvänd"
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:97
-#, fuzzy
 msgid "Visible"
-msgstr "_Synlig"
+msgstr "Synlig"
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:147
 #: ../src/live_effects/parameter/path.cpp:563
@@ -14530,17 +14483,16 @@ msgid "without URI"
 msgstr "<b>Länk</b> utan URI"
 
 #: ../src/object/sp-ellipse.cpp:389 ../src/ui/toolbar/arc-toolbar.cpp:160
-#, fuzzy
 msgid "Slice"
-msgstr "Delare"
+msgstr "Skiva"
 
 #: ../src/object/sp-ellipse.cpp:392 ../src/ui/toolbar/arc-toolbar.cpp:170
 msgid "Chord"
-msgstr ""
+msgstr "Ackord"
 
 #: ../src/object/sp-ellipse.cpp:395
 msgid "Arc"
-msgstr ""
+msgstr "Båge"
 
 #. Ellipse
 #: ../src/object/sp-ellipse.cpp:399 ../src/object/sp-ellipse.cpp:406
@@ -14601,9 +14553,8 @@ msgstr "Radera alla stödlinjer"
 
 #. Guide has probably been deleted and no longer has an attached namedview.
 #: ../src/object/sp-guide.cpp:512
-#, fuzzy
 msgid "Deleted"
-msgstr "Radera"
+msgstr "raderade"
 
 #: ../src/object/sp-guide.cpp:521
 msgid ""
@@ -14648,14 +14599,14 @@ msgid "Group"
 msgstr "Grupp"
 
 #: ../src/object/sp-item-group.cpp:311 ../src/object/sp-switch.cpp:70
-#, fuzzy, c-format
+#, c-format
 msgid "of <b>%d</b> object"
-msgstr "<b>Grupp</b> med <b>%d</b> objekt"
+msgstr "av <b>% d </b> objekt"
 
 #: ../src/object/sp-item-group.cpp:311 ../src/object/sp-switch.cpp:70
-#, fuzzy, c-format
+#, c-format
 msgid "of <b>%d</b> objects"
-msgstr "<b>Grupp</b> med <b>%d</b> objekt"
+msgstr "av <b>% d </b> objekt"
 
 #: ../src/object/sp-item-group.cpp:647 ../src/selection-chemistry.cpp:900
 #: ../src/ui/dialog/objects.cpp:1912
@@ -14667,9 +14618,9 @@ msgid "Object"
 msgstr "Objekt"
 
 #: ../src/object/sp-item.cpp:1040
-#, fuzzy, c-format
+#, c-format
 msgid "%s; <i>clipped</i>"
-msgstr "%s; <i>beskuren</i>"
+msgstr "%s; <i> klippt </i>"
 
 #: ../src/object/sp-item.cpp:1046
 #, fuzzy, c-format
@@ -14789,7 +14740,7 @@ msgstr "<b>Stjärna</b> med %d spetsar"
 
 #: ../src/object/sp-switch.cpp:64
 msgid "Conditional Group"
-msgstr ""
+msgstr "Villkorlig grupp"
 
 #: ../src/object/sp-text.cpp:323
 #, fuzzy
@@ -14832,7 +14783,6 @@ msgid "Cloned Character Data"
 msgstr "<b>Klonad teckendata</b>%s%s"
 
 #: ../src/object/sp-tref.cpp:232
-#, fuzzy
 msgid " from "
 msgstr " från "
 
@@ -14858,7 +14808,7 @@ msgstr "Klonad"
 #: ../src/object/sp-use.cpp:248
 #, c-format
 msgid "called %s"
-msgstr ""
+msgstr "Kallas %s"
 
 #: ../src/object/sp-use.cpp:248
 #, fuzzy
@@ -15260,7 +15210,7 @@ msgid "Select <b>object(s)</b> to duplicate."
 msgstr "Markera <b>objekt</b> att klona."
 
 #: ../src/selection-chemistry.cpp:570
-#, fuzzy, c-format
+#, c-format
 msgid "%s copy"
 msgstr "%s-kopia"
 
@@ -15275,7 +15225,6 @@ msgid "Select <b>some objects</b> to group."
 msgstr "Markera <b>några objekt</b> att gruppera."
 
 #: ../src/selection-chemistry.cpp:785
-#, fuzzy
 msgctxt "Verb"
 msgid "Group"
 msgstr "Grupp"
@@ -15317,10 +15266,9 @@ msgstr ""
 
 #. TRANSLATORS: "Raise" means "to raise an object" in the undo history
 #: ../src/selection-chemistry.cpp:1033
-#, fuzzy
 msgctxt "Undo action"
 msgid "Raise"
-msgstr "Höj"
+msgstr "Höja"
 
 #: ../src/selection-chemistry.cpp:1059
 msgid "Raise to top"
@@ -15332,7 +15280,6 @@ msgstr "Markera <b>objekt</b> att sänka."
 
 #. TRANSLATORS: "Lower" means "to lower an object" in the undo history
 #: ../src/selection-chemistry.cpp:1114
-#, fuzzy
 msgctxt "Undo action"
 msgid "Lower"
 msgstr "Sänk"
@@ -15624,7 +15571,7 @@ msgstr "Välj <b>objekt</b> att konvertera till markör."
 
 #: ../src/selection-chemistry.cpp:3258
 msgid "Group to symbol"
-msgstr ""
+msgstr "Grupp från symbol"
 
 #: ../src/selection-chemistry.cpp:3271
 #, fuzzy
@@ -15638,7 +15585,7 @@ msgstr ""
 
 #: ../src/selection-chemistry.cpp:3342
 msgid "Group from symbol"
-msgstr ""
+msgstr "Grupp från symbol"
 
 #: ../src/selection-chemistry.cpp:3357
 msgid "Select <b>object(s)</b> to convert to pattern."
@@ -16576,10 +16523,9 @@ msgstr "Minsta vertikala gap (i antal bildpunkter) mellan begränsningsytor"
 
 #. TRANSLATORS: Vertical gap
 #: ../src/ui/dialog/align-and-distribute.cpp:476
-#, fuzzy
 msgctxt "Gap"
 msgid "_V:"
-msgstr "V:"
+msgstr "_V:"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:506
 #: ../src/ui/dialog/align-and-distribute.cpp:924
@@ -17400,30 +17346,27 @@ msgid "Pick the Blue component of the color"
 msgstr "Hämta färgens blåa komponent"
 
 #: ../src/ui/dialog/clonetiler.cpp:821
-#, fuzzy
 msgctxt "Clonetiler color hue"
 msgid "H"
-msgstr "N"
+msgstr "H"
 
 #: ../src/ui/dialog/clonetiler.cpp:822
 msgid "Pick the hue of the color"
 msgstr "Hämta nyansen hos färgen"
 
 #: ../src/ui/dialog/clonetiler.cpp:828
-#, fuzzy
 msgctxt "Clonetiler color saturation"
 msgid "S"
-msgstr "M"
+msgstr "S"
 
 #: ../src/ui/dialog/clonetiler.cpp:829
 msgid "Pick the saturation of the color"
 msgstr "Hämta mättnaden hos färgen"
 
 #: ../src/ui/dialog/clonetiler.cpp:835
-#, fuzzy
 msgctxt "Clonetiler color lightness"
 msgid "L"
-msgstr "I"
+msgstr "L"
 
 #: ../src/ui/dialog/clonetiler.cpp:836
 msgid "Pick the lightness of the color"
@@ -18031,11 +17974,11 @@ msgid "<b>Page Size</b>"
 msgstr "<b>Sidstorlek</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:301
-#, fuzzy
 msgid "<b>Background</b>"
-msgstr "Bakgrund"
+msgstr "<b> bakgrund </b>"
 
 #: ../src/ui/dialog/document-properties.cpp:304
+#, fuzzy
 msgid "<b>Border</b>"
 msgstr "<b>Ram</b>"
 
@@ -18081,7 +18024,6 @@ msgstr "Länka färgprofil"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:312
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:321
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:330
-#, fuzzy
 msgid "_Remove"
 msgstr "_Ta bort"
 
@@ -18284,7 +18226,7 @@ msgstr "Precision"
 
 #: ../src/ui/dialog/export.cpp:146
 msgid "pHYs dpi"
-msgstr ""
+msgstr "pHYs dpi"
 
 #: ../src/ui/dialog/export.cpp:151
 #, fuzzy
@@ -18384,7 +18326,7 @@ msgstr "Exportera bitmappen med dessa inställningar"
 #. Advanced
 #: ../src/ui/dialog/export.cpp:331
 msgid "Advanced"
-msgstr ""
+msgstr "Avancerad"
 
 #: ../src/ui/dialog/export.cpp:345
 msgid ""
@@ -18915,9 +18857,8 @@ msgstr "Värde(n):"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2769
 #: ../src/widgets/desktop-widget.cpp:653
-#, fuzzy
 msgid "R:"
-msgstr "Rx:"
+msgstr "R:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2770
 #: ../src/ui/widget/color-icc-selector.cpp:170
@@ -18938,7 +18879,7 @@ msgstr "_A"
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2775
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2815
 msgid "Operator:"
-msgstr "Operator:"
+msgstr "Operatör:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2776
 msgid "K1:"
@@ -19109,7 +19050,7 @@ msgstr ""
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2801
 msgid "X displacement:"
-msgstr ""
+msgstr "X-förskjutning:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2801
 msgid "Color component that controls the displacement in the X direction"
@@ -19117,7 +19058,7 @@ msgstr ""
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2802
 msgid "Y displacement:"
-msgstr ""
+msgstr "Y-förskjutning:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2802
 msgid "Color component that controls the displacement in the Y direction"
@@ -19154,7 +19095,7 @@ msgstr "Bildkälla:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2828
 msgid "Delta X:"
-msgstr ""
+msgstr "Delta X:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2828
 msgid "This is how far the input image gets shifted to the right"
@@ -19162,7 +19103,7 @@ msgstr ""
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2829
 msgid "Delta Y:"
-msgstr ""
+msgstr "Delta Y:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2829
 msgid "This is how far the input image gets shifted downwards"
@@ -19190,7 +19131,7 @@ msgstr ""
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2845
 msgid "Base Frequency:"
-msgstr ""
+msgstr "Bas frekvens:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2846
 msgid "Octaves:"
@@ -19736,9 +19677,8 @@ msgid "Font '%1' substituted with '%2'"
 msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:54 ../src/ui/dialog/glyphs.cpp:146
-#, fuzzy
 msgid "all"
-msgstr "alla"
+msgstr "Allt"
 
 #: ../src/ui/dialog/glyphs.cpp:55
 msgid "common"
@@ -19750,15 +19690,15 @@ msgstr "ärvd"
 
 #: ../src/ui/dialog/glyphs.cpp:57 ../src/ui/dialog/glyphs.cpp:159
 msgid "Arabic"
-msgstr ""
+msgstr "Arabiska"
 
 #: ../src/ui/dialog/glyphs.cpp:58 ../src/ui/dialog/glyphs.cpp:157
 msgid "Armenian"
-msgstr ""
+msgstr "Armeniska"
 
 #: ../src/ui/dialog/glyphs.cpp:59 ../src/ui/dialog/glyphs.cpp:166
 msgid "Bengali"
-msgstr ""
+msgstr "Bengali"
 
 #: ../src/ui/dialog/glyphs.cpp:60 ../src/ui/dialog/glyphs.cpp:248
 msgid "Bopomofo"
@@ -19795,11 +19735,11 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:68
 msgid "Gothic"
-msgstr ""
+msgstr "Gotiska"
 
 #: ../src/ui/dialog/glyphs.cpp:69
 msgid "Greek"
-msgstr ""
+msgstr "Grekiska"
 
 #: ../src/ui/dialog/glyphs.cpp:70 ../src/ui/dialog/glyphs.cpp:168
 msgid "Gujarati"
@@ -19819,7 +19759,7 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:74 ../src/ui/dialog/glyphs.cpp:158
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebreiska"
 
 #: ../src/ui/dialog/glyphs.cpp:75 ../src/ui/dialog/glyphs.cpp:246
 msgid "Hiragana"
@@ -19835,7 +19775,7 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:78 ../src/ui/dialog/glyphs.cpp:191
 msgid "Khmer"
-msgstr ""
+msgstr "Khmer"
 
 #: ../src/ui/dialog/glyphs.cpp:79 ../src/ui/dialog/glyphs.cpp:176
 msgid "Lao"
@@ -19843,7 +19783,7 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:80
 msgid "Latin"
-msgstr ""
+msgstr "Latin"
 
 #: ../src/ui/dialog/glyphs.cpp:81 ../src/ui/dialog/glyphs.cpp:173
 msgid "Malayalam"
@@ -19851,7 +19791,7 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:82 ../src/ui/dialog/glyphs.cpp:192
 msgid "Mongolian"
-msgstr ""
+msgstr "Mongoliska "
 
 #: ../src/ui/dialog/glyphs.cpp:83 ../src/ui/dialog/glyphs.cpp:178
 msgid "Myanmar"
@@ -19863,7 +19803,7 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:85
 msgid "Old Italic"
-msgstr ""
+msgstr "Gammal kursiv"
 
 #: ../src/ui/dialog/glyphs.cpp:86 ../src/ui/dialog/glyphs.cpp:169
 msgid "Oriya"
@@ -19895,11 +19835,12 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:93 ../src/ui/dialog/glyphs.cpp:175
 msgid "Thai"
-msgstr ""
+msgstr "Thai"
 
 #: ../src/ui/dialog/glyphs.cpp:94 ../src/ui/dialog/glyphs.cpp:177
+#, fuzzy
 msgid "Tibetan"
-msgstr ""
+msgstr "Tibetanska"
 
 #: ../src/ui/dialog/glyphs.cpp:95
 msgid "Canadian Aboriginal"
@@ -20057,7 +19998,7 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:147
 msgid "Basic Latin"
-msgstr ""
+msgstr "Grundläggande Latin"
 
 #: ../src/ui/dialog/glyphs.cpp:148
 msgid "Latin-1 Supplement"
@@ -20086,7 +20027,7 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:154
 msgid "Greek and Coptic"
-msgstr ""
+msgstr "Grekiska och koptiska"
 
 #: ../src/ui/dialog/glyphs.cpp:156
 msgid "Cyrillic Supplement"
@@ -20102,7 +20043,7 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:164
 msgid "Samaritan"
-msgstr ""
+msgstr "Samaritiska"
 
 #: ../src/ui/dialog/glyphs.cpp:180
 msgid "Hangul Jamo"
@@ -20174,7 +20115,7 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:215
 msgid "Number Forms"
-msgstr ""
+msgstr "Nummer formulär"
 
 #: ../src/ui/dialog/glyphs.cpp:216
 #, fuzzy
@@ -20409,7 +20350,7 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:285
 msgid "Private Use Area"
-msgstr ""
+msgstr "Privat användnings område"
 
 #: ../src/ui/dialog/glyphs.cpp:286
 msgid "CJK Compatibility Ideographs"
@@ -20429,7 +20370,7 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:290
 msgid "Vertical Forms"
-msgstr ""
+msgstr "Vertikala former"
 
 #: ../src/ui/dialog/glyphs.cpp:291
 msgid "Combining Half Marks"
@@ -20462,7 +20403,7 @@ msgstr "Skript: "
 
 #: ../src/ui/dialog/glyphs.cpp:378
 msgid "Range: "
-msgstr ""
+msgstr "Räckvidd:"
 
 #: ../src/ui/dialog/glyphs.cpp:441
 #, fuzzy
@@ -20571,16 +20512,14 @@ msgid "Rela_tive change"
 msgstr "Relativ ändring"
 
 #: ../src/ui/dialog/guides.cpp:45
-#, fuzzy
 msgctxt "Guides"
 msgid "_X:"
-msgstr "X:"
+msgstr "_X:"
 
 #: ../src/ui/dialog/guides.cpp:46
-#, fuzzy
 msgctxt "Guides"
 msgid "_Y:"
-msgstr "Y:"
+msgstr "_Y:"
 
 #: ../src/ui/dialog/guides.cpp:47 ../src/ui/dialog/object-properties.cpp:57
 #, fuzzy
@@ -20592,9 +20531,8 @@ msgid "Optionally give this guideline a name"
 msgstr ""
 
 #: ../src/ui/dialog/guides.cpp:48
-#, fuzzy
 msgid "_Angle:"
-msgstr "Vinkel:"
+msgstr "_Vinkel:"
 
 #: ../src/ui/dialog/guides.cpp:52
 msgid "Lock the movement of guides"
@@ -20635,9 +20573,8 @@ msgid "Magnified:"
 msgstr "Förstorad:"
 
 #: ../src/ui/dialog/icon-preview.cpp:230
-#, fuzzy
 msgid "Actual Size:"
-msgstr "Verklig Storlek:"
+msgstr "Faktiska storleken:"
 
 #: ../src/ui/dialog/icon-preview.cpp:235
 msgctxt "Icon preview window"
@@ -21057,10 +20994,9 @@ msgstr "Zooma"
 
 #. Measure
 #: ../src/ui/dialog/inkscape-preferences.cpp:439 ../src/verbs.cpp:2956
-#, fuzzy
 msgctxt "ContextVerb"
 msgid "Measure"
-msgstr "Mät"
+msgstr "Mäta"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:441
 msgid "Ignore first and last points"
@@ -21080,7 +21016,7 @@ msgstr "Figurer"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:478
 msgid "Pressure sensitivity settings"
-msgstr ""
+msgstr "Inställningar för tryckkänslig het"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:481
 msgid "Sketch mode"
@@ -21847,7 +21783,7 @@ msgstr "Ändra linjebredd"
 #: ../src/ui/dialog/inkscape-preferences.cpp:973
 #: ../src/ui/dialog/inkscape-preferences.cpp:974
 msgid "Use dark theme"
-msgstr ""
+msgstr "Använd mörkt tema "
 
 #. Icons
 #: ../src/ui/dialog/inkscape-preferences.cpp:977
@@ -21867,7 +21803,7 @@ msgstr "Ikontema: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1006
 msgid "Use symbolic icons"
-msgstr ""
+msgstr "Använd symboliska ikoner"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1009
 #: ../src/ui/dialog/inkscape-preferences.cpp:1020
@@ -21882,7 +21818,7 @@ msgstr "Kopiera färg"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1011
 msgid "Apply color to symbolic icons)"
-msgstr ""
+msgstr "Tillämpa färg på symboliska ikoner)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1013
 #: ../src/ui/dialog/inkscape-preferences.cpp:1040
@@ -21957,16 +21893,15 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1040
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1040
-#, fuzzy
 msgid "No"
-msgstr "Neon"
+msgstr "Nej"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1043
 msgid "Show icons in menus:"
-msgstr ""
+msgstr "Visa ikoner i menyer:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1044
 msgid ""
@@ -21977,7 +21912,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1046
 msgid "Reload icons"
-msgstr ""
+msgstr "Ladda om ikoner"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1047
 msgid "Apply icon changes (may take a few seconds)"
@@ -21985,7 +21920,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1050
 msgid "Theme"
-msgstr ""
+msgstr "Tema"
 
 #. Windows
 #: ../src/ui/dialog/inkscape-preferences.cpp:1053
@@ -22207,7 +22142,7 @@ msgstr "Fönster"
 #. Grids
 #: ../src/ui/dialog/inkscape-preferences.cpp:1150
 msgid "Line color when zooming out"
-msgstr ""
+msgstr "Linjens färg när du zoomar ut"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1153
 #, fuzzy
@@ -22451,7 +22386,7 @@ msgstr "Slingdata"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1309
 msgid "Absolute"
-msgstr ""
+msgstr "Absolut"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1309
 #, fuzzy
@@ -22597,9 +22532,8 @@ msgid ""
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1356
-#, fuzzy
 msgid "Editing"
-msgstr "_Redigera"
+msgstr "Redigering"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1357
 msgid ""
@@ -22625,7 +22559,7 @@ msgstr "SVG-utdata"
 #. SVG 2 Fallbacks
 #: ../src/ui/dialog/inkscape-preferences.cpp:1366
 msgid "SVG 2"
-msgstr ""
+msgstr "SVG 2"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1367
 msgid "Insert SVG 1.1 fallback in text."
@@ -22646,7 +22580,7 @@ msgstr ""
 #. SVG Export Options (SVG 2 -> SVG 1)
 #: ../src/ui/dialog/inkscape-preferences.cpp:1374
 msgid "SVG 2 to SVG 1.1"
-msgstr ""
+msgstr "SVG 2 till SVG 1,1"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1376
 msgid "Replace markers with 'auto_start_reverse'."
@@ -23850,7 +23784,7 @@ msgstr "Inkludera dolda"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1941
 msgid "SVG import mode:"
-msgstr ""
+msgstr "SVG-importläge:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1948
 #, fuzzy
@@ -23902,7 +23836,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1979
 msgid "Shortcut file:"
-msgstr ""
+msgstr "Genväg fil:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1982
 #: ../src/ui/dialog/template-load-tab.cpp:43
@@ -23912,7 +23846,7 @@ msgstr "Sök"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1994
 msgid "Shortcut"
-msgstr ""
+msgstr "Genväg"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1995
 #: ../src/ui/widget/page-sizer.cpp:99
@@ -23930,18 +23864,16 @@ msgid ""
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2044
-#, fuzzy
 msgid "Import ..."
-msgstr "_Importera..."
+msgstr "Importera...Importera..."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2046
 msgid "Import custom keyboard shortcuts from a file"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2049
-#, fuzzy
 msgid "Export ..."
-msgstr "_Exportera bitmappsbild..."
+msgstr "Exportera..."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2051
 #, fuzzy
@@ -24068,7 +24000,7 @@ msgstr "Användarkonfiguration:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2401
 msgid "Location of users configuration"
-msgstr ""
+msgstr "Plats för användarnas konfiguration"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2404
 #, fuzzy
@@ -24201,7 +24133,7 @@ msgstr "Upplösning:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2450
 msgid "Temporary files: "
-msgstr ""
+msgstr "Tillfälliga filer:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2450
 msgid "Location of the temporary files used for autosave"
@@ -24285,9 +24217,8 @@ msgid "Hardware"
 msgstr "Taggtråd"
 
 #: ../src/ui/dialog/input.cpp:667
-#, fuzzy
 msgid "Link:"
-msgstr "Linje:"
+msgstr "Länk:"
 
 #: ../src/ui/dialog/input.cpp:669 ../src/ui/dialog/input.cpp:670
 #: ../src/ui/dialog/input.cpp:1394 ../src/ui/widget/color-scales.cpp:47
@@ -24297,15 +24228,15 @@ msgstr "Ingen"
 
 #: ../src/ui/dialog/input.cpp:676
 msgid "Axes count:"
-msgstr ""
+msgstr "Axlar räkna"
 
 #: ../src/ui/dialog/input.cpp:682
 msgid "axis:"
-msgstr ""
+msgstr "Axel:"
 
 #: ../src/ui/dialog/input.cpp:695
 msgid "Button count:"
-msgstr ""
+msgstr "Knappen räkna"
 
 #: ../src/ui/dialog/input.cpp:843
 #, fuzzy
@@ -24313,8 +24244,9 @@ msgid "Tablet"
 msgstr "Rityta"
 
 #: ../src/ui/dialog/input.cpp:870 ../src/ui/dialog/input.cpp:1751
+#, fuzzy
 msgid "pad"
-msgstr ""
+msgstr "vaddera"
 
 #: ../src/ui/dialog/input.cpp:911
 #, fuzzy
@@ -24347,11 +24279,11 @@ msgstr "Tryck"
 
 #: ../src/ui/dialog/input.cpp:1439
 msgid "X tilt"
-msgstr ""
+msgstr "X lutning"
 
 #: ../src/ui/dialog/input.cpp:1439
 msgid "Y tilt"
-msgstr ""
+msgstr "Y lutning"
 
 #: ../src/ui/dialog/input.cpp:1439 ../src/ui/widget/color-wheel-selector.cpp:31
 #, fuzzy
@@ -24527,7 +24459,7 @@ msgstr ""
 #: ../src/ui/dialog/livepatheffect-add.cpp:417
 #: ../src/ui/dialog/livepatheffect-add.cpp:439
 msgid "This is your favorite effects"
-msgstr ""
+msgstr "Det här är dina favorit effekter"
 
 #: ../src/ui/dialog/livepatheffect-add.cpp:422
 #: ../src/ui/dialog/livepatheffect-add.cpp:434
@@ -24663,12 +24595,11 @@ msgstr "K1:"
 
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:110
 msgid "Modify Node Position"
-msgstr ""
+msgstr "Ändra Nodposition"
 
 #: ../src/ui/dialog/memory.cpp:95
-#, fuzzy
 msgid "Heap"
-msgstr "Hög"
+msgstr "Högen"
 
 #: ../src/ui/dialog/memory.cpp:96
 #, fuzzy
@@ -24704,9 +24635,8 @@ msgid "Clear log messages"
 msgstr "Spara loggmeddelanden"
 
 #: ../src/ui/dialog/messages.cpp:79
-#, fuzzy
 msgid "Ready."
-msgstr "Klar."
+msgstr "Redo."
 
 #: ../src/ui/dialog/messages.cpp:171
 msgid "Log capture started."
@@ -24723,7 +24653,7 @@ msgstr "Skapa en Spiroslinga"
 
 #: ../src/ui/dialog/new-from-template.cpp:24
 msgid "New From Template"
-msgstr ""
+msgstr "Nytt från mall"
 
 #: ../src/ui/dialog/object-attributes.cpp:38
 msgid "Href:"
@@ -24770,7 +24700,7 @@ msgstr "_Titel"
 
 #: ../src/ui/dialog/object-properties.cpp:59
 msgid "_DPI SVG:"
-msgstr ""
+msgstr "_DPI SVG:"
 
 #: ../src/ui/dialog/object-properties.cpp:60
 #, fuzzy
@@ -24910,7 +24840,7 @@ msgstr "Visa objekt"
 
 #: ../src/ui/dialog/objects.cpp:432
 msgid "no-id"
-msgstr ""
+msgstr "Nej-id"
 
 #: ../src/ui/dialog/objects.cpp:904
 #, fuzzy
@@ -24976,30 +24906,27 @@ msgstr "Sätt objektetikett"
 #: ../src/ui/dialog/objects.cpp:1664
 msgctxt "Visibility"
 msgid "V"
-msgstr ""
+msgstr "V"
 
 #: ../src/ui/dialog/objects.cpp:1665
-#, fuzzy
 msgctxt "Lock"
 msgid "L"
-msgstr "I"
+msgstr "L"
 
 #: ../src/ui/dialog/objects.cpp:1666
 msgctxt "Type"
 msgid "T"
-msgstr ""
+msgstr "T"
 
 #: ../src/ui/dialog/objects.cpp:1667
-#, fuzzy
 msgctxt "Clip and mask"
 msgid "CM"
-msgstr "CMS"
+msgstr "CM"
 
 #: ../src/ui/dialog/objects.cpp:1668
-#, fuzzy
 msgctxt "Highlight"
 msgid "HL"
-msgstr "NMI"
+msgstr "HL"
 
 #: ../src/ui/dialog/objects.cpp:1669
 #, fuzzy
@@ -25070,7 +24997,7 @@ msgstr "Byt namn"
 
 #: ../src/ui/dialog/objects.cpp:1892
 msgid "Solo"
-msgstr ""
+msgstr "Solo"
 
 #: ../src/ui/dialog/objects.cpp:1893
 #, fuzzy
@@ -25098,14 +25025,12 @@ msgid "Unlock All"
 msgstr "Lås upp allt"
 
 #: ../src/ui/dialog/objects.cpp:1905
-#, fuzzy
 msgid "Up"
 msgstr "Upp"
 
 #: ../src/ui/dialog/objects.cpp:1907
-#, fuzzy
 msgid "Down"
-msgstr "Nedåtgående"
+msgstr "Ner"
 
 #: ../src/ui/dialog/objects.cpp:1916
 #, fuzzy
@@ -25131,7 +25056,7 @@ msgstr "Färg på _markering:"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:580
 msgid "Clipart found"
-msgstr ""
+msgstr "Clipart hittade"
 
 #: ../src/ui/dialog/ocaldialogs.cpp:629
 #, fuzzy
@@ -25231,7 +25156,7 @@ msgstr ""
 
 #: ../src/ui/dialog/pixelartdialog.cpp:258
 msgid "Heuristics"
-msgstr ""
+msgstr "Heuristik"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:265
 #, fuzzy
@@ -25273,9 +25198,8 @@ msgstr "Återställ dialogfönstret till standardvärden - Ctrl+r"
 #. ## The OK button
 #: ../src/ui/dialog/pixelartdialog.cpp:299 ../src/ui/dialog/spellcheck.cpp:72
 #: ../src/ui/dialog/tracedialog.cpp:813
-#, fuzzy
 msgid "_Stop"
-msgstr "_Stopp"
+msgstr "_Sluta"
 
 #: ../src/ui/dialog/pixelartdialog.cpp:301 ../src/ui/dialog/tracedialog.cpp:815
 #, fuzzy
@@ -25386,15 +25310,13 @@ msgid "Center X/Y:"
 msgstr "Mittpunkt"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:92
-#, fuzzy
 msgctxt "Polar arrange tab"
 msgid "Radius X/Y:"
-msgstr "Radie:"
+msgstr "Radie X/Y:"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:105
-#, fuzzy
 msgid "Angle X/Y:"
-msgstr "Vinkel X:"
+msgstr "Vinkel X/Y:"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:119
 #, fuzzy
@@ -25462,7 +25384,6 @@ msgid "Keywords: "
 msgstr "Nyckelord"
 
 #: ../src/ui/dialog/spellcheck.cpp:67
-#, fuzzy
 msgid "_Accept"
 msgstr "_Acceptera"
 
@@ -25472,18 +25393,17 @@ msgid "_Ignore once"
 msgstr "_Ignorera en gång"
 
 #: ../src/ui/dialog/spellcheck.cpp:69
-#, fuzzy
 msgid "_Ignore"
 msgstr "_Ignorera"
 
 #: ../src/ui/dialog/spellcheck.cpp:70
 msgid "A_dd"
-msgstr ""
+msgstr "A_dd"
 
 #: ../src/ui/dialog/spellcheck.cpp:73
 #, fuzzy
 msgid "_Start"
-msgstr "Sta_rta"
+msgstr "_ Starta"
 
 #: ../src/ui/dialog/spellcheck.cpp:103
 #, fuzzy
@@ -25975,7 +25895,7 @@ msgstr "Ingen"
 #: ../src/ui/dialog/swatches.cpp:800
 msgctxt "Swatches border"
 msgid "Solid"
-msgstr ""
+msgstr "Fast"
 
 #: ../src/ui/dialog/swatches.cpp:801
 #, fuzzy
@@ -26072,7 +25992,7 @@ msgstr "Inga objekt hittades"
 
 #: ../src/ui/dialog/symbols.cpp:483
 msgid "Try a different search term."
-msgstr ""
+msgstr "Prova en annan sökterm."
 
 #: ../src/ui/dialog/symbols.cpp:493 ../src/ui/dialog/symbols.cpp:499
 msgid ""
@@ -26112,8 +26032,9 @@ msgid "Remove from selection set"
 msgstr "Ta bort mask från markering"
 
 #: ../src/ui/dialog/tags.cpp:405
+#, fuzzy
 msgid "Items"
-msgstr ""
+msgstr "Objekt"
 
 #: ../src/ui/dialog/tags.cpp:646 ../src/ui/dialog/tags.cpp:922
 #, fuzzy
@@ -27531,7 +27452,7 @@ msgstr "Ändra till segment (stängd form med två radier)"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:165
 msgid "Arc (Open)"
-msgstr ""
+msgstr "Båge (öppen)"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:166
 msgid "Switch to arc (unclosed shape)"
@@ -27552,7 +27473,7 @@ msgstr "Gör figuren till en hel ellips, inte en båge eller ett segment"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:282
 msgid "Ellipse: Change radius"
-msgstr ""
+msgstr "Ellipse: ändra radie"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:336
 msgid "Arc: Change start/end"
@@ -28226,11 +28147,11 @@ msgstr "Flera stopp"
 #. The first toggle button represents the state that no subtool is active.
 #: ../src/ui/toolbar/lpe-toolbar.cpp:74
 msgid "All inactive"
-msgstr ""
+msgstr "Alla inaktiva"
 
 #: ../src/ui/toolbar/lpe-toolbar.cpp:75
 msgid "No geometric tool is active"
-msgstr ""
+msgstr "Inget geometriskt verktyg är aktivt"
 
 #: ../src/ui/toolbar/lpe-toolbar.cpp:105
 msgid "Show limiting bounding box"
@@ -28362,7 +28283,7 @@ msgstr "Vänd slinga"
 #: ../src/ui/toolbar/measure-toolbar.cpp:185
 #: ../src/ui/toolbar/measure-toolbar.cpp:186
 msgid "Phantom measure"
-msgstr ""
+msgstr "Spöke mäta"
 
 #: ../src/ui/toolbar/measure-toolbar.cpp:194
 #: ../src/ui/toolbar/measure-toolbar.cpp:195
@@ -28373,7 +28294,7 @@ msgstr "Visa _stödlinjer"
 #: ../src/ui/toolbar/measure-toolbar.cpp:203
 #: ../src/ui/toolbar/measure-toolbar.cpp:204
 msgid "Convert to item"
-msgstr ""
+msgstr "Konvertera till objekt"
 
 #: ../src/ui/toolbar/measure-toolbar.cpp:212
 #: ../src/ui/toolbar/measure-toolbar.cpp:213
@@ -28496,7 +28417,7 @@ msgstr "Visa handtag"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:277
 msgid "Toggle Sides"
-msgstr ""
+msgstr "Växla sidor"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:278
 msgid "Toggle selected sides between Beziers and lines."
@@ -28582,7 +28503,7 @@ msgstr "Infoga nya noder i markerade segment"
 #. auto insert_min_x_item = Gtk::manage(new Gtk::MenuItem(*insert_min_x_icon));
 #: ../src/ui/toolbar/node-toolbar.cpp:107
 msgid "Insert node at min X"
-msgstr ""
+msgstr "Infoga nod vid min X"
 
 #: ../src/ui/toolbar/node-toolbar.cpp:108
 msgid "Insert new nodes at min X into selected segments"
@@ -28593,7 +28514,7 @@ msgstr ""
 #. auto insert_max_x_item = Gtk::manage(new Gtk::MenuItem(*insert_max_x_icon));
 #: ../src/ui/toolbar/node-toolbar.cpp:116
 msgid "Insert node at max X"
-msgstr ""
+msgstr "Infoga nod vid max X"
 
 #: ../src/ui/toolbar/node-toolbar.cpp:117
 msgid "Insert new nodes at max X into selected segments"
@@ -28604,7 +28525,7 @@ msgstr ""
 #. auto insert_min_y_item = Gtk::manage(new Gtk::MenuItem(*insert_min_y_icon));
 #: ../src/ui/toolbar/node-toolbar.cpp:125
 msgid "Insert node at min Y"
-msgstr ""
+msgstr "Infoga nod vid min Y"
 
 #: ../src/ui/toolbar/node-toolbar.cpp:126
 msgid "Insert new nodes at min Y into selected segments"
@@ -28615,7 +28536,7 @@ msgstr ""
 #. auto insert_max_y_item = Gtk::manage(new Gtk::MenuItem(*insert_max_y_icon));
 #: ../src/ui/toolbar/node-toolbar.cpp:134
 msgid "Insert node at max Y"
-msgstr ""
+msgstr "Infoga nod vid max Y"
 
 #: ../src/ui/toolbar/node-toolbar.cpp:135
 msgid "Insert new nodes at max Y into selected segments"
@@ -28798,7 +28719,7 @@ msgstr ""
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:112
 msgid "Min:"
-msgstr ""
+msgstr "Min:"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:113
 #, fuzzy
@@ -28807,7 +28728,7 @@ msgstr "En kort beskrivning av innehållet i detta dokument."
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:126
 msgid "Max:"
-msgstr ""
+msgstr "Max:"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:127
 #, fuzzy
@@ -28840,7 +28761,7 @@ msgstr ""
 #: ../src/ui/toolbar/pencil-toolbar.cpp:190
 #: ../src/ui/toolbar/pencil-toolbar.cpp:191
 msgid "LPE simplify flatten"
-msgstr ""
+msgstr "LPE förenklar plattan"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:264
 msgid "Mode of new lines drawn by this tool"
@@ -28913,7 +28834,7 @@ msgstr "Från urklipp"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:390
 msgid "Last applied"
-msgstr ""
+msgstr "Senast tillämpad"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:398
 msgid "Shape of new paths drawn by this tool"
@@ -28921,7 +28842,7 @@ msgstr "Formen på nya slingor ritade med detta verktyg"
 
 #: ../src/ui/toolbar/rect-toolbar.cpp:94
 msgid "W:"
-msgstr "B:"
+msgstr "W:"
 
 #: ../src/ui/toolbar/rect-toolbar.cpp:96
 msgid "Width of rectangle"
@@ -28983,7 +28904,7 @@ msgstr "Markeringens vertikala koordinat"
 #: ../src/ui/toolbar/select-toolbar.cpp:143
 msgctxt "Select toolbar"
 msgid "W:"
-msgstr "B:"
+msgstr "W:"
 
 #: ../src/ui/toolbar/select-toolbar.cpp:147
 msgctxt "Select toolbar"
@@ -29654,18 +29575,16 @@ msgid "Horizontal text"
 msgstr "Horisontell text"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:466
-#, fuzzy
 msgid "Vertical — RL"
-msgstr "Vertikal"
+msgstr "Vertikal — RL"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:467
 msgid "Vertical text — lines: right to left"
 msgstr ""
 
 #: ../src/ui/toolbar/text-toolbar.cpp:472
-#, fuzzy
 msgid "Vertical — LR"
-msgstr "Vertikal"
+msgstr "Vertikal  — LR"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:473
 msgid "Vertical text — lines: left to right"
@@ -29680,7 +29599,7 @@ msgstr "Ritläge"
 #. Label
 #: ../src/ui/toolbar/text-toolbar.cpp:480
 msgid "Block progression"
-msgstr ""
+msgstr "Blockera progression"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:503
 #, fuzzy
@@ -29719,7 +29638,7 @@ msgstr ""
 
 #: ../src/ui/toolbar/text-toolbar.cpp:544
 msgid "LTR"
-msgstr ""
+msgstr "LTR"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:545
 #, fuzzy
@@ -29728,7 +29647,7 @@ msgstr "Vänster till Höger (0)"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:550
 msgid "RTL"
-msgstr ""
+msgstr "RTL"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:551
 #, fuzzy
@@ -29803,11 +29722,11 @@ msgstr ""
 
 #: ../src/ui/toolbar/text-toolbar.cpp:633
 msgid "Even"
-msgstr ""
+msgstr "Även"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:634
 msgid "Lines evenly spaced."
-msgstr ""
+msgstr "Linjer jämnt fördelade."
 
 #: ../src/ui/toolbar/text-toolbar.cpp:639
 #, fuzzy
@@ -29873,9 +29792,8 @@ msgstr "Teckenavstånd"
 
 #. label
 #: ../src/ui/toolbar/text-toolbar.cpp:700
-#, fuzzy
 msgid "Letter:"
-msgstr "Tecken:"
+msgstr "Brev:"
 
 #. short label
 #: ../src/ui/toolbar/text-toolbar.cpp:701
@@ -30220,10 +30138,9 @@ msgstr "Kanaler:"
 
 #. TRANSLATORS:  "H" here stands for hue
 #: ../src/ui/toolbar/tweak-toolbar.cpp:211
-#, fuzzy
 msgctxt "Hue"
 msgid "H"
-msgstr "N"
+msgstr "H"
 
 #: ../src/ui/toolbar/tweak-toolbar.cpp:212
 #, fuzzy
@@ -30232,10 +30149,9 @@ msgstr "Modifiera objektets nyans i färgläge"
 
 #. TRANSLATORS:  "S" here stands for saturation
 #: ../src/ui/toolbar/tweak-toolbar.cpp:221
-#, fuzzy
 msgctxt "Saturation"
 msgid "S"
-msgstr "M"
+msgstr "S"
 
 #: ../src/ui/toolbar/tweak-toolbar.cpp:222
 #, fuzzy
@@ -30244,10 +30160,9 @@ msgstr "Modifiera objektets mättnad i färgläge"
 
 #. TRANSLATORS:  "S" here stands for saturation
 #: ../src/ui/toolbar/tweak-toolbar.cpp:231
-#, fuzzy
 msgctxt "Lightness"
 msgid "L"
-msgstr "I"
+msgstr "L"
 
 #: ../src/ui/toolbar/tweak-toolbar.cpp:232
 #, fuzzy
@@ -30256,10 +30171,9 @@ msgstr "Modifiera objektets intensitet i färgläge"
 
 #. TRANSLATORS:  "O" here stands for opacity
 #: ../src/ui/toolbar/tweak-toolbar.cpp:241
-#, fuzzy
 msgctxt "Opacity"
 msgid "O"
-msgstr "T"
+msgstr "O"
 
 #: ../src/ui/toolbar/tweak-toolbar.cpp:242
 #, fuzzy
@@ -30388,10 +30302,12 @@ msgid ""
 "<b>Click</b> or <b>drag around an area</b> to zoom in, <b>Shift+click</b> to "
 "zoom out."
 msgstr ""
+"<b> Klicka </b> eller <b> dra runt ett område </b> att zooma in, <b> shift + "
+"klicka </b> att zooma ut."
 
 #: ../src/ui/tools-switch.cpp:111
 msgid "<b>Drag</b> to measure the dimensions of objects."
-msgstr ""
+msgstr "<b> dra </b> för att mäta dimensionerna på objekten."
 
 #: ../src/ui/tools-switch.cpp:112 ../src/ui/tools/dropper-tool.cpp:375
 msgid ""
@@ -30791,20 +30707,23 @@ msgstr "Ta bort den markerade posten på verktygsraden"
 
 #. create the knots
 #: ../src/ui/tools/measure-tool.cpp:342
+#, fuzzy
 msgid "Measure start, <b>Shift+Click</b> for position dialog"
-msgstr ""
+msgstr "Mätstart, <b> Skift + Klicka </ b> för positions dialogrutan"
 
 #: ../src/ui/tools/measure-tool.cpp:348
+#, fuzzy
 msgid "Measure end, <b>Shift+Click</b> for position dialog"
-msgstr ""
+msgstr "Mät slutet, <b> Skift + Klicka </ b> för positions dialogrutan"
 
 #: ../src/ui/tools/measure-tool.cpp:736 ../share/extensions/measure.inx.h:2
 msgid "Measure"
 msgstr "Mät"
 
 #: ../src/ui/tools/measure-tool.cpp:741
+#, fuzzy
 msgid "Base"
-msgstr ""
+msgstr "Base"
 
 #: ../src/ui/tools/measure-tool.cpp:750
 msgid "Add guides from measure tool"
@@ -31720,9 +31639,8 @@ msgstr "_M"
 #: ../src/ui/widget/color-icc-selector.cpp:182
 #: ../src/ui/widget/color-icc-selector.cpp:187
 #: ../src/ui/widget/color-scales.cpp:483
-#, fuzzy
 msgid "_Y:"
-msgstr "Y:"
+msgstr "_Y:"
 
 #: ../src/ui/widget/color-icc-selector.cpp:183
 #: ../src/ui/widget/color-scales.cpp:486
@@ -31786,7 +31704,7 @@ msgstr "Hämta färger från bild"
 #. Create RGBA entry and color preview
 #: ../src/ui/widget/color-notebook.cpp:194
 msgid "RGBA_:"
-msgstr "RGBA:"
+msgstr "RGBA_:"
 
 #: ../src/ui/widget/color-scales.cpp:47
 msgid "RGB"
@@ -31794,21 +31712,19 @@ msgstr "RGB"
 
 #: ../src/ui/widget/color-scales.cpp:47
 msgid "HSL"
-msgstr "NMI"
+msgstr "HSL"
 
 #: ../src/ui/widget/color-scales.cpp:47
 msgid "CMYK"
 msgstr "CMYK"
 
 #: ../src/ui/widget/color-scales.cpp:47
-#, fuzzy
 msgid "HSV"
-msgstr "NMI"
+msgstr "HSV"
 
 #: ../src/ui/widget/color-scales.cpp:451
-#, fuzzy
 msgid "_V:"
-msgstr "V:"
+msgstr "_V:"
 
 #: ../src/ui/widget/dash-selector.cpp:63
 msgid "Dash pattern"
@@ -31852,7 +31768,7 @@ msgstr "Stil"
 #: ../src/ui/widget/font-variants.cpp:115
 msgctxt "Font feature"
 msgid "Ligatures"
-msgstr ""
+msgstr "Ligaturer"
 
 #: ../src/ui/widget/font-variants.cpp:116
 #, fuzzy
@@ -31947,7 +31863,7 @@ msgstr "Panorering"
 #: ../src/ui/widget/font-variants.cpp:135
 msgctxt "Font feature"
 msgid "Numeric"
-msgstr ""
+msgstr "Numerisk"
 
 #: ../src/ui/widget/font-variants.cpp:136
 #, fuzzy
@@ -32029,22 +31945,22 @@ msgstr "Standardalternativ"
 #: ../src/ui/widget/font-variants.cpp:150
 msgctxt "Font feature"
 msgid "JIS78"
-msgstr ""
+msgstr "JIS78"
 
 #: ../src/ui/widget/font-variants.cpp:151
 msgctxt "Font feature"
 msgid "JIS83"
-msgstr ""
+msgstr "JIS83"
 
 #: ../src/ui/widget/font-variants.cpp:152
 msgctxt "Font feature"
 msgid "JIS90"
-msgstr ""
+msgstr "JIS90"
 
 #: ../src/ui/widget/font-variants.cpp:153
 msgctxt "Font feature"
 msgid "JIS04"
-msgstr ""
+msgstr "JIS04"
 
 #: ../src/ui/widget/font-variants.cpp:154
 #, fuzzy
@@ -32501,7 +32417,7 @@ msgstr "Fyllning:"
 
 #: ../src/ui/widget/selected-style.cpp:126
 msgid "O:"
-msgstr "T:"
+msgstr "O:"
 
 #: ../src/ui/widget/selected-style.cpp:182
 msgid "N/A"
@@ -32514,13 +32430,11 @@ msgid "Nothing selected"
 msgstr "Ingen vald"
 
 #: ../src/ui/widget/selected-style.cpp:188
-#, fuzzy
 msgctxt "Fill"
 msgid "<i>None</i>"
 msgstr "<i>Ingen</i>"
 
 #: ../src/ui/widget/selected-style.cpp:190
-#, fuzzy
 msgctxt "Stroke"
 msgid "<i>None</i>"
 msgstr "<i>Ingen</i>"
@@ -32579,9 +32493,8 @@ msgid "Radial gradient stroke"
 msgstr "Radiell gradient linje"
 
 #: ../src/ui/widget/selected-style.cpp:222
-#, fuzzy
 msgid "<b>M</b>"
-msgstr "<b>L</b>"
+msgstr "<b>M</b>"
 
 #: ../src/ui/widget/selected-style.cpp:225
 #, fuzzy
@@ -32637,7 +32550,7 @@ msgstr "Enfärgad kantlinje"
 #. TRANSLATOR COMMENT: A means "Averaged"
 #: ../src/ui/widget/selected-style.cpp:247
 msgid "<b>a</b>"
-msgstr "<b>m</b>"
+msgstr "<b>a</b>"
 
 #: ../src/ui/widget/selected-style.cpp:250
 msgid "Fill is averaged over selected objects"
@@ -32783,9 +32696,8 @@ msgid "100% (opaque)"
 msgstr "100% (mättad)"
 
 #: ../src/ui/widget/selected-style.cpp:1326
-#, fuzzy
 msgid "Adjust alpha"
-msgstr "Justera nyans"
+msgstr "Justera alfa"
 
 #: ../src/ui/widget/selected-style.cpp:1328
 #, c-format
@@ -32794,6 +32706,9 @@ msgid ""
 "b> to adjust lightness, with <b>Shift</b> to adjust saturation, without "
 "modifiers to adjust hue"
 msgstr ""
+"Justera <b> alpha </b>: var%.3g, nu <b>%.3g </b> (diff%.3g); med <b> CTRL </"
+"b> för att justera ljushet, med <b> Shift </b> för att justera mättnad, utan "
+"modifierare för att justera nyans"
 
 #: ../src/ui/widget/selected-style.cpp:1332
 msgid "Adjust saturation"
@@ -32806,18 +32721,25 @@ msgid ""
 "<b>Ctrl</b> to adjust lightness, with <b>Alt</b> to adjust alpha, without "
 "modifiers to adjust hue"
 msgstr ""
+"Justering <b> mättnad </b>: var%.3g, nu <b>%.3g </b> (diff%.3g); med <b> "
+"CTRL </b> för att justera lätthet, med <b> Alt </b> för att justera alfa, "
+"utan modifierare för att justera nyans"
 
 #: ../src/ui/widget/selected-style.cpp:1338
+#, fuzzy
 msgid "Adjust lightness"
 msgstr "Justera intensitet"
 
 #: ../src/ui/widget/selected-style.cpp:1340
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Adjusting <b>lightness</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with "
 "<b>Shift</b> to adjust saturation, with <b>Alt</b> to adjust alpha, without "
 "modifiers to adjust hue"
 msgstr ""
+"Justera <b> lätthet </b>: var%. 3G, nu <b>%. 3G </b> (diff%. 3G); med <b> "
+"Shift </b> för att justera mättnad, med <b> Alt </b> för att justera alfa, "
+"utan modifierare för att justera nyans"
 
 #: ../src/ui/widget/selected-style.cpp:1344
 #, fuzzy
@@ -32825,12 +32747,15 @@ msgid "Adjust hue"
 msgstr "Justera nyans"
 
 #: ../src/ui/widget/selected-style.cpp:1346
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Adjusting <b>hue</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Shift</"
 "b> to adjust saturation, with <b>Alt</b> to adjust alpha, with <b>Ctrl</b> "
 "to adjust lightness"
 msgstr ""
+"Justering av <b> nyans </ b>: var% .3g, nu <b>%. 3g </ b> (diff% .3g); med "
+"<b> Skift </ b> för att justera mättnad, med <b> Alt </ b> för att justera "
+"alfabet, med <b> Ctrl </ b> för att justera ljusstyrkan"
 
 #: ../src/ui/widget/selected-style.cpp:1455
 #: ../src/ui/widget/selected-style.cpp:1469
@@ -32840,7 +32765,7 @@ msgstr "Justera linjebredd"
 #: ../src/ui/widget/selected-style.cpp:1456
 #, c-format
 msgid "Adjusting <b>stroke width</b>: was %.3g, now <b>%.3g</b> (diff %.3g)"
-msgstr ""
+msgstr "Justera <b> linje bredd </b>: var%.3g, nu <b>%.3g </b> (diff%.3g)"
 
 #. TRANSLATORS: "Link" means to _link_ two sliders together
 #: ../src/ui/widget/spin-scale.cpp:122 ../src/ui/widget/spin-slider.cpp:116
@@ -32868,22 +32793,19 @@ msgid "Stroke: %06x/%.3g"
 msgstr "Linje: %06x/%.3g"
 
 #: ../src/ui/widget/style-swatch.cpp:319
-#, fuzzy
 msgctxt "Fill and stroke"
 msgid "<i>None</i>"
 msgstr "<i>Ingen</i>"
 
 #: ../src/ui/widget/style-swatch.cpp:321
-#, fuzzy
 msgctxt "Fill and stroke"
 msgid "No fill"
 msgstr "Ingen fyllning"
 
 #: ../src/ui/widget/style-swatch.cpp:321
-#, fuzzy
 msgctxt "Fill and stroke"
 msgid "No stroke"
-msgstr "Ingen linje"
+msgstr "Ingen stroke"
 
 #: ../src/ui/widget/style-swatch.cpp:346
 #, c-format
@@ -32893,7 +32815,7 @@ msgstr "Linjebredd: %.5g%s"
 #: ../src/ui/widget/style-swatch.cpp:362
 #, c-format
 msgid "O: %2.0f"
-msgstr ""
+msgstr "O: %2.0f"
 
 #: ../src/ui/widget/style-swatch.cpp:367
 #, c-format
@@ -32961,9 +32883,8 @@ msgid "Tag"
 msgstr ""
 
 #: ../src/verbs.cpp:254
-#, fuzzy
 msgid "Context"
-msgstr "Kontrast"
+msgstr "Sammanhang"
 
 #: ../src/verbs.cpp:273 ../src/verbs.cpp:2449
 #: ../share/extensions/jessyInk_view.inx.h:1
@@ -33104,7 +33025,6 @@ msgid "Unhide all objects in all layers"
 msgstr "Visa alla objekt i alla lager"
 
 #: ../src/verbs.cpp:2575
-#, fuzzy
 msgctxt "Verb"
 msgid "None"
 msgstr "Ingen"
@@ -33156,9 +33076,8 @@ msgid "Save a copy of the document under a new name"
 msgstr "Spara kopia av dokument med nytt namn"
 
 #: ../src/verbs.cpp:2590
-#, fuzzy
 msgid "Save Template..."
-msgstr "Mallar..."
+msgstr "Spara mall..."
 
 #: ../src/verbs.cpp:2591
 #, fuzzy
@@ -33235,9 +33154,8 @@ msgid "Quit Inkscape"
 msgstr "Avsluta Inkscape"
 
 #: ../src/verbs.cpp:2614
-#, fuzzy
 msgid "New from _Template..."
-msgstr "Mallar..."
+msgstr "Nytt från _ template..."
 
 #: ../src/verbs.cpp:2615
 #, fuzzy
@@ -33372,9 +33290,8 @@ msgid "Remove any path effects from selected objects"
 msgstr "Ta bort alla slingeffekter från markerade objekt"
 
 #: ../src/verbs.cpp:2646
-#, fuzzy
 msgid "_Remove Filters"
-msgstr "Ta bort Filter"
+msgstr "_Ta bort Filter"
 
 #: ../src/verbs.cpp:2647
 msgid "Remove any filters from selected objects"
@@ -33494,11 +33411,12 @@ msgstr "Konvertera linje till slinga"
 
 #: ../src/verbs.cpp:2676
 msgid "Symbol to Group"
-msgstr ""
+msgstr "Symbol till grupp"
 
 #: ../src/verbs.cpp:2676
+#, fuzzy
 msgid "Extract group from a symbol"
-msgstr ""
+msgstr "Extrahera grupp från en symbol"
 
 #: ../src/verbs.cpp:2678
 #, fuzzy
@@ -33689,9 +33607,8 @@ msgid "Lower selection one step"
 msgstr "Sänk markeringen ett steg"
 
 #: ../src/verbs.cpp:2733
-#, fuzzy
 msgid "_Stack up"
-msgstr "Stjärna"
+msgstr "_Stapla"
 
 #: ../src/verbs.cpp:2734
 #, fuzzy
@@ -33829,7 +33746,7 @@ msgstr "Blanda färgerna på markerade objekt"
 
 #: ../src/verbs.cpp:2778
 msgid "_Shrink"
-msgstr ""
+msgstr "_Krympa"
 
 #: ../src/verbs.cpp:2778
 #, fuzzy
@@ -34461,9 +34378,10 @@ msgid "Create and edit gradients"
 msgstr "Skapa och redigera gradienter"
 
 #: ../src/verbs.cpp:2952
+#, fuzzy
 msgctxt "ContextVerb"
 msgid "Mesh"
-msgstr ""
+msgstr "Maska"
 
 #: ../src/verbs.cpp:2952
 #, fuzzy
@@ -35126,7 +35044,7 @@ msgstr ""
 #. Dialogs
 #: ../src/verbs.cpp:3122
 msgid "Prototype..."
-msgstr ""
+msgstr "Prototyp..."
 
 #: ../src/verbs.cpp:3122
 msgid "Prototype Dialog"
@@ -35764,7 +35682,7 @@ msgstr "_Spara som Inkscape SVG"
 
 #: ../src/widgets/desktop-widget.cpp:1357
 msgid "Note:"
-msgstr ""
+msgstr "Notera:"
 
 #: ../src/widgets/desktop-widget.cpp:2316
 #, fuzzy
@@ -35845,7 +35763,6 @@ msgid "Position of mark on the ruler"
 msgstr ""
 
 #: ../src/widgets/gimp/ruler.cpp:233
-#, fuzzy
 msgid "Max Size"
 msgstr "Max storlek"
 
@@ -37012,7 +36929,7 @@ msgstr ""
 #: ../share/extensions/jessyInk_summary.py:175
 #, python-brace-format
 msgid "{0}\tObject \"{1}\""
-msgstr ""
+msgstr "{0}\tObjekt \"{1}\""
 
 #: ../share/extensions/jessyInk_summary.py:178
 #, fuzzy
@@ -37030,7 +36947,7 @@ msgstr ""
 
 #: ../share/extensions/jessyInk_summary.py:186
 msgid " in {0!s} s"
-msgstr ""
+msgstr " in {0!s} s"
 
 #: ../share/extensions/jessyInk_transitions.py:54
 #, fuzzy
@@ -37355,9 +37272,9 @@ msgstr ""
 "%s"
 
 #: ../share/extensions/webslicer_export.py:69
-#, fuzzy, python-format
+#, python-format
 msgid "Error: %s"
-msgstr "Fel"
+msgstr "Fel:% s"
 
 #: ../share/extensions/webslicer_export.py:72
 #, fuzzy, python-format
@@ -37780,11 +37697,11 @@ msgstr ""
 
 #: ../share/extensions/dpi90to96.inx.h:1
 msgid "DPI 90 to 96"
-msgstr ""
+msgstr "DPI 90 till 96"
 
 #: ../share/extensions/dpi96to90.inx.h:1
 msgid "DPI 96 to 90"
-msgstr ""
+msgstr "DPI 96 till 90"
 
 #: ../share/extensions/draw_from_triangle.inx.h:1
 #, fuzzy
@@ -38150,15 +38067,15 @@ msgstr "Sammet"
 
 #: ../share/extensions/dxf_outlines.inx.h:18
 msgid "CP 1250"
-msgstr ""
+msgstr "CP 1250"
 
 #: ../share/extensions/dxf_outlines.inx.h:19
 msgid "CP 1252"
-msgstr ""
+msgstr "CP 1252"
 
 #: ../share/extensions/dxf_outlines.inx.h:20
 msgid "UTF 8"
-msgstr ""
+msgstr "UTF 8"
 
 #: ../share/extensions/dxf_outlines.inx.h:21
 #, fuzzy
@@ -38252,7 +38169,7 @@ msgstr "Infoga endast valda bilder"
 
 #: ../share/extensions/empty_business_card.inx.h:1
 msgid "Business Card"
-msgstr ""
+msgstr "Visitkort"
 
 #: ../share/extensions/empty_business_card.inx.h:2
 msgid "Business card size:"
@@ -38357,9 +38274,8 @@ msgid "EPS Input"
 msgstr "Inmatnings_metoder"
 
 #: ../share/extensions/eqtexsvg.inx.h:1
-#, fuzzy
 msgid "LaTeX"
-msgstr "LaTeX Utskrift"
+msgstr "LaTeX"
 
 #: ../share/extensions/eqtexsvg.inx.h:2
 #, fuzzy
@@ -38476,7 +38392,7 @@ msgstr "Underdelar"
 
 #: ../share/extensions/frame.inx.h:1
 msgid "Frame"
-msgstr ""
+msgstr "Ram"
 
 #: ../share/extensions/funcplot.inx.h:1
 #, fuzzy
@@ -38677,9 +38593,8 @@ msgid "Gcodetools"
 msgstr ""
 
 #: ../share/extensions/gcodetools_area.inx.h:1
-#, fuzzy
 msgid "Area"
-msgstr "Area"
+msgstr "Område"
 
 #: ../share/extensions/gcodetools_area.inx.h:2
 msgid "Maximum area cutting curves:"
@@ -38950,7 +38865,7 @@ msgstr ""
 #: ../share/extensions/gcodetools_orientation_points.inx.h:6
 #: ../share/extensions/gcodetools_path_to_gcode.inx.h:27
 msgid "Units (mm or in):"
-msgstr ""
+msgstr "Enheter (mm eller in):"
 
 #: ../share/extensions/gcodetools_area.inx.h:58
 #: ../share/extensions/gcodetools_dxf_points.inx.h:19
@@ -39040,7 +38955,7 @@ msgstr ""
 
 #: ../share/extensions/gcodetools_check_for_updates.inx.h:1
 msgid "Check for updates"
-msgstr ""
+msgstr "Sök efter uppdateringar"
 
 #: ../share/extensions/gcodetools_check_for_updates.inx.h:2
 msgid "Check for Gcodetools latest stable version and try to get the updates."
@@ -39352,7 +39267,7 @@ msgstr ""
 
 #: ../share/extensions/gcodetools_tools_library.inx.h:1
 msgid "Tools library"
-msgstr ""
+msgstr "Verktygs bibliotek"
 
 #: ../share/extensions/gcodetools_tools_library.inx.h:2
 #, fuzzy
@@ -39370,9 +39285,8 @@ msgid "cylinder"
 msgstr "Polyline"
 
 #: ../share/extensions/gcodetools_tools_library.inx.h:5
-#, fuzzy
 msgid "cone"
-msgstr "hörn"
+msgstr "kon"
 
 #: ../share/extensions/gcodetools_tools_library.inx.h:6
 #, fuzzy
@@ -39917,15 +39831,15 @@ msgstr "Skript: "
 
 #: ../share/extensions/hershey.inx.h:17
 msgid "Gothic English"
-msgstr ""
+msgstr "Gotiska engelska"
 
 #: ../share/extensions/hershey.inx.h:18
 msgid "Gothic German"
-msgstr ""
+msgstr "Gotiska tyska"
 
 #: ../share/extensions/hershey.inx.h:19
 msgid "Gothic Italian"
-msgstr ""
+msgstr "Gotiska italienska"
 
 #: ../share/extensions/hershey.inx.h:20
 #, fuzzy
@@ -39943,9 +39857,8 @@ msgid "Japanese"
 msgstr "Japanska (ja)"
 
 #: ../share/extensions/hershey.inx.h:24
-#, fuzzy
 msgid "Astrology"
-msgstr "Morfologi"
+msgstr "Astrologi"
 
 #: ../share/extensions/hershey.inx.h:25
 msgid "Math (lower)"
@@ -39963,11 +39876,11 @@ msgstr "Morfologi"
 
 #: ../share/extensions/hershey.inx.h:29
 msgid "Music"
-msgstr ""
+msgstr "musik"
 
 #: ../share/extensions/hershey.inx.h:30
 msgid "Symbolic"
-msgstr ""
+msgstr "Symbolisk"
 
 #: ../share/extensions/hershey.inx.h:31
 msgid ""
@@ -40652,7 +40565,7 @@ msgstr "Avmättning"
 #: ../share/extensions/jessyInk_effects.inx.h:10
 #: ../share/extensions/jessyInk_transitions.inx.h:10
 msgid "Pop"
-msgstr ""
+msgstr "Pop"
 
 #: ../share/extensions/jessyInk_effects.inx.h:11
 #, fuzzy
@@ -40685,11 +40598,11 @@ msgstr "Upplösning:"
 
 #: ../share/extensions/jessyInk_export.inx.h:5
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: ../share/extensions/jessyInk_export.inx.h:6
 msgid "PNG"
-msgstr ""
+msgstr "PNG"
 
 #: ../share/extensions/jessyInk_export.inx.h:8
 msgid ""
@@ -41085,7 +40998,6 @@ msgstr ""
 "google.com/p/jessyink för ytterligare information."
 
 #: ../share/extensions/jessyInk_video.inx.h:1
-#, fuzzy
 msgid "Video"
 msgstr "Video"
 
@@ -41139,7 +41051,7 @@ msgstr "Skifta nodhandtag"
 
 #: ../share/extensions/jitternodes.inx.h:7
 msgid "Distribution of the displacements:"
-msgstr ""
+msgstr "Fördelning av förskjutningarna:"
 
 #: ../share/extensions/jitternodes.inx.h:8
 #, fuzzy
@@ -41148,7 +41060,7 @@ msgstr "Likformigt Brus"
 
 #: ../share/extensions/jitternodes.inx.h:9
 msgid "Pareto"
-msgstr ""
+msgstr "Pareto"
 
 #: ../share/extensions/jitternodes.inx.h:10
 #, fuzzy
@@ -41170,7 +41082,7 @@ msgstr ""
 
 #: ../share/extensions/layers2svgfont.inx.h:1
 msgid "3 - Convert Glyph Layers to SVG Font"
-msgstr ""
+msgstr "3-konvertera Glyph lager till SVG font"
 
 #: ../share/extensions/layers2svgfont.inx.h:2
 #: ../share/extensions/new_glyph_layer.inx.h:3
@@ -41303,6 +41215,15 @@ msgid ""
 "    * Layout padding: inner padding for each part of the layout.\n"
 "      "
 msgstr ""
+"\n"
+"Parametrar: * sid storlek: bredd och höjd.\n"
+"    * Sid marginaler: extra utrymme runt varje sida.\n"
+"    * Layout rader och kolumner.\n"
+"    * Layout storlek: bredd och höjd, Auto beräknas om en är 0.\n"
+"    * Auto beräkna layout storlek: Använd inte layouten storlek värden.\n"
+"    * Layoutmarginaler: tomrum runt varje del av layouten.\n"
+"    * Layout stoppning: inre stoppning för varje del av layouten\n"
+"."
 
 #: ../share/extensions/layout_nup.inx.h:36
 #: ../share/extensions/perfectboundcover.inx.h:20
@@ -41434,7 +41355,7 @@ msgstr "Tilldela opacitet"
 
 #: ../share/extensions/markers_strokepaint.inx.h:6
 msgid "solid"
-msgstr ""
+msgstr "Fast"
 
 #: ../share/extensions/markers_strokepaint.inx.h:7
 #, fuzzy
@@ -41680,7 +41601,7 @@ msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:2
 msgid "Data"
-msgstr ""
+msgstr "Data"
 
 #: ../share/extensions/nicechart.inx.h:3
 #, fuzzy
@@ -41809,7 +41730,7 @@ msgstr "Skuggkastning"
 
 #: ../share/extensions/nicechart.inx.h:37
 msgid "SAP"
-msgstr ""
+msgstr "SAP"
 
 #: ../share/extensions/nicechart.inx.h:39
 #, fuzzy
@@ -41822,13 +41743,12 @@ msgid "Chart type:"
 msgstr "Form"
 
 #: ../share/extensions/nicechart.inx.h:41
-#, fuzzy
 msgid "Bar chart"
-msgstr "Streckhöjd:"
+msgstr "Stapeldiagram"
 
 #: ../share/extensions/nicechart.inx.h:42
 msgid "Pie chart"
-msgstr ""
+msgstr "Tårtdiagram"
 
 #: ../share/extensions/nicechart.inx.h:43
 msgid "Pie chart (percentage)"
@@ -42073,7 +41993,7 @@ msgstr ""
 
 #: ../share/extensions/output_scour.inx.h:47
 msgid "Shorten IDs"
-msgstr ""
+msgstr "Förkorta IDs"
 
 #: ../share/extensions/output_scour.inx.h:48
 msgid ""
@@ -42210,12 +42130,10 @@ msgstr ""
 "Förstaderivator beräknas alltid numeriskt."
 
 #: ../share/extensions/param_curves.inx.h:26
-#, fuzzy
 msgid "X-Function:"
 msgstr "x-Funktion"
 
 #: ../share/extensions/param_curves.inx.h:27
-#, fuzzy
 msgid "Y-Function:"
 msgstr "x-Funktion"
 
@@ -42395,9 +42313,8 @@ msgid "Specify Width"
 msgstr "Ange Bredd"
 
 #: ../share/extensions/perfectboundcover.inx.h:14
-#, fuzzy
 msgid "Value:"
-msgstr "Värde"
+msgstr "Värde:"
 
 #: ../share/extensions/perfectboundcover.inx.h:15
 #, fuzzy
@@ -42557,11 +42474,11 @@ msgstr ""
 
 #: ../share/extensions/plotter.inx.h:30
 msgid "HPGL"
-msgstr ""
+msgstr "HPGL"
 
 #: ../share/extensions/plotter.inx.h:31
 msgid "DMPL"
-msgstr ""
+msgstr "DMPL"
 
 #: ../share/extensions/plotter.inx.h:32
 msgid "KNK Plotter (HPGL variant)"
@@ -42739,9 +42656,8 @@ msgid "Z-Axis"
 msgstr "Z-axeln"
 
 #: ../share/extensions/polyhedron_3d.inx.h:34
-#, fuzzy
 msgid "Scaling factor:"
-msgstr "Skalningsfaktor"
+msgstr "Skalningsfaktor:"
 
 #: ../share/extensions/polyhedron_3d.inx.h:35
 #, fuzzy
@@ -42778,19 +42694,16 @@ msgid "Shading"
 msgstr "Skuggning"
 
 #: ../share/extensions/polyhedron_3d.inx.h:44
-#, fuzzy
 msgid "Light X:"
-msgstr "Ljus X"
+msgstr "Ljus X:"
 
 #: ../share/extensions/polyhedron_3d.inx.h:45
-#, fuzzy
 msgid "Light Y:"
-msgstr "Ljus Y"
+msgstr "Ljus Y:"
 
 #: ../share/extensions/polyhedron_3d.inx.h:46
-#, fuzzy
 msgid "Light Z:"
-msgstr "Ljus Z"
+msgstr "Ljus Z:"
 
 #: ../share/extensions/polyhedron_3d.inx.h:48
 msgid "Draw back-facing polygons"
@@ -42898,7 +42811,7 @@ msgstr "Alfabetssoppa"
 
 #: ../share/extensions/render_barcode.inx.h:1
 msgid "Classic"
-msgstr ""
+msgstr "Klassisk"
 
 #: ../share/extensions/render_barcode.inx.h:2
 msgid "Barcode Type:"
@@ -42935,7 +42848,7 @@ msgstr "Kvadratisk Storlek / px"
 
 #: ../share/extensions/render_barcode_qrcode.inx.h:1
 msgid "QR Code"
-msgstr ""
+msgstr "QR-kod"
 
 #: ../share/extensions/render_barcode_qrcode.inx.h:2
 msgid "See http://www.denso-wave.com/qrcode/index-e.html for details"
@@ -43387,9 +43300,8 @@ msgid "Envelope"
 msgstr "Kuvert"
 
 #: ../share/extensions/svg2fxg.inx.h:1
-#, fuzzy
 msgid "FXG Output"
-msgstr "SVG-utdata"
+msgstr "FXGF utdata"
 
 #: ../share/extensions/svg2fxg.inx.h:2
 #, fuzzy
@@ -43402,7 +43314,7 @@ msgstr ""
 
 #: ../share/extensions/svg2xaml.inx.h:1
 msgid "XAML Output"
-msgstr ""
+msgstr "XAML-utdata"
 
 #: ../share/extensions/svg2xaml.inx.h:2
 msgid "Silverlight compatible XAML"
@@ -43439,14 +43351,12 @@ msgid "Show week number"
 msgstr "Sidonummer"
 
 #: ../share/extensions/svgcalendar.inx.h:7
-#, fuzzy
 msgid "Week start day:"
-msgstr "Första dag i veckan"
+msgstr "Veckans start dag:"
 
 #: ../share/extensions/svgcalendar.inx.h:8
-#, fuzzy
 msgid "Weekend:"
-msgstr "Helg"
+msgstr "Helgen:"
 
 #: ../share/extensions/svgcalendar.inx.h:9
 msgid "Sunday"
@@ -43572,7 +43482,7 @@ msgstr "(Listan över dagarnas namn måste börja med Söndag)"
 
 #: ../share/extensions/svgcalendar.inx.h:36
 msgid "Wk"
-msgstr ""
+msgstr "Wk"
 
 #: ../share/extensions/svgcalendar.inx.h:37
 #, fuzzy
@@ -44000,7 +43910,6 @@ msgstr ""
 #: ../share/extensions/webslicer_create_group.inx.h:13
 #: ../share/extensions/webslicer_create_rect.inx.h:41
 #: ../share/extensions/webslicer_export.inx.h:8
-#, fuzzy
 msgid "Web"
 msgstr "Webb"
 
@@ -44136,9 +44045,8 @@ msgid "JPG specific options"
 msgstr "JPEG-specifika alternativ"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:11
-#, fuzzy
 msgid "Quality:"
-msgstr "Kvalité:"
+msgstr "Kvalitet:"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:12
 msgid ""
@@ -44219,9 +44127,8 @@ msgid "Position anchor:"
 msgstr "Placera ankare:"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:32
-#, fuzzy
 msgid "Top and Left"
-msgstr "Topp, till vänster"
+msgstr "Övre och vänstra"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:33
 #, fuzzy
@@ -44243,9 +44150,8 @@ msgid "Middle and Center"
 msgstr "Mitten, centrerat"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:37
-#, fuzzy
 msgid "Middle and Right"
-msgstr "Mitten, till höger"
+msgstr "Mitten och höger"
 
 #: ../share/extensions/webslicer_create_rect.inx.h:38
 #, fuzzy
