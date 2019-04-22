@@ -3,9 +3,11 @@
 #
 # This file is part of the build pipeline for Inkscape on macOS.
 #
-# ### 140-jhbuild-inkdeps.sh ###
+# ### 150-jhbuild-inkdeps.sh ###
 # Install additional dependencies into our jhbuild environment required for
 # building Inkscape.
+
+### load settings and functions ################################################
 
 SELF_DIR=$(cd $(dirname "$0"); pwd -P)
 for script in $SELF_DIR/0??-*.sh; do source $script; done
@@ -53,7 +55,6 @@ cmake_make_makeinstall -DENABLE_UNSTABLE_API_ABI_HEADERS=ON
 
 get_source $URL_GTK_MAC_BUNDLER
 make install
-cp $SRC_DIR/gtk-mac-bundler*/examples/gtk3-launcher.sh $SELF_DIR
 
 ### install double-conversion ##################################################
 

@@ -2,15 +2,16 @@
 #
 # This file is part of the build pipeline for Inkscape on macOS.
 #
-# ### 020-vars.sh ###
+# ### 030-funcs.sh ###
 # This file contains all the functions used by the other scripts. It helps
 # modularizing functionalities and keeping the scripts that do the real work
 # as clean as possible.
+# This file does not include the "vars" files it requires itself (on purpose,
+# for flexibility reasons), the script that wants to use these functions
+# needs to do that. The suggest way is to always source all the "0nn-*.sh"
+# files in order.
 
 [ -z $FUNCS_INCLUDED ] && FUNCS_INCLUDED=true || return   # include guard
-
-SELF_DIR=$(cd $(dirname "${BASH_SOURCE[0]}"); pwd -P)
-source $SELF_DIR/010-vars.sh
 
 ### get repository version string ##############################################
 
@@ -42,9 +43,13 @@ function get_comp_flag
 function get_source
 {
   local url=$1
-  local log=$TMP_DIR/$FUNCNAME.log
+  local target_dir=$2   # optional argument, defaults to $SRC_DIR
 
-  cd $SRC_DIR
+  [ ! -d $TMP_DIR ] && mkdir -p $TMP_DIR
+  local log=$(mktemp $TMP_DIR/$FUNCNAME.XXXX)
+  [ -z $target_dir ] && target_dir=$SRC_DIR
+
+  cd $target_dir
 
   # This downloads a file and pipes it directly into tar (file is not saved
   # to disk) to extract it. Output is saved temporarily to determine
@@ -96,5 +101,21 @@ function create_ramdisk
     newfs_hfs -v "RAMDISK" $device
     mount -o noatime,nobrowse -t hfs $device $dir
   fi
+}
+
+### insert line into a textfile ################################################
+
+# insert_before [filename] '[insert before this pattern]' '[line to insert]'
+
+function insert_before 
+{
+  local file=$1
+  local pattern=$2
+  local line=$3
+
+  local file_tmp=$(mktemp)
+  awk "/${pattern}/{print \"$line\"}1" $file > $file_tmp
+  cat $file_tmp > $file   # we don't 'mv' to preserve permissions
+  rm $file_tmp
 }
 

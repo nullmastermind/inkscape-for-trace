@@ -77,12 +77,14 @@ inkscape:mac:
     - branches@dehesselle/inkscape
   except:
     - schedules
+  before_script:
+    - packaging/macos/build_toolset.sh
   script:
-    - packaging/macos/210-inkscape.sh
+    - packaging/macos/build_inkscape.sh
   artifacts:
     expire_in: 1 year
     paths:
-      - build/Inkscape.tar.xz
+      - build/artifacts
   allow_failure: true
 
 
