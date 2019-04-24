@@ -452,7 +452,7 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
 
     /** Fix first line spacing in legacy documents (pre-1.0 files) **/
     if (sp_version_inside_range(document->root->version.inkscape, 0, 1, 1, 0)) {
-        sp_file_remove_style_on_empty_lines(document);
+        sp_file_fix_empty_lines(document);
     }
 
     /** Fix dpi (pre-92 files). With GUI fixed in Inkscape::Application::fix_document. **/
