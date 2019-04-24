@@ -9181,7 +9181,7 @@ msgstr "EXPORTA-NOM DEL FITXER"
 
 #: ../src/inkscape-application.cpp:269
 msgid "Export: Overwrite input file."
-msgstr "Exporta: sobreescriu el fitxer d'entrada"
+msgstr "Exporta: sobreescriu el fitxer d'entrada."
 
 #. BSP
 #. B = PNG, S = SVG, P = PS/EPS/PDF
@@ -34077,7 +34077,7 @@ msgstr "Cantonades de la capsa contenidora"
 
 #: ../src/widgets/toolbox.cpp:1100
 msgid "Snap bounding box corners"
-msgstr "Ajusta les vores de la capsa contenidora"
+msgstr "Ajusta les cantonades de les capses contenidores"
 
 #: ../src/widgets/toolbox.cpp:1109
 msgid "BBox Edge Midpoints"
@@ -35311,7 +35311,7 @@ msgstr ""
 #: ../share/extensions/webslicer_create_group.py:73
 #, python-format
 msgid "Oops... The element \"%s\" is not in the Web Slicer layer"
-msgstr "L'element \"%s\" no és a la capa web lliscadora"
+msgstr "L'element «%s» no és a la capa web lliscadora"
 
 #: ../share/extensions/webslicer_export.py:56
 msgid "You must give a directory to export the slices."
@@ -35330,7 +35330,7 @@ msgstr "Error: %s"
 #: ../share/extensions/webslicer_export.py:72
 #, python-format
 msgid "The directory \"%s\" does not exists."
-msgstr "El directori \"%s\" no existeix."
+msgstr "El directori «%s» no existeix."
 
 #: ../share/extensions/webslicer_export.py:77
 msgid "No slicer layer found."
