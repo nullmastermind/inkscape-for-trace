@@ -685,7 +685,9 @@ SPStyle::readIfUnset(SPAttributeEnum id, gchar const *val, SPStyleSrc const &sou
             g_warning("attribute 'clip-path' given as CSS");
 
             //XML Tree being directly used here.
-            this->object->getRepr()->setAttribute("clip-path", val);
+            if (object) {
+                object->getRepr()->setAttribute("clip-path", val);
+            }
             return;
         case SP_PROP_MASK:
             /** \todo
@@ -694,7 +696,9 @@ SPStyle::readIfUnset(SPAttributeEnum id, gchar const *val, SPStyleSrc const &sou
             g_warning("attribute 'mask' given as CSS");
             
             //XML Tree being directly used here.
-            this->object->getRepr()->setAttribute("mask", val);
+            if (object) {
+                object->getRepr()->setAttribute("mask", val);
+            }
             return;
         case SP_PROP_FILTER:
             if( !filter.inherit ) filter.readIfUnset( val, source );
