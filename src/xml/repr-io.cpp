@@ -983,7 +983,8 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
 
     // If this is a <text> element, suppress formatting whitespace
     // for its content and children:
-    if (strcmp(repr->name(),"svg:text") == 0) {
+    if (strcmp(repr->name(), "svg:text")     == 0 ||
+        strcmp(repr->name(), "svg:flowRoot") == 0) {
         add_whitespace = false;
     }
 
