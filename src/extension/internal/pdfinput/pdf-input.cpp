@@ -782,6 +782,9 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
 #endif
     } else {
         page_num = INKSCAPE.get_pdf_page();
+#ifdef HAVE_POPPLER_CAIRO
+        is_importvia_poppler = INKSCAPE.get_pdf_poppler();
+#endif
     }
 
     SPDocument *doc = nullptr;

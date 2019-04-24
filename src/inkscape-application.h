@@ -92,6 +92,8 @@ protected:
     bool _with_gui;
     bool _batch_process; // Temp
     bool _use_shell;
+    int _pdf_page;
+    int _pdf_poppler;
     InkscapeApplication();
 
     // Documents are owned by the application which is responsible for opening/saving/exporting. WIP

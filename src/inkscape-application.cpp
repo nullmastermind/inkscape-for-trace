@@ -66,6 +66,8 @@ InkscapeApplication::InkscapeApplication()
     , _active_document(nullptr)
     , _active_selection(nullptr)
     , _active_view(nullptr)
+    , _pdf_page(0)
+    , _pdf_poppler(false)
 {}
 
 // Add document to app.
@@ -484,6 +486,7 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
 
     // Open/Import
     this->add_main_option_entry(T::OPTION_TYPE_INT,      "pdf-page",           '\0', N_("Open: PDF page to import"),         N_("PAGE"));
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "pdf-poppler",        '\0', N_("Use poppler when importing via commandline"),                                        "");
     this->add_main_option_entry(T::OPTION_TYPE_STRING,   "convert-dpi-method", '\0', N_("Open: Method used to convert pre-0.92 document dpi, if needed: [none|scale-viewbox|scale-document]."), "[...]");
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "no-convert-text-baseline-spacing", 0, N_("Open: Do not fix pre-0.92 document's text baseline spacing on opening."), "");
 
@@ -803,6 +806,10 @@ void
 ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint)
 {
     on_startup2();
+    if(_pdf_poppler)
+        INKSCAPE.set_pdf_poppler(_pdf_poppler);
+    if(_pdf_page)
+        INKSCAPE.set_pdf_page(_pdf_page);
 
     for (auto file : files) {
         // Open file
@@ -849,6 +856,10 @@ void
 ConcreteInkscapeApplication<Gtk::Application>::on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint)
 {
     on_startup2();
+    if(_pdf_poppler)
+        INKSCAPE.set_pdf_poppler(_pdf_poppler);
+    if(_pdf_page)
+        INKSCAPE.set_pdf_page(_pdf_page);
 
     for (auto file : files) {
         if (_with_gui) {
@@ -1131,11 +1142,13 @@ ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib:
 
     // ================= OPEN/IMPORT ===================
 
+    if (options->contains("pdf-poppler")) {
+        _pdf_poppler = true;
+    }
     if (options->contains("pdf-page")) {   // Maybe useful for other file types?
         int page = 0;
         options->lookup_value("pdf-page", page);
-        _command_line_actions.push_back(
-            std::make_pair("open-page", Glib::Variant<int>::create(page)));
+        _pdf_page = page;
     }
 
     if (options->contains("convert-dpi-method")) {
