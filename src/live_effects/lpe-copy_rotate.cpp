@@ -68,7 +68,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     gap(_("Gap"), _("Gap"), "gap", &wr, this, -0.0001),
     copies_to_360(_("360º Copies"), _("No rotation angle, fixed to 360º"), "copies_to_360", &wr, this, true),
     mirror_copies(_("Mirror copies"), _("Mirror between copies"), "mirror_copies", &wr, this, false),
-    split_items(_("Split elements"), _("Split elements, this allow gradients and other paints."), "split_items", &wr, this, false),
+    split_items(_("Split elements"), _("Split elements, so each can have its own style"), "split_items", &wr, this, false),
     dist_angle_handle(100.0)
 {
     show_orig_path = true;
