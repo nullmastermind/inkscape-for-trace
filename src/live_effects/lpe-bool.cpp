@@ -51,16 +51,16 @@ static const Util::EnumData<LPEBool::bool_op_ex> BoolOpData[LPEBool::bool_op_ex_
 static const Util::EnumDataConverter<LPEBool::bool_op_ex> BoolOpConverter(BoolOpData, sizeof(BoolOpData) / sizeof(*BoolOpData));
 
 static const Util::EnumData<fill_typ> FillTypeData[] = {
-    { fill_oddEven, N_("odd-even"), "oddeven" },
+    { fill_oddEven, N_("even-odd"), "oddeven" },
     { fill_nonZero, N_("non-zero"), "nonzero" },
     { fill_positive, N_("positive"), "positive" },
-    { fill_justDont, N_("from curve"), "from-curve" }
+    { fill_justDont, N_("take from object"), "from-curve" }
 };
 
 static const Util::EnumDataConverter<fill_typ> FillTypeConverter(FillTypeData, sizeof(FillTypeData) / sizeof(*FillTypeData));
 
 static const Util::EnumData<fill_typ> FillTypeDataThis[] = {
-    { fill_oddEven, N_("odd-even"), "oddeven" },
+    { fill_oddEven, N_("even-odd"), "oddeven" },
     { fill_nonZero, N_("non-zero"), "nonzero" },
     { fill_positive, N_("positive"), "positive" }
 };
@@ -71,10 +71,10 @@ LPEBool::LPEBool(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     operand_path(_("Operand path:"), _("Operand for the boolean operation"), "operand-path", &wr, this),
     bool_operation(_("Operation:"), _("Boolean Operation"), "operation", BoolOpConverter, &wr, this, bool_op_ex_union),
-    swap_operands(_("Swap operands:"), _("Swap operands (useful e.g. for difference)"), "swap-operands", &wr, this),
-    rmv_inner(_("Remove inner:"), _("For cut operations: remove inner (non-contour) lines of cutting path to avoid invisible extra points"), "rmv-inner", &wr, this),
-    fill_type_this(_("Fill type this:"), _("Fill type (winding mode) for this path"), "filltype-this", FillTypeConverterThis, &wr, this, fill_oddEven),
-    fill_type_operand(_("Fill type operand:"), _("Fill type (winding mode) for operand path"), "filltype-operand", FillTypeConverter, &wr, this, fill_justDont)
+    swap_operands(_("Swap operands"), _("Swap operands (useful e.g. for difference)"), "swap-operands", &wr, this),
+    rmv_inner(_("Remove inner"), _("For cut operations: remove inner (non-contour) lines of cutting path to avoid invisible extra points"), "rmv-inner", &wr, this),
+    fill_type_this(_("Fill type (this):"), _("Fill type (winding mode) for this path"), "filltype-this", FillTypeConverterThis, &wr, this, fill_oddEven),
+    fill_type_operand(_("Fill type (operand):"), _("Fill type (winding mode) for operand path"), "filltype-operand", FillTypeConverter, &wr, this, fill_justDont)
 {
     registerParameter(&operand_path);
     registerParameter(&bool_operation);
