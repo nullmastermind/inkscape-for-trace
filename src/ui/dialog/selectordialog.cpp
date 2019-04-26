@@ -812,9 +812,22 @@ Glib::ustring SelectorDialog::_getIdList(std::vector<SPObject*> sel)
  */
 std::vector<SPObject *> SelectorDialog::_getObjVec(Glib::ustring selector) {
 
-    std::vector<SPObject *> objVec = SP_ACTIVE_DOCUMENT->getObjectsBySelector( selector );
-
     g_debug("SelectorDialog::_getObjVec: | %s |", selector.c_str());
+    std::vector<SPObject *> objVec;
+    std::vector<Glib::ustring> tokensplus = Glib::Regex::split_simple("[,]+", selector);
+    bool unhandled = false;
+    for (auto tok : tokensplus) {
+        REMOVE_SPACES(tok);
+        if (tok.find(" ") != -1 || tok.erase(0, 1).find(".") != -1) {
+            unhandled = true;
+            std::vector<SPObject *> objVecSplited = SP_ACTIVE_DOCUMENT->getObjectsBySelector(tok);
+            objVec.insert(objVec.end(), objVecSplited.begin(), objVecSplited.end());
+        }
+    }
+    if (!unhandled) {
+        objVec = SP_ACTIVE_DOCUMENT->getObjectsBySelector(selector);
+    }
+
     for (auto& obj: objVec) {
         g_debug("  %s", obj->getId() ? obj->getId() : "null");
     }
