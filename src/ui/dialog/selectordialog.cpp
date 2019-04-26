@@ -485,16 +485,14 @@ void SelectorDialog::_readStyleElement()
         row[_mColumns._colType] = colType;
         row[_mColumns._colObj]        = objVec;
         row[_mColumns._colProperties] = properties;
-        if (colType == SELECTOR) {
-            // Add as children, objects that match selector.
-            for (auto &obj : objVec) {
-                Gtk::TreeModel::Row childrow = *(_store->append(row->children()));
-                childrow[_mColumns._colSelector] = "#" + Glib::ustring(obj->getId());
-                childrow[_mColumns._colExpand] = false;
-                childrow[_mColumns._colType] = OBJECT;
-                childrow[_mColumns._colObj] = std::vector<SPObject *>(1, obj);
-                childrow[_mColumns._colProperties] = ""; // Unused
-            }
+        // Add as children, objects that match selector.
+        for (auto &obj : objVec) {
+            Gtk::TreeModel::Row childrow = *(_store->append(row->children()));
+            childrow[_mColumns._colSelector] = "#" + Glib::ustring(obj->getId());
+            childrow[_mColumns._colExpand] = false;
+            childrow[_mColumns._colType] = colType == UNHANDLED?UNHANDLED:OBJECT;
+            childrow[_mColumns._colObj] = std::vector<SPObject *>(1, obj);
+            childrow[_mColumns._colProperties] = ""; // Unused
         }
     }
     _updating = false;
@@ -693,6 +691,9 @@ void SelectorDialog::_removeFromSelector(Gtk::TreeModel::Row row)
     if (*row) {
 
         Glib::ustring objectLabel = row[_mColumns._colSelector];
+        if (row[_mColumns._colType] == UNHANDLED) {
+            return;
+        };
         Gtk::TreeModel::iterator iter = row->parent();
         if (iter) {
             Gtk::TreeModel::Row parent = *iter;
