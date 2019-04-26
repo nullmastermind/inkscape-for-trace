@@ -490,7 +490,7 @@ void SelectorDialog::_readStyleElement()
             Gtk::TreeModel::Row childrow = *(_store->append(row->children()));
             childrow[_mColumns._colSelector] = "#" + Glib::ustring(obj->getId());
             childrow[_mColumns._colExpand] = false;
-            childrow[_mColumns._colType] = colType == UNHANDLED?UNHANDLED:OBJECT;
+            childrow[_mColumns._colType] = colType == UNHANDLED ? UNHANDLED : OBJECT;
             childrow[_mColumns._colObj] = std::vector<SPObject *>(1, obj);
             childrow[_mColumns._colProperties] = ""; // Unused
         }
