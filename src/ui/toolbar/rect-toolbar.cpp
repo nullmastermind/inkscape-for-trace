@@ -84,7 +84,7 @@ RectToolbar::RectToolbar(SPDesktop *desktop)
     // rx/ry units menu: create
     //tracker->addUnit( SP_UNIT_PERCENT, 0 );
     // fixme: add % meaning per cent of the width/height
-    _tracker->setActiveUnit(unit_table.getUnit("px"));
+    _tracker->setActiveUnit(desktop->getNamedView()->display_units);
     _mode_item->set_use_markup(true);
 
     /* W */

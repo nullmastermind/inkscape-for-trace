@@ -1769,10 +1769,10 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
                         // Don't apply to text toolbar. We want to be able to
                         // use different units for text. (Bug 1562217)
                         const Glib::ustring name = j->get_name();
-                        if ( name == "TextToolbar")
+                        if ( name == "TextToolbar" || name == "MeasureToolbar")
                             continue;
 
-                        gpointer t = sp_search_by_data_recursive(GTK_WIDGET(j->gobj()), (gpointer) "tracker");
+                        gpointer t = sp_search_by_data_recursive(GTK_WIDGET(j->gobj()), (gpointer) "unit-tracker");
                         if (t == nullptr) // didn't find any tracker data
                             continue;
 

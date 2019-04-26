@@ -265,7 +265,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
      _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
 {
     /* Line height unit tracker */
-    _tracker->prependUnit(unit_table.getUnit("")); // No unit
+    _tracker->prependUnit(unit_table.getUnit("")); // Ratio
     _tracker->addUnit(unit_table.getUnit("%"));
     _tracker->addUnit(unit_table.getUnit("em"));
     _tracker->addUnit(unit_table.getUnit("ex"));
