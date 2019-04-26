@@ -801,7 +801,7 @@ std::vector<SPObject *> SelectorDialog::_getObjVec(Glib::ustring selector) {
         }
     }
     if (!unhandled) {
-        objVec = SP_ACTIVE_DOCUMENT->getObjectsBySelector( selector );
+        objVec = SP_ACTIVE_DOCUMENT->getObjectsBySelector(selector);
     }
     g_debug("SelectorDialog::_getObjVec: | %s |", selector.c_str());
     for (auto& obj: objVec) {
