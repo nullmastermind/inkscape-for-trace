@@ -467,7 +467,8 @@ void SelectorDialog::_readStyleElement()
         coltype colType = SELECTOR;
         for (auto tok : tokensplus) {
             REMOVE_SPACES(tok);
-            if (tok.find(" ") != -1 || tok.erase(0, 1).find(".") != -1) {
+            if (SPAttributeRelSVG::isSVGElement(tok) || tok.find(" ") != -1 || tok[0] == '>' || tok[0] == '+' ||
++               tok[0] == '~' || tok[0] == '*' || tok.erase(0, 1).find(".") != -1) {
                 colType = UNHANDLED;
             }
         }
@@ -818,7 +819,8 @@ std::vector<SPObject *> SelectorDialog::_getObjVec(Glib::ustring selector) {
     bool unhandled = false;
     for (auto tok : tokensplus) {
         REMOVE_SPACES(tok);
-        if (tok.find(" ") != -1 || tok.erase(0, 1).find(".") != -1) {
+        if (SPAttributeRelSVG::isSVGElement(tok) || tok.find(" ") != -1 || tok[0] == '>' || tok[0] == '+' ||
+            tok[0] == '~' || tok[0] == '*' || tok.erase(0, 1).find(".") != -1) {
             unhandled = true;
             std::vector<SPObject *> objVecSplited = SP_ACTIVE_DOCUMENT->getObjectsBySelector(tok);
             objVec.insert(objVec.end(), objVecSplited.begin(), objVecSplited.end());
@@ -978,19 +980,45 @@ void SelectorDialog::_addSelector()
          * set to ".Class1"
          */
         selectorValue = textEditPtr->get_text();
-        Glib::ustring firstWord = selectorValue.substr(0, selectorValue.find_first_of(" >+~"));
-        if (firstWord != selectorValue) {
-            handled = false;
-        }
         if (!_stylemode) {
             del->set_sensitive(true);
         }
-        if (selectorValue[0] == '.' || selectorValue[0] == '#' || selectorValue[0] == '*' ||
-            SPAttributeRelSVG::isSVGElement(selectorValue)) {
-            invalid = false;
-        } else {
-            textLabelPtr->show();
+        std::vector<Glib::ustring> tokensplus = Glib::Regex::split_simple("[,]+", selectorValue);
+        bool unhandled = false;
+        bool partialinvalid = false;
+        for (auto tok : tokensplus) {
+            REMOVE_SPACES(tok);
+            if (SPAttributeRelSVG::isSVGElement(tok) || tok.find(" ") != -1 || tok[0] == '>' || tok[0] == '+' ||
+                tok[0] == '~' || tok[0] == '*' || tok.erase(0, 1).find(".") != -1) {
+                unhandled = true;
+                Glib::ustring firstWord = tok.substr(0, tok.find_first_of(" >+~"));
+                if (firstWord != tok) {
+                    handled = false;
+                }
+                if (!partialinvalid &&
+                    (tok[0] == '.' || tok[0] == '#' || tok[0] == '*' || SPAttributeRelSVG::isSVGElement(tok))) {
+                    partialinvalid = false;
+                } else {
+                    partialinvalid = true;
+                }
+            }
         }
+        if (!unhandled) {
+            Glib::ustring firstWord = selectorValue.substr(0, selectorValue.find_first_of(" >+~"));
+            if (firstWord != selectorValue) {
+                handled = false;
+            }
+            if (selectorValue[0] == '.' || selectorValue[0] == '#' || selectorValue[0] == '*' ||
+                SPAttributeRelSVG::isSVGElement(selectorValue)) {
+                invalid = false;
+            } else {
+                textLabelPtr->show();
+            }
+        } else if (partialinvalid) {
+            textLabelPtr->show();
+        } else {
+            invalid = false;
+         }
     }
     delete textDialogPtr;
     // ==== Handle response ====
