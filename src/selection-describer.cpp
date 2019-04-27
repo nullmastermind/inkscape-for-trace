@@ -139,7 +139,7 @@ void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *select
 
         // Parent name
         SPObject *parent = item->parent;
-        if (!parent) { //fix selector * to "svg:svg"
+        if (!parent) { // fix selector * to "svg:svg"
             return;
         }
         gchar const *parent_label = parent->getId();

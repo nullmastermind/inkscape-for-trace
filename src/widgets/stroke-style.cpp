@@ -952,8 +952,8 @@ StrokeStyle::updateLine()
 
     std::vector<SPItem*> const objects(sel->items().begin(), sel->items().end());
     if (objects.size()) {
-        SPObject * const object = objects[0];
-        SPStyle * const style = object->style;
+        SPObject *const object = objects[0];
+        SPStyle *const style = object->style;
         /* Markers */
         updateAllMarkers(objects, true); // FIXME: make this desktop query too
 
