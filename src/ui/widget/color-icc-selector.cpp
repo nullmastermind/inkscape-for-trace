@@ -486,7 +486,7 @@ void ColorICCSelector::init()
     attachToGridOrTable(t, _impl->_label, 0, row, 1, 1);
 
     // Adjustment
-    _impl->_adj = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, 0.0, 255.0, 1.0, 10.0, 10.0));
+    _impl->_adj = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, 0.0, 100.0, 1.0, 10.0, 10.0));
 
     // Slider
     _impl->_slider = Gtk::manage(new Inkscape::UI::Widget::ColorSlider(Glib::wrap(_impl->_adj, true)));
@@ -941,12 +941,6 @@ void ColorICCSelectorImpl::_updateSliders(gint ignore)
 
 void ColorICCSelectorImpl::_adjustmentChanged(GtkAdjustment *adjustment, ColorICCSelectorImpl *cs)
 {
-// // TODO check this. It looks questionable:
-//     // if a value is entered between 0 and 1 exclusive, normalize it to (int) 0..255  or 0..100
-//     if (adjustment->value > 0.0 && adjustment->value < 1.0) {
-//         gtk_adjustment_set_value( adjustment, floor ((adjustment->value) * adjustment->upper + 0.5) );
-//     }
-
 #ifdef DEBUG_LCMS
     g_message("/^^^^^^^^^  %p::_adjustmentChanged()", cs);
 #endif // DEBUG_LCMS

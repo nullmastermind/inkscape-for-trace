@@ -14,6 +14,7 @@ list(APPEND INKSCAPE_INCS ${PROJECT_SOURCE_DIR}
 list(APPEND INKSCAPE_CXX_FLAGS "-Werror=format")                # e.g.: printf("%s", std::string("foo"))
 list(APPEND INKSCAPE_CXX_FLAGS "-Werror=format-security")       # e.g.: printf(variable);
 list(APPEND INKSCAPE_CXX_FLAGS "-D_FORTIFY_SOURCE=2")
+list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-D_GLIBCXX_ASSERTIONS")
 if (CMAKE_COMPILER_IS_GNUCC)
     list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-Og")                 # for _FORTIFY_SOURCE
     list(APPEND INKSCAPE_CXX_FLAGS_DEBUG "-fexceptions -fstack-protector-strong -grecord-gcc-switches -fasynchronous-unwind-tables")

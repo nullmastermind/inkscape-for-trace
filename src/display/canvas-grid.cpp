@@ -680,18 +680,6 @@ CanvasXYGrid::newSpecificWidget()
     _rsi = Gtk::manage( new Inkscape::UI::Widget::RegisteredSuffixedInteger(
             _("_Major grid line every:"), "", _("lines"), "empspacing", _wr, repr, doc) );
 
-    _rsu_ox->setDigits(5);
-    _rsu_ox->setIncrements(0.1, 1.0);
-
-    _rsu_oy->setDigits(5);
-    _rsu_oy->setIncrements(0.1, 1.0);
-
-    _rsu_sx->setDigits(5);
-    _rsu_sx->setIncrements(0.1, 1.0);
-
-    _rsu_sy->setDigits(5);
-    _rsu_sy->setIncrements(0.1, 1.0);
-
     _rumg->set_hexpand();
     _rsu_ox->set_hexpand();
     _rsu_oy->set_hexpand();
@@ -703,6 +691,18 @@ CanvasXYGrid::newSpecificWidget()
 
     // set widget values
     _wr.setUpdating (true);
+
+    _rsu_ox->setDigits(5);
+    _rsu_ox->setIncrements(0.1, 1.0);
+
+    _rsu_oy->setDigits(5);
+    _rsu_oy->setIncrements(0.1, 1.0);
+
+    _rsu_sx->setDigits(5);
+    _rsu_sx->setIncrements(0.1, 1.0);
+
+    _rsu_sy->setDigits(5);
+    _rsu_sy->setIncrements(0.1, 1.0);
 
     _rumg->setUnit (gridunit->abbr);
 

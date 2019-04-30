@@ -30,15 +30,23 @@ static void set_extensions_env()
     g_free(program_dir);
 
     // add share/inkscape/extensions to PYTHONPATH so the inkex module is found by extensions in user folder
+    auto new_pythonpath = std::string(INKSCAPE_EXTENSIONDIR);
+
+    // add old PYTHONPATH
     gchar const *pythonpath = g_getenv("PYTHONPATH");
-    gchar *new_pythonpath;
     if (pythonpath) {
-        new_pythonpath = g_strdup_printf("%s" G_SEARCHPATH_SEPARATOR_S "%s", INKSCAPE_EXTENSIONDIR, pythonpath);
-    } else {
-        new_pythonpath = g_strdup(INKSCAPE_EXTENSIONDIR);
+        new_pythonpath.append(G_SEARCHPATH_SEPARATOR_S).append(pythonpath);
     }
-    g_setenv("PYTHONPATH", new_pythonpath, true);
-    g_free(new_pythonpath);
+
+    // add share/inkscape/extensions/inkex/deprecated-simple
+    new_pythonpath.append(G_SEARCHPATH_SEPARATOR_S)
+        .append(INKSCAPE_EXTENSIONDIR)
+        .append(G_DIR_SEPARATOR_S)
+        .append("inkex")
+        .append(G_DIR_SEPARATOR_S)
+        .append("deprecated-simple");
+
+    g_setenv("PYTHONPATH", new_pythonpath.c_str(), true);
 
 #ifdef _WIN32
     // add inkscape directory to DLL search path so dynamically linked extension modules find their libraries

@@ -193,12 +193,19 @@ public:
     // may not be reflected by a selection change and thus needs a separate signal
     sigc::signal<void> signal_external_change;
 
+    void set_pdf_poppler(bool p) {
+        _pdf_poppler = p;
+    }
+    bool get_pdf_poppler() {
+        return _pdf_poppler;
+    }
     void set_pdf_page(gint page) {
         _pdf_page = page;
     }
     gint get_pdf_page() {
         return _pdf_page;
     }
+
     void add_gtk_css();
     void add_icon_theme();
 
@@ -225,6 +232,7 @@ public:
     static bool _crashIsHappening;
     bool _use_gui;
     gint _pdf_page;
+    bool _pdf_poppler;
 };
 
 } // namespace Inkscape

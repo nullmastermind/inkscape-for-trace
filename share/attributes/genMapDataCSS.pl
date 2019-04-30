@@ -179,7 +179,7 @@ $properties{ "line-height" }->{inherit} = "no";
 
 # Inkscape uses CSS property 'text-align' for flowed text. It is not an SVG 1.1 property
 # but is found in SVG 1.2 Tiny.
-push @{$properties{ "text-align" }->{elements}}, "flowRoot";
+push @{$properties{ "text-align" }->{elements}}, "flowRoot", "flowPara", "flowSpan";
 $properties{ "text-align" }->{default} = "start";
 $properties{ "text-align" }->{inherit} = "yes";
 

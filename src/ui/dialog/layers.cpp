@@ -383,6 +383,7 @@ void LayersPanel::_layersChanged()
 //    g_message("_layersChanged()");
     if (_desktop) {
         SPDocument* document = _desktop->doc();
+        g_return_if_fail(document != nullptr); // bug #158: Crash on File>Quit
         SPRoot* root = document->getRoot();
         if ( root ) {
             _selectedConnection.block();

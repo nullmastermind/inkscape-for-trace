@@ -380,7 +380,6 @@ share/extensions/extrude.py
 share/extensions/generate_voronoi.py
 share/extensions/gimp_xcf.py
 share/extensions/hpgl_decoder.py
-share/extensions/hpgl_encoder.py
 share/extensions/hpgl_input.py
 share/extensions/hpgl_output.py
 share/extensions/inkex/bezier.py
@@ -438,7 +437,6 @@ share/extensions/webslicer_export.py
 [type: gettext/xml] share/extensions/color_rgbbarrel.inx
 [type: gettext/xml] share/extensions/convert2dashes.inx
 [type: gettext/xml] share/extensions/dhw_input.inx
-[type: gettext/xml] share/extensions/dia.inx
 [type: gettext/xml] share/extensions/dimension.inx
 [type: gettext/xml] share/extensions/docinfo.inx
 [type: gettext/xml] share/extensions/dots.inx
@@ -459,7 +457,6 @@ share/extensions/webslicer_export.py
 [type: gettext/xml] share/extensions/empty_page.inx
 [type: gettext/xml] share/extensions/empty_video.inx
 [type: gettext/xml] share/extensions/eps_input.inx
-[type: gettext/xml] share/extensions/eqtexsvg.inx
 [type: gettext/xml] share/extensions/export_gimp_palette.inx
 [type: gettext/xml] share/extensions/extractimage.inx
 [type: gettext/xml] share/extensions/extrude.inx
@@ -555,7 +552,6 @@ share/extensions/webslicer_export.py
 [type: gettext/xml] share/extensions/seamless_pattern.inx
 [type: gettext/xml] share/extensions/seamless_pattern_procedural.inx
 [type: gettext/xml] share/extensions/setup_typography_canvas.inx
-[type: gettext/xml] share/extensions/sk_input.inx
 [type: gettext/xml] share/extensions/spirograph.inx
 [type: gettext/xml] share/extensions/split.inx
 [type: gettext/xml] share/extensions/straightseg.inx

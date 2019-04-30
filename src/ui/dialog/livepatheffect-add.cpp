@@ -101,11 +101,10 @@ LivePathEffectAdd::LivePathEffectAdd()
     _LPESelectorFlowBox->signal_child_activated().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_activate));
     _LPEDialogSelector->add_events(Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK |
                                    Gdk::ENTER_NOTIFY_MASK | Gdk::LEAVE_NOTIFY_MASK);
-    Glib::ustring effectgladefile = get_filename(Inkscape::IO::Resource::UIS, "dialog-livepatheffect-add-effect.ui");
     for (int i = 0; i < static_cast<int>(converter._length); ++i) {
         Glib::RefPtr<Gtk::Builder> builder_effect;
         try {
-            builder_effect = Gtk::Builder::create_from_file(effectgladefile);
+            builder_effect = Gtk::Builder::create_from_file(gladefile);
         } catch (const Glib::Error &ex) {
             g_warning("Glade file loading failed for filter effect dialog");
             return;
@@ -136,10 +135,10 @@ LivePathEffectAdd::LivePathEffectAdd()
         Gtk::Label *LPEDescription;
         builder_effect->get_widget("LPEDescription", LPEDescription);
         LPEDescription->set_text(converter.get_description(data->id));
-        Gtk::ToggleButton *LPEExperimental;
-        builder_effect->get_widget("LPEExperimental", LPEExperimental);
+        Gtk::ToggleButton *LPEExperimentalToggle;
+        builder_effect->get_widget("LPEExperimentalToggle", LPEExperimentalToggle);
         bool active = converter.get_experimental(data->id) ? true : false;
-        LPEExperimental->set_active(active);
+        LPEExperimentalToggle->set_active(active);
         Gtk::Image *LPEIcon;
         builder_effect->get_widget("LPEIcon", LPEIcon);
         LPEIcon->set_from_icon_name(converter.get_icon(data->id), Gtk::BuiltinIconSize(Gtk::ICON_SIZE_DIALOG));

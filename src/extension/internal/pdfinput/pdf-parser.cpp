@@ -421,7 +421,7 @@ void PdfParser::parse(Object *obj, GBool topLevel) {
 	error(errInternal, -1, "Weird page contents");
     	return;
   }
-  parser = new Parser(xref, new Lexer(xref, obj), gFalse);
+  parser = new _POPPLER_NEW_PARSER(xref, obj);
   go(topLevel);
   delete parser;
   parser = nullptr;

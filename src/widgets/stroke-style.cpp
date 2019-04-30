@@ -951,15 +951,15 @@ StrokeStyle::updateLine()
         return;
 
     std::vector<SPItem*> const objects(sel->items().begin(), sel->items().end());
-    SPObject * const object = objects[0];
-    SPStyle * const style = object->style;
+    if (objects.size()) {
+        SPObject *const object = objects[0];
+        SPStyle *const style = object->style;
+        /* Markers */
+        updateAllMarkers(objects, true); // FIXME: make this desktop query too
 
-    /* Markers */
-    updateAllMarkers(objects, true); // FIXME: make this desktop query too
-
-    /* Dash */
-    setDashSelectorFromStyle(dashSelector, style); // FIXME: make this desktop query too
-
+        /* Dash */
+        setDashSelectorFromStyle(dashSelector, style); // FIXME: make this desktop query too
+    }
     table->set_sensitive(true);
 
     update = false;

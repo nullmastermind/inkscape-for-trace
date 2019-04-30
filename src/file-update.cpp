@@ -205,6 +205,53 @@ void sp_file_convert_text_baseline_spacing(SPDocument *doc)
     sp_file_text_run_recursive(fix_update, doc->getRoot());
 }
 
+
+/**
+ * Implements a fix for https://gitlab.com/inkscape/inkscape/issues/45
+ * Line spacing for empty lines was handled differently before 1.0
+ * and in particular with the first empty lines or with how style attributes
+ * are processed in empty lines (line  =  tspan with sodipodi:role="line")
+ *
+ * This function "fixes" a text element in a old document by removing the
+ * first empty lines and style attrs on other empty lines.
+ *
+ * */
+void _fix_pre_v1_empty_lines(SPObject *o)
+{
+    std::vector<SPObject *> cl = o->childList(false);
+    bool begin = true;
+    std::string cur_y = "";
+    for (std::vector<SPObject *>::const_iterator ci = cl.begin(); ci != cl.end(); ++ci) {
+        if (!SP_IS_TSPAN(*ci))
+            continue;
+        if (!is_line(*ci))
+            continue;
+        if (!(*ci)->childList(false).empty()) {
+            if (begin)
+                cur_y = (*ci)->getAttribute("y") ? (*ci)->getAttribute("y") : cur_y;
+            begin = false;
+        } else {
+            (*ci)->removeAttribute("style");
+            (*ci)->updateRepr();
+            if (begin) {
+                (*ci)->deleteObject();
+            }
+        }
+        if (cur_y != "")
+            o->setAttribute("y", cur_y);
+    }
+}
+
+
+
+void sp_file_fix_empty_lines(SPDocument *doc)
+{
+    sp_file_text_run_recursive(_fix_pre_v1_empty_lines, doc->getRoot());
+    sp_file_text_run_recursive(fix_update, doc->getRoot());
+}
+
+
+
 void sp_file_convert_font_name(SPDocument *doc)
 {
     sp_file_text_run_recursive(fix_font_name, doc->getRoot());

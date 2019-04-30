@@ -198,6 +198,7 @@ static struct {
       SP_VERB_INVALID, nullptr, nullptr},
     { "/tools/zoom",   "zoom_toolbox",   Inkscape::UI::Toolbar::ZoomToolbar::create, nullptr, "ZoomToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
+    // If you change MeasureToolbar here, change it also in desktop-widget.cpp
     { "/tools/measure",   "measure_toolbox", Inkscape::UI::Toolbar::MeasureToolbar::create, nullptr,         "MeasureToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
     { "/tools/shapes/star",   "star_toolbox",   Inkscape::UI::Toolbar::StarToolbar::create,   nullptr,  "StarToolbar",
@@ -819,6 +820,7 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             gtk_container_add(GTK_CONTAINER(toolbox), holder);
             gtk_size_group_add_widget(grouper, holder);
             sp_set_font_size_smaller( holder );
+            gtk_widget_set_name( holder, aux_toolboxes[i].ui_name );
 
             // TODO: We could make the toolbox a custom subclass of GtkEventBox
             //       so that we can store a list of toolbars, rather than using

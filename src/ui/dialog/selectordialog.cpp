@@ -457,7 +457,8 @@ void SelectorDialog::_readStyleElement()
         coltype colType = SELECTOR;
         for (auto tok : tokensplus) {
             REMOVE_SPACES(tok);
-            if (tok.find(" ") != -1 || tok.erase(0, 1).find(".") != -1) {
+            if (SPAttributeRelSVG::isSVGElement(tok) || tok.find(" ") != -1 || tok[0] == '>' || tok[0] == '+' ||
+                tok[0] == '~' || tok[0] == '*' || tok.erase(0, 1).find(".") != -1) {
                 colType = UNHANDLED;
             }
         }
@@ -485,16 +486,14 @@ void SelectorDialog::_readStyleElement()
         row[_mColumns._colType] = colType;
         row[_mColumns._colObj]        = objVec;
         row[_mColumns._colProperties] = properties;
-        if (colType == SELECTOR) {
-            // Add as children, objects that match selector.
-            for (auto &obj : objVec) {
-                Gtk::TreeModel::Row childrow = *(_store->append(row->children()));
-                childrow[_mColumns._colSelector] = "#" + Glib::ustring(obj->getId());
-                childrow[_mColumns._colExpand] = false;
-                childrow[_mColumns._colType] = OBJECT;
-                childrow[_mColumns._colObj] = std::vector<SPObject *>(1, obj);
-                childrow[_mColumns._colProperties] = ""; // Unused
-            }
+        // Add as children, objects that match selector.
+        for (auto &obj : objVec) {
+            Gtk::TreeModel::Row childrow = *(_store->append(row->children()));
+            childrow[_mColumns._colSelector] = "#" + Glib::ustring(obj->getId());
+            childrow[_mColumns._colExpand] = false;
+            childrow[_mColumns._colType] = colType == UNHANDLED ? UNHANDLED : OBJECT;
+            childrow[_mColumns._colObj] = std::vector<SPObject *>(1, obj);
+            childrow[_mColumns._colProperties] = ""; // Unused
         }
     }
     _updating = false;
@@ -693,6 +692,9 @@ void SelectorDialog::_removeFromSelector(Gtk::TreeModel::Row row)
     if (*row) {
 
         Glib::ustring objectLabel = row[_mColumns._colSelector];
+        if (row[_mColumns._colType] == UNHANDLED) {
+            return;
+        };
         Gtk::TreeModel::iterator iter = row->parent();
         if (iter) {
             Gtk::TreeModel::Row parent = *iter;
@@ -788,8 +790,21 @@ Glib::ustring SelectorDialog::_getIdList(std::vector<SPObject*> sel)
  */
 std::vector<SPObject *> SelectorDialog::_getObjVec(Glib::ustring selector) {
 
-    std::vector<SPObject *> objVec = SP_ACTIVE_DOCUMENT->getObjectsBySelector( selector );
-
+    std::vector<SPObject *> objVec;
+    std::vector<Glib::ustring> tokensplus = Glib::Regex::split_simple("[,]+", selector);
+    bool unhandled = false;
+    for (auto tok : tokensplus) {
+        REMOVE_SPACES(tok);
+        if (SPAttributeRelSVG::isSVGElement(tok) || tok.find(" ") != -1 || tok[0] == '>' || tok[0] == '+' ||
+            tok[0] == '~' || tok[0] == '*' || tok.erase(0, 1).find(".") != -1) {
+            unhandled = true;
+            std::vector<SPObject *> objVecSplited = SP_ACTIVE_DOCUMENT->getObjectsBySelector(tok);
+            objVec.insert(objVec.end(), objVecSplited.begin(), objVecSplited.end());
+        }
+    }
+    if (!unhandled) {
+        objVec = SP_ACTIVE_DOCUMENT->getObjectsBySelector(selector);
+    }
     g_debug("SelectorDialog::_getObjVec: | %s |", selector.c_str());
     for (auto& obj: objVec) {
         g_debug("  %s", obj->getId() ? obj->getId() : "null");
@@ -943,17 +958,44 @@ void SelectorDialog::_addSelector()
          * set to ".Class1"
          */
         selectorValue = textEditPtr->get_text();
-        Glib::ustring firstWord = selectorValue.substr(0, selectorValue.find_first_of(" >+~"));
-        if (firstWord != selectorValue) {
-            handled = false;
-        }
-        del->set_sensitive(true);
 
-        if (selectorValue[0] == '.' || selectorValue[0] == '#' || selectorValue[0] == '*' ||
-            SPAttributeRelSVG::isSVGElement(selectorValue)) {
-            invalid = false;
-        } else {
+        del->set_sensitive(true);
+        std::vector<Glib::ustring> tokensplus = Glib::Regex::split_simple("[,]+", selectorValue);
+        bool unhandled = false;
+        bool partialinvalid = false;
+        for (auto tok : tokensplus) {
+            REMOVE_SPACES(tok);
+            if (SPAttributeRelSVG::isSVGElement(tok) || tok.find(" ") != -1 || tok[0] == '>' || tok[0] == '+' ||
+                tok[0] == '~' || tok[0] == '*' || tok.erase(0, 1).find(".") != -1) {
+                unhandled = true;
+                Glib::ustring firstWord = tok.substr(0, tok.find_first_of(" >+~"));
+                if (firstWord != tok) {
+                    handled = false;
+                }
+
+                if (!partialinvalid &&
+                    (tok[0] == '.' || tok[0] == '#' || tok[0] == '*' || SPAttributeRelSVG::isSVGElement(tok))) {
+                    partialinvalid = false;
+                } else {
+                    partialinvalid = true;
+                }
+            }
+        }
+        if (!unhandled) {
+            Glib::ustring firstWord = selectorValue.substr(0, selectorValue.find_first_of(" >+~"));
+            if (firstWord != selectorValue) {
+                handled = false;
+            }
+            if (selectorValue[0] == '.' || selectorValue[0] == '#' || selectorValue[0] == '*' ||
+                SPAttributeRelSVG::isSVGElement(selectorValue)) {
+                invalid = false;
+            } else {
+                textLabelPtr->show();
+            }
+        } else if (partialinvalid) {
             textLabelPtr->show();
+        } else {
+            invalid = false;
         }
     }
     delete textDialogPtr;

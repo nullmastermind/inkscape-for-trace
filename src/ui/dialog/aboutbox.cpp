@@ -91,6 +91,9 @@ AboutBox::AboutBox()
     set_comments      (_("Open Source Scalable Vector Graphics Editor\n"
                          "Draw Freely."));
     // clang-format on
+
+    get_content_area()->set_border_width(3);
+    get_action_area()->set_border_width(3);
 }
 
 /**

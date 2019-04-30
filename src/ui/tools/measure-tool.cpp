@@ -810,7 +810,7 @@ void MeasureTool::toMarkDimension()
     setLine(start, end, true, color);
     Glib::ustring unit_name = prefs->getString("/tools/measure/unit");
     if (!unit_name.compare("")) {
-        unit_name = "px";
+        unit_name = DEFAULT_UNIT_NAME;
     }
     double fontsize = prefs->getDouble("/tools/measure/fontsize", 10.0);
     int precision = prefs->getInt("/tools/measure/precision", 2);
@@ -1162,7 +1162,7 @@ void MeasureTool::showInfoBox(Geom::Point cursor, bool into_groups)
         Glib::ustring unit_name = prefs->getString("/tools/measure/unit");
         bool only_selected = prefs->getBool("/tools/measure/only_selected", false);
         if (!unit_name.compare("")) {
-            unit_name = "px";
+            unit_name = DEFAULT_UNIT_NAME;
         }
         Geom::Scale zoom = Geom::Scale(Inkscape::Util::Quantity::convert(desktop->current_zoom(), "px", unit->abbr)).inverse();
         if(newover != over){
@@ -1324,7 +1324,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
     }
     Glib::ustring unit_name = prefs->getString("/tools/measure/unit");
     if (!unit_name.compare("")) {
-        unit_name = "px";
+        unit_name = DEFAULT_UNIT_NAME;
     }
     double scale = prefs->getDouble("/tools/measure/scale", 100.0) / 100.0;
     double fontsize = prefs->getDouble("/tools/measure/fontsize", 10.0);

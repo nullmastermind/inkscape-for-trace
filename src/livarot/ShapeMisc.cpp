@@ -397,7 +397,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int /*wildPath*
               parentContour = GPOINTER_TO_INT(swdData[askTo].misc);
               parentContour-=1; // pour compenser le decalage
           }
-          childEdge = getPoint(fi).incidentEdge[FIRST];
+          childEdge = getPoint(fi % numberOfPoints()).incidentEdge[FIRST];
         }
       }
       lastPtUsed = fi + 1;

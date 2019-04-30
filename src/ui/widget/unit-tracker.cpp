@@ -180,7 +180,9 @@ UnitTracker::create_tool_item(Glib::ustring const &label,
                               Glib::ustring const &tooltip)
 {
     auto combo = ComboToolItem::create(label, tooltip, "NotUsed", _store);
+    combo->set_active(_active);
     combo->signal_changed().connect(sigc::mem_fun(*this, &UnitTracker::_unitChangedCB));
+    combo->set_data("unit-tracker", this);
     _combo_list.push_back(combo);
     return combo;    
 }

@@ -627,7 +627,7 @@ static ScanlineCheckResult perform_bitmap_scanline_check(std::deque<Geom::Point>
     bool can_paint_top = (top_ty > 0);
     bool can_paint_bottom = (bottom_ty < bci.height);
 
-    Geom::Point t = fill_queue->front();
+    Geom::Point front_of_queue = fill_queue->empty() ? Geom::Point() : fill_queue->front();
 
     do {
         ok = false;
@@ -645,8 +645,11 @@ static ScanlineCheckResult perform_bitmap_scanline_check(std::deque<Geom::Point>
                 paint_directions = paint_pixel(px, trace_px, orig_color, bci, current_trace_t);
                 if (bci.radius == 0) {
                     mark_pixel_checked(current_trace_t);
-                    if ((t[Geom::X] == bci.x) && (t[Geom::Y] == bci.y)) {
-                        fill_queue->pop_front(); t = fill_queue->front();
+                    if ((!fill_queue->empty()) &&
+                        (front_of_queue[Geom::X] == bci.x) &&
+                        (front_of_queue[Geom::Y] == bci.y)) {
+                        fill_queue->pop_front();
+                        front_of_queue = fill_queue->empty() ? Geom::Point() : fill_queue->front();
                     }
                 }
 

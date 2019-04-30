@@ -590,7 +590,7 @@
 
 "stroke-width" - "path","rect","circle","ellipse","line","polyline","polygon","altGlyph","textPath","text","tref","tspan","flowRoot","flowPara","flowSpan","a","defs","glyph","g","marker","mask","missing-glyph","pattern","svg","switch","symbol","use"
 
-"text-align" - "flowRoot","a","defs","glyph","g","marker","mask","missing-glyph","pattern","svg","switch","symbol","use"
+"text-align" - "flowRoot","flowPara","flowSpan","a","defs","glyph","g","marker","mask","missing-glyph","pattern","svg","switch","symbol","use"
 
 "text-anchor" - "altGlyph","textPath","text","tref","tspan","flowRoot","flowPara","flowSpan","a","defs","glyph","g","marker","mask","missing-glyph","pattern","svg","switch","symbol","use"
 

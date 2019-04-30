@@ -39,6 +39,7 @@
 #include "verbs.h"
 
 #include "object/sp-ellipse.h"
+#include "object/sp-namedview.h"
 
 #include "ui/icon-names.h"
 #include "ui/pref-pusher.h"
@@ -78,7 +79,7 @@ ArcToolbar::ArcToolbar(SPDesktop *desktop) :
         _freeze(false),
         _repr(nullptr)
 {
-    _tracker->setActiveUnit(unit_table.getUnit("px"));
+    _tracker->setActiveUnit(desktop->getNamedView()->display_units);
     auto prefs = Inkscape::Preferences::get();
 
     {
