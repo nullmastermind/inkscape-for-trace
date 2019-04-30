@@ -911,6 +911,10 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
     cairo_set_line_width(buf->ct, 1.0);
     cairo_set_line_cap(buf->ct, CAIRO_LINE_CAP_SQUARE);
 
+	// Adding a 2 px margin to the buffer rectangle to avoid missing intersections (in case of rounding errors, and due to adding 0.5 below)
+	Geom::IntRect buf_rect_with_margin = buf->rect;
+	buf_rect_with_margin.expandBy(2);
+	
     for (unsigned dim = 0; dim < 2; ++dim) {
 
         // std::cout << "\n  " << (dim==0?"Horizontal":"Vertical") << "   ------------" << std::endl;
@@ -932,7 +936,7 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
         for (unsigned c = 0; c < 4; ++c) {
 
             // We need signed distance... lib2geom offers only positive distance.
-            double distance = signed_distance( buf->rect.corner(c), axis );
+            double distance = signed_distance( buf_rect_with_margin.corner(c), axis );
 
             // Correct it for coordinate flips (inverts handedness).
             if (Geom::cross( axis.vector(), orth.vector() ) > 0 ) {
@@ -956,7 +960,7 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
 
             Geom::Line grid_line = Geom::make_parallel_line( ow + j * sw[(dim+1)%2], axis );
 
-            std::vector<Geom::Point> x = intersect_line_rectangle( grid_line, buf->rect );
+            std::vector<Geom::Point> x = intersect_line_rectangle( grid_line, buf_rect_with_margin );
 
             // If we have two intersections, grid line intersects buffer rectangle.
             if (x.size() == 2 ) {
@@ -967,10 +971,11 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
                     std::swap(x[0], x[1]);
                 }
 
-                // Set up line.
-                cairo_move_to(buf->ct, x[0][Geom::X] + 0.5, x[0][Geom::Y] + 0.5);
-                cairo_line_to(buf->ct, x[1][Geom::X] + 0.5, x[1][Geom::Y] + 0.5);
-
+                // Set up line. Need to use floor()+0.5 such that Cairo will draw us lines with a width of a single pixel, without any aliasing.
+                // For this we need to position the lines at exactly half pixels, see https://www.cairographics.org/FAQ/#sharp_lines
+                cairo_move_to(buf->ct, floor(x[0][Geom::X]) + 0.5, floor(x[0][Geom::Y]) + 0.5);
+                cairo_line_to(buf->ct, floor(x[1][Geom::X]) + 0.5, floor(x[1][Geom::Y]) + 0.5);
+                
                 // Set dash pattern and color.
                 if (render_dotted) {
                     // alpha needs to be larger than in the line case to maintain a similar

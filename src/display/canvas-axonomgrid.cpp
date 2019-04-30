@@ -529,7 +529,9 @@ CanvasAxonomGrid::Render (SPCanvasBuf *buf)
     gint const  ylinestart = round((ystart_x_sc - ow[Geom::X]) / spacing_ylines);
     gint ylinenum = ylinestart;
     for (gdouble x = ystart_x_sc; x < buf->rect.right(); x += spacing_ylines, ylinenum++) {
-        gint const x0 = round(x);
+        gint const x0 = floor(x); // sp_grid_vline will add 0.5 again, so we'll pre-emptively use floor()
+        // instead of round() to avoid biasing the vertical lines to the right by half a pixel; see
+        // CanvasXYGrid::Render() for more details
 
         if (!scaled && (ylinenum % empspacing) != 0) {
             sp_grid_vline (buf, x0, buf->rect.top(), buf->rect.bottom() - 1, _color);
