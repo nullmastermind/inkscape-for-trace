@@ -595,6 +595,10 @@ void LivePathEffectAdd::show(SPDesktop *desktop)
     Glib::RefPtr<Gtk::Adjustment> vadjust = dial._LPEScrolled->get_vadjustment();
     vadjust->set_value(vadjust->get_lower());
     dial._LPEDialogSelector->show();
+    int searchlen = dial._LPEFilter->get_text().length();
+    if (searchlen > 0) {
+        dial._LPEFilter->select_region (0, searchlen);
+    }
     dial._LPEDialogSelector->run();
     dial._LPEDialogSelector->hide();
 }

@@ -1531,19 +1531,6 @@ void PenTool::_bsplineSpiroMotion(guint const state){
             if (this->sa && this->green_curve->is_unset()) {
                 this->sa_overwrited = tmp_curve->copy();
             }
-            if (!this->green_bpaths.empty()) {
-                this->green_curve = tmp_curve->copy();
-                // remove old piecewise green canvasitems
-                for (auto i: this->green_bpaths) {
-                    sp_canvas_item_destroy(i);
-                }
-                this->green_bpaths.clear();
-                // one canvas bpath for all of green_curve
-                SPCanvasItem *canvas_shape = sp_canvas_bpath_new(this->desktop->getSketch(), this->green_curve, true);
-                sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(canvas_shape), this->green_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-                sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(canvas_shape), 0, SP_WIND_RULE_NONZERO);
-                this->green_bpaths.push_back(canvas_shape);
-            }
         }
         if (cubic) {
             if (this->bspline) {
@@ -1591,7 +1578,18 @@ void PenTool::_bsplineSpiroMotion(guint const state){
             this->_bsplineSpiroEndAnchorOn();
         }
     }
-
+    if (!this->green_bpaths.empty()) {
+        // remove old piecewise green canvasitems
+        for (auto i: this->green_bpaths) {
+            sp_canvas_item_destroy(i);
+        }
+        this->green_bpaths.clear();
+    }
+    // one canvas bpath for all of green_curve
+    SPCanvasItem *canvas_shape = sp_canvas_bpath_new(this->desktop->getSketch(), this->green_curve, true);
+    sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(canvas_shape), this->green_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+    sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(canvas_shape), 0, SP_WIND_RULE_NONZERO);
+    this->green_bpaths.push_back(canvas_shape);
     this->_bsplineSpiroBuild();
 }
 
