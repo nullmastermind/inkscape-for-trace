@@ -100,3 +100,24 @@ export PATH=$P36_DIR/bin:$PATH   # use Python interpreter from inside the app
 $P36_DIR/bin/pip3 install lxml
 $P36_DIR/bin/pip3 install numpy
 
+### fontconfig #################################################################
+
+# Mimic the behavior of having all files under 'share' and linking the
+# active ones to 'etc'.
+cd $APP_ETC_DIR/fonts/conf.d
+
+for file in ./*.conf; do
+  ln -sf ../../../share/fontconfig/conf.avail/$(basename $file)
+done
+
+insert_before $APP_EXE_DIR/Inkscape '\$EXEC' \
+  'export FONTCONFIG_PATH=$bundle_res/etc/fonts'
+
+# Our customized version loses all the non-macOS paths and sets a cache
+# directory below '$HOME/Library/Application Support/Inkscape'.
+cp $SELF_DIR/fonts.conf $APP_ETC_DIR/fonts
+
+### GIO modules path ###########################################################
+
+insert_before $APP_EXE_DIR/Inkscape '\$EXEC' 'export GIO_MODULE_DIR=$bundle_lib/gio/modules'
+
