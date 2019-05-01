@@ -13,6 +13,7 @@
  */
 
 #include "styledialog.h"
+#include "io/resource.h"
 #include "verbs.h"
 #include "selection.h"
 #include "attribute-rel-svg.h"
@@ -25,6 +26,7 @@
 #include "xml/attribute-record.h"
 #include "xml/node-observer.h"
 
+#include <gtkmm/builder.h>
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
 
@@ -164,30 +166,6 @@ StyleDialog::_nodeChanged( Inkscape::XML::Node &object ) {
     _filterRow();
 }
 
-StyleDialog::TreeStore::TreeStore()
-= default;
-
-
-// This is only here to handle updating style element after a drag and drop.
-void
-StyleDialog::TreeStore::on_row_deleted(const TreeModel::Path& path)
-{
-    if (_styledialog->_updating) return;  // Don't write if we deleted row (other than from DND)
-
-    g_debug("on_row_deleted");
-
-    _styledialog->_writeStyleElement();
-}
-
-
-Glib::RefPtr<StyleDialog::TreeStore> StyleDialog::TreeStore::create(StyleDialog *styledialog)
-{
-    StyleDialog::TreeStore * store = new StyleDialog::TreeStore();
-    store->_styledialog = styledialog;
-    store->set_column_types( store->_styledialog->_mColumns );
-    return Glib::RefPtr<StyleDialog::TreeStore>( store );
-}
-
 /**
  * Constructor
  * A treeview and a set of two buttons are added to the dialog. _addSelector
@@ -201,25 +179,12 @@ StyleDialog::StyleDialog() :
     _desktopTracker()
 {
     g_debug("StyleDialog::StyleDialog");
-    _store = TreeStore::create(this);
-    _modelfilter = Gtk::TreeModelFilter::create(_store);
-    _modelfilter->set_visible_column(_mColumns._colVisible);
-    _treeView.set_model(_modelfilter);
-    _treeView.set_headers_visible(false);
-    _treeView.set_grid_lines (Gtk::TREE_VIEW_GRID_LINES_HORIZONTAL);
-    _treeView.enable_model_drag_source();
-    _treeView.enable_model_drag_dest( Gdk::ACTION_MOVE );
-    _treeView.append_column("CSS Selector", _mColumns._colData);
-
     // Pack widgets
-    _paned.set_orientation(Gtk::ORIENTATION_VERTICAL);
-    _paned.pack1(_mainBox, Gtk::SHRINK);
+    _mainBox.pack_start(_scrolledWindow, Gtk::PACK_EXPAND_WIDGET);
+    _scrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+    _scrolledWindow.add(_styleBox);
     _mainBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
-
-    _mainBox.pack_start(_treeView, Gtk::PACK_EXPAND_WIDGET);
-    _getContents()->pack_start(_paned, Gtk::PACK_EXPAND_WIDGET);
-
-
+    _getContents()->pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
     // Document & Desktop
     _desktop_changed_connection = _desktopTracker.connectDesktopChanged(
         sigc::mem_fun(*this, &StyleDialog::_handleDesktopChanged) );
@@ -306,6 +271,18 @@ Inkscape::XML::Node* StyleDialog::_getStyleTextNode()
     return textNode;
 }
 
+void StyleDialog::_hideRootToggle( Gtk::CellRenderer* renderer, const Gtk::TreeModel::iterator& iter)
+{
+    //Get the value from the model and show it appropriately in the view:
+    Gtk::CellRendererToggle* toggle = dynamic_cast<Gtk::CellRendererToggle*>(renderer);
+    Gtk::TreeModel::Row row = *iter;
+    Gtk::TreeModel::iterator parent = row->parent();
+    if (parent) {
+        toggle->set_visible(true);
+    } else {
+        toggle->set_visible(false);
+    }
+}
 
 /**
  * Fill the Gtk::TreeStore from the svg:style element.
@@ -353,10 +330,10 @@ void StyleDialog::_readStyleElement()
         _updating = false;
         return;
     }
-    _store->clear();
 
     for (unsigned i = 0; i < tokens.size()-1; i += 2) {
 
+        
         Glib::ustring selector = tokens[i];
         REMOVE_SPACES(selector); // Remove leading/trailing spaces
         std::vector<Glib::ustring> tokensplus = Glib::Regex::split_simple("[,]+", selector);
@@ -377,20 +354,66 @@ void StyleDialog::_readStyleElement()
             std::cerr << "StyleDialog::_readStyleElement: Missing values "
                 "for last selector!" << std::endl;
         }
-        Gtk::TreeModel::Row row = *(_store->append());
-        row[_mColumns._colData]    = selector;
-        row[_mColumns._colObj]     = objVec;
-        row[_mColumns._colVisible] = true;
-        row[_mColumns._colProperties] = properties;
+        Glib::ustring gladefile = get_filename(Inkscape::IO::Resource::UIS, "dialog-css.ui");
+        Glib::RefPtr<Gtk::Builder> _builder;
+        try {
+            _builder = Gtk::Builder::create_from_file(gladefile);
+        } catch (const Glib::Error &ex) {
+            g_warning("Glade file loading failed for filter effect dialog");
+            return;
+        }
+        Gtk::Box *CSSSelectorContainer;
+        _builder->get_widget("CSSSelectorContainer", CSSSelectorContainer);
+        Gtk::Label *CSSSelector;
+        _builder->get_widget("CSSSelector", CSSSelector);
+        CSSSelector->set_text(selector);
+        Gtk::TreeView *CSSTree;
+        _builder->get_widget("CSSTree", CSSTree);
+        Glib::RefPtr<Gtk::TreeStore> store = Gtk::TreeStore::create(_mColumns);
+        CSSTree->set_model(store);
+        Gtk::CellRendererToggle *active = Gtk::manage(new Gtk::CellRendererToggle);
+        int addCol = CSSTree->append_column("", *active) - 1;
+        Gtk::TreeViewColumn *col = CSSTree->get_column(addCol);
+        if (col) {
+            col->add_attribute(active->property_active(), _mColumns._colActive);
+        }
+        //col->set_cell_data_func(*active, sigc::mem_fun(*this, &StyleDialog::_hideRootToggle));
+        CSSTree->set_headers_visible(false);
+        Gtk::CellRendererText *label = Gtk::manage(new Gtk::CellRendererText());
+        CSSTree->set_reorderable(false);
+        label->property_editable() = true;
+        addCol = CSSTree->append_column("CSS Selector", *label) - 1;
+        col = CSSTree->get_column(addCol);
+        if (col) {
+            col->add_attribute(label->property_text(), _mColumns._colLabel);
+        }
+        Gtk::CellRendererText *value = Gtk::manage(new Gtk::CellRendererText());
+        CSSTree->set_reorderable(false);
+        value->property_editable() = true;
+        addCol = CSSTree->append_column("CSS Selector", *value) - 1;
+        col = CSSTree->get_column(addCol);
+        if (col) {
+            col->add_attribute(value->property_text(), _mColumns._colValue);
+        }
         std::vector<Glib::ustring> properties_data = Glib::Regex::split_simple(";", properties);
         for (auto property : properties_data) {
             property = REMOVE_SPACES(property);
-            Gtk::TreeModel::Row childrow = *(_store->append(row->children()));
-            childrow[_mColumns._colData] = Glib::ustring(property);
-            childrow[_mColumns._colObj] = {};
-            childrow[_mColumns._colProperties] = ""; // Unused
-            childrow[_mColumns._colVisible] = true; // Unused
+            if (!property.empty()) {
+                std::vector<Glib::ustring> pairdata = Glib::Regex::split_simple(":", property);
+                if (pairdata.size() == 2) {
+                    Gtk::TreeModel::Row row = *(store->append());
+                    row[_mColumns._colActive] = true;
+                    row[_mColumns._colSelector] = selector;
+                    row[_mColumns._colLabel] = pairdata[0];
+                    row[_mColumns._colValue] = pairdata[1];
+                }
+            }
         }
+        CSSSelectorContainer->unparent();
+        _styleBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
+        _styleBox.pack_start(*CSSSelectorContainer, Gtk::PACK_EXPAND_WIDGET);
+        _mainBox.show_all_children();
+
     }
     _updating = false;
 }
@@ -406,8 +429,11 @@ void StyleDialog::_writeStyleElement()
     _updating = true;
 
     Glib::ustring styleContent;
-    for (auto& row: _store->children()) {
+/*     for (auto& row: _store->children()) {
         Glib::ustring selector = row[_mColumns._colData];
+        if (!row[_mColumns._colExpand]) {
+            selector = selector.erase(selector.size()-1);
+        } */
         /*
                 REMOVE_SPACES(selector);
         /*         size_t len = selector.size();
@@ -415,8 +441,8 @@ void StyleDialog::_writeStyleElement()
                     selector.erase(len-1);
                 }
                 row[_mColumns._colData] =  selector; */
-        styleContent = styleContent + selector + " { " + row[_mColumns._colProperties] + " }\n";
-    }
+      /*   styleContent = styleContent + selector + " { " + row[_mColumns._colProperties] + " }\n";
+    } */
     // We could test if styleContent is empty and then delete the style node here but there is no
     // harm in keeping it around ...
 
@@ -428,7 +454,6 @@ void StyleDialog::_writeStyleElement()
     _updating = false;
     g_debug("StyleDialog::_writeStyleElement(): | %s |", styleContent.c_str());
 }
-
 
 void StyleDialog::_addWatcherRecursive(Inkscape::XML::Node *node) {
 
@@ -598,13 +623,13 @@ void StyleDialog::_filterRow()
         std::cerr << "StyleDialog::_selectRow: SP_ACTIVE_DESKTOP != getDesktop()" << std::endl;
         return;
     }
-    Gtk::TreeModel::Children children = _store->children();
+    //Gtk::TreeModel::Children children = _store->children();
     Inkscape::Selection* selection = getDesktop()->getSelection();
     SPObject *obj = nullptr;
     if(selection->objects().size() == 1) {
         obj = selection->objects().back();
     }
-    for (auto row : children) {
+    /* for (auto row : children) {
         std::vector<SPObject *> objVec = row[_mColumns._colObj];
         if (obj) {
             for (auto & i : objVec) {
@@ -617,7 +642,7 @@ void StyleDialog::_filterRow()
             }
         }
     }
-    _modelfilter->refilter();
+    _modelfilter->refilter(); */
 }
 
 } // namespace Dialog

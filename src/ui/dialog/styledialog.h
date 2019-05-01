@@ -65,48 +65,25 @@ public:
     void _nodeRemoved( Inkscape::XML::Node &repr );
     void _nodeChanged( Inkscape::XML::Node &repr );
     // Data structure
-    enum coltype { OBJECT, STYLE, UNHANDLED };
     class ModelColumns : public Gtk::TreeModel::ColumnRecord {
     public:
         ModelColumns() {
-            add(_colData);
-            add(_colObj);
-            add(_colProperties);
-            add(_colVisible);
+            add(_colActive);
+            add(_colLabel);
+            add(_colSelector);
+            add(_colValue);
         }
-        Gtk::TreeModelColumn<Glib::ustring> _colData;           // Style or matching object id.
-        Gtk::TreeModelColumn<std::vector<SPObject *> > _colObj; // List of matching objects.
-        Gtk::TreeModelColumn<Glib::ustring> _colProperties;     // List of properties.
-        Gtk::TreeModelColumn<bool> _colVisible;                 // Make visible or not.
+        Gtk::TreeModelColumn<Glib::ustring > _colSelector; // Style or matching object id.
+        Gtk::TreeModelColumn<bool> _colActive;             // Active or inative property
+        Gtk::TreeModelColumn<Glib::ustring > _colLabel;    // Style or matching object id.
+        Gtk::TreeModelColumn<Glib::ustring > _colValue;    // List of properties.
     };
     ModelColumns _mColumns;
 
-    // Override Gtk::TreeStore to control drag-n-drop (only allow dragging and dropping of selectors).
-    // See: https://developer.gnome.org/gtkmm-tutorial/stable/sec-treeview-examples.html.en
-    //
-    // TreeStore implements simple drag and drop (DND) but there appears no way to know when a DND
-    // has been completed (other than doing the whole DND ourselves). As a hack, we use
-    // on_row_deleted to trigger write of style element.
-    class TreeStore : public Gtk::TreeStore {
-    protected:
-        TreeStore();
-        void on_row_deleted(const TreeModel::Path& path) override;
-
-    public:
-        static Glib::RefPtr<StyleDialog::TreeStore> create(StyleDialog *styledialog);
-
-    private:
-        StyleDialog *_styledialog;
-    };
-
-    // TreeView
-    Glib::RefPtr<Gtk::TreeModelFilter> _modelfilter;
-    Glib::RefPtr<TreeStore> _store;
-    Gtk::TreeView _treeView;
     // Widgets
     Gtk::ScrolledWindow _scrolledWindow;
-    Gtk::Paned _paned;
     Gtk::Box   _mainBox;
+    Gtk::Box   _styleBox;
 
     // Reading and writing the style element.
     Inkscape::XML::Node *_getStyleTextNode();
@@ -133,7 +110,10 @@ public:
     void _handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
     void _handleDesktopChanged(SPDesktop* desktop);
     void _handleSelectionChanged();
+    void _rowExpand(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);
+    void _rowCollapse(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);
     void _closeDialog(Gtk::Dialog *textDialogPtr);
+    void _hideRootToggle( Gtk::CellRenderer* renderer, const Gtk::TreeModel::iterator& iter);
     void _filterRow(); // filter row in tree when selection changed.
     DesktopTracker _desktopTracker;
 
