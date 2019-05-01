@@ -1204,7 +1204,9 @@ Effect::processObjects(LPEAction lpe_action)
                         sp_item_list_to_curves(item_list, item_selected, item_to_select);
                     }
                     elemnode->setAttribute("sodipodi:insensitive", nullptr);
-                    SP_ITEM(elemref)->moveTo(SP_ITEM(sp_lpe_item), false);
+                    if (!SP_IS_DEFS(SP_ITEM(elemref)->parent)) {
+                        SP_ITEM(elemref)->moveTo(SP_ITEM(sp_lpe_item), false);
+                    }
                 }
                 break;
 
