@@ -147,8 +147,8 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "Stitch Sub-Paths" //untranslated name
         , N_("Draw perpendicular lines between subpaths of a path, like rungs of a ladder.") //description
         , true  //on_path
-        , false  //on_shape
-        , true  //on_group
+        , false //on_shape
+        , false //on_group
         , false //on_image
         , false //on_text
         , false //experimental
@@ -204,8 +204,8 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "Spiro spline" //untranslated name
         , N_("Make the path curl like wire, using Spiro B-Splines. This effect is usually used directly on the canvas with the Spiro mode of the drawing tools.") //description
         , true  //on_path
-        , false  //on_shape
-        , false  //on_group
+        , false //on_shape
+        , false //on_group
         , false //on_image
         , false //on_text
         , false //experimental
@@ -232,8 +232,8 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "Interpolate Sub-Paths" //untranslated name
         , N_("Create a stepwise transition between the 2 subpaths of a path.") //description
         , true  //on_path
-        , false  //on_shape
-        , false  //on_group
+        , false //on_shape
+        , false //on_group
         , false //on_image
         , false //on_text
         , false //experimental
@@ -272,7 +272,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "ruler" //key
         , "ruler" //icon
         , "Ruler" //untranslated name
-        , N_("Add ruler marks to the path in adjustable intervals, using the path's stroke style.") //description
+        , N_("Add ruler marks to the object in adjustable intervals, using the object's stroke style.") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
@@ -289,8 +289,8 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "Power stroke" //untranslated name
         , N_("Create calligraphic strokes and control their variable width and curvature. This effect can also be used directly on the canvas with a pressure sensitive stylus and the Pencil tool.") //description
         , true  //on_path
-        , false  //on_shape
-        , false  //on_group
+        , true  //on_shape
+        , false //on_group
         , false //on_image
         , false //on_text
         , false //experimental
@@ -301,7 +301,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "clone_original" //key
         , "clone-original" //icon
         , "Clone original" //untranslated name
-        , N_("Let a path take on the shape, fill, stroke and/or other attributes of another path.") //description
+        , N_("Let a object take on the shape, fill, stroke and/or other attributes of another object.") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
@@ -316,7 +316,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "simplify" //key
         , "simplify" //icon
         , "Simplify" //untranslated name
-        , N_("Smoothen and simplify a path. This effect is also available in the Pencil tool's tool controls.") //description
+        , N_("Smoothen and simplify a object. This effect is also available in the Pencil tool's tool controls.") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
@@ -358,7 +358,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "interpolate_points" //key
         , "interpolate-points" //icon
         , "Interpolate points" //untranslated name
-        , N_("Connect the nodes of the path (e.g. corresponding to data points) by different types of lines.") //description
+        , N_("Connect the nodes of the object (e.g. corresponding to data points) by different types of lines.") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
@@ -386,7 +386,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "show_handles" //key
         , "show-handles" //icon
         , "Show handles" //untranslated name
-        , N_("Draw the handles and nodes of paths (replaces the original styling with a black stroke).") //description
+        , N_("Draw the handles and nodes of objects (replaces the original styling with a black stroke).") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
@@ -416,8 +416,8 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "BSpline" //untranslated name
         , N_("Create a BSpline that molds into the path's corners. This effect is usually used directly on the canvas with the BSpline mode of the drawing tools.") //description
         , true  //on_path
-        , false  //on_shape
-        , false  //on_group
+        , false //on_shape
+        , false //on_group
         , false //on_image
         , false //on_text
         , false //experimental
@@ -428,7 +428,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "join_type" //key
         , "join-type" //icon
         , "Join type" //untranslated name
-        , N_("Select among various join types for a path's corner nodes (mitre, rounded, extrapolated arc, ...)") //description
+        , N_("Select among various join types for a object's corner nodes (mitre, rounded, extrapolated arc, ...)") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
@@ -445,7 +445,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Let the path's ends narrow down to a tip.") //description
         , true  //on_path
         , true  //on_shape
-        , true  //on_group
+        , false //on_group
         , false //on_image
         , false //on_text
         , false //experimental
@@ -530,7 +530,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Create an ellipse from 5 nodes on its circumference.") //description
         , true  //on_path
         , true  //on_shape
-        , true  //on_group
+        , false //on_group
         , false //on_image
         , false //on_text
         , false //experimental
@@ -559,7 +559,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Add dimensioning for distances between nodes, optionally with projection and many other configuration options.") //description
         , true  //on_path
         , true  //on_shape
-        , false  //on_group
+        , false //on_group
         , false //on_image
         , false //on_text
         , false //experimental
@@ -573,7 +573,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Adjust the shape of a path's corners, rounding them to a specified radius, or cutting them off.") //description
         , true  //on_path
         , true  //on_shape
-        , false  //on_group
+        , false //on_group
         , false //on_image
         , false //on_text
         , false //experimental
@@ -587,7 +587,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Cut, union, subtract, intersect and divide a path non-destructively with another path.") //description
         , true  //on_path
         , true  //on_shape
-        , true  //on_group
+        , false //on_group
         , false //on_image
         , false //on_text
         , false //experimental
@@ -612,7 +612,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "powerclip" //key
         , "powerclip" //icon
         , "Power clip" //untranslated name
-        , N_("Power clip alows to reverse a clip, fatten it...") //description
+        , N_("Power clip alows to reverse a clip, flatten it...") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
@@ -657,7 +657,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Offset the path, optionally keeping cusp corners cusp.") //description
         , true  //on_path
         , true  //on_shape
-        , true  //on_group
+        , false //on_group
         , false //on_image
         , false //on_text
         , false //experimental
