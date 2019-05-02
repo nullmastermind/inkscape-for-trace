@@ -74,6 +74,7 @@ parts:
       - libatkmm-1.6-1v5
       - libcairomm-1.0-1v5
       - libcdr-0.1-1
+      - libdouble-conversion1v5
       - libgc1c2
       - libgdk-pixbuf2.0-0
       - libgdl-3-5
