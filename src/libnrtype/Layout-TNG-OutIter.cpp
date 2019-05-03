@@ -308,8 +308,10 @@ Geom::Rect Layout::characterBoundingBox(iterator const &it, double *rotation) co
 
     if (_path_fitted) {
         double cluster_half_width = 0.0;
-        for (int glyph_index = _characters[char_index].in_glyph ; _glyphs[glyph_index].in_character == char_index ; glyph_index++)
+        for (int glyph_index = _characters[char_index].in_glyph ; _glyphs.size() != glyph_index ; glyph_index++) {
+            if (_glyphs[glyph_index].in_character != char_index) break;
             cluster_half_width += _glyphs[glyph_index].width;
+        }
         cluster_half_width *= 0.5;
 
         double midpoint_offset = _characters[char_index].span(this).x_start + _characters[char_index].x + cluster_half_width;
