@@ -704,7 +704,7 @@ SPDocument *
 Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
 {
     // This is only used at the end... but it should go here once uri stuff is fixed.
-    auto file = Gio::File::create_for_uri(uri);
+    auto file = Gio::File::create_for_commandline_arg(uri);
     const auto path = file->get_path();
 
     // Fixing this means fixing a whole string of things.
