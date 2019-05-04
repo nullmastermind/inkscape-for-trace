@@ -482,6 +482,9 @@ void StyleDialog::_readStyleElement()
             g_warning("Glade file loading failed for filter effect dialog");
             return;
         }
+        Gtk::Label *CSSSelector;
+        _builder->get_widget("CSSSelector", CSSSelector);
+        CSSSelector->set_text("element.attributes");
         Gtk::Box *CSSSelectorContainer;
         _builder->get_widget("CSSSelectorContainer", CSSSelectorContainer);
         Gtk::Label *CSSSelectorAdd;
@@ -495,9 +498,6 @@ void StyleDialog::_readStyleElement()
                     const gchar *attr = obj->getRepr()->attribute(iter->name.c_str());
                     if (attr) {
                         if (!hasattributes) {
-                            Gtk::Label *CSSSelector;
-                            _builder->get_widget("CSSSelector", CSSSelector);
-                            CSSSelector->set_text("element.attributes");
                             Gtk::TreeView *CSSTree;
                             _builder->get_widget("CSSTree", CSSTree);
                             CSSTree->set_model(store);
@@ -543,14 +543,11 @@ void StyleDialog::_readStyleElement()
                 }
             }
         }
-        if (contract) {
-            CSSSelectorAdd->show();
-            CSSSelectorFilled->hide();
-        } else {
+        if (!contract) {
             CSSSelectorAdd->hide();
             CSSSelectorFilled->show(); 
+            _styleBox.pack_start(*CSSSelectorContainer, Gtk::PACK_EXPAND_WIDGET);
         }
-        _styleBox.pack_start(*CSSSelectorContainer, Gtk::PACK_EXPAND_WIDGET);
     }
     if (obj) {
         for (unsigned i = 0; i < tokens.size()-1; i += 2) {
@@ -565,7 +562,7 @@ void StyleDialog::_readStyleElement()
             }
             // Get list of objects selector matches
             std::vector<SPObject *> objVec = _getObjVec( selector );
-
+ 
             Glib::ustring properties;
             // Check to make sure we do have a value to match selector.
             if ((i+1) < tokens.size()) {
