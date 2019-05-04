@@ -23,6 +23,7 @@
 #include <gtkmm/dialog.h>
 #include <gtkmm/treeselection.h>
 #include <gtkmm/paned.h>
+#include <glibmm/regex.h>
 
 #include "ui/dialog/desktop-tracker.h"
 
@@ -59,7 +60,8 @@ public:
 
     // Monitor all objects for addition/removal/attribute change
     class NodeWatcher;
-
+    Glib::RefPtr<Glib::Regex> r_props = Glib::Regex::create("\\s*;\\s*");
+    Glib::RefPtr<Glib::Regex> r_pair = Glib::Regex::create("\\s*:\\s*");
     std::vector<StyleDialog::NodeWatcher*> _nodeWatchers;
     void _nodeAdded(   Inkscape::XML::Node &repr );
     void _nodeRemoved( Inkscape::XML::Node &repr );
@@ -72,11 +74,13 @@ public:
             add(_colLabel);
             add(_colSelector);
             add(_colValue);
+            add(_colStrike);
         }
         Gtk::TreeModelColumn<Glib::ustring > _colSelector; // Style or matching object id.
         Gtk::TreeModelColumn<bool> _colActive;             // Active or inative property
         Gtk::TreeModelColumn<Glib::ustring > _colLabel;    // Style or matching object id.
         Gtk::TreeModelColumn<Glib::ustring > _colValue;    // List of properties.
+        Gtk::TreeModelColumn<bool> _colStrike;             // Propery not used, overloaded
     };
     ModelColumns _mColumns;
 
@@ -97,6 +101,8 @@ public:
     // Manipulate Tree
     Glib::ustring _getIdList(std::vector<SPObject *>);
     std::vector<SPObject *> _getObjVec(Glib::ustring selector);
+    std::map<Glib::ustring, Glib::ustring> parseStyle(Glib::ustring style_string);
+
 
     // Variables
     Inkscape::XML::Node *_textNode; // Track so we know when to add a NodeObserver.
