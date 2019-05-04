@@ -463,11 +463,68 @@ void StyleDialog::_readStyleElement()
                 contract = false;
             }
         }
+        if (contract) {
+            CSSSelectorAdd->show();
+            CSSSelectorFilled->hide();
+        } else {
+            CSSSelectorAdd->hide();
+            CSSSelectorFilled->show(); 
+        }
+        _styleBox.pack_start(*CSSSelectorContainer, Gtk::PACK_EXPAND_WIDGET);
+        bool hasattributes = false;
+        contract = true;
+        Glib::RefPtr<Gtk::Builder> _builder;
+        try {
+            _builder = Gtk::Builder::create_from_file(gladefile);
+        } catch (const Glib::Error &ex) {
+            g_warning("Glade file loading failed for filter effect dialog");
+            return;
+        }
+        Gtk::Box *CSSSelectorContainer;
+        _builder->get_widget("CSSSelectorContainer", CSSSelectorContainer);
+        Gtk::Label *CSSSelectorAdd;
+        _builder->get_widget("CSSSelectorAdd", CSSSelectorAdd);
+        Gtk::Label *CSSSelectorFilled;
+        _builder->get_widget("CSSSelectorFilled", CSSSelectorFilled);
+        Glib::RefPtr<Gtk::TreeStore> store = Gtk::TreeStore::create(_mColumns);
         for (auto iter : obj->style->properties()) {
             if (iter->style_src != SP_STYLE_SRC_UNSET) {
                 if( iter->name != "font" && iter->name != "marker") {
                     const gchar *attr = obj->getRepr()->attribute(iter->name.c_str());
                     if (attr) {
+                        if (!hasattributes) {
+                            Gtk::Label *CSSSelector;
+                            _builder->get_widget("CSSSelector", CSSSelector);
+                            CSSSelector->set_text("element.attributes");
+                            Gtk::TreeView *CSSTree;
+                            _builder->get_widget("CSSTree", CSSTree);
+                            CSSTree->set_model(store);
+                            Gtk::CellRendererToggle *active = Gtk::manage(new Gtk::CellRendererToggle);
+                            int addCol = CSSTree->append_column("", *active) - 1;
+                            Gtk::TreeViewColumn *col = CSSTree->get_column(addCol);
+                            if (col) {
+                                col->add_attribute(active->property_active(), _mColumns._colActive);
+                            }
+                            //col->set_cell_data_func(*active, sigc::mem_fun(*this, &StyleDialog::_hideRootToggle));
+                            CSSTree->set_headers_visible(false);
+                            Gtk::CellRendererText *label = Gtk::manage(new Gtk::CellRendererText());
+                            CSSTree->set_reorderable(false);
+                            label->property_editable() = true;
+                            addCol = CSSTree->append_column("CSS Selector", *label) - 1;
+                            col = CSSTree->get_column(addCol);
+                            if (col) {
+                                col->add_attribute(label->property_text(), _mColumns._colLabel);
+                            }
+                            Gtk::CellRendererText *value = Gtk::manage(new Gtk::CellRendererText());
+                            CSSTree->set_reorderable(false);
+                            value->property_editable() = true;
+                            addCol = CSSTree->append_column("CSS Selector", *value) - 1;
+                            col = CSSTree->get_column(addCol);
+                            if (col) {
+                                col->add_attribute(value->property_text(), _mColumns._colValue);
+                                col->add_attribute(value->property_strikethrough(), _mColumns._colStrike);
+                            }
+                        }
                         Gtk::TreeModel::Row row = *(store->append());
                         row[_mColumns._colActive] = true;
                         row[_mColumns._colSelector] = "attribute";
@@ -479,6 +536,7 @@ void StyleDialog::_readStyleElement()
                             row[_mColumns._colStrike] = false;
                         }
                         contract = false;
+                        hasattributes = true;
                     }
                 }
             }
@@ -514,7 +572,6 @@ void StyleDialog::_readStyleElement()
                 std::cerr << "StyleDialog::_readStyleElement: Missing values "
                     "for last selector!" << std::endl;
             }
-            Glib::ustring gladefile = get_filename(Inkscape::IO::Resource::UIS, "dialog-css.ui");
             Glib::RefPtr<Gtk::Builder> _builder;
             try {
                 _builder = Gtk::Builder::create_from_file(gladefile);
