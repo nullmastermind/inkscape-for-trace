@@ -28,6 +28,7 @@ InkFlowBox::InkFlowBox(const gchar *name)
     _flowbox.set_activate_on_single_click(true);
     Gtk::ToggleButton *tbutton = new Gtk::ToggleButton("", false);
     tbutton->set_always_show_image(true);
+    _flowbox.set_selection_mode(Gtk::SelectionMode::SELECTION_NONE);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     tbutton->set_active(prefs->getBool(Glib::ustring("/dialogs/") + get_name() + Glib::ustring("/flowbox/lock"), true));
     Glib::ustring iconname = "object-unlocked";

@@ -324,6 +324,17 @@ spinbutton undershoot {
     padding-bottom: 0;
 }
 
+#XMLFlow GtkFlowBoxChild,
+#XMLFlow flowboxchild{
+  border-right-width:1px;
+  border-top-width:1px;
+  border-bottom-width:1px;
+  margin-top:-1px;
+  border-style:solid;
+  border-color:@borders;
+  padding:7px;
+}
+
 SPRuler {
     background-color: @theme_bg_color;
     color: @theme_fg_color;

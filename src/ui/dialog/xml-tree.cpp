@@ -74,7 +74,6 @@ XmlTree::XmlTree() :
         return;
     }
     flowbox_content = Gtk::manage(new Inkscape::UI::Widget::InkFlowBox("XMLFlow"));
-
     Gtk::Box *contents = _getContents();
     contents->set_spacing(0);
     contents->set_size_request(320, 260);

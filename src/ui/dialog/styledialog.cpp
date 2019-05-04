@@ -399,19 +399,19 @@ void StyleDialog::_readStyleElement()
     _builder->get_widget("CSSTree", CSSTree);
     Glib::RefPtr<Gtk::TreeStore> store = Gtk::TreeStore::create(_mColumns);
     CSSTree->set_model(store);
-    Gtk::CellRendererToggle *active = Gtk::manage(new Gtk::CellRendererToggle);
+    // We need to handle comments on SPStyle to activate 
+    /* Gtk::CellRendererToggle *active = Gtk::manage(new Gtk::CellRendererToggle);
     int addCol = CSSTree->append_column("", *active) - 1;
     Gtk::TreeViewColumn *col = CSSTree->get_column(addCol);
     if (col) {
         col->add_attribute(active->property_active(), _mColumns._colActive);
-    }
-    //col->set_cell_data_func(*active, sigc::mem_fun(*this, &StyleDialog::_hideRootToggle));
+    } */
     CSSTree->set_headers_visible(false);
     Gtk::CellRendererText *label = Gtk::manage(new Gtk::CellRendererText());
     CSSTree->set_reorderable(false);
     label->property_editable() = true;
-    addCol = CSSTree->append_column("CSS Selector", *label) - 1;
-    col = CSSTree->get_column(addCol);
+    int addCol = CSSTree->append_column("CSS Selector", *label) - 1;
+    Gtk::TreeViewColumn *col = CSSTree->get_column(addCol);
     if (col) {
         col->add_attribute(label->property_text(), _mColumns._colLabel);
     }
@@ -426,19 +426,20 @@ void StyleDialog::_readStyleElement()
     }
     bool contract = true;
     std::map<Glib::ustring, Glib::ustring> attr_prop;
-    if (obj) {
+    if (obj && obj->getRepr()->attribute("style")) {
         Glib::ustring style = obj->getRepr()->attribute("style");
-        Glib::ustring comments = "";
+        // We need to handle comments on SPStyle to activate 
+        /* Glib::ustring comments = "";
         while(style.find("/*") != std::string::npos) {
-            size_t beg = style.find("/*");
-            size_t end = style.find("*/");
+            size_t beg = style.find(""); //opening cooment
+            size_t end = style.find("");//closing coment
             if (end !=  std::string::npos &&
                 beg !=  std::string::npos) 
             {
                 comments = comments.append(style, beg + 2, end - beg - 2);
                 style = style.erase(beg, end - beg + 2);
             }
-        }
+        } */
         attr_prop = parseStyle(style);
         for (auto iter : obj->style->properties()) {
             if (attr_prop.count(iter->name)) {
@@ -451,7 +452,8 @@ void StyleDialog::_readStyleElement()
                 contract = false;
             }
         }
-        std::map<Glib::ustring, Glib::ustring> attr_prop_comments = parseStyle(comments);
+        // We need to handle comments on SPStyle to activate 
+        /* std::map<Glib::ustring, Glib::ustring> attr_prop_comments = parseStyle(comments);
         for (auto iter : attr_prop_comments) {
             if (!attr_prop.count(iter.first)) {
                 Gtk::TreeModel::Row row = *(store->append());
@@ -462,7 +464,7 @@ void StyleDialog::_readStyleElement()
                 row[_mColumns._colStrike] = true;
                 contract = false;
             }
-        }
+        } */
         if (contract) {
             CSSSelectorAdd->show();
             CSSSelectorFilled->hide();
@@ -499,19 +501,19 @@ void StyleDialog::_readStyleElement()
                             Gtk::TreeView *CSSTree;
                             _builder->get_widget("CSSTree", CSSTree);
                             CSSTree->set_model(store);
-                            Gtk::CellRendererToggle *active = Gtk::manage(new Gtk::CellRendererToggle);
+                            // We need to handle comments on SPStyle to activate 
+                            /* Gtk::CellRendererToggle *active = Gtk::manage(new Gtk::CellRendererToggle);
                             int addCol = CSSTree->append_column("", *active) - 1;
                             Gtk::TreeViewColumn *col = CSSTree->get_column(addCol);
                             if (col) {
                                 col->add_attribute(active->property_active(), _mColumns._colActive);
-                            }
-                            //col->set_cell_data_func(*active, sigc::mem_fun(*this, &StyleDialog::_hideRootToggle));
+                            } */
                             CSSTree->set_headers_visible(false);
                             Gtk::CellRendererText *label = Gtk::manage(new Gtk::CellRendererText());
                             CSSTree->set_reorderable(false);
                             label->property_editable() = true;
-                            addCol = CSSTree->append_column("CSS Selector", *label) - 1;
-                            col = CSSTree->get_column(addCol);
+                            int addCol = CSSTree->append_column("CSS Selector", *label) - 1;
+                            Gtk::TreeViewColumn *col = CSSTree->get_column(addCol);
                             if (col) {
                                 col->add_attribute(label->property_text(), _mColumns._colLabel);
                             }
