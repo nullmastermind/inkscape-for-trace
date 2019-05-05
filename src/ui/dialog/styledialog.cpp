@@ -194,7 +194,7 @@ StyleDialog::StyleDialog() :
 
     _selection_changed_connection = getDesktop()->getSelection()->connectChanged(
         sigc::hide(sigc::mem_fun(this, &StyleDialog::_handleSelectionChanged)));
-
+        
     // Add watchers
     _updateWatchers();
 
@@ -269,25 +269,12 @@ Inkscape::XML::Node* StyleDialog::_getStyleTextNode()
     return textNode;
 }
 
-void StyleDialog::_hideRootToggle( Gtk::CellRenderer* renderer, const Gtk::TreeModel::iterator& iter)
-{
-    //Get the value from the model and show it appropriately in the view:
-    Gtk::CellRendererToggle* toggle = dynamic_cast<Gtk::CellRendererToggle*>(renderer);
-    Gtk::TreeModel::Row row = *iter;
-    Gtk::TreeModel::iterator parent = row->parent();
-    if (parent) {
-        toggle->set_visible(true);
-    } else {
-        toggle->set_visible(false);
-    }
-}
-
 /**
  * Fill the Gtk::TreeStore from the svg:style element.
  */
 void StyleDialog::_readStyleElement()
 {
-    g_debug("StyleDialog::_readStyleElement: updating %s", (_updating ? "true" : "false"));
+    g_debug("StyleDialog::_readStyleElement");
 
     if (_updating) return; // Don't read if we wrote style element.
     _updating = true;
@@ -356,10 +343,6 @@ void StyleDialog::_readStyleElement()
     std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[}{]", content);
 
     // If text node is empty, return (avoids problem with negative below).
-    if (tokens.size() == 0) {
-        _updating = false;
-        return;
-    }
 
     for (auto child:_styleBox.get_children()) {
         _styleBox.remove(*child);
@@ -487,7 +470,7 @@ void StyleDialog::_readStyleElement()
         Glib::RefPtr<Gtk::TreeStore> store = Gtk::TreeStore::create(_mColumns);
         for (auto iter : obj->style->properties()) {
             if (iter->style_src != SP_STYLE_SRC_UNSET) {
-                if( iter->name != "font" && iter->name != "marker") {
+                if( iter->name != "font" && iter->name != "d" && iter->name != "marker") {
                     const gchar *attr = obj->getRepr()->attribute(iter->name.c_str());
                     if (attr) {
                         if (!hasattributes) {
@@ -543,6 +526,10 @@ void StyleDialog::_readStyleElement()
         }
     }
     if (obj) {
+        if (tokens.size() == 0) {
+            _updating = false;
+            return;
+        }
         for (unsigned i = 0; i < tokens.size()-1; i += 2) {
             Glib::ustring selector = tokens[i];
             REMOVE_SPACES(selector); // Remove leading/trailing spaces
@@ -708,7 +695,7 @@ void StyleDialog::_writeStyleElement()
         return;
     }
     _updating = true;
-
+    
     Glib::ustring styleContent;
 /*     for (auto& row: _store->children()) {
         Glib::ustring selector = row[_mColumns._colData];
@@ -792,28 +779,6 @@ std::vector<SPObject *> StyleDialog::_getObjVec(Glib::ustring selector) {
 }
 
 void StyleDialog::_closeDialog(Gtk::Dialog *textDialogPtr) { textDialogPtr->response(Gtk::RESPONSE_OK); }
-
-// -------------------------------------------------------------------
-
-class PropertyData
-{
-public:
-    PropertyData() = default;;
-    PropertyData(Glib::ustring name) : _name(std::move(name)) {};
-
-    void _setSheetValue(Glib::ustring value) { _sheetValue = value; };
-    void _setAttrValue(Glib::ustring value)  { _attrValue  = value; };
-    Glib::ustring _getName()       { return _name;       };
-    Glib::ustring _getSheetValue() { return _sheetValue; };
-    Glib::ustring _getAttrValue()  { return _attrValue;  };
-
-private:
-    Glib::ustring _name;
-    Glib::ustring _sheetValue;
-    Glib::ustring _attrValue;
-};
-
-// -------------------------------------------------------------------
 
 
 /**

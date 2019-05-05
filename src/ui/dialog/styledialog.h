@@ -57,7 +57,6 @@ public:
   private:
     // Monitor <style> element for changes.
     class NodeObserver;
-
     // Monitor all objects for addition/removal/attribute change
     class NodeWatcher;
     Glib::RefPtr<Glib::Regex> r_props = Glib::Regex::create("\\s*;\\s*");
@@ -96,17 +95,16 @@ public:
 
     // Update watchers
     void _addWatcherRecursive(Inkscape::XML::Node *node);
-    void _updateWatchers();
-    
+    void _updateWatchers();    
+
     // Manipulate Tree
     std::vector<SPObject *> _getObjVec(Glib::ustring selector);
     std::map<Glib::ustring, Glib::ustring> parseStyle(Glib::ustring style_string);
 
-
     // Variables
     Inkscape::XML::Node *_textNode; // Track so we know when to add a NodeObserver.
     bool _updating;  // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
-    
+
     // Signals and handlers - External
     sigc::connection _document_replaced_connection;
     sigc::connection _desktop_changed_connection;
@@ -115,13 +113,8 @@ public:
     void _handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
     void _handleDesktopChanged(SPDesktop* desktop);
     void _handleSelectionChanged();
-    void _rowExpand(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);
-    void _rowCollapse(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);
     void _closeDialog(Gtk::Dialog *textDialogPtr);
-    void _hideRootToggle( Gtk::CellRenderer* renderer, const Gtk::TreeModel::iterator& iter);
     DesktopTracker _desktopTracker;
-
-    Inkscape::XML::SignalObserver _objObserver; // Track object in selected row (for style change).
 };
 
 } // namespace Dialogc
