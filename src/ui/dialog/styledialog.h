@@ -99,7 +99,6 @@ public:
     void _updateWatchers();
     
     // Manipulate Tree
-    Glib::ustring _getIdList(std::vector<SPObject *>);
     std::vector<SPObject *> _getObjVec(Glib::ustring selector);
     std::map<Glib::ustring, Glib::ustring> parseStyle(Glib::ustring style_string);
 
@@ -120,7 +119,6 @@ public:
     void _rowCollapse(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);
     void _closeDialog(Gtk::Dialog *textDialogPtr);
     void _hideRootToggle( Gtk::CellRenderer* renderer, const Gtk::TreeModel::iterator& iter);
-    void _filterRow(); // filter row in tree when selection changed.
     DesktopTracker _desktopTracker;
 
     Inkscape::XML::SignalObserver _objObserver; // Track object in selected row (for style change).

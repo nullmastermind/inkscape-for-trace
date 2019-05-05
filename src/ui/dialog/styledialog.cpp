@@ -80,7 +80,6 @@ StyleDialog::NodeObserver::notifyContentChanged(
     g_debug("StyleDialog::NodeObserver::notifyContentChanged");
     _styledialog->_updating = false;
     _styledialog->_readStyleElement();
-    _styledialog->_filterRow();
 }
 
 
@@ -144,7 +143,6 @@ StyleDialog::_nodeAdded( Inkscape::XML::Node &node ) {
     _nodeWatchers.push_back(w);
 
     _readStyleElement();
-    _filterRow();
 }
 
 void
@@ -157,16 +155,12 @@ StyleDialog::_nodeRemoved( Inkscape::XML::Node &repr ) {
             break;
         }
     }
-
     _readStyleElement();
-    _filterRow();
 }
 
 void
 StyleDialog::_nodeChanged( Inkscape::XML::Node &object ) {
-
     _readStyleElement();
-    _filterRow();
 }
 
 /**
@@ -206,7 +200,6 @@ StyleDialog::StyleDialog() :
 
     // Load tree
     _readStyleElement();
-    _filterRow();
 }
 
 
@@ -556,13 +549,18 @@ void StyleDialog::_readStyleElement()
             std::vector<Glib::ustring> tokensplus = Glib::Regex::split_simple("[,]+", selector);
             for (auto tok : tokensplus) {
                 REMOVE_SPACES(tok);
-    /*             if (tok.find(" ") != -1 || tok.erase(0, 1).find(".") != -1) {
-                    colType = UNHANDLED;
-                } */
             }
             // Get list of objects selector matches
             std::vector<SPObject *> objVec = _getObjVec( selector );
- 
+            bool stop = true;
+            for (auto objel:objVec) {
+                if (objel->getId() == obj->getId()){
+                    stop = false;
+                }
+            }
+            if (stop) {
+                continue;
+            }
             Glib::ustring properties;
             // Check to make sure we do have a value to match selector.
             if ((i+1) < tokens.size()) {
@@ -777,24 +775,6 @@ void StyleDialog::_updateWatchers()
 
 
 /**
- * @param sel
- * @return This function returns a comma separated list of ids for objects in input vector.
- * It is used in creating an 'id' selector. It relies on objects having 'id's.
- */
-Glib::ustring StyleDialog::_getIdList(std::vector<SPObject*> sel)
-{
-    Glib::ustring str;
-    for (auto& obj: sel) {
-        str += "#" + Glib::ustring(obj->getId()) + ", ";
-    }
-    if (!str.empty()) {
-        str.erase(str.size()-1); // Remove space at end. c++11 has pop_back() but not ustring.
-        str.erase(str.size()-1); // Remove comma at end.
-    }
-    return str;
-}
-
-/**
  * @param selector: a valid CSS selector string.
  * @return objVec: a vector of pointers to SPObject's the selector matches.
  * Return a vector of all objects that selector matches.
@@ -852,7 +832,6 @@ StyleDialog::_handleDocumentReplaced(SPDesktop *desktop, SPDocument * /* documen
 
     _updateWatchers();
     _readStyleElement();
-    _filterRow();
 }
 
 
@@ -881,7 +860,6 @@ StyleDialog::_handleDesktopChanged(SPDesktop* desktop) {
 
     _updateWatchers();
     _readStyleElement();
-    _filterRow();
 }
 
 
@@ -892,58 +870,6 @@ void
 StyleDialog::_handleSelectionChanged() {
     g_debug("StyleDialog::_handleSelectionChanged()");
     _readStyleElement();
-    _filterRow();
-}
-
-/**
- * This function selects the row in treeview corresponding to an object selected
- * in the drawing. If more than one row matches, the first is chosen.
- */
-void StyleDialog::_filterRow()
-{
-    g_debug("StyleDialog::_selectRow: updating: %s", (_updating ? "true" : "false"));
-    if (_updating || !getDesktop()) return; // Avoid updating if we have set row via dialog.
-    if (SP_ACTIVE_DESKTOP != getDesktop()) {
-        std::cerr << "StyleDialog::_selectRow: SP_ACTIVE_DESKTOP != getDesktop()" << std::endl;
-        return;
-    }
-    //Gtk::TreeModel::Children children = _store->children();
-    Inkscape::Selection* selection = getDesktop()->getSelection();
-    SPObject *obj = nullptr;
-    if(selection->objects().size() == 1) {
-        obj = selection->objects().back();
-    }
-
-    for (auto *child : _styleBox.get_children()) {
-        Gtk::Box *childbox = dynamic_cast<Gtk::Box *>(child);
-        std::vector<Gtk::Widget *> selectorwrapper = childbox->get_children();
-        Gtk::Box *childwrapperbox = dynamic_cast<Gtk::Box *>(selectorwrapper[0]);
-        std::vector<Gtk::Widget *> childselectorwrapper = childwrapperbox->get_children();
-        Gtk::Label *selectorlabel = dynamic_cast<Gtk::Label *>(childselectorwrapper[0]);
-        Glib::ustring selector = selectorlabel->get_text();
-        if (selector == "element"){
-            child->show();
-            childbox->show_all_children();
-            continue;
-        }
-        if (selector.empty()) {
-            return;
-        }
-        std::vector<SPObject *> objVec = _getObjVec( selector );
-        if (obj) {
-            for (auto & i : objVec) {
-                if (obj->getId() == i->getId()) {
-                    child->show();
-                    childbox->show_all_children();
-                    break;
-                } else {
-                    child->hide();
-                }
-            }
-        } else {
-            child->hide();
-        }
-    }
 }
 
 } // namespace Dialog
