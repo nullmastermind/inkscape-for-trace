@@ -718,7 +718,16 @@ Inkscape::Pixbuf* font_instance::PixBuf(int glyph_id)
                 // std::cout << "replacement: |" << replacement << "|" << std::endl;
                 svg = regex->replace_literal(svg, 0, replacement, static_cast<Glib::RegexMatchFlags >(0));
             } else {
-                std::cerr << "font_instance::PixBuf: Failed to match!" << std::endl;
+                // No viewBox! We insert one.
+                Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("<\\s*svg");
+                Glib::ustring viewbox("<svg viewBox=\"0 ");
+                viewbox += std::to_string(-_design_units);
+                viewbox += " ";
+                viewbox += std::to_string(_design_units);
+                viewbox += " ";
+                viewbox += std::to_string(_design_units*2);
+                viewbox += "\"";
+                svg = regex->replace_literal(svg, 0, viewbox, static_cast<Glib::RegexMatchFlags >(0));
             }
 
             // Finally create pixbuf!

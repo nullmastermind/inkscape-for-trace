@@ -381,7 +381,7 @@ void readOpenTypeSVGTable(const FT_Face ft_face,
 
         // for (auto glyph : glyphs) {
         //     std::cout << "Glyph: " << glyph.first << std::endl;
-        //     std::cout << glyph.second << std::endl;
+        //     std::cout << glyph.second.svg << std::endl;
         // }
     }
 }
