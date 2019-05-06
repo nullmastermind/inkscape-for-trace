@@ -65,20 +65,23 @@ public:
     void _nodeAdded(   Inkscape::XML::Node &repr );
     void _nodeRemoved( Inkscape::XML::Node &repr );
     void _nodeChanged( Inkscape::XML::Node &repr );
+    /* void _stylesheetChanged( Inkscape::XML::Node &repr ); */
     // Data structure
     class ModelColumns : public Gtk::TreeModel::ColumnRecord {
     public:
         ModelColumns() {
-            add(_colActive);
-            add(_colLabel);
             add(_colSelector);
+            add(_colSelectorPos);
+            add(_colActive);
+            add(_colName);
             add(_colValue);
             add(_colStrike);
         }
-        Gtk::TreeModelColumn<Glib::ustring > _colSelector; // Style or matching object id.
+        Gtk::TreeModelColumn<Glib::ustring> _colSelector;  // Style or matching object id.
+        Gtk::TreeModelColumn<gint> _colSelectorPos;        // Position of the selector to hadle dup selectors
         Gtk::TreeModelColumn<bool> _colActive;             // Active or inative property
-        Gtk::TreeModelColumn<Glib::ustring > _colLabel;    // Style or matching object id.
-        Gtk::TreeModelColumn<Glib::ustring > _colValue;    // List of properties.
+        Gtk::TreeModelColumn<Glib::ustring> _colName;      // Name of the property.
+        Gtk::TreeModelColumn<Glib::ustring> _colValue;     // Value of the property.
         Gtk::TreeModelColumn<bool> _colStrike;             // Propery not used, overloaded
     };
     ModelColumns _mColumns;
@@ -91,7 +94,11 @@ public:
     // Reading and writing the style element.
     Inkscape::XML::Node *_getStyleTextNode();
     void _readStyleElement();
-    void _writeStyleElement();
+    void _writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store);
+    void _activeToggled(const Glib::ustring& path, Glib::RefPtr<Gtk::TreeStore> store);
+    void _nameEdited(const Glib::ustring& path, const Glib::ustring& name, Glib::RefPtr<Gtk::TreeStore> store);
+    void _valueEdited(const Glib::ustring& path, const Glib::ustring& value, Glib::RefPtr<Gtk::TreeStore> store);
+
 
     // Update watchers
     void _addWatcherRecursive(Inkscape::XML::Node *node);
