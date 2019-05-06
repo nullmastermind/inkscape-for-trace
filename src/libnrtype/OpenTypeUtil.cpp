@@ -371,11 +371,11 @@ void readOpenTypeSVGTable(const FT_Face ft_face,
         //           << "  Offset: " << offsetGlyph << " Length: " << lengthGlyph << std::endl;
 
         std::string svg;
-        for (unsigned c = offsetGlyph; c < offsetGlyph + lengthGlyph; ++c) {
+        for (unsigned int c = offsetGlyph; c < offsetGlyph + lengthGlyph; ++c) {
             svg += (char) data[offset + c];
         }
 
-        for (uint i = startGlyphID; i < endGlyphID+1; ++i) {
+        for (unsigned int i = startGlyphID; i < endGlyphID+1; ++i) {
             glyphs[i].svg = svg;
         }
 
