@@ -21,6 +21,7 @@
 #include "font-style.h"
 #include "OpenTypeUtil.h"
 
+namespace Inkscape { class Pixbuf; }
 
 class font_factory;
 struct font_glyph;
@@ -54,6 +55,12 @@ public:
     // Maps for font variations.
     std::map<Glib::ustring, OTVarAxis> openTypeVarAxes;      // Axes with ranges
 
+    // Map of SVG in OpenType glyphs
+    std::map<int, SVGTableEntry> openTypeSVGGlyphs;
+
+    // Does OpenType font contain SVG glyphs?
+    bool   fontHasSVG;
+
     font_instance();
     virtual ~font_instance();
 
@@ -76,6 +83,13 @@ public:
     // Return 2geom pathvector for glyph. Deallocated when font instance dies.
     Geom::PathVector*    PathVector(int glyph_id);
 
+    // Return font has SVG OpenType enties.
+    bool                 FontHasSVG() { return fontHasSVG; };
+
+    // Return pixbuf of SVG glyph or nullptr if no SVG glyph exists.
+    Inkscape::Pixbuf*    PixBuf(int glyph_id);
+
+
     // Horizontal advance if 'vertical' is false, vertical advance if true.
     double               Advance(int glyph_id, bool vertical);
 
@@ -85,6 +99,7 @@ public:
     double               GetMaxAscent()   { return _ascent_max; }
     double               GetMaxDescent()  { return _descent_max; }
     const double*        GetBaselines()   { return _baselines; }
+    int                  GetDesignUnits() { return _design_units; }
 
     bool                 FontMetrics(double &ascent, double &descent, double &leading);
     bool                 FontDecoration(double &underline_position, double &underline_thickness,
@@ -116,6 +131,7 @@ private:
     double  _xheight;      // x-height of font.
     double  _ascent_max;   // Maximum ascent of all glyphs in font.
     double  _descent_max;  // Maximum descent of all glyphs in font.
+    int     _design_units; // Design units, (units per em, typically 1000 or 2048).
 
     // Baselines
     double _baselines[SP_CSS_BASELINE_SIZE];

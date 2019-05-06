@@ -72,6 +72,16 @@ inline FT_Fixed FTDoubleToFixed (double value) {
     return static_cast<FT_Fixed>(value * 65536);
 }
 
+
+namespace Inkscape { class Pixbuf; }
+
+class SVGTableEntry {
+public:
+    SVGTableEntry() : pixbuf(nullptr) {};
+    std::string svg;
+    Inkscape::Pixbuf* pixbuf;
+};
+
 // This would be better if one had std::vector<OTSubstitution> instead of OTSubstitution where each
 // entry corresponded to one substitution (e.g. ff -> ﬀ) but Harfbuzz at the moment cannot return
 // individual substitutions. See Harfbuzz issue #673.
@@ -83,6 +93,9 @@ void readOpenTypeFvarAxes  (const FT_Face ft_face,
 
 void readOpenTypeFvarNamed (const FT_Face ft_face,
                             std::map<Glib::ustring, OTVarInstance>& named);
+
+void readOpenTypeSVGTable  (const FT_Face ft_face,
+                            std::map<int, SVGTableEntry>& glyphs);
 
 #endif /* !USE_PANGO_WIND32    */
 #endif /* !SEEN_OPENTYPEUTIL_H */

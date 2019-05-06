@@ -324,6 +324,68 @@ void readOpenTypeFvarNamed(const FT_Face ft_face,
 #endif /* FREETYPE Version */
 }
 
+#define HB_OT_TAG_SVG HB_TAG('S','V','G',' ')
+
+// Get SVG glyphs out of an OpenType font.
+void readOpenTypeSVGTable(const FT_Face ft_face,
+                          std::map<int, SVGTableEntry>& glyphs) {
+
+    // Harfbuzz has some support for SVG fonts but it is not yet exposed to user.
+    // We do it the hard way!
+    hb_face_t *hb_face = hb_ft_face_create_cached (ft_face);
+    hb_blob_t *hb_blob = hb_face_reference_table (hb_face, HB_OT_TAG_SVG);
+    unsigned int svg_length = hb_blob_get_length (hb_blob);
+
+    if (!hb_blob) {
+        // No SVG glyphs in font!
+        return;
+    }
+
+    const char* data = hb_blob_get_data(hb_blob, &svg_length);
+    if (!data) {
+        std::cerr << "readOpenTypeSVGTable: Failed to get data! "
+                  << (ft_face->family_name?ft_face->family_name:"Unknown family") << std::endl;
+        return;
+    }
+
+    // OpenType fonts use Big Endian
+    uint16_t version = ((data[0] & 0xff) <<  8) +  (data[1] & 0xff);
+    // std::cout << "Version: " << version << std::endl;
+    uint32_t offset  = ((data[2] & 0xff) << 24) + ((data[3] & 0xff) << 16) + ((data[4] & 0xff) << 8) + (data[5] & 0xff);
+
+    // std::cout << "Offset: "  << offset << std::endl;
+    // Bytes 6-9 are reserved.
+
+    uint16_t entries = (data[offset] << 8) + data[offset+1];
+    // std::cout << "Number of entries: " << entries << std::endl;
+
+    for (int entry = 0; entry < entries; ++entry) {
+        uint32_t base = offset + 2 + entry * 12;
+
+        uint16_t startGlyphID = ((data[base  ] & 0xff) <<  8) + (data[base+1] & 0xff);
+        uint16_t endGlyphID   = ((data[base+2] & 0xff) <<  8) + (data[base+3] & 0xff);
+        uint32_t offsetGlyph  = ((data[base+4] & 0xff) << 24) + ((data[base+5] & 0xff) << 16) +((data[base+6]  & 0xff) << 8) + (data[base+7]  & 0xff);
+        uint32_t lengthGlyph  = ((data[base+8] & 0xff) << 24) + ((data[base+9] & 0xff) << 16) +((data[base+10] & 0xff) << 8) + (data[base+11] & 0xff);
+
+        // std::cout << "Entry " << entry << ": Start: " << startGlyphID << "  End: " << endGlyphID
+        //           << "  Offset: " << offsetGlyph << " Length: " << lengthGlyph << std::endl;
+
+        std::string svg;
+        for (unsigned c = offsetGlyph; c < offsetGlyph + lengthGlyph; ++c) {
+            svg += (char) data[offset + c];
+        }
+
+        for (uint i = startGlyphID; i < endGlyphID+1; ++i) {
+            glyphs[i].svg = svg;
+        }
+
+        // for (auto glyph : glyphs) {
+        //     std::cout << "Glyph: " << glyph.first << std::endl;
+        //     std::cout << glyph.second << std::endl;
+        // }
+    }
+}
+
 #endif /* !USE_PANGO_WIND32    */
 
 /*

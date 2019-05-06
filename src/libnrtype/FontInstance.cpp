@@ -35,6 +35,7 @@
 #include "libnrtype/font-glyph.h"
 #include "libnrtype/font-instance.h"
 
+#include "display/cairo-utils.h"  // Inkscape::Pixbuf
 
 #ifndef USE_PANGO_WIN32
 /*
@@ -111,7 +112,8 @@ font_instance::font_instance() :
     nbGlyph(0),
     maxGlyph(0),
     glyphs(nullptr),
-    theFace(nullptr)
+    theFace(nullptr),
+    fontHasSVG(false)
 {
     //printf("font instance born\n");
     _ascent  = _ascent_max  = 0.8;
@@ -214,6 +216,11 @@ void font_instance::InitTheFace()
 
         readOpenTypeGsubTable( theFace, openTypeTables );
         readOpenTypeFvarAxes(  theFace, openTypeVarAxes );
+        readOpenTypeSVGTable(  theFace, openTypeSVGGlyphs );
+
+        if (openTypeSVGGlyphs.size() > 0 ) {
+            fontHasSVG = true;
+        }
 
 #if PANGO_VERSION_CHECK(1,41,1)
 #if FREETYPE_MAJOR == 2 && FREETYPE_MINOR >= 8  // 2.8 does not seem to work even though it has some support.
@@ -669,7 +676,63 @@ Geom::PathVector* font_instance::PathVector(int glyph_id)
     return glyphs[no].pathvector;
 }
 
-double font_instance::Advance(int glyph_id,bool vertical)
+Inkscape::Pixbuf* font_instance::PixBuf(int glyph_id)
+{
+    Inkscape::Pixbuf* pixbuf = nullptr;
+
+    auto glyph_iter = openTypeSVGGlyphs.find(glyph_id);
+    if (glyph_iter != openTypeSVGGlyphs.end()) {
+
+        // Glyphs are layed out in the +x, -y quadrant (assuming viewBox origin is 0,0).
+        // We need to shift the viewBox by the height inorder to generate pixbuf!
+        // To do: glyphs must draw overflow so we actually need larger pixbuf!
+        // To do: cache pixbuf.
+        // To do: Error handling.
+
+        pixbuf = glyph_iter->second.pixbuf;
+        if (!pixbuf) {
+            Glib::ustring svg = glyph_iter->second.svg;
+
+            Glib::RefPtr<Glib::Regex> regex =
+                Glib::Regex::create("viewBox=\"\\s*(\\d*)\\s*,?\\s*(\\d*)\\s*,?\\s*(\\d*)\\s*,?\\s*(\\d*)\\s*\"");
+            Glib::MatchInfo matchInfo;
+            regex->match(svg, matchInfo);
+            if (matchInfo.matches()) {
+                int x = std::stod(matchInfo.fetch(1));
+                int y = std::stod(matchInfo.fetch(2));
+                int w = std::stod(matchInfo.fetch(3));
+                int h = std::stod(matchInfo.fetch(4));
+                // std::cout << " x: " << x
+                //           << " y: " << y
+                //           << " w: " << w
+                //           << " h: " << h << std::endl;
+                Glib::ustring replacement("viewBox=\"");
+                replacement += std::to_string(x);
+                replacement += " ";
+                replacement += std::to_string(y-h);
+                replacement += " ";
+                replacement += std::to_string(w);
+                replacement += " ";
+                replacement += std::to_string(h*2); // Baseline is at y=0 so we need larger box to get decent.
+                replacement += "\"";
+                // std::cout << "replacement: |" << replacement << "|" << std::endl;
+                svg = regex->replace_literal(svg, 0, replacement, static_cast<Glib::RegexMatchFlags >(0));
+            } else {
+                std::cerr << "font_instance::PixBuf: Failed to match!" << std::endl;
+            }
+
+            // Finally create pixbuf!
+            pixbuf = Inkscape::Pixbuf::create_from_buffer(svg);
+
+            // And cache it.
+            glyph_iter->second.pixbuf = pixbuf;
+        }
+    }
+
+    return pixbuf;
+}
+
+double font_instance::Advance(int glyph_id, bool vertical)
 {
     int no = -1;
     if ( id_to_no.find(glyph_id) == id_to_no.end() ) {
@@ -714,6 +777,7 @@ void font_instance::FindFontMetrics() {
             _xheight     = fabs(otm.otmsXHeight    * scale);
             _ascent_max  = fabs(otm.otmAscent     * scale);
             _descent_max = fabs(otm.otmDescent    * scale);
+            _design_units = parent->fontSize;
 
             // In CSS em size is ascent + descent... which should be 1. If not,
             // adjust so it is.
@@ -777,6 +841,7 @@ void font_instance::FindFontMetrics() {
             }
             _ascent_max  = fabs(((double)theFace->ascender)  / ((double)theFace->units_per_EM));
             _descent_max = fabs(((double)theFace->descender) / ((double)theFace->units_per_EM));
+            _design_units = theFace->units_per_EM;
 
             // In CSS em size is ascent + descent... which should be 1. If not,
             // adjust so it is.
