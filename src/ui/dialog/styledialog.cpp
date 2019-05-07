@@ -781,7 +781,7 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store)
     } else if (!selector.empty()) { //styleshhetç
         // We could test if styleContent is empty and then delete the style node here but there is no
         // harm in keeping it around ...
-
+        SP_ACTIVE_DOCUMENT->setStyleSheet(nullptr);
         std::string pos = std::to_string(selectorpos);
         std::string selectormatch = "(";
         for (selectorpos; selectorpos > 0; selectorpos--) {
@@ -794,12 +794,12 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store)
         std::string result;
         std::regex_replace (std::back_inserter(result), content.begin(), content.end(), e, "$1" + styleContent + "$3");
         textNode->setContent(result.c_str());
-        obj->emitModified(SP_OBJECT_STYLE_MODIFIED_FLAG |SP_OBJECT_PARENT_MODIFIED_FLAG);
     }
-
+    
     DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_STYLE, _("Edited style element."));
 
     _updating = false;
+    _readStyleElement();
     g_debug("StyleDialog::_writeStyleElement(): | %s |", styleContent.c_str());
 }
 
