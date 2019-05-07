@@ -254,6 +254,7 @@ void readOpenTypeGsubTable (const FT_Face ft_face,
     hb_face_destroy (hb_face);
 }
 
+// Harfbuzz now as API for variations (Version 2.2, Nov 29 2018).
 // Make a list of all Variation axes with ranges.
 void readOpenTypeFvarAxes(const FT_Face ft_face,
                           std::map<Glib::ustring, OTVarAxis>& axes) {
@@ -289,6 +290,7 @@ void readOpenTypeFvarAxes(const FT_Face ft_face,
 }
 
 
+// Harfbuzz now as API for named variations (Version 2.2, Nov 29 2018).
 // Make a list of all Named instances with axis values.
 void readOpenTypeFvarNamed(const FT_Face ft_face,
                            std::map<Glib::ustring, OTVarInstance>& named) {
@@ -330,7 +332,7 @@ void readOpenTypeFvarNamed(const FT_Face ft_face,
 void readOpenTypeSVGTable(const FT_Face ft_face,
                           std::map<int, SVGTableEntry>& glyphs) {
 
-    // Harfbuzz has some support for SVG fonts but it is not yet exposed to user.
+    // Harfbuzz has some support for SVG fonts but it is not exposed until version 2.1 (Oct 30, 2018).
     // We do it the hard way!
     hb_face_t *hb_face = hb_ft_face_create_cached (ft_face);
     hb_blob_t *hb_blob = hb_face_reference_table (hb_face, HB_OT_TAG_SVG);

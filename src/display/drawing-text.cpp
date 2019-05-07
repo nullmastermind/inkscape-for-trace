@@ -575,7 +575,7 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, Geom::IntRect const &/*are
             dc.newPath(); // Clear text-decoration path
         }
 
-        // accumulate the path that represents the glyphs
+        // Accumulate the path that represents the glyphs and/or draw SVG glyphs.
         for (auto & i : _children) {
             DrawingGlyphs *g = dynamic_cast<DrawingGlyphs *>(&i);
             if (!g) throw InvalidItemException();
@@ -615,7 +615,7 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, Geom::IntRect const &/*are
             }
         }
 
-        // Draw the glyphs.
+        // Draw the glyphs (non-SVG glyphs).
         {
             Inkscape::DrawingContext::Save save(dc);
             dc.transform(_ctm);
