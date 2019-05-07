@@ -1884,7 +1884,6 @@ ObjectsPanel::ObjectsPanel() :
     // -------------------------------------------------------
     {
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_RENAME, nullptr, _("Rename"), (int)BUTTON_RENAME ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_EDIT_DUPLICATE, nullptr, _("Duplicate"), (int)BUTTON_DUPLICATE ) );
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_NEW, nullptr, _("New"), (int)BUTTON_NEW ) );
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
@@ -1925,7 +1924,9 @@ ObjectsPanel::ObjectsPanel() :
         
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_MASK, nullptr, _("Set Mask"), (int)BUTTON_SETMASK ) );
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_UNSET_MASK, nullptr, _("Unset Mask"), (int)BUTTON_UNSETMASK ) );
-        
+
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_EDIT_DUPLICATE, nullptr, _("Duplicate"), (int)BUTTON_DUPLICATE ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_EDIT_DELETE, nullptr, _("Delete"), (int)BUTTON_DELETE ) );
         _popupMenu.show_all_children();
     }
     // -------------------------------------------------------
