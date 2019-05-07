@@ -748,7 +748,7 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store)
             opencomment = row[_mColumns._colActive] ? "    " : "  /*";
             closecomment = row[_mColumns._colActive] ? "\n" : "*/\n" ;
         }
-        Glib::ustring name = row[_mColumns._colName];
+        Glib::ustring name = row[_mColumns._colName];        
         Glib::ustring value = row[_mColumns._colValue] + ";";
         if (!(name.empty() && value.empty())){
             styleContent = styleContent + opencomment + name + ":" + value + closecomment;
@@ -772,8 +772,8 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store)
             }
         }
         for (auto& row: store->children()) {
-            Glib::ustring name = row[_mColumns._colName];
-            Glib::ustring value = row[_mColumns._colValue] ;
+            Glib::ustring name = row[_mColumns._colName];        
+            Glib::ustring value = row[_mColumns._colValue];          
             if (!(name.empty() && value.empty())){
                 obj->getRepr()->setAttribute(name.c_str(), value);
             }
@@ -835,10 +835,24 @@ void StyleDialog::_valueEdited(const Glib::ustring& path, const Glib::ustring& v
     if(row) {
         row[_mColumns._colValue] = value;
         Glib::ustring name = row[_mColumns._colName];
+        Gtk::TreeIter iter = store->get_iter(path);
+        ++iter;
         if(name.empty() && value.empty()) {
             store->erase(row);
         }
+        Glib::ustring selector = row[_mColumns._colSelector];
         _writeStyleElement(store);
+        /* if (!iter && !value.empty()) {
+            Gtk::TreeModel::Row rowadded = *(store->append());
+            Glib::ustring selector = row[_mColumns._colSelector];
+            gint pos = row[_mColumns._colSelectorPos];
+            rowadded[_mColumns._colSelector] = selector;
+            rowadded[_mColumns._colSelectorPos] = pos;
+            rowadded[_mColumns._colActive] = false;
+            rowadded[_mColumns._colName] = "";
+            rowadded[_mColumns._colValue] = "";
+            rowadded[_mColumns._colStrike] = false;            
+        } */
     }
 }
 
