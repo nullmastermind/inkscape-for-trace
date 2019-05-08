@@ -124,7 +124,7 @@ build_menu_item_from_verb(SPAction* action,
     }
 
     Gtk::AccelLabel* label = Gtk::manage(new Gtk::AccelLabel(action->name, true));
-    label->set_alignment(0.0, 0.5);
+    label->set_xalign(0.0);
     label->set_accel_widget(*menuitem);
     sp_shortcut_add_accelerator((GtkWidget*)menuitem->gobj(), sp_shortcut_get_primary(action->verb));
 
