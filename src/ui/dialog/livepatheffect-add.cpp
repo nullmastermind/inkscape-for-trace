@@ -100,7 +100,7 @@ LivePathEffectAdd::LivePathEffectAdd()
     _LPEFilter->signal_search_changed().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_search));
     _LPEDialogSelector->add_events(Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK |
                                    Gdk::ENTER_NOTIFY_MASK | Gdk::LEAVE_NOTIFY_MASK | Gdk::KEY_PRESS_MASK);
-    _LPESelectorFlowBox->signal_set_focus_child().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_focus));  
+    _LPESelectorFlowBox->signal_set_focus_child().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_focus));
     for (int i = 0; i < static_cast<int>(converter._length); ++i) {
         Glib::RefPtr<Gtk::Builder> builder_effect;
         try {
@@ -118,7 +118,7 @@ LivePathEffectAdd::LivePathEffectAdd()
         Gtk::EventBox *LPESelectorEffectEventExpander;
         builder_effect->get_widget("LPESelectorEffectEventExpander", LPESelectorEffectEventExpander);
         LPESelectorEffectEventExpander->signal_button_press_event().connect(
-            sigc::bind<Glib::RefPtr<Gtk::Builder>>(sigc::mem_fun(*this, &LivePathEffectAdd::expand), builder_effect)); 
+            sigc::bind<Glib::RefPtr<Gtk::Builder>>(sigc::mem_fun(*this, &LivePathEffectAdd::expand), builder_effect));
         LPESelectorEffectEventExpander->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(
             sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(LPESelectorEffect->gobj())));
         LPESelectorEffectEventExpander->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(
@@ -207,7 +207,7 @@ LivePathEffectAdd::LivePathEffectAdd()
     int height;
     window->get_size(width, height);
     _LPEDialogSelector->resize(std::min(width - 300, 1440), std::min(height - 300, 900));
-    _LPEDialogSelector->set_transient_for(*window);	
+    _LPEDialogSelector->set_transient_for(*window);
     _LPESelectorFlowBox->set_focus_vadjustment(_LPEScrolled->get_vadjustment());
     _LPEDialogSelector->show_all_children();
 }
@@ -249,7 +249,7 @@ void LivePathEffectAdd::on_focus(Gtk::Widget *widget)
                 }
             }
         }
-    
+
     child->show_all_children();
     _LPESelectorFlowBox->select_child(*child);
     }
@@ -360,7 +360,7 @@ bool LivePathEffectAdd::apply(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> bu
 }
 
 bool LivePathEffectAdd::on_press_enter(GdkEventKey *key, Glib::RefPtr<Gtk::Builder> builder_effect,
-                              const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *to_add)
+                                       const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *to_add)
 {
     if (key->keyval == 65293 || key->keyval == 65421) {
         _to_add = to_add;
