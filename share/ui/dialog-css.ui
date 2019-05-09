@@ -39,12 +39,18 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="CSSSelectorAdd">
+          <object class="GtkEventBox" id="CSSSelectorEventAdd">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="no_show_all">True</property>
-            <property name="label">   &lt;b&gt;+&lt;/b&gt;   }</property>
-            <property name="use_markup">True</property>
+            <child>
+              <object class="GtkLabel" id="CSSSelectorAdd">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="no_show_all">True</property>
+                <property name="label">   &lt;b&gt;+&lt;/b&gt;   }</property>
+                <property name="use_markup">True</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>

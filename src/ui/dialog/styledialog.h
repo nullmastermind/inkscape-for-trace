@@ -22,8 +22,10 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/treeselection.h>
+#include <gtkmm/eventbox.h>
 #include <gtkmm/paned.h>
 #include <glibmm/regex.h>
+#include <gtkmm/builder.h>
 
 #include "ui/dialog/desktop-tracker.h"
 
@@ -94,8 +96,10 @@ public:
     // Reading and writing the style element.
     Inkscape::XML::Node *_getStyleTextNode();
     void _readStyleElement();
+    Glib::RefPtr< Gtk::TreeModel > _selectTree(Glib::ustring selector);
     void _writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store);
     void _activeToggled(const Glib::ustring& path, Glib::RefPtr<Gtk::TreeStore> store);
+    bool _addFirstRow(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> _builder, Glib::ustring selector, gint pos);
     void _nameEdited(const Glib::ustring& path, const Glib::ustring& name, Glib::RefPtr<Gtk::TreeStore> store);
     void _valueEdited(const Glib::ustring& path, const Glib::ustring& value, Glib::RefPtr<Gtk::TreeStore> store);
 
