@@ -98,9 +98,9 @@ LivePathEffectAdd::LivePathEffectAdd()
     _builder->get_widget("LPESelectorEffectEventFavShow", _LPESelectorEffectEventFavShow);
     _builder->get_widget("LPESelectorEffectInfoEventBox", _LPESelectorEffectInfoEventBox);
     _LPEFilter->signal_search_changed().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_search));
-    _LPESelectorFlowBox->signal_child_activated().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_activate));
     _LPEDialogSelector->add_events(Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK |
-                                   Gdk::ENTER_NOTIFY_MASK | Gdk::LEAVE_NOTIFY_MASK);
+                                   Gdk::ENTER_NOTIFY_MASK | Gdk::LEAVE_NOTIFY_MASK | Gdk::KEY_PRESS_MASK);
+    _LPESelectorFlowBox->signal_set_focus_child().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_focus));  
     for (int i = 0; i < static_cast<int>(converter._length); ++i) {
         Glib::RefPtr<Gtk::Builder> builder_effect;
         try {
@@ -118,7 +118,7 @@ LivePathEffectAdd::LivePathEffectAdd()
         Gtk::EventBox *LPESelectorEffectEventExpander;
         builder_effect->get_widget("LPESelectorEffectEventExpander", LPESelectorEffectEventExpander);
         LPESelectorEffectEventExpander->signal_button_press_event().connect(
-            sigc::bind<Glib::RefPtr<Gtk::Builder>>(sigc::mem_fun(*this, &LivePathEffectAdd::expand), builder_effect));   
+            sigc::bind<Glib::RefPtr<Gtk::Builder>>(sigc::mem_fun(*this, &LivePathEffectAdd::expand), builder_effect)); 
         LPESelectorEffectEventExpander->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(
             sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(LPESelectorEffect->gobj())));
         LPESelectorEffectEventExpander->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(
@@ -179,10 +179,15 @@ LivePathEffectAdd::LivePathEffectAdd()
         LPESelectorEffect->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(
             sigc::mem_fun(*this, &LivePathEffectAdd::mouseout), GTK_WIDGET(LPESelectorEffect->gobj())));
         _LPESelectorFlowBox->insert(*LPESelectorEffect, i);
+        LPESelectorEffect->get_parent()->signal_key_press_event().connect(
+            sigc::bind<Glib::RefPtr<Gtk::Builder>, const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *>(
+                sigc::mem_fun(*this, &LivePathEffectAdd::on_press_enter), builder_effect, &converter.data(i)));
         LPESelectorEffect->get_parent()->get_style_context()->add_class(
             ("LPEIndex" + Glib::ustring::format(i)).c_str());
     }
+    _LPESelectorFlowBox->set_activate_on_single_click(false);
     _visiblelpe = _LPESelectorFlowBox->get_children().size();
+    _firstlpe = 0; 
     _LPEInfo->set_visible(false);
     _LPESelectorEffectEventFavShow->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(
         sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(_LPESelectorEffectEventFavShow->gobj())));
@@ -204,50 +209,51 @@ LivePathEffectAdd::LivePathEffectAdd()
     window->get_size(width, height);
     _LPEDialogSelector->resize(std::min(width - 300, 1440), std::min(height - 300, 900));
     _LPEDialogSelector->set_transient_for(*window);	
+    _LPESelectorFlowBox->set_focus_vadjustment(_LPEScrolled->get_vadjustment());
     _LPEDialogSelector->show_all_children();
 }
 const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *LivePathEffectAdd::getActiveData()
 {
     return instance()._to_add;
 }
-void LivePathEffectAdd::on_activate(Gtk::FlowBoxChild *child)
+
+void LivePathEffectAdd::on_focus(Gtk::Widget *widget)
 {
-    for (auto i : _LPESelectorFlowBox->get_children()) {
-        Gtk::FlowBoxChild *leitem = dynamic_cast<Gtk::FlowBoxChild *>(i);
-        leitem->get_style_context()->remove_class("lpeactive");
-        leitem->get_style_context()->remove_class("colorinverse");
-        leitem->get_style_context()->remove_class("backgroundinverse");
-        Gtk::EventBox *eventbox = dynamic_cast<Gtk::EventBox *>(leitem->get_child());
+    Gtk::FlowBoxChild *child = dynamic_cast<Gtk::FlowBoxChild *>(widget);
+    if (child) {
+        for (auto i : _LPESelectorFlowBox->get_children()) {
+            Gtk::FlowBoxChild *leitem = dynamic_cast<Gtk::FlowBoxChild *>(i);
+            Gtk::EventBox *eventbox = dynamic_cast<Gtk::EventBox *>(leitem->get_child());
+            if (eventbox) {
+                Gtk::Box *box = dynamic_cast<Gtk::Box *>(eventbox->get_child());
+                if (box) {
+                    std::vector<Gtk::Widget *> contents = box->get_children();
+                    Gtk::Box *actions = dynamic_cast<Gtk::Box *>(contents[5]);
+                    if (actions) {
+                        actions->set_visible(false);
+                    }
+                    Gtk::EventBox *expander = dynamic_cast<Gtk::EventBox *>(contents[4]);
+                    if (expander) {
+                        expander->set_visible(true);
+                    }
+                }
+            }
+        }
+        Gtk::EventBox *eventbox = dynamic_cast<Gtk::EventBox *>(child->get_child());
         if (eventbox) {
             Gtk::Box *box = dynamic_cast<Gtk::Box *>(eventbox->get_child());
             if (box) {
                 std::vector<Gtk::Widget *> contents = box->get_children();
-                Gtk::Box *actions = dynamic_cast<Gtk::Box *>(contents[5]);
-                if (actions) {
-                    actions->set_visible(false);
-                }
                 Gtk::EventBox *expander = dynamic_cast<Gtk::EventBox *>(contents[4]);
                 if (expander) {
-                    expander->set_visible(true);
+                    expander->set_visible(false);
                 }
             }
         }
-    }
-    Gtk::EventBox *eventbox = dynamic_cast<Gtk::EventBox *>(child->get_child());
-    if (eventbox) {
-        Gtk::Box *box = dynamic_cast<Gtk::Box *>(eventbox->get_child());
-        if (box) {
-            std::vector<Gtk::Widget *> contents = box->get_children();
-            Gtk::EventBox *expander = dynamic_cast<Gtk::EventBox *>(contents[4]);
-            if (expander) {
-                expander->set_visible(false);
-            }
-        }
-    }
-    child->get_style_context()->add_class("lpeactive");
-    child->get_style_context()->add_class("colorinverse");
-    child->get_style_context()->add_class("backgroundinverse");
+    
     child->show_all_children();
+    _LPESelectorFlowBox->select_child(*child);
+    }
 }
 
 bool LivePathEffectAdd::pop_description(GdkEventCrossing *evt, Glib::RefPtr<Gtk::Builder> builder_effect)
@@ -303,6 +309,8 @@ bool LivePathEffectAdd::fav_toggler(GdkEventButton *evt, Glib::RefPtr<Gtk::Build
             LPESelectorEffectFav->set_from_icon_name("draw-star-outline", Gtk::IconSize(25));
             sp_remove_fav(LPEName->get_text());
             LPESelectorEffect->get_parent()->get_style_context()->remove_class("lpefav");
+            LPESelectorEffect->get_parent()->get_style_context()->add_class("lpenormal");
+            LPESelectorEffect->get_parent()->get_style_context()->add_class("lpe");
             if (_showfavs) {
                 reload_effect_list();
             }
@@ -312,6 +320,8 @@ bool LivePathEffectAdd::fav_toggler(GdkEventButton *evt, Glib::RefPtr<Gtk::Build
             LPESelectorEffectFav->set_from_icon_name("draw-star", Gtk::IconSize(25));
             sp_add_fav(LPEName->get_text());
             LPESelectorEffect->get_parent()->get_style_context()->add_class("lpefav");
+            LPESelectorEffect->get_parent()->get_style_context()->remove_class("lpenormal");
+            LPESelectorEffect->get_parent()->get_style_context()->add_class("lpe");
         }
     }
     return true;
@@ -340,7 +350,7 @@ bool LivePathEffectAdd::apply(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> bu
     if (LPESelectorEffect->get_parent()->get_style_context()->has_class("lpedisabled")) {
         Gtk::FlowBoxChild *child = dynamic_cast<Gtk::FlowBoxChild *>(LPESelectorEffect->get_parent());
         if (child) {
-            on_activate(child);
+            child->grab_focus();
         }
         return true;
     }
@@ -350,13 +360,35 @@ bool LivePathEffectAdd::apply(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> bu
     return true;
 }
 
+bool LivePathEffectAdd::on_press_enter(GdkEventKey *key, Glib::RefPtr<Gtk::Builder> builder_effect,
+                              const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *to_add)
+{
+    if (key->keyval == 65293 || key->keyval == 65421) {
+        _to_add = to_add;
+        Gtk::EventBox *LPESelectorEffect;
+        builder_effect->get_widget("LPESelectorEffect", LPESelectorEffect);
+        if (LPESelectorEffect->get_parent()->get_style_context()->has_class("lpedisabled")) {
+            Gtk::FlowBoxChild *child = dynamic_cast<Gtk::FlowBoxChild *>(LPESelectorEffect->get_parent());
+            if (child) {
+                child->grab_focus();
+            }
+            return true;
+        }
+        _applied = true;
+        _LPEDialogSelector->response(Gtk::RESPONSE_APPLY);
+        _LPEDialogSelector->hide();
+        return true;
+    }
+    return false;
+}
+
 bool LivePathEffectAdd::expand(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> builder_effect)
 {
     Gtk::EventBox *LPESelectorEffect;
     builder_effect->get_widget("LPESelectorEffect", LPESelectorEffect);
     Gtk::FlowBoxChild *child = dynamic_cast<Gtk::FlowBoxChild *>(LPESelectorEffect->get_parent());
     if (child) {
-        on_activate(child);
+        child->grab_focus();
     }
     return true;
 }
@@ -406,12 +438,18 @@ bool LivePathEffectAdd::on_filter(Gtk::FlowBoxChild *child)
             }
             if (_LPEFilter->get_text().length() < 1) {
                 _visiblelpe++;
+                if(_firstlpe == 0){
+                    _firstlpe = child->get_index();
+                }
                 return true;
             }
             if (lpename) {
                 size_t s = lpename->get_text().uppercase().find(_LPEFilter->get_text().uppercase(), 0);
                 if (s != -1) {
                     _visiblelpe++;
+                    if(_firstlpe == 0){
+                        _firstlpe = child->get_index();
+                    }
                     return true;
                 }
             }
@@ -420,6 +458,9 @@ bool LivePathEffectAdd::on_filter(Gtk::FlowBoxChild *child)
                 size_t s = lpedesc->get_text().uppercase().find(_LPEFilter->get_text().uppercase(), 0);
                 if (s != -1) {
                     _visiblelpe++;
+                    if(_firstlpe == 0){
+                        _firstlpe = child->get_index();
+                    }
                     return true;
                 }
             }
@@ -436,6 +477,7 @@ void LivePathEffectAdd::reload_effect_list()
         _LPEExperimental->get_style_context()->remove_class("active");
     } */
     _visiblelpe = 0;
+    _firstlpe = 0;
     _LPESelectorFlowBox->invalidate_filter();
     if (_showfavs) {
         if (_visiblelpe == 0) {
@@ -457,6 +499,7 @@ void LivePathEffectAdd::reload_effect_list()
 void LivePathEffectAdd::on_search()
 {
     _visiblelpe = 0;
+    _firstlpe = 0;
     _LPESelectorFlowBox->invalidate_filter();
     if (_showfavs) {
         if (_visiblelpe == 0) {
@@ -471,6 +514,7 @@ void LivePathEffectAdd::on_search()
             }
             _LPEInfo->set_visible(true);
             _LPEInfo->get_style_context()->add_class("lpeinfowarn");
+            _LPESelectorFlowBox->select_child(*_LPESelectorFlowBox->get_child_at_index(_firstlpe));
         }
     } else {
         if (_visiblelpe == 0) {
@@ -480,6 +524,7 @@ void LivePathEffectAdd::on_search()
         } else {
             _LPEInfo->set_visible(false);
             _LPEInfo->get_style_context()->remove_class("lpeinfowarn");
+            _LPESelectorFlowBox->select_child(*_LPESelectorFlowBox->get_child_at_index(_firstlpe));
         }
     }
 }
@@ -504,11 +549,14 @@ int LivePathEffectAdd::on_sort(Gtk::FlowBoxChild *child1, Gtk::FlowBoxChild *chi
                         LPESelectorEffectEventFavTop->set_visible(true);
                         LPESelectorEffectEventFavTop->show();
                         child1->get_style_context()->add_class("lpefav");
-                    } else {
+                        child1->get_style_context()->remove_class("lpenormal");
+                    } else if (!sp_has_fav(name1)) {
                         LPESelectorEffectEventFavTop->set_visible(false);
                         LPESelectorEffectEventFavTop->hide();
                         child1->get_style_context()->remove_class("lpefav");
+                        child1->get_style_context()->add_class("lpenormal");
                     }
+                    child1->get_style_context()->add_class("lpe");
                 }
             }
         }
@@ -528,12 +576,15 @@ int LivePathEffectAdd::on_sort(Gtk::FlowBoxChild *child1, Gtk::FlowBoxChild *chi
                     if (sp_has_fav(name2)) {
                         LPESelectorEffectEventFavTop->set_visible(true);
                         LPESelectorEffectEventFavTop->show();
-                        child1->get_style_context()->add_class("lpefav");
-                    } else {
+                        child2->get_style_context()->add_class("lpefav");
+                        child2->get_style_context()->remove_class("lpenormal");
+                    } else if (!sp_has_fav(name2)) {
                         LPESelectorEffectEventFavTop->set_visible(false);
                         LPESelectorEffectEventFavTop->hide();
-                        child1->get_style_context()->remove_class("lpefav");
+                        child2->get_style_context()->remove_class("lpefav");
+                        child2->get_style_context()->add_class("lpenormal");
                     }
+                    child2->get_style_context()->add_class("lpe");
                 }
             }
         }

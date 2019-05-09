@@ -1,5 +1,5 @@
-
 /* GTK3 WIDGET STYLING */
+
 
 /*
  * Keep in order of:
@@ -12,6 +12,7 @@
  *
  * As of Gtk 3.20, you cannot use widget names.
  */
+
 
 /* Standard theme based colors. Prefer these.
  *
@@ -26,273 +27,315 @@
  *
  */
 
+
 /* Our own custom shades... better not to use.
  * Lightest to darkest based on linear rgb.
  */
- @define-color bg_color0  #ffffff; /* White */
- @define-color bg_color05 #f8f8f8; /* Slightly off white */
- @define-color bg_color1  #f0f0f0;
- @define-color bg_color2  #e0e0e0;
- @define-color bg_color3  #d0d0d0;
- @define-color bg_color4  #bbbbbb; /* 50% Gray */
- @define-color bg_color5  #a5a5a5;
- @define-color bg_color6  #898989;
- @define-color bg_color7  #636363;
- @define-color bg_color8  #000000; /* Black */
 
-  /* Inkscape CSS helper
-   * to add a class to a widget do some thing like
-   * widget->get_style_context()->add_class("mycoolclass");
-   * we define a bunch of helper CSS styles
-   * Ecah Inkscape desktop has a class in top level window
-   * call "dark" so you can style using 2 clases with or without
-   * "dark" by this way you can always know if the UI is in dark mode
-   * Also added some helper clases:
-   * ::::::: Color based
-   * ::::::: apply to colors
-   * ::::::: scope widget and all his childs
-   * ".colordefault" use default window color
-   * ".colorinverse" invert window colors
-   * ".colorbright" force bright colors no matter the UI is dark or bright
-   * ".colordark" same but dark
-   * ::::::: Background based
-   * ::::::: apply to backgrounds
-   * ::::::: scope widget and all his childs
-   * ".backgrounddefault" use default window color
-   * ".backgroundinverse" invert window colors
-   * ".backgroundbright" force bright colors no matter the UI is dark or bright
-   * ".backgrounddark" same but daLPESelectorButtonBoxk
-   * :::::::: Icon Based.
-   * :::::::: apply to color (foreground)
-   * :::::::: scope widget and all nested images
-   * ".iconsymbolic" Force icon symbolic
-   * ".iconregular" Force colorful icons
-   * ".iconcolordefault" Theme color default
-   * ".iconcolorinverse" Inverse color from theme
-   * ".iconcolorbright, Force clear icon
-   * ".iconcolordark" Force dark icon
-   * ".iconcolornamed" Icon in prefs selected color;
-   * ".iconcolornamedinverse" Icon in inverse color from prefs"
-   * :::::::: Combo box.
-   * "..combobright" Combo bright
-   * ".regular ..." Inkscape is in regular icon mode 
-   * ".symbolic ..." Inkscape is in symbolic icon mode 
-   */
+@define-color bg_color0 #ffffff;
 
- .colordefault,
- .colordefault *{
-     color: @theme_fg_color;
- }
+/* White */
 
- .colorinverse,
- .colorinverse *{
-     color: @theme_bg_color;
- }
- .colorbright,
- .colorbright *{
-     color: @theme_fg_color;
- }
+@define-color bg_color05 #f8f8f8;
 
- .dark .colorbright,
- .dark .colorbright *{
-     color: @theme_bg_color;
- }
- .colordark,
- .colordark *{
-     color: @theme_bg_color;
- }
- .dark .colordark,
- .dark .colordark *{
-     color: @theme_fg_color;
- }
- .backgrounddefault,
- .backgrounddefault *{
-     background-color: @theme_bg_color;
-     background-image:image(@theme_bg_color);
- }
- .backgroundinverse,
- .backgroundinverse *{
-     background-color: @theme_fg_color;
-     background-image:image(@theme_fg_color);
- }
- .backgroundbright,
- .backgroundbright *{
-     background-color: @theme_bg_color;
-     background-image:image(@theme_bg_color);
- }
- .dark .backgroundbright,
- .dark .backgroundbright *{
-     background-color: @theme_fg_color;
-     background-image:image(@theme_fg_color);
- }
- .backgrounddark,
- .backgrounddark *{
-     background-color: @theme_fg_color;
-     background-image:image(@theme_fg_color);
- }
- .dark .backgrounddark,
- .dark .backgrounddark *{
-     background-color: @theme_bg_color;
-     background-image:image(@theme_bg_color);
- }
- .iconsymbolic,
- .iconsymbolic image{
-     -gtk-icon-style: symbolic;
- }
- .iconregular,
- .iconregular image{
-     -gtk-icon-style: regular;
- }
+/* Slightly off white */
 
- .combobright *{
-     color: @theme_text_color;
-     background-color: @theme_base_color;
-     background-image:image(@theme_base_color);
-     border-radius:4px;
- }
- .dark .combobright *{
-     color: @theme_base_color;
-     background-color: @theme_text_color;
-     background-image:image(@theme_text_color);
-     border-radius:4px;
- }
+@define-color bg_color1 #f0f0f0;
+@define-color bg_color2 #e0e0e0;
+@define-color bg_color3 #d0d0d0;
+@define-color bg_color4 #bbbbbb;
+
+/* 50% Gray */
+
+@define-color bg_color5 #a5a5a5;
+@define-color bg_color6 #898989;
+@define-color bg_color7 #636363;
+@define-color bg_color8 #000000;
+
+/* Black */
 
 
- /* 'GtkWidget' for Gtk  <= 3.18   */
- /* 'widget'    for Gtk  <= 3.19.2 */
- GtkWidget, widget {
- /*    font-size: 12pt; */
- }
+/* Inkscape CSS helper
+     * to add a class to a widget do some thing like
+     * widget->get_style_context()->add_class("mycoolclass");
+     * we define a bunch of helper CSS styles
+     * Ecah Inkscape desktop has a class in top level window
+     * call "dark" so you can style using 2 clases with or without
+     * "dark" by this way you can always know if the UI is in dark mode
+     * Also added some helper clases:
+     * ::::::: Color based
+     * ::::::: apply to colors
+     * ::::::: scope widget and all his childs
+     * ".colordefault" use default window color
+     * ".colorinverse" invert window colors
+     * ".colorbright" force bright colors no matter the UI is dark or bright
+     * ".colordark" same but dark
+     * ::::::: Background based
+     * ::::::: apply to backgrounds
+     * ::::::: scope widget and all his childs
+     * ".backgrounddefault" use default window color
+     * ".backgroundinverse" invert window colors
+     * ".backgroundbright" force bright colors no matter the UI is dark or bright
+     * ".backgrounddark" same but daLPESelectorButtonBoxk
+     * :::::::: Icon Based.
+     * :::::::: apply to color (foreground)
+     * :::::::: scope widget and all nested images
+     * ".iconsymbolic" Force icon symbolic
+     * ".iconregular" Force colorful icons
+     * ".iconcolordefault" Theme color default
+     * ".iconcolorinverse" Inverse color from theme
+     * ".iconcolorbright, Force clear icon
+     * ".iconcolordark" Force dark icon
+     * ".iconcolornamed" Icon in prefs selected color;
+     * ".iconcolornamedinverse" Icon in inverse color from prefs"
+     * :::::::: Combo box.
+     * "..combobright" Combo bright
+     * ".regular ..." Inkscape is in regular icon mode 
+     * ".symbolic ..." Inkscape is in symbolic icon mode 
+     */
 
- GtkSpinButton {
-     padding: 0;
-     outline-style : none;
- }
+.colordefault,
+.colordefault * {
+    color: @theme_fg_color;
+}
 
- spinbutton {
-     padding: 0;
-     outline-style : none;
- }
+.colorinverse,
+.colorinverse * {
+    color: @theme_bg_color;
+}
 
- GtkSpinButton entry {
-     padding-left: 2px;
-     padding-right:0;
- }
+.colorbright,
+.colorbright * {
+    color: @theme_fg_color;
+}
 
- spinbutton entry {
-     padding-left: 2px;
-     padding-right:0;
- }
+.dark .colorbright,
+.dark .colorbright * {
+    color: @theme_bg_color;
+}
 
- GtkSpinButton undershoot {
-     outline-style : none;
- }
+.colordark,
+.colordark * {
+    color: @theme_bg_color;
+}
 
- spinbutton undershoot {
-     outline-style : none;
- }
+.dark .colordark,
+.dark .colordark * {
+    color: @theme_fg_color;
+}
 
+.backgrounddefault,
+.backgrounddefault * {
+    background-color: @theme_bg_color;
+    background-image: image(@theme_bg_color);
+}
+
+.backgroundinverse,
+.backgroundinverse * {
+    background-color: @theme_fg_color;
+    background-image: image(@theme_fg_color);
+}
+
+.backgroundbright,
+.backgroundbright * {
+    background-color: @theme_bg_color;
+    background-image: image(@theme_bg_color);
+}
+
+.dark .backgroundbright,
+.dark .backgroundbright * {
+    background-color: @theme_fg_color;
+    background-image: image(@theme_fg_color);
+}
+
+.backgrounddark,
+.backgrounddark * {
+    background-color: @theme_fg_color;
+    background-image: image(@theme_fg_color);
+}
+
+.dark .backgrounddark,
+.dark .backgrounddark * {
+    background-color: @theme_bg_color;
+    background-image: image(@theme_bg_color);
+}
+
+.iconsymbolic,
+.iconsymbolic image {
+    -gtk-icon-style: symbolic;
+}
+
+.iconregular,
+.iconregular image {
+    -gtk-icon-style: regular;
+}
+
+.combobright * {
+    color: @theme_text_color;
+    background-color: @theme_base_color;
+    background-image: image(@theme_base_color);
+    border-radius: 4px;
+}
+
+.dark .combobright * {
+    color: @theme_base_color;
+    background-color: @theme_text_color;
+    background-image: image(@theme_text_color);
+    border-radius: 4px;
+}
+
+
+/* 'GtkWidget' for Gtk  <= 3.18   */
+
+
+/* 'widget'    for Gtk  <= 3.19.2 */
+
+GtkWidget,
+widget {
+    /*    font-size: 12pt; */
+}
+
+GtkSpinButton {
+    padding: 0;
+    outline-style: none;
+}
+
+spinbutton {
+    padding: 0;
+    outline-style: none;
+}
 
 GtkSpinButton entry {
     padding-left: 2px;
-    padding-right:0;
+    padding-right: 0;
 }
 
 spinbutton entry {
     padding-left: 2px;
-    padding-right:0;
+    padding-right: 0;
 }
 
 GtkSpinButton undershoot {
-	outline-style : none;
+    outline-style: none;
 }
 
 spinbutton undershoot {
-	outline-style : none;
+    outline-style: none;
 }
 
-.lpeactive #LPESelectorEffectFavTop{
-    opacity:0;
+GtkSpinButton entry {
+    padding-left: 2px;
+    padding-right: 0;
 }
 
-.lpefav{
-    background-color: @theme_base_color;
-    padding-bottom:0;
+spinbutton entry {
+    padding-left: 2px;
+    padding-right: 0;
 }
 
-.lpename{
-    font-size:16px;
-    margin-bottom:5px;
+GtkSpinButton undershoot {
+    outline-style: none;
 }
 
-.lpeinfo{
-    font-size:16px;
-    padding:20px;
-}
-
-.lpedisabled{
-    opacity:0.3;
+spinbutton undershoot {
+    outline-style: none;
 }
 
 #LPEDialogSelector,
 #LPEDialogSelector .frame,
 #LPEDialogSelector .searchbar {
-    outline-width:0;
-    border-width:0;
+    outline-width: 0;
+    border-width: 0;
 }
 
 #LPESelectorFlowBox GtkFlowBoxChild,
-#LPESelectorFlowBox flowboxchild{
-    border-width:0px;
-    border-radius:6px;
-    margin:10px;
-    padding:10px;
-    margin-bottom:0px;
-    padding-bottom:10px;
-    outline:none;
+#LPESelectorFlowBox flowboxchild {
+    border-width: 0px;
+    border-radius: 6px;
+    margin: 10px;
+    padding: 10px;
+    margin-bottom: 0px;
+    padding-bottom: 10px;
+    outline: none;
 }
 
-#LPEExperimental image{
-color: transparent;
+#LPESelectorFlowBox flowboxchild * {
+    color: @theme_selected_bg_color;
 }
 
-#LPESelectorEffectInfoPop{
-padding:15px;
+#LPESelectorFlowBox flowboxchild:selected image,
+#LPESelectorFlowBox flowboxchild:selected label {
+    background-color: @theme_selected_bg_color;
+    color: @theme_selected_fg_color;
+    background-image: image(@theme_selected_bg_color);
 }
 
-#LPESelectorEffectInfoName{
-font-weight:bold;
-padding:15px;
+#LPESelectorFlowBox *:selected #LPESelectorEffectFavTop,
+#LPESelectorFlowBox *:selected:focus #LPESelectorEffectFavTop {
+    opacity: 0;
 }
 
-#XMLFlow .toggle{
-    min-width:18px;
-    padding-left:6px;
-    padding-right:6px;
-    padding-top:0;
-    padding-bottom:0;
+#LPESelectorFlowBox .lpename {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+#LPESelectorFlowBox .lpeinfo {
+    font-size: 16px;
+    padding: 20px;
+}
+
+#LPESelectorFlowBox .lpedisabled {
+    opacity: 0.3;
+}
+
+#LPESelectorEffectInfoPop {
+    padding: 15px;
+}
+
+#LPESelectorEffectInfoName {
+    font-weight: bold;
+    padding: 15px;
+}
+
+#LPEExperimental image {
+    color: transparent;
+}
+
+#LPEDialogSelector .searchbar entry image,
+#LPEDialogSelector .searchbar label,
+#LPEDialogSelector .searchbar #LPESelectorEffectFavShowImage {
+    color: @theme_selected_bg_color;
+}
+
+#XMLFlow .toggle {
+    min-width: 18px;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 SPRuler {
     background-color: @theme_bg_color;
-    color:            @theme_fg_color;
+    color: @theme_fg_color;
 }
 
 ruler-widget {
     background-color: @theme_bg_color;
-    color:            @theme_fg_color;
+    color: @theme_fg_color;
 }
 
+
 /* The actual canvas (Inkscape's drawing area). */
+
 SPCanvas {
     background-color: white;
 }
 
-combobox window.popup scrolledwindow treeview separator {
-}
+combobox window.popup scrolledwindow treeview separator {}
 
-#font_selector_family {
-}
+#font_selector_family {}
 
 #TextFontFamilyAction_combobox {
     -GtkComboBox-appears-as-list: true;
@@ -304,33 +347,44 @@ combobox window.popup scrolledwindow treeview separator {
     padding: 0;
 }
 
+
 /* Keep palette scrollbar from generating warnings. */
+
 #PreviewHolderScroller .vertical slider {
     min-height: 15px;
 }
 
+
 /* Override minimum size of container children for palette. */
+
 #ColorItemPreview {
     min-height: 5px;
-    min-width:  5px;
+    min-width: 5px;
 }
 
+
 /* Reduce width of Fill and Stroke dialog */
+
 #ColorModeButton {
     padding-left: 0;
     padding-right: 0;
 }
 
+
 /* Reduce width of +/- buttons. */
-.up, .down {
+
+.up,
+.down {
     padding-left: 0;
     padding-right: 0;
 }
 
+
 /* InkSpinScale */
+
 #InkSpinScale {
-    background : @theme_bg_color;
-    border : 1px black;
+    background: @theme_bg_color;
+    border: 1px black;
     border-radius: 3px;
     padding: 0px;
 }
@@ -341,23 +395,26 @@ combobox window.popup scrolledwindow treeview separator {
     border-radius: 0 3px 3px 0;
     box-shadow: none;
     padding: 0 0 0 1px;
-    min-height : 10px;
+    min-height: 10px;
 }
+
 
 /* Hide slider */
+
 #InkSpinScale slider {
     background: none;
-    border:     none;
-    outline:    none;
-    min-width:  0px;
+    border: none;
+    outline: none;
+    min-width: 0px;
     min-height: 0px;
-    padding:    0px;
-    margin:     0px;
+    padding: 0px;
+    margin: 0px;
 }
 
-#InkSpinScale slider, #InkSpinScale highlight {
-    border-top-right-radius : 0;
-    border-bottom-right-radius : 0;
+#InkSpinScale slider,
+#InkSpinScale highlight {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
 #InkSpinScale scale {
@@ -369,11 +426,10 @@ combobox window.popup scrolledwindow treeview separator {
 }
 
 #InkSpinScale box.active {
-    box-shadow: 0 0 0 1px  rgb(74,144,217);
+    box-shadow: 0 0 0 1px rgb(74, 144, 217);
 }
 
 #InkSpinScale spinbutton entry {
-    padding : 0 ;
-    outline-style : none;
+    padding: 0;
+    outline-style: none;
 }
-
