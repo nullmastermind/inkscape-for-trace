@@ -106,7 +106,6 @@ private:
   Gtk::Label *_LPEInfo;
   Gtk::Box *_LPESelector;
   guint _visiblelpe;
-  guint _firstlpe;
   Glib::ustring _item_type;
   const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *_to_add;
   bool _showfavs;

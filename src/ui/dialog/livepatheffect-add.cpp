@@ -187,7 +187,6 @@ LivePathEffectAdd::LivePathEffectAdd()
     }
     _LPESelectorFlowBox->set_activate_on_single_click(false);
     _visiblelpe = _LPESelectorFlowBox->get_children().size();
-    _firstlpe = 0; 
     _LPEInfo->set_visible(false);
     _LPESelectorEffectEventFavShow->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(
         sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(_LPESelectorEffectEventFavShow->gobj())));
@@ -438,18 +437,12 @@ bool LivePathEffectAdd::on_filter(Gtk::FlowBoxChild *child)
             }
             if (_LPEFilter->get_text().length() < 1) {
                 _visiblelpe++;
-                if(_firstlpe == 0){
-                    _firstlpe = child->get_index();
-                }
                 return true;
             }
             if (lpename) {
                 size_t s = lpename->get_text().uppercase().find(_LPEFilter->get_text().uppercase(), 0);
                 if (s != -1) {
                     _visiblelpe++;
-                    if(_firstlpe == 0){
-                        _firstlpe = child->get_index();
-                    }
                     return true;
                 }
             }
@@ -458,9 +451,6 @@ bool LivePathEffectAdd::on_filter(Gtk::FlowBoxChild *child)
                 size_t s = lpedesc->get_text().uppercase().find(_LPEFilter->get_text().uppercase(), 0);
                 if (s != -1) {
                     _visiblelpe++;
-                    if(_firstlpe == 0){
-                        _firstlpe = child->get_index();
-                    }
                     return true;
                 }
             }
@@ -477,7 +467,6 @@ void LivePathEffectAdd::reload_effect_list()
         _LPEExperimental->get_style_context()->remove_class("active");
     } */
     _visiblelpe = 0;
-    _firstlpe = 0;
     _LPESelectorFlowBox->invalidate_filter();
     if (_showfavs) {
         if (_visiblelpe == 0) {
@@ -499,7 +488,6 @@ void LivePathEffectAdd::reload_effect_list()
 void LivePathEffectAdd::on_search()
 {
     _visiblelpe = 0;
-    _firstlpe = 0;
     _LPESelectorFlowBox->invalidate_filter();
     if (_showfavs) {
         if (_visiblelpe == 0) {
@@ -514,7 +502,6 @@ void LivePathEffectAdd::on_search()
             }
             _LPEInfo->set_visible(true);
             _LPEInfo->get_style_context()->add_class("lpeinfowarn");
-            _LPESelectorFlowBox->select_child(*_LPESelectorFlowBox->get_child_at_index(_firstlpe));
         }
     } else {
         if (_visiblelpe == 0) {
@@ -524,7 +511,6 @@ void LivePathEffectAdd::on_search()
         } else {
             _LPEInfo->set_visible(false);
             _LPEInfo->get_style_context()->remove_class("lpeinfowarn");
-            _LPESelectorFlowBox->select_child(*_LPESelectorFlowBox->get_child_at_index(_firstlpe));
         }
     }
 }
