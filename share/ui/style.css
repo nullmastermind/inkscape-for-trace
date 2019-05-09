@@ -260,7 +260,7 @@ spinbutton undershoot {
 }
 
 #LPESelectorFlowBox flowboxchild * {
-    color: @theme_selected_bg_color;
+    color: @theme_fg_color;
 }
 
 #LPESelectorFlowBox flowboxchild:selected image,
@@ -305,7 +305,7 @@ spinbutton undershoot {
 #LPEDialogSelector .searchbar entry image,
 #LPEDialogSelector .searchbar label,
 #LPEDialogSelector .searchbar #LPESelectorEffectFavShowImage {
-    color: @theme_selected_bg_color;
+    color: @theme_fg_color;
 }
 
 #XMLFlow .toggle {
