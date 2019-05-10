@@ -41,15 +41,10 @@
 #include "preferences.h"
 #include "io/sys.h"
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
 #include "cms-system.h"
 #include "color-profile.h"
-
-#if HAVE_LIBLCMS2
-#  include <lcms2.h>
-#elif HAVE_LIBLCMS1
-#  include <lcms.h>
-#endif // HAVE_LIBLCMS2
+#include <lcms2.h>
 
 //#define DEBUG_LCMS
 #ifdef DEBUG_LCMS
@@ -61,7 +56,7 @@
 #else
 #define DEBUG_MESSAGE(key, ...)
 #endif // DEBUG_LCMS
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 /*
  * SPImage
  */
@@ -125,9 +120,9 @@ SPImage::SPImage() : SPItem(), SPViewBox() {
     this->curve = nullptr;
 
     this->href = nullptr;
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
     this->color_profile = nullptr;
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
     this->pixbuf = nullptr;
 }
 
@@ -163,12 +158,12 @@ void SPImage::release() {
     delete this->pixbuf;
     this->pixbuf = nullptr;
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
     if (this->color_profile) {
         g_free (this->color_profile);
         this->color_profile = nullptr;
     }
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 
     if (this->curve) {
         this->curve = this->curve->unref();
@@ -230,7 +225,7 @@ void SPImage::set(SPAttributeEnum key, const gchar* value) {
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
             break;
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
         case SP_PROP_COLOR_PROFILE:
             if ( this->color_profile ) {
                 g_free (this->color_profile);
@@ -248,7 +243,7 @@ void SPImage::set(SPAttributeEnum key, const gchar* value) {
             this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_IMAGE_HREF_MODIFIED_FLAG);
             break;
 
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 
         default:
             SPItem::set(key, value);
@@ -259,7 +254,7 @@ void SPImage::set(SPAttributeEnum key, const gchar* value) {
 }
 
 // BLIP
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
 void SPImage::apply_profile(Inkscape::Pixbuf *pixbuf) {
 
     // TODO: this will prevent using MIME data when exporting.
@@ -327,7 +322,7 @@ void SPImage::apply_profile(Inkscape::Pixbuf *pixbuf) {
         }
     }
 }
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 
 void SPImage::update(SPCtx *ctx, unsigned int flags) {
 
@@ -348,7 +343,7 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
                                               this->getRepr()->attribute("sodipodi:absref"), doc->getDocumentBase(), svgdpi);
 
             if (pixbuf) {
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
                 if ( this->color_profile ) apply_profile( pixbuf );
 #endif
                 this->pixbuf = pixbuf;
@@ -481,11 +476,11 @@ Inkscape::XML::Node *SPImage::write(Inkscape::XML::Document *xml_doc, Inkscape::
     repr->setAttribute("inkscape:svg-dpi", this->getRepr()->attribute("inkscape:svg-dpi"));
     //XML Tree being used directly here while it shouldn't be...
     repr->setAttribute("preserveAspectRatio", this->getRepr()->attribute("preserveAspectRatio"));
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
     if (this->color_profile) {
         repr->setAttribute("color-profile", this->color_profile);
     }
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 
     SPItem::write(xml_doc, repr, flags);
 

@@ -23,9 +23,6 @@
 /* Use AutoPackage? */
 #cmakedefine ENABLE_BINRELOC 1
 
-/* define to 1 if you have lcms version 1.x */
-#cmakedefine HAVE_LIBLCMS1 1
-
 /* define to 1 if you have lcms version 2.x */
 #cmakedefine HAVE_LIBLCMS2 1
 

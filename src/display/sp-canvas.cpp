@@ -1038,10 +1038,10 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_changecursor = 0;
     bool _is_dragging;
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
     canvas->_enable_cms_display_adj = false;
     new (&canvas->_cms_key) Glib::ustring("");
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 }
 
 void SPCanvas::shutdownTransients()
@@ -1084,7 +1084,7 @@ void SPCanvas::dispose(GObject *object)
     }
 
     canvas->shutdownTransients();
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
     canvas->_cms_key.~ustring();
 #endif
     if (G_OBJECT_CLASS(sp_canvas_parent_class)->dispose) {
@@ -1871,7 +1871,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     // output to X
     cairo_destroy(buf.ct);
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
     if (_enable_cms_display_adj) {
         cmsHTRANSFORM transf = nullptr;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -1893,7 +1893,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
             cairo_surface_mark_dirty(imgs);
         }
     }
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 
     cairo_surface_mark_dirty(_backing_store);
     // cairo_surface_write_to_png( _backing_store, "debug3.png" );

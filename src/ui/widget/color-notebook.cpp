@@ -73,7 +73,7 @@ ColorNotebook::ColorNotebook(SelectedColor &color)
     _available_pages.push_back(page);
     page = new Page(new ColorWheelSelectorFactory, true);
     _available_pages.push_back(page);
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
     page = new Page(new ColorICCSelectorFactory, true);
     _available_pages.push_back(page);
 #endif
@@ -156,7 +156,7 @@ void ColorNotebook::_initUI()
 
     GtkWidget *rgbabox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
     /* Create color management icons */
     _box_colormanaged = gtk_event_box_new();
     GtkWidget *colormanaged = sp_get_icon_image("color-management", GTK_ICON_SIZE_SMALL_TOOLBAR);
@@ -178,7 +178,7 @@ void ColorNotebook::_initUI()
     gtk_widget_set_tooltip_text(_box_toomuchink, _("Too much ink!"));
     gtk_widget_set_sensitive(_box_toomuchink, false);
     gtk_box_pack_start(GTK_BOX(rgbabox), _box_toomuchink, FALSE, FALSE, 2);
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 
 
     /* Color picker */
@@ -203,10 +203,10 @@ void ColorNotebook::_initUI()
     sp_set_font_size_smaller(rgbabox);
     gtk_widget_show_all(rgbabox);
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
     // the "too much ink" icon is initially hidden
     gtk_widget_hide(GTK_WIDGET(_box_toomuchink));
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 
   #if GTK_CHECK_VERSION(3, 12, 0)
     gtk_widget_set_margin_start(rgbabox, XPAD);
@@ -269,7 +269,7 @@ void ColorNotebook::_updateICCButtons()
 
     g_return_if_fail((0.0 <= alpha) && (alpha <= 1.0));
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
     /* update color management icon*/
     gtk_widget_set_sensitive(_box_colormanaged, color.icc != nullptr);
 
@@ -305,7 +305,7 @@ void ColorNotebook::_updateICCButtons()
             gtk_widget_hide(GTK_WIDGET(_box_toomuchink));
         }
     }
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 }
 
 void ColorNotebook::_setCurrentPage(int i)

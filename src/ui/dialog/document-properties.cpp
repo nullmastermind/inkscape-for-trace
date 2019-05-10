@@ -44,9 +44,9 @@
 #include "ui/widget/notebook-page.h"
 #include "xml/node-event-vector.h"
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
 #include "object/color-profile.h"
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 
 namespace Inkscape {
 namespace UI {
@@ -160,9 +160,9 @@ DocumentProperties::DocumentProperties()
     build_guides();
     build_gridspage();
     build_snap();
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
     build_cms();
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
     build_scripting();
     build_metadata();
     _wr.setUpdating (false);
@@ -429,7 +429,7 @@ void DocumentProperties::delete_all_guides()
     }
 }
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
 /// Populates the available color profiles combo box
 void DocumentProperties::populate_available_profiles(){
     _AvailableProfilesListStore->clear(); // Clear any existing items in the combo box
@@ -791,7 +791,7 @@ void DocumentProperties::build_cms()
     _emb_profiles_observer.signal_changed().connect(sigc::mem_fun(*this, &DocumentProperties::populate_linked_profiles_box));
     onColorProfileSelectRow();
 }
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 
 void DocumentProperties::build_scripting()
 {
@@ -960,7 +960,7 @@ void DocumentProperties::build_scripting()
 
     _embed_new_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::addEmbeddedScript));
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
 
     _external_remove_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::removeExternalScript));
     _embed_remove_btn.signal_clicked().connect(sigc::mem_fun(*this, &DocumentProperties::removeEmbeddedScript));
@@ -970,7 +970,7 @@ void DocumentProperties::build_scripting()
 
     _EmbeddedScriptsList.signal_button_release_event().connect_notify(sigc::mem_fun(*this, &DocumentProperties::embedded_scripts_list_button_release));
     embedded_create_popup_menu(_EmbeddedScriptsList, sigc::mem_fun(*this, &DocumentProperties::removeEmbeddedScript));
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 
 //TODO: review this observers code:
     std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
@@ -1473,10 +1473,10 @@ void DocumentProperties::update()
 
     //------------------------------------------------Color Management page
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
     populate_linked_profiles_box();
     populate_available_profiles();
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 
     //-----------------------------------------------------------meta pages
     /* update the RDF entities */

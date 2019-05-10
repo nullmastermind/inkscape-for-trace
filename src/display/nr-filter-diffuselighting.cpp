@@ -139,7 +139,7 @@ void FilterDiffuseLighting::render_cairo(FilterSlot &slot)
     double g = SP_RGBA32_G_F(lighting_color);
     double b = SP_RGBA32_B_F(lighting_color);
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
 
     if (icc) {
         guchar ru, gu, bu;

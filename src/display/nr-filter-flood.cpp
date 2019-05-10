@@ -44,7 +44,7 @@ void FilterFlood::render_cairo(FilterSlot &slot)
     double b = SP_RGBA32_B_F(color);
     double a = opacity;
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
 
     if (icc) {
         guchar ru, gu, bu;

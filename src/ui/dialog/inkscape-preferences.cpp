@@ -1218,7 +1218,7 @@ void InkscapePreferences::initPageUI()
     initKeyboardShortcuts(iter_ui);
 }
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
 static void profileComboChanged( Gtk::ComboBoxText* combo )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -1258,7 +1258,7 @@ static void gamutColorChanged( Gtk::ColorButton* btn ) {
     prefs->setString("/options/softproof/gamutcolor", tmp);
     g_free(tmp);
 }
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 
 void InkscapePreferences::initPageIO()
 {
@@ -1396,10 +1396,10 @@ void InkscapePreferences::initPageIO()
     Glib::ustring intentLabels[numIntents] = {_("Perceptual"), _("Relative Colorimetric"), _("Saturation"), _("Absolute Colorimetric")};
     int intentValues[numIntents] = {0, 1, 2, 3};
 
-#if !defined(HAVE_LIBLCMS1) && !defined(HAVE_LIBLCMS2)
+#if !defined(HAVE_LIBLCMS2)
     Gtk::Label* lbl = new Gtk::Label(_("(Note: Color management has been disabled in this build)"));
     _page_cms.add_line( false, "", *lbl, "", "", true);
-#endif // !defined(HAVE_LIBLCMS1) && !defined(HAVE_LIBLCMS2)
+#endif // !defined(HAVE_LIBLCMS2)
 
     _page_cms.add_group_header( _("Display adjustment"));
 
@@ -1475,7 +1475,7 @@ void InkscapePreferences::initPageIO()
 #endif // !defined(cmsFLAGS_PRESERVEBLACK)
 
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
     {
         std::vector<Glib::ustring> names = ::Inkscape::CMSSystem::getDisplayNames();
         Glib::ustring current = prefs->getString( "/options/displayprofile/uri" );
@@ -1524,7 +1524,7 @@ void InkscapePreferences::initPageIO()
     _cms_proof_profile.set_sensitive( false );
     _cms_proof_blackpoint.set_sensitive( false );
     _cms_proof_preserveblack.set_sensitive( false );
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 
     this->AddPage(_page_cms, _("Color management"), iter_io, PREFS_PAGE_IO_CMS);
 

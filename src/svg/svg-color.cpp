@@ -33,7 +33,7 @@
 #include "svg-icc-color.h"
 
 #include "color.h"
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
 
 #include <vector>
 #include "object/color-profile.h"
@@ -41,7 +41,7 @@
 #include "document.h"
 #include "inkscape.h"
 #include "profile-manager.h"
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 
 #include "cms-system.h"
 
@@ -508,7 +508,7 @@ sp_svg_create_color_hash()
     return colors;
 }
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
 
 void icc_color_to_sRGB(SVGICCColor* icc, guchar* r, guchar* g, guchar* b)
 {
@@ -538,7 +538,7 @@ g_message("transform to sRGB done");
         }
     }
 }
-#endif //defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif //defined(HAVE_LIBLCMS2)
 
 /*
  * Some discussion at http://markmail.org/message/bhfvdfptt25kgtmj

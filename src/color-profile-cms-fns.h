@@ -16,15 +16,13 @@
 
 #if HAVE_LIBLCMS2
 #  include <lcms2.h>
-#elif HAVE_LIBLCMS1
-#  include <lcms.h>
 #endif // HAVE_LIBLCMS2
 
 #include "cms-color-types.h"
 
 namespace Inkscape {
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
 
 // Note: these can later be adjusted to adapt for lcms2:
 
@@ -47,7 +45,7 @@ public :
 cmsColorSpaceSignature asICColorSpaceSig(ColorSpaceSig const & sig);
 cmsProfileClassSignature asICColorProfileClassSig(ColorProfileClassSig const & sig);
 
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 
 } // namespace Inkscape
 

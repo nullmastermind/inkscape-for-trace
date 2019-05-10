@@ -269,10 +269,10 @@ public:
     int _rendermode;
     int _colorrendermode;
 
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#if defined(HAVE_LIBLCMS2)
     bool _enable_cms_display_adj;
     Glib::ustring _cms_key;
-#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS2)
 
     bool _is_scrolling;
 };
