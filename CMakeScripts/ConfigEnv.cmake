@@ -19,7 +19,7 @@ if(WIN32)
   option(ENABLE_NLS "Compile with Native Language Support (using gettext)" ON)
 
   # Does not compile on Windows with these options.
-  option(ENABLE_BINRELOC "Use AutoPackage" OFF)
+  option(ENABLE_BINRELOC "Compile with binary relocation support" OFF)
   option(WITH_JEMALLOC "Compile with JEMALLOC support" OFF)
 endif()
 
