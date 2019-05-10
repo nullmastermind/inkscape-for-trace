@@ -385,7 +385,7 @@ if(NOT WIN32)
     inkview 
     RUNTIME DESTINATION bin)
   if(BUILD_SHARED_LIBS)
-    install(TARGETS inkscape_base LIBRARY DESTINATION lib/inkscape)
+    install(TARGETS inkscape_base LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/inkscape)
   endif()
 else()
   install(TARGETS

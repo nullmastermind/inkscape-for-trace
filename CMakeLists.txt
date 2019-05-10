@@ -30,6 +30,7 @@ set(CMAKE_BUILD_TYPE_INIT "Release")
 
 include(CMakeScripts/HelperFunctions.cmake)
 include(CMakeScripts/ConfigEnv.cmake)
+include(GNUInstallDirs) # for the CMAKE_INSTALL_LIBDIR variable
 
 project(inkscape)
 
@@ -54,9 +55,9 @@ set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 
 if(APPLE)
     SET(CMAKE_MACOSX_RPATH TRUE)
-    SET(CMAKE_INSTALL_RPATH "@loader_path/../lib/inkscape")
+    SET(CMAKE_INSTALL_RPATH "@loader_path/../${CMAKE_INSTALL_LIBDIR}/inkscape")
 else()
-    SET(CMAKE_INSTALL_RPATH "$ORIGIN/../lib/inkscape")
+    SET(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}/inkscape")
 endif()
 
 # this can be removed if/when cmake 3.1 is made the minimum required version
@@ -91,8 +92,8 @@ set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING
 # Redirect output files
 # -----------------------------------------------------------------------------
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin CACHE PATH "Output directory for runtime binaries")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib CACHE PATH "Output directory for shared libraries")
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib CACHE PATH "Output directory for static libraries")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR} CACHE PATH "Output directory for shared libraries")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR} CACHE PATH "Output directory for static libraries")
 
 # -----------------------------------------------------------------------------
 # Options
@@ -275,6 +276,7 @@ message("")
 # cmake info
 message("CMAKE_BINARY_DIR:        ${CMAKE_BINARY_DIR}")
 message("CMAKE_INSTALL_PREFIX:    ${CMAKE_INSTALL_PREFIX}")
+message("CMAKE_INSTALL_LIBDIR:    ${CMAKE_INSTALL_LIBDIR}")
 message("PACKAGE_LOCALE_DIR       ${PACKAGE_LOCALE_DIR}")
 message("CMAKE_SYSTEM_NAME:       ${CMAKE_SYSTEM_NAME}")
 message("CMAKE_SYSTEM_VERSION:    ${CMAKE_SYSTEM_VERSION}")
