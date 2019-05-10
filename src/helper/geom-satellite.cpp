@@ -100,7 +100,11 @@ double Satellite::radToLen(
     Geom::Piecewise<Geom::D2<Geom::SBasis> > offset_curve1 =
         Geom::Piecewise<Geom::D2<Geom::SBasis> >(d2_out) +
         rot90(unitVector(derivative(d2_out))) * (A);
+    offset_curve0[0][0].normalize();
+    offset_curve0[0][1].normalize();
     Geom::Path p0 = path_from_piecewise(offset_curve0, 0.1)[0];
+    offset_curve1[0][0].normalize();
+    offset_curve1[0][1].normalize();
     Geom::Path p1 = path_from_piecewise(offset_curve1, 0.1)[0];
     Geom::Crossings cs = Geom::crossings(p0, p1);
     if (cs.size() > 0) {
