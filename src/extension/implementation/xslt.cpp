@@ -163,7 +163,18 @@ SPDocument * XSLT::open(Inkscape::Extension::Input */*module*/,
 void XSLT::save(Inkscape::Extension::Output *module, SPDocument *doc, gchar const *filename)
 {
     /* TODO: Should we assume filename to be in utf8 or to be a raw filename?
-     * See JavaFXOutput::save for discussion. */
+     * See JavaFXOutput::save for discussion.
+     *
+     * From JavaFXOutput::save (now removed):
+     * ---
+     * N.B. The name `filename_utf8' represents the fact that we want it to be in utf8; whereas in
+     * fact we know that some callers of Extension::save pass something in the filesystem's
+     * encoding, while others do g_filename_to_utf8 before calling.
+     *
+     * In terms of safety, it's best to make all callers pass actual filenames, since in general
+     * one can't round-trip from filename to utf8 back to the same filename.  Whereas the argument
+     * for passing utf8 filenames is one of convenience: we often want to pass to g_warning or
+     * store as a string (rather than a byte stream) in XML, or the like. */
     g_return_if_fail(doc != nullptr);
     g_return_if_fail(filename != nullptr);
 

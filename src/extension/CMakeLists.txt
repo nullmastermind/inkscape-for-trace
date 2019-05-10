@@ -50,7 +50,6 @@ set(extension_SRC
 	internal/odf.cpp
 	internal/latex-text-renderer.cpp
 	internal/pov-out.cpp
-	internal/javafx-out.cpp
 	internal/svg.cpp
 	internal/svgz.cpp
 	internal/text_reassemble.c
@@ -123,7 +122,6 @@ set(extension_SRC
 	internal/gimpgrad.h
 	internal/grid.h
 	internal/image-resolution.h
-	internal/javafx-out.h
 	internal/latex-pstricks-out.h
 	internal/latex-pstricks.h
 	internal/latex-text-renderer.h

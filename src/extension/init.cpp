@@ -45,7 +45,6 @@
 # include "internal/cairo-ps-out.h"
 #endif
 #include "internal/pov-out.h"
-#include "internal/javafx-out.h"
 #include "internal/odf.h"
 #include "internal/latex-pstricks-out.h"
 #include "internal/latex-pstricks.h"
@@ -170,7 +169,6 @@ init()
     Internal::PrintWmf::init();
     Internal::Wmf::init();
     Internal::PovOutput::init();
-    Internal::JavaFXOutput::init();
     Internal::OdfOutput::init();
     Internal::PrintLatex::init();
     Internal::LatexOutput::init();
