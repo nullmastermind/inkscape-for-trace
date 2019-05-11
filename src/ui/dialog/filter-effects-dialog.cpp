@@ -983,8 +983,9 @@ private:
         Gtk::HBox *hb = Gtk::manage(new Gtk::HBox);
         hb->set_spacing(12);
 
-        if(label != "") {
-            Gtk::Label *lbl = Gtk::manage(new Gtk::Label(label, 0.0, 0.5));
+        if (label != "") {
+            Gtk::Label *lbl = Gtk::manage(new Gtk::Label(label));
+            lbl->set_xalign(0.0);
             hb->pack_start(*lbl, Gtk::PACK_SHRINK);
             _size_group->add_widget(*lbl);
         }
@@ -1156,10 +1157,11 @@ public:
         : AttrWidget(SP_ATTR_INVALID),
           _dialog(d),
           _settings(d, _box, sigc::mem_fun(_dialog, &FilterEffectsDialog::set_child_attr_direct), LIGHT_ENDSOURCE),
-          _light_label(_("Light Source:"), 0.0, 0.5),
+          _light_label(_("Light Source:")),
           _light_source(LightSourceConverter),
           _locked(false)
     {
+        _light_label.set_xalign(0.0);
         _settings._size_group->add_widget(_light_label);
         _light_box.pack_start(_light_label, Gtk::PACK_SHRINK);
         _light_box.pack_start(_light_source, Gtk::PACK_EXPAND_WIDGET);
