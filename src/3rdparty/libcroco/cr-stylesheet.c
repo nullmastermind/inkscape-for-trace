@@ -199,9 +199,10 @@ cr_stylesheet_append_import (CRStyleSheet * a_this, CRStyleSheet * a_new_import)
 
         g_return_val_if_fail (a_new_import, NULL);
 
-        if (a_this->import == NULL)
+        if (a_this->import == NULL) {
                 a_this->import = a_new_import;
                 return a_this;
+        }
 
         for (cur = a_this->import; cur->next; cur = cur->next) ;
 
