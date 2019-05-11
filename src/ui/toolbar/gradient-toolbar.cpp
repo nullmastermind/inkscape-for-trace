@@ -749,7 +749,6 @@ GradientToolbar::stop_set_offset()
 
     _offset_adj->set_value(stop->offset);
     _offset_item->set_sensitive( !isEndStop );
-    _offset_adj->changed();
 }
 
 /**
