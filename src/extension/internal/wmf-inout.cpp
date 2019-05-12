@@ -493,6 +493,7 @@ uint32_t Wmf::add_dib_image(PWMF_CALLBACK_DATA d, const char *dib, uint32_t iUsa
         base64String = bad_image_png();
     }
     idx = in_images(d, (char *) base64String);
+    auto & defs = d->defs;
     if(!idx){  // add it if not already present - we looked at the actual data for comparison
         if(d->images.count == d->images.size){  enlarge_images(d); }
         idx = d->images.count;
@@ -501,35 +502,35 @@ uint32_t Wmf::add_dib_image(PWMF_CALLBACK_DATA d, const char *dib, uint32_t iUsa
         sprintf(imagename,"WMFimage%d",idx++);
         sprintf(xywh," x=\"0\" y=\"0\" width=\"%d\" height=\"%d\" ",width,height); // reuse this buffer
 
-        d->defs += "\n";
-        d->defs += "   <image id=\"";
-        d->defs += imagename;
-        d->defs += "\"\n      ";
-        d->defs += xywh;
-        d->defs += "\n";
-        if(dibparams == U_BI_JPEG){    d->defs += "       xlink:href=\"data:image/jpeg;base64,"; }
-        else {                         d->defs += "       xlink:href=\"data:image/png;base64,";  }
-        d->defs += base64String;
-        d->defs += "\"\n";
-        d->defs += " preserveAspectRatio=\"none\"\n";
-        d->defs += "   />\n";
+        defs += "\n";
+        defs += "   <image id=\"";
+        defs += imagename;
+        defs += "\"\n      ";
+        defs += xywh;
+        defs += "\n";
+        if(dibparams == U_BI_JPEG){    defs += "       xlink:href=\"data:image/jpeg;base64,"; }
+        else {                         defs += "       xlink:href=\"data:image/png;base64,";  }
+        defs += base64String;
+        defs += "\"\n";
+        defs += " preserveAspectRatio=\"none\"\n";
+        defs += "   />\n";
 
 
-        d->defs += "\n";
-        d->defs += "   <pattern id=\"";
-        d->defs += imagename;
-        d->defs += "_ref\"\n      ";
-        d->defs += xywh;
-        d->defs += "\n       patternUnits=\"userSpaceOnUse\"";
-        d->defs += " >\n";
-        d->defs += "      <use id=\"";
-        d->defs += imagename;
-        d->defs += "_ign\" ";
-        d->defs += " xlink:href=\"#";
-        d->defs += imagename;
-        d->defs += "\" />\n";
-        d->defs += "    ";
-        d->defs += "   </pattern>\n";
+        defs += "\n";
+        defs += "   <pattern id=\"";
+        defs += imagename;
+        defs += "_ref\"\n      ";
+        defs += xywh;
+        defs += "\n       patternUnits=\"userSpaceOnUse\"";
+        defs += " >\n";
+        defs += "      <use id=\"";
+        defs += imagename;
+        defs += "_ign\" ";
+        defs += " xlink:href=\"#";
+        defs += imagename;
+        defs += "\" />\n";
+        defs += "    ";
+        defs += "   </pattern>\n";
     }
     g_free(base64String); //wait until this point to free because it might be a duplicate image
     return(idx-1);
@@ -589,6 +590,7 @@ uint32_t Wmf::add_bm16_image(PWMF_CALLBACK_DATA d, U_BITMAP16 Bm16, const char *
     }
 
     idx = in_images(d, (char *) base64String);
+    auto & defs = d->defs;
     if(!idx){  // add it if not already present - we looked at the actual data for comparison
         if(d->images.count == d->images.size){  enlarge_images(d); }
         idx = d->images.count;
@@ -597,33 +599,33 @@ uint32_t Wmf::add_bm16_image(PWMF_CALLBACK_DATA d, U_BITMAP16 Bm16, const char *
         sprintf(imagename,"WMFimage%d",idx++);
         sprintf(xywh," x=\"0\" y=\"0\" width=\"%d\" height=\"%d\" ",width,height); // reuse this buffer
 
-        d->defs += "\n";
-        d->defs += "   <image id=\"";
-        d->defs += imagename;
-        d->defs += "\"\n      ";
-        d->defs += xywh;
-        d->defs += "\n";
-        d->defs += "       xlink:href=\"data:image/png;base64,";
-        d->defs += base64String;
-        d->defs += "\"\n";
-        d->defs += " preserveAspectRatio=\"none\"\n";
-        d->defs += "   />\n";
+        defs += "\n";
+        defs += "   <image id=\"";
+        defs += imagename;
+        defs += "\"\n      ";
+        defs += xywh;
+        defs += "\n";
+        defs += "       xlink:href=\"data:image/png;base64,";
+        defs += base64String;
+        defs += "\"\n";
+        defs += " preserveAspectRatio=\"none\"\n";
+        defs += "   />\n";
 
 
-        d->defs += "\n";
-        d->defs += "   <pattern id=\"";
-        d->defs += imagename;
-        d->defs += "_ref\"\n      ";
-        d->defs += xywh;
-        d->defs += "\n       patternUnits=\"userSpaceOnUse\"";
-        d->defs += " >\n";
-        d->defs += "      <use id=\"";
-        d->defs += imagename;
-        d->defs += "_ign\" ";
-        d->defs += " xlink:href=\"#";
-        d->defs += imagename;
-        d->defs += "\" />\n";
-        d->defs += "   </pattern>\n";
+        defs += "\n";
+        defs += "   <pattern id=\"";
+        defs += imagename;
+        defs += "_ref\"\n      ";
+        defs += xywh;
+        defs += "\n       patternUnits=\"userSpaceOnUse\"";
+        defs += " >\n";
+        defs += "      <use id=\"";
+        defs += imagename;
+        defs += "_ign\" ";
+        defs += " xlink:href=\"#";
+        defs += imagename;
+        defs += "\" />\n";
+        defs += "   </pattern>\n";
     }
     g_free(base64String); //wait until this point to free because it might be a duplicate image
     return(idx-1);
