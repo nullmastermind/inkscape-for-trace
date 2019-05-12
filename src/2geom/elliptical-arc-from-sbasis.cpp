@@ -304,7 +304,6 @@ bool make_elliptical_arc::make_elliptiarc()
 
     Point inner_point = curve(0.5);
 
-#if __cplusplus >= 201100L
     std::unique_ptr<EllipticalArc> arc( e.arc(initial_point, inner_point, final_point) );
     ea = *arc;
 
