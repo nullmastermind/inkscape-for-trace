@@ -84,7 +84,6 @@ private:
     MessageParam helpdata;
     Glib::ustring display_unit;
     bool locked_pagenumber;
-    double doc_scale;
     double fontsize;
     double anotation_width;
     double previous_size;

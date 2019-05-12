@@ -450,7 +450,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         rtext->addChild(rtspan, nullptr);
         Inkscape::GC::release(rtspan);
     }
-    length = Inkscape::Util::Quantity::convert(length / doc_scale, display_unit.c_str(), unit.get_abbreviation());
+    length = Inkscape::Util::Quantity::convert(length, display_unit.c_str(), unit.get_abbreviation());
     if (local_locale) {
         setlocale (LC_NUMERIC, "");
     } else {
@@ -619,7 +619,7 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring 
     std::stringstream stroke_w;
     setlocale (LC_NUMERIC, "C");
     
-    double stroke_width = Inkscape::Util::Quantity::convert(line_width / doc_scale, "mm", display_unit.c_str());
+    double stroke_width = Inkscape::Util::Quantity::convert(line_width, unit.get_abbreviation(), display_unit.c_str());
     stroke_w <<  stroke_width;
     setlocale (LC_NUMERIC, locale_base);
     style  += "stroke-width:";
@@ -797,7 +797,7 @@ getNodes(SPItem * item, Geom::Affine transform, bool onbbox, bool centers, bool 
         onbbox = true;
     }
     if (onbbox || centers) {
-        Geom::OptRect bbox = item->geometricBounds(item->transform);
+        Geom::OptRect bbox = item->geometricBounds();
         if (bbox && onbbox) {
             current_nodes.push_back((*bbox).corner(0) * transform);
             current_nodes.push_back((*bbox).corner(1) * transform);
@@ -832,6 +832,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
     }
     Geom::Affine parentaffinetransform = i2anc_affine(SP_OBJECT(lpeitem->parent), SP_OBJECT(document->getRoot()));
     Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(document->getRoot()));
+    Geom::Affine itemtransform = affinetransform * parentaffinetransform.inverse();
     //Projection prepare
     Geom::PathVector pathvector;
     std::vector< Point > nodes;
@@ -841,21 +842,17 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         if (bbox) {
             Geom::Point mid =  bbox->midpoint();
             double angle = Geom::rad_from_deg(angle_projection);
-            Geom::Affine transform = affinetransform;
+            Geom::Affine transform = itemtransform;
             transform *= Geom::Translate(mid).inverse();
             transform *= Geom::Rotate(angle).inverse();
             transform *= Geom::Translate(mid);
             std::vector< Point > current_nodes = getNodes(splpeitem, transform, onbbox, centers, bboxonly);
             nodes.insert(nodes.end(),current_nodes.begin(), current_nodes.end());
             std::vector<Point> result;
-            Geom::OptRect bbox = sp_lpe_item->geometricBounds(sp_lpe_item->transform);
             Geom::Point pojpoint = Geom::Point();
             double maxdistance = -std::numeric_limits<double>::max();
             for (auto & node : nodes) {
                 Geom::Point point = node;
-                point *= Geom::Translate(mid).inverse();
-                point *= Geom::Rotate(angle).inverse();
-                point *= Geom::Translate(mid);
                 if (point[Geom::X] > maxdistance) {
                     maxdistance = point[Geom::X];
                 }
@@ -883,12 +880,14 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                 result.emplace_back(xpos, point[Geom::Y]);
             }
             std::sort (result.begin(), result.end(), sortPoints);
+            result.erase( unique(result.begin(), result.end() ), result.end() );
             Geom::Path path;
             Geom::Point prevpoint(0,0);
             size_t counter = 0;
             bool started = false;
+            Geom::Point point = Geom::Point();
             for (auto & iter : result) {
-                Geom::Point point = iter;
+                point = iter;
                 if (Geom::are_near(prevpoint, point)){
                     continue;
                 }
@@ -903,7 +902,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                 prevpoint = point;
             }
             if (maxmin) {
-                path.appendNew<Geom::LineSegment>(result[result.size()-1]);
+               path.appendNew<Geom::LineSegment>(point);
             }
             pathvector.push_back(path);
             pathvector *= Geom::Translate(-mid);
@@ -916,14 +915,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
     SPShape *shape = dynamic_cast<SPShape *>(splpeitem);
     if (shape) {
         //only check constrain viewbox on X
-        Geom::Scale scaledoc = document->getDocumentScale();
         display_unit = document->getDisplayUnit()->abbr.c_str();
-        doc_scale = Inkscape::Util::Quantity::convert( scaledoc[Geom::X], "px", display_unit.c_str() );
-        if (doc_scale > 0) {
-            doc_scale= 1.0/doc_scale;
-        } else {
-            doc_scale = 1.0;
-        }
         guint32 color32 = coloropacity.get_value();
         bool colorchanged = false;
         if (color32 != rgb32) {
@@ -1213,14 +1205,14 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     } else {
                         createTextLabel(pos, counter, length, angle, remove, true);
                     }
-                    arrow_gap = 8 * Inkscape::Util::Quantity::convert(line_width / doc_scale, "mm", display_unit.c_str());
+                    arrow_gap = 8 * Inkscape::Util::Quantity::convert(line_width, unit.get_abbreviation(), display_unit.c_str());
                     SPCSSAttr *css = sp_repr_css_attr_new();
 
                     setlocale (LC_NUMERIC, "C");
                     double width_line =  atof(sp_repr_css_property(css,"stroke-width","-1"));
                     setlocale (LC_NUMERIC, locale_base);
                     if (width_line > -0.0001) {
-                         arrow_gap = 8 * Inkscape::Util::Quantity::convert(width_line/ doc_scale, "mm", display_unit.c_str());
+                         arrow_gap = 8 * Inkscape::Util::Quantity::convert(width_line, unit.get_abbreviation(), display_unit.c_str());
                     }
                     if(flip_side) {
                        arrow_gap *= -1;
