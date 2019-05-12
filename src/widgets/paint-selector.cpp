@@ -1388,20 +1388,20 @@ gboolean SPPaintSelector::isSeparator (GtkTreeModel *model, GtkTreeIter *iter, g
 SPPattern *SPPaintSelector::getPattern()
 {
     SPPattern *pat = nullptr;
-    g_return_val_if_fail((mode == MODE_PATTERN) , NULL);
+    g_return_val_if_fail(mode == MODE_PATTERN, NULL);
 
     GtkWidget *combo = GTK_WIDGET(g_object_get_data(G_OBJECT(this), "patternmenu"));
 
     /* no pattern menu if we were just selected */
-    if ( combo == nullptr ) {
+    if (combo == nullptr) {
         return nullptr;
     }
 
     GtkTreeModel *store = gtk_combo_box_get_model(GTK_COMBO_BOX(combo));
 
     /* Get the selected pattern */
-    GtkTreeIter  iter;
-    if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX(combo), &iter) ||
+    GtkTreeIter iter;
+    if (!gtk_combo_box_get_active_iter(GTK_COMBO_BOX(combo), &iter) ||
             !gtk_list_store_iter_is_valid(GTK_LIST_STORE(store), &iter)) {
         return nullptr;
     }
@@ -1409,18 +1409,21 @@ SPPattern *SPPaintSelector::getPattern()
     gchar *patid = nullptr;
     gboolean stockid = FALSE;
     gchar *label = nullptr;
-    gtk_tree_model_get (store, &iter, COMBO_COL_LABEL, &label, COMBO_COL_STOCK, &stockid, COMBO_COL_PATTERN, &patid,  -1);
+    gtk_tree_model_get(store, &iter,
+                       COMBO_COL_LABEL, &label,
+                       COMBO_COL_STOCK, &stockid,
+                       COMBO_COL_PATTERN, &patid,  -1);
+
     if (patid == nullptr) {
         return nullptr;
     }
 
-    if (strcmp(patid, "none")){
-
+    if (strcmp(patid, "none") != 0) {
         gchar *paturn;
+
         if (stockid) {
-            paturn = g_strconcat("urn:inkscape:pattern:",patid,NULL);
-        }
-        else {
+            paturn = g_strconcat("urn:inkscape:pattern:", patid, NULL);
+        } else {
             paturn = g_strdup(patid);
         }
         SPObject *pat_obj = get_stock_item(paturn);
@@ -1429,11 +1432,12 @@ SPPattern *SPPaintSelector::getPattern()
         }
         g_free(paturn);
     } else {
-        pat = SP_PATTERN(patid)->rootPattern();
-    }
+        SPDocument *doc = SP_ACTIVE_DOCUMENT;
+        SPObject *pat_obj = doc->getObjectById(patid);
 
-    if (pat && !SP_IS_PATTERN(pat)) {
-        pat = nullptr;
+        if (pat_obj && SP_IS_PATTERN(pat_obj)) {
+            pat = SP_PATTERN(pat_obj)->rootPattern();
+        }
     }
 
     return pat;
