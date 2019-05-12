@@ -141,11 +141,13 @@ URL_INKSCAPE=https://gitlab.com/inkscape/inkscape
 # download the icns from the original "macOS Inkscape build and package"
 # repository.
 URL_INKSCAPE_ICNS=https://github.com/dehesselle/mibap/raw/master/inkscape.icns
+URL_LCMS2=https://netcologne.dl.sourceforge.net/project/lcms/lcms/2.9/lcms2-2.9.tar.gz
 URL_LIBPSL=https://github.com/rockdaboot/libpsl/releases/download/libpsl-0.20.2/libpsl-0.20.2.tar.gz
 URL_LIBSOUP=https://ftp.gnome.org/pub/GNOME/sources/libsoup/2.65/libsoup-2.65.92.tar.xz
 URL_OPENJPEG=https://github.com/uclouvain/openjpeg/archive/v2.3.0.tar.gz
 URL_OPENSSL=https://www.openssl.org/source/openssl-1.1.1b.tar.gz
 URL_POPPLER=https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-0.74.0/poppler-poppler-0.74.0.tar.gz
+URL_POTRACE=http://potrace.sourceforge.net/download/1.15/potrace-1.15.tar.gz
 # A pre-built version of the complete toolset.
-URL_TOOLSET_CACHE=https://github.com/dehesselle/mibap/releases/download/v0.7/mibap_v0.7.tar.xz
+URL_TOOLSET_CACHE=https://github.com/dehesselle/mibap/releases/download/v0.9/mibap_v0.9.tar.xz
 

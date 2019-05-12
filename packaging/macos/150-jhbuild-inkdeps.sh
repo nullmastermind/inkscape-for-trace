@@ -41,6 +41,11 @@ get_source $URL_BOOST
 jhbuild run ./bootstrap.sh --prefix=$OPT_DIR
 jhbuild run ./b2 -j$CORES install
 
+### install little CMS colore engine v2 ########################################
+
+get_source $URL_LCMS2
+configure_make_makeinstall
+
 ### install OpenJPEG ###########################################################
 
 get_source $URL_OPENJPEG
@@ -62,4 +67,9 @@ make install
 
 get_source $URL_DOUBLE_CONVERSION
 cmake_make_makeinstall
+
+### install Potrace ############################################################
+
+get_source $URL_POTRACE
+configure_make_makeinstall --with-libpotrace
 

@@ -110,6 +110,8 @@ for file in ./*.conf; do
   ln -sf ../../../share/fontconfig/conf.avail/$(basename $file)
 done
 
+# Set environment variable so fontconfig looks in the right place for its
+# files. (https://www.freedesktop.org/software/fontconfig/fontconfig-user.html)
 insert_before $APP_EXE_DIR/Inkscape '\$EXEC' \
   'export FONTCONFIG_PATH=$bundle_res/etc/fonts'
 
@@ -119,5 +121,7 @@ cp $SELF_DIR/fonts.conf $APP_ETC_DIR/fonts
 
 ### GIO modules path ###########################################################
 
+# Set environment variable for GIO to find its modules.
+# (https://developer.gnome.org/gio//2.52/running-gio-apps.html)
 insert_before $APP_EXE_DIR/Inkscape '\$EXEC' 'export GIO_MODULE_DIR=$bundle_lib/gio/modules'
 
