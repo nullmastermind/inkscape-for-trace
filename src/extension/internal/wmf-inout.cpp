@@ -238,6 +238,7 @@ uint32_t Wmf::add_hatch(PWMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
             sprintf(tmpcolor,"%6.6X",sethexcolor(hatchColor));
             break;
     }
+    auto & defs = d->defs;
 
     /*  For both bkMode types set the PATH + FOREGROUND COLOR for the indicated standard hatch.
         This will be used late to compose, or recompose  the transparent or opaque final hatch.*/
@@ -249,54 +250,54 @@ uint32_t Wmf::add_hatch(PWMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
         if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
         d->hatches.strings[d->hatches.count++]=strdup(hpathname);
 
-        d->defs += "\n";
+        defs += "\n";
         switch(hatchType){
             case U_HS_HORIZONTAL:
-                d->defs += "   <path id=\"";
-                d->defs += hpathname;
-                d->defs += "\" d=\"M 0 0 6 0\" style=\"fill:none;stroke:#";
-                d->defs += tmpcolor;
-                d->defs += "\" />\n";
+                defs += "   <path id=\"";
+                defs += hpathname;
+                defs += "\" d=\"M 0 0 6 0\" style=\"fill:none;stroke:#";
+                defs += tmpcolor;
+                defs += "\" />\n";
                 break;
             case U_HS_VERTICAL:
-                d->defs += "   <path id=\"";
-                d->defs += hpathname;
-                d->defs += "\" d=\"M 0 0 0 6\" style=\"fill:none;stroke:#";
-                d->defs += tmpcolor;
-                d->defs += "\" />\n";
+                defs += "   <path id=\"";
+                defs += hpathname;
+                defs += "\" d=\"M 0 0 0 6\" style=\"fill:none;stroke:#";
+                defs += tmpcolor;
+                defs += "\" />\n";
                 break;
             case U_HS_FDIAGONAL:
-                d->defs += "   <line  id=\"sub";
-                d->defs += hpathname;
-                d->defs += "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#";
-                d->defs += tmpcolor;
-                d->defs += "\"/>\n";
+                defs += "   <line  id=\"sub";
+                defs += hpathname;
+                defs += "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#";
+                defs += tmpcolor;
+                defs += "\"/>\n";
                 break;
             case U_HS_BDIAGONAL:
-                d->defs += "   <line  id=\"sub";
-                d->defs += hpathname;
-                d->defs += "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#";
-                d->defs += tmpcolor;
-                d->defs += "\"/>\n";
+                defs += "   <line  id=\"sub";
+                defs += hpathname;
+                defs += "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#";
+                defs += tmpcolor;
+                defs += "\"/>\n";
                 break;
             case U_HS_CROSS:
-                d->defs += "   <path   id=\"";
-                d->defs += hpathname;
-                d->defs += "\" d=\"M 0 0 6 0 M 0 0 0 6\" style=\"fill:none;stroke:#";
-                d->defs += tmpcolor;
-                d->defs += "\" />\n";
+                defs += "   <path   id=\"";
+                defs += hpathname;
+                defs += "\" d=\"M 0 0 6 0 M 0 0 0 6\" style=\"fill:none;stroke:#";
+                defs += tmpcolor;
+                defs += "\" />\n";
                  break;
             case U_HS_DIAGCROSS:
-                d->defs += "   <line   id=\"subfd";
-                d->defs += hpathname;
-                d->defs += "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#";
-                d->defs += tmpcolor;
-                d->defs += "\"/>\n";
-                d->defs += "   <line   id=\"subbd";
-                d->defs += hpathname;
-                d->defs += "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#";
-                d->defs += tmpcolor;
-                d->defs += "\"/>\n";
+                defs += "   <line   id=\"subfd";
+                defs += hpathname;
+                defs += "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#";
+                defs += tmpcolor;
+                defs += "\"/>\n";
+                defs += "   <line   id=\"subbd";
+                defs += hpathname;
+                defs += "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#";
+                defs += tmpcolor;
+                defs += "\"/>\n";
                 break;
             case U_HS_SOLIDCLR:
             case U_HS_DITHEREDCLR:
@@ -305,12 +306,12 @@ uint32_t Wmf::add_hatch(PWMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
             case U_HS_SOLIDBKCLR:
             case U_HS_DITHEREDBKCLR:
             default:
-                d->defs += "   <path   id=\"";
-                d->defs += hpathname;
-                d->defs += "\" d=\"M 0 0 6 0 6 6 0 6 z\" style=\"fill:#";
-                d->defs += tmpcolor;
-                d->defs += ";stroke:none";
-                d->defs += "\" />\n";
+                defs += "   <path   id=\"";
+                defs += hpathname;
+                defs += "\" d=\"M 0 0 6 0 6 6 0 6 z\" style=\"fill:#";
+                defs += tmpcolor;
+                defs += ";stroke:none";
+                defs += "\" />\n";
                 break;
         }
     }
@@ -372,12 +373,12 @@ uint32_t Wmf::add_hatch(PWMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
         if(!idx){  // add it if not already present
             if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
             d->hatches.strings[d->hatches.count++]=strdup(hatchname);
-            d->defs += "\n";
-            d->defs += "   <pattern id=\"";
-            d->defs += hatchname;
-            d->defs += "\"  xlink:href=\"#WMFhbasepattern\">\n";
-            d->defs += refpath;
-            d->defs += "   </pattern>\n";
+            defs += "\n";
+            defs += "   <pattern id=\"";
+            defs += hatchname;
+            defs += "\"  xlink:href=\"#WMFhbasepattern\">\n";
+            defs += refpath;
+            defs += "   </pattern>\n";
             idx = d->hatches.count;
         }
     }
@@ -390,12 +391,12 @@ uint32_t Wmf::add_hatch(PWMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
             if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
             d->hatches.strings[d->hatches.count++]=strdup(hbkname);
 
-            d->defs += "\n";
-            d->defs += "   <rect id=\"";
-            d->defs += hbkname;
-            d->defs += "\" x=\"0\" y=\"0\" width=\"6\" height=\"6\" fill=\"#";
-            d->defs += bkcolor;
-            d->defs += "\" />\n";
+            defs += "\n";
+            defs += "   <rect id=\"";
+            defs += hbkname;
+            defs += "\" x=\"0\" y=\"0\" width=\"6\" height=\"6\" fill=\"#";
+            defs += bkcolor;
+            defs += "\" />\n";
         }
 
         // this is the pattern, its name will show up in Inkscape's pattern selector
@@ -404,15 +405,15 @@ uint32_t Wmf::add_hatch(PWMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
         if(!idx){  // add it if not already present
             if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
             d->hatches.strings[d->hatches.count++]=strdup(hatchname);
-            d->defs += "\n";
-            d->defs += "   <pattern id=\"";
-            d->defs += hatchname;
-            d->defs += "\"  xlink:href=\"#WMFhbasepattern\">\n";
-            d->defs += "      <use xlink:href=\"#";
-            d->defs += hbkname;
-            d->defs += "\" />\n";
-            d->defs += refpath;
-            d->defs += "   </pattern>\n";
+            defs += "\n";
+            defs += "   <pattern id=\"";
+            defs += hatchname;
+            defs += "\"  xlink:href=\"#WMFhbasepattern\">\n";
+            defs += "      <use xlink:href=\"#";
+            defs += hbkname;
+            defs += "\" />\n";
+            defs += refpath;
+            defs += "   </pattern>\n";
             idx = d->hatches.count;
         }
     }
