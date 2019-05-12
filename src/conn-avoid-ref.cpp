@@ -285,14 +285,18 @@ static Avoid::Polygon avoid_item_poly(SPItem const *item)
     // store expanded convex hull in Avoid::Polygn
     Avoid::Polygon poly;
 
-    Geom::Line hull_edge(hull[-1], hull[0]);
+    Geom::Line hull_edge(hull.back(), hull.front());
     Geom::Line prev_parallel_hull_edge;
     prev_parallel_hull_edge.setOrigin(hull_edge.origin()+hull_edge.versor().ccw()*spacing);
     prev_parallel_hull_edge.setVector(hull_edge.versor());
     int hull_size = hull.size();
     for (int i = 0; i < hull_size; ++i)
     {
-        hull_edge.setPoints(hull[i], hull[i+1]);
+        if (i + 1 == hull_size) {
+            hull_edge.setPoints(hull.back(), hull.front());
+        } else {
+            hull_edge.setPoints(hull[i], hull[i + 1]);
+        }
         Geom::Line parallel_hull_edge;
         parallel_hull_edge.setOrigin(hull_edge.origin()+hull_edge.versor().ccw()*spacing);
         parallel_hull_edge.setVector(hull_edge.versor());
