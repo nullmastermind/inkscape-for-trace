@@ -216,8 +216,8 @@ int Wmf::in_hatches(PWMF_CALLBACK_DATA d, char *test){
 class TagEmitter
 {
 public:
-    TagEmitter(Glib::ustring & defs, char * tmpcolor, char * hpathname):
-        defs(defs), tmpcolor(tmpcolor), hpathname(hpathname)
+    TagEmitter(Glib::ustring & p_defs, char * p_tmpcolor, char * p_hpathname):
+        defs(p_defs), tmpcolor(p_tmpcolor), hpathname(p_hpathname)
     {
     };
     void append(const char *prefix, const char * inner)
