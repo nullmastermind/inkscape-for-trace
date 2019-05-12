@@ -213,6 +213,28 @@ int Wmf::in_hatches(PWMF_CALLBACK_DATA d, char *test){
     return(0);
 }
 
+class TagEmitter
+{
+public:
+    TagEmitter(Glib::ustring & defs, char * tmpcolor, char * hpathname):
+        defs(defs), tmpcolor(tmpcolor), hpathname(hpathname)
+    {
+    };
+    void append(const char *prefix, const char * inner)
+    {
+        defs += "   ";
+        defs += prefix;
+        defs += hpathname;
+        defs += inner;
+        defs += tmpcolor;
+        defs += "\" />\n";
+    }
+
+protected:
+    Glib::ustring & defs;
+    char * tmpcolor, * hpathname;
+};
+
 /*  (Conditionally) add a hatch.  If a matching hatch already exists nothing happens.  If one
     does not exist it is added to the hatches list and also entered into <defs>.
     This is also used to add the path part of the hatches, which they reference with a xlink:href
@@ -239,6 +261,7 @@ uint32_t Wmf::add_hatch(PWMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
             break;
     }
     auto & defs = d->defs;
+    TagEmitter a(defs, tmpcolor, hpathname);
 
     /*  For both bkMode types set the PATH + FOREGROUND COLOR for the indicated standard hatch.
         This will be used late to compose, or recompose  the transparent or opaque final hatch.*/
@@ -253,51 +276,30 @@ uint32_t Wmf::add_hatch(PWMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
         defs += "\n";
         switch(hatchType){
             case U_HS_HORIZONTAL:
-                defs += "   <path id=\"";
-                defs += hpathname;
-                defs += "\" d=\"M 0 0 6 0\" style=\"fill:none;stroke:#";
-                defs += tmpcolor;
-                defs += "\" />\n";
+                a.append("<path id=\"",
+                "\" d=\"M 0 0 6 0\" style=\"fill:none;stroke:#");
                 break;
             case U_HS_VERTICAL:
-                defs += "   <path id=\"";
-                defs += hpathname;
-                defs += "\" d=\"M 0 0 0 6\" style=\"fill:none;stroke:#";
-                defs += tmpcolor;
-                defs += "\" />\n";
+                a.append("<path id=\"",
+                "\" d=\"M 0 0 0 6\" style=\"fill:none;stroke:#");
                 break;
             case U_HS_FDIAGONAL:
-                defs += "   <line  id=\"sub";
-                defs += hpathname;
-                defs += "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#";
-                defs += tmpcolor;
-                defs += "\"/>\n";
+                a.append("<line  id=\"sub",
+                "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#");
                 break;
             case U_HS_BDIAGONAL:
-                defs += "   <line  id=\"sub";
-                defs += hpathname;
-                defs += "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#";
-                defs += tmpcolor;
-                defs += "\"/>\n";
+                a.append("<line  id=\"sub",
+                "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#");
                 break;
             case U_HS_CROSS:
-                defs += "   <path   id=\"";
-                defs += hpathname;
-                defs += "\" d=\"M 0 0 6 0 M 0 0 0 6\" style=\"fill:none;stroke:#";
-                defs += tmpcolor;
-                defs += "\" />\n";
+                a.append("<path   id=\"",
+                "\" d=\"M 0 0 6 0 M 0 0 0 6\" style=\"fill:none;stroke:#");
                  break;
             case U_HS_DIAGCROSS:
-                defs += "   <line   id=\"subfd";
-                defs += hpathname;
-                defs += "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#";
-                defs += tmpcolor;
-                defs += "\"/>\n";
-                defs += "   <line   id=\"subbd";
-                defs += hpathname;
-                defs += "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#";
-                defs += tmpcolor;
-                defs += "\"/>\n";
+                a.append("<line   id=\"subfd",
+                "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#");
+                a.append("<line   id=\"subbd",
+                "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#");
                 break;
             case U_HS_SOLIDCLR:
             case U_HS_DITHEREDCLR:
@@ -306,12 +308,8 @@ uint32_t Wmf::add_hatch(PWMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
             case U_HS_SOLIDBKCLR:
             case U_HS_DITHEREDBKCLR:
             default:
-                defs += "   <path   id=\"";
-                defs += hpathname;
-                defs += "\" d=\"M 0 0 6 0 6 6 0 6 z\" style=\"fill:#";
-                defs += tmpcolor;
-                defs += ";stroke:none";
-                defs += "\" />\n";
+                a.append("<path   id=\"",
+                "\" d=\"M 0 0 6 0 6 6 0 6 z\" style=\"stroke:none;fill:#");
                 break;
         }
     }
