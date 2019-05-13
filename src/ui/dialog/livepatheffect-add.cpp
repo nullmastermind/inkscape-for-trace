@@ -210,6 +210,7 @@ LivePathEffectAdd::LivePathEffectAdd()
     _LPEDialogSelector->set_transient_for(*window);
     _LPESelectorFlowBox->set_focus_vadjustment(_LPEScrolled->get_vadjustment());
     _LPEDialogSelector->show_all_children();
+    _lasteffect = nullptr;
 }
 const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *LivePathEffectAdd::getActiveData()
 {
@@ -346,14 +347,13 @@ bool LivePathEffectAdd::apply(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> bu
     _to_add = to_add;
     Gtk::EventBox *LPESelectorEffect;
     builder_effect->get_widget("LPESelectorEffect", LPESelectorEffect);
-    if (LPESelectorEffect->get_parent()->get_style_context()->has_class("lpedisabled")) {
-        Gtk::FlowBoxChild *child = dynamic_cast<Gtk::FlowBoxChild *>(LPESelectorEffect->get_parent());
-        if (child) {
-            child->grab_focus();
-        }
+    Gtk::FlowBoxChild *flowboxchild =  dynamic_cast<Gtk::FlowBoxChild *>(LPESelectorEffect->get_parent());
+    _LPESelectorFlowBox->select_child(*flowboxchild);
+    if (flowboxchild && flowboxchild->get_style_context()->has_class("lpedisabled")) {
         return true;
     }
     _applied = true;
+    _lasteffect = flowboxchild;
     _LPEDialogSelector->response(Gtk::RESPONSE_APPLY);
     _LPEDialogSelector->hide();
     return true;
@@ -366,14 +366,12 @@ bool LivePathEffectAdd::on_press_enter(GdkEventKey *key, Glib::RefPtr<Gtk::Build
         _to_add = to_add;
         Gtk::EventBox *LPESelectorEffect;
         builder_effect->get_widget("LPESelectorEffect", LPESelectorEffect);
-        if (LPESelectorEffect->get_parent()->get_style_context()->has_class("lpedisabled")) {
-            Gtk::FlowBoxChild *child = dynamic_cast<Gtk::FlowBoxChild *>(LPESelectorEffect->get_parent());
-            if (child) {
-                child->grab_focus();
-            }
+        Gtk::FlowBoxChild *flowboxchild =  dynamic_cast<Gtk::FlowBoxChild *>(LPESelectorEffect->get_parent());
+        if (flowboxchild && flowboxchild->get_style_context()->has_class("lpedisabled")) {
             return true;
         }
         _applied = true;
+        _lasteffect = flowboxchild;
         _LPEDialogSelector->response(Gtk::RESPONSE_APPLY);
         _LPEDialogSelector->hide();
         return true;
@@ -635,6 +633,9 @@ void LivePathEffectAdd::show(SPDesktop *desktop)
     int searchlen = dial._LPEFilter->get_text().length();
     if (searchlen > 0) {
         dial._LPEFilter->select_region (0, searchlen);
+        dial._LPESelectorFlowBox->unselect_all();
+    } else if (dial._lasteffect) {
+        dial._lasteffect->grab_focus();
     }
     dial._LPEDialogSelector->run();
     dial._LPEDialogSelector->hide();
