@@ -298,6 +298,12 @@ spinbutton undershoot {
     padding: 15px;
 }
 
+#LPEDialogSelector .lpeinfo {
+    padding: 12px;
+    background-color: @theme_selected_bg_color;
+    color: @theme_bg_color;
+}
+
 #LPEExperimental image {
     color: transparent;
 }
