@@ -116,7 +116,7 @@ APP_EXE_DIR=$APP_CON_DIR/MacOS
 APP_LIB_DIR=$APP_RES_DIR/lib
 APP_PLIST=$APP_CON_DIR/Info.plist
 
-### downlad URLs ###############################################################
+### download URLs ##############################################################
 
 # These are the versioned URLs of Inkscape dependencies that are not part of
 # any JHBuild moduleset. (They are candidates for a custom Inkscape moduleset.)

@@ -312,7 +312,7 @@
 		<string>application-vnd.ms.xaml.icns</string>
 		<key>CFBundleTypeMIMETypes</key>
 		<array>
-			<string>appliction/vnd.ms.xaml</string>
+			<string>application/vnd.ms.xaml</string>
 		</array>
 		<key>CFBundleTypeName</key>
 		<string>Extensible Application Markup Language (XAML)</string>
