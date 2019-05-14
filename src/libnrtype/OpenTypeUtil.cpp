@@ -336,10 +336,15 @@ void readOpenTypeSVGTable(const FT_Face ft_face,
     // We do it the hard way!
     hb_face_t *hb_face = hb_ft_face_create_cached (ft_face);
     hb_blob_t *hb_blob = hb_face_reference_table (hb_face, HB_OT_TAG_SVG);
-    unsigned int svg_length = hb_blob_get_length (hb_blob);
 
     if (!hb_blob) {
-        // No SVG glyphs in font!
+        // No SVG table in font!
+        return;
+    }
+
+    unsigned int svg_length = hb_blob_get_length (hb_blob);
+    if (svg_length == 0) {
+        // No SVG glyphs in table!
         return;
     }
 
