@@ -372,11 +372,11 @@ Inkscape::XML::Node* SelectorDialog::_getStyleTextNode()
         styleNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createElement("svg:style");
         textNode  = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
 
-        styleNode->appendChild(textNode);
-        Inkscape::GC::release(textNode);
-
         root->addChild(styleNode, nullptr);
         Inkscape::GC::release(styleNode);
+
+        styleNode->appendChild(textNode);
+        Inkscape::GC::release(textNode);
     }
 
     if (_textNode != textNode) {
