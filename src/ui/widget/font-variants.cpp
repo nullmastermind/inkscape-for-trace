@@ -29,18 +29,18 @@ namespace Widget {
   class Feature
   {
   public:
-      Feature( const Glib::ustring& name, OTSubstitution& glyphs, int options, Glib::ustring family, Gtk::Grid& grid, int row, FontVariants* parent)
+      Feature( const Glib::ustring& name, OTSubstitution& glyphs, int options, Glib::ustring family, Gtk::Grid& grid, int &row, FontVariants* parent)
           : _name (name)
           , _options (options)
       {
           Gtk::Label* table_name = Gtk::manage (new Gtk::Label());
           table_name->set_markup ("\"" + name + "\" ");
-
           grid.attach (*table_name, 0, row, 1, 1);
 
           Gtk::RadioButton::Group group;
           for (int i = 0; i < options; ++i) {
-
+              int col = i%10;  // Some fonts might have a table with many options (Bungee Hairline table 'ornm' has 113 entries).
+              if (i > 10 && col == 0) row++;
               Gtk::RadioButton* button = Gtk::manage (new Gtk::RadioButton());
               if (i == 0) {
                   group = button->get_group();
@@ -48,7 +48,7 @@ namespace Widget {
                   button->set_group (group);
               }
               button->signal_clicked().connect ( sigc::mem_fun(*parent, &FontVariants::feature_callback) );
-              grid.attach (*button, 2*i+1, row, 1, 1);
+              grid.attach (*button, 2*col+1, row, 1, 1);
               buttons.push_back (button);
 
               Gtk::Label* label = Gtk::manage (new Gtk::Label());
@@ -57,7 +57,7 @@ namespace Widget {
               label->set_line_wrap( true );
               label->set_line_wrap_mode( Pango::WRAP_WORD_CHAR );
               label->set_ellipsize( Pango::ELLIPSIZE_END );
-              label->set_lines(2);
+              label->set_lines(3);
 
               Glib::ustring markup;
               markup += "<span font_family='";
@@ -70,7 +70,7 @@ namespace Widget {
               markup += Glib::Markup::escape_text (glyphs.input);
               markup += "</span>";
               label->set_markup (markup);
-              grid.attach (*label, 2*i+2, row, 1, 1);
+              grid.attach (*label, 2*col+2, row, 1, 1);
           }
       }
 
@@ -1097,7 +1097,8 @@ namespace Widget {
 
                   _features[table.first] = new Feature (table.first, table.second, 2,
                                                         sp_font_description_get_family(res->descr),
-                                                        _feature_grid, grid_row++, this);
+                                                        _feature_grid, grid_row, this);
+                  grid_row++;
               }
           }
 
@@ -1132,7 +1133,8 @@ namespace Widget {
 
                   _features[table.first] = new Feature (table.first, table.second, number+1,
                                                         sp_font_description_get_family(res->descr),
-                                                        _feature_grid, grid_row++, this);
+                                                        _feature_grid, grid_row, this);
+                  grid_row++;
               }
           }
 
