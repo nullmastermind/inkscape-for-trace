@@ -12,6 +12,7 @@
 #include "sp-linear-gradient.h"
 
 #include "attributes.h"
+#include "style.h"
 #include "xml/repr.h"
 
 /*
@@ -66,6 +67,29 @@ void SPLinearGradient::set(SPAttributeEnum key, const gchar* value) {
     }
 }
 
+void
+SPLinearGradient::update(SPCtx *ctx, guint flags)
+{
+    // To do: Verify flags.
+    if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
+
+        SPItemCtx const *ictx = reinterpret_cast<SPItemCtx const *>(ctx);
+
+        if (getUnits() == SP_GRADIENT_UNITS_USERSPACEONUSE) {
+            double w = ictx->viewport.width();
+            double h = ictx->viewport.height();
+            double d = sqrt ((w*w + h*h)/2.0);
+            double const em = style->font_size.computed;
+            double const ex = 0.5 * em;  // fixme: get x height from pango or libnrtype.
+
+            this->x1.update(em, ex, w);
+            this->y1.update(em, ex, h);
+            this->x2.update(em, ex, w);
+            this->y2.update(em, ex, h);
+        }
+    }
+}
+
 /**
  * Callback: write attributes to associated repr.
  */
@@ -106,3 +130,14 @@ cairo_pattern_t* SPLinearGradient::pattern_new(cairo_t * /*ct*/, Geom::OptRect c
 
     return cp;
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

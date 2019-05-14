@@ -23,20 +23,21 @@
 /** Linear gradient. */
 class SPLinearGradient : public SPGradient {
 public:
-	SPLinearGradient();
-	~SPLinearGradient() override;
+    SPLinearGradient();
+    ~SPLinearGradient() override;
 
     SVGLength x1;
     SVGLength y1;
     SVGLength x2;
     SVGLength y2;
 
-	cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity) override;
+    cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity) override;
 
 protected:
-	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
-	void set(SPAttributeEnum key, char const *value) override;
-	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
+    void build(SPDocument *document, Inkscape::XML::Node *repr) override;
+    void set(SPAttributeEnum key, char const *value) override;
+    void update(SPCtx *ctx, guint flags) override;
+    Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 };
 
 #endif /* !SP_LINEAR_GRADIENT_H */

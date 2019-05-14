@@ -26,8 +26,8 @@ typedef struct _cairo_pattern cairo_pattern_t;
 /** Radial gradient. */
 class SPRadialGradient : public SPGradient {
 public:
-	SPRadialGradient();
-	~SPRadialGradient() override;
+    SPRadialGradient();
+    ~SPRadialGradient() override;
 
     SVGLength cx;
     SVGLength cy;
@@ -39,9 +39,10 @@ public:
     cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity) override;
 
 protected:
-	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
-	void set(SPAttributeEnum key, char const *value) override;
-	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
+    void build(SPDocument *document, Inkscape::XML::Node *repr) override;
+    void set(SPAttributeEnum key, char const *value) override;
+    void update(SPCtx *ctx, unsigned int flags) override;
+    Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
 };
 
 #endif /* !SP_RADIAL_GRADIENT_H */

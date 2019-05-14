@@ -12,6 +12,7 @@
 #include "sp-radial-gradient.h"
 
 #include "attributes.h"
+#include "style.h"
 #include "xml/repr.h"
 
 #include <2geom/transforms.h>
@@ -48,6 +49,7 @@ void SPRadialGradient::build(SPDocument *document, Inkscape::XML::Node *repr) {
  * Set radial gradient attribute.
  */
 void SPRadialGradient::set(SPAttributeEnum key, gchar const *value) {
+
     switch (key) {
         case SP_ATTR_CX:
             if (!this->cx.read(value)) {
@@ -109,6 +111,31 @@ void SPRadialGradient::set(SPAttributeEnum key, gchar const *value) {
         default:
             SPGradient::set(key, value);
             break;
+    }
+}
+
+void
+SPRadialGradient::update(SPCtx *ctx, guint flags)
+{
+    // To do: Verify flags.
+    if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
+
+        SPItemCtx const *ictx = reinterpret_cast<SPItemCtx const *>(ctx);
+
+        if (getUnits() == SP_GRADIENT_UNITS_USERSPACEONUSE) {
+            double w = ictx->viewport.width();
+            double h = ictx->viewport.height();
+            double d = sqrt ((w*w + h*h)/2.0);
+            double const em = style->font_size.computed;
+            double const ex = 0.5 * em;  // fixme: get x height from pango or libnrtype.
+
+            this->cx.update(em, ex, w);
+            this->cy.update(em, ex, h);
+            this->r.update(em, ex, d);
+            this->fx.update(em, ex, w);
+            this->fy.update(em, ex, h);
+            this->fr.update(em, ex, d);
+        }
     }
 }
 
@@ -212,3 +239,14 @@ cairo_pattern_t* SPRadialGradient::pattern_new(cairo_t *ct, Geom::OptRect const 
 
     return cp;
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
