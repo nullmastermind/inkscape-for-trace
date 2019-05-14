@@ -383,11 +383,11 @@ Inkscape::XML::Node* SelectorDialog::_getStyleTextNode()
         styleNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createElement("svg:style");
         textNode  = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
 
-        styleNode->appendChild(textNode);
-        Inkscape::GC::release(textNode);
-
         root->addChild(styleNode, nullptr);
         Inkscape::GC::release(styleNode);
+
+        styleNode->appendChild(textNode);
+        Inkscape::GC::release(textNode);
     }
 
     if (_textNode != textNode) {
@@ -468,7 +468,7 @@ void SelectorDialog::_readStyleElement()
         for (auto tok : tokensplus) {
             REMOVE_SPACES(tok);
             if (SPAttributeRelSVG::isSVGElement(tok) || tok.find(" ") != -1 || tok[0] == '>' || tok[0] == '+' ||
-+               tok[0] == '~' || tok[0] == '*' || tok.erase(0, 1).find(".") != -1) {
+               tok[0] == '~' || tok[0] == '*' || tok.erase(0, 1).find(".") != -1) {
                 colType = UNHANDLED;
             }
         }
