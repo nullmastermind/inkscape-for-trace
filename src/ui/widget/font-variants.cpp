@@ -711,7 +711,7 @@ namespace Widget {
 
       // Fix me: Should match a space if second part matches.            ---,
       //       : Add boundary to 'on' and 'off'.                            v
-      Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("\"(\\w{4})\"\\s*([0-9]|on|off|)");
+      Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("\"(\\w{4})\"\\s*([0-9]+|on|off|)");
       Glib::MatchInfo matchInfo;
       std::string setting;
 
