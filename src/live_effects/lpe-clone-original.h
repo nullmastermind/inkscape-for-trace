@@ -20,13 +20,7 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
-enum Clonelpemethod {
-    CLM_NONE,
-    CLM_ORIGINALD,
-    CLM_BSPLINESPIRO,
-    CLM_D,
-    CLM_END
-};
+enum Clonelpemethod { CLM_NONE, CLM_D, CLM_ORIGINALD, CLM_BSPLINESPIRO, CLM_CURRENT, CLM_END };
 
 class LPECloneOriginal : public Effect, GroupBBoxEffect {
 public:
@@ -46,7 +40,7 @@ private:
     TextParam style_attributes;
     BoolParam allow_transforms;
     const gchar * linked;
-    Clonelpemethod previus_method;
+    Clonelpemethod previous_method;
     bool listening;
     bool is_updating;
     sigc::connection modified_connection;

@@ -18,6 +18,7 @@
 #include "object/sp-mask.h"
 #include "object/sp-path.h"
 #include "object/sp-shape.h"
+#include "object/sp-text.h"
 
 #include "xml/sp-css-attr.h"
 
@@ -28,20 +29,24 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 static const Util::EnumData<Clonelpemethod> ClonelpemethodData[] = {
-    { CLM_NONE, N_("No shape"), "none" },
-    { CLM_ORIGINALD, N_("Without LPE's"), "originald" }, 
-    { CLM_BSPLINESPIRO, N_("With Spiro or BSpline"), "bsplinespiro" },
-    { CLM_D, N_("With LPE's"), "d" }
+    { CLM_NONE, N_("No Shape"), "none" },
+    { CLM_D, N_("With LPE's"), "d" },
+    { CLM_ORIGINALD, N_("Without LPE's"), "originald" },
+    { CLM_BSPLINESPIRO, N_("Spiro or BSpline Only"), "bsplinespiro" },
+    { CLM_CURRENT, N_("Use Current and Lock"), "current" }
 };
 static const Util::EnumDataConverter<Clonelpemethod> CLMConverter(ClonelpemethodData, CLM_END);
 
-LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
-    Effect(lpeobject),
-    linkeditem(_("Linked Item:"), _("Item from which to take the original data"), "linkeditem", &wr, this),
-    method(_("Shape linked"), _("Shape linked"), "method", CLMConverter, &wr, this, CLM_D),
-    attributes("Attributes linked", "Attributes linked, comma separated attributes", "attributes", &wr, this,""),
-    style_attributes("Style attributes linked", "Style attributes linked, comma separated attributes like fill, filter, opacity", "style_attributes", &wr, this,""),
-    allow_transforms(_("Allow transforms"), _("Allow transforms"), "allow_transforms", &wr, this, true)
+LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject)
+    : Effect(lpeobject)
+    , linkeditem(_("Linked Item:"), _("Item from which to take the original data"), "linkeditem", &wr, this)
+    , method(_("Shape linked"), _("Shape linked"), "method", CLMConverter, &wr, this, CLM_D)
+    , attributes("Attributes linked", "Attributes linked, comma separated attributes like trasform, X, Y...",
+                 "attributes", &wr, this, "")
+    , style_attributes("Style attributes linked",
+                       "Style attributes linked, comma separated attributes like fill, filter, opacity...",
+                       "style_attributes", &wr, this, "")
+    , allow_transforms(_("Allow transforms"), _("Allow transforms"), "allow_transforms", &wr, this, true)
 {
     //0.92 compatibility
     const gchar * linkedpath = this->getRepr()->attribute("linkedpath");
@@ -59,7 +64,7 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
     registerParameter(&attributes);
     registerParameter(&style_attributes);
     registerParameter(&allow_transforms);
-    previus_method = method;
+    previous_method = method;
     attributes.param_hide_canvas_text();
     style_attributes.param_hide_canvas_text();
 }
@@ -77,6 +82,14 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
         for (auto & child : childs) {
             SPObject *dest_child = dest->nthChild(index); 
             cloneAttrbutes(child, dest_child, attributes, style_attributes); 
+            index++;
+        }
+    }
+    if ( SP_IS_TEXT(origin) && SP_IS_TEXT(dest) && SP_TEXT(origin)->children.size() == SP_TEXT(dest)->children.size()) {
+        size_t index = 0;
+        for (auto & child : SP_TEXT(origin)->children) {
+            SPObject *dest_child = dest->nthChild(index); 
+            cloneAttrbutes(&child, dest_child, attributes, style_attributes); 
             index++;
         }
     }
@@ -123,7 +136,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
         if (strlen(attribute)) {
             if ( shape_dest && shape_origin && (std::strcmp(attribute, "d") == 0)) {
                 SPCurve *c = nullptr;
-                if (method == CLM_BSPLINESPIRO) {
+                if (method == CLM_BSPLINESPIRO || (previous_method == CLM_BSPLINESPIRO && method == CLM_CURRENT)) {
                     c = shape_origin->getCurveForEdit();
                     SPLPEItem * lpe_item = SP_LPE_ITEM(origin);
                     if (lpe_item) {
@@ -141,12 +154,26 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
                             }
                         }
                     }
-                } else if (method == CLM_ORIGINALD) {
+                    if (method == CLM_CURRENT) {
+                        shape_dest->setCurveBeforeLPE(c);
+                    }
+                } else if (method == CLM_ORIGINALD || (previous_method == CLM_ORIGINALD && method == CLM_CURRENT)) {
                     c = shape_origin->getCurveForEdit();
-                } else if (method == CLM_NONE) {
+                    if (method == CLM_CURRENT) {
+                        shape_dest->setCurveBeforeLPE(c);
+                    }
+                } else if (method == CLM_NONE || (previous_method == CLM_NONE && method == CLM_CURRENT)) {
+                    c = shape_dest->getCurve();
+                    if (method == CLM_CURRENT) {
+                        shape_dest->setCurveBeforeLPE(c);
+                    }
+                } else if (method == CLM_CURRENT && previous_method == CLM_CURRENT) {
                     c = shape_dest->getCurve();
                 } else {
                     c = shape_origin->getCurve();
+                    if (method == CLM_CURRENT) {
+                        shape_dest->setCurveBeforeLPE(c);
+                    }
                 }
                 if (c) {
                     Geom::PathVector c_pv = c->get_pathvector();
@@ -160,7 +187,10 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
                     dest->getRepr()->setAttribute(attribute, nullptr);
                 }
             } else {
-                dest->getRepr()->setAttribute(attribute, origin->getRepr()->attribute(attribute));
+                if (!(SP_IS_GROUP(dest) && dest->getId() == sp_lpe_item->getId() && !strcmp(attribute, "transform") &&
+                      allow_transforms)) {
+                    dest->getRepr()->setAttribute(attribute, origin->getRepr()->attribute(attribute));
+                }
             }
         }
         iter++;
@@ -226,7 +256,7 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
     } else {
         linked = "";
     }
-    previus_method = method;
+    previous_method = method;
 }
 
 void
