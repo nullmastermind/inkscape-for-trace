@@ -119,20 +119,25 @@ static void sp_guideline_render(SPCanvasItem *item, SPCanvasBuf *buf)
     }
 
     // Draw guide.
-    // Special case horizontal and vertical lines so they snap to pixels.
+    // Special case horizontal and vertical lines so they accurately align to the to pixels.
+    
+    // Need to use floor()+0.5 such that Cairo will draw us lines with a width of a single pixel, without any aliasing.
+    // For this we need to position the lines at exactly half pixels, see https://www.cairographics.org/FAQ/#sharp_lines
+    // Must be consistent with the pixel alignment of the grid lines, see CanvasXYGrid::Render(), and the drawing of the rulers
+    
     // Don't use isHorizontal()/isVertical() as they test only exact matches.
     if ( Geom::are_near(normal_dt[Geom::Y], 0.0) ) { // Vertical?
 
-        int position = round(point_on_line_dt[Geom::X]);
-        cairo_move_to(buf->ct, position + 0.5, buf->rect.top() + 0.5);
-        cairo_line_to(buf->ct, position + 0.5, buf->rect.bottom() - 0.5);
+        double position = floor(point_on_line_dt[Geom::X]) + 0.5;
+        cairo_move_to(buf->ct, position, buf->rect.top() + 0.5);
+        cairo_line_to(buf->ct, position, buf->rect.bottom() - 0.5);
         cairo_stroke(buf->ct);
 
     } else if ( Geom::are_near(normal_dt[Geom::X], 0.0) ) { // Horizontal?
 
-        int position = round(point_on_line_dt[Geom::Y]);
-        cairo_move_to(buf->ct, buf->rect.left() + 0.5, position + 0.5);
-        cairo_line_to(buf->ct, buf->rect.right() - 0.5, position + 0.5);
+        double position = floor(point_on_line_dt[Geom::Y]) + 0.5;
+        cairo_move_to(buf->ct, buf->rect.left() + 0.5, position);
+        cairo_line_to(buf->ct, buf->rect.right() - 0.5, position);
         cairo_stroke(buf->ct);
 
     } else {
@@ -181,11 +186,11 @@ static void sp_guideline_update(SPCanvasItem *item, Geom::Affine const &affine, 
         if (gl->locked) {
             g_object_set(G_OBJECT(gl->origin), "stroke_color", 0x0000ff88,
                                                "shape", SP_CTRL_SHAPE_CROSS,
-                                               "size", 6., NULL);
+                                               "size", 6.0, NULL);
         } else {
             g_object_set(G_OBJECT(gl->origin), "stroke_color", 0xff000088,
                                                "shape", SP_CTRL_SHAPE_CIRCLE,
-                                               "size", 4., NULL);
+                                               "size", 4.0, NULL);
         }
         gl->origin->moveto(gl->point_on_line);
         sp_canvas_item_request_update(SP_CANVAS_ITEM(gl->origin));

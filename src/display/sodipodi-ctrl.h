@@ -47,8 +47,9 @@ struct SPCtrl : public SPCanvasItem {
     SPCtrlShapeType shape;
     SPCtrlModeType mode;
     SPAnchorType anchor;
-    gint width;
-    gint height;
+    gdouble width;
+    gdouble height;
+    
     guint defined : 1;
     guint shown   : 1;
     guint build   : 1;

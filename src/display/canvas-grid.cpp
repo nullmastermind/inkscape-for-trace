@@ -911,10 +911,10 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
     cairo_set_line_width(buf->ct, 1.0);
     cairo_set_line_cap(buf->ct, CAIRO_LINE_CAP_SQUARE);
 
-	// Adding a 2 px margin to the buffer rectangle to avoid missing intersections (in case of rounding errors, and due to adding 0.5 below)
-	Geom::IntRect buf_rect_with_margin = buf->rect;
-	buf_rect_with_margin.expandBy(2);
-	
+    // Adding a 2 px margin to the buffer rectangle to avoid missing intersections (in case of rounding errors, and due to adding 0.5 below)
+    Geom::IntRect buf_rect_with_margin = buf->rect;
+    buf_rect_with_margin.expandBy(2);
+
     for (unsigned dim = 0; dim < 2; ++dim) {
 
         // std::cout << "\n  " << (dim==0?"Horizontal":"Vertical") << "   ------------" << std::endl;
@@ -964,7 +964,6 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
 
             // If we have two intersections, grid line intersects buffer rectangle.
             if (x.size() == 2 ) {
-
                 // Make sure lines are always drawn in the same direction (or dashes misplaced).
                 Geom::Line vector( x[0], x[1]);
                 if (Geom::dot( vector.vector(), axis.vector() ) < 0.0) {
@@ -973,6 +972,7 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
 
                 // Set up line. Need to use floor()+0.5 such that Cairo will draw us lines with a width of a single pixel, without any aliasing.
                 // For this we need to position the lines at exactly half pixels, see https://www.cairographics.org/FAQ/#sharp_lines
+                // Must be consistent with the pixel alignment of the guide lines, see CanvasXYGrid::Render(), and the drawing of the rulers
                 cairo_move_to(buf->ct, floor(x[0][Geom::X]) + 0.5, floor(x[0][Geom::Y]) + 0.5);
                 cairo_line_to(buf->ct, floor(x[1][Geom::X]) + 0.5, floor(x[1][Geom::Y]) + 0.5);
                 

@@ -104,7 +104,7 @@ sp_ctrl_set_property(GObject *object, guint prop_id, const GValue *value, GParam
         ctrl->anchor = (SPAnchorType) g_value_get_int(value);
         break;
     case ARG_SIZE:
-        ctrl->width = (gint)(g_value_get_double(value) / 2.0);
+        ctrl->width = (gint) g_value_get_double(value);
         ctrl->height = ctrl->width;
         ctrl->defined = (ctrl->width > 0);
         break;
@@ -126,8 +126,8 @@ sp_ctrl_set_property(GObject *object, guint prop_id, const GValue *value, GParam
     case ARG_PIXBUF:
         pixbuf = (GdkPixbuf*) g_value_get_pointer(value);
         // A pixbuf defines it's own size, don't mess about with size.
-        ctrl->width = gdk_pixbuf_get_width(pixbuf) / 2.0;
-        ctrl->height = gdk_pixbuf_get_height(pixbuf) / 2.0;
+        ctrl->width = gdk_pixbuf_get_width(pixbuf);
+        ctrl->height = gdk_pixbuf_get_height(pixbuf);
         if (gdk_pixbuf_get_has_alpha(pixbuf)) {
             ctrl->pixbuf = pixbuf;
         } else {
@@ -164,7 +164,7 @@ sp_ctrl_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec 
             break;
 
         case ARG_SIZE:
-            g_value_set_double(value, ctrl->width);
+            g_value_set_double(value, ctrl->width/2.0);
             break;
 
         case ARG_ANGLE:
@@ -176,7 +176,7 @@ sp_ctrl_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec 
             break;
 
         case ARG_FILL_COLOR:
-        	g_value_set_int(value, ctrl->fill_color);
+            g_value_set_int(value, ctrl->fill_color);
             break;
 
         case ARG_STROKED:
@@ -203,8 +203,8 @@ sp_ctrl_init (SPCtrl *ctrl)
     ctrl->shape = SP_CTRL_SHAPE_SQUARE;
     ctrl->mode = SP_CTRL_MODE_COLOR;
     ctrl->anchor = SP_ANCHOR_CENTER;
-    ctrl->width = 3;
-    ctrl->height = 3;
+    ctrl->width = 6;
+    ctrl->height = 6;
     ctrl->defined = TRUE;
     ctrl->shown = FALSE;
     ctrl->build = FALSE;
@@ -241,8 +241,6 @@ static void
 sp_ctrl_update (SPCanvasItem *item, Geom::Affine const &affine, unsigned int flags)
 {
     SPCtrl *ctrl;
-    gint x, y;
-
     ctrl = SP_CTRL (item);
 
     if (SP_CANVAS_ITEM_CLASS(sp_ctrl_parent_class)->update)
@@ -256,8 +254,8 @@ sp_ctrl_update (SPCanvasItem *item, Geom::Affine const &affine, unsigned int fla
 
     if (!ctrl->defined) return;
 
-    x = (gint) ((affine[4] > 0) ? (affine[4] + 0.5) : (affine[4] - 0.5)) - ctrl->width;
-    y = (gint) ((affine[5] > 0) ? (affine[5] + 0.5) : (affine[5] - 0.5)) - ctrl->height;
+    int x = floor(affine[4]) - floor(ctrl->width/2.0);
+    int y = floor(affine[5]) - floor(ctrl->height/2.0);
 
     switch (ctrl->anchor) {
         case SP_ANCHOR_N:
@@ -268,13 +266,13 @@ sp_ctrl_update (SPCanvasItem *item, Geom::Affine const &affine, unsigned int fla
         case SP_ANCHOR_NW:
         case SP_ANCHOR_W:
         case SP_ANCHOR_SW:
-            x += ctrl->width;
+            x += floor(ctrl->width/2.0);
             break;
 
         case SP_ANCHOR_NE:
         case SP_ANCHOR_E:
         case SP_ANCHOR_SE:
-            x -= (ctrl->width + 1);
+            x -= floor(ctrl->width/2.0);
             break;
     }
 
@@ -287,17 +285,17 @@ sp_ctrl_update (SPCanvasItem *item, Geom::Affine const &affine, unsigned int fla
         case SP_ANCHOR_NW:
         case SP_ANCHOR_N:
         case SP_ANCHOR_NE:
-            y += ctrl->height;
+            y += floor(ctrl->height/2.0);
             break;
 
         case SP_ANCHOR_SW:
         case SP_ANCHOR_S:
         case SP_ANCHOR_SE:
-            y -= (ctrl->height + 1);
+            y -= floor(ctrl->height/2.0);
             break;
     }
 
-    ctrl->box = Geom::IntRect::from_xywh(x, y, 2*ctrl->width, 2*ctrl->height);
+    ctrl->box = Geom::IntRect::from_xywh(x, y, lround(ctrl->width), lround(ctrl->height));
     sp_canvas_update_bbox (item, ctrl->box.left(), ctrl->box.top(), ctrl->box.right() + 1, ctrl->box.bottom() + 1);
 }
 
@@ -353,8 +351,13 @@ sp_ctrl_build_cache (SPCtrl *ctrl, int device_scale)
         stroke_color = fill_color;
     }
 
-    gint width  = (ctrl->width  * 2 + 1) * device_scale;
-    gint height = (ctrl->height * 2 + 1) * device_scale;
+    gint width  = (ctrl->width  + 1) * device_scale;
+    gint height = (ctrl->height + 1) * device_scale;    
+    if ((ctrl->shape == SP_CTRL_SHAPE_BITMAP) or (ctrl->shape == SP_CTRL_SHAPE_IMAGE)) {
+        width  = ctrl->width * device_scale;
+        height = ctrl->height * device_scale;
+    }
+
     if (width < 2) return;
     gint size = width * height;
 
@@ -598,8 +601,14 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
     }
 
     // Must match width/height sp_ctrl_build_cache.
-    int w = (ctrl->width  * 2 + 1) * buf->device_scale;
-    int h = (ctrl->height * 2 + 1) * buf->device_scale;
+    int w = (ctrl->width  + 1) * buf->device_scale;
+    int h = (ctrl->height + 1) * buf->device_scale;
+    if ((ctrl->shape == SP_CTRL_SHAPE_BITMAP) or (ctrl->shape == SP_CTRL_SHAPE_IMAGE)) {
+        w = ctrl->width * buf->device_scale;
+        h = ctrl->height * buf->device_scale;
+    }
+    double x = ctrl->box.left() - buf->rect.left();
+    double y = ctrl->box.top() - buf->rect.top();
 
     // The code below works even when the target is not an image surface
     if (ctrl->mode == SP_CTRL_MODE_XOR) {
@@ -609,7 +618,7 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
         // Size in device pixels. Does not set device scale.
         cairo_surface_t *work = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
         cairo_surface_set_device_scale(work, buf->device_scale, buf->device_scale);
-
+        
         cairo_t *cr = cairo_create(work);
         cairo_translate(cr, -ctrl->box.left(), -ctrl->box.top());
         cairo_set_source_surface(cr, cairo_get_target(buf->ct), buf->rect.left(), buf->rect.top());
@@ -645,9 +654,8 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
 
         // 3. Replace the affected part of output with contents of temporary surface
         cairo_save(buf->ct);
-        cairo_set_source_surface(buf->ct, work,
-            ctrl->box.left() - buf->rect.left(), ctrl->box.top() - buf->rect.top());
-        cairo_rectangle(buf->ct, ctrl->box.left() - buf->rect.left(), ctrl->box.top() - buf->rect.top(), w/buf->device_scale, h/buf->device_scale);
+        cairo_set_source_surface(buf->ct, work, x, y);
+        cairo_rectangle(buf->ct, x, y, w/buf->device_scale, h/buf->device_scale);
         cairo_clip(buf->ct);
         cairo_set_operator(buf->ct, CAIRO_OPERATOR_SOURCE);
         cairo_paint(buf->ct);
@@ -659,13 +667,14 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
         cairo_surface_set_device_scale(cache, buf->device_scale, buf->device_scale);
         cairo_surface_mark_dirty(cache);
         cairo_save(buf->ct);
-        cairo_set_source_surface(buf->ct, cache,
-            ctrl->box.left() - buf->rect.left(), ctrl->box.top() - buf->rect.top());
-        cairo_rectangle(buf->ct, ctrl->box.left() - buf->rect.left(), ctrl->box.top() - buf->rect.top(), w/buf->device_scale, h/buf->device_scale);
+        cairo_set_source_surface(buf->ct, cache, x, y);
+        cairo_rectangle(buf->ct, x, y, w/buf->device_scale, h/buf->device_scale);
         cairo_clip(buf->ct);
         cairo_paint(buf->ct);
+        cairo_surface_write_to_png(cache, "ctrl_cache.png" );
         cairo_restore(buf->ct);
         cairo_surface_destroy(cache);
+
     }
     ctrl->shown = TRUE;
 }
