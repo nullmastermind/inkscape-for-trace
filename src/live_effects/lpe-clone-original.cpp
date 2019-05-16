@@ -33,7 +33,6 @@ static const Util::EnumData<Clonelpemethod> ClonelpemethodData[] = {
     { CLM_D, N_("With LPE's"), "d" },
     { CLM_ORIGINALD, N_("Without LPE's"), "originald" },
     { CLM_BSPLINESPIRO, N_("Spiro or BSpline Only"), "bsplinespiro" },
-    { CLM_CURRENT, N_("Use Current and Lock"), "current" }
 };
 static const Util::EnumDataConverter<Clonelpemethod> CLMConverter(ClonelpemethodData, CLM_END);
 
@@ -58,15 +57,59 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject)
     };
     is_updating = false;
     listening = false;
+    sync = false;
     linked = this->getRepr()->attribute("linkeditem");
     registerParameter(&linkeditem);
     registerParameter(&method);
     registerParameter(&attributes);
     registerParameter(&style_attributes);
     registerParameter(&allow_transforms);
-    previous_method = method;
+    old_style_attributes = strdup("");
+    old_attributes = strdup("");
     attributes.param_hide_canvas_text();
     style_attributes.param_hide_canvas_text();
+}
+
+void 
+LPECloneOriginal::syncOriginal()
+{
+    sync = true;
+    sp_lpe_item_update_patheffect (sp_lpe_item, false, true);
+}
+
+Gtk::Widget *
+LPECloneOriginal::newWidget()
+{
+    // use manage here, because after deletion of Effect object, others might still be pointing to this widget.
+    Gtk::VBox * vbox = Gtk::manage( new Gtk::VBox(Effect::newWidget()) );
+    vbox->set_border_width(5);
+    vbox->set_homogeneous(false);
+    vbox->set_spacing(6);
+    std::vector<Parameter *>::iterator it = param_vector.begin();
+    while (it != param_vector.end()) {
+        if ((*it)->widget_is_visible) {
+            Parameter * param = *it;
+            Gtk::Widget * widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
+            Glib::ustring * tip = param->param_getTooltip();
+            if (widg) {
+                vbox->pack_start(*widg, true, true, 2);
+                if (tip) {
+                    widg->set_tooltip_text(*tip);
+                } else {
+                    widg->set_tooltip_text("");
+                    widg->set_has_tooltip(false);
+                }
+            }
+        }
+        ++it;
+    }
+    Gtk::Button * sync_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Sync Original Path"))));
+    sync_button->signal_clicked().connect(sigc::mem_fun (*this,&LPECloneOriginal::syncOriginal));
+    vbox->pack_start(*sync_button, true, true, 2);
+    if(Gtk::Widget* widg = defaultParamSet()) {
+        vbox->pack_start(*widg, true, true, 2);
+    }
+    return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
 void
@@ -129,16 +172,23 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
             }
         }
     }
-    gchar ** attarray = g_strsplit(attributes, ",", 0);
+    gchar ** attarray = g_strsplit(old_attributes, ",", 0);
     gchar ** iter = attarray;
     while (*iter != nullptr) {
         const char* attribute = (*iter);
         if (strlen(attribute)) {
-            if ( shape_dest && shape_origin && (std::strcmp(attribute, "d") == 0)) {
+            dest->getRepr()->setAttribute(attribute, nullptr);
+        }
+        iter++;
+    }
+    attarray = g_strsplit(attributes, ",", 0);
+    iter = attarray;
+    while (*iter != nullptr) {
+        const char* attribute = (*iter);
+        if (strlen(attribute) && shape_dest && shape_origin) {
+            if (std::strcmp(attribute, "d") == 0) {
                 SPCurve *c = nullptr;
-                if (method == CLM_CURRENT && (previous_method == CLM_CURRENT || is_load)) {
-                    c = shape_dest->getCurve();
-                } else if (method == CLM_BSPLINESPIRO || (previous_method == CLM_BSPLINESPIRO && method == CLM_CURRENT)) {
+                if (method == CLM_BSPLINESPIRO) {
                     c = shape_origin->getCurveForEdit();
                     SPLPEItem * lpe_item = SP_LPE_ITEM(origin);
                     if (lpe_item) {
@@ -156,34 +206,23 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
                             }
                         }
                     }
-                    if (method == CLM_CURRENT) {
-                        shape_dest->setCurveBeforeLPE(c);
-                    }
-                } else if (method == CLM_ORIGINALD || (previous_method == CLM_ORIGINALD && method == CLM_CURRENT)) {
+                } else if (method == CLM_ORIGINALD) {
                     c = shape_origin->getCurveForEdit();
-                    if (method == CLM_CURRENT) {
-                        shape_dest->setCurveBeforeLPE(c);
-                    }
-                } else if (method == CLM_NONE || (previous_method == CLM_NONE && method == CLM_CURRENT)) {
-                    c = shape_dest->getCurve();
-                    if (method == CLM_CURRENT) {
-                        shape_dest->setCurveBeforeLPE(c);
-                    }
-                } else if(method == CLM_D || (previous_method == CLM_D && method == CLM_CURRENT)){
+                } else if(method == CLM_D){
                     c = shape_origin->getCurve();
-                    if (method == CLM_CURRENT) {
-                        shape_dest->setCurveBeforeLPE(c);
-                    }
                 }
-                if (c) {
+                if (c && method != CLM_NONE) {
                     Geom::PathVector c_pv = c->get_pathvector();
                     c->set_pathvector(c_pv);
-                    shape_dest->setCurveInsync(c);
                     gchar *str = sp_svg_write_path(c_pv);
+                    if (sync){
+                        dest->getRepr()->setAttribute("inkscape:original-d", str);
+                    }
+                    shape_dest->setCurveInsync(c);
                     dest->getRepr()->setAttribute("d", str);
                     g_free(str);
                     c->unref();
-                } else {
+                } else if (method != CLM_NONE) {
                     dest->getRepr()->setAttribute(attribute, nullptr);
                 }
             } else {
@@ -200,8 +239,17 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
     sp_repr_css_attr_add_from_string(css_origin, origin->getRepr()->attribute("style"));
     SPCSSAttr *css_dest = sp_repr_css_attr_new();
     sp_repr_css_attr_add_from_string(css_dest, dest->getRepr()->attribute("style"));
-    gchar ** styleattarray = g_strsplit(style_attributes, ",", 0);
+    gchar ** styleattarray = g_strsplit(old_style_attributes, ",", 0);
     gchar ** styleiter = styleattarray;
+    while (*styleiter != nullptr) {
+        const char* attribute = (*styleiter);
+        if (strlen(attribute)) {
+            sp_repr_css_set_property (css_dest, attribute, nullptr);
+        }
+        styleiter++;
+    }
+    styleattarray = g_strsplit(style_attributes, ",", 0);
+    styleiter = styleattarray;
     while (*styleiter != nullptr) {
         const char* attribute = (*styleiter);
         if (strlen(attribute)) {
@@ -248,15 +296,15 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
             return;
         }
         SPItem * dest =  SP_ITEM(sp_lpe_item); 
-        Geom::OptRect o_bbox = orig->geometricBounds(orig->transform);
-        Geom::OptRect d_bbox = dest->geometricBounds(dest->transform);
         const gchar * id = orig->getId();
         cloneAttrbutes(orig, dest, attr.c_str(), style_attr.c_str());
+        old_style_attributes = style_attributes.param_getSVGValue();
+        old_attributes = attributes.param_getSVGValue();
+        sync = false;
         linked = id;
     } else {
         linked = "";
     }
-    previous_method = method;
 }
 
 void
@@ -266,7 +314,7 @@ LPECloneOriginal::start_listening()
         return;
     }
     quit_listening();
-    modified_connection = SP_OBJECT(sp_lpe_item)->connectModified(sigc::mem_fun(*this, &LPECloneOriginal::modified));
+    modified_connection = SP_OBJECT(this->getLPEObj())->connectModified(sigc::mem_fun(*this, &LPECloneOriginal::modified));
     listening = true;
 }
 
@@ -284,19 +332,28 @@ LPECloneOriginal::modified(SPObject */*obj*/, guint /*flags*/)
         is_updating = false;
         return;
     }
-    SP_OBJECT(this->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    SP_OBJECT(sp_lpe_item)->requestModified(SP_OBJECT_MODIFIED_FLAG);
     is_updating = true;
 }
 
 LPECloneOriginal::~LPECloneOriginal()
 {
     quit_listening();
+    g_free(old_style_attributes);
+    g_free(old_attributes);
+
 }
 
 void 
 LPECloneOriginal::doEffect (SPCurve * curve)
 {
-    curve->set_pathvector(current_shape->getCurve()->get_pathvector());
+    if (method != CLM_NONE) {
+        SPCurve *current_curve = current_shape->getCurve();
+        if (current_curve != nullptr) {
+            curve->set_pathvector(current_curve->get_pathvector());
+            current_curve->unref();
+        }
+    }
 }
 
 } // namespace LivePathEffect

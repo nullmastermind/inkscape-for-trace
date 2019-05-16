@@ -20,7 +20,7 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
-enum Clonelpemethod { CLM_NONE, CLM_D, CLM_ORIGINALD, CLM_BSPLINESPIRO, CLM_CURRENT, CLM_END };
+enum Clonelpemethod { CLM_NONE, CLM_D, CLM_ORIGINALD, CLM_BSPLINESPIRO, CLM_END };
 
 class LPECloneOriginal : public Effect, GroupBBoxEffect {
 public:
@@ -30,6 +30,8 @@ public:
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
     void cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar * attributes, const gchar * style_attributes);
     void modified(SPObject */*obj*/, guint /*flags*/);
+    Gtk::Widget *newWidget();
+    void syncOriginal();
     void start_listening();
     void quit_listening();
 
@@ -37,12 +39,14 @@ private:
     OriginalItemParam linkeditem;
     EnumParam<Clonelpemethod> method;
     TextParam attributes;
+    gchar * old_attributes;
     TextParam style_attributes;
+    gchar * old_style_attributes;
     BoolParam allow_transforms;
     const gchar * linked;
-    Clonelpemethod previous_method;
     bool listening;
     bool is_updating;
+    bool sync;
     sigc::connection modified_connection;
     LPECloneOriginal(const LPECloneOriginal&) = delete;
     LPECloneOriginal& operator=(const LPECloneOriginal&) = delete;
