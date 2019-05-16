@@ -9,7 +9,6 @@
 #include <2geom/intersection-graph.h>
 #include "display/curve.h"
 #include "helper/geom.h"
-#include "ui/tools-switch.h"
 #include "path-chemistry.h"
 #include "extract-uri.h"
 #include <bad-uri-exception.h>

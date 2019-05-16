@@ -28,9 +28,9 @@ public:
     ~LPECloneOriginal() override;
     void doEffect (SPCurve * curve) override;
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
-    void cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar * attributes, const gchar * style_attributes);
+    void cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar * attributes, const gchar * css_properties);
     void modified(SPObject */*obj*/, guint /*flags*/);
-    Gtk::Widget *newWidget();
+    Gtk::Widget *newWidget() override;
     void syncOriginal();
     void start_listening();
     void quit_listening();
@@ -40,8 +40,8 @@ private:
     EnumParam<Clonelpemethod> method;
     TextParam attributes;
     gchar * old_attributes;
-    TextParam style_attributes;
-    gchar * old_style_attributes;
+    TextParam css_properties;
+    gchar * old_css_properties;
     BoolParam allow_transforms;
     const gchar * linked;
     bool listening;

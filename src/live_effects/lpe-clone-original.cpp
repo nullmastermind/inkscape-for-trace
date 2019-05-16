@@ -14,6 +14,7 @@
 #include "svg/path-string.h"
 #include "svg/svg.h"
 
+#include "ui/tools-switch.h"
 #include "object/sp-clippath.h"
 #include "object/sp-mask.h"
 #include "object/sp-path.h"
@@ -39,13 +40,13 @@ static const Util::EnumDataConverter<Clonelpemethod> CLMConverter(Clonelpemethod
 LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject)
     : Effect(lpeobject)
     , linkeditem(_("Linked Item:"), _("Item from which to take the original data"), "linkeditem", &wr, this)
-    , method(_("Shape linked"), _("Shape linked"), "method", CLMConverter, &wr, this, CLM_D)
-    , attributes("Attributes linked", "Attributes linked, comma separated attributes like trasform, X, Y...",
+    , method(_("Shape"), _("Shape linked"), "method", CLMConverter, &wr, this, CLM_D)
+    , attributes("Attributes", "Attributes linked, comma separated attributes like trasform, X, Y...",
                  "attributes", &wr, this, "")
-    , style_attributes("Style attributes linked",
-                       "Style attributes linked, comma separated attributes like fill, filter, opacity...",
-                       "style_attributes", &wr, this, "")
-    , allow_transforms(_("Allow transforms"), _("Allow transforms"), "allow_transforms", &wr, this, true)
+    , css_properties("CSS Properties",
+                       "CSS properties linked, comma separated attributes like fill, filter, opacity...",
+                       "css_properties", &wr, this, "")
+    , allow_transforms(_("Allow Transforms"), _("Allow transforms"), "allow_transforms", &wr, this, true)
 {
     //0.92 compatibility
     const gchar * linkedpath = this->getRepr()->attribute("linkedpath");
@@ -62,19 +63,30 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject)
     registerParameter(&linkeditem);
     registerParameter(&method);
     registerParameter(&attributes);
-    registerParameter(&style_attributes);
+    registerParameter(&css_properties);
     registerParameter(&allow_transforms);
-    old_style_attributes = strdup("");
+    old_css_properties = strdup("");
     old_attributes = strdup("");
     attributes.param_hide_canvas_text();
-    style_attributes.param_hide_canvas_text();
+    css_properties.param_hide_canvas_text();
 }
 
 void 
 LPECloneOriginal::syncOriginal()
 {
-    sync = true;
-    sp_lpe_item_update_patheffect (sp_lpe_item, false, true);
+    if (method != CLM_NONE) {
+        sync = true;
+        // TODO remove the tools_switch atrocity.
+        sp_lpe_item_update_patheffect (sp_lpe_item, false, true);
+        method.param_set_value(CLM_NONE);
+        upd_params = true;
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+        sp_lpe_item_update_patheffect (sp_lpe_item, false, true);
+        if (desktop && tools_isactive(desktop, TOOLS_NODES)) {
+            tools_switch(desktop, TOOLS_SELECT);
+            tools_switch(desktop, TOOLS_NODES);
+        }
+    }
 }
 
 Gtk::Widget *
@@ -103,7 +115,7 @@ LPECloneOriginal::newWidget()
         }
         ++it;
     }
-    Gtk::Button * sync_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Sync Original Path"))));
+    Gtk::Button * sync_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("No Shape Sync to Current"))));
     sync_button->signal_clicked().connect(sigc::mem_fun (*this,&LPECloneOriginal::syncOriginal));
     vbox->pack_start(*sync_button, true, true, 2);
     if(Gtk::Widget* widg = defaultParamSet()) {
@@ -113,7 +125,7 @@ LPECloneOriginal::newWidget()
 }
 
 void
-LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar * attributes, const gchar * style_attributes) 
+LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar * attributes, const gchar * css_properties) 
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document || !origin || !dest) {
@@ -124,7 +136,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
         size_t index = 0;
         for (auto & child : childs) {
             SPObject *dest_child = dest->nthChild(index); 
-            cloneAttrbutes(child, dest_child, attributes, style_attributes); 
+            cloneAttrbutes(child, dest_child, attributes, css_properties); 
             index++;
         }
     }
@@ -132,7 +144,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
         size_t index = 0;
         for (auto & child : SP_TEXT(origin)->children) {
             SPObject *dest_child = dest->nthChild(index); 
-            cloneAttrbutes(&child, dest_child, attributes, style_attributes); 
+            cloneAttrbutes(&child, dest_child, attributes, css_properties); 
             index++;
         }
     }
@@ -151,7 +163,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
             for ( std::vector<SPObject*>::const_iterator iter=mask_list.begin();iter!=mask_list.end();++iter) {
                 SPObject * mask_data = *iter;
                 SPObject * mask_dest_data = mask_list_dest[i];
-                cloneAttrbutes(mask_data, mask_dest_data, attributes, style_attributes);
+                cloneAttrbutes(mask_data, mask_dest_data, attributes, css_properties);
                 i++;
             }
         }
@@ -167,7 +179,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
             for ( std::vector<SPObject*>::const_iterator iter=clippath_list.begin();iter!=clippath_list.end();++iter) {
                 SPObject * clippath_data = *iter;
                 SPObject * clippath_dest_data = clippath_list_dest[i];
-                cloneAttrbutes(clippath_data, clippath_dest_data, attributes, style_attributes);
+                cloneAttrbutes(clippath_data, clippath_dest_data, attributes, css_properties);
                 i++;
             }
         }
@@ -239,7 +251,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
     sp_repr_css_attr_add_from_string(css_origin, origin->getRepr()->attribute("style"));
     SPCSSAttr *css_dest = sp_repr_css_attr_new();
     sp_repr_css_attr_add_from_string(css_dest, dest->getRepr()->attribute("style"));
-    gchar ** styleattarray = g_strsplit(old_style_attributes, ",", 0);
+    gchar ** styleattarray = g_strsplit(old_css_properties, ",", 0);
     gchar ** styleiter = styleattarray;
     while (*styleiter != nullptr) {
         const char* attribute = (*styleiter);
@@ -248,7 +260,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
         }
         styleiter++;
     }
-    styleattarray = g_strsplit(style_attributes, ",", 0);
+    styleattarray = g_strsplit(css_properties, ",", 0);
     styleiter = styleattarray;
     while (*styleiter != nullptr) {
         const char* attribute = (*styleiter);
@@ -284,12 +296,12 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         if (attr.size()  && !Glib::ustring(attributes_str).size()) {
             attr.erase (attr.size()-1, 1);
         }
-        gchar * style_attributes_str = style_attributes.param_getSVGValue();
+        gchar * css_properties_str = css_properties.param_getSVGValue();
         Glib::ustring style_attr = "";
-        if (style_attr.size() && !Glib::ustring( style_attributes_str).size()) {
+        if (style_attr.size() && !Glib::ustring( css_properties_str).size()) {
             style_attr.erase (style_attr.size()-1, 1);
         }
-        style_attr += Glib::ustring( style_attributes_str) + Glib::ustring(",");
+        style_attr += Glib::ustring( css_properties_str) + Glib::ustring(",");
 
         SPItem * orig =  SP_ITEM(linkeditem.getObject());
         if(!orig) {
@@ -298,7 +310,7 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         SPItem * dest =  SP_ITEM(sp_lpe_item); 
         const gchar * id = orig->getId();
         cloneAttrbutes(orig, dest, attr.c_str(), style_attr.c_str());
-        old_style_attributes = style_attributes.param_getSVGValue();
+        old_css_properties = css_properties.param_getSVGValue();
         old_attributes = attributes.param_getSVGValue();
         sync = false;
         linked = id;
@@ -339,7 +351,7 @@ LPECloneOriginal::modified(SPObject */*obj*/, guint /*flags*/)
 LPECloneOriginal::~LPECloneOriginal()
 {
     quit_listening();
-    g_free(old_style_attributes);
+    g_free(old_css_properties);
     g_free(old_attributes);
 
 }
