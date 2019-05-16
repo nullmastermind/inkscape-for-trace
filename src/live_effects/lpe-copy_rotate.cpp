@@ -110,8 +110,8 @@ LPECopyRotate::~LPECopyRotate()
 void
 LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
 {
+    is_load = false;
     if (split_items) {
-        is_load = false;
         SPDocument * document = SP_ACTIVE_DOCUMENT;
         if (!document) {
             return;

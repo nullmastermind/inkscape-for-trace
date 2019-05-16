@@ -136,7 +136,9 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
         if (strlen(attribute)) {
             if ( shape_dest && shape_origin && (std::strcmp(attribute, "d") == 0)) {
                 SPCurve *c = nullptr;
-                if (method == CLM_BSPLINESPIRO || (previous_method == CLM_BSPLINESPIRO && method == CLM_CURRENT)) {
+                if (method == CLM_CURRENT && (previous_method == CLM_CURRENT || is_load)) {
+                    c = shape_dest->getCurve();
+                } else if (method == CLM_BSPLINESPIRO || (previous_method == CLM_BSPLINESPIRO && method == CLM_CURRENT)) {
                     c = shape_origin->getCurveForEdit();
                     SPLPEItem * lpe_item = SP_LPE_ITEM(origin);
                     if (lpe_item) {
@@ -167,9 +169,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
                     if (method == CLM_CURRENT) {
                         shape_dest->setCurveBeforeLPE(c);
                     }
-                } else if (method == CLM_CURRENT && previous_method == CLM_CURRENT) {
-                    c = shape_dest->getCurve();
-                } else {
+                } else if(method == CLM_D || (previous_method == CLM_D && method == CLM_CURRENT)){
                     c = shape_origin->getCurve();
                     if (method == CLM_CURRENT) {
                         shape_dest->setCurveBeforeLPE(c);

@@ -128,6 +128,7 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
 
 void
 LPEPowerClip::doAfterEffect (SPLPEItem const* lpeitem){
+    is_load = false;
     if (!hide_clip && flatten && isVisible()) {
         SP_ITEM(sp_lpe_item)->clip_ref->detach();
     }
