@@ -254,8 +254,18 @@ sp_ctrl_update (SPCanvasItem *item, Geom::Affine const &affine, unsigned int fla
 
     if (!ctrl->defined) return;
 
-    int x = floor(affine[4]) - floor(ctrl->width/2.0);
-    int y = floor(affine[5]) - floor(ctrl->height/2.0);
+    int w = (ctrl->width  + 1);
+    int h = (ctrl->height + 1);
+    if ((ctrl->shape == SP_CTRL_SHAPE_BITMAP) or (ctrl->shape == SP_CTRL_SHAPE_IMAGE)) {
+        w = ctrl->width;
+        h = ctrl->height;
+    }
+    int w_half = floor(w/2.0);
+    int h_half = floor(h/2.0);
+
+
+    int x = floor(affine[4]) - w_half;
+    int y = floor(affine[5]) - h_half;
 
     switch (ctrl->anchor) {
         case SP_ANCHOR_N:
@@ -266,13 +276,13 @@ sp_ctrl_update (SPCanvasItem *item, Geom::Affine const &affine, unsigned int fla
         case SP_ANCHOR_NW:
         case SP_ANCHOR_W:
         case SP_ANCHOR_SW:
-            x += floor(ctrl->width/2.0);
+            x += w_half;
             break;
 
         case SP_ANCHOR_NE:
         case SP_ANCHOR_E:
         case SP_ANCHOR_SE:
-            x -= floor(ctrl->width/2.0);
+            x -= w_half;
             break;
     }
 
@@ -285,13 +295,13 @@ sp_ctrl_update (SPCanvasItem *item, Geom::Affine const &affine, unsigned int fla
         case SP_ANCHOR_NW:
         case SP_ANCHOR_N:
         case SP_ANCHOR_NE:
-            y += floor(ctrl->height/2.0);
+            y += h_half;
             break;
 
         case SP_ANCHOR_SW:
         case SP_ANCHOR_S:
         case SP_ANCHOR_SE:
-            y -= floor(ctrl->height/2.0);
+            y -= h_half;
             break;
     }
 
@@ -671,7 +681,7 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
         cairo_rectangle(buf->ct, x, y, w/buf->device_scale, h/buf->device_scale);
         cairo_clip(buf->ct);
         cairo_paint(buf->ct);
-        cairo_surface_write_to_png(cache, "ctrl_cache.png" );
+        // cairo_surface_write_to_png(cache, "ctrl_cache.png" );
         cairo_restore(buf->ct);
         cairo_surface_destroy(cache);
 
