@@ -1152,9 +1152,19 @@ void SPLPEItem::replacePathEffects( std::vector<LivePathEffectObject const *> co
  *  use this method instead.
  *  Returns true if one or more effects were forked; returns false if nothing was done.
  */
-bool SPLPEItem::forkPathEffectsIfNecessary(unsigned int nr_of_allowed_users)
+bool SPLPEItem::forkPathEffectsIfNecessary(unsigned int nr_of_allowed_users, bool recursive)
 {
     bool forked = false;
+    SPGroup * group = dynamic_cast<SPGroup *>(this);
+    if (group && recursive) {
+        std::vector<SPItem*> item_list = sp_item_group_item_list(group);
+        for (auto child:item_list) {
+            SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(child);
+            if (lpeitem && lpeitem->forkPathEffectsIfNecessary(nr_of_allowed_users, recursive)) {
+                forked = true;
+            }
+        }
+    }
 
     if ( this->hasPathEffect() ) {
         // If one of the path effects is used by 2 or more items, fork it

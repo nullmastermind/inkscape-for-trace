@@ -99,7 +99,7 @@ public:
     void applyToMask(SPItem* to, Inkscape::LivePathEffect::Effect *lpe = nullptr);
     void applyToClipPath(SPItem* to, Inkscape::LivePathEffect::Effect *lpe = nullptr);
     void applyToClipPathOrMask(SPItem * clip_mask, SPItem* to, Inkscape::LivePathEffect::Effect *lpe = nullptr);
-    bool forkPathEffectsIfNecessary(unsigned int nr_of_allowed_users = 1);
+    bool forkPathEffectsIfNecessary(unsigned int nr_of_allowed_users = 1, bool recursive = true);
 
     void editNextParamOncanvas(SPDesktop *dt);
 };
