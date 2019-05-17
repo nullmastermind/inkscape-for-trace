@@ -273,7 +273,6 @@ msgid "Sharpen edges and boundaries within the object, force=0.3"
 msgstr "Affina bordi e riquadri interni all'oggetto, forza=0.3"
 
 #: ../share/filters/filters.svg.h:74
-#, fuzzy
 msgid "Oil Painting"
 msgstr "Pittura ad olio"
 
@@ -1173,7 +1172,6 @@ msgstr ""
 "dai punti di intersezione"
 
 #: ../share/filters/filters.svg.h:434
-#, fuzzy
 msgid "Dark and Glow"
 msgstr "Scuro e con alone"
 
@@ -7019,7 +7017,6 @@ msgstr ""
 "Sposta i canali CMY separatamente e gli miscela in diversi tipi di sfondi"
 
 #: ../src/extension/internal/filter/color.h:1485
-#, fuzzy
 msgid "Quadritone Fantasy"
 msgstr "Fantasia in quattro torni"
 
@@ -33113,13 +33110,12 @@ msgid "Rotate canvas counter-clockwise"
 msgstr "Ruota antiorario"
 
 #: ../src/verbs.cpp:3046
-#, fuzzy
 msgid "Reset Rotation"
-msgstr "Rotazione"
+msgstr "Reimposta rotazione"
 
 #: ../src/verbs.cpp:3046
 msgid "Reset canvas rotation to zero"
-msgstr ""
+msgstr "Reimposta la rotazione del canvas a zero"
 
 #: ../src/verbs.cpp:3048
 msgid "Flip Horizontally"
@@ -33303,7 +33299,7 @@ msgstr "Al_terna"
 
 #: ../src/verbs.cpp:3097
 msgid "Toggle between normal and outline display modes"
-msgstr "Alterna tra la visualizzazione normale o solo contorni"
+msgstr "Alterna tra la visualizzazione normale e scheletro"
 
 #: ../src/verbs.cpp:3099
 msgid "Switch to normal color display mode"
@@ -33322,24 +33318,20 @@ msgid "Toggle between normal and grayscale color display modes"
 msgstr "Alterna tra le modalità colore schemo normale e in scala di grigi"
 
 #: ../src/verbs.cpp:3108
-#, fuzzy
 msgid "Toggle _Split View Mode"
-msgstr "Commuta modalità focus"
+msgstr "Attiva modalità _Split View"
 
 #: ../src/verbs.cpp:3109
-#, fuzzy
 msgid "Split canvas in 2 to show outline"
-msgstr "Mostra sempre scheletro"
+msgstr "Separa il canvas in due per mostrare lo scheletro"
 
 #: ../src/verbs.cpp:3111
-#, fuzzy
 msgid "Toggle _XRay Mode"
-msgstr "Commuta modalità focus"
+msgstr "Attiva modalità _XRay"
 
 #: ../src/verbs.cpp:3111
-#, fuzzy
 msgid "XRay around cursor"
-msgstr " sotto il cursore"
+msgstr "Mostra lo scheletro in un'area circolare attorno al cursore"
 
 #: ../src/verbs.cpp:3114
 msgid "Color-Managed View"
@@ -33864,7 +33856,7 @@ msgstr ""
 
 #: ../src/widgets/desktop-widget.cpp:606
 msgid "Rotation. (Also Ctrl+Shift+Scroll)"
-msgstr ""
+msgstr "Rotazione (Ctrl+Maiusc+Scroll)"
 
 #: ../src/widgets/desktop-widget.cpp:637
 msgid "Cursor coordinates"
