@@ -127,45 +127,28 @@ sp_flatten(Geom::PathVector &pathvector, bool evenodd)
 }
 
 Geom::PathVector
-sp_get_outer(Geom::PathVector pathvector)
+sp_get_one(Geom::PathVector pathvector, bool outer)
 {
     Geom::OptRect bbox;
     Geom::Path ret;
     Geom::PathVector ret_pv;
-    for (auto & path_it : pathvector) {
-        Geom::Path iter = path_it;
-        if (iter.empty()) {
-            continue;
-        }
-        if (bbox && iter.boundsFast()->contains(bbox)) {
-            ret = iter;
-        } else if(!bbox) {
-            ret = iter;
-        }
-        bbox = iter.boundsFast();
+    if (pathvector.size() == 0) {
+        return ret_pv;
     }
-    if (!ret.empty()) {
-        ret_pv.push_back(ret);
+    Geom::Path path0 = pathvector.at(0);
+    if (pathvector.size() == 1) {
+        ret_pv.push_back(path0);
+        return ret_pv;
     }
-    return ret_pv;
-}
-
-Geom::PathVector
-sp_get_inner(Geom::PathVector pathvector)
-{
-    Geom::Path ret;
-    Geom::PathVector ret_pv;
-    Geom::PathVector outer = sp_get_outer(pathvector);
-    Geom::OptRect bbox = outer.boundsFast();
-    for (auto & path_it : pathvector) {
-        Geom::Path iter = path_it;
-        if (iter.empty()) {
-            continue;
-        }
-        if (bbox && bbox != iter.boundsFast()) {
-            ret_pv.push_back(iter);
-        }
+    Geom::Path path1 = pathvector.at(1);
+    bool push = false;
+    if (path0.boundsFast()->contains(path1.boundsFast())) {
+        push = true;
     }
+    if (!outer) {
+        push = !push;
+    }
+    ret_pv.push_back(pathvector.at(push?0:1));
     return ret_pv;
 }
 
@@ -173,7 +156,7 @@ static void
 sp_set_origin(Geom::PathVector original_pathv, Geom::Point &origin)
 {
     double size = 0;
-    Geom::PathVector bigger = sp_get_outer(original_pathv);
+    Geom::PathVector bigger = sp_get_one(original_pathv, true);
     boost::optional< Geom::PathVectorTime > pathvectortime = bigger.nearestTime(origin);
     if (pathvectortime) {
         Geom::PathTime pathtime = pathvectortime->asPathTime();
@@ -249,11 +232,6 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         Geom::PathVector original_pv;
         original_pv.push_back(original);
         Geom::OptRect bounds = original_pv.boundsFast();
-        Geom::Point winding_point = original[0].initialPoint();
-        int wind = 0;
-        double dist = Geom::infinity();
-        pathv_matrix_point_bbox_wind_distance(original_pathv, Geom::identity(), winding_point, nullptr, &wind, &dist, 0.5, nullptr);
-        bool path_inside = wind % 2 != 0;
         Geom::PathVector outline = Inkscape::outline(original, std::abs(offset) * 2 , 
                                (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit),
                                 static_cast<LineJoinType>(linejoin_type.get_value()),
@@ -262,10 +240,15 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         if (outline.empty()) {
             continue;
         }
+        Geom::Point winding_point = Geom::Point(Geom::infinity(), Geom::infinity());
+        int wind = 0;
+        double dist = Geom::infinity();
+        pathv_matrix_point_bbox_wind_distance(original_pathv, Geom::identity(), winding_point, nullptr, &wind, &dist, 0.5, nullptr);
+        bool path_inside = wind % 2 != 0;
         if (offset > 0 && !path_inside) {
-            ret_painter_tmp = sp_get_outer(outline);
+            ret_painter_tmp = sp_get_one(outline, true);
         } else if (offset < 0 && !path_inside) {
-            ret_painter_tmp = sp_get_inner(outline);
+            ret_painter_tmp = sp_get_one(outline, false);
         } else if (offset > 0 && path_inside) {
             Geom::OptRect boundsOutline = outline.boundsFast();
             if(!boundsOutline || 
@@ -273,9 +256,9 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
                ((*boundsOutline).width()+(*boundsOutline).height())/2.0 > (*bounds).width() + (*bounds).height()){
                 continue;
             }
-            ret_eraser_tmp = sp_get_inner(outline);
+            ret_eraser_tmp = sp_get_one(outline, false);
         } else /*if (offset < 0 && path_inside) */ {
-            ret_eraser_tmp = sp_get_outer(outline);
+            ret_eraser_tmp = sp_get_one(outline, true);
         }
         ret_painter.insert(ret_painter.end(),ret_painter_tmp.begin(),ret_painter_tmp.end());
         ret_eraser.insert(ret_eraser.end(),ret_eraser_tmp.begin(),ret_eraser_tmp.end());

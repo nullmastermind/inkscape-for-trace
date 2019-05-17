@@ -36,10 +36,10 @@ static Point intersection_point(Point origin_a, Point vector_a, Point origin_b, 
 static Circle touching_circle( D2<SBasis> const &curve, double t, double tol=0.01 )
 {
     D2<SBasis> dM=derivative(curve);
-    if ( are_near(L2sq(dM(t)),0.) ) {
+    if ( are_near(L2sq(dM(t)), tol) ) {
         dM=derivative(dM);
     }
-    if ( are_near(L2sq(dM(t)),0.) ) {   // try second time
+    if ( are_near(L2sq(dM(t)), tol) ) {   // try second time
         dM=derivative(dM);
     }
     Piecewise<D2<SBasis> > unitv = unitVector(dM,tol);
