@@ -1241,9 +1241,9 @@ void Path::ConvertPositionsToForced(int nbPos, cut_position *poss)
           PathDescrArcTo *nData = dynamic_cast<PathDescrArcTo *>(descr_cmd[cp]);
           nData->p=theP;
           if ( delta*ct > M_PI ) {
-            nData->clockwise=true;
+            nData->large=true;
           } else {
-            nData->clockwise=false;
+            nData->large=false;
           }
         }
         // decalages dans le tableau des positions de coupe

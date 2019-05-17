@@ -955,8 +955,6 @@ void Path::TangentOnArcAt(double at, const Geom::Point &iS, PathDescrArcTo const
 	csex /= rx;
 	csey /= ry;
 	double l = csex * csex + csey * csey;
-	if (l >= 4)
-		return;
 	double const d = sqrt(std::max(1 - l / 4, 0.0));
 	double csdx = csey;
         double csdy = -csex;
