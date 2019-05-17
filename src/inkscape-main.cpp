@@ -48,6 +48,9 @@ static void set_extensions_env()
 
     g_setenv("PYTHONPATH", new_pythonpath.c_str(), true);
 
+    // Python 2.x attempts to encode output as ASCII by default when sent to a pipe.
+    g_setenv("PYTHONIOENCODING", "UTF-8", true);
+
 #ifdef _WIN32
     // add inkscape directory to DLL search path so dynamically linked extension modules find their libraries
     // should be fixed in Python 3.8 (https://github.com/python/cpython/commit/2438cdf0e932a341c7613bf4323d06b91ae9f1f1)
