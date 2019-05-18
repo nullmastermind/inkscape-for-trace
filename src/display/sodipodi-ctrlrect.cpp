@@ -172,16 +172,11 @@ void CtrlRect::render(SPCanvasBuf *buf)
 
             // Snap to pixel grid
             Geom::Rect outline( _rect.min() * _affine, _rect.max() * _affine);
-            // Check if there is a simpler way to go from 'outline' to 'int_rect'.
-            Geom::IntRect int_rect ( (int) floor(outline.min()[X] + 0.5),
-                                     (int) floor(outline.min()[Y] + 0.5),
-                                     (int) floor(outline.max()[X] + 0.5),
-                                     (int) floor(outline.max()[Y] + 0.5) );
             cairo_rectangle (buf->ct,
-                             0.5 + int_rect[X].min(),
-                             0.5 + int_rect[Y].min(),
-                             int_rect[X].max() - int_rect[X].min(),
-                             int_rect[Y].max() - int_rect[Y].min() );
+                             floor(outline.min()[X])+0.5,
+                             floor(outline.min()[Y])+0.5,
+                             floor(outline.max()[X]) - floor(outline.min()[X]),
+                             floor(outline.max()[Y]) - floor(outline.min()[Y]));
         } else {
 
             // Angled
