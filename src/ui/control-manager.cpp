@@ -125,11 +125,6 @@ ControlManagerImpl::ControlManagerImpl(ControlManager &manager) :
     _itemList(),
     _sizeTable()
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->addObserver(_prefHook);
-
-    _size = prefs->getIntLimited("/options/grabsize/value", 3, 1, 7);
-
     _typeTable[CTRL_TYPE_UNKNOWN] = SP_TYPE_CTRL;
     _typeTable[CTRL_TYPE_ADJ_HANDLE] = SP_TYPE_CTRL;
     _typeTable[CTRL_TYPE_ANCHOR] = SP_TYPE_CTRL;
@@ -140,7 +135,6 @@ ControlManagerImpl::ControlManagerImpl(ControlManager &manager) :
     _typeTable[CTRL_TYPE_NODE_SYMETRICAL] = SP_TYPE_CTRL;
 
     _typeTable[CTRL_TYPE_LINE] = SP_TYPE_CTRLLINE;
-
 
     // -------
     _ctrlToShape[CTRL_TYPE_UNKNOWN] = SP_CTRL_SHAPE_DIAMOND;
@@ -161,32 +155,44 @@ ControlManagerImpl::ControlManagerImpl(ControlManager &manager) :
 
     // -------
 
+    // The size of the controls is determined by the grabsize preference; see the "Handle size" parameter in
+    // the input/output group, on the "input devices" tab; this parameter ranges from 1 to 7; When selecting a control, we
+    // increase the size by an additional 2 pixels, if _resizeOnSelect is true (see setSelected())
+    
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->addObserver(_prefHook);
+
+    _size = prefs->getIntLimited("/options/grabsize/value", 3, 1, 7);
+
+    // _sizeTable will have odd numbers, which allow for pixel perfect alignment (e.g. relative to grids
+    // or guides, which are 1 px wide. It is not possible to accurately center a control to them if the
+    // control has an even width).
     {
-        int sizes[] = {8, 8, 8, 8, 8, 8, 8};
+        int sizes[] = {7, 7, 7, 7, 7, 7, 7};
         _sizeTable[CTRL_TYPE_UNKNOWN] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
     }
     {
-        int sizes[] = {2, 4, 6, 8, 10, 12, 14};
+        int sizes[] = {3, 5, 7, 9, 11, 13, 15};
         _sizeTable[CTRL_TYPE_ANCHOR] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
     }
     {
-        int sizes[] = {2, 4, 7, 8, 9, 10, 12};
+        int sizes[] = {3, 5, 7, 9, 11, 13, 15};
         _sizeTable[CTRL_TYPE_ADJ_HANDLE] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
     }
     {
-        int sizes[] = {4, 6, 8, 10, 12, 14, 16};
+        int sizes[] = {5, 7, 9, 11, 13, 15, 17};
         _sizeTable[CTRL_TYPE_POINT] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
         _sizeTable[CTRL_TYPE_ROTATE] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
         _sizeTable[CTRL_TYPE_SIZER] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
         _sizeTable[CTRL_TYPE_SHAPER] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
     }
     {
-        int sizes[] = {5, 7, 9, 10, 11, 12, 13};
+        int sizes[] = {5, 7, 9, 11, 13, 15, 17};
         _sizeTable[CTRL_TYPE_NODE_AUTO] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
         _sizeTable[CTRL_TYPE_NODE_CUSP] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
     }
     {
-        int sizes[] = {3, 5, 7, 8, 9, 10, 11};
+        int sizes[] = {3, 5, 7, 9, 11, 13, 15};
         _sizeTable[CTRL_TYPE_NODE_SMOOTH] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
         _sizeTable[CTRL_TYPE_NODE_SYMETRICAL] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
     }
@@ -286,7 +292,6 @@ void ControlManagerImpl::updateItem(SPCanvasItem *item)
 {
     if (item) {
         double target = _sizeTable[item->ctrlType][_size - 1] + item->ctrlResize;
-
         g_object_set(item, "size", target, NULL);
 
         sp_canvas_item_request_update(item);
@@ -315,6 +320,10 @@ bool ControlManagerImpl::setControlType(SPCanvasItem *item, ControlType type)
 
 bool ControlManagerImpl::setControlResize(SPCanvasItem *item, int ctrlResize)
 {
+    // _sizeTable will have odd numbers, which allow for pixel perfect alignment (e.g. relative to grids
+    // or guides, which are 1 px wide. It is not possible to accurately center a control to them if the
+    // control has an even width). ctrlResize should therefore be an even number, such that the sum (targetSize)
+    // is also odd
     if(item) {
         item->ctrlResize = ctrlResize;
         double targetSize = _sizeTable[item->ctrlType][_size - 1] + item->ctrlResize;

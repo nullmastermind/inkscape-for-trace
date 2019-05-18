@@ -254,15 +254,8 @@ sp_ctrl_update (SPCanvasItem *item, Geom::Affine const &affine, unsigned int fla
 
     if (!ctrl->defined) return;
 
-    int w = (ctrl->width  + 1);
-    int h = (ctrl->height + 1);
-    if ((ctrl->shape == SP_CTRL_SHAPE_BITMAP) or (ctrl->shape == SP_CTRL_SHAPE_IMAGE)) {
-        w = ctrl->width;
-        h = ctrl->height;
-    }
-    int w_half = floor(w/2.0);
-    int h_half = floor(h/2.0);
-
+    int w_half = floor(ctrl->width/2.0);
+    int h_half = floor(ctrl->height/2.0);
 
     int x = floor(affine[4]) - w_half;
     int y = floor(affine[5]) - h_half;
@@ -361,12 +354,8 @@ sp_ctrl_build_cache (SPCtrl *ctrl, int device_scale)
         stroke_color = fill_color;
     }
 
-    gint width  = (ctrl->width  + 1) * device_scale;
-    gint height = (ctrl->height + 1) * device_scale;    
-    if ((ctrl->shape == SP_CTRL_SHAPE_BITMAP) or (ctrl->shape == SP_CTRL_SHAPE_IMAGE)) {
-        width  = ctrl->width * device_scale;
-        height = ctrl->height * device_scale;
-    }
+    gint width  = ctrl->width  * device_scale;
+    gint height = ctrl->height * device_scale;
 
     if (width < 2) return;
     gint size = width * height;
@@ -611,12 +600,9 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
     }
 
     // Must match width/height sp_ctrl_build_cache.
-    int w = (ctrl->width  + 1) * buf->device_scale;
-    int h = (ctrl->height + 1) * buf->device_scale;
-    if ((ctrl->shape == SP_CTRL_SHAPE_BITMAP) or (ctrl->shape == SP_CTRL_SHAPE_IMAGE)) {
-        w = ctrl->width * buf->device_scale;
-        h = ctrl->height * buf->device_scale;
-    }
+    int w = ctrl->width * buf->device_scale;
+    int h = ctrl->height * buf->device_scale;
+
     double x = ctrl->box.left() - buf->rect.left();
     double y = ctrl->box.top() - buf->rect.top();
 

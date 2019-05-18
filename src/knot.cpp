@@ -114,7 +114,7 @@ SPKnot::SPKnot(SPDesktop *desktop, gchar const *tip)
     this->item = sp_canvas_item_new(desktop->getControls(),
                                     SP_TYPE_CTRL,
                                     "anchor", SP_ANCHOR_CENTER,
-                                    "size", 8.0,
+                                    "size", 9.0,
                                     "angle", 0.0,
                                     "filled", TRUE,
                                     "fill_color", 0xffffff00,

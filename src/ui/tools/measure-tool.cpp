@@ -1080,7 +1080,7 @@ void MeasureTool::setMeasureCanvasItem(Geom::Point position, bool to_item, bool 
     SPCanvasItem * canvasitem = sp_canvas_item_new(desktop->getTempGroup(),
         SP_TYPE_CTRL,
         "anchor", SP_ANCHOR_CENTER,
-        "size", 8.0,
+        "size", 9.0,
         "stroked", TRUE,
         "stroke_color", color,
         "mode", SP_KNOT_MODE_XOR,
