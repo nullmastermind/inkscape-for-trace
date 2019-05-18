@@ -187,7 +187,7 @@ boost::optional<Geom::Point> Line::intersection_with_viewbox (SPDesktop *desktop
     return this->intersect (line);
 }
 
-void create_canvas_point(Geom::Point const &pos, double size, guint32 rgba)
+void create_canvas_point(Geom::Point const &pos, unsigned int size, guint32 rgba)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     SPCanvasItem * canvas_pt = sp_canvas_item_new(desktop->getControls(), SP_TYPE_CTRL,

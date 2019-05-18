@@ -186,11 +186,11 @@ static void sp_guideline_update(SPCanvasItem *item, Geom::Affine const &affine, 
         if (gl->locked) {
             g_object_set(G_OBJECT(gl->origin), "stroke_color", 0x0000ff88,
                                                "shape", SP_CTRL_SHAPE_CROSS,
-                                               "size", 7.0, NULL);
+                                               "size", 7, NULL);
         } else {
             g_object_set(G_OBJECT(gl->origin), "stroke_color", 0xff000088,
                                                "shape", SP_CTRL_SHAPE_CIRCLE,
-                                               "size", 5.0, NULL);
+                                               "size", 5, NULL);
         }
         gl->origin->moveto(gl->point_on_line);
         sp_canvas_item_request_update(SP_CANVAS_ITEM(gl->origin));

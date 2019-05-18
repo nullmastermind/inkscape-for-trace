@@ -114,7 +114,7 @@ SPKnot::SPKnot(SPDesktop *desktop, gchar const *tip)
     this->item = sp_canvas_item_new(desktop->getControls(),
                                     SP_TYPE_CTRL,
                                     "anchor", SP_ANCHOR_CENTER,
-                                    "size", 9.0,
+                                    "size", 9,
                                     "angle", 0.0,
                                     "filled", TRUE,
                                     "fill_color", 0xffffff00,
@@ -458,7 +458,7 @@ void SPKnot::updateCtrl() {
 
     g_object_set(this->item, "shape", this->shape, NULL);
     g_object_set(this->item, "mode", this->mode, NULL);
-    g_object_set(this->item, "size", (gdouble) this->size, NULL);
+    g_object_set(this->item, "size", this->size, NULL);
     g_object_set(this->item, "angle", this->angle, NULL);
     g_object_set(this->item, "anchor", this->anchor, NULL);
 

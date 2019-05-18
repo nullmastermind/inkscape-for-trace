@@ -80,7 +80,7 @@ ControlPoint::ControlPoint(SPDesktop *d, Geom::Point const &initial_pos, SPAncho
 {
     _canvas_item = sp_canvas_item_new(
         group ? group : _desktop->getControls(), SP_TYPE_CTRL,
-        "anchor", (SPAnchorType) anchor, "size", (gdouble) pixbuf->get_width(),
+        "anchor", (SPAnchorType) anchor, "size", (unsigned int) pixbuf->get_width(),
         "shape", SP_CTRL_SHAPE_BITMAP, "pixbuf", pixbuf->gobj(),
         "filled", TRUE, "fill_color", _cset.normal.fill,
         "stroked", TRUE, "stroke_color", _cset.normal.stroke,
@@ -167,9 +167,9 @@ Glib::ustring ControlPoint::format_tip(char const *format, ...)
 
 unsigned int ControlPoint::_size() const
 {
-    double ret;
+    unsigned int ret;
     g_object_get(_canvas_item, "size", &ret, NULL);
-    return static_cast<unsigned int>(ret);
+    return ret;
 }
 
 SPCtrlShapeType ControlPoint::_shape() const
@@ -197,7 +197,7 @@ Glib::RefPtr<Gdk::Pixbuf> ControlPoint::_pixbuf()
 
 void ControlPoint::_setSize(unsigned int size)
 {
-    g_object_set(_canvas_item, "size", (gdouble) size, NULL);
+    g_object_set(_canvas_item, "size", size, NULL);
 }
 
 bool ControlPoint::_setControlType(Inkscape::ControlType type)

@@ -26,8 +26,6 @@ using Inkscape::ControlFlags;
 
 namespace {
 
-std::map<Inkscape::ControlType, std::vector<int> > sizeTable;
-
 // Note: The following operator overloads are local to this file at the moment to discourage flag manipulation elsewhere.
 /*
 ControlFlags operator |(ControlFlags lhs, ControlFlags rhs)
@@ -110,7 +108,7 @@ private:
     int _size;   // Size from the grabsize preference
     int _resize; // Way size should change from grabsize
     std::vector<SPCanvasItem *> _itemList;
-    std::map<Inkscape::ControlType, std::vector<int> > _sizeTable;
+    std::map<Inkscape::ControlType, std::vector<unsigned int> > _sizeTable;
     std::map<Inkscape::ControlType, GType> _typeTable;
     std::map<Inkscape::ControlType, SPCtrlShapeType> _ctrlToShape;
     std::set<Inkscape::ControlType> _resizeOnSelect;
@@ -168,37 +166,37 @@ ControlManagerImpl::ControlManagerImpl(ControlManager &manager) :
     // or guides, which are 1 px wide. It is not possible to accurately center a control to them if the
     // control has an even width).
     {
-        int sizes[] = {7, 7, 7, 7, 7, 7, 7};
-        _sizeTable[CTRL_TYPE_UNKNOWN] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
+        unsigned int sizes[] = {7, 7, 7, 7, 7, 7, 7};
+        _sizeTable[CTRL_TYPE_UNKNOWN] = std::vector<unsigned int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
     }
     {
-        int sizes[] = {3, 5, 7, 9, 11, 13, 15};
-        _sizeTable[CTRL_TYPE_ANCHOR] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
+        unsigned int sizes[] = {3, 5, 7, 9, 11, 13, 15};
+        _sizeTable[CTRL_TYPE_ANCHOR] = std::vector<unsigned int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
     }
     {
-        int sizes[] = {3, 5, 7, 9, 11, 13, 15};
-        _sizeTable[CTRL_TYPE_ADJ_HANDLE] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
+        unsigned int sizes[] = {3, 5, 7, 9, 11, 13, 15};
+        _sizeTable[CTRL_TYPE_ADJ_HANDLE] = std::vector<unsigned int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
     }
     {
-        int sizes[] = {5, 7, 9, 11, 13, 15, 17};
-        _sizeTable[CTRL_TYPE_POINT] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
-        _sizeTable[CTRL_TYPE_ROTATE] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
-        _sizeTable[CTRL_TYPE_SIZER] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
-        _sizeTable[CTRL_TYPE_SHAPER] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
+        unsigned int sizes[] = {5, 7, 9, 11, 13, 15, 17};
+        _sizeTable[CTRL_TYPE_POINT] = std::vector<unsigned int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
+        _sizeTable[CTRL_TYPE_ROTATE] = std::vector<unsigned int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
+        _sizeTable[CTRL_TYPE_SIZER] = std::vector<unsigned int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
+        _sizeTable[CTRL_TYPE_SHAPER] = std::vector<unsigned int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
     }
     {
-        int sizes[] = {5, 7, 9, 11, 13, 15, 17};
-        _sizeTable[CTRL_TYPE_NODE_AUTO] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
-        _sizeTable[CTRL_TYPE_NODE_CUSP] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
+        unsigned int sizes[] = {5, 7, 9, 11, 13, 15, 17};
+        _sizeTable[CTRL_TYPE_NODE_AUTO] = std::vector<unsigned int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
+        _sizeTable[CTRL_TYPE_NODE_CUSP] = std::vector<unsigned int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
     }
     {
-        int sizes[] = {3, 5, 7, 9, 11, 13, 15};
-        _sizeTable[CTRL_TYPE_NODE_SMOOTH] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
-        _sizeTable[CTRL_TYPE_NODE_SYMETRICAL] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
+        unsigned int sizes[] = {3, 5, 7, 9, 11, 13, 15};
+        _sizeTable[CTRL_TYPE_NODE_SMOOTH] = std::vector<unsigned int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
+        _sizeTable[CTRL_TYPE_NODE_SYMETRICAL] = std::vector<unsigned int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
     }
     {
-        int sizes[] = {1, 1, 1, 1, 1, 1, 1};
-        _sizeTable[CTRL_TYPE_INVISIPOINT] = std::vector<int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
+        unsigned int sizes[] = {1, 1, 1, 1, 1, 1, 1};
+        _sizeTable[CTRL_TYPE_INVISIPOINT] = std::vector<unsigned int>(sizes, sizes + (sizeof(sizes) / sizeof(sizes[0])));
     }
 }
 
@@ -224,7 +222,7 @@ void ControlManagerImpl::setControlSize(int size, bool force)
 SPCanvasItem *ControlManagerImpl::createControl(SPCanvasGroup *parent, ControlType type)
 {
     SPCanvasItem *item = nullptr;
-    double targetSize = _sizeTable[type][_size - 1];
+    unsigned int targetSize = _sizeTable[type][_size - 1];
     switch (type)
     {
         case CTRL_TYPE_ADJ_HANDLE:
@@ -291,7 +289,7 @@ sigc::connection ControlManagerImpl::connectCtrlSizeChanged(const sigc::slot<voi
 void ControlManagerImpl::updateItem(SPCanvasItem *item)
 {
     if (item) {
-        double target = _sizeTable[item->ctrlType][_size - 1] + item->ctrlResize;
+        unsigned int target = _sizeTable[item->ctrlType][_size - 1] + item->ctrlResize;
         g_object_set(item, "size", target, NULL);
 
         sp_canvas_item_request_update(item);
@@ -306,7 +304,7 @@ bool ControlManagerImpl::setControlType(SPCanvasItem *item, ControlType type)
         accepted = true;
     } else if (item) {
         if (_ctrlToShape.count(type) && (_typeTable[type] == _typeTable[item->ctrlType])) { // compatible?
-            double targetSize = _sizeTable[type][_size - 1] + item->ctrlResize;
+            unsigned int targetSize = _sizeTable[type][_size - 1] + item->ctrlResize;
             SPCtrlShapeType targetShape = _ctrlToShape[type];
 
             g_object_set(item, "shape", targetShape, "size", targetSize, NULL);
@@ -326,7 +324,7 @@ bool ControlManagerImpl::setControlResize(SPCanvasItem *item, int ctrlResize)
     // is also odd
     if(item) {
         item->ctrlResize = ctrlResize;
-        double targetSize = _sizeTable[item->ctrlType][_size - 1] + item->ctrlResize;
+        unsigned int targetSize = _sizeTable[item->ctrlType][_size - 1] + item->ctrlResize;
         g_object_set(item, "size", targetSize, NULL);
         return true;
     }
@@ -345,7 +343,7 @@ void ControlManagerImpl::setSelected(SPCanvasItem *item, bool selected)
         }
 
         // TODO refresh colors
-        double targetSize = _sizeTable[item->ctrlType][_size - 1] + item->ctrlResize;
+        unsigned int targetSize = _sizeTable[item->ctrlType][_size - 1] + item->ctrlResize;
         g_object_set(item, "size", targetSize, NULL);
     }
 }

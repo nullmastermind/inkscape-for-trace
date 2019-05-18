@@ -60,9 +60,9 @@ sp_ctrl_class_init (SPCtrlClass *klass)
     g_object_class_install_property (g_object_class,
             ARG_MODE, g_param_spec_int ("mode", "mode", "Mode", 0, G_MAXINT, SP_CTRL_MODE_COLOR, (GParamFlags) G_PARAM_READWRITE));
     g_object_class_install_property (g_object_class,
-            ARG_ANCHOR, g_param_spec_int ("anchor", "anchor", "Anchor", 0, G_MAXINT, SP_ANCHOR_CENTER, (GParamFlags) G_PARAM_READWRITE));
+            ARG_ANCHOR, g_param_spec_int ("anchor", "anchor", "Anchor", 0, G_MAXUINT, SP_ANCHOR_CENTER, (GParamFlags) G_PARAM_READWRITE));
     g_object_class_install_property (g_object_class,
-            ARG_SIZE, g_param_spec_double ("size", "size", "Size", 0.0, G_MAXDOUBLE, 8.0, (GParamFlags) G_PARAM_READWRITE));
+            ARG_SIZE, g_param_spec_uint ("size", "size", "Size", 0, G_MAXINT, 7, (GParamFlags) G_PARAM_READWRITE));
     g_object_class_install_property (g_object_class,
             ARG_ANGLE, g_param_spec_double ("angle", "angle", "Angle", -G_MAXDOUBLE, G_MAXDOUBLE, 0.0, (GParamFlags) G_PARAM_READWRITE));
     g_object_class_install_property (g_object_class,
@@ -104,7 +104,7 @@ sp_ctrl_set_property(GObject *object, guint prop_id, const GValue *value, GParam
         ctrl->anchor = (SPAnchorType) g_value_get_int(value);
         break;
     case ARG_SIZE:
-        ctrl->width = (gint) g_value_get_double(value);
+        ctrl->width = g_value_get_uint(value);
         ctrl->height = ctrl->width;
         ctrl->defined = (ctrl->width > 0);
         break;
@@ -164,7 +164,7 @@ sp_ctrl_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec 
             break;
 
         case ARG_SIZE:
-            g_value_set_double(value, ctrl->width/2.0);
+            g_value_set_uint(value, ctrl->width);
             break;
 
         case ARG_ANGLE:

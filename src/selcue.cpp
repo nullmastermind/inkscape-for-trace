@@ -162,7 +162,7 @@ void Inkscape::SelCue::_newItemBboxes()
                                          SP_TYPE_CTRL,
                                          "mode", SP_CTRL_MODE_XOR,
                                          "shape", SP_CTRL_SHAPE_DIAMOND,
-                                         "size", 6.0,
+                                         "size", 6,
                                          "filled", TRUE,
                                          "fill_color", 0x000000ff,
                                          "stroked", FALSE,
@@ -214,7 +214,7 @@ void Inkscape::SelCue::_newTextBaselines()
                 if (pt) {
                     baseline_point = sp_canvas_item_new(_desktop->getControls(), SP_TYPE_CTRL,
                         "mode", SP_CTRL_MODE_XOR,
-                        "size", 5.0,
+                        "size", 5,
                         "filled", 0,
                         "stroked", 1,
                         "stroke_color", 0x000000ff,
