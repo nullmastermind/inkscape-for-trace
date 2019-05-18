@@ -57,6 +57,7 @@ void SPConnEndPair::release()
         handle_ix->_changed_connection.disconnect();
         handle_ix->_delete_connection.disconnect();
         handle_ix->_transformed_connection.disconnect();
+        handle_ix->_group_connection.disconnect();
         g_free(handle_ix->href);
         handle_ix->href = nullptr;
         handle_ix->ref.detach();
