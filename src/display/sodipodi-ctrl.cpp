@@ -60,9 +60,9 @@ sp_ctrl_class_init (SPCtrlClass *klass)
     g_object_class_install_property (g_object_class,
             ARG_MODE, g_param_spec_int ("mode", "mode", "Mode", 0, G_MAXINT, SP_CTRL_MODE_COLOR, (GParamFlags) G_PARAM_READWRITE));
     g_object_class_install_property (g_object_class,
-            ARG_ANCHOR, g_param_spec_int ("anchor", "anchor", "Anchor", 0, G_MAXUINT, SP_ANCHOR_CENTER, (GParamFlags) G_PARAM_READWRITE));
+            ARG_ANCHOR, g_param_spec_int ("anchor", "anchor", "Anchor", 0, G_MAXINT, SP_ANCHOR_CENTER, (GParamFlags) G_PARAM_READWRITE));
     g_object_class_install_property (g_object_class,
-            ARG_SIZE, g_param_spec_uint ("size", "size", "Size", 0, G_MAXINT, 7, (GParamFlags) G_PARAM_READWRITE));
+            ARG_SIZE, g_param_spec_uint ("size", "size", "Size", 0, G_MAXUINT, 7, (GParamFlags) G_PARAM_READWRITE));
     g_object_class_install_property (g_object_class,
             ARG_ANGLE, g_param_spec_double ("angle", "angle", "Angle", -G_MAXDOUBLE, G_MAXDOUBLE, 0.0, (GParamFlags) G_PARAM_READWRITE));
     g_object_class_install_property (g_object_class,
