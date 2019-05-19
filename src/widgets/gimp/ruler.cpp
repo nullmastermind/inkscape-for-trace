@@ -1088,7 +1088,7 @@ sp_ruler_draw_ticks (SPRuler *ruler)
     gint             digit_offset;
     gchar            digit_str[2] = { '\0', '\0' };
     gint             text_size;
-    gint             pos;
+    gdouble          pos;
     gdouble          max_size;
     Inkscape::Util::Unit const *unit = nullptr;
     SPRulerMetric    ruler_metric = ruler_metric_general; /* The metric to use for this unit system */
@@ -1123,6 +1123,8 @@ sp_ruler_draw_ticks (SPRuler *ruler)
 
     cr = cairo_create (priv->backing_store);
     
+    cairo_set_line_width(cr, 1.0);
+
     cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
     cairo_paint (cr);
     cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
@@ -1221,24 +1223,19 @@ sp_ruler_draw_ticks (SPRuler *ruler)
 
         for (cur = start; cur <= end; cur += subd_incr)
           {
-            // due to the typical values for cur, lower and increment, pos will often end up to
-            // be e.g. 641.50000000000; rounding behaviour is not defined in such a case (see round.h)
-            // and jitter will be apparent (upon redrawing some of the lines on the ruler might jump a
-            // by a pixel, and jump back on the next redraw). This is suppressed by adding 1e-9 (that's only one nanopixel ;-))
-            pos = gint(round((cur - lower) * increment + 1e-12));
+            pos = floor((cur - lower) * increment) + 0.5;
 
             if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
              {
-               cairo_rectangle (cr,
-                                pos, height + border.top - length,
-                                1,   length);
+               cairo_move_to(cr, pos, height + border.top - length);
+               cairo_line_to(cr, pos, height + border.top);
              }
             else 
              {
-               cairo_rectangle (cr,
-                                height + border.left - length, pos,
-                                length,                        1);
+               cairo_move_to(cr, height + border.left - length, pos);
+               cairo_line_to(cr, height + border.left         , pos);
              }
+             cairo_stroke(cr);
 
             /* draw label */
             double label_spacing_px = fabs(increment*(double)ruler_metric.ruler_scale[scale]/ruler_metric.subdivide[i]);

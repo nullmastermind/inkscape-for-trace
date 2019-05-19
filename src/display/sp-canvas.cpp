@@ -2814,8 +2814,7 @@ Geom::Rect SPCanvas::getViewbox() const
     GtkAllocation allocation;
 
     gtk_widget_get_allocation (GTK_WIDGET (this), &allocation);
-    return Geom::Rect(Geom::Point(_dx0, _dy0),
-                      Geom::Point(_dx0 + allocation.width, _dy0 + allocation.height));
+    return Geom::Rect::from_xywh(_dx0, _dy0, allocation.width, allocation.height);
 }
 
 /**
@@ -2826,10 +2825,7 @@ Geom::IntRect SPCanvas::getViewboxIntegers() const
     GtkAllocation allocation;
 
     gtk_widget_get_allocation (GTK_WIDGET(this), &allocation);
-    Geom::IntRect ret;
-    ret.setMin(Geom::IntPoint(_x0, _y0));
-    ret.setMax(Geom::IntPoint(_x0 + allocation.width, _y0 + allocation.height));
-    return ret;
+    return Geom::IntRect::from_xywh(_x0, _y0, allocation.width, allocation.height);
 }
 
 inline int sp_canvas_tile_floor(int x)

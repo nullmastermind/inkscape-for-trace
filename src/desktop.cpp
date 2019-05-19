@@ -940,9 +940,9 @@ SPDesktop::set_display_area( Geom::Rect const &r, double border, bool log)
 /**
  * Return viewbox dimensions. FixMe: Doesn't handle rotation. FixMe InvertedY
  */
-Geom::Rect SPDesktop::get_display_area() const
+Geom::Rect SPDesktop::get_display_area(bool use_integer_viewbox) const
 {
-    Geom::Rect const viewbox = canvas->getViewbox();
+    Geom::Rect const viewbox = use_integer_viewbox ? canvas->getViewboxIntegers() : canvas->getViewbox();
     double const scale = _current_affine.getZoom();
 
     return viewbox * Geom::Scale(1. / scale, _doc2dt[3] / scale);

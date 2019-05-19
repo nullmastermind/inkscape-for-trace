@@ -1713,14 +1713,19 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPDocument *document)
 void
 SPDesktopWidget::update_rulers()
 {
-    Geom::Rect viewbox = desktop->get_display_area();
+    Geom::Rect viewbox = desktop->get_display_area(true); 
+    // "true" means: Use integer values of the canvas for calculating the display area, similar
+    // to the integer values used for positioning the grid lines. (see SPCanvas::scrollTo(), 
+    // where ix and iy are rounded integer values; these values are stored in SPCanvasBuf->rect,
+    // and used for drawing the grid). By using the integer values here too, the ruler ticks 
+    // will be perfectly aligned to the grid
 
     double lower_x = _dt2r * (viewbox.left()  - _ruler_origin[Geom::X]);
     double upper_x = _dt2r * (viewbox.right() - _ruler_origin[Geom::X]);
     sp_ruler_set_range(SP_RULER(_hruler->gobj()),
-	      	       lower_x,
-		       upper_x,
-		       (upper_x - lower_x));
+                       lower_x,
+                       upper_x,
+                       upper_x - lower_x);
 
     double lower_y = _dt2r * (viewbox.bottom() - _ruler_origin[Geom::Y]);
     double upper_y = _dt2r * (viewbox.top()    - _ruler_origin[Geom::Y]);
@@ -1729,8 +1734,8 @@ SPDesktopWidget::update_rulers()
     }
     sp_ruler_set_range(SP_RULER(_vruler->gobj()),
                        lower_y,
-		       upper_y,
-		       (upper_y - lower_y));
+                       upper_y,
+                       upper_y - lower_y);
 }
 
 

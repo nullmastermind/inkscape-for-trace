@@ -331,7 +331,7 @@ public:
     void set_display_area (bool log = true);
     void set_display_area (Geom::Point const &c, Geom::Point const &w, bool log = true);
     void set_display_area (Geom::Rect const &a, Geom::Coord border, bool log = true);
-    Geom::Rect get_display_area() const;
+    Geom::Rect get_display_area(bool use_integer_viewbox = false) const;
 
     void zoom_absolute_keep_point   (Geom::Point const &c, double const zoom);
     void zoom_relative_keep_point   (Geom::Point const &c, double const zoom);
