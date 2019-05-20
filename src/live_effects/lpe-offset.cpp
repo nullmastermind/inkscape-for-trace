@@ -283,13 +283,14 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         Geom::OptRect big_gap_bounds = big.boundsFast();
         Geom::OptRect small_gap_bounds = small.boundsFast();
         Geom::OptRect original_bounds = original.boundsFast();
+        bool fix_reverse = ((*original_bounds).width() + (*original_bounds).height()) / 2.0  > std::abs(offset) * 2;
         if (offset < 0) {
-            if (((*original_bounds).width() + (*original_bounds).height()) / 2.0 > std::abs(offset) * 2) {
+            if (fix_reverse) {
                 big_gap_ret.insert(big_gap_ret.end(), big_gap.begin(), big_gap.end());
             }
         } else {
             if (path_inside) {
-                if (((*original_bounds).width() + (*original_bounds).height()) / 2.0 > offset * 2) {
+                if (fix_reverse) {
                     big_gap_ret.insert(big_gap_ret.end(),small_gap.begin(), small_gap.end());
                 }
             } else {
