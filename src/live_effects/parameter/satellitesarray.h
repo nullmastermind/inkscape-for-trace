@@ -92,6 +92,7 @@ public:
                           guint state) override;
     Geom::Point knot_get() const override;
     void knot_click(guint state) override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set_offset(Satellite);
     /** Checks whether the index falls within the size of the parameter's vector
      */

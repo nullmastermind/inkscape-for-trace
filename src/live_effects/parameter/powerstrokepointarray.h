@@ -71,6 +71,7 @@ public:
     ~PowerStrokePointArrayParamKnotHolderEntity() override = default;
 
     void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     Geom::Point knot_get() const override;
     virtual void knot_set_offset(Geom::Point offset);
     void knot_click(guint state) override;

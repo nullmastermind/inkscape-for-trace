@@ -271,8 +271,16 @@ KnotHolder::knot_ungrabbed_handler(SPKnot *knot, guint state)
     } else {
         // if a point is dragged while not selected, it should select itself,
         // even if it was just unselected in the mousedown event handler.
-        if (!(knot->flags & SP_KNOT_SELECTED))
+        if (!(knot->flags & SP_KNOT_SELECTED)) {
             knot->selectKnot(true);
+        } else {
+            for(auto e : this->entity) {
+                if (e->knot == knot) {
+                    e->knot_ungrabbed(e->knot->position(), e->knot->drag_origin * item->i2dt_affine().inverse() * _edit_transform.inverse(), state);
+                    break;
+                }
+            }
+        }
 
         SPObject *object = (SPObject *) this->item;
 

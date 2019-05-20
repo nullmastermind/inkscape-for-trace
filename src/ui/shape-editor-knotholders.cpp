@@ -165,6 +165,7 @@ class RectKnotHolderEntityRX : public KnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_click(unsigned int state) override;
 };
 
@@ -173,6 +174,7 @@ class RectKnotHolderEntityRY : public KnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_click(unsigned int state) override;
 };
 
@@ -180,6 +182,7 @@ public:
 class RectKnotHolderEntityWH : public KnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 
 protected:
@@ -190,6 +193,7 @@ protected:
 class RectKnotHolderEntityXY : public KnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
@@ -197,6 +201,7 @@ public:
 class RectKnotHolderEntityCenter : public KnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
@@ -621,54 +626,63 @@ Box3DKnotHolderEntity::knot_set_generic(SPItem *item, unsigned int knot_id, Geom
 class Box3DKnotHolderEntity0 : public Box3DKnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 class Box3DKnotHolderEntity1 : public Box3DKnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 class Box3DKnotHolderEntity2 : public Box3DKnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 class Box3DKnotHolderEntity3 : public Box3DKnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 class Box3DKnotHolderEntity4 : public Box3DKnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 class Box3DKnotHolderEntity5 : public Box3DKnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 class Box3DKnotHolderEntity6 : public Box3DKnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 class Box3DKnotHolderEntity7 : public Box3DKnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 class Box3DKnotHolderEntityCenter : public KnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
@@ -863,6 +877,7 @@ class ArcKnotHolderEntityStart : public KnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_click(unsigned int state) override;
 };
 
@@ -870,6 +885,7 @@ class ArcKnotHolderEntityEnd : public KnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_click(unsigned int state) override;
 };
 
@@ -877,6 +893,7 @@ class ArcKnotHolderEntityRX : public KnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_click(unsigned int state) override;
 };
 
@@ -884,12 +901,14 @@ class ArcKnotHolderEntityRY : public KnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_click(unsigned int state) override;
 };
 
 class ArcKnotHolderEntityCenter : public KnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
@@ -1166,6 +1185,7 @@ class StarKnotHolderEntity1 : public KnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_click(unsigned int state) override;
 };
 
@@ -1173,12 +1193,14 @@ class StarKnotHolderEntity2 : public KnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_click(unsigned int state) override;
 };
 
 class StarKnotHolderEntityCenter : public KnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
@@ -1350,18 +1372,21 @@ class SpiralKnotHolderEntityInner : public KnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_click(unsigned int state) override;
 };
 
 class SpiralKnotHolderEntityOuter : public KnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 class SpiralKnotHolderEntityCenter : public KnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
@@ -1596,6 +1621,7 @@ SpiralKnotHolder::SpiralKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolde
 class OffsetKnotHolderEntity : public KnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
@@ -1643,6 +1669,7 @@ class TextKnotHolderEntityInlineSize : public KnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_click(unsigned int state) override;
 };
 
@@ -1771,6 +1798,7 @@ TextKnotHolderEntityInlineSize::knot_click(unsigned int state)
 class TextKnotHolderEntityShapeInside : public KnotHolderEntity {
 public:
     Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 

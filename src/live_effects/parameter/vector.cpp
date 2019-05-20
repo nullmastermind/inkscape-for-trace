@@ -183,6 +183,7 @@ public:
     Geom::Point knot_get() const override {
         return param->origin;
     };
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_click(guint /*state*/) override{
         g_print ("This is the origin handle associated to parameter '%s'\n", param->param_key.c_str());
     };
@@ -207,6 +208,7 @@ public:
     Geom::Point knot_get() const override {
         return param->origin + param->vector;
     };
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_click(guint /*state*/) override{
         g_print ("This is the vector handle associated to parameter '%s'\n", param->param_key.c_str());
     };

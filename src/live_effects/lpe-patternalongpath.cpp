@@ -56,6 +56,7 @@ namespace WPAP {
             lpe->_knot_entity = nullptr;
         }
         void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state) override;
+        void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
         Geom::Point knot_get() const override;
     };
 } // WPAP

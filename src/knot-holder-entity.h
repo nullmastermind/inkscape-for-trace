@@ -62,6 +62,7 @@ public:
     /* the get/set/click handlers are virtual functions; each handler class for a knot
        should be derived from KnotHolderEntity and override these functions */
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) = 0;
+    virtual void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, unsigned int state) = 0;
     virtual Geom::Point knot_get() const = 0;
     virtual void knot_click(unsigned int /*state*/) {}
 
@@ -108,6 +109,7 @@ class PatternKnotHolderEntityXY : public KnotHolderEntity {
 public:
     PatternKnotHolderEntityXY(bool fill) : KnotHolderEntity(), _fill(fill) {}
     Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 private:
     // true if the entity tracks fill, false for stroke 
@@ -118,6 +120,7 @@ class PatternKnotHolderEntityAngle : public KnotHolderEntity {
 public:
     PatternKnotHolderEntityAngle(bool fill) : KnotHolderEntity(), _fill(fill) {}
     Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 private:
     bool _fill;
@@ -127,6 +130,7 @@ class PatternKnotHolderEntityScale : public KnotHolderEntity {
 public:
     PatternKnotHolderEntityScale(bool fill) : KnotHolderEntity(), _fill(fill) {}
     Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 private:
     bool _fill;
@@ -137,6 +141,7 @@ class FilterKnotHolderEntity : public KnotHolderEntity {
 public: 
     FilterKnotHolderEntity(bool topleft) : KnotHolderEntity(), _topleft(topleft) {}
     Geom::Point knot_get() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 private:
     bool _topleft; // true for topleft point, false for bottomright
