@@ -1033,7 +1033,6 @@ Geom::PathVector outline(
     Geom::PathBuilder res;
     Geom::Path with_dir = half_outline(input, width/2., miter, join, tolerance);
     Geom::Path against_dir = half_outline(input.reversed(), width/2., miter, join, tolerance);
-
     res.moveTo(with_dir[0].initialPoint());
     res.append(with_dir);
 
@@ -1103,6 +1102,20 @@ Geom::Path half_outline(
     const Geom::Curve &closingline = input.back_closed();
     const size_t k = (are_near(closingline.initialPoint(), closingline.finalPoint()) && input.closed() )
             ?input.size_open():input.size_default();
+    
+    size_t outside = 0;
+    for (size_t u = 0; u < k; u += 2) {
+        if (u != 0) {
+            tangents(tang, input[u-1], input[u]);
+            if (Geom::cross(tang[0], tang[1]) > 0) {
+                outside --;
+            } else {
+                outside ++;
+            }
+        }
+    }
+    bool on_outside = outside >= 0;
+
     for (size_t u = 0; u < k; u += 2) {
         temp.clear();
 
@@ -1113,7 +1126,7 @@ Geom::Path half_outline(
             res.append(temp);
         } else {
             tangents(tang, input[u-1], input[u]);
-            outline_join(res, temp, tang[0], tang[1], width, miter, join);
+            outline_join(res, temp, tang[0], tang[1], width, miter, on_outside, join);
         }
 
         // odd number of paths
@@ -1121,7 +1134,7 @@ Geom::Path half_outline(
             temp.clear();
             offset_curve(temp, &input[u+1], width, tolerance);
             tangents(tang, input[u], input[u+1]);
-            outline_join(res, temp, tang[0], tang[1], width, miter, join);
+            outline_join(res, temp, tang[0], tang[1], width, miter, on_outside, join);
         }
     }
     if (input.closed()) {
@@ -1132,17 +1145,16 @@ Geom::Path half_outline(
         Geom::Path temp2;
         temp2.append(c2);
         tangents(tang, input.back(), input.front());
-        outline_join(temp, temp2, tang[0], tang[1], width, miter, join);
+        outline_join(temp, temp2, tang[0], tang[1], width, miter, on_outside, join);
         res.erase(res.begin());
         res.erase_last();
         res.append(temp);
         res.close();
     }
-
     return res;
 }
 
-void outline_join(Geom::Path &res, Geom::Path const& temp, Geom::Point in_tang, Geom::Point out_tang, double width, double miter, Inkscape::LineJoinType join)
+void outline_join(Geom::Path &res, Geom::Path const& temp, Geom::Point in_tang, Geom::Point out_tang, double width, double miter, bool on_outside, Inkscape::LineJoinType join)
 {
     if (res.size() == 0 || temp.size() == 0)
         return;
@@ -1155,8 +1167,6 @@ void outline_join(Geom::Path &res, Geom::Path const& temp, Geom::Point in_tang, 
     }
 
     join_data jd(res, temp, in_tang, out_tang, miter, width);
-
-    bool on_outside = (Geom::cross(in_tang, out_tang) > 0);
 
     if (on_outside) {
         join_func *jf;

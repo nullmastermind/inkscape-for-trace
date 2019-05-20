@@ -36,10 +36,10 @@ public:
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
     Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
     void doOnApply(SPLPEItem const* lpeitem) override;
-    Gtk::Widget *newWidget() override;
     void calculateOffset (Geom::PathVector const & path_in);
     void drawHandle(Geom::Point p);
     void addKnotHolderEntities(KnotHolder * knotholder, SPItem * item) override;
+    double sp_get_offset(Geom::Point &origin);
     friend class OfS::KnotHolderEntityOffsetPoint;
 protected:
     void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec) override;
@@ -56,6 +56,7 @@ private:
     bool evenodd;
     KnotHolderEntity * _knot_entity;
     Geom::PathVector original_pathv;
+    Geom::PathVector filled_rule_pathv;
     Inkscape::UI::Widget::Scalar *offset_widget;
 
     LPEOffset(const LPEOffset&);
