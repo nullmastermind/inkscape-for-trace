@@ -657,46 +657,6 @@ void extrapolate_join_alt2(join_data jd) { extrapolate_join_internal(jd, 2); }
 void extrapolate_join_alt3(join_data jd) { extrapolate_join_internal(jd, 3); }
 
 
-void join_inside(join_data jd)
-{
-    Geom::Path &res = jd.res;
-    Geom::Path const& temp = jd.outgoing;
-    Geom::Crossings cross = Geom::crossings(res, temp);
-
-    int solution = -1; // lol, really hope there aren't more than INT_MAX crossings
-    if (cross.size() == 1) solution = 0;
-    else if (cross.size() > 1) {
-        // I am not sure how well this will work -- we pick the join node closest
-        // to the cross point of the paths
-        /*Geom::Point original = res.finalPoint()+Geom::rot90(jd.in_tang)*jd.width;
-        Geom::Coord trial = Geom::L2(res.pointAt(cross[0].ta)-original);
-        solution = 0;
-        for (size_t i = 1; i < cross.size(); ++i) {
-            //printf("Trying %d\n", i);
-            Geom::Coord test = Geom::L2(res.pointAt(cross[i].ta)-original);
-            if (test < trial) {
-                trial = test;
-                solution = i;
-                //printf("Found improved solution: %f\n", trial);
-            }
-        }*/
-    }
-
-    if (solution != -1) {
-        Geom::Path d1 = res.portion(0., cross[solution].ta);
-        Geom::Path d2 = temp.portion(cross[solution].tb, temp.size());
-
-        // Watch for bugs in 2geom crossing regarding severe inflection points
-        res.clear();
-        res.append(d1);
-        res.setFinal(d2.initialPoint());
-        res.append(d2);
-    } else {
-        res.appendNew<Geom::LineSegment>(temp.initialPoint());
-        res.append(temp);
-    }
-}
-
 void tangents(Geom::Point tang[2], Geom::Curve const& incoming, Geom::Curve const& outgoing)
 {
     Geom::Point tang1 = Geom::unitTangentAt(reverse(incoming.toSBasis()), 0.);
@@ -1103,19 +1063,6 @@ Geom::Path half_outline(
     const size_t k = (are_near(closingline.initialPoint(), closingline.finalPoint()) && input.closed() )
             ?input.size_open():input.size_default();
     
-    size_t outside = 0;
-    for (size_t u = 0; u < k; u += 2) {
-        if (u != 0) {
-            tangents(tang, input[u-1], input[u]);
-            if (Geom::cross(tang[0], tang[1]) > 0) {
-                outside --;
-            } else {
-                outside ++;
-            }
-        }
-    }
-    bool on_outside = outside >= 0;
-
     for (size_t u = 0; u < k; u += 2) {
         temp.clear();
 
@@ -1126,7 +1073,7 @@ Geom::Path half_outline(
             res.append(temp);
         } else {
             tangents(tang, input[u-1], input[u]);
-            outline_join(res, temp, tang[0], tang[1], width, miter, on_outside, join);
+            outline_join(res, temp, tang[0], tang[1], width, miter, join);
         }
 
         // odd number of paths
@@ -1134,7 +1081,7 @@ Geom::Path half_outline(
             temp.clear();
             offset_curve(temp, &input[u+1], width, tolerance);
             tangents(tang, input[u], input[u+1]);
-            outline_join(res, temp, tang[0], tang[1], width, miter, on_outside, join);
+            outline_join(res, temp, tang[0], tang[1], width, miter, join);
         }
     }
     if (input.closed()) {
@@ -1145,7 +1092,7 @@ Geom::Path half_outline(
         Geom::Path temp2;
         temp2.append(c2);
         tangents(tang, input.back(), input.front());
-        outline_join(temp, temp2, tang[0], tang[1], width, miter, on_outside, join);
+        outline_join(temp, temp2, tang[0], tang[1], width, miter, join);
         res.erase(res.begin());
         res.erase_last();
         res.append(temp);
@@ -1154,7 +1101,7 @@ Geom::Path half_outline(
     return res;
 }
 
-void outline_join(Geom::Path &res, Geom::Path const& temp, Geom::Point in_tang, Geom::Point out_tang, double width, double miter, bool on_outside, Inkscape::LineJoinType join)
+void outline_join(Geom::Path &res, Geom::Path const& temp, Geom::Point in_tang, Geom::Point out_tang, double width, double miter, Inkscape::LineJoinType join)
 {
     if (res.size() == 0 || temp.size() == 0)
         return;
@@ -1167,39 +1114,37 @@ void outline_join(Geom::Path &res, Geom::Path const& temp, Geom::Point in_tang, 
     }
 
     join_data jd(res, temp, in_tang, out_tang, miter, width);
-
-    if (on_outside) {
-        join_func *jf;
-        switch (join) {
-            case Inkscape::JOIN_BEVEL:
-                jf = &bevel_join;
-                break;
-            case Inkscape::JOIN_ROUND:
-                jf = &round_join;
-                break;
-            case Inkscape::JOIN_EXTRAPOLATE:
-                jf = &extrapolate_join;
-                break;
-            case Inkscape::JOIN_EXTRAPOLATE1:
-                jf = &extrapolate_join_alt1;
-                break;
-            case Inkscape::JOIN_EXTRAPOLATE2:
-                jf = &extrapolate_join_alt2;
-                break;
-            case Inkscape::JOIN_EXTRAPOLATE3:
-                jf = &extrapolate_join_alt3;
-                break;
-            case Inkscape::JOIN_MITER_CLIP:
-                jf = &miter_clip_join;
-                break;
-            default:
-                jf = &miter_join;
-        }
-        jf(jd);
-    } else {
-        join_inside(jd);
+    if (!(Geom::cross(in_tang, out_tang) > 0)) {
+        join = Inkscape::JOIN_ROUND;
     }
-}
+    join_func *jf;
+    switch (join) {
+        case Inkscape::JOIN_BEVEL:
+            jf = &bevel_join;
+            break;
+        case Inkscape::JOIN_ROUND:
+            jf = &round_join;
+            break;
+        case Inkscape::JOIN_EXTRAPOLATE:
+            jf = &extrapolate_join;
+            break;
+        case Inkscape::JOIN_EXTRAPOLATE1:
+            jf = &extrapolate_join_alt1;
+            break;
+        case Inkscape::JOIN_EXTRAPOLATE2:
+            jf = &extrapolate_join_alt2;
+            break;
+        case Inkscape::JOIN_EXTRAPOLATE3:
+            jf = &extrapolate_join_alt3;
+            break;
+        case Inkscape::JOIN_MITER_CLIP:
+            jf = &miter_clip_join;
+            break;
+        default:
+            jf = &miter_join;
+    }
+    jf(jd);
+ }
 
 } // namespace Inkscape
 

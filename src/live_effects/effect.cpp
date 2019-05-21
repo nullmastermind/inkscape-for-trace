@@ -657,7 +657,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Offset the path, optionally keeping cusp corners cusp.") //description
         , true  //on_path
         , true  //on_shape
-        , false //on_group
+        , true //on_group
         , false //on_image
         , false //on_text
         , false //experimental

@@ -91,7 +91,7 @@ Geom::Path half_outline(
  * @param[in]    miter
  * @param[in]    join
  */
-void outline_join(Geom::Path &res, Geom::Path const& outgoing, Geom::Point in_tang, Geom::Point out_tang, double width, double miter, bool on_outside, LineJoinType join);
+void outline_join(Geom::Path &res, Geom::Path const& outgoing, Geom::Point in_tang, Geom::Point out_tang, double width, double miter, LineJoinType join);
 
 } // namespace Inkscape
 

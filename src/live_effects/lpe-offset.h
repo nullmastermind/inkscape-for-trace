@@ -20,6 +20,7 @@
 #include "live_effects/lpegroupbbox.h"
 #include "live_effects/effect.h"
 #include "live_effects/parameter/parameter.h"
+#include "live_effects/parameter/unit.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -35,27 +36,24 @@ public:
     ~LPEOffset() override;
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
     Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
-    void doOnApply(SPLPEItem const* lpeitem) override;
-    void calculateOffset (Geom::PathVector const & path_in);
-    void drawHandle(Geom::Point p);
     void addKnotHolderEntities(KnotHolder * knotholder, SPItem * item) override;
-    double sp_get_offset(Geom::Point &origin);
+    void calculateOffset (Geom::PathVector const & path_in);
+    Geom::Point get_default_point(Geom::PathVector pathv) const;
+    Geom::Point get_nearest_point(Geom::PathVector pathv, Geom::Point point)  const;
+    double sp_get_offset(Geom::Point origin);
     friend class OfS::KnotHolderEntityOffsetPoint;
-protected:
-    void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec) override;
 
 private:
+    UnitParam unit;
     ScalarParam offset;
     EnumParam<unsigned> linejoin_type;
     ScalarParam miter_limit;
     BoolParam attempt_force_join;
     BoolParam update_on_knot_move;
-    Geom::PathVector hp;
     Geom::Point offset_pt;
-    Geom::Point origin;
     bool evenodd;
+    Glib::ustring display_unit;
     KnotHolderEntity * _knot_entity;
-    Geom::PathVector original_pathv;
     Geom::PathVector filled_rule_pathv;
     Inkscape::UI::Widget::Scalar *offset_widget;
 

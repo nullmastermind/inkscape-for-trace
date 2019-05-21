@@ -237,7 +237,7 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
             return false;
         }
         //if is not clip or mask or LPE apply to clip and mask
-        if (!(is_clip_or_mask && !lpe->apply_to_clippath_and_mask)) {
+        if (!is_clip_or_mask || lpe->apply_to_clippath_and_mask) {
             lpe->setCurrentShape(current);
             if (!SP_IS_GROUP(this)) {
                 lpe->pathvector_before_effect = curve->get_pathvector();
