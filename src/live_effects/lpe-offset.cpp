@@ -281,7 +281,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         }
         int wdg = offset_winding(work, original);
         bool path_inside = wdg % 2 != 0;
-        double gap = path_inside ? 0.05 :-0.05;
+        double gap_size = -0.5;
         bool closed = original.closed();
         double to_offset = Inkscape::Util::Quantity::convert(std::abs(offset), unit.get_abbreviation(), display_unit.c_str());
         Geom::Path with_dir = half_outline(original, 
@@ -295,12 +295,12 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
                                 static_cast<LineJoinType>(linejoin_type.get_value()),
                                 static_cast<LineCapType>(BUTT_FLAT));
         Geom::Path with_dir_gap = half_outline(original, 
-                                to_offset + gap,
+                                to_offset + gap_size,
                                 (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit),
                                 static_cast<LineJoinType>(linejoin_type.get_value()),
                                 static_cast<LineCapType>(BUTT_FLAT));
         Geom::Path against_dir_gap = half_outline(original.reversed(), 
-                                to_offset + gap,
+                                to_offset + gap_size,
                                 (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit),
                                 static_cast<LineJoinType>(linejoin_type.get_value()),
                                 static_cast<LineCapType>(BUTT_FLAT));
@@ -309,38 +309,23 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         Geom::PathVector outline;
         Geom::OptRect original_bounds = original.boundsFast();
         Geom::Path big;
-        Geom::Path big_gap;
+        Geom::Path gap;
         Geom::Path small;
-        Geom::Path small_gap;
-        Geom::OptRect big_bounds;
-        Geom::OptRect small_bounds;
-        Geom::OptRect big_bounds_gap;
-        Geom::OptRect small_bounds_gap;
         Geom::OptRect against_dir_bounds = against_dir.boundsFast();
         Geom::OptRect against_dir_bounds_gap = against_dir_gap.boundsFast();
         Geom::OptRect with_dir_bounds = with_dir.boundsFast();
         Geom::OptRect with_dir_bounds_gap = with_dir_gap.boundsFast();
         if (against_dir_bounds.contains(with_dir_bounds)) {
             big  = against_dir;
-            big_gap = against_dir_gap;
+            gap = against_dir_gap;
             small = with_dir;
-            small_gap = with_dir_gap;
-            big_bounds = against_dir_bounds;
-            small_bounds = with_dir_bounds;
-            big_bounds_gap = against_dir_bounds_gap;
-            small_bounds_gap = with_dir_bounds_gap;
         } else {
             big = with_dir;
-            big_gap   = with_dir_gap;
+            gap   = with_dir_gap;
             small = against_dir;
-            small_gap = against_dir_gap;
-            big_bounds = with_dir_bounds;
-            small_bounds = against_dir_bounds;
-            big_bounds_gap = with_dir_bounds_gap;
-            small_bounds_gap = against_dir_bounds_gap;
         }
         sp_get_outer(big);
-        sp_get_outer(big_gap);
+        sp_get_outer(gap);
         outline.push_back(with_dir);
         outline.push_back(against_dir);
         tmp.clear();
@@ -356,7 +341,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         bool fix_reverse = ((*original_bounds).width() + (*original_bounds).height()) / 2.0  > to_offset * 2;
         if (offset < 0) {
             if (fix_reverse) {
-                tmp.push_back(big_gap);
+                tmp.push_back(gap);
             }
         } else {
             if (path_inside) {
