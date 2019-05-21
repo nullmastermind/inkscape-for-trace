@@ -91,7 +91,6 @@ LPEOffset::LPEOffset(LivePathEffectObject *lpeobject) :
     offset.param_set_increments(0.1, 0.1);
     offset.param_set_digits(4);
     offset_pt = Geom::Point(Geom::infinity(), Geom::infinity());
-    evenodd = true;
     _knot_entity = nullptr;
     _provides_knotholder_entities = true;
     apply_to_clippath_and_mask = true;
@@ -100,8 +99,17 @@ LPEOffset::LPEOffset(LivePathEffectObject *lpeobject) :
 LPEOffset::~LPEOffset()
 = default;
 
+enum fill_type
+{
+  fill_oddEven   = 0,
+  fill_nonZero   = 1,
+  fill_positive  = 2,
+  fill_justDont = 3
+};
+typedef enum fill_type FillRuleFlatten;
+
 static void
-sp_flatten(Geom::PathVector &pathvector, bool evenodd)
+sp_flatten(Geom::PathVector &pathvector, FillRuleFlatten fillkind)
 {
     Path *orig = new Path;
     orig->LoadPathVector(pathvector);
@@ -109,11 +117,7 @@ sp_flatten(Geom::PathVector &pathvector, bool evenodd)
     Shape *theRes = new Shape;
     orig->ConvertWithBackData (1.0);
     orig->Fill (theShape, 0);
-    if (evenodd) {
-        theRes->ConvertToShape (theShape, fill_oddEven);
-    } else {
-        theRes->ConvertToShape (theShape, fill_nonZero);
-    }
+    theRes->ConvertToShape (theShape, FillRule(fillkind));
     Path *originaux[1];
     originaux[0] = orig;
     Path *res = new Path;
@@ -204,29 +208,48 @@ Geom::Path
 sp_get_outer(Geom::Path path) {
     Geom::PathVector pathv;
     pathv.push_back(path);
-    sp_flatten(pathv, true);
-    Geom::Path out = pathv[0];
-    Geom::OptRect bounds = out.boundsFast();
+    sp_flatten(pathv, fill_nonZero);
+    Geom::Path out_bounds;
+    Geom::Path out_size;
+    Geom::OptRect bounds;
+    double size = 0;
+    bool get_bounds = false;
     for (auto path_child:pathv) {
         Geom::OptRect path_bounds = path_child.boundsFast();
-        if (path_bounds.contains(bounds)) {
-            bounds = path_bounds;
-            out = path_child;
+        if (path_bounds) {
+            double path_size = (*path_bounds).width() + (*path_bounds).height();
+            if (path_bounds.contains(bounds)) {
+                bounds = path_bounds;
+                out_bounds = path_child;
+                get_bounds = true;
+            }
+            if (size < path_size) {
+                size = path_size;
+                out_size = path_child;
+            }
         }
     }
     pathv.clear();
+    if (get_bounds) {
+        return out_bounds;
+    }
+    return out_size;
+}
+
+Geom::PathVector 
+sp_get_inner(Geom::PathVector pathv, Geom::Path outer) {
+    Geom::PathVector out;
+    for (auto path_child:pathv) {
+        if (path_child != outer) {
+            out.push_back(path_child);
+        }
+    }
     return out;
 }
 
 Geom::PathVector 
 LPEOffset::doEffect_path(Geom::PathVector const & path_in)
 {
-    Geom::PathVector original_pathv = pathv_to_linear_and_cubic_beziers(path_in);
-    filled_rule_pathv = original_pathv;
-    sp_flatten(filled_rule_pathv, evenodd);
-    if (offset == 0.0) {
-        return path_in;
-    }
     SPItem * item = SP_ITEM(current_shape);
     if (!item) {
         return path_in;
@@ -235,20 +258,20 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
     const gchar *val;
     css = sp_repr_css_attr (item->getRepr() , "style");
     val = sp_repr_css_property (css, "fill-rule", nullptr);
-    bool upd_fill_rule = false;
+    FillRuleFlatten fillrule;
     if (val && strcmp (val, "nonzero") == 0)
     {
-        if (evenodd == true) {
-            upd_fill_rule = true;
-        }
-        evenodd = false;
+        fillrule = fill_nonZero;
     }
     else if (val && strcmp (val, "evenodd") == 0)
     {
-        if (evenodd == false) {
-            upd_fill_rule = true;
-        }
-        evenodd = true;
+        fillrule = fill_oddEven;
+    }
+    Geom::PathVector original_pathv = pathv_to_linear_and_cubic_beziers(path_in);
+    filled_rule_pathv = original_pathv;
+    sp_flatten(filled_rule_pathv, fillrule);
+    if (offset == 0.0) {
+        return path_in;
     }
     Geom::PathVector work;
     Geom::PathVector ret;
@@ -264,7 +287,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
             if (!Geom::are_near(cross.ta, cross.tb)) {
                 Geom::PathVector tmp;
                 tmp.push_back(original);
-                sp_flatten(tmp, false);
+                sp_flatten(tmp, fill_nonZero);
                 work.insert(work.begin(), tmp.begin(), tmp.end());
                 added = true;
                 break;
@@ -304,31 +327,49 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
                                 (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit),
                                 static_cast<LineJoinType>(linejoin_type.get_value()),
                                 static_cast<LineCapType>(BUTT_FLAT));
-    
+        bool reversed = false;
+        if (offset > 0) {
+            Geom::Path with_dir_size = half_outline(original, 
+                                    2,
+                                    (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit),
+                                    static_cast<LineJoinType>(linejoin_type.get_value()),
+                                    static_cast<LineCapType>(BUTT_FLAT));
+            Geom::Path against_dir_size = half_outline(original.reversed(), 
+                                    2,
+                                    (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit),
+                                    static_cast<LineJoinType>(linejoin_type.get_value()),
+                                    static_cast<LineCapType>(BUTT_FLAT));
+        
+            Geom::OptRect against_dir_size_bounds = against_dir_size.boundsFast();
+            Geom::OptRect with_dir_size_bounds = with_dir_size.boundsFast();
+            reversed = against_dir_size_bounds.contains(with_dir_size_bounds) == false;
+        } else {
+            Geom::OptRect against_dir_bounds = against_dir.boundsFast();
+            Geom::OptRect with_dir_bounds = with_dir.boundsFast();
+            reversed = against_dir_bounds.contains(with_dir_bounds) == false;
+        }
         Geom::PathVector tmp;
         Geom::PathVector outline;
-        Geom::OptRect original_bounds = original.boundsFast();
         Geom::Path big;
         Geom::Path gap;
         Geom::Path small;
-        Geom::OptRect against_dir_bounds = against_dir.boundsFast();
-        Geom::OptRect against_dir_bounds_gap = against_dir_gap.boundsFast();
-        Geom::OptRect with_dir_bounds = with_dir.boundsFast();
-        Geom::OptRect with_dir_bounds_gap = with_dir_gap.boundsFast();
-        if (against_dir_bounds.contains(with_dir_bounds)) {
-            big  = against_dir;
-            gap = against_dir_gap;
-            small = with_dir;
-        } else {
+        outline.push_back(with_dir);
+        outline.push_back(against_dir);
+        sp_flatten(outline, fill_nonZero);
+        Geom::OptRect original_bounds = original.boundsFast();
+        if (reversed) {
             big = with_dir;
             gap   = with_dir_gap;
             small = against_dir;
+        } else {
+            big  = against_dir;
+            gap = against_dir_gap;
+            small = with_dir;
+            
         }
-        sp_get_outer(big);
-        sp_get_outer(gap);
-        outline.push_back(with_dir);
-        outline.push_back(against_dir);
-        tmp.clear();
+        //big = sp_get_outer(big);
+        //gap = sp_get_outer(gap);
+        
         if (!closed) {
             if (offset < 0) {
                 ret.push_back(small);
@@ -355,20 +396,20 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         if (path_inside) {
             outline.clear();
             outline.push_back(big);
-        } else {
-            sp_flatten(outline, false);
         }
         ret.insert(ret.end(), tmp.begin(), tmp.end());
         ret_outline.insert(ret_outline.end(), outline.begin(), outline.end());
     }
-    sp_flatten(ret_outline, false);
+    sp_flatten(ret_outline, fill_nonZero);
+    
     if (offset < 0) {
         pig = new Geom::PathIntersectionGraph(ret, ret_outline);
         if (pig && !ret_outline.empty() && !ret.empty()) {
             ret = pig->getAminusB();
         }
     }
-    sp_flatten(ret, false);
+    sp_flatten(ret, fill_nonZero);
+
     if (offset_pt == Geom::Point(Geom::infinity(), Geom::infinity())) {
         offset_pt = get_default_point(ret);
     }

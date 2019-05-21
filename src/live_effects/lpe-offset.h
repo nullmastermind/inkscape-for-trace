@@ -51,7 +51,6 @@ private:
     BoolParam attempt_force_join;
     BoolParam update_on_knot_move;
     Geom::Point offset_pt;
-    bool evenodd;
     Glib::ustring display_unit;
     KnotHolderEntity * _knot_entity;
     Geom::PathVector filled_rule_pathv;
