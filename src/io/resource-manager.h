@@ -10,13 +10,11 @@
 #ifndef SEEN_INKSCAPE_RESOURCE_MANAGER_H
 #define SEEN_INKSCAPE_RESOURCE_MANAGER_H
 
-#include <glibmm/object.h>
-
 class SPDocument;
 
 namespace Inkscape {
 
-class ResourceManager : public Glib::Object {
+class ResourceManager {
 
 public:
     static ResourceManager& getManager();
@@ -25,7 +23,7 @@ public:
 
 protected:
     ResourceManager();
-    ~ResourceManager() override;
+    virtual ~ResourceManager();
 
 private:
     ResourceManager(ResourceManager const &) = delete; // no copy
