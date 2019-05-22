@@ -37,6 +37,7 @@ public:
     void doBeforeEffect (SPLPEItem const* lpeitem) override;
     Geom::PathVector doEffect_path (Geom::PathVector const & path_in) override;
     void addKnotHolderEntities(KnotHolder * knotholder, SPItem * item) override;
+    void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec) override;
     void calculateOffset (Geom::PathVector const & path_in);
     Geom::Point get_default_point(Geom::PathVector pathv) const;
     Geom::Point get_nearest_point(Geom::PathVector pathv, Geom::Point point)  const;
@@ -54,6 +55,7 @@ private:
     Glib::ustring display_unit;
     KnotHolderEntity * _knot_entity;
     Geom::PathVector filled_rule_pathv;
+    Geom::PathVector helper_path;
     Inkscape::UI::Widget::Scalar *offset_widget;
 
     LPEOffset(const LPEOffset&);

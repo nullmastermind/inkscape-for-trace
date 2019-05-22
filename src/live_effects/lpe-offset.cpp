@@ -146,14 +146,16 @@ LPEOffset::get_nearest_point(Geom::PathVector pathv, Geom::Point point)  const
 Geom::Point 
 LPEOffset::get_default_point(Geom::PathVector pathv)  const
 {
-    if (SP_IS_GROUP(sp_lpe_item)) {
-        return Geom::Point(Geom::infinity(), Geom::infinity());
-    }
     Geom::Point origin = Geom::Point(Geom::infinity(), Geom::infinity());
     Geom::OptRect bbox = pathv.boundsFast();
     if (bbox) {
-        origin = Geom::Point((*bbox).midpoint()[Geom::X],(*bbox).top());
-        origin = get_nearest_point(pathv, origin);
+        if (SP_IS_GROUP(sp_lpe_item)) {
+            origin = Geom::Point(boundingbox_X.min(),boundingbox_Y.min());
+        } else {
+            origin = Geom::Point((*bbox).midpoint()[Geom::X],(*bbox).top());
+            origin = get_nearest_point(pathv, origin);
+        }
+        
     }
     return origin;
 }
@@ -171,17 +173,33 @@ sp_get_distance_point(Geom::PathVector pathv, Geom::Point origin) {
 double
 LPEOffset::sp_get_offset(Geom::Point origin)
 {
+    SPGroup * group = dynamic_cast<SPGroup *>(sp_lpe_item);
+    double ret_offset = 0;
+    if (group) {
+        Geom::Point initial = get_default_point(filled_rule_pathv);
+        ret_offset = Geom::distance(origin, initial);
+        if (origin[Geom::Y] < initial[Geom::Y]) {
+            ret_offset *= -1;
+        }
+        return Inkscape::Util::Quantity::convert(ret_offset, display_unit.c_str(), unit.get_abbreviation());
+    }
     int winding_value = filled_rule_pathv.winding(origin); 
     bool inset = false;
     if (winding_value % 2 != 0) {
         inset = true;
     }
-    double ret_offset = 0;
+    
     ret_offset = sp_get_distance_point(filled_rule_pathv, origin);
     if (inset) {
         ret_offset *= -1;
     }
     return Inkscape::Util::Quantity::convert(ret_offset, display_unit.c_str(), unit.get_abbreviation());
+}
+
+void
+LPEOffset::addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec)
+{
+    hp_vec.push_back(helper_path);
 }
 
 void
@@ -193,6 +211,16 @@ LPEOffset::doBeforeEffect (SPLPEItem const* lpeitem)
         return;
     }
     display_unit = document->getDisplayUnit()->abbr.c_str();
+    SPGroup const *group = dynamic_cast<SPGroup const *>(lpeitem);
+    if (group) {
+        helper_path.clear();
+        Geom::Point origin = Geom::Point(boundingbox_X.min(), boundingbox_Y.min());
+        Geom::Point endpont = Geom::Point(boundingbox_X.min(), boundingbox_Y.min());
+        endpont[Geom::Y] = endpont[Geom::Y] + Inkscape::Util::Quantity::convert(offset, unit.get_abbreviation(), display_unit.c_str());
+        Geom::Path hp(origin);
+        hp.appendNew<Geom::LineSegment>(endpont);
+        helper_path.push_back(hp);
+    }
 }
 
 int offset_winding(Geom::PathVector pathvector, Geom::Path path)
@@ -466,11 +494,12 @@ void KnotHolderEntityOffsetPoint::knot_ungrabbed(Geom::Point const &p, Geom::Poi
 void KnotHolderEntityOffsetPoint::knot_set(Geom::Point const &p, Geom::Point const& /*origin*/, guint state)
 {
     using namespace Geom;
-    if (SP_IS_GROUP(item)) {
-        return;
-    }
+    SPGroup * group = dynamic_cast<SPGroup *>(item);
     LPEOffset* lpe = dynamic_cast<LPEOffset *>(_effect);
     Geom::Point s = snap_knot_position(p, state);
+    if (group) {
+        s[Geom::X] = lpe->boundingbox_X.min();
+    }
     double offset = lpe->sp_get_offset(s);
     lpe->offset_pt = s;
     lpe->offset.param_set_value(offset);
@@ -481,14 +510,16 @@ void KnotHolderEntityOffsetPoint::knot_set(Geom::Point const &p, Geom::Point con
 
 Geom::Point KnotHolderEntityOffsetPoint::knot_get() const
 {
-    if (SP_IS_GROUP(item)) {
-        return Geom::Point(Geom::infinity(), Geom::infinity());
-    }
-    LPEOffset const * lpe = dynamic_cast<LPEOffset const*> (_effect);
+    SPGroup * group = dynamic_cast<SPGroup *>(item);
+    LPEOffset * lpe = dynamic_cast<LPEOffset *> (_effect);
     Geom::Point nearest = lpe->offset_pt;
     if (lpe->offset_pt == Geom::Point(Geom::infinity(), Geom::infinity())) {
-        Geom::PathVector out = SP_SHAPE(item)->getCurve()->get_pathvector();
-        nearest = lpe->get_default_point(out);
+        if (group) {
+            nearest = Geom::Point(lpe->boundingbox_X.min(), lpe->boundingbox_Y.min());
+        } else {
+            Geom::PathVector out = SP_SHAPE(item)->getCurve()->get_pathvector();
+            nearest = lpe->get_default_point(out);
+        }
     }
     return nearest;
 }
