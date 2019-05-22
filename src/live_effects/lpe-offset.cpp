@@ -328,7 +328,37 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
                                 static_cast<LineJoinType>(linejoin_type.get_value()),
                                 static_cast<LineCapType>(BUTT_FLAT));
         bool reversed = false;
-        if (offset > 0) {
+        Geom::OptRect against_dir_bounds = against_dir.boundsFast();
+        Geom::OptRect with_dir_bounds = with_dir.boundsFast();
+        Geom::OptRect original_bounds = original.boundsFast();
+        double with_dir_height = 0;
+        double against_dir_height = 0;
+        double original_height = 0;
+        double with_dir_width = 0;
+        double against_dir_width = 0;
+        double original_width = 0;
+        if (with_dir_bounds) {
+            with_dir_height = (*with_dir_bounds).height();
+            with_dir_width = (*with_dir_bounds).width();
+        }
+        if (against_dir_bounds) {
+            against_dir_height = (*against_dir_bounds).height();
+            against_dir_width = (*against_dir_bounds).width();
+        }
+        if (original_bounds) {
+            original_height = (*original_bounds).height();
+            original_width = (*original_bounds).width();
+        }
+        reversed = against_dir_bounds.contains(with_dir_bounds) == false;
+        // We can have a strange result thth bounding box container
+        // Give a wrong result.in teory it happends sometimes on expand offset
+        if (offset > 0 &&
+            ((original_width  < against_dir_width &&
+              original_width  < with_dir_width) ||
+             (original_height < against_dir_width &&
+              original_height < with_dir_height)))
+
+        {
             Geom::Path with_dir_size = half_outline(original, 
                                     2,
                                     (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit),
@@ -343,10 +373,6 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
             Geom::OptRect against_dir_size_bounds = against_dir_size.boundsFast();
             Geom::OptRect with_dir_size_bounds = with_dir_size.boundsFast();
             reversed = against_dir_size_bounds.contains(with_dir_size_bounds) == false;
-        } else {
-            Geom::OptRect against_dir_bounds = against_dir.boundsFast();
-            Geom::OptRect with_dir_bounds = with_dir.boundsFast();
-            reversed = against_dir_bounds.contains(with_dir_bounds) == false;
         }
         Geom::PathVector tmp;
         Geom::PathVector outline;
@@ -356,7 +382,6 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         outline.push_back(with_dir);
         outline.push_back(against_dir);
         sp_flatten(outline, fill_nonZero);
-        Geom::OptRect original_bounds = original.boundsFast();
         if (reversed) {
             big = with_dir;
             gap   = with_dir_gap;
@@ -365,7 +390,6 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
             big  = against_dir;
             gap = against_dir_gap;
             small = with_dir;
-            
         }
         //big = sp_get_outer(big);
         //gap = sp_get_outer(gap);
@@ -379,7 +403,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
                 return ret;
             }
         }
-        bool fix_reverse = ((*original_bounds).width() + (*original_bounds).height()) / 2.0  > to_offset * 2;
+        bool fix_reverse = (original_width + original_height) / 2.0  > to_offset * 2;
         if (offset < 0) {
             if (fix_reverse) {
                 tmp.push_back(gap);
@@ -442,7 +466,6 @@ void KnotHolderEntityOffsetPoint::knot_set(Geom::Point const &p, Geom::Point con
     double offset = lpe->sp_get_offset(s);
     lpe->offset_pt = s;
     lpe->offset.param_set_value(offset);
-    
     if (lpe->update_on_knot_move) {
         sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, false);
     }
