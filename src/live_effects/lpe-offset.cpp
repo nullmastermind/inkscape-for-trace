@@ -302,37 +302,16 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
     if (offset == 0.0) {
         return path_in;
     }
-    Geom::PathVector work;
     Geom::PathVector ret;
     Geom::PathVector open_ret;
     Geom::PathVector ret_outline;
     Geom::PathIntersectionGraph *pig;
-    for (Geom::PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
+    for (Geom::PathVector::const_iterator path_it = filled_rule_pathv.begin(); path_it != filled_rule_pathv.end(); ++path_it) {
         Geom::Path original = (*path_it);
         if (original.empty()) {
             continue;
         }
-        bool added = false;
-        for (auto cross:Geom::self_crossings(original)) {
-            if (!Geom::are_near(cross.ta, cross.tb)) {
-                Geom::PathVector tmp;
-                tmp.push_back(original);
-                sp_flatten(tmp, fill_nonZero);
-                work.insert(work.begin(), tmp.begin(), tmp.end());
-                added = true;
-                break;
-            }
-        } 
-        if (!added) {
-            work.push_back(original);
-        } 
-    }
-    for (Geom::PathVector::const_iterator path_it = work.begin(); path_it != work.end(); ++path_it) {
-        Geom::Path original = (*path_it);
-        if (original.empty()) {
-            continue;
-        }
-        int wdg = offset_winding(work, original);
+        int wdg = offset_winding(filled_rule_pathv, original);
         bool path_inside = wdg % 2 != 0;
         double gap_size = -0.5;
         bool closed = original.closed();
@@ -409,9 +388,11 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         Geom::Path big;
         Geom::Path gap;
         Geom::Path small;
-        outline.push_back(with_dir);
-        outline.push_back(against_dir);
-        sp_flatten(outline, fill_nonZero);
+        if (offset < 0) {
+            outline.push_back(with_dir);
+            outline.push_back(against_dir);
+            sp_flatten(outline, fill_nonZero);
+        }
         if (reversed || !closed) {
             big = with_dir;
             gap   = with_dir_gap;
@@ -452,21 +433,20 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
                 tmp.push_back(big);
             } 
         }
-        if (path_inside) {
-            outline.clear();
-            outline.push_back(big);
-        }
         ret.insert(ret.end(), tmp.begin(), tmp.end());
-        ret_outline.insert(ret_outline.end(), outline.begin(), outline.end());
+        if (offset < 0) {
+            ret_outline.insert(ret_outline.end(), outline.begin(), outline.end());
+        }
     }
 
-    sp_flatten(ret_outline, fill_nonZero);
     if (offset < 0) {
+        sp_flatten(ret_outline, fill_nonZero);
         pig = new Geom::PathIntersectionGraph(ret, ret_outline);
         if (pig && !ret_outline.empty() && !ret.empty()) {
             ret = pig->getAminusB();
         }
     }
+
     sp_flatten(ret, fill_nonZero);
     ret.insert(ret.end(), open_ret.begin(), open_ret.end());
     
