@@ -269,58 +269,59 @@ uint32_t Emf::add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
     std::string refpath; // used to reference later the path pieces which are about to be created
     sprintf(hpathname,"EMFhpath%d_%s",hatchType,tmpcolor);
     idx = in_hatches(d,hpathname);
+    auto & defs = d->defs;
     if(!idx){  // add path/color if not already present
         if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
         d->hatches.strings[d->hatches.count++]=strdup(hpathname);
 
-        d->defs += "\n";
+        defs += "\n";
         switch(hatchType){
             case U_HS_HORIZONTAL:
-                d->defs += "   <path id=\"";
-                d->defs += hpathname;
-                d->defs += "\" d=\"M 0 0 6 0\" style=\"fill:none;stroke:#";
-                d->defs += tmpcolor;
-                d->defs += "\" />\n";
+                defs += "   <path id=\"";
+                defs += hpathname;
+                defs += "\" d=\"M 0 0 6 0\" style=\"fill:none;stroke:#";
+                defs += tmpcolor;
+                defs += "\" />\n";
                 break;
             case U_HS_VERTICAL:
-                d->defs += "   <path id=\"";
-                d->defs += hpathname;
-                d->defs += "\" d=\"M 0 0 0 6\" style=\"fill:none;stroke:#";
-                d->defs += tmpcolor;
-                d->defs += "\" />\n";
+                defs += "   <path id=\"";
+                defs += hpathname;
+                defs += "\" d=\"M 0 0 0 6\" style=\"fill:none;stroke:#";
+                defs += tmpcolor;
+                defs += "\" />\n";
                 break;
             case U_HS_FDIAGONAL:
-                d->defs += "   <line  id=\"sub";
-                d->defs += hpathname;
-                d->defs += "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#";
-                d->defs += tmpcolor;
-                d->defs += "\"/>\n";
+                defs += "   <line  id=\"sub";
+                defs += hpathname;
+                defs += "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#";
+                defs += tmpcolor;
+                defs += "\"/>\n";
                 break;
             case U_HS_BDIAGONAL:
-                d->defs += "   <line  id=\"sub";
-                d->defs += hpathname;
-                d->defs += "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#";
-                d->defs += tmpcolor;
-                d->defs += "\"/>\n";
+                defs += "   <line  id=\"sub";
+                defs += hpathname;
+                defs += "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#";
+                defs += tmpcolor;
+                defs += "\"/>\n";
                 break;
             case U_HS_CROSS:
-                d->defs += "   <path   id=\"";
-                d->defs += hpathname;
-                d->defs += "\" d=\"M 0 0 6 0 M 0 0 0 6\" style=\"fill:none;stroke:#";
-                d->defs += tmpcolor;
-                d->defs += "\" />\n";
+                defs += "   <path   id=\"";
+                defs += hpathname;
+                defs += "\" d=\"M 0 0 6 0 M 0 0 0 6\" style=\"fill:none;stroke:#";
+                defs += tmpcolor;
+                defs += "\" />\n";
                  break;
             case U_HS_DIAGCROSS:
-                d->defs += "   <line   id=\"subfd";
-                d->defs += hpathname;
-                d->defs += "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#";
-                d->defs += tmpcolor;
-                d->defs += "\"/>\n";
-                d->defs += "   <line   id=\"subbd";
-                d->defs += hpathname;
-                d->defs += "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#";
-                d->defs += tmpcolor;
-                d->defs += "\"/>\n";
+                defs += "   <line   id=\"subfd";
+                defs += hpathname;
+                defs += "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#";
+                defs += tmpcolor;
+                defs += "\"/>\n";
+                defs += "   <line   id=\"subbd";
+                defs += hpathname;
+                defs += "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#";
+                defs += tmpcolor;
+                defs += "\"/>\n";
                 break;
             case U_HS_SOLIDCLR:
             case U_HS_DITHEREDCLR:
@@ -329,12 +330,12 @@ uint32_t Emf::add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
             case U_HS_SOLIDBKCLR:
             case U_HS_DITHEREDBKCLR:
             default:
-                d->defs += "   <path   id=\"";
-                d->defs += hpathname;
-                d->defs += "\" d=\"M 0 0 6 0 6 6 0 6 z\" style=\"fill:#";
-                d->defs += tmpcolor;
-                d->defs += ";stroke:none";
-                d->defs += "\" />\n";
+                defs += "   <path   id=\"";
+                defs += hpathname;
+                defs += "\" d=\"M 0 0 6 0 6 6 0 6 z\" style=\"fill:#";
+                defs += tmpcolor;
+                defs += ";stroke:none";
+                defs += "\" />\n";
                 break;
         }
     }
@@ -396,12 +397,12 @@ uint32_t Emf::add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
         if(!idx){  // add it if not already present
             if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
             d->hatches.strings[d->hatches.count++]=strdup(hatchname);
-            d->defs += "\n";
-            d->defs += "   <pattern id=\"";
-            d->defs += hatchname;
-            d->defs += "\"  xlink:href=\"#EMFhbasepattern\">\n";
-            d->defs += refpath;
-            d->defs += "   </pattern>\n";
+            defs += "\n";
+            defs += "   <pattern id=\"";
+            defs += hatchname;
+            defs += "\"  xlink:href=\"#EMFhbasepattern\">\n";
+            defs += refpath;
+            defs += "   </pattern>\n";
             idx = d->hatches.count;
         }
     }
@@ -414,12 +415,12 @@ uint32_t Emf::add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
             if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
             d->hatches.strings[d->hatches.count++]=strdup(hbkname);
 
-            d->defs += "\n";
-            d->defs += "   <rect id=\"";
-            d->defs += hbkname;
-            d->defs += "\" x=\"0\" y=\"0\" width=\"6\" height=\"6\" fill=\"#";
-            d->defs += bkcolor;
-            d->defs += "\" />\n";
+            defs += "\n";
+            defs += "   <rect id=\"";
+            defs += hbkname;
+            defs += "\" x=\"0\" y=\"0\" width=\"6\" height=\"6\" fill=\"#";
+            defs += bkcolor;
+            defs += "\" />\n";
         }
 
         // this is the pattern, its name will show up in Inkscape's pattern selector
@@ -428,15 +429,15 @@ uint32_t Emf::add_hatch(PEMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
         if(!idx){  // add it if not already present
             if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
             d->hatches.strings[d->hatches.count++]=strdup(hatchname);
-            d->defs += "\n";
-            d->defs += "   <pattern id=\"";
-            d->defs += hatchname;
-            d->defs += "\"  xlink:href=\"#EMFhbasepattern\">\n";
-            d->defs += "      <use xlink:href=\"#";
-            d->defs += hbkname;
-            d->defs += "\" />\n";
-            d->defs += refpath;
-            d->defs += "   </pattern>\n";
+            defs += "\n";
+            defs += "   <pattern id=\"";
+            defs += hatchname;
+            defs += "\"  xlink:href=\"#EMFhbasepattern\">\n";
+            defs += "      <use xlink:href=\"#";
+            defs += hbkname;
+            defs += "\" />\n";
+            defs += refpath;
+            defs += "   </pattern>\n";
             idx = d->hatches.count;
         }
     }
@@ -536,6 +537,7 @@ uint32_t Emf::add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint
     }
 
     idx = in_images(d, (char *) base64String);
+    auto & defs = d->defs;
     if(!idx){  // add it if not already present - we looked at the actual data for comparison
         if(d->images.count == d->images.size){  enlarge_images(d); }
         idx = d->images.count;
@@ -544,35 +546,35 @@ uint32_t Emf::add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint
         sprintf(imagename,"EMFimage%d",idx++);
         sprintf(xywh," x=\"0\" y=\"0\" width=\"%d\" height=\"%d\" ",width,height); // reuse this buffer
 
-        d->defs += "\n";
-        d->defs += "   <image id=\"";
-        d->defs += imagename;
-        d->defs += "\"\n      ";
-        d->defs += xywh;
-        d->defs += "\n";
-        if(dibparams == U_BI_JPEG){    d->defs += "       xlink:href=\"data:image/jpeg;base64,"; }
-        else {                         d->defs += "       xlink:href=\"data:image/png;base64,";  }
-        d->defs += base64String;
-        d->defs += "\"\n";
-        d->defs += "    preserveAspectRatio=\"none\"\n";
-        d->defs += "    />\n";
+        defs += "\n";
+        defs += "   <image id=\"";
+        defs += imagename;
+        defs += "\"\n      ";
+        defs += xywh;
+        defs += "\n";
+        if(dibparams == U_BI_JPEG){    defs += "       xlink:href=\"data:image/jpeg;base64,"; }
+        else {                         defs += "       xlink:href=\"data:image/png;base64,";  }
+        defs += base64String;
+        defs += "\"\n";
+        defs += "    preserveAspectRatio=\"none\"\n";
+        defs += "    />\n";
 
 
-        d->defs += "\n";
-        d->defs += "   <pattern id=\"";
-        d->defs += imagename;
-        d->defs += "_ref\"\n      ";
-        d->defs += xywh;
-        d->defs += "\n       patternUnits=\"userSpaceOnUse\"";
-        d->defs += " >\n";
-        d->defs += "      <use id=\"";
-        d->defs += imagename;
-        d->defs += "_ign\" ";
-        d->defs += " xlink:href=\"#";
-        d->defs += imagename;
-        d->defs += "\" />\n";
-        d->defs += "    ";
-        d->defs += "   </pattern>\n";
+        defs += "\n";
+        defs += "   <pattern id=\"";
+        defs += imagename;
+        defs += "_ref\"\n      ";
+        defs += xywh;
+        defs += "\n       patternUnits=\"userSpaceOnUse\"";
+        defs += " >\n";
+        defs += "      <use id=\"";
+        defs += imagename;
+        defs += "_ign\" ";
+        defs += " xlink:href=\"#";
+        defs += imagename;
+        defs += "\" />\n";
+        defs += "    ";
+        defs += "   </pattern>\n";
     }
     g_free(base64String);//wait until this point to free because it might be a duplicate image
 
@@ -596,17 +598,17 @@ uint32_t Emf::add_image(PEMF_CALLBACK_DATA d,  void *pEmr, uint32_t cbBits, uint
             d->images.strings[d->images.count++]=strdup(base64String);
             sprintf(imrotname,"EMFimage%d",idx++);
 
-            d->defs += "\n";
-            d->defs += "   <pattern\n";
-            d->defs += "       id=\"";
-            d->defs += imrotname;
-            d->defs += "_ref\"\n";
-            d->defs += "       xlink:href=\"#";
-            d->defs += imagename;
-            d->defs += "_ref\"\n";
-            d->defs += "       patternTransform=";
-            d->defs += current_matrix(d, 0.0, 0.0, 0); //j use offset 0,0
-            d->defs += " />\n";
+            defs += "\n";
+            defs += "   <pattern\n";
+            defs += "       id=\"";
+            defs += imrotname;
+            defs += "_ref\"\n";
+            defs += "       xlink:href=\"#";
+            defs += imagename;
+            defs += "_ref\"\n";
+            defs += "       patternTransform=";
+            defs += current_matrix(d, 0.0, 0.0, 0); //j use offset 0,0
+            defs += " />\n";
         }
         g_free(base64String);
     }
