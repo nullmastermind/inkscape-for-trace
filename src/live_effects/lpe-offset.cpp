@@ -157,6 +157,16 @@ LPEOffset::get_default_point(Geom::PathVector pathv)  const
     }
     return origin;
 }
+double 
+sp_get_distance_point(Geom::PathVector pathv, Geom::Point origin) {
+    boost::optional< Geom::PathVectorTime > pathvectortime = pathv.nearestTime(origin);
+    Geom::Point nearest = origin;
+    if (pathvectortime) {
+        Geom::PathTime pathtime = pathvectortime->asPathTime();
+        nearest = pathv[(*pathvectortime).path_index].pointAt(pathtime.curve_index + pathtime.t);
+    }
+    return Geom::distance(origin, nearest);
+}
 
 double
 LPEOffset::sp_get_offset(Geom::Point origin)
@@ -167,14 +177,7 @@ LPEOffset::sp_get_offset(Geom::Point origin)
         inset = true;
     }
     double ret_offset = 0;
-    boost::optional< Geom::PathVectorTime > pathvectortime = filled_rule_pathv.nearestTime(origin);
-    Geom::Point nearest = origin;
-    double distance = 0;
-    if (pathvectortime) {
-        Geom::PathTime pathtime = pathvectortime->asPathTime();
-        nearest = filled_rule_pathv[(*pathvectortime).path_index].pointAt(pathtime.curve_index + pathtime.t);
-    }
-    ret_offset = Geom::distance(origin, nearest);
+    ret_offset = sp_get_distance_point(filled_rule_pathv, origin);
     if (inset) {
         ret_offset *= -1;
     }
@@ -204,10 +207,8 @@ int offset_winding(Geom::PathVector pathvector, Geom::Path path)
     return wind;
 }
 
-Geom::Path 
-sp_get_outer(Geom::Path path) {
-    Geom::PathVector pathv;
-    pathv.push_back(path);
+/* Geom::Path 
+sp_get_outer(Geom::PathVector pathv) {
     sp_flatten(pathv, fill_nonZero);
     Geom::Path out_bounds;
     Geom::Path out_size;
@@ -245,7 +246,7 @@ sp_get_inner(Geom::PathVector pathv, Geom::Path outer) {
         }
     }
     return out;
-}
+} */
 
 Geom::PathVector 
 LPEOffset::doEffect_path(Geom::PathVector const & path_in)
@@ -275,6 +276,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
     }
     Geom::PathVector work;
     Geom::PathVector ret;
+    Geom::PathVector open_ret;
     Geom::PathVector ret_outline;
     Geom::PathIntersectionGraph *pig;
     for (Geom::PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
@@ -382,7 +384,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         outline.push_back(with_dir);
         outline.push_back(against_dir);
         sp_flatten(outline, fill_nonZero);
-        if (reversed) {
+        if (reversed || !closed) {
             big = with_dir;
             gap   = with_dir_gap;
             small = against_dir;
@@ -395,13 +397,18 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         //gap = sp_get_outer(gap);
         
         if (!closed) {
-            if (offset < 0) {
-                ret.push_back(small);
-                return ret;
+            tmp.push_back(small);
+            double smalldist = sp_get_distance_point(tmp, offset_pt);
+            tmp.clear();
+            tmp.push_back(big);
+            double bigdist = sp_get_distance_point(tmp, offset_pt);
+            tmp.clear();
+            if (bigdist > smalldist) {
+                open_ret.push_back(small);
             } else {
-                ret.push_back(big);
-                return ret;
+                open_ret.push_back(big);
             }
+            continue;
         }
         bool fix_reverse = (original_width + original_height) / 2.0  > to_offset * 2;
         if (offset < 0) {
@@ -424,8 +431,8 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         ret.insert(ret.end(), tmp.begin(), tmp.end());
         ret_outline.insert(ret_outline.end(), outline.begin(), outline.end());
     }
+
     sp_flatten(ret_outline, fill_nonZero);
-    
     if (offset < 0) {
         pig = new Geom::PathIntersectionGraph(ret, ret_outline);
         if (pig && !ret_outline.empty() && !ret.empty()) {
@@ -433,7 +440,8 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         }
     }
     sp_flatten(ret, fill_nonZero);
-
+    ret.insert(ret.end(), open_ret.begin(), open_ret.end());
+    
     if (offset_pt == Geom::Point(Geom::infinity(), Geom::infinity())) {
         offset_pt = get_default_point(ret);
     }
