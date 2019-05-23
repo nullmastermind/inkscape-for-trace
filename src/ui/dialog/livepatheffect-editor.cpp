@@ -520,6 +520,7 @@ LivePathEffectEditor::onRemove()
         SPItem *item = sel->singleItem();
         SPLPEItem *lpeitem  = dynamic_cast<SPLPEItem *>(item);
         if ( lpeitem ) {
+            sp_lpe_item_update_patheffect(lpeitem, false, false);
             lpeitem->removeCurrentPathEffect(false);
             current_lperef = nullptr;
             DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,

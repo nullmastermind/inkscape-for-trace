@@ -74,6 +74,7 @@ private:
     Geom::Point previous_start_point;
     double dist_angle_handle;
     double size_divider;
+    double gap_override;
     Geom::Path divider;
     double previous_num_copies;
     bool reset;
