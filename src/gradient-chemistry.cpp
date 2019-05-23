@@ -380,7 +380,7 @@ SPGradient *sp_gradient_reset_to_userspace(SPGradient *gr, SPItem *item)
         gr->gradientTransform = squeeze;
         {
             gchar *c=sp_svg_transform_write(gr->gradientTransform);
-            gr->getRepr()->setAttribute("gradientTransform", c);
+            gr->setAttribute("gradientTransform", c);
             g_free(c);
         }
     } else if (SP_IS_LINEARGRADIENT(gr)) {
@@ -509,7 +509,7 @@ SPGradient *sp_gradient_convert_to_userspace(SPGradient *gr, SPItem *item, gchar
         gr->gradientTransform = skew;
         {
             gchar *c=sp_svg_transform_write(gr->gradientTransform);
-            gr->getRepr()->setAttribute("gradientTransform", c);
+            gr->setAttribute("gradientTransform", c);
             g_free(c);
         }
 
@@ -588,7 +588,7 @@ void sp_gradient_transform_multiply(SPGradient *gradient, Geom::Affine postmul, 
     gradient->gradientTransform_set = TRUE;
 
     gchar *c=sp_svg_transform_write(gradient->gradientTransform);
-    gradient->getRepr()->setAttribute("gradientTransform", c);
+    gradient->setAttribute("gradientTransform", c);
     g_free(c);
 }
 
@@ -685,7 +685,7 @@ SPStop *sp_vector_add_stop(SPGradient *vector, SPStop* prev_stop, SPStop* next_s
     sp_svg_write_color (c, sizeof(c), cnew);
     gdouble opacity = (gdouble) SP_RGBA32_A_F (cnew);
     os << "stop-color:" << c << ";stop-opacity:" << opacity <<";";
-    newstop->getRepr()->setAttribute("style", os.str().c_str());
+    newstop->setAttribute("style", os.str());
     Inkscape::GC::release(new_stop_repr);
 
     return newstop;
@@ -1230,7 +1230,7 @@ void sp_item_gradient_set_coords(SPItem *item, GrPointType point_type, guint poi
             gradient->gradientTransform_set = TRUE;
             if (write_repr) {
                 gchar *s=sp_svg_transform_write(gradient->gradientTransform);
-                gradient->getRepr()->setAttribute("gradientTransform", s);
+                gradient->setAttribute("gradientTransform", s);
                 g_free(s);
             } else {
                 gradient->requestModified(SP_OBJECT_MODIFIED_FLAG);

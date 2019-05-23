@@ -468,8 +468,8 @@ LivePathEffectEditor::onAdd()
                         SPItem *new_item = sel->singleItem();
                         // Check that the cloning was successful. We don't want to change the ID of the original referenced path!
                         if (new_item && (new_item != orig)) {
-                            new_item->getRepr()->setAttribute("id", id);
-                            new_item->getRepr()->setAttribute("transform", transform);
+                            new_item->setAttribute("id", id);
+                            new_item->setAttribute("transform", transform);
                         }
                         g_free(id);
                         g_free(transform);

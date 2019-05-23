@@ -372,7 +372,7 @@ void SPPattern::transform_multiply(Geom::Affine postmul, bool set)
     _pattern_transform_set = true;
 
     gchar *c = sp_svg_transform_write(_pattern_transform);
-    getRepr()->setAttribute("patternTransform", c);
+    setAttribute("patternTransform", c);
     g_free(c);
 }
 

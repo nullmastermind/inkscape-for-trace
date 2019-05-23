@@ -102,7 +102,7 @@ void SPText::set(SPAttributeEnum key, const gchar* value) {
                     this->style->line_height.value = this->style->line_height.computed = sp_svg_read_percentage (value, 1.0);
                 }
                 // Remove deprecated attribute
-                this->getRepr()->setAttribute("sodipodi:linespacing", nullptr);
+                this->setAttribute("sodipodi:linespacing", nullptr);
 
                 this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
                 break;

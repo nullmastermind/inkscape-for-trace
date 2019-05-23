@@ -1116,7 +1116,7 @@ private:
         SPFilterPrimitive* prim = _dialog._primitive_list.get_selected();
         if(prim) {
 
-            _funcNode->getRepr()->setAttribute( "type", _type.get_as_attribute().c_str() );
+            _funcNode->setAttribute( "type", _type.get_as_attribute() );
 
             SPFilter* filter = _dialog._filter_modifier.get_selected_filter();
             filter->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -2494,20 +2494,20 @@ static void check_single_connection(SPFilterPrimitive* prim, const int result)
 {
     if (prim && (result >= 0)) {
         if (prim->image_in == result) {
-            prim->getRepr()->setAttribute("in", nullptr);
+            prim->setAttribute("in", nullptr);
         }
 
         if (SP_IS_FEBLEND(prim)) {
             if (SP_FEBLEND(prim)->in2 == result) {
-                prim->getRepr()->setAttribute("in2", nullptr);
+                prim->setAttribute("in2", nullptr);
             }
         } else if (SP_IS_FECOMPOSITE(prim)) {
             if (SP_FECOMPOSITE(prim)->in2 == result) {
-                prim->getRepr()->setAttribute("in2", nullptr);
+                prim->setAttribute("in2", nullptr);
             }
         } else if (SP_IS_FEDISPLACEMENTMAP(prim)) {
             if (SP_FEDISPLACEMENTMAP(prim)->in2 == result) {
-                prim->getRepr()->setAttribute("in2", nullptr);
+                prim->setAttribute("in2", nullptr);
             }
         }
     }
@@ -2990,7 +2990,7 @@ void FilterEffectsDialog::set_filternode_attr(const AttrWidget* input)
         SPFilter *filter = _filter_modifier.get_selected_filter();
         const gchar* name = (const gchar*)sp_attribute_name(input->get_attribute());
         if (filter && name && filter->getRepr()){
-            filter->getRepr()->setAttribute(name, input->get_as_attribute().c_str());
+            filter->setAttribute(name, input->get_as_attribute());
             filter->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
         _attr_lock = false;
@@ -3012,7 +3012,7 @@ void FilterEffectsDialog::set_attr(SPObject* o, const SPAttributeEnum attr, cons
         if(filter && name && o) {
             update_settings_sensitivity();
 
-            o->getRepr()->setAttribute(name, val);
+            o->setAttribute(name, val);
             filter->requestModified(SP_OBJECT_MODIFIED_FLAG);
 
             Glib::ustring undokey = "filtereffects:";

@@ -906,7 +906,7 @@ void SPObject::set(SPAttributeEnum key, gchar const* value) {
                         sp_object_ref(conflict, nullptr);
                         // give the conflicting object a new ID
                         gchar *new_conflict_id = sp_object_get_unique_id(conflict, nullptr);
-                        conflict->getRepr()->setAttribute("id", new_conflict_id);
+                        conflict->setAttribute("id", new_conflict_id);
                         g_free(new_conflict_id);
                         sp_object_unref(conflict, nullptr);
                     } else {

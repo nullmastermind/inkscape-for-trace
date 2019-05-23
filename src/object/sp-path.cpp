@@ -158,7 +158,7 @@ void SPPath::build(SPDocument *document, Inkscape::XML::Node *repr) {
                     curve->unref();
 
                     // Convert from property to attribute (convert back on write)
-                    getRepr()->setAttribute("d", value);
+                    setAttribute("d", value);
 
                     SPCSSAttr *css = sp_repr_css_attr( getRepr(), "style");
                     sp_repr_css_unset_property ( css, "d");

@@ -617,9 +617,9 @@ ObjectSet::pathReverse()
 
         gchar *str = sp_svg_write_path(rcurve->get_pathvector());
         if ( path->hasPathEffectRecursive() ) {
-            path->getRepr()->setAttribute("inkscape:original-d", str);
+            path->setAttribute("inkscape:original-d", str);
         } else {
-            path->getRepr()->setAttribute("d", str);
+            path->setAttribute("d", str);
         }
         g_free(str);
 
@@ -628,7 +628,7 @@ ObjectSet::pathReverse()
         // reverse nodetypes order (Bug #179866)
         gchar *nodetypes = g_strdup(path->getRepr()->attribute("sodipodi:nodetypes"));
         if ( nodetypes ) {
-            path->getRepr()->setAttribute("sodipodi:nodetypes", g_strreverse(nodetypes));
+            path->setAttribute("sodipodi:nodetypes", g_strreverse(nodetypes));
             g_free(nodetypes);
         }
     }

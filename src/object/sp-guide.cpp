@@ -471,7 +471,7 @@ void SPGuide::set_color(const unsigned r, const unsigned g, const unsigned b, bo
         std::ostringstream os;
         os << "rgb(" << r << "," << g << "," << b << ")";
         //XML Tree being used directly while it shouldn't be
-        getRepr()->setAttribute("inkscape:color", os.str().c_str());
+        setAttribute("inkscape:color", os.str());
     }
 }
 
@@ -483,7 +483,7 @@ void SPGuide::set_locked(const bool locked, bool const commit)
     }
 
     if (commit) {
-        getRepr()->setAttribute("inkscape:locked", g_strdup(locked ? "true" : "false"));
+        setAttribute("inkscape:locked", locked ? "true" : "false");
     }
 }
 
@@ -495,7 +495,7 @@ void SPGuide::set_label(const char* label, bool const commit)
 
     if (commit) {
         //XML Tree being used directly while it shouldn't be
-        getRepr()->setAttribute("inkscape:label", label);
+        setAttribute("inkscape:label", label);
     }
 }
 

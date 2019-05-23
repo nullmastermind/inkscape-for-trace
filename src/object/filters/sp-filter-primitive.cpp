@@ -233,7 +233,7 @@ int SPFilterPrimitive::name_previous_out() {
             int slot = parent->set_image_name(name.c_str());
             i_prim->image_out = slot;
             //XML Tree is being directly used while it shouldn't be.
-            i_prim->getRepr()->setAttribute("result", name.c_str());
+            i_prim->setAttribute("result", name);
             return slot;
         } else {
             return i_prim->image_out;

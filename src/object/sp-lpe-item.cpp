@@ -548,7 +548,7 @@ void SPLPEItem::addPathEffect(std::string value, bool reset)
         }
         hreflist.push_back(value); // C++11: should be emplace_back std::move'd  (also the reason why passed by value to addPathEffect)
 
-        this->getRepr()->setAttribute("inkscape:path-effect", hreflist_svg_string(hreflist));
+        this->setAttribute("inkscape:path-effect", hreflist_svg_string(hreflist));
         // Make sure that ellipse is stored as <svg:path>
         if( SP_IS_GENERICELLIPSE(this)) {
             SP_GENERICELLIPSE(this)->write( this->getRepr()->document(), this->getRepr(), SP_OBJECT_WRITE_EXT );
@@ -603,7 +603,7 @@ void SPLPEItem::removeCurrentPathEffect(bool keep_paths)
         effect_->keep_paths = keep_paths;
         effect_->doOnRemove(this);
         this->path_effect_list->remove(lperef); //current lpe ref is always our 'own' pointer from the path_effect_list
-        this->getRepr()->setAttribute("inkscape:path-effect", patheffectlist_svg_string(*this->path_effect_list));
+        this->setAttribute("inkscape:path-effect", patheffectlist_svg_string(*this->path_effect_list));
         if (!keep_paths) {
             // Make sure that ellipse is stored as <svg:circle> or <svg:ellipse> if possible.
             if( SP_IS_GENERICELLIPSE(this)) {
@@ -640,7 +640,7 @@ void SPLPEItem::removeAllPathEffects(bool keep_paths)
         }
     }
     this->path_effect_list->clear();
-    this->getRepr()->setAttribute("inkscape:path-effect", nullptr);
+    this->setAttribute("inkscape:path-effect", nullptr);
     if (!keep_paths) {
         // Make sure that ellipse is stored as <svg:circle> or <svg:ellipse> if possible.
         if (SP_IS_GENERICELLIPSE(this)) {
@@ -667,7 +667,7 @@ void SPLPEItem::downCurrentPathEffect()
         }
     }
 
-    this->getRepr()->setAttribute("inkscape:path-effect", patheffectlist_svg_string(new_list));
+    this->setAttribute("inkscape:path-effect", patheffectlist_svg_string(new_list));
 
     sp_lpe_item_cleanup_original_path_recursive(this, false);
 }
@@ -686,7 +686,7 @@ void SPLPEItem::upCurrentPathEffect()
         std::iter_swap(cur_it, up_it);
     }
 
-    this->getRepr()->setAttribute("inkscape:path-effect", patheffectlist_svg_string(new_list));
+    this->setAttribute("inkscape:path-effect", patheffectlist_svg_string(new_list));
 
     sp_lpe_item_cleanup_original_path_recursive(this, false);
 }
@@ -820,7 +820,7 @@ SPLPEItem::resetClipPathAndMaskLPE(bool fromrecurse)
         } else if (shape) {
             shape->setCurveInsync( shape->getCurveForEdit());
             if (!hasPathEffectOnClipOrMaskRecursive(shape)) {
-                shape->getRepr()->setAttribute("inkscape:original-d", nullptr);
+                shape->setAttribute("inkscape:original-d", nullptr);
                 shape->setCurveBeforeLPE(nullptr);
             } else {
                 // make sure there is an original-d for paths!!!
@@ -846,7 +846,7 @@ SPLPEItem::resetClipPathAndMaskLPE(bool fromrecurse)
             } else if (shape) {
                 shape->setCurveInsync( shape->getCurveForEdit());
                 if (!hasPathEffectOnClipOrMaskRecursive(shape)) {
-                    shape->getRepr()->setAttribute("inkscape:original-d", nullptr);
+                    shape->setAttribute("inkscape:original-d", nullptr);
                     shape->setCurveBeforeLPE(nullptr);
                 } else {
                     // make sure there is an original-d for paths!!!
@@ -872,7 +872,7 @@ SPLPEItem::resetClipPathAndMaskLPE(bool fromrecurse)
             } else if (shape) {
                 shape->setCurveInsync( shape->getCurveForEdit());
                 if (!hasPathEffectOnClipOrMaskRecursive(shape)) {
-                    shape->getRepr()->setAttribute("inkscape:original-d", nullptr);
+                    shape->setAttribute("inkscape:original-d", nullptr);
                     shape->setCurveBeforeLPE(nullptr);
                 } else {
                     // make sure there is an original-d for paths!!!
@@ -1143,7 +1143,7 @@ void SPLPEItem::replacePathEffects( std::vector<LivePathEffectObject const *> co
         }
     }
 
-    this->getRepr()->setAttribute("inkscape:path-effect", hreflist_svg_string(hreflist));
+    this->setAttribute("inkscape:path-effect", hreflist_svg_string(hreflist));
 }
 
 /**

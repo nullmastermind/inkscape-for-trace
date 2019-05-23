@@ -98,7 +98,7 @@ void SwatchSelector::_changedCb()
             gchar c[64];
             sp_svg_write_color(c, sizeof(c), rgb);
             os << "stop-color:" << c << ";stop-opacity:" << static_cast<gdouble>(alpha) <<";";
-            stop->getRepr()->setAttribute("style", os.str().c_str());
+            stop->setAttribute("style", os.str());
 
             DocumentUndo::done(ngr->document, SP_VERB_CONTEXT_GRADIENT,
                                _("Change swatch color"));

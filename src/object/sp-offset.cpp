@@ -118,8 +118,8 @@ void SPOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
         //XML Tree being used directly here (as object->getRepr) 
         //in all the below lines in the block while it shouldn't be.
         gchar const *oldA = this->getRepr()->attribute("sodipodi:radius");
-        this->getRepr()->setAttribute("inkscape:radius",oldA);
-        this->getRepr()->setAttribute("sodipodi:radius",nullptr);
+        this->setAttribute("inkscape:radius",oldA);
+        this->setAttribute("sodipodi:radius",nullptr);
 
         this->readAttr( "inkscape:radius" );
     }
@@ -128,8 +128,8 @@ void SPOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
         this->readAttr( "inkscape:original" );
     } else {
         gchar const *oldA = this->getRepr()->attribute("sodipodi:original");
-        this->getRepr()->setAttribute("inkscape:original",oldA);
-        this->getRepr()->setAttribute("sodipodi:original",nullptr);
+        this->setAttribute("inkscape:original",oldA);
+        this->setAttribute("sodipodi:original",nullptr);
 
         this->readAttr( "inkscape:original" );
     }
@@ -148,11 +148,11 @@ void SPOffset::build(SPDocument *document, Inkscape::XML::Node *repr) {
             nA[0]='#';
             nA[lA+1]=0;
 
-            this->getRepr()->setAttribute("xlink:href",nA);
+            this->setAttribute("xlink:href",nA);
 
             free(nA);
 
-            this->getRepr()->setAttribute("inkscape:href",nullptr);
+            this->setAttribute("inkscape:href",nullptr);
         }
 
         this->readAttr( "xlink:href" );
@@ -1188,7 +1188,7 @@ refresh_offset_source(SPOffset* offset)
 
         // TODO fix:
         //XML Tree being used directly here while it shouldn't be.
-        offset->getRepr()->setAttribute("inkscape:original", res_d);
+        offset->setAttribute("inkscape:original", res_d);
 
         free (res_d);
     }

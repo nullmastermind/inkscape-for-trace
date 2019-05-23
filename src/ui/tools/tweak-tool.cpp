@@ -616,9 +616,9 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
                     } else {
                         SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
                         if (lpeitem && lpeitem->hasPathEffectRecursive()) {
-                            item->getRepr()->setAttribute("inkscape:original-d", str);
+                            item->setAttribute("inkscape:original-d", str);
                         } else {
-                            item->getRepr()->setAttribute("d", str);
+                            item->setAttribute("d", str);
                         }
                     }
                     g_free(str);

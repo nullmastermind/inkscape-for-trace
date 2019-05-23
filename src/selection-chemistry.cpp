@@ -520,7 +520,7 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
                         // we have both orig and clone in selection, relink
                         // std::cout << id  << " old, its ori: " << orig->getId() << "; will relink:" << new_ids[i] << " to " << new_ids[j] << "\n";
                         SPObject *new_clone = doc->getObjectById(new_ids[i]);
-                        new_clone->getRepr()->setAttribute("xlink:href", Glib::ustring("#") + new_ids[j]);
+                        new_clone->setAttribute("xlink:href", Glib::ustring("#") + new_ids[j]);
                         new_clone->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
                     }
                 }
@@ -528,7 +528,7 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
                 gchar *source_href = offset->sourceHref;
                 for (guint j = 0; j < old_ids.size(); j++) {
                     if (source_href && source_href[0]=='#' && !strcmp(source_href+1, old_ids[j])) {
-                        doc->getObjectById(new_ids[i])->getRepr()->setAttribute("xlink:href", Glib::ustring("#") + new_ids[j]);
+                        doc->getObjectById(new_ids[i])->setAttribute("xlink:href", Glib::ustring("#") + new_ids[j]);
                     }
                 }
             } else if (text) {
@@ -537,7 +537,7 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
                 const gchar *source_href = sp_textpath_get_path_item(textpath)->getId();
                 for (guint j = 0; j < old_ids.size(); j++) {
                     if (!strcmp(source_href, old_ids[j])) {
-                        doc->getObjectById(new_ids[i])->firstChild()->getRepr()->setAttribute("xlink:href", Glib::ustring("#") + new_ids[j]);
+                        doc->getObjectById(new_ids[i])->firstChild()->setAttribute("xlink:href", Glib::ustring("#") + new_ids[j]);
                     }
                 }
             } else if (path) {
@@ -547,10 +547,10 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
                     SPObject *new_clone = doc->getObjectById(new_ids[i]);
                     for (guint j = 0; j < old_ids.size(); j++) {
                         if(old_start == Glib::ustring("#") + old_ids[j]) {
-                            new_clone->getRepr()->setAttribute("inkscape:connection-start", Glib::ustring("#") + new_ids[j]);
+                            new_clone->setAttribute("inkscape:connection-start", Glib::ustring("#") + new_ids[j]);
                         }
                         if(old_end == Glib::ustring("#") + old_ids[j]) {
-                            new_clone->getRepr()->setAttribute("inkscape:connection-end", Glib::ustring("#") + new_ids[j]);
+                            new_clone->setAttribute("inkscape:connection-end", Glib::ustring("#") + new_ids[j]);
                         }
                     }
                 }
@@ -2666,7 +2666,7 @@ void ObjectSet::relink()
         SPItem *item = *i;
 
         if (dynamic_cast<SPUse *>(item)) {
-            item->getRepr()->setAttribute("xlink:href", newref);
+            item->setAttribute("xlink:href", newref);
             item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             relinked = true;
         }
@@ -4150,7 +4150,7 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
             }
         }
 
-        (*i)->getRepr()->setAttribute(attributeName, "none");
+        (*i)->setAttribute(attributeName, "none");
 
         SPGroup *group = dynamic_cast<SPGroup *>(*i);
         if (ungroup_masked && group) {

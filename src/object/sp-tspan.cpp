@@ -405,14 +405,14 @@ Inkscape::XML::Node* SPTextPath::write(Inkscape::XML::Document *xml_doc, Inkscap
     this->attributes.writeTo(repr);
 
     if (this->side == SP_TEXT_PATH_SIDE_RIGHT) {
-        this->getRepr()->setAttribute("side", "right");
+        this->setAttribute("side", "right");
     }
 
     if (this->startOffset._set) {
         if (this->startOffset.unit == SVGLength::PERCENT) {
 	        Inkscape::SVGOStringStream os;
             os << (this->startOffset.computed * 100.0) << "%";
-            this->getRepr()->setAttribute("startOffset", os.str().c_str());
+            this->setAttribute("startOffset", os.str());
         } else {
             /* FIXME: This logic looks rather undesirable if e.g. startOffset is to be
                in ems. */

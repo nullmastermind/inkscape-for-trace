@@ -750,7 +750,7 @@ void SelectorDialog::_removeFromSelector(Gtk::TreeModel::Row row)
                     classAttr.erase(i, 1);
                 }
                 _store->erase(row);
-                objVec[0]->getRepr()->setAttribute("class", classAttr);
+                objVec[0]->setAttribute("class", classAttr);
                 parent[_mColumns._colExpand] = true;
             } else {
                 // Do nothing for element selectors.
@@ -823,7 +823,7 @@ void SelectorDialog::_insertClass(const std::vector<SPObject *>& objVec, const G
 
         if (!obj->getRepr()->attribute("class")) {
             // 'class' attribute does not exist, create it.
-            obj->getRepr()->setAttribute("class", className);
+            obj->setAttribute("class", className);
         } else {
             // 'class' attribute exists, append.
             Glib::ustring classAttr = obj->getRepr()->attribute("class");
@@ -838,7 +838,7 @@ void SelectorDialog::_insertClass(const std::vector<SPObject *>& objVec, const G
                 }
             }
             if (add) {
-                obj->getRepr()->setAttribute("class", classAttr + " " + className );
+                obj->setAttribute("class", classAttr + " " + className );
             }
         }
     }

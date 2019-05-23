@@ -227,7 +227,7 @@ change_clashing_ids(SPDocument *imported_doc, SPDocument *current_doc,
             }
             // Change to the new ID
 
-            elem->getRepr()->setAttribute("id", new_id);
+            elem->setAttribute("id", new_id);
                 // Make a note of this change, if we need to fix up refs to it
             if (refmap.find(old_id) != refmap.end())
             id_changes->push_back(id_changeitem_type(elem, old_id));
@@ -259,7 +259,7 @@ fix_up_refs(refmap_type const &refmap, const id_changelist_type &id_changes)
             switch (it->type) {
                 case REF_HREF: {
                     gchar *new_uri = g_strdup_printf("#%s", obj->getId());
-                    it->elem->getRepr()->setAttribute(it->attr, new_uri);
+                    it->elem->setAttribute(it->attr, new_uri);
                     g_free(new_uri);
                     break;
                 }
@@ -269,7 +269,7 @@ fix_up_refs(refmap_type const &refmap, const id_changelist_type &id_changes)
                 }
                 case REF_URL: {
                     gchar *url = g_strdup_printf("url(#%s)", obj->getId());
-                    it->elem->getRepr()->setAttribute(it->attr, url);
+                    it->elem->setAttribute(it->attr, url);
                     g_free(url);
                     break;
                 }
@@ -280,7 +280,7 @@ fix_up_refs(refmap_type const &refmap, const id_changelist_type &id_changes)
                     g_free(url);
                     Glib::ustring style_string;
                     sp_repr_css_write_string(style, style_string);
-                    it->elem->getRepr()->setAttribute("style", style_string);
+                    it->elem->setAttribute("style", style_string);
                     break;
                 }
             }
@@ -327,7 +327,7 @@ change_def_references(SPObject *from_obj, SPObject *to_obj)
             switch (it->type) {
                 case REF_HREF: {
                     gchar *new_uri = g_strdup_printf("#%s", to_obj->getId());
-                    it->elem->getRepr()->setAttribute(it->attr, new_uri);
+                    it->elem->setAttribute(it->attr, new_uri);
                     g_free(new_uri);
                     break;
                 }
@@ -337,7 +337,7 @@ change_def_references(SPObject *from_obj, SPObject *to_obj)
                 }
                 case REF_URL: {
                     gchar *url = g_strdup_printf("url(#%s)", to_obj->getId());
-                    it->elem->getRepr()->setAttribute(it->attr, url);
+                    it->elem->setAttribute(it->attr, url);
                     g_free(url);
                     break;
                 }
@@ -348,7 +348,7 @@ change_def_references(SPObject *from_obj, SPObject *to_obj)
                     g_free(url);
                     Glib::ustring style_string;
                     sp_repr_css_write_string(style, style_string);
-                    it->elem->getRepr()->setAttribute("style", style_string);
+                    it->elem->setAttribute("style", style_string);
                     break;
                 }
             } 
@@ -394,7 +394,7 @@ void rename_id(SPObject *elem, Glib::ustring const &new_name)
     }
     g_free (id);
     // Change to the new ID
-    elem->getRepr()->setAttribute("id", new_name2);
+    elem->setAttribute("id", new_name2);
     // Make a note of this change, if we need to fix up refs to it
     id_changelist_type id_changes;
     if (refmap.find(old_id) != refmap.end()) {

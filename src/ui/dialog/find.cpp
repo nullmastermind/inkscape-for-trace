@@ -496,7 +496,7 @@ bool Find::item_id_match (SPItem *item, const gchar *id, bool exact, bool casema
         gchar * replace_text  = g_strdup(entry_replace.getEntry()->get_text().c_str());
         Glib::ustring new_item_style = find_replace(item_id, id, replace_text , exact, casematch, true);
         if (new_item_style != item_id) {
-            item->getRepr()->setAttribute("id", new_item_style.data());
+            item->setAttribute("id", new_item_style.data());
         }
         g_free(replace_text);
     }
@@ -521,7 +521,7 @@ bool Find::item_style_match (SPItem *item, const gchar *text, bool exact, bool c
         gchar * replace_text  = g_strdup(entry_replace.getEntry()->get_text().c_str());
         Glib::ustring new_item_style = find_replace(item_style, text, replace_text , exact, casematch, true);
         if (new_item_style != item_style) {
-            item->getRepr()->setAttribute("style", new_item_style.data());
+            item->setAttribute("style", new_item_style.data());
         }
         g_free(replace_text);
     }
@@ -575,7 +575,7 @@ bool Find::item_attrvalue_match(SPItem *item, const gchar *text, bool exact, boo
             gchar * replace_text  = g_strdup(entry_replace.getEntry()->get_text().c_str());
             Glib::ustring new_item_style = find_replace(attr_value, text, replace_text , exact, casematch, true);
             if (new_item_style != attr_value) {
-                item->getRepr()->setAttribute(key, new_item_style.data());
+                item->setAttribute(key, new_item_style.data());
             }
         }
 
@@ -634,7 +634,7 @@ bool Find::item_font_match(SPItem *item, const gchar *text, bool exact, bool cas
             new_item_style.append(vStyleToken).append(";");
         }
         new_item_style.erase(new_item_style.size()-1);
-        item->getRepr()->setAttribute("style", new_item_style.data());
+        item->setAttribute("style", new_item_style.data());
     }
 
     return ret;

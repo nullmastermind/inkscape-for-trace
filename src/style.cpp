@@ -686,7 +686,7 @@ SPStyle::readIfUnset(SPAttributeEnum id, gchar const *val, SPStyleSrc const &sou
 
             //XML Tree being directly used here.
             if (object) {
-                object->getRepr()->setAttribute("clip-path", val);
+                object->setAttribute("clip-path", val);
             }
             return;
         case SP_PROP_MASK:
@@ -697,7 +697,7 @@ SPStyle::readIfUnset(SPAttributeEnum id, gchar const *val, SPStyleSrc const &sou
             
             //XML Tree being directly used here.
             if (object) {
-                object->getRepr()->setAttribute("mask", val);
+                object->setAttribute("mask", val);
             }
             return;
         case SP_PROP_FILTER:

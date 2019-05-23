@@ -136,7 +136,7 @@ text_put_on_path()
 
     // remove transform from text, but recursively scale text's fontsize by the expansion
     SP_TEXT(text)->_adjustFontsizeRecursive (text, text->transform.descrim());
-    text->getRepr()->setAttribute("transform", nullptr);
+    text->setAttribute("transform", nullptr);
 
     // make a list of text children
     std::vector<Inkscape::XML::Node *> text_reprs;
@@ -173,8 +173,8 @@ text_put_on_path()
     }
 
     // x/y are useless with textpath, and confuse Batik 1.5
-    text->getRepr()->setAttribute("x", nullptr);
-    text->getRepr()->setAttribute("y", nullptr);
+    text->setAttribute("x", nullptr);
+    text->setAttribute("y", nullptr);
 
     DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT, 
                        _("Put text on path"));
@@ -219,9 +219,9 @@ text_remove_from_path()
 static void
 text_remove_all_kerns_recursively(SPObject *o)
 {
-    o->getRepr()->setAttribute("dx", nullptr);
-    o->getRepr()->setAttribute("dy", nullptr);
-    o->getRepr()->setAttribute("rotate", nullptr);
+    o->setAttribute("dx", nullptr);
+    o->setAttribute("dy", nullptr);
+    o->setAttribute("rotate", nullptr);
 
     // if x contains a list, leave only the first value
     gchar const *x = o->getRepr()->attribute("x");
@@ -229,9 +229,9 @@ text_remove_all_kerns_recursively(SPObject *o)
         gchar **xa_space = g_strsplit(x, " ", 0);
         gchar **xa_comma = g_strsplit(x, ",", 0);
         if (xa_space && *xa_space && *(xa_space + 1)) {
-            o->getRepr()->setAttribute("x", *xa_space);
+            o->setAttribute("x", *xa_space);
         } else if (xa_comma && *xa_comma && *(xa_comma + 1)) {
-            o->getRepr()->setAttribute("x", *xa_comma);
+            o->setAttribute("x", *xa_comma);
         }
         g_strfreev(xa_space);
         g_strfreev(xa_comma);
@@ -338,7 +338,7 @@ text_flow_into_shape()
             // remove transform from text, but recursively scale text's fontsize by the expansion
             auto ex = i2i_affine(text, shape->parent).descrim();
             SP_TEXT(text)->_adjustFontsizeRecursive(text, ex);
-            text->getRepr()->setAttribute("transform", nullptr);
+            text->setAttribute("transform", nullptr);
         }
 
         Inkscape::XML::Node *root_repr = xml_doc->createElement("svg:flowRoot");

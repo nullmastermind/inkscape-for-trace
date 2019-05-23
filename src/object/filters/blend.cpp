@@ -178,7 +178,7 @@ void SPFeBlend::update(SPCtx *ctx, guint flags) {
         this->in2 = this->name_previous_out();
 
         // TODO: XML Tree being used directly here while it shouldn't be.
-        this->getRepr()->setAttribute("in2", parent->name_for_image(this->in2));
+        this->setAttribute("in2", parent->name_for_image(this->in2));
     }
 
     SPFilterPrimitive::update(ctx, flags);

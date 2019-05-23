@@ -1396,7 +1396,7 @@ static void overwrite_style_with_string(SPObject *item, gchar const *style_strin
         style.mergeString(item_style_string);
     }
     Glib::ustring new_style_string = style.write();
-    item->getRepr()->setAttribute("style", new_style_string.empty() ? nullptr : new_style_string.c_str());
+    item->setAttribute("style", new_style_string.empty() ? nullptr : new_style_string.c_str());
 }
 
 // Move to style.h?

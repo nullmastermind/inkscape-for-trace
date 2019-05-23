@@ -734,7 +734,7 @@ static void sp_grd_ed_add_stop(GtkWidget */*widget*/,  GtkWidget *vb)
     sp_svg_write_color(c, sizeof(c), cnew);
     gdouble opacity = static_cast<gdouble>(SP_RGBA32_A_F(cnew));
     os << "stop-color:" << c << ";stop-opacity:" << opacity <<";";
-    newstop->getRepr()->setAttribute("style", os.str().c_str());
+    newstop->setAttribute("style", os.str().c_str());
     sp_repr_set_css_double( newstop->getRepr(), "offset", (double)newstop->offset);
 
     sp_gradient_vector_widget_load_gradient(vb, gradient);
@@ -1097,7 +1097,7 @@ static void sp_gradient_vector_widget_load_gradient(GtkWidget *widget, SPGradien
         if (gradient->getRepr()->attribute("inkscape:collect")) {
             SPDocument *document = gradient->document;
             DocumentUndo::ScopedInsensitive _no_undo(document);
-            gradient->getRepr()->setAttribute("inkscape:collect", nullptr);
+            gradient->setAttribute("inkscape:collect", nullptr);
         }
     } else { // no gradient, disable everything
         gtk_widget_set_sensitive(widget, FALSE);
@@ -1279,9 +1279,9 @@ static void sp_gradient_vector_color_changed(Inkscape::UI::SelectedColor *select
     sp_repr_set_css_double(stop->getRepr(), "offset", stop->offset);
     Inkscape::CSSOStringStream os;
     os << "stop-color:" << color.toString() << ";stop-opacity:" << static_cast<gdouble>(alpha) <<";";
-    stop->getRepr()->setAttribute("style", os.str().c_str());
+    stop->setAttribute("style", os.str());
     // g_snprintf(c, 256, "stop-color:#%06x;stop-opacity:%g;", rgb >> 8, static_cast<gdouble>(alpha));
-    //stop->getRepr()->setAttribute("style", c);
+    //stop->setAttribute("style", c);
 
     DocumentUndo::done(ngr->document, SP_VERB_CONTEXT_GRADIENT,
                        _("Change gradient stop color"));

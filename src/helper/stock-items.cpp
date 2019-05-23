@@ -251,7 +251,7 @@ SPObject *get_stock_item(gchar const *urn, gboolean stock)
         g_free(name);
         
         if (object) {
-            object->getRepr()->setAttribute("inkscape:isstock", "true");
+            object->setAttribute("inkscape:isstock", "true");
         }
 
         return object;
