@@ -23,6 +23,7 @@ class SPGradient;
 namespace Gtk {
 class ComboBoxText;
 class ToolButton;
+class ToolItem;
 }
 
 namespace Inkscape {
@@ -44,6 +45,7 @@ private:
     std::vector<Gtk::RadioToolButton *> _new_type_buttons;
     std::vector<Gtk::RadioToolButton *> _new_fillstroke_buttons;
     UI::Widget::ComboToolItem *_select_cb;
+    Gtk::ToolItem             *_spread_lbl;
     Gtk::ComboBoxText         *_spread_cb;
     UI::Widget::ComboToolItem *_stop_cb;
 

@@ -980,12 +980,11 @@ void sp_item_gradient_reverse_vector(SPItem *item, Inkscape::PaintTarget fill_or
         i->deleteObject();
     }
 
-    std::vector<double>::iterator iter = offsets.end() - 1;
-    for (auto copy:child_copies) {
-        vector->appendChildRepr(copy);
-        sp_repr_set_svg_double (copy, "offset", 1 - *iter);
-        --iter;
-        Inkscape::GC::release(copy);
+    std::vector<double>::reverse_iterator o_it = offsets.rbegin();
+    for (auto c_it = child_copies.rbegin(); c_it != child_copies.rend(); ++c_it, ++o_it) {
+        vector->appendChildRepr(*c_it);
+        sp_repr_set_svg_double (*c_it, "offset", 1 - *o_it);
+        Inkscape::GC::release(*c_it);
     }
 }
 

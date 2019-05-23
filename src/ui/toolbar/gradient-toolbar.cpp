@@ -447,7 +447,7 @@ GradientToolbar::GradientToolbar(SPDesktop *desktop)
    
     // Gradient Spread type (how a gradient is drawn outside its nominal area)
     {
-        add_label(_("Repeat"));
+        _spread_lbl = add_label(_("Repeat: "));
 
         _spread_cb = Gtk::manage(new Gtk::ComboBoxText());
         _spread_cb->append(C_("Gradient repeat type", "None"));
@@ -461,7 +461,8 @@ GradientToolbar::GradientToolbar(SPDesktop *desktop)
                                           "(spreadMethod=\"pad\"), or repeat the gradient in the same direction "
                                           "(spreadMethod=\"repeat\"), or repeat the gradient in alternating opposite "
                                           "directions (spreadMethod=\"reflect\")"));
-        spread_item->set_sensitive(false);
+        _spread_lbl->set_sensitive(false);
+        _spread_cb->set_sensitive(false);
         spread_item->add(*_spread_cb);
         add(*spread_item);
 
@@ -934,6 +935,7 @@ GradientToolbar::selection_changed(Inkscape::Selection * /*selection*/)
         }
 
         // Spread menu
+        _spread_lbl->set_sensitive( gr_selected && !gr_multi );
         _spread_cb->set_sensitive( gr_selected && !gr_multi );
         _spread_cb->set_active( gr_selected ? (int)spr_selected : 0 );
 
