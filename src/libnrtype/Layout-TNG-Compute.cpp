@@ -711,7 +711,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                 counter_directional_width_remaining = 0.0;
                 std::vector<BrokenSpan>::const_iterator it_following_span;
                 for (it_following_span = it_span ; it_following_span != it_chunk->broken_spans.end() ; it_following_span++) {
-                    if (_flow._input_stream[it_following_span->start.iter_span->input_index]->Type() == CONTROL_CODE) break;
+                    if (it_following_span->start.iter_span->pango_item_index == -1) break;
                     Layout::Direction following_span_progression = static_cast<InputStreamTextSource const *>(_flow._input_stream[it_following_span->start.iter_span->input_index])->styleGetBlockProgression();
                     if (!Layout::_directions_are_orthogonal(following_span_progression, _block_progression)) {
                         if (new_span.direction != (para.pango_items[it_following_span->start.iter_span->pango_item_index].item->analysis.level & 1 ? RIGHT_TO_LEFT : LEFT_TO_RIGHT)) break;
