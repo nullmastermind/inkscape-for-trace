@@ -66,7 +66,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     starting_angle(_("Starting angle"), _("Angle of the first copy"), "starting_angle", &wr, this, 0.0),
     rotation_angle(_("Rotation angle"), _("Angle between two successive copies"), "rotation_angle", &wr, this, 60.0),
     num_copies(_("Number of copies"), _("Number of copies of the original path"), "num_copies", &wr, this, 6),
-    gap(_("Gap"), _("Gap"), "gap", &wr, this, 0),
+    gap(_("Gap"), _("Gap"), _("Gap space between copies, use small negative gaps to fix some joins"), &wr, this, 0.05),
     copies_to_360(_("360º Copies"), _("No rotation angle, fixed to 360º"), "copies_to_360", &wr, this, true),
     mirror_copies(_("Mirror copies"), _("Mirror between copies"), "mirror_copies", &wr, this, false),
     split_items(_("Split elements"), _("Split elements, this allow gradients and other paints."), "split_items", &wr, this, false),
@@ -93,7 +93,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     registerParameter(&split_items);
 
     gap.param_set_range(-99999.0, 99999.0);
-    gap.param_set_increments(0.1, 0.1);
+    gap.param_set_increments(0.01, 0.01);
     gap.param_set_digits(5);
     num_copies.param_set_range(1, 999999);
     num_copies.param_make_integer(true);
@@ -102,7 +102,6 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     previous_origin = Geom::Point(0,0);
     previous_start_point = Geom::Point(0,0);
     starting_point.param_widget_is_visible(false);
-    gap_override = gap;
     reset = false;
 }
 
@@ -386,10 +385,6 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
     original_bbox(lpeitem, false, true);
-    gap_override = gap;
-    if (gap <= 0 && gap > -0.5 && method == RM_FUSE && !split_items) {
-        gap_override = -0.5;
-    }
     if (copies_to_360 && num_copies > 2) {
         rotation_angle.param_set_value(360.0/(double)num_copies);
     }
@@ -511,9 +506,6 @@ LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
     divider.appendNew<Geom::LineSegment>((Geom::Point)origin);
     divider.appendNew<Geom::LineSegment>(line_end);
     Geom::OptRect trianglebounds = divider.boundsFast();
-    if (gap_override <= 0 && method != RM_NORMAL && !split_items) {
-        divider *= Geom::Translate((*trianglebounds).midpoint()).inverse() * Geom::Scale(1.1) * Geom::Translate((*trianglebounds).midpoint());
-    }
     divider.close();
     half_dir = unit_vector(Geom::middle_point(line_start,line_end) - (Geom::Point)origin);
     if (method != RM_NORMAL) {
@@ -531,9 +523,9 @@ LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
         if (pig && !path_out.empty() && !triangle.empty()) {
             path_out = pig->getIntersection();
         }
-        path_out *= Geom::Translate(half_dir * gap_override);
+        path_out *= Geom::Translate(half_dir * gap);
         if ( !split_items ) {
-            path_out *= Geom::Translate(half_dir * gap_override).inverse();
+            path_out *= Geom::Translate(half_dir * gap).inverse();
             path_out = doEffect_path_post(path_out);
         }
     } else {
@@ -573,7 +565,7 @@ LPECopyRotate::doEffect_path_post (Geom::PathVector const & path_in)
         }
         if (method != RM_NORMAL) {
             Geom::PathVector join_pv = original_pathv * t;
-            join_pv *= Geom::Translate(half_dir * rot * gap_override);
+            join_pv *= Geom::Translate(half_dir * rot * gap);
             Geom::PathIntersectionGraph *pig = new Geom::PathIntersectionGraph(output_pv, join_pv);
             if (pig) {
                 if (!output_pv.empty()) {
