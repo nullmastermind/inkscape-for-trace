@@ -105,8 +105,15 @@ void KnotHolder::updateControlSizes()
 
 void KnotHolder::update_knots()
 {
-    for (auto e : entity) {
-        e->update_knot();
+    for (auto e = entity.begin(); e != entity.end(); ) {
+        // check if pattern was removed without deleting the knot
+        if ((*e)->knot_missing()) {
+            delete (*e);
+            e = entity.erase(e);
+        } else {
+            (*e)->update_knot();
+            ++e;
+        }
     }
 }
 

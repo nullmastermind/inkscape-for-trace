@@ -63,6 +63,7 @@ public:
        should be derived from KnotHolderEntity and override these functions */
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) = 0;
     virtual void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, unsigned int state) = 0;
+    virtual bool knot_missing() const { return false; }
     virtual Geom::Point knot_get() const = 0;
     virtual void knot_click(unsigned int /*state*/) {}
 
@@ -108,6 +109,7 @@ protected:
 class PatternKnotHolderEntityXY : public KnotHolderEntity {
 public:
     PatternKnotHolderEntityXY(bool fill) : KnotHolderEntity(), _fill(fill) {}
+    bool knot_missing() const override;
     Geom::Point knot_get() const override;
     void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
@@ -119,6 +121,7 @@ private:
 class PatternKnotHolderEntityAngle : public KnotHolderEntity {
 public:
     PatternKnotHolderEntityAngle(bool fill) : KnotHolderEntity(), _fill(fill) {}
+    bool knot_missing() const override;
     Geom::Point knot_get() const override;
     void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
@@ -129,6 +132,7 @@ private:
 class PatternKnotHolderEntityScale : public KnotHolderEntity {
 public:
     PatternKnotHolderEntityScale(bool fill) : KnotHolderEntity(), _fill(fill) {}
+    bool knot_missing() const override;
     Geom::Point knot_get() const override;
     void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;

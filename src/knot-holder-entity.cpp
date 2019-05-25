@@ -172,6 +172,27 @@ static Geom::Point sp_pattern_knot_get(SPPattern const *pat, gdouble x, gdouble 
     return Geom::Point(x, y) * pat->getTransform();
 }
 
+bool
+PatternKnotHolderEntityXY::knot_missing() const
+{
+    SPPattern *pat = _fill ? SP_PATTERN(item->style->getFillPaintServer()) : SP_PATTERN(item->style->getStrokePaintServer());
+    return (pat == nullptr);
+}
+
+bool
+PatternKnotHolderEntityAngle::knot_missing() const
+{
+    SPPattern *pat = _fill ? SP_PATTERN(item->style->getFillPaintServer()) : SP_PATTERN(item->style->getStrokePaintServer());
+    return (pat == nullptr);
+}
+
+bool
+PatternKnotHolderEntityScale::knot_missing() const
+{
+    SPPattern *pat = _fill ? SP_PATTERN(item->style->getFillPaintServer()) : SP_PATTERN(item->style->getStrokePaintServer());
+    return (pat == nullptr);
+}
+
 Geom::Point
 PatternKnotHolderEntityXY::knot_get() const
 {
@@ -183,7 +204,6 @@ Geom::Point
 PatternKnotHolderEntityAngle::knot_get() const
 {
     SPPattern *pat = _fill ? SP_PATTERN(item->style->getFillPaintServer()) : SP_PATTERN(item->style->getStrokePaintServer());
-
     return sp_pattern_knot_get(pat, pat->width(), 0);
 }
 
