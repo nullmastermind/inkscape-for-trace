@@ -191,7 +191,7 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
     }
 }
 
-void LPECopyRotate::sp_clone_style(SPObject *orig, SPObject *dest)
+void LPECopyRotate::cloneStyle(SPObject *orig, SPObject *dest)
 {
     dest->getRepr()->setAttribute("style", orig->getRepr()->attribute("style"));
     for (auto iter : orig->style->properties()) {
@@ -216,7 +216,7 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     if ( SP_IS_GROUP(orig) && SP_IS_GROUP(dest) && SP_GROUP(orig)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
         if (reset) {
-            sp_clone_style(orig, dest);
+            cloneStyle(orig, dest);
         }
         std::vector< SPObject * > childs = orig->childList(true);
         size_t index = 0;
@@ -230,7 +230,7 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
 
     if ( SP_IS_TEXT(orig) && SP_IS_TEXT(dest) && SP_TEXT(orig)->children.size() == SP_TEXT(dest)->children.size()) {
         if (reset) {
-            sp_clone_style(orig, dest);
+            cloneStyle(orig, dest);
         }
         size_t index = 0;
         for (auto & child : SP_TEXT(orig)->children) {
@@ -266,7 +266,7 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
         
     }
     if (reset) {
-        sp_clone_style(orig, dest);
+        cloneStyle(orig, dest);
     }
 }
 

@@ -31,7 +31,6 @@
 #include "object/sp-lpe-item.h"
 #include "object/sp-path.h"
 #include "object/sp-text.h"
-#include "style.h"
 
 #include "xml/sp-css-attr.h"
 
@@ -272,7 +271,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
     previous_center = center_point;
 }
 
-void LPEMirrorSymmetry::sp_clone_style(SPObject *orig, SPObject *dest)
+void LPEMirrorSymmetry::cloneStyle(SPObject *orig, SPObject *dest)
 {
     dest->getRepr()->setAttribute("style", orig->getRepr()->attribute("style"));
     for (auto iter : orig->style->properties()) {
@@ -300,7 +299,7 @@ LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset)
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     if ( SP_IS_GROUP(orig) && SP_IS_GROUP(dest) && SP_GROUP(orig)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
         if (reset) {
-            sp_clone_style(orig, dest);
+            cloneStyle(orig, dest);
         }
         std::vector< SPObject * > childs = orig->childList(true);
         size_t index = 0;
@@ -314,7 +313,7 @@ LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset)
 
     if (SP_IS_TEXT(orig) && SP_IS_TEXT(dest) && SP_TEXT(orig)->children.size() == SP_TEXT(dest)->children.size()) {
         if (reset) {
-            sp_clone_style(orig, dest);
+            cloneStyle(orig, dest);
         }
         size_t index = 0;
         for (auto &child : SP_TEXT(orig)->children) {
@@ -338,7 +337,7 @@ LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset)
         }
     }
     if (reset) {
-        sp_clone_style(orig, dest);
+        cloneStyle(orig, dest);
     }
 }
 

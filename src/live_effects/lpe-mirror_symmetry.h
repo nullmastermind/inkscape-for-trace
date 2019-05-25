@@ -49,7 +49,7 @@ public:
     void doOnRemove (SPLPEItem const* /*lpeitem*/) override;
     void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/) override;
     Gtk::Widget * newWidget() override;
-    void sp_clone_style(SPObject *orig, SPObject *dest);
+    void cloneStyle(SPObject *orig, SPObject *dest);
     void toMirror(Geom::Affine transform, bool reset);
     void cloneD(SPObject *orig, SPObject *dest, bool reset);
     Inkscape::XML::Node * createPathBase(SPObject *elemref);
