@@ -12,20 +12,21 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gtkmm.h>
-#include <gdk/gdk.h>
-#include <2geom/path-intersection.h>
-#include <2geom/sbasis-to-bezier.h>
-#include <2geom/intersection-graph.h>
 #include "live_effects/lpe-copy_rotate.h"
-#include "live_effects/lpeobject.h"
 #include "display/curve.h"
+#include "helper/geom.h"
+#include "live_effects/lpeobject.h"
+#include "object/sp-text.h"
+#include "path-chemistry.h"
+#include "style.h"
 #include "svg/path-string.h"
 #include "svg/svg.h"
-#include "helper/geom.h"
 #include "xml/sp-css-attr.h"
-#include "path-chemistry.h"
-#include "object/sp-text.h"
+#include <2geom/intersection-graph.h>
+#include <2geom/path-intersection.h>
+#include <2geom/sbasis-to-bezier.h>
+#include <gdk/gdk.h>
+#include <gtkmm.h>
 
 #include "object/sp-path.h"
 #include "object/sp-shape.h"
@@ -190,6 +191,21 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
     }
 }
 
+void LPECopyRotate::sp_clone_style(SPObject *orig, SPObject *dest)
+{
+    dest->getRepr()->setAttribute("style", orig->getRepr()->attribute("style"));
+    for (auto iter : orig->style->properties()) {
+        if (iter->style_src != SP_STYLE_SRC_UNSET) {
+            if (iter->name != "font" && iter->name != "d" && iter->name != "marker") {
+                const gchar *attr = orig->getRepr()->attribute(iter->name.c_str());
+                if (attr) {
+                    dest->getRepr()->setAttribute(iter->name.c_str(), attr);
+                }
+            }
+        }
+    }
+}
+
 void
 LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bool reset) 
 {
@@ -200,7 +216,7 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     if ( SP_IS_GROUP(orig) && SP_IS_GROUP(dest) && SP_GROUP(orig)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
         if (reset) {
-            dest->getRepr()->setAttribute("style", orig->getRepr()->attribute("style"));
+            sp_clone_style(orig, dest);
         }
         std::vector< SPObject * > childs = orig->childList(true);
         size_t index = 0;
@@ -214,7 +230,7 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
 
     if ( SP_IS_TEXT(orig) && SP_IS_TEXT(dest) && SP_TEXT(orig)->children.size() == SP_TEXT(dest)->children.size()) {
         if (reset) {
-            dest->getRepr()->setAttribute("style", orig->getRepr()->attribute("style"));
+            sp_clone_style(orig, dest);
         }
         size_t index = 0;
         for (auto & child : SP_TEXT(orig)->children) {
@@ -250,7 +266,7 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
         
     }
     if (reset) {
-        dest->getRepr()->setAttribute("style", orig->getRepr()->attribute("style"));
+        sp_clone_style(orig, dest);
     }
 }
 

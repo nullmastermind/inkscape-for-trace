@@ -45,6 +45,7 @@ public:
     void doOnRemove (SPLPEItem const* /*lpeitem*/) override;
     void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/) override;
     Gtk::Widget * newWidget() override;
+    void sp_clone_style(SPObject *orig, SPObject *dest);
     Geom::PathVector doEffect_path_post (Geom::PathVector const & path_in);
     void toItem(Geom::Affine transform, size_t i, bool reset);
     void cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bool reset);

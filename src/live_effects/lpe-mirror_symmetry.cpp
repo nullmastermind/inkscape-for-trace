@@ -15,21 +15,22 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gtkmm.h>
 #include "live_effects/lpe-mirror_symmetry.h"
-#include "display/curve.h"
-#include "svg/path-string.h"
-#include "svg/svg.h"
-#include "helper/geom.h"
+#include "2geom/affine.h"
 #include "2geom/intersection-graph.h"
 #include "2geom/path-intersection.h"
-#include "2geom/affine.h"
+#include "display/curve.h"
 #include "helper/geom.h"
 #include "path-chemistry.h"
+#include "style.h"
+#include "svg/path-string.h"
+#include "svg/svg.h"
+#include <gtkmm.h>
 
 #include "object/sp-defs.h"
-#include "object/sp-path.h"
 #include "object/sp-lpe-item.h"
+#include "object/sp-path.h"
+#include "object/sp-text.h"
 #include "style.h"
 
 #include "xml/sp-css-attr.h"
@@ -271,6 +272,24 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
     previous_center = center_point;
 }
 
+void LPEMirrorSymmetry::sp_clone_style(SPObject *orig, SPObject *dest)
+{
+    dest->getRepr()->setAttribute("style", orig->getRepr()->attribute("style"));
+    for (auto iter : orig->style->properties()) {
+        if (iter->style_src != SP_STYLE_SRC_UNSET) {
+            if (iter->name != "font" && iter->name != "d" && iter->name != "marker") {
+                const gchar *attr = orig->getRepr()->attribute(iter->name.c_str());
+                std::cout << iter->name << std::endl;
+                std::cout << attr << std::endl;
+                std::cout << "aaa" << std::endl;
+                if (attr) {
+                    dest->getRepr()->setAttribute(iter->name.c_str(), attr);
+                }
+            }
+        }
+    }
+}
+
 void
 LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset) 
 {
@@ -280,6 +299,9 @@ LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset)
     }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     if ( SP_IS_GROUP(orig) && SP_IS_GROUP(dest) && SP_GROUP(orig)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
+        if (reset) {
+            sp_clone_style(orig, dest);
+        }
         std::vector< SPObject * > childs = orig->childList(true);
         size_t index = 0;
         for (auto & child : childs) {
@@ -289,6 +311,19 @@ LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset)
         }
         return;
     }
+
+    if (SP_IS_TEXT(orig) && SP_IS_TEXT(dest) && SP_TEXT(orig)->children.size() == SP_TEXT(dest)->children.size()) {
+        if (reset) {
+            sp_clone_style(orig, dest);
+        }
+        size_t index = 0;
+        for (auto &child : SP_TEXT(orig)->children) {
+            SPObject *dest_child = dest->nthChild(index);
+            cloneD(&child, dest_child, reset);
+            index++;
+        }
+    }
+
     SPShape * shape =  SP_SHAPE(orig);
     SPPath * path =  SP_PATH(dest);
     if (path && shape) {
@@ -301,9 +336,9 @@ LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset)
         } else {
             dest->getRepr()->setAttribute("d", nullptr);
         }
-        if (reset) {
-            dest->getRepr()->setAttribute("style", shape->getRepr()->attribute("style"));
-        }
+    }
+    if (reset) {
+        sp_clone_style(orig, dest);
     }
 }
 
