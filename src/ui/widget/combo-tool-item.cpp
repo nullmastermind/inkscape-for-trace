@@ -100,12 +100,6 @@ ComboToolItem::ComboToolItem(Glib::ustring group_label,
 
 void
 ComboToolItem::set_active (gint active) {
-
-    if (active < 0) {
-        std::cerr << "ComboToolItem::set_active: active < 0: " << active << std::endl;
-        return;
-    }
-
     if (_active != active) {
 
         _active = active;
@@ -176,7 +170,6 @@ void
 ComboToolItem::on_changed_combobox() {
 
     int row = _combobox->get_active_row_number();
-    if (row < 0) row = 0;  // Happens when Gtk::ListStore reconstructed
     set_active( row );
     _changed.emit (_active);
     _changed_after.emit (_active);

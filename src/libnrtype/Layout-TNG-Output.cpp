@@ -667,7 +667,8 @@ void Layout::fitToPathAlign(SVGLength const &startOffset, Path const &path)
             offset = startOffset.computed;
     }
 
-    switch (_paragraphs.front().alignment) {
+    Alignment alignment = _paragraphs.empty() ? LEFT : _paragraphs.front().alignment;
+    switch (alignment) {
         case CENTER:
             offset -= _getChunkWidth(0) * 0.5;
             break;

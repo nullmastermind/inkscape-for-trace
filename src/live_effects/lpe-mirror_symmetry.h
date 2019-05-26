@@ -62,7 +62,6 @@ protected:
 
 private:
     EnumParam<ModeType> mode;
-    ScalarParam split_gap;
     BoolParam discard_orig_path;
     BoolParam fuse_paths;
     BoolParam oposite_fuse;
