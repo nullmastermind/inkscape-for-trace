@@ -40,14 +40,8 @@ Gtk::Label * spw_label(Gtk::Grid *table, const gchar *label_text, int col, int r
 
   label_widget->set_halign(Gtk::ALIGN_START);
   label_widget->set_valign(Gtk::ALIGN_CENTER);
-
-#if GTK_CHECK_VERSION(3,12,0)
   label_widget->set_margin_start(4);
   label_widget->set_margin_end(4);
-#else
-  label_widget->set_margin_left(4);
-  label_widget->set_margin_right(4);
-#endif
 
   table->attach(*label_widget, col, row, 1, 1);
 

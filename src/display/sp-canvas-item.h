@@ -132,7 +132,7 @@ void sp_canvas_item_show(SPCanvasItem *item);
 void sp_canvas_item_hide(SPCanvasItem *item);
 void sp_canvas_item_destroy(SPCanvasItem *item);
 int sp_canvas_item_grab(SPCanvasItem *item, unsigned int event_mask, GdkCursor *cursor, guint32 etime);
-void sp_canvas_item_ungrab(SPCanvasItem *item, guint32 etime);
+void sp_canvas_item_ungrab(SPCanvasItem *item);
 
 Geom::Affine sp_canvas_item_i2w_affine(SPCanvasItem const *item);
 

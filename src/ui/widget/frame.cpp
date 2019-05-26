@@ -53,14 +53,8 @@ Frame::set_padding (guint padding_top, guint padding_bottom, guint padding_left,
     {
         child->set_margin_top(padding_top);
         child->set_margin_bottom(padding_bottom);
-
-#if GTK_CHECK_VERSION(3,12,0)
         child->set_margin_start(padding_left);
         child->set_margin_end(padding_right);
-#else
-        child->set_margin_left(padding_left);
-        child->set_margin_right(padding_right);
-#endif
     }
 }
 

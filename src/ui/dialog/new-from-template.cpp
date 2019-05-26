@@ -30,12 +30,7 @@ NewFromTemplate::NewFromTemplate()
    
     _create_template_button.set_halign(Gtk::ALIGN_END);
     _create_template_button.set_valign(Gtk::ALIGN_END);
-
-#if GTKMM_CHECK_VERSION(3,12,0)
     _create_template_button.set_margin_end(15);
-#else
-    _create_template_button.set_margin_right(15);
-#endif
 
     get_content_area()->pack_end(_create_template_button, Gtk::PACK_SHRINK);
     

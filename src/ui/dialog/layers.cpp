@@ -156,11 +156,7 @@ Gtk::MenuItem& LayersPanel::_addPopupItem( SPDesktop *desktop, unsigned int code
     }
 
     Gtk::Label *menu_label = Gtk::manage(new Gtk::Label(label, true));
-#if GTKMM_CHECK_VERSION(3,16,0)
     menu_label->set_xalign(0.0);
-#else
-    menu_label->set_alignment(0.0, 0.5);
-#endif
     box->pack_start(*menu_label, true, true, 0);
     item->add(*box);
     item->show_all();
@@ -557,11 +553,7 @@ bool LayersPanel::_handleButtonEvent(GdkEventButton* event)
         if ( _tree.get_path_at_pos( x, y, path ) ) {
             _checkTreeSelection();
 
-#if GTKMM_CHECK_VERSION(3,22,0)
             _popupMenu.popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
-#else
-            _popupMenu.popup(event->button, event->time);
-#endif
         }
     }
 

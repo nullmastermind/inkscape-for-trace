@@ -294,11 +294,7 @@ void track_screen( GdkScreen* screen, EgeColorProfTracker* tracker )
 
         GdkDisplay* display = gdk_display_get_default();
 
-#if GTK_CHECK_VERSION(3,22,0)
         int numMonitors = gdk_display_get_n_monitors(display);
-#else
-        gint numMonitors = gdk_screen_get_n_monitors(screen);
-#endif
 
 #ifdef GDK_WINDOWING_X11
         tracked_screen->zeroSeen = FALSE;
@@ -355,9 +351,7 @@ void event_after_cb( GtkWidget* widget, GdkEvent* event, gpointer user_data )
         EgeColorProfTracker* tracker = (EgeColorProfTracker*)user_data;
         auto priv = EGE_COLOR_PROF_TRACKER_GET_PRIVATE (tracker);
 
-        // In old Gtk+ versions, we can directly find the ID number for a monitor.
-        // In Gtk+ >= 3.22, however, we need to figure out the ID
-#if GTK_CHECK_VERSION(3,22,0)
+        // In Gtk+ >= 3.22, we need to figure out the screen ID
         auto display = gdk_display_get_default();
         auto monitor = gdk_display_get_monitor_at_window(display, window);
 
@@ -370,10 +364,6 @@ void event_after_cb( GtkWidget* widget, GdkEvent* event, gpointer user_data )
             auto monitor_at_index = gdk_display_get_monitor(display, i_monitor);
             if(monitor_at_index == monitor) monitorNum = i_monitor;
         }
-#else
-        GdkScreen* screen = gtk_widget_get_screen(widget);
-        gint monitorNum = gdk_screen_get_monitor_at_window(screen, window);
-#endif
 
         if ( monitorNum != priv->_monitor && monitorNum != -1 ) {
             priv->_monitor = monitorNum;
@@ -413,11 +403,7 @@ void screen_size_changed_cb(GdkScreen* screen, gpointer user_data)
     if ( tracked_screen ) {
         GdkDisplay* display = gdk_display_get_default();
 
-#if GTK_CHECK_VERSION(3,22,0)
         int numMonitors  = gdk_display_get_n_monitors(display);
-#else
-        gint numMonitors = gdk_screen_get_n_monitors(screen);
-#endif
 
         if ( numMonitors > (gint)tracked_screen->profiles->len ) {
             for ( guint i = tracked_screen->profiles->len; i < (guint)numMonitors; i++ ) {
@@ -543,12 +529,8 @@ void add_x11_tracking_for_screen(GdkScreen* screen)
         if ( propArray ) {
             int j = 0;
 
-#if GTK_CHECK_VERSION(3,22,0)
             auto display = gdk_display_get_default();
             int numMonitors = gdk_display_get_n_monitors(display);
-#else
-            gint numMonitors = gdk_screen_get_n_monitors(screen);
-#endif
 
             if ( baseAtom != None ) {
                 for ( i = 0; i < numWinProps; i++ ) {

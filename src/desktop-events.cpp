@@ -19,12 +19,9 @@
 #include "desktop-events.h"
 
 #include <gdkmm/display.h>
+#include <gdkmm/seat.h>
+
 #include <gtk/gtk.h>
-#if GTK_CHECK_VERSION(3, 20, 0)
-# include <gdkmm/seat.h>
-#else
-# include <gdkmm/devicemanager.h>
-#endif
 
 #include <glibmm/i18n.h>
 
@@ -113,7 +110,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
             if (event->button.button == 1) {
                 drag_type = SP_DRAG_NONE;
                 sp_event_context_discard_delayed_snap_event(desktop->event_context);
-                sp_canvas_item_ungrab(item, event->button.time);
+                sp_canvas_item_ungrab(item);
                 Inkscape::UI::Dialogs::GuidelinePropertiesDialog::showDialog(guide, desktop);
                 ret = TRUE;
             }
@@ -327,7 +324,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                     desktop->set_coordinate_status(event_dt);
                 }
                 drag_type = SP_DRAG_NONE;
-                sp_canvas_item_ungrab(item, event->button.time);
+                sp_canvas_item_ungrab(item);
                 ret=TRUE;
             }
             break;
@@ -431,14 +428,8 @@ static void init_extended()
 {
     Glib::ustring avoidName("pad");
     auto display = Gdk::Display::get_default();
-
-#if GTK_CHECK_VERSION(3, 20, 0)
     auto seat = display->get_default_seat();
     auto const devices = seat->get_slaves(Gdk::SEAT_CAPABILITY_ALL);
-#else
-    auto dm = display->get_device_manager();
-    auto const devices = dm->list_devices(Gdk::DEVICE_TYPE_SLAVE);	
-#endif
     
     if ( !devices.empty() ) {
         for (auto const dev : devices) {

@@ -332,20 +332,11 @@ void DocumentProperties::build_guides()
     Gtk::Label *label_gui = Gtk::manage (new Gtk::Label);
     label_gui->set_markup (_("<b>Guides</b>"));
 
-#if GTK_CHECK_VERSION(3,12,0)
     _rum_deflt.set_margin_start(0);
     _rcp_bg.set_margin_start(0);
     _rcp_bord.set_margin_start(0);
     _rcp_gui.set_margin_start(0);
     _rcp_hgui.set_margin_start(0);
-#else
-    _rum_deflt.set_margin_left(0);
-    _rcp_bg.set_margin_left(0);
-    _rcp_bord.set_margin_left(0);
-    _rcp_gui.set_margin_left(0);
-    _rcp_hgui.set_margin_left(0);
-#endif
-
     _rcp_gui.set_hexpand();
     _rcp_hgui.set_hexpand();
     _rcb_sgui.set_hexpand();
@@ -590,33 +581,21 @@ void DocumentProperties::populate_linked_profiles_box()
 void DocumentProperties::external_scripts_list_button_release(GdkEventButton* event)
 {
     if((event->type == GDK_BUTTON_RELEASE) && (event->button == 3)) {
-#if GTKMM_CHECK_VERSION(3,22,0)
         _ExternalScriptsContextMenu.popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
-#else
-        _ExternalScriptsContextMenu.popup(event->button, event->time);
-#endif
     }
 }
 
 void DocumentProperties::embedded_scripts_list_button_release(GdkEventButton* event)
 {
     if((event->type == GDK_BUTTON_RELEASE) && (event->button == 3)) {
-#if GTKMM_CHECK_VERSION(3,22,0)
         _EmbeddedScriptsContextMenu.popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
-#else
-        _EmbeddedScriptsContextMenu.popup(event->button, event->time);
-#endif
     }
 }
 
 void DocumentProperties::linked_profiles_list_button_release(GdkEventButton* event)
 {
     if((event->type == GDK_BUTTON_RELEASE) && (event->button == 3)) {
-#if GTKMM_CHECK_VERSION(3,22,0)
         _EmbProfContextMenu.popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
-#else
-        _EmbProfContextMenu.popup(event->button, event->time);
-#endif
     }
 }
 
@@ -740,13 +719,8 @@ void DocumentProperties::build_cms()
 
     _link_btn.set_halign(Gtk::ALIGN_CENTER);
     _link_btn.set_valign(Gtk::ALIGN_CENTER);
-#if GTKMM_CHECK_VERSION(3,12,0)
     _link_btn.set_margin_start(2);
     _link_btn.set_margin_end(2);
-#else
-    _link_btn.set_margin_left(2);
-    _link_btn.set_margin_right(2);
-#endif
     _page_cms->table().attach(_link_btn, 1, row, 1, 1);
 
     _unlink_btn.set_halign(Gtk::ALIGN_CENTER);
@@ -843,14 +817,8 @@ void DocumentProperties::build_scripting()
 
     _external_add_btn.set_halign(Gtk::ALIGN_CENTER);
     _external_add_btn.set_valign(Gtk::ALIGN_CENTER);
-
-#if GTKMM_CHECK_VERSION(3,12,0)
     _external_add_btn.set_margin_start(2);
     _external_add_btn.set_margin_end(2);
-#else
-    _external_add_btn.set_margin_left(2);
-    _external_add_btn.set_margin_right(2);
-#endif
 
     _page_external_scripts->table().attach(_external_add_btn, 1, row, 1, 1);
 

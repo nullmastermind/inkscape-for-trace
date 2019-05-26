@@ -798,15 +798,8 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
                 swatch->setDesktop( desktop );
                 swatch->setClickVerb( aux_toolboxes[i].swatch_verb_id );
                 swatch->setWatchedTool( aux_toolboxes[i].swatch_tool, true );
-
-#if GTKMM_CHECK_VERSION(3,12,0)
                 swatch->set_margin_start(AUX_BETWEEN_BUTTON_GROUPS);
                 swatch->set_margin_end(AUX_BETWEEN_BUTTON_GROUPS);
-#else
-                swatch->set_margin_left(AUX_BETWEEN_BUTTON_GROUPS);
-                swatch->set_margin_right(AUX_BETWEEN_BUTTON_GROUPS);
-#endif
-
                 swatch->set_margin_top(AUX_SPACING);
                 swatch->set_margin_bottom(AUX_SPACING);
 
@@ -878,15 +871,8 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
                 swatch->setDesktop( desktop );
                 swatch->setClickVerb( aux_toolboxes[i].swatch_verb_id );
                 swatch->setWatchedTool( aux_toolboxes[i].swatch_tool, true );
-
-#if GTKMM_CHECK_VERSION(3,12,0)
                 swatch->set_margin_start(AUX_BETWEEN_BUTTON_GROUPS);
                 swatch->set_margin_end(AUX_BETWEEN_BUTTON_GROUPS);
-#else
-                swatch->set_margin_left(AUX_BETWEEN_BUTTON_GROUPS);
-                swatch->set_margin_right(AUX_BETWEEN_BUTTON_GROUPS);
-#endif
-
                 swatch->set_margin_top(AUX_SPACING);
                 swatch->set_margin_bottom(AUX_SPACING);
 

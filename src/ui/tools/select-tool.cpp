@@ -127,7 +127,7 @@ SelectTool::~SelectTool() {
     this->enableGrDrag(false);
 
     if (this->grabbed) {
-        sp_canvas_item_ungrab(this->grabbed, GDK_CURRENT_TIME);
+        sp_canvas_item_ungrab(this->grabbed);
         this->grabbed = nullptr;
     }
 
@@ -318,7 +318,7 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
                     rb_escaped = drag_escaped = 0;
 
                     if (this->grabbed) {
-                        sp_canvas_item_ungrab(this->grabbed, event->button.time);
+                        sp_canvas_item_ungrab(this->grabbed);
                         this->grabbed = nullptr;
                     }
 
@@ -521,7 +521,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                 Inkscape::Rubberband::get(desktop)->start(desktop, p);
 
                 if (this->grabbed) {
-                    sp_canvas_item_ungrab(this->grabbed, event->button.time);
+                    sp_canvas_item_ungrab(this->grabbed);
                     this->grabbed = nullptr;
                 }
 
@@ -793,7 +793,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                 }
 
                 if (this->grabbed) {
-                    sp_canvas_item_ungrab(this->grabbed, event->button.time);
+                    sp_canvas_item_ungrab(this->grabbed);
                     this->grabbed = nullptr;
                 }
 

@@ -425,7 +425,7 @@ void CalligraphicTool::cancel() {
     this->dragging = false;
     this->is_drawing = false;
 
-    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), 0);
+    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
 
 	/* Remove all temporary line segments */
     for (auto i:this->segments)
@@ -727,7 +727,7 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
         Geom::Point const motion_w(event->button.x, event->button.y);
         Geom::Point const motion_dt(desktop->w2d(motion_w));
 
-        sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
+        sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
         desktop->canvas->endForcedFullRedraws();
         this->is_drawing = false;
 

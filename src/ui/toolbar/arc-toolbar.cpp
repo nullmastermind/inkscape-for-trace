@@ -402,11 +402,6 @@ ArcToolbar::defaults()
     _start_adj->set_value(0.0);
     _end_adj->set_value(0.0);
 
-#if !GTK_CHECK_VERSION(3,18,0)
-    _start_adj->value_changed();
-    _end_adj->value_changed();
-#endif
-
     if(_desktop->canvas) gtk_widget_grab_focus(GTK_WIDGET(_desktop->canvas));
 }
 
@@ -514,11 +509,6 @@ ArcToolbar::event_attr_changed(Inkscape::XML::Node *repr, gchar const * /*name*/
         gdouble ry = ge->getVisibleRy();
         toolbar->_rx_adj->set_value(Quantity::convert(rx, "px", unit));
         toolbar->_ry_adj->set_value(Quantity::convert(ry, "px", unit));
-
-#if !GTK_CHECK_VERSION(3,18,0)
-        toolbar->_rx_adj->value_changed();
-        toolbar->_ry_adj->value_changed();
-#endif
     }
 
     gdouble start = 0.;

@@ -14,19 +14,15 @@
 #include <string>
 
 #include <gtkmm.h>
+
 #include <gdkmm/display.h>
+#include <gdkmm/seat.h>
+
 #include <glibmm/convert.h>
 #include <glibmm/error.h>
 #include <glibmm/i18n.h>
 #include <glibmm/main.h>
 #include <glibmm/stringutils.h>
-
-#if GTK_CHECK_VERSION(3, 20, 0)
-# include <gdkmm/seat.h>
-#else
-# include <gdkmm/devicemanager.h>
-#endif
-
 
 #include "desktop.h"
 #include "dialog-manager.h"

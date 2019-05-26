@@ -491,7 +491,7 @@ void MeasureTool::finish()
     this->enableGrDrag(false);
 
     if (this->grabbed) {
-        sp_canvas_item_ungrab(this->grabbed, GDK_CURRENT_TIME);
+        sp_canvas_item_ungrab(this->grabbed);
         this->grabbed = nullptr;
     }
 
@@ -655,7 +655,7 @@ bool MeasureTool::root_handler(GdkEvent* event)
         showCanvasItems();
 
         if (this->grabbed) {
-            sp_canvas_item_ungrab(this->grabbed, event->button.time);
+            sp_canvas_item_ungrab(this->grabbed);
             this->grabbed = nullptr;
         }
         break;

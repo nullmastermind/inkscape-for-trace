@@ -264,12 +264,6 @@ RectToolbar::defaults()
     _rx_adj->set_value(0.0);
     _ry_adj->set_value(0.0);
 
-#if !GTK_CHECK_VERSION(3,18,0)
-    // this is necessary if the previous value was 0, but we still need to run the callback to change all selected objects
-    _rx_adj->value_changed();
-    _ry_adj->value_changed();
-#endif
-
     sensitivize();
 }
 

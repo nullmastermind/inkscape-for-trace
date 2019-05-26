@@ -10,17 +10,11 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <gdkmm/monitor.h>
 #include <gdkmm/rectangle.h>
 #include <gdkmm/window.h>
 
 #include "include/gtkmm_version.h"
-
-#if GTKMM_CHECK_VERSION(3,22,0)
-# include <gdkmm/monitor.h>
-#else
-# include <gdkmm/screen.h>
-#endif
-
 
 namespace Inkscape {
 namespace UI {
@@ -28,7 +22,6 @@ namespace UI {
 /** get monitor geometry of primary monitor */
 Gdk::Rectangle get_monitor_geometry_primary() {
     Gdk::Rectangle monitor_geometry;
-#if GTKMM_CHECK_VERSION(3,22,0)
     auto const display = Gdk::Display::get_default();
     auto monitor = display->get_primary_monitor();
 
@@ -38,41 +31,24 @@ Gdk::Rectangle get_monitor_geometry_primary() {
     }
 
     monitor->get_geometry(monitor_geometry);
-#else
-    auto const default_screen = Gdk::Screen::get_default();
-    auto const monitor_number = default_screen->get_primary_monitor();
-    default_screen->get_monitor_geometry(monitor_number, monitor_geometry);
-#endif
     return monitor_geometry;
 }
 
 /** get monitor geometry of monitor containing largest part of window */
 Gdk::Rectangle get_monitor_geometry_at_window(const Glib::RefPtr<Gdk::Window>& window) {
     Gdk::Rectangle monitor_geometry;
-#if GTKMM_CHECK_VERSION(3,22,0)
     auto const display = Gdk::Display::get_default();
     auto const monitor = display->get_monitor_at_window(window);
     monitor->get_geometry(monitor_geometry);
-#else
-    auto const default_screen = Gdk::Screen::get_default();
-    auto const monitor_number = default_screen->get_monitor_at_window(window);
-    default_screen->get_monitor_geometry(monitor_number, monitor_geometry);
-#endif
     return monitor_geometry;
 }
 
 /** get monitor geometry of monitor at (or closest to) point on combined screen area */
 Gdk::Rectangle get_monitor_geometry_at_point(int x, int y) {
     Gdk::Rectangle monitor_geometry;
-#if GTKMM_CHECK_VERSION(3,22,0)
     auto const display = Gdk::Display::get_default();
     auto const monitor = display->get_monitor_at_point(x ,y);
     monitor->get_geometry(monitor_geometry);
-#else
-    auto const default_screen = Gdk::Screen::get_default();
-    auto const monitor_number = default_screen->get_monitor_at_point(x, y);
-    default_screen->get_monitor_geometry(monitor_number, monitor_geometry);
-#endif
     return monitor_geometry;
 }
 

@@ -608,15 +608,8 @@ InputDialogImpl::InputDialogImpl() :
     testThumb.set(getPix(PIX_TABLET));
     testThumb.set_margin_top(24);
     testThumb.set_margin_bottom(24);
-
-#if GTK_CHECK_VERSION(3,12,0)
     testThumb.set_margin_start(24);
     testThumb.set_margin_end(24);
-#else
-    testThumb.set_margin_left(24);
-    testThumb.set_margin_right(24);
-#endif
-
     testThumb.set_hexpand();
     testThumb.set_vexpand();
     imageTable.attach(testThumb, 0, 0, 8, 1);

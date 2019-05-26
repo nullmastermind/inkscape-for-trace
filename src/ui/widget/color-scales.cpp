@@ -94,13 +94,8 @@ void ColorScales::_initUI(SPColorScalesMode mode)
         gtk_widget_set_halign(_l[i], GTK_ALIGN_START);
         gtk_widget_show(_l[i]);
 
-  #if GTK_CHECK_VERSION(3, 12, 0)
         gtk_widget_set_margin_start(_l[i], XPAD);
         gtk_widget_set_margin_end(_l[i], XPAD);
-  #else
-        gtk_widget_set_margin_left(_l[i], XPAD);
-        gtk_widget_set_margin_right(_l[i], XPAD);
-  #endif
         gtk_widget_set_margin_top(_l[i], YPAD);
         gtk_widget_set_margin_bottom(_l[i], YPAD);
         gtk_grid_attach(GTK_GRID(t), _l[i], 0, i, 1, 1);
@@ -111,13 +106,8 @@ void ColorScales::_initUI(SPColorScalesMode mode)
         _s[i] = Gtk::manage(new Inkscape::UI::Widget::ColorSlider(Glib::wrap(_a[i], true)));
         _s[i]->show();
 
-  #if GTK_CHECK_VERSION(3, 12, 0)
         _s[i]->set_margin_start(XPAD);
         _s[i]->set_margin_end(XPAD);
-  #else
-        _s[i]->set_margin_left(XPAD);
-        _s[i]->set_margin_right(XPAD);
-  #endif
         _s[i]->set_margin_top(YPAD);
         _s[i]->set_margin_bottom(YPAD);
         _s[i]->set_hexpand(true);
@@ -129,13 +119,8 @@ void ColorScales::_initUI(SPColorScalesMode mode)
         gtk_label_set_mnemonic_widget(GTK_LABEL(_l[i]), _b[i]);
         gtk_widget_show(_b[i]);
 
-  #if GTK_CHECK_VERSION(3, 12, 0)
         gtk_widget_set_margin_start(_b[i], XPAD);
         gtk_widget_set_margin_end(_b[i], XPAD);
-  #else
-        gtk_widget_set_margin_left(_b[i], XPAD);
-        gtk_widget_set_margin_right(_b[i], XPAD);
-  #endif
         gtk_widget_set_margin_top(_b[i], YPAD);
         gtk_widget_set_margin_bottom(_b[i], YPAD);
         gtk_widget_set_halign(_b[i], GTK_ALIGN_END);

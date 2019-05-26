@@ -204,7 +204,7 @@ static int sp_canvas_rotate_event  (SPCanvasItem *item, GdkEvent *event)
                                                    Geom::rad_from_deg(cr->angle) );
 
             // We're done
-            sp_canvas_item_ungrab (item, event->button.time);
+            sp_canvas_item_ungrab (item);
             sp_canvas_item_hide (item);
 
             cr->start_angle = -1000;

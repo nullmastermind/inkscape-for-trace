@@ -86,23 +86,20 @@ std::set<cmsUInt32Number> knownColorspaces;
 void attachToGridOrTable(GtkWidget *parent, GtkWidget *child, guint left, guint top, guint width, guint height,
                          bool hexpand = false, bool centered = false, guint xpadding = XPAD, guint ypadding = YPAD)
 {
-  #if GTK_CHECK_VERSION(3, 12, 0)
     gtk_widget_set_margin_start(child, xpadding);
     gtk_widget_set_margin_end(child, xpadding);
-  #else
-    gtk_widget_set_margin_left(child, xpadding);
-    gtk_widget_set_margin_right(child, xpadding);
-  #endif
-
     gtk_widget_set_margin_top(child, ypadding);
     gtk_widget_set_margin_bottom(child, ypadding);
+
     if (hexpand) {
         gtk_widget_set_hexpand(child, TRUE);
     }
+
     if (centered) {
         gtk_widget_set_halign(child, GTK_ALIGN_CENTER);
         gtk_widget_set_valign(child, GTK_ALIGN_CENTER);
     }
+
     gtk_grid_attach(GTK_GRID(parent), child, left, top, width, height);
 }
 

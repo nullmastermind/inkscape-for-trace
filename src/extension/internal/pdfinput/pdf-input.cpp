@@ -163,7 +163,6 @@ PdfImportDialog::PdfImportDialog(PDFDoc *doc, const gchar */*uri*/)
     okbutton->set_can_default();
     okbutton->set_relief(Gtk::RELIEF_NORMAL);
 
-#if GTK_CHECK_VERSION(3,16,0)
     _labelSelect->set_xalign(0.5);
     _labelSelect->set_yalign(0.5);
     _labelTotalPages->set_xalign(0.5);
@@ -174,15 +173,7 @@ PdfImportDialog::PdfImportDialog(PDFDoc *doc, const gchar */*uri*/)
     _labelPrecisionWarning->set_yalign(0.5);
     _labelPrecisionComment->set_xalign(0.5);
     _labelPrecisionComment->set_yalign(0.5);
-#else
-    _labelSelect->set_alignment(0.5,0.5);
-    _labelTotalPages->set_alignment(0.5,0.5);
-    _labelPrecision->set_alignment(0,0.5);
-    _labelPrecisionWarning->set_alignment(0,0.5);
-    _labelPrecisionComment->set_alignment(0.5,0.5);
-#endif
 
-#if GTK_CHECK_VERSION(3,12,0)
     _labelSelect->set_margin_start(4);
     _labelSelect->set_margin_end(4);
     _labelTotalPages->set_margin_start(4);
@@ -193,18 +184,6 @@ PdfImportDialog::PdfImportDialog(PDFDoc *doc, const gchar */*uri*/)
     _labelPrecisionWarning->set_margin_end(4);
     _labelPrecisionComment->set_margin_start(4);
     _labelPrecisionComment->set_margin_end(4);
-#else
-    _labelSelect->set_margin_left(4);
-    _labelSelect->set_margin_right(4);
-    _labelTotalPages->set_margin_left(4);
-    _labelTotalPages->set_margin_right(4);
-    _labelPrecision->set_margin_left(4);
-    _labelPrecision->set_margin_right(4);
-    _labelPrecisionWarning->set_margin_left(4);
-    _labelPrecisionWarning->set_margin_right(4);
-    _labelPrecisionComment->set_margin_left(4);
-    _labelPrecisionComment->set_margin_right(4);
-#endif
 
     _labelSelect->set_justify(Gtk::JUSTIFY_LEFT);
     _labelSelect->set_line_wrap(false);
@@ -253,14 +232,8 @@ PdfImportDialog::PdfImportDialog(PDFDoc *doc, const gchar */*uri*/)
     _importViaInternal->set_active(true);
     _labelViaPoppler->set_line_wrap(true);
     _labelViaInternal->set_line_wrap(true);
-
-# if GTK_CHECK_VERSION(3,16,0)
     _labelViaPoppler->set_xalign(0);
     _labelViaInternal->set_xalign(0);
-# else
-    _labelViaPoppler->set_alignment(0, 0.5);
-    _labelViaInternal->set_alignment(0, 0.5);
-# endif
 #endif
 
     _fallbackPrecisionSlider->set_size_request(180,-1);

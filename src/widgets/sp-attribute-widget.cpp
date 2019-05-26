@@ -165,13 +165,8 @@ void SPAttributeTable::set_object(SPObject *object,
             ll->set_halign(Gtk::ALIGN_START);
             ll->set_valign(Gtk::ALIGN_CENTER);
             ll->set_vexpand();
-#if GTKMM_CHECK_VERSION(3,12,0)
             ll->set_margin_start(XPAD);
             ll->set_margin_end(XPAD);
-#else
-            ll->set_margin_left(XPAD);
-            ll->set_margin_right(XPAD);
-#endif
             ll->set_margin_top(XPAD);
             ll->set_margin_bottom(XPAD);
             table->attach(*ll, 0, i, 1, 1);
@@ -182,13 +177,8 @@ void SPAttributeTable::set_object(SPObject *object,
             ee->set_text (val ? val : (const gchar *) "");
             ee->set_hexpand();
             ee->set_vexpand();
-#if GTKMM_CHECK_VERSION(3,12,0)
             ee->set_margin_start(XPAD);
             ee->set_margin_end(XPAD);
-#else
-            ee->set_margin_left(XPAD);
-            ee->set_margin_right(XPAD);
-#endif
             ee->set_margin_top(XPAD);
             ee->set_margin_bottom(XPAD);
             table->attach(*ee, 1, i, 1, 1);

@@ -20,16 +20,12 @@
 
 #include <gdkmm/display.h>
 #include <gdkmm/general.h>
+#include <gdkmm/seat.h>
+
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/colorbutton.h>
 #include <gtkmm/eventbox.h>
 #include <gtkmm/sizegroup.h>
-#if GTK_CHECK_VERSION(3, 20, 0)
-# include <gdkmm/seat.h>
-#else
-# include <gdkmm/devicemanager.h>
-#endif
-
 
 #include <glibmm/i18n.h>
 #include <glibmm/stringutils.h>
@@ -1628,11 +1624,7 @@ void FilterEffectsDialog::FilterModifier::filter_list_button_release(GdkEventBut
 	items[0]->set_sensitive(sensitive);
         items[1]->set_sensitive(sensitive);
 
-#if GTKMM_CHECK_VERSION(3,22,0)
         _menu->popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
-#else
-        _menu->popup(event->button, event->time);
-#endif
     }
 }
 
@@ -2000,13 +1992,8 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
         Gdk::ModifierType mask;
 
         auto display = get_bin_window()->get_display();
-#if GTK_CHECK_VERSION(3, 20, 0)
         auto seat = display->get_default_seat();
         auto device = seat->get_pointer();
-#else
-        auto dm = display->get_device_manager();
-        auto device = dm->get_client_pointer();
-#endif
         cairo_set_line_width (cr->cobj(),0.5);
         get_bin_window()->get_device_position(device, mx, my, mask);
 
@@ -2494,11 +2481,7 @@ bool FilterEffectsDialog::PrimitiveList::on_button_release_event(GdkEventButton*
         items[0]->set_sensitive(sensitive);
         items[1]->set_sensitive(sensitive);
 
-#if GTKMM_CHECK_VERSION(3,22,0)
         _primitive_menu->popup_at_pointer(reinterpret_cast<GdkEvent *>(e));
-#else
-        _primitive_menu->popup(e->button, e->time);
-#endif
 
         return true;
     }

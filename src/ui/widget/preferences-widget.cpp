@@ -99,11 +99,7 @@ void DialogPage::add_line(bool                 indent,
         label_widget->set_markup(label_widget->get_text());
         
         if (indent) {
-#if GTKMM_CHECK_VERSION(3,12,0)
             label_widget->set_margin_start(12);
-#else
-            label_widget->set_margin_left(12);
-#endif
         }
 
         label_widget->set_valign(Gtk::ALIGN_CENTER);
@@ -115,11 +111,7 @@ void DialogPage::add_line(bool                 indent,
     if (label == "")
     {
         if (indent) {
-#if GTKMM_CHECK_VERSION(3,12,0)
             hb->set_margin_start(12);
-#else
-            hb->set_margin_left(12);
-#endif
         }
 
         add(*hb);

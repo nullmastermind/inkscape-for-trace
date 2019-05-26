@@ -213,12 +213,6 @@ SpiralToolbar::defaults()
     _expansion_adj->set_value(exp);
     _t0_adj->set_value(t0);
 
-#if !GTK_CHECK_VERSION(3,18,0)
-    _revolution_adj->value_changed();
-    _expansion_adj->value_changed();
-    _t0_adj->value_changed();
-#endif
-
     if(_desktop->canvas) gtk_widget_grab_focus(GTK_WIDGET(_desktop->canvas));
 }
 

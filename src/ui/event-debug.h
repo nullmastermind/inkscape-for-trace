@@ -81,20 +81,12 @@ inline void ui_dump_event (GdkEvent *event, Glib::ustring const &prefix, bool me
         case GDK_TOUCH_CANCEL:
             std::cout  << "GDK_TOUCH_CANCEL" << std::endl;
             break;
-
-#if GTK_CHECK_VERSION(3,18,0)
-
         case GDK_TOUCHPAD_SWIPE:
             std::cout << "GDK_TOUCHPAD_SWIPE" << std::endl;
             break;
         case GDK_TOUCHPAD_PINCH:
             std::cout << "GDK_TOUCHPAD_PINCH" << std::endl;
             break;
-
-#endif
-
-#if GTK_CHECK_VERSION(3,22,0)
-
         case GDK_PAD_BUTTON_PRESS:
             std::cout << "GDK_PAD_BUTTON_PRESS" << std::endl;
             break;
@@ -110,9 +102,6 @@ inline void ui_dump_event (GdkEvent *event, Glib::ustring const &prefix, bool me
         case GDK_PAD_GROUP_MODE:
             std::cout << "GDK_PAD_GROUP_MODE" << std::endl;
             break;
-
-#endif
-    
         default:
             std::cout << "GDK event not recognized!" << std::endl;
             break;

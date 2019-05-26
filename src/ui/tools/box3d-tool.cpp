@@ -70,7 +70,7 @@ Box3dTool::Box3dTool()
 }
 
 void Box3dTool::finish() {
-    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), GDK_CURRENT_TIME);
+    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
     this->finishItem();
     this->sel_changed_connection.disconnect();
 
@@ -336,8 +336,7 @@ bool Box3dTool::root_handler(GdkEvent* event) {
 
             this->item_to_select = nullptr;
             ret = TRUE;
-            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
-                                  event->button.time);
+            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
         }
         break;
 
@@ -459,8 +458,7 @@ bool Box3dTool::root_handler(GdkEvent* event) {
 
         case GDK_KEY_space:
             if (dragging) {
-                sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
-                                      event->button.time);
+                sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
                 dragging = false;
                 sp_event_context_discard_delayed_snap_event(this);
                 if (!this->within_tolerance) {

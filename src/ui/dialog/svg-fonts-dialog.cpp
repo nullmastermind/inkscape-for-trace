@@ -280,33 +280,21 @@ void SvgFontsDialog::on_kerning_value_changed(){
 void SvgFontsDialog::glyphs_list_button_release(GdkEventButton* event)
 {
     if((event->type == GDK_BUTTON_RELEASE) && (event->button == 3)) {
-#if GTKMM_CHECK_VERSION(3,22,0)
         _GlyphsContextMenu.popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
-#else
-        _GlyphsContextMenu.popup(event->button, event->time);
-#endif
     }
 }
 
 void SvgFontsDialog::kerning_pairs_list_button_release(GdkEventButton* event)
 {
     if((event->type == GDK_BUTTON_RELEASE) && (event->button == 3)) {
-#if GTKMM_CHECK_VERSION(3,22,0)
         _KerningPairsContextMenu.popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
-#else
-        _KerningPairsContextMenu.popup(event->button, event->time);
-#endif
     }
 }
 
 void SvgFontsDialog::fonts_list_button_release(GdkEventButton* event)
 {
     if((event->type == GDK_BUTTON_RELEASE) && (event->button == 3)) {
-#if GTKMM_CHECK_VERSION(3,22,0)
         _FontsContextMenu.popup_at_pointer(reinterpret_cast<GdkEvent *>(event));
-#else
-        _FontsContextMenu.popup(event->button, event->time);
-#endif
     }
 }
 

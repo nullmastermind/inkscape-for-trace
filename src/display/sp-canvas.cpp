@@ -25,6 +25,8 @@
 #include <gdkmm/devicemanager.h>
 #include <gdkmm/display.h>
 #include <gdkmm/rectangle.h>
+#include <gdkmm/seat.h>
+
 #include <cairomm/region.h>
 
 #include "cms-system.h"
@@ -46,15 +48,10 @@
 #include <2geom/affine.h>
 #include <2geom/rect.h>
 
-#if GTK_CHECK_VERSION(3,20,0)
-# include <gdkmm/seat.h>
-#endif
-
 using Inkscape::Debug::GdkEventLatencyTracker;
 
-// gtk_check_version returns non-NULL on failure
-static bool const HAS_BROKEN_MOTION_HINTS =
-  true || gtk_check_version(2, 12, 0) != nullptr;
+// Disabled by Mentalguy, many years ago in commit 427a81 
+static bool const HAS_BROKEN_MOTION_HINTS = true;
 
 // Define this to visualize the regions to be redrawn
 //#define DEBUG_REDRAW 1;
@@ -71,18 +68,11 @@ struct SPCanvasGroupClass {
     SPCanvasItemClass parent_class;
 };
 
-static void ungrab_default_client_pointer(guint32 const time = GDK_CURRENT_TIME)
+static void ungrab_default_client_pointer()
 {
     auto const display = Gdk::Display::get_default();
-
-#if GTK_CHECK_VERSION(3,20,0)
-    auto const seat = display->get_default_seat();
+    auto const seat    = display->get_default_seat();
     seat->ungrab();
-#else
-    auto const dm = display->get_device_manager();
-    auto const device = dm->get_client_pointer();
-    device->ungrab(time);
-#endif
 }
 
 /**
@@ -662,8 +652,7 @@ int sp_canvas_item_grab(SPCanvasItem *item, guint event_mask, GdkCursor *cursor,
     // fixme: If we add key masks to event mask, Gdk will abort (Lauris)
     // fixme: But Canvas actually does get key events, so all we need is routing these here
     auto display = gdk_display_get_default();
-#if GTK_CHECK_VERSION(3,20,0)
-    auto seat   = gdk_display_get_default_seat(display);
+    auto seat    = gdk_display_get_default_seat(display);
     gdk_seat_grab(seat,
                   getWindow(item->canvas),
                   GDK_SEAT_CAPABILITY_ALL_POINTING,
@@ -672,18 +661,6 @@ int sp_canvas_item_grab(SPCanvasItem *item, guint event_mask, GdkCursor *cursor,
                   nullptr,
                   nullptr,
                   nullptr);
-#else
-    auto dm = gdk_display_get_device_manager(display);
-    auto device = gdk_device_manager_get_client_pointer(dm);
-
-    gdk_device_grab(device,
-                    getWindow(item->canvas),
-                    GDK_OWNERSHIP_NONE,
-                    FALSE,
-                    (GdkEventMask)(event_mask & (~(GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK))),
-                    cursor,
-                    etime);
-#endif
 
     item->canvas->_grabbed_item = item;
     item->canvas->_grabbed_event_mask = event_mask;
@@ -697,9 +674,8 @@ int sp_canvas_item_grab(SPCanvasItem *item, guint event_mask, GdkCursor *cursor,
  * mouse.
  *
  * @param item A canvas item that holds a grab.
- * @param etime The timestamp for ungrabbing the mouse.
  */
-void sp_canvas_item_ungrab(SPCanvasItem *item, guint32 etime)
+void sp_canvas_item_ungrab(SPCanvasItem *item)
 {
     g_return_if_fail (item != nullptr);
     g_return_if_fail (SP_IS_CANVAS_ITEM (item));
@@ -709,7 +685,7 @@ void sp_canvas_item_ungrab(SPCanvasItem *item, guint32 etime)
     }
 
     item->canvas->_grabbed_item = nullptr;
-    ungrab_default_client_pointer(etime);
+    ungrab_default_client_pointer();
 }
 
 /**
@@ -2214,14 +2190,8 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
     gint x, y;
 
     auto const display = Gdk::Display::get_default();
-
-#if GTK_CHECK_VERSION(3,20,0)
-    auto const seat   = display->get_default_seat();
-    auto const device = seat->get_pointer();
-#else
-    auto const dm = display->get_device_manager();
-    auto const device = dm->get_client_pointer();
-#endif
+    auto const seat    = display->get_default_seat();
+    auto const device  = seat->get_pointer();
 
     gdk_window_get_device_position(gtk_widget_get_window(GTK_WIDGET(this)),
                                    device->gobj(),

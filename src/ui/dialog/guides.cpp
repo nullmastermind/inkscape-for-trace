@@ -210,11 +210,7 @@ void GuidelinePropertiesDialog::_setup() {
     _color.set_halign(Gtk::ALIGN_FILL);
     _color.set_valign(Gtk::ALIGN_FILL);
     _color.set_hexpand();
-#if GTKMM_CHECK_VERSION(3,12,0)
     _color.set_margin_end(6);
-#else
-    _color.set_margin_right(6);
-#endif
     _layout_table.attach(_color, 1, 3, 2, 1);
 
     // unitmenus
@@ -246,11 +242,7 @@ void GuidelinePropertiesDialog::_setup() {
 
     _unit_menu.set_halign(Gtk::ALIGN_FILL);
     _unit_menu.set_valign(Gtk::ALIGN_FILL);
-#if GTKMM_CHECK_VERSION(3,12,0)
     _unit_menu.set_margin_end(6);
-#else
-    _unit_menu.set_margin_right(6);
-#endif
     _layout_table.attach(_unit_menu, 2, 4, 1, 1);
 
     // angle spinbutton
@@ -267,22 +259,14 @@ void GuidelinePropertiesDialog::_setup() {
     _relative_toggle.set_halign(Gtk::ALIGN_FILL);
     _relative_toggle.set_valign(Gtk::ALIGN_FILL);
     _relative_toggle.set_hexpand();
-#if GTKMM_CHECK_VERSION(3,12,0)
     _relative_toggle.set_margin_start(6);
-#else
-    _relative_toggle.set_margin_left(6);
-#endif
     _layout_table.attach(_relative_toggle, 1, 7, 2, 1);
 
     // locked radio button
     _locked_toggle.set_halign(Gtk::ALIGN_FILL);
     _locked_toggle.set_valign(Gtk::ALIGN_FILL);
     _locked_toggle.set_hexpand();
-#if GTKMM_CHECK_VERSION(3,12,0)
     _locked_toggle.set_margin_start(6);
-#else
-    _locked_toggle.set_margin_left(6);
-#endif
     _layout_table.attach(_locked_toggle, 1, 8, 2, 1);
 
     _relative_toggle.signal_toggled().connect(sigc::mem_fun(*this, &GuidelinePropertiesDialog::_modeChanged));

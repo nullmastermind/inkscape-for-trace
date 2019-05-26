@@ -15,16 +15,13 @@
 
 #include "preferences.h"
 
-#include <glibmm/regex.h>
-
+// Only needed for gtk_accelerator_parse(). Can probably drop when we switch to Gtk+ 4
 #include <gtk/gtk.h>
 
+#include <glibmm/regex.h>
+
 #include <gdkmm/display.h>
-#if GTK_CHECK_VERSION(3, 20, 0)
-# include <gdkmm/seat.h>
-#else
-# include <gdkmm/devicemanager.h>
-#endif
+#include <gdkmm/seat.h>
 
 #include <gtkmm/accelkey.h>
 
@@ -85,17 +82,17 @@ static Glib::ustring getBaseDeviceName(Gdk::InputSource source)
 {
     Glib::ustring name;
     switch (source) {
-        case GDK_SOURCE_MOUSE:
-            name ="pointer";
+        case Gdk::SOURCE_MOUSE:
+            name = "pointer";
             break;
-        case GDK_SOURCE_PEN:
-            name ="pen";
+        case Gdk::SOURCE_PEN:
+            name = "pen";
             break;
-        case GDK_SOURCE_ERASER:
-            name ="eraser";
+        case Gdk::SOURCE_ERASER:
+            name = "eraser";
             break;
-        case GDK_SOURCE_CURSOR:
-            name ="cursor";
+        case Gdk::SOURCE_CURSOR:
+            name = "cursor";
             break;
         default:
             name = "tablet";
@@ -321,15 +318,9 @@ DeviceManagerImpl::DeviceManagerImpl() :
     DeviceManager(),
     devices()
 {
-    Glib::RefPtr<Gdk::Display> display = Gdk::Display::get_default();
-
-#if GTK_CHECK_VERSION(3, 20, 0)
-    auto seat = display->get_default_seat();
+    auto display = Gdk::Display::get_default();
+    auto seat    = display->get_default_seat();
     auto devList = seat->get_slaves(Gdk::SEAT_CAPABILITY_ALL);
-#else
-    auto dm = display->get_device_manager();
-    auto devList = dm->list_devices(Gdk::DEVICE_TYPE_SLAVE);	
-#endif
 
     if (fakeList.empty()) {
         createFakeList();
@@ -658,14 +649,9 @@ static void createFakeList() {
         fakeList[3].num_keys   = 7;
 
         // try to find the first *real* core pointer
-        Glib::RefPtr<Gdk::Display> display = Gdk::Display::get_default();
-#if GTK_CHECK_VERSION(3, 20, 0)
-        auto seat = display->get_default_seat();
+        auto display = Gdk::Display::get_default();
+        auto seat    = display->get_default_seat();
         auto devList = seat->get_slaves(Gdk::SEAT_CAPABILITY_ALL);
-#else
-        auto dm = display->get_device_manager();
-        auto devList = dm->list_devices(Gdk::DEVICE_TYPE_SLAVE);	
-#endif
 
         // Set iterator to point at beginning of device list
         std::vector< Glib::RefPtr<Gdk::Device> >::iterator dev = devList.begin();

@@ -109,7 +109,7 @@ TextTool::~TextTool() {
     this->shape_editor = nullptr;
 
     if (this->grabbed) {
-        sp_canvas_item_ungrab(this->grabbed, GDK_CURRENT_TIME);
+        sp_canvas_item_ungrab(this->grabbed);
         this->grabbed = nullptr;
     }
 
@@ -611,7 +611,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                 m.unSetup();
 
                 if (this->grabbed) {
-                    sp_canvas_item_ungrab(this->grabbed, GDK_CURRENT_TIME);
+                    sp_canvas_item_ungrab(this->grabbed);
                     this->grabbed = nullptr;
                 }
 
@@ -1134,7 +1134,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                                 if (this->creating) {
                                     this->creating = false;
                                     if (this->grabbed) {
-                                        sp_canvas_item_ungrab(this->grabbed, GDK_CURRENT_TIME);
+                                        sp_canvas_item_ungrab(this->grabbed);
                                         this->grabbed = nullptr;
                                     }
                                     Inkscape::Rubberband::get(desktop)->stop();
@@ -1256,7 +1256,7 @@ bool TextTool::root_handler(GdkEvent* event) {
                     if (this->creating) {
                         this->creating = false;
                         if (this->grabbed) {
-                            sp_canvas_item_ungrab(this->grabbed, GDK_CURRENT_TIME);
+                            sp_canvas_item_ungrab(this->grabbed);
                             this->grabbed = nullptr;
                         }
                         Inkscape::Rubberband::get(desktop)->stop();

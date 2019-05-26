@@ -85,13 +85,8 @@ MessageParam::param_newWidget()
     Gtk::Frame * frame = new Gtk::Frame (_legend);
     Gtk::Widget * widg_frame = frame->get_label_widget();
 
-#if GTKMM_CHECK_VERSION(3,12,0)
     widg_frame->set_margin_end(_marginend);
     widg_frame->set_margin_start(_marginstart);
-#else
-    widg_frame->set_margin_right(_marginend);
-    widg_frame->set_margin_left(_marginstart);
-#endif
     _label = new Gtk::Label (message, Gtk::ALIGN_END);
     _label->set_use_underline (true);
     _label->set_use_markup();
@@ -100,15 +95,8 @@ MessageParam::param_newWidget()
     Gtk::Widget* widg_label = dynamic_cast<Gtk::Widget *> (_label);
     widg_label->set_halign(_halign);
     widg_label->set_valign(_valign);
-
-#if GTKMM_CHECK_VERSION(3,12,0)
     widg_label->set_margin_end(_marginend);
     widg_label->set_margin_start(_marginstart);
-#else
-    widg_label->set_margin_right(_marginstart);
-    widg_label->set_margin_left(_marginstart);
-#endif
-
     frame->add(*widg_label);
     return dynamic_cast<Gtk::Widget *> (frame);
 }

@@ -418,10 +418,6 @@ ConnectorToolbar::event_attr_changed(Inkscape::XML::Node *repr,
 
         toolbar->_spacing_adj->set_value(spacing);
 
-#if !GTK_CHECK_VERSION(3,18,0)
-        toolbar->_spacing_adj->value_changed();
-#endif
-
         if(toolbar->_desktop->canvas) gtk_widget_grab_focus(GTK_WIDGET(toolbar->_desktop->canvas));
     }
 }

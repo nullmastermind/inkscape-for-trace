@@ -685,11 +685,7 @@ public:
      */
     void addWidget(Gtk::Widget *widg, gchar const *tooltip, int indent) {
         if (widg) {
-#if GTK_CHECK_VERSION(3,12,0)
             widg->set_margin_start(indent * Parameter::GUI_INDENTATION);
-#else
-            widg->set_margin_left(indent * Parameter::GUI_INDENTATION);
-#endif
             this->pack_start(*widg, false, false, 0);
             if (tooltip) {
                 widg->set_tooltip_text(tooltip);

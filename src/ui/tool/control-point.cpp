@@ -339,7 +339,7 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
                 sp_event_context_snap_watchdog_callback(event_context->_delayed_snap_event);
             }
 
-            sp_canvas_item_ungrab(_canvas_item, event->button.time);
+            sp_canvas_item_ungrab(_canvas_item);
             _setMouseover(this, event->button.state);
             _event_grab = false;
 
@@ -419,7 +419,7 @@ bool ControlPoint::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, G
             
             dragged(new_pos, &fake);
 
-            sp_canvas_item_ungrab(_canvas_item, event->key.time);
+            sp_canvas_item_ungrab(_canvas_item);
             _clearMouseover(); // this will also reset state to normal
             _desktop->canvas->endForcedFullRedraws();
             _event_grab = false;
@@ -535,7 +535,7 @@ void ControlPoint::transferGrab(ControlPoint *prev_point, GdkEventMotion *event)
     if (!_event_grab) return;
 
     grabbed(event);
-    sp_canvas_item_ungrab(prev_point->_canvas_item, event->time);
+    sp_canvas_item_ungrab(prev_point->_canvas_item);
     sp_canvas_item_grab(_canvas_item, _grab_event_mask, nullptr, event->time);
 
     if (!_drag_initiated) {

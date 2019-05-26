@@ -226,14 +226,8 @@ SPDesktopWidget::window_get_pointer()
     int x, y;
     auto window = Glib::wrap(GTK_WIDGET(_canvas))->get_window();
     auto display = window->get_display();
-
-#if GTK_CHECK_VERSION(3,20,0)
     auto seat = display->get_default_seat();
     auto device = seat->get_pointer();
-#else
-    auto dm = display->get_device_manager();
-    auto device = dm->get_client_pointer();
-#endif
     Gdk::ModifierType m;
     window->get_device_position(device, x, y, m);
 
@@ -558,11 +552,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->_select_status = Gtk::manage(new Gtk::Label());
     dtw->_select_status->set_name("SelectStatus");
     dtw->_select_status->set_ellipsize(Pango::ELLIPSIZE_END);
-#if GTK_CHECK_VERSION(3,10,0)
     dtw->_select_status->set_line_wrap(true);
     dtw->_select_status->set_lines(2);
-#endif
-
     dtw->_select_status->set_halign(Gtk::ALIGN_START);
     dtw->_select_status->set_size_request(1, -1);
 
@@ -990,9 +981,7 @@ SPDesktopWidget::color_profile_event(EgeColorProfTracker */*tracker*/, SPDesktop
     GdkScreen* screen = gtk_widget_get_screen(GTK_WIDGET(dtw));
     GdkWindow *window = gtk_widget_get_window(gtk_widget_get_toplevel(GTK_WIDGET(dtw)));
 
-    // In old Gtk+ versions, we can directly find the ID number for a monitor.
-    // In Gtk+ >= 3.22, however, we need to figure out the ID
-# if GTK_CHECK_VERSION(3,22,0)
+    // Figure out the ID for the monitor
     auto display = gdk_display_get_default();
     auto monitor = gdk_display_get_monitor_at_window(display, window);
 
@@ -1005,9 +994,6 @@ SPDesktopWidget::color_profile_event(EgeColorProfTracker */*tracker*/, SPDesktop
         auto monitor_at_index = gdk_display_get_monitor(display, i_monitor);
         if(monitor_at_index == monitor) monitorNum = i_monitor;
     }
-# else // GTK_CHECK_VERSION(3,22,0)
-    gint monitorNum = gdk_screen_get_monitor_at_window(screen, window);
-# endif // GTK_CHECK_VERSION(3,22,0)
 
     Glib::ustring id = Inkscape::CMSSystem::getDisplayId( monitorNum );
     bool enabled = false;
@@ -2297,12 +2283,8 @@ SPDesktopWidget::on_ruler_box_button_release_event(GdkEventButton *event, Gtk::E
     if (_ruler_clicked && event->button == 1) {
         sp_event_context_discard_delayed_snap_event(desktop->event_context);
 
-#if GTK_CHECK_VERSION(3,20,0)
         auto seat = gdk_device_get_seat(event->device);
         gdk_seat_ungrab(seat);
-#else
-        gdk_device_ungrab(event->device, event->time);
-#endif
 
         Geom::Point const event_w(sp_canvas_window_to_world(_canvas, event_win));
         Geom::Point event_dt(desktop->w2d(event_w));
@@ -2421,7 +2403,6 @@ SPDesktopWidget::on_ruler_box_button_press_event(GdkEventButton *event, Gtk::Eve
 
         auto window = widget->get_window()->gobj();
 
-#if GTK_CHECK_VERSION(3,20,0)
         auto seat = gdk_device_get_seat(event->device);
         gdk_seat_grab(seat,
                 window,
@@ -2431,15 +2412,6 @@ SPDesktopWidget::on_ruler_box_button_press_event(GdkEventButton *event, Gtk::Eve
                 (GdkEvent*)event,
                 nullptr,
                 nullptr);
-#else
-        gdk_device_grab(event->device,
-                window,
-                GDK_OWNERSHIP_NONE,
-                FALSE,
-                (GdkEventMask)(GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK ),
-                NULL,
-                event->time);
-#endif
     }
 
     return false;

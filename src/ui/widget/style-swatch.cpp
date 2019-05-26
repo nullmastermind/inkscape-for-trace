@@ -125,14 +125,8 @@ StyleSwatch::StyleSwatch(SPCSSAttr *css, gchar const *main_tip)
         _label[i].set_valign(Gtk::ALIGN_CENTER);
         _label[i].set_margin_top(0);
         _label[i].set_margin_bottom(0);
-
-#if GTK_CHECK_VERSION(3,12,0)
         _label[i].set_margin_start(0);
         _label[i].set_margin_end(0);
-#else
-        _label[i].set_margin_left(0);
-        _label[i].set_margin_right(0);
-#endif
 
         _color_preview[i] = new Inkscape::UI::Widget::ColorPreview (0);
     }
@@ -141,14 +135,8 @@ StyleSwatch::StyleSwatch(SPCSSAttr *css, gchar const *main_tip)
     _opacity_value.set_valign(Gtk::ALIGN_CENTER);
     _opacity_value.set_margin_top(0);
     _opacity_value.set_margin_bottom(0);
-
-#if GTK_CHECK_VERSION(3,12,0)
     _opacity_value.set_margin_start(0);
     _opacity_value.set_margin_end(0);
-#else
-    _opacity_value.set_margin_left(0);
-    _opacity_value.set_margin_right(0);
-#endif
 
     _table->set_column_spacing(2);
     _table->set_row_spacing(0);

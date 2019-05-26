@@ -355,12 +355,7 @@ bool colorItemHandleButtonPress(GdkEventButton* event, UI::Widget::Preview *prev
                     }
                 }
                 gtk_widget_set_sensitive( popupSubHolder, processed );
-
-#if GTK_CHECK_VERSION(3,22,0)
                 gtk_menu_popup_at_pointer(GTK_MENU(popupMenu), reinterpret_cast<GdkEvent *>(event));
-#else
-                gtk_menu_popup(GTK_MENU(popupMenu), NULL, NULL, NULL, NULL, event->button, event->time);
-#endif
                 handled = TRUE;
             }
         }

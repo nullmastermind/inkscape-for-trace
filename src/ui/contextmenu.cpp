@@ -283,11 +283,7 @@ void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb, bool show_icon)
 
         // Now create the label and add it to the menu item (with mnemonic)
         auto const label = Gtk::manage(new Gtk::AccelLabel(action->name, true));
-#if GTKMM_CHECK_VERSION(3,16,0)
         label->set_xalign(0.0);
-#else
-        label->set_alignment(0.0, 0.5);
-#endif
         sp_shortcut_add_accelerator(GTK_WIDGET(item->gobj()), sp_shortcut_get_primary(verb));
         label->set_accel_widget(*item);
 

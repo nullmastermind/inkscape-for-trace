@@ -160,7 +160,6 @@ bool ColorSlider::on_button_press_event(GdkEventButton *event)
 
 	auto window = _gdk_window->gobj();
 
-#if GTK_CHECK_VERSION(3,20,0)
 	auto seat = gdk_event_get_seat(reinterpret_cast<GdkEvent *>(event));
 	gdk_seat_grab(seat,
                       window,
@@ -170,16 +169,6 @@ bool ColorSlider::on_button_press_event(GdkEventButton *event)
                       reinterpret_cast<GdkEvent *>(event),
                       nullptr,
                       nullptr);
-#else
-	auto device = gdk_event_get_device(reinterpret_cast<GdkEvent *>(event));
-        gdk_device_grab(device,
-			window,
-			GDK_OWNERSHIP_NONE,
-			FALSE,
-                        static_cast<GdkEventMask>(GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK),
-			NULL,
-			event->time);
-#endif
     }
 
     return false;
@@ -188,12 +177,7 @@ bool ColorSlider::on_button_press_event(GdkEventButton *event)
 bool ColorSlider::on_button_release_event(GdkEventButton *event)
 {
     if (event->button == 1) {
-#if GTK_CHECK_VERSION(3,20,0)
         gdk_seat_ungrab(gdk_event_get_seat(reinterpret_cast<GdkEvent *>(event)));
-#else
-        gdk_device_ungrab(gdk_event_get_device(reinterpret_cast<GdkEvent *>(event)),
-                          gdk_event_get_time(reinterpret_cast<GdkEvent *>(event)));
-#endif
         _dragging = false;
         signal_released.emit();
         if (_value != _oldvalue) {

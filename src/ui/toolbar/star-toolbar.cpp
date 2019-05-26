@@ -437,13 +437,6 @@ StarToolbar::defaults()
     _spoke_adj->set_value(prop);
     _roundedness_adj->set_value(rounded);
     _randomization_adj->set_value(randomized);
-
-#if !GTK_CHECK_VERSION(3,18,0)
-    _magnitude_adj->value_changed();
-    _spoke_adj->value_changed();
-    _roundedness_adj->value_changed();
-    _randomization_adj->value_changed();
-#endif
 }
 
 void

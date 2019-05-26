@@ -67,7 +67,7 @@ ArcTool::ArcTool()
 }
 
 void ArcTool::finish() {
-    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), GDK_CURRENT_TIME);
+    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
     this->finishItem();
     this->sel_changed_connection.disconnect();
 
@@ -225,7 +225,7 @@ bool ArcTool::root_handler(GdkEvent* event) {
                 this->item_to_select = nullptr;
                 handled = true;
             }
-            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
+            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
             break;
 
         case GDK_KEY_PRESS:
@@ -266,7 +266,7 @@ bool ArcTool::root_handler(GdkEvent* event) {
 
                 case GDK_KEY_space:
                     if (dragging) {
-                        sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
+                        sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
                         dragging = false;
                         sp_event_context_discard_delayed_snap_event(this);
 
@@ -454,7 +454,7 @@ void ArcTool::finishItem() {
 
 void ArcTool::cancel() {
     desktop->getSelection()->clear();
-    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), 0);
+    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
 
     if (this->arc != nullptr) {
         this->arc->deleteObject();

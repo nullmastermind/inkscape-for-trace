@@ -165,11 +165,7 @@ Gtk::Widget * ParamNotebook::ParamNotebookPage::get_widget(SPDocument * doc, Ink
         Gtk::Widget * widg = param->get_widget(doc, node, changeSignal);
         if (widg) {
             int indent = param->get_indent();
-#if GTK_CHECK_VERSION(3,12,0)
             widg->set_margin_start(indent * Parameter::GUI_INDENTATION);
-#else
-            widg->set_margin_left(indent * Parameter::GUI_INDENTATION);
-#endif
             vbox->pack_start(*widg, false, false, 0);
 
             gchar const * tip = param->get_tooltip();

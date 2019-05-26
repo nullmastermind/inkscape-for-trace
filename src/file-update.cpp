@@ -423,13 +423,9 @@ void sp_file_convert_dpi(SPDocument *doc)
             moreinfo_text.set_line_wrap(true);
             moreinfo_text.set_margin_bottom(20);
             moreinfo_text.set_margin_top(20);
-#if GTK_CHECK_VERSION(3,12,0)
             moreinfo_text.set_margin_start(30);
             moreinfo_text.set_margin_end(15);
-#else
-            moreinfo_text.set_margin_left(30);
-            moreinfo_text.set_margin_right(15);
-#endif
+
             Gtk::Box b;
             b.set_border_width(0);
             
@@ -442,12 +438,7 @@ void sp_file_convert_dpi(SPDocument *doc)
             b.set_valign(Gtk::ALIGN_START);
             b.set_hexpand(false);
             b.set_vexpand(false);
-
-#if GTK_CHECK_VERSION(3,12,0)
             b.set_margin_start(30);
-#else
-            b.set_margin_left(30);
-#endif
 
             Gtk::Box *content = scale_dialog.get_content_area();
             Gtk::Button *ok_button = scale_dialog.add_button(_("OK"), GTK_RESPONSE_ACCEPT);

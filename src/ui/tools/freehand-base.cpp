@@ -103,7 +103,7 @@ FreehandBase::FreehandBase(gchar const *const *cursor_shape)
 
 FreehandBase::~FreehandBase() {
     if (this->grab) {
-        sp_canvas_item_ungrab(this->grab, GDK_CURRENT_TIME);
+        sp_canvas_item_ungrab(this->grab);
         this->grab = nullptr;
     }
 
@@ -160,7 +160,7 @@ void FreehandBase::finish() {
     this->sel_modified_connection.disconnect();
 
     if (this->grab) {
-        sp_canvas_item_ungrab(this->grab, GDK_CURRENT_TIME);
+        sp_canvas_item_ungrab(this->grab);
     }
 
     if (this->selection) {

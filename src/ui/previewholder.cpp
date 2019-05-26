@@ -56,11 +56,9 @@ PreviewHolder::PreviewHolder() :
     _scroller->set_vexpand();
     _scroller->add( *_insides );
 
-#if GTK_CHECK_VERSION(3,16,0)
     // Disable overlay scrolling as the scrollbar covers up swatches.
     // For some reason this also makes the height 55px.
     _scroller->set_overlay_scrolling(false);
-#endif
 
     add(*_scroller);
 }

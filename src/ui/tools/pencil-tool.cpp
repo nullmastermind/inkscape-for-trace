@@ -506,7 +506,7 @@ bool PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
 
         if (this->grab) {
             /* Release grab now */
-            sp_canvas_item_ungrab(this->grab, revent.time);
+            sp_canvas_item_ungrab(this->grab);
             this->grab = nullptr;
         }
 
@@ -518,7 +518,7 @@ bool PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
 void PencilTool::_cancel() {
     if (this->grab) {
         /* Release grab now */
-        sp_canvas_item_ungrab(this->grab, 0);
+        sp_canvas_item_ungrab(this->grab);
         this->grab = nullptr;
     }
 

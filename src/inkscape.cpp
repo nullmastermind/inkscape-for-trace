@@ -455,19 +455,13 @@ Application::add_gtk_css()
         css_str += "    font-family: sans-serif";
         css_str += "}"; // we also can add to * but seems to me Cantarell looks better for other places
     }
-    // From 3.16, throws an error which we must catch.
+
     try {
         provider->load_from_data(css_str);
-    }
-#if GTK_CHECK_VERSION(3, 16, 0)
-    // Gtk::CssProviderError not defined until 3.16.
-    catch (const Gtk::CssProviderError &ex) {
+    } catch (const Gtk::CssProviderError &ex) {
         g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
     }
-#else
-    catch (...) {
-    }
-#endif
+
     Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
     // we want a tiny file with 3 or 4 lines, so we can load without removing context
@@ -479,18 +473,12 @@ Application::add_gtk_css()
       // From 3.16, throws an error which we must catch.
       try {
           provider->load_from_path (style);
-      }
-#if GTK_CHECK_VERSION(3,16,0)
-      // Gtk::CssProviderError not defined until 3.16.
-      catch (const Gtk::CssProviderError& ex)
+      } catch (const Gtk::CssProviderError& ex)
       {
           g_critical("CSSProviderError::load_from_path(): failed to load '%s'\n(%s)",
                  style.c_str(), ex.what().c_str());
       }
-#else
-      catch (...)
-      {}
-#endif
+
       Gtk::StyleContext::add_provider_for_screen (screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
 }

@@ -358,7 +358,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
     case GDK_2BUTTON_PRESS:
         if (panning) {
             panning = 0;
-            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
+            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
             ret = TRUE;
         } else {
             /* sp_desktop_dialog(); */
@@ -399,7 +399,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 // Grab background before doing anything else
                 sp_canvas_rotate_start (SP_CANVAS_ROTATE(desktop->canvas_rotate),
                                         desktop->canvas->_backing_store);
-                sp_canvas_item_ungrab (desktop->acetate, event->button.time);
+                sp_canvas_item_ungrab (desktop->acetate);
                 sp_canvas_item_show (desktop->canvas_rotate);
                 sp_canvas_item_grab (desktop->canvas_rotate,
                                      GDK_KEY_PRESS_MASK    | GDK_KEY_RELEASE_MASK    |
@@ -471,7 +471,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                     || (panning == 3 && !(event->motion.state & GDK_BUTTON3_MASK))) {
                 /* Gdk seems to lose button release for us sometimes :-( */
                 panning = 0;
-                sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
+                sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
                 ret = TRUE;
             } else {
                 if (within_tolerance && (abs((gint) event->motion.x - xp)
@@ -544,8 +544,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
             if (panning) {
                 panning = 0;
-                sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
-                        event->button.time);
+                sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
             }
 
             Geom::Point const event_w(event->button.x, event->button.y);
@@ -561,8 +560,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             ret = TRUE;
         } else if (panning == event->button.button) {
             panning = 0;
-            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
-                    event->button.time);
+            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
 
             // in slow complex drawings, some of the motion events are lost;
             // to make up for this, we scroll it once again to the button-up event coordinates
@@ -736,8 +734,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             panning = 0;
             xp = yp = 0;
 
-            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
-                    event->key.time);
+            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
 
             desktop->updateNow();
         }
@@ -1164,15 +1161,8 @@ void sp_event_root_menu_popup(SPDesktop *desktop, SPItem *item, GdkEvent *event)
 
     switch (event->type) {
     case GDK_BUTTON_PRESS:
-#if GTKMM_CHECK_VERSION(3,22,0)
     case GDK_KEY_PRESS:
         CM->popup_at_pointer(event);
-#else
-        CM->popup(event->button.button, event->button.time);
-        break;
-    case GDK_KEY_PRESS:
-        CM->popup(0, event->key.time);
-#endif
         break;
     default:
         break;

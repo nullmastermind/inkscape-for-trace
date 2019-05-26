@@ -114,10 +114,8 @@ InkscapePreferences::InkscapePreferences()
     hbox_list_page->pack_start(*list_frame, false, true, 0);
     _page_list.set_headers_visible(false);
     scrolled_window->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
-#if GTKMM_CHECK_VERSION(3,22,0)
     scrolled_window->set_propagate_natural_width();
     scrolled_window->set_propagate_natural_height();
-#endif
     scrolled_window->add(_page_list);
     list_frame->set_shadow_type(Gtk::SHADOW_IN);
     list_frame->add(*scrolled_window);
@@ -134,10 +132,8 @@ InkscapePreferences::InkscapePreferences()
 
     Gtk::ScrolledWindow* pageScroller = Gtk::manage(new Gtk::ScrolledWindow());
     pageScroller->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-#if GTKMM_CHECK_VERSION(3,22,0)
     pageScroller->set_propagate_natural_width();
     pageScroller->set_propagate_natural_height();
-#endif
     pageScroller->add(*vbox_page);
     hbox_list_page->pack_start(*pageScroller, true, true, 0);
 
@@ -162,29 +158,7 @@ InkscapePreferences::InkscapePreferences()
 
     //calculate the size request for this dialog
     _page_list.expand_all();
-#if GTKMM_CHECK_VERSION(3,22,0)
     _page_list_model->foreach_iter(sigc::mem_fun(*this, &InkscapePreferences::GetSizeRequest));
-#else
-    // we don't have Gtk::ScrolledWindow::set_propagate_natural_width/height so work around it:
-    // -> store current policy
-    Gtk::PolicyType scrolled_window_h, scrolled_window_v,
-                    pageScroller_h, pageScroller_v;
-    scrolled_window->get_policy(scrolled_window_h, scrolled_window_v);
-    pageScroller->get_policy(pageScroller_h, pageScroller_v);
-    // -> calculate minimum size with current policy
-    _page_list_model->foreach_iter(sigc::mem_fun(*this, &InkscapePreferences::GetSizeRequest));
-    int minimum_width  = _minimum_width;
-    int minimum_height = _minimum_height;
-    // -> calculate natural size with Gtk::POLICY_NEVER (i.e. no scrollbars)
-    scrolled_window->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_NEVER);
-    pageScroller->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_NEVER);
-    _page_list_model->foreach_iter(sigc::mem_fun(*this, &InkscapePreferences::GetSizeRequest));
-    // -> reset policy to previously stored values and reset minimum size to reasonable values as stored above
-    scrolled_window->set_policy(scrolled_window_h, scrolled_window_v);
-    pageScroller->set_policy(pageScroller_h, pageScroller_v);
-    _minimum_width  = minimum_width;
-    _minimum_height = minimum_height;
-#endif
     _page_list.collapse_all();
 }
 
@@ -661,19 +635,13 @@ void InkscapePreferences::symbolicDefaultColor(){
     } else {
         css_str += "*{-gtk-icon-style: regular;}";
     }
-    // From 3.16, throws an error which we must catch.
+
     try {
         provider->load_from_data(css_str);
-    }
-#if GTK_CHECK_VERSION(3, 16, 0)
-    // Gtk::CssProviderError not defined until 3.16.
-    catch (const Gtk::CssProviderError &ex) {
+    } catch (const Gtk::CssProviderError &ex) {
         g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
     }
-#else
-    catch (...) {
-    }
-#endif
+
     Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
 }
@@ -717,19 +685,13 @@ void InkscapePreferences::symbolicAddClass()
     css_str += ".iconcolornamedinverse, .colornamedinverse image{ color:";
     css_str += colornamed_inverse;
     css_str += ";}";
-    // From 3.16, throws an error which we must catch.
+
     try {
         provider->load_from_data(css_str);
-    }
-#if GTK_CHECK_VERSION(3, 16, 0)
-    // Gtk::CssProviderError not defined until 3.16.
-    catch (const Gtk::CssProviderError &ex) {
+    } catch (const Gtk::CssProviderError &ex) {
         g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
     }
-#else
-    catch (...) {
-    }
-#endif
+
     Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     // we want a tiny file with 3 or 4 lines, so we can load without removing context
     // is more understandable than record previously applied
@@ -737,20 +699,13 @@ void InkscapePreferences::symbolicAddClass()
     if (!style.empty()) {
         auto provider = Gtk::CssProvider::create();
 
-        // From 3.16, throws an error which we must catch.
         try {
             provider->load_from_path(style);
-        }
-#if GTK_CHECK_VERSION(3, 16, 0)
-        // Gtk::CssProviderError not defined until 3.16.
-        catch (const Gtk::CssProviderError &ex) {
+        } catch (const Gtk::CssProviderError &ex) {
             g_critical("CSSProviderError::load_from_path(): failed to load '%s'\n(%s)", style.c_str(),
                        ex.what().c_str());
         }
-#else
-        catch (...) {
-        }
-#endif
+
         Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
 }

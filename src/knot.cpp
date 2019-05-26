@@ -130,23 +130,12 @@ SPKnot::SPKnot(SPDesktop *desktop, gchar const *tip)
 
 SPKnot::~SPKnot() {
     auto display = gdk_display_get_default();
-
-#if GTK_CHECK_VERSION(3,20,0)
-    auto seat   = gdk_display_get_default_seat(display);
-    auto device = gdk_seat_get_pointer(seat);
-#else
-    auto dm = gdk_display_get_device_manager(display);
-    auto device = gdk_device_manager_get_client_pointer(dm);
-#endif
+    auto seat    = gdk_display_get_default_seat(display);
+    auto device  = gdk_seat_get_pointer(seat);
 
     if ((this->flags & SP_KNOT_GRABBED) && gdk_display_device_is_grabbed(display, device)) {
         // This happens e.g. when deleting a node in node tool while dragging it
-
-#if GTK_CHECK_VERSION(3,20,0)
         gdk_seat_ungrab(seat);
-#else
-        gdk_device_ungrab(device, GDK_CURRENT_TIME);
-#endif
     }
 
     if (this->_event_handler_id > 0) {
@@ -253,7 +242,7 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
                 knot->setFlag(SP_KNOT_GRABBED, FALSE);
 
                 if (!nograb) {
-                    sp_canvas_item_ungrab(knot->item, event->button.time);
+                    sp_canvas_item_ungrab(knot->item);
                 }
 
                 if (moved) {
@@ -332,7 +321,7 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
                 knot->setFlag(SP_KNOT_GRABBED, FALSE);
 
                 if (!nograb) {
-                    sp_canvas_item_ungrab(knot->item, event->button.time);
+                    sp_canvas_item_ungrab(knot->item);
                 }
 
                 if (moved) {

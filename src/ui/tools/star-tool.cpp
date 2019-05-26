@@ -68,7 +68,7 @@ StarTool::StarTool()
 }
 
 void StarTool::finish() {
-    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), GDK_CURRENT_TIME);
+    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
 
     this->finishItem();
     this->sel_changed_connection.disconnect();
@@ -241,7 +241,7 @@ bool StarTool::root_handler(GdkEvent* event) {
 
             this->item_to_select = nullptr;
             ret = TRUE;
-            sp_canvas_item_ungrab(SP_CANVAS_ITEM (desktop->acetate), event->button.time);
+            sp_canvas_item_ungrab(SP_CANVAS_ITEM (desktop->acetate));
         }
         break;
 
@@ -280,7 +280,7 @@ bool StarTool::root_handler(GdkEvent* event) {
 
         case GDK_KEY_space:
             if (dragging) {
-                sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
+                sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
 
                 dragging = false;
 
@@ -426,7 +426,7 @@ void StarTool::finishItem() {
 
 void StarTool::cancel() {
     desktop->getSelection()->clear();
-    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), 0);
+    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate));
 
     if (this->star != nullptr) {
         this->star->deleteObject();

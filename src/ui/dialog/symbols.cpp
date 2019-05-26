@@ -117,14 +117,8 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
     /********************    Table    *************************/
   auto table = new Gtk::Grid();
 
-#if GTKMM_CHECK_VERSION(3,12,0)
   table->set_margin_start(3);
   table->set_margin_end(3);
-#else
-  table->set_margin_left(3);
-  table->set_margin_right(3);
-#endif
-
   table->set_margin_top(4);
   // panel is a cloked Gtk::VBox
   _getContents()->pack_start(*Gtk::manage(table), Gtk::PACK_EXPAND_WIDGET);
@@ -200,7 +194,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   scroller->add(*Gtk::manage(icon_view));
   scroller->set_hexpand();
   scroller->set_vexpand();
-#if GTKMM_CHECK_VERSION(3,14,0)
+
   overlay = new Gtk::Overlay();
   overlay->set_hexpand();
   overlay->set_vexpand();
@@ -238,9 +232,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   overlay->add_overlay(* overlay_icon);
   overlay->add_overlay(* overlay_title);
   overlay->add_overlay(* overlay_desc);
-#else
-  table->attach(*Gtk::manage(scroller),0,row,2,1);
-#endif
+  
   previous_height = 0;
   ++row;
 
@@ -251,14 +243,8 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   progress->pack_start(* progress_bar, Gtk::PACK_EXPAND_WIDGET);
   progress->set_margin_top(15);
   progress->set_margin_bottom(15);
-
-#if GTKMM_CHECK_VERSION(3,12,0)
   progress->set_margin_start(20);
   progress->set_margin_end(20);
-#else
-  progress->set_margin_left(20);
-  progress->set_margin_right(20);
-#endif
 
   ++row;
 
@@ -459,7 +445,6 @@ void SymbolsDialog::rebuild() {
   }
 }
 void SymbolsDialog::showOverlay() {
-#if GTKMM_CHECK_VERSION(3,14,0)
   Glib::ustring current = Glib::Markup::escape_text(symbol_set->get_active_text());
   if (current == ALLDOCS && !l.size()) 
   {
@@ -507,17 +492,15 @@ void SymbolsDialog::showOverlay() {
     overlay_title->hide();
     overlay_desc->hide();
   }
-#endif
 }
 
 void SymbolsDialog::hideOverlay() {
-#if GTKMM_CHECK_VERSION(3,14,0)
     overlay_opacity->hide();
     overlay_icon->hide();
     overlay_title->hide();
     overlay_desc->hide();
-#endif
 }
+
 void SymbolsDialog::insertSymbol() {
     Inkscape::Verb *verb = Inkscape::Verb::get( SP_VERB_EDIT_SYMBOL );
     SPAction *action = verb->get_action(Inkscape::ActionContext( (Inkscape::UI::View::View *) current_desktop) );
