@@ -17,7 +17,6 @@
 
 #include "live_effects/lpe-mirror_symmetry.h"
 #include "2geom/affine.h"
-#include "2geom/intersection-graph.h"
 #include "2geom/path-intersection.h"
 #include "display/curve.h"
 #include "helper/geom.h"
@@ -54,7 +53,7 @@ MTConverter(ModeTypeData, MT_END);
 LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     mode(_("Mode"), _("Set mode of transformation. Either freely defined by mirror line or constrained to certain symmetry points."), "mode", MTConverter, &wr, this, MT_FREE),
-    split_gap(_("Gap on splitting"), _("Add attitional space in between split objects."), "split_gap", &wr, this, -0.001),
+    split_gap(_("Gap on splitting"), _("Add attitional space in between split objects."), "split_gap", &wr, this, 0.0),
     discard_orig_path(_("Discard original path"), _("Only keep mirrored part of the path, remove the original."), "discard_orig_path", &wr, this, false),
     fuse_paths(_("Fuse paths"), _("Fuse original path and mirror image into a single path"), "fuse_paths", &wr, this, false),
     oposite_fuse(_("Fuse opposite sides"), _("Picks the part on the other side of the mirror line as the original."), "oposite_fuse", &wr, this, false),
@@ -465,44 +464,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
 
     Geom::Line line_separation((Geom::Point)start_point, (Geom::Point)end_point);
     Geom::Affine m = Geom::reflection (line_separation.vector(), (Geom::Point)start_point);
-    if (split_items && fuse_paths) {
-        Geom::OptRect bbox = sp_lpe_item->geometricBounds();
-        Geom::Path p(Geom::Point(bbox->left(), bbox->top()));
-        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->top()));
-        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->bottom()));
-        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->bottom()));
-        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->top()));
-        p.close();
-        p *= Geom::Translate(bbox->midpoint()).inverse();
-        p *= Geom::Scale(1.2);
-        p *= Geom::Rotate(line_separation.angle());
-        p *= Geom::Translate(bbox->midpoint());
-        bbox = p.boundsFast();
-        p.clear();
-        p.start(Geom::Point(bbox->left(), bbox->top()));
-        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->top()));
-        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->bottom()));
-        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->bottom()));
-        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->top()));
-        p.close();
-        p *= Geom::Translate(bbox->midpoint()).inverse();
-        p *= Geom::Rotate(line_separation.angle());
-        p *= Geom::Translate(bbox->midpoint());
-        Geom::Point base(p.pointAt(3));
-        if (oposite_fuse) {
-            base = p.pointAt(0);
-        }
-        p *= Geom::Translate(line_separation.pointAt(line_separation.nearestTime(base)) - base);
-        Geom::PathVector pv_bbox;
-        pv_bbox.push_back(p);
-        Geom::PathIntersectionGraph *pig = new Geom::PathIntersectionGraph(pv_bbox, original_pathv);
-        if (pig && !original_pathv.empty() && !pv_bbox.empty()) {
-            path_out = pig->getBminusA();
-        }
-        Geom::Point dir = rot90(unit_vector((Geom::Point)end_point - (Geom::Point)start_point));
-        Geom::Point gap = dir * split_gap;
-        path_out *= Geom::Translate(gap);
-    } else if (fuse_paths && !discard_orig_path) {
+    if (fuse_paths && !discard_orig_path) {
         for (const auto & path_it : original_pathv) 
         {
             if (path_it.empty()) {
@@ -551,12 +513,18 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                             position *= -1;
                         }
                         if (position == 1) {
-                            Geom::Path mirror = portion.reversed() * m;
-                            mirror.setInitial(portion.finalPoint());
-                            portion.append(mirror);
-                            if(i != 0) {
-                                portion.setFinal(portion.initialPoint());
-                                portion.close();
+                            if (!split_items) {
+                                Geom::Path mirror = portion.reversed() * m;
+                                mirror.setInitial(portion.finalPoint());
+                                portion.append(mirror);
+                                if(i != 0) {
+                                    portion.setFinal(portion.initialPoint());
+                                    portion.close();
+                                }
+                            } else {
+                                if (path_it.closed()) {
+                                    portion.close();
+                                }
                             }
                             tmp_pathvector.push_back(portion);
                         }
@@ -574,9 +542,11 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                     Geom::Path portion = original.portion(time_start, original.size());
                     if (!portion.empty()) {
                         portion = portion.reversed();
-                        Geom::Path mirror = portion.reversed() * m;
-                        mirror.setInitial(portion.finalPoint());
-                        portion.append(mirror);
+                        if (!split_items) {
+                            Geom::Path mirror = portion.reversed() * m;
+                            mirror.setInitial(portion.finalPoint());
+                            portion.append(mirror);
+                        }
                         portion = portion.reversed();
                         if (!original.closed()) {
                             tmp_pathvector.push_back(portion);
