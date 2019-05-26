@@ -63,6 +63,9 @@ Effect::Effect (Inkscape::XML::Node * in_repr, Implementation::Implementation * 
                 if (child->attribute("needs-live-preview") && !strcmp(child->attribute("needs-live-preview"), "false")) {
                   no_live_preview = true;
                 }
+                if (child->attribute("suppress-working-dialog") && !strcmp(child->attribute("suppress-working-dialog"), "true")) {
+                  _workingDialog = false;
+                }
                 for (Inkscape::XML::Node *effect_child = child->firstChild(); effect_child != nullptr; effect_child = effect_child->next()) {
                     if (!strcmp(effect_child->name(), INKSCAPE_EXTENSION_NS "effects-menu")) {
                         // printf("Found local effects menu in %s\n", this->get_name());
@@ -269,7 +272,7 @@ Effect::effect (Inkscape::UI::View::View * doc)
     if (!loaded())
         set_state(Extension::STATE_LOADED);
     if (!loaded()) return;
-    ExecutionEnv executionEnv(this, doc);
+    ExecutionEnv executionEnv(this, doc, nullptr, _workingDialog, true);
     execution_env = &executionEnv;
     timer->lock();
     executionEnv.run();
