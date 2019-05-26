@@ -637,6 +637,16 @@ Glib::ustring ClipboardManagerImpl::getShapeOrTextObjectId(SPDesktop *desktop)
     if ( repr == nullptr ) {
         repr = sp_repr_lookup_name(root, "svg:text", -1);
     }
+    if (repr == nullptr) {
+        repr = sp_repr_lookup_name(root, "svg:ellipse", -1);
+    }
+    if (repr == nullptr) {
+        repr = sp_repr_lookup_name(root, "svg:rect", -1);
+    }
+    if (repr == nullptr) {
+        repr = sp_repr_lookup_name(root, "svg:circle", -1);
+    }
+
 
     if ( repr == nullptr ) {
         _userWarn(desktop, _("Clipboard does not contain a path."));

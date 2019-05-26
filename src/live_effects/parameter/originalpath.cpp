@@ -30,11 +30,12 @@ namespace LivePathEffect {
 
 OriginalPathParam::OriginalPathParam( const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect)
+                      Effect* effect, bool all)
     : PathParam(label, tip, key, wr, effect, "")
 {
     oncanvas_editable = false;
     _from_original_d = false;
+    _all = false;
 }
 
 OriginalPathParam::~OriginalPathParam()
