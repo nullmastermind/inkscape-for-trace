@@ -53,7 +53,6 @@ MTConverter(ModeTypeData, MT_END);
 LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     mode(_("Mode"), _("Set mode of transformation. Either freely defined by mirror line or constrained to certain symmetry points."), "mode", MTConverter, &wr, this, MT_FREE),
-    split_gap(_("Gap on splitting"), _("Add attitional space in between split objects."), "split_gap", &wr, this, 0.0),
     discard_orig_path(_("Discard original path"), _("Only keep mirrored part of the path, remove the original."), "discard_orig_path", &wr, this, false),
     fuse_paths(_("Fuse paths"), _("Fuse original path and mirror image into a single path"), "fuse_paths", &wr, this, false),
     oposite_fuse(_("Fuse opposite sides"), _("Picks the part on the other side of the mirror line as the original."), "oposite_fuse", &wr, this, false),
@@ -64,7 +63,6 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
 {
     show_orig_path = true;
     registerParameter(&mode);
-    registerParameter(&split_gap);
     registerParameter(&discard_orig_path);
     registerParameter(&fuse_paths);
     registerParameter(&oposite_fuse);
@@ -72,9 +70,6 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     registerParameter(&start_point);
     registerParameter(&end_point);
     registerParameter(&center_point);
-    split_gap.param_set_range(-999999.0, 999999.0);
-    split_gap.param_set_increments(0.1, 0.1);
-    split_gap.param_set_digits(5);
     apply_to_clippath_and_mask = true;
     previous_center = Geom::Point(0,0);
     center_point.param_widget_is_visible(false);
@@ -104,7 +99,7 @@ LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
     if (split_items && !discard_orig_path) {
         Geom::Line ls((Geom::Point)start_point, (Geom::Point)end_point);
         Geom::Affine m = Geom::reflection (ls.vector(), (Geom::Point)start_point);
-        m = m * sp_lpe_item->transform;
+        m *= sp_lpe_item->transform;
         toMirror(m, reset);
         reset = false;
     } else {
@@ -277,9 +272,6 @@ void LPEMirrorSymmetry::cloneStyle(SPObject *orig, SPObject *dest)
         if (iter->style_src != SP_STYLE_SRC_UNSET) {
             if (iter->name != "font" && iter->name != "d" && iter->name != "marker") {
                 const gchar *attr = orig->getRepr()->attribute(iter->name.c_str());
-                std::cout << iter->name << std::endl;
-                std::cout << attr << std::endl;
-                std::cout << "aaa" << std::endl;
                 if (attr) {
                     dest->getRepr()->setAttribute(iter->name.c_str(), attr);
                 }
