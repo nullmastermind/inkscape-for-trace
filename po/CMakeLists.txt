@@ -31,7 +31,7 @@ if(UNIX)
 	SET(_potFile ${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}.pot)
 	add_custom_command(OUTPUT ${_potFile}
 		#COMMAND sh -c "${INTLTOOL-UPDATE} --pot --gettext-package=inkscape"
-		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -L Glade --from-code=UTF-8 -ktranslatable -k_ -kN_ -o ${_potFile} -f POTFILES.ui.in
+		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE}    -L Glade --from-code=UTF-8 -ktranslatable -k_ -kN_ -o ${_potFile} -f POTFILES.ui.in
 		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -L Python -f POTFILES.py.in -o ${_potFile}
 		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -f POTFILES.inx.in --its its/inx.its -o ${_potFile}
 		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -C -f POTFILES.src.in -o ${_potFile}
