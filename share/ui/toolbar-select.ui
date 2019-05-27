@@ -1,4 +1,5 @@
 <ui>
+	<!--
   <toolbar name='TextToolbar'>
     <toolitem action='TextFontFamilyAction' />
     <toolitem action='TextFontStyleAction' />
@@ -25,4 +26,5 @@
     <toolitem action='TextOrientationAction' />
     <toolitem action='TextDirectionAction' />
   </toolbar>
+  -->
 </ui>

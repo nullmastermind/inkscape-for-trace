@@ -222,7 +222,7 @@ static struct {
     { "/tools/lpetool", "lpetool_toolbox", Inkscape::UI::Toolbar::LPEToolbar::create, nullptr, "LPEToolToolbar",
       SP_VERB_CONTEXT_LPETOOL_PREFS, "/tools/lpetool", _("TBD")},
     // If you change TextToolbar here, change it also in desktop-widget.cpp
-    { "/tools/text",   "text_toolbox",   nullptr, Inkscape::UI::Toolbar::TextToolbar::prep, "TextToolbar",
+    { "/tools/text",   "text_toolbox",  Inkscape::UI::Toolbar::TextToolbar::create, nullptr, "TextToolbar",
       SP_VERB_INVALID, nullptr, nullptr},
     { "/tools/dropper", "dropper_toolbox", Inkscape::UI::Toolbar::DropperToolbar::create, nullptr,         "DropperToolbar",
       SP_VERB_INVALID, nullptr, nullptr},

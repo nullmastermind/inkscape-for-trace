@@ -129,7 +129,7 @@ protected:
     TextToolbar(SPDesktop *desktop);
 
 public:
-    static GtkWidget * prep(SPDesktop *desktop, GtkActionGroup* mainActions);
+    static GtkWidget * create(SPDesktop *desktop);
 };
 
 }

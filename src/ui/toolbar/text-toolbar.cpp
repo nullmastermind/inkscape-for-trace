@@ -270,17 +270,11 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
     _tracker->addUnit(unit_table.getUnit("em"));
     _tracker->addUnit(unit_table.getUnit("ex"));
     _tracker->setActiveUnit(unit_table.getUnit("%"));
-}
-
-// Define all the "widgets" in the toolbar.
-GtkWidget *
-TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
-{
-    auto toolbar = new TextToolbar(desktop);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
+#if 0
     /* Font family */
     {
         // Font list
@@ -838,6 +832,7 @@ TextToolbar::prep(SPDesktop *desktop, GtkActionGroup* mainActions)
     desktop->connectEventContextChanged(sigc::mem_fun(*toolbar, &TextToolbar::watch_ec));
 
     return GTK_WIDGET(toolbar->gobj());
+#endif
 }
 
 void
@@ -911,6 +906,13 @@ TextToolbar::fontfamily_value_changed( Ink_ComboBoxEntry_Action *act, gpointer d
     std::cout << "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM" << std::endl;
     std::cout << std::endl;
 #endif
+}
+
+GtkWidget *
+TextToolbar::create(SPDesktop *desktop)
+{
+    auto tb = Gtk::manage(new TextToolbar(desktop));
+    return GTK_WIDGET(tb->gobj());
 }
 
 void
