@@ -100,7 +100,7 @@ public:
     Glib::RefPtr< Gtk::TreeModel > _selectTree(Glib::ustring selector);
     void _writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::ustring selector);
     void _activeToggled(const Glib::ustring& path, Glib::RefPtr<Gtk::TreeStore> store);
-    bool _addRow(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> _builder, Glib::ustring selector, gint pos);
+    bool _addRow(GdkEventButton *evt, Glib::RefPtr<Gtk::TreeStore> store, Glib::ustring selector, gint pos);
     void _nameEdited(const Glib::ustring& path, const Glib::ustring& name, Glib::RefPtr<Gtk::TreeStore> store);
     void _valueEdited(const Glib::ustring& path, const Glib::ustring& value, Glib::RefPtr<Gtk::TreeStore> store);
     void _onPropDelete(Glib::ustring path, Glib::RefPtr<Gtk::TreeStore> store);

@@ -432,8 +432,8 @@ void StyleDialog::_readStyleElement()
     }  */
     
     CSSSelectorEventAdd->signal_button_release_event().connect(
-            sigc::bind<Glib::RefPtr<Gtk::Builder>, Glib::ustring, gint>(
-                sigc::mem_fun(*this, &StyleDialog::_addRow), _builder, "style_properties", 0));
+            sigc::bind<Glib::RefPtr<Gtk::TreeStore>, Glib::ustring, gint>(
+                sigc::mem_fun(*this, &StyleDialog::_addRow), store, "style_properties", 0));
     Inkscape::UI::Widget::IconRenderer * addRenderer = manage(new Inkscape::UI::Widget::IconRenderer());
     addRenderer->add_icon("edit-delete");
     int addCol = CSSTree->append_column("Delete row", *addRenderer) - 1;
@@ -530,8 +530,8 @@ void StyleDialog::_readStyleElement()
                             _builder->get_widget("CSSTree", CSSTree);
                             CSSTree->set_model(store);
                             CSSSelectorEventAdd->signal_button_release_event().connect(
-                            sigc::bind<Glib::RefPtr<Gtk::Builder>, Glib::ustring, gint>(
-                            sigc::mem_fun(*this, &StyleDialog::_addRow), _builder, "style_properties", 0));
+                            sigc::bind<Glib::RefPtr<Gtk::TreeStore>, Glib::ustring, gint>(
+                            sigc::mem_fun(*this, &StyleDialog::_addRow), store, "style_properties", 0));
     
                             Inkscape::UI::Widget::IconRenderer * addRenderer = manage(new Inkscape::UI::Widget::IconRenderer());
                             addRenderer->add_icon("edit-delete");
@@ -684,8 +684,8 @@ void StyleDialog::_readStyleElement()
             }
             std::map<Glib::ustring, Glib::ustring> attr_prop_styleshet = parseStyle(style);
             CSSSelectorEventAdd->signal_button_release_event().connect(
-            sigc::bind<Glib::RefPtr<Gtk::Builder>, Glib::ustring, gint>(
-            sigc::mem_fun(*this, &StyleDialog::_addRow), _builder, selector, selectorpos));
+            sigc::bind<Glib::RefPtr<Gtk::TreeStore>, Glib::ustring, gint>(
+            sigc::mem_fun(*this, &StyleDialog::_addRow), store, selector, selectorpos));
                 
             for (auto iter : obj->style->properties()) {
                 if (iter->style_src != SP_STYLE_SRC_UNSET) {
@@ -793,7 +793,10 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
     _updating = true;
     gint selectorpos = 0;
     std::string styleContent = "";
-    styleContent = "\n" + selector + " { \n";
+    if (selector != "style_properties" &&
+            selector != "attributes") {
+        styleContent = "\n" + selector + " { \n";
+    }
     for (auto& row: store->children()) {
         selector = row[_mColumns._colSelector];
         selectorpos = row[_mColumns._colSelectorPos];
@@ -880,11 +883,7 @@ void StyleDialog::_nameEdited (const Glib::ustring& path, const Glib::ustring& n
     }
 }
 
-bool StyleDialog::_addRow(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> builder, Glib::ustring selector, gint pos) {
-    Gtk::TreeView *CSSTree;
-    builder->get_widget("CSSTree", CSSTree);
-    Glib::RefPtr< Gtk::TreeModel > model = CSSTree->get_model();
-    Glib::RefPtr< Gtk::TreeStore > store = Glib::RefPtr< Gtk::TreeStore >::cast_static(model);
+bool StyleDialog::_addRow(GdkEventButton *evt, Glib::RefPtr<Gtk::TreeStore> store, Glib::ustring selector, gint pos) {
     Gtk::TreeModel::Row rowadded = *(store->append());
     rowadded[_mColumns._colSelector] = selector;
     rowadded[_mColumns._colSelectorPos] = pos;
