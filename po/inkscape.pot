@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-27 11:39+0200\n"
+"POT-Creation-Date: 2019-05-27 12:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4678,7 +4678,15 @@ msgstr ""
 #: ../share/extensions/prepare_file_save_as.inx:7
 #: ../share/extensions/restack.inx:51 ../share/extensions/rubberstretch.inx:9
 #: ../share/extensions/straightseg.inx:9 ../share/extensions/summersnight.inx:7
-#: ../share/extensions/whirl.inx:9
+#: ../share/extensions/whirl.inx:9 ../share/extensions/gcodetools_about.inx:47
+#: ../share/extensions/gcodetools_area.inx:128
+#: ../share/extensions/gcodetools_check_for_updates.inx:37
+#: ../share/extensions/gcodetools_dxf_points.inx:74
+#: ../share/extensions/gcodetools_engraving.inx:86
+#: ../share/extensions/gcodetools_graffiti.inx:113
+#: ../share/extensions/gcodetools_lathe.inx:108
+#: ../share/extensions/gcodetools_orientation_points.inx:67
+#: ../share/extensions/gcodetools_path_to_gcode.inx:88
 msgid "path"
 msgstr ""
 
@@ -17517,6 +17525,14 @@ msgstr ""
 #: ../share/extensions/wireframe_sphere.inx:13
 #: ../share/extensions/web_set_att.inx:41
 #: ../share/extensions/web_transmit_att.inx:39
+#: ../share/extensions/color_custom.inx:28
+#: ../share/extensions/color_HSL_adjust.inx:27
+#: ../share/extensions/eqtexsvg.inx:12
+#: ../share/extensions/grid_cartesian.inx:34
+#: ../share/extensions/render_barcode_qrcode.inx:66
+#: ../share/extensions/svgcalendar.inx:131
+#: ../share/extensions/web-set-att.inx:41
+#: ../share/extensions/web-transmit-att.inx:39
 msgid "all"
 msgstr ""
 
@@ -21615,6 +21631,7 @@ msgstr ""
 #: ../share/extensions/guides_creator.inx:77
 #: ../share/extensions/output_scour.inx:64 ../share/extensions/plotter.inx:46
 #: ../share/extensions/plotter.inx:56
+#: ../share/extensions/gcodetools_graffiti.inx:75
 msgid "None"
 msgstr ""
 
@@ -23790,6 +23807,8 @@ msgstr ""
 #: ../share/extensions/web-transmit-att.inx.h:19
 #: ../share/extensions/web_set_att.inx:26
 #: ../share/extensions/web_transmit_att.inx:24
+#: ../share/extensions/web-set-att.inx:26
+#: ../share/extensions/web-transmit-att.inx:24
 msgid "Replace"
 msgstr ""
 
@@ -25023,6 +25042,7 @@ msgstr ""
 #: ../src/ui/toolbar/gradient-toolbar.cpp:374
 #: ../src/ui/toolbar/mesh-toolbar.cpp:262
 #: ../share/extensions/web_transmit_att.inx:8
+#: ../share/extensions/web-transmit-att.inx:8
 msgid "fill"
 msgstr ""
 
@@ -33862,7 +33882,7 @@ msgstr ""
 msgid "Open files from ACECAD Digimemo"
 msgstr ""
 
-#: ../share/extensions/dia.inx.h:1
+#: ../share/extensions/dia.inx.h:1 ../share/extensions/dia.inx:3
 msgid "Dia Input"
 msgstr ""
 
@@ -33879,11 +33899,11 @@ msgid ""
 "at http://live.gnome.org/Dia"
 msgstr ""
 
-#: ../share/extensions/dia.inx.h:4
+#: ../share/extensions/dia.inx.h:4 ../share/extensions/dia.inx:10
 msgid "Dia Diagram (*.dia)"
 msgstr ""
 
-#: ../share/extensions/dia.inx.h:5
+#: ../share/extensions/dia.inx.h:5 ../share/extensions/dia.inx:11
 msgid "A diagram created with the program Dia"
 msgstr ""
 
@@ -34296,6 +34316,9 @@ msgstr ""
 #: ../share/extensions/layout_nup.inx:13 ../share/extensions/measure.inx:53
 #: ../share/extensions/printing_marks.inx:26
 #: ../share/extensions/render_gears.inx:13
+#: ../share/extensions/gcodetools_graffiti.inx:35
+#: ../share/extensions/gcodetools_graffiti.inx:71
+#: ../share/extensions/gcodetools_orientation_points.inx:25
 msgid "mm"
 msgstr ""
 
@@ -34348,6 +34371,9 @@ msgstr ""
 #: ../share/extensions/layout_nup.inx:11 ../share/extensions/measure.inx:50
 #: ../share/extensions/printing_marks.inx:24
 #: ../share/extensions/render_gears.inx:12
+#: ../share/extensions/gcodetools_graffiti.inx:36
+#: ../share/extensions/gcodetools_graffiti.inx:72
+#: ../share/extensions/gcodetools_orientation_points.inx:26
 msgid "in"
 msgstr ""
 
@@ -34359,24 +34385,28 @@ msgstr ""
 #: ../share/extensions/dxf_outlines.inx.h:17
 #: ../share/extensions/dxf_input.inx:19 ../share/extensions/dxf_outlines.inx:22
 #: ../share/extensions/render_barcode_qrcode.inx:29
+#: ../share/extensions/render_barcode_qrcode.inx:59
 msgid "Latin 1"
 msgstr ""
 
 #: ../share/extensions/dxf_outlines.inx.h:18
 #: ../share/extensions/dxf_input.inx:20 ../share/extensions/dxf_outlines.inx:23
 #: ../share/extensions/render_barcode_qrcode.inx:30
+#: ../share/extensions/render_barcode_qrcode.inx:60
 msgid "CP 1250"
 msgstr ""
 
 #: ../share/extensions/dxf_outlines.inx.h:19
 #: ../share/extensions/dxf_input.inx:21 ../share/extensions/dxf_outlines.inx:24
 #: ../share/extensions/render_barcode_qrcode.inx:31
+#: ../share/extensions/render_barcode_qrcode.inx:61
 msgid "CP 1252"
 msgstr ""
 
 #: ../share/extensions/dxf_outlines.inx.h:20
 #: ../share/extensions/dxf_input.inx:22 ../share/extensions/dxf_outlines.inx:25
 #: ../share/extensions/render_barcode_qrcode.inx:32
+#: ../share/extensions/render_barcode_qrcode.inx:62
 msgid "UTF 8"
 msgstr ""
 
@@ -34559,7 +34589,7 @@ msgstr ""
 msgid "EPS Input"
 msgstr ""
 
-#: ../share/extensions/eqtexsvg.inx.h:1
+#: ../share/extensions/eqtexsvg.inx.h:1 ../share/extensions/eqtexsvg.inx:3
 msgid "LaTeX"
 msgstr ""
 
@@ -35182,6 +35212,7 @@ msgstr ""
 #: ../share/extensions/gcodetools_graffiti.inx:78
 #: ../share/extensions/gcodetools_lathe.inx:71
 #: ../share/extensions/gcodetools_path_to_gcode.inx:51
+#: ../share/extensions/gcodetools_graffiti.inx:76
 msgid "Parameterize Gcode"
 msgstr ""
 
@@ -35197,6 +35228,7 @@ msgstr ""
 #: ../share/extensions/gcodetools_graffiti.inx:79
 #: ../share/extensions/gcodetools_lathe.inx:72
 #: ../share/extensions/gcodetools_path_to_gcode.inx:52
+#: ../share/extensions/gcodetools_graffiti.inx:77
 msgid "Flip y axis and parameterize Gcode"
 msgstr ""
 
@@ -35212,6 +35244,7 @@ msgstr ""
 #: ../share/extensions/gcodetools_graffiti.inx:80
 #: ../share/extensions/gcodetools_lathe.inx:73
 #: ../share/extensions/gcodetools_path_to_gcode.inx:53
+#: ../share/extensions/gcodetools_graffiti.inx:78
 msgid "Round all values to 4 digits"
 msgstr ""
 
@@ -35227,14 +35260,17 @@ msgstr ""
 #: ../share/extensions/gcodetools_graffiti.inx:81
 #: ../share/extensions/gcodetools_lathe.inx:74
 #: ../share/extensions/gcodetools_path_to_gcode.inx:54
+#: ../share/extensions/gcodetools_graffiti.inx:79
 msgid "Fast pre-penetrate"
 msgstr ""
 
 #: ../share/extensions/gcodetools_check_for_updates.inx.h:1
+#: ../share/extensions/gcodetools_check_for_updates.inx:4
 msgid "Check for updates"
 msgstr ""
 
 #: ../share/extensions/gcodetools_check_for_updates.inx.h:2
+#: ../share/extensions/gcodetools_check_for_updates.inx:10
 msgid "Check for Gcodetools latest stable version and try to get the updates."
 msgstr ""
 
@@ -35366,6 +35402,7 @@ msgstr ""
 #: ../share/extensions/gcodetools_orientation_points.inx.h:7
 #: ../share/extensions/gcodetools_graffiti.inx:22
 #: ../share/extensions/gcodetools_orientation_points.inx:11
+#: ../share/extensions/gcodetools_orientation_points.inx:12
 msgid "2-points mode (move and rotate, maintained aspect ratio X/Y)"
 msgstr ""
 
@@ -35373,6 +35410,8 @@ msgstr ""
 #: ../share/extensions/gcodetools_orientation_points.inx.h:8
 #: ../share/extensions/gcodetools_graffiti.inx:26
 #: ../share/extensions/gcodetools_orientation_points.inx:12
+#: ../share/extensions/gcodetools_graffiti.inx:25
+#: ../share/extensions/gcodetools_orientation_points.inx:15
 msgid "3-points mode (move, rotate and mirror, different X/Y scale)"
 msgstr ""
 
@@ -35380,6 +35419,8 @@ msgstr ""
 #: ../share/extensions/gcodetools_orientation_points.inx.h:9
 #: ../share/extensions/gcodetools_graffiti.inx:30
 #: ../share/extensions/gcodetools_orientation_points.inx:13
+#: ../share/extensions/gcodetools_graffiti.inx:28
+#: ../share/extensions/gcodetools_orientation_points.inx:18
 msgid "graffiti points"
 msgstr ""
 
@@ -35387,6 +35428,8 @@ msgstr ""
 #: ../share/extensions/gcodetools_orientation_points.inx.h:10
 #: ../share/extensions/gcodetools_graffiti.inx:31
 #: ../share/extensions/gcodetools_orientation_points.inx:14
+#: ../share/extensions/gcodetools_graffiti.inx:29
+#: ../share/extensions/gcodetools_orientation_points.inx:19
 msgid "in-out reference point"
 msgstr ""
 
@@ -38910,6 +38953,7 @@ msgstr ""
 
 #: ../share/extensions/render_barcode_qrcode.inx.h:6
 #: ../share/extensions/render_barcode_qrcode.inx:21
+#: ../share/extensions/render_barcode_qrcode.inx:51
 msgid ""
 "With \"Auto\", the size of the barcode depends on the length of the text and "
 "the error correction level"
@@ -38921,24 +38965,28 @@ msgstr ""
 
 #: ../share/extensions/render_barcode_qrcode.inx.h:9
 #: ../share/extensions/render_barcode_qrcode.inx:23
+#: ../share/extensions/render_barcode_qrcode.inx:53
 #, no-c-format
 msgid "L (Approx. 7%)"
 msgstr ""
 
 #: ../share/extensions/render_barcode_qrcode.inx.h:11
 #: ../share/extensions/render_barcode_qrcode.inx:24
+#: ../share/extensions/render_barcode_qrcode.inx:54
 #, no-c-format
 msgid "M (Approx. 15%)"
 msgstr ""
 
 #: ../share/extensions/render_barcode_qrcode.inx.h:13
 #: ../share/extensions/render_barcode_qrcode.inx:25
+#: ../share/extensions/render_barcode_qrcode.inx:55
 #, no-c-format
 msgid "Q (Approx. 25%)"
 msgstr ""
 
 #: ../share/extensions/render_barcode_qrcode.inx.h:15
 #: ../share/extensions/render_barcode_qrcode.inx:26
+#: ../share/extensions/render_barcode_qrcode.inx:56
 #, no-c-format
 msgid "H (Approx. 30%)"
 msgstr ""
@@ -39227,15 +39275,15 @@ msgstr ""
 msgid "Descender:"
 msgstr ""
 
-#: ../share/extensions/sk_input.inx.h:1
+#: ../share/extensions/sk_input.inx.h:1 ../share/extensions/sk_input.inx:3
 msgid "Sketch Input"
 msgstr ""
 
-#: ../share/extensions/sk_input.inx.h:2
+#: ../share/extensions/sk_input.inx.h:2 ../share/extensions/sk_input.inx:10
 msgid "Sketch Diagram (*.sk)"
 msgstr ""
 
-#: ../share/extensions/sk_input.inx.h:3
+#: ../share/extensions/sk_input.inx.h:3 ../share/extensions/sk_input.inx:11
 msgid "A diagram created with the program Sketch"
 msgstr ""
 
@@ -39471,11 +39519,13 @@ msgstr ""
 
 #: ../share/extensions/svgcalendar.inx.h:32
 #: ../share/extensions/svgcalendar.inx:45
+#: ../share/extensions/svgcalendar.inx:39
 msgid "You may change the names for other languages:"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx.h:33
 #: ../share/extensions/svgcalendar.inx:46
+#: ../share/extensions/svgcalendar.inx:40
 msgid ""
 "January February March April May June July August September October November "
 "December"
@@ -39483,21 +39533,25 @@ msgstr ""
 
 #: ../share/extensions/svgcalendar.inx.h:34
 #: ../share/extensions/svgcalendar.inx:47
+#: ../share/extensions/svgcalendar.inx:41
 msgid "Sun Mon Tue Wed Thu Fri Sat"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx.h:35
 #: ../share/extensions/svgcalendar.inx:48
+#: ../share/extensions/svgcalendar.inx:42
 msgid "The day names list must start from Sunday."
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx.h:36
 #: ../share/extensions/svgcalendar.inx:49
+#: ../share/extensions/svgcalendar.inx:43
 msgid "Wk"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx.h:37
 #: ../share/extensions/svgcalendar.inx:133
+#: ../share/extensions/svgcalendar.inx:127
 msgid ""
 "Select your system encoding. More information at http://docs.python.org/"
 "library/codecs.html#standard-encodings."
@@ -39774,7 +39828,7 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/web-set-att.inx.h:1
-#: ../share/extensions/web_set_att.inx:3
+#: ../share/extensions/web_set_att.inx:3 ../share/extensions/web-set-att.inx:3
 msgid "Set Attributes"
 msgstr ""
 
@@ -39803,6 +39857,8 @@ msgstr ""
 #: ../share/extensions/web-transmit-att.inx.h:7
 #: ../share/extensions/web_set_att.inx:10
 #: ../share/extensions/web_transmit_att.inx:10
+#: ../share/extensions/web-set-att.inx:10
+#: ../share/extensions/web-transmit-att.inx:10
 msgid "on click"
 msgstr ""
 
@@ -39810,6 +39866,8 @@ msgstr ""
 #: ../share/extensions/web-transmit-att.inx.h:8
 #: ../share/extensions/web_set_att.inx:11
 #: ../share/extensions/web_transmit_att.inx:11
+#: ../share/extensions/web-set-att.inx:11
+#: ../share/extensions/web-transmit-att.inx:11
 msgid "on focus"
 msgstr ""
 
@@ -39817,6 +39875,8 @@ msgstr ""
 #: ../share/extensions/web-transmit-att.inx.h:9
 #: ../share/extensions/web_set_att.inx:12
 #: ../share/extensions/web_transmit_att.inx:12
+#: ../share/extensions/web-set-att.inx:12
+#: ../share/extensions/web-transmit-att.inx:12
 msgid "on blur"
 msgstr ""
 
@@ -39824,6 +39884,8 @@ msgstr ""
 #: ../share/extensions/web-transmit-att.inx.h:10
 #: ../share/extensions/web_set_att.inx:13
 #: ../share/extensions/web_transmit_att.inx:13
+#: ../share/extensions/web-set-att.inx:13
+#: ../share/extensions/web-transmit-att.inx:13
 msgid "on activate"
 msgstr ""
 
@@ -39831,6 +39893,8 @@ msgstr ""
 #: ../share/extensions/web-transmit-att.inx.h:11
 #: ../share/extensions/web_set_att.inx:14
 #: ../share/extensions/web_transmit_att.inx:14
+#: ../share/extensions/web-set-att.inx:14
+#: ../share/extensions/web-transmit-att.inx:14
 msgid "on mouse down"
 msgstr ""
 
@@ -39838,6 +39902,8 @@ msgstr ""
 #: ../share/extensions/web-transmit-att.inx.h:12
 #: ../share/extensions/web_set_att.inx:15
 #: ../share/extensions/web_transmit_att.inx:15
+#: ../share/extensions/web-set-att.inx:15
+#: ../share/extensions/web-transmit-att.inx:15
 msgid "on mouse up"
 msgstr ""
 
@@ -39845,6 +39911,8 @@ msgstr ""
 #: ../share/extensions/web-transmit-att.inx.h:13
 #: ../share/extensions/web_set_att.inx:16
 #: ../share/extensions/web_transmit_att.inx:16
+#: ../share/extensions/web-set-att.inx:16
+#: ../share/extensions/web-transmit-att.inx:16
 msgid "on mouse over"
 msgstr ""
 
@@ -39852,6 +39920,8 @@ msgstr ""
 #: ../share/extensions/web-transmit-att.inx.h:14
 #: ../share/extensions/web_set_att.inx:17
 #: ../share/extensions/web_transmit_att.inx:17
+#: ../share/extensions/web-set-att.inx:17
+#: ../share/extensions/web-transmit-att.inx:17
 msgid "on mouse move"
 msgstr ""
 
@@ -39859,6 +39929,8 @@ msgstr ""
 #: ../share/extensions/web-transmit-att.inx.h:15
 #: ../share/extensions/web_set_att.inx:18
 #: ../share/extensions/web_transmit_att.inx:18
+#: ../share/extensions/web-set-att.inx:18
+#: ../share/extensions/web-transmit-att.inx:18
 msgid "on mouse out"
 msgstr ""
 
@@ -39866,11 +39938,14 @@ msgstr ""
 #: ../share/extensions/web-transmit-att.inx.h:16
 #: ../share/extensions/web_set_att.inx:19
 #: ../share/extensions/web_transmit_att.inx:19
+#: ../share/extensions/web-set-att.inx:19
+#: ../share/extensions/web-transmit-att.inx:19
 msgid "on element loaded"
 msgstr ""
 
 #: ../share/extensions/web-set-att.inx.h:18
 #: ../share/extensions/web_set_att.inx:21
+#: ../share/extensions/web-set-att.inx:21
 msgid "The list of values must have the same size as the attributes list."
 msgstr ""
 
@@ -39878,6 +39953,8 @@ msgstr ""
 #: ../share/extensions/web-transmit-att.inx.h:17
 #: ../share/extensions/web_set_att.inx:24
 #: ../share/extensions/web_transmit_att.inx:22
+#: ../share/extensions/web-set-att.inx:24
+#: ../share/extensions/web-transmit-att.inx:22
 msgid "Run it after"
 msgstr ""
 
@@ -39885,6 +39962,8 @@ msgstr ""
 #: ../share/extensions/web-transmit-att.inx.h:18
 #: ../share/extensions/web_set_att.inx:25
 #: ../share/extensions/web_transmit_att.inx:23
+#: ../share/extensions/web-set-att.inx:25
+#: ../share/extensions/web-transmit-att.inx:23
 msgid "Run it before"
 msgstr ""
 
@@ -39892,16 +39971,20 @@ msgstr ""
 #: ../share/extensions/web-transmit-att.inx.h:20
 #: ../share/extensions/web_set_att.inx:28
 #: ../share/extensions/web_transmit_att.inx:26
+#: ../share/extensions/web-set-att.inx:28
+#: ../share/extensions/web-transmit-att.inx:26
 msgid "The next parameter is useful when you select more than two elements"
 msgstr ""
 
 #: ../share/extensions/web-set-att.inx.h:23
 #: ../share/extensions/web_set_att.inx:30
+#: ../share/extensions/web-set-att.inx:30
 msgid "All selected ones set an attribute in the last one"
 msgstr ""
 
 #: ../share/extensions/web-set-att.inx.h:24
 #: ../share/extensions/web_set_att.inx:31
+#: ../share/extensions/web-set-att.inx:31
 msgid "The first selected sets an attribute in all others"
 msgstr ""
 
@@ -39909,6 +39992,8 @@ msgstr ""
 #: ../share/extensions/web-transmit-att.inx.h:24
 #: ../share/extensions/web_set_att.inx:35
 #: ../share/extensions/web_transmit_att.inx:33
+#: ../share/extensions/web-set-att.inx:35
+#: ../share/extensions/web-transmit-att.inx:33
 msgid ""
 "This effect adds a feature visible (or usable) only on a SVG enabled web "
 "browser (like Firefox)."
@@ -39916,6 +40001,7 @@ msgstr ""
 
 #: ../share/extensions/web-set-att.inx.h:27
 #: ../share/extensions/web_set_att.inx:36
+#: ../share/extensions/web-set-att.inx:36
 msgid ""
 "This effect sets one or more attributes in the second selected element, when "
 "a defined event occurs on the first selected element."
@@ -39923,6 +40009,7 @@ msgstr ""
 
 #: ../share/extensions/web-set-att.inx.h:28
 #: ../share/extensions/web_set_att.inx:37
+#: ../share/extensions/web-set-att.inx:37
 msgid ""
 "If you want to set more than one attribute, you must separate this with a "
 "space, and only with a space."
@@ -39938,6 +40025,7 @@ msgstr ""
 
 #: ../share/extensions/web-transmit-att.inx.h:1
 #: ../share/extensions/web_transmit_att.inx:3
+#: ../share/extensions/web-transmit-att.inx:3
 msgid "Transmit Attributes"
 msgstr ""
 
@@ -39955,16 +40043,19 @@ msgstr ""
 
 #: ../share/extensions/web-transmit-att.inx.h:21
 #: ../share/extensions/web_transmit_att.inx:28
+#: ../share/extensions/web-transmit-att.inx:28
 msgid "All selected ones transmit to the last one"
 msgstr ""
 
 #: ../share/extensions/web-transmit-att.inx.h:22
 #: ../share/extensions/web_transmit_att.inx:29
+#: ../share/extensions/web-transmit-att.inx:29
 msgid "The first selected transmits to all others"
 msgstr ""
 
 #: ../share/extensions/web-transmit-att.inx.h:25
 #: ../share/extensions/web_transmit_att.inx:34
+#: ../share/extensions/web-transmit-att.inx:34
 msgid ""
 "This effect transmits one or more attributes from the first selected element "
 "to the second when an event occurs."
@@ -39972,6 +40063,7 @@ msgstr ""
 
 #: ../share/extensions/web-transmit-att.inx.h:26
 #: ../share/extensions/web_transmit_att.inx:35
+#: ../share/extensions/web-transmit-att.inx:35
 msgid ""
 "If you want to transmit more than one attribute, you should separate this "
 "with a space, and only with a space."
@@ -40401,6 +40493,9 @@ msgstr ""
 #: ../share/extensions/guides_creator.inx:79 ../share/extensions/interp.inx:8
 #: ../share/extensions/layout_nup.inx:24 ../share/extensions/layout_nup.inx:25
 #: ../share/extensions/measure.inx:45 ../share/extensions/polyhedron_3d.inx:72
+#: ../share/extensions/grid_cartesian.inx:12
+#: ../share/extensions/grid_cartesian.inx:16
+#: ../share/extensions/grid_cartesian.inx:27
 msgid "2"
 msgstr ""
 
@@ -40442,6 +40537,7 @@ msgstr ""
 
 #: ../share/extensions/color_HSL_adjust.inx:6
 #: ../share/extensions/color_HSL_adjust.inx:34
+#: ../share/extensions/color_HSL_adjust.inx:33
 msgid "color_HSL_adjust.py"
 msgstr ""
 
@@ -40481,6 +40577,8 @@ msgstr ""
 #: ../share/extensions/polyhedron_3d.inx:82
 #: ../share/extensions/svgcalendar.inx:9 ../share/extensions/ungroup_deep.inx:7
 #: ../share/extensions/ungroup_deep.inx:9
+#: ../share/extensions/gcodetools_graffiti.inx:32
+#: ../share/extensions/gcodetools_orientation_points.inx:22
 msgid "0"
 msgstr ""
 
@@ -40549,6 +40647,9 @@ msgstr ""
 #: ../share/extensions/svgcalendar.inx:11 ../share/extensions/tar_layers.inx:12
 #: ../share/extensions/webslicer_export.inx:10
 #: ../share/extensions/wireframe_sphere.inx:11
+#: ../share/extensions/gcodetools_graffiti.inx:84
+#: ../share/extensions/grid_cartesian.inx:13
+#: ../share/extensions/grid_cartesian.inx:24
 msgid "false"
 msgstr ""
 
@@ -40589,6 +40690,7 @@ msgstr ""
 
 #: ../share/extensions/color_custom.inx:6
 #: ../share/extensions/color_custom.inx:36
+#: ../share/extensions/color_custom.inx:34
 msgid "color_custom.py"
 msgstr ""
 
@@ -40880,6 +40982,9 @@ msgstr ""
 #: ../share/extensions/polyhedron_3d.inx:74
 #: ../share/extensions/polyhedron_3d.inx:75
 #: ../share/extensions/straightseg.inx:7
+#: ../share/extensions/gcodetools_graffiti.inx:54
+#: ../share/extensions/grid_cartesian.inx:17
+#: ../share/extensions/grid_cartesian.inx:23
 msgid "1"
 msgstr ""
 
@@ -41028,6 +41133,7 @@ msgstr ""
 #: ../share/extensions/pathscatter.inx:11
 #: ../share/extensions/pathscatter.inx:12
 #: ../share/extensions/pathscatter.inx:13 ../share/extensions/spirograph.inx:13
+#: ../share/extensions/gcodetools_graffiti.inx:55
 msgid "0.0"
 msgstr ""
 
@@ -41062,6 +41168,8 @@ msgstr ""
 msgid "dxf_outlines.py"
 msgstr ""
 
+#. this parameter is checked programmatically in the extension to show a warning
+#. <param name="flowtext" type="boolean" _gui-text="Flow text">false</param>
 #. this parameter is checked programmatically in the extension to show a warning
 #. <param name="flowtext" type="boolean" _gui-text="Flow text">false</param>
 #. this parameter is checked programmatically in the extension to show a warning
@@ -41131,6 +41239,8 @@ msgstr ""
 #: ../share/extensions/synfig_output.inx:13
 #: ../share/extensions/text_merge.inx:23
 #: ../share/extensions/webslicer_export.inx:11 ../share/extensions/whirl.inx:7
+#: ../share/extensions/gcodetools_graffiti.inx:56
+#: ../share/extensions/gcodetools_graffiti.inx:65
 msgid "true"
 msgstr ""
 
@@ -41194,6 +41304,10 @@ msgstr ""
 #: ../share/extensions/printing_marks.inx:31
 #: ../share/extensions/printing_marks.inx:32
 #: ../share/extensions/printing_marks.inx:33
+#: ../share/extensions/gcodetools_graffiti.inx:69
+#: ../share/extensions/grid_cartesian.inx:14
+#: ../share/extensions/grid_cartesian.inx:21
+#: ../share/extensions/grid_cartesian.inx:25
 msgid "5"
 msgstr ""
 
@@ -41296,6 +41410,7 @@ msgstr ""
 #: ../share/extensions/jessyInk_keyBindings.inx:26
 #: ../share/extensions/lindenmayer.inx:10
 #: ../share/extensions/svgcalendar.inx:25
+#: ../share/extensions/grid_cartesian.inx:7
 msgid "3"
 msgstr ""
 
@@ -41564,6 +41679,7 @@ msgstr ""
 #: ../share/extensions/fractalize.inx:6
 #: ../share/extensions/grid_cartesian.inx:16
 #: ../share/extensions/perfectboundcover.inx:7
+#: ../share/extensions/grid_cartesian.inx:10
 msgid "6"
 msgstr ""
 
@@ -41655,6 +41771,16 @@ msgstr ""
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx:58
 #: ../share/extensions/gcodetools_tools_library.inx:6
 #: ../share/extensions/gcodetools_tools_library.inx:61
+#: ../share/extensions/gcodetools_about.inx:50
+#: ../share/extensions/gcodetools_area.inx:131
+#: ../share/extensions/gcodetools_check_for_updates.inx:6
+#: ../share/extensions/gcodetools_check_for_updates.inx:40
+#: ../share/extensions/gcodetools_dxf_points.inx:77
+#: ../share/extensions/gcodetools_engraving.inx:89
+#: ../share/extensions/gcodetools_graffiti.inx:116
+#: ../share/extensions/gcodetools_lathe.inx:111
+#: ../share/extensions/gcodetools_orientation_points.inx:70
+#: ../share/extensions/gcodetools_path_to_gcode.inx:91
 msgid "gcodetools.py"
 msgstr ""
 
@@ -41725,6 +41851,9 @@ msgstr ""
 #: ../share/extensions/render_barcode_datamatrix.inx:39
 #: ../share/extensions/render_barcode_qrcode.inx:35
 #: ../share/extensions/wireframe_sphere.inx:9
+#: ../share/extensions/grid_cartesian.inx:15
+#: ../share/extensions/grid_cartesian.inx:26
+#: ../share/extensions/render_barcode_qrcode.inx:64
 msgid "4"
 msgstr ""
 
@@ -41752,6 +41881,7 @@ msgstr ""
 #: ../share/extensions/gcodetools_graffiti.inx:59
 #: ../share/extensions/gcodetools_lathe.inx:52
 #: ../share/extensions/gcodetools_path_to_gcode.inx:32
+#: ../share/extensions/gcodetools_graffiti.inx:57
 msgid "0.05"
 msgstr ""
 
@@ -41762,6 +41892,7 @@ msgstr ""
 #: ../share/extensions/gcodetools_path_to_gcode.inx:34
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx:19
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx:20
+#: ../share/extensions/gcodetools_graffiti.inx:59
 msgid "False"
 msgstr ""
 
@@ -41771,6 +41902,7 @@ msgstr ""
 #: ../share/extensions/gcodetools_graffiti.inx:66
 #: ../share/extensions/gcodetools_lathe.inx:59
 #: ../share/extensions/gcodetools_path_to_gcode.inx:39
+#: ../share/extensions/gcodetools_graffiti.inx:64
 msgid "output.ngc"
 msgstr ""
 
@@ -41780,6 +41912,7 @@ msgstr ""
 #: ../share/extensions/gcodetools_graffiti.inx:69
 #: ../share/extensions/gcodetools_lathe.inx:62
 #: ../share/extensions/gcodetools_path_to_gcode.inx:42
+#: ../share/extensions/gcodetools_graffiti.inx:67
 msgid "/home"
 msgstr ""
 
@@ -41829,10 +41962,14 @@ msgstr ""
 #: ../share/extensions/gcodetools_graffiti.inx:35
 #: ../share/extensions/gcodetools_orientation_points.inx:17
 #: ../share/extensions/markers_strokepaint.inx:20
+#: ../share/extensions/gcodetools_graffiti.inx:33
+#: ../share/extensions/gcodetools_orientation_points.inx:23
 msgid "-1"
 msgstr ""
 
 #: ../share/extensions/gcodetools_graffiti.inx:41
+#: ../share/extensions/gcodetools_graffiti.inx:39
+#: ../share/extensions/gcodetools_orientation_points.inx:29
 msgid ""
 "Orientation points are used to calculate transformation (offset,scale,mirror,"
 "rotation in XY plane) of the path. 3-points mode only: do not put all three "
@@ -41900,6 +42037,16 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/gcodetools_tools_library.inx:35
+#: ../share/extensions/gcodetools_about.inx:24
+#: ../share/extensions/gcodetools_area.inx:105
+#: ../share/extensions/gcodetools_check_for_updates.inx:14
+#: ../share/extensions/gcodetools_dxf_points.inx:51
+#: ../share/extensions/gcodetools_engraving.inx:63
+#: ../share/extensions/gcodetools_graffiti.inx:90
+#: ../share/extensions/gcodetools_lathe.inx:85
+#: ../share/extensions/gcodetools_orientation_points.inx:44
+#: ../share/extensions/gcodetools_path_to_gcode.inx:65
+#: ../share/extensions/gcodetools_prepare_path_for_plasma.inx:32
 msgid ""
 "Gcodetools plug-in: converts paths to Gcode (using circular interpolation), "
 "makes offset paths and engraves sharp corners using cone cutters. This plug-"
@@ -41977,6 +42124,7 @@ msgstr ""
 
 #: ../share/extensions/grid_cartesian.inx:5
 #: ../share/extensions/grid_cartesian.inx:72
+#: ../share/extensions/grid_cartesian.inx:42
 msgid "grid_cartesian.py"
 msgstr ""
 
@@ -41988,6 +42136,8 @@ msgstr ""
 
 #: ../share/extensions/grid_cartesian.inx:30
 #: ../share/extensions/grid_cartesian.inx:53
+#: ../share/extensions/grid_cartesian.inx:18
+#: ../share/extensions/grid_cartesian.inx:29
 msgid "0.3"
 msgstr ""
 
@@ -43362,6 +43512,7 @@ msgstr ""
 
 #: ../share/extensions/render_barcode_qrcode.inx:5
 #: ../share/extensions/render_barcode_qrcode.inx:58
+#: ../share/extensions/render_barcode_qrcode.inx:74
 msgid "render_barcode_qrcode.py"
 msgstr ""
 
@@ -43509,6 +43660,8 @@ msgstr ""
 #: ../share/extensions/triangle.inx:6 ../share/extensions/triangle.inx:7
 #: ../share/extensions/triangle.inx:8
 #: ../share/extensions/wireframe_sphere.inx:10
+#: ../share/extensions/grid_cartesian.inx:11
+#: ../share/extensions/grid_cartesian.inx:22
 msgid "100.0"
 msgstr ""
 
@@ -43676,6 +43829,7 @@ msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:5
 #: ../share/extensions/svgcalendar.inx:143
+#: ../share/extensions/svgcalendar.inx:137
 msgid "svgcalendar.py"
 msgstr ""
 
@@ -43724,326 +43878,407 @@ msgid "arial"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:51
+#: ../share/extensions/svgcalendar.inx:45
 msgid "arabic"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:52
+#: ../share/extensions/svgcalendar.inx:46
 msgid "big5-tw"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:53
+#: ../share/extensions/svgcalendar.inx:47
 msgid "big5-hkscs"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:54
+#: ../share/extensions/svgcalendar.inx:48
 msgid "chinese"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:55
+#: ../share/extensions/svgcalendar.inx:49
 msgid "cp737"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:56
+#: ../share/extensions/svgcalendar.inx:50
 msgid "cp856"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:57
+#: ../share/extensions/svgcalendar.inx:51
 msgid "cp874"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:58
+#: ../share/extensions/svgcalendar.inx:52
 msgid "cp875"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:59
+#: ../share/extensions/svgcalendar.inx:53
 msgid "cp1006"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:60
+#: ../share/extensions/svgcalendar.inx:54
 msgid "cyrillic"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:61
+#: ../share/extensions/svgcalendar.inx:55
 msgid "cyrillic-asian"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:62
+#: ../share/extensions/svgcalendar.inx:56
 msgid "eucjis2004"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:63
+#: ../share/extensions/svgcalendar.inx:57
 msgid "eucjisx0213"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:64
+#: ../share/extensions/svgcalendar.inx:58
 msgid "gbk"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:65
+#: ../share/extensions/svgcalendar.inx:59
 msgid "gb18030-2000"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:66
+#: ../share/extensions/svgcalendar.inx:60
 msgid "greek"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:67
+#: ../share/extensions/svgcalendar.inx:61
 msgid "hebrew"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:68
+#: ../share/extensions/svgcalendar.inx:62
 msgid "hz-gb"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:69
+#: ../share/extensions/svgcalendar.inx:63
 msgid "IBM037"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:70
+#: ../share/extensions/svgcalendar.inx:64
 msgid "IBM424"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:71
+#: ../share/extensions/svgcalendar.inx:65
 msgid "IBM437"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:72
+#: ../share/extensions/svgcalendar.inx:66
 msgid "IBM500"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:73
+#: ../share/extensions/svgcalendar.inx:67
 msgid "IBM775"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:74
+#: ../share/extensions/svgcalendar.inx:68
 msgid "IBM850"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:75
+#: ../share/extensions/svgcalendar.inx:69
 msgid "IBM852"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:76
+#: ../share/extensions/svgcalendar.inx:70
 msgid "IBM855"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:77
+#: ../share/extensions/svgcalendar.inx:71
 msgid "IBM857"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:78
+#: ../share/extensions/svgcalendar.inx:72
 msgid "IBM860"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:79
+#: ../share/extensions/svgcalendar.inx:73
 msgid "IBM861"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:80
+#: ../share/extensions/svgcalendar.inx:74
 msgid "IBM862"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:81
+#: ../share/extensions/svgcalendar.inx:75
 msgid "IBM863"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:82
+#: ../share/extensions/svgcalendar.inx:76
 msgid "IBM864"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:83
+#: ../share/extensions/svgcalendar.inx:77
 msgid "IBM865"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:84
+#: ../share/extensions/svgcalendar.inx:78
 msgid "IBM866"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:85
+#: ../share/extensions/svgcalendar.inx:79
 msgid "IBM869"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:86
+#: ../share/extensions/svgcalendar.inx:80
 msgid "IBM1026"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:87
+#: ../share/extensions/svgcalendar.inx:81
 msgid "IBM1140"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:88
+#: ../share/extensions/svgcalendar.inx:82
 msgid "iso-2022-jp"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:89
+#: ../share/extensions/svgcalendar.inx:83
 msgid "iso-2022-jp-1"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:90
+#: ../share/extensions/svgcalendar.inx:84
 msgid "iso-2022-jp-2"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:91
+#: ../share/extensions/svgcalendar.inx:85
 msgid "iso-2022-jp-2004"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:92
+#: ../share/extensions/svgcalendar.inx:86
 msgid "iso-2022-jp-3"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:93
+#: ../share/extensions/svgcalendar.inx:87
 msgid "iso-2022-jp-ext"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:94
+#: ../share/extensions/svgcalendar.inx:88
 msgid "iso-2022-kr"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:95
+#: ../share/extensions/svgcalendar.inx:89
 msgid "johab"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:96
+#: ../share/extensions/svgcalendar.inx:90
 msgid "korean"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:97
+#: ../share/extensions/svgcalendar.inx:91
 msgid "koi8_r"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:98
+#: ../share/extensions/svgcalendar.inx:92
 msgid "koi8_u"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:99
+#: ../share/extensions/svgcalendar.inx:93
 msgid "latin1"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:100
+#: ../share/extensions/svgcalendar.inx:94
 msgid "latin2"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:101
+#: ../share/extensions/svgcalendar.inx:95
 msgid "latin3"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:102
+#: ../share/extensions/svgcalendar.inx:96
 msgid "latin4"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:103
+#: ../share/extensions/svgcalendar.inx:97
 msgid "latin5"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:104
+#: ../share/extensions/svgcalendar.inx:98
 msgid "latin6"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:105
+#: ../share/extensions/svgcalendar.inx:99
 msgid "latin8"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:106
+#: ../share/extensions/svgcalendar.inx:100
 msgid "Latin - iso-8859-15 - Western Europe"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:107
+#: ../share/extensions/svgcalendar.inx:101
 msgid "macgreek"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:108
+#: ../share/extensions/svgcalendar.inx:102
 msgid "maciceland"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:109
+#: ../share/extensions/svgcalendar.inx:103
 msgid "maccentraleurope"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:110
+#: ../share/extensions/svgcalendar.inx:104
 msgid "macroman"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:111
+#: ../share/extensions/svgcalendar.inx:105
 msgid "macturkish"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:112
+#: ../share/extensions/svgcalendar.inx:106
 msgid "ms932"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:113
+#: ../share/extensions/svgcalendar.inx:107
 msgid "ms949"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:114
+#: ../share/extensions/svgcalendar.inx:108
 msgid "ms950"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:115
+#: ../share/extensions/svgcalendar.inx:109
 msgid "sjis"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:116
+#: ../share/extensions/svgcalendar.inx:110
 msgid "sjis2004"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:117
+#: ../share/extensions/svgcalendar.inx:111
 msgid "sjisx0213"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:118
+#: ../share/extensions/svgcalendar.inx:112
 msgid "u-jis"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:119
+#: ../share/extensions/svgcalendar.inx:113
 msgid "us-ascii"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:120
+#: ../share/extensions/svgcalendar.inx:114
 msgid "Windows - Central and Eastern Europe"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:121
+#: ../share/extensions/svgcalendar.inx:115
 msgid "Windows - Russian and more"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:122
+#: ../share/extensions/svgcalendar.inx:116
 msgid "Windows - Western Europe"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:123
+#: ../share/extensions/svgcalendar.inx:117
 msgid "Windows - Greek"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:124
+#: ../share/extensions/svgcalendar.inx:118
 msgid "Windows - Turkish"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:125
+#: ../share/extensions/svgcalendar.inx:119
 msgid "Windows - Hebrew"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:126
+#: ../share/extensions/svgcalendar.inx:120
 msgid "Windows - Arabic"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:127
+#: ../share/extensions/svgcalendar.inx:121
 msgid "Windows - Baltic languages"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:128
+#: ../share/extensions/svgcalendar.inx:122
 msgid "Windows - Vietnamese"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:129
+#: ../share/extensions/svgcalendar.inx:123
 msgid "UTF-32 - All languages"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:130
+#: ../share/extensions/svgcalendar.inx:124
 msgid "UTF-16 - All languages"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:131
+#: ../share/extensions/svgcalendar.inx:125
 msgid "UTF-8 - All languages"
 msgstr ""
 
@@ -44335,7 +44570,7 @@ msgstr ""
 msgid "${INKSCAPE_ICONPATH}"
 msgstr ""
 
-#: ../share/extensions/web_set_att.inx:4
+#: ../share/extensions/web_set_att.inx:4 ../share/extensions/web-set-att.inx:4
 msgid "org.inkscape.web.set-att"
 msgstr ""
 
@@ -44343,15 +44578,17 @@ msgstr ""
 msgid "web_set_att.py"
 msgstr ""
 
-#: ../share/extensions/web_set_att.inx:8
+#: ../share/extensions/web_set_att.inx:8 ../share/extensions/web-set-att.inx:8
 msgid "fill stroke stroke-width"
 msgstr ""
 
 #: ../share/extensions/web_set_att.inx:22
+#: ../share/extensions/web-set-att.inx:22
 msgid "red black 5px"
 msgstr ""
 
 #: ../share/extensions/web_transmit_att.inx:4
+#: ../share/extensions/web-transmit-att.inx:4
 msgid "org.inkscape.web.transmit-att"
 msgstr ""
 
@@ -44530,4 +44767,216 @@ msgstr ""
 
 #: ../share/ui/units.xml:99
 msgid "Half of font height"
+msgstr ""
+
+#: ../share/extensions/dia.inx:4
+msgid "org.inkscape.input.dia"
+msgstr ""
+
+#: ../share/extensions/dia.inx:5 ../share/extensions/dia.inx:14
+msgid "dia2svg.sh"
+msgstr ""
+
+#: ../share/extensions/dia.inx:6
+msgid "dia"
+msgstr ""
+
+#: ../share/extensions/dia.inx:8
+msgid ".dia"
+msgstr ""
+
+#: ../share/extensions/dia.inx:9
+msgid "application/x-dia"
+msgstr ""
+
+#: ../share/extensions/eps_input.inx:7 ../share/extensions/eps_input.inx:17
+#: ../share/extensions/ps_input.inx:7 ../share/extensions/ps_input.inx:16
+msgid "ps2pdf-ext.py"
+msgstr ""
+
+#: ../share/extensions/eqtexsvg.inx:4
+msgid "org.inkscape.effect.eqtexsvg"
+msgstr ""
+
+#: ../share/extensions/eqtexsvg.inx:5 ../share/extensions/eqtexsvg.inx:18
+msgid "eqtexsvg.py"
+msgstr ""
+
+#: ../share/extensions/eqtexsvg.inx:6
+msgid "latex"
+msgstr ""
+
+#: ../share/extensions/eqtexsvg.inx:7
+msgid "dvips"
+msgstr ""
+
+#: ../share/extensions/eqtexsvg.inx:8
+msgid "pstoedit"
+msgstr ""
+
+#: ../share/extensions/eqtexsvg.inx:9
+msgid ""
+"\\(\\displaystyle\\frac{\\pi^2}{6}=\\lim_{n \\to \\infty}\\sum_{k=1}^n "
+"\\frac{1}{k^2}\\)"
+msgstr ""
+
+#: ../share/extensions/fig_input.inx:6 ../share/extensions/fig_input.inx:15
+msgid "fig2dev-ext.py"
+msgstr ""
+
+#: ../share/extensions/gcodetools_check_for_updates.inx:5
+msgid "ru.cnc-club.filter.gcodetools_update_no_options_no_preferences"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:19
+msgid "57x37"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:20
+msgid "61x61"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:21
+msgid "65x65"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:22
+msgid "69x69"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:23
+msgid "73x73"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:24
+msgid "77x77"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:25
+msgid "81x81"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:26
+msgid "85x85"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:27
+msgid "89x89"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:28
+msgid "93x93"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:29
+msgid "97x97"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:30
+msgid "101x101"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:31
+msgid "105x105"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:32
+msgid "109x109"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:33
+msgid "113x113"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:34
+msgid "117x117"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:35
+msgid "121x121"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:36
+msgid "125x125"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:37
+msgid "129x129"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:38
+msgid "133x133"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:39
+msgid "137x137"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:40
+msgid "141x141"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:41
+msgid "145x145"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:42
+msgid "149x149"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:43
+msgid "153x153"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:44
+msgid "157x157"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:45
+msgid "161x161"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:46
+msgid "165x165"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:47
+msgid "169x169"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:48
+msgid "173x173"
+msgstr ""
+
+#: ../share/extensions/render_barcode_qrcode.inx:49
+msgid "177x177"
+msgstr ""
+
+#: ../share/extensions/sk_input.inx:4
+msgid "org.inkscape.input.sk"
+msgstr ""
+
+#: ../share/extensions/sk_input.inx:5 ../share/extensions/sk_input.inx:14
+msgid "sk2svg.sh"
+msgstr ""
+
+#: ../share/extensions/sk_input.inx:6
+msgid "skconvert"
+msgstr ""
+
+#: ../share/extensions/sk_input.inx:8
+msgid ".sk"
+msgstr ""
+
+#: ../share/extensions/sk_input.inx:9
+msgid "application/x-sketch"
+msgstr ""
+
+#: ../share/extensions/web-set-att.inx:5 ../share/extensions/web-set-att.inx:49
+msgid "web-set-att.py"
+msgstr ""
+
+#: ../share/extensions/web-transmit-att.inx:5
+#: ../share/extensions/web-transmit-att.inx:47
+msgid "web-transmit-att.py"
 msgstr ""

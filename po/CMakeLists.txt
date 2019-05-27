@@ -31,14 +31,15 @@ if(UNIX)
 	SET(_potFile ${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}.pot)
 	add_custom_command(OUTPUT ${_potFile}
 		#COMMAND sh -c "${INTLTOOL-UPDATE} --pot --gettext-package=inkscape"
-		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE}    -L Glade --from-code=UTF-8 -ktranslatable -k_ -kN_ -o ${_potFile} -f POTFILES.ui.in
-		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -L Python -f POTFILES.py.in -o ${_potFile}
-		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -f POTFILES.inx.in --its its/inx.its -o ${_potFile}
-		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -C -f POTFILES.src.in -o ${_potFile}
-		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -L AppData ../org.inkscape.Inkscape.appdata.xml.in -o ${_potFile}
-		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -L Desktop ../org.inkscape.Inkscape.desktop.template -o ${_potFile}
-		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j --its its/menus.its ../share/ui/menus.xml -o ${_potFile}
-		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j --its its/units.its ../share/ui/units.xml -o ${_potFile}
+		COMMAND touch ${_potFile}
+		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -L Glade --from-code=UTF-8 -ktranslatable -k_ -kN_ -o ${_potFile} -f POTFILES.ui.in
+		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -L Python --from-code=UTF-8 -f POTFILES.py.in -o ${_potFile}
+		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -f POTFILES.inx.in --from-code=UTF-8 --its its/inx.its -o ${_potFile}
+		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -C --from-code=UTF-8 -f POTFILES.src.in -o ${_potFile}
+		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -L AppData --from-code=UTF-8 ../org.inkscape.Inkscape.appdata.xml.in -o ${_potFile}
+		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -L Desktop --from-code=UTF-8 ../org.inkscape.Inkscape.desktop.template -o ${_potFile}
+		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j --its its/menus.its --from-code=UTF-8 ../share/ui/menus.xml -o ${_potFile}
+		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j --its its/units.its --from-code=UTF-8 ../share/ui/units.xml -o ${_potFile}
 		COMMENT "Extract translatable messages to ${_potFile}"
 		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 		)
