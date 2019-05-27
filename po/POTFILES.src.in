@@ -82,7 +82,6 @@
 ../src/extension/internal/gdkpixbuf-input.cpp
 ../src/extension/internal/gimpgrad.cpp
 ../src/extension/internal/grid.cpp
-../src/extension/internal/javafx-out.cpp
 ../src/extension/internal/latex-pstricks-out.cpp
 ../src/extension/internal/latex-pstricks.cpp
 ../src/extension/internal/odf.cpp
@@ -106,12 +105,15 @@
 ../src/filter-enums.cpp
 ../src/gradient-chemistry.cpp
 ../src/gradient-drag.cpp
+../src/help.cpp
 ../src/helper/gettext.cpp
 ../src/helper/gettext.h
+../src/helper/verb-action.cpp
 ../src/inkscape-application.cpp
 ../src/inkscape.cpp
 ../src/inkview-application.cpp
 ../src/io/resource-manager.cpp
+../src/io/resource.cpp
 ../src/knot.cpp
 ../src/knotholder.cpp
 ../src/libnrtype/FontFactory.cpp
@@ -127,7 +129,7 @@
 ../src/live_effects/lpe-constructgrid.cpp
 ../src/live_effects/lpe-copy_rotate.cpp
 ../src/live_effects/lpe-curvestitch.cpp
-../src/live_effects/lpe-dash-stroke.cpp
+../src/live_effects/lpe-dashed-stroke.cpp
 ../src/live_effects/lpe-dynastroke.cpp
 ../src/live_effects/lpe-ellipse_5pts.cpp
 ../src/live_effects/lpe-embrodery-stitch.cpp
@@ -240,7 +242,6 @@
 ../src/ui/dialog/calligraphic-profile-rename.cpp
 ../src/ui/dialog/clonetiler.cpp
 ../src/ui/dialog/color-item.cpp
-../src/ui/dialog/cssdialog.cpp
 ../src/ui/dialog/debug.cpp
 ../src/ui/dialog/document-metadata.cpp
 ../src/ui/dialog/document-properties.cpp
@@ -277,12 +278,13 @@
 ../src/ui/dialog/print-colors-preview-dialog.cpp
 ../src/ui/dialog/print.cpp
 ../src/ui/dialog/save-template-dialog.cpp
+../src/ui/dialog/selectordialog.cpp
 ../src/ui/dialog/spellcheck.cpp
 ../src/ui/dialog/styledialog.cpp
 ../src/ui/dialog/svg-fonts-dialog.cpp
+../src/ui/dialog/svg-preview.cpp
 ../src/ui/dialog/swatches.cpp
 ../src/ui/dialog/symbols.cpp
-../src/ui/dialog/tags.cpp
 ../src/ui/dialog/template-load-tab.cpp
 ../src/ui/dialog/template-widget.cpp
 ../src/ui/dialog/text-edit.cpp
