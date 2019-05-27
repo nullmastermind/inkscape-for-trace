@@ -596,7 +596,7 @@ ConcreteInkscapeApplication<Gtk::Application>::on_startup2()
     // removed after confirming this code isn't required.
     _builder = Gtk::Builder::create();
 
-    Glib::ustring app_builder_file = get_filename(UIS, "inkscape-application.xml");
+    Glib::ustring app_builder_file = get_filename(UIS, "inkscape-application.glade");
 
     try
     {
