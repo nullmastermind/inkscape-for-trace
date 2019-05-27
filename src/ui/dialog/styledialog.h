@@ -72,19 +72,20 @@ public:
     class ModelColumns : public Gtk::TreeModel::ColumnRecord {
     public:
         ModelColumns() {
-            add(_colSelector);
-            add(_colSelectorPos);
             add(_colActive);
             add(_colName);
             add(_colValue);
             add(_colStrike);
+            add(_colSelector);
+            add(_colSelectorPos);
         }
-        Gtk::TreeModelColumn<Glib::ustring> _colSelector;  // Style or matching object id.
-        Gtk::TreeModelColumn<gint> _colSelectorPos;        // Position of the selector to hadle dup selectors
         Gtk::TreeModelColumn<bool> _colActive;             // Active or inative property
         Gtk::TreeModelColumn<Glib::ustring> _colName;      // Name of the property.
         Gtk::TreeModelColumn<Glib::ustring> _colValue;     // Value of the property.
         Gtk::TreeModelColumn<bool> _colStrike;             // Propery not used, overloaded
+        Gtk::TreeModelColumn<Glib::ustring> _colSelector;  // Style or matching object id.
+        Gtk::TreeModelColumn<gint> _colSelectorPos;        // Position of the selector to hadle dup selectors
+        
     };
     ModelColumns _mColumns;
 
@@ -97,12 +98,12 @@ public:
     Inkscape::XML::Node *_getStyleTextNode();
     void _readStyleElement();
     Glib::RefPtr< Gtk::TreeModel > _selectTree(Glib::ustring selector);
-    void _writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store);
+    void _writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::ustring selector);
     void _activeToggled(const Glib::ustring& path, Glib::RefPtr<Gtk::TreeStore> store);
-    bool _addFirstRow(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> _builder, Glib::ustring selector, gint pos);
+    bool _addRow(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> _builder, Glib::ustring selector, gint pos);
     void _nameEdited(const Glib::ustring& path, const Glib::ustring& name, Glib::RefPtr<Gtk::TreeStore> store);
     void _valueEdited(const Glib::ustring& path, const Glib::ustring& value, Glib::RefPtr<Gtk::TreeStore> store);
-
+    void _onPropDelete(Glib::ustring path, Glib::RefPtr<Gtk::TreeStore> store);
 
     // Update watchers
     void _addWatcherRecursive(Inkscape::XML::Node *node);

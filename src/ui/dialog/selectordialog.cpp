@@ -422,10 +422,10 @@ void SelectorDialog::_readStyleElement()
     content.erase(std::remove(content.begin(), content.end(), '\n'), content.end());
 
     // Remove comments (/* xxx */)
-    while(content.find("/*") != std::string::npos) {
+/*     while(content.find("/*") != std::string::npos) {
         size_t start = content.find("/*");
-        content.erase(start, (content.find("*/", start) - start) +2);
-    }
+        content.erase(start, (content.find("*\/", start) - start) +2);
+    } */
 
     // First split into selector/value chunks.
     // An attempt to use Glib::Regex failed. A C++11 version worked but
