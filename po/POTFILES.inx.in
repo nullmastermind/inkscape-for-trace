@@ -22,6 +22,7 @@
 ../share/extensions/color_rgbbarrel.inx
 ../share/extensions/convert2dashes.inx
 ../share/extensions/dhw_input.inx
+../share/extensions/dia.inx
 ../share/extensions/dimension.inx
 ../share/extensions/docinfo.inx
 ../share/extensions/dots.inx
@@ -42,6 +43,7 @@
 ../share/extensions/empty_page.inx
 ../share/extensions/empty_video.inx
 ../share/extensions/eps_input.inx
+../share/extensions/eqtexsvg.inx
 ../share/extensions/export_gimp_palette.inx
 ../share/extensions/extractimage.inx
 ../share/extensions/extrude.inx
@@ -53,6 +55,7 @@
 ../share/extensions/funcplot.inx
 ../share/extensions/gcodetools_about.inx
 ../share/extensions/gcodetools_area.inx
+../share/extensions/gcodetools_check_for_updates.inx
 ../share/extensions/gcodetools_dxf_points.inx
 ../share/extensions/gcodetools_engraving.inx
 ../share/extensions/gcodetools_graffiti.inx
@@ -137,6 +140,7 @@
 ../share/extensions/seamless_pattern.inx
 ../share/extensions/seamless_pattern_procedural.inx
 ../share/extensions/setup_typography_canvas.inx
+../share/extensions/sk_input.inx
 ../share/extensions/spirograph.inx
 ../share/extensions/split.inx
 ../share/extensions/straightseg.inx
@@ -159,11 +163,11 @@
 ../share/extensions/triangle.inx
 ../share/extensions/ungroup_deep.inx
 ../share/extensions/voronoi2svg.inx
-../share/extensions/web_set_att.inx
+../share/extensions/web-set-att.inx
 ../share/extensions/webslicer_create_group.inx
 ../share/extensions/webslicer_create_rect.inx
 ../share/extensions/webslicer_export.inx
-../share/extensions/web_transmit_att.inx
+../share/extensions/web-transmit-att.inx
 ../share/extensions/whirl.inx
 ../share/extensions/wireframe_sphere.inx
 ../share/extensions/xaml2svg.inx
