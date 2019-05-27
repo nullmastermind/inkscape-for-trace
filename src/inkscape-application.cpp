@@ -434,15 +434,21 @@ ConcreteInkscapeApplication<T>::get_instance()
     return instance;
 }
 
+// Note: We tried using Gio::APPLICATION_CAN_OVERRIDE_APP_ID instead of
+// Gio::APPLICATION_NON_UNIQUE. The advantages of this is that copy/paste between windows would be
+// more reliable and that we wouldn't have multiple Inkscape instance writing to the preferences
+// file at the same time (if started as separate processes). This caused problems with batch
+// processing files and with extensions as they rely on having multiple instances of Inkscape
+// running independently. In principle one can use --gapplication-app-id to run a new instance of
+// Inkscape but this with our current structure fails with the error message:
+// "g_application_set_application_id: assertion '!application->priv->is_registered' failed".
+// It also require generating new id's for each separate Inkscape instance required.
+
 template<class T>
 ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     : T("org.inkscape.application.with_gui",
                        Gio::APPLICATION_HANDLES_OPEN | // Use default file opening.
-                       Gio::APPLICATION_CAN_OVERRIDE_APP_ID ) // Allows different instances of
-                                                              // Inkscape to run at same time using
-                                                              // --gapplication-app-id (useful for
-                                                              // debugging different versions of
-                                                              // Inkscape).
+                       Gio::APPLICATION_NON_UNIQUE )
     , InkscapeApplication()
 {
 
