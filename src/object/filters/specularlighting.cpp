@@ -289,7 +289,6 @@ static void sp_feSpecularLighting_children_modified(SPFeSpecularLighting *sp_spe
 }
 
 void SPFeSpecularLighting::build_renderer(Inkscape::Filters::Filter* filter) {
-    g_assert(this != nullptr);
     g_assert(filter != nullptr);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_SPECULARLIGHTING);

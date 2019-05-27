@@ -277,7 +277,6 @@ static void sp_feDiffuseLighting_children_modified(SPFeDiffuseLighting *sp_diffu
 }
 
 void SPFeDiffuseLighting::build_renderer(Inkscape::Filters::Filter* filter) {
-    g_assert(this != nullptr);
     g_assert(filter != nullptr);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_DIFFUSELIGHTING);

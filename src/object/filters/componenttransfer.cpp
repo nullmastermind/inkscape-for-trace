@@ -160,7 +160,6 @@ Inkscape::XML::Node* SPFeComponentTransfer::write(Inkscape::XML::Document *doc, 
 }
 
 void SPFeComponentTransfer::build_renderer(Inkscape::Filters::Filter* filter) {
-    g_assert(this != nullptr);
     g_assert(filter != nullptr);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_COMPONENTTRANSFER);

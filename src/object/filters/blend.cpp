@@ -265,7 +265,6 @@ Inkscape::XML::Node* SPFeBlend::write(Inkscape::XML::Document *doc, Inkscape::XM
 }
 
 void SPFeBlend::build_renderer(Inkscape::Filters::Filter* filter) {
-    g_assert(this != nullptr);
     g_assert(filter != nullptr);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_BLEND);

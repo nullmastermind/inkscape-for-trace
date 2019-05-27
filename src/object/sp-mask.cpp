@@ -238,7 +238,6 @@ sp_mask_create (std::vector<Inkscape::XML::Node*> &reprs, SPDocument *document)
 }
 
 Inkscape::DrawingItem *SPMask::sp_mask_show(Inkscape::Drawing &drawing, unsigned int key) {
-	g_return_val_if_fail (this != nullptr, NULL);
 	g_return_val_if_fail (SP_IS_MASK (this), NULL);
 
 	Inkscape::DrawingGroup *ai = new Inkscape::DrawingGroup(drawing);
@@ -264,7 +263,6 @@ Inkscape::DrawingItem *SPMask::sp_mask_show(Inkscape::Drawing &drawing, unsigned
 }
 
 void SPMask::sp_mask_hide(unsigned int key) {
-	g_return_if_fail (this != nullptr);
 	g_return_if_fail (SP_IS_MASK (this));
 
 	for (auto& child: children) {

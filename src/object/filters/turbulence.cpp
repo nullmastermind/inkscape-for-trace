@@ -199,7 +199,6 @@ Inkscape::XML::Node* SPFeTurbulence::write(Inkscape::XML::Document *doc, Inkscap
 }
 
 void SPFeTurbulence::build_renderer(Inkscape::Filters::Filter* filter) {
-    g_assert(this != nullptr);
     g_assert(filter != nullptr);
 
     int primitive_n = filter->add_primitive(Inkscape::Filters::NR_FILTER_TURBULENCE);

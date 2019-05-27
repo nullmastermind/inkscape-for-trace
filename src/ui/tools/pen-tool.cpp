@@ -1285,7 +1285,6 @@ void PenTool::_setInitialPoint(Geom::Point const p) {
  * two parameters ("angle %3.2f&#176;, distance %s").
  */
 void PenTool::_setAngleDistanceStatusMessage(Geom::Point const p, int pc_point_to_compare, gchar const *message) {
-    g_assert(this != nullptr);
     g_assert((pc_point_to_compare == 0) || (pc_point_to_compare == 3)); // exclude control handles
     g_assert(message != nullptr);
 

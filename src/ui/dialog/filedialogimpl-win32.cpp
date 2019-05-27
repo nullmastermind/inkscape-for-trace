@@ -462,7 +462,6 @@ void FileOpenDialogImplWin32::GetOpenFileName_thread()
 {
     OPENFILENAMEW ofn;
 
-    g_assert(this != NULL);
     g_assert(_mutex != NULL);
 
     WCHAR* current_directory_string = (WCHAR*)g_utf8_to_utf16(
@@ -1753,7 +1752,6 @@ void FileSaveDialogImplWin32::GetSaveFileName_thread()
 {
     OPENFILENAMEW ofn;
 
-    g_assert(this != NULL);
     g_assert(_main_loop != NULL);
 
     WCHAR* current_directory_string = (WCHAR*)g_utf8_to_utf16(

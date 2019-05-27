@@ -377,7 +377,6 @@ SPILength::merge( const SPIBase* const parent ) {
                 switch (p->unit) {
                     case SP_CSS_UNIT_EM:
                     case SP_CSS_UNIT_EX:
-                        g_assert( &style->font_size != nullptr && &p->style->font_size != nullptr );
                         value *= p->style->font_size.computed / style->font_size.computed;
                         /** \todo
                          * FIXME: Have separate ex ratio parameter.

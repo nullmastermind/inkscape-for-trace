@@ -1546,7 +1546,7 @@ void GrDragger::moveThisToDraggable(SPItem *item, GrPointType point_type, gint p
     for (std::vector<GrDraggable *>::const_iterator j = draggables.begin(); j != draggables.end(); ++j ) {
         GrDraggable *da = *j; 
         if ( (da->item == item) &&
-             (point_type == -1 || da->point_type == point_type) &&
+             (da->point_type == point_type) &&
              (point_i == -1 || da->point_i == point_i) &&
              (da->fill_or_stroke == fill_or_stroke) ) {
             // Don't move initial draggable
@@ -1743,7 +1743,7 @@ GrDragger *GrDrag::getDraggerFor(SPItem *item, GrPointType point_type, gint poin
         for (std::vector<GrDraggable *>::const_iterator j = dragger->draggables.begin(); j != dragger->draggables.end(); ++j ) {
             GrDraggable *da2 = *j; 
             if ( (da2->item == item) &&
-                 (point_type == -1 || da2->point_type == point_type) && // -1 means this does not matter
+                 (da2->point_type == point_type) &&
                  (point_i == -1 || da2->point_i == point_i) && // -1 means this does not matter
                  (da2->fill_or_stroke == fill_or_stroke)) {
                 return (dragger);
