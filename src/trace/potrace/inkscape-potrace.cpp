@@ -98,6 +98,15 @@ PotraceTracingEngine::PotraceTracingEngine() :
     potraceParams->progress.data = (void *)this;
 }
 
+PotraceTracingEngine::PotraceTracingEngine(TraceType traceType, bool invert, int quantizationNrColors, double brightnessThreshold, double brightnessFloor, double cannyHighThreshold, int multiScanNrColors, bool multiScanStack, bool multiScanSmooth, bool multiScanRemoveBackground) :
+  keepGoing(1), traceType(traceType), invert(invert), quantizationNrColors(quantizationNrColors), brightnessThreshold(brightnessThreshold), brightnessFloor(brightnessFloor), cannyHighThreshold(cannyHighThreshold), multiScanNrColors(multiScanNrColors) , multiScanStack(multiScanStack), multiScanSmooth(multiScanSmooth), multiScanRemoveBackground(multiScanRemoveBackground)
+{
+    potraceParams = potrace_param_default();
+    potraceParams->progress.callback = potraceStatusCallback;
+    potraceParams->progress.data = (void *)this;
+}
+
+
 PotraceTracingEngine::~PotraceTracingEngine()
 {
     potrace_param_free(potraceParams);
@@ -212,27 +221,27 @@ static GrayMap *filter(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
     GrayMap *newGm = nullptr;
 
     /*### Color quantization -- banding ###*/
-    if (engine.getTraceType() == TRACE_QUANT)
+    if (engine.traceType == TRACE_QUANT)
         {
         RgbMap *rgbmap = gdkPixbufToRgbMap(pixbuf);
         //rgbMap->writePPM(rgbMap, "rgb.ppm");
         newGm = quantizeBand(rgbmap,
-                            engine.getQuantizationNrColors());
+                            engine.quantizationNrColors);
         rgbmap->destroy(rgbmap);
         //return newGm;
         }
 
     /*### Brightness threshold ###*/
-    else if ( engine.getTraceType() == TRACE_BRIGHTNESS ||
-              engine.getTraceType() == TRACE_BRIGHTNESS_MULTI )
+    else if ( engine.traceType == TRACE_BRIGHTNESS ||
+              engine.traceType == TRACE_BRIGHTNESS_MULTI )
         {
         GrayMap *gm = gdkPixbufToGrayMap(pixbuf);
 
         newGm = GrayMapCreate(gm->width, gm->height);
         double floor =  3.0 *
-               ( engine.getBrightnessFloor() * 256.0 );
+               ( engine.brightnessFloor * 256.0 );
         double cutoff =  3.0 *
-               ( engine.getBrightnessThreshold() * 256.0 );
+               ( engine.brightnessThreshold * 256.0 );
         for (int y=0 ; y<gm->height ; y++)
             {
             for (int x=0 ; x<gm->width ; x++)
@@ -251,17 +260,17 @@ static GrayMap *filter(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
         }
 
     /*### Canny edge detection ###*/
-    else if (engine.getTraceType() == TRACE_CANNY)
+    else if (engine.traceType == TRACE_CANNY)
         {
         GrayMap *gm = gdkPixbufToGrayMap(pixbuf);
-        newGm = grayMapCanny(gm, 0.1, engine.getCannyHighThreshold());
+        newGm = grayMapCanny(gm, 0.1, engine.cannyHighThreshold);
         gm->destroy(gm);
         //newGm->writePPM(newGm, "canny.ppm");
         //return newGm;
         }
 
     /*### Do I invert the image? ###*/
-    if (newGm && engine.getInvert())
+    if (newGm && engine.invert)
         {
         for (int y=0 ; y<newGm->height ; y++)
             {
@@ -286,19 +295,19 @@ static IndexedMap *filterIndexed(PotraceTracingEngine &engine, GdkPixbuf * pixbu
     IndexedMap *newGm = nullptr;
 
     RgbMap *gm = gdkPixbufToRgbMap(pixbuf);
-    if (engine.getMultiScanSmooth())
+    if (engine.multiScanSmooth)
         {
         RgbMap *gaussMap = rgbMapGaussian(gm);
-        newGm = rgbMapQuantize(gaussMap, engine.getMultiScanNrColors());
+        newGm = rgbMapQuantize(gaussMap, engine.multiScanNrColors);
         gaussMap->destroy(gaussMap);
         }
     else
         {
-        newGm = rgbMapQuantize(gm, engine.getMultiScanNrColors());
+        newGm = rgbMapQuantize(gm, engine.multiScanNrColors);
         }
     gm->destroy(gm);
 
-    if (engine.getTraceType() == TRACE_QUANT_MONO)
+    if (engine.traceType == TRACE_QUANT_MONO)
         {
         //Turn to grays
         for (int i=0 ; i<newGm->nrColors ; i++)

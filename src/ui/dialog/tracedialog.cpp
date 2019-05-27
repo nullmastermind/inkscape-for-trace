@@ -12,7 +12,7 @@
  *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-
+#if 0
 #include "tracedialog.h"
 #include <gtkmm/notebook.h>
 #include <gtkmm/frame.h>
@@ -865,5 +865,5 @@ TraceDialogImpl::~TraceDialogImpl()
 //## E N D    O F    F I L E
 //#########################################################################
 
-
+#endif
 

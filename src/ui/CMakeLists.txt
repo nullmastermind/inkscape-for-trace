@@ -471,6 +471,7 @@ set ( ui_flood_and_trace_SRC
 	tools/flood-tool.h
 	tools/flood-tool.cpp
 	dialog/tracedialog.cpp
+	dialog/tracedialog2.cpp
 	dialog/tracedialog.h
 	toolbar/paintbucket-toolbar.cpp
 	toolbar/paintbucket-toolbar.h
