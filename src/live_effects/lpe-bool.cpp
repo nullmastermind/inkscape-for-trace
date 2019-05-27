@@ -14,13 +14,14 @@
 
 #include "live_effects/lpe-bool.h"
 
-#include "display/curve.h"
-
-#include "2geom/path.h"
+#include "2geom/affine.h"
 #include "2geom/bezier-curve.h"
 #include "2geom/path-sink.h"
-#include "2geom/affine.h"
+#include "2geom/path.h"
 #include "2geom/svg-path-parser.h"
+#include "display/curve.h"
+#include "object/sp-shape.h"
+#include "svg/svg.h"
 
 #include "helper/geom.h"
 
@@ -67,22 +68,29 @@ static const Util::EnumData<fill_typ> FillTypeDataThis[] = {
 
 static const Util::EnumDataConverter<fill_typ> FillTypeConverterThis(FillTypeDataThis, sizeof(FillTypeDataThis) / sizeof(*FillTypeDataThis));
 
-LPEBool::LPEBool(LivePathEffectObject *lpeobject) :
-    Effect(lpeobject),
-    operand_path(_("Operand path:"), _("Operand for the boolean operation"), "operand-path", &wr, this),
-    bool_operation(_("Operation:"), _("Boolean Operation"), "operation", BoolOpConverter, &wr, this, bool_op_ex_union),
-    swap_operands(_("Swap operands:"), _("Swap operands (useful e.g. for difference)"), "swap-operands", &wr, this),
-    rmv_inner(_("Remove inner:"), _("For cut operations: remove inner (non-contour) lines of cutting path to avoid invisible extra points"), "rmv-inner", &wr, this),
-    fill_type_this(_("Fill type this:"), _("Fill type (winding mode) for this path"), "filltype-this", FillTypeConverterThis, &wr, this, fill_oddEven),
-    fill_type_operand(_("Fill type operand:"), _("Fill type (winding mode) for operand path"), "filltype-operand", FillTypeConverter, &wr, this, fill_justDont)
+LPEBool::LPEBool(LivePathEffectObject *lpeobject)
+    : Effect(lpeobject)
+    , operand_path(_("Operand path:"), _("Operand for the boolean operation"), "operand-path", &wr, this)
+    , bool_operation(_("Operation:"), _("Boolean Operation"), "operation", BoolOpConverter, &wr, this, bool_op_ex_union)
+    , swap_operands(_("Swap operands:"), _("Swap operands (useful e.g. for difference)"), "swap-operands", &wr, this)
+    , hide_linked(_("Hide Linked:"), _("Hide linked path"), "hide-linked", &wr, this, true)
+    , rmv_inner(
+          _("Remove inner:"),
+          _("For cut operations: remove inner (non-contour) lines of cutting path to avoid invisible extra points"),
+          "rmv-inner", &wr, this)
+    , fill_type_this(_("Fill type this:"), _("Fill type (winding mode) for this path"), "filltype-this",
+                     FillTypeConverterThis, &wr, this, fill_oddEven)
+    , fill_type_operand(_("Fill type operand:"), _("Fill type (winding mode) for operand path"), "filltype-operand",
+                        FillTypeConverter, &wr, this, fill_justDont)
 {
     registerParameter(&operand_path);
     registerParameter(&bool_operation);
     registerParameter(&swap_operands);
+    registerParameter(&hide_linked);
     registerParameter(&rmv_inner);
     registerParameter(&fill_type_this);
     registerParameter(&fill_type_operand);
-
+    prev = Geom::identity();
     show_orig_path = true;
 }
 
@@ -356,13 +364,29 @@ static fill_typ GetFillTyp(SPItem *item)
 void LPEBool::doEffect(SPCurve *curve)
 {
     Geom::PathVector path_in = curve->get_pathvector();
-
-    if (operand_path.linksToPath() && operand_path.getObject()) {
+    SPItem *operand = dynamic_cast<SPItem *>(operand_path.getObject());
+    if (operand_path.linksToPath() && operand) {
+        if (!operand->isHidden() && hide_linked) {
+            operand->setHidden(true);
+        }
+        if (operand->isHidden() && !hide_linked) {
+            operand->setHidden(false);
+        }
         bool_op_ex op = bool_operation.get_value();
         bool swap =  swap_operands.get_value();
 
-        Geom::PathVector path_a = swap ? operand_path.get_pathvector() : path_in;
-        Geom::PathVector path_b = swap ? path_in : operand_path.get_pathvector();
+        // operand->set_transform(i2anc_affine(sp_lpe_item, sp_lpe_item->parent));
+        Geom::Affine current = sp_item_transform_repr(sp_lpe_item);
+        if (!is_load) {
+            operand->doWriteTransform(prev.inverse() * current);
+        }
+        Geom::PathVector operand_pv = operand_path.get_pathvector();
+        if (!is_load) {
+            operand_pv *= current.inverse();
+        }
+        prev = current;
+        Geom::PathVector path_a = swap ? operand_pv : path_in;
+        Geom::PathVector path_b = swap ? path_in : operand_pv;
 
         // TODO: I would like to use the original objects fill rule if the UI selected rule is fill_justDont.
         // But it doesn't seem possible to access them from here, because SPCurve is not derived from SPItem.
@@ -392,6 +416,34 @@ void LPEBool::doEffect(SPCurve *curve)
             path_out = sp_pathvector_boolop(path_a, path_b, to_bool_op(op), fill_a, fill_b);
         }
         curve->set_pathvector(path_out);
+    }
+}
+
+void LPEBool::doOnRemove(SPLPEItem const * /*lpeitem*/)
+{
+    // set "keep paths" hook on sp-lpe-item.cpp
+    SPItem *operand = dynamic_cast<SPItem *>(operand_path.getObject());
+    if (operand_path.linksToPath() && operand) {
+        if (keep_paths) {
+            if (operand->isHidden()) {
+                operand->deleteObject(true);
+            }
+        } else {
+            if (operand->isHidden()) {
+                operand->setHidden(false);
+            }
+        }
+    }
+}
+
+// TODO: Migrate the tree next function to effect.cpp/h to avoid duplication
+void LPEBool::doOnVisibilityToggled(SPLPEItem const * /*lpeitem*/)
+{
+    SPItem *operand = dynamic_cast<SPItem *>(operand_path.getObject());
+    if (operand_path.linksToPath() && operand) {
+        if (!is_visible) {
+            operand->setHidden(false);
+        }
     }
 }
 

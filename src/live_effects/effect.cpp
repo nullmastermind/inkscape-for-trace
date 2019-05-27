@@ -587,7 +587,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , N_("Cut, union, subtract, intersect and divide a path non-destructively with another path.") //description
         , true  //on_path
         , true  //on_shape
-        , false //on_group
+        , true //on_group
         , false //on_image
         , false //on_text
         , false //experimental

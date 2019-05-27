@@ -27,6 +27,8 @@ public:
 
     void doEffect(SPCurve *curve) override;
     void resetDefaults(SPItem const *item) override;
+    void doOnVisibilityToggled(SPLPEItem const * /*lpeitem*/) override;
+    void doOnRemove(SPLPEItem const * /*lpeitem*/) override;
 
     enum bool_op_ex {
         bool_op_ex_union     = bool_op_union,
@@ -54,8 +56,10 @@ private:
     EnumParam<bool_op_ex> bool_operation;
     EnumParam<fill_typ> fill_type_this;
     EnumParam<fill_typ> fill_type_operand;
+    BoolParam hide_linked;
     BoolParam swap_operands;
     BoolParam rmv_inner;
+    Geom::Affine prev;
 };
 
 }; //namespace LivePathEffect
