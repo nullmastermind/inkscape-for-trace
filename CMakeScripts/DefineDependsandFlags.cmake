@@ -339,7 +339,7 @@ if(WITH_NLS)
     if(GETTEXT_XGETTEXT_EXECUTABLE)
         message(STATUS "Found xgettext. inkscape.pot will be re-created if missing.")
     else()
-        message(STATUS "Did not find intltool. inkscape.pot can't be re-created.")
+        message(STATUS "Did not find xgetttext. inkscape.pot can't be re-created.")
     endif()
 endif(WITH_NLS)
 
