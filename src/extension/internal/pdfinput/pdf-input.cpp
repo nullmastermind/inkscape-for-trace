@@ -62,6 +62,19 @@
 
 #include <gdkmm/general.h>
 
+
+namespace {
+  void sanitize_page_number(int& page_num, const int num_pages){
+    if (page_num < 1 || page_num > num_pages){
+      std::cerr << "Inkscape::Extension::Internal::PdfInput::open: Bad page number "
+                << page_num
+                << ". Import first page instead."
+                << std::endl;
+      page_num = 1;
+    }
+  }
+}
+
 namespace Inkscape {
 namespace Extension {
 namespace Internal {
@@ -815,6 +828,8 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
         sp_repr_get_double(prefs, "cropTo", &crop_setting);
 
         Catalog *catalog = pdf_doc->getCatalog();
+        int const num_pages = catalog->getNumPages();
+        sanitize_page_number(page_num, num_pages);
         Page *page = catalog->getPage(page_num);
 
         if ( crop_setting >= 0.0 ) {    // Do page clipping
@@ -899,6 +914,8 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
         if (document != NULL)
         {
             double width, height;
+            int const num_pages = poppler_document_get_n_pages(document);
+            sanitize_page_number(page_num, num_pages);
             PopplerPage* page = poppler_document_get_page(document, page_num - 1);
             poppler_page_get_size(page, &width, &height);
 

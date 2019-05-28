@@ -200,9 +200,7 @@ public:
         return _pdf_poppler;
     }
     void set_pdf_page(gint page) {
-        if (page > 0) {
-            _pdf_page = page;
-        }
+        _pdf_page = page;
     }
     gint get_pdf_page() {
         return _pdf_page;
