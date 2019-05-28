@@ -6,9 +6,10 @@ echo "Generating updated POTFILES list..."
 mydir=`dirname "$0"`
 cd "$mydir"
 
+# enforce consistent sort order and date format
+export LC_ALL=C
+
 (
- # enforce consistent sort order and date format
- export LC_ALL=C
  echo "../share/filters/filters.svg.h"
  echo "../share/palettes/palettes.h"
  echo "../share/patterns/patterns.svg.h"

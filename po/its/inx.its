@@ -7,5 +7,5 @@
 <its:translateRule selector="/inkscape-extension/param//*" translate="no"/>
 <its:translateRule selector="/inkscape-extension/effect//*" translate="no"/>
 <!--<its:translateRule selector="//name | /*//_option | /*//_param | /*//_item" translate="yes"/>-->
-<!--<its:translateRule selector="//@_gui-text | //@_param" translate="yes"/>-->
+<its:translateRule selector="//@_gui-text | //@_param" translate="yes"/>
 </its:rules>

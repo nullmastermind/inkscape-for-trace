@@ -423,8 +423,7 @@ bool ResourceManagerImpl::searchUpwards( std::string const &base, std::string co
 static ResourceManagerImpl* theInstance = nullptr;
 
 ResourceManager::ResourceManager()
-{
-}
+= default;
 
 ResourceManager::~ResourceManager() = default;
 
