@@ -63,7 +63,7 @@ Effect::Effect (Inkscape::XML::Node * in_repr, Implementation::Implementation * 
                 if (child->attribute("needs-live-preview") && !strcmp(child->attribute("needs-live-preview"), "false")) {
                     no_live_preview = true;
                 }
-                if (child->attribute("application") && !strcmp(child->attribute("application"), "true")) {
+                if (child->attribute("implements-custom-gui") && !strcmp(child->attribute("implements-custom-gui"), "true")) {
                     _workingDialog = false;
                 }
                 for (Inkscape::XML::Node *effect_child = child->firstChild(); effect_child != nullptr; effect_child = effect_child->next()) {
