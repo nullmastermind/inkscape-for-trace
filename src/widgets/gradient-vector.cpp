@@ -734,7 +734,7 @@ static void sp_grd_ed_add_stop(GtkWidget */*widget*/,  GtkWidget *vb)
     sp_svg_write_color(c, sizeof(c), cnew);
     gdouble opacity = static_cast<gdouble>(SP_RGBA32_A_F(cnew));
     os << "stop-color:" << c << ";stop-opacity:" << opacity <<";";
-    newstop->setAttribute("style", os.str().c_str());
+    newstop->setAttribute("style", os.str());
     sp_repr_set_css_double( newstop->getRepr(), "offset", (double)newstop->offset);
 
     sp_gradient_vector_widget_load_gradient(vb, gradient);

@@ -209,7 +209,7 @@ void SvgFontsDialog::AttrSpin::on_attr_changed(){
     if(name && o) {
         std::ostringstream temp;
         temp << this->spin.get_value();
-        o->setAttribute((const gchar*) name, temp.str() );
+        o->setAttribute(name, temp.str());
         o->parent->requestModified(SP_OBJECT_MODIFIED_FLAG);
 
         Glib::ustring undokey = "svgfonts:";

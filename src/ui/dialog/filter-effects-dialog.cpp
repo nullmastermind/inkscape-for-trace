@@ -1116,7 +1116,7 @@ private:
         SPFilterPrimitive* prim = _dialog._primitive_list.get_selected();
         if(prim) {
 
-            _funcNode->setAttribute( "type", _type.get_as_attribute() );
+            _funcNode->setAttribute("type", _type.get_as_attribute());
 
             SPFilter* filter = _dialog._filter_modifier.get_selected_filter();
             filter->requestModified(SP_OBJECT_MODIFIED_FLAG);

@@ -838,7 +838,7 @@ void SelectorDialog::_insertClass(const std::vector<SPObject *>& objVec, const G
                 }
             }
             if (add) {
-                obj->setAttribute("class", classAttr + " " + className );
+                obj->setAttribute("class", classAttr + " " + className);
             }
         }
     }
