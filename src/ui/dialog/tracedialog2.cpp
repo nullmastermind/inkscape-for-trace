@@ -185,8 +185,10 @@ void TraceDialogImpl2::traceProcess(bool do_i_trace)
         }
     }
     if (do_i_trace){
-        if (choice_tab->get_current_page() == 0)
-            tracer.trace(&pte);//TODO
+	if (use_autotrace)
+	    tracer.trace(&ate);
+	else if (choice_tab->get_current_page() == 0)
+            tracer.trace(&pte);
         else if (choice_tab->get_current_page() == 1)
             tracer.trace(&dte);
     }

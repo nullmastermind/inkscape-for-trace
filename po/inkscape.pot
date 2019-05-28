@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-07-30 23:06+0200\n"
+"POT-Creation-Date: 2019-08-14 11:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4147,11 +4147,11 @@ msgstr ""
 msgid "<b>Guideline</b>: %s"
 msgstr ""
 
-#: ../src/desktop.cpp:805
+#: ../src/desktop.cpp:801
 msgid "No previous transform."
 msgstr ""
 
-#: ../src/desktop.cpp:828
+#: ../src/desktop.cpp:824
 msgid "No next transform."
 msgstr ""
 
@@ -4538,11 +4538,11 @@ msgstr ""
 msgid "[Unchanged]"
 msgstr ""
 
-#: ../src/event-log.cpp:366 ../src/event-log.cpp:369 ../src/verbs.cpp:2576
+#: ../src/event-log.cpp:366 ../src/event-log.cpp:369 ../src/verbs.cpp:2573
 msgid "_Undo"
 msgstr ""
 
-#: ../src/event-log.cpp:376 ../src/event-log.cpp:380 ../src/verbs.cpp:2577
+#: ../src/event-log.cpp:376 ../src/event-log.cpp:380 ../src/verbs.cpp:2574
 msgid "_Redo"
 msgstr ""
 
@@ -4570,7 +4570,7 @@ msgstr ""
 msgid " (No preferences)"
 msgstr ""
 
-#: ../src/extension/effect.h:70 ../src/verbs.cpp:2344
+#: ../src/extension/effect.h:70 ../src/verbs.cpp:2341
 msgid "Extensions"
 msgstr ""
 
@@ -5464,8 +5464,8 @@ msgstr ""
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:30
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:36
 #: ../src/ui/dialog/ocaldialogs.cpp:1085 ../src/ui/interface.cpp:240
-#: ../src/widgets/desktop-widget.cpp:1145
-#: ../src/widgets/desktop-widget.cpp:1192
+#: ../src/widgets/desktop-widget.cpp:1160
+#: ../src/widgets/desktop-widget.cpp:1207
 msgid "_Cancel"
 msgstr ""
 
@@ -5907,6 +5907,8 @@ msgstr ""
 #: ../src/extension/internal/filter/transparency.h:62
 #: ../src/filter-enums.cpp:53 ../src/live_effects/lpe-copy_rotate.cpp:41
 #: ../src/ui/dialog/inkscape-preferences.cpp:1246
+#: ../share/extensions/empty_generic.inx:20
+#: ../share/extensions/empty_page.inx:22
 msgid "Normal"
 msgstr ""
 
@@ -6929,7 +6931,7 @@ msgstr ""
 #: ../src/extension/internal/filter/morphology.h:180
 #: ../src/ui/dialog/layer-properties.cpp:167
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:49
-#: ../share/extensions/measure.inx:15 ../share/extensions/measure.inx:35
+#: ../share/extensions/measure.inx:13 ../share/extensions/measure.inx:33
 msgid "Position:"
 msgstr ""
 
@@ -7009,8 +7011,10 @@ msgstr ""
 #: ../share/extensions/jessyInk_uninstall.inx:7
 #: ../share/extensions/jitternodes.inx:7 ../share/extensions/lorem_ipsum.inx:7
 #: ../share/extensions/output_scour.inx:7
+#: ../share/extensions/path_mesh_m2p.inx:10
+#: ../share/extensions/path_mesh_p2m.inx:10
 #: ../share/extensions/pathalongpath.inx:8
-#: ../share/extensions/pathscatter.inx:8 ../share/extensions/split.inx:7
+#: ../share/extensions/pathscatter.inx:8 ../share/extensions/text_split.inx:7
 #: ../share/extensions/voronoi2svg.inx:8
 #: ../share/extensions/web_interactive_mockup.inx:7
 #: ../share/extensions/web_set_att.inx:7
@@ -7108,7 +7112,7 @@ msgid "Clean-up"
 msgstr ""
 
 #: ../src/extension/internal/filter/paint.h:239
-#: ../src/ui/tools/measure-tool.cpp:1205 ../share/extensions/measure.inx:9
+#: ../src/ui/tools/measure-tool.cpp:1205 ../share/extensions/measure.inx:7
 msgid "Length"
 msgstr ""
 
@@ -7118,7 +7122,7 @@ msgstr ""
 
 #: ../src/extension/internal/filter/paint.h:332
 #: ../src/ui/dialog/align-and-distribute.cpp:1074
-#: ../src/widgets/desktop-widget.cpp:1971
+#: ../src/widgets/desktop-widget.cpp:1987
 msgid "Drawing"
 msgstr ""
 
@@ -7366,6 +7370,8 @@ msgstr ""
 
 #: ../src/extension/internal/filter/textures.h:82
 #: ../share/extensions/color_custom.inx:3
+#: ../share/extensions/empty_desktop.inx:8
+#: ../share/extensions/empty_video.inx:8
 #: ../share/extensions/markers_strokepaint.inx:16
 #: ../share/extensions/restack.inx:20
 msgid "Custom"
@@ -7411,7 +7417,7 @@ msgstr ""
 #: ../src/ui/toolbar/pencil-toolbar.cpp:253
 #: ../src/ui/toolbar/spray-toolbar.cpp:77
 #: ../src/ui/toolbar/tweak-toolbar.cpp:98 ../share/extensions/extrude.inx:6
-#: ../share/extensions/triangle.inx:12
+#: ../share/extensions/path_mesh_m2p.inx:11 ../share/extensions/triangle.inx:12
 msgid "Mode:"
 msgstr ""
 
@@ -7586,7 +7592,7 @@ msgstr ""
 #: ../share/extensions/grid_cartesian.inx:66
 #: ../share/extensions/grid_isometric.inx:18
 #: ../share/extensions/grid_polar.inx:36
-#: ../share/extensions/guides_creator.inx:88 ../share/extensions/hershey.inx:10
+#: ../share/extensions/guides_creator.inx:86 ../share/extensions/hershey.inx:10
 #: ../share/extensions/layout_nup.inx:65 ../share/extensions/lindenmayer.inx:43
 #: ../share/extensions/nicechart.inx:98 ../share/extensions/param_curves.inx:42
 #: ../share/extensions/pdflatex.inx:11
@@ -7951,7 +7957,7 @@ msgid "Vector graphics format used by Corel WordPerfect"
 msgstr ""
 
 #: ../src/extension/prefdialog.cpp:78 ../src/ui/dialog/knot-properties.cpp:41
-#: ../src/ui/dialog/text-edit.cpp:68 ../src/verbs.cpp:2569
+#: ../src/ui/dialog/text-edit.cpp:68 ../src/verbs.cpp:2566
 msgid "_Close"
 msgstr ""
 
@@ -8252,7 +8258,7 @@ msgstr ""
 #: ../src/filter-enums.cpp:88 ../share/extensions/jessyInk_mouseHandler.inx:9
 #: ../share/extensions/jessyInk_transitions.inx:12
 #: ../share/extensions/jessyInk_transitions.inx:20
-#: ../share/extensions/measure.inx:16 ../share/extensions/nicechart.inx:68
+#: ../share/extensions/measure.inx:14 ../share/extensions/nicechart.inx:68
 msgid "Default"
 msgstr ""
 
@@ -11121,11 +11127,12 @@ msgid "Determines on which side the line or line segment is infinite."
 msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:59
-#: ../src/ui/toolbar/text-toolbar.cpp:631
+#: ../src/ui/toolbar/text-toolbar.cpp:631 ../share/extensions/empty_page.inx:18
 msgid "Horizontal"
 msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:60
+#: ../share/extensions/empty_page.inx:17
 msgid "Vertical"
 msgstr ""
 
@@ -11401,8 +11408,8 @@ msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:102
 #: ../src/live_effects/lpe-measure-segments.cpp:282
-#: ../src/ui/dialog/extension-editor.cpp:76 ../src/verbs.cpp:297
-#: ../src/verbs.cpp:316 ../share/extensions/color_HSL_adjust.inx:16
+#: ../src/ui/dialog/extension-editor.cpp:76 ../src/verbs.cpp:292
+#: ../src/verbs.cpp:311 ../share/extensions/color_HSL_adjust.inx:16
 #: ../share/extensions/color_custom.inx:17
 #: ../share/extensions/color_randomize.inx:13 ../share/extensions/dots.inx:13
 #: ../share/extensions/draw_from_triangle.inx:43
@@ -11433,10 +11440,10 @@ msgstr ""
 #: ../share/extensions/jessyInk_view.inx:13
 #: ../share/extensions/jitternodes.inx:19 ../share/extensions/layout_nup.inx:48
 #: ../share/extensions/lindenmayer.inx:17
-#: ../share/extensions/lorem_ipsum.inx:12 ../share/extensions/measure.inx:59
+#: ../share/extensions/lorem_ipsum.inx:12 ../share/extensions/measure.inx:40
 #: ../share/extensions/pathalongpath.inx:25
 #: ../share/extensions/pathscatter.inx:27 ../share/extensions/restack.inx:43
-#: ../share/extensions/split.inx:15 ../share/extensions/voronoi2svg.inx:27
+#: ../share/extensions/text_split.inx:15 ../share/extensions/voronoi2svg.inx:27
 #: ../share/extensions/web_interactive_mockup.inx:21
 #: ../share/extensions/web_set_att.inx:34
 #: ../share/extensions/web_transmit_att.inx:32
@@ -12286,14 +12293,14 @@ msgstr ""
 msgid "<b>Options</b> Modify options to rough"
 msgstr ""
 
-#: ../src/live_effects/lpe-ruler.cpp:23 ../share/extensions/measure.inx:29
-#: ../share/extensions/restack.inx:26 ../share/extensions/text_extract.inx:13
+#: ../src/live_effects/lpe-ruler.cpp:23 ../share/extensions/restack.inx:26
+#: ../share/extensions/text_extract.inx:13
 #: ../share/extensions/text_merge.inx:13
 msgid "Left"
 msgstr ""
 
-#: ../src/live_effects/lpe-ruler.cpp:24 ../share/extensions/measure.inx:31
-#: ../share/extensions/restack.inx:28 ../share/extensions/text_extract.inx:15
+#: ../src/live_effects/lpe-ruler.cpp:24 ../share/extensions/restack.inx:28
+#: ../share/extensions/text_extract.inx:15
 #: ../share/extensions/text_merge.inx:15
 msgid "Right"
 msgstr ""
@@ -12900,7 +12907,7 @@ msgstr ""
 #: ../src/live_effects/parameter/originalpath.cpp:64
 #: ../src/live_effects/parameter/originalpatharray.cpp:187
 #: ../src/live_effects/parameter/path.cpp:256
-msgid "Insert from clipboard"
+msgid "Link to path in clipboard"
 msgstr ""
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:89
@@ -13123,7 +13130,7 @@ msgstr[1] ""
 msgid "Create Guides Around the Page"
 msgstr ""
 
-#: ../src/object/sp-guide.cpp:292 ../src/verbs.cpp:2668
+#: ../src/object/sp-guide.cpp:292 ../src/verbs.cpp:2665
 msgid "Delete All Guides"
 msgstr ""
 
@@ -13184,7 +13191,7 @@ msgstr ""
 msgid "Ungroup"
 msgstr ""
 
-#: ../src/object/sp-item.cpp:1031 ../src/verbs.cpp:220
+#: ../src/object/sp-item.cpp:1031 ../src/verbs.cpp:215
 msgid "Object"
 msgstr ""
 
@@ -13310,9 +13317,9 @@ msgstr ""
 msgid "Text in-a-shape"
 msgstr ""
 
-#: ../src/object/sp-text.cpp:327 ../src/verbs.cpp:335
+#: ../src/object/sp-text.cpp:327 ../src/verbs.cpp:330
 #: ../share/extensions/hershey.inx:128 ../share/extensions/lorem_ipsum.inx:19
-#: ../share/extensions/replace_font.inx:30 ../share/extensions/split.inx:22
+#: ../share/extensions/replace_font.inx:30
 #: ../share/extensions/text_braille.inx:10
 #: ../share/extensions/text_extract.inx:25
 #: ../share/extensions/text_flipcase.inx:10
@@ -13320,6 +13327,7 @@ msgstr ""
 #: ../share/extensions/text_merge.inx:27
 #: ../share/extensions/text_randomcase.inx:10
 #: ../share/extensions/text_sentencecase.inx:10
+#: ../share/extensions/text_split.inx:22
 #: ../share/extensions/text_titlecase.inx:10
 #: ../share/extensions/text_uppercase.inx:10
 msgid "Text"
@@ -13874,7 +13882,7 @@ msgstr ""
 msgid "Select <b>object(s)</b> to move."
 msgstr ""
 
-#: ../src/selection-chemistry.cpp:1521 ../src/verbs.cpp:2808
+#: ../src/selection-chemistry.cpp:1521 ../src/verbs.cpp:2805
 msgid "Move selection to layer"
 msgstr ""
 
@@ -14100,15 +14108,15 @@ msgstr ""
 msgid "Select <b>object(s)</b> to fit canvas to."
 msgstr ""
 
-#: ../src/selection-chemistry.cpp:4255 ../src/verbs.cpp:3196
+#: ../src/selection-chemistry.cpp:4255 ../src/verbs.cpp:3189
 msgid "Fit Page to Selection"
 msgstr ""
 
-#: ../src/selection-chemistry.cpp:4329 ../src/verbs.cpp:2678
+#: ../src/selection-chemistry.cpp:4329 ../src/verbs.cpp:2675
 msgid "Swap fill and stroke of an object"
 msgstr ""
 
-#: ../src/selection-chemistry.cpp:4357 ../src/verbs.cpp:3198
+#: ../src/selection-chemistry.cpp:4357 ../src/verbs.cpp:3191
 msgid "Fit Page to Drawing"
 msgstr ""
 
@@ -14426,7 +14434,7 @@ msgstr ""
 msgid "The flowed text(s) must be <b>visible</b> in order to be put on a path."
 msgstr ""
 
-#: ../src/text-chemistry.cpp:180 ../src/verbs.cpp:2705
+#: ../src/text-chemistry.cpp:180 ../src/verbs.cpp:2702
 msgid "Put text on path"
 msgstr ""
 
@@ -14438,7 +14446,7 @@ msgstr ""
 msgid "<b>No texts-on-paths</b> in the selection."
 msgstr ""
 
-#: ../src/text-chemistry.cpp:213 ../src/verbs.cpp:2708
+#: ../src/text-chemistry.cpp:213 ../src/verbs.cpp:2705
 msgid "Remove text from path"
 msgstr ""
 
@@ -14488,8 +14496,8 @@ msgstr ""
 msgid "You cannot edit <b>cloned character data</b>."
 msgstr ""
 
-#: ../src/trace/potrace/inkscape-potrace.cpp:513
-#: ../src/trace/potrace/inkscape-potrace.cpp:576
+#: ../src/trace/potrace/inkscape-potrace.cpp:522
+#: ../src/trace/potrace/inkscape-potrace.cpp:585
 msgid "Trace: %1.  %2 nodes"
 msgstr ""
 
@@ -14606,7 +14614,7 @@ msgstr ""
 msgid "_Pop selection out of group"
 msgstr ""
 
-#: ../src/ui/contextmenu.cpp:353 ../src/verbs.cpp:3132
+#: ../src/ui/contextmenu.cpp:353 ../src/verbs.cpp:3129
 msgid "_Object Properties..."
 msgstr ""
 
@@ -14666,7 +14674,7 @@ msgstr ""
 msgid "Release C_lip"
 msgstr ""
 
-#: ../src/ui/contextmenu.cpp:502 ../src/verbs.cpp:2697
+#: ../src/ui/contextmenu.cpp:502 ../src/verbs.cpp:2694
 msgid "_Group"
 msgstr ""
 
@@ -14674,7 +14682,7 @@ msgstr ""
 msgid "Create link"
 msgstr ""
 
-#: ../src/ui/contextmenu.cpp:608 ../src/verbs.cpp:2699
+#: ../src/ui/contextmenu.cpp:608 ../src/verbs.cpp:2696
 msgid "_Ungroup"
 msgstr ""
 
@@ -14702,65 +14710,65 @@ msgstr ""
 msgid "Edit Externally..."
 msgstr ""
 
-#: ../src/ui/contextmenu.cpp:706 ../src/verbs.cpp:2777
+#: ../src/ui/contextmenu.cpp:707 ../src/verbs.cpp:2774
 msgid "_Trace Bitmap..."
 msgstr ""
 
-#: ../src/ui/contextmenu.cpp:715
+#: ../src/ui/contextmenu.cpp:717
 msgid "Trace Pixel Art"
 msgstr ""
 
-#: ../src/ui/contextmenu.cpp:725
+#: ../src/ui/contextmenu.cpp:727
 msgctxt "Context menu"
 msgid "Embed Image"
 msgstr ""
 
-#: ../src/ui/contextmenu.cpp:736
+#: ../src/ui/contextmenu.cpp:738
 msgctxt "Context menu"
 msgid "Extract Image..."
 msgstr ""
 
-#: ../src/ui/contextmenu.cpp:897 ../src/ui/contextmenu.cpp:917
-#: ../src/verbs.cpp:3088
+#: ../src/ui/contextmenu.cpp:901 ../src/ui/contextmenu.cpp:921
+#: ../src/verbs.cpp:3085
 msgid "_Fill and Stroke..."
 msgstr ""
 
-#: ../src/ui/contextmenu.cpp:923 ../src/verbs.cpp:3110
+#: ../src/ui/contextmenu.cpp:927 ../src/verbs.cpp:3107
 msgid "_Text and Font..."
 msgstr ""
 
-#: ../src/ui/contextmenu.cpp:929 ../src/verbs.cpp:3120
+#: ../src/ui/contextmenu.cpp:934 ../src/verbs.cpp:3117
 msgid "Check Spellin_g..."
 msgstr ""
 
-#: ../src/ui/desktop/menubar.cpp:310
+#: ../src/ui/desktop/menubar.cpp:312
 msgctxt "Interface setup"
 msgid "Default"
 msgstr ""
 
-#: ../src/ui/desktop/menubar.cpp:310
+#: ../src/ui/desktop/menubar.cpp:312
 msgid "Default interface setup"
 msgstr ""
 
-#: ../src/ui/desktop/menubar.cpp:311
+#: ../src/ui/desktop/menubar.cpp:313
 msgctxt "Interface setup"
 msgid "Custom"
 msgstr ""
 
-#: ../src/ui/desktop/menubar.cpp:311
+#: ../src/ui/desktop/menubar.cpp:313
 msgid "Setup for custom task"
 msgstr ""
 
-#: ../src/ui/desktop/menubar.cpp:312
+#: ../src/ui/desktop/menubar.cpp:314
 msgctxt "Interface setup"
 msgid "Wide"
 msgstr ""
 
-#: ../src/ui/desktop/menubar.cpp:312
+#: ../src/ui/desktop/menubar.cpp:314
 msgid "Setup for widescreen work"
 msgstr ""
 
-#: ../src/ui/desktop/menubar.cpp:506
+#: ../src/ui/desktop/menubar.cpp:515
 msgid "Open _Recent"
 msgstr ""
 
@@ -14859,52 +14867,52 @@ msgstr ""
 msgid "Relative to: "
 msgstr ""
 
-#: ../src/ui/dialog/align-and-distribute.cpp:947 ../src/verbs.cpp:3230
-#: ../src/verbs.cpp:3231
+#: ../src/ui/dialog/align-and-distribute.cpp:947 ../src/verbs.cpp:3223
+#: ../src/verbs.cpp:3224
 msgid "Align right edges of objects to the left edge of the anchor"
 msgstr ""
 
-#: ../src/ui/dialog/align-and-distribute.cpp:950 ../src/verbs.cpp:3233
-#: ../src/verbs.cpp:3234
+#: ../src/ui/dialog/align-and-distribute.cpp:950 ../src/verbs.cpp:3226
+#: ../src/verbs.cpp:3227
 msgid "Align left edges"
 msgstr ""
 
-#: ../src/ui/dialog/align-and-distribute.cpp:953 ../src/verbs.cpp:3235
-#: ../src/verbs.cpp:3236
+#: ../src/ui/dialog/align-and-distribute.cpp:953 ../src/verbs.cpp:3228
+#: ../src/verbs.cpp:3229
 msgid "Center on vertical axis"
 msgstr ""
 
-#: ../src/ui/dialog/align-and-distribute.cpp:956 ../src/verbs.cpp:3237
-#: ../src/verbs.cpp:3238
+#: ../src/ui/dialog/align-and-distribute.cpp:956 ../src/verbs.cpp:3230
+#: ../src/verbs.cpp:3231
 msgid "Align right sides"
 msgstr ""
 
-#: ../src/ui/dialog/align-and-distribute.cpp:959 ../src/verbs.cpp:3240
-#: ../src/verbs.cpp:3241
+#: ../src/ui/dialog/align-and-distribute.cpp:959 ../src/verbs.cpp:3233
+#: ../src/verbs.cpp:3234
 msgid "Align left edges of objects to the right edge of the anchor"
 msgstr ""
 
-#: ../src/ui/dialog/align-and-distribute.cpp:962 ../src/verbs.cpp:3244
-#: ../src/verbs.cpp:3245
+#: ../src/ui/dialog/align-and-distribute.cpp:962 ../src/verbs.cpp:3237
+#: ../src/verbs.cpp:3238
 msgid "Align bottom edges of objects to the top edge of the anchor"
 msgstr ""
 
-#: ../src/ui/dialog/align-and-distribute.cpp:965 ../src/verbs.cpp:3247
+#: ../src/ui/dialog/align-and-distribute.cpp:965 ../src/verbs.cpp:3240
 msgid "Align top edges"
 msgstr ""
 
-#: ../src/ui/dialog/align-and-distribute.cpp:968 ../src/verbs.cpp:3249
-#: ../src/verbs.cpp:3250
+#: ../src/ui/dialog/align-and-distribute.cpp:968 ../src/verbs.cpp:3242
+#: ../src/verbs.cpp:3243
 msgid "Center on horizontal axis"
 msgstr ""
 
-#: ../src/ui/dialog/align-and-distribute.cpp:971 ../src/verbs.cpp:3251
-#: ../src/verbs.cpp:3252
+#: ../src/ui/dialog/align-and-distribute.cpp:971 ../src/verbs.cpp:3244
+#: ../src/verbs.cpp:3245
 msgid "Align bottom edges"
 msgstr ""
 
-#: ../src/ui/dialog/align-and-distribute.cpp:974 ../src/verbs.cpp:3254
-#: ../src/verbs.cpp:3255
+#: ../src/ui/dialog/align-and-distribute.cpp:974 ../src/verbs.cpp:3247
+#: ../src/verbs.cpp:3248
 msgid "Align top edges of objects to the bottom edge of the anchor"
 msgstr ""
 
@@ -15023,7 +15031,7 @@ msgstr ""
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1073
 #: ../src/ui/dialog/document-properties.cpp:149
-#: ../src/widgets/desktop-widget.cpp:1967 ../share/extensions/empty_page.inx:3
+#: ../src/widgets/desktop-widget.cpp:1983
 #: ../share/extensions/voronoi2svg.inx:16
 msgid "Page"
 msgstr ""
@@ -15102,14 +15110,14 @@ msgid "Profile name:"
 msgstr ""
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:55
-#: ../src/ui/dialog/guides.cpp:179 ../src/verbs.cpp:2606
+#: ../src/ui/dialog/guides.cpp:179 ../src/verbs.cpp:2603
 msgid "_Delete"
 msgstr ""
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:60
 #: ../src/ui/dialog/export.cpp:1306
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:563 ../src/ui/dialog/input.cpp:905
-#: ../src/verbs.cpp:2543 ../src/widgets/desktop-widget.cpp:1146
+#: ../src/verbs.cpp:2540 ../src/widgets/desktop-widget.cpp:1161
 msgid "_Save"
 msgstr ""
 
@@ -15943,7 +15951,7 @@ msgstr ""
 msgid "Lock all guides"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:115 ../src/verbs.cpp:2671
+#: ../src/ui/dialog/document-properties.cpp:115 ../src/verbs.cpp:2668
 #: ../src/widgets/desktop-widget.cpp:379
 msgid "Toggle lock of all guides in the document"
 msgstr ""
@@ -16108,7 +16116,7 @@ msgstr ""
 msgid "Guides"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:152 ../src/verbs.cpp:3023
+#: ../src/ui/dialog/document-properties.cpp:152 ../src/verbs.cpp:3020
 msgid "Snap"
 msgstr ""
 
@@ -16156,7 +16164,7 @@ msgstr ""
 msgid "<b>Miscellaneous</b>"
 msgstr ""
 
-#: ../src/ui/dialog/document-properties.cpp:537 ../src/verbs.cpp:3213
+#: ../src/ui/dialog/document-properties.cpp:537 ../src/verbs.cpp:3206
 msgid "Link Color Profile"
 msgstr ""
 
@@ -16292,15 +16300,15 @@ msgstr ""
 msgid "Changed default display unit"
 msgstr ""
 
-#: ../src/ui/dialog/export.cpp:117 ../src/verbs.cpp:2990
+#: ../src/ui/dialog/export.cpp:117 ../src/verbs.cpp:2987
 msgid "_Page"
 msgstr ""
 
-#: ../src/ui/dialog/export.cpp:117 ../src/verbs.cpp:2994
+#: ../src/ui/dialog/export.cpp:117 ../src/verbs.cpp:2991
 msgid "_Drawing"
 msgstr ""
 
-#: ../src/ui/dialog/export.cpp:117 ../src/verbs.cpp:2996
+#: ../src/ui/dialog/export.cpp:117 ../src/verbs.cpp:2993
 msgid "_Selection"
 msgstr ""
 
@@ -16725,7 +16733,7 @@ msgid "_Duplicate"
 msgstr ""
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1328
-#: ../src/ui/dialog/svg-fonts-dialog.cpp:1001 ../src/verbs.cpp:2536
+#: ../src/ui/dialog/svg-fonts-dialog.cpp:1001 ../src/verbs.cpp:2533
 #: ../share/ui/inkscape-application.glade:10
 msgid "_New"
 msgstr ""
@@ -16835,7 +16843,7 @@ msgid "Value(s):"
 msgstr ""
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2758
-#: ../src/widgets/desktop-widget.cpp:658
+#: ../src/widgets/desktop-widget.cpp:659
 msgid "R:"
 msgstr ""
 
@@ -17353,7 +17361,7 @@ msgid "Clones"
 msgstr ""
 
 #: ../src/ui/dialog/find.cpp:98 ../share/extensions/embedimage.inx:10
-#: ../share/extensions/extractimage.inx:13
+#: ../share/extensions/extractimage.inx:11
 #: ../share/extensions/image_attributes.inx:70
 msgid "Images"
 msgstr ""
@@ -18287,7 +18295,7 @@ msgstr ""
 #: ../src/ui/dialog/object-attributes.cpp:57
 #: ../src/ui/dialog/object-attributes.cpp:65
 #: ../src/ui/toolbar/node-toolbar.cpp:262 ../src/ui/widget/page-sizer.cpp:57
-#: ../src/widgets/desktop-widget.cpp:643
+#: ../src/widgets/desktop-widget.cpp:644
 msgid "X:"
 msgstr ""
 
@@ -18299,7 +18307,7 @@ msgstr ""
 #: ../src/ui/dialog/object-attributes.cpp:58
 #: ../src/ui/dialog/object-attributes.cpp:66
 #: ../src/ui/toolbar/node-toolbar.cpp:277 ../src/ui/widget/page-sizer.cpp:58
-#: ../src/widgets/desktop-widget.cpp:644
+#: ../src/widgets/desktop-widget.cpp:645
 msgid "Y:"
 msgstr ""
 
@@ -18757,11 +18765,11 @@ msgid "Object paint style"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:405
-#: ../src/widgets/desktop-widget.cpp:585
+#: ../src/widgets/desktop-widget.cpp:586
 msgid "Zoom"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:410 ../src/verbs.cpp:2912
+#: ../src/ui/dialog/inkscape-preferences.cpp:410 ../src/verbs.cpp:2909
 msgctxt "ContextVerb"
 msgid "Measure"
 msgstr ""
@@ -18812,7 +18820,7 @@ msgid ""
 "selection)"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:469 ../src/verbs.cpp:2904
+#: ../src/ui/dialog/inkscape-preferences.cpp:469 ../src/verbs.cpp:2901
 msgctxt "ContextVerb"
 msgid "Text"
 msgstr ""
@@ -18827,7 +18835,7 @@ msgid ""
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:477
-msgid "Show font substitution inng dialog"
+msgid "Show font substitution warning dialog"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:478
@@ -21127,7 +21135,7 @@ msgstr ""
 msgid "Rendering"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2081 ../src/verbs.cpp:163
+#: ../src/ui/dialog/inkscape-preferences.cpp:2081 ../src/verbs.cpp:158
 msgid "Edit"
 msgstr ""
 
@@ -21148,7 +21156,7 @@ msgid "_SVG editor:"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2090
-#: ../share/extensions/guillotine.inx:17 ../share/extensions/plotter.inx:101
+#: ../share/extensions/guillotine.inx:17 ../share/extensions/plotter.inx:100
 #: ../share/extensions/prepare_file_save_as.inx:9
 #: ../share/extensions/print_win32_vector.inx:10
 msgid "Export"
@@ -21711,8 +21719,8 @@ msgid "Rename Layer"
 msgstr ""
 
 #: ../src/ui/dialog/layer-properties.cpp:323
-#: ../src/ui/dialog/layer-properties.cpp:379 ../src/verbs.cpp:201
-#: ../src/verbs.cpp:2473
+#: ../src/ui/dialog/layer-properties.cpp:379 ../src/verbs.cpp:196
+#: ../src/verbs.cpp:2470
 msgid "Layer"
 msgstr ""
 
@@ -21761,12 +21769,12 @@ msgid "Unlock layer"
 msgstr ""
 
 #: ../src/ui/dialog/layers.cpp:584 ../src/ui/dialog/objects.cpp:844
-#: ../src/verbs.cpp:1479
+#: ../src/verbs.cpp:1476
 msgid "Toggle layer solo"
 msgstr ""
 
 #: ../src/ui/dialog/layers.cpp:587 ../src/ui/dialog/objects.cpp:847
-#: ../src/verbs.cpp:1503
+#: ../src/verbs.cpp:1500
 msgid "Lock other layers"
 msgstr ""
 
@@ -22076,8 +22084,8 @@ msgstr ""
 msgid "Check to preserve aspect ratio on images"
 msgstr ""
 
-#: ../src/ui/dialog/object-properties.cpp:273 ../src/verbs.cpp:2861
-#: ../src/verbs.cpp:2869
+#: ../src/ui/dialog/object-properties.cpp:273 ../src/verbs.cpp:2858
+#: ../src/verbs.cpp:2866
 msgid "_Set"
 msgstr ""
 
@@ -24242,7 +24250,7 @@ msgctxt "Transform handle tip"
 msgid "<b>Rotation center</b>: drag to change the origin of transforms"
 msgstr ""
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:86 ../src/ui/toolbar/arc-toolbar.cpp:465
+#: ../src/ui/toolbar/arc-toolbar.cpp:86 ../src/ui/toolbar/arc-toolbar.cpp:469
 #: ../src/ui/toolbar/rect-toolbar.cpp:80 ../src/ui/toolbar/rect-toolbar.cpp:326
 #: ../src/ui/toolbar/spiral-toolbar.cpp:73
 #: ../src/ui/toolbar/spiral-toolbar.cpp:241
@@ -24299,27 +24307,27 @@ msgstr ""
 msgid "Switch to chord (closed shape)"
 msgstr ""
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:192
+#: ../src/ui/toolbar/arc-toolbar.cpp:196
 msgid "Make whole"
 msgstr ""
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:193
+#: ../src/ui/toolbar/arc-toolbar.cpp:197
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr ""
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:283
+#: ../src/ui/toolbar/arc-toolbar.cpp:287
 msgid "Ellipse: Change radius"
 msgstr ""
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:337
+#: ../src/ui/toolbar/arc-toolbar.cpp:341
 msgid "Arc: Change start/end"
 msgstr ""
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:393
+#: ../src/ui/toolbar/arc-toolbar.cpp:397
 msgid "Arc: Changed arc type"
 msgstr ""
 
-#: ../src/ui/toolbar/arc-toolbar.cpp:468 ../src/ui/toolbar/arc-toolbar.cpp:482
+#: ../src/ui/toolbar/arc-toolbar.cpp:472 ../src/ui/toolbar/arc-toolbar.cpp:486
 #: ../src/ui/toolbar/rect-toolbar.cpp:330
 #: ../src/ui/toolbar/rect-toolbar.cpp:345
 #: ../src/ui/toolbar/spiral-toolbar.cpp:243
@@ -24975,7 +24983,7 @@ msgstr ""
 msgid "The font size to be used in the measurement labels"
 msgstr ""
 
-#: ../src/ui/toolbar/measure-toolbar.cpp:92 ../share/extensions/measure.inx:45
+#: ../src/ui/toolbar/measure-toolbar.cpp:92 ../share/extensions/measure.inx:52
 msgid "Precision:"
 msgstr ""
 
@@ -25108,7 +25116,7 @@ msgstr ""
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:219
 #: ../share/extensions/guides_creator.inx:14
-#: ../share/extensions/guides_creator.inx:80
+#: ../share/extensions/guides_creator.inx:78
 #: ../share/extensions/layout_nup.inx:24
 msgid "Rows:"
 msgstr ""
@@ -25119,7 +25127,7 @@ msgstr ""
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:233
 #: ../share/extensions/guides_creator.inx:13
-#: ../share/extensions/guides_creator.inx:79
+#: ../share/extensions/guides_creator.inx:77
 msgid "Columns:"
 msgstr ""
 
@@ -27235,7 +27243,7 @@ msgstr ""
 msgid "Measure end, <b>Shift+Click</b> for position dialog"
 msgstr ""
 
-#: ../src/ui/tools/measure-tool.cpp:736 ../share/extensions/measure.inx:7
+#: ../src/ui/tools/measure-tool.cpp:736
 msgid "Measure"
 msgstr ""
 
@@ -27809,7 +27817,7 @@ msgstr[1] ""
 msgid "Type text"
 msgstr ""
 
-#: ../src/ui/tools/tool-base.cpp:707
+#: ../src/ui/tools/tool-base.cpp:710
 msgid "<b>Space+mouse move</b> to pan canvas"
 msgstr ""
 
@@ -28043,7 +28051,7 @@ msgstr ""
 msgid "Too much ink!"
 msgstr ""
 
-#: ../src/ui/widget/color-notebook.cpp:179 ../src/verbs.cpp:2914
+#: ../src/ui/widget/color-notebook.cpp:179 ../src/verbs.cpp:2911
 msgid "Pick colors from image"
 msgstr ""
 
@@ -28597,7 +28605,7 @@ msgid "Resi_ze page to content..."
 msgstr ""
 
 #: ../src/ui/widget/page-sizer.cpp:204
-#: ../share/extensions/guides_creator.inx:25
+#: ../share/extensions/guides_creator.inx:23
 msgid "Margins"
 msgstr ""
 
@@ -28860,7 +28868,7 @@ msgstr ""
 msgid "Paste color"
 msgstr ""
 
-#: ../src/ui/widget/selected-style.cpp:281 ../src/verbs.cpp:2677
+#: ../src/ui/widget/selected-style.cpp:281 ../src/verbs.cpp:2674
 msgid "Swap fill and stroke"
 msgstr ""
 
@@ -29108,2417 +29116,2417 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/verbs.cpp:144
+#: ../src/verbs.cpp:139
 msgid "File"
 msgstr ""
 
-#: ../src/verbs.cpp:182 ../src/widgets/desktop-widget.cpp:1975
+#: ../src/verbs.cpp:177 ../src/widgets/desktop-widget.cpp:1991
 #: ../share/extensions/printing_marks.inx:19
 msgid "Selection"
 msgstr ""
 
-#: ../src/verbs.cpp:239
+#: ../src/verbs.cpp:234
 msgid "Context"
 msgstr ""
 
-#: ../src/verbs.cpp:258 ../src/verbs.cpp:2407
+#: ../src/verbs.cpp:253 ../src/verbs.cpp:2404
 #: ../share/extensions/jessyInk_view.inx:3
 #: ../share/extensions/polyhedron_3d.inx:33
 msgid "View"
 msgstr ""
 
-#: ../src/verbs.cpp:278
+#: ../src/verbs.cpp:273
 msgid "Dialog"
 msgstr ""
 
-#: ../src/verbs.cpp:1319
+#: ../src/verbs.cpp:1316
 msgid "Switch to next layer"
 msgstr ""
 
-#: ../src/verbs.cpp:1320
+#: ../src/verbs.cpp:1317
 msgid "Switched to next layer."
 msgstr ""
 
-#: ../src/verbs.cpp:1322
+#: ../src/verbs.cpp:1319
 msgid "Cannot go past last layer."
 msgstr ""
 
-#: ../src/verbs.cpp:1331
+#: ../src/verbs.cpp:1328
 msgid "Switch to previous layer"
 msgstr ""
 
-#: ../src/verbs.cpp:1332
+#: ../src/verbs.cpp:1329
 msgid "Switched to previous layer."
 msgstr ""
 
-#: ../src/verbs.cpp:1334
+#: ../src/verbs.cpp:1331
 msgid "Cannot go before first layer."
 msgstr ""
 
-#: ../src/verbs.cpp:1355 ../src/verbs.cpp:1422 ../src/verbs.cpp:1470
-#: ../src/verbs.cpp:1476 ../src/verbs.cpp:1500 ../src/verbs.cpp:1515
+#: ../src/verbs.cpp:1352 ../src/verbs.cpp:1419 ../src/verbs.cpp:1467
+#: ../src/verbs.cpp:1473 ../src/verbs.cpp:1497 ../src/verbs.cpp:1512
 msgid "No current layer."
 msgstr ""
 
-#: ../src/verbs.cpp:1384 ../src/verbs.cpp:1388
+#: ../src/verbs.cpp:1381 ../src/verbs.cpp:1385
 #, c-format
 msgid "Raised layer <b>%s</b>."
 msgstr ""
 
-#: ../src/verbs.cpp:1385
+#: ../src/verbs.cpp:1382
 msgid "Layer to top"
 msgstr ""
 
-#: ../src/verbs.cpp:1389
+#: ../src/verbs.cpp:1386
 msgid "Raise layer"
 msgstr ""
 
-#: ../src/verbs.cpp:1392 ../src/verbs.cpp:1396
+#: ../src/verbs.cpp:1389 ../src/verbs.cpp:1393
 #, c-format
 msgid "Lowered layer <b>%s</b>."
 msgstr ""
 
-#: ../src/verbs.cpp:1393
+#: ../src/verbs.cpp:1390
 msgid "Layer to bottom"
 msgstr ""
 
-#: ../src/verbs.cpp:1397
+#: ../src/verbs.cpp:1394
 msgid "Lower layer"
 msgstr ""
 
-#: ../src/verbs.cpp:1406
+#: ../src/verbs.cpp:1403
 msgid "Cannot move layer any further."
 msgstr ""
 
-#: ../src/verbs.cpp:1417
+#: ../src/verbs.cpp:1414
 msgid "Duplicate layer"
 msgstr ""
 
-#: ../src/verbs.cpp:1420
+#: ../src/verbs.cpp:1417
 msgid "Duplicated layer."
 msgstr ""
 
-#: ../src/verbs.cpp:1465
+#: ../src/verbs.cpp:1462
 msgid "Delete layer"
 msgstr ""
 
-#: ../src/verbs.cpp:1468
+#: ../src/verbs.cpp:1465
 msgid "Deleted layer."
 msgstr ""
 
-#: ../src/verbs.cpp:1485
+#: ../src/verbs.cpp:1482
 msgid "Show all layers"
 msgstr ""
 
-#: ../src/verbs.cpp:1490
+#: ../src/verbs.cpp:1487
 msgid "Hide all layers"
 msgstr ""
 
-#: ../src/verbs.cpp:1495
+#: ../src/verbs.cpp:1492
 msgid "Lock all layers"
 msgstr ""
 
-#: ../src/verbs.cpp:1509
+#: ../src/verbs.cpp:1506
 msgid "Unlock all layers"
 msgstr ""
 
-#: ../src/verbs.cpp:1593
+#: ../src/verbs.cpp:1590
 msgid "Flip horizontally"
 msgstr ""
 
-#: ../src/verbs.cpp:1598
+#: ../src/verbs.cpp:1595
 msgid "Flip vertically"
 msgstr ""
 
-#: ../src/verbs.cpp:2506 ../src/verbs.cpp:3205
+#: ../src/verbs.cpp:2503 ../src/verbs.cpp:3198
 msgid "Unlock all objects in the current layer"
 msgstr ""
 
-#: ../src/verbs.cpp:2510 ../src/verbs.cpp:3207
+#: ../src/verbs.cpp:2507 ../src/verbs.cpp:3200
 msgid "Unlock all objects in all layers"
 msgstr ""
 
-#: ../src/verbs.cpp:2514 ../src/verbs.cpp:3209
+#: ../src/verbs.cpp:2511 ../src/verbs.cpp:3202
 msgid "Unhide all objects in the current layer"
 msgstr ""
 
-#: ../src/verbs.cpp:2518 ../src/verbs.cpp:3211
+#: ../src/verbs.cpp:2515 ../src/verbs.cpp:3204
 msgid "Unhide all objects in all layers"
 msgstr ""
 
-#: ../src/verbs.cpp:2533
+#: ../src/verbs.cpp:2530
 msgctxt "Verb"
 msgid "None"
 msgstr ""
 
-#: ../src/verbs.cpp:2533
+#: ../src/verbs.cpp:2530
 msgid "Does nothing"
 msgstr ""
 
-#: ../src/verbs.cpp:2536
+#: ../src/verbs.cpp:2533
 msgid "Create new document from the default template"
 msgstr ""
 
-#: ../src/verbs.cpp:2538
+#: ../src/verbs.cpp:2535
 msgid "_Open..."
 msgstr ""
 
-#: ../src/verbs.cpp:2538
+#: ../src/verbs.cpp:2535
 msgid "Open an existing document"
 msgstr ""
 
-#: ../src/verbs.cpp:2540
+#: ../src/verbs.cpp:2537
 msgid "Re_vert"
 msgstr ""
 
-#: ../src/verbs.cpp:2541
+#: ../src/verbs.cpp:2538
 msgid "Revert to the last saved version of document (changes will be lost)"
 msgstr ""
 
-#: ../src/verbs.cpp:2543
+#: ../src/verbs.cpp:2540
 msgid "Save document"
 msgstr ""
 
-#: ../src/verbs.cpp:2544
+#: ../src/verbs.cpp:2541
 msgid "Save _As..."
 msgstr ""
 
-#: ../src/verbs.cpp:2544
+#: ../src/verbs.cpp:2541
 msgid "Save document under a new name"
 msgstr ""
 
-#: ../src/verbs.cpp:2546
+#: ../src/verbs.cpp:2543
 msgid "Save a Cop_y..."
 msgstr ""
 
-#: ../src/verbs.cpp:2547
+#: ../src/verbs.cpp:2544
 msgid "Save a copy of the document under a new name"
 msgstr ""
 
-#: ../src/verbs.cpp:2548
+#: ../src/verbs.cpp:2545
 msgid "Save Template..."
 msgstr ""
 
-#: ../src/verbs.cpp:2549
+#: ../src/verbs.cpp:2546
 msgid "Save a copy of the document as template"
 msgstr ""
 
-#: ../src/verbs.cpp:2550
+#: ../src/verbs.cpp:2547
 msgid "_Print..."
 msgstr ""
 
-#: ../src/verbs.cpp:2550
+#: ../src/verbs.cpp:2547
 msgid "Print document"
 msgstr ""
 
-#: ../src/verbs.cpp:2554
+#: ../src/verbs.cpp:2551
 msgid "Clean _Up Document"
 msgstr ""
 
-#: ../src/verbs.cpp:2555
+#: ../src/verbs.cpp:2552
 msgid ""
 "Remove unused definitions (such as gradients or clipping paths) from the &lt;"
 "defs&gt; of the document"
 msgstr ""
 
-#: ../src/verbs.cpp:2557
+#: ../src/verbs.cpp:2554
 msgid "_Import..."
 msgstr ""
 
-#: ../src/verbs.cpp:2558
+#: ../src/verbs.cpp:2555
 msgid "Import a bitmap or SVG image into this document"
 msgstr ""
 
-#: ../src/verbs.cpp:2561
+#: ../src/verbs.cpp:2558
 msgid "Import Clip Art..."
 msgstr ""
 
-#: ../src/verbs.cpp:2562
+#: ../src/verbs.cpp:2559
 msgid "Import clipart from Open Clip Art Library"
 msgstr ""
 
-#: ../src/verbs.cpp:2565
+#: ../src/verbs.cpp:2562
 msgid "N_ext Window"
 msgstr ""
 
-#: ../src/verbs.cpp:2565
+#: ../src/verbs.cpp:2562
 msgid "Switch to the next document window"
 msgstr ""
 
-#: ../src/verbs.cpp:2567
+#: ../src/verbs.cpp:2564
 msgid "P_revious Window"
 msgstr ""
 
-#: ../src/verbs.cpp:2568
+#: ../src/verbs.cpp:2565
 msgid "Switch to the previous document window"
 msgstr ""
 
-#: ../src/verbs.cpp:2569
+#: ../src/verbs.cpp:2566
 msgid "Close this document window"
 msgstr ""
 
-#: ../src/verbs.cpp:2571 ../share/ui/inkscape-application.glade:15
+#: ../src/verbs.cpp:2568 ../share/ui/inkscape-application.glade:15
 msgid "_Quit"
 msgstr ""
 
-#: ../src/verbs.cpp:2571
+#: ../src/verbs.cpp:2568
 msgid "Quit Inkscape"
 msgstr ""
 
-#: ../src/verbs.cpp:2572
+#: ../src/verbs.cpp:2569
 msgid "New from _Template..."
 msgstr ""
 
-#: ../src/verbs.cpp:2573
+#: ../src/verbs.cpp:2570
 msgid "Create new project from template"
 msgstr ""
 
-#: ../src/verbs.cpp:2576
+#: ../src/verbs.cpp:2573
 msgid "Undo last action"
 msgstr ""
 
-#: ../src/verbs.cpp:2577
+#: ../src/verbs.cpp:2574
 msgid "Do again the last undone action"
 msgstr ""
 
-#: ../src/verbs.cpp:2579
+#: ../src/verbs.cpp:2576
 msgid "Cu_t"
 msgstr ""
 
-#: ../src/verbs.cpp:2579
+#: ../src/verbs.cpp:2576
 msgid "Cut selection to clipboard"
 msgstr ""
 
-#: ../src/verbs.cpp:2580
+#: ../src/verbs.cpp:2577
 msgid "_Copy"
 msgstr ""
 
-#: ../src/verbs.cpp:2580
+#: ../src/verbs.cpp:2577
 msgid "Copy selection to clipboard"
 msgstr ""
 
-#: ../src/verbs.cpp:2582
+#: ../src/verbs.cpp:2579
 msgid "_Paste"
 msgstr ""
 
-#: ../src/verbs.cpp:2583
+#: ../src/verbs.cpp:2580
 msgid "Paste objects from clipboard to mouse point, or paste text"
 msgstr ""
 
-#: ../src/verbs.cpp:2584
+#: ../src/verbs.cpp:2581
 msgid "Paste _Style"
 msgstr ""
 
-#: ../src/verbs.cpp:2585
+#: ../src/verbs.cpp:2582
 msgid "Apply the style of the copied object to selection"
 msgstr ""
 
-#: ../src/verbs.cpp:2586
+#: ../src/verbs.cpp:2583
 msgid "Paste Si_ze"
 msgstr ""
 
-#: ../src/verbs.cpp:2587
+#: ../src/verbs.cpp:2584
 msgid "Scale selection to match the size of the copied object"
 msgstr ""
 
-#: ../src/verbs.cpp:2588
+#: ../src/verbs.cpp:2585
 msgid "Paste _Width"
 msgstr ""
 
-#: ../src/verbs.cpp:2589
+#: ../src/verbs.cpp:2586
 msgid "Scale selection horizontally to match the width of the copied object"
 msgstr ""
 
-#: ../src/verbs.cpp:2590
+#: ../src/verbs.cpp:2587
 msgid "Paste _Height"
 msgstr ""
 
-#: ../src/verbs.cpp:2591
+#: ../src/verbs.cpp:2588
 msgid "Scale selection vertically to match the height of the copied object"
 msgstr ""
 
-#: ../src/verbs.cpp:2592
+#: ../src/verbs.cpp:2589
 msgid "Paste Size Separately"
 msgstr ""
 
-#: ../src/verbs.cpp:2593
+#: ../src/verbs.cpp:2590
 msgid "Scale each selected object to match the size of the copied object"
 msgstr ""
 
-#: ../src/verbs.cpp:2594
+#: ../src/verbs.cpp:2591
 msgid "Paste Width Separately"
 msgstr ""
 
-#: ../src/verbs.cpp:2595
+#: ../src/verbs.cpp:2592
 msgid ""
 "Scale each selected object horizontally to match the width of the copied "
 "object"
 msgstr ""
 
-#: ../src/verbs.cpp:2596
+#: ../src/verbs.cpp:2593
 msgid "Paste Height Separately"
 msgstr ""
 
-#: ../src/verbs.cpp:2597
+#: ../src/verbs.cpp:2594
 msgid ""
 "Scale each selected object vertically to match the height of the copied "
 "object"
 msgstr ""
 
-#: ../src/verbs.cpp:2598
+#: ../src/verbs.cpp:2595
 msgid "Paste _In Place"
 msgstr ""
 
-#: ../src/verbs.cpp:2599
+#: ../src/verbs.cpp:2596
 msgid "Paste objects from clipboard to the original location"
 msgstr ""
 
-#: ../src/verbs.cpp:2600
+#: ../src/verbs.cpp:2597
 msgid "Paste Path _Effect"
 msgstr ""
 
-#: ../src/verbs.cpp:2601
+#: ../src/verbs.cpp:2598
 msgid "Apply the path effect of the copied object to selection"
 msgstr ""
 
-#: ../src/verbs.cpp:2602
+#: ../src/verbs.cpp:2599
 msgid "Remove Path _Effect"
 msgstr ""
 
-#: ../src/verbs.cpp:2603
+#: ../src/verbs.cpp:2600
 msgid "Remove any path effects from selected objects"
 msgstr ""
 
-#: ../src/verbs.cpp:2604
+#: ../src/verbs.cpp:2601
 msgid "_Remove Filters"
 msgstr ""
 
-#: ../src/verbs.cpp:2605
+#: ../src/verbs.cpp:2602
 msgid "Remove any filters from selected objects"
 msgstr ""
 
-#: ../src/verbs.cpp:2606
+#: ../src/verbs.cpp:2603
 msgid "Delete selection"
 msgstr ""
 
-#: ../src/verbs.cpp:2608
+#: ../src/verbs.cpp:2605
 msgid "Duplic_ate"
 msgstr ""
 
-#: ../src/verbs.cpp:2608
+#: ../src/verbs.cpp:2605
 msgid "Duplicate Selected Objects"
 msgstr ""
 
-#: ../src/verbs.cpp:2610
+#: ../src/verbs.cpp:2607
 msgid "Create Clo_ne"
 msgstr ""
 
-#: ../src/verbs.cpp:2611
+#: ../src/verbs.cpp:2608
 msgid "Create a clone (a copy linked to the original) of selected object"
 msgstr ""
 
-#: ../src/verbs.cpp:2612
+#: ../src/verbs.cpp:2609
 msgid "Unlin_k Clone"
 msgstr ""
 
-#: ../src/verbs.cpp:2613
+#: ../src/verbs.cpp:2610
 msgid ""
 "Cut the selected clones' links to the originals, turning them into "
 "standalone objects"
 msgstr ""
 
-#: ../src/verbs.cpp:2615
+#: ../src/verbs.cpp:2612
 msgid "Unlink Clones _recursively"
 msgstr ""
 
-#: ../src/verbs.cpp:2616
+#: ../src/verbs.cpp:2613
 msgid "Unlink all clones in the selection, even if they are in groups."
 msgstr ""
 
-#: ../src/verbs.cpp:2618
+#: ../src/verbs.cpp:2615
 msgid "Relink to Copied"
 msgstr ""
 
-#: ../src/verbs.cpp:2619
+#: ../src/verbs.cpp:2616
 msgid "Relink the selected clones to the object currently on the clipboard"
 msgstr ""
 
-#: ../src/verbs.cpp:2620
+#: ../src/verbs.cpp:2617
 msgid "Select _Original"
 msgstr ""
 
-#: ../src/verbs.cpp:2621
+#: ../src/verbs.cpp:2618
 msgid "Select the object to which the selected clone is linked"
 msgstr ""
 
-#: ../src/verbs.cpp:2622
+#: ../src/verbs.cpp:2619
 msgid "Clone original path (LPE)"
 msgstr ""
 
-#: ../src/verbs.cpp:2623
+#: ../src/verbs.cpp:2620
 msgid ""
 "Creates a new path, applies the Clone original LPE, and refers it to the "
 "selected path"
 msgstr ""
 
-#: ../src/verbs.cpp:2624
+#: ../src/verbs.cpp:2621
 msgid "Objects to _Marker"
 msgstr ""
 
-#: ../src/verbs.cpp:2625
+#: ../src/verbs.cpp:2622
 msgid "Convert selection to a line marker"
 msgstr ""
 
-#: ../src/verbs.cpp:2626
+#: ../src/verbs.cpp:2623
 msgid "Objects to Gu_ides"
 msgstr ""
 
-#: ../src/verbs.cpp:2627
+#: ../src/verbs.cpp:2624
 msgid ""
 "Convert selected objects to a collection of guidelines aligned with their "
 "edges"
 msgstr ""
 
-#: ../src/verbs.cpp:2628
+#: ../src/verbs.cpp:2625
 msgid "Objects to Patter_n"
 msgstr ""
 
-#: ../src/verbs.cpp:2629
+#: ../src/verbs.cpp:2626
 msgid "Convert selection to a rectangle with tiled pattern fill"
 msgstr ""
 
-#: ../src/verbs.cpp:2630
+#: ../src/verbs.cpp:2627
 msgid "Pattern to _Objects"
 msgstr ""
 
-#: ../src/verbs.cpp:2631
+#: ../src/verbs.cpp:2628
 msgid "Extract objects from a tiled pattern fill"
 msgstr ""
 
-#: ../src/verbs.cpp:2632
+#: ../src/verbs.cpp:2629
 msgid "Group to Symbol"
 msgstr ""
 
-#: ../src/verbs.cpp:2632
+#: ../src/verbs.cpp:2629
 msgid "Convert group to a symbol"
 msgstr ""
 
-#: ../src/verbs.cpp:2634
+#: ../src/verbs.cpp:2631
 msgid "Symbol to Group"
 msgstr ""
 
-#: ../src/verbs.cpp:2634
+#: ../src/verbs.cpp:2631
 msgid "Extract group from a symbol"
 msgstr ""
 
-#: ../src/verbs.cpp:2636
+#: ../src/verbs.cpp:2633
 msgid "Clea_r All"
 msgstr ""
 
-#: ../src/verbs.cpp:2636
+#: ../src/verbs.cpp:2633
 msgid "Delete all objects from document"
 msgstr ""
 
-#: ../src/verbs.cpp:2638
+#: ../src/verbs.cpp:2635
 msgid "Select Al_l"
 msgstr ""
 
-#: ../src/verbs.cpp:2638
+#: ../src/verbs.cpp:2635
 msgid "Select all objects or all nodes"
 msgstr ""
 
-#: ../src/verbs.cpp:2640
+#: ../src/verbs.cpp:2637
 msgid "Select All in All La_yers"
 msgstr ""
 
-#: ../src/verbs.cpp:2641
+#: ../src/verbs.cpp:2638
 msgid "Select all objects in all visible and unlocked layers"
 msgstr ""
 
-#: ../src/verbs.cpp:2642
+#: ../src/verbs.cpp:2639
 msgid "Fill _and Stroke"
 msgstr ""
 
-#: ../src/verbs.cpp:2643
+#: ../src/verbs.cpp:2640
 msgid ""
 "Select all objects with the same fill and stroke as the selected objects"
 msgstr ""
 
-#: ../src/verbs.cpp:2645
+#: ../src/verbs.cpp:2642
 msgid "_Fill Color"
 msgstr ""
 
-#: ../src/verbs.cpp:2646
+#: ../src/verbs.cpp:2643
 msgid "Select all objects with the same fill as the selected objects"
 msgstr ""
 
-#: ../src/verbs.cpp:2647
+#: ../src/verbs.cpp:2644
 msgid "_Stroke Color"
 msgstr ""
 
-#: ../src/verbs.cpp:2648
+#: ../src/verbs.cpp:2645
 msgid "Select all objects with the same stroke as the selected objects"
 msgstr ""
 
-#: ../src/verbs.cpp:2650
+#: ../src/verbs.cpp:2647
 msgid "Stroke St_yle"
 msgstr ""
 
-#: ../src/verbs.cpp:2651
+#: ../src/verbs.cpp:2648
 msgid ""
 "Select all objects with the same stroke style (width, dash, markers) as the "
 "selected objects"
 msgstr ""
 
-#: ../src/verbs.cpp:2654
+#: ../src/verbs.cpp:2651
 msgid "_Object Type"
 msgstr ""
 
-#: ../src/verbs.cpp:2655
+#: ../src/verbs.cpp:2652
 msgid ""
 "Select all objects with the same object type (rect, arc, text, path, bitmap "
 "etc) as the selected objects"
 msgstr ""
 
-#: ../src/verbs.cpp:2657
+#: ../src/verbs.cpp:2654
 msgid "In_vert Selection"
 msgstr ""
 
-#: ../src/verbs.cpp:2658
+#: ../src/verbs.cpp:2655
 msgid "Invert selection (unselect what is selected and select everything else)"
 msgstr ""
 
-#: ../src/verbs.cpp:2660
+#: ../src/verbs.cpp:2657
 msgid "Invert in All Layers"
 msgstr ""
 
-#: ../src/verbs.cpp:2661
+#: ../src/verbs.cpp:2658
 msgid "Invert selection in all visible and unlocked layers"
 msgstr ""
 
-#: ../src/verbs.cpp:2662
+#: ../src/verbs.cpp:2659
 msgid "Select Next"
 msgstr ""
 
-#: ../src/verbs.cpp:2662
+#: ../src/verbs.cpp:2659
 msgid "Select next object or node"
 msgstr ""
 
-#: ../src/verbs.cpp:2664
+#: ../src/verbs.cpp:2661
 msgid "Select Previous"
 msgstr ""
 
-#: ../src/verbs.cpp:2665
+#: ../src/verbs.cpp:2662
 msgid "Select previous object or node"
 msgstr ""
 
-#: ../src/verbs.cpp:2666
+#: ../src/verbs.cpp:2663
 msgid "D_eselect"
 msgstr ""
 
-#: ../src/verbs.cpp:2666
+#: ../src/verbs.cpp:2663
 msgid "Deselect any selected objects or nodes"
 msgstr ""
 
-#: ../src/verbs.cpp:2669
+#: ../src/verbs.cpp:2666
 msgid "Delete all the guides in the document"
 msgstr ""
 
-#: ../src/verbs.cpp:2670
+#: ../src/verbs.cpp:2667
 msgid "Lock All Guides"
 msgstr ""
 
-#: ../src/verbs.cpp:2672
+#: ../src/verbs.cpp:2669
 msgid "Create _Guides Around the Page"
 msgstr ""
 
-#: ../src/verbs.cpp:2673
+#: ../src/verbs.cpp:2670
 msgid "Create four guides aligned with the page borders"
 msgstr ""
 
-#: ../src/verbs.cpp:2675
+#: ../src/verbs.cpp:2672
 msgid "Next path effect parameter"
 msgstr ""
 
-#: ../src/verbs.cpp:2675
+#: ../src/verbs.cpp:2672
 msgid "Show next editable path effect parameter"
 msgstr ""
 
-#: ../src/verbs.cpp:2681
+#: ../src/verbs.cpp:2678
 msgid "Raise to _Top"
 msgstr ""
 
-#: ../src/verbs.cpp:2681
+#: ../src/verbs.cpp:2678
 msgid "Raise selection to top"
 msgstr ""
 
-#: ../src/verbs.cpp:2683
+#: ../src/verbs.cpp:2680
 msgid "Lower to _Bottom"
 msgstr ""
 
-#: ../src/verbs.cpp:2684
+#: ../src/verbs.cpp:2681
 msgid "Lower selection to bottom"
 msgstr ""
 
-#: ../src/verbs.cpp:2685
+#: ../src/verbs.cpp:2682
 msgid "_Raise"
 msgstr ""
 
-#: ../src/verbs.cpp:2685
+#: ../src/verbs.cpp:2682
 msgid "Raise selection one step"
 msgstr ""
 
-#: ../src/verbs.cpp:2687
+#: ../src/verbs.cpp:2684
 msgid "_Lower"
 msgstr ""
 
-#: ../src/verbs.cpp:2687
+#: ../src/verbs.cpp:2684
 msgid "Lower selection one step"
 msgstr ""
 
-#: ../src/verbs.cpp:2691
+#: ../src/verbs.cpp:2688
 msgid "_Stack up"
 msgstr ""
 
-#: ../src/verbs.cpp:2692
+#: ../src/verbs.cpp:2689
 msgid "Stack selection one step up"
 msgstr ""
 
-#: ../src/verbs.cpp:2693
+#: ../src/verbs.cpp:2690
 msgid "_Stack down"
 msgstr ""
 
-#: ../src/verbs.cpp:2694
+#: ../src/verbs.cpp:2691
 msgid "Stack selection one step down"
 msgstr ""
 
-#: ../src/verbs.cpp:2697
+#: ../src/verbs.cpp:2694
 msgid "Group selected objects"
 msgstr ""
 
-#: ../src/verbs.cpp:2699
+#: ../src/verbs.cpp:2696
 msgid "Ungroup selected groups"
 msgstr ""
 
-#: ../src/verbs.cpp:2702
+#: ../src/verbs.cpp:2699
 msgid "_Pop Selected Objects out of Group"
 msgstr ""
 
-#: ../src/verbs.cpp:2702
+#: ../src/verbs.cpp:2699
 msgid "Pop selected objects out of group"
 msgstr ""
 
-#: ../src/verbs.cpp:2705
+#: ../src/verbs.cpp:2702
 msgid "_Put on Path"
 msgstr ""
 
-#: ../src/verbs.cpp:2707
+#: ../src/verbs.cpp:2704
 msgid "_Remove from Path"
 msgstr ""
 
-#: ../src/verbs.cpp:2709
+#: ../src/verbs.cpp:2706
 msgid "Remove Manual _Kerns"
 msgstr ""
 
-#: ../src/verbs.cpp:2712
+#: ../src/verbs.cpp:2709
 msgid "Remove all manual kerns and glyph rotations from a text object"
 msgstr ""
 
-#: ../src/verbs.cpp:2715
+#: ../src/verbs.cpp:2712
 msgid "_Union"
 msgstr ""
 
-#: ../src/verbs.cpp:2715
+#: ../src/verbs.cpp:2712
 msgid "Create union of selected paths"
 msgstr ""
 
-#: ../src/verbs.cpp:2717
+#: ../src/verbs.cpp:2714
 msgid "_Intersection"
 msgstr ""
 
-#: ../src/verbs.cpp:2718
+#: ../src/verbs.cpp:2715
 msgid "Create intersection of selected paths"
 msgstr ""
 
-#: ../src/verbs.cpp:2719
+#: ../src/verbs.cpp:2716
 msgid "_Difference"
 msgstr ""
 
-#: ../src/verbs.cpp:2720
+#: ../src/verbs.cpp:2717
 msgid "Create difference of selected paths (bottom minus top)"
 msgstr ""
 
-#: ../src/verbs.cpp:2721
+#: ../src/verbs.cpp:2718
 msgid "E_xclusion"
 msgstr ""
 
-#: ../src/verbs.cpp:2722
+#: ../src/verbs.cpp:2719
 msgid ""
 "Create exclusive OR of selected paths (those parts that belong to only one "
 "path)"
 msgstr ""
 
-#: ../src/verbs.cpp:2724
+#: ../src/verbs.cpp:2721
 msgid "Di_vision"
 msgstr ""
 
-#: ../src/verbs.cpp:2724
+#: ../src/verbs.cpp:2721
 msgid "Cut the bottom path into pieces"
 msgstr ""
 
-#: ../src/verbs.cpp:2728
+#: ../src/verbs.cpp:2725
 msgid "Cut _Path"
 msgstr ""
 
-#: ../src/verbs.cpp:2729
+#: ../src/verbs.cpp:2726
 msgid "Cut the bottom path's stroke into pieces, removing fill"
 msgstr ""
 
-#: ../src/verbs.cpp:2730
+#: ../src/verbs.cpp:2727
 msgid "_Grow"
 msgstr ""
 
-#: ../src/verbs.cpp:2730
+#: ../src/verbs.cpp:2727
 msgid "Make selected objects bigger"
 msgstr ""
 
-#: ../src/verbs.cpp:2732
+#: ../src/verbs.cpp:2729
 msgid "_Grow on screen"
 msgstr ""
 
-#: ../src/verbs.cpp:2733
+#: ../src/verbs.cpp:2730
 msgid "Make selected objects bigger relative to screen"
 msgstr ""
 
-#: ../src/verbs.cpp:2734
+#: ../src/verbs.cpp:2731
 msgid "_Double size"
 msgstr ""
 
-#: ../src/verbs.cpp:2735
+#: ../src/verbs.cpp:2732
 msgid "Double the size of selected objects"
 msgstr ""
 
-#: ../src/verbs.cpp:2736
+#: ../src/verbs.cpp:2733
 msgid "_Shrink"
 msgstr ""
 
-#: ../src/verbs.cpp:2736
+#: ../src/verbs.cpp:2733
 msgid "Make selected objects smaller"
 msgstr ""
 
-#: ../src/verbs.cpp:2738
+#: ../src/verbs.cpp:2735
 msgid "_Shrink on screen"
 msgstr ""
 
-#: ../src/verbs.cpp:2739
+#: ../src/verbs.cpp:2736
 msgid "Make selected objects smaller relative to screen"
 msgstr ""
 
-#: ../src/verbs.cpp:2740
+#: ../src/verbs.cpp:2737
 msgid "_Halve size"
 msgstr ""
 
-#: ../src/verbs.cpp:2741
+#: ../src/verbs.cpp:2738
 msgid "Halve the size of selected objects"
 msgstr ""
 
-#: ../src/verbs.cpp:2745
+#: ../src/verbs.cpp:2742
 msgid "Outs_et"
 msgstr ""
 
-#: ../src/verbs.cpp:2745
+#: ../src/verbs.cpp:2742
 msgid "Outset selected paths"
 msgstr ""
 
-#: ../src/verbs.cpp:2747
+#: ../src/verbs.cpp:2744
 msgid "O_utset Path by 1 px"
 msgstr ""
 
-#: ../src/verbs.cpp:2748
+#: ../src/verbs.cpp:2745
 msgid "Outset selected paths by 1 px"
 msgstr ""
 
-#: ../src/verbs.cpp:2749
+#: ../src/verbs.cpp:2746
 msgid "O_utset Path by 10 px"
 msgstr ""
 
-#: ../src/verbs.cpp:2750
+#: ../src/verbs.cpp:2747
 msgid "Outset selected paths by 10 px"
 msgstr ""
 
-#: ../src/verbs.cpp:2754
+#: ../src/verbs.cpp:2751
 msgid "I_nset"
 msgstr ""
 
-#: ../src/verbs.cpp:2754
+#: ../src/verbs.cpp:2751
 msgid "Inset selected paths"
 msgstr ""
 
-#: ../src/verbs.cpp:2756
+#: ../src/verbs.cpp:2753
 msgid "I_nset Path by 1 px"
 msgstr ""
 
-#: ../src/verbs.cpp:2757
+#: ../src/verbs.cpp:2754
 msgid "Inset selected paths by 1 px"
 msgstr ""
 
-#: ../src/verbs.cpp:2758
+#: ../src/verbs.cpp:2755
 msgid "I_nset Path by 10 px"
 msgstr ""
 
-#: ../src/verbs.cpp:2759
+#: ../src/verbs.cpp:2756
 msgid "Inset selected paths by 10 px"
 msgstr ""
 
-#: ../src/verbs.cpp:2760
+#: ../src/verbs.cpp:2757
 msgid "D_ynamic Offset"
 msgstr ""
 
-#: ../src/verbs.cpp:2761
+#: ../src/verbs.cpp:2758
 msgid "Create a dynamic offset object"
 msgstr ""
 
-#: ../src/verbs.cpp:2762
+#: ../src/verbs.cpp:2759
 msgid "_Linked Offset"
 msgstr ""
 
-#: ../src/verbs.cpp:2763
+#: ../src/verbs.cpp:2760
 msgid "Create a dynamic offset object linked to the original path"
 msgstr ""
 
-#: ../src/verbs.cpp:2765
+#: ../src/verbs.cpp:2762
 msgid "_Stroke to Path"
 msgstr ""
 
-#: ../src/verbs.cpp:2766
+#: ../src/verbs.cpp:2763
 msgid "Convert selected object's stroke to paths"
 msgstr ""
 
-#: ../src/verbs.cpp:2767
+#: ../src/verbs.cpp:2764
 msgid "_Stroke to Path Legacy"
 msgstr ""
 
-#: ../src/verbs.cpp:2768
+#: ../src/verbs.cpp:2765
 msgid "Convert selected object's stroke to paths legacy mode"
 msgstr ""
 
-#: ../src/verbs.cpp:2769
+#: ../src/verbs.cpp:2766
 msgid "Si_mplify"
 msgstr ""
 
-#: ../src/verbs.cpp:2770
+#: ../src/verbs.cpp:2767
 msgid "Simplify selected paths (remove extra nodes)"
 msgstr ""
 
-#: ../src/verbs.cpp:2771
+#: ../src/verbs.cpp:2768
 msgid "_Reverse"
 msgstr ""
 
-#: ../src/verbs.cpp:2772
+#: ../src/verbs.cpp:2769
 msgid "Reverse the direction of selected paths (useful for flipping markers)"
 msgstr ""
 
-#: ../src/verbs.cpp:2778
+#: ../src/verbs.cpp:2775
 msgid "Create one or more paths from a bitmap by tracing it"
 msgstr ""
 
-#: ../src/verbs.cpp:2781
+#: ../src/verbs.cpp:2778
 msgid "Trace Pixel Art..."
 msgstr ""
 
-#: ../src/verbs.cpp:2782
+#: ../src/verbs.cpp:2779
 msgid "Create paths using Kopf-Lischinski algorithm to vectorize pixel art"
 msgstr ""
 
-#: ../src/verbs.cpp:2784
+#: ../src/verbs.cpp:2781
 msgid "Make a _Bitmap Copy"
 msgstr ""
 
-#: ../src/verbs.cpp:2785
+#: ../src/verbs.cpp:2782
 msgid "Export selection to a bitmap and insert it into document"
 msgstr ""
 
-#: ../src/verbs.cpp:2787
+#: ../src/verbs.cpp:2784
 msgid "_Combine"
 msgstr ""
 
-#: ../src/verbs.cpp:2788
+#: ../src/verbs.cpp:2785
 msgid "Combine several paths into one"
 msgstr ""
 
-#: ../src/verbs.cpp:2791
+#: ../src/verbs.cpp:2788
 msgid "Break _Apart"
 msgstr ""
 
-#: ../src/verbs.cpp:2792
+#: ../src/verbs.cpp:2789
 msgid "Break selected paths into subpaths"
 msgstr ""
 
-#: ../src/verbs.cpp:2793
+#: ../src/verbs.cpp:2790
 msgid "_Arrange..."
 msgstr ""
 
-#: ../src/verbs.cpp:2794
+#: ../src/verbs.cpp:2791
 msgid "Arrange selected objects in a table or circle"
 msgstr ""
 
-#: ../src/verbs.cpp:2796
+#: ../src/verbs.cpp:2793
 msgid "_Add Layer..."
 msgstr ""
 
-#: ../src/verbs.cpp:2796
+#: ../src/verbs.cpp:2793
 msgid "Create a new layer"
 msgstr ""
 
-#: ../src/verbs.cpp:2798
+#: ../src/verbs.cpp:2795
 msgid "Re_name Layer..."
 msgstr ""
 
-#: ../src/verbs.cpp:2798
+#: ../src/verbs.cpp:2795
 msgid "Rename the current layer"
 msgstr ""
 
-#: ../src/verbs.cpp:2800
+#: ../src/verbs.cpp:2797
 msgid "Switch to Layer Abov_e"
 msgstr ""
 
-#: ../src/verbs.cpp:2801
+#: ../src/verbs.cpp:2798
 msgid "Switch to the layer above the current"
 msgstr ""
 
-#: ../src/verbs.cpp:2802
+#: ../src/verbs.cpp:2799
 msgid "Switch to Layer Belo_w"
 msgstr ""
 
-#: ../src/verbs.cpp:2803
+#: ../src/verbs.cpp:2800
 msgid "Switch to the layer below the current"
 msgstr ""
 
-#: ../src/verbs.cpp:2804
+#: ../src/verbs.cpp:2801
 msgid "Move Selection to Layer Abo_ve"
 msgstr ""
 
-#: ../src/verbs.cpp:2805
+#: ../src/verbs.cpp:2802
 msgid "Move selection to the layer above the current"
 msgstr ""
 
-#: ../src/verbs.cpp:2806
+#: ../src/verbs.cpp:2803
 msgid "Move Selection to Layer Bel_ow"
 msgstr ""
 
-#: ../src/verbs.cpp:2807
+#: ../src/verbs.cpp:2804
 msgid "Move selection to the layer below the current"
 msgstr ""
 
-#: ../src/verbs.cpp:2808
+#: ../src/verbs.cpp:2805
 msgid "Move Selection to Layer..."
 msgstr ""
 
-#: ../src/verbs.cpp:2810
+#: ../src/verbs.cpp:2807
 msgid "Layer to _Top"
 msgstr ""
 
-#: ../src/verbs.cpp:2810
+#: ../src/verbs.cpp:2807
 msgid "Raise the current layer to the top"
 msgstr ""
 
-#: ../src/verbs.cpp:2812
+#: ../src/verbs.cpp:2809
 msgid "Layer to _Bottom"
 msgstr ""
 
-#: ../src/verbs.cpp:2813
+#: ../src/verbs.cpp:2810
 msgid "Lower the current layer to the bottom"
 msgstr ""
 
-#: ../src/verbs.cpp:2814
+#: ../src/verbs.cpp:2811
 msgid "_Raise Layer"
 msgstr ""
 
-#: ../src/verbs.cpp:2814
+#: ../src/verbs.cpp:2811
 msgid "Raise the current layer"
 msgstr ""
 
-#: ../src/verbs.cpp:2816
+#: ../src/verbs.cpp:2813
 msgid "_Lower Layer"
 msgstr ""
 
-#: ../src/verbs.cpp:2816
+#: ../src/verbs.cpp:2813
 msgid "Lower the current layer"
 msgstr ""
 
-#: ../src/verbs.cpp:2818
+#: ../src/verbs.cpp:2815
 msgid "D_uplicate Current Layer"
 msgstr ""
 
-#: ../src/verbs.cpp:2819
+#: ../src/verbs.cpp:2816
 msgid "Duplicate an existing layer"
 msgstr ""
 
-#: ../src/verbs.cpp:2820
+#: ../src/verbs.cpp:2817
 msgid "_Delete Current Layer"
 msgstr ""
 
-#: ../src/verbs.cpp:2820
+#: ../src/verbs.cpp:2817
 msgid "Delete the current layer"
 msgstr ""
 
-#: ../src/verbs.cpp:2822
+#: ../src/verbs.cpp:2819
 msgid "_Show/hide other layers"
 msgstr ""
 
-#: ../src/verbs.cpp:2822
+#: ../src/verbs.cpp:2819
 msgid "Solo the current layer"
 msgstr ""
 
-#: ../src/verbs.cpp:2824
+#: ../src/verbs.cpp:2821
 msgid "_Show all layers"
 msgstr ""
 
-#: ../src/verbs.cpp:2824
+#: ../src/verbs.cpp:2821
 msgid "Show all the layers"
 msgstr ""
 
-#: ../src/verbs.cpp:2825
+#: ../src/verbs.cpp:2822
 msgid "_Hide all layers"
 msgstr ""
 
-#: ../src/verbs.cpp:2825
+#: ../src/verbs.cpp:2822
 msgid "Hide all the layers"
 msgstr ""
 
-#: ../src/verbs.cpp:2826
+#: ../src/verbs.cpp:2823
 msgid "_Lock all layers"
 msgstr ""
 
-#: ../src/verbs.cpp:2826
+#: ../src/verbs.cpp:2823
 msgid "Lock all the layers"
 msgstr ""
 
-#: ../src/verbs.cpp:2827
+#: ../src/verbs.cpp:2824
 msgid "Lock/Unlock _other layers"
 msgstr ""
 
-#: ../src/verbs.cpp:2828
+#: ../src/verbs.cpp:2825
 msgid "Lock all the other layers"
 msgstr ""
 
-#: ../src/verbs.cpp:2829
+#: ../src/verbs.cpp:2826
 msgid "_Unlock all layers"
 msgstr ""
 
-#: ../src/verbs.cpp:2829
+#: ../src/verbs.cpp:2826
 msgid "Unlock all the layers"
 msgstr ""
 
-#: ../src/verbs.cpp:2831
+#: ../src/verbs.cpp:2828
 msgid "_Lock/Unlock Current Layer"
 msgstr ""
 
-#: ../src/verbs.cpp:2832
+#: ../src/verbs.cpp:2829
 msgid "Toggle lock on current layer"
 msgstr ""
 
-#: ../src/verbs.cpp:2833
+#: ../src/verbs.cpp:2830
 msgid "_Show/Hide Current Layer"
 msgstr ""
 
-#: ../src/verbs.cpp:2834
+#: ../src/verbs.cpp:2831
 msgid "Toggle visibility of current layer"
 msgstr ""
 
-#: ../src/verbs.cpp:2837
+#: ../src/verbs.cpp:2834
 msgid "Rotate _90° CW"
 msgstr ""
 
-#: ../src/verbs.cpp:2840
+#: ../src/verbs.cpp:2837
 msgid "Rotate selection 90° clockwise"
 msgstr ""
 
-#: ../src/verbs.cpp:2841
+#: ../src/verbs.cpp:2838
 msgid "Rotate 9_0° CCW"
 msgstr ""
 
-#: ../src/verbs.cpp:2844
+#: ../src/verbs.cpp:2841
 msgid "Rotate selection 90° counter-clockwise"
 msgstr ""
 
-#: ../src/verbs.cpp:2845
+#: ../src/verbs.cpp:2842
 msgid "Remove _Transformations"
 msgstr ""
 
-#: ../src/verbs.cpp:2846
+#: ../src/verbs.cpp:2843
 msgid "Remove transformations from object"
 msgstr ""
 
-#: ../src/verbs.cpp:2847
+#: ../src/verbs.cpp:2844
 msgid "_Object to Path"
 msgstr ""
 
-#: ../src/verbs.cpp:2848
+#: ../src/verbs.cpp:2845
 msgid "Convert selected object to path"
 msgstr ""
 
-#: ../src/verbs.cpp:2849
+#: ../src/verbs.cpp:2846
 msgid "_Flow into Frame"
 msgstr ""
 
-#: ../src/verbs.cpp:2850
+#: ../src/verbs.cpp:2847
 msgid ""
 "Put text into a frame (path or shape), creating a flowed text linked to the "
 "frame object"
 msgstr ""
 
-#: ../src/verbs.cpp:2852
+#: ../src/verbs.cpp:2849
 msgid "_Unflow"
 msgstr ""
 
-#: ../src/verbs.cpp:2853
+#: ../src/verbs.cpp:2850
 msgid "Remove text from frame (creates a single-line text object)"
 msgstr ""
 
-#: ../src/verbs.cpp:2854
+#: ../src/verbs.cpp:2851
 msgid "_Convert to Text"
 msgstr ""
 
-#: ../src/verbs.cpp:2855
+#: ../src/verbs.cpp:2852
 msgid "Convert flowed text to regular text object (preserves appearance)"
 msgstr ""
 
-#: ../src/verbs.cpp:2857
+#: ../src/verbs.cpp:2854
 msgid "Flip _Horizontal"
 msgstr ""
 
-#: ../src/verbs.cpp:2858
+#: ../src/verbs.cpp:2855
 msgid "Flip selected objects horizontally"
 msgstr ""
 
-#: ../src/verbs.cpp:2859
+#: ../src/verbs.cpp:2856
 msgid "Flip _Vertical"
 msgstr ""
 
-#: ../src/verbs.cpp:2860
+#: ../src/verbs.cpp:2857
 msgid "Flip selected objects vertically"
 msgstr ""
 
-#: ../src/verbs.cpp:2862
+#: ../src/verbs.cpp:2859
 msgid "Apply mask to selection (using the topmost object as mask)"
 msgstr ""
 
-#: ../src/verbs.cpp:2863 ../src/verbs.cpp:2871
+#: ../src/verbs.cpp:2860 ../src/verbs.cpp:2868
 msgid "_Set Inverse (LPE)"
 msgstr ""
 
-#: ../src/verbs.cpp:2864
+#: ../src/verbs.cpp:2861
 msgid "Apply inverse mask to selection (using the topmost object as mask)"
 msgstr ""
 
-#: ../src/verbs.cpp:2865 ../src/verbs.cpp:2875 ../share/ui/menus.xml:32
+#: ../src/verbs.cpp:2862 ../src/verbs.cpp:2872 ../share/ui/menus.xml:32
 msgid "_Edit"
 msgstr ""
 
-#: ../src/verbs.cpp:2865
+#: ../src/verbs.cpp:2862
 msgid "Edit mask"
 msgstr ""
 
-#: ../src/verbs.cpp:2867 ../src/verbs.cpp:2877
+#: ../src/verbs.cpp:2864 ../src/verbs.cpp:2874
 msgid "_Release"
 msgstr ""
 
-#: ../src/verbs.cpp:2867
+#: ../src/verbs.cpp:2864
 msgid "Remove mask from selection"
 msgstr ""
 
-#: ../src/verbs.cpp:2870
+#: ../src/verbs.cpp:2867
 msgid ""
 "Apply clipping path to selection (using the topmost object as clipping path)"
 msgstr ""
 
-#: ../src/verbs.cpp:2872
+#: ../src/verbs.cpp:2869
 msgid ""
 "Apply inverse clipping path to selection (using the topmost object as "
 "clipping path)"
 msgstr ""
 
-#: ../src/verbs.cpp:2873
+#: ../src/verbs.cpp:2870
 msgid "Create Cl_ip Group"
 msgstr ""
 
-#: ../src/verbs.cpp:2874
+#: ../src/verbs.cpp:2871
 msgid "Creates a clip group using the selected objects as a base"
 msgstr ""
 
-#: ../src/verbs.cpp:2875
+#: ../src/verbs.cpp:2872
 msgid "Edit clipping path"
 msgstr ""
 
-#: ../src/verbs.cpp:2878
+#: ../src/verbs.cpp:2875
 msgid "Remove clipping path from selection"
 msgstr ""
 
-#: ../src/verbs.cpp:2880
+#: ../src/verbs.cpp:2877
 msgctxt "ContextVerb"
 msgid "Select"
 msgstr ""
 
-#: ../src/verbs.cpp:2881
+#: ../src/verbs.cpp:2878
 msgid "Select and transform objects"
 msgstr ""
 
-#: ../src/verbs.cpp:2882
+#: ../src/verbs.cpp:2879
 msgctxt "ContextVerb"
 msgid "Node Edit"
 msgstr ""
 
-#: ../src/verbs.cpp:2882
+#: ../src/verbs.cpp:2879
 msgid "Edit paths by nodes"
 msgstr ""
 
-#: ../src/verbs.cpp:2884
+#: ../src/verbs.cpp:2881
 msgctxt "ContextVerb"
 msgid "Tweak"
 msgstr ""
 
-#: ../src/verbs.cpp:2885
+#: ../src/verbs.cpp:2882
 msgid "Tweak objects by sculpting or painting"
 msgstr ""
 
-#: ../src/verbs.cpp:2886
+#: ../src/verbs.cpp:2883
 msgctxt "ContextVerb"
 msgid "Spray"
 msgstr ""
 
-#: ../src/verbs.cpp:2887
+#: ../src/verbs.cpp:2884
 msgid "Spray objects by sculpting or painting"
 msgstr ""
 
-#: ../src/verbs.cpp:2888
+#: ../src/verbs.cpp:2885
 msgctxt "ContextVerb"
 msgid "Rectangle"
 msgstr ""
 
-#: ../src/verbs.cpp:2889
+#: ../src/verbs.cpp:2886
 msgid "Create rectangles and squares"
 msgstr ""
 
-#: ../src/verbs.cpp:2890
+#: ../src/verbs.cpp:2887
 msgctxt "ContextVerb"
 msgid "3D Box"
 msgstr ""
 
-#: ../src/verbs.cpp:2890
+#: ../src/verbs.cpp:2887
 msgid "Create 3D boxes"
 msgstr ""
 
-#: ../src/verbs.cpp:2892
+#: ../src/verbs.cpp:2889
 msgctxt "ContextVerb"
 msgid "Ellipse"
 msgstr ""
 
-#: ../src/verbs.cpp:2893
+#: ../src/verbs.cpp:2890
 msgid "Create circles, ellipses, and arcs"
 msgstr ""
 
-#: ../src/verbs.cpp:2894
+#: ../src/verbs.cpp:2891
 msgctxt "ContextVerb"
 msgid "Star"
 msgstr ""
 
-#: ../src/verbs.cpp:2894
+#: ../src/verbs.cpp:2891
 msgid "Create stars and polygons"
 msgstr ""
 
-#: ../src/verbs.cpp:2896
+#: ../src/verbs.cpp:2893
 msgctxt "ContextVerb"
 msgid "Spiral"
 msgstr ""
 
-#: ../src/verbs.cpp:2896
+#: ../src/verbs.cpp:2893
 msgid "Create spirals"
 msgstr ""
 
-#: ../src/verbs.cpp:2898
+#: ../src/verbs.cpp:2895
 msgctxt "ContextVerb"
 msgid "Pencil"
 msgstr ""
 
-#: ../src/verbs.cpp:2898
+#: ../src/verbs.cpp:2895
 msgid "Draw freehand lines"
 msgstr ""
 
-#: ../src/verbs.cpp:2900
+#: ../src/verbs.cpp:2897
 msgctxt "ContextVerb"
 msgid "Pen"
 msgstr ""
 
-#: ../src/verbs.cpp:2901
+#: ../src/verbs.cpp:2898
 msgid "Draw Bezier curves and straight lines"
 msgstr ""
 
-#: ../src/verbs.cpp:2902
+#: ../src/verbs.cpp:2899
 msgctxt "ContextVerb"
 msgid "Calligraphy"
 msgstr ""
 
-#: ../src/verbs.cpp:2903
+#: ../src/verbs.cpp:2900
 msgid "Draw calligraphic or brush strokes"
 msgstr ""
 
-#: ../src/verbs.cpp:2904
+#: ../src/verbs.cpp:2901
 msgid "Create and edit text objects"
 msgstr ""
 
-#: ../src/verbs.cpp:2906
+#: ../src/verbs.cpp:2903
 msgctxt "ContextVerb"
 msgid "Gradient"
 msgstr ""
 
-#: ../src/verbs.cpp:2907
+#: ../src/verbs.cpp:2904
 msgid "Create and edit gradients"
 msgstr ""
 
-#: ../src/verbs.cpp:2908
+#: ../src/verbs.cpp:2905
 msgctxt "ContextVerb"
 msgid "Mesh"
 msgstr ""
 
-#: ../src/verbs.cpp:2908
+#: ../src/verbs.cpp:2905
 msgid "Create and edit meshes"
 msgstr ""
 
-#: ../src/verbs.cpp:2910
+#: ../src/verbs.cpp:2907
 msgctxt "ContextVerb"
 msgid "Zoom"
 msgstr ""
 
-#: ../src/verbs.cpp:2910
+#: ../src/verbs.cpp:2907
 msgid "Zoom in or out"
 msgstr ""
 
-#: ../src/verbs.cpp:2912
+#: ../src/verbs.cpp:2909
 msgid "Measurement tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2914
+#: ../src/verbs.cpp:2911
 msgctxt "ContextVerb"
 msgid "Dropper"
 msgstr ""
 
-#: ../src/verbs.cpp:2916
+#: ../src/verbs.cpp:2913
 msgctxt "ContextVerb"
 msgid "Connector"
 msgstr ""
 
-#: ../src/verbs.cpp:2917
+#: ../src/verbs.cpp:2914
 msgid "Create diagram connectors"
 msgstr ""
 
-#: ../src/verbs.cpp:2920
+#: ../src/verbs.cpp:2917
 msgctxt "ContextVerb"
 msgid "Paint Bucket"
 msgstr ""
 
-#: ../src/verbs.cpp:2921
+#: ../src/verbs.cpp:2918
 msgid "Fill bounded areas"
 msgstr ""
 
-#: ../src/verbs.cpp:2924
+#: ../src/verbs.cpp:2921
 msgctxt "ContextVerb"
 msgid "LPE Edit"
 msgstr ""
 
-#: ../src/verbs.cpp:2924
+#: ../src/verbs.cpp:2921
 msgid "Edit Path Effect parameters"
 msgstr ""
 
-#: ../src/verbs.cpp:2926
+#: ../src/verbs.cpp:2923
 msgctxt "ContextVerb"
 msgid "Eraser"
 msgstr ""
 
-#: ../src/verbs.cpp:2926
+#: ../src/verbs.cpp:2923
 msgid "Erase existing paths"
 msgstr ""
 
-#: ../src/verbs.cpp:2928
+#: ../src/verbs.cpp:2925
 msgctxt "ContextVerb"
 msgid "LPE Tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2929
+#: ../src/verbs.cpp:2926
 msgid "Do geometric constructions"
 msgstr ""
 
-#: ../src/verbs.cpp:2931
+#: ../src/verbs.cpp:2928
 msgid "Selector Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2932
+#: ../src/verbs.cpp:2929
 msgid "Open Preferences for the Selector tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2933
+#: ../src/verbs.cpp:2930
 msgid "Node Tool Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2934
+#: ../src/verbs.cpp:2931
 msgid "Open Preferences for the Node tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2935
+#: ../src/verbs.cpp:2932
 msgid "Tweak Tool Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2936
+#: ../src/verbs.cpp:2933
 msgid "Open Preferences for the Tweak tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2937
+#: ../src/verbs.cpp:2934
 msgid "Spray Tool Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2938
+#: ../src/verbs.cpp:2935
 msgid "Open Preferences for the Spray tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2939
+#: ../src/verbs.cpp:2936
 msgid "Rectangle Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2940
+#: ../src/verbs.cpp:2937
 msgid "Open Preferences for the Rectangle tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2941
+#: ../src/verbs.cpp:2938
 msgid "3D Box Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2942
+#: ../src/verbs.cpp:2939
 msgid "Open Preferences for the 3D Box tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2943
+#: ../src/verbs.cpp:2940
 msgid "Ellipse Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2944
+#: ../src/verbs.cpp:2941
 msgid "Open Preferences for the Ellipse tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2945
+#: ../src/verbs.cpp:2942
 msgid "Star Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2946
+#: ../src/verbs.cpp:2943
 msgid "Open Preferences for the Star tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2947
+#: ../src/verbs.cpp:2944
 msgid "Spiral Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2948
+#: ../src/verbs.cpp:2945
 msgid "Open Preferences for the Spiral tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2949
+#: ../src/verbs.cpp:2946
 msgid "Pencil Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2950
+#: ../src/verbs.cpp:2947
 msgid "Open Preferences for the Pencil tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2951
+#: ../src/verbs.cpp:2948
 msgid "Pen Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2952
+#: ../src/verbs.cpp:2949
 msgid "Open Preferences for the Pen tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2953
+#: ../src/verbs.cpp:2950
 msgid "Calligraphic Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2954
+#: ../src/verbs.cpp:2951
 msgid "Open Preferences for the Calligraphy tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2955
+#: ../src/verbs.cpp:2952
 msgid "Text Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2956
+#: ../src/verbs.cpp:2953
 msgid "Open Preferences for the Text tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2957
+#: ../src/verbs.cpp:2954
 msgid "Gradient Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2958
+#: ../src/verbs.cpp:2955
 msgid "Open Preferences for the Gradient tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2959
+#: ../src/verbs.cpp:2956
 msgid "Mesh Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2960
+#: ../src/verbs.cpp:2957
 msgid "Open Preferences for the Mesh tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2961
+#: ../src/verbs.cpp:2958
 msgid "Zoom Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2962
+#: ../src/verbs.cpp:2959
 msgid "Open Preferences for the Zoom tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2963
+#: ../src/verbs.cpp:2960
 msgid "Measure Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2964
+#: ../src/verbs.cpp:2961
 msgid "Open Preferences for the Measure tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2965
+#: ../src/verbs.cpp:2962
 msgid "Dropper Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2966
+#: ../src/verbs.cpp:2963
 msgid "Open Preferences for the Dropper tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2967
+#: ../src/verbs.cpp:2964
 msgid "Connector Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2968
+#: ../src/verbs.cpp:2965
 msgid "Open Preferences for the Connector tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2971
+#: ../src/verbs.cpp:2968
 msgid "Paint Bucket Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2972
+#: ../src/verbs.cpp:2969
 msgid "Open Preferences for the Paint Bucket tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2975
+#: ../src/verbs.cpp:2972
 msgid "Eraser Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2976
+#: ../src/verbs.cpp:2973
 msgid "Open Preferences for the Eraser tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2977
+#: ../src/verbs.cpp:2974
 msgid "LPE Tool Preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:2978
+#: ../src/verbs.cpp:2975
 msgid "Open Preferences for the LPETool tool"
 msgstr ""
 
-#: ../src/verbs.cpp:2981
+#: ../src/verbs.cpp:2978
 msgid "Zoom In"
 msgstr ""
 
-#: ../src/verbs.cpp:2981
+#: ../src/verbs.cpp:2978
 msgid "Zoom in"
 msgstr ""
 
-#: ../src/verbs.cpp:2982
+#: ../src/verbs.cpp:2979
 msgid "Zoom Out"
 msgstr ""
 
-#: ../src/verbs.cpp:2982
+#: ../src/verbs.cpp:2979
 msgid "Zoom out"
 msgstr ""
 
-#: ../src/verbs.cpp:2983
+#: ../src/verbs.cpp:2980
 msgid "Nex_t Zoom"
 msgstr ""
 
-#: ../src/verbs.cpp:2983
+#: ../src/verbs.cpp:2980
 msgid "Next zoom (from the history of zooms)"
 msgstr ""
 
-#: ../src/verbs.cpp:2985
+#: ../src/verbs.cpp:2982
 msgid "Pre_vious Zoom"
 msgstr ""
 
-#: ../src/verbs.cpp:2985
+#: ../src/verbs.cpp:2982
 msgid "Previous zoom (from the history of zooms)"
 msgstr ""
 
-#: ../src/verbs.cpp:2987
+#: ../src/verbs.cpp:2984
 msgid "Zoom 1:_1"
 msgstr ""
 
-#: ../src/verbs.cpp:2987
+#: ../src/verbs.cpp:2984
 msgid "Zoom to 1:1"
 msgstr ""
 
-#: ../src/verbs.cpp:2988
+#: ../src/verbs.cpp:2985
 msgid "Zoom 1:_2"
 msgstr ""
 
-#: ../src/verbs.cpp:2988
+#: ../src/verbs.cpp:2985
 msgid "Zoom to 1:2"
 msgstr ""
 
-#: ../src/verbs.cpp:2989
+#: ../src/verbs.cpp:2986
 msgid "_Zoom 2:1"
 msgstr ""
 
-#: ../src/verbs.cpp:2989
+#: ../src/verbs.cpp:2986
 msgid "Zoom to 2:1"
 msgstr ""
 
-#: ../src/verbs.cpp:2990
+#: ../src/verbs.cpp:2987
 msgid "Zoom to fit page in window"
 msgstr ""
 
-#: ../src/verbs.cpp:2992
+#: ../src/verbs.cpp:2989
 msgid "Page _Width"
 msgstr ""
 
-#: ../src/verbs.cpp:2992
+#: ../src/verbs.cpp:2989
 msgid "Zoom to fit page width in window"
 msgstr ""
 
-#: ../src/verbs.cpp:2994
+#: ../src/verbs.cpp:2991
 msgid "Zoom to fit drawing in window"
 msgstr ""
 
-#: ../src/verbs.cpp:2996
+#: ../src/verbs.cpp:2993
 msgid "Zoom to fit selection in window"
 msgstr ""
 
-#: ../src/verbs.cpp:2998
+#: ../src/verbs.cpp:2995
 msgid "_Center Page"
 msgstr ""
 
-#: ../src/verbs.cpp:2998
+#: ../src/verbs.cpp:2995
 msgid "Center page in window"
 msgstr ""
 
-#: ../src/verbs.cpp:3001
+#: ../src/verbs.cpp:2998
 msgid "Rotate Clockwise"
 msgstr ""
 
-#: ../src/verbs.cpp:3001
+#: ../src/verbs.cpp:2998
 msgid "Rotate canvas clockwise"
 msgstr ""
 
-#: ../src/verbs.cpp:3002
+#: ../src/verbs.cpp:2999
 msgid "Rotate Counter-Clockwise"
 msgstr ""
 
-#: ../src/verbs.cpp:3003
+#: ../src/verbs.cpp:3000
 msgid "Rotate canvas counter-clockwise"
 msgstr ""
 
-#: ../src/verbs.cpp:3004
+#: ../src/verbs.cpp:3001
 msgid "Reset Rotation"
 msgstr ""
 
-#: ../src/verbs.cpp:3004
+#: ../src/verbs.cpp:3001
 msgid "Reset canvas rotation to zero"
 msgstr ""
 
-#: ../src/verbs.cpp:3006
+#: ../src/verbs.cpp:3003
 msgid "Flip Horizontally"
 msgstr ""
 
-#: ../src/verbs.cpp:3006
+#: ../src/verbs.cpp:3003
 msgid "Flip canvas horizontally"
 msgstr ""
 
-#: ../src/verbs.cpp:3008
+#: ../src/verbs.cpp:3005
 msgid "Flip Vertically"
 msgstr ""
 
-#: ../src/verbs.cpp:3008
+#: ../src/verbs.cpp:3005
 msgid "Flip canvas vertically"
 msgstr ""
 
-#: ../src/verbs.cpp:3010
+#: ../src/verbs.cpp:3007
 msgid "Reset Flip"
 msgstr ""
 
-#: ../src/verbs.cpp:3010
+#: ../src/verbs.cpp:3007
 msgid "Undo any flip"
 msgstr ""
 
-#: ../src/verbs.cpp:3016
+#: ../src/verbs.cpp:3013
 msgid "_Rulers"
 msgstr ""
 
-#: ../src/verbs.cpp:3016
+#: ../src/verbs.cpp:3013
 msgid "Show or hide the canvas rulers"
 msgstr ""
 
-#: ../src/verbs.cpp:3017
+#: ../src/verbs.cpp:3014
 msgid "Scroll_bars"
 msgstr ""
 
-#: ../src/verbs.cpp:3018
+#: ../src/verbs.cpp:3015
 msgid "Show or hide the canvas scrollbars"
 msgstr ""
 
-#: ../src/verbs.cpp:3019
+#: ../src/verbs.cpp:3016
 msgid "Page _Grid"
 msgstr ""
 
-#: ../src/verbs.cpp:3019
+#: ../src/verbs.cpp:3016
 msgid "Show or hide the page grid"
 msgstr ""
 
-#: ../src/verbs.cpp:3021
+#: ../src/verbs.cpp:3018
 msgid "G_uides"
 msgstr ""
 
-#: ../src/verbs.cpp:3022
+#: ../src/verbs.cpp:3019
 msgid "Show or hide guides (drag from a ruler to create a guide)"
 msgstr ""
 
-#: ../src/verbs.cpp:3023
+#: ../src/verbs.cpp:3020
 msgid "Enable snapping"
 msgstr ""
 
-#: ../src/verbs.cpp:3024
+#: ../src/verbs.cpp:3021
 msgid "_Commands Bar"
 msgstr ""
 
-#: ../src/verbs.cpp:3025
+#: ../src/verbs.cpp:3022
 msgid "Show or hide the Commands bar (under the menu)"
 msgstr ""
 
-#: ../src/verbs.cpp:3026
+#: ../src/verbs.cpp:3023
 msgid "Sn_ap Controls Bar"
 msgstr ""
 
-#: ../src/verbs.cpp:3027
+#: ../src/verbs.cpp:3024
 msgid "Show or hide the snapping controls"
 msgstr ""
 
-#: ../src/verbs.cpp:3028
+#: ../src/verbs.cpp:3025
 msgid "T_ool Controls Bar"
 msgstr ""
 
-#: ../src/verbs.cpp:3029
+#: ../src/verbs.cpp:3026
 msgid "Show or hide the Tool Controls bar"
 msgstr ""
 
-#: ../src/verbs.cpp:3030
+#: ../src/verbs.cpp:3027
 msgid "_Toolbox"
 msgstr ""
 
-#: ../src/verbs.cpp:3031
+#: ../src/verbs.cpp:3028
 msgid "Show or hide the main toolbox (on the left)"
 msgstr ""
 
-#: ../src/verbs.cpp:3032
+#: ../src/verbs.cpp:3029
 msgid "_Palette"
 msgstr ""
 
-#: ../src/verbs.cpp:3032
+#: ../src/verbs.cpp:3029
 msgid "Show or hide the color palette"
 msgstr ""
 
-#: ../src/verbs.cpp:3034
+#: ../src/verbs.cpp:3031
 msgid "_Statusbar"
 msgstr ""
 
-#: ../src/verbs.cpp:3035
+#: ../src/verbs.cpp:3032
 msgid "Show or hide the statusbar (at the bottom of the window)"
 msgstr ""
 
-#: ../src/verbs.cpp:3037
+#: ../src/verbs.cpp:3034
 msgid "_Fullscreen"
 msgstr ""
 
-#: ../src/verbs.cpp:3037 ../src/verbs.cpp:3040
+#: ../src/verbs.cpp:3034 ../src/verbs.cpp:3037
 msgid "Stretch this document window to full screen"
 msgstr ""
 
-#: ../src/verbs.cpp:3039
+#: ../src/verbs.cpp:3036
 msgid "Fullscreen & Focus Mode"
 msgstr ""
 
-#: ../src/verbs.cpp:3041
+#: ../src/verbs.cpp:3038
 msgid "Toggle _Focus Mode"
 msgstr ""
 
-#: ../src/verbs.cpp:3042
+#: ../src/verbs.cpp:3039
 msgid "Remove excess toolbars to focus on drawing"
 msgstr ""
 
-#: ../src/verbs.cpp:3043
+#: ../src/verbs.cpp:3040
 msgid "Duplic_ate Window"
 msgstr ""
 
-#: ../src/verbs.cpp:3043
+#: ../src/verbs.cpp:3040
 msgid "Open a new window with the same document"
 msgstr ""
 
-#: ../src/verbs.cpp:3046 ../src/verbs.cpp:3056
+#: ../src/verbs.cpp:3043 ../src/verbs.cpp:3053
 msgid "_Normal"
 msgstr ""
 
-#: ../src/verbs.cpp:3046
+#: ../src/verbs.cpp:3043
 msgid "Switch to normal display mode"
 msgstr ""
 
-#: ../src/verbs.cpp:3048
+#: ../src/verbs.cpp:3045
 msgid "No _Filters"
 msgstr ""
 
-#: ../src/verbs.cpp:3049
+#: ../src/verbs.cpp:3046
 msgid "Switch to normal display without filters"
 msgstr ""
 
-#: ../src/verbs.cpp:3050
+#: ../src/verbs.cpp:3047
 msgid "_Outline"
 msgstr ""
 
-#: ../src/verbs.cpp:3051
+#: ../src/verbs.cpp:3048
 msgid "Switch to outline (wireframe) display mode"
 msgstr ""
 
-#: ../src/verbs.cpp:3052
+#: ../src/verbs.cpp:3049
 msgid "Visible _Hairlines"
 msgstr ""
 
-#: ../src/verbs.cpp:3053
+#: ../src/verbs.cpp:3050
 msgid "Make sure hairlines are always drawn thick enough to see"
 msgstr ""
 
-#: ../src/verbs.cpp:3054 ../src/verbs.cpp:3063
+#: ../src/verbs.cpp:3051 ../src/verbs.cpp:3060
 msgid "_Toggle"
 msgstr ""
 
-#: ../src/verbs.cpp:3055
+#: ../src/verbs.cpp:3052
 msgid "Toggle between normal and outline display modes"
 msgstr ""
 
-#: ../src/verbs.cpp:3057
+#: ../src/verbs.cpp:3054
 msgid "Switch to normal color display mode"
 msgstr ""
 
-#: ../src/verbs.cpp:3058
+#: ../src/verbs.cpp:3055
 msgid "_Grayscale"
 msgstr ""
 
-#: ../src/verbs.cpp:3059
+#: ../src/verbs.cpp:3056
 msgid "Switch to grayscale display mode"
 msgstr ""
 
-#: ../src/verbs.cpp:3064
+#: ../src/verbs.cpp:3061
 msgid "Toggle between normal and grayscale color display modes"
 msgstr ""
 
-#: ../src/verbs.cpp:3066
+#: ../src/verbs.cpp:3063
 msgid "_Split View Mode"
 msgstr ""
 
-#: ../src/verbs.cpp:3067
+#: ../src/verbs.cpp:3064
 msgid "Split canvas in 2 to show outline"
 msgstr ""
 
-#: ../src/verbs.cpp:3069
+#: ../src/verbs.cpp:3066
 msgid "_XRay Mode"
 msgstr ""
 
-#: ../src/verbs.cpp:3069
+#: ../src/verbs.cpp:3066
 msgid "XRay around cursor"
 msgstr ""
 
-#: ../src/verbs.cpp:3071
+#: ../src/verbs.cpp:3068
 msgid "Color-Managed View"
 msgstr ""
 
-#: ../src/verbs.cpp:3072
+#: ../src/verbs.cpp:3069
 msgid "Toggle color-managed display for this document window"
 msgstr ""
 
-#: ../src/verbs.cpp:3074
+#: ../src/verbs.cpp:3071
 msgid "Ico_n Preview..."
 msgstr ""
 
-#: ../src/verbs.cpp:3075
+#: ../src/verbs.cpp:3072
 msgid "Open a window to preview objects at different icon resolutions"
 msgstr ""
 
-#: ../src/verbs.cpp:3079
+#: ../src/verbs.cpp:3076
 msgid "Prototype..."
 msgstr ""
 
-#: ../src/verbs.cpp:3079
+#: ../src/verbs.cpp:3076
 msgid "Prototype Dialog"
 msgstr ""
 
-#: ../src/verbs.cpp:3081
+#: ../src/verbs.cpp:3078
 msgid "P_references..."
 msgstr ""
 
-#: ../src/verbs.cpp:3082
+#: ../src/verbs.cpp:3079
 msgid "Edit global Inkscape preferences"
 msgstr ""
 
-#: ../src/verbs.cpp:3083
+#: ../src/verbs.cpp:3080
 msgid "_Document Properties..."
 msgstr ""
 
-#: ../src/verbs.cpp:3084
+#: ../src/verbs.cpp:3081
 msgid "Edit properties of this document (to be saved with the document)"
 msgstr ""
 
-#: ../src/verbs.cpp:3086
+#: ../src/verbs.cpp:3083
 msgid "Document _Metadata..."
 msgstr ""
 
-#: ../src/verbs.cpp:3087
+#: ../src/verbs.cpp:3084
 msgid "Edit document metadata (to be saved with the document)"
 msgstr ""
 
-#: ../src/verbs.cpp:3089
+#: ../src/verbs.cpp:3086
 msgid ""
 "Edit objects' colors, gradients, arrowheads, and other fill and stroke "
 "properties..."
 msgstr ""
 
-#: ../src/verbs.cpp:3094
+#: ../src/verbs.cpp:3091
 msgid "_Unicode Characters..."
 msgstr ""
 
-#: ../src/verbs.cpp:3095
+#: ../src/verbs.cpp:3092
 msgid "Select Unicode characters from a palette"
 msgstr ""
 
-#: ../src/verbs.cpp:3098
+#: ../src/verbs.cpp:3095
 msgid "S_watches..."
 msgstr ""
 
-#: ../src/verbs.cpp:3099
+#: ../src/verbs.cpp:3096
 msgid "Select colors from a swatches palette"
 msgstr ""
 
-#: ../src/verbs.cpp:3100
+#: ../src/verbs.cpp:3097
 msgid "S_ymbols..."
 msgstr ""
 
-#: ../src/verbs.cpp:3101
+#: ../src/verbs.cpp:3098
 msgid "Select symbol from a symbols palette"
 msgstr ""
 
-#: ../src/verbs.cpp:3102
+#: ../src/verbs.cpp:3099
 msgid "Transfor_m..."
 msgstr ""
 
-#: ../src/verbs.cpp:3103
+#: ../src/verbs.cpp:3100
 msgid "Precisely control objects' transformations"
 msgstr ""
 
-#: ../src/verbs.cpp:3104
+#: ../src/verbs.cpp:3101
 msgid "_Align and Distribute..."
 msgstr ""
 
-#: ../src/verbs.cpp:3105
+#: ../src/verbs.cpp:3102
 msgid "Align and distribute objects"
 msgstr ""
 
-#: ../src/verbs.cpp:3106
+#: ../src/verbs.cpp:3103
 msgid "_Spray options..."
 msgstr ""
 
-#: ../src/verbs.cpp:3107
+#: ../src/verbs.cpp:3104
 msgid "Some options for the spray"
 msgstr ""
 
-#: ../src/verbs.cpp:3108
+#: ../src/verbs.cpp:3105
 msgid "Undo _History..."
 msgstr ""
 
-#: ../src/verbs.cpp:3108
+#: ../src/verbs.cpp:3105
 msgid "Undo History"
 msgstr ""
 
-#: ../src/verbs.cpp:3111
+#: ../src/verbs.cpp:3108
 msgid "View and select font family, font size and other text properties"
 msgstr ""
 
-#: ../src/verbs.cpp:3113
+#: ../src/verbs.cpp:3110
 msgid "_XML Editor..."
 msgstr ""
 
-#: ../src/verbs.cpp:3114
+#: ../src/verbs.cpp:3111
 msgid "View and edit the XML tree of the document"
 msgstr ""
 
-#: ../src/verbs.cpp:3115
+#: ../src/verbs.cpp:3112
 msgid "_Selectors and CSS..."
 msgstr ""
 
-#: ../src/verbs.cpp:3116
+#: ../src/verbs.cpp:3113
 msgid "View and edit selections and CSS styles"
 msgstr ""
 
-#: ../src/verbs.cpp:3117
+#: ../src/verbs.cpp:3114
 msgid "_Find/Replace..."
 msgstr ""
 
-#: ../src/verbs.cpp:3117
+#: ../src/verbs.cpp:3114
 msgid "Find objects in document"
 msgstr ""
 
-#: ../src/verbs.cpp:3121
+#: ../src/verbs.cpp:3118
 msgid "Check spelling of text in document"
 msgstr ""
 
-#: ../src/verbs.cpp:3123
+#: ../src/verbs.cpp:3120
 msgid "_Messages..."
 msgstr ""
 
-#: ../src/verbs.cpp:3123
+#: ../src/verbs.cpp:3120
 msgid "View debug messages"
 msgstr ""
 
-#: ../src/verbs.cpp:3125
+#: ../src/verbs.cpp:3122
 msgid "Show/Hide D_ialogs"
 msgstr ""
 
-#: ../src/verbs.cpp:3126
+#: ../src/verbs.cpp:3123
 msgid "Show or hide all open dialogs"
 msgstr ""
 
-#: ../src/verbs.cpp:3127
+#: ../src/verbs.cpp:3124
 msgid "Create Tiled Clones..."
 msgstr ""
 
-#: ../src/verbs.cpp:3128
+#: ../src/verbs.cpp:3125
 msgid ""
 "Create multiple clones of selected object, arranging them into a pattern or "
 "scattering"
 msgstr ""
 
-#: ../src/verbs.cpp:3130
+#: ../src/verbs.cpp:3127
 msgid "_Object attributes..."
 msgstr ""
 
-#: ../src/verbs.cpp:3131
+#: ../src/verbs.cpp:3128
 msgid "Edit the object attributes..."
 msgstr ""
 
-#: ../src/verbs.cpp:3133
+#: ../src/verbs.cpp:3130
 msgid "Edit the ID, locked and visible status, and other object properties"
 msgstr ""
 
-#: ../src/verbs.cpp:3135
+#: ../src/verbs.cpp:3132
 msgid "_Input Devices..."
 msgstr ""
 
-#: ../src/verbs.cpp:3136
+#: ../src/verbs.cpp:3133
 msgid "Configure extended input devices, such as a graphics tablet"
 msgstr ""
 
-#: ../src/verbs.cpp:3138
+#: ../src/verbs.cpp:3135
 msgid "_Extensions..."
 msgstr ""
 
-#: ../src/verbs.cpp:3139
+#: ../src/verbs.cpp:3136
 msgid "Query information about extensions"
 msgstr ""
 
-#: ../src/verbs.cpp:3140
+#: ../src/verbs.cpp:3137
 msgid "Layer_s..."
 msgstr ""
 
-#: ../src/verbs.cpp:3140
+#: ../src/verbs.cpp:3137
 msgid "View Layers"
 msgstr ""
 
-#: ../src/verbs.cpp:3142
+#: ../src/verbs.cpp:3139
 msgid "Object_s..."
 msgstr ""
 
-#: ../src/verbs.cpp:3142
+#: ../src/verbs.cpp:3139
 msgid "View Objects"
 msgstr ""
 
-#: ../src/verbs.cpp:3144
+#: ../src/verbs.cpp:3141
 msgid "Style Dialog..."
 msgstr ""
 
-#: ../src/verbs.cpp:3144
+#: ../src/verbs.cpp:3141
 msgid "View Style Dialog"
 msgstr ""
 
-#: ../src/verbs.cpp:3145
+#: ../src/verbs.cpp:3142
 msgid "Path E_ffects..."
 msgstr ""
 
-#: ../src/verbs.cpp:3146
+#: ../src/verbs.cpp:3143
 msgid "Manage, edit, and apply path effects"
 msgstr ""
 
-#: ../src/verbs.cpp:3147
+#: ../src/verbs.cpp:3144
 msgid "Filter _Editor..."
 msgstr ""
 
-#: ../src/verbs.cpp:3148
+#: ../src/verbs.cpp:3145
 msgid "Manage, edit, and apply SVG filters"
 msgstr ""
 
-#: ../src/verbs.cpp:3149
+#: ../src/verbs.cpp:3146
 msgid "SVG Font Editor..."
 msgstr ""
 
-#: ../src/verbs.cpp:3149
+#: ../src/verbs.cpp:3146
 msgid "Edit SVG fonts"
 msgstr ""
 
-#: ../src/verbs.cpp:3150
+#: ../src/verbs.cpp:3147
 msgid "Print Colors..."
 msgstr ""
 
-#: ../src/verbs.cpp:3151
+#: ../src/verbs.cpp:3148
 msgid ""
 "Select which color separations to render in Print Colors Preview rendermode"
 msgstr ""
 
-#: ../src/verbs.cpp:3152
+#: ../src/verbs.cpp:3149
 msgid "_Export PNG Image..."
 msgstr ""
 
-#: ../src/verbs.cpp:3153
+#: ../src/verbs.cpp:3150
 msgid "Export this document or a selection as a PNG image"
 msgstr ""
 
-#: ../src/verbs.cpp:3155
+#: ../src/verbs.cpp:3152
 msgid "About E_xtensions"
 msgstr ""
 
-#: ../src/verbs.cpp:3156
+#: ../src/verbs.cpp:3153
 msgid "Information on Inkscape extensions"
 msgstr ""
 
-#: ../src/verbs.cpp:3157
+#: ../src/verbs.cpp:3154
 msgid "About _Memory"
 msgstr ""
 
-#: ../src/verbs.cpp:3157
+#: ../src/verbs.cpp:3154
 msgid "Memory usage information"
 msgstr ""
 
-#: ../src/verbs.cpp:3159
+#: ../src/verbs.cpp:3156
 msgid "_About Inkscape"
 msgstr ""
 
-#: ../src/verbs.cpp:3159
+#: ../src/verbs.cpp:3156
 msgid "Inkscape version, authors, license"
 msgstr ""
 
-#: ../src/verbs.cpp:3165
+#: ../src/verbs.cpp:3162
 msgid "Inkscape: _Basic"
 msgstr ""
 
-#: ../src/verbs.cpp:3166
+#: ../src/verbs.cpp:3163
 msgid "Getting started with Inkscape"
 msgstr ""
 
-#: ../src/verbs.cpp:3167
+#: ../src/verbs.cpp:3164
 msgid "Inkscape: _Shapes"
 msgstr ""
 
-#: ../src/verbs.cpp:3168
+#: ../src/verbs.cpp:3165
 msgid "Using shape tools to create and edit shapes"
 msgstr ""
 
-#: ../src/verbs.cpp:3169
+#: ../src/verbs.cpp:3166
 msgid "Inkscape: _Advanced"
 msgstr ""
 
-#: ../src/verbs.cpp:3170
+#: ../src/verbs.cpp:3167
 msgid "Advanced Inkscape topics"
 msgstr ""
 
-#: ../src/verbs.cpp:3174
+#: ../src/verbs.cpp:3169
 msgid "Inkscape: T_racing"
 msgstr ""
 
-#: ../src/verbs.cpp:3174
+#: ../src/verbs.cpp:3169
 msgid "Using bitmap tracing"
 msgstr ""
 
-#: ../src/verbs.cpp:3178
+#: ../src/verbs.cpp:3171
 msgid "Inkscape: Tracing Pixel Art"
 msgstr ""
 
-#: ../src/verbs.cpp:3179
+#: ../src/verbs.cpp:3172
 msgid "Using Trace Pixel Art dialog"
 msgstr ""
 
-#: ../src/verbs.cpp:3180
+#: ../src/verbs.cpp:3173
 msgid "Inkscape: _Calligraphy"
 msgstr ""
 
-#: ../src/verbs.cpp:3181
+#: ../src/verbs.cpp:3174
 msgid "Using the Calligraphy pen tool"
 msgstr ""
 
-#: ../src/verbs.cpp:3182
+#: ../src/verbs.cpp:3175
 msgid "Inkscape: _Interpolate"
 msgstr ""
 
-#: ../src/verbs.cpp:3183
+#: ../src/verbs.cpp:3176
 msgid "Using the interpolate extension"
 msgstr ""
 
-#: ../src/verbs.cpp:3184
+#: ../src/verbs.cpp:3177
 msgid "_Elements of Design"
 msgstr ""
 
-#: ../src/verbs.cpp:3185
+#: ../src/verbs.cpp:3178
 msgid "Principles of design in the tutorial form"
 msgstr ""
 
-#: ../src/verbs.cpp:3186
+#: ../src/verbs.cpp:3179
 msgid "_Tips and Tricks"
 msgstr ""
 
-#: ../src/verbs.cpp:3187
+#: ../src/verbs.cpp:3180
 msgid "Miscellaneous tips and tricks"
 msgstr ""
 
-#: ../src/verbs.cpp:3190
+#: ../src/verbs.cpp:3183
 msgid "Previous Exte_nsion"
 msgstr ""
 
-#: ../src/verbs.cpp:3191
+#: ../src/verbs.cpp:3184
 msgid "Repeat the last extension with the same settings"
 msgstr ""
 
-#: ../src/verbs.cpp:3192
+#: ../src/verbs.cpp:3185
 msgid "_Previous Extension Settings..."
 msgstr ""
 
-#: ../src/verbs.cpp:3193
+#: ../src/verbs.cpp:3186
 msgid "Repeat the last extension with new settings"
 msgstr ""
 
-#: ../src/verbs.cpp:3197
+#: ../src/verbs.cpp:3190
 msgid "Fit the page to the current selection"
 msgstr ""
 
-#: ../src/verbs.cpp:3199
+#: ../src/verbs.cpp:3192
 msgid "Fit the page to the drawing"
 msgstr ""
 
-#: ../src/verbs.cpp:3201
+#: ../src/verbs.cpp:3194
 msgid "_Resize Page to Selection"
 msgstr ""
 
-#: ../src/verbs.cpp:3202
+#: ../src/verbs.cpp:3195
 msgid ""
 "Fit the page to the current selection or the drawing if there is no selection"
 msgstr ""
 
-#: ../src/verbs.cpp:3204
+#: ../src/verbs.cpp:3197
 msgid "Unlock All"
 msgstr ""
 
-#: ../src/verbs.cpp:3206
+#: ../src/verbs.cpp:3199
 msgid "Unlock All in All Layers"
 msgstr ""
 
-#: ../src/verbs.cpp:3208
+#: ../src/verbs.cpp:3201
 msgid "Unhide All"
 msgstr ""
 
-#: ../src/verbs.cpp:3210
+#: ../src/verbs.cpp:3203
 msgid "Unhide All in All Layers"
 msgstr ""
 
-#: ../src/verbs.cpp:3214
+#: ../src/verbs.cpp:3207
 msgid "Link an ICC color profile"
 msgstr ""
 
-#: ../src/verbs.cpp:3215
+#: ../src/verbs.cpp:3208
 msgid "Remove Color Profile"
 msgstr ""
 
-#: ../src/verbs.cpp:3216
+#: ../src/verbs.cpp:3209
 msgid "Remove a linked ICC color profile"
 msgstr ""
 
-#: ../src/verbs.cpp:3218
+#: ../src/verbs.cpp:3211
 msgid "Add External Script"
 msgstr ""
 
-#: ../src/verbs.cpp:3219
+#: ../src/verbs.cpp:3212
 msgid "Add an external script"
 msgstr ""
 
-#: ../src/verbs.cpp:3220
+#: ../src/verbs.cpp:3213
 msgid "Add Embedded Script"
 msgstr ""
 
-#: ../src/verbs.cpp:3221
+#: ../src/verbs.cpp:3214
 msgid "Add an embedded script"
 msgstr ""
 
-#: ../src/verbs.cpp:3222
+#: ../src/verbs.cpp:3215
 msgid "Edit Embedded Script"
 msgstr ""
 
-#: ../src/verbs.cpp:3223
+#: ../src/verbs.cpp:3216
 msgid "Edit an embedded script"
 msgstr ""
 
-#: ../src/verbs.cpp:3224
+#: ../src/verbs.cpp:3217
 msgid "Remove External Script"
 msgstr ""
 
-#: ../src/verbs.cpp:3225
+#: ../src/verbs.cpp:3218
 msgid "Remove an external script"
 msgstr ""
 
-#: ../src/verbs.cpp:3226
+#: ../src/verbs.cpp:3219
 msgid "Remove Embedded Script"
 msgstr ""
 
-#: ../src/verbs.cpp:3227
+#: ../src/verbs.cpp:3220
 msgid "Remove an embedded script"
 msgstr ""
 
-#: ../src/verbs.cpp:3258 ../src/verbs.cpp:3259 ../src/verbs.cpp:3274
-#: ../src/verbs.cpp:3275
+#: ../src/verbs.cpp:3251 ../src/verbs.cpp:3252 ../src/verbs.cpp:3267
+#: ../src/verbs.cpp:3268
 msgid "Align edges of objects to the top-left corner of the anchor"
 msgstr ""
 
-#: ../src/verbs.cpp:3262 ../src/verbs.cpp:3263 ../src/verbs.cpp:3278
-#: ../src/verbs.cpp:3279
+#: ../src/verbs.cpp:3255 ../src/verbs.cpp:3256 ../src/verbs.cpp:3271
+#: ../src/verbs.cpp:3272
 msgid "Align edges of objects to the top-right corner of the anchor"
 msgstr ""
 
-#: ../src/verbs.cpp:3266 ../src/verbs.cpp:3267 ../src/verbs.cpp:3282
-#: ../src/verbs.cpp:3283
+#: ../src/verbs.cpp:3259 ../src/verbs.cpp:3260 ../src/verbs.cpp:3275
+#: ../src/verbs.cpp:3276
 msgid "Align edges of objects to the bottom-right corner of the anchor"
 msgstr ""
 
-#: ../src/verbs.cpp:3270 ../src/verbs.cpp:3271 ../src/verbs.cpp:3286
-#: ../src/verbs.cpp:3287
+#: ../src/verbs.cpp:3263 ../src/verbs.cpp:3264 ../src/verbs.cpp:3279
+#: ../src/verbs.cpp:3280
 msgid "Align edges of objects to the bottom-left corner of the anchor"
 msgstr ""
 
-#: ../src/verbs.cpp:3290
+#: ../src/verbs.cpp:3283
 msgid "Center on horizontal and vertical axis"
 msgstr ""
 
@@ -31526,61 +31534,61 @@ msgstr ""
 msgid "Zoom drawing if window size changes"
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:575
+#: ../src/widgets/desktop-widget.cpp:576
 msgid ""
 "<b>Welcome to Inkscape!</b> Use shape or freehand tools to create objects; "
 "use selector (arrow) to move or transform them."
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:611
+#: ../src/widgets/desktop-widget.cpp:612
 msgid "Rotation. (Also Ctrl+Shift+Scroll)"
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:642
+#: ../src/widgets/desktop-widget.cpp:643
 msgid "Cursor coordinates"
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:656
+#: ../src/widgets/desktop-widget.cpp:657
 msgid "Z:"
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:789
+#: ../src/widgets/desktop-widget.cpp:790
 msgid "outline"
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:791
+#: ../src/widgets/desktop-widget.cpp:792
 msgid "no filters"
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:793
+#: ../src/widgets/desktop-widget.cpp:794
 msgid "visible hairlines"
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:802
+#: ../src/widgets/desktop-widget.cpp:803
 msgid "grayscale"
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:804
+#: ../src/widgets/desktop-widget.cpp:805
 msgid "print colors preview"
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:1061
+#: ../src/widgets/desktop-widget.cpp:1076
 msgid "Locked all guides"
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:1063
+#: ../src/widgets/desktop-widget.cpp:1078
 msgid "Unlocked all guides"
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:1081
+#: ../src/widgets/desktop-widget.cpp:1096
 msgid "Color-managed display is <b>enabled</b> in this window"
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:1083
+#: ../src/widgets/desktop-widget.cpp:1098
 msgid "Color-managed display is <b>disabled</b> in this window"
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:1130
+#: ../src/widgets/desktop-widget.cpp:1145
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -31589,12 +31597,12 @@ msgid ""
 "If you close without saving, your changes will be discarded."
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:1141
-#: ../src/widgets/desktop-widget.cpp:1188
+#: ../src/widgets/desktop-widget.cpp:1156
+#: ../src/widgets/desktop-widget.cpp:1203
 msgid "Close _without saving"
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:1177
+#: ../src/widgets/desktop-widget.cpp:1192
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a "
@@ -31603,19 +31611,19 @@ msgid ""
 "Do you want to save this file as Inkscape SVG?"
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:1194
+#: ../src/widgets/desktop-widget.cpp:1209
 msgid "_Save as Inkscape SVG"
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:1392
+#: ../src/widgets/desktop-widget.cpp:1407
 msgid "Note:"
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:1979
+#: ../src/widgets/desktop-widget.cpp:1995
 msgid "Centre Page"
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:2365
+#: ../src/widgets/desktop-widget.cpp:2381
 msgid "Create guide"
 msgstr ""
 
@@ -31979,25 +31987,18 @@ msgid ""
 "to Release 13 format using QCad."
 msgstr ""
 
-#: ../share/extensions/embedimage.py:89
-msgid ""
-"No xlink:href or sodipodi:absref attributes found, or they do not point to "
-"an existing file! Unable to embed image."
+#: ../share/extensions/embedimage.py:78
+msgid "File not found \"{}\". Unable to embed image."
 msgstr ""
 
 #: ../share/extensions/embedimage.py:92
-#, python-format
-msgid "Sorry we could not locate %s"
-msgstr ""
-
-#: ../share/extensions/embedimage.py:106
 #, python-format
 msgid ""
 "%s is not of type image/png, image/jpeg, image/bmp, image/gif, image/tiff, "
 "or image/x-icon"
 msgstr ""
 
-#: ../share/extensions/extrude.py:42
+#: ../share/extensions/extrude.py:41
 msgid "Need at least 2 paths selected"
 msgstr ""
 
@@ -32005,7 +32006,7 @@ msgstr ""
 msgid "Please select an object"
 msgstr ""
 
-#: ../share/extensions/gimp_xcf.py:139
+#: ../share/extensions/gimp_xcf.py:138
 msgid "This extension requires at least one non empty layer."
 msgstr ""
 
@@ -32028,128 +32029,127 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/hpgl_output.py:55
-msgid ""
-"No paths where found. Please convert all objects you want to save into paths."
+msgid "No paths where found. Please convert objects you want into paths."
 msgstr ""
 
-#: ../share/extensions/inkex/bezier.py:405
+#: ../share/extensions/inkex/bezier.py:406
 msgid "Area is zero, cannot calculate Center of Mass"
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:83
+#: ../share/extensions/inkex/deprecated.py:84
 msgid "{} is deprecated and should be removed"
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:93
+#: ../share/extensions/inkex/deprecated.py:94
 msgid ""
 "{} or `optparse` has been deprecated and replaced with `argparser`.You must "
 "change `self.OptionParser.add_option` to `self.arg_parser.add_argument`; the "
 "arguments are similar."
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:114
+#: ../share/extensions/inkex/deprecated.py:115
 msgid ""
 "{} method is now a required method. It should be created on {cls}, even if "
 "it does nothing."
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:120
+#: ../share/extensions/inkex/deprecated.py:121
 msgid ""
 "{} is now a method in the svg. Use `self.svg.get_current_layer()` instead."
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:126
+#: ../share/extensions/inkex/deprecated.py:127
 msgid ""
 "{} is now a method in the svg. Use `self.svg.get_center_position()` instead."
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:131
+#: ../share/extensions/inkex/deprecated.py:132
 msgid "{} is now a dict in the svg. Use `self.svg.selected`."
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:136
+#: ../share/extensions/inkex/deprecated.py:137
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.get_ids()` instead."
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:143
+#: ../share/extensions/inkex/deprecated.py:144
 msgid "Use `self.svg.get_ids()` instead of {} and `doc_ids`."
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:148
+#: ../share/extensions/inkex/deprecated.py:149
 msgid "{} has been removed"
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:152
+#: ../share/extensions/inkex/deprecated.py:153
 msgid ""
 "{} is now a method in the svg. Use `self.svg.getElementById(eid)` instead."
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:156
+#: ../share/extensions/inkex/deprecated.py:157
 msgid ""
 "{} is now a new method in the svg document. Use `self.svg.getElement(path)` "
 "instead.`"
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:162
+#: ../share/extensions/inkex/deprecated.py:163
 msgid "{} is no longer in use. Use the lxml .getparent() method instead."
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:167
+#: ../share/extensions/inkex/deprecated.py:168
 msgid ""
 "{} is now a property of the svg. Use `self.svg.namedview` to access this "
 "element"
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:172
+#: ../share/extensions/inkex/deprecated.py:173
 msgid ""
 "{} is now a method of the namedview element object. Use `self.svg.namedview."
-"add(Guide(x, y, a))` instead"
+"add(Guide().move_to(x, y, a))` instead"
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:178
+#: ../share/extensions/inkex/deprecated.py:179
 msgid "{} is now `Effect.run()`. The `output` argument has changed."
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:184
+#: ../share/extensions/inkex/deprecated.py:185
 msgid "self.args[-1] is now self.options.input_file"
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:189
+#: ../share/extensions/inkex/deprecated.py:190
 msgid "self.svg_file is now self.options.input_file"
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:201
+#: ../share/extensions/inkex/deprecated.py:202
 msgid ""
 "{} is now a method in the svg document.  Use `self.svg."
 "get_unique_id(old_id)` instead."
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:206
+#: ../share/extensions/inkex/deprecated.py:207
 msgid "{} is now a property of the svg document. Use `self.svg.width` instead."
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:211
+#: ../share/extensions/inkex/deprecated.py:212
 msgid ""
 "{} is now a property of the svg document. Use `self.svg.height` instead."
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:216
+#: ../share/extensions/inkex/deprecated.py:217
 msgid "{} is now a property of the svg document. Use `self.svg.unit` instead."
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:221
+#: ../share/extensions/inkex/deprecated.py:222
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.unittouu(str)` instead."
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:226
+#: ../share/extensions/inkex/deprecated.py:227
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.uutounit(value, unit)` "
 "instead."
 msgstr ""
 
-#: ../share/extensions/inkex/deprecated.py:231
+#: ../share/extensions/inkex/deprecated.py:232
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.add_unit(value)` "
 "instead."
@@ -32159,24 +32159,24 @@ msgstr ""
 msgid "Bad values for a number field: {}, {}."
 msgstr ""
 
-#: ../share/extensions/interp_att_g.py:116
+#: ../share/extensions/interp_att_g.py:114
 msgid "You selected 'Other'. Please enter an attribute to interpolate."
 msgstr ""
 
-#: ../share/extensions/interp_att_g.py:137
+#: ../share/extensions/interp_att_g.py:135
 msgid "There is no selection to interpolate"
 msgstr ""
 
-#: ../share/extensions/jessyInk_autoTexts.py:37
-#: ../share/extensions/jessyInk_effects.py:42
+#: ../share/extensions/jessyInk_autoTexts.py:34
+#: ../share/extensions/jessyInk_effects.py:39
 #: ../share/extensions/jessyInk_export.py:53
 #: ../share/extensions/jessyInk_keyBindings.py:200
-#: ../share/extensions/jessyInk_masterSlide.py:37
-#: ../share/extensions/jessyInk_mouseHandler.py:42
-#: ../share/extensions/jessyInk_summary.py:56
-#: ../share/extensions/jessyInk_transitions.py:42
-#: ../share/extensions/jessyInk_video.py:43
-#: ../share/extensions/jessyInk_view.py:60
+#: ../share/extensions/jessyInk_masterSlide.py:34
+#: ../share/extensions/jessyInk_mouseHandler.py:38
+#: ../share/extensions/jessyInk_summary.py:53
+#: ../share/extensions/jessyInk_transitions.py:39
+#: ../share/extensions/jessyInk_video.py:39
+#: ../share/extensions/jessyInk_view.py:55
 msgid ""
 "The JessyInk script is not installed in this SVG file or has a different "
 "version than the JessyInk extensions. Please select \"install/update...\" "
@@ -32185,182 +32185,182 @@ msgid ""
 "\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_autoTexts.py:40
+#: ../share/extensions/jessyInk_autoTexts.py:37
 msgid ""
 "To assign an effect, please select an object.\n"
 "\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_autoTexts.py:46
+#: ../share/extensions/jessyInk_autoTexts.py:43
 #, python-brace-format
 msgid ""
 "Node with id '{0}' is not a suitable text node and was therefore ignored.\n"
 "\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_effects.py:45
+#: ../share/extensions/jessyInk_effects.py:42
 msgid ""
 "No object selected. Please select the object you want to assign an effect to "
 "and then press apply.\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_masterSlide.py:47
+#: ../share/extensions/jessyInk_masterSlide.py:44
 msgid "Layer not found. Removed current master slide selection.\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_masterSlide.py:49
+#: ../share/extensions/jessyInk_masterSlide.py:46
 msgid ""
 "More than one layer with this name found. Removed current master slide "
 "selection.\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:61
+#: ../share/extensions/jessyInk_summary.py:58
 #, python-brace-format
 msgid "JessyInk script version {0} installed."
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:63
+#: ../share/extensions/jessyInk_summary.py:60
 msgid "JessyInk script installed."
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:75
+#: ../share/extensions/jessyInk_summary.py:72
 msgid ""
 "\n"
 "Master slide:"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:81
+#: ../share/extensions/jessyInk_summary.py:78
 msgid ""
 "\n"
 "Slide {0!s}:"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:86
+#: ../share/extensions/jessyInk_summary.py:83
 #, python-brace-format
 msgid "{0}Layer name: {1}"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:94
+#: ../share/extensions/jessyInk_summary.py:91
 msgid "{0}Transition in: {1} ({2!s} s)"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:96
+#: ../share/extensions/jessyInk_summary.py:93
 #, python-brace-format
 msgid "{0}Transition in: {1}"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:103
+#: ../share/extensions/jessyInk_summary.py:100
 msgid "{0}Transition out: {1} ({2!s} s)"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:105
+#: ../share/extensions/jessyInk_summary.py:102
 #, python-brace-format
 msgid "{0}Transition out: {1}"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:112
+#: ../share/extensions/jessyInk_summary.py:109
 #, python-brace-format
 msgid ""
 "\n"
 "{0}Auto-texts:"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:115
+#: ../share/extensions/jessyInk_summary.py:112
 #, python-brace-format
 msgid "{0}\t\"{1}\" (object id \"{2}\") will be replaced by \"{3}\"."
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:160
+#: ../share/extensions/jessyInk_summary.py:157
 #, python-brace-format
 msgid ""
 "\n"
 "{0}Initial effect (order number {1}):"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:162
+#: ../share/extensions/jessyInk_summary.py:159
 msgid ""
 "\n"
 "{0}Effect {1!s} (order number {2}):"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:166
+#: ../share/extensions/jessyInk_summary.py:163
 #, python-brace-format
 msgid "{0}\tView will be set according to object \"{1}\""
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:168
+#: ../share/extensions/jessyInk_summary.py:165
 #, python-brace-format
 msgid "{0}\tObject \"{1}\""
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:171
+#: ../share/extensions/jessyInk_summary.py:168
 msgid " will appear"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:173
+#: ../share/extensions/jessyInk_summary.py:170
 msgid " will disappear"
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:176
+#: ../share/extensions/jessyInk_summary.py:173
 #, python-brace-format
 msgid " using effect \"{0}\""
 msgstr ""
 
-#: ../share/extensions/jessyInk_summary.py:179
+#: ../share/extensions/jessyInk_summary.py:176
 msgid " in {0!s} s"
 msgstr ""
 
-#: ../share/extensions/jessyInk_transitions.py:47
+#: ../share/extensions/jessyInk_transitions.py:44
 msgid "Layer not found.\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_transitions.py:49
+#: ../share/extensions/jessyInk_transitions.py:46
 msgid "More than one layer with this name found.\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_transitions.py:62
+#: ../share/extensions/jessyInk_transitions.py:59
 msgid "Please enter a layer name.\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_video.py:48
-#: ../share/extensions/jessyInk_video.py:53
+#: ../share/extensions/jessyInk_video.py:44
+#: ../share/extensions/jessyInk_video.py:49
 msgid ""
 "Could not obtain the selected layer for inclusion of the video element.\n"
 "\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_view.py:68
+#: ../share/extensions/jessyInk_view.py:63
 msgid "More than one object selected. Please select only one object.\n"
 msgstr ""
 
-#: ../share/extensions/jessyInk_view.py:72
+#: ../share/extensions/jessyInk_view.py:67
 msgid ""
 "No object selected. Please select the object you want to assign a view to "
 "and then press apply.\n"
 msgstr ""
 
-#: ../share/extensions/markers_strokepaint.py:74
+#: ../share/extensions/markers_strokepaint.py:70
 #, python-format
 msgid "No style attribute found for id: %s"
 msgstr ""
 
-#: ../share/extensions/markers_strokepaint.py:127
+#: ../share/extensions/markers_strokepaint.py:117
 #, python-format
 msgid "unable to locate marker: %s"
 msgstr ""
 
-#: ../share/extensions/pathalongpath.py:195
-#: ../share/extensions/pathscatter.py:192 ../share/extensions/perspective.py:44
+#: ../share/extensions/pathalongpath.py:192
+#: ../share/extensions/pathscatter.py:191 ../share/extensions/perspective.py:44
 msgid "This extension requires two selected paths."
 msgstr ""
 
-#: ../share/extensions/pathalongpath.py:222
+#: ../share/extensions/pathalongpath.py:219
 msgid ""
 "The total length of the pattern is too small :\n"
 "Please choose a larger object or set 'Space between copies' > 0"
 msgstr ""
 
-#: ../share/extensions/pathalongpath.py:272
+#: ../share/extensions/pathalongpath.py:261
 msgid ""
 "The 'stretch' option requires that the pattern must have non-zero width :\n"
 "Please edit the pattern width."
@@ -32408,70 +32408,46 @@ msgid ""
 "Try using the procedure Path->Object to Path."
 msgstr ""
 
-#: ../share/extensions/plotter.py:67
-msgid ""
-"No paths where found. Please convert all objects you want to plot into paths."
+#: ../share/extensions/plotter.py:69
+msgid "No paths where found. Please convert objects into paths."
 msgstr ""
 
-#: ../share/extensions/plotter.py:152
-msgid "pySerial is not installed. Please follow these steps:"
-msgstr ""
-
-#: ../share/extensions/plotter.py:153
-msgid "1. Download and extract (unzip) this file to your local harddisk:"
-msgstr ""
-
-#: ../share/extensions/plotter.py:155
-msgid ""
-"2. Copy the \"serial\" folder (Can be found inside the just extracted folder)"
-msgstr ""
-
-#: ../share/extensions/plotter.py:156
-msgid ""
-"   into the following Inkscape folder: C:\\[Program files]\\inkscape\\python"
-"\\Lib\\"
-msgstr ""
-
-#: ../share/extensions/plotter.py:157
-msgid "3. Close and restart Inkscape."
-msgstr ""
-
-#: ../share/extensions/plotter.py:206
+#: ../share/extensions/plotter.py:194
 msgid ""
 "Could not open port. Please check that your plotter is running, connected "
 "and the settings are correct."
 msgstr ""
 
-#: ../share/extensions/polyhedron_3d.py:373
+#: ../share/extensions/polyhedron_3d.py:372
 msgid "No face data found in specified file."
 msgstr ""
 
-#: ../share/extensions/polyhedron_3d.py:374
+#: ../share/extensions/polyhedron_3d.py:373
 msgid "Try selecting \"Edge Specified\" in the Model File tab.\n"
 msgstr ""
 
-#: ../share/extensions/polyhedron_3d.py:380
+#: ../share/extensions/polyhedron_3d.py:379
 msgid "No edge data found in specified file."
 msgstr ""
 
-#: ../share/extensions/polyhedron_3d.py:381
+#: ../share/extensions/polyhedron_3d.py:380
 msgid "Try selecting \"Face Specified\" in the Model File tab.\n"
 msgstr ""
 
-#: ../share/extensions/polyhedron_3d.py:491
+#: ../share/extensions/polyhedron_3d.py:490
 msgid ""
 "Failed to import the numpy module. This module is required by this "
 "extension. Please install it and try again.  On a Debian-like system this "
 "can be done with the command 'sudo apt-get install python-numpy'."
 msgstr ""
 
-#: ../share/extensions/polyhedron_3d.py:560
+#: ../share/extensions/polyhedron_3d.py:559
 msgid ""
 "Face Data Not Found. Ensure file contains face data, and check the file is "
 "imported as \"Face-Specified\" under the \"Model File\" tab.\n"
 msgstr ""
 
-#: ../share/extensions/polyhedron_3d.py:562
+#: ../share/extensions/polyhedron_3d.py:561
 msgid "Internal Error. No view type selected\n"
 msgstr ""
 
@@ -32501,19 +32477,19 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../share/extensions/replace_font.py:175
+#: ../share/extensions/replace_font.py:174
 msgid "There was nothing selected"
 msgstr ""
 
-#: ../share/extensions/replace_font.py:225
+#: ../share/extensions/replace_font.py:222
 msgid "Please enter a search string in the find box."
 msgstr ""
 
-#: ../share/extensions/replace_font.py:229
+#: ../share/extensions/replace_font.py:226
 msgid "Please enter a replacement font in the replace with box."
 msgstr ""
 
-#: ../share/extensions/replace_font.py:234
+#: ../share/extensions/replace_font.py:231
 msgid "Please enter a replacement font in the replace all box."
 msgstr ""
 
@@ -32527,7 +32503,7 @@ msgid ""
 "The second path must be exactly four nodes long."
 msgstr ""
 
-#: ../share/extensions/voronoi2svg.py:160
+#: ../share/extensions/voronoi2svg.py:155
 msgid "Please select objects!"
 msgstr ""
 
@@ -32551,15 +32527,15 @@ msgstr ""
 msgid "Oops... The element \"%s\" is not in the Web Slicer layer"
 msgstr ""
 
-#: ../share/extensions/webslicer_export.py:55
+#: ../share/extensions/webslicer_export.py:54
 msgid "You must give a directory to export the slices."
 msgstr ""
 
-#: ../share/extensions/webslicer_export.py:76
+#: ../share/extensions/webslicer_export.py:75
 msgid "No slicer layer found."
 msgstr ""
 
-#: ../share/extensions/webslicer_export.py:335
+#: ../share/extensions/webslicer_export.py:334
 msgid "You must install the ImageMagick to get JPG and GIF."
 msgstr ""
 
@@ -32589,7 +32565,9 @@ msgstr ""
 #: ../share/extensions/interp_att_g.inx:54
 #: ../share/extensions/jitternodes.inx:26
 #: ../share/extensions/markers_strokepaint.inx:33
-#: ../share/extensions/perspective.inx:9 ../share/extensions/pixelsnap.inx:20
+#: ../share/extensions/path_mesh_m2p.inx:29
+#: ../share/extensions/path_mesh_p2m.inx:24
+#: ../share/extensions/perspective.inx:9 ../share/extensions/pixelsnap.inx:15
 #: ../share/extensions/rubberstretch.inx:11
 #: ../share/extensions/straightseg.inx:11
 #: ../share/extensions/summersnight.inx:9 ../share/extensions/whirl.inx:11
@@ -32837,7 +32815,7 @@ msgid "Visual"
 msgstr ""
 
 #: ../share/extensions/dimension.inx:15 ../share/extensions/dots.inx:25
-#: ../share/extensions/handles.inx:9 ../share/extensions/measure.inx:72
+#: ../share/extensions/handles.inx:9 ../share/extensions/measure.inx:68
 msgid "Visualize Path"
 msgstr ""
 
@@ -32899,8 +32877,16 @@ msgstr ""
 msgid "Switch DPI"
 msgstr ""
 
+#: ../share/extensions/dpi90to96.inx:9
+msgid "DPI Switch from 90 to 96"
+msgstr ""
+
 #: ../share/extensions/dpi96to90.inx:3
 msgid "DPI 96 to 90"
+msgstr ""
+
+#: ../share/extensions/dpi96to90.inx:9
+msgid "DPI Switch from 96 to 90"
 msgstr ""
 
 #: ../share/extensions/draw_from_triangle.inx:3
@@ -33319,6 +33305,34 @@ msgstr ""
 msgid "Business card size:"
 msgstr ""
 
+#: ../share/extensions/empty_business_card.inx:8
+msgid "74mm x 52mm (A8)"
+msgstr ""
+
+#: ../share/extensions/empty_business_card.inx:9
+msgid "85mm x 55mm (Europe)"
+msgstr ""
+
+#: ../share/extensions/empty_business_card.inx:10
+msgid "90mm x 55mm (Australia, India, ...)"
+msgstr ""
+
+#: ../share/extensions/empty_business_card.inx:11
+msgid "91mm x 55mm (Japan)"
+msgstr ""
+
+#: ../share/extensions/empty_business_card.inx:12
+msgid "90mm x 54mm (China, ...)"
+msgstr ""
+
+#: ../share/extensions/empty_business_card.inx:13
+msgid "90mm x 50mm (India, Russia, ...)"
+msgstr ""
+
+#: ../share/extensions/empty_business_card.inx:14
+msgid "3.5in x 2in (United States, Canada)"
+msgstr ""
+
 #: ../share/extensions/empty_business_card.inx:22
 msgid "Business Card..."
 msgstr ""
@@ -33371,6 +33385,22 @@ msgstr ""
 msgid "DVD spine width:"
 msgstr ""
 
+#: ../share/extensions/empty_dvd_cover.inx:8
+msgid "Normal (14mm)"
+msgstr ""
+
+#: ../share/extensions/empty_dvd_cover.inx:9
+msgid "Slim (9mm)"
+msgstr ""
+
+#: ../share/extensions/empty_dvd_cover.inx:10
+msgid "Super Slim (7mm)"
+msgstr ""
+
+#: ../share/extensions/empty_dvd_cover.inx:11
+msgid "Ultra Slim (5mm)"
+msgstr ""
+
 #: ../share/extensions/empty_dvd_cover.inx:14
 msgid "DVD cover bleed (mm):"
 msgstr ""
@@ -33387,6 +33417,27 @@ msgstr ""
 msgid "dvd cover"
 msgstr ""
 
+#: ../share/extensions/empty_envelope.inx:3
+#: ../share/extensions/summersnight.inx:3
+msgid "Envelope"
+msgstr ""
+
+#: ../share/extensions/empty_envelope.inx:7
+msgid "Envelope size:"
+msgstr ""
+
+#: ../share/extensions/empty_envelope.inx:17
+msgid "Envelope..."
+msgstr ""
+
+#: ../share/extensions/empty_envelope.inx:19
+msgid "Blank envelope of chosen size."
+msgstr ""
+
+#: ../share/extensions/empty_envelope.inx:21
+msgid "empty envelope dl no10"
+msgstr ""
+
 #: ../share/extensions/empty_generic.inx:3
 msgid "Generic Canvas"
 msgstr ""
@@ -33399,8 +33450,23 @@ msgstr ""
 msgid "Canvas background:"
 msgstr ""
 
+#: ../share/extensions/empty_generic.inx:21
+#: ../share/extensions/empty_page.inx:23
+msgid "Black Opaque"
+msgstr ""
+
+#: ../share/extensions/empty_generic.inx:22
+#: ../share/extensions/empty_page.inx:24
+msgid "Gray Opaque"
+msgstr ""
+
+#: ../share/extensions/empty_generic.inx:23
+#: ../share/extensions/empty_page.inx:25
+msgid "White Opaque"
+msgstr ""
+
 #: ../share/extensions/empty_generic.inx:26
-#: ../share/extensions/empty_page.inx:26
+#: ../share/extensions/empty_page.inx:28
 msgid "Hide border"
 msgstr ""
 
@@ -33436,28 +33502,34 @@ msgstr ""
 msgid "empty icon"
 msgstr ""
 
+#: ../share/extensions/empty_page.inx:3
+msgid "Blank Page"
+msgstr ""
+
 #: ../share/extensions/empty_page.inx:7
 msgid "Page size:"
 msgstr ""
 
-#: ../share/extensions/empty_page.inx:14
+#: ../share/extensions/empty_page.inx:16
 msgid "Page orientation:"
 msgstr ""
 
-#: ../share/extensions/empty_page.inx:19
+#: ../share/extensions/empty_page.inx:21
 msgid "Page background:"
 msgstr ""
 
-#: ../share/extensions/empty_page.inx:33
-msgid "Page..."
-msgstr ""
-
 #: ../share/extensions/empty_page.inx:35
-msgid "Empty page of chosen size."
+msgid "Blank Page..."
 msgstr ""
 
 #: ../share/extensions/empty_page.inx:37
-msgid "empty sheet a4 a3 a5 letter black white opaque"
+msgid "Empty page of chosen size."
+msgstr ""
+
+#: ../share/extensions/empty_page.inx:39
+msgid ""
+"empty page sheet tabloid ledger letter legal print paper a4 a3 a5 letter "
+"black white opaque"
 msgstr ""
 
 #: ../share/extensions/empty_video.inx:3
@@ -33506,13 +33578,6 @@ msgstr ""
 
 #: ../share/extensions/extractimage.inx:7
 msgid "Path to save image:"
-msgstr ""
-
-#: ../share/extensions/extractimage.inx:8
-msgid ""
-"* Don't type the file extension, it is appended automatically.\n"
-"* A relative path (or a filename without path) is relative to the user's "
-"home directory."
 msgstr ""
 
 #: ../share/extensions/extrude.inx:7
@@ -33712,6 +33777,8 @@ msgstr ""
 #: ../share/extensions/gcodetools_about.inx:9
 #: ../share/extensions/gcodetools_orientation_points.inx:35
 #: ../share/extensions/hershey.inx:84 ../share/extensions/output_scour.inx:95
+#: ../share/extensions/path_mesh_m2p.inx:19
+#: ../share/extensions/path_mesh_p2m.inx:14
 msgid "About"
 msgstr ""
 
@@ -34808,7 +34875,7 @@ msgid "Guides preset:"
 msgstr ""
 
 #: ../share/extensions/guides_creator.inx:9
-#: ../share/extensions/guides_creator.inx:27
+#: ../share/extensions/guides_creator.inx:25
 msgid "Custom..."
 msgstr ""
 
@@ -34821,70 +34888,68 @@ msgid "Rule-of-third"
 msgstr ""
 
 #: ../share/extensions/guides_creator.inx:15
-#: ../share/extensions/guides_creator.inx:81
+#: ../share/extensions/guides_creator.inx:79
 msgid "Start from edges"
 msgstr ""
 
-#: ../share/extensions/guides_creator.inx:16
-#: ../share/extensions/guides_creator.inx:23
-#: ../share/extensions/guides_creator.inx:82
-msgid "Delete existing guides"
-msgstr ""
-
-#: ../share/extensions/guides_creator.inx:18
+#: ../share/extensions/guides_creator.inx:17
 msgid "Diagonal guides"
 msgstr ""
 
-#: ../share/extensions/guides_creator.inx:19
+#: ../share/extensions/guides_creator.inx:18
 msgid "Upper left corner"
 msgstr ""
 
-#: ../share/extensions/guides_creator.inx:20
+#: ../share/extensions/guides_creator.inx:19
 msgid "Upper right corner"
 msgstr ""
 
-#: ../share/extensions/guides_creator.inx:21
+#: ../share/extensions/guides_creator.inx:20
 msgid "Lower left corner"
 msgstr ""
 
-#: ../share/extensions/guides_creator.inx:22
+#: ../share/extensions/guides_creator.inx:21
 msgid "Lower right corner"
 msgstr ""
 
-#: ../share/extensions/guides_creator.inx:26
+#: ../share/extensions/guides_creator.inx:24
 msgid "Margins preset:"
 msgstr ""
 
-#: ../share/extensions/guides_creator.inx:28
+#: ../share/extensions/guides_creator.inx:26
 msgid "Left book page"
 msgstr ""
 
-#: ../share/extensions/guides_creator.inx:29
+#: ../share/extensions/guides_creator.inx:27
 msgid "Right book page"
 msgstr ""
 
-#: ../share/extensions/guides_creator.inx:31
+#: ../share/extensions/guides_creator.inx:29
 msgid "Header margin:"
 msgstr ""
 
-#: ../share/extensions/guides_creator.inx:41
-#: ../share/extensions/guides_creator.inx:53
-#: ../share/extensions/guides_creator.inx:65
-#: ../share/extensions/guides_creator.inx:77
+#: ../share/extensions/guides_creator.inx:39
+#: ../share/extensions/guides_creator.inx:51
+#: ../share/extensions/guides_creator.inx:63
+#: ../share/extensions/guides_creator.inx:75
 msgctxt "Margin"
 msgid "None"
 msgstr ""
 
-#: ../share/extensions/guides_creator.inx:43
+#: ../share/extensions/guides_creator.inx:41
 msgid "Footer margin:"
 msgstr ""
 
-#: ../share/extensions/guides_creator.inx:55
+#: ../share/extensions/guides_creator.inx:53
 msgid "Left margin:"
 msgstr ""
 
-#: ../share/extensions/guides_creator.inx:67
+#: ../share/extensions/guides_creator.inx:65
 msgid "Right margin:"
+msgstr ""
+
+#: ../share/extensions/guides_creator.inx:82
+msgid "Delete existing guides"
 msgstr ""
 
 #: ../share/extensions/guillotine.inx:3
@@ -34921,7 +34986,7 @@ msgstr ""
 msgid ""
 "A tool to replace text with stroke fonts\n"
 "\n"
-"Version 3.0, 2019-06-16\n"
+"Version 3.0.1, 2019-07-05\n"
 "\n"
 "\n"
 msgstr ""
@@ -35018,7 +35083,7 @@ msgstr ""
 msgid "Name/Path:"
 msgstr ""
 
-#: ../share/extensions/hershey.inx:61 ../share/extensions/split.inx:13
+#: ../share/extensions/hershey.inx:61 ../share/extensions/text_split.inx:13
 msgid "Preserve original text"
 msgstr ""
 
@@ -35284,17 +35349,17 @@ msgid ""
 "are within the document border! (Default: Checked)"
 msgstr ""
 
-#: ../share/extensions/hpgl_output.inx:34 ../share/extensions/plotter.inx:94
+#: ../share/extensions/hpgl_output.inx:34 ../share/extensions/plotter.inx:93
 msgid "Convert objects to paths"
 msgstr ""
 
-#: ../share/extensions/hpgl_output.inx:34 ../share/extensions/plotter.inx:94
+#: ../share/extensions/hpgl_output.inx:34 ../share/extensions/plotter.inx:93
 msgid ""
 "Check this to automatically (nondestructively) convert all objects to paths "
 "before plotting (Default: Checked)"
 msgstr ""
 
-#: ../share/extensions/hpgl_output.inx:37 ../share/extensions/plotter.inx:97
+#: ../share/extensions/hpgl_output.inx:37 ../share/extensions/plotter.inx:96
 msgid ""
 "All these settings depend on the plotter you use, for more information "
 "please consult the manual or homepage for your plotter."
@@ -36327,101 +36392,93 @@ msgstr ""
 msgid "Measure Path"
 msgstr ""
 
-#: ../share/extensions/measure.inx:8
+#: ../share/extensions/measure.inx:6
 msgid "Measurement Type:"
 msgstr ""
 
-#: ../share/extensions/measure.inx:10
+#: ../share/extensions/measure.inx:8
 msgctxt "measure extension"
 msgid "Area"
 msgstr ""
 
-#: ../share/extensions/measure.inx:11
+#: ../share/extensions/measure.inx:9
 msgctxt "measure extension"
 msgid "Center of Mass"
 msgstr ""
 
-#: ../share/extensions/measure.inx:14
+#: ../share/extensions/measure.inx:12
 msgid "Text Presets"
 msgstr ""
 
-#: ../share/extensions/measure.inx:17
+#: ../share/extensions/measure.inx:15
 msgid "Text on Path, Start"
 msgstr ""
 
-#: ../share/extensions/measure.inx:18
+#: ../share/extensions/measure.inx:16
 msgid "Text on Path, Middle"
 msgstr ""
 
-#: ../share/extensions/measure.inx:19
+#: ../share/extensions/measure.inx:17
 msgid "Text on Path, End"
 msgstr ""
 
-#: ../share/extensions/measure.inx:20
+#: ../share/extensions/measure.inx:18
 msgid "Fixed Text, Start of Path"
 msgstr ""
 
-#: ../share/extensions/measure.inx:21
+#: ../share/extensions/measure.inx:19
 msgid "Fixed Text, Center of BBox"
 msgstr ""
 
-#: ../share/extensions/measure.inx:22
+#: ../share/extensions/measure.inx:20
 msgid "Fixed Text, Center of Mass"
 msgstr ""
 
-#: ../share/extensions/measure.inx:25
+#: ../share/extensions/measure.inx:23
 msgid "Text on Path"
 msgstr ""
 
-#: ../share/extensions/measure.inx:27
+#: ../share/extensions/measure.inx:25
 msgid "Offset (%)"
 msgstr ""
 
-#: ../share/extensions/measure.inx:28
+#: ../share/extensions/measure.inx:26
 msgid "Text anchor:"
 msgstr ""
 
-#: ../share/extensions/measure.inx:30
-msgid "Center"
+#: ../share/extensions/measure.inx:27
+msgid "Left (Start)"
 msgstr ""
 
-#: ../share/extensions/measure.inx:34
+#: ../share/extensions/measure.inx:28
+msgid "Center (Middle)"
+msgstr ""
+
+#: ../share/extensions/measure.inx:29
+msgid "Right (End)"
+msgstr ""
+
+#: ../share/extensions/measure.inx:32
 msgid "Fixed Text"
 msgstr ""
 
-#: ../share/extensions/measure.inx:36
+#: ../share/extensions/measure.inx:34
 msgid "Start of Path"
 msgstr ""
 
-#: ../share/extensions/measure.inx:37
+#: ../share/extensions/measure.inx:35
 msgid "Center of BBox"
 msgstr ""
 
-#: ../share/extensions/measure.inx:38
+#: ../share/extensions/measure.inx:36
 msgid "Center of Mass"
 msgstr ""
 
-#: ../share/extensions/measure.inx:40
+#: ../share/extensions/measure.inx:38
 msgid "Angle (°):"
 msgstr ""
 
-#: ../share/extensions/measure.inx:43
-msgid "Font size (px):"
-msgstr ""
-
-#: ../share/extensions/measure.inx:44
-msgid "Offset (px):"
-msgstr ""
-
-#: ../share/extensions/measure.inx:46
-msgid "Scale Factor (Drawing:Real Length) = 1:"
-msgstr ""
-
-#: ../share/extensions/measure.inx:47
-msgid "Length Unit:"
-msgstr ""
-
-#: ../share/extensions/measure.inx:60
+#: ../share/extensions/measure.inx:41
 msgid ""
 "This effect measures the length, area, or center-of-mass of the selected "
 "paths. Length and area are added as a text object with the selected units. "
@@ -36438,6 +36495,22 @@ msgid ""
 "  * When calculating area, the result should be precise for polygons and "
 "Bezier curves. If a circle is used, the area may be too high by as much as "
 "0.03%."
+msgstr ""
+
+#: ../share/extensions/measure.inx:50
+msgid "Font size (px):"
+msgstr ""
+
+#: ../share/extensions/measure.inx:51
+msgid "Offset (px):"
+msgstr ""
+
+#: ../share/extensions/measure.inx:53
+msgid "Scale Factor (Drawing:Real Length) = 1:"
+msgstr ""
+
+#: ../share/extensions/measure.inx:54
+msgid "Length Unit:"
 msgstr ""
 
 #: ../share/extensions/media_zip.inx:3
@@ -36987,6 +37060,45 @@ msgstr ""
 msgid "Y-Function:"
 msgstr ""
 
+#: ../share/extensions/path_mesh_m2p.inx:3
+msgid "Mesh-Gradient to Path"
+msgstr ""
+
+#: ../share/extensions/path_mesh_m2p.inx:20
+msgid "Mesh to path"
+msgstr ""
+
+#: ../share/extensions/path_mesh_m2p.inx:21
+msgid "Convert geometry of selected meshgradient to path data"
+msgstr ""
+
+#: ../share/extensions/path_mesh_m2p.inx:30
+#: ../share/extensions/path_mesh_p2m.inx:25
+msgid "Mesh"
+msgstr ""
+
+#: ../share/extensions/path_mesh_p2m.inx:3
+msgid "Path to Mesh-Gradient"
+msgstr ""
+
+#: ../share/extensions/path_mesh_p2m.inx:11
+msgid ""
+"Only the first four nodes in the first sub-path of each selected path will "
+"be used to create a basic meshgradient definition."
+msgstr ""
+
+#: ../share/extensions/path_mesh_p2m.inx:11
+msgid "Convert each selected path to 1x1 mesh"
+msgstr ""
+
+#: ../share/extensions/path_mesh_p2m.inx:15
+msgid "Path to mesh"
+msgstr ""
+
+#: ../share/extensions/path_mesh_p2m.inx:16
+msgid "Convert geometry of selected path (4 corners) to a meshgradient"
+msgstr ""
+
 #: ../share/extensions/pathalongpath.inx:3
 msgid "Pattern along Path"
 msgstr ""
@@ -37202,19 +37314,7 @@ msgid ""
 "document height offset)"
 msgstr ""
 
-#: ../share/extensions/pixelsnap.inx:12
-msgid ""
-"Only move position and resize objects, don't touch paths (least damaging "
-"choice, fine for most scenarios)"
-msgstr ""
-
-#: ../share/extensions/pixelsnap.inx:13
-msgid ""
-"Modify path shapes, size, and position of object (most effective, but can "
-"damage intricate paths)"
-msgstr ""
-
-#: ../share/extensions/pixelsnap.inx:16
+#: ../share/extensions/pixelsnap.inx:11
 msgid "Maximum slope to consider straight (%)"
 msgstr ""
 
@@ -37364,16 +37464,6 @@ msgstr ""
 
 #: ../share/extensions/plotter.inx:74
 msgid "Rotation (°, clockwise):"
-msgstr ""
-
-#: ../share/extensions/plotter.inx:93
-msgid "Show debug information"
-msgstr ""
-
-#: ../share/extensions/plotter.inx:93
-msgid ""
-"Check this to get verbose information about the plot without actually "
-"sending something to the plotter (A.k.a. data dump) (Default: Unchecked)"
 msgstr ""
 
 #: ../share/extensions/polyhedron_3d.inx:3
@@ -38088,33 +38178,6 @@ msgstr ""
 msgid "Quality (Default = 16):"
 msgstr ""
 
-#: ../share/extensions/split.inx:3
-msgid "Split text"
-msgstr ""
-
-#: ../share/extensions/split.inx:8
-msgid "Split:"
-msgstr ""
-
-#: ../share/extensions/split.inx:9
-msgctxt "split"
-msgid "Lines"
-msgstr ""
-
-#: ../share/extensions/split.inx:10
-msgctxt "split"
-msgid "Words"
-msgstr ""
-
-#: ../share/extensions/split.inx:11
-msgctxt "split"
-msgid "Letters"
-msgstr ""
-
-#: ../share/extensions/split.inx:16
-msgid "This effect splits texts into different lines, words or letters."
-msgstr ""
-
 #: ../share/extensions/straightseg.inx:3
 msgid "Straighten Segments"
 msgstr ""
@@ -38125,10 +38188,6 @@ msgstr ""
 
 #: ../share/extensions/straightseg.inx:7
 msgid "Behavior:"
-msgstr ""
-
-#: ../share/extensions/summersnight.inx:3
-msgid "Envelope"
 msgstr ""
 
 #: ../share/extensions/svg2fxg.inx:3
@@ -38299,7 +38358,7 @@ msgid "Sun Mon Tue Wed Thu Fri Sat"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:48
-msgid "The day names list must start from Sunday."
+msgid "The day names list must start with Sunday."
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:49
@@ -38312,6 +38371,58 @@ msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:50
 msgid "Char Encoding:"
+msgstr ""
+
+#: ../share/extensions/svgcalendar.inx:106
+msgid "Latin - iso-8859-15 - Western Europe"
+msgstr ""
+
+#: ../share/extensions/svgcalendar.inx:120
+msgid "Windows - Central and Eastern Europe"
+msgstr ""
+
+#: ../share/extensions/svgcalendar.inx:121
+msgid "Windows - Russian and more"
+msgstr ""
+
+#: ../share/extensions/svgcalendar.inx:122
+msgid "Windows - Western Europe"
+msgstr ""
+
+#: ../share/extensions/svgcalendar.inx:123
+msgid "Windows - Greek"
+msgstr ""
+
+#: ../share/extensions/svgcalendar.inx:124
+msgid "Windows - Turkish"
+msgstr ""
+
+#: ../share/extensions/svgcalendar.inx:125
+msgid "Windows - Hebrew"
+msgstr ""
+
+#: ../share/extensions/svgcalendar.inx:126
+msgid "Windows - Arabic"
+msgstr ""
+
+#: ../share/extensions/svgcalendar.inx:127
+msgid "Windows - Baltic languages"
+msgstr ""
+
+#: ../share/extensions/svgcalendar.inx:128
+msgid "Windows - Vietnamese"
+msgstr ""
+
+#: ../share/extensions/svgcalendar.inx:129
+msgid "UTF-32 - All languages"
+msgstr ""
+
+#: ../share/extensions/svgcalendar.inx:130
+msgid "UTF-16 - All languages"
+msgstr ""
+
+#: ../share/extensions/svgcalendar.inx:131
+msgid "UTF-8 - All languages"
 msgstr ""
 
 #: ../share/extensions/svgcalendar.inx:133
@@ -38420,6 +38531,33 @@ msgstr ""
 
 #: ../share/extensions/text_sentencecase.inx:3
 msgid "Sentence case"
+msgstr ""
+
+#: ../share/extensions/text_split.inx:3
+msgid "Split text"
+msgstr ""
+
+#: ../share/extensions/text_split.inx:8
+msgid "Split:"
+msgstr ""
+
+#: ../share/extensions/text_split.inx:9
+msgctxt "split"
+msgid "Lines"
+msgstr ""
+
+#: ../share/extensions/text_split.inx:10
+msgctxt "split"
+msgid "Words"
+msgstr ""
+
+#: ../share/extensions/text_split.inx:11
+msgctxt "split"
+msgid "Letters"
+msgstr ""
+
+#: ../share/extensions/text_split.inx:16
+msgid "This effect splits texts into different lines, words or letters."
 msgstr ""
 
 #: ../share/extensions/text_titlecase.inx:3
@@ -38639,7 +38777,12 @@ msgid "When selecting object the last one is the one we jump to."
 msgstr ""
 
 #: ../share/extensions/web_interactive_mockup.inx:30
-msgid "Web design"
+#: ../share/extensions/web_set_att.inx:43
+#: ../share/extensions/web_transmit_att.inx:41
+#: ../share/extensions/webslicer_create_group.inx:30
+#: ../share/extensions/webslicer_create_rect.inx:64
+#: ../share/extensions/webslicer_export.inx:20
+msgid "Web"
 msgstr ""
 
 #: ../share/extensions/web_set_att.inx:3
@@ -38711,14 +38854,6 @@ msgstr ""
 msgid ""
 "If you want to set more than one attribute, you must separate this with a "
 "space, and only with a space."
-msgstr ""
-
-#: ../share/extensions/web_set_att.inx:43
-#: ../share/extensions/web_transmit_att.inx:41
-#: ../share/extensions/webslicer_create_group.inx:30
-#: ../share/extensions/webslicer_create_rect.inx:64
-#: ../share/extensions/webslicer_export.inx:20
-msgid "Web"
 msgstr ""
 
 #: ../share/extensions/web_set_att.inx:44

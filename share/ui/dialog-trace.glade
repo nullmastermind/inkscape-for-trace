@@ -106,6 +106,7 @@
                   <object class="GtkStackSwitcher">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Create a single path or create a group of paths</property>
                     <property name="halign">center</property>
                     <property name="stack">choice_scan</property>
                   </object>
@@ -150,7 +151,7 @@
                             <property name="homogeneous">True</property>
                             <child>
                               <object class="GtkStack" id="Stack_SS">
-                                <property name="visible-child-name" bind-source="CBT_SS" bind-property="active-id">SS_BC</property>
+-                                <property name="visible-child-name" bind-source="CBT_SS" bind-property="active-id">SS_BC</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <child>
@@ -344,6 +345,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
+                                <property name="tooltip_text" translatable="yes">Invert black and white regions</property>
                                 <property name="draw_indicator">True</property>
                               </object>
                               <packing>
@@ -394,6 +396,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="tooltip_text" translatable="yes">Apply Gaussian blur to the bitmap before tracing</property>
                             <property name="draw_indicator">True</property>
                           </object>
                           <packing>
@@ -407,6 +410,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="tooltip_text" translatable="yes">Stack scans on top of one another (no gaps) instead of tiling (usually with gaps)</property>
                             <property name="draw_indicator">True</property>
                           </object>
                           <packing>
@@ -420,6 +424,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="tooltip_text" translatable="yes">Remove bottom (background) layer when done</property>
                             <property name="draw_indicator">True</property>
                           </object>
                           <packing>
@@ -442,6 +447,7 @@
                           <object class="GtkSpinButton">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="tooltip_text" translatable="yes">The desired number of scans</property>
                             <property name="adjustment">MS_scans</property>
                           </object>
                           <packing>
@@ -499,6 +505,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes">Ignore small spots (speckles) in the bitmap</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -513,6 +520,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes">Smooth out sharp corners of the trace</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -527,6 +535,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes">Try to optimize paths by joining adjacent Bezier curve segments</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -539,6 +548,7 @@
                       <object class="GtkSpinButton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Speckles of up to this many pixels will be suppressed</property>
                         <property name="adjustment">speckles</property>
                       </object>
                       <packing>
@@ -550,6 +560,7 @@
                       <object class="GtkSpinButton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Increase this to smooth corners more</property>
                         <property name="adjustment">smooth</property>
                         <property name="digits">2</property>
                       </object>
@@ -562,6 +573,7 @@
                       <object class="GtkSpinButton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Increase this to reduce the number of nodes in the trace by more aggressive optimization</property>
                         <property name="adjustment">optimize</property>
                         <property name="digits">2</property>
                         <property name="value">0.20000000000000001</property>
@@ -622,6 +634,7 @@ Heuristics
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Favors connections that are part of a long curve</property>
                         <property name="label" translatable="yes">Curves (multiplier)</property>
                       </object>
                       <packing>
@@ -633,6 +646,7 @@ Heuristics
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Avoid single disconnected pixels</property>
                         <property name="label" translatable="yes">Islands (weight)</property>
                       </object>
                       <packing>
@@ -644,6 +658,7 @@ Heuristics
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Favors connections that are part of foreground color</property>
                         <property name="label" translatable="yes">Sparse pixels
 (window radius)</property>
                       </object>
@@ -656,6 +671,7 @@ Heuristics
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Favors connections that are part of foreground color</property>
                         <property name="label" translatable="yes">Sparse pixels
 (multiplier)</property>
                       </object>
@@ -668,6 +684,7 @@ Heuristics
                       <object class="GtkSpinButton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">The heuristic computed vote will be multiplied by this value</property>
                         <property name="adjustment">PA_curves</property>
                         <property name="digits">3</property>
                         <property name="numeric">True</property>
@@ -682,6 +699,7 @@ Heuristics
                       <object class="GtkSpinButton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">A constant vote value</property>
                         <property name="adjustment">PA_islands</property>
                         <property name="numeric">True</property>
                         <property name="value">5</property>
@@ -695,6 +713,7 @@ Heuristics
                       <object class="GtkSpinButton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">The radius of the window analyzed</property>
                         <property name="adjustment">PA_sparse1</property>
                         <property name="numeric">True</property>
                         <property name="value">2</property>
@@ -708,6 +727,7 @@ Heuristics
                       <object class="GtkSpinButton">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">The heuristic computed vote will be multiplied by this value</property>
                         <property name="adjustment">PA_sparse2</property>
                         <property name="digits">3</property>
                         <property name="numeric">True</property>
@@ -748,6 +768,7 @@ Output
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">Output composed of straight lines</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
@@ -763,6 +784,7 @@ Output
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">Preserve staircaseing artifacts</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">RB_PA_voronoi</property>
@@ -842,23 +864,32 @@ and on autotrace</property>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-<!--
-                <child>
-                  <object class="GtkCheckButton" id="CB_live">
-                    <property name="label" translatable="yes">Live</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
--->
+		<property name="can_focus">False</property>
+
+
+
+-<!--
+-                <child>
+-                  <object class="GtkCheckButton" id="CB_live">
+-                    <property name="label" translatable="yes">Live</property>
+-                    <property name="visible">True</property>
+-                    <property name="can_focus">True</property>
+-                    <property name="receives_default">False</property>
+-                    <property name="draw_indicator">True</property>
+-                  </object>
+-                  <packing>
+-                    <property name="expand">False</property>
+-                    <property name="fill">True</property>
+-                    <property name="position">2</property>
+-                  </packing>
+-                </child>
+--->
+
+
+
+
+
+
                 <child>
                   <object class="GtkButton" id="B_Update">
                     <property name="label" translatable="yes">Update</property>
@@ -878,6 +909,7 @@ and on autotrace</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">Cover the area you want to select as the foreground</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
