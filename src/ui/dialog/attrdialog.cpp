@@ -20,6 +20,7 @@
 #include "message-stack.h"
 #include "ui/icon-loader.h"
 #include "ui/widget/iconrenderer.h"
+#include "style.h"
 
 #include "xml/node-event-vector.h"
 #include "xml/attribute-record.h"
@@ -280,6 +281,7 @@ void AttrDialog::onAttrDelete(Glib::ustring path)
             this->_store->erase(row);
             this->_repr->setAttribute(name.c_str(), nullptr, false);
             this->setUndo(_("Delete attribute"));
+            reloadStyles(name);
         }
     }
 }
@@ -308,6 +310,7 @@ bool AttrDialog::onKeyPressed(GdkEventKey *event)
                     this->_store->erase(row);
                     this->_repr->setAttribute(name.c_str(), nullptr, false);
                     this->setUndo(_("Delete attribute"));
+                    reloadStyles(name);
                 }
                 return true;
               }
@@ -363,6 +366,28 @@ void AttrDialog::nameEdited (const Glib::ustring& path, const Glib::ustring& nam
  * @return
  * Called when the value is edited in the TreeView editable column
  */
+void AttrDialog::reloadStyles(Glib::ustring name)
+{
+    SPDocument *document = this->_desktop->doc();
+    SPObject *obj = document->getObjectById(_repr->attribute("id"));
+    if (obj) {
+        for (auto iter : obj->style->properties()) {
+            if (iter->style_src != SP_STYLE_SRC_UNSET) {
+                if( iter->name == name) {
+                    obj->style->readFromObject(obj);
+                    obj->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+                }
+            }
+        }
+    }
+}
+
+/**
+ * @brief AttrDialog::valueEdited
+ * @param event
+ * @return
+ * Called when the value is edited in the TreeView editable column
+ */
 void AttrDialog::valueEdited (const Glib::ustring& path, const Glib::ustring& value)
 {
     Gtk::TreeModel::Row row = *_store->get_iter(path);
@@ -377,7 +402,8 @@ void AttrDialog::valueEdited (const Glib::ustring& path, const Glib::ustring& va
         if(!value.empty()) {
             row[_attrColumns._attributeValue] = value;
         }
-
+        reloadStyles(name);
+        
         this->setUndo(_("Change attribute value"));
     }
 }

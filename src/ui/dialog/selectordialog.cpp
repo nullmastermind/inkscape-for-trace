@@ -284,7 +284,7 @@ SelectorDialog::SelectorDialog(bool stylemode) :
         del = manage( new Gtk::Button() );
         _styleButton(*del, "list-remove", "Remove a CSS Selector");
         del->signal_clicked().connect(sigc::mem_fun(*this, &SelectorDialog::_delSelector));
-        del->set_sensitive(false);
+        del->hide();
         _mainBox.pack_end(_buttonBox, Gtk::PACK_SHRINK);
 
         _buttonBox.pack_start(*create, Gtk::PACK_SHRINK);
@@ -327,7 +327,7 @@ SelectorDialog::SelectorDialog(bool stylemode) :
     _selectRow();
 
     if (!_stylemode && !_store->children().empty()) {
-        del->set_sensitive(true);
+        del->show();
     }
 
 }
@@ -895,8 +895,8 @@ void SelectorDialog::_selectObjects(int eventX, int eventY)
             if (iter) {
                 Gtk::TreeModel::Row row = *iter;
                 Gtk::TreeModel::Children children = row.children();
-                if (children.empty() && !_stylemode) {
-                    del->set_sensitive(true);
+                if ((children.empty() || children.size() == 1) && !_stylemode) {
+                    del->show();
                 }
                 std::vector<SPObject *> objVec = row[_mColumns._colObj];
 
@@ -981,7 +981,7 @@ void SelectorDialog::_addSelector()
          */
         selectorValue = textEditPtr->get_text();
         if (!_stylemode) {
-            del->set_sensitive(true);
+            del->show();
         }
         std::vector<Glib::ustring> tokensplus = Glib::Regex::split_simple("[,]+", selectorValue);
         bool unhandled = false;
@@ -1077,7 +1077,7 @@ void SelectorDialog::_delSelector()
     Gtk::TreeModel::iterator iter = refTreeSelection->get_selected();
     if (iter) {
         Gtk::TreeModel::Row row = *iter;
-        if (!row.children().empty()) {
+        if (row.children().size() > 2) {
             return;
         }
         _updating = true;
@@ -1085,7 +1085,7 @@ void SelectorDialog::_delSelector()
         _updating = false;
         _writeStyleElement();
         if (!_stylemode) {
-            del->set_sensitive(false);
+            del->hide();
         }
     }
 }
@@ -1226,7 +1226,7 @@ void SelectorDialog::_buttonEventsSelectObjs(GdkEventButton* event )
     _treeView.get_selection()->set_mode(Gtk::SELECTION_SINGLE);
     _updating = true;
     if (!_stylemode) {
-        del->set_sensitive(true);
+        del->show();
     }
     if (event->type == GDK_BUTTON_RELEASE && event->button == 1) {
         int x = static_cast<int>(event->x);
@@ -1245,7 +1245,9 @@ void SelectorDialog::_selectRow()
 {
     g_debug("SelectorDialog::_selectRow: updating: %s", (_updating ? "true" : "false"));
     if (!_stylemode) {
-        del->set_sensitive(false);
+        del->hide();
+    } else {
+        del->show();    
     }
     if (_updating || !getDesktop()) return; // Avoid updating if we have set row via dialog.
     if (SP_ACTIVE_DESKTOP != getDesktop()) {

@@ -98,6 +98,7 @@ public:
     void onAttrDelete(Glib::ustring path);
     bool onAttrCreate(GdkEventButton *event);
     bool onKeyPressed(GdkEventKey *event);
+    void reloadStyles(Glib::ustring name);
     void nameEdited(const Glib::ustring &path, const Glib::ustring &name);
     void valueEdited(const Glib::ustring &path, const Glib::ustring &value);
 
