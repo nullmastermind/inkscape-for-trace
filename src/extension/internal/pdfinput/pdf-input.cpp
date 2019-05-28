@@ -64,15 +64,17 @@
 
 
 namespace {
-  void sanitize_page_number(int& page_num, const int num_pages){
-    if (page_num < 1 || page_num > num_pages){
-      std::cerr << "Inkscape::Extension::Internal::PdfInput::open: Bad page number "
-                << page_num
-                << ". Import first page instead."
-                << std::endl;
-      page_num = 1;
+
+void sanitize_page_number(int &page_num, const int num_pages) {
+    if (page_num < 1 || page_num > num_pages) {
+        std::cerr << "Inkscape::Extension::Internal::PdfInput::open: Bad page number "
+                  << page_num
+                  << ". Import first page instead."
+                  << std::endl;
+        page_num = 1;
     }
-  }
+}
+
 }
 
 namespace Inkscape {
