@@ -37,10 +37,6 @@
 class Persp3D;
 class SPDesktop;
 
-typedef struct _EgeAdjustmentAction EgeAdjustmentAction;
-typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _InkToggleAction InkToggleAction;
-
 namespace Inkscape {
 class Selection;
 

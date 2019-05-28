@@ -36,10 +36,6 @@ class SPDesktop;
 class SPItem;
 class SPRect;
 
-typedef struct _EgeAdjustmentAction EgeAdjustmentAction;
-typedef struct _EgeOutputAction EgeOutputAction;
-typedef struct _InkAction InkAction;
-
 namespace Gtk {
 class Toolbutton;
 }

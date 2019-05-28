@@ -60,7 +60,6 @@
 #include "ui/widget/style-swatch.h"
 #include "ui/widget/unit-tracker.h"
 
-#include "widgets/ege-adjustment-action.h"
 #include "widgets/spinbutton-events.h"
 #include "widgets/spw-utilities.h"
 #include "widgets/widget-sizes.h"
@@ -463,55 +462,6 @@ static GtkWidget* createCustomSlider( GtkAdjustment *adjustment, gdouble climbRa
     GtkWidget *widget = GTK_WIDGET( inkSpinner->gobj() );
     return widget;
 }
-
-EgeAdjustmentAction * create_adjustment_action( gchar const *name,
-                                                       gchar const *label, gchar const *shortLabel, gchar const *tooltip,
-                                                       Glib::ustring const &path, gdouble def,
-                                                       gboolean altx, gchar const *altx_mark,
-                                                       gdouble lower, gdouble upper, gdouble step, gdouble page,
-                                                       gchar const** descrLabels, gdouble const* descrValues, guint descrCount,
-                                                       Inkscape::UI::Widget::UnitTracker *unit_tracker,
-                                                       gdouble climb/* = 0.1*/, guint digits/* = 3*/, double factor/* = 1.0*/ )
-{
-    static bool init = false;
-    if ( !init ) {
-        init = true;
-        ege_adjustment_action_set_compact_tool_factory( createCustomSlider );
-    }
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    GtkAdjustment* adj = GTK_ADJUSTMENT( gtk_adjustment_new( prefs->getDouble(path, def) * factor,
-                                                             lower, upper, step, page, 0 ) );
-
-    EgeAdjustmentAction* act = ege_adjustment_action_new( adj, name, label, tooltip, nullptr, climb, digits, unit_tracker );
-    if ( shortLabel ) {
-        g_object_set( act, "short_label", shortLabel, NULL );
-    }
-
-    if ( (descrCount > 0) && descrLabels && descrValues ) {
-        ege_adjustment_action_set_descriptions( act, descrLabels, descrValues, descrCount );
-    }
-
-    // The EgeAdjustmentAction class uses this to create a data member
-    // with the specified name, that simply points to the object itself.
-    // It appears to only be used by the DesktopWidget to find the named
-    // object
-    //
-    // TODO: Get rid of this and look up widgets by name instead.
-    if ( altx && altx_mark ) {
-        g_object_set( G_OBJECT(act), "self-id", altx_mark, NULL );
-    }
-
-    if (unit_tracker) {
-        unit_tracker->addAdjustment(adj);
-    }
-
-    // Using a cast just to make sure we pass in the right kind of function pointer
-    g_object_set( G_OBJECT(act), "tool-post", static_cast<EgeWidgetFixup>(sp_set_font_size_smaller), NULL );
-
-    return act;
-}
-
 
 void ToolboxFactory::setToolboxDesktop(GtkWidget *toolbox, SPDesktop *desktop)
 {

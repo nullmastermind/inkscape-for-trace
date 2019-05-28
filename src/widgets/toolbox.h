@@ -20,8 +20,6 @@
 
 #define TOOLBAR_SLIDER_HINT "compact"
 
-typedef struct _EgeAdjustmentAction      EgeAdjustmentAction;
-
 class SPDesktop;
 
 namespace Inkscape {
@@ -71,18 +69,6 @@ public:
 
 } // namespace UI
 } // namespace Inkscape
-
-
-// utility
-
- EgeAdjustmentAction * create_adjustment_action( gchar const *name,
-                                                       gchar const *label, gchar const *shortLabel, gchar const *tooltip,
-                                                       Glib::ustring const &path, gdouble def,
-                                                       gboolean altx, gchar const *altx_mark,
-                                                       gdouble lower, gdouble upper, gdouble step, gdouble page,
-                                                       gchar const** descrLabels, gdouble const* descrValues, guint descrCount,
-                                                       Inkscape::UI::Widget::UnitTracker *unit_tracker = nullptr,
-                                                       gdouble climb = 0.1, guint digits = 3, double factor = 1.0 );
 
 #endif /* !SEEN_TOOLBOX_H */
 

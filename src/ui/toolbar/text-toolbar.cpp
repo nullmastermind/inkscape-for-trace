@@ -60,7 +60,6 @@
 #include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
 
-#include "widgets/ege-adjustment-action.h"
 #include "widgets/ink-comboboxentry-action.h"
 #include "widgets/style-utils.h"
 
