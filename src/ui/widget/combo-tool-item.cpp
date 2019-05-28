@@ -34,15 +34,17 @@ ComboToolItem*
 ComboToolItem::create(const Glib::ustring &group_label,
                       const Glib::ustring &tooltip,
                       const Glib::ustring &stock_id,
-                      Glib::RefPtr<Gtk::ListStore> store )
+                      Glib::RefPtr<Gtk::ListStore> store,
+                      bool                 has_entry)
 {
-    return new ComboToolItem(group_label, tooltip, stock_id, store);
+    return new ComboToolItem(group_label, tooltip, stock_id, store, has_entry);
 }
 
 ComboToolItem::ComboToolItem(Glib::ustring group_label,
                              Glib::ustring tooltip,
                              Glib::ustring stock_id,
-                             Glib::RefPtr<Gtk::ListStore> store ) :
+                             Glib::RefPtr<Gtk::ListStore> store,
+                             bool          has_entry) :
     _group_label(std::move( group_label )),
     _tooltip(std::move( tooltip )),
     _stock_id(std::move( stock_id )),
@@ -63,7 +65,7 @@ ComboToolItem::ComboToolItem(Glib::ustring group_label,
     }
 
     // Create combobox
-    _combobox = Gtk::manage (new Gtk::ComboBox());
+    _combobox = Gtk::manage (new Gtk::ComboBox(has_entry));
     _combobox->set_model(_store);
 
     populate_combobox();

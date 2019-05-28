@@ -54,7 +54,8 @@ public:
     static ComboToolItem* create(const Glib::ustring &label,
                                  const Glib::ustring &tooltip,
                                  const Glib::ustring &stock_id,
-                                 Glib::RefPtr<Gtk::ListStore> store );
+                                 Glib::RefPtr<Gtk::ListStore> store,
+                                 bool                 has_entry = false);
 
     /* Style of combobox */
     void use_label(  bool use_label  );
@@ -109,7 +110,8 @@ private:
     ComboToolItem(Glib::ustring group_label,
                   Glib::ustring tooltip,
                   Glib::ustring stock_id,
-                  Glib::RefPtr<Gtk::ListStore> store );
+                  Glib::RefPtr<Gtk::ListStore> store,
+                  bool          has_entry = false);
 };
 }
 }
