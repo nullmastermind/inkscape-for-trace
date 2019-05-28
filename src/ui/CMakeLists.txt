@@ -179,7 +179,6 @@ set(ui_SRC
 	widget/imagetoggler.cpp
     widget/ink-color-wheel.cpp
 	widget/ink-flow-box.cpp
-	widget/ink-select-one-action.cpp
 	widget/ink-spinscale.cpp
 	widget/insertordericon.cpp
         widget/label-tool-item.cpp
@@ -414,7 +413,6 @@ set(ui_SRC
 	widget/imagetoggler.h
     widget/ink-color-wheel.h
     widget/ink-flow-box.h
-	widget/ink-select-one-action.h
 	widget/ink-spinscale.h
         widget/label-tool-item.h
 	widget/labelled.h

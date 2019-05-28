@@ -56,7 +56,6 @@
 #include "ui/icon-names.h"
 #include "ui/tools/text-tool.h"
 #include "ui/widget/combo-tool-item.h"
-#include "ui/widget/ink-select-one-action.h"
 #include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
 
@@ -2150,7 +2149,7 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
 
         Glib::RefPtr<Gtk::ListStore> store = _align_item->get_store();
         Gtk::TreeModel::Row row = *(store->get_iter("3"));  // Justify entry
-        InkSelectOneActionColumns columns;
+        UI::Widget::ComboToolItemColumns columns;
         row[columns.col_sensitive] = isFlow;
 
         int activeButton = 0;

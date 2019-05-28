@@ -60,7 +60,6 @@
 #include "ui/uxmanager.h"
 #include "ui/widget/button.h"
 #include "ui/widget/dock.h"
-#include "ui/widget/ink-select-one-action.h"
 #include "ui/widget/layer-selector.h"
 #include "ui/widget/selected-style.h"
 #include "ui/widget/spin-button-tool-item.h"
@@ -1513,6 +1512,22 @@ void SPDesktopWidget::layoutWidgets()
     }
 }
 
+Gtk::Toolbar *
+SPDesktopWidget::get_toolbar_by_name(const Glib::ustring& name)
+{
+    // The name is actually attached to the GtkGrid that contains
+    // the toolbar, so we need to get the grid first
+    auto widget = sp_search_by_name_recursive(Glib::wrap(aux_toolbox), name);
+    auto grid = dynamic_cast<Gtk::Grid*>(widget);
+
+    if (!grid) return nullptr;
+
+    auto child = grid->get_child_at(0,0);
+    auto tb = dynamic_cast<Gtk::Toolbar*>(child);
+
+    return tb;
+}
+
 void
 SPDesktopWidget::setToolboxFocusTo (const gchar* label)
 {
@@ -1549,15 +1564,6 @@ SPDesktopWidget::setToolboxAdjustmentValue (gchar const *id, double value)
     }
 
     else g_warning ("Could not find GtkAdjustment for %s\n", id);
-}
-
-void
-SPDesktopWidget::setToolboxSelectOneValue (gchar const *id, int value)
-{
-    gpointer hb = sp_search_by_data_recursive(aux_toolbox, (gpointer) id);
-    if (static_cast<InkSelectOneAction*>(hb)) {
-        static_cast<InkSelectOneAction*>(hb)->set_active( value );
-    }
 }
 
 

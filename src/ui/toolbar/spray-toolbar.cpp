@@ -528,6 +528,12 @@ SprayToolbar::on_pref_toggled(Gtk::ToggleToolButton *btn,
     prefs->setBool(path, active);
 }
 
+void
+SprayToolbar::set_mode(int mode)
+{
+    _mode_buttons[mode]->set_active();
+}
+
 }
 }
 }

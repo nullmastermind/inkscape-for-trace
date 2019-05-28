@@ -36,6 +36,7 @@
 
 #include "util/units.h"
 
+#include "ui/toolbar/lpe-toolbar.h"
 #include "ui/tools/lpe-tool.h"
 #include "ui/shape-editor.h"
 
@@ -309,7 +310,13 @@ lpetool_context_switch_mode(LpeTool *lc, Inkscape::LivePathEffect::EffectType co
     int index = lpetool_mode_to_index(type);
     if (index != -1) {
         lc->mode = type;
-        lc->desktop->setToolboxSelectOneValue ("lpetool_mode_action", index);
+        auto tb = dynamic_cast<UI::Toolbar::LPEToolbar*>(lc->desktop->get_toolbar_by_name("LPEToolToolbar"));
+
+        if(tb) {
+            tb->set_mode(index);
+        } else {
+            std::cerr << "Could not access LPE toolbar" << std::endl;
+        }
     } else {
         g_warning ("Invalid mode selected: %d", type);
         return;

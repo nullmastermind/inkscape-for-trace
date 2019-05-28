@@ -243,6 +243,12 @@ TweakToolbar::TweakToolbar(SPDesktop *desktop)
     }
 }
 
+void
+TweakToolbar::set_mode(int mode)
+{
+    _mode_buttons[mode]->set_active();
+}
+
 GtkWidget *
 TweakToolbar::create(SPDesktop *desktop)
 {

@@ -79,6 +79,8 @@ protected:
 
 public:
     static GtkWidget * create(SPDesktop *desktop);
+
+    void set_mode(int mode);
 };
 }
 }
