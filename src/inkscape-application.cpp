@@ -66,7 +66,7 @@ InkscapeApplication::InkscapeApplication()
     , _active_document(nullptr)
     , _active_selection(nullptr)
     , _active_view(nullptr)
-    , _pdf_page(0)
+    , _pdf_page(1)
     , _pdf_poppler(false)
 {}
 
