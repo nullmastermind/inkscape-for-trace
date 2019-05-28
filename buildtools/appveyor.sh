@@ -12,6 +12,9 @@ error()   { echo -e "\e[1;31m\nError: ${1}\n\e[0m";  exit 1; }
 # reduce time required to install packages by disabling pacman's disk space checking
 sed -i 's/^CheckSpace/#CheckSpace/g' /etc/pacman.conf
 
+# remove Ada and ObjC compilers (they cause update conflicts, see https://github.com/msys2/MINGW-packages/issues/5434)
+pacman -R $MINGW_PACKAGE_PREFIX-gcc-{ada,objc} --noconfirm
+
 # update MSYS2-packages and MINGW-packages (but only for current architecture)
 pacman -Quq | grep -v mingw-w64- | xargs pacman -S $PACMAN_OPTIONS
 pacman -Quq | grep ${MINGW_PACKAGE_PREFIX} | xargs pacman -S $PACMAN_OPTIONS
