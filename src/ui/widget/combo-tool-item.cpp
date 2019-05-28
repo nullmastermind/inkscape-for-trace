@@ -66,6 +66,42 @@ ComboToolItem::ComboToolItem(Glib::ustring group_label,
     _combobox = Gtk::manage (new Gtk::ComboBox());
     _combobox->set_model(_store);
 
+    populate_combobox();
+
+    _combobox->signal_changed().connect(
+            sigc::mem_fun(*this, &ComboToolItem::on_changed_combobox));
+
+    box->add (*_combobox);
+
+    show_all();
+}
+
+void
+ComboToolItem::use_label(bool use_label)
+{
+    _use_label = use_label;
+    populate_combobox();
+}
+
+void
+ComboToolItem::use_icon(bool use_icon)
+{
+    _use_icon = use_icon;
+    populate_combobox();
+}
+
+void
+ComboToolItem::use_pixbuf(bool use_pixbuf)
+{
+    _use_pixbuf = use_pixbuf;
+    populate_combobox();
+}
+
+void
+ComboToolItem::populate_combobox()
+{
+    _combobox->clear();
+
     ComboToolItemColumns columns;
     if (_use_icon) {
         Gtk::CellRendererPixbuf *renderer = new Gtk::CellRendererPixbuf;
@@ -89,13 +125,6 @@ ComboToolItem::ComboToolItem(Glib::ustring group_label,
     }
 
     _combobox->set_active (_active);
-
-    _combobox->signal_changed().connect(
-            sigc::mem_fun(*this, &ComboToolItem::on_changed_combobox));
-
-    box->add (*_combobox);
-
-    show_all();
 }
 
 void

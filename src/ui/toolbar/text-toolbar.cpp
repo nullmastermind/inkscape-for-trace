@@ -55,7 +55,9 @@
 
 #include "ui/icon-names.h"
 #include "ui/tools/text-tool.h"
+#include "ui/widget/combo-tool-item.h"
 #include "ui/widget/ink-select-one-action.h"
+#include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
 
 #include "widgets/ege-adjustment-action.h"
@@ -370,33 +372,107 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_font_style_action) );
     }
 
-    /* Style - Superscript */
+        
+#endif
+    /* Text outer style */
     {
-        toolbar->_superscript_action = ink_toggle_action_new( "TextSuperscriptAction",             // Name
-                                                              _("Toggle Superscript"),             // Label
-                                                              _("Toggle superscript"),             // Tooltip
-                                                              "text_superscript",                  // Icon (inkId)
-                                                              secondarySize );                     // Icon size
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_superscript_action ) );
-        g_signal_connect_after( G_OBJECT(toolbar->_superscript_action), "toggled", G_CALLBACK(script_changed), toolbar );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(toolbar->_superscript_action), prefs->getBool("/tools/text/super", false) );
+        _outer_style_item = Gtk::manage(new Gtk::ToggleToolButton());
+        _outer_style_item->set_label(_("Show outer style"));
+        _outer_style_item->set_tooltip_text(_("Show style of outermost text element. The 'font-size' and 'line-height' values of the outermost text element determine the minimum line spacing in the block."));
+        _outer_style_item->set_icon_name(INKSCAPE_ICON("text_outer_style"));
+        add(*_outer_style_item);
+        _outer_style_item->signal_toggled().connect(sigc::mem_fun(*this, &TextToolbar::outer_style_changed));
+        _outer_style_item->set_active(prefs->getBool("/tools/text/outer_style", false));
     }
 
-    /* Style - Subscript */
+    /* Line height */
     {
-        toolbar->_subscript_action = ink_toggle_action_new( "TextSubscriptAction",             // Name
-                                                            _("Toggle Subscript"),             // Label
-                                                            _("Toggle subscript"),             // Tooltip
-                                                            "text_subscript",                  // Icon (inkId)
-                                                            secondarySize );                   // Icon size
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_subscript_action ) );
-        g_signal_connect_after( G_OBJECT(toolbar->_subscript_action), "toggled", G_CALLBACK(script_changed), (gpointer)toolbar );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(toolbar->_subscript_action), prefs->getBool("/tools/text/sub", false) );
+        // Drop down menu
+        std::vector<Glib::ustring> labels = {_("Smaller spacing"),  "",  "",  "",  "", C_("Text tool", "Normal"),  "", "",   "",  "",  "", _("Larger spacing")};
+        std::vector<double>        values = {                 0.5, 0.6, 0.7, 0.8, 0.9,                       1.0, 1.1, 1.2, 1.3, 1.4, 1.5,                 2.0};
+
+        auto line_height_val = prefs->getDouble("/tools/text/lineheight", 0.0);
+        _line_height_adj = Gtk::Adjustment::create(line_height_val, 0.0, 1000.0, 0.1, 1.0);
+        _line_height_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("text-line-height", _("Line:"), _line_height_adj, 0.1, 2));
+        _line_height_item->set_tooltip_text(_("Spacing between baselines"));
+        _line_height_item->set_custom_numeric_menu_data(values, labels);
+        _line_height_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _line_height_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::lineheight_value_changed));
+        //_tracker->addAdjustment(_line_height_adj->gobj()); // (Alex V) Why is this commented out?
+        add(*_line_height_item);
+        _line_height_item->set_sensitive(true);
+        _line_height_item->set_icon(INKSCAPE_ICON("text_line_spacing"));
     }
+
+    /* Line height units */
+    {
+        _line_height_units_item = _tracker->create_tool_item( _("Units"), ("") );
+        add(*_line_height_units_item);
+        _line_height_units_item->signal_changed_after().connect(sigc::mem_fun(*this, &TextToolbar::lineheight_unit_changed));
+    }
+
+    /* Text line height unset */
+    {
+        _line_height_unset_item = Gtk::manage(new Gtk::ToggleToolButton());
+        _line_height_unset_item->set_label(_("Unset line height"));
+        _line_height_unset_item->set_tooltip_text(_("If enabled, line height is set on part of selection. Click to unset."));
+        _line_height_unset_item->set_icon_name(INKSCAPE_ICON("paint-unknown"));
+        add(*_line_height_unset_item);
+        _line_height_unset_item->signal_toggled().connect(sigc::mem_fun(*this, &TextToolbar::lineheight_unset_changed));
+        _line_height_unset_item->set_active(prefs->getBool("/tools/text/line_height_unset", false));
+    }
+
+    /* Line spacing mode */
+    {
+        UI::Widget::ComboToolItemColumns columns;
+
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
+
+        Gtk::TreeModel::Row row;
+
+        row = *(store->append());
+        row[columns.col_label    ] = _("Adaptive");
+        row[columns.col_tooltip  ] = _("Line spacing adapts to font size.");
+        row[columns.col_icon     ] = INKSCAPE_ICON("text_line_spacing");
+        row[columns.col_sensitive] = true;
+
+        row = *(store->append());
+        row[columns.col_label    ] = _("Minimum");
+        row[columns.col_tooltip  ] = _("Line spacing adapts to fonts size with set minimum spacing.");
+        row[columns.col_icon     ] = INKSCAPE_ICON("text_line_spacing");
+        row[columns.col_sensitive] = true;
+        row = *(store->append());
+        row[columns.col_label    ] = _("Even");
+        row[columns.col_tooltip  ] = _("Lines evenly spaced.");
+        row[columns.col_icon     ] = INKSCAPE_ICON("text_line_spacing");
+        row[columns.col_sensitive] = true;
+
+        row = *(store->append());
+        row[columns.col_label    ] = _("Adjustable ☠");
+        row[columns.col_tooltip  ] = _("Line spacing fully adjustable");
+        row[columns.col_icon     ] = INKSCAPE_ICON("text_line_spacing");
+        row[columns.col_sensitive] = true;
+
+        _line_spacing_item =
+            UI::Widget::ComboToolItem::create(_("Line Spacing Mode"),   // Label
+                                              _("How should multiple baselines be spaced?\n Adaptive: Line spacing adapts to font size.\n Minimum: Like Adaptive, but with a set minimum.\n Even: Evenly spaced.\n Adjustable: No restrictions."), // Tooltip
+                                             "Not Used",          // Icon
+                                             store );             // Tree store
+        _line_spacing_item->use_icon(true);
+        _line_spacing_item->use_label(true);
+        gint mode = prefs->getInt("/tools/text/line_spacing_mode", 0);
+        _line_spacing_item->set_active( mode );
+
+        add(*_line_spacing_item);
+
+        _line_spacing_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::line_spacing_mode_changed));
+    }
+
+    add_separator();
 
     /* Alignment */
     {
-        InkSelectOneActionColumns columns;
+        UI::Widget::ComboToolItemColumns columns;
 
         Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
 
@@ -426,25 +502,135 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         row[columns.col_icon     ] = INKSCAPE_ICON("format-justify-fill");
         row[columns.col_sensitive] = false;
 
-        toolbar->_align_action =
-            InkSelectOneAction::create( "TextAlignAction",   // Name
-                                        _("Alignment"),      // Label
-                                        _("Text alignment"), // Tooltip
-                                        "Not Used",          // Icon
-                                        store );             // Tree store
-        toolbar->_align_action->use_radio( false );
-        toolbar->_align_action->use_label( false );
+        _align_item =
+            UI::Widget::ComboToolItem::create(_("Alignment"),      // Label
+                                              _("Text alignment"), // Tooltip
+                                              "Not Used",          // Icon
+                                              store );             // Tree store
+        _align_item->use_icon( true );
+        _align_item->use_label( false );
         gint mode = prefs->getInt("/tools/text/align_mode", 0);
-        toolbar->_align_action->set_active( mode );
+        _align_item->set_active( mode );
 
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_align_action->gobj() ));
+        add(*_align_item);
 
-        toolbar->_align_action->signal_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::align_mode_changed));
+        _align_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::align_mode_changed));
     }
+
+    add_separator();
+
+    /* Style - Superscript */
+    {
+        _superscript_item = Gtk::manage(new Gtk::ToggleToolButton());
+        _superscript_item->set_label(_("Toggle superscript"));
+        _superscript_item->set_tooltip_text(_("Toggle superscript"));
+        _superscript_item->set_icon_name(INKSCAPE_ICON("text_superscript"));
+        _superscript_item->set_name("text-superscript");
+        add(*_superscript_item);
+        _superscript_item->signal_toggled().connect(sigc::bind(sigc::mem_fun(*this, &TextToolbar::script_changed), _superscript_item));
+        _superscript_item->set_active(prefs->getBool("/tools/text/super", false));
+    }
+
+    /* Style - Subscript */
+    {
+        _subscript_item = Gtk::manage(new Gtk::ToggleToolButton());
+        _subscript_item->set_label(_("Toggle subscript"));
+        _subscript_item->set_tooltip_text(_("Toggle subscript"));
+        _subscript_item->set_icon_name(INKSCAPE_ICON("text_subscript"));
+        _subscript_item->set_name("text-subscript");
+        add(*_subscript_item);
+        _subscript_item->signal_toggled().connect(sigc::bind(sigc::mem_fun(*this, &TextToolbar::script_changed), _subscript_item));
+        _subscript_item->set_active(prefs->getBool("/tools/text/sub", false));
+    }
+
+    add_separator();
+
+    /* Letter spacing */
+    {
+        // Drop down menu
+        std::vector<Glib::ustring> labels = {_("Negative spacing"),   "",   "",   "", C_("Text tool", "Normal"),  "",  "",  "",  "",  "",  "",  "", _("Positive spacing")};
+        std::vector<double>        values = {                 -2.0, -1.5, -1.0, -0.5,                         0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0,                   5.0};
+        auto letter_spacing_val = prefs->getDouble("/tools/text/letterspacing", 0.0);
+        _letter_spacing_adj = Gtk::Adjustment::create(letter_spacing_val, -100.0, 100.0, 0.01, 0.10);
+        _letter_spacing_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("text-letter-spacing", _("Letter:"), _letter_spacing_adj, 0.1, 2));
+        _letter_spacing_item->set_tooltip_text(_("Spacing between letters (px)"));
+        _letter_spacing_item->set_custom_numeric_menu_data(values, labels);
+        _letter_spacing_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _letter_spacing_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::letterspacing_value_changed));
+        add(*_letter_spacing_item);
+        _letter_spacing_item->set_sensitive(true);
+        _letter_spacing_item->set_icon(INKSCAPE_ICON("text_letter_spacing"));
+    }
+
+    /* Word spacing */
+    {
+        // Drop down menu
+        std::vector<Glib::ustring> labels = {_("Negative spacing"),   "",   "",   "", C_("Text tool", "Normal"),  "",  "",  "",  "",  "",  "",  "", _("Positive spacing")};
+        std::vector<double>        values = {                 -2.0, -1.5, -1.0, -0.5,                         0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0,                   5.0};
+        auto word_spacing_val = prefs->getDouble("/tools/text/wordspacing", 0.0);
+        _word_spacing_adj = Gtk::Adjustment::create(word_spacing_val, -100.0, 100.0, 0.01, 0.10);
+        _word_spacing_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("text-word-spacing", _("Word:"), _word_spacing_adj, 0.1, 2));
+        _word_spacing_item->set_tooltip_text(_("Spacing between words (px)"));
+        _word_spacing_item->set_custom_numeric_menu_data(values, labels);
+        _word_spacing_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _word_spacing_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::wordspacing_value_changed));
+        add(*_word_spacing_item);
+        _word_spacing_item->set_sensitive(true);
+        _word_spacing_item->set_icon(INKSCAPE_ICON("text_word_spacing"));
+    }
+
+    /* Character kerning (horizontal shift) */
+    {
+        // Drop down menu
+        std::vector<double> values = { -2.0, -1.5, -1.0, -0.5,   0,  0.5,  1.0,  1.5,  2.0, 2.5 };
+        auto dx_val = prefs->getDouble("/tools/text/dx", 0.0);
+        _dx_adj = Gtk::Adjustment::create(dx_val, -100.0, 100.0, 0.01, 0.1);
+        _dx_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("text-dx", _("Kern:"), _dx_adj, 0.1, 2));
+        _dx_item->set_custom_numeric_menu_data(values);
+        _dx_item->set_tooltip_text(_("Horizontal kerning (px)"));
+        _dx_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _dx_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::dx_value_changed));
+        add(*_dx_item);
+        _dx_item->set_sensitive(true);
+        _dx_item->set_icon(INKSCAPE_ICON("text_horz_kern"));
+    }
+
+    /* Character vertical shift */
+    {
+        // Drop down menu
+        std::vector<double> values = { -2.0, -1.5, -1.0, -0.5,   0,  0.5,  1.0,  1.5,  2.0, 2.5 };
+        auto dy_val = prefs->getDouble("/tools/text/dy", 0.0);
+        _dy_adj = Gtk::Adjustment::create(dy_val, -100.0, 100.0, 0.01, 0.1);
+        _dy_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("text-dy", _("Vert:"), _dy_adj, 0.1, 2));
+        _dy_item->set_tooltip_text(_("Vertical kerning (px)"));
+        _dy_item->set_custom_numeric_menu_data(values);
+        _dy_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _dy_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::dy_value_changed));
+        _dy_item->set_sensitive(true);
+        _dy_item->set_icon(INKSCAPE_ICON("text_vert_kern"));
+        add(*_dy_item);
+    }
+
+    /* Character rotation */
+    {
+        std::vector<double> values = { -90, -45, -30, -15,   0,  15,  30,  45,  90, 180 };
+        auto rotation_val = prefs->getDouble("/tools/text/rotation", 0.0);
+        _rotation_adj = Gtk::Adjustment::create(rotation_val, -180.0, 180.0, 0.1, 1.0);
+        _rotation_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("text-rotation", _("Rot:"), _rotation_adj, 0.1, 2));
+        _rotation_item->set_tooltip_text(_("Character rotation (degrees)"));
+        _rotation_item->set_custom_numeric_menu_data(values);
+        _rotation_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _rotation_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::rotation_value_changed));
+        _rotation_item->set_sensitive();
+        _rotation_item->set_icon(INKSCAPE_ICON("text_rotation"));
+        add(*_rotation_item);
+    }
+
+    add_separator();
 
     /* Writing mode (Horizontal, Vertical-LR, Vertical-RL) */
     {
-        InkSelectOneActionColumns columns;
+        UI::Widget::ComboToolItemColumns columns;
 
         Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
 
@@ -468,25 +654,25 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         row[columns.col_icon     ] = INKSCAPE_ICON("format-text-direction-vertical-lr");
         row[columns.col_sensitive] = true;
 
-        toolbar->_writing_mode_action =
-            InkSelectOneAction::create( "TextWritingModeAction", // Name
-                                        _("Writing mode"),       // Label
-                                        _("Block progression"),  // Tooltip
-                                        "Not Used",              // Icon
-                                        store );                 // Tree store
-        toolbar->_writing_mode_action->use_radio( false );
-        toolbar->_writing_mode_action->use_label( false );
+        _writing_mode_item =
+            UI::Widget::ComboToolItem::create( _("Writing mode"),       // Label
+                                               _("Block progression"),  // Tooltip
+                                               "Not Used",              // Icon
+                                               store );                 // Tree store
+        _writing_mode_item->use_icon(true);
+        _writing_mode_item->use_label( false );
         gint mode = prefs->getInt("/tools/text/writing_mode", 0);
-        toolbar->_writing_mode_action->set_active( mode );
+        _writing_mode_item->set_active( mode );
 
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_writing_mode_action->gobj() ));
+        add(*_writing_mode_item);
 
-        toolbar->_writing_mode_action->signal_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::writing_mode_changed));
+        _writing_mode_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::writing_mode_changed));
     }
+
 
     /* Text (glyph) orientation (Auto (mixed), Upright, Sideways) */
     {
-        InkSelectOneActionColumns columns;
+        UI::Widget::ComboToolItemColumns columns;
 
         Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
 
@@ -510,25 +696,25 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         row[columns.col_icon     ] = INKSCAPE_ICON("text-orientation-sideways");
         row[columns.col_sensitive] = true;
 
-        toolbar->_orientation_action =
-            InkSelectOneAction::create( "TextOrientationAction",  // Name
-                                        _("Text orientation"),    // Label
-                                        _("Text (glyph) orientation in vertical text."),  // Tooltip
-                                        "Not Used",               // Icon
-                                        store );                  // List store
-        toolbar->_orientation_action->use_radio( false );
-        toolbar->_orientation_action->use_label( false );
+        _orientation_item =
+            UI::Widget::ComboToolItem::create(_("Text orientation"),    // Label
+                                              _("Text (glyph) orientation in vertical text."),  // Tooltip
+                                              "Not Used",               // Icon
+                                              store );                  // List store
+        _orientation_item->use_icon(true);
+        _orientation_item->use_label( false );
         gint mode = prefs->getInt("/tools/text/text_orientation", 0);
-        toolbar->_orientation_action->set_active( mode );
+        _orientation_item->set_active( mode );
 
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_orientation_action->gobj() ));
+        add(*_orientation_item);
 
-        toolbar->_orientation_action->signal_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::orientation_changed));
+        _orientation_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::orientation_changed));
     }
+
 
     // Text direction (predominant direction of horizontal text).
     {
-        InkSelectOneActionColumns columns;
+        UI::Widget::ComboToolItemColumns columns;
 
         Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
 
@@ -546,293 +732,26 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         row[columns.col_icon     ] = INKSCAPE_ICON("format-text-direction-r2l");
         row[columns.col_sensitive] = true;
 
-        toolbar->_direction_action =
-            InkSelectOneAction::create( "TextDirectionAction",  // Name
-                                        _("Text direction"),    // Label
-                                        _("Text direction for normally horizontal text."),  // Tooltip
-                                        "Not Used",               // Icon
-                                        store );                  // List store
-        toolbar->_direction_action->use_radio( false );
-        toolbar->_direction_action->use_label( false );
+        _direction_item =
+            UI::Widget::ComboToolItem::create( _("Text direction"),    // Label
+                                               _("Text direction for normally horizontal text."),  // Tooltip
+                                               "Not Used",               // Icon
+                                               store );                  // List store
+        _direction_item->use_icon(true);
+        _direction_item->use_label(false);
         gint mode = prefs->getInt("/tools/text/text_direction", 0);
-        toolbar->_direction_action->set_active( mode );
+        _direction_item->set_active( mode );
 
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_direction_action->gobj() ));
-
-        toolbar->_direction_action->signal_changed_after().connect(sigc::mem_fun(*toolbar, &TextToolbar::direction_changed));
+        add(*_direction_item);
+        _direction_item->signal_changed_after().connect(sigc::mem_fun(*this, &TextToolbar::direction_changed));
     }
 
-    /* Line height */
-    {
-        // Drop down menu
-        gchar const* labels[] = {_("Smaller spacing"), nullptr, nullptr, nullptr, nullptr, C_("Text tool", "Normal"), nullptr, nullptr, nullptr, nullptr, nullptr, _("Larger spacing")};
-        gdouble values[] = { 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1,2, 1.3, 1.4, 1.5, 2.0};
-
-        toolbar->_line_height_action = create_adjustment_action(
-            "TextLineHeightAction",               /* name */
-            _("Line Height"),                     /* label */
-            _("Line:"),                           /* short label */
-            _("Spacing between baselines"),       /* tooltip */
-            "/tools/text/lineheight",             /* preferences path */
-            0.0,                                  /* default */
-            FALSE,                                /* set alt-x keyboard shortcut? */
-            nullptr,                              /* altx_mark */
-            0.0, 1000.0, 0.1, 1.0,                /* lower, upper, step (arrow up/down), page up/down */
-            labels, values, G_N_ELEMENTS(labels), /* drop down menu */
-            nullptr, // tracker,                  /* unit tracker */
-            0.1,                                  /* step (used?) */
-            2,                                    /* digits to show */
-            1.0                                   /* factor (multiplies default) */
-            );
-        ege_adjustment_action_set_focuswidget(toolbar->_line_height_action, GTK_WIDGET(desktop->canvas));
-
-        toolbar->_line_height_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_line_height_action));
-        toolbar->_line_height_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::lineheight_value_changed));
-
-        //tracker->addAdjustment( ege_adjustment_action_get_adjustment(eact) );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_line_height_action) );
-        gtk_action_set_sensitive( GTK_ACTION(toolbar->_line_height_action), TRUE );
-
-        // TODO: Create accessor method for this, instead of GObject property
-        g_object_set( G_OBJECT(toolbar->_line_height_action), "iconId", "text_line_spacing", NULL );
-    }
-
-    /* Line height units */
-    {
-        toolbar->_line_height_units_action = toolbar->_tracker->createAction( "TextLineHeightUnitsAction", _("Units"), ("") );
-        gtk_action_group_add_action( mainActions, toolbar->_line_height_units_action->gobj() );
-        toolbar->_line_height_units_action->signal_changed_after().connect(sigc::mem_fun(*toolbar, &TextToolbar::lineheight_unit_changed));
-    }
-
-    /* Line spacing mode */
-    {
-        InkSelectOneActionColumns columns;
-
-        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
-
-        Gtk::TreeModel::Row row;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Adaptive");
-        row[columns.col_tooltip  ] = _("Line spacing adapts to font size.");
-        row[columns.col_icon     ] = INKSCAPE_ICON("text_line_spacing");
-        row[columns.col_sensitive] = true;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Minimum");
-        row[columns.col_tooltip  ] = _("Line spacing adapts to fonts size with set minimum spacing.");
-        row[columns.col_icon     ] = INKSCAPE_ICON("text_line_spacing");
-        row[columns.col_sensitive] = true;
-        row = *(store->append());
-        row[columns.col_label    ] = _("Even");
-        row[columns.col_tooltip  ] = _("Lines evenly spaced.");
-        row[columns.col_icon     ] = INKSCAPE_ICON("text_line_spacing");
-        row[columns.col_sensitive] = true;
-
-        row = *(store->append());
-        row[columns.col_label    ] = _("Adjustable ☠");
-        row[columns.col_tooltip  ] = _("Line spacing fully adjustable");
-        row[columns.col_icon     ] = INKSCAPE_ICON("text_line_spacing");
-        row[columns.col_sensitive] = true;
-
-        toolbar->_line_spacing_action =
-            InkSelectOneAction::create( "TextLineSpacingAction", // Name
-                                        _("Line Spacing Mode"),   // Label
-                                        _("How should multiple baselines be spaced?\n Adaptive: Line spacing adapts to font size.\n Minimum: Like Adaptive, but with a set minimum.\n Even: Evenly spaced.\n Adjustable: No restrictions."), // Tooltip
-                                        "Not Used",          // Icon
-                                        store );             // Tree store
-        toolbar->_line_spacing_action->use_radio( false );
-        toolbar->_line_spacing_action->use_label( true );
-        gint mode = prefs->getInt("/tools/text/line_spacing_mode", 0);
-        toolbar->_line_spacing_action->set_active( mode );
-
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_line_spacing_action->gobj() ));
-
-        toolbar->_line_spacing_action->signal_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::line_spacing_mode_changed));
-    }
-
-    /* Word spacing */
-    {
-        // Drop down menu
-        gchar const* labels[] = {_("Negative spacing"), nullptr, nullptr, nullptr, C_("Text tool", "Normal"), nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, _("Positive spacing")};
-        gdouble values[] = {-2.0, -1.5, -1.0, -0.5, 0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0};
-
-        toolbar->_word_spacing_action = create_adjustment_action(
-            "TextWordSpacingAction",              /* name */
-            _("Word spacing"),                    /* label */
-            _("Word:"),                           /* short label */
-            _("Spacing between words (px)"),      /* tooltip */
-            "/tools/text/wordspacing",            /* preferences path */
-            0.0,                                  /* default */
-            FALSE,                                /* set alt-x keyboard shortcut? */
-            nullptr,                                 /* altx_mark */
-            -100.0, 100.0, 0.01, 0.10,            /* lower, upper, step (arrow up/down), page up/down */
-            labels, values, G_N_ELEMENTS(labels), /* drop down menu */
-            nullptr,                                 /* unit tracker */
-            0.1,                                  /* step (used?) */
-            2,                                    /* digits to show */
-            1.0                                   /* factor (multiplies default) */
-            );
-        ege_adjustment_action_set_focuswidget(toolbar->_word_spacing_action, GTK_WIDGET(desktop->canvas));
-
-        toolbar->_word_spacing_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_word_spacing_action));
-        toolbar->_word_spacing_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::wordspacing_value_changed));
-        gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_word_spacing_action) );
-        gtk_action_set_sensitive( GTK_ACTION(toolbar->_word_spacing_action), TRUE );
-        g_object_set( G_OBJECT(toolbar->_word_spacing_action), "iconId", "text_word_spacing", NULL );
-    }
-
-    /* Letter spacing */
-    {
-        // Drop down menu
-        gchar const* labels[] = {_("Negative spacing"), nullptr, nullptr, nullptr, C_("Text tool", "Normal"), nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, _("Positive spacing")};
-        gdouble values[] = {-2.0, -1.5, -1.0, -0.5, 0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0};
-
-        toolbar->_letter_spacing_action = create_adjustment_action(
-            "TextLetterSpacingAction",            /* name */
-            _("Letter spacing"),                  /* label */
-            _("Letter:"),                         /* short label */
-            _("Spacing between letters (px)"),    /* tooltip */
-            "/tools/text/letterspacing",          /* preferences path */
-            0.0,                                  /* default */
-            FALSE,                                /* set alt-x keyboard shortcut? */
-            nullptr,                                 /* altx_mark */
-            -100.0, 100.0, 0.01, 0.10,            /* lower, upper, step (arrow up/down), page up/down */
-            labels, values, G_N_ELEMENTS(labels), /* drop down menu */
-            nullptr,                                 /* unit tracker */
-            0.1,                                  /* step (used?) */
-            2,                                    /* digits to show */
-            1.0                                   /* factor (multiplies default) */
-            );
-        ege_adjustment_action_set_focuswidget(toolbar->_letter_spacing_action, GTK_WIDGET(desktop->canvas));
-        toolbar->_letter_spacing_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_letter_spacing_action));
-        toolbar->_letter_spacing_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::letterspacing_value_changed));
-        gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_letter_spacing_action) );
-        gtk_action_set_sensitive( GTK_ACTION(toolbar->_letter_spacing_action), TRUE );
-        g_object_set( G_OBJECT(toolbar->_letter_spacing_action), "iconId", "text_letter_spacing", NULL );
-    }
-
-    /* Character kerning (horizontal shift) */
-    {
-        // Drop down menu
-        gchar const* labels[] = {   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr };
-        gdouble values[]      = { -2.0, -1.5, -1.0, -0.5,   0,  0.5,  1.0,  1.5,  2.0, 2.5 };
-
-        toolbar->_dx_action = create_adjustment_action(
-            "TextDxAction",                       /* name */
-            _("Kerning"),                         /* label */
-            _("Kern:"),                           /* short label */
-            _("Horizontal kerning (px)"),         /* tooltip */
-            "/tools/text/dx",                     /* preferences path */
-            0.0,                                  /* default */
-            FALSE,                                /* set alt-x keyboard shortcut? */
-            nullptr,                              /* altx_mark */
-            -100.0, 100.0, 0.01, 0.1,             /* lower, upper, step (arrow up/down), page up/down */
-            labels, values, G_N_ELEMENTS(labels), /* drop down menu */
-            nullptr,                              /* unit tracker */
-            0.1,                                  /* step (used?) */
-            2,                                    /* digits to show */
-            1.0                                   /* factor (multiplies default) */
-            );
-        ege_adjustment_action_set_focuswidget(toolbar->_dx_action, GTK_WIDGET(desktop->canvas));
-        toolbar->_dx_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_dx_action));
-        toolbar->_dx_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::dx_value_changed));
-        gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_dx_action) );
-        gtk_action_set_sensitive( GTK_ACTION(toolbar->_dx_action), TRUE );
-        g_object_set( G_OBJECT(toolbar->_dx_action), "iconId", "text_horz_kern", NULL );
-    }
-
-    /* Character vertical shift */
-    {
-        // Drop down menu
-        gchar const* labels[] = {   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr };
-        gdouble values[]      = { -2.0, -1.5, -1.0, -0.5,   0,  0.5,  1.0,  1.5,  2.0, 2.5 };
-
-        toolbar->_dy_action = create_adjustment_action(
-            "TextDyAction",                       /* name */
-            _("Vertical Shift"),                  /* label */
-            _("Vert:"),                           /* short label */
-            _("Vertical shift (px)"),             /* tooltip */
-            "/tools/text/dy",                     /* preferences path */
-            0.0,                                  /* default */
-            FALSE,                                /* set alt-x keyboard shortcut? */
-            nullptr,                                 /* altx_mark */
-            -100.0, 100.0, 0.01, 0.1,             /* lower, upper, step (arrow up/down), page up/down */
-            labels, values, G_N_ELEMENTS(labels), /* drop down menu */
-            nullptr,                                 /* unit tracker */
-            0.1,                                  /* step (used?) */
-            2,                                    /* digits to show */
-            1.0                                   /* factor (multiplies default) */
-            );
-        ege_adjustment_action_set_focuswidget(toolbar->_dy_action, GTK_WIDGET(desktop->canvas));
-        toolbar->_dy_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_dy_action));
-        toolbar->_dy_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::dy_value_changed));
-        gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_dy_action) );
-        gtk_action_set_sensitive( GTK_ACTION(toolbar->_dy_action), TRUE );
-        g_object_set( G_OBJECT(toolbar->_dy_action), "iconId", "text_vert_kern", NULL );
-    }
-
-    /* Character rotation */
-    {
-        // Drop down menu
-        gchar const* labels[] = {   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr,   nullptr };
-        gdouble values[]      = { -90, -45, -30, -15,   0,  15,  30,  45,  90, 180 };
-
-        toolbar->_rotation_action = create_adjustment_action(
-            "TextRotationAction",                 /* name */
-            _("Letter rotation"),                 /* label */
-            _("Rot:"),                            /* short label */
-            _("Character rotation (degrees)"),    /* tooltip */
-            "/tools/text/rotation",               /* preferences path */
-            0.0,                                  /* default */
-            FALSE,                                /* set alt-x keyboard shortcut? */
-            nullptr,                                 /* altx_mark */
-            -180.0, 180.0, 0.1, 1.0,              /* lower, upper, step (arrow up/down), page up/down */
-            labels, values, G_N_ELEMENTS(labels), /* drop down menu */
-            nullptr,                                 /* unit tracker */
-            0.1,                                  /* step (used?) */
-            2,                                    /* digits to show */
-            1.0                                   /* factor (multiplies default) */
-            );
-        ege_adjustment_action_set_focuswidget(toolbar->_rotation_action, GTK_WIDGET(desktop->canvas));
-        toolbar->_rotation_adj = Glib::wrap(ege_adjustment_action_get_adjustment(toolbar->_rotation_action));
-        toolbar->_rotation_adj->signal_value_changed().connect(sigc::mem_fun(*toolbar, &TextToolbar::rotation_value_changed));
-        gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_rotation_action) );
-        gtk_action_set_sensitive( GTK_ACTION(toolbar->_rotation_action), TRUE );
-        g_object_set( G_OBJECT(toolbar->_rotation_action), "iconId", "text_rotation", NULL );
-    }
-
-    /* Text line height unset */
-    {
-        toolbar->_line_height_unset_action = ink_toggle_action_new( "TextLineHeightUnsetAction",       // Name
-                                                                    _("Unset line height"),            // Label
-                                                                    _("If enabled, line height is set on part of selection. Click to unset."),
-                                                                    INKSCAPE_ICON("paint-unknown"),
-                                                                    secondarySize );                   // Icon size
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_line_height_unset_action ) );
-        g_signal_connect_after( G_OBJECT(toolbar->_line_height_unset_action), "toggled", G_CALLBACK(lineheight_unset_changed), (gpointer)toolbar );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(toolbar->_line_height_unset_action), prefs->getBool("/tools/text/line_height_unset", false) );
-    }
-
-    /* Text outer style */
-    {
-        toolbar->_outer_style_action = ink_toggle_action_new( "TextOuterStyleAction",            // Name
-                                                              _("Show outer style"),             // Label
-                                                              _("Show style of outermost text element. The 'font-size' and 'line-height' values of the outermost text element determine the minimum line spacing in the block."),
-                                                              INKSCAPE_ICON("text_outer_style"),
-                                                              secondarySize );                   // Icon size
-        gtk_action_group_add_action( mainActions, GTK_ACTION( toolbar->_outer_style_action ) );
-        g_signal_connect_after( G_OBJECT(toolbar->_outer_style_action), "toggled", G_CALLBACK(outer_style_changed), (gpointer)toolbar );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(toolbar->_outer_style_action), prefs->getBool("/tools/text/outer_style", false) );
-    }
+    show_all();
 
     // Is this necessary to call? Shouldn't hurt.
-    toolbar->selection_changed(desktop->getSelection());
+    // selection_changed(desktop->getSelection());
 
-    desktop->connectEventContextChanged(sigc::mem_fun(*toolbar, &TextToolbar::watch_ec));
-
-    return GTK_WIDGET(toolbar->gobj());
-#endif
+    // desktop->connectEventContextChanged(sigc::mem_fun(*this, &TextToolbar::watch_ec));
 }
 
 void
@@ -1053,21 +972,21 @@ TextToolbar::fontstyle_value_changed( Ink_ComboBoxEntry_Action *act, gpointer da
 
 // Handles both Superscripts and Subscripts
 void
-TextToolbar::script_changed( InkToggleAction* act, gpointer data)
+TextToolbar::script_changed(Gtk::ToggleToolButton *btn)
 {
-    auto toolbar = reinterpret_cast<TextToolbar *>(data);
     // quit if run by the _changed callbacks
-    if (toolbar->_freeze) {
+    if (_freeze) {
         return;
     }
-    toolbar->_freeze = true;
+
+    _freeze = true;
 
     // Called by Superscript or Subscript button?
-    const gchar* name = gtk_action_get_name( GTK_ACTION( act ) );
-    gint prop = (strcmp(name, "TextSuperscriptAction") == 0) ? 0 : 1;
+    auto name = btn->get_name();
+    gint prop = (strcmp(name.c_str(), "TextSuperscriptAction") == 0) ? 0 : 1;
 
 #ifdef DEBUG_TEXT
-    std::cout << "sp_text_script_changed: " << prop << std::endl;
+    std::cout << "TextToolbar::script_changed: " << prop << std::endl;
 #endif
 
     // Query baseline
@@ -1127,7 +1046,7 @@ TextToolbar::script_changed( InkToggleAction* act, gpointer data)
         DocumentUndo::maybeDone(SP_ACTIVE_DESKTOP->getDocument(), "ttb:script", SP_VERB_NONE,
                              _("Text: Change superscript or subscript"));
     }
-    toolbar->_freeze = false;
+    _freeze = false;
 }
 
 void
@@ -1798,13 +1717,13 @@ TextToolbar::line_spacing_mode_changed(int mode)
     // Set "Outer Style" toggle to match mode.
     switch (mode) {
         case 0: // Adaptive
-            gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(_outer_style_action), false );
+            _outer_style_item->set_active(false);
             prefs->setInt("/tools/text/outer_style", false);
             break;
 
         case 1: // Minimum
         case 2: // Even
-            gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(_outer_style_action), true );
+            _outer_style_item->set_active(true);
             prefs->setInt("/tools/text/outer_style", true);
             break;
 
@@ -1813,7 +1732,7 @@ TextToolbar::line_spacing_mode_changed(int mode)
     }
 
     // Outer style toggle set per mode so that line height widget should be enabled.
-    gtk_action_set_sensitive(GTK_ACTION(_line_height_action), true);
+    _line_height_item->set_sensitive(true);
 
     // Update "climb rate"
     Unit const *unit = _tracker->getActiveUnit();
@@ -2023,15 +1942,12 @@ TextToolbar::rotation_value_changed()
 
 // Unset line height on selection's inner text objects (tspan, etc.).
 void
-TextToolbar::lineheight_unset_changed(InkToggleAction*act, gpointer data)
+TextToolbar::lineheight_unset_changed()
 {
-    auto toolbar = reinterpret_cast<TextToolbar *>(data);
-
     // quit if run by the _changed callbacks
-    if (toolbar->_freeze) {
+    if (_freeze) {
         return;
     }
-    toolbar->_freeze = true;
 
     SPCSSAttr *css = sp_repr_css_attr_new();
     sp_repr_css_unset_property(css, "line-height");
@@ -2044,20 +1960,19 @@ TextToolbar::lineheight_unset_changed(InkToggleAction*act, gpointer data)
     DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
                        _("Text: Unset line height."));
 
-    toolbar->_freeze = false;
+    _freeze = false;
 }
 
 // Changes selection to only text outer elements.
 void
-TextToolbar::outer_style_changed( InkToggleAction *act, gpointer data )
+TextToolbar::outer_style_changed()
 {
-    auto toolbar = reinterpret_cast<TextToolbar *>(data);
-    bool outer = gtk_toggle_action_get_active( GTK_TOGGLE_ACTION(act) );
+    bool outer = _outer_style_item->get_active();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setInt("/tools/text/outer_style", outer);
 
     // Update widgets to reflect new state of Text Outer Style button.
-    toolbar->selection_changed(nullptr);
+    //selection_changed(nullptr);
 }
 
 /*
@@ -2216,7 +2131,7 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
              query.baseline_shift.type == SP_BASELINE_SHIFT_LITERAL &&
              query.baseline_shift.literal == SP_CSS_BASELINE_SHIFT_SUPER );
 
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(_superscript_action), superscriptSet );
+        _superscript_item->set_active(superscriptSet);
 
         // Subscript
         gboolean subscriptSet =
@@ -2225,7 +2140,7 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
              query.baseline_shift.type == SP_BASELINE_SHIFT_LITERAL &&
              query.baseline_shift.literal == SP_CSS_BASELINE_SHIFT_SUB );
 
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(_subscript_action), subscriptSet );
+        _subscript_item->set_active(subscriptSet);
 
         // Alignment
 
@@ -2234,7 +2149,7 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
         // Only flowed text can be left and right justified at the same time.
         // Disable button if we don't have flowed text.
 
-        Glib::RefPtr<Gtk::ListStore> store = _align_action->get_store();
+        Glib::RefPtr<Gtk::ListStore> store = _align_item->get_store();
         Gtk::TreeModel::Row row = *(store->get_iter("3"));  // Justify entry
         InkSelectOneActionColumns columns;
         row[columns.col_sensitive] = isFlow;
@@ -2249,7 +2164,7 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
             if (query.text_anchor.computed == SP_CSS_TEXT_ANCHOR_MIDDLE) activeButton = 1;
             if (query.text_anchor.computed == SP_CSS_TEXT_ANCHOR_END)    activeButton = 2;
         }
-        _align_action->set_active( activeButton );
+        _align_item->set_active( activeButton );
 
         // Line height (spacing) and line height unit
         double height;
@@ -2315,8 +2230,8 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
         _lineheight_unit = line_height_unit;
 
         // Enable and turn on only if selection includes an object with line height set.
-        gtk_action_set_sensitive(GTK_ACTION(_line_height_unset_action), query.line_height.set );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(_line_height_unset_action), query.line_height.set );
+        _line_height_unset_item->set_sensitive(query.line_height.set);
+        _line_height_unset_item->set_active(query.line_height.set);
 
         // Line spacing mode: requires calculating mode for each <text> element and the <tspan>s within.
         Inkscape::Selection *selection = desktop->getSelection();
@@ -2370,23 +2285,23 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
         //           << ", "<< mode[1]
         //           << ", "<< mode[2]
         //           << ", "<< mode[3] << std::endl;
-        _line_spacing_action->set_active( activeButtonLS );
+        _line_spacing_item->set_active( activeButtonLS );
 
         // Enable/disable line height widget based on mode and Outer Style toggle.
         if ( (activeButtonLS == 0 && outer)  ||   // Adaptive
              (activeButtonLS == 1 && !outer) ||   // Minimum
              (activeButtonLS == 2 && !outer)      // Even
             ) {
-            gtk_action_set_sensitive (GTK_ACTION(_line_height_action), false);
+            _line_height_item->set_sensitive(false);
         } else {
-            gtk_action_set_sensitive (GTK_ACTION(_line_height_action), true);
+            _line_height_item->set_sensitive(true);
         }
 
         // In Minimum and Adaptive modes, don't allow unit change (must remain unitless).
         if (activeButtonLS == 0 || (activeButtonLS == 1 && outer)) {
-            _line_height_units_action->set_sensitive(false);
+            _line_height_units_item->set_sensitive(false);
         } else {
-            _line_height_units_action->set_sensitive(true);
+            _line_height_units_item->set_sensitive(true);
         }
 
         // Word spacing
@@ -2410,7 +2325,7 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
         if (query.writing_mode.computed == SP_CSS_WRITING_MODE_TB_RL) activeButton2 = 1;
         if (query.writing_mode.computed == SP_CSS_WRITING_MODE_TB_LR) activeButton2 = 2;
 
-        _writing_mode_action->set_active( activeButton2 );
+        _writing_mode_item->set_active( activeButton2 );
 
         // Orientation
         int activeButton3 = 0;
@@ -2418,16 +2333,16 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
         if (query.text_orientation.computed == SP_CSS_TEXT_ORIENTATION_UPRIGHT ) activeButton3 = 1;
         if (query.text_orientation.computed == SP_CSS_TEXT_ORIENTATION_SIDEWAYS) activeButton3 = 2;
 
-        _orientation_action->set_active( activeButton3 );
+        _orientation_item->set_active( activeButton3 );
 
         // Disable text orientation for horizontal text...
-        _orientation_action->set_sensitive( activeButton2 != 0 );
+        _orientation_item->set_sensitive( activeButton2 != 0 );
 
         // Direction
         int activeButton4 = 0;
         if (query.direction.computed == SP_CSS_DIRECTION_LTR ) activeButton4 = 0;
         if (query.direction.computed == SP_CSS_DIRECTION_RTL ) activeButton4 = 1;
-        _direction_action->set_active( activeButton4 );
+        _direction_item->set_active( activeButton4 );
     }
 
 #ifdef DEBUG_TEXT
@@ -2485,9 +2400,9 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
 
     {
         // Set these here as we don't always have kerning/rotating attributes
-        gtk_action_set_sensitive( GTK_ACTION(_dx_action), !isFlow );
-        gtk_action_set_sensitive( GTK_ACTION(_dy_action), !isFlow );
-        gtk_action_set_sensitive( GTK_ACTION(_rotation_action), !isFlow );
+        _dx_item->set_sensitive(!isFlow);
+        _dy_item->set_sensitive(!isFlow);
+        _rotation_item->set_sensitive(!isFlow);
     }
 
 #ifdef DEBUG_TEXT

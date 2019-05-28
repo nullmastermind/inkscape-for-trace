@@ -3,6 +3,7 @@
 #include "spin-button-tool-item.h"
 
 #include <gtkmm/box.h>
+#include <gtkmm/image.h>
 #include <gtkmm/radiomenuitem.h>
 #include <gtkmm/toolbar.h>
 
@@ -390,14 +391,28 @@ SpinButtonToolItem::SpinButtonToolItem(const Glib::ustring            name,
     _btn->add_events(Gdk::KEY_PRESS_MASK);
 
     // Create a label
-    auto label = Gtk::manage(new Gtk::Label(label_text));
+    _label = Gtk::manage(new Gtk::Label(label_text));
 
     // Arrange the widgets in a horizontal box
-    auto hbox = Gtk::manage(new Gtk::Box());
-    hbox->set_spacing(3);
-    hbox->pack_start(*label);
-    hbox->pack_start(*_btn);
-    add(*hbox);
+    _hbox = Gtk::manage(new Gtk::Box());
+    _hbox->set_spacing(3);
+    _hbox->pack_start(*_label);
+    _hbox->pack_start(*_btn);
+    add(*_hbox);
+    show_all();
+}
+
+void
+SpinButtonToolItem::set_icon(const Glib::ustring& icon_name)
+{
+    _hbox->remove(*_label);
+    _icon = Gtk::manage(new Gtk::Image(icon_name, Gtk::ICON_SIZE_SMALL_TOOLBAR));
+
+    if(_icon) {
+        _hbox->pack_start(*_icon);
+        _hbox->reorder_child(*_icon, 0);
+    }
+
     show_all();
 }
 

@@ -32,13 +32,14 @@
 
 #include <gtkmm/adjustment.h>
 
-class InkSelectOneAction;
 class SPDesktop;
 
-typedef struct _EgeAdjustmentAction EgeAdjustmentAction;
 typedef struct _GtkActionGroup GtkActionGroup;
 typedef struct _Ink_ComboBoxEntry_Action Ink_ComboBoxEntry_Action;
-typedef struct _InkToggleAction InkToggleAction;
+
+namespace Gtk {
+class ToggleToolButton;
+}
 
 namespace Inkscape {
 class Selection;
@@ -49,6 +50,8 @@ class ToolBase;
 }
 
 namespace Widget {
+class ComboToolItem;
+class SpinButtonToolItem;
 class UnitTracker;
 }
 
@@ -63,23 +66,23 @@ private:
     Ink_ComboBoxEntry_Action *_font_family_action;
     Ink_ComboBoxEntry_Action *_font_size_action;
     Ink_ComboBoxEntry_Action *_font_style_action;
-    InkToggleAction *_superscript_action;
-    InkToggleAction *_subscript_action;
-    InkToggleAction *_outer_style_action;
-    InkToggleAction *_line_height_unset_action;
-    InkSelectOneAction *_align_action;
-    InkSelectOneAction *_writing_mode_action;
-    InkSelectOneAction *_orientation_action;
-    InkSelectOneAction *_direction_action;
-    InkSelectOneAction *_line_height_units_action;
-    InkSelectOneAction *_line_spacing_action;
+    Gtk::ToggleToolButton *_superscript_item;
+    Gtk::ToggleToolButton *_subscript_item;
+    Gtk::ToggleToolButton *_outer_style_item;
+    Gtk::ToggleToolButton *_line_height_unset_item;
+    UI::Widget::ComboToolItem *_align_item;
+    UI::Widget::ComboToolItem *_writing_mode_item;
+    UI::Widget::ComboToolItem *_orientation_item;
+    UI::Widget::ComboToolItem *_direction_item;
+    UI::Widget::ComboToolItem *_line_height_units_item;
+    UI::Widget::ComboToolItem *_line_spacing_item;
 
-    EgeAdjustmentAction *_line_height_action;
-    EgeAdjustmentAction *_word_spacing_action;
-    EgeAdjustmentAction *_letter_spacing_action;
-    EgeAdjustmentAction *_dx_action;
-    EgeAdjustmentAction *_dy_action;
-    EgeAdjustmentAction *_rotation_action;
+    UI::Widget::SpinButtonToolItem *_line_height_item;
+    UI::Widget::SpinButtonToolItem *_word_spacing_item;
+    UI::Widget::SpinButtonToolItem *_letter_spacing_item;
+    UI::Widget::SpinButtonToolItem *_dx_item;
+    UI::Widget::SpinButtonToolItem *_dy_item;
+    UI::Widget::SpinButtonToolItem *_rotation_item;
 
     Glib::RefPtr<Gtk::Adjustment> _line_height_adj;
     Glib::RefPtr<Gtk::Adjustment> _word_spacing_adj;
@@ -100,13 +103,9 @@ private:
                                          gpointer                  data);
     static void fontstyle_value_changed (Ink_ComboBoxEntry_Action *act,
                                          gpointer                  data);
-    static void script_changed          (InkToggleAction          *act,
-                                         gpointer                  data);
-    static void lineheight_unset_changed(InkToggleAction          *act,
-                                         gpointer                  data);
-    static void outer_style_changed     (InkToggleAction          *act,
-                                         gpointer                  data);
-
+    void script_changed(Gtk::ToggleToolButton *btn);
+    void lineheight_unset_changed();
+    void outer_style_changed();
     void align_mode_changed(int mode);
     void writing_mode_changed(int mode);
     void orientation_changed(int mode);

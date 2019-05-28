@@ -5,6 +5,7 @@
 #include <gtkmm/toolitem.h>
 
 namespace Gtk {
+class Box;
 class RadioButtonGroup;
 class RadioMenuItem;
 }
@@ -28,6 +29,10 @@ private:
     Glib::ustring  _label_text;     ///< A string to use in labels for the widget (translatable)
     double         _last_val;       ///< The last value of the adjustment
     bool           _transfer_focus; ///< Whether or not to transfer focus
+
+    Gtk::Box    *_hbox;       ///< Horizontal box, to store widgets
+    Gtk::Widget *_label;      ///< A text label to describe the setting
+    Gtk::Widget *_icon;       ///< An icon to describe the setting
 
     /** A widget that grabs focus when this one loses it */
     Gtk::Widget * _focus_widget;
@@ -72,6 +77,7 @@ public:
     void set_custom_numeric_menu_data(std::vector<double>&              values,
                                       const std::vector<Glib::ustring>& labels = std::vector<Glib::ustring>());
     Glib::RefPtr<Gtk::Adjustment> get_adjustment();
+    void set_icon(const Glib::ustring& icon_name);
 };
 } // namespace Widget
 } // namespace UI
