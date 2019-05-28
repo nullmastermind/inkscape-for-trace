@@ -142,23 +142,16 @@ translations:
     - cd po/
 
     # update POTFILES.in
-    - grep -v "^#" POTFILES.in > POTFILES.in.1
     - ./generate_POTFILES.sh
-    - grep -v "^#" POTFILES.in > POTFILES.in.2
-
-    # update inkscape.pot and sync all .po files
-    - intltool-update --pot --gettext-package=inkscape
-    - ./update_po_files.sh
 
     # check if POTFILES.in should be updated in the repo (shall we automate this?)
-    - 'if [ -n "$(diff POTFILES.in.1 POTFILES.in.2)" ]; then
-        git diff POTFILES.in;
+    - 'if [ -n "$(git diff)" ]; then
+        git diff;
         echo "New translatable strings in source files found.";
         echo "Please add the paths to POTFILES.in so they can be translated";
         echo "(or add them to POTFILES.skip to exclude them from translations).";
         exit 1;
       fi'
-    - rm POTFILES.in.1 POTFILES.in.2
   artifacts:
     name: "translations"
     paths:
