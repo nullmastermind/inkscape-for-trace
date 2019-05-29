@@ -56,7 +56,7 @@ public:
       : _selectordialog(selectordialog)
   {
       g_debug("SelectorDialog::NodeObserver: Constructor");
-    };
+  };
 
     void notifyContentChanged(Inkscape::XML::Node &node,
                                       Inkscape::Util::ptr_shared old_content,
@@ -88,7 +88,7 @@ public:
       , _repr(repr)
   {
       g_debug("SelectorDialog::NodeWatcher: Constructor");
-    };
+  };
 
     void notifyChildAdded( Inkscape::XML::Node &/*node*/,
                                    Inkscape::XML::Node &child,
