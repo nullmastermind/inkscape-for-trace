@@ -339,7 +339,7 @@ bool AttrDialog::onKeyPressed(GdkEventKey *event)
  */
 void AttrDialog::nameEdited (const Glib::ustring& path, const Glib::ustring& name)
 {
-    Gtk::TreeIter iter = this->_store->append();
+    Gtk::TreeIter iter = *_store->get_iter(path);
     Gtk::TreeModel::Path modelpath = (Gtk::TreeModel::Path)iter;
     Gtk::TreeModel::Row row = *iter;
     if(row && this->_repr) {

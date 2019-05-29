@@ -209,6 +209,7 @@ StyleDialog::StyleDialog() :
     _all_css = Gtk::manage(new Gtk::Switch());
     _all_css->get_style_context()->add_class("switchclean");
     _all_css->set_margin_right(5);
+    _all_css->set_margin_top(2);
     _all_css->property_active().signal_changed().connect(sigc::mem_fun(*this, &StyleDialog::_reload));
     alltoggler->pack_start(*_all_css, false, false, 0);
     alltoggler->pack_start(*infotoggler, false, false, 0);
@@ -478,7 +479,6 @@ void StyleDialog::_readStyleElement()
     value->property_placeholder_text() = _("value");
     value->property_editable() = true;
     value->signal_edited().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore> >(sigc::mem_fun(*this, &StyleDialog::_valueEdited), store));
-    css_tree->set_focus_vadjustment(_scrolledWindow.get_vadjustment());
     addCol = css_tree->append_column("CSS Value", *value) - 1;
     col = css_tree->get_column(addCol);
     if (col) {
@@ -550,7 +550,6 @@ void StyleDialog::_readStyleElement()
                                 value->property_placeholder_text() = _("value");
                                 value->property_editable() = true;
                                 value->signal_edited().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore> >(sigc::mem_fun(*this, &StyleDialog::_valueEdited), store));
-                                css_tree->set_focus_vadjustment(_scrolledWindow.get_vadjustment());
                                 addCol = css_tree->append_column("CSS Value", *value) - 1;
                                 col = css_tree->get_column(addCol);
                                 if (col) {
@@ -649,7 +648,6 @@ void StyleDialog::_readStyleElement()
                 col->add_attribute(active->property_active(), _mColumns._colActive);
                 active->signal_toggled().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore> >(sigc::mem_fun(*this, &StyleDialog::_activeToggled), store));
             }
-            //col->set_cell_data_func(*active, sigc::mem_fun(*this, &StyleDialog::_hideRootToggle));
             Gtk::CellRendererText *label = Gtk::manage(new Gtk::CellRendererText());
             label->property_placeholder_text() = _("property");
             label->property_editable() = true;
@@ -663,7 +661,6 @@ void StyleDialog::_readStyleElement()
             value->property_editable() = true;
             value->signal_edited().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore> >(sigc::mem_fun(*this, &StyleDialog::_valueEdited), store));
             value->property_placeholder_text() = _("value");
-            css_tree->set_focus_vadjustment(_scrolledWindow.get_vadjustment());
             addCol = css_tree->append_column("CSS Value", *value) - 1;
             col = css_tree->get_column(addCol);
             if (col) {
@@ -879,21 +876,24 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
 }
 
 bool StyleDialog::_addRow(GdkEventButton *evt, Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeView *css_tree, Glib::ustring selector, gint pos) {
-    Gtk::TreeIter iter = store->append();
-    Gtk::TreeModel::Path path = (Gtk::TreeModel::Path)iter;
-    Gtk::TreeModel::Row row = *(iter);
-    row[_mColumns._colSelector] = selector;
-    row[_mColumns._colSelectorPos] = pos;
-    row[_mColumns._colActive] = true;
-    row[_mColumns._colName] =  "";
-    row[_mColumns._colValue] = "";
-    row[_mColumns._colStrike] = false;
-    gint col = 2;
-    if (pos < 2 ){
-        col = 1;
+    if(evt->type == GDK_BUTTON_RELEASE && evt->button == 1) {
+        Gtk::TreeIter iter = store->append();
+        Gtk::TreeModel::Path path = (Gtk::TreeModel::Path)iter;
+        Gtk::TreeModel::Row row = *(iter);
+        row[_mColumns._colSelector] = selector;
+        row[_mColumns._colSelectorPos] = pos;
+        row[_mColumns._colActive] = true;
+        row[_mColumns._colName] =  "";
+        row[_mColumns._colValue] = "";
+        row[_mColumns._colStrike] = false;
+        gint col = 2;
+        if (pos < 2 ){
+            col = 1;
+        }
+        css_tree->set_cursor(path, *(css_tree->get_column(col)), true);
+        grab_focus();
+        return true;
     }
-    css_tree->set_cursor(path, *(css_tree->get_column(col)), true);
-    grab_focus();
     return false;
 }
 
