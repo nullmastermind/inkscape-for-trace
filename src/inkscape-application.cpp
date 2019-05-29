@@ -42,6 +42,10 @@
 #include "actions/actions-selection.h" // Actions
 #include "actions/actions-transform.h" // Actions
 
+#ifdef GDK_WINDOWING_QUARTZ
+#include <gtkosxapplication.h>
+#endif
+
 #ifdef WITH_DBUS
 # include "extension/dbus/dbus-init.h"
 #endif
@@ -572,6 +576,11 @@ ConcreteInkscapeApplication<Gio::Application>::on_startup2()
     Inkscape::Application::create(nullptr, false);
 }
 
+#ifdef GDK_WINDOWING_QUARTZ
+static gboolean osx_openfile_callback(GtkosxApplication *, gchar const *,
+                                      ConcreteInkscapeApplication<Gtk::Application> *);
+#endif
+
 template<>
 void
 ConcreteInkscapeApplication<Gtk::Application>::on_startup2()
@@ -614,6 +623,11 @@ ConcreteInkscapeApplication<Gtk::Application>::on_startup2()
     } else {
         // set_app_menu(menu);
     }
+
+#ifdef GDK_WINDOWING_QUARTZ
+    GtkosxApplication *osxapp = gtkosx_application_get();
+    g_signal_connect(G_OBJECT(osxapp), "NSApplicationOpenFile", G_CALLBACK(osx_openfile_callback), this);
+#endif
 }
 
 /** We should not create a window if T is Gio::Applicaton.
@@ -708,6 +722,20 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<
 
     return (desktop); // Temp: Need to track desktop for shell mode.
 }
+
+#ifdef GDK_WINDOWING_QUARTZ
+/**
+ * On macOS, handle dropping files on Inkscape.app icon and "Open With" file association.
+ */
+static gboolean osx_openfile_callback(GtkosxApplication *osxapp, gchar const *path,
+                                      ConcreteInkscapeApplication<Gtk::Application> *app)
+{
+    auto ptr = Gio::File::create_for_path(path);
+    g_return_val_if_fail(ptr, false);
+    app->create_window(ptr);
+    return true;
+}
+#endif
 
 /** No need to destroy window if T is Gio::Application.
  */

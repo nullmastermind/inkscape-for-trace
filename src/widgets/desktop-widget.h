@@ -269,6 +269,8 @@ public:
     void updateTitle(gchar const *uri);
     bool onFocusInEvent(GdkEventFocus*);
 
+    Gtk::MenuBar *menubar() { return _menubar; }
+
     Inkscape::UI::Widget::Dock* getDock();
 
     static GType getType();
