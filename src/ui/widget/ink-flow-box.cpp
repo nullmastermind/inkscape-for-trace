@@ -30,8 +30,10 @@ InkFlowBox::InkFlowBox(const gchar *name)
     tbutton->set_always_show_image(true);
     _flowbox.set_selection_mode(Gtk::SelectionMode::SELECTION_NONE);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    tbutton->set_active(true); // commented for furter use prefs->getBool(Glib::ustring("/dialogs/") + get_name() +
-                               // Glib::ustring("/flowbox/lock"), true));
+    prefs->setBool(Glib::ustring("/dialogs/") + get_name() +
+                        Glib::ustring("/flowbox/lock"), false);
+    tbutton->set_active(prefs->getBool(Glib::ustring("/dialogs/") + get_name() +
+                        Glib::ustring("/flowbox/lock"), true));
     Glib::ustring iconname = "object-unlocked";
     if (tbutton->get_active()) {
         iconname = "object-locked";
@@ -39,8 +41,9 @@ InkFlowBox::InkFlowBox(const gchar *name)
     tbutton->set_image(*sp_get_icon_image(iconname, Gtk::ICON_SIZE_MENU));
     tbutton->signal_toggled().connect(
         sigc::bind<Gtk::ToggleButton *>(sigc::mem_fun(*this, &InkFlowBox::on_global_toggle), tbutton));
-    //_controller.pack_start(*tbutton);
-    // tbutton->show();
+    _controller.pack_start(*tbutton);
+    tbutton->hide();
+    tbutton->set_no_show_all(true);
     showing = 0;
     sensitive = true;
 }
