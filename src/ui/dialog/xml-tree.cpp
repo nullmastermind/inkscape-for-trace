@@ -356,11 +356,11 @@ void XmlTree::propagate_tree_select(Inkscape::XML::Node *repr)
         repr->type() == Inkscape::XML::COMMENT_NODE)) 
     {
         attributes->setRepr(repr);
-        //styles->setRepr(repr);
+        // styles->setRepr(repr);
         // selectors->setRepr(repr);
     } else {
         attributes->setRepr(nullptr);
-        //styles->setRepr(nullptr);
+        // styles->setRepr(nullptr);
         // selectors->setRepr(nullptr);
     }
 }

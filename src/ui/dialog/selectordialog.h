@@ -15,14 +15,14 @@
 #ifndef SELECTORDIALOG_H
 #define SELECTORDIALOG_H
 
-#include <ui/widget/panel.h>
-#include <gtkmm/treeview.h>
-#include <gtkmm/treestore.h>
-#include <gtkmm/treemodelfilter.h>
-#include <gtkmm/scrolledwindow.h>
 #include <gtkmm/dialog.h>
-#include <gtkmm/treeselection.h>
 #include <gtkmm/paned.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/treemodelfilter.h>
+#include <gtkmm/treeselection.h>
+#include <gtkmm/treestore.h>
+#include <gtkmm/treeview.h>
+#include <ui/widget/panel.h>
 
 #include "ui/dialog/desktop-tracker.h"
 
@@ -81,7 +81,7 @@ public:
         Gtk::TreeModelColumn<gint> _colType;                    // Selector row or child object row.
         Gtk::TreeModelColumn<std::vector<SPObject *> > _colObj; // List of matching objects.
         Gtk::TreeModelColumn<Glib::ustring> _colProperties;     // List of properties.
-        Gtk::TreeModelColumn<bool> _colVisible;                                       // Make visible or not.
+        Gtk::TreeModelColumn<bool> _colVisible;                 // Make visible or not.
     };
     ModelColumns _mColumns;
 
@@ -100,7 +100,7 @@ public:
         void on_row_deleted(const TreeModel::Path& path) override;
 
     public:
-        static Glib::RefPtr<SelectorDialog::TreeStore> create(SelectorDialog *styledialog);
+      static Glib::RefPtr<SelectorDialog::TreeStore> create(SelectorDialog *styledialog);
 
     private:
         SelectorDialog *_selectordialog;

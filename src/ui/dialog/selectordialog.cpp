@@ -52,17 +52,17 @@ namespace Dialog {
 // Keeps a watch on style element
 class SelectorDialog::NodeObserver : public Inkscape::XML::NodeObserver {
 public:
-    NodeObserver(SelectorDialog* selectordialog) :
-        _selectordialog(selectordialog)
-    {
-        g_debug("SelectorDialog::NodeObserver: Constructor");
+  NodeObserver(SelectorDialog *selectordialog)
+      : _selectordialog(selectordialog)
+  {
+      g_debug("SelectorDialog::NodeObserver: Constructor");
     };
 
     void notifyContentChanged(Inkscape::XML::Node &node,
                                       Inkscape::Util::ptr_shared old_content,
                                       Inkscape::Util::ptr_shared new_content) override;
 
-    SelectorDialog * _selectordialog;
+    SelectorDialog *_selectordialog;
 };
 
 
@@ -83,19 +83,19 @@ SelectorDialog::NodeObserver::notifyContentChanged(
 // (Must update objects that selectors match.)
 class SelectorDialog::NodeWatcher : public Inkscape::XML::NodeObserver {
 public:
-    NodeWatcher(SelectorDialog* selectordialog, Inkscape::XML::Node *repr) :
-        _selectordialog(selectordialog),
-        _repr(repr)
-    {
-        g_debug("SelectorDialog::NodeWatcher: Constructor");
+  NodeWatcher(SelectorDialog *selectordialog, Inkscape::XML::Node *repr)
+      : _selectordialog(selectordialog)
+      , _repr(repr)
+  {
+      g_debug("SelectorDialog::NodeWatcher: Constructor");
     };
 
     void notifyChildAdded( Inkscape::XML::Node &/*node*/,
                                    Inkscape::XML::Node &child,
                                    Inkscape::XML::Node */*prev*/ ) override
     {
-        if ( _selectordialog && _repr ) {
-            _selectordialog->_nodeAdded( child );
+        if (_selectordialog && _repr) {
+            _selectordialog->_nodeAdded(child);
         }
     }
 
@@ -103,8 +103,8 @@ public:
                                      Inkscape::XML::Node &child,
                                      Inkscape::XML::Node */*prev*/ ) override
     {
-        if ( _selectordialog && _repr ) {
-            _selectordialog->_nodeRemoved( child );
+        if (_selectordialog && _repr) {
+            _selectordialog->_nodeRemoved(child);
         }
     }
 
@@ -112,7 +112,7 @@ public:
                                          GQuark qname,
                                          Util::ptr_shared /*old_value*/,
                                          Util::ptr_shared /*new_value*/ ) override {
-        if ( _selectordialog && _repr ) {
+        if (_selectordialog && _repr) {
 
             // For the moment only care about attributes that are directly used in selectors.
             const gchar * cname = g_quark_to_string (qname );
@@ -122,12 +122,12 @@ public:
             }
 
             if ( name == "id" || name == "class" ) {
-                _selectordialog->_nodeChanged( node );
+                _selectordialog->_nodeChanged(node);
             }
         }
     }
 
-    SelectorDialog * _selectordialog;
+    SelectorDialog *_selectordialog;
     Inkscape::XML::Node * _repr;  // Need to track if document changes.
 };
 
@@ -243,7 +243,7 @@ SelectorDialog::SelectorDialog() :
     addRenderer->add_icon("edit-delete");
     addRenderer->add_icon("list-add");
     addRenderer->add_icon("object-locked");
-    
+
     _store = TreeStore::create(this);
     _treeView.set_model(_store);
 
@@ -407,10 +407,10 @@ void SelectorDialog::_readStyleElement()
     content.erase(std::remove(content.begin(), content.end(), '\n'), content.end());
 
     // Remove comments (/* xxx */)
-/*     while(content.find("/*") != std::string::npos) {
-        size_t start = content.find("/*");
-        content.erase(start, (content.find("*\/", start) - start) +2);
-    } */
+    /*     while(content.find("/*") != std::string::npos) {
+            size_t start = content.find("/*");
+            content.erase(start, (content.find("*\/", start) - start) +2);
+        } */
 
     // First split into selector/value chunks.
     // An attempt to use Glib::Regex failed. A C++11 version worked but
@@ -453,7 +453,7 @@ void SelectorDialog::_readStyleElement()
         for (auto tok : tokensplus) {
             REMOVE_SPACES(tok);
             if (SPAttributeRelSVG::isSVGElement(tok) || tok.find(" ") != -1 || tok[0] == '>' || tok[0] == '+' ||
-               tok[0] == '~' || tok[0] == '*' || tok.erase(0, 1).find(".") != -1) {
+                tok[0] == '~' || tok[0] == '*' || tok.erase(0, 1).find(".") != -1) {
                 colType = UNHANDLED;
             }
         }
@@ -488,14 +488,15 @@ void SelectorDialog::_readStyleElement()
             Gtk::TreeModel::Row childrow = *(_store->append(row->children()));
             childrow[_mColumns._colSelector] = "#" + Glib::ustring(obj->getId());
             childrow[_mColumns._colExpand] = false;
-            childrow[_mColumns._colType] = colType == UNHANDLED ? UNHANDLED : OBJECT;;
+            childrow[_mColumns._colType] = colType == UNHANDLED ? UNHANDLED : OBJECT;
+            ;
             childrow[_mColumns._colObj] = std::vector<SPObject *>(1, obj);
             childrow[_mColumns._colProperties] = ""; // Unused
-            childrow[_mColumns._colVisible] = true; // Unused
+            childrow[_mColumns._colVisible] = true;  // Unused
         }
-}
+    }
 
-    
+
     _updating = false;
 }
 
@@ -624,7 +625,7 @@ void SelectorDialog::_addToSelector(Gtk::TreeModel::Row row)
                     childrow[_mColumns._colType] = OBJECT;
                     childrow[_mColumns._colObj]        = std::vector<SPObject *>(1, obj);
                     childrow[_mColumns._colProperties] = "";  // Unused
-                    childrow[_mColumns._colVisible] = true;  // Unused
+                    childrow[_mColumns._colVisible] = true;   // Unused
                 }
             }
         }
@@ -665,7 +666,7 @@ void SelectorDialog::_addToSelector(Gtk::TreeModel::Row row)
                     childrow[_mColumns._colType] = OBJECT;
                     childrow[_mColumns._colObj] = std::vector<SPObject *>(1, obj);
                     childrow[_mColumns._colProperties] = ""; // Unused
-                    childrow[_mColumns._colVisible] = true; // Unused
+                    childrow[_mColumns._colVisible] = true;  // Unused
                 }
             }
         }
@@ -986,7 +987,7 @@ void SelectorDialog::_addSelector()
             textLabelPtr->show();
         } else {
             invalid = false;
-         }
+        }
     }
     delete textDialogPtr;
     // ==== Handle response ====
@@ -1209,13 +1210,13 @@ void SelectorDialog::_selectRow()
 {
     g_debug("SelectorDialog::_selectRow: updating: %s", (_updating ? "true" : "false"));
     del->hide();
-    std::vector< Gtk::TreeModel::Path > selectedrows = _treeView.get_selection()->get_selected_rows(); 
-    if(selectedrows.size() == 1) {
+    std::vector<Gtk::TreeModel::Path> selectedrows = _treeView.get_selection()->get_selected_rows();
+    if (selectedrows.size() == 1) {
         Gtk::TreeModel::Row row = *_store->get_iter(selectedrows[0]);
-        if (!row->parent() && row->children().size() < 2 ) {
+        if (!row->parent() && row->children().size() < 2) {
             del->show();
         }
-    } else if(selectedrows.size() == 0) {
+    } else if (selectedrows.size() == 0) {
         del->show();
     }
     if (_updating || !getDesktop()) return; // Avoid updating if we have set row via dialog.
@@ -1231,7 +1232,7 @@ void SelectorDialog::_selectRow()
     if (!selection->isEmpty()) {
         obj = selection->objects().back();
     }
-    
+
     for (auto row : children) {
         std::vector<SPObject *> objVec = row[_mColumns._colObj];
         if (obj) {

@@ -27,10 +27,10 @@
 
 #include "message.h"
 
-#include "ui/dialog/selectordialog.h"
 #include "ui/dialog/attrdialog.h"
-#include "ui/dialog/styledialog.h"
 #include "ui/dialog/desktop-tracker.h"
+#include "ui/dialog/selectordialog.h"
+#include "ui/dialog/styledialog.h"
 
 
 class SPDesktop;

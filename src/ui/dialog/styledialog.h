@@ -15,18 +15,18 @@
 #ifndef STYLEDIALOG_H
 #define STYLEDIALOG_H
 
-#include <ui/widget/panel.h>
-#include <gtkmm/treeview.h>
-#include <gtkmm/treestore.h>
-#include <gtkmm/treemodelfilter.h>
-#include <gtkmm/scrolledwindow.h>
-#include <gtkmm/dialog.h>
-#include <gtkmm/treeselection.h>
-#include <gtkmm/switch.h>
-#include <gtkmm/eventbox.h>
-#include <gtkmm/paned.h>
 #include <glibmm/regex.h>
 #include <gtkmm/builder.h>
+#include <gtkmm/dialog.h>
+#include <gtkmm/eventbox.h>
+#include <gtkmm/paned.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/switch.h>
+#include <gtkmm/treemodelfilter.h>
+#include <gtkmm/treeselection.h>
+#include <gtkmm/treestore.h>
+#include <gtkmm/treeview.h>
+#include <ui/widget/panel.h>
 
 #include "ui/dialog/desktop-tracker.h"
 
@@ -49,7 +49,7 @@ namespace Dialog {
  */
 class StyleDialog : public Widget::Panel {
 
-public:
+  public:
     ~StyleDialog() override;
     // No default constructor, noncopyable, nonassignable
     StyleDialog();
@@ -57,6 +57,7 @@ public:
     StyleDialog operator=(StyleDialog const &d) = delete;
 
     static StyleDialog &getInstance() { return *new StyleDialog(); }
+
   private:
     // Monitor <style> element for changes.
     class NodeObserver;
@@ -64,15 +65,16 @@ public:
     class NodeWatcher;
     Glib::RefPtr<Glib::Regex> r_props = Glib::Regex::create("\\s*;\\s*");
     Glib::RefPtr<Glib::Regex> r_pair = Glib::Regex::create("\\s*:\\s*");
-    std::vector<StyleDialog::NodeWatcher*> _nodeWatchers;
-    void _nodeAdded(   Inkscape::XML::Node &repr );
-    void _nodeRemoved( Inkscape::XML::Node &repr );
-    void _nodeChanged( Inkscape::XML::Node &repr );
+    std::vector<StyleDialog::NodeWatcher *> _nodeWatchers;
+    void _nodeAdded(Inkscape::XML::Node &repr);
+    void _nodeRemoved(Inkscape::XML::Node &repr);
+    void _nodeChanged(Inkscape::XML::Node &repr);
     /* void _stylesheetChanged( Inkscape::XML::Node &repr ); */
     // Data structure
     class ModelColumns : public Gtk::TreeModel::ColumnRecord {
-    public:
-        ModelColumns() {
+      public:
+        ModelColumns()
+        {
             add(_colActive);
             add(_colName);
             add(_colValue);
@@ -80,36 +82,37 @@ public:
             add(_colSelector);
             add(_colSelectorPos);
         }
-        Gtk::TreeModelColumn<bool> _colActive;             // Active or inative property
-        Gtk::TreeModelColumn<Glib::ustring> _colName;      // Name of the property.
-        Gtk::TreeModelColumn<Glib::ustring> _colValue;     // Value of the property.
-        Gtk::TreeModelColumn<bool> _colStrike;             // Propery not used, overloaded
-        Gtk::TreeModelColumn<Glib::ustring> _colSelector;  // Style or matching object id.
-        Gtk::TreeModelColumn<gint> _colSelectorPos;        // Position of the selector to hadle dup selectors
-        
+        Gtk::TreeModelColumn<bool> _colActive;            // Active or inative property
+        Gtk::TreeModelColumn<Glib::ustring> _colName;     // Name of the property.
+        Gtk::TreeModelColumn<Glib::ustring> _colValue;    // Value of the property.
+        Gtk::TreeModelColumn<bool> _colStrike;            // Propery not used, overloaded
+        Gtk::TreeModelColumn<Glib::ustring> _colSelector; // Style or matching object id.
+        Gtk::TreeModelColumn<gint> _colSelectorPos;       // Position of the selector to hadle dup selectors
     };
     ModelColumns _mColumns;
 
     // Widgets
     Gtk::ScrolledWindow _scrolledWindow;
-    Gtk::Box   _mainBox;
-    Gtk::Box   _styleBox;
+    Gtk::Box _mainBox;
+    Gtk::Box _styleBox;
     Gtk::Switch *_all_css;
     // Reading and writing the style element.
     Inkscape::XML::Node *_getStyleTextNode();
     void _readStyleElement();
-    Glib::RefPtr< Gtk::TreeModel > _selectTree(Glib::ustring selector);
+    Glib::RefPtr<Gtk::TreeModel> _selectTree(Glib::ustring selector);
     void _writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::ustring selector);
-    void _activeToggled(const Glib::ustring& path, Glib::RefPtr<Gtk::TreeStore> store);
-    bool _addRow(GdkEventButton *evt, Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeView *css_tree, Glib::ustring selector, gint pos);
-    void _nameEdited(const Glib::ustring& path, const Glib::ustring& name, Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeView *css_tree);
-    void _valueEdited(const Glib::ustring& path, const Glib::ustring& value, Glib::RefPtr<Gtk::TreeStore> store);
+    void _activeToggled(const Glib::ustring &path, Glib::RefPtr<Gtk::TreeStore> store);
+    bool _addRow(GdkEventButton *evt, Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeView *css_tree,
+                 Glib::ustring selector, gint pos);
+    void _nameEdited(const Glib::ustring &path, const Glib::ustring &name, Glib::RefPtr<Gtk::TreeStore> store,
+                     Gtk::TreeView *css_tree);
+    void _valueEdited(const Glib::ustring &path, const Glib::ustring &value, Glib::RefPtr<Gtk::TreeStore> store);
     void _onPropDelete(Glib::ustring path, Glib::RefPtr<Gtk::TreeStore> store);
     void _reload();
 
     // Update watchers
     void _addWatcherRecursive(Inkscape::XML::Node *node);
-    void _updateWatchers();    
+    void _updateWatchers();
 
     // Manipulate Tree
     std::vector<SPObject *> _getObjVec(Glib::ustring selector);
@@ -117,21 +120,21 @@ public:
 
     // Variables
     Inkscape::XML::Node *_textNode; // Track so we know when to add a NodeObserver.
-    bool _updating;  // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
+    bool _updating;                 // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
 
     // Signals and handlers - External
     sigc::connection _document_replaced_connection;
     sigc::connection _desktop_changed_connection;
     sigc::connection _selection_changed_connection;
 
-    void _handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
-    void _handleDesktopChanged(SPDesktop* desktop);
+    void _handleDocumentReplaced(SPDesktop *desktop, SPDocument *document);
+    void _handleDesktopChanged(SPDesktop *desktop);
     void _handleSelectionChanged();
     void _closeDialog(Gtk::Dialog *textDialogPtr);
     DesktopTracker _desktopTracker;
 };
 
-} // namespace Dialogc
+} // namespace Dialog
 } // namespace UI
 } // namespace Inkscape
 

@@ -18,9 +18,9 @@
 
 #include "message-context.h"
 #include "message-stack.h"
+#include "style.h"
 #include "ui/icon-loader.h"
 #include "ui/widget/iconrenderer.h"
-#include "style.h"
 
 #include "xml/node-event-vector.h"
 #include "xml/attribute-record.h"
@@ -383,7 +383,7 @@ void AttrDialog::reloadStyles(Glib::ustring name)
     if (obj) {
         for (auto iter : obj->style->properties()) {
             if (iter->style_src != SP_STYLE_SRC_UNSET) {
-                if( iter->name == name) {
+                if (iter->name == name) {
                     obj->style->readFromObject(obj);
                     obj->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
                 }
@@ -413,7 +413,7 @@ void AttrDialog::valueEdited (const Glib::ustring& path, const Glib::ustring& va
             row[_attrColumns._attributeValue] = value;
         }
         reloadStyles(name);
-        
+
         this->setUndo(_("Change attribute value"));
     }
 }
