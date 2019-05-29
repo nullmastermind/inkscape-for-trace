@@ -334,9 +334,10 @@ text_flow_into_shape()
     } else {
         // SVG 1.2 Flowed Text
 
-        if (SP_IS_TEXT(text)) {
+        if (SP_IS_TEXT(text) || SP_IS_FLOWTEXT(text)) {
             // remove transform from text, but recursively scale text's fontsize by the expansion
-            SP_TEXT(text)->_adjustFontsizeRecursive(text, text->transform.descrim());
+            auto ex = i2i_affine(text, shape->parent).descrim();
+            SP_TEXT(text)->_adjustFontsizeRecursive(text, ex);
             text->getRepr()->setAttribute("transform", nullptr);
         }
 
