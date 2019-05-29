@@ -24,6 +24,7 @@
 #include "ui/icon-loader.h"
 #include "ui/widget/iconrenderer.h"
 #include "verbs.h"
+#include "svg/svg-color.h"
 
 #include "xml/attribute-record.h"
 #include "xml/node-observer.h"
@@ -604,7 +605,16 @@ void StyleDialog::_readStyleElement()
                             row[_mColumns._colActive] = true;
                             row[_mColumns._colName] = iter->name;
                             row[_mColumns._colValue] = attr_prop_styleshet[iter->name];
-                            if (attr_prop.count(iter->name) || row[_mColumns._colValue] != iter->get_value()) {
+                            const Glib::ustring value = row[_mColumns._colValue];
+                            guint32 r1 = 0; // if there's no color, return black
+                            r1 = sp_svg_read_color(value.c_str(), r1);
+                            guint32 r2 = 0; // if there's no color, return black
+                            r2 = sp_svg_read_color(iter->get_value().c_str(), r2);
+                            if (attr_prop.count(iter->name) || 
+                                (value != iter->get_value() &&
+                                (r1 & 0xff == 0 ||
+                                r1 != r2)))  
+                            {
                                 row[_mColumns._colStrike] = true;
                             } else {
                                 row[_mColumns._colStrike] = false;
@@ -739,11 +749,9 @@ void StyleDialog::_onPropDelete(Glib::ustring path, Glib::RefPtr<Gtk::TreeStore>
 {
     Gtk::TreeModel::Row row = *store->get_iter(path);
     if (row) {
-        _updating = true; // to avoid a crash on deleting an obsolete widget
         Glib::ustring selector = row[_mColumns._colSelector];
         row[_mColumns._colName] = "";
         store->erase(row);
-        _updating = false;
         _writeStyleElement(store, selector);
     }
 }
@@ -836,9 +844,26 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
         std::string result;
         std::regex_replace(std::back_inserter(result), content.begin(), content.end(), e, "$1" + styleContent + "$3");
         textNode->setContent(result.c_str());
-        for (auto iter : document->getObjectsByClass(selector)) {
-            iter->style->readFromObject(iter);
-            iter->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+        std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[,]+", selector);
+        for (auto token : tokens) {
+            REMOVE_SPACES(token);
+            std::vector<Glib::ustring> selectorlist = Glib::Regex::split_simple("[ ]+", token);
+            if (selectorlist.size() > 0) {
+                Glib::ustring lastselector = REMOVE_SPACES(selectorlist[selectorlist.size() - 1]);
+                Glib::ustring selectorname = lastselector;
+                selectorname.erase(0, 1);
+                lastselector.erase(1);
+                if (lastselector == ".") {
+                    for (auto iter : document->getObjectsByClass(selectorname)) {
+                        iter->style->readFromObject(iter);
+                        iter->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+                    }
+                } else {
+                    SPObject * obj = document->getObjectById(selectorname);
+                    obj->style->readFromObject(obj);
+                    obj->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+                }
+            }
         }
     }
     /* if (selector == "attributes") {
@@ -860,10 +885,10 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
             }
         }
     } else  */
+    _updating = false;
     _readStyleElement();
     DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_STYLE, _("Edited style element."));
 
-    _updating = false;
     g_debug("StyleDialog::_writeStyleElement(): | %s |", styleContent.c_str());
 }
 
