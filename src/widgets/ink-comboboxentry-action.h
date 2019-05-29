@@ -20,88 +20,136 @@
 #ifndef SEEN_INK_COMBOBOXENTRY_ACTION
 #define SEEN_INK_COMBOBOXENTRY_ACTION
 
-#include <gtk/gtk.h>
+#include <gtkmm/action.h>
 
-#define INK_COMBOBOXENTRY_TYPE_ACTION           (ink_comboboxentry_action_get_type())
-#define INK_COMBOBOXENTRY_ACTION(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), INK_COMBOBOXENTRY_TYPE_ACTION, Ink_ComboBoxEntry_Action))
-#define INK_COMBOBOXENTRY_ACTION_CLASS(klass)   (G_TYPE_CHECK_CLASS_CAST ((klass),  INK_COMBOBOXENTRY_TYPE_ACTION, Ink_ComboBoxEntry_ActionClass))
-#define INK_COMBOBOXENTRY_IS_ACTION(obj)        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), INK_COMBOBOXENTRY_TYPE_ACTION))
-#define INK_COMBOBOXENTRY_ACTION_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj),  INK_COMBOBOXENTRY_TYPE_ACTION, Ink_ComboBoxEntry_ActionClass))
+namespace Inkscape {
+namespace UI {
+namespace Widget {
 
-typedef struct _Ink_ComboBoxEntry_ActionClass Ink_ComboBoxEntry_ActionClass;
-typedef struct _Ink_ComboBoxEntry_Action      Ink_ComboBoxEntry_Action;
+class ComboBoxEntryAction : public Gtk::Action {
+private:
+    GtkTreeModel       *_model; ///< Tree Model
+    GtkComboBox        *_combobox;
+    GtkEntry           *_entry;
+    gint                _entry_width;// Width of GtkEntry in characters.
+    gint                _extra_width;// Extra Width of GtkComboBox.. to widen drop-down list in list mode.
+    gpointer            _cell_data_func; // drop-down menu format
+    gpointer            _separator_func;
+    gboolean            _popup;      // Do we pop-up an entry-completion dialog?
+    GtkEntryCompletion *_entry_completion;
+    GtkWidget          *_focusWidget; ///< The widget to return focus to
 
-struct _Ink_ComboBoxEntry_ActionClass {
-  GtkActionClass parent_class;
+    GtkWidget          *_indicator;
+    gint                _active;     // Index of active menu item (-1 if not in list).
+    gchar              *_text;       // Text of active menu item or entry box.
+    gchar              *_info;       // Text for tooltip info about entry.
+    gpointer            _info_cb;    // Callback for clicking info icon.
+    gint                _info_cb_id;
+    gboolean            _info_cb_blocked;
+    gchar              *_warning;    // Text for tooltip warning that entry isn't in list.
+    gpointer            _warning_cb; // Callback for clicking warning icon.
+    gint                _warning_cb_id;
+    gboolean            _warning_cb_blocked;
+    gchar              *_altx_name;  // Target for Alt-X keyboard shortcut.
 
-  void (*changed)   (Ink_ComboBoxEntry_Action* action);
-  void (*activated) (Ink_ComboBoxEntry_Action* action);
+    // Signals
+    sigc::signal<void> _signal_changed;
+
+    void (*changed)   (ComboBoxEntryAction* action);
+    void (*activated) (ComboBoxEntryAction* action);
+
+    static gint get_active_row_from_text(ComboBoxEntryAction *action,
+                                         const gchar         *target_text,
+	                                 gboolean             exclude     = false,
+                                         gboolean             ignore_case = false);
+    void defocus();
+
+    Gtk::Widget* create_tool_item_vfunc() override;
+    static void combo_box_changed_cb( GtkComboBox* widget, gpointer data );
+    static void entry_activate_cb( GtkEntry *widget,
+                                   gpointer  data );
+    static gboolean match_selected_cb( GtkEntryCompletion *widget,
+                                       GtkTreeModel       *model,
+                                       GtkTreeIter        *iter,
+                                       gpointer            data);
+    static gboolean keypress_cb( GtkWidget   *widget,
+                                 GdkEventKey *event,
+                                 gpointer     data );
+
+    Glib::ustring check_comma_separated_text();
+ 
+public:
+    /**
+     * Creates a GtkAction subclass that wraps a GtkComboBoxEntry object.
+     */
+    ComboBoxEntryAction(const gchar  *name,
+                        const gchar  *label,
+                        const gchar  *tooltip,
+                        const gchar  *stock_id,
+                        GtkTreeModel *model,
+                        gint          entry_width    = -1,
+                        gint          extra_width    = -1,
+                        gpointer      cell_data_func = nullptr,
+                        gpointer      separator_func = nullptr,
+                        GtkWidget*    focusWidget    = nullptr);
+
+    gchar*   get_active_text();
+    gboolean set_active_text(const gchar* text, int row=-1);
+
+    void     set_entry_width(gint entry_width);
+    void     set_extra_width(gint extra_width);
+
+    void     popup_enable();
+    void     popup_disable();
+
+    void     set_info(      const gchar* info );
+    void     set_info_cb(   gpointer info_cb );
+    void     set_warning(   const gchar* warning_cb );
+    void     set_warning_cb(gpointer warning );
+    void     set_tooltip(   const gchar* tooltip );
+
+    void     set_altx_name( const gchar* altx_name );
+
+    // Accessor methods
+    decltype(_model)          get_model()          const {return _model;}
+    decltype(_combobox)       get_combobox()       const {return _combobox;}
+    decltype(_entry)          get_entry()          const {return _entry;}
+    decltype(_entry_width)    get_entry_width()    const {return _entry_width;}
+    decltype(_extra_width)    get_extra_width()    const {return _extra_width;}
+    decltype(_cell_data_func) get_cell_data_func() const {return _cell_data_func;}
+    decltype(_separator_func) get_separator_func() const {return _separator_func;}
+    decltype(_popup)          get_popup()          const {return _popup;}
+    decltype(_focusWidget)    get_focus_widget()   const {return _focusWidget;}
+
+    decltype(_active)         get_active()         const {return _active;}
+
+    decltype(_signal_changed) signal_changed() {return _signal_changed;}
+
+    // Mutator methods
+    void set_model         (decltype(_model)          model)          {_model          = model;}
+    void set_combobox      (decltype(_combobox)       combobox)       {_combobox       = combobox;}
+    void set_entry         (decltype(_entry)          entry)          {_entry          = entry;}
+    void set_cell_data_func(decltype(_cell_data_func) cell_data_func) {_cell_data_func = cell_data_func;}
+    void set_separator_func(decltype(_separator_func) separator_func) {_separator_func = separator_func;}
+    void set_popup         (decltype(_popup)          popup)          {_popup          = popup;}
+    void set_focus_widget  (decltype(_focusWidget)    focus_widget)   {_focusWidget    = focus_widget;}
+
+    // This doesn't seem right... surely we should set the active row in the Combobox too?
+    void set_active        (decltype(_active)         active)         {_active         = active;}
 };
 
-struct _Ink_ComboBoxEntry_Action {
-  GtkAction parent_instance;
-
-  GtkTreeModel       *model;
-  GtkComboBox        *combobox;
-  GtkEntry           *entry;
-  GtkEntryCompletion *entry_completion;
-  GtkWidget          *indicator;
-
-  gpointer            cell_data_func; // drop-down menu format
-  gpointer            separator_func;
-
-  gint                active;     // Index of active menu item (-1 if not in list).
-  gchar              *text;       // Text of active menu item or entry box.
-  gint                entry_width;// Width of GtkEntry in characters.
-  gint                extra_width;// Extra Width of GtkComboBox.. to widen drop-down list in list mode.
-  gboolean            popup;      // Do we pop-up an entry-completion dialog?
-  gchar              *info;       // Text for tooltip info about entry.
-  gpointer            info_cb;    // Callback for clicking info icon.
-  gint                info_cb_id;
-  gboolean            info_cb_blocked;
-  gchar              *warning;    // Text for tooltip warning that entry isn't in list.
-  gpointer            warning_cb; // Callback for clicking warning icon.
-  gint                warning_cb_id;
-  gboolean            warning_cb_blocked;
-  gchar              *altx_name;  // Target for Alt-X keyboard shortcut.
-  GtkWidget          *focusWidget;
-};
-
-
-GType ink_comboboxentry_action_get_type ();
-
-/**
- * Creates a GtkAction subclass that wraps a GtkComboBoxEntry object.
- */
-Ink_ComboBoxEntry_Action *ink_comboboxentry_action_new ( const gchar  *name,
-							 const gchar  *label,
-							 const gchar  *tooltip,
-							 const gchar  *stock_id,
-							 GtkTreeModel *model,
-							 gint          entry_width = -1,
-							 gint          extra_width = -1,
-							 gpointer cell_data_func = nullptr,
-							 gpointer separator_func = nullptr,
-							 GtkWidget* focusWidget = nullptr);
-
-GtkTreeModel     *ink_comboboxentry_action_get_model( Ink_ComboBoxEntry_Action* action );
-GtkComboBox      *ink_comboboxentry_action_get_comboboxentry( Ink_ComboBoxEntry_Action* action );
-
-gchar*   ink_comboboxentry_action_get_active_text( Ink_ComboBoxEntry_Action* action );
-gboolean ink_comboboxentry_action_set_active_text( Ink_ComboBoxEntry_Action* action, const gchar* text, int row=-1 );
-
-void     ink_comboboxentry_action_set_entry_width( Ink_ComboBoxEntry_Action* action, gint entry_width );
-void     ink_comboboxentry_action_set_extra_width( Ink_ComboBoxEntry_Action* action, gint extra_width );
-
-void     ink_comboboxentry_action_popup_enable(  Ink_ComboBoxEntry_Action* action );
-void     ink_comboboxentry_action_popup_disable( Ink_ComboBoxEntry_Action* action );
-
-void     ink_comboboxentry_action_set_info(      Ink_ComboBoxEntry_Action* action, const gchar* info );
-void     ink_comboboxentry_action_set_info_cb(   Ink_ComboBoxEntry_Action* action, gpointer info_cb );
-void     ink_comboboxentry_action_set_warning(   Ink_ComboBoxEntry_Action* action, const gchar* warning_cb );
-void     ink_comboboxentry_action_set_warning_cb(Ink_ComboBoxEntry_Action* action, gpointer warning );
-void     ink_comboboxentry_action_set_tooltip(   Ink_ComboBoxEntry_Action* action, const gchar* tooltip );
-
-void     ink_comboboxentry_action_set_altx_name( Ink_ComboBoxEntry_Action* action, const gchar* altx_name );
-
+}
+}
+}
 #endif /* SEEN_INK_COMBOBOXENTRY_ACTION */
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

@@ -753,7 +753,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
 }
 
 void
-TextToolbar::fontfamily_value_changed( Ink_ComboBoxEntry_Action *act, gpointer data )
+TextToolbar::fontfamily_value_changed( UI::Widget::ComboBoxEntryAction *act, gpointer data )
 {
     auto toolbar = reinterpret_cast<TextToolbar *>(data);
 
@@ -773,7 +773,7 @@ TextToolbar::fontfamily_value_changed( Ink_ComboBoxEntry_Action *act, gpointer d
     }
     toolbar->_freeze = true;
 
-    Glib::ustring new_family = ink_comboboxentry_action_get_active_text( act );
+    Glib::ustring new_family = act->get_active_text();
     css_font_family_unquote( new_family ); // Remove quotes around font family names.
 
     // TODO: Think about how to handle handle multiple selections. While
@@ -789,13 +789,16 @@ TextToolbar::fontfamily_value_changed( Ink_ComboBoxEntry_Action *act, gpointer d
     if( new_family.compare( fontlister->get_font_family() ) != 0 ) {
         // Changed font-family
 
-        if( act->active == -1 ) {
+        if( act->get_active() == -1 ) {
             // New font-family, not in document, not on system (could be fallback list)
             fontlister->insert_font_family( new_family );
-            act->active = 0; // New family is always at top of list.
+
+            // This just sets a variable in the ComboBoxEntryAction object...
+            // shouldn't we also set the actual active row in the combobox?
+            act->set_active(0); // New family is always at top of list.
         }
 
-        fontlister->set_font_family( act->active );
+        fontlister->set_font_family( act->get_active() );
         // active text set in sp_text_toolbox_selection_changed()
 
         SPCSSAttr *css = sp_repr_css_attr_new ();
@@ -833,7 +836,7 @@ TextToolbar::create(SPDesktop *desktop)
 }
 
 void
-TextToolbar::fontsize_value_changed( Ink_ComboBoxEntry_Action *act, gpointer data)
+TextToolbar::fontsize_value_changed( UI::Widget::ComboBoxEntryAction *act, gpointer data)
 {
     auto toolbar = reinterpret_cast<TextToolbar *>(data);
 
@@ -843,7 +846,7 @@ TextToolbar::fontsize_value_changed( Ink_ComboBoxEntry_Action *act, gpointer dat
     }
     toolbar->_freeze = true;
 
-    gchar *text = ink_comboboxentry_action_get_active_text( act );
+    gchar *text = act->get_active_text();
     gchar *endptr;
     gdouble size = g_strtod( text, &endptr );
     if (endptr == text) {  // Conversion failed, non-numeric input.
@@ -922,7 +925,7 @@ TextToolbar::fontsize_value_changed( Ink_ComboBoxEntry_Action *act, gpointer dat
 }
 
 void
-TextToolbar::fontstyle_value_changed( Ink_ComboBoxEntry_Action *act, gpointer data)
+TextToolbar::fontstyle_value_changed( UI::Widget::ComboBoxEntryAction *act, gpointer data)
 {
     auto toolbar = reinterpret_cast<TextToolbar *>(data);
 
@@ -932,7 +935,7 @@ TextToolbar::fontstyle_value_changed( Ink_ComboBoxEntry_Action *act, gpointer da
     }
     toolbar->_freeze = true;
 
-    Glib::ustring new_style = ink_comboboxentry_action_get_active_text( act );
+    Glib::ustring new_style = act->get_active_text();
 
     Inkscape::FontLister* fontlister = Inkscape::FontLister::get_instance();
 
@@ -2015,9 +2018,9 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
     fontlister->selection_update();
 
     // Update font list, but only if widget already created.
-    if( _font_family_action->combobox != nullptr ) {
-        ink_comboboxentry_action_set_active_text( _font_family_action, fontlister->get_font_family().c_str(), fontlister->get_font_family_row() );
-        ink_comboboxentry_action_set_active_text( _font_style_action,  fontlister->get_font_style().c_str()  );
+    if( _font_family_action->get_combobox() != nullptr ) {
+        _font_family_action->set_active_text( fontlister->get_font_family().c_str(), fontlister->get_font_family_row() );
+        _font_style_action->set_active_text( fontlister->get_font_style().c_str() );
     }
 
     // Only flowed text can be justified, only normal text can be kerned...
@@ -2092,7 +2095,7 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
 
         // To ensure the value of the combobox is properly set on start-up, only mark
         // the prefs set if the combobox has already been constructed.
-        if( _font_family_action->combobox != nullptr ) {
+        if( _font_family_action->get_combobox() != nullptr ) {
             _text_style_from_prefs = true;
         }
     } else {
@@ -2114,13 +2117,13 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
 
         // Freeze to ignore callbacks.
         //g_object_freeze_notify( G_OBJECT( fontSizeAction->combobox ) );
-        sp_text_set_sizes(GTK_LIST_STORE(ink_comboboxentry_action_get_model(_font_size_action)), unit);
+        sp_text_set_sizes(GTK_LIST_STORE(_font_size_action->get_model()), unit);
         //g_object_thaw_notify( G_OBJECT( fontSizeAction->combobox ) );
 
-        ink_comboboxentry_action_set_active_text( _font_size_action, os.str().c_str() );
+        _font_size_action->set_active_text( os.str().c_str() );
 
         Glib::ustring tooltip = Glib::ustring::format(_("Font size"), " (", sp_style_get_css_unit_string(unit), ")");
-        ink_comboboxentry_action_set_tooltip ( _font_size_action, tooltip.c_str());
+        _font_size_action->set_tooltip (tooltip.c_str());
 
         // Superscript
         gboolean superscriptSet =

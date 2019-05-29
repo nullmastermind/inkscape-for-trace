@@ -34,10 +34,8 @@
 
 class SPDesktop;
 
-typedef struct _GtkActionGroup GtkActionGroup;
-typedef struct _Ink_ComboBoxEntry_Action Ink_ComboBoxEntry_Action;
-
 namespace Gtk {
+class ComboBoxText;
 class ToggleToolButton;
 }
 
@@ -50,6 +48,7 @@ class ToolBase;
 }
 
 namespace Widget {
+class ComboBoxEntryAction;
 class ComboToolItem;
 class SpinButtonToolItem;
 class UnitTracker;
@@ -63,9 +62,9 @@ private:
 
     UI::Widget::UnitTracker *_tracker;
 
-    Ink_ComboBoxEntry_Action *_font_family_action;
-    Ink_ComboBoxEntry_Action *_font_size_action;
-    Ink_ComboBoxEntry_Action *_font_style_action;
+    UI::Widget::ComboBoxEntryAction *_font_family_action;
+    UI::Widget::ComboBoxEntryAction *_font_size_action;
+    UI::Widget::ComboBoxEntryAction *_font_style_action;
     Gtk::ToggleToolButton *_superscript_item;
     Gtk::ToggleToolButton *_subscript_item;
     Gtk::ToggleToolButton *_outer_style_item;
@@ -97,12 +96,12 @@ private:
     sigc::connection c_selection_modified;
     sigc::connection c_subselection_changed;
 
-    static void fontfamily_value_changed(Ink_ComboBoxEntry_Action *act,
+    static void fontfamily_value_changed(UI::Widget::ComboBoxEntryAction *act,
                                          gpointer                  data);
-    static void fontsize_value_changed  (Ink_ComboBoxEntry_Action *act,
+    static void fontsize_value_changed  (UI::Widget::ComboBoxEntryAction *act,
                                          gpointer                  data);
-    static void fontstyle_value_changed (Ink_ComboBoxEntry_Action *act,
-                                         gpointer                  data);
+    static void fontstyle_value_changed (UI::Widget::ComboBoxEntryAction *act,
+                                         gpointer                         data);
     void script_changed(Gtk::ToggleToolButton *btn);
     void lineheight_unset_changed();
     void outer_style_changed();
@@ -123,6 +122,7 @@ private:
     void selection_modified(Inkscape::Selection *selection, guint flags);
     void subselection_changed(gpointer tc);
     void watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
+    void set_sizes(int unit);
 
 protected:
     TextToolbar(SPDesktop *desktop);
