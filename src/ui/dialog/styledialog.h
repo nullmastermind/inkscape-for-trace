@@ -22,6 +22,7 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/treeselection.h>
+#include <gtkmm/switch.h>
 #include <gtkmm/eventbox.h>
 #include <gtkmm/paned.h>
 #include <glibmm/regex.h>
@@ -93,17 +94,18 @@ public:
     Gtk::ScrolledWindow _scrolledWindow;
     Gtk::Box   _mainBox;
     Gtk::Box   _styleBox;
-
+    Gtk::Switch *_all_css;
     // Reading and writing the style element.
     Inkscape::XML::Node *_getStyleTextNode();
     void _readStyleElement();
     Glib::RefPtr< Gtk::TreeModel > _selectTree(Glib::ustring selector);
     void _writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::ustring selector);
     void _activeToggled(const Glib::ustring& path, Glib::RefPtr<Gtk::TreeStore> store);
-    bool _addRow(GdkEventButton *evt, Glib::RefPtr<Gtk::TreeStore> store, Glib::ustring selector, gint pos);
-    void _nameEdited(const Glib::ustring& path, const Glib::ustring& name, Glib::RefPtr<Gtk::TreeStore> store);
+    bool _addRow(GdkEventButton *evt, Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeView *css_tree, Glib::ustring selector, gint pos);
+    void _nameEdited(const Glib::ustring& path, const Glib::ustring& name, Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeView *css_tree);
     void _valueEdited(const Glib::ustring& path, const Glib::ustring& value, Glib::RefPtr<Gtk::TreeStore> store);
     void _onPropDelete(Glib::ustring path, Glib::RefPtr<Gtk::TreeStore> store);
+    void _reload();
 
     // Update watchers
     void _addWatcherRecursive(Inkscape::XML::Node *node);

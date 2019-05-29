@@ -235,7 +235,8 @@ void AttrDialog::onAttrChanged(Inkscape::XML::Node *repr, const gchar * name, co
             }
         }
     }
-    if (new_value) {
+    std::cout << new_value << "aaa" << new_value << std::endl;
+    if (new_value && strcmp(new_value, "") != 0) {
         if ((repr->type() == Inkscape::XML::TEXT_NODE || repr->type() == Inkscape::XML::COMMENT_NODE) &&
              strcmp(name, "content") != 0)
         {
@@ -338,9 +339,16 @@ bool AttrDialog::onKeyPressed(GdkEventKey *event)
  */
 void AttrDialog::nameEdited (const Glib::ustring& path, const Glib::ustring& name)
 {
-    Gtk::TreeModel::Row row = *_store->get_iter(path);
+    Gtk::TreeIter iter = this->_store->append();
+    Gtk::TreeModel::Path modelpath = (Gtk::TreeModel::Path)iter;
+    Gtk::TreeModel::Row row = *iter;
     if(row && this->_repr) {
         Glib::ustring old_name = row[_attrColumns._attributeName];
+        if (old_name == name) {
+            _treeView.set_cursor(modelpath, *_valueCol, true);
+            grab_focus();
+            return;
+        }
         if (old_name == "content" ||
             old_name == name) 
         {
@@ -353,8 +361,10 @@ void AttrDialog::nameEdited (const Glib::ustring& path, const Glib::ustring& nam
             _repr->setAttribute(old_name.c_str(), nullptr, false);
         }
         if (!name.empty()) {
-            _repr->setAttribute(name.c_str(), value, false);
             row[_attrColumns._attributeName] = name;
+            _repr->setAttribute(name.c_str(), value, false);
+            _treeView.set_cursor(modelpath, *_valueCol, true);
+            grab_focus();
         }
         this->setUndo(_("Rename attribute"));
     }

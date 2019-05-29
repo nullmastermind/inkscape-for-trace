@@ -306,6 +306,7 @@ spinbutton undershoot {
     border-radius: 5px;
 }
 
+.switchclean image,
 #LPEExperimental image {
     color: transparent;
 }

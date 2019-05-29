@@ -48,11 +48,11 @@ class SelectorDialog : public Widget::Panel {
 public:
     ~SelectorDialog() override;
     // No default constructor, noncopyable, nonassignable
-    SelectorDialog(bool stylemode = false);
+    SelectorDialog();
     SelectorDialog(SelectorDialog const &d) = delete;
     SelectorDialog operator=(SelectorDialog const &d) = delete;
 
-    static SelectorDialog &getInstance() { return *new SelectorDialog(false); }
+    static SelectorDialog &getInstance() { return *new SelectorDialog(); }
   private:
     // Monitor <style> element for changes.
     class NodeObserver;
@@ -137,7 +137,6 @@ public:
 
     // Variables
     bool _updating;  // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
-    bool _stylemode;  // Show dialog of items in selector widget or in css styles in CSS dialog
     Inkscape::XML::Node *_textNode; // Track so we know when to add a NodeObserver.
 
     // Signals and handlers - External
