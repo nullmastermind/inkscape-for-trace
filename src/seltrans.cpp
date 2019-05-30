@@ -677,8 +677,8 @@ void Inkscape::SelTrans::_makeHandles()
         knots[i]->setSize(13);
         knots[i]->setAnchor(hands[i].anchor);
         knots[i]->setMode(SP_CTRL_MODE_XOR);
-        knots[i]->setFill(info.color[0], info.color[1], info.color[2], info.color[1]);
-        knots[i]->setStroke(info.color[3], info.color[4], info.color[5], info.color[4]);
+        knots[i]->setFill(info.color[0], info.color[1], info.color[1], info.color[1]);
+        knots[i]->setStroke(info.color[2], info.color[3], info.color[3], info.color[3]);
 
         knots[i]->setPixbuf(handles[hands[i].control]);
         knots[i]->updateCtrl();
