@@ -117,8 +117,6 @@
     ${prefix}/share/gtk3-demo
   </data -->
 
-  <!-- Copy in the themes data. You may want to trim this to save space
-       in your bundle. -->
   <data>
     ${prefix}/etc/fonts
   </data>
@@ -132,8 +130,13 @@
     ${prefix}/share/icons
   </data>
   <data>
+    ${prefix}/share/ImageMagick-6
+  </data>
+  <data>
     ${prefix}/share/inkscape
   </data>
+  <!-- Copy in the themes data. You may want to trim this to save space
+       in your bundle. -->
   <data>
     ${prefix}/share/themes
   </data>

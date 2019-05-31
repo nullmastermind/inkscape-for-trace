@@ -21,7 +21,7 @@ _(comments based on default configuration)_
     $HOME/.profile     # will be overwritten
     ```
 
-- __16 GiB RAM__, since we're using a 10 GiB ramdisk to build everything.
+- __16 GiB RAM__, since we're using a 9 GiB ramdisk to build everything.
   - Using a ramdisk speeds up the process significantly and avoids wearing out your ssd.
   - You can choose to not use a ramdisk by overriding `RAMDISK_ENABLE=false` in a e.g. `021-custom.sh` file.
   - The build environment takes up ~6.1 GiB of disk space, the Inkscape Git repository ~1.6 GiB. Subject to change and YMMV.
