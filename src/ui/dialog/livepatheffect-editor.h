@@ -71,7 +71,6 @@ private:
     void effect_list_reload(SPLPEItem *lpeitem);
 
     void set_sensitize_all(bool sensitive);
-    void rectsToCurves(SPItem *topitem, SPItem *item);
     void showParams(LivePathEffect::Effect& effect);
     void showText(Glib::ustring const &str);
     void selectInList(LivePathEffect::Effect* effect);

@@ -19,9 +19,10 @@
 #include "attributes.h"
 #include "style.h"
 #include "sp-rect.h"
-#include <glibmm/i18n.h>
 #include "sp-guide.h"
 #include "preferences.h"
+#include "svg/svg.h"
+#include <glibmm/i18n.h>
 
 #define noRECT_VERBOSE
 
@@ -193,6 +194,20 @@ const char* SPRect::displayName() const {
 #define C1 0.554
 
 void SPRect::set_shape() {
+    if (hasBrokenPathEffect()) {
+        g_warning ("The spiral shape has unknown LPE on it! Convert to path to make it editable preserving the appearance; editing it as spiral will remove the bad LPE");
+
+        if (this->getRepr()->attribute("d")) {
+            // unconditionally read the curve from d, if any, to preserve appearance
+            Geom::PathVector pv = sp_svg_read_pathv(this->getRepr()->attribute("d"));
+            SPCurve *cold = new SPCurve(pv);
+            this->setCurveInsync(cold);
+            this->setCurveBeforeLPE( cold );
+            cold->unref();
+        }
+
+        return;
+    }
     if ((this->height.computed < 1e-18) || (this->width.computed < 1e-18)) {
     	this->setCurveInsync(nullptr);
     	this->setCurveBeforeLPE(nullptr);
@@ -259,13 +274,26 @@ void SPRect::set_shape() {
         c->lineto(x + w, y + h);
         c->lineto(x + 0.0, y + h);
     }
-
-    c->closepath();
-    this->setCurveInsync(c);
-    this->setCurveBeforeLPE(c);
-
-    // LPE is not applied because result can generally not be represented as SPRect
-    
+    /* Reset the shape's curve to the "original_curve"
+    * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+    SPCurve * before = this->getCurveBeforeLPE();
+    bool haslpe = this->hasPathEffectOnClipOrMaskRecursive(this);
+    if (before || haslpe) {
+        if (c && before && before->get_pathvector() != c->get_pathvector()){
+            this->setCurveBeforeLPE(c);
+            sp_lpe_item_update_patheffect(this, true, false);
+        } else if(haslpe) {
+            this->setCurveBeforeLPE(c);
+        } else {
+            //This happends on undo, fix bug:#1791784
+            this->setCurveInsync(c);
+        }
+    } else {
+        this->setCurveInsync(c);
+    }
+    if (before) {
+        before->unref();
+    }
     c->unref();
 }
 
@@ -298,6 +326,10 @@ void SPRect::setRy(bool set, gdouble value) {
     }
 
     this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+}
+
+void SPRect::update_patheffect(bool write) {
+    SPShape::update_patheffect(write);
 }
 
 Geom::Affine SPRect::set_transform(Geom::Affine const& xform) {

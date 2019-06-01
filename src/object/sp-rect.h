@@ -57,7 +57,7 @@ public:
 
 	Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags) override;
         const char* displayName() const override;
-
+    void update_patheffect(bool write) override;
 	void set_shape() override;
 	Geom::Affine set_transform(Geom::Affine const& xform) override;
 
