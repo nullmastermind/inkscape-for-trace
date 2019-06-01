@@ -49,6 +49,11 @@ public:
     int hasMarkers () const;
     int numberOfMarkers (int type) const;
 
+    // bbox cache
+    mutable bool bbox_cache_is_valid = false;
+    mutable Geom::Affine bbox_transform_cache;
+    mutable Geom::OptRect bbox_cache;
+
 
 public: // temporarily public, until SPPath is properly classed, etc.
     SPCurve *_curve_before_lpe;
