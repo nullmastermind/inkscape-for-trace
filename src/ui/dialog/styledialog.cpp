@@ -440,14 +440,6 @@ void StyleDialog::_readStyleElement()
     _builder->get_widget("CSSTree", css_tree);
     Glib::RefPtr<Gtk::TreeStore> store = Gtk::TreeStore::create(_mColumns);
     css_tree->set_model(store);
-    // We need to handle comments on SPStyle to activate
-    /* Gtk::CellRendererToggle *active = Gtk::manage(new Gtk::CellRendererToggle);
-    int addCol = css_tree->append_column("", *active) - 1;
-    Gtk::TreeViewColumn *col = css_tree->get_column(addCol);
-    if (col) {
-        col->add_attribute(active->property_active(), _mColumns._colActive);
-    }  */
-
     css_selector_event_add->signal_button_release_event().connect(
         sigc::bind<Glib::RefPtr<Gtk::TreeStore>, Gtk::TreeView *, Glib::ustring, gint>(
             sigc::mem_fun(*this, &StyleDialog::_addRow), store, css_tree, "style_properties", selectorpos));
@@ -578,6 +570,7 @@ void StyleDialog::_readStyleElement()
             label->property_editable() = true;
             label->signal_edited().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore>, Gtk::TreeView *>(
                 sigc::mem_fun(*this, &StyleDialog::_nameEdited), store, css_tree));
+            label->signal_editing_started().connect(sigc::mem_fun(*this, &StyleDialog::_startNameEdit));
             addCol = css_tree->append_column("CSS Selector", *label) - 1;
             col = css_tree->get_column(addCol);
             if (col) {
