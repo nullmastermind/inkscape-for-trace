@@ -127,8 +127,8 @@ class StyleDialog : public Widget::Panel {
     void _valueEdited(const Glib::ustring &path, const Glib::ustring &value, Glib::RefPtr<Gtk::TreeStore> store);
     void _startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &path);
 
-    // void _startValueEdit(Gtk::CellEditable* cell, const Glib::ustring& path, Glib::RefPtr<Gtk::TreeStore> store);
-    // void _setAutocompletion(Gtk::Entry *entry, SPStyleEnum const cssenum[]);
+    void _startValueEdit(Gtk::CellEditable* cell, const Glib::ustring& path, Glib::RefPtr<Gtk::TreeStore> store);
+    void _setAutocompletion(Gtk::Entry *entry, SPStyleEnum const cssenum[]);
     void _reload();
 
     // Update watchers

@@ -467,8 +467,8 @@ void StyleDialog::_readStyleElement()
     value->property_editable() = true;
     value->signal_edited().connect(
         sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_valueEdited), store));
-    // value->signal_editing_started().connect( sigc::bind<Glib::RefPtr<Gtk::TreeStore> >(sigc::mem_fun(*this,
-    // &StyleDialog::_startValueEdit), store));
+    value->signal_editing_started().connect( sigc::bind<Glib::RefPtr<Gtk::TreeStore> >(sigc::mem_fun(*this,
+                                             &StyleDialog::_startValueEdit), store));
     addCol = css_tree->append_column("CSS Value", *value) - 1;
     col = css_tree->get_column(addCol);
     if (col) {
@@ -581,6 +581,8 @@ void StyleDialog::_readStyleElement()
             value->signal_edited().connect(
                 sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_valueEdited), store));
             value->property_placeholder_text() = _("value");
+            value->signal_editing_started().connect( sigc::bind<Glib::RefPtr<Gtk::TreeStore> >(sigc::mem_fun(*this,
+                                             &StyleDialog::_startValueEdit), store));
             addCol = css_tree->append_column("CSS Value", *value) - 1;
             col = css_tree->get_column(addCol);
             if (col) {
@@ -925,15 +927,15 @@ void StyleDialog::_startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &p
     entry->set_completion(_entry_completion);
 }
 
-/* void
+void
 StyleDialog::_setAutocompletion(Gtk::Entry *entry, SPStyleEnum const cssenum[])
 {
     Glib::RefPtr<Gtk::ListStore> completionModel = Gtk::ListStore::create(_mCSSData);
     Glib::RefPtr<Gtk::EntryCompletion> entry_completion = Gtk::EntryCompletion::create();
+    entry_completion->set_model(completionModel);
     entry_completion->set_text_column (_mCSSData._colCSSData);
     entry_completion->set_minimum_key_length(0);
     entry_completion->set_popup_completion(true);
-
     gint counter = 0;
     const char * key = cssenum[counter].key;
     while (key) {
@@ -998,7 +1000,7 @@ StyleDialog::_startValueEdit(Gtk::CellEditable* cell, const Glib::ustring& path,
             _setAutocompletion(entry, enum_color_interpolation);
         }
     }
-} */
+}
 
 /**
  * @brief StyleDialog::nameEdited
