@@ -55,12 +55,12 @@ curl -L -o $APP_RES_DIR/inkscape.icns $URL_INKSCAPE_ICNS
 
 if [ -z $CI_JOB_ID ]; then   # running standalone
   # update version information
-  /usr/libexec/PlistBuddy -c "Set CFBundleShortVersionString '1.0alpha-g$(get_repo_version $SRC_DIR/inkscape)'" $APP_PLIST
-  /usr/libexec/PlistBuddy -c "Set CFBundleVersion '1.0alpha-g$(get_repo_version $SRC_DIR/inkscape)'" $APP_PLIST
+  /usr/libexec/PlistBuddy -c "Set CFBundleShortVersionString '1.0alpha2-g$(get_repo_version $SRC_DIR/inkscape)'" $APP_PLIST
+  /usr/libexec/PlistBuddy -c "Set CFBundleVersion '1.0alpha2-g$(get_repo_version $SRC_DIR/inkscape)'" $APP_PLIST
 else   # running as CI job
   # update version information
-  /usr/libexec/PlistBuddy -c "Set CFBundleShortVersionString '1.0alpha-g$(get_repo_version $SELF_DIR)'" $APP_PLIST
-  /usr/libexec/PlistBuddy -c "Set CFBundleVersion '1.0alpha-g$(get_repo_version $SELF_DIR)'" $APP_PLIST
+  /usr/libexec/PlistBuddy -c "Set CFBundleShortVersionString '1.0alpha2-g$(get_repo_version $SELF_DIR)'" $APP_PLIST
+  /usr/libexec/PlistBuddy -c "Set CFBundleVersion '1.0alpha2-g$(get_repo_version $SELF_DIR)'" $APP_PLIST
 fi
 
 ### copy Python.framework ######################################################
