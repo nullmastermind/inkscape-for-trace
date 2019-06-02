@@ -617,7 +617,7 @@ void StyleDialog::_readStyleElement()
                             guint32 r2 = 0; // if there's no color, return black
                             r2 = sp_svg_read_color(iter->get_value().c_str(), r2);
                             if (attr_prop.count(iter->name) ||
-                                (value != iter->get_value() && ((r1 & (0xff) == 0) || r1 != r2))) {
+                                (value != iter->get_value() && (((r1 & ((0xff)) == 0)) || r1 != r2))) {
                                 row[_mColumns._colStrike] = true;
                             } else {
                                 row[_mColumns._colStrike] = false;
