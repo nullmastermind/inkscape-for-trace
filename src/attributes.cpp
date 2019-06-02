@@ -604,8 +604,7 @@ sp_attribute_name(SPAttributeEnum id)
     return props[id].name;
 }
 
-std::vector<Glib::ustring>
-sp_attribute_name_list(bool cssattr, bool attr)
+std::vector<Glib::ustring> sp_attribute_name_list(bool cssattr, bool attr)
 {
     std::vector<Glib::ustring> result;
     static AttributeLookupImpl const _instance;

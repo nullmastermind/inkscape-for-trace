@@ -21,11 +21,10 @@
 #include "selection.h"
 #include "style-internal.h"
 #include "style.h"
+#include "svg/svg-color.h"
 #include "ui/icon-loader.h"
 #include "ui/widget/iconrenderer.h"
 #include "verbs.h"
-#include "svg/svg-color.h"
-#include "attributes.h"
 #include "xml/attribute-record.h"
 #include "xml/node-observer.h"
 
@@ -210,16 +209,16 @@ StyleDialog::StyleDialog()
     Glib::RefPtr<Gtk::ListStore> completionModel = Gtk::ListStore::create(_mCSSData);
     _entry_completion = Gtk::EntryCompletion::create();
     _entry_completion->set_model(completionModel);
-    _entry_completion->set_text_column (_mCSSData._colCSSData);
+    _entry_completion->set_text_column(_mCSSData._colCSSData);
     _entry_completion->set_minimum_key_length(1);
     _entry_completion->set_popup_completion(true);
-    for (auto prop : sp_attribute_name_list(true)){
+    for (auto prop : sp_attribute_name_list(true)) {
         Gtk::TreeModel::Row row = *(completionModel->append());
         row[_mCSSData._colCSSData] = prop;
     }
     _mainBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
 
-    _getContents()->pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);    
+    _getContents()->pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
     _all_css->get_style_context()->add_class("stylesheettoggler");
     // Document & Desktop
     _desktop_changed_connection =
@@ -476,7 +475,8 @@ void StyleDialog::_readStyleElement()
     value->property_editable() = true;
     value->signal_edited().connect(
         sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_valueEdited), store));
-    //value->signal_editing_started().connect( sigc::bind<Glib::RefPtr<Gtk::TreeStore> >(sigc::mem_fun(*this, &StyleDialog::_startValueEdit), store));
+    // value->signal_editing_started().connect( sigc::bind<Glib::RefPtr<Gtk::TreeStore> >(sigc::mem_fun(*this,
+    // &StyleDialog::_startValueEdit), store));
     addCol = css_tree->append_column("CSS Value", *value) - 1;
     col = css_tree->get_column(addCol);
     if (col) {
@@ -623,11 +623,8 @@ void StyleDialog::_readStyleElement()
                             r1 = sp_svg_read_color(value.c_str(), r1);
                             guint32 r2 = 0; // if there's no color, return black
                             r2 = sp_svg_read_color(iter->get_value().c_str(), r2);
-                            if (attr_prop.count(iter->name) || 
-                                (value != iter->get_value() &&
-                                (r1 & 0xff == 0 ||
-                                r1 != r2)))  
-                            {
+                            if (attr_prop.count(iter->name) ||
+                                (value != iter->get_value() && (r1 & 0xff == 0 || r1 != r2))) {
                                 row[_mColumns._colStrike] = true;
                             } else {
                                 row[_mColumns._colStrike] = false;
@@ -872,7 +869,7 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
                         iter->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
                     }
                 } else {
-                    SPObject * obj = document->getObjectById(selectorname);
+                    SPObject *obj = document->getObjectById(selectorname);
                     obj->style->readFromObject(obj);
                     obj->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
                 }
@@ -929,14 +926,13 @@ bool StyleDialog::_addRow(GdkEventButton *evt, Glib::RefPtr<Gtk::TreeStore> stor
     return false;
 }
 
-void 
-StyleDialog::_startNameEdit(Gtk::CellEditable* cell, const Glib::ustring& path)
+void StyleDialog::_startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &path)
 {
     Gtk::Entry *entry = dynamic_cast<Gtk::Entry *>(cell);
     entry->set_completion(_entry_completion);
 }
 
-/* void 
+/* void
 StyleDialog::_setAutocompletion(Gtk::Entry *entry, SPStyleEnum const cssenum[])
 {
     Glib::RefPtr<Gtk::ListStore> completionModel = Gtk::ListStore::create(_mCSSData);
@@ -944,7 +940,7 @@ StyleDialog::_setAutocompletion(Gtk::Entry *entry, SPStyleEnum const cssenum[])
     entry_completion->set_text_column (_mCSSData._colCSSData);
     entry_completion->set_minimum_key_length(0);
     entry_completion->set_popup_completion(true);
-    
+
     gint counter = 0;
     const char * key = cssenum[counter].key;
     while (key) {
@@ -955,7 +951,7 @@ StyleDialog::_setAutocompletion(Gtk::Entry *entry, SPStyleEnum const cssenum[])
     }
 }
 
-void 
+void
 StyleDialog::_startValueEdit(Gtk::CellEditable* cell, const Glib::ustring& path, Glib::RefPtr<Gtk::TreeStore> store)
 {
     Gtk::TreeModel::Row row = *store->get_iter(path);

@@ -14,8 +14,8 @@
  *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
-#include <vector>
 #include <glibmm/value.h>
+#include <vector>
 
 /**
  * True iff k is a property in SVG, i.e. something that can be written either in a style attribute

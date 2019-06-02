@@ -18,19 +18,19 @@
 #include "style-enums.h"
 #include <glibmm/regex.h>
 #include <gtkmm/builder.h>
-#include <gtkmm/cellrenderercombo.h>
 #include <gtkmm/celleditable.h>
+#include <gtkmm/cellrenderercombo.h>
+#include <gtkmm/dialog.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/entrycompletion.h>
-#include <gtkmm/dialog.h>
 #include <gtkmm/eventbox.h>
+#include <gtkmm/liststore.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/switch.h>
 #include <gtkmm/treemodelfilter.h>
 #include <gtkmm/treeselection.h>
 #include <gtkmm/treestore.h>
-#include <gtkmm/liststore.h>
 #include <gtkmm/treeview.h>
 #include <ui/widget/panel.h>
 
@@ -99,11 +99,8 @@ class StyleDialog : public Widget::Panel {
 
     class CSSData : public Gtk::TreeModel::ColumnRecord {
       public:
-        CSSData()
-        {
-            add(_colCSSData);
-        }
-        Gtk::TreeModelColumn<Glib::ustring> _colCSSData;     // Name of the property.
+        CSSData() { add(_colCSSData); }
+        Gtk::TreeModelColumn<Glib::ustring> _colCSSData; // Name of the property.
     };
     CSSData _mCSSData;
 
@@ -128,7 +125,7 @@ class StyleDialog : public Widget::Panel {
     void _nameEdited(const Glib::ustring &path, const Glib::ustring &name, Glib::RefPtr<Gtk::TreeStore> store,
                      Gtk::TreeView *css_tree);
     void _valueEdited(const Glib::ustring &path, const Glib::ustring &value, Glib::RefPtr<Gtk::TreeStore> store);
-    void _startNameEdit(Gtk::CellEditable* cell, const Glib::ustring& path);
+    void _startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &path);
 
     // void _startValueEdit(Gtk::CellEditable* cell, const Glib::ustring& path, Glib::RefPtr<Gtk::TreeStore> store);
     // void _setAutocompletion(Gtk::Entry *entry, SPStyleEnum const cssenum[]);

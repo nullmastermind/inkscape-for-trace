@@ -30,10 +30,8 @@ InkFlowBox::InkFlowBox(const gchar *name)
     tbutton->set_always_show_image(true);
     _flowbox.set_selection_mode(Gtk::SelectionMode::SELECTION_NONE);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool(Glib::ustring("/dialogs/") + get_name() +
-                        Glib::ustring("/flowbox/lock"), false);
-    tbutton->set_active(prefs->getBool(Glib::ustring("/dialogs/") + get_name() +
-                        Glib::ustring("/flowbox/lock"), true));
+    prefs->setBool(Glib::ustring("/dialogs/") + get_name() + Glib::ustring("/flowbox/lock"), false);
+    tbutton->set_active(prefs->getBool(Glib::ustring("/dialogs/") + get_name() + Glib::ustring("/flowbox/lock"), true));
     Glib::ustring iconname = "object-unlocked";
     if (tbutton->get_active()) {
         iconname = "object-locked";
