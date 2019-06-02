@@ -618,7 +618,7 @@ std::vector<Glib::ustring> sp_attribute_name_list(bool cssattr, bool attr)
             }
         }
         if (add) {
-            result.push_back(Glib::ustring(prop.name));
+            result.emplace_back(prop.name);
         }
     }
     std::sort(result.begin(), result.end());
