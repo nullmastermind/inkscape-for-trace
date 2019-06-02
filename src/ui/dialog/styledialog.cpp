@@ -25,7 +25,7 @@
 #include "ui/widget/iconrenderer.h"
 #include "verbs.h"
 #include "svg/svg-color.h"
-
+#include "attributes.h"
 #include "xml/attribute-record.h"
 #include "xml/node-observer.h"
 
@@ -207,8 +207,19 @@ StyleDialog::StyleDialog()
     alltoggler->pack_start(*infotoggler, false, false, 0);
     _all_css->set_active(false);
     _mainBox.pack_start(*alltoggler, false, false, 0);
+    Glib::RefPtr<Gtk::ListStore> completionModel = Gtk::ListStore::create(_mCSSData);
+    _entry_completion = Gtk::EntryCompletion::create();
+    _entry_completion->set_model(completionModel);
+    _entry_completion->set_text_column (_mCSSData._colCSSData);
+    _entry_completion->set_minimum_key_length(1);
+    _entry_completion->set_popup_completion(true);
+    for (auto prop : sp_attribute_name_list(true)){
+        Gtk::TreeModel::Row row = *(completionModel->append());
+        row[_mCSSData._colCSSData] = prop;
+    }
     _mainBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
-    _getContents()->pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
+
+    _getContents()->pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);    
     _all_css->get_style_context()->add_class("stylesheettoggler");
     // Document & Desktop
     _desktop_changed_connection =
@@ -454,6 +465,7 @@ void StyleDialog::_readStyleElement()
     label->property_editable() = true;
     label->signal_edited().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore>, Gtk::TreeView *>(
         sigc::mem_fun(*this, &StyleDialog::_nameEdited), store, css_tree));
+    label->signal_editing_started().connect(sigc::mem_fun(*this, &StyleDialog::_startNameEdit));
     addCol = css_tree->append_column("CSS Property", *label) - 1;
     col = css_tree->get_column(addCol);
     if (col) {
@@ -464,6 +476,7 @@ void StyleDialog::_readStyleElement()
     value->property_editable() = true;
     value->signal_edited().connect(
         sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_valueEdited), store));
+    //value->signal_editing_started().connect( sigc::bind<Glib::RefPtr<Gtk::TreeStore> >(sigc::mem_fun(*this, &StyleDialog::_startValueEdit), store));
     addCol = css_tree->append_column("CSS Value", *value) - 1;
     col = css_tree->get_column(addCol);
     if (col) {
@@ -915,6 +928,88 @@ bool StyleDialog::_addRow(GdkEventButton *evt, Glib::RefPtr<Gtk::TreeStore> stor
     }
     return false;
 }
+
+void 
+StyleDialog::_startNameEdit(Gtk::CellEditable* cell, const Glib::ustring& path)
+{
+    Gtk::Entry *entry = dynamic_cast<Gtk::Entry *>(cell);
+    entry->set_completion(_entry_completion);
+}
+
+/* void 
+StyleDialog::_setAutocompletion(Gtk::Entry *entry, SPStyleEnum const cssenum[])
+{
+    Glib::RefPtr<Gtk::ListStore> completionModel = Gtk::ListStore::create(_mCSSData);
+    Glib::RefPtr<Gtk::EntryCompletion> entry_completion = Gtk::EntryCompletion::create();
+    entry_completion->set_text_column (_mCSSData._colCSSData);
+    entry_completion->set_minimum_key_length(0);
+    entry_completion->set_popup_completion(true);
+    
+    gint counter = 0;
+    const char * key = cssenum[counter].key;
+    while (key) {
+        Gtk::TreeModel::Row row = *(completionModel->append());
+        row[_mCSSData._colCSSData] = Glib::ustring(key);
+        key = cssenum[counter].key;
+        counter++;
+    }
+}
+
+void 
+StyleDialog::_startValueEdit(Gtk::CellEditable* cell, const Glib::ustring& path, Glib::RefPtr<Gtk::TreeStore> store)
+{
+    Gtk::TreeModel::Row row = *store->get_iter(path);
+    Gtk::TreeModel::Path pathel = (Gtk::TreeModel::Path)*store->get_iter(path);
+    if (row) {
+        Gtk::Entry *entry = dynamic_cast<Gtk::Entry *>(cell);
+        Glib::ustring name = row[_mColumns._colName];
+        if (name == "fill-rule") {
+            _setAutocompletion(entry, enum_fill_rule);
+        } else if (name == "stroke-linecap") {
+            _setAutocompletion(entry, enum_stroke_linecap);
+        } else if (name == "stroke-linejoin") {
+            _setAutocompletion(entry, enum_stroke_linejoin);
+        } else if (name == "font-style") {
+            _setAutocompletion(entry, enum_font_style);
+        } else if (name == "font-variant") {
+            _setAutocompletion(entry, enum_font_variant);
+        } else if (name == "font-weight") {
+            _setAutocompletion(entry, enum_font_weight);
+        } else if (name == "font-stretch") {
+            _setAutocompletion(entry, enum_font_stretch);
+        } else if (name == "font-variant-position") {
+            _setAutocompletion(entry, enum_font_variant_position);
+        } else if (name == "text-align") {
+            _setAutocompletion(entry, enum_text_align);
+        } else if (name == "text-transform") {
+            _setAutocompletion(entry, enum_text_transform);
+        } else if (name == "text-anchor") {
+            _setAutocompletion(entry, enum_text_anchor);
+        } else if (name == "white-space") {
+            _setAutocompletion(entry, enum_white_space);
+        } else if (name == "direction") {
+            _setAutocompletion(entry, enum_direction);
+        } else if (name == "baseline-shift") {
+            _setAutocompletion(entry, enum_baseline_shift);
+        } else if (name == "visibility") {
+            _setAutocompletion(entry, enum_visibility);
+        } else if (name == "overflow") {
+            _setAutocompletion(entry, enum_overflow);
+        } else if (name == "display") {
+            _setAutocompletion(entry, enum_display);
+        } else if (name == "shape-rendering") {
+            _setAutocompletion(entry, enum_shape_rendering);
+        } else if (name == "color-rendering") {
+            _setAutocompletion(entry, enum_color_rendering);
+        } else if (name == "overflow") {
+            _setAutocompletion(entry, enum_overflow);
+        } else if (name == "clip-rule") {
+            _setAutocompletion(entry, enum_clip_rule);
+        } else if (name == "color-interpolation") {
+            _setAutocompletion(entry, enum_color_interpolation);
+        }
+    }
+} */
 
 /**
  * @brief StyleDialog::nameEdited

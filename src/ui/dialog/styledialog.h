@@ -15,8 +15,13 @@
 #ifndef STYLEDIALOG_H
 #define STYLEDIALOG_H
 
+#include "style-enums.h"
 #include <glibmm/regex.h>
 #include <gtkmm/builder.h>
+#include <gtkmm/cellrenderercombo.h>
+#include <gtkmm/celleditable.h>
+#include <gtkmm/entry.h>
+#include <gtkmm/entrycompletion.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/eventbox.h>
 #include <gtkmm/paned.h>
@@ -25,6 +30,7 @@
 #include <gtkmm/treemodelfilter.h>
 #include <gtkmm/treeselection.h>
 #include <gtkmm/treestore.h>
+#include <gtkmm/liststore.h>
 #include <gtkmm/treeview.h>
 #include <ui/widget/panel.h>
 
@@ -91,11 +97,25 @@ class StyleDialog : public Widget::Panel {
     };
     ModelColumns _mColumns;
 
+    class CSSData : public Gtk::TreeModel::ColumnRecord {
+      public:
+        CSSData()
+        {
+            add(_colCSSData);
+        }
+        Gtk::TreeModelColumn<Glib::ustring> _colCSSData;     // Name of the property.
+    };
+    CSSData _mCSSData;
+
     // Widgets
     Gtk::ScrolledWindow _scrolledWindow;
     Gtk::Box _mainBox;
     Gtk::Box _styleBox;
     Gtk::Switch *_all_css;
+
+    // TreeViewCssProps
+    Glib::RefPtr<Gtk::EntryCompletion> _entry_completion;
+
     // Reading and writing the style element.
     Inkscape::XML::Node *_getStyleTextNode();
     void _readStyleElement();
@@ -104,10 +124,14 @@ class StyleDialog : public Widget::Panel {
     void _activeToggled(const Glib::ustring &path, Glib::RefPtr<Gtk::TreeStore> store);
     bool _addRow(GdkEventButton *evt, Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeView *css_tree,
                  Glib::ustring selector, gint pos);
+    void _onPropDelete(Glib::ustring path, Glib::RefPtr<Gtk::TreeStore> store);
     void _nameEdited(const Glib::ustring &path, const Glib::ustring &name, Glib::RefPtr<Gtk::TreeStore> store,
                      Gtk::TreeView *css_tree);
     void _valueEdited(const Glib::ustring &path, const Glib::ustring &value, Glib::RefPtr<Gtk::TreeStore> store);
-    void _onPropDelete(Glib::ustring path, Glib::RefPtr<Gtk::TreeStore> store);
+    void _startNameEdit(Gtk::CellEditable* cell, const Glib::ustring& path);
+
+    // void _startValueEdit(Gtk::CellEditable* cell, const Glib::ustring& path, Glib::RefPtr<Gtk::TreeStore> store);
+    // void _setAutocompletion(Gtk::Entry *entry, SPStyleEnum const cssenum[]);
     void _reload();
 
     // Update watchers
