@@ -15,6 +15,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 #include <glibmm/value.h>
+#include <vector>
 
 /**
  * True iff k is a property in SVG, i.e. something that can be written either in a style attribute
@@ -573,6 +574,11 @@ SPAttributeEnum sp_attribute_lookup(gchar const *key);
  * Get attribute name by id. Return NULL for invalid ids.
  */
 gchar const *sp_attribute_name(SPAttributeEnum id);
+
+/**
+ * Get attribute name css list.
+ */
+std::vector<Glib::ustring> sp_attribute_name_list(bool cssattr = false, bool attr = false);
 
 #endif
 

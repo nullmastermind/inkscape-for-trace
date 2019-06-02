@@ -9,11 +9,13 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "attributes.h"
 #include <cstring>
 #include <map>
 
+#include <algorithm>
 #include <glib.h> // g_assert()
-#include "attributes.h"
+
 
 struct SPStyleProp {
     SPAttributeEnum code;
@@ -600,6 +602,27 @@ sp_attribute_name(SPAttributeEnum id)
     }
 
     return props[id].name;
+}
+
+std::vector<Glib::ustring> sp_attribute_name_list(bool cssattr, bool attr)
+{
+    std::vector<Glib::ustring> result;
+    static AttributeLookupImpl const _instance;
+    bool add = attr;
+    for (auto prop : props) {
+        if (prop.code == SP_ATTR_D) {
+            if (cssattr) {
+                add = true;
+            } else if (attr) {
+                add = false;
+            }
+        }
+        if (add) {
+            result.push_back(Glib::ustring(prop.name));
+        }
+    }
+    std::sort(result.begin(), result.end());
+    return result;
 }
 
 

@@ -74,7 +74,6 @@ XmlTree::XmlTree() :
         return;
     }
     flowbox_content = Gtk::manage(new Inkscape::UI::Widget::InkFlowBox("XMLFlow"));
-
     Gtk::Box *contents = _getContents();
     contents->set_spacing(0);
     contents->set_size_request(320, 260);
@@ -357,11 +356,11 @@ void XmlTree::propagate_tree_select(Inkscape::XML::Node *repr)
         repr->type() == Inkscape::XML::COMMENT_NODE)) 
     {
         attributes->setRepr(repr);
-        styles->setRepr(repr);
+        // styles->setRepr(repr);
         // selectors->setRepr(repr);
     } else {
         attributes->setRepr(nullptr);
-        styles->setRepr(nullptr);
+        // styles->setRepr(nullptr);
         // selectors->setRepr(nullptr);
     }
 }
