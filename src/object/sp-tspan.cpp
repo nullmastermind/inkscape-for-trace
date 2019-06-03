@@ -482,13 +482,29 @@ void sp_textpath_to_text(SPObject *tp)
     SPObject *text = tp->parent;
 
     Geom::OptRect bbox = SP_ITEM(text)->geometricBounds(SP_ITEM(text)->i2doc_affine());
-
+    Geom::Point xy;
     if (!bbox) {
-    	return;
+        // Text is not shown on canvas at all
+        // Copied from Layout::fitToPathAlign
+        Path *path = dynamic_cast<SPTextPath*>(tp)->originalPath;
+        SVGLength const startOffset = dynamic_cast<SPTextPath*>(tp)->startOffset;
+        double offset = 0.0;
+        if (startOffset._set) {
+            if (startOffset.unit == SVGLength::PERCENT)
+                offset = startOffset.computed * path->Length();
+            else
+                offset = startOffset.computed;
+        }
+        int unused = 0;
+        Path::cut_position *cut_pos = path->CurvilignToPosition(1, &offset, unused);
+        Geom::Point midpoint;
+        Geom::Point tangent;
+        path->PointAndTangentAt(cut_pos[0].piece, cut_pos[0].t, midpoint, tangent);
+        xy = midpoint;
+    } else {
+        xy = bbox->min();
+        xy *= tp->document->getDocumentScale().inverse(); // Convert to user-units.
     }
-
-    Geom::Point xy = bbox->min();
-    xy *= tp->document->getDocumentScale().inverse(); // Convert to user-units.
     
     // make a list of textpath children
     std::vector<Inkscape::XML::Node *> tp_reprs;
