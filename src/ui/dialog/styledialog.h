@@ -32,6 +32,8 @@
 #include <gtkmm/treeselection.h>
 #include <gtkmm/treestore.h>
 #include <gtkmm/treeview.h>
+#include <gtkmm/tooltip.h>
+#include <gtkmm/viewport.h>
 #include <ui/widget/panel.h>
 
 #include "ui/dialog/desktop-tracker.h"
@@ -87,6 +89,7 @@ class StyleDialog : public Widget::Panel {
             add(_colStrike);
             add(_colSelector);
             add(_colSelectorPos);
+            add(_colOwner);
         }
         Gtk::TreeModelColumn<bool> _colActive;            // Active or inative property
         Gtk::TreeModelColumn<Glib::ustring> _colName;     // Name of the property.
@@ -94,6 +97,7 @@ class StyleDialog : public Widget::Panel {
         Gtk::TreeModelColumn<bool> _colStrike;            // Propery not used, overloaded
         Gtk::TreeModelColumn<Glib::ustring> _colSelector; // Style or matching object id.
         Gtk::TreeModelColumn<gint> _colSelectorPos;       // Position of the selector to hadle dup selectors
+        Gtk::TreeModelColumn<Glib::ustring> _colOwner;    // Store the owner of the property for popup
     };
     ModelColumns _mColumns;
 
@@ -109,9 +113,6 @@ class StyleDialog : public Widget::Panel {
     Gtk::Box _mainBox;
     Gtk::Box _styleBox;
     Gtk::Switch *_all_css;
-
-    // TreeViewCssProps
-    Glib::RefPtr<Gtk::EntryCompletion> _entry_completion;
 
     // Reading and writing the style element.
     Inkscape::XML::Node *_getStyleTextNode();
@@ -129,6 +130,8 @@ class StyleDialog : public Widget::Panel {
 
     void _startValueEdit(Gtk::CellEditable* cell, const Glib::ustring& path, Glib::RefPtr<Gtk::TreeStore> store);
     void _setAutocompletion(Gtk::Entry *entry, SPStyleEnum const cssenum[]);
+    void _setAutocompletion(Gtk::Entry *entry, Glib::ustring name);
+    bool _on_foreach_iter(const Gtk::TreeModel::iterator& iter);
     void _reload();
 
     // Update watchers
@@ -138,7 +141,8 @@ class StyleDialog : public Widget::Panel {
     // Manipulate Tree
     std::vector<SPObject *> _getObjVec(Glib::ustring selector);
     std::map<Glib::ustring, Glib::ustring> parseStyle(Glib::ustring style_string);
-
+    std::map<Glib::ustring, Glib::ustring> _ownerStyle;
+    void _addOwnerStyle(Glib::ustring name, Glib::ustring selector);
     // Variables
     Inkscape::XML::Node *_textNode; // Track so we know when to add a NodeObserver.
     bool _updating;                 // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop

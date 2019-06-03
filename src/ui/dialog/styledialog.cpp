@@ -132,10 +132,11 @@ class StyleDialog::NodeWatcher : public Inkscape::XML::NodeObserver {
             SPObject *obj = SP_ACTIVE_DOCUMENT->getObjectById(node.attribute("id"));
             if (obj) {
                 for (auto iter : obj->style->properties()) {
-                    if (iter->style_src != SP_STYLE_SRC_UNSET) {
-                        if (iter->name == name) {
-                            _styledialog->_nodeChanged(node);
-                        }
+                    if (iter->name == name) {
+                        obj->style->readFromObject(obj);
+                        obj->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+                        _styledialog->_nodeChanged(node);
+                        break;
                     }
                 }
             }
@@ -206,16 +207,6 @@ StyleDialog::StyleDialog()
     alltoggler->pack_start(*infotoggler, false, false, 0);
     _all_css->set_active(false);
     _mainBox.pack_start(*alltoggler, false, false, 0);
-    Glib::RefPtr<Gtk::ListStore> completionModel = Gtk::ListStore::create(_mCSSData);
-    _entry_completion = Gtk::EntryCompletion::create();
-    _entry_completion->set_model(completionModel);
-    _entry_completion->set_text_column(_mCSSData._colCSSData);
-    _entry_completion->set_minimum_key_length(1);
-    _entry_completion->set_popup_completion(true);
-    for (auto prop : sp_attribute_name_list(true)) {
-        Gtk::TreeModel::Row row = *(completionModel->append());
-        row[_mCSSData._colCSSData] = prop;
-    }
     _mainBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
 
     _getContents()->pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
@@ -406,7 +397,7 @@ void StyleDialog::_readStyleElement()
 
     // Split on curly brackets. Even tokens are selectors, odd are values.
     std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[}{]", content);
-
+    _ownerStyle.clear();
     // If text node is empty, return (avoids problem with negative below).
 
     for (auto child : _styleBox.get_children()) {
@@ -490,6 +481,8 @@ void StyleDialog::_readStyleElement()
                     row[_mColumns._colName] = iter->name;
                     row[_mColumns._colValue] = iter->get_value();
                     row[_mColumns._colStrike] = false;
+                    row[_mColumns._colOwner] = Glib::ustring("Value active");
+                    _addOwnerStyle(iter->name, "style attribute");
                 }
             }
             _styleBox.pack_start(*css_selector_container, Gtk::PACK_EXPAND_WIDGET);
@@ -578,9 +571,9 @@ void StyleDialog::_readStyleElement()
             }
             Gtk::CellRendererText *value = Gtk::manage(new Gtk::CellRendererText());
             value->property_editable() = true;
+                        value->property_placeholder_text() = _("value");
             value->signal_edited().connect(
                 sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_valueEdited), store));
-            value->property_placeholder_text() = _("value");
             value->signal_editing_started().connect( sigc::bind<Glib::RefPtr<Gtk::TreeStore> >(sigc::mem_fun(*this,
                                              &StyleDialog::_startValueEdit), store));
             addCol = css_tree->append_column("CSS Value", *value) - 1;
@@ -607,7 +600,9 @@ void StyleDialog::_readStyleElement()
                 for (auto iter : obj->style->properties()) {
                     if (iter->style_src != SP_STYLE_SRC_UNSET) {
                         if (attr_prop_styleshet.count(iter->name)) {
-                            Gtk::TreeModel::Row row = *(store->append());
+                            Gtk::TreeIter iterstore = store->append();
+                            Gtk::TreeModel::Path path = (Gtk::TreeModel::Path)iterstore;
+                            Gtk::TreeModel::Row row = *(iterstore);
                             row[_mColumns._colSelector] = selector;
                             row[_mColumns._colSelectorPos] = selectorpos;
                             row[_mColumns._colActive] = true;
@@ -619,10 +614,14 @@ void StyleDialog::_readStyleElement()
                             guint32 r2 = 0; // if there's no color, return black
                             r2 = sp_svg_read_color(iter->get_value().c_str(), r2);
                             if (attr_prop.count(iter->name) ||
-                                (value != iter->get_value() && ((r1 & 0x000000ff) == 0 || r1 != r2))) {
+                                (value != iter->get_value() && ((r1 & 0x000000ff) == 0 || r1 != r2))) 
+                            {
                                 row[_mColumns._colStrike] = true;
+                                row[_mColumns._colOwner] = Glib::ustring("");
                             } else {
                                 row[_mColumns._colStrike] = false;
+                                row[_mColumns._colOwner] = Glib::ustring("Value active");
+                                _addOwnerStyle(iter->name, selector);
                             }
                         }
                     }
@@ -636,25 +635,30 @@ void StyleDialog::_readStyleElement()
                     row[_mColumns._colName] = iter.first;
                     row[_mColumns._colValue] = iter.second;
                     row[_mColumns._colStrike] = false;
+                    row[_mColumns._colOwner] = Glib::ustring("Stylesheet value");
                 }
             }
             std::map<Glib::ustring, Glib::ustring> attr_prop_styleshet_comments = parseStyle(comments);
 
             for (auto iter : attr_prop_styleshet_comments) {
                 if (!attr_prop_styleshet.count(iter.first)) {
-                    Gtk::TreeModel::Row row = *(store->append());
+                    Gtk::TreeIter iterstore = store->append();
+                    Gtk::TreeModel::Path path = (Gtk::TreeModel::Path)iterstore;
+                    Gtk::TreeModel::Row row = *(iterstore);
                     row[_mColumns._colSelector] = selector;
                     row[_mColumns._colSelectorPos] = selectorpos;
                     row[_mColumns._colActive] = false;
                     row[_mColumns._colName] = iter.first;
                     row[_mColumns._colValue] = iter.second;
                     row[_mColumns._colStrike] = true;
+                    Glib::ustring tooltiptext = _("This value is comented");
+                    row[_mColumns._colOwner] = tooltiptext;
                 }
             }
             _styleBox.pack_start(*css_selector_container, Gtk::PACK_EXPAND_WIDGET);
             selectorpos++;
         }
-        /* try {
+        try {
             _builder = Gtk::Builder::create_from_file(gladefile);
         } catch (const Glib::Error &ex) {
             g_warning("Glade file loading failed for filter effect dialog");
@@ -691,9 +695,9 @@ void StyleDialog::_readStyleElement()
                                 Gtk::CellRendererText *label = Gtk::manage(new Gtk::CellRendererText());
                                 label->property_placeholder_text() = _("property");
                                 label->property_editable() = true;
-                                label->signal_edited().connect(
-                                    sigc::bind<Glib::RefPtr<Gtk::TreeStore>, Gtk::TreeView *>(
-                                        sigc::mem_fun(*this, &StyleDialog::_nameEdited), store, css_tree));
+                                label->signal_edited().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore>, Gtk::TreeView *>(
+                                    sigc::mem_fun(*this, &StyleDialog::_nameEdited), store, css_tree));
+                                label->signal_editing_started().connect(sigc::mem_fun(*this, &StyleDialog::_startNameEdit));
                                 addCol = css_tree->append_column("CSS Property", *label) - 1;
                                 col = css_tree->get_column(addCol);
                                 if (col) {
@@ -702,8 +706,11 @@ void StyleDialog::_readStyleElement()
                                 Gtk::CellRendererText *value = Gtk::manage(new Gtk::CellRendererText());
                                 value->property_placeholder_text() = _("value");
                                 value->property_editable() = true;
-                                value->signal_edited().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(
-                                    sigc::mem_fun(*this, &StyleDialog::_valueEdited), store));
+                                value->signal_edited().connect(
+                                    sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_valueEdited), store));
+                                value->signal_editing_started().connect( sigc::bind<Glib::RefPtr<Gtk::TreeStore> >(sigc::mem_fun(*this,
+                                             &StyleDialog::_startValueEdit), store));
+            
                                 addCol = css_tree->append_column("CSS Value", *value) - 1;
                                 col = css_tree->get_column(addCol);
                                 if (col) {
@@ -711,17 +718,22 @@ void StyleDialog::_readStyleElement()
                                     col->add_attribute(value->property_strikethrough(), _mColumns._colStrike);
                                 }
                             }
-                            Gtk::TreeModel::Row row = *(store->append());
+                            Gtk::TreeIter iterstore = store->append();
+                            Gtk::TreeModel::Path path = (Gtk::TreeModel::Path)iterstore;
+                            Gtk::TreeModel::Row row = *(iterstore);
                             row[_mColumns._colSelector] = "attributes";
-                            row[_mColumns._colSelectorPos] = 1;
+                            row[_mColumns._colSelectorPos] = selectorpos;
                             row[_mColumns._colActive] = true;
                             row[_mColumns._colName] = iter->name;
                             row[_mColumns._colValue] = attr;
-                            //for this we comment this code
-                            if (attr_prop.count(iter->name)) {
+                            if (_ownerStyle.find(iter->name) != _ownerStyle.end()) {
                                 row[_mColumns._colStrike] = true;
+                                Glib::ustring tooltiptext = Glib::ustring("");
+                                row[_mColumns._colOwner] = tooltiptext;
                             } else {
                                 row[_mColumns._colStrike] = false;
+                                row[_mColumns._colOwner] = Glib::ustring("Value active");
+                                _addOwnerStyle(iter->name, "inline attributes");
                             }
                             hasattributes = true;
                         }
@@ -733,8 +745,16 @@ void StyleDialog::_readStyleElement()
                     delete widg;
                 }
             }
-            _styleBox.pack_start(*css_selector_container, Gtk::PACK_EXPAND_WIDGET); */
-        //}
+            _styleBox.pack_start(*css_selector_container, Gtk::PACK_EXPAND_WIDGET);
+        }
+        for (auto selector : _styleBox.get_children()) {
+            Gtk::Box *box = dynamic_cast<Gtk::Box *>(&selector[0]);
+            if (box) {
+                Gtk::TreeView *css_tree = dynamic_cast<Gtk::TreeView *>(box->get_children()[1]);
+                Glib::RefPtr<Gtk::TreeModel> model = css_tree->get_model();
+                model->foreach_iter(sigc::mem_fun(*this, &StyleDialog::_on_foreach_iter));
+            }
+        }
     }
     if (obj) {
         obj->style->readFromObject(obj);
@@ -742,6 +762,17 @@ void StyleDialog::_readStyleElement()
     }
     _mainBox.show_all_children();
     _updating = false;
+}
+
+bool 
+StyleDialog::_on_foreach_iter(const Gtk::TreeModel::iterator& iter) {
+    Gtk::TreeModel::Row row = *(iter);
+    Glib::ustring owner = row[_mColumns._colOwner];
+    if (owner.empty()) {
+        Glib::ustring tooltiptext = Glib::ustring(_("Used in ") + _ownerStyle[row[_mColumns._colName]]);
+        row[_mColumns._colOwner] = tooltiptext;
+    }
+    return false;
 }
 
 /**
@@ -760,6 +791,15 @@ void StyleDialog::_onPropDelete(Glib::ustring path, Glib::RefPtr<Gtk::TreeStore>
         _writeStyleElement(store, selector);
     }
 }
+
+void 
+StyleDialog::_addOwnerStyle(Glib::ustring name, Glib::ustring selector) 
+{
+    if (_ownerStyle.find(name) == _ownerStyle.end()) {
+        _ownerStyle[name] = selector;
+    }
+}
+
 
 /**
  * @brief StyleDialog::parseStyle
@@ -832,6 +872,22 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
     }
     if (selector == "style_properties") {
         obj->getRepr()->setAttribute("style", styleContent, false);
+    } else if (selector == "attributes") {
+        for (auto iter : obj->style->properties()) {
+            if (iter->name != "font" && iter->name != "d" && iter->name != "marker") {
+                const gchar *attr = obj->getRepr()->attribute(iter->name.c_str());
+                if (attr) {
+                    obj->getRepr()->setAttribute(iter->name.c_str(), nullptr);
+                }
+            }
+        }
+        for (auto &row : store->children()) {
+            Glib::ustring name = row[_mColumns._colName];
+            Glib::ustring value = row[_mColumns._colValue];
+            if (!(name.empty() && value.empty())) {
+                obj->getRepr()->setAttribute(name.c_str(), value, false);
+            }
+        }
     } else if (!selector.empty()) { // styleshet
         // We could test if styleContent is empty and then delete the style node here but there is no
         // harm in keeping it around ...
@@ -871,25 +927,6 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
             }
         }
     }
-    /* if (selector == "attributes") {
-        for (auto iter : obj->style->properties()) {
-            if (iter->style_src != SP_STYLE_SRC_UNSET) {
-                if (iter->name != "font" && iter->name != "d" && iter->name != "marker") {
-                    const gchar *attr = obj->getRepr()->attribute(iter->name.c_str());
-                    if (attr) {
-                        obj->getRepr()->setAttribute(iter->name.c_str(), nullptr);
-                    }
-                }
-            }
-        }
-        for (auto &row : store->children()) {
-            Glib::ustring name = row[_mColumns._colName];
-            Glib::ustring value = row[_mColumns._colValue];
-            if (!(name.empty() && value.empty())) {
-                obj->getRepr()->setAttribute(name.c_str(), value);
-            }
-        }
-    } else  */
     _updating = false;
     _readStyleElement();
     DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_STYLE, _("Edited style element."));
@@ -921,12 +958,6 @@ bool StyleDialog::_addRow(GdkEventButton *evt, Glib::RefPtr<Gtk::TreeStore> stor
     return false;
 }
 
-void StyleDialog::_startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &path)
-{
-    Gtk::Entry *entry = dynamic_cast<Gtk::Entry *>(cell);
-    entry->set_completion(_entry_completion);
-}
-
 void
 StyleDialog::_setAutocompletion(Gtk::Entry *entry, SPStyleEnum const cssenum[])
 {
@@ -941,20 +972,49 @@ StyleDialog::_setAutocompletion(Gtk::Entry *entry, SPStyleEnum const cssenum[])
     while (key) {
         Gtk::TreeModel::Row row = *(completionModel->append());
         row[_mCSSData._colCSSData] = Glib::ustring(key);
-        key = cssenum[counter].key;
         counter++;
+        key = cssenum[counter].key;
     }
+    entry->set_completion(entry_completion);
+}
+/*Harcode values non in enum*/
+void
+StyleDialog::_setAutocompletion(Gtk::Entry *entry, Glib::ustring name)
+{
+    Glib::RefPtr<Gtk::ListStore> completionModel = Gtk::ListStore::create(_mCSSData);
+    Glib::RefPtr<Gtk::EntryCompletion> entry_completion = Gtk::EntryCompletion::create();
+    entry_completion->set_model(completionModel);
+    entry_completion->set_text_column (_mCSSData._colCSSData);
+    entry_completion->set_minimum_key_length(0);
+    entry_completion->set_popup_completion(true);
+    gint counter = 0;
+    if(name == "paint-order") {
+        Gtk::TreeModel::Row row = *(completionModel->append());
+        row[_mCSSData._colCSSData] = Glib::ustring("fill markers stroke");
+        row = *(completionModel->append());
+        row[_mCSSData._colCSSData] = Glib::ustring("fill stroke markers");
+        row = *(completionModel->append());
+        row[_mCSSData._colCSSData] = Glib::ustring("stroke markers fill");
+        row = *(completionModel->append());
+        row[_mCSSData._colCSSData] = Glib::ustring("stroke fill markers");
+        row = *(completionModel->append());
+        row[_mCSSData._colCSSData] = Glib::ustring("markers fill stroke");
+        row = *(completionModel->append());
+        row[_mCSSData._colCSSData] = Glib::ustring("markers stroke fill");
+    }
+    entry->set_completion(entry_completion);
 }
 
 void
 StyleDialog::_startValueEdit(Gtk::CellEditable* cell, const Glib::ustring& path, Glib::RefPtr<Gtk::TreeStore> store)
 {
     Gtk::TreeModel::Row row = *store->get_iter(path);
-    Gtk::TreeModel::Path pathel = (Gtk::TreeModel::Path)*store->get_iter(path);
     if (row) {
         Gtk::Entry *entry = dynamic_cast<Gtk::Entry *>(cell);
         Glib::ustring name = row[_mColumns._colName];
-        if (name == "fill-rule") {
+        if (name == "paint-order") {
+            _setAutocompletion(entry, name);
+        } else if (name == "fill-rule") {
             _setAutocompletion(entry, enum_fill_rule);
         } else if (name == "stroke-linecap") {
             _setAutocompletion(entry, enum_stroke_linecap);
@@ -1002,6 +1062,22 @@ StyleDialog::_startValueEdit(Gtk::CellEditable* cell, const Glib::ustring& path,
     }
 }
 
+void StyleDialog::_startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &path)
+{
+    Glib::RefPtr<Gtk::ListStore> completionModel = Gtk::ListStore::create(_mCSSData);
+    Glib::RefPtr<Gtk::EntryCompletion> entry_completion = Gtk::EntryCompletion::create();
+    entry_completion->set_model(completionModel);
+    entry_completion->set_text_column(_mCSSData._colCSSData);
+    entry_completion->set_minimum_key_length(1);
+    entry_completion->set_popup_completion(true);
+    for (auto prop : sp_attribute_name_list(true)) {
+        Gtk::TreeModel::Row row = *(completionModel->append());
+        row[_mCSSData._colCSSData] = prop;
+    }
+    Gtk::Entry *entry = dynamic_cast<Gtk::Entry *>(cell);
+    entry->set_completion(entry_completion);
+}
+
 /**
  * @brief StyleDialog::nameEdited
  * @param event
@@ -1014,20 +1090,22 @@ void StyleDialog::_nameEdited(const Glib::ustring &path, const Glib::ustring &na
     Gtk::TreeModel::Row row = *store->get_iter(path);
     Gtk::TreeModel::Path pathel = (Gtk::TreeModel::Path)*store->get_iter(path);
 
-    if (row) {
+    if (row ) {
         gint pos = row[_mColumns._colSelectorPos];
         bool write = false;
         if (row[_mColumns._colName] != name && row[_mColumns._colValue] != "") {
             write = true;
         }
-        Glib::ustring value = row[_mColumns._colValue];
         Glib::ustring selector = row[_mColumns._colSelector];
+        Glib::ustring value = row[_mColumns._colValue];
+        bool is_attr = selector == "attributes";
+
         row[_mColumns._colName] = name;
         if (name.empty() && value.empty()) {
             store->erase(row);
         }
         gint col = 3;
-        if (pos < 1) {
+        if (pos < 1 || is_attr) {
             col = 2;
         }
         if (write) {
