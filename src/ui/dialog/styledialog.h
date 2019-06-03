@@ -28,11 +28,11 @@
 #include <gtkmm/paned.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/switch.h>
+#include <gtkmm/tooltip.h>
 #include <gtkmm/treemodelfilter.h>
 #include <gtkmm/treeselection.h>
 #include <gtkmm/treestore.h>
 #include <gtkmm/treeview.h>
-#include <gtkmm/tooltip.h>
 #include <gtkmm/viewport.h>
 #include <ui/widget/panel.h>
 
@@ -128,10 +128,10 @@ class StyleDialog : public Widget::Panel {
     void _valueEdited(const Glib::ustring &path, const Glib::ustring &value, Glib::RefPtr<Gtk::TreeStore> store);
     void _startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &path);
 
-    void _startValueEdit(Gtk::CellEditable* cell, const Glib::ustring& path, Glib::RefPtr<Gtk::TreeStore> store);
+    void _startValueEdit(Gtk::CellEditable *cell, const Glib::ustring &path, Glib::RefPtr<Gtk::TreeStore> store);
     void _setAutocompletion(Gtk::Entry *entry, SPStyleEnum const cssenum[]);
     void _setAutocompletion(Gtk::Entry *entry, Glib::ustring name);
-    bool _on_foreach_iter(const Gtk::TreeModel::iterator& iter);
+    bool _on_foreach_iter(const Gtk::TreeModel::iterator &iter);
     void _reload();
 
     // Update watchers
