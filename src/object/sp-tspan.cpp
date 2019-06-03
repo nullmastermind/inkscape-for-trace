@@ -480,31 +480,6 @@ SPItem *sp_textpath_get_path_item(SPTextPath *tp)
 void sp_textpath_to_text(SPObject *tp)
 {
     SPObject *text = tp->parent;
-
-    Geom::OptRect bbox = SP_ITEM(text)->geometricBounds(SP_ITEM(text)->i2doc_affine());
-    Geom::Point xy;
-    if (!bbox) {
-        // Text is not shown on canvas at all
-        // Copied from Layout::fitToPathAlign
-        Path *path = dynamic_cast<SPTextPath*>(tp)->originalPath;
-        SVGLength const startOffset = dynamic_cast<SPTextPath*>(tp)->startOffset;
-        double offset = 0.0;
-        if (startOffset._set) {
-            if (startOffset.unit == SVGLength::PERCENT)
-                offset = startOffset.computed * path->Length();
-            else
-                offset = startOffset.computed;
-        }
-        int unused = 0;
-        Path::cut_position *cut_pos = path->CurvilignToPosition(1, &offset, unused);
-        Geom::Point midpoint;
-        Geom::Point tangent;
-        path->PointAndTangentAt(cut_pos[0].piece, cut_pos[0].t, midpoint, tangent);
-        xy = midpoint;
-    } else {
-        xy = bbox->min();
-        xy *= tp->document->getDocumentScale().inverse(); // Convert to user-units.
-    }
     
     // make a list of textpath children
     std::vector<Inkscape::XML::Node *> tp_reprs;
@@ -522,15 +497,27 @@ void sp_textpath_to_text(SPObject *tp)
         text->getRepr()->addChild(copy, nullptr); // fixme: copy id
     }
 
+    // set x/y on text (to be near where it was when on path)
+    // Copied from Layout::fitToPathAlign
+    Path *path = dynamic_cast<SPTextPath*>(tp)->originalPath;
+    SVGLength const startOffset = dynamic_cast<SPTextPath*>(tp)->startOffset;
+    double offset = 0.0;
+    if (startOffset._set) {
+        if (startOffset.unit == SVGLength::PERCENT)
+            offset = startOffset.computed * path->Length();
+        else
+            offset = startOffset.computed;
+    }
+    int unused = 0;
+    Path::cut_position *cut_pos = path->CurvilignToPosition(1, &offset, unused);
+    Geom::Point midpoint;
+    Geom::Point tangent;
+    path->PointAndTangentAt(cut_pos[0].piece, cut_pos[0].t, midpoint, tangent);
+    sp_repr_set_svg_double(text->getRepr(), "x", midpoint[Geom::X]);
+    sp_repr_set_svg_double(text->getRepr(), "y", midpoint[Geom::Y]);
+
     //remove textpath
     tp->deleteObject();
-
-    // set x/y on text (to be near where it was when on path)
-    /* fixme: Yuck, is this really the right test? */
-    if (xy[Geom::X] != 1e18 && xy[Geom::Y] != 1e18) {
-        sp_repr_set_svg_double(text->getRepr(), "x", xy[Geom::X]);
-        sp_repr_set_svg_double(text->getRepr(), "y", xy[Geom::Y]);
-    }
 }
 
 
