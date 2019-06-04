@@ -751,9 +751,16 @@ void StyleDialog::_readStyleElement()
         for (auto selector : _styleBox.get_children()) {
             Gtk::Box *box = dynamic_cast<Gtk::Box *>(&selector[0]);
             if (box) {
-                Gtk::TreeView *css_tree = dynamic_cast<Gtk::TreeView *>(box->get_children()[1]);
-                Glib::RefPtr<Gtk::TreeModel> model = css_tree->get_model();
-                model->foreach_iter(sigc::mem_fun(*this, &StyleDialog::_on_foreach_iter));
+                std::vector<Gtk::Widget*> childs = box->get_children();
+                if (childs.size() > 1) {
+                    Gtk::TreeView *css_tree = dynamic_cast<Gtk::TreeView *>(childs[1]);
+                    if (css_tree) {
+                        Glib::RefPtr<Gtk::TreeModel> model = css_tree->get_model();
+                        if (model) {
+                            model->foreach_iter(sigc::mem_fun(*this, &StyleDialog::_on_foreach_iter));
+                        }
+                    }
+                }
             }
         }
     }
@@ -838,6 +845,7 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
         return;
     }
     Inkscape::Selection *selection = getDesktop()->getSelection();
+    SP_ACTIVE_DOCUMENT->fixCSSSelectors(selector);
     SPObject *obj = nullptr;
     if (selection->objects().size() == 1) {
         obj = selection->objects().back();
@@ -854,6 +862,8 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
     }
     for (auto &row : store->children()) {
         selector = row[_mColumns._colSelector];
+        SP_ACTIVE_DOCUMENT->fixCSSSelectors(selector);
+        row[_mColumns._colSelector] = selector;
         selectorpos = row[_mColumns._colSelectorPos];
         Glib::ustring opencomment = "";
         Glib::ustring closecomment = "";
