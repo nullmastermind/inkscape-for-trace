@@ -24,6 +24,7 @@
 class SPItem;
 class SPKnot;
 class SPDesktop;
+class SPPattern;
 class KnotHolder;
 
 namespace Inkscape {
@@ -106,38 +107,36 @@ protected:
 
 /* pattern manipulation */
 
-class PatternKnotHolderEntityXY : public KnotHolderEntity {
+class PatternKnotHolderEntity : public KnotHolderEntity {
 public:
-    PatternKnotHolderEntityXY(bool fill) : KnotHolderEntity(), _fill(fill) {}
+    PatternKnotHolderEntity(bool fill) : KnotHolderEntity(), _fill(fill) {}
     bool knot_missing() const override;
-    Geom::Point knot_get() const override;
     void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
-    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
-private:
+protected:
     // true if the entity tracks fill, false for stroke 
     bool _fill;
+    SPPattern *_pattern() const;
 };
 
-class PatternKnotHolderEntityAngle : public KnotHolderEntity {
+class PatternKnotHolderEntityXY : public PatternKnotHolderEntity {
 public:
-    PatternKnotHolderEntityAngle(bool fill) : KnotHolderEntity(), _fill(fill) {}
-    bool knot_missing() const override;
+    PatternKnotHolderEntityXY(bool fill) : PatternKnotHolderEntity(fill) {}
     Geom::Point knot_get() const override;
-    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
-private:
-    bool _fill;
 };
 
-class PatternKnotHolderEntityScale : public KnotHolderEntity {
+class PatternKnotHolderEntityAngle : public PatternKnotHolderEntity {
 public:
-    PatternKnotHolderEntityScale(bool fill) : KnotHolderEntity(), _fill(fill) {}
-    bool knot_missing() const override;
+    PatternKnotHolderEntityAngle(bool fill) : PatternKnotHolderEntity(fill) {}
     Geom::Point knot_get() const override;
-    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
-private:
-    bool _fill;
+};
+
+class PatternKnotHolderEntityScale : public PatternKnotHolderEntity {
+public:
+    PatternKnotHolderEntityScale(bool fill) : PatternKnotHolderEntity(fill) {}
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
 /* Filter manipulation */
