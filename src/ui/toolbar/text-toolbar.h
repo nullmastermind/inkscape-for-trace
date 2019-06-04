@@ -48,7 +48,7 @@ class ToolBase;
 }
 
 namespace Widget {
-class ComboBoxEntryAction;
+class ComboBoxEntryToolItem;
 class ComboToolItem;
 class SpinButtonToolItem;
 class UnitTracker;
@@ -62,9 +62,9 @@ private:
 
     UI::Widget::UnitTracker *_tracker;
 
-    UI::Widget::ComboBoxEntryAction *_font_family_action;
-    UI::Widget::ComboBoxEntryAction *_font_size_action;
-    UI::Widget::ComboBoxEntryAction *_font_style_action;
+    UI::Widget::ComboBoxEntryToolItem *_font_family_action;
+    UI::Widget::ComboBoxEntryToolItem *_font_size_action;
+    UI::Widget::ComboBoxEntryToolItem *_font_style_action;
     Gtk::ToggleToolButton *_superscript_item;
     Gtk::ToggleToolButton *_subscript_item;
     Gtk::ToggleToolButton *_outer_style_item;
@@ -96,11 +96,11 @@ private:
     sigc::connection c_selection_modified;
     sigc::connection c_subselection_changed;
 
-    static void fontfamily_value_changed(UI::Widget::ComboBoxEntryAction *act,
+    static void fontfamily_value_changed(UI::Widget::ComboBoxEntryToolItem *act,
                                          gpointer                  data);
-    static void fontsize_value_changed  (UI::Widget::ComboBoxEntryAction *act,
+    static void fontsize_value_changed  (UI::Widget::ComboBoxEntryToolItem *act,
                                          gpointer                  data);
-    static void fontstyle_value_changed (UI::Widget::ComboBoxEntryAction *act,
+    static void fontstyle_value_changed (UI::Widget::ComboBoxEntryToolItem *act,
                                          gpointer                         data);
     void script_changed(Gtk::ToggleToolButton *btn);
     void lineheight_unset_changed();

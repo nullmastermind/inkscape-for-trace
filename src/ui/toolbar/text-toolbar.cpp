@@ -753,7 +753,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
 }
 
 void
-TextToolbar::fontfamily_value_changed( UI::Widget::ComboBoxEntryAction *act, gpointer data )
+TextToolbar::fontfamily_value_changed( UI::Widget::ComboBoxEntryToolItem *act, gpointer data )
 {
     auto toolbar = reinterpret_cast<TextToolbar *>(data);
 
@@ -836,7 +836,7 @@ TextToolbar::create(SPDesktop *desktop)
 }
 
 void
-TextToolbar::fontsize_value_changed( UI::Widget::ComboBoxEntryAction *act, gpointer data)
+TextToolbar::fontsize_value_changed( UI::Widget::ComboBoxEntryToolItem *act, gpointer data)
 {
     auto toolbar = reinterpret_cast<TextToolbar *>(data);
 
@@ -925,7 +925,7 @@ TextToolbar::fontsize_value_changed( UI::Widget::ComboBoxEntryAction *act, gpoin
 }
 
 void
-TextToolbar::fontstyle_value_changed( UI::Widget::ComboBoxEntryAction *act, gpointer data)
+TextToolbar::fontstyle_value_changed( UI::Widget::ComboBoxEntryToolItem *act, gpointer data)
 {
     auto toolbar = reinterpret_cast<TextToolbar *>(data);
 

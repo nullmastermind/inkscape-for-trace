@@ -20,14 +20,20 @@
 #ifndef SEEN_INK_COMBOBOXENTRY_ACTION
 #define SEEN_INK_COMBOBOXENTRY_ACTION
 
-#include <gtkmm/action.h>
+#include <gtkmm/toolitem.h>
 
 namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-class ComboBoxEntryAction : public Gtk::Action {
+/**
+ * Creates a Gtk::ToolItem subclass that wraps a Gtk::ComboBox object.
+ */
+class ComboBoxEntryToolItem : public Gtk::ToolItem {
 private:
+    Glib::ustring       _stock_id;
+    Glib::ustring       _tooltip;
+    Glib::ustring       _label;
     GtkTreeModel       *_model; ///< Tree Model
     GtkComboBox        *_combobox;
     GtkEntry           *_entry;
@@ -55,16 +61,15 @@ private:
     // Signals
     sigc::signal<void> _signal_changed;
 
-    void (*changed)   (ComboBoxEntryAction* action);
-    void (*activated) (ComboBoxEntryAction* action);
+    void (*changed)   (ComboBoxEntryToolItem* action);
+    void (*activated) (ComboBoxEntryToolItem* action);
 
-    static gint get_active_row_from_text(ComboBoxEntryAction *action,
+    static gint get_active_row_from_text(ComboBoxEntryToolItem *action,
                                          const gchar         *target_text,
 	                                 gboolean             exclude     = false,
                                          gboolean             ignore_case = false);
     void defocus();
 
-    Gtk::Widget* create_tool_item_vfunc() override;
     static void combo_box_changed_cb( GtkComboBox* widget, gpointer data );
     static void entry_activate_cb( GtkEntry *widget,
                                    gpointer  data );
@@ -79,19 +84,16 @@ private:
     Glib::ustring check_comma_separated_text();
  
 public:
-    /**
-     * Creates a GtkAction subclass that wraps a GtkComboBoxEntry object.
-     */
-    ComboBoxEntryAction(const gchar  *name,
-                        const gchar  *label,
-                        const gchar  *tooltip,
-                        const gchar  *stock_id,
-                        GtkTreeModel *model,
-                        gint          entry_width    = -1,
-                        gint          extra_width    = -1,
-                        gpointer      cell_data_func = nullptr,
-                        gpointer      separator_func = nullptr,
-                        GtkWidget*    focusWidget    = nullptr);
+    ComboBoxEntryToolItem(const Glib::ustring name,
+                          const Glib::ustring label,
+                          const Glib::ustring tooltip,
+                          const Glib::ustring stock_id,
+                          GtkTreeModel *model,
+                          gint          entry_width    = -1,
+                          gint          extra_width    = -1,
+                          gpointer      cell_data_func = nullptr,
+                          gpointer      separator_func = nullptr,
+                          GtkWidget*    focusWidget    = nullptr);
 
     gchar*   get_active_text();
     gboolean set_active_text(const gchar* text, int row=-1);

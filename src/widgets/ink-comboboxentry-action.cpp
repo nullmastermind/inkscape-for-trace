@@ -43,17 +43,19 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-ComboBoxEntryAction::ComboBoxEntryAction(const gchar   *name,
-                                         const gchar   *label,
-                                         const gchar   *tooltip,
-                                         const gchar   *stock_id,
-                                         GtkTreeModel  *model,
-                                         gint           entry_width,
-                                         gint           extra_width,
-                                         void          *cell_data_func,
-                                         void          *separator_func,
-                                         GtkWidget     *focusWidget)
-    : Gtk::Action(name, stock_id, label, tooltip),
+ComboBoxEntryToolItem::ComboBoxEntryToolItem(Glib::ustring name,
+                                     Glib::ustring label,
+                                     Glib::ustring tooltip,
+                                     Glib::ustring stock_id,
+                                     GtkTreeModel  *model,
+                                     gint           entry_width,
+                                     gint           extra_width,
+                                     void          *cell_data_func,
+                                     void          *separator_func,
+                                     GtkWidget     *focusWidget)
+    : _label(std::move(label)),
+      _stock_id(std::move(stock_id)),
+      _tooltip(std::move(tooltip)),
       _model(model),
       _entry_width(entry_width),
       _extra_width(extra_width),
@@ -75,20 +77,14 @@ ComboBoxEntryAction::ComboBoxEntryAction(const gchar   *name,
       _warning_cb_blocked(false),
       _altx_name(nullptr)
 {
-}
+    set_name(name);
 
-// Create a widget for a toolbar.
-Gtk::Widget*
-ComboBoxEntryAction::create_tool_item_vfunc()
-{
     GtkWidget* item = nullptr;
 
     gchar *action_name = g_strdup( get_name().c_str() );
     gchar *combobox_name = g_strjoin( nullptr, action_name, "_combobox", NULL );
     gchar *entry_name =    g_strjoin( nullptr, action_name, "_entry", NULL );
     g_free( action_name );
-
-    item = GTK_WIDGET( gtk_tool_item_new() );
 
     GtkWidget* comboBoxEntry = gtk_combo_box_new_with_model_and_entry (_model);
     gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX (comboBoxEntry), 0);
@@ -101,7 +97,7 @@ ComboBoxEntryAction::create_tool_item_vfunc()
         gtk_widget_set_halign(comboBoxEntry, GTK_ALIGN_START);
         gtk_widget_set_hexpand(comboBoxEntry, FALSE);
         gtk_widget_set_vexpand(comboBoxEntry, FALSE);
-        gtk_container_add(GTK_CONTAINER(item), comboBoxEntry);
+        add(*Glib::wrap(comboBoxEntry));
     }
 
     _combobox = GTK_COMBO_BOX (comboBoxEntry);
@@ -171,16 +167,13 @@ ComboBoxEntryAction::create_tool_item_vfunc()
         g_signal_connect( G_OBJECT(child), "key-press-event", G_CALLBACK(keypress_cb), this );
     }
 
-    gtk_activatable_set_related_action( GTK_ACTIVATABLE (item), GTK_ACTION( gobj() ) );
-    gtk_widget_show_all( item );
-
-  return Glib::wrap(item);
+    show_all();
 }
 
 // Setters/Getters ---------------------------------------------------
 
 gchar*
-ComboBoxEntryAction::get_active_text()
+ComboBoxEntryToolItem::get_active_text()
 {
   gchar* text = g_strdup( _text );
   return text;
@@ -197,7 +190,7 @@ ComboBoxEntryAction::get_active_text()
  *     In this case we have a row number of -1, and the text must be set by hand.
  */
 gboolean
-ComboBoxEntryAction::set_active_text(const gchar* text, int row)
+ComboBoxEntryToolItem::set_active_text(const gchar* text, int row)
 {
   if( strcmp( _text, text ) != 0 ) { 
     g_free( _text );
@@ -311,7 +304,7 @@ ComboBoxEntryAction::set_active_text(const gchar* text, int row)
 }
 
 void
-ComboBoxEntryAction::set_entry_width(gint entry_width)
+ComboBoxEntryToolItem::set_entry_width(gint entry_width)
 {
     _entry_width = entry_width;
 
@@ -326,7 +319,7 @@ ComboBoxEntryAction::set_entry_width(gint entry_width)
 }
 
 void
-ComboBoxEntryAction::set_extra_width( gint extra_width )
+ComboBoxEntryToolItem::set_extra_width( gint extra_width )
 {
     _extra_width = extra_width;
 
@@ -343,7 +336,7 @@ ComboBoxEntryAction::set_extra_width( gint extra_width )
 }
 
 void
-ComboBoxEntryAction::popup_enable()
+ComboBoxEntryToolItem::popup_enable()
 {
     _popup = true;
 
@@ -367,7 +360,7 @@ ComboBoxEntryAction::popup_enable()
 }
 
 void
-ComboBoxEntryAction::popup_disable()
+ComboBoxEntryToolItem::popup_disable()
 {
   _popup = false;
 
@@ -378,7 +371,7 @@ ComboBoxEntryAction::popup_disable()
 }
 
 void
-ComboBoxEntryAction::set_tooltip(const gchar* tooltip)
+ComboBoxEntryToolItem::set_tooltip(const gchar* tooltip)
 {
     // Widget may not have been created....
     if( _entry ) {
@@ -390,7 +383,7 @@ ComboBoxEntryAction::set_tooltip(const gchar* tooltip)
 }
 
 void
-ComboBoxEntryAction::set_info(const gchar* info)
+ComboBoxEntryToolItem::set_info(const gchar* info)
 {
     g_free( _info );
     _info = g_strdup( info );
@@ -404,13 +397,13 @@ ComboBoxEntryAction::set_info(const gchar* info)
 }
 
 void
-ComboBoxEntryAction::set_info_cb(gpointer info_cb)
+ComboBoxEntryToolItem::set_info_cb(gpointer info_cb)
 {
     _info_cb = info_cb;
 }
 
 void
-ComboBoxEntryAction::set_warning(const gchar* warning)
+ComboBoxEntryToolItem::set_warning(const gchar* warning)
 {
   g_free( _warning );
   _warning = g_strdup( warning );
@@ -424,13 +417,13 @@ ComboBoxEntryAction::set_warning(const gchar* warning)
 }
 
 void
-ComboBoxEntryAction::set_warning_cb(gpointer warning_cb)
+ComboBoxEntryToolItem::set_warning_cb(gpointer warning_cb)
 {
     _warning_cb = warning_cb;
 }
 
 void
-ComboBoxEntryAction::set_altx_name(const gchar* altx_name)
+ComboBoxEntryToolItem::set_altx_name(const gchar* altx_name)
 {
     g_free(_altx_name);
     _altx_name = g_strdup( altx_name );
@@ -448,7 +441,7 @@ ComboBoxEntryAction::set_altx_name(const gchar* altx_name)
 // skip rows added for font-families included in doc and not on
 // system)
 gint
-ComboBoxEntryAction::get_active_row_from_text(ComboBoxEntryAction *action,
+ComboBoxEntryToolItem::get_active_row_from_text(ComboBoxEntryToolItem *action,
                                               const gchar         *target_text,
 			                      gboolean             exclude,
                                               gboolean             ignore_case )
@@ -513,7 +506,7 @@ ComboBoxEntryAction::get_active_row_from_text(ComboBoxEntryAction *action,
 //   PangoLayout * pl = gtk_entry_get_layout( entry );
 //   pango_layout_set_markup( pl, "NEW STRING", -1 ); // DOESN'T WORK
 Glib::ustring
-ComboBoxEntryAction::check_comma_separated_text()
+ComboBoxEntryToolItem::check_comma_separated_text()
 {
   Glib::ustring missing;
 
@@ -544,7 +537,7 @@ ComboBoxEntryAction::check_comma_separated_text()
 // Callbacks ---------------------------------------------------
 
 void
-ComboBoxEntryAction::combo_box_changed_cb( GtkComboBox* widget, gpointer data )
+ComboBoxEntryToolItem::combo_box_changed_cb( GtkComboBox* widget, gpointer data )
 {
   // Two things can happen to get here:
   //   An item is selected in the drop-down menu.
@@ -552,7 +545,7 @@ ComboBoxEntryAction::combo_box_changed_cb( GtkComboBox* widget, gpointer data )
   // We only react here if an item is selected.
 
   // Get action
-  auto action = reinterpret_cast<ComboBoxEntryAction *>( data );
+  auto action = reinterpret_cast<ComboBoxEntryToolItem *>( data );
 
   // Check if item selected:
   gint newActive = gtk_combo_box_get_active(widget);
@@ -577,13 +570,13 @@ ComboBoxEntryAction::combo_box_changed_cb( GtkComboBox* widget, gpointer data )
 }
 
 void
-ComboBoxEntryAction::entry_activate_cb( GtkEntry *widget,
+ComboBoxEntryToolItem::entry_activate_cb( GtkEntry *widget,
                                         gpointer  data )
 {
   // Get text from entry box.. check if it matches a menu entry.
 
   // Get action
-  auto action = reinterpret_cast<ComboBoxEntryAction*>( data );
+  auto action = reinterpret_cast<ComboBoxEntryToolItem*>( data );
 
   // Get text
   g_free( action->_text );
@@ -601,10 +594,10 @@ ComboBoxEntryAction::entry_activate_cb( GtkEntry *widget,
 }
 
 gboolean
-ComboBoxEntryAction::match_selected_cb( GtkEntryCompletion* /*widget*/, GtkTreeModel* model, GtkTreeIter* iter, gpointer data )
+ComboBoxEntryToolItem::match_selected_cb( GtkEntryCompletion* /*widget*/, GtkTreeModel* model, GtkTreeIter* iter, gpointer data )
 {
   // Get action
-  auto action = reinterpret_cast<ComboBoxEntryAction*>(data);
+  auto action = reinterpret_cast<ComboBoxEntryToolItem*>(data);
   GtkEntry *entry = action->_entry;
 
   if( entry) {
@@ -634,7 +627,7 @@ ComboBoxEntryAction::match_selected_cb( GtkEntryCompletion* /*widget*/, GtkTreeM
 }
 
 void
-ComboBoxEntryAction::defocus()
+ComboBoxEntryToolItem::defocus()
 {
     if ( _focusWidget ) {
         gtk_widget_grab_focus( _focusWidget );
@@ -642,11 +635,11 @@ ComboBoxEntryAction::defocus()
 }
 
 gboolean
-ComboBoxEntryAction::keypress_cb( GtkWidget * /*widget*/, GdkEventKey *event, gpointer data )
+ComboBoxEntryToolItem::keypress_cb( GtkWidget * /*widget*/, GdkEventKey *event, gpointer data )
 {
     gboolean wasConsumed = FALSE; /* default to report event not consumed */
     guint key = 0;
-    auto action = reinterpret_cast<ComboBoxEntryAction*>(data);
+    auto action = reinterpret_cast<ComboBoxEntryToolItem*>(data);
     gdk_keymap_translate_keyboard_state( Gdk::Display::get_default()->get_keymap(),
                                          event->hardware_keycode, (GdkModifierType)event->state,
                                          0, &key, nullptr, nullptr, nullptr );
