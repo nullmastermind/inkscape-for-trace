@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!-- This file links the .xml file to a corresponding .its file, which decides which parts of the XML will be translated -->
+<locatingRules>
+  <!-- the name of the locatingRule does not matter. The pattern specifies the filename, without directory name. (Wildcards are possible) -->
+  <locatingRule name="foobar" pattern="units.xml">
+    <!-- set 'localName' to the name of the main element in the XML file, and 'target' to the name of the .its file. -->
+    <documentRule localName="unitdefs" target="units.its"/>
+  </locatingRule>
+</locatingRules>

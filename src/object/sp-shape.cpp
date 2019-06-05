@@ -121,6 +121,10 @@ void SPShape::update(SPCtx* ctx, guint flags) {
     // std::cout << "SPShape::update(): " << (getId()?getId():"null") << std::endl;
     SPLPEItem::update(ctx, flags);
 
+    // Any update can change the bounding box,
+    // so the cached version can no longer be used.
+    bbox_cache_is_valid = false;
+
     /* This stanza checks that an object's marker style agrees with
      * the marker objects it has allocated.  sp_shape_set_marker ensures
      * that the appropriate marker objects are present (or absent) to
@@ -456,6 +460,13 @@ void SPShape::modified(unsigned int flags) {
 }
 
 Geom::OptRect SPShape::bbox(Geom::Affine const &transform, SPItem::BBoxType bboxtype) const {
+    // If the object is clipped, the update funcation that invalidates
+    // the cache doesn't get called if the object is moved, so we need
+    // to compare the transformations as well.
+    if (bbox_cache_is_valid && transform == bbox_transform_cache) {
+        return bbox_cache;
+    }
+
     Geom::OptRect bbox;
 
     if (!this->_curve || this->_curve->get_pathvector().empty()) {
@@ -640,6 +651,10 @@ Geom::OptRect SPShape::bbox(Geom::Affine const &transform, SPItem::BBoxType bbox
             }
         }
     }
+
+    bbox_transform_cache = transform;
+    bbox_cache = bbox;
+    bbox_cache_is_valid = true;
 
     return bbox;
 }

@@ -58,10 +58,13 @@ Effect::Effect (Inkscape::XML::Node * in_repr, Implementation::Implementation * 
         for (Inkscape::XML::Node *child = repr->firstChild(); child != nullptr; child = child->next()) {
             if (!strcmp(child->name(), INKSCAPE_EXTENSION_NS "effect")) {
                 if (child->attribute("needs-document") && !strcmp(child->attribute("needs-document"), "false")) {
-                  no_doc = true;
+                    no_doc = true;
                 }
                 if (child->attribute("needs-live-preview") && !strcmp(child->attribute("needs-live-preview"), "false")) {
-                  no_live_preview = true;
+                    no_live_preview = true;
+                }
+                if (child->attribute("implements-custom-gui") && !strcmp(child->attribute("implements-custom-gui"), "true")) {
+                    _workingDialog = false;
                 }
                 for (Inkscape::XML::Node *effect_child = child->firstChild(); effect_child != nullptr; effect_child = effect_child->next()) {
                     if (!strcmp(effect_child->name(), INKSCAPE_EXTENSION_NS "effects-menu")) {
@@ -269,7 +272,7 @@ Effect::effect (Inkscape::UI::View::View * doc)
     if (!loaded())
         set_state(Extension::STATE_LOADED);
     if (!loaded()) return;
-    ExecutionEnv executionEnv(this, doc);
+    ExecutionEnv executionEnv(this, doc, nullptr, _workingDialog, true);
     execution_env = &executionEnv;
     timer->lock();
     executionEnv.run();

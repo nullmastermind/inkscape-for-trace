@@ -29,17 +29,26 @@ if(UNIX)
 	
 	# update inkscape.pot
 	SET(_potFile ${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}.pot)
+	set(xgettext_options -j --keyword=_ --keyword=N_ --keyword=Q_ --keyword=C_:1c,2 --keyword=NC_:1c,2 --msgid-bugs-address=inkscape-devel@lists.sourceforge.net --strict -s --from-code=UTF-8 -ktranslatable -o ${_potFile})
 	add_custom_command(OUTPUT ${_potFile}
 		#COMMAND sh -c "${INTLTOOL-UPDATE} --pot --gettext-package=inkscape"
 		COMMAND touch ${_potFile}
-		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -L Glade --from-code=UTF-8 -ktranslatable -k_ -kN_ -o ${_potFile} -f POTFILES.ui.in
-		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -L Python --from-code=UTF-8 -f POTFILES.py.in -o ${_potFile}
-		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -f POTFILES.inx.in --from-code=UTF-8 --its its/inx.its -o ${_potFile}
-		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -C --from-code=UTF-8 -f POTFILES.src.in -o ${_potFile}
-		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -L AppData --from-code=UTF-8 ../org.inkscape.Inkscape.appdata.xml.in -o ${_potFile}
-		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j -L Desktop --from-code=UTF-8 ../org.inkscape.Inkscape.desktop.template -o ${_potFile}
-		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j --its its/menus.its --from-code=UTF-8 ../share/ui/menus.xml -o ${_potFile}
-		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} -j --its its/units.its --from-code=UTF-8 ../share/ui/units.xml -o ${_potFile}
+		# Due to a bug in old xgettext versions, we cannot use '--its='.
+		# Instead, we use GETTEXTDATADIR=. to refer to the po/its/*.its files.
+		# This requires a .loc file for each .its file. See po/its/units.loc for an example.
+		# See https://gitlab.com/inkscape/inkscape/issues/271 for details.
+		# This workaround is necessary for Debian 9, so roughly until ca 2021.
+		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} -C -f POTFILES.src.in
+		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} -L Glade -f POTFILES.ui.in
+		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} -L Python -f POTFILES.py.in
+		# the following uses po/its/inx.{loc, its}
+		COMMAND GETTEXTDATADIR=. ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} -f POTFILES.inx.in --from-code=UTF-8
+		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} -L AppData ../org.inkscape.Inkscape.appdata.xml.in 
+		COMMAND ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} -L Desktop ../org.inkscape.Inkscape.desktop.template 
+		# the following uses po/its/menus.{loc, its}
+		COMMAND GETTEXTDATADIR=. ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} ../share/ui/menus.xml
+		# the following uses po/its/units.{loc, its}
+		COMMAND GETTEXTDATADIR=. ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} ../share/ui/units.xml
 		COMMENT "Extract translatable messages to ${_potFile}"
 		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 		)

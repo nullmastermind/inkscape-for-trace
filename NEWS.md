@@ -1,3 +1,13 @@
+Inkscape 1.0alpha2
+
+Release highlights
+
+Released on 2019-06-02
+
+  • Performance improvements
+  • "Native" MacOS look
+  • Various fixes
+
 Inkscape 1.0alpha
 
 Release highlights

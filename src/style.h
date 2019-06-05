@@ -52,6 +52,7 @@ public:
     void read(SPObject *object, Inkscape::XML::Node *repr);
     void readFromObject(SPObject *object);
     void readFromPrefs(Glib::ustring const &path);
+    bool isSet(SPAttributeEnum id);
     void readIfUnset(SPAttributeEnum id, char const *val, SPStyleSrc const &source = SP_STYLE_SRC_STYLE_PROP );
     Glib::ustring write( unsigned int const flags = SP_STYLE_FLAG_IFSET,
                          SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,

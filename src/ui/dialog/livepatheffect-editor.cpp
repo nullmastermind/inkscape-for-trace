@@ -35,7 +35,6 @@
 
 #include "object/sp-item-group.h"
 #include "object/sp-path.h"
-#include "object/sp-rect.h"
 #include "object/sp-use.h"
 #include "object/sp-text.h"
 
@@ -407,27 +406,6 @@ LivePathEffectEditor::setDesktop(SPDesktop *desktop)
     }
 }
 
-void
-LivePathEffectEditor::rectsToCurves(SPItem* topitem, SPItem *item)
-{
-    Inkscape::Selection *sel = _getSelection();
-    if ( dynamic_cast<SPRect *>(item) ) {
-        sel->clear();
-        sel->set(item);
-        sel->toCurves();
-        if (topitem == item) {
-            return;
-        }
-    } else if( SPGroup *group = dynamic_cast<SPGroup *>(item)){
-        std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
-        for (auto sub_item : item_list) {
-            rectsToCurves(topitem, sub_item);
-        }
-    }
-    sel->set(topitem);
-}
-
-
 /*########################################################################
 # BUTTON CLICK HANDLERS    (callbacks)
 ########################################################################*/
@@ -455,7 +433,6 @@ LivePathEffectEditor::onAdd()
                 if (!data) {
                     return;
                 }
-                rectsToCurves(item, item);
                 item = sel->singleItem(); // get new item
 
                 LivePathEffect::Effect::createAndApply(data->key.c_str(), doc, item);

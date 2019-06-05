@@ -125,7 +125,7 @@ LivePathEffectAdd::LivePathEffectAdd()
             sigc::mem_fun(*this, &LivePathEffectAdd::mouseout), GTK_WIDGET(LPESelectorEffect->gobj())));
         Gtk::Label *LPEName;
         builder_effect->get_widget("LPEName", LPEName);
-        const Glib::ustring label = converter.get_label(data->id);
+        const Glib::ustring label = _(converter.get_label(data->id).c_str());
         const Glib::ustring untranslated_label = converter.get_untranslated_label(data->id);
         if (untranslated_label == label) {
             LPEName->set_text(label);

@@ -35,12 +35,31 @@ namespace Widget {
       {
           Gtk::Label* table_name = Gtk::manage (new Gtk::Label());
           table_name->set_markup ("\"" + name + "\" ");
+
           grid.attach (*table_name, 0, row, 1, 1);
+
+          Gtk::FlowBox* flow_box = nullptr;
+          Gtk::ScrolledWindow* scrolled_window = nullptr;
+          if (options > 2) {
+              // If there are more than 2 option, pack them into a flowbox instead of directly putting them in the grid.
+              // Some fonts might have a table with many options (Bungee Hairline table 'ornm' has 113 entries).
+              flow_box = Gtk::manage (new Gtk::FlowBox());
+              flow_box->set_selection_mode(); // Turn off selection
+              flow_box->set_homogeneous();
+              flow_box->set_max_children_per_line (100); // Override default value
+              flow_box->set_min_children_per_line (10);  // Override default value
+
+              // We pack this into a scrollbar... otherwise the minimum height is set to what is required to fit all
+              // flow box children into the flow box when the flow box has minimum width. (Crazy if you ask me!)
+              scrolled_window = Gtk::manage (new Gtk::ScrolledWindow());
+              scrolled_window->set_policy (Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+              scrolled_window->add(*flow_box);
+          }
 
           Gtk::RadioButton::Group group;
           for (int i = 0; i < options; ++i) {
-              int col = i%10;  // Some fonts might have a table with many options (Bungee Hairline table 'ornm' has 113 entries).
-              if (i > 10 && col == 0) row++;
+
+              // Create radio button and create or add to button group.
               Gtk::RadioButton* button = Gtk::manage (new Gtk::RadioButton());
               if (i == 0) {
                   group = button->get_group();
@@ -48,9 +67,9 @@ namespace Widget {
                   button->set_group (group);
               }
               button->signal_clicked().connect ( sigc::mem_fun(*parent, &FontVariants::feature_callback) );
-              grid.attach (*button, 2*col+1, row, 1, 1);
               buttons.push_back (button);
 
+              // Create label.
               Gtk::Label* label = Gtk::manage (new Gtk::Label());
 
               // Restrict label width (some fonts have lots of alternatives).
@@ -58,6 +77,7 @@ namespace Widget {
               label->set_line_wrap_mode( Pango::WRAP_WORD_CHAR );
               label->set_ellipsize( Pango::ELLIPSIZE_END );
               label->set_lines(3);
+              label->set_hexpand();
 
               Glib::ustring markup;
               markup += "<span font_family='";
@@ -70,7 +90,26 @@ namespace Widget {
               markup += Glib::Markup::escape_text (glyphs.input);
               markup += "</span>";
               label->set_markup (markup);
-              grid.attach (*label, 2*col+2, row, 1, 1);
+
+              // Add button and label to widget
+              if (!flow_box) {
+                  // Attach directly to grid (keeps things aligned row-to-row).
+                  grid.attach (*button, 2*i+1, row, 1, 1);
+                  grid.attach (*label,  2*i+2, row, 1, 1);
+              } else {
+                  // Pack into FlowBox
+
+                  // Pack button and label into a box so they stay together.
+                  Gtk::Box* box = Gtk::manage (new Gtk::Box());
+                  box->add(*button);
+                  box->add(*label);
+
+                  flow_box->add(*box);
+              }
+          }
+
+          if (scrolled_window) {
+              grid.attach (*scrolled_window, 1, row, 4, 1);
           }
       }
 
@@ -299,7 +338,7 @@ namespace Widget {
 
     _caps_grid.set_margin_start(15);
     _caps_grid.set_margin_end(15);
-    
+
     _caps_frame.add( _caps_grid );
     pack_start( _caps_frame, Gtk::PACK_SHRINK );
 
@@ -373,7 +412,7 @@ namespace Widget {
 
     _numeric_grid.set_margin_start(15);
     _numeric_grid.set_margin_end(15);
-    
+
     _numeric_frame.add( _numeric_grid );
     pack_start( _numeric_frame, Gtk::PACK_SHRINK );
     
@@ -420,7 +459,7 @@ namespace Widget {
 
     _asian_grid.set_margin_start(15);
     _asian_grid.set_margin_end(15);
-    
+
     _asian_frame.add( _asian_grid );
     pack_start( _asian_frame, Gtk::PACK_SHRINK );
 
@@ -450,17 +489,17 @@ namespace Widget {
     _feature_list.set_line_wrap( true );
 
     // Add to frame
-    _feature_vbox.pack_start( _feature_grid  );
-    _feature_vbox.pack_start( _feature_entry );
-    _feature_vbox.pack_start( _feature_label );
-    _feature_vbox.pack_start( _feature_substitutions );
-    _feature_vbox.pack_start( _feature_list  );
+    _feature_vbox.pack_start( _feature_grid,          Gtk::PACK_SHRINK );
+    _feature_vbox.pack_start( _feature_entry,         Gtk::PACK_SHRINK );
+    _feature_vbox.pack_start( _feature_label,         Gtk::PACK_SHRINK );
+    _feature_vbox.pack_start( _feature_substitutions, Gtk::PACK_SHRINK );
+    _feature_vbox.pack_start( _feature_list,          Gtk::PACK_SHRINK );
 
     _feature_vbox.set_margin_start(15);
     _feature_vbox.set_margin_end(15);
-    
+
     _feature_frame.add( _feature_vbox );
-    pack_start( _feature_frame, Gtk::PACK_SHRINK  );
+    pack_start( _feature_frame, Gtk::PACK_SHRINK );
 
     // Add signals
     //_feature_entry.signal_key_press_event().connect ( sigc::mem_fun(*this, &FontVariants::feature_callback) );

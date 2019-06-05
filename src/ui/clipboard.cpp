@@ -1100,9 +1100,6 @@ void ClipboardManagerImpl::_applyPathEffect(SPItem *item, gchar const *effectsta
     if ( item == nullptr ) {
         return;
     }
-    if ( dynamic_cast<SPRect *>(item) ) {
-        return;
-    }
 
     SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
     if (lpeitem)

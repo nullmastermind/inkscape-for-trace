@@ -84,6 +84,7 @@ if(WIN32)
     ${MINGW_BIN}/libpangomm-1.4-[0-9]*.dll
     ${MINGW_BIN}/libpangowin32-1.0-[0-9]*.dll
     ${MINGW_BIN}/libpcre-[0-9]*.dll
+    ${MINGW_BIN}/libpdcurses.dll
     ${MINGW_BIN}/libpixman-1-[0-9]*.dll
     ${MINGW_BIN}/libplc[0-9]*.dll
     ${MINGW_BIN}/libplds[0-9]*.dll
@@ -94,7 +95,6 @@ if(WIN32)
     ${MINGW_BIN}/libpsl-[0-9]*.dll
     ${MINGW_BIN}/libquadmath-[0-9]*.dll
     ${MINGW_BIN}/libraqm-[0-9]*.dll
-    ${MINGW_BIN}/libreadline[0-9]*.dll
     ${MINGW_BIN}/librevenge-0.[0-9]*.dll
     ${MINGW_BIN}/librevenge-stream-0.[0-9]*.dll
     ${MINGW_BIN}/librsvg-2-[0-9]*.dll
@@ -117,13 +117,13 @@ if(WIN32)
     ${MINGW_BIN}/libxml2-[0-9]*.dll
     ${MINGW_BIN}/libxslt-[0-9]*.dll
     ${MINGW_BIN}/libyaml-0-[0-9]*.dll
+    ${MINGW_BIN}/libzstd.dll
     ${MINGW_BIN}/nss[0-9]*.dll
     ${MINGW_BIN}/nssutil[0-9]*.dll
     ${MINGW_BIN}/smime[0-9]*.dll
     ${MINGW_BIN}/tcl[0-9]*.dll
     ${MINGW_BIN}/tk[0-9]*.dll
-    ${MINGW_BIN}/zlib1.dll
-    ${MINGW_BIN}/libzstd.dll)
+    ${MINGW_BIN}/zlib1.dll)
   INSTALL(FILES ${MINGW_LIBS} DESTINATION .)
   # There are differences for 64-Bit and 32-Bit build environments.
   if(HAVE_MINGW64)

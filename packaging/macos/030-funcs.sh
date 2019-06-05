@@ -56,7 +56,7 @@ function get_source
   # the directory the files have been extracted to.
   curl -L $url | tar xv$(get_comp_flag $url) 2>$log
   cd $(head -1 $log | awk '{ print $2 }')
-  rm $log
+  [ $? -eq 0 ] && rm $log || echo "$FUNCNAME: check $log"
 }
 
 ### make, make install in jhbuild environment ##################################

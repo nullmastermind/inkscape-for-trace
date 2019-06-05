@@ -720,6 +720,33 @@ SPStyle::readIfUnset(SPAttributeEnum id, gchar const *val, SPStyleSrc const &sou
     }
 }
 
+// return if is seted property
+bool SPStyle::isSet(SPAttributeEnum id)
+{
+    bool set = false;
+    switch (id) {
+        case SP_PROP_CLIP_PATH:
+            return set;
+        case SP_PROP_MASK:
+            return set;
+        case SP_PROP_FILTER:
+            if (!filter.inherit)
+                set = filter.set;
+            return set;
+        case SP_PROP_COLOR_INTERPOLATION:
+            // We read it but issue warning
+            return color_interpolation.set;
+    }
+
+    auto p = _prop_helper.get(this, id);
+    if (p) {
+        return p->set;
+    } else {
+        g_warning("Unimplemented style property %d", id);
+        return set;
+    }
+}
+
 /**
  * Outputs the style to a CSS string.
  *
@@ -881,16 +908,18 @@ SPStyle::_mergeDecl(  CRDeclaration const *const decl, SPStyleSrc const &source 
          * convert to string. Alternatively, set from CRTerm directly rather
          * than converting to string.
          */
-        guchar *const str_value_unsigned = cr_term_to_string(decl->value);
-        gchar *const str_value = reinterpret_cast<gchar *>(str_value_unsigned);
+        if (!isSet(prop_idx) || decl->important) {
+            guchar *const str_value_unsigned = cr_term_to_string(decl->value);
+            gchar *const str_value = reinterpret_cast<gchar *>(str_value_unsigned);
 
-        // Add "!important" rule if necessary as this is not handled by cr_term_to_string().
-        gchar const * important = decl->important ? " !important" : "";
-        Inkscape::CSSOStringStream os;
-        os << str_value << important;
+            // Add "!important" rule if necessary as this is not handled by cr_term_to_string().
+            gchar const *important = decl->important ? " !important" : "";
+            Inkscape::CSSOStringStream os;
+            os << str_value << important;
 
-        readIfUnset( prop_idx, os.str().c_str(), source );
-        g_free(str_value);
+            readIfUnset(prop_idx, os.str().c_str(), source);
+            g_free(str_value);
+        }
     }
 }
 

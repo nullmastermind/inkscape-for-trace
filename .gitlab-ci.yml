@@ -130,7 +130,11 @@ check-license-headers:
   script:
     - python buildtools/check_license_headers.py
 
-    ### Verify that the list of the files containing strings to be translated is up to date
+    ### Several translation tests:
+    #   - verify that the list of translatable files (POTFILES.*.in) are up to date
+    #   - check if we can successfully re-generate inkscape.pot
+    #   - sync all .po files with the updated inkscape.pot and run some automated checks on them
+    #  (artifacts from this job are also used to generate translations statistics for the website)
 
 translations:
   stage: build
@@ -141,24 +145,22 @@ translations:
     - mkdir build && cd build && cmake .. && make inkscape_pot && cd .. || exit 1
     - cd po/
 
-    # update POTFILES.in
-    - grep -v "^#" POTFILES.in > POTFILES.in.1
+    # update POTFILES.*.in
     - ./generate_POTFILES.sh
-    - grep -v "^#" POTFILES.in > POTFILES.in.2
 
     # update inkscape.pot and sync all .po files
-    - intltool-update --pot --gettext-package=inkscape
+    - rm -f inkscape.pot
+    - cd ../build && make inkscape_pot && cd ../po || exit 1
     - ./update_po_files.sh
 
-    # check if POTFILES.in should be updated in the repo (shall we automate this?)
-    - 'if [ -n "$(diff POTFILES.in.1 POTFILES.in.2)" ]; then
-        git diff POTFILES.in;
+    # check if POTFILES.*.in should be updated in the repo (shall we automate this?)
+    - 'if [ -n "$(git diff POTFILES.*.in)" ]; then
+        git diff POTFILES.*.in;
         echo "New translatable strings in source files found.";
-        echo "Please add the paths to POTFILES.in so they can be translated";
+        echo "Please add the paths to POTFILES.*.in so they can be translated";
         echo "(or add them to POTFILES.skip to exclude them from translations).";
         exit 1;
       fi'
-    - rm POTFILES.in.1 POTFILES.in.2
   artifacts:
     name: "translations"
     paths:
