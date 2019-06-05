@@ -35,8 +35,6 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "widgets/ink-toggle-action.h"
-#include "widgets/toolbox.h"
 #include "inkscape.h"
 #include "selection-chemistry.h"
 #include "text-editing.h"
@@ -63,7 +61,6 @@
 #include "widgets/style-utils.h"
 
 using Inkscape::DocumentUndo;
-using Inkscape::UI::ToolboxFactory;
 using Inkscape::Util::Unit;
 using Inkscape::Util::Quantity;
 using Inkscape::Util::unit_table;
@@ -272,7 +269,6 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
     _tracker->setActiveUnit(unit_table.getUnit("%"));
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
 #if 0
     /* Font family */
@@ -320,7 +316,8 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         gtk_style_context_add_provider_for_screen(screen,
                                                   GTK_STYLE_PROVIDER(css_provider),
                                                   GTK_STYLE_PROVIDER_PRIORITY_USER);
-    }
+    }        
+#endif
 
     /* Font styles */
     {
@@ -328,22 +325,23 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         Glib::RefPtr<Gtk::ListStore> store = fontlister->get_style_list();
         GtkListStore* model_style = store->gobj();
 
-        toolbar->_font_style_action = ink_comboboxentry_action_new( "TextFontStyleAction",
-                                                                    _("Font Style"),
-                                                                    _("Font style"),
-                                                                    GTK_TREE_MODEL(model_style),
-                                                                    12,     // Width in characters
-                                                                    0,      // Extra list width
-                                                                    nullptr,   // Cell layout
-                                                                    nullptr,   // Separator
-                                                                    GTK_WIDGET(desktop->canvas)); // Focus widget
+        _font_style_item = Gtk::manage(new UI::Widget::ComboBoxEntryToolItem( "TextFontStyleAction",
+                                                                              _("Font Style"),
+                                                                              _("Font style"),
+                                                                              GTK_TREE_MODEL(model_style),
+                                                                              12,     // Width in characters
+                                                                              0,      // Extra list width
+                                                                              nullptr,   // Cell layout
+                                                                              nullptr,   // Separator
+                                                                              GTK_WIDGET(desktop->canvas))); // Focus widget
 
-        g_signal_connect( G_OBJECT(toolbar->_font_style_action), "changed", G_CALLBACK(fontstyle_value_changed), (gpointer)toolbar );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_font_style_action) );
+        _font_style_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::fontstyle_value_changed));
+        add(*_font_style_item);
     }
 
-        
-#endif
+
+    add_separator();
+
     /* Text outer style */
     {
         _outer_style_item = Gtk::manage(new Gtk::ToggleToolButton());
@@ -920,17 +918,15 @@ TextToolbar::fontsize_value_changed()
 }
 
 void
-TextToolbar::fontstyle_value_changed( UI::Widget::ComboBoxEntryToolItem *act, gpointer data)
+TextToolbar::fontstyle_value_changed()
 {
-    auto toolbar = reinterpret_cast<TextToolbar *>(data);
-
     // quit if run by the _changed callbacks
-    if (toolbar->_freeze) {
+    if (_freeze) {
         return;
     }
-    toolbar->_freeze = true;
+    _freeze = true;
 
-    Glib::ustring new_style = act->get_active_text();
+    Glib::ustring new_style = _font_style_item->get_active_text();
 
     Inkscape::FontLister* fontlister = Inkscape::FontLister::get_instance();
 
@@ -963,7 +959,7 @@ TextToolbar::fontstyle_value_changed( UI::Widget::ComboBoxEntryToolItem *act, gp
 
     }
 
-    toolbar->_freeze = false;
+    _freeze = false;
 }
 
 // Handles both Superscripts and Subscripts
@@ -2016,7 +2012,7 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
 #ifdef FINISHEDHACKING
     if( _font_family_action->get_combobox() != nullptr ) {
         _font_family_action->set_active_text( fontlister->get_font_family().c_str(), fontlister->get_font_family_row() );
-        _font_style_action->set_active_text( fontlister->get_font_style().c_str() );
+        _font_style_item->set_active_text( fontlister->get_font_style().c_str() );
     }
 #endif
 

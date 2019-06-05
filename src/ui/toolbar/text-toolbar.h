@@ -64,7 +64,7 @@ private:
 
     UI::Widget::ComboBoxEntryToolItem *_font_family_action;
     UI::Widget::ComboBoxEntryToolItem *_font_size_item;
-    UI::Widget::ComboBoxEntryToolItem *_font_style_action;
+    UI::Widget::ComboBoxEntryToolItem *_font_style_item;
     Gtk::ToggleToolButton *_superscript_item;
     Gtk::ToggleToolButton *_subscript_item;
     Gtk::ToggleToolButton *_outer_style_item;
@@ -99,8 +99,7 @@ private:
     static void fontfamily_value_changed(UI::Widget::ComboBoxEntryToolItem *act,
                                          gpointer                  data);
     void fontsize_value_changed();
-    static void fontstyle_value_changed (UI::Widget::ComboBoxEntryToolItem *act,
-                                         gpointer                         data);
+    void fontstyle_value_changed();
     void script_changed(Gtk::ToggleToolButton *btn);
     void lineheight_unset_changed();
     void outer_style_changed();
