@@ -24,6 +24,8 @@
  * we must keep track of things like active entry ourselves.
  */
 
+#include "combo-box-entry-tool-item.h"
+
 #include <iostream>
 #include <cstring>
 #include <glibmm/ustring.h>
@@ -32,7 +34,6 @@
 #include <gdk/gdkkeysyms.h>
 #include <gdkmm/display.h>
 
-#include "widgets/ink-comboboxentry-action.h"
 #include "ui/icon-names.h"
 
 static GQuark gDataName = 0;

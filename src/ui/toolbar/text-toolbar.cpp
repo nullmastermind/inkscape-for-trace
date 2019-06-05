@@ -53,11 +53,11 @@
 
 #include "ui/icon-names.h"
 #include "ui/tools/text-tool.h"
+#include "ui/widget/combo-box-entry-tool-item.h"
 #include "ui/widget/combo-tool-item.h"
 #include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
 
-#include "widgets/ink-comboboxentry-action.h"
 #include "widgets/style-utils.h"
 
 using Inkscape::DocumentUndo;
@@ -270,7 +270,6 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-#if 0
     /* Font family */
     {
         // Font list
@@ -279,30 +278,30 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         Glib::RefPtr<Gtk::ListStore> store = fontlister->get_font_list();
         GtkListStore* model = store->gobj();
 
-        toolbar->_font_family_action =
-            ink_comboboxentry_action_new( "TextFontFamilyAction",
-                                          _("Font Family"),
-                                          _("Select Font Family (Alt-X to access)"),
-                                          GTK_TREE_MODEL(model),
-                                          -1,                // Entry width
-                                          50,                // Extra list width
-                                          (gpointer)font_lister_cell_data_func2, // Cell layout
-                                          (gpointer)font_lister_separator_func2,
-                                          GTK_WIDGET(desktop->canvas)); // Focus widget
-        ink_comboboxentry_action_popup_enable( toolbar->_font_family_action ); // Enable entry completion
+        _font_family_item =
+            Gtk::manage(new UI::Widget::ComboBoxEntryToolItem( "TextFontFamilyAction",
+                                                               _("Font Family"),
+                                                               _("Select Font Family (Alt-X to access)"),
+                                                               GTK_TREE_MODEL(model),
+                                                               -1,                // Entry width
+                                                               50,                // Extra list width
+                                                               (gpointer)font_lister_cell_data_func2, // Cell layout
+                                                               (gpointer)font_lister_separator_func2,
+                                                               GTK_WIDGET(desktop->canvas))); // Focus widget
+        _font_family_item->popup_enable(); // Enable entry completion
 
         gchar *const info = _("Select all text with this font-family");
-        ink_comboboxentry_action_set_info( toolbar->_font_family_action, info ); // Show selection icon
-        ink_comboboxentry_action_set_info_cb( toolbar->_font_family_action, (gpointer)sp_text_toolbox_select_cb );
+        _font_family_item->set_info( info ); // Show selection icon
+        _font_family_item->set_info_cb( (gpointer)sp_text_toolbox_select_cb );
 
         gchar *const warning = _("Font not found on system");
-        ink_comboboxentry_action_set_warning( toolbar->_font_family_action, warning ); // Show icon w/ tooltip if font missing
-        ink_comboboxentry_action_set_warning_cb( toolbar->_font_family_action, (gpointer)sp_text_toolbox_select_cb );
+        _font_family_item->set_warning( warning ); // Show icon w/ tooltip if font missing
+        _font_family_item->set_warning_cb( (gpointer)sp_text_toolbox_select_cb );
 
         //ink_comboboxentry_action_set_warning_callback( act, sp_text_fontfamily_select_all );
-        ink_comboboxentry_action_set_altx_name( toolbar->_font_family_action, "altx-text" ); // Set Alt-X keyboard shortcut
-        g_signal_connect( G_OBJECT(toolbar->_font_family_action), "changed", G_CALLBACK(fontfamily_value_changed), (gpointer)toolbar );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_font_family_action) );
+        _font_family_item->set_altx_name( "altx-text" ); // Set Alt-X keyboard shortcut
+        _font_family_item->signal_changed().connect( sigc::mem_fun(*this, &TextToolbar::fontfamily_value_changed) );
+        add(*_font_family_item);
 
         // Change style of drop-down from menu to list
         auto css_provider = gtk_css_provider_new();
@@ -316,8 +315,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         gtk_style_context_add_provider_for_screen(screen,
                                                   GTK_STYLE_PROVIDER(css_provider),
                                                   GTK_STYLE_PROVIDER_PRIORITY_USER);
-    }        
-#endif
+    }
 
     /* Font styles */
     {
@@ -338,7 +336,6 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _font_style_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::fontstyle_value_changed));
         add(*_font_style_item);
     }
-
 
     add_separator();
 
@@ -748,10 +745,8 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
 }
 
 void
-TextToolbar::fontfamily_value_changed( UI::Widget::ComboBoxEntryToolItem *act, gpointer data )
+TextToolbar::fontfamily_value_changed()
 {
-    auto toolbar = reinterpret_cast<TextToolbar *>(data);
-
 #ifdef DEBUG_TEXT
     std::cout << std::endl;
     std::cout << "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM" << std::endl;
@@ -759,16 +754,16 @@ TextToolbar::fontfamily_value_changed( UI::Widget::ComboBoxEntryToolItem *act, g
 #endif
 
      // quit if run by the _changed callbacks
-    if (toolbar->_freeze) {
+    if (_freeze) {
 #ifdef DEBUG_TEXT
         std::cout << "sp_text_fontfamily_value_changed: frozen... return" << std::endl;
         std::cout << "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\n" << std::endl;
 #endif
         return;
     }
-    toolbar->_freeze = true;
+    _freeze = true;
 
-    Glib::ustring new_family = act->get_active_text();
+    Glib::ustring new_family = _font_family_item->get_active_text();
     css_font_family_unquote( new_family ); // Remove quotes around font family names.
 
     // TODO: Think about how to handle handle multiple selections. While
@@ -784,16 +779,16 @@ TextToolbar::fontfamily_value_changed( UI::Widget::ComboBoxEntryToolItem *act, g
     if( new_family.compare( fontlister->get_font_family() ) != 0 ) {
         // Changed font-family
 
-        if( act->get_active() == -1 ) {
+        if( _font_family_item->get_active() == -1 ) {
             // New font-family, not in document, not on system (could be fallback list)
             fontlister->insert_font_family( new_family );
 
             // This just sets a variable in the ComboBoxEntryAction object...
             // shouldn't we also set the actual active row in the combobox?
-            act->set_active(0); // New family is always at top of list.
+            _font_family_item->set_active(0); // New family is always at top of list.
         }
 
-        fontlister->set_font_family( act->get_active() );
+        fontlister->set_font_family( _font_family_item->get_active() );
         // active text set in sp_text_toolbox_selection_changed()
 
         SPCSSAttr *css = sp_repr_css_attr_new ();
@@ -814,7 +809,7 @@ TextToolbar::fontfamily_value_changed( UI::Widget::ComboBoxEntryToolItem *act, g
     }
 
     // unfreeze
-    toolbar->_freeze = false;
+    _freeze = false;
 
 #ifdef DEBUG_TEXT
     std::cout << "sp_text_toolbox_fontfamily_changes: exit"  << std::endl;
@@ -2009,12 +2004,10 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
     fontlister->selection_update();
 
     // Update font list, but only if widget already created.
-#ifdef FINISHEDHACKING
-    if( _font_family_action->get_combobox() != nullptr ) {
-        _font_family_action->set_active_text( fontlister->get_font_family().c_str(), fontlister->get_font_family_row() );
+    if( _font_family_item->get_combobox() != nullptr ) {
+        _font_family_item->set_active_text( fontlister->get_font_family().c_str(), fontlister->get_font_family_row() );
         _font_style_item->set_active_text( fontlister->get_font_style().c_str() );
     }
-#endif
 
     // Only flowed text can be justified, only normal text can be kerned...
     // Find out if we have flowed text now so we can use it several places
@@ -2086,13 +2079,11 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
             return;
         }
 
-#ifdef FINISHEDHACKING
         // To ensure the value of the combobox is properly set on start-up, only mark
         // the prefs set if the combobox has already been constructed.
-        if( _font_family_action->get_combobox() != nullptr ) {
+        if( _font_family_item->get_combobox() != nullptr ) {
             _text_style_from_prefs = true;
         }
-#endif
     } else {
         _text_style_from_prefs = false;
     }

@@ -62,7 +62,7 @@ private:
 
     UI::Widget::UnitTracker *_tracker;
 
-    UI::Widget::ComboBoxEntryToolItem *_font_family_action;
+    UI::Widget::ComboBoxEntryToolItem *_font_family_item;
     UI::Widget::ComboBoxEntryToolItem *_font_size_item;
     UI::Widget::ComboBoxEntryToolItem *_font_style_item;
     Gtk::ToggleToolButton *_superscript_item;
@@ -96,8 +96,7 @@ private:
     sigc::connection c_selection_modified;
     sigc::connection c_subselection_changed;
 
-    static void fontfamily_value_changed(UI::Widget::ComboBoxEntryToolItem *act,
-                                         gpointer                  data);
+    void fontfamily_value_changed();
     void fontsize_value_changed();
     void fontstyle_value_changed();
     void script_changed(Gtk::ToggleToolButton *btn);
