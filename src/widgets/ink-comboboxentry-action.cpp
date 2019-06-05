@@ -46,7 +46,6 @@ namespace Widget {
 ComboBoxEntryToolItem::ComboBoxEntryToolItem(Glib::ustring name,
                                      Glib::ustring label,
                                      Glib::ustring tooltip,
-                                     Glib::ustring stock_id,
                                      GtkTreeModel  *model,
                                      gint           entry_width,
                                      gint           extra_width,
@@ -54,7 +53,6 @@ ComboBoxEntryToolItem::ComboBoxEntryToolItem(Glib::ustring name,
                                      void          *separator_func,
                                      GtkWidget     *focusWidget)
     : _label(std::move(label)),
-      _stock_id(std::move(stock_id)),
       _tooltip(std::move(tooltip)),
       _model(model),
       _entry_width(entry_width),
@@ -78,8 +76,6 @@ ComboBoxEntryToolItem::ComboBoxEntryToolItem(Glib::ustring name,
       _altx_name(nullptr)
 {
     set_name(name);
-
-    GtkWidget* item = nullptr;
 
     gchar *action_name = g_strdup( get_name().c_str() );
     gchar *combobox_name = g_strjoin( nullptr, action_name, "_combobox", NULL );
@@ -166,6 +162,8 @@ ComboBoxEntryToolItem::ComboBoxEntryToolItem(Glib::ustring name,
         g_signal_connect( G_OBJECT(child), "activate", G_CALLBACK(entry_activate_cb), this );
         g_signal_connect( G_OBJECT(child), "key-press-event", G_CALLBACK(keypress_cb), this );
     }
+
+    set_tooltip(tooltip.c_str());
 
     show_all();
 }
@@ -373,12 +371,12 @@ ComboBoxEntryToolItem::popup_disable()
 void
 ComboBoxEntryToolItem::set_tooltip(const gchar* tooltip)
 {
+    set_tooltip_text(tooltip);
+    gtk_widget_set_tooltip_text ( GTK_WIDGET(_combobox), tooltip);
+
     // Widget may not have been created....
     if( _entry ) {
         gtk_widget_set_tooltip_text ( GTK_WIDGET(_entry), tooltip);
-    }
-    if( _combobox ) {
-        gtk_widget_set_tooltip_text ( GTK_WIDGET(_combobox), tooltip);
     }
 }
 

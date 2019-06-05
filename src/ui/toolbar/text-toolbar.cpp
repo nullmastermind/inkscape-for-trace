@@ -287,7 +287,6 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
             ink_comboboxentry_action_new( "TextFontFamilyAction",
                                           _("Font Family"),
                                           _("Select Font Family (Alt-X to access)"),
-                                          nullptr,
                                           GTK_TREE_MODEL(model),
                                           -1,                // Entry width
                                           50,                // Extra list width
@@ -323,32 +322,6 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
                                                   GTK_STYLE_PROVIDER_PRIORITY_USER);
     }
 
-    /* Font size */
-    {
-        // List of font sizes for drop-down menu
-        GtkListStore* model_size = gtk_list_store_new( 1, G_TYPE_STRING );
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
-
-        sp_text_set_sizes(model_size, unit);
-
-        Glib::ustring tooltip = Glib::ustring::format(_("Font size"), " (", sp_style_get_css_unit_string(unit), ")");
-
-        toolbar->_font_size_action = ink_comboboxentry_action_new( "TextFontSizeAction",
-                                                                   _("Font Size"),
-                                                                   _(tooltip.c_str()),
-                                                                   nullptr,
-                                                                   GTK_TREE_MODEL(model_size),
-                                                                   8,      // Width in characters
-                                                                   0,      // Extra list width
-                                                                   nullptr,   // Cell layout
-                                                                   nullptr,   // Separator
-                                                                   GTK_WIDGET(desktop->canvas)); // Focus widget
-
-        g_signal_connect( G_OBJECT(toolbar->_font_size_action), "changed", G_CALLBACK(fontsize_value_changed), (gpointer)toolbar );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(toolbar->_font_size_action) );
-    }
-
     /* Font styles */
     {
         Inkscape::FontLister* fontlister = Inkscape::FontLister::get_instance();
@@ -358,7 +331,6 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         toolbar->_font_style_action = ink_comboboxentry_action_new( "TextFontStyleAction",
                                                                     _("Font Style"),
                                                                     _("Font style"),
-                                                                    nullptr,
                                                                     GTK_TREE_MODEL(model_style),
                                                                     12,     // Width in characters
                                                                     0,      // Extra list width
@@ -381,6 +353,32 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         add(*_outer_style_item);
         _outer_style_item->signal_toggled().connect(sigc::mem_fun(*this, &TextToolbar::outer_style_changed));
         _outer_style_item->set_active(prefs->getBool("/tools/text/outer_style", false));
+    }
+
+    /* Font size */
+    {
+        // List of font sizes for drop-down menu
+        GtkListStore* model_size = gtk_list_store_new( 1, G_TYPE_STRING );
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
+
+        sp_text_set_sizes(model_size, unit);
+
+        auto unit_str = sp_style_get_css_unit_string(unit);
+        Glib::ustring tooltip = Glib::ustring::format(_("Font size"), " (", unit_str, ")");
+
+        _font_size_item = Gtk::manage(new UI::Widget::ComboBoxEntryToolItem( "TextFontSizeAction",
+                                                                             _("Font Size"),
+                                                                             tooltip,
+                                                                             GTK_TREE_MODEL(model_size),
+                                                                             8,      // Width in characters
+                                                                             0,      // Extra list width
+                                                                             nullptr,   // Cell layout
+                                                                             nullptr,   // Separator
+                                                                             GTK_WIDGET(desktop->canvas))); // Focus widget
+
+        _font_size_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::fontsize_value_changed));
+        add(*_font_size_item);
     }
 
     /* Line height */
@@ -709,7 +707,6 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _orientation_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::orientation_changed));
     }
 
-
     // Text direction (predominant direction of horizontal text).
     {
         UI::Widget::ComboToolItemColumns columns;
@@ -747,9 +744,9 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
     show_all();
 
     // Is this necessary to call? Shouldn't hurt.
-    // selection_changed(desktop->getSelection());
+    selection_changed(desktop->getSelection());
 
-    // desktop->connectEventContextChanged(sigc::mem_fun(*this, &TextToolbar::watch_ec));
+    desktop->connectEventContextChanged(sigc::mem_fun(*this, &TextToolbar::watch_ec));
 }
 
 void
@@ -836,23 +833,21 @@ TextToolbar::create(SPDesktop *desktop)
 }
 
 void
-TextToolbar::fontsize_value_changed( UI::Widget::ComboBoxEntryToolItem *act, gpointer data)
+TextToolbar::fontsize_value_changed()
 {
-    auto toolbar = reinterpret_cast<TextToolbar *>(data);
-
     // quit if run by the _changed callbacks
-    if (toolbar->_freeze) {
+    if (_freeze) {
         return;
     }
-    toolbar->_freeze = true;
+    _freeze = true;
 
-    gchar *text = act->get_active_text();
+    gchar *text = _font_size_item->get_active_text();
     gchar *endptr;
     gdouble size = g_strtod( text, &endptr );
     if (endptr == text) {  // Conversion failed, non-numeric input.
         g_warning( "Conversion of size text to double failed, input: %s\n", text );
         g_free( text );
-        toolbar->_freeze = false;
+        _freeze = false;
         return;
     }
     g_free( text );
@@ -921,7 +916,7 @@ TextToolbar::fontsize_value_changed( UI::Widget::ComboBoxEntryToolItem *act, gpo
 
     sp_repr_css_attr_unref (css);
 
-    toolbar->_freeze = false;
+    _freeze = false;
 }
 
 void
@@ -1973,7 +1968,7 @@ TextToolbar::outer_style_changed()
     prefs->setInt("/tools/text/outer_style", outer);
 
     // Update widgets to reflect new state of Text Outer Style button.
-    //selection_changed(nullptr);
+    selection_changed(nullptr);
 }
 
 /*
@@ -2018,10 +2013,12 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
     fontlister->selection_update();
 
     // Update font list, but only if widget already created.
+#ifdef FINISHEDHACKING
     if( _font_family_action->get_combobox() != nullptr ) {
         _font_family_action->set_active_text( fontlister->get_font_family().c_str(), fontlister->get_font_family_row() );
         _font_style_action->set_active_text( fontlister->get_font_style().c_str() );
     }
+#endif
 
     // Only flowed text can be justified, only normal text can be kerned...
     // Find out if we have flowed text now so we can use it several places
@@ -2093,11 +2090,13 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
             return;
         }
 
+#ifdef FINISHEDHACKING
         // To ensure the value of the combobox is properly set on start-up, only mark
         // the prefs set if the combobox has already been constructed.
         if( _font_family_action->get_combobox() != nullptr ) {
             _text_style_from_prefs = true;
         }
+#endif
     } else {
         _text_style_from_prefs = false;
     }
@@ -2117,13 +2116,13 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
 
         // Freeze to ignore callbacks.
         //g_object_freeze_notify( G_OBJECT( fontSizeAction->combobox ) );
-        sp_text_set_sizes(GTK_LIST_STORE(_font_size_action->get_model()), unit);
+        sp_text_set_sizes(GTK_LIST_STORE(_font_size_item->get_model()), unit);
         //g_object_thaw_notify( G_OBJECT( fontSizeAction->combobox ) );
 
-        _font_size_action->set_active_text( os.str().c_str() );
+        _font_size_item->set_active_text( os.str().c_str() );
 
         Glib::ustring tooltip = Glib::ustring::format(_("Font size"), " (", sp_style_get_css_unit_string(unit), ")");
-        _font_size_action->set_tooltip (tooltip.c_str());
+        _font_size_item->set_tooltip (tooltip.c_str());
 
         // Superscript
         gboolean superscriptSet =

@@ -31,7 +31,6 @@ namespace Widget {
  */
 class ComboBoxEntryToolItem : public Gtk::ToolItem {
 private:
-    Glib::ustring       _stock_id;
     Glib::ustring       _tooltip;
     Glib::ustring       _label;
     GtkTreeModel       *_model; ///< Tree Model
@@ -87,7 +86,6 @@ public:
     ComboBoxEntryToolItem(const Glib::ustring name,
                           const Glib::ustring label,
                           const Glib::ustring tooltip,
-                          const Glib::ustring stock_id,
                           GtkTreeModel *model,
                           gint          entry_width    = -1,
                           gint          extra_width    = -1,
