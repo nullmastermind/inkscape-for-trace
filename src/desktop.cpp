@@ -1524,10 +1524,10 @@ SPDesktop::setToolboxAdjustmentValue (gchar const* id, double val)
     _widget->setToolboxAdjustmentValue (id, val);
 }
 
-void
-SPDesktop::setToolboxSelectOneValue (gchar const* id, gint val)
+Gtk::Toolbar*
+SPDesktop::get_toolbar_by_name(const Glib::ustring& name)
 {
-    _widget->setToolboxSelectOneValue (id, val);
+    return _widget->get_toolbar_by_name(name);
 }
 
 bool

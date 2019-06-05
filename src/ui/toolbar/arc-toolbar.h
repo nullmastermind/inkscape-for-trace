@@ -32,7 +32,6 @@
 
 #include <gtkmm/adjustment.h>
 
-class InkSelectOneAction;
 class SPDesktop;
 class SPItem;
 

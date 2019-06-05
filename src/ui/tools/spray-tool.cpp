@@ -62,6 +62,7 @@
 #include "svg/svg.h"
 #include "svg/svg-color.h"
 
+#include "ui/toolbar/spray-toolbar.h"
 #include "ui/tools/spray-tool.h"
 #include "ui/dialog/dialog-manager.h"
 
@@ -1210,7 +1211,14 @@ static void sp_spray_update_area(SprayTool *tc)
 static void sp_spray_switch_mode(SprayTool *tc, gint mode, bool with_shift)
 {
     // Select the button mode
-    SP_EVENT_CONTEXT(tc)->desktop->setToolboxSelectOneValue("spray_tool_mode", mode); 
+    auto tb = dynamic_cast<UI::Toolbar::SprayToolbar*>(SP_EVENT_CONTEXT(tc)->desktop->get_toolbar_by_name("SprayToolbar"));
+
+    if(tb) {
+        tb->set_mode(mode);
+    } else {
+        std::cerr << "Could not access Spray toolbar" << std::endl;
+    }
+
     // Need to set explicitly, because the prefs may not have changed by the previous
     tc->mode = mode;
     tc->update_cursor(with_shift);

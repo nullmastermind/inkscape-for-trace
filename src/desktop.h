@@ -65,7 +65,8 @@ class InkscapeWindow;
 
 namespace Gtk
 {
-  class Window;
+    class Toolbar;
+    class Window;
 }
 
 typedef int sp_verb_t;
@@ -388,8 +389,8 @@ public:
     void layoutWidget();
     void destroyWidget();
     void setToolboxFocusTo (gchar const* label);
+    Gtk::Toolbar* get_toolbar_by_name(const Glib::ustring& name); 
     void setToolboxAdjustmentValue (gchar const* id, double val);
-    void setToolboxSelectOneValue (gchar const* id, gint val);
     bool isToolboxButtonActive (gchar const *id);
     void updateNow();
     void updateCanvasNow();

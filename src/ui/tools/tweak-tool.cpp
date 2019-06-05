@@ -74,6 +74,8 @@
 
 #include "svg/svg.h"
 
+#include "ui/toolbar/tweak-toolbar.h"
+
 #include "ui/tools/tweak-tool.h"
 
 using Inkscape::DocumentUndo;
@@ -1121,7 +1123,14 @@ sp_tweak_update_area (TweakTool *tc)
 static void
 sp_tweak_switch_mode (TweakTool *tc, gint mode, bool with_shift)
 {
-    SP_EVENT_CONTEXT(tc)->desktop->setToolboxSelectOneValue ("tweak_tool_mode", mode);
+    auto tb = dynamic_cast<UI::Toolbar::TweakToolbar*>(SP_EVENT_CONTEXT(tc)->desktop->get_toolbar_by_name("TweakToolbar"));
+
+    if(tb) {
+        tb->set_mode(mode);
+    } else {
+        std::cerr << "Could not access Tweak toolbar" << std::endl;
+    }
+
     // need to set explicitly, because the prefs may not have changed by the previous
     tc->mode = mode;
     tc->update_cursor(with_shift);
@@ -1133,7 +1142,15 @@ sp_tweak_switch_mode_temporarily (TweakTool *tc, gint mode, bool with_shift)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
    // Juggling about so that prefs have the old value but tc->mode and the button show new mode:
    gint now_mode = prefs->getInt("/tools/tweak/mode", 0);
-   SP_EVENT_CONTEXT(tc)->desktop->setToolboxSelectOneValue ("tweak_tool_mode", mode);
+
+   auto tb = dynamic_cast<UI::Toolbar::TweakToolbar*>(SP_EVENT_CONTEXT(tc)->desktop->get_toolbar_by_name("TweakToolbar"));
+
+   if(tb) {
+       tb->set_mode(mode);
+   } else {
+       std::cerr << "Could not access Tweak toolbar" << std::endl;
+   }
+
    // button has changed prefs, restore
    prefs->setInt("/tools/tweak/mode", now_mode);
    // changing prefs changed tc->mode, restore back :)

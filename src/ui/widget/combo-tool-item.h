@@ -54,12 +54,13 @@ public:
     static ComboToolItem* create(const Glib::ustring &label,
                                  const Glib::ustring &tooltip,
                                  const Glib::ustring &stock_id,
-                                 Glib::RefPtr<Gtk::ListStore> store );
+                                 Glib::RefPtr<Gtk::ListStore> store,
+                                 bool                 has_entry = false);
 
-    /* Style of action */
-    void use_label(  bool use_label  ) { _use_label  = use_label;  }
-    void use_icon(   bool use_icon   ) { _use_icon   = use_icon;   }
-    void use_pixbuf( bool use_pixbuf ) { _use_pixbuf = use_pixbuf; }
+    /* Style of combobox */
+    void use_label(  bool use_label  );
+    void use_icon(   bool use_icon   );
+    void use_pixbuf( bool use_pixbuf );
     void use_group_label( bool use_group_label ) { _use_group_label = use_group_label; }
   
     gint get_active() { return _active; }
@@ -74,6 +75,7 @@ public:
 
 protected:
     bool on_create_menu_proxy() override;
+    void populate_combobox();
 
     /* Signals */
     sigc::signal<void, int> _changed;
@@ -108,7 +110,8 @@ private:
     ComboToolItem(Glib::ustring group_label,
                   Glib::ustring tooltip,
                   Glib::ustring stock_id,
-                  Glib::RefPtr<Gtk::ListStore> store );
+                  Glib::RefPtr<Gtk::ListStore> store,
+                  bool          has_entry = false);
 };
 }
 }

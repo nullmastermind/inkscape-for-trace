@@ -218,11 +218,10 @@ public:
         void updateZoom() override { _dtw->update_zoom(); }
         void letZoomGrabFocus() override { _dtw->letZoomGrabFocus(); }
         void updateRotation() override { _dtw->update_rotation(); }
+        Gtk::Toolbar* get_toolbar_by_name(const Glib::ustring& name) override {return _dtw->get_toolbar_by_name(name);}
         void setToolboxFocusTo(const gchar *id) override { _dtw->setToolboxFocusTo(id); }
         void setToolboxAdjustmentValue(const gchar *id, double val) override
         { _dtw->setToolboxAdjustmentValue (id, val); }
-        void setToolboxSelectOneValue (gchar const *id, int val) override
-        { _dtw->setToolboxSelectOneValue (id, val); }
         bool isToolboxButtonActive (gchar const* id) override
         { return _dtw->isToolboxButtonActive (id); }
         void setCoordinateStatus (Geom::Point p) override
@@ -255,9 +254,9 @@ public:
     void presentWindow();
     bool showInfoDialog( Glib::ustring const &message );
     bool warnDialog (Glib::ustring const &text);
+    Gtk::Toolbar* get_toolbar_by_name(const Glib::ustring& name);
     void setToolboxFocusTo (gchar const *);
     void setToolboxAdjustmentValue (gchar const * id, double value);
-    void setToolboxSelectOneValue (gchar const * id, gint value);
     bool isToolboxButtonActive (gchar const *id);
     void setToolboxPosition(Glib::ustring const& id, GtkPositionType pos);
     void setCoordinateStatus(Geom::Point p);

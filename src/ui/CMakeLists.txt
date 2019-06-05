@@ -162,6 +162,7 @@ set(ui_SRC
 	widget/color-scales.cpp
 	widget/color-slider.cpp
 	widget/color-wheel-selector.cpp
+	widget/combo-box-entry-tool-item.cpp
         widget/combo-tool-item.cpp
     widget/dash-selector.cpp
 	widget/dock-item.cpp
@@ -179,7 +180,6 @@ set(ui_SRC
 	widget/imagetoggler.cpp
     widget/ink-color-wheel.cpp
 	widget/ink-flow-box.cpp
-	widget/ink-select-one-action.cpp
 	widget/ink-spinscale.cpp
 	widget/insertordericon.cpp
         widget/label-tool-item.cpp
@@ -396,6 +396,7 @@ set(ui_SRC
 	widget/color-slider.h
 	widget/color-wheel-selector.h
 	widget/combo-enums.h
+	widget/combo-box-entry-tool-item.h
         widget/combo-tool-item.h
     widget/dash-selector.h
 	widget/dock-item.h
@@ -414,7 +415,6 @@ set(ui_SRC
 	widget/imagetoggler.h
     widget/ink-color-wheel.h
     widget/ink-flow-box.h
-	widget/ink-select-one-action.h
 	widget/ink-spinscale.h
         widget/label-tool-item.h
 	widget/labelled.h

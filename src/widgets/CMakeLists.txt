@@ -3,14 +3,12 @@ add_subdirectory(gimp)
 
 set(widgets_SRC
 	desktop-widget.cpp
-	ege-adjustment-action.cpp
 	ege-paint-def.cpp
 	fill-style.cpp
 	gradient-image.cpp
 	gradient-selector.cpp
 	gradient-vector.cpp
 	ink-action.cpp
-	ink-comboboxentry-action.cpp
 	ink-toggle-action.cpp
 	paint-selector.cpp
 	sp-attribute-widget.cpp
@@ -26,7 +24,6 @@ set(widgets_SRC
 	# -------
 	# Headers
 	desktop-widget.h
-	ege-adjustment-action.h
 	ege-paint-def.h
 	fill-n-stroke-factory.h
 	fill-style.h
@@ -34,7 +31,6 @@ set(widgets_SRC
 	gradient-selector.h
 	gradient-vector.h
 	ink-action.h
-	ink-comboboxentry-action.h
 	ink-toggle-action.h
 	paint-selector.h
 	sp-attribute-widget.h

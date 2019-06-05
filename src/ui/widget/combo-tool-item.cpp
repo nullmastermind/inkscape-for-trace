@@ -34,15 +34,17 @@ ComboToolItem*
 ComboToolItem::create(const Glib::ustring &group_label,
                       const Glib::ustring &tooltip,
                       const Glib::ustring &stock_id,
-                      Glib::RefPtr<Gtk::ListStore> store )
+                      Glib::RefPtr<Gtk::ListStore> store,
+                      bool                 has_entry)
 {
-    return new ComboToolItem(group_label, tooltip, stock_id, store);
+    return new ComboToolItem(group_label, tooltip, stock_id, store, has_entry);
 }
 
 ComboToolItem::ComboToolItem(Glib::ustring group_label,
                              Glib::ustring tooltip,
                              Glib::ustring stock_id,
-                             Glib::RefPtr<Gtk::ListStore> store ) :
+                             Glib::RefPtr<Gtk::ListStore> store,
+                             bool          has_entry) :
     _group_label(std::move( group_label )),
     _tooltip(std::move( tooltip )),
     _stock_id(std::move( stock_id )),
@@ -63,8 +65,44 @@ ComboToolItem::ComboToolItem(Glib::ustring group_label,
     }
 
     // Create combobox
-    _combobox = Gtk::manage (new Gtk::ComboBox());
+    _combobox = Gtk::manage (new Gtk::ComboBox(has_entry));
     _combobox->set_model(_store);
+
+    populate_combobox();
+
+    _combobox->signal_changed().connect(
+            sigc::mem_fun(*this, &ComboToolItem::on_changed_combobox));
+
+    box->add (*_combobox);
+
+    show_all();
+}
+
+void
+ComboToolItem::use_label(bool use_label)
+{
+    _use_label = use_label;
+    populate_combobox();
+}
+
+void
+ComboToolItem::use_icon(bool use_icon)
+{
+    _use_icon = use_icon;
+    populate_combobox();
+}
+
+void
+ComboToolItem::use_pixbuf(bool use_pixbuf)
+{
+    _use_pixbuf = use_pixbuf;
+    populate_combobox();
+}
+
+void
+ComboToolItem::populate_combobox()
+{
+    _combobox->clear();
 
     ComboToolItemColumns columns;
     if (_use_icon) {
@@ -89,13 +127,6 @@ ComboToolItem::ComboToolItem(Glib::ustring group_label,
     }
 
     _combobox->set_active (_active);
-
-    _combobox->signal_changed().connect(
-            sigc::mem_fun(*this, &ComboToolItem::on_changed_combobox));
-
-    box->add (*_combobox);
-
-    show_all();
 }
 
 void

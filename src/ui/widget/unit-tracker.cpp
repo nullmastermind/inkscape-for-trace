@@ -19,7 +19,6 @@
 
 #include "unit-tracker.h"
 
-#include "ink-select-one-action.h"
 #include "combo-tool-item.h"
 
 #define COLUMN_STRING 0
@@ -41,7 +40,7 @@ UnitTracker::UnitTracker(UnitType unit_type) :
 {
     UnitTable::UnitMap m = unit_table.units(unit_type);
     
-    InkSelectOneActionColumns columns;
+    ComboToolItemColumns columns;
     _store = Gtk::ListStore::create(columns);
     Gtk::TreeModel::Row row;
 
@@ -67,7 +66,6 @@ UnitTracker::UnitTracker(UnitType unit_type) :
 
 UnitTracker::~UnitTracker()
 {
-    _actionList.clear();
     _combo_list.clear();
 
     // Unhook weak references to GtkAdjustments
@@ -91,7 +89,7 @@ void UnitTracker::setActiveUnit(Inkscape::Util::Unit const *unit)
 {
     if (unit) {
 
-        InkSelectOneActionColumns columns;
+        ComboToolItemColumns columns;
         int index = 0;
         for (auto& row: _store->children() ) {
             Glib::ustring storedUnit = row[columns.col_label];
@@ -122,7 +120,7 @@ void UnitTracker::addAdjustment(GtkAdjustment *adj)
 
 void UnitTracker::addUnit(Inkscape::Util::Unit const *u)
 {
-    InkSelectOneActionColumns columns;
+    ComboToolItemColumns columns;
 
     Gtk::TreeModel::Row row;
     row = *(_store->append());
@@ -134,7 +132,7 @@ void UnitTracker::addUnit(Inkscape::Util::Unit const *u)
 
 void UnitTracker::prependUnit(Inkscape::Util::Unit const *u)
 {
-    InkSelectOneActionColumns columns;
+    ComboToolItemColumns columns;
 
     Gtk::TreeModel::Row row;
     row = *(_store->prepend());
@@ -151,28 +149,6 @@ void UnitTracker::prependUnit(Inkscape::Util::Unit const *u)
 void UnitTracker::setFullVal(GtkAdjustment *adj, gdouble val)
 {
     _priorValues[adj] = val;
-}
-
-/**
- * \deprecated Use create_tool_item instead
- */
-InkSelectOneAction *UnitTracker::createAction(Glib::ustring const &name,
-                                     Glib::ustring const &label,
-                                     Glib::ustring const &tooltip)
-{
-    InkSelectOneAction* act =
-        InkSelectOneAction::create( name, label, tooltip, "NotUsed", _store);
-
-    act->use_radio( false );
-    act->use_label( true );
-    act->use_icon( false );
-    act->use_group_label( false );
-    act->set_active( _active );
-
-    act->signal_changed().connect(sigc::mem_fun(*this, &UnitTracker::_unitChangedCB));
-    _actionList.push_back(act);
-
-    return act;
 }
 
 ComboToolItem *
@@ -192,30 +168,11 @@ void UnitTracker::_unitChangedCB(int active)
     _setActive(active);
 }
 
-void UnitTracker::_actionFinalizedCB(gpointer data, GObject *where_the_object_was)
-{
-    if (data && where_the_object_was) {
-        UnitTracker *self = reinterpret_cast<UnitTracker *>(data);
-        self->_actionFinalized(where_the_object_was);
-    }
-}
-
 void UnitTracker::_adjustmentFinalizedCB(gpointer data, GObject *where_the_object_was)
 {
     if (data && where_the_object_was) {
         UnitTracker *self = reinterpret_cast<UnitTracker *>(data);
         self->_adjustmentFinalized(where_the_object_was);
-    }
-}
-
-void UnitTracker::_actionFinalized(GObject *where_the_object_was)
-{
-    InkSelectOneAction* act = (InkSelectOneAction*)(where_the_object_was);
-    auto it = std::find(_actionList.begin(),_actionList.end(), act);
-    if (it != _actionList.end()) {
-        _actionList.erase(it);
-    } else {
-        g_warning("Received a finalization callback for unknown object %p", where_the_object_was);
     }
 }
 
@@ -238,7 +195,7 @@ void UnitTracker::_setActive(gint active)
         if (_store) {
 
             // Find old and new units
-            InkSelectOneActionColumns columns;
+            ComboToolItemColumns columns;
             int index = 0;
             Glib::ustring oldAbbr( "NotFound" );
             Glib::ustring newAbbr( "NotFound" );
@@ -273,10 +230,6 @@ void UnitTracker::_setActive(gint active)
             }
         }
         _active = active;
-
-        for (auto act: _actionList) {
-            act->set_active (active);
-        }
 
         for (auto combo : _combo_list) {
             if(combo) combo->set_active(active);

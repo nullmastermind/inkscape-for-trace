@@ -20,17 +20,13 @@
 #include <vector>
 
 #include <gtkmm/liststore.h>
-#include <gtkmm/action.h>
 
 #include "util/units.h"
-
-class InkSelectOneAction;
 
 using Inkscape::Util::Unit;
 using Inkscape::Util::UnitType;
 
 typedef struct _GObject       GObject;
-typedef struct _GtkAction     GtkAction;
 typedef struct _GtkAdjustment GtkAdjustment;
 typedef struct _GtkListStore  GtkListStore;
 
@@ -55,10 +51,6 @@ public:
     void prependUnit(Inkscape::Util::Unit const *u);
     void setFullVal(GtkAdjustment *adj, gdouble val);
 
-    InkSelectOneAction *createAction(Glib::ustring const &name,
-                                     Glib::ustring const &label,
-                                     Glib::ustring const &tooltip);
-
     ComboToolItem *create_tool_item(Glib::ustring const &label,
                                     Glib::ustring const &tooltip);
 
@@ -68,14 +60,12 @@ protected:
 private:
     // Callbacks
     void _unitChangedCB(int active);
-    static void _actionFinalizedCB(gpointer data, GObject *where_the_object_was);
     static void _adjustmentFinalizedCB(gpointer data, GObject *where_the_object_was);
 
     void _setActive(gint index);
     void _fixupAdjustments(Inkscape::Util::Unit const *oldUnit, Inkscape::Util::Unit const *newUnit);
 
     // Cleanup
-    void _actionFinalized(GObject *where_the_object_was);
     void _adjustmentFinalized(GObject *where_the_object_was);
 
     gint _active;
@@ -84,7 +74,6 @@ private:
     bool _activeUnitInitialized;
 
     Glib::RefPtr<Gtk::ListStore> _store;
-    std::vector<InkSelectOneAction*> _actionList;
     std::vector<ComboToolItem *> _combo_list;
     std::vector<GtkAdjustment*> _adjList;
     std::map <GtkAdjustment *, gdouble> _priorValues;

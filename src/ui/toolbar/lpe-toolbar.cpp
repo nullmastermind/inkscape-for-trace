@@ -173,6 +173,12 @@ LPEToolbar::LPEToolbar(SPDesktop *desktop)
     show_all();
 }
 
+void
+LPEToolbar::set_mode(int mode)
+{
+    _mode_buttons[mode]->set_active();
+}
+
 GtkWidget *
 LPEToolbar::create(SPDesktop *desktop)
 {
