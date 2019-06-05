@@ -120,7 +120,4 @@
 /* Do we want experimental, unsupported, unguaranteed, etc., LivePathEffects enabled? */
 #cmakedefine LPE_ENABLE_TEST_EFFECTS 1
 
-/* Build using libyaml (for xverbs) */
-#cmakedefine WITH_YAML 1
-
 #endif /* _CONFIG_H_ */

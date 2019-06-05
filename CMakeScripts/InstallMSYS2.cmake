@@ -116,7 +116,6 @@ if(WIN32)
     ${MINGW_BIN}/libwpg-0.[0-9]*.dll
     ${MINGW_BIN}/libxml2-[0-9]*.dll
     ${MINGW_BIN}/libxslt-[0-9]*.dll
-    ${MINGW_BIN}/libyaml-0-[0-9]*.dll
     ${MINGW_BIN}/libzstd.dll
     ${MINGW_BIN}/nss[0-9]*.dll
     ${MINGW_BIN}/nssutil[0-9]*.dll

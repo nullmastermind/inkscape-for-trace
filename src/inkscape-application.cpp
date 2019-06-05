@@ -543,10 +543,6 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-background",   'b', N_("Export: Background color for exported bitmaps (any SVG color string)."),    N_("COLOR")); // Bxx
     this->add_main_option_entry(T::OPTION_TYPE_DOUBLE,   "export-background-opacity", 'y', N_("Export: Background opacity for exported bitmaps (either 0.0 to 1.0 or 1 to 255)."), N_("VALUE")); // Bxx
 
-#ifdef WITH_YAML
-    this->add_main_option_entry(T::OPTION_TYPE_FILENAME, "xverbs",             '\0', N_("Process: xverb command file."),                                   N_("XVERBS-FILENAME"));
-#endif // WITH_YAML
-
 #ifdef WITH_DBUS
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "dbus-listen",        '\0', N_("D-Bus: Enter a listening loop for D-Bus messages in console mode."),                 "");
     this->add_main_option_entry(T::OPTION_TYPE_STRING,   "dbus-name",          '\0', N_("D-Bus: Specify the D-Bus name (default is 'org.inkscape')."),            N_("BUS-NAME"));
@@ -1101,7 +1097,7 @@ ConcreteInkscapeApplication<T>::shell2()
  * Options are processed in the order they appear in this function.
  * We process in order: Print -> GUI -> Open -> Query -> Process -> Export.
  * For each file without GUI: Open -> Query -> Process -> Export 
- * More flexible processing can be done via actions or xverbs.
+ * More flexible processing can be done via actions.
  */
 template<class T>
 int

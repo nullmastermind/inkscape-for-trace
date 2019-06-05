@@ -56,9 +56,6 @@ install_name_tool -change @rpath/libpoppler.85.dylib $LIB_DIR/libpoppler.85.dyli
 install_name_tool -change @rpath/libpoppler-glib.8.dylib $LIB_DIR/libpoppler-glib.8.dylib $BIN_DIR/inkscape
 install_name_tool -change @rpath/libpoppler.85.dylib $LIB_DIR/libpoppler.85.dylib $LIB_DIR/inkscape/libinkscape_base.dylib
 install_name_tool -change @rpath/libpoppler-glib.8.dylib $LIB_DIR/libpoppler-glib.8.dylib $LIB_DIR/inkscape/libinkscape_base.dylib
-#   LibYAML
-install_name_tool -change @rpath/libyaml.dylib $LIB_DIR/libyaml.dylib $BIN_DIR/inkscape
-install_name_tool -change @rpath/libyaml.dylib $LIB_DIR/libyaml.dylib $LIB_DIR/inkscape/libinkscape_base.dylib
 #   OpenMP
 install_name_tool -change @rpath/libomp.dylib $LIB_DIR/libomp.dylib $BIN_DIR/inkscape
 install_name_tool -change @rpath/libomp.dylib $LIB_DIR/libomp.dylib $LIB_DIR/inkscape/libinkscape_base.dylib
