@@ -37,6 +37,6 @@
 ../share/extensions/summersnight.py
 ../share/extensions/voronoi2svg.py
 ../share/extensions/web_set_att.py
+../share/extensions/web_transmit_att.py
 ../share/extensions/webslicer_create_group.py
 ../share/extensions/webslicer_export.py
-../share/extensions/web_transmit_att.py
