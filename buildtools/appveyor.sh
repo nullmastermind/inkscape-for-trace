@@ -78,8 +78,9 @@ PATH= inkscape/inkscape.exe -V >/dev/null || error "installed executable won't r
 err=$(PATH= inkscape/inkscape.exe -V 2>&1 >/dev/null)
 if [ -n "$err" ]; then warning "installed executable produces output on stderr:"; echo "$err"; fi
 # check if the uninstalled executable works
-INKSCAPE_DATADIR=../share bin/inkscape.exe -V >/dev/null || error "uninstalled executable won't run"
-err=$(INKSCAPE_DATADIR=../share bin/inkscape.exe -V 2>&1 >/dev/null)
+ninja inkscape_datadir_symlink
+INKSCAPE_DATADIR=inkscape_datadir bin/inkscape.exe -V >/dev/null || error "uninstalled executable won't run"
+err=$(INKSCAPE_DATADIR=inkscape_datadir bin/inkscape.exe -V 2>&1 >/dev/null)
 if [ -n "$err" ]; then warning "uninstalled executable produces output on stderr:"; echo "$err"; fi
 # run tests
 ninja check || error "tests failed"

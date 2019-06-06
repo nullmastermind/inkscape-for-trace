@@ -28,7 +28,8 @@
 
 #include "prefix.h"
 
-#ifdef ENABLE_BINRELOC
+#ifdef ENABLE_BINRELOC // TODO: Should we drop binreloc in favor of OS-specific relocation code
+                       //       in append_inkscape_datadir() like we already do for win32?
 /* The way that we're building now is with a shared library between Inkscape
    and Inkview, and the code will find the path to the library then. But we
    don't really want that. This prefix then pulls things out of the lib directory
@@ -58,33 +59,7 @@
 #    define CREATE_GRADIENTSDIR   BR_DATADIR( INKSCAPE_LIBPREFIX "/share/create/gradients/gimp" )
 #    define CREATE_PALETTESDIR    BR_DATADIR( INKSCAPE_LIBPREFIX "/share/create/swatches" )
 #    define CREATE_PATTERNSDIR    BR_DATADIR( INKSCAPE_LIBPREFIX "/share/create/patterns/vector" )
-#else
-#  ifdef _WIN32
-#    define INKSCAPE_DATADIR_REAL append_inkscape_datadir()
-#    define INKSCAPE_ATTRRELDIR   append_inkscape_datadir("attributes")
-#    define INKSCAPE_DOCDIR       append_inkscape_datadir("doc")
-#    define INKSCAPE_EXAMPLESDIR  append_inkscape_datadir("examples")
-#    define INKSCAPE_EXTENSIONDIR append_inkscape_datadir("extensions")
-#    define INKSCAPE_FILTERDIR    append_inkscape_datadir("filters")
-#    define INKSCAPE_FONTSDIR     append_inkscape_datadir("fonts")
-#    define INKSCAPE_GRADIENTSDIR append_inkscape_datadir("gradients")
-#    define INKSCAPE_KEYSDIR      append_inkscape_datadir("keys")
-#    define INKSCAPE_ICONSDIR     append_inkscape_datadir("icons")
-#    define INKSCAPE_PIXMAPSDIR   append_inkscape_datadir("pixmaps")
-#    define INKSCAPE_MARKERSDIR   append_inkscape_datadir("markers")
-#    define INKSCAPE_PALETTESDIR  append_inkscape_datadir("palettes")
-#    define INKSCAPE_PATTERNSDIR  append_inkscape_datadir("patterns")
-#    define INKSCAPE_SCREENSDIR   append_inkscape_datadir("screens")
-#    define INKSCAPE_SYMBOLSDIR   append_inkscape_datadir("symbols")
-#    define INKSCAPE_THEMEDIR     append_inkscape_datadir("themes")
-#    define INKSCAPE_TUTORIALSDIR append_inkscape_datadir("tutorials")
-#    define INKSCAPE_TEMPLATESDIR append_inkscape_datadir("templates")
-#    define INKSCAPE_UIDIR        append_inkscape_datadir("ui")
-//CREATE V0.1  WIN32 support
-#    define CREATE_GRADIENTSDIR   append_inkscape_datadir("create\\gradients\\gimp")
-#    define CREATE_PALETTESDIR    append_inkscape_datadir("create\\swatches")
-#    define CREATE_PATTERNSDIR    append_inkscape_datadir("create\\patterns\\vector")
-#  elif defined ENABLE_OSX_APP_LOCATIONS // TODO: Is ENABLE_OSX_APP_LOCATIONS still in use?
+#elif defined ENABLE_OSX_APP_LOCATIONS // TODO: Is ENABLE_OSX_APP_LOCATIONS still in use?
 #    define INKSCAPE_DATADIR_REAL "Contents/Resources/share"
 #    define INKSCAPE_ATTRRELDIR   "Contents/Resources/share/inkscape/attributes"
 #    define INKSCAPE_DOCDIR       "Contents/Resources/share/inkscape/doc"
@@ -109,7 +84,7 @@
 #    define CREATE_GRADIENTSDIR  "/Library/Application Support/create/gradients/gimp"
 #    define CREATE_PALETTESDIR   "/Library/Application Support/create/swatches"
 #    define CREATE_PATTERNSDIR   "/Library/Application Support/create/patterns/vector"
-#  else
+#else
 #    define INKSCAPE_DATADIR_REAL append_inkscape_datadir()
 #    define INKSCAPE_ATTRRELDIR   append_inkscape_datadir("inkscape/attributes")
 #    define INKSCAPE_BINDDIR      append_inkscape_datadir("inkscape/bind")
@@ -135,7 +110,6 @@
 #    define CREATE_GRADIENTSDIR   append_inkscape_datadir("create/gradients/gimp")
 #    define CREATE_PALETTESDIR    append_inkscape_datadir("create/swatches")
 #    define CREATE_PATTERNSDIR    append_inkscape_datadir("create/patterns/vector")
-#  endif
 #endif
 
 

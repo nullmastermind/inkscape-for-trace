@@ -187,11 +187,22 @@ if(GMOCK_PRESENT)
     enable_testing()
     set(CMAKE_CTEST_COMMAND ctest -V)
     if(WIN32)
-        set(CMAKE_CTEST_ENV INKSCAPE_DATADIR=${CMAKE_CURRENT_SOURCE_DIR}/share)
+        set(CMAKE_CTEST_ENV INKSCAPE_DATADIR=${CMAKE_BINARY_DIR}/inkscape_datadir)
     endif()
     add_subdirectory(testfiles EXCLUDE_FROM_ALL)
     add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} DEPENDS tests)
     add_dependencies(check inkscape)
+
+    if(WIN32)
+        # create symlink "inkscape_datadir" to use as INKSCAPE_DATADIR
+        file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/share inkscape_share)
+        add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/inkscape_datadir
+            COMMAND mkdir inkscape_datadir
+            COMMAND mklink /D inkscape_datadir\\inkscape ${inkscape_share}
+        )
+        add_custom_target(inkscape_datadir_symlink DEPENDS ${CMAKE_BINARY_DIR}/inkscape_datadir)
+        add_dependencies(check inkscape_datadir_symlink)
+    endif()
 endif()
 
 # -----------------------------------------------------------------------------
