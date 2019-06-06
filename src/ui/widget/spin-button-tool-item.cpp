@@ -10,6 +10,7 @@
 #include <utility>
 
 #include "spinbutton.h"
+#include "ui/icon-loader.h"
 
 namespace Inkscape {
 namespace UI {
@@ -406,7 +407,7 @@ void
 SpinButtonToolItem::set_icon(const Glib::ustring& icon_name)
 {
     _hbox->remove(*_label);
-    _icon = Gtk::manage(new Gtk::Image(icon_name, Gtk::ICON_SIZE_SMALL_TOOLBAR));
+    _icon = Gtk::manage(sp_get_icon_image(icon_name, Gtk::ICON_SIZE_SMALL_TOOLBAR));
 
     if(_icon) {
         _hbox->pack_start(*_icon);
