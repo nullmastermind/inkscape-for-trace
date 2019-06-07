@@ -970,7 +970,7 @@ TextToolbar::script_changed(Gtk::ToggleToolButton *btn)
 
     // Called by Superscript or Subscript button?
     auto name = btn->get_name();
-    gint prop = (strcmp(name.c_str(), "TextSuperscriptAction") == 0) ? 0 : 1;
+    gint prop = (btn == _superscript_item) ? 0 : 1;
 
 #ifdef DEBUG_TEXT
     std::cout << "TextToolbar::script_changed: " << prop << std::endl;
