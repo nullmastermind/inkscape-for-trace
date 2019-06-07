@@ -164,7 +164,7 @@ ComboBoxEntryToolItem::ComboBoxEntryToolItem(Glib::ustring name,
         g_signal_connect( G_OBJECT(child), "key-press-event", G_CALLBACK(keypress_cb), this );
     }
 
-    set_tooltip(tooltip.c_str());
+    set_tooltip(_tooltip.c_str());
 
     show_all();
 }
