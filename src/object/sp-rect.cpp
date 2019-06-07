@@ -274,6 +274,9 @@ void SPRect::set_shape() {
         c->lineto(x + w, y + h);
         c->lineto(x + 0.0, y + h);
     }
+
+    c->closepath();
+
     /* Reset the shape's curve to the "original_curve"
     * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
     SPCurve * before = this->getCurveBeforeLPE();
