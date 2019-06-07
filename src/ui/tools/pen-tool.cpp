@@ -1904,11 +1904,6 @@ bool PenTool::_undoLastPoint() {
     } else {
         // Reset red curve
         this->red_curve->reset();
-        // Destroy topmost green bpath
-        if (!this->green_bpaths.empty()) {
-            sp_canvas_item_destroy(this->green_bpaths.back());
-            this->green_bpaths.pop_back();
-        }
         // Get last segment
         if ( this->green_curve->is_unset() ) {
             g_warning("pen_handle_key_press, case GDK_KP_Delete: Green curve is empty");
@@ -1932,7 +1927,7 @@ bool PenTool::_undoLastPoint() {
         Geom::Point const pt( (this->npoints < 4) ? crv->finalPoint() : this->p[3] );
 
         this->npoints = 2;
-        // delete the last segment of the green curve
+        // delete the last segment of the green curve and green bpath
         if (this->green_curve->get_segment_count() == 1) {
             this->npoints = 5;
             if (!this->green_bpaths.empty()) {
@@ -1942,6 +1937,12 @@ bool PenTool::_undoLastPoint() {
             this->green_curve->reset();
         } else {
             this->green_curve->backspace();
+            if (this->green_bpaths.size() > 1) {
+                sp_canvas_item_destroy(this->green_bpaths.back());
+                this->green_bpaths.pop_back();
+            } else if (this->green_bpaths.size() == 1) {
+                sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(green_bpaths.back()), this->green_curve, true);
+            }
         }
 
         // assign the value of this->p[1] to the opposite of the green line last segment
