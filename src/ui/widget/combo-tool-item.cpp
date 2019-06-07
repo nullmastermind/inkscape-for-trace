@@ -158,7 +158,7 @@ ComboToolItem::on_create_menu_proxy()
 {
     if (_menuitem == nullptr) {
 
-        _menuitem = Gtk::manage (new Gtk::MenuItem);
+        _menuitem = Gtk::manage (new Gtk::MenuItem(_group_label));
         Gtk::Menu *menu = Gtk::manage (new Gtk::Menu);
 
         Gtk::RadioButton::Group group;
