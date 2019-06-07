@@ -89,7 +89,7 @@ InkviewApplication::on_startup()
     Gtk::Application::on_startup();
 
     // Inkscape::Application should disappear!
-    Inkscape::Application::create(nullptr, true); // argv appears to not be used.
+    Inkscape::Application::create(true);
 }
 
 

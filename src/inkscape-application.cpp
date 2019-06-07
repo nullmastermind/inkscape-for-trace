@@ -569,7 +569,7 @@ template<>
 void
 ConcreteInkscapeApplication<Gio::Application>::on_startup2()
 {
-    Inkscape::Application::create(nullptr, false);
+    Inkscape::Application::create(false);
 }
 
 #ifdef GDK_WINDOWING_QUARTZ
@@ -582,7 +582,7 @@ void
 ConcreteInkscapeApplication<Gtk::Application>::on_startup2()
 {
     // This should be completely rewritten.
-    Inkscape::Application::create(nullptr, _with_gui); // argv appears to not be used.
+    Inkscape::Application::create(_with_gui);
 
     if (!_with_gui) {
         return;

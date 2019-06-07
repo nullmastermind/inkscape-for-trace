@@ -26,7 +26,7 @@ void DocPerCaseTest::SetUpTestCase()
     if ( !Inkscape::Application::exists() )
     {
         // Create the global inkscape object.
-        Inkscape::Application::create("", false);
+        Inkscape::Application::create(false);
     }
 
     _doc = SPDocument::createNewDoc( NULL, TRUE, true );

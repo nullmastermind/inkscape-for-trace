@@ -40,7 +40,7 @@ T* createSuiteAndDocument( void (*fun)(T*&) )
     if ( !Inkscape::Application::exists() )
     {
         // Create the global inkscape object.
-        Inkscape::Application::create("", false);
+        Inkscape::Application::create(false);
     }
 
     SPDocument* tmp = SPDocument::createNewDoc( NULL, TRUE, true );

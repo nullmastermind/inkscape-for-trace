@@ -76,7 +76,7 @@ class Application {
 public:
     static Application& instance();
     static bool exists();
-    static void create(const char* argv0, bool use_gui);
+    static void create(bool use_gui);
     
     // returns the mask of the keyboard modifier to map to Alt, zero if no mapping
     // Needs to be a guint because gdktypes.h does not define a 'no-modifier' value
@@ -91,15 +91,12 @@ public:
     bool use_gui() const { return _use_gui; }
     void use_gui(gboolean guival) { _use_gui = guival; }
 
-    char const* argv0() const { return _argv0; }
-    void argv0(char const *);
-
     // no setter for this -- only we can control this variable
     static bool isCrashing() { return _crashIsHappening; }
 
     // useful functions
     void autosave_init();
-    void application_init (const gchar *argv0, gboolean use_gui);
+    void application_init (gboolean use_gui);
     void load_config (const gchar *filename, Inkscape::XML::Document *config, const gchar *skeleton, 
                       unsigned int skel_size, const gchar *e_notreg, const gchar *e_notxml, 
                       const gchar *e_notsp, const gchar *warn);
@@ -212,7 +209,7 @@ public:
   private:
     static Inkscape::Application * _S_inst;
 
-    Application(const char* argv0, bool use_gui);
+    Application(bool use_gui);
     ~Application();
 
     Application(Application const&); // no copy
@@ -228,7 +225,6 @@ public:
     bool _dialogs_toggle;
     guint _mapalt;
     guint _trackalt;
-    char * _argv0;
     static bool _crashIsHappening;
     bool _use_gui;
     gint _pdf_page;

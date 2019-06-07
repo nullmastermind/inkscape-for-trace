@@ -161,10 +161,10 @@ Application::operator &() const
  *  Creates a new Inkscape::Application global object.
  */
 void
-Application::create(const char *argv0, bool use_gui)
+Application::create(bool use_gui)
 {
    if (!Application::exists()) {
-        new Application(argv0, use_gui);
+        new Application(use_gui);
     } else {
        // g_assert_not_reached();  Can happen with InkscapeApplication
     }
@@ -361,11 +361,6 @@ void Application::autosave_init()
     }
 }
 
-void Application::argv0(char const* argv)
-{
-    _argv0 = g_strdup(argv);
-}
-
 /**
  * \brief Add our CSS style sheets
  */
@@ -489,7 +484,7 @@ Application::add_gtk_css()
  *  \pre Application::_S_inst == NULL
  */
 
-Application::Application(const char* argv, bool use_gui) :
+Application::Application(bool use_gui) :
     _menus(nullptr),
     _desktops(nullptr),
     refCount(1),
@@ -508,8 +503,6 @@ Application::Application(const char* argv, bool use_gui) :
 #ifndef _WIN32
     bus_handler  = signal (SIGBUS,  Application::crash_handler);
 #endif
-
-    _argv0 = g_strdup(argv);
 
     // \TODO: this belongs to Application::init but if it isn't here
     // then the Filters and Extensions menus don't work.
@@ -603,11 +596,6 @@ Application::~Application()
         _menus = nullptr;
     }
 
-    if (_argv0) {
-        g_free(_argv0);
-        _argv0 = nullptr;
-    }
-
     _S_inst = nullptr; // this will probably break things
 
     refCount = 0;
@@ -668,7 +656,6 @@ Application::crash_handler (int /*signum*/)
 
     gint count = 0;
     gchar *curdir = g_get_current_dir(); // This one needs to be freed explicitly
-    gchar *inkscapedir = g_path_get_dirname(INKSCAPE._argv0); // Needs to be freed
     std::vector<gchar *> savednames;
     std::vector<gchar *> failednames;
     for (std::map<SPDocument*,int>::iterator iter = INKSCAPE._document_set.begin(), e = INKSCAPE._document_set.end();
@@ -714,7 +701,6 @@ Application::crash_handler (int /*signum*/)
                 g_get_home_dir(),
                 g_get_tmp_dir(),
                 curdir,
-                inkscapedir
             };
             FILE *file = nullptr;
             for(auto & location : locations) {
@@ -740,7 +726,6 @@ Application::crash_handler (int /*signum*/)
         }
     }
     g_free(curdir);
-    g_free(inkscapedir);
 
     if (!savednames.empty()) {
         fprintf (stderr, "\nEmergency save document locations:\n");

@@ -457,10 +457,6 @@ char *homedir_path(const char *filename)
     static const gchar *homedir = nullptr;
     homedir = g_get_home_dir();
 
-    // I suspect this is for handling inkscape app packages
-    /*if (!homedir && Application::exists()) {
-        homedir = g_path_get_dirname(Application::instance()._argv0);
-    }*/
     return g_build_filename(homedir, filename, NULL);
 }
 
