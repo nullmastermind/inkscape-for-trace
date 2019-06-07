@@ -126,6 +126,8 @@ ComboToolItem::populate_combobox()
         _combobox->add_attribute (*cell, "sensitive", columns.col_sensitive);
     }
 
+    set_tooltip_text(_tooltip);
+    _combobox->set_tooltip_text(_tooltip);
     _combobox->set_active (_active);
 }
 
