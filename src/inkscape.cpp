@@ -744,7 +744,7 @@ Application::crash_handler (int /*signum*/)
     Inkscape::Preferences::unload(false);
 
     fprintf (stderr, "Emergency save completed. Inkscape will close now.\n");
-    fprintf (stderr, "If you can reproduce this crash, please file a bug at www.inkscape.org\n");
+    fprintf (stderr, "If you can reproduce this crash, please file a bug at https://inkscape.org/report\n");
     fprintf (stderr, "with a detailed description of the steps leading to the crash, so we can fix it.\n");
 
     /* Show nice dialog box */
@@ -809,6 +809,8 @@ Application::crash_handler (int /*signum*/)
 
     tracker.clear();
     Logger::shutdown();
+
+    fflush(stderr); // make sure buffers are empty before crashing (otherwise output might be suppressed)
 
     /* on exit, allow restored signal handler to take over and crash us */
 }
