@@ -252,6 +252,9 @@ PencilToolbar::mode_changed(int mode)
     if (_simplify) {
         _simplify->set_visible(visible);
     }
+    if (tools_isactive(_desktop, TOOLS_FREEHAND_PEN)) {
+        SP_PEN_CONTEXT(_desktop->event_context)->setPolylineMode();
+    }
 }
 
 /* This is used in generic functions below to share large portions of code between pen and pencil tool */

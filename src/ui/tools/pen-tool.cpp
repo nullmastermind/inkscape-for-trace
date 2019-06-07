@@ -429,7 +429,7 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
                         // This is allowed, if we just canceled curve
                     case PenTool::POINT:
                         if (this->npoints == 0) {
-                            this->setPolylineMode();
+                            this->_bsplineSpiroColor();
                             Geom::Point p;
                             if ((bevent.state & GDK_CONTROL_MASK) && (this->polylines_only || this->polylines_paraxial)) {
                                 p = event_dt;
@@ -508,7 +508,6 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
                                 this->_setSubsequentPoint(p, true);
                             }
                         }
-                        this->_bsplineSpiroColor();
                         // avoid the creation of a control point so a node is created in the release event
                         this->state = (this->spiro || this->bspline || this->polylines_only) ? PenTool::POINT : PenTool::CONTROL;
                         ret = true;
