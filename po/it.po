@@ -5686,7 +5686,7 @@ msgid "Bitmap"
 msgstr "Bitmap"
 
 msgid "Bitmap import/open mode:"
-msgstr ""
+msgstr "Modalità importazione/apertura bitmap:"
 
 msgid "Bitmap options"
 msgstr "Opzioni bitmap"
@@ -7231,14 +7231,12 @@ msgstr "Colore di una guida quando è sotto il mouse"
 msgid "Color of guidelines"
 msgstr "Colore delle linee guida"
 
-#, fuzzy
 msgid ""
 "Color of the canvas background. Note: opacity is ignored except when "
 "exporting to bitmap."
 msgstr ""
 "Colore di sfondo della pagina. Nota: l'impostazione della trasparenza è "
-"ignorata durante la modifica se 'Sfondo a scacchiera' non è selezionato, ma "
-"utilizzata nell'esportazione bitmap."
+"ignorata ad eccezione nell'esportazione come bitmap."
 
 msgid "Color of the major (highlighted) grid lines"
 msgstr "Colore delle linee principali (evidenziate) della griglia"
@@ -9192,20 +9190,16 @@ msgstr "_Risoluzione predefinita per l'esportazione:"
 msgid "Default grid settings"
 msgstr "Impostazioni predefinite griglia"
 
-#, fuzzy
 msgid "Default image resolution (in dots per inch) in the Export dialog"
 msgstr ""
-"Risoluzione predefinita (in punti per pollice) delle bitmap nella "
-"sottofinestra Esporta"
+"Risoluzione predefinita (in dpi) delle bitmap nella sottofinestra Esporta"
 
 msgid "Default import resolution"
 msgstr "Risoluzione predefinita per l'importazione"
 
-#, fuzzy
 msgid "Default import resolution (in dots per inch) for bitmap and SVG import"
 msgstr ""
-"Risoluzione predefinita (in punti per pollice) delle bitmap nella "
-"sottofinestra Esporta"
+"Risoluzione predefinita (in dpi) per l'importazione delle bitmap e SVG"
 
 msgid "Default interface setup"
 msgstr "Impostazione interfaccia predefinita"
@@ -10761,9 +10755,8 @@ msgstr "Attiva indicatore aggancio"
 msgid "Enable snapping"
 msgstr "Attiva aggancio"
 
-#, fuzzy
 msgid "Enable snapping in new documents"
-msgstr "Documento senza nome"
+msgstr "Attiva aggancio nei nuovi documenti"
 
 msgid "Enable the left and right deformation paths"
 msgstr "Attiva i tracciati di deformazione sinistro e destro"
@@ -13733,11 +13726,9 @@ msgstr "Se attivo, il canale alpha non verrà alterato da questo filtro."
 msgid "If set, this will replace DPI."
 msgstr "Se impostato, sostituirà il valore DPI."
 
-#, fuzzy
 msgid "If set, use a colored checkerboard for the canvas background"
 msgstr ""
-"Se attivo, usa una scacchiera come sfondo, altrimenti usa il colore di "
-"sfondo opaco."
+"Se attivo, usa una scacchiera colorata come sfondo"
 
 msgid ""
 "If set, write the CSS name of the color when available (e.g. 'red' or "
@@ -14095,9 +14086,8 @@ msgstr ""
 msgid "Incircle"
 msgstr "Incerchio"
 
-#, fuzzy
 msgid "Include"
-msgstr "Includi _nascosti"
+msgstr "Includi"
 
 msgid "Include SVG image as editable object(s) in the current file"
 msgstr "Include SVG come oggetto modificabile nel file attuale"
@@ -15864,9 +15854,8 @@ msgstr "Blocca lunghezza"
 msgid "Lock length to current distance"
 msgstr "Blocca la lunghezza alla distanza attuale"
 
-#, fuzzy
 msgid "Lock margins"
-msgstr "Margini layout"
+msgstr "Blocca margini"
 
 msgid "Lock object"
 msgstr "Blocca oggetto"
@@ -16286,7 +16275,7 @@ msgstr "Rendi intero"
 #
 # File: ../src/display/canvas-grid.cpp, line: 306
 msgid "Makes the grid available for working with on the canvas."
-msgstr ""
+msgstr "Abilita la griglia sull'area di lavoro."
 
 msgid "Malayalam"
 msgstr "Malayalam"
@@ -22170,7 +22159,7 @@ msgid "SVG format with Inkscape extensions"
 msgstr "Formato SVG con estensioni di Inkscape"
 
 msgid "SVG import mode:"
-msgstr ""
+msgstr "Modalità importazione SVG:"
 
 msgid "SVG output"
 msgstr "Output SVG"
@@ -24538,9 +24527,8 @@ msgstr "Aggancia ai nodi angolari, incl. angoli dei rettangoli"
 msgid "Snap d_istance"
 msgstr "D_istanza di aggancio"
 
-#, fuzzy
 msgid "Snap defaults"
-msgstr "Imposta come _predefinito"
+msgstr "Aggancio predefinito"
 
 msgid "Snap dist_ance"
 msgstr "Dist_anza di aggancio"
