@@ -347,7 +347,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _outer_style_item->set_icon_name(INKSCAPE_ICON("text_outer_style"));
         add(*_outer_style_item);
         _outer_style_item->signal_toggled().connect(sigc::mem_fun(*this, &TextToolbar::outer_style_changed));
-        _outer_style_item->set_active(prefs->getBool("/tools/text/outer_style", false));
+        // need to set_active status *after* a bunch of other widgets. See end of this function.
     }
 
     /* Font size */
@@ -735,6 +735,9 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         add(*_direction_item);
         _direction_item->signal_changed_after().connect(sigc::mem_fun(*this, &TextToolbar::direction_changed));
     }
+
+    // Text outer style (continued)
+    _outer_style_item->set_active(prefs->getBool("/tools/text/outer_style", false));
 
     show_all();
 
