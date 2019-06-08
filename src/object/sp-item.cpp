@@ -176,7 +176,7 @@ guint32 SPItem::highlight_color() const {
         else
         {
             static Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            return prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff) | 0x00000000;
+            return prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff);
         }
     }
 }

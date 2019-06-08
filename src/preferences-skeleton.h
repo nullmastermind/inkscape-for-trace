@@ -133,7 +133,7 @@ R"=====(
                        show_sample_in_list="1" use_svg2="0"
                   style="fill:black;fill-opacity:1;stroke:none;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;" selcue="1"/>
 
-    <eventcontext id="nodes" selcue="1" gradientdrag="1" highlight_color="4278190335" pathflash_enabled="1" pathflash_unselected="0" pathflash_timeout="500" show_handles="1" show_outline="0"
+    <eventcontext id="nodes" selcue="1" gradientdrag="1" highlight_color="0xff0000ff" pathflash_enabled="1" pathflash_unselected="0" pathflash_timeout="500" show_handles="1" show_outline="0"
       sculpting_profile="1" single_node_transform_handles="0" show_transform_handles="0" live_outline="1" live_objects="1" show_helperpath="0" x="0" y="0" edit_clipping_paths="0" edit_masks="0" />
     <eventcontext id="tweak" selcue="0" gradientdrag="0" show_handles="0" width="0.2" force="0.2" fidelity="0.5" usepressure="1" style="fill:red;stroke:none;" usecurrent="0"/>
     <eventcontext id="spray" selcue="1" gradientdrag="0" usepressure="1" width="15" population="70" mode="1" rotation_variation="0" scale_variation="0" standard_deviation="70" mean="0"/>

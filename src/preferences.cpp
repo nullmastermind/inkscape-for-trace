@@ -783,7 +783,23 @@ int Preferences::_extractInt(Entry const &v)
         v.value_int = 0;
         return false;
     } else {
-        v.value_int = (int)strtol(s, nullptr, 0);
+        int val = 0;
+
+        // TODO: We happily save unsigned integers (notably RGBA values) as signed integers and overflow as needed.
+        //       We should consider adding an unsigned integer type to preferences or use HTML colors where appropriate
+        //       (the latter would breaks backwards compatibility, though)
+        errno = 0;
+        val = (int)strtol(s, nullptr, 0);
+        if (errno == ERANGE) {
+            errno = 0;
+            val = (int)strtoul(s, nullptr, 0);
+            if (errno == ERANGE) {
+                g_warning("Integer preference out of range: '%s' (raw value: %s)", v._pref_path.c_str(), s);
+                val = 0;
+            }
+        }
+
+        v.value_int = val;
         return v.value_int;
     }
 }
