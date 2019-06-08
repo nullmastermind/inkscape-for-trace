@@ -953,7 +953,6 @@ void SelectorDialog::_removeClass(SPObject *obj, const Glib::ustring &className,
                 classAttr.erase(i, tok.length());
             } else {
                 notfound = true;
->>>>>>> Fixes on selector dialog based in LGM input
             }
         }
         if (all && notfound) {
