@@ -68,14 +68,14 @@ appveyor SetVariable -Name APPVEYOR_SAVE_CACHE_ON_ERROR -Value true # build succ
 # install
 message "--- Installing the project"
 ninja install || error "installation failed"
-python  ../buildtools/msys2checkdeps.py check inkscape/ || error "missing libraries in installed project"
+python  ../buildtools/msys2checkdeps.py check inkscape -w inkscape/bin || error "missing libraries in installed project"
 
 # test
 message "--- Running tests"
 # check if the installed executable works
-inkscape/inkscape.exe -V || error "installed executable won't run"
-PATH= inkscape/inkscape.exe -V >/dev/null || error "installed executable won't run with empty PATH (missing dependencies?)"
-err=$(PATH= inkscape/inkscape.exe -V 2>&1 >/dev/null)
+inkscape/bin/inkscape.exe -V || error "installed executable won't run"
+PATH= inkscape/bin/inkscape.exe -V >/dev/null || error "installed executable won't run with empty PATH (missing dependencies?)"
+err=$(PATH= inkscape/bin/inkscape.exe -V 2>&1 >/dev/null)
 if [ -n "$err" ]; then warning "installed executable produces output on stderr:"; echo "$err"; fi
 # check if the uninstalled executable works
 ninja inkscape_datadir_symlink
