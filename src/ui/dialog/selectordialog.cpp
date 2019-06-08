@@ -28,8 +28,8 @@
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
 
-#include <regex>
 #include <map>
+#include <regex>
 #include <utility>
 
 //#define DEBUG_SELECTORDIALOG
@@ -43,9 +43,12 @@ using Inkscape::XML::AttributeRecord;
  * This macro is used to remove spaces around selectors or any strings when
  * parsing is done to update XML style element or row labels in this dialog.
  */
-#define REMOVE_SPACES(x) x.erase(0, x.find_first_not_of(' ')); \
-    if(x.size() && x[0] == ',') x.erase(0, 1); \
-    if(x.size() && x[x.size()-1] == ',') x.erase(x.size()-1, 1); \
+#define REMOVE_SPACES(x)                                                                                               \
+    x.erase(0, x.find_first_not_of(' '));                                                                              \
+    if (x.size() && x[0] == ',')                                                                                       \
+        x.erase(0, 1);                                                                                                 \
+    if (x.size() && x[x.size() - 1] == ',')                                                                            \
+        x.erase(x.size() - 1, 1);                                                                                      \
     x.erase(x.find_last_not_of(' ') + 1);
 
 namespace Inkscape {
@@ -183,19 +186,17 @@ SelectorDialog::TreeStore::row_draggable_vfunc(const Gtk::TreeModel::Path& path)
     const_iterator iter = unconstThis->get_iter(path);
     if (iter) {
         Gtk::TreeModel::Row row = *iter;
-        bool is_draggable =
-            row[_selectordialog->_mColumns._colType] == SELECTOR;
+        bool is_draggable = row[_selectordialog->_mColumns._colType] == SELECTOR;
         return is_draggable;
     }
     return Gtk::TreeStore::row_draggable_vfunc(path);
 }
 
-void
-SelectorDialog::fixCSSSelectors(Glib::ustring &selector)
+void SelectorDialog::fixCSSSelectors(Glib::ustring &selector)
 {
     REMOVE_SPACES(selector);
-    Glib::ustring my_selector = selector + " {";  // Parsing fails sometimes without '{'. Fix me
-    CRSelector *cr_selector = cr_selector_parse_from_buf ((guchar*)my_selector.c_str(), CR_UTF_8);
+    Glib::ustring my_selector = selector + " {"; // Parsing fails sometimes without '{'. Fix me
+    CRSelector *cr_selector = cr_selector_parse_from_buf((guchar *)my_selector.c_str(), CR_UTF_8);
     selector = Glib::ustring("");
     CRSelector const *cur = nullptr;
     for (cur = cr_selector; cur; cur = cur->next) {
@@ -221,7 +222,7 @@ SelectorDialog::fixCSSSelectors(Glib::ustring &selector)
             Glib::ustring tag = Glib::ustring("");
             if (toparse[0] != '.' && toparse[0] != '#') {
                 auto i = std::min(toparse.find("#"), toparse.find("."));
-                tag = toparse.substr(0,i);
+                tag = toparse.substr(0, i);
                 if (!SPAttributeRelSVG::isSVGElement(tag)) {
                     continue;
                 }
@@ -647,7 +648,7 @@ void SelectorDialog::_updateWatchers()
 
     _updating = false;
 }
-/* 
+/*
 void sp_get_selector_active(Glib::ustring &selector)
 {
     std::vector<Glib::ustring> tokensplus = Glib::Regex::split_simple("[ ]+", selector);
@@ -674,10 +675,9 @@ void sp_get_selector_active(Glib::ustring &selector)
     }
 } */
 
-Glib::ustring
-sp_get_selector_classes(Glib::ustring selector)//, SelectorType selectortype,  Glib::ustring id = "")
+Glib::ustring sp_get_selector_classes(Glib::ustring selector) //, SelectorType selectortype,  Glib::ustring id = "")
 {
-    std::pair<Glib::ustring,Glib::ustring> result;
+    std::pair<Glib::ustring, Glib::ustring> result;
     std::vector<Glib::ustring> tokensplus = Glib::Regex::split_simple("[ ]+", selector);
     selector = tokensplus[tokensplus.size() - 1];
     // Erase any comma/space
@@ -686,7 +686,7 @@ sp_get_selector_classes(Glib::ustring selector)//, SelectorType selectortype,  G
     selector = Glib::ustring("");
     if (toparse[0] != '.' && toparse[0] != '#') {
         auto i = std::min(toparse.find("#"), toparse.find("."));
-        Glib::ustring tag = toparse.substr(0,i);
+        Glib::ustring tag = toparse.substr(0, i);
         if (!SPAttributeRelSVG::isSVGElement(tag)) {
             return selector;
         }
@@ -705,13 +705,13 @@ sp_get_selector_classes(Glib::ustring selector)//, SelectorType selectortype,  G
     if (i != std::string::npos) {
         toparse.insert(i, "#");
         if (i) {
-            Glib::ustring post = toparse.substr(0,i);
-            Glib::ustring pre = toparse.substr(i, toparse.size()-i);
+            Glib::ustring post = toparse.substr(0, i);
+            Glib::ustring pre = toparse.substr(i, toparse.size() - i);
             toparse = pre + post;
         }
         auto k = toparse.find(".");
         if (k != std::string::npos) {
-            toparse = toparse.substr(k, toparse.size()-k);
+            toparse = toparse.substr(k, toparse.size() - k);
         }
     }
     return toparse;
@@ -727,16 +727,15 @@ void SelectorDialog::_addToSelector(Gtk::TreeModel::Row row)
     if (*row) {
         // Store list of selected elements on desktop (not to be confused with selector).
         _updating = true;
-        Inkscape::Selection* selection = getDesktop()->getSelection();
-        std::vector<SPObject *> toAddObjVec( selection->objects().begin(),
-                                        selection->objects().end() );
+        Inkscape::Selection *selection = getDesktop()->getSelection();
+        std::vector<SPObject *> toAddObjVec(selection->objects().begin(), selection->objects().end());
         Glib::ustring multiselector = row[_mColumns._colSelector];
         std::vector<SPObject *> objVec = _getObjVec(multiselector);
-        row[_mColumns._colObj]      = objVec;
+        row[_mColumns._colObj] = objVec;
         row[_mColumns._colExpand] = true;
         std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[,]+", multiselector);
         for (auto &obj : toAddObjVec) {
-            Glib::ustring id = (obj->getId()?obj->getId():"");
+            Glib::ustring id = (obj->getId() ? obj->getId() : "");
             for (auto tok : tokens) {
                 Glib::ustring clases = sp_get_selector_classes(tok);
                 if (!clases.empty()) {
@@ -770,7 +769,7 @@ void SelectorDialog::_addToSelector(Gtk::TreeModel::Row row)
             childrow[_mColumns._colObj] = std::vector<SPObject *>(1, obj);
             childrow[_mColumns._colProperties] = ""; // Unused
             childrow[_mColumns._colVisible] = true;  // Unused
-        }  
+        }
         objVec = _getObjVec(multiselector);
         row[_mColumns._colSelector] = multiselector;
         row[_mColumns._colObj] = objVec;
@@ -811,7 +810,7 @@ void SelectorDialog::_removeFromSelector(Gtk::TreeModel::Row row)
                 }
                 auto i = tok.find(row[_mColumns._colSelector]);
                 if (i == std::string::npos) {
-                    selector = selector.empty()? tok : selector + "," + tok;
+                    selector = selector.empty() ? tok : selector + "," + tok;
                 }
             }
             REMOVE_SPACES(selector);
@@ -821,8 +820,8 @@ void SelectorDialog::_removeFromSelector(Gtk::TreeModel::Row row)
             } else {
                 _store->erase(row);
                 parent[_mColumns._colSelector] = selector;
-                parent[_mColumns._colExpand]   = true;
-                parent[_mColumns._colObj]      = _getObjVec(selector);
+                parent[_mColumns._colExpand] = true;
+                parent[_mColumns._colObj] = _getObjVec(selector);
             }
         }
         _updating = false;
@@ -888,7 +887,7 @@ std::vector<SPObject *> SelectorDialog::_getObjVec(Glib::ustring selector) {
  * @param class: class to insert
  * Insert a class name into objects' 'class' attribute.
  */
-void SelectorDialog::_insertClass(const std::vector<SPObject *>& objVec, const Glib::ustring& className)
+void SelectorDialog::_insertClass(const std::vector<SPObject *> &objVec, const Glib::ustring &className)
 {
     for (auto& obj: objVec) {
         _insertClass(obj, className);
@@ -900,7 +899,7 @@ void SelectorDialog::_insertClass(const std::vector<SPObject *>& objVec, const G
  * @param class: class to insert
  * Insert a class name into objects' 'class' attribute.
  */
-void SelectorDialog::_insertClass(SPObject * obj, const Glib::ustring& className) 
+void SelectorDialog::_insertClass(SPObject *obj, const Glib::ustring &className)
 {
     Glib::ustring classAttr = Glib::ustring("");
     if (obj->getRepr()->attribute("class")) {
@@ -912,7 +911,7 @@ void SelectorDialog::_insertClass(SPObject * obj, const Glib::ustring& className
     std::vector<Glib::ustring> tokensplus = Glib::Regex::split_simple("[\\s]+", classAttr);
     for (auto tok : tokens) {
         bool exist = false;
-        for (auto& tokenplus: tokensplus) {
+        for (auto &tokenplus : tokensplus) {
             if (tokenplus == tok) {
                 exist = true;
             }
@@ -929,9 +928,9 @@ void SelectorDialog::_insertClass(SPObject * obj, const Glib::ustring& className
  * @param class: class to insert
  * Insert a class name into objects' 'class' attribute.
  */
-void SelectorDialog::_removeClass(const std::vector<SPObject *>& objVec, const Glib::ustring& className, bool all)
+void SelectorDialog::_removeClass(const std::vector<SPObject *> &objVec, const Glib::ustring &className, bool all)
 {
-    for (auto& obj: objVec) {
+    for (auto &obj : objVec) {
         _removeClass(obj, className, all);
     }
 }
@@ -941,7 +940,7 @@ void SelectorDialog::_removeClass(const std::vector<SPObject *>& objVec, const G
  * @param class: class to insert
  * Insert a class name into objects' 'class' attribute.
  */
-void SelectorDialog::_removeClass(SPObject * obj, const Glib::ustring& className, bool all) //without "." 
+void SelectorDialog::_removeClass(SPObject *obj, const Glib::ustring &className, bool all) // without "."
 {
     if (obj->getRepr()->attribute("class")) {
         std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[.]+", className);
@@ -1028,9 +1027,7 @@ void SelectorDialog::_addSelector()
         sigc::bind<Gtk::Dialog *>(sigc::mem_fun(*this, &SelectorDialog::_closeDialog), textDialogPtr));
     textDialogPtr->get_content_area()->pack_start(*textEditPtr, Gtk::PACK_SHRINK);
 
-    Gtk::Label *textLabelPtr = manage ( new Gtk::Label(
-      _("Invalid CSS selector.")
-    ) );
+    Gtk::Label *textLabelPtr = manage(new Gtk::Label(_("Invalid CSS selector.")));
     textDialogPtr->get_content_area()->pack_start(*textLabelPtr, Gtk::PACK_SHRINK);
 
     /**

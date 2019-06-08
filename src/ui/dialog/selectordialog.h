@@ -59,18 +59,14 @@ public:
 
     // Monitor all objects for addition/removal/attribute change
     class NodeWatcher;
-    enum SelectorType {
-        CLASS,
-        ID,
-        TAG
-    };
+    enum SelectorType { CLASS, ID, TAG };
     void fixCSSSelectors(Glib::ustring &selector);
     std::vector<SelectorDialog::NodeWatcher*> _nodeWatchers;
     void _nodeAdded(   Inkscape::XML::Node &repr );
     void _nodeRemoved( Inkscape::XML::Node &repr );
     void _nodeChanged( Inkscape::XML::Node &repr );
     // Data structure
-    enum coltype { OBJECT, SELECTOR};
+    enum coltype { OBJECT, SELECTOR };
     class ModelColumns : public Gtk::TreeModel::ColumnRecord {
     public:
         ModelColumns() {
@@ -138,10 +134,10 @@ public:
     Glib::ustring _getIdList(std::vector<SPObject *>);
     std::vector<SPObject *> _getObjVec(Glib::ustring selector);
     void _insertClass(const std::vector<SPObject *>& objVec, const Glib::ustring& className);
-    void _insertClass(SPObject * obj, const Glib::ustring& className);
-    void _removeClass(const std::vector<SPObject *>& objVec, const Glib::ustring& className, bool all = false);
-    void _removeClass(SPObject * obj, const Glib::ustring& className, bool all = false);
-    
+    void _insertClass(SPObject *obj, const Glib::ustring &className);
+    void _removeClass(const std::vector<SPObject *> &objVec, const Glib::ustring &className, bool all = false);
+    void _removeClass(SPObject *obj, const Glib::ustring &className, bool all = false);
+
 
     void _selectObjects(int, int);
     // Variables
