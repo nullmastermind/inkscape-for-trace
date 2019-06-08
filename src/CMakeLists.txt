@@ -379,22 +379,10 @@ target_link_libraries(inkview inkscape_base)
 
 
 #Define the installation
-if(NOT WIN32)
-  install(TARGETS
-    inkscape
-    inkview 
-    RUNTIME DESTINATION bin)
-  if(BUILD_SHARED_LIBS)
+install(TARGETS inkscape inkview RUNTIME DESTINATION bin)
+if(WIN32)
+    install(TARGETS inkscape_com inkview_com)
+endif()
+if(BUILD_SHARED_LIBS)
     install(TARGETS inkscape_base LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/inkscape)
-  endif()
-else()
-  install(TARGETS
-    inkscape
-    inkscape_com
-    inkview
-    inkview_com
-    RUNTIME DESTINATION .)
-  if(BUILD_SHARED_LIBS)
-    install(TARGETS inkscape_base RUNTIME DESTINATION .)
-  endif()
 endif()
