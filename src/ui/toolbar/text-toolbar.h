@@ -30,6 +30,8 @@
 
 #include "toolbar.h"
 
+#include <gtkmm/popover.h>
+#include <gtkmm/box.h>
 #include <gtkmm/adjustment.h>
 
 class SPDesktop;
@@ -65,6 +67,9 @@ private:
     UI::Widget::ComboBoxEntryToolItem *_font_family_item;
     UI::Widget::ComboBoxEntryToolItem *_font_size_item;
     UI::Widget::ComboBoxEntryToolItem *_font_style_item;
+    Gtk::Popover *_hamburger_menu;
+    Gtk::Box *_hamburger_menu_content;
+    Gtk::ToggleToolButton *_hamburger_menu_launcher;
     Gtk::ToggleToolButton *_superscript_item;
     Gtk::ToggleToolButton *_subscript_item;
     Gtk::ToggleToolButton *_outer_style_item;
@@ -120,7 +125,7 @@ private:
     void subselection_changed(gpointer tc);
     void watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
     void set_sizes(int unit);
-
+    void poptoggle(Gtk::ToggleToolButton *btn);
 protected:
     TextToolbar(SPDesktop *desktop);
 

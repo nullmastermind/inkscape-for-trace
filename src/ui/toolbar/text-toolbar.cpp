@@ -267,6 +267,10 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
     _tracker->addUnit(unit_table.getUnit("em"));
     _tracker->addUnit(unit_table.getUnit("ex"));
     _tracker->setActiveUnit(unit_table.getUnit("%"));
+    _hamburger_menu = Gtk::manage(new Gtk::Popover());
+    
+    _hamburger_menu_content = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
+    _hamburger_menu->add(*_hamburger_menu_content);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -345,7 +349,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _outer_style_item->set_label(_("Show outer style"));
         _outer_style_item->set_tooltip_text(_("Show style of outermost text element. The 'font-size' and 'line-height' values of the outermost text element determine the minimum line spacing in the block."));
         _outer_style_item->set_icon_name(INKSCAPE_ICON("text_outer_style"));
-        add(*_outer_style_item);
+        _hamburger_menu_content->pack_start(*_outer_style_item, 10, false, false);
         _outer_style_item->signal_toggled().connect(sigc::mem_fun(*this, &TextToolbar::outer_style_changed));
         // need to set_active status *after* a bunch of other widgets. See end of this function.
     }
@@ -376,39 +380,13 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         add(*_font_size_item);
     }
 
-    /* Line height */
-    {
-        // Drop down menu
-        std::vector<Glib::ustring> labels = {_("Smaller spacing"),  "",  "",  "",  "", C_("Text tool", "Normal"),  "", "",   "",  "",  "", _("Larger spacing")};
-        std::vector<double>        values = {                 0.5, 0.6, 0.7, 0.8, 0.9,                       1.0, 1.1, 1.2, 1.3, 1.4, 1.5,                 2.0};
-
-        auto line_height_val = prefs->getDouble("/tools/text/lineheight", 0.0);
-        _line_height_adj = Gtk::Adjustment::create(line_height_val, 0.0, 1000.0, 0.1, 1.0);
-        _line_height_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("text-line-height", _("Line:"), _line_height_adj, 0.1, 2));
-        _line_height_item->set_tooltip_text(_("Spacing between baselines"));
-        _line_height_item->set_custom_numeric_menu_data(values, labels);
-        _line_height_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
-        _line_height_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::lineheight_value_changed));
-        //_tracker->addAdjustment(_line_height_adj->gobj()); // (Alex V) Why is this commented out?
-        add(*_line_height_item);
-        _line_height_item->set_sensitive(true);
-        _line_height_item->set_icon(INKSCAPE_ICON("text_line_spacing"));
-    }
-
-    /* Line height units */
-    {
-        _line_height_units_item = _tracker->create_tool_item( _("Units"), ("") );
-        add(*_line_height_units_item);
-        _line_height_units_item->signal_changed_after().connect(sigc::mem_fun(*this, &TextToolbar::lineheight_unit_changed));
-    }
-
     /* Text line height unset */
     {
         _line_height_unset_item = Gtk::manage(new Gtk::ToggleToolButton());
         _line_height_unset_item->set_label(_("Unset line height"));
         _line_height_unset_item->set_tooltip_text(_("If enabled, line height is set on part of selection. Click to unset."));
         _line_height_unset_item->set_icon_name(INKSCAPE_ICON("paint-unknown"));
-        add(*_line_height_unset_item);
+        _hamburger_menu_content->pack_start(*_line_height_unset_item, 10, false, false);
         _line_height_unset_item->signal_toggled().connect(sigc::mem_fun(*this, &TextToolbar::lineheight_unset_changed));
         _line_height_unset_item->set_active(prefs->getBool("/tools/text/line_height_unset", false));
     }
@@ -454,12 +432,11 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         gint mode = prefs->getInt("/tools/text/line_spacing_mode", 0);
         _line_spacing_item->set_active( mode );
 
-        add(*_line_spacing_item);
+        _hamburger_menu_content->pack_start(*_line_spacing_item,10, false, false);
 
         _line_spacing_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::line_spacing_mode_changed));
     }
 
-    add_separator();
 
     /* Alignment */
     {
@@ -508,8 +485,6 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _align_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::align_mode_changed));
     }
 
-    add_separator();
-
     /* Style - Superscript */
     {
         _superscript_item = Gtk::manage(new Gtk::ToggleToolButton());
@@ -517,7 +492,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _superscript_item->set_tooltip_text(_("Toggle superscript"));
         _superscript_item->set_icon_name(INKSCAPE_ICON("text_superscript"));
         _superscript_item->set_name("text-superscript");
-        add(*_superscript_item);
+        _hamburger_menu_content->pack_start(*_superscript_item, 10, false, false);
         _superscript_item->signal_toggled().connect(sigc::bind(sigc::mem_fun(*this, &TextToolbar::script_changed), _superscript_item));
         _superscript_item->set_active(prefs->getBool("/tools/text/super", false));
     }
@@ -529,13 +504,36 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _subscript_item->set_tooltip_text(_("Toggle subscript"));
         _subscript_item->set_icon_name(INKSCAPE_ICON("text_subscript"));
         _subscript_item->set_name("text-subscript");
-        add(*_subscript_item);
+        _hamburger_menu_content->pack_start(*_subscript_item, 10, false, false);
         _subscript_item->signal_toggled().connect(sigc::bind(sigc::mem_fun(*this, &TextToolbar::script_changed), _subscript_item));
         _subscript_item->set_active(prefs->getBool("/tools/text/sub", false));
     }
 
-    add_separator();
+    /* Line height */
+    {
+        // Drop down menu
+        std::vector<Glib::ustring> labels = {_("Smaller spacing"),  "",  "",  "",  "", C_("Text tool", "Normal"),  "", "",   "",  "",  "", _("Larger spacing")};
+        std::vector<double>        values = {                 0.5, 0.6, 0.7, 0.8, 0.9,                       1.0, 1.1, 1.2, 1.3, 1.4, 1.5,                 2.0};
 
+        auto line_height_val = prefs->getDouble("/tools/text/lineheight", 0.0);
+        _line_height_adj = Gtk::Adjustment::create(line_height_val, 0.0, 1000.0, 0.1, 1.0);
+        _line_height_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("text-line-height", _("Line:"), _line_height_adj, 0.1, 2));
+        _line_height_item->set_tooltip_text(_("Spacing between baselines"));
+        _line_height_item->set_custom_numeric_menu_data(values, labels);
+        _line_height_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
+        _line_height_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::lineheight_value_changed));
+        //_tracker->addAdjustment(_line_height_adj->gobj()); // (Alex V) Why is this commented out?
+        add(*_line_height_item);
+        _line_height_item->set_sensitive(true);
+        _line_height_item->set_icon(INKSCAPE_ICON("text_line_spacing"));
+    }
+
+    /* Line height units */
+    {
+        _line_height_units_item = _tracker->create_tool_item( _("Units"), ("") );
+        _hamburger_menu_content->pack_start(*_line_height_units_item, 10, false, false);
+        _line_height_units_item->signal_changed_after().connect(sigc::mem_fun(*this, &TextToolbar::lineheight_unit_changed));
+    }
     /* Letter spacing */
     {
         // Drop down menu
@@ -549,6 +547,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _letter_spacing_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _letter_spacing_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::letterspacing_value_changed));
         add(*_letter_spacing_item);
+        
         _letter_spacing_item->set_sensitive(true);
         _letter_spacing_item->set_icon(INKSCAPE_ICON("text_letter_spacing"));
     }
@@ -565,7 +564,8 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _word_spacing_item->set_custom_numeric_menu_data(values, labels);
         _word_spacing_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _word_spacing_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::wordspacing_value_changed));
-        add(*_word_spacing_item);
+
+        _hamburger_menu_content->pack_start(*_word_spacing_item, 10, false, false);
         _word_spacing_item->set_sensitive(true);
         _word_spacing_item->set_icon(INKSCAPE_ICON("text_word_spacing"));
     }
@@ -581,7 +581,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _dx_item->set_tooltip_text(_("Horizontal kerning (px)"));
         _dx_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _dx_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::dx_value_changed));
-        add(*_dx_item);
+        _hamburger_menu_content->pack_start(*_dx_item, 10, false, false);
         _dx_item->set_sensitive(true);
         _dx_item->set_icon(INKSCAPE_ICON("text_horz_kern"));
     }
@@ -599,7 +599,8 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _dy_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::dy_value_changed));
         _dy_item->set_sensitive(true);
         _dy_item->set_icon(INKSCAPE_ICON("text_vert_kern"));
-        add(*_dy_item);
+        _hamburger_menu_content->pack_start(*_dy_item, 10, false, false);
+
     }
 
     /* Character rotation */
@@ -614,10 +615,9 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _rotation_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::rotation_value_changed));
         _rotation_item->set_sensitive();
         _rotation_item->set_icon(INKSCAPE_ICON("text_rotation"));
-        add(*_rotation_item);
+        _hamburger_menu_content->pack_start(*_rotation_item, 10, false, false);
     }
 
-    add_separator();
 
     /* Writing mode (Horizontal, Vertical-LR, Vertical-RL) */
     {
@@ -654,8 +654,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _writing_mode_item->use_label( false );
         gint mode = prefs->getInt("/tools/text/writing_mode", 0);
         _writing_mode_item->set_active( mode );
-
-        add(*_writing_mode_item);
+        _hamburger_menu_content->pack_start(*_writing_mode_item, 10, false, false);
 
         _writing_mode_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::writing_mode_changed));
     }
@@ -696,8 +695,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _orientation_item->use_label( false );
         gint mode = prefs->getInt("/tools/text/text_orientation", 0);
         _orientation_item->set_active( mode );
-
-        add(*_orientation_item);
+        _hamburger_menu_content->pack_start(*_orientation_item,10, false, false);
 
         _orientation_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::orientation_changed));
     }
@@ -731,11 +729,24 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _direction_item->use_label(false);
         gint mode = prefs->getInt("/tools/text/text_direction", 0);
         _direction_item->set_active( mode );
-
-        add(*_direction_item);
+        _hamburger_menu_content->pack_start(*_direction_item,10, false, false);
         _direction_item->signal_changed_after().connect(sigc::mem_fun(*this, &TextToolbar::direction_changed));
     }
+    add_separator();
 
+    /* Hamburger Menu */
+    {
+        _hamburger_menu_launcher = Gtk::manage(new Gtk::ToggleToolButton());
+        _hamburger_menu_launcher->set_label(_("More options"));
+        _hamburger_menu_launcher->set_tooltip_text(_("Toggle show more options"));
+        _hamburger_menu_launcher->set_icon_name(INKSCAPE_ICON("hamburger-menu"));
+        _hamburger_menu_launcher->set_name("hamburger-menu-launcher");
+        _hamburger_menu->set_relative_to(*_hamburger_menu_launcher);
+        _hamburger_menu->set_name("hamburger-menu");
+        _hamburger_menu->set_default_widget(*_hamburger_menu_launcher);
+        _hamburger_menu_launcher->signal_toggled().connect(sigc::bind(sigc::mem_fun(*this, &TextToolbar::poptoggle), _hamburger_menu_launcher));
+        add(*_hamburger_menu_launcher);
+    }
     // Text outer style (continued)
     _outer_style_item->set_active(prefs->getBool("/tools/text/outer_style", false));
 
@@ -958,6 +969,17 @@ TextToolbar::fontstyle_value_changed()
     }
 
     _freeze = false;
+}
+
+// Handles both Superscripts and Subscripts
+void
+TextToolbar::poptoggle(Gtk::ToggleToolButton *btn) 
+{
+    if (btn->get_active()) {
+        _hamburger_menu->show_all();
+    } else {
+        _hamburger_menu->hide();
+    }
 }
 
 // Handles both Superscripts and Subscripts
