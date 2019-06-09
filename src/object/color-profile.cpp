@@ -30,9 +30,6 @@
 #include <io/resource.h>
 
 #ifdef _WIN32
-#ifndef _WIN32_WINDOWS         // Allow use of features specific to Windows 98 or later. Required for correctly including icm.h
-#define _WIN32_WINDOWS 0x0410
-#endif
 #include <windows.h>
 #endif
 

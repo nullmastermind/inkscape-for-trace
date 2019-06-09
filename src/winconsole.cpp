@@ -40,7 +40,6 @@
  */
 
 #ifdef _WIN32
-#undef DATADIR
 #include <windows.h>
 
 struct echo_thread_info {
