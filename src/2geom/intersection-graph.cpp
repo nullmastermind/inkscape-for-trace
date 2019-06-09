@@ -89,6 +89,7 @@ void PathIntersectionGraph::_prepareArguments()
         for (std::size_t i = _pv[w].size(); i > 0; --i) {
             if (_pv[w][i-1].empty()) {
                 _pv[w].erase(_pv[w].begin() + (i-1));
+                continue;
             }
             for (std::size_t j = _pv[w][i-1].size(); j > 0; --j) {
                 if (_pv[w][i-1][j-1].isDegenerate()) {

@@ -123,16 +123,16 @@ if(WIN32)
     ${MINGW_BIN}/tcl[0-9]*.dll
     ${MINGW_BIN}/tk[0-9]*.dll
     ${MINGW_BIN}/zlib1.dll)
-  INSTALL(FILES ${MINGW_LIBS} DESTINATION .)
+  INSTALL(FILES ${MINGW_LIBS} DESTINATION bin)
   # There are differences for 64-Bit and 32-Bit build environments.
   if(HAVE_MINGW64)
     install(FILES
       ${MINGW_BIN}/libgcc_s_seh-1.dll
-      DESTINATION .)
+      DESTINATION bin)
   else()
     install(FILES
       ${MINGW_BIN}/libgcc_s_dw2-1.dll
-      DESTINATION .)
+      DESTINATION bin)
   endif()
 
   # Install hicolor/index.theme to avoid bug 1635207
@@ -223,26 +223,26 @@ if(WIN32)
     install(FILES
       ${MINGW_BIN}/gspawn-win64-helper.exe
       ${MINGW_BIN}/gspawn-win64-helper-console.exe
-      DESTINATION .)
+      DESTINATION bin)
   else()
     install(FILES
       ${MINGW_BIN}/gspawn-win32-helper.exe
       ${MINGW_BIN}/gspawn-win32-helper-console.exe
-      DESTINATION .)
+      DESTINATION bin)
   endif()
 
   # Python (a bit hacky for backwards compatibility with devlibs at this point)
   install(FILES
     ${MINGW_BIN}/python2.exe
     RENAME python.exe
-    DESTINATION .)
+    DESTINATION bin)
   install(FILES
     ${MINGW_BIN}/python2w.exe
     RENAME pythonw.exe
-    DESTINATION .)
+    DESTINATION bin)
   install(FILES
     ${MINGW_BIN}/libpython2.7.dll
-    DESTINATION .)
+    DESTINATION bin)
   install(DIRECTORY ${MINGW_LIB}/python2.7
     DESTINATION lib
     PATTERN "python2.7/site-packages" EXCLUDE # specify individual packages to install below

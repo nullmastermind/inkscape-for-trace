@@ -2,24 +2,13 @@
 # ------------------------------------------------------------------------------------------------------------------
 # list or check dependencies for binary distributions based on MSYS2 (requires the package mingw-w64-ntldd)
 #
-# Usage:
-#   python msys2checkdeps.py MODE PATH
-#
-#   MODE
-#     list          - list dependencies in human-readable form with full path and list of dependents
-#     list-compact  - list dependencies in compact form (as a plain list of filenames)
-#     check         - check for missing or unused dependencies (see below for details)
-#     check-missing - check if all required dependencies are present in PATH
-#                     exits with error code 2 if missing dependencies are found and prints the list to stderr
-#     check-unused  - check if any of the libraries in the root of PATH are unused and prints the list to stderr
-#
-#  PATH
-#     full or relative path to a single file or a directory to work on (directories will be checked recursively)
+# run './msys2checkdeps.py --help' for usage information
 # ------------------------------------------------------------------------------------------------------------------
 
 from __future__ import print_function
 
 
+import argparse
 import os
 import subprocess
 import sys
@@ -101,10 +90,8 @@ def collect_dependencies(path):
     #   - the corresponding value is an instance of class Dependency (containing full path and dependents)
     deps = {}
     if os.path.isfile(path):
-        os.chdir(os.path.dirname(path))
         deps = get_dependencies(path, deps)
     elif os.path.isdir(path):
-        os.chdir(path)
         extensions = ['.exe', '.pyd', '.dll']
         exclusions = ['python2.7/distutils/command/wininst']
         for base, dirs, files in os.walk(path):
@@ -118,22 +105,46 @@ def collect_dependencies(path):
 
 
 if __name__ == '__main__':
-
-    # get mode from command line
-    mode = sys.argv[1]
     modes = ['list', 'list-compact', 'check', 'check-missing', 'check-unused']
-    if mode not in modes:
-        error("First argument needs to be a valid mode (" + (', ').join(modes) + ").")
 
-    # get path from command line
-    path = sys.argv[2]
-    path = os.path.abspath(path)
-    if not os.path.exists(path):
-        error("Can't find file/folder '" + path + "'")
-    root = path if os.path.isdir(path) else os.path.dirname(path)
+    # parse arguments from command line
+    parser = argparse.ArgumentParser(description="List or check dependencies for binary distributions based on MSYS2.\n"
+                                                 "(requires the package 'mingw-w64-ntldd')",
+                                     formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('mode', metavar="MODE", choices=modes,
+                        help="One of the following:\n"
+                             "  list          - list dependencies in human-readable form\n"
+                             "                  with full path and list of dependents\n"
+                             "  list-compact  - list dependencies in compact form (as a plain list of filenames)\n"
+                             "  check         - check for missing or unused dependencies (see below for details)\n"
+                             "  check-missing - check if all required dependencies are present in PATH\n"
+                             "                  exits with error code 2 if missing dependencies are found\n"
+                             "                  and prints the list to stderr\n"
+                             "  check-unused  - check if any of the libraries in the root of PATH are unused\n"
+                             "                  and prints the list to stderr")
+    parser.add_argument('path', metavar='PATH',
+                        help="full or relative path to a single file or a directory to work on\n"
+                             "(directories will be checked recursively)")
+    parser.add_argument('-w', '--working-directory', metavar="DIR",
+                        help="Use custom working directory (instead of 'dirname PATH')")
+    args = parser.parse_args()
+
+    # check if path exists
+    args.path = os.path.abspath(args.path)
+    if not os.path.exists(args.path):
+        error("Can't find file/folder '" + args.path + "'")
+
+    # get root and set it as working directory (unless one is explicitly specified)
+    if args.working_directory:
+        root = os.path.abspath(args.working_directory)
+    elif os.path.isdir(args.path):
+        root = args.path
+    elif os.path.isfile(args.path):
+        root = os.path.dirname(args.path)
+    os.chdir(root)
 
     # get dependencies for path recursively
-    deps = collect_dependencies(path)
+    deps = collect_dependencies(args.path)
 
     # print output / prepare exit code
     exit_code = 0
@@ -141,19 +152,19 @@ if __name__ == '__main__':
         location = deps[dep].location
         dependents = deps[dep].dependents
 
-        if mode == 'list':
+        if args.mode == 'list':
             if (location is None):
                 location = '---MISSING---'
             print(dep + " - " + location + " (" + ", ".join(dependents) + ")")
-        elif mode == 'list-compact':
+        elif args.mode == 'list-compact':
             print(dep)
-        elif mode in ['check', 'check-missing']:
+        elif args.mode in ['check', 'check-missing']:
             if ((location is None) or (root not in os.path.abspath(location))):
                 warning("Missing dependency " + dep + " (" + ", ".join(dependents) + ")")
                 exit_code = 2
 
     # check for unused libraries
-    if mode in ['check', 'check-unused']:
+    if args.mode in ['check', 'check-unused']:
         installed_libs = [file for file in os.listdir(root) if file.endswith(".dll")]
         deps_lower = [dep.lower() for dep in deps]
         top_level_libs = [lib for lib in installed_libs if lib.lower() not in deps_lower]
