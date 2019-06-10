@@ -505,8 +505,8 @@ Hom/end keys-select minimum or maximum feather values
   <bind key="x" modifiers="Ctrl,Shift" action="DialogXMLEditor" display="true"/>
   <bind key="X" modifiers="Ctrl,Shift" action="DialogXMLEditor" />
 
-  <bind key="s" modifiers="Ctrl,Alt" action="DialogSelectors" display="true"/>
-  <bind key="S" modifiers="Ctrl,Alt" action="DialogSelectors" />
+  <bind key="q" modifiers="Ctrl,Shift" action="DialogSelectors" display="true"/>
+  <bind key="Q" modifiers="Ctrl,Shift" action="DialogSelectors" />
 
   <bind action="DialogDocumentProperties" display="true"/>
 

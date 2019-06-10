@@ -567,8 +567,8 @@ and tooltips. Only one binding for each action may have this attribute.
   <bind key="x" modifiers="Cmd,Shift" action="DialogXMLEditor" display="true" />
   <bind key="X" modifiers="Cmd,Shift" action="DialogXMLEditor" />
 
-  <bind key="s" modifiers="Cmd,Alt" action="DialogSelectors" display="true" />
-  <bind key="S" modifiers="Cmd,Alt" action="DialogSelectors" />
+  <bind key="q" modifiers="Cmd,Shift" action="DialogSelectors" display="true" />
+  <bind key="Q" modifiers="Cmd,Shift" action="DialogSelectors" />
 
   <bind key="d" modifiers="Cmd,Shift" action="DialogDocumentProperties" display="true" />
   <bind key="D" modifiers="Cmd,Shift" action="DialogDocumentProperties" />
