@@ -125,7 +125,6 @@ DialogManager::DialogManager() {
         registerFactory("TileDialog",          &create<ArrangeDialog,        FloatingBehavior>);
         registerFactory("Symbols",             &create<SymbolsDialog,        FloatingBehavior>);
         registerFactory("StyleDialog",         &create<StyleDialog,          FloatingBehavior>);
-        registerFactory("Selectors",           &create<SelectorsDialog,      FloatingBehavior>);
 
 #if HAVE_POTRACE
         registerFactory("Trace",               &create<TraceDialog,          FloatingBehavior>);
@@ -140,7 +139,8 @@ DialogManager::DialogManager() {
         registerFactory("Export",              &create<Export,               FloatingBehavior>);
         registerFactory("CloneTiler",          &create<CloneTiler,           FloatingBehavior>);
         registerFactory("XmlTree",             &create<XmlTree,              FloatingBehavior>);
-
+        registerFactory("Selectors",           &create<SelectorsDialog,      FloatingBehavior>);
+    
     } else {
 
         registerFactory("Prototype",           &create<Prototype,            DockBehavior>);
@@ -166,7 +166,6 @@ DialogManager::DialogManager() {
         registerFactory("Swatches",            &create<SwatchesPanel,        DockBehavior>);
         registerFactory("TileDialog",          &create<ArrangeDialog,        DockBehavior>);
         registerFactory("Symbols",             &create<SymbolsDialog,        DockBehavior>);
-        registerFactory("Selectors",           &create<SelectorsDialog,      DockBehavior>);
 
 #if HAVE_POTRACE
         registerFactory("Trace",               &create<TraceDialog,          DockBehavior>);
@@ -181,7 +180,7 @@ DialogManager::DialogManager() {
         registerFactory("Export",              &create<Export,               DockBehavior>);
         registerFactory("CloneTiler",          &create<CloneTiler,           DockBehavior>);
         registerFactory("XmlTree",             &create<XmlTree,              DockBehavior>);
-
+        registerFactory("Selectors",           &create<SelectorsDialog,      DockBehavior>);
     }
 }
 

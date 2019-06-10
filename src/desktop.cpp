@@ -2018,13 +2018,13 @@ SPDesktop::show_dialogs()
     mapVerbPreference.insert(std::make_pair ("TextFont", "/dialogs/textandfont") );
     mapVerbPreference.insert(std::make_pair ("Export", "/dialogs/export") );
     mapVerbPreference.insert(std::make_pair ("XmlTree", "/dialogs/xml") );
+    mapVerbPreference.insert(std::make_pair ("Selectors", "/dialogs/selectors") );
     mapVerbPreference.insert(std::make_pair ("CloneTiler", "/dialogs/clonetiler") );
     mapVerbPreference.insert(std::make_pair ("ObjectProperties", "/dialogs/object") );
     mapVerbPreference.insert(std::make_pair ("SpellCheck", "/dialogs/spellcheck") );
     mapVerbPreference.insert(std::make_pair ("Symbols", "/dialogs/symbols") );
     mapVerbPreference.insert(std::make_pair ("ObjectsPanel", "/dialogs/objects") );
     mapVerbPreference.insert(std::make_pair ("Prototype", "/dialogs/prototype") );
-    mapVerbPreference.insert(std::make_pair("Selectors", "/dialogs/selectors"));
 
 
     for (std::map<Glib::ustring, Glib::ustring>::const_iterator iter = mapVerbPreference.begin(); iter != mapVerbPreference.end(); ++iter) {

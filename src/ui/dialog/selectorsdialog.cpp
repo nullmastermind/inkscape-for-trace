@@ -354,7 +354,7 @@ void SelectorsDialog::_showWidgets()
 {
     // Pack widgets
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool dir = prefs->getBool("/dialogs/selectors/updown", true);
+    bool dir = prefs->getBool("/dialogs/selectors/updow", true);
     _paned.set_orientation(dir ? Gtk::ORIENTATION_VERTICAL : Gtk::ORIENTATION_HORIZONTAL);
     _selectors_box.set_orientation(Gtk::ORIENTATION_VERTICAL);
     _selectors_box.set_name("SelectorsDialog");
