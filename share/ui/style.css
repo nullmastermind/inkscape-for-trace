@@ -317,27 +317,32 @@
      color: @theme_fg_color;
  }
 
+ #XMLDialogAndAttribuesDialog,
  #SelectorsAndStyleDialog{
     min-height:200px;
     min-width:250px;
  }
-
+ #XMLAndAttributesDialog button,
  #SelectorsAndStyleDialog button{
     padding:4px;
     min-height:16px;
     margin:2px;
  }
-
+ #XMLAndAttributesDialog .directiontoggler  image,
+ #XMLAndAttributesDialog .stylesheettoggler image,
  #SelectorsAndStyleDialog .directiontoggler  image,
  #SelectorsAndStyleDialog .stylesheettoggler image {
      color: transparent;
  }
 
+ #XMLAndAttributesDialog .directiontoggler,
+ #XMLAndAttributesDialog .stylesheettoggler,
  #SelectorsAndStyleDialog .directiontoggler,
  #SelectorsAndStyleDialog .stylesheettoggler {
      margin:2px;
  }
  
+ #XMLAndAttributesDialog .toggle,
  #SelectorsAndStyleDialog .toggle {
      min-width: 18px;
      padding-left: 6px;

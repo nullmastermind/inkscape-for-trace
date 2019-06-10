@@ -137,6 +137,8 @@ AttrDialog::AttrDialog()
     setDesktop(getDesktop());
 }
 
+
+
 /**
  * @brief AttrDialog::~AttrDialog
  * Class destructor

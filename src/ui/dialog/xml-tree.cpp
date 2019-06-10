@@ -73,8 +73,8 @@ XmlTree::XmlTree() :
     if (!desktop) {
         return;
     }
-    flowbox_content = Gtk::manage(new Inkscape::UI::Widget::InkFlowBox("XMLFlow"));
     Gtk::Box *contents = _getContents();
+    contents->set_name("XMLAndAttributesDialog");
     contents->set_spacing(0);
     contents->set_size_request(320, 260);
 
@@ -84,16 +84,15 @@ XmlTree::XmlTree() :
     status.set_markup("");
     status.set_line_wrap(true);
     status_box.pack_start( status, TRUE, TRUE, 0);
-
-    contents->pack_start(*flowbox_content, true, true, 0);
-
+    status_box.pack_start(_direction, Gtk::PACK_SHRINK);
+    contents->pack_start(_paned, true, true, 0);
+    
     _message_stack = std::make_shared<Inkscape::MessageStack>();
     _message_context = std::unique_ptr<Inkscape::MessageContext>(new Inkscape::MessageContext(_message_stack));
     _message_changed_connection = _message_stack->connectChanged(
             sigc::bind(sigc::ptr_fun(_set_status_message), GTK_WIDGET(status.gobj())));
 
     /* tree view */
-    flowbox_content->insert(&node_box, _("_Nodes"), FLOWBOX_PAGE_NODES, true, -1);
     tree = SP_XMLVIEW_TREE(sp_xmlview_tree_new(nullptr, nullptr, nullptr));
     gtk_widget_set_tooltip_text( GTK_WIDGET(tree), _("Drag to reorder nodes") );
 
@@ -173,12 +172,27 @@ XmlTree::XmlTree() :
     node_box.pack_start(*tree_scroller);
 
     node_box.pack_end(status_box, false, false, 2);
-
-    /* attributes */
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool attrtoggler = prefs->getBool("/dialogs/xml/attrtoggler", true);
     attributes = new AttrDialog;
-    attr_box.pack_start(*attributes);
-    flowbox_content->insert(&attr_box, _("_Attributes"), FLOWBOX_PAGE_ATTRS, false, 200);
+    _paned.set_orientation(attrtoggler ? Gtk::ORIENTATION_VERTICAL : Gtk::ORIENTATION_HORIZONTAL);
+    _paned.pack1(node_box, Gtk::SHRINK);
+    /* attributes */
+    Gtk::Box *actionsbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+    Gtk::Label *attrtogglerlabel = Gtk::manage(new Gtk::Label(_("Show attributes")));
+    _attrswitch.property_active() = attrtoggler;
+    _attrswitch.property_active().signal_changed().connect(sigc::mem_fun(*this, &XmlTree::_attrtoggler));
+    _attrswitch.get_style_context()->add_class("directiontoggler");
+    _dirtogglerlabel = Gtk::manage(new Gtk::Label(_("Paned vertical")));
+    _direction.property_active().signal_changed().connect(sigc::mem_fun(*this, &XmlTree::_toggleDirection));
+    _direction.get_style_context()->add_class("directiontoggler");
+    actionsbox->pack_start(_attrswitch, Gtk::PACK_SHRINK);
+    actionsbox->pack_start(*attrtogglerlabel, Gtk::PACK_SHRINK);
+    actionsbox->pack_start(_direction, Gtk::PACK_SHRINK);
+    actionsbox->pack_start(*_dirtogglerlabel, Gtk::PACK_SHRINK);
 
+    _paned.pack2(*attributes, true, true);
+    contents->pack_start(*actionsbox, true, true, 0);
     /* Signal handlers */
     GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(tree));
     g_signal_connect (G_OBJECT(selection), "changed", G_CALLBACK (on_tree_select_row), this);
@@ -198,11 +212,44 @@ XmlTree::XmlTree() :
 
     /* initial show/hide */
     show_all();
+    if (attrtoggler) {
+        attributes->hide();
+        _dirtogglerlabel->hide();
+        _direction.hide();
+        _paned.set_position(9999999);
+    }
     tree_reset_context();
 
     g_assert(desktop != nullptr);
     set_tree_desktop(desktop);
 
+}
+
+void XmlTree::_toggleDirection()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool dir = !prefs->getBool("/dialogs/xml/updown", true);
+    prefs->setBool("/dialogs/xml/updown", dir);
+    _paned.set_position(-1);
+    _paned.set_orientation(dir ? Gtk::ORIENTATION_VERTICAL : Gtk::ORIENTATION_HORIZONTAL);
+}
+
+void XmlTree::_attrtoggler()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool attrtoggler = !prefs->getBool("/dialogs/xml/attrtoggler", true);
+    prefs->setBool("/dialogs/xml/attrtoggler", attrtoggler);
+    if (prefs->getBool("/dialogs/xml/attrtoggler", true)) {
+        _attrbox->hide();
+        _dirtogglerlabel->hide();
+        _direction.hide();
+        _paned.set_position(9999999);
+    } else {
+        _attrbox->show();
+        _dirtogglerlabel->show();
+        _direction.show();
+        _paned.set_position(-1);
+    }
 }
 
 void XmlTree::present()

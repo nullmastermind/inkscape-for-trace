@@ -15,13 +15,13 @@
 
 #include <memory>
 
-#include "ui/widget/ink-flow-box.h"
 #include "ui/widget/panel.h"
 #include <gtkmm/button.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/separatortoolitem.h>
+#include <gtkmm/switch.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/toolbar.h>
 
@@ -165,7 +165,8 @@ private:
     void cmd_unindent_node();
 
     void present() override;
-
+    void _attrtoggler();
+    void _toggleDirection();
     bool in_dt_coordsys(SPObject const &item);
 
     /**
@@ -177,13 +178,6 @@ private:
      * Flag to ensure only one operation is performed at once
      */
     gint blocked;
-
-    /* Each of the notebook page type (by number) */
-    UI::Widget::InkFlowBox *flowbox_content;
-    enum {
-        FLOWBOX_PAGE_NODES,
-        FLOWBOX_PAGE_ATTRS,
-    };
 
     /**
      * Status bar
@@ -212,14 +206,18 @@ private:
     SPXMLViewTree *tree;
     //SPXMLViewAttrList *attributes;
     AttrDialog *attributes;
+    Gtk::Box *_attrbox;
 
     /* XML Node Creation pop-up window */
     Gtk::Entry *name_entry;
     Gtk::Button *create_button;
+    Gtk::Paned _paned;
 
     Gtk::VBox node_box;
-    Gtk::VBox attr_box;
     Gtk::HBox status_box;
+    Gtk::Switch _attrswitch;
+    Gtk::Switch _direction;
+    Gtk::Label *_dirtogglerlabel;
     Gtk::Label status;
     Gtk::Toolbar tree_toolbar;
     Gtk::ToolButton xml_element_new_button;

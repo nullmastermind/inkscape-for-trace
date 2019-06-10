@@ -361,7 +361,7 @@ void SelectorsDialog::_showWidgets()
     _selectors_box.pack_start(_scrolled_window_selectors, Gtk::PACK_EXPAND_WIDGET);
     _scrolled_window_selectors.add(_treeView);
     _scrolled_window_selectors.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-    Gtk::Label *dirogglerlabel = Gtk::manage(new Gtk::Label(_("Paned vertical")));
+    Gtk::Label *dirtogglerlabel = Gtk::manage(new Gtk::Label(_("Paned vertical")));
     _direction.property_active().signal_changed().connect(sigc::mem_fun(*this, &SelectorsDialog::_toggleDirection));
     _direction.get_style_context()->add_class("directiontoggler");
     _styleButton(_create, "list-add", "Add a new CSS Selector");
@@ -370,7 +370,7 @@ void SelectorsDialog::_showWidgets()
     _button_box.pack_start(_create, Gtk::PACK_SHRINK);
     _button_box.pack_start(_del, Gtk::PACK_SHRINK);
     _button_box.pack_start(_direction, Gtk::PACK_SHRINK);
-    _button_box.pack_start(*dirogglerlabel, Gtk::PACK_SHRINK);
+    _button_box.pack_start(*dirtogglerlabel, Gtk::PACK_SHRINK);
     _selectors_box.pack_end(_button_box, Gtk::PACK_SHRINK);
     _del.signal_clicked().connect(sigc::mem_fun(*this, &SelectorsDialog::_delSelector));
     _del.hide();
