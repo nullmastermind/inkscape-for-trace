@@ -388,6 +388,7 @@ void SelectorsDialog::_toggleDirection()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool dir = !prefs->getBool("/dialogs/selectors/updown", true);
     prefs->setBool("/dialogs/selectors/updown", dir);
+    _paned.set_position(-1);
     _paned.set_orientation(dir ? Gtk::ORIENTATION_VERTICAL : Gtk::ORIENTATION_HORIZONTAL);
 }
 
