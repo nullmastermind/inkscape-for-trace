@@ -141,7 +141,7 @@ LivePathEffectAdd::LivePathEffectAdd()
         LPEExperimentalToggle->set_active(active);
         Gtk::Image *LPEIcon;
         builder_effect->get_widget("LPEIcon", LPEIcon);
-        LPEIcon->set_from_icon_name(converter.get_icon(data->id), Gtk::BuiltinIconSize(Gtk::ICON_SIZE_DIALOG));
+        LPEIcon->set_from_icon_name(converter.get_icon(data->id), Gtk::IconSize(Gtk::ICON_SIZE_DIALOG));
         Gtk::EventBox *LPESelectorEffectEventInfo;
         builder_effect->get_widget("LPESelectorEffectEventInfo", LPESelectorEffectEventInfo);
         LPESelectorEffectEventInfo->signal_enter_notify_event().connect(sigc::bind<Glib::RefPtr<Gtk::Builder>>(
@@ -150,7 +150,7 @@ LivePathEffectAdd::LivePathEffectAdd()
         builder_effect->get_widget("LPESelectorEffectEventFav", LPESelectorEffectEventFav);
         if (sp_has_fav(LPEName->get_text())) {
             Gtk::Image *fav = dynamic_cast<Gtk::Image *>(LPESelectorEffectEventFav->get_child());
-            fav->set_from_icon_name("draw-star", Gtk::IconSize(25));
+            fav->set_from_icon_name("draw-star", Gtk::IconSize(Gtk::ICON_SIZE_SMALL_TOOLBAR));
         }
         Gtk::EventBox *LPESelectorEffectEventFavTop;
         builder_effect->get_widget("LPESelectorEffectEventFavTop", LPESelectorEffectEventFavTop);
@@ -271,7 +271,7 @@ bool LivePathEffectAdd::pop_description(GdkEventCrossing *evt, Glib::RefPtr<Gtk:
 
     Gtk::Image *LPESelectorEffectInfoIcon;
     _builder->get_widget("LPESelectorEffectInfoIcon", LPESelectorEffectInfoIcon);
-    LPESelectorEffectInfoIcon->set_from_icon_name(LPEIcon->get_icon_name(), Gtk::IconSize(60));
+    LPESelectorEffectInfoIcon->set_from_icon_name(LPEIcon->get_icon_name(), Gtk::IconSize(Gtk::ICON_SIZE_DIALOG));
 
     Gtk::Label *LPESelectorEffectInfoName;
     _builder->get_widget("LPESelectorEffectInfoName", LPESelectorEffectInfoName);
@@ -306,7 +306,7 @@ bool LivePathEffectAdd::fav_toggler(GdkEventButton *evt, Glib::RefPtr<Gtk::Build
         if (sp_has_fav(LPEName->get_text())) {
             LPESelectorEffectEventFavTop->set_visible(false);
             LPESelectorEffectEventFavTop->hide();
-            LPESelectorEffectFav->set_from_icon_name("draw-star-outline", Gtk::IconSize(25));
+            LPESelectorEffectFav->set_from_icon_name("draw-star-outline", Gtk::IconSize(Gtk::ICON_SIZE_SMALL_TOOLBAR));
             sp_remove_fav(LPEName->get_text());
             LPESelectorEffect->get_parent()->get_style_context()->remove_class("lpefav");
             LPESelectorEffect->get_parent()->get_style_context()->add_class("lpenormal");
@@ -317,7 +317,7 @@ bool LivePathEffectAdd::fav_toggler(GdkEventButton *evt, Glib::RefPtr<Gtk::Build
         } else {
             LPESelectorEffectEventFavTop->set_visible(true);
             LPESelectorEffectEventFavTop->show();
-            LPESelectorEffectFav->set_from_icon_name("draw-star", Gtk::IconSize(25));
+            LPESelectorEffectFav->set_from_icon_name("draw-star", Gtk::IconSize(Gtk::ICON_SIZE_SMALL_TOOLBAR));
             sp_add_fav(LPEName->get_text());
             LPESelectorEffect->get_parent()->get_style_context()->add_class("lpefav");
             LPESelectorEffect->get_parent()->get_style_context()->remove_class("lpenormal");
@@ -333,14 +333,15 @@ bool LivePathEffectAdd::show_fav_toggler(GdkEventButton *evt)
     Gtk::Image *favimage = dynamic_cast<Gtk::Image *>(_LPESelectorEffectEventFavShow->get_child());
     if (favimage) {
         if (_showfavs) {
-            favimage->set_from_icon_name("draw-star", Gtk::IconSize(favimage->get_pixel_size()));
+            favimage->set_from_icon_name("draw-star", Gtk::IconSize(Gtk::ICON_SIZE_SMALL_TOOLBAR));
         } else {
-            favimage->set_from_icon_name("draw-star-outline", Gtk::IconSize(favimage->get_pixel_size()));
+            favimage->set_from_icon_name("draw-star-outline", Gtk::IconSize(Gtk::ICON_SIZE_SMALL_TOOLBAR));
         }
     }
     reload_effect_list();
     return true;
 }
+
 bool LivePathEffectAdd::apply(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> builder_effect,
                               const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *to_add)
 {
