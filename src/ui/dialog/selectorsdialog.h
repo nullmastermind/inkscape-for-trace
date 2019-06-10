@@ -15,9 +15,9 @@
 #ifndef SELECTORSDIALOG_H
 #define SELECTORSDIALOG_H
 
+#include "ui/dialog/styledialog.h"
 #include "ui/dialog/desktop-tracker.h"
 #include "ui/dialog/dialog-manager.h"
-#include "ui/dialog/styledialog.h"
 #include "ui/widget/panel.h"
 #include <gtkmm/dialog.h>
 #include <gtkmm/paned.h>

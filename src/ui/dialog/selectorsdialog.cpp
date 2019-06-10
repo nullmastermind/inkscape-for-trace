@@ -618,7 +618,7 @@ void SelectorsDialog::_writeStyleElement()
     Inkscape::XML::Node *textNode = _getStyleTextNode();
     textNode->setContent(styleContent.c_str());
 
-    DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_STYLE, _("Edited style element."));
+    DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_SELECTORS, _("Edited style element."));
 
     _updating = false;
     g_debug("SelectorsDialog::_writeStyleElement(): | %s |", styleContent.c_str());
