@@ -229,11 +229,7 @@ StyleDialog::StyleDialog()
     _readStyleElement();
 }
 
-void 
-StyleDialog::_vscrool()
-{
-    _scroolpos = vadj->get_value();
-}
+void StyleDialog::_vscrool() { _scroolpos = vadj->get_value(); }
 
 /**
  * Class destructor

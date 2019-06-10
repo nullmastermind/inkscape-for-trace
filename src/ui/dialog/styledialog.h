@@ -111,7 +111,7 @@ class StyleDialog : public Widget::Panel {
 
     // Widgets
     Gtk::ScrolledWindow _scrolledWindow;
-    Glib::RefPtr< Gtk::Adjustment > vadj;
+    Glib::RefPtr<Gtk::Adjustment> vadj;
     Gtk::Box _mainBox;
     Gtk::Box _styleBox;
     Gtk::Switch *_all_css;

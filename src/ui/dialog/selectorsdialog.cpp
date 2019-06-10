@@ -13,11 +13,11 @@
  */
 
 #include "selectorsdialog.h"
-#include "verbs.h"
-#include "selection.h"
 #include "attribute-rel-svg.h"
-#include "inkscape.h"
 #include "document-undo.h"
+#include "inkscape.h"
+#include "selection.h"
+#include "verbs.h"
 
 #include "ui/icon-loader.h"
 #include "ui/widget/iconrenderer.h"
@@ -57,12 +57,12 @@ namespace Dialog {
 
 // Keeps a watch on style element
 class SelectorsDialog::NodeObserver : public Inkscape::XML::NodeObserver {
-public:
-  NodeObserver(SelectorsDialog *selectorsdialog)
-      : _selectorsdialog(selectorsdialog)
-  {
-      g_debug("SelectorsDialog::NodeObserver: Constructor");
-  };
+  public:
+    NodeObserver(SelectorsDialog *selectorsdialog)
+        : _selectorsdialog(selectorsdialog)
+    {
+        g_debug("SelectorsDialog::NodeObserver: Constructor");
+    };
 
     void notifyContentChanged(Inkscape::XML::Node &node,
                                       Inkscape::Util::ptr_shared old_content,
@@ -72,11 +72,10 @@ public:
 };
 
 
-void
-SelectorsDialog::NodeObserver::notifyContentChanged(
-    Inkscape::XML::Node &/*node*/,
-    Inkscape::Util::ptr_shared /*old_content*/,
-    Inkscape::Util::ptr_shared /*new_content*/ ) {
+void SelectorsDialog::NodeObserver::notifyContentChanged(Inkscape::XML::Node & /*node*/,
+                                                         Inkscape::Util::ptr_shared /*old_content*/,
+                                                         Inkscape::Util::ptr_shared /*new_content*/)
+{
 
     g_debug("SelectorsDialog::NodeObserver::notifyContentChanged");
     _selectorsdialog->_updating = false;
@@ -88,13 +87,13 @@ SelectorsDialog::NodeObserver::notifyContentChanged(
 // Keeps a watch for new/removed/changed nodes
 // (Must update objects that selectors match.)
 class SelectorsDialog::NodeWatcher : public Inkscape::XML::NodeObserver {
-public:
-  NodeWatcher(SelectorsDialog *selectorsdialog, Inkscape::XML::Node *repr)
-      : _selectorsdialog(selectorsdialog)
-      , _repr(repr)
-  {
-      g_debug("SelectorsDialog::NodeWatcher: Constructor");
-  };
+  public:
+    NodeWatcher(SelectorsDialog *selectorsdialog, Inkscape::XML::Node *repr)
+        : _selectorsdialog(selectorsdialog)
+        , _repr(repr)
+    {
+        g_debug("SelectorsDialog::NodeWatcher: Constructor");
+    };
 
     void notifyChildAdded( Inkscape::XML::Node &/*node*/,
                                    Inkscape::XML::Node &child,
@@ -137,10 +136,10 @@ public:
     Inkscape::XML::Node * _repr;  // Need to track if document changes.
 };
 
-void
-SelectorsDialog::_nodeAdded( Inkscape::XML::Node &node ) {
+void SelectorsDialog::_nodeAdded(Inkscape::XML::Node &node)
+{
 
-    SelectorsDialog::NodeWatcher *w = new SelectorsDialog::NodeWatcher (this, &node);
+    SelectorsDialog::NodeWatcher *w = new SelectorsDialog::NodeWatcher(this, &node);
     node.addObserver (*w);
     _nodeWatchers.push_back(w);
 
@@ -148,8 +147,8 @@ SelectorsDialog::_nodeAdded( Inkscape::XML::Node &node ) {
     _selectRow();
 }
 
-void
-SelectorsDialog::_nodeRemoved( Inkscape::XML::Node &repr ) {
+void SelectorsDialog::_nodeRemoved(Inkscape::XML::Node &repr)
+{
 
     for (auto it = _nodeWatchers.begin(); it != _nodeWatchers.end(); ++it) {
         if ( (*it)->_repr == &repr ) {
@@ -163,26 +162,24 @@ SelectorsDialog::_nodeRemoved( Inkscape::XML::Node &repr ) {
     _selectRow();
 }
 
-void
-SelectorsDialog::_nodeChanged( Inkscape::XML::Node &object ) {
+void SelectorsDialog::_nodeChanged(Inkscape::XML::Node &object)
+{
 
     _readStyleElement();
     _selectRow();
 }
 
-SelectorsDialog::TreeStore::TreeStore()
-= default;
+SelectorsDialog::TreeStore::TreeStore() = default;
 
 
 /**
  * Allow dragging only selectors.
  */
-bool
-SelectorsDialog::TreeStore::row_draggable_vfunc(const Gtk::TreeModel::Path& path) const
+bool SelectorsDialog::TreeStore::row_draggable_vfunc(const Gtk::TreeModel::Path &path) const
 {
     g_debug("SelectorsDialog::TreeStore::row_draggable_vfunc");
 
-    auto unconstThis = const_cast<SelectorsDialog::TreeStore*>(this);
+    auto unconstThis = const_cast<SelectorsDialog::TreeStore *>(this);
     const_iterator iter = unconstThis->get_iter(path);
     if (iter) {
         Gtk::TreeModel::Row row = *iter;
@@ -253,9 +250,8 @@ void SelectorsDialog::fixCSSSelectors(Glib::ustring &selector)
 /**
  * Allow dropping only in between other selectors.
  */
-bool
-SelectorsDialog::TreeStore::row_drop_possible_vfunc(const Gtk::TreeModel::Path& dest,
-                                                const Gtk::SelectionData& selection_data) const
+bool SelectorsDialog::TreeStore::row_drop_possible_vfunc(const Gtk::TreeModel::Path &dest,
+                                                         const Gtk::SelectionData &selection_data) const
 {
     g_debug("SelectorsDialog::TreeStore::row_drop_possible_vfunc");
 
@@ -266,10 +262,10 @@ SelectorsDialog::TreeStore::row_drop_possible_vfunc(const Gtk::TreeModel::Path& 
 
 
 // This is only here to handle updating style element after a drag and drop.
-void
-SelectorsDialog::TreeStore::on_row_deleted(const TreeModel::Path& path)
+void SelectorsDialog::TreeStore::on_row_deleted(const TreeModel::Path &path)
 {
-    if (_selectorsdialog->_updating) return;  // Don't write if we deleted row (other than from DND)
+    if (_selectorsdialog->_updating)
+        return; // Don't write if we deleted row (other than from DND)
 
     g_debug("on_row_deleted");
 
@@ -279,10 +275,10 @@ SelectorsDialog::TreeStore::on_row_deleted(const TreeModel::Path& path)
 
 Glib::RefPtr<SelectorsDialog::TreeStore> SelectorsDialog::TreeStore::create(SelectorsDialog *selectorsdialog)
 {
-    SelectorsDialog::TreeStore * store = new SelectorsDialog::TreeStore();
+    SelectorsDialog::TreeStore *store = new SelectorsDialog::TreeStore();
     store->_selectorsdialog = selectorsdialog;
-    store->set_column_types( store->_selectorsdialog->_mColumns );
-    return Glib::RefPtr<SelectorsDialog::TreeStore>( store );
+    store->set_column_types(store->_selectorsdialog->_mColumns);
+    return Glib::RefPtr<SelectorsDialog::TreeStore>(store);
 }
 
 /**
@@ -291,11 +287,11 @@ Glib::RefPtr<SelectorsDialog::TreeStore> SelectorsDialog::TreeStore::create(Sele
  * adds selectors to treeview. _delSelector deletes the selector from the dialog.
  * Any addition/deletion of the selectors updates XML style element accordingly.
  */
-SelectorsDialog::SelectorsDialog() :
-    UI::Widget::Panel("/dialogs/selectors", SP_VERB_DIALOG_SELECTORS),
-    _updating(false),
-    _textNode(nullptr),
-    _desktopTracker()
+SelectorsDialog::SelectorsDialog()
+    : UI::Widget::Panel("/dialogs/selectors", SP_VERB_DIALOG_SELECTORS)
+    , _updating(false)
+    , _textNode(nullptr)
+    , _desktopTracker()
 {
     g_debug("SelectorsDialog::SelectorsDialog");
     // Tree
@@ -318,13 +314,11 @@ SelectorsDialog::SelectorsDialog() :
     _treeView.set_expander_column(*(_treeView.get_column(1)));
 
     // Signal handlers
-    _treeView.signal_button_release_event().connect(   // Needs to be release, not press.
-        sigc::mem_fun(*this,  &SelectorsDialog::_handleButtonEvent),
-        false);
+    _treeView.signal_button_release_event().connect( // Needs to be release, not press.
+        sigc::mem_fun(*this, &SelectorsDialog::_handleButtonEvent), false);
 
     _treeView.signal_button_release_event().connect_notify(
-        sigc::mem_fun(*this, &SelectorsDialog::_buttonEventsSelectObjs),
-        false);
+        sigc::mem_fun(*this, &SelectorsDialog::_buttonEventsSelectObjs), false);
 
     _treeView.signal_row_expanded().connect(sigc::mem_fun(*this, &SelectorsDialog::_rowExpand));
 
@@ -333,12 +327,12 @@ SelectorsDialog::SelectorsDialog() :
     _showWidgets();
 
     // Document & Desktop
-    _desktop_changed_connection = _desktopTracker.connectDesktopChanged(
-        sigc::mem_fun(*this, &SelectorsDialog::_handleDesktopChanged) );
+    _desktop_changed_connection =
+        _desktopTracker.connectDesktopChanged(sigc::mem_fun(*this, &SelectorsDialog::_handleDesktopChanged));
     _desktopTracker.connect(GTK_WIDGET(gobj()));
 
-    _document_replaced_connection = getDesktop()->connectDocumentReplaced(
-        sigc::mem_fun(this, &SelectorsDialog::_handleDocumentReplaced));
+    _document_replaced_connection =
+        getDesktop()->connectDocumentReplaced(sigc::mem_fun(this, &SelectorsDialog::_handleDocumentReplaced));
 
     _selection_changed_connection = getDesktop()->getSelection()->connectChanged(
         sigc::hide(sigc::mem_fun(this, &SelectorsDialog::_handleSelectionChanged)));
@@ -356,8 +350,7 @@ SelectorsDialog::SelectorsDialog() :
     show_all();
 }
 
-void 
-SelectorsDialog::_showWidgets()
+void SelectorsDialog::_showWidgets()
 {
     // Pack widgets
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -390,8 +383,7 @@ SelectorsDialog::_showWidgets()
     set_name("SelectorsAndStyleDialog");
 }
 
-void 
-SelectorsDialog::_toggleDirection()
+void SelectorsDialog::_toggleDirection()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool dir = !prefs->getBool("/dialogs/selectors/updown", true);
@@ -416,7 +408,7 @@ SelectorsDialog::~SelectorsDialog()
  * Returns the style element's text node. If there is no style element, one is created.
  * Ditto for text node.
  */
-Inkscape::XML::Node* SelectorsDialog::_getStyleTextNode()
+Inkscape::XML::Node *SelectorsDialog::_getStyleTextNode()
 {
 
     Inkscape::XML::Node *styleNode = nullptr;
@@ -548,7 +540,8 @@ void SelectorsDialog::_readStyleElement()
             properties = tokens[i+1];
         } else {
             std::cerr << "SelectorsDialog::_readStyleElement: Missing values "
-                "for last selector!" << std::endl;
+                         "for last selector!"
+                      << std::endl;
         }
         REMOVE_SPACES(properties);
         bool colExpand = false;
@@ -632,7 +625,8 @@ void SelectorsDialog::_writeStyleElement()
 }
 
 
-void SelectorsDialog::_addWatcherRecursive(Inkscape::XML::Node *node) {
+void SelectorsDialog::_addWatcherRecursive(Inkscape::XML::Node *node)
+{
 
     g_debug("SelectorsDialog::_addWatcherRecursive()");
 
@@ -857,7 +851,7 @@ void SelectorsDialog::_removeFromSelector(Gtk::TreeModel::Row row)
  * @return This function returns a comma separated list of ids for objects in input vector.
  * It is used in creating an 'id' selector. It relies on objects having 'id's.
  */
-Glib::ustring SelectorsDialog::_getIdList(std::vector<SPObject*> sel)
+Glib::ustring SelectorsDialog::_getIdList(std::vector<SPObject *> sel)
 {
     Glib::ustring str;
     for (auto& obj: sel) {
@@ -875,7 +869,8 @@ Glib::ustring SelectorsDialog::_getIdList(std::vector<SPObject*> sel)
  * @return objVec: a vector of pointers to SPObject's the selector matches.
  * Return a vector of all objects that selector matches.
  */
-std::vector<SPObject *> SelectorsDialog::_getObjVec(Glib::ustring selector) {
+std::vector<SPObject *> SelectorsDialog::_getObjVec(Glib::ustring selector)
+{
 
     g_debug("SelectorsDialog::_getObjVec: | %s |", selector.c_str());
     std::vector<SPObject *> objVec;
@@ -1238,8 +1233,7 @@ private:
  * Handle document replaced. (Happens when a default document is immediately replaced by another
  * document in a new window.)
  */
-void
-SelectorsDialog::_handleDocumentReplaced(SPDesktop *desktop, SPDocument * /* document */)
+void SelectorsDialog::_handleDocumentReplaced(SPDesktop *desktop, SPDocument * /* document */)
 {
     g_debug("SelectorsDialog::handleDocumentReplaced()");
 
@@ -1257,8 +1251,8 @@ SelectorsDialog::_handleDocumentReplaced(SPDesktop *desktop, SPDocument * /* doc
 /*
  * When a dialog is floating, it is connected to the active desktop.
  */
-void
-SelectorsDialog::_handleDesktopChanged(SPDesktop* desktop) {
+void SelectorsDialog::_handleDesktopChanged(SPDesktop *desktop)
+{
     g_debug("SelectorsDialog::handleDesktopReplaced()");
 
     if (getDesktop() == desktop) {
@@ -1274,8 +1268,8 @@ SelectorsDialog::_handleDesktopChanged(SPDesktop* desktop) {
 
     _selection_changed_connection = desktop->getSelection()->connectChanged(
         sigc::hide(sigc::mem_fun(this, &SelectorsDialog::_handleSelectionChanged)));
-    _document_replaced_connection = desktop->connectDocumentReplaced(
-        sigc::mem_fun(this, &SelectorsDialog::_handleDocumentReplaced));
+    _document_replaced_connection =
+        desktop->connectDocumentReplaced(sigc::mem_fun(this, &SelectorsDialog::_handleDocumentReplaced));
 
     _updateWatchers();
     _readStyleElement();
@@ -1286,8 +1280,8 @@ SelectorsDialog::_handleDesktopChanged(SPDesktop* desktop) {
 /*
  * Handle a change in which objects are selected in a document.
  */
-void
-SelectorsDialog::_handleSelectionChanged() {
+void SelectorsDialog::_handleSelectionChanged()
+{
     g_debug("SelectorsDialog::_handleSelectionChanged()");
     _treeView.get_selection()->set_mode(Gtk::SELECTION_MULTIPLE);
     _selectRow();
@@ -1300,7 +1294,7 @@ SelectorsDialog::_handleSelectionChanged() {
  * on a selector selects the matching objects on the desktop. A double click will
  * in addition open the CSS dialog.
  */
-void SelectorsDialog::_buttonEventsSelectObjs(GdkEventButton* event )
+void SelectorsDialog::_buttonEventsSelectObjs(GdkEventButton *event)
 {
     g_debug("SelectorsDialog::_buttonEventsSelectObjs");
     _treeView.get_selection()->set_mode(Gtk::SELECTION_SINGLE);
@@ -1369,8 +1363,7 @@ void SelectorsDialog::_selectRow()
  * @param tooltip
  * Set the style of '+' and '-' buttons at the bottom of dialog.
  */
-void SelectorsDialog::_styleButton(Gtk::Button& btn, char const* iconName,
-                               char const* tooltip)
+void SelectorsDialog::_styleButton(Gtk::Button &btn, char const *iconName, char const *tooltip)
 {
     GtkWidget *child = sp_get_icon_image(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_widget_show(child);

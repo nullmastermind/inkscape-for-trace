@@ -3107,8 +3107,9 @@ Verb *Verb::_base_verbs[] = {
                    INKSCAPE_ICON("dialog-text-and-font")),
     new DialogVerb(SP_VERB_DIALOG_XML_EDITOR, "DialogXMLEditor", N_("_XML Editor..."),
                    N_("View and edit the XML tree of the document"), INKSCAPE_ICON("dialog-xml-editor")),
-    new DialogVerb(SP_VERB_DIALOG_SELECTORS, "DialogSelectors", N_("_Selectors & CSS..."), N_("View and edit selections and CSS styles"), INKSCAPE_ICON("dialog-selectors")),
-    
+    new DialogVerb(SP_VERB_DIALOG_SELECTORS, "DialogSelectors", N_("_Selectors & CSS..."),
+                   N_("View and edit selections and CSS styles"), INKSCAPE_ICON("dialog-selectors")),
+
     new DialogVerb(SP_VERB_DIALOG_FIND, "DialogFind", N_("_Find/Replace..."), N_("Find objects in document"),
                    INKSCAPE_ICON("edit-find")),
     new DialogVerb(SP_VERB_DIALOG_SPELLCHECK, "DialogSpellcheck", N_("Check Spellin_g..."),

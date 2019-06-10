@@ -15,6 +15,10 @@
 #ifndef SELECTORSDIALOG_H
 #define SELECTORSDIALOG_H
 
+#include "ui/dialog/desktop-tracker.h"
+#include "ui/dialog/dialog-manager.h"
+#include "ui/dialog/styledialog.h"
+#include "ui/widget/panel.h"
 #include <gtkmm/dialog.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/scrolledwindow.h>
@@ -24,10 +28,6 @@
 #include <gtkmm/treestore.h>
 #include <gtkmm/treeview.h>
 #include <ui/widget/panel.h>
-#include "ui/dialog/dialog-manager.h"
-#include "ui/dialog/styledialog.h"
-#include "ui/dialog/desktop-tracker.h"
-#include "ui/widget/panel.h"
 
 #include "xml/helper-observer.h"
 
@@ -48,7 +48,7 @@ namespace Dialog {
  */
 class SelectorsDialog : public Widget::Panel {
 
-public:
+  public:
     ~SelectorsDialog() override;
     // No default constructor, noncopyable, nonassignable
     SelectorsDialog();
@@ -56,7 +56,8 @@ public:
     SelectorsDialog operator=(SelectorsDialog const &d) = delete;
 
     static SelectorsDialog &getInstance() { return *new SelectorsDialog(); }
-private:
+
+  private:
     // Monitor <style> element for changes.
     class NodeObserver;
 
@@ -64,7 +65,7 @@ private:
     class NodeWatcher;
     enum SelectorType { CLASS, ID, TAG };
     void fixCSSSelectors(Glib::ustring &selector);
-    std::vector<SelectorsDialog::NodeWatcher*> _nodeWatchers;
+    std::vector<SelectorsDialog::NodeWatcher *> _nodeWatchers;
     void _nodeAdded(   Inkscape::XML::Node &repr );
     void _nodeRemoved( Inkscape::XML::Node &repr );
     void _nodeChanged( Inkscape::XML::Node &repr );
@@ -107,7 +108,7 @@ private:
       static Glib::RefPtr<SelectorsDialog::TreeStore> create(SelectorsDialog *styledialog);
 
     private:
-        SelectorsDialog *_selectorsdialog;
+      SelectorsDialog *_selectorsdialog;
     };
 
     // TreeView
@@ -117,7 +118,7 @@ private:
     // Widgets
     Gtk::Paned _paned;
     Gtk::Switch _direction;
-    Gtk::Box   _button_box;
+    Gtk::Box _button_box;
     Gtk::Box _selectors_box;
     Gtk::ScrolledWindow _scrolled_window_style;
     Gtk::ScrolledWindow _scrolled_window_selectors;
