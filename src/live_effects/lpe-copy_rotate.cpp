@@ -68,7 +68,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     rotation_angle(_("Rotation angle"), _("Angle between two successive copies"), "rotation_angle", &wr, this, 60.0),
     num_copies(_("Number of copies"), _("Number of copies of the original path"), "num_copies", &wr, this, 6),
     gap(_("Gap"), _("Gap"), _("Gap space between copies, use small negative gaps to fix some joins"), &wr, this, 0.05),
-    copies_to_360(_("360º Copies"), _("No rotation angle, fixed to 360º"), "copies_to_360", &wr, this, true),
+    copies_to_360(_("360° Copies"), _("No rotation angle, fixed to 360°"), "copies_to_360", &wr, this, true),
     mirror_copies(_("Mirror copies"), _("Mirror between copies"), "mirror_copies", &wr, this, false),
     split_items(_("Split elements"), _("Split elements, this allow gradients and other paints."), "split_items", &wr, this, false),
     dist_angle_handle(100.0)
@@ -372,9 +372,9 @@ Gtk::Widget * LPECopyRotate::newWidget()
     Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false,0));
     Gtk::Button * reset_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Reset styles"))));
     reset_button->signal_clicked().connect(sigc::mem_fun (*this,&LPECopyRotate::resetStyles));
-    reset_button->set_size_request(110,20);
-    vbox->pack_start(*hbox, true,true,2);
-    hbox->pack_start(*reset_button, false, false,2);
+    reset_button->set_size_request(110, 20);
+    vbox->pack_start(*hbox, true, true, 2);
+    hbox->pack_start(*reset_button, false, false, 2);
     if(Gtk::Widget* widg = defaultParamSet()) {
         vbox->pack_start(*widg, true, true, 2);
     }
