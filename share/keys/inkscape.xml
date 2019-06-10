@@ -627,6 +627,9 @@ override) the bindings in the main default.xml.
   <bind key="x" modifiers="Primary,Shift" action="DialogXMLEditor" display="true" />
   <bind key="X" modifiers="Primary,Shift" action="DialogXMLEditor" />
 
+  <bind key="s" modifiers="Primary,Alt" action="DialogSelectors" display="true" />
+  <bind key="S" modifiers="Primary,Alt" action="DialogSelectors" />
+
   <bind key="d" modifiers="Primary,Shift" action="DialogDocumentProperties" display="true" />
   <bind key="D" modifiers="Primary,Shift" action="DialogDocumentProperties" />
 

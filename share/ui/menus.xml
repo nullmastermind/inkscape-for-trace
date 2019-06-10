@@ -82,6 +82,7 @@
        <verb verb-id="EditRemoveAllGuides" />
        <separator/>
        <verb verb-id="DialogXMLEditor" />
+       <verb verb-id="DialogSelectors" />
        <separator/>
        <verb verb-id="DialogInput" />
        <verb verb-id="DialogPreferences" />

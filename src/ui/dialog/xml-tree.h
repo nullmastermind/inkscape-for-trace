@@ -29,8 +29,6 @@
 
 #include "ui/dialog/attrdialog.h"
 #include "ui/dialog/desktop-tracker.h"
-#include "ui/dialog/selectordialog.h"
-#include "ui/dialog/styledialog.h"
 
 
 class SPDesktop;
@@ -185,8 +183,6 @@ private:
     enum {
         FLOWBOX_PAGE_NODES,
         FLOWBOX_PAGE_ATTRS,
-        FLOWBOX_PAGE_STYLES,
-        FLOWBOX_PAGE_SELECTORS,
     };
 
     /**
@@ -216,8 +212,6 @@ private:
     SPXMLViewTree *tree;
     //SPXMLViewAttrList *attributes;
     AttrDialog *attributes;
-    StyleDialog *styles;
-    SelectorDialog *selectors;
 
     /* XML Node Creation pop-up window */
     Gtk::Entry *name_entry;
@@ -225,8 +219,6 @@ private:
 
     Gtk::VBox node_box;
     Gtk::VBox attr_box;
-    Gtk::VBox selectors_box;
-    Gtk::VBox styles_box;
     Gtk::HBox status_box;
     Gtk::Label status;
     Gtk::Toolbar tree_toolbar;

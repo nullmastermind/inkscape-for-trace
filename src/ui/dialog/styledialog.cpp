@@ -200,8 +200,9 @@ StyleDialog::StyleDialog()
     Gtk::Box *alltoggler = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     Gtk::Label *infotoggler = Gtk::manage(new Gtk::Label(_("Edit Full Stylesheet")));
     _all_css = Gtk::manage(new Gtk::Switch());
-    _all_css->set_margin_right(5);
-    _all_css->set_margin_top(2);
+    _scroolpos = 0;
+    vadj = _scrolledWindow.get_vadjustment();
+    vadj->signal_changed().connect(sigc::mem_fun(*this, &StyleDialog::_vscrool));
     _all_css->property_active().signal_changed().connect(sigc::mem_fun(*this, &StyleDialog::_reload));
     alltoggler->pack_start(*_all_css, false, false, 0);
     alltoggler->pack_start(*infotoggler, false, false, 0);
@@ -226,6 +227,12 @@ StyleDialog::StyleDialog()
 
     // Load tree
     _readStyleElement();
+}
+
+void 
+StyleDialog::_vscrool()
+{
+    _scroolpos = vadj->get_value();
 }
 
 /**
@@ -340,7 +347,6 @@ void StyleDialog::_readStyleElement()
     if (_updating)
         return; // Don't read if we wrote style element.
     _updating = true;
-
     Inkscape::XML::Node *textNode = _getStyleTextNode();
     if (textNode == nullptr) {
         std::cerr << "StyleDialog::_readStyleElement: No text node!" << std::endl;
@@ -945,6 +951,7 @@ bool StyleDialog::_addRow(GdkEventButton *evt, Glib::RefPtr<Gtk::TreeStore> stor
                           Glib::ustring selector, gint pos)
 {
     if (evt->type == GDK_BUTTON_RELEASE && evt->button == 1) {
+        vadj->set_value(_scroolpos);
         Gtk::TreeIter iter = store->append();
         Gtk::TreeModel::Path path = (Gtk::TreeModel::Path)iter;
         Gtk::TreeModel::Row row = *(iter);
@@ -1013,6 +1020,7 @@ void StyleDialog::_setAutocompletion(Gtk::Entry *entry, Glib::ustring name)
 void
 StyleDialog::_startValueEdit(Gtk::CellEditable* cell, const Glib::ustring& path, Glib::RefPtr<Gtk::TreeStore> store)
 {
+    vadj->set_value(_scroolpos);
     Gtk::TreeModel::Row row = *store->get_iter(path);
     if (row) {
         Gtk::Entry *entry = dynamic_cast<Gtk::Entry *>(cell);
@@ -1069,6 +1077,7 @@ StyleDialog::_startValueEdit(Gtk::CellEditable* cell, const Glib::ustring& path,
 
 void StyleDialog::_startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &path)
 {
+    vadj->set_value(_scroolpos);
     Glib::RefPtr<Gtk::ListStore> completionModel = Gtk::ListStore::create(_mCSSData);
     Glib::RefPtr<Gtk::EntryCompletion> entry_completion = Gtk::EntryCompletion::create();
     entry_completion->set_model(completionModel);
@@ -1118,6 +1127,7 @@ void StyleDialog::_nameEdited(const Glib::ustring &path, const Glib::ustring &na
         } else {
             css_tree->set_cursor(pathel, *(css_tree->get_column(col)), true);
             grab_focus();
+            vadj->set_value(_scroolpos);
         }
     }
 }

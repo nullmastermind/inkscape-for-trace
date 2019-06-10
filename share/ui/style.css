@@ -316,12 +316,29 @@
  #LPEDialogSelector .searchbar #LPESelectorEffectFavShowImage {
      color: @theme_fg_color;
  }
- 
- #XMLFlow .stylesheettoggler image {
+
+ #SelectorsAndStyleDialog{
+    min-height:200px;
+    min-width:250px;
+ }
+
+ #SelectorsAndStyleDialog button{
+    padding:4px;
+    min-height:16px;
+    margin:2px;
+ }
+
+ #SelectorsAndStyleDialog .directiontoggler  image,
+ #SelectorsAndStyleDialog .stylesheettoggler image {
      color: transparent;
  }
+
+ #SelectorsAndStyleDialog .directiontoggler,
+ #SelectorsAndStyleDialog .stylesheettoggler {
+     margin:2px;
+ }
  
- #XMLFlow .toggle {
+ #SelectorsAndStyleDialog .toggle {
      min-width: 18px;
      padding-left: 6px;
      padding-right: 6px;

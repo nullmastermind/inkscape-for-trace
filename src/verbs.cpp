@@ -2183,6 +2183,9 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_XML_EDITOR:
             dt->_dlg_mgr->showDialog("XmlTree");
             break;
+        case SP_VERB_DIALOG_SELECTORS:
+            dt->_dlg_mgr->showDialog("Selectors");
+            break;
         case SP_VERB_DIALOG_FIND:
             dt->_dlg_mgr->showDialog("Find");
             break;
@@ -2239,11 +2242,7 @@ void DialogVerb::perform(SPAction *action, void *data)
             break;
         case SP_VERB_DIALOG_STYLE:
             dt->_dlg_mgr->showDialog("StyleDialog");
-           break;
-        case SP_VERB_DIALOG_CSS:
-            dt->_dlg_mgr->showDialog("CssDialog");
             break;
-
         default:
             break;
     }
@@ -3108,6 +3107,8 @@ Verb *Verb::_base_verbs[] = {
                    INKSCAPE_ICON("dialog-text-and-font")),
     new DialogVerb(SP_VERB_DIALOG_XML_EDITOR, "DialogXMLEditor", N_("_XML Editor..."),
                    N_("View and edit the XML tree of the document"), INKSCAPE_ICON("dialog-xml-editor")),
+    new DialogVerb(SP_VERB_DIALOG_SELECTORS, "DialogSelectors", N_("_Selectors & CSS..."), N_("View and edit selections and CSS styles"), INKSCAPE_ICON("dialog-selectors")),
+    
     new DialogVerb(SP_VERB_DIALOG_FIND, "DialogFind", N_("_Find/Replace..."), N_("Find objects in document"),
                    INKSCAPE_ICON("edit-find")),
     new DialogVerb(SP_VERB_DIALOG_SPELLCHECK, "DialogSpellcheck", N_("Check Spellin_g..."),
@@ -3134,7 +3135,6 @@ Verb *Verb::_base_verbs[] = {
     new DialogVerb(SP_VERB_DIALOG_OBJECTS, "DialogObjects", N_("Object_s..."), N_("View Objects"),
                    INKSCAPE_ICON("dialog-layers")),
     new DialogVerb(SP_VERB_DIALOG_STYLE, "DialogStyle", N_("Style Dialog..."), N_("View Style Dialog"), nullptr),
-    new DialogVerb(SP_VERB_DIALOG_CSS, "DialogCss", N_("Css Dialog..."), N_("View Css Dialog"), nullptr),
     new DialogVerb(SP_VERB_DIALOG_LIVE_PATH_EFFECT, "DialogLivePathEffect", N_("Path E_ffects..."),
                    N_("Manage, edit, and apply path effects"), INKSCAPE_ICON("dialog-path-effects")),
     new DialogVerb(SP_VERB_DIALOG_FILTER_EFFECTS, "DialogFilterEffects", N_("Filter _Editor..."),

@@ -378,6 +378,7 @@ File, Edit, View, Modify, Text, Xtras, Window, Help.
 
   <!-- Nothing even remotely equivalent -->
   <bind action="DialogXMLEditor" /> 
+  <bind action="DialogSelectors" /> 
   <!-- Equivalent exists but no key binding -->
   <bind action="DialogDocumentProperties" /> 
 

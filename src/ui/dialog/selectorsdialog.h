@@ -12,19 +12,22 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifndef SELECTORDIALOG_H
-#define SELECTORDIALOG_H
+#ifndef SELECTORSDIALOG_H
+#define SELECTORSDIALOG_H
 
 #include <gtkmm/dialog.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/scrolledwindow.h>
+#include <gtkmm/switch.h>
 #include <gtkmm/treemodelfilter.h>
 #include <gtkmm/treeselection.h>
 #include <gtkmm/treestore.h>
 #include <gtkmm/treeview.h>
 #include <ui/widget/panel.h>
-
+#include "ui/dialog/dialog-manager.h"
+#include "ui/dialog/styledialog.h"
 #include "ui/dialog/desktop-tracker.h"
+#include "ui/widget/panel.h"
 
 #include "xml/helper-observer.h"
 
@@ -33,7 +36,7 @@ namespace UI {
 namespace Dialog {
 
 /**
- * @brief The SelectorDialog class
+ * @brief The SelectorsDialog class
  * A list of CSS selectors will show up in this dialog. This dialog allows one to
  * add and delete selectors. Elements can be added to and removed from the selectors
  * in the dialog. Selection of any selector row selects the matching  objects in
@@ -43,17 +46,17 @@ namespace Dialog {
  *   1. The text node of the style element.
  *   2. The Gtk::TreeModel.
  */
-class SelectorDialog : public Widget::Panel {
+class SelectorsDialog : public Widget::Panel {
 
 public:
-    ~SelectorDialog() override;
+    ~SelectorsDialog() override;
     // No default constructor, noncopyable, nonassignable
-    SelectorDialog();
-    SelectorDialog(SelectorDialog const &d) = delete;
-    SelectorDialog operator=(SelectorDialog const &d) = delete;
+    SelectorsDialog();
+    SelectorsDialog(SelectorsDialog const &d) = delete;
+    SelectorsDialog operator=(SelectorsDialog const &d) = delete;
 
-    static SelectorDialog &getInstance() { return *new SelectorDialog(); }
-  private:
+    static SelectorsDialog &getInstance() { return *new SelectorsDialog(); }
+private:
     // Monitor <style> element for changes.
     class NodeObserver;
 
@@ -61,7 +64,7 @@ public:
     class NodeWatcher;
     enum SelectorType { CLASS, ID, TAG };
     void fixCSSSelectors(Glib::ustring &selector);
-    std::vector<SelectorDialog::NodeWatcher*> _nodeWatchers;
+    std::vector<SelectorsDialog::NodeWatcher*> _nodeWatchers;
     void _nodeAdded(   Inkscape::XML::Node &repr );
     void _nodeRemoved( Inkscape::XML::Node &repr );
     void _nodeChanged( Inkscape::XML::Node &repr );
@@ -101,10 +104,10 @@ public:
         void on_row_deleted(const TreeModel::Path& path) override;
 
     public:
-      static Glib::RefPtr<SelectorDialog::TreeStore> create(SelectorDialog *styledialog);
+      static Glib::RefPtr<SelectorsDialog::TreeStore> create(SelectorsDialog *styledialog);
 
     private:
-        SelectorDialog *_selectordialog;
+        SelectorsDialog *_selectorsdialog;
     };
 
     // TreeView
@@ -113,12 +116,15 @@ public:
     Gtk::TreeView _treeView;
     // Widgets
     Gtk::Paned _paned;
-    Gtk::Box   _mainBox;
-    Gtk::Box   _buttonBox;
-    Gtk::ScrolledWindow _scrolledWindow;
-    Gtk::Button* del;
-    Gtk::Button* create;
+    Gtk::Switch _direction;
+    Gtk::Box   _button_box;
+    Gtk::Box _selectors_box;
+    Gtk::ScrolledWindow _scrolled_window_style;
+    Gtk::ScrolledWindow _scrolled_window_selectors;
 
+    Gtk::Button _del;
+    Gtk::Button _create;
+    StyleDialog *_style_dialog;
     // Reading and writing the style element.
     Inkscape::XML::Node *_getStyleTextNode();
     void _readStyleElement();
@@ -137,7 +143,8 @@ public:
     void _insertClass(SPObject *obj, const Glib::ustring &className);
     void _removeClass(const std::vector<SPObject *> &objVec, const Glib::ustring &className, bool all = false);
     void _removeClass(SPObject *obj, const Glib::ustring &className, bool all = false);
-
+    void _toggleDirection();
+    void _showWidgets();
 
     void _selectObjects(int, int);
     // Variables
@@ -175,7 +182,7 @@ public:
 } // namespace UI
 } // namespace Inkscape
 
-#endif // SELECTORDIALOG_H
+#endif // SELECTORSDIALOG_H
 
 /*
   Local Variables:

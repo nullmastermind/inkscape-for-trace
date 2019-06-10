@@ -55,9 +55,8 @@
 #include "ui/dialog/clonetiler.h"
 #include "ui/dialog/svg-fonts-dialog.h"
 #include "ui/dialog/objects.h"
-#include "ui/dialog/selectordialog.h"
+#include "ui/dialog/selectorsdialog.h"
 #include "ui/dialog/styledialog.h"
-
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
@@ -126,7 +125,7 @@ DialogManager::DialogManager() {
         registerFactory("TileDialog",          &create<ArrangeDialog,        FloatingBehavior>);
         registerFactory("Symbols",             &create<SymbolsDialog,        FloatingBehavior>);
         registerFactory("StyleDialog",         &create<StyleDialog,          FloatingBehavior>);
-        registerFactory("SelectorDialog",      &create<SelectorDialog,       FloatingBehavior>);
+        registerFactory("Selectors",           &create<SelectorsDialog,      FloatingBehavior>);
 
 #if HAVE_POTRACE
         registerFactory("Trace",               &create<TraceDialog,          FloatingBehavior>);
@@ -167,8 +166,7 @@ DialogManager::DialogManager() {
         registerFactory("Swatches",            &create<SwatchesPanel,        DockBehavior>);
         registerFactory("TileDialog",          &create<ArrangeDialog,        DockBehavior>);
         registerFactory("Symbols",             &create<SymbolsDialog,        DockBehavior>);
-        registerFactory("StyleDialog",         &create<StyleDialog,          DockBehavior>);
-        registerFactory("SelectorDialog",      &create<SelectorDialog,       DockBehavior>);
+        registerFactory("Selectors",           &create<SelectorsDialog,      DockBehavior>);
 
 #if HAVE_POTRACE
         registerFactory("Trace",               &create<TraceDialog,          DockBehavior>);
