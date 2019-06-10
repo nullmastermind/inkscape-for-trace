@@ -315,6 +315,7 @@
 ../src/ui/toolbar/pencil-toolbar.cpp
 ../src/ui/toolbar/rect-toolbar.cpp
 ../src/ui/toolbar/select-toolbar.cpp
+../src/ui/toolbar/snap-toolbar.cpp
 ../src/ui/toolbar/spiral-toolbar.cpp
 ../src/ui/toolbar/spray-toolbar.cpp
 ../src/ui/toolbar/star-toolbar.cpp
