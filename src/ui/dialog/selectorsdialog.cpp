@@ -17,6 +17,7 @@
 #include "document-undo.h"
 #include "inkscape.h"
 #include "selection.h"
+#include "style.h"
 #include "verbs.h"
 
 #include "ui/icon-loader.h"
@@ -272,7 +273,6 @@ void SelectorsDialog::TreeStore::on_row_deleted(const TreeModel::Path &path)
         return; // Don't write if we deleted row (other than from DND)
 
     g_debug("on_row_deleted");
-
     _selectorsdialog->_writeStyleElement();
 }
 
@@ -624,7 +624,8 @@ void SelectorsDialog::_writeStyleElement()
         return;
     }
     _updating = true;
-
+    SPDocument *document = SP_ACTIVE_DOCUMENT;
+    document->setStyleSheet(nullptr);
     Glib::ustring styleContent;
     for (auto& row: _store->children()) {
         Glib::ustring selector = row[_mColumns._colSelector];

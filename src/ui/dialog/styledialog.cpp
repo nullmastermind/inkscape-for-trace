@@ -607,65 +607,68 @@ void StyleDialog::_readStyleElement()
             }
         }
         std::map<Glib::ustring, Glib::ustring> attr_prop_styleshet = parseStyle(style);
+        std::map<Glib::ustring, Glib::ustring> attr_prop_styleshet_comments = parseStyle(comments);
+        std::map<Glib::ustring, std::pair<Glib::ustring, bool> > result_props;
+        for (auto styled : attr_prop_styleshet) {
+            result_props[styled.first] = std::make_pair(styled.second, true);
+        }
+        for (auto styled : attr_prop_styleshet_comments) {
+            result_props[styled.first] = std::make_pair(styled.second, false);
+        }
         css_selector_event_add->signal_button_release_event().connect(
             sigc::bind<Glib::RefPtr<Gtk::TreeStore>, Gtk::TreeView *, Glib::ustring, gint>(
                 sigc::mem_fun(*this, &StyleDialog::_addRow), store, css_tree, selector, selectorpos));
         if (obj && !_all_css->get_active()) {
-            for (auto iter : obj->style->properties()) {
-                if (iter->style_src != SP_STYLE_SRC_UNSET) {
-                    if (attr_prop_styleshet.count(iter->name)) {
-                        Gtk::TreeIter iterstore = store->append();
-                        Gtk::TreeModel::Path path = (Gtk::TreeModel::Path)iterstore;
-                        Gtk::TreeModel::Row row = *(iterstore);
-                        row[_mColumns._colSelector] = selector;
-                        row[_mColumns._colSelectorPos] = selectorpos;
-                        row[_mColumns._colActive] = true;
-                        row[_mColumns._colName] = iter->name;
-                        row[_mColumns._colValue] = attr_prop_styleshet[iter->name];
-                        const Glib::ustring value = row[_mColumns._colValue];
-                        guint32 r1 = 0; // if there's no color, return black
-                        r1 = sp_svg_read_color(value.c_str(), r1);
-                        guint32 r2 = 0; // if there's no color, return black
-                        r2 = sp_svg_read_color(iter->get_value().c_str(), r2);
-                        if (attr_prop.count(iter->name) ||
-                            (value != iter->get_value() && ((r1 & 0x000000ff) == 0 || r1 != r2))) {
-                            row[_mColumns._colStrike] = true;
-                            row[_mColumns._colOwner] = Glib::ustring("");
-                        } else {
-                            row[_mColumns._colStrike] = false;
-                            row[_mColumns._colOwner] = Glib::ustring("Value active");
-                            _addOwnerStyle(iter->name, selector);
-                        }
-                    }
-                }
-            }
-        } else {
-            for (auto iter : attr_prop_styleshet) {
-                Gtk::TreeModel::Row row = *(store->append());
-                row[_mColumns._colSelector] = selector;
-                row[_mColumns._colSelectorPos] = selectorpos;
-                row[_mColumns._colActive] = true;
-                row[_mColumns._colName] = iter.first;
-                row[_mColumns._colValue] = iter.second;
-                row[_mColumns._colStrike] = false;
-                row[_mColumns._colOwner] = Glib::ustring("Stylesheet value");
-            }
-        }
-        std::map<Glib::ustring, Glib::ustring> attr_prop_styleshet_comments = parseStyle(comments);
-
-        for (auto iter : attr_prop_styleshet_comments) {
-            if (!attr_prop_styleshet.count(iter.first)) {
+            for (auto iter : result_props) {
                 Gtk::TreeIter iterstore = store->append();
                 Gtk::TreeModel::Path path = (Gtk::TreeModel::Path)iterstore;
                 Gtk::TreeModel::Row row = *(iterstore);
                 row[_mColumns._colSelector] = selector;
                 row[_mColumns._colSelectorPos] = selectorpos;
-                row[_mColumns._colActive] = false;
+                row[_mColumns._colActive] = iter.second.second;
                 row[_mColumns._colName] = iter.first;
-                row[_mColumns._colValue] = iter.second;
-                row[_mColumns._colStrike] = true;
-                Glib::ustring tooltiptext = _("This value is comented");
-                row[_mColumns._colOwner] = tooltiptext;
+                row[_mColumns._colValue] = iter.second.first;
+                const Glib::ustring value = row[_mColumns._colValue];
+                if (iter.second.second) {
+                    Glib::ustring val = "";
+                    for (auto iterprop : obj->style->properties()) {
+                        if (iterprop->style_src != SP_STYLE_SRC_UNSET &&
+                            iterprop->name == iter.first) 
+                        {
+                            val = iterprop->get_value();
+                            break;
+                        }
+                    }
+                    guint32 r1 = 0; // if there's no color, return black
+                    r1 = sp_svg_read_color(value.c_str(), r1);
+                    guint32 r2 = 0; // if there's no color, return black
+                    r2 = sp_svg_read_color(val.c_str(), r2);
+                    if (attr_prop.count(iter.first) ||
+                        (value != val && (r1 == 0 || r1 != r2))) 
+                    {
+                        row[_mColumns._colStrike] = true;
+                        row[_mColumns._colOwner] = Glib::ustring("");
+                    } else {
+                        row[_mColumns._colStrike] = false;
+                        row[_mColumns._colOwner] = Glib::ustring("Value active");
+                        _addOwnerStyle(iter.first, selector);
+                    }
+                } else {
+                    row[_mColumns._colStrike] = true;
+                    Glib::ustring tooltiptext = _("This value is comented");
+                    row[_mColumns._colOwner] = tooltiptext;
+                }
+            }
+        } else {
+            for (auto iter : result_props) {
+                Gtk::TreeModel::Row row = *(store->append());
+                row[_mColumns._colSelector] = selector;
+                row[_mColumns._colSelectorPos] = selectorpos;
+                row[_mColumns._colActive] = iter.second.second;
+                row[_mColumns._colName] = iter.first;
+                row[_mColumns._colValue] = iter.second.first;
+                row[_mColumns._colStrike] = false;
+                row[_mColumns._colOwner] = Glib::ustring("Stylesheet value");
             }
         }
         _styleBox.pack_start(*css_selector_container, Gtk::PACK_EXPAND_WIDGET);
