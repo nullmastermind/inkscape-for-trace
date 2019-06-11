@@ -199,19 +199,20 @@ StyleDialog::StyleDialog()
     _scrolledWindow.add(_styleBox);
     Gtk::Box *alltoggler = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     Gtk::Label *infotoggler = Gtk::manage(new Gtk::Label(_("Edit Full Stylesheet")));
+    infotoggler->get_style_context()->add_class("inksmall");
     _all_css = Gtk::manage(new Gtk::Switch());
     _scroolpos = 0;
     vadj = _scrolledWindow.get_vadjustment();
     vadj->signal_changed().connect(sigc::mem_fun(*this, &StyleDialog::_vscrool));
-    _all_css->property_active().signal_changed().connect(sigc::mem_fun(*this, &StyleDialog::_reload));
-    alltoggler->pack_start(*_all_css, false, false, 0);
-    alltoggler->pack_start(*infotoggler, false, false, 0);
-    _all_css->set_active(false);
-    _mainBox.pack_start(*alltoggler, false, false, 0);
+    //_all_css->property_active().signal_changed().connect(sigc::mem_fun(*this, &StyleDialog::_reload));
+    //alltoggler->pack_start(*_all_css, false, false, 0);
+    //alltoggler->pack_start(*infotoggler, false, false, 0);
+    //_all_css->set_active(false);
+    //_mainBox.pack_start(*alltoggler, false, false, 0);
     _mainBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
 
     _getContents()->pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
-    _all_css->get_style_context()->add_class("inkswitch");
+    //_all_css->get_style_context()->add_class("inkswitch");
     // Document & Desktop
     _desktop_changed_connection =
         _desktopTracker.connectDesktopChanged(sigc::mem_fun(*this, &StyleDialog::_handleDesktopChanged));
@@ -333,6 +334,10 @@ Glib::RefPtr<Gtk::TreeModel> StyleDialog::_selectTree(Glib::ustring selector)
     return model;
 }
 
+void StyleDialog::setCurrentSelector(Glib::ustring current_selector){
+    _current_selector = current_selector;
+    _readStyleElement();
+}
 /**
  * Fill the Gtk::TreeStore from the svg:style element.
  */
@@ -503,7 +508,7 @@ void StyleDialog::_readStyleElement()
             }
             // Get list of objects selector matches
             std::vector<SPObject *> objVec = _getObjVec(selector);
-            if (!_all_css->get_active()) {
+            if (!_all_css->get_active() && _current_selector == "") {
                 bool stop = true;
                 for (auto objel : objVec) {
                     if (objel->getId() == obj->getId()) {
@@ -515,6 +520,9 @@ void StyleDialog::_readStyleElement()
                     selectorpos++;
                     continue;
                 }
+            }
+            if (!_current_selector.empty() && _current_selector != selector) {
+                continue;
             }
             Glib::ustring properties;
             // Check to make sure we do have a value to match selector.
@@ -598,7 +606,7 @@ void StyleDialog::_readStyleElement()
             css_selector_event_add->signal_button_release_event().connect(
                 sigc::bind<Glib::RefPtr<Gtk::TreeStore>, Gtk::TreeView *, Glib::ustring, gint>(
                     sigc::mem_fun(*this, &StyleDialog::_addRow), store, css_tree, selector, selectorpos));
-            if (!_all_css->get_active()) {
+            if (!_all_css->get_active() || _current_selector != "") {
                 for (auto iter : obj->style->properties()) {
                     if (iter->style_src != SP_STYLE_SRC_UNSET) {
                         if (attr_prop_styleshet.count(iter->name)) {

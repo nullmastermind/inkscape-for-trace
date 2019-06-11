@@ -323,12 +323,24 @@
     margin:2px;
     padding:2px;
  }
+ 
+ .inksmall{
+    font-size:11;
+ }
+
+ .inkswitch slider{
+    min-width:18px;
+    min-height:18px;
+ }
 
  .inkswitch image{
     color: transparent;
  }
+
  .inkswitch {
     margin:2px;
+    padding:0;
+    font-size:8px;
  }
  
  #XMLAndAttributesDialog .toggle,

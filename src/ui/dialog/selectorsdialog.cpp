@@ -225,6 +225,10 @@ void SelectorsDialog::fixCSSSelectors(Glib::ustring &selector)
                 }
                 if (i != std::string::npos) {
                     toparse.erase(0, i);
+                } else {
+                    toparse = tag;
+                    selectorpart = selectorpart == Glib::ustring("") ? toparse : selectorpart + " " + toparse;
+                    continue;
                 }
             }
             auto i = toparse.find("#");
@@ -362,6 +366,7 @@ void SelectorsDialog::_showWidgets()
     _scrolled_window_selectors.add(_treeView);
     _scrolled_window_selectors.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     Gtk::Label *dirtogglerlabel = Gtk::manage(new Gtk::Label(_("Paned vertical")));
+    dirtogglerlabel->get_style_context()->add_class("inksmall");
     _direction.property_active() = dir;
     _direction.property_active().signal_changed().connect(sigc::mem_fun(*this, &SelectorsDialog::_toggleDirection));
     _direction.get_style_context()->add_class("inkswitch");
@@ -381,7 +386,7 @@ void SelectorsDialog::_showWidgets()
     _paned.pack2(_selectors_box, true, true);
     _getContents()->pack_start(_paned, Gtk::PACK_EXPAND_WIDGET);
     show_all();
-    int widthpos = _paned.property_max_position() - _paned.property_min_position();
+    int widthpos = _paned.property_max_position();
     int panedpos = prefs->getInt("/dialogs/selectors/panedpos", 130);
 
     _paned.set_position(panedpos);
@@ -405,7 +410,8 @@ void SelectorsDialog::_toggleDirection()
     bool dir = !prefs->getBool("/dialogs/selectors/vertical", true);
     prefs->setBool("/dialogs/selectors/vertical", dir);
     _paned.set_orientation(dir ? Gtk::ORIENTATION_VERTICAL : Gtk::ORIENTATION_HORIZONTAL);
-    int widthpos = _paned.property_max_position() - _paned.property_min_position();
+    int widthpos = _paned.property_max_position();
+    prefs->setInt("/dialogs/xml/panedpos", widthpos / 2);
     _paned.set_position(widthpos / 2);
 }
 
@@ -1341,8 +1347,16 @@ void SelectorsDialog::_selectRow()
         if (!row->parent() && row->children().size() < 2) {
             _del.show();
         }
+        if (!row->parent() && row->children().size() > 1) {
+            _style_dialog->setCurrentSelector(row[_mColumns._colSelector]);
+        } else {
+            _style_dialog->setCurrentSelector("");
+        }
     } else if (selectedrows.size() == 0) {
+        _style_dialog->setCurrentSelector("");
         _del.show();
+    } else {
+        _style_dialog->setCurrentSelector("");
     }
     if (_updating || !getDesktop()) return; // Avoid updating if we have set row via dialog.
     if (SP_ACTIVE_DESKTOP != getDesktop()) {

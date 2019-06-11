@@ -66,6 +66,7 @@ class StyleDialog : public Widget::Panel {
     StyleDialog operator=(StyleDialog const &d) = delete;
 
     static StyleDialog &getInstance() { return *new StyleDialog(); }
+    void setCurrentSelector(Glib::ustring current_selector);
 
   private:
     // Monitor <style> element for changes.
@@ -137,6 +138,7 @@ class StyleDialog : public Widget::Panel {
     void _reload();
     void _vscrool();
     double _scroolpos;
+    Glib::ustring _current_selector;
 
     // Update watchers
     void _addWatcherRecursive(Inkscape::XML::Node *node);
