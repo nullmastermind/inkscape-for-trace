@@ -128,6 +128,8 @@ class StyleDialog : public Widget::Panel {
     void _onPropDelete(Glib::ustring path, Glib::RefPtr<Gtk::TreeStore> store);
     void _nameEdited(const Glib::ustring &path, const Glib::ustring &name, Glib::RefPtr<Gtk::TreeStore> store,
                      Gtk::TreeView *css_tree);
+    bool _onNameKeyReleased(GdkEventKey *event, Gtk::CellEditable *cell);
+    bool _onValueKeyReleased(GdkEventKey *event, Gtk::CellEditable *cell);
     void _valueEdited(const Glib::ustring &path, const Glib::ustring &value, Glib::RefPtr<Gtk::TreeStore> store);
     void _startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &path);
 
@@ -147,7 +149,7 @@ class StyleDialog : public Widget::Panel {
     // Manipulate Tree
     std::vector<SPObject *> _getObjVec(Glib::ustring selector);
     std::map<Glib::ustring, Glib::ustring> parseStyle(Glib::ustring style_string);
-    std::map<Glib::ustring, Glib::ustring> _ownerStyle;
+    std::map<Glib::ustring, Glib::ustring> _owner_style;
     void _addOwnerStyle(Glib::ustring name, Glib::ustring selector);
     // Variables
     Inkscape::XML::Node *_textNode; // Track so we know when to add a NodeObserver.

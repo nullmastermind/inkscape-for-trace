@@ -1347,16 +1347,11 @@ void SelectorsDialog::_selectRow()
         if (!row->parent() && row->children().size() < 2) {
             _del.show();
         }
-        if (!row->parent() && row->children().size() > 1) {
+        if (!row->parent()) {
             _style_dialog->setCurrentSelector(row[_mColumns._colSelector]);
-        } else {
-            _style_dialog->setCurrentSelector("");
         }
     } else if (selectedrows.size() == 0) {
-        _style_dialog->setCurrentSelector("");
         _del.show();
-    } else {
-        _style_dialog->setCurrentSelector("");
     }
     if (_updating || !getDesktop()) return; // Avoid updating if we have set row via dialog.
     if (SP_ACTIVE_DESKTOP != getDesktop()) {
@@ -1370,6 +1365,8 @@ void SelectorsDialog::_selectRow()
     SPObject *obj = nullptr;
     if (!selection->isEmpty()) {
         obj = selection->objects().back();
+    } else {
+        _style_dialog->setCurrentSelector("");
     }
 
     for (auto row : children) {
