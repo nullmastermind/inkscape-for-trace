@@ -608,7 +608,7 @@ void StyleDialog::_readStyleElement()
         }
         std::map<Glib::ustring, Glib::ustring> attr_prop_styleshet = parseStyle(style);
         std::map<Glib::ustring, Glib::ustring> attr_prop_styleshet_comments = parseStyle(comments);
-        std::map<Glib::ustring, std::pair<Glib::ustring, bool> > result_props;
+        std::map<Glib::ustring, std::pair<Glib::ustring, bool>> result_props;
         for (auto styled : attr_prop_styleshet) {
             result_props[styled.first] = std::make_pair(styled.second, true);
         }
@@ -632,9 +632,7 @@ void StyleDialog::_readStyleElement()
                 if (iter.second.second) {
                     Glib::ustring val = "";
                     for (auto iterprop : obj->style->properties()) {
-                        if (iterprop->style_src != SP_STYLE_SRC_UNSET &&
-                            iterprop->name == iter.first) 
-                        {
+                        if (iterprop->style_src != SP_STYLE_SRC_UNSET && iterprop->name == iter.first) {
                             val = iterprop->get_value();
                             break;
                         }
@@ -643,9 +641,7 @@ void StyleDialog::_readStyleElement()
                     r1 = sp_svg_read_color(value.c_str(), r1);
                     guint32 r2 = 0; // if there's no color, return black
                     r2 = sp_svg_read_color(val.c_str(), r2);
-                    if (attr_prop.count(iter.first) ||
-                        (value != val && (r1 == 0 || r1 != r2))) 
-                    {
+                    if (attr_prop.count(iter.first) || (value != val && (r1 == 0 || r1 != r2))) {
                         row[_mColumns._colStrike] = true;
                         row[_mColumns._colOwner] = Glib::ustring("");
                     } else {
