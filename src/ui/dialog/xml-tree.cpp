@@ -74,19 +74,16 @@ XmlTree::XmlTree() :
         return;
     }
     Gtk::Box *contents = _getContents();
-    contents->set_name("XMLAndAttributesDialog");
-    contents->set_spacing(0);
-    contents->set_size_request(320, 260);
-
     status.set_halign(Gtk::ALIGN_START);
     status.set_valign(Gtk::ALIGN_CENTER);
     status.set_size_request(1, -1);
     status.set_markup("");
     status.set_line_wrap(true);
     status_box.pack_start( status, TRUE, TRUE, 0);
-    status_box.pack_start(_direction, Gtk::PACK_SHRINK);
     contents->pack_start(_paned, true, true, 0);
-    
+    contents->set_valign(Gtk::ALIGN_FILL);
+    contents->child_property_fill(_paned);
+    _paned.set_vexpand(true);
     _message_stack = std::make_shared<Inkscape::MessageStack>();
     _message_context = std::unique_ptr<Inkscape::MessageContext>(new Inkscape::MessageContext(_message_stack));
     _message_changed_connection = _message_stack->connectChanged(
@@ -174,25 +171,29 @@ XmlTree::XmlTree() :
     node_box.pack_end(status_box, false, false, 2);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool attrtoggler = prefs->getBool("/dialogs/xml/attrtoggler", true);
+    bool dir = prefs->getBool("/dialogs/xml/vertical", true);
     attributes = new AttrDialog;
-    _paned.set_orientation(attrtoggler ? Gtk::ORIENTATION_VERTICAL : Gtk::ORIENTATION_HORIZONTAL);
+    _paned.set_orientation(dir ? Gtk::ORIENTATION_VERTICAL : Gtk::ORIENTATION_HORIZONTAL);
     _paned.pack1(node_box, Gtk::SHRINK);
     /* attributes */
-    Gtk::Box *actionsbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+    Gtk::Box *actionsbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
+    actionsbox->set_valign(Gtk::ALIGN_START);
     Gtk::Label *attrtogglerlabel = Gtk::manage(new Gtk::Label(_("Show attributes")));
+    attrtogglerlabel->set_margin_right(5);
     _attrswitch.property_active() = attrtoggler;
+    _attrswitch.get_style_context()->add_class("inkswitch");
     _attrswitch.property_active().signal_changed().connect(sigc::mem_fun(*this, &XmlTree::_attrtoggler));
-    _attrswitch.get_style_context()->add_class("directiontoggler");
     _dirtogglerlabel = Gtk::manage(new Gtk::Label(_("Paned vertical")));
+    _direction.property_active() = dir;
     _direction.property_active().signal_changed().connect(sigc::mem_fun(*this, &XmlTree::_toggleDirection));
-    _direction.get_style_context()->add_class("directiontoggler");
+    _direction.get_style_context()->add_class("inkswitch");
     actionsbox->pack_start(_attrswitch, Gtk::PACK_SHRINK);
     actionsbox->pack_start(*attrtogglerlabel, Gtk::PACK_SHRINK);
     actionsbox->pack_start(_direction, Gtk::PACK_SHRINK);
     actionsbox->pack_start(*_dirtogglerlabel, Gtk::PACK_SHRINK);
 
     _paned.pack2(*attributes, true, true);
-    contents->pack_start(*actionsbox, true, true, 0);
+    contents->pack_start(*actionsbox, false, false, 0);
     /* Signal handlers */
     GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(tree));
     g_signal_connect (G_OBJECT(selection), "changed", G_CALLBACK (on_tree_select_row), this);
@@ -209,14 +210,21 @@ XmlTree::XmlTree() :
 
     desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &XmlTree::set_tree_desktop) );
     deskTrack.connect(GTK_WIDGET(gobj()));
-
-    /* initial show/hide */
+    int widthpos = _paned.property_max_position() - _paned.property_min_position();
+    int panedpos = prefs->getInt("/dialogs/xml/panedpos", 130);
+    
+    _paned.set_position(panedpos);
+    _paned.signal_button_release_event().connect(sigc::mem_fun(*this, &XmlTree::_resized), false);    /* initial show/hide */
+    set_name("XMLAndAttributesDialog");
+    set_spacing(0);
+    set_size_request(320, 260);
     show_all();
-    if (attrtoggler) {
+    _paned.property_wide_handle() = true;
+    if (!attrtoggler) {
         attributes->hide();
         _dirtogglerlabel->hide();
         _direction.hide();
-        _paned.set_position(9999999);
+        _paned.set_position(widthpos);
     }
     tree_reset_context();
 
@@ -225,13 +233,21 @@ XmlTree::XmlTree() :
 
 }
 
+bool XmlTree::_resized(GdkEventButton *event)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setInt("/dialogs/xml/panedpos", _paned.get_position());
+    return false;
+}
+
 void XmlTree::_toggleDirection()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool dir = !prefs->getBool("/dialogs/xml/updown", true);
-    prefs->setBool("/dialogs/xml/updown", dir);
-    _paned.set_position(-1);
+    bool dir = !prefs->getBool("/dialogs/xml/vertical", true);
+    prefs->setBool("/dialogs/xml/vertical", dir);
     _paned.set_orientation(dir ? Gtk::ORIENTATION_VERTICAL : Gtk::ORIENTATION_HORIZONTAL);
+    int widthpos = _paned.property_max_position() - _paned.property_min_position();
+    _paned.set_position(widthpos/2);
 }
 
 void XmlTree::_attrtoggler()
@@ -239,16 +255,18 @@ void XmlTree::_attrtoggler()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool attrtoggler = !prefs->getBool("/dialogs/xml/attrtoggler", true);
     prefs->setBool("/dialogs/xml/attrtoggler", attrtoggler);
-    if (prefs->getBool("/dialogs/xml/attrtoggler", true)) {
-        _attrbox->hide();
-        _dirtogglerlabel->hide();
-        _direction.hide();
-        _paned.set_position(9999999);
-    } else {
-        _attrbox->show();
+    if (attrtoggler) {
+        attributes->show();
         _dirtogglerlabel->show();
         _direction.show();
-        _paned.set_position(-1);
+        int widthpos = _paned.property_max_position() - _paned.property_min_position();
+        _paned.set_position(widthpos/2);
+    } else {
+        attributes->hide();
+        _dirtogglerlabel->hide();
+        _direction.hide();
+        int widthpos = _paned.property_max_position() - _paned.property_min_position();
+        _paned.set_position(widthpos);
     }
 }
 

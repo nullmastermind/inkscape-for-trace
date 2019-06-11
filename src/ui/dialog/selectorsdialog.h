@@ -146,6 +146,7 @@ class SelectorsDialog : public Widget::Panel {
     void _removeClass(SPObject *obj, const Glib::ustring &className, bool all = false);
     void _toggleDirection();
     void _showWidgets();
+    bool _resized(GdkEventButton *event);
 
     void _selectObjects(int, int);
     // Variables

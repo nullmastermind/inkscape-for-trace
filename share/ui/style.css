@@ -316,30 +316,19 @@
  #LPEDialogSelector .searchbar #LPESelectorEffectFavShowImage {
      color: @theme_fg_color;
  }
-
- #XMLDialogAndAttribuesDialog,
- #SelectorsAndStyleDialog{
-    min-height:200px;
-    min-width:250px;
- }
- #XMLAndAttributesDialog button,
+ 
  #SelectorsAndStyleDialog button{
     padding:4px;
     min-height:16px;
     margin:2px;
- }
- #XMLAndAttributesDialog .directiontoggler  image,
- #XMLAndAttributesDialog .stylesheettoggler image,
- #SelectorsAndStyleDialog .directiontoggler  image,
- #SelectorsAndStyleDialog .stylesheettoggler image {
-     color: transparent;
+    padding:2px;
  }
 
- #XMLAndAttributesDialog .directiontoggler,
- #XMLAndAttributesDialog .stylesheettoggler,
- #SelectorsAndStyleDialog .directiontoggler,
- #SelectorsAndStyleDialog .stylesheettoggler {
-     margin:2px;
+ .inkswitch image{
+    color: transparent;
+ }
+ .inkswitch {
+    margin:2px;
  }
  
  #XMLAndAttributesDialog .toggle,
@@ -350,18 +339,6 @@
      padding-top: 0;
      padding-bottom: 0;
  }
- 
- #XMLFlow GtkFlowBoxChild,
- #XMLFlow flowboxchild{
-   border-right-width:1px;
-   border-top-width:1px;
-   border-bottom-width:1px;
-   margin-top:-1px;
-   border-style:solid;
-   border-color:@borders;
-   padding:7px;
- }
- 
  SPRuler {
      background-color: @theme_bg_color;
      color: @theme_fg_color;

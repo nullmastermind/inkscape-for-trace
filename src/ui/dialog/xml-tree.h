@@ -167,6 +167,7 @@ private:
     void present() override;
     void _attrtoggler();
     void _toggleDirection();
+    bool _resized(GdkEventButton *event);
     bool in_dt_coordsys(SPObject const &item);
 
     /**

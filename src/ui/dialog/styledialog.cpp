@@ -211,7 +211,7 @@ StyleDialog::StyleDialog()
     _mainBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
 
     _getContents()->pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
-    _all_css->get_style_context()->add_class("stylesheettoggler");
+    _all_css->get_style_context()->add_class("inkswitch");
     // Document & Desktop
     _desktop_changed_connection =
         _desktopTracker.connectDesktopChanged(sigc::mem_fun(*this, &StyleDialog::_handleDesktopChanged));
