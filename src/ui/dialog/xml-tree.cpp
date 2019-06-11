@@ -212,9 +212,10 @@ XmlTree::XmlTree() :
     deskTrack.connect(GTK_WIDGET(gobj()));
     int widthpos = _paned.property_max_position() - _paned.property_min_position();
     int panedpos = prefs->getInt("/dialogs/xml/panedpos", 130);
-    
+
     _paned.set_position(panedpos);
-    _paned.signal_button_release_event().connect(sigc::mem_fun(*this, &XmlTree::_resized), false);    /* initial show/hide */
+    _paned.signal_button_release_event().connect(sigc::mem_fun(*this, &XmlTree::_resized),
+                                                 false); /* initial show/hide */
     set_name("XMLAndAttributesDialog");
     set_spacing(0);
     set_size_request(320, 260);
@@ -247,7 +248,7 @@ void XmlTree::_toggleDirection()
     prefs->setBool("/dialogs/xml/vertical", dir);
     _paned.set_orientation(dir ? Gtk::ORIENTATION_VERTICAL : Gtk::ORIENTATION_HORIZONTAL);
     int widthpos = _paned.property_max_position() - _paned.property_min_position();
-    _paned.set_position(widthpos/2);
+    _paned.set_position(widthpos / 2);
 }
 
 void XmlTree::_attrtoggler()
@@ -260,7 +261,7 @@ void XmlTree::_attrtoggler()
         _dirtogglerlabel->show();
         _direction.show();
         int widthpos = _paned.property_max_position() - _paned.property_min_position();
-        _paned.set_position(widthpos/2);
+        _paned.set_position(widthpos / 2);
     } else {
         attributes->hide();
         _dirtogglerlabel->hide();

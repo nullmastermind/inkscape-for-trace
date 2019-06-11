@@ -383,7 +383,7 @@ void SelectorsDialog::_showWidgets()
     show_all();
     int widthpos = _paned.property_max_position() - _paned.property_min_position();
     int panedpos = prefs->getInt("/dialogs/selectors/panedpos", 130);
-    
+
     _paned.set_position(panedpos);
     _paned.property_wide_handle() = true;
     _paned.signal_button_release_event().connect(sigc::mem_fun(*this, &SelectorsDialog::_resized), false);
@@ -406,8 +406,7 @@ void SelectorsDialog::_toggleDirection()
     prefs->setBool("/dialogs/selectors/vertical", dir);
     _paned.set_orientation(dir ? Gtk::ORIENTATION_VERTICAL : Gtk::ORIENTATION_HORIZONTAL);
     int widthpos = _paned.property_max_position() - _paned.property_min_position();
-    _paned.set_position(widthpos/2);
-
+    _paned.set_position(widthpos / 2);
 }
 
 /**
