@@ -32,8 +32,8 @@
 #include <regex>
 #include <utility>
 
-#include <glibmm/i18n.h>
 #include <gdk/gdkkeysyms.h>
+#include <glibmm/i18n.h>
 
 //#define DEBUG_STYLEDIALOG
 //#define G_LOG_DOMAIN "STYLEDIALOG"
@@ -206,8 +206,8 @@ StyleDialog::StyleDialog()
     vadj = _scrolledWindow.get_vadjustment();
     vadj->signal_changed().connect(sigc::mem_fun(*this, &StyleDialog::_vscrool));
     //_all_css->property_active().signal_changed().connect(sigc::mem_fun(*this, &StyleDialog::_reload));
-    //alltoggler->pack_start(*_all_css, false, false, 0);
-    //alltoggler->pack_start(*infotoggler, false, false, 0);
+    // alltoggler->pack_start(*_all_css, false, false, 0);
+    // alltoggler->pack_start(*infotoggler, false, false, 0);
     //_all_css->set_active(false);
     //_mainBox.pack_start(*alltoggler, false, false, 0);
     _mainBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
@@ -231,7 +231,8 @@ StyleDialog::StyleDialog()
     _readStyleElement();
 }
 
-void StyleDialog::_vscrool() {
+void StyleDialog::_vscrool()
+{
     if (!_updating) {
         _scroolpos = vadj->get_value();
     }
@@ -339,7 +340,8 @@ Glib::RefPtr<Gtk::TreeModel> StyleDialog::_selectTree(Glib::ustring selector)
     return model;
 }
 
-void StyleDialog::setCurrentSelector(Glib::ustring current_selector){
+void StyleDialog::setCurrentSelector(Glib::ustring current_selector)
+{
     _current_selector = current_selector;
     _readStyleElement();
 }
@@ -532,8 +534,8 @@ void StyleDialog::_readStyleElement()
             properties = tokens[i + 1];
         } else {
             std::cerr << "StyleDialog::_readStyleElement: Missing values "
-                            "for last selector!"
-                        << std::endl;
+                         "for last selector!"
+                      << std::endl;
         }
         Glib::RefPtr<Gtk::Builder> _builder;
         try {
@@ -567,8 +569,8 @@ void StyleDialog::_readStyleElement()
         col = css_tree->get_column(addCol);
         if (col) {
             col->add_attribute(active->property_active(), _mColumns._colActive);
-            active->signal_toggled().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(
-                sigc::mem_fun(*this, &StyleDialog::_activeToggled), store));
+            active->signal_toggled().connect(
+                sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_activeToggled), store));
         }
         Gtk::CellRendererText *label = Gtk::manage(new Gtk::CellRendererText());
         label->property_placeholder_text() = _("property");
@@ -706,11 +708,9 @@ void StyleDialog::_readStyleElement()
                             Gtk::CellRendererText *label = Gtk::manage(new Gtk::CellRendererText());
                             label->property_placeholder_text() = _("property");
                             label->property_editable() = true;
-                            label->signal_edited().connect(
-                                sigc::bind<Glib::RefPtr<Gtk::TreeStore>, Gtk::TreeView *>(
-                                    sigc::mem_fun(*this, &StyleDialog::_nameEdited), store, css_tree));
-                            label->signal_editing_started().connect(
-                                sigc::mem_fun(*this, &StyleDialog::_startNameEdit));
+                            label->signal_edited().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore>, Gtk::TreeView *>(
+                                sigc::mem_fun(*this, &StyleDialog::_nameEdited), store, css_tree));
+                            label->signal_editing_started().connect(sigc::mem_fun(*this, &StyleDialog::_startNameEdit));
                             addCol = css_tree->append_column("CSS Property", *label) - 1;
                             col = css_tree->get_column(addCol);
                             if (col) {
@@ -1060,8 +1060,8 @@ StyleDialog::_startValueEdit(Gtk::CellEditable* cell, const Glib::ustring& path,
         } else if (name == "color-interpolation") {
             _setAutocompletion(entry, enum_color_interpolation);
         }
-        entry->signal_key_release_event().connect(sigc::bind(
-            sigc::mem_fun(*this, &StyleDialog::_onValueKeyReleased), cell));
+        entry->signal_key_release_event().connect(
+            sigc::bind(sigc::mem_fun(*this, &StyleDialog::_onValueKeyReleased), cell));
     }
 }
 
@@ -1080,8 +1080,7 @@ void StyleDialog::_startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &p
     }
     Gtk::Entry *entry = dynamic_cast<Gtk::Entry *>(cell);
     entry->set_completion(entry_completion);
-    entry->signal_key_release_event().connect(sigc::bind(
-        sigc::mem_fun(*this, &StyleDialog::_onNameKeyReleased), cell));
+    entry->signal_key_release_event().connect(sigc::bind(sigc::mem_fun(*this, &StyleDialog::_onNameKeyReleased), cell));
 }
 
 /**
@@ -1101,7 +1100,7 @@ void StyleDialog::_nameEdited(const Glib::ustring &path, const Glib::ustring &na
         Glib::ustring finalname = name;
         auto i = std::min(finalname.find(";"), finalname.find(":"));
         if (i != std::string::npos) {
-            finalname.erase(i, name.size()-i);
+            finalname.erase(i, name.size() - i);
         }
         gint pos = row[_mColumns._colSelectorPos];
         bool write = false;
@@ -1111,7 +1110,7 @@ void StyleDialog::_nameEdited(const Glib::ustring &path, const Glib::ustring &na
         Glib::ustring selector = row[_mColumns._colSelector];
         Glib::ustring value = row[_mColumns._colValue];
         bool is_attr = selector == "attributes";
-        
+
         row[_mColumns._colName] = finalname;
         if (finalname.empty() && value.empty()) {
             store->erase(row);
@@ -1145,7 +1144,7 @@ void StyleDialog::_valueEdited(const Glib::ustring &path, const Glib::ustring &v
         Glib::ustring finalvalue = value;
         auto i = std::min(finalvalue.find(";"), finalvalue.find(":"));
         if (i != std::string::npos) {
-            finalvalue.erase(i, finalvalue.size()-i);
+            finalvalue.erase(i, finalvalue.size() - i);
         }
         row[_mColumns._colValue] = finalvalue;
         Glib::ustring selector = row[_mColumns._colSelector];
@@ -1172,19 +1171,16 @@ void StyleDialog::_activeToggled(const Glib::ustring &path, Glib::RefPtr<Gtk::Tr
 
 bool StyleDialog::_onNameKeyReleased(GdkEventKey *event, Gtk::CellEditable *cell)
 {
-    switch (event->keyval)
-    {
+    switch (event->keyval) {
         case GDK_KEY_Tab:
         case GDK_KEY_KP_Tab:
-        case GDK_KEY_colon:
-            {
-                cell->editing_done();
-                return true;
-            }
+        case GDK_KEY_colon: {
+            cell->editing_done();
+            return true;
+        }
         case GDK_KEY_Shift_L:
         case GDK_KEY_Shift_R:
-        case GDK_KEY_semicolon:
-            {
+        case GDK_KEY_semicolon: {
             Gtk::Entry *entry = dynamic_cast<Gtk::Entry *>(cell);
             Glib::ustring text = entry->get_text();
             auto i = std::min(text.find(";"), text.find(":"));
@@ -1199,19 +1195,16 @@ bool StyleDialog::_onNameKeyReleased(GdkEventKey *event, Gtk::CellEditable *cell
 
 bool StyleDialog::_onValueKeyReleased(GdkEventKey *event, Gtk::CellEditable *cell)
 {
-    switch (event->keyval)
-    {
+    switch (event->keyval) {
         case GDK_KEY_Tab:
         case GDK_KEY_KP_Tab:
-        case GDK_KEY_semicolon:
-            {
-                cell->editing_done();
-                return true;
-            }
+        case GDK_KEY_semicolon: {
+            cell->editing_done();
+            return true;
+        }
         case GDK_KEY_Shift_L:
         case GDK_KEY_Shift_R:
-        case GDK_KEY_colon:
-            {
+        case GDK_KEY_colon: {
             Gtk::Entry *entry = dynamic_cast<Gtk::Entry *>(cell);
             Glib::ustring text = entry->get_text();
             auto i = std::min(text.find(";"), text.find(":"));
