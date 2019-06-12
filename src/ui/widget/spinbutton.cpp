@@ -73,6 +73,9 @@ bool SpinButton::on_my_scroll_event(GdkEventScroll* event)
     }
     double step, page;
     get_increments(step, page);
+    if (event->state & GDK_CONTROL_MASK) {
+        step = page;
+    }
     double change = 0.0;
     if (event->direction == GDK_SCROLL_UP) {
         change = step;
