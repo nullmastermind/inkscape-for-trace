@@ -829,13 +829,14 @@ void SelectorsDialog::_removeFromSelector(Gtk::TreeModel::Row row)
     g_debug("SelectorsDialog::_removeFromSelector: Entrance");
     if (*row) {
         _updating = true;
+        SPObject *obj = nullptr;
         Glib::ustring objectLabel = row[_mColumns._colSelector];
         Gtk::TreeModel::iterator iter = row->parent();
         if (iter) {
             Gtk::TreeModel::Row parent = *iter;
             Glib::ustring multiselector = parent[_mColumns._colSelector];
             REMOVE_SPACES(multiselector);
-            SPObject *obj = _getObjVec(objectLabel)[0];
+            obj = _getObjVec(objectLabel)[0];
             std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[,]+", multiselector);
             Glib::ustring selector = "";
             for (auto tok : tokens) {
@@ -867,6 +868,10 @@ void SelectorsDialog::_removeFromSelector(Gtk::TreeModel::Row row)
 
         // Add entry to style element
         _writeStyleElement();
+        if (obj) {
+            obj->style->readFromObject(obj);
+            obj->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+        }
     }
 }
 
