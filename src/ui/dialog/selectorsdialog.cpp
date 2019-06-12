@@ -274,6 +274,7 @@ void SelectorsDialog::TreeStore::on_row_deleted(const TreeModel::Path &path)
 
     g_debug("on_row_deleted");
     _selectorsdialog->_writeStyleElement();
+    _selectorsdialog->_readStyleElement();
 }
 
 
