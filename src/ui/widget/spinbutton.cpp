@@ -9,7 +9,6 @@
  */
 
 #include "spinbutton.h"
-
 #include "unit-menu.h"
 #include "unit-tracker.h"
 #include "util/expression-evaluator.h"
@@ -25,6 +24,8 @@ SpinButton::connect_signals() {
     signal_input().connect(sigc::mem_fun(*this, &SpinButton::on_input));
     signal_focus_in_event().connect(sigc::mem_fun(*this, &SpinButton::on_my_focus_in_event));
     signal_key_press_event().connect(sigc::mem_fun(*this, &SpinButton::on_my_key_press_event));
+    gtk_widget_add_events(GTK_WIDGET(gobj()), GDK_SCROLL_MASK | GDK_SMOOTH_SCROLL_MASK);
+    signal_scroll_event().connect(sigc::mem_fun(*this, &SpinButton::on_my_scroll_event));
 };
 
 int SpinButton::on_input(double* newvalue)
@@ -48,7 +49,6 @@ int SpinButton::on_input(double* newvalue)
             Inkscape::Util::ExpressionEvaluator eval = Inkscape::Util::ExpressionEvaluator(get_text().c_str(), nullptr);
             result = eval.evaluate();
         }
-
         *newvalue = result.value;
     }
     catch(Inkscape::Util::EvaluatorException &e) {
@@ -64,6 +64,28 @@ bool SpinButton::on_my_focus_in_event(GdkEventFocus* /*event*/)
 {
     _on_focus_in_value = get_value();
     return false; // do not consume the event
+}
+
+bool SpinButton::on_my_scroll_event(GdkEventScroll* event)
+{
+    if (!property_has_focus()) {
+        return true;
+    }
+    double step, page;
+    get_increments(step, page);
+    double change = 0.0;
+    if (event->direction == GDK_SCROLL_UP) {
+        change = step;
+    } else if (event->direction == GDK_SCROLL_DOWN) {
+        change = step * -1.0;
+    } else if (event->direction == GDK_SCROLL_SMOOTH) {
+        double delta_y_clamped = CLAMP(event->delta_y, step * -1.0, step); // values > 1 result in excessive changes
+        change = step * -delta_y_clamped;
+    } else {
+        return false;
+    }
+    set_value(get_value() + change);
+    return false;
 }
 
 bool SpinButton::on_my_key_press_event(GdkEventKey* event)

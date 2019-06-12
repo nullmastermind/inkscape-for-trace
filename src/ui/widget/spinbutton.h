@@ -80,6 +80,13 @@ protected:
     bool on_my_focus_in_event(GdkEventFocus* event);
 
     /**
+     * When scroll is done.
+     * @retval false continue with default handler.
+     * @retval true  don't call default handler. 
+     */
+    bool on_my_scroll_event(GdkEventScroll* event);
+
+    /**
      * Handle specific keypress events, like Ctrl+Z.
      *
      * @retval false continue with default handler.
