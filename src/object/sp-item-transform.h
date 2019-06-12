@@ -14,7 +14,6 @@
 
 class SPItem;
 
-void sp_item_rotate_rel(SPItem *item, Geom::Rotate const &rotation);
 void sp_item_scale_rel (SPItem *item, Geom::Scale const &scale);
 void sp_item_skew_rel (SPItem *item, double skewX, double skewY);
 void sp_item_move_rel(SPItem *item, Geom::Translate const &tr);

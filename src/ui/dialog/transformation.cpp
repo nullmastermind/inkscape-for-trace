@@ -797,7 +797,7 @@ void Transformation::applyPageRotate(Inkscape::Selection *selection)
     	auto tmp= selection->items();
     	for(auto i=tmp.begin();i!=tmp.end();++i){
             SPItem *item = *i;
-            sp_item_rotate_rel(item, Geom::Rotate (angle*M_PI/180.0));
+            item->rotate_rel(Geom::Rotate (angle*M_PI/180.0));
         }
     } else {
         boost::optional<Geom::Point> center = selection->center();

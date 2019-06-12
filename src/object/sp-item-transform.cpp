@@ -21,24 +21,6 @@
 
 #include <glib.h>
 
-void sp_item_rotate_rel(SPItem *item, Geom::Rotate const &rotation)
-{
-    Geom::Point center = item->getCenter();
-    Geom::Translate const s(item->getCenter());
-    Geom::Affine affine = Geom::Affine(s).inverse() * Geom::Affine(rotation) * Geom::Affine(s);
-
-    // Rotate item.
-    item->set_i2d_affine(item->i2dt_affine() * (Geom::Affine)affine);
-    // Use each item's own transform writer, consistent with sp_selection_apply_affine()
-    item->doWriteTransform(item->transform);
-
-    // Restore the center position (it's changed because the bbox center changed)
-    if (item->isCenterSet()) {
-        item->setCenter(center * affine);
-        item->updateRepr();
-    }
-}
-
 void sp_item_scale_rel(SPItem *item, Geom::Scale const &scale)
 {
     Geom::OptRect bbox = item->desktopVisualBounds();

@@ -1716,6 +1716,23 @@ void SPItem::convert_to_guides() const {
     sp_guide_pt_pairs_to_guides(document, pts);
 }
 
+void SPItem::rotate_rel(Geom::Rotate const &rotation)
+{
+    Geom::Point center = getCenter();
+    Geom::Translate const s(getCenter());
+    Geom::Affine affine = Geom::Affine(s).inverse() * Geom::Affine(rotation) * Geom::Affine(s);
+
+    // Rotate item.
+    set_i2d_affine(i2dt_affine() * (Geom::Affine)affine);
+    // Use each item's own transform writer, consistent with sp_selection_apply_affine()
+    doWriteTransform(transform);
+
+    // Restore the center position (it's changed because the bbox center changed)
+    if (isCenterSet()) {
+        setCenter(center * affine);
+        updateRepr();
+    }
+}
 /*
   Local Variables:
   mode:c++

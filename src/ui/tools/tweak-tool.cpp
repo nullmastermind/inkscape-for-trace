@@ -456,7 +456,7 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
                 if (x < 1) {
                     double angle = (reverse? force : -force) * 0.05 * (cos(M_PI * x) + 1) * M_PI;
                     angle *= -selection->desktop()->yaxisdir();
-                    sp_item_rotate_rel(item, Geom::Rotate(angle));
+                    item->rotate_rel(Geom::Rotate(angle));
                     did = true;
                 }
             }
