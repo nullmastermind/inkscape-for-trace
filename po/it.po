@@ -449,7 +449,7 @@ msgid "%s; <i>masked</i>"
 msgstr "%s; <i>con maschera</i>"
 
 msgid "&gt; and &lt; _scale by:"
-msgstr "&gt; and &lt; _ridimensionano di:"
+msgstr "&gt; e &lt; _ridimensionano di:"
 
 #, c-format
 msgid "'%s' working, please wait..."
@@ -3946,7 +3946,7 @@ msgid "Additional angle between tangent and curve"
 msgstr "Angolo aggiuntivo tra la tangente e la curva"
 
 msgid "Additional font directories"
-msgstr ""
+msgstr "Cartelle caratteri aggiuntive"
 
 #
 # File: ../share/extensions/gcodetools_area.inx, line: 96
@@ -6434,7 +6434,6 @@ msgstr "Altezza della maiuscola:"
 msgid "Cap:"
 msgstr "Estremi:"
 
-#, fuzzy
 msgctxt "Font feature"
 msgid "Capitals"
 msgstr "Maiuscole"
@@ -6503,9 +6502,8 @@ msgstr "Centra sull'asse orizzontale"
 msgid "Center on vertical axis"
 msgstr "Centra sull'asse verticale"
 
-#, fuzzy
 msgid "Center page in window"
-msgstr "Ingrandisce per adattare la pagina alla finestra"
+msgstr "Centra pagina nella finestra"
 
 #, fuzzy
 msgid "Center point of mirror line"
@@ -7443,7 +7441,6 @@ msgctxt "Symbol"
 msgid "Comment/Annotation"
 msgstr "Commento/Annotazione"
 
-#, fuzzy
 msgctxt "Font feature"
 msgid "Common"
 msgstr "Standard"
@@ -7586,7 +7583,6 @@ msgstr "Triangolo inscritto"
 msgid "Context"
 msgstr "Contesto"
 
-#, fuzzy
 msgctxt "Font feature"
 msgid "Contextual"
 msgstr "Contestuali"
@@ -9152,7 +9148,6 @@ msgctxt "Interface setup"
 msgid "Default"
 msgstr "Predefinita"
 
-#, fuzzy
 msgctxt "Window size"
 msgid "Default"
 msgstr "Predefinito"
@@ -9683,7 +9678,6 @@ msgstr "Scarta il tracciato originale"
 msgid "Discrete"
 msgstr "Discreto"
 
-#, fuzzy
 msgctxt "Font feature"
 msgid "Discretionary"
 msgstr "Discrezionali"
@@ -11990,10 +11984,10 @@ msgstr "Stile carattere"
 
 #, fuzzy
 msgid "Font color:"
-msgstr "Colore del mese:"
+msgstr "Colore carattere:"
 
 msgid "Font directories"
-msgstr ""
+msgstr "Cartelle caratteri"
 
 #, fuzzy
 msgid "Font face:"
@@ -13202,7 +13196,6 @@ msgstr "Nuvoletta sfiancata"
 msgid "Hiragana"
 msgstr "Hiragana"
 
-#, fuzzy
 msgctxt "Font feature"
 msgid "Historical"
 msgstr "Storiche"
@@ -15405,7 +15398,6 @@ msgstr "Livelli"
 msgid "License"
 msgstr "Licenza"
 
-#, fuzzy
 msgctxt "Font feature"
 msgid "Ligatures"
 msgstr "Legature"
@@ -17612,9 +17604,8 @@ msgstr "Centro di Feuerbach"
 msgid "Nine-Point Circle"
 msgstr "Cerchio di Feuerbach"
 
-#, fuzzy
 msgid "No"
-msgstr "NKo"
+msgstr "No"
 
 msgctxt "Symbol"
 msgid "No Dogs"
@@ -19974,7 +19965,6 @@ msgstr "Portoghese/Brasiliano (pt_BR)"
 msgid "Position"
 msgstr "Posizione"
 
-#, fuzzy
 msgctxt "Font feature"
 msgid "Position"
 msgstr "Posizione"
@@ -23908,7 +23898,7 @@ msgstr ""
 "nella finestra dei filtri"
 
 msgid "Show icons in menus:"
-msgstr ""
+msgstr "Mostra icone nei menu:"
 
 msgid "Show limiting bounding box"
 msgstr "Mostra riquadro limite"
@@ -25555,13 +25545,12 @@ msgstr "Spessore sottodivisioni Y (px):"
 msgid "Subpath by subpath"
 msgstr ""
 
-#, fuzzy
 msgctxt "Font feature"
 msgid "Subscript"
 msgstr "Pedice"
 
 msgid "Subscript. OpenType table: 'subs'"
-msgstr "Apice. OpenType table: 'subs'"
+msgstr "Pedice. OpenType table: 'subs'"
 
 msgid "Subsubdivs per Subdivision:"
 msgstr "Sottodivisioni minori per sottodivisione:"
@@ -25592,13 +25581,12 @@ msgstr "Sundanese"
 msgid "Sunday"
 msgstr "Domenica"
 
-#, fuzzy
 msgctxt "Font feature"
 msgid "Superscript"
 msgstr "Apice"
 
 msgid "Superscript. OpenType table: 'sups'"
-msgstr "Pedice. OpenType table: 'sups'"
+msgstr "Apice. OpenType table: 'sups'"
 
 msgid "Superscripts and Subscripts"
 msgstr "Apici e Pedici"
@@ -28332,7 +28320,7 @@ msgid "Use GTK open and save dialogs "
 msgstr "Usa finestre apri e salva in stile GTK"
 
 msgid "Use Inkscape's fonts directory"
-msgstr ""
+msgstr "Usa la cartella dei caratteri di Inkscape"
 
 msgid "Use MS Unicode PUA (0xF020-0xF0FF) for converted characters"
 msgstr "Usa MS Unicode PUA (0xF020-0xF0FF) per i caratteri convertiti"
@@ -28511,7 +28499,7 @@ msgstr ""
 "punta della penna"
 
 msgid "Use user's fonts directory"
-msgstr ""
+msgstr "Usa la cartella dei caratteri utente"
 
 #, fuzzy
 msgid "User UI: "
@@ -29769,7 +29757,7 @@ msgid "Yellow offset"
 msgstr "Spostamento giallo"
 
 msgid "Yes"
-msgstr ""
+msgstr "Sì"
 
 msgid "Yi"
 msgstr "Yi"
@@ -30057,9 +30045,8 @@ msgstr "_C:"
 msgid "_Cancel"
 msgstr "_Annulla"
 
-#, fuzzy
 msgid "_Center _Page"
-msgstr "Pagine interne"
+msgstr "_Centra pagina"
 
 msgid "_Clear"
 msgstr "_Pulisci"
