@@ -491,7 +491,7 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
 
     // Interface
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "with-gui",            'g', N_("GUI: With graphical interface."),                                                    "");
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "without-gui",         'G', N_("GUI: Console only."),                                                                "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "without-gui",         'z', N_("GUI: Console only."),                                                                "");
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "batch-process",      '\0', N_("GUI: Close window after processing actions (needed as some verbs require GUI)."),    "");
 
     // Open/Import
