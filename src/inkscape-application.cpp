@@ -537,7 +537,7 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-ignore-filters", '\0', N_("Export: Render objects without filters instead of rasterizing. (PS/EPS/PDF)"),    ""); // xxP
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-text-to-path", 'T', N_("Export: Convert text to paths. (PS/EPS/PDF/SVG)."),                                  ""); // xxP
     this->add_main_option_entry(T::OPTION_TYPE_INT,      "export-ps-level",    '\0', N_("Export: Postscript level (2 or 3). Default is 3."),                      N_("PS-Level")); // xxP
-    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-pdf-level",   '\0', N_("Export: PDF level (1.4 or 1.5)"),                                       N_("PDF-Level")); // xxP
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-pdf-version", '\0', N_("Export: PDF version (1.4 or 1.5)"),                                   N_("PDF-VERSION")); // xxP
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-latex",       '\0', N_("Export: Export text separately to LaTeX file (PS/EPS/PDF). Include via \\input{file.tex}"), ""); // xxP
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-use-hints",    't', N_("Export: Use stored filename and DPI hints when exporting object selected by --export-id."), ""); // Bxx
     this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-background",   'b', N_("Export: Background color for exported bitmaps (any SVG color string)."),    N_("COLOR")); // Bxx
@@ -1289,8 +1289,8 @@ ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib:
         options->lookup_value("export-ps-level",  _file_export.export_ps_level);
     }
 
-    if (options->contains("export-pdf-level")) {
-        options->lookup_value("export-pdf-level", _file_export.export_pdf_level);
+    if (options->contains("export-pdf-version")) {
+        options->lookup_value("export-pdf-version", _file_export.export_pdf_level);
     }
 
     if (options->contains("export-latex"))        _file_export.export_latex       = true;

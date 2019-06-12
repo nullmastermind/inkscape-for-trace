@@ -243,7 +243,7 @@ add_actions_output(ConcreteInkscapeApplication<T>* app)
     app->add_action_with_parameter( "export-ignore-filters",    Bool,   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_plain_svg),    app));
     app->add_action_with_parameter( "export-text-to-path",      Bool,   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_text_to_path), app));
     app->add_action_with_parameter( "export-ps-level",          Int,    sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_ps_level),     app));
-    app->add_action_with_parameter( "export-pdf-level",         String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_pdf_level),    app));
+    app->add_action_with_parameter( "export-pdf-version",       String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_pdf_level),    app));
     app->add_action_with_parameter( "export-latex",             Bool,   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_latex),        app));
     app->add_action_with_parameter( "export-use-hints",         Bool,   sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_use_hints),    app));
     app->add_action_with_parameter( "export-background",        String, sigc::bind<InkscapeApplication*>(sigc::ptr_fun(&export_background),   app));
