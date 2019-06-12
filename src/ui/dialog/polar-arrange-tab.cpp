@@ -260,7 +260,7 @@ static Geom::Point getAnchorPoint(int anchor, SPItem *item)
  */
 static void moveToPoint(int anchor, SPItem *item, Geom::Point p)
 {
-	sp_item_move_rel(item, Geom::Translate(p - getAnchorPoint(anchor, item)));
+	item->move_rel(Geom::Translate(p - getAnchorPoint(anchor, item)));
 }
 
 void PolarArrangeTab::arrange()

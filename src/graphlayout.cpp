@@ -76,7 +76,7 @@ struct CheckProgress: TestConvergence {
                 Geom::Rect const item_box(sp_item_bbox_desktop(u));
                 Geom::Point const curr(item_box.midpoint());
                 Geom::Point const dest(r->getCentreX(),r->getCentreY());
-                sp_item_move_rel(u, Geom::Translate(dest - curr));
+                u->move_rel(Geom::Translate(dest - curr));
             }
         }
         */
@@ -210,7 +210,7 @@ void graphlayout(std::vector<SPItem*> const & items) {
                 if (item_box) {
                     Geom::Point const curr(item_box->midpoint());
                     Geom::Point const dest(r->getCentreX(),r->getCentreY());
-                    sp_item_move_rel(item, Geom::Translate(dest - curr));
+                    item->move_rel(Geom::Translate(dest - curr));
                 }
             }
         }

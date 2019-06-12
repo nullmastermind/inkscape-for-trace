@@ -396,6 +396,9 @@ private:
 
 public:
         void rotate_rel(Geom::Rotate const &rotation);
+        void scale_rel(Geom::Scale const &scale);
+        void skew_rel(double skewX, double skewY);
+        void move_rel( Geom::Translate const &tr);
 	void build(SPDocument *document, Inkscape::XML::Node *repr) override;
 	void release() override;
 	void set(SPAttributeEnum key, char const* value) override;
