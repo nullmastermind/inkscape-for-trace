@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /*
- * A subclass of GtkAction that wraps a GtkComboBoxEntry.
+ * A class derived from Gtk::ToolItem that wraps a GtkComboBoxEntry.
  * Features:
  *   Setting GtkEntryBox width in characters.
  *   Passing a function for formatting cells.
@@ -606,7 +606,7 @@ ComboBoxEntryToolItem::match_selected_cb( GtkEntryCompletion* /*widget*/, GtkTre
     // Set text in GtkEntry
     gtk_entry_set_text (GTK_ENTRY (entry), family );
 
-    // Set text in GtkAction
+    // Set text in ToolItem
     g_free( action->_text );
     action->_text = family;
 
