@@ -101,12 +101,12 @@ endfunction(list_files_pacman)
 function(list_files_pip package_name file_list)
     # use pip to show package information including full list of files installed by the package
     execute_process(
-        COMMAND pip show -f ${package_name}
+        COMMAND pip3 show -f ${package_name}
         OUTPUT_FILE list_files_pip_temp.txt
         RESULT_VARIABLE res
         ERROR_VARIABLE err
     )
-    check_error("${res}" "${err}" "pip show -f ${package_name}")
+    check_error("${res}" "${err}" "pip3 show -f ${package_name}")
 
     # clean up output
     execute_process(
@@ -118,7 +118,7 @@ function(list_files_pip package_name file_list)
         RESULT_VARIABLE res
         ERROR_VARIABLE err
     )
-    check_error("${res}" "${err}" "Parsing result of 'pip show -f ${package_name}'")
+    check_error("${res}" "${err}" "Parsing result of 'pip3 show -f ${package_name}'")
 
     SET(${file_list} ${out} PARENT_SCOPE)
     file(REMOVE ${CMAKE_CURRENT_BINARY_DIR}/list_files_pip_temp.txt)

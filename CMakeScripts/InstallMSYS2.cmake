@@ -74,6 +74,7 @@ if(WIN32)
     ${MINGW_BIN}/liblcms2-[0-9]*.dll
     ${MINGW_BIN}/liblqr-1-[0-9]*.dll
     ${MINGW_BIN}/liblzma-[0-9]*.dll
+    ${MINGW_BIN}/libmpdec-[0-9]*.dll
     ${MINGW_BIN}/libnghttp2-[0-9]*.dll
     ${MINGW_BIN}/libnspr[0-9]*.dll
     ${MINGW_BIN}/libopenblas.dll
@@ -231,27 +232,27 @@ if(WIN32)
       DESTINATION bin)
   endif()
 
-  # Python (a bit hacky for backwards compatibility with devlibs at this point)
+  # Python (use executable names without version number for compatibility with python from python.org)
   install(FILES
-    ${MINGW_BIN}/python2.exe
+    ${MINGW_BIN}/python3.exe
     RENAME python.exe
     DESTINATION bin)
   install(FILES
-    ${MINGW_BIN}/python2w.exe
+    ${MINGW_BIN}/python3w.exe
     RENAME pythonw.exe
     DESTINATION bin)
   install(FILES
-    ${MINGW_BIN}/libpython2.7.dll
+    ${MINGW_BIN}/libpython3.7m.dll
     DESTINATION bin)
-  install(DIRECTORY ${MINGW_LIB}/python2.7
+  install(DIRECTORY ${MINGW_LIB}/python3.7
     DESTINATION lib
-    PATTERN "python2.7/site-packages" EXCLUDE # specify individual packages to install below
-    PATTERN "python2.7/test" EXCLUDE # we don't need the Python testsuite
+    PATTERN "python3.7/site-packages" EXCLUDE # specify individual packages to install below
+    PATTERN "python3.7/test" EXCLUDE # we don't need the Python testsuite
   )
 
-  set(site_packages "lib/python2.7/site-packages")
+  set(site_packages "lib/python3.7/site-packages")
   # Python packages installed via pacman
-  set(packages "python2-lxml" "python2-numpy" "python2-pillow" "python2-six")
+  set(packages "python3-lxml" "python3-numpy" "python3-pillow" "python3-six")
   foreach(package ${packages})
     list_files_pacman(${package} paths)
     install_list(FILES ${paths}

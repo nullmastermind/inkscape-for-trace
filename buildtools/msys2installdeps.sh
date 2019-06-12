@@ -80,19 +80,19 @@ done
 
 # install Python and modules used by Inkscape
 eval pacman -S $PACMAN_OPTIONS \
-$ARCH-python2 \
-$ARCH-python2-pip \
-$ARCH-python2-lxml \
-$ARCH-python2-numpy \
-$ARCH-python2-pillow \
-$ARCH-python2-six
+$ARCH-python3 \
+$ARCH-python3-pip \
+$ARCH-python3-lxml \
+$ARCH-python3-numpy \
+$ARCH-python3-pillow \
+$ARCH-python3-six
 for arch in $(eval echo $ARCH); do
   case ${arch} in
     mingw-w64-i686)
-      /mingw32/bin/pip install --upgrade coverage pyserial scour
+      /mingw32/bin/pip3 install --upgrade --upgrade-strategy eager coverage pyserial scour
       ;;
     mingw-w64-x86_64)
-      /mingw64/bin/pip install --upgrade coverage pyserial scour
+      /mingw64/bin/pip3 install --upgrade --upgrade-strategy eager coverage pyserial scour
       ;;
   esac
 done
