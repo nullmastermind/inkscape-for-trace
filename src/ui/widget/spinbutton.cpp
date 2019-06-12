@@ -69,7 +69,7 @@ bool SpinButton::on_my_focus_in_event(GdkEventFocus* /*event*/)
 bool SpinButton::on_my_scroll_event(GdkEventScroll* event)
 {
     if (!property_has_focus()) {
-        return true;
+        return false;
     }
     double step, page;
     get_increments(step, page);
@@ -88,7 +88,7 @@ bool SpinButton::on_my_scroll_event(GdkEventScroll* event)
         return false;
     }
     set_value(get_value() + change);
-    return false;
+    return true;
 }
 
 bool SpinButton::on_my_key_press_event(GdkEventKey* event)
