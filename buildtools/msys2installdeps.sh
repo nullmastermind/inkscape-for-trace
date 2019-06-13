@@ -85,7 +85,8 @@ $ARCH-python3-pip \
 $ARCH-python3-lxml \
 $ARCH-python3-numpy \
 $ARCH-python3-pillow \
-$ARCH-python3-six
+$ARCH-python3-six \
+$ARCH-python3-gobject
 for arch in $(eval echo $ARCH); do
   case ${arch} in
     mingw-w64-i686)

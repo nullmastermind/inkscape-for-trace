@@ -51,6 +51,7 @@ if(WIN32)
     ${MINGW_BIN}/libgfortran-[0-9]*.dll
     ${MINGW_BIN}/libgio-2.0-[0-9]*.dll
     ${MINGW_BIN}/libgiomm-2.4-[0-9]*.dll
+    ${MINGW_BIN}/libgirepository-1.0-[0-9].dll
     ${MINGW_BIN}/libglib-2.0-[0-9]*.dll
     ${MINGW_BIN}/libglibmm-2.4-[0-9]*.dll
     ${MINGW_BIN}/libgmodule-2.0-[0-9]*.dll
@@ -203,6 +204,22 @@ if(WIN32)
     PATTERN "*.dll"
     PATTERN "*.cache")
 
+  # Typelibs for gtk, pango, cairo -> can be used in Python extensions
+  # ToDo: Automate the creation of this collection!
+  install (FILES 
+    ${MINGW_LIB}/girepository-1.0/Atk-1.0.typelib
+    ${MINGW_LIB}/girepository-1.0/cairo-1.0.typelib
+    ${MINGW_LIB}/girepository-1.0/Gdk-3.0.typelib
+    ${MINGW_LIB}/girepository-1.0/GdkPixbuf-2.0.typelib
+    ${MINGW_LIB}/girepository-1.0/Gio-2.0.typelib
+    ${MINGW_LIB}/girepository-1.0/GLib-2.0.typelib
+    ${MINGW_LIB}/girepository-1.0/GModule-2.0.typelib
+    ${MINGW_LIB}/girepository-1.0/GObject-2.0.typelib
+    ${MINGW_LIB}/girepository-1.0/Gtk-3.0.typelib
+    ${MINGW_LIB}/girepository-1.0/Pango-1.0.typelib
+    ${MINGW_LIB}/girepository-1.0/PangoCairo-1.0.typelib
+    DESTINATION lib/girepository-1.0)
+
   # Aspell dictionaries
   install(DIRECTORY ${MINGW_LIB}/aspell-0.60
     DESTINATION lib)
@@ -252,7 +269,7 @@ if(WIN32)
 
   set(site_packages "lib/python3.7/site-packages")
   # Python packages installed via pacman
-  set(packages "python3-lxml" "python3-numpy" "python3-pillow" "python3-six")
+  set(packages "python3-lxml" "python3-numpy" "python3-pillow" "python3-six" "python3-cairo" "python3-gobject")
   foreach(package ${packages})
     list_files_pacman(${package} paths)
     install_list(FILES ${paths}
