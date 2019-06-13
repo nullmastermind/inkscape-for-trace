@@ -3,7 +3,7 @@
  * path-prefix.cpp - Inkscape specific prefix handling *//*
  * Authors:
  *   Patrick Storz <eduard.braun2@gmx.de>
- * 
+ *
  * Copyright (C) 2018 Authors
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
@@ -39,11 +39,7 @@ char *append_inkscape_datadir(const char *relative_path)
     if (!inkscape_datadir) {
         gchar const *datadir_env = g_getenv("INKSCAPE_DATADIR");
         if (datadir_env) {
-#if GLIB_CHECK_VERSION(2,58,0)
-            inkscape_datadir = g_canonicalize_filename(datadir_env, NULL);
-#else
             inkscape_datadir = g_strdup(datadir_env);
-#endif
         } else {
 #ifdef _WIN32
             gchar *module_path = g_win32_get_package_installation_directory_of_module(NULL);
@@ -55,11 +51,11 @@ char *append_inkscape_datadir(const char *relative_path)
         }
     }
 
-    if (!relative_path) {
-        relative_path = "";
-    }
-
+#if GLIB_CHECK_VERSION(2,58,0)
+    return g_canonicalize_filename(relative_path, inkscape_datadir);
+#else
     return g_build_filename(inkscape_datadir, relative_path, NULL);
+#endif
 }
 
 /**
