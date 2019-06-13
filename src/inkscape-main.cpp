@@ -17,6 +17,8 @@
 #include "inkscape-application.h"
 #include "path-prefix.h"
 
+#include "io/resource.h"
+
 static void set_extensions_env()
 {
     // add inkscape to PATH, so the correct version is always available to extensions by simply calling "inkscape"
@@ -29,27 +31,23 @@ static void set_extensions_env()
     }
     g_free(program_dir);
 
-    // add share/inkscape/extensions to PYTHONPATH so the inkex module is found by extensions in user folder
-    auto new_pythonpath = std::string(INKSCAPE_EXTENSIONDIR);
+    // add various locations to PYTHONPATH so extensions find their modules
+    auto extensiondir_user = get_path_ustring(Inkscape::IO::Resource::USER, Inkscape::IO::Resource::EXTENSIONS);
+    auto extensiondir_system = get_path_ustring(Inkscape::IO::Resource::SYSTEM, Inkscape::IO::Resource::EXTENSIONS);
 
-    // add old PYTHONPATH
-    gchar const *pythonpath = g_getenv("PYTHONPATH");
-    if (pythonpath) {
-        new_pythonpath.append(G_SEARCHPATH_SEPARATOR_S).append(pythonpath);
+    auto pythonpath = extensiondir_user + G_SEARCHPATH_SEPARATOR + extensiondir_system;
+
+    auto pythonpath_old = Glib::getenv("PYTHONPATH");
+    if (!pythonpath_old.empty()) {
+        pythonpath += G_SEARCHPATH_SEPARATOR + pythonpath_old;
     }
 
-    // add share/inkscape/extensions/inkex/deprecated-simple
-    new_pythonpath.append(G_SEARCHPATH_SEPARATOR_S)
-        .append(INKSCAPE_EXTENSIONDIR)
-        .append(G_DIR_SEPARATOR_S)
-        .append("inkex")
-        .append(G_DIR_SEPARATOR_S)
-        .append("deprecated-simple");
+    pythonpath += G_SEARCHPATH_SEPARATOR + Glib::build_filename(extensiondir_system, "inkex", "deprecated-simple");
 
-    g_setenv("PYTHONPATH", new_pythonpath.c_str(), true);
+    Glib::setenv("PYTHONPATH", pythonpath);
 
     // Python 2.x attempts to encode output as ASCII by default when sent to a pipe.
-    g_setenv("PYTHONIOENCODING", "UTF-8", true);
+    Glib::setenv("PYTHONIOENCODING", "UTF-8");
 
 #ifdef _WIN32
     // add inkscape directory to DLL search path so dynamically linked extension modules find their libraries
