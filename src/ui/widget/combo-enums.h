@@ -155,7 +155,7 @@ public:
         }
     };
 
-    bool on_scroll_event(GdkEventScroll* event) 
+    bool on_scroll_event(GdkEventScroll* event) override 
     {
         return false;
     }

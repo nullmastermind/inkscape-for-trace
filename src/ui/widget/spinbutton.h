@@ -84,7 +84,7 @@ protected:
      * @retval false continue with default handler.
      * @retval true  don't call default handler. 
      */
-    bool on_scroll_event(GdkEventScroll* event);
+    bool on_scroll_event(GdkEventScroll* event) override;
     /**
      * Handle specific keypress events, like Ctrl+Z.
      *
