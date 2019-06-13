@@ -787,7 +787,11 @@ bool StyleDialog::_on_foreach_iter(const Gtk::TreeModel::iterator &iter)
     Gtk::TreeModel::Row row = *(iter);
     Glib::ustring owner = row[_mColumns._colOwner];
     if (owner.empty()) {
-        Glib::ustring tooltiptext = Glib::ustring(_("Used in ") + _owner_style[row[_mColumns._colName]]);
+        Glib::ustring value = _owner_style[row[_mColumns._colName]];
+        Glib::ustring tooltiptext = Glib::ustring(_("Invalid value set"));
+        if (!value.empty()) {
+            tooltiptext = Glib::ustring(_("Used in ") + _owner_style[row[_mColumns._colName]]);
+        }
         row[_mColumns._colOwner] = tooltiptext;
     }
     return false;
