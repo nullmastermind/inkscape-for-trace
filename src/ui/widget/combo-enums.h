@@ -155,10 +155,7 @@ public:
         }
     };
 
-    bool on_scroll_event(GdkEventScroll* event) override 
-    {
-        return false;
-    }
+    bool on_scroll_event(GdkEventScroll *event) override { return false; }
 
     void set_active_by_key(const Glib::ustring& key) {
         setProgrammatically = true;

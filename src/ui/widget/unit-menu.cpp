@@ -134,10 +134,7 @@ bool UnitMenu::isRadial() const
     return getUnitType() == UNIT_TYPE_RADIAL;
 }
 
-bool UnitMenu::on_scroll_event(GdkEventScroll* event) 
-{
-    return false;
-}
+bool UnitMenu::on_scroll_event(GdkEventScroll *event) { return false; }
 
 } // namespace Widget
 } // namespace UI

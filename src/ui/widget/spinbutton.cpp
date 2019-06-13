@@ -85,7 +85,7 @@ bool SpinButton::on_scroll_event(GdkEventScroll *event)
     } else if (event->direction == GDK_SCROLL_DOWN) {
         change = -step;
     } else if (event->direction == GDK_SCROLL_SMOOTH) {
-        double delta_y_clamped = CLAMP(event->delta_y, -1 , 1); // values > 1 result in excessive changes
+        double delta_y_clamped = CLAMP(event->delta_y, -1, 1); // values > 1 result in excessive changes
         change = step * -delta_y_clamped;
     } else {
         return false;
