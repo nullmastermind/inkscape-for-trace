@@ -46,7 +46,7 @@ public:
       connect_signals();
   };
 
-  ~SpinButton() override = default;;
+  ~SpinButton() override = default;
 
   // noncopyable
   SpinButton(const SpinButton&) = delete;
@@ -84,8 +84,7 @@ protected:
      * @retval false continue with default handler.
      * @retval true  don't call default handler. 
      */
-    bool on_my_scroll_event(GdkEventScroll* event);
-
+    bool on_scroll_event(GdkEventScroll* event);
     /**
      * Handle specific keypress events, like Ctrl+Z.
      *

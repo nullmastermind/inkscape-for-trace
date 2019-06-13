@@ -25,7 +25,8 @@ SpinButton::connect_signals() {
     signal_focus_in_event().connect(sigc::mem_fun(*this, &SpinButton::on_my_focus_in_event));
     signal_key_press_event().connect(sigc::mem_fun(*this, &SpinButton::on_my_key_press_event));
     gtk_widget_add_events(GTK_WIDGET(gobj()), GDK_SCROLL_MASK | GDK_SMOOTH_SCROLL_MASK);
-    signal_scroll_event().connect(sigc::mem_fun(*this, &SpinButton::on_my_scroll_event));
+    signal_scroll_event().connect(sigc::mem_fun(*this, &SpinButton::on_scroll_event));
+    set_focus_on_click(true);
 };
 
 int SpinButton::on_input(double* newvalue)
@@ -66,16 +67,18 @@ bool SpinButton::on_my_focus_in_event(GdkEventFocus* /*event*/)
     return false; // do not consume the event
 }
 
-bool SpinButton::on_my_scroll_event(GdkEventScroll* event)
+
+
+bool SpinButton::on_scroll_event(GdkEventScroll *event)
 {
-    if (!property_has_focus()) {
+    if (!is_focus()) {
         return false;
     }
     double step, page;
     get_increments(step, page);
-    if (event->state & GDK_CONTROL_MASK) {
-        step = page;
-    }
+    /*if (event->state & GDK_CONTROL_MASK) {
+        page = step;
+    } */
     double change = 0.0;
     if (event->direction == GDK_SCROLL_UP) {
         change = step;

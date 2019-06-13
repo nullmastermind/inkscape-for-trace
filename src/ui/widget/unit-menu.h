@@ -122,6 +122,10 @@ public:
 
 protected:
     UnitType          _type;
+    /**
+     * block scroll from widget if is inside a scrolled window.
+     */
+    bool on_scroll_event(GdkEventScroll* event);
 };
 
 } // namespace Widget

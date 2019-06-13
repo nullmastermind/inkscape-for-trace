@@ -21,6 +21,8 @@ namespace Widget {
 UnitMenu::UnitMenu() : _type(UNIT_TYPE_NONE)
 {
     set_active(0);
+    gtk_widget_add_events(GTK_WIDGET(gobj()), GDK_SCROLL_MASK | GDK_SMOOTH_SCROLL_MASK);
+    signal_scroll_event().connect(sigc::mem_fun(*this, &UnitMenu::on_scroll_event));
 }
 
 UnitMenu::~UnitMenu() = default;
@@ -130,6 +132,11 @@ bool UnitMenu::isAbsolute() const
 bool UnitMenu::isRadial() const
 {
     return getUnitType() == UNIT_TYPE_RADIAL;
+}
+
+bool UnitMenu::on_scroll_event(GdkEventScroll* event) 
+{
+    return false;
 }
 
 } // namespace Widget

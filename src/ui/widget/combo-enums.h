@@ -45,7 +45,8 @@ public:
         _sort = sort;
 
         signal_changed().connect(signal_attr_changed().make_slot());
-
+        gtk_widget_add_events(GTK_WIDGET(gobj()), GDK_SCROLL_MASK | GDK_SMOOTH_SCROLL_MASK);
+        signal_scroll_event().connect(sigc::mem_fun(*this, &ComboBoxEnum<E>::on_scroll_event));
         _model = Gtk::ListStore::create(_columns);
         set_model(_model);
 
@@ -73,6 +74,8 @@ public:
         _sort = sort;
 
         signal_changed().connect(signal_attr_changed().make_slot());
+        gtk_widget_add_events(GTK_WIDGET(gobj()), GDK_SCROLL_MASK | GDK_SMOOTH_SCROLL_MASK);
+        signal_scroll_event().connect(sigc::mem_fun(*this, &ComboBoxEnum<E>::on_scroll_event));
 
         _model = Gtk::ListStore::create(_columns);
         set_model(_model);
@@ -151,6 +154,11 @@ public:
             }
         }
     };
+
+    bool on_scroll_event(GdkEventScroll* event) 
+    {
+        return false;
+    }
 
     void set_active_by_key(const Glib::ustring& key) {
         setProgrammatically = true;
