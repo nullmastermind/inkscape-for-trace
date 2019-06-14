@@ -722,6 +722,7 @@ Inkscape::XML::Node* ObjectSet::group() {
 
     std::vector<Inkscape::XML::Node*> p(xmlNodes().begin(), xmlNodes().end());
     std::sort(p.begin(), p.end(), sp_repr_compare_position_bool);
+    this->clear();
 
     // Remember the position and parent of the topmost object.
     gint topmost = p.back()->position();
