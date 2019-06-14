@@ -125,6 +125,8 @@ PageSizer::PageSizer(Registry & _wr)
             //name, width, height, unit
             double width = g_ascii_strtod(line[1], nullptr);
             double height = g_ascii_strtod(line[2], nullptr);
+            g_strstrip(line[0]);
+            g_strstrip(line[3]);
             Glib::ustring name = line[0];
             char formatBuf[80];
             snprintf(formatBuf, 79, "%0.1f x %0.1f", width, height);

@@ -72,85 +72,73 @@
        page size to the list, then please consider using a name more specific than just `Folio' or
        `Foolscap Folio'. */
 
-static char const pages_skeleton[] =
-"#comma-separated : NAME - WIDTH - HEIGHT - UNIT; name and unit must have no spacing before or after\n"
-"A4,                210,  297,mm\n"
-"US Letter,         8.5,   11,in\n"
-"US Legal,          8.5,   14,in\n"
-"US Executive,     7.25, 10.5,in\n"
-"A0,                841, 1189,mm\n"
-"A1,                594,  841,mm\n"
-"A2,                420,  594,mm\n"
-"A3,                297,  420,mm\n"
-"A5,                148,  210,mm\n"
-"A6,                105,  148,mm\n"
-"A7,                 74,  105,mm\n"
-"A8,                 52,   74,mm\n"
-"A9,                 37,   52,mm\n"
-"A10,                26,   37,mm\n"
-"B0,               1000, 1414,mm\n"
-"B1,                707, 1000,mm\n"
-"B2,                500,  707,mm\n"
-"B3,                353,  500,mm\n"
-"B4,                250,  353,mm\n"
-"B5,                176,  250,mm\n"
-"B6,                125,  176,mm\n"
-"B7,                 88,  125,mm\n"
-"B8,                 62,   88,mm\n"
-"B9,                 44,   62,mm\n"
-"B10,                31,   44,mm\n"
-"C0,                917, 1297,mm\n"
-"C1,                648,  917,mm\n"
-"C2,                458,  648,mm\n"
-"C3,                324,  458,mm\n"
-"C4,                229,  324,mm\n"
-"C5,                162,  229,mm\n"
-"C6,                114,  162,mm\n"
-"C7,                 81,  114,mm\n"
-"C8,                 57,   81,mm\n"
-"C9,                 40,   57,mm\n"
-"C10,                28,   40,mm\n"
-"D1,                545,  771,mm\n"
-"D2,                385,  545,mm\n"
-"D3,                272,  385,mm\n"
-"D4,                192,  272,mm\n"
-"D5,                136,  192,mm\n"
-"D6,                 96,  136,mm\n"
-"D7,                 68,   96,mm\n"
-"E3,                400,  560,mm\n"
-"E4,                280,  400,mm\n"
-"E5,                200,  280,mm\n"
-"E6,                140,  200,mm\n"
-"CSE,               462,  649,pt\n"
-"US #10 Envelope,   9.5,4.125,in\n"
-"DL Envelope,       220,  110,mm\n"
-"Ledger/Tabloid,     11,   17,in\n"
-"Banner 468x60,     468,   60,px\n"
-"Icon 16x16,         16,   16,px\n"
-"Icon 32x32,         32,   32,px\n"
-"Icon 48x48,         48,   48,px\n"
-"Business Card (ISO 7810), 85.60,53.98,mm\n"
-"Business Card (US),    3.5,2,in\n"
-"Business Card (Europe),        85,    55,mm\n"
-"Business Card (Aus/NZ),        90,    55,mm\n"
-"Arch A,         9,    12,in\n"
-"Arch B,        12,    18,in\n"
-"Arch C,        18,    24,in\n"
-"Arch D,        24,    36,in\n"
-"Arch E,        36,    48,in\n"
-"Arch E1,       30,    42,in\n";
-
-
-
-
-
-
-
-
-
-
-
-
-
+static char const pages_skeleton[] = R"(#Inkscape page sizes
+#NAME,                    WIDTH, HEIGHT, UNIT
+A4,                         210,    297, mm
+US Letter,                  8.5,     11, in
+US Legal,                   8.5,     14, in
+US Executive,              7.25,   10.5, in
+A0,                         841,   1189, mm
+A1,                         594,    841, mm
+A2,                         420,    594, mm
+A3,                         297,    420, mm
+A5,                         148,    210, mm
+A6,                         105,    148, mm
+A7,                          74,    105, mm
+A8,                          52,     74, mm
+A9,                          37,     52, mm
+A10,                         26,     37, mm
+B0,                        1000,   1414, mm
+B1,                         707,   1000, mm
+B2,                         500,    707, mm
+B3,                         353,    500, mm
+B4,                         250,    353, mm
+B5,                         176,    250, mm
+B6,                         125,    176, mm
+B7,                          88,    125, mm
+B8,                          62,     88, mm
+B9,                          44,     62, mm
+B10,                         31,     44, mm
+C0,                         917,   1297, mm
+C1,                         648,    917, mm
+C2,                         458,    648, mm
+C3,                         324,    458, mm
+C4,                         229,    324, mm
+C5,                         162,    229, mm
+C6,                         114,    162, mm
+C7,                          81,    114, mm
+C8,                          57,     81, mm
+C9,                          40,     57, mm
+C10,                         28,     40, mm
+D1,                         545,    771, mm
+D2,                         385,    545, mm
+D3,                         272,    385, mm
+D4,                         192,    272, mm
+D5,                         136,    192, mm
+D6,                          96,    136, mm
+D7,                          68,     96, mm
+E3,                         400,    560, mm
+E4,                         280,    400, mm
+E5,                         200,    280, mm
+E6,                         140,    200, mm
+CSE,                        462,    649, pt
+US #10 Envelope,            9.5,  4.125, in
+DL Envelope,                220,    110, mm
+Ledger/Tabloid,              11,     17, in
+Banner 468x60,              468,     60, px
+Icon 16x16,                  16,     16, px
+Icon 32x32,                  32,     32, px
+Icon 48x48,                  48,     48, px
+ID Card (ISO 7810),       85.60,  53.98, mm
+Business Card (US),         3.5,      2, in
+Business Card (Europe),      85,     55, mm
+Business Card (Aus/NZ),      90,     55, mm
+Arch A,                       9,     12, in
+Arch B,                      12,     18, in
+Arch C,                      18,     24, in
+Arch D,                      24,     36, in
+Arch E,                      36,     48, in
+Arch E1,                     30,     42, in
+)";
 
 #endif
