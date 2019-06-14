@@ -37,18 +37,30 @@ char *append_inkscape_datadir(const char *relative_path)
 {
     static gchar const *inkscape_datadir;
     if (!inkscape_datadir) {
+        gchar *datadir;
         gchar const *datadir_env = g_getenv("INKSCAPE_DATADIR");
         if (datadir_env) {
-            inkscape_datadir = g_strdup(datadir_env);
+            datadir = g_strdup(datadir_env);
         } else {
 #ifdef _WIN32
             gchar *module_path = g_win32_get_package_installation_directory_of_module(NULL);
-            inkscape_datadir = g_build_filename(module_path, "share", NULL);
+            datadir = g_build_filename(module_path, "share", NULL);
             g_free(module_path);
 #else
-            inkscape_datadir = INKSCAPE_DATADIR;
+            datadir = g_strdup(INKSCAPE_DATADIR);
 #endif
         }
+
+#if GLIB_CHECK_VERSION(2,58,0)
+        inkscape_datadir = g_canonicalize_filename(datadir, NULL);
+        g_free(datadir);
+#else
+        inkscape_datadir = datadir;
+#endif
+    }
+
+    if (!relative_path) {
+        relative_path = "";
     }
 
 #if GLIB_CHECK_VERSION(2,58,0)
