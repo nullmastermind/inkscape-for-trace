@@ -30,9 +30,9 @@ if(UNIX)
 	# update inkscape.pot
 	SET(_potFile ${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}.pot)
 	set(xgettext_options -j --keyword=_ --keyword=N_ --keyword=Q_ --keyword=C_:1c,2 --keyword=NC_:1c,2 --msgid-bugs-address=inkscape-devel@lists.sourceforge.net --strict -s --from-code=UTF-8 -ktranslatable -o ${_potFile})
-	add_custom_command(OUTPUT ${_potFile}
+  add_custom_target(inkscape_pot BYPRODUCTS ${_potFile}
 		#COMMAND sh -c "${INTLTOOL-UPDATE} --pot --gettext-package=inkscape"
-		COMMAND touch ${_potFile}
+		COMMAND rm -f ${_potFile} && touch ${_potFile}
 		# Due to a bug in old xgettext versions, we cannot use '--its='.
 		# Instead, we use GETTEXTDATADIR=. to refer to the po/its/*.its files.
 		# This requires a .loc file for each .its file. See po/its/units.loc for an example.
@@ -52,9 +52,7 @@ if(UNIX)
 		COMMENT "Extract translatable messages to ${_potFile}"
 		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 		)
-	set_source_files_properties(${_potFile} PROPERTIES GENERATED TRUE)
 
-	add_custom_target(inkscape_pot ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/inkscape.pot)
 	add_dependencies(inkscape_pot filters_svg_h)
 	add_dependencies(inkscape_pot palettes_h)
 	add_dependencies(inkscape_pot patterns_svg_h)
