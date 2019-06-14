@@ -429,8 +429,6 @@ PageSizer::find_paper_size (Inkscape::Util::Quantity w, Inkscape::Util::Quantity
         std::swap(h,w);
     }
 
-    g_return_val_if_fail(w <= h, _paperSizeListStore->children().end());
-
     std::map<Glib::ustring, PaperSize>::const_iterator iter;
     for (iter = _paperSizeTable.begin() ;
          iter != _paperSizeTable.end() ; ++iter) {
@@ -438,7 +436,10 @@ PageSizer::find_paper_size (Inkscape::Util::Quantity w, Inkscape::Util::Quantity
         Inkscape::Util::Quantity smallX (paper.smaller, paper.unit);
         Inkscape::Util::Quantity largeX (paper.larger, paper.unit);
 
-        g_return_val_if_fail(smallX.quantity < largeX.quantity + 0.001, _paperSizeListStore->children().end());
+        // account for landscape formats (e.g. business cards)
+        if (largeX < smallX) {
+            std::swap(largeX, smallX);
+        }
 
         if ( are_near(w, smallX, 0.1) && are_near(h, largeX, 0.1) ) {
             Gtk::ListStore::iterator p = _paperSizeListStore->children().begin();
