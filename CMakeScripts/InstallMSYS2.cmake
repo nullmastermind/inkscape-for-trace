@@ -270,4 +270,16 @@ if(WIN32)
       EXCLUDE "^\\.\\.\\/" # exclude content in parent directories (notably scripts installed to /bin)
     )
   endforeach()
+  
+  # gdb
+  install(FILES
+    ${MINGW_BIN}/gdb.exe
+    ${MINGW_BIN}/libreadline8.dll
+    DESTINATION bin)
+  install(DIRECTORY
+    ${MINGW_PATH}/share/gdb
+    DESTINATION share)
+  install(FILES
+    packaging/win32/gdb_create_backtrace.bat
+    DESTINATION bin)
 endif()
