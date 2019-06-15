@@ -108,7 +108,7 @@ PageSizer::PageSizer(Registry & _wr)
 
     char *path = Inkscape::IO::Resource::profile_path("pages.csv");
     if (!g_file_test(path, G_FILE_TEST_EXISTS)) {
-        if (!g_file_set_contents(path, pages_skeleton, sizeof(pages_skeleton) , nullptr)) {
+        if (!g_file_set_contents(path, pages_skeleton, -1, nullptr)) {
             g_warning("%s", _("Failed to create the page file."));
         }
     }
