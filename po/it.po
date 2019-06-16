@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 1.0\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-05-28 11:33+0200\n"
+"POT-Creation-Date: 2019-06-14 19:13+0200\n"
 "PO-Revision-Date: 2019-02-17 15:31+0100\n"
 "Last-Translator: Firas Hanife <FirasHanife@gmail.com>\n"
 "Language-Team: \n"
@@ -1703,7 +1703,8 @@ msgstr ""
 msgid "35"
 msgstr ""
 
-msgid "360º Copies"
+#, fuzzy
+msgid "360° Copies"
 msgstr "Copie a 360°"
 
 #
@@ -2333,10 +2334,6 @@ msgstr "<b>Modifica:</b>"
 
 msgid "<b>Click and drag</b> between shapes to create a connector."
 msgstr "<b>Clicca e trascina</b> tra le forme per creare un connettore."
-
-#, fuzzy
-msgid "<b>Click</b> CSS property to edit."
-msgstr "<b>Clicca</b> l'attributo da modificare."
 
 msgid "<b>Click</b> attribute to edit."
 msgstr "<b>Clicca</b> l'attributo da modificare."
@@ -3778,10 +3775,6 @@ msgstr "Aggiunge una piega globale agli scarabocchi (lento)"
 #, fuzzy
 msgid "Add a new attribute"
 msgstr "Cambia attributo"
-
-#, fuzzy
-msgid "Add a new style property"
-msgstr "Aggiungi un nuovo set di selezione"
 
 msgid "Add an embedded script"
 msgstr "Aggiungi uno script incorporato"
@@ -8693,10 +8686,6 @@ msgstr "Carta stropicciata e patinata, può essere usata per oggetti o immagini"
 msgid "Crumpled matte plastic, with melted edge"
 msgstr "Plastica spiegazzata opaca, con bordi fusi"
 
-#, fuzzy
-msgid "Css Dialog..."
-msgstr "Finestre"
-
 #
 # File: ../src/ui/tool/node.cpp, line: 611
 msgctxt "Path handle tip"
@@ -9193,8 +9182,7 @@ msgid "Default import resolution"
 msgstr "Risoluzione predefinita per l'importazione"
 
 msgid "Default import resolution (in dots per inch) for bitmap and SVG import"
-msgstr ""
-"Risoluzione predefinita (in dpi) per l'importazione delle bitmap e SVG"
+msgstr "Risoluzione predefinita (in dpi) per l'importazione delle bitmap e SVG"
 
 msgid "Default interface setup"
 msgstr "Impostazione interfaccia predefinita"
@@ -10458,6 +10446,10 @@ msgstr "Modifica con programma esterno..."
 msgid "Edit Fill"
 msgstr "Modifica riempimento"
 
+#, fuzzy
+msgid "Edit Full Stylesheet"
+msgstr "Stile"
+
 msgid "Edit Path Effect parameters"
 msgstr "Modifica parametri effetto su tracciato"
 
@@ -11189,7 +11181,9 @@ msgstr ""
 msgid "Export: Overwrite input file."
 msgstr ""
 
-msgid "Export: PDF level (1.4 or 1.5)"
+#
+# File: ../src/inkscape-application.cpp, line: 540
+msgid "Export: PDF version (1.4 or 1.5)"
 msgstr ""
 
 msgid "Export: Postscript level (2 or 3). Default is 3."
@@ -13720,8 +13714,7 @@ msgid "If set, this will replace DPI."
 msgstr "Se impostato, sostituirà il valore DPI."
 
 msgid "If set, use a colored checkerboard for the canvas background"
-msgstr ""
-"Se attivo, usa una scacchiera colorata come sfondo"
+msgstr "Se attivo, usa una scacchiera colorata come sfondo"
 
 msgid ""
 "If set, write the CSS name of the color when available (e.g. 'red' or "
@@ -14499,11 +14492,16 @@ msgstr ""
 "Intervalli di tempo (in minuti) a cui eseguire il salvataggio automatico del "
 "documento"
 
+#, fuzzy
+msgid "Invalid CSS selector."
+msgstr "Risultato SIOX non valido"
+
 msgid "Invalid SIOX result"
 msgstr "Risultato SIOX non valido"
 
-msgid "Invalid entry: Not an id (#), class (.), or element CSS selector."
-msgstr ""
+#, fuzzy
+msgid "Invalid property set"
+msgstr "Nome di programma non valido: %s"
 
 msgid "Inverse chamfer"
 msgstr "Smussatura inversa"
@@ -14852,9 +14850,6 @@ msgstr "Unità lunghezza nucleo:"
 
 msgid "Kernel:"
 msgstr "Nucleo:"
-
-msgid "Kerning"
-msgstr "Crenatura"
 
 #, fuzzy
 msgid "Kerning Value:"
@@ -15355,12 +15350,6 @@ msgstr ""
 "Permette al gestore delle finestre di determinare la posizione di tutte le "
 "finestre"
 
-msgid "Letter rotation"
-msgstr "Rotazione lettere"
-
-msgid "Letter spacing"
-msgstr "Spaziatura lettere"
-
 msgid "Letter:"
 msgstr "Lettere:"
 
@@ -15493,9 +15482,6 @@ msgstr "Limita la ricerca alla selezione attuale"
 
 msgid "Line"
 msgstr "Linea"
-
-msgid "Line Height"
-msgstr "Spaziatura linee"
 
 msgid "Line Midpoints"
 msgstr "Metà linea"
@@ -17788,7 +17774,8 @@ msgstr "Nessuno zoom precedente."
 msgid "No results found"
 msgstr "Nessun oggetto trovato"
 
-msgid "No rotation angle, fixed to 360º"
+#, fuzzy
+msgid "No rotation angle, fixed to 360°"
 msgstr "Nessun angolo di rotazione, fissato a 360°"
 
 msgid "No size on the clipboard."
@@ -19108,8 +19095,8 @@ msgid "PDF Input"
 msgstr "Input PDF"
 
 #, fuzzy
-msgid "PDF-Level"
-msgstr "Livello"
+msgid "PDF-VERSION"
+msgstr "VERSIONE_PDF"
 
 msgid "PNG"
 msgstr "PNG"
@@ -19222,6 +19209,10 @@ msgstr "Paletta"
 #, fuzzy
 msgid "Palette size:"
 msgstr "Incolla dimensione"
+
+#, fuzzy
+msgid "Paned vertical"
+msgstr "Motivo verticale"
 
 msgid "Panjabi (pa)"
 msgstr "Panjabi (pa)"
@@ -20426,9 +20417,6 @@ msgstr "Avvia Inkscape in modalità interattiva per terminale."
 msgid "Process: Verb(s) to call when Inkscape opens."
 msgstr "Azioni da compiere all'apertura di Inkscape."
 
-msgid "Process: xverb command file."
-msgstr ""
-
 msgid "Profile Name"
 msgstr "Nome profilo"
 
@@ -20444,14 +20432,6 @@ msgstr "Correzione"
 
 msgid "Properties"
 msgstr "Proprietà"
-
-#, fuzzy, c-format
-msgid ""
-"Property <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
-"commit changes."
-msgstr ""
-"Selezionato l'attributo <b>%s</b>. Premi <b>Ctrl+Invio</b> quando finito per "
-"applicare i cambiamenti."
 
 #, fuzzy
 msgctxt "Font feature"
@@ -22160,10 +22140,6 @@ msgstr "Input SVGZ"
 msgid "SVGZ Output"
 msgstr "Output SVGZ"
 
-#, fuzzy
-msgid "S_electors"
-msgstr "Selettore"
-
 msgid "S_hift"
 msgstr "Spos_tamento"
 
@@ -23842,6 +23818,10 @@ msgstr "Mostra tutti i livelli"
 msgid "Show all the layers"
 msgstr "Mostra tutti i livelli"
 
+#, fuzzy
+msgid "Show attributes"
+msgstr "Imposta attributo"
+
 msgid "Show bounding box (used to cut infinite lines)"
 msgstr "Mostra riquadro (usato per tagliare linee infinite)"
 
@@ -24511,9 +24491,6 @@ msgstr "Aggancia angoli riquadri"
 msgid "Snap centers of objects"
 msgstr "Aggancia a e con i centri degli oggetti"
 
-msgid "Snap cusp nodes, incl. rectangle corners"
-msgstr "Aggancia ai nodi angolari, incl. angoli dei rettangoli"
-
 msgid "Snap d_istance"
 msgstr "D_istanza di aggancio"
 
@@ -24571,6 +24548,10 @@ msgstr ""
 
 msgid "Snap to clip paths"
 msgstr "Aggancia tracciati fissaggi"
+
+#, fuzzy
+msgid "Snap to cusp nodes, incl. rectangle corners"
+msgstr "Aggancia ai nodi angolari, incl. angoli dei rettangoli"
 
 msgid "Snap to edges of a bounding box"
 msgstr "Aggancia ai bordi dei riquadri"
@@ -27199,6 +27180,11 @@ msgstr ""
 "Questo valore verrà aggiunto ad ogni componente. Risulta utile per definire "
 "un valore costante per l'effetto nullo del filtro."
 
+#
+# File: ../src/ui/dialog/styledialog.cpp, line: 654
+msgid "This value is comented"
+msgstr ""
+
 #, fuzzy
 msgid "This version of the extension is designed for"
 msgstr "l'estensione è stata programmata solo per Windows."
@@ -27300,12 +27286,6 @@ msgstr "Imposta adattamento simboli in spazio icona."
 
 msgid "Toggle Sides"
 msgstr "Commuta lati"
-
-msgid "Toggle Subscript"
-msgstr "Abilita pedice"
-
-msgid "Toggle Superscript"
-msgstr "Abilita apice"
 
 msgid "Toggle VP in X direction between 'finite' and 'infinite' (=parallel)"
 msgstr ""
@@ -28501,6 +28481,11 @@ msgstr ""
 msgid "Use user's fonts directory"
 msgstr "Usa la cartella dei caratteri utente"
 
+#
+# File: ../src/ui/dialog/styledialog.cpp, line: 793
+msgid "Used in "
+msgstr ""
+
 #, fuzzy
 msgid "User UI: "
 msgstr "Cache utente: "
@@ -28673,9 +28658,6 @@ msgstr "Raggio verticale"
 msgid "Vertical Offset:"
 msgstr "Spostamento verticale:"
 
-msgid "Vertical Shift"
-msgstr "Spostamento verticale"
-
 msgid "Vertical Spacing:"
 msgstr "Spaziatura verticale:"
 
@@ -28701,6 +28683,10 @@ msgstr "Frequenza verticale:"
 
 msgid "Vertical inlay:"
 msgstr "Punto verticale:"
+
+#, fuzzy
+msgid "Vertical kerning (px)"
+msgstr "Trasformazione verticale"
 
 msgid "Vertical lines"
 msgstr "Linee verticali"
@@ -28732,9 +28718,6 @@ msgstr ""
 msgid "Vertical scale per row (in % of tile height)"
 msgstr ""
 "Il ridimensionamento verticale per ogni riga (in % sulla larghezza del clone)"
-
-msgid "Vertical shift (px)"
-msgstr "Spostamento verticale (px)"
 
 #, no-c-format
 msgid "Vertical shift per column (in % of tile height)"
@@ -28801,9 +28784,6 @@ msgstr "Vietnamita (vi)"
 msgid "View"
 msgstr "Visualizza"
 
-msgid "View Css Dialog"
-msgstr ""
-
 msgid "View Layers"
 msgstr "Mostra i livelli"
 
@@ -28817,6 +28797,11 @@ msgid "View Previous Glyph"
 msgstr "Visualizza glifo precedente"
 
 msgid "View Style Dialog"
+msgstr ""
+
+#
+# File: ../src/verbs.cpp, line: 3111
+msgid "View and edit selections and CSS styles"
 msgstr ""
 
 msgid "View and edit the XML tree of the document"
@@ -29474,9 +29459,6 @@ msgctxt "Symbol"
 msgid "Word Balloons"
 msgstr "Nuvolette"
 
-msgid "Word spacing"
-msgstr "Spaziatura parole"
-
 msgid "Word:"
 msgstr "Parola:"
 
@@ -29635,10 +29617,6 @@ msgstr "Mostra lo scheletro in un'area circolare attorno al cursore"
 
 msgid "XRay mode radius preview"
 msgstr ""
-
-#, fuzzy
-msgid "XVERBS-FILENAME"
-msgstr "NOMEFILE"
 
 msgctxt "Symbol"
 msgid "Xnor Gate"
@@ -30016,10 +29994,6 @@ msgstr "_Ordina..."
 msgid "_Arrow keys move by:"
 msgstr "Le _frecce direzionali muovono di:"
 
-#, fuzzy
-msgid "_Attributes"
-msgstr "_Attributi:"
-
 msgid "_B:"
 msgstr "_B:"
 
@@ -30381,9 +30355,6 @@ msgctxt "Grid"
 msgid "_New"
 msgstr "_Nuova"
 
-msgid "_Nodes"
-msgstr "_Nodi"
-
 msgid "_Normal"
 msgstr "_Normale"
 
@@ -30570,6 +30541,10 @@ msgstr "_Seleziona questo"
 msgid "_Selection"
 msgstr "_Selezione"
 
+#, fuzzy
+msgid "_Selectors and CSS..."
+msgstr "Set di selezione..."
+
 msgid "_Set"
 msgstr "Impo_sta"
 
@@ -30645,10 +30620,6 @@ msgid "_Stroke to Path Legacy"
 msgstr "Da _contorno a tracciato"
 
 msgid "_Style"
-msgstr "_Stile"
-
-#, fuzzy
-msgid "_Styles"
 msgstr "_Stile"
 
 msgid "_Symmetry"
@@ -33965,6 +33936,10 @@ msgstr ""
 msgid "printing_marks.py"
 msgstr "Margini di stampa"
 
+#, fuzzy
+msgid "property"
+msgstr "Proprietà"
+
 #
 # File: ../share/extensions/eps_input.inx, line: 6
 # File: ../share/extensions/ps_input.inx, line: 6
@@ -34696,6 +34671,10 @@ msgstr "abilita output ROBO-Master"
 msgid "use ROBO-Master type of spline output"
 msgstr "abilita output ROBO-Master"
 
+#, fuzzy
+msgid "value"
+msgstr "Valore"
+
 #, c-format
 msgid "vertical, at %s"
 msgstr "verticale, a %s"
@@ -35102,6 +35081,76 @@ msgstr ""
 msgid "© 2019 Inkscape Developers"
 msgstr "© 2019 Sviluppatori di Inkscape"
 
+#, fuzzy
+#~ msgid "<b>Click</b> CSS property to edit."
+#~ msgstr "<b>Clicca</b> l'attributo da modificare."
+
+#, fuzzy
+#~ msgid "Add a new style property"
+#~ msgstr "Aggiungi un nuovo set di selezione"
+
+#, fuzzy
+#~ msgid "Css Dialog..."
+#~ msgstr "Finestre"
+
+#~ msgid "Kerning"
+#~ msgstr "Crenatura"
+
+#~ msgid "Letter rotation"
+#~ msgstr "Rotazione lettere"
+
+#~ msgid "Letter spacing"
+#~ msgstr "Spaziatura lettere"
+
+#~ msgid "Line Height"
+#~ msgstr "Spaziatura linee"
+
+#, fuzzy
+#~ msgid "PDF-Level"
+#~ msgstr "Livello"
+
+#, fuzzy
+#~ msgid ""
+#~ "Property <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
+#~ "commit changes."
+#~ msgstr ""
+#~ "Selezionato l'attributo <b>%s</b>. Premi <b>Ctrl+Invio</b> quando finito "
+#~ "per applicare i cambiamenti."
+
+#, fuzzy
+#~ msgid "S_electors"
+#~ msgstr "Selettore"
+
+#~ msgid "Toggle Subscript"
+#~ msgstr "Abilita pedice"
+
+#~ msgid "Toggle Superscript"
+#~ msgstr "Abilita apice"
+
+#~ msgid "Vertical Shift"
+#~ msgstr "Spostamento verticale"
+
+#~ msgid "Vertical shift (px)"
+#~ msgstr "Spostamento verticale (px)"
+
+#~ msgid "Word spacing"
+#~ msgstr "Spaziatura parole"
+
+#, fuzzy
+#~ msgid "XVERBS-FILENAME"
+#~ msgstr "NOMEFILE"
+
+#, fuzzy
+#~ msgid "_Attributes"
+#~ msgstr "_Attributi:"
+
+#~ msgid "_Nodes"
+#~ msgstr "_Nodi"
+
+#, fuzzy
+#~ msgid "_Styles"
+#~ msgstr "_Stile"
+
 #~ msgid "Inkscape Vector Graphics Editor"
 #~ msgstr "Inkscape - Grafica vettoriale SVG"
 
@@ -35313,9 +35362,6 @@ msgstr "© 2019 Sviluppatori di Inkscape"
 
 #~ msgid "Find and replace text in document"
 #~ msgstr "Trova e sostituisci testo nel documento"
-
-#~ msgid "Selection Se_ts..."
-#~ msgstr "Set di selezione..."
 
 #~ msgid "View Tags"
 #~ msgstr "Visualizza set di selezione"
@@ -35531,10 +35577,6 @@ msgstr "© 2019 Sviluppatori di Inkscape"
 #~ msgctxt "measure extension"
 #~ msgid "Center of Mass"
 #~ msgstr "Centro di massa"
-
-#, fuzzy
-#~ msgid "Stylesheet"
-#~ msgstr "Stile"
 
 #, fuzzy
 #~ msgid "Enter the full path to a CSV file:"
@@ -35930,9 +35972,6 @@ msgstr "© 2019 Sviluppatori di Inkscape"
 #~ "Esporta PDF alla versione scelta. (aiuto: assicurarsi di inserire la "
 #~ "stringa esatta nella finestra di esportazione PDF, es. \"PDF 1.4\" che è "
 #~ "conforme al formato PDF-a)"
-
-#~ msgid "PDF_VERSION"
-#~ msgstr "VERSIONE_PDF"
 
 #~ msgid ""
 #~ "Export PDF/PS/EPS without text. Besides the PDF/PS/EPS, a LaTeX file is "
@@ -37944,9 +37983,6 @@ msgstr "© 2019 Sviluppatori di Inkscape"
 #~ msgid "Failed to execute child process (%s)"
 #~ msgstr "Impossibile eseguire il processo figlio (%s)"
 
-#~ msgid "Invalid program name: %s"
-#~ msgstr "Nome di programma non valido: %s"
-
 #~ msgid "Invalid string in argument vector at %d: %s"
 #~ msgstr "Stringa non valida nel vettore argomento a %d: %s"
 
@@ -38882,6 +38918,3 @@ msgstr "© 2019 Sviluppatori di Inkscape"
 
 #~ msgid "Enables application of the display using an ICC profile."
 #~ msgstr "Abilita la calibrazione del display usando un profilo ICC."
-
-#~ msgid "Vertical kerning"
-#~ msgstr "Trasformazione verticale"
