@@ -584,6 +584,13 @@ void InkscapePreferences::symbolicThemeCheck()
     using namespace Inkscape::IO::Resource;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool symbolic = false;
+    GtkSettings *settings = gtk_settings_get_default();
+    if (settings) {
+        Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+        if (themeiconname != "") {
+            g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
+        }
+    }
     if (prefs->getString("/theme/defaultIconTheme") != prefs->getString("/theme/iconTheme")) {
         auto folders = get_foldernames(ICONS, { "application" });
         for (auto &folder : folders) {
