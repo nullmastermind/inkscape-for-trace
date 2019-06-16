@@ -3,7 +3,7 @@ Basic Installation
 
 Inkscape version 0.92 and newer can be build using cmake:
 
-```bash
+```sh
 mkdir build
 cd build
 cmake ..
@@ -50,16 +50,23 @@ Build Options
 A number of configuration settings can be overridden through cmake.  To
 see a list of the options available for inkscape, run:
 
- $ cmake -L
-
+```sh
+cmake -L
+```
 or, for more advanced cmake settings:
 
- $ cmake --help
+```sh
+cmake --help
+```
 
 For example, to build inkscape with only SVG 1 support, and no SVG 2, do:
 
- $ cmake .. -DWITH_SVG2=OFF
+```sh
+cmake .. -DWITH_SVG2=OFF
+```
 
 Or, to build inkscape with debugging symbols, do:
 
- $ cmake -DCMAKE_BUILD_TYPE=Debug ..
+```sh
+cmake -DCMAKE_BUILD_TYPE=Debug ..
+```
