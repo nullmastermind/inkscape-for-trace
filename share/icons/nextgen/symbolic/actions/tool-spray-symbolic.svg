@@ -47,11 +47,11 @@
        type="xygrid"
        id="grid" />
   </sodipodi:namedview>
-  <style
-     id="style226">.success { fill:#25FF4E; }
-.error { fill:#CC0000; }
-.warning { fill:#FF25CE; }
-</style>
+   <style id="style226">
+      .success { fill:#4AD589; }
+      .warning { fill:#F57900; }
+      .error { fill:#cc0000; }
+   </style>
   <g
      transform="matrix(0.666667,0,0,0.666667,-190,-681.57467)"
      id="tool-spray"

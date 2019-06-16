@@ -80,7 +80,7 @@ R"=====(
   </group>
 
   <group id="theme"
-       gtkTheme="" iconTheme=""  symbolicIcons="0" darkTheme="0" symbolicColor="0x000000ff" >
+       gtkTheme="" iconTheme=""  symbolicIcons="0" darkTheme="0" symbolicColor="0x2E3436ff" >
   </group>
 
   <group id="tools" bounding_box="0">

@@ -378,13 +378,13 @@ Application::add_gtk_css()
     gchar colornamedwarning[64];
     gchar colornamederror[64];
     gchar colornamed_inverse[64];
-    int colorset = prefs->getInt("/theme/symbolicColor", 0x000000ff);
+    int colorset = prefs->getInt("/theme/symbolicColor", 0x2E3436ff);
     sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
-    int colorsetsuccess = prefs->getInt("/theme/symbolicSuccessColor", 0x000000ff);
+    int colorsetsuccess = prefs->getInt("/theme/symbolicSuccessColor", 0x4AD589ff);
     sp_svg_write_color(colornamedsuccess, sizeof(colornamedsuccess), colorsetsuccess);
-    int colorsetwarning = prefs->getInt("/theme/symbolicWarningColor", 0x000000ff);
+    int colorsetwarning = prefs->getInt("/theme/symbolicWarningColor", 0xF57900ff);
     sp_svg_write_color(colornamedwarning, sizeof(colornamedwarning), colorsetwarning);
-    int colorseterror = prefs->getInt("/theme/symbolicErrorColor", 0x000000ff);
+    int colorseterror = prefs->getInt("/theme/symbolicErrorColor", 0xcc0000ff);
     sp_svg_write_color(colornamederror, sizeof(colornamederror), colorseterror);
     // Use in case the special widgets have inverse theme background and symbolic
     int colorset_inverse = colorset ^ 0xffffff00;

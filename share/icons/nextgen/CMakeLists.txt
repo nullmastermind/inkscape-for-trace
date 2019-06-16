@@ -1,4 +1,4 @@
-set(THEME nextgeneration)
+set(THEME nextgen)
 install(FILES "index.theme" DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/${THEME})
 
 set(PIXMAP_SIZES "scalable" "symbolic")

@@ -63,11 +63,11 @@
        id="grid"
        type="xygrid" />
   </sodipodi:namedview>
-  <style
-     id="style226">.success { fill:#25FF4E; }
-.error { fill:#CC0000; }
-.warning { fill:#FF25CE; }
-</style>
+   <style id="style226">
+      .success { fill:#4AD589; }
+      .warning { fill:#F57900; }
+      .error { fill:#cc0000; }
+   </style>
   <g
      inkscape:label="00155"
      id="tool-tweak"

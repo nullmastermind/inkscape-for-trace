@@ -14,11 +14,11 @@
    viewBox="0 0 16 16"
    sodipodi:docname="tool-measure-symbolic.svg"
    inkscape:version="1.0alpha2 (92053aa9ea, 2019-06-13)">
-  <style
-     id="style226">.success { fill:#25FF4E; }
-.error { fill:#CC0000; }
-.warning { fill:#FF25CE; }
-</style>
+   <style id="style226">
+      .success { fill:#4AD589; }
+      .warning { fill:#F57900; }
+      .error { fill:#cc0000; }
+   </style>
   <metadata
      id="metadata852">
     <rdf:RDF>
