@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
+<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="distribute-horizontal-center-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="0.6002936" inkscape:cx="732.67439" inkscape:cy="-567.94603" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
+    <inkscape:grid type="xygrid" id="grid"/>
+  </sodipodi:namedview>
+  <g transform="matrix(0.666667,0,0,0.666653,-721.334,-472.23122)" inkscape:label="00280" id="distribute-horizontal-center">
+      <use height="1250" width="1250" transform="matrix(1,0,0,0.5000175,51.00122,354.1682)" id="use18671" y="0" x="0" xlink:href="#path5265"/>
+      <path inkscape:connector-curvature="0" style="opacity:1" d="m 1088.001,708.3622 v 0.4615 11.0769 0.4616 h 1 v -0.4616 -11.0769 -0.4615 z" id="path18673"/>
+      <path inkscape:connector-curvature="0" style="opacity:1" d="m 1085,717.3622 v 15 h 7 v -15 h -2.031 v 4.0312 h -2.906 v -4.0312 z" id="rect18675"/>
+      <path inkscape:connector-curvature="0" style="opacity:1" d="m 1098,717.3622 v 9 h 5 v -9 h -1 v 4 h -3 v -4 z" id="rect18677"/>
+      <path inkscape:connector-curvature="0" id="rect18679" d="m 1082.001,708.36218 h 24 v 24 h -24 z" style="opacity:0;fill:none"/>
+      <path inkscape:connector-curvature="0" style="opacity:1" d="m 1092.001,715.3622 -3,-3 3,-3 v 2 h 5 v -2 l 3,3 -3,3 v -2 h -5 z" id="path18683"/>
+    </g>
+    </svg>

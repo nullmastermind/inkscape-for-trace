@@ -629,7 +629,7 @@ void InkscapePreferences::symbolicDefaultColor(){
     Glib::ustring css_str = "";
     if (prefs->getBool("/theme/symbolicIcons", false)) {
         css_str += "*{ -gtk-icon-style: symbolic;}";
-        css_str += ".dark,.bright,.dark image,.bright image{ color: @theme_fg_color;}";
+        css_str += ".dark,.bright,.dark image,.bright image{ color: @theme_fg_color;-gtk-icon-palette: default;}";
         css_str += "iconinverse{ color: @theme_bg_color;}";
         css_str += "iconregular{ -gtk-icon-style: regular;}";
     } else {
@@ -655,9 +655,18 @@ void InkscapePreferences::symbolicAddClass()
     auto provider = Gtk::CssProvider::create();
     Glib::ustring css_str = "";
     gchar colornamed[64];
+    gchar colornamedsuccess[64];
+    gchar colornamedwarning[64];
+    gchar colornamederror[64];
     gchar colornamed_inverse[64];
     int colorset = prefs->getInt("/theme/symbolicColor", 0x000000ff);
     sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
+    int colorsetsuccess = prefs->getInt("/theme/symbolicSuccessColor", 0x000000ff);
+    sp_svg_write_color(colornamedsuccess, sizeof(colornamedsuccess), colorsetsuccess);
+    int colorsetwarning = prefs->getInt("/theme/symbolicWarningColor", 0x000000ff);
+    sp_svg_write_color(colornamedwarning, sizeof(colornamedwarning), colorsetwarning);
+    int colorseterror = prefs->getInt("/theme/symbolicErrorColor", 0x000000ff);
+    sp_svg_write_color(colornamederror, sizeof(colornamederror), colorseterror);
     // Use in case the special widgets have inverse theme background and symbolic
     int colorset_inverse = colorset ^ 0xffffff00;
     sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
@@ -667,6 +676,13 @@ void InkscapePreferences::symbolicAddClass()
         css_str += ".dark *,.bright *{ color:  @theme_fg_color;}";
         css_str += ".dark,.bright,.dark image,.bright image{ color:";
         css_str += colornamed;
+        css_str += ";";
+        css_str += "-gtk-icon-palette: success ";
+        css_str += colornamedsuccess;
+        css_str += ", warning ";
+        css_str += colornamedwarning;
+        css_str += ", error ";
+        css_str += colornamederror;
         css_str += ";}";
         if (window ) {
             window->get_style_context()->add_class("symbolic");
@@ -970,7 +986,10 @@ void InkscapePreferences::initPageUI()
     _symbolic_icons.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicAddClass));
     _page_theme.add_line(true, "", _symbolic_icons, "", "", true);
     _symbolic_color.init(_("Color for symbolic icons:"), "/theme/symbolicColor", 0x000000ff);
-    Gtk::Label *_symbolic_color_label = Gtk::manage(new Gtk::Label(_("Color for symbolic icons:")));
+    _symbolic_success_color.init(_("Color for symbolic success icons:"), "/theme/symbolicSucessColor", 0x000000ff);
+    _symbolic_warning_color.init(_("Color for symbolic warning icons:"), "/theme/symbolicWarningColor", 0x000000ff);
+    _symbolic_error_color.init(_("Color for symbolic error icons:"), "/theme/symbolicErrorColor", 0x000000ff);
+    Gtk::Label *_symbolic_color_label = Gtk::manage(new Gtk::Label(_("Change colors:")));
     Gtk::Button *apply_color = Gtk::manage(new Gtk::Button(_("Apply color")));
     apply_color->set_tooltip_text(_("Apply color to symbolic icons)"));
     apply_color->signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicAddClass));
@@ -980,6 +999,9 @@ void InkscapePreferences::initPageUI()
     Gtk::Box *icon_buttons = Gtk::manage(new Gtk::Box());
     icon_buttons->pack_start(*_symbolic_color_label, true, true, 4);
     icon_buttons->pack_start(_symbolic_color, true, true, 4);
+    icon_buttons->pack_start(_symbolic_success_color, true, true, 4);
+    icon_buttons->pack_start(_symbolic_warning_color, true, true, 4);
+    icon_buttons->pack_start(_symbolic_error_color, true, true, 4);
     icon_buttons->pack_start(*apply_color, true, true, 4);
     icon_buttons->pack_start(*theme_decide_color, true, true, 4);
     _page_theme.add_line(false,"", *icon_buttons, "", _("Color for symbolic icons, theme based or custom. Some icon color changes need reload"), false );

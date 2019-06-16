@@ -374,20 +374,22 @@ Application::add_gtk_css()
     auto provider = Gtk::CssProvider::create();
     Glib::ustring css_str = "";
     gchar colornamed[64];
+    gchar colornamedsuccess[64];
+    gchar colornamedwarning[64];
+    gchar colornamederror[64];
     gchar colornamed_inverse[64];
     int colorset = prefs->getInt("/theme/symbolicColor", 0x000000ff);
     sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
+    int colorsetsuccess = prefs->getInt("/theme/symbolicSuccessColor", 0x000000ff);
+    sp_svg_write_color(colornamedsuccess, sizeof(colornamedsuccess), colorsetsuccess);
+    int colorsetwarning = prefs->getInt("/theme/symbolicWarningColor", 0x000000ff);
+    sp_svg_write_color(colornamedwarning, sizeof(colornamedwarning), colorsetwarning);
+    int colorseterror = prefs->getInt("/theme/symbolicErrorColor", 0x000000ff);
+    sp_svg_write_color(colornamederror, sizeof(colornamederror), colorseterror);
     // Use in case the special widgets have inverse theme background and symbolic
     int colorset_inverse = colorset ^ 0xffffff00;
     sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
     if (prefs->getBool("/theme/symbolicIcons", false)) {
-        int colorset = prefs->getInt("/theme/symbolicColor", 0x000000ff);
-        gchar colornamed[64];
-        sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
-        // Use in case the special widgets have inverse theme background and symbolic
-        int colorset_inverse = colorset ^ 0xffffff00;
-        gchar colornamed_inverse[64];
-        sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
         if (prefs->getBool("/theme/symbolicIconsDefaultColor", true)) {
             css_str += "*{ -gtk-icon-style: symbolic;}";
             css_str += ".dark,.bright,.dark image,.bright image{ color: @theme_fg_color}";
@@ -398,6 +400,13 @@ Application::add_gtk_css()
             css_str += ".dark *,.bright *{ color:  @theme_fg_color;}";
             css_str += ".dark,.bright,.dark image,.bright image{ color:";
             css_str += colornamed;
+            css_str += ";";
+            css_str += "-gtk-icon-palette: success ";
+            css_str += colornamedsuccess;
+            css_str += ", warning ";
+            css_str += colornamedwarning;
+            css_str += ", error ";
+            css_str += colornamederror;
             css_str += ";}";
             css_str += "#iconinverse{ color:";
             css_str += colornamed_inverse;
