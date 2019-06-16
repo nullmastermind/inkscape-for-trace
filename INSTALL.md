@@ -1,7 +1,10 @@
-Basic Installation
-==================
+Installation
+============
 
-Inkscape version 0.92 and newer can be build using cmake:
+Basic Installation
+------------------
+
+Inkscape version 0.92 and newer can be build using CMake:
 
 ```sh
 mkdir build
@@ -15,40 +18,40 @@ Other platforms such as Windows and Mac require a lot more and are considered
 a developer and packager task. These instructions are kept on the Inkscape wiki.
 
 Running Without Installing
-==========================
+--------------------------
 
-For developers and others who want to run inkscape without installing it please
+For developers and others who want to run Inkscape without installing it please
 see the ***Building*** section in the `CONTRIBUTING.md` file.
 
 Required Dependencies
-=====================
+---------------------
 
 The Inkscape core depends on several other libraries that you will need
-install, if they are not already present on your system.  The most
+install, if they are not already present on your system. The most
 typical libraries you may need to install are:
 
-   * [Boehm-GC](http://www.hboehm.info/gc/)
-   * [libsigc++](https://github.com/libsigcplusplus/libsigcplusplus)
-   * [gtkmm](https://www.gtkmm.org/)
+* [Boehm-GC](http://www.hboehm.info/gc/)
+* [libsigc++](https://github.com/libsigcplusplus/libsigcplusplus)
+* [gtkmm](https://www.gtkmm.org/)
 
 Please see [the wiki page on compiling Inkscape](http://wiki.inkscape.org/wiki/index.php/CompilingInkscape) for the
 most current dependencies, including links to the source tarballs.
 
 
 Extensions
-==========
+----------
 
-All inkscape extensions have been moved into their own reporsitory, they
+All Inkscape extensions have been moved into their own repository. They
 can be installed from there and should be packaged into builds directly.
 Report all bugs and ideas to that sub project.
 
 [Inkscape Extensions](https://gitlab.com/inkscape/extensions/)
 
 Build Options
-=============
+-------------
 
-A number of configuration settings can be overridden through cmake.  To
-see a list of the options available for inkscape, run:
+A number of configuration settings can be overridden through CMake. To
+see a list of the options available for Inkscape, run:
 
 ```sh
 cmake -L
@@ -59,13 +62,13 @@ or, for more advanced cmake settings:
 cmake --help
 ```
 
-For example, to build inkscape with only SVG 1 support, and no SVG 2, do:
+For example, to build Inkscape with only SVG 1 support, and no SVG 2, do:
 
 ```sh
 cmake .. -DWITH_SVG2=OFF
 ```
 
-Or, to build inkscape with debugging symbols, do:
+Or, to build Inkscape with debugging symbols, do:
 
 ```sh
 cmake -DCMAKE_BUILD_TYPE=Debug ..
