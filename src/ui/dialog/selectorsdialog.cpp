@@ -458,6 +458,8 @@ Inkscape::XML::Node *SelectorsDialog::_getStyleTextNode()
                 styleNode->appendChild(textNode);
                 Inkscape::GC::release(textNode);
             }
+            // TODO: handle imports
+            break; //read only first CSS element
         }
     }
 
