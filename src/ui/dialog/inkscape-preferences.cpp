@@ -986,7 +986,7 @@ void InkscapePreferences::initPageUI()
     _symbolic_icons.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicAddClass));
     _page_theme.add_line(true, "", _symbolic_icons, "", "", true);
     _symbolic_color.init(_("Color for symbolic icons:"), "/theme/symbolicColor", 0x000000ff);
-    _symbolic_success_color.init(_("Color for symbolic success icons:"), "/theme/symbolicSucessColor", 0x000000ff);
+    _symbolic_success_color.init(_("Color for symbolic success icons:"), "/theme/symbolicSuccessColor", 0x000000ff);
     _symbolic_warning_color.init(_("Color for symbolic warning icons:"), "/theme/symbolicWarningColor", 0x000000ff);
     _symbolic_error_color.init(_("Color for symbolic error icons:"), "/theme/symbolicErrorColor", 0x000000ff);
     Gtk::Label *_symbolic_color_label = Gtk::manage(new Gtk::Label(_("Change colors:")));
