@@ -64,7 +64,9 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
         Gtk::IconInfo iconinfo = icon_theme->lookup_icon(icon_name + Glib::ustring("-symbolic"), size, Gtk::ICON_LOOKUP_FORCE_SIZE);
         if (iconinfo && SP_ACTIVE_DESKTOP->getToplevel()) {
             bool was_symbolic = false;
-            _icon_pixbuf = iconinfo.load_symbolic(SP_ACTIVE_DESKTOP->getToplevel()->get_style_context(), was_symbolic);
+            Glib::RefPtr< Gtk::StyleContext > stylecontext = SP_ACTIVE_DESKTOP->getToplevel()->get_style_context();
+            stylecontext->add_provider(INKSCAPE.colorizeprovider, 1);
+            _icon_pixbuf = iconinfo.load_symbolic(stylecontext, was_symbolic);
         } else {
             Gtk::IconInfo iconinfo = icon_theme->lookup_icon(icon_name, size, Gtk::ICON_LOOKUP_FORCE_SIZE);
             _icon_pixbuf = iconinfo.load_icon();

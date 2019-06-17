@@ -235,7 +235,6 @@
     </child>
     <style>
       <class name="iconsymbolic"/>
-      <class name="colordefault"/>
     </style>
   </object>
   <object class="GtkPopover" id="LPESelectorEffectInfoPop">

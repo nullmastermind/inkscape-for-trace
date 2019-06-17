@@ -199,8 +199,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   overlay->set_hexpand();
   overlay->set_vexpand();
   overlay->add(* scroller);
-  overlay->get_style_context()->add_class("colorbright");
-  overlay->get_style_context()->add_class("backgroundbright");
+  overlay->get_style_context()->add_class("brightstyle");
   scroller->set_size_request(100, 250);
   table->attach(*Gtk::manage(overlay),0,row,2,1);
 

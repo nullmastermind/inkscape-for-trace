@@ -592,7 +592,7 @@ protected:
 private:
   void themeChange();
   void symbolicThemeCheck();
-  void symbolicAddClass();
+  void symbolicStyling();
   void symbolicDefaultColor();
 
   InkscapePreferences();

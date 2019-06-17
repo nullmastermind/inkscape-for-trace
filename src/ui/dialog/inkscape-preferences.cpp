@@ -629,109 +629,74 @@ void InkscapePreferences::symbolicThemeCheck()
 }
 
 void InkscapePreferences::symbolicDefaultColor(){
+    auto const screen = Gdk::Screen::get_default();
+    Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool("/theme/symbolicIconsDefaultColor", true);
-    auto const screen = Gdk::Screen::get_default();
-    auto provider = Gtk::CssProvider::create();
-    Glib::ustring css_str = "";
-    if (prefs->getBool("/theme/symbolicIcons", false)) {
-        css_str += "*{ -gtk-icon-style: symbolic;}";
-        css_str += ".dark,.bright,.dark image,.bright image{ color: @theme_fg_color;-gtk-icon-palette: default;}";
-        css_str += "iconinverse{ color: @theme_bg_color;}";
-        css_str += "iconregular{ -gtk-icon-style: regular;}";
-    } else {
-        css_str += "*{-gtk-icon-style: regular;}";
-    }
-
-    try {
-        provider->load_from_data(css_str);
-    } catch (const Gtk::CssProviderError &ex) {
-        g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
-    }
-
-    Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-
 }
 
-void InkscapePreferences::symbolicAddClass()
+void InkscapePreferences::symbolicStyling()
 {
+    auto const screen = Gdk::Screen::get_default();
+    Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     using namespace Inkscape::IO::Resource;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool("/theme/symbolicIconsDefaultColor", false);
-    auto const screen = Gdk::Screen::get_default();
-    auto provider = Gtk::CssProvider::create();
-    Glib::ustring css_str = "";
-    gchar colornamed[64];
-    gchar colornamedsuccess[64];
-    gchar colornamedwarning[64];
-    gchar colornamederror[64];
-    gchar colornamed_inverse[64];
-    int colorset = prefs->getInt("/theme/symbolicColor", 0x2E3436ff);
-    sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
-    int colorsetsuccess = prefs->getInt("/theme/symbolicSuccessColor", 0x4AD589ff);
-    sp_svg_write_color(colornamedsuccess, sizeof(colornamedsuccess), colorsetsuccess);
-    int colorsetwarning = prefs->getInt("/theme/symbolicWarningColor", 0xF57900ff);
-    sp_svg_write_color(colornamedwarning, sizeof(colornamedwarning), colorsetwarning);
-    int colorseterror = prefs->getInt("/theme/symbolicErrorColor", 0xcc0000ff);
-    sp_svg_write_color(colornamederror, sizeof(colornamederror), colorseterror);
-    // Use in case the special widgets have inverse theme background and symbolic
-    int colorset_inverse = colorset ^ 0xffffff00;
-    sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
     Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
+    Glib::ustring css_str = "";
     if (prefs->getBool("/theme/symbolicIcons", false)) {
-        css_str += "*{ -gtk-icon-style: symbolic;}";
-        css_str += ".dark *,.bright *{ color:  @theme_fg_color;}";
-        css_str += ".dark,.bright,.dark image,.bright image{ color:";
-        css_str += colornamed;
-        css_str += ";";
-        css_str += "-gtk-icon-palette: success ";
+        gchar colornamed[64];
+        gchar colornamedsuccess[64];
+        gchar colornamedwarning[64];
+        gchar colornamederror[64];
+        gchar colornamed_inverse[64];
+        int colorset = prefs->getInt("/theme/symbolicColor", 0x2E3436ff);
+        sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
+        int colorsetsuccess = prefs->getInt("/theme/symbolicSuccessColor", 0x4AD589ff);
+        sp_svg_write_color(colornamedsuccess, sizeof(colornamedsuccess), colorsetsuccess);
+        int colorsetwarning = prefs->getInt("/theme/symbolicWarningColor", 0xF57900ff);
+        sp_svg_write_color(colornamedwarning, sizeof(colornamedwarning), colorsetwarning);
+        int colorseterror = prefs->getInt("/theme/symbolicErrorColor", 0xcc0000ff);
+        sp_svg_write_color(colornamederror, sizeof(colornamederror), colorseterror);
+        // Use in case the special widgets have inverse theme background and symbolic
+        int colorset_inverse = colorset ^ 0xffffff00;
+        sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
+        css_str += "*{-gtk-icon-palette: success ";
         css_str += colornamedsuccess;
         css_str += ", warning ";
         css_str += colornamedwarning;
         css_str += ", error ";
         css_str += colornamederror;
         css_str += ";}";
+        css_str += "SPRuler, ruler-widget,";
+        css_str += ".bright image, .dark image";
+        css_str += "{color:";
+        css_str += colornamed;
+        css_str += ";}";
+        css_str += ".dark .brightstyle image,";
+        css_str += ".bright .darkstyle image,";
+        css_str += ".inversestyle image";
+        css_str += "{color:";
+        css_str += colornamed_inverse;
+        css_str += ";}";
         if (window ) {
             window->get_style_context()->add_class("symbolic");
             window->get_style_context()->remove_class("regular");
         }
     } else {
-        css_str += "*{-gtk-icon-style: regular;}";
         if (window) {
             window->get_style_context()->add_class("regular");
             window->get_style_context()->remove_class("symbolic");
         }
     }
-    css_str += ".iconcolornamed, .iconcolornamed image{ color:";
-    css_str += colornamed;
-    css_str += ";}";
-    css_str += ".iconcolornamedinverse, .colornamedinverse image{ color:";
-    css_str += colornamed_inverse;
-    css_str += ";}";
-
     try {
-        provider->load_from_data(css_str);
+        INKSCAPE.colorizeprovider->load_from_data(css_str);
     } catch (const Gtk::CssProviderError &ex) {
         g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
     }
-
-    Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    // we want a tiny file with 3 or 4 lines, so we can load without removing context
-    // is more understandable than record previously applied
-    Glib::ustring style = get_filename(UIS, "style.css");
-    if (!style.empty()) {
-        auto provider = Gtk::CssProvider::create();
-
-        try {
-            provider->load_from_path(style);
-        } catch (const Gtk::CssProviderError &ex) {
-            g_critical("CSSProviderError::load_from_path(): failed to load '%s'\n(%s)", style.c_str(),
-                       ex.what().c_str());
-        }
-
-        Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    }
+    Gtk::StyleContext::add_provider_for_screen(screen, INKSCAPE.colorizeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
+
 void InkscapePreferences::themeChange()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -990,7 +955,7 @@ void InkscapePreferences::initPageUI()
         _icon_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicThemeCheck));
     }
     _symbolic_icons.init(_("Use symbolic icons"), "/theme/symbolicIcons", true);
-    _symbolic_icons.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicAddClass));
+    _symbolic_icons.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicStyling));
     _page_theme.add_line(true, "", _symbolic_icons, "", "", true);
     _symbolic_color.init(_("Color for symbolic icons:"), "/theme/symbolicColor", 0x2E3436ff);
     _symbolic_success_color.init(_("Color for symbolic success icons:"), "/theme/symbolicSuccessColor", 0x4AD589ff);
@@ -999,7 +964,7 @@ void InkscapePreferences::initPageUI()
     Gtk::Label *_symbolic_color_label = Gtk::manage(new Gtk::Label(_("Change colors:")));
     Gtk::Button *apply_color = Gtk::manage(new Gtk::Button(_("Apply color")));
     apply_color->set_tooltip_text(_("Apply color to symbolic icons)"));
-    apply_color->signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicAddClass));
+    apply_color->signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicStyling));
     Gtk::Button *theme_decide_color = Gtk::manage(new Gtk::Button(_("Theme decides")));
     theme_decide_color->set_tooltip_text(_("Theme decide symbolic icon color)"));
     theme_decide_color->signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicDefaultColor));

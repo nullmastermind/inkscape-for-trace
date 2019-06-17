@@ -23,7 +23,6 @@
 #include <glibmm/fileutils.h>
 #include <glibmm/regex.h>
 
-#include <gtkmm/cssprovider.h>
 #include <gtkmm/icontheme.h>
 #include <gtkmm/messagedialog.h>
 
@@ -371,57 +370,6 @@ Application::add_gtk_css()
     // Add style sheet (GTK3)
     auto const screen = Gdk::Screen::get_default();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    auto provider = Gtk::CssProvider::create();
-    Glib::ustring css_str = "";
-    gchar colornamed[64];
-    gchar colornamedsuccess[64];
-    gchar colornamedwarning[64];
-    gchar colornamederror[64];
-    gchar colornamed_inverse[64];
-    int colorset = prefs->getInt("/theme/symbolicColor", 0x2E3436ff);
-    sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
-    int colorsetsuccess = prefs->getInt("/theme/symbolicSuccessColor", 0x4AD589ff);
-    sp_svg_write_color(colornamedsuccess, sizeof(colornamedsuccess), colorsetsuccess);
-    int colorsetwarning = prefs->getInt("/theme/symbolicWarningColor", 0xF57900ff);
-    sp_svg_write_color(colornamedwarning, sizeof(colornamedwarning), colorsetwarning);
-    int colorseterror = prefs->getInt("/theme/symbolicErrorColor", 0xcc0000ff);
-    sp_svg_write_color(colornamederror, sizeof(colornamederror), colorseterror);
-    // Use in case the special widgets have inverse theme background and symbolic
-    int colorset_inverse = colorset ^ 0xffffff00;
-    sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
-    if (prefs->getBool("/theme/symbolicIcons", false)) {
-        if (prefs->getBool("/theme/symbolicIconsDefaultColor", true)) {
-            css_str += "*{ -gtk-icon-style: symbolic;}";
-            css_str += ".dark,.bright,.dark image,.bright image{ color: @theme_fg_color}";
-            css_str += "iconinverse{ color: @theme_bg_color;}";
-            css_str += "iconregular{ -gtk-icon-style: regular;}";
-        } else {
-            css_str += "*{ -gtk-icon-style: symbolic;}";
-            css_str += ".dark *,.bright *{ color:  @theme_fg_color;}";
-            css_str += ".dark,.bright,.dark image,.bright image{ color:";
-            css_str += colornamed;
-            css_str += ";";
-            css_str += "-gtk-icon-palette: success ";
-            css_str += colornamedsuccess;
-            css_str += ", warning ";
-            css_str += colornamedwarning;
-            css_str += ", error ";
-            css_str += colornamederror;
-            css_str += ";}";
-            css_str += "#iconinverse{ color:";
-            css_str += colornamed_inverse;
-            css_str += ";}";
-            css_str += "#iconregular{ -gtk-icon-style: regular;}";
-        }
-    } else {
-        css_str += "*{-gtk-icon-style: regular;}";
-    }
-    css_str += ".iconcolornamed, .iconcolornamed image{ color:";
-    css_str += colornamed;
-    css_str += ";}";
-    css_str += ".iconcolornamedinverse, .colornamedinverse image{ color:";
-    css_str += colornamed_inverse;
-    css_str += ";}";
     const gchar *gtk_font_name = "";
     const gchar *gtkThemeName;
     const gchar *gtkIconThemeName;
@@ -449,32 +397,10 @@ Application::add_gtk_css()
         }
         g_object_get(settings, "gtk-font-name", &gtk_font_name, NULL);
     }
-    if (!strncmp(gtk_font_name, "Cantarell", 9)) {
-        css_str += "#monoStrokeWidth,";
-        css_str += "#fillEmptySpace,";
-        css_str += "#SelectStatus,";
-        css_str += "#CoordinateStatusX,";
-        css_str += "#CoordinateStatusY,";
-        css_str += "#DesktopMainTable spinbutton{";
-        css_str += "    font-family: sans-serif";
-        css_str += "}"; // we also can add to * but seems to me Cantarell looks better for other places
-    }
-
-    try {
-        provider->load_from_data(css_str);
-    } catch (const Gtk::CssProviderError &ex) {
-        g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
-    }
-
-    Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-    // we want a tiny file with 3 or 4 lines, so we can load without removing context
-    // is more understandable than record previously applied
+    
+    auto provider = Gtk::CssProvider::create();
     Glib::ustring style = get_filename(UIS, "style.css");
     if (!style.empty()) {
-      auto provider = Gtk::CssProvider::create();
-
-      // From 3.16, throws an error which we must catch.
       try {
           provider->load_from_path (style);
       } catch (const Gtk::CssProviderError& ex)
@@ -482,8 +408,70 @@ Application::add_gtk_css()
           g_critical("CSSProviderError::load_from_path(): failed to load '%s'\n(%s)",
                  style.c_str(), ex.what().c_str());
       }
-
       Gtk::StyleContext::add_provider_for_screen (screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+    colorizeprovider = Gtk::CssProvider::create();
+    Glib::ustring css_str = "";
+    if (prefs->getBool("/theme/symbolicIcons", false)) {
+        if (!prefs->getBool("/theme/symbolicIconsDefaultColor", true)) {
+            gchar colornamed[64];
+            gchar colornamedsuccess[64];
+            gchar colornamedwarning[64];
+            gchar colornamederror[64];
+            gchar colornamed_inverse[64];
+            int colorset = prefs->getInt("/theme/symbolicColor", 0x2E3436ff);
+            sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
+            int colorsetsuccess = prefs->getInt("/theme/symbolicSuccessColor", 0x4AD589ff);
+            sp_svg_write_color(colornamedsuccess, sizeof(colornamedsuccess), colorsetsuccess);
+            int colorsetwarning = prefs->getInt("/theme/symbolicWarningColor", 0xF57900ff);
+            sp_svg_write_color(colornamedwarning, sizeof(colornamedwarning), colorsetwarning);
+            int colorseterror = prefs->getInt("/theme/symbolicErrorColor", 0xcc0000ff);
+            sp_svg_write_color(colornamederror, sizeof(colornamederror), colorseterror);
+            // Use in case the special widgets have inverse theme background and symbolic
+            int colorset_inverse = colorset ^ 0xffffff00;
+            sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
+            
+            css_str += "*{-gtk-icon-palette: success ";
+            css_str += colornamedsuccess;
+            css_str += ", warning ";
+            css_str += colornamedwarning;
+            css_str += ", error ";
+            css_str += colornamederror;
+            css_str += ";}";
+            css_str += "SPRuler, ruler-widget,";
+            css_str += ".bright image, .dark image";
+            css_str += "{color:";
+            css_str += colornamed;
+            css_str += ";}";
+            css_str += ".dark .brightstyle image,";
+            css_str += ".bright .darkstyle image,";
+            css_str += ".inversestyle image";
+            css_str += "{color:";
+            css_str += colornamed_inverse;
+            css_str += ";}";
+        }
+    }
+    try {
+        colorizeprovider->load_from_data(css_str);
+    } catch (const Gtk::CssProviderError &ex) {
+        g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
+    }
+    Gtk::StyleContext::add_provider_for_screen(screen, colorizeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    if (!strncmp(gtk_font_name, "Cantarell", 9)) {
+        css_str = "#monoStrokeWidth,";
+        css_str += "#fillEmptySpace,";
+        css_str += "#SelectStatus,";
+        css_str += "#CoordinateStatusX,";
+        css_str += "#CoordinateStatusY,";
+        css_str += "#DesktopMainTable spinbutton{";
+        css_str += "    font-family: sans-serif;";
+        css_str += "}"; // we also can add to * but seems to me Cantarell looks better for other places
+        try {
+            provider->load_from_data(css_str);
+        } catch (const Gtk::CssProviderError &ex) {
+            g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
+        }
+        Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
 }
 

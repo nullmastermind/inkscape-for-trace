@@ -56,118 +56,57 @@
 
 
 /* Inkscape CSS helper
-      * to add a class to a widget do some thing like
-      * widget->get_style_context()->add_class("mycoolclass");
-      * we define a bunch of helper CSS styles
-      * Ecah Inkscape desktop has a class in top level window
-      * call "dark" so you can style using 2 clases with or without
-      * "dark" by this way you can always know if the UI is in dark mode
-      * Also added some helper clases:
-      * ::::::: Color based
-      * ::::::: apply to colors
-      * ::::::: scope widget and all his childs
-      * ".colordefault" use default window color
-      * ".colorinverse" invert window colors
-      * ".colorbright" force bright colors no matter the UI is dark or bright
-      * ".colordark" same but dark
-      * ::::::: Background based
-      * ::::::: apply to backgrounds
-      * ::::::: scope widget and all his childs
-      * ".backgrounddefault" use default window color
-      * ".backgroundinverse" invert window colors
-      * ".backgroundbright" force bright colors no matter the UI is dark or bright
-      * ".backgrounddark" same but daLPESelectorButtonBoxk
-      * :::::::: Icon Based.
-      * :::::::: apply to color (foreground)
-      * :::::::: scope widget and all nested images
-      * ".iconsymbolic" Force icon symbolic
-      * ".iconregular" Force colorful icons
-      * ".iconcolordefault" Theme color default
-      * ".iconcolorinverse" Inverse color from theme
-      * ".iconcolorbright, Force clear icon
-      * ".iconcolordark" Force dark icon
-      * ".iconcolornamed" Icon in prefs selected color;
-      * ".iconcolornamedinverse" Icon in inverse color from prefs"
-      * :::::::: Combo box.
-      * "..combobright" Combo bright
-      * ".regular ..." Inkscape is in regular icon mode 
-      * ".symbolic ..." Inkscape is in symbolic icon mode 
-      */
+  * to add a class to a widget do some thing like
+  * widget->get_style_context()->add_class("mycoolclass");
+  * we define a bunch of helper CSS styles
+  * Each Inkscape desktop has some classes in top level window
+  * called "dark|bright" and "symbolic|regular" so you can style using this clases 
+  * by this way you can always know if the UI is in dark mode
+  * Also added some helper clases:
+  * ::::::: Color based
+  * ::::::: apply to colors
+  * ::::::: scope widget and all his childs
+  * ".inversestyle" invert window colors
+  * ".brightstyle" force bright colors no matter the UI is dark or bright
+  * ".darkstyle" same but dark
+  * ".defaultstyle" use default window color for child wigets inside a modified one
+  * :::::::: Icon Based.
+  * ".iconsymbolic" Force icon symbolic
+  * ".iconregular" Force colorful icons
+  * :::::::: Combo box.
+  * "..combobright" Combo bright
+  */
 
-.colordefault,
-.colordefault * {
-    color: @theme_fg_color;
+* {
+    -gtk-icon-palette: default;
 }
 
-.colorinverse,
-.colorinverse * {
-    color: @theme_bg_color;
-}
-
-.colorbright,
-.colorbright * {
-    color: @theme_fg_color;
-}
-
-.dark .colorbright,
-.dark .colorbright * {
-    color: @theme_bg_color;
-}
-
-.colordark,
-.colordark * {
-    color: @theme_bg_color;
-}
-
-.dark .colordark,
-.dark .colordark * {
-    color: @theme_fg_color;
-}
-
-.backgrounddefault,
-.backgrounddefault * {
-    background-color: @theme_bg_color;
-    background-image: image(@theme_bg_color);
-}
-
-.backgroundinverse,
-.backgroundinverse * {
-    background-color: @theme_fg_color;
-    background-image: image(@theme_fg_color);
-}
-
-.backgroundbright,
-.backgroundbright * {
-    background-color: @theme_bg_color;
-    background-image: image(@theme_bg_color);
-}
-
-.dark .backgroundbright,
-.dark .backgroundbright * {
-    background-color: @theme_fg_color;
-    background-image: image(@theme_fg_color);
-}
-
-.backgrounddark,
-.backgrounddark * {
-    background-color: @theme_fg_color;
-    background-image: image(@theme_fg_color);
-}
-
-.dark .backgrounddark,
-.dark .backgrounddark * {
-    background-color: @theme_bg_color;
-    background-image: image(@theme_bg_color);
-}
-
-.iconsymbolic,
-.iconsymbolic image {
+.symbolic image {
     -gtk-icon-style: symbolic;
 }
 
-.iconregular,
-.iconregular image {
+.regular image {
     -gtk-icon-style: regular;
+}
+
+.bright .brightstyle,
+.bright .brightstyle *,
+.dark .darkstyle,
+.dark .darkstyle * {
+    color: @theme_fg_color;
+    background-color: @theme_bg_color;
+    background-image: image(@theme_bg_color);
+}
+
+.bright .darkstyle,
+.bright .darkstyle *,
+.dark .brightstyle,
+.dark .brightstyle *,
+.inversestyle,
+.inversestyle * {
+    color: @theme_bg_color;
+    background-color: @theme_fg_color;
+    background-image: image(@theme_fg_color);
 }
 
 .combobright * {
