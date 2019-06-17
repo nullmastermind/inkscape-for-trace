@@ -1129,6 +1129,7 @@ sp_ruler_draw_ticks (SPRuler *ruler)
 
     gtk_style_context_get_color (context, gtk_widget_get_state_flags (widget),
                                  &color);
+    color.alpha = 0.75;
     gdk_cairo_set_source_rgba (cr, &color);
 
     if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
