@@ -837,8 +837,9 @@ void Transformation::applyPageSkew(Inkscape::Selection *selection)
                     getDesktop()->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Transform matrix is singular, <b>not used</b>."));
                     return;
                 }
-                double skewX = tan(-angleX);
+                double skewX = tan(angleX);
                 double skewY = tan(angleY);
+                skewX *= getDesktop()->yaxisdir();
                 skewY *= getDesktop()->yaxisdir();
                 sp_item_skew_rel (item, skewX, skewY);
             } else { // absolute displacement
@@ -884,8 +885,9 @@ void Transformation::applyPageSkew(Inkscape::Selection *selection)
                     getDesktop()->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Transform matrix is singular, <b>not used</b>."));
                     return;
                 }
-                double skewX = tan(-angleX);
+                double skewX = tan(angleX);
                 double skewY = tan(angleY);
+                skewX *= getDesktop()->yaxisdir();
                 skewY *= getDesktop()->yaxisdir();
                 selection->skewRelative(*center, skewX, skewY);
             } else { // absolute displacement
