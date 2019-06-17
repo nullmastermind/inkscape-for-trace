@@ -66,8 +66,15 @@ PreviewHolder::PreviewHolder() :
 PreviewHolder::~PreviewHolder()
 = default;
 
+/**
+ * Translates vertical scrolling into horizontal
+ */
 bool PreviewHolder::on_scroll_event(GdkEventScroll *event)
 {
+    if (_wrap) {
+        return FALSE;
+    }
+
     // Scroll horizontally by page on mouse wheel
     auto adj = _scroller->get_hadjustment();
 
@@ -75,24 +82,35 @@ bool PreviewHolder::on_scroll_event(GdkEventScroll *event)
         return FALSE;
     }
 
-    int move;
+    double move;
     switch (event->direction) {
         case GDK_SCROLL_UP:
+        case GDK_SCROLL_LEFT:
             move = -adj->get_page_size();
             break;
         case GDK_SCROLL_DOWN:
+        case GDK_SCROLL_RIGHT:
             move =  adj->get_page_size();
             break;
         case GDK_SCROLL_SMOOTH:
-            move = event->delta_y > 0 ? adj->get_page_size() : -adj->get_page_size();
+            if (fabs(event->delta_y) <= fabs(event->delta_x)) {
+                return FALSE;
+            }
+#ifdef GDK_WINDOWING_QUARTZ
+            move = event->delta_y;
+#else
+            move = event->delta_y * adj->get_page_size();
+#endif
             break;
+        default:
+            return FALSE;
     }
 
-    double value = std::min(adj->get_upper() - move, adj->get_value() + move );
+    double value = adj->get_value() + move;
 
     adj->set_value(value);
 
-    return FALSE;
+    return TRUE;
 }
 
 void PreviewHolder::clear()
