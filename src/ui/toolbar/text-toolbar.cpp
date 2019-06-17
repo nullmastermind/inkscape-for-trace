@@ -2098,11 +2098,15 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
         int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
         double size = sp_style_css_size_px_to_units(query.font_size.computed, unit);
 
-        //gchar size_text[G_ASCII_DTOSTR_BUF_SIZE];
-        //g_ascii_dtostr (size_text, sizeof (size_text), size);
-
         Inkscape::CSSOStringStream os;
-        os << size;
+
+        int rounded_size = std::round(size);
+        if (std::abs((size - rounded_size)/size) < 0.0001) {
+            // We use rounded_size to avoid rounding errors when, say, converting stored 'px' values to displayed 'pt' values.
+            os << rounded_size;
+        } else {
+            os << size;
+        }
 
         // Freeze to ignore callbacks.
         //g_object_freeze_notify( G_OBJECT( fontSizeAction->combobox ) );
