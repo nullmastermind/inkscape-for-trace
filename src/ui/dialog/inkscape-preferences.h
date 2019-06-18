@@ -594,7 +594,7 @@ private:
   void symbolicDefaultColor();
   void symbolicChangeCustom();
   void symbolicCustomColorsReset();
-  void symbolicChangeColor(guint32 /*color*/){symbolicChangeCustom();}
+  void symbolicChangeColor(guint32 /*color*/) { symbolicChangeCustom(); }
 
   InkscapePreferences();
   InkscapePreferences(InkscapePreferences const &d);

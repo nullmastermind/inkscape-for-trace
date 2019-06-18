@@ -34,7 +34,6 @@
 #include "ui/dialog/prototype.h"
 #include "ui/dialog/symbols.h"
 #include "ui/dialog/tile.h"
-#include "style.h"
 
 #if HAVE_POTRACE
 # include "ui/dialog/tracedialog.h"
