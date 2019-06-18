@@ -141,7 +141,7 @@ Glib::ustring get_path_ustring(Domain domain, Type type, char const *filename)
  *  localized - Prefer a localized version of the file, i.e. default.de.svg instead of default.svg.
  *              (will use gettext to determine the preferred language of the user)
  */
-Glib::ustring get_filename(Type type, char const *filename, bool localized)
+Glib::ustring get_filename(Type type, char const *filename, bool localized, bool silent)
 {
     Glib::ustring result;
 

@@ -59,7 +59,7 @@ Util::ptr_shared get_path(Domain domain, Type type,
 Glib::ustring get_path_ustring(Domain domain, Type type,
                                 char const *filename=nullptr);
 
-Glib::ustring get_filename(Type type, char const *filename, bool localized = false);
+Glib::ustring get_filename(Type type, char const *filename, bool localized = false, bool silent = false);
 Glib::ustring get_filename(Glib::ustring path, Glib::ustring filename);
 
 std::vector<Glib::ustring> get_filenames(Type type,

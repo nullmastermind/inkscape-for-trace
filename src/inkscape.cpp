@@ -65,6 +65,8 @@
 /* Backbones of configuration xml data */
 #include "menus-skeleton.h"
 
+#include <fstream>
+
 // Inkscape::Application static members
 Inkscape::Application * Inkscape::Application::_S_inst = nullptr;
 bool Inkscape::Application::_crashIsHappening = false;
@@ -363,6 +365,69 @@ void Application::autosave_init()
     }
 }
 
+void
+Application::set_higlightcolors(gchar *&colornamedsuccess, gchar *&colornamedwarning, *&gchar colornamederror)
+{
+    int colorsetsuccess = 0x4AD589ff;
+    int colorsetwarning = 0xF57900ff;
+    int colorseterror = 0xcc0000ff;
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+    Glib::ustring higlight = get_filename(ICONS, Glib::ustring(themeiconname + "/higlights.css").c_str(), false, false);
+    if (!higlight.empty()) {
+        std::ifstream ifs(higlight);
+        std::string content( (std::istreambuf_iterator<char>(ifs) ),
+                            (std::istreambuf_iterator<char>()    ) );
+        Glib::ustring result;
+        size_t startpos = content.find(".success");
+        size_t endpos = content.find("}");
+        if (startpos != std::string::npos) {
+            result = content.substr(startpos, endpos - startpos);
+            startpos = content.find("fill:");
+            endpos = content.find(";");
+            result = content.substr(startpos + 4, endpos - 1 - startpos + 4);
+            Gdk::RGBA success_color = Gdk::RGBA(result);
+            SPColor success_color_sp(success_color.get_red(),
+                    success_color.get_green(),
+                    success_color.get_blue());
+            colorsetsuccess = success_color_sp.toRGBA32(1);
+        }
+        startpos = content.find(".warning");
+        endpos = content.find("}");
+        if (startpos != std::string::npos) {
+            result = content.substr(startpos, endpos - startpos);
+            startpos = content.find("fill:");
+            endpos = content.find(";");
+            result = content.substr(startpos + 4, endpos - 1 - startpos + 4);
+            Gdk::RGBA warning_color = Gdk::RGBA(result);
+            SPColor warning_color_sp(warning_color.get_red(),
+                    warning_color.get_green(),
+                    warning_color.get_blue());
+            colorsetwarning = warning_color_sp.toRGBA32(1);
+        }
+        startpos = content.find(".error");
+        endpos = content.find("}");
+        if (startpos != std::string::npos) {
+            result = content.substr(startpos, endpos - startpos);
+            startpos = content.find("fill:");
+            endpos = content.find(";");
+            result = content.substr(startpos + 4, endpos - 1 - startpos + 4);
+            Gdk::RGBA error_color = Gdk::RGBA(result);
+            SPColor error_color_sp(error_color.get_red(),
+                    error_color.get_green(),
+                    error_color.get_blue());
+            colorseterror = error_color_sp.toRGBA32(1);
+        }
+    }
+    colorsetsuccess = prefs->getInt("/theme/" + themeiconname + "/symbolicSuccessColor", colorsetsuccess);
+    sp_svg_write_color(colornamedsuccess, sizeof(colornamedsuccess), colorsetsuccess);
+    colorsetwarning = prefs->getInt("/theme/" + themeiconname + "/symbolicWarningColor", colorsetwarning);
+    sp_svg_write_color(colornamedwarning, sizeof(colornamedwarning), colorsetwarning);
+    colorseterror = prefs->getInt("/theme/" + themeiconname + "/symbolicErrorColor", colorseterror);
+    sp_svg_write_color(colornamederror, sizeof(colornamederror), colorseterror);
+    // Use in case the special widgets have inverse theme background and symbolic
+}
+
 /**
  * \brief Add our CSS style sheets
  */
@@ -376,6 +441,7 @@ Application::add_gtk_css()
     const gchar *gtk_font_name = "";
     const gchar *gtkThemeName;
     const gchar *gtkIconThemeName;
+    Glib::ustring themeiconname;
     gboolean gtkApplicationPreferDarkTheme;
     GtkSettings *settings = gtk_settings_get_default();
     if (settings) {
@@ -392,7 +458,7 @@ Application::add_gtk_css()
         } else {
             prefs->setString("/theme/gtkTheme", Glib::ustring(gtkThemeName));
         }
-        Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+        themeiconname = prefs->getString("/theme/iconTheme");
         if (themeiconname != "") {
             g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
         } else {
@@ -401,17 +467,18 @@ Application::add_gtk_css()
         g_object_get(settings, "gtk-font-name", &gtk_font_name, NULL);
     }
 
-    auto provider = Gtk::CssProvider::create();
+    
     Glib::ustring style = get_filename(UIS, "style.css");
     if (!style.empty()) {
-      try {
-          provider->load_from_path (style);
-      } catch (const Gtk::CssProviderError& ex)
-      {
-          g_critical("CSSProviderError::load_from_path(): failed to load '%s'\n(%s)",
-                 style.c_str(), ex.what().c_str());
-      }
-      Gtk::StyleContext::add_provider_for_screen (screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        auto provider = Gtk::CssProvider::create();
+        try {
+            provider->load_from_path (style);
+        } catch (const Gtk::CssProviderError& ex)
+        {
+            g_critical("CSSProviderError::load_from_path(): failed to load '%s'\n(%s)",
+                    style.c_str(), ex.what().c_str());
+        }
+        Gtk::StyleContext::add_provider_for_screen (screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
     if (!colorizeprovider) {
         colorizeprovider = Gtk::CssProvider::create();
@@ -421,7 +488,9 @@ Application::add_gtk_css()
         if (!prefs->getBool("/theme/symbolicIconsDefaultColor", true)) {
             gchar colornamed[64];
             gchar colornamed_inverse[64];
-            int colorset = prefs->getInt("/theme/symbolicColor", 0x2E3436ff);
+            set_higlightcolors(colornamedsuccess, colornamedwarning, colornamederror);
+            int colorset = 0x2E3436ff;
+            colorset = prefs->getInt("/theme/" + themeiconname + "/symbolicColor", colorset);
             sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
             // Use in case the special widgets have inverse theme background and symbolic
             int colorset_inverse = colorset ^ 0xffffff00;
@@ -445,8 +514,9 @@ Application::add_gtk_css()
         g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
     }
     Gtk::StyleContext::add_provider_for_screen(screen, colorizeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    
     if (!strncmp(gtk_font_name, "Cantarell", 9)) {
-        provider = Gtk::CssProvider::create();
+        auto provider = Gtk::CssProvider::create();
         css_str = "#monoStrokeWidth,";
         css_str += "#fillEmptySpace,";
         css_str += "#SelectStatus,";

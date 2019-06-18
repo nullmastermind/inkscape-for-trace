@@ -139,7 +139,7 @@ public:
     void selection_changed (Inkscape::Selection * selection);
     void subselection_changed (SPDesktop *desktop);
     void selection_set (Inkscape::Selection * selection);
-    
+    void set_higlightcolors(gchar *&colornamedsuccess, gchar *&colornamedwarning, gchar *&colornamederror);
     void eventcontext_set (Inkscape::UI::Tools::ToolBase * eventcontext);
     
     // Moved document add/remove functions into public inkscape.h as they are used
@@ -179,7 +179,6 @@ public:
     sigc::signal<void, SPDesktop *> signal_deactivate_desktop;
     // user change theme
     sigc::signal<void> signal_change_theme;
-
     // these are orphaned signals (nothing emits them and nothing connects to them)
     sigc::signal<void, SPDocument *> signal_destroy_document;
     sigc::signal<void, SPColor *, double /*opacity*/> signal_color_set;

@@ -245,6 +245,7 @@ protected:
     UI::Widget::PrefCombo _icon_theme;
     UI::Widget::PrefCheckButton _dark_theme;
     UI::Widget::PrefCheckButton _symbolic_icons;
+    UI::Widget::PrefCheckButton _symbolic_colors;
     UI::Widget::PrefColorPicker _symbolic_color;
     UI::Widget::PrefCombo _misc_small_toolbar;
     UI::Widget::PrefCombo _misc_small_secondary;
@@ -589,8 +590,11 @@ private:
   void themeChange();
   void changeIconsColor(guint32 /*color*/);
   void symbolicThemeCheck();
-  void symbolicStyling();
+  void symbolicCustomColors();
   void symbolicDefaultColor();
+  void symbolicChangeCustom();
+  void symbolicCustomColorsReset();
+  void symbolicChangeColor(guint32 /*color*/){symbolicChangeCustom();}
 
   InkscapePreferences();
   InkscapePreferences(InkscapePreferences const &d);

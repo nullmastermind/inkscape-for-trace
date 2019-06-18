@@ -130,6 +130,29 @@ image {
 
 /* 'widget'    for Gtk  <= 3.19.2 */
 
+
+/* 
+*to get system default colors
+* with Gdk::RGBA success =_symbolic_error_color.get_style_context()->get_color();
+* _symbolic_error_color has one of this calsses applied
+*/
+
+.system_error_color {
+    color: @error_color;
+}
+
+.system_warning_color {
+    color: @warning_color;
+}
+
+.system_success_color {
+    color: @success_color;
+}
+
+.system_normal_color {
+    color: @theme_fg_color;
+}
+
 GtkWidget,
 widget {
     /*    font-size: 12pt; */
