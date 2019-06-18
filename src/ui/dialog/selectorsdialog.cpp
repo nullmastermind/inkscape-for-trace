@@ -488,7 +488,7 @@ Inkscape::XML::Node *SelectorsDialog::_getStyleTextNode()
     for (unsigned i = 0; i < root->childCount(); ++i) {
         if (Glib::ustring(root->nthChild(i)->name()) == "svg:style") {
             styleNode = root->nthChild(i);
-            if (!first) { 
+            if (!first) {
                 for (unsigned j = 0; j < styleNode->childCount(); ++j) {
                     if (styleNode->nthChild(j)->type() == Inkscape::XML::TEXT_NODE) {
                         textNode = styleNode->nthChild(j);
