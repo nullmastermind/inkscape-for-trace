@@ -630,7 +630,9 @@ void InkscapePreferences::symbolicThemeCheck()
 
 void InkscapePreferences::symbolicDefaultColor(){
     auto const screen = Gdk::Screen::get_default();
-    Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider);
+    if (INKSCAPE.colorizeprovider) {
+        Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider);
+    }
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool("/theme/symbolicIconsDefaultColor", true);
 }
@@ -638,7 +640,9 @@ void InkscapePreferences::symbolicDefaultColor(){
 void InkscapePreferences::symbolicStyling()
 {
     auto const screen = Gdk::Screen::get_default();
-    Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider);
+    if (INKSCAPE.colorizeprovider) {
+        Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider);
+    }
     using namespace Inkscape::IO::Resource;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool("/theme/symbolicIconsDefaultColor", false);
@@ -695,7 +699,8 @@ void InkscapePreferences::symbolicStyling()
     } catch (const Gtk::CssProviderError &ex) {
         g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
     }
-    Gtk::StyleContext::add_provider_for_screen(screen, INKSCAPE.colorizeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    Gtk::StyleContext::add_provider_for_screen(screen, INKSCAPE.colorizeprovider,
+                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 
 void InkscapePreferences::themeChange()

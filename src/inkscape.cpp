@@ -383,12 +383,12 @@ Application::add_gtk_css()
                      prefs->getBool("/theme/darkTheme", gtkApplicationPreferDarkTheme), NULL);
         prefs->setString("/theme/defaultTheme", Glib::ustring(gtkThemeName));
         prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName));
-        if (prefs->getString("/theme/gtkTheme") != "") {
-            g_object_set(settings, "gtk-theme-name", prefs->getString("/theme/gtkTheme").c_str(), NULL);
+        Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme");
+        if (gtkthemename != "") {
+            g_object_set(settings, "gtk-theme-name",  gtkthemename.c_str(), NULL);
         } else {
             prefs->setString("/theme/gtkTheme", Glib::ustring(gtkThemeName));
         }
-
         Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
         if (themeiconname != "") {
             g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
@@ -397,7 +397,7 @@ Application::add_gtk_css()
         }
         g_object_get(settings, "gtk-font-name", &gtk_font_name, NULL);
     }
-    
+
     auto provider = Gtk::CssProvider::create();
     Glib::ustring style = get_filename(UIS, "style.css");
     if (!style.empty()) {
@@ -410,7 +410,9 @@ Application::add_gtk_css()
       }
       Gtk::StyleContext::add_provider_for_screen (screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
-    colorizeprovider = Gtk::CssProvider::create();
+    if (!colorizeprovider) {
+        colorizeprovider = Gtk::CssProvider::create();
+    }
     Glib::ustring css_str = "";
     if (prefs->getBool("/theme/symbolicIcons", false)) {
         if (!prefs->getBool("/theme/symbolicIconsDefaultColor", true)) {
@@ -430,7 +432,7 @@ Application::add_gtk_css()
             // Use in case the special widgets have inverse theme background and symbolic
             int colorset_inverse = colorset ^ 0xffffff00;
             sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
-            
+
             css_str += "*{-gtk-icon-palette: success ";
             css_str += colornamedsuccess;
             css_str += ", warning ";
@@ -458,6 +460,7 @@ Application::add_gtk_css()
     }
     Gtk::StyleContext::add_provider_for_screen(screen, colorizeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     if (!strncmp(gtk_font_name, "Cantarell", 9)) {
+        provider = Gtk::CssProvider::create();
         css_str = "#monoStrokeWidth,";
         css_str += "#fillEmptySpace,";
         css_str += "#SelectStatus,";
@@ -469,10 +472,11 @@ Application::add_gtk_css()
         try {
             provider->load_from_data(css_str);
         } catch (const Gtk::CssProviderError &ex) {
-            g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
+            g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(),
+                       ex.what().c_str());
         }
         Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    }
+     }
 }
 
 /* \brief Constructor for the application.

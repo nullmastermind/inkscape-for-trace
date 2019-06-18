@@ -14,14 +14,14 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <map>
-#include <vector>
-#include <glib.h>
-#include <glib-object.h>
-#include <sigc++/signal.h>
 #include "layer-model.h"
-#include <gtkmm/cssprovider.h>
 #include "selection.h"
+#include <glib-object.h>
+#include <glib.h>
+#include <gtkmm/cssprovider.h>
+#include <map>
+#include <sigc++/signal.h>
+#include <vector>
 
 class SPDesktop;
 class SPDocument;
@@ -109,7 +109,7 @@ public:
     Inkscape::UI::Tools::ToolBase * active_event_context();
     SPDocument * active_document();
     SPDesktop * active_desktop();
-    Glib::RefPtr< Gtk::CssProvider > colorizeprovider;
+    Glib::RefPtr<Gtk::CssProvider> colorizeprovider;
     // Use this function to get selection model etc for a document
     Inkscape::ActionContext action_context_for_document(SPDocument *doc);
     Inkscape::ActionContext active_action_context();

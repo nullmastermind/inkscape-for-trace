@@ -13,6 +13,7 @@
 
 #include "icon-loader.h"
 #include "inkscape.h"
+#include "svg/svg-color.h"
 #include "widgets/toolbox.h"
 #include <gtkmm/iconinfo.h>
 #include <gdkmm/display.h>
@@ -64,9 +65,26 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
         Gtk::IconInfo iconinfo = icon_theme->lookup_icon(icon_name + Glib::ustring("-symbolic"), size, Gtk::ICON_LOOKUP_FORCE_SIZE);
         if (iconinfo && SP_ACTIVE_DESKTOP->getToplevel()) {
             bool was_symbolic = false;
-            Glib::RefPtr< Gtk::StyleContext > stylecontext = SP_ACTIVE_DESKTOP->getToplevel()->get_style_context();
-            stylecontext->add_provider(INKSCAPE.colorizeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-            _icon_pixbuf = iconinfo.load_symbolic(stylecontext, was_symbolic);
+            Glib::ustring css_str = "";
+            if (!prefs->getBool("/theme/symbolicIconsDefaultColor", true)) {
+                gchar colornamed[64];
+                gchar colornamedsuccess[64];
+                gchar colornamedwarning[64];
+                gchar colornamederror[64];
+                gchar colornamed_inverse[64];
+                int colorset = prefs->getInt("/theme/symbolicColor", 0x2E3436ff);
+                sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
+                int colorsetsuccess = prefs->getInt("/theme/symbolicSuccessColor", 0x4AD589ff);
+                sp_svg_write_color(colornamedsuccess, sizeof(colornamedsuccess), colorsetsuccess);
+                int colorsetwarning = prefs->getInt("/theme/symbolicWarningColor", 0xF57900ff);
+                sp_svg_write_color(colornamedwarning, sizeof(colornamedwarning), colorsetwarning);
+                int colorseterror = prefs->getInt("/theme/symbolicErrorColor", 0xcc0000ff);
+                sp_svg_write_color(colornamederror, sizeof(colornamederror), colorseterror);
+                _icon_pixbuf = iconinfo.load_symbolic(Gdk::RGBA(colornamed), Gdk::RGBA(colornamedsuccess), Gdk::RGBA(colornamedwarning), Gdk::RGBA(colornamederror), was_symbolic);
+            } else {
+                Glib::RefPtr<Gtk::StyleContext> stylecontext = SP_ACTIVE_DESKTOP->getToplevel()->get_style_context();
+                _icon_pixbuf = iconinfo.load_symbolic(stylecontext, was_symbolic);
+            }
         } else {
             Gtk::IconInfo iconinfo = icon_theme->lookup_icon(icon_name, size, Gtk::ICON_LOOKUP_FORCE_SIZE);
             _icon_pixbuf = iconinfo.load_icon();

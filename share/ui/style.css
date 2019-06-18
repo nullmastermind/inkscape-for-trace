@@ -56,26 +56,26 @@
 
 
 /* Inkscape CSS helper
-  * to add a class to a widget do some thing like
-  * widget->get_style_context()->add_class("mycoolclass");
-  * we define a bunch of helper CSS styles
-  * Each Inkscape desktop has some classes in top level window
-  * called "dark|bright" and "symbolic|regular" so you can style using this clases 
-  * by this way you can always know if the UI is in dark mode
-  * Also added some helper clases:
-  * ::::::: Color based
-  * ::::::: apply to colors
-  * ::::::: scope widget and all his childs
-  * ".invertstyle" invert window colors
-  * ".brightstyle" force bright colors no matter the UI is dark or bright
-  * ".darkstyle" same but dark
-  * ".defaultstyle" use default window color for child wigets inside a modified one
-  * :::::::: Icon Based.
-  * ".symbolic" Force icon symbolic
-  * ".regular" Force colorful icons
-  * :::::::: Combo box.
-  * "..combobright" Combo bright
-  */
+    * to add a class to a widget do some thing like
+    * widget->get_style_context()->add_class("mycoolclass");
+    * we define a bunch of helper CSS styles
+    * Each Inkscape desktop has some classes in top level window
+    * called "dark|bright" and "symbolic|regular" so you can style using this clases 
+    * by this way you can always know if the UI is in dark mode
+    * Also added some helper clases:
+    * ::::::: Color based
+    * ::::::: apply to colors
+    * ::::::: scope widget and all his childs
+    * ".invertstyle" invert window colors
+    * ".brightstyle" force bright colors no matter the UI is dark or bright
+    * ".darkstyle" same but dark
+    * ".defaultstyle" use default window color for child wigets inside a modified one
+    * :::::::: Icon Based.
+    * ".symbolic" Force icon symbolic
+    * ".regular" Force colorful icons
+    * :::::::: Combo box.
+    * "..combobright" Combo bright
+    */
 
 image {
     -gtk-icon-palette: default;
@@ -89,6 +89,8 @@ image {
     -gtk-icon-style: regular;
 }
 
+.bright *,
+.dark *,
 .bright .brightstyle,
 .bright .brightstyle *,
 .dark .darkstyle,
