@@ -6,7 +6,7 @@
      <style id="style226">
       .success { fill:#4AD589; }
       .warning { fill:#F57900; }
-      . { fill:#cc0000; }
+      .error { fill:#cc0000; }
    </style>
   <g transform="translate(-135,-807.36218)" inkscape:label="00069" id="dialog-align-and-distribute">
       <path inkscape:connector-curvature="0" id="rect18735" d="m 135,807.36218 h 16 v 16 h -16 z" style="opacity:0;fill:none"/>

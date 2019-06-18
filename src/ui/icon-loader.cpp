@@ -15,7 +15,6 @@
 #include "inkscape.h"
 #include "svg/svg-color.h"
 #include "widgets/toolbox.h"
-#include <gtkmm/iconinfo.h>
 #include <gdkmm/display.h>
 #include <gdkmm/screen.h>
 #include <gtkmm/iconinfo.h>
@@ -80,7 +79,9 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
                 sp_svg_write_color(colornamedwarning, sizeof(colornamedwarning), colorsetwarning);
                 int colorseterror = prefs->getInt("/theme/symbolicErrorColor", 0xcc0000ff);
                 sp_svg_write_color(colornamederror, sizeof(colornamederror), colorseterror);
-                _icon_pixbuf = iconinfo.load_symbolic(Gdk::RGBA(colornamed), Gdk::RGBA(colornamedsuccess), Gdk::RGBA(colornamedwarning), Gdk::RGBA(colornamederror), was_symbolic);
+                _icon_pixbuf =
+                    iconinfo.load_symbolic(Gdk::RGBA(colornamed), Gdk::RGBA(colornamedsuccess),
+                                           Gdk::RGBA(colornamedwarning), Gdk::RGBA(colornamederror), was_symbolic);
             } else {
                 Glib::RefPtr<Gtk::StyleContext> stylecontext = SP_ACTIVE_DESKTOP->getToplevel()->get_style_context();
                 _icon_pixbuf = iconinfo.load_symbolic(stylecontext, was_symbolic);

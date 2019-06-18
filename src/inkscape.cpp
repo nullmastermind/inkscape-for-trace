@@ -385,7 +385,7 @@ Application::add_gtk_css()
         prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName));
         Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme");
         if (gtkthemename != "") {
-            g_object_set(settings, "gtk-theme-name",  gtkthemename.c_str(), NULL);
+            g_object_set(settings, "gtk-theme-name", gtkthemename.c_str(), NULL);
         } else {
             prefs->setString("/theme/gtkTheme", Glib::ustring(gtkThemeName));
         }
@@ -476,7 +476,7 @@ Application::add_gtk_css()
                        ex.what().c_str());
         }
         Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-     }
+    }
 }
 
 /* \brief Constructor for the application.
