@@ -66,18 +66,18 @@
   * ::::::: Color based
   * ::::::: apply to colors
   * ::::::: scope widget and all his childs
-  * ".inversestyle" invert window colors
+  * ".invertstyle" invert window colors
   * ".brightstyle" force bright colors no matter the UI is dark or bright
   * ".darkstyle" same but dark
   * ".defaultstyle" use default window color for child wigets inside a modified one
   * :::::::: Icon Based.
-  * ".iconsymbolic" Force icon symbolic
-  * ".iconregular" Force colorful icons
+  * ".symbolic" Force icon symbolic
+  * ".regular" Force colorful icons
   * :::::::: Combo box.
   * "..combobright" Combo bright
   */
 
-* {
+image {
     -gtk-icon-palette: default;
 }
 
@@ -102,8 +102,8 @@
 .bright .darkstyle *,
 .dark .brightstyle,
 .dark .brightstyle *,
-.inversestyle,
-.inversestyle * {
+.invertstyle,
+.invertstyle * {
     color: @theme_bg_color;
     background-color: @theme_fg_color;
     background-image: image(@theme_fg_color);

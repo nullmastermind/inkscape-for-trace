@@ -630,7 +630,7 @@ void InkscapePreferences::symbolicThemeCheck()
 
 void InkscapePreferences::symbolicDefaultColor(){
     auto const screen = Gdk::Screen::get_default();
-    Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool("/theme/symbolicIconsDefaultColor", true);
 }
@@ -638,11 +638,12 @@ void InkscapePreferences::symbolicDefaultColor(){
 void InkscapePreferences::symbolicStyling()
 {
     auto const screen = Gdk::Screen::get_default();
-    Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider);
     using namespace Inkscape::IO::Resource;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool("/theme/symbolicIconsDefaultColor", false);
     Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
+    Gtk::CssProvider::create();
     Glib::ustring css_str = "";
     if (prefs->getBool("/theme/symbolicIcons", false)) {
         gchar colornamed[64];
@@ -675,7 +676,7 @@ void InkscapePreferences::symbolicStyling()
         css_str += ";}";
         css_str += ".dark .brightstyle image,";
         css_str += ".bright .darkstyle image,";
-        css_str += ".inversestyle image";
+        css_str += ".invertstyle image";
         css_str += "{color:";
         css_str += colornamed_inverse;
         css_str += ";}";

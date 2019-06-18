@@ -445,7 +445,7 @@ Application::add_gtk_css()
             css_str += ";}";
             css_str += ".dark .brightstyle image,";
             css_str += ".bright .darkstyle image,";
-            css_str += ".inversestyle image";
+            css_str += ".invertstyle image";
             css_str += "{color:";
             css_str += colornamed_inverse;
             css_str += ";}";
