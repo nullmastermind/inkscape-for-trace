@@ -479,37 +479,39 @@ SelectorsDialog::~SelectorsDialog()
 Inkscape::XML::Node *SelectorsDialog::_getStyleTextNode()
 {
     g_debug("SelectorsDialog::_getStyleTextNode");
+    
     Inkscape::XML::Node *styleNode = nullptr;
     Inkscape::XML::Node *textNode = nullptr;
 
     Inkscape::XML::Node *root = SP_ACTIVE_DOCUMENT->getReprRoot();
+    bool first = false;
     for (unsigned i = 0; i < root->childCount(); ++i) {
         if (Glib::ustring(root->nthChild(i)->name()) == "svg:style") {
-
             styleNode = root->nthChild(i);
-
-            for (unsigned j = 0; j < styleNode->childCount(); ++j) {
-                if (styleNode->nthChild(j)->type() == Inkscape::XML::TEXT_NODE) {
-                    textNode = styleNode->nthChild(j);
+            if (!first) { 
+                for (unsigned j = 0; j < styleNode->childCount(); ++j) {
+                    if (styleNode->nthChild(j)->type() == Inkscape::XML::TEXT_NODE) {
+                        textNode = styleNode->nthChild(j);
+                    }
                 }
-            }
 
-            if (textNode == nullptr) {
-                // Style element found but does not contain text node!
-                std::cerr << "SelectorsDialog::_getStyleTextNode(): No text node!" << std::endl;
-                textNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
-                styleNode->appendChild(textNode);
-                Inkscape::GC::release(textNode);
+                if (textNode == nullptr) {
+                    // Style element found but does not contain text node!
+                    std::cerr << "StyleDialog::_getStyleTextNode(): No text node!" << std::endl;
+                    textNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
+                    styleNode->appendChild(textNode);
+                    Inkscape::GC::release(textNode);
+                }
+                first = true;
             }
-            // TODO: handle imports
-            break; //read only first CSS element
+            styleNode->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
         }
     }
 
     if (styleNode == nullptr) {
         // Style element not found, create one
         styleNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createElement("svg:style");
-        textNode  = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
+        textNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
 
         root->addChild(styleNode, nullptr);
         Inkscape::GC::release(styleNode);

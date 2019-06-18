@@ -705,6 +705,7 @@ void InkscapePreferences::symbolicCustomColors()
     if (prefs->getBool("/theme/symbolicIcons", false)) {
         gchar colornamed[64];
         gchar colornamed_inverse[64];
+        Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
         INKSCAPE.set_higlightcolors(colornamedsuccess, colornamedwarning, colornamederror);
         int colorset = 0x2E3436ff;
         colorset = prefs->getInt("/theme/" + themeiconname + "/symbolicColor", colorset);

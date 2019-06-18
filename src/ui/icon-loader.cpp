@@ -73,6 +73,7 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
                 gchar colornamedsuccess[64];
                 gchar colornamedwarning[64];
                 gchar colornamederror[64];
+                Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
                 INKSCAPE.set_higlightcolors(colornamedsuccess, colornamedwarning, colornamederror);
                 int colorset = 0x2E3436ff;
                 colorset = prefs->getInt("/theme/" + themeiconname + "/symbolicColor", colorset);

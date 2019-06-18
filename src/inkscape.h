@@ -139,7 +139,7 @@ public:
     void selection_changed (Inkscape::Selection * selection);
     void subselection_changed (SPDesktop *desktop);
     void selection_set (Inkscape::Selection * selection);
-    void set_higlightcolors(gchar *&colornamedsuccess, gchar *&colornamedwarning, gchar *&colornamederror);
+    void set_higlightcolors(gchar *colornamedsuccess, gchar *colornamedwarning, gchar *colornamederror);
     void eventcontext_set (Inkscape::UI::Tools::ToolBase * eventcontext);
     
     // Moved document add/remove functions into public inkscape.h as they are used

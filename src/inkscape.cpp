@@ -365,7 +365,7 @@ void Application::autosave_init()
     }
 }
 
-void Application::set_higlightcolors(gchar *&colornamedsuccess, gchar *&colornamedwarning, *&gchar colornamederror)
+void Application::set_higlightcolors(gchar *colornamedsuccess, gchar *colornamedwarning, gchar *colornamederror);
 {
     int colorsetsuccess = 0x4AD589ff;
     int colorsetwarning = 0xF57900ff;
@@ -479,6 +479,7 @@ Application::add_gtk_css()
         if (!prefs->getBool("/theme/symbolicIconsDefaultColor", true)) {
             gchar colornamed[64];
             gchar colornamed_inverse[64];
+            Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
             set_higlightcolors(colornamedsuccess, colornamedwarning, colornamederror);
             int colorset = 0x2E3436ff;
             colorset = prefs->getInt("/theme/" + themeiconname + "/symbolicColor", colorset);
