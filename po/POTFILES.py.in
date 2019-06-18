@@ -6,6 +6,7 @@
 ../share/extensions/extrude.py
 ../share/extensions/generate_voronoi.py
 ../share/extensions/gimp_xcf.py
+../share/extensions/hershey.py
 ../share/extensions/hpgl_decoder.py
 ../share/extensions/hpgl_input.py
 ../share/extensions/hpgl_output.py

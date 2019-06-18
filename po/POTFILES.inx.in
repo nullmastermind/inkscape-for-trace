@@ -114,6 +114,7 @@
 ../share/extensions/param_curves.inx
 ../share/extensions/pathalongpath.inx
 ../share/extensions/pathscatter.inx
+../share/extensions/pdflatex.inx
 ../share/extensions/perfectboundcover.inx
 ../share/extensions/perspective.inx
 ../share/extensions/pixelsnap.inx
@@ -159,6 +160,7 @@
 ../share/extensions/triangle.inx
 ../share/extensions/ungroup_deep.inx
 ../share/extensions/voronoi2svg.inx
+../share/extensions/web_interactive_mockup.inx
 ../share/extensions/web_set_att.inx
 ../share/extensions/web_transmit_att.inx
 ../share/extensions/webslicer_create_group.inx
