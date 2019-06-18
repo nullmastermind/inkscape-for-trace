@@ -78,6 +78,7 @@
     */
 
 image {
+    color: @theme_fg_color;
     -gtk-icon-palette: default;
 }
 
@@ -89,8 +90,6 @@ image {
     -gtk-icon-style: regular;
 }
 
-.bright *,
-.dark *,
 .bright .brightstyle,
 .bright .brightstyle *,
 .dark .darkstyle,
