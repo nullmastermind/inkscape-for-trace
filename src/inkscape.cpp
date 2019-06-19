@@ -675,7 +675,7 @@ Application::add_gtk_css()
     }
 }
 
-void Application::readStyleSheets()
+void Application::readStyleSheets(bool forceupd)
 {
     SPDocument *document = SP_ACTIVE_DOCUMENT;
     document->setStyleSheet(nullptr);
@@ -694,7 +694,9 @@ void Application::readStyleSheets()
             styleelem->read_content();
         }
     }
-    document->getRoot()->emitModified( SP_OBJECT_MODIFIED_CASCADE );
+    if (forceupd || styles.size > 1) {
+        document->getRoot()->emitModified( SP_OBJECT_MODIFIED_CASCADE );
+    }
 }
 
 /** Sets the keyboard modifier to map to Alt.

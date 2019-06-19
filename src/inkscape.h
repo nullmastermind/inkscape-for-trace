@@ -139,7 +139,7 @@ public:
     void selection_changed (Inkscape::Selection * selection);
     void subselection_changed (SPDesktop *desktop);
     void selection_set (Inkscape::Selection * selection);
-    void readStyleSheets();
+    void readStyleSheets(bool forceupd = false);
     Glib::ustring get_symbolic_colors();
     void get_higlight_colors(gchar *colornamedsuccess, gchar *colornamedwarning, gchar *colornamederror);
     void eventcontext_set (Inkscape::UI::Tools::ToolBase * eventcontext);
