@@ -827,6 +827,49 @@ ConcreteInkscapeApplication<Gtk::Application>::destroy_all()
     }
 }
 
+/** Process document (headless operation).
+ * 'output_path' is path or "-" for pipe.
+ */
+template<class T>
+void
+ConcreteInkscapeApplication<T>::process(SPDocument* document, std::string output_path)
+{
+    // Add to Inkscape::Application...
+    INKSCAPE.add_document(document);
+    // ActionContext should be removed once verbs are gone but we use it for now.
+    Inkscape::ActionContext context = INKSCAPE.action_context_for_document(document);
+    _active_document  = document;
+    _active_selection = context.getSelection();
+    _active_view      = context.getView();
+
+    if (_active_selection == nullptr) {
+        std::cerr << "ConcreteInkscapeApplication<T>::process: _active_selection in null!" << std::endl;
+        std::cerr << "  Must use --without_gui with --pipe!" << std::endl;
+        return; // Avoid segfault
+    }
+
+    document->ensureUpToDate(); // Or queries don't work!
+
+    // process_file
+    for (auto action: _command_line_actions) {
+        Gio::Application::activate_action( action.first, action.second );
+    }
+
+    if (_use_shell) {
+        shell2();
+    } else {
+        // Save... can't use action yet.
+        _file_export.do_export(document, output_path);
+    }
+
+    _active_document = nullptr;
+    _active_selection = nullptr;
+    _active_view = nullptr;
+
+    // Close file
+    INKSCAPE.remove_document(document);
+}
+
 // Open document window with default document. Either this or on_open() is called.
 template<class T>
 void
@@ -847,34 +890,8 @@ ConcreteInkscapeApplication<T>::on_activate()
         SPDocument *document = document_open (s);
         if (!document) return;
 
-        // Add to Inkscape::Application...
-        INKSCAPE.add_document(document);
-        // ActionContext should be removed once verbs are gone but we use it for now.
-        Inkscape::ActionContext context = INKSCAPE.action_context_for_document(document);
-        _active_document  = document;
-        _active_selection = context.getSelection();
-        _active_view      = context.getView();
-
-        if (_active_selection == nullptr) {
-            std::cerr << "ConcreteInkscapeApplication<T>::on_activate:_active_selection is null!" << std::endl;
-            std::cerr << "  Must use --without_gui with --pipe!" << std::endl;
-            return; // Avoid segfault
-
-        }
-
-        document->ensureUpToDate(); // Or queries don't work!
-
-        // process_file(file);
-        for (auto action: _command_line_actions) {
-            Gio::Application::activate_action( action.first, action.second );
-        }
-
-        _active_document = nullptr;
-        _active_selection = nullptr;
-        _active_view = nullptr;
-
-        // Close file
-        INKSCAPE.remove_document(document);
+        // Process
+        process (document, "-");
 
         document_close (document);
         return;
@@ -912,35 +929,7 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
         SPDocument *document = document_open (file);
         if (!document) continue;
 
-        // Add to Inkscape::Application...
-        INKSCAPE.add_document(document);
-        // ActionContext should be removed once verbs are gone but we use it for now.
-        Inkscape::ActionContext context = INKSCAPE.action_context_for_document(document);
-        _active_document  = document;
-        _active_selection = context.getSelection();
-        _active_view      = context.getView();
-
-        document->ensureUpToDate(); // Or queries don't work!
-
-        // process_file(file);
-        for (auto action: _command_line_actions) {
-            Gio::Application::activate_action( action.first, action.second );
-        }
-
-        if (_use_shell) {
-            shell2();
-        } else {
-            // Save... can't use action yet.
-            _file_export.do_export(document, file->get_path());
-        }
-
-        _active_document = nullptr;
-        _active_selection = nullptr;
-        _active_view = nullptr;
-
-        // Close file
-        INKSCAPE.remove_document(document);
-
+        process (document, file->get_path());
         document_close (document);
     }
 }
@@ -951,6 +940,7 @@ template<>
 void
 ConcreteInkscapeApplication<Gtk::Application>::on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint)
 {
+    std::cout << "on_open" << std::endl;
     on_startup2();
     if(_pdf_poppler)
         INKSCAPE.set_pdf_poppler(_pdf_poppler);
@@ -964,7 +954,7 @@ ConcreteInkscapeApplication<Gtk::Application>::on_open(const Gio::Application::t
 
             // Process each file.
             for (auto action: _command_line_actions) {
-		    Gio::Application::activate_action( action.first, action.second );
+                Gio::Application::activate_action( action.first, action.second );
             }
 
             // Close window after we're done with file. This may not be the best way...
@@ -980,35 +970,7 @@ ConcreteInkscapeApplication<Gtk::Application>::on_open(const Gio::Application::t
             SPDocument *document = document_open (file);
             if (!document) continue;
 
-            // Add to Inkscape::Application...
-            INKSCAPE.add_document(document);
-            // ActionContext should be removed once verbs are gone but we use it for now.
-            Inkscape::ActionContext context = INKSCAPE.action_context_for_document(document);
-            _active_document  = document;
-            _active_selection = context.getSelection();
-            _active_view      = context.getView();
-
-            document->ensureUpToDate(); // Or queries don't work!
-
-            // process_file(file);
-            for (auto action: _command_line_actions) {
-		    Gio::Application::activate_action( action.first, action.second );
-            }
-
-            if (_use_shell) {
-                shell2();
-            } else {
-                // Save... can't use action yet.
-                _file_export.do_export(document, file->get_path());
-            }
-
-            _active_document = nullptr;
-            _active_selection = nullptr;
-            _active_view = nullptr;
-
-            // Close file
-            INKSCAPE.remove_document(document);
-
+            process (document, file->get_path());
             document_close (document);
         }
     }
@@ -1148,7 +1110,7 @@ ConcreteInkscapeApplication<T>::shell2()
         action_vector_t action_vector;
         parse_actions(input, action_vector);
         for (auto action: action_vector) {
-            T::activate_action( action.first, action.second );
+            Gio::Application::activate_action( action.first, action.second );
         }
     }
 }

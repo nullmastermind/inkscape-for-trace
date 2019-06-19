@@ -150,6 +150,11 @@ InkFileExportCmd::get_filename_out(std::string filename_in, std::string object_i
         return export_filename;
     }
 
+    // Check for pipe
+    if (filename_in == "-") {
+        return "-";
+    }
+
     // Construct output filename from input filename and export_type.
     auto extension_pos = filename_in.find_last_of('.');
     if (extension_pos == std::string::npos) {
