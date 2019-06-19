@@ -67,6 +67,7 @@ InkscapeApplication::InkscapeApplication()
     : _with_gui(true)
     , _batch_process(false)
     , _use_shell(false)
+    , _use_pipe(false)
     , _active_document(nullptr)
     , _active_selection(nullptr)
     , _active_view(nullptr)
@@ -127,7 +128,26 @@ InkscapeApplication::document_open(const Glib::RefPtr<Gio::File>& file)
 
         document_add (document);
     } else {
-        std::cerr << "InkscapeApplication::open_document: Failed to open: " << file->get_parse_name() << std::endl;
+        std::cerr << "InkscapeApplication::document_open: Failed to open: " << file->get_parse_name() << std::endl;
+    }
+
+    return document;
+}
+
+
+// Open a document, add it to app.
+SPDocument*
+InkscapeApplication::document_open(const std::string& data)
+{
+    // Open file
+    SPDocument *document = ink_file_open(data);
+
+    if (document) {
+        document->setVirgin(false); // Prevents replacing document in same window during file open.
+
+        document_add (document);
+    } else {
+        std::cerr << "InkscapeApplication::document_open: Failed to open memory document." << std::endl;
     }
 
     return document;
@@ -512,7 +532,8 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "vacuum-defs",        '\0', N_("Process: Remove unused definitions from the <defs> section(s) of document."),        "");
     this->add_main_option_entry(T::OPTION_TYPE_STRING,   "select",             '\0', N_("Process: Select objects: comma separated list of IDs."),   N_("OBJECT-ID[,OBJECT-ID]*"));
     this->add_main_option_entry(T::OPTION_TYPE_STRING,   "verb",               '\0', N_("Process: Verb(s) to call when Inkscape opens."),               N_("VERB-ID[;VERB-ID]*"));
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "shell",              '\0', N_("Process: Start Inkscape in interactive shell mode."),                                 "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "shell",              '\0', N_("Process: Start Inkscape in interactive shell mode."),                                "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "pipe",                'p', N_("Process: Read file from pipe."),                                                     "");
 
     // Export - File and File Type
     this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-type",        '\0', N_("Export: File type:[svg,png,ps,psf,tex,emf,wmf,xaml]"),                          "[...]");
@@ -806,13 +827,58 @@ ConcreteInkscapeApplication<Gtk::Application>::destroy_all()
     }
 }
 
-
 // Open document window with default document. Either this or on_open() is called.
 template<class T>
 void
 ConcreteInkscapeApplication<T>::on_activate()
 {
     on_startup2();
+
+    if (_use_pipe) {
+
+        if (_with_gui) {
+            std::cerr << "Must use --without-gui with --pipe!" << std::endl;
+            return;
+        }
+
+        // Create document from pipe in.
+        std::istreambuf_iterator<char> begin(std::cin), end;
+        std::string s(begin, end);
+        SPDocument *document = document_open (s);
+        if (!document) return;
+
+        // Add to Inkscape::Application...
+        INKSCAPE.add_document(document);
+        // ActionContext should be removed once verbs are gone but we use it for now.
+        Inkscape::ActionContext context = INKSCAPE.action_context_for_document(document);
+        _active_document  = document;
+        _active_selection = context.getSelection();
+        _active_view      = context.getView();
+
+        if (_active_selection == nullptr) {
+            std::cerr << "ConcreteInkscapeApplication<T>::on_activate:_active_selection is null!" << std::endl;
+            std::cerr << "  Must use --without_gui with --pipe!" << std::endl;
+            return; // Avoid segfault
+
+        }
+
+        document->ensureUpToDate(); // Or queries don't work!
+
+        // process_file(file);
+        for (auto action: _command_line_actions) {
+            Gio::Application::activate_action( action.first, action.second );
+        }
+
+        _active_document = nullptr;
+        _active_selection = nullptr;
+        _active_view = nullptr;
+
+        // Close file
+        INKSCAPE.remove_document(document);
+
+        document_close (document);
+        return;
+    }
 
     if (_with_gui) {
         if (_use_shell) {
@@ -910,7 +976,6 @@ ConcreteInkscapeApplication<Gtk::Application>::on_open(const Gio::Application::t
             }
 
         } else {
-
             // Open file
             SPDocument *document = document_open (file);
             if (!document) continue;
@@ -1142,6 +1207,7 @@ ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib:
     if (options->contains("with-gui"))       _with_gui = true;
     if (options->contains("batch-process"))  _batch_process = true;
     if (options->contains("shell"))          _use_shell = true;
+    if (options->contains("pipe"))           _use_pipe  = true;
 
     // Some options should preclude using gui!
     if (options->contains("query-id")         ||

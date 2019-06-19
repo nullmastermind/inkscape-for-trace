@@ -65,6 +65,7 @@ public:
 
     SPDocument*           document_new(const std::string &Template);
     SPDocument*           document_open(const Glib::RefPtr<Gio::File>& file);
+    SPDocument*           document_open(const std::string& data);
     bool                  document_swap(InkscapeWindow* window, SPDocument* document);
     bool                  document_revert(SPDocument* document);
     void                  document_close(SPDocument* document);
@@ -92,6 +93,7 @@ protected:
     bool _with_gui;
     bool _batch_process; // Temp
     bool _use_shell;
+    bool _use_pipe;
     int _pdf_page;
     int _pdf_poppler;
     InkscapeApplication();

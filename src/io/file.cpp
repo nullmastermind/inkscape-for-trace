@@ -49,7 +49,30 @@ ink_file_new(const std::string &Template)
     return doc;
 }
 
+/**
+ * Open a document from memory.
+ */
+SPDocument*
+ink_file_open(const Glib::ustring& data)
+{
+    SPDocument *doc = SPDocument::createNewDocFromMem (data.c_str(), data.length(), true);
 
+    if (doc == nullptr) {
+        std::cerr << "ink_file_open: cannot open file in memory (pipe?)" << std::endl;
+    } else {
+
+        // This is the only place original values should be set.
+        SPRoot *root = doc->getRoot();
+        root->original.inkscape = root->version.inkscape;
+        root->original.svg      = root->version.svg;
+    }
+
+    return doc;
+}
+
+/**
+ * Open a document.
+ */
 SPDocument*
 ink_file_open(const Glib::RefPtr<Gio::File>& file, bool &cancelled)
 {

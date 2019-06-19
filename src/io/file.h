@@ -14,6 +14,7 @@
 class SPDocument;
 
 SPDocument* ink_file_new(const std::string &Template = nullptr);
+SPDocument* ink_file_open(const Glib::ustring &data);
 SPDocument* ink_file_open(const Glib::RefPtr<Gio::File>& file, bool &cancelled);
 
 // To do:
