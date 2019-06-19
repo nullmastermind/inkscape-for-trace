@@ -684,9 +684,19 @@ void InkscapePreferences::symbolicCustomColorsReset()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
-    prefs->setInt("/theme/" + themeiconname + "/symbolicSuccessColor", 0);
-    prefs->setInt("/theme/" + themeiconname + "/symbolicErrorColor", 0);
-    prefs->setInt("/theme/" + themeiconname + "/symbolicWaringColor", 0);
+    int colorset = 0x2E3436ff;
+    int colorsetsuccess = 0x4AD589ff;
+    int colorsetwarning = 0xF57900ff;
+    int colorseterror = 0xcc0000ff;
+    INKSCAPE.get_higlight_colors(colorset, colorsetsuccess, colorsetwarning, colorseterror);
+    _symbolic_color.setRgba32(colorset);
+    _symbolic_success_color.setRgba32(colorsetsuccess);
+    _symbolic_warning_color.setRgba32(colorsetwarning);
+    _symbolic_error_color.setRgba32(colorseterror);
+    prefs->setInt("/theme/" + themeiconname + "/symbolicSuccessColor",colorset);
+    prefs->setInt("/theme/" + themeiconname + "/symbolicColor", colorsetsuccess);
+    prefs->setInt("/theme/" + themeiconname + "/symbolicErrorColor", colorsetwarning);
+    prefs->setInt("/theme/" + themeiconname + "/symbolicWaringColor", colorseterror);
     symbolicCustomColors();
 }
 

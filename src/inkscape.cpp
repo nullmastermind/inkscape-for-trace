@@ -379,10 +379,19 @@ Glib::ustring Application::get_symbolic_colors()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
     int colorset = 0x2E3436ff;
-    get_higlight_colors(colornamedsuccess, colornamedwarning, colornamederror);
+    int colorset_inverse = colorset ^ 0xffffff00;
+    int colorsetsuccess = 0x4AD589ff;
+    int colorsetwarning = 0xF57900ff;
+    int colorseterror = 0xcc0000ff;
+    get_higlight_colors(colorset, colorsetsuccess, colorsetwarning, colorseterror);
     colorset = prefs->getInt("/theme/" + themeiconname + "/symbolicColor", colorset);
     sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
-    int colorset_inverse = colorset ^ 0xffffff00;
+    colorsetsuccess = prefs->getInt("/theme/" + themeiconname + "/symbolicSuccessColor", colorsetsuccess);
+    sp_svg_write_color(colornamedsuccess, sizeof(colornamedsuccess), colorsetsuccess);
+    colorsetwarning = prefs->getInt("/theme/" + themeiconname + "/symbolicWarningColor", colorsetwarning);
+    sp_svg_write_color(colornamedwarning, sizeof(colornamedwarning), colorsetwarning);
+    colorseterror = prefs->getInt("/theme/" + themeiconname + "/symbolicErrorColor", colorseterror);
+    sp_svg_write_color(colornamederror, sizeof(colornamederror), colorseterror);
     sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
     css_str += "*{-gtk-icon-palette: success ";
     css_str += colornamedsuccess;
@@ -530,18 +539,15 @@ Application::~Application()
     // gtk_main_quit ();
 }
 
-void Application::get_higlight_colors(gchar *colornamedsuccess, gchar *colornamedwarning, gchar *colornamederror)
+void Application::get_higlight_colors(int &colorset, int &colorsetsuccess, int &colorsetwarning, int &colorseterror)
 {
     using namespace Inkscape::IO::Resource;
-    int colorsetsuccess = 0x4AD589ff;
-    int colorsetwarning = 0xF57900ff;
-    int colorseterror = 0xcc0000ff;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
     if (themeiconname == prefs->getString("/theme/defaultIconTheme")) {
         themeiconname = "hicolor";
     }
-    Glib::ustring higlight = get_filename(ICONS, Glib::ustring(themeiconname + "/highlights.css").c_str(), false, false);
+    Glib::ustring higlight = get_filename(ICONS, Glib::ustring(themeiconname + "/highlights.css").c_str(), false, true);
     if (!higlight.empty()) {
         std::ifstream ifs(higlight);
         std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
@@ -550,9 +556,9 @@ void Application::get_higlight_colors(gchar *colornamedsuccess, gchar *colorname
         size_t endpos = content.find("}");
         if (startpos != std::string::npos) {
             result = content.substr(startpos, endpos - startpos);
-            startpos = content.find("fill:");
-            endpos = content.find(";");
-            result = content.substr(startpos + 4, endpos - 1 - startpos + 4);
+            startpos = result.find("fill:");
+            endpos = result.find(";");
+            result = content.substr(startpos + 5, endpos - (startpos + 5));
             Gdk::RGBA success_color = Gdk::RGBA(result);
             SPColor success_color_sp(success_color.get_red(), success_color.get_green(), success_color.get_blue());
             colorsetsuccess = success_color_sp.toRGBA32(1);
@@ -561,9 +567,9 @@ void Application::get_higlight_colors(gchar *colornamedsuccess, gchar *colorname
         endpos = content.find("}");
         if (startpos != std::string::npos) {
             result = content.substr(startpos, endpos - startpos);
-            startpos = content.find("fill:");
-            endpos = content.find(";");
-            result = content.substr(startpos + 4, endpos - 1 - startpos + 4);
+            startpos = result.find("fill:");
+            endpos = result.find(";");
+            result = content.substr(startpos + 5, endpos - (startpos + 5));
             Gdk::RGBA warning_color = Gdk::RGBA(result);
             SPColor warning_color_sp(warning_color.get_red(), warning_color.get_green(), warning_color.get_blue());
             colorsetwarning = warning_color_sp.toRGBA32(1);
@@ -572,23 +578,25 @@ void Application::get_higlight_colors(gchar *colornamedsuccess, gchar *colorname
         endpos = content.find("}");
         if (startpos != std::string::npos) {
             result = content.substr(startpos, endpos - startpos);
-            startpos = content.find("fill:");
-            endpos = content.find(";");
-            result = content.substr(startpos + 4, endpos - 1 - startpos + 4);
+            startpos = result.find("fill:");
+            endpos = result.find(";");
+            result = content.substr(startpos + 5, endpos - (startpos + 5));
             Gdk::RGBA error_color = Gdk::RGBA(result);
             SPColor error_color_sp(error_color.get_red(), error_color.get_green(), error_color.get_blue());
             colorseterror = error_color_sp.toRGBA32(1);
         }
+        startpos = content.find(".base");
+        endpos = content.find("}");
+        if (startpos != std::string::npos) {
+            result = content.substr(startpos, endpos - startpos);
+            startpos = result.find("fill:");
+            endpos = result.find(";");
+            result = content.substr(startpos + 5, endpos - (startpos + 5));
+            Gdk::RGBA base_color = Gdk::RGBA(result);
+            SPColor base_color_sp(base_color.get_red(), base_color.get_green(), base_color.get_blue());
+            colorset = base_color_sp.toRGBA32(1);
+        }
     }
-    if (themeiconname == "hicolor") {
-        themeiconname = prefs->getString("/theme/defaultIconTheme");
-    }
-    colorsetsuccess = prefs->getInt("/theme/" + themeiconname + "/symbolicSuccessColor", colorsetsuccess);
-    sp_svg_write_color(colornamedsuccess, sizeof(colornamedsuccess), colorsetsuccess);
-    colorsetwarning = prefs->getInt("/theme/" + themeiconname + "/symbolicWarningColor", colorsetwarning);
-    sp_svg_write_color(colornamedwarning, sizeof(colornamedwarning), colorsetwarning);
-    colorseterror = prefs->getInt("/theme/" + themeiconname + "/symbolicErrorColor", colorseterror);
-    sp_svg_write_color(colornamederror, sizeof(colornamederror), colorseterror);
 }
 
 /**

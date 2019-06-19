@@ -1,3 +1,15 @@
-.success { fill:#FFCE00; }
-.warning { fill:#00FF48; }
-.error { fill:#FF00DB; }
+.base {
+    fill: #FF1100;
+}
+
+.success {
+    fill: #FFCE00;
+}
+
+.warning {
+    fill: #00FF48;
+}
+
+.error {
+    fill: #FF00DB;
+}

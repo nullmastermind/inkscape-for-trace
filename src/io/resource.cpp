@@ -179,7 +179,7 @@ Glib::ustring get_filename(Type type, char const *filename, bool localized, bool
     } else if (file_test(sys_filename, G_FILE_TEST_EXISTS)) {
         result = Glib::ustring(sys_filename);
         g_info("Found resource file '%s' in system directory:\n\t%s", filename, result.c_str());
-    } else {
+    } else if (!silent) {
         if (localized) {
             g_warning("Failed to find resource file '%s'. Looked in:\n\t%s\n\t%s\n\t%s\n\t%s",
                       filename, user_filename_localized, user_filename, sys_filename_localized, sys_filename);
