@@ -703,27 +703,7 @@ void InkscapePreferences::symbolicCustomColors()
     Gtk::CssProvider::create();
     Glib::ustring css_str = "";
     if (prefs->getBool("/theme/symbolicIcons", false)) {
-        gchar colornamed[64];
-        gchar colornamed_inverse[64];
-        Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
-        INKSCAPE.set_higlightcolors(colornamedsuccess, colornamedwarning, colornamederror);
-        int colorset = 0x2E3436ff;
-        colorset = prefs->getInt("/theme/" + themeiconname + "/symbolicColor", colorset);
-        sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
-        // Use in case the special widgets have inverse theme background and symbolic
-        int colorset_inverse = colorset ^ 0xffffff00;
-        sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
-        css_str += "#InkRuler, ";
-        css_str += ".bright image, .dark image";
-        css_str += "{color:";
-        css_str += colornamed;
-        css_str += ";}";
-        css_str += ".dark .brightstyle image,";
-        css_str += ".bright .darkstyle image,";
-        css_str += ".invertstyle image";
-        css_str += "{color:";
-        css_str += colornamed_inverse;
-        css_str += ";}";
+        css_str = INKSCAPE.get_symbolic_colors();
         if (window ) {
             window->get_style_context()->add_class("symbolic");
             window->get_style_context()->remove_class("regular");
@@ -1042,10 +1022,12 @@ void InkscapePreferences::initPageUI()
     icon_buttons_hight->pack_start(_symbolic_error_color, true, true, 4);
     _page_theme.add_line(false, _("Change icon highlights:"), *icon_buttons_hight, "",
                          _("HSet the predefined colors fro the creator of icon set"), false);
+    Gtk::Box *icon_buttons_def = Gtk::manage(new Gtk::Box());
     Gtk::Button *theme_decide_color = Gtk::manage(new Gtk::Button(_("Theme defaults")));
     theme_decide_color->set_tooltip_text(_("Defaul colors from theme)"));
     theme_decide_color->signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::symbolicCustomColorsReset));
-    _page_theme.add_line(false, _("Defaul colors:"), *icon_buttons_hight, "",
+    icon_buttons_def->pack_start(*theme_decide_color, true, true, 4);
+    _page_theme.add_line(false, _("Default colors:"), *icon_buttons_def, "",
                          _("Set the predefined colors fro the creator of icon set"), false);
     symbolicChangeCustom();
     {

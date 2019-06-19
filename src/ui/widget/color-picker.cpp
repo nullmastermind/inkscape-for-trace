@@ -66,6 +66,7 @@ void ColorPicker::setupDialog(const Glib::ustring &title)
     _colorSelectorDialog.get_content_area()->pack_start (
               *_color_selector, true, true, 0);
     _color_selector->show();
+    
 }
 
 void ColorPicker::setTransientFor(Glib::RefPtr<Gdk::Window> transientwindow) { _transientwindow = transientwindow; }
@@ -100,6 +101,10 @@ void ColorPicker::on_clicked()
         _updating = false;
     }
     _colorSelectorDialog.show();
+    Glib::RefPtr<Gdk::Window> window = get_parent_window();
+    if (window) {
+        window->focus(1);
+    }
 }
 
 void ColorPicker::on_changed (guint32)

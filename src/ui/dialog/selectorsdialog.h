@@ -130,6 +130,7 @@ class SelectorsDialog : public Widget::Panel {
     StyleDialog *_style_dialog;
     // Reading and writing the style element.
     Inkscape::XML::Node *_getStyleTextNode();
+    void _updateStyleSheets();
     void _readStyleElement();
     void _writeStyleElement();
 

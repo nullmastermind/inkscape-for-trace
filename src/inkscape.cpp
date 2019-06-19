@@ -365,14 +365,55 @@ void Application::autosave_init()
     }
 }
 
-void Application::set_higlightcolors(gchar *colornamedsuccess, gchar *colornamedwarning, gchar *colornamederror);
+Glib::ustring Application::get_symbolic_colors()
 {
+    Glib::ustring css_str;
+    gchar colornamed[64];
+    gchar colornamedsuccess[64];
+    gchar colornamedwarning[64];
+    gchar colornamederror[64];
+    gchar colornamed_inverse[64];
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+    int colorset = 0x2E3436ff;
+    get_higlight_colors(colornamedsuccess, colornamedwarning, colornamederror);
+    colorset = prefs->getInt("/theme/" + themeiconname + "/symbolicColor", colorset);
+    sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
+    int colorset_inverse = colorset ^ 0xffffff00;
+    sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
+    css_str += "*{-gtk-icon-palette: success ";
+    css_str += colornamedsuccess;
+    css_str += ", warning ";
+    css_str += colornamedwarning;
+    css_str += ", error ";
+    css_str += colornamederror;
+    css_str += ";}";
+    css_str += "SPRuler, ruler-widget,";
+    css_str += ".bright image, .dark image";
+    css_str += "{color:";
+    css_str += colornamed;
+    css_str += ";}";
+    css_str += ".dark .brightstyle image,";
+    css_str += ".bright .darkstyle image,";
+    css_str += ".invertstyle image";
+    css_str += "{color:";
+    css_str += colornamed_inverse;
+    css_str += ";}";
+    return css_str;
+}
+
+void Application::get_higlight_colors(gchar *colornamedsuccess, gchar *colornamedwarning, gchar *colornamederror)
+{
+    using namespace Inkscape::IO::Resource;
     int colorsetsuccess = 0x4AD589ff;
     int colorsetwarning = 0xF57900ff;
     int colorseterror = 0xcc0000ff;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
-    Glib::ustring higlight = get_filename(ICONS, Glib::ustring(themeiconname + "/higlights.css").c_str(), false, false);
+    if (themeiconname == prefs->getString("/theme/defaultIconTheme")) {
+        themeiconname = "hicolor";
+    }
+    Glib::ustring higlight = get_filename(ICONS, Glib::ustring(themeiconname + "/highlights.css").c_str(), false, false);
     if (!higlight.empty()) {
         std::ifstream ifs(higlight);
         std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
@@ -411,13 +452,15 @@ void Application::set_higlightcolors(gchar *colornamedsuccess, gchar *colornamed
             colorseterror = error_color_sp.toRGBA32(1);
         }
     }
+    if (themeiconname == "hicolor") {
+        themeiconname = prefs->getString("/theme/defaultIconTheme");
+    }
     colorsetsuccess = prefs->getInt("/theme/" + themeiconname + "/symbolicSuccessColor", colorsetsuccess);
     sp_svg_write_color(colornamedsuccess, sizeof(colornamedsuccess), colorsetsuccess);
     colorsetwarning = prefs->getInt("/theme/" + themeiconname + "/symbolicWarningColor", colorsetwarning);
     sp_svg_write_color(colornamedwarning, sizeof(colornamedwarning), colorsetwarning);
     colorseterror = prefs->getInt("/theme/" + themeiconname + "/symbolicErrorColor", colorseterror);
     sp_svg_write_color(colornamederror, sizeof(colornamederror), colorseterror);
-    // Use in case the special widgets have inverse theme background and symbolic
 }
 
 /**
@@ -477,27 +520,7 @@ Application::add_gtk_css()
     Glib::ustring css_str = "";
     if (prefs->getBool("/theme/symbolicIcons", false)) {
         if (!prefs->getBool("/theme/symbolicIconsDefaultColor", true)) {
-            gchar colornamed[64];
-            gchar colornamed_inverse[64];
-            Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
-            set_higlightcolors(colornamedsuccess, colornamedwarning, colornamederror);
-            int colorset = 0x2E3436ff;
-            colorset = prefs->getInt("/theme/" + themeiconname + "/symbolicColor", colorset);
-            sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
-            // Use in case the special widgets have inverse theme background and symbolic
-            int colorset_inverse = colorset ^ 0xffffff00;
-            sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
-            css_str += "#InkRuler, ";
-            css_str += ".bright image, .dark image";
-            css_str += "{color:";
-            css_str += colornamed;
-            css_str += ";}";
-            css_str += ".dark .brightstyle image,";
-            css_str += ".bright .darkstyle image,";
-            css_str += ".invertstyle image";
-            css_str += "{color:";
-            css_str += colornamed_inverse;
-            css_str += ";}";
+            css_str = get_symbolic_colors();
         }
     }
     try {

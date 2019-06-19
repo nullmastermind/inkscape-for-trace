@@ -74,7 +74,7 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
                 gchar colornamedwarning[64];
                 gchar colornamederror[64];
                 Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
-                INKSCAPE.set_higlightcolors(colornamedsuccess, colornamedwarning, colornamederror);
+                INKSCAPE.get_higlight_colors(colornamedsuccess, colornamedwarning, colornamederror);
                 int colorset = 0x2E3436ff;
                 colorset = prefs->getInt("/theme/" + themeiconname + "/symbolicColor", colorset);
                 sp_svg_write_color(colornamed, sizeof(colornamed), colorset);

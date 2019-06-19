@@ -20,7 +20,8 @@
 #include "selection.h"
 #include "style.h"
 #include "verbs.h"
-
+#include "object/sp-style-elem.h"
+#include "object/sp-root.h"
 #include "ui/icon-loader.h"
 #include "ui/widget/iconrenderer.h"
 
@@ -484,27 +485,22 @@ Inkscape::XML::Node *SelectorsDialog::_getStyleTextNode()
     Inkscape::XML::Node *textNode = nullptr;
 
     Inkscape::XML::Node *root = SP_ACTIVE_DOCUMENT->getReprRoot();
-    bool first = false;
     for (unsigned i = 0; i < root->childCount(); ++i) {
         if (Glib::ustring(root->nthChild(i)->name()) == "svg:style") {
             styleNode = root->nthChild(i);
-            if (!first) {
-                for (unsigned j = 0; j < styleNode->childCount(); ++j) {
-                    if (styleNode->nthChild(j)->type() == Inkscape::XML::TEXT_NODE) {
-                        textNode = styleNode->nthChild(j);
-                    }
+            for (unsigned j = 0; j < styleNode->childCount(); ++j) {
+                if (styleNode->nthChild(j)->type() == Inkscape::XML::TEXT_NODE) {
+                    textNode = styleNode->nthChild(j);
                 }
-
-                if (textNode == nullptr) {
-                    // Style element found but does not contain text node!
-                    std::cerr << "StyleDialog::_getStyleTextNode(): No text node!" << std::endl;
-                    textNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
-                    styleNode->appendChild(textNode);
-                    Inkscape::GC::release(textNode);
-                }
-                first = true;
             }
-            styleNode->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+            if (textNode == nullptr) {
+                // Style element found but does not contain text node!
+                std::cerr << "StyleDialog::_getStyleTextNode(): No text node!" << std::endl;
+                textNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
+                styleNode->appendChild(textNode);
+                Inkscape::GC::release(textNode);
+            }
+            break;
         }
     }
 
@@ -528,6 +524,25 @@ Inkscape::XML::Node *SelectorsDialog::_getStyleTextNode()
 
     return textNode;
 }
+
+/**
+ * Ditto for update stylesheets.
+ */
+void SelectorsDialog::_updateStyleSheets()
+{
+    SPDocument *document = SP_ACTIVE_DOCUMENT;
+    document->setStyleSheet(nullptr);
+    Inkscape::XML::Node *root = document->getReprRoot();
+    for (unsigned i = 0; i < root->childCount(); --i) {
+        gchar const * name =  root->nthChild(i)->name();
+        if (name && strcmp(name,"svg:style") == 0) {
+            SPStyleElem *styleelem = dynamic_cast<SPStyleElem *>(document->getObjectByRepr(root->nthChild(i)));
+            styleelem->read_content();
+        }
+    }
+    document->getRoot()->emitModified( SP_OBJECT_MODIFIED_CASCADE );
+}
+
 
 /**
  * Fill the Gtk::TreeStore from the svg:style element.
@@ -697,7 +712,7 @@ void SelectorsDialog::_writeStyleElement()
     // harm in keeping it around ...
     Inkscape::XML::Node *textNode = _getStyleTextNode();
     textNode->setContent(styleContent.c_str());
-    INKSCAPE.readStyleSheets(true);
+    _updateStyleSheets();
     DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_SELECTORS, _("Edited style element."));
 
     _updating = false;
