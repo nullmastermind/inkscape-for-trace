@@ -59,6 +59,9 @@
 
 #include "svg/svg-color.h"
 
+#include "object/sp-style-elem.h"
+#include "object/sp-root.h"
+
 #include "ui/dialog/debug.h"
 #include "ui/tools/tool-base.h"
 
@@ -678,7 +681,6 @@ Application::add_gtk_css()
 void Application::readStyleSheets(bool forceupd)
 {
     SPDocument *document = SP_ACTIVE_DOCUMENT;
-    document->setStyleSheet(nullptr);
     Inkscape::XML::Node *root = document->getReprRoot();
     std::vector <Inkscape::XML::Node *> styles;
     for (unsigned i = 0; i < root->childCount(); ++i) {
@@ -687,14 +689,15 @@ void Application::readStyleSheets(bool forceupd)
             styles.insert(styles.begin(),child);
         }
     }
-    for (auto style : styles) {
-        gchar const * id = style->attribute("id");
-        if (id) {
-            SPStyleElem *styleelem = dynamic_cast<SPStyleElem *>(document->getObjectById(id));
-            styleelem->read_content();
+    if (forceupd || styles.size() > 1) {
+        document->setStyleSheet(nullptr);
+        for (auto style : styles) {
+            gchar const * id = style->attribute("id");
+            if (id) {
+                SPStyleElem *styleelem = dynamic_cast<SPStyleElem *>(document->getObjectById(id));
+                styleelem->read_content();
+            }
         }
-    }
-    if (forceupd || styles.size > 1) {
         document->getRoot()->emitModified( SP_OBJECT_MODIFIED_CASCADE );
     }
 }

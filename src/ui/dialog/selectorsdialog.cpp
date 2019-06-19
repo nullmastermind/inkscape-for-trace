@@ -20,8 +20,6 @@
 #include "selection.h"
 #include "style.h"
 #include "verbs.h"
-#include "object/sp-style-elem.h"
-#include "object/sp-root.h"
 #include "ui/icon-loader.h"
 #include "ui/widget/iconrenderer.h"
 
