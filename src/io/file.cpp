@@ -65,6 +65,7 @@ ink_file_open(const Glib::ustring& data)
         SPRoot *root = doc->getRoot();
         root->original.inkscape = root->version.inkscape;
         root->original.svg      = root->version.svg;
+        INKSCAPE.readStyleSheets();
     }
 
     return doc;
@@ -115,6 +116,7 @@ ink_file_open(const Glib::RefPtr<Gio::File>& file, bool &cancelled)
         SPRoot *root = doc->getRoot();
         root->original.inkscape = root->version.inkscape;
         root->original.svg      = root->version.svg;
+        INKSCAPE.readStyleSheets();
     }
 
     return doc;

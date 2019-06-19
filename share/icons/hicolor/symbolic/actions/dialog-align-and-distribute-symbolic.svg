@@ -8,7 +8,11 @@
       .warning { fill:#F57900; }
       .error { fill:#cc0000; }
    </style>
-   <style id="highlights"> @import "../../highlights.css"; </style> 
+   <style id="style226">
+      .success { fill:#009911; }
+      .warning { fill:#009911; }
+      .error { fill:#00ffff; }
+   </style>
   <g transform="translate(-135,-807.36218)" inkscape:label="00069" id="dialog-align-and-distribute">
       <path inkscape:connector-curvature="0" id="rect18735" d="m 135,807.36218 h 16 v 16 h -16 z" style="opacity:0;fill:none"/>
       <path inkscape:connector-curvature="0" id="rect18737" d="m 136,808.36218 h 1 v 13 h -1 z" style="opacity:1"/>

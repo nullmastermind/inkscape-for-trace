@@ -402,6 +402,131 @@ Glib::ustring Application::get_symbolic_colors()
     return css_str;
 }
 
+
+/* \brief Constructor for the application.
+ *  Creates a new Inkscape::Application.
+ *
+ *  \pre Application::_S_inst == NULL
+ */
+
+Application::Application(bool use_gui) :
+    _menus(nullptr),
+    _desktops(nullptr),
+    refCount(1),
+    _dialogs_toggle(TRUE),
+    _mapalt(GDK_MOD1_MASK),
+    _trackalt(FALSE),
+    _use_gui(use_gui)
+{
+    using namespace Inkscape::IO::Resource;
+    /* fixme: load application defaults */
+
+    segv_handler = signal (SIGSEGV, Application::crash_handler);
+    abrt_handler = signal (SIGABRT, Application::crash_handler);
+    fpe_handler  = signal (SIGFPE,  Application::crash_handler);
+    ill_handler  = signal (SIGILL,  Application::crash_handler);
+#ifndef _WIN32
+    bus_handler  = signal (SIGBUS,  Application::crash_handler);
+#endif
+
+    // \TODO: this belongs to Application::init but if it isn't here
+    // then the Filters and Extensions menus don't work.
+    _S_inst = this;
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    InkErrorHandler* handler = new InkErrorHandler(use_gui);
+    prefs->setErrorHandler(handler);
+    {
+        Glib::ustring msg;
+        Glib::ustring secondary;
+        if (prefs->getLastError( msg, secondary )) {
+            handler->handleError(msg, secondary);
+        }
+    }
+
+    if (use_gui) {
+        using namespace Inkscape::IO::Resource;
+        auto icon_theme = Gtk::IconTheme::get_default();
+        icon_theme->prepend_search_path(get_path_ustring(SYSTEM, ICONS));
+        icon_theme->prepend_search_path(get_path_ustring(USER, ICONS));
+        add_gtk_css();
+        /* Load the preferences and menus */
+        load_menus();
+        Inkscape::DeviceManager::getManager().loadConfig();
+    }
+
+    Inkscape::ResourceManager::getManager();
+
+    /* set language for user interface according setting in preferences */
+    Glib::ustring ui_language = prefs->getString("/ui/language");
+    if(!ui_language.empty())
+    {
+        setenv("LANGUAGE", ui_language, true);
+    }
+
+    /* DebugDialog redirection.  On Linux, default to OFF, on Win32, default to ON.
+     * Use only if use_gui is enabled
+     */
+#ifdef _WIN32
+#define DEFAULT_LOG_REDIRECT true
+#else
+#define DEFAULT_LOG_REDIRECT false
+#endif
+
+    if (use_gui && prefs->getBool("/dialogs/debug/redirect", DEFAULT_LOG_REDIRECT))
+    {
+        Inkscape::UI::Dialog::DebugDialog::getInstance()->captureLogMessages();
+    }
+
+    if (use_gui)
+    {
+        Inkscape::UI::Tools::init_latin_keys_group();
+        /* Check for global remapping of Alt key */
+        mapalt(guint(prefs->getInt("/options/mapalt/value", 0)));
+        trackalt(guint(prefs->getInt("/options/trackalt/value", 0)));
+    }
+
+    /* Initialize the extensions */
+    Inkscape::Extension::init();
+
+    autosave_init();
+
+    /* Initialize font factory */
+    font_factory *factory = font_factory::Default();
+    if (prefs->getBool("/options/font/use_fontsdir_system", true)) {
+        char const *fontsdir = get_path(SYSTEM, FONTS);
+        factory->AddFontsDir(fontsdir);
+    }
+    if (prefs->getBool("/options/font/use_fontsdir_user", true)) {
+        char const *fontsdir = get_path(USER, FONTS);
+        factory->AddFontsDir(fontsdir);
+    }
+    Glib::ustring fontdirs_pref = prefs->getString("/options/font/custom_fontdirs");
+    std::vector<Glib::ustring> fontdirs = Glib::Regex::split_simple("\\|", fontdirs_pref);
+    for (auto &fontdir : fontdirs) {
+        factory->AddFontsDir(fontdir.c_str());
+    }
+}
+
+Application::~Application()
+{
+    if (_desktops) {
+        g_error("FATAL: desktops still in list on application destruction!");
+    }
+
+    Inkscape::Preferences::unload();
+
+    if (_menus) {
+        Inkscape::GC::release(_menus);
+        _menus = nullptr;
+    }
+
+    _S_inst = nullptr; // this will probably break things
+
+    refCount = 0;
+    // gtk_main_quit ();
+}
+
 void Application::get_higlight_colors(gchar *colornamedsuccess, gchar *colornamedwarning, gchar *colornamederror)
 {
     using namespace Inkscape::IO::Resource;
@@ -550,152 +675,26 @@ Application::add_gtk_css()
     }
 }
 
-void Application::readStyleSheets(bool forceupd)
+void Application::readStyleSheets()
 {
     SPDocument *document = SP_ACTIVE_DOCUMENT;
+    document->setStyleSheet(nullptr);
     Inkscape::XML::Node *root = document->getReprRoot();
-    std::vector<Inkscape::XML::Node *> styles;
+    std::vector <Inkscape::XML::Node *> styles;
     for (unsigned i = 0; i < root->childCount(); ++i) {
-        Inkscape::XML::Node *child = root->nthChild(i);
-        if (child && strcmp(child->name(), "svg:style") == 0) {
-            styles.insert(styles.begin(), child);
+        Inkscape::XML::Node * child =  root->nthChild(i);
+        if (child && strcmp(child->name(),"svg:style") == 0) {
+            styles.insert(styles.begin(),child);
         }
     }
-    if (forceupd || styles.size() > 1) {
-        document->setStyleSheet(nullptr);
-        for (auto style : styles) {
-            gchar const *id = style->attribute("id");
-            if (id) {
-                SPStyleElem *styleelem = dynamic_cast<SPStyleElem *>(document->getObjectById(id));
-                styleelem->read_content();
-            }
-        }
-        document->getRoot()->emitModified(SP_OBJECT_MODIFIED_CASCADE);
-    }
-}
-
-/* \brief Constructor for the application.
- *  Creates a new Inkscape::Application.
- *
- *  \pre Application::_S_inst == NULL
- */
-
-Application::Application(bool use_gui) :
-    _menus(nullptr),
-    _desktops(nullptr),
-    refCount(1),
-    _dialogs_toggle(TRUE),
-    _mapalt(GDK_MOD1_MASK),
-    _trackalt(FALSE),
-    _use_gui(use_gui)
-{
-    using namespace Inkscape::IO::Resource;
-    /* fixme: load application defaults */
-
-    segv_handler = signal (SIGSEGV, Application::crash_handler);
-    abrt_handler = signal (SIGABRT, Application::crash_handler);
-    fpe_handler  = signal (SIGFPE,  Application::crash_handler);
-    ill_handler  = signal (SIGILL,  Application::crash_handler);
-#ifndef _WIN32
-    bus_handler  = signal (SIGBUS,  Application::crash_handler);
-#endif
-
-    // \TODO: this belongs to Application::init but if it isn't here
-    // then the Filters and Extensions menus don't work.
-    _S_inst = this;
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    InkErrorHandler* handler = new InkErrorHandler(use_gui);
-    prefs->setErrorHandler(handler);
-    {
-        Glib::ustring msg;
-        Glib::ustring secondary;
-        if (prefs->getLastError( msg, secondary )) {
-            handler->handleError(msg, secondary);
+    for (auto style : styles) {
+        gchar const * id = style->attribute("id");
+        if (id) {
+            SPStyleElem *styleelem = dynamic_cast<SPStyleElem *>(document->getObjectById(id));
+            styleelem->read_content();
         }
     }
-
-    if (use_gui) {
-        using namespace Inkscape::IO::Resource;
-        auto icon_theme = Gtk::IconTheme::get_default();
-        icon_theme->prepend_search_path(get_path_ustring(SYSTEM, ICONS));
-        icon_theme->prepend_search_path(get_path_ustring(USER, ICONS));
-        add_gtk_css();
-        /* Load the preferences and menus */
-        load_menus();
-        Inkscape::DeviceManager::getManager().loadConfig();
-    }
-
-    Inkscape::ResourceManager::getManager();
-
-    /* set language for user interface according setting in preferences */
-    Glib::ustring ui_language = prefs->getString("/ui/language");
-    if(!ui_language.empty())
-    {
-        setenv("LANGUAGE", ui_language, true);
-    }
-
-    /* DebugDialog redirection.  On Linux, default to OFF, on Win32, default to ON.
-     * Use only if use_gui is enabled
-     */
-#ifdef _WIN32
-#define DEFAULT_LOG_REDIRECT true
-#else
-#define DEFAULT_LOG_REDIRECT false
-#endif
-
-    if (use_gui && prefs->getBool("/dialogs/debug/redirect", DEFAULT_LOG_REDIRECT))
-    {
-        Inkscape::UI::Dialog::DebugDialog::getInstance()->captureLogMessages();
-    }
-
-    if (use_gui)
-    {
-        Inkscape::UI::Tools::init_latin_keys_group();
-        /* Check for global remapping of Alt key */
-        mapalt(guint(prefs->getInt("/options/mapalt/value", 0)));
-        trackalt(guint(prefs->getInt("/options/trackalt/value", 0)));
-    }
-
-    /* Initialize the extensions */
-    Inkscape::Extension::init();
-
-    autosave_init();
-
-    /* Initialize font factory */
-    font_factory *factory = font_factory::Default();
-    if (prefs->getBool("/options/font/use_fontsdir_system", true)) {
-        char const *fontsdir = get_path(SYSTEM, FONTS);
-        factory->AddFontsDir(fontsdir);
-    }
-    if (prefs->getBool("/options/font/use_fontsdir_user", true)) {
-        char const *fontsdir = get_path(USER, FONTS);
-        factory->AddFontsDir(fontsdir);
-    }
-    Glib::ustring fontdirs_pref = prefs->getString("/options/font/custom_fontdirs");
-    std::vector<Glib::ustring> fontdirs = Glib::Regex::split_simple("\\|", fontdirs_pref);
-    for (auto &fontdir : fontdirs) {
-        factory->AddFontsDir(fontdir.c_str());
-    }
-}
-
-Application::~Application()
-{
-    if (_desktops) {
-        g_error("FATAL: desktops still in list on application destruction!");
-    }
-
-    Inkscape::Preferences::unload();
-
-    if (_menus) {
-        Inkscape::GC::release(_menus);
-        _menus = nullptr;
-    }
-
-    _S_inst = nullptr; // this will probably break things
-
-    refCount = 0;
-    // gtk_main_quit ();
+    document->getRoot()->emitModified( SP_OBJECT_MODIFIED_CASCADE );
 }
 
 /** Sets the keyboard modifier to map to Alt.

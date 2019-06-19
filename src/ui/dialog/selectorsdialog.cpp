@@ -526,25 +526,6 @@ Inkscape::XML::Node *SelectorsDialog::_getStyleTextNode()
 }
 
 /**
- * Ditto for update stylesheets.
- */
-void SelectorsDialog::_updateStyleSheets()
-{
-    SPDocument *document = SP_ACTIVE_DOCUMENT;
-    document->setStyleSheet(nullptr);
-    Inkscape::XML::Node *root = document->getReprRoot();
-    for (unsigned i = 0; i < root->childCount(); --i) {
-        gchar const * name =  root->nthChild(i)->name();
-        if (name && strcmp(name,"svg:style") == 0) {
-            SPStyleElem *styleelem = dynamic_cast<SPStyleElem *>(document->getObjectByRepr(root->nthChild(i)));
-            styleelem->read_content();
-        }
-    }
-    document->getRoot()->emitModified( SP_OBJECT_MODIFIED_CASCADE );
-}
-
-
-/**
  * Fill the Gtk::TreeStore from the svg:style element.
  */
 void SelectorsDialog::_readStyleElement()
@@ -712,7 +693,7 @@ void SelectorsDialog::_writeStyleElement()
     // harm in keeping it around ...
     Inkscape::XML::Node *textNode = _getStyleTextNode();
     textNode->setContent(styleContent.c_str());
-    _updateStyleSheets();
+    INKSCAPE.readStyleSheets();
     DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_SELECTORS, _("Edited style element."));
 
     _updating = false;
