@@ -32,6 +32,18 @@ endif()
 
 
 # ----------------------------------------------------------------------------
+# Helper macros
+# ----------------------------------------------------------------------------
+
+# Turns linker arguments like "-framework Foo" into "-Wl,-framework,Foo" to
+# make them safe for appending to INKSCAPE_LIBS
+macro(sanitize_ldflags_for_libs ldflags_var)
+    # matches dash-argument followed by non-dash-argument
+    string(REGEX REPLACE "(^|;)(-[^;]*);([^-])" "\\1-Wl,\\2,\\3" ${ldflags_var} "${${ldflags_var}}")
+endmacro()
+
+
+# ----------------------------------------------------------------------------
 # Files we include
 # ----------------------------------------------------------------------------
 if(WIN32)
@@ -64,6 +76,7 @@ pkg_check_modules(INKSCAPE_DEP REQUIRED
                   gmodule-2.0
                   libsoup-2.4>=2.42)
 
+sanitize_ldflags_for_libs(INKSCAPE_DEP_LDFLAGS)
 list(APPEND INKSCAPE_LIBS ${INKSCAPE_DEP_LDFLAGS})
 list(APPEND INKSCAPE_INCS_SYS ${INKSCAPE_DEP_INCLUDE_DIRS})
 
@@ -191,6 +204,7 @@ endif()
 if(WITH_DBUS)
     pkg_check_modules(DBUS dbus-1 dbus-glib-1)
     if(DBUS_FOUND)
+        sanitize_ldflags_for_libs(DBUS_LDFLAGS)
         list(APPEND INKSCAPE_LIBS ${DBUS_LDFLAGS})
         list(APPEND INKSCAPE_INCS_SYS ${DBUS_INCLUDE_DIRS} ${CMAKE_BINARY_DIR}/src/extension/dbus/)
         add_definitions(${DBUS_CFLAGS_OTHER})
@@ -214,6 +228,7 @@ endif()
 if(APPLE)
     pkg_check_modules(MacIntegration REQUIRED gtk-mac-integration-gtk3)
     list(APPEND INKSCAPE_INCS_SYS ${MacIntegration_INCLUDE_DIRS})
+    sanitize_ldflags_for_libs(MacIntegration_LDFLAGS)
     list(APPEND INKSCAPE_LIBS ${MacIntegration_LDFLAGS})
 endif()
 
@@ -247,6 +262,7 @@ pkg_check_modules(GTKSPELL3 gtkspell3-3.0)
 if("${GTKSPELL3_FOUND}")
     message(STATUS "Using GtkSpell 3")
     list(APPEND INKSCAPE_INCS_SYS ${GTKSPELL3_INCLUDE_DIRS})
+    sanitize_ldflags_for_libs(GTKSPELL3_LDFLAGS)
     list(APPEND INKSCAPE_LIBS ${GTKSPELL3_LDFLAGS})
     set(WITH_GTKSPELL ON)
 else()
@@ -319,6 +335,7 @@ if(WITH_GRAPHICS_MAGICK)
     endif()
 endif()
 if(MAGICK_FOUND)
+    sanitize_ldflags_for_libs(MAGICK_LDFLAGS)
     list(APPEND INKSCAPE_LIBS ${MAGICK_LDFLAGS})
     add_definitions(${MAGICK_CFLAGS_OTHER})
     list(APPEND INKSCAPE_INCS_SYS ${MAGICK_INCLUDE_DIRS})
@@ -344,6 +361,7 @@ if(WITH_NLS)
 endif(WITH_NLS)
 
 pkg_check_modules(SIGC++ REQUIRED sigc++-2.0 )
+sanitize_ldflags_for_libs(SIGC++_LDFLAGS)
 list(APPEND INKSCAPE_LIBS ${SIGC++_LDFLAGS})
 list(APPEND INKSCAPE_CXX_FLAGS ${SIGC++_CFLAGS_OTHER})
 
