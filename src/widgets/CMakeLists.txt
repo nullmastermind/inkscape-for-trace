@@ -9,7 +9,6 @@ set(widgets_SRC
 	gradient-selector.cpp
 	gradient-vector.cpp
 	ink-action.cpp
-	ink-toggle-action.cpp
 	paint-selector.cpp
 	sp-attribute-widget.cpp
 	sp-color-selector.cpp
@@ -31,7 +30,6 @@ set(widgets_SRC
 	gradient-selector.h
 	gradient-vector.h
 	ink-action.h
-	ink-toggle-action.h
 	paint-selector.h
 	sp-attribute-widget.h
 	sp-color-selector.h
