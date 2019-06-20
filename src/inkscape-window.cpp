@@ -95,6 +95,8 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     // Must show before setting zoom and view! (crashes otherwise)
     // Showing after resizing/moving allows the window manager to correct an invalid size/position of the window
     show();
+    // Extra call seems to ensure toolbar widgets are visible after programmatic resize
+    check_resize();
 
     sp_namedview_zoom_and_view_from_document(_desktop);
     sp_namedview_update_layers_from_document(_desktop);
