@@ -141,7 +141,7 @@ public:
     void selection_set (Inkscape::Selection * selection);
     void readStyleSheets(bool forceupd = false);
     Glib::ustring get_symbolic_colors();
-    void get_higlight_colors(int &colorset, int &colorsetsuccess, int &colorsetwarning, int &colorseterror);
+    void get_higlight_colors(int &colorsetbase, int &colorsetsuccess, int &colorsetwarning, int &colorseterror);
     void eventcontext_set (Inkscape::UI::Tools::ToolBase * eventcontext);
     
     // Moved document add/remove functions into public inkscape.h as they are used

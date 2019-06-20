@@ -368,53 +368,6 @@ void Application::autosave_init()
     }
 }
 
-Glib::ustring Application::get_symbolic_colors()
-{
-    Glib::ustring css_str;
-    gchar colornamed[64];
-    gchar colornamedsuccess[64];
-    gchar colornamedwarning[64];
-    gchar colornamederror[64];
-    gchar colornamed_inverse[64];
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
-    int colorset = 0x2E3436ff;
-    int colorset_inverse = colorset ^ 0xffffff00;
-    int colorsetsuccess = 0x4AD589ff;
-    int colorsetwarning = 0xF57900ff;
-    int colorseterror = 0xcc0000ff;
-    get_higlight_colors(colorset, colorsetsuccess, colorsetwarning, colorseterror);
-    colorset = prefs->getInt("/theme/" + themeiconname + "/symbolicColor", colorset);
-    sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
-    colorsetsuccess = prefs->getInt("/theme/" + themeiconname + "/symbolicSuccessColor", colorsetsuccess);
-    sp_svg_write_color(colornamedsuccess, sizeof(colornamedsuccess), colorsetsuccess);
-    colorsetwarning = prefs->getInt("/theme/" + themeiconname + "/symbolicWarningColor", colorsetwarning);
-    sp_svg_write_color(colornamedwarning, sizeof(colornamedwarning), colorsetwarning);
-    colorseterror = prefs->getInt("/theme/" + themeiconname + "/symbolicErrorColor", colorseterror);
-    sp_svg_write_color(colornamederror, sizeof(colornamederror), colorseterror);
-    sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
-    css_str += "*{-gtk-icon-palette: success ";
-    css_str += colornamedsuccess;
-    css_str += ", warning ";
-    css_str += colornamedwarning;
-    css_str += ", error ";
-    css_str += colornamederror;
-    css_str += ";}";
-    css_str += "SPRuler, ruler-widget,";
-    css_str += ".bright image, .dark image";
-    css_str += "{color:";
-    css_str += colornamed;
-    css_str += ";}";
-    css_str += ".dark .brightstyle image,";
-    css_str += ".bright .darkstyle image,";
-    css_str += ".invertstyle image";
-    css_str += "{color:";
-    css_str += colornamed_inverse;
-    css_str += ";}";
-    return css_str;
-}
-
-
 /* \brief Constructor for the application.
  *  Creates a new Inkscape::Application.
  *
@@ -539,7 +492,53 @@ Application::~Application()
     // gtk_main_quit ();
 }
 
-void Application::get_higlight_colors(int &colorset, int &colorsetsuccess, int &colorsetwarning, int &colorseterror)
+
+Glib::ustring Application::get_symbolic_colors()
+{
+    Glib::ustring css_str;
+    gchar colornamed[64];
+    gchar colornamedsuccess[64];
+    gchar colornamedwarning[64];
+    gchar colornamederror[64];
+    gchar colornamed_inverse[64];
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+    int colorsetbase = 0x2E3436ff;
+    int colorsetbase_inverse = colorsetbase^ 0xffffff00;
+    int colorsetsuccess = 0x4AD589ff;
+    int colorsetwarning = 0xF57900ff;
+    int colorseterror = 0xcc0000ff;
+    colorsetbase = prefs->getInt("/theme/" + themeiconname + "/symbolicBaseColor", colorsetbase);
+    sp_svg_write_color(colornamed, sizeof(colornamed), colorsetbase);
+    colorsetsuccess = prefs->getInt("/theme/" + themeiconname + "/symbolicSuccessColor", colorsetsuccess);
+    sp_svg_write_color(colornamedsuccess, sizeof(colornamedsuccess), colorsetsuccess);
+    colorsetwarning = prefs->getInt("/theme/" + themeiconname + "/symbolicWarningColor", colorsetwarning);
+    sp_svg_write_color(colornamedwarning, sizeof(colornamedwarning), colorsetwarning);
+    colorseterror = prefs->getInt("/theme/" + themeiconname + "/symbolicErrorColor", colorseterror);
+    sp_svg_write_color(colornamederror, sizeof(colornamederror), colorseterror);
+    sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorsetbase_inverse);
+    css_str += "*{-gtk-icon-palette: success ";
+    css_str += colornamedsuccess;
+    css_str += ", warning ";
+    css_str += colornamedwarning;
+    css_str += ", error ";
+    css_str += colornamederror;
+    css_str += ";}";
+    css_str += "SPRuler, ruler-widget,";
+    css_str += ".bright image, .dark image";
+    css_str += "{color:";
+    css_str += colornamed;
+    css_str += ";}";
+    css_str += ".dark .brightstyle image,";
+    css_str += ".bright .darkstyle image,";
+    css_str += ".invertstyle image";
+    css_str += "{color:";
+    css_str += colornamed_inverse;
+    css_str += ";}";
+    return css_str;
+}
+
+void Application::get_higlight_colors(int &colorsetbase, int &colorsetsuccess, int &colorsetwarning, int &colorseterror)
 {
     using namespace Inkscape::IO::Resource;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -552,8 +551,19 @@ void Application::get_higlight_colors(int &colorset, int &colorsetsuccess, int &
         std::ifstream ifs(higlight);
         std::string content((std::istreambuf_iterator<char>(ifs)), (std::istreambuf_iterator<char>()));
         Glib::ustring result;
-        size_t startpos = content.find(".success");
+        size_t startpos = content.find(".base");
         size_t endpos = content.find("}");
+        if (startpos != std::string::npos) {
+            result = content.substr(startpos, endpos - startpos);
+            startpos = result.find("fill:");
+            endpos = result.find(";");
+            result = content.substr(startpos + 5, endpos - (startpos + 5));
+            Gdk::RGBA base_color = Gdk::RGBA(result);
+            SPColor base_color_sp(base_color.get_red(), base_color.get_green(), base_color.get_blue());
+            colorsetbase = base_color_sp.toRGBA32(1);
+        }
+        startpos = content.find(".success");
+        endpos = content.find("}");
         if (startpos != std::string::npos) {
             result = content.substr(startpos, endpos - startpos);
             startpos = result.find("fill:");
@@ -584,17 +594,6 @@ void Application::get_higlight_colors(int &colorset, int &colorsetsuccess, int &
             Gdk::RGBA error_color = Gdk::RGBA(result);
             SPColor error_color_sp(error_color.get_red(), error_color.get_green(), error_color.get_blue());
             colorseterror = error_color_sp.toRGBA32(1);
-        }
-        startpos = content.find(".base");
-        endpos = content.find("}");
-        if (startpos != std::string::npos) {
-            result = content.substr(startpos, endpos - startpos);
-            startpos = result.find("fill:");
-            endpos = result.find(";");
-            result = content.substr(startpos + 5, endpos - (startpos + 5));
-            Gdk::RGBA base_color = Gdk::RGBA(result);
-            SPColor base_color_sp(base_color.get_red(), base_color.get_green(), base_color.get_blue());
-            colorset = base_color_sp.toRGBA32(1);
         }
     }
 }

@@ -149,7 +149,7 @@ image {
     color: @success_color;
 }
 
-.system_normal_color {
+.system_base_color {
     color: @theme_fg_color;
 }
 

@@ -68,24 +68,18 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
             bool was_symbolic = false;
             Glib::ustring css_str = "";
             if (!prefs->getBool("/theme/symbolicIconsDefaultColor", true)) {
-                using namespace Inkscape::IO::Resource;
-                int colorset = 0x2E3436ff;
-                int colorsetsuccess = 0x4AD589ff;
-                int colorsetwarning = 0xF57900ff;
-                int colorseterror = 0xcc0000ff;
+                Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+                int colorsetbase = prefs->getInt("/theme/" + themeiconname + "/symbolicBaseColor", 0x2E3436ff);
+                int colorsetsuccess = prefs->getInt("/theme/" + themeiconname + "/symbolicSuccessColor", 0x4AD589ff);
+                int colorsetwarning = prefs->getInt("/theme/" + themeiconname + "/symbolicWarningColor", 0xF57900ff);
+                int colorseterror = prefs->getInt("/theme/" + themeiconname + "/symbolicErrorColor", 0xcc0000ff);
                 gchar colornamed[64];
                 gchar colornamedsuccess[64];
                 gchar colornamedwarning[64];
                 gchar colornamederror[64];
-                Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
-                INKSCAPE.get_higlight_colors(colorset, colorsetsuccess, colorsetwarning, colorseterror);
-                colorset = prefs->getInt("/theme/" + themeiconname + "/symbolicColor", colorset);
-                sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
-                colorsetsuccess = prefs->getInt("/theme/" + themeiconname + "/symbolicSuccessColor", colorsetsuccess);
+                sp_svg_write_color(colornamed, sizeof(colornamed), colorsetbase);
                 sp_svg_write_color(colornamedsuccess, sizeof(colornamedsuccess), colorsetsuccess);
-                colorsetwarning = prefs->getInt("/theme/" + themeiconname + "/symbolicWarningColor", colorsetwarning);
                 sp_svg_write_color(colornamedwarning, sizeof(colornamedwarning), colorsetwarning);
-                colorseterror = prefs->getInt("/theme/" + themeiconname + "/symbolicErrorColor", colorseterror);
                 sp_svg_write_color(colornamederror, sizeof(colornamederror), colorseterror);
                 _icon_pixbuf =
                     iconinfo.load_symbolic(Gdk::RGBA(colornamed), Gdk::RGBA(colornamedsuccess),
