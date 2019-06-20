@@ -118,12 +118,12 @@ Inkscape::XML::Node* SPShape::write(Inkscape::XML::Document *xml_doc, Inkscape::
 }
 
 void SPShape::update(SPCtx* ctx, guint flags) {
-    // std::cout << "SPShape::update(): " << (getId()?getId():"null") << std::endl;
-    SPLPEItem::update(ctx, flags);
-
     // Any update can change the bounding box,
     // so the cached version can no longer be used.
     bbox_cache_is_valid = false;
+
+    // std::cout << "SPShape::update(): " << (getId()?getId():"null") << std::endl;
+    SPLPEItem::update(ctx, flags);
 
     /* This stanza checks that an object's marker style agrees with
      * the marker objects it has allocated.  sp_shape_set_marker ensures
