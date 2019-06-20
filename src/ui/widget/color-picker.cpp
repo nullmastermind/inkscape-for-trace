@@ -69,9 +69,13 @@ void ColorPicker::setupDialog(const Glib::ustring &title)
     
 }
 
-void ColorPicker::setTransientFor(Glib::RefPtr<Gdk::Window> transientwindow) { _transientwindow = transientwindow; }
+void ColorPicker::setTransientFor(Glib::RefPtr<Gdk::Window> transientwindow) { 
+    _transientwindow = transientwindow; 
+}
 
-void ColorPicker::setSensitive(bool sensitive) { _color_selector->set_sensitive(sensitive); }
+void ColorPicker::setSensitive(bool sensitive) { 
+    set_sensitive(sensitive); 
+}
 
 void ColorPicker::setRgba32 (guint32 rgba)
 {

@@ -1,15 +1,15 @@
 .base {
-    fill: #FF1100;
+    fill: #333333;
 }
 
 .success {
-    fill: #FFCE00;
+    fill: rgb(213, 74, 201);
 }
 
 .warning {
-    fill: #00FF48;
+    fill: rgb(9, 61, 63);
 }
 
 .error {
-    fill: #FF00DB;
+    fill: #6dcc00;
 }

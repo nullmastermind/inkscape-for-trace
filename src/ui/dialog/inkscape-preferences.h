@@ -250,6 +250,7 @@ protected:
     UI::Widget::PrefColorPicker _symbolic_warning_color;
     UI::Widget::PrefColorPicker _symbolic_error_color;
     UI::Widget::PrefColorPicker _symbolic_success_color;
+    Gtk::Button _theme_decide_color;
     UI::Widget::PrefCombo _misc_small_toolbar;
     UI::Widget::PrefCombo _misc_small_secondary;
     UI::Widget::PrefCombo _misc_small_tools;
@@ -598,6 +599,7 @@ private:
   void resetIconsColors();
   void themeIconsColors();
   void changeIconsColor(guint32 /*color*/) { changeIconsColors(); }
+  void get_highlight_colors(guint32 &colorsetbase, guint32 &colorsetsuccess, guint32 &colorsetwarning, guint32 &colorseterror);
 
   InkscapePreferences();
   InkscapePreferences(InkscapePreferences const &d);

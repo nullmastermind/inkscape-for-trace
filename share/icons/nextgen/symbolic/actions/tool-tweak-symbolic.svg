@@ -64,6 +64,7 @@
        type="xygrid" />
   </sodipodi:namedview>
    <style id="style226">
+      .base {fill: #000000;}
       .success { fill:#4AD589; }
       .warning { fill:#F57900; }
       .error { fill:#cc0000; }

@@ -3,16 +3,13 @@
 <svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="dialog-align-and-distribute-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="0.6002936" inkscape:cx="732.67439" inkscape:cy="-567.94603" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
     <inkscape:grid type="xygrid" id="grid"/>
   </sodipodi:namedview>
-    <style id="style226">
+   <style id="style226">
+      .base {fill: #000000;}
       .success { fill:#4AD589; }
       .warning { fill:#F57900; }
       .error { fill:#cc0000; }
    </style>
-   <style id="style226">
-      .success { fill:#009911; }
-      .warning { fill:#009911; }
-      .error { fill:#00ffff; }
-   </style>
+   <style id="highlights"> @import "../../highlights.css"; </style> 
   <g transform="translate(-135,-807.36218)" inkscape:label="00069" id="dialog-align-and-distribute">
       <path inkscape:connector-curvature="0" id="rect18735" d="m 135,807.36218 h 16 v 16 h -16 z" style="opacity:0;fill:none"/>
       <path inkscape:connector-curvature="0" id="rect18737" d="m 136,808.36218 h 1 v 13 h -1 z" style="opacity:1"/>

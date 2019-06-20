@@ -137,6 +137,10 @@ image {
 * _symbolic_error_color has one of this calsses applied
 */
 
+.system_base_color {
+    color: @theme_fg_color;
+}
+
 .system_error_color {
     color: @error_color;
 }
@@ -147,10 +151,6 @@ image {
 
 .system_success_color {
     color: @success_color;
-}
-
-.system_base_color {
-    color: @theme_fg_color;
 }
 
 GtkWidget,

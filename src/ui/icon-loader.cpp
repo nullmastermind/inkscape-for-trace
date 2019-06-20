@@ -67,12 +67,12 @@ Glib::RefPtr<Gdk::Pixbuf> sp_get_icon_pixbuf(Glib::ustring icon_name, gint size)
         if (iconinfo && SP_ACTIVE_DESKTOP->getToplevel()) {
             bool was_symbolic = false;
             Glib::ustring css_str = "";
-            if (!prefs->getBool("/theme/symbolicIconsDefaultColor", true)) {
+            if (!prefs->getBool("/theme/symbolicDefaultColors", true)) {
                 Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
-                int colorsetbase = prefs->getInt("/theme/" + themeiconname + "/symbolicBaseColor", 0x2E3436ff);
-                int colorsetsuccess = prefs->getInt("/theme/" + themeiconname + "/symbolicSuccessColor", 0x4AD589ff);
-                int colorsetwarning = prefs->getInt("/theme/" + themeiconname + "/symbolicWarningColor", 0xF57900ff);
-                int colorseterror = prefs->getInt("/theme/" + themeiconname + "/symbolicErrorColor", 0xcc0000ff);
+                guint32 colorsetbase = prefs->getInt("/theme/" + themeiconname + "/symbolicBaseColor", 0x2E3436ff);
+                guint32 colorsetsuccess = prefs->getInt("/theme/" + themeiconname + "/symbolicSuccessColor", 0x4AD589ff);
+                guint32 colorsetwarning = prefs->getInt("/theme/" + themeiconname + "/symbolicWarningColor", 0xF57900ff);
+                guint32 colorseterror = prefs->getInt("/theme/" + themeiconname + "/symbolicErrorColor", 0xcc0000ff);
                 gchar colornamed[64];
                 gchar colornamedsuccess[64];
                 gchar colornamedwarning[64];
