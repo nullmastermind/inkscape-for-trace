@@ -781,11 +781,10 @@ void InkscapePreferences::changeIconsColors()
     try {
         INKSCAPE.colorizeprovider->load_from_data(css_str);
     } catch (const Gtk::CssProviderError &ex) {
-        g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(),
-                    ex.what().c_str());
+        g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
     }
     Gtk::StyleContext::add_provider_for_screen(screen, INKSCAPE.colorizeprovider,
-                                                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 
 void InkscapePreferences::toggleSymbolic()
