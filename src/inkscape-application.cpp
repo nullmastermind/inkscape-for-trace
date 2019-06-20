@@ -1183,7 +1183,8 @@ ConcreteInkscapeApplication<T>::on_handle_local_options(const Glib::RefPtr<Glib:
         options->contains("export-overwrite") ||
         options->contains("export-id")        ||
         options->contains("export-plain-svg") ||
-        options->contains("export-text-to_path")
+        options->contains("export-text-to_path") ||
+        options->contains("pipe")
         ) {
         _with_gui = false;
     }
