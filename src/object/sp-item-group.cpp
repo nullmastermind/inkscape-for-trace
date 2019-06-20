@@ -733,7 +733,7 @@ void SPGroup::translateChildItems(Geom::Translate const &tr)
         for (auto& o: children) {
             SPItem *item = dynamic_cast<SPItem *>(&o);
             if ( item ) {
-                sp_item_move_rel(item, tr);
+                item->move_rel(tr);
             }
         }
     }

@@ -201,7 +201,7 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
                                  a.sy0 * b->min()[Geom::Y] + a.sy1 * b->max()[Geom::Y]);
             Geom::Point const mp_rel( mp - sp );
             if (LInfty(mp_rel) > 1e-9) {
-                sp_item_move_rel(item, Geom::Translate(mp_rel));
+                item->move_rel(Geom::Translate(mp_rel));
                 changed = true;
             }
         }
@@ -359,7 +359,7 @@ private :
                 if (!Geom::are_near(pos, it->bbox.min()[_orientation], 1e-6)) {
                     Geom::Point t(0.0, 0.0);
                     t[_orientation] = pos - it->bbox.min()[_orientation];
-                    sp_item_move_rel(it->item, Geom::Translate(t));
+                    it->item->move_rel(Geom::Translate(t));
                     changed = true;
                 }
                 pos += it->bbox[_orientation].extent();
@@ -384,7 +384,7 @@ private :
                     Geom::Point t(0.0, 0.0);
                     t[_orientation] = pos - it.anchor;
                     //translate
-                    sp_item_move_rel(it.item, Geom::Translate(t));
+                    it.item->move_rel(Geom::Translate(t));
                     changed = true;
                 }
             }
@@ -626,7 +626,7 @@ private :
 	{
 		Geom::Point p2 = item->getCenter();
 		Geom::Point delta = p1 - p2;
-		sp_item_move_rel(item,Geom::Translate(delta[Geom::X],delta[Geom::Y] ));
+		item->move_rel(Geom::Translate(delta[Geom::X],delta[Geom::Y] ));
 		p1 = p2;
 	}
 
@@ -729,7 +729,7 @@ private :
                     g_random_double_range (0, (*_dialog.randomize_bbox)[Geom::Y].extent() - (*item_box)[Geom::Y].extent());
                 // displacement is the new center minus old:
                 Geom::Point t = Geom::Point (x, y) - 0.5*(item_box->max() + item_box->min());
-                sp_item_move_rel(item, Geom::Translate(t));
+                item->move_rel(Geom::Translate(t));
             }
         }
 
@@ -825,7 +825,7 @@ private :
                 Geom::Point base = sorted[i]._base;
                 Geom::Point t(0.0, 0.0);
                 t[_orientation] = b_min[_orientation] + step * i - base[_orientation];
-                sp_item_move_rel(item, Geom::Translate(t));
+                item->move_rel(Geom::Translate(t));
                 changed = true;
             }
 
@@ -888,7 +888,7 @@ private :
                         Geom::Point base = *pt * (item)->i2dt_affine();
                         Geom::Point t(0.0, 0.0);
                         t[_orientation] = ref_point[_orientation] - base[_orientation];
-                        sp_item_move_rel(item, Geom::Translate(t));
+                        item->move_rel(Geom::Translate(t));
                         changed = true;
                     }
                 }

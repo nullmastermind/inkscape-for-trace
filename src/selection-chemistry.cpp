@@ -1868,7 +1868,7 @@ void ObjectSet::rotate90(bool ccw)
     for (auto l=items_copy.begin();l!=items_copy.end() ;++l) {
         SPItem *item = *l;
         if (item) {
-            sp_item_rotate_rel(item, rot_90);
+            item->rotate_rel(rot_90);
         } else {
             g_assert_not_reached();
         }

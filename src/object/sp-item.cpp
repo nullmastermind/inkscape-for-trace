@@ -1716,6 +1716,59 @@ void SPItem::convert_to_guides() const {
     sp_guide_pt_pairs_to_guides(document, pts);
 }
 
+void SPItem::rotate_rel(Geom::Rotate const &rotation)
+{
+    Geom::Point center = getCenter();
+    Geom::Translate const s(getCenter());
+    Geom::Affine affine = Geom::Affine(s).inverse() * Geom::Affine(rotation) * Geom::Affine(s);
+
+    // Rotate item.
+    set_i2d_affine(i2dt_affine() * (Geom::Affine)affine);
+    // Use each item's own transform writer, consistent with sp_selection_apply_affine()
+    doWriteTransform(transform);
+
+    // Restore the center position (it's changed because the bbox center changed)
+    if (isCenterSet()) {
+        setCenter(center * affine);
+        updateRepr();
+    }
+}
+
+void SPItem::scale_rel(Geom::Scale const &scale)
+{
+    Geom::OptRect bbox = desktopVisualBounds();
+    if (bbox) {
+        Geom::Translate const s(bbox->midpoint()); // use getCenter?
+        set_i2d_affine(i2dt_affine() * s.inverse() * scale * s);
+        doWriteTransform(transform);
+    }
+}
+
+void SPItem::skew_rel(double skewX, double skewY)
+{
+    Geom::Point center = getCenter();
+    Geom::Translate const s(getCenter());
+
+    Geom::Affine const skew(1, skewY, skewX, 1, 0, 0);
+    Geom::Affine affine = Geom::Affine(s).inverse() * skew * Geom::Affine(s);
+
+    set_i2d_affine(i2dt_affine() * affine);
+    doWriteTransform(transform);
+
+    // Restore the center position (it's changed because the bbox center changed)
+    if (isCenterSet()) {
+        setCenter(center * affine);
+        updateRepr();
+    }
+}
+
+void SPItem::move_rel( Geom::Translate const &tr)
+{
+    set_i2d_affine(i2dt_affine() * tr);
+
+    doWriteTransform(transform);
+}
+
 /*
   Local Variables:
   mode:c++

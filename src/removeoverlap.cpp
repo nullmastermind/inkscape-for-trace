@@ -79,7 +79,7 @@ void removeoverlap(std::vector<SPItem*> const & items, double const xGap, double
     for (Record & rec: records) {
         Geom::Point const curr = rec.midpoint;
         Geom::Point const dest(rec.vspc_rect->getCentreX(), rec.vspc_rect->getCentreY());
-        sp_item_move_rel(rec.item, Geom::Translate(dest - curr));
+        rec.item->move_rel(Geom::Translate(dest - curr));
         delete rec.vspc_rect;
     }
 }

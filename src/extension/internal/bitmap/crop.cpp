@@ -38,7 +38,7 @@ Crop::postEffect(Magick::Image *image, SPItem *item) {
     Geom::Scale scale (0,0);
     scale = Geom::Scale(image->columns() / (double) image->baseColumns(),
                         image->rows() / (double) image->baseRows());
-    sp_item_scale_rel (item, scale);  
+    item->scale_rel(scale);
 
     // Translate proportionaly to the image/bbox ratio
     Geom::OptRect bbox(item->desktopGeometricBounds());
@@ -47,7 +47,7 @@ Crop::postEffect(Magick::Image *image, SPItem *item) {
     Geom::Translate translate (0,0);
     translate = Geom::Translate(((_left - _right) / 2.0) * (bbox->dimensions()[Geom::X] / (double) image->columns()),
                                 ((_bottom - _top) / 2.0) * (bbox->dimensions()[Geom::Y] / (double) image->rows()));
-    sp_item_move_rel(item, translate);
+    item->move_rel(translate);
 }
 
 void

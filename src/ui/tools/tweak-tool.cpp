@@ -400,7 +400,7 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
                 if (a->contains(p)) x = 0;
                 if (x < 1) {
                     Geom::Point move = force * 0.5 * (cos(M_PI * x) + 1) * vector;
-                    sp_item_move_rel(item, Geom::Translate(move * selection->desktop()->doc2dt().withoutTranslation()));
+                    item->move_rel(Geom::Translate(move * selection->desktop()->doc2dt().withoutTranslation()));
                     did = true;
                 }
             }
@@ -414,7 +414,7 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
                 if (x < 1) {
                     Geom::Point move = force * 0.5 * (cos(M_PI * x) + 1) * 
                         (reverse? (a->midpoint() - p) : (p - a->midpoint()));
-                    sp_item_move_rel(item, Geom::Translate(move * selection->desktop()->doc2dt().withoutTranslation()));
+                    item->move_rel(Geom::Translate(move * selection->desktop()->doc2dt().withoutTranslation()));
                     did = true;
                 }
             }
@@ -429,7 +429,7 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
                 if (a->contains(p)) x = 0;
                 if (x < 1) {
                     Geom::Point move = force * 0.5 * (cos(M_PI * x) + 1) * Geom::Point(cos(dp)*dr, sin(dp)*dr);
-                    sp_item_move_rel(item, Geom::Translate(move * selection->desktop()->doc2dt().withoutTranslation()));
+                    item->move_rel(Geom::Translate(move * selection->desktop()->doc2dt().withoutTranslation()));
                     did = true;
                 }
             }
@@ -442,7 +442,7 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
                 if (a->contains(p)) x = 0;
                 if (x < 1) {
                     double scale = 1 + (reverse? force : -force) * 0.05 * (cos(M_PI * x) + 1);
-                    sp_item_scale_rel(item, Geom::Scale(scale, scale));
+                    item->scale_rel(Geom::Scale(scale, scale));
                     did = true;
                 }
             }
@@ -456,7 +456,7 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
                 if (x < 1) {
                     double angle = (reverse? force : -force) * 0.05 * (cos(M_PI * x) + 1) * M_PI;
                     angle *= -selection->desktop()->yaxisdir();
-                    sp_item_rotate_rel(item, Geom::Rotate(angle));
+                    item->rotate_rel(Geom::Rotate(angle));
                     did = true;
                 }
             }
@@ -553,28 +553,28 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
             bool did_this = false;
             if (mode == TWEAK_MODE_SHRINK_GROW) {
                 if (theShape->MakeTweak(tweak_mode_grow, theRes,
-                                     reverse? force : -force,
-                                     join_straight, 4.0,
-                                     true, p, Geom::Point(0,0), radius, &i2doc) == 0) // 0 means the shape was actually changed
-                  did_this = true;
+                        reverse? force : -force,
+                        join_straight, 4.0,
+                        true, p, Geom::Point(0,0), radius, &i2doc) == 0) // 0 means the shape was actually changed
+                    did_this = true;
             } else if (mode == TWEAK_MODE_ATTRACT_REPEL) {
                 if (theShape->MakeTweak(tweak_mode_repel, theRes,
-                                     reverse? force : -force,
-                                     join_straight, 4.0,
-                                     true, p, Geom::Point(0,0), radius, &i2doc) == 0)
-                  did_this = true;
+                        reverse? force : -force,
+                        join_straight, 4.0,
+                        true, p, Geom::Point(0,0), radius, &i2doc) == 0)
+                    did_this = true;
             } else if (mode == TWEAK_MODE_PUSH) {
                 if (theShape->MakeTweak(tweak_mode_push, theRes,
-                                     1.0,
-                                     join_straight, 4.0,
-                                     true, p, force*2*vector, radius, &i2doc) == 0)
-                  did_this = true;
+                        1.0,
+                        join_straight, 4.0,
+                        true, p, force*2*vector, radius, &i2doc) == 0)
+                    did_this = true;
             } else if (mode == TWEAK_MODE_ROUGHEN) {
                 if (theShape->MakeTweak(tweak_mode_roughen, theRes,
-                                     force,
-                                     join_straight, 4.0,
-                                     true, p, Geom::Point(0,0), radius, &i2doc) == 0)
-                  did_this = true;
+                        force,
+                        join_straight, 4.0,
+                        true, p, Geom::Point(0,0), radius, &i2doc) == 0)
+                    did_this = true;
             }
 
             // the rest only makes sense if we actually changed the path
@@ -647,7 +647,7 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
     return did;
 }
 
-static void
+    static void
 tweak_colorpaint (float *color, guint32 goal, double force, bool do_h, bool do_s, bool do_l)
 {
     float rgb_g[3];
@@ -679,7 +679,7 @@ tweak_colorpaint (float *color, guint32 goal, double force, bool do_h, bool do_s
     }
 }
 
-static void
+    static void
 tweak_colorjitter (float *color, double force, bool do_h, bool do_s, bool do_l)
 {
     float hsl_c[3];
@@ -704,7 +704,7 @@ tweak_colorjitter (float *color, double force, bool do_h, bool do_s, bool do_l)
     SPColor::hsl_to_rgb_floatv (color, hsl_c[0], hsl_c[1], hsl_c[2]);
 }
 
-static void
+    static void
 tweak_color (guint mode, float *color, guint32 goal, double force, bool do_h, bool do_s, bool do_l)
 {
     if (mode == TWEAK_MODE_COLORPAINT) {
@@ -714,7 +714,7 @@ tweak_color (guint mode, float *color, guint32 goal, double force, bool do_h, bo
     }
 }
 
-static void
+    static void
 tweak_opacity (guint mode, SPIScale24 *style_opacity, double opacity_goal, double force)
 {
     double opacity = SP_SCALE24_TO_FLOAT (style_opacity->value);
@@ -730,7 +730,7 @@ tweak_opacity (guint mode, SPIScale24 *style_opacity, double opacity_goal, doubl
 }
 
 
-static double
+    static double
 tweak_profile (double dist, double radius)
 {
     if (radius == 0) {
@@ -748,8 +748,8 @@ tweak_profile (double dist, double radius)
 }
 
 static void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or_stroke,
-                                     guint32 const rgb_goal, Geom::Point p_w, double radius, double force, guint mode,
-                                     bool do_h, bool do_s, bool do_l, bool /*do_o*/)
+    guint32 const rgb_goal, Geom::Point p_w, double radius, double force, guint mode,
+    bool do_h, bool do_s, bool do_l, bool /*do_o*/)
 {
     SPGradient *gradient = getGradient(item, fill_or_stroke);
 
@@ -841,11 +841,11 @@ static void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or
                     // distribute the force between the two endstops so that they
                     // get all the painting even if they are not touched by the brush
                     tweak_color (mode, stop->getColor().v.c, rgb_goal,
-                                 force * (pos_e - offset_l) / (offset_h - offset_l),
-                                 do_h, do_s, do_l);
+                        force * (pos_e - offset_l) / (offset_h - offset_l),
+                        do_h, do_s, do_l);
                     tweak_color(mode, prevStop->getColor().v.c, rgb_goal,
-                                force * (offset_h - pos_e) / (offset_h - offset_l),
-                                do_h, do_s, do_l);
+                        force * (offset_h - pos_e) / (offset_h - offset_l),
+                        do_h, do_s, do_l);
                     stop->updateRepr();
                     child_prev->updateRepr();
                     break;
@@ -854,15 +854,15 @@ static void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or
                     // paint each stop by the force from the profile curve
                     if (offset_l <= pos_e && offset_l > pos_e - r) {
                         tweak_color(mode, prevStop->getColor().v.c, rgb_goal,
-                                    force * tweak_profile (fabs (pos_e - offset_l), r),
-                                    do_h, do_s, do_l);
+                            force * tweak_profile (fabs (pos_e - offset_l), r),
+                            do_h, do_s, do_l);
                         child_prev->updateRepr();
                     }
 
                     if (offset_h >= pos_e && offset_h < pos_e + r) {
                         tweak_color (mode, stop->getColor().v.c, rgb_goal,
-                                     force * tweak_profile (fabs (pos_e - offset_h), r),
-                                     do_h, do_s, do_l);
+                            force * tweak_profile (fabs (pos_e - offset_h), r),
+                            do_h, do_s, do_l);
                         stop->updateRepr();
                     }
                 }
@@ -883,7 +883,7 @@ static void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or
                     SPStop *stop = array->nodes[i][j]->stop;
                     double distance = Geom::L2(Geom::Point(p - array->nodes[i][j]->p)); 
                     tweak_color (mode, stop->getColor().v.c, rgb_goal,
-                                 force * tweak_profile (distance, radius), do_h, do_s, do_l);
+                        force * tweak_profile (distance, radius), do_h, do_s, do_l);
                     stop->updateRepr();
                 }
             }
@@ -891,14 +891,14 @@ static void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or
     }
 }
 
-static bool
+    static bool
 sp_tweak_color_recursive (guint mode, SPItem *item, SPItem *item_at_point,
-                          guint32 fill_goal, bool do_fill,
-                          guint32 stroke_goal, bool do_stroke,
-                          float opacity_goal, bool do_opacity,
-                          bool do_blur, bool reverse,
-                          Geom::Point p, double radius, double force,
-                          bool do_h, bool do_s, bool do_l, bool do_o)
+    guint32 fill_goal, bool do_fill,
+    guint32 stroke_goal, bool do_stroke,
+    float opacity_goal, bool do_opacity,
+    bool do_blur, bool reverse,
+    Geom::Point p, double radius, double force,
+    bool do_h, bool do_s, bool do_l, bool do_o)
 {
     bool did = false;
 
@@ -907,11 +907,11 @@ sp_tweak_color_recursive (guint mode, SPItem *item, SPItem *item_at_point,
             SPItem *childItem = dynamic_cast<SPItem *>(&child);
             if (childItem) {
                 if (sp_tweak_color_recursive (mode, childItem, item_at_point,
-                                          fill_goal, do_fill,
-                                          stroke_goal, do_stroke,
-                                          opacity_goal, do_opacity,
-                                          do_blur, reverse,
-                                          p, radius, force, do_h, do_s, do_l, do_o)) {
+                        fill_goal, do_fill,
+                        stroke_goal, do_stroke,
+                        opacity_goal, do_opacity,
+                        do_blur, reverse,
+                        p, radius, force, do_h, do_s, do_l, do_o)) {
                     did = true;
                 }
             }
@@ -932,99 +932,99 @@ sp_tweak_color_recursive (guint mode, SPItem *item, SPItem *item_at_point,
         Geom::Point center = bbox->midpoint();
         double this_force;
 
-// if item == item_at_point, use max force
+        // if item == item_at_point, use max force
         if (item == item_at_point) {
             this_force = force;
-// else if no overlap of bbox and brush box, skip:
+            // else if no overlap of bbox and brush box, skip:
         } else if (!bbox->intersects(brush)) {
             return false;
-//TODO:
-// else if object > 1.5 brush: test 4/8/16 points in the brush on hitting the object, choose max
-        //} else if (bbox->maxExtent() > 3 * radius) {
-        //}
-// else if object > 0.5 brush: test 4 corners of bbox and center on being in the brush, choose max
-// else if still smaller, then check only the object center:
-        } else {
-            this_force = force * tweak_profile (Geom::L2 (p - center), radius);
-        }
+            //TODO:
+            // else if object > 1.5 brush: test 4/8/16 points in the brush on hitting the object, choose max
+            //} else if (bbox->maxExtent() > 3 * radius) {
+            //}
+            // else if object > 0.5 brush: test 4 corners of bbox and center on being in the brush, choose max
+            // else if still smaller, then check only the object center:
+    } else {
+        this_force = force * tweak_profile (Geom::L2 (p - center), radius);
+    }
 
-        if (this_force > 0.002) {
+    if (this_force > 0.002) {
 
-            if (do_blur) {
-                Geom::OptRect bbox = item->documentGeometricBounds();
-                if (!bbox) {
-                    return did;
-                }
+        if (do_blur) {
+            Geom::OptRect bbox = item->documentGeometricBounds();
+            if (!bbox) {
+                return did;
+            }
 
-                double blur_now = 0;
-                Geom::Affine i2dt = item->i2dt_affine ();
-                if (style->filter.set && style->getFilter()) {
-                    //cycle through filter primitives
-                    for (auto& primitive_obj: style->getFilter()->children) {
-                        SPFilterPrimitive *primitive = dynamic_cast<SPFilterPrimitive *>(&primitive_obj);
-                        if (primitive) {
-                            //if primitive is gaussianblur
-                            SPGaussianBlur * spblur = dynamic_cast<SPGaussianBlur *>(primitive);
-                            if (spblur) {
-                                float num = spblur->stdDeviation.getNumber();
-                                blur_now += num * i2dt.descrim(); // sum all blurs in the filter
-                            }
+            double blur_now = 0;
+            Geom::Affine i2dt = item->i2dt_affine ();
+            if (style->filter.set && style->getFilter()) {
+                //cycle through filter primitives
+                for (auto& primitive_obj: style->getFilter()->children) {
+                    SPFilterPrimitive *primitive = dynamic_cast<SPFilterPrimitive *>(&primitive_obj);
+                    if (primitive) {
+                        //if primitive is gaussianblur
+                        SPGaussianBlur * spblur = dynamic_cast<SPGaussianBlur *>(primitive);
+                        if (spblur) {
+                            float num = spblur->stdDeviation.getNumber();
+                            blur_now += num * i2dt.descrim(); // sum all blurs in the filter
                         }
                     }
                 }
-                double perimeter = bbox->dimensions()[Geom::X] + bbox->dimensions()[Geom::Y];
-                blur_now = blur_now / perimeter;
+            }
+            double perimeter = bbox->dimensions()[Geom::X] + bbox->dimensions()[Geom::Y];
+            blur_now = blur_now / perimeter;
 
-                double blur_new;
-                if (reverse) {
-                    blur_new = blur_now - 0.06 * force;
-                } else {
-                    blur_new = blur_now + 0.06 * force;
-                }
-                if (blur_new < 0.0005 && blur_new < blur_now) {
-                    blur_new = 0;
-                }
-                if (blur_new == 0) {
-                    remove_filter(item, false);
-                } else {
-                    double radius = blur_new * perimeter;
-                    SPFilter *filter = modify_filter_gaussian_blur_from_item(item->document, item, radius);
-                    sp_style_set_property_url(item, "filter", filter, false);
-                }
-                return true; // do not do colors, blur is a separate mode
+            double blur_new;
+            if (reverse) {
+                blur_new = blur_now - 0.06 * force;
+            } else {
+                blur_new = blur_now + 0.06 * force;
             }
+            if (blur_new < 0.0005 && blur_new < blur_now) {
+                blur_new = 0;
+            }
+            if (blur_new == 0) {
+                remove_filter(item, false);
+            } else {
+                double radius = blur_new * perimeter;
+                SPFilter *filter = modify_filter_gaussian_blur_from_item(item->document, item, radius);
+                sp_style_set_property_url(item, "filter", filter, false);
+            }
+            return true; // do not do colors, blur is a separate mode
+        }
 
-            if (do_fill) {
-                if (style->fill.isPaintserver()) {
-                    tweak_colors_in_gradient(item, Inkscape::FOR_FILL, fill_goal, p, radius, this_force, mode, do_h, do_s, do_l, do_o);
-                    did = true;
-                } else if (style->fill.isColor()) {
-                    tweak_color (mode, style->fill.value.color.v.c, fill_goal, this_force, do_h, do_s, do_l);
-                    item->updateRepr();
-                    did = true;
-                }
-            }
-            if (do_stroke) {
-                if (style->stroke.isPaintserver()) {
-                    tweak_colors_in_gradient(item, Inkscape::FOR_STROKE, stroke_goal, p, radius, this_force, mode, do_h, do_s, do_l, do_o);
-                    did = true;
-                } else if (style->stroke.isColor()) {
-                    tweak_color (mode, style->stroke.value.color.v.c, stroke_goal, this_force, do_h, do_s, do_l);
-                    item->updateRepr();
-                    did = true;
-                }
-            }
-            if (do_opacity && do_o) {
-                tweak_opacity (mode, &style->opacity, opacity_goal, this_force);
+        if (do_fill) {
+            if (style->fill.isPaintserver()) {
+                tweak_colors_in_gradient(item, Inkscape::FOR_FILL, fill_goal, p, radius, this_force, mode, do_h, do_s, do_l, do_o);
+                did = true;
+            } else if (style->fill.isColor()) {
+                tweak_color (mode, style->fill.value.color.v.c, fill_goal, this_force, do_h, do_s, do_l);
+                item->updateRepr();
+                did = true;
             }
         }
+        if (do_stroke) {
+            if (style->stroke.isPaintserver()) {
+                tweak_colors_in_gradient(item, Inkscape::FOR_STROKE, stroke_goal, p, radius, this_force, mode, do_h, do_s, do_l, do_o);
+                did = true;
+            } else if (style->stroke.isColor()) {
+                tweak_color (mode, style->stroke.value.color.v.c, stroke_goal, this_force, do_h, do_s, do_l);
+                item->updateRepr();
+                did = true;
+            }
+        }
+        if (do_opacity && do_o) {
+            tweak_opacity (mode, &style->opacity, opacity_goal, this_force);
+        }
     }
+}
 
-    return did;
+return did;
 }
 
 
-static bool
+    static bool
 sp_tweak_dilate (TweakTool *tc, Geom::Point event_p, Geom::Point p, Geom::Point vector, bool reverse)
 {
     Inkscape::Selection *selection = tc->desktop->getSelection();
@@ -1049,15 +1049,15 @@ sp_tweak_dilate (TweakTool *tc, Geom::Point event_p, Geom::Point p, Geom::Point 
         float hsv[3];
         float rgb[3];
         SPColor::rgb_to_hsv_floatv (hsv, 
-                                    SP_RGBA32_R_F(fill_goal),
-                                    SP_RGBA32_G_F(fill_goal),
-                                    SP_RGBA32_B_F(fill_goal));
+            SP_RGBA32_R_F(fill_goal),
+            SP_RGBA32_G_F(fill_goal),
+            SP_RGBA32_B_F(fill_goal));
         SPColor::hsv_to_rgb_floatv (rgb, hsv[0]<.5? hsv[0]+.5 : hsv[0]-.5, 1 - hsv[1], 1 - hsv[2]);
         fill_goal = SP_RGBA32_F_COMPOSE(rgb[0], rgb[1], rgb[2], 1);
         SPColor::rgb_to_hsv_floatv (hsv, 
-                                    SP_RGBA32_R_F(stroke_goal),
-                                    SP_RGBA32_G_F(stroke_goal),
-                                    SP_RGBA32_B_F(stroke_goal));
+            SP_RGBA32_R_F(stroke_goal),
+            SP_RGBA32_G_F(stroke_goal),
+            SP_RGBA32_B_F(stroke_goal));
         SPColor::hsv_to_rgb_floatv (rgb, hsv[0]<.5? hsv[0]+.5 : hsv[0]-.5, 1 - hsv[1], 1 - hsv[2]);
         stroke_goal = SP_RGBA32_F_COMPOSE(rgb[0], rgb[1], rgb[2], 1);
 #else
@@ -1083,17 +1083,17 @@ sp_tweak_dilate (TweakTool *tc, Geom::Point event_p, Geom::Point p, Geom::Point 
     double move_force = get_move_force(tc);
     double color_force = MIN(sqrt(path_force)/20.0, 1);
 
-//    auto items= selection->items();
+    //    auto items= selection->items();
     std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
     for(auto item : items){
         if (is_color_mode (tc->mode)) {
             if (do_fill || do_stroke || do_opacity) {
                 if (sp_tweak_color_recursive (tc->mode, item, item_at_point,
-                                          fill_goal, do_fill,
-                                          stroke_goal, do_stroke,
-                                          opacity_goal, do_opacity,
-                                          tc->mode == TWEAK_MODE_BLUR, reverse,
-                                          p, radius, color_force, tc->do_h, tc->do_s, tc->do_l, tc->do_o)) {
+                        fill_goal, do_fill,
+                        stroke_goal, do_stroke,
+                        opacity_goal, do_opacity,
+                        tc->mode == TWEAK_MODE_BLUR, reverse,
+                        p, radius, color_force, tc->do_h, tc->do_s, tc->do_l, tc->do_o)) {
                     did = true;
                 }
             }
@@ -1111,16 +1111,16 @@ sp_tweak_dilate (TweakTool *tc, Geom::Point event_p, Geom::Point p, Geom::Point 
     return did;
 }
 
-static void
+    static void
 sp_tweak_update_area (TweakTool *tc)
 {
-        double radius = get_dilate_radius(tc);
-        Geom::Affine const sm (Geom::Scale(radius, radius) * Geom::Translate(SP_EVENT_CONTEXT(tc)->desktop->point()));
-        sp_canvas_item_affine_absolute(tc->dilate_area, sm);
-        sp_canvas_item_show(tc->dilate_area);
+    double radius = get_dilate_radius(tc);
+    Geom::Affine const sm (Geom::Scale(radius, radius) * Geom::Translate(SP_EVENT_CONTEXT(tc)->desktop->point()));
+    sp_canvas_item_affine_absolute(tc->dilate_area, sm);
+    sp_canvas_item_show(tc->dilate_area);
 }
 
-static void
+    static void
 sp_tweak_switch_mode (TweakTool *tc, gint mode, bool with_shift)
 {
     auto tb = dynamic_cast<UI::Toolbar::TweakToolbar*>(SP_EVENT_CONTEXT(tc)->desktop->get_toolbar_by_name("TweakToolbar"));
@@ -1136,24 +1136,24 @@ sp_tweak_switch_mode (TweakTool *tc, gint mode, bool with_shift)
     tc->update_cursor(with_shift);
 }
 
-static void
+    static void
 sp_tweak_switch_mode_temporarily (TweakTool *tc, gint mode, bool with_shift)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-   // Juggling about so that prefs have the old value but tc->mode and the button show new mode:
-   gint now_mode = prefs->getInt("/tools/tweak/mode", 0);
+    // Juggling about so that prefs have the old value but tc->mode and the button show new mode:
+    gint now_mode = prefs->getInt("/tools/tweak/mode", 0);
 
-   auto tb = dynamic_cast<UI::Toolbar::TweakToolbar*>(SP_EVENT_CONTEXT(tc)->desktop->get_toolbar_by_name("TweakToolbar"));
+    auto tb = dynamic_cast<UI::Toolbar::TweakToolbar*>(SP_EVENT_CONTEXT(tc)->desktop->get_toolbar_by_name("TweakToolbar"));
 
-   if(tb) {
-       tb->set_mode(mode);
-   } else {
-       std::cerr << "Could not access Tweak toolbar" << std::endl;
-   }
+    if(tb) {
+        tb->set_mode(mode);
+    } else {
+        std::cerr << "Could not access Tweak toolbar" << std::endl;
+    }
 
-   // button has changed prefs, restore
-   prefs->setInt("/tools/tweak/mode", now_mode);
-   // changing prefs changed tc->mode, restore back :)
+    // button has changed prefs, restore
+    prefs->setInt("/tools/tweak/mode", now_mode);
+    // changing prefs changed tc->mode, restore back :
    tc->mode = mode;
    tc->update_cursor(with_shift);
 }

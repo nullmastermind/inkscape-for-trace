@@ -682,7 +682,7 @@ void Transformation::applyPageMove(Inkscape::Selection *selection)
                       it < sorted.end();
                       ++it )
                 {
-                    sp_item_move_rel(it->item, Geom::Translate(move, 0));
+                    it->item->move_rel(Geom::Translate(move, 0));
                     // move each next object by x relative to previous
                     move += x;
                 }
@@ -704,7 +704,7 @@ void Transformation::applyPageMove(Inkscape::Selection *selection)
                       it < sorted.end();
                       ++it )
                 {
-                    sp_item_move_rel(it->item, Geom::Translate(0, move));
+                    it->item->move_rel(Geom::Translate(0, move));
                     // move each next object by x relative to previous
                     move += y;
                 }
@@ -797,7 +797,7 @@ void Transformation::applyPageRotate(Inkscape::Selection *selection)
     	auto tmp= selection->items();
     	for(auto i=tmp.begin();i!=tmp.end();++i){
             SPItem *item = *i;
-            sp_item_rotate_rel(item, Geom::Rotate (angle*M_PI/180.0));
+            item->rotate_rel(Geom::Rotate (angle*M_PI/180.0));
         }
     } else {
         boost::optional<Geom::Point> center = selection->center();
@@ -826,7 +826,7 @@ void Transformation::applyPageSkew(Inkscape::Selection *selection)
                     getDesktop()->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Transform matrix is singular, <b>not used</b>."));
                     return;
                 }
-                sp_item_skew_rel (item, 0.01*skewX, 0.01*skewY);
+                item->skew_rel(0.01*skewX, 0.01*skewY);
             } else if (_units_skew.isRadial()) { //deg or rad
                 double angleX = _scalar_skew_horizontal.getValue("rad");
                 double angleY = _scalar_skew_vertical.getValue("rad");
@@ -841,7 +841,7 @@ void Transformation::applyPageSkew(Inkscape::Selection *selection)
                 double skewY = tan(angleY);
                 skewX *= getDesktop()->yaxisdir();
                 skewY *= getDesktop()->yaxisdir();
-                sp_item_skew_rel (item, skewX, skewY);
+                item->skew_rel(skewX, skewY);
             } else { // absolute displacement
                 double skewX = _scalar_skew_horizontal.getValue("px");
                 double skewY = _scalar_skew_vertical.getValue("px");
@@ -854,7 +854,7 @@ void Transformation::applyPageSkew(Inkscape::Selection *selection)
                         getDesktop()->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Transform matrix is singular, <b>not used</b>."));
                         return;
                     }
-                    sp_item_skew_rel (item, skewX/height, skewY/width);
+                    item->skew_rel(skewX/height, skewY/width);
                 }
             }
         }

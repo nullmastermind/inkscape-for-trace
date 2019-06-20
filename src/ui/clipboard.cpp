@@ -521,7 +521,7 @@ bool ClipboardManagerImpl::pasteSize(ObjectSet *set, bool separately, bool apply
                 if (item) {
                     Geom::OptRect obj_size = item->desktopVisualBounds();
                     if ( obj_size ) {
-                        sp_item_scale_rel(item, _getScale(set->desktop(), min, max, *obj_size, apply_x, apply_y));
+                        item->scale_rel(_getScale(set->desktop(), min, max, *obj_size, apply_x, apply_y));
                     }
                 } else {
                     g_assert_not_reached();
