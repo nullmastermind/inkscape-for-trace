@@ -640,7 +640,8 @@ void InkscapePreferences::symbolicThemeCheck()
     }
 }
 
-void InkscapePreferences::resetIconsColors() {
+void InkscapePreferences::resetIconsColors()
+{
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (!prefs->getBool("/theme/symbolicIcons", false)) {
         _symbolic_base_colors.set_sensitive(false);
@@ -690,7 +691,8 @@ void InkscapePreferences::resetIconsColors() {
 }
 
 
-void InkscapePreferences::get_highlight_colors(guint32 &colorsetbase, guint32 &colorsetsuccess, guint32 &colorsetwarning, guint32 &colorseterror)
+void InkscapePreferences::get_highlight_colors(guint32 &colorsetbase, guint32 &colorsetsuccess,
+                                               guint32 &colorsetwarning, guint32 &colorseterror)
 {
     using namespace Inkscape::IO::Resource;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -787,7 +789,8 @@ void InkscapePreferences::themeIconsColors()
     }
 }
 
-void InkscapePreferences::changeIconsColors() {
+void InkscapePreferences::changeIconsColors()
+{
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (!prefs->getBool("/theme/symbolicDefaultColors", true)) {
         Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
@@ -811,14 +814,16 @@ void InkscapePreferences::changeIconsColors() {
         try {
             INKSCAPE.colorizeprovider->load_from_data(css_str);
         } catch (const Gtk::CssProviderError &ex) {
-            g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
+            g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(),
+                       ex.what().c_str());
         }
         Gtk::StyleContext::add_provider_for_screen(screen, INKSCAPE.colorizeprovider,
-                                                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+                                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
 }
 
-void InkscapePreferences::toggleSymbolic() {
+void InkscapePreferences::toggleSymbolic()
+{
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
     if (prefs->getBool("/theme/symbolicIcons", false)) {
@@ -1105,7 +1110,8 @@ void InkscapePreferences::initPageUI()
     _symbolic_base_colors.init(_("Use default colors for icons"), "/theme/symbolicDefaultColors", true);
     _symbolic_base_colors.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::resetIconsColors));
     _page_theme.add_line(true, "", _symbolic_base_colors, "", "", true);
-    _symbolic_base_color.init(_("Color for symbolic icons:"), "/theme/" + themeiconname + "/symbolicBaseColor", 0x2E3436ff);
+    _symbolic_base_color.init(_("Color for symbolic icons:"), "/theme/" + themeiconname + "/symbolicBaseColor",
+                              0x2E3436ff);
     _symbolic_success_color.init(_("Color for symbolic success icons:"),
                                  "/theme/" + themeiconname + "/symbolicSuccessColor", 0x4AD589ff);
     _symbolic_warning_color.init(_("Color for symbolic warning icons:"),
@@ -1135,8 +1141,9 @@ void InkscapePreferences::initPageUI()
     icon_buttons_hight->pack_start(_symbolic_success_color, true, true, 4);
     icon_buttons_hight->pack_start(_symbolic_warning_color, true, true, 4);
     icon_buttons_hight->pack_start(_symbolic_error_color, true, true, 4);
-    _page_theme.add_line(false,"", *icon_buttons_hight, _("Highlights"),
-                         _("Highlights colors, some symbolic icon themes use it. Some icons changes need reload"), false);
+    _page_theme.add_line(false, "", *icon_buttons_hight, _("Highlights"),
+                         _("Highlights colors, some symbolic icon themes use it. Some icons changes need reload"),
+                         false);
     Gtk::Box *icon_buttons_def = Gtk::manage(new Gtk::Box());
     _theme_decide_color.set_label(_("Theme default colors"));
     _theme_decide_color.set_tooltip_text(_("Defaul colors from theme)"));
@@ -1144,7 +1151,8 @@ void InkscapePreferences::initPageUI()
     icon_buttons_def->pack_start(_theme_decide_color, true, true, 4);
     resetIconsColors();
     _page_theme.add_line(false, "", *icon_buttons_def, "",
-                         _("Reset theme colors, some symbolic icon themes use it. Some icons changes need reload"), false);
+                         _("Reset theme colors, some symbolic icon themes use it. Some icons changes need reload"),
+                         false);
     {
         Glib::ustring sizeLabels[] = { C_("Icon size", "Larger"), C_("Icon size", "Large"), C_("Icon size", "Small"),
                                        C_("Icon size", "Smaller") };

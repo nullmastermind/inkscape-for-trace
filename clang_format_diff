@@ -1,0 +1,196 @@
+--- src/ui/dialog/inkscape-preferences.cpp	(before formatting)
++++ src/ui/dialog/inkscape-preferences.cpp	(after formatting)
+@@ -640,7 +640,8 @@
+     }
+ }
+ 
+-void InkscapePreferences::resetIconsColors() {
++void InkscapePreferences::resetIconsColors()
++{
+     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+     if (!prefs->getBool("/theme/symbolicIcons", false)) {
+         _symbolic_base_colors.set_sensitive(false);
+@@ -690,7 +691,8 @@
+ }
+ 
+ 
+-void InkscapePreferences::get_highlight_colors(guint32 &colorsetbase, guint32 &colorsetsuccess, guint32 &colorsetwarning, guint32 &colorseterror)
++void InkscapePreferences::get_highlight_colors(guint32 &colorsetbase, guint32 &colorsetsuccess,
++                                               guint32 &colorsetwarning, guint32 &colorseterror)
+ {
+     using namespace Inkscape::IO::Resource;
+     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+@@ -787,7 +789,8 @@
+     }
+ }
+ 
+-void InkscapePreferences::changeIconsColors() {
++void InkscapePreferences::changeIconsColors()
++{
+     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+     if (!prefs->getBool("/theme/symbolicDefaultColors", true)) {
+         Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+@@ -811,14 +814,16 @@
+         try {
+             INKSCAPE.colorizeprovider->load_from_data(css_str);
+         } catch (const Gtk::CssProviderError &ex) {
+-            g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
++            g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(),
++                       ex.what().c_str());
+         }
+         Gtk::StyleContext::add_provider_for_screen(screen, INKSCAPE.colorizeprovider,
+-                                                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+-    }
+-}
+-
+-void InkscapePreferences::toggleSymbolic() {
++                                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
++    }
++}
++
++void InkscapePreferences::toggleSymbolic()
++{
+     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+     Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
+     if (prefs->getBool("/theme/symbolicIcons", false)) {
+@@ -1103,7 +1108,8 @@
+     _symbolic_base_colors.init(_("Use default colors for icons"), "/theme/symbolicDefaultColors", true);
+     _symbolic_base_colors.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::resetIconsColors));
+     _page_theme.add_line(true, "", _symbolic_base_colors, "", "", true);
+-    _symbolic_base_color.init(_("Color for symbolic icons:"), "/theme/" + themeiconname + "/symbolicBaseColor", 0x2E3436ff);
++    _symbolic_base_color.init(_("Color for symbolic icons:"), "/theme/" + themeiconname + "/symbolicBaseColor",
++                              0x2E3436ff);
+     _symbolic_success_color.init(_("Color for symbolic success icons:"),
+                                  "/theme/" + themeiconname + "/symbolicSuccessColor", 0x4AD589ff);
+     _symbolic_warning_color.init(_("Color for symbolic warning icons:"),
+@@ -1133,8 +1139,9 @@
+     icon_buttons_hight->pack_start(_symbolic_success_color, true, true, 4);
+     icon_buttons_hight->pack_start(_symbolic_warning_color, true, true, 4);
+     icon_buttons_hight->pack_start(_symbolic_error_color, true, true, 4);
+-    _page_theme.add_line(false,"", *icon_buttons_hight, _("Highlights"),
+-                         _("Highlights colors, some symbolic icon themes use it. Some icons changes need reload"), false);
++    _page_theme.add_line(false, "", *icon_buttons_hight, _("Highlights"),
++                         _("Highlights colors, some symbolic icon themes use it. Some icons changes need reload"),
++                         false);
+     Gtk::Box *icon_buttons_def = Gtk::manage(new Gtk::Box());
+     _theme_decide_color.set_label(_("Theme default colors"));
+     _theme_decide_color.set_tooltip_text(_("Defaul colors from theme)"));
+@@ -1142,7 +1149,8 @@
+     icon_buttons_def->pack_start(_theme_decide_color, true, true, 4);
+     resetIconsColors();
+     _page_theme.add_line(false, "", *icon_buttons_def, "",
+-                         _("Reset theme colors, some symbolic icon themes use it. Some icons changes need reload"), false);
++                         _("Reset theme colors, some symbolic icon themes use it. Some icons changes need reload"),
++                         false);
+     {
+         Glib::ustring sizeLabels[] = { C_("Icon size", "Larger"), C_("Icon size", "Large"), C_("Icon size", "Small"),
+                                        C_("Icon size", "Smaller") };
+--- src/ui/widget/color-picker.cpp	(before formatting)
++++ src/ui/widget/color-picker.cpp	(after formatting)
+@@ -66,16 +66,11 @@
+     _colorSelectorDialog.get_content_area()->pack_start (
+               *_color_selector, true, true, 0);
+     _color_selector->show();
+-    
+ }
+ 
+-void ColorPicker::setTransientFor(Glib::RefPtr<Gdk::Window> transientwindow) { 
+-    _transientwindow = transientwindow; 
+-}
++void ColorPicker::setTransientFor(Glib::RefPtr<Gdk::Window> transientwindow) { _transientwindow = transientwindow; }
+ 
+-void ColorPicker::setSensitive(bool sensitive) { 
+-    set_sensitive(sensitive); 
+-}
++void ColorPicker::setSensitive(bool sensitive) { set_sensitive(sensitive); }
+ 
+ void ColorPicker::setRgba32 (guint32 rgba)
+ {
+--- src/ui/icon-loader.cpp	(before formatting)
++++ src/ui/icon-loader.cpp	(after formatting)
+@@ -70,8 +70,10 @@
+             if (!prefs->getBool("/theme/symbolicDefaultColors", true)) {
+                 Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+                 guint32 colorsetbase = prefs->getInt("/theme/" + themeiconname + "/symbolicBaseColor", 0x2E3436ff);
+-                guint32 colorsetsuccess = prefs->getInt("/theme/" + themeiconname + "/symbolicSuccessColor", 0x4AD589ff);
+-                guint32 colorsetwarning = prefs->getInt("/theme/" + themeiconname + "/symbolicWarningColor", 0xF57900ff);
++                guint32 colorsetsuccess =
++                    prefs->getInt("/theme/" + themeiconname + "/symbolicSuccessColor", 0x4AD589ff);
++                guint32 colorsetwarning =
++                    prefs->getInt("/theme/" + themeiconname + "/symbolicWarningColor", 0xF57900ff);
+                 guint32 colorseterror = prefs->getInt("/theme/" + themeiconname + "/symbolicErrorColor", 0xcc0000ff);
+                 gchar colornamed[64];
+                 gchar colornamedsuccess[64];
+--- src/inkscape.cpp	(before formatting)
++++ src/inkscape.cpp	(after formatting)
+@@ -56,8 +56,8 @@
+ 
+ #include "svg/svg-color.h"
+ 
++#include "object/sp-root.h"
+ #include "object/sp-style-elem.h"
+-#include "object/sp-root.h"
+ 
+ #include "ui/dialog/debug.h"
+ #include "ui/tools/tool-base.h"
+@@ -501,7 +501,7 @@
+     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+     Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+     guint32 colorsetbase = 0x2E3436ff;
+-    guint32 colorsetbase_inverse = colorsetbase^ 0xffffff00;
++    guint32 colorsetbase_inverse = colorsetbase ^ 0xffffff00;
+     guint32 colorsetsuccess = 0x4AD589ff;
+     guint32 colorsetwarning = 0xF57900ff;
+     guint32 colorseterror = 0xcc0000ff;
+@@ -538,8 +538,7 @@
+ /**
+  * \brief Add our CSS style sheets
+  */
+-void
+-Application::add_gtk_css()
++void Application::add_gtk_css()
+ {
+     using namespace Inkscape::IO::Resource;
+     // Add style sheet (GTK3)
+@@ -626,23 +625,23 @@
+ {
+     SPDocument *document = SP_ACTIVE_DOCUMENT;
+     Inkscape::XML::Node *root = document->getReprRoot();
+-    std::vector <Inkscape::XML::Node *> styles;
++    std::vector<Inkscape::XML::Node *> styles;
+     for (unsigned i = 0; i < root->childCount(); ++i) {
+-        Inkscape::XML::Node * child =  root->nthChild(i);
+-        if (child && strcmp(child->name(),"svg:style") == 0) {
+-            styles.insert(styles.begin(),child);
++        Inkscape::XML::Node *child = root->nthChild(i);
++        if (child && strcmp(child->name(), "svg:style") == 0) {
++            styles.insert(styles.begin(), child);
+         }
+     }
+     if (forceupd || styles.size() > 1) {
+         document->setStyleSheet(nullptr);
+         for (auto style : styles) {
+-            gchar const * id = style->attribute("id");
++            gchar const *id = style->attribute("id");
+             if (id) {
+                 SPStyleElem *styleelem = dynamic_cast<SPStyleElem *>(document->getObjectById(id));
+                 styleelem->read_content();
+             }
+         }
+-        document->getRoot()->emitModified( SP_OBJECT_MODIFIED_CASCADE );
++        document->getRoot()->emitModified(SP_OBJECT_MODIFIED_CASCADE);
+     }
+ }
+ 
+--- src/ui/dialog/inkscape-preferences.h	(before formatting)
++++ src/ui/dialog/inkscape-preferences.h	(after formatting)
+@@ -599,7 +599,8 @@
+   void resetIconsColors();
+   void themeIconsColors();
+   void changeIconsColor(guint32 /*color*/) { changeIconsColors(); }
+-  void get_highlight_colors(guint32 &colorsetbase, guint32 &colorsetsuccess, guint32 &colorsetwarning, guint32 &colorseterror);
++  void get_highlight_colors(guint32 &colorsetbase, guint32 &colorsetsuccess, guint32 &colorsetwarning,
++                            guint32 &colorseterror);
+ 
+   InkscapePreferences();
+   InkscapePreferences(InkscapePreferences const &d);

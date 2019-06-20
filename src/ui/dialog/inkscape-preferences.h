@@ -599,7 +599,8 @@ private:
   void resetIconsColors();
   void themeIconsColors();
   void changeIconsColor(guint32 /*color*/) { changeIconsColors(); }
-  void get_highlight_colors(guint32 &colorsetbase, guint32 &colorsetsuccess, guint32 &colorsetwarning, guint32 &colorseterror);
+  void get_highlight_colors(guint32 &colorsetbase, guint32 &colorsetsuccess, guint32 &colorsetwarning,
+                            guint32 &colorseterror);
 
   InkscapePreferences();
   InkscapePreferences(InkscapePreferences const &d);

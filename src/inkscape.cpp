@@ -59,8 +59,8 @@
 
 #include "svg/svg-color.h"
 
-#include "object/sp-style-elem.h"
 #include "object/sp-root.h"
+#include "object/sp-style-elem.h"
 
 #include "ui/dialog/debug.h"
 #include "ui/tools/tool-base.h"
@@ -504,7 +504,7 @@ Glib::ustring Application::get_symbolic_colors()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
     guint32 colorsetbase = 0x2E3436ff;
-    guint32 colorsetbase_inverse = colorsetbase^ 0xffffff00;
+    guint32 colorsetbase_inverse = colorsetbase ^ 0xffffff00;
     guint32 colorsetsuccess = 0x4AD589ff;
     guint32 colorsetwarning = 0xF57900ff;
     guint32 colorseterror = 0xcc0000ff;
@@ -541,8 +541,7 @@ Glib::ustring Application::get_symbolic_colors()
 /**
  * \brief Add our CSS style sheets
  */
-void
-Application::add_gtk_css()
+void Application::add_gtk_css()
 {
     using namespace Inkscape::IO::Resource;
     // Add style sheet (GTK3)
@@ -629,23 +628,23 @@ void Application::readStyleSheets(bool forceupd)
 {
     SPDocument *document = SP_ACTIVE_DOCUMENT;
     Inkscape::XML::Node *root = document->getReprRoot();
-    std::vector <Inkscape::XML::Node *> styles;
+    std::vector<Inkscape::XML::Node *> styles;
     for (unsigned i = 0; i < root->childCount(); ++i) {
-        Inkscape::XML::Node * child =  root->nthChild(i);
-        if (child && strcmp(child->name(),"svg:style") == 0) {
-            styles.insert(styles.begin(),child);
+        Inkscape::XML::Node *child = root->nthChild(i);
+        if (child && strcmp(child->name(), "svg:style") == 0) {
+            styles.insert(styles.begin(), child);
         }
     }
     if (forceupd || styles.size() > 1) {
         document->setStyleSheet(nullptr);
         for (auto style : styles) {
-            gchar const * id = style->attribute("id");
+            gchar const *id = style->attribute("id");
             if (id) {
                 SPStyleElem *styleelem = dynamic_cast<SPStyleElem *>(document->getObjectById(id));
                 styleelem->read_content();
             }
         }
-        document->getRoot()->emitModified( SP_OBJECT_MODIFIED_CASCADE );
+        document->getRoot()->emitModified(SP_OBJECT_MODIFIED_CASCADE);
     }
 }
 
