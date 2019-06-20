@@ -1,15 +1,43 @@
+/*
+* Change only colors, do not add more class, order or remove 
+* also dont chage selectors definition
+*/
+
 .base {
     fill: #333333;
 }
 
 .success {
-    fill: rgb(213, 74, 201);
+    fill: #d54ac9;
 }
 
 .warning {
-    fill: rgb(9, 61, 63);
+    fill: #177579;
 }
 
 .error {
-    fill: #6dcc00;
+    fill: #457211;
+}
+
+.dark .base {
+    fill: #CCCCCC;
+}
+
+.dark .success {
+    fill: #fa85f2;
+}
+
+.dark .warning {
+    fill: #8fecf0;
+}
+
+.dark .error {
+    fill: #c1f08c;
+}
+
+
+/* do not change */
+
+.dark #background {
+    opacity: 0.8 !important;
 }

@@ -1,20 +1,91 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
-<svg xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg1" width="16" height="16" viewBox="0 0 16 16" sodipodi:docname="dialog-align-and-distribute-symbolic.svg"><sodipodi:namedview objecttolerance="10" gridtolerance="10" guidetolerance="10" id="namedview" showgrid="true" inkscape:zoom="0.6002936" inkscape:cx="732.67439" inkscape:cy="-567.94603" inkscape:window-width="1920" inkscape:window-height="1016" inkscape:window-x="0" inkscape:window-y="27" inkscape:window-maximized="1" inkscape:current-layer="layer1">
-    <inkscape:grid type="xygrid" id="grid"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0alpha2 (a0e047e17e, 2019-06-20, custom)"
+   sodipodi:docname="dialog-align-and-distribute-symbolic.svg"
+   viewBox="0 0 16 16"
+   height="16"
+   width="16"
+   id="svg1"
+   version="1.1">
+  <metadata
+     id="metadata21">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs19" />
+  <sodipodi:namedview
+     inkscape:document-rotation="0"
+     inkscape:current-layer="dialog-align-and-distribute"
+     inkscape:window-maximized="1"
+     inkscape:window-y="27"
+     inkscape:window-x="0"
+     inkscape:window-height="1016"
+     inkscape:window-width="1920"
+     inkscape:cy="17.841732"
+     inkscape:cx="-5.4727695"
+     inkscape:zoom="15.839192"
+     showgrid="true"
+     id="namedview"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10">
+    <inkscape:grid
+       id="grid"
+       type="xygrid" />
   </sodipodi:namedview>
-   <style id="style226">
-      .base {fill: #000000;}
-      .success { fill:#4AD589; }
-      .warning { fill:#F57900; }
-      .error { fill:#cc0000; }
-   </style>
-   <style id="highlights"> @import "../../highlights.css"; </style> 
-  <g transform="translate(-135,-807.36218)" inkscape:label="00069" id="dialog-align-and-distribute">
-      <path inkscape:connector-curvature="0" id="rect18735" d="m 135,807.36218 h 16 v 16 h -16 z" style="opacity:0;fill:none"/>
-      <path inkscape:connector-curvature="0" id="rect18737" d="m 136,808.36218 h 1 v 13 h -1 z" style="opacity:1"/>
-      <path inkscape:connector-curvature="0" id="rect18739" d="m 139,808.36218 h 7 v 3 h -7 z" style="opacity:1"/>
-      <path inkscape:connector-curvature="0" id="rect18741" d="m 139,813.36218 h 10 v 3 h -10 z" style="opacity:1"/>
-      <path inkscape:connector-curvature="0" id="rect18743" d="m 139,-821.36218 h 6 v 3 h -6 z" style="opacity:1" transform="scale(1,-1)"/>
-    </g>
-    </svg>
+  <style
+     id="style226">.base { fill: #333333; }
+.success { fill:#d54ac9; }
+.warning { fill:#177579; }
+.error { fill:#457211; }
+.dark {  }
+</style>
+  <style
+     id="highlights"> @import '../../highlights.css'; </style>
+  <g
+     id="dialog-align-and-distribute">
+    <path
+       inkscape:connector-curvature="0"
+       style="opacity:0;"
+       d="M 0,0 H 16 V 16 H 0 Z"
+       id="background" /><!--Add this to all icons at dirst place and do not change the id or style-->
+    <path
+       style="opacity:1"
+       d="M 2,2 H 3 V 15 H 2 Z"
+       id="rect18737"
+       inkscape:connector-curvature="0"
+       class="base" />
+    <path
+       style="opacity:1"
+       d="m 5,2 h 7 V 5 H 5 Z"
+       class="success"
+       id="rect18739"
+       inkscape:connector-curvature="0" />
+    <path
+       style="opacity:1"
+       d="m 5,7 h 10 v 3 H 5 Z"
+       class="warning"
+       id="rect18741"
+       inkscape:connector-curvature="0" />
+    <path
+       style="opacity:1"
+       d="m 5,12 h 6 v 3 H 5 Z"
+       class="error"
+       id="rect18743"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>
