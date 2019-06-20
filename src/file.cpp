@@ -148,18 +148,18 @@ SPDesktop* sp_file_new_default()
 /**
  *  Perform document closures preceding an exit()
  */
-void
-sp_file_exit()
+void sp_file_exit()
 {
     if (SP_ACTIVE_DESKTOP == nullptr) {
         // We must be in console mode
-        Gtk::Main::quit();
+        auto app = Gio::Application::get_default();
+        g_assert(app);
+        app->quit();
     } else {
         sp_ui_close_all();
         // no need to call inkscape_exit here; last document being closed will take care of that
     }
 }
-
 
 
 /**

@@ -418,9 +418,9 @@ SpinButtonToolItem::set_icon(const Glib::ustring& icon_name)
 }
 
 bool
-SpinButtonToolItem::on_btn_button_press_event(GdkEventButton *button_event)
+SpinButtonToolItem::on_btn_button_press_event(const GdkEventButton *button_event)
 {
-    if (gdk_event_triggers_context_menu((GdkEvent *)button_event) &&
+    if (gdk_event_triggers_context_menu(reinterpret_cast<const GdkEvent *>(button_event)) &&
             button_event->type == GDK_BUTTON_PRESS) {
         do_popup_menu(button_event);
         return true;
@@ -430,21 +430,12 @@ SpinButtonToolItem::on_btn_button_press_event(GdkEventButton *button_event)
 }
 
 void
-SpinButtonToolItem::do_popup_menu(GdkEventButton *button_event)
+SpinButtonToolItem::do_popup_menu(const GdkEventButton *button_event)
 {
     auto menu = create_numeric_menu();
     menu->attach_to_widget(*_btn);
     menu->show_all();
-
-    int button = 0;
-    int time   = gtk_get_current_event_time();
-
-    if (button_event) {
-        button = button_event->button;
-        time   = button_event->time;
-    }
-
-    menu->popup(button, time);
+    menu->popup_at_pointer(reinterpret_cast<const GdkEvent *>(button_event));
 }
 
 /**

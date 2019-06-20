@@ -224,7 +224,6 @@ protected:
     RegisteredUnitMenu   _dimensionUnits;
     RegisteredScalarUnit _dimensionWidth;
     RegisteredScalarUnit _dimensionHeight;
-    std::vector<Widget*> _dimTabOrderList;
 
     //### Fit Page options
     Gtk::Expander        _fitPageMarginExpander;

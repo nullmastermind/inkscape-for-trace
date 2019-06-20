@@ -44,9 +44,9 @@ private:
     bool on_btn_focus_in_event(GdkEventFocus  *focus_event);
     bool on_btn_focus_out_event(GdkEventFocus *focus_event);
     bool on_btn_key_press_event(GdkEventKey   *key_event);
-    bool on_btn_button_press_event(GdkEventButton *button_event);
+    bool on_btn_button_press_event(const GdkEventButton *button_event);
     bool on_popup_menu();
-    void do_popup_menu(GdkEventButton *button_event);
+    void do_popup_menu(const GdkEventButton *button_event);
 
     void defocus();
     bool process_tab(int direction);

@@ -796,7 +796,8 @@ Extension::get_help_widget()
 
     if (_help == nullptr) {
         Gtk::Label * content = Gtk::manage(new Gtk::Label(_("Currently there is no help available for this Extension.  Please look on the Inkscape website or ask on the mailing lists if you have questions regarding this extension.")));
-        content->set_alignment(Gtk::ALIGN_START, Gtk::ALIGN_START);
+        content->set_xalign(0);
+        content->set_yalign(0);
         retval->pack_start(*content, true, true, 4);
         content->set_line_wrap(true);
         content->show();

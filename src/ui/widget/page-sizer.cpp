@@ -191,13 +191,6 @@ PageSizer::PageSizer(Registry & _wr)
 
     _customDimTable.attach(_fitPageMarginExpander, 0, 1, 3, 1);
 
-    _dimTabOrderList.clear();
-    _dimTabOrderList.push_back(&_dimensionWidth);
-    _dimTabOrderList.push_back(&_dimensionHeight);
-    _dimTabOrderList.push_back(&_dimensionUnits);
-    _dimTabOrderList.push_back(&_fitPageMarginExpander);
-    _customDimTable.set_focus_chain(_dimTabOrderList);
-
     //## Set up fit page expander
     _fitPageMarginExpander.set_use_underline();
     _fitPageMarginExpander.set_label(_("Resi_ze page to content..."));

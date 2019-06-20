@@ -201,37 +201,38 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   overlay->add(* scroller);
   overlay->get_style_context()->add_class("brightstyle");
   scroller->set_size_request(100, 250);
-  table->attach(*Gtk::manage(overlay),0,row,2,1);
+  table->attach(*Gtk::manage(overlay), 0, row, 2, 1);
 
   /*************************Overlays******************************/
   overlay_opacity = new Gtk::Image();
-  overlay_opacity->set_halign(Gtk::ALIGN_START );
-  overlay_opacity->set_valign(Gtk::ALIGN_START );
-  //No results
-  iconsize = Gtk::IconSize().from_name(Glib::ustring("ICON_SIZE_DIALOG_EXTRA"));
-  if (!iconsize) {
-      iconsize = Gtk::IconSize().register_new(Glib::ustring("ICON_SIZE_DIALOG_EXTRA"), 110, 110);
-  }
-  overlay_icon = sp_get_icon_image("searching", iconsize);
+  overlay_opacity->set_halign(Gtk::ALIGN_START);
+  overlay_opacity->set_valign(Gtk::ALIGN_START);
+
+  // No results
+  overlay_icon = sp_get_icon_image("searching", Gtk::ICON_SIZE_DIALOG);
+  overlay_icon->set_pixel_size(110);
   overlay_icon->get_style_context()->add_class("iconsymbolic");
-  overlay_icon->set_halign(Gtk::ALIGN_CENTER );
-  overlay_icon->set_valign(Gtk::ALIGN_START );
+  overlay_icon->set_halign(Gtk::ALIGN_CENTER);
+  overlay_icon->set_valign(Gtk::ALIGN_START);
   overlay_icon->set_margin_top(45);
+
   overlay_title = new Gtk::Label();
   overlay_title->set_halign(Gtk::ALIGN_CENTER );
   overlay_title->set_valign(Gtk::ALIGN_START );
   overlay_title->set_justify(Gtk::JUSTIFY_CENTER);
   overlay_title->set_margin_top(155);
+
   overlay_desc = new Gtk::Label();
-  overlay_desc->set_halign(Gtk::ALIGN_CENTER );
-  overlay_desc->set_valign(Gtk::ALIGN_START );
+  overlay_desc->set_halign(Gtk::ALIGN_CENTER);
+  overlay_desc->set_valign(Gtk::ALIGN_START);
   overlay_desc->set_margin_top(180);
   overlay_desc->set_justify(Gtk::JUSTIFY_CENTER);
-  overlay->add_overlay(* overlay_opacity);
-  overlay->add_overlay(* overlay_icon);
-  overlay->add_overlay(* overlay_title);
-  overlay->add_overlay(* overlay_desc);
-  
+
+  overlay->add_overlay(*overlay_opacity);
+  overlay->add_overlay(*overlay_icon);
+  overlay->add_overlay(*overlay_title);
+  overlay->add_overlay(*overlay_desc);
+
   previous_height = 0;
   ++row;
 

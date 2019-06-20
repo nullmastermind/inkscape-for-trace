@@ -641,8 +641,6 @@ static void sp_grad_edit_combo_box_changed (GtkComboBox * /*widget*/, GtkWidget 
 
     gtk_adjustment_set_value(adj, stop->offset);
 
-    gtk_adjustment_changed(adj);
-
     blocked = FALSE;
 }
 
