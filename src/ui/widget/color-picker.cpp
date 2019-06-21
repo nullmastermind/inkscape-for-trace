@@ -106,7 +106,6 @@ void ColorPicker::on_clicked()
     if (originalwindow) {
         originalwindow->show();
     }
-
 }
 
 void ColorPicker::on_changed (guint32)

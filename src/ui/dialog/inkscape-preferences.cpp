@@ -666,10 +666,9 @@ void InkscapePreferences::resetIconsColors()
         _symbolic_warning_color.setSensitive(false);
         _symbolic_error_color.setSensitive(false);
         return;
-    } 
+    }
     if (prefs->getBool("/theme/symbolicDefaultColors", true) ||
-        !prefs->getEntry("/theme/" + themeiconname + "/symbolicBaseColor").isValid())
-    {
+        !prefs->getEntry("/theme/" + themeiconname + "/symbolicBaseColor").isValid()) {
         Gdk::RGBA normal_color = _symbolic_base_color.get_style_context()->get_color();
         Gdk::RGBA success_color = _symbolic_success_color.get_style_context()->get_color();
         Gdk::RGBA warning_color = _symbolic_warning_color.get_style_context()->get_color();
@@ -823,11 +822,11 @@ void InkscapePreferences::symbolicThemeCheck()
                 folder.erase(0, last_slash_idx + 1);
             }
             if (folder == prefs->getString("/theme/iconTheme")) {
-    #ifdef _WIN32
+#ifdef _WIN32
                 path += g_win32_locale_filename_from_utf8("/symbolic/actions");
-    #else
+#else
                 path += "/symbolic/actions";
-    #endif
+#endif
                 std::vector<Glib::ustring> symbolic_icons = get_filenames(path, { ".svg" }, {});
                 if (symbolic_icons.size() > 0) {
                     symbolic = true;
@@ -845,8 +844,7 @@ void InkscapePreferences::symbolicThemeCheck()
             _symbolic_base_colors.get_parent()->hide();
             _symbolic_base_color.get_parent()->get_parent()->hide();
             _symbolic_success_color.get_parent()->get_parent()->hide();
-        }
-        else {
+        } else {
             _symbolic_icons.get_parent()->show();
             _symbolic_base_colors.get_parent()->show();
             _symbolic_base_color.get_parent()->get_parent()->show();
@@ -863,13 +861,14 @@ void InkscapePreferences::symbolicThemeCheck()
         guint32 colorsetsuccess = prefs->getInt("/theme/" + themeiconname + "/symbolicSuccessColor", 0x4AD589ff);
         guint32 colorsetwarning = prefs->getInt("/theme/" + themeiconname + "/symbolicWarningColor", 0xF57900ff);
         guint32 colorseterror = prefs->getInt("/theme/" + themeiconname + "/symbolicErrorColor", 0xcc0000ff);
-        _symbolic_base_color.init(_("Color for symbolic icons:"), "/theme/" + themeiconname + "/symbolicBaseColor", colorsetbase);
+        _symbolic_base_color.init(_("Color for symbolic icons:"), "/theme/" + themeiconname + "/symbolicBaseColor",
+                                  colorsetbase);
         _symbolic_success_color.init(_("Color for symbolic success icons:"),
-                                    "/theme/" + themeiconname + "/symbolicSuccessColor", colorsetsuccess);
+                                     "/theme/" + themeiconname + "/symbolicSuccessColor", colorsetsuccess);
         _symbolic_warning_color.init(_("Color for symbolic warning icons:"),
-                                    "/theme/" + themeiconname + "/symbolicWarningColor", colorsetwarning);
-        _symbolic_error_color.init(_("Color for symbolic error icons:"), "/theme/" + themeiconname + "/symbolicErrorColor",
-                                colorseterror);
+                                     "/theme/" + themeiconname + "/symbolicWarningColor", colorsetwarning);
+        _symbolic_error_color.init(_("Color for symbolic error icons:"),
+                                   "/theme/" + themeiconname + "/symbolicErrorColor", colorseterror);
     }
 }
 
