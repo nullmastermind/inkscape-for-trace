@@ -509,12 +509,12 @@ Glib::ustring Application::get_symbolic_colors()
     guint32 colorsetwarning = 0xF57900ff;
     guint32 colorseterror = 0xcc0000ff;
     colorsetbase = prefs->getInt("/theme/" + themeiconname + "/symbolicBaseColor", colorsetbase);
-    sp_svg_write_color(colornamed, sizeof(colornamed), colorsetbase);
     colorsetsuccess = prefs->getInt("/theme/" + themeiconname + "/symbolicSuccessColor", colorsetsuccess);
-    sp_svg_write_color(colornamedsuccess, sizeof(colornamedsuccess), colorsetsuccess);
     colorsetwarning = prefs->getInt("/theme/" + themeiconname + "/symbolicWarningColor", colorsetwarning);
-    sp_svg_write_color(colornamedwarning, sizeof(colornamedwarning), colorsetwarning);
     colorseterror = prefs->getInt("/theme/" + themeiconname + "/symbolicErrorColor", colorseterror);
+    sp_svg_write_color(colornamed, sizeof(colornamed), colorsetbase);
+    sp_svg_write_color(colornamedsuccess, sizeof(colornamedsuccess), colorsetsuccess);
+    sp_svg_write_color(colornamedwarning, sizeof(colornamedwarning), colorsetwarning);
     sp_svg_write_color(colornamederror, sizeof(colornamederror), colorseterror);
     sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorsetbase_inverse);
     css_str += "*{-gtk-icon-palette: success ";
