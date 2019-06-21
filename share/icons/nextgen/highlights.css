@@ -4,35 +4,35 @@
 */
 
 .base {
-    fill: #333333;
+    fill: #000000;
 }
 
 .success {
-    fill: #d54ac9;
+    fill: #00990A;
 }
 
 .warning {
-    fill: #177579;
+    fill: #FF1990;
 }
 
 .error {
-    fill: #457211;
+    fill: #00AAFF;
 }
 
 .dark .base {
-    fill: #CCCCCC;
+    fill: #ffffff;
 }
 
 .dark .success {
-    fill: #fa85f2;
+    fill: #00990A;
 }
 
 .dark .warning {
-    fill: #8fecf0;
+    fill: #FF1990;
 }
 
 .dark .error {
-    fill: #c1f08c;
+    fill: #00AAFF;
 }
 
 

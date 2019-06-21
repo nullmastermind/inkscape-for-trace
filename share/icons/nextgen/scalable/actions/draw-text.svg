@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="svg1"
+   width="16"
+   height="16"
+   viewBox="0 0 16 16"
+   sodipodi:docname="draw-text-symbolic.svg"
+   inkscape:version="1.0alpha2 (2892b30, 2019-06-19)">
+  <metadata
+     id="metadata1053">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs1051" />
+  <sodipodi:namedview
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     id="namedview"
+     showgrid="true"
+     inkscape:zoom="44.8"
+     inkscape:cx="7.6039887"
+     inkscape:cy="6.4334239"
+     inkscape:window-width="1858"
+     inkscape:window-height="1177"
+     inkscape:window-x="54"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g1721"
+     inkscape:document-rotation="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid" />
+  </sodipodi:namedview>
+  <g
+     id="g1721"
+     transform="matrix(0.49833642,0,0,0.49833642,-481.02421,-133.21522)"
+     style="stroke-width:2.00668">
+    <path
+       style="opacity:1;stroke-width:2.00668;stop-opacity:1"
+       d="m 984.4948,290.10777 h -8.75 l -1.28334,3.29888 h -5.86666 l 8.775,-20.06676 h 5.59167 l 8.74999,20.06676 h -5.925 z m -4.35834,-11.1444 -2.51666,6.39265 h 5 z"
+       id="path1713"
+       inkscape:connector-curvature="0" />
+    <rect
+       id="rect1717"
+       height="28.093475"
+       width="2.8921192"
+       class="success"
+       y="269.32654"
+       x="994.47473"
+       style="stroke-width:2.00668" />
+  </g>
+</svg>

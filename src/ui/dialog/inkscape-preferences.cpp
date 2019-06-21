@@ -621,8 +621,6 @@ void InkscapePreferences::symbolicThemeCheck()
     }
     if (_symbolic_icons.get_parent()) {
         if (!symbolic) {
-            // 2 first order might important
-            _symbolic_base_colors.set_active(true);
             _symbolic_icons.set_active(false);
             _symbolic_icons.get_parent()->hide();
             _symbolic_base_colors.get_parent()->hide();
@@ -642,14 +640,16 @@ void InkscapePreferences::symbolicThemeCheck()
 void InkscapePreferences::resetIconsColors()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
     if (!prefs->getBool("/theme/symbolicIcons", false)) {
         _symbolic_base_colors.set_sensitive(false);
         _symbolic_base_color.setSensitive(false);
         _symbolic_success_color.setSensitive(false);
         _symbolic_warning_color.setSensitive(false);
         _symbolic_error_color.setSensitive(false);
-    } else if (prefs->getBool("/theme/symbolicDefaultColors", true)) {
-        Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+    } else if (prefs->getBool("/theme/symbolicDefaultColors", true) ||
+              !prefs->getEntry("/theme/" + themeiconname + "/symbolicBaseColor").isValid())
+    {
         Gdk::RGBA normal_color = _symbolic_base_color.get_style_context()->get_color();
         Gdk::RGBA success_color = _symbolic_success_color.get_style_context()->get_color();
         Gdk::RGBA warning_color = _symbolic_warning_color.get_style_context()->get_color();
@@ -797,13 +797,16 @@ void InkscapePreferences::toggleSymbolic()
             window->get_style_context()->remove_class("regular");
         }
         _symbolic_base_colors.set_sensitive(true);
-        resetIconsColors();
+        changeIconsColors();
     } else {
         if (window) {
             window->get_style_context()->add_class("regular");
             window->get_style_context()->remove_class("symbolic");
         }
-        _symbolic_base_colors.set_active(true);
+        auto const screen = Gdk::Screen::get_default();
+        if (INKSCAPE.colorizeprovider) {
+            Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider);
+        }
         _symbolic_base_colors.set_sensitive(false);
     }
     INKSCAPE.signal_change_theme.emit();
