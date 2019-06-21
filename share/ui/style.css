@@ -153,6 +153,10 @@ image {
     color: @success_color;
 }
 
+.symboliccolors:disabled * {
+    opacity: 0.2;
+}
+
 GtkWidget,
 widget {
     /*    font-size: 12pt; */

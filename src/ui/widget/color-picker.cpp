@@ -37,6 +37,7 @@ ColorPicker::ColorPicker (const Glib::ustring& title, const Glib::ustring& tip,
     _preview.show();
     add (_preview);
     set_tooltip_text (tip);
+    _parent_dialog = nullptr;
     _selected_color.signal_changed.connect(sigc::mem_fun(this, &ColorPicker::_onSelectedColorChanged));
     _selected_color.signal_dragged.connect(sigc::mem_fun(this, &ColorPicker::_onSelectedColorChanged));
     _selected_color.signal_released.connect(sigc::mem_fun(this, &ColorPicker::_onSelectedColorChanged));
@@ -57,18 +58,12 @@ void ColorPicker::setupDialog(const Glib::ustring &title)
     _colorSelectorDialog.set_border_width (4);
 
     _color_selector = Gtk::manage(new ColorNotebook(_selected_color));
-    if (_transientwindow) {
-        Glib::RefPtr<Gdk::Window> window = get_parent_window();
-        if (window) {
-            window->set_transient_for(_transientwindow);
-        }
-    }
     _colorSelectorDialog.get_content_area()->pack_start (
               *_color_selector, true, true, 0);
     _color_selector->show();
 }
 
-void ColorPicker::setTransientFor(Glib::RefPtr<Gdk::Window> transientwindow) { _transientwindow = transientwindow; }
+void ColorPicker::setParentDialog(Gtk::Widget *parent_dialog) { _parent_dialog = parent_dialog; }
 
 void ColorPicker::setSensitive(bool sensitive) { set_sensitive(sensitive); }
 
@@ -99,11 +94,19 @@ void ColorPicker::on_clicked()
         _selected_color.setValue(_rgba);
         _updating = false;
     }
+    Gtk::Window *originalwindow = dynamic_cast<Gtk::Window *>(_parent_dialog->get_toplevel());
+    if (originalwindow) {
+        originalwindow->hide();
+    }
     _colorSelectorDialog.show();
     Glib::RefPtr<Gdk::Window> window = get_parent_window();
     if (window) {
         window->focus(1);
     }
+    if (originalwindow) {
+        originalwindow->show();
+    }
+
 }
 
 void ColorPicker::on_changed (guint32)

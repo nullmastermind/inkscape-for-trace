@@ -797,11 +797,7 @@ void InkscapePreferences::themeChange()
             window->get_style_context()->add_class("bright");
             window->get_style_context()->remove_class("dark");
         }
-        if (!prefs->getEntry("/theme/" + themeiconname + "/symbolicBaseColor").isValid()) {
-            resetIconsColors();
-        } else {
-            changeIconsColors();
-        }
+        resetIconsColors();
         INKSCAPE.signal_change_theme.emit();
     }
 }
@@ -1121,17 +1117,18 @@ void InkscapePreferences::initPageUI()
     _symbolic_success_color.get_style_context()->add_class("system_success_color");
     _symbolic_warning_color.get_style_context()->add_class("system_warning_color");
     _symbolic_error_color.get_style_context()->add_class("system_error_color");
+    _symbolic_base_color.get_style_context()->add_class("symboliccolors");
+    _symbolic_success_color.get_style_context()->add_class("symboliccolors");
+    _symbolic_warning_color.get_style_context()->add_class("symboliccolors");
+    _symbolic_error_color.get_style_context()->add_class("symboliccolors");
     _symbolic_base_color.connectChanged(sigc::mem_fun(this, &InkscapePreferences::changeIconsColor));
     _symbolic_warning_color.connectChanged(sigc::mem_fun(this, &InkscapePreferences::changeIconsColor));
     _symbolic_success_color.connectChanged(sigc::mem_fun(this, &InkscapePreferences::changeIconsColor));
     _symbolic_error_color.connectChanged(sigc::mem_fun(this, &InkscapePreferences::changeIconsColor));
-    Glib::RefPtr<Gdk::Window> window = get_parent_window();
-    if (window) {
-        _symbolic_base_color.setTransientFor(window);
-        _symbolic_success_color.setTransientFor(window);
-        _symbolic_warning_color.setTransientFor(window);
-        _symbolic_error_color.setTransientFor(window);
-    }
+    _symbolic_base_color.setParentDialog(this);
+    _symbolic_success_color.setParentDialog(this);
+    _symbolic_warning_color.setParentDialog(this);
+    _symbolic_error_color.setParentDialog(this);
     Gtk::Box *icon_buttons = Gtk::manage(new Gtk::Box());
     icon_buttons->pack_start(_symbolic_base_color, true, true, 4);
     _page_theme.add_line(false, "", *icon_buttons, _("Icon color"),
