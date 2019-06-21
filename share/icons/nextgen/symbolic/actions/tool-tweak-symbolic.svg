@@ -13,7 +13,18 @@
    height="16"
    viewBox="0 0 16 16"
    sodipodi:docname="tool-tweak-symbolic.svg"
-   inkscape:version="1.0alpha2 (2892b30, 2019-06-19)">
+   inkscape:version="1.0alpha2 (119fb3b5e8, 2019-06-21, custom)">
+  <style
+     id="s0">.base {  }
+.success {  }
+.warning {  }
+.error {  }
+.dark {  }
+</style>
+  <style
+     id="s2"> 
+     @import '../../highlights.css'; 
+  </style>
   <title
      id="title3468">symbolic icons</title>
   <metadata
@@ -29,35 +40,7 @@
     </rdf:RDF>
   </metadata>
   <defs
-     id="defs941">
-    <inkscape:path-effect
-       id="path-effect1605"
-       allow_transforms="false"
-       method="bsplinespiro"
-       linkeditem="#path945"
-       effect="clone_original" />
-    <inkscape:path-effect
-       id="path-effect1601"
-       allow_transforms="false"
-       method="bsplinespiro"
-       linkeditem="#path945"
-       effect="clone_original" />
-    <inkscape:path-effect
-       effect="clone_original"
-       linkeditem="#path945"
-       method="bsplinespiro"
-       allow_transforms="false"
-       id="path-effect949" />
-    <inkscape:path-effect
-       effect="join_type"
-       id="path-effect947"
-       is_visible="true"
-       linecap_type="butt"
-       line_width="5.4"
-       linejoin_type="round"
-       miter_limit="100"
-       attempt_force_join="true" />
-  </defs>
+     id="defs941" />
   <sodipodi:namedview
      inkscape:snap-global="true"
      objecttolerance="10"
@@ -65,13 +48,13 @@
      guidetolerance="10"
      id="namedview"
      showgrid="true"
-     inkscape:zoom="22.4"
-     inkscape:cx="-3.5945637"
-     inkscape:cy="11.467773"
-     inkscape:window-width="1858"
-     inkscape:window-height="1177"
-     inkscape:window-x="54"
-     inkscape:window-y="-8"
+     inkscape:zoom="44.8"
+     inkscape:cx="4.7025426"
+     inkscape:cy="10.042447"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg1"
      inkscape:document-rotation="0">
@@ -83,12 +66,17 @@
        spacingy="0.5"
        empspacing="4" />
   </sodipodi:namedview>
-  <style
-     id="style226">.success { fill:#25FF4E; }
-.error { fill:#CC0000; }
-.warning { fill:#FF25CE; }
-</style>
-  <path
-     id="path1702"
-     d="M 0.5,15 0.5446353,9.3298225 c 0,0 1.7452285,-0.05625 3.1927949,-1.0204006 C 6.206793,6.664704 5.1119198,3.3735133 8.7560327,2.1882189 11.32823,1.3515789 13.617319,2.803097 13.814229,4.8532869 13.857136,5.300032 13.514545,5.5660383 13.085395,5.2953538 12.291964,4.7949001 11.198867,4.946675 10.65436,5.7842873 c -1.0542341,1.6217231 0.211599,3.2069115 2.031348,3.5926018 1.330726,0.2820433 2.858928,-0.047333 2.858928,-0.047333 L 15.5,15 Z" />
+  <g
+     inkscape:label="tool-tweak"
+     id="g0">
+    <path
+       id="background"
+       d="M 0,0 H 16 V 16 H 0 Z"
+       style="opacity:0"
+       inkscape:connector-curvature="0" />
+    <path
+       class="base"
+       id="path1702"
+       d="M 0.5,15 0.5446353,9.3298225 c 0,0 1.7452285,-0.05625 3.1927949,-1.0204006 C 6.206793,6.664704 5.1119198,3.3735133 8.7560327,2.1882189 11.32823,1.3515789 13.617319,2.803097 13.814229,4.8532869 13.857136,5.300032 13.514545,5.5660383 13.085395,5.2953538 12.291964,4.7949001 11.198867,4.946675 10.65436,5.7842873 c -1.0542341,1.6217231 0.211599,3.2069115 2.031348,3.5926018 1.330726,0.2820433 2.858928,-0.047333 2.858928,-0.047333 L 15.5,15 Z" />
+  </g>
 </svg>

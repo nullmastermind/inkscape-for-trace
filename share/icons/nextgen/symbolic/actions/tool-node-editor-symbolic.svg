@@ -13,7 +13,18 @@
    height="16"
    viewBox="0 0 16 16"
    sodipodi:docname="tool-node-editor-symbolic.svg"
-   inkscape:version="1.0alpha2 (2892b30, 2019-06-19)">
+   inkscape:version="1.0alpha2 (119fb3b5e8, 2019-06-21, custom)">
+  <style
+     id="s0">.base {  }
+.success {  }
+.warning {  }
+.error {  }
+.dark {  }
+</style>
+  <style
+     id="s2"> 
+     @import '../../highlights.css'; 
+  </style>
   <metadata
      id="metadata1609">
     <rdf:RDF>
@@ -34,14 +45,14 @@
      id="namedview"
      showgrid="true"
      inkscape:zoom="13.583094"
-     inkscape:cx="7.978469"
-     inkscape:cy="23.410824"
-     inkscape:window-width="1858"
-     inkscape:window-height="1177"
-     inkscape:window-x="54"
-     inkscape:window-y="-8"
+     inkscape:cx="6.0002594"
+     inkscape:cy="19.572714"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g986"
+     inkscape:current-layer="svg1"
      inkscape:document-rotation="0"
      inkscape:snap-global="true">
     <inkscape:grid
@@ -49,44 +60,37 @@
        id="grid" />
   </sodipodi:namedview>
   <g
-     inkscape:label="edit-paths"
-     id="g986"
-     transform="matrix(0.43312848,0,0,0.43312848,-416.83976,-62.667691)"
-     style="stroke-width:2.30878">
-    <g
-       inkscape:label="PATH"
-       id="g982"
-       style="display:inline;stroke-width:2.30878"
-       transform="translate(-1.7847355)">
-      <g
-         inkscape:label="path"
-         id="g978"
-         style="display:inline;opacity:0.5;stroke-width:2.30117"
-         transform="matrix(1.0033091,0,0,1.0033091,-3.1982322,-0.58179758)">
-        <path
-           inkscape:connector-curvature="0"
-           id="path974"
-           d="m 971.66,159.44 c -3.24,4.65 -5.15,10.29 -5.15,16.38 h 1.7 c 0,-5.03 1.39,-9.75 3.8,-13.79 z"
-           style="opacity:1;stroke-width:2.30117" />
-        <path
-           inkscape:connector-curvature="0"
-           id="path976"
-           d="m 979.99,151.49 2.21,0.67 c 3.87,-2.14 8.32,-3.37 13.05,-3.37 v -1.7 c -5.61,0 -10.84,1.61 -15.26,4.4 z"
-           style="opacity:1;stroke-width:2.30117" />
-      </g>
-      <path
-         inkscape:label="node"
-         inkscape:connector-curvature="0"
-         id="path980"
-         d="m 982.64787,163.15642 h -12.43514 v -12.43514 h 12.43514 z m -9.79371,-2.63212 h 7.16159 v -7.1616 h -7.16159 z"
-         style="display:inline;stroke-width:2.30878" />
-    </g>
+     id="g0"
+     inkscape:label="tool-node-editor">
     <path
-       inkscape:label="cursor"
-       id="polygon984"
-       style="display:inline;stroke-width:2.30878"
-       d="m 985.53237,164.58 v 14.65 l 4.44763,-5.38 7.05,-1.63 z"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccc" />
+       style="opacity:0"
+       d="M 0,0 H 16 V 16 H 0 Z"
+       id="background" />
+    <path
+       class="base"
+       style="opacity:0.5"
+       d="M 3.24824,6.3668414 C 1.8402599,8.3875536 1.010247,10.838482 1.010247,13.484963 h 0.738755 c 0,-2.185846 0.6040408,-4.2369772 1.6513346,-5.9926066 z"
+       id="path974"
+       inkscape:connector-curvature="0" />
+    <path
+       class="base"
+       style="opacity:0.5"
+       d="M 6.8681394,2.9120755 7.8285209,3.2032319 C 9.5102748,2.2732697 11.444075,1.7387588 13.499552,1.7387588 v -0.738755 c -2.437892,0 -4.7106497,0.6996444 -6.6314126,1.9120717 z"
+       id="path976"
+       inkscape:connector-curvature="0" />
+    <path
+       class="base"
+       inkscape:label="node"
+       inkscape:connector-curvature="0"
+       id="path980"
+       d="M 7.9999983,8.0000012 H 2.613985 V 2.6139879 H 7.9999983 Z M 3.7580636,6.8599551 H 6.8599522 V 3.7580621 H 3.7580636 Z" />
+    <path
+       class="base"
+       sodipodi:nodetypes="ccccc"
+       inkscape:connector-curvature="0"
+       d="m 10.022377,8.6165942 v 6.3453318 l 1.926396,-2.330231 3.053555,-0.705999 z"
+       id="polygon984"
+       inkscape:label="cursor" />
   </g>
 </svg>

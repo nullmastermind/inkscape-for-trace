@@ -7,13 +7,24 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:version="1.0alpha2 (2892b30, 2019-06-19)"
+   inkscape:version="1.0alpha2 (119fb3b5e8, 2019-06-21, custom)"
    sodipodi:docname="draw-eraser-symbolic.svg"
    viewBox="0 0 16 16"
    height="16"
    width="16"
    id="svg1"
    version="1.1">
+  <style
+     id="s0">.base {  }
+.success {  }
+.warning {  }
+.error {  }
+.dark {  }
+</style>
+  <style
+     id="s2"> 
+     @import '../../highlights.css'; 
+  </style>
   <metadata
      id="metadata1012">
     <rdf:RDF>
@@ -30,14 +41,14 @@
   <sodipodi:namedview
      inkscape:snap-bbox="true"
      inkscape:document-rotation="0"
-     inkscape:current-layer="draw-eraser"
+     inkscape:current-layer="svg1"
      inkscape:window-maximized="1"
-     inkscape:window-y="-8"
-     inkscape:window-x="54"
-     inkscape:window-height="1177"
-     inkscape:window-width="1858"
-     inkscape:cy="3.5629604"
-     inkscape:cx="2.7558553"
+     inkscape:window-y="27"
+     inkscape:window-x="0"
+     inkscape:window-height="1016"
+     inkscape:window-width="1920"
+     inkscape:cy="8.2507014"
+     inkscape:cx="4.5550693"
      inkscape:zoom="32"
      showgrid="true"
      id="namedview"
@@ -49,37 +60,37 @@
        type="xygrid" />
   </sodipodi:namedview>
   <g
-     id="draw-eraser"
-     inkscape:label="00151"
-     transform="matrix(0.666667,0,0,0.666666,-190,-660.90757)">
+     id="g0"
+     inkscape:label="draw-eraser">
     <path
-       style="opacity:0;fill:none"
-       d="m 285,991.36218 h 24 v 24.00002 h -24 z"
-       id="rect29999"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       style="opacity:0"
+       d="M 0,0 H 16 V 16 H 0 Z"
+       id="background" />
     <path
+       class="base"
        sodipodi:nodetypes="sccssss"
        id="path30001"
-       d="m 301.00776,993.28408 -6.02336,5.76562 6.0468,6.5153 6.2344,-5.8122 c 0.35589,-0.33179 0.28158,-1.03672 -0.1875,-1.5469 l -4.46854,-4.86007 c -0.61914,-0.67338 -1.1607,-0.48398 -1.6018,-0.0617 z"
-       style="opacity:1"
+       d="M 10.671831,1.2812656 6.6562611,5.1250091 10.687458,9.4685388 14.843721,5.593742 c 0.23726,-0.2211931 0.18772,-0.6911461 -0.125,-1.0312658 L 11.739697,1.3224322 C 11.326937,0.87351261 10.965898,0.99977917 10.671831,1.2812989 Z"
        inkscape:connector-curvature="0" />
     <path
+       class="base"
        sodipodi:nodetypes="csssscc"
        id="path30003"
-       d="m 293.25,1000.69 -3.30015,3.0831 c -0.50109,0.4682 -0.69828,1.0761 -0.24058,1.5957 l 4.38443,4.9782 c 0.51254,0.5819 1.18589,0.5869 1.6114,0.1874 l 3.5449,-3.3284 z"
+       d="M 5.4999954,6.2185415 3.2998973,8.2739398 C 2.9658375,8.5860728 2.8343776,8.9913392 3.1395107,9.3377389 l 2.9229509,3.3187971 c 0.3416931,0.387933 0.7905927,0.391266 1.0742658,0.124933 l 2.3632647,-2.218931 z"
        style="opacity:0.5"
        inkscape:connector-curvature="0" />
     <path
+       class="base"
        sodipodi:nodetypes="cscccc"
-       style="opacity:1"
-       d="m 298.49985,1011.8624 c -0.5817,0 -1.05,0.446 -1.05,1 0,0.554 0.4683,1 1.05,1 h 9 l 1.5e-4,-2 z"
+       d="m 8.9998925,13.666802 c -0.3877997,0 -0.6999994,0.297333 -0.6999994,0.666666 0,0.369333 0.3121997,0.666666 0.6999994,0.666666 h 5.9999955 l 10e-5,-1.333332 z"
        id="path30005"
        inkscape:connector-curvature="0" />
     <path
+       class="base"
        inkscape:connector-curvature="0"
        id="path30005-4"
-       d="m 290.18423,1013.8624 c 0.5817,0 1.05,-0.446 1.05,-1 0,-0.554 -0.4683,-1 -1.05,-1 l -3.68437,0 v 2 z"
-       style="opacity:1;stroke-width:1"
+       d="m 3.4561505,15.000134 c 0.3877996,0 0.6999994,-0.297333 0.6999994,-0.666666 0,-0.369333 -0.3121998,-0.666666 -0.6999994,-0.666666 H 0.99990583 v 1.333332 z"
        sodipodi:nodetypes="cscccc" />
   </g>
 </svg>

@@ -7,7 +7,7 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:version="1.0alpha2 (2892b30, 2019-06-19)"
+   inkscape:version="1.0alpha2 (119fb3b5e8, 2019-06-21, custom)"
    sodipodi:docname="draw-cuboid-symbolic.svg"
    viewBox="0 0 16 16"
    height="16"
@@ -25,6 +25,17 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <style
+     id="s0">.base {  }
+.success {  }
+.warning {  }
+.error {  }
+.dark {  }
+</style>
+  <style
+     id="s2"> 
+     @import '../../highlights.css'; 
+  </style>
   <defs
      id="defs1280">
     <inkscape:path-effect
@@ -36,63 +47,18 @@
        is_visible="true"
        id="path-effect979"
        effect="join_type" />
-    <inkscape:path-effect
-       effect="join_type"
-       id="path-effect961"
-       is_visible="true"
-       linecap_type="butt"
-       line_width="1"
-       linejoin_type="extrp_arc"
-       miter_limit="100"
-       attempt_force_join="true" />
-    <inkscape:path-effect
-       attempt_force_join="true"
-       miter_limit="100"
-       linejoin_type="extrp_arc"
-       line_width="1"
-       linecap_type="butt"
-       is_visible="true"
-       id="path-effect946"
-       effect="join_type" />
-    <inkscape:path-effect
-       effect="join_type"
-       id="path-effect947"
-       is_visible="true"
-       linecap_type="butt"
-       line_width="1.83758"
-       linejoin_type="extrp_arc"
-       miter_limit="100"
-       attempt_force_join="true" />
-    <inkscape:path-effect
-       effect="join_type"
-       id="path-effect945"
-       is_visible="true"
-       linecap_type="butt"
-       line_width="1.83758"
-       linejoin_type="extrp_arc"
-       miter_limit="100"
-       attempt_force_join="true" />
-    <inkscape:path-effect
-       effect="join_type"
-       id="path-effect943"
-       is_visible="true"
-       linecap_type="butt"
-       line_width="1.83758"
-       linejoin_type="extrp_arc"
-       miter_limit="100"
-       attempt_force_join="true" />
   </defs>
   <sodipodi:namedview
      inkscape:document-rotation="0"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="svg1"
      inkscape:window-maximized="1"
-     inkscape:window-y="-8"
-     inkscape:window-x="54"
-     inkscape:window-height="1177"
-     inkscape:window-width="1858"
-     inkscape:cy="30.703057"
-     inkscape:cx="2.0681753"
-     inkscape:zoom="11.2"
+     inkscape:window-y="27"
+     inkscape:window-x="0"
+     inkscape:window-height="1016"
+     inkscape:window-width="1920"
+     inkscape:cy="10.823388"
+     inkscape:cx="6.7490701"
+     inkscape:zoom="31.678384"
      showgrid="true"
      id="namedview"
      guidetolerance="10"
@@ -104,31 +70,36 @@
        type="xygrid" />
   </sodipodi:namedview>
   <g
-     inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="plates">
-    <polygon
-       inkscape:label="right"
-       style="display:inline;opacity:0.4;fill:#ff00ff;stroke-width:1.10829;stop-opacity:1"
-       class="warning"
-       transform="matrix(0.49102052,0,0,0.49102052,-473.83817,-187.11363)"
-       id="polygon1116"
-       points="993.53,404.59 981.3,411.68 981.3,397.37 993.53,390.27 " />
-    <polygon
-       inkscape:label="left"
-       class="warning"
-       style="display:inline;opacity:1;fill:#ff00ff;stroke-width:1.10829;stop-opacity:1"
-       transform="matrix(0.49102052,0,0,0.49102052,-473.83817,-187.11363)"
-       points="969.08,390.27 969.08,404.59 981.3,411.68 981.3,397.37 "
-       id="polygon1118" />
-    <polygon
-       inkscape:label="top"
-       class="warning"
-       style="display:inline;opacity:0.2;fill:#ff00ff;stroke-width:1.10829;stop-opacity:1"
-       transform="matrix(0.49102052,0,0,0.49102052,-473.83817,-187.11363)"
-       id="polygon1122"
-       points="981.3,397.37 969.08,390.27 981.3,383.18 993.53,390.27 " />
+     id="g0"
+     inkscape:label="draw-cuboid">
     <path
+       inkscape:connector-curvature="0"
+       style="opacity:0"
+       d="M 0,0 H 16 V 16 H 0 Z"
+       id="background" />
+    <path
+       id="polygon1116"
+       style="opacity:0.4"
+       inkscape:label="right"
+       transform="matrix(0.49102052,0,0,0.49102052,-473.83817,-187.11363)"
+       d="m 993.53,404.59 -12.23,7.09 v -14.31 l 12.23,-7.1 z"
+       class="warning" />
+    <path
+       id="polygon1118"
+       style="opacity:1"
+       inkscape:label="left"
+       transform="matrix(0.49102052,0,0,0.49102052,-473.83817,-187.11363)"
+       d="m 969.08,390.27 v 14.32 l 12.22,7.09 v -14.31 z"
+       class="warning" />
+    <path
+       id="polygon1122"
+       style="opacity:0.2"
+       inkscape:label="top"
+       transform="matrix(0.49102052,0,0,0.49102052,-473.83817,-187.11363)"
+       d="m 981.3,397.37 -12.22,-7.1 12.22,-7.09 12.23,7.09 z"
+       class="warning" />
+    <path
+       class="base"
        inkscape:label="outline"
        inkscape:original-d="M 8.0002664,8.0031909 14.005452,4.5169495 8.0002708,1.0356139 2,4.5169495 v 7.0314135 l 6.0002708,3.481335 6.0051812,-3.481335 V 4.5169495 L 8.0002664,8.0031909 2,4.5169495 8.0002708,8.0031952 v 7.0265028"
        inkscape:path-effect="#path-effect979"

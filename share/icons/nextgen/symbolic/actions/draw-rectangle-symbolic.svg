@@ -7,13 +7,24 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:version="1.0alpha2 (2892b30, 2019-06-19)"
+   inkscape:version="1.0alpha2 (119fb3b5e8, 2019-06-21, custom)"
    sodipodi:docname="draw-rectangle-symbolic.svg"
    viewBox="0 0 16 16"
    height="16"
    width="16"
    id="svg1"
    version="1.1">
+  <style
+     id="s0">.base {  }
+.success {  }
+.warning {  }
+.error {  }
+.dark {  }
+</style>
+  <style
+     id="s2"> 
+     @import '../../highlights.css'; 
+  </style>
   <metadata
      id="metadata1678">
     <rdf:RDF>
@@ -40,15 +51,15 @@
   <sodipodi:namedview
      inkscape:snap-global="false"
      inkscape:document-rotation="0"
-     inkscape:current-layer="draw-rectangle"
+     inkscape:current-layer="svg1"
      inkscape:window-maximized="1"
-     inkscape:window-y="-8"
-     inkscape:window-x="54"
-     inkscape:window-height="1177"
-     inkscape:window-width="1858"
-     inkscape:cy="15.643266"
-     inkscape:cx="16.396526"
-     inkscape:zoom="15.839192"
+     inkscape:window-y="27"
+     inkscape:window-x="0"
+     inkscape:window-height="1016"
+     inkscape:window-width="1920"
+     inkscape:cy="10.361318"
+     inkscape:cx="4.468584"
+     inkscape:zoom="22.4"
      showgrid="true"
      id="namedview"
      guidetolerance="10"
@@ -59,21 +70,28 @@
        type="xygrid" />
   </sodipodi:namedview>
   <g
-     id="draw-rectangle"
-     inkscape:label="rectangle"
-     transform="matrix(0.666667,0,0,0.666667,-190,-413.57479)">
+     inkscape:label="draw-rectangle"
+     id="g0">
+    <path
+       id="background"
+       d="M 0,0 H 16 V 16 H 0 Z"
+       style="opacity:0"
+       inkscape:connector-curvature="0" />
     <path
        class="warning"
-       d="m 288.69,624 h 16.62 v 16.62 H 288.7 Z"
+       d="M 1.7193115,1.6799758 H 14.280941 V 14.241606 H 1.7268697 Z"
        inkscape:label="fill"
-       style="opacity:0.6;fill:#ff00ff"
-       id="rect938" />
+       style="opacity:0.6"
+       id="rect938"
+       inkscape:connector-curvature="0" />
     <path
+       class="base"
        inkscape:label="stroke"
        inkscape:original-d="m 288.69,624.05206 h 16.61965 v 16.61965 H 288.69 Z"
        inkscape:path-effect="#path-effect4438"
        inkscape:connector-curvature="0"
        d="m 305.30965,625.30206 a 1.25,1.25 0 0 0 -1.25,-1.25 v 16.61965 a 1.25,1.25 0 0 0 1.25,-1.25 H 288.69 a 1.25,1.25 0 0 0 1.25,1.25 v -16.61965 a 1.25,1.25 0 0 0 -1.25,1.25 z M 287.44,640.67171 a 1.25,1.25 0 0 0 1.25,1.25 h 16.61965 a 1.25,1.25 0 0 0 1.25,-1.25 v -16.61965 a 1.25,1.25 0 0 0 -1.25,-1.25 H 288.69 a 1.25,1.25 0 0 0 -1.25,1.25 z"
-       id="rect939" />
+       id="rect939"
+       transform="matrix(0.75581407,0,0,0.75581407,-216.47665,-469.94801)" />
   </g>
 </svg>

@@ -13,7 +13,18 @@
    height="16"
    viewBox="0 0 16 16"
    sodipodi:docname="draw-text-symbolic.svg"
-   inkscape:version="1.0alpha2 (2892b30, 2019-06-19)">
+   inkscape:version="1.0alpha2 (119fb3b5e8, 2019-06-21, custom)">
+  <style
+     id="s0">.base {  }
+.success {  }
+.warning {  }
+.error {  }
+.dark {  }
+</style>
+  <style
+     id="s2"> 
+     @import '../../highlights.css'; 
+  </style>
   <metadata
      id="metadata1053">
     <rdf:RDF>
@@ -33,36 +44,36 @@
      guidetolerance="10"
      id="namedview"
      showgrid="true"
-     inkscape:zoom="44.8"
-     inkscape:cx="7.6039887"
-     inkscape:cy="6.4334239"
-     inkscape:window-width="1858"
-     inkscape:window-height="1177"
-     inkscape:window-x="54"
-     inkscape:window-y="-8"
+     inkscape:zoom="31.678384"
+     inkscape:cx="12.62107"
+     inkscape:cy="11.836159"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g1721"
+     inkscape:current-layer="svg1"
      inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
        id="grid" />
   </sodipodi:namedview>
   <g
-     id="g1721"
-     transform="matrix(0.49833642,0,0,0.49833642,-481.02421,-133.21522)"
-     style="stroke-width:2.00668">
+     inkscape:label="draw-text"
+     id="g0">
     <path
-       style="opacity:1;stroke-width:2.00668;stop-opacity:1"
-       d="m 984.4948,290.10777 h -8.75 l -1.28334,3.29888 h -5.86666 l 8.775,-20.06676 h 5.59167 l 8.74999,20.06676 h -5.925 z m -4.35834,-11.1444 -2.51666,6.39265 h 5 z"
+       id="background"
+       d="M 0,0 H 16 V 16 H 0 Z"
+       style="opacity:0"
+       inkscape:connector-curvature="0" />
+    <path
+       class="base"
+       d="M 8.8419145,11.835478 H 3.9760811 L 3.2624218,13.71428 H 0 L 4.8797359,2.2857133 H 7.989237 L 12.855065,13.71428 H 9.5602006 Z M 6.4182624,5.4884385 5.0187597,9.1292269 H 7.799236 Z"
        id="path1713"
        inkscape:connector-curvature="0" />
-    <rect
+    <path
        id="rect1717"
-       height="28.093475"
-       width="2.8921192"
-       class="success"
-       y="269.32654"
-       x="994.47473"
-       style="stroke-width:2.00668" />
+       d="M 14.391706,0 H 16 v 16 h -1.608294 z"
+       class="success" />
   </g>
 </svg>

@@ -13,9 +13,18 @@
    height="16"
    viewBox="0 0 16 16"
    sodipodi:docname="draw-path-symbolic.svg"
-   inkscape:version="1.0alpha2 (2892b30, 2019-06-19)">
+   inkscape:version="1.0alpha2 (119fb3b5e8, 2019-06-21, custom)">
   <style
-     id="style3560" />
+     id="s0">.base {  }
+.success {  }
+.warning {  }
+.error {  }
+.dark {  }
+</style>
+  <style
+     id="s2"> 
+     @import '../../highlights.css'; 
+  </style>
   <metadata
      id="metadata2927">
     <rdf:RDF>
@@ -30,33 +39,6 @@
   </metadata>
   <defs
      id="defs2925">
-    <inkscape:path-effect
-       effect="join_type"
-       id="path-effect947"
-       is_visible="true"
-       linecap_type="butt"
-       line_width="0.4"
-       linejoin_type="extrp_arc"
-       miter_limit="100"
-       attempt_force_join="true" />
-    <inkscape:path-effect
-       attempt_force_join="true"
-       miter_limit="100"
-       linejoin_type="extrp_arc"
-       line_width="1"
-       linecap_type="butt"
-       is_visible="true"
-       id="path-effect944"
-       effect="join_type" />
-    <inkscape:path-effect
-       attempt_force_join="true"
-       miter_limit="100"
-       linejoin_type="extrp_arc"
-       line_width="0.2"
-       linecap_type="butt"
-       is_visible="true"
-       id="path-effect1632"
-       effect="join_type" />
     <inkscape:path-effect
        attempt_force_join="true"
        miter_limit="100"
@@ -73,13 +55,13 @@
      guidetolerance="10"
      id="namedview"
      showgrid="true"
-     inkscape:zoom="22.4"
-     inkscape:cx="11.298228"
-     inkscape:cy="11.819618"
-     inkscape:window-width="1858"
-     inkscape:window-height="1177"
-     inkscape:window-x="54"
-     inkscape:window-y="-8"
+     inkscape:zoom="11.2"
+     inkscape:cx="18.45432"
+     inkscape:cy="20.532635"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg1"
      inkscape:document-rotation="0"
@@ -89,48 +71,40 @@
        id="grid" />
   </sodipodi:namedview>
   <g
-     inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="Layer 1"
-     style="display:inline"
-     inkscape:highlight-color="8519679" />
-  <path
-     inkscape:connector-curvature="0"
-     id="path1021"
-     d="m 926.04996,243.32195 c -0.0458,-4.83381 4.62875,-17.36777 20.08641,-17.49932 l -0.0145,-1.69994 c -16.31548,0.13885 -21.82748,13.34625 -21.77187,19.21536 z"
-     class="st5"
-     style="opacity:0.5;fill:#000000;fill-rule:nonzero;stroke:none;stroke-width:2.1157;stop-opacity:1"
-     inkscape:path-effect="#path-effect2216"
-     inkscape:original-d="m 925.2,243.33 c -0.0507,-5.35146 5.04257,-18.22214 20.92914,-18.35734"
-     transform="matrix(0.47265641,0,0,0.47265641,-435.46146,-104.35914)"
-     sodipodi:nodetypes="cc" />
-  <rect
-     style="opacity:1;stroke-width:1;stop-opacity:1"
-     x="1.7965699"
-     y="1.9999998"
-     class="success"
-     width="0.62307298"
-     height="10.648046"
-     id="rect946" />
-  <rect
-     id="rect1023"
-     height="3.902128"
-     width="3.902128"
-     class="success"
-     y="8.7459183"
-     x="0.15704247"
-     style="opacity:1;stroke-width:0.999999;stop-opacity:1" />
-  <path
-     id="polygon1025"
-     style="opacity:1;stroke-width:0.999994;stop-opacity:1"
-     d="M 5.6986783,15.971348 13.178561,13.565393 14.545982,8.9992981 15.774274,7.7710084 14.810833,5.8965868 12.93897,4.930587 11.710679,6.158877 7.1394668,7.5262997 4.733513,15.00618 8.6666,11.073094 8.9059415,9.2927744 11.873548,8.8338792 11.412086,11.798918 9.631766,12.03826 Z"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="ccccccccccccccc" />
-  <circle
-     id="circle1027"
-     r="1.9439304"
-     cy="2.0151236"
-     cx="2.1081064"
-     style="opacity:1;stroke-width:0.999999;stop-opacity:1"
-     class="success" />
+     inkscape:label="draw-path"
+     id="g0">
+    <path
+       id="background"
+       d="M 0,0 H 16 V 16 H 0 Z"
+       style="opacity:0"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path1021"
+       d="m 926.04996,243.32195 c -0.0458,-4.83381 4.62875,-17.36777 20.08641,-17.49932 l -0.0145,-1.69994 c -16.31548,0.13885 -21.82748,13.34625 -21.77187,19.21536 z"
+       class="st5  base"
+       style="opacity:0.5"
+       inkscape:path-effect="#path-effect2216"
+       inkscape:original-d="m 925.2,243.33 c -0.0507,-5.35146 5.04257,-18.22214 20.92914,-18.35734"
+       transform="matrix(0.47265641,0,0,0.47265641,-435.46146,-104.35914)"
+       sodipodi:nodetypes="cc" />
+    <path
+       id="rect1023"
+       d="M 0.15704247,8.7459183 H 4.0591705 V 12.648046 H 0.15704247 Z"
+       class="success" />
+    <path
+       id="rect946"
+       d="m 1.7965699,1.9999998 h 0.623073 V 12.648045 h -0.623073 z"
+       class="success" />
+    <path
+       class="base"
+       id="polygon1025"
+       d="M 5.6986783,15.971348 13.178561,13.565393 14.545982,8.9992981 15.774274,7.7710084 14.810833,5.8965868 12.93897,4.930587 11.710679,6.158877 7.1394668,7.5262997 4.733513,15.00618 8.6666,11.073094 8.9059415,9.2927744 11.873548,8.8338792 11.412086,11.798918 9.631766,12.03826 Z"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccccccccccc" />
+    <path
+       id="circle1027"
+       d="M 4.0520368,2.0151236 A 1.9439304,1.9439304 0 0 1 2.1081064,3.959054 1.9439304,1.9439304 0 0 1 0.16417599,2.0151236 1.9439304,1.9439304 0 0 1 2.1081064,0.07119322 1.9439304,1.9439304 0 0 1 4.0520368,2.0151236"
+       class="success" />
+  </g>
 </svg>

@@ -7,13 +7,13 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:version="1.0alpha2 (2892b30, 2019-06-19)"
-   sodipodi:docname="dialog-fill-and-stroke-symbolic.svg"
-   viewBox="0 0 16 16"
-   height="16"
-   width="16"
+   version="1.1"
    id="svg1"
-   version="1.1">
+   width="16"
+   height="16"
+   viewBox="0 0 16 16"
+   sodipodi:docname="dialog-fill-and-stroke-symbolic.svg"
+   inkscape:version="1.0alpha2 (119fb3b5e8, 2019-06-21, custom)">
   <metadata
      id="metadata1160">
     <rdf:RDF>
@@ -26,59 +26,71 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <style id="s0">
+     .base {  }
+     .success {  }
+     .warning {  }
+     .error {  }
+     .dark {  }
+  </style>
+  <style id="s2"> 
+     @import '../../highlights.css'; 
+  </style>
   <defs
      id="defs1158" />
   <sodipodi:namedview
-     inkscape:document-rotation="0"
-     inkscape:current-layer="g3298"
-     inkscape:window-maximized="1"
-     inkscape:window-y="-8"
-     inkscape:window-x="54"
-     inkscape:window-height="1177"
-     inkscape:window-width="1858"
-     inkscape:cy="11.95595"
-     inkscape:cx="6.6159845"
-     inkscape:zoom="15.839192"
-     showgrid="true"
-     id="namedview"
-     guidetolerance="10"
+     objecttolerance="10"
      gridtolerance="10"
-     objecttolerance="10">
+     guidetolerance="10"
+     id="namedview"
+     showgrid="true"
+     inkscape:zoom="31.678384"
+     inkscape:cx="16.65179"
+     inkscape:cy="11.615726"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1"
+     inkscape:document-rotation="0">
     <inkscape:grid
-       id="grid"
-       type="xygrid" />
+       type="xygrid"
+       id="grid" />
   </sodipodi:namedview>
   <g
-     inkscape:label="brush"
-     style="stroke-width:2.19015"
-     transform="matrix(0.45658996,0,0,0.45658996,-420.29501,-121.35173)"
-     id="g3298">
+     id="g0"
+     inkscape:label="dialog-fill-and-stroke">
+    <path
+       id="background"
+       d="M 0,0 H 16 V 16 H 0 Z"
+       style="opacity:0"
+       inkscape:connector-curvature="0" />
+    <!--Add this to all icons at dirst place and do not change the id or style-->
     <path
        inkscape:connector-curvature="0"
-       inkscape:label="tip"
-       style="opacity:1;fill:#008000"
+       id="path3292"
+       d="M 5.384614,12.785273 C 4.9111683,15.112517 1.9793067,15.483291 0,15.061183 1.8367031,14.599147 2.024933,11.370682 4.2323932,11.638763 Z"
        class="error"
-       d="m 932.83066,295.03582 c -1.08342,5.3256 -7.79261,6.17407 -12.322,5.20813 4.20306,-1.05731 4.6338,-8.44524 9.68529,-7.83177 z"
-       id="path3292" />
+       inkscape:label="tip" />
     <path
-       inkscape:label="mid"
+       sodipodi:nodetypes="ccccc"
+       inkscape:connector-curvature="0"
+       d="M 6.1468328,8.881729 5.2115696,10.820094 6.2961354,11.90466 8.2345047,10.96941 Z"
        id="polygon3296"
-       style="stroke-width:2.19016"
-       d="m 934.5749,286.10306 -2.14023,4.4357 2.48189,2.48189 4.43571,-2.1402 z"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccc" />
+       inkscape:label="mid"
+       class="base" />
     <path
-       inkscape:label="top"
-       style="stroke-width:2.19015"
-       d="m 955.20167,271.54051 -13.80825,17.12157 -4.80348,-4.80344 16.82348,-14.0933 c 0.49604,-0.43074 1.24002,-0.3916 1.70991,0.0654 v 0 c 0.45683,0.46992 0.49604,1.21391 0.0784,1.70992 z"
+       class="base"
+       sodipodi:nodetypes="cccccccc"
+       inkscape:connector-curvature="0"
        id="path3290"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccccccc" />
+       d="M 15.160564,2.5180128 9.1264707,10 7.0273889,7.9009357 14.379113,1.7422779 c 0.216766,-0.1882299 0.541879,-0.171126 0.747217,0.028579 v 0 c 0.199631,0.2053512 0.216765,0.5304688 0.03426,0.7472212 z"
+       inkscape:label="top" />
     <path
-       inkscape:connector-curvature="0"
-       transform="matrix(2.1901489,0,0,2.1901489,920.50866,265.77836)"
-       d="M 0,0 V 1 13 H 1 V 1 H 12 V 0 H 1 Z"
-       style="opacity:1;fill:#008000"
-       id="rect44369" />
+       class="base"
+       id="rect44369"
+       d="M 0,0 V 0.9570773 12.442005 H 0.95707778 V 0.9570773 H 11.484929 V 0 H 0.95707778 Z"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>

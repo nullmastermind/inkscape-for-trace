@@ -14,14 +14,14 @@
    viewBox="0 0 16 16"
    sodipodi:docname="color-fill-symbolic.svg"
    inkscape:version="1.0alpha2 (2892b301b3, 2019-06-19)">
-  <style id="stylefornonsymbolic">
-     .base {}
-     .success {}
-     .warning {}
-     .error {}
-     .dark {}
+  <style id="s0">
+     .base {  }
+     .success {  }
+     .warning {  }
+     .error {  }
+     .dark {  }
   </style>
-  <style id="highlights"> 
+  <style id="s2"> 
      @import '../../highlights.css'; 
   </style>
   <metadata
@@ -142,9 +142,7 @@
        type="xygrid"
        id="grid" />
   </sodipodi:namedview>
-  <g
-     inkscape:label="gradient icon"
-     id="color-fill">
+  <g id="g0" inkscape:label="color-fill" >
     <path
        id="background"
        d="M 0,0 H 16 V 16 H 0 Z"

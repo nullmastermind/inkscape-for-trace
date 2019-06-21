@@ -7,13 +7,13 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:version="1.0alpha2 (2892b30, 2019-06-19)"
-   sodipodi:docname="draw-calligraphic-symbolic.svg"
-   viewBox="0 0 16 16"
-   height="16"
-   width="16"
+   version="1.1"
    id="svg1"
-   version="1.1">
+   width="16"
+   height="16"
+   viewBox="0 0 16 16"
+   sodipodi:docname="draw-calligraphic-symbolic.svg"
+   inkscape:version="1.0">
   <metadata
      id="metadata1160">
     <rdf:RDF>
@@ -26,61 +26,78 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <style
+     id="s0">.base {  }
+.success {  }
+.warning {  }
+.error {  }
+.dark {  }
+</style>
+  <style
+     id="s2"> 
+     @import '../../highlights.css'; 
+  </style>
   <defs
      id="defs1158" />
   <sodipodi:namedview
-     inkscape:document-rotation="0"
-     inkscape:current-layer="g3298"
-     inkscape:window-maximized="1"
-     inkscape:window-y="-8"
-     inkscape:window-x="54"
-     inkscape:window-height="1177"
-     inkscape:window-width="1858"
-     inkscape:cy="29.137275"
-     inkscape:cx="27.301568"
-     inkscape:zoom="15.839192"
-     showgrid="true"
-     id="namedview"
-     guidetolerance="10"
+     inkscape:snap-global="false"
+     objecttolerance="10"
      gridtolerance="10"
-     objecttolerance="10">
+     guidetolerance="10"
+     id="namedview"
+     showgrid="true"
+     inkscape:zoom="7.919596"
+     inkscape:cx="13.453635"
+     inkscape:cy="31.420339"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1"
+     inkscape:document-rotation="0">
     <inkscape:grid
-       id="grid"
-       type="xygrid" />
+       type="xygrid"
+       id="grid" />
   </sodipodi:namedview>
   <g
-     inkscape:label="brush"
-     style="stroke-width:2.19015"
-     transform="matrix(0.45658996,0,0,0.45658996,-420.29501,-121.35173)"
-     id="g3298">
+     id="g0"
+     inkscape:label="draw-calligraphic">
     <path
-       inkscape:label="tip"
-       style="opacity:1;fill:#008000"
-       class="success"
-       d="m 932.83066,295.03582 c -1.08342,5.3256 -7.79261,6.17407 -12.322,5.20813 4.20306,-1.05731 4.6338,-8.44524 9.68529,-7.83177 z"
+       inkscape:connector-curvature="0"
+       style="opacity:0"
+       d="M 0,0 H 16 V 16 H 0 Z"
+       id="background" />
+    <path
+       inkscape:connector-curvature="0"
        id="path3292"
-       inkscape:connector-curvature="0" />
-    <path
-       inkscape:label="mid"
-       id="polygon3296"
-       style="stroke-width:2.19016"
-       d="m 934.5749,286.10306 -2.14023,4.4357 2.48189,2.48189 4.43571,-2.1402 z"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccc" />
-    <path
-       inkscape:label="top"
-       style="stroke-width:2.19015"
-       d="m 955.20167,271.54051 -13.80825,17.12157 -4.80348,-4.80344 16.82348,-14.0933 c 0.49604,-0.43074 1.24002,-0.3916 1.70991,0.0654 v 0 c 0.45683,0.46992 0.49604,1.21391 0.0784,1.70992 z"
-       id="path3290"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccccccc" />
-    <path
-       inkscape:label="swush"
-       style="fill:#008000"
+       d="M 5.8671104,12.456846 C 5.4166091,14.671305 2.6268334,15.024111 0.74344921,14.62246 2.4911408,14.182815 2.6702485,11.11081 4.7707292,11.365899 Z"
        class="success"
-       d="m 925.64168,266.83983 c 12.64107,0.51969 11.82604,17.09086 1.46056,16.24039 -5.17733,-0.42479 -4.40344,4.59963 -4.40344,4.59963 -3.12819,-2.46332 -1.65601,-9.12079 4.17454,-8.63249 7.31435,0.61256 5.64011,-11.02709 -1.23166,-12.20753 z"
-       id="path3294"
+       inkscape:label="tip"
+       style="stroke-width:0.415814" />
+    <path
+       class="base"
+       sodipodi:nodetypes="ccccc"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cscsc" />
+       d="M 6.59239,8.742478 5.7024522,10.586905 6.734457,11.61891 8.5788877,10.728984 Z"
+       id="polygon3296"
+       inkscape:label="mid"
+       style="stroke-width:0.415814" />
+    <path
+       class="base"
+       sodipodi:nodetypes="cccccccc"
+       inkscape:connector-curvature="0"
+       id="path3290"
+       d="m 15.169291,2.6871646 -5.7416643,7.11939 -1.9973547,-1.997338 6.99544,-5.8601927 c 0.20626,-0.1791078 0.515618,-0.1628328 0.711004,0.027194 v 0 c 0.189957,0.1953994 0.206261,0.5047609 0.0326,0.7110088 z"
+       inkscape:label="top"
+       style="stroke-width:0.415814" />
+    <path
+       sodipodi:nodetypes="cscsc"
+       inkscape:connector-curvature="0"
+       id="path3294"
+       d="M 2.8778312,0.73255557 C 8.1341662,0.94864999 7.7952653,7.839176 3.4851527,7.4855386 1.3323459,7.3089049 1.6541403,9.3981295 1.6541403,9.3981295 0.3533948,8.3738464 0.96554799,5.6055766 3.3899728,5.8086186 6.4313826,6.0633296 5.73521,1.2233992 2.8778312,0.73255557 Z"
+       class="success"
+       inkscape:label="swush"
+       style="stroke-width:0.415814" />
   </g>
 </svg>

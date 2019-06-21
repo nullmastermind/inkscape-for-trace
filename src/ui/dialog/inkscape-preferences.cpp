@@ -691,7 +691,7 @@ void InkscapePreferences::resetIconsColors()
         prefs->setInt("/theme/" + themeiconname + "/symbolicSuccessColor", colorsetsuccess);
         prefs->setInt("/theme/" + themeiconname + "/symbolicWarningColor", colorsetwarning);
         prefs->setInt("/theme/" + themeiconname + "/symbolicErrorColor", colorseterror);
-        if (prefs->getBool("/theme/symbolicDefaultColors", true) {
+        if (prefs->getBool("/theme/symbolicDefaultColors", true)) {
             _symbolic_base_color.setSensitive(false);
             _symbolic_success_color.setSensitive(false);
             _symbolic_warning_color.setSensitive(false);
