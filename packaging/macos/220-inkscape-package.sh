@@ -24,24 +24,24 @@ jhbuild run gtk-mac-bundler inkscape.bundle
 
 # patch library locations
 install_name_tool -change @rpath/libinkscape_base.dylib @executable_path/../Resources/lib/inkscape/libinkscape_base.dylib $APP_EXE_DIR/Inkscape-bin
+
 install_name_tool -change @rpath/libpoppler.85.dylib @executable_path/../Resources/lib/libpoppler.85.dylib $APP_LIB_DIR/libpoppler-glib.8.dylib
 install_name_tool -change @rpath/libpoppler.85.dylib @executable_path/../Resources/lib/libpoppler.85.dylib $APP_LIB_DIR/inkscape/libinkscape_base.dylib
 install_name_tool -change @rpath/libpoppler-glib.8.dylib @executable_path/../Resources/lib/libpoppler-glib.8.dylib $APP_LIB_DIR/inkscape/libinkscape_base.dylib
 
 install_name_tool -change @executable_path/../Resources/lib/libcrypto.1.1.dylib @loader_path/libcrypto.1.1.dylib $APP_LIB_DIR/libssl.1.1.dylib
 
-
-# patch the launch script
+# set Inkscape's data directory via environment variables
 # TODO: as follow-up to https://gitlab.com/inkscape/inkscape/merge_requests/612,
 # it should not be necessary to rely on $INKSCAPE_DATADIR. Paths in
-# 'path-prefix.h' are supposed to work. Needs to be looked into with @ede123.
+# 'path-prefix.h' are supposed to work. Needs to be looked into.
 
 insert_before $APP_EXE_DIR/Inkscape '\$EXEC' 'export INKSCAPE_DATADIR=$bundle_data'
 insert_before $APP_EXE_DIR/Inkscape '\$EXEC' 'export INKSCAPE_LOCALEDIR=$bundle_data/locale'
 
 # add XDG paths to use native locations on macOS
 insert_before $APP_EXE_DIR/Inkscape 'export XDG_CONFIG_DIRS' '\
-export XDG_DATA_HOME=\"$HOME/Library/Application Support/Inkscape/data\"\
+export XDG_DATA_HOME=\"$HOME/Library/Application\\ Support/Inkscape/data\"\
 export XDG_CONFIG_HOME=\"$HOME/Library/Application Support/Inkscape/config\"\
 export XDG_CACHE_HOME=\"$HOME/Library/Application Support/Inkscape/cache\"\
 mkdir -p $XDG_DATA_HOME\
@@ -49,56 +49,174 @@ mkdir -p $XDG_CONFIG_HOME\
 mkdir -p $XDG_CACHE_HOME\
 '
 
-# add icon
-# TODO: create from Inkscape assets on-the-fly
-curl -L -o $APP_RES_DIR/inkscape.icns $URL_INKSCAPE_ICNS
+# update Inkscape version information
+/usr/libexec/PlistBuddy -c "Set CFBundleShortVersionString '$(get_inkscape_version) ($(get_repo_version $INK_DIR))'" $APP_PLIST
+/usr/libexec/PlistBuddy -c "Set CFBundleVersion '$(get_inkscape_version) ($(get_repo_version $INK_DIR))'" $APP_PLIST
 
-if [ -z $CI_JOB_ID ]; then   # running standalone
-  # update version information
-  /usr/libexec/PlistBuddy -c "Set CFBundleShortVersionString '1.0alpha2-g$(get_repo_version $SRC_DIR/inkscape)'" $APP_PLIST
-  /usr/libexec/PlistBuddy -c "Set CFBundleVersion '1.0alpha2-g$(get_repo_version $SRC_DIR/inkscape)'" $APP_PLIST
-else   # running as CI job
-  # update version information
-  /usr/libexec/PlistBuddy -c "Set CFBundleShortVersionString '1.0alpha2-g$(get_repo_version $SELF_DIR)'" $APP_PLIST
-  /usr/libexec/PlistBuddy -c "Set CFBundleVersion '1.0alpha2-g$(get_repo_version $SELF_DIR)'" $APP_PLIST
-fi
+# update minimum OS version
+/usr/libexec/PlistBuddy -c "Set LSMinimumSystemVersion '$MACOSX_DEPLOYMENT_TARGET'" $APP_PLIST
 
-### copy Python.framework ######################################################
+### generate application icon ##################################################
 
-# This section deals with bundling Python.framework into the application
-# and making it portable.
+# svg to png
 
-# Link Python executable version-less for the extensions to find it.
-# This will shadow the system's Python interpreter for Inkscape.
+jhbuild run pip3 install cairosvg==2.4.0
+jhbuild run pip3 install cairocffi==1.0.2
+
+(
+  export DYLD_FALLBACK_LIBRARY_PATH=/work/opt/lib
+  jhbuild run cairosvg -f png -s 8 -o $SRC_DIR/inkscape.png $INK_DIR/share/branding/inkscape.svg
+)
+
+# png to icns
+
+get_source $URL_PNG2ICNS
+./png2icns.sh $SRC_DIR/inkscape.png
+mv inkscape.icns $APP_RES_DIR
+
+### bundle Python.framework ####################################################
+
+# This section deals with bundling Python.framework into the application.
+
+save_file $URL_PYTHON3   # download a pre-built Python.framework
+
+mkdir $APP_FRA_DIR
+get_source file://$SRC_DIR/$(basename $URL_PYTHON3) $APP_FRA_DIR
+
+# add it to '$PATH' in launch script
+insert_before $APP_EXE_DIR/Inkscape '\$EXEC' 'export PATH=$bundle_contents/Frameworks/Python.framework/Versions/Current/bin:$PATH'
+# add it to '$PATH' here and now (for package installation below)
+export PATH=$APP_FRA_DIR/Python.framework/Versions/Current/bin:$PATH
+
+# create '.pth' file inside Framework to include our site-packages directory
+echo "./../../../../../../../Resources/lib/python3.6/site-packages" > $APP_FRA_DIR/Python.framework/Versions/Current/lib/python3.6/site-packages/inkscape.pth
+
+### install Python package: lxml ###############################################
+
+(
+  export CFLAGS=-I$OPT_DIR/include/libxml2   # This became necessary when switching
+  export LDFLAGS=-L/$LIB_DIR                 # from builing on 10.13 to 10.11.
+  pip3 install --install-option="--prefix=$APP_RES_DIR" --ignore-installed lxml==4.3.3
+)
+
+# patch 'etree'
+relocate_dependency @loader_path/../../../libxml2.2.dylib $APP_LIB_DIR/python3.6/site-packages/lxml/etree.cpython-36m-darwin.so
+relocate_dependency @loader_path/../../../libz.1.dylib $APP_LIB_DIR/python3.6/site-packages/lxml/etree.cpython-36m-darwin.so
+# patch 'objectify'
+relocate_dependency @loader_path/../../../libxml2.2.dylib $APP_LIB_DIR/python3.6/site-packages/lxml/objectify.cpython-36m-darwin.so
+relocate_dependency @loader_path/../../../libz.1.dylib $APP_LIB_DIR/python3.6/site-packages/lxml/objectify.cpython-36m-darwin.so
+
+# patch libxml2.dylib to use '@loader_path' to find neighbouring libraries
+relocate_dependency @loader_path/libz.1.dylib $APP_LIB_DIR/libxml2.2.dylib
+relocate_dependency @loader_path/liblzma.5.dylib $APP_LIB_DIR/libxml2.2.dylib
+
+### install Python package: NumPy ##############################################
+
+pip3 install --install-option="--prefix=$APP_RES_DIR" --ignore-installed numpy==1.16.4
+
+### install Python package: Pycairo ############################################
+
+pip3 install --install-option="--prefix=$APP_RES_DIR" --ignore-installed pycairo==1.18.1
+
+# patch '_cairo'
+relocate_dependency @loader_path/../../../libcairo.2.dylib $APP_LIB_DIR/python3.6/site-packages/cairo/_cairo.cpython-36m-darwin.so
+
+# patch libcairo.2.dylib to use '@loader_path' to find neighbouring libraries
+relocate_dependency @loader_path/libpixman-1.0.dylib $APP_LIB_DIR/libcairo.2.dylib
+relocate_dependency @loader_path/libfontconfig.1.dylib $APP_LIB_DIR/libcairo.2.dylib
+relocate_dependency @loader_path/libfreetype.6.dylib $APP_LIB_DIR/libcairo.2.dylib
+relocate_dependency @loader_path/libpng16.16.dylib $APP_LIB_DIR/libcairo.2.dylib
+relocate_dependency @loader_path/libz.1.dylib $APP_LIB_DIR/libcairo.2.dylib
+
+### install Python package: PyGObject ##########################################
+
+pip3 install --install-option="--prefix=$APP_RES_DIR" --ignore-installed PyGObject==3.32.1
+
+# patch '_gi'
+relocate_dependency @loader_path/../../../libglib-2.0.0.dylib $APP_LIB_DIR/python3.6/site-packages/gi/_gi.cpython-36m-darwin.so
+relocate_dependency @loader_path/../../../libintl.9.dylib $APP_LIB_DIR/python3.6/site-packages/gi/_gi.cpython-36m-darwin.so
+relocate_dependency @loader_path/../../../libgio-2.0.0.dylib $APP_LIB_DIR/python3.6/site-packages/gi/_gi.cpython-36m-darwin.so
+relocate_dependency @loader_path/../../../libgobject-2.0.0.dylib $APP_LIB_DIR/python3.6/site-packages/gi/_gi.cpython-36m-darwin.so
+relocate_dependency @loader_path/../../../libgirepository-1.0.1.dylib $APP_LIB_DIR/python3.6/site-packages/gi/_gi.cpython-36m-darwin.so
+relocate_dependency @loader_path/../../../libffi.6.dylib $APP_LIB_DIR/python3.6/site-packages/gi/_gi.cpython-36m-darwin.so
+
+# patch libglib-2.0.0.dylib to find neighbouring libraries
+relocate_dependency @loader_path/libintl.9.dylib $APP_LIB_DIR/libglib-2.0.0.dylib
+
+# patch libgio-2.0.0.dylib to find neighbouring libraries
+relocate_dependency @loader_path/libgobject-2.0.0.dylib $APP_LIB_DIR/libgio-2.0.0.dylib
+relocate_dependency @loader_path/libffi.6.dylib $APP_LIB_DIR/libgio-2.0.0.dylib
+relocate_dependency @loader_path/libgmodule-2.0.0.dylib $APP_LIB_DIR/libgio-2.0.0.dylib
+relocate_dependency @loader_path/libglib-2.0.0.dylib $APP_LIB_DIR/libgio-2.0.0.dylib
+relocate_dependency @loader_path/libz.1.dylib $APP_LIB_DIR/libgio-2.0.0.dylib
+relocate_dependency @loader_path/libintl.9.dylib $APP_LIB_DIR/libgio-2.0.0.dylib
+
+# patch libgobject-2.0.0.dylib to find neighbouring libraries
+relocate_dependency @loader_path/libglib-2.0.0.dylib $APP_LIB_DIR/libgobject-2.0.0.dylib
+relocate_dependency @loader_path/libffi.6.dylib $APP_LIB_DIR/libgobject-2.0.0.dylib
+relocate_dependency @loader_path/libintl.9.dylib $APP_LIB_DIR/libgobject-2.0.0.dylib
+
+# patch libgirepository-1.0.1.dylib to find neighbouring libraries
+relocate_dependency @loader_path/libgmodule-2.0.0.dylib $APP_LIB_DIR/libgirepository-1.0.1.dylib
+relocate_dependency @loader_path/libgio-2.0.0.dylib $APP_LIB_DIR/libgirepository-1.0.1.dylib
+relocate_dependency @loader_path/libgobject-2.0.0.dylib $APP_LIB_DIR/libgirepository-1.0.1.dylib
+relocate_dependency @loader_path/libglib-2.0.0.dylib $APP_LIB_DIR/libgirepository-1.0.1.dylib
+relocate_dependency @loader_path/libintl.9.dylib $APP_LIB_DIR/libgirepository-1.0.1.dylib
+relocate_dependency @loader_path/libffi.6.dylib $APP_LIB_DIR/libgirepository-1.0.1.dylib
+
+# patch '_gi_cairo'
+relocate_dependency @loader_path/../../../libglib-2.0.0.dylib $APP_LIB_DIR/python3.6/site-packages/gi/_gi_cairo.cpython-36m-darwin.so
+relocate_dependency @loader_path/../../../libintl.9.dylib $APP_LIB_DIR/python3.6/site-packages/gi/_gi_cairo.cpython-36m-darwin.so
+relocate_dependency @loader_path/../../../libgio-2.0.0.dylib $APP_LIB_DIR/python3.6/site-packages/gi/_gi_cairo.cpython-36m-darwin.so
+relocate_dependency @loader_path/../../../libgobject-2.0.0.dylib $APP_LIB_DIR/python3.6/site-packages/gi/_gi_cairo.cpython-36m-darwin.so
+relocate_dependency @loader_path/../../../libgirepository-1.0.1.dylib $APP_LIB_DIR/python3.6/site-packages/gi/_gi_cairo.cpython-36m-darwin.so
+relocate_dependency @loader_path/../../../libffi.6.dylib $APP_LIB_DIR/python3.6/site-packages/gi/_gi_cairo.cpython-36m-darwin.so
+relocate_dependency @loader_path/../../../libcairo.2.dylib $APP_LIB_DIR/python3.6/site-packages/gi/_gi_cairo.cpython-36m-darwin.so
+relocate_dependency @loader_path/../../../libcairo-gobject.2.dylib $APP_LIB_DIR/python3.6/site-packages/gi/_gi_cairo.cpython-36m-darwin.so
+
+# patch libcairo-gobject.2.dylib
+relocate_dependency @loader_path/libcairo.2.dylib $APP_LIB_DIR/libcairo-gobject.2.dylib
+relocate_dependency @loader_path/libpixman-1.0.dylib $APP_LIB_DIR/libcairo-gobject.2.dylib
+relocate_dependency @loader_path/libfontconfig.1.dylib $APP_LIB_DIR/libcairo-gobject.2.dylib
+relocate_dependency @loader_path/libfreetype.6.dylib $APP_LIB_DIR/libcairo-gobject.2.dylib
+relocate_dependency @loader_path/libpng16.16.dylib $APP_LIB_DIR/libcairo-gobject.2.dylib
+relocate_dependency @loader_path/libz.1.dylib $APP_LIB_DIR/libcairo-gobject.2.dylib
+relocate_dependency @loader_path/libgobject-2.0.0.dylib $APP_LIB_DIR/libcairo-gobject.2.dylib
+relocate_dependency @loader_path/libglib-2.0.0.dylib $APP_LIB_DIR/libcairo-gobject.2.dylib
+relocate_dependency @loader_path/libintl.9.dylib $APP_LIB_DIR/libcairo-gobject.2.dylib
+
+# patch libgmodule-2.0.0.dylib
+relocate_dependency @loader_path/libglib-2.0.0.dylib $APP_LIB_DIR/libgmodule-2.0.0.dylib
+relocate_dependency @loader_path/libintl.9.dylib $APP_LIB_DIR/libgmodule-2.0.0.dylib
+
+### install Python package: Scour ##############################################
+
+pip3 install --install-option="--prefix=$APP_RES_DIR" --ignore-installed scour==0.37
+
+### set default Python interpreter #############################################
+
+# If no override is present in 'preferences.xml' (see
+# http://wiki.inkscape.org/wiki/index.php/Extension_Interpreters#Selecting_a_specific_interpreter_version_.28via_preferences_file.29
+# ) we set the bundled Python to be the default one.
+
+# Default interpreter is an unversioned environment lookup for 'python', so
+# we prepar to override it.
 mkdir -p $APP_BIN_DIR
 cd $APP_BIN_DIR
-ln -s ../../Frameworks/Python.framework/Versions/3.6/bin/python3.6 python
-# add '$APP_BIN_DIR' to paths
-insert_before $APP_EXE_DIR/Inkscape '\$EXEC' 'export PATH=$bundle_bin:$PATH'
+ln -sf ../../Frameworks/Python.framework/Versions/Current/bin/python3 python
 
-# Copy Python framework to app bundle
-rsync -a $OPT_DIR/Frameworks $APP_CON_DIR
-
-P36_DIR=$APP_CON_DIR/Frameworks/Python.framework/Versions/3.6
-
-# patch various binaries and libraries to use relative library locations
-# main library
-chmod 644 $APP_CON_DIR/Frameworks/Python.framework/Versions/3.6/Python
-install_name_tool -change $LIB_DIR/libintl.9.dylib @loader_path/../../../../Resources/lib/libintl.9.dylib $P36_DIR/Python
-# Python.app inside the framework
-install_name_tool -change $LIB_DIR/libintl.9.dylib @executable_path/../../../../../../../../Resources/lib/libintl.9.dylib  $APP_CON_DIR/Frameworks/Python.framework/Resources/Python.app/Contents/MacOS/Python
-# dynamic loader for SSL libraries
-install_name_tool -change $LIB_DIR/libssl.1.1.dylib @loader_path/../../../../../../../Resources/lib/libssl.1.1.dylib $P36_DIR/lib/python3.6/lib-dynload/_ssl*.so
-install_name_tool -change $LIB_DIR/libcrypto.1.1.dylib @loader_path/../../../../../../../Resources/lib/libcrypto.1.1.dylib $P36_DIR/lib/python3.6/lib-dynload/_ssl*.so
-
-### install Python packages ####################################################
-
-# Install Python packages required by default Inkscape extensions.
-
-export PATH=$P36_DIR/bin:$PATH   # use Python interpreter from inside the app
-
-$P36_DIR/bin/pip3 install lxml
-$P36_DIR/bin/pip3 install numpy
+# add override check to launch script
+insert_before $APP_EXE_DIR/Inkscape '\$EXEC' '\
+INKSCAPE_PREFERENCES=$HOME/Library/Application\\ Support/Inkscape/config/inkscape/preferences.xml\
+if [ -f $INKSCAPE_PREFERENCES ]; then   # Has Inkscape been launched before?\
+  PYTHON_INTERPRETER=$\(xmllint --xpath '\''string\(//inkscape/group[@id=\"extensions\"]/@python-interpreter\)'\'' $INKSCAPE_PREFERENCES\)\
+  if [ -z $PYTHON_INTERPRETER ]\; then   # No override for Python interpreter?\
+    export PATH=$bundle_bin:$PATH        # make bundled Python default one\
+  fi\
+else                                     # Inkscape has not been launched before\
+  export PATH=$bundle_bin:$PATH          # make bundled Python default one\
+fi\
+'
 
 ### fontconfig #################################################################
 

@@ -15,23 +15,17 @@ set -e
 
 ### build Inkscape #############################################################
 
-INKSCAPE_SRC_DIR=..
-
 if [ -z $CI_JOB_ID ]; then   # running standalone
-  cd $SRC_DIR
-  git clone --recurse-submodules --depth 10 $URL_INKSCAPE
-  #git clone --recurse-submodules $URL_INKSCAPE   # this is a >1.6 GiB download
-  mkdir inkscape_build
-  cd inkscape_build
-  INKSCAPE_SRC_DIR=$INKSCAPE_SRC_DIR/inkscape
-else   # running as CI job
-  if [ -d $SELF_DIR/../../build ]; then   # cleanup previous run
-    rm -rf $SELF_DIR/../../build
-  fi
-  mkdir $SELF_DIR/../../build
-  cd $SELF_DIR/../../build
+  git clone --recurse-submodules --depth 10 $URL_INKSCAPE $INK_DIR
+  #git clone --recurse-submodules $URL_INKSCAPE $INK_DIR   # >1.6 GiB download
 fi
 
+[ -d $INK_DIR.build ] && rm -rf $INK_DIR.build   # cleanup previous run
+
+mkdir -p $INK_DIR.build
+cd $INK_DIR.build
+
+# about the '-DOpenMP_*' arguments:
 # All the settings for OpenMP are to trigger the detection during 'cmake'.
 # Experimenting with a "Hello World"-style example shows that linking with
 # '-lomp' would suffice, no '-fopenmp' required.
@@ -45,18 +39,18 @@ cmake \
   -DOpenMP_CXX_LIB_NAMES="omp" \
   -DOpenMP_C_LIB_NAMES="omp" \
   -DOpenMP_omp_LIBRARY=$LIB_DIR/libomp.dylib \
-  $INKSCAPE_SRC_DIR
+  $INK_DIR
 
 make
 make install
 
-# patch library locations before packaging
-#   poppler
+# patch Poppler library locations
 install_name_tool -change @rpath/libpoppler.85.dylib $LIB_DIR/libpoppler.85.dylib $BIN_DIR/inkscape
 install_name_tool -change @rpath/libpoppler-glib.8.dylib $LIB_DIR/libpoppler-glib.8.dylib $BIN_DIR/inkscape
 install_name_tool -change @rpath/libpoppler.85.dylib $LIB_DIR/libpoppler.85.dylib $LIB_DIR/inkscape/libinkscape_base.dylib
 install_name_tool -change @rpath/libpoppler-glib.8.dylib $LIB_DIR/libpoppler-glib.8.dylib $LIB_DIR/inkscape/libinkscape_base.dylib
-#   OpenMP
+
+# patch OpenMP library locations
 install_name_tool -change @rpath/libomp.dylib $LIB_DIR/libomp.dylib $BIN_DIR/inkscape
 install_name_tool -change @rpath/libomp.dylib $LIB_DIR/libomp.dylib $LIB_DIR/inkscape/libinkscape_base.dylib
 

@@ -22,6 +22,27 @@ function get_repo_version
   echo $(git -C $repo log --pretty=format:'%h' -n 1)
 }
 
+### get Inkscape version from CMakeLists.txt ###################################
+
+function get_inkscape_version
+{
+  local file=$SRC_DIR/inkscape/CMakeLists.txt
+  local ver_major=$(grep INKSCAPE_VERSION_MAJOR $file | head -n 1 | awk '{ print $2+0 }')
+  local ver_minor=$(grep INKSCAPE_VERSION_MINOR $file | head -n 1 | awk '{ print $2+0 }')
+  local ver_patch=$(grep INKSCAPE_VERSION_PATCH $file | head -n 1 | awk '{ print $2+0 }')
+  local ver_suffix=$(grep INKSCAPE_VERSION_SUFFIX $file | head -n 1 | awk '{ print $2 }')
+  
+  ver_suffix=${ver_suffix%\"*}   # remove "double quote and everything after" from end
+  ver_suffix=${ver_suffix#\"}   # remove "double quote" from beginning
+ 
+  # If there is a suffix, add the dot to it. Otherwise the suffix stays an
+  # empty string and resolves to "nothing" down below (as intended in that
+  # case).
+  [ ${#ver_suffix} -gt 0 ] && ver_suffix=.$ver_suffix
+
+  echo $ver_major.$ver_minor.$ver_patch$ver_suffix
+}
+
 ### get compression flag by filename extension #################################
 
 function get_comp_flag
@@ -57,6 +78,23 @@ function get_source
   curl -L $url | tar xv$(get_comp_flag $url) 2>$log
   cd $(head -1 $log | awk '{ print $2 }')
   [ $? -eq 0 ] && rm $log || echo "$FUNCNAME: check $log"
+}
+
+### download a file and save to disk ###########################################
+
+function save_file
+{
+  local url=$1
+  local target_dir=$2   # optional argument, defaults to $SRC_DIR
+
+  [ -z $target_dir ] && target_dir=$SRC_DIR
+
+  local file=$SRC_DIR/$(basename $url)
+  if [ -f $file ]; then
+    echo "$FUNCNAME: file $file exists"
+  else
+    curl -o $file -L $url
+  fi
 }
 
 ### make, make install in jhbuild environment ##################################
@@ -117,5 +155,18 @@ function insert_before
   awk "/${pattern}/{print \"$line\"}1" $file > $file_tmp
   cat $file_tmp > $file   # we don't 'mv' to preserve permissions
   rm $file_tmp
+}
+
+### relocate a library dependency ##############################################
+
+function relocate_dependency
+{
+  local target=$1    # fully qualified path and library name to new location
+  local library=$2   # library where 'source' get changed to 'target'
+
+  local source_lib=${target##*/}   # get library filename from target location
+  local source=$(otool -L $library | grep $source_lib | awk '{ print $1 }')
+
+  install_name_tool -change $source $target $library
 }
 

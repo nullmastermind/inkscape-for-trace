@@ -84,7 +84,7 @@ inkscape:mac:
   artifacts:
     expire_in: 1 year
     paths:
-      - build/artifacts
+      - artifacts/
   allow_failure: true
 
 

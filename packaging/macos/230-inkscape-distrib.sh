@@ -19,5 +19,5 @@ set -e
 
 if [ ! -z $CI_JOB_ID ]; then   # create build artifcat for CI job
   cd $WRK_DIR
-  mv $ARTIFACT_DIR $SELF_DIR/../../build
+  mv $ARTIFACT_DIR $INK_DIR/artifacts
 fi

@@ -4,14 +4,26 @@ This folder contains the scripts that make up the build pipeline for Inkscape on
 
 ## Requirements
 
-_It would've been more fair if this section was called "recommandations" instead, but that would only encourage carelessness._
+_In some regards it would've been more fair if this section was called "recommendations" instead, but that would only encourage carelessness or deviating from a known-good setup._
 
-- Use a __dedicated, clean macOS installation__ as build machine. "clean" as in "freshly installed + Xcode CLI tools". Nothing more, nothing less.
+- Use a __dedicated, clean macOS installation__ as build machine. "clean" as in "freshly installed + Xcode". Nothing more, nothing less.
   - Especially no MacPorts, no Fink, no Homebrew, ... because they could interfere with the build system we're using.
-  - macOS 10.13.6 with Xcode 10.1.
-    - These scripts are being developed and used using said versions.
-    - Newer versions might work but haven't been tested.
-  - A full Xcode installation won't hurt, but is not required.
+  - macOS 10.11.6 with Xcode 8.2.1.
+  - macOS 10.11 SDK from Xcode 7.3.1
+    - Place it inside your `Xcode.app` and re-symlink to make look as follows:
+
+      ```bash
+      elcapitan:SDKs rene$ pwd
+      /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs
+      elcapitan:SDKs rene$ ls -lah
+      total 8
+      drwxr-xr-x  5 root  wheel   170B 20 Jun 12:23 .
+      drwxr-xr-x  5 root  wheel   170B 15 Dez  2016 ..
+      lrwxr-xr-x  1 root  wheel    15B 20 Jun 12:23 MacOSX.sdk -> MacOSX10.11.sdk
+      drwxr-xr-x  5 root  wheel   170B 21 Okt  2020 MacOSX10.11.sdk
+      drwxr-xr-x  5 root  wheel   170B 17 Sep  2017 MacOSX10.12.sdk.disabled
+      ```
+
 - __Use a dedicated user account__ unless you're prepared that these scripts will delete and overwrite your data in the following locations:  
 _(comments based on default configuration)_
 
@@ -22,7 +34,7 @@ _(comments based on default configuration)_
     ```
 
 - __16 GiB RAM__, since we're using a 9 GiB ramdisk to build everything.
-  - Using a ramdisk speeds up the process significantly and avoids wearing out your ssd.
+  - Using a ramdisk speeds up the process significantly and avoids wearing out your SSD.
   - You can choose to not use a ramdisk by overriding `RAMDISK_ENABLE=false` in a e.g. `021-custom.sh` file.
   - The build environment takes up ~6.1 GiB of disk space, the Inkscape Git repository ~1.6 GiB. Subject to change and YMMV.
 - somewhat decent __internet connection__ for all the downloads
@@ -33,15 +45,17 @@ _(comments based on default configuration)_
 
 > TODO: These scripts were initially designed as part of a dedicated repository, not the Inkscape repository itself. Therefore they contain a step that shallow-clones the Inkscape repository to build. This behaviour will be improved upon in a future version.
 
-Run:
+You can either run all the executable scripts that have a numerical prefix yourself and in the given order (`1nn`, `2nn` - not the `0nn` ones), or, if you're feeling bold, use
 
 ```bash
-./build_everything.sh
+./build_all.sh
 ```
 
-This will run all the `nnn-*.sh` scripts consecutively.
+to have everything run for you. If you are doing this the first time, my advice is to do it manually and step-by-step first to see if you're getting through all of it without errors.
 
 ### GitLab CI
+
+> TODO: configuration examples need to be reworked
 
 #### configuration example `.gitlab-runner/config.toml`
 
@@ -67,4 +81,4 @@ buildmacos:
 
 ## Status
 
-This is still a work in progress and actively being worked on.
+This is based on [mibap](https://github.com/dehesselle/mibap) and still a work in progress.

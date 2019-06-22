@@ -61,3 +61,7 @@ echo "quiet_mode = True"                    >> $JHBUILDRC    # suppress output
 echo "progress_bar = True"                  >> $JHBUILDRC
 echo "moduleset = '$URL_GTK_OSX_MODULESET'" >> $JHBUILDRC    # custom moduleset
 
+# configure SDK
+sed -i "" "s/^setup_sdk/#setup_sdk/" $JHBUILDRC   # comment out existing setting
+echo "setup_sdk(target=\"$MACOSX_DEPLOYMENT_TARGET\")" >> $JHBUILDRC
+
