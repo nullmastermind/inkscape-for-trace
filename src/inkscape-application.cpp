@@ -596,6 +596,7 @@ ConcreteInkscapeApplication<Gio::Application>::on_startup2()
 #ifdef GDK_WINDOWING_QUARTZ
 static gboolean osx_openfile_callback(GtkosxApplication *, gchar const *,
                                       ConcreteInkscapeApplication<Gtk::Application> *);
+static gboolean osx_quit_callback(GtkosxApplication *, ConcreteInkscapeApplication<Gtk::Application> *);
 #endif
 
 template<>
@@ -644,6 +645,7 @@ ConcreteInkscapeApplication<Gtk::Application>::on_startup2()
 #ifdef GDK_WINDOWING_QUARTZ
     GtkosxApplication *osxapp = gtkosx_application_get();
     g_signal_connect(G_OBJECT(osxapp), "NSApplicationOpenFile", G_CALLBACK(osx_openfile_callback), this);
+    g_signal_connect(G_OBJECT(osxapp), "NSApplicationBlockTermination", G_CALLBACK(osx_quit_callback), this);
 #endif
 }
 
@@ -739,20 +741,6 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<
 
     return (desktop); // Temp: Need to track desktop for shell mode.
 }
-
-#ifdef GDK_WINDOWING_QUARTZ
-/**
- * On macOS, handle dropping files on Inkscape.app icon and "Open With" file association.
- */
-static gboolean osx_openfile_callback(GtkosxApplication *osxapp, gchar const *path,
-                                      ConcreteInkscapeApplication<Gtk::Application> *app)
-{
-    auto ptr = Gio::File::create_for_path(path);
-    g_return_val_if_fail(ptr, false);
-    app->create_window(ptr);
-    return true;
-}
-#endif
 
 /** No need to destroy window if T is Gio::Application.
  */
@@ -1373,6 +1361,31 @@ ConcreteInkscapeApplication<Gtk::Application>::on_quit()
 
     quit();
 }
+
+//   ======================== macOS =============================
+
+#ifdef GDK_WINDOWING_QUARTZ
+/**
+ * On macOS, handle dropping files on Inkscape.app icon and "Open With" file association.
+ */
+static gboolean osx_openfile_callback(GtkosxApplication *osxapp, gchar const *path,
+                                      ConcreteInkscapeApplication<Gtk::Application> *app)
+{
+    auto ptr = Gio::File::create_for_path(path);
+    g_return_val_if_fail(ptr, false);
+    app->create_window(ptr);
+    return true;
+}
+
+/**
+ * Handle macOS terminating the application
+ */
+static gboolean osx_quit_callback(GtkosxApplication *, ConcreteInkscapeApplication<Gtk::Application> *app)
+{
+    app->destroy_all();
+    return true;
+}
+#endif
 
 template class ConcreteInkscapeApplication<Gio::Application>;
 template class ConcreteInkscapeApplication<Gtk::Application>;
