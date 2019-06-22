@@ -930,6 +930,7 @@ sp_desktop_widget_realize (GtkWidget *widget)
         menushell->set_parent(*window);
         gtkosx_application_set_menu_bar(osxapp, menushell->gobj());
         gtkosx_application_set_use_quartz_accelerators(osxapp, false);
+        gtkosx_application_set_window_menu(osxapp, nullptr);
     }
 #endif
 }
