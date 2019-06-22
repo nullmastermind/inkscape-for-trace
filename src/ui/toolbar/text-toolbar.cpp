@@ -429,6 +429,10 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
                                              store );             // Tree store
         _line_spacing_item->use_icon(true);
         _line_spacing_item->use_label(true);
+        std::cout << prefs->getEntry("/tools/text/default_line_spacing_mode").isValid() << "jjjjjjj" << std::endl;
+        if (!prefs->getEntry("/tools/text/default_line_spacing_mode").isValid()) {
+            prefs->setInt("/tools/text/default_line_spacing_mode",0);
+        }
         gint mode = prefs->getInt("/tools/text/line_spacing_mode", 0);
         _line_spacing_item->set_active( mode );
 
@@ -436,7 +440,19 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
 
         _line_spacing_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::line_spacing_mode_changed));
     }
-
+    /* Hamburger Menu */
+    {
+        _hamburger_menu_launcher = Gtk::manage(new Gtk::ToggleToolButton());
+        _hamburger_menu_launcher->set_label(_("More options"));
+        _hamburger_menu_launcher->set_tooltip_text(_("Toggle show more options"));
+        _hamburger_menu_launcher->set_icon_name(INKSCAPE_ICON("hamburger-menu"));
+        _hamburger_menu_launcher->set_name("hamburger-menu-launcher");
+        _hamburger_menu->set_relative_to(*_hamburger_menu_launcher);
+        _hamburger_menu->set_name("hamburger-menu");
+        _hamburger_menu->set_default_widget(*_hamburger_menu_launcher);
+        _hamburger_menu_launcher->signal_toggled().connect(sigc::bind(sigc::mem_fun(*this, &TextToolbar::poptoggle), _hamburger_menu_launcher));
+        add(*_hamburger_menu_launcher);
+    }
 
     /* Alignment */
     {
@@ -492,7 +508,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _superscript_item->set_tooltip_text(_("Toggle superscript"));
         _superscript_item->set_icon_name(INKSCAPE_ICON("text_superscript"));
         _superscript_item->set_name("text-superscript");
-        _hamburger_menu_content->pack_start(*_superscript_item, 10, false, false);
+        add(*_superscript_item);
         _superscript_item->signal_toggled().connect(sigc::bind(sigc::mem_fun(*this, &TextToolbar::script_changed), _superscript_item));
         _superscript_item->set_active(prefs->getBool("/tools/text/super", false));
     }
@@ -504,7 +520,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _subscript_item->set_tooltip_text(_("Toggle subscript"));
         _subscript_item->set_icon_name(INKSCAPE_ICON("text_subscript"));
         _subscript_item->set_name("text-subscript");
-        _hamburger_menu_content->pack_start(*_subscript_item, 10, false, false);
+        add(*_subscript_item);
         _subscript_item->signal_toggled().connect(sigc::bind(sigc::mem_fun(*this, &TextToolbar::script_changed), _subscript_item));
         _subscript_item->set_active(prefs->getBool("/tools/text/sub", false));
     }
@@ -565,7 +581,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _word_spacing_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _word_spacing_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::wordspacing_value_changed));
 
-        _hamburger_menu_content->pack_start(*_word_spacing_item, 10, false, false);
+        add(*_word_spacing_item);
         _word_spacing_item->set_sensitive(true);
         _word_spacing_item->set_icon(INKSCAPE_ICON("text_word_spacing"));
     }
@@ -581,7 +597,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _dx_item->set_tooltip_text(_("Horizontal kerning (px)"));
         _dx_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _dx_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::dx_value_changed));
-        _hamburger_menu_content->pack_start(*_dx_item, 10, false, false);
+        add(*_dx_item);
         _dx_item->set_sensitive(true);
         _dx_item->set_icon(INKSCAPE_ICON("text_horz_kern"));
     }
@@ -599,7 +615,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _dy_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::dy_value_changed));
         _dy_item->set_sensitive(true);
         _dy_item->set_icon(INKSCAPE_ICON("text_vert_kern"));
-        _hamburger_menu_content->pack_start(*_dy_item, 10, false, false);
+        add(*_dy_item);
 
     }
 
@@ -615,7 +631,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _rotation_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::rotation_value_changed));
         _rotation_item->set_sensitive();
         _rotation_item->set_icon(INKSCAPE_ICON("text_rotation"));
-        _hamburger_menu_content->pack_start(*_rotation_item, 10, false, false);
+        add(*_rotation_item);
     }
 
 
@@ -654,7 +670,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _writing_mode_item->use_label( false );
         gint mode = prefs->getInt("/tools/text/writing_mode", 0);
         _writing_mode_item->set_active( mode );
-        _hamburger_menu_content->pack_start(*_writing_mode_item, 10, false, false);
+        add(*_writing_mode_item);
 
         _writing_mode_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::writing_mode_changed));
     }
@@ -695,7 +711,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _orientation_item->use_label( false );
         gint mode = prefs->getInt("/tools/text/text_orientation", 0);
         _orientation_item->set_active( mode );
-        _hamburger_menu_content->pack_start(*_orientation_item,10, false, false);
+        add(*_orientation_item);
 
         _orientation_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::orientation_changed));
     }
@@ -734,19 +750,6 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
     }
     add_separator();
 
-    /* Hamburger Menu */
-    {
-        _hamburger_menu_launcher = Gtk::manage(new Gtk::ToggleToolButton());
-        _hamburger_menu_launcher->set_label(_("More options"));
-        _hamburger_menu_launcher->set_tooltip_text(_("Toggle show more options"));
-        _hamburger_menu_launcher->set_icon_name(INKSCAPE_ICON("hamburger-menu"));
-        _hamburger_menu_launcher->set_name("hamburger-menu-launcher");
-        _hamburger_menu->set_relative_to(*_hamburger_menu_launcher);
-        _hamburger_menu->set_name("hamburger-menu");
-        _hamburger_menu->set_default_widget(*_hamburger_menu_launcher);
-        _hamburger_menu_launcher->signal_toggled().connect(sigc::bind(sigc::mem_fun(*this, &TextToolbar::poptoggle), _hamburger_menu_launcher));
-        add(*_hamburger_menu_launcher);
-    }
     // Text outer style (continued)
     _outer_style_item->set_active(prefs->getBool("/tools/text/outer_style", false));
 
