@@ -95,8 +95,6 @@ private:
     bool _handleButtonRelease(GdkEventButton const &revent);
     bool _handle2ButtonPress(GdkEventButton const &bevent);
     bool _handleKeyPress(GdkEvent *event);
-    //adds spiro & bspline modes
-    void _penContextSetMode(guint mode);
     //this function changes the colors red, green and blue making them transparent or not depending on if the function uses spiro
     void _bsplineSpiroColor();
     //creates a node in bspline or spiro modes
