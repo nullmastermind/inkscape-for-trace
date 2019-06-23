@@ -998,7 +998,11 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
         std::string result;
         std::regex_replace(std::back_inserter(result), content.begin(), content.end(), e, "$1" + styleContent + "$3");
         textNode->setContent(result.c_str());
-        _updateStyleSheets();
+        INKSCAPE.readStyleSheets();
+        for (auto iter : document->getObjectsBySelector(selector)) {
+            iter->style->readFromObject(iter);
+            iter->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+        }
     }
     _updating = false;
     _readStyleElement();

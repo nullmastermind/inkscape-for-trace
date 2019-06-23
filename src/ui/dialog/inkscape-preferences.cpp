@@ -47,6 +47,7 @@
 
 #include "display/canvas-grid.h"
 #include "display/nr-filter-gaussian.h"
+#include "display/cairo-utils.h"
 
 #include "extension/internal/gdkpixbuf-input.h"
 
@@ -660,11 +661,11 @@ void InkscapePreferences::resetIconsColors()
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
     if (!prefs->getBool("/theme/symbolicIcons", false)) {
-        _symbolic_base_colors.set_sensitive(false);
+/*         _symbolic_base_colors.set_sensitive(false);
         _symbolic_base_color.setSensitive(false);
         _symbolic_success_color.setSensitive(false);
         _symbolic_warning_color.setSensitive(false);
-        _symbolic_error_color.setSensitive(false);
+        _symbolic_error_color.setSensitive(false); */
         return;
     }
     if (prefs->getBool("/theme/symbolicDefaultColors", true) ||
@@ -695,6 +696,7 @@ void InkscapePreferences::resetIconsColors()
             _symbolic_success_color.setSensitive(false);
             _symbolic_warning_color.setSensitive(false);
             _symbolic_error_color.setSensitive(false);
+            _complementary_colors->get_style_context()->add_class("disabled");
         }
         changeIconsColors();
     } else {
@@ -702,6 +704,7 @@ void InkscapePreferences::resetIconsColors()
         _symbolic_success_color.setSensitive(true);
         _symbolic_warning_color.setSensitive(true);
         _symbolic_error_color.setSensitive(true);
+        _complementary_colors->get_style_context()->remove_class("disabled");
     }
 }
 
@@ -870,6 +873,50 @@ void InkscapePreferences::symbolicThemeCheck()
         _symbolic_error_color.init(_("Color for symbolic error icons:"),
                                    "/theme/" + themeiconname + "/symbolicErrorColor", colorseterror);
     }
+}
+/* void sp_mix_colors(cairo_t *ct, int pos, SPColor a, SPColor b)
+{
+    double arcEnd=2*M_PI;
+    cairo_set_source_rgba(ct, 1, 1, 1, 1);
+    cairo_arc(ct,pos,13,12,0,arcEnd);
+    cairo_fill(ct);
+    cairo_set_source_rgba(ct, a.v.c[0], a.v.c[1], a.v.c[2], 0.5);
+    cairo_arc(ct,pos,13,12,0,arcEnd);
+    cairo_fill(ct);
+    cairo_set_source_rgba(ct, b.v.c[0], b.v.c[1], b.v.c[2], 0.5);
+    cairo_arc(ct,pos,13,12,0,arcEnd);
+    cairo_fill(ct);
+}
+
+Glib::RefPtr< Gdk::Pixbuf > sp_mix_colors()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
+    guint32 colorsetsuccess = prefs->getInt("/theme/" + themeiconname + "/symbolicSuccessColor", 0x4AD589ff);
+    guint32 colorsetwarning = prefs->getInt("/theme/" + themeiconname + "/symbolicWarningColor", 0xF57900ff);
+    guint32 colorseterror = prefs->getInt("/theme/" + themeiconname + "/symbolicErrorColor", 0xcc0000ff);
+    SPColor success(colorsetsuccess);
+    SPColor warning(colorsetwarning);
+    SPColor error(colorseterror);
+    cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 82, 26);
+    cairo_t *ct = cairo_create(s);
+    // success + warning
+    sp_mix_colors(ct, 13, success, warning);
+    sp_mix_colors(ct, 41, success, error);
+    sp_mix_colors(ct, 69, warning, error);
+    cairo_destroy(ct);
+    cairo_surface_flush(s);
+
+    Cairo::RefPtr<Cairo::Surface> sref = Cairo::RefPtr<Cairo::Surface>(new Cairo::Surface(s));
+    Glib::RefPtr<Gdk::Pixbuf> pixbuf =
+        Gdk::Pixbuf::create(sref, 0, 0, 82, 26);
+    cairo_surface_destroy(s);
+    return pixbuf;
+} */
+
+void InkscapePreferences::changeIconsColor(guint32 /*color*/) { 
+    changeIconsColors();
+/*     _complementary_colors->set(sp_mix_colors()); */
 }
 
 void InkscapePreferences::initPageUI()
@@ -1128,6 +1175,7 @@ void InkscapePreferences::initPageUI()
     _symbolic_success_color.setParentDialog(this);
     _symbolic_warning_color.setParentDialog(this);
     _symbolic_error_color.setParentDialog(this);
+    /* _complementary_colors = Gtk::manage(new Gtk::Image()); */
     Gtk::Box *icon_buttons = Gtk::manage(new Gtk::Box());
     icon_buttons->pack_start(_symbolic_base_color, true, true, 4);
     _page_theme.add_line(false, "", *icon_buttons, _("Icon color"),
@@ -1136,11 +1184,13 @@ void InkscapePreferences::initPageUI()
     icon_buttons_hight->pack_start(_symbolic_success_color, true, true, 4);
     icon_buttons_hight->pack_start(_symbolic_warning_color, true, true, 4);
     icon_buttons_hight->pack_start(_symbolic_error_color, true, true, 4);
+    /* icon_buttons_hight->pack_start(*_complementary_colors, true, true, 4); */
     _page_theme.add_line(false, "", *icon_buttons_hight, _("Highlights"),
                          _("Highlights colors, some symbolic icon themes use it. Some icons changes need reload"),
                          false);
     Gtk::Box *icon_buttons_def = Gtk::manage(new Gtk::Box());
     resetIconsColors();
+    changeIconsColor(0xffffffff);
     _page_theme.add_line(false, "", *icon_buttons_def, "",
                          _("Reset theme colors, some symbolic icon themes use it. Some icons changes need reload"),
                          false);

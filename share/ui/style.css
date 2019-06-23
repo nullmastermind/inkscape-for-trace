@@ -153,8 +153,9 @@ image {
     color: @success_color;
 }
 
+image.disabled,
 .symboliccolors:disabled * {
-    opacity: 0.2;
+    opacity: 0.35;
 }
 
 GtkWidget,

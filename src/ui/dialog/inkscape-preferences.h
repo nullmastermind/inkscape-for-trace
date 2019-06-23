@@ -250,10 +250,13 @@ protected:
     UI::Widget::PrefColorPicker _symbolic_warning_color;
     UI::Widget::PrefColorPicker _symbolic_error_color;
     UI::Widget::PrefColorPicker _symbolic_success_color;
+/*     Gtk::Image *_complementary_colors; */
     UI::Widget::PrefCombo _misc_small_toolbar;
     UI::Widget::PrefCombo _misc_small_secondary;
     UI::Widget::PrefCombo _misc_small_tools;
     UI::Widget::PrefCombo _menu_icons;
+
+    Gtk::Button _apply_theme;
 
     UI::Widget::PrefRadioButton _win_dockable;
     UI::Widget::PrefRadioButton _win_floating;
@@ -596,7 +599,7 @@ private:
   void toggleSymbolic();
   void changeIconsColors();
   void resetIconsColors();
-  void changeIconsColor(guint32 /*color*/) { changeIconsColors(); }
+  void changeIconsColor(guint32 /*color*/);
   void get_highlight_colors(guint32 &colorsetbase, guint32 &colorsetsuccess, guint32 &colorsetwarning,
                             guint32 &colorseterror);
 
