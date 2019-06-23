@@ -162,6 +162,8 @@ void PenTool::setPolylineMode() {
     this->spiro = (mode == 1);
     this->bspline = (mode == 2);
     this->_bsplineSpiroColor();
+    if (!this->green_bpaths.empty())
+        this->_redrawAll();
 }
 
 /**
