@@ -231,11 +231,11 @@
             <property name="position">0</property>
           </packing>
         </child>
+        <style>
+          <class name="symbolic"/>
+        </style>
       </object>
     </child>
-    <style>
-      <class name="iconsymbolic"/>
-    </style>
   </object>
   <object class="GtkPopover" id="LPESelectorEffectInfoPop">
     <property name="name">LPESelectorEffectInfoPop</property>
@@ -331,7 +331,7 @@
       </object>
     </child>
     <style>
-      <class name="popover"/>
+      <class name="popover symbolic"/>
     </style>
   </object>
   <object class="GtkEventBox" id="LPESelectorEffect">

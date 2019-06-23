@@ -254,12 +254,11 @@ InkscapeApplication::document_revert(SPDocument* document)
         }
 
         document_close (document);
-
     } else {
         std::cerr << "InkscapeApplication::revert_document: Document not found!" << std::endl;
         return false;
     }
-
+    INKSCAPE.readStyleSheets();
     return true;
 }
 
@@ -688,6 +687,7 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<
                 // virgin == true => an empty document (template).
 
                 // Is there a better place for this? It requires GUI.
+
                 document->ensureUpToDate(); // TODO this will trigger broken line warnings, etc.
 
                 InkscapeWindow* window = dynamic_cast<InkscapeWindow*>(get_active_window());
@@ -711,6 +711,7 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<
                 InkscapeWindow* window = window_open (document);
                 desktop = window->get_desktop();
             }
+            INKSCAPE.readStyleSheets();
 
 
         } else {
@@ -738,7 +739,6 @@ ConcreteInkscapeApplication<Gtk::Application>::create_window(const Glib::RefPtr<
     } else {
         std::cerr << "ConcreteInkscapeApplication<T>::create_window: Failed to create desktop!" << std::endl;
     }
-
     return (desktop); // Temp: Need to track desktop for shell mode.
 }
 
@@ -835,7 +835,7 @@ ConcreteInkscapeApplication<T>::process(SPDocument* document, std::string output
         std::cerr << "  Must use --without_gui with --pipe!" << std::endl;
         return; // Avoid segfault
     }
-
+    INKSCAPE.readStyleSheets();
     document->ensureUpToDate(); // Or queries don't work!
 
     // process_file
@@ -957,6 +957,7 @@ ConcreteInkscapeApplication<Gtk::Application>::on_open(const Gio::Application::t
             // Open file
             SPDocument *document = document_open (file);
             if (!document) continue;
+
 
             process (document, file->get_path());
             document_close (document);

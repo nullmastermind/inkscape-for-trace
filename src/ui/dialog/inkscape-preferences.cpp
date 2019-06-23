@@ -915,7 +915,7 @@ void InkscapePreferences::initPageUI()
         _page_theme.add_line(false, _("Change Gtk theme:"), _gtk_theme, "", "", false);
         _gtk_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
     }
-    _dark_theme.init(_("Use dark theme"), "/theme/darkTheme", true);
+    _dark_theme.init(_("Use dark theme"), "/theme/darkTheme", false);
     _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
     _dark_theme.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
     // Icons
