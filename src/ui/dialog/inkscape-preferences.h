@@ -594,7 +594,6 @@ protected:
 
 private:
   void themeChange();
-  void changeIconsColor(guint32 /*color*/);
   void symbolicThemeCheck();
   void toggleSymbolic();
   void changeIconsColors();
