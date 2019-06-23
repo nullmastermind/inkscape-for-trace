@@ -124,7 +124,6 @@ public:
     void switch_desktops_prev ();
     void get_all_desktops (std::list< SPDesktop* >& listbuf);
     void reactivate_desktop (SPDesktop * desktop);
-    void readStyleSheets(bool forceupd = false);
     SPDesktop * find_desktop_by_dkey (unsigned int dkey);
     unsigned int maximum_dkey();
     SPDesktop * next_desktop ();

@@ -682,12 +682,11 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
         // Style element not found, create one
         styleNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createElement("svg:style");
         textNode  = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
+        root->addChild(styleNode, nullptr);
+        Inkscape::GC::release(styleNode);
 
         styleNode->appendChild(textNode);
         Inkscape::GC::release(textNode);
-
-        root->addChild(styleNode, nullptr);
-        Inkscape::GC::release(styleNode);
     }
     Glib::ustring styleContent = Glib::ustring(textNode->content());
     if (styleContent.find(".measure-arrows\n{\n") == -1) {

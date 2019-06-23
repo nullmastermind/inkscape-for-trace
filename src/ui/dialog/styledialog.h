@@ -123,7 +123,6 @@ class StyleDialog : public Widget::Panel {
 
     // Reading and writing the style element.
     Inkscape::XML::Node *_getStyleTextNode();
-    void _updateStyleSheets();
     void _readStyleElement();
     Glib::RefPtr<Gtk::TreeModel> _selectTree(Glib::ustring selector);
     void _writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::ustring selector);

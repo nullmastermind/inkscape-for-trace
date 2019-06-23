@@ -1,5 +1,6 @@
-set(THEME hicolor)
+set(THEME nextgen)
 install(FILES "index.theme" DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/${THEME})
+install(FILES "highlights.css" DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/${THEME})
 
 set(PIXMAP_SIZES "scalable" "symbolic")
 set(CONTENT "actions")
