@@ -54,6 +54,9 @@
 
 #include "libnrtype/FontFactory.h"
 
+#include "object/sp-root.h"
+#include "object/sp-style-elem.h"
+
 #include "svg/svg-color.h"
 
 #include "ui/dialog/debug.h"
@@ -417,29 +420,12 @@ Application::add_gtk_css()
     if (prefs->getBool("/theme/symbolicIcons", false)) {
         if (!prefs->getBool("/theme/symbolicIconsDefaultColor", true)) {
             gchar colornamed[64];
-            gchar colornamedsuccess[64];
-            gchar colornamedwarning[64];
-            gchar colornamederror[64];
             gchar colornamed_inverse[64];
             int colorset = prefs->getInt("/theme/symbolicColor", 0x2E3436ff);
             sp_svg_write_color(colornamed, sizeof(colornamed), colorset);
-            int colorsetsuccess = prefs->getInt("/theme/symbolicSuccessColor", 0x4AD589ff);
-            sp_svg_write_color(colornamedsuccess, sizeof(colornamedsuccess), colorsetsuccess);
-            int colorsetwarning = prefs->getInt("/theme/symbolicWarningColor", 0xF57900ff);
-            sp_svg_write_color(colornamedwarning, sizeof(colornamedwarning), colorsetwarning);
-            int colorseterror = prefs->getInt("/theme/symbolicErrorColor", 0xcc0000ff);
-            sp_svg_write_color(colornamederror, sizeof(colornamederror), colorseterror);
             // Use in case the special widgets have inverse theme background and symbolic
             int colorset_inverse = colorset ^ 0xffffff00;
             sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
-
-            css_str += "*{-gtk-icon-palette: success ";
-            css_str += colornamedsuccess;
-            css_str += ", warning ";
-            css_str += colornamedwarning;
-            css_str += ", error ";
-            css_str += colornamederror;
-            css_str += ";}";
             css_str += "SPRuler, ruler-widget,";
             css_str += ".bright image, .dark image";
             css_str += "{color:";
@@ -476,6 +462,30 @@ Application::add_gtk_css()
                        ex.what().c_str());
         }
         Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+}
+
+void Application::readStyleSheets(bool forceupd)
+{
+    SPDocument *document = SP_ACTIVE_DOCUMENT;
+    Inkscape::XML::Node *root = document->getReprRoot();
+    std::vector<Inkscape::XML::Node *> styles;
+    for (unsigned i = 0; i < root->childCount(); ++i) {
+        Inkscape::XML::Node *child = root->nthChild(i);
+        if (child && strcmp(child->name(), "svg:style") == 0) {
+            styles.insert(styles.begin(), child);
+        }
+    }
+    if (forceupd || styles.size() > 1) {
+        document->setStyleSheet(nullptr);
+        for (auto style : styles) {
+            gchar const *id = style->attribute("id");
+            if (id) {
+                SPStyleElem *styleelem = dynamic_cast<SPStyleElem *>(document->getObjectById(id));
+                styleelem->read_content();
+            }
+        }
+        document->getRoot()->emitModified(SP_OBJECT_MODIFIED_CASCADE);
     }
 }
 

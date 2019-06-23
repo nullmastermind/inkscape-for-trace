@@ -920,6 +920,7 @@ sp_desktop_widget_realize (GtkWidget *widget)
             window->get_style_context()->add_class("regular");
             window->get_style_context()->remove_class("symbolic");
         }
+        INKSCAPE.signal_change_theme.emit();
     }
 
 #ifdef GDK_WINDOWING_QUARTZ

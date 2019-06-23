@@ -130,17 +130,6 @@ class StyleDialog::NodeWatcher : public Inkscape::XML::NodeObserver {
             if (name == "id" || name == "class" || name == "style") {
                 _styledialog->_nodeChanged(node);
             }
-            SPObject *obj = SP_ACTIVE_DOCUMENT->getObjectById(node.attribute("id"));
-            if (obj) {
-                for (auto iter : obj->style->properties()) {
-                    if (iter->name == name) {
-                        obj->style->readFromObject(obj);
-                        obj->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
-                        _styledialog->_nodeChanged(node);
-                        break;
-                    }
-                }
-            }
         }
     }
 
@@ -291,11 +280,11 @@ Inkscape::XML::Node *StyleDialog::_getStyleTextNode()
         styleNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createElement("svg:style");
         textNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
 
-        styleNode->appendChild(textNode);
-        Inkscape::GC::release(textNode);
-
         root->addChild(styleNode, nullptr);
         Inkscape::GC::release(styleNode);
+
+        styleNode->appendChild(textNode);
+        Inkscape::GC::release(textNode);
     }
 
     if (_textNode != textNode) {
@@ -306,6 +295,7 @@ Inkscape::XML::Node *StyleDialog::_getStyleTextNode()
 
     return textNode;
 }
+
 
 Glib::RefPtr<Gtk::TreeModel> StyleDialog::_selectTree(Glib::ustring selector)
 {
@@ -915,7 +905,6 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
         // We could test if styleContent is empty and then delete the style node here but there is no
         // harm in keeping it around ...
         SPDocument *document = SP_ACTIVE_DOCUMENT;
-        document->setStyleSheet(nullptr);
         std::string pos = std::to_string(selectorpos);
         std::string selectormatch = "(";
         for (selectorpos; selectorpos > 1; selectorpos--) {
@@ -928,6 +917,7 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
         std::string result;
         std::regex_replace(std::back_inserter(result), content.begin(), content.end(), e, "$1" + styleContent + "$3");
         textNode->setContent(result.c_str());
+        INKSCAPE.readStyleSheets(true);
         for (auto iter : document->getObjectsBySelector(selector)) {
             iter->style->readFromObject(iter);
             iter->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);

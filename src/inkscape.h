@@ -124,6 +124,7 @@ public:
     void switch_desktops_prev ();
     void get_all_desktops (std::list< SPDesktop* >& listbuf);
     void reactivate_desktop (SPDesktop * desktop);
+    void readStyleSheets(bool forceupd = false);
     SPDesktop * find_desktop_by_dkey (unsigned int dkey);
     unsigned int maximum_dkey();
     SPDesktop * next_desktop ();
@@ -176,7 +177,9 @@ public:
     sigc::signal<void, SPDesktop *> signal_activate_desktop;
     // some desktop lost focus
     sigc::signal<void, SPDesktop *> signal_deactivate_desktop;
-    
+    // user change theme
+    sigc::signal<void> signal_change_theme;
+
     // these are orphaned signals (nothing emits them and nothing connects to them)
     sigc::signal<void, SPDocument *> signal_destroy_document;
     sigc::signal<void, SPColor *, double /*opacity*/> signal_color_set;

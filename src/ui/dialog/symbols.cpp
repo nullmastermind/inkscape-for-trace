@@ -211,9 +211,9 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   // No results
   overlay_icon = sp_get_icon_image("searching", Gtk::ICON_SIZE_DIALOG);
   overlay_icon->set_pixel_size(110);
-  overlay_icon->get_style_context()->add_class("iconsymbolic");
   overlay_icon->set_halign(Gtk::ALIGN_CENTER);
   overlay_icon->set_valign(Gtk::ALIGN_START);
+
   overlay_icon->set_margin_top(45);
 
   overlay_title = new Gtk::Label();

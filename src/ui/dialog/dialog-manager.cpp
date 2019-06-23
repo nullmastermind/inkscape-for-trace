@@ -16,14 +16,14 @@
 
 #include "ui/dialog/dialog-manager.h"
 
-#include "ui/dialog/prototype.h"
+#include "style.h"
 #include "ui/dialog/align-and-distribute.h"
 #include "ui/dialog/document-metadata.h"
 #include "ui/dialog/document-properties.h"
 #include "ui/dialog/extension-editor.h"
 #include "ui/dialog/fill-and-stroke.h"
-#include "ui/dialog/filter-effects-dialog.h"
 #include "ui/dialog/filter-editor.h"
+#include "ui/dialog/filter-effects-dialog.h"
 #include "ui/dialog/find.h"
 #include "ui/dialog/glyphs.h"
 #include "ui/dialog/inkscape-preferences.h"
@@ -31,6 +31,7 @@
 #include "ui/dialog/livepatheffect-editor.h"
 #include "ui/dialog/memory.h"
 #include "ui/dialog/messages.h"
+#include "ui/dialog/prototype.h"
 #include "ui/dialog/symbols.h"
 #include "ui/dialog/tile.h"
 

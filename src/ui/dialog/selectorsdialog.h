@@ -80,6 +80,7 @@ class SelectorsDialog : public Widget::Panel {
             add(_colObj);
             add(_colProperties);
             add(_colVisible);
+            add(_colSelected);
         }
         Gtk::TreeModelColumn<Glib::ustring> _colSelector;       // Selector or matching object id.
         Gtk::TreeModelColumn<bool> _colExpand;                  // Open/Close store row.
@@ -87,6 +88,7 @@ class SelectorsDialog : public Widget::Panel {
         Gtk::TreeModelColumn<std::vector<SPObject *> > _colObj; // List of matching objects.
         Gtk::TreeModelColumn<Glib::ustring> _colProperties;     // List of properties.
         Gtk::TreeModelColumn<bool> _colVisible;                 // Make visible or not.
+        Gtk::TreeModelColumn<gint> _colSelected;                // Make selected.
     };
     ModelColumns _mColumns;
 

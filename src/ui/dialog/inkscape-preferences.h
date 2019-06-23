@@ -246,14 +246,10 @@ protected:
     UI::Widget::PrefCheckButton _dark_theme;
     UI::Widget::PrefCheckButton _symbolic_icons;
     UI::Widget::PrefColorPicker _symbolic_color;
-    UI::Widget::PrefColorPicker _symbolic_warning_color;
-    UI::Widget::PrefColorPicker _symbolic_error_color;
-    UI::Widget::PrefColorPicker _symbolic_success_color;
     UI::Widget::PrefCombo _misc_small_toolbar;
     UI::Widget::PrefCombo _misc_small_secondary;
     UI::Widget::PrefCombo _misc_small_tools;
     UI::Widget::PrefCombo _menu_icons;
-    Gtk::Button _apply_theme;
 
     UI::Widget::PrefRadioButton _win_dockable;
     UI::Widget::PrefRadioButton _win_floating;
@@ -591,6 +587,7 @@ protected:
 
 private:
   void themeChange();
+  void changeIconsColor(guint32 /*color*/);
   void symbolicThemeCheck();
   void symbolicStyling();
   void symbolicDefaultColor();

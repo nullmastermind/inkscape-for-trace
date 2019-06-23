@@ -144,9 +144,11 @@ protected:
     sigc::connection _dialogs_hidden_connection;
     sigc::connection _dialogs_unhidden_connection;
     sigc::connection _shutdown_connection;
+    sigc::connection _change_theme_connection;
 
-private:
+  private:
     Behavior::Behavior* _behavior;
+    void addTopWindowClasses();
 
     Dialog() = delete; // no constructor without params
 

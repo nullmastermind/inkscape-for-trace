@@ -79,10 +79,6 @@ R"=====(
        inkscape:window-height="480" />
   </group>
 
-  <group id="theme"
-       gtkTheme="" iconTheme=""  symbolicIcons="0" darkTheme="0" symbolicColor="0x2E3436ff" >
-  </group>
-
   <group id="tools" bounding_box="0">
 
     <group id="shapes" style="fill-rule:evenodd;" selcue="1" gradientdrag="1">
