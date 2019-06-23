@@ -320,11 +320,11 @@ SelectorsDialog::SelectorsDialog()
     addCol = _treeView.append_column("CSS Selector", *label) - 1;
     col = _treeView.get_column(addCol);
     if (col) {
-        col->add_attribute(label->property_text(),_mColumns._colSelector);
+        col->add_attribute(label->property_text(), _mColumns._colSelector);
         col->add_attribute(label->property_weight(), _mColumns._colSelected);
     }
     _treeView.set_expander_column(*(_treeView.get_column(1)));
-    
+
 
     // Signal handlers
     _treeView.signal_button_release_event().connect( // Needs to be release, not press.
@@ -1382,10 +1382,10 @@ void SelectorsDialog::_selectRow()
     for (auto row : children) {
         Gtk::TreeModel::Children subchildren = row->children();
         for (auto subrow : subchildren) {
-                subrow[_mColumns._colSelected] = 400;
+            subrow[_mColumns._colSelected] = 400;
         }
     }
-    for (auto obj: selection->items()) {
+    for (auto obj : selection->items()) {
         for (auto row : children) {
             Gtk::TreeModel::Children subchildren = row->children();
             for (auto subrow : subchildren) {
