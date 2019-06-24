@@ -1529,6 +1529,7 @@ void PenTool::_bsplineSpiroMotion(guint const state){
             if (this->sa && this->green_curve->is_unset()) {
                 this->sa_overwrited = tmp_curve->copy();
             }
+            this->green_curve = tmp_curve->copy();
         }
         if (cubic) {
             if (this->bspline) {
