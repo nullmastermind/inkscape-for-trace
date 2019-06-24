@@ -166,9 +166,10 @@ void StyleDialog::_nodeRemoved(Inkscape::XML::Node &repr)
     _readStyleElement();
 }
 
-void StyleDialog::_nodeChanged(Inkscape::XML::Node &object) { 
+void StyleDialog::_nodeChanged(Inkscape::XML::Node &object)
+{
     g_debug("StyleDialog::_nodeChanged");
-    _readStyleElement(); 
+    _readStyleElement();
 }
 
 /* void
@@ -961,7 +962,7 @@ bool StyleDialog::_addRow(GdkEventButton *evt, Glib::RefPtr<Gtk::TreeStore> stor
                           Glib::ustring selector, gint pos)
 {
     g_debug("StyleDialog::_addRow");
-    
+
     if (evt->type == GDK_BUTTON_RELEASE && evt->button == 1) {
         Gtk::TreeIter iter = store->append();
         Gtk::TreeModel::Path path = (Gtk::TreeModel::Path)iter;
@@ -1097,7 +1098,7 @@ StyleDialog::_startValueEdit(Gtk::CellEditable* cell, const Glib::ustring& path,
 void StyleDialog::_startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &path)
 {
     g_debug("StyleDialog::_startNameEdit");
-    
+
     _scroollock = true;
     Glib::RefPtr<Gtk::ListStore> completionModel = Gtk::ListStore::create(_mCSSData);
     Glib::RefPtr<Gtk::EntryCompletion> entry_completion = Gtk::EntryCompletion::create();
@@ -1171,7 +1172,7 @@ void StyleDialog::_valueEdited(const Glib::ustring &path, const Glib::ustring &v
                                Glib::RefPtr<Gtk::TreeStore> store)
 {
     g_debug("StyleDialog::_valueEdited");
-    
+
     _scroollock = true;
 
     Gtk::TreeModel::Row row = *store->get_iter(path);
@@ -1194,7 +1195,7 @@ void StyleDialog::_valueEdited(const Glib::ustring &path, const Glib::ustring &v
 void StyleDialog::_activeToggled(const Glib::ustring &path, Glib::RefPtr<Gtk::TreeStore> store)
 {
     g_debug("StyleDialog::_activeToggled");
-    
+
     _scroollock = true;
     Gtk::TreeModel::Row row = *store->get_iter(path);
     if (row) {

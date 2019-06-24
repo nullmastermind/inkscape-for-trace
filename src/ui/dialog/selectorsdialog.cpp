@@ -6,7 +6,7 @@
  *   Kamalpreet Kaur Grewal
  *   Tavmjong Bah
  *   Jabiertxof
- * 
+ *
  * Copyright (C) Kamalpreet Kaur Grewal 2016 <grewalkamal005@gmail.com>
  * Copyright (C) Tavmjong Bah 2017 <tavmjong@free.fr>
  *
@@ -156,7 +156,7 @@ void SelectorsDialog::_nodeRemoved(Inkscape::XML::Node &repr)
 {
 
     g_debug("SelectorsDialog::NodeRemoved");
-    
+
     _scroollock = true;
     for (auto it = _nodeWatchers.begin(); it != _nodeWatchers.end(); ++it) {
         if ( (*it)->_repr == &repr ) {
@@ -174,9 +174,9 @@ void SelectorsDialog::_nodeChanged(Inkscape::XML::Node &object)
 {
 
     g_debug("SelectorsDialog::NodeChanged");
-    
+
     _scroollock = true;
-    
+
     _readStyleElement();
     _selectRow();
 }
@@ -293,7 +293,7 @@ void SelectorsDialog::TreeStore::on_row_deleted(const TreeModel::Path &path)
 Glib::RefPtr<SelectorsDialog::TreeStore> SelectorsDialog::TreeStore::create(SelectorsDialog *selectorsdialog)
 {
     g_debug("SelectorsDialog::TreeStore::create");
-    
+
     SelectorsDialog::TreeStore *store = new SelectorsDialog::TreeStore();
     store->_selectorsdialog = selectorsdialog;
     store->set_column_types(store->_selectorsdialog->_mColumns);
@@ -673,7 +673,7 @@ void SelectorsDialog::_writeStyleElement()
     if (_updating) {
         return;
     }
-    
+
     g_debug("SelectorsDialog::_writeStyleElement");
 
     _scroollock = true;
@@ -1238,7 +1238,7 @@ void SelectorsDialog::_addSelector()
     }
     // Add entry to style element
     _writeStyleElement();
-     _scroollock = false;
+    _scroollock = false;
     _vadj->set_value(std::min(_scroolpos, _vadj->get_upper()));
 }
 
