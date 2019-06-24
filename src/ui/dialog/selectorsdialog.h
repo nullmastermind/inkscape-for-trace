@@ -119,10 +119,10 @@ class SelectorsDialog : public Widget::Panel {
     Gtk::TreeView _treeView;
     // Widgets
     Gtk::Paned _paned;
+    Glib::RefPtr<Gtk::Adjustment> _vadj;
     Gtk::Switch _direction;
     Gtk::Box _button_box;
     Gtk::Box _selectors_box;
-    Gtk::ScrolledWindow _scrolled_window_style;
     Gtk::ScrolledWindow _scrolled_window_selectors;
 
     Gtk::Button _del;
@@ -153,6 +153,8 @@ class SelectorsDialog : public Widget::Panel {
     void _selectObjects(int, int);
     // Variables
     bool _updating;  // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
+    double _scroolpos;
+    bool _scroollock;
     Inkscape::XML::Node *_textNode; // Track so we know when to add a NodeObserver.
 
     // Signals and handlers - External
@@ -177,6 +179,7 @@ class SelectorsDialog : public Widget::Panel {
     bool _handleButtonEvent(GdkEventButton *event);
     void _buttonEventsSelectObjs(GdkEventButton *event);
     void _selectRow(); // Select row in tree when selection changed.
+    void _vscrool();
 
     // GUI
     void _styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip);
