@@ -1253,6 +1253,7 @@ void SelectorsDialog::_delSelector()
     _treeView.get_selection()->set_mode(Gtk::SELECTION_SINGLE);
     Gtk::TreeModel::iterator iter = refTreeSelection->get_selected();
     if (iter) {
+        _vscrool();
         Gtk::TreeModel::Row row = *iter;
         if (row.children().size() > 2) {
             return;
@@ -1289,6 +1290,7 @@ bool SelectorsDialog::_handleButtonEvent(GdkEventButton *event)
 
         if (_treeView.get_path_at_pos(x, y, path, col, x2, y2)) {
             if (col == _treeView.get_column(0)) {
+                _vscrool();
                 Gtk::TreeModel::iterator iter = _store->get_iter(path);
                 Gtk::TreeModel::Row row = *iter;
                 if (!row.parent()) {
