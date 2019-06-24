@@ -696,7 +696,7 @@ void InkscapePreferences::resetIconsColors()
             _symbolic_success_color.setSensitive(false);
             _symbolic_warning_color.setSensitive(false);
             _symbolic_error_color.setSensitive(false);
-            _complementary_colors->get_style_context()->add_class("disabled");
+            /* _complementary_colors->get_style_context()->add_class("disabled"); */
         }
         changeIconsColors();
     } else {
@@ -704,7 +704,7 @@ void InkscapePreferences::resetIconsColors()
         _symbolic_success_color.setSensitive(true);
         _symbolic_warning_color.setSensitive(true);
         _symbolic_error_color.setSensitive(true);
-        _complementary_colors->get_style_context()->remove_class("disabled");
+        /* _complementary_colors->get_style_context()->remove_class("disabled"); */
     }
 }
 
