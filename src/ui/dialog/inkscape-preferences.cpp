@@ -45,9 +45,9 @@
 #include "shortcuts.h"
 #include "verbs.h"
 
+/* #include "display/cairo-utils.h" */
 #include "display/canvas-grid.h"
 #include "display/nr-filter-gaussian.h"
-#include "display/cairo-utils.h"
 
 #include "extension/internal/gdkpixbuf-input.h"
 
@@ -669,8 +669,7 @@ void InkscapePreferences::resetIconsColors(bool themechange)
         return;
     }
     if (prefs->getBool("/theme/symbolicDefaultColors", true) ||
-        !prefs->getEntry("/theme/" + themeiconname + "/symbolicBaseColor").isValid()) 
-    {
+        !prefs->getEntry("/theme/" + themeiconname + "/symbolicBaseColor").isValid()) {
         auto const screen = Gdk::Screen::get_default();
         if (INKSCAPE.colorizeprovider) {
             Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider);
@@ -719,10 +718,7 @@ void InkscapePreferences::resetIconsColors(bool themechange)
     }
 }
 
-void InkscapePreferences::resetIconsColorsWrapper()
-{
-    resetIconsColors(false);
-}
+void InkscapePreferences::resetIconsColorsWrapper() { resetIconsColors(false); }
 
 void InkscapePreferences::changeIconsColors()
 {
@@ -766,8 +762,7 @@ void InkscapePreferences::toggleSymbolic()
         _symbolic_base_colors.set_sensitive(true);
         Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
         if (prefs->getBool("/theme/symbolicDefaultColors", true) ||
-            !prefs->getEntry("/theme/" + themeiconname + "/symbolicBaseColor").isValid()) 
-        {
+            !prefs->getEntry("/theme/" + themeiconname + "/symbolicBaseColor").isValid()) {
             resetIconsColors();
         } else {
             changeIconsColors();
@@ -876,8 +871,7 @@ void InkscapePreferences::symbolicThemeCheck()
     }
     if (symbolic) {
         if (prefs->getBool("/theme/symbolicDefaultColors", true) ||
-            !prefs->getEntry("/theme/" + themeiconname + "/symbolicBaseColor").isValid()) 
-        {
+            !prefs->getEntry("/theme/" + themeiconname + "/symbolicBaseColor").isValid()) {
             resetIconsColors();
         } else {
             changeIconsColors();
@@ -936,9 +930,10 @@ Glib::RefPtr< Gdk::Pixbuf > sp_mix_colors()
     return pixbuf;
 } */
 
-void InkscapePreferences::changeIconsColor(guint32 /*color*/) { 
+void InkscapePreferences::changeIconsColor(guint32 /*color*/)
+{
     changeIconsColors();
-/*     _complementary_colors->set(sp_mix_colors()); */
+    /*     _complementary_colors->set(sp_mix_colors()); */
 }
 
 void InkscapePreferences::initPageUI()

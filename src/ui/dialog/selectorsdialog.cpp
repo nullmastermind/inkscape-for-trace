@@ -478,7 +478,7 @@ SelectorsDialog::~SelectorsDialog()
 Inkscape::XML::Node *SelectorsDialog::_getStyleTextNode()
 {
     g_debug("SelectorsDialog::_getStyleTextNode");
-    
+
     Inkscape::XML::Node *styleNode = nullptr;
     Inkscape::XML::Node *textNode = nullptr;
 

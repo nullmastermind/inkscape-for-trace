@@ -250,7 +250,7 @@ protected:
     UI::Widget::PrefColorPicker _symbolic_warning_color;
     UI::Widget::PrefColorPicker _symbolic_error_color;
     UI::Widget::PrefColorPicker _symbolic_success_color;
-/*     Gtk::Image *_complementary_colors; */
+    /*     Gtk::Image *_complementary_colors; */
     UI::Widget::PrefCombo _misc_small_toolbar;
     UI::Widget::PrefCombo _misc_small_secondary;
     UI::Widget::PrefCombo _misc_small_tools;
