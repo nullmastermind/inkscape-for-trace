@@ -1,8 +1,18 @@
 
-
 This directory contains code for converting bitmap images to vector images.
+The subdirectories contain code for the three tracers used in Inkscape: potrace
+(external dependency), autotrace, and libdepixelize (currently in src/3rdparty).
+
 
 To do:
 
-* Move to an appropriate subdirectory.
+* Think about conceptually changing how the tracing works: Ideally, it should
+  be three steps clearly separated:
+  1/ Preprocessing (color reduction, blurring, background removing, image
+    inversion...)
+  2/ Tracing the preprocessed image, using some tracing engine
+  3/ Post-processing (suppressing speckles, optimizing paths...)
+  
+  The main problem is that the tracing engine sometimes *also* does 1 and 3, so
+  there is some discussion to have whether this can be done.
 
