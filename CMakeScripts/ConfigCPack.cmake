@@ -28,6 +28,8 @@ set(CPACK_SOURCE_GENERATOR "TXZ")
 set(CPACK_PACKAGE_EXECUTABLES "inkscape;Inkscape;inkview;Inkview")
 set(CPACK_STRIP_FILES TRUE)
 set(CPACK_WARN_ON_ABSOLUTE_INSTALL_DESTINATION TRUE)
+configure_file("${CMAKE_SOURCE_DIR}/CMakeScripts/CPack.cmake" "${CMAKE_BINARY_DIR}/CMakeScripts/CPack.cmake" @ONLY)
+set(CPACK_PROJECT_CONFIG_FILE "${CMAKE_BINARY_DIR}/CMakeScripts/CPack.cmake")
 
 ## Windows ##
 
@@ -41,6 +43,12 @@ if (WIN32)
         set(CPACK_NSIS_COMPRESSOR "/SOLID zlib")
         set(CPACK_NSIS_MENU_LINKS "https://inkscape.org/" "Inkscape homepage")
     endif (NSIS_MAKE)
+
+    #WIX
+    set(CPACK_WIX_UPGRADE_GUID "4d5fedaa-84a0-48be-bd2a-08246398361a")
+    set(CPACK_WIX_PRODUCT_ICON "${CMAKE_SOURCE_DIR}/share/branding/inkscape.ico")
+    set(CPACK_WIX_UI_BANNER  "${CMAKE_SOURCE_DIR}/packaging/wix/Bitmaps/banner.bmp")
+    set(CPACK_WIX_UI_DIALOG  "${CMAKE_SOURCE_DIR}/packaging/wix/Bitmaps/dialog.bmp")
 endif (WIN32)
 
 ## Linux ##
