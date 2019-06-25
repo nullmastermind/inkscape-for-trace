@@ -597,7 +597,8 @@ private:
   void symbolicThemeCheck();
   void toggleSymbolic();
   void changeIconsColors();
-  void resetIconsColors();
+  void resetIconsColors(bool themechange = false);
+  void resetIconsColorsWrapper();
   void changeIconsColor(guint32 /*color*/);
   void get_highlight_colors(guint32 &colorsetbase, guint32 &colorsetsuccess, guint32 &colorsetwarning,
                             guint32 &colorseterror);

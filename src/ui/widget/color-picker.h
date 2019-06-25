@@ -48,7 +48,6 @@ public:
     void setRgba32 (guint32 rgba);
     void setSensitive(bool sensitive);
     void closeWindow();
-    void setParentDialog(Gtk::Widget *parent_dialog);
     sigc::connection connectChanged (const sigc::slot<void,guint>& slot)
         { return _changed_signal.connect (slot); }
 
@@ -71,7 +70,6 @@ protected:
     //Inkscape::UI::Dialog::Dialog _colorSelectorDialog;
     Gtk::Dialog _colorSelectorDialog;
     SelectedColor _selected_color;
-    Gtk::Widget *_parent_dialog;
     Gtk::Widget *_color_selector;
 };
 

@@ -139,6 +139,7 @@ image {
 
 .system_base_color {
     color: @theme_fg_color;
+    background-color: @theme_bg_color;
 }
 
 .system_error_color {

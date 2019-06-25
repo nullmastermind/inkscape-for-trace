@@ -317,19 +317,20 @@ void Dialog::addTopWindowClasses()
         Gtk::Widget *canvas = Glib::wrap(GTK_WIDGET(desktop->canvas));
         Gtk::Window *toplevel_window = dynamic_cast<Gtk::Window *>(canvas->get_toplevel());
         if (toplevel_window) {
+            Gtk::Widget *dialog_window = Glib::wrap(gobj());
             if (toplevel_window->get_style_context()->has_class("dark")) {
-                Glib::wrap(gobj())->get_style_context()->add_class("dark");
-                Glib::wrap(gobj())->get_style_context()->remove_class("bright");
+                dialog_window->get_style_context()->add_class("dark");
+                dialog_window->get_style_context()->remove_class("bright");
             } else {
-                Glib::wrap(gobj())->get_style_context()->add_class("bright");
-                Glib::wrap(gobj())->get_style_context()->remove_class("dark");
+                dialog_window->get_style_context()->add_class("bright");
+                dialog_window->get_style_context()->remove_class("dark");
             }
             if (toplevel_window->get_style_context()->has_class("symbolic")) {
-                Glib::wrap(gobj())->get_style_context()->add_class("symbolic");
-                Glib::wrap(gobj())->get_style_context()->remove_class("regular");
+                dialog_window->get_style_context()->add_class("symbolic");
+                dialog_window->get_style_context()->remove_class("regular");
             } else {
-                Glib::wrap(gobj())->get_style_context()->remove_class("symbolic");
-                Glib::wrap(gobj())->get_style_context()->add_class("regular");
+                dialog_window->get_style_context()->remove_class("symbolic");
+                dialog_window->get_style_context()->add_class("regular");
             }
         }
     }

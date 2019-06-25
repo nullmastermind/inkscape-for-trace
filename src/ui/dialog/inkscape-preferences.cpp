@@ -656,29 +656,40 @@ void InkscapePreferences::get_highlight_colors(guint32 &colorsetbase, guint32 &c
     }
 }
 
-void InkscapePreferences::resetIconsColors()
+void InkscapePreferences::resetIconsColors(bool themechange)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
     if (!prefs->getBool("/theme/symbolicIcons", false)) {
-/*         _symbolic_base_colors.set_sensitive(false);
+        _symbolic_base_colors.set_sensitive(false);
         _symbolic_base_color.setSensitive(false);
         _symbolic_success_color.setSensitive(false);
         _symbolic_warning_color.setSensitive(false);
-        _symbolic_error_color.setSensitive(false); */
+        _symbolic_error_color.setSensitive(false);
         return;
     }
     if (prefs->getBool("/theme/symbolicDefaultColors", true) ||
-        !prefs->getEntry("/theme/" + themeiconname + "/symbolicBaseColor").isValid()) {
-        Gdk::RGBA normal_color = _symbolic_base_color.get_style_context()->get_color();
+        !prefs->getEntry("/theme/" + themeiconname + "/symbolicBaseColor").isValid()) 
+    {
+        auto const screen = Gdk::Screen::get_default();
+        if (INKSCAPE.colorizeprovider) {
+            Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.colorizeprovider);
+        }
+        // This colors are setted on style.css of inkscape
+        Gdk::RGBA base_color = _symbolic_base_color.get_style_context()->get_color();
+        // This is a hack to fix a proble style is not updated enoght fast on
+        // chage from dark to bright themes
+        if (themechange) {
+            base_color = _symbolic_base_color.get_style_context()->get_background_color();
+        }
         Gdk::RGBA success_color = _symbolic_success_color.get_style_context()->get_color();
         Gdk::RGBA warning_color = _symbolic_warning_color.get_style_context()->get_color();
         Gdk::RGBA error_color = _symbolic_error_color.get_style_context()->get_color();
-        SPColor normal_color_sp(normal_color.get_red(), normal_color.get_green(), normal_color.get_blue());
+        SPColor base_color_sp(base_color.get_red(), base_color.get_green(), base_color.get_blue());
         SPColor success_color_sp(success_color.get_red(), success_color.get_green(), success_color.get_blue());
         SPColor warning_color_sp(warning_color.get_red(), warning_color.get_green(), warning_color.get_blue());
         SPColor error_color_sp(error_color.get_red(), error_color.get_green(), error_color.get_blue());
-        guint32 colorsetbase = normal_color_sp.toRGBA32(normal_color.get_alpha());
+        guint32 colorsetbase = base_color_sp.toRGBA32(base_color.get_alpha());
         guint32 colorsetsuccess = success_color_sp.toRGBA32(success_color.get_alpha());
         guint32 colorsetwarning = warning_color_sp.toRGBA32(warning_color.get_alpha());
         guint32 colorseterror = error_color_sp.toRGBA32(error_color.get_alpha());
@@ -706,6 +717,11 @@ void InkscapePreferences::resetIconsColors()
         _symbolic_error_color.setSensitive(true);
         /* _complementary_colors->get_style_context()->remove_class("disabled"); */
     }
+}
+
+void InkscapePreferences::resetIconsColorsWrapper()
+{
+    resetIconsColors(false);
 }
 
 void InkscapePreferences::changeIconsColors()
@@ -749,7 +765,9 @@ void InkscapePreferences::toggleSymbolic()
         }
         _symbolic_base_colors.set_sensitive(true);
         Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
-        if (!prefs->getEntry("/theme/" + themeiconname + "/symbolicBaseColor").isValid()) {
+        if (prefs->getBool("/theme/symbolicDefaultColors", true) ||
+            !prefs->getEntry("/theme/" + themeiconname + "/symbolicBaseColor").isValid()) 
+        {
             resetIconsColors();
         } else {
             changeIconsColors();
@@ -773,7 +791,7 @@ void InkscapePreferences::themeChange()
     Gtk::Window *window = SP_ACTIVE_DESKTOP->getToplevel();
     if (window) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        bool darktheme = prefs->getBool("/theme/darkTheme", false);
+        bool darktheme = prefs->getBool("/theme/preferDarkTheme", false);
         Glib::ustring themename = prefs->getString("/theme/gtkTheme");
         Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
         GtkSettings *settings = gtk_settings_get_default();
@@ -790,6 +808,8 @@ void InkscapePreferences::themeChange()
                 dark = true;
             }
         }
+        Gtk::Widget *dialog_window = Glib::wrap(gobj());
+        bool toggled = prefs->getBool("/theme/darkTheme", false) != dark;
         if (dark) {
             prefs->setBool("/theme/darkTheme", true);
             window->get_style_context()->add_class("dark");
@@ -799,8 +819,8 @@ void InkscapePreferences::themeChange()
             window->get_style_context()->add_class("bright");
             window->get_style_context()->remove_class("dark");
         }
-        resetIconsColors();
         INKSCAPE.signal_change_theme.emit();
+        resetIconsColors(toggled);
     }
 }
 
@@ -855,7 +875,9 @@ void InkscapePreferences::symbolicThemeCheck()
         }
     }
     if (symbolic) {
-        if (!prefs->getEntry("/theme/" + themeiconname + "/symbolicBaseColor").isValid()) {
+        if (prefs->getBool("/theme/symbolicDefaultColors", true) ||
+            !prefs->getEntry("/theme/" + themeiconname + "/symbolicBaseColor").isValid()) 
+        {
             resetIconsColors();
         } else {
             changeIconsColors();
@@ -1111,7 +1133,7 @@ void InkscapePreferences::initPageUI()
         _page_theme.add_line(false, _("Change Gtk theme:"), _gtk_theme, "", "", false);
         _gtk_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
     }
-    _dark_theme.init(_("Use dark theme"), "/theme/darkTheme", false);
+    _dark_theme.init(_("Use dark theme"), "/theme/preferDarkTheme", false);
     _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
     _dark_theme.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
     // Icons
@@ -1149,7 +1171,7 @@ void InkscapePreferences::initPageUI()
     _symbolic_icons.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::toggleSymbolic));
     _page_theme.add_line(true, "", _symbolic_icons, "", "", true);
     _symbolic_base_colors.init(_("Use default colors for icons"), "/theme/symbolicDefaultColors", true);
-    _symbolic_base_colors.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::resetIconsColors));
+    _symbolic_base_colors.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::resetIconsColorsWrapper));
     _page_theme.add_line(true, "", _symbolic_base_colors, "", "", true);
     _symbolic_base_color.init(_("Color for symbolic icons:"), "/theme/" + themeiconname + "/symbolicBaseColor",
                               0x2E3436ff);
@@ -1171,10 +1193,6 @@ void InkscapePreferences::initPageUI()
     _symbolic_warning_color.connectChanged(sigc::mem_fun(this, &InkscapePreferences::changeIconsColor));
     _symbolic_success_color.connectChanged(sigc::mem_fun(this, &InkscapePreferences::changeIconsColor));
     _symbolic_error_color.connectChanged(sigc::mem_fun(this, &InkscapePreferences::changeIconsColor));
-    _symbolic_base_color.setParentDialog(this);
-    _symbolic_success_color.setParentDialog(this);
-    _symbolic_warning_color.setParentDialog(this);
-    _symbolic_error_color.setParentDialog(this);
     /* _complementary_colors = Gtk::manage(new Gtk::Image()); */
     Gtk::Box *icon_buttons = Gtk::manage(new Gtk::Box());
     icon_buttons->pack_start(_symbolic_base_color, true, true, 4);

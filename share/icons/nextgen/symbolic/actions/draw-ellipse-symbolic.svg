@@ -7,13 +7,13 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   version="1.1"
-   id="svg1"
-   width="16"
-   height="16"
-   viewBox="0 0 16 16"
+   inkscape:version="1.0alpha2 (9f2c3edcd0, 2019-06-24, custom)"
    sodipodi:docname="draw-ellipse-symbolic.svg"
-   inkscape:version="1.0alpha2 (119fb3b5e8, 2019-06-21, custom)">
+   viewBox="0 0 16 16"
+   height="16"
+   width="16"
+   id="svg1"
+   version="1.1">
   <metadata
      id="metadata1213">
     <rdf:RDF>
@@ -40,68 +40,68 @@
   <defs
      id="defs1211">
     <inkscape:path-effect
-       effect="join_type"
+       attempt_force_join="true"
+       miter_limit="100"
+       linejoin_type="extrp_arc"
+       line_width="2"
+       linecap_type="butt"
+       is_visible="true"
        id="path-effect950"
-       is_visible="true"
-       linecap_type="butt"
-       line_width="2.5"
-       linejoin_type="extrp_arc"
-       miter_limit="100"
-       attempt_force_join="true" />
+       effect="join_type" />
     <inkscape:path-effect
-       effect="join_type"
-       id="path-effect942"
-       is_visible="true"
-       linecap_type="butt"
-       line_width="2.5"
-       linejoin_type="extrp_arc"
+       attempt_force_join="true"
        miter_limit="100"
-       attempt_force_join="true" />
+       linejoin_type="extrp_arc"
+       line_width="2.5"
+       linecap_type="butt"
+       is_visible="true"
+       id="path-effect942"
+       effect="join_type" />
   </defs>
   <sodipodi:namedview
-     inkscape:showpageshadow="true"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     id="namedview"
-     showgrid="true"
-     inkscape:zoom="14.555687"
-     inkscape:cx="2.1272764"
-     inkscape:cy="7.0793571"
-     inkscape:window-width="1920"
-     inkscape:window-height="1016"
-     inkscape:window-x="0"
-     inkscape:window-y="27"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg1"
+     inkscape:snap-global="false"
      inkscape:document-rotation="0"
-     inkscape:snap-global="false">
+     inkscape:current-layer="g0"
+     inkscape:window-maximized="1"
+     inkscape:window-y="27"
+     inkscape:window-x="0"
+     inkscape:window-height="704"
+     inkscape:window-width="1360"
+     inkscape:cy="18.106338"
+     inkscape:cx="28.18301"
+     inkscape:zoom="7.9195959"
+     showgrid="true"
+     id="namedview"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     inkscape:showpageshadow="true">
     <inkscape:grid
-       type="xygrid"
-       id="grid" />
+       id="grid"
+       type="xygrid" />
   </sodipodi:namedview>
   <g
-     inkscape:label="draw-ellipse"
-     id="g0">
+     id="g0"
+     inkscape:label="draw-ellipse">
     <path
-       id="background"
-       d="M 0,0 H 16 V 16 H 0 Z"
+       inkscape:connector-curvature="0"
        style="opacity:0"
-       inkscape:connector-curvature="0" />
+       d="M 0,0 H 16 V 16 H 0 Z"
+       id="background" />
     <path
-       sodipodi:nodetypes="sssss"
-       inkscape:connector-curvature="0"
-       d="m 7.9999957,13.598599 c -3.092032,0 -5.598617,-2.506578 -5.598617,-5.5986123 0,-3.0920333 2.506585,-5.5986179 5.598617,-5.5986179 3.0920313,0 5.5986113,2.5065846 5.5986113,5.5986179 0,3.0920283 -2.506585,5.5986123 -5.5986113,5.5986123 z"
+       class="warning"
        id="path949"
-       class="warning" />
-    <path
-       class="base"
-       id="path1215"
-       d="m 2.2500002,8.0000038 c 0,-3.1693361 2.5806675,-5.7500036 5.7500036,-5.7500036 3.1693352,0 5.7499962,2.580666 5.7499962,5.7500036 C 13.75,11.169331 11.169331,13.75 8.0000038,13.75 4.8306662,13.75 2.2500002,11.169339 2.2500002,8.0000038 Z m 13.9999998,0 c 0,-4.5626556 -3.687339,-8.2500036 -8.2499962,-8.2500036 -4.5626571,0 -8.2500036,3.6873465 -8.2500036,8.2500036 0,4.5626572 3.687348,8.2499962 8.2500036,8.2499962 C 12.562655,16.25 16.25,12.562655 16.25,8.0000038 Z"
+       d="m 7.9999957,13.598599 c -3.092032,0 -5.598617,-2.506578 -5.598617,-5.5986123 0,-3.0920333 2.506585,-5.5986179 5.598617,-5.5986179 3.0920313,0 5.5986113,2.5065846 5.5986113,5.5986179 0,3.0920283 -2.506585,5.5986123 -5.5986113,5.5986123 z"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="sssss"
-       inkscape:path-effect="#path-effect950"
+       sodipodi:nodetypes="sssss" />
+    <path
+       transform="matrix(0.82855242,0,0,0.82855242,1.3715807,1.3715807)"
        inkscape:original-d="M 8.0000038,15 C 4.1340072,15 1.0000002,11.866 1.0000002,8.0000038 c 0,-3.8659966 3.134007,-7.0000036 7.0000036,-7.0000036 C 11.866,1.0000002 15,4.1340072 15,8.0000038 15,11.865993 11.865993,15 8.0000038,15 Z"
-       transform="matrix(0.93309984,0,0,0.93309984,0.5352013,0.5352013)" />
+       inkscape:path-effect="#path-effect950"
+       sodipodi:nodetypes="sssss"
+       inkscape:connector-curvature="0"
+       d="m 2.0000002,8.0000038 c 0,-3.3086682 2.6913354,-6.0000036 6.0000036,-6.0000036 C 11.308672,2.0000002 14,4.6913344 14,8.0000038 14,11.308664 11.308664,14 8.0000038,14 4.6913344,14 2.0000002,11.308672 2.0000002,8.0000038 Z M 16,8.0000038 C 16,3.57668 12.423328,2e-7 8.0000038,2e-7 3.5766788,2e-7 2e-7,3.5766788 2e-7,8.0000038 2e-7,12.423328 3.57668,16 8.0000038,16 12.423322,16 16,12.423322 16,8.0000038 Z"
+       id="path1215"
+       class="base" />
   </g>
 </svg>
