@@ -32,6 +32,7 @@
 
 #include <gtkmm/popover.h>
 #include <gtkmm/box.h>
+#include <gtkmm/separatortoolitem.h>
 #include <gtkmm/adjustment.h>
 
 class SPDesktop;
@@ -67,21 +68,24 @@ private:
     UI::Widget::ComboBoxEntryToolItem *_font_family_item;
     UI::Widget::ComboBoxEntryToolItem *_font_size_item;
     UI::Widget::ComboBoxEntryToolItem *_font_style_item;
-    Gtk::Popover *_hamburger_menu;
-    Gtk::Box *_hamburger_menu_content;
-    Gtk::ToggleToolButton *_hamburger_menu_launcher;
+    Gtk::Popover *_line_spacing_menu;
+    Gtk::Box *_line_spacing_menu_content;
+    Gtk::ToolButton *_line_spacing_defaulting;
+    Gtk::ToggleToolButton *_line_height_unset_item;
+    Gtk::ToggleToolButton *_line_spacing_menu_launcher;
+    UI::Widget::ComboToolItem *_line_height_units_item;
+    UI::Widget::SpinButtonToolItem *_line_height_item;
+    UI::Widget::ComboToolItem *_line_spacing_item;
     Gtk::ToggleToolButton *_superscript_item;
     Gtk::ToggleToolButton *_subscript_item;
     Gtk::ToggleToolButton *_outer_style_item;
-    Gtk::ToggleToolButton *_line_height_unset_item;
+    
+
     UI::Widget::ComboToolItem *_align_item;
     UI::Widget::ComboToolItem *_writing_mode_item;
     UI::Widget::ComboToolItem *_orientation_item;
     UI::Widget::ComboToolItem *_direction_item;
-    UI::Widget::ComboToolItem *_line_height_units_item;
-    UI::Widget::ComboToolItem *_line_spacing_item;
 
-    UI::Widget::SpinButtonToolItem *_line_height_item;
     UI::Widget::SpinButtonToolItem *_word_spacing_item;
     UI::Widget::SpinButtonToolItem *_letter_spacing_item;
     UI::Widget::SpinButtonToolItem *_dx_item;
@@ -113,6 +117,8 @@ private:
     void direction_changed(int mode);
     void lineheight_value_changed();
     void lineheight_unit_changed(int not_used);
+    void lineheight_defaulting();
+    void line_height_popover_closed();
     void line_spacing_mode_changed(int mode);
     void wordspacing_value_changed();
     void letterspacing_value_changed();

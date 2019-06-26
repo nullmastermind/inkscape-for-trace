@@ -328,6 +328,12 @@ spinbutton undershoot {
     font-size: 7pt;
 }
 
+#line_spacing_menu > box *{
+	margin:1px;
+}
+
+
+
 /* The actual canvas (Inkscape's drawing area). */
 
 SPCanvas {

@@ -54,7 +54,8 @@ ComboToolItem::ComboToolItem(Glib::ustring group_label,
     _use_pixbuf (true),
     _icon_size ( Gtk::ICON_SIZE_LARGE_TOOLBAR ),
     _combobox (nullptr),
-    _menuitem (nullptr)
+    _menuitem (nullptr),
+    _active(0)
 {
     Gtk::Box* box = Gtk::manage(new Gtk::Box());
     add(*box);
