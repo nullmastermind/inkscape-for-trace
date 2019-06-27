@@ -60,6 +60,7 @@
 #include "ui/uxmanager.h"
 #include "ui/widget/button.h"
 #include "ui/widget/dock.h"
+#include "ui/widget/ink-ruler.h"
 #include "ui/widget/layer-selector.h"
 #include "ui/widget/selected-style.h"
 #include "ui/widget/spin-button-tool-item.h"
@@ -287,10 +288,20 @@ sp_desktop_widget_class_init (SPDesktopWidgetClass *klass)
  *
  * This adjusts the range of the rulers when the dock container is adjusted
  * (fixes lp:950552)
+ *
+ * This fix was causing the rulers to be completely redrawn when not needed.
+ * Added check to see if allocation really changed.
+ *
+ *(Question, why is the callback being called when allocation not changed?)
  */
 void
-SPDesktopWidget::canvas_tbl_size_allocate(Gtk::Allocation& /*allocation*/)
+SPDesktopWidget::canvas_tbl_size_allocate(Gtk::Allocation& allocation)
 {
+    if (_allocation == allocation) {
+        return;
+    }
+
+    _allocation = allocation;
     update_rulers();
 }
 
@@ -376,14 +387,26 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->_guides_lock->signal_toggled().connect(sigc::mem_fun(dtw, &SPDesktopWidget::update_guides_lock));
     dtw->_canvas_tbl->attach(*dtw->_guides_lock, 0, 0, 1, 1);
 
+    /* Rulers */
+    Inkscape::Util::Unit const *pt = unit_table.getUnit("pt");
+
     /* Horizontal ruler */
+    dtw->_hruler2 = Gtk::manage(new Inkscape::UI::Widget::Ruler(Gtk::ORIENTATION_HORIZONTAL));
+    dtw->_hruler2->set_unit(pt);
+
     dtw->_hruler = Glib::wrap(sp_ruler_new(GTK_ORIENTATION_HORIZONTAL));
     dtw->_hruler->set_name("HorizontalRuler");
-    dtw->_hruler_box = Gtk::manage(new Gtk::EventBox());
-    Inkscape::Util::Unit const *pt = unit_table.getUnit("pt");
     sp_ruler_set_unit(SP_RULER(dtw->_hruler->gobj()), pt);
+
+    dtw->_hruler_box = Gtk::manage(new Gtk::EventBox());
     dtw->_hruler_box->set_tooltip_text(gettext(pt->name_plural.c_str()));
-    dtw->_hruler_box->add(*dtw->_hruler);
+    // dtw->_hruler_box->add(*dtw->_hruler);
+
+    auto vbox   = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+
+    vbox->pack_start(*dtw->_hruler, true, true);
+    vbox->pack_start(*dtw->_hruler2, true, true);
+    dtw->_hruler_box->add(*vbox);
 
     dtw->_hruler_box->signal_button_press_event().connect(sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_press_event), dtw->_hruler_box, true));
     dtw->_hruler_box->signal_button_release_event().connect(sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_release_event), dtw->_hruler_box, true));
@@ -397,7 +420,16 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->_vruler_box = Gtk::manage(new Gtk::EventBox());
     sp_ruler_set_unit (SP_RULER (dtw->_vruler->gobj()), pt);
     dtw->_vruler_box->set_tooltip_text(gettext(pt->name_plural.c_str()));
-    dtw->_vruler_box->add(*dtw->_vruler);
+    // dtw->_vruler_box->add(*dtw->_vruler);
+
+    auto hbox   = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
+    dtw->_vruler2 = Gtk::manage(new Inkscape::UI::Widget::Ruler(Gtk::ORIENTATION_VERTICAL));
+    dtw->_vruler2->set_unit(pt);
+
+    hbox->pack_start(*dtw->_vruler, true, true);
+    hbox->pack_start(*dtw->_vruler2, true, true);
+    dtw->_vruler_box->add(*hbox);
+
 
     dtw->_vruler_box->signal_button_press_event().connect(sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_press_event), dtw->_vruler_box, false));
     dtw->_vruler_box->signal_button_release_event().connect(sigc::bind(sigc::mem_fun(*dtw, &SPDesktopWidget::on_ruler_box_button_release_event), dtw->_vruler_box, false));
@@ -484,6 +516,9 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
     sp_ruler_add_track_widget(SP_RULER(dtw->_hruler->gobj()), GTK_WIDGET(dtw->_canvas));
     sp_ruler_add_track_widget(SP_RULER(dtw->_vruler->gobj()), GTK_WIDGET(dtw->_canvas));
+    dtw->_hruler2->add_track_widget(*Glib::wrap(GTK_WIDGET(dtw->_canvas)));
+    dtw->_vruler2->add_track_widget(*Glib::wrap(GTK_WIDGET(dtw->_canvas)));
+
     auto css_provider  = gtk_css_provider_new();
     auto style_context = gtk_widget_get_style_context(GTK_WIDGET(dtw->_canvas));
 
@@ -1739,6 +1774,7 @@ SPDesktopWidget::update_rulers()
                        lower_x,
                        upper_x,
                        upper_x - lower_x);
+    _hruler2->set_range(lower_x, upper_x);
 
     double lower_y = _dt2r * (viewbox.bottom() - _ruler_origin[Geom::Y]);
     double upper_y = _dt2r * (viewbox.top()    - _ruler_origin[Geom::Y]);
@@ -1749,6 +1785,7 @@ SPDesktopWidget::update_rulers()
                        lower_y,
                        upper_y,
                        upper_y - lower_y);
+    _vruler2->set_range(lower_y, upper_y);
 }
 
 
@@ -1762,6 +1799,8 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
 
         sp_ruler_set_unit(SP_RULER(_vruler->gobj()), nv->getDisplayUnit());
         sp_ruler_set_unit(SP_RULER(_hruler->gobj()), nv->getDisplayUnit());
+        _vruler2->set_unit(nv->getDisplayUnit());
+        _hruler2->set_unit(nv->getDisplayUnit());
 
         /* This loops through all the grandchildren of aux toolbox,
          * and for each that it finds, it performs an sp_search_by_data_recursive(),

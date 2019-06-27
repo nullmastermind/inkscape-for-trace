@@ -296,6 +296,10 @@ SPRuler {
     color: @theme_fg_color;
 }
 
+#InkRuler {
+    font-size: 7pt;
+}
+
 ruler-widget {
     background-color: @theme_bg_color;
     color: @theme_fg_color;
