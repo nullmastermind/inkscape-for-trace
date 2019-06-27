@@ -149,6 +149,8 @@ static void sp_gradient_selector_init(SPGradientSelector *sel)
     count_column->set_clickable(true);
     count_column->set_resizable(true);
 
+    sel->treeview->signal_key_press_event().connect(sigc::mem_fun(*sel, &SPGradientSelector::onKeyPressEvent), false);
+
     sel->treeview->show();
 
     icon_column->signal_clicked().connect( sigc::mem_fun(*sel, &SPGradientSelector::onTreeColorColClick) );
@@ -334,6 +336,66 @@ void SPGradientSelector::onTreeCountColClick() {
     column->set_sort_column(columns->refcount);
 }
 
+void SPGradientSelector::moveSelection(int amount)
+{
+    Glib::RefPtr<Gtk::TreeSelection> select = treeview->get_selection();
+    auto iter = select->get_selected();
+    auto canary = iter;
+
+    for (--canary; amount < 0 && canary; ++amount) {
+        --canary;
+        --iter;
+    }
+
+    canary = iter;
+    for (++canary; amount > 0 && canary; --amount) {
+        ++canary;
+        ++iter;
+    }
+
+    select->select(iter);
+    treeview->scroll_to_row(store->get_path(iter), 0.5);
+}
+
+bool SPGradientSelector::onKeyPressEvent(GdkEventKey *event)
+{
+    bool consume = false;
+    auto display = Gdk::Display::get_default();
+    auto keymap = display->get_keymap();
+    guint key = 0;
+    gdk_keymap_translate_keyboard_state(keymap, event->hardware_keycode,
+                                        static_cast<GdkModifierType>(event->state),
+                                        0, &key, 0, 0, 0);
+
+    switch (key) {
+        case GDK_KEY_Up:
+        case GDK_KEY_KP_Up: {
+            moveSelection(-1);
+            consume = true;
+            break;
+        }
+        case GDK_KEY_Down:
+        case GDK_KEY_KP_Down: {
+            moveSelection(1);
+            consume = true;
+            break;
+        }
+        case GDK_KEY_Page_Up:
+        case GDK_KEY_KP_Page_Up: {
+            moveSelection(-5);
+            consume = true;
+            break;
+        }
+
+        case GDK_KEY_Page_Down:
+        case GDK_KEY_KP_Page_Down: {
+            moveSelection(5);
+            consume = true;
+            break;
+        }
+    }
+    return consume;
+}
 
 void SPGradientSelector::onTreeSelection()
 {

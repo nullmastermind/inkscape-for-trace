@@ -60,6 +60,7 @@ struct SPGradientSelector {
 
     /* Tree */
     bool _checkForSelected(const Gtk::TreePath& path, const Gtk::TreeIter& iter, SPGradient *vector);
+    bool onKeyPressEvent(GdkEventKey *event);
     void onTreeSelection();
     void onGradientRename( const Glib::ustring& path_string, const Glib::ustring& new_text);
     void onTreeNameColClick();
@@ -114,6 +115,7 @@ struct SPGradientSelector {
     void setSpread(SPGradientSpread spread);
     void setVector(SPDocument *doc, SPGradient *vector);
     void selectGradientInTree(SPGradient *vector);
+    void moveSelection(int amount);
 
     SPGradientUnits getUnits();
     SPGradientSpread getSpread();
