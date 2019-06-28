@@ -41,7 +41,7 @@ public:
     void get_preferred_height_vfunc(int& minimum_height, int& natural_height) const override;
 
 protected:
-    bool draw_scale();
+    bool draw_scale(const Cairo::RefPtr<::Cairo::Context>& cr);
     void draw_marker(const Cairo::RefPtr<::Cairo::Context>& cr);
     Cairo::RectangleInt marker_rect();
     bool on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr) override;
@@ -59,7 +59,7 @@ private:
 
     bool   _backing_store_valid;
 
-    Cairo::RefPtr<::Cairo::ImageSurface> _backing_store;
+    Cairo::RefPtr<::Cairo::Surface> _backing_store;
     Cairo::RectangleInt _rect;
 };
 

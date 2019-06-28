@@ -63,7 +63,7 @@ Ruler::set_unit(Inkscape::Util::Unit const *unit)
     if (_unit != unit) {
         _unit = unit;
 
-        draw_scale(); // Update backing store.
+        _backing_store_valid = false;
         queue_draw();
     }
 }
@@ -81,7 +81,7 @@ Ruler::set_range(const double& lower, const double& upper)
             _max_size = 1;
         }
 
-        draw_scale(); // Update backing store.
+        _backing_store_valid = false;
         queue_draw();
     }
 }
@@ -180,8 +180,9 @@ Ruler::get_preferred_height_vfunc (int& minimum_height, int& natural_height) con
 // is a border, We calculate tick position ignoring border width at ends of ruler but move the
 // ticks and position marker inside the border.
 bool
-Ruler::draw_scale()
+Ruler::draw_scale(const::Cairo::RefPtr<::Cairo::Context>& cr_in)
 {
+
     // Get style information
     Glib::RefPtr<Gtk::StyleContext> style_context = get_style_context();
     Gtk::Border border = style_context->get_border(get_state_flags());
@@ -196,13 +197,15 @@ Ruler::draw_scale()
     Gtk::Allocation allocation = get_allocation();
     int awidth  = allocation.get_width();
     int aheight = allocation.get_height();
+
     // if (allocation.get_x() != 0 || allocation.get_y() != 0) {
     //     std::cerr << "Ruler::draw_scale: maybe we do have to handle allocation x and y! "
     //               << " x: " << allocation.get_x() << " y: " << allocation.get_y() << std::endl;
     // }
 
-    // Create backing store
-    _backing_store = Cairo::ImageSurface::create(Cairo::FORMAT_ARGB32, awidth, aheight);
+    // Create backing store (need surface_in to get scale factor correct).
+    Cairo::RefPtr<Cairo::Surface> surface_in = cr_in->get_target();
+    _backing_store = Cairo::Surface::create(surface_in, Cairo::CONTENT_COLOR_ALPHA, awidth, aheight);
 
     // Get context
     Cairo::RefPtr<::Cairo::Context> cr = ::Cairo::Context::create(_backing_store);
@@ -426,7 +429,7 @@ bool
 Ruler::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr) {
 
     if (!_backing_store_valid) {
-        draw_scale();
+        draw_scale (cr);
     }
 
     cr->set_source (_backing_store, 0, 0);
