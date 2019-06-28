@@ -283,7 +283,7 @@ Ruler::draw_scale(const::Cairo::RefPtr<::Cairo::Context>& cr_in)
     for (int i = start; i < end+1; ++i) {
 
         // Position of tick (add 0.5 to center tick on pixel).
-        double position = std::round(i*pixels_per_tick - _lower*pixels_per_unit) + 0.5;
+        double position = std::floor(i*pixels_per_tick - _lower*pixels_per_unit) + 0.5;
 
         // Height of tick
         int height = rheight;
