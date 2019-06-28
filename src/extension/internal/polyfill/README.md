@@ -1,4 +1,4 @@
-# Gradient Mesh JavaScript polyfill
+# JavaScript polyfills
 
 This directory contains JavaScript "Polyfills" to support rendering of SVG 2
 features that are not well supported by browsers, but appeared in the 2016
@@ -7,6 +7,9 @@ features that are not well supported by browsers, but appeared in the 2016
 The included files are:
  - `mesh.js` mesh gradients supporting bicubic meshes and mesh on strokes.
  - `mesh_compressed.include` mesh.js minified and wrapped as a C++11 raw string literal.
+ - `hatch.js` hatch paint server supporting linear and absolute paths hatches
+ (relative paths are not fully supported)
+ - `hatch_tests` folder with tests used for `hatch.js` rendering
 
 ## Details
 The coding standard used is [semistandard](https://github.com/Flet/semistandard),

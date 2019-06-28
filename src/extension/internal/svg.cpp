@@ -57,7 +57,7 @@ using Inkscape::XML::AttributeRecord;
 using Inkscape::XML::Node;
 
 /*
- * Removes all sodipodi and inkscape elements and attributes from an xml tree. 
+ * Removes all sodipodi and inkscape elements and attributes from an xml tree.
  * used to make plain svg output.
  */
 static void pruneExtendedNamespaces( Inkscape::XML::Node *repr )
@@ -100,7 +100,7 @@ static void pruneProprietaryGarbage( Inkscape::XML::Node *repr )
 {
     if (repr) {
         std::vector<Inkscape::XML::Node *> nodesRemoved;
-        for ( Node *child = repr->firstChild(); child; child = child->next() ) { 
+        for ( Node *child = repr->firstChild(); child; child = child->next() ) {
             if((strncmp("i:pgf", child->name(), 5) == 0)) {
                 nodesRemoved.push_back(child);
                 g_warning( "An Adobe proprietary tag was found which is known to cause issues. It was removed before saving.");
@@ -108,7 +108,7 @@ static void pruneProprietaryGarbage( Inkscape::XML::Node *repr )
                 pruneProprietaryGarbage(child);
             }
         }
-        for (auto & it : nodesRemoved) { 
+        for (auto & it : nodesRemoved) {
             repr->removeChild(it);
         }
     }
@@ -423,7 +423,7 @@ static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *doc, In
                         }
                         sp_repr_set_svg_double(line_tspan, "y", line_y); // FIXME: this will pick up the wrong end of counter-directional runs
                     } else {
-                        // std::cout << "  vertical:   " << line_anchor_point[Geom::X] << " " << text_y << std::endl; 
+                        // std::cout << "  vertical:   " << line_anchor_point[Geom::X] << " " << text_y << std::endl;
                         sp_repr_set_svg_double(line_tspan, "x", line_x); // FIXME: this will pick up the wrong end of counter-directional runs
                         if (text->has_inline_size()) {
                             sp_repr_set_svg_double(line_tspan, "y", text_y);
@@ -558,6 +558,46 @@ static void insert_mesh_polyfill( Inkscape::XML::Node *repr )
     }
 }
 
+
+static void insert_hatch_polyfill( Inkscape::XML::Node *repr )
+{
+    if (repr) {
+
+        Inkscape::XML::Node *defs = sp_repr_lookup_name (repr, "svg:defs");
+
+        if (defs == nullptr) {
+            // We always put meshes in <defs>, no defs -> no mesh.
+            return;
+        }
+
+        bool has_hatch = false;
+        for ( Node *child = defs->firstChild(); child; child = child->next() ) {
+            if (strncmp("svg:hatch", child->name(), 16) == 0) {
+                has_hatch = true;
+                break;
+            }
+        }
+
+        Inkscape::XML::Node *script = sp_repr_lookup_child (repr, "id", "hatch_polyfill");
+
+        if (has_hatch && script == nullptr) {
+
+            script = repr->document()->createElement("svg:script");
+            script->setAttribute ("id",   "hatch_polyfill");
+            script->setAttribute ("type", "text/javascript");
+            repr->root()->appendChild(script); // Must be last
+
+            // Insert JavaScript via raw string literal.
+            Glib::ustring js =
+#include "polyfill/hatch_compressed.include"
+;
+
+            Inkscape::XML::Node *script_text = repr->document()->createTextNode(js.c_str());
+            script->appendChild(script_text);
+        }
+    }
+}
+
 /*
  * Recursively transform SVG 2 to SVG 1.1, if possible.
  */
@@ -655,7 +695,7 @@ Svg::init()
                 "<output_extension>" SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE "</output_extension>\n"
             "</input>\n"
         "</inkscape-extension>", new Svg());
-    
+
     /* SVG out Inkscape */
     Inkscape::Extension::build_from_mem(
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
@@ -881,12 +921,15 @@ Svg::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
         prefs->getBool("/options/svgexport/text_insertfallback", true);
     bool const insert_mesh_polyfill_flag =
         prefs->getBool("/options/svgexport/mesh_insertpolyfill", true);
+    bool const insert_hatch_polyfill_flag =
+        prefs->getBool("/options/svgexport/hatch_insertpolyfill", true);
 
     bool createNewDoc =
         !exportExtensions         ||
         transform_2_to_1_flag     ||
         insert_text_fallback_flag ||
-        insert_mesh_polyfill_flag;
+        insert_mesh_polyfill_flag ||
+        insert_hatch_polyfill_flag;
 
     // We prune the in-use document and deliberately loose data, because there
     // is no known use for this data at the present time.
@@ -899,7 +942,7 @@ Svg::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
         Inkscape::XML::Document *new_rdoc = new Inkscape::XML::SimpleDocument();
 
         // Comments and PI nodes are not included in this duplication
-        // TODO: Move this code into xml/document.h and duplicate rdoc instead of root. 
+        // TODO: Move this code into xml/document.h and duplicate rdoc instead of root.
         new_rdoc->setAttribute("standalone", "no");
         new_rdoc->setAttribute("version", "2.0");
 
@@ -925,6 +968,10 @@ Svg::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
 
         if (insert_mesh_polyfill_flag) {
             insert_mesh_polyfill (root);
+        }
+
+        if (insert_hatch_polyfill_flag) {
+            insert_hatch_polyfill (root);
         }
 
         rdoc = new_rdoc;

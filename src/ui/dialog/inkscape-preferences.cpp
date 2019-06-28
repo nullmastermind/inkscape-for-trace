@@ -505,7 +505,7 @@ void InkscapePreferences::initPageTools()
     _page_text.add_line( true, "", _font_fontsdir_user, "", _("Load additional fonts from \"fonts\" directory located in Inkscape's user configuration directory"));
     _font_fontdirs_custom.init("/options/font/custom_fontdirs", 50);
     _page_text.add_line(true, _("Additional font directories"), _font_fontdirs_custom, "", _("Load additional fonts from custom locations (one path per line)"), true);
-    
+
 
     this->AddNewObjectsStyle(_page_text, "/tools/text");
 
@@ -1307,9 +1307,11 @@ void InkscapePreferences::initPageIO()
     _page_svgexport.add_group_header( _("SVG 2"));
     _svgexport_insert_text_fallback.init( _("Insert SVG 1.1 fallback in text."),                                     "/options/svgexport/text_insertfallback",    true );
     _svgexport_insert_mesh_polyfill.init( _("Insert Mesh Gradient JavaScript polyfill."),                            "/options/svgexport/mesh_insertpolyfill",    true );
+    _svgexport_insert_mesh_polyfill.init( _("Insert Hatch Paint Server JavaScript polyfill."),                       "/options/svgexport/hatch_insertpolyfill",   true );
 
-    _page_svgexport.add_line( false, "", _svgexport_insert_text_fallback,  "", _("Adds fallback options for non-SVG 2 renderers."),        false);
-    _page_svgexport.add_line( false, "", _svgexport_insert_mesh_polyfill,  "", _("Adds JavaScript polyfill to render meshes (only fill."), false);
+    _page_svgexport.add_line( false, "", _svgexport_insert_text_fallback,  "", _("Adds fallback options for non-SVG 2 renderers."),                          false);
+    _page_svgexport.add_line( false, "", _svgexport_insert_mesh_polyfill,  "", _("Adds JavaScript polyfill to render meshes."),                              false);
+    _page_svgexport.add_line( false, "", _svgexport_insert_mesh_polyfill,  "", _("Adds JavaScript polyfill to render hatches (linear and absolute paths)."), false);
 
     // SVG Export Options (SVG 2 -> SVG 1)
     _page_svgexport.add_group_header( _("SVG 2 to SVG 1.1"));
