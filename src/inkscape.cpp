@@ -426,7 +426,7 @@ Application::add_gtk_css()
             // Use in case the special widgets have inverse theme background and symbolic
             int colorset_inverse = colorset ^ 0xffffff00;
             sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorset_inverse);
-            css_str += "SPRuler, ruler-widget,";
+            css_str += "SPRuler, ruler-widget, #InkRuler, ";
             css_str += ".bright image, .dark image";
             css_str += "{color:";
             css_str += colornamed;
