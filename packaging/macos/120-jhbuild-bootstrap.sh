@@ -20,6 +20,9 @@ get_source $URL_OPENSSL
 ./config --prefix=$OPT_DIR --openssldir=$OPT_DIR/etc/ssl $FLAG_MMACOSXVERSIONMIN
 make_makeinstall
 
+# The non-Apple OpenSSL cannot access the keychain where the certificates
+# are stored (required for https downloads). But the curl project provides
+# a certificates file that they extracted from Mozilla, so we use that.
 curl -o $OPT_DIR/etc/ssl/cert.pem $URL_CURL_CACERT
 
 ### bootstrap jhbuild environment ##############################################

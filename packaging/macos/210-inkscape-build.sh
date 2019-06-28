@@ -45,12 +45,12 @@ make
 make install
 
 # patch Poppler library locations
-install_name_tool -change @rpath/libpoppler.85.dylib $LIB_DIR/libpoppler.85.dylib $BIN_DIR/inkscape
-install_name_tool -change @rpath/libpoppler-glib.8.dylib $LIB_DIR/libpoppler-glib.8.dylib $BIN_DIR/inkscape
-install_name_tool -change @rpath/libpoppler.85.dylib $LIB_DIR/libpoppler.85.dylib $LIB_DIR/inkscape/libinkscape_base.dylib
-install_name_tool -change @rpath/libpoppler-glib.8.dylib $LIB_DIR/libpoppler-glib.8.dylib $LIB_DIR/inkscape/libinkscape_base.dylib
+relocate_dependency $LIB_DIR/libpoppler.85.dylib $BIN_DIR/inkscape
+relocate_dependency $LIB_DIR/libpoppler-glib.8.dylib $BIN_DIR/inkscape
+relocate_dependency $LIB_DIR/libpoppler.85.dylib $LIB_DIR/inkscape/libinkscape_base.dylib
+relocate_dependency $LIB_DIR/libpoppler-glib.8.dylib $LIB_DIR/inkscape/libinkscape_base.dylib
 
 # patch OpenMP library locations
-install_name_tool -change @rpath/libomp.dylib $LIB_DIR/libomp.dylib $BIN_DIR/inkscape
-install_name_tool -change @rpath/libomp.dylib $LIB_DIR/libomp.dylib $LIB_DIR/inkscape/libinkscape_base.dylib
+relocate_dependency $LIB_DIR/libomp.dylib $BIN_DIR/inkscape
+relocate_dependency $LIB_DIR/libomp.dylib $LIB_DIR/inkscape/libinkscape_base.dylib
 

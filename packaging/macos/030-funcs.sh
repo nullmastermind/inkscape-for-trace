@@ -4,11 +4,11 @@
 #
 # ### 030-funcs.sh ###
 # This file contains all the functions used by the other scripts. It helps
-# modularizing functionalities and keeping the scripts that do the real work
-# as clean as possible.
+# modularizing functionality and keeping the scripts that do the real work
+# as readable as possible.
 # This file does not include the "vars" files it requires itself (on purpose,
 # for flexibility reasons), the script that wants to use these functions
-# needs to do that. The suggest way is to always source all the "0nn-*.sh"
+# needs to do that. The suggested way is to always source all the "0nn-*.sh"
 # files in order.
 
 [ -z $FUNCS_INCLUDED ] && FUNCS_INCLUDED=true || return   # include guard
@@ -26,7 +26,7 @@ function get_repo_version
 
 function get_inkscape_version
 {
-  local file=$SRC_DIR/inkscape/CMakeLists.txt
+  local file=$INK_DIR/CMakeLists.txt
   local ver_major=$(grep INKSCAPE_VERSION_MAJOR $file | head -n 1 | awk '{ print $2+0 }')
   local ver_minor=$(grep INKSCAPE_VERSION_MINOR $file | head -n 1 | awk '{ print $2+0 }')
   local ver_patch=$(grep INKSCAPE_VERSION_PATCH $file | head -n 1 | awk '{ print $2+0 }')
@@ -35,11 +35,6 @@ function get_inkscape_version
   ver_suffix=${ver_suffix%\"*}   # remove "double quote and everything after" from end
   ver_suffix=${ver_suffix#\"}   # remove "double quote" from beginning
  
-  # If there is a suffix, add the dot to it. Otherwise the suffix stays an
-  # empty string and resolves to "nothing" down below (as intended in that
-  # case).
-  [ ${#ver_suffix} -gt 0 ] && ver_suffix=.$ver_suffix
-
   echo $ver_major.$ver_minor.$ver_patch$ver_suffix
 }
 

@@ -4,7 +4,7 @@
 # This file is part of the build pipeline for Inkscape on macOS.
 #
 # ### 130-jhbuild-python.sh ###
-# Install Python 2 and 3.
+# Install Python 2 and packages for the build system.
 
 ### load settings and functions ################################################
 

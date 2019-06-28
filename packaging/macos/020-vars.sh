@@ -30,12 +30,12 @@ export MAKEFLAGS="-j $CORES"
 
 ### target OS version ##########################################################
 
-# There are a lot of ways to appraoch this. I recommend:
+# There are a lot of ways to appraoch this. Recommendation:
 #   - OS X El Capitan (10.11)
 #   - Xcode 8.2.1 (latest Xcode to support 10.11) for its clang 8.x
 #   - MacOSX10.11.sdk from Xcode 7.3.1
 
-export MACOSX_DEPLOYMENT_TARGET=10.11   # minimum version Mavericks
+export MACOSX_DEPLOYMENT_TARGET=10.11   # minimum version El Capitan
 
 FLAG_MMACOSXVERSIONMIN="-mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
 
@@ -171,6 +171,7 @@ URL_LIBREVENGE=https://ayera.dl.sourceforge.net/project/libwpd/librevenge/librev
 URL_LIBSOUP=https://ftp.gnome.org/pub/GNOME/sources/libsoup/2.65/libsoup-2.65.92.tar.xz
 URL_LIBVISIO=https://github.com/LibreOffice/libvisio/archive/libvisio-0.1.6.tar.gz
 URL_LIBWPG=https://netcologne.dl.sourceforge.net/project/libwpg/libwpg/libwpg-0.3.3/libwpg-0.3.3.tar.xz
+URL_NODEJS=https://nodejs.org/dist/v10.16.0/node-v10.16.0-darwin-x64.tar.gz
 URL_OPENJPEG=https://github.com/uclouvain/openjpeg/archive/v2.3.0.tar.gz
 URL_OPENMP=https://github.com/llvm/llvm-project/releases/download/llvmorg-7.1.0/openmp-7.1.0.src.tar.xz
 # use OpenSSL version as in gtk-osx moduleset
@@ -178,7 +179,7 @@ URL_OPENSSL=https://www.openssl.org/source/old/1.1.0/openssl-1.1.0g.tar.gz
 URL_PNG2ICNS=https://github.com/bitboss-ca/png2icns/archive/v0.1.tar.gz
 URL_POPPLER=https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-0.74.0/poppler-poppler-0.74.0.tar.gz
 URL_POTRACE=http://potrace.sourceforge.net/download/1.15/potrace-1.15.tar.gz
-URL_PYTHON3=https://github.com/dehesselle/py3framework/releases/download/py368.4/py368_framework_4.tar.xz
+URL_PYTHON3=https://github.com/dehesselle/py3framework/releases/download/py368.5/py368_framework_5.tar.xz
 # A pre-built version of the complete toolset.
-URL_TOOLSET_CACHE=https://github.com/dehesselle/mibap/releases/download/v0.11/mibap_v0.11.tar.xz
+URL_TOOLSET_CACHE=https://github.com/dehesselle/mibap/releases/download/v0.13/mibap_v0.13.tar.xz
 

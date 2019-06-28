@@ -536,17 +536,17 @@
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0alpha</string>
+    <string>CFBundleShortVersionString</string>
     <key>CFBundleSignature</key>
     <string>Inks</string>
     <key>CFBundleVersion</key>
-    <string>1.0alpha</string>
+    <string>CFBundleVersion</string>
     <key>NSHumanReadableCopyright</key>
     <string>Copyright 2019 Inkscape Developers, GNU General Public License.</string>
     <key>LSApplicationCategoryType</key>
     <string>public.app-category.graphics-design</string>
     <key>LSMinimumSystemVersion</key>
-    <string>10.11</string>
+    <string>LSMinimumSystemVersion</string>
     <key>GtkOSXLaunchScriptFile</key>
     <string>gtk_launcher.py</string>
     <key>NSHighResolutionCapable</key>
