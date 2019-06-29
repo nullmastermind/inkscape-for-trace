@@ -375,7 +375,6 @@
 ../src/widgets/desktop-widget.cpp
 ../src/widgets/ege-paint-def.cpp
 ../src/widgets/fill-style.cpp
-../src/widgets/gimp/ruler.cpp
 ../src/widgets/gradient-selector.cpp
 ../src/widgets/gradient-vector.cpp
 ../src/widgets/paint-selector.cpp
