@@ -4,6 +4,8 @@
  *
  * Copyright (C) 2019 Tavmjong Bah
  *
+ * Rewrite of the 'C' ruler code which came originally from Gimp.
+ *
  * The contents of this file may be used under the GNU General Public License Version 2 or later.
  *
  */
@@ -86,7 +88,8 @@ Ruler::set_range(const double& lower, const double& upper)
     }
 }
 
-
+// Add a widget (i.e. canvas) to monitor. Note, we don't worry about removing this signal as
+// our ruler is tied tightly to the canvas, if one is destroyed, so is the other.
 void
 Ruler::add_track_widget(Gtk::Widget& widget)
 {
@@ -177,7 +180,7 @@ Ruler::get_preferred_height_vfunc (int& minimum_height, int& natural_height) con
 
 // Update backing store when scale changes.
 // Note: in principle, there should not be a border (ruler ends should match canvas ends). If there
-// is a border, We calculate tick position ignoring border width at ends of ruler but move the
+// is a border, we calculate tick position ignoring border width at ends of ruler but move the
 // ticks and position marker inside the border.
 bool
 Ruler::draw_scale(const::Cairo::RefPtr<::Cairo::Context>& cr_in)
@@ -363,7 +366,7 @@ Ruler::draw_marker(const Cairo::RefPtr<::Cairo::Context>& cr)
     const int awidth  = allocation.get_width();
     const int aheight = allocation.get_height();
 
-    // Temp (to verify our rectangle encloses position marker).
+    // Temp (to verify our redraw rectangle encloses position marker).
     // Cairo::RectangleInt rect = marker_rect();
     // cr->set_source_rgb(0, 1.0, 0);
     // cr->rectangle (rect.x, rect.y, rect.width, rect.height);

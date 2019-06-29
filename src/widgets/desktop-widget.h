@@ -148,10 +148,8 @@ private:
     Gtk::EventBox *_vruler_box; // eventboxes for setting tooltips
 
     /* Rulers */
-    Gtk::Widget *_hruler;
-    Gtk::Widget *_vruler;
-    Inkscape::UI::Widget::Ruler *_hruler2;
-    Inkscape::UI::Widget::Ruler *_vruler2;
+    Inkscape::UI::Widget::Ruler *_hruler;
+    Inkscape::UI::Widget::Ruler *_vruler;
     Gtk::Allocation _allocation;
 
     unsigned int _interaction_disabled_counter;

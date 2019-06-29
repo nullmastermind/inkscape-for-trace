@@ -291,20 +291,9 @@ spinbutton undershoot {
     padding-bottom: 0;
 }
 
-SPRuler {
-    background-color: @theme_bg_color;
-    color: @theme_fg_color;
-}
-
 #InkRuler {
     font-size: 7pt;
 }
-
-ruler-widget {
-    background-color: @theme_bg_color;
-    color: @theme_fg_color;
-}
-
 
 /* The actual canvas (Inkscape's drawing area). */
 
