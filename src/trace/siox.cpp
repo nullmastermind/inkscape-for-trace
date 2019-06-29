@@ -656,7 +656,7 @@ GdkPixbuf *SioxImage::getGdkPixbuf()
     GdkPixbuf *buf = gdk_pixbuf_new_from_data(pixdata,
                         GDK_COLORSPACE_RGB,
                         has_alpha, 8, width, height,
-                        rowstride, nullptr, nullptr);
+                        rowstride, (GdkPixbufDestroyNotify)free, nullptr);
 
     //### Fill in the cells with RGB values
     int row  = 0;
@@ -677,7 +677,6 @@ GdkPixbuf *SioxImage::getGdkPixbuf()
             }
         row += rowstride;
         }
-    free(pixdata);
     return buf;
 }
 
