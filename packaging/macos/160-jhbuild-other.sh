@@ -12,12 +12,7 @@
 SELF_DIR=$(cd $(dirname "$0"); pwd -P)
 for script in $SELF_DIR/0??-*.sh; do source $script; done
 
-### install Node.js ############################################################
+### install create-dmg #########################################################
 
-get_source $URL_NODEJS
-
-(
-  export PATH=$PATH:$(pwd)/bin
-  npm install -g appdmg   # tool to easily create .dmg
-)
+get_source $URL_CREATEDMG
 
