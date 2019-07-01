@@ -1,7 +1,11 @@
 <?xml version="1.0"?>
 <its:rules xmlns:its="http://www.w3.org/2005/11/its" version="1.0">
     <!-- <its:translateRule selector="/inkscape-extension" translate="no"/> --><!-- doesn't work due to namespace, see https://savannah.gnu.org/bugs/index.php?54472 -->
+
     <its:translateRule selector="//*" translate="no"/>
     <its:translateRule selector="//*[starts-with(name(),'_')]" translate="yes"/>
     <its:translateRule selector="//*/@*[starts-with(name(), '_')]" translate="yes"/>
+
+    <its:contextRule selector="//*" contextPointer="@msgctxt"/>
+    <its:contextRule selector="//*/@*" contextPointer="../@msgctxt"/>
 </its:rules>

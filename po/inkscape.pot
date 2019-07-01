@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2019-07-01 22:19+0200\n"
+"Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
+"POT-Creation-Date: 2019-07-02 01:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4277,7 +4277,11 @@ msgstr ""
 #
 # File: ../share/extensions/gcodetools_area.inx, line: 4
 # File: ../share/extensions/gcodetools_area.inx, line: 9
+msgid "Area"
+msgstr ""
+#
 # File: ../share/extensions/measure.inx, line: 10
+msgctxt "measure extension"
 msgid "Area"
 msgstr ""
 #
@@ -6328,8 +6332,12 @@ msgstr ""
 msgid "Center of BBox"
 msgstr ""
 #
-# File: ../share/extensions/measure.inx, line: 11
 # File: ../share/extensions/measure.inx, line: 38
+msgid "Center of Mass"
+msgstr ""
+#
+# File: ../share/extensions/measure.inx, line: 11
+msgctxt "measure extension"
 msgid "Center of Mass"
 msgstr ""
 #
@@ -17669,6 +17677,7 @@ msgid "Letterlike Symbols"
 msgstr ""
 #
 # File: ../share/extensions/split.inx, line: 11
+msgctxt "split"
 msgid "Letters"
 msgstr ""
 #
@@ -17973,7 +17982,11 @@ msgid "Linen Canvas"
 msgstr ""
 #
 # File: ../share/extensions/extrude.inx, line: 7
+msgid "Lines"
+msgstr ""
+#
 # File: ../share/extensions/split.inx, line: 9
+msgctxt "split"
 msgid "Lines"
 msgstr ""
 #
@@ -21100,18 +21113,6 @@ msgstr ""
 # File: ../src/ui/dialog/input.cpp, line: 663
 # File: ../src/ui/dialog/input.cpp, line: 1388
 # File: ../src/ui/widget/color-scales.cpp, line: 47
-# File: ../share/extensions/gcodetools_area.inx, line: 90
-# File: ../share/extensions/gcodetools_dxf_points.inx, line: 36
-# File: ../share/extensions/gcodetools_engraving.inx, line: 48
-# File: ../share/extensions/gcodetools_graffiti.inx, line: 77
-# File: ../share/extensions/gcodetools_lathe.inx, line: 70
-# File: ../share/extensions/gcodetools_path_to_gcode.inx, line: 50
-# File: ../share/extensions/grid_polar.inx, line: 9
-# File: ../share/extensions/guides_creator.inx, line: 41
-# File: ../share/extensions/guides_creator.inx, line: 53
-# File: ../share/extensions/guides_creator.inx, line: 65
-# File: ../share/extensions/guides_creator.inx, line: 77
-# File: ../share/extensions/output_scour.inx, line: 64
 # File: ../share/extensions/plotter.inx, line: 56
 msgid "None"
 msgstr ""
@@ -21141,8 +21142,23 @@ msgctxt "Freehand shape"
 msgid "None"
 msgstr ""
 #
+# File: ../share/extensions/gcodetools_area.inx, line: 90
+# File: ../share/extensions/gcodetools_dxf_points.inx, line: 36
+# File: ../share/extensions/gcodetools_engraving.inx, line: 48
+# File: ../share/extensions/gcodetools_graffiti.inx, line: 77
+# File: ../share/extensions/gcodetools_lathe.inx, line: 70
+# File: ../share/extensions/gcodetools_path_to_gcode.inx, line: 50
+msgctxt "GCode postprocessor"
+msgid "None"
+msgstr ""
+#
 # File: ../src/ui/toolbar/gradient-toolbar.cpp, line: 453
 msgctxt "Gradient repeat type"
+msgid "None"
+msgstr ""
+#
+# File: ../share/extensions/output_scour.inx, line: 64
+msgctxt "Indent"
 msgid "None"
 msgstr ""
 #
@@ -21152,7 +21168,16 @@ msgid "None"
 msgstr ""
 #
 # File: ../src/ui/dialog/filter-effects-dialog.cpp, line: 516
+# File: ../share/extensions/grid_polar.inx, line: 9
 msgctxt "Label"
+msgid "None"
+msgstr ""
+#
+# File: ../share/extensions/guides_creator.inx, line: 41
+# File: ../share/extensions/guides_creator.inx, line: 53
+# File: ../share/extensions/guides_creator.inx, line: 65
+# File: ../share/extensions/guides_creator.inx, line: 77
+msgctxt "Margin"
 msgid "None"
 msgstr ""
 #
@@ -35666,6 +35691,7 @@ msgid "WordPerfect Graphics (*.wpg)"
 msgstr ""
 #
 # File: ../share/extensions/split.inx, line: 10
+msgctxt "split"
 msgid "Words"
 msgstr ""
 #
