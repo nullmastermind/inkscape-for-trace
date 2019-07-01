@@ -888,7 +888,7 @@ Handle *PathManipulator::_chooseHandle(Node *n, int which)
     if (!next) return n->back();
     if (!prev) return n->front();
 
-    // compare X coord ofline segments
+    // compare X coord offline segments
     Geom::Point npos = next->position();
     Geom::Point ppos = prev->position();
     if (which < 0) {

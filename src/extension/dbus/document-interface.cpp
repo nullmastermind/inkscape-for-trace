@@ -1468,7 +1468,7 @@ document_interface_get_xpath (DocumentInterface *doc_interface,  char *xpath_exp
   xpathObj = xmlXPathEvalExpression(xmlCharStrdup(xpath_expression), xpathCtx);
   
   //xpathresult result = xpatheval(repr, xpath_selection);
-  //convert resut to a string array we can return via dbus
+  //convert result to a string array we can return via dbus
   return TRUE;
 }
 #endif

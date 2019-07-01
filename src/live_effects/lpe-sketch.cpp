@@ -251,7 +251,7 @@ LPESketch::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_
 
                 // pick a new end point (s1 = s0 + strokelength).
                 s1 = s0 + strokelength*(1-strokelength_rdm);
-                // don't let it go beyond the end of the orgiginal path.
+                // don't let it go beyond the end of the original path.
                 // TODO/FIXME: this might result in short strokes near the end...
                 if (!closed && s1>piece_total_length-ends_tolerance.get_value()*strokelength){
                     done = true;

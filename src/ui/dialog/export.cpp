@@ -724,7 +724,7 @@ void Export::onAreaToggled ()
 
         /* Notice how the switch is used to 'fall through' here to get
            various backups.  If you modify this without noticing you'll
-           probabaly screw something up. */
+           probably screw something up. */
         switch (key) {
         case SELECTION_SELECTION:
             if ((SP_ACTIVE_DESKTOP->getSelection())->isEmpty() == false)
@@ -1422,14 +1422,14 @@ bool Export::bbox_equal(Geom::Rect const &one, Geom::Rect const &two)
  * should always check the current selection to see if it is the valid
  * one.  While this is a performance improvement it is also a usability
  * one during the cases where things like selections and drawings match
- * size.  This way buttons change less 'randomly' (atleast in the eyes
+ * size.  This way buttons change less 'randomly' (at least in the eyes
  * of the user).  To do this an array is built where the current selection
  * type is placed first, and then the others in an order from smallest
  * to largest (this can be configured by reshuffling \c test_order).
  *
  * All of the values in this function are rounded to two decimal places
  * because that is what is shown to the user.  While everything is kept
- * more accurate than that, the user can't control more acurrate than
+ * more accurate than that, the user can't control more accurate than
  * that, so for this to work for them - it needs to check on that level
  * of accuracy.
  *
@@ -1822,7 +1822,7 @@ void Export::onExportXdpiChange()
  *
  * This function just calls \c sp_export_value_set_px for each of the
  * parameters that is passed in.  This allows for setting them all in
- * one convient area.
+ * one convenient area.
  *
  * Update is set to suspend all of the other test running while all the
  * values are being set up.  This allows for a performance increase, but

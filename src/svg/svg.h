@@ -41,7 +41,7 @@ unsigned int sp_svg_number_write_de( char *buf, int bufLen, double val, unsigned
 
 /*
  * Parse number with optional unit specifier:
- * - for px, pt, pc, mm, cm, computed is final value accrding to SVG spec
+ * - for px, pt, pc, mm, cm, computed is final value according to SVG spec
  * - for em, ex, and % computed is left untouched
  * - % is divided by 100 (i.e. 100% is 1.0)
  * !isalnum check is done at the end

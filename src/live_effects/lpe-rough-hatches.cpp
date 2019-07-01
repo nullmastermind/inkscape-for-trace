@@ -488,7 +488,7 @@ LPERoughHatches::smoothSnake(std::vector<std::vector<Point> > const &linearSnake
 
                     new_hdle_in  -=  (pt1-pt0)/2*( double((is_top ? front_thickness : back_thickness)) / (pt1[X]-pt0[X]) );
                     new_hdle_out +=  (pt1-pt0)/2*( double((is_top ? back_thickness : front_thickness)) / (pt1[X]-pt0[X]) );
-                    //TODO: find a good way to handle limit cases (small smthness, large stroke).
+                    //TODO: find a good way to handle limit cases (small smoothness, large stroke).
                     //if (inside_hdle_in[X]  > inside[X]) inside_hdle_in = inside;
                     //if (inside_hdle_out[X] < inside[X]) inside_hdle_out = inside;
 

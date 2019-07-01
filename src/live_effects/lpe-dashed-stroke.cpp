@@ -117,13 +117,13 @@ Geom::PathVector LPEDashedStroke::doEffect_path(Geom::PathVector const &path_in)
         double dashsize_fixed = 0;
         double holesize_fixed = 0;
         Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = path_it.toPwSb();
-        double lenght_pwd2 = length (pwd2);
-        double minlenght = lenght_pwd2;
+        double length_pwd2 = length (pwd2);
+        double minlength = length_pwd2;
         if(unifysegment) {
             while (curve_it1 != curve_endit) {
-                double lenght_segment = (*curve_it1).length();
-                if (lenght_segment < minlenght) {
-                    minlenght = lenght_segment;
+                double length_segment = (*curve_it1).length();
+                if (length_segment < minlength) {
+                    minlength = length_segment;
                     dashsize_fixed = (*curve_it1).length() * dashpercent;
                     holesize_fixed = (*curve_it1).length() * holepercent;
                 } 
@@ -234,8 +234,8 @@ Geom::PathVector LPEDashedStroke::doEffect_path(Geom::PathVector const &path_in)
         } else {
             double start = 0.0;
             double end = 0.0;
-            double dashsize = lenght_pwd2 * dashpercent;
-            double holesize = lenght_pwd2 * holepercent;
+            double dashsize = length_pwd2 * dashpercent;
+            double holesize = length_pwd2 * holepercent;
             if (halfextreme) {
                 end = timeAtLength(dashsize/2.0,pwd2);
             } else {

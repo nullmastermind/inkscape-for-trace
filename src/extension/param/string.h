@@ -45,7 +45,7 @@ public:
 
     void string(std::string &string) const override;
 
-    void setMaxLength(int maxLenght) { _max_length = maxLenght; }
+    void setMaxLength(int maxLength) { _max_length = maxLength; }
     int getMaxLength() { return _max_length; }
 };
 

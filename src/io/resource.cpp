@@ -286,7 +286,7 @@ std::vector<Glib::ustring> get_foldernames(Glib::ustring path, std::vector<const
 /*
  * Get all the files from a specific path and any sub-dirs, populating &files vector
  *
- * &files - Output list to populate, will be poulated with full paths
+ * &files - Output list to populate, will be populated with full paths
  * path - The directory to parse, will add nothing if directory doesn't exist
  * extensions - Only add files with these extensions, they must be duplicated
  * exclusions - Exclude files that exactly match these names.

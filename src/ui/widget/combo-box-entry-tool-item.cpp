@@ -436,7 +436,7 @@ ComboBoxEntryToolItem::set_altx_name(const gchar* altx_name)
 // Internal ---------------------------------------------------
 
 // Return row of active text or -1 if not found. If exclude is true,
-// use 3d colunm if available to exclude row from checking (useful to
+// use 3d column if available to exclude row from checking (useful to
 // skip rows added for font-families included in doc and not on
 // system)
 gint

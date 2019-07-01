@@ -119,7 +119,7 @@ EvaluatorQuantity ExpressionEvaluator::evaluateExpression()
     {
         EvaluatorQuantity new_term = evaluateTerm();
         
-        // If dimensions mismatch, attempt default unit assignent
+        // If dimensions mismatch, attempt default unit assignment
         if ( new_term.dimension != evaluated_terms.dimension ) {
             EvaluatorQuantity default_unit_factor;
             

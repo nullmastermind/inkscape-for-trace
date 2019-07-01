@@ -86,7 +86,7 @@ public:
     unsigned getDigits() const;
 
     /**
-     * Gets the current step ingrement used by the spin button.
+     * Gets the current step increment used by the spin button.
      */
     double  getStep() const;
 

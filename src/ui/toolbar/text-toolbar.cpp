@@ -2057,7 +2057,7 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
 
     /*
      * If no text in selection (querying returned nothing), read the style from
-     * the /tools/text preferencess (default style for new texts). Return if
+     * the /tools/text preferences (default style for new texts). Return if
      * tool bar already set to these preferences.
      */
     if (result_family  == QUERY_STYLE_NOTHING ||

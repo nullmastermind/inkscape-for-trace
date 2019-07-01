@@ -160,7 +160,7 @@ Wmf::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
     ext->set_param_bool("FixPPTPatternAsHatch",new_FixPPTPatternAsHatch);
     ext->set_param_bool("textToPath", new_val);
 
-    // ensure usage of dot as decimal separator in scanf/printf functions (indepentendly of current locale)
+    // ensure usage of dot as decimal separator in scanf/printf functions (independently of current locale)
     char *oldlocale = g_strdup(setlocale(LC_NUMERIC, nullptr));
     setlocale(LC_NUMERIC, "C");
 

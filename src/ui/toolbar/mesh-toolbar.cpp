@@ -326,7 +326,7 @@ MeshToolbar::MeshToolbar(SPDesktop *desktop)
         _select_type_combo->append(_("Bicubic"));
 
         // TRANSLATORS: Type of Smoothing. See https://en.wikipedia.org/wiki/Coons_patch
-        _select_type_combo->set_tooltip_text(_("Coons: no smothing. Bicubic: smothing across patch boundaries."));
+        _select_type_combo->set_tooltip_text(_("Coons: no smoothing. Bicubic: smoothing across patch boundaries."));
         _select_type_combo->set_sensitive( false );
         _select_type_combo->set_active( 0 );
 

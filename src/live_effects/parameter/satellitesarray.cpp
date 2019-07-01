@@ -111,7 +111,7 @@ void SatellitesArrayParam::updateCanvasIndicators(bool mirror)
                 double pos = 0;
                 bool overflow = false;
                 double size_out = _vector[i][j].arcDistance(*curve_in);
-                double lenght_out = curve_in->length();
+                double length_out = curve_in->length();
                 gint previous_index = j - 1; //Always are previous index because we skip first satellite on open paths
                 if (j == 0 && pathv[i].closed()) {
                     previous_index = pathv[i].size() - 1;
@@ -119,16 +119,16 @@ void SatellitesArrayParam::updateCanvasIndicators(bool mirror)
                 if ( previous_index < 0 ) {
                     return;
                 }
-                double lenght_in = pathv.curveAt(previous_index).length();
+                double length_in = pathv.curveAt(previous_index).length();
                 if (mirror) {
                     curve_in = const_cast<Geom::Curve *>(&pathv.curveAt(previous_index));
                     pos = _vector[i][j].time(size_out, true, *curve_in);
-                    if (lenght_out < size_out) {
+                    if (length_out < size_out) {
                         overflow = true;
                     }
                 } else {
                     pos = _vector[i][j].time(*curve_in);
-                    if (lenght_in < size_out) {
+                    if (length_in < size_out) {
                         overflow = true;
                     }
                 }

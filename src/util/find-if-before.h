@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Inkscape::Algorithms::find_if_before - finds the position before
- *                                        the first value that satisifes
+ *                                        the first value that satisfies
  *                                        the predicate
  *
  * Authors:

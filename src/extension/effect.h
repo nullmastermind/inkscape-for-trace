@@ -55,7 +55,7 @@ class Effect : public Extension {
             Effect * _effect;
             /** \brief  Whether or not to show preferences on display */
             bool _showPrefs;
-            /** \brief  Name with elipses if that makes sense */
+            /** \brief  Name with ellipses if that makes sense */
             gchar * _elip_name;
         protected:
             SPAction * make_action (Inkscape::ActionContext const & context) override;

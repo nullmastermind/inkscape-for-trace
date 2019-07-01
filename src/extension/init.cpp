@@ -145,7 +145,7 @@ update_pref(Glib::ustring const &pref_path,
  * Invokes the init routines for internal modules.
  *
  * This should be a list of all the internal modules that need to initialized.  This is just a
- * convinent place to put them.
+ * convenient place to put them.
  */
 void
 init()

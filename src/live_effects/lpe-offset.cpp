@@ -359,8 +359,8 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
             original_width = (*original_bounds).width();
         }
         reversed = against_dir_bounds.contains(with_dir_bounds) == false;
-        // We can have a strange result thth bounding box container
-        // Give a wrong result.in teory it happends sometimes on expand offset
+        // We can have a strange result for the bounding box container
+        // Gives a wrong result, in theory, it happens sometimes on expand offset
         if (offset > 0 &&
             ((original_width  < against_dir_width &&
               original_width  < with_dir_width) ||

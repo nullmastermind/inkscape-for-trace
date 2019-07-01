@@ -612,7 +612,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "powerclip" //key
         , "powerclip" //icon
         , "Power clip" //untranslated name
-        , N_("Power clip alows to reverse a clip, flatten it...") //description
+        , N_("Power clip allows to reverse a clip, flatten it...") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
@@ -626,7 +626,7 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , "powermask" //key
         , "powermask" //icon
         , "Power mask" //untranslated name
-        , N_("Power mask allow to inverse the mask, make negative..") //description
+        , N_("Power mask allows inversing the mask, make negative...") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group

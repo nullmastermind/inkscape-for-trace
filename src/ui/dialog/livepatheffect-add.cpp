@@ -469,7 +469,7 @@ void LivePathEffectAdd::reload_effect_list()
     _LPESelectorFlowBox->invalidate_filter();
     if (_showfavs) {
         if (_visiblelpe == 0) {
-            _LPEInfo->set_text(_("You dont have any favorites jet, please disable the favorites star"));
+            _LPEInfo->set_text(_("You don't have any favorites yet, please disable the favorites star"));
             _LPEInfo->set_visible(true);
             _LPEInfo->get_style_context()->add_class("lpeinfowarn");
         } else {

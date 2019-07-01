@@ -1087,7 +1087,7 @@ bool OdfOutput::writeManifest(ZipFile &zf)
         {
         Glib::ustring newName = iter->second;
 
-        // note: mime subtype was added as file extenion in OdfOutput::preprocess
+        // note: mime subtype was added as file extension in OdfOutput::preprocess
         Glib::ustring mimesubtype = Inkscape::IO::get_file_extension(newName);
 
         outs.printf("    <manifest:file-entry manifest:media-type=\"");

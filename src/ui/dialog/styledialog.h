@@ -93,12 +93,12 @@ class StyleDialog : public Widget::Panel {
             add(_colSelectorPos);
             add(_colOwner);
         }
-        Gtk::TreeModelColumn<bool> _colActive;            // Active or inative property
+        Gtk::TreeModelColumn<bool> _colActive;            // Active or inactive property
         Gtk::TreeModelColumn<Glib::ustring> _colName;     // Name of the property.
         Gtk::TreeModelColumn<Glib::ustring> _colValue;    // Value of the property.
-        Gtk::TreeModelColumn<bool> _colStrike;            // Propery not used, overloaded
+        Gtk::TreeModelColumn<bool> _colStrike;            // Property not used, overloaded
         Gtk::TreeModelColumn<Glib::ustring> _colSelector; // Style or matching object id.
-        Gtk::TreeModelColumn<gint> _colSelectorPos;       // Position of the selector to hadle dup selectors
+        Gtk::TreeModelColumn<gint> _colSelectorPos;       // Position of the selector to handle dup selectors
         Gtk::TreeModelColumn<Glib::ustring> _colOwner;    // Store the owner of the property for popup
     };
     ModelColumns _mColumns;

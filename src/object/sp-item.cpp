@@ -1400,7 +1400,7 @@ void SPItem::adjust_paint_recursive (Geom::Affine advertized_transform, Geom::Af
             SPItem *item = dynamic_cast<SPItem *>(&o);
             if (item) {
 // At the level of the transformed item, t_ancestors is identity;
-// below it, it is the accmmulated chain of transforms from this level to the top level
+// below it, it is the accumulated chain of transforms from this level to the top level
                 item->adjust_paint_recursive (advertized_transform, t_item * t_ancestors, is_pattern);
             }
         }

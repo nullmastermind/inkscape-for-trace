@@ -274,7 +274,7 @@ private:
  *
  * Because paths can be cyclic, node iterators have two different ways to
  * increment and decrement them. When using ++/--, the end iterator will eventually
- * be returned. Whent using advance()/retreat(), the end iterator will only be returned
+ * be returned. When using advance()/retreat(), the end iterator will only be returned
  * when the path is open. If it's closed, calling advance() will cycle indefinitely.
  * This is particularly useful for cases where the adjacency of nodes is more important
  * than their sequence order.

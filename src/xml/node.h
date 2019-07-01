@@ -382,7 +382,7 @@ public:
 
      /**
      * @brief Remove all elements that not in src node
-     * @param src The node to check for elemments into this node
+     * @param src The node to check for elements into this node
      * @param key The attribute to use as the identity attribute
      */
     virtual void cleanOriginal(Node *src, gchar const *key)=0;

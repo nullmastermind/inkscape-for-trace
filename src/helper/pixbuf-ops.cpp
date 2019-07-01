@@ -123,7 +123,7 @@ Inkscape::Pixbuf *sp_generate_internal_bitmap(SPDocument *doc, gchar const */*fi
     if (item_only) {
         hide_other_items_recursively(doc->getRoot(), item_only, dkey);
         // TODO: The following line forces 100% opacity as required by sp_asbitmap_render() in cairo-renderer.cpp
-        //       Make it contitional if 'item_only' is ever used by other callers which need to retain opacity 
+        //       Make it conditional if 'item_only' is ever used by other callers which need to retain opacity 
         item_only->get_arenaitem(dkey)->setOpacity(1.0);
     }
 

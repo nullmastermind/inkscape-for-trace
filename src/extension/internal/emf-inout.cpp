@@ -162,7 +162,7 @@ Emf::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
     ext->set_param_bool("FixImageRot",new_FixImageRot);
     ext->set_param_bool("textToPath", new_val);
 
-    // ensure usage of dot as decimal separator in scanf/printf functions (indepentendly of current locale)
+    // ensure usage of dot as decimal separator in scanf/printf functions (independently of current locale)
     char *oldlocale = g_strdup(setlocale(LC_NUMERIC, nullptr));
     setlocale(LC_NUMERIC, "C");
 
@@ -215,7 +215,7 @@ std::string Emf::current_matrix(PEMF_CALLBACK_DATA d, double x, double y, int us
 }
 
 /*  given the transformation matrix from worldTransform return the rotation angle in radians.
-    counter clocwise from the x axis.  */
+    counter clockwise from the x axis.  */
 double Emf::current_rotation(PEMF_CALLBACK_DATA d){
     return -std::atan2(d->dc[d->level].worldTransform.eM12, d->dc[d->level].worldTransform.eM11);
 }

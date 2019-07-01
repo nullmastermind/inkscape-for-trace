@@ -365,7 +365,7 @@ Geom::Affine SPUse::get_root_transform() {
 
     chain.push_back(dynamic_cast<SPItem *>(orig));
 
-    // calculate the accummulated transform, starting from the original
+    // calculate the accumulated transform, starting from the original
     Geom::Affine t(Geom::identity());
 
     for (auto i=chain.rbegin(); i!=chain.rend(); ++i) {

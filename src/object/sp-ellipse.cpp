@@ -640,7 +640,7 @@ Geom::Point SPGenericEllipse::getPointAtAngle(double arg) const
  * Convert center to endpoint parameterization and set it to repr.
  *
  * See SVG 1.0 Specification W3C Recommendation
- * ``F.6 Ellptical arc implementation notes'' for more detail.
+ * ``F.6 Elliptical arc implementation notes'' for more detail.
  */
 bool SPGenericEllipse::set_elliptical_path_attribute(Inkscape::XML::Node *repr)
 {

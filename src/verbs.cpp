@@ -2989,7 +2989,7 @@ Verb *Verb::_base_verbs[] = {
                  INKSCAPE_ICON("zoom-fit-drawing")),
     new ZoomVerb(SP_VERB_ZOOM_SELECTION, "ZoomSelection", N_("_Selection"), N_("Zoom to fit selection in window"),
                  INKSCAPE_ICON("zoom-fit-selection")),
-    new ZoomVerb(SP_VERB_ZOOM_CENTER_PAGE, "ZoomCenterPage", N_("_Center _Page"), N_("Center page in window"),
+    new ZoomVerb(SP_VERB_ZOOM_CENTER_PAGE, "ZoomCenterPage", N_("_Center Page"), N_("Center page in window"),
                  INKSCAPE_ICON("zoom-center-page")),
 
     new ZoomVerb(SP_VERB_ROTATE_CW, "RotateClockwise", N_("Rotate Clockwise"), N_("Rotate canvas clockwise"), nullptr),

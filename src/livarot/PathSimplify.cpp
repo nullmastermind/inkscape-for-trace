@@ -74,7 +74,7 @@ void Path::Simplify(double treshhold)
 #if 0
 // dichomtomic method to get distance to curve approximation
 // a real polynomial solver would get the minimum more efficiently, but since the polynom
-// would likely be of degree >= 5, that would imply using some generic solver, liek using the sturm metod
+// would likely be of degree >= 5, that would imply using some generic solver, liek using the sturm method
 static double RecDistanceToCubic(Geom::Point const &iS, Geom::Point const &isD,
                                  Geom::Point const &iE, Geom::Point const &ieD,
                                  Geom::Point &pt, double current, int lev, double st, double et)
@@ -242,7 +242,7 @@ void Path::DoSimplify(int off, int N, double treshhold)
 
 
 // warning: slow
-// idea behing this feature: splotches appear when trying to fit a small number of points: you can
+// idea behind this feature: splotches appear when trying to fit a small number of points: you can
 // get a cubic bezier that fits the points very well but doesn't fit the polyline itself
 // so we add a bit of the error at the middle of each segment of the polyline
 // also we restrict this to <=20 points, to avoid unnecessary computations

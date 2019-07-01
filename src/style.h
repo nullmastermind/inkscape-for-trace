@@ -307,7 +307,7 @@ public:
      * when the reference starts pointing to a different address in memory.
      *
      * NB It is different from fill_ps_modified signal. When paint server is modified
-     * it means some of it's attributes or chilren change.
+     * it means some of it's attributes or children change.
      */
     sigc::signal<void, SPObject *, SPObject *> signal_fill_ps_changed;
     /**

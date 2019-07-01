@@ -52,7 +52,7 @@ protected:
 private:
     ToggleButtonParam elastic;
     ToggleButtonParam from_original_width;
-    ToggleButtonParam lock_lenght;
+    ToggleButtonParam lock_length;
     ToggleButtonParam lock_angle;
     ToggleButtonParam flip_horizontal;
     ToggleButtonParam flip_vertical;
@@ -70,7 +70,7 @@ private:
     bool append_path;
     Geom::Angle previous_angle;
     Geom::Point previous_start;
-    double previous_lenght;
+    double previous_length;
     LPETransform2Pts(const LPETransform2Pts&) = delete;
     LPETransform2Pts& operator=(const LPETransform2Pts&) = delete;
 };

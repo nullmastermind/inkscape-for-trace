@@ -120,7 +120,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   table->set_margin_start(3);
   table->set_margin_end(3);
   table->set_margin_top(4);
-  // panel is a cloked Gtk::VBox
+  // panel is a locked Gtk::VBox
   _getContents()->pack_start(*Gtk::manage(table), Gtk::PACK_EXPAND_WIDGET);
   guint row = 0;
 

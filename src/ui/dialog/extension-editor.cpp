@@ -145,7 +145,7 @@ void ExtensionEditor::on_pagelist_selection_changed()
 
         Inkscape::Extension::Extension * ext = Inkscape::Extension::db.get(id.c_str());
 
-        /* Make sure we have all the widges */
+        /* Make sure we have all the widgets */
         Gtk::Widget * info = nullptr;
         Gtk::Widget * help = nullptr;
         Gtk::Widget * params = nullptr;

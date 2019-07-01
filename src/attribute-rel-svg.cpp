@@ -71,7 +71,7 @@ bool SPAttributeRelSVG::findIfValid(Glib::ustring attribute, Glib::ustring eleme
         temp.erase( temp.find("svg:"), 4 );
     }
     
-    // Check for attributes with -, role, aria etc. to allow for more accessbility
+    // Check for attributes with -, role, aria etc. to allow for more accessibility
     if (attribute[0] == '-'
         || attribute.substr(0,4) == "role"
         || attribute.substr(0,4) == "aria"

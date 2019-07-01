@@ -194,7 +194,7 @@ typedef struct {
                                  element in a complex                                                 */
    TRCOLORREF  color;       /**< RGB                                                                  */
    int         taln;        /**< text alignment with respect to x,y                                   */
-   int         ldir;        /**< language diretion LDIR_*                                             */
+   int         ldir;        /**< language direction LDIR_*                                            */
    int         italics;     /**< italics, as in FontConfig                                            */
    int         weight;      /**< weight, as in FontConfig                                             */
    int         condensed;   /**< condensed, as in FontConfig                                          */

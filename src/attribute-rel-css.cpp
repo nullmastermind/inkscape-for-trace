@@ -53,7 +53,7 @@ bool SPAttributeRelCSS::findIfValid(Glib::ustring property, Glib::ustring elemen
         temp.erase( temp.find("svg:"), 4 );
     }
 
-    // Don't check for properties with -, role, aria etc. to allow for more accessbility
+    // Don't check for properties with -, role, aria etc. to allow for more accessibility
     // FixMe: Name space list should be created when file read in.
     if (property[0] == '-'
         || property.substr(0,4) == "role"

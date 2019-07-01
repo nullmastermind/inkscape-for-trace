@@ -75,7 +75,7 @@ void  Path::DashPolylineFromStyle(SPStyle *style, float scale, float min_len)
                 dash[i] = style->stroke_dasharray.values[i].value * scale;
             }
 
-            // Convert relative positions to absolute postions
+            // Convert relative positions to absolute positions
             int    nbD = n_dash;
             float  *dashs=(float*)malloc((nbD+1)*sizeof(float));
             while ( dash_offset >= dlen ) dash_offset-=dlen;

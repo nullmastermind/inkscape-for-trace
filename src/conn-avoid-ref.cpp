@@ -92,7 +92,7 @@ void SPAvoidRef::handleSettingChange()
         // isn't the same as the document that this item is part of.  This
         // case can happen if a new document is loaded from the file chooser
         // or via the recent file menu.  In this case, we can end up here
-        // as a rersult of a ensureUpToDate performed on a
+        // as a result of a ensureUpToDate performed on a
         // document not yet attached to the active desktop.
         return;
     }

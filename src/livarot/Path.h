@@ -84,7 +84,7 @@ public:
   std::vector<PathDescr*> descr_cmd;
 
   // polyline storage: a series of coordinates (and maybe weights)
-  // also back data: info on where this polyline's segment comes from, ie wich command in the path description: "piece"
+  // also back data: info on where this polyline's segment comes from, ie which command in the path description: "piece"
   // and what abcissis on the chunk of path for this command: "t"
   // t=0 means it's at the start of the command's chunk, t=1 it's at the end
   struct path_lineto
@@ -233,7 +233,7 @@ public:
   bool IsLineSegment(int piece);
 
     private:
-  // utilitary functions for the path contruction
+  // utilitary functions for the path construction
   void CancelBezier ();
   void CloseSubpath();
   void InsertMoveTo (Geom::Point const &iPt,int at);

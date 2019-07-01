@@ -35,7 +35,7 @@ class SPObject;
 #define SP_OBJECT_USER_MODIFIED_FLAG_B (1 << 6)
 #define SP_OBJECT_USER_MODIFIED_FLAG_C (1 << 7)
 
-/* Conveneience */
+/* Convenience */
 #define SP_OBJECT_FLAGS_ALL 0xff
 
 /* Flags that mark object as modified */

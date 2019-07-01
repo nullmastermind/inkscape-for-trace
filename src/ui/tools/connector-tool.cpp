@@ -1142,7 +1142,7 @@ void ConnectorTool::cc_set_active_conn(SPItem *item)
     if (this->active_conn == item) {
         if (curve->is_empty()) {
             // Connector is invisible because it is clipped to the boundary of
-            // two overlpapping shapes.
+            // two overlapping shapes.
             this->endpt_handle[0]->hide();
             this->endpt_handle[1]->hide();
         } else {

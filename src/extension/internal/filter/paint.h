@@ -828,7 +828,7 @@ PointEngraving::get_filter_text (Inkscape::Extension::Extension * ext)
     * Effect type (enum, default "Normal") ->
         Normal = feComponentTransfer
         Dented = Normal + intermediate values
-    * Transfer type (enum, default "descrete") -> component (type)
+    * Transfer type (enum, default "discrete") -> component (type)
     * Levels (0->15, default 5) -> component (tableValues)
     * Blend mode (enum, default "Lighten") -> blend (mode)
     * Primary simplify (0.01->100., default 4.) -> blur1 (stdDeviation)

@@ -785,7 +785,7 @@ static void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or
 
             // Scale its X coordinate to match the length of the gradient line:
             pos = pnorm[Geom::X] / vl;
-            // Calculate radius in lenfth-of-gradient-line units
+            // Calculate radius in length-of-gradient-line units
             r = radius / vl;
 
         }

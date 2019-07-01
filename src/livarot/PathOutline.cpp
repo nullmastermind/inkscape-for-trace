@@ -901,7 +901,7 @@ Path::IsNulCurve (std::vector<PathDescr*> const &cmd, int curD, Geom::Point cons
 	}
 }
 
-// tangents and cuvarture computing, for the different path command types.
+// tangents and curvarture computing, for the different path command types.
 // the need for tangent is obvious: it gives the normal, along which we offset points
 // curvature is used to do strength correction on the length of the tangents to the offset (see
 // cubic offset)

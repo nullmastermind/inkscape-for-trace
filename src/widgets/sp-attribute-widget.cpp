@@ -56,7 +56,7 @@ static void sp_attribute_table_entry_changed (Gtk::Entry *editable, SPAttributeT
  */
 static void sp_attribute_table_object_modified (SPObject *object, guint flags, SPAttributeTable *spaw);
 /**
- * Callback for the delection of the selected object.
+ * Callback for the deletion of the selected object.
  *
  * sp_attribute_table_object_release invalidates all data of 
  * SPAttributeTable and disables the widget.

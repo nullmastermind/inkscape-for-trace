@@ -79,7 +79,7 @@ void sp_conn_end_pair_build(SPObject *object);
 enum {
     SP_CONNECTOR_NOAVOID,     // Basic connector - a straight line.
     SP_CONNECTOR_POLYLINE,    // Object avoiding polyline.
-    SP_CONNECTOR_ORTHOGONAL   // Object avoiding orthogonal polyline (only horizontal and verical segments).
+    SP_CONNECTOR_ORTHOGONAL   // Object avoiding orthogonal polyline (only horizontal and vertical segments).
 };
 
 

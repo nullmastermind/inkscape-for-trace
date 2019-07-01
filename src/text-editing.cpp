@@ -2100,7 +2100,7 @@ void sp_te_apply_style(SPItem *text, Inkscape::Text::Layout::iterator const &sta
     has matching routines for optimising the patterns it finds. It's reasonably
     easy to add new pattern matching processors. If everything gets disastrous
     and neither option can be made to work, a fallback could be to reduce
-    everything to a single level of nesting and drop all pretence of
+    everything to a single level of nesting and drop all pretense of
     roundtrippability. */
     bool has_text_decoration = false;
     gchar const *root_style = (text)->getRepr()->attribute("style");

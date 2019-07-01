@@ -31,7 +31,7 @@ LPETransform2Pts::LPETransform2Pts(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     elastic(_("Elastic"), _("Elastic transform mode"), "elastic", &wr, this, false,"", INKSCAPE_ICON("on"), INKSCAPE_ICON("off")),
     from_original_width(_("From original width"), _("From original width"), "from_original_width", &wr, this, false,"", INKSCAPE_ICON("on"), INKSCAPE_ICON("off")),
-    lock_lenght(_("Lock length"), _("Lock length to current distance"), "lock_lenght", &wr, this, false,"", INKSCAPE_ICON("on"), INKSCAPE_ICON("off")),
+    lock_length(_("Lock length"), _("Lock length to current distance"), "lock_length", &wr, this, false,"", INKSCAPE_ICON("on"), INKSCAPE_ICON("off")),
     lock_angle(_("Lock angle"), _("Lock angle"), "lock_angle", &wr, this, false,"", INKSCAPE_ICON("on"), INKSCAPE_ICON("off")),
     flip_horizontal(_("Flip horizontal"), _("Flip horizontal"), "flip_horizontal", &wr, this, false,"", INKSCAPE_ICON("on"), INKSCAPE_ICON("off")),
     flip_vertical(_("Flip vertical"), _("Flip vertical"), "flip_vertical", &wr, this, false,"", INKSCAPE_ICON("on"), INKSCAPE_ICON("off")),
@@ -49,7 +49,7 @@ LPETransform2Pts::LPETransform2Pts(LivePathEffectObject *lpeobject) :
     append_path(false),
     previous_angle(Geom::rad_from_deg(0)),
     previous_start(Geom::Point()),
-    previous_lenght(-1)
+    previous_length(-1)
 {
 
     registerParameter(&first_knot);
@@ -63,7 +63,7 @@ LPETransform2Pts::LPETransform2Pts(LivePathEffectObject *lpeobject) :
     registerParameter(&from_original_width);
     registerParameter(&flip_vertical);
     registerParameter(&flip_horizontal);
-    registerParameter(&lock_lenght);
+    registerParameter(&lock_length);
     registerParameter(&lock_angle);
 
     first_knot.param_make_integer(true);
@@ -107,7 +107,7 @@ LPETransform2Pts::doOnApply(SPLPEItem const* lpeitem)
         last_knot.param_set_value(nnodes);
     }
 
-    previous_lenght = Geom::distance(point_a,point_b);
+    previous_length = Geom::distance(point_a,point_b);
     Geom::Ray transformed(point_a,point_b);
     previous_angle = transformed.angle();
     start.param_update_default(point_a);
@@ -157,23 +157,23 @@ LPETransform2Pts::doBeforeEffect (SPLPEItem const* lpeitem)
             from_original_width.param_setValue(true);
         }
     }
-    if(lock_lenght && !lock_angle && previous_lenght != -1) {
+    if(lock_length && !lock_angle && previous_length != -1) {
         Geom::Ray transformed((Geom::Point)start,(Geom::Point)end);
         if(previous_start == start || previous_angle == Geom::rad_from_deg(0)) {
             previous_angle = transformed.angle();
         }
-    } else if(lock_angle && !lock_lenght && previous_angle != Geom::rad_from_deg(0)) {
+    } else if(lock_angle && !lock_length && previous_angle != Geom::rad_from_deg(0)) {
         if(previous_start == start){
-            previous_lenght = Geom::distance((Geom::Point)start, (Geom::Point)end);
+            previous_length = Geom::distance((Geom::Point)start, (Geom::Point)end);
         }
     }
-    if(lock_lenght || lock_angle ) {
-        Geom::Point end_point = Geom::Point::polar(previous_angle, previous_lenght) + (Geom::Point)start;
+    if(lock_length || lock_angle ) {
+        Geom::Point end_point = Geom::Point::polar(previous_angle, previous_length) + (Geom::Point)start;
         end.param_setValue(end_point);
     }
     Geom::Ray transformed((Geom::Point)start,(Geom::Point)end);
     previous_angle = transformed.angle();
-    previous_lenght = Geom::distance((Geom::Point)start, (Geom::Point)end);
+    previous_length = Geom::distance((Geom::Point)start, (Geom::Point)end);
     previous_start = start;
 }
 
@@ -265,7 +265,7 @@ LPETransform2Pts::reset()
     stretch.param_set_value(1.0);
     Geom::Ray transformed(point_a, point_b);
     previous_angle = transformed.angle();
-    previous_lenght = Geom::distance(point_a, point_b);
+    previous_length = Geom::distance(point_a, point_b);
     start.param_update_default(point_a);
     end.param_update_default(point_b);
     start.param_set_default();
@@ -331,7 +331,7 @@ Gtk::Widget *LPETransform2Pts::newWidget()
                         widg->set_has_tooltip(false);
                     }
                 }
-            } else if (param->param_key == "lock_angle" || param->param_key == "lock_lenght") {
+            } else if (param->param_key == "lock_angle" || param->param_key == "lock_length") {
                 Glib::ustring * tip = param->param_getTooltip();
                 if (widg) {
                     button3->pack_start(*widg, true, true, 2);
@@ -437,14 +437,14 @@ LPETransform2Pts::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<
     Geom::PathVector pathv;
     pathv.push_back(hp);
     double r = helper_size*.1;
-    if(lock_lenght || lock_angle ) {
+    if(lock_length || lock_angle ) {
         char const * svgd;
         svgd = "M -5.39,8.78 -9.13,5.29 -10.38,10.28 Z M -7.22,7.07 -3.43,3.37 m -1.95,-12.16 -3.74,3.5 -1.26,-5 z m -1.83,1.71 3.78,3.7 M 5.24,8.78 8.98,5.29 10.24,10.28 Z M 7.07,7.07 3.29,3.37 M 5.24,-8.78 l 3.74,3.5 1.26,-5 z M 7.07,-7.07 3.29,-3.37";
         PathVector pathv_move = sp_svg_read_pathv(svgd);
         pathv_move *= Affine(r,0,0,r,0,0) * Translate(Geom::Point(start));
         hp_vec.push_back(pathv_move);
     }
-    if(!lock_angle && lock_lenght) {
+    if(!lock_angle && lock_length) {
         char const * svgd;
         svgd = "M 0,9.94 C -2.56,9.91 -5.17,8.98 -7.07,7.07 c -3.91,-3.9 -3.91,-10.24 0,-14.14 1.97,-1.97 4.51,-3.02 7.07,-3.04 2.56,0.02 5.1,1.07 7.07,3.04 3.91,3.9 3.91,10.24 0,14.14 C 5.17,8.98 2.56,9.91 0,9.94 Z";
         PathVector pathv_turn = sp_svg_read_pathv(svgd);

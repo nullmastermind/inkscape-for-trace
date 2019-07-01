@@ -834,7 +834,7 @@ PdfInput::open(::Inkscape::Extension::Input * /*mod*/, const gchar * uri) {
         PdfParser *pdf_parser = new PdfParser(pdf_doc->getXRef(), builder, page_num-1, page->getRotate(),
                                               page->getResourceDict(), page->getCropBox(), clipToBox);
 
-        // Set up approximation precision for parser. Used for convering Mesh Gradients into tiles.
+        // Set up approximation precision for parser. Used for converting Mesh Gradients into tiles.
         double color_delta;
         sp_repr_get_double(prefs, "approximationPrecision", &color_delta);
         if ( color_delta <= 0.0 ) {

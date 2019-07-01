@@ -46,7 +46,7 @@ public:
 
     void doEffect(SPCurve *curve) override;
     virtual double sign(double randNumber);
-    virtual Geom::Point randomize(double max_lenght, bool is_node = false);
+    virtual Geom::Point randomize(double max_length, bool is_node = false);
     void doBeforeEffect(SPLPEItem const * lpeitem) override;
     virtual SPCurve const * addNodesAndJitter(Geom::Curve const * A, Geom::Point &prev, Geom::Point &last_move, double t, bool last);
     virtual SPCurve *jitter(Geom::Curve const * A,  Geom::Point &prev, Geom::Point &last_move);
