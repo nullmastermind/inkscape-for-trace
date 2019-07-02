@@ -521,85 +521,88 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     // Will automatically handle character conversions.
     // Note: OPTION_TYPE_FILENAME => std::string, OPTION_TYPE_STRING => Glib::ustring.
 
-    // Actions
-    _start_main_option_section(_("Actions"));
-    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "actions",             'a', N_("Actions (with optional arguments), semi-colon separated."),     N_("ACTION(:ARG)[;ACTION(:ARG)]*"));
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "action-list",        '\0', N_("List available actions."),                                                  "");
+    // General
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "version",                 'V', N_("Print Inkscape version."),                                                  "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "extension-directory",     'x', N_("Print system extension directory."),                                        "");
 
-    // Query
-    _start_main_option_section(_("Query"));
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "version",             'V', N_("Inkscape version."),                                                          "");
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "extension-directory", 'x', N_("Extensions directory."),                                                      "");
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "verb-list",          '\0', N_("List verbs."),                                                                "");
+    // Open/Import
+    _start_main_option_section(_("File import"));
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "pipe",                    'p', N_("Read input file from standard input (stdin)."),                             "");
+    this->add_main_option_entry(T::OPTION_TYPE_INT,      "pdf-page",               '\0', N_("PDF page number to import."),         N_("PAGE"));
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "pdf-poppler",            '\0', N_("Use poppler when importing via commandline."),                              "");
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "convert-dpi-method",     '\0', N_("Method used to convert pre-0.92 document dpi, if needed: [none|scale-viewbox|scale-document]."), "[...]");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "no-convert-text-baseline-spacing", '\0', N_("Do not fix pre-0.92 document's text baseline spacing on opening."), "");
+
+
+    // Export - File and File Type
+    _start_main_option_section(_("File export"));
+    this->add_main_option_entry(T::OPTION_TYPE_FILENAME, "export-file",            'o', N_("Output file name (file type is guessed from extension)."), N_("EXPORT-FILENAME"));
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-overwrite",      '\0', N_("Overwrite input file."),                                                     "");
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-type",           '\0', N_("File type to export: [svg,png,ps,eps,pdf,tex,emf,wmf,xaml]"),        "[...]");
+
+    // Export - Geometry
+    _start_main_option_section(_("Export geometry"));                                                                                                                         // B = PNG, S = SVG, P = PS/EPS/PDF
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-area-page",       'C', N_("Area to export is page."),                                                   ""); // BSP
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-area-drawing",    'D', N_("Area to export is whole drawing (ignoring page size)."),                     ""); // BSP
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-area",            'a', N_("Area to export in SVG user units."),                          N_("x0:y0:x1:y1")); // BSP
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-area-snap",      '\0', N_("Snap the bitmap export area outwards to the nearest integer values."),       ""); // Bxx
+    this->add_main_option_entry(T::OPTION_TYPE_INT,      "export-dpi",             'd', N_("Resolution for bitmaps and rasterized filters. Default is 96."),      N_("DPI")); // BxP
+    this->add_main_option_entry(T::OPTION_TYPE_INT,      "export-width",           'w', N_("Bitmap width in pixels (overrides --export-dpi)."),                 N_("WIDTH")); // Bxx
+    this->add_main_option_entry(T::OPTION_TYPE_INT,      "export-height",          'h', N_("Bitmap height in pixels (overrides --export-dpi)."),               N_("HEIGHT")); // Bxx
+    this->add_main_option_entry(T::OPTION_TYPE_INT,      "export-margin",         '\0', N_("Margin around export area: units of page size for SVG, mm for PS/EPS/PDF."), ""); // xSP
+
+    // Export - Options
+    _start_main_option_section(_("Export options"));
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-id",              'i', N_("ID(s) of object(s) to export."),                   N_("OBJECT-ID[;OBJECT-ID]*")); // BSP
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-id-only",         'j', N_("Hide all objects except object with ID selected by export-id."),             ""); // BSx
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-plain-svg",       'l', N_("Remove items in the Inkscape namespace."),                                   ""); // xSx
+    this->add_main_option_entry(T::OPTION_TYPE_INT,      "export-ps-level",       '\0', N_("Postscript level (2 or 3). Default is 3."),                      N_("PS-Level")); // xxP
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-pdf-version",    '\0', N_("PDF version (1.4 or 1.5)."),                                  N_("PDF-VERSION")); // xxP
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-text-to-path",    'T', N_("Convert text to paths. (PS/EPS/PDF/SVG)."),                                  ""); // xxP
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-latex",          '\0', N_("Export text separately to LaTeX file (PS/EPS/PDF)."),                        ""); // xxP
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-ignore-filters", '\0', N_("Render objects without filters instead of rasterizing. (PS/EPS/PDF)"),       ""); // xxP
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-use-hints",       't', N_("Use stored filename and DPI hints when exporting object selected by --export-id."), ""); // Bxx
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-background",      'b', N_("Background color for exported bitmaps (any SVG color string)."),         N_("COLOR")); // Bxx
+    this->add_main_option_entry(T::OPTION_TYPE_DOUBLE,   "export-background-opacity", 'y', N_("Background opacity for exported bitmaps (0.0 to 1.0, or 1 to 255)."), N_("VALUE")); // Bxx
+
+    // Query - Geometry
+    _start_main_option_section(_("Query object/document geometry"));
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "query-id",               'I', N_("ID(s) of object(s) to be queried."),              N_("OBJECT-ID[,OBJECT-ID]*"));
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "query-all",              'S', N_("Print bounding boxes of all objects."),                                     "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "query-x",                'X', N_("X coordinate of drawing or object (if specified by --query-id)."),          "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "query-y",                'Y', N_("Y coordinate of drawing or object (if specified by --query-id)."),          "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "query-width",            'W', N_("Width of drawing or object (if specified by --query-id)."),                 "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "query-height",           'H', N_("Height of drawing or object (if specified by --query-id)."),                "");
+
+    // Processing
+    _start_main_option_section(_("Advanced file processing"));
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "vacuum-defs",           '\0', N_("Remove unused definitions from the <defs> section(s) of document."),        "");
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "select",                '\0', N_("Select objects: comma separated list of IDs."),   N_("OBJECT-ID[,OBJECT-ID]*"));
+
+    // Actions
+    _start_main_option_section();
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "actions",                'a', N_("List of actions (with optional arguments) to execute."),     N_("ACTION(:ARG)[;ACTION(:ARG)]*"));
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "action-list",           '\0', N_("List all available actions."),                                               "");
+
+    // Verbs
+    _start_main_option_section();
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "verb",                  '\0', N_("List of verbs to execute."),                                 N_("VERB[;VERB]*"));
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "verb-list",             '\0', N_("List all available verbs."),                                                 "");
 
     // Interface
     _start_main_option_section(_("Interface"));
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "with-gui",            'g', N_("With graphical interface."),                                                    "");
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "without-gui",         'z', N_("Console only."),                                                                "");
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "batch-process",      '\0', N_("Close window after processing actions (needed as some verbs require GUI)."),    "");
-
-    // Open/Import
-    _start_main_option_section(_("Open/Import"));
-    this->add_main_option_entry(T::OPTION_TYPE_INT,      "pdf-page",           '\0', N_("PDF page to import"),         N_("PAGE"));
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "pdf-poppler",        '\0', N_("Use poppler when importing via commandline"),                                        "");
-    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "convert-dpi-method", '\0', N_("Method used to convert pre-0.92 document dpi, if needed: [none|scale-viewbox|scale-document]."), "[...]");
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "no-convert-text-baseline-spacing", 0, N_("Open: Do not fix pre-0.92 document's text baseline spacing on opening."), "");
-
-    // Query - Geometry
-    _start_main_option_section(_("Query - Geometry"));
-    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "query-id",            'I', N_("ID(s) of object(s) to be queried."),                N_("OBJECT-ID[,OBJECT-ID]*"));
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "query-all",           'S', N_("Print bounding boxes of all objects."),                                       "");
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "query-x",             'X', N_("X coordinate of drawing or object (if specified by --query-id)."),            "");
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "query-y",             'Y', N_("Y coordinate of drawing or object (if specified by --query-id)."),            "");
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "query-width",         'W', N_("Width of drawing or object (if specified by --query-id)."),                   "");
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "query-height",        'H', N_("Height of drawing or object (if specified by --query-id)."),                   "");
-
-    // Processing
-    _start_main_option_section(_("Processing"));
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "vacuum-defs",        '\0', N_("Remove unused definitions from the <defs> section(s) of document."),        "");
-    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "select",             '\0', N_("Select objects: comma separated list of IDs."),   N_("OBJECT-ID[,OBJECT-ID]*"));
-    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "verb",               '\0', N_("Verb(s) to call when Inkscape opens."),               N_("VERB-ID[;VERB-ID]*"));
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "shell",              '\0', N_("Start Inkscape in interactive shell mode."),                                "");
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "pipe",                'p', N_("Read file from pipe."),                                                     "");
-
-    // Export - File and File Type
-    _start_main_option_section(_("Export"));
-    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-type",        '\0', N_("Export: File type:[svg,png,ps,psf,tex,emf,wmf,xaml]"),                          "[...]");
-    this->add_main_option_entry(T::OPTION_TYPE_FILENAME, "export-file",         'o', N_("Export: File name"),                                              N_("EXPORT-FILENAME"));
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-overwrite",   '\0', N_("Export: Overwrite input file."),                                                     ""); // BSP
-
-    //                                                                                                                                          B = PNG, S = SVG, P = PS/EPS/PDF
-    // Export - Geometry
-    _start_main_option_section(_("Export - Geometry"));
-    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-area",         'a', N_("Area to export in SVG user units."),                          N_("x0:y0:x1:y1")); // BSP
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-area-drawing", 'D', N_("Area to export is drawing (not page)."),                                     ""); // BSP
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-area-page",    'C', N_("Area to export is page."),                                                   ""); // BSP
-    this->add_main_option_entry(T::OPTION_TYPE_INT,      "export-margin",      '\0', N_("Margin around export area: units of page size for SVG, mm for PS/EPS/PDF."), ""); // xSP
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-area-snap",   '\0', N_("Snap the bitmap export area outwards to the nearest integer values."),       ""); // Bxx
-    this->add_main_option_entry(T::OPTION_TYPE_INT,      "export-width",        'w', N_("Bitmap width in pixels (overrides --export-dpi)."),                 N_("WIDTH")); // Bxx
-    this->add_main_option_entry(T::OPTION_TYPE_INT,      "export-height",       'h', N_("Bitmap height in pixels (overrides --export-dpi)."),               N_("HEIGHT")); // Bxx
-
-    // Export - Options
-    _start_main_option_section(_("Export - Options"));
-    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-id",           'i', N_("ID(s) of object(s) to export."),                   N_("OBJECT-ID[;OBJECT-ID]*")); // BSP
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-id-only",      'j', N_("Hide all objects except object with ID selected by export-id."),             ""); // BSx
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-plain-svg",    'l', N_("Remove items in the Inkscape namespace."),                                   ""); // xSx
-    this->add_main_option_entry(T::OPTION_TYPE_INT,      "export-dpi",          'd', N_("Resolution for rasterization bitmaps and filters (default is 96)."),  N_("DPI")); // BxP
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-ignore-filters", '\0', N_("Render objects without filters instead of rasterizing. (PS/EPS/PDF)"),    ""); // xxP
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-text-to-path", 'T', N_("Convert text to paths. (PS/EPS/PDF/SVG)."),                                  ""); // xxP
-    this->add_main_option_entry(T::OPTION_TYPE_INT,      "export-ps-level",    '\0', N_("Postscript level (2 or 3). Default is 3."),                      N_("PS-Level")); // xxP
-    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-pdf-version", '\0', N_("PDF version (1.4 or 1.5)"),                                   N_("PDF-VERSION")); // xxP
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-latex",       '\0', N_("Export text separately to LaTeX file (PS/EPS/PDF). Include via \\input{file.tex}"), ""); // xxP
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-use-hints",    't', N_("Use stored filename and DPI hints when exporting object selected by --export-id."), ""); // Bxx
-    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-background",   'b', N_("Background color for exported bitmaps (any SVG color string)."),    N_("COLOR")); // Bxx
-    this->add_main_option_entry(T::OPTION_TYPE_DOUBLE,   "export-background-opacity", 'y', N_("Background opacity for exported bitmaps (either 0.0 to 1.0 or 1 to 255)."), N_("VALUE")); // Bxx
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "without-gui",            'z', N_("Console interface only (no visible GUI)."),                                  "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "with-gui",               'g', N_("With graphical user interface (required by some actions/verbs)."),           "");
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "batch-process",         '\0', N_("Close GUI after executing all actions/verbs."),"");
+    _start_main_option_section();
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "shell",                 '\0', N_("Start Inkscape in interactive shell mode."),                                 "");
 
 #ifdef WITH_DBUS
     _start_main_option_section(_("D-Bus"));
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "dbus-listen",        '\0', N_("Enter a listening loop for D-Bus messages in console mode."),                 "");
-    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "dbus-name",          '\0', N_("Specify the D-Bus name (default is 'org.inkscape')."),            N_("BUS-NAME"));
+    this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "dbus-listen",           '\0', N_("Enter a listening loop for D-Bus messages in console mode."),                "");
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "dbus-name",             '\0', N_("Specify the D-Bus name. Default is 'org.inkscape'."),            N_("BUS-NAME"));
 #endif // WITH_DBUS
-    
+
     Gio::Application::signal_handle_local_options().connect(sigc::mem_fun(*this, &InkscapeApplication::on_handle_local_options));
 
     // This is normally called for us... but after the "handle_local_options" signal is emitted. If
@@ -1144,7 +1147,7 @@ ConcreteInkscapeApplication<T>::shell2()
  *
  * Options are processed in the order they appear in this function.
  * We process in order: Print -> GUI -> Open -> Query -> Process -> Export.
- * For each file without GUI: Open -> Query -> Process -> Export 
+ * For each file without GUI: Open -> Query -> Process -> Export
  * More flexible processing can be done via actions.
  */
 template<class T>
