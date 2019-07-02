@@ -148,11 +148,11 @@ private:
     void on_new() override;
     void on_quit() override;
     void on_about();
-    
+
     void shell();
     void shell2();
 
-    void _start_main_option_section(const Glib::ustring& section_name);
+    void _start_main_option_section(const Glib::ustring& section_name = "");
 
     Glib::RefPtr<Gtk::Builder> _builder;
 

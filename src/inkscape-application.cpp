@@ -472,7 +472,11 @@ ConcreteInkscapeApplication<T>::_start_main_option_section(const Glib::ustring& 
     }
 #endif
 
-    this->add_main_option_entry(T::OPTION_TYPE_BOOL, Glib::ustring("\b\b  \n") + section_name + ":");
+    if (section_name.empty()) {
+        this->add_main_option_entry(T::OPTION_TYPE_BOOL, Glib::ustring("\b\b  "));
+    } else {
+        this->add_main_option_entry(T::OPTION_TYPE_BOOL, Glib::ustring("\b\b  \n") + section_name + ":");
+    }
 }
 
 // Note: We tried using Gio::APPLICATION_CAN_OVERRIDE_APP_ID instead of
