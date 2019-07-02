@@ -1420,7 +1420,7 @@ guint32 pixbuf_from_argb32(guint32 c)
 void
 convert_pixels_pixbuf_to_argb32(guchar *data, int w, int h, int stride)
 {
-    for (int i = 0; i < h; ++i) {
+    for (size_t i = 0; i < h; ++i) {
         guint32 *px = reinterpret_cast<guint32*>(data + i*stride);
         for (int j = 0; j < w; ++j) {
             *px = argb32_from_pixbuf(*px);
@@ -1437,7 +1437,7 @@ convert_pixels_pixbuf_to_argb32(guchar *data, int w, int h, int stride)
 void
 convert_pixels_argb32_to_pixbuf(guchar *data, int w, int h, int stride)
 {
-    for (int i = 0; i < h; ++i) {
+    for (size_t i = 0; i < h; ++i) {
         guint32 *px = reinterpret_cast<guint32*>(data + i*stride);
         for (int j = 0; j < w; ++j) {
             *px = pixbuf_from_argb32(*px);

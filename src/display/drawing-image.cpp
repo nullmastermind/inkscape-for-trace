@@ -209,7 +209,7 @@ DrawingImage::_pickItem(Geom::Point const &p, double delta, unsigned /*sticky*/)
         unsigned char *const pixels = _pixbuf->pixels();
         int width = _pixbuf->width();
         int height = _pixbuf->height();
-        int rowstride = _pixbuf->rowstride();
+        size_t rowstride = _pixbuf->rowstride();
 
         Geom::Point tp = p * _ctm.inverse();
         Geom::Rect r = bounds();
