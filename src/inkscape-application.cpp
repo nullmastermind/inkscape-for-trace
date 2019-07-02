@@ -461,6 +461,17 @@ template<class T>
 void
 ConcreteInkscapeApplication<T>::_start_main_option_section(const Glib::ustring& section_name)
 {
+#ifndef _WIN32
+    // Avoid outputting control characters to non-tty destinations.
+    //
+    // However, isatty() is not useful on Windows
+    //   - it doesn't recognize mintty and similar terminals
+    //   - it doesn't work in cmd.exe either, where we have to use the inkscape.com wrapper, connecting stdout to a pipe
+    if (!isatty(fileno(stdout))) {
+        return;
+    }
+#endif
+
     this->add_main_option_entry(T::OPTION_TYPE_BOOL, Glib::ustring("\b\b  \n") + section_name + ":");
 }
 
