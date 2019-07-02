@@ -4,6 +4,7 @@
 
     <its:translateRule selector="//*" translate="no"/>
     <its:translateRule selector="//*[starts-with(name(),'_')]" translate="yes"/>
+    <its:translateRule selector="//*[starts-with(name(),'inkscape:_')]" translate="yes"/>
     <its:translateRule selector="//*/@*[starts-with(name(), '_')]" translate="yes"/>
 
     <its:contextRule selector="//*" contextPointer="@msgctxt"/>

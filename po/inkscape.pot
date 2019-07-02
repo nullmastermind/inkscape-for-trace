@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-07-02 01:30+0200\n"
+"POT-Creation-Date: 2019-07-02 02:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -5978,6 +5978,14 @@ msgstr ""
 msgid "Business Card"
 msgstr ""
 #
+# File: ../share/extensions/empty_business_card.inx, line: 22
+msgid "Business Card..."
+msgstr ""
+#
+# File: ../share/extensions/empty_business_card.inx, line: 24
+msgid "Business card of chosen size."
+msgstr ""
+#
 # File: ../share/extensions/empty_business_card.inx, line: 7
 msgid "Business card size:"
 msgstr ""
@@ -9005,6 +9013,10 @@ msgstr ""
 msgid "Create regular Bezier path"
 msgstr ""
 #
+# File: ../share/extensions/seamless_pattern_procedural.inx, line: 17
+msgid "Create seamless patterns."
+msgstr ""
+#
 # File: ../src/ui/tools/freehand-base.cpp, line: 1064
 msgid "Create single dot"
 msgstr ""
@@ -9549,8 +9561,16 @@ msgstr ""
 msgid "DVD Cover"
 msgstr ""
 #
+# File: ../share/extensions/empty_dvd_cover.inx, line: 21
+msgid "DVD Cover..."
+msgstr ""
+#
 # File: ../share/extensions/empty_dvd_cover.inx, line: 14
 msgid "DVD cover bleed (mm):"
+msgstr ""
+#
+# File: ../share/extensions/empty_dvd_cover.inx, line: 23
+msgid "DVD cover of chosen size."
 msgstr ""
 #
 # File: ../share/extensions/empty_dvd_cover.inx, line: 7
@@ -10148,6 +10168,10 @@ msgstr ""
 #
 # File: ../share/extensions/empty_desktop.inx, line: 7
 msgid "Desktop size:"
+msgstr ""
+#
+# File: ../share/extensions/empty_desktop.inx, line: 32
+msgid "Desktop..."
 msgstr ""
 #
 # File: ../src/extension/internal/bitmap/despeckle.cpp, line: 37
@@ -11772,6 +11796,18 @@ msgstr ""
 # File: ../share/symbols/symbols.h, line: 284
 msgctxt "Symbol"
 msgid "Emergency Telephone"
+msgstr ""
+#
+# File: ../share/extensions/empty_desktop.inx, line: 34
+msgid "Empty desktop of chosen size."
+msgstr ""
+#
+# File: ../share/extensions/empty_icon.inx, line: 16
+msgid "Empty icon of chosen size."
+msgstr ""
+#
+# File: ../share/extensions/empty_page.inx, line: 35
+msgid "Empty page of chosen size."
 msgstr ""
 #
 # File: ../share/templates/templates.h, line: 1
@@ -14071,6 +14107,14 @@ msgstr ""
 msgid "Generic Canvas"
 msgstr ""
 #
+# File: ../share/extensions/empty_generic.inx, line: 39
+msgid "Generic canvas of chosen size."
+msgstr ""
+#
+# File: ../share/extensions/empty_generic.inx, line: 37
+msgid "Generic canvas..."
+msgstr ""
+#
 # File: ../share/extensions/dimension.inx, line: 9
 msgid "Geometric"
 msgstr ""
@@ -15441,6 +15485,10 @@ msgstr ""
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 2430
 msgid "Icon theme: "
+msgstr ""
+#
+# File: ../share/extensions/empty_icon.inx, line: 14
+msgid "Icon..."
 msgstr ""
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 839
@@ -22806,6 +22854,10 @@ msgstr ""
 msgid "Page size:"
 msgstr ""
 #
+# File: ../share/extensions/empty_page.inx, line: 33
+msgid "Page..."
+msgstr ""
+#
 # File: ../share/extensions/perfectboundcover.inx, line: 13
 # File: ../share/extensions/perfectboundcover.inx, line: 22
 msgid "Pages Per Inch (PPI)"
@@ -27326,6 +27378,10 @@ msgstr ""
 #
 # File: ../share/extensions/seamless_pattern_procedural.inx, line: 3
 msgid "Seamless Pattern Procedural"
+msgstr ""
+#
+# File: ../share/extensions/seamless_pattern_procedural.inx, line: 15
+msgid "Seamless Pattern..."
 msgstr ""
 #
 # File: ../src/ui/dialog/ocaldialogs.cpp, line: 1078
@@ -34920,8 +34976,16 @@ msgstr ""
 msgid "Video Screen"
 msgstr ""
 #
+# File: ../share/extensions/empty_video.inx, line: 27
+msgid "Video screen of chosen size."
+msgstr ""
+#
 # File: ../share/extensions/empty_video.inx, line: 7
 msgid "Video size:"
+msgstr ""
+#
+# File: ../share/extensions/empty_video.inx, line: 25
+msgid "Video..."
 msgstr ""
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 754
@@ -37633,6 +37697,10 @@ msgctxt "Palette"
 msgid "burlywood (#DEB887)"
 msgstr ""
 #
+# File: ../share/extensions/empty_business_card.inx, line: 26
+msgid "business card"
+msgstr ""
+#
 # File: ../share/palettes/palettes.h, line: 121
 msgctxt "Palette"
 msgid "cadetblue (#5F9EA0)"
@@ -37981,6 +38049,10 @@ msgstr ""
 msgid "drawing-%1"
 msgstr ""
 #
+# File: ../share/extensions/empty_dvd_cover.inx, line: 25
+msgid "dvd cover"
+msgstr ""
+#
 # File: ../src/ui/toolbar/spiral-toolbar.cpp, line: 95
 msgid "edge is denser"
 msgstr ""
@@ -37991,6 +38063,26 @@ msgstr ""
 #
 # File: ../src/object/sp-image.cpp, line: 532
 msgid "embedded"
+msgstr ""
+#
+# File: ../share/extensions/empty_desktop.inx, line: 36
+msgid "empty desktop"
+msgstr ""
+#
+# File: ../share/extensions/empty_generic.inx, line: 41
+msgid "empty generic canvas"
+msgstr ""
+#
+# File: ../share/extensions/empty_icon.inx, line: 18
+msgid "empty icon"
+msgstr ""
+#
+# File: ../share/extensions/empty_page.inx, line: 37
+msgid "empty sheet a4 a3 a5 letter black white opaque"
+msgstr ""
+#
+# File: ../share/extensions/empty_video.inx, line: 29
+msgid "empty video"
 msgstr ""
 #
 # File: ../src/file.cpp, line: 893
@@ -38472,6 +38564,10 @@ msgstr ""
 # File: ../src/display/canvas-axonomgrid.cpp, line: 289
 # File: ../src/display/canvas-grid.cpp, line: 681
 msgid "lines"
+msgstr ""
+#
+# File: ../share/extensions/seamless_pattern_procedural.inx, line: 19
+msgid "live seamless patterns"
 msgstr ""
 #
 # File: ../share/extensions/text_lowercase.inx, line: 3
