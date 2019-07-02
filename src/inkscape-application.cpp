@@ -521,6 +521,17 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     // Will automatically handle character conversions.
     // Note: OPTION_TYPE_FILENAME => std::string, OPTION_TYPE_STRING => Glib::ustring.
 
+    // Additional informational strings for --help output
+    // TODO: Claims to be translated automatically, but seems broken, so pass already translated strings
+    this->set_option_context_parameter_string(_("file1 [file2 [fileN]]"));
+    this->set_option_context_summary(_("Process (or open) one or more files."));
+    this->set_option_context_description(Glib::ustring("\n") + _("Examples:") + '\n'
+            + "  " + Glib::ustring::compose(_("Export input SVG (%1) to PDF (%2) format:"), "in.svg", "out.pdf") + '\n'
+            + '\t' + "inkscape --export-file=out.pdf in.svg\n"
+            + "  " + Glib::ustring::compose(_("Export input files (%1) to PNG format keeping original name (%2):"), "1n1.svg/in2.svg", "in1.png/in2.png") + '\n'
+            + '\t' + "inkscape --export-type=png in1.svg in2.svg\n"
+            + "  " + Glib::ustring::compose(_("See %1 and %2 for more details."), "'man inkscape'", "http://wiki.inkscape.org/wiki/index.php/Using_the_Command_Line"));
+
     // General
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "version",                 'V', N_("Print Inkscape version."),                                                  "");
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "extension-directory",     'x', N_("Print system extension directory."),                                        "");
