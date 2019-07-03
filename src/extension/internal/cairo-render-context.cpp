@@ -752,6 +752,18 @@ CairoRenderContext::popLayer()
             cairo_paint_with_alpha(_cr, opacity);
     }
 }
+void CairoRenderContext::tagBegin(const char* l){
+    char link[1000] = "uri='";
+    if(strlen(l)<990)
+        strcat(link, l);
+    strcat(link, "'");
+    cairo_tag_begin(_cr, CAIRO_TAG_LINK, link);
+}
+
+void CairoRenderContext::tagEnd(){
+    cairo_tag_end(_cr, CAIRO_TAG_LINK);
+}
+
 
 void
 CairoRenderContext::addClipPath(Geom::PathVector const &pv, SPIEnum const *fill_rule)

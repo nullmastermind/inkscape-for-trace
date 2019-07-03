@@ -128,6 +128,9 @@ public:
     void pushLayer();
     void popLayer();
 
+    void tagBegin(const char* link);
+    void tagEnd();
+
     /* Graphics state manipulation */
     void pushState();
     void popState();

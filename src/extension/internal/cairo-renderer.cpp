@@ -39,6 +39,7 @@
 #include "display/curve.h"
 #include "display/canvas-bpath.h"
 #include "display/cairo-utils.h"
+#include "object/sp-anchor.h"
 #include "object/sp-item.h"
 #include "object/sp-item-group.h"
 #include "object/sp-marker.h"
@@ -131,6 +132,7 @@ Here comes the rendering part which could be put into the 'render' methods of SP
 /* The below functions are copy&pasted plus slightly modified from *_invoke_print functions. */
 static void sp_item_invoke_render(SPItem *item, CairoRenderContext *ctx);
 static void sp_group_render(SPGroup *group, CairoRenderContext *ctx);
+static void sp_anchor_render(SPAnchor *a, CairoRenderContext *ctx);
 static void sp_use_render(SPUse *use, CairoRenderContext *ctx);
 static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx);
 static void sp_text_render(SPText *text, CairoRenderContext *ctx);
@@ -303,7 +305,7 @@ static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
 static void sp_group_render(SPGroup *group, CairoRenderContext *ctx)
 {
     CairoRenderer *renderer = ctx->getRenderer();
-    TRACE(("sp_group_render opacity: %f\n", SP_SCALE24_TO_FLOAT(item->style->opacity.value)));
+    //TRACE(("sp_group_render opacity: %f\n", SP_SCALE24_TO_FLOAT(item->style->opacity.value)));
 
     std::vector<SPObject*> l(group->childList(false));
     for(std::vector<SPObject*>::const_iterator x = l.begin(); x!= l.end(); ++x){
@@ -376,6 +378,22 @@ static void sp_image_render(SPImage *image, CairoRenderContext *ctx)
     Geom::Affine t(s * tp);
 
     ctx->renderImage(image->pixbuf, t, image->style); 
+}
+
+static void sp_anchor_render(SPAnchor *a, CairoRenderContext *ctx)
+{
+    CairoRenderer *renderer = ctx->getRenderer();
+    //TRACE(("sp_group_render opacity: %f\n", SP_SCALE24_TO_FLOAT(item->style->opacity.value)));
+
+    std::vector<SPObject*> l(a->childList(false));
+    ctx->tagBegin(a->href);
+    for(std::vector<SPObject*>::const_iterator x = l.begin(); x!= l.end(); ++x){
+        SPItem *item = dynamic_cast<SPItem*>(*x);
+        if (item) {
+            renderer->renderItem(ctx, item);
+        }
+    }
+    ctx->tagEnd();
 }
 
 static void sp_symbol_render(SPSymbol *symbol, CairoRenderContext *ctx)
@@ -534,10 +552,10 @@ static void sp_item_invoke_render(SPItem *item, CairoRenderContext *ctx)
             TRACE(("symbol\n"));
             sp_symbol_render(symbol, ctx);
         } else {
-            SPGroup *group = dynamic_cast<SPGroup *>(item);
-            if (group) {
-                TRACE(("group\n"));
-                sp_group_render(group, ctx);
+            SPAnchor *anchor = dynamic_cast<SPAnchor *>(item);
+            if (anchor) {
+                TRACE(("<a>\n"));
+                sp_anchor_render(anchor, ctx);
             } else {
                 SPShape *shape = dynamic_cast<SPShape *>(item);
                 if (shape) {
@@ -564,7 +582,13 @@ static void sp_item_invoke_render(SPItem *item, CairoRenderContext *ctx)
                                 if (image) {
                                     TRACE(("image\n"));
                                     sp_image_render(image, ctx);
-                                }
+                                } else {
+				    SPGroup *group = dynamic_cast<SPGroup *>(item);
+				    if (group) {
+			                TRACE(("<g>\n"));
+					sp_group_render(group, ctx);
+				    }
+				}
                             }
                         }
                     }
