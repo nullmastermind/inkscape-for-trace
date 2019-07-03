@@ -28,11 +28,12 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gtkmm/box.h>
+#include <glibmm/i18n.h>
+#include <gtk/gtk.h>
 #include <gtkmm/action.h>
 #include <gtkmm/actiongroup.h>
+#include <gtkmm/box.h>
 #include <gtkmm/toolitem.h>
-#include <glibmm/i18n.h>
 
 #include "desktop-style.h"
 #include "desktop.h"
@@ -683,7 +684,7 @@ void update_tool_toolbox( SPDesktop *desktop, ToolBase *eventcontext, GtkWidget 
 void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    GtkSizeGroup* grouper = gtk_size_group_new( GTK_SIZE_GROUP_BOTH );
+    GtkWidget *grouper = gtk_stack_new();
 
     // Loop through all the toolboxes and create them using either
     // their "create" methods.
@@ -719,24 +720,18 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
                 gtk_grid_attach( GTK_GRID(holder), swatch_, 1, 0, 1, 1);
             }
 
-            // Add the new toolbar into the toolbox (i.e., make it the visible toolbar)
-            // and also store a pointer to it inside the toolbox.  This allows the
-            // active toolbar to be changed.
-            gtk_container_add(GTK_CONTAINER(toolbox), holder);
-            gtk_size_group_add_widget(grouper, holder);
+            // Add the new toolbar into the toolbox
+            gtk_stack_add_named((GtkStack *)grouper, holder, aux_toolboxes[i].type_name);
             sp_set_font_size_smaller( holder );
             gtk_widget_set_name( holder, aux_toolboxes[i].ui_name );
 
-            // TODO: We could make the toolbox a custom subclass of GtkEventBox
-            //       so that we can store a list of toolbars, rather than using
-            //       GObject data
-            g_object_set_data(G_OBJECT(toolbox), aux_toolboxes[i].data_name, holder);
         } else {
             g_warning("Could not create toolbox %s", aux_toolboxes[i].ui_name);
         }
     }
-
-    g_object_unref( G_OBJECT(grouper) );
+    gtk_container_add(GTK_CONTAINER(toolbox), grouper);
+    gtk_stack_set_visible_child_name((GtkStack *)grouper, "/tools/select");
+    gtk_widget_show_all(grouper);
 }
 
 void update_aux_toolbox(SPDesktop * /*desktop*/, ToolBase *eventcontext, GtkWidget *toolbox)
@@ -744,15 +739,8 @@ void update_aux_toolbox(SPDesktop * /*desktop*/, ToolBase *eventcontext, GtkWidg
     gchar const *tname = ( eventcontext
                            ? eventcontext->getPrefsPath().c_str() //g_type_name(G_OBJECT_TYPE(eventcontext))
                            : nullptr );
-    for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
-        GtkWidget *sub_toolbox = GTK_WIDGET(g_object_get_data(G_OBJECT(toolbox), aux_toolboxes[i].data_name));
-        if (tname && !strcmp(tname, aux_toolboxes[i].type_name)) {
-            gtk_widget_show_now(sub_toolbox);
-            g_object_set_data(G_OBJECT(toolbox), "shows", sub_toolbox);
-        } else {
-            gtk_widget_hide(sub_toolbox);
-        }
-    }
+    GtkWidget *stack = (GtkWidget *)gtk_container_get_children((GtkContainer *)toolbox)->data;
+    gtk_stack_set_visible_child_name((GtkStack *)stack, tname);
 }
 
 void setup_commands_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
