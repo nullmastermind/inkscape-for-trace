@@ -386,14 +386,16 @@ static void sp_anchor_render(SPAnchor *a, CairoRenderContext *ctx)
     //TRACE(("sp_group_render opacity: %f\n", SP_SCALE24_TO_FLOAT(item->style->opacity.value)));
 
     std::vector<SPObject*> l(a->childList(false));
-    ctx->tagBegin(a->href);
+    if (a->href)
+        ctx->tagBegin(a->href);
     for(std::vector<SPObject*>::const_iterator x = l.begin(); x!= l.end(); ++x){
         SPItem *item = dynamic_cast<SPItem*>(*x);
         if (item) {
             renderer->renderItem(ctx, item);
         }
     }
-    ctx->tagEnd();
+    if (a->href)
+        ctx->tagEnd();
 }
 
 static void sp_symbol_render(SPSymbol *symbol, CairoRenderContext *ctx)

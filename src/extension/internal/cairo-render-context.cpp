@@ -753,15 +753,17 @@ CairoRenderContext::popLayer()
     }
 }
 void CairoRenderContext::tagBegin(const char* l){
-    char link[1000] = "uri='";
-    if(strlen(l)<990)
-        strcat(link, l);
-    strcat(link, "'");
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 15, 4)
+    char* link = g_strdup_printf("uri='%s'", l);
     cairo_tag_begin(_cr, CAIRO_TAG_LINK, link);
+    g_free(link);
+#endif
 }
 
 void CairoRenderContext::tagEnd(){
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 15, 4)
     cairo_tag_end(_cr, CAIRO_TAG_LINK);
+#endif
 }
 
 
