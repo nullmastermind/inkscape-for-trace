@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-07-02 02:05+0200\n"
+"POT-Creation-Date: 2019-07-05 00:50+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,10 +18,246 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 #
+# File: ../share/extensions/gcodetools_dxf_points.inx, line: 10
+msgid ""
+"\n"
+"\n"
+"Convert selected objects to drill points (as dxf_import plugin does). Also "
+"you can save original shape. Only the start point of each curve will be "
+"used.\n"
+"\n"
+"Also you can manually select object, open XML editor (Shift+Ctrl+X) and add "
+"or remove XML tag 'dxfpoint' with any value.\n"
+"          "
+msgstr ""
+#
+# File: ../share/extensions/hershey.inx, line: 75
+msgid ""
+"\n"
+"\n"
+"Sample text to use when generating font table:"
+msgstr ""
+#
+# File: ../share/extensions/gcodetools_lathe.inx, line: 22
+msgid ""
+"\n"
+"            This function modifies path so it will be possible to be cut it "
+"with a rectangular cutter.\n"
+"        "
+msgstr ""
+#
+# File: ../share/extensions/gcodetools_area.inx, line: 14
+msgid ""
+"\n"
+"\"Create area offset\": creates several Inkscape path offsets to fill "
+"original path's area up to \"Area radius\" value.\n"
+"\n"
+"Outlines start from \"1/2 D\" up to \"Area width\" total width with \"D\" "
+"steps where D is taken from the nearest tool definition (\"Tool diameter\" "
+"value).\n"
+"Only one offset will be created if the \"Area width\" is equal to \"1/2 D"
+"\".\n"
+"            "
+msgstr ""
+#
+# File: ../share/extensions/color_HSL_adjust.inx, line: 17
+msgid ""
+"\n"
+"Adjusts hue, saturation and lightness in the HSL representation of the "
+"selected objects's color.\n"
+"Options:\n"
+"    * Hue: rotate by degrees (wraps around).\n"
+"    * Saturation: add/subtract % (min=-100, max=100).\n"
+"    * Lightness: add/subtract % (min=-100, max=100).\n"
+"    * Random Hue/Saturation/Lightness: randomize the parameter's value.\n"
+"      "
+msgstr ""
+#
+# File: ../share/extensions/color_custom.inx, line: 18
+msgid ""
+"\n"
+"Allows you to evaluate different functions for each channel.\n"
+"r, g and b are the normalized values of the red, green and blue channels. "
+"The resulting RGB values are automatically clamped.\n"
+"\n"
+"Example (half the red, swap green and blue):\n"
+"  Red Function: r*0.5\n"
+"  Green Function: b\n"
+"  Blue Function: g\n"
+"            "
+msgstr ""
+#
+# File: ../share/extensions/gcodetools_area.inx, line: 61
+# File: ../share/extensions/gcodetools_lathe.inx, line: 41
+# File: ../share/extensions/gcodetools_path_to_gcode.inx, line: 21
+msgid ""
+"\n"
+"Biarc interpolation tolerance is the maximum distance between path and its "
+"approximation.\n"
+"The segment will be split into two segments if the distance between path's "
+"segment and its approximation exceeds biarc interpolation tolerance.\n"
+"For depth function c=color intensity from 0.0 (white) to 1.0 (black), d is "
+"the depth defined by orientation points, s - surface defined by orientation "
+"points.\n"
+msgstr ""
+#
+# File: ../share/extensions/gcodetools_about.inx, line: 24
+# File: ../share/extensions/gcodetools_area.inx, line: 105
+# File: ../share/extensions/gcodetools_dxf_points.inx, line: 51
+# File: ../share/extensions/gcodetools_engraving.inx, line: 63
+# File: ../share/extensions/gcodetools_graffiti.inx, line: 92
+# File: ../share/extensions/gcodetools_lathe.inx, line: 85
+# File: ../share/extensions/gcodetools_path_to_gcode.inx, line: 65
+# File: ../share/extensions/gcodetools_prepare_path_for_plasma.inx, line: 31
+msgid ""
+"\n"
+"Gcodetools plug-in:\n"
+"Converts paths to Gcode (using circular interpolation), makes offset paths "
+"and engraves sharp corners using cone cutters.\n"
+"This plug-in calculates Gcode for paths using circular interpolation or "
+"linear motion when needed.\n"
+"\n"
+"Tutorials, manuals and support can be found at\n"
+"English support forum:\n"
+"    http://www.cnc-club.ru/gcodetools\n"
+"\n"
+"and Russian support forum:\n"
+"    http://www.cnc-club.ru/gcodetoolsru\n"
+"\n"
+"Credits: Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas, "
+"Chris Lusby Taylor.\n"
+"\n"
+"Gcodetools ver. 1.7\n"
+msgstr ""
+#
+# File: ../share/extensions/gcodetools_orientation_points.inx, line: 36
+msgid ""
+"\n"
+"Gcodetools plug-in:\n"
+"Converts paths to Gcode (using circular interpolation), makes offset paths "
+"and engraves sharp corners using cone cutters. This plug-in calculates Gcode "
+"for paths using circular interpolation or linear motion when needed.\n"
+"\n"
+"Tutorials, manuals and support can be found at English support forum: http://"
+"www.cnc-club.ru/gcodetools and Russian support forum: http://www.cnc-club.ru/"
+"gcodetoolsru\n"
+"\n"
+"Credits: Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas, "
+"Chris Lusby Taylor.\n"
+"\n"
+"Gcodetools ver. 1.7\n"
+"      "
+msgstr ""
+#
+# File: ../share/extensions/gcodetools_tools_library.inx, line: 35
+msgid ""
+"\n"
+"Gcodetools plug-in: converts paths to Gcode (using circular interpolation), "
+"makes offset paths and engraves sharp corners using cone cutters.\n"
+"This plug-in calculates Gcode for paths using circular interpolation or "
+"linear motion when needed.\n"
+"\n"
+"Tutorials, manuals and support can be found at\n"
+"English support forum:\n"
+"    http://www.cnc-club.ru/gcodetools\n"
+"\n"
+"and Russian support forum:\n"
+"    http://www.cnc-club.ru/gcodetoolsru\n"
+"\n"
+"Credits: Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas, "
+"Chris Lusby Taylor.\n"
+"\n"
+"Gcodetools ver. 1.7\n"
+msgstr ""
+#
+# File: ../share/extensions/hershey.inx, line: 12
+msgid ""
+"\n"
+"Hershey Text\n"
+msgstr ""
+#
+# File: ../share/extensions/hershey.inx, line: 66
+msgid ""
+"\n"
+"Hershey Text Utility Functions\n"
+"  "
+msgstr ""
+#
 # File: ../share/extensions/jessyInk_summary.py, line: 75
 msgid ""
 "\n"
 "Master slide:"
+msgstr ""
+#
+# File: ../share/extensions/gcodetools_graffiti.inx, line: 41
+msgid ""
+"\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
+"3-points mode only: do not put all three into one line (use 2-points mode "
+"instead).\n"
+"\n"
+"You can modify Z surface, Z depth values later using text tool (3rd "
+"coordinates).\n"
+"\n"
+"If there are no orientation points inside current layer they are taken from "
+"the upper layer.\n"
+"\n"
+"Do not ungroup orientation points! You can select them using double click to "
+"enter the group or by Ctrl+Click.\n"
+"\n"
+"Now press apply to create control points (independent set for each layer).\n"
+"            "
+msgstr ""
+#
+# File: ../share/extensions/gcodetools_orientation_points.inx, line: 25
+msgid ""
+"\n"
+"Orientation points are used to calculate transformation (offset,scale,mirror,"
+"rotation in XY plane) of the path.\n"
+"3-points mode only: do not put all three into one line (use 2-points mode "
+"instead).\n"
+"You can modify Z surface, Z depth values later using text tool (3rd "
+"coordinates).\n"
+"If there are no orientation points inside current layer, they are taken from "
+"the upper layer.\n"
+"Do not ungroup orientation points!\n"
+"You can select them using double click to enter the group or by Ctrl+Click. "
+"Now press apply to create control points (independent set for each layer).\n"
+"      "
+msgstr ""
+#
+# File: ../share/extensions/hershey.inx, line: 56
+msgid ""
+"\n"
+"Other SVG font name or path (if \"Other\" selected above):\n"
+msgstr ""
+#
+# File: ../share/extensions/layout_nup.inx, line: 49
+msgid ""
+"\n"
+"Parameters:\n"
+"    * Page size: width and height.\n"
+"    * Page margins: extra space around each page.\n"
+"    * Layout rows and cols.\n"
+"    * Layout size: width and height, auto calculated if one is 0.\n"
+"    * Auto calculate layout size: don't use the layout size values.\n"
+"    * Layout margins: white space around each part of the layout.\n"
+"    * Layout padding: inner padding for each part of the layout.\n"
+"      "
+msgstr ""
+#
+# File: ../share/extensions/gcodetools_tools_library.inx, line: 25
+msgid ""
+"\n"
+"Selected tool type fills appropriate default values. You can change these "
+"values using the Text tool later on.\n"
+"\n"
+"The topmost (z order) tool in the active layer is used. If there is no tool "
+"inside the current layer it is taken from the upper layer.\n"
+"\n"
+"Press Apply to create new tool.\n"
+"            "
 msgstr ""
 #
 # File: ../share/extensions/jessyInk_summary.py, line: 81
@@ -34,6 +270,94 @@ msgstr ""
 msgid ""
 "\n"
 "Some fonts are not available and have been substituted."
+msgstr ""
+#
+# File: ../share/extensions/hershey.inx, line: 109
+msgid ""
+"\n"
+"The classic Hershey fonts included are derived from\n"
+"work by Dr. A. V. Hershey.\n"
+"\n"
+"Additional modern \"EMS\" fonts in this distribution are\n"
+"derivatives created from fonts licensed under the SIL\n"
+"Open Font License.\n"
+"\n"
+"For full credits and license information, please read the\n"
+"credits embedded within the SVG fonts included with this\n"
+"distribution.\n"
+msgstr ""
+#
+# File: ../share/extensions/lindenmayer.inx, line: 18
+msgid ""
+"\n"
+"The path is generated by applying the \n"
+"substitutions of Rules to the Axiom, \n"
+"Order times. The following commands are \n"
+"recognized in Axiom and Rules:\n"
+"\n"
+"Any of A,B,C,D,E,F: draw forward \n"
+"\n"
+"Any of G,H,I,J,K,L: move forward \n"
+"\n"
+"+: turn left\n"
+"\n"
+"-: turn right\n"
+"\n"
+"|: turn 180 degrees\n"
+"\n"
+"[: remember point\n"
+"\n"
+"]: return to remembered point\n"
+msgstr ""
+#
+# File: ../share/extensions/hershey.inx, line: 85
+msgid ""
+"\n"
+"This extension renders all text (or all selected text)\n"
+"in your document into using specialized \"stroke\" or\n"
+"\"engraving\" fonts designed for plotters. \n"
+"\n"
+"Whereas regular \"outline\" fonts (e.g., TrueType) work\n"
+"by filling in the region inside an invisible outline,\n"
+"engraving fonts are composed only of individual lines\n"
+"or strokes; much like human handwriting.\n"
+"\n"
+"Engraving fonts are used for creating text paths that\n"
+"computer controlled drawing and cutting machines (from\n"
+"pen plotters to CNC routers) can efficiently follow. \n"
+"\n"
+"A complete user guide is available to download at:\n"
+"  http://wiki.evilmadscientist.com/hershey\n"
+"  \n"
+"For extended help, click \"Apply\" with this tab selected.\n"
+"\n"
+"  "
+msgstr ""
+#
+# File: ../share/extensions/gcodetools_engraving.inx, line: 15
+msgid ""
+"\n"
+"This function creates path to engrave letters or any shape with sharp "
+"angles.\n"
+"Cutter's depth as a function of radius is defined by the tool.\n"
+"Depth may be any Python expression. For instance:\n"
+"\n"
+"cone....(45 degrees)......................: w\n"
+"cone....(height/diameter=10/3)..: 10*w/3\n"
+"sphere..(radius r)...........................: math.sqrt(max(0,r**2-w**2))\n"
+"ellipse.(minor axis r, major 4r).....: math.sqrt(max(0,r**2-w**2))*4"
+msgstr ""
+#
+# File: ../share/extensions/gcodetools_area.inx, line: 39
+msgid ""
+"\n"
+"Usage:\n"
+"1. Select all Area Offsets (gray outlines)\n"
+"2. Object/Ungroup (Shift+Ctrl+G)\n"
+"3. Press Apply\n"
+"\n"
+"Suspected small objects will be marked out by colored arrows.\n"
+"            "
 msgstr ""
 #
 # File: ../share/extensions/jessyInk_summary.py, line: 112
@@ -219,15 +543,6 @@ msgstr ""
 msgid "\" failed to load because "
 msgstr ""
 #
-# File: ../share/extensions/gcodetools_area.inx, line: 14
-msgid ""
-"\"Create area offset\": creates several Inkscape path offsets to fill "
-"original path's area up to \"Area radius\" value. Outlines start from \"1/2 D"
-"\" up to \"Area width\" total width with \"D\" steps where D is taken from "
-"the nearest tool definition (\"Tool diameter\" value). Only one offset will "
-"be created if the \"Area width\" is equal to \"1/2 D\"."
-msgstr ""
-#
 # File: ../org.inkscape.Inkscape.desktop.template, line: 17
 msgid "${INKSCAPE_ICONPATH}"
 msgstr ""
@@ -344,7 +659,7 @@ msgstr ""
 msgid "%s is not a valid directory."
 msgstr ""
 #
-# File: ../share/extensions/embedimage.py, line: 117
+# File: ../share/extensions/embedimage.py, line: 106
 #, python-format
 msgid ""
 "%s is not of type image/png, image/jpeg, image/bmp, image/gif, image/tiff, "
@@ -737,8 +1052,9 @@ msgstr ""
 #
 # File: ../share/extensions/extractimage.inx, line: 8
 msgid ""
-"* Don't type the file extension, it is appended automatically. * A relative "
-"path (or a filename without path) is relative to the user's home directory."
+"* Don't type the file extension, it is appended automatically.\n"
+"* A relative path (or a filename without path) is relative to the user's "
+"home directory."
 msgstr ""
 #
 # File: ../src/ui/tools/dropper-tool.cpp, line: 373
@@ -757,25 +1073,31 @@ msgstr ""
 #
 # File: ../share/extensions/dxf_input.inx, line: 27
 msgid ""
-"- AutoCAD Release 13 and newer. - for manual scaling, assume dxf drawing is "
-"in mm. - assume svg drawing is in pixels, at 96 dpi. - scale factor and "
-"origin apply only to manual scaling. - 'Automatic scaling' will fit the "
-"width of an A4 page. - 'Read from file' uses the variable $MEASUREMENT. - "
-"layers are preserved only on File-&gt;Open, not Import. - limited support "
-"for BLOCKS, use AutoCAD Explode Blocks instead, if needed."
+"- AutoCAD Release 13 and newer.\n"
+"- for manual scaling, assume dxf drawing is in mm.\n"
+"- assume svg drawing is in pixels, at 96 dpi.\n"
+"- scale factor and origin apply only to manual scaling.\n"
+"- 'Automatic scaling' will fit the width of an A4 page.\n"
+"- 'Read from file' uses the variable $MEASUREMENT.\n"
+"- layers are preserved only on File-&gt;Open, not Import.\n"
+"- limited support for BLOCKS, use AutoCAD Explode Blocks instead, if needed."
 msgstr ""
 #
 # File: ../share/extensions/dxf_outlines.inx, line: 35
 msgid ""
-"- AutoCAD Release 14 DXF format. - The base unit parameter specifies in what "
-"unit the coordinates are output (96 px = 1 in). - Supported element types - "
-"paths (lines and splines) - rectangles - clones (the crossreference to the "
-"original is lost) - ROBO-Master spline output is a specialized spline "
-"readable only by ROBO-Master and AutoDesk viewers, not Inkscape. - "
-"LWPOLYLINE output is a multiply-connected polyline, disable it to use a "
-"legacy version of the LINE output. - You can choose to export all layers, "
-"only visible ones or by name match (case insensitive and use comma ',' as "
-"separator)"
+"- AutoCAD Release 14 DXF format.\n"
+"- The base unit parameter specifies in what unit the coordinates are output "
+"(96 px = 1 in).\n"
+"- Supported element types\n"
+"    - paths (lines and splines)\n"
+"    - rectangles\n"
+"    - clones (the crossreference to the original is lost)\n"
+"- ROBO-Master spline output is a specialized spline readable only by ROBO-"
+"Master and AutoDesk viewers, not Inkscape.\n"
+"- LWPOLYLINE output is a multiply-connected polyline, disable it to use a "
+"legacy version of the LINE output.\n"
+"- You can choose to export all layers, only visible ones or by name match "
+"(case insensitive and use comma ',' as separator)"
 msgstr ""
 #
 # File: ../share/extensions/gcodetools_prepare_path_for_plasma.inx, line: 22
@@ -2610,7 +2932,12 @@ msgid "A related resource from which the described resource is derived"
 msgstr ""
 #
 # File: ../share/extensions/hershey.inx, line: 16
-msgid "A tool to replace text with stroke fonts Version 3.0, 2019-06-16"
+msgid ""
+"A tool to replace text with stroke fonts\n"
+"\n"
+"Version 3.0, 2019-06-16\n"
+"\n"
+"\n"
 msgstr ""
 #
 # File: ../share/filters/filters.svg.h, line: 184
@@ -2633,7 +2960,7 @@ msgstr ""
 msgid "ACECAD Digimemo File (*.dhw)"
 msgstr ""
 #
-# File: ../src/inkscape-application.cpp, line: 503
+# File: ../src/inkscape-application.cpp, line: 594
 msgid "ACTION(:ARG)[;ACTION(:ARG)]*"
 msgstr ""
 #
@@ -2710,14 +3037,6 @@ msgstr ""
 # File: ../share/extensions/gcodetools_area.inx, line: 34
 # File: ../share/extensions/hershey.inx, line: 70
 msgid "Action:"
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 503
-msgid "Actions (with optional arguments), semi-colon separated."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 504
-msgid "Actions: List available actions."
 msgstr ""
 #
 # File: ../src/ui/dialog/livepatheffect-editor.cpp, line: 604
@@ -3278,15 +3597,6 @@ msgstr ""
 msgid "Adjusting <b>stroke width</b>: was %.3g, now <b>%.3g</b> (diff %.3g)"
 msgstr ""
 #
-# File: ../share/extensions/color_HSL_adjust.inx, line: 17
-msgid ""
-"Adjusts hue, saturation and lightness in the HSL representation of the "
-"selected objects's color. Options: * Hue: rotate by degrees (wraps around). "
-"* Saturation: add/subtract % (min=-100, max=100). * Lightness: add/subtract "
-"% (min=-100, max=100). * Random Hue/Saturation/Lightness: randomize the "
-"parameter's value."
-msgstr ""
-#
 # File: ../src/ui/toolbar/spray-toolbar.cpp, line: 146
 msgid "Adjusts the number of items sprayed per click"
 msgstr ""
@@ -3313,6 +3623,10 @@ msgstr ""
 #
 # File: ../src/verbs.cpp, line: 3163
 msgid "Advanced Inkscape topics"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 588
+msgid "Advanced file processing"
 msgstr ""
 #
 # File: ../src/ui/dialog/filter-effects-dialog.cpp, line: 2776
@@ -3619,14 +3933,6 @@ msgstr ""
 #
 # File: ../src/live_effects/lpe-clone-original.cpp, line: 49
 msgid "Allow transforms"
-msgstr ""
-#
-# File: ../share/extensions/color_custom.inx, line: 18
-msgid ""
-"Allows you to evaluate different functions for each channel. r, g and b are "
-"the normalized values of the red, green and blue channels. The resulting RGB "
-"values are automatically clamped. Example (half the red, swap green and "
-"blue): Red Function: r*0.5 Green Function: b Blue Function: g"
 msgstr ""
 #
 # File: ../src/live_effects/lpe-roughen.cpp, line: 37
@@ -4318,6 +4624,18 @@ msgstr[1] ""
 msgid "Area is zero, cannot calculate Center of Mass"
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 557
+msgid "Area to export in SVG user units"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 555
+msgid "Area to export is page"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 556
+msgid "Area to export is whole drawing (ignoring page size)"
+msgstr ""
+#
 # File: ../share/extensions/gcodetools_area.inx, line: 12
 msgid "Area tool overlap (0..0.9):"
 msgstr ""
@@ -4751,7 +5069,7 @@ msgstr ""
 msgid "BSpline"
 msgstr ""
 #
-# File: ../src/inkscape-application.cpp, line: 568
+# File: ../src/inkscape-application.cpp, line: 613
 msgid "BUS-NAME"
 msgstr ""
 #
@@ -4813,6 +5131,10 @@ msgstr ""
 msgid "Background color and opacity"
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 575
+msgid "Background color for exported bitmaps (any SVG color string)"
+msgstr ""
+#
 # File: ../share/extensions/webslicer_create_group.inx, line: 21
 # File: ../share/extensions/webslicer_create_rect.inx, line: 18
 msgid "Background color:"
@@ -4820,6 +5142,10 @@ msgstr ""
 #
 # File: ../src/extension/internal/filter/bumps.h, line: 326
 msgid "Background opacity"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 576
+msgid "Background opacity for exported bitmaps (0.0 to 1.0, or 1 to 255)"
 msgstr ""
 #
 # File: ../share/extensions/webslicer_create_rect.inx, line: 42
@@ -5163,18 +5489,6 @@ msgstr ""
 msgid "Bezier"
 msgstr ""
 #
-# File: ../share/extensions/gcodetools_area.inx, line: 61
-# File: ../share/extensions/gcodetools_lathe.inx, line: 41
-# File: ../share/extensions/gcodetools_path_to_gcode.inx, line: 21
-msgid ""
-"Biarc interpolation tolerance is the maximum distance between path and its "
-"approximation. The segment will be split into two segments if the distance "
-"between path's segment and its approximation exceeds biarc interpolation "
-"tolerance. For depth function c=color intensity from 0.0 (white) to 1.0 "
-"(black), d is the depth defined by orientation points, s - surface defined "
-"by orientation points."
-msgstr ""
-#
 # File: ../share/extensions/gcodetools_area.inx, line: 50
 # File: ../share/extensions/gcodetools_lathe.inx, line: 30
 # File: ../share/extensions/gcodetools_path_to_gcode.inx, line: 10
@@ -5207,12 +5521,20 @@ msgstr ""
 msgid "Bitmap"
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 561
+msgid "Bitmap height in pixels (overrides --export-dpi)"
+msgstr ""
+#
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1877
 msgid "Bitmap import/open mode:"
 msgstr ""
 #
 # File: ../src/ui/widget/rendering-options.cpp, line: 33
 msgid "Bitmap options"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 560
+msgid "Bitmap width in pixels (overrides --export-dpi)"
 msgstr ""
 #
 # File: ../src/extension/internal/filter/color.h, line: 821
@@ -6128,7 +6450,7 @@ msgstr ""
 msgid "CMYK"
 msgstr ""
 #
-# File: ../src/inkscape-application.cpp, line: 563
+# File: ../src/inkscape-application.cpp, line: 575
 msgid "COLOR"
 msgstr ""
 #
@@ -7150,6 +7472,10 @@ msgstr ""
 msgid "Close"
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 606
+msgid "Close GUI after executing all actions/verbs"
+msgstr ""
+#
 # File: ../src/widgets/desktop-widget.cpp, line: 1127
 # File: ../src/widgets/desktop-widget.cpp, line: 1174
 msgid "Close _without saving"
@@ -7468,7 +7794,7 @@ msgstr ""
 msgid "Color-managed display is <b>enabled</b> in this window"
 msgstr ""
 #
-# File: ../src/widgets/toolbox.cpp, line: 194
+# File: ../src/widgets/toolbox.cpp, line: 195
 msgid "Color/opacity used for color tweaking"
 msgstr ""
 #
@@ -7821,6 +8147,10 @@ msgstr ""
 #
 # File: ../src/ui/tools/connector-tool.cpp, line: 736
 msgid "Connector endpoint drag cancelled."
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 604
+msgid "Console interface only (no visible GUI)"
 msgstr ""
 #
 # File: ../src/ui/dialog/filter-effects-dialog.cpp, line: 2784
@@ -8351,14 +8681,6 @@ msgid ""
 "edges"
 msgstr ""
 #
-# File: ../share/extensions/gcodetools_dxf_points.inx, line: 10
-msgid ""
-"Convert selected objects to drill points (as dxf_import plugin does). Also "
-"you can save original shape. Only the start point of each curve will be "
-"used. Also you can manually select object, open XML editor (Shift+Ctrl+X) "
-"and add or remove XML tag 'dxfpoint' with any value."
-msgstr ""
-#
 # File: ../src/verbs.cpp, line: 2619
 msgid "Convert selection to a line marker"
 msgstr ""
@@ -8389,6 +8711,10 @@ msgstr ""
 # File: ../src/extension/internal/cairo-ps-out.cpp, line: 376
 # File: ../src/extension/internal/cairo-renderer-pdf-out.cpp, line: 253
 msgid "Convert text to paths"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 571
+msgid "Convert text to paths (PS/EPS/PDF/SVG)"
 msgstr ""
 #
 # File: ../src/extension/internal/emf-inout.cpp, line: 3650
@@ -8465,7 +8791,7 @@ msgid "Coons"
 msgstr ""
 #
 # File: ../src/ui/toolbar/mesh-toolbar.cpp, line: 329
-msgid "Coons: no smothing. Bicubic: smothing across patch boundaries."
+msgid "Coons: no smoothing. Bicubic: smoothing across patch boundaries."
 msgstr ""
 #
 # File: ../src/ui/dialog/filter-effects-dialog.cpp, line: 2746
@@ -9520,12 +9846,8 @@ msgstr ""
 msgid "Czech (cs)"
 msgstr ""
 #
-# File: ../src/inkscape-application.cpp, line: 567
-msgid "D-Bus: Enter a listening loop for D-Bus messages in console mode."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 568
-msgid "D-Bus: Specify the D-Bus name (default is 'org.inkscape')."
+# File: ../src/inkscape-application.cpp, line: 611
+msgid "D-Bus"
 msgstr ""
 #
 # File: ../share/extensions/dhw_input.inx, line: 3
@@ -9540,7 +9862,7 @@ msgstr ""
 msgid "DOC Info"
 msgstr ""
 #
-# File: ../src/inkscape-application.cpp, line: 556
+# File: ../src/inkscape-application.cpp, line: 559
 # File: ../src/ui/widget/rendering-options.cpp, line: 34
 msgid "DPI"
 msgstr ""
@@ -10458,7 +10780,7 @@ msgstr ""
 # File: ../src/ui/dialog/input.cpp, line: 347
 # File: ../src/ui/dialog/input.cpp, line: 368
 # File: ../src/ui/dialog/input.cpp, line: 1458
-# File: ../src/widgets/toolbox.cpp, line: 238
+# File: ../src/widgets/toolbox.cpp, line: 239
 msgid "Disabled"
 msgstr ""
 #
@@ -10710,6 +11032,10 @@ msgstr ""
 #
 # File: ../src/ui/toolbar/connector-toolbar.cpp, line: 157
 msgid "Do not allow overlapping shapes"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 545
+msgid "Do not fix pre-0.92 document's text baseline spacing on opening"
 msgstr ""
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1731
@@ -11353,7 +11679,7 @@ msgstr ""
 msgid "EPS Input"
 msgstr ""
 #
-# File: ../src/inkscape-application.cpp, line: 539
+# File: ../src/inkscape-application.cpp, line: 549
 msgid "EXPORT-FILENAME"
 msgstr ""
 #
@@ -12040,6 +12366,10 @@ msgstr ""
 msgid "Enhanced Metafiles (*.emf)"
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 612
+msgid "Enter a listening loop for D-Bus messages in console mode"
+msgstr ""
+#
 # File: ../src/ui/contextmenu.cpp, line: 154
 msgid "Enter group #%1"
 msgstr ""
@@ -12203,6 +12533,10 @@ msgstr ""
 msgid "Even"
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 528
+msgid "Examples:"
+msgstr ""
+#
 # File: ../share/extensions/interp_att_g.inx, line: 34
 # File: ../share/extensions/interp_att_g.inx, line: 35
 msgid "Examples: 0.5, 5, #rgb, #rrggbb or r, g, b"
@@ -12339,12 +12673,28 @@ msgid ""
 "(caution, overwrites without asking!)"
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 554
+msgid "Export geometry"
+msgstr ""
+#
 # File: ../src/ui/dialog/export.cpp, line: 912
 msgid "Export in progress"
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 529
+msgid "Export input SVG (%1) to PDF (%2) format:"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 531
+msgid "Export input files (%1) to PNG format keeping original name (%2):"
+msgstr ""
+#
 # File: ../share/extensions/webslicer_export.inx, line: 3
 msgid "Export layout pieces and HTML+CSS code"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 565
+msgid "Export options"
 msgstr ""
 #
 # File: ../share/extensions/jessyInk_keyBindings.inx, line: 20
@@ -12355,111 +12705,16 @@ msgstr ""
 msgid "Export selection to a bitmap and insert it into document"
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 572
+msgid "Export text separately to LaTeX file (PS/EPS/PDF)"
+msgstr ""
+#
 # File: ../src/ui/dialog/export.cpp, line: 324
 msgid "Export the bitmap file with these settings"
 msgstr ""
 #
 # File: ../src/verbs.cpp, line: 3146
 msgid "Export this document or a selection as a PNG image"
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 544
-msgid "Export: Area to export in SVG user units."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 545
-msgid "Export: Area to export is drawing (not page)."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 546
-msgid "Export: Area to export is page."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 563
-msgid "Export: Background color for exported bitmaps (any SVG color string)."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 564
-msgid ""
-"Export: Background opacity for exported bitmaps (either 0.0 to 1.0 or 1 to "
-"255)."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 550
-msgid "Export: Bitmap height in pixels (overrides --export-dpi)."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 549
-msgid "Export: Bitmap width in pixels (overrides --export-dpi)."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 558
-msgid "Export: Convert text to paths. (PS/EPS/PDF/SVG)."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 561
-msgid ""
-"Export: Export text separately to LaTeX file (PS/EPS/PDF). Include via "
-"\\input{file.tex}"
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 539
-msgid "Export: File name"
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 538
-msgid "Export: File type:[svg,png,ps,psf,tex,emf,wmf,xaml]"
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 554
-msgid "Export: Hide all objects except object with ID selected by export-id."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 553
-msgid "Export: ID(s) of object(s) to export."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 547
-msgid ""
-"Export: Margin around export area: units of page size for SVG, mm for PS/EPS/"
-"PDF."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 540
-msgid "Export: Overwrite input file."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 560
-msgid "Export: PDF version (1.4 or 1.5)"
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 559
-msgid "Export: Postscript level (2 or 3). Default is 3."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 555
-msgid "Export: Remove items in the Inkscape namespace."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 557
-msgid ""
-"Export: Render objects without filters instead of rasterizing. (PS/EPS/PDF)"
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 556
-msgid ""
-"Export: Resolution for rasterization bitmaps and filters (default is 96)."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 548
-msgid ""
-"Export: Snap the bitmap export area outwards to the nearest integer values."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 562
-msgid ""
-"Export: Use stored filename and DPI hints when exporting object selected by "
-"--export-id."
 msgstr ""
 #
 # File: ../src/ui/dialog/export.cpp, line: 1150
@@ -12802,6 +13057,10 @@ msgstr ""
 msgid "File encoding (e.g. utf-8):"
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 548
+msgid "File export"
+msgstr ""
+#
 # File: ../src/extension/internal/vsd-input.cpp, line: 345
 msgid "File format used by Microsoft Visio 2010 and later"
 msgstr ""
@@ -12813,6 +13072,14 @@ msgstr ""
 #
 # File: ../src/extension/internal/vsd-input.cpp, line: 332
 msgid "File format used by Microsoft Visio 6 and later"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 540
+msgid "File import"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 551
+msgid "File type to export: [svg,png,ps,eps,pdf,tex,emf,wmf,xaml]"
 msgstr ""
 #
 # File: ../share/extensions/gcodetools_area.inx, line: 79
@@ -13560,7 +13827,7 @@ msgstr ""
 # File: ../share/extensions/render_barcode_qrcode.inx, line: 47
 msgid ""
 "For Path: custom set the path in relative coordinates (0,0)=(left,up) square "
-"size 1.0"
+"size 1.0 "
 msgstr ""
 #
 # File: ../src/live_effects/lpe-bool.cpp, line: 79
@@ -13870,20 +14137,6 @@ msgstr ""
 msgid "GTK open/save dialogs"
 msgstr ""
 #
-# File: ../src/inkscape-application.cpp, line: 514
-msgid ""
-"GUI: Close window after processing actions (needed as some verbs require "
-"GUI)."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 513
-msgid "GUI: Console only."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 512
-msgid "GUI: With graphical interface."
-msgstr ""
-#
 # File: ../src/verbs.cpp, line: 3015
 msgid "G_uides"
 msgstr ""
@@ -13972,44 +14225,21 @@ msgstr ""
 msgid "Gcodetools compatible point import"
 msgstr ""
 #
-# File: ../share/extensions/gcodetools_about.inx, line: 24
-# File: ../share/extensions/gcodetools_area.inx, line: 105
-# File: ../share/extensions/gcodetools_dxf_points.inx, line: 51
-# File: ../share/extensions/gcodetools_engraving.inx, line: 63
-# File: ../share/extensions/gcodetools_graffiti.inx, line: 92
-# File: ../share/extensions/gcodetools_lathe.inx, line: 85
-# File: ../share/extensions/gcodetools_orientation_points.inx, line: 36
-# File: ../share/extensions/gcodetools_path_to_gcode.inx, line: 65
-# File: ../share/extensions/gcodetools_prepare_path_for_plasma.inx, line: 31
-msgid ""
-"Gcodetools plug-in: Converts paths to Gcode (using circular interpolation), "
-"makes offset paths and engraves sharp corners using cone cutters. This plug-"
-"in calculates Gcode for paths using circular interpolation or linear motion "
-"when needed. Tutorials, manuals and support can be found at English support "
-"forum: http://www.cnc-club.ru/gcodetools and Russian support forum: http://"
-"www.cnc-club.ru/gcodetoolsru Credits: Nick Drobchenko, Vladimir Kalyaev, "
-"John Brooker, Henry Nicolas, Chris Lusby Taylor. Gcodetools ver. 1.7"
-msgstr ""
-#
-# File: ../share/extensions/gcodetools_tools_library.inx, line: 35
-msgid ""
-"Gcodetools plug-in: converts paths to Gcode (using circular interpolation), "
-"makes offset paths and engraves sharp corners using cone cutters. This plug-"
-"in calculates Gcode for paths using circular interpolation or linear motion "
-"when needed. Tutorials, manuals and support can be found at English support "
-"forum: http://www.cnc-club.ru/gcodetools and Russian support forum: http://"
-"www.cnc-club.ru/gcodetoolsru Credits: Nick Drobchenko, Vladimir Kalyaev, "
-"John Brooker, Henry Nicolas, Chris Lusby Taylor. Gcodetools ver. 1.7"
-msgstr ""
-#
 # File: ../share/extensions/gcodetools_about.inx, line: 10
 msgid ""
 "Gcodetools was developed to make simple Gcode from Inkscape's paths. Gcode "
 "is a special format which is used in most of CNC machines. So Gcodetools "
-"allows you to use Inkscape as CAM program. It can be used with a lot of "
-"machine types: Mills Lathes Laser and Plasma cutters and engravers Mill "
-"engravers Plotters etc. To get more info visit developers page at http://www."
-"cnc-club.ru/gcodetools"
+"allows you to use Inkscape as CAM program.\n"
+"\n"
+"It can be used with a lot of machine types:\n"
+"    Mills\n"
+"    Lathes\n"
+"    Laser and Plasma cutters and engravers\n"
+"    Mill engravers\n"
+"    Plotters\n"
+"    etc.\n"
+"\n"
+"To get more info visit developers page at http://www.cnc-club.ru/gcodetools"
 msgstr ""
 #
 # File: ../share/extensions/render_gear_rack.inx, line: 13
@@ -14054,8 +14284,9 @@ msgstr ""
 # File: ../share/extensions/generate_voronoi.inx, line: 13
 msgid ""
 "Generate a random pattern of Voronoi cells. The pattern will be accessible "
-"in the Fill and Stroke dialog. You must select an object or a group. If "
-"border is zero, the pattern will be discontinuous at the edges. Use a "
+"in the Fill and Stroke dialog. You must select an object or a group.\n"
+"\n"
+"If border is zero, the pattern will be discontinuous at the edges. Use a "
 "positive border, preferably greater than the cell size, to produce a smooth "
 "join of the pattern at the edges. Use a negative border to reduce the size "
 "of the pattern and get an empty border."
@@ -14613,7 +14844,7 @@ msgctxt "Select toolbar"
 msgid "H:"
 msgstr ""
 #
-# File: ../src/inkscape-application.cpp, line: 550
+# File: ../src/inkscape-application.cpp, line: 561
 msgid "HEIGHT"
 msgstr ""
 #
@@ -14822,6 +15053,10 @@ msgstr ""
 msgid "Height"
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 585
+msgid "Height of drawing or object (if specified by --query-id)"
+msgstr ""
+#
 # File: ../src/ui/dialog/filter-effects-dialog.cpp, line: 2747
 msgid "Height of filter effects region"
 msgstr ""
@@ -14978,12 +15213,7 @@ msgid "Hershey Serif medium italic"
 msgstr ""
 #
 # File: ../share/extensions/hershey.inx, line: 3
-# File: ../share/extensions/hershey.inx, line: 12
 msgid "Hershey Text"
-msgstr ""
-#
-# File: ../share/extensions/hershey.inx, line: 66
-msgid "Hershey Text Utility Functions"
 msgstr ""
 #
 # File: ../src/ui/dialog/pixelartdialog.cpp, line: 258
@@ -15016,6 +15246,10 @@ msgstr ""
 #
 # File: ../src/verbs.cpp, line: 1486
 msgid "Hide all layers"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 567
+msgid "Hide all objects except object with ID selected by export-id"
 msgstr ""
 #
 # File: ../src/verbs.cpp, line: 2819
@@ -15435,6 +15669,14 @@ msgstr ""
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1939
 msgid "ID"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 580
+msgid "ID(s) of object(s) to be queried"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 566
+msgid "ID(s) of object(s) to export"
 msgstr ""
 #
 # File: ../src/extension/extension.cpp, line: 766
@@ -16548,6 +16790,7 @@ msgstr ""
 msgid "Intercept"
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 603
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 728
 msgid "Interface"
 msgstr ""
@@ -18178,8 +18421,24 @@ msgstr ""
 msgid "List"
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 595
+msgid "List all available actions"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 600
+msgid "List all available verbs"
+msgstr ""
+#
 # File: ../share/extensions/replace_font.inx, line: 17
 msgid "List all fonts"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 594
+msgid "List of actions (with optional arguments) to execute"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 599
+msgid "List of verbs to execute"
 msgstr ""
 #
 # File: ../src/ui/dialog/glyphs.cpp, line: 261
@@ -19026,6 +19285,11 @@ msgstr ""
 msgid "Marbled transparency effect which conforms to image detected edges"
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 562
+msgid ""
+"Margin around export area: units of page size for SVG, mm for PS/EPS/PDF"
+msgstr ""
+#
 # File: ../share/extensions/layout_nup.inx, line: 46
 msgid "Margin box"
 msgstr ""
@@ -19576,6 +19840,12 @@ msgstr ""
 #
 # File: ../src/live_effects/lpe-embrodery-stitch.cpp, line: 57
 msgid "Method to connect end points of sub paths"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 544
+msgid ""
+"Method used to convert pre-0.92 document dpi, if needed: [none|scale-viewbox|"
+"scale-document]"
 msgstr ""
 #
 # File: ../src/live_effects/lpe-embrodery-stitch.cpp, line: 56
@@ -21031,7 +21301,7 @@ msgstr ""
 msgid "No unused definitions in &lt;defs&gt;."
 msgstr ""
 #
-# File: ../share/extensions/embedimage.py, line: 88
+# File: ../share/extensions/embedimage.py, line: 89
 msgid ""
 "No xlink:href or sodipodi:absref attributes found, or they do not point to "
 "an existing file! Unable to embed image."
@@ -21622,12 +21892,12 @@ msgstr ""
 msgid "O: %2.0f"
 msgstr ""
 #
-# File: ../src/inkscape-application.cpp, line: 523
-# File: ../src/inkscape-application.cpp, line: 532
+# File: ../src/inkscape-application.cpp, line: 580
+# File: ../src/inkscape-application.cpp, line: 590
 msgid "OBJECT-ID[,OBJECT-ID]*"
 msgstr ""
 #
-# File: ../src/inkscape-application.cpp, line: 553
+# File: ../src/inkscape-application.cpp, line: 566
 msgid "OBJECT-ID[;OBJECT-ID]*"
 msgstr ""
 #
@@ -22267,20 +22537,6 @@ msgstr ""
 msgid "Open user interface folder"
 msgstr ""
 #
-# File: ../src/inkscape-application.cpp, line: 520
-msgid "Open: Do not fix pre-0.92 document's text baseline spacing on opening."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 519
-msgid ""
-"Open: Method used to convert pre-0.92 document dpi, if needed: [none|scale-"
-"viewbox|scale-document]."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 517
-msgid "Open: PDF page to import"
-msgstr ""
-#
 # File: ../src/extension/internal/odf.cpp, line: 2083
 msgid "OpenDocument Drawing Output"
 msgstr ""
@@ -22451,30 +22707,6 @@ msgstr ""
 msgid "Orientation points"
 msgstr ""
 #
-# File: ../share/extensions/gcodetools_graffiti.inx, line: 41
-msgid ""
-"Orientation points are used to calculate transformation (offset,scale,mirror,"
-"rotation in XY plane) of the path. 3-points mode only: do not put all three "
-"into one line (use 2-points mode instead). You can modify Z surface, Z depth "
-"values later using text tool (3rd coordinates). If there are no orientation "
-"points inside current layer they are taken from the upper layer. Do not "
-"ungroup orientation points! You can select them using double click to enter "
-"the group or by Ctrl+Click. Now press apply to create control points "
-"(independent set for each layer)."
-msgstr ""
-#
-# File: ../share/extensions/gcodetools_orientation_points.inx, line: 25
-msgid ""
-"Orientation points are used to calculate transformation (offset,scale,mirror,"
-"rotation in XY plane) of the path. 3-points mode only: do not put all three "
-"into one line (use 2-points mode instead). You can modify Z surface, Z depth "
-"values later using text tool (3rd coordinates). If there are no orientation "
-"points inside current layer, they are taken from the upper layer. Do not "
-"ungroup orientation points! You can select them using double click to enter "
-"the group or by Ctrl+Click. Now press apply to create control points "
-"(independent set for each layer)."
-msgstr ""
-#
 # File: ../share/extensions/gcodetools_graffiti.inx, line: 21
 # File: ../share/extensions/gcodetools_orientation_points.inx, line: 10
 msgid "Orientation type:"
@@ -22556,10 +22788,6 @@ msgstr ""
 msgid "Other Attribute:"
 msgstr ""
 #
-# File: ../share/extensions/hershey.inx, line: 56
-msgid "Other SVG font name or path (if \"Other\" selected above):"
-msgstr ""
-#
 # File: ../src/ui/toolbar/snap-toolbar.cpp, line: 139
 msgid "Others"
 msgstr ""
@@ -22601,6 +22829,10 @@ msgstr ""
 #
 # File: ../src/ui/dialog/pixelartdialog.cpp, line: 266
 msgid "Output composed of straight lines"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 549
+msgid "Output file name (file type is guessed from extension)"
 msgstr ""
 #
 # File: ../src/extension/internal/cairo-ps-out.cpp, line: 339
@@ -22741,7 +22973,11 @@ msgstr ""
 msgid "Oversaturate colors which can be fluorescent in real world"
 msgstr ""
 #
-# File: ../src/inkscape-application.cpp, line: 517
+# File: ../src/inkscape-application.cpp, line: 550
+msgid "Overwrite input file"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 542
 msgid "PAGE"
 msgstr ""
 #
@@ -22765,7 +23001,15 @@ msgstr ""
 msgid "PDF Input"
 msgstr ""
 #
-# File: ../src/inkscape-application.cpp, line: 560
+# File: ../src/inkscape-application.cpp, line: 542
+msgid "PDF page number to import"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 570
+msgid "PDF version (1.4 or 1.5)"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 570
 msgid "PDF-VERSION"
 msgstr ""
 #
@@ -22773,7 +23017,7 @@ msgstr ""
 msgid "PNG"
 msgstr ""
 #
-# File: ../src/inkscape-application.cpp, line: 559
+# File: ../src/inkscape-application.cpp, line: 569
 msgid "PS-Level"
 msgstr ""
 #
@@ -22975,15 +23219,6 @@ msgstr ""
 #
 # File: ../src/ui/dialog/extension-editor.cpp, line: 77
 msgid "Parameters"
-msgstr ""
-#
-# File: ../share/extensions/layout_nup.inx, line: 49
-msgid ""
-"Parameters: * Page size: width and height. * Page margins: extra space "
-"around each page. * Layout rows and cols. * Layout size: width and height, "
-"auto calculated if one is 0. * Auto calculate layout size: don't use the "
-"layout size values. * Layout margins: white space around each part of the "
-"layout. * Layout padding: inner padding for each part of the layout."
 msgstr ""
 #
 # File: ../share/extensions/param_curves.inx, line: 3
@@ -24050,6 +24285,10 @@ msgid ""
 "When set to zero or to a very small number, snapping will be immediate."
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 569
+msgid "Postscript level (2 or 3); default is 3"
+msgstr ""
+#
 # File: ../src/extension/internal/pov-out.cpp, line: 717
 msgid "PovRay (*.pov) (paths and shapes only)"
 msgstr ""
@@ -24067,7 +24306,7 @@ msgid "Power clip"
 msgstr ""
 #
 # File: ../src/live_effects/effect.cpp, line: 615
-msgid "Power clip alows to reverse a clip, flatten it..."
+msgid "Power clip allows to reverse a clip, flatten it..."
 msgstr ""
 #
 # File: ../src/live_effects/effect.cpp, line: 625
@@ -24075,7 +24314,7 @@ msgid "Power mask"
 msgstr ""
 #
 # File: ../src/live_effects/effect.cpp, line: 629
-msgid "Power mask allow to inverse the mask, make negative.."
+msgid "Power mask allows inversing the mask, make negative..."
 msgstr ""
 #
 # File: ../src/live_effects/effect.cpp, line: 286
@@ -24350,8 +24589,20 @@ msgstr ""
 msgid "Print Colors..."
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 536
+msgid "Print Inkscape version"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 581
+msgid "Print bounding boxes of all objects"
+msgstr ""
+#
 # File: ../src/verbs.cpp, line: 2544
 msgid "Print document"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 537
+msgid "Print system extension directory"
 msgstr ""
 #
 # File: ../src/live_effects/lpe-path_length.cpp, line: 28
@@ -24384,20 +24635,8 @@ msgstr ""
 msgid "Print warnings"
 msgstr ""
 #
-# File: ../src/inkscape-application.cpp, line: 508
-msgid "Print: Extensions directory."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 507
-msgid "Print: Inkscape version."
-msgstr ""
-#
 # File: ../src/inkview-application.cpp, line: 66
 msgid "Print: Inkview version."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 509
-msgid "Print: List verbs."
 msgstr ""
 #
 # File: ../share/extensions/printing_marks.inx, line: 3
@@ -24413,25 +24652,8 @@ msgctxt "Symbol"
 msgid "Process"
 msgstr ""
 #
-# File: ../src/inkscape-application.cpp, line: 535
-msgid "Process: Read file from pipe."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 531
-msgid ""
-"Process: Remove unused definitions from the <defs> section(s) of document."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 532
-msgid "Process: Select objects: comma separated list of IDs."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 534
-msgid "Process: Start Inkscape in interactive shell mode."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 533
-msgid "Process: Verb(s) to call when Inkscape opens."
+# File: ../src/inkscape-application.cpp, line: 527
+msgid "Process (or open) one or more files."
 msgstr ""
 #
 # File: ../share/extensions/output_scour.inx, line: 58
@@ -24576,28 +24798,8 @@ msgstr ""
 msgid "Query information about extensions"
 msgstr ""
 #
-# File: ../src/inkscape-application.cpp, line: 528
-msgid "Query: Height of drawing or object (if specified by --query-id)."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 523
-msgid "Query: ID(s) of object(s) to be queried."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 524
-msgid "Query: Print bounding boxes of all objects."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 527
-msgid "Query: Width of drawing or object (if specified by --query-id)."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 525
-msgid "Query: X coordinate of drawing or object (if specified by --query-id)."
-msgstr ""
-#
-# File: ../src/inkscape-application.cpp, line: 526
-msgid "Query: Y coordinate of drawing or object (if specified by --query-id)."
+# File: ../src/inkscape-application.cpp, line: 579
+msgid "Query object/document geometry"
 msgstr ""
 #
 # File: ../src/verbs.cpp, line: 2565
@@ -25073,6 +25275,10 @@ msgstr ""
 msgid "Re_vert"
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 541
+msgid "Read input file from standard input (stdin)"
+msgstr ""
+#
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1295
 msgid "Reading"
 msgstr ""
@@ -25355,6 +25561,10 @@ msgstr ""
 #
 # File: ../share/extensions/color_removegreen.inx, line: 3
 msgid "Remove Green"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 568
+msgid "Remove Inkscape-specific SVG attributes/properties"
 msgstr ""
 #
 # File: ../src/live_effects/parameter/originalitemarray.cpp, line: 158
@@ -25640,6 +25850,10 @@ msgid ""
 "defs&gt; of the document"
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 589
+msgid "Remove unused definitions from the <defs> section(s) of document"
+msgstr ""
+#
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1765
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1767
 msgid "Remove unused swatches when doing a document cleanup"
@@ -25768,6 +25982,10 @@ msgstr ""
 #
 # File: ../share/extensions/image_attributes.inx, line: 17
 msgid "Render images blocky"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 573
+msgid "Render objects without filters instead of rasterizing (PS/EPS/PDF)"
 msgstr ""
 #
 # File: ../src/ui/widget/rendering-options.cpp, line: 44
@@ -26038,6 +26256,10 @@ msgstr ""
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1862
 msgid "Resolution for Create Bitmap _Copy:"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 559
+msgid "Resolution for bitmaps and rasterized filters; default is 96"
 msgstr ""
 #
 # File: ../src/extension/internal/cairo-ps-out.cpp, line: 338
@@ -26860,10 +27082,6 @@ msgstr ""
 msgid "Sample Text"
 msgstr ""
 #
-# File: ../share/extensions/hershey.inx, line: 75
-msgid "Sample text to use when generating font table:"
-msgstr ""
-#
 # File: ../share/extensions/param_curves.inx, line: 15
 msgid "Samples:"
 msgstr ""
@@ -27515,6 +27733,10 @@ msgstr ""
 msgid "Secondary toolbar icon size:"
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 533
+msgid "See %1 and %2 for more details."
+msgstr ""
+#
 # File: ../share/extensions/render_barcode_qrcode.inx, line: 6
 msgid "See http://www.denso-wave.com/qrcode/index-e.html for details"
 msgstr ""
@@ -27810,20 +28032,24 @@ msgstr ""
 msgid "Select a property"
 msgstr ""
 #
+# File: ../share/extensions/funcplot.inx, line: 19
+msgid ""
+"Select a rectangle before calling the extension,\n"
+"it will determine X and Y scales. If you wish to fill the area, then add x-"
+"axis endpoints.\n"
+"\n"
+"With polar coordinates:\n"
+"   Start and end X values define the angle range in radians.\n"
+"   X scale is set so that left and right edges of rectangle are at +/-1.\n"
+"   Isotropic scaling is disabled.\n"
+"   First derivative is always determined numerically."
+msgstr ""
+#
 # File: ../share/extensions/param_curves.inx, line: 20
 msgid ""
 "Select a rectangle before calling the extension, it will determine X and Y "
-"scales. First derivatives are always determined numerically."
-msgstr ""
-#
-# File: ../share/extensions/funcplot.inx, line: 19
-msgid ""
-"Select a rectangle before calling the extension, it will determine X and Y "
-"scales. If you wish to fill the area, then add x-axis endpoints. With polar "
-"coordinates: Start and end X values define the angle range in radians. X "
-"scale is set so that left and right edges of rectangle are at +/-1. "
-"Isotropic scaling is disabled. First derivative is always determined "
-"numerically."
+"scales.\n"
+"First derivatives are always determined numerically."
 msgstr ""
 #
 # File: ../src/ui/dialog/document-properties.cpp, line: 1080
@@ -27977,6 +28203,10 @@ msgstr ""
 msgid "Select next object or node"
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 590
+msgid "Select objects: comma-separated list of IDs"
+msgstr ""
+#
 # File: ../src/trace/trace.cpp, line: 114
 msgid "Select one image and one or more shapes above it"
 msgstr ""
@@ -28073,14 +28303,6 @@ msgstr ""
 #
 # File: ../share/extensions/replace_font.inx, line: 24
 msgid "Selected objects only"
-msgstr ""
-#
-# File: ../share/extensions/gcodetools_tools_library.inx, line: 25
-msgid ""
-"Selected tool type fills appropriate default values. You can change these "
-"values using the Text tool later on. The topmost (z order) tool in the "
-"active layer is used. If there is no tool inside the current layer it is "
-"taken from the upper layer. Press Apply to create new tool."
 msgstr ""
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1551
@@ -29779,6 +30001,10 @@ msgstr ""
 msgid "Snap text anchors and baselines"
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 558
+msgid "Snap the bitmap export area outwards to the nearest integer values"
+msgstr ""
+#
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1637
 msgid "Snap the mouse pointer when dragging a constrained knot"
 msgstr ""
@@ -29935,7 +30161,7 @@ msgstr ""
 msgid "Something like a water noise"
 msgstr ""
 #
-# File: ../share/extensions/embedimage.py, line: 90
+# File: ../share/extensions/embedimage.py, line: 92
 #, python-format
 msgid "Sorry we could not locate %s"
 msgstr ""
@@ -30117,6 +30343,10 @@ msgstr ""
 # File: ../share/extensions/perfectboundcover.inx, line: 17
 # File: ../share/extensions/perfectboundcover.inx, line: 26
 msgid "Specify Width"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 613
+msgid "Specify the D-Bus name; default is 'org.inkscape'"
 msgstr ""
 #
 # File: ../share/filters/filters.svg.h, line: 42
@@ -30422,10 +30652,14 @@ msgstr ""
 # File: ../share/extensions/funcplot.inx, line: 29
 # File: ../share/extensions/param_curves.inx, line: 24
 msgid ""
-"Standard Python math functions are available: ceil(x); fabs(x); floor(x); "
-"fmod(x,y); frexp(x); ldexp(x,i); modf(x); exp(x); log(x [, base]); log10(x); "
-"pow(x,y); sqrt(x); acos(x); asin(x); atan(x); atan2(y,x); hypot(x,y); "
-"cos(x); sin(x); tan(x); degrees(x); radians(x); cosh(x); sinh(x); tanh(x). "
+"Standard Python math functions are available:\n"
+"\n"
+"ceil(x); fabs(x); floor(x); fmod(x,y); frexp(x); ldexp(x,i); \n"
+"modf(x); exp(x); log(x [, base]); log10(x); pow(x,y); sqrt(x); \n"
+"acos(x); asin(x); atan(x); atan2(y,x); hypot(x,y); \n"
+"cos(x); sin(x); tan(x); degrees(x); radians(x); \n"
+"cosh(x); sinh(x); tanh(x).\n"
+"\n"
 "The constants pi and e are also available."
 msgstr ""
 #
@@ -30476,6 +30710,10 @@ msgstr ""
 # File: ../src/live_effects/lpe-transform_2pts.cpp, line: 38
 # File: ../src/ui/tools/measure-tool.cpp, line: 745
 msgid "Start"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 608
+msgid "Start Inkscape in interactive shell mode"
 msgstr ""
 #
 # File: ../src/widgets/stroke-style.cpp, line: 240
@@ -30973,19 +31211,19 @@ msgstr ""
 msgid "Style Dialog..."
 msgstr ""
 #
-# File: ../src/widgets/toolbox.cpp, line: 235
+# File: ../src/widgets/toolbox.cpp, line: 236
 msgid "Style of Paint Bucket fill objects"
 msgstr ""
 #
-# File: ../src/widgets/toolbox.cpp, line: 207
+# File: ../src/widgets/toolbox.cpp, line: 208
 msgid "Style of new 3D boxes"
 msgstr ""
 #
-# File: ../src/widgets/toolbox.cpp, line: 217
+# File: ../src/widgets/toolbox.cpp, line: 218
 msgid "Style of new calligraphic strokes"
 msgstr ""
 #
-# File: ../src/widgets/toolbox.cpp, line: 209
+# File: ../src/widgets/toolbox.cpp, line: 210
 msgid "Style of new ellipses"
 msgstr ""
 #
@@ -30993,23 +31231,23 @@ msgstr ""
 msgid "Style of new objects"
 msgstr ""
 #
-# File: ../src/widgets/toolbox.cpp, line: 215
+# File: ../src/widgets/toolbox.cpp, line: 216
 msgid "Style of new paths created by Pen"
 msgstr ""
 #
-# File: ../src/widgets/toolbox.cpp, line: 213
+# File: ../src/widgets/toolbox.cpp, line: 214
 msgid "Style of new paths created by Pencil"
 msgstr ""
 #
-# File: ../src/widgets/toolbox.cpp, line: 205
+# File: ../src/widgets/toolbox.cpp, line: 206
 msgid "Style of new rectangles"
 msgstr ""
 #
-# File: ../src/widgets/toolbox.cpp, line: 211
+# File: ../src/widgets/toolbox.cpp, line: 212
 msgid "Style of new spirals"
 msgstr ""
 #
-# File: ../src/widgets/toolbox.cpp, line: 203
+# File: ../src/widgets/toolbox.cpp, line: 204
 msgid "Style of new stars"
 msgstr ""
 #
@@ -31389,8 +31627,8 @@ msgctxt "Type"
 msgid "T"
 msgstr ""
 #
-# File: ../src/widgets/toolbox.cpp, line: 219
-# File: ../src/widgets/toolbox.cpp, line: 221
+# File: ../src/widgets/toolbox.cpp, line: 220
+# File: ../src/widgets/toolbox.cpp, line: 222
 msgid "TBD"
 msgstr ""
 #
@@ -32112,15 +32350,6 @@ msgstr ""
 msgid "The chosen area to be exported is invalid."
 msgstr ""
 #
-# File: ../share/extensions/hershey.inx, line: 109
-msgid ""
-"The classic Hershey fonts included are derived from work by Dr. A. V. "
-"Hershey. Additional modern \"EMS\" fonts in this distribution are "
-"derivatives created from fonts licensed under the SIL Open Font License. For "
-"full credits and license information, please read the credits embedded "
-"within the SVG fonts included with this distribution."
-msgstr ""
-#
 # File: ../share/extensions/plotter.inx, line: 58
 msgid "The command language to use (Default: HPGL)"
 msgstr ""
@@ -32309,15 +32538,6 @@ msgstr ""
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1505
 msgid "The password used to log into Open Clip Art Library"
-msgstr ""
-#
-# File: ../share/extensions/lindenmayer.inx, line: 18
-msgid ""
-"The path is generated by applying the substitutions of Rules to the Axiom, "
-"Order times. The following commands are recognized in Axiom and Rules: Any "
-"of A,B,C,D,E,F: draw forward Any of G,H,I,J,K,L: move forward +: turn left "
-"-: turn right |: turn 180 degrees [: remember point ]: return to remembered "
-"point"
 msgstr ""
 #
 # File: ../src/live_effects/lpe-curvestitch.cpp, line: 37
@@ -32654,14 +32874,19 @@ msgstr ""
 msgid ""
 "This effect measures the length, area, or center-of-mass of the selected "
 "paths. Length and area are added as a text object with the selected units. "
-"Center-of-mass is shown as a cross symbol. * Text display format can be "
-"either Text-On-Path, or stand-alone text at a specified angle. * The number "
-"of significant digits can be controlled by the Precision field. * The Offset "
-"field controls the distance from the text to the path. * The Scale factor "
-"can be used to make measurements in scaled drawings. For example, if 1 cm in "
-"the drawing equals 2.5 m in the real world, Scale must be set to 250. * When "
-"calculating area, the result should be precise for polygons and Bezier "
-"curves. If a circle is used, the area may be too high by as much as 0.03%."
+"Center-of-mass is shown as a cross symbol.\n"
+"\n"
+"  * Text display format can be either Text-On-Path, or stand-alone text at a "
+"specified angle.\n"
+"  * The number of significant digits can be controlled by the Precision "
+"field.\n"
+"  * The Offset field controls the distance from the text to the path.\n"
+"  * The Scale factor can be used to make measurements in scaled drawings. "
+"For example, if 1 cm in the drawing equals 2.5 m in the real world, Scale "
+"must be set to 250.\n"
+"  * When calculating area, the result should be precise for polygons and "
+"Bezier curves. If a circle is used, the area may be too high by as much as "
+"0.03%."
 msgstr ""
 #
 # File: ../share/extensions/jitternodes.inx, line: 20
@@ -32783,34 +33008,48 @@ msgstr ""
 msgid ""
 "This extension draws constructions about a triangle defined by the first 3 "
 "nodes of a selected path. You may select one of preset objects or create "
-"your own ones. All units are the Inkscape's pixel unit. Angles are all in "
-"radians. You can specify a point by trilinear coordinates or by a triangle "
-"centre function. Enter as functions of the side length or angles. Trilinear "
-"elements should be separated by a colon: ':'. Side lengths are represented "
-"as 's_a', 's_b' and 's_c'. Angles corresponding to these are 'a_a', 'a_b', "
-"and 'a_c'. You can also use the semi-perimeter and area of the triangle as "
-"constants. Write 'area' or 'semiperim' for these. You can use any standard "
-"Python math function: ceil(x); fabs(x); floor(x); fmod(x,y); frexp(x); "
-"ldexp(x,i); modf(x); exp(x); log(x [, base]); log10(x); pow(x,y); sqrt(x); "
-"acos(x); asin(x); atan(x); atan2(y,x); hypot(x,y); cos(x); sin(x); tan(x); "
-"degrees(x); radians(x); cosh(x); sinh(x); tanh(x) Also available are the "
-"inverse trigonometric functions: sec(x); csc(x); cot(x) You can specify the "
-"radius of a circle around a custom point using a formula, which may also "
-"contain the side lengths, angles, etc. You can also plot the isogonal and "
-"isotomic conjugate of the point. Be aware that this may cause a divide-by-"
-"zero error for certain points."
+"your own ones.\n"
+"            \n"
+"All units are the Inkscape's pixel unit. Angles are all in radians.\n"
+"You can specify a point by trilinear coordinates or by a triangle centre "
+"function.\n"
+"Enter as functions of the side length or angles.\n"
+"Trilinear elements should be separated by a colon: ':'.\n"
+"Side lengths are represented as 's_a', 's_b' and 's_c'.\n"
+"Angles corresponding to these are 'a_a', 'a_b', and 'a_c'.\n"
+"You can also use the semi-perimeter and area of the triangle as constants. "
+"Write 'area' or 'semiperim' for these.\n"
+"\n"
+"You can use any standard Python math function:\n"
+"ceil(x); fabs(x); floor(x); fmod(x,y); frexp(x); ldexp(x,i); \n"
+"modf(x); exp(x); log(x [, base]); log10(x); pow(x,y); sqrt(x); \n"
+"acos(x); asin(x); atan(x); atan2(y,x); hypot(x,y); \n"
+"cos(x); sin(x); tan(x); degrees(x); radians(x); \n"
+"cosh(x); sinh(x); tanh(x)\n"
+"\n"
+"Also available are the inverse trigonometric functions:\n"
+"sec(x); csc(x); cot(x)\n"
+"\n"
+"You can specify the radius of a circle around a custom point using a "
+"formula, which may also contain the side lengths, angles, etc. You can also "
+"plot the isogonal and isotomic conjugate of the point. Be aware that this "
+"may cause a divide-by-zero error for certain points.\n"
+"            "
 msgstr ""
 #
 # File: ../share/extensions/gimp_xcf.inx, line: 16
 msgid ""
 "This extension exports the document to Gimp XCF format according to the "
-"following options: * Save Guides: convert all guides to Gimp guides. * Save "
-"Grid: convert the first rectangular grid to a Gimp grid (note that the "
-"default Inkscape grid is very narrow when shown in Gimp). * Save Background: "
-"add the document background to each converted layer. * File Resolution: XCF "
-"file resolution, in DPI. Each first level layer is converted to a Gimp "
-"layer. Sublayers are concatenated and converted with their first level "
-"parent layer into a single Gimp layer."
+"following options:\n"
+"    * Save Guides: convert all guides to Gimp guides.\n"
+"    * Save Grid: convert the first rectangular grid to a Gimp grid (note "
+"that the default Inkscape grid is very narrow when shown in Gimp).\n"
+"    * Save Background: add the document background to each converted layer.\n"
+"    * File Resolution: XCF file resolution, in DPI.\n"
+"\n"
+"Each first level layer is converted to a Gimp layer. Sublayers are "
+"concatenated and converted with their first level parent layer into a single "
+"Gimp layer."
 msgstr ""
 #
 # File: ../share/extensions/seamless_pattern.inx, line: 8
@@ -32824,27 +33063,15 @@ msgid ""
 "presentation. Please see code.google.com/p/jessyink for more details."
 msgstr ""
 #
-# File: ../share/extensions/hershey.inx, line: 85
-msgid ""
-"This extension renders all text (or all selected text) in your document into "
-"using specialized \"stroke\" or \"engraving\" fonts designed for plotters. "
-"Whereas regular \"outline\" fonts (e.g., TrueType) work by filling in the "
-"region inside an invisible outline, engraving fonts are composed only of "
-"individual lines or strokes; much like human handwriting. Engraving fonts "
-"are used for creating text paths that computer controlled drawing and "
-"cutting machines (from pen plotters to CNC routers) can efficiently follow. "
-"A complete user guide is available to download at: http://wiki."
-"evilmadscientist.com/hershey For extended help, click \"Apply\" with this "
-"tab selected."
-msgstr ""
-#
 # File: ../share/extensions/dots.inx, line: 14
 msgid ""
 "This extension replaces the selection's nodes with numbered dots according "
-"to the following options: * Font size: size of the node number labels (20px, "
-"12pt...). * Dot size: diameter of the dots placed at path nodes (10px, "
-"2mm...). * Starting dot number: first number in the sequence, assigned to "
-"the first node of the path. * Step: numbering step between two nodes."
+"to the following options:\n"
+"    * Font size: size of the node number labels (20px, 12pt...).\n"
+"    * Dot size: diameter of the dots placed at path nodes (10px, 2mm...).\n"
+"    * Starting dot number: first number in the sequence, assigned to the "
+"first node of the path.\n"
+"    * Step: numbering step between two nodes."
 msgstr ""
 #
 # File: ../share/extensions/gimp_xcf.py, line: 139
@@ -32877,22 +33104,6 @@ msgstr ""
 #
 # File: ../src/file-update.cpp, line: 397
 msgid "This file is intended for physical output, such as paper or 3D prints."
-msgstr ""
-#
-# File: ../share/extensions/gcodetools_engraving.inx, line: 15
-msgid ""
-"This function creates path to engrave letters or any shape with sharp "
-"angles. Cutter's depth as a function of radius is defined by the tool. Depth "
-"may be any Python expression. For instance: cone....(45 "
-"degrees)......................: w cone....(height/diameter=10/3)..: 10*w/3 "
-"sphere..(radius r)...........................: math.sqrt(max(0,r**2-w**2)) "
-"ellipse.(minor axis r, major 4r).....: math.sqrt(max(0,r**2-w**2))*4"
-msgstr ""
-#
-# File: ../share/extensions/gcodetools_lathe.inx, line: 22
-msgid ""
-"This function modifies path so it will be possible to be cut it with a "
-"rectangular cutter."
 msgstr ""
 #
 # File: ../src/ui/dialog/filter-effects-dialog.cpp, line: 2818
@@ -34369,13 +34580,6 @@ msgstr ""
 msgid "Urdu (ur)"
 msgstr ""
 #
-# File: ../share/extensions/gcodetools_area.inx, line: 39
-msgid ""
-"Usage: 1. Select all Area Offsets (gray outlines) 2. Object/Ungroup (Shift"
-"+Ctrl+G) 3. Press Apply Suspected small objects will be marked out by "
-"colored arrows."
-msgstr ""
-#
 # File: ../share/extensions/funcplot.inx, line: 18
 # File: ../share/extensions/param_curves.inx, line: 19
 msgid "Use"
@@ -34522,7 +34726,7 @@ msgstr ""
 msgid "Use polar coordinates"
 msgstr ""
 #
-# File: ../src/inkscape-application.cpp, line: 518
+# File: ../src/inkscape-application.cpp, line: 543
 msgid "Use poppler when importing via commandline"
 msgstr ""
 #
@@ -34541,6 +34745,12 @@ msgstr ""
 #
 # File: ../src/live_effects/lpe-dashed-stroke.cpp, line: 20
 msgid "Use segments"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 574
+msgid ""
+"Use stored filename and DPI hints when exporting object selected by --export-"
+"id"
 msgstr ""
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 951
@@ -34706,7 +34916,7 @@ msgctxt "Visibility"
 msgid "V"
 msgstr ""
 #
-# File: ../src/inkscape-application.cpp, line: 564
+# File: ../src/inkscape-application.cpp, line: 576
 msgid "VALUE"
 msgstr ""
 #
@@ -34714,8 +34924,8 @@ msgstr ""
 msgid "VDX Input"
 msgstr ""
 #
-# File: ../src/inkscape-application.cpp, line: 533
-msgid "VERB-ID[;VERB-ID]*"
+# File: ../src/inkscape-application.cpp, line: 599
+msgid "VERB[;VERB]*"
 msgstr ""
 #
 # File: ../src/extension/internal/vsd-input.cpp, line: 326
@@ -35107,7 +35317,7 @@ msgstr ""
 msgid "WARNING: Mesh SVG Syntax Subject to Change"
 msgstr ""
 #
-# File: ../src/inkscape-application.cpp, line: 549
+# File: ../src/inkscape-application.cpp, line: 560
 msgid "WIDTH"
 msgstr ""
 #
@@ -35595,6 +35805,10 @@ msgstr ""
 msgid "Width is in absolute units"
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 584
+msgid "Width of drawing or object (if specified by --query-id)"
+msgstr ""
+#
 # File: ../src/ui/dialog/filter-effects-dialog.cpp, line: 2747
 msgid "Width of filter effects region"
 msgstr ""
@@ -35732,6 +35946,10 @@ msgstr ""
 msgid "With Spiro or BSpline"
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 605
+msgid "With graphical user interface (required by some actions/verbs)"
+msgstr ""
+#
 # File: ../src/live_effects/lpe-clone-original.cpp, line: 35
 # File: ../src/live_effects/lpe-fill-between-many.cpp, line: 27
 msgid "Without LPE's"
@@ -35848,6 +36066,10 @@ msgstr ""
 # File: ../src/ui/dialog/filter-effects-dialog.cpp, line: 1185
 # File: ../src/ui/dialog/filter-effects-dialog.cpp, line: 1188
 msgid "X coordinate"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 582
+msgid "X coordinate of drawing or object (if specified by --query-id)"
 msgstr ""
 #
 # File: ../src/display/canvas-axonomgrid.cpp, line: 267
@@ -36020,6 +36242,10 @@ msgstr ""
 # File: ../src/ui/dialog/filter-effects-dialog.cpp, line: 1185
 # File: ../src/ui/dialog/filter-effects-dialog.cpp, line: 1188
 msgid "Y coordinate"
+msgstr ""
+#
+# File: ../src/inkscape-application.cpp, line: 583
+msgid "Y coordinate of drawing or object (if specified by --query-id)"
 msgstr ""
 #
 # File: ../src/display/canvas-axonomgrid.cpp, line: 270
@@ -36197,7 +36423,7 @@ msgid ""
 msgstr ""
 #
 # File: ../src/ui/dialog/livepatheffect-add.cpp, line: 472
-msgid "You dont have any favorites jet, please disable the favorites star"
+msgid "You don't have any favorites yet, please disable the favorites star"
 msgstr ""
 #
 # File: ../src/ui/dialog/export.cpp, line: 1105
@@ -36537,7 +36763,7 @@ msgid "_Cancel"
 msgstr ""
 #
 # File: ../src/verbs.cpp, line: 2992
-msgid "_Center _Page"
+msgid "_Center Page"
 msgstr ""
 #
 # File: ../src/live_effects/lpe-perspective-envelope.cpp, line: 411
@@ -38109,6 +38335,10 @@ msgstr ""
 msgid "fLIP cASE"
 msgstr ""
 #
+# File: ../src/inkscape-application.cpp, line: 526
+msgid "file1 [file2 [fileN]]"
+msgstr ""
+#
 # File: ../src/ui/toolbar/gradient-toolbar.cpp, line: 374
 # File: ../src/ui/toolbar/mesh-toolbar.cpp, line: 193
 msgid "fill"
@@ -39600,7 +39830,7 @@ msgstr ""
 msgid "x-heights"
 msgstr ""
 #
-# File: ../src/inkscape-application.cpp, line: 544
+# File: ../src/inkscape-application.cpp, line: 557
 msgid "x0:y0:x1:y1"
 msgstr ""
 #
