@@ -32,7 +32,7 @@ private:
     int do_export_ps_pdf(SPDocument* doc, std::string filename_in, std::string mime_type);
     int do_export_win_metafile(SPDocument* doc, std::string filename_in, std::string mime_type);
 
-    Glib::ustring export_type_internal;
+    Glib::ustring export_type_current;
 
 public:
     // Should be private, but this is just temporary code (I hope!).

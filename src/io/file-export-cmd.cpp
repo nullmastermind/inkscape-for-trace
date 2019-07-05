@@ -60,83 +60,84 @@ InkFileExportCmd::InkFileExportCmd()
 void
 InkFileExportCmd::do_export(SPDocument* doc, std::string filename_in)
 {
-    // Get type from filename.
     std::string export_type_filename;
+    std::vector<Glib::ustring> export_type_list;
+
+    // Get export type from filename supplied with --export-file
     if (!export_filename.empty() && export_filename != "-") {
-
         auto extension_pos = export_filename.find_last_of('.');
-
         if (extension_pos == std::string::npos) {
-            std::cerr << "InkFileExportCmd::do_export: No export_filename extension: " << export_filename << std::endl;
-            return;
+            if (export_type.empty()) {
+                std::cerr << "InkFileExportCmd::do_export: No export type specified. "
+                          << "Append a supported file extension to filename provided with --export-file or "
+                          << "provide one or more extensions separately using --export-type" << std::endl;
+                return;
+            } else {
+                // no extension is fine if --export-type is given
+            }
+        } else {
+            export_type_filename = export_filename.substr(extension_pos+1);
+            export_filename.erase(extension_pos);
         }
-
-        export_type_filename = export_filename.substr(extension_pos+1);
     }
 
-    // Check for consistency between export_type and export_filename type.
-    if (!export_type.empty() && !export_type_filename.empty() && export_type != export_type_filename) {
-        std::cerr << "InkFileExportCmd::do_export: Mismatch between export_type and export_filename extension: "
-                  << export_type << ", " << export_type_filename << std::endl;
-        return ;
+    // Get export type(s) from string supplied with --export-type
+    if (!export_type.empty()) {
+        export_type_list = Glib::Regex::split_simple("[,;]", export_type);
     }
 
-    // Determine type.
-    export_type_internal = "svg"; // Default
+    // Determine actual type(s) for export.
     if (export_use_hints) {
-        if (export_type != "png" && !export_type.empty()) {
-            std::cerr << "InkFileExportCmd::do_export: --export-hints can only be used with PNG export!" << std::endl;
-            return;
+        // "hack" for --export-hints (hints presume PNG export)
+        if (export_type_list.size() > 1 || (export_type_list.size() == 1 && export_type_list[0] != "png")) {
+            std::cerr << "InkFileExportCmd::do_export: --export-hints can only be used with PNG export! "
+                      << "Ignoring --export-type=" << export_type << "." << std::endl;
         }
         if (!export_filename.empty()) {
-            std::cerr << "InkFileExportCmd::do_export: --export-filename cannot be used with --export-use-hints!" << std::endl;
-            return;
+            std::cerr << "InkFileExportCmd::do_export: --export-filename is ignored when using --export-use-hints!" << std::endl;
         }
-        export_type_internal = "png"; // Hints only work with PNG export.
+        export_type_list.clear();
+        export_type_list.emplace_back("png");
+    } else if (export_type_list.empty()) {
+        if (!export_type_filename.empty()) {
+            export_type_list.emplace_back(export_type_filename); // use extension from filename
+        } else {
+            export_type_list.emplace_back("svg"); // fall-back to SVG by default
+        }
     }
-    if (!export_type.empty()) {
-        export_type_internal = export_type;
-    }
-    if (!export_type_filename.empty()) {
-        export_type_internal = export_type_filename;
-    }
 
-    if (export_type_internal == "svg") {
+    for (auto const& type: export_type_list) {
+        g_info("exporting '%s' to type '%s'", filename_in.c_str(), type.c_str());
 
-        do_export_svg(doc, filename_in);
+        export_type_current = type;
 
-    } else if (export_type_internal == "png") {
+        // Check for consistency between extension of --export-file and --export-type if both are given
+        if (!export_type_filename.empty() && (type != export_type_filename)) {
+            std::cerr << "InkFileExportCmd::do_export: "
+                      << "Ignoring extension of export filename (" << export_type_filename << ") "
+                      << "as it does not match the current export type (" << type << ")." << std::endl;
+        }
 
-        do_export_png(doc, filename_in);
-
-    } else if (export_type_internal == "ps") {
-
-        do_export_ps_pdf(doc, filename_in, "image/x-postscript");
-
-    } else if (export_type_internal == "eps") {
-
-        do_export_ps_pdf(doc, filename_in, "image/x-e-postscript");
-
-    } else if (export_type_internal == "pdf") {
-
-        do_export_ps_pdf(doc, filename_in, "application/pdf");
-
-    } else if (export_type_internal == "emf") {
-
-        do_export_win_metafile(doc, filename_in, "image/x-emf");
-
-    } else if (export_type_internal == "wmf") {
-
-        do_export_win_metafile(doc, filename_in, "image/x-wmf");
-
-    } else if (export_type_internal == "xaml") {
-
-        do_export_win_metafile(doc, filename_in, "text/xml+xaml");
-
-    } else {
-
-        std::cerr << "InkFileExportCmd::export: Unknown export type: " << export_type_internal
-                  << ". Allowed values: [svg,png,ps,eps,pdf,emf,wmf,xaml]." << std::endl;
+        if (type == "svg") {
+            do_export_svg(doc, filename_in);
+        } else if (type == "png") {
+            do_export_png(doc, filename_in);
+        } else if (type == "ps") {
+            do_export_ps_pdf(doc, filename_in, "image/x-postscript");
+        } else if (type == "eps") {
+            do_export_ps_pdf(doc, filename_in, "image/x-e-postscript");
+        } else if (type == "pdf") {
+            do_export_ps_pdf(doc, filename_in, "application/pdf");
+        } else if (type == "emf") {
+            do_export_win_metafile(doc, filename_in, "image/x-emf");
+        } else if (type == "wmf") {
+            do_export_win_metafile(doc, filename_in, "image/x-wmf");
+        } else if (type == "xaml") {
+            do_export_win_metafile(doc, filename_in, "text/xml+xaml");
+        } else {
+            std::cerr << "InkFileExportCmd::export: Unknown export type: " << type
+                      << ". Allowed values: [svg,png,ps,eps,pdf,emf,wmf,xaml]." << std::endl;
+        }
     }
 }
 
@@ -145,9 +146,9 @@ InkFileExportCmd::do_export(SPDocument* doc, std::string filename_in)
 std::string
 InkFileExportCmd::get_filename_out(std::string filename_in, std::string object_id)
 {
-    // Use export_filename if given.
+    // Use filename provided as --export-file if given (and append proper extension).
     if (!export_filename.empty()) {
-        return export_filename;
+        return export_filename + "." + export_type_current;
     }
 
     // Check for pipe
@@ -163,17 +164,17 @@ InkFileExportCmd::get_filename_out(std::string filename_in, std::string object_i
     }
 
     std::string extension = filename_in.substr(extension_pos+1);
-    if (export_overwrite && export_type_internal == extension) {
+    if (export_overwrite && export_type_current == extension) {
         return filename_in;
     } else {
         std::string tag;
-        if (export_type_internal == extension) {
+        if (export_type_current == extension) {
             tag = "_out";
         }
         if (!object_id.empty()) {
             tag = "_" + object_id;
         }
-        return (filename_in.substr(0,extension_pos) + tag + "." + export_type_internal);
+        return (filename_in.substr(0,extension_pos) + tag + "." + export_type_current);
     }
 
     // We need a valid file name to write to unless we're using PNG export hints.

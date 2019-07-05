@@ -548,7 +548,7 @@ ConcreteInkscapeApplication<T>::ConcreteInkscapeApplication()
     _start_main_option_section(_("File export"));
     this->add_main_option_entry(T::OPTION_TYPE_FILENAME, "export-file",            'o', N_("Output file name (file type is guessed from extension)"),N_("EXPORT-FILENAME"));
     this->add_main_option_entry(T::OPTION_TYPE_BOOL,     "export-overwrite",      '\0', N_("Overwrite input file"),                                                     "");
-    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-type",           '\0', N_("File type to export: [svg,png,ps,eps,pdf,tex,emf,wmf,xaml]"),          "[...]");
+    this->add_main_option_entry(T::OPTION_TYPE_STRING,   "export-type",           '\0', N_("File type(s) to export: [svg,png,ps,eps,pdf,tex,emf,wmf,xaml]"),       "[...]");
 
     // Export - Geometry
     _start_main_option_section(_("Export geometry"));                                                                                                                        // B = PNG, S = SVG, P = PS/EPS/PDF
