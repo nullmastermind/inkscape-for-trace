@@ -112,7 +112,8 @@ SPDocument::SPDocument() :
     current_persp3d(nullptr),
     current_persp3d_impl(nullptr),
     _parent_document(nullptr),
-    _node_cache_valid(false)
+    _node_cache_valid(false),
+    _activexmltree(nullptr)
 {
     // Penalise libavoid for choosing paths with needless extra segments.
     // This results in much better looking orthogonal connector paths.

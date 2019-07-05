@@ -354,6 +354,20 @@ void StyleDialog::setCurrentSelector(Glib::ustring current_selector)
     _current_selector = current_selector;
     _readStyleElement();
 }
+
+//copied from style.cpp:1499
+static bool
+is_url(char const *p)
+{
+    if (p == nullptr)
+        return false;
+/** \todo
+ * FIXME: I'm not sure if this applies to SVG as well, but CSS2 says any URIs
+ * in property values must start with 'url('.
+ */
+    return (g_ascii_strncasecmp(p, "url(", 4) == 0);
+}
+
 /**
  * Fill the Gtk::TreeStore from the svg:style element.
  */
@@ -369,6 +383,7 @@ void StyleDialog::_readStyleElement()
     if (textNode == nullptr) {
         std::cerr << "StyleDialog::_readStyleElement: No text node!" << std::endl;
     }
+    SPDocument *document = SP_ACTIVE_DOCUMENT;
 
     // Get content from style text node.
     std::string content = (textNode->content() ? textNode->content() : "");
@@ -433,6 +448,9 @@ void StyleDialog::_readStyleElement()
     if (selection->objects().size() == 1) {
         obj = selection->objects().back();
     }
+    if (!obj) {
+        obj = getDesktop()->getDocument()->getXMLDialogSelectedObject();
+    }
 
     Glib::ustring gladefile = get_filename(Inkscape::IO::Resource::UIS, "dialog-css.ui");
     Glib::RefPtr<Gtk::Builder> _builder;
@@ -490,6 +508,16 @@ void StyleDialog::_readStyleElement()
         col->add_attribute(value->property_text(), _mColumns._colValue);
         col->add_attribute(value->property_strikethrough(), _mColumns._colStrike);
     }
+    Inkscape::UI::Widget::IconRenderer *urlRenderer = manage(new Inkscape::UI::Widget::IconRenderer());
+    urlRenderer->add_icon("empty");
+    urlRenderer->add_icon("edit-redo");
+    int urlCol = css_tree->append_column("Go to", *urlRenderer) - 1;
+    Gtk::TreeViewColumn *urlcol = css_tree->get_column(urlCol);
+    if (urlcol) {
+        urlRenderer->signal_activated().connect(
+            sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_onLinkObj), store));
+        urlcol->add_attribute(urlRenderer->property_icon(), _mColumns._colLinked);
+    }
     std::map<Glib::ustring, Glib::ustring> attr_prop;
     Gtk::TreeModel::Path path;
     if (!_all_css->get_active() && obj && obj->getRepr()->attribute("style")) {
@@ -505,6 +533,17 @@ void StyleDialog::_readStyleElement()
                 row[_mColumns._colValue] = iter->get_value();
                 row[_mColumns._colStrike] = false;
                 row[_mColumns._colOwner] = Glib::ustring("Value active");
+                row[_mColumns._colHref] = nullptr;
+                row[_mColumns._colLinked] = false;
+                if (is_url(iter->get_value().c_str())) {
+                    Glib::ustring id = iter->get_value();
+                    id = id.substr(5,id.size()-6);
+                    SPObject *elemref = nullptr;
+                    if ((elemref = document->getObjectById(id.c_str()))) {
+                        row[_mColumns._colHref] = elemref;
+                        row[_mColumns._colLinked] = true;
+                    }
+                }
                 _addOwnerStyle(iter->name, "style attribute");
             }
         }
@@ -809,6 +848,22 @@ bool StyleDialog::_on_foreach_iter(const Gtk::TreeModel::iterator &iter)
     return false;
 }
 
+void StyleDialog::_onLinkObj(Glib::ustring path, Glib::RefPtr<Gtk::TreeStore> store)
+{
+    g_debug("StyleDialog::_onLinkObj");
+
+    Gtk::TreeModel::Row row = *store->get_iter(path);
+    if (row && row[_mColumns._colLinked]) {
+        SPObject * linked = row[_mColumns._colHref];
+        if (linked) {
+            Inkscape::Selection *selection = getDesktop()->getSelection();
+            getDesktop()->getDocument()->setXMLDialogSelectedObject(linked);
+            selection->clear();
+            selection->set(linked);
+        }
+    }
+}
+
 /**
  * @brief StyleDialog::_onPropDelete
  * @param event
@@ -882,6 +937,9 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
     SPObject *obj = nullptr;
     if (selection->objects().size() == 1) {
         obj = selection->objects().back();
+    }
+    if (!obj) {
+        obj = getDesktop()->getDocument()->getXMLDialogSelectedObject();
     }
     if (selection->objects().size() < 2 && !obj && !_all_css->get_active()) {
         _readStyleElement();

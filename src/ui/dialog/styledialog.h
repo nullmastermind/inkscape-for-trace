@@ -92,6 +92,8 @@ class StyleDialog : public Widget::Panel {
             add(_colSelector);
             add(_colSelectorPos);
             add(_colOwner);
+            add(_colLinked);
+            add(_colHref);
         }
         Gtk::TreeModelColumn<bool> _colActive;            // Active or inactive property
         Gtk::TreeModelColumn<Glib::ustring> _colName;     // Name of the property.
@@ -100,6 +102,8 @@ class StyleDialog : public Widget::Panel {
         Gtk::TreeModelColumn<Glib::ustring> _colSelector; // Style or matching object id.
         Gtk::TreeModelColumn<gint> _colSelectorPos;       // Position of the selector to handle dup selectors
         Gtk::TreeModelColumn<Glib::ustring> _colOwner;    // Store the owner of the property for popup
+        Gtk::TreeModelColumn<bool> _colLinked;         // Go to another element
+        Gtk::TreeModelColumn<SPObject *> _colHref;         // Go to another element
     };
     ModelColumns _mColumns;
 
@@ -130,6 +134,7 @@ class StyleDialog : public Widget::Panel {
                      Gtk::TreeView *css_tree);
     bool _onNameKeyReleased(GdkEventKey *event, Gtk::CellEditable *cell);
     bool _onValueKeyReleased(GdkEventKey *event, Gtk::CellEditable *cell);
+    void _onLinkObj(Glib::ustring path, Glib::RefPtr<Gtk::TreeStore> store);
     void _valueEdited(const Glib::ustring &path, const Glib::ustring &value, Glib::RefPtr<Gtk::TreeStore> store);
     void _startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &path);
 

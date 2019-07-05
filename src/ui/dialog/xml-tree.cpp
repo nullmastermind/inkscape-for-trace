@@ -285,7 +285,9 @@ void XmlTree::present()
 XmlTree::~XmlTree ()
 {
     set_tree_desktop(nullptr);
-
+    if (current_desktop) {
+        current_desktop->getDocument()->setXMLDialogSelectedObject(nullptr);
+    }
     _message_changed_connection.disconnect();
     _message_context = nullptr;
     _message_stack = nullptr;
@@ -379,6 +381,9 @@ void XmlTree::set_tree_select(Inkscape::XML::Node *repr)
     }
 
     selected_repr = repr;
+    if (current_desktop) {
+        current_desktop->getDocument()->setXMLDialogSelectedObject(nullptr);
+    }
     if (repr) {
         GtkTreeIter node;
 
@@ -454,7 +459,7 @@ void XmlTree::set_dt_select(Inkscape::XML::Node *repr)
     } else {
         object = nullptr;
     }
-
+    
     blocked++;
     if ( object && in_dt_coordsys(*object)
          && !(SP_IS_STRING(object) ||
@@ -463,6 +468,10 @@ void XmlTree::set_dt_select(Inkscape::XML::Node *repr)
             /* We cannot set selection to root or string - they are not items and selection is not
              * equipped to deal with them */
             selection->set(SP_ITEM(object));
+            current_desktop->getDocument()->setXMLDialogSelectedObject(nullptr);
+    } else if (object && !current_desktop->isLayer(object)) {
+        current_desktop->getDocument()->setXMLDialogSelectedObject(object);
+        selection->clear();
     }
     blocked--;
 
