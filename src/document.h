@@ -146,12 +146,14 @@ public:
 
     void do_change_uri(char const *const filename, bool const rebase);
     void changeUriAndHrefs(char const *uri);
-    void setXMLDialogSelectedObject(SPObject * activexmltree) {_activexmltree = activexmltree;}
-    SPObject * getXMLDialogSelectedObject() {return _activexmltree;}
-private:
+    void setXMLDialogSelectedObject(SPObject *activexmltree) { _activexmltree = activexmltree; }
+    SPObject *getXMLDialogSelectedObject() { return _activexmltree; }
+
+  private:
     void _importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, Inkscape::XML::Node *target_defs);
     SPObject *_activexmltree;
-public:
+
+  public:
     void importDefs(SPDocument *source);
 
     unsigned int vacuumDocument();

@@ -355,16 +355,15 @@ void StyleDialog::setCurrentSelector(Glib::ustring current_selector)
     _readStyleElement();
 }
 
-//copied from style.cpp:1499
-static bool
-is_url(char const *p)
+// copied from style.cpp:1499
+static bool is_url(char const *p)
 {
     if (p == nullptr)
         return false;
-/** \todo
- * FIXME: I'm not sure if this applies to SVG as well, but CSS2 says any URIs
- * in property values must start with 'url('.
- */
+    /** \todo
+     * FIXME: I'm not sure if this applies to SVG as well, but CSS2 says any URIs
+     * in property values must start with 'url('.
+     */
     return (g_ascii_strncasecmp(p, "url(", 4) == 0);
 }
 
@@ -537,7 +536,7 @@ void StyleDialog::_readStyleElement()
                 row[_mColumns._colLinked] = false;
                 if (is_url(iter->get_value().c_str())) {
                     Glib::ustring id = iter->get_value();
-                    id = id.substr(5,id.size()-6);
+                    id = id.substr(5, id.size() - 6);
                     SPObject *elemref = nullptr;
                     if ((elemref = document->getObjectById(id.c_str()))) {
                         row[_mColumns._colHref] = elemref;
@@ -854,7 +853,7 @@ void StyleDialog::_onLinkObj(Glib::ustring path, Glib::RefPtr<Gtk::TreeStore> st
 
     Gtk::TreeModel::Row row = *store->get_iter(path);
     if (row && row[_mColumns._colLinked]) {
-        SPObject * linked = row[_mColumns._colHref];
+        SPObject *linked = row[_mColumns._colHref];
         if (linked) {
             Inkscape::Selection *selection = getDesktop()->getSelection();
             getDesktop()->getDocument()->setXMLDialogSelectedObject(linked);

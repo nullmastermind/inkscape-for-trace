@@ -459,7 +459,7 @@ void XmlTree::set_dt_select(Inkscape::XML::Node *repr)
     } else {
         object = nullptr;
     }
-    
+
     blocked++;
     if ( object && in_dt_coordsys(*object)
          && !(SP_IS_STRING(object) ||

@@ -102,8 +102,8 @@ class StyleDialog : public Widget::Panel {
         Gtk::TreeModelColumn<Glib::ustring> _colSelector; // Style or matching object id.
         Gtk::TreeModelColumn<gint> _colSelectorPos;       // Position of the selector to handle dup selectors
         Gtk::TreeModelColumn<Glib::ustring> _colOwner;    // Store the owner of the property for popup
-        Gtk::TreeModelColumn<bool> _colLinked;         // Go to another element
-        Gtk::TreeModelColumn<SPObject *> _colHref;         // Go to another element
+        Gtk::TreeModelColumn<bool> _colLinked;            // Other object linked
+        Gtk::TreeModelColumn<SPObject *> _colHref;        // Is going to another object
     };
     ModelColumns _mColumns;
 
