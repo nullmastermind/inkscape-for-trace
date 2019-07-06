@@ -229,11 +229,11 @@ CairoRendererPdfOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, 
 #include "clear-n_.h"
 
 /**
-	\brief   A function allocate a copy of this function.
+    \brief   A function allocate a copy of this function.
 
-	This is the definition of Cairo PDF out.  This function just
-	calls the extension system with the memory allocated XML that
-	describes the data.
+    This is the definition of Cairo PDF out.  This function just
+    calls the extension system with the memory allocated XML that
+    describes the data.
 */
 void
 CairoRendererPdfOutput::init ()

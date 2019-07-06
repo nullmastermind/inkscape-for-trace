@@ -196,7 +196,7 @@ void CairoRenderContext::setStateForStyle(SPStyle const *style)
  * \param width     width of the surface to be created
  * \param height    height of the surface to be created
  */
-CairoRenderContext* 
+CairoRenderContext*
 CairoRenderContext::cloneMe(double width, double height) const
 {
     g_assert( _is_valid );
@@ -948,7 +948,7 @@ CairoRenderContext::finish(bool finish_surface)
 
     cairo_destroy(_cr);
     _cr = nullptr;
-    
+
     if (finish_surface)
         cairo_surface_finish(_surface);
     status = cairo_surface_status(_surface);
@@ -1509,7 +1509,7 @@ CairoRenderContext::_prepareRenderGraphic()
             //   and apply clipping / masking to layers on the way (this is done in popLayer)
             // - then emit the page using cairo_show_page()
             // - finally restore the previous state with proper transforms and appropriate layers again
-            // 
+            //
             // TODO: While this appears to be an ugly hack it seems to work
             //       Somebody with a more intimate understanding of cairo and the renderer implementation might
             //       be able to implement this in a cleaner way, though.
@@ -1666,7 +1666,7 @@ bool CairoRenderContext::renderImage(Inkscape::Pixbuf *pb,
         cairo_rectangle(_cr, 0, 0, w, h);
         cairo_clip(_cr);
     }
-        
+
     // Cairo filter method will be mapped to PS/PDF 'interpolate' true/false).
     // See cairo-pdf-surface.c
     if (style) {
@@ -1742,7 +1742,7 @@ unsigned int CairoRenderContext::_showGlyphs(cairo_t *cr, PangoFont * /*font*/, 
 bool
 CairoRenderContext::renderGlyphtext(PangoFont *font, Geom::Affine const &font_matrix,
                                     std::vector<CairoGlyphInfo> const &glyphtext, SPStyle const *style)
-{    
+{
 
     _prepareRenderText();
     if (_is_omittext)
@@ -1871,7 +1871,7 @@ CairoRenderContext::renderGlyphtext(PangoFont *font, Geom::Affine const &font_ma
                 _showGlyphs(_cr, font, glyphtext, false);
             }
         }
-            
+
     }
 
     cairo_restore(_cr);

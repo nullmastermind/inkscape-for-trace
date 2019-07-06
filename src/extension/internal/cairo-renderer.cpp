@@ -215,7 +215,7 @@ static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
         SPMarker* marker = shape->_marker[i];
         for(Geom::PathVector::const_iterator path_it = pathv.begin(); path_it != pathv.end(); ++path_it) {
             // START position
-            if ( path_it != pathv.begin() 
+            if ( path_it != pathv.begin()
                  && ! ((path_it == (pathv.end()-1)) && (path_it->size_default() == 0)) ) // if this is the last path and it is a moveto-only, there is no mid marker there
             {
                 Geom::Affine tr;
@@ -305,7 +305,6 @@ static void sp_shape_render(SPShape *shape, CairoRenderContext *ctx)
 static void sp_group_render(SPGroup *group, CairoRenderContext *ctx)
 {
     CairoRenderer *renderer = ctx->getRenderer();
-    //TRACE(("sp_group_render opacity: %f\n", SP_SCALE24_TO_FLOAT(item->style->opacity.value)));
 
     std::vector<SPObject*> l(group->childList(false));
     for(std::vector<SPObject*>::const_iterator x = l.begin(); x!= l.end(); ++x){
@@ -377,13 +376,12 @@ static void sp_image_render(SPImage *image, CairoRenderContext *ctx)
     Geom::Scale s(width / (double)w, height / (double)h);
     Geom::Affine t(s * tp);
 
-    ctx->renderImage(image->pixbuf, t, image->style); 
+    ctx->renderImage(image->pixbuf, t, image->style);
 }
 
 static void sp_anchor_render(SPAnchor *a, CairoRenderContext *ctx)
 {
     CairoRenderer *renderer = ctx->getRenderer();
-    //TRACE(("sp_group_render opacity: %f\n", SP_SCALE24_TO_FLOAT(item->style->opacity.value)));
 
     std::vector<SPObject*> l(a->childList(false));
     if (a->href)
@@ -502,7 +500,7 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
     double shift_y = bbox->top();
 
     // For default 96 dpi, snap bitmap to pixel grid
-    if (res == Inkscape::Util::Quantity::convert(1, "in", "px")) { 
+    if (res == Inkscape::Util::Quantity::convert(1, "in", "px")) {
         shift_x = round (shift_x);
         shift_y = round (shift_y);
     }
@@ -522,7 +520,7 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
 
     std::unique_ptr<Inkscape::Pixbuf> pb(
         sp_generate_internal_bitmap(document, nullptr,
-            bbox->min()[Geom::X], bbox->min()[Geom::Y], bbox->max()[Geom::X], bbox->max()[Geom::Y], 
+            bbox->min()[Geom::X], bbox->min()[Geom::Y], bbox->max()[Geom::X], bbox->max()[Geom::Y],
             width, height, res, res, (guint32) 0xffffff00, item ));
 
     if (pb) {
@@ -585,12 +583,12 @@ static void sp_item_invoke_render(SPItem *item, CairoRenderContext *ctx)
                                     TRACE(("image\n"));
                                     sp_image_render(image, ctx);
                                 } else {
-				    SPGroup *group = dynamic_cast<SPGroup *>(item);
-				    if (group) {
-			                TRACE(("<g>\n"));
-					sp_group_render(group, ctx);
-				    }
-				}
+                                    SPGroup *group = dynamic_cast<SPGroup *>(item);
+                                    if (group) {
+                                        TRACE(("<g>\n"));
+                                        sp_group_render(group, ctx);
+                                    }
+                                }
                             }
                         }
                     }
