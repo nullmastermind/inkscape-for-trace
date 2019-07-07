@@ -17,7 +17,8 @@
 
 namespace Inkscape {
 
-extern char const *version_string; ///< Full version string
+extern char const *version_string; ///< full version string
+extern char const *version_string_without_revision; ///< version string excluding revision and date
 
 } // namespace Inkscape
 
