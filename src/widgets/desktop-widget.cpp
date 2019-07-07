@@ -878,6 +878,19 @@ sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
     }
 }
 
+#ifdef GDK_WINDOWING_QUARTZ
+static GtkMenuItem *_get_help_menu(GtkMenuShell *menu)
+{
+    // Assume "Help" is the last child in menu
+    GtkMenuItem *last = nullptr;
+    auto callback = [](GtkWidget *widget, gpointer data) {
+        *static_cast<GtkMenuItem **>(data) = GTK_MENU_ITEM(widget);
+    };
+    gtk_container_foreach(GTK_CONTAINER(menu), callback, &last);
+    return last;
+}
+#endif
+
 /**
  * Callback to realize desktop widget.
  */
@@ -939,6 +952,7 @@ sp_desktop_widget_realize (GtkWidget *widget)
         menushell->set_parent(*window);
         gtkosx_application_set_menu_bar(osxapp, menushell->gobj());
         gtkosx_application_set_use_quartz_accelerators(osxapp, false);
+        gtkosx_application_set_help_menu(osxapp, _get_help_menu(menushell->gobj()));
         gtkosx_application_set_window_menu(osxapp, nullptr);
     }
 #endif
