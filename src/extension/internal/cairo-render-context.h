@@ -64,6 +64,18 @@ struct CairoRenderState {
     Geom::Affine transform;     // the CTM
 };
 
+// Metadata to set on the cairo surface (if the surface supports it)
+struct CairoRenderContextMetadata {
+    Glib::ustring title = "";
+    Glib::ustring author = "";
+    Glib::ustring subject = "";
+    Glib::ustring keywords = "";
+    Glib::ustring copyright = "";
+    Glib::ustring creator = "";
+    Glib::ustring cdate = ""; // currently unused
+    Glib::ustring mdate = ""; // currently unused
+};
+
 class CairoRenderContext {
     friend class CairoRenderer;
 public:
@@ -105,7 +117,7 @@ public:
 
     /** Creates the cairo_surface_t for the context with the
     given width, height and with the currently set target
-    surface type. */
+    surface type. Also sets supported metadata on the surface. */
     bool setupSurface(double width, double height);
 
     cairo_surface_t *getSurface();
@@ -208,6 +220,8 @@ protected:
 
     CairoOmitTextPageState _omittext_state;
 
+    CairoRenderContextMetadata _metadata;
+
     cairo_pattern_t *_createPatternForPaintServer(SPPaintServer const *const paintserver,
                                                   Geom::OptRect const &pbox, float alpha);
     cairo_pattern_t *_createPatternPainter(SPPaintServer const *const paintserver, Geom::OptRect const &pbox);
@@ -216,6 +230,8 @@ protected:
     unsigned int _showGlyphs(cairo_t *cr, PangoFont *font, std::vector<CairoGlyphInfo> const &glyphtext, bool is_stroke);
 
     bool _finishSurfaceSetup(cairo_surface_t *surface, cairo_matrix_t *ctm = nullptr);
+    void _setSurfaceMetadata(cairo_surface_t *surface);
+
     void _setFillStyle(SPStyle const *style, Geom::OptRect const &pbox);
     void _setStrokeStyle(SPStyle const *style, Geom::OptRect const &pbox);
 

@@ -29,46 +29,12 @@
 #include <csignal>
 #include <cerrno>
 
-#include "libnrtype/Layout-TNG.h"
+
 #include <2geom/transforms.h>
 #include <2geom/pathvector.h>
-
-#include <glib.h>
-
-#include <glibmm/i18n.h>
-#include "display/curve.h"
-#include "display/canvas-bpath.h"
-#include "display/cairo-utils.h"
-#include "object/sp-anchor.h"
-#include "object/sp-item.h"
-#include "object/sp-item-group.h"
-#include "object/sp-marker.h"
-#include "object/sp-linear-gradient.h"
-#include "object/sp-radial-gradient.h"
-#include "object/sp-root.h"
-#include "object/sp-shape.h"
-#include "object/sp-use.h"
-#include "object/sp-text.h"
-#include "object/sp-flowtext.h"
-#include "object/sp-hatch-path.h"
-#include "object/sp-image.h"
-#include "object/sp-symbol.h"
-#include "object/sp-pattern.h"
-#include "object/sp-mask.h"
-#include "object/sp-clippath.h"
-
-#include "util/units.h"
-#include "helper/png-write.h"
-#include "helper/pixbuf-ops.h"
-
-#include "cairo-renderer.h"
-#include "cairo-render-context.h"
-#include "extension/system.h"
-
-#include "io/sys.h"
-
 #include <cairo.h>
-#include "document.h"
+#include <glib.h>
+#include <glibmm/i18n.h>
 
 // include support for only the compiled-in surface types
 #ifdef CAIRO_HAS_PDF_SURFACE
@@ -77,6 +43,45 @@
 #ifdef CAIRO_HAS_PS_SURFACE
 #include <cairo-ps.h>
 #endif
+
+#include "cairo-render-context.h"
+#include "cairo-renderer.h"
+#include "document.h"
+#include "inkscape-version.h"
+#include "rdf.h"
+
+#include "display/cairo-utils.h"
+#include "display/canvas-bpath.h"
+#include "display/curve.h"
+
+#include "extension/system.h"
+
+#include "helper/pixbuf-ops.h"
+#include "helper/png-write.h"
+
+#include "io/sys.h"
+
+#include "libnrtype/Layout-TNG.h"
+
+#include "object/sp-anchor.h"
+#include "object/sp-clippath.h"
+#include "object/sp-flowtext.h"
+#include "object/sp-hatch-path.h"
+#include "object/sp-image.h"
+#include "object/sp-item-group.h"
+#include "object/sp-item.h"
+#include "object/sp-linear-gradient.h"
+#include "object/sp-marker.h"
+#include "object/sp-mask.h"
+#include "object/sp-pattern.h"
+#include "object/sp-radial-gradient.h"
+#include "object/sp-root.h"
+#include "object/sp-shape.h"
+#include "object/sp-symbol.h"
+#include "object/sp-text.h"
+#include "object/sp-use.h"
+
+#include "util/units.h"
 
 //#define TRACE(_args) g_printf _args
 #define TRACE(_args)
@@ -657,6 +662,45 @@ void CairoRenderer::renderHatchPath(CairoRenderContext *ctx, SPHatchPath const &
     ctx->popState();
 }
 
+void CairoRenderer::setMetadata(CairoRenderContext *ctx, SPDocument *doc) {
+    // title
+    const gchar *title = rdf_get_work_entity(doc, rdf_find_entity("title"));
+    if (title) {
+        ctx->_metadata.title = title;
+    }
+
+    // author
+    const gchar *author = rdf_get_work_entity(doc, rdf_find_entity("creator"));
+    if (author) {
+        ctx->_metadata.author = author;
+    }
+
+    // subject
+    const gchar *subject = rdf_get_work_entity(doc, rdf_find_entity("description"));
+    if (subject) {
+        ctx->_metadata.subject = subject;
+    }
+
+    // keywords
+    const gchar *keywords = rdf_get_work_entity(doc, rdf_find_entity("subject"));
+    if (keywords) {
+        ctx->_metadata.keywords = keywords;
+    }
+
+    // copyright
+    const gchar *copyright = rdf_get_work_entity(doc, rdf_find_entity("rights"));
+    if (copyright) {
+        ctx->_metadata.copyright = copyright;
+    }
+
+    // creator
+    ctx->_metadata.creator = Glib::ustring::compose("Inkscape %1 (https://inkscape.org)",
+                                                    Inkscape::version_string_without_revision);
+
+   // cdate / mdate
+   // (currently unused)
+}
+
 bool
 CairoRenderer::setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool pageBoundingBox, float bleedmargin_px, SPItem *base)
 {
@@ -691,6 +735,8 @@ CairoRenderer::setupDocument(CairoRenderContext *ctx, SPDocument *doc, bool page
     ctx->_height = d.height() * px_to_ctx_units;
 
     TRACE(("setupDocument: %f x %f\n", ctx->_width, ctx->_height));
+
+    setMetadata(ctx, doc);
 
     bool ret = ctx->setupSurface(ctx->_width, ctx->_height);
 

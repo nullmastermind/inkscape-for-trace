@@ -55,6 +55,10 @@ public:
     /** Traverses the object tree and invokes the render methods. */
     void renderItem(CairoRenderContext *ctx, SPItem *item);
     void renderHatchPath(CairoRenderContext *ctx, SPHatchPath const &hatchPath, unsigned key);
+
+private:
+    /** Extract metadata from doc and set it on ctx. */
+    void setMetadata(CairoRenderContext *ctx, SPDocument *doc);
 };
 
 // FIXME: this should be a static method of CairoRenderer

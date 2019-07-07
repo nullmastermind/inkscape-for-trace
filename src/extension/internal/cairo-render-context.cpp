@@ -885,6 +885,8 @@ CairoRenderContext::setupSurface(double width, double height)
             break;
     }
 
+    _setSurfaceMetadata(surface);
+
     return _finishSurfaceSetup (surface, &ctm);
 }
 
@@ -932,6 +934,42 @@ CairoRenderContext::_finishSurfaceSetup(cairo_surface_t *surface, cairo_matrix_t
     _is_valid = TRUE;
 
     return true;
+}
+
+void
+CairoRenderContext::_setSurfaceMetadata(cairo_surface_t *surface)
+{
+    switch (_target) {
+#if defined CAIRO_HAS_PDF_SURFACE && CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 15, 4)
+        case CAIRO_SURFACE_TYPE_PDF:
+            if (!_metadata.title.empty()) {
+                cairo_pdf_surface_set_metadata(surface, CAIRO_PDF_METADATA_TITLE, _metadata.title.c_str());
+            }
+            if (!_metadata.author.empty()) {
+                cairo_pdf_surface_set_metadata(surface, CAIRO_PDF_METADATA_AUTHOR, _metadata.author.c_str());
+            }
+            if (!_metadata.subject.empty()) {
+                cairo_pdf_surface_set_metadata(surface, CAIRO_PDF_METADATA_SUBJECT, _metadata.subject.c_str());
+            }
+            if (!_metadata.keywords.empty()) {
+                cairo_pdf_surface_set_metadata(surface, CAIRO_PDF_METADATA_KEYWORDS, _metadata.keywords.c_str());
+            }
+            if (!_metadata.creator.empty()) {
+                cairo_pdf_surface_set_metadata(surface, CAIRO_PDF_METADATA_CREATOR, _metadata.creator.c_str());
+            }
+            break;
+#endif
+#if defined CAIRO_HAS_PS_SURFACE
+        case CAIRO_SURFACE_TYPE_PS:
+            if (!_metadata.title.empty()) {
+                cairo_ps_surface_dsc_comment(surface, (Glib::ustring("%%Title: ") + _metadata.title).c_str());
+            }
+            if (!_metadata.copyright.empty()) {
+                cairo_ps_surface_dsc_comment(surface, (Glib::ustring("%%Copyright: ") + _metadata.copyright).c_str());
+            }
+            break;
+#endif
+    }
 }
 
 bool
