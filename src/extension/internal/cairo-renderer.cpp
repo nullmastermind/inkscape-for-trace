@@ -61,6 +61,8 @@
 
 #include "io/sys.h"
 
+#include "include/source_date_epoch.h"
+
 #include "libnrtype/Layout-TNG.h"
 
 #include "object/sp-anchor.h"
@@ -697,8 +699,13 @@ void CairoRenderer::setMetadata(CairoRenderContext *ctx, SPDocument *doc) {
     ctx->_metadata.creator = Glib::ustring::compose("Inkscape %1 (https://inkscape.org)",
                                                     Inkscape::version_string_without_revision);
 
-   // cdate / mdate
-   // (currently unused)
+    // cdate (only used for for reproducible builds hack)
+    Glib::ustring cdate = ReproducibleBuilds::now_iso_8601();
+    if (!cdate.empty()) {
+        ctx->_metadata.cdate = cdate;
+    }
+
+    // mdate (currently unused)
 }
 
 bool

@@ -27,10 +27,7 @@
 
 
 #include <csignal>
-#include <climits>
 #include <cerrno>
-#include <ctime>
-#include <cstdlib>
 #include <2geom/pathvector.h>
 
 #include <glib.h>
@@ -814,12 +811,6 @@ CairoRenderContext::setupSurface(double width, double height)
     cairo_surface_t *surface = nullptr;
     cairo_matrix_t ctm;
     cairo_matrix_init_identity (&ctm);
-    char buffer[25];
-    char *endptr;
-    char *source_date_epoch;
-    time_t now;
-    struct tm *build_time;
-    unsigned long long epoch;
     switch (_target) {
         case CAIRO_SURFACE_TYPE_IMAGE:
             surface = cairo_image_surface_create(_target_format, (int)ceil(width), (int)ceil(height));
@@ -828,40 +819,6 @@ CairoRenderContext::setupSurface(double width, double height)
         case CAIRO_SURFACE_TYPE_PDF:
             surface = cairo_pdf_surface_create_for_stream(Inkscape::Extension::Internal::_write_callback, _stream, width, height);
             cairo_pdf_surface_restrict_to_version(surface, (cairo_pdf_version_t)_pdf_level);
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 15, 4)
-            source_date_epoch = getenv("SOURCE_DATE_EPOCH");
-            if (source_date_epoch) {
-                errno = 0;
-                epoch = strtoull(source_date_epoch, &endptr, 10);
-                if ((errno == ERANGE && (epoch == ULLONG_MAX || epoch == 0))
-                        || (errno != 0 && epoch == 0)) {
-                    g_printerr ("Environment variable $SOURCE_DATE_EPOCH: strtoull: %s\n",
-                                strerror(errno));
-                    exit (1);
-                }
-                if (endptr == source_date_epoch) {
-                    g_printerr ("Environment variable $SOURCE_DATE_EPOCH: No digits were found: %s\n",
-                                endptr);
-                    exit (1);
-                }
-                if (*endptr != '\0') {
-                    g_printerr ("Environment variable $SOURCE_DATE_EPOCH: Trailing garbage: %s\n",
-                                endptr);
-                    exit (1);
-                }
-                if (epoch > ULONG_MAX) {
-                    g_printerr ("Environment variable $SOURCE_DATE_EPOCH: must be <= %lu but saw: %llu\n",
-                                ULONG_MAX, epoch);
-                    exit (1);
-                }
-                now = (time_t)epoch;
-                build_time = gmtime(&now);
-                strftime(buffer, 25, "%Y-%m-%dT%H:%M:%S%z", build_time);
-                cairo_pdf_surface_set_metadata (surface,
-                                                CAIRO_PDF_METADATA_CREATE_DATE,
-                                                buffer);
-            }
-#endif
             break;
 #endif
 #ifdef CAIRO_HAS_PS_SURFACE
@@ -956,6 +913,12 @@ CairoRenderContext::_setSurfaceMetadata(cairo_surface_t *surface)
             }
             if (!_metadata.creator.empty()) {
                 cairo_pdf_surface_set_metadata(surface, CAIRO_PDF_METADATA_CREATOR, _metadata.creator.c_str());
+            }
+            if (!_metadata.cdate.empty()) {
+                cairo_pdf_surface_set_metadata(surface, CAIRO_PDF_METADATA_CREATE_DATE, _metadata.cdate.c_str());
+            }
+            if (!_metadata.mdate.empty()) {
+                cairo_pdf_surface_set_metadata(surface, CAIRO_PDF_METADATA_MOD_DATE, _metadata.mdate.c_str());
             }
             break;
 #endif
