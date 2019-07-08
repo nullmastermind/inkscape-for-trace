@@ -11,13 +11,14 @@
 #define SEEN_PENCIL_CONTEXT_H
 
 
-
+#include "live_effects/lpe-powerstroke.h"
 #include "ui/tools/freehand-base.h"
 
 #include <2geom/piecewise.h>
 #include <2geom/d2.h>
 #include <2geom/sbasis.h>
 #include <2geom/pathvector.h>
+#include <future>
 
 class SPShape;
 
@@ -68,7 +69,7 @@ private:
     bool _handleKeyPress(GdkEventKey const &event);
     bool _handleKeyRelease(GdkEventKey const &event);
     void _setStartpoint(Geom::Point const &p);
-    void _powerStrokePreview(Geom::Path const path);
+    bool _powerStrokePreview(Geom::Path const path);
     void _setEndpoint(Geom::Point const &p);
     void _finishEndpoint();
     void _addFreehandPoint(Geom::Point const &p, guint state);
@@ -86,10 +87,12 @@ private:
     double _previous_pressure;
     SPCurve * _curve;
     SPShape *_powerpreview;
+    Inkscape::LivePathEffect::LPEPowerStroke * _pspreview;
     Geom::Point _req_tangent;
     bool _is_drawing;
     PencilState _state;
     gint _npoints;
+    std::future<bool> future;
 };
 
 }

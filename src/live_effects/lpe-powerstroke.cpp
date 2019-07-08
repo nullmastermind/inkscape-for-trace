@@ -566,7 +566,7 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
 
     Geom::PathVector path_out;
     if (path_in.empty()) {
-        return path_out;
+        return path_in;
     }
     Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers(path_in);
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in = pathv[0].toPwSb();
@@ -590,7 +590,7 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
 
     std::vector<Geom::Point> ts_no_scale = offset_points.data();
     if (ts_no_scale.empty()) {
-        return path_out;
+        return path_in;
     }
     std::vector<Geom::Point> ts;
     for (auto & tsp : ts_no_scale) {
@@ -752,6 +752,10 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
         }
         fixed_path.close(true);
         path_out.push_back(fixed_path);
+    }
+    if (path_out.empty()) {
+        return path_in;
+        //doEffect_path (path_in);
     }
     return path_out;
 }

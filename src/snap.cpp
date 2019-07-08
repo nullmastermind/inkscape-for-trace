@@ -663,7 +663,9 @@ void SnapManager::setup(SPDesktop const *desktop,
         g_warning("The snapmanager has been set up before, but unSetup() hasn't been called afterwards. It possibly held invalid pointers");
     }
     _items_to_ignore.clear();
-    _items_to_ignore.push_back(item_to_ignore);
+    if (item_to_ignore) {
+        _items_to_ignore.push_back(item_to_ignore);
+    }
     _desktop = desktop;
     _snapindicator = snapindicator;
     _unselected_nodes = unselected_nodes;

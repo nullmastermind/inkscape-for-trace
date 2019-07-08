@@ -378,10 +378,22 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         if (!is_bend && previous_shape_type == BEND_CLIPBOARD && shape == BEND_CLIPBOARD) {
             return;
         }
+        bool shape_applied = false;
+        bool tabletpencil = false;
+        if (SP_IS_PENCIL_CONTEXT(dc)) {
+            if (dc->tablet_enabled) {
+                tabletpencil = true;
+                std::vector<Geom::Point> points;
+                spdc_apply_powerstroke_shape(points, dc, item);
+                shape_applied = true;
+                shape = NONE;
+                previous_shape_type = NONE;
+            }
+        }
         bool simplify = prefs->getInt(tool_name(dc) + "/simplify", 0);
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         guint mode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
-        if(simplify && mode != 2){
+        if(!tabletpencil && simplify && mode != 2){
             double tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 1.0, 100.0);
             tol = tol/(100.0*(102.0-tol));
             std::ostringstream ss;
@@ -389,19 +401,17 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             spdc_apply_simplify(ss.str(), dc, item);
             sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
         }
-        if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1) {
+        if (!tabletpencil && prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1) {
             Effect::createAndApply(SPIRO, dc->desktop->doc(), item);
         }
 
-        if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2) {
+        if (!tabletpencil && prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2) {
             Effect::createAndApply(BSPLINE, dc->desktop->doc(), item);
         }
         SPShape *sp_shape = dynamic_cast<SPShape *>(item);
         if (sp_shape) {
             curve = sp_shape->getCurve();
         }
-
-        bool shape_applied = false;
         SPCSSAttr *css_item = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
         const char *cstroke = sp_repr_css_property(css_item, "stroke", "none");
         const char *cfill = sp_repr_css_property(css_item, "fill", "none");
@@ -412,15 +422,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         if (!swidth) {
             swidth = swidth/2;
         }
-        if (SP_IS_PENCIL_CONTEXT(dc)) {
-            if (dc->tablet_enabled) {
-                std::vector<Geom::Point> points;
-                spdc_apply_powerstroke_shape(points, dc, item);
-                shape_applied = true;
-                shape = NONE;
-                previous_shape_type = NONE;
-            }
-        }
+        
 #define SHAPE_LENGTH 10
 #define SHAPE_HEIGHT 10
 

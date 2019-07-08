@@ -18,11 +18,9 @@
  */
 
 #include <gdk/gdkkeysyms.h>
-#include <glibmm/i18n.h>
 
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/bezier-utils.h>
-
 #include "ui/tools/pencil-tool.h"
 
 
@@ -41,10 +39,10 @@
 #include "display/curve.h"
 #include "display/sp-canvas.h"
 
-#include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-powerstroke-interpolators.h"
 
 #include "object/sp-path.h"
+#include "object/sp-lpe-item.h"
 #include "style.h"
 
 #include "ui/pixmaps/cursor-pencil.xpm"
@@ -56,6 +54,9 @@
 
 #include "xml/node.h"
 #include "xml/sp-css-attr.h"
+#include <glibmm/i18n.h>
+#include <thread>
+#include <chrono>
 
 namespace Inkscape {
 namespace UI {
@@ -270,7 +271,6 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
         this->_is_drawing = false;
         return true;
     }
-
     bool ret = false;
 
     if (this->space_panning || (mevent.state & GDK_BUTTON2_MASK) || (mevent.state & GDK_BUTTON3_MASK)) {
@@ -356,7 +356,6 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
                         this->ps.push_back(this->p[0]);
                         if (tablet_enabled) {
                             this->_wps.push_back(this->pressure);
-                            this->addPowerStrokePencil();
                         }
                     }
                     this->_addFreehandPoint(p, mevent.state);
@@ -476,11 +475,12 @@ bool PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
 
                     this->ea = anchor;
                     /* Write curves to object */
+                    desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Finishing freehand"));
                     if (tablet_enabled) {
                         _powerstrokeInterpolate(true);
+                    } else {
+                        this->_interpolate();
                     }
-                    desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Finishing freehand"));
-                    this->_interpolate();
                     spdc_concat_colors_and_flush(this, FALSE);
                     this->points.clear();
                     this->sa = nullptr;
@@ -693,25 +693,30 @@ void PencilTool::_finishEndpoint() {
     }
 }
 
-void
+bool
 PencilTool::_powerStrokePreview(Geom::Path const path)
 {
     using namespace Inkscape::LivePathEffect;
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document) {
-        return;
+        return true;
     }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     Geom::PathVector const pathv(path);
-    SPLPEItem * lpeitem = dynamic_cast<SPLPEItem *>(_powerpreview);
-    if (!lpeitem) {
+    std::vector<Geom::Point> points_preview = this->points;
+    points_preview.emplace_back(pathv.size() - 1, points_preview[points_preview.size()-1][Geom::Y]);
+/*     SPLPEItem * lpeitem = dynamic_cast<SPLPEItem *>(_powerpreview);
+    if (lpeitem) {
+        lpeitem->removeAllPathEffects(true);
+        delete _powerpreview;
+    } */
         Inkscape::XML::Node *body = nullptr;
         body = xml_doc->createElement("svg:path");
         body->setAttribute("sodipodi:insensitive", "true");
         sp_desktop_apply_style_tool(desktop, body, Glib::ustring("/tools/freehand/pencil").data(), false);
-        _powerpreview = SP_SHAPE(SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->appendChildRepr(body));
+        SPShape * powerpreview = SP_SHAPE(SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->appendChildRepr(body));
         Inkscape::GC::release(body);
-        SPCSSAttr *css = sp_css_attr_from_object(_powerpreview, SP_STYLE_FLAG_ALWAYS);
+        SPCSSAttr *css = sp_css_attr_from_object(powerpreview, SP_STYLE_FLAG_ALWAYS);
         const gchar * stroke = sp_repr_css_property(css, "stroke", "none");
         const gchar * fill = sp_repr_css_property(css, "fill", "none");
         if (!strcmp(fill, "none")) {
@@ -726,48 +731,68 @@ PencilTool::_powerStrokePreview(Geom::Path const path)
         sp_repr_css_write_string(css,css_str);
         body->setAttribute("style", css_str.c_str());
         gchar * pvector_str = sp_svg_write_path(pathv);
-        _powerpreview->setAttribute("d" , pvector_str);
-        g_free(pvector_str);
-        SPLPEItem * lpeitem = dynamic_cast<SPLPEItem *>(_powerpreview);
+        if (pvector_str) {
+            powerpreview->setAttribute("d" , pvector_str);
+            g_free(pvector_str);
+        }
+        SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(powerpreview);
         if (!lpeitem) {
-            return;
+            return true;
         }
-        Effect::createAndApply(POWERSTROKE, SP_ACTIVE_DESKTOP->doc(), SP_ITEM(_powerpreview));
+        Effect::createAndApply(POWERSTROKE, SP_ACTIVE_DESKTOP->doc(), SP_ITEM(powerpreview));
         Effect* lpe = lpeitem->getCurrentLPE();
-        LPEPowerStroke * ps = static_cast<LPEPowerStroke*>(lpe);
-        if (ps) {
-            ps->offset_points.param_set_and_write_new_value(this->points);
-            ps->getRepr()->setAttribute("sort_points", "true");
-            ps->getRepr()->setAttribute("interpolator_type", "CentripetalCatmullRom");
+        _pspreview = static_cast<LPEPowerStroke*>(lpe);
+        if (_pspreview) {
+            _pspreview->offset_points.param_set_and_write_new_value(points_preview);
+            _pspreview->getRepr()->setAttribute("sort_points", "true");
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
+                                       Glib::ustring("powerstroke") +
+                                       (Glib::ustring)"/" + 
+                                       Glib::ustring("interpolator_type");
+            bool valid = prefs->getEntry(pref_path).isValid();
+            if (!valid){
+                _pspreview->getRepr()->setAttribute("interpolator_type", "CentripetalCatmullRom");
+            }
         }
-    } else {
-        Effect* lpe = lpeitem->getCurrentLPE();
-        LPEPowerStroke * ps = static_cast<LPEPowerStroke*>(lpe);
-        if (ps) {
-            ps->offset_points.param_set_and_write_new_value(this->points);
-        }
-        gchar * pvector_str = sp_svg_write_path(pathv);
-        _powerpreview->setAttribute("inkscape:original-d" , pvector_str);
-        g_free(pvector_str);
-    }
+   /*  else {
+        Inkscape::LivePathEffect::LPEPowerStroke * pspreview = _pspreview;
+        SPShape *powerpreview = _powerpreview;
+        [points_preview, powerpreview, pspreview, pathv] {
+            gchar * pvector_str = sp_svg_write_path(pathv);
+            if (pvector_str) {
+                pspreview->is_visible.param_setValue(false);
+                powerpreview->setAttribute("inkscape:original-d", pvector_str);
+                pspreview->offset_points.param_set_and_write_new_value(points_preview);
+                pspreview->is_visible.param_setValue(true);
+                g_free(powerpreview);
+            }
+    } */
+    return true;
 }
 
 void
 PencilTool::removePowerStrokePreview()
 {
-    if(_powerpreview) {
+    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    if (!document) {
+        return;
+    }
+    SPObject *elemref = nullptr;
+    if ((elemref = document->getObjectById("power_stroke_preview"))) {
         using namespace Inkscape::LivePathEffect;
-        Effect* lpe = SP_LPE_ITEM(_powerpreview)->getCurrentLPE();
-        SP_LPE_ITEM(_powerpreview)->removeCurrentPathEffect(true);
+        Effect* lpe = SP_LPE_ITEM(elemref)->getCurrentLPE();
+        SP_LPE_ITEM(elemref)->removeCurrentPathEffect(true);
         LivePathEffectObject * lpeobj = lpe->getLPEObj();
         if (lpeobj) {
-            SP_OBJECT(lpeobj)->deleteObject();
+            SP_OBJECT(lpeobj)->deleteObject(true);
             lpeobj = nullptr;
         }
-        _powerpreview->deleteObject();
-        _powerpreview = nullptr;
+        elemref->deleteObject(true);
+        elemref = nullptr;
     }
 }
+
 void 
 PencilTool::addPowerStrokePencil(SPCurve *& c) 
 {
@@ -775,7 +800,6 @@ PencilTool::addPowerStrokePencil(SPCurve *& c)
         c = this->_curve->copy();
     }
 }
-
 void 
 PencilTool::addPowerStrokePencil() 
 {
@@ -802,7 +826,7 @@ PencilTool::addPowerStrokePencil()
     double pressure_shrunk   = (last_pressure * (max - min)) + min;
     step = (step * (max - min)) + min;
     //We need half width for power stroke
-    double pressure_computed =  pressure_shrunk * dezoomify_factor/2.0;
+    double pressure_computed =  (pressure_shrunk * dezoomify_factor)/2.0;
     this->_last_point        = this->ps.back();
     this->_last_point       *= transform_coordinate.inverse();
     if (this->ps.size() == 1 ||
@@ -818,15 +842,111 @@ PencilTool::addPowerStrokePencil()
         _powerstrokeInterpolate(false);
         Geom::PathVector cpv = this->_curve->get_pathvector();
         if (cpv.size()) {
-            _powerStrokePreview(cpv[0]);
+            std::future_status status;
+            if (future.valid()) {
+                status = future.wait_for(std::chrono::seconds(0));
+            }
+            if (!future.valid() || status == std::future_status::ready) {
+                Geom::Path path = cpv[0];
+                
+                std::vector<Geom::Point> points_preview = points;
+                points_preview.emplace_back(path.size() - 1, points_preview[points_preview.size()-1][Geom::Y]);
+                std::cout << path << points_preview.size() << "ooops" << std::endl;
+                future = std::async(std::launch::async, [path, points_preview] {
+                    using namespace Inkscape::LivePathEffect;
+                    SPDocument * document = SP_ACTIVE_DOCUMENT;
+                    if (!document) {
+                        return true;
+                    }
+                    Inkscape::XML::Document *xml_doc = document->getReprDoc();
+                    Geom::PathVector const pathv(path);
+                    Inkscape::XML::Node *pp = nullptr;
+                    pp = xml_doc->createElement("svg:path");
+                    SPShape * powerpreview = SP_SHAPE(SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->appendChildRepr(pp));
+                   /*  body->setAttribute("sodipodi:insensitive", "true");
+                    sp_desktop_apply_style_tool(SP_ACTIVE_DESKTOP, body, Glib::ustring("/tools/freehand/pencil").data(), false);
+                    SPShape * powerpreview = SP_SHAPE(SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->appendChildRepr(body));
+                    Inkscape::GC::release(body);
+                    SPCSSAttr *css = sp_css_attr_from_object(powerpreview, SP_STYLE_FLAG_ALWAYS);
+                    const gchar * stroke = sp_repr_css_property(css, "stroke", "none");
+                    const gchar * fill = sp_repr_css_property(css, "fill", "none");
+                    if (!strcmp(fill, "none")) {
+                        sp_repr_css_set_property (css, "stroke", "#000000");
+                    } else {
+                        sp_repr_css_set_property (css, "stroke", fill);
+                    }
+                    if (!strcmp(stroke, "none")) {
+                        sp_repr_css_set_property (css, "fill", "#000000");
+                    } else {
+                        sp_repr_css_set_property (css, "fill", stroke);
+                    }
+                    Glib::ustring css_str;
+                    sp_repr_css_write_string(css,css_str); */
+                    pp->setAttribute("style", "fill:#888");
+                    gchar * pvector_str = sp_svg_write_path(pathv);
+                    if (pvector_str) {
+                        pp->setAttribute("d" , pvector_str);
+                        g_free(pvector_str);
+                    }
+                    SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(powerpreview);
+                    if (!lpeitem) {
+                        return true;
+                    }
+                    sp_lpe_item_enable_path_effects(SP_LPE_ITEM(powerpreview), false);
+                    Effect::createAndApply(POWERSTROKE, SP_ACTIVE_DESKTOP->doc(), SP_ITEM(powerpreview));
+                    Effect* lpe = lpeitem->getCurrentLPE();
+                    Inkscape::LivePathEffect::LPEPowerStroke *pspreview = static_cast<LPEPowerStroke*>(lpe);
+                    if (pspreview) {
+                        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+                        Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
+                                                Glib::ustring("powerstroke") +
+                                                (Glib::ustring)"/" + 
+                                                Glib::ustring("interpolator_type");
+                        bool valid = prefs->getEntry(pref_path).isValid();
+                        if (!valid){
+                            pspreview->getRepr()->setAttribute("interpolator_type", "CentripetalCatmullRom");
+                        }
+                        pspreview->getRepr()->setAttribute("sort_points", "true");
+                        pspreview->offset_points.param_set_and_write_new_value(points_preview);
+                    }
+                    pp->setAttribute("id", "tmp_power_stroke_preview");
+                    const gchar *toremove = "power_stroke_preview";
+                    if (powerpreview->getCurve() == powerpreview->getCurveBeforeLPE()) {
+                        toremove = "tmp_power_stroke_preview";
+                    }  
+                    SPObject *elemref = nullptr;
+                    if ((elemref = document->getObjectById(toremove))) {
+                        using namespace Inkscape::LivePathEffect;
+                        Effect* lpe = SP_LPE_ITEM(elemref)->getCurrentLPE();
+                        SP_LPE_ITEM(elemref)->removeCurrentPathEffect(true);
+                        LivePathEffectObject * lpeobj = lpe->getLPEObj();
+                        if (lpeobj) {
+                            SP_OBJECT(lpeobj)->deleteObject(true);
+                            lpeobj = nullptr;
+                        }
+                        elemref->deleteObject(true);
+                        elemref = nullptr;
+                    }
+                    if (toremove == "power_stroke_preview") {
+                        pp->setAttribute("id", toremove);
+                        sp_lpe_item_enable_path_effects(SP_LPE_ITEM(powerpreview), true);
+                    }
+                    return true;
+                });
+            } else {
+
+                std::cout << "stopped" << std::endl;
+            }
+
         }
     }
+
 }
 
 void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/) {
     g_assert( this->_npoints > 0 );
     g_return_if_fail(unsigned(this->_npoints) < G_N_ELEMENTS(this->p));
-
+    
     if ( ( p != this->p[ this->_npoints - 1 ] )
          && in_svg_plane(p) )
     {
@@ -837,7 +957,7 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/) {
             if (this->pressure != 0) {
                 this->_wps.push_back(this->pressure);
                 this->addPowerStrokePencil();
-            }
+            }    
             sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr);
             for (auto i:this->green_bpaths) {
                 sp_canvas_item_destroy(i);
@@ -877,7 +997,7 @@ PencilTool::_powerstrokeInterpolate(bool apply) {
         using namespace Inkscape::LivePathEffect;
         SPCurve * c = sa_overwrited->copy();
         Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
-        LPEPowerStroke* ps = static_cast<LPEPowerStroke*>(lpe);
+        LPEPowerStroke* ps = dynamic_cast<LPEPowerStroke*>(lpe);
         if (ps) {
             if (sa->start) {
                 sa_points = ps->offset_points.reverse_controlpoints(false);
@@ -892,7 +1012,7 @@ PencilTool::_powerstrokeInterpolate(bool apply) {
         this->_key_nodes.pop_back();
     }
     size_t count = 0;
-    for (auto current:this->ps) {
+    /* for (auto current:this->ps) {
         current *= transform_coordinate.inverse();
         Geom::Point prev = Geom::Point(0,0);
         if (count == ps_size - 1 || (apply && count%tol == 0 ) || (!apply && count%2 == 0)) {
@@ -911,22 +1031,24 @@ PencilTool::_powerstrokeInterpolate(bool apply) {
             }
         }
         count++;
-    }
+    } */
+    for (auto current:this->ps) {
+        current *= transform_coordinate.inverse();
+        this->_key_nodes.push_back(current);
+    } 
     Geom::Path path(this->_key_nodes.front());
     if (this->_key_nodes.size() == 2) {
         path.appendNew<Geom::LineSegment>(this->_key_nodes.back());
     } else {
         path = interpolator->interpolateToPath(this->_key_nodes);
     }
-    count = 0;
-    size_t points_size = this->_points_pos.size();
-    for (auto point:this->_points_pos) {
-        double pos = Geom::nearest_time(point, path);
-        this->points[count][Geom::X] = pos;
-        if (count > 1 && (this->points[count-1][Geom::X] == pos || (apply && pos > path.size() - 1 ))) {
-            this->points.pop_back();
+    gint points_size = this->_points_pos.size();
+    for (gint i = points_size - 1; i >= 0; --i) {
+        double pos = Geom::nearest_time(this->_points_pos[i], path);
+        this->points[i][Geom::X] = pos;
+        if (points_size -1 != i && Geom::are_near(this->points[i+1][Geom::X], pos, 1/tol) ) {
+            this->_points_pos.erase(this->_points_pos.begin() + i);
         }
-        count++;
     }
     sa_points.insert(sa_points.end(),this->points.begin(),this->points.end());
     this->points = sa_points;

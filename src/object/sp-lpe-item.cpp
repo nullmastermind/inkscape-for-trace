@@ -45,7 +45,6 @@
 #include "sp-rect.h"
 
 /* LPEItem base class */
-static void sp_lpe_item_enable_path_effects(SPLPEItem *lpeitem, bool enable);
 
 static void lpeobject_ref_modified(SPObject *href, guint flags, SPLPEItem *lpeitem);
 static void sp_lpe_item_create_original_path_recursive(SPLPEItem *lpeitem);
@@ -208,7 +207,7 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current, bool is_clip
             }
 
             Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
-            if (!performOnePathEffect(curve, current, lpe, is_clip_or_mask)) {
+            if (!lpe || !performOnePathEffect(curve, current, lpe, is_clip_or_mask)) {
                 return false;
             }
             if (path_effect_list_size != this->path_effect_list->size()) {
@@ -265,7 +264,9 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
 
             if (!SP_IS_GROUP(this)) {
                 // To have processed the shape to doAfterEffect
-                lpe->pathvector_after_effect = curve->get_pathvector();
+                if (curve) {
+                    lpe->pathvector_after_effect = curve->get_pathvector();
+                }
                 lpe->doAfterEffect(this);
             }
         }
@@ -569,9 +570,6 @@ void SPLPEItem::addPathEffect(std::string value, bool reset)
             sp_lpe_item_create_original_path_recursive(this);
             // perform this once when the effect is applied
             lpe->doOnApply_impl(this);
-
-            // indicate that all necessary preparations are done and the effect can be performed
-            lpe->setReady();
         }
 
         //Enable the path effects now that everything is ready to apply the new path effect
@@ -1199,8 +1197,7 @@ bool SPLPEItem::forkPathEffectsIfNecessary(unsigned int nr_of_allowed_users, boo
 }
 
 // Enable or disable the path effects of the item.
-// The counter allows nested calls
-static void sp_lpe_item_enable_path_effects(SPLPEItem *lpeitem, bool enable)
+void sp_lpe_item_enable_path_effects(SPLPEItem *lpeitem, bool enable)
 {
     if (enable) {
         lpeitem->path_effects_enabled++;

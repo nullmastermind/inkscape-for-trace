@@ -1113,7 +1113,7 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       current_shape(nullptr),
       provides_own_flash_paths(true), // is automatically set to false if providesOwnFlashPaths() is not overridden
       defaultsopen(false),
-      is_ready(false) // is automatically set to false if providesOwnFlashPaths() is not overridden
+      is_ready(false) 
 {
     registerParameter( dynamic_cast<Parameter *>(&is_visible) );
     is_visible.widget_is_visible = false;
@@ -1261,12 +1261,12 @@ void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
     doOnApply(lpeitem);
+    setReady();
 }
 
 void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
-    setReady();
     doBeforeEffect(lpeitem);
     update_helperpath();
 }
