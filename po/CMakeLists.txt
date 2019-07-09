@@ -14,7 +14,7 @@ endforeach(language)
 
 # update inkscape.pot
 set(_potFile ${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}.pot)
-set(xgettext_options -j --keyword=_ --keyword=N_ --keyword=Q_ --keyword=C_:1c,2 --keyword=NC_:1c,2 --msgid-bugs-address=inkscape-translator@lists.inkscape.org --strict -s --from-code=UTF-8 -ktranslatable -o ${_potFile})
+set(xgettext_options -j --keyword=_ --keyword=N_ --keyword=Q_ --keyword=C_:1c,2 --keyword=NC_:1c,2 --msgid-bugs-address=inkscape-translator@lists.inkscape.org --strict --from-code=UTF-8 -ktranslatable -o ${_potFile})
 
 # Due to a bug in old xgettext versions, we cannot use '--its='.
 # Instead, we use GETTEXTDATADIR=. to refer to the po/its/*.its files.
