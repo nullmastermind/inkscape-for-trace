@@ -593,9 +593,7 @@ void Application::add_gtk_css()
     }
     Glib::ustring css_str = "";
     if (prefs->getBool("/theme/symbolicIcons", false)) {
-        if (!prefs->getBool("/theme/symbolicDefaultColors", true)) {
-            css_str = get_symbolic_colors();
-        }
+        css_str = get_symbolic_colors();
     }
     try {
         colorizeprovider->load_from_data(css_str);

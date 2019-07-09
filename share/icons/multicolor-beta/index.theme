@@ -2,7 +2,7 @@
 Name=multicolor-beta
 Comment=next generation theme for inkscape
 Hidden=true
-Directories=scalable/actions,scalable/apps,symbolic/actions,symbolic/apps
+Directories=symbolic/actions,symbolic/apps
 
 [symbolic/apps]
 MinSize=8
@@ -18,16 +18,3 @@ MaxSize=512
 Context=Actions
 Type=Scalable
 
-[scalable/actions]
-MinSize=8
-Size=16
-MaxSize=512
-Context=Actions
-Type=Scalable
-
-[scalable/apps]
-MinSize=8
-Size=16
-MaxSize=512
-Context=Actions
-Type=Scalable

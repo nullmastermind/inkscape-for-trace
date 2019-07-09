@@ -2,7 +2,7 @@ set(THEME multicolor-beta)
 install(FILES "index.theme" DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/${THEME})
 install(FILES "highlights.css" DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/${THEME})
 
-set(PIXMAP_SIZES "scalable" "symbolic")
+set(PIXMAP_SIZES "symbolic")
 set(CONTENT "actions")
 
 foreach(pixmap_size ${PIXMAP_SIZES})
@@ -12,7 +12,6 @@ foreach(pixmap_size ${PIXMAP_SIZES})
   endforeach(content)
 endforeach(pixmap_size)
 
-install(FILES "../application/scalable/apps/org.inkscape.Inkscape.svg" DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/${THEME}/scalable/apps/)
 install(FILES "../application/symbolic/apps/org.inkscape.Inkscape-symbolic.svg" DESTINATION ${INKSCAPE_SHARE_INSTALL}/icons/${THEME}/symbolic/apps/)
 
 if(WIN32)
