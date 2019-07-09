@@ -14,8 +14,8 @@
    viewBox="0 0 16 16"
    sodipodi:docname="measure-segments-symbolic.svg"
    inkscape:version="1.0alpha (b90687801a, 2019-05-08, custom)">
-  <style
-     id="style1502"></style>
+
+  
   <defs
      id="defs5134">
     <inkscape:path-effect
@@ -50,7 +50,8 @@
        type="xygrid"
        id="grid" />
   </sodipodi:namedview>
-  <metadata
+  
+<metadata
      id="metadata1906">
     <rdf:RDF>
       <cc:Work

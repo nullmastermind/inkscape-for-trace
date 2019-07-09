@@ -14,8 +14,8 @@
    viewBox="0 0 16 16"
    sodipodi:docname="pts2ellipse-symbolic.svg"
    inkscape:version="1.0alpha (634dba98d9, 2019-03-28)">
-  <style
-     id="style1476"></style>
+
+  
   <defs
      id="defs913">
     <inkscape:path-effect
@@ -53,7 +53,8 @@
        type="xygrid"
        id="grid" />
   </sodipodi:namedview>
-  <metadata
+  
+<metadata
      id="metadata1906">
     <rdf:RDF>
       <cc:Work

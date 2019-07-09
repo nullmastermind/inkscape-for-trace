@@ -14,6 +14,7 @@
    width="16"
    id="svg1"
    version="1.1">
+
   <defs
      id="defs500">
     <inkscape:path-effect
@@ -46,7 +47,8 @@
        id="grid"
        type="xygrid" />
   </sodipodi:namedview>
-  <metadata
+  
+<metadata
      id="metadata1906">
     <rdf:RDF>
       <cc:Work
