@@ -31,7 +31,6 @@
 
 #include <libvpsc/solve_VPSC.h>
 #include <libvpsc/variable.h>
-#include <libvpsc/isnan.h>
 #include <libvpsc/constraint.h>
 #include <libvpsc/assertions.h>
 
@@ -67,11 +66,11 @@ GradientProjection::GradientProjection(
           clusterHierarchy(clusterHierarchy),
           tolerance(tol), 
           max_iterations(max_iterations),
-          sparseQ(NULL),
+          sparseQ(nullptr),
           solveWithMosek(solveWithMosek),
           scaling(scaling)
 {
-    printf("GP Instance: scaling=%d, mosek=%d\n",scaling,solveWithMosek);
+    //printf("GP Instance: scaling=%d, mosek=%d\n",scaling,solveWithMosek);
     for(unsigned i=0;i<denseSize;i++) {
         vars.push_back(new vpsc::Variable(i,1,1));
     }
@@ -82,7 +81,7 @@ GradientProjection::GradientProjection(
             // XXX: Scale can sometimes be set to infinity here when 
             //      there are nodes not connected to any other node.
             //      Thus we just set the scale for such a variable to 1.
-            if (!isFinite(vars[i]->scale))
+            if (!std::isfinite(vars[i]->scale))
             {
                 vars[i]->scale = 1;
             }
@@ -242,8 +241,8 @@ unsigned GradientProjection::solve(
     COLA_ASSERT(linearCoefficients.size()==x.size());
     COLA_ASSERT(x.size()==denseSize);
     COLA_ASSERT(numStaticVars>=denseSize);
-    COLA_ASSERT(sparseQ==NULL || 
-                (sparseQ!=NULL && (vars.size()==sparseQ->rowSize())) );
+    COLA_ASSERT(sparseQ==nullptr || 
+                (sparseQ!=nullptr && (vars.size()==sparseQ->rowSize())) );
 
     if(max_iterations==0) return 0;
 
@@ -276,8 +275,8 @@ unsigned GradientProjection::solve(
     // load desired positions into vars, note that we keep desired positions 
     // already calculated for dummy vars
     for (unsigned i=0;i<x.size();i++) {
-        COLA_ASSERT(!isNaN(x[i]));
-        COLA_ASSERT(isFinite(x[i]));
+        COLA_ASSERT(!std::isnan(x[i]));
+        COLA_ASSERT(std::isfinite(x[i]));
         b[i]=i<linearCoefficients.size()?linearCoefficients[i]:0;
         result[i]=x[i];
         if(scaling) {
@@ -311,8 +310,8 @@ unsigned GradientProjection::solve(
             result[i]+=step;
             //printf("   after unconstrained step: x[%d]=%f\n",i,result[i]);
             stepSize+=step*step;
-            COLA_ASSERT(!isNaN(result[i]));
-            COLA_ASSERT(isFinite(result[i]));
+            COLA_ASSERT(!std::isnan(result[i]));
+            COLA_ASSERT(std::isfinite(result[i]));
             if(!vars[i]->fixedDesiredPosition) vars[i]->desiredPosition=result[i];
         }
 
@@ -451,7 +450,7 @@ void GradientProjection::destroyVPSC(IncSolver *vpsc) {
             delete vars[i];
         }
         vars.resize(numStaticVars);
-        sparseQ=NULL;
+        sparseQ=nullptr;
     }
     for(vector<Constraint*>::iterator i=lcs.begin();i!=lcs.end();i++) {
         delete *i;

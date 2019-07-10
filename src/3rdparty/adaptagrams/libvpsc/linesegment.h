@@ -103,21 +103,21 @@ void DoLineSegmentIntersection(const Vector& p0, const Vector& p1, const Vector&
     Vector intersection;
 
     std::cout << "Line Segment 0: (" << p0.x_ << ", " << p0.y_ << ") to (" << p1.x_ << ", " << p1.y_ << ")\n"
-              << "Line Segment 1: (" << p2.x_ << ", " << p2.y_ << ") to (" << p3.x_ << ", " << p3.y_ << ")" << std::endl;
+              << "Line Segment 1: (" << p2.x_ << ", " << p2.y_ << ") to (" << p3.x_ << ", " << p3.y_ << ")\n";
 
     switch(linesegment0.Intersect(linesegment1, intersection))
     {
     case LineSegment::PARALLEL:
-        std::cout << "The lines are parallel\n" << std::endl;
+        std::cout << "The lines are parallel\n\n";
         break;
     case LineSegment::COINCIDENT:
-        std::cout << "The lines are coincident\n" << std::endl;
+        std::cout << "The lines are coincident\n\n";
         break;
     case LineSegment::NOT_INTERSECTING:
-        std::cout << "The lines do not intersect\n" << std::endl;
+        std::cout << "The lines do not intersect\n\n";
         break;
     case LineSegment::INTERSECTING:
-        std::cout << "The lines intersect at (" << intersection.x_ << ", " << intersection.y_ << ")\n" << std::endl;
+        std::cout << "The lines intersect at (" << intersection.x_ << ", " << intersection.y_ << ")\n\n";
         break;
     }
 }

@@ -78,84 +78,6 @@ bool NonOverlapConstraintExemptions::shapePairIsExempt(
 // NonOverlapConstraints code
 //-----------------------------------------------------------------------------
 
-class OverlapShapeOffsets : public SubConstraintInfo
-{
-    public:
-        OverlapShapeOffsets(unsigned ind, double xOffset, double yOffset,
-                unsigned int group)
-            : SubConstraintInfo(ind),
-              cluster(NULL),
-              rectPadding(0),
-              group(group)
-        {
-            halfDim[0] = xOffset;
-            halfDim[1] = yOffset;
-        }
-        OverlapShapeOffsets(unsigned ind, Cluster *cluster, unsigned int group)
-            : SubConstraintInfo(ind),
-              cluster(cluster),
-              rectPadding(cluster->margin()),
-              group(group)
-        {
-            halfDim[0] = 0;
-            halfDim[1] = 0;
-        }
-        OverlapShapeOffsets()
-            : SubConstraintInfo(1000000),
-              cluster(NULL),
-              rectPadding(0)
-        {
-        }
-        bool usesClusterBounds(void) const
-        {
-            return (cluster && !cluster->clusterIsFromFixedRectangle());
-        }
-        Cluster *cluster;
-        double halfDim[2];   // Half width and height values.
-        Box rectPadding;  // Used for cluster padding.
-        unsigned int group;
-};
-
-
-class ShapePairInfo 
-{
-    public:
-        ShapePairInfo(unsigned ind1, unsigned ind2, unsigned ord = 1) 
-            : order(ord),
-              satisfied(false),
-              processed(false)
-        {
-            COLA_ASSERT(ind1 != ind2);
-            // Assign the lesser value to varIndex1.
-            varIndex1 = (ind1 < ind2) ? ind1 : ind2;
-            // Assign the greater value to varIndex2.
-            varIndex2 = (ind1 > ind2) ? ind1 : ind2;
-        }
-        bool operator<(const ShapePairInfo& rhs) const
-        {
-            // Make sure the processed ones are at the end after sorting.
-            int processedInt = processed ? 1 : 0;
-            int rhsProcessedInt = rhs.processed ? 1 : 0;
-            if (processedInt != rhsProcessedInt)
-            {
-                return processedInt < rhsProcessedInt;
-            }
-            // Use cluster ordering for primary sorting.
-            if (order != rhs.order)
-            {
-                return order < rhs.order;
-            }
-            return overlapMax > rhs.overlapMax;
-        }
-        unsigned short order;
-        unsigned short varIndex1;
-        unsigned short varIndex2;
-        bool satisfied;
-        bool processed;
-        double overlapMax;
-};
-
-
 NonOverlapConstraints::NonOverlapConstraints(
         NonOverlapConstraintExemptions *exemptions, unsigned int priority)
     : CompoundConstraint(vpsc::HORIZONTAL, priority),
@@ -167,14 +89,14 @@ NonOverlapConstraints::NonOverlapConstraints(
 }
 
 void NonOverlapConstraints::addShape(unsigned id, double halfW, double halfH,
-        unsigned int group)
+        unsigned int group, std::set<unsigned> exemptions)
 {
     // Setup pairInfos for all other shapes. 
     for (std::map<unsigned, OverlapShapeOffsets>::iterator curr =
             shapeOffsets.begin(); curr != shapeOffsets.end(); ++curr)
     {
         unsigned otherId = curr->first;
-        if ((shapeOffsets[otherId].group == group) && (id != otherId))
+        if ((shapeOffsets[otherId].group == group) && (id != otherId) && exemptions.count(otherId)==0)
         {
             if (m_exemptions &&
                     m_exemptions->shapePairIsExempt(ShapePair(otherId, id)))
@@ -190,6 +112,27 @@ void NonOverlapConstraints::addShape(unsigned id, double halfW, double halfH,
     shapeOffsets[id] = OverlapShapeOffsets(id, halfW, halfH, group);
 }
 
+void NonOverlapConstraints::resizeShape(unsigned id, double halfW, double halfH)
+{
+    OverlapShapeOffsets oso = shapeOffsets[id];
+    oso.resize(halfW, halfH);
+}
+
+void NonOverlapConstraints::removeShape(unsigned id)
+{
+    // Remove the OverlapShapeOffsets object for this id.
+    shapeOffsets.erase(id);
+    // Remove all ShapePairInfo objects having this id as one of their two indices.
+    std::list<ShapePairInfo>::iterator it = pairInfoList.begin();
+    while (it != pairInfoList.end()) {
+        ShapePairInfo spi = *it;
+        if (spi.varIndex1==id || spi.varIndex2==id) {
+            it = pairInfoList.erase(it); // now it points to next list element after one erased
+        } else {
+            it++;
+        }
+    }
+}
 
 // This is expected to be called after all addNode calls.
 void NonOverlapConstraints::addCluster(Cluster *cluster, unsigned int group)
@@ -590,10 +533,10 @@ void NonOverlapConstraints::generateSeparationConstraints(
         double below2 = shape2.halfDim[dim];
         double above2 = shape2.halfDim[dim];
 
-        vpsc::Variable *varLeft1 = NULL;
-        vpsc::Variable *varLeft2 = NULL;
-        vpsc::Variable *varRight1 = NULL;
-        vpsc::Variable *varRight2 = NULL;
+        vpsc::Variable *varLeft1 = nullptr;
+        vpsc::Variable *varLeft2 = nullptr;
+        vpsc::Variable *varRight1 = nullptr;
+        vpsc::Variable *varRight2 = nullptr;
         if (shape1.cluster)
         {
             // Must constraint to cluster boundary variables.
@@ -626,7 +569,7 @@ void NonOverlapConstraints::generateSeparationConstraints(
 
         if (rect1.overlapD(!dim, &rect2) > 0.0005)
         {
-            vpsc::Constraint *constraint = NULL;
+            vpsc::Constraint *constraint = nullptr;
             if (pos1 < pos2)
             {
                 constraint = new vpsc::Constraint(varRight1, varLeft2,

@@ -17,7 +17,6 @@ set(libvpsc_SRC
 	cbuffer.h
 	constraint.h
 	exceptions.h
-	isnan.h
 	linesegment.h
 	pairing_heap.h
 	rectangle.h

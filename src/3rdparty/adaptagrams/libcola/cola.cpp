@@ -22,7 +22,6 @@
 #include <cmath>
 
 #include "libvpsc/assertions.h"
-#include "libvpsc/isnan.h"
 #include "libcola/commondefs.h"
 #include "libcola/cola.h"
 #include "libcola/conjugate_gradient.h"
@@ -44,7 +43,8 @@ ConstrainedMajorizationLayout
         const double idealLength,
         EdgeLengths eLengths,
         TestConvergence *doneTest,
-        PreIteration* preIteration)
+        PreIteration* preIteration,
+        bool useNeighbourStress)
     : n(rs.size()),
       lap2(valarray<double>(n*n)), 
       Dij(valarray<double>(n*n)),
@@ -58,18 +58,18 @@ ConstrainedMajorizationLayout
       constrainedLayout(false),
       nonOverlappingClusters(false),
       clusterHierarchy(clusterHierarchy),
-      gpX(NULL), gpY(NULL),
-      ccs(NULL),
-      unsatisfiableX(NULL), unsatisfiableY(NULL),
+      gpX(nullptr), gpY(nullptr),
+      ccs(nullptr),
+      unsatisfiableX(nullptr), unsatisfiableY(nullptr),
       avoidOverlaps(None),
-      straightenEdges(NULL),
+      straightenEdges(nullptr),
       bendWeight(0.1), potBendWeight(0.1),
       xSkipping(true),
       scaling(true),
       externalSolver(false),
       majorization(true)
 {
-    if (done == NULL)
+    if (done == nullptr)
     {
         done = new TestConvergence();
         using_default_done = true;
@@ -99,8 +99,23 @@ ConstrainedMajorizationLayout
         }
     }
 
-    shortest_paths::johnsons(n,D,es,edgeLengths);
-    //shortest_paths::neighbours(n,D,es,edgeLengths);
+    if (useNeighbourStress) {
+        for(unsigned i=0;i<n;i++) {
+            for(unsigned j=0;j<n;j++) {
+                D[i][j]=std::numeric_limits<double>::max();
+            }
+        }
+        bool haveLengths = edgeLengths.size() == es.size();
+        for (unsigned i = 0; i < es.size(); i++) {
+            unsigned source = es[i].first;
+            unsigned target = es[i].second;
+            D[source][target] = D[target][source] = (haveLengths ? edgeLengths[i] : 1.0);
+        }
+    } else {
+        shortest_paths::johnsons(n,D,es,edgeLengths);
+        //shortest_paths::neighbours(n,D,es,edgeLengths);
+    }
+
     edge_length = idealLength;
     if(clusterHierarchy) {
         for(Clusters::const_iterator i=clusterHierarchy->clusters.begin();
@@ -185,7 +200,7 @@ void ConstrainedMajorizationLayout::majorize(
             b[i] -= stickyWeight*startCoords[i];
         }
         b[i] += degree * coords[i];
-        COLA_ASSERT(!isNaN(b[i]));
+        COLA_ASSERT(!std::isnan(b[i]));
     }
     if(constrainedLayout) {
         //printf("GP iteration...\n");
@@ -303,7 +318,7 @@ inline double ConstrainedMajorizationLayout
 
 void ConstrainedMajorizationLayout::run(bool x, bool y) {
     if(constrainedLayout) {
-        vector<vpsc::Rectangle*>* pbb = boundingBoxes.empty()?NULL:&boundingBoxes;
+        vector<vpsc::Rectangle*>* pbb = boundingBoxes.empty()?nullptr:&boundingBoxes;
         SolveWithMosek mosek = Off;
         if(externalSolver) mosek=Outer;
         // scaling doesn't currently work with straighten edges because sparse
@@ -381,7 +396,7 @@ double ConstrainedMajorizationLayout::computeStress() {
 }
 void ConstrainedMajorizationLayout::runOnce(bool x, bool y) {
     if(constrainedLayout) {
-        vector<vpsc::Rectangle*>* pbb = boundingBoxes.empty()?NULL:&boundingBoxes;
+        vector<vpsc::Rectangle*>* pbb = boundingBoxes.empty()?nullptr:&boundingBoxes;
         SolveWithMosek mosek = Off;
         if(externalSolver) mosek=Outer;
         // scaling doesn't currently work with straighten edges because sparse
@@ -666,5 +681,20 @@ Rectangle bounds(vector<Rectangle*>& rs) {
         removeClusterOverlap(clusterHierarchy, rs, locks, vpsc::VERTICAL);
     }
 #endif
+
+    ConstrainedMajorizationLayout* simpleCMLFactory(
+            vpsc::Rectangles& rs,
+            std::vector<Edge> const & es,
+            RootCluster* clusterHierarchy,
+            const double idealLength,
+            bool useNeighbourStress
+        ) {
+        cola::EdgeLengths eLengths;
+        for(size_t i = 0; i < es.size(); ++i) {
+            eLengths.push_back(1);
+        }
+        return new ConstrainedMajorizationLayout(rs, es, clusterHierarchy, idealLength,
+                eLengths, nullptr, nullptr, useNeighbourStress);
+    };
 
 } // namespace cola

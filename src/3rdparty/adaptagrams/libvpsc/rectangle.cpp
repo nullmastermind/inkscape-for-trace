@@ -25,6 +25,7 @@
  *
  */
 
+#include <cmath>
 #include <set>
 #include <cstdlib>
 #include <algorithm>
@@ -35,8 +36,6 @@
 #include "libvpsc/rectangle.h"
 #include "libvpsc/constraint.h"
 #include "libvpsc/variable.h"
-
-#include "libvpsc/isnan.h" /* Include last */
 
 using std::set;
 using std::vector;
@@ -121,8 +120,8 @@ struct Node {
     NodeSet *leftNeighbours, *rightNeighbours;
     Node(Variable *v, Rectangle *r, double p) 
         : v(v),r(r),pos(p),
-          firstAbove(NULL), firstBelow(NULL),
-          leftNeighbours(NULL), rightNeighbours(NULL)
+          firstAbove(nullptr), firstBelow(nullptr),
+          leftNeighbours(nullptr), rightNeighbours(nullptr)
      
     {
         COLA_ASSERT(r->width()<1e40);
@@ -132,11 +131,11 @@ struct Node {
         delete rightNeighbours;
     }
     void addLeftNeighbour(Node *u) {
-        COLA_ASSERT(leftNeighbours!=NULL);
+        COLA_ASSERT(leftNeighbours!=nullptr);
         leftNeighbours->insert(u);
     }
     void addRightNeighbour(Node *u) {
-        COLA_ASSERT(rightNeighbours!=NULL);
+        COLA_ASSERT(rightNeighbours!=nullptr);
         rightNeighbours->insert(u);
     }
     void setNeighbours(NodeSet *left, NodeSet *right) {
@@ -153,8 +152,8 @@ struct Node {
     }
 };
 bool CmpNodePos::operator() (const Node* u, const Node* v) const {
-    COLA_ASSERT(!isNaN(u->pos));
-    COLA_ASSERT(!isNaN(v->pos));
+    COLA_ASSERT(!std::isnan(u->pos));
+    COLA_ASSERT(!std::isnan(v->pos));
     if (u->pos < v->pos) {
         return true;
     }
@@ -214,9 +213,9 @@ int compare_events(const void *a, const void *b) {
         return 1;
     } else if(ea->pos < eb->pos) {
         return -1;
-    } else if(isNaN(ea->pos) != isNaN(ea->pos)) {
+    } else if(std::isnan(ea->pos) != std::isnan(ea->pos)) {
         /* See comment in CmpNodePos. */
-        return ( isNaN(ea->pos)
+        return ( std::isnan(ea->pos)
              ? -1
              : 1 );
     }
@@ -295,12 +294,12 @@ void generateXConstraints(const Rectangles& rs, const Variables& vars,
                 }
             } else {
                 Node *l=v->firstAbove, *r=v->firstBelow;
-                if(l!=NULL) {
+                if(l!=nullptr) {
                     double sep = (v->r->width()+l->r->width())/2.0;
                     cs.push_back(new Constraint(l->v,v->v,sep));
                     l->firstBelow=v->firstBelow;
                 }
-                if(r!=NULL) {
+                if(r!=nullptr) {
                     double sep = (v->r->width()+r->r->width())/2.0;
                     cs.push_back(new Constraint(v->v,r->v,sep));
                     r->firstAbove=v->firstAbove;
@@ -364,12 +363,12 @@ void generateYConstraints(const Rectangles& rs, const Variables& vars,
         } else {
             // Close event
             Node *l=v->firstAbove, *r=v->firstBelow;
-            if(l!=NULL) {
+            if(l!=nullptr) {
                 double sep = (v->r->height()+l->r->height())/2.0;
                 cs.push_back(new Constraint(l->v,v->v,sep));
                 l->firstBelow=v->firstBelow;
             }
-            if(r!=NULL) {
+            if(r!=nullptr) {
                 double sep = (v->r->height()+r->r->height())/2.0;
                 cs.push_back(new Constraint(v->v,r->v,sep));
                 r->firstAbove=v->firstAbove;
@@ -561,7 +560,7 @@ void Rectangle::routeAround(double x1, double y1, double x2, double y2,
  * @param rs the rectangles which will be moved to remove overlap
  */
 void removeoverlaps(Rectangles& rs) {
-    const set<unsigned> fixed;
+    const set<unsigned> fixed = set<unsigned>();
     removeoverlaps(rs,fixed);
 }
 #define ISNOTNAN(d) (d)==(d)
