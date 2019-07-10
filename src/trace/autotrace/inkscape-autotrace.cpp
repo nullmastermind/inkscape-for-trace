@@ -52,6 +52,26 @@ namespace Trace {
 
 namespace Autotrace {
 
+static guchar* to_3channels(GdkPixbuf* input) {
+    int imgsize = gdk_pixbuf_get_height(input) * gdk_pixbuf_get_width(input);
+    guchar *out = (guchar*)malloc(3 * imgsize);
+    int x=0;
+    guchar* pix = gdk_pixbuf_get_pixels (input);
+    int rs = gdk_pixbuf_get_rowstride (input);
+    for(int row=0;row<gdk_pixbuf_get_height(input);row++) {
+        for (int col=0;col<gdk_pixbuf_get_width(input);col++) {
+            char alpha = *(pix + row * rs + col * 4 + 3);
+            char white = 255 - alpha;
+            for(int chan=0;chan<3;chan++) {
+                guchar *pnew = (pix + row * rs + col * 3 + chan);
+                guchar *pold = (pix + row * rs + col * 4 + chan);
+                out[x++] = ((*pold) * alpha / 256 + white);
+            }
+        }
+    }
+    return out;
+}
+
 
 /**
  *
@@ -63,6 +83,8 @@ AutotraceTracingEngine::AutotraceTracingEngine()
 {
     /* get default parameters */
     opts = at_fitting_opts_new();
+    opts->background_color = at_color_new(255,255,255);
+    autotrace_init();
 }
 
 AutotraceTracingEngine::~AutotraceTracingEngine() { at_fitting_opts_free(opts); }
@@ -70,7 +92,12 @@ AutotraceTracingEngine::~AutotraceTracingEngine() { at_fitting_opts_free(opts); 
 
 
 // TODO
-Glib::RefPtr<Gdk::Pixbuf> AutotraceTracingEngine::preview(Glib::RefPtr<Gdk::Pixbuf> thePixbuf) { return thePixbuf; }
+Glib::RefPtr<Gdk::Pixbuf> AutotraceTracingEngine::preview(Glib::RefPtr<Gdk::Pixbuf> thePixbuf) { 
+  //auto x = thePixbuf.copy(); 
+  guchar *pb = to_3channels(thePixbuf->gobj());
+  return Gdk::Pixbuf::create_from_data(pb, thePixbuf->get_colorspace(), false, 8, thePixbuf->get_width(), thePixbuf->get_height(), (thePixbuf->get_width()*3));
+
+}
 
 /**
  *  This is the working method of this interface, and all
@@ -80,11 +107,14 @@ Glib::RefPtr<Gdk::Pixbuf> AutotraceTracingEngine::preview(Glib::RefPtr<Gdk::Pixb
  */
 std::vector<TracingEngineResult> AutotraceTracingEngine::trace(Glib::RefPtr<Gdk::Pixbuf> pixbuf)
 {
-    GdkPixbuf *pb = pixbuf->gobj();
+    GdkPixbuf *pb1 = pixbuf->gobj();
+    guchar *pb = to_3channels(pb1);
     
     at_bitmap *bitmap =
-        at_bitmap_new(gdk_pixbuf_get_width(pb), gdk_pixbuf_get_height(pb), gdk_pixbuf_get_n_channels(pb));
-    bitmap->bitmap = gdk_pixbuf_get_pixels(pb);
+//        at_bitmap_new(gdk_pixbuf_get_width(pb), gdk_pixbuf_get_height(pb), gdk_pixbuf_get_n_channels(pb));
+//    bitmap->bitmap = gdk_pixbuf_get_pixels(pb);
+    at_bitmap_new(gdk_pixbuf_get_width(pb1), gdk_pixbuf_get_height(pb1), 3);
+    bitmap->bitmap = pb;
     
     at_splines_type *splines = at_splines_new_full(bitmap, opts, NULL, NULL, NULL, NULL, NULL, NULL);
     // at_output_write_func wfunc = at_output_get_handler_by_suffix("svg");

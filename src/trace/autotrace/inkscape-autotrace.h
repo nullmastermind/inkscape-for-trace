@@ -69,7 +69,7 @@ class AutotraceTracingEngine : public TracingEngine {
      */
     int keepGoing;
 
-  private:
+  //private:
     // autotrace_param_t *autotraceParams;
     TraceType traceType;
     at_fitting_opts_type *opts;

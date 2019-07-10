@@ -151,7 +151,7 @@
                             <property name="homogeneous">True</property>
                             <child>
                               <object class="GtkStack" id="Stack_SS">
--                                <property name="visible-child-name" bind-source="CBT_SS" bind-property="active-id">SS_BC</property>
+-                                <property name="visible-child-name" bind-source="CBT_SS" bind-property="active-id"></property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <child>
@@ -363,7 +363,7 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="name">page0</property>
+                        <property name="name">SingleScan</property>
                         <property name="title" translatable="yes">Single scan</property>
                       </packing>
                     </child>

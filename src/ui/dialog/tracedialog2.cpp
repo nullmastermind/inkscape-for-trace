@@ -118,6 +118,7 @@ void TraceDialogImpl2::traceProcess(bool do_i_trace)
     // Inkscape::Trace::Autotrace::TraceType autotraceType;
 
     bool use_autotrace = false;
+    Inkscape::Trace::Autotrace::AutotraceTracingEngine ate; // TODO
 
     if (type == _("Brightness cutoff"))
       potraceType = Inkscape::Trace::Potrace::TRACE_BRIGHTNESS;
@@ -129,11 +130,15 @@ void TraceDialogImpl2::traceProcess(bool do_i_trace)
     {
       // autotraceType = Inkscape::Trace::Autotrace::TRACE_CENTERLINE
       use_autotrace = true;
+      ate.opts->color_count = 2;
     }
     else if (type == _("Centerline tracing (autotrace)"))
     {
       // autotraceType = Inkscape::Trace::Autotrace::TRACE_CENTERLINE
       use_autotrace = true;
+      ate.opts->color_count = 2;
+      ate.opts->centerline = true;
+      ate.opts->preserve_width = true;
     }
     else if (type == _("Brightness steps"))
       potraceType = Inkscape::Trace::Potrace::TRACE_BRIGHTNESS_MULTI;
@@ -145,6 +150,7 @@ void TraceDialogImpl2::traceProcess(bool do_i_trace)
     {
       // autotraceType = Inkscape::Trace::Autotrace::TRACE_CENTERLINE
       use_autotrace = true;
+      ate.opts->color_count = (int)MS_scans->get_value() + 1;
     }
     else 
     {
@@ -163,13 +169,13 @@ void TraceDialogImpl2::traceProcess(bool do_i_trace)
 
 
 
-    Inkscape::Trace::Autotrace::AutotraceTracingEngine ate; // TODO
+    //Inkscape::Trace::Autotrace::AutotraceTracingEngine ate; // TODO
     Inkscape::Trace::Depixelize::DepixelizeTracingEngine dte(RB_PA_voronoi->get_active() ? Inkscape::Trace::Depixelize::TraceType::TRACE_VORONOI : Inkscape::Trace::Depixelize::TraceType::TRACE_BSPLINES, PA_curves->get_value(), (int) PA_islands->get_value(), (int) PA_sparse1->get_value(), PA_sparse2->get_value() );
 
 
     Glib::RefPtr<Gdk::Pixbuf> pixbuf = tracer.getSelectedImage();
     if (pixbuf) {
-        Glib::RefPtr<Gdk::Pixbuf> preview = pte.preview(pixbuf);
+        Glib::RefPtr<Gdk::Pixbuf> preview = use_autotrace ? ate.preview(pixbuf) : pte.preview(pixbuf);
         if (preview) {
             int width = preview->get_width();
             int height = preview->get_height();
@@ -185,12 +191,16 @@ void TraceDialogImpl2::traceProcess(bool do_i_trace)
         }
     }
     if (do_i_trace){
-	if (use_autotrace)
-	    tracer.trace(&ate);
-	else if (choice_tab->get_current_page() == 0)
+        if (use_autotrace){
+	          tracer.trace(&ate);
+            printf("at\n");
+        } else if (choice_tab->get_current_page() == 0){
             tracer.trace(&pte);
-        else if (choice_tab->get_current_page() == 1)
+            printf("pt\n");
+        } else if (choice_tab->get_current_page() == 1){
             tracer.trace(&dte);
+            printf("dt\n");
+        }
     }
 
     if (desktop)
