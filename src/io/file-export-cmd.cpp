@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * File export from the command line. This code, greatly modified, use to be in main.cpp. It should
- * be replaced by code shared code shared with the file dialog (Gio::Actions?).
+ * be replaced by code shared with the file dialog (Gio::Actions?).
  *
  * Copyright (C) 2018 Tavmjong Bah
  *
