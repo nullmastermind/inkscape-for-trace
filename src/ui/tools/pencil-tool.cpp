@@ -734,6 +734,12 @@ PencilTool::removePowerStrokePreview()
     }
 }
 
+static inline double
+square(double const x)
+{
+    return x * x;
+}
+
 void 
 PencilTool::addPowerStrokePencil() 
 {
@@ -745,15 +751,6 @@ PencilTool::addPowerStrokePencil()
     Geom::Affine transform_coordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine();
     if (min > max){
         min = max;
-    }
-    if (!green_curve->is_unset()) {
-        this->_curve = green_curve->copy();
-        if (!red_curve->is_unset()) {
-            this->_curve->append_continuous( red_curve, 0.0625);
-        }
-    }
-    if (!this->_curve || this->_curve->is_unset()) {
-        this->_curve = nullptr;
     }
     double dezoomify_factor  = 0.05 * 1000/SP_EVENT_CONTEXT(this)->desktop->current_zoom();//\/100 we want 100% = 1;
     double last_pressure     = this->_wps.back();
@@ -775,11 +772,21 @@ PencilTool::addPowerStrokePencil()
     if (this->_curve && this->ps.size() > 1) {
         
         std::future_status status;
-        if (future.valid()) {
+        bool stop = false;
+        bool nofuture = false;
+        try {
             status = future.wait_for(std::chrono::seconds(0));
+        } catch (const std::future_error& e) {
+            stop = true;
+            if (e.code() == std::future_errc::no_state) {
+                nofuture = true;
+            } else {
+                std::cout << "Caught a future_error with code \"" << e.code()
+                << nofuture << future.valid() << "\"\nMessage: \"" << e.what() << "\"\n";
+            }
         }
-        if (!future.valid() || status == std::future_status::ready) {
-            if (status == std::future_status::ready) {
+        if (nofuture || status == std::future_status::ready) {
+            if (!stop && status == std::future_status::ready) {
                 const gchar *tmpid = "tmp_power_stroke_preview";
                 const gchar *id = "power_stroke_preview";
                 SPDocument * document = SP_ACTIVE_DOCUMENT;
@@ -791,10 +798,8 @@ PencilTool::addPowerStrokePencil()
                 using namespace Inkscape::LivePathEffect;
                 if (tmpelemref) {
                     bool failed = true;
-                    if (elemref) {
-                        if (SP_SHAPE(elemref)->getCurve() != SP_SHAPE(elemref)->getCurveBeforeLPE()) {
-                            failed = false;
-                        }  
+                    if (elemref->getRepr()->attribute("style") != "opacity:0") {
+                        failed = false;
                     }
                     SPObject *toremove =  failed ? elemref : tmpelemref;
                     SPObject *toretain = !failed ? elemref : tmpelemref;
@@ -814,14 +819,14 @@ PencilTool::addPowerStrokePencil()
                 }
             }
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            SPCurve *curve;
+            SPCurve *curve = new SPCurve();
             double tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 1.0, 100.0) * 0.4;
             bool simplify = prefs->getInt("/tools/freehand/pencil/simplify", 0);
             if(simplify){
                 double tol2 = prefs->getDoubleLimited("/tools/freehand/pencil/base-simplify", 25.0, 1.0, 100.0) * 0.4;
                 tol = std::min(tol,tol2);
             }
-            double tolerance_sq = 0.02 ;// * square(this->desktop->w2d().descrim() * tol) * exp(0.2 * tol - 2);
+            double tolerance_sq = 0.02 * square(this->desktop->w2d().descrim() * tol) * exp(0.2 * tol - 2);
             int n_points = this->ps.size();
             // worst case gives us a segment per point
             int max_segs = 4 * n_points;
@@ -835,12 +840,13 @@ PencilTool::addPowerStrokePencil()
                 }
             }
             Geom::Path path = curve->get_pathvector()[0];
+            delete curve;
             if (!path.empty()) {
                 Geom::Affine transform_coordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine().inverse();
                 path *= transform_coordinate;
                 powerStrokeInterpolate(path);
                 std::vector<Geom::Point> points_preview = this->points;
-                //points_preview.push_back(Geom::Point(path.size() - 1, points_preview[points_preview.size()-1][Geom::Y]));
+                points_preview.push_back(Geom::Point(path.size() - 1, points_preview[points_preview.size()-1][Geom::Y]));
                 future = std::async(std::launch::async, [path, points_preview] {
                     using namespace Inkscape::LivePathEffect;
                     SPDocument * document = SP_ACTIVE_DOCUMENT;
@@ -854,19 +860,21 @@ PencilTool::addPowerStrokePencil()
                     gchar * pvector_str = sp_svg_write_path(path);
                     if (pvector_str) {
                         pp->setAttribute("d" , pvector_str);
+                        pp->setAttribute("style", "opacity:0");
                         g_free(pvector_str);
                     }
                     pp->setAttribute("id", "power_stroke_preview");
                     Inkscape::GC::release(pp);
-                    SPShape * powerpreview = SP_SHAPE(SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->appendChildRepr(pp));
-                    sp_desktop_apply_style_tool(SP_ACTIVE_DESKTOP, pp, Glib::ustring("/tools/freehand/pencil").data(), false);
+                    SPShape *powerpreview = SP_SHAPE(SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->appendChildRepr(pp));
                     SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(powerpreview);
                     if (!lpeitem) {
                         return true;
                     }
                     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
                     Glib::ustring pref_path_pp = "/live_effects/powerstroke/powerpencil";
+                    Glib::ustring pref_path_ps = "/live_effects/powerstroke/powerpencilstyle";
                     prefs->setBool(pref_path_pp, true);
+                    prefs->setBool(pref_path_ps, true);
                     Effect::createAndApply(POWERSTROKE, SP_ACTIVE_DESKTOP->doc(), lpeitem);
                     Effect* lpe = lpeitem->getCurrentLPE();
                     Inkscape::LivePathEffect::LPEPowerStroke *pspreview = static_cast<LPEPowerStroke*>(lpe);
@@ -881,11 +889,15 @@ PencilTool::addPowerStrokePencil()
                         pspreview->offset_points.param_set_and_write_new_value(points_preview);
                         sp_lpe_item_enable_path_effects(lpeitem, true);
                     }
+                    if (powerpreview->getCurve() != powerpreview->getCurveBeforeLPE()) {
+                        pp->setAttribute("style", "fill:#888888;opacity:0.7;fill-rule:nonzero;stroke:none;");
+                    }
                     prefs->setBool(pref_path_pp, false);
+                    prefs->setBool(pref_path_ps, false);
                     return true;
                 });
             } else {
-                //std::cout << "stopped" << std::endl;
+                std::cout << "stopped" << std::endl;
             }
 
         }
@@ -915,12 +927,6 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/) {
             this->green_bpaths.clear();
         }
     }
-}
-
-static inline double
-square(double const x)
-{
-    return x * x;
 }
 
 void

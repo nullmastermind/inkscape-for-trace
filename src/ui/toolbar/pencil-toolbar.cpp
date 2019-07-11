@@ -209,9 +209,10 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
         if (freehandMode == 2 || !prefs->getInt("/tools/freehand/pencil/simplify", 0)) {
             _flatten_simplify->set_visible(false);
         }
-
-        /* Advanced shape options */
-        _shape_item->set_visible(!prefs->getBool("/tools/freehand/pencil/pressure", false));
+        if (!prefs->getBool(freehand_tool_name() + "/pressure", false)) {
+            /* Advanced shape options */
+            _shape_item->set_visible(!prefs->getBool("/tools/freehand/pencil/pressure", false));
+        }
     }
 }
 

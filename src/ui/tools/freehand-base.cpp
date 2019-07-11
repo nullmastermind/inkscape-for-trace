@@ -243,7 +243,7 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
             item->transform = transform_coordinate;
             SPShape *sp_shape = dynamic_cast<SPShape *>(item);
             if (sp_shape) {
-                SPCurve * c = sp_shape->getCurve();
+                SPCurve *c = sp_shape->getCurve();
                 if (!c) {
                     return;
                 }
@@ -285,8 +285,12 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
                     Geom::Path path = c->get_pathvector()[0];
                     if (!path.empty()) {
                         pt->powerStrokeInterpolate(path);
-                    } 
+                    }
+                    bool transform_stroke = prefs->getBool("/options/transform/stroke", true);
+                    prefs->setBool("/options/transform/stroke", true);
                     ps->offset_points.param_set_and_write_new_value(pt->points);
+                    ps->offset_points.param_transform_multiply(transform_coordinate.inverse(), false);
+                    prefs->setBool("/options/transform/stroke", transform_stroke);
                 }
                 prefs->setBool(pref_path_pp, false);
                 return;
