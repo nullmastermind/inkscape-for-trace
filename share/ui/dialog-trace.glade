@@ -37,10 +37,12 @@
     <property name="step_increment">0.20000000000000001</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="SS_AT_T">
-    <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
+  <object class="GtkAdjustment" id="SS_AT_ET_T">
+    <property name="lower">1</property>
+    <property name="upper">10</property>
+    <property name="value">2</property>
+    <property name="step_increment">0.1</property>
+    <property name="page_increment">1</property>
   </object>
   <object class="GtkAdjustment" id="SS_BC_T">
     <property name="upper">1</property>
@@ -55,8 +57,10 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkAdjustment" id="SS_CT_T">
-    <property name="upper">100</property>
+  <object class="GtkAdjustment" id="SS_AT_FI_T">
+    <property name="lower">1</property>
+    <property name="upper">20</property>
+    <property name="value">4</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
@@ -151,7 +155,7 @@
                             <property name="homogeneous">True</property>
                             <child>
                               <object class="GtkStack" id="Stack_SS">
--                                <property name="visible-child-name" bind-source="CBT_SS" bind-property="active-id"></property>
+                                <property name="visible-child-name" bind-source="CBT_SS" bind-property="active-id"></property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <child>
@@ -269,7 +273,7 @@
                                       <object class="GtkLabel">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">Autotrace ?</property>
+                                        <property name="label" translatable="yes">Filter iterations</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -281,8 +285,33 @@
                                       <object class="GtkSpinButton">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="adjustment">SS_AT_T</property>
-                                        <property name="digits">3</property>
+                                        <property name="adjustment">SS_AT_FI_T</property>
+                                        <property name="digits">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Error threshold</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSpinButton">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="adjustment">SS_AT_ET_T</property>
+                                        <property name="digits">1</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -301,11 +330,12 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="orientation">vertical</property>
+                                    
                                     <child>
                                       <object class="GtkLabel">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="label" translatable="yes">Centerline tries</property>
+                                        <property name="label" translatable="yes">Filter iterations</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -317,8 +347,33 @@
                                       <object class="GtkSpinButton">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="adjustment">SS_CT_T</property>
-                                        <property name="digits">3</property>
+                                        <property name="adjustment">SS_AT_FI_T</property>
+                                        <property name="digits">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Error threshold</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSpinButton">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="adjustment">SS_AT_ET_T</property>
+                                        <property name="digits">1</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>

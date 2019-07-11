@@ -66,7 +66,7 @@ class TraceDialogImpl2 : public TraceDialog {
 
     Glib::RefPtr<Gtk::Builder> builder;
 
-    Glib::RefPtr<Gtk::Adjustment> MS_scans, PA_curves, PA_islands, PA_sparse1, PA_sparse2, SS_AT_T, SS_BC_T, SS_CQ_T,
+    Glib::RefPtr<Gtk::Adjustment> MS_scans, PA_curves, PA_islands, PA_sparse1, PA_sparse2, SS_AT_ET_T, SS_AT_FI_T, SS_BC_T, SS_CQ_T,
         SS_CT_T, SS_ED_T, optimize, smooth, speckles;
     Gtk::ComboBoxText *CBT_SS, *CBT_MS;
     Gtk::CheckButton *CB_invert, *CB_MS_smooth, *CB_MS_stack, *CB_MS_rb, *CB_speckles, *CB_smooth, *CB_optimize,
@@ -156,6 +156,8 @@ void TraceDialogImpl2::traceProcess(bool do_i_trace)
     {
       g_warning("Should not happen!");
     }
+    ate.opts->filter_iterations = (int) SS_AT_FI_T->get_value();
+    ate.opts->error_threshold = SS_AT_ET_T->get_value();
 
     Inkscape::Trace::Potrace::PotraceTracingEngine pte(
         potraceType, CB_invert->get_active(), (int)SS_CQ_T->get_value(), SS_BC_T->get_value(),
@@ -237,7 +239,8 @@ void TraceDialogImpl2::onSetDefaults()
     PA_islands->set_value(5);
     PA_sparse1->set_value(4);
     PA_sparse2->set_value(1);
-    SS_AT_T->set_value(0);
+    SS_AT_FI_T->set_value(4);
+    SS_AT_ET_T->set_value(2);
     SS_BC_T->set_value(0.45);
     SS_CQ_T->set_value(64);
     SS_CT_T->set_value(0);
@@ -264,7 +267,7 @@ TraceDialogImpl2::TraceDialogImpl2()
     : TraceDialog()
 {
     const std::string req_widgets[] = { "MS_scans",    "PA_curves", "PA_islands",  "PA_sparse1", "PA_sparse2",
-                                        "SS_AT_T",     "SS_BC_T",   "SS_CQ_T",     "SS_CT_T",    "SS_ED_T",
+                                        "SS_AT_FI_T", "SS_AT_ET_T",     "SS_BC_T",   "SS_CQ_T",     "SS_CT_T",    "SS_ED_T",
                                         "optimize",    "smooth",    "speckles",    "CB_invert",  "CB_MS_smooth",
                                         "CB_MS_stack", "CB_MS_rb",  "CB_speckles", "CB_smooth",  "CB_optimize",
                                         /*"CB_live",*/ "CB_SIOX",   "CBT_SS",      "CBT_MS",     "B_RESET",
@@ -298,7 +301,8 @@ TraceDialogImpl2::TraceDialogImpl2()
     GET_O(PA_islands)
     GET_O(PA_sparse1)
     GET_O(PA_sparse2)
-    GET_O(SS_AT_T)
+    GET_O(SS_AT_FI_T)
+    GET_O(SS_AT_ET_T)
     GET_O(SS_BC_T)
     GET_O(SS_CQ_T)
     GET_O(SS_CT_T)
