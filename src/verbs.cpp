@@ -1261,10 +1261,6 @@ void SelectionVerb::perform(SPAction *action, void *data)
             break;
 #endif
 
-        case SP_VERB_SELECTION_PIXEL_ART:
-            INKSCAPE.dialogs_unhide();
-            dt->_dlg_mgr->showDialog("PixelArt");
-            break;
         case SP_VERB_SELECTION_CREATE_BITMAP:
             dt->selection->createBitmapCopy();
             break;
@@ -2779,9 +2775,6 @@ Verb *Verb::_base_verbs[] = {
                       N_("Create one or more paths from a bitmap by tracing it"), INKSCAPE_ICON("bitmap-trace")),
 #endif
 
-    new SelectionVerb(SP_VERB_SELECTION_PIXEL_ART, "SelectionPixelArt", N_("Trace Pixel Art..."),
-                      N_("Create paths using Kopf-Lischinski algorithm to vectorize pixel art"),
-                      INKSCAPE_ICON("pixelart-trace")),
     new SelectionVerb(SP_VERB_SELECTION_CREATE_BITMAP, "SelectionCreateBitmap", N_("Make a _Bitmap Copy"),
                       N_("Export selection to a bitmap and insert it into document"),
                       INKSCAPE_ICON("selection-make-bitmap-copy")),

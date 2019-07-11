@@ -129,7 +129,6 @@ set(ui_SRC
 	dialog/object-properties.cpp
 	dialog/objects.cpp
 	dialog/ocaldialogs.cpp
-	dialog/pixelartdialog.cpp
 	dialog/polar-arrange-tab.cpp
 	dialog/print-colors-preview-dialog.cpp
 	dialog/print.cpp
@@ -297,7 +296,6 @@ set(ui_SRC
 	dialog/objects.h
 	dialog/ocaldialogs.h
 	dialog/panel-dialog.h
-	dialog/pixelartdialog.h
 	dialog/polar-arrange-tab.h
 	dialog/print-colors-preview-dialog.h
 	dialog/print.h

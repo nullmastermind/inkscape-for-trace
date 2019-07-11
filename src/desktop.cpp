@@ -2050,7 +2050,6 @@ SPDesktop::show_dialogs()
     mapVerbPreference.insert(std::make_pair ("InkscapePreferences", "/dialogs/preferences") );
     mapVerbPreference.insert(std::make_pair ("TileDialog", "/dialogs/gridtiler") );
     mapVerbPreference.insert(std::make_pair ("Trace", "/dialogs/trace") );
-    mapVerbPreference.insert(std::make_pair ("PixelArt", "/dialogs/pixelart") );
     mapVerbPreference.insert(std::make_pair ("TextFont", "/dialogs/textandfont") );
     mapVerbPreference.insert(std::make_pair ("Export", "/dialogs/export") );
     mapVerbPreference.insert(std::make_pair ("XmlTree", "/dialogs/xml") );
