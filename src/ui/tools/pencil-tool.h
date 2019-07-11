@@ -52,6 +52,7 @@ public:
     void addPowerStrokePencil(SPCurve *& c);
     void addPowerStrokePencil();
     void removePowerStrokePreview();
+    void powerStrokeInterpolate(Geom::Path);
     Geom::Piecewise<Geom::D2<Geom::SBasis> > sketch_interpolation; // the current proposal from the sketched paths
     unsigned sketch_n; // number of sketches done
     static const std::string prefsPath;
@@ -69,20 +70,18 @@ private:
     bool _handleKeyPress(GdkEventKey const &event);
     bool _handleKeyRelease(GdkEventKey const &event);
     void _setStartpoint(Geom::Point const &p);
-    bool _powerStrokePreview(Geom::Path const path);
     void _setEndpoint(Geom::Point const &p);
     void _finishEndpoint();
     void _addFreehandPoint(Geom::Point const &p, guint state);
     void _fitAndSplit();
     void _interpolate();
-    void _powerstrokeInterpolate(bool apply);
     void _sketchInterpolate();
     void _extinput(GdkEvent *event);
     void _cancel();
     void _endpointSnap(Geom::Point &p, guint const state);
     std::vector<double> _wps;
     std::vector<Geom::Point> _points_pos;
-    std::vector<Geom::Point> _key_nodes;
+    std::vector<Geom::Point> _points_pressure;
     Geom::Point _last_point;
     double _previous_pressure;
     SPCurve * _curve;

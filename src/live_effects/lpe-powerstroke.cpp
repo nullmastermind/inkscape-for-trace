@@ -210,7 +210,7 @@ LPEPowerStroke::doBeforeEffect(SPLPEItem const *lpeItem)
 void
 LPEPowerStroke::doOnApply(SPLPEItem const* lpeitem)
 {
-    if (SP_IS_SHAPE(lpeitem) && offset_points.data().empty()) {
+    if (SP_IS_SHAPE(lpeitem)) {
         SPLPEItem* item = const_cast<SPLPEItem*>(lpeitem);
         std::vector<Geom::Point> points;
         Geom::PathVector const &pathv = pathv_to_linear_and_cubic_beziers(SP_SHAPE(lpeitem)->_curve->get_pathvector());
@@ -245,23 +245,28 @@ LPEPowerStroke::doOnApply(SPLPEItem const* lpeitem)
         sp_repr_css_attr_unref (css);
         
         item->updateRepr();
-        if (pathv.empty()) {
-            points.emplace_back(0.2,width );
-            points.emplace_back(0.5,width );
-            points.emplace_back(0.8,width );
-        } else {
-            Geom::Path const &path = pathv.front();
-            Geom::Path::size_type const size = path.size_default();
-            if (!path.closed()) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        Glib::ustring pref_path_pp = "/live_effects/powerstroke/powerpencil";
+        bool powerpencil = prefs->getBool(pref_path_pp, false);
+        if (!powerpencil) {
+            if (pathv.empty()) {
                 points.emplace_back(0.2,width );
+                points.emplace_back(0.5,width );
+                points.emplace_back(0.8,width );
+            } else {
+                Geom::Path const &path = pathv.front();
+                Geom::Path::size_type const size = path.size_default();
+                if (!path.closed()) {
+                    points.emplace_back(0.2,width );
+                }
+                points.emplace_back(0.5*size,width );
+                if (!path.closed()) {
+                    points.emplace_back(size - 0.2,width );
+                }
             }
-            points.emplace_back(0.5*size,width );
-            if (!path.closed()) {
-                points.emplace_back(size - 0.2,width );
-            }
+            offset_points.param_set_and_write_new_value(points);
         }
         offset_points.set_scale_width(scale_width);
-        offset_points.param_set_and_write_new_value(points);
     } else {
         if (!SP_IS_SHAPE(lpeitem)) {
             g_warning("LPE Powerstroke can only be applied to shapes (not groups).");

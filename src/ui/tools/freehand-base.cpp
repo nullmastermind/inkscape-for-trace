@@ -239,31 +239,15 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
         PencilTool *pt = SP_PENCIL_CONTEXT(dc);
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         if (dc->tablet_enabled) {
+            Geom::Affine transform_coordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine().inverse();
+            item->transform = transform_coordinate;
             SPShape *sp_shape = dynamic_cast<SPShape *>(item);
             if (sp_shape) {
                 SPCurve * c = sp_shape->getCurve();
                 if (!c) {
                     return;
                 }
-                Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
-                LPEPowerStroke* ps = nullptr;
-                pt->addPowerStrokePencil(c);
-                if (lpe) {
-                    ps = static_cast<LPEPowerStroke*>(lpe);
-                    gchar * pvector_str = sp_svg_write_path(c->get_pathvector());
-                    item->setAttribute("inkscape:original-d" , pvector_str);
-                    g_free(pvector_str);
-                } else {
-                    gchar * pvector_str = sp_svg_write_path(c->get_pathvector());
-                    item->setAttribute("d" , pvector_str);
-                    g_free(pvector_str);
-                }
-                if (ps && dc->sa) {
-                    ps->offset_points.param_set_and_write_new_value(pt->points);
-                    return;
-                }
                 if(pt->points.empty()){
-                    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
                     SPCSSAttr *css_item = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
                     const char *stroke_width = sp_repr_css_property(css_item, "stroke-width", "0");
                     double swidth;
@@ -272,19 +256,43 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
                     if (!swidth) {
                         swidth = swidth/2;
                     }
-                    points.emplace_back(0, swidth);
+                    pt->points.emplace_back(0, swidth);
                 }
-                Effect::createAndApply(POWERSTROKE, dc->desktop->doc(), item);
-                lpe = SP_LPE_ITEM(item)->getCurrentLPE();
-                ps = static_cast<LPEPowerStroke*>(lpe);
+                Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
+                LPEPowerStroke* ps = nullptr;
+                Glib::ustring pref_path_pp = "/live_effects/powerstroke/powerpencil";
+                prefs->setBool(pref_path_pp, true);
+                if (lpe) {
+                    ps = static_cast<LPEPowerStroke*>(lpe);
+                } 
+                if (!lpe || !ps) {
+                    Effect::createAndApply(POWERSTROKE, SP_ACTIVE_DESKTOP->doc(), item);
+                    Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
+                    ps = static_cast<LPEPowerStroke*>(lpe);
+                }
                 if (ps) {
+                    if (pt->sa) {
+                        std::vector<Geom::Point> sa_points;
+                        if (pt->sa->start) {
+                            sa_points = ps->offset_points.reverse_controlpoints(false);
+                        } else {
+                            sa_points = ps->offset_points.data();
+                        }
+                        sa_points.insert(sa_points.end(), pt->points.begin(), pt->points.end());
+                        pt->points = sa_points;
+                        sa_points.clear();
+                    }
+                    Geom::Path path = c->get_pathvector()[0];
+                    if (!path.empty()) {
+                        pt->powerStrokeInterpolate(path);
+                    } 
                     ps->offset_points.param_set_and_write_new_value(pt->points);
                 }
+                prefs->setBool(pref_path_pp, false);
                 return;
             }
         }
     }
-
     Effect::createAndApply(POWERSTROKE, dc->desktop->doc(), item);
     Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
 
@@ -379,21 +387,10 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             return;
         }
         bool shape_applied = false;
-        bool tabletpencil = false;
-        if (SP_IS_PENCIL_CONTEXT(dc)) {
-            if (dc->tablet_enabled) {
-                tabletpencil = true;
-                std::vector<Geom::Point> points;
-                spdc_apply_powerstroke_shape(points, dc, item);
-                shape_applied = true;
-                shape = NONE;
-                previous_shape_type = NONE;
-            }
-        }
         bool simplify = prefs->getInt(tool_name(dc) + "/simplify", 0);
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         guint mode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
-        if(!tabletpencil && simplify && mode != 2){
+        if(simplify && mode != 2){
             double tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 1.0, 100.0);
             tol = tol/(100.0*(102.0-tol));
             std::ostringstream ss;
@@ -401,11 +398,11 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             spdc_apply_simplify(ss.str(), dc, item);
             sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
         }
-        if (!tabletpencil && prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1) {
+        if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1) {
             Effect::createAndApply(SPIRO, dc->desktop->doc(), item);
         }
 
-        if (!tabletpencil && prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2) {
+        if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2) {
             Effect::createAndApply(BSPLINE, dc->desktop->doc(), item);
         }
         SPShape *sp_shape = dynamic_cast<SPShape *>(item);
@@ -421,6 +418,15 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         swidth = prefs->getDouble("/live_effect/power_stroke/width", swidth/2);
         if (!swidth) {
             swidth = swidth/2;
+        }
+        if (SP_IS_PENCIL_CONTEXT(dc)) {
+            if (dc->tablet_enabled) {
+                std::vector<Geom::Point> points;
+                spdc_apply_powerstroke_shape(points, dc, item);
+                shape_applied = true;
+                shape = NONE;
+                previous_shape_type = NONE;
+            }
         }
         
 #define SHAPE_LENGTH 10
