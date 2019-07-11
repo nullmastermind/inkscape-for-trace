@@ -957,6 +957,15 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
     if(_pdf_page)
         INKSCAPE.set_pdf_page(_pdf_page);
 
+    if (files.size() > 1 && !_file_export.export_filename.empty()) {
+        std::cerr << "ConcreteInkscapeApplication<Gtk::Application>::on_open: "
+                     "Can't use '--export-file' with multiple input files "
+                     "(output file would be overwritten for each input file). "
+                     "Please use '--export-type' instead and rename manually."
+                  << std::endl;
+        return;
+    }
+
     for (auto file : files) {
         // Open file
         SPDocument *document = document_open (file);
@@ -973,12 +982,20 @@ template<>
 void
 ConcreteInkscapeApplication<Gtk::Application>::on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint)
 {
-    std::cout << "on_open" << std::endl;
     on_startup2();
     if(_pdf_poppler)
         INKSCAPE.set_pdf_poppler(_pdf_poppler);
     if(_pdf_page)
         INKSCAPE.set_pdf_page(_pdf_page);
+
+    if (files.size() > 1 && !_file_export.export_filename.empty()) {
+        std::cerr << "ConcreteInkscapeApplication<Gtk::Application>::on_open: "
+                     "Can't use '--export-file' with multiple input files "
+                     "(output file would be overwritten for each input file). "
+                     "Please use '--export-type' instead and rename manually."
+                  << std::endl;
+        return;
+    }
 
     for (auto file : files) {
         if (_with_gui) {
