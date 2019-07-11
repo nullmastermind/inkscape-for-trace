@@ -67,7 +67,7 @@ class TraceDialogImpl2 : public TraceDialog {
     Glib::RefPtr<Gtk::Builder> builder;
 
     Glib::RefPtr<Gtk::Adjustment> MS_scans, PA_curves, PA_islands, PA_sparse1, PA_sparse2, SS_AT_ET_T, SS_AT_FI_T, SS_BC_T, SS_CQ_T,
-        SS_CT_T, SS_ED_T, optimize, smooth, speckles;
+        SS_ED_T, optimize, smooth, speckles;
     Gtk::ComboBoxText *CBT_SS, *CBT_MS;
     Gtk::CheckButton *CB_invert, *CB_MS_smooth, *CB_MS_stack, *CB_MS_rb, *CB_speckles, *CB_smooth, *CB_optimize,
         /* *CB_live,*/ *CB_SIOX;
@@ -210,19 +210,11 @@ void TraceDialogImpl2::traceProcess(bool do_i_trace)
 }
 
 void TraceDialogImpl2::abort()
-{ /*
+{ 
      SPDesktop *desktop = SP_ACTIVE_DESKTOP;
      if (desktop)
-         desktop->setWaitingCursor();
-
-     if (mainCancelButton)
-         mainCancelButton->set_sensitive(false)
-     if (mainOkButton)
-         mainOkButton->set_sensitive(true);
-
-     //### Make the abort() call to the tracer
+         desktop->clearWaitingCursor();
      tracer.abort();
- */
 }
 
 void TraceDialogImpl2::onSelectionModified(guint flags)
@@ -243,7 +235,6 @@ void TraceDialogImpl2::onSetDefaults()
     SS_AT_ET_T->set_value(2);
     SS_BC_T->set_value(0.45);
     SS_CQ_T->set_value(64);
-    SS_CT_T->set_value(0);
     SS_ED_T->set_value(.65);
     optimize->set_value(0.2);
     smooth->set_value(1);
@@ -267,7 +258,7 @@ TraceDialogImpl2::TraceDialogImpl2()
     : TraceDialog()
 {
     const std::string req_widgets[] = { "MS_scans",    "PA_curves", "PA_islands",  "PA_sparse1", "PA_sparse2",
-                                        "SS_AT_FI_T", "SS_AT_ET_T",     "SS_BC_T",   "SS_CQ_T",     "SS_CT_T",    "SS_ED_T",
+                                        "SS_AT_FI_T", "SS_AT_ET_T",     "SS_BC_T",   "SS_CQ_T",     "SS_ED_T",
                                         "optimize",    "smooth",    "speckles",    "CB_invert",  "CB_MS_smooth",
                                         "CB_MS_stack", "CB_MS_rb",  "CB_speckles", "CB_smooth",  "CB_optimize",
                                         /*"CB_live",*/ "CB_SIOX",   "CBT_SS",      "CBT_MS",     "B_RESET",
@@ -305,7 +296,6 @@ TraceDialogImpl2::TraceDialogImpl2()
     GET_O(SS_AT_ET_T)
     GET_O(SS_BC_T)
     GET_O(SS_CQ_T)
-    GET_O(SS_CT_T)
     GET_O(SS_ED_T)
     GET_O(optimize)
     GET_O(smooth)

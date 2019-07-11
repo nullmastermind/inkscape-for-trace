@@ -99,6 +99,8 @@ Glib::RefPtr<Gdk::Pixbuf> AutotraceTracingEngine::preview(Glib::RefPtr<Gdk::Pixb
 
 }
 
+int test_cancel (void* keepGoing){return !(* ((int*)keepGoing));}
+
 /**
  *  This is the working method of this interface, and all
  *  implementing classes.  Take a GdkPixbuf, trace it, and
@@ -116,7 +118,7 @@ std::vector<TracingEngineResult> AutotraceTracingEngine::trace(Glib::RefPtr<Gdk:
     at_bitmap_new(gdk_pixbuf_get_width(pb1), gdk_pixbuf_get_height(pb1), 3);
     bitmap->bitmap = pb;
     
-    at_splines_type *splines = at_splines_new_full(bitmap, opts, NULL, NULL, NULL, NULL, NULL, NULL);
+    at_splines_type *splines = at_splines_new_full(bitmap, opts, NULL, NULL, NULL, NULL, test_cancel, &keepGoing);
     // at_output_write_func wfunc = at_output_get_handler_by_suffix("svg");
     at_spline_writer *wfunc = at_output_get_handler_by_suffix("svg");
 
