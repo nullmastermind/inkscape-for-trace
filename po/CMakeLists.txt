@@ -14,7 +14,7 @@ endforeach(language)
 
 # update inkscape.pot
 set(_potFile ${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_PROJECT_NAME}.pot)
-set(xgettext_options -j --keyword=_ --keyword=N_ --keyword=Q_ --keyword=C_:1c,2 --keyword=NC_:1c,2 --msgid-bugs-address=inkscape-translator@lists.inkscape.org --strict --from-code=UTF-8 -ktranslatable -o ${_potFile})
+set(xgettext_options -j --keyword=_ --keyword=N_ --keyword=Q_ --keyword=C_:1c,2 --keyword=NC_:1c,2 --msgid-bugs-address=inkscape-translator@lists.inkscape.org --from-code=UTF-8 -ktranslatable -o ${_potFile})
 
 # Due to a bug in old xgettext versions, we cannot use '--its='.
 # Instead, we use GETTEXTDATADIR=. to refer to the po/its/*.its files.
@@ -39,7 +39,6 @@ add_custom_target(inkscape_pot BYPRODUCTS ${_potFile}
     COMMAND ${its_workaround} ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} ../share/ui/menus.xml
     # the following uses po/its/units.{loc, its}
     COMMAND ${its_workaround} ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} ../share/ui/units.xml
-    COMMAND sed -i 's/^\# File/\#: File/g' ${_potFile}
 
     COMMENT "Extract translatable messages to ${_potFile}"
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
