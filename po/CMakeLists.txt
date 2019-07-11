@@ -39,6 +39,7 @@ add_custom_target(inkscape_pot BYPRODUCTS ${_potFile}
     COMMAND ${its_workaround} ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} ../share/ui/menus.xml
     # the following uses po/its/units.{loc, its}
     COMMAND ${its_workaround} ${GETTEXT_XGETTEXT_EXECUTABLE} ${xgettext_options} ../share/ui/units.xml
+    COMMAND sed -i 's/^\# File/\#: File/g' ${_potFile}
 
     COMMENT "Extract translatable messages to ${_potFile}"
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
