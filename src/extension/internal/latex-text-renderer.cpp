@@ -42,7 +42,6 @@
 #include "extension/output.h"
 #include "extension/system.h"
 
-#include "inkscape.h"
 #include "inkscape-version.h"
 #include "io/sys.h"
 #include "document.h"
@@ -657,7 +656,7 @@ LaTeXTextRenderer::setupDocument(SPDocument *doc, bool pageBoundingBox, float bl
     if (pageBoundingBox) {
         d = Geom::Rect::from_xywh(Geom::Point(0,0), doc->getDimensions());
     } else {
-        Geom::OptRect bbox = base->desktopVisualBounds();
+        Geom::OptRect bbox = base->documentVisualBounds();
         if (!bbox) {
             g_message("CairoRenderer: empty bounding box.");
             return false;
@@ -670,17 +669,7 @@ LaTeXTextRenderer::setupDocument(SPDocument *doc, bool pageBoundingBox, float bl
     double scale = 1/(d.width());
     double _width = d.width() * scale;
     double _height = d.height() * scale;
-    push_transform( Geom::Scale(scale, scale) );
-
-    if (!pageBoundingBox)
-    {
-        push_transform( Geom::Translate( -d.min() ) );
-    }
-
-    // flip y-axis
-    if (SP_ACTIVE_DESKTOP) {
-        push_transform( SP_ACTIVE_DESKTOP->doc2dt() );
-    }
+    push_transform(Geom::Translate(-d.corner(3)) * Geom::Scale(scale, -scale));
 
     // write the info to LaTeX
     Inkscape::SVGOStringStream os;
