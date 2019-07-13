@@ -724,14 +724,16 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             gtk_stack_add_named((GtkStack *)grouper, holder, aux_toolboxes[i].type_name);
             sp_set_font_size_smaller( holder );
             gtk_widget_set_name( holder, aux_toolboxes[i].ui_name );
-
+            gtk_widget_show(sub_toolbox);
+            gtk_widget_show(holder);
         } else {
             g_warning("Could not create toolbox %s", aux_toolboxes[i].ui_name);
         }
     }
     gtk_container_add(GTK_CONTAINER(toolbox), grouper);
     gtk_stack_set_visible_child_name((GtkStack *)grouper, "/tools/select");
-    gtk_widget_show_all(grouper);
+    // do not use show_all to get good display of hidden widgets at start
+    gtk_widget_show(grouper);
 }
 
 void update_aux_toolbox(SPDesktop * /*desktop*/, ToolBase *eventcontext, GtkWidget *toolbox)
@@ -822,8 +824,6 @@ void ToolboxFactory::showAuxToolbox(GtkWidget *toolbox_toplevel)
         return;
     }
     gtk_widget_show(toolbox);
-
-    gtk_widget_show_all(shown_toolbox);
 }
 
 #define MODE_LABEL_WIDTH 70

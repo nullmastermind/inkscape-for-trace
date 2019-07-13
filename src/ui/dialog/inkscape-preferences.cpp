@@ -227,14 +227,6 @@ void InkscapePreferences::AddBaseSimplifySpinbutton(DialogPage &p, Glib::ustring
                        false );
 }
 
-void InkscapePreferences::AddPencilPowerStrokePressureStep(DialogPage &p, Glib::ustring const &prefs_path, gint def_value)
-{
-    PrefSpinButton* sb = Gtk::manage( new PrefSpinButton);
-    sb->init ( prefs_path + "/ps-step-pressure", 1, 100, 1, 10, def_value, true, false);
-    p.add_line( false, _("Pressure change for new knot:"), *sb, _("%"),
-                       _("Percentage increase / decrease of stylus pressure that is required to create a new PowerStroke knot."),
-                       false );
-}
 
 static void StyleFromSelectionToTool(Glib::ustring const &prefs_path, StyleSwatch *swatch)
 {
@@ -454,9 +446,6 @@ void InkscapePreferences::initPageTools()
     this->AddNewObjectsStyle(_page_pencil, "/tools/freehand/pencil");
     this->AddDotSizeSpinbutton(_page_pencil, "/tools/freehand/pencil", 3.0);
     this->AddBaseSimplifySpinbutton(_page_pencil, "/tools/freehand/pencil", 25.0);
-    _page_pencil.add_group_header( _("Pressure sensitivity settings"));
-    this->AddPencilPowerStrokePressureStep(_page_pencil, "/tools/freehand/pencil", 5);
-
     _page_pencil.add_group_header( _("Sketch mode"));
     _page_pencil.add_line( true, "", _pencil_average_all_sketches, "",
                             _("If on, the sketch result will be the normal average of all sketches made, instead of averaging the old result with the new sketch"));

@@ -32,6 +32,7 @@
 #include "live_effects/lpe-powerstroke.h"
 
 #include "svg/svg.h"
+#include "svg/svg-color.h"
 
 #include "object/sp-item-group.h"
 #include "object/sp-path.h"
@@ -231,70 +232,93 @@ static void spdc_paste_curve_as_freehand_shape(Geom::PathVector const &newpath, 
     lpe->getRepr()->setAttribute("prop_scale", os.str().c_str());
 }
 
-static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, FreehandBase *dc, SPItem *item)
+void 
+spdc_apply_style(SPObject *obj)
+{
+    SPCSSAttr *css = sp_repr_css_attr_new ();
+    if (obj->style) {
+        if (obj->style->stroke.isPaintserver()) {
+            SPPaintServer * server = obj->style->getStrokePaintServer();
+            if (server) {
+                Glib::ustring str;
+                str += "url(#";
+                str += server->getId();
+                str += ")";
+                sp_repr_css_set_property (css, "fill", str.c_str());
+            }
+        } else if (obj->style->stroke.isColor()) {
+            gchar c[64];
+            sp_svg_write_color (c, sizeof(c), obj->style->stroke.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(obj->style->stroke_opacity.value)));
+            sp_repr_css_set_property (css, "fill", c);
+        } else {
+            sp_repr_css_set_property (css, "fill", "none");
+        }
+    } else {
+        sp_repr_css_unset_property (css, "fill");
+    }
+
+    sp_repr_css_set_property(css, "fill-rule", "nonzero");        
+    sp_repr_css_set_property(css, "stroke", "none");
+    
+    sp_desktop_apply_css_recursive(obj, css, true);
+    sp_repr_css_attr_unref (css);
+}
+static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, FreehandBase *dc, SPItem *item, gint maxrecursion = 0)
 {
     using namespace Inkscape::LivePathEffect;
 
     if (SP_IS_PENCIL_CONTEXT(dc)) {
         PencilTool *pt = SP_PENCIL_CONTEXT(dc);
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        SPDocument *document = SP_ACTIVE_DOCUMENT;
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+        if (!document || !desktop) {
+            return;
+        }
         if (dc->tablet_enabled) {
-            Geom::Affine transform_coordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine().inverse();
-            item->transform = transform_coordinate;
-            SPShape *sp_shape = dynamic_cast<SPShape *>(item);
-            if (sp_shape) {
-                SPCurve *c = sp_shape->getCurve();
-                if (!c) {
-                    return;
-                }
-                if(pt->points.empty()){
-                    SPCSSAttr *css_item = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
-                    const char *stroke_width = sp_repr_css_property(css_item, "stroke-width", "0");
-                    double swidth;
-                    sp_svg_number_read_d(stroke_width, &swidth);
-                    swidth = prefs->getDouble("/live_effect/power_stroke/width", swidth/2);
-                    if (!swidth) {
-                        swidth = swidth/2;
-                    }
-                    pt->points.emplace_back(0, swidth);
-                }
-                Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
-                LPEPowerStroke* ps = nullptr;
-                Glib::ustring pref_path_pp = "/live_effects/powerstroke/powerpencil";
-                prefs->setBool(pref_path_pp, true);
-                if (lpe) {
-                    ps = static_cast<LPEPowerStroke*>(lpe);
-                } 
-                if (!lpe || !ps) {
-                    Effect::createAndApply(POWERSTROKE, SP_ACTIVE_DESKTOP->doc(), item);
-                    Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
-                    ps = static_cast<LPEPowerStroke*>(lpe);
-                }
-                if (ps) {
-                    if (pt->sa) {
-                        std::vector<Geom::Point> sa_points;
-                        if (pt->sa->start) {
-                            sa_points = ps->offset_points.reverse_controlpoints(false);
-                        } else {
-                            sa_points = ps->offset_points.data();
+            SPObject *elemref = nullptr;
+            if ((elemref = document->getObjectById("power_stroke_preview"))) {
+                sp_lpe_item_update_patheffect(SP_LPE_ITEM(elemref), false, true);
+                if (SP_SHAPE(elemref)->getCurve() != pt->curvepressure) {
+                    elemref->getRepr()->setAttribute("style", nullptr);
+                    SPObject *successor = dynamic_cast<SPObject *>(elemref);
+                    sp_desktop_apply_style_tool(desktop, successor->getRepr(), Glib::ustring("/tools/freehand/pencil").data(), false);
+                    spdc_apply_style(successor);
+                    sp_lpe_item_enable_path_effects(SP_LPE_ITEM(item), false);
+                    item->getRepr()->setAttribute("style", elemref->getRepr()->attribute("style"));
+                    item->getRepr()->setAttribute("inkscape:original-d", elemref->getRepr()->attribute("inkscape:original-d"));
+                    SP_LPE_ITEM(item)->set(SP_ATTR_INKSCAPE_PATH_EFFECT, elemref->getRepr()->attribute("inkscape:path-effect"));
+                    sp_lpe_item_enable_path_effects(SP_LPE_ITEM(item), true);
+                    sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, true);
+                    //successor->deleteObject(true);
+                    //successor = nullptr;
+                } else {
+                    using namespace Inkscape::LivePathEffect;
+                    Effect* lpe = SP_LPE_ITEM(elemref)->getCurrentLPE();
+                    if (lpe) {
+                        SP_LPE_ITEM(elemref)->removeCurrentPathEffect(true);
+                        LivePathEffectObject * lpeobj = lpe->getLPEObj();
+                        if (lpeobj) {
+                            SP_OBJECT(lpeobj)->deleteObject(true);
+                            lpeobj = nullptr;
                         }
-                        sa_points.insert(sa_points.end(), pt->points.begin(), pt->points.end());
-                        pt->points = sa_points;
-                        sa_points.clear();
                     }
-                    Geom::Path path = c->get_pathvector()[0];
-                    if (!path.empty()) {
-                        pt->powerStrokeInterpolate(path);
+                    elemref->deleteObject(true);
+                    elemref = nullptr;
+                    maxrecursion ++;
+                    if (maxrecursion < 5) {
+                        pt->addPowerStrokePencil(true);
+                        spdc_apply_powerstroke_shape(points, dc, item, maxrecursion);
                     }
-                    bool transform_stroke = prefs->getBool("/options/transform/stroke", true);
-                    prefs->setBool("/options/transform/stroke", true);
-                    ps->offset_points.param_set_and_write_new_value(pt->points);
-                    ps->offset_points.param_transform_multiply(transform_coordinate.inverse(), false);
-                    prefs->setBool("/options/transform/stroke", transform_stroke);
                 }
-                prefs->setBool(pref_path_pp, false);
-                return;
+            } else {
+                maxrecursion ++;
+                if (maxrecursion < 5) {
+                    pt->addPowerStrokePencil(true);
+                    spdc_apply_powerstroke_shape(points, dc, item, maxrecursion);
+                }
             }
+            return;
         }
     }
     Effect::createAndApply(POWERSTROKE, dc->desktop->doc(), item);
@@ -349,8 +373,8 @@ static void spdc_apply_simplify(std::string threshold, FreehandBase *dc, SPItem 
     lpe->getRepr()->setAttribute("threshold", threshold);
     lpe->getRepr()->setAttribute("smooth_angles", "360");
     lpe->getRepr()->setAttribute("helper_size", "0");
-    lpe->getRepr()->setAttribute("simplifyindividualpaths", "false");
-    lpe->getRepr()->setAttribute("simplifyJustCoalesce", "false");
+    lpe->getRepr()->setAttribute("simplify_individual_paths", "false");
+    lpe->getRepr()->setAttribute("simplify_just_coalesce", "false");
 }
 
 enum shapeType { NONE, TRIANGLE_IN, TRIANGLE_OUT, ELLIPSE, CLIPBOARD, BEND_CLIPBOARD, LAST_APPLIED };

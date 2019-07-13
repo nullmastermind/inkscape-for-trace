@@ -11,14 +11,13 @@
 #define SEEN_PENCIL_CONTEXT_H
 
 
-#include "live_effects/lpe-powerstroke.h"
 #include "ui/tools/freehand-base.h"
 
 #include <2geom/piecewise.h>
 #include <2geom/d2.h>
 #include <2geom/sbasis.h>
 #include <2geom/pathvector.h>
-#include <future>
+// #include <future>
 
 class SPShape;
 
@@ -49,13 +48,12 @@ public:
     Geom::Point p[16];
     std::vector<Geom::Point> ps;
     std::vector<Geom::Point> points;
-    void addPowerStrokePencil(SPCurve *& c);
-    void addPowerStrokePencil();
-    void removePowerStrokePreview();
+    void addPowerStrokePencil(bool force);
     void powerStrokeInterpolate(Geom::Path);
     Geom::Piecewise<Geom::D2<Geom::SBasis> > sketch_interpolation; // the current proposal from the sketched paths
     unsigned sketch_n; // number of sketches done
     static const std::string prefsPath;
+    SPCurve * curvepressure;
     const std::string& getPrefsPath() override;
 
 protected:
@@ -85,13 +83,11 @@ private:
     Geom::Point _last_point;
     double _previous_pressure;
     SPCurve * _curve;
-    SPShape *_powerpreview;
-    Inkscape::LivePathEffect::LPEPowerStroke * _pspreview;
     Geom::Point _req_tangent;
     bool _is_drawing;
     PencilState _state;
     gint _npoints;
-    std::future<bool> future;
+    // std::future<bool> future;
 };
 
 }

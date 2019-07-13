@@ -53,7 +53,8 @@ private:
     Gtk::ToggleToolButton *_pressure_item;
     UI::Widget::SpinButtonToolItem *_minpressure;
     UI::Widget::SpinButtonToolItem *_maxpressure;
-
+    UI::Widget::SpinButtonToolItem *_pressurestep;
+    
     XML::Node *_repr;
     Gtk::ToolButton *_flatten_spiro_bspline;
     Gtk::ToolButton *_flatten_simplify;
@@ -61,12 +62,14 @@ private:
     Gtk::ToolItem *_shape_item;
     Gtk::ComboBoxText *_shape_combo;
 
+
     Gtk::ToggleToolButton *_simplify;
 
     bool _freeze;
 
     Glib::RefPtr<Gtk::Adjustment> _minpressure_adj;
     Glib::RefPtr<Gtk::Adjustment> _maxpressure_adj;
+    Glib::RefPtr<Gtk::Adjustment> _pressurestep_adj;
     Glib::RefPtr<Gtk::Adjustment> _tolerance_adj;
 
     void add_freehand_mode_toggle(bool tool_is_pencil);
@@ -74,6 +77,7 @@ private:
     Glib::ustring const freehand_tool_name();
     void minpressure_value_changed();
     void maxpressure_value_changed();
+    void pressurestep_value_changed();
     void use_pencil_pressure();
     void tolerance_value_changed();
     void add_advanced_shape_options(bool tool_is_pencil);

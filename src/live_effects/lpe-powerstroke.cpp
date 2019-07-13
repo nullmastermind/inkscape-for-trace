@@ -207,6 +207,39 @@ LPEPowerStroke::doBeforeEffect(SPLPEItem const *lpeItem)
 {
     offset_points.set_scale_width(scale_width);
 }
+
+void 
+LPEPowerStroke::applyStyle(SPLPEItem *lpeitem)
+{
+    SPCSSAttr *css = sp_repr_css_attr_new ();
+    if (lpeitem->style) {
+        if (lpeitem->style->stroke.isPaintserver()) {
+            SPPaintServer * server = lpeitem->style->getStrokePaintServer();
+            if (server) {
+                Glib::ustring str;
+                str += "url(#";
+                str += server->getId();
+                str += ")";
+                sp_repr_css_set_property (css, "fill", str.c_str());
+            }
+        } else if (lpeitem->style->stroke.isColor()) {
+            gchar c[64];
+            sp_svg_write_color (c, sizeof(c), lpeitem->style->stroke.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(lpeitem->style->stroke_opacity.value)));
+            sp_repr_css_set_property (css, "fill", c);
+        } else {
+            sp_repr_css_set_property (css, "fill", "none");
+        }
+    } else {
+        sp_repr_css_unset_property (css, "fill");
+    }
+
+    sp_repr_css_set_property(css, "fill-rule", "nonzero");        
+    sp_repr_css_set_property(css, "stroke", "none");
+    
+    sp_desktop_apply_css_recursive(lpeitem, css, true);
+    sp_repr_css_attr_unref (css);
+}
+
 void
 LPEPowerStroke::doOnApply(SPLPEItem const* lpeitem)
 {
@@ -216,42 +249,11 @@ LPEPowerStroke::doOnApply(SPLPEItem const* lpeitem)
         Geom::PathVector const &pathv = pathv_to_linear_and_cubic_beziers(SP_SHAPE(lpeitem)->_curve->get_pathvector());
         double width = (lpeitem && lpeitem->style) ? lpeitem->style->stroke_width.computed / 2 : 1.;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        Glib::ustring pref_path_ps = "/live_effects/powerstroke/powerpencilstyle";
         Glib::ustring pref_path_pp = "/live_effects/powerstroke/powerpencil";
         bool powerpencil = prefs->getBool(pref_path_pp, false);
-        bool powerpencilstyle = prefs->getBool(pref_path_ps, false);
-        if (!powerpencilstyle) {
-            SPCSSAttr *css = sp_repr_css_attr_new ();
-            if (lpeitem->style) {
-                if (lpeitem->style->stroke.isPaintserver()) {
-                    SPPaintServer * server = lpeitem->style->getStrokePaintServer();
-                    if (server) {
-                        Glib::ustring str;
-                        str += "url(#";
-                        str += server->getId();
-                        str += ")";
-                        sp_repr_css_set_property (css, "fill", str.c_str());
-                    }
-                } else if (lpeitem->style->stroke.isColor()) {
-                    gchar c[64];
-                    sp_svg_write_color (c, sizeof(c), lpeitem->style->stroke.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(lpeitem->style->stroke_opacity.value)));
-                    sp_repr_css_set_property (css, "fill", c);
-                } else {
-                    sp_repr_css_set_property (css, "fill", "none");
-                }
-            } else {
-                sp_repr_css_unset_property (css, "fill");
-            }
-
-            sp_repr_css_set_property(css, "fill-rule", "nonzero");        
-            sp_repr_css_set_property(css, "stroke", "none");
-            
-            sp_desktop_apply_css_recursive(item, css, true);
-            sp_repr_css_attr_unref (css);
-            
-            item->updateRepr();
-        }
         if (!powerpencil) {
+            applyStyle(item);
+            item->updateRepr();
             if (pathv.empty()) {
                 points.emplace_back(0.2,width );
                 points.emplace_back(0.5,width );
