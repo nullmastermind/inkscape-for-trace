@@ -110,15 +110,12 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
             _pressure_item = add_toggle_button(_("Use pressure input"),
                                                _("Use pressure input"));
             _pressure_item->set_icon_name(INKSCAPE_ICON("draw-use-pressure"));
-            bool oldPressureMode = prefs->getIntLimited("/tools/freehand/pencil/freehand-mode", 0, 0, 3) == 3;
-            bool pressure = prefs->getBool(freehand_tool_name() + "/pressure", oldPressureMode);
+            bool pressure = prefs->getBool(freehand_tool_name() + "/pressure", false);
             if (oldPressureMode && pressure) {
                 prefs->setBool(freehand_tool_name() + "/pressure", true);
             }
             _pressure_item->set_active(pressure);
             _pressure_item->signal_toggled().connect(sigc::mem_fun(*this, &PencilToolbar::use_pencil_pressure));
-            // always show
-            add(*_pressure_item);
         }
         /* min pressure */
         {

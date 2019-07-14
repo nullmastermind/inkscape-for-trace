@@ -947,13 +947,7 @@ PencilTool::powerStrokeInterpolate(Geom::Path path) {
         {
             tmp_points.push_back(pp);
             prev = pp;
-            std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
         }
-        std::cout << pp << std::endl;
-        std::cout << step << std::endl;
-        std::cout << path.size() << std::endl;
-        std::cout << i << std::endl;
-        std::cout << ":::::::::::::::::::" << std::endl;
         ++i;
     }
     this->points = tmp_points;
