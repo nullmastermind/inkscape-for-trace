@@ -356,7 +356,7 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
                         //   whether we're going into freehand mode or not
                         this->ps.push_back(this->p[0]);
                         if (tablet_enabled) {
-                            this->_wps.push_back(this->pressure/10);
+                            this->_wps.push_back(this->pressure);
                         }
                     }
                     this->_addFreehandPoint(p, mevent.state);
@@ -904,7 +904,7 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/) {
         this->_fitAndSplit();
         this->ps.push_back(p);
         if (tablet_enabled) {
-            this->_wps.push_back(this->pressure/10);
+            this->_wps.push_back(this->pressure);
             this->addPowerStrokePencil(false);
             sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr);
             for (auto i:this->green_bpaths) {
@@ -924,7 +924,7 @@ PencilTool::powerStrokeInterpolate(Geom::Path path) {
     using Geom::X;
     using Geom::Y;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    double step = prefs->getDoubleLimited("/tools/freehand/pencil/pressurestep", 5.0, 0.0, 100.0)/100.0;
+    double step = prefs->getDoubleLimited("/tools/freehand/pencil/pressurestep", 5.0, 0.0, 100.0);
     double min  = prefs->getIntLimited("/tools/freehand/pencil/minpressure", 10, 1, 100) / 100.0;
     double max  = prefs->getIntLimited("/tools/freehand/pencil/maxpressure", 40, 1, 100) / 100.0;
     if (min > max){

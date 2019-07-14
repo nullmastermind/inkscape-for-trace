@@ -39,6 +39,7 @@
 #include "object/sp-rect.h"
 #include "object/sp-use.h"
 #include "style.h"
+#include "id-clash.h"
 
 #include "ui/clipboard.h"
 #include "ui/control-manager.h"
@@ -278,20 +279,16 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
         if (dc->tablet_enabled) {
             SPObject *elemref = nullptr;
             if ((elemref = document->getObjectById("power_stroke_preview"))) {
-                sp_lpe_item_update_patheffect(SP_LPE_ITEM(elemref), false, true);
                 if (SP_SHAPE(elemref)->getCurve() != pt->curvepressure) {
                     elemref->getRepr()->setAttribute("style", nullptr);
-                    SPObject *successor = dynamic_cast<SPObject *>(elemref);
+                    SPItem *successor = dynamic_cast<SPItem *>(elemref);
                     sp_desktop_apply_style_tool(desktop, successor->getRepr(), Glib::ustring("/tools/freehand/pencil").data(), false);
                     spdc_apply_style(successor);
-                    sp_lpe_item_enable_path_effects(SP_LPE_ITEM(item), false);
-                    item->getRepr()->setAttribute("style", elemref->getRepr()->attribute("style"));
-                    item->getRepr()->setAttribute("inkscape:original-d", elemref->getRepr()->attribute("inkscape:original-d"));
-                    SP_LPE_ITEM(item)->set(SP_ATTR_INKSCAPE_PATH_EFFECT, elemref->getRepr()->attribute("inkscape:path-effect"));
-                    sp_lpe_item_enable_path_effects(SP_LPE_ITEM(item), true);
-                    sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, true);
-                    //successor->deleteObject(true);
-                    //successor = nullptr;
+                    item->deleteObject(true);
+                    item = successor;
+                    dc->selection->set(item);
+                    item->setLocked(false);
+                    rename_id(SP_OBJECT(item), "path-1");
                 } else {
                     using namespace Inkscape::LivePathEffect;
                     Effect* lpe = SP_LPE_ITEM(elemref)->getCurrentLPE();
@@ -451,7 +448,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             if (dc->tablet_enabled) {
                 std::vector<Geom::Point> points;
                 spdc_apply_powerstroke_shape(points, dc, item);
-                shape_applied = true;
+                shape_applied = false;
                 shape = NONE;
                 previous_shape_type = NONE;
             }
@@ -921,7 +918,6 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
                      dc->white_item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
                 }
                 spdc_check_for_and_apply_waiting_LPE(dc, dc->white_item, c, false);
-                dc->selection->set(dc->white_item);
             }
         }
         if (!dc->white_item) {
