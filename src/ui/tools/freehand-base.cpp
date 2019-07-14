@@ -31,15 +31,15 @@
 #include "live_effects/lpe-simplify.h"
 #include "live_effects/lpe-powerstroke.h"
 
-#include "svg/svg.h"
 #include "svg/svg-color.h"
+#include "svg/svg.h"
 
+#include "id-clash.h"
 #include "object/sp-item-group.h"
 #include "object/sp-path.h"
 #include "object/sp-rect.h"
 #include "object/sp-use.h"
 #include "style.h"
-#include "id-clash.h"
 
 #include "ui/clipboard.h"
 #include "ui/control-manager.h"
@@ -233,38 +233,40 @@ static void spdc_paste_curve_as_freehand_shape(Geom::PathVector const &newpath, 
     lpe->getRepr()->setAttribute("prop_scale", os.str().c_str());
 }
 
-void 
-spdc_apply_style(SPObject *obj)
+void spdc_apply_style(SPObject *obj)
 {
-    SPCSSAttr *css = sp_repr_css_attr_new ();
+    SPCSSAttr *css = sp_repr_css_attr_new();
     if (obj->style) {
         if (obj->style->stroke.isPaintserver()) {
-            SPPaintServer * server = obj->style->getStrokePaintServer();
+            SPPaintServer *server = obj->style->getStrokePaintServer();
             if (server) {
                 Glib::ustring str;
                 str += "url(#";
                 str += server->getId();
                 str += ")";
-                sp_repr_css_set_property (css, "fill", str.c_str());
+                sp_repr_css_set_property(css, "fill", str.c_str());
             }
         } else if (obj->style->stroke.isColor()) {
             gchar c[64];
-            sp_svg_write_color (c, sizeof(c), obj->style->stroke.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(obj->style->stroke_opacity.value)));
-            sp_repr_css_set_property (css, "fill", c);
+            sp_svg_write_color(
+                c, sizeof(c),
+                obj->style->stroke.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(obj->style->stroke_opacity.value)));
+            sp_repr_css_set_property(css, "fill", c);
         } else {
-            sp_repr_css_set_property (css, "fill", "none");
+            sp_repr_css_set_property(css, "fill", "none");
         }
     } else {
-        sp_repr_css_unset_property (css, "fill");
+        sp_repr_css_unset_property(css, "fill");
     }
 
-    sp_repr_css_set_property(css, "fill-rule", "nonzero");        
+    sp_repr_css_set_property(css, "fill-rule", "nonzero");
     sp_repr_css_set_property(css, "stroke", "none");
-    
+
     sp_desktop_apply_css_recursive(obj, css, true);
-    sp_repr_css_attr_unref (css);
+    sp_repr_css_attr_unref(css);
 }
-static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, FreehandBase *dc, SPItem *item, gint maxrecursion = 0)
+static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, FreehandBase *dc, SPItem *item,
+                                         gint maxrecursion = 0)
 {
     using namespace Inkscape::LivePathEffect;
 
@@ -282,7 +284,8 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
                 if (SP_SHAPE(elemref)->getCurve() != pt->curvepressure) {
                     elemref->getRepr()->setAttribute("style", nullptr);
                     SPItem *successor = dynamic_cast<SPItem *>(elemref);
-                    sp_desktop_apply_style_tool(desktop, successor->getRepr(), Glib::ustring("/tools/freehand/pencil").data(), false);
+                    sp_desktop_apply_style_tool(desktop, successor->getRepr(),
+                                                Glib::ustring("/tools/freehand/pencil").data(), false);
                     spdc_apply_style(successor);
                     item->deleteObject(true);
                     item = successor;
@@ -291,10 +294,10 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
                     rename_id(SP_OBJECT(item), "path-1");
                 } else {
                     using namespace Inkscape::LivePathEffect;
-                    Effect* lpe = SP_LPE_ITEM(elemref)->getCurrentLPE();
+                    Effect *lpe = SP_LPE_ITEM(elemref)->getCurrentLPE();
                     if (lpe) {
                         SP_LPE_ITEM(elemref)->removeCurrentPathEffect(true);
-                        LivePathEffectObject * lpeobj = lpe->getLPEObj();
+                        LivePathEffectObject *lpeobj = lpe->getLPEObj();
                         if (lpeobj) {
                             SP_OBJECT(lpeobj)->deleteObject(true);
                             lpeobj = nullptr;
@@ -302,14 +305,14 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
                     }
                     elemref->deleteObject(true);
                     elemref = nullptr;
-                    maxrecursion ++;
+                    maxrecursion++;
                     if (maxrecursion < 5) {
                         pt->addPowerStrokePencil(true);
                         spdc_apply_powerstroke_shape(points, dc, item, maxrecursion);
                     }
                 }
             } else {
-                maxrecursion ++;
+                maxrecursion++;
                 if (maxrecursion < 5) {
                     pt->addPowerStrokePencil(true);
                     spdc_apply_powerstroke_shape(points, dc, item, maxrecursion);
@@ -453,7 +456,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                 previous_shape_type = NONE;
             }
         }
-        
+
 #define SHAPE_LENGTH 10
 #define SHAPE_HEIGHT 10
 

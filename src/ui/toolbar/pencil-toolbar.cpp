@@ -107,13 +107,9 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
     if (pencil_mode) {
         /* Use pressure */
         {
-            _pressure_item = add_toggle_button(_("Use pressure input"),
-                                               _("Use pressure input"));
+            _pressure_item = add_toggle_button(_("Use pressure input"), _("Use pressure input"));
             _pressure_item->set_icon_name(INKSCAPE_ICON("draw-use-pressure"));
             bool pressure = prefs->getBool(freehand_tool_name() + "/pressure", false);
-            if (oldPressureMode && pressure) {
-                prefs->setBool(freehand_tool_name() + "/pressure", true);
-            }
             _pressure_item->set_active(pressure);
             _pressure_item->signal_toggled().connect(sigc::mem_fun(*this, &PencilToolbar::use_pencil_pressure));
         }
@@ -141,14 +137,16 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
         {
             auto pressurestep_val = prefs->getDouble("/tools/freehand/pencil/pressurestep", 5);
             _pressurestep_adj = Gtk::Adjustment::create(pressurestep_val, 0., 100, 1.0, 0.0);
-            _pressurestep = Gtk::manage(new UI::Widget::SpinButtonToolItem("pencil-pressurestep", _("Knot gap:"), _pressurestep_adj, 0, 0));
+            _pressurestep = Gtk::manage(
+                new UI::Widget::SpinButtonToolItem("pencil-pressurestep", _("Knot gap:"), _pressurestep_adj, 0, 0));
             _pressurestep->set_tooltip_text(_("Pressure steps for new knot"));
             _pressurestep->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
-            _pressurestep_adj->signal_value_changed().connect(sigc::mem_fun(*this, &PencilToolbar::pressurestep_value_changed));
+            _pressurestep_adj->signal_value_changed().connect(
+                sigc::mem_fun(*this, &PencilToolbar::pressurestep_value_changed));
             add(*_pressurestep);
         }
 
-        
+
 
         add(* Gtk::manage(new Gtk::SeparatorToolItem()));
 
@@ -341,8 +339,7 @@ PencilToolbar::maxpressure_value_changed()
     prefs->setDouble( "/tools/freehand/pencil/maxpressure", _maxpressure_adj->get_value());
 }
 
-void
-PencilToolbar::pressurestep_value_changed()
+void PencilToolbar::pressurestep_value_changed()
 {
     // quit if run by the attr_changed listener
     if (_freeze) {
@@ -350,7 +347,7 @@ PencilToolbar::pressurestep_value_changed()
     }
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/freehand/pencil/pressurestep", _pressurestep_adj->get_value());
+    prefs->setDouble("/tools/freehand/pencil/pressurestep", _pressurestep_adj->get_value());
 }
 
 void
@@ -371,7 +368,7 @@ PencilToolbar::use_pencil_pressure() {
         }
     } else {
         guint freehandMode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
-    
+
         _minpressure->set_visible(false);
         _maxpressure->set_visible(false);
         _pressurestep->set_visible(false);

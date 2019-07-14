@@ -208,36 +208,37 @@ LPEPowerStroke::doBeforeEffect(SPLPEItem const *lpeItem)
     offset_points.set_scale_width(scale_width);
 }
 
-void 
-LPEPowerStroke::applyStyle(SPLPEItem *lpeitem)
+void LPEPowerStroke::applyStyle(SPLPEItem *lpeitem)
 {
-    SPCSSAttr *css = sp_repr_css_attr_new ();
+    SPCSSAttr *css = sp_repr_css_attr_new();
     if (lpeitem->style) {
         if (lpeitem->style->stroke.isPaintserver()) {
-            SPPaintServer * server = lpeitem->style->getStrokePaintServer();
+            SPPaintServer *server = lpeitem->style->getStrokePaintServer();
             if (server) {
                 Glib::ustring str;
                 str += "url(#";
                 str += server->getId();
                 str += ")";
-                sp_repr_css_set_property (css, "fill", str.c_str());
+                sp_repr_css_set_property(css, "fill", str.c_str());
             }
         } else if (lpeitem->style->stroke.isColor()) {
             gchar c[64];
-            sp_svg_write_color (c, sizeof(c), lpeitem->style->stroke.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(lpeitem->style->stroke_opacity.value)));
-            sp_repr_css_set_property (css, "fill", c);
+            sp_svg_write_color(
+                c, sizeof(c),
+                lpeitem->style->stroke.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(lpeitem->style->stroke_opacity.value)));
+            sp_repr_css_set_property(css, "fill", c);
         } else {
-            sp_repr_css_set_property (css, "fill", "none");
+            sp_repr_css_set_property(css, "fill", "none");
         }
     } else {
-        sp_repr_css_unset_property (css, "fill");
+        sp_repr_css_unset_property(css, "fill");
     }
 
-    sp_repr_css_set_property(css, "fill-rule", "nonzero");        
+    sp_repr_css_set_property(css, "fill-rule", "nonzero");
     sp_repr_css_set_property(css, "stroke", "none");
-    
+
     sp_desktop_apply_css_recursive(lpeitem, css, true);
-    sp_repr_css_attr_unref (css);
+    sp_repr_css_attr_unref(css);
 }
 
 void
@@ -256,17 +257,17 @@ LPEPowerStroke::doOnApply(SPLPEItem const* lpeitem)
             item->updateRepr();
             if (pathv.empty()) {
                 points.emplace_back(0.2,width );
-                points.emplace_back(0.5,width );
-                points.emplace_back(0.8,width );
+                points.emplace_back(0.5, width);
+                points.emplace_back(0.8, width);
             } else {
                 Geom::Path const &path = pathv.front();
                 Geom::Path::size_type const size = path.size_default();
                 if (!path.closed()) {
-                    points.emplace_back(0.2,width );
+                    points.emplace_back(0.2, width);
                 }
-                points.emplace_back(0.5*size,width );
+                points.emplace_back(0.5 * size, width);
                 if (!path.closed()) {
-                    points.emplace_back(size - 0.2,width );
+                    points.emplace_back(size - 0.2, width);
                 }
             }
             offset_points.param_set_and_write_new_value(points);
@@ -765,7 +766,7 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
     }
     if (path_out.empty()) {
         return path_in;
-        //doEffect_path (path_in);
+        // doEffect_path (path_in);
     }
     return path_out;
 }

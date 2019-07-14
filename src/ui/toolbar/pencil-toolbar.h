@@ -54,7 +54,7 @@ private:
     UI::Widget::SpinButtonToolItem *_minpressure;
     UI::Widget::SpinButtonToolItem *_maxpressure;
     UI::Widget::SpinButtonToolItem *_pressurestep;
-    
+
     XML::Node *_repr;
     Gtk::ToolButton *_flatten_spiro_bspline;
     Gtk::ToolButton *_flatten_simplify;
