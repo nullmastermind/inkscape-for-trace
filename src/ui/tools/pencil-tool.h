@@ -79,7 +79,7 @@ private:
     void _endpointSnap(Geom::Point &p, guint const state);
     std::vector<double> _wps;
     std::vector<Geom::Point> _points_pos;
-    std::vector<Geom::Point> _points_pressure;
+    std::vector<double> _pressure_data;
     Geom::Point _last_point;
     double _previous_pressure;
     SPCurve * _curve;

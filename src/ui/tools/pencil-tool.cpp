@@ -494,7 +494,7 @@ bool PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
                     this->ps.clear();
                     this->_wps.clear();
                     this->_points_pos.clear();
-                    this->_points_pressure.clear();
+                    this->_pressure_data.clear();
                     this->_last_point = Geom::Point();
                     this->_previous_pressure = 0.0;
                     if (this->green_anchor) {
@@ -725,7 +725,7 @@ void PencilTool::addPowerStrokePencil(bool force)
     double pressure_computed = (pressure_shrunk * dezoomify_factor) / 5.0;
     this->_last_point        = this->ps.back();
     this->_last_point       *= transform_coordinate.inverse();
-    this->_points_pressure.push_back(Geom::Point(0, pressure_computed));
+    this->_pressure_data.push_back(pressure_computed);
     this->_points_pos.push_back(this->_last_point);
     if (this->_curve && this->ps.size() > 1) {
         // Example og work with std::future
@@ -825,13 +825,9 @@ void PencilTool::addPowerStrokePencil(bool force)
                 Glib::ustring pref_path = "/live_effects/simplify/smooth_angles";
                 bool valid = prefs->getEntry(pref_path).isValid();
                 if (!valid) {
-                    lpe->getRepr()->setAttribute("smooth_angles", "360");
+                    lpe->getRepr()->setAttribute("smooth_angles", "0");
                 }
                 lpe->getRepr()->setAttribute("threshold", threshold.str());
-                lpe->getRepr()->setAttribute("steps", "1");
-                lpe->getRepr()->setAttribute("helper_size", "0");
-                lpe->getRepr()->setAttribute("simplify_individual_paths", "false");
-                lpe->getRepr()->setAttribute("simplify_just_coalesce", "false");
             }
             sp_lpe_item_update_patheffect(lpeitem, false, true);
             curvepressure = powerpreview->getCurve();
@@ -935,7 +931,7 @@ void PencilTool::powerStrokeInterpolate(Geom::Path path)
     for (auto pospoint : this->_points_pos) {
         Geom::Point pp = pospoint;
         pp[Geom::X] = (path.size() / (double)this->_points_pos.size()) * i;
-        pp[Geom::Y] = this->_points_pressure[i][Geom::Y];
+        pp[Geom::Y] = this->_pressure_data[i];
         if (this->_points_pos.size() - 1 == i ||
             (!Geom::are_near(prev[Geom::X], pp[Geom::X], 0.2) && !Geom::are_near(prev[Geom::Y], pp[Geom::Y], step))) {
             tmp_points.push_back(pp);
@@ -1107,7 +1103,7 @@ void PencilTool::_sketchInterpolate() {
 
     this->ps.clear();
     this->points.clear();
-    this->_points_pressure.clear();
+    this->_pressure_data.clear();
     this->_wps.clear();
 }
 
