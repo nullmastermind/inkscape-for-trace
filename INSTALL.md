@@ -47,6 +47,15 @@ Report all bugs and ideas to that sub project.
 
 [Inkscape Extensions](https://gitlab.com/inkscape/extensions/)
 
+They are available as a sub-module which can be updated independently:
+
+```sh
+git submodule update --remote
+```
+
+This will update the module to the latest version and you will see the
+extensions directory is now changes in the git status. So be mindful of that.
+
 Build Options
 -------------
 
