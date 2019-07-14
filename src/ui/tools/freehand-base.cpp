@@ -291,6 +291,7 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
                     item = successor;
                     dc->selection->set(item);
                     item->setLocked(false);
+                    dc->white_item = item;
                     rename_id(SP_OBJECT(item), "path-1");
                 } else {
                     using namespace Inkscape::LivePathEffect;
@@ -451,7 +452,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             if (dc->tablet_enabled) {
                 std::vector<Geom::Point> points;
                 spdc_apply_powerstroke_shape(points, dc, item);
-                shape_applied = false;
+                shape_applied = true;
                 shape = NONE;
                 previous_shape_type = NONE;
             }
@@ -618,7 +619,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                 sp_repr_css_set_property (css, "fill", cfill);
             }
             sp_repr_css_set_property (css, "stroke", "none");
-            sp_desktop_apply_css_recursive(item, css, true);
+            sp_desktop_apply_css_recursive(dc->white_item, css, true);
             sp_repr_css_attr_unref(css);
             return;
         }
@@ -926,6 +927,7 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
         if (!dc->white_item) {
             // Attach repr
             SPItem *item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
+            dc->white_item = item;
             //Bend needs the transforms applied after, Other effects best before
             spdc_check_for_and_apply_waiting_LPE(dc, item, c, true);
             Inkscape::GC::release(repr);
