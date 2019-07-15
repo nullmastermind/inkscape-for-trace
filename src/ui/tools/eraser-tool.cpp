@@ -651,7 +651,7 @@ void EraserTool::set_to_accumulated() {
 
             this->repr = repr;
         }
-        SPObject * top_layer = desktop->layer_manager->nthChildOf(desktop->layers->currentRoot(), 0);
+        SPObject * top_layer = desktop->currentRoot();
         SPItem *item_repr = SP_ITEM(top_layer->appendChildRepr(this->repr));
         Inkscape::GC::release(this->repr);
         item_repr->updateRepr();
@@ -781,8 +781,11 @@ void EraserTool::set_to_accumulated() {
                                         Inkscape::XML::Node *dup_clip = clip_data->duplicate(xml_doc);
                                         if (dup_clip) {
                                             SPItem * dup_clip_obj = SP_ITEM(item_repr->parent->appendChildRepr(dup_clip));
+                                            Inkscape::GC::release(dup_clip);
                                             if (dup_clip_obj) {
-                                                dup_clip_obj->doWriteTransform(item->transform);
+                                                dup_clip_obj->transform *=
+                                                    item->getRelativeTransform(SP_ITEM(item_repr->parent));
+                                                dup_clip_obj->updateRepr();
                                                 clip_path->deleteObject(true);
                                                 selection->raiseToTop(true);
                                                 selection->add(dup_clip);
