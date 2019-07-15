@@ -10,10 +10,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: Incscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-07-11 20:37+0200\n"
-"PO-Revision-Date: 2019-05-23 18:46+0200\n"
+"PO-Revision-Date: 2019-07-14 21:59+0200\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: \n"
 "Language: hr\n"
@@ -1123,7 +1123,7 @@ msgstr "Strip krema"
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
 msgid "Non-Realistic 3D Shaders"
-msgstr "Nerealno 3D sjenjčanje"
+msgstr "Nerealistično 3D sjenjčanje"
 
 #: ../share/filters/filters.svg.h:428
 msgid "Comics shader with creamy waves transparency"
@@ -1138,7 +1138,7 @@ msgid ""
 "Creates colorizable blotches which smoothly flow over the edges of the lines "
 "at their crossings"
 msgstr ""
-"Stvara obojene pjege s glatkim prijelazom preko ruba linija, koje se sijeku"
+"Stvara obojene pjege s glatkim prijelazom preko ruba linija, koje se križu"
 
 #: ../share/filters/filters.svg.h:434
 msgid "Dark and Glow"
@@ -1645,7 +1645,7 @@ msgstr "Poboljšaj i precrtaj rubove oko posteriziranih područja"
 
 #: ../share/filters/filters.svg.h:666
 msgid "Cross Noise Poster"
-msgstr "Poster s ukriženim šumom"
+msgstr "Poster s ukrižnim šumom"
 
 #: ../share/filters/filters.svg.h:668
 msgid "Overlay with a small scale screen like noise"
@@ -1653,7 +1653,7 @@ msgstr "Prekrij s malom količinom smetnji, nalik šumovima na ekranu"
 
 #: ../share/filters/filters.svg.h:670
 msgid "Cross Noise Poster B"
-msgstr "Poster B s ukriženim šumom"
+msgstr "Poster B s ukrižnim šumom"
 
 #: ../share/filters/filters.svg.h:672
 msgid "Adds a small scale screen like noise locally"
@@ -2847,17 +2847,17 @@ msgstr "Kameleon 3"
 #: ../share/palettes/palettes.h:173
 msgctxt "Palette"
 msgid "Orange 1"
-msgstr "Naranča 1"
+msgstr "Narančasta 1"
 
 #: ../share/palettes/palettes.h:174
 msgctxt "Palette"
 msgid "Orange 2"
-msgstr "Naranča 2"
+msgstr "Narančasta 2"
 
 #: ../share/palettes/palettes.h:175
 msgctxt "Palette"
 msgid "Orange 3"
-msgstr "Naranča 3"
+msgstr "Narančasta 3"
 
 #: ../share/palettes/palettes.h:176
 msgctxt "Palette"
@@ -4049,6 +4049,8 @@ msgid ""
 "background-color <hexadezimal>: the color of the background that should be "
 "ignored, for example FFFFFF; default is no background color."
 msgstr ""
+"background-color <heksadecimalno>: boja pozadine koja se treba zanemariti, "
+"npr. FFFFFF; standardno je bez boje pozadine."
 
 #
 # File: ../src/3rdparty/autotrace/autotrace.h, line: 120
@@ -4057,6 +4059,8 @@ msgid ""
 "charcode <unsigned>: code of character to load from GF file, allowed are "
 "0..255; default is the first character in font."
 msgstr ""
+"kȏd slovnog znaka <nedodijeljen>: kȏd znaka koji se treba učitati iz GF "
+"datoteke, dozvoljeno je 0..255; standardno je prvi znak u fontu."
 
 #
 # File: ../src/3rdparty/autotrace/autotrace.h, line: 125
@@ -4066,6 +4070,9 @@ msgid ""
 "does not work on grayscale, allowed are 1..256; default is 0, that means not "
 "color reduction is done."
 msgstr ""
+"broj boja <nedodijeljen>: broj boja na koji se bitmap smanjuje, ne radi sa "
+"sivim tonovim, dozvoljeno je 1..256; standardno je 0, to znači, da se broj "
+"boja ne smanjuje."
 
 #
 # File: ../src/3rdparty/autotrace/autotrace.h, line: 131
@@ -4075,6 +4082,9 @@ msgid ""
 "than this, it is considered a corner, even if it is within `corner-surround' "
 "pixels of another corner; default is 60. "
 msgstr ""
+"kut-uvijek-prag <kut-u-stupnjevima>: ako je kut pri pikselu manji od toga, "
+"on se smatra kutom, čak i ako je unutar „corner-surround” piksela drugog "
+"kuta; zadano je 60. "
 
 #
 # File: ../src/3rdparty/autotrace/autotrace.h, line: 137
@@ -4083,6 +4093,8 @@ msgid ""
 "corner-surround <unsigned>: number of pixels on either side of a point to "
 "consider when determining if that point is a corner; default is 4. "
 msgstr ""
+"kut-okolina <neoznačeno>: broj piksela na obje strane točke koje treba uzeti "
+"u obzir pri određivanju je li ta točka predstavlja kut; zadano je 4. "
 
 #
 # File: ../src/3rdparty/autotrace/autotrace.h, line: 143
@@ -4092,6 +4104,8 @@ msgid ""
 "successor(s) meet at an angle smaller than this, it's a corner; default is "
 "100. "
 msgstr ""
+"kut-prag <kut-u-stupnjevima>: ako se piksel, njegovi prethodni i njegovi "
+"nasljedni susreću pod kutom koji je manji od toga, to je kut; zadano je 100. "
 
 #
 # File: ../src/3rdparty/autotrace/autotrace.h, line: 149
@@ -4100,6 +4114,8 @@ msgid ""
 "error-threshold <real>: subdivide fitted curves that are off by more pixels "
 "than this; default is 2.0. "
 msgstr ""
+"greška-prag <realni broj>: podijeli krivulje koje su udaljene više od "
+"ovoliko piksela; zadano je 2,0. "
 
 #
 # File: ../src/3rdparty/autotrace/autotrace.h, line: 154
@@ -4108,6 +4124,8 @@ msgid ""
 "filter-iterations <unsigned>: smooth the curve this many times before "
 "fitting; default is 4."
 msgstr ""
+"filtar-ponavljanje <neoznačeno>: zagladi krivulju ovoliko puta prije "
+"poklapanja; zadano je 4."
 
 #
 # File: ../src/3rdparty/autotrace/autotrace.h, line: 159
@@ -4117,6 +4135,9 @@ msgid ""
 "than this, weighted by the square of the curve length, keep it a straight "
 "line even if it is a list with curves; default is .01. "
 msgstr ""
+"linija-vraćanje-prag <realni broj>: ako je krivulja bliža ravnoj liniji od "
+"ove, ponderirana kvadratom duljine krivulje, zadrži je ravnom linijom čak i "
+"ako je to popis s krivuljama; zadano je ,01. "
 
 #
 # File: ../src/3rdparty/autotrace/autotrace.h, line: 165
@@ -4126,6 +4147,9 @@ msgid ""
 "straight line defined by its endpoints,then output a straight line; default "
 "is 1. "
 msgstr ""
+"linija-prag <realni broj>: ako krivulja nije više od ovoliko udaljena od "
+"ravne crte definirana njezinim krajnjim točkama, tad ispiši ravnu liniju; "
+"zadano je 1. "
 
 #
 # File: ../src/3rdparty/autotrace/autotrace.h, line: 171
@@ -4134,6 +4158,7 @@ msgid ""
 "remove-adjacent-corners: remove corners that are adjacent; default doesn't "
 "remove."
 msgstr ""
+"ukloni-susjedne-kutove: ukloni susjedne kutove; zadano je da ne uklanja."
 
 #
 # File: ../src/3rdparty/autotrace/autotrace.h, line: 176
@@ -4142,30 +4167,37 @@ msgid ""
 "tangent-surround <unsigned>: number of points on either side of a point to "
 "consider when computing the tangent at that point;  default is 3."
 msgstr ""
+"tangenta-okolina <neoznačeno>: broj točaka na obje strane točke koje treba "
+"uzeti u obzir pri izračunavanju tangente na toj točci; zadano je 3."
 
 #
 # File: ../src/3rdparty/autotrace/autotrace.h, line: 182
 #: ../src/3rdparty/autotrace/autotrace.h:182
 msgid "despeckle-level <unsigned>: 0..20; default is no despeckling. "
 msgstr ""
+"redukcija točkastog šuma-razina <neoznačeno>: 0 do 20; zadano je bez "
+"redukcije. "
 
 #
 # File: ../src/3rdparty/autotrace/autotrace.h, line: 186
 #: ../src/3rdparty/autotrace/autotrace.h:186
 msgid "despeckle-tightness <real>: 0.0..8.0; default is 2.0. "
 msgstr ""
+"redukcija točkastog šuma-obuhvaćeno područje<realni broj>: 0,0 do 8,0; "
+"zadano je 2,0. "
 
 #
 # File: ../src/3rdparty/autotrace/autotrace.h, line: 190
 #: ../src/3rdparty/autotrace/autotrace.h:190
 msgid "noise-removal <real>: 1.0..0.0; default is 0.99. "
-msgstr ""
+msgstr "uklanjanje šuma <realan>: 1.0..0.0; standardno je 0,99. "
 
 #
 # File: ../src/3rdparty/autotrace/autotrace.h, line: 194
 #: ../src/3rdparty/autotrace/autotrace.h:194
 msgid "centerline: trace a character's centerline, rather than its outline. "
 msgstr ""
+"središnja linija: precrtaj središnju liniju znaka, umjesto njegove konture. "
 
 #
 # File: ../src/3rdparty/autotrace/autotrace.h, line: 198
@@ -4174,26 +4206,30 @@ msgid ""
 "preserve-width: whether to preserve linewith with centerline fitting; "
 "default doesn't preserve."
 msgstr ""
+"zadrži-širinu: treba li sačuvati crtu kad se poklapa središnja linija; "
+"zadano je da ne čuva."
 
 #
 # File: ../src/3rdparty/autotrace/autotrace.h, line: 203
 #: ../src/3rdparty/autotrace/autotrace.h:203
 msgid "width-weight-factor <real>: weight factor for fitting the linewidth."
 msgstr ""
+"faktor širine-debljine <realan>: faktor debljine za usklađivanje širine "
+"linije."
 
 #
 # File: ../src/3rdparty/autotrace/color.c, line: 53
 #: ../src/3rdparty/autotrace/color.c:53
 #, c-format
 msgid "color string is too short: %s"
-msgstr ""
+msgstr "znakovni niz boje je pre kratak: %s"
 
 #
 # File: ../src/3rdparty/autotrace/color.c, line: 61
 #: ../src/3rdparty/autotrace/color.c:61
 #, c-format
 msgid "wrong char in color string: %c"
-msgstr ""
+msgstr "krivi znak u znakovnom nizu boje: %c"
 
 #: ../src/context-fns.cpp:45 ../src/context-fns.cpp:74
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to draw on it."
@@ -4248,7 +4284,7 @@ msgstr "Isho_dište Y:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1355
 #: ../src/ui/dialog/inkscape-preferences.cpp:1380
 msgid "Y coordinate of grid origin"
-msgstr "Y koordinata ishodište mreže"
+msgstr "Y koordinata ishodišta mreže"
 
 #: ../src/display/canvas-axonomgrid.cpp:273 ../src/display/canvas-grid.cpp:668
 msgid "Spacing _Y:"
@@ -7209,7 +7245,7 @@ msgstr "Krom efekt s prilagođenim rubovima i zrnatosti"
 
 #: ../src/extension/internal/filter/paint.h:233
 msgid "Cross Engraving"
-msgstr "Graviranje, ukriženo"
+msgstr "Graviranje, ukrižno"
 
 #: ../src/extension/internal/filter/paint.h:235
 #: ../src/extension/internal/filter/paint.h:338
@@ -8562,7 +8598,7 @@ msgstr "<b>Tenzor</b> mrežnog gradijenta"
 
 #: ../src/gradient-drag.cpp:556
 msgid "Added patch row or column"
-msgstr "Dodan je umetak reda ili stupca"
+msgstr "Dodan je odjelni redak ili stupac"
 
 #: ../src/gradient-drag.cpp:799
 msgid "Merge gradient handles"
@@ -8663,16 +8699,15 @@ msgstr "Prekinuti linkovi biti će postavljeni na mjesto u postojećoj datoteci.
 # File: ../src/inkscape-application.cpp, line: 526
 #: ../src/inkscape-application.cpp:526
 msgid "file1 [file2 [fileN]]"
-msgstr ""
+msgstr "datoteka1 [datoteka2 [datotekaN]]"
 
 #
 # File: ../src/inkscape-application.cpp, line: 527
 #: ../src/inkscape-application.cpp:527
 msgid "Process (or open) one or more files."
-msgstr ""
+msgstr "Obradi (ili otvori) jednu ili više datoeka."
 
 #: ../src/inkscape-application.cpp:528
-#, fuzzy
 msgid "Examples:"
 msgstr "Primjeri:"
 
@@ -8680,133 +8715,119 @@ msgstr "Primjeri:"
 # File: ../src/inkscape-application.cpp, line: 529
 #: ../src/inkscape-application.cpp:529
 msgid "Export input SVG (%1) to PDF (%2) format:"
-msgstr ""
+msgstr "Izvezi ulazni SVG (%1) u PDF (%2) format:"
 
 #
 # File: ../src/inkscape-application.cpp, line: 531
 #: ../src/inkscape-application.cpp:531
 msgid "Export input files (%1) to PNG format keeping original name (%2):"
 msgstr ""
+"Izvezi ulazni SVG (%1) u PNG format, zadržavajući pri tome originalni naziv "
+"(%2):"
 
 #
 # File: ../src/inkscape-application.cpp, line: 533
 #: ../src/inkscape-application.cpp:533
 msgid "See %1 and %2 for more details."
-msgstr ""
+msgstr "Pogledaj %1 i %2 za daljnje detalje."
 
 #: ../src/inkscape-application.cpp:536
-#, fuzzy
 msgid "Print Inkscape version"
-msgstr "Ispis: Inkscape verzija."
+msgstr "Ispiši Inkscape verziju"
 
 #: ../src/inkscape-application.cpp:537
-#, fuzzy
 msgid "Print system extension directory"
-msgstr "Ispis: Direktorij s proširenjima."
+msgstr "Ispiši direktorij s proširenjima sustava"
 
 #: ../src/inkscape-application.cpp:540
-#, fuzzy
 msgid "File import"
-msgstr "Heliodrom"
+msgstr "Uvoz datoteke"
 
 #
 # File: ../src/inkscape-application.cpp, line: 541
 #: ../src/inkscape-application.cpp:541
 msgid "Read input file from standard input (stdin)"
-msgstr ""
+msgstr "Učitaj ulaznu datoteku iz standardnog ulaza (stdin)"
 
 #: ../src/inkscape-application.cpp:542
-#, fuzzy
 msgid "PDF page number to import"
-msgstr "Otvori: PDF stranica za uvoz"
+msgstr "Broj PDF stranice za uvoz"
 
 #: ../src/inkscape-application.cpp:542
 msgid "PAGE"
 msgstr "STRANICA"
 
 #
-# File: ../src/inkscape-application.cpp, line: 495
+# File: ../src/inkscape-application.cpp, line: 543
 #: ../src/inkscape-application.cpp:543
 msgid "Use poppler when importing via commandline"
-msgstr ""
+msgstr "Koristi poppler prilikom uvoza putem naredbenog retka"
 
 #: ../src/inkscape-application.cpp:544
-#, fuzzy
 msgid ""
 "Method used to convert pre-0.92 document dpi, if needed: [none|scale-viewbox|"
 "scale-document]"
 msgstr ""
-"Otvori: Metoda za konvertiranje dpi-veličina za dokumente, stvorenih ranijim "
-"verzijama Inkscapea od 0.92. Ako je potrebno: [none|scale-viewbox|scale-"
-"document]."
+"Metoda za konvertiranje dpi-veličina za dokumente, stvorenih ranijim "
+"verzijama od 0.92. Ako je potrebno: [none|scale-viewbox|scale-document]."
 
 #: ../src/inkscape-application.cpp:545
-#, fuzzy
 msgid "Do not fix pre-0.92 document's text baseline spacing on opening"
 msgstr ""
-"Otvori: Ne ispravljaj razmak između pismovnih linija prilikom otvaranja "
-"datoteka, stvorenih ranijim verzijama Inkscapea od 0.92."
+"Ne ispravljaj razmak između pismovnih linija prilikom otvaranja datoteka "
+"ranijih verzija od 0.92"
 
 #: ../src/inkscape-application.cpp:548
-#, fuzzy
 msgid "File export"
-msgstr "SVG izvoz"
+msgstr "Izvoz datoteke"
 
 #
 # File: ../src/inkscape-application.cpp, line: 549
 #: ../src/inkscape-application.cpp:549
 msgid "Output file name (file type is guessed from extension)"
 msgstr ""
+"Naziv datoteke rezultata (vrsta datoteke se određuje na osnovi nastavka)"
 
 #: ../src/inkscape-application.cpp:549
 msgid "EXPORT-FILENAME"
 msgstr "IZVOZ-IME_DATOTEKE"
 
 #: ../src/inkscape-application.cpp:550
-#, fuzzy
 msgid "Overwrite input file"
-msgstr "Izvoz: Prepiši ulaznu datoteku."
+msgstr "Prepiši ulaznu datoteku"
 
 #: ../src/inkscape-application.cpp:551
-#, fuzzy
 msgid "File type(s) to export: [svg,png,ps,eps,pdf,tex,emf,wmf,xaml]"
-msgstr "Izvoz: Vrsta datoteke:[svg,png,ps,psf,tex,emf,wmf,xaml]"
+msgstr "Vrsta datoteka za izvoz: [svg,png,ps,eps,pdf,tex,emf,wmf,xaml]"
 
 #: ../src/inkscape-application.cpp:554
-#, fuzzy
 msgid "Export geometry"
-msgstr "Izvoz: Ime datoteke"
+msgstr "Izvezi geometriju"
 
 #: ../src/inkscape-application.cpp:555
-#, fuzzy
 msgid "Area to export is page"
-msgstr "Izvoz: Područje izvoza je stranica."
+msgstr "Područje izvoza je stranica"
 
 #: ../src/inkscape-application.cpp:556
-#, fuzzy
 msgid "Area to export is whole drawing (ignoring page size)"
-msgstr "Izvoz: Područje izvoza je crtež (a ne stranica)."
+msgstr "Područje izvoza je cijeli crtež (veličina stranice se zanemaruje)"
 
 #: ../src/inkscape-application.cpp:557
-#, fuzzy
 msgid "Area to export in SVG user units"
-msgstr "Izvoz: Područje za izvoz u SVG korisničkim mjernim jedinicama."
+msgstr "Područje za izvoz u SVG korisničkim jedinicama"
 
 #: ../src/inkscape-application.cpp:557
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
 #: ../src/inkscape-application.cpp:558
-#, fuzzy
 msgid "Snap the bitmap export area outwards to the nearest integer values"
 msgstr ""
-"Izvoz: Prilagodi izvoznu površinu bitmapa najbližoj većoj cjelobrojnoj "
-"vrijednosti."
+"Prilagodi izvoznu površinu bitmapa najbližoj većoj cjelobrojnoj vrijednosti"
 
 #: ../src/inkscape-application.cpp:559
-#, fuzzy
 msgid "Resolution for bitmaps and rasterized filters; default is 96"
-msgstr "Izvoz: Rezolucija za rasterizaciju bitmapa i filtara (zadano je 96)."
+msgstr "Rezolucija za rasterizaciju bitmapa i filtara; zadano je 96"
 
 #: ../src/inkscape-application.cpp:559
 #: ../src/ui/widget/rendering-options.cpp:34
@@ -8814,123 +8835,102 @@ msgid "DPI"
 msgstr "DPI"
 
 #: ../src/inkscape-application.cpp:560
-#, fuzzy
 msgid "Bitmap width in pixels (overrides --export-dpi)"
-msgstr "Izvoz: Širina bitmapa u pikselima (zanemaruje --export-dpi)."
+msgstr "Širina bitmapa u pikselima (zanemaruje --export-dpi)."
 
 #: ../src/inkscape-application.cpp:560
 msgid "WIDTH"
 msgstr "ŠIRINA"
 
 #: ../src/inkscape-application.cpp:561
-#, fuzzy
 msgid "Bitmap height in pixels (overrides --export-dpi)"
-msgstr "Izvoz: Visina bitmapa u pikselima (zanemaruje --export-dpi)."
+msgstr "Visina bitmapa u pikselima (zanemaruje --export-dpi)."
 
 #: ../src/inkscape-application.cpp:561
 msgid "HEIGHT"
 msgstr "VISINA"
 
 #: ../src/inkscape-application.cpp:562
-#, fuzzy
 msgid ""
 "Margin around export area: units of page size for SVG, mm for PS/EPS/PDF"
 msgstr ""
-"Izvoz: Vanjske margine izvozne površine. Za SVG u mjernim jedinicama "
-"stranice, a za PS/EPS/PDF u mm."
+"Vanjske margine izvozne površine: za SVG u jedinicama stranice, a za PS/EPS/"
+"PDF u mm"
 
 #: ../src/inkscape-application.cpp:565
-#, fuzzy
 msgid "Export options"
-msgstr "Izvezi prezentaciju:"
+msgstr "Opcije za izvoz"
 
 #: ../src/inkscape-application.cpp:566
-#, fuzzy
 msgid "ID(s) of object(s) to export"
-msgstr "Izvoz: ID oznake objekata za izvoz."
+msgstr "ID oznake objekata za izvoz"
 
 #: ../src/inkscape-application.cpp:566
 msgid "OBJECT-ID[;OBJECT-ID]*"
 msgstr "OBJEKT-ID[;OBJECT-ID]*"
 
 #: ../src/inkscape-application.cpp:567
-#, fuzzy
 msgid "Hide all objects except object with ID selected by export-id"
 msgstr ""
-"Izvoz: Sakrij sve objekte, osim objekta s ID oznakom odabranom pomoću export-"
-"id."
+"Sakrij sve objekte, osim objekta s ID oznakom odabranom pomoću export-id"
 
 #
 # File: ../src/inkscape-application.cpp, line: 568
 #: ../src/inkscape-application.cpp:568
 msgid "Remove Inkscape-specific SVG attributes/properties"
-msgstr ""
+msgstr "Ukloni Inkscape specifične SVG svojstva/osobitosti"
 
 #: ../src/inkscape-application.cpp:569
-#, fuzzy
 msgid "Postscript level (2 or 3); default is 3"
-msgstr "Izvoz: Postscript razinu (2 ili 3). Zadana je 3."
+msgstr "Postscript razina (2. ili 3.). Zadana je 3."
 
 #: ../src/inkscape-application.cpp:569
 msgid "PS-Level"
 msgstr "PS razina"
 
 #: ../src/inkscape-application.cpp:570
-#, fuzzy
 msgid "PDF version (1.4 or 1.5)"
-msgstr "Izvoz: PDF razina (1.4 ili 1.5)"
+msgstr "PDF verzija (1.4 ili 1.5)"
 
 #
 # File: ../src/inkscape-application.cpp, line: 570
 #: ../src/inkscape-application.cpp:570
 msgid "PDF-VERSION"
-msgstr ""
+msgstr "PDF-VERZIJA"
 
 #: ../src/inkscape-application.cpp:571
-#, fuzzy
 msgid "Convert text to paths (PS/EPS/PDF/SVG)"
-msgstr "Izvoz: Konvertiraj tekst u stazu. (PS/EPS/PDF/SVG)."
+msgstr "Pretvori tekst u staze. (PS/EPS/PDF/SVG)."
 
 #: ../src/inkscape-application.cpp:572
-#, fuzzy
 msgid "Export text separately to LaTeX file (PS/EPS/PDF)"
-msgstr ""
-"Izvoz: Izvezi tekst odvojeno u LaTeX datoteku (PS/EPS/PDF). Uključi pomoću "
-"\\input{file.tex}"
+msgstr "Izvezi tekst u zasebnu LaTeX datoteku (PS/EPS/PDF)"
 
 #: ../src/inkscape-application.cpp:573
-#, fuzzy
 msgid "Render objects without filters instead of rasterizing (PS/EPS/PDF)"
 msgstr ""
-"Izvoz: Iscrtaj objekte bez filtara, umjesto korištenja rasterizacije. (PS, "
-"EPS, PDF)"
+"Iscrtaj objekte bez filtara, umjesto korištenja rasterizacije (PS/EPS/PDF)"
 
 #: ../src/inkscape-application.cpp:574
-#, fuzzy
 msgid ""
 "Use stored filename and DPI hints when exporting object selected by --export-"
 "id"
 msgstr ""
-"Izvoz: Koristi pohranjeni naziv datoteke i DPI rezoluciju prilikom izvoza "
-"objekta, odabranog pomoću --export-id."
+"Koristi spremljeni naziv datoteke i DPI rezoluciju prilikom izvoza objekta, "
+"odabranog pomoću --export-id"
 
 #: ../src/inkscape-application.cpp:575
-#, fuzzy
 msgid "Background color for exported bitmaps (any SVG color string)"
-msgstr ""
-"Izvoz: Boja pozadine izvezenog bitmapa (bilo koja oznaka boje, koju podržava "
-"SVG)."
+msgstr "Boja pozadine izvezenih bitmapa (bilo koji znakovni niz za SVG boje)"
 
 #: ../src/inkscape-application.cpp:575
 msgid "COLOR"
 msgstr "BOJA"
 
 #: ../src/inkscape-application.cpp:576
-#, fuzzy
 msgid "Background opacity for exported bitmaps (0.0 to 1.0, or 1 to 255)"
 msgstr ""
-"Izvoz: Neprozirnost pozadine izvezenog bitmapa (od 0.0 do 1.0 ili od 1 do "
-"255)."
+"Neprozirnost pozadine izvezenog bitmapa (od 0,0 do 1,0 ili od 1 do 255)."
 
 #: ../src/inkscape-application.cpp:576
 msgid "VALUE"
@@ -8940,90 +8940,77 @@ msgstr "VRIJEDNOST"
 # File: ../src/inkscape-application.cpp, line: 579
 #: ../src/inkscape-application.cpp:579
 msgid "Query object/document geometry"
-msgstr ""
+msgstr "Traži geometriju objekta/dokumenta"
 
 #: ../src/inkscape-application.cpp:580
-#, fuzzy
 msgid "ID(s) of object(s) to be queried"
-msgstr "Upit: ID oznake objekata koje se traže."
+msgstr "ID oznake objekata koje se traže"
 
 #: ../src/inkscape-application.cpp:580 ../src/inkscape-application.cpp:590
 msgid "OBJECT-ID[,OBJECT-ID]*"
 msgstr "OBJEKT-ID[,OBJECT-ID]*"
 
 #: ../src/inkscape-application.cpp:581
-#, fuzzy
 msgid "Print bounding boxes of all objects"
-msgstr "Upit: Ispiši granične okvire svih objekata."
+msgstr "Ispiši granične okvire svih objekata"
 
 #: ../src/inkscape-application.cpp:582
-#, fuzzy
 msgid "X coordinate of drawing or object (if specified by --query-id)"
-msgstr ""
-"Upit: X koordinata crteža ili objekta (ako je naznačeno sa --query-id)."
+msgstr "X koordinata crteža ili objekta (ako je određeno s --query-id)"
 
 #: ../src/inkscape-application.cpp:583
-#, fuzzy
 msgid "Y coordinate of drawing or object (if specified by --query-id)"
-msgstr ""
-"Upit: Y koordinata crteža ili objekta (ako je naznačeno sa --query-id)."
+msgstr "Y koordinata crteža ili objekta (ako je određeno s --query-id)"
 
 #: ../src/inkscape-application.cpp:584
-#, fuzzy
 msgid "Width of drawing or object (if specified by --query-id)"
-msgstr "Upit: Širina crteža ili objekta (ako je naznačeno sa --query-id)."
+msgstr "Širina crteža ili objekta (ako je određeno s --query-id)."
 
 #: ../src/inkscape-application.cpp:585
-#, fuzzy
 msgid "Height of drawing or object (if specified by --query-id)"
-msgstr "Upit: Visina crteža ili objekta (ako je određeno s --query-id)."
+msgstr "Visina crteža ili objekta (ako je određeno s --query-id)"
 
 #
 # File: ../src/inkscape-application.cpp, line: 588
 #: ../src/inkscape-application.cpp:588
 msgid "Advanced file processing"
-msgstr ""
+msgstr "Napredna obrada datoteka"
 
 #: ../src/inkscape-application.cpp:589
-#, fuzzy
 msgid "Remove unused definitions from the <defs> section(s) of document"
-msgstr "Obradi: Ukloni neupotrebljene definicije iz <defs> odjeljka dokumenta."
+msgstr "Ukloni nekorištene definicije iz <defs> odjeljka dokumenta"
 
 #: ../src/inkscape-application.cpp:590
-#, fuzzy
 msgid "Select objects: comma-separated list of IDs"
-msgstr "Obradi: Odaberi objekte: popis ID oznaka, rastavljenih točka-zarezom."
+msgstr "Odaberi objekte: popis ID oznaka, rastavljenih točka-zarezom"
 
 #: ../src/inkscape-application.cpp:594
-#, fuzzy
 msgid "List of actions (with optional arguments) to execute"
-msgstr "Akcije (s opcionalnim argumentima), rastavljene točka-zarezom."
+msgstr "Popis radnji (s opcionalnim argumentima) za izvršavanje"
 
 #: ../src/inkscape-application.cpp:594
 msgid "ACTION(:ARG)[;ACTION(:ARG)]*"
 msgstr "AKCIJA(:ARG)[;AKCIJA(:ARG)]*"
 
 #: ../src/inkscape-application.cpp:595
-#, fuzzy
 msgid "List all available actions"
-msgstr "Akcije: Popis dostupnih akcija."
+msgstr "Stvori popis svih dostupnih radnji"
 
 #
 # File: ../src/inkscape-application.cpp, line: 599
 #: ../src/inkscape-application.cpp:599
 msgid "List of verbs to execute"
-msgstr ""
+msgstr "Popis glagola za izvršavanje"
 
 #: ../src/inkscape-application.cpp:599
-#, fuzzy
 msgid "VERB[;VERB]*"
-msgstr "IDENTIFIKATOR-ID[;VERB-ID]*"
+msgstr "GLAGOL[;GLAGOL]*"
 
 #
 # File: ../src/inkscape-application.cpp, line: 600
 #: ../src/inkscape-application.cpp:600
 msgid "List all available verbs"
-msgstr ""
+msgstr "Stvori popis svih dostupnih glagola"
 
 #: ../src/inkscape-application.cpp:603
 #: ../src/ui/dialog/inkscape-preferences.cpp:941
@@ -9034,42 +9021,37 @@ msgstr "Sučelje"
 # File: ../src/inkscape-application.cpp, line: 604
 #: ../src/inkscape-application.cpp:604
 msgid "Console interface only (no visible GUI)"
-msgstr ""
+msgstr "Samo konzola (bez grafičkog sučelja)"
 
 #
 # File: ../src/inkscape-application.cpp, line: 605
 #: ../src/inkscape-application.cpp:605
 msgid "With graphical user interface (required by some actions/verbs)"
-msgstr ""
+msgstr "S grafičkim korisničkim sučeljem (potrebno za neke radnje/glagole)"
 
 #
 # File: ../src/inkscape-application.cpp, line: 606
 #: ../src/inkscape-application.cpp:606
 msgid "Close GUI after executing all actions/verbs"
-msgstr ""
+msgstr "Zatvori grafičko sučelje nakon izvršavanja svih radnji/glagola"
 
 #: ../src/inkscape-application.cpp:608
-#, fuzzy
 msgid "Start Inkscape in interactive shell mode"
-msgstr "Obradi: Pokreni Inkskape u interaktivnom modusu konzole."
+msgstr "Pokreni Inkskape u interaktivnom modusu konzole"
 
 #
 # File: ../src/inkscape-application.cpp, line: 611
 #: ../src/inkscape-application.cpp:611
 msgid "D-Bus"
-msgstr ""
+msgstr "D-Bus"
 
 #: ../src/inkscape-application.cpp:612
-#, fuzzy
 msgid "Enter a listening loop for D-Bus messages in console mode"
-msgstr "D-Bus: Unesi petlju čekanja za D-Bus poruke u modusu konzole."
+msgstr "Upiši petlju čekanja za D-Bus poruke u načinu rada s konzolom"
 
 #: ../src/inkscape-application.cpp:613
-#, fuzzy
 msgid "Specify the D-Bus name; default is 'org.inkscape'"
-msgstr ""
-"D-Bus: Odredi ime D-Bus-a, za prikazivanje poruka (uobičajeno je „org."
-"inkscape”)."
+msgstr "Odredi naziv D-Bus-a; zadano je „org.inkscape”"
 
 #: ../src/inkscape-application.cpp:613
 msgid "BUS-NAME"
@@ -9295,12 +9277,12 @@ msgid "Ruler"
 msgstr "Ravnalo"
 
 #: ../src/live_effects/effect.cpp:275
-#, fuzzy
 msgid ""
 "Add ruler marks to the object in adjustable intervals, using the object's "
 "stroke style."
 msgstr ""
-"Dodaj stazi oznake ravnala u podesivim intervalima pomoću stila linije staze."
+"Dodaj objektu oznake ravnala u podesivim intervalima, koristeći stil linije "
+"objekta."
 
 #: ../src/live_effects/effect.cpp:286
 msgid "Power stroke"
@@ -9321,21 +9303,19 @@ msgid "Clone original"
 msgstr "Kloniraj orginal"
 
 #: ../src/live_effects/effect.cpp:304
-#, fuzzy
 msgid ""
 "Let a object take on the shape, fill, stroke and/or other attributes of "
 "another object."
 msgstr ""
-"Dozvoli stazi, da preuzme oblik, ispunu, liniju i/ili neki drugi atribut "
-"jedne druge staze."
+"Dozvoli objektu da preuzme oblik, ispunu, liniju i/ili neki drugi atribut "
+"jednog drugog objekta."
 
 #: ../src/live_effects/effect.cpp:319
-#, fuzzy
 msgid ""
 "Smoothen and simplify a object. This effect is also available in the Pencil "
 "tool's tool controls."
 msgstr ""
-"Zagladi i pojednostavni stazu. Ovej je efekt dostupan i u postavkama alata "
+"Zagladi i pojednostavni stazu. Ovaj je efekt dostupan i u kontrolama alata "
 "za crtanje."
 
 #: ../src/live_effects/effect.cpp:329
@@ -9363,12 +9343,11 @@ msgid "Interpolate points"
 msgstr "Interpoliraj točke"
 
 #: ../src/live_effects/effect.cpp:361
-#, fuzzy
 msgid ""
 "Connect the nodes of the object (e.g. corresponding to data points) by "
 "different types of lines."
 msgstr ""
-"Spoji čvorove staze (npr. koji odgovaraju točkama) različitim linijskim "
+"Spoji čvorove objekta (npr. koji odgovaraju točkama) različitim linijskim "
 "vrstama."
 
 #: ../src/live_effects/effect.cpp:371
@@ -9386,13 +9365,12 @@ msgid "Show handles"
 msgstr "Prikaži ručke"
 
 #: ../src/live_effects/effect.cpp:389
-#, fuzzy
 msgid ""
 "Draw the handles and nodes of objects (replaces the original styling with a "
 "black stroke)."
 msgstr ""
-"Iscrtaj drške i čvorove staza (nadomješta originalno stiliziranje sa crnom "
-"linijom)."
+"Iscrtaj drške i čvorove objekata (nadomješta originalno stiliziranje sa "
+"crnom linijom)."
 
 #: ../src/live_effects/effect.cpp:403
 msgid "Roughen an object by adding and randomly shifting new nodes."
@@ -9415,12 +9393,11 @@ msgid "Join type"
 msgstr "Pridruži vrstu"
 
 #: ../src/live_effects/effect.cpp:431
-#, fuzzy
 msgid ""
 "Select among various join types for a object's corner nodes (mitre, rounded, "
 "extrapolated arc, ...)"
 msgstr ""
-"Odaberi između raznih vrsta spojeva za čvorove kuta staze (kosi rez, "
+"Odaberi između raznih vrsta spojeva za čvorove kuta objekta (kosi rez, "
 "okruglo, ekstrapolirani luk, …)"
 
 #: ../src/live_effects/effect.cpp:441
@@ -9553,18 +9530,16 @@ msgid "Power clip"
 msgstr "Moćni isječak"
 
 #: ../src/live_effects/effect.cpp:615
-#, fuzzy
 msgid "Power clip allows to reverse a clip, flatten it..."
-msgstr "Moćni isječak omogućuje preokretanje isječka, podebljavanje …"
+msgstr "Moćni isječak omogućuje preokretanje isječka, izravnaj ga …"
 
 #: ../src/live_effects/effect.cpp:625
 msgid "Power mask"
 msgstr "Moćna maska"
 
 #: ../src/live_effects/effect.cpp:629
-#, fuzzy
 msgid "Power mask allows inversing the mask, make negative..."
-msgstr "Moćna maska omogućuje invertiranje maske, izrade negativa …"
+msgstr "Moćna maska omogućuje invertiranje maske, izradi negativ …"
 
 #: ../src/live_effects/effect.cpp:639
 msgid "Ellipse from points"
@@ -9719,41 +9694,35 @@ msgstr ""
 #: ../src/live_effects/lpe-parallel.cpp:51
 #: ../src/live_effects/lpe-perp_bisector.cpp:98
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:63
-#, fuzzy
 msgid "Length left:"
-msgstr "Mjerna jedinica duljine:"
+msgstr "Duljina lijevo:"
 
 #: ../src/live_effects/lpe-angle_bisector.cpp:45
 #: ../src/live_effects/lpe-perp_bisector.cpp:98
-#, fuzzy
 msgid "Specifies the left end of the bisector"
-msgstr "Odredi boju izvora svjetla"
+msgstr "Određuje lijevi kraj središnjice"
 
 #: ../src/live_effects/lpe-angle_bisector.cpp:46
 #: ../src/live_effects/lpe-parallel.cpp:52
 #: ../src/live_effects/lpe-perp_bisector.cpp:99
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:64
-#, fuzzy
 msgid "Length right:"
-msgstr "Mjerna jedinica duljine:"
+msgstr "Duljina desno:"
 
 #: ../src/live_effects/lpe-angle_bisector.cpp:46
 #: ../src/live_effects/lpe-perp_bisector.cpp:99
-#, fuzzy
 msgid "Specifies the right end of the bisector"
-msgstr "Odaberi osvijetljenost boje"
+msgstr "Određuje desni kraj središnjice"
 
 #: ../src/live_effects/lpe-angle_bisector.cpp:85
 #: ../src/live_effects/lpe-perp_bisector.cpp:159
-#, fuzzy
 msgid "Adjust the \"left\" end of the bisector"
-msgstr "Prilagodi <b>pravokutno</b> područje teksta."
+msgstr "Podesi „lijevi” kraj bisektora"
 
 #: ../src/live_effects/lpe-angle_bisector.cpp:91
 #: ../src/live_effects/lpe-perp_bisector.cpp:165
-#, fuzzy
 msgid "Adjust the \"right\" end of the bisector"
-msgstr "Podesi ishodište rotacije"
+msgstr "Podesi „desni” kraj bisektora"
 
 #: ../src/live_effects/lpe-attach-path.cpp:20
 msgid "Start path:"
@@ -9931,14 +9900,12 @@ msgid "Swap operands (useful e.g. for difference)"
 msgstr "Zamijeni mjesta operanda (korisno, npr. za razliku)"
 
 #: ../src/live_effects/lpe-bool.cpp:76
-#, fuzzy
 msgid "Hide Linked:"
-msgstr "Ravan čvor"
+msgstr "Sakrij povazanu:"
 
 #: ../src/live_effects/lpe-bool.cpp:76
-#, fuzzy
 msgid "Hide linked path"
-msgstr "Povezana staza:"
+msgstr "Sakrij povezanu stazu"
 
 #: ../src/live_effects/lpe-bool.cpp:78
 msgid "Remove inner:"
@@ -10050,7 +10017,6 @@ msgid "Change scalar parameter"
 msgstr "Promijeni skalarni parametar"
 
 #: ../src/live_effects/lpe-clone-original.cpp:33
-#, fuzzy
 msgid "No Shape"
 msgstr "Bez oblika"
 
@@ -10065,9 +10031,8 @@ msgid "Without LPE's"
 msgstr "Bez LPE efekata"
 
 #: ../src/live_effects/lpe-clone-original.cpp:36
-#, fuzzy
 msgid "Spiro or BSpline Only"
-msgstr "Sa Spiro ili B-krivuljama"
+msgstr "Samo Spiro ili B-krivulje"
 
 #: ../src/live_effects/lpe-clone-original.cpp:42
 msgid "Linked Item:"
@@ -10078,16 +10043,14 @@ msgid "Item from which to take the original data"
 msgstr "Element iz kojeg se preuzimaju originalni podaci"
 
 #: ../src/live_effects/lpe-clone-original.cpp:43
-#, fuzzy
 msgid "Shape"
-msgstr "Oblici"
+msgstr "Oblik"
 
 #: ../src/live_effects/lpe-clone-original.cpp:43
 msgid "Shape linked"
 msgstr "Povezani oblik"
 
 #: ../src/live_effects/lpe-clone-original.cpp:49
-#, fuzzy
 msgid "Allow Transforms"
 msgstr "Dozvoli transformacije"
 
@@ -10099,7 +10062,7 @@ msgstr "Dozvoli transformacije"
 # File: ../src/live_effects/lpe-clone-original.cpp, line: 118
 #: ../src/live_effects/lpe-clone-original.cpp:118
 msgid "No Shape Sync to Current"
-msgstr ""
+msgstr "Bez sinkronizacije oblika s trenutačnim"
 
 #: ../src/live_effects/lpe-constructgrid.cpp:25
 msgid "Size _X:"
@@ -10191,16 +10154,16 @@ msgstr "Razmak"
 #: ../src/live_effects/lpe-copy_rotate.cpp:70
 msgid "Gap space between copies, use small negative gaps to fix some joins"
 msgstr ""
+"Razmak između kopija, koristi male negativne razmake za popravljanje nekih "
+"spojeva"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:71
-#, fuzzy
 msgid "360° Copies"
 msgstr "Kopije od 360 °"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:71
-#, fuzzy
 msgid "No rotation angle, fixed to 360°"
-msgstr "Bez kuta rotacije, fiksirano na 360 °"
+msgstr "Bez kuta rotacije, fiksno na 360 °"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:72
 msgid "Mirror copies"
@@ -10349,25 +10312,22 @@ msgstr ""
 "Uključi <b>„Popuna između mnogobrojnih LPE efekata”</b> za dodavanje popune."
 
 #: ../src/live_effects/lpe-dynastroke.cpp:31
-#, fuzzy
 msgid "Elliptic Pen"
-msgstr "Elipsa"
+msgstr "Elipsasto pero"
 
 #: ../src/live_effects/lpe-dynastroke.cpp:32
-#, fuzzy
 msgid "Thick-Thin strokes (fast)"
-msgstr "Krasopis, jednopotezni (alternativa)"
+msgstr "Debelo-tanki potezi (brzo)"
 
 #
 # File: ../src/live_effects/lpe-dynastroke.cpp, line: 33
 #: ../src/live_effects/lpe-dynastroke.cpp:33
 msgid "Thick-Thin strokes (slow)"
-msgstr ""
+msgstr "Debelo-tanki potezi (sporo)"
 
 #: ../src/live_effects/lpe-dynastroke.cpp:38
-#, fuzzy
 msgid "Sharp"
-msgstr "Izoštravanje"
+msgstr "Izoštreno"
 
 #: ../src/live_effects/lpe-dynastroke.cpp:39
 #: ../src/live_effects/lpe-powerstroke.cpp:146
@@ -10376,30 +10336,26 @@ msgid "Round"
 msgstr "Okruglo"
 
 #: ../src/live_effects/lpe-dynastroke.cpp:46
-#, fuzzy
 msgid "Choose pen type"
-msgstr "Odaberi vrstu segmenta linije"
+msgstr "Odaberi vrstu pera"
 
 #: ../src/live_effects/lpe-dynastroke.cpp:47
-#, fuzzy
 msgid "Pen width:"
-msgstr "Širina područja:"
+msgstr "Širina pera:"
 
 #: ../src/live_effects/lpe-dynastroke.cpp:47
-#, fuzzy
 msgid "Maximal stroke width"
-msgstr "Skaliraj debljinu linije"
+msgstr "Maksimalna debljina linije"
 
 #: ../src/live_effects/lpe-dynastroke.cpp:48
-#, fuzzy
 msgid "Pen roundness:"
-msgstr "Slučajnost razmještaja:"
+msgstr "Zaobljenost pera:"
 
 #
 # File: ../src/live_effects/lpe-dynastroke.cpp, line: 48
 #: ../src/live_effects/lpe-dynastroke.cpp:48
 msgid "Min/Max width ratio"
-msgstr ""
+msgstr "Min/Maks omjer širine"
 
 #: ../src/live_effects/lpe-dynastroke.cpp:49
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:61
@@ -10412,7 +10368,7 @@ msgstr "Nagib:"
 # File: ../src/live_effects/lpe-dynastroke.cpp, line: 49
 #: ../src/live_effects/lpe-dynastroke.cpp:49
 msgid "direction of thickest strokes (opposite = thinnest)"
-msgstr ""
+msgstr "smjer najdeblje linije (nasuprotna = najtanji)"
 
 #: ../src/live_effects/lpe-dynastroke.cpp:51
 #: ../src/ui/toolbar/arc-toolbar.cpp:135
@@ -10420,9 +10376,8 @@ msgid "Start:"
 msgstr "Početak:"
 
 #: ../src/live_effects/lpe-dynastroke.cpp:51
-#, fuzzy
 msgid "Choose start capping type"
-msgstr "Odaberi vrstu segmenta linije"
+msgstr "Odaberi vrstu početnog odrezivanja"
 
 #: ../src/live_effects/lpe-dynastroke.cpp:52
 #: ../src/ui/toolbar/arc-toolbar.cpp:145
@@ -10430,51 +10385,44 @@ msgid "End:"
 msgstr "Kraj:"
 
 #: ../src/live_effects/lpe-dynastroke.cpp:52
-#, fuzzy
 msgid "Choose end capping type"
-msgstr "Odaberi vrstu segmenta linije"
+msgstr "Odaberi vrstu odrezivanja"
 
 #: ../src/live_effects/lpe-dynastroke.cpp:53
-#, fuzzy
 msgid "Grow for:"
-msgstr "Širenje:"
+msgstr "Širenje za:"
 
 #
 # File: ../src/live_effects/lpe-dynastroke.cpp, line: 53
 #: ../src/live_effects/lpe-dynastroke.cpp:53
 msgid "Make the stroke thinner near it's start"
-msgstr ""
+msgstr "Stanji potez pri početku"
 
 #: ../src/live_effects/lpe-dynastroke.cpp:54
-#, fuzzy
 msgid "Fade for:"
-msgstr "Postupni prijelaz u:"
+msgstr "Postupni prijelaz za:"
 
 #
 # File: ../src/live_effects/lpe-dynastroke.cpp, line: 54
 #: ../src/live_effects/lpe-dynastroke.cpp:54
 msgid "Make the stroke thinner near it's end"
-msgstr ""
+msgstr "Stanji potez pri kraju"
 
 #: ../src/live_effects/lpe-dynastroke.cpp:55
-#, fuzzy
 msgid "Round ends"
-msgstr "Zaobljeno"
+msgstr "Zaobljeni krajevi"
 
 #: ../src/live_effects/lpe-dynastroke.cpp:55
-#, fuzzy
 msgid "Strokes end with a round end"
-msgstr "Prešano željezo s oblim rubovima"
+msgstr "Krajevi linija su zaobljeni"
 
 #: ../src/live_effects/lpe-dynastroke.cpp:56
-#, fuzzy
 msgid "Capping:"
-msgstr "Preklapanje"
+msgstr "Odrezivanje:"
 
 #: ../src/live_effects/lpe-dynastroke.cpp:56
-#, fuzzy
 msgid "left capping"
-msgstr "Aktiviraj privljačenje"
+msgstr "lijevo odrezivanje"
 
 #: ../src/live_effects/lpe-ellipse_5pts.cpp:75
 msgid "Five points required for constructing an ellipse"
@@ -10748,7 +10696,7 @@ msgstr "Modus, zaobljenje ili zakošenje"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:47
 msgid "Radius, in unit or %"
-msgstr "Polumjer, zadan mjernom jedinicom ili postotkom"
+msgstr "Polumjer zadan u jedinicama ili postotku"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:49
 msgid "Chamfer steps:"
@@ -10760,7 +10708,7 @@ msgstr "Koraci zakošenja"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:51
 msgid "Radius in %"
-msgstr "Polumjer zadan postotkom"
+msgstr "Polumjer zadan u postotku"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:51
 msgid "Flexible radius size (%)"
@@ -11069,167 +11017,135 @@ msgstr ""
 
 #: ../src/live_effects/lpe-knot.cpp:710
 msgid "Change knot crossing"
-msgstr "Promijeni križni čvor"
+msgstr "Promijeni križanje čvora"
 
 #: ../src/live_effects/lpe-lattice.cpp:35
-#, fuzzy
 msgid "Control handle 0:"
-msgstr "Hvatište 0:"
+msgstr "Ručka hvatišta 0:"
 
 #: ../src/live_effects/lpe-lattice.cpp:35
-#, fuzzy
 msgid "Control handle 0"
-msgstr "ručka kontrolnog čvora"
+msgstr "Ručka hvatišta 0"
 
 #: ../src/live_effects/lpe-lattice.cpp:36
-#, fuzzy
 msgid "Control handle 1:"
-msgstr "Hvatište 1:"
+msgstr "Ručka hvatišta 1:"
 
 #: ../src/live_effects/lpe-lattice.cpp:36
-#, fuzzy
 msgid "Control handle 1"
-msgstr "ručka kontrolnog čvora"
+msgstr "Ručka hvatišta 1"
 
 #: ../src/live_effects/lpe-lattice.cpp:37
-#, fuzzy
 msgid "Control handle 2:"
-msgstr "Hvatište 2:"
+msgstr "Ručka hvatišta 2:"
 
 #: ../src/live_effects/lpe-lattice.cpp:37
-#, fuzzy
 msgid "Control handle 2"
-msgstr "ručka kontrolnog čvora"
+msgstr "Ručka hvatišta 2"
 
 #: ../src/live_effects/lpe-lattice.cpp:38
-#, fuzzy
 msgid "Control handle 3:"
-msgstr "Hvatište 3:"
+msgstr "Ručka hvatišta 3:"
 
 #: ../src/live_effects/lpe-lattice.cpp:38
-#, fuzzy
 msgid "Control handle 3"
-msgstr "ručka kontrolnog čvora"
+msgstr "Ručka hvatišta 3"
 
 #: ../src/live_effects/lpe-lattice.cpp:39
-#, fuzzy
 msgid "Control handle 4:"
-msgstr "Hvatište 4:"
+msgstr "Ručka hvatišta 4:"
 
 #: ../src/live_effects/lpe-lattice.cpp:39
-#, fuzzy
 msgid "Control handle 4"
-msgstr "ručka kontrolnog čvora"
+msgstr "Ručka hvatišta 4"
 
 #: ../src/live_effects/lpe-lattice.cpp:40
-#, fuzzy
 msgid "Control handle 5:"
-msgstr "Hvatište 5:"
+msgstr "Ručka hvatišta 5:"
 
 #: ../src/live_effects/lpe-lattice.cpp:40
-#, fuzzy
 msgid "Control handle 5"
-msgstr "ručka kontrolnog čvora"
+msgstr "Ručka hvatišta 5"
 
 #: ../src/live_effects/lpe-lattice.cpp:41
-#, fuzzy
 msgid "Control handle 6:"
-msgstr "Hvatište 6:"
+msgstr "Ručka hvatišta 6:"
 
 #: ../src/live_effects/lpe-lattice.cpp:41
-#, fuzzy
 msgid "Control handle 6"
-msgstr "ručka kontrolnog čvora"
+msgstr "Ručka hvatišta 6"
 
 #: ../src/live_effects/lpe-lattice.cpp:42
-#, fuzzy
 msgid "Control handle 7:"
-msgstr "Hvatište 7:"
+msgstr "Ručka hvatišta 7:"
 
 #: ../src/live_effects/lpe-lattice.cpp:42
-#, fuzzy
 msgid "Control handle 7"
-msgstr "ručka kontrolnog čvora"
+msgstr "Ručka hvatišta 7"
 
 #: ../src/live_effects/lpe-lattice.cpp:43
-#, fuzzy
 msgid "Control handle 8:"
-msgstr "ručka kontrolnog čvora"
+msgstr "Ručka hvatišta 8:"
 
 #: ../src/live_effects/lpe-lattice.cpp:43
-#, fuzzy
 msgid "Control handle 8"
-msgstr "ručka kontrolnog čvora"
+msgstr "Ručka hvatišta 8"
 
 #: ../src/live_effects/lpe-lattice.cpp:44
-#, fuzzy
 msgid "Control handle 9:"
-msgstr "ručka kontrolnog čvora"
+msgstr "Ručka hvatišta 9:"
 
 #: ../src/live_effects/lpe-lattice.cpp:44
-#, fuzzy
 msgid "Control handle 9"
-msgstr "ručka kontrolnog čvora"
+msgstr "Ručka hvatišta 9"
 
 #: ../src/live_effects/lpe-lattice.cpp:45
-#, fuzzy
 msgid "Control handle 10:"
-msgstr "Hvatište 0:"
+msgstr "Ručka hvatišta 10:"
 
 #: ../src/live_effects/lpe-lattice.cpp:45
-#, fuzzy
 msgid "Control handle 10"
-msgstr "ručka kontrolnog čvora"
+msgstr "Ručka hvatišta 10"
 
 #: ../src/live_effects/lpe-lattice.cpp:46
-#, fuzzy
 msgid "Control handle 11:"
-msgstr "Hvatište 1:"
+msgstr "Ručka hvatišta 11:"
 
 #: ../src/live_effects/lpe-lattice.cpp:46
-#, fuzzy
 msgid "Control handle 11"
-msgstr "ručka kontrolnog čvora"
+msgstr "Ručka hvatišta 11"
 
 #: ../src/live_effects/lpe-lattice.cpp:47
-#, fuzzy
 msgid "Control handle 12:"
-msgstr "Hvatište 12:"
+msgstr "Ručka hvatišta 12:"
 
 #: ../src/live_effects/lpe-lattice.cpp:47
-#, fuzzy
 msgid "Control handle 12"
-msgstr "ručka kontrolnog čvora"
+msgstr "Ručka hvatišta 12"
 
 #: ../src/live_effects/lpe-lattice.cpp:48
-#, fuzzy
 msgid "Control handle 13:"
-msgstr "Hvatište 13:"
+msgstr "Ručka hvatišta 13:"
 
 #: ../src/live_effects/lpe-lattice.cpp:48
-#, fuzzy
 msgid "Control handle 13"
-msgstr "ručka kontrolnog čvora"
+msgstr "Ručka hvatišta 13"
 
 #: ../src/live_effects/lpe-lattice.cpp:49
-#, fuzzy
 msgid "Control handle 14:"
-msgstr "Hvatište 14:"
+msgstr "Ručka hvatišta 14:"
 
 #: ../src/live_effects/lpe-lattice.cpp:49
-#, fuzzy
 msgid "Control handle 14"
-msgstr "ručka kontrolnog čvora"
+msgstr "Ručka hvatišta 14"
 
 #: ../src/live_effects/lpe-lattice.cpp:50
-#, fuzzy
 msgid "Control handle 15:"
-msgstr "Hvatište 15:"
+msgstr "Ručka hvatišta 15:"
 
 #: ../src/live_effects/lpe-lattice.cpp:50
-#, fuzzy
 msgid "Control handle 15"
-msgstr "ručka kontrolnog čvora"
+msgstr "Ručka hvatišta 15"
 
 #: ../src/live_effects/lpe-lattice2.cpp:37
 #: ../src/live_effects/lpe-perspective-envelope.cpp:46
@@ -11527,15 +11443,14 @@ msgid "Open both"
 msgstr "Otvori oba dva"
 
 #: ../src/live_effects/lpe-line_segment.cpp:33
-#, fuzzy
 msgid "End type:"
-msgstr "Vrsta stapanja:"
+msgstr "Vrsta kraja:"
 
 #
 # File: ../src/live_effects/lpe-line_segment.cpp, line: 33
 #: ../src/live_effects/lpe-line_segment.cpp:33
 msgid "Determines on which side the line or line segment is infinite."
-msgstr ""
+msgstr "Odlučuje na kojoj strani je linija ili segment linije beskonačna."
 
 #: ../src/live_effects/lpe-measure-segments.cpp:59
 #: ../src/ui/toolbar/text-toolbar.cpp:631
@@ -11933,29 +11848,24 @@ msgid "Non Uniform Scale"
 msgstr "Neproporcionalno skaliranje"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:43
-#, fuzzy
 msgid "Vertical page center"
-msgstr "Centar uspravne stranice"
+msgstr "Središte uspravne stranice"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:44
-#, fuzzy
 msgid "Horizontal page center"
-msgstr "Centar polegnute stranice"
+msgstr "Središte polegnute stranice"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:45
-#, fuzzy
 msgid "Freely defined mirror line"
-msgstr "Kraj linije zrcaljenja"
+msgstr "Slobodno definirana linija zrcaljenja"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:46
-#, fuzzy
 msgid "X coordinate of mirror line midpoint"
-msgstr "X koordinata ishodišta mreže"
+msgstr "X koordinata središnje točke linije zrcaljenja"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:47
-#, fuzzy
 msgid "Y coordinate of mirror line midpoint"
-msgstr "Y koordinata ishodište mreže"
+msgstr "Y koordinata središnje točke linije zrcaljenja"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:55
 msgid "Mode"
@@ -11968,83 +11878,72 @@ msgid ""
 "Set mode of transformation. Either freely defined by mirror line or "
 "constrained to certain symmetry points."
 msgstr ""
+"Postavi način transformacije. Ili se slobodno definiraju linijom zrcaljenja "
+"ili se ograničavaju na određene točke simetrije."
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:56
 msgid "Discard original path"
 msgstr "Napusti orginalnu stazu"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:56
-#, fuzzy
 msgid "Only keep mirrored part of the path, remove the original."
-msgstr "Aktiviraj, za zadržavanje samo zrcaljenog dijela staze"
+msgstr "Zadrži samo zrcaljeni dio staze, ukloni original."
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:57
-#, fuzzy
 msgid "Fuse original path and mirror image into a single path"
-msgstr "Spoji orginal i refleksiju u jedinstvenu stazu"
+msgstr "Spoji orginalnu stazu i zrcaljenu sliku u jednu stazu"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:58
-#, fuzzy
 msgid "Fuse opposite sides"
-msgstr "Spoji suprotnosti"
+msgstr "Spoji suprotne strane"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:58
-#, fuzzy
 msgid "Picks the part on the other side of the mirror line as the original."
-msgstr "Uzima drugu stranu zrcaljenja kao original"
+msgstr "Uzima dio na drugoj strani linije zrcaljenja kao original."
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:59
-#, fuzzy
 msgid ""
 "Split original and mirror image into separate paths. (This allows gradients "
 "and other paints.)"
 msgstr ""
-"Razdvoji elemente. To omogućuje upotrebu gradijenta i drugih vrsta bojenja."
+"Razdvoji original i zrcaljenu sliku u pojedinačne staze. (To omogućuje "
+"upotrebu gradijenta i drugih vrsta bojenja.)"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:60
-#, fuzzy
 msgid "Mirror line start"
-msgstr "Zrcali kopije"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:60
-#, fuzzy
-msgid "Start point of mirror line"
 msgstr "Početak linije zrcaljenja"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:60
-#, fuzzy
+msgid "Start point of mirror line"
+msgstr "Početna točka linije zrcaljenja"
+
+#: ../src/live_effects/lpe-mirror_symmetry.cpp:60
 msgid "Adjust start point of of mirror line"
-msgstr "Podesi početak zrcaljenja"
+msgstr "Podesi početnu točku linije zrcaljenja"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:61
-#, fuzzy
 msgid "Mirror line end"
 msgstr "Kraj linije zrcaljenja"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:61
-#, fuzzy
 msgid "End point of mirror line"
-msgstr "Kraj linije zrcaljenja"
+msgstr "Krajnja točka linije zrcaljenja"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:61
-#, fuzzy
 msgid "Adjust end point of mirror line"
-msgstr "Podesi kraj zrcaljenja"
+msgstr "Podesi krajnju točku linije zrcaljenja"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:62
-#, fuzzy
 msgid "Mirror line mid"
-msgstr "Kraj linije zrcaljenja"
+msgstr "Sredina linije zrcaljenja"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:62
-#, fuzzy
 msgid "Center point of mirror line"
-msgstr "Centriraj liniju zrcaljenja"
+msgstr "Središnja točka linije zrcaljenja"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:62
-#, fuzzy
 msgid "Adjust center point of mirror line"
-msgstr "Podesi centar zrcaljenja"
+msgstr "Podesi središnju točku linije zrcaljenja"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:142
 msgid "Vertical center"
@@ -12055,48 +11954,44 @@ msgid "Horizontal center"
 msgstr "Vodoravni centar"
 
 #: ../src/live_effects/lpe-offset.cpp:78
-#, fuzzy
 msgid "Offset)"
-msgstr "Odmak"
+msgstr "Odmak)"
 
 #
 # File: ../src/live_effects/lpe-offset.cpp, line: 82
 #: ../src/live_effects/lpe-offset.cpp:82
 msgid "Update on knot move"
-msgstr ""
+msgstr "Aktualiziraj prilikom premještanja čvora"
 
 #: ../src/live_effects/lpe-offset.cpp:462
-#, fuzzy
 msgid "Offset point"
-msgstr "Odmakni točke"
+msgstr "Odmakni točku"
 
 #: ../src/live_effects/lpe-parallel.cpp:50
-#, fuzzy
 msgid "Adjust the offset"
-msgstr "Podesi <b>udaljenost odmaka</b>"
+msgstr "Podesi odmak"
 
 #
 # File: ../src/live_effects/lpe-parallel.cpp, line: 51
 #: ../src/live_effects/lpe-parallel.cpp:51
 msgid "Specifies the left end of the parallel"
-msgstr ""
+msgstr "Određuje lijevi kraj paralele"
 
 #
 # File: ../src/live_effects/lpe-parallel.cpp, line: 52
 #: ../src/live_effects/lpe-parallel.cpp:52
 msgid "Specifies the right end of the parallel"
-msgstr ""
+msgstr "Određuje desni kraj paralele"
 
 #
 # File: ../src/live_effects/lpe-parallel.cpp, line: 107
 #: ../src/live_effects/lpe-parallel.cpp:107
 msgid "Adjust the \"left\" end of the parallel"
-msgstr ""
+msgstr "Podesi „lijevi” kraj paralele"
 
 #: ../src/live_effects/lpe-parallel.cpp:113
-#, fuzzy
 msgid "Adjust the \"right\" end of the parallel"
-msgstr "Podesi ishodište rotacije"
+msgstr "Podesi „desni” kraj paralele"
 
 #: ../src/live_effects/lpe-path_length.cpp:25
 #: ../src/live_effects/lpe-sketch.cpp:52
@@ -12113,14 +12008,12 @@ msgid "Unit:"
 msgstr "Mjerna jedinica:"
 
 #: ../src/live_effects/lpe-path_length.cpp:28
-#, fuzzy
 msgid "Display unit"
-msgstr "_Mjerne jedinice ekrana:"
+msgstr "Jedinica ekrana"
 
 #: ../src/live_effects/lpe-path_length.cpp:28
-#, fuzzy
 msgid "Print unit after path length"
-msgstr "Duljina unutarnje-vanjske staze:"
+msgstr "Ispiši jedinicu iza duljine staze"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:65
 #: ../share/extensions/pathalongpath.inx:10
@@ -12413,19 +12306,16 @@ msgid "Isometric circle"
 msgstr "Izometrijska kružnica"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:40
-#, fuzzy
 msgid "Perspective circle"
-msgstr "Perspektiva"
+msgstr "Perspektivna kružnica"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:43
-#, fuzzy
 msgid "Steiner ellipse"
-msgstr "Stil za nove elipse"
+msgstr "Steiner elipsa"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:45
-#, fuzzy
 msgid "Steiner inellipse"
-msgstr "Stil za nove elipse"
+msgstr "Steiner unutarnja elipsa"
 
 #
 # File: ../src/live_effects/lpe-pts2ellipse.cpp, line: 54
@@ -12440,20 +12330,26 @@ msgid ""
 "- Steiner ellipse: (3 points) ellipse on a triangle\n"
 "- Steiner inellipse: (3 points) ellipse inside a triangle"
 msgstr ""
+"Metode za generiranje elipse\n"
+"- Automatska elipsa: uskladi s krugom (2 do 4 točke) ili elipsom (najmanje 5 "
+"točaka)\n"
+"- Prisili krug: (najmanje 2 točke) uvijek uskladi s krugom\n"
+"- Izometrijski krug: (3 točke) koristi prva dva ruba\n"
+"- Perspektivni krug: (4 točke) krug u kvadratu u perspektivi\n"
+"- Steiner elipsa: (3 točke) elipsa na trokutu\n"
+"- Steiner unutarnja elipsa: (3 točke) elipsa unutar trokuta"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:59
 msgid "_Frame (isometric rectangle)"
 msgstr "_Okvir (izometričan pravokutnik)"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:59
-#, fuzzy
 msgid "Draw parallelogram around the ellipse"
 msgstr "Crtaj paralelogram oko elipse"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:62
-#, fuzzy
 msgid "_Perspective square"
-msgstr "Perspektiva"
+msgstr "Perspektivni kvadrat"
 
 #
 # File: ../src/live_effects/lpe-pts2ellipse.cpp, line: 63
@@ -12462,6 +12358,8 @@ msgid ""
 "Draw square surrounding the circle in perspective view\n"
 "(only in method \"Perspective circle\")"
 msgstr ""
+"Crtaj kvadrat koji obrubljuje kružnicu u prespektivnom prikazu\n"
+"(samo u načinu rada „Perspektivna kružnica”)"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:65
 msgid "_Arc"
@@ -12474,26 +12372,24 @@ msgid ""
 "Generate open arc (open ellipse) based on first and last point\n"
 "(only for methods \"Auto ellipse\" and \"Force circle\")"
 msgstr ""
+"Stvori otvoreni luk (otvorenu elipsu) na osnovi prve i zadnje točke\n"
+"(samo za način rada „Automatska elipsa” i „Prisili kružnicu”)"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:69
-#, fuzzy
 msgid "_Other arc side"
 msgstr "_Druga strana luka"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:69
-#, fuzzy
 msgid "Switch sides of the arc"
-msgstr "zamijeni strane luka"
+msgstr "Zamijeni strane luka"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:70
-#, fuzzy
 msgid "_Slice arc"
 msgstr "_Izreži luk"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:70
-#, fuzzy
 msgid "Slice the arc"
-msgstr "izreži luk"
+msgstr "Izreži luk"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:71
 msgid "A_xes"
@@ -12504,9 +12400,8 @@ msgid "Draw both semi-major and semi-minor axes"
 msgstr "Crtaj polu-glavne i polu-pomoćne osi"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:72
-#, fuzzy
 msgid "Perspective axes"
-msgstr "Perspektiva"
+msgstr "Perspektivne osi"
 
 #
 # File: ../src/live_effects/lpe-pts2ellipse.cpp, line: 73
@@ -12515,9 +12410,10 @@ msgid ""
 "Draw the axes in perspective view\n"
 "(only in method \"Perspective circle\")"
 msgstr ""
+"Crtaj osi u prespektivnom prikazu\n"
+"(samo u načinu rada „Perspektivna kružnica”)"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:75
-#, fuzzy
 msgid "Axes rotation"
 msgstr "Rotacija osi"
 
@@ -12526,24 +12422,22 @@ msgid "Axes rotation angle [deg]"
 msgstr "Kut rotacije osi [u stupnjevima]"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:76
-#, fuzzy
 msgid "Source _path"
-msgstr "Izvor _staze"
+msgstr "Staza _izvora"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:76
 msgid "Show the original source path"
 msgstr "Prikaži orginalni izvor staze"
 
 #: ../src/live_effects/lpe-recursiveskeleton.cpp:26
-#, fuzzy
 msgid "Iterations:"
-msgstr "Operacija:"
+msgstr "Ponavljanja:"
 
 #
 # File: ../src/live_effects/lpe-recursiveskeleton.cpp, line: 26
 #: ../src/live_effects/lpe-recursiveskeleton.cpp:26
 msgid "recursivity"
-msgstr ""
+msgstr "povratnost"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:219
 msgid "Frequency randomness:"
@@ -12981,15 +12875,14 @@ msgid "Simplify just coalesce"
 msgstr "Pojednostavni „Samo stopi”"
 
 #: ../src/live_effects/lpe-skeleton.cpp:33
-#, fuzzy
 msgid "Float parameter"
-msgstr "Parametri efekta"
+msgstr "Float parametar"
 
 #
 # File: ../src/live_effects/lpe-skeleton.cpp, line: 33
 #: ../src/live_effects/lpe-skeleton.cpp:33
 msgid "just a real number like 1.4!"
-msgstr ""
+msgstr "samo stvarni broj kao 1,4!"
 
 #: ../src/live_effects/lpe-sketch.cpp:32
 msgid "Strokes:"
@@ -13132,12 +13025,11 @@ msgstr "maks. zakrivljenost"
 # File: ../src/live_effects/lpe-tangent_to_curve.cpp, line: 61
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:61
 msgid "Additional angle between tangent and curve"
-msgstr ""
+msgstr "Dodatni kut između tangente i krivulje"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:62
-#, fuzzy
 msgid "Location along curve:"
-msgstr "Početna krivulja"
+msgstr "Mjesto na krivulji:"
 
 #
 # File: ../src/live_effects/lpe-tangent_to_curve.cpp, line: 62
@@ -13145,33 +13037,29 @@ msgstr "Početna krivulja"
 msgid ""
 "Location of the point of attachment along the curve (between 0.0 and number-"
 "of-segments)"
-msgstr ""
+msgstr "Položaj točke povezivanja duž krivulje (između 0,0 i broja segmenata)"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:63
-#, fuzzy
 msgid "Specifies the left end of the tangent"
-msgstr "Obrni smjer gradijenta"
+msgstr "Određuje lijevi kraj tangente"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:64
-#, fuzzy
 msgid "Specifies the right end of the tangent"
-msgstr "Obrni smjer gradijenta"
+msgstr "Određuje desni kraj tangente"
 
 #
 # File: ../src/live_effects/lpe-tangent_to_curve.cpp, line: 104
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:104
 msgid "Adjust the point of attachment of the tangent"
-msgstr ""
+msgstr "Podesi točku povezivanja tangente"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:110
-#, fuzzy
 msgid "Adjust the <b>left</b> end of the tangent"
-msgstr "Prilagodi <b>pravokutno</b> područje teksta."
+msgstr "Podesi <b>lijevi</b> kraj tangente"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:116
-#, fuzzy
 msgid "Adjust the <b>right</b> end of the tangent"
-msgstr "Prilagodi <b>pravokutno</b> područje teksta."
+msgstr "Podesi <b>desni</b> kraj tangente"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:68
 msgid "Extrapolated"
@@ -13231,29 +13119,24 @@ msgid "End point of the taper"
 msgstr "Krajnja točka suženja"
 
 #: ../src/live_effects/lpe-test-doEffect-stack.cpp:19
-#, fuzzy
 msgid "Stack step:"
-msgstr "Na_složi naviše"
+msgstr "Korak slaganja:"
 
 #: ../src/live_effects/lpe-test-doEffect-stack.cpp:20
-#, fuzzy
 msgid "Point param:"
-msgstr "Točka na:"
+msgstr "Parametri točke:"
 
 #: ../src/live_effects/lpe-test-doEffect-stack.cpp:21
-#, fuzzy
 msgid "Path param:"
-msgstr "Podaci staze"
+msgstr "Parametri staze:"
 
 #: ../src/live_effects/lpe-text_label.cpp:25
-#, fuzzy
 msgid "Label:"
-msgstr "_Etiketa:"
+msgstr "Etiketa:"
 
 #: ../src/live_effects/lpe-text_label.cpp:25
-#, fuzzy
 msgid "Text label attached to the path"
-msgstr "Staza koju će se dodati na kraj ove staze"
+msgstr "Tekstna oznaka prikačena na stazu"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:32
 msgid "Elastic"
@@ -17409,23 +17292,20 @@ msgid "Z coordinate"
 msgstr "Z koordinata"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1188
-#, fuzzy
 msgid "Points At:"
-msgstr "Usmjereno na"
+msgstr "Pokazuje na:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1189
-#, fuzzy
 msgid "Specular Exponent:"
-msgstr "Eksponent refleksije"
+msgstr "Eksponent refleksije:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1189
 msgid "Exponent value controlling the focus for the light source"
 msgstr "Vrijednost eksponenta kontrolira žarište izvora svjetla"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1191
-#, fuzzy
 msgid "Cone Angle:"
-msgstr "Konusni kut"
+msgstr "Kut stožca:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1191
 msgid ""
@@ -18818,7 +18698,7 @@ msgstr "Razni tehnički znakovi"
 
 #: ../src/ui/dialog/glyphs.cpp:219
 msgid "Control Pictures"
-msgstr "Kontrolne slike"
+msgstr "Slike hvatišta"
 
 #: ../src/ui/dialog/glyphs.cpp:220
 msgid "Optical Character Recognition"
@@ -19207,9 +19087,8 @@ msgid "Set guide properties"
 msgstr "Postavi svojstva vodilice"
 
 #: ../src/ui/dialog/guides.cpp:151
-#, fuzzy
 msgid "Duplicate guide"
-msgstr "Dupliciraj čvor"
+msgstr "Dupliciraj vodilicu"
 
 #: ../src/ui/dialog/guides.cpp:176
 msgid "Guideline"
@@ -19700,9 +19579,8 @@ msgstr ""
 "teksta"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:488
-#, fuzzy
 msgid "Show font substitution inng dialog"
-msgstr "Prikaži dijaloški okvir upozorenja za zamjenu fontova"
+msgstr "Prikaži zamjenu fonta u dijaloškom okviru"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:489
 msgid ""
@@ -19869,7 +19747,7 @@ msgstr "Poveznica"
 #: ../src/ui/dialog/inkscape-preferences.cpp:557
 msgid "If on, connector attachment points will not be shown for text objects"
 msgstr ""
-"Ako je uključeno, priključne točke spojnice neće biti prikazane za "
+"Ako je uključeno, točke povezivanja spojnice neće biti prikazane za "
 "tekstualne objekte"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:562
@@ -19883,21 +19761,18 @@ msgstr "Boja simbolskih ikona:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:885
 #: ../src/ui/dialog/inkscape-preferences.cpp:1173
-#, fuzzy
 msgid "Color for symbolic success icons:"
-msgstr "Boja simbolskih ikona:"
+msgstr "Boja za simboličke ikone uspjeha:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:887
 #: ../src/ui/dialog/inkscape-preferences.cpp:1175
-#, fuzzy
 msgid "Color for symbolic warning icons:"
-msgstr "Boja simbolskih ikona:"
+msgstr "Boja za simboličke ikone upozorenja:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:889
 #: ../src/ui/dialog/inkscape-preferences.cpp:1177
-#, fuzzy
 msgid "Color for symbolic error icons:"
-msgstr "Boja simbolskih ikona:"
+msgstr "Boja za simboličke ikone grešaka:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:944
 msgid "System default"
@@ -20304,7 +20179,7 @@ msgid ""
 "real length. This information is used when zooming to 1:1, 1:2, etc., to "
 "display objects in their true sizes"
 msgstr ""
-"Podesi klizač, tako da duljina ravnala na ekranu, odgovara stvarnoj duljini. "
+"Podesi klizač, tako da duljina ravnala na ekranu odgovara stvarnoj duljini. "
 "Ova se informacija koristi prilikom zumiranje na 1:1, 1:2, itd., za "
 "prikazivanje objekata u stvarnoj veličini"
 
@@ -20348,13 +20223,15 @@ msgstr "Ikone i tekst"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1057
 msgid "Dockbar style (requires restart):"
-msgstr "Stil bočne trake (ponovo pokreni program):"
+msgstr "Stil priključne trake (ponovo pokreni program):"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1058
 msgid ""
 "Selects whether the vertical bars on the dockbar will show text labels, "
 "icons, or both"
-msgstr "Prikazuje opise, ikone ili oboje u uspravnim bočnim trakama"
+msgstr ""
+"Odabire, hoće li uspravne trake na priključnoj traci prikazati tekstne "
+"oznake, ikone ili oboje"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1065
 msgid "Switcher style (requires restart):"
@@ -20363,18 +20240,20 @@ msgstr "Stil prekidača (ponovo pokreni program):"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1066
 msgid ""
 "Selects whether the dockbar switcher will show text labels, icons, or both"
-msgstr "Prikazuje opise, ikone ili oboje u bočnom izborniku"
+msgstr ""
+"Odabire, hoće li prekidač priključne trake prikazati tekstne oznake, ikone "
+"ili oboje"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1069
 msgid "Origin at upper left with y-axis pointing down (requires restart)"
 msgstr ""
-"Ishodište gornje lijevo, s y-osi usmjerenom prema dolje (zahtijeva ponovo "
-"pokretanje)"
+"Ishodište gornji lijevi kut, s y-osi usmjerenom prema dolje (zahtijeva "
+"ponovno pokretanje)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1071
 msgid "When off, origin is at lower left corner and y-axis points up"
 msgstr ""
-"Kad je isključeno, ishodište je u doljnjem lijevom kutu s y-osi usmjerenom "
+"Kad je isključeno, ishodište je u donjem lijevom kutu s y-osi usmjerenom "
 "prema gore"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1075
@@ -20411,44 +20290,37 @@ msgid "Use symbolic icons"
 msgstr "Koristi simbolske ikone"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1168
-#, fuzzy
 msgid "Use default colors for icons"
-msgstr "Postavi boju ispune na ništa"
+msgstr "Koristi standardne boje za ikone"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1194
-#, fuzzy
 msgid "Icon color"
-msgstr "Boja fonta:"
+msgstr "Boja ikone"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1195
-#, fuzzy
 msgid "Base color for icons. Some icons changes need reload"
 msgstr ""
-"Tematska boja simbolskih ikona ili prilagođena boja. Za neke promjene boja "
-"ikona je potrebno ponovo pokrenuti program"
+"Osnovna boja za ikone. Za neke promjene ikona je potrebno ponovno učitavanje"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1201
-#, fuzzy
 msgid "Highlights"
-msgstr "Stapanje istaknutog:"
+msgstr "Isticanja"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1202
-#, fuzzy
 msgid ""
 "Highlights colors, some symbolic icon themes use it. Some icons changes need "
 "reload"
 msgstr ""
-"Tematska boja simbolskih ikona ili prilagođena boja. Za neke promjene boja "
-"ikona je potrebno ponovo pokrenuti program"
+"Boje za isticanje, neke teme simboličkih ikona ih koriste. Za neke promjene "
+"ikona je potrebno ponovno učitavanje"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1208
-#, fuzzy
 msgid ""
 "Reset theme colors, some symbolic icon themes use it. Some icons changes "
 "need reload"
 msgstr ""
-"Tematska boja simbolskih ikona ili prilagođena boja. Za neke promjene boja "
-"ikona je potrebno ponovo pokrenuti program"
+"Ponovo postavi boje teme, neke teme simboličkih ikona ih koriste. Za neke "
+"promjene ikona je potrebno ponovno učitavanje"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1211
 msgctxt "Icon size"
@@ -20552,7 +20424,7 @@ msgstr "Nemoj spremiti stanje dijaloških okvira"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1246
 #: ../src/ui/dialog/inkscape-preferences.cpp:1293
 msgid "Dockable"
-msgstr "Bočno priključeni"
+msgstr "Priključivi"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1247
 #: ../src/ui/dialog/inkscape-preferences.cpp:1295
@@ -20569,7 +20441,7 @@ msgstr "GTK dijalozi za otvori/spremi"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1253
 msgid "Dialogs are hidden in taskbar"
-msgstr "Sakrij dijaloške okvire u bočnu traku"
+msgstr "Dijalozi se skrivaju u traci zadataka"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1254
 msgid "Save and restore documents viewport"
@@ -20591,7 +20463,7 @@ msgstr "Agresivno"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1261
 msgctxt "Window size"
 msgid "Default"
-msgstr "Standardno"
+msgstr "Standardna"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1262
 msgctxt "Window size"
@@ -20858,7 +20730,7 @@ msgstr "Osjetljivost _dohvaćanja:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1461
 msgid "pixels (requires restart)"
-msgstr "px (ponovo pokreni program)"
+msgstr "piksela (ponovo pokreni program)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1462
 msgid ""
@@ -20875,7 +20747,7 @@ msgstr "_Prag za klik/povlačenje:"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1833
 #: ../src/ui/dialog/inkscape-preferences.cpp:1843 ../share/ui/units.xml:12
 msgid "pixels"
-msgstr "px"
+msgstr "piksela"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1465
 msgid ""
@@ -21145,25 +21017,22 @@ msgid "Insert Mesh Gradient JavaScript polyfill."
 msgstr "Umetni mrežni gradijent višestrukom JavaScript ispunom."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1555
-#, fuzzy
 msgid "Insert Hatch Paint Server JavaScript polyfill."
-msgstr "Umetni mrežni gradijent višestrukom JavaScript ispunom."
+msgstr "Umetni šrafirani gradijent višestrukom JavaScript ispunom."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1557
 msgid "Adds fallback options for non-SVG 2 renderers."
 msgstr "Dodaje alternativne opcije za iscrtavanja, koja ne podupiru SVG 2."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1558
-#, fuzzy
 msgid "Adds JavaScript polyfill to render meshes."
-msgstr ""
-"Dodaje višestruku JavaScript ispunu za iscrtavanje mreže (samo ispuna)."
+msgstr "Dodaje višestruku JavaScript ispunu za iscrtavanje mreže."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1559
-#, fuzzy
 msgid "Adds JavaScript polyfill to render hatches (linear and absolute paths)."
 msgstr ""
-"Dodaje višestruku JavaScript ispunu za iscrtavanje mreže (samo ispuna)."
+"Dodaje višestruku JavaScript ispunu za iscrtavanje šrafura (linearne i "
+"apsolutne staze)."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1562
 msgid "SVG 2 to SVG 1.1"
@@ -22077,7 +21946,7 @@ msgstr "Čišćenje dokumenta"
 #: ../src/ui/dialog/inkscape-preferences.cpp:2010
 #: ../src/ui/dialog/inkscape-preferences.cpp:2012
 msgid "Remove unused swatches when doing a document cleanup"
-msgstr "Ukloni neupotrebljene palete boja prilikom čišćenja dokumenta"
+msgstr "Ukloni nekorištene palete boja prilikom čišćenja dokumenta"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2013
 msgid "Cleanup"
@@ -22386,24 +22255,26 @@ msgid "Keyboard Shortcuts"
 msgstr "Tipkovni prečaci"
 
 #
-# File: ../src/ui/dialog/inkscape-preferences.cpp, line: 2149
+# File: ../src/ui/dialog/inkscape-preferences.cpp, line: 2085
 #: ../src/ui/dialog/inkscape-preferences.cpp:2330
 msgid ""
 "Keyboard shortcut \"%1\"\n"
 "is already assigned to \"%2\""
 msgstr ""
+"Tipkovni prečac „%1”\n"
+"je već dodijeljen za „%2”"
 
 #
-# File: ../src/ui/dialog/inkscape-preferences.cpp, line: 2152
+# File: ../src/ui/dialog/inkscape-preferences.cpp, line: 2088
 #: ../src/ui/dialog/inkscape-preferences.cpp:2333
 msgid "Reassign shortcut?"
-msgstr ""
+msgstr "Ponovo dodijeliti prečac?"
 
 #
-# File: ../src/ui/dialog/inkscape-preferences.cpp, line: 2153
+# File: ../src/ui/dialog/inkscape-preferences.cpp, line: 2089
 #: ../src/ui/dialog/inkscape-preferences.cpp:2334
 msgid "Are you sure you want to reassign this shortcut?"
-msgstr ""
+msgstr "Sigurno želite ponovo dodijeliti ovaj prečac?"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2430
 msgid "Misc"
@@ -22913,7 +22784,6 @@ msgid "Top"
 msgstr "Vrh"
 
 #: ../src/ui/dialog/livepatheffect-add.cpp:472
-#, fuzzy
 msgid "You don't have any favorites yet, please disable the favorites star"
 msgstr "Još nemaš favorita. Isključi oznaku (zvjezdicu) za favorite"
 
@@ -23743,9 +23613,8 @@ msgid "Keywords: "
 msgstr "Ključne riječi: "
 
 #: ../src/ui/dialog/selectorsdialog.cpp:407 ../src/ui/dialog/xml-tree.cpp:187
-#, fuzzy
 msgid "Paned vertical"
-msgstr "Mustra je uspravna"
+msgstr "Uvećano uspravno"
 
 #: ../src/ui/dialog/selectorsdialog.cpp:695
 #: ../src/ui/dialog/styledialog.cpp:1009
@@ -23761,9 +23630,8 @@ msgid "Add"
 msgstr "Dodaj"
 
 #: ../src/ui/dialog/selectorsdialog.cpp:1139
-#, fuzzy
 msgid "Invalid CSS selector."
-msgstr "Neispravni SIOX-ov rezultat"
+msgstr "Neispravni CSS selektor."
 
 #: ../src/ui/dialog/spellcheck.cpp:67
 msgid "_Accept"
@@ -23836,38 +23704,34 @@ msgid "Fix spelling"
 msgstr "Ispravi pravopis"
 
 #: ../src/ui/dialog/styledialog.cpp:202
-#, fuzzy
 msgid "Edit Full Stylesheet"
-msgstr "Stilski list"
+msgstr "Uredi cijeli stilski list"
 
 #: ../src/ui/dialog/styledialog.cpp:483 ../src/ui/dialog/styledialog.cpp:620
 #: ../src/ui/dialog/styledialog.cpp:752
-#, fuzzy
 msgid "property"
-msgstr "Svojstva"
+msgstr "svojstvo"
 
 #: ../src/ui/dialog/styledialog.cpp:494 ../src/ui/dialog/styledialog.cpp:632
 #: ../src/ui/dialog/styledialog.cpp:763
-#, fuzzy
 msgid "value"
-msgstr "Vrijednost"
+msgstr "vrijednost"
 
 #
-# File: ../src/ui/dialog/styledialog.cpp, line: 698
+# File: ../src/ui/dialog/styledialog.cpp, line: 664
 #: ../src/ui/dialog/styledialog.cpp:698
 msgid "This value is comented"
-msgstr ""
+msgstr "Ova je vrijednost komentirana"
 
 #: ../src/ui/dialog/styledialog.cpp:837
-#, fuzzy
 msgid "Invalid property set"
-msgstr "Neispravni SIOX-ov rezultat"
+msgstr "Postavljeno je neispravno svojstvo"
 
 #
-# File: ../src/ui/dialog/styledialog.cpp, line: 839
+# File: ../src/ui/dialog/styledialog.cpp, line: 805
 #: ../src/ui/dialog/styledialog.cpp:839
 msgid "Used in "
-msgstr ""
+msgstr "Korišteno u "
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:146
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:218
@@ -24072,9 +23936,8 @@ msgid "Second Unicode range"
 msgstr "Drugi Unicode raspon"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:916
-#, fuzzy
 msgid "Kerning Value:"
-msgstr "Količina podrezivanja:"
+msgstr "Vrijednost za podrezivanje:"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:973
 msgid "Set font family"
@@ -24089,9 +23952,8 @@ msgid "Add font"
 msgstr "Dodaj font"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1018
-#, fuzzy
 msgid "_Fonts"
-msgstr "_Font"
+msgstr "_Fontovi"
 
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:1026
 msgid "_Global Settings"
@@ -24569,15 +24431,13 @@ msgid "O_ptions"
 msgstr "O_pcije"
 
 #: ../src/ui/dialog/tracedialog.cpp:755
-#, fuzzy
 msgid ""
 "Inkscape bitmap tracing is based on Potrace, created by Peter Selinger.\n"
 "\n"
 "http://potrace.sourceforge.net"
 msgstr ""
-"Inkscapeovo precrtavanje bitmapa\n"
-"se bazira na Potrace sistemu,\n"
-"proizvedenog od Peter Selinger,\n"
+"Inkscapeovo precrtavanje bitmapa se zasniva na Potrace sustavu od Peter "
+"Selingera,\n"
 "\n"
 "http://potrace.sourceforge.net"
 
@@ -24824,9 +24684,8 @@ msgid "Lower node"
 msgstr "Spusti čvor"
 
 #: ../src/ui/dialog/xml-tree.cpp:181
-#, fuzzy
 msgid "Show attributes"
-msgstr "Postavi svojstvo"
+msgstr "Prikaži svojstva"
 
 #: ../src/ui/dialog/xml-tree.cpp:309
 msgid "<b>Click</b> to select nodes, <b>drag</b> to rearrange."
@@ -25785,7 +25644,7 @@ msgstr "(određeno nagibom, „pero”)"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:182
 msgid "Fixation:"
-msgstr "Položaj:"
+msgstr "Fiksiranje:"
 
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:183
 msgid ""
@@ -26146,9 +26005,8 @@ msgid "Reverse the direction of the gradient"
 msgstr "Obrni smjer gradijenta"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:450
-#, fuzzy
 msgid "Repeat: "
-msgstr "Ponavljanje"
+msgstr "Ponavljanje: "
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:453
 msgctxt "Gradient repeat type"
@@ -26510,10 +26368,9 @@ msgid "Bicubic"
 msgstr "Bikubično"
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:329
-#, fuzzy
 msgid "Coons: no smoothing. Bicubic: smoothing across patch boundaries."
 msgstr ""
-"Konusno: bez zaglađivanja. Bikubično: zaglađivanje uzduž granica staze."
+"Konusno: bez zaglađivanja. Bikubično: zaglađivanje uzduž granica odjeljka."
 
 #: ../src/ui/toolbar/mesh-toolbar.cpp:528
 msgid ""
@@ -27079,7 +26936,6 @@ msgid "To nodes"
 msgstr "Na čvorove"
 
 #: ../src/ui/toolbar/snap-toolbar.cpp:114
-#, fuzzy
 msgid "Snap to cusp nodes, incl. rectangle corners"
 msgstr "Privuci na kupaste čvorove, uključujući kutove pravokutnika"
 
@@ -27806,9 +27662,8 @@ msgid "Vert:"
 msgstr "Uspravno:"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:596
-#, fuzzy
 msgid "Vertical kerning (px)"
-msgstr "Vodoravno podrezivanje (px)"
+msgstr "Uspravno podrezivanje (px)"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:610
 msgid "Rot:"
@@ -29231,7 +29086,7 @@ msgstr "<b>Okvir prelamajućeg teksta</b>: %s &#215; %s"
 
 #: ../src/ui/tools/text-tool.cpp:646
 msgid "Type text; <b>Enter</b> to start new line."
-msgstr "Unesi tekst; <b>Enter</b> za novi redak."
+msgstr "Upiši tekst; <b>Enter</b> za novi redak."
 
 #: ../src/ui/tools/text-tool.cpp:685
 msgid "Flowed text is created."
@@ -29326,13 +29181,13 @@ msgid_plural ""
 "Type or edit flowed text (%d characters%s); <b>Enter</b> to start new "
 "paragraph."
 msgstr[0] ""
-"Unesi ili uredi prelamajući tekst (%d pismovni znak%s); Tipka <b>Enter</b> "
+"Upiši ili uredi prelamajući tekst (%d pismovni znak%s); Tipka <b>Enter</b> "
 "za novi odlomak."
 msgstr[1] ""
-"Unesi ili uredi prelamajući tekst (%d pismovna znaka%s); Tipka <b>Enter</b> "
+"Upiši ili uredi prelamajući tekst (%d pismovna znaka%s); Tipka <b>Enter</b> "
 "za novi odlomak."
 msgstr[2] ""
-"Unesi ili uredi prelamajući tekst (%d pismovnih znakova%s); Tipka <b>Enter</"
+"Upiši ili uredi prelamajući tekst (%d pismovnih znakova%s); Tipka <b>Enter</"
 "b> za novi odlomak."
 
 #: ../src/ui/tools/text-tool.cpp:1683
@@ -29341,17 +29196,17 @@ msgid "Type or edit text (%d character%s); <b>Enter</b> to start new line."
 msgid_plural ""
 "Type or edit text (%d characters%s); <b>Enter</b> to start new line."
 msgstr[0] ""
-"Unesi ili uredi tekst (%d pismovni znak%s); Tipka <b>Enter</b> za novi redak."
+"Upiši ili uredi tekst (%d pismovni znak%s); Tipka <b>Enter</b> za novi redak."
 msgstr[1] ""
-"Unesi ili uredi tekst (%d pismovna znaka%s); Tipka <b>Enter</b> za novi "
+"Upiši ili uredi tekst (%d pismovna znaka%s); Tipka <b>Enter</b> za novi "
 "redak."
 msgstr[2] ""
-"Unesi ili uredi tekst (%d pismovnih znakova%s); Tipka <b>Enter</b> za novi "
+"Upiši ili uredi tekst (%d pismovnih znakova%s); Tipka <b>Enter</b> za novi "
 "redak."
 
 #: ../src/ui/tools/text-tool.cpp:1799
 msgid "Type text"
-msgstr "Unesi tekst"
+msgstr "Upiši tekst"
 
 #: ../src/ui/tools/tool-base.cpp:707
 msgid "<b>Space+mouse move</b> to pan canvas"
@@ -29858,12 +29713,12 @@ msgstr "Ruby"
 #: ../src/ui/widget/font-variants.cpp:200
 msgctxt "Font feature"
 msgid "Feature Settings"
-msgstr "Postavke svojstva"
+msgstr "Postavke karakteristika"
 
 #: ../src/ui/widget/font-variants.cpp:201
 msgctxt "Font feature"
 msgid "Selection has different Feature Settings!"
-msgstr "Obilježeni tekst ima drugačije postavke svojstva!"
+msgstr "Obilježeni tekst ima drugačije postavke karakteristika!"
 
 #: ../src/ui/widget/font-variants.cpp:217
 msgid "Common ligatures. On by default. OpenType tables: 'liga', 'clig'"
@@ -30028,7 +29883,7 @@ msgstr "Ruby varijante. OpenType tablica: ‚ruby‘."
 
 #: ../src/ui/widget/font-variants.cpp:482
 msgid "Feature settings in CSS form (e.g. \"wxyz\" or \"wxyz\" 3)."
-msgstr "Postavke svojstva u CSS obliku (npr. „wxyz” ili „wxyz” 3)."
+msgstr "Postavke karakteristika u CSS obliku (npr. „wxyz” ili „wxyz” 3)."
 
 #: ../src/ui/widget/layer-selector.cpp:115
 msgid "Toggle current layer visibility"
@@ -30933,8 +30788,8 @@ msgid ""
 "Remove unused definitions (such as gradients or clipping paths) from the &lt;"
 "defs&gt; of the document"
 msgstr ""
-"Ukloni neupotrebljene definicije (kao što su gradijenti ili isijecajuće "
-"staze) iz &lt;definicija&gt; dokumenta"
+"Ukloni nekorištene definicije (kao što su gradijenti ili isijecajuće staze) "
+"iz &lt;definicija&gt; dokumenta"
 
 #: ../src/verbs.cpp:2551
 msgid "_Import..."
@@ -32441,7 +32296,6 @@ msgid "Zoom to fit selection in window"
 msgstr "Prikaži cijeli odabir u prozoru"
 
 #: ../src/verbs.cpp:2992
-#, fuzzy
 msgid "_Center Page"
 msgstr "_Centriraj _stranicu"
 
@@ -32807,15 +32661,14 @@ msgid "View and edit the XML tree of the document"
 msgstr "Prikaži i uredi XML stabla dokumenta"
 
 #: ../src/verbs.cpp:3110
-#, fuzzy
 msgid "_Selectors and CSS..."
-msgstr "Odabir je poništen."
+msgstr "_Selektori i CSS …"
 
 #
 # File: ../src/verbs.cpp, line: 3111
 #: ../src/verbs.cpp:3111
 msgid "View and edit selections and CSS styles"
-msgstr ""
+msgstr "Prikaži i uredi odabire i CSS stilove"
 
 #: ../src/verbs.cpp:3112
 msgid "_Find/Replace..."
@@ -33629,9 +33482,8 @@ msgid "_Help"
 msgstr "Po_moć"
 
 #: ../share/ui/inkscape-application.glade:25
-#, fuzzy
 msgid "_About"
-msgstr "O Gcode alatima"
+msgstr "_O"
 
 #: ../share/extensions/convert2dashes.py:41
 msgid "Total number of objects not converted: {}\n"
@@ -33719,16 +33571,14 @@ msgid "{} is deprecated and should be removed"
 msgstr "{} je nepodržano i treba ukloniti"
 
 #: ../share/extensions/inkex/deprecated.py:93
-#, fuzzy
 msgid ""
 "{} or `optparse` has been deprecated and replaced with `argparser`.You must "
 "change `self.OptionParser.add_option` to `self.arg_parser.add_argument`; the "
 "arguments are similar."
 msgstr ""
-"{} ili „optparse” je vrlo staro, nepodržano otkad je izašao Python 2.7 u "
-"2009. i sada je zamijenjen s „argparser”. Moraš promijeniti „self."
-"OptionParser.add_option” u „self.arg_parser.add_argument” argumenti su "
-"slični."
+"{} ili „optparse” je zastarjelo i sad je zamijenjeno s „argparser”. Moraš "
+"promijeniti „self.OptionParser.add_option” u „self.arg_parser.add_argument”; "
+"argumenti su slični."
 
 #: ../share/extensions/inkex/deprecated.py:114
 msgid ""
@@ -33738,51 +33588,46 @@ msgstr ""
 "{} je sad obavezna metoda. Treba je stvoriti u {cls}, čak i ako ne postoji."
 
 #: ../share/extensions/inkex/deprecated.py:120
-#, fuzzy
 msgid ""
 "{} is now a method in the svg. Use `self.svg.get_current_layer()` instead."
 msgstr ""
-"{} je sada metoda u svg dokumentu. Umjesto toga koristi „self.svg."
+"{} je sad metoda u svg-u. Umjesto toga koristi „self.svg."
 "get_current_layer()”."
 
 #: ../share/extensions/inkex/deprecated.py:126
-#, fuzzy
 msgid ""
 "{} is now a method in the svg. Use `self.svg.get_center_position()` instead."
 msgstr ""
-"{} je sada metoda u svg dokumentu. Umjesto toga koristi „self.svg."
+"{} je sad metoda u svg-u. Umjesto toga koristi „self.svg."
 "get_center_position()”."
 
 #: ../share/extensions/inkex/deprecated.py:131
-#, fuzzy
 msgid "{} is now a dict in the svg. Use `self.svg.selected`."
-msgstr ""
-"{} je sada rječnik u svg dokumentu. Umjesto toga koristi „self.svg.selected”."
+msgstr "{} je sad rječnik u svg-u. Koristi „self.svg.selected”."
 
 #: ../share/extensions/inkex/deprecated.py:136
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.get_ids()` instead."
 msgstr ""
-"{} je sada metoda u svg dokumentu. Umjesto toga koristi „self.svg.get_ids()”."
+"{} je sad metoda u svg dokumentu. Umjesto toga koristi „self.svg.get_ids()”."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 143
 #: ../share/extensions/inkex/deprecated.py:143
 msgid "Use `self.svg.get_ids()` instead of {} and `doc_ids`."
-msgstr ""
+msgstr "Koristi „self.svg.get_ids()” umjesto {} i „doc_ids”."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 148
 #: ../share/extensions/inkex/deprecated.py:148
 msgid "{} has been removed"
-msgstr ""
+msgstr "{} je uklonjeno"
 
 #: ../share/extensions/inkex/deprecated.py:152
-#, fuzzy
 msgid ""
 "{} is now a method in the svg. Use `self.svg.getElementById(eid)` instead."
 msgstr ""
-"{} je sada metoda u svg dokumentu. Umjesto toga koristi „self.svg."
+"{} je sad metoda u svg-u. Umjesto toga koristi „self.svg."
 "getElementById(eid)”."
 
 #: ../share/extensions/inkex/deprecated.py:156
@@ -33794,76 +33639,70 @@ msgstr ""
 "getElement(path)”."
 
 #: ../share/extensions/inkex/deprecated.py:162
-#, fuzzy
 msgid "{} is no longer in use. Use the lxml .getparent() method instead."
-msgstr ""
-"{} je sada metoda u svg dokumentu. Umjesto toga koristi „self.svg."
-"get_current_layer()”."
+msgstr "{} se više ne koristi. Umjesto toga koristi lxml metodu .getparent()."
 
 #: ../share/extensions/inkex/deprecated.py:167
-#, fuzzy
 msgid ""
 "{} is now a property of the svg. Use `self.svg.namedview` to access this "
 "element"
 msgstr ""
-"{} je sada svojstvo svg dokumenta. Koristi „self.svg.namedview” za "
-"dohvaćanje ovog dokumenta"
+"{} je sad svojstvo svg-a. Koristi „self.svg.namedview” za dohvaćanje ovog "
+"dokumenta"
 
 #: ../share/extensions/inkex/deprecated.py:172
-#, fuzzy
 msgid ""
 "{} is now a method of the namedview element object. Use `self.svg.namedview."
 "add(Guide(x, y, a))` instead"
 msgstr ""
-"{} je sada metoda „namedview” elementa objekta. Umjesto toga koristi „self."
-"svg.namedview.create_guide(x, y, a)”"
+"{} je sad metoda „namedview” elementa objekta. Umjesto toga koristi „self."
+"svg.namedview.add(Guide(x, y, a))”"
 
 #: ../share/extensions/inkex/deprecated.py:178
-#, fuzzy
 msgid "{} is now `Effect.run()`. The `output` argument has changed."
-msgstr "{} je sada „Effect.run()” s istim argumentima"
+msgstr "{} je sad „Effect.run()”. „output” argument je promijenjen."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 184
 #: ../share/extensions/inkex/deprecated.py:184
 msgid "self.args[-1] is now self.options.input_file"
-msgstr ""
+msgstr "self.args[-1] je sad self.options.input_file"
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 189
 #: ../share/extensions/inkex/deprecated.py:189
 msgid "self.svg_file is now self.options.input_file"
-msgstr ""
+msgstr "self.svg_file je sad self.options.input_file"
 
 #: ../share/extensions/inkex/deprecated.py:201
 msgid ""
 "{} is now a method in the svg document.  Use `self.svg."
 "get_unique_id(old_id)` instead."
 msgstr ""
-"{} je sada metoda u svg dokumentu. Umjesto toga koristi „self.svg."
+"{} je sad metoda u svg dokumentu. Umjesto toga koristi „self.svg."
 "get_unique_id(old_id)”."
 
 #: ../share/extensions/inkex/deprecated.py:206
 msgid "{} is now a property of the svg document. Use `self.svg.width` instead."
 msgstr ""
-"{} je sada svojstvo svg dokumenta. Umjesto toga koristi „self.svg.width”."
+"{} je sad svojstvo svg dokumenta. Umjesto toga koristi „self.svg.width”."
 
 #: ../share/extensions/inkex/deprecated.py:211
 msgid ""
 "{} is now a property of the svg document. Use `self.svg.height` instead."
 msgstr ""
-"{} je sada svojstvo svg dokumenta. Umjesto toga koristi „self.svg.height”."
+"{} je sad svojstvo svg dokumenta. Umjesto toga koristi „self.svg.height”."
 
 #: ../share/extensions/inkex/deprecated.py:216
 msgid "{} is now a property of the svg document. Use `self.svg.unit` instead."
 msgstr ""
-"{} je sada svojstvo svg dokumenta. Umjesto toga koristi „self.svg.unit”."
+"{} je sad svojstvo svg dokumenta. Umjesto toga koristi „self.svg.unit”."
 
 #: ../share/extensions/inkex/deprecated.py:221
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.unittouu(str)` instead."
 msgstr ""
-"{} je sada metoda u svg dokumentu. Umjesto toga koristi „self.svg."
+"{} je sad metoda u svg dokumentu. Umjesto toga koristi „self.svg."
 "unittouu(str)”."
 
 #: ../share/extensions/inkex/deprecated.py:226
@@ -33871,7 +33710,7 @@ msgid ""
 "{} is now a method in the svg document. Use `self.svg.uutounit(value, unit)` "
 "instead."
 msgstr ""
-"{} je sada metoda u svg dokumentu. Umjesto toga koristi „self.svg."
+"{} je sad metoda u svg dokumentu. Umjesto toga koristi „self.svg."
 "uutounit(value, unit)”."
 
 #: ../share/extensions/inkex/deprecated.py:231
@@ -33879,18 +33718,18 @@ msgid ""
 "{} is now a method in the svg document. Use `self.svg.add_unit(value)` "
 "instead."
 msgstr ""
-"{} je sada metoda u svg dokumentu. Umjesto toga koristi „self.svg."
+"{} je sad metoda u svg dokumentu. Umjesto toga koristi „self.svg."
 "add_unit(value)”."
 
 #
-# File: ../share/extensions/interp_att_g.py, line: 92
+# File: ../share/extensions/interp_att_g.py, line: 88
 #: ../share/extensions/interp_att_g.py:88
 msgid "Bad values for a number field: {}, {}."
-msgstr ""
+msgstr "Neispravne vrijednosti za numeričko polje: {}, {}."
 
 #: ../share/extensions/interp_att_g.py:116
 msgid "You selected 'Other'. Please enter an attribute to interpolate."
-msgstr "Odabrano je „Drugo”. Unesi jedno svojstvo za interpolaciju."
+msgstr "Odabrano je „Drugo”. Upiši jedno svojstvo za interpolaciju."
 
 #: ../share/extensions/interp_att_g.py:137
 msgid "There is no selection to interpolate"
@@ -34229,8 +34068,7 @@ msgstr "U navedenoj datoteci nema podataka o rubu."
 
 #: ../share/extensions/polyhedron_3d.py:381
 msgid "Try selecting \"Face Specified\" in the Model File tab.\n"
-msgstr ""
-"Pokušaj odabrati „Definirano površinom” u kartici za datoteku modela.\n"
+msgstr "Pokušaj odabrati „Određeno plohom” u kartici za datoteku modela.\n"
 
 #: ../share/extensions/polyhedron_3d.py:491
 msgid ""
@@ -34247,8 +34085,8 @@ msgid ""
 "Face Data Not Found. Ensure file contains face data, and check the file is "
 "imported as \"Face-Specified\" under the \"Model File\" tab.\n"
 msgstr ""
-"Podaci površine nisu nađeni. Provjeri, da datoteka sadrži podatke o površini "
-"i da je uvezeš „Određeno površinom” u kartici za datoteku modela.\n"
+"Podaci plohe nisu nađeni. Provjeri, da datoteka sadrži podatke o plohi i da "
+"je uvezeš „Određeno plohom” u kartici za datoteku modela.\n"
 
 #: ../share/extensions/polyhedron_3d.py:562
 msgid "Internal Error. No view type selected\n"
@@ -34424,7 +34262,6 @@ msgid "Random lightness"
 msgstr "Slučajna osvijetljenost"
 
 #: ../share/extensions/color_HSL_adjust.inx:17
-#, fuzzy
 msgid ""
 "\n"
 "Adjusts hue, saturation and lightness in the HSL representation of the "
@@ -34476,7 +34313,6 @@ msgid "Input (r,g,b) Color Range:"
 msgstr "Ulazni (r,g,b) raspon boja:"
 
 #: ../share/extensions/color_custom.inx:18
-#, fuzzy
 msgid ""
 "\n"
 "Allows you to evaluate different functions for each channel.\n"
@@ -34593,9 +34429,8 @@ msgid "Replace color (RRGGBB hex):"
 msgstr "Zamijeni boju (RRGGBB heks):"
 
 #: ../share/extensions/color_replace.inx:6
-#, fuzzy
 msgid "Color to replace"
-msgstr "Nema se što zamijeniti"
+msgstr "Boja, koja se zamjenjuje"
 
 #: ../share/extensions/color_replace.inx:7
 msgid "By color (RRGGBB hex):"
@@ -34696,7 +34531,6 @@ msgid "Step:"
 msgstr "Koraci:"
 
 #: ../share/extensions/dots.inx:14
-#, fuzzy
 msgid ""
 "This extension replaces the selection's nodes with numbered dots according "
 "to the following options:\n"
@@ -34722,7 +34556,7 @@ msgstr "90 na 96 dpi"
 # File: ../share/extensions/dpi96to90.inx, line: 7
 #: ../share/extensions/dpi90to96.inx:7 ../share/extensions/dpi96to90.inx:7
 msgid "Switch DPI"
-msgstr ""
+msgstr "Promijeni DPI"
 
 #: ../share/extensions/dpi96to90.inx:3
 msgid "DPI 96 to 90"
@@ -34837,9 +34671,8 @@ msgid "Triangle Function"
 msgstr "Funkcija trokuta"
 
 #: ../share/extensions/draw_from_triangle.inx:35
-#, fuzzy
 msgid "Point At:"
-msgstr "Usmjereno na"
+msgstr "Točka na:"
 
 #: ../share/extensions/draw_from_triangle.inx:36
 msgid "Draw Marker At This Point"
@@ -34867,7 +34700,6 @@ msgid "Report this triangle's properties"
 msgstr "Izvijesti o svojstvima ovog trokuta"
 
 #: ../share/extensions/draw_from_triangle.inx:44
-#, fuzzy
 msgid ""
 "This extension draws constructions about a triangle defined by the first 3 "
 "nodes of a selected path. You may select one of preset objects or create "
@@ -34906,7 +34738,7 @@ msgstr ""
 "Sve mjerne jedinice su Inkscapeove piksel jedinice. Kutovi su u radijanima.\n"
 "Možeš odrediti točku trilinearnim koordinatama ili funkcijom za centar "
 "trokuta.\n"
-"Unesi kao funkcije duljine staze ili kutova.\n"
+"Upiši kao funkcije duljine staze ili kutova.\n"
 "Trilinearni elementi trebaju biti rastavljeni dvotočkom: „:”\n"
 "Duljine strana se prikazuju kao „s_a”, „s_b” i „s_c”.\n"
 "Njihovi odgovarajući kotovi su „a_a”, „a_b” i „a_c”.\n"
@@ -34950,7 +34782,6 @@ msgid "Method of Scaling:"
 msgstr "Način skaliranja:"
 
 #: ../share/extensions/dxf_input.inx:13
-#, fuzzy
 msgid "Manual scale factor:"
 msgstr "Faktor za ručno skaliranje:"
 
@@ -34976,7 +34807,6 @@ msgid "Text Font:"
 msgstr "Font teksta:"
 
 #: ../share/extensions/dxf_input.inx:27
-#, fuzzy
 msgid ""
 "- AutoCAD Release 13 and newer.\n"
 "- for manual scaling, assume dxf drawing is in mm.\n"
@@ -34994,7 +34824,7 @@ msgstr ""
 "skaliranja.\n"
 "- „Automatsko skaliranje” će ispuniti A4 stranicu po širini.\n"
 "- „Pročitaj iz datoteke” koristi varijablu $MEASUREMENT.\n"
-"- slojevi su sačuvani samo s običnim otvaranjem datoteke, ne s uvozom\n"
+"- slojevi su sačuvani samo putem Datoteka → Otvori , ne putem uvoza\n"
 "- ograničena podrška za BLOKOVE, koristi AutoCAD Explode Blocks umjesto toga."
 
 #: ../share/extensions/dxf_input.inx:40
@@ -35023,7 +34853,7 @@ msgstr "Osnovna mjerna jedinica:"
 
 #: ../share/extensions/dxf_outlines.inx:12
 msgid "pt"
-msgstr "pt"
+msgstr "tč"
 
 #: ../share/extensions/dxf_outlines.inx:13
 msgid "pc"
@@ -35113,7 +34943,6 @@ msgid "Layer match name:"
 msgstr "Poklapajuće ime sloja:"
 
 #: ../share/extensions/dxf_outlines.inx:35
-#, fuzzy
 msgid ""
 "- AutoCAD Release 14 DXF format.\n"
 "- The base unit parameter specifies in what unit the coordinates are output "
@@ -35165,9 +34994,8 @@ msgid "Shades:"
 msgstr "Nijanse:"
 
 #: ../share/extensions/edge3d.inx:8
-#, fuzzy
 msgid "Only black and white:"
-msgstr "Crno i bijelo"
+msgstr "Samo crno i bijelo:"
 
 #: ../share/extensions/edge3d.inx:10
 msgid "Blur stdDeviation:"
@@ -35199,24 +35027,20 @@ msgid "Business Card"
 msgstr "Posjetnica"
 
 #: ../share/extensions/empty_business_card.inx:7
-#, fuzzy
 msgid "Business card size:"
 msgstr "Veličina posjetnice:"
 
 #: ../share/extensions/empty_business_card.inx:22
-#, fuzzy
 msgid "Business Card..."
-msgstr "Posjetnica"
+msgstr "Posjetnica …"
 
 #: ../share/extensions/empty_business_card.inx:24
-#, fuzzy
 msgid "Business card of chosen size."
-msgstr "Veličina posjetnice:"
+msgstr "Posjetnica odabrane veličine."
 
 #: ../share/extensions/empty_business_card.inx:26
-#, fuzzy
 msgid "business card"
-msgstr "Posjetnica"
+msgstr "posjetnica"
 
 #: ../share/extensions/empty_desktop.inx:3
 msgid "Desktop"
@@ -35239,20 +35063,18 @@ msgid "Custom Height:"
 msgstr "Prilagođena visina:"
 
 #: ../share/extensions/empty_desktop.inx:32
-#, fuzzy
 msgid "Desktop..."
-msgstr "Grafičko sučelje"
+msgstr "Radna površina …"
 
 #
 # File: ../share/extensions/empty_desktop.inx, line: 34
 #: ../share/extensions/empty_desktop.inx:34
 msgid "Empty desktop of chosen size."
-msgstr ""
+msgstr "Prazna radna površina odabrane veličine."
 
 #: ../share/extensions/empty_desktop.inx:36
-#, fuzzy
 msgid "empty desktop"
-msgstr "Grafičko sučelje"
+msgstr "prazna radna površina"
 
 #: ../share/extensions/empty_dvd_cover.inx:3
 msgid "DVD Cover"
@@ -35267,21 +35089,20 @@ msgid "DVD cover bleed (mm):"
 msgstr "Napust DVD omota (mm):"
 
 #: ../share/extensions/empty_dvd_cover.inx:21
-#, fuzzy
 msgid "DVD Cover..."
-msgstr "DVD omot"
+msgstr "DVD omot …"
 
 #
 # File: ../share/extensions/empty_dvd_cover.inx, line: 23
 #: ../share/extensions/empty_dvd_cover.inx:23
 msgid "DVD cover of chosen size."
-msgstr ""
+msgstr "DVD omot odabrane veličine."
 
 #
 # File: ../share/extensions/empty_dvd_cover.inx, line: 25
 #: ../share/extensions/empty_dvd_cover.inx:25
 msgid "dvd cover"
-msgstr ""
+msgstr "dvd omot"
 
 #: ../share/extensions/empty_generic.inx:3
 msgid "Generic Canvas"
@@ -35301,19 +35122,16 @@ msgid "Hide border"
 msgstr "Sakrij rub"
 
 #: ../share/extensions/empty_generic.inx:37
-#, fuzzy
 msgid "Generic canvas..."
-msgstr "Generička radna površina"
+msgstr "Generičko platno …"
 
 #: ../share/extensions/empty_generic.inx:39
-#, fuzzy
 msgid "Generic canvas of chosen size."
-msgstr "Veličina memorije za is_crtavanja:"
+msgstr "Generičko platno odabrane veličine."
 
 #: ../share/extensions/empty_generic.inx:41
-#, fuzzy
 msgid "empty generic canvas"
-msgstr "Generička radna površina"
+msgstr "prazno generičko platno"
 
 #: ../share/extensions/empty_icon.inx:3
 msgid "Icon"
@@ -35324,20 +35142,18 @@ msgid "Icon size:"
 msgstr "Veličina ikone:"
 
 #: ../share/extensions/empty_icon.inx:14
-#, fuzzy
 msgid "Icon..."
-msgstr "Ikona"
+msgstr "Ikona …"
 
 #
 # File: ../share/extensions/empty_icon.inx, line: 16
 #: ../share/extensions/empty_icon.inx:16
 msgid "Empty icon of chosen size."
-msgstr ""
+msgstr "Prazna ikona odabrane veličine."
 
 #: ../share/extensions/empty_icon.inx:18
-#, fuzzy
 msgid "empty icon"
-msgstr "Prikaži ikone"
+msgstr "prazna ikona"
 
 #: ../share/extensions/empty_page.inx:7
 msgid "Page size:"
@@ -35352,21 +35168,20 @@ msgid "Page background:"
 msgstr "Pozadina stranice:"
 
 #: ../share/extensions/empty_page.inx:33
-#, fuzzy
 msgid "Page..."
-msgstr "Stranica"
+msgstr "Stranica …"
 
 #
 # File: ../share/extensions/empty_page.inx, line: 35
 #: ../share/extensions/empty_page.inx:35
 msgid "Empty page of chosen size."
-msgstr ""
+msgstr "Prazna stranica odabrane veličine."
 
 #
 # File: ../share/extensions/empty_page.inx, line: 37
 #: ../share/extensions/empty_page.inx:37
 msgid "empty sheet a4 a3 a5 letter black white opaque"
-msgstr ""
+msgstr "prazan papir a4 a3 a5 pismo crno bijelo neprozirno"
 
 #: ../share/extensions/empty_video.inx:3
 msgid "Video Screen"
@@ -35377,21 +35192,20 @@ msgid "Video size:"
 msgstr "Veličina videa:"
 
 #: ../share/extensions/empty_video.inx:25
-#, fuzzy
 msgid "Video..."
-msgstr "Video"
+msgstr "Video …"
 
 #
 # File: ../share/extensions/empty_video.inx, line: 27
 #: ../share/extensions/empty_video.inx:27
 msgid "Video screen of chosen size."
-msgstr ""
+msgstr "Video ekran odabrane veličine."
 
 #
 # File: ../share/extensions/empty_video.inx, line: 29
 #: ../share/extensions/empty_video.inx:29
 msgid "empty video"
-msgstr ""
+msgstr "prazan video"
 
 #: ../share/extensions/eps_input.inx:3
 msgid "EPS Input"
@@ -35422,7 +35236,6 @@ msgid "Path to save image:"
 msgstr "Staza za spremanje slike:"
 
 #: ../share/extensions/extractimage.inx:8
-#, fuzzy
 msgid ""
 "* Don't type the file extension, it is appended automatically.\n"
 "* A relative path (or a filename without path) is relative to the user's "
@@ -35498,9 +35311,8 @@ msgid "Stroke"
 msgstr "Linija"
 
 #: ../share/extensions/frame.inx:8
-#, fuzzy
 msgid "Stroke Color:"
-msgstr "Boja linije"
+msgstr "Boja linije:"
 
 #: ../share/extensions/frame.inx:10 ../share/extensions/interp_att_g.inx:14
 #: ../share/extensions/markers_strokepaint.inx:18
@@ -35508,19 +35320,16 @@ msgid "Fill"
 msgstr "Ispuni"
 
 #: ../share/extensions/frame.inx:11
-#, fuzzy
 msgid "Fill Color:"
-msgstr "Boja ispune"
+msgstr "Boja ispune:"
 
 #: ../share/extensions/frame.inx:20
-#, fuzzy
 msgid "Width(px)"
-msgstr "Širina"
+msgstr "Širina (px)"
 
 #: ../share/extensions/frame.inx:21
-#, fuzzy
 msgid "Corner Radius"
-msgstr "Unutrašnji polumjer:"
+msgstr "Polumjer kuta"
 
 #: ../share/extensions/funcplot.inx:3
 msgid "Function Plotter"
@@ -35574,7 +35383,6 @@ msgid "Use"
 msgstr "Koristi"
 
 #: ../share/extensions/funcplot.inx:19
-#, fuzzy
 msgid ""
 "Select a rectangle before calling the extension,\n"
 "it will determine X and Y scales. If you wish to fill the area, then add x-"
@@ -35602,7 +35410,6 @@ msgid "Functions"
 msgstr "Funkcije"
 
 #: ../share/extensions/funcplot.inx:29 ../share/extensions/param_curves.inx:24
-#, fuzzy
 msgid ""
 "Standard Python math functions are available:\n"
 "\n"
@@ -35659,7 +35466,6 @@ msgid "About"
 msgstr "O Gcode alatima"
 
 #: ../share/extensions/gcodetools_about.inx:10
-#, fuzzy
 msgid ""
 "Gcodetools was developed to make simple Gcode from Inkscape's paths. Gcode "
 "is a special format which is used in most of CNC machines. So Gcodetools "
@@ -35747,7 +35553,6 @@ msgstr ""
 #: ../share/extensions/gcodetools_path_to_gcode.inx:88
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx:54
 #: ../share/extensions/gcodetools_tools_library.inx:57
-#, fuzzy
 msgid "Gcodetools"
 msgstr "Gcode alati"
 
@@ -35761,7 +35566,6 @@ msgid "Maximum area cutting curves:"
 msgstr "Maksimalno područje isjecajućih krivulja:"
 
 #: ../share/extensions/gcodetools_area.inx:11
-#, fuzzy
 msgid "Area width:"
 msgstr "Širina područja:"
 
@@ -35770,7 +35574,6 @@ msgid "Area tool overlap (0..0.9):"
 msgstr "Područje preklapanja alata (0..0.9):"
 
 #: ../share/extensions/gcodetools_area.inx:14
-#, fuzzy
 msgid ""
 "\n"
 "\"Create area offset\": creates several Inkscape path offsets to fill "
@@ -35842,7 +35645,6 @@ msgid "delete"
 msgstr "ukloni"
 
 #: ../share/extensions/gcodetools_area.inx:39
-#, fuzzy
 msgid ""
 "\n"
 "Usage:\n"
@@ -35920,7 +35722,6 @@ msgstr "Rasporedi staze, za usporavanje brzog udaljavanja"
 #: ../share/extensions/gcodetools_area.inx:61
 #: ../share/extensions/gcodetools_lathe.inx:41
 #: ../share/extensions/gcodetools_path_to_gcode.inx:21
-#, fuzzy
 msgid ""
 "\n"
 "Biarc interpolation tolerance is the maximum distance between path and its "
@@ -36132,12 +35933,10 @@ msgid "DXF Points"
 msgstr "DXF točke"
 
 #: ../share/extensions/gcodetools_dxf_points.inx:9
-#, fuzzy
 msgid "DXF points"
 msgstr "DXF točke"
 
 #: ../share/extensions/gcodetools_dxf_points.inx:10
-#, fuzzy
 msgid ""
 "\n"
 "\n"
@@ -36198,7 +35997,6 @@ msgid "Draw additional graphics to see engraving path"
 msgstr "Crtaj dodatne grafike za prikaz staze gravure"
 
 #: ../share/extensions/gcodetools_engraving.inx:15
-#, fuzzy
 msgid ""
 "\n"
 "This function creates path to engrave letters or any shape with sharp "
@@ -36372,7 +36170,6 @@ msgid "Lathe modify path"
 msgstr "Izmijeni stazu tokarenja"
 
 #: ../share/extensions/gcodetools_lathe.inx:22
-#, fuzzy
 msgid ""
 "\n"
 "            This function modifies path so it will be possible to be cut it "
@@ -36390,7 +36187,6 @@ msgid "Orientation points"
 msgstr "Orijentacijske točke"
 
 #: ../share/extensions/gcodetools_orientation_points.inx:25
-#, fuzzy
 msgid ""
 "\n"
 "Orientation points are used to calculate transformation (offset,scale,mirror,"
@@ -36411,21 +36207,16 @@ msgstr ""
 "(odmaka, skaliranja, zrcaljenja, rotacije u XY ravnini).\n"
 "Samo za modus triju točaka: ne postavljaj sve tri točke na isti pravac "
 "(umjesto toga, koristi modus dviju točaka).\n"
-"\n"
 "Vrijednosti za Z plohu i Z dubinu možeš promijeniti i kasnije tekst alatom "
 "(treće koordinate).\n"
-"\n"
 "Ako nema točaka orijentacije na aktivnom sloju, uzet će se iz sloja iznad.\n"
-"\n"
-"Ne razdvajaj grupu točaka orijentacije! Možeš ih odabrati duplim klikom, za "
-"ulaženje u grupu ili Ctrl+Klik.\n"
-"\n"
-"Sada pritisni gumb „Primijeni” za stvaranje kontrolnih točaka (neovisne "
-"skupine za svaki sloj).\n"
-"            "
+"Ne razdvajaj grupu točaka orijentacije!\n"
+"Možeš ih odabrati duplim klikom, za ulaženje u grupu ili Ctrl+Klik. Sad "
+"pritisni gumb „Primijeni” za stvaranje kontrolnih točaka (neovisne skupine "
+"za svaki sloj).\n"
+"      "
 
 #: ../share/extensions/gcodetools_orientation_points.inx:36
-#, fuzzy
 msgid ""
 "\n"
 "Gcodetools plug-in:\n"
@@ -36473,9 +36264,8 @@ msgid "Create in-out paths"
 msgstr "Stvori unutarnje-vanjske staze"
 
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx:11
-#, fuzzy
 msgid "In-out path length:"
-msgstr "Vrsta unutarnje-vanjske staze:"
+msgstr "Duljina unutarnje-vanjske staze:"
 
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx:12
 msgid "In-out path max distance to reference point:"
@@ -36563,7 +36353,6 @@ msgid "Just check tools"
 msgstr "Samo provjeri alate"
 
 #: ../share/extensions/gcodetools_tools_library.inx:25
-#, fuzzy
 msgid ""
 "\n"
 "Selected tool type fills appropriate default values. You can change these "
@@ -36637,7 +36426,6 @@ msgid "Size of Border (px):"
 msgstr "Veličina okvira (px):"
 
 #: ../share/extensions/generate_voronoi.inx:13
-#, fuzzy
 msgid ""
 "Generate a random pattern of Voronoi cells. The pattern will be accessible "
 "in the Fill and Stroke dialog. You must select an object or a group.\n"
@@ -36676,7 +36464,6 @@ msgid "File Resolution:"
 msgstr "Rezolucija datoteke:"
 
 #: ../share/extensions/gimp_xcf.inx:16
-#, fuzzy
 msgid ""
 "This extension exports the document to Gimp XCF format according to the "
 "following options:\n"
@@ -36822,9 +36609,8 @@ msgid "X Divisions [x2]:"
 msgstr "X podjele [×2]:"
 
 #: ../share/extensions/grid_isometric.inx:7
-#, fuzzy
 msgid "Y Divisions [x2] [&gt; 1/2 X Div]:"
-msgstr "Y podjele [×2] [> ½X podjele]:"
+msgstr "Y podjele [×2] [> ½ X podjele]:"
 
 #: ../share/extensions/grid_isometric.inx:8
 msgid "Division Spacing (px):"
@@ -37051,11 +36837,12 @@ msgid "Hershey Text"
 msgstr "Hershey tekst"
 
 #: ../share/extensions/hershey.inx:12
-#, fuzzy
 msgid ""
 "\n"
 "Hershey Text\n"
-msgstr "Hershey tekst"
+msgstr ""
+"\n"
+"Hershey tekst\n"
 
 #
 # File: ../share/extensions/hershey.inx, line: 16
@@ -37067,119 +36854,116 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+"Alat za zamjenu teksta s „poteznim” (stroke) fontovima\n"
+"\n"
+"Verzija 3.0, 2019-06-16\n"
+"\n"
+"\n"
+"\n"
 
 #: ../share/extensions/hershey.inx:23
-#, fuzzy
 msgid "Font face:"
-msgstr "Vrsta fonta: "
+msgstr "Pismovni rez fonta:"
 
 #: ../share/extensions/hershey.inx:24
-#, fuzzy
 msgid "Hershey Sans 1-stroke"
-msgstr "Bezserifni, jednopotezni"
+msgstr "Hershey bezserifni, jednopotezni"
 
 #
 # File: ../share/extensions/hershey.inx, line: 25
 #: ../share/extensions/hershey.inx:25
 msgid "Hershey Sans medium"
-msgstr ""
+msgstr "Hershey bezserifni, srednji"
 
 #: ../share/extensions/hershey.inx:27
-#, fuzzy
 msgid "Hershey Serif medium"
-msgstr "Serifni, normalni"
+msgstr "Hershey serifni, srednji"
 
 #: ../share/extensions/hershey.inx:28
-#, fuzzy
 msgid "Hershey Serif medium italic"
-msgstr "Serifni, normalni kurziv"
+msgstr "Hershey serifni, srednji kurziv"
 
 #: ../share/extensions/hershey.inx:30
-#, fuzzy
 msgid "Hershey Serif bold"
-msgstr "Serifni, debeli"
+msgstr "Hershey serifni, debeli"
 
 #: ../share/extensions/hershey.inx:31
-#, fuzzy
 msgid "Hershey Serif bold italic"
-msgstr "Serifni, debeli kurziv"
+msgstr "Hershey serifni, debeli kurziv"
 
 #: ../share/extensions/hershey.inx:33
-#, fuzzy
 msgid "Hershey Script 1-stroke"
-msgstr "Krasopis, jednopotezni"
+msgstr "Hershey krasopis, jednopotezni"
 
 #: ../share/extensions/hershey.inx:34
-#, fuzzy
 msgid "Hershey Script medium"
-msgstr "Krasopis, normalni"
+msgstr "Hershey krasopis, normalni"
 
 #: ../share/extensions/hershey.inx:36
-#, fuzzy
 msgid "Hershey Gothic English"
-msgstr "Gotica, engleska"
+msgstr "Hershey engleska gotica"
 
 #
 # File: ../share/extensions/hershey.inx, line: 39
 #. Block below this are derived from fonts licensed under SIL Open Font License
 #: ../share/extensions/hershey.inx:39
 msgid "EMS Allure"
-msgstr ""
+msgstr "EMS Allure"
 
 #
 # File: ../share/extensions/hershey.inx, line: 41
 #: ../share/extensions/hershey.inx:41
 msgid "EMS Elfin"
-msgstr ""
+msgstr "EMS Elfin"
 
 #
 # File: ../share/extensions/hershey.inx, line: 42
 #: ../share/extensions/hershey.inx:42
 msgid "EMS Felix"
-msgstr ""
+msgstr "EMS Felix"
 
 #
 # File: ../share/extensions/hershey.inx, line: 44
 #: ../share/extensions/hershey.inx:44
 msgid "EMS Nixish"
-msgstr ""
+msgstr "EMS Nixish"
 
 #
 # File: ../share/extensions/hershey.inx, line: 45
 #: ../share/extensions/hershey.inx:45
 msgid "EMS Nixish Italic"
-msgstr ""
+msgstr "EMS Nixish kurziv"
 
 #
 # File: ../share/extensions/hershey.inx, line: 47
 #: ../share/extensions/hershey.inx:47
 msgid "EMS Osmotron"
-msgstr ""
+msgstr "EMS Osmotron"
 
 #
 # File: ../share/extensions/hershey.inx, line: 48
 #: ../share/extensions/hershey.inx:48
 msgid "EMS Readability"
-msgstr ""
+msgstr "EMS Readability"
 
 #
 # File: ../share/extensions/hershey.inx, line: 49
 #: ../share/extensions/hershey.inx:49
 msgid "EMS Readability Italic"
-msgstr ""
+msgstr "EMS Readability kurziv"
 
 #
 # File: ../share/extensions/hershey.inx, line: 50
 #: ../share/extensions/hershey.inx:50
 msgid "EMS Tech"
-msgstr ""
+msgstr "EMS Tech"
 
 #
 # File: ../share/extensions/hershey.inx, line: 53
 #. Block above this are derived from fonts licensed under SIL Open Font License
 #: ../share/extensions/hershey.inx:53
 msgid "Other (given below)"
-msgstr ""
+msgstr "Drugi (zadan niže dolje)"
 
 #
 # File: ../share/extensions/hershey.inx, line: 56
@@ -37188,11 +36972,12 @@ msgid ""
 "\n"
 "Other SVG font name or path (if \"Other\" selected above):\n"
 msgstr ""
+"\n"
+"Drugi naziv SVG fonta ili staze (ako je „Drugi” iznad odabrano):\n"
 
 #: ../share/extensions/hershey.inx:59
-#, fuzzy
 msgid "Name/Path:"
-msgstr "Naziv:"
+msgstr "Naziv/Staza:"
 
 #: ../share/extensions/hershey.inx:61 ../share/extensions/split.inx:13
 msgid "Preserve original text"
@@ -37202,7 +36987,7 @@ msgstr "Očuvaj orginalni tekst"
 # File: ../share/extensions/hershey.inx, line: 65
 #: ../share/extensions/hershey.inx:65
 msgid "Utilities"
-msgstr ""
+msgstr "Uslužni programi"
 
 #
 # File: ../share/extensions/hershey.inx, line: 66
@@ -37212,17 +36997,19 @@ msgid ""
 "Hershey Text Utility Functions\n"
 "  "
 msgstr ""
+"\n"
+"Funkcije tekstnog programa Hershey\n"
+"  "
 
 #: ../share/extensions/hershey.inx:71
-#, fuzzy
 msgid "Generate font table"
-msgstr "Stvori log datoteku"
+msgstr "Stvori tablicu fonta"
 
 #
 # File: ../share/extensions/hershey.inx, line: 72
 #: ../share/extensions/hershey.inx:72
 msgid "Generate glyph table in selected font"
-msgstr ""
+msgstr "Stvori tablicu grafema u odabranom fontu"
 
 #
 # File: ../share/extensions/hershey.inx, line: 75
@@ -37232,6 +37019,9 @@ msgid ""
 "\n"
 "Sample text to use when generating font table:"
 msgstr ""
+"\n"
+"\n"
+"Standardni tekst za stvaranje tablice fonta:"
 
 #: ../share/extensions/hershey.inx:78
 #: ../share/extensions/render_alphabetsoup.inx:7
@@ -37265,6 +37055,26 @@ msgid ""
 "\n"
 "  "
 msgstr ""
+"\n"
+"Ovo proširenje iscrtava cijeli tekst (ili cijeli odabrani tekst)\n"
+"u tvom dokumentu koristeći specijalne „jednospotezne”\n"
+"ili „gravurne” fontove izrađene za plotere.\n"
+"\n"
+"Dok obični „obrisni” fontovi (npr. TrueType) funkcioniraju\n"
+"popunjavanjem područja unutar nevidljivog obrisa,\n"
+"fontovi za graviranje se sastoje samo od pojedinačnih linija\n"
+"ili poteza; slično ljudskom rukopisu.\n"
+"\n"
+"Gravurni fontovi se koristi za stvaranje tekstualnih staza, koje\n"
+"računalom upravljani strojevi za crtanje i rezanje (od plotera\n"
+"do CNC usmjerivače) mogu učinkovito slijediti.\n"
+"\n"
+"Potpuni korisnički priručnik dostupan je za preuzimanje na:\n"
+"   http://wiki.evilmadscientist.com/hershey\n"
+"  \n"
+"Za proširenu pomoć kliknite „Primijeni” s odabranom karticom.\n"
+"\n"
+"  "
 
 #
 # File: ../share/extensions/hershey.inx, line: 109
@@ -37282,6 +37092,15 @@ msgid ""
 "credits embedded within the SVG fonts included with this\n"
 "distribution.\n"
 msgstr ""
+"\n"
+"Hershey fontove je izradio dr. A. V. Hershey.\n"
+"\n"
+"Dodatni moderni „EMS” fontovi u ovoj distribuciji su derivati\n"
+"kreirani od fontova licenciranih pod licencom SIL Open Font.\n"
+"\n"
+"Za cjelovite podatke o zaslugama i informacijama o licenci,\n"
+"pročitajte zasluge u SVG fontovima, koji su uključeni u \n"
+"ovu distribuciju.\n"
 
 #: ../share/extensions/hpgl_input.inx:3
 msgid "HPGL Input"
@@ -37357,9 +37176,8 @@ msgstr ""
 "serijske veze."
 
 #: ../share/extensions/hpgl_output.inx:10 ../share/extensions/plotter.inx:68
-#, fuzzy
 msgid "Plotter Settings"
-msgstr "Postavke plotera "
+msgstr "Postavke plotera"
 
 #: ../share/extensions/hpgl_output.inx:13 ../share/extensions/plotter.inx:71
 msgid "Pen number:"
@@ -37440,9 +37258,8 @@ msgstr ""
 "odgovrajuće slojeve. Ovo nadvladava gornji unos za broj olovaka."
 
 #: ../share/extensions/hpgl_output.inx:28 ../share/extensions/plotter.inx:86
-#, fuzzy
 msgid "Plot Features"
-msgstr "Karakteristike plotanja "
+msgstr "Karakteristike plotanja"
 
 #: ../share/extensions/hpgl_output.inx:29 ../share/extensions/plotter.inx:87
 msgid "Overcut (mm):"
@@ -37602,7 +37419,7 @@ msgstr "Primijeni svojstvo na SVG korijen"
 
 #: ../share/extensions/ink2canvas.inx:3
 msgid "Convert to html5 canvas"
-msgstr "Konvertiraj u HTML5 <canvas>"
+msgstr "Konvertiraj u HTML5 platno (canvas)"
 
 #: ../share/extensions/ink2canvas.inx:9
 msgid "HTML 5 canvas (*.html)"
@@ -37750,7 +37567,7 @@ msgstr "Cijeli broj"
 
 #: ../share/extensions/interp_att_g.inx:25
 msgid "Float Number"
-msgstr "Decimalni broj"
+msgstr "Broj s pomičnim zarezom"
 
 #: ../share/extensions/interp_att_g.inx:27
 msgid "Apply to:"
@@ -37853,7 +37670,6 @@ msgstr ""
 #: ../share/extensions/jessyInk_uninstall.inx:23
 #: ../share/extensions/jessyInk_video.inx:14
 #: ../share/extensions/jessyInk_view.inx:20
-#, fuzzy
 msgid "JessyInk"
 msgstr "JessyInk"
 
@@ -38451,7 +38267,6 @@ msgid "Margin box"
 msgstr "Okvir margine"
 
 #: ../share/extensions/layout_nup.inx:49
-#, fuzzy
 msgid ""
 "\n"
 "Parameters:\n"
@@ -38521,7 +38336,6 @@ msgid "Randomize angle (%):"
 msgstr "Slučajnost kuta (%):"
 
 #: ../share/extensions/lindenmayer.inx:18
-#, fuzzy
 msgid ""
 "\n"
 "The path is generated by applying the \n"
@@ -38631,9 +38445,8 @@ msgid "Measure Path"
 msgstr "Izmjeri stazu"
 
 #: ../share/extensions/measure.inx:8
-#, fuzzy
 msgid "Measurement Type:"
-msgstr "Vrsta mjerenja: "
+msgstr "Vrsta mjerenja:"
 
 #: ../share/extensions/measure.inx:10
 msgctxt "measure extension"
@@ -38722,12 +38535,10 @@ msgid "Scale Factor (Drawing:Real Length) = 1:"
 msgstr "Faktor za skaliranje (crtež : stvarna duljina) = 1:"
 
 #: ../share/extensions/measure.inx:47
-#, fuzzy
 msgid "Length Unit:"
 msgstr "Mjerna jedinica duljine:"
 
 #: ../share/extensions/measure.inx:60
-#, fuzzy
 msgid ""
 "This effect measures the length, area, or center-of-mass of the selected "
 "paths. Length and area are added as a text object with the selected units. "
@@ -38842,7 +38653,7 @@ msgstr "Podaci iz datoteke"
 
 #: ../share/extensions/nicechart.inx:36
 msgid "Enter the full path to a CSV file:"
-msgstr "Unesi potpuni put do CSV datoteke:"
+msgstr "Upiši potpuni put do CSV datoteke:"
 
 #: ../share/extensions/nicechart.inx:38
 msgid "Delimiter:"
@@ -38870,7 +38681,7 @@ msgstr "Direktan unos"
 
 #: ../share/extensions/nicechart.inx:45
 msgid "Type in comma separated values:"
-msgstr "Unesi vrijednosti, zarezom razdvojene:"
+msgstr "Upiši vrijednosti, zarezom razdvojene:"
 
 #: ../share/extensions/nicechart.inx:46
 msgid "(format like this: apples:3,bananas:5)"
@@ -38961,9 +38772,8 @@ msgid "Bar chart"
 msgstr "Stupčasti dijagram"
 
 #: ../share/extensions/nicechart.inx:91
-#, fuzzy
 msgid "Pie chart"
-msgstr "Stupčasti dijagram"
+msgstr "Kružni dijagram"
 
 #: ../share/extensions/nicechart.inx:92
 msgid "Pie chart (percentage)"
@@ -38982,7 +38792,6 @@ msgid "Number of significant digits for coordinates:"
 msgstr "Broj indikativnih brojaka za koordinate:"
 
 #: ../share/extensions/output_scour.inx:10
-#, fuzzy
 msgid ""
 "Specifies the number of significant digits that should be output for "
 "coordinates. Note that significant digits are *not* the number of decimals "
@@ -38990,10 +38799,10 @@ msgid ""
 "&quot;3&quot; is specified, the coordinate 3.14159 is output as 3.14 while "
 "the coordinate 123.675 is output as 124."
 msgstr ""
-"Određuje broj indikativnih brojaka za koordinate. „Indikativno” NE "
-"podrazumijva broj decimalnih brojaka, već ukupni broj brojaka. Npr.: ako je "
-"zadana vrijednost 3, tada se koordinata „3.14159” ispisuje kao „3.14”, dok "
-"se koordinata „123.675” ispisuje kao „124”."
+"Određuje broj indikativnih brojaka za koordinate. Indikativno *ne* "
+"podrazumijeva broj decimalnih brojaka, već ukupni broj brojaka. Npr.: ako je "
+"zadana vrijednost „3”, tada se koordinata 3,14159 ispisuje kao 3,14, dok se "
+"koordinata 123,675 ispisuje kao 124."
 
 #: ../share/extensions/output_scour.inx:14
 msgid "Shorten color values"
@@ -39011,26 +38820,24 @@ msgid "Convert CSS attributes to XML attributes"
 msgstr "Pretvori CSS svojstva u XML svojstva"
 
 #: ../share/extensions/output_scour.inx:17
-#, fuzzy
 msgid ""
 "Convert styles from style tags and inline style=&quot;&quot; declarations "
 "into XML attributes."
 msgstr ""
-"Pretvori stilove u označnim stilovima i umetnutim (style=\"\") deklaracijama "
-"u XML svojstva."
+"Pretvori stilove u označnim stilovima i umetnutim (style=&quot;&quot;) "
+"deklaracijama u XML svojstva."
 
 #: ../share/extensions/output_scour.inx:21
 msgid "Collapse groups"
 msgstr "Sažmi grupe"
 
 #: ../share/extensions/output_scour.inx:21
-#, fuzzy
 msgid ""
 "Remove useless groups, promoting their contents up one level. Requires &quot;"
 "Remove unused IDs&quot; to be set."
 msgstr ""
 "Ukloni nepotrebne grupe, prikazujući njihov sadržaj u sloju iznad "
-"trenutačnog. Potrebno je postaviti „Ukloni neupotrebljene ID oznake”."
+"trenutačnog. Potrebno je postaviti „Ukloni nekorištene ID oznake”."
 
 #: ../share/extensions/output_scour.inx:24
 msgid "Create groups for similar attributes"
@@ -39162,15 +38969,14 @@ msgid "Indentation characters:"
 msgstr "Znakovi uvlake:"
 
 #: ../share/extensions/output_scour.inx:61
-#, fuzzy
 msgid ""
 "The type of indentation used for each level of nesting in the output. "
 "Specify &quot;None&quot; to disable indentation. This option has no effect "
 "if &quot;Format output with line-breaks and indentation&quot; is disabled."
 msgstr ""
 "Vrsta uvlake svake pod-razine u izlaznim podacima. Deaktiviraj uvlake, "
-"upotrebom „Bez”. Ova opcija nema utjecaja, ako je „Formatiraj izlaze podatke "
-"s prijelomima redaka i uvlakama” deaktivirano."
+"upotrebom „Bez”. Ova opcija nema utjecaja, ako je „Formatiraj izlazne "
+"podatke s prijelomima redaka i uvlakama” deaktivirano."
 
 #: ../share/extensions/output_scour.inx:62
 msgid "Space"
@@ -39190,22 +38996,19 @@ msgid "Depth of indentation:"
 msgstr "Količina uvlake:"
 
 #: ../share/extensions/output_scour.inx:68
-#, fuzzy
 msgid ""
 "The depth of the chosen type of indentation. E.g. if you choose "
 "&quot;2&quot; every nesting level in the output will be indented by two "
 "additional spaces/tabs."
 msgstr ""
 "Količina odabrane vrste uvlake. Npr., ako odabereš „2”, svaka ugniježdena "
-"razina izvožaja bit će uvučena s dva dodatna razmaka/tabulatora."
+"razina razultata bit će uvučena s dva dodatna razmaka/tabulatora."
 
 #: ../share/extensions/output_scour.inx:71
-#, fuzzy
 msgid "Strip the &quot;xml:space&quot; attribute from the root SVG element"
-msgstr "Ukloni „xml:space” svojstvo iz korijena SVG elementa"
+msgstr "Ukloni &quot;xml:space&quot; svojstvo iz korijena SVG elementa"
 
 #: ../share/extensions/output_scour.inx:71
-#, fuzzy
 msgid ""
 "This is useful if the input file specifies &quot;xml:space='preserve'&quot; "
 "in the root SVG element which instructs the SVG editor not to change "
@@ -39213,7 +39016,7 @@ msgid ""
 "above)."
 msgstr ""
 "Ovo je korisno, ako ulazna datoteka sadrži „xml:space='preserve'” u osnovi "
-"SVG elementa. To instruira SVG-uređivača, da ne mijenja razmake u dokumentu "
+"SVG elementa. To instruira SVG uređivača, da ne mijenja razmake u dokumentu "
 "(i na taj način zanemaruje gornje opcije)."
 
 #: ../share/extensions/output_scour.inx:73
@@ -39237,7 +39040,6 @@ msgid "Shorten IDs"
 msgstr "Skrati ID oznake"
 
 #: ../share/extensions/output_scour.inx:80
-#, fuzzy
 msgid ""
 "Minimize the length of IDs using only lowercase letters, assigning the "
 "shortest values to the most-referenced elements. For instance, &quot;"
@@ -39285,12 +39087,11 @@ msgid "Preserve IDs starting with:"
 msgstr "Sačuvaj ID oznake koje počinju sa:"
 
 #: ../share/extensions/output_scour.inx:93
-#, fuzzy
 msgid ""
 "Preserve all IDs that start with the specified prefix (e.g. specify &quot;"
 "flag&quot; to preserve &quot;flag-mx&quot;, &quot;flag-pt&quot;, etc.)."
 msgstr ""
-"Sačuvaj sve ID oznake s određenim prefiksom (npr. unesi „flag” za čuvanje "
+"Sačuvaj sve ID oznake s određenim prefiksom (npr. upiši „flag” za čuvanje "
 "„flag-mx”, „flag-pt”, itd.)."
 
 #: ../share/extensions/output_scour.inx:97
@@ -39358,7 +39159,6 @@ msgid "Samples:"
 msgstr "Primjeri:"
 
 #: ../share/extensions/param_curves.inx:20
-#, fuzzy
 msgid ""
 "Select a rectangle before calling the extension, it will determine X and Y "
 "scales.\n"
@@ -39483,22 +39283,19 @@ msgstr ""
 # File: ../share/extensions/pdflatex.inx, line: 3
 #: ../share/extensions/pdflatex.inx:3
 msgid "LaTeX (pdflatex)"
-msgstr ""
+msgstr "LaTeX (pdflatex)"
 
 #: ../share/extensions/pdflatex.inx:6
-#, fuzzy
 msgid "LaTeX input:"
-msgstr "Ulazni LaTeX: "
+msgstr "Ulazni LaTeX:"
 
 #: ../share/extensions/pdflatex.inx:7
-#, fuzzy
 msgid "Additional packages (comma-separated):"
-msgstr "Dodatni paketi (razdvojeni zarezom): "
+msgstr "Dodatni paketi (razdvojeni zarezom):"
 
 #: ../share/extensions/pdflatex.inx:12
-#, fuzzy
 msgid "Mathematics"
-msgstr "Matematički operatori"
+msgstr "Matematičko"
 
 #: ../share/extensions/perfectboundcover.inx:3
 msgid "Perfect-Bound Cover Template"
@@ -39589,6 +39386,9 @@ msgid ""
 "Snap selected paths, images, and rectangles to pixel boundaries. Strokes "
 "with a non-zero odd width are snapped to midpoints, so they align correctly"
 msgstr ""
+"Privuci odabrane staze, slike i pravokutnike na granice piksela. Potezi s ne-"
+"nulnom neparnom širinom se privlače do srednjih točaka, tako da se ispravno "
+"poravnaju"
 
 #
 # File: ../share/extensions/pixelsnap.inx, line: 8
@@ -39597,6 +39397,8 @@ msgid ""
 "Snap unselected ancestors' translations (groups, layers, document height) "
 "first"
 msgstr ""
+"Privuci najprije translacije neodabranih prethodnika (grupe, slojevi, visina "
+"dokumenta)"
 
 #
 # File: ../share/extensions/pixelsnap.inx, line: 9
@@ -39605,6 +39407,8 @@ msgid ""
 "Calculate offset relative to unselected ancestors' transforms (includes "
 "document height offset)"
 msgstr ""
+"Izračunaj odmak, relativno u odnosu na transformaciju nadređenog (uključuje "
+"odmak visine dokumenta)"
 
 #
 # File: ../share/extensions/pixelsnap.inx, line: 12
@@ -39613,6 +39417,8 @@ msgid ""
 "Only move position and resize objects, don't touch paths (least damaging "
 "choice, fine for most scenarios)"
 msgstr ""
+"Premjesti samo položaj i promijenite veličinu objekata, ne diraj staze "
+"(najmanje štetan izbor, u redu za većinu slučajeva)"
 
 #
 # File: ../share/extensions/pixelsnap.inx, line: 13
@@ -39621,12 +39427,14 @@ msgid ""
 "Modify path shapes, size, and position of object (most effective, but can "
 "damage intricate paths)"
 msgstr ""
+"Promijeni oblike staze, veličinu i položaj objekta (najučinkovitije, ali "
+"može oštetiti zamršene staze)"
 
 #
 # File: ../share/extensions/pixelsnap.inx, line: 16
 #: ../share/extensions/pixelsnap.inx:16
 msgid "Maximum slope to consider straight (%)"
-msgstr ""
+msgstr "Maksimalna kosina koja se uzima kao ravan (%)"
 
 #: ../share/extensions/plotter.inx:3
 msgid "Plot"
@@ -39638,9 +39446,8 @@ msgid ""
 msgstr "Provjeri, da su svi objekti koje želiš plotati, pretvoreni u staze."
 
 #: ../share/extensions/plotter.inx:10
-#, fuzzy
 msgid "Connection Settings"
-msgstr "Postavke veze "
+msgstr "Postavke veze"
 
 #: ../share/extensions/plotter.inx:11
 msgid "Port type:"
@@ -40003,7 +39810,7 @@ msgstr "Svjetlo Z:"
 
 #: ../share/extensions/polyhedron_3d.inx:78
 msgid "Faces"
-msgstr "Ploha"
+msgstr "Plohe"
 
 #: ../share/extensions/polyhedron_3d.inx:79
 msgid "Edges"
@@ -40173,9 +39980,8 @@ msgid "Square size (px):"
 msgstr "Veličina kvadrata (px):"
 
 #: ../share/extensions/render_barcode_qrcode.inx:36
-#, fuzzy
 msgid "Drawing type:"
-msgstr "Vrsta crteža: "
+msgstr "Vrsta crteža:"
 
 #: ../share/extensions/render_barcode_qrcode.inx:37
 msgid "Smooth: neutral"
@@ -40210,7 +40016,6 @@ msgid "Smooth square value (0-1):"
 msgstr "Zaglađena kvadratna vrijednost(0–1):"
 
 #: ../share/extensions/render_barcode_qrcode.inx:47
-#, fuzzy
 msgid ""
 "For Path: custom set the path in relative coordinates (0,0)=(left,up) square "
 "size 1.0 "
@@ -40274,19 +40079,16 @@ msgid "Find and Replace font"
 msgstr "Pronađi i zamijeni font"
 
 #: ../share/extensions/replace_font.inx:11
-#, fuzzy
 msgid "Find font:"
-msgstr "Nađi font: "
+msgstr "Nađi font:"
 
 #: ../share/extensions/replace_font.inx:12
-#, fuzzy
 msgid "Replace with:"
-msgstr "Zamijeni sa: "
+msgstr "Zamijeni sa:"
 
 #: ../share/extensions/replace_font.inx:15
-#, fuzzy
 msgid "Replace all fonts with:"
-msgstr "Zamijeni sve fontove sa: "
+msgstr "Zamijeni sve fontove sa:"
 
 #: ../share/extensions/replace_font.inx:17
 msgid "List all fonts"
@@ -40466,19 +40268,16 @@ msgid "Seamless Pattern Procedural"
 msgstr "Bešavna mustra, proceduralno"
 
 #: ../share/extensions/seamless_pattern_procedural.inx:15
-#, fuzzy
 msgid "Seamless Pattern..."
-msgstr "Bešavna mustra"
+msgstr "Bešavna mustra …"
 
 #: ../share/extensions/seamless_pattern_procedural.inx:17
-#, fuzzy
 msgid "Create seamless patterns."
-msgstr "Bešavna mustra"
+msgstr "Stvori bešavne mustre."
 
 #: ../share/extensions/seamless_pattern_procedural.inx:19
-#, fuzzy
 msgid "live seamless patterns"
-msgstr "Bešavna mustra"
+msgstr "žive bešavne mustre"
 
 #: ../share/extensions/setup_typography_canvas.inx:3
 msgid "1 - Setup Typography Canvas"
@@ -40550,13 +40349,11 @@ msgid "Lines"
 msgstr "Linije"
 
 #: ../share/extensions/split.inx:10
-#, fuzzy
 msgctxt "split"
 msgid "Words"
 msgstr "Riječi"
 
 #: ../share/extensions/split.inx:11
-#, fuzzy
 msgctxt "split"
 msgid "Letters"
 msgstr "Slova"
@@ -40570,7 +40367,6 @@ msgid "Straighten Segments"
 msgstr "Izravnaj segmente"
 
 #: ../share/extensions/straightseg.inx:6
-#, fuzzy
 msgid "Percent:"
 msgstr "Postotak:"
 
@@ -40656,9 +40452,8 @@ msgid "Saturday"
 msgstr "Subota"
 
 #: ../share/extensions/svgcalendar.inx:23
-#, fuzzy
 msgid "Automatically set size and position"
-msgstr "Automatski aktualiziraj slike"
+msgstr "Automatski postavi veličinu i položaj"
 
 #: ../share/extensions/svgcalendar.inx:24
 msgid "The options below have no influence when the above is checked."
@@ -40666,7 +40461,7 @@ msgstr "Daljnje opcije nemaju utjecaja, ako je gornje aktivirano."
 
 #: ../share/extensions/svgcalendar.inx:25
 msgid "Months per line:"
-msgstr "Broj mjeseca u jednom redu:"
+msgstr "Broj mjeseci po retku:"
 
 #: ../share/extensions/svgcalendar.inx:26
 msgid "Month Width:"
@@ -40722,7 +40517,7 @@ msgstr "Font za dan u tjednu:"
 
 #: ../share/extensions/svgcalendar.inx:42
 msgid "Day font:"
-msgstr "Font za datum:"
+msgstr "Font za dan:"
 
 #: ../share/extensions/svgcalendar.inx:44
 msgid "Localization"
@@ -41017,9 +40812,8 @@ msgstr ""
 "dijagrama. Tekstualni objekti neće biti manipulirani."
 
 #: ../share/extensions/web_interactive_mockup.inx:3
-#, fuzzy
 msgid "Interactive Mockup"
-msgstr "_Interaktivnost"
+msgstr "Interaktivna skica"
 
 #: ../share/extensions/web_interactive_mockup.inx:8
 #: ../share/extensions/web_transmit_att.inx:9
@@ -41090,7 +40884,7 @@ msgstr "kad je element učitan"
 # File: ../share/extensions/web_interactive_mockup.inx, line: 22
 #: ../share/extensions/web_interactive_mockup.inx:22
 msgid "This effect adds interaction in a viewer like a web browser."
-msgstr ""
+msgstr "Ovaj efekt dodaje interakciju u prikazivaču kao što je web preglednik."
 
 #
 # File: ../share/extensions/web_interactive_mockup.inx, line: 23
@@ -41098,18 +40892,18 @@ msgstr ""
 msgid ""
 "It creates a link effect by changing to viewbox from one position to another."
 msgstr ""
+"Stvara efekta poveznice, premještanjem okvira za prikaz s jednog mjesta na "
+"drugo."
 
 #: ../share/extensions/web_interactive_mockup.inx:24
-#, fuzzy
 msgid "When selecting object the last one is the one we jump to."
-msgstr ""
-"Prilikom skaliranja objekata, proporcionalno skaliraj i debljinu linije"
+msgstr "Prilikom odabira objekata, zadnji je taj na koji prelazimo."
 
 #
 # File: ../share/extensions/web_interactive_mockup.inx, line: 30
 #: ../share/extensions/web_interactive_mockup.inx:30
 msgid "Web design"
-msgstr ""
+msgstr "Web dizajn"
 
 #: ../share/extensions/web_set_att.inx:3
 msgid "Set Attributes"
@@ -41198,9 +40992,8 @@ msgstr "Web"
 
 #: ../share/extensions/web_set_att.inx:44
 #: ../share/extensions/web_transmit_att.inx:42
-#, fuzzy
 msgid "JavaScript"
-msgstr "Vrsta pisma: "
+msgstr "JavaScript"
 
 #: ../share/extensions/web_transmit_att.inx:3
 msgid "Transmit Attributes"
@@ -41308,18 +41101,17 @@ msgstr "Prisili dimenziju:"
 
 #. i18n. Description duplicated in a fake value attribute in order to make it translatable
 #: ../share/extensions/webslicer_create_rect.inx:16
-#, fuzzy
 msgid "Force Dimension must be set as &lt;width&gt;x&lt;height&gt;"
-msgstr "„Prisili dimenziju” mora biti postavljeno kao <širina>x<visina>"
+msgstr ""
+"„Prisili dimenziju” mora biti postavljeno kao &lt;širina&gt; × &lt;visina&gt;"
 
 #: ../share/extensions/webslicer_create_rect.inx:17
 msgid "If set, this will replace DPI."
 msgstr "Ako je zadano, to će zamijeniti DPI vrijednost."
 
 #: ../share/extensions/webslicer_create_rect.inx:20
-#, fuzzy
 msgid "JPG"
-msgstr "PNG"
+msgstr "JPG"
 
 #: ../share/extensions/webslicer_create_rect.inx:21
 msgid "JPG specific options"
@@ -41338,10 +41130,10 @@ msgstr ""
 "najbolja kvaliteta slike i najmanji stupanj komprimiranja"
 
 #
-# File: ../share/extensions/webslicer_create_rect.inx, line: 11
+# File: ../share/extensions/webslicer_create_rect.inx, line: 25
 #: ../share/extensions/webslicer_create_rect.inx:25
 msgid "GIF"
-msgstr ""
+msgstr "GIF"
 
 #: ../share/extensions/webslicer_create_rect.inx:26
 msgid "GIF specific options"
@@ -41359,7 +41151,7 @@ msgstr "Količina boja palete:"
 # File: ../share/extensions/webslicer_create_rect.inx, line: 33
 #: ../share/extensions/webslicer_create_rect.inx:33
 msgid "HTML"
-msgstr ""
+msgstr "HTML"
 
 #: ../share/extensions/webslicer_create_rect.inx:36
 msgid "Options for HTML export"
@@ -41507,15 +41299,13 @@ msgstr "Ulazni XAML"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:10
 #: ../org.inkscape.Inkscape.desktop.template:5
-#, fuzzy
 msgid "Inkscape"
-msgstr "Izađi iz programa"
+msgstr "Inkscape"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:11
 #: ../org.inkscape.Inkscape.desktop.template:6
-#, fuzzy
 msgid "Vector Graphics Editor"
-msgstr "Skalabilne vektorske grafike"
+msgstr "Uređivač vektorskih grafika"
 
 #
 # File: ../org.inkscape.Inkscape.appdata.xml.in, line: 13
@@ -41525,6 +41315,9 @@ msgid ""
 "Illustrator, CorelDraw, or Xara X, using the W3C standard Scalable Vector "
 "Graphics (SVG) file format."
 msgstr ""
+"Uređivač vektorskih grafika, otvorenog kȏda, s funkcijama usporedivima s "
+"programima Illustrator, CorelDraw ili Xara X, koristi W3C-ov standardni "
+"datotečni format SVG (skalabilne vektorske grafike)."
 
 #
 # File: ../org.inkscape.Inkscape.appdata.xml.in, line: 18
@@ -41536,33 +41329,36 @@ msgid ""
 "trace bitmaps and much more. We also aim to maintain a thriving user and "
 "developer community by using open, community-oriented development."
 msgstr ""
+"Inkscape podržava mnoge napredne SVG značajke (markere, klonove, alfa "
+"stapanje, itd.). Velika pažnja je posvećena dizajniranju modernog sučelja. "
+"Na jednostavan način je moguće uređivati čvorove, izvesti složene operacije "
+"na stazi, precrtavati bitmape i još mnogo toga. Također želimo održati "
+"uspješnu korisničku i razvojnu zajednicu, koristeći otvoreni način razvoja, "
+"usmjeren na zajednicu."
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:38
-#, fuzzy
 msgid "Main application window"
-msgstr "Duplicir_aj prozor"
+msgstr "Glavni prozor programa"
 
 #: ../org.inkscape.Inkscape.desktop.template:8
-#, fuzzy
 msgid "Create and edit Scalable Vector Graphics images"
-msgstr "Skalabilne vektorske grafike"
+msgstr "Stvori i uredi skalabilne vektorske grafike"
 
 #
 # File: ../org.inkscape.Inkscape.desktop.template, line: 9
 #: ../org.inkscape.Inkscape.desktop.template:9
 msgid "image;editor;vector;drawing;"
-msgstr ""
+msgstr "slika;uređivač;vektor;crtež;"
 
 #
 # File: ../org.inkscape.Inkscape.desktop.template, line: 17
 #: ../org.inkscape.Inkscape.desktop.template:17
 msgid "${INKSCAPE_ICONPATH}"
-msgstr ""
+msgstr "${INKSCAPE_ICONPATH}"
 
 #: ../org.inkscape.Inkscape.desktop.template:21
-#, fuzzy
 msgid "New Drawing"
-msgstr "Crtež"
+msgstr "Novi crtež"
 
 #: ../share/ui/menus.xml:90
 msgid "_View"
@@ -41589,1253 +41385,175 @@ msgid "Exte_nsions"
 msgstr "Prošire_nja"
 
 #: ../share/ui/units.xml:8
-#, fuzzy
 msgid "Percentage"
-msgstr "Postotak:"
+msgstr "Postotak"
 
 #: ../share/ui/units.xml:11
-#, fuzzy
 msgid "pixel"
-msgstr "px"
+msgstr "piksel"
 
 #
 # File: ../share/ui/units.xml, line: 15
 #: ../share/ui/units.xml:15
 msgid "CSS Pixels (96/inch)"
-msgstr ""
+msgstr "CSS piksela (96/inč)"
 
 #: ../share/ui/units.xml:18
-#, fuzzy
 msgid "point"
-msgstr "Točka"
+msgstr "točka"
 
 #: ../share/ui/units.xml:19
-#, fuzzy
 msgid "points"
-msgstr "Tipografske točke"
+msgstr "točaka"
 
 #: ../share/ui/units.xml:22
-#, fuzzy
 msgid "PostScript points (72/inch)"
-msgstr "PostScript (*.ps)"
+msgstr "PostScript točke (72/inč)"
 
 #
 # File: ../share/ui/units.xml, line: 25
 #: ../share/ui/units.xml:25
 msgid "pica"
-msgstr ""
+msgstr "pica"
 
 #: ../share/ui/units.xml:26
-#, fuzzy
 msgid "picas"
-msgstr "Ujednačena slova"
+msgstr "pica"
 
 #: ../share/ui/units.xml:29
-#, fuzzy
 msgid "12 points"
-msgstr "DXF točke"
+msgstr "12 točaka"
 
 #
 # File: ../share/ui/units.xml, line: 32
 #: ../share/ui/units.xml:32
 msgid "inch"
-msgstr ""
+msgstr "inč"
 
 #
 # File: ../share/ui/units.xml, line: 33
 #: ../share/ui/units.xml:33
 msgid "inches"
-msgstr ""
+msgstr "inča"
 
 #
 # File: ../share/ui/units.xml, line: 36
 #: ../share/ui/units.xml:36
 msgid "Inches (96 px/in)"
-msgstr ""
+msgstr "Inča (96 px/in)"
 
 #: ../share/ui/units.xml:39
-#, fuzzy
 msgid "millimeter"
-msgstr "Milimetar"
+msgstr "milimetar"
 
 #: ../share/ui/units.xml:40
-#, fuzzy
 msgid "millimeters"
-msgstr "Milimetar"
+msgstr "milimetara"
 
 #
 # File: ../share/ui/units.xml, line: 43
 #: ../share/ui/units.xml:43
 msgid "Millimeters (25.4 mm/in)"
-msgstr ""
+msgstr "Milimetara (25,4 mm/in)"
 
 #: ../share/ui/units.xml:46
-#, fuzzy
 msgid "centimeter"
-msgstr "Centimetar"
+msgstr "centimetar"
 
 #: ../share/ui/units.xml:47
-#, fuzzy
 msgid "centimeters"
-msgstr "Centimetar"
+msgstr "centimetara"
 
 #: ../share/ui/units.xml:50
-#, fuzzy
 msgid "Centimeters (10 mm/cm)"
-msgstr "Centimetar"
+msgstr "Centimetra (10 mm/cm)"
 
 #: ../share/ui/units.xml:53
-#, fuzzy
 msgid "degree"
-msgstr "stupnjeva"
+msgstr "stupanj"
 
 #: ../share/ui/units.xml:60
-#, fuzzy
 msgid "radian"
-msgstr "zrakasto"
+msgstr "radijan"
 
 #: ../share/ui/units.xml:61
-#, fuzzy
 msgid "radians"
-msgstr "zrakasto"
+msgstr "radijani"
 
 #
 # File: ../share/ui/units.xml, line: 64
 #: ../share/ui/units.xml:64
 msgid "Radians (180/pi deg/rad)"
-msgstr ""
+msgstr "Radijani (180/pi stupnjeva/rad)"
 
 #: ../share/ui/units.xml:67
-#, fuzzy
 msgid "gradian"
-msgstr "zrakasto"
+msgstr "gradijan"
 
 #: ../share/ui/units.xml:68
-#, fuzzy
 msgid "gradians"
-msgstr "zrakasto"
+msgstr "gradijani"
 
 #
 # File: ../share/ui/units.xml, line: 71
 #: ../share/ui/units.xml:71
 msgid "Gradians (360/400 deg/grad)"
-msgstr ""
+msgstr "Gradijani (360/400 stupnjeva/grad)"
 
 #
 # File: ../share/ui/units.xml, line: 74
 #: ../share/ui/units.xml:74
 msgid "turn"
-msgstr ""
+msgstr "okretaj"
 
 #: ../share/ui/units.xml:75
-#, fuzzy
 msgid "turns"
-msgstr "Okretaji:"
+msgstr "okretaji"
 
 #
 # File: ../share/ui/units.xml, line: 78
 #: ../share/ui/units.xml:78
 msgid "Turns (360 deg/turn)"
-msgstr ""
+msgstr "Okretaji (360 stupnjeva/okretaja)"
 
 #: ../share/ui/units.xml:81
-#, fuzzy
 msgid "font-height"
-msgstr "Točkasto svjetlo"
+msgstr "visina fonta"
 
 #: ../share/ui/units.xml:82
-#, fuzzy
 msgid "font-heights"
-msgstr "Točkasto svjetlo"
+msgstr "visine fonta"
 
 #: ../share/ui/units.xml:85
-#, fuzzy
 msgid "Font height"
-msgstr "Točkasto svjetlo"
+msgstr "Visina fonta"
 
 #: ../share/ui/units.xml:88
-#, fuzzy
 msgid "x-height"
-msgstr "Visina"
+msgstr "Visina kurenta"
 
 #: ../share/ui/units.xml:89
-#, fuzzy
 msgid "x-heights"
-msgstr "Visina"
+msgstr "Visine kurenta"
 
 #: ../share/ui/units.xml:92
-#, fuzzy
 msgid "Height of letter 'x'"
-msgstr "Visina stranice"
+msgstr "Visina slova „x”"
 
 #
 # File: ../share/ui/units.xml, line: 95
 #: ../share/ui/units.xml:95
 msgid "half-em"
-msgstr ""
+msgstr "polu-četverac"
 
 #
 # File: ../share/ui/units.xml, line: 96
 #: ../share/ui/units.xml:96
 msgid "half-ems"
-msgstr ""
+msgstr "polu-četverci"
 
 #
 # File: ../share/ui/units.xml, line: 99
 #: ../share/ui/units.xml:99
 msgid "Half of font height"
-msgstr ""
-
-#, fuzzy
-#~ msgid "#000000"
-#~ msgstr "crna (#000000)"
-
-#, fuzzy
-#~ msgid "#808080"
-#~ msgstr "siva (#808080)"
-
-#, fuzzy
-#~ msgid "-------------------------------------------------------------------------"
-#~ msgstr "-------------------------------------------------"
-
-#, fuzzy
-#~ msgid ".ai.svg"
-#~ msgstr "about.svg"
-
-#, fuzzy
-#~ msgid ".svg"
-#~ msgstr "about.svg"
-
-#, fuzzy
-#~ msgid "1cm"
-#~ msgstr "cm"
-
-#, fuzzy
-#~ msgid "250"
-#~ msgstr "CP 1250"
-
-#, fuzzy
-#~ msgid "6cm"
-#~ msgstr "cm"
-
-#~ msgid "<b>Click</b> CSS property to edit."
-#~ msgstr "<b>Klikni</b> na CSS svojstvo i uredi ga."
-
-#~ msgid "About..."
-#~ msgstr "O …"
-
-#~ msgid "Add a new style property"
-#~ msgstr "Dodaj novo svojstvo stila"
-
-#~ msgid "Apply color"
-#~ msgstr "Primijeni boju"
-
-#~ msgid "Apply color to symbolic icons)"
-#~ msgstr "Primijeni boju na simbolske ikone"
-
-#, fuzzy
-#~ msgid "Arial"
-#~ msgstr "Serijski"
-
-#~ msgid "Astrology"
-#~ msgstr "Astrologija"
-
-#, fuzzy
-#~ msgid "Automatic scaling to size A4"
-#~ msgstr "Automatski postavi veličinu i položaj"
-
-#, fuzzy
-#~ msgid "Code39"
-#~ msgstr "QR kȏd"
-
-#, fuzzy
-#~ msgid "Code39 Extended"
-#~ msgstr "Grčko prošireno"
-
-#, fuzzy
-#~ msgid "Code93"
-#~ msgstr "QR kȏd"
-
-#~ msgid "Css Dialog..."
-#~ msgstr "CSS dijalog …"
-
-#, fuzzy
-#~ msgid "D"
-#~ msgstr "Identifikacija"
-
-#, fuzzy
-#~ msgid "DPI Switch from 90 to 96"
-#~ msgstr "90 na 96 dpi"
-
-#, fuzzy
-#~ msgid "DPI Switch from 96 to 90"
-#~ msgstr "96 na 90 dpi"
-
-#, fuzzy
-#~ msgid "EAN13 +Extensions"
-#~ msgstr "IPA proširenja"
-
-#, fuzzy
-#~ msgid "EAN2 Extension"
-#~ msgstr "IPA proširenja"
-
-#, fuzzy
-#~ msgid "EAN5 Extension"
-#~ msgstr "IPA proširenja"
-
-#~ msgid "Export: Remove items in the Inkscape namespace."
-#~ msgstr "Izvoz: Ukloni stavke Inkscapeovog imenskog prostora."
-
-#~ msgid ""
-#~ "GUI: Close window after processing actions (needed as some verbs require "
-#~ "GUI)."
-#~ msgstr ""
-#~ "Grafičko sučelje: Zatvori prozor nakon izvršavanja akcije (potrebno je, "
-#~ "jer neki identifikatori zahtijevaju upotrebu sučelja)."
-
-#~ msgid "GUI: Console only."
-#~ msgstr "Korisničko sučelje: Samo konzola."
-
-#~ msgid "GUI: With graphical interface."
-#~ msgstr "Korisničko sučelje: S grafičkim sučeljem."
-
-#, fuzzy
-#~ msgid ""
-#~ "Gcodetools plug-in: converts paths to Gcode (using circular "
-#~ "interpolation), makes offset paths and engraves sharp corners using cone "
-#~ "cutters. This plug-in calculates Gcode for paths using circular "
-#~ "interpolation or linear motion when needed. Tutorials, manuals and "
-#~ "support can be found at English support forum: http://www.cnc-club.ru/"
-#~ "gcodetools and Russian support forum: http://www.cnc-club.ru/gcodetoolsru "
-#~ "Credits: Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry Nicolas, "
-#~ "Chris Lusby Taylor. Gcodetools ver. 1.7"
-#~ msgstr ""
-#~ "\n"
-#~ "Gcodetools dodatak:\n"
-#~ "Konvertira staze u Gcode (upotrebom kružne interpolacije), stvara "
-#~ "odmaknute staze i oštre kutove gravura koristeći stožaste rezače. Ovaj "
-#~ "dodatak po potrebi izračunava Gcode za staze koje koriste kružnu "
-#~ "interpolaciju ili linearno micanje.\n"
-#~ "\n"
-#~ "Vježbe, priručnik i pomoć možeš naći u engleskom forumu za korisničku "
-#~ "podršku: http://www.cnc-club.ru/gcodetools i na ruskom forumu za "
-#~ "korisničku podršku: http://www.cnc-club.ru/gcodetoolsru\n"
-#~ "\n"
-#~ "Zaslužni su: Nick Drobchenko, Vladimir Kalyaev, John Brooker, Henry "
-#~ "Nicolas, Chris Lusby Taylor.\n"
-#~ "\n"
-#~ "Gcodetools ver. 1.7\n"
-#~ "      "
-
-#~ msgid "Gothic German"
-#~ msgstr "Gotica, njemačka"
-
-#~ msgid "Gothic Italian"
-#~ msgstr "Gotica, talijanska"
-
-#~ msgid "Greek 1-stroke"
-#~ msgstr "Grčki, jednopotezni"
-
-#~ msgid "Greek medium"
-#~ msgstr "Grčki, normalni"
-
-#, fuzzy
-#~ msgid "Hershey Text for Inkscape"
-#~ msgstr "Hershey tekst"
-
-#~ msgid "Invalid entry: Not an id (#), class (.), or element CSS selector."
-#~ msgstr "Nevaljani unos: Nije CSS selektor za id (#), class (.) ili element."
-
-#~ msgid "Japanese"
-#~ msgstr "Japanski"
-
-#~ msgid "Kerning"
-#~ msgstr "Podrezivanje"
-
-#~ msgid "Letter rotation"
-#~ msgstr "Rotacija slova"
-
-#~ msgid "Letter spacing"
-#~ msgstr "Spacioniranje"
-
-#~ msgid "Line Height"
-#~ msgstr "Visina retka"
-
-#~ msgid "Lower"
-#~ msgstr "Donji"
-
-#~ msgid "Lower limit of ruler"
-#~ msgstr "Donja granica ravnala"
-
-#, fuzzy
-#~ msgid "Manual scale"
-#~ msgstr "Faktor za ručno skaliranje:"
-
-#~ msgid "Math (lower)"
-#~ msgstr "Matematika (niža)"
-
-#~ msgid "Math (upper)"
-#~ msgstr "Matematika (viša)"
-
-#~ msgid "Max Size"
-#~ msgstr "Maksimalna veličina"
-
-#~ msgid "Maximum size of the ruler"
-#~ msgstr "Maksimalna veličina ravnala"
-
-#~ msgid "Meteorology"
-#~ msgstr "Meteorologija"
-
-#~ msgid "Music"
-#~ msgstr "Muzika"
-
-#, fuzzy
-#~ msgid "Odd"
-#~ msgstr "Dodaj"
-
-#, fuzzy
-#~ msgid ""
-#~ "Orientation points are used to calculate transformation (offset,scale,"
-#~ "mirror,rotation in XY plane) of the path. 3-points mode only: do not put "
-#~ "all three into one line (use 2-points mode instead). You can modify Z "
-#~ "surface, Z depth values later using text tool (3rd coordinates). If there "
-#~ "are no orientation points inside current layer they are taken from the "
-#~ "upper layer. Do not ungroup orientation points! You can select them using "
-#~ "double click to enter the group or by Ctrl+Click. Now press apply to "
-#~ "create control points (independent set for each layer)."
-#~ msgstr ""
-#~ "\n"
-#~ "Orijentacijske točke se koriste za izračunavanje transformacije staze "
-#~ "(odmaka, skaliranja, zrcaljenja, rotacije u XY ravnini).\n"
-#~ "Samo za modus triju točaka: ne postavljaj sve tri točke na isti pravac "
-#~ "(umjesto toga, koristi modus dviju točaka).\n"
-#~ "Vrijednosti za Z plohu i Z dubinu možeš promijeniti i kasnije tekst "
-#~ "alatom (treće koordinate).\n"
-#~ "Ako nema točaka orijentacije na aktivnom sloju, uzet će se iz sloja "
-#~ "iznad.\n"
-#~ "Ne razdvajaj grupu točaka orijentacije!\n"
-#~ "Možeš ih odabrati duplim klikom, za ulaženje u grupu ili Ctrl+Klik. Sad "
-#~ "pritisni gumb „Primijeni” za stvaranje kontrolnih točaka (neovisne "
-#~ "skupine za svaki sloj).\n"
-#~ "      "
-
-#, fuzzy
-#~ msgid ""
-#~ "Orientation points are used to calculate transformation (offset,scale,"
-#~ "mirror,rotation in XY plane) of the path. 3-points mode only: do not put "
-#~ "all three into one line (use 2-points mode instead). You can modify Z "
-#~ "surface, Z depth values later using text tool (3rd coordinates). If there "
-#~ "are no orientation points inside current layer, they are taken from the "
-#~ "upper layer. Do not ungroup orientation points! You can select them using "
-#~ "double click to enter the group or by Ctrl+Click. Now press apply to "
-#~ "create control points (independent set for each layer)."
-#~ msgstr ""
-#~ "\n"
-#~ "Orijentacijske točke se koriste za izračunavanje transformacije staze "
-#~ "(odmaka, skaliranja, zrcaljenja, rotacije u XY ravnini).\n"
-#~ "Samo za modus triju točaka: ne postavljaj sve tri točke na isti pravac "
-#~ "(umjesto toga, koristi modus dviju točaka).\n"
-#~ "Vrijednosti za Z plohu i Z dubinu možeš promijeniti i kasnije tekst "
-#~ "alatom (treće koordinate).\n"
-#~ "Ako nema točaka orijentacije na aktivnom sloju, uzet će se iz sloja "
-#~ "iznad.\n"
-#~ "Ne razdvajaj grupu točaka orijentacije!\n"
-#~ "Možeš ih odabrati duplim klikom, za ulaženje u grupu ili Ctrl+Klik. Sad "
-#~ "pritisni gumb „Primijeni” za stvaranje kontrolnih točaka (neovisne "
-#~ "skupine za svaki sloj).\n"
-#~ "      "
-
-#, fuzzy
-#~ msgid "PAGE_DOWN"
-#~ msgstr "STRANICA"
-
-#, fuzzy
-#~ msgid "PAGE_UP"
-#~ msgstr "STRANICA"
-
-#~ msgid "PDF-Level"
-#~ msgstr "PDF razina"
-
-#~ msgid "Position of mark on the ruler"
-#~ msgstr "Položaj oznake na ravnalu"
-
-#~ msgid "Print: List verbs."
-#~ msgstr "Ispis: Popis identifikatora."
-
-#~ msgid "Process: Verb(s) to call when Inkscape opens."
-#~ msgstr "Obradi: Identifikator koji će se pozvati kada se Inkscape otvori."
-
-#~ msgid "Process: xverb command file."
-#~ msgstr "Obradi: naredbena datoteka za x-identifikatore (xverbs)."
-
-#~ msgid ""
-#~ "Property <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
-#~ "commit changes."
-#~ msgstr ""
-#~ "Svojstvo <b>%s</b> je odabrano. Pritisni <b>Ctrl+Enter</b> kad završiš s "
-#~ "uređivanjem, za potvrđivanje promjene."
-
-#, fuzzy
-#~ msgid "RIGHT"
-#~ msgstr "VISINA"
-
-#, fuzzy
-#~ msgid "Read from file"
-#~ msgstr "Učitaj iz datoteke"
-
-#~ msgid "Render Text"
-#~ msgstr "Iscrtaj tekst"
-
-#~ msgid "S_electors"
-#~ msgstr "S_elektori"
-
-#~ msgid "Sans bold"
-#~ msgstr "Bezserifni, debeli"
-
-#~ msgid "Script 1-stroke (alt)"
-#~ msgstr "Krasopis, jednopotezni (alternativa)"
-
-#~ msgid ""
-#~ "Snap all paths in selection to pixels. Snaps borders to half-points and "
-#~ "fills to full points."
-#~ msgstr ""
-#~ "Privuci sve staze u izboru na piksele. Privuci rubove na polutočke, a "
-#~ "ispune na cijele točke."
-
-#~ msgid "Symbolic"
-#~ msgstr "Simboli"
-
-#~ msgid "The orientation of the ruler"
-#~ msgstr "Smjer ravnala"
-
-#~ msgid "Theme decide symbolic icon color)"
-#~ msgstr "Odredi tematsku boju simbolskih ikona"
-
-#, fuzzy
-#~ msgid ""
-#~ "This extension renders a line of text using \"Hershey\" fonts for "
-#~ "plotters, derived from NBS SP-424 1976-04, \"A contribution to computer "
-#~ "typesetting techniques: Tables of Coordinates for Hershey's Repertory of "
-#~ "Occidental Type Fonts and Graphic Symbols.\" These are not traditional "
-#~ "\"outline\" fonts, but are instead \"single-stroke\" fonts, or \"engraving"
-#~ "\" fonts where the character is formed by the stroke (and not the fill). "
-#~ "For additional information, please visit: www.evilmadscientist.com/go/"
-#~ "hershey"
-#~ msgstr ""
-#~ "\n"
-#~ "Ovo proširenje iscrtava redak teksta, upotrebom\n"
-#~ "„Hershey” fontova za plotere, izvedeno iz\n"
-#~ "NBS SP-424 1976-04, „A contribution to \n"
-#~ "computer typesetting techniques: Tables of\n"
-#~ "Coordinates for Hershey’s Repertory of\n"
-#~ "Occidental Type Fonts and Graphic Symbols.”\n"
-#~ "\n"
-#~ "Ne radi se o tradicionalnim „obrisnim” fontovima,\n"
-#~ "već o „jednostaznim” fontovima, korištenih \n"
-#~ "za graviranje, čija su slova definirana jednom\n"
-#~ "stazom, a ne ispunom.\n"
-#~ "\n"
-#~ "Za više informacija, pogledaj:\n"
-#~ "  www.evilmadscientist.com/go/hershey"
-
-#~ msgid "Toggle Subscript"
-#~ msgstr "Uključi/Isključi indeks"
-
-#~ msgid "Toggle Superscript"
-#~ msgstr "Uključi/Isključi eksponent"
-
-#~ msgid "Typeset that text"
-#~ msgstr "Posloži taj tekst"
-
-#~ msgid "Unit of the ruler"
-#~ msgstr "Mjerna jedinica ravnala"
-
-#~ msgid "Upper"
-#~ msgstr "Gornji"
-
-#~ msgid "Upper limit of ruler"
-#~ msgstr "Gornja granica ravnala"
-
-#~ msgid "Vertical Shift"
-#~ msgstr "Uspravni pomak"
-
-#~ msgid "Vertical shift (px)"
-#~ msgstr "Uspravni pomak (px)"
-
-#~ msgid "View Css Dialog"
-#~ msgstr "Prikaži dijalog CSS-a"
-
-#, fuzzy
-#~ msgid "Windows - Arabic"
-#~ msgstr "Windows meta-datoteka"
-
-#, fuzzy
-#~ msgid "Windows - Baltic languages"
-#~ msgstr "Windows meta-datoteke"
-
-#, fuzzy
-#~ msgid "Windows - Greek"
-#~ msgstr "Windows meta-datoteka"
-
-#, fuzzy
-#~ msgid "Windows - Hebrew"
-#~ msgstr "Windows meta-datoteka"
-
-#, fuzzy
-#~ msgid "Windows - Vietnamese"
-#~ msgstr "Windows meta-datoteke"
-
-#~ msgid "Word spacing"
-#~ msgstr "Spacioniranje riječi"
-
-#~ msgid "Write glyph table"
-#~ msgstr "Ispiši tablicu grafema"
-
-#~ msgid "XVERBS-FILENAME"
-#~ msgstr "XIDENTIFIKATORI-NAZIV_DATOTEKE"
-
-#, fuzzy
-#~ msgid "Z"
-#~ msgstr "Z:"
-
-#~ msgid "_Attributes"
-#~ msgstr "_Svojstva"
-
-#~ msgid "_Nodes"
-#~ msgstr "Č_vorovi"
-
-#~ msgid "_Styles"
-#~ msgstr "_Stilovi"
-
-#, fuzzy
-#~ msgid "addnodes.py"
-#~ msgstr "Dodaj čvorove"
-
-#, fuzzy
-#~ msgid "arabic"
-#~ msgstr "Arapsko"
-
-#, fuzzy
-#~ msgid "arial"
-#~ msgstr "Carian"
-
-#, fuzzy
-#~ msgid "c"
-#~ msgstr "pc"
-
-#, fuzzy
-#~ msgid "chinese"
-#~ msgstr "Buginezno"
-
-#, fuzzy
-#~ msgid "class1"
-#~ msgstr "Klasično"
-
-#, fuzzy
-#~ msgid "color_blackandwhite.py"
-#~ msgstr "Samo crno i bijelo:"
-
-#, fuzzy
-#~ msgid "color_darker.py"
-#~ msgstr "Oboji oznake"
-
-#, fuzzy
-#~ msgid "color_desaturate.py"
-#~ msgstr "Ukloni zasićenost"
-
-#, fuzzy
-#~ msgid "color_grayscale.py"
-#~ msgstr "sive nijanse"
-
-#, fuzzy
-#~ msgid "color_lesssaturation.py"
-#~ msgstr "Pred-zasićenost"
-
-#, fuzzy
-#~ msgid "color_moresaturation.py"
-#~ msgstr "Pred-zasićenost"
-
-#, fuzzy
-#~ msgid "color_randomize.py"
-#~ msgstr "Globalna slučajnost"
-
-#, fuzzy
-#~ msgid "color_replace.py"
-#~ msgstr "Boja, koja se zamjenjuje"
-
-#, fuzzy
-#~ msgid "coloreffect.py"
-#~ msgstr "Bez efekta"
-
-#, fuzzy
-#~ msgid "convert2dashes.py"
-#~ msgstr "Pretvori u crtice"
-
-#, fuzzy
-#~ msgid "custom"
-#~ msgstr "Prilagođeno"
-
-#, fuzzy
-#~ msgid "cyrillic"
-#~ msgstr "Ćirilica"
-
-#, fuzzy
-#~ msgid "cyrillic-asian"
-#~ msgstr "Ćirilica"
-
-#, fuzzy
-#~ msgid "dimension.py"
-#~ msgstr "Dimenzije"
-
-#, fuzzy
-#~ msgid "draw_from_triangle.py"
-#~ msgstr "Crtaj iz trokuta"
-
-#, fuzzy
-#~ msgid "dxf_outlines.py"
-#~ msgstr "kontura"
-
-#, fuzzy
-#~ msgid "e"
-#~ msgstr "hr"
-
-#, fuzzy
-#~ msgid "embedimage.py"
-#~ msgstr "Ugradi slike"
-
-#, fuzzy
-#~ msgid "extractimage.py"
-#~ msgstr "Izdvoji sliku"
-
-#, fuzzy
-#~ msgid "extrude.py"
-#~ msgstr "Izvlači"
-
-#, fuzzy
-#~ msgid "fill stroke stroke-width"
-#~ msgstr "Skaliraj debljinu linije"
-
-#, fuzzy
-#~ msgid "flatten.py"
-#~ msgstr "Sjedini isječak"
-
-#, fuzzy
-#~ msgid "foldablebox.py"
-#~ msgstr "Sklopiva kutija"
-
-#, fuzzy
-#~ msgid "fractalize.py"
-#~ msgstr "Fraktalizacija"
-
-#, fuzzy
-#~ msgid "frame"
-#~ msgstr "Okvir"
-
-#, fuzzy
-#~ msgid "frame.py"
-#~ msgstr "Okvir"
-
-#, fuzzy
-#~ msgid "greek"
-#~ msgstr "Grčko"
-
-#, fuzzy
-#~ msgid "guides_creator.py"
-#~ msgstr "Uređivač vodilica"
-
-#, fuzzy
-#~ msgid "guillotine.py"
-#~ msgstr "Ručni rezač"
-
-#, fuzzy
-#~ msgid "guillotined"
-#~ msgstr "Ručni rezač"
-
-#, fuzzy
-#~ msgid "handles.py"
-#~ msgstr "Ručke"
-
-#, fuzzy
-#~ msgid "hebrew"
-#~ msgstr "Hebrejsko"
-
-#, fuzzy
-#~ msgid "http://inkscape.org/contribute/report-bugs/"
-#~ msgstr "http://inkscape.org/en/ask/"
-
-#, fuzzy
-#~ msgid "https://inkscape.org/learn/faq/"
-#~ msgstr "http://inkscape.org/en/ask/"
-
-#, fuzzy
-#~ msgid "i"
-#~ msgstr "Yi"
-
-#, fuzzy
-#~ msgid "il.datamatrix"
-#~ msgstr "Matrica podataka"
-
-#, fuzzy
-#~ msgid "il.fromtriangle"
-#~ msgstr "Trokut"
-
-#, fuzzy
-#~ msgid "il.wireframesphere"
-#~ msgstr "Umrežena kugla"
-
-#, fuzzy
-#~ msgid "image/sif"
-#~ msgstr "Slike"
-
-#, fuzzy
-#~ msgid "image/x-encapsulated-postscript"
-#~ msgstr "Encapsulated Postscript"
-
-#, fuzzy
-#~ msgid "image_attributes.py"
-#~ msgstr "Umetnuta svojstva"
-
-#, fuzzy
-#~ msgid "images"
-#~ msgstr "Slike"
-
-#, fuzzy
-#~ msgid "inherit"
-#~ msgstr "naslijeđene"
-
-#, fuzzy
-#~ msgid "jessyInk_install.py"
-#~ msgstr "JessyInk skript je instaliran."
-
-#, fuzzy
-#~ msgid "jessyInk_uninstall.py"
-#~ msgstr "JessyInk skript je instaliran."
-
-#, fuzzy
-#~ msgid "jessyink.install"
-#~ msgstr "JessyInk skript je instaliran."
-
-#, fuzzy
-#~ msgid "jessyink.transitions"
-#~ msgstr "Prijelazi"
-
-#, fuzzy
-#~ msgid "jitternodes.py"
-#~ msgstr "Variranje čvorova"
-
-#, fuzzy
-#~ msgid "k"
-#~ msgstr "Tjedan"
-
-#, fuzzy
-#~ msgid "km"
-#~ msgstr "m"
-
-#, fuzzy
-#~ msgid "latin1"
-#~ msgstr "Latinica 1"
-
-#, fuzzy
-#~ msgid "latin2"
-#~ msgstr "Latinica"
-
-#, fuzzy
-#~ msgid "latin3"
-#~ msgstr "Latinica"
-
-#, fuzzy
-#~ msgid "latin4"
-#~ msgstr "Latinica"
-
-#, fuzzy
-#~ msgid "latin5"
-#~ msgstr "Latinica"
-
-#, fuzzy
-#~ msgid "latin6"
-#~ msgstr "Latinica"
-
-#, fuzzy
-#~ msgid "latin8"
-#~ msgstr "Latinica"
-
-#, fuzzy
-#~ msgid "lorem_ipsum.py"
-#~ msgstr "Lorem ipsum"
-
-#, fuzzy
-#~ msgid "macgreek"
-#~ msgstr "Grčko"
-
-#, fuzzy
-#~ msgid "math.triangle"
-#~ msgstr "Trokut"
-
-#, fuzzy
-#~ msgid "measure.py"
-#~ msgstr "Mjerenje"
-
-#, fuzzy
-#~ msgid "motion.py"
-#~ msgstr "Pokret"
-
-#, fuzzy
-#~ msgid "n"
-#~ msgstr "U"
-
-#, fuzzy
-#~ msgid "nicechart.py"
-#~ msgstr "Kružni dijagram"
-
-#, fuzzy
-#~ msgid "o"
-#~ msgstr "Ne"
-
-#, fuzzy
-#~ msgid "optimizeQuality"
-#~ msgstr "Zaglađeno (optimiraj kvalitetu)"
-
-#, fuzzy
-#~ msgid "optimizeSpeed"
-#~ msgstr "Grubo (optimiraj brzinu)"
-
-#, fuzzy
-#~ msgid "org.inkscape.help.manual"
-#~ msgstr "Priručnik za Inkscape"
-
-#, fuzzy
-#~ msgid "org.inkscape.output.xaml"
-#~ msgstr "Inkscape prečaci (*.xml)"
-
-#, fuzzy
-#~ msgid "org.inkscape.web.set-att"
-#~ msgstr "Inkscape internet stranica"
-
-#, fuzzy
-#~ msgid "output.ngc"
-#~ msgstr "Izlazni"
-
-#, fuzzy
-#~ msgid "p"
-#~ msgstr "Gore"
-
-#, fuzzy
-#~ msgid "param_curves.py"
-#~ msgstr "Parametarske krivulje"
-
-#, fuzzy
-#~ msgid "pathalongpath.py"
-#~ msgstr "Zatvaranje staze."
-
-#, fuzzy
-#~ msgid "pathscatter.py"
-#~ msgstr "tokarski rezač"
-
-#, fuzzy
-#~ msgid "perfectboundcover.py"
-#~ msgstr "Predložak za omot knjige"
-
-#, fuzzy
-#~ msgid "perspective.py"
-#~ msgstr "Perspektiva"
-
-#, fuzzy
-#~ msgid "pixelsnap.py"
-#~ msgstr "piksela po"
-
-#, fuzzy
-#~ msgid "polyhedron_3d.py"
-#~ msgstr "3D poliedar"
-
-#, fuzzy
-#~ msgid "printing_marks.py"
-#~ msgstr "Tiskarske oznake"
-
-#, fuzzy
-#~ msgid "rect"
-#~ msgstr "Direktno"
-
-#, fuzzy
-#~ msgid "replace_font.py"
-#~ msgstr "Zamijeni font"
-
-#, fuzzy
-#~ msgid "restack.py"
-#~ msgstr "Presloži"
-
-#, fuzzy
-#~ msgid "rubberstretch.py"
-#~ msgstr "Gumasto rastezanje"
-
-#, fuzzy
-#~ msgid "seamless_pattern.py"
-#~ msgstr "Bešavna mustra"
-
-#, fuzzy
-#~ msgid "setup_typography_canvas.py"
-#~ msgstr "1 – Postavi tipografsku radnu površinu"
-
-#, fuzzy
-#~ msgid "slice"
-#~ msgstr "Izrezak"
-
-#, fuzzy
-#~ msgid "spirograph.py"
-#~ msgstr "Spirograf"
-
-#, fuzzy
-#~ msgid "straightseg.py"
-#~ msgstr "ravna crta"
-
-#, fuzzy
-#~ msgid "svgcalendar.py"
-#~ msgstr "Kalendar"
-
-#, fuzzy
-#~ msgid "synfig_output.py"
-#~ msgstr "Izlazni Synfig"
-
-#, fuzzy
-#~ msgid "t"
-#~ msgstr "pt"
-
-#, fuzzy
-#~ msgid "text"
-#~ msgstr "Sadržaj"
-
-#, fuzzy
-#~ msgid "text/plain"
-#~ msgstr "osnovna pismovna linija"
-
-#, fuzzy
-#~ msgid "text_lowercase.py"
-#~ msgstr "mala slova"
-
-#, fuzzy
-#~ msgid "text_sentencecase.py"
-#~ msgstr "Početna slova u rečenici"
-
-#, fuzzy
-#~ msgid "triangle.py"
-#~ msgstr "Trokut"
-
-#, fuzzy
-#~ msgid "whirl.py"
-#~ msgstr "Vrtlog"
-
-#, fuzzy
-#~ msgid "wireframe_sphere.py"
-#~ msgstr "Umrežena kugla"
-
-#, fuzzy
-#~ msgid "x"
-#~ msgstr "px"
-
-#~ msgid ""
-#~ "{} should never have existed. lxml always had a getparent() method and "
-#~ "that should be used instead of this custom Effect method."
-#~ msgstr ""
-#~ "{} nije nikada trebalo postojati. „lxml” je uvijek imalo metodu "
-#~ "„getparent()”, te nju treba koristiti umjesto ove prilagođene metode "
-#~ "efekta."
-
-#~ msgid ""
-#~ "{} wasn't even a public property, why is your effect extension even using "
-#~ "it? Should be inkex.units.CONVERSIONS"
-#~ msgstr ""
-#~ "{} nije bio čak ni javno svojstvo, zašto ga tvoj efekt proširenja uopće "
-#~ "koristi? Treba biti inkex.units.CONVERSIONS"
-
-#~ msgid "JavaFX Output"
-#~ msgstr "Izlazni JavaFX"
-
-#~ msgid "JavaFX (*.fx)"
-#~ msgstr "JavaFX (*.fx)"
-
-#~ msgid "JavaFX Raytracer File"
-#~ msgstr "JavaFX Raytracer datoteka"
-
-#~ msgid "Select file to export to"
-#~ msgstr "Odaberi datoteku za izvoz u"
-
-#~ msgid "Inkscape - A Vector Drawing Program"
-#~ msgstr "Inkscape – program za vektorsko crtanje"
-
-#~ msgid "<b>Current parameter value:</b> "
-#~ msgstr "<b>Trenutačna vrijednost parametra:</b> "
-
-#~ msgid "Free from reflection line"
-#~ msgstr "Slobodno od linije refleksije"
-
-#~ msgid "X from middle knot"
-#~ msgstr "X od srednjeg čvora"
-
-#~ msgid "Y from middle knot"
-#~ msgstr "Y od srednjeg čvora"
-
-#~ msgid "Symmetry move mode"
-#~ msgstr "Simetrično pomicanje (mod)"
-
-#~ msgid "Gap on split"
-#~ msgstr "Razmak prilikom razdvajanja"
-
-#~ msgid "Methods to generate the ellipse"
-#~ msgstr "Metode za stvaranje elipse"
-
-#~ msgid "Generate open arc (open ellipse)"
-#~ msgstr "Stvori otvoreni luk (otvorena elipsa)"
-
-#~ msgctxt "Profile name"
-#~ msgid "None"
-#~ msgstr "Bez"
-
-#~ msgid "Left edge of source"
-#~ msgstr "Lijevi rub izvora"
-
-#~ msgid "Top edge of source"
-#~ msgstr "Gornji rub izvora"
-
-#~ msgid "Right edge of source"
-#~ msgstr "Desni rub izvora"
-
-#~ msgid "Bottom edge of source"
-#~ msgstr "Donji rub izvora"
-
-#~ msgid "Source width"
-#~ msgstr "Širina izvora"
-
-#~ msgid "Source height"
-#~ msgstr "Visina izvora"
-
-#~ msgid "Destination width"
-#~ msgstr "Širina odredišta"
-
-#~ msgid "Destination height"
-#~ msgstr "Visina odredišta"
-
-#~ msgid "Resolution (dots per inch)"
-#~ msgstr "Razlučivost (točaka po inču)"
-
-#~ msgctxt "Export dialog"
-#~ msgid "Custom"
-#~ msgstr "Prilagođeno"
-
-#~ msgid "Source"
-#~ msgstr "Izvor"
-
-#~ msgid "Cairo"
-#~ msgstr "Cairo"
-
-#~ msgid "Antialias"
-#~ msgstr "Uglađeni rubovi (antialias)"
-
-#~ msgid "Kerning Setup"
-#~ msgstr "Postave za podrezivanje"
-
-#~ msgid "Find and _Replace Text..."
-#~ msgstr "Pronađi i _zamijeni tekst …"
-
-#~ msgid "Find and replace text in document"
-#~ msgstr "Pronađi i _zamijeni tekst u dokumentu"
-
-#~ msgid "Unable to process this object.  Try changing it into a path first."
-#~ msgstr "Nije moguće obraditi ovaj objekt. Pokušaj ga pretvoriti u stazu."
-
-#~ msgid "Inkscape must be installed and set in your path variable."
-#~ msgstr "Inkscape mora biti instaliran i postavljen u varijablu tvoje staze."
-
-#~ msgid "Gimp must be installed and set in your path variable."
-#~ msgstr "Gimp mora biti instaliran i postavljen u varijabli tvoje staze."
-
-#~ msgid "An error occurred while processing the XCF file."
-#~ msgstr "Kod obrade XCF datoteke pojavila se jdna greška."
-
-#~ msgid "Could not find Inkscape command.\n"
-#~ msgstr "Nije moguće pronaći Inkscape naredbu.\n"
-
-#~ msgctxt "Custom color extension"
-#~ msgid "Custom"
-#~ msgstr "Prilagođeno"
-
-#~ msgid "Dia Input"
-#~ msgstr "Ulazni Dia"
-
-#~ msgid ""
-#~ "The dia2svg.sh script should be installed with your Inkscape "
-#~ "distribution.  If you do not have it, there is likely to be something "
-#~ "wrong with your Inkscape installation."
-#~ msgstr ""
-#~ "Skript „dia2svg.sh” će biti instaliran s tvojim izdanjem Inkscapea. Ako "
-#~ "ga nemaš, vjerojatno nešto nije u redu s tvojom Inkscape instalacijom."
-
-#~ msgid ""
-#~ "In order to import Dia files, Dia itself must be installed.  You can get "
-#~ "Dia at http://live.gnome.org/Dia"
-#~ msgstr ""
-#~ "Ukoliko želiš uvesti Dia datoteke, Dia mora biti instaliran. Program "
-#~ "možeš naći na http://live.gnome.org/Dia"
-
-#~ msgid "Dia Diagram (*.dia)"
-#~ msgstr "Dia dijagram (*.dia)"
-
-#~ msgid "A diagram created with the program Dia"
-#~ msgstr "Dijagram, stvoren programom Dia"
-
-#~ msgid "LaTeX"
-#~ msgstr "LaTeX"
-
-#~ msgid "Action: "
-#~ msgstr "Akcija: "
-
-#~ msgid ""
-#~ " \n"
-#~ "\n"
-#~ "\n"
-#~ "\n"
-#~ msgstr ""
-#~ " \n"
-#~ "\n"
-#~ "\n"
-#~ "\n"
-
-#~ msgid "Sketch Input"
-#~ msgstr "Ulazni Sketch"
-
-#~ msgid "Sketch Diagram (*.sk)"
-#~ msgstr "Sketch Diagram (*.sk)"
-
-#~ msgid "A diagram created with the program Sketch"
-#~ msgstr "Dijagram izrađen programom Sketch"
-
-#~ msgid "Clo_ne"
-#~ msgstr "Klo_niraj"
-
-#~ msgid "Select Sa_me"
-#~ msgstr "Odaberi is_to"
-
-#~ msgid "_Zoom"
-#~ msgstr "Z_umiranje"
-
-#~ msgid "_Display Mode"
-#~ msgstr "_Način prikaza"
-
-#~ msgid "_Color Display Mode"
-#~ msgstr "Način prikaza _boja"
-
-#~ msgid "_Canvas Orientation"
-#~ msgstr "Položaj _radne površine"
-
-#~ msgid "Sh_ow/Hide"
-#~ msgstr "Pri_kaži/Sakrij"
-
-#~ msgid "Cli_p"
-#~ msgstr "_Isječak"
-
-#~ msgid "Mas_k"
-#~ msgstr "Mas_ka"
-
-#~ msgid "Patter_n"
-#~ msgstr "_Mustra"
-
-#~ msgid "Tutorials"
-#~ msgstr "Vježbe"
+msgstr "Pola visine fonta"
