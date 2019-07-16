@@ -89,8 +89,8 @@ private:
     void flatten_spiro_bspline();
 
 protected:
-    PencilToolbar(SPDesktop *desktop, bool pencil_mode);
-    ~PencilToolbar() override;
+  PencilToolbar(SPDesktop *desktop, bool pencil_mode);
+  ~PencilToolbar() override;
 
 public:
     static GtkWidget * create_pencil(SPDesktop *desktop);

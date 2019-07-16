@@ -21,22 +21,15 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
-enum LineCapType {
-  LINECAP_BUTT,
-  LINECAP_SQUARE,
-  LINECAP_ROUND,
-  LINECAP_PEAK,
-  LINECAP_ZERO_WIDTH
-};
+enum LineCapType { LINECAP_BUTT, LINECAP_SQUARE, LINECAP_ROUND, LINECAP_PEAK, LINECAP_ZERO_WIDTH };
 
-static const Util::EnumData<unsigned> LineCapTypeData[] = {
-    {LINECAP_BUTT,          N_("Butt"),         "butt"},
-    {LINECAP_SQUARE,        N_("Square"),       "square"},
-    {LINECAP_ROUND,         N_("Round"),        "round"},
-    {LINECAP_PEAK,          N_("Peak"),         "peak"},
-    {LINECAP_ZERO_WIDTH,    N_("Zero width"),   "zerowidth"}
-};
-static const Util::EnumDataConverter<unsigned> LineCapTypeConverter(LineCapTypeData, sizeof(LineCapTypeData)/sizeof(*LineCapTypeData));
+static const Util::EnumData<unsigned> LineCapTypeData[] = { { LINECAP_BUTT, N_("Butt"), "butt" },
+                                                            { LINECAP_SQUARE, N_("Square"), "square" },
+                                                            { LINECAP_ROUND, N_("Round"), "round" },
+                                                            { LINECAP_PEAK, N_("Peak"), "peak" },
+                                                            { LINECAP_ZERO_WIDTH, N_("Zero width"), "zerowidth" } };
+static const Util::EnumDataConverter<unsigned> LineCapTypeConverter(LineCapTypeData,
+                                                                    sizeof(LineCapTypeData) / sizeof(*LineCapTypeData));
 
 class LPEPowerStroke : public Effect {
 public:

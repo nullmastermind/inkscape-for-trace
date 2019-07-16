@@ -93,7 +93,7 @@ void PencilTool::setup() {
         this->enableSelectionCue();
     }
     this->_curve = new SPCurve();
-    
+
     FreehandBase::setup();
 
     this->_is_drawing = false;
@@ -693,7 +693,7 @@ static inline double square(double const x) { return x * x; }
 
 void PencilTool::addPowerStrokePencil(bool force, gint tolsimplify)
 {
-    
+
     static int pscounter = 16;
     if (pscounter > 15 || force) {
         pscounter = 0;
@@ -741,7 +741,7 @@ void PencilTool::addPowerStrokePencil(bool force, gint tolsimplify)
         int max_segs = 4 * n_points;
         std::vector<Geom::Point> b(max_segs);
         SPCurve *curvepressure = new SPCurve();
-        
+
         int const n_segs = Geom::bezier_fit_cubic_r(b.data(), this->ps.data(), n_points, tolerance_sq, max_segs);
         if (n_segs > 0) {
             /* Fit and draw and reset state */
@@ -782,9 +782,9 @@ void PencilTool::addPowerStrokePencil(bool force, gint tolsimplify)
                 return;
                 // return true;
             }
-            
+
             tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 0.0, 100.0) + tolsimplify;
-            tol = tol/(100.0*(102.0-tol));
+            tol = tol / (100.0 * (102.0 - tol));
             std::ostringstream threshold;
             threshold << tol;
             Effect::createAndApply(SIMPLIFY, desktop->doc(), SP_ITEM(lpeitem));
@@ -871,16 +871,16 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/) {
             double min = prefs->getIntLimited("/tools/freehand/pencil/minpressure", 10, 0, 100) / 100.0;
             double max = prefs->getIntLimited("/tools/freehand/pencil/maxpressure", 40, 0, 100) / 100.0;
             Geom::Affine transform_coordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine();
-            if (min > max){
+            if (min > max) {
                 min = max;
             }
             if (this->pressure < 0.25) {
                 this->_wps.push_back(0);
                 return;
             }
-            double dezoomify_factor  = 0.05 * 1000 / SP_EVENT_CONTEXT(this)->desktop->current_zoom();
-            double pressure_shrunk   = (((this->pressure - 0.25) * 1.25) * (max - min)) + min;
-            double pressure_computed = pressure_shrunk * (dezoomify_factor/5.0);
+            double dezoomify_factor = 0.05 * 1000 / SP_EVENT_CONTEXT(this)->desktop->current_zoom();
+            double pressure_shrunk = (((this->pressure - 0.25) * 1.25) * (max - min)) + min;
+            double pressure_computed = pressure_shrunk * (dezoomify_factor / 5.0);
             this->_wps.push_back(pressure_computed);
             this->addPowerStrokePencil(false, 30);
             sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr);
@@ -889,7 +889,6 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/) {
             }
             this->green_bpaths.clear();
         }
-
     }
 }
 
@@ -914,16 +913,11 @@ void PencilTool::powerStrokeInterpolate(Geom::Path path)
         Geom::Point pp = Geom::Point();
         pp[Geom::X] = (path_size / (double)points_size) * i;
         pp[Geom::Y] = pressure;
-        if (pressure == 0 || 
-            (path_size > 1 && 
-             (pp[Geom::X] < 1 || pp[Geom::X] > path_size - 1)))
-        {
+        if (pressure == 0 || (path_size > 1 && (pp[Geom::X] < 1 || pp[Geom::X] > path_size - 1))) {
             ++i;
             continue;
         }
-        if (std::abs(pp[Geom::X] - previous[Geom::X]) > 0.2 &&
-            std::abs(pp[Geom::Y] - previous[Geom::Y]) > 0.5) 
-        {
+        if (std::abs(pp[Geom::X] - previous[Geom::X]) > 0.2 && std::abs(pp[Geom::Y] - previous[Geom::Y]) > 0.5) {
             if (previous[Geom::Y] < pp[Geom::Y]) {
                 if (increase && tmp_points.size() > 1) {
                     tmp_points.pop_back();
@@ -938,7 +932,7 @@ void PencilTool::powerStrokeInterpolate(Geom::Path path)
             previous = pp;
             tmp_points.push_back(pp);
         }
-        
+
         ++i;
     }
     this->points = tmp_points;

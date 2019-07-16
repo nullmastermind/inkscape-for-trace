@@ -1067,7 +1067,7 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             neweffect = nullptr;
             break;
     }
-    
+
     if (neweffect) {
         neweffect->readallParameters(lpeobj->getRepr());
     }

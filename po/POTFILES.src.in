@@ -157,6 +157,7 @@
 ../src/live_effects/lpe-powerclip.cpp
 ../src/live_effects/lpe-powermask.cpp
 ../src/live_effects/lpe-powerstroke.cpp
+../src/live_effects/lpe-powerstroke.h
 ../src/live_effects/lpe-pts2ellipse.cpp
 ../src/live_effects/lpe-recursiveskeleton.cpp
 ../src/live_effects/lpe-rough-hatches.cpp

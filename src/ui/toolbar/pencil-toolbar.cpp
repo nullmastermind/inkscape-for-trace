@@ -116,33 +116,39 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
     {
         auto minpressure_val = prefs->getDouble("/tools/freehand/pencil/minpressure", 10);
         _minpressure_adj = Gtk::Adjustment::create(minpressure_val, 0, 100, 1, 0);
-        _minpressure = Gtk::manage(new UI::Widget::SpinButtonToolItem("pencil-minpressure", _("Min:"), _minpressure_adj, 0, 0));
+        _minpressure =
+            Gtk::manage(new UI::Widget::SpinButtonToolItem("pencil-minpressure", _("Min:"), _minpressure_adj, 0, 0));
         _minpressure->set_tooltip_text(_("Min percent of pressure"));
         _minpressure->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
-        _minpressure_adj->signal_value_changed().connect(sigc::mem_fun(*this, &PencilToolbar::minpressure_value_changed));
+        _minpressure_adj->signal_value_changed().connect(
+            sigc::mem_fun(*this, &PencilToolbar::minpressure_value_changed));
         add(*_minpressure);
     }
     /* max pressure */
     {
         auto maxpressure_val = prefs->getDouble("/tools/freehand/pencil/maxpressure", 40);
         _maxpressure_adj = Gtk::Adjustment::create(maxpressure_val, 0, 100, 1, 0);
-        _maxpressure = Gtk::manage(new UI::Widget::SpinButtonToolItem("pencil-maxpressure", _("Max:"), _maxpressure_adj, 0, 0));
+        _maxpressure =
+            Gtk::manage(new UI::Widget::SpinButtonToolItem("pencil-maxpressure", _("Max:"), _maxpressure_adj, 0, 0));
         _maxpressure->set_tooltip_text(_("Max percent of pressure"));
         _maxpressure->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
-        _maxpressure_adj->signal_value_changed().connect(sigc::mem_fun(*this, &PencilToolbar::maxpressure_value_changed));
+        _maxpressure_adj->signal_value_changed().connect(
+            sigc::mem_fun(*this, &PencilToolbar::maxpressure_value_changed));
         add(*_maxpressure);
     }
 
 
-    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
+    add(*Gtk::manage(new Gtk::SeparatorToolItem()));
 
     /* Tolerance */
     {
-        std::vector<Glib::ustring> labels = {_("(many nodes, rough)"), _("(default)"), "", "", "", "", _("(few nodes, smooth)")};
-        std::vector<double>        values = {                       1,             10, 20, 30, 50, 75,                      100};
+        std::vector<Glib::ustring> labels = { _("(many nodes, rough)"), _("(default)"), "", "", "", "",
+                                              _("(few nodes, smooth)") };
+        std::vector<double> values = { 1, 10, 20, 30, 50, 75, 100 };
         auto tolerance_val = prefs->getDouble("/tools/freehand/pencil/tolerance", 3.0);
         _tolerance_adj = Gtk::Adjustment::create(tolerance_val, 1, 100.0, 0.5, 1.0);
-        auto tolerance_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("pencil-tolerance", _("Smoothing:"), _tolerance_adj, 1, 2));
+        auto tolerance_item =
+            Gtk::manage(new UI::Widget::SpinButtonToolItem("pencil-tolerance", _("Smoothing:"), _tolerance_adj, 1, 2));
         tolerance_item->set_tooltip_text(_("How much smoothing (simplifying) is applied to the line"));
         tolerance_item->set_custom_numeric_menu_data(values, labels);
         tolerance_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
@@ -156,8 +162,7 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
 
     /* LPE simplify based tolerance */
     {
-        _simplify = add_toggle_button(_("LPE based interactive simplify"),
-                                        _("LPE based interactive simplify"));
+        _simplify = add_toggle_button(_("LPE based interactive simplify"), _("LPE based interactive simplify"));
         _simplify->set_icon_name(INKSCAPE_ICON("interactive_simplify"));
         _simplify->set_active(prefs->getInt("/tools/freehand/pencil/simplify", 0));
         _simplify->signal_toggled().connect(sigc::mem_fun(*this, &PencilToolbar::simplify_lpe));
@@ -172,7 +177,7 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
         add(*_flatten_simplify);
     }
 
-    add(* Gtk::manage(new Gtk::SeparatorToolItem()));
+    add(*Gtk::manage(new Gtk::SeparatorToolItem()));
 
     /* advanced shape options */
     add_advanced_shape_options(pencil_mode);
@@ -410,8 +415,7 @@ PencilToolbar::change_shape() {
     prefs->setInt(freehand_tool_name() + "/shape", shape);
 }
 
-void
-PencilToolbar::add_powerstroke_cap(bool tool_is_pencil)
+void PencilToolbar::add_powerstroke_cap(bool tool_is_pencil)
 {
     /*advanced shape options */
     _cap_item = Gtk::manage(new Gtk::ToolItem());
@@ -425,20 +429,15 @@ PencilToolbar::add_powerstroke_cap(bool tool_is_pencil)
 
     auto prefs = Inkscape::Preferences::get();
 
-    std::vector<gchar*> powerstroke_cap_items_list = {
-        const_cast<gchar *>(C_("Cap", "Butt")),
-        _("Square"),
-        _("Round"),
-        _("Peak"),
-        _("Zero width")
-    };
-    for (auto item:powerstroke_cap_items_list) {
+    std::vector<gchar *> powerstroke_cap_items_list = { const_cast<gchar *>(C_("Cap", "Butt")), _("Square"), _("Round"),
+                                                        _("Peak"), _("Zero width") };
+    for (auto item : powerstroke_cap_items_list) {
         _cap_combo->append(item);
     }
 
     _cap_combo->set_tooltip_text(_("Cap for powerstroke pressure"));
-    int cap = prefs->getInt( "/live_effects/powerstroke/powerpencilcap", 4);
-    _cap_combo->set_active( cap );
+    int cap = prefs->getInt("/live_effects/powerstroke/powerpencilcap", 4);
+    _cap_combo->set_active(cap);
 
     hbox->add(*_cap_combo);
 
@@ -447,8 +446,8 @@ PencilToolbar::add_powerstroke_cap(bool tool_is_pencil)
     add(*_cap_item);
 }
 
-void
-PencilToolbar::change_cap() {
+void PencilToolbar::change_cap()
+{
     auto prefs = Inkscape::Preferences::get();
     auto cap = _cap_combo->get_active_row_number();
     prefs->setInt("/live_effects/powerstroke/powerpencilcap", cap);
