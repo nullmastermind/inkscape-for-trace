@@ -93,7 +93,7 @@ void PencilTool::setup() {
         this->enableSelectionCue();
     }
     this->_curve = new SPCurve();
-    this->curvepressure = new SPCurve();
+    
     FreehandBase::setup();
 
     this->_is_drawing = false;
@@ -105,9 +105,6 @@ void PencilTool::setup() {
 PencilTool::~PencilTool() {
     if (this->_curve) {
         this->_curve->unref();
-    }
-    if (this->curvepressure) {
-        this->curvepressure->unref();
     }
 }
 
@@ -694,11 +691,11 @@ void PencilTool::_finishEndpoint() {
 
 static inline double square(double const x) { return x * x; }
 
-void PencilTool::addPowerStrokePencil(bool force)
+void PencilTool::addPowerStrokePencil(bool force, gint tolsimplify)
 {
     
-    static int pscounter = 21;
-    if (pscounter > 20 || force) {
+    static int pscounter = 16;
+    if (pscounter > 15 || force) {
         pscounter = 0;
     } else {
         pscounter++;
@@ -743,7 +740,8 @@ void PencilTool::addPowerStrokePencil(bool force)
         // worst case gives us a segment per point
         int max_segs = 4 * n_points;
         std::vector<Geom::Point> b(max_segs);
-        curvepressure->reset();
+        SPCurve *curvepressure = new SPCurve();
+        
         int const n_segs = Geom::bezier_fit_cubic_r(b.data(), this->ps.data(), n_points, tolerance_sq, max_segs);
         if (n_segs > 0) {
             /* Fit and draw and reset state */
@@ -753,7 +751,7 @@ void PencilTool::addPowerStrokePencil(bool force)
             }
         }
         Geom::Path path = curvepressure->get_pathvector()[0];
-
+        int original_size = path.size();
         if (!path.empty()) {
             Geom::Affine transform_coordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine().inverse();
             path *= transform_coordinate;
@@ -784,7 +782,9 @@ void PencilTool::addPowerStrokePencil(bool force)
                 return;
                 // return true;
             }
-            tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 1.0, 100.0) / 400;
+            
+            tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 0.0, 100.0) + tolsimplify;
+            tol = tol/(100.0*(102.0-tol));
             std::ostringstream threshold;
             threshold << tol;
             Effect::createAndApply(SIMPLIFY, desktop->doc(), SP_ITEM(lpeitem));
@@ -793,7 +793,7 @@ void PencilTool::addPowerStrokePencil(bool force)
                 Glib::ustring pref_path = "/live_effects/simplify/smooth_angles";
                 bool valid = prefs->getEntry(pref_path).isValid();
                 if (!valid) {
-                    lpe->getRepr()->setAttribute("smooth_angles", "360");
+                    lpe->getRepr()->setAttribute("smooth_angles", "0");
                 }
                 lpe->getRepr()->setAttribute("threshold", threshold.str());
             }
@@ -807,44 +807,48 @@ void PencilTool::addPowerStrokePencil(bool force)
             Effect::createAndApply(POWERSTROKE, SP_ACTIVE_DESKTOP->doc(), lpeitem);
             lpe = lpeitem->getCurrentLPE();
             Inkscape::LivePathEffect::LPEPowerStroke *pspreview = static_cast<LPEPowerStroke *>(lpe);
-            sp_lpe_item_enable_path_effects(lpeitem, false);
             if (pspreview) {
+                sp_lpe_item_enable_path_effects(lpeitem, false);
                 Glib::ustring pref_path = "/live_effects/powerstroke/interpolator_type";
                 bool valid = prefs->getEntry(pref_path).isValid();
                 if (!valid) {
                     pspreview->getRepr()->setAttribute("interpolator_type", "CentripetalCatmullRom");
                 }
+                gint cap = prefs->getInt("/live_effects/powerstroke/powerpencilcap", 4);
+                pspreview->getRepr()->setAttribute("start_linecap_type", LineCapTypeConverter.get_key(cap));
+                pspreview->getRepr()->setAttribute("end_linecap_type", LineCapTypeConverter.get_key(cap));
                 pspreview->getRepr()->setAttribute("sort_points", "true");
                 pspreview->offset_points.param_set_and_write_new_value(this->points);
-                if (powerpreview->getCurve() != curvepressure) {
+                sp_lpe_item_enable_path_effects(lpeitem, true);
+                sp_lpe_item_update_patheffect(lpeitem, false, true);
+                if (toremove) {
+                    using namespace Inkscape::LivePathEffect;
+                    Effect *lpe = SP_LPE_ITEM(toremove)->getCurrentLPE();
+                    SP_LPE_ITEM(toremove)->removeCurrentPathEffect(true);
+                    LivePathEffectObject *lpeobj = lpe->getLPEObj();
+                    if (lpeobj) {
+                        SP_OBJECT(lpeobj)->deleteObject(true);
+                        lpeobj = nullptr;
+                    }
+                    lpe = SP_LPE_ITEM(toremove)->getCurrentLPE();
+                    SP_LPE_ITEM(toremove)->removeCurrentPathEffect(true);
+                    lpeobj = lpe->getLPEObj();
+                    if (lpeobj) {
+                        SP_OBJECT(lpeobj)->deleteObject(true);
+                        lpeobj = nullptr;
+                    }
+                    toremove->deleteObject(true);
+                    toremove = nullptr;
+                }
+                if (!pspreview->has_exception && path.size() != powerpreview->getCurve()->get_pathvector()[0].size()) {
                     pp->setAttribute("style", "fill:#888888;opacity:1;fill-rule:nonzero;stroke:none;");
-                } else if (toremove) {
-                    toremove->getRepr()->setAttribute("id", "power_stroke_preview");
-                    toremove = powerpreview;
+                } else if (tolsimplify < 61) { // run 3 times
+                    addPowerStrokePencil(true, tolsimplify + 10);
                 }
             }
-            sp_lpe_item_enable_path_effects(lpeitem, true);
-
-            if (toremove) {
-                using namespace Inkscape::LivePathEffect;
-                Effect *lpe = SP_LPE_ITEM(toremove)->getCurrentLPE();
-                SP_LPE_ITEM(toremove)->removeCurrentPathEffect(true);
-                LivePathEffectObject *lpeobj = lpe->getLPEObj();
-                if (lpeobj) {
-                    SP_OBJECT(lpeobj)->deleteObject(true);
-                    lpeobj = nullptr;
-                }
-                lpe = SP_LPE_ITEM(toremove)->getCurrentLPE();
-                SP_LPE_ITEM(toremove)->removeCurrentPathEffect(true);
-                lpeobj = lpe->getLPEObj();
-                if (lpeobj) {
-                    SP_OBJECT(lpeobj)->deleteObject(true);
-                    lpeobj = nullptr;
-                }
-                toremove->deleteObject(true);
-                toremove = nullptr;
+            if (curvepressure) {
+                curvepressure->unref();
             }
-
             prefs->setBool(pref_path_pp, false);
             // return true;
             // });
@@ -878,7 +882,7 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/) {
             double pressure_shrunk   = (((this->pressure - 0.25) * 1.25) * (max - min)) + min;
             double pressure_computed = pressure_shrunk * (dezoomify_factor/5.0);
             this->_wps.push_back(pressure_computed);
-            this->addPowerStrokePencil(false);
+            this->addPowerStrokePencil(false, 30);
             sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr);
             for (auto i:this->green_bpaths) {
                 sp_canvas_item_destroy(i);
@@ -898,26 +902,43 @@ void PencilTool::powerStrokeInterpolate(Geom::Path path)
     using Geom::X;
     using Geom::Y;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    double step = prefs->getDoubleLimited("/tools/freehand/pencil/pressurestep", 1.0, 0, 100.0);
-
     SPItem *item = selection ? selection->singleItem() : nullptr;
     gint points_size = this->_wps.size();
     gint path_size = path.size();
     std::vector<Geom::Point> tmp_points;
     Geom::Point previous = Geom::Point(Geom::infinity(), 0);
     size_t i = 0;
+    size_t previ = 0;
+    bool increase = true;
     for (auto pressure : this->_wps) {
         Geom::Point pp = Geom::Point();
         pp[Geom::X] = (path_size / (double)points_size) * i;
         pp[Geom::Y] = pressure;
-        if (pressure == 0 || path_size > 2 && (pp[Geom::X] < 1 || pp[Geom::X] > path_size - 2)) {
+        if (pressure == 0 || 
+            (path_size > 1 && 
+             (pp[Geom::X] < 1 || pp[Geom::X] > path_size - 1)))
+        {
             ++i;
             continue;
         }
-        if (std::abs(previous[Geom::Y] - pp[Geom::Y]) > step) {
-            tmp_points.push_back(pp);
+        if (std::abs(pp[Geom::X] - previous[Geom::X]) > 0.2 &&
+            std::abs(pp[Geom::Y] - previous[Geom::Y]) > 0.5) 
+        {
+            if (previous[Geom::Y] < pp[Geom::Y]) {
+                if (increase && tmp_points.size() > 1) {
+                    tmp_points.pop_back();
+                }
+                increase = true;
+            } else {
+                if (!increase && tmp_points.size() > 1) {
+                    tmp_points.pop_back();
+                }
+                increase = false;
+            }
             previous = pp;
+            tmp_points.push_back(pp);
         }
+        
         ++i;
     }
     this->points = tmp_points;
@@ -938,7 +959,7 @@ void PencilTool::_interpolate() {
     bool simplify = prefs->getInt("/tools/freehand/pencil/simplify", 0);
     if(simplify){
         double tol2 = prefs->getDoubleLimited("/tools/freehand/pencil/base-simplify", 25.0, 0.0, 100.0) * 0.4;
-        tol = tol > tol2 ? tol : tol2;
+        tol = std::min(tol,tol2);
     }
     this->green_curve->reset();
     this->red_curve->reset();

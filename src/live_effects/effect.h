@@ -113,6 +113,7 @@ public:
     void addHandles(KnotHolder *knotholder, SPItem *item);
     std::vector<Geom::PathVector> getCanvasIndicators(SPLPEItem const* lpeitem);
     void update_helperpath();
+    bool has_exception;
 
     inline bool providesOwnFlashPaths() const {
         return provides_own_flash_paths || show_orig_path;

@@ -53,7 +53,6 @@ private:
     Gtk::ToggleToolButton *_pressure_item;
     UI::Widget::SpinButtonToolItem *_minpressure;
     UI::Widget::SpinButtonToolItem *_maxpressure;
-    UI::Widget::SpinButtonToolItem *_pressurestep;
 
     XML::Node *_repr;
     Gtk::ToolButton *_flatten_spiro_bspline;
@@ -62,6 +61,9 @@ private:
     Gtk::ToolItem *_shape_item;
     Gtk::ComboBoxText *_shape_combo;
 
+    Gtk::ToolItem *_cap_item;
+    Gtk::ComboBoxText *_cap_combo;
+
 
     Gtk::ToggleToolButton *_simplify;
 
@@ -69,7 +71,6 @@ private:
 
     Glib::RefPtr<Gtk::Adjustment> _minpressure_adj;
     Glib::RefPtr<Gtk::Adjustment> _maxpressure_adj;
-    Glib::RefPtr<Gtk::Adjustment> _pressurestep_adj;
     Glib::RefPtr<Gtk::Adjustment> _tolerance_adj;
 
     void add_freehand_mode_toggle(bool tool_is_pencil);
@@ -77,18 +78,18 @@ private:
     Glib::ustring const freehand_tool_name();
     void minpressure_value_changed();
     void maxpressure_value_changed();
-    void pressurestep_value_changed();
     void use_pencil_pressure();
     void tolerance_value_changed();
     void add_advanced_shape_options(bool tool_is_pencil);
+    void add_powerstroke_cap(bool tool_is_pencil);
     void change_shape();
+    void change_cap();
     void simplify_lpe();
     void simplify_flatten();
     void flatten_spiro_bspline();
 
 protected:
-    PencilToolbar(SPDesktop *desktop,
-                  bool       pencil_mode);
+    PencilToolbar(SPDesktop *desktop, bool pencil_mode);
     ~PencilToolbar() override;
 
 public:

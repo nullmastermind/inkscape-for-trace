@@ -1067,7 +1067,7 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             neweffect = nullptr;
             break;
     }
-
+    
     if (neweffect) {
         neweffect->readallParameters(lpeobj->getRepr());
     }
@@ -1262,6 +1262,7 @@ void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
     doOnApply(lpeitem);
     setReady();
+    has_exception = false;
 }
 
 void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)

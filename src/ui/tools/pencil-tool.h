@@ -48,12 +48,11 @@ public:
     Geom::Point p[16];
     std::vector<Geom::Point> ps;
     std::vector<Geom::Point> points;
-    void addPowerStrokePencil(bool force);
+    void addPowerStrokePencil(bool force, gint tolsimplify);
     void powerStrokeInterpolate(Geom::Path);
     Geom::Piecewise<Geom::D2<Geom::SBasis> > sketch_interpolation; // the current proposal from the sketched paths
     unsigned sketch_n; // number of sketches done
     static const std::string prefsPath;
-    SPCurve *curvepressure;
     const std::string& getPrefsPath() override;
 
 protected:

@@ -281,43 +281,17 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
         if (dc->tablet_enabled) {
             SPObject *elemref = nullptr;
             if ((elemref = document->getObjectById("power_stroke_preview"))) {
-                if (SP_SHAPE(elemref)->getCurve() != pt->curvepressure) {
-                    elemref->getRepr()->setAttribute("style", nullptr);
-                    SPItem *successor = dynamic_cast<SPItem *>(elemref);
-                    sp_desktop_apply_style_tool(desktop, successor->getRepr(),
-                                                Glib::ustring("/tools/freehand/pencil").data(), false);
-                    spdc_apply_style(successor);
-                    item->deleteObject(true);
-                    item = successor;
-                    dc->selection->set(item);
-                    item->setLocked(false);
-                    dc->white_item = item;
-                    rename_id(SP_OBJECT(item), "path-1");
-                } else {
-                    using namespace Inkscape::LivePathEffect;
-                    Effect *lpe = SP_LPE_ITEM(elemref)->getCurrentLPE();
-                    if (lpe) {
-                        SP_LPE_ITEM(elemref)->removeCurrentPathEffect(true);
-                        LivePathEffectObject *lpeobj = lpe->getLPEObj();
-                        if (lpeobj) {
-                            SP_OBJECT(lpeobj)->deleteObject(true);
-                            lpeobj = nullptr;
-                        }
-                    }
-                    elemref->deleteObject(true);
-                    elemref = nullptr;
-                    maxrecursion++;
-                    if (maxrecursion < 5) {
-                        pt->addPowerStrokePencil(true);
-                        spdc_apply_powerstroke_shape(points, dc, item, maxrecursion);
-                    }
-                }
-            } else {
-                maxrecursion++;
-                if (maxrecursion < 5) {
-                    pt->addPowerStrokePencil(true);
-                    spdc_apply_powerstroke_shape(points, dc, item, maxrecursion);
-                }
+                elemref->getRepr()->setAttribute("style", nullptr);
+                SPItem *successor = dynamic_cast<SPItem *>(elemref);
+                sp_desktop_apply_style_tool(desktop, successor->getRepr(),
+                                            Glib::ustring("/tools/freehand/pencil").data(), false);
+                spdc_apply_style(successor);
+                item->deleteObject(true);
+                item = successor;
+                dc->selection->set(item);
+                item->setLocked(false);
+                dc->white_item = item;
+                rename_id(SP_OBJECT(item), "path-1");
             }
             return;
         }
