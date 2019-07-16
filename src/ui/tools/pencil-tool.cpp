@@ -84,8 +84,6 @@ PencilTool::PencilTool()
     , _is_drawing(false)
     , sketch_n(0)
     , _curve(nullptr)
-    , _previous_pressure(0.0)
-    , _last_point(Geom::Point())
 {
 }
 
@@ -356,7 +354,7 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
                         //   whether we're going into freehand mode or not
                         this->ps.push_back(this->p[0]);
                         if (tablet_enabled) {
-                            this->_wps.push_back(this->pressure);
+                            this->_wps.push_back(0);
                         }
                     }
                     this->_addFreehandPoint(p, mevent.state);
@@ -479,7 +477,6 @@ bool PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
                     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Finishing freehand"));
                     this->_interpolate();
                     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-                    tablet_enabled = prefs->getBool("/tools/freehand/pencil/pressure", false);
                     if (tablet_enabled) {
                         gint prevmode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
                         prefs->setInt("/tools/freehand/pencil/freehand-mode", 0);
@@ -493,10 +490,6 @@ bool PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
                     this->ea = nullptr;
                     this->ps.clear();
                     this->_wps.clear();
-                    this->_points_pos.clear();
-                    this->_pressure_data.clear();
-                    this->_last_point = Geom::Point();
-                    this->_previous_pressure = 0.0;
                     if (this->green_anchor) {
                         this->green_anchor = sp_draw_anchor_destroy(this->green_anchor);
                     }
@@ -703,30 +696,16 @@ static inline double square(double const x) { return x * x; }
 
 void PencilTool::addPowerStrokePencil(bool force)
 {
-    static int pscounter = 11;
-    if (pscounter > 10 || force) {
+    
+    static int pscounter = 21;
+    if (pscounter > 20 || force) {
         pscounter = 0;
     } else {
         pscounter++;
         return;
     }
     using namespace Inkscape::LivePathEffect;
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    double min = prefs->getIntLimited("/tools/freehand/pencil/minpressure", 10, 1, 100) / 100.0;
-    double max = prefs->getIntLimited("/tools/freehand/pencil/maxpressure", 40, 1, 100) / 100.0;
-    Geom::Affine transform_coordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine();
-    if (min > max){
-        min = max;
-    }
-    double dezoomify_factor  = 0.05 * 1000/SP_EVENT_CONTEXT(this)->desktop->current_zoom();//\/100 we want 100% = 1;
-    double last_pressure     = this->_wps.back();
-    double pressure_shrunk   = (last_pressure * (max - min)) + min;
-    //We need half width for power stroke
-    double pressure_computed = (pressure_shrunk * dezoomify_factor) / 5.0;
-    this->_last_point        = this->ps.back();
-    this->_last_point       *= transform_coordinate.inverse();
-    this->_pressure_data.push_back(pressure_computed);
-    this->_points_pos.push_back(this->_last_point);
+
     if (this->_curve && this->ps.size() > 1) {
         // Example og work with std::future
         // Retain for other works
@@ -758,13 +737,12 @@ void PencilTool::addPowerStrokePencil(bool force)
             toremove->getRepr()->setAttribute("id", "tmp_power_stroke_preview");
         }
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        double tol = prefs->getDoubleLimited("/tools/freehand/pencil/base-simplify", 25.0, 1.0, 100.0) * 0.4;
+        double tol = prefs->getDoubleLimited("/tools/freehand/pencil/base-simplify", 25.0, 0.0, 100.0) * 0.4;
         double tolerance_sq = 0.02 * square(this->desktop->w2d().descrim() * tol) * exp(0.2 * tol - 2);
         int n_points = this->ps.size();
         // worst case gives us a segment per point
         int max_segs = 4 * n_points;
         std::vector<Geom::Point> b(max_segs);
-        std::vector<Geom::Point> pts;
         curvepressure->reset();
         int const n_segs = Geom::bezier_fit_cubic_r(b.data(), this->ps.data(), n_points, tolerance_sq, max_segs);
         if (n_segs > 0) {
@@ -776,15 +754,6 @@ void PencilTool::addPowerStrokePencil(bool force)
         }
         Geom::Path path = curvepressure->get_pathvector()[0];
 
-        /* gdouble size  = Geom::L2(original_pathv.boundsFast()->dimensions());
-        //size /= Geom::Affine(0,0,0,0,0,0).descrim();
-        Path* pathliv = Path_for_pathvector(original_pathv);
-        size = Geom::L2(Geom::bounds_fast(original_pathv)->dimensions());
-        //size /= sp_lpe_item->i2doc_affine().descrim();
-        pathliv->ConvertEvenLines(tol * size);
-        pathliv->Simplify(tol * size);
-
-        Geom::Path path = Geom::parse_svg_path(pathliv->svg_dump_path())[0];*/
         if (!path.empty()) {
             Geom::Affine transform_coordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine().inverse();
             path *= transform_coordinate;
@@ -815,8 +784,7 @@ void PencilTool::addPowerStrokePencil(bool force)
                 return;
                 // return true;
             }
-            tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 1.0, 100.0);
-            tol = tol / (100.0 * (102.0 - tol));
+            tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 1.0, 100.0) / 400;
             std::ostringstream threshold;
             threshold << tol;
             Effect::createAndApply(SIMPLIFY, desktop->doc(), SP_ITEM(lpeitem));
@@ -825,7 +793,7 @@ void PencilTool::addPowerStrokePencil(bool force)
                 Glib::ustring pref_path = "/live_effects/simplify/smooth_angles";
                 bool valid = prefs->getEntry(pref_path).isValid();
                 if (!valid) {
-                    lpe->getRepr()->setAttribute("smooth_angles", "0");
+                    lpe->getRepr()->setAttribute("smooth_angles", "360");
                 }
                 lpe->getRepr()->setAttribute("threshold", threshold.str());
             }
@@ -895,7 +863,21 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/) {
         this->_fitAndSplit();
         this->ps.push_back(p);
         if (tablet_enabled) {
-            this->_wps.push_back(this->pressure);
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            double min = prefs->getIntLimited("/tools/freehand/pencil/minpressure", 10, 0, 100) / 100.0;
+            double max = prefs->getIntLimited("/tools/freehand/pencil/maxpressure", 40, 0, 100) / 100.0;
+            Geom::Affine transform_coordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine();
+            if (min > max){
+                min = max;
+            }
+            if (this->pressure < 0.25) {
+                this->_wps.push_back(0);
+                return;
+            }
+            double dezoomify_factor  = 0.05 * 1000 / SP_EVENT_CONTEXT(this)->desktop->current_zoom();
+            double pressure_shrunk   = (((this->pressure - 0.25) * 1.25) * (max - min)) + min;
+            double pressure_computed = pressure_shrunk * (dezoomify_factor/5.0);
+            this->_wps.push_back(pressure_computed);
             this->addPowerStrokePencil(false);
             sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr);
             for (auto i:this->green_bpaths) {
@@ -903,6 +885,7 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/) {
             }
             this->green_bpaths.clear();
         }
+
     }
 }
 
@@ -915,27 +898,25 @@ void PencilTool::powerStrokeInterpolate(Geom::Path path)
     using Geom::X;
     using Geom::Y;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    double step = prefs->getDoubleLimited("/tools/freehand/pencil/pressurestep", 5.0, 0.0, 100.0);
-    double min = prefs->getIntLimited("/tools/freehand/pencil/minpressure", 10, 1, 100) / 100.0;
-    double max = prefs->getIntLimited("/tools/freehand/pencil/maxpressure", 40, 1, 100) / 100.0;
-    if (min > max) {
-        min = max;
-    }
-    step = (step * (max - min)) + min;
+    double step = prefs->getDoubleLimited("/tools/freehand/pencil/pressurestep", 1.0, 0, 100.0);
+
     SPItem *item = selection ? selection->singleItem() : nullptr;
-    gint points_size = this->_points_pos.size();
+    gint points_size = this->_wps.size();
+    gint path_size = path.size();
     std::vector<Geom::Point> tmp_points;
-    std::vector<Geom::Point> tmp_points_pos;
-    Geom::Point prev = Geom::Point(Geom::infinity(), Geom::infinity());
+    Geom::Point previous = Geom::Point(Geom::infinity(), 0);
     size_t i = 0;
-    for (auto pospoint : this->_points_pos) {
-        Geom::Point pp = pospoint;
-        pp[Geom::X] = (path.size() / (double)this->_points_pos.size()) * i;
-        pp[Geom::Y] = this->_pressure_data[i];
-        if (this->_points_pos.size() - 1 == i ||
-            (!Geom::are_near(prev[Geom::X], pp[Geom::X], 0.2) && !Geom::are_near(prev[Geom::Y], pp[Geom::Y], step))) {
+    for (auto pressure : this->_wps) {
+        Geom::Point pp = Geom::Point();
+        pp[Geom::X] = (path_size / (double)points_size) * i;
+        pp[Geom::Y] = pressure;
+        if (pressure == 0 || path_size > 2 && (pp[Geom::X] < 1 || pp[Geom::X] > path_size - 2)) {
+            ++i;
+            continue;
+        }
+        if (std::abs(previous[Geom::Y] - pp[Geom::Y]) > step) {
             tmp_points.push_back(pp);
-            prev = pp;
+            previous = pp;
         }
         ++i;
     }
@@ -956,8 +937,8 @@ void PencilTool::_interpolate() {
     double tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 1.0, 100.0) * 0.4;
     bool simplify = prefs->getInt("/tools/freehand/pencil/simplify", 0);
     if(simplify){
-        double tol2 = prefs->getDoubleLimited("/tools/freehand/pencil/base-simplify", 25.0, 1.0, 100.0) * 0.4;
-        tol = std::min(tol,tol2);
+        double tol2 = prefs->getDoubleLimited("/tools/freehand/pencil/base-simplify", 25.0, 0.0, 100.0) * 0.4;
+        tol = tol > tol2 ? tol : tol2;
     }
     this->green_curve->reset();
     this->red_curve->reset();
@@ -1103,7 +1084,6 @@ void PencilTool::_sketchInterpolate() {
 
     this->ps.clear();
     this->points.clear();
-    this->_pressure_data.clear();
     this->_wps.clear();
 }
 

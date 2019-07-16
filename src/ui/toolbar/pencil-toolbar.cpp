@@ -135,10 +135,10 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
         }
         /* pressure steps */
         {
-            auto pressurestep_val = prefs->getDouble("/tools/freehand/pencil/pressurestep", 5);
-            _pressurestep_adj = Gtk::Adjustment::create(pressurestep_val, 0., 100, 1.0, 0.0);
+            auto pressurestep_val = prefs->getDouble("/tools/freehand/pencil/pressurestep", 2.0);
+            _pressurestep_adj = Gtk::Adjustment::create(pressurestep_val, 0.0, 100.0, 1.0, 0.0);
             _pressurestep = Gtk::manage(
-                new UI::Widget::SpinButtonToolItem("pencil-pressurestep", _("Knot gap:"), _pressurestep_adj, 0, 0));
+                new UI::Widget::SpinButtonToolItem("pencil-pressurestep", _("Knot gap:"), _pressurestep_adj, 1.0, 2));
             _pressurestep->set_tooltip_text(_("Pressure steps for new knot"));
             _pressurestep->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
             _pressurestep_adj->signal_value_changed().connect(
