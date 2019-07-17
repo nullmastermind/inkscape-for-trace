@@ -137,6 +137,7 @@ protected:
     void on_startup2() override;
     void on_activate() override;
     void process(SPDocument* document, std::string output_path);
+    void process_file_with_gui(Glib::RefPtr<Gio::File> file);
     void on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint) override;
     void parse_actions(const Glib::ustring& input, action_vector_t& action_vector);
 

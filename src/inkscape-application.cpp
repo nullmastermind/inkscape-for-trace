@@ -903,6 +903,36 @@ ConcreteInkscapeApplication<T>::process(SPDocument* document, std::string output
     INKSCAPE.remove_document(document);
 }
 
+/** Process 'file' using GUI.
+ */
+template<class T>
+void
+ConcreteInkscapeApplication<T>::process_file_with_gui(Glib::RefPtr<Gio::File> file)
+{
+    // no-op in general case (we only have a GUI if our application instance is a a Gtk::Application, see below)
+}
+
+template<>
+void
+ConcreteInkscapeApplication<Gtk::Application>::process_file_with_gui(Glib::RefPtr<Gio::File> file)
+{
+    // Create a window for each file.
+    SPDesktop* desktop = create_window(file);
+
+    // Process each file.
+    for (auto action: _command_line_actions) {
+        Gio::Application::activate_action( action.first, action.second );
+    }
+
+    // Close window after we're done with file. This may not be the best way...
+    // but we need to rewrite most of the window handling code so do this for now.
+    if (_batch_process) {
+        std::vector<Gtk::Window*> windows = get_windows();
+        remove_window(*windows[0]);  // There should be only one window (added in InkscapeWindow constructor).
+                                     // Eventually create_window() should return a pointer to the window, not the desktop.
+    }
+}
+
 // Open document window with default document. Either this or on_open() is called.
 template<class T>
 void
@@ -967,54 +997,8 @@ ConcreteInkscapeApplication<T>::on_open(const Gio::Application::type_vec_files& 
     }
 
     for (auto file : files) {
-        // Open file
-        SPDocument *document = document_open (file);
-        if (!document) continue;
-
-        process (document, file->get_path());
-        document_close (document);
-    }
-}
-
-// Open document window for each file. Either this or on_activate() is called.
-// type_vec_files == std::vector<Glib::RefPtr<Gio::File> >
-template<>
-void
-ConcreteInkscapeApplication<Gtk::Application>::on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint)
-{
-    on_startup2();
-    if(_pdf_poppler)
-        INKSCAPE.set_pdf_poppler(_pdf_poppler);
-    if(_pdf_page)
-        INKSCAPE.set_pdf_page(_pdf_page);
-
-    if (files.size() > 1 && !_file_export.export_filename.empty()) {
-        std::cerr << "ConcreteInkscapeApplication<Gtk::Application>::on_open: "
-                     "Can't use '--export-file' with multiple input files "
-                     "(output file would be overwritten for each input file). "
-                     "Please use '--export-type' instead and rename manually."
-                  << std::endl;
-        return;
-    }
-
-    for (auto file : files) {
         if (_with_gui) {
-            // Create a window for each file.
-            SPDesktop* desktop = create_window(file);
-
-            // Process each file.
-            for (auto action: _command_line_actions) {
-                Gio::Application::activate_action( action.first, action.second );
-            }
-
-            // Close window after we're done with file. This may not be the best way...
-            // but we need to rewrite most of the window handling code so do this for now.
-            if (_batch_process) {
-                std::vector<Gtk::Window*> windows = get_windows();
-                remove_window(*windows[0]);  // There should be only one window (added in InkscapeWindow constructor).
-                                             // Eventually create_window() should return a pointer to the window, not the desktop.
-            }
-
+            process_file_with_gui(file);
         } else {
             // Open file
             SPDocument *document = document_open (file);
