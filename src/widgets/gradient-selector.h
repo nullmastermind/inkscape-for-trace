@@ -115,7 +115,7 @@ struct SPGradientSelector {
     void setSpread(SPGradientSpread spread);
     void setVector(SPDocument *doc, SPGradient *vector);
     void selectGradientInTree(SPGradient *vector);
-    void moveSelection(int amount);
+    void moveSelection(int amount, bool down = true, bool toEnd = false);
 
     SPGradientUnits getUnits();
     SPGradientSpread getSpread();

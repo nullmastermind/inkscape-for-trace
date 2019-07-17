@@ -336,21 +336,31 @@ void SPGradientSelector::onTreeCountColClick() {
     column->set_sort_column(columns->refcount);
 }
 
-void SPGradientSelector::moveSelection(int amount)
+void SPGradientSelector::moveSelection(int amount, bool down, bool toEnd)
 {
     Glib::RefPtr<Gtk::TreeSelection> select = treeview->get_selection();
     auto iter = select->get_selected();
-    auto canary = iter;
 
-    for (--canary; amount < 0 && canary; ++amount) {
-        --canary;
-        --iter;
+    if (amount < 0) {
+        down = !down;
+        amount = -amount;
     }
 
-    canary = iter;
-    for (++canary; amount > 0 && canary; --amount) {
+    auto canary = iter;
+    if (down) {
         ++canary;
-        ++iter;
+    } else {
+        --canary;
+    }
+    while (canary && (toEnd || amount > 0)) {
+        --amount;
+        if (down) {
+            ++canary;
+            ++iter;
+        } else {
+            --canary;
+            --iter;
+        }
     }
 
     select->select(iter);
@@ -390,6 +400,20 @@ bool SPGradientSelector::onKeyPressEvent(GdkEventKey *event)
         case GDK_KEY_Page_Down:
         case GDK_KEY_KP_Page_Down: {
             moveSelection(5);
+            consume = true;
+            break;
+        }
+
+        case GDK_KEY_End:
+        case GDK_KEY_KP_End: {
+            moveSelection(0, true, true);
+            consume = true;
+            break;
+        }
+
+        case GDK_KEY_Home:
+        case GDK_KEY_KP_Home: {
+            moveSelection(0, false, true);
             consume = true;
             break;
         }
