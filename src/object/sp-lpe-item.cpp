@@ -259,7 +259,7 @@ bool SPLPEItem::performOnePathEffect(SPCurve *curve, SPShape *current, Inkscape:
                     SP_ACTIVE_DESKTOP->messageStack()->flash( Inkscape::WARNING_MESSAGE,
                                     _("An exception occurred during execution of the Path Effect.") );
                 }
-                lpe->has_exception = true;
+                lpe->doOnException(this);
                 return false;
             }
 

@@ -29,7 +29,7 @@ ToggleButtonParam::ToggleButtonParam( const Glib::ustring& label, const Glib::us
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
                       Effect* effect, bool default_value, Glib::ustring  inactive_label,
                       char const * _icon_active, char const * _icon_inactive, 
-                      GtkIconSize _icon_size)
+                      Gtk::BuiltinIconSize _icon_size)
     : Parameter(label, tip, key, wr, effect), value(default_value), defvalue(default_value),
       inactive_label(std::move(inactive_label)), _icon_active(_icon_active), _icon_inactive(_icon_inactive), _icon_size(_icon_size)
 {
@@ -95,38 +95,38 @@ ToggleButtonParam::param_newWidget()
                                                          false,
                                                          param_effect->getRepr(),
                                                          param_effect->getSPDoc()) );
-    auto box_button = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_box_set_homogeneous(GTK_BOX(box_button), false);
-    GtkWidget * label_button = gtk_label_new ("");
+    auto box_button = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL);
+    box_button->set_homogeneous(false);
+    Gtk::Label * label = new Gtk::Label("");
     if (!param_label.empty()) {
         if(value || inactive_label.empty()){
-            gtk_label_set_text(GTK_LABEL(label_button), param_label.c_str());
+            label->set_text(param_label.c_str());
         }else{
-            gtk_label_set_text(GTK_LABEL(label_button), inactive_label.c_str());
+            label->set_text(inactive_label.c_str());
         }
     }
-    gtk_widget_show(label_button);
+    label->show();
     if ( _icon_active ) {
         if(!_icon_inactive){
             _icon_inactive = _icon_active;
         }
-        gtk_widget_show(box_button);
-        GtkWidget *icon_button = nullptr;
+        box_button->show();
+        Gtk::Widget *icon_button = nullptr;
         if (!value) {
             icon_button = sp_get_icon_image(_icon_inactive, _icon_size);
         } else {
             icon_button = sp_get_icon_image(_icon_active, _icon_size);
         }
-        gtk_widget_show(icon_button);
-        gtk_box_pack_start (GTK_BOX(box_button), icon_button, false, false, 1);
+        icon_button->show();
+        box_button->pack_start(*icon_button, false, false, 1);
         if (!param_label.empty()) {
-            gtk_box_pack_start (GTK_BOX(box_button), label_button, false, false, 1);
+            box_button->pack_start (*label, false, false, 1);
         }
     }else{
-        gtk_box_pack_start (GTK_BOX(box_button), label_button, false, false, 1);
+        box_button->pack_start(*label, false, false, 1);
     }
 
-    checkwdg->add(*Gtk::manage(Glib::wrap(box_button)));
+    checkwdg->add(*Gtk::manage(box_button));
     checkwdg->setActive(value);
     checkwdg->setProgrammatically = false;
     checkwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change togglebutton parameter"));
@@ -145,11 +145,11 @@ ToggleButtonParam::refresh_button()
     if(!checkwdg){
         return;
     }
-    Gtk::Widget * box_button = checkwdg->get_child();
+    Gtk::Container *box_button = dynamic_cast<Gtk::Container *>(checkwdg->get_child());
     if(!box_button){
         return;
     }
-    std::vector<Gtk::Widget*> children = Glib::wrap(GTK_CONTAINER(box_button))->get_children();
+    std::vector<Gtk::Widget*> children = box_button->get_children();
     if (!param_label.empty()) {
         Gtk::Label *lab = dynamic_cast<Gtk::Label*>(children[children.size()-1]);
         if (!lab) return;
@@ -160,13 +160,13 @@ ToggleButtonParam::refresh_button()
         }
     }
     if ( _icon_active ) {
-        GdkPixbuf * icon_pixbuf = nullptr;
+        Gdk::Pixbuf * icon_pixbuf = nullptr;
         Gtk::Widget *im = dynamic_cast<Gtk::Image *>(children[0]);
         if (!im) return;
         if (!value) {
-            im = Glib::wrap(sp_get_icon_image(_icon_inactive, _icon_size));
+            im = sp_get_icon_image(_icon_inactive, _icon_size);
         } else {
-            im = Glib::wrap(sp_get_icon_image(_icon_active, _icon_size));
+            im = sp_get_icon_image(_icon_active, _icon_size);
         }
     }
 }

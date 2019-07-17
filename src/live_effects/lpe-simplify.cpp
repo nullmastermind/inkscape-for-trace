@@ -27,7 +27,7 @@ LPESimplify::LPESimplify(LivePathEffectObject *lpeobject)
       simplify_individual_paths(_("Paths separately"), _("Simplifying paths (separately)"), "simplify_individual_paths", &wr, this, false,
                               "", INKSCAPE_ICON("on"), INKSCAPE_ICON("off")),
       simplify_just_coalesce(_("Just coalesce"), _("Simplify just coalesce"), "simplify_just_coalesce", &wr, this, false,
-                           "", INKSCAPE_ICON("on"), INKSCAPE_ICON("off"))
+                           "", INKSCAPE_ICON("on"), INKSCAPE_ICON("off"))   
 {
     registerParameter(&steps);
     registerParameter(&threshold);

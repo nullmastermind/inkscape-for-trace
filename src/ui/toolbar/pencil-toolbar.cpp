@@ -146,7 +146,7 @@ PencilToolbar::PencilToolbar(SPDesktop *desktop,
                                               _("(few nodes, smooth)") };
         std::vector<double> values = { 1, 10, 20, 30, 50, 75, 100 };
         auto tolerance_val = prefs->getDouble("/tools/freehand/pencil/tolerance", 3.0);
-        _tolerance_adj = Gtk::Adjustment::create(tolerance_val, 1, 100.0, 0.5, 1.0);
+        _tolerance_adj = Gtk::Adjustment::create(tolerance_val, 0, 100.0, 0.5, 1.0);
         auto tolerance_item =
             Gtk::manage(new UI::Widget::SpinButtonToolItem("pencil-tolerance", _("Smoothing:"), _tolerance_adj, 1, 2));
         tolerance_item->set_tooltip_text(_("How much smoothing (simplifying) is applied to the line"));

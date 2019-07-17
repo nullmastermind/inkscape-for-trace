@@ -1250,6 +1250,13 @@ void Effect::doAfterEffect (SPLPEItem const* /*lpeitem*/)
     is_load = false;
 }
 
+void Effect::doOnException (SPLPEItem const* /*lpeitem*/)
+{
+    has_exception = true;
+    pathvector_after_effect = pathvector_before_effect;     
+}
+
+
 void Effect::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
 }

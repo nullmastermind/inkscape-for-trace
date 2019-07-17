@@ -48,8 +48,8 @@ public:
     Geom::Point p[16];
     std::vector<Geom::Point> ps;
     std::vector<Geom::Point> points;
-    void addPowerStrokePencil(bool force, gint tolsimplify);
-    void powerStrokeInterpolate(Geom::Path);
+    void addPowerStrokePencil(bool reset);
+    void powerStrokeInterpolate(Geom::Path const path);
     Geom::Piecewise<Geom::D2<Geom::SBasis> > sketch_interpolation; // the current proposal from the sketched paths
     unsigned sketch_n; // number of sketches done
     static const std::string prefsPath;
@@ -76,12 +76,13 @@ private:
     void _extinput(GdkEvent *event);
     void _cancel();
     void _endpointSnap(Geom::Point &p, guint const state);
-    std::vector<double> _wps;
+    std::vector<Geom::Point> _wps;
     SPCurve * _curve;
     Geom::Point _req_tangent;
     bool _is_drawing;
     PencilState _state;
     gint _npoints;
+    gint size_powerpencil;
     // std::future<bool> future;
 };
 

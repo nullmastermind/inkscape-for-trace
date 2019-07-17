@@ -75,6 +75,7 @@ public:
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     
     virtual void doAfterEffect (SPLPEItem const* lpeitem);
+    virtual void doOnException (SPLPEItem const* lpeitem);
     virtual void doOnRemove (SPLPEItem const* lpeitem);
     virtual void doOnVisibilityToggled(SPLPEItem const* lpeitem);
     void writeParamsToSVG();

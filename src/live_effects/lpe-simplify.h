@@ -35,13 +35,13 @@ public:
     virtual void drawHandle(Geom::Point p);
 
     virtual void drawHandleLine(Geom::Point p,Geom::Point p2);
+    ScalarParam threshold;
 
 protected:
     void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec) override;
 
 private:
     ScalarParam steps;
-    ScalarParam threshold;
     ScalarParam smooth_angles;
     ScalarParam helper_size;
     ToggleButtonParam simplify_individual_paths;
