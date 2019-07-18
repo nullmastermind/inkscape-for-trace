@@ -25,13 +25,17 @@ namespace Inkscape {
 
 namespace LivePathEffect {
 
-ToggleButtonParam::ToggleButtonParam( const Glib::ustring& label, const Glib::ustring& tip,
-                      const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect, bool default_value, Glib::ustring  inactive_label,
-                      char const * _icon_active, char const * _icon_inactive, 
-                      Gtk::BuiltinIconSize _icon_size)
-    : Parameter(label, tip, key, wr, effect), value(default_value), defvalue(default_value),
-      inactive_label(std::move(inactive_label)), _icon_active(_icon_active), _icon_inactive(_icon_inactive), _icon_size(_icon_size)
+ToggleButtonParam::ToggleButtonParam(const Glib::ustring &label, const Glib::ustring &tip, const Glib::ustring &key,
+                                     Inkscape::UI::Widget::Registry *wr, Effect *effect, bool default_value,
+                                     Glib::ustring inactive_label, char const *_icon_active, char const *_icon_inactive,
+                                     Gtk::BuiltinIconSize _icon_size)
+    : Parameter(label, tip, key, wr, effect)
+    , value(default_value)
+    , defvalue(default_value)
+    , inactive_label(std::move(inactive_label))
+    , _icon_active(_icon_active)
+    , _icon_inactive(_icon_inactive)
+    , _icon_size(_icon_size)
 {
     checkwdg = nullptr;
 }
@@ -95,33 +99,33 @@ ToggleButtonParam::param_newWidget()
                                                          false,
                                                          param_effect->getRepr(),
                                                          param_effect->getSPDoc()) );
-    auto box_button = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL);
-    box_button->set_homogeneous(false);
-    Gtk::Label * label = new Gtk::Label("");
-    if (!param_label.empty()) {
-        if(value || inactive_label.empty()){
-            label->set_text(param_label.c_str());
-        }else{
-            label->set_text(inactive_label.c_str());
-        }
-    }
-    label->show();
-    if ( _icon_active ) {
-        if(!_icon_inactive){
-            _icon_inactive = _icon_active;
-        }
-        box_button->show();
-        Gtk::Widget *icon_button = nullptr;
-        if (!value) {
-            icon_button = sp_get_icon_image(_icon_inactive, _icon_size);
-        } else {
-            icon_button = sp_get_icon_image(_icon_active, _icon_size);
-        }
-        icon_button->show();
-        box_button->pack_start(*icon_button, false, false, 1);
-        if (!param_label.empty()) {
-            box_button->pack_start (*label, false, false, 1);
-        }
+   auto box_button = new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL);
+   box_button->set_homogeneous(false);
+   Gtk::Label *label = new Gtk::Label("");
+   if (!param_label.empty()) {
+       if (value || inactive_label.empty()) {
+           label->set_text(param_label.c_str());
+       } else {
+           label->set_text(inactive_label.c_str());
+       }
+   }
+   label->show();
+   if (_icon_active) {
+       if (!_icon_inactive) {
+           _icon_inactive = _icon_active;
+       }
+       box_button->show();
+       Gtk::Widget *icon_button = nullptr;
+       if (!value) {
+           icon_button = sp_get_icon_image(_icon_inactive, _icon_size);
+       } else {
+           icon_button = sp_get_icon_image(_icon_active, _icon_size);
+       }
+       icon_button->show();
+       box_button->pack_start(*icon_button, false, false, 1);
+       if (!param_label.empty()) {
+           box_button->pack_start(*label, false, false, 1);
+       }
     }else{
         box_button->pack_start(*label, false, false, 1);
     }
@@ -149,7 +153,7 @@ ToggleButtonParam::refresh_button()
     if(!box_button){
         return;
     }
-    std::vector<Gtk::Widget*> children = box_button->get_children();
+    std::vector<Gtk::Widget *> children = box_button->get_children();
     if (!param_label.empty()) {
         Gtk::Label *lab = dynamic_cast<Gtk::Label*>(children[children.size()-1]);
         if (!lab) return;
@@ -160,7 +164,7 @@ ToggleButtonParam::refresh_button()
         }
     }
     if ( _icon_active ) {
-        Gdk::Pixbuf * icon_pixbuf = nullptr;
+        Gdk::Pixbuf *icon_pixbuf = nullptr;
         Gtk::Widget *im = dynamic_cast<Gtk::Image *>(children[0]);
         if (!im) return;
         if (!value) {

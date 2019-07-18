@@ -42,7 +42,7 @@ public:
     void doBeforeEffect(SPLPEItem const *lpeItem) override;
     void doOnApply(SPLPEItem const* lpeitem) override;
     void doOnRemove(SPLPEItem const* lpeitem) override;
-    void doAfterEffect (SPLPEItem const* lpeitem) override;
+    void doAfterEffect(SPLPEItem const *lpeitem) override;
     void applyStyle(SPLPEItem *lpeitem);
     // methods called by path-manipulator upon edits
     void adjustForNewPath(Geom::PathVector const & path_in);
@@ -59,7 +59,7 @@ private:
     ScalarParam miter_limit;
     EnumParam<unsigned> end_linecap_type;
     size_t recusion_limit;
-    size_t previous_size;
+    bool has_recursion;
 };
 
 } //namespace LivePathEffect

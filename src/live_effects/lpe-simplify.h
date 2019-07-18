@@ -37,7 +37,7 @@ public:
     virtual void drawHandleLine(Geom::Point p,Geom::Point p2);
     ScalarParam threshold;
 
-protected:
+  protected:
     void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec) override;
 
 private:

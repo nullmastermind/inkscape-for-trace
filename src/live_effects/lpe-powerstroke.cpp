@@ -12,8 +12,8 @@
  */
 
 #include "live_effects/lpe-powerstroke.h"
-#include "live_effects/lpe-simplify.h"
 #include "live_effects/lpe-powerstroke-interpolators.h"
+#include "live_effects/lpe-simplify.h"
 #include "live_effects/lpeobject.h"
 
 #include "svg/svg-color.h"
@@ -185,7 +185,7 @@ LPEPowerStroke::LPEPowerStroke(LivePathEffectObject *lpeobject) :
     scale_width.param_set_increments(0.1, 0.1);
     scale_width.param_set_digits(4);
     recusion_limit = 0;
-    previous_size = 0;
+    has_recursion = false;
 }
 
 LPEPowerStroke::~LPEPowerStroke() = default;
@@ -194,15 +194,13 @@ void
 LPEPowerStroke::doBeforeEffect(SPLPEItem const *lpeItem)
 {
     offset_points.set_scale_width(scale_width);
-    size_t psize = pathvector_before_effect.size();
-    if (!is_load && previous_size != psize) {
+    if (has_recursion) {
+        has_recursion = false;
         adjustForNewPath(pathvector_before_effect);
     }
-    previous_size = psize;
 }
 
-void 
-LPEPowerStroke::applyStyle(SPLPEItem *lpeitem)
+void LPEPowerStroke::applyStyle(SPLPEItem *lpeitem)
 {
     SPCSSAttr *css = sp_repr_css_attr_new();
     if (lpeitem->style) {
@@ -765,17 +763,20 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
     return path_out;
 }
 
-void
-LPEPowerStroke::doAfterEffect (SPLPEItem const* lpeitem){
+void LPEPowerStroke::doAfterEffect(SPLPEItem const *lpeitem)
+{
     is_load = false;
     if (pathvector_before_effect[0].size() == pathvector_after_effect[0].size()) {
         if (recusion_limit < 6) {
-            Inkscape::LivePathEffect::Effect* effect = sp_lpe_item->getPathEffectOfType(Inkscape::LivePathEffect::SIMPLIFY);
-            if(effect){
-                LivePathEffect::LPESimplify *simplify = dynamic_cast<LivePathEffect::LPESimplify*>(effect->getLPEObj()->get_lpe());
+            Inkscape::LivePathEffect::Effect *effect =
+                sp_lpe_item->getPathEffectOfType(Inkscape::LivePathEffect::SIMPLIFY);
+            if (effect) {
+                LivePathEffect::LPESimplify *simplify =
+                    dynamic_cast<LivePathEffect::LPESimplify *>(effect->getLPEObj()->get_lpe());
                 double threshold = simplify->threshold * 1.2;
-                simplify->threshold.param_set_value(threshold); 
+                simplify->threshold.param_set_value(threshold);
                 simplify->threshold.write_to_SVG();
+                has_recursion = true;
             }
         }
         ++recusion_limit;

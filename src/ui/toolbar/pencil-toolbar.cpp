@@ -341,9 +341,9 @@ PencilToolbar::use_pencil_pressure() {
         _minpressure->set_visible(true);
         _maxpressure->set_visible(true);
         _cap_item->set_visible(true);
+        _flatten_simplify->set_visible(true);
         _shape_item->set_visible(false);
         _simplify->set_visible(false);
-        _flatten_simplify->set_visible(false);
         _flatten_spiro_bspline->set_visible(false);
         for (auto button : _mode_buttons) {
             button->set_sensitive(false);
@@ -354,9 +354,9 @@ PencilToolbar::use_pencil_pressure() {
         _minpressure->set_visible(false);
         _maxpressure->set_visible(false);
         _cap_item->set_visible(false);
+        _flatten_simplify->set_visible(false);
         _shape_item->set_visible(true);
         _simplify->set_visible(true);
-        _flatten_simplify->set_visible(true);
         if (freehandMode == 1 || freehandMode == 2) {
             _flatten_spiro_bspline->set_visible(true);
         }

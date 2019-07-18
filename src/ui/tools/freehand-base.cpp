@@ -892,7 +892,7 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
 
         if (SP_IS_PENCIL_CONTEXT(dc) && dc->tablet_enabled) {
             if (!dc->white_item) {
-                    dc->white_item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
+                dc->white_item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
             }
             spdc_check_for_and_apply_waiting_LPE(dc, dc->white_item, c, false);
         }
