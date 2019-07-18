@@ -126,17 +126,17 @@ ToggleButtonParam::param_newWidget()
        if (!param_label.empty()) {
            box_button->pack_start(*label, false, false, 1);
        }
-    }else{
-        box_button->pack_start(*label, false, false, 1);
-    }
+   } else {
+       box_button->pack_start(*label, false, false, 1);
+   }
 
-    checkwdg->add(*Gtk::manage(box_button));
-    checkwdg->setActive(value);
-    checkwdg->setProgrammatically = false;
-    checkwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change togglebutton parameter"));
+   checkwdg->add(*Gtk::manage(box_button));
+   checkwdg->setActive(value);
+   checkwdg->setProgrammatically = false;
+   checkwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change togglebutton parameter"));
 
-    _toggled_connection = checkwdg->signal_toggled().connect(sigc::mem_fun(*this, &ToggleButtonParam::toggled));
-    return checkwdg;
+   _toggled_connection = checkwdg->signal_toggled().connect(sigc::mem_fun(*this, &ToggleButtonParam::toggled));
+   return checkwdg;
 }
 
 void

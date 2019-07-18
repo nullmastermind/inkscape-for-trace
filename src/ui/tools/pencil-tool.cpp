@@ -916,7 +916,7 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/) {
         this->_fitAndSplit();
         double distance = 0;
         if (tablet_enabled) {
-            distance = Geom::distance(p,this->ps.back()) + this->_wps.back()[Geom::X];
+            distance = Geom::distance(p, this->ps.back()) + this->_wps.back()[Geom::X];
         }
         this->ps.push_back(p);
         if (tablet_enabled) {
@@ -961,13 +961,13 @@ void PencilTool::powerStrokeInterpolate(Geom::Path const path)
     size_t i = 0;
     for (auto pp : this->_wps) {
         i++;
-        if (i%10) { //remove 9 of 10
+        if (i % 10) { // remove 9 of 10
             continue;
         }
         if (!this->_wps.back()[Geom::X]) {
             continue;
         }
-        
+
         pp[Geom::X] /= this->_wps.back()[Geom::X];
         pp[Geom::X] *= path_size;
         if (pp[Geom::Y] == 0 || path_size < 2 || pp[Geom::X] < 1) {
@@ -999,7 +999,7 @@ void PencilTool::powerStrokeInterpolate(Geom::Path const path)
     tmp_points.clear();
     if (this->points.empty() && this->_wps.size() > 1) {
         double onepress = this->_wps[((this->_wps.size() - 1) / 2) + 1][Geom::Y];
-        double onewidth = path_size /(double)2.0;
+        double onewidth = path_size / (double)2.0;
         Geom::Point one(onewidth, onepress);
         this->points.push_back(one);
     }
