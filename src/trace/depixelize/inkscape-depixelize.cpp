@@ -29,6 +29,8 @@
 
 #include <svg/path-string.h>
 #include <svg/svg.h>
+#include <svg/svg-color.h>
+#include "svg/css-ostringstream.h"
 
 using Glib::ustring;
 
@@ -97,36 +99,19 @@ std::vector<TracingEngineResult> DepixelizeTracingEngine::trace(Glib::RefPtr<Gdk
     std::vector<TracingEngineResult> res;
 
     for (::Tracer::Splines::const_iterator it = splines.begin(), end = splines.end(); it != end; ++it) {
-        /*{
-            SPCSSAttr *css = sp_repr_css_attr_new();
-
-            {
                 gchar b[64];
                 sp_svg_write_color(b, sizeof(b),
                                    SP_RGBA32_U_COMPOSE(unsigned(it->rgba[0]),
                                                        unsigned(it->rgba[1]),
                                                        unsigned(it->rgba[2]),
                                                        unsigned(it->rgba[3])));
-
-                sp_repr_css_set_property(css, "fill", b);
-            }
-
-            {
-                Inkscape::CSSOStringStream osalpha;
-                osalpha << float(it->rgba[3]) / 255.;
-                sp_repr_css_set_property(css, "fill-opacity",
-                                         osalpha.str().c_str());
-            }
-
-            sp_repr_css_set(repr, css, "style");
-            sp_repr_css_attr_unref(css);
-        }
-
-        gchar *str = sp_svg_write_path(it->pathVector);
-    */
-
-        TracingEngineResult r("fill:black;", sp_svg_write_path(it->pathVector), it->pathVector.nodes().size()); //TODO
+        Inkscape::CSSOStringStream osalpha;
+        osalpha << float(it->rgba[3]) / 255.;
+        gchar* style = g_strdup_printf("fill:%s;fill-opacity:%s;", b, osalpha.str().c_str());
+        printf("%s\n", style);
+        TracingEngineResult r(style, sp_svg_write_path(it->pathVector), it->pathVector.nodes().size());
         res.push_back(r);
+        g_free(style);
     }
     return res;
 }

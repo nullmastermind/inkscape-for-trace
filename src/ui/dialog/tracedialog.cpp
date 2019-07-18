@@ -193,15 +193,15 @@ void TraceDialogImpl2::traceProcess(bool do_i_trace)
         }
     }
     if (do_i_trace){
-        if (use_autotrace){
-	          tracer.trace(&ate);
-            printf("at\n");
-        } else if (choice_tab->get_current_page() == 0){
-            tracer.trace(&pte);
-            printf("pt\n");
-        } else if (choice_tab->get_current_page() == 1){
+        if (choice_tab->get_current_page() == 1){
             tracer.trace(&dte);
             printf("dt\n");
+        } else if (use_autotrace) {
+	          tracer.trace(&ate);
+            printf("at\n");
+        } else if (choice_tab->get_current_page() == 0) {
+            tracer.trace(&pte);
+            printf("pt\n");
         }
     }
 
