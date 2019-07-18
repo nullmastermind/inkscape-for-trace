@@ -675,7 +675,7 @@ void Transformation::applyPageMove(Inkscape::Selection *selection)
                     }
                 }
                 //sort bbox by anchors
-                std::sort(sorted.begin(), sorted.end());
+                std::stable_sort(sorted.begin(), sorted.end());
 
                 double move = x;
                 for ( std::vector<BBoxSort> ::iterator it (sorted.begin());
@@ -697,7 +697,7 @@ void Transformation::applyPageMove(Inkscape::Selection *selection)
                     }
                 }
                 //sort bbox by anchors
-                std::sort(sorted.begin(), sorted.end());
+                std::stable_sort(sorted.begin(), sorted.end());
 
                 double move = y;
                 for ( std::vector<BBoxSort> ::iterator it (sorted.begin());

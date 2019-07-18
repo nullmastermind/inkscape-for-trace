@@ -330,7 +330,7 @@ private :
             }
         }
         //sort bbox by anchors
-        std::sort(sorted.begin(), sorted.end());
+        std::stable_sort(sorted.begin(), sorted.end());
 
         // see comment in ActionAlign above
         int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
@@ -814,7 +814,7 @@ private :
         if (sorted.size() <= 1) return;
 
         //sort baselines
-        std::sort(sorted.begin(), sorted.end());
+        std::stable_sort(sorted.begin(), sorted.end());
 
         bool changed = false;
 
