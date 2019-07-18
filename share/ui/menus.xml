@@ -240,7 +240,6 @@
        <verb verb-id="ObjectToPath" />
        <verb verb-id="StrokeToPath" />
        <verb verb-id="SelectionTrace" /> <!-- depends on HAVE_POTRACE -->
-       <verb verb-id="SelectionPixelArt" />
        <separator/>
        <verb verb-id="SelectionUnion"        show-icons="true" />
        <verb verb-id="SelectionDiff"         show-icons="true" />
