@@ -699,7 +699,6 @@ void PencilTool::_finishEndpoint() {
 
 static inline double square(double const x) { return x * x; }
 
-    
 
 
 void PencilTool::addPowerStrokePencil()
@@ -795,7 +794,7 @@ void PencilTool::addPowerStrokePencil()
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             Glib::ustring pref_path_pp = "/live_effects/powerstroke/powerpencil";
             prefs->setBool(pref_path_pp, true);
-            if (this->points.size()) {                
+            if (this->points.size()) {
                 Effect::createAndApply(POWERSTROKE, SP_ACTIVE_DESKTOP->doc(), lpeitem);
                 Effect *lpe = lpeitem->getCurrentLPE();
                 Inkscape::LivePathEffect::LPEPowerStroke *pspreview = static_cast<LPEPowerStroke *>(lpe);
@@ -917,7 +916,7 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/) {
                         return true;
                     });
                 }
-            } */                
+            } */
             this->addPowerStrokePencil();
             sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr);
             for (auto i:this->green_bpaths) {
@@ -945,14 +944,15 @@ void PencilTool::powerStrokeInterpolate(Geom::Path const path)
     size_t i = 0;
     double dezoomify_factor = 0.05 * 1000 / SP_EVENT_CONTEXT(this)->desktop->current_zoom();
     double limit = 6 * dezoomify_factor;
-    double max = std::max(this->_wps.back()[Geom::X] - (this->_wps.back()[Geom::X]/10), this->_wps.back()[Geom::X] - limit);
-    double min = std::min(this->_wps.back()[Geom::X]/10, limit);
+    double max =
+        std::max(this->_wps.back()[Geom::X] - (this->_wps.back()[Geom::X] / 10), this->_wps.back()[Geom::X] - limit);
+    double min = std::min(this->_wps.back()[Geom::X] / 10, limit);
     double original_lenght = this->_wps.back()[Geom::X];
     double max10 = 0;
     double min10 = 0;
     for (auto wps : this->_wps) {
         i++;
-        max10 = max10 >  wps[Geom::Y] ? max10 : wps[Geom::Y];
+        max10 = max10 > wps[Geom::Y] ? max10 : wps[Geom::Y];
         min10 = min10 <= wps[Geom::Y] ? min10 : wps[Geom::Y];
         if (i % 10) { // remove 9 of 10
             continue;
@@ -968,7 +968,7 @@ void PencilTool::powerStrokeInterpolate(Geom::Path const path)
         if (wps[Geom::Y] == 0 || path_size < 2 || wps[Geom::X] < min) {
             continue;
         }
-        if (previous[Geom::Y] < (max10 + min10)/2.0) {
+        if (previous[Geom::Y] < (max10 + min10) / 2.0) {
             if (increase && tmp_points.size() > 1) {
                 tmp_points.pop_back();
             }
@@ -987,7 +987,6 @@ void PencilTool::powerStrokeInterpolate(Geom::Path const path)
         previous = wps;
         max10 = 0;
         min10 = 999999999;
-
     }
     this->points.clear();
     double prev_pressure = 0;
