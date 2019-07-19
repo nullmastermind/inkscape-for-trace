@@ -2800,7 +2800,7 @@ Verb *Verb::_base_verbs[] = {
     new LayerVerb(SP_VERB_LAYER_MOVE_TO_PREV, "LayerMoveToPrev", N_("Move Selection to Layer Bel_ow"),
                   N_("Move selection to the layer below the current"), INKSCAPE_ICON("selection-move-to-layer-below")),
     new LayerVerb(SP_VERB_LAYER_MOVE_TO, "LayerMoveTo", N_("Move Selection to Layer..."), N_("Move selection to layer"),
-                  INKSCAPE_ICON("layer-rename")),
+                  INKSCAPE_ICON("selection-move-to-layer")),
     new LayerVerb(SP_VERB_LAYER_TO_TOP, "LayerToTop", N_("Layer to _Top"), N_("Raise the current layer to the top"),
                   INKSCAPE_ICON("layer-top")),
     new LayerVerb(SP_VERB_LAYER_TO_BOTTOM, "LayerToBottom", N_("Layer to _Bottom"),

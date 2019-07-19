@@ -1,59 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://web.resource.org/cc/"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   id="svg1"
-   width="16.000567"
-   height="16"
-  >
-  <sodipodi:namedview
-     id="base"
-     showgrid="true"
-     gridspacingy="1pt"
-     gridspacingx="1pt"
-     gridoriginy="0pt"
-     gridoriginx="0pt"
-  />
-  <defs id="defs3">
-
-    <linearGradient id="linearGradient2485">
-      <stop id="stop2486" offset="0" style="stop-color:#ffffff;stop-opacity:1"/>
-      <stop id="stop2487" offset="1" style="stop-color:#aaaaaa;stop-opacity:1"/>
-    </linearGradient>
-    <linearGradient id="linearGradient5704">
-      <stop id="stop5706" offset="0" style="stop-color:#5a5a5a;stop-opacity:1"/>
-      <stop id="stop5708" offset="1" style="stop-color:#000000;stop-opacity:1"/>
-    </linearGradient>
-    <linearGradient gradientUnits="userSpaceOnUse" id="linearGradient5789" inkscape:collect="always" x1="968.8881" x2="977.9335" xlink:href="#linearGradient5704" y1="178.3186" y2="181.7098"/>
-    <linearGradient gradientUnits="userSpaceOnUse" id="linearGradient5787" inkscape:collect="always" x1="974.1975" x2="979.8044" xlink:href="#linearGradient2485" y1="182.4686" y2="184.8026"/>
-  </defs>
-<g id="selection-move-to-layer-below" inkscape:label="#move_selection_below" transform="matrix(0.997444,0,0,1,-962.492,-164)">
-  <path d="M 969.5,182.5 980.5,182.5 976.5,177.5 965.5,177.5 969.5,182.5 Z" id="use5776" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccc" style="color:#000000;fill:url(#linearGradient5787);fill-rule:evenodd;stroke:url(#linearGradient5789);stroke-width:0.9999474;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0" transform="matrix(1,0,0,1,-0.0409998,-5.03912)"/>
-  <rect height="16" id="rect10345" style="color:#000000;fill:none" width="16" x="965" y="164"/>
-  <path d="M 973.5,177 971,174 973,174 973,169 974,168 974,174 976,174 973.5,177 Z" id="path10353" inkscape:connector-curvature="0" sodipodi:nodetypes="cccccccc" style="fill:#000000;fill-rule:evenodd"/>
-  <g id="use5851" transform="matrix(1,0,0,1,-0.041,-6.999996)">
-    <path d="M 965.5,173.5 975.5,173.5 979.5,177.5 969.5,177.5 965.5,173.5 Z" id="path9593" inkscape:connector-curvature="0" style="fill:none;stroke:#ffffff;stroke-width:1.0012804px;stroke-linecap:round;stroke-linejoin:round"/>
-    <rect height="1" id="rect9565" style="color:#000000;fill:#000000;fill-rule:evenodd" width="1" x="965" y="173"/>
-    <rect height="1" id="use5802" style="color:#000000;fill:#000000;fill-rule:evenodd" transform="matrix(1,0,0,1,1.959,1.96088)" width="1" x="965" y="173"/>
-    <rect height="1" id="use5804" style="color:#000000;fill:#000000;fill-rule:evenodd" transform="matrix(1,0,0,1,3.959,3.96088)" width="1" x="965" y="173"/>
-    <rect height="1" id="use5806" style="color:#000000;fill:#000000;fill-rule:evenodd" transform="matrix(1,0,0,1,3.959,3.96088)" width="1" x="965" y="173"/>
-    <rect height="1" id="use5808" style="color:#000000;fill:#000000;fill-rule:evenodd" transform="matrix(1,0,0,1,3.959,3.96088)" width="1" x="965" y="173"/>
-    <rect height="1" id="use5810" style="color:#000000;fill:#000000;fill-rule:evenodd" transform="matrix(1,0,0,1,3.959,3.96088)" width="1" x="965" y="173"/>
-    <rect height="1" id="use5812" style="color:#000000;fill:#000000;fill-rule:evenodd" transform="matrix(1,0,0,1,3.959,3.96088)" width="1" x="965" y="173"/>
-    <rect height="1" id="use5815" style="color:#000000;fill:#000000;fill-rule:evenodd" transform="matrix(1,0,0,1,3.959,3.96088)" width="1" x="965" y="173"/>
-    <rect height="1" id="use5817" style="color:#000000;fill:#000000;fill-rule:evenodd" transform="matrix(1,0,0,1,1.959,1.96088)" width="1" x="965" y="173"/>
-    <rect height="1" id="use5821" style="color:#000000;fill:#000000;fill-rule:evenodd" width="1" x="970.959" y="172.9609"/>
-    <rect height="1" id="use5823" style="color:#000000;fill:#000000;fill-rule:evenodd" transform="matrix(1,0,0,1,0,0)" width="1" x="970.959" y="172.9609"/>
-    <rect height="1" id="use5825" style="color:#000000;fill:#000000;fill-rule:evenodd" transform="matrix(1,0,0,1,0,0)" width="1" x="970.959" y="172.9609"/>
-    <rect height="1" id="use5829" style="color:#000000;fill:#000000;fill-rule:evenodd" transform="matrix(1,0,0,1,-0.0409999999999999,-0.03912)" width="1" x="965" y="173"/>
-    <rect height="1" id="use5832" style="color:#000000;fill:#000000;fill-rule:evenodd" transform="matrix(1,0,0,1,-0.0409999999999999,-0.03912)" width="1" x="965" y="173"/>
+<svg width="16.001" height="16" inkscape:version="1.0alpha2 (941498d2b1, 2019-07-19, custom)" sodipodi:docname="selection-move-to-layer-below.svg" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <linearGradient id="linearGradient5789" x1="968.89" x2="977.93" y1="178.32" y2="181.71" gradientUnits="userSpaceOnUse" inkscape:collect="always">
+   <stop stop-color="#5a5a5a" offset="0"/>
+   <stop offset="1"/>
+  </linearGradient>
+  <linearGradient id="linearGradient5787" x1="974.2" x2="979.8" y1="182.47" y2="184.8" gradientUnits="userSpaceOnUse" inkscape:collect="always">
+   <stop stop-color="#fff" offset="0"/>
+   <stop stop-color="#aaa" offset="1"/>
+  </linearGradient>
+ </defs>
+ <g id="selection-move-to-layer-below" transform="matrix(.99744 0 0 1 -962.49 -164)" inkscape:label="#move_selection_below">
+  <path transform="translate(-.041 -5.0391)" d="m969.5 182.5h11l-4-5h-11l4 5z" color="#000000" fill="url(#linearGradient5787)" fill-rule="evenodd" stroke="url(#linearGradient5789)" stroke-linecap="square" stroke-linejoin="round" stroke-miterlimit="0" stroke-width=".99995" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccc"/>
+  <rect x="965" y="164" width="16" height="16" color="#000000" fill="none"/>
+  <path d="m973.5 177-2.5-3h2v-5l1-1v6h2l-2.5 3z" fill-rule="evenodd" inkscape:connector-curvature="0" sodipodi:nodetypes="cccccccc"/>
+  <g transform="translate(-.041 -7)">
+   <path d="m965.5 173.5h10l4 4h-10l-4-4z" fill="none" stroke="#000" stroke-dasharray="1 1.5" stroke-linejoin="round" stroke-width="1px" inkscape:connector-curvature="0"/>
   </g>
-</g>
-
+ </g>
 </svg>
