@@ -121,10 +121,8 @@ void SPAvoidRef::handleSettingChange()
             shapeRef = new Avoid::ShapeRef(router, poly, itemID);
         }
     }
-    else
+    else if (shapeRef)
     {
-        g_assert(shapeRef);
-
         router->deleteShape(shapeRef);
         shapeRef = nullptr;
     }
@@ -284,6 +282,9 @@ static Avoid::Polygon avoid_item_poly(SPItem const *item)
     // enlarge path by "desktop->namedview->connector_spacing"
     // store expanded convex hull in Avoid::Polygn
     Avoid::Polygon poly;
+    if (hull.empty()) {
+        return poly;
+    }
 
     Geom::Line hull_edge(hull.back(), hull.front());
     Geom::Line prev_parallel_hull_edge;
