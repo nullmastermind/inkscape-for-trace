@@ -41,6 +41,7 @@
 #include <glibmm/miscutils.h>
 
 #include "helper/action.h"
+#include "io/dir-util.h"
 #include "io/sys.h"
 #include "io/resource.h"
 #include "verbs.h"
@@ -91,15 +92,28 @@ void sp_shortcut_init()
 
     // try to load shortcut file as set in preferences
     // if preference is unset or loading fails fallback to share/keys/default.xml and finally share/keys/inkscape.xml
+    // make paths relative to share/keys/ if possible (handle parallel installations of Inkscape gracefully)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring shortcutfile = prefs->getString("/options/kbshortcuts/shortcutfile");
+    std::string shortcutfile = prefs->getString("/options/kbshortcuts/shortcutfile");
     bool success = false;
     gchar const *reason;
     if (shortcutfile.empty()) {
         reason = "No key file set in preferences";
     } else {
-        success = try_shortcuts_file(shortcutfile.c_str());
         reason = "Unable to read key file set in preferences";
+        
+        bool absolute = Glib::path_is_absolute(shortcutfile);
+        if (absolute) {
+            success = try_shortcuts_file(shortcutfile.c_str());
+        } else {
+            success = try_shortcuts_file(get_path(SYSTEM, KEYS, shortcutfile.c_str()));
+        }
+
+        // store shortcutfile location relative to INKSCAPE_DATADIR
+        if (absolute && success) {
+            shortcutfile = sp_relative_path_from_path(shortcutfile, std::string(get_path(SYSTEM, KEYS)));
+            prefs->setString("/options/kbshortcuts/shortcutfile", shortcutfile.c_str());
+        }
     }
 #ifdef WITH_CARBON_INTEGRATION
     if (!success) {
@@ -316,6 +330,7 @@ void sp_shortcut_get_file_names(std::vector<Glib::ustring> *names, std::vector<G
     std::vector<std::pair<Glib::ustring, Glib::ustring>> names_and_paths;
     for(auto &filename: filenames) {
         Glib::ustring label = Glib::path_get_basename(filename);
+        Glib::ustring filename_relative = sp_relative_path_from_path(filename, std::string(get_path(SYSTEM, KEYS)));
 
         XML::Document *doc = sp_repr_read_file(filename.c_str(), nullptr);
         if (!doc) {
@@ -331,7 +346,7 @@ void sp_shortcut_get_file_names(std::vector<Glib::ustring> *names, std::vector<G
                 label = Glib::ustring(name) + " (" + label + ")";
             }
             std::pair<Glib::ustring, Glib::ustring> name_and_path;
-            name_and_path = std::make_pair(label, filename);
+            name_and_path = std::make_pair(label, filename_relative);
             names_and_paths.push_back(name_and_path);
         } else {
             g_warning("Not a shortcut keys file %s", filename.c_str());
