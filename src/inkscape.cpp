@@ -524,7 +524,7 @@ Glib::ustring Application::get_symbolic_colors()
     css_str += ", error ";
     css_str += colornamederror;
     css_str += ";}";
-    css_str += "SPRuler, ruler-widget,";
+    css_str += "#InkRuler,";
     css_str += ".bright image, .dark image";
     css_str += "{color:";
     css_str += colornamed;
