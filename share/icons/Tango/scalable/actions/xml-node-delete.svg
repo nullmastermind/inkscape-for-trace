@@ -9,11 +9,11 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg1"
-   width="121.2"
-   height="26.400002"
+   width="26.4"
+   height="26.4"
    version="1.1"
    sodipodi:docname="xml-node-delete.svg"
-   viewBox="0 0 121.2 26.400002">
+   viewBox="0 0 26.4 26.4">
   <metadata
      id="metadata44">
     <rdf:RDF>
@@ -101,7 +101,7 @@
        id="rect12912"
        style="display:inline;overflow:visible;visibility:visible;fill:url(#radialGradient12914);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;marker-start:none;marker-mid:none;marker-end:none;enable-background:accumulate"
        width="24"
-       x="456"
+       x="360"
        y="1088" />
     <g
        id="use12786">
@@ -129,7 +129,7 @@
     </g>
     <g
        id="use11269"
-       transform="translate(-443.9821,1082.999)">
+       transform="translate(-539.9821,1082.999)">
       <path
          d="m 909.5,11 v 5"
          id="path5405"
@@ -167,28 +167,20 @@
     </g>
     <g
        id="use11271"
-       transform="translate(-443.9821,1082.999)">
+       transform="translate(-539.9821,1082.999)">
       <path
          d="m 906.5,24.5 -3,-3 3,-3 m 3,6 3,-3 -3,-3"
          id="path5418"
          inkscape:connector-curvature="0"
          style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:square;stroke-linejoin:miter;stroke-opacity:1" />
     </g>
-    <g
-       id="g12883"
-       transform="translate(35,1)">
-      <path
-         d="m 434.5,1103.5 v 3 h 3 v 2.969 h 3.0312 V 1106.5 H 443.5 v -3 h -2.9375 l -0.0313,-3 -3.0468,-0.016 0.0156,2.985 z"
-         id="path12885"
-         inkscape:connector-curvature="0"
-         sodipodi:nodetypes="ccccccccccccc"
-         style="fill:#729fcf;fill-opacity:1;stroke:#204a87;stroke-width:1.0000006;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-      <path
-         d="m 435.5312,1105.969 -0.0312,-1.438 3,-0.047 0.0312,-2.953 L 440,1101.5"
-         id="path12887"
-         inkscape:connector-curvature="0"
-         sodipodi:nodetypes="ccccc"
-         style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#aac5e2;stroke-width:1.00000024px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
-    </g>
+    <path
+       d="m 181.3125,371.39844 -1.91406,1.91406 2.48828,2.48828 a 0.28127812,0.28127812 0 0 1 0,0.39844 l -2.48828,2.48828 1.91406,1.91406 2.48828,-2.48828 a 0.28127812,0.28127812 0 0 1 0.39844,0 l 2.48828,2.48828 1.91406,-1.91406 -2.48828,-2.48828 a 0.28127812,0.28127812 0 0 1 0,-0.39844 l 2.48828,-2.48828 -1.91406,-1.91406 -2.48828,2.48828 a 0.28127812,0.28127812 0 0 1 -0.39844,0 z"
+       id="path12852"
+       inkscape:original="M 181.3125 371 L 179 373.3125 L 181.6875 376 L 179 378.6875 L 181.3125 381 L 184 378.3125 L 186.6875 381 L 189 378.6875 L 186.3125 376 L 189 373.3125 L 186.6875 371 L 184 373.6875 L 181.3125 371 z "
+       inkscape:radius="-0.28125"
+       sodipodi:type="inkscape:offset"
+       style="display:inline;overflow:visible;visibility:visible;fill:#ef2929;fill-opacity:1;fill-rule:evenodd;stroke:#a40000;stroke-width:1.02777779;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0.50001389;stroke-opacity:1;marker:none;marker-start:none;marker-mid:none;marker-end:none;enable-background:accumulate"
+       transform="matrix(0.972973,0,0,0.972973,198.97272,740.1621)" />
   </g>
 </svg>

@@ -9,11 +9,11 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg1"
-   width="217.2"
-   height="26.400002"
+   width="26.4"
+   height="26.4"
    version="1.1"
    sodipodi:docname="xml-attribute-delete.svg"
-   viewBox="0 0 217.2 26.400002">
+   viewBox="0 0 26.4 26.4">
   <metadata
      id="metadata37">
     <rdf:RDF>
@@ -101,7 +101,7 @@
        id="rect12920"
        style="display:inline;overflow:visible;visibility:visible;fill:url(#radialGradient12922);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;marker-start:none;marker-mid:none;marker-end:none;enable-background:accumulate"
        width="24"
-       x="552"
+       x="360"
        y="1088" />
     <g
        id="use12788">
@@ -132,21 +132,21 @@
        id="rect11293"
        style="display:inline;opacity:0.31671549;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999988;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;marker-start:none;marker-mid:none;marker-end:none"
        width="6.9850459"
-       x="562.56458"
+       x="370.56458"
        y="1103.5179" />
     <path
-       d="m 556.4933,1104.518 h 5.1429"
+       d="m 364.4933,1104.518 h 5.1429"
        id="path11295"
        inkscape:connector-curvature="0"
        style="opacity:0.31671549;fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000012px;stroke-linecap:square;stroke-linejoin:miter;stroke-opacity:1" />
     <path
-       d="m 556.4933,1101.446 v 2.147"
+       d="m 364.4933,1101.446 v 2.147"
        id="path11297"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        style="opacity:0.31671549;fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000012px;stroke-linecap:square;stroke-linejoin:miter;stroke-opacity:1" />
     <path
-       d="m 555.4928,1090.498 h 1.9844 v 2.012 h -1.9844 z m 1.0718,2.502 v 7.415 m 0,-3.897 h 6 m 0.0149,-1.018 h 6.9851 v 2.035 h -6.9851 z m -6.0795,4.999 h 6 m 0,-1.035 h 6.985 v 2.035 H 562.5 Z"
+       d="m 363.4928,1090.498 h 1.9844 v 2.012 h -1.9844 z m 1.0718,2.502 v 7.415 m 0,-3.897 h 6 m 0.0149,-1.018 h 6.9851 v 2.035 h -6.9851 z m -6.0795,4.999 h 6 m 0,-1.035 h 6.985 v 2.035 H 370.5 Z"
        id="path11301"
        inkscape:connector-curvature="0"
        style="display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999821;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1;marker:none;marker-start:none;marker-mid:none;marker-end:none" />
@@ -157,6 +157,6 @@
        inkscape:radius="-0.28125"
        sodipodi:type="inkscape:offset"
        style="display:inline;overflow:visible;visibility:visible;fill:#ef2929;fill-opacity:1;fill-rule:evenodd;stroke:#a40000;stroke-width:1.02777779;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0.50001389;stroke-opacity:1;marker:none;marker-start:none;marker-mid:none;marker-end:none;enable-background:accumulate"
-       transform="matrix(0.972973,0,0,0.972973,390.973,740.1621)" />
+       transform="matrix(0.972973,0,0,0.972973,198.97272,740.1621)" />
   </g>
 </svg>

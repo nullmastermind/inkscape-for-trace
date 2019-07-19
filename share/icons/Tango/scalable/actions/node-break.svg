@@ -9,11 +9,11 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg1"
-   width="131.00018"
-   height="16.000031"
+   width="16"
+   height="16"
    version="1.1"
    sodipodi:docname="node-break.svg"
-   viewBox="0 0 131.00019 16.000031">
+   viewBox="0 0 16 16">
   <metadata
      id="metadata71">
     <rdf:RDF>
@@ -233,11 +233,11 @@
        id="rect6701"
        style="display:inline;overflow:visible;visibility:visible;fill:url(#radialGradient14102);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.193344;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;marker-start:none;marker-mid:none;marker-end:none;enable-background:accumulate"
        width="16"
-       x="1392"
+       x="1277.0001"
        y="192" />
     <g
        id="g7634"
-       transform="matrix(-0.7272725,0,0,-0.7272725,1394.182,514.9088)">
+       transform="matrix(-0.7272725,0,0,-0.7272725,1279.1822,514.9088)">
       <path
          d="M -19,423.3747 H 2.999997 v 4.125 H -19 Z"
          id="path7636"
@@ -251,7 +251,7 @@
     </g>
     <g
        id="g7630"
-       transform="matrix(0.7272725,0,0,0.7272725,1405.818,-104)">
+       transform="matrix(0.7272725,0,0,0.7272725,1290.8182,-104)">
       <path
          d="M -19,423.5001 H 2.999997 v 4.125 H -19 Z"
          id="path6703"
@@ -265,7 +265,7 @@
     </g>
     <g
        id="g7686"
-       transform="matrix(0.7272725,0,0,0.7272725,1405.818,-104.7272)">
+       transform="matrix(0.7272725,0,0,0.7272725,1290.8182,-104.7272)">
       <path
          d="M -19,409.375 H 3 v 4.125 h -22 z"
          id="path7668"
@@ -279,7 +279,7 @@
     </g>
     <g
        id="use13946"
-       transform="translate(63.9778,-12.99999)">
+       transform="translate(-51.022022,-12.99999)">
       <path
          d="m 1334.496,210.5 v 2.0139 h -1.974 l 3.476,2.9861 3.524,-2.9861 h -2.017 V 210.5 Z"
          id="path13970"
@@ -296,7 +296,7 @@
     <g
        id="use14458"
        inkscape:label="#g14209"
-       transform="translate(121,-11)">
+       transform="translate(6.0001775,-11)">
       <path
          d="m 1277.5,203.5 h 4 v 4 h -4 z"
          id="path20341"
@@ -310,7 +310,8 @@
     </g>
     <g
        id="use14460"
-       inkscape:label="#g14209">
+       inkscape:label="#g14209"
+       transform="translate(2)">
       <path
          d="m 1277.5,203.5 h 4 v 4 h -4 z"
          id="path57"
@@ -325,7 +326,7 @@
     <g
        id="use14462"
        inkscape:label="#g14209"
-       transform="translate(124,3e-5)">
+       transform="translate(9.0001775,3e-5)">
       <path
          d="m 1277.5,203.5 h 4 v 4 h -4 z"
          id="path62"

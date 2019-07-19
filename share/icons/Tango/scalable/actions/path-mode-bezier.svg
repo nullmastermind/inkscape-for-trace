@@ -9,11 +9,11 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg1"
-   width="232.9989"
+   width="18.552411"
    height="18.501411"
    version="1.1"
    sodipodi:docname="path-mode-bezier.svg"
-   viewBox="0 0 232.9989 18.501411">
+   viewBox="0 0 18.552411 18.501411">
   <metadata
      id="metadata65">
     <rdf:RDF>
@@ -194,7 +194,7 @@
   </defs>
   <g
      id="bezier_mode"
-     transform="translate(-1445.0011,-189.49983)">
+     transform="translate(-1659.4378,-189.49871)">
     <g
        id="g15301"
        transform="rotate(-157.6286,1678.174,200.5205)">
@@ -292,7 +292,8 @@
     </g>
     <g
        id="use15228"
-       inkscape:label="#g14630">
+       inkscape:label="#g14630"
+       transform="rotate(135,1557.961,243.4972)">
       <g
          id="g58"
          transform="matrix(0.7272727,0,0,0.7310807,1453.818,-102.0049)">

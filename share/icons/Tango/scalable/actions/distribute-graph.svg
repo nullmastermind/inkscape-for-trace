@@ -9,11 +9,11 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg1"
-   width="40.000004"
+   width="24"
    height="24"
    version="1.1"
    sodipodi:docname="distribute-graph.svg"
-   viewBox="0 0 40.000004 24">
+   viewBox="0 0 24 24">
   <metadata
      id="metadata51">
     <rdf:RDF>
@@ -68,21 +68,21 @@
      id="graph_layout"
      transform="translate(-176,-1640)">
     <rect
-       height="24"
        id="rect11566"
        style="display:inline;overflow:visible;visibility:visible;opacity:1;fill:url(#radialGradient11641);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;marker-start:none;marker-mid:none;marker-end:none;enable-background:accumulate"
+       height="24"
        width="24"
-       x="192"
+       x="176"
        y="1640" />
     <path
-       d="m 212.6464,1650.265 -3,10 v 0 l -6,-5 -8,2 v -12 l 10,-2 m 0,0 -2,12"
+       d="m 196.6464,1650.265 -3,10 v 0 l -6,-5 -8,2 v -12 l 10,-2 m 0,0 -2,12"
        id="path11883"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccc"
        style="display:inline;overflow:visible;visibility:visible;opacity:1;fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#555753;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;marker-start:none;marker-mid:none;marker-end:none;enable-background:accumulate" />
     <g
        id="use11873"
-       transform="translate(32,1.99998)">
+       transform="translate(33,1.99998)">
       <circle
          cx="328"
          cy="215"
@@ -100,7 +100,7 @@
     </g>
     <g
        id="use11875"
-       transform="translate(40,11.99998)">
+       transform="translate(41,11.99998)">
       <circle
          cx="328"
          cy="215"
@@ -118,7 +118,7 @@
     </g>
     <g
        id="use11877"
-       transform="translate(46,16.99998)">
+       transform="translate(47,16.99998)">
       <circle
          cx="328"
          cy="215"
@@ -136,7 +136,7 @@
     </g>
     <g
        id="use11879"
-       transform="translate(42,-2e-5)">
+       transform="translate(43,-2e-5)">
       <circle
          cx="328"
          cy="215"
@@ -154,7 +154,7 @@
     </g>
     <g
        id="use11881"
-       transform="translate(32,13.99994)">
+       transform="translate(33,13.99994)">
       <circle
          cx="328"
          cy="215"
@@ -172,7 +172,7 @@
     </g>
     <g
        id="use11888"
-       transform="translate(49,6.99998)">
+       transform="translate(50,6.99998)">
       <circle
          cx="328"
          cy="215"

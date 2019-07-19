@@ -9,11 +9,11 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg1"
-   width="1090"
-   height="1341"
+   width="24"
+   height="24"
    version="1.1"
    sodipodi:docname="distribute-vertical-baseline.svg"
-   viewBox="0 0 1090 1341">
+   viewBox="0 0 24 24">
   <metadata
      id="metadata54">
     <rdf:RDF>
@@ -175,7 +175,7 @@
   </defs>
   <g
      id="distribute_baselines_vert"
-     transform="translate(-192,-203)">
+     transform="translate(-192,-1520)">
     <rect
        height="24"
        id="rect12842"
@@ -214,7 +214,13 @@
        style="display:inline;overflow:visible;visibility:visible;fill:#fcaf3e;fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient12964);stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;marker-start:none;marker-mid:none;marker-end:none;enable-background:accumulate" />
     <g
        id="use12852"
-       inkscape:label="#g14209">
+       inkscape:label="#g14209"
+       x="0"
+       y="0"
+       transform="rotate(90,76.5,326.5)"
+       width="2000"
+       height="2000"
+       style="display:inline">
       <path
          d="m 1277.5,203.5 h 4 v 4 h -4 z"
          id="path20341"
@@ -228,7 +234,13 @@
     </g>
     <g
        id="use12854"
-       inkscape:label="#g14209">
+       inkscape:label="#g14209"
+       style="display:inline"
+       height="2000"
+       width="2000"
+       transform="rotate(90,71,332)"
+       y="0"
+       x="0">
       <path
          d="m 1277.5,203.5 h 4 v 4 h -4 z"
          id="path43"

@@ -9,11 +9,11 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg1"
-   width="82.998497"
-   height="75.001244"
+   width="16"
+   height="16"
    version="1.1"
    sodipodi:docname="snap-nodes.svg"
-   viewBox="0 0 82.998497 75.001241">
+   viewBox="0 0 16 16">
   <metadata
      id="metadata50">
     <rdf:RDF>
@@ -192,7 +192,8 @@
     </g>
     <g
        id="use20996"
-       inkscape:label="#g14630">
+       inkscape:label="#g14630"
+       transform="rotate(-45,1337.159,255.9115)">
       <g
          id="g6643"
          transform="matrix(0.7272727,0,0,0.7310807,1453.818,-102.0049)">

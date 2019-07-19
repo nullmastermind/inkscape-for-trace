@@ -175,7 +175,8 @@
          transform="matrix(0.2499999,0,0,0.249998,64.50002,1589.75)" />
     </g>
     <g
-       id="use11833">
+       id="use11833"
+       transform="translate(17)">
       <circle
          cx="328"
          cy="215"
@@ -193,7 +194,7 @@
     </g>
     <g
        id="use11835"
-       transform="translate(8,7)">
+       transform="translate(9,7)">
       <circle
          cx="328"
          cy="215"
@@ -211,7 +212,7 @@
     </g>
     <g
        id="use11837"
-       transform="translate(8,17)">
+       transform="translate(9,17)">
       <circle
          cx="328"
          cy="215"

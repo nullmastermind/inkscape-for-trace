@@ -205,7 +205,7 @@
   </defs>
   <g
      id="node_vdistribute"
-     transform="translate(-96,-1736)">
+     transform="matrix(0,1,1,0,-1736,-96)">
     <rect
        height="24"
        id="rect12047"

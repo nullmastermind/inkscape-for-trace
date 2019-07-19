@@ -9,11 +9,11 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg1"
-   width="34.998901"
+   width="16"
    height="16"
    version="1.1"
    sodipodi:docname="node-type-symmetric.svg"
-   viewBox="0 0 34.998902 16">
+   viewBox="0 0 16 16">
   <metadata
      id="metadata44">
     <rdf:RDF>
@@ -132,7 +132,7 @@
   </defs>
   <g
      id="node_symmetric"
-     transform="translate(-1445.0011,-192)">
+     transform="translate(-1464,-192)">
     <path
        d="m 1478.5,203.5 c -6.276,-0.1837 -9.988,-3.5796 -10,-10"
        id="path14758"
@@ -178,7 +178,8 @@
     </g>
     <g
        id="use14635"
-       inkscape:label="#g14630">
+       inkscape:label="#g14630"
+       transform="rotate(45,1457.407,227.9234)">
       <g
          id="g6643"
          transform="matrix(0.7272727,0,0,0.7310807,1453.818,-102.0049)">
