@@ -186,9 +186,8 @@ static void sp_gradient_selector_init(SPGradientSelector *sel)
     gtk_button_set_relief(GTK_BUTTON(sel->add), GTK_RELIEF_NONE);
     gtk_widget_set_tooltip_text( sel->add, _("Create a duplicate gradient"));
 
-    // FIXME: Probably better to either use something from the icon naming spec or ship our own "edit-gradient" icon
     sel->edit = gtk_button_new();
-    gradsel_style_button(sel->edit, INKSCAPE_ICON("gtk-edit"));
+    gradsel_style_button(sel->edit, INKSCAPE_ICON("edit"));
 
     sel->nonsolid.push_back(sel->edit);
     gtk_box_pack_start (GTK_BOX (hb), sel->edit, FALSE, FALSE, 0);
