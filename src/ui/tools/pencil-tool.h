@@ -48,7 +48,7 @@ public:
     Geom::Point p[16];
     std::vector<Geom::Point> ps;
     std::vector<Geom::Point> points;
-    void addPowerStrokePencil(bool reset);
+    void addPowerStrokePencil();
     void powerStrokeInterpolate(Geom::Path const path);
     Geom::Piecewise<Geom::D2<Geom::SBasis> > sketch_interpolation; // the current proposal from the sketched paths
     unsigned sketch_n; // number of sketches done
@@ -82,7 +82,6 @@ private:
     bool _is_drawing;
     PencilState _state;
     gint _npoints;
-    gint size_powerpencil;
     // std::future<bool> future;
 };
 

@@ -100,7 +100,6 @@ void PencilTool::setup() {
 
     this->_is_drawing = false;
     this->anchor_statusbar = false;
-    this->size_powerpencil = 0;
 }
 
 
@@ -488,7 +487,6 @@ bool PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
                         prefs->setInt("/tools/freehand/pencil/freehand-mode", mode);
                         prefs->setInt("/tools/freehand/pencil/simplify", simplify);
                         prefs->setInt("/tools/freehand/pencil/shape", shapetype);
-                        this->addPowerStrokePencil(true);
                     } else {
                         spdc_concat_colors_and_flush(this, FALSE);
                     }
@@ -497,7 +495,6 @@ bool PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
                     this->ea = nullptr;
                     this->ps.clear();
                     this->_wps.clear();
-                    this->size_powerpencil = 0;
                     if (this->green_anchor) {
                         this->green_anchor = sp_draw_anchor_destroy(this->green_anchor);
                     }
@@ -702,53 +699,19 @@ void PencilTool::_finishEndpoint() {
 
 static inline double square(double const x) { return x * x; }
 
-void PencilTool::addPowerStrokePencil(bool reset)
+    
+
+
+void PencilTool::addPowerStrokePencil()
 {
-    gint top = 21;
-    if (this->size_powerpencil > 30) {
-        top = 41;
-    }
-    static int pscounter = 21;
-    if (reset) {
-        pscounter = top;
-        return;
-    }
-    if (pscounter > top - 1) {
-        pscounter = 0;
-    } else {
-        pscounter++;
-        return;
-    }
-
-    using namespace Inkscape::LivePathEffect;
-
-    if (this->_curve && this->ps.size() > 1) {
-        // Example og work with std::future
-        // Retain for other works
-        /* std::future_status status;
-        bool stop = false;
-        bool nofuture = false;
-        try {
-            status = future.wait_for(std::chrono::seconds(0));
-        } catch (const std::future_error& e) {
-            stop = true;
-            if (e.code() == std::future_errc::no_state) {
-                nofuture = true;
-            } else {
-                std::cout << "Caught a future_error with code \"" << e.code()
-                << nofuture << future.valid() << "\"\nMessage: \"" << e.what() << "\"\n";
-            }
-        }
-        if (nofuture || status == std::future_status::ready) {
-            if (!stop && status == std::future_status::ready) { */
-
+    if (this->_curve && !(this->ps.size() % 20)) {
         SPDocument *document = SP_ACTIVE_DOCUMENT;
         if (!document) {
             return;
         }
+        using namespace Inkscape::LivePathEffect;
         const gchar *id = "power_stroke_preview";
         SPObject *toremove = document->getObjectById(id);
-        using namespace Inkscape::LivePathEffect;
         if (toremove) {
             toremove->getRepr()->setAttribute("id", "tmp_power_stroke_preview");
         }
@@ -773,10 +736,6 @@ void PencilTool::addPowerStrokePencil(bool reset)
         Geom::Path path = curvepressure->get_pathvector()[0];
         int original_size = path.size();
         if (!path.empty()) {
-            // std::vector<Geom::Point> points_preview = this->points;
-            // points_preview.push_back(Geom::Point(path.size() - 1, points_preview[points_preview.size()-1][Geom::Y]));
-            // future = std::async(std::launch::async, [path, points_preview] {
-            using namespace Inkscape::LivePathEffect;
             Inkscape::XML::Document *xml_doc = document->getReprDoc();
             Inkscape::XML::Node *pp = nullptr;
             pp = xml_doc->createElement("svg:path");
@@ -793,7 +752,6 @@ void PencilTool::addPowerStrokePencil(bool reset)
             SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(powerpreview);
             if (!lpeitem) {
                 return;
-                // return true;
             }
             tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 0.0, 100.0) + 30;
             if (tol > 30) {
@@ -833,74 +791,76 @@ void PencilTool::addPowerStrokePencil(bool reset)
                 }
                 path = curvepressure->get_pathvector()[0];
             }
-            this->size_powerpencil = path.size();
             powerStrokeInterpolate(path);
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             Glib::ustring pref_path_pp = "/live_effects/powerstroke/powerpencil";
             prefs->setBool(pref_path_pp, true);
-            Effect::createAndApply(POWERSTROKE, SP_ACTIVE_DESKTOP->doc(), lpeitem);
-            Effect *lpe = lpeitem->getCurrentLPE();
-            Inkscape::LivePathEffect::LPEPowerStroke *pspreview = static_cast<LPEPowerStroke *>(lpe);
-            if (pspreview) {
-                sp_lpe_item_enable_path_effects(lpeitem, false);
-                Glib::ustring pref_path = "/live_effects/powerstroke/interpolator_type";
-                bool valid = prefs->getEntry(pref_path).isValid();
-                if (!valid) {
-                    pspreview->getRepr()->setAttribute("interpolator_type", "CubicBezierJohan");
-                }
-                pref_path = "/live_effects/powerstroke/linejoin_type";
-                valid = prefs->getEntry(pref_path).isValid();
-                if (!valid) {
-                    pspreview->getRepr()->setAttribute("linejoin_type", "bevel");
-                }
-                pref_path = "/live_effects/powerstroke/interpolator_beta";
-                valid = prefs->getEntry(pref_path).isValid();
-                if (!valid) {
-                    pspreview->getRepr()->setAttribute("interpolator_beta", "0.75");
-                }
-                gint cap = prefs->getInt("/live_effects/powerstroke/powerpencilcap", 4);
-                pspreview->getRepr()->setAttribute("start_linecap_type", LineCapTypeConverter.get_key(cap));
-                pspreview->getRepr()->setAttribute("end_linecap_type", LineCapTypeConverter.get_key(cap));
-                pspreview->getRepr()->setAttribute("sort_points", "true");
-                pspreview->offset_points.param_set_and_write_new_value(this->points);
-                sp_lpe_item_enable_path_effects(lpeitem, true);
-                sp_lpe_item_update_patheffect(lpeitem, false, true);
-                if (pspreview->has_exception) {
+            if (this->points.size()) {                
+                Effect::createAndApply(POWERSTROKE, SP_ACTIVE_DESKTOP->doc(), lpeitem);
+                Effect *lpe = lpeitem->getCurrentLPE();
+                Inkscape::LivePathEffect::LPEPowerStroke *pspreview = static_cast<LPEPowerStroke *>(lpe);
+                if (pspreview) {
                     sp_lpe_item_enable_path_effects(lpeitem, false);
-                    pp->setAttribute("id", "delete_power_stroke_preview");
-                    toremove->setAttribute("id", "power_stroke_preview");
-                    toremove = powerpreview;
-                }
-                if (toremove) {
-                    using namespace Inkscape::LivePathEffect;
-                    Effect *lpe = SP_LPE_ITEM(toremove)->getCurrentLPE();
-                    SP_LPE_ITEM(toremove)->removeCurrentPathEffect(true);
-                    LivePathEffectObject *lpeobj = lpe->getLPEObj();
-                    if (lpeobj) {
-                        SP_OBJECT(lpeobj)->deleteObject(true);
-                        lpeobj = nullptr;
+                    Glib::ustring pref_path = "/live_effects/powerstroke/interpolator_type";
+                    bool valid = prefs->getEntry(pref_path).isValid();
+                    if (!valid) {
+                        pspreview->getRepr()->setAttribute("interpolator_type", "CentripetalCatmullRom");
                     }
-                    tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 0.0, 100.0) + 30;
-                    if (tol > 30) {
-                        lpe = SP_LPE_ITEM(toremove)->getCurrentLPE();
-                        SP_LPE_ITEM(toremove)->removeCurrentPathEffect(true);
-                        lpeobj = lpe->getLPEObj();
-                        if (lpeobj) {
-                            SP_OBJECT(lpeobj)->deleteObject(true);
-                            lpeobj = nullptr;
+                    pref_path = "/live_effects/powerstroke/linejoin_type";
+                    valid = prefs->getEntry(pref_path).isValid();
+                    if (!valid) {
+                        pspreview->getRepr()->setAttribute("linejoin_type", "spiro");
+                    }
+                    pref_path = "/live_effects/powerstroke/interpolator_beta";
+                    valid = prefs->getEntry(pref_path).isValid();
+                    if (!valid) {
+                        pspreview->getRepr()->setAttribute("interpolator_beta", "0.75");
+                    }
+                    gint cap = prefs->getInt("/live_effects/powerstroke/powerpencilcap", 4);
+                    pspreview->getRepr()->setAttribute("start_linecap_type", LineCapTypeConverter.get_key(cap));
+                    pspreview->getRepr()->setAttribute("end_linecap_type", LineCapTypeConverter.get_key(cap));
+                    pspreview->getRepr()->setAttribute("sort_points", "true");
+                    pspreview->offset_points.param_set_and_write_new_value(this->points);
+                    sp_lpe_item_enable_path_effects(lpeitem, true);
+                    sp_lpe_item_update_patheffect(lpeitem, false, true);
+                    pp->setAttribute("style", "fill:#888888;opacity:1;fill-rule:nonzero;stroke:none;");
+                    if (toremove) {
+                        if (pspreview->has_exception) {
+                            sp_lpe_item_enable_path_effects(lpeitem, false);
+                            pp->setAttribute("id", "delete_power_stroke_preview");
+                            toremove->setAttribute("id", "power_stroke_preview");
+                            toremove = powerpreview;
                         }
+                        Effect *lpe = SP_LPE_ITEM(toremove)->getCurrentLPE();
+                        if (lpe) {
+                            SP_LPE_ITEM(toremove)->removeCurrentPathEffect(true);
+                            LivePathEffectObject *lpeobj = lpe->getLPEObj();
+                            if (lpeobj) {
+                                SP_OBJECT(lpeobj)->deleteObject(true);
+                                lpeobj = nullptr;
+                            }
+                            tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 0.0, 100.0) + 30;
+                            if (tol > 30) {
+                                lpe = SP_LPE_ITEM(toremove)->getCurrentLPE();
+                                if (lpe) {
+                                    SP_LPE_ITEM(toremove)->removeCurrentPathEffect(true);
+                                    lpeobj = lpe->getLPEObj();
+                                    if (lpeobj) {
+                                        SP_OBJECT(lpeobj)->deleteObject(true);
+                                        lpeobj = nullptr;
+                                    }
+                                }
+                            }
+                        }
+                        toremove->deleteObject(true);
+                        toremove = nullptr;
                     }
-                    toremove->deleteObject(true);
-                    toremove = nullptr;
                 }
-                pp->setAttribute("style", "fill:#888888;opacity:1;fill-rule:nonzero;stroke:none;");
             }
             if (curvepressure) {
                 curvepressure->unref();
             }
             prefs->setBool(pref_path_pp, false);
-            // return true;
-            // });
         }
     }
 }
@@ -934,7 +894,31 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/) {
             } else {
                 this->_wps.emplace_back(distance, pressure_computed);
             }
-            this->addPowerStrokePencil(false);
+            // Example og work with std::future
+            // Retain for other works
+            /* std::future_status status;
+            bool stop = false;
+            bool nofuture = false;
+            try {
+                status = future.wait_for(std::chrono::seconds(0));
+            } catch (const std::future_error& e) {
+                stop = true;
+                if (e.code() == std::future_errc::no_state) {
+                    nofuture = true;
+                } else {
+                    std::cout << "Caught a future_error with code \"" << e.code()
+                    << nofuture << future.valid() << "\"\nMessage: \"" << e.what() << "\"\n";
+                }
+            }
+            if (nofuture || status == std::future_status::ready) {
+                if (!stop && status == std::future_status::ready) {
+                    future = std::async(std::launch::async, [this] {
+                        this->addPowerStrokePencil(false);
+                        return true;
+                    });
+                }
+            } */                
+            this->addPowerStrokePencil();
             sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr);
             for (auto i:this->green_bpaths) {
                 sp_canvas_item_destroy(i);
@@ -959,50 +943,64 @@ void PencilTool::powerStrokeInterpolate(Geom::Path const path)
     Geom::Point previous = Geom::Point(Geom::infinity(), 0);
     bool increase = false;
     size_t i = 0;
-    for (auto pp : this->_wps) {
+    double dezoomify_factor = 0.05 * 1000 / SP_EVENT_CONTEXT(this)->desktop->current_zoom();
+    double limit = 6 * dezoomify_factor;
+    double max = std::max(this->_wps.back()[Geom::X] - (this->_wps.back()[Geom::X]/10), this->_wps.back()[Geom::X] - limit);
+    double min = std::min(this->_wps.back()[Geom::X]/10, limit);
+    double original_lenght = this->_wps.back()[Geom::X];
+    double max10 = 0;
+    double min10 = 0;
+    for (auto wps : this->_wps) {
         i++;
+        max10 = max10 >  wps[Geom::Y] ? max10 : wps[Geom::Y];
+        min10 = min10 <= wps[Geom::Y] ? min10 : wps[Geom::Y];
         if (i % 10) { // remove 9 of 10
             continue;
         }
-        if (!this->_wps.back()[Geom::X]) {
-            continue;
+        if (!original_lenght) {
+            break;
         }
 
-        pp[Geom::X] /= this->_wps.back()[Geom::X];
-        pp[Geom::X] *= path_size;
-        if (pp[Geom::Y] == 0 || path_size < 2 || pp[Geom::X] < 1) {
-            continue;
+        if (wps[Geom::X] > max) {
+            break;
         }
 
-        if (previous[Geom::Y] < pp[Geom::Y]) {
+        if (wps[Geom::Y] == 0 || path_size < 2 || wps[Geom::X] < min) {
+            continue;
+        }
+        if (previous[Geom::Y] < (max10 + min10)/2.0) {
             if (increase && tmp_points.size() > 1) {
                 tmp_points.pop_back();
             }
-            tmp_points.push_back(pp);
+            wps[Geom::Y] = max10;
+            tmp_points.push_back(wps);
             increase = true;
         } else {
             if (!increase && tmp_points.size() > 1) {
                 tmp_points.pop_back();
             }
-            tmp_points.push_back(pp);
+            wps[Geom::Y] = min10;
+            tmp_points.push_back(wps);
             increase = false;
         }
 
-        previous = pp;
-        if (pp[Geom::X] > path.size() - 1) {
-            pp[Geom::X] = path.size() - 1;
-            break;
+        previous = wps;
+        max10 = 0;
+        min10 = 999999999;
+
+    }
+    this->points.clear();
+    double prev_pressure = 0;
+    for (auto point : tmp_points) {
+        point[Geom::X] /= original_lenght;
+        point[Geom::X] *= path_size;
+        if (std::abs(point[Geom::Y] - prev_pressure) > point[Geom::Y] / 10.0) {
+            this->points.push_back(point);
+            prev_pressure = point[Geom::Y];
         }
     }
-
-    this->points = tmp_points;
     tmp_points.clear();
-    if (this->points.empty() && this->_wps.size() > 1) {
-        double onepress = this->_wps[((this->_wps.size() - 1) / 2) + 1][Geom::Y];
-        double onewidth = path_size / (double)2.0;
-        Geom::Point one(onewidth, onepress);
-        this->points.push_back(one);
-    }
+
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), nullptr);
 }
 
