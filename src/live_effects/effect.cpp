@@ -1113,7 +1113,7 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       current_shape(nullptr),
       provides_own_flash_paths(true), // is automatically set to false if providesOwnFlashPaths() is not overridden
       defaultsopen(false),
-      is_ready(false) 
+      is_ready(false)
 {
     registerParameter( dynamic_cast<Parameter *>(&is_visible) );
     is_visible.widget_is_visible = false;
@@ -1161,7 +1161,7 @@ Effect::isNodePointSelected(Geom::Point const &nodePoint) const
 {
     if (selectedNodesPoints.size() > 0) {
         using Geom::X;
-        using Geom::Y; 
+        using Geom::Y;
         for (auto p : selectedNodesPoints) {
             Geom::Affine transformCoordinate = sp_lpe_item->i2dt_affine();
             Geom::Point p2(nodePoint[X],nodePoint[Y]);
@@ -1174,7 +1174,7 @@ Effect::isNodePointSelected(Geom::Point const &nodePoint) const
     return false;
 }
 
-void 
+void
 Effect::processObjects(LPEAction lpe_action)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
@@ -1389,7 +1389,7 @@ Effect::readallParameters(Inkscape::XML::Node const* repr)
         } else {
             Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
                                        (Glib::ustring)LPETypeConverter.get_key(effectType()).c_str() +
-                                       (Glib::ustring)"/" + 
+                                       (Glib::ustring)"/" +
                                        (Glib::ustring)key;
             bool valid = prefs->getEntry(pref_path).isValid();
             if(valid){
@@ -1571,7 +1571,7 @@ Effect::defaultParamSet()
             Gtk::Button *set = Gtk::manage(new Gtk::Button((Glib::ustring)set_or_upd));
             Gtk::Button *unset = Gtk::manage(new Gtk::Button(Glib::ustring(_("Unset"))));
             unset->signal_clicked().connect(sigc::bind<Glib::ustring, Glib::ustring, Parameter *, Gtk::Label *, Gtk::Button *, Gtk::Button *>(sigc::mem_fun(*this, &Effect::unsetDefaultParam), pref_path, tooltip, param, parameter_label, set, unset));
-            
+
             set->signal_clicked().connect(sigc::bind<Glib::ustring, Glib::ustring, Parameter *, Gtk::Label *, Gtk::Button *, Gtk::Button *>(sigc::mem_fun(*this, &Effect::setDefaultParam), pref_path, tooltip, param, parameter_label, set, unset));
             if (!valid) {
                 unset->set_sensitive(false);

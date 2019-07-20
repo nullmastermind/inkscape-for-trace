@@ -220,7 +220,7 @@ PathParam::param_newWidget()
         static_cast<Gtk::HBox*>(_widget)->pack_start(*pButton, true, true);
         pButton->set_tooltip_text(_("Edit on-canvas"));
     }
-    
+
     if (_copy_button) {
         pIcon = Gtk::manage(sp_get_icon_image(INKSCAPE_ICON("edit-copy"), Gtk::ICON_SIZE_BUTTON));
         pButton = Gtk::manage(new Gtk::Button());
@@ -232,7 +232,7 @@ PathParam::param_newWidget()
         static_cast<Gtk::HBox*>(_widget)->pack_start(*pButton, true, true);
         pButton->set_tooltip_text(_("Copy path"));
     }
-    
+
     if (_paste_button) {
         pIcon = Gtk::manage(sp_get_icon_image(INKSCAPE_ICON("edit-paste"), Gtk::ICON_SIZE_BUTTON));
         pButton = Gtk::manage(new Gtk::Button());
@@ -255,7 +255,7 @@ PathParam::param_newWidget()
         static_cast<Gtk::HBox*>(_widget)->pack_start(*pButton, true, true);
         pButton->set_tooltip_text(_("Insert from clipboard"));
     }
-    
+
     static_cast<Gtk::HBox*>(_widget)->show_all_children();
 
     return dynamic_cast<Gtk::Widget *> (_widget);
@@ -515,7 +515,7 @@ PathParam::paste_param_path(const char *svgd)
             path_clipboard *= item->i2doc_affine().inverse();
             svgd = sp_svg_write_path( path_clipboard );
         }
-        
+
         param_write_to_repr(svgd);
         signal_path_pasted.emit();
     }
