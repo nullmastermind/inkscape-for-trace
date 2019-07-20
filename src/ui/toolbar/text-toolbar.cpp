@@ -66,7 +66,7 @@ using Inkscape::Util::Quantity;
 using Inkscape::Util::unit_table;
 using Inkscape::UI::Widget::UnitTracker;
 
-//#define DEBUG_TEXT
+#define DEBUG_TEXT
 
 //########################
 //##    Text Toolbox    ##
@@ -805,7 +805,7 @@ TextToolbar::fontfamily_value_changed()
     std::cout << "  Old family: " << fontlister->get_font_family() << std::endl;
     std::cout << "  New family: " << new_family << std::endl;
     std::cout << "  Old active: " << fontlister->get_font_family_row() << std::endl;
-    std::cout << "  New active: " << act->active << std::endl;
+    //std::cout << "  New active: " << act->active << std::endl;
 #endif
     if( new_family.compare( fontlister->get_font_family() ) != 0 ) {
         // Changed font-family
@@ -2035,7 +2035,7 @@ TextToolbar::outer_style_changed()
  * through text, or setting focus to text.
  */
 void
-TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subselection) // don't bother to update font list if subsel changed
+TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subselection, bool fullsubselection) // don't bother to update font list if subsel changed
 {
 #ifdef DEBUG_TEXT
     static int count = 0;
@@ -2065,7 +2065,9 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
         return;
     }
     _freeze = true;
-
+    if (!subselection) {
+        this->subselection_objs.clear();
+    }
     Inkscape::FontLister* fontlister = Inkscape::FontLister::get_instance();
     fontlister->selection_update();
 
@@ -2223,7 +2225,7 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
         }
         _align_item->set_active( activeButton );
 
-        // Line height (spacing) and line height unit
+        
         double height;
         int line_height_unit = -1;
         if (query.line_height.normal) {
@@ -2427,6 +2429,11 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
               << "  letter_spacing.value: "    << query.letter_spacing.value
               << "  letter_spacing.unit: "     << query.letter_spacing.unit  << std::endl;
     std::cout << "    GUI: writing_mode.computed: " << query.writing_mode.computed << std::endl;
+    std::cout << "    GUI: full subselection: " << (fullsubselection ? "yes" : "no") << std::endl;
+    std::cout << "    GUI: root sublements selected: " << (this->subselection_objs.size()? "" : "none") << std::endl;
+    for (auto obj : this->subselection_objs) {
+        std::cout << "    * " << obj->getId() << std::endl;
+    }
 #endif
 
     // Kerning (xshift), yshift, rotation.  NB: These are not CSS attributes.
@@ -2483,7 +2490,7 @@ TextToolbar::watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec) {
         // Watch selection
 
         // Ensure FontLister is updated here first.................. VVVVV
-        c_selection_changed = desktop->getSelection()->connectChangedFirst(sigc::bind(sigc::mem_fun(*this, &TextToolbar::selection_changed), false));
+        c_selection_changed = desktop->getSelection()->connectChangedFirst(sigc::bind(sigc::mem_fun(*this, &TextToolbar::selection_changed), false, false));
         c_selection_modified = desktop->getSelection()->connectModifiedFirst(sigc::mem_fun(*this, &TextToolbar::selection_modified));
         c_subselection_changed = desktop->connectToolSubselectionChanged(sigc::mem_fun(*this, &TextToolbar::subselection_changed));
     } else {
@@ -2505,7 +2512,74 @@ TextToolbar::selection_modified(Inkscape::Selection *selection, guint /*flags*/)
 void
 TextToolbar::subselection_changed(gpointer /*tc*/)
 {
-    selection_changed(nullptr, true);
+#ifdef DEBUG_TEXT
+    std::cout << std::endl;
+    std::cout << "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&" << std::endl;
+    std::cout << "subselection_changed: start " << std::endl;
+#endif
+    // TODO: any way to use the gpointer?
+    Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context);
+    if( tc ) {
+        Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
+        if (layout) {
+            Inkscape::Text::Layout::iterator start = layout->begin();
+            Inkscape::Text::Layout::iterator end = layout->end();
+            Inkscape::Text::Layout::iterator start_selection = tc->text_sel_start;
+            Inkscape::Text::Layout::iterator end_selection = tc->text_sel_end;
+            if (start_selection > end_selection) {
+                Inkscape::Text::Layout::iterator tmp_selection = start_selection;
+                start_selection = end_selection;
+                end_selection = tmp_selection;
+            }
+#ifdef DEBUG_TEXT
+            std::cout << "    GUI: Start of text: "  << layout->iteratorToCharIndex(start) << std::endl;
+            std::cout << "    GUI: End of text: " << layout->iteratorToCharIndex(end) << std::endl;
+            std::cout << "    GUI: Start of selection: " << layout->iteratorToCharIndex(start_selection) << std::endl;
+            std::cout << "    GUI: End of selection: " << layout->iteratorToCharIndex(end_selection) << std::endl;
+            std::cout << "    GUI: Loop Subelements: "  << std::endl;
+            std::cout << "    ::::::::::::::::::::::::::::::::::::::::::::: "  << std::endl;
+#endif
+            if(start_selection == start &&
+            end_selection == end) 
+            {
+                // full subselection
+                this->subselection_objs = tc->text->childList(false);
+                selection_changed(nullptr, true, true);
+            } else {
+                int pos = 0;
+                this->subselection_objs.clear();
+                for (auto child: tc->text->childList(false)) {
+                    Inkscape::Text::Layout::iterator cstart = layout->charIndexToIterator(pos);
+                    pos += sp_text_get_length(child);
+                    Inkscape::Text::Layout::iterator cend = layout->charIndexToIterator(pos);
+                    if(start_selection < cend &&
+                        end_selection > cstart)
+                    {
+#ifdef DEBUG_TEXT
+                        std::cout << "    GUI: SELECTED : " << child->getId() << std::endl;
+#endif
+                        this->subselection_objs.push_back(child);
+                    }
+#ifdef DEBUG_TEXT
+                    else {
+                        std::cout << "    GUI: NOT SELECTED : " << child->getId() << std::endl;
+                    }
+                    std::cout << "    GUI: Current pos: " << pos << std::endl;
+                    std::cout << "    GUI: Length of " << child->getId() << ": " << sp_text_get_length(child) << std::endl;
+                    std::cout << "    GUI: Start of " << child->getId() << ": " << layout->iteratorToCharIndex(cstart) << std::endl;
+                    std::cout << "    GUI: End of " << child->getId() << ": " << layout->iteratorToCharIndex(cend) << std::endl;
+                    std::cout << "    ::::::" << std::endl;
+#endif
+                }
+                selection_changed(nullptr, true, false);
+            }
+        }
+    }
+#ifdef DEBUG_TEXT
+    std::cout << "subselection_changed: exit " << std::endl;
+    std::cout << "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&" << std::endl;
+    std::cout << std::endl;
+#endif
 }
 
 }

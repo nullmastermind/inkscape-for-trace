@@ -29,7 +29,7 @@
  */
 
 #include "toolbar.h"
-
+#include "object/sp-object.h"
 #include <gtkmm/popover.h>
 #include <gtkmm/box.h>
 #include <gtkmm/separatortoolitem.h>
@@ -98,7 +98,7 @@ private:
     Glib::RefPtr<Gtk::Adjustment> _dx_adj;
     Glib::RefPtr<Gtk::Adjustment> _dy_adj;
     Glib::RefPtr<Gtk::Adjustment> _rotation_adj;
-
+    std::vector<SPObject *> subselection_objs;
     int _lineheight_unit;
 
     sigc::connection c_selection_changed;
@@ -126,7 +126,8 @@ private:
     void dy_value_changed();
     void rotation_value_changed();
     void selection_changed(Inkscape::Selection *selection,
-                           bool subselection = false);
+                           bool subselection = false,
+                           bool fullsubselection = false);
     void selection_modified(Inkscape::Selection *selection, guint flags);
     void subselection_changed(gpointer tc);
     void watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
