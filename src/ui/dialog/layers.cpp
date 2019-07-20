@@ -36,6 +36,7 @@
 
 #include "svg/css-ostringstream.h"
 
+#include "ui/contextmenu.h"
 #include "ui/icon-loader.h"
 #include "ui/icon-names.h"
 #include "ui/tools/tool-base.h"
@@ -146,6 +147,7 @@ Gtk::MenuItem& LayersPanel::_addPopupItem( SPDesktop *desktop, unsigned int code
 
     auto box = Gtk::manage(new Gtk::Box());
     Gtk::MenuItem* item = Gtk::manage(new Gtk::MenuItem());
+    item->set_name("ImageMenuItem");  // custom name to identify our "ImageMenuItems"
 
     if (iconWidget) {
         box->pack_start(*iconWidget, false, true, 0);
@@ -913,8 +915,11 @@ LayersPanel::LayersPanel() :
 
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_DUPLICATE, nullptr, "Duplicate", (int)BUTTON_DUPLICATE ) );
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_DELETE, nullptr, "Delete", (int)BUTTON_DELETE ) );
-        
+
         _popupMenu.show_all_children();
+
+        // Install CSS to shift icons into the space reserved for toggles (i.e. check and radio items).
+        _popupMenu.signal_map().connect(sigc::mem_fun(static_cast<ContextMenu*>(&_popupMenu), &ContextMenu::ShiftIcons));
     }
     // -------------------------------------------------------
 

@@ -43,6 +43,7 @@
 #include "object/sp-shape.h"
 #include "style.h"
 
+#include "ui/contextmenu.h"
 #include "ui/dialog-events.h"
 #include "ui/icon-names.h"
 #include "ui/selected-color.h"
@@ -276,6 +277,7 @@ Gtk::MenuItem& ObjectsPanel::_addPopupItem( SPDesktop *desktop, unsigned int cod
 
     auto box = Gtk::manage(new Gtk::Box());
     Gtk::MenuItem* item = Gtk::manage(new Gtk::MenuItem());
+    item->set_name("ImageMenuItem");  // custom name to identify our "ImageMenuItems"
 
     if (iconWidget) {
         box->pack_start(*iconWidget, false, true, 0);
@@ -1905,7 +1907,7 @@ ObjectsPanel::ObjectsPanel() :
         
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_CLIPPATH, nullptr, _("Set Clip"), (int)BUTTON_SETCLIP ) );
         
-	_watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_CREATE_CLIP_GROUP, nullptr, _("Create Clip Group"), (int)BUTTON_CLIPGROUP ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_CREATE_CLIP_GROUP, nullptr, _("Create Clip Group"), (int)BUTTON_CLIPGROUP ) );
 
         //will never be implemented
         //_watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_INVERSE_CLIPPATH, 0, "Set Inverse Clip", (int)BUTTON_SETINVCLIP ) );
@@ -1918,7 +1920,11 @@ ObjectsPanel::ObjectsPanel() :
 
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_EDIT_DUPLICATE, nullptr, _("Duplicate"), (int)BUTTON_DUPLICATE ) );
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_EDIT_DELETE, nullptr, _("Delete"), (int)BUTTON_DELETE ) );
+
         _popupMenu.show_all_children();
+
+        // Install CSS to shift icons into the space reserved for toggles (i.e. check and radio items).
+        _popupMenu.signal_map().connect(sigc::mem_fun(static_cast<ContextMenu*>(&_popupMenu), &ContextMenu::ShiftIcons));
     }
     // -------------------------------------------------------
 
