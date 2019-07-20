@@ -50,13 +50,13 @@
 #include "style.h"
 
 #include "svg/css-ostringstream.h"
-#include "util/units.h" 
 #include "ui/icon-names.h"
 #include "ui/tools/text-tool.h"
 #include "ui/widget/combo-box-entry-tool-item.h"
 #include "ui/widget/combo-tool-item.h"
 #include "ui/widget/spin-button-tool-item.h"
 #include "ui/widget/unit-tracker.h"
+#include "util/units.h"
 
 #include "widgets/style-utils.h"
 
@@ -136,7 +136,8 @@ static void recursively_set_properties( SPObject* object, SPCSSAttr *css ) {
     sp_repr_css_attr_unref (css_unset);
 }
 
-void sp_line_height_to_child(SPObject *root, SPCSSAttr *css, SPILengthOrNormal line_height, bool not_selected) {
+void sp_line_height_to_child(SPObject *root, SPCSSAttr *css, SPILengthOrNormal line_height, bool not_selected)
+{
     if (root) {
         SPILengthOrNormal current_line_height = root->style->line_height;
         SPCSSAttr *css_item = sp_repr_css_attr_new();
@@ -156,13 +157,13 @@ void sp_line_height_to_child(SPObject *root, SPCSSAttr *css, SPILengthOrNormal l
 }
 
 // Apply line height changes (line-height value changed or line-height unit changed)
-static void set_lineheight (SPCSSAttr *css,
-                            std::vector<SPObject *> sub_selection_objs,
-                            std::vector<SPObject *> sub_unselection_objs) {
+static void set_lineheight(SPCSSAttr *css, std::vector<SPObject *> sub_selection_objs,
+                           std::vector<SPObject *> sub_unselection_objs)
+{
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-/*     bool outer = prefs->getInt("/tools/text/outer_style", false);
-    gint mode  = prefs->getInt("/tools/text/line_spacing_mode", 0); */
+    /*     bool outer = prefs->getInt("/tools/text/outer_style", false);
+        gint mode  = prefs->getInt("/tools/text/line_spacing_mode", 0); */
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     // Calling sp_desktop_set_style will result in a call to TextTool::_styleSet() which
@@ -172,16 +173,16 @@ static void set_lineheight (SPCSSAttr *css,
     if (sub_selection_objs.empty()) {
         out = true;
     }
-/*     if ( out ) {
-        // This will call sp_te_apply_style via signal
-        sp_desktop_set_style (desktop, css, true, true);
-    } else { */
+    /*     if ( out ) {
+            // This will call sp_te_apply_style via signal
+            sp_desktop_set_style (desktop, css, true, true);
+        } else { */
     Inkscape::Selection *selection = desktop->getSelection();
-    auto itemlist= selection->items();
-    for (auto i: itemlist) {
+    auto itemlist = selection->items();
+    for (auto i : itemlist) {
         if (dynamic_cast<SPText *>(i) || dynamic_cast<SPFlowtext *>(i)) {
             SPItem *item = i;
-            
+
             // Scale by inverse of accumulated parent transform
             SPCSSAttr *css_reset = sp_repr_css_attr_new();
             sp_repr_css_merge(css_reset, css);
@@ -190,12 +191,12 @@ static void set_lineheight (SPCSSAttr *css,
             sp_repr_css_merge(css_set, css);
             Geom::Affine const local(item->i2doc_affine());
             double const ex(local.descrim());
-            if ( (ex != 0.0) && (ex != 1.0) ) {
-                sp_css_attr_scale(css_set, 1/ex);
+            if ((ex != 0.0) && (ex != 1.0)) {
+                sp_css_attr_scale(css_set, 1 / ex);
             }
             if (out) {
                 item->changeCSS(css_set, "style");
-                for (auto subitem :item->childList (false)) {
+                for (auto subitem : item->childList(false)) {
                     sp_line_height_to_child(subitem, css_reset, SPILengthOrNormal("line_height", 0), false);
                 }
             } else {

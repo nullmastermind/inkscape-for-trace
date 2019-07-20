@@ -28,12 +28,12 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "toolbar.h"
 #include "object/sp-object.h"
-#include <gtkmm/popover.h>
-#include <gtkmm/box.h>
-#include <gtkmm/separatortoolitem.h>
+#include "toolbar.h"
 #include <gtkmm/adjustment.h>
+#include <gtkmm/box.h>
+#include <gtkmm/popover.h>
+#include <gtkmm/separatortoolitem.h>
 
 class SPDesktop;
 
@@ -68,18 +68,18 @@ private:
     UI::Widget::ComboBoxEntryToolItem *_font_family_item;
     UI::Widget::ComboBoxEntryToolItem *_font_size_item;
     UI::Widget::ComboBoxEntryToolItem *_font_style_item;
-/*     Gtk::Popover *_line_spacing_menu; */
-/*     Gtk::Box *_line_spacing_menu_content; */
-/*     Gtk::ToolButton *_line_spacing_defaulting; */
-/*     Gtk::ToggleToolButton *_line_height_unset_item; */
+    /*     Gtk::Popover *_line_spacing_menu; */
+    /*     Gtk::Box *_line_spacing_menu_content; */
+    /*     Gtk::ToolButton *_line_spacing_defaulting; */
+    /*     Gtk::ToggleToolButton *_line_height_unset_item; */
     Gtk::ToggleToolButton *_line_spacing_menu_launcher;
     UI::Widget::ComboToolItem *_line_height_units_item;
     UI::Widget::SpinButtonToolItem *_line_height_item;
-/*     UI::Widget::ComboToolItem *_line_spacing_item; */
+    /*     UI::Widget::ComboToolItem *_line_spacing_item; */
     Gtk::ToggleToolButton *_superscript_item;
     Gtk::ToggleToolButton *_subscript_item;
-/*     Gtk::ToggleToolButton *_outer_style_item; */
-    
+    /*     Gtk::ToggleToolButton *_outer_style_item; */
+
 
     UI::Widget::ComboToolItem *_align_item;
     UI::Widget::ComboToolItem *_writing_mode_item;
@@ -110,31 +110,29 @@ private:
     void fontsize_value_changed();
     void fontstyle_value_changed();
     void script_changed(Gtk::ToggleToolButton *btn);
-/*     void lineheight_unset_changed(); */
-/*     void outer_style_changed(); */
+    /*     void lineheight_unset_changed(); */
+    /*     void outer_style_changed(); */
     void align_mode_changed(int mode);
     void writing_mode_changed(int mode);
     void orientation_changed(int mode);
     void direction_changed(int mode);
     void lineheight_value_changed();
     void lineheight_unit_changed(int not_used);
-/*     void lineheight_defaulting(); */
-/*     void line_height_popover_closed();
-    void line_spacing_mode_changed(int mode); */
+    /*     void lineheight_defaulting(); */
+    /*     void line_height_popover_closed(); */
+    /*     void line_spacing_mode_changed(int mode); */
     void wordspacing_value_changed();
     void letterspacing_value_changed();
     void dx_value_changed();
     void dy_value_changed();
     void rotation_value_changed();
-    void selection_changed(Inkscape::Selection *selection,
-                           bool subselection = false,
-                           bool fullsubselection = false);
+    void selection_changed(Inkscape::Selection *selection, bool subselection = false, bool fullsubselection = false);
     void selection_modified(Inkscape::Selection *selection, guint flags);
     void subselection_changed(gpointer tc);
     void watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
     void set_sizes(int unit);
-/*     void poptoggle(Gtk::ToggleToolButton *btn); */
-protected:
+    /*     void poptoggle(Gtk::ToggleToolButton *btn); */
+  protected:
     TextToolbar(SPDesktop *desktop);
 
 public:

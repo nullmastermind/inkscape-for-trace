@@ -9,10 +9,10 @@
  */
 
 #include "spinbutton.h"
+#include "ui/tools/tool-base.h"
 #include "unit-menu.h"
 #include "unit-tracker.h"
 #include "util/expression-evaluator.h"
-#include "ui/tools/tool-base.h"
 #include <cmath>
 
 namespace Inkscape {
@@ -65,7 +65,8 @@ int SpinButton::on_input(double* newvalue)
     return true;
 }
 
-void SpinButton::on_value_changed() {
+void SpinButton::on_value_changed()
+{
     double val = get_value();
     double absval = std::abs(val);
     int count = get_digits();
@@ -80,7 +81,7 @@ void SpinButton::on_value_changed() {
     if (val < 0) {
         count += 1;
     }
-    count += absval > 9 ? (int) log10 (absval) + 1 : 1;
+    count += absval > 9 ? (int)log10(absval) + 1 : 1;
     count = std::min(std::max(count, 3), 7);
     set_width_chars(count);
 }
