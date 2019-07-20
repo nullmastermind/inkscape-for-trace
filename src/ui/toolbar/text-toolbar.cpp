@@ -2421,9 +2421,9 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
 
         // In Minimum and Adaptive modes, don't allow unit change (must remain unitless).
         if (sub_selection_objs.empty()) {
-            _line_height_units_item->set_sensitive(false);
-        } else {
             _line_height_units_item->set_sensitive(true);
+        } else {
+            _line_height_units_item->set_sensitive(false);
         }
 
         // Word spacing
