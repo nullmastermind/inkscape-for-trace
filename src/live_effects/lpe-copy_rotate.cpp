@@ -70,7 +70,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     gap(_("Gap"), _("Gap"), _("Gap space between copies, use small negative gaps to fix some joins"), &wr, this, 0.05),
     copies_to_360(_("360° Copies"), _("No rotation angle, fixed to 360°"), "copies_to_360", &wr, this, true),
     mirror_copies(_("Mirror copies"), _("Mirror between copies"), "mirror_copies", &wr, this, false),
-    split_items(_("Split elements"), _("Split elements, this allow gradients and other paints."), "split_items", &wr, this, false),
+    split_items(_("Split elements"), _("Split elements, so each can have its own style"), "split_items", &wr, this, false),
     dist_angle_handle(100.0)
 {
     show_orig_path = true;
