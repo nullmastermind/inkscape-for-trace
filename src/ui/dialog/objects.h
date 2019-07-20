@@ -164,7 +164,7 @@ private:
     void _styleButton( Gtk::Button& btn, char const* iconName, char const* tooltip );
     void _fireAction( unsigned int code );
     
-    Gtk::MenuItem& _addPopupItem( SPDesktop *desktop, unsigned int code, char const* iconName, char const* fallback, int id );
+    Gtk::MenuItem& _addPopupItem( SPDesktop *desktop, unsigned int code, int id );
     
     void _setVisibleIter( const Gtk::TreeModel::iterator& iter, const bool visible );
     void _setLockedIter( const Gtk::TreeModel::iterator& iter, const bool locked );

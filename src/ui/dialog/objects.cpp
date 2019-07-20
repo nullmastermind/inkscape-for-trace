@@ -243,55 +243,32 @@ void ObjectsPanel::_styleButton(Gtk::Button& btn, char const* iconName, char con
  * Adds an item to the pop-up (right-click) menu
  * @param desktop The active destktop
  * @param code Action code
- * @param iconName Icon name
- * @param fallback Fallback text
  * @param id Button id for callback function
  * @return The generated menu item
  */
-Gtk::MenuItem& ObjectsPanel::_addPopupItem( SPDesktop *desktop, unsigned int code, char const* iconName, char const* fallback, int id )
+Gtk::MenuItem& ObjectsPanel::_addPopupItem( SPDesktop *desktop, unsigned int code, int id )
 {
-    Gtk::Image *iconWidget = nullptr;
-    const char* label = nullptr;
+    Verb *verb = Verb::get( code );
+    g_assert(verb);
+    SPAction *action = verb->get_action(Inkscape::ActionContext(desktop));
 
-    if ( iconName ) {
-        iconWidget = Gtk::manage(sp_get_icon_image(iconName, Gtk::ICON_SIZE_MENU));
-    }
-
-    if ( desktop ) {
-        Verb *verb = Verb::get( code );
-        if ( verb ) {
-            SPAction *action = verb->get_action(Inkscape::ActionContext(desktop));
-            if ( !iconWidget && action && action->image ) {
-                iconWidget = Gtk::manage(sp_get_icon_image(action->image, Gtk::ICON_SIZE_MENU));
-            }
-
-            if ( action ) {
-                label = action->name;
-            }
-        }
-    }
-
-    if ( !label && fallback ) {
-        label = fallback;
-    }
-
-    auto box = Gtk::manage(new Gtk::Box());
     Gtk::MenuItem* item = Gtk::manage(new Gtk::MenuItem());
-    item->set_name("ImageMenuItem");  // custom name to identify our "ImageMenuItems"
 
-    if (iconWidget) {
-        box->pack_start(*iconWidget, false, true, 0);
-    }
-    else {
-        Gtk::Label *fake_icon = Gtk::manage(new Gtk::Label(""));
-        box->pack_start(*fake_icon, false, true, 0);
-    }
+    Gtk::Label *label = Gtk::manage(new Gtk::Label(action->name, true));
+    label->set_xalign(0.0);
 
-    Gtk::Label *menu_label = Gtk::manage(new Gtk::Label(label, true));
-    menu_label->set_xalign(0.0);
-    box->pack_start(*menu_label, true, true, 0);
-    item->add(*box);
-    item->show_all();
+    if (action->image) {
+        item->set_name("ImageMenuItem");  // custom name to identify our "ImageMenuItems"
+        Gtk::Image *icon = Gtk::manage(sp_get_icon_image(action->image, Gtk::ICON_SIZE_MENU));
+
+        // Create a box to hold icon and label as Gtk::MenuItem derives from GtkBin and can only hold one child
+        Gtk::Box *box = Gtk::manage(new Gtk::Box());
+        box->pack_start(*icon, false, false, 0);
+        box->pack_start(*label, true,  true,  0);
+        item->add(*box);
+    } else {
+        item->add(*label);
+    }
 
     item->signal_activate().connect(sigc::bind(sigc::mem_fun(*this, &ObjectsPanel::_takeAction), id));
     _popupMenu.append(*item);
@@ -1876,50 +1853,48 @@ ObjectsPanel::ObjectsPanel() :
     //Set up the pop-up menu
     // -------------------------------------------------------
     {
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_RENAME, nullptr, _("Rename"), (int)BUTTON_RENAME ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_NEW, nullptr, _("New"), (int)BUTTON_NEW ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_RENAME, (int)BUTTON_RENAME ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_NEW, (int)BUTTON_NEW ) );
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
 
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_SOLO, nullptr, _("Solo"), (int)BUTTON_SOLO ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_SHOW_ALL, nullptr, _("Show All"), (int)BUTTON_SHOW_ALL ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_HIDE_ALL, nullptr, _("Hide All"), (int)BUTTON_HIDE_ALL ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_SOLO, (int)BUTTON_SOLO ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_SHOW_ALL, (int)BUTTON_SHOW_ALL ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_HIDE_ALL, (int)BUTTON_HIDE_ALL ) );
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
 
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_LOCK_OTHERS, nullptr, _("Lock Others"), (int)BUTTON_LOCK_OTHERS ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_LOCK_ALL, nullptr, _("Lock All"), (int)BUTTON_LOCK_ALL ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_UNLOCK_ALL, nullptr, _("Unlock All"), (int)BUTTON_UNLOCK_ALL ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_LOCK_OTHERS, (int)BUTTON_LOCK_OTHERS ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_LOCK_ALL, (int)BUTTON_LOCK_ALL ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_UNLOCK_ALL, (int)BUTTON_UNLOCK_ALL ) );
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
 
-        _watchingNonTop.push_back(
-            &_addPopupItem(targetDesktop, SP_VERB_SELECTION_STACK_UP, "go-up", _("Up"), (int)BUTTON_UP));
-        _watchingNonBottom.push_back(
-            &_addPopupItem(targetDesktop, SP_VERB_SELECTION_STACK_DOWN, "go-down", _("Down"), (int)BUTTON_DOWN));
+        _watchingNonTop.push_back( &_addPopupItem(targetDesktop, SP_VERB_SELECTION_STACK_UP, (int)BUTTON_UP) );
+        _watchingNonBottom.push_back( &_addPopupItem(targetDesktop, SP_VERB_SELECTION_STACK_DOWN, (int)BUTTON_DOWN) );
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
         
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_GROUP, nullptr, _("Group"), (int)BUTTON_GROUP ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_UNGROUP, nullptr, _("Ungroup"), (int)BUTTON_UNGROUP ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_GROUP, (int)BUTTON_GROUP ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_UNGROUP, (int)BUTTON_UNGROUP ) );
         
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
         
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_CLIPPATH, nullptr, _("Set Clip"), (int)BUTTON_SETCLIP ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_CLIPPATH, (int)BUTTON_SETCLIP ) );
         
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_CREATE_CLIP_GROUP, nullptr, _("Create Clip Group"), (int)BUTTON_CLIPGROUP ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_CREATE_CLIP_GROUP, (int)BUTTON_CLIPGROUP ) );
 
         //will never be implemented
-        //_watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_INVERSE_CLIPPATH, 0, "Set Inverse Clip", (int)BUTTON_SETINVCLIP ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_UNSET_CLIPPATH, nullptr, _("Unset Clip"), (int)BUTTON_UNSETCLIP ) );
+        //_watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_INVERSE_CLIPPATH, (int)BUTTON_SETINVCLIP ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_UNSET_CLIPPATH, (int)BUTTON_UNSETCLIP ) );
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
         
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_MASK, nullptr, _("Set Mask"), (int)BUTTON_SETMASK ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_UNSET_MASK, nullptr, _("Unset Mask"), (int)BUTTON_UNSETMASK ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_MASK, (int)BUTTON_SETMASK ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_UNSET_MASK, (int)BUTTON_UNSETMASK ) );
 
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_EDIT_DUPLICATE, nullptr, _("Duplicate"), (int)BUTTON_DUPLICATE ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_EDIT_DELETE, nullptr, _("Delete"), (int)BUTTON_DELETE ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_EDIT_DUPLICATE, (int)BUTTON_DUPLICATE ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_EDIT_DELETE, (int)BUTTON_DELETE ) );
 
         _popupMenu.show_all_children();
 

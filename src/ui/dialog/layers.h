@@ -55,7 +55,7 @@ private:
 
     void _styleButton( Gtk::Button& btn, SPDesktop *desktop, unsigned int code, char const* iconName, char const* fallback );
     void _fireAction( unsigned int code );
-    Gtk::MenuItem& _addPopupItem( SPDesktop *desktop, unsigned int code, char const* iconName, char const* fallback, int id );
+    Gtk::MenuItem& _addPopupItem( SPDesktop *desktop, unsigned int code, int id );
 
     void _preToggle( GdkEvent const *event );
     void _toggled( Glib::ustring const& str, int targetCol );
