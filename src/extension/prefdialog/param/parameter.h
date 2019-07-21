@@ -188,11 +188,6 @@ protected:
      */
     gchar *pref_name() const;
 
-    Inkscape::XML::Node * find_child (Inkscape::XML::Node * adult);
-
-    Inkscape::XML::Node * document_param_node (SPDocument * doc);
-
-    Inkscape::XML::Node * new_child (Inkscape::XML::Node * parent);
 
 private:
     /** Which extension is this parameter attached to. */

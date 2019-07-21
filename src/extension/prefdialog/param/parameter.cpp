@@ -365,52 +365,6 @@ gchar *Parameter::pref_name() const
     return g_strdup_printf("%s.%s", _extension->get_id(), _name);
 }
 
-Inkscape::XML::Node *
-Parameter::find_child (Inkscape::XML::Node * adult)
-{
-    return sp_repr_lookup_child(adult, "name", _name);
-}
-
-Inkscape::XML::Node *
-Parameter::new_child (Inkscape::XML::Node * parent)
-{
-    Inkscape::XML::Node * retval;
-    retval = parent->document()->createElement("inkscape:extension-param");
-    retval->setAttribute("name", _name);
-
-    parent->appendChild(retval);
-    Inkscape::GC::release(retval);
-    return retval;
-}
-
-Inkscape::XML::Node *Parameter::document_param_node(SPDocument * doc)
-{
-    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
-    Inkscape::XML::Node * defs = doc->getDefs()->getRepr();
-    Inkscape::XML::Node * params = nullptr;
-
-    GQuark const name_quark = g_quark_from_string("inkscape:extension-params");
-
-    for (Inkscape::XML::Node * child = defs->firstChild();
-            child != nullptr;
-            child = child->next()) {
-        if ((GQuark)child->code() == name_quark &&
-                !strcmp(child->attribute("extension"), _extension->get_id())) {
-            params = child;
-            break;
-        }
-    }
-
-    if (params == nullptr) {
-        params = xml_doc->createElement("inkscape:extension-param");
-        params->setAttribute("extension", _extension->get_id());
-        defs->appendChild(params);
-        Inkscape::GC::release(params);
-    }
-
-    return params;
-}
-
 /** Basically, if there is no widget pass a NULL. */
 Gtk::Widget *
 Parameter::get_widget (SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/, sigc::signal<void> * /*changeSignal*/)
