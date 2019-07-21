@@ -162,7 +162,7 @@ bool Parameter::get_bool(SPDocument const *doc, Inkscape::XML::Node const *node)
 {
     ParamBool const *boolpntr = dynamic_cast<ParamBool const *>(this);
     if (!boolpntr) {
-        throw Extension::param_not_bool_param();
+        throw param_not_bool_param();
     }
     return boolpntr->get(doc, node);
 }
@@ -171,7 +171,7 @@ int Parameter::get_int(SPDocument const *doc, Inkscape::XML::Node const *node) c
 {
     ParamInt const *intpntr = dynamic_cast<ParamInt const *>(this);
     if (!intpntr) {
-        throw Extension::param_not_int_param();
+        throw param_not_int_param();
     }
     return intpntr->get(doc, node);
 }
@@ -180,7 +180,7 @@ float Parameter::get_float(SPDocument const *doc, Inkscape::XML::Node const *nod
 {
     ParamFloat const *floatpntr = dynamic_cast<ParamFloat const *>(this);
     if (!floatpntr) {
-        throw Extension::param_not_float_param();
+        throw param_not_float_param();
     }
     return floatpntr->get(doc, node);
 }
@@ -189,7 +189,7 @@ gchar const *Parameter::get_string(SPDocument const *doc, Inkscape::XML::Node co
 {
     ParamString const *stringpntr = dynamic_cast<ParamString const *>(this);
     if (!stringpntr) {
-        throw Extension::param_not_string_param();
+        throw param_not_string_param();
     }
     return stringpntr->get(doc, node);
 }
@@ -198,7 +198,7 @@ gchar const *Parameter::get_enum(SPDocument const *doc, Inkscape::XML::Node cons
 {
     ParamComboBox const *param = dynamic_cast<ParamComboBox const *>(this);
     if (!param) {
-        throw Extension::param_not_enum_param();
+        throw param_not_enum_param();
     }
     return param->get(doc, node);
 }
@@ -207,7 +207,7 @@ bool Parameter::get_enum_contains(gchar const * value, SPDocument const *doc, In
 {
     ParamComboBox const *param = dynamic_cast<ParamComboBox const *>(this);
     if (!param) {
-        throw Extension::param_not_enum_param();
+        throw param_not_enum_param();
     }
     return param->contains(value, doc, node);
 }
@@ -216,7 +216,7 @@ gchar const *Parameter::get_optiongroup(SPDocument const *doc, Inkscape::XML::No
 {
     ParamRadioButton const *param = dynamic_cast<ParamRadioButton const *>(this);
     if (!param) {
-        throw Extension::param_not_optiongroup_param();
+        throw param_not_optiongroup_param();
     }
     return param->get(doc, node);
 }
@@ -225,7 +225,7 @@ guint32 Parameter::get_color(const SPDocument* doc, Inkscape::XML::Node const *n
 {
     ParamColor const *param = dynamic_cast<ParamColor const *>(this);
     if (!param) {
-        throw Extension::param_not_color_param();
+        throw param_not_color_param();
     }
     return param->get(doc, node);
 }
@@ -234,7 +234,7 @@ bool Parameter::set_bool(bool in, SPDocument * doc, Inkscape::XML::Node * node)
 {
     ParamBool * boolpntr = dynamic_cast<ParamBool *>(this);
     if (boolpntr == nullptr)
-        throw Extension::param_not_bool_param();
+        throw param_not_bool_param();
     return boolpntr->set(in, doc, node);
 }
 
@@ -242,7 +242,7 @@ int Parameter::set_int(int in, SPDocument * doc, Inkscape::XML::Node * node)
 {
     ParamInt * intpntr = dynamic_cast<ParamInt *>(this);
     if (intpntr == nullptr)
-        throw Extension::param_not_int_param();
+        throw param_not_int_param();
     return intpntr->set(in, doc, node);
 }
 
@@ -253,7 +253,7 @@ Parameter::set_float (float in, SPDocument * doc, Inkscape::XML::Node * node)
     ParamFloat * floatpntr;
     floatpntr = dynamic_cast<ParamFloat *>(this);
     if (floatpntr == nullptr)
-        throw Extension::param_not_float_param();
+        throw param_not_float_param();
     return floatpntr->set(in, doc, node);
 }
 
@@ -263,7 +263,7 @@ Parameter::set_string (gchar const * in, SPDocument * doc, Inkscape::XML::Node *
 {
     ParamString * stringpntr = dynamic_cast<ParamString *>(this);
     if (stringpntr == nullptr)
-        throw Extension::param_not_string_param();
+        throw param_not_string_param();
     return stringpntr->set(in, doc, node);
 }
 
@@ -271,7 +271,7 @@ gchar const * Parameter::set_optiongroup( gchar const * in, SPDocument * doc, In
 {
     ParamRadioButton *param = dynamic_cast<ParamRadioButton *>(this);
     if (!param) {
-        throw Extension::param_not_optiongroup_param();
+        throw param_not_optiongroup_param();
     }
     return param->set(in, doc, node);
 }
@@ -280,7 +280,7 @@ gchar const *Parameter::set_enum( gchar const * in, SPDocument * doc, Inkscape::
 {
     ParamComboBox *param = dynamic_cast<ParamComboBox *>(this);
     if (!param) {
-        throw Extension::param_not_enum_param();
+        throw param_not_enum_param();
     }
     return param->set(in, doc, node);
 }
@@ -292,7 +292,7 @@ Parameter::set_color (guint32 in, SPDocument * doc, Inkscape::XML::Node * node)
 {
     ParamColor* param = dynamic_cast<ParamColor *>(this);
     if (param == nullptr)
-        throw Extension::param_not_color_param();
+        throw param_not_color_param();
     return param->set(in, doc, node);
 }
 

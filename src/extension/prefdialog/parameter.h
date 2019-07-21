@@ -168,6 +168,18 @@ public:
     const static int GUI_MAX_LINE_LENGTH = 60;
 
 
+    /** An error class for when a parameter is called on a type it is not */
+    class param_no_name {};
+    class param_no_type {};
+    class param_not_color_param {};
+    class param_not_enum_param {};
+    class param_not_optiongroup_param {};
+    class param_not_string_param {};
+    class param_not_float_param {};
+    class param_not_int_param {};
+    class param_not_bool_param {};
+
+
 protected:
     /** Parameter text to show as the GUI label. */
     gchar * _text;

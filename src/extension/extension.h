@@ -154,16 +154,6 @@ public:
     unsigned int param_visible_count ( );
 
 public:
-    /** An error class for when a parameter is called on a type it is not */
-    class param_wrong_type {};
-    class param_not_color_param {};
-    class param_not_enum_param {};
-    class param_not_optiongroup_param {};
-    class param_not_string_param {};
-    class param_not_float_param {};
-    class param_not_int_param {};
-    class param_not_bool_param {};
-
     /** An error class for when a parameter is looked for that just
      * simply doesn't exist */
     class param_not_exist {};
