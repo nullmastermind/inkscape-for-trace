@@ -13,7 +13,7 @@
 #include <gtkmm/messagedialog.h>
 
 #include "execution-env.h"
-#include "prefdialog.h"
+#include "prefdialog/prefdialog.h"
 #include "implementation/implementation.h"
 
 #include "selection.h"

@@ -9,7 +9,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "prefdialog.h"
+#include "prefdialog/prefdialog.h"
 #include "document.h"
 #include "implementation/implementation.h"
 #include "output.h"

@@ -17,7 +17,7 @@
 
 #include <xml/node.h>
 
-#include "../extension.h"
+#include "extension/extension.h"
 #include "color.h"
 
 #include <color.h>

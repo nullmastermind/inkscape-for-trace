@@ -11,7 +11,7 @@
 #ifdef HAVE_CONFIG_H
 #endif
 
-#include "prefdialog.h"
+#include "prefdialog/prefdialog.h"
 #include "implementation/implementation.h"
 #include "timer.h"
 #include "input.h"

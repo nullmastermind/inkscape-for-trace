@@ -9,15 +9,16 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "prefdialog.h"
-#include "inkscape.h"
-#include "helper/action.h"
-#include "ui/view/view.h"
-
-#include "implementation/implementation.h"
 #include "effect.h"
+
 #include "execution-env.h"
+#include "inkscape.h"
 #include "timer.h"
+
+#include "helper/action.h"
+#include "implementation/implementation.h"
+#include "prefdialog/prefdialog.h"
+#include "ui/view/view.h"
 
 
 

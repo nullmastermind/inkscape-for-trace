@@ -13,7 +13,7 @@
 #include <gtkmm/checkbutton.h>
 
 #include "xml/node.h"
-#include "../extension.h"
+#include "extension/extension.h"
 #include "bool.h"
 #include "preferences.h"
 

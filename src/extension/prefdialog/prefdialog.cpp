@@ -9,6 +9,7 @@
  */
 
 #include "prefdialog.h"
+
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/separator.h>
 #include <glibmm/i18n.h>
@@ -22,10 +23,10 @@
 #include "document.h"
 #include "document-undo.h"
 
-#include "effect.h"
-#include "implementation/implementation.h"
+#include "extension/effect.h"
+#include "extension/execution-env.h"
+#include "extension/implementation/implementation.h"
 
-#include "execution-env.h"
 #include "param/parameter.h"
 
 
@@ -258,7 +259,7 @@ PrefDialog::on_response (int signal) {
     return;
 }
 
-#include "internal/clear-n_.h"
+#include "extension/internal/clear-n_.h"
 
 const char * PrefDialog::live_param_xml = "<param name=\"__live_effect__\" type=\"boolean\" _gui-text=\"" N_("Live preview") "\" gui-description=\"" N_("Is the effect previewed live on canvas?") "\">false</param>";
 

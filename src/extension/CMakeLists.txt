@@ -11,7 +11,6 @@ set(extension_SRC
 	input.cpp
 	output.cpp
 	patheffect.cpp
-	prefdialog.cpp
 	print.cpp
 	system.cpp
 	timer.cpp
@@ -20,17 +19,6 @@ set(extension_SRC
 	implementation/implementation.cpp
 	implementation/xslt.cpp
 	implementation/script.cpp
-
-	param/bool.cpp
-	param/color.cpp
-	param/description.cpp
-	param/enum.cpp
-	param/float.cpp
-	param/int.cpp
-	param/notebook.cpp
-	param/parameter.cpp
-	param/radiobutton.cpp
-	param/string.cpp
 
 	internal/bluredge.cpp
 	internal/cairo-ps-out.cpp
@@ -64,6 +52,18 @@ set(extension_SRC
 	internal/pdfinput/pdf-parser.cpp
 	internal/pdfinput/svg-builder.cpp
 
+	prefdialog/prefdialog.cpp
+	prefdialog/param/bool.cpp
+	prefdialog/param/color.cpp
+	prefdialog/param/description.cpp
+	prefdialog/param/enum.cpp
+	prefdialog/param/float.cpp
+	prefdialog/param/int.cpp
+	prefdialog/param/notebook.cpp
+	prefdialog/param/parameter.cpp
+	prefdialog/param/radiobutton.cpp
+	prefdialog/param/string.cpp
+
 	# ------
 	# Header
 	db.h
@@ -75,18 +75,7 @@ set(extension_SRC
 	init.h
 	input.h
 	output.h
-	param/bool.h
-	param/color.h
-	param/description.h
-	param/enum.h
-	param/float.h
-	param/int.h
-	param/notebook.h
-	param/parameter.h
-	param/radiobutton.h
-	param/string.h
 	patheffect.h
-	prefdialog.h
 	print.h
 	system.h
 	timer.h
@@ -137,6 +126,18 @@ set(extension_SRC
 	internal/text_reassemble.h
 	internal/wmf-inout.h
 	internal/wmf-print.h
+
+	prefdialog/prefdialog.h
+	prefdialog/param/bool.h
+	prefdialog/param/color.h
+	prefdialog/param/description.h
+	prefdialog/param/enum.h
+	prefdialog/param/float.h
+	prefdialog/param/int.h
+	prefdialog/param/notebook.h
+	prefdialog/param/parameter.h
+	prefdialog/param/radiobutton.h
+	prefdialog/param/string.h
 )
 
 if(WIN32)
