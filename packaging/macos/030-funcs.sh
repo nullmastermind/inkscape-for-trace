@@ -64,6 +64,7 @@ function get_source
   [ ! -d $TMP_DIR ] && mkdir -p $TMP_DIR
   local log=$(mktemp $TMP_DIR/$FUNCNAME.XXXX)
   [ -z $target_dir ] && target_dir=$SRC_DIR
+  [ ! -d $SRC_DIR ] && mkdir -p $SRC_DIR
 
   cd $target_dir
 
@@ -163,5 +164,31 @@ function relocate_dependency
   local source=$(otool -L $library | grep $source_lib | awk '{ print $1 }')
 
   install_name_tool -change $source $target $library
+}
+
+### 'readlink -f' replacement ##################################################
+
+# This is what the oneliner used to set SELF_DIR is based on.
+
+function readlinkf
+{
+  # 'readlink -f' replacement: https://stackoverflow.com/a/1116890
+  # 'do while' replacement: https://stackoverflow.com/a/16491478
+
+  local file=$1
+
+  # iterate down a (possible) chain of symlinks
+  while
+      [ ! -z $(readlink $file) ] && file=$(readlink $file)
+      cd $(dirname $file)
+      file=$(basename $file)
+      [ -L "$file" ]
+      do
+    :
+  done
+
+  # Compute the canonicalized name by finding the physical path 
+  # for the directory we're in and appending the target file.
+  echo $(pwd -P)/$file
 }
 

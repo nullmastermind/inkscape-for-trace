@@ -18,10 +18,11 @@
 
 [ -f $HOME/.profile ] && source $HOME/.profile
 
-### name #######################################################################
+### name and directory #########################################################
 
 SELF_NAME=$(basename $0)
-SELF_DIR=$(cd $(dirname "$0"); pwd -P)
+SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); \
+  cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
 
 ### multithreading #############################################################
 
@@ -114,9 +115,24 @@ LIB_DIR=$OPT_DIR/lib
 SRC_DIR=$OPT_DIR/src
 TMP_DIR=$OPT_DIR/tmp
 
+### set system temporary locations to our TMP_DIR ##############################
+
+export TMP=$TMP_DIR
+export TEMP=$TMP_DIR
+export TMPDIR=$TMP_DIR
+
+### set jhbuild directories ####################################################
+
+export DEVROOT=$WRK_DIR/gtk-osx
+export DEVPREFIX=$DEVROOT/local
+export PYTHONUSERBASE=$DEVPREFIX
+export DEV_SRC_ROOT=$DEVROOT/source
+DEVCONFIG=$DEVROOT/config   # no export because this is a made-up variable
+export PIP_CONFIG_DIR=$DEVCONFIG/pip
+
 ### Inkscape Git repository directory ##########################################
 
-# Location is different when run as GitLab CI job.
+# Location is different when running as GitLab CI job.
 
 if [ -z $CI_JOB_ID ]; then
   INK_DIR=$SRC_DIR/inkscape
@@ -151,35 +167,42 @@ APP_PLIST=$APP_CON_DIR/Info.plist
 
 URL_BOOST=https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.tar.bz2
 URL_CPPUNIT=https://dev-www.libreoffice.org/src/cppunit-1.14.0.tar.gz
-URL_CURL_CACERT=https://curl.haxx.se/ca/cacert.pem
 URL_CREATEDMG=https://github.com/andreyvit/create-dmg/archive/v1.0.0.5.tar.gz
 URL_DOUBLE_CONVERSION=https://github.com/google/double-conversion/archive/v3.1.4.tar.gz
-URL_FREETYPE=https://download.savannah.gnu.org/releases/freetype/freetype-2.10.0.tar.bz2
 URL_GC=https://github.com/ivmai/bdwgc/releases/download/v8.0.4/gc-8.0.4.tar.gz
 URL_GDL=https://github.com/GNOME/gdl/archive/GDL_3_28_0.tar.gz
 URL_GSL=http://ftp.fau.de/gnu/gsl/gsl-2.5.tar.gz
 URL_GTK_MAC_BUNDLER=https://gitlab.gnome.org/GNOME/gtk-mac-bundler/-/archive/727793cfae08dec0e1e2621078d53a02ec5f7fb3.tar.gz
 URL_GTK_OSX=https://raw.githubusercontent.com/dehesselle/gtk-osx/inkscape
-URL_GTK_OSX_BUILD_SETUP=$URL_GTK_OSX/gtk-osx-build-setup.sh
+URL_GTK_OSX_SETUP=$URL_GTK_OSX/gtk-osx-setup.sh
 URL_GTK_OSX_MODULESET=$URL_GTK_OSX/modulesets-stable/gtk-osx.modules
 URL_IMAGEMAGICK=https://github.com/ImageMagick/ImageMagick6/archive/6.9.7-10.tar.gz
 # Inkscape Git repository
 URL_INKSCAPE=https://gitlab.com/inkscape/inkscape
 URL_LCMS2=https://netcologne.dl.sourceforge.net/project/lcms/lcms/2.9/lcms2-2.9.tar.gz
 URL_LIBCDR=https://github.com/LibreOffice/libcdr/archive/libcdr-0.1.5.tar.gz
-URL_LIBPSL=https://github.com/rockdaboot/libpsl/releases/download/libpsl-0.20.2/libpsl-0.20.2.tar.gz
 URL_LIBREVENGE=https://ayera.dl.sourceforge.net/project/libwpd/librevenge/librevenge-0.0.4/librevenge-0.0.4.tar.gz
-URL_LIBSOUP=https://ftp.gnome.org/pub/GNOME/sources/libsoup/2.65/libsoup-2.65.92.tar.xz
 URL_LIBVISIO=https://github.com/LibreOffice/libvisio/archive/libvisio-0.1.6.tar.gz
 URL_LIBWPG=https://netcologne.dl.sourceforge.net/project/libwpg/libwpg/libwpg-0.3.3/libwpg-0.3.3.tar.xz
 URL_OPENJPEG=https://github.com/uclouvain/openjpeg/archive/v2.3.0.tar.gz
 URL_OPENMP=https://github.com/llvm/llvm-project/releases/download/llvmorg-7.1.0/openmp-7.1.0.src.tar.xz
-# use OpenSSL version as in gtk-osx moduleset
-URL_OPENSSL=https://www.openssl.org/source/old/1.1.0/openssl-1.1.0g.tar.gz
 URL_PNG2ICNS=https://github.com/bitboss-ca/png2icns/archive/v0.1.tar.gz
 URL_POPPLER=https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-0.74.0/poppler-poppler-0.74.0.tar.gz
 URL_POTRACE=http://potrace.sourceforge.net/download/1.15/potrace-1.15.tar.gz
-URL_PYTHON3=https://github.com/dehesselle/py3framework/releases/download/py368.5/py368_framework_5.tar.xz
+# This is the relocatable framework to be bundled with the app.
+URL_PYTHON3_BIN=https://github.com/dehesselle/py3framework/releases/download/py374.1/py374_framework_1.tar.xz
+# This is for the jhbuild toolset only.
+URL_PYTHON3_SRC=https://github.com/dehesselle/py3framework/archive/py369.2.tar.gz
 # A pre-built version of the complete toolset.
-URL_TOOLSET_CACHE=https://github.com/dehesselle/mibap/releases/download/v0.14/mibap_v0.14.tar.xz
+URL_TOOLSET_CACHE=https://github.com/dehesselle/mibap/releases/download/v0.15/mibap_v0.15.tar.xz
+
+### Python packages ############################################################
+
+PYTHON_CAIROSVG=cairosvg==2.4.0
+PYTHON_CAIROCFFI=cairocffi==1.0.2
+PYTHON_LXML=lxml==4.3.3
+PYTHON_NUMPY=numpy==1.16.4
+PYTHON_PYCAIRO=pycairo==1.18.1
+PYTHON_PYGOBJECT=PyGObject==3.32.1
+PYTHON_SCOUR=scour==0.37
 

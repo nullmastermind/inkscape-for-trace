@@ -9,10 +9,32 @@
 
 ### load settings and functions ################################################
 
-SELF_DIR=$(cd $(dirname "$0"); pwd -P)
+SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); \
+  cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
 for script in $SELF_DIR/0??-*.sh; do source $script; done
 
 ### install create-dmg #########################################################
 
 get_source $URL_CREATEDMG
+
+### install gtk-mac-bundler ####################################################
+
+get_source $URL_GTK_MAC_BUNDLER
+make install
+
+### install svg to pgn convertor ###############################################
+
+jhbuild run pip3 install $PYTHON_CAIROSVG
+jhbuild run pip3 install $PYTHON_CAIROCFFI
+
+### install png to icns converter ##############################################
+
+get_source $URL_PNG2ICNS
+ln -s $(pwd)/png2icns.sh $BIN_DIR
+
+### downlaod a pre-built Python.framework ######################################
+
+# This will be bundled with the application.
+
+save_file $URL_PYTHON3_BIN
 

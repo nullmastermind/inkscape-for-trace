@@ -25,12 +25,13 @@ _In some regards it would've been more fair if this section was called "recommen
       ```
 
 - __Use a dedicated user account__ unless you're prepared that these scripts will delete and overwrite your data in the following locations:  
-_(comments based on default configuration)_
+_(based on default configuration)_
 
     ```bash
-    $HOME/.cache       # will be symlinked to $WRK_DIR/tmp
-    $HOME/.local       # will be symlinked to $WRK_DIR/opt
-    $HOME/.profile     # will be overwritten
+    $HOME/.cache               # will be linked to $TMP_DIR
+    $HOME/.config/jhbuildrc*   # will be overwritten
+    $HOME/.local               # will be linked to $OPT_DIR
+    $HOME/.profile             # will be overwritten
     ```
 
 - __16 GiB RAM__, since we're using a 9 GiB ramdisk to build everything.
@@ -55,7 +56,7 @@ to have everything run for you. If you are doing this the first time, my advice 
 
 ### GitLab CI
 
-> TODO: configuration examples need to be reworked
+> TODO: configuration examples need to be updated!
 
 #### configuration example `.gitlab-runner/config.toml`
 
