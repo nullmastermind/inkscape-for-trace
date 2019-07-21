@@ -12,10 +12,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifdef linux  // does the dollar sign need escaping when passed as string parameter?
-# define ESCAPE_DOLLAR_COMMANDLINE
-#endif
-
 #include <cstring>
 #include <list>
 
