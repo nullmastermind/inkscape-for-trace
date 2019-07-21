@@ -51,8 +51,7 @@ std::ofstream Extension::error_file;
     a name and an ID the module will be left in an errored state.
 */
 Extension::Extension (Inkscape::XML::Node * in_repr, Implementation::Implementation * in_imp)
-    : silent(false)
-    , _gui(true)
+    : _gui(true)
     , execution_env(nullptr)
 {
     repr = in_repr;
@@ -103,9 +102,6 @@ Extension::Extension (Inkscape::XML::Node * in_repr, Implementation::Implementat
                     } /* skip non-element nodes (see LP #1372200) */
                 }
             } /* check command as a dependency (see LP #505920) */
-            if (!strcmp(chname, "options")) {
-                silent = !strcmp( child_repr->attribute("silent"), "true" );
-            }
             child_repr = child_repr->next();
         }
 
@@ -317,16 +313,6 @@ Inkscape::XML::Node *
 Extension::get_repr ()
 {
     return repr;
-}
-
-/**
-    \return  bool
-    \brief   Whether this extension should hide the "working, please wait" dialog
-*/
-bool
-Extension::is_silent ()
-{
-    return silent;
 }
 
 /**

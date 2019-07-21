@@ -104,7 +104,6 @@ private:
     state_t    _state;                    /**< Which state the Extension is currently in */
     std::vector<Dependency *>  _deps;     /**< Dependencies for this extension */
     static std::ofstream error_file;      /**< This is the place where errors get reported */
-    bool silent;
     bool _gui;
 
 protected:
@@ -125,7 +124,6 @@ public:
     Inkscape::XML::Node *      get_repr     ();
     gchar *       get_id       ();
     gchar *       get_name     ();
-    bool          is_silent    ();
     void          deactivate   ();
     bool          deactivated  ();
     void          printFailure (Glib::ustring reason);
