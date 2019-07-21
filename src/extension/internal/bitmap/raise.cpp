@@ -42,7 +42,7 @@ Raise::init()
 			"<id>org.inkscape.effect.bitmap.raise</id>\n"
 			"<param name=\"width\" _gui-text=\"" N_("Width:") "\" type=\"int\" min=\"0\" max=\"800\">6</param>\n"
 			"<param name=\"height\" _gui-text=\"" N_("Height:") "\" type=\"int\" min=\"0\" max=\"800\">6</param>\n"
-			"<param name=\"raisedFlag\" _gui-text=\"" N_("Raised") "\" type=\"boolean\">0</param>\n"
+			"<param name=\"raisedFlag\" _gui-text=\"" N_("Raised") "\" type=\"boolean\">false</param>\n"
 			"<effect>\n"
 				"<object-type>all</object-type>\n"
 				"<effects-menu>\n"

@@ -56,7 +56,7 @@ public:
               "<id>org.inkscape.effect.filter.Blur</id>\n"
               "<param name=\"hblur\" _gui-text=\"" N_("Horizontal blur") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.01\" max=\"100.00\">2</param>\n"
               "<param name=\"vblur\" _gui-text=\"" N_("Vertical blur") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.01\" max=\"100.00\">2</param>\n"
-              "<param name=\"content\" _gui-text=\"" N_("Blur content only") "\" type=\"boolean\">False</param>\n"
+              "<param name=\"content\" _gui-text=\"" N_("Blur content only") "\" type=\"boolean\">false</param>\n"
               "<effect>\n"
                 "<object-type>all</object-type>\n"
                 "<effects-menu>\n"
