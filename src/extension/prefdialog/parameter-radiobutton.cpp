@@ -15,6 +15,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "parameter-radiobutton.h"
+
 #include <gtkmm/box.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/radiobutton.h>
@@ -23,8 +25,6 @@
 #include "xml/node.h"
 #include "extension/extension.h"
 #include "preferences.h"
-
-#include "radiobutton.h"
 
 /**
  * The root directory in the preferences database for extension

@@ -7,6 +7,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "parameter-float.h"
+
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
 #include <gtkmm/scale.h>
@@ -16,7 +18,6 @@
 #include "xml/node.h"
 #include "extension/extension.h"
 #include "preferences.h"
-#include "./float.h"
 
 namespace Inkscape {
 namespace Extension {

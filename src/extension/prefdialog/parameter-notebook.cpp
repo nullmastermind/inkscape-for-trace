@@ -13,6 +13,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "parameter-notebook.h"
+
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
 #include <gtkmm/spinbutton.h>
@@ -25,7 +27,6 @@
 #include <extension/extension.h>
 #include "preferences.h"
 
-#include "notebook.h"
 
 /**
  * The root directory in the preferences database for extension

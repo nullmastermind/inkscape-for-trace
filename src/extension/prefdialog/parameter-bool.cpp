@@ -7,6 +7,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "parameter-bool.h"
+
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
 #include <gtkmm/spinbutton.h>
@@ -14,7 +16,6 @@
 
 #include "xml/node.h"
 #include "extension/extension.h"
-#include "bool.h"
 #include "preferences.h"
 
 namespace Inkscape {

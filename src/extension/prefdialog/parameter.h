@@ -16,6 +16,7 @@
 
 #include <string>
 
+#include <sigc++/sigc++.h>
 #include <glibmm/ustring.h>
 
 class SPDocument;

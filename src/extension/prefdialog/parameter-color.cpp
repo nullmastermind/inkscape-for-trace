@@ -8,6 +8,8 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "parameter-color.h"
+
 #include <iostream>
 #include <sstream>
 
@@ -18,9 +20,8 @@
 #include <xml/node.h>
 
 #include "extension/extension.h"
-#include "color.h"
 
-#include <color.h>
+#include "color.h"
 #include "ui/widget/color-notebook.h"
 #include "preferences.h"
 

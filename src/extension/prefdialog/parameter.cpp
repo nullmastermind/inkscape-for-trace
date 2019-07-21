@@ -22,16 +22,16 @@
 #include <glibmm/i18n.h>
 #include <sigc++/sigc++.h>
 
-#include "bool.h"
-#include "color.h"
-#include "description.h"
-#include "enum.h"
-#include "./float.h"
-#include "int.h"
-#include "notebook.h"
 #include "parameter.h"
-#include "radiobutton.h"
-#include "./string.h"
+#include "parameter-bool.h"
+#include "parameter-color.h"
+#include "parameter-description.h"
+#include "parameter-enum.h"
+#include "parameter-float.h"
+#include "parameter-int.h"
+#include "parameter-notebook.h"
+#include "parameter-radiobutton.h"
+#include "parameter-string.h"
 
 #include "extension/extension.h"
 

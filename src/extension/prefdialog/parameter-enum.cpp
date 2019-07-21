@@ -15,13 +15,14 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "parameter-enum.h"
+
 #include <gtkmm/box.h>
 #include <gtkmm/comboboxtext.h>
 #include <glibmm/i18n.h>
 
 #include "xml/node.h"
 #include "extension/extension.h"
-#include "enum.h"
 #include "preferences.h"
 
 namespace Inkscape {

@@ -27,7 +27,7 @@
 #include "extension/execution-env.h"
 #include "extension/implementation/implementation.h"
 
-#include "param/parameter.h"
+#include "parameter.h"
 
 
 namespace Inkscape {

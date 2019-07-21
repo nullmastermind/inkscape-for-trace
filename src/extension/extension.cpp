@@ -29,7 +29,7 @@
 #include "db.h"
 #include "dependency.h"
 #include "timer.h"
-#include "prefdialog/param/parameter.h"
+#include "prefdialog/parameter.h"
 #include "io/resource.h"
 
 namespace Inkscape {

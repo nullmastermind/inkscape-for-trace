@@ -53,16 +53,16 @@ set(extension_SRC
 	internal/pdfinput/svg-builder.cpp
 
 	prefdialog/prefdialog.cpp
-	prefdialog/param/bool.cpp
-	prefdialog/param/color.cpp
-	prefdialog/param/description.cpp
-	prefdialog/param/enum.cpp
-	prefdialog/param/float.cpp
-	prefdialog/param/int.cpp
-	prefdialog/param/notebook.cpp
-	prefdialog/param/parameter.cpp
-	prefdialog/param/radiobutton.cpp
-	prefdialog/param/string.cpp
+	prefdialog/parameter.cpp
+	prefdialog/parameter-bool.cpp
+	prefdialog/parameter-color.cpp
+	prefdialog/parameter-description.cpp
+	prefdialog/parameter-enum.cpp
+	prefdialog/parameter-float.cpp
+	prefdialog/parameter-int.cpp
+	prefdialog/parameter-notebook.cpp
+	prefdialog/parameter-radiobutton.cpp
+	prefdialog/parameter-string.cpp
 
 	# ------
 	# Header
@@ -128,16 +128,16 @@ set(extension_SRC
 	internal/wmf-print.h
 
 	prefdialog/prefdialog.h
-	prefdialog/param/bool.h
-	prefdialog/param/color.h
-	prefdialog/param/description.h
-	prefdialog/param/enum.h
-	prefdialog/param/float.h
-	prefdialog/param/int.h
-	prefdialog/param/notebook.h
-	prefdialog/param/parameter.h
-	prefdialog/param/radiobutton.h
-	prefdialog/param/string.h
+	prefdialog/parameter.h
+	prefdialog/parameter-bool.h
+	prefdialog/parameter-color.h
+	prefdialog/parameter-description.h
+	prefdialog/parameter-enum.h
+	prefdialog/parameter-float.h
+	prefdialog/parameter-int.h
+	prefdialog/parameter-notebook.h
+	prefdialog/parameter-radiobutton.h
+	prefdialog/parameter-string.h
 )
 
 if(WIN32)
