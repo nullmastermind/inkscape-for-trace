@@ -129,7 +129,7 @@ Gtk::MenuItem& LayersPanel::_addPopupItem( SPDesktop *desktop, unsigned int code
     Gtk::Label *label = Gtk::manage(new Gtk::Label(action->name, true));
     label->set_xalign(0.0);
 
-    if (action->image) {
+    if (_show_contextmenu_icons && action->image) {
         item->set_name("ImageMenuItem");  // custom name to identify our "ImageMenuItems"
         Gtk::Image *icon = Gtk::manage(sp_get_icon_image(action->image, Gtk::ICON_SIZE_MENU));
 
@@ -870,6 +870,8 @@ LayersPanel::LayersPanel() :
 
     // -------------------------------------------------------
     {
+        _show_contextmenu_icons = prefs->getBool("/theme/menuIcons_layers", true);
+
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_NEW, (int)BUTTON_NEW ) );
         _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_RENAME, (int)BUTTON_RENAME ) );
 

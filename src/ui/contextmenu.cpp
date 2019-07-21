@@ -68,18 +68,17 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     _desktop = desktop;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int show_icons_pref = prefs->getInt("/theme/menuIcons", 0);
-    bool show_icon = show_icons_pref >= 0 ? true : false;
+    bool show_icons = prefs->getInt("/theme/menuIcons_canvas", true);
 
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_UNDO), show_icon);
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_REDO), show_icon);
+    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_UNDO), show_icons);
+    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_REDO), show_icons);
     AddSeparator();
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_CUT), show_icon);
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_COPY), show_icon);
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_PASTE), show_icon);
+    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_CUT), show_icons);
+    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_COPY), show_icons);
+    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_PASTE), show_icons);
     AddSeparator();
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_DUPLICATE), show_icon);
-    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_DELETE), show_icon);
+    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_DUPLICATE), show_icons);
+    AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_DELETE), show_icons);
 
     positionOfLastDialog = 10; // 9 in front + 1 for the separator in the next if; used to position the dialog menu entries below each other
     /* Item menu */

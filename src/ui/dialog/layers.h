@@ -107,6 +107,7 @@ private:
     SPItem* _dnd_source;
     SPItem* _dnd_target;
     GdkEvent* _toggleEvent;
+    bool _show_contextmenu_icons;
 
     Glib::RefPtr<Gtk::TreeStore> _store;
     std::vector<Gtk::Widget*> _watching;

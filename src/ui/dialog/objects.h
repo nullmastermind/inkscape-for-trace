@@ -121,6 +121,9 @@ private:
     //List of items to change the highlight on
     std::vector<SPItem*> _highlight_target;
 
+    //Show icons in the context menu
+    bool _show_contextmenu_icons;
+
     //GUI Members:
     
     GdkEvent* _toggleEvent;

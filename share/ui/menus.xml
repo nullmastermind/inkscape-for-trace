@@ -1,8 +1,9 @@
 <inkscape version="1.0"
   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-  xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+  xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+  show-icons="false">
 
-   <submenu _name="_File" show-icons="false">
+   <submenu _name="_File">
        <verb verb-id="FileNew" />
        <verb verb-id="FileTemplates" />
        <verb verb-id="FileOpen" />
@@ -85,7 +86,7 @@
        <verb verb-id="DialogSelectors" />
        <separator/>
        <verb verb-id="DialogInput" />
-       <verb verb-id="DialogPreferences" />
+       <verb verb-id="DialogPreferences" show-icons="true" />
    </submenu>
    <submenu _name="_View">
      <submenu _name="_Zoom">
@@ -171,17 +172,17 @@
        <verb verb-id="LayerToggleHide" />
        <verb verb-id="LayerToggleLock" />
        <separator/>
-       <verb verb-id="LayerNext" />
-       <verb verb-id="LayerPrev" />
+       <verb verb-id="LayerNext"       show-icons="true"/>
+       <verb verb-id="LayerPrev"       show-icons="true"/>
        <separator/>
-       <verb verb-id="LayerMoveToNext" />
-       <verb verb-id="LayerMoveToPrev" />
-       <verb verb-id="LayerMoveTo" />
+       <verb verb-id="LayerMoveToNext" show-icons="true"/>
+       <verb verb-id="LayerMoveToPrev" show-icons="true"/>
+       <verb verb-id="LayerMoveTo"     show-icons="true"/>
        <separator/>
-       <verb verb-id="LayerRaise" />
-       <verb verb-id="LayerLower" />
-       <verb verb-id="LayerToTop" />
-       <verb verb-id="LayerToBottom" />
+       <verb verb-id="LayerRaise"      show-icons="true"/>
+       <verb verb-id="LayerLower"      show-icons="true"/>
+       <verb verb-id="LayerToTop"      show-icons="true"/>
+       <verb verb-id="LayerToBottom"   show-icons="true" />
        <separator/>
        <verb verb-id="LayerDuplicate" />
        <verb verb-id="LayerDelete" />
@@ -216,15 +217,15 @@
        <verb verb-id="ObjectsToMarker" />
        <verb verb-id="ObjectsToGuides" />
        <separator/>
-       <verb verb-id="SelectionRaise" />
-       <verb verb-id="SelectionLower" />
-       <verb verb-id="SelectionToFront" />
-       <verb verb-id="SelectionToBack" />
+       <verb verb-id="SelectionRaise"         show-icons="true"/>
+       <verb verb-id="SelectionLower"         show-icons="true" />
+       <verb verb-id="SelectionToFront"       show-icons="true" />
+       <verb verb-id="SelectionToBack"        show-icons="true"/>
        <separator/>
-       <verb verb-id="ObjectRotate90" />
-       <verb verb-id="ObjectRotate90CCW" />
-       <verb verb-id="ObjectFlipHorizontally" />
-       <verb verb-id="ObjectFlipVertically" />
+       <verb verb-id="ObjectRotate90"         show-icons="true" />
+       <verb verb-id="ObjectRotate90CCW"      show-icons="true" />
+       <verb verb-id="ObjectFlipHorizontally" show-icons="true" />
+       <verb verb-id="ObjectFlipVertically"   show-icons="true" />
        <separator/>
        <verb verb-id="UnhideAll" />
        <verb verb-id="UnlockAll" />
@@ -240,22 +241,22 @@
        <verb verb-id="SelectionTrace" /> <!-- depends on HAVE_POTRACE -->
        <verb verb-id="SelectionPixelArt" />
        <separator/>
-       <verb verb-id="SelectionUnion" show-icons="true" />
-       <verb verb-id="SelectionDiff" />
-       <verb verb-id="SelectionIntersect" />
-       <verb verb-id="SelectionSymDiff" />
-       <verb verb-id="SelectionDivide" />
-       <verb verb-id="SelectionCutPath" />
+       <verb verb-id="SelectionUnion"        show-icons="true" />
+       <verb verb-id="SelectionDiff"         show-icons="true" />
+       <verb verb-id="SelectionIntersect"    show-icons="true" />
+       <verb verb-id="SelectionSymDiff"      show-icons="true" />
+       <verb verb-id="SelectionDivide"       show-icons="true" />
+       <verb verb-id="SelectionCutPath"      show-icons="true" />
        <separator/>
-       <verb verb-id="SelectionCombine" />
-       <verb verb-id="SelectionBreakApart" />
+       <verb verb-id="SelectionCombine"      show-icons="true" />
+       <verb verb-id="SelectionBreakApart"   show-icons="true" />
        <separator/>
-       <verb verb-id="SelectionInset" />
-       <verb verb-id="SelectionOffset" />
-       <verb verb-id="SelectionDynOffset" />
-       <verb verb-id="SelectionLinkedOffset" />
+       <verb verb-id="SelectionInset"        show-icons="true" />
+       <verb verb-id="SelectionOffset"       show-icons="true" />
+       <verb verb-id="SelectionDynOffset"    show-icons="true" />
+       <verb verb-id="SelectionLinkedOffset" show-icons="true" />
        <separator/>
-       <verb verb-id="SelectionSimplify" show-icons="false"/>
+       <verb verb-id="SelectionSimplify" />
        <verb verb-id="SelectionReverse" />
        <separator/>
        <verb verb-id="DialogLivePathEffect" />
@@ -313,7 +314,11 @@
        <verb verb-id="org.inkscape.help.svgspec" />
        <separator/>
        <verb verb-id="HelpAboutMemory" />
-       <verb verb-id="HelpAbout" />
+       <verb verb-id="HelpAbout" show-icons="true"/>
        <!--verb verb-id="ShowLicense" /-->
    </submenu>
+
+   <contextmenu id="canvas" show-icons="false" />
+   <contextmenu id="layers" show-icons="false" />
+   <contextmenu id="objects" show-icons="false" />
 </inkscape>

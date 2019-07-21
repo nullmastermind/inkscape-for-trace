@@ -331,7 +331,7 @@ sp_recent_open(Gtk::RecentChooser* recentchooser)
 // =================== Main Menu ================
 // Recursively build menu and submenus.
 void
-build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::View* view)
+build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::View* view, bool show_icons = true)
 {
     if (menu == nullptr) {
         std::cerr << "build_menu: menu is nullptr" << std::endl;
@@ -343,41 +343,41 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
         return;
     }
 
-    // Do we want icons????
+    // user preference for icons in menus (1: show all, -1: hide all; 0: theme chooses per icon)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    int show_icon_pref = prefs->getInt("/theme/menuIcons", 0);
-    static bool show_icon = false;
-    if (show_icon_pref ==  1) {
-        show_icon = true;
-    } else if ( show_icon_pref == -1) {
-        show_icon = false;
-    }
+    int show_icons_pref = prefs->getInt("/theme/menuIcons", 0);
 
     Gtk::RadioMenuItem::Group group;
 
     for (auto menu_ptr = xml; menu_ptr != nullptr; menu_ptr = menu_ptr->next()) {
 
-        if (show_icon_pref == 0) {
-            // We set according to file, value is inherited into sub-menus.
-            const char *str = menu_ptr->attribute("show-icons");
-            if (str) {
-                Glib::ustring ustr = str;
-                if (ustr == "true") {
-                    show_icon = true;
-                } else if (ustr == "false") {
-                    show_icon = false;
-                } else {
-                    std::cerr << "build_menu: invalid value for 'show-icon' (use 'true' or 'false')."
-                              << ustr << std::endl;
+        if (menu_ptr->name()) {
+
+            // show menu icons for current item?
+            bool show_icons_curr = show_icons;
+            if (show_icons_pref == 1) {          // show all icons per global pref
+                show_icons_curr = true;
+            } else if (show_icons_pref == -1) {  // hide all icons per global pref
+                show_icons_curr = false;
+            } else {  // set according to 'show-icons' attribute in theme's XML file; value is fully inherited
+                const char *str = menu_ptr->attribute("show-icons");
+                if (str) {
+                    Glib::ustring ustr = str;
+                    if (ustr == "true") {
+                        show_icons_curr = true;
+                    } else if (ustr == "false") {
+                        show_icons_curr = false;
+                    } else {
+                        std::cerr << "build_menu: invalid value for 'show-icons' (use 'true' or 'false')."
+                                  << ustr << std::endl;
+                    }
                 }
             }
-        }
 
-        if (menu_ptr->name()) {
             Glib::ustring name = menu_ptr->name();
 
             if (name == "inkscape") {
-                build_menu(menu, menu_ptr->firstChild(), view);
+                build_menu(menu, menu_ptr->firstChild(), view, show_icons_curr);
                 continue;
             }
 
@@ -389,13 +389,28 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                     menuitem = Gtk::manage(new Gtk::MenuItem(  menu_ptr->attribute("name"),   true));
                 }
                 Gtk::Menu* submenu = Gtk::manage(new Gtk::Menu());
-                build_menu(submenu, menu_ptr->firstChild(), view);
+                build_menu(submenu, menu_ptr->firstChild(), view, show_icons_curr);
                 menuitem->set_submenu(*submenu);
                 menu->append(*menuitem);
 
                 submenu->signal_map().connect(
                     sigc::bind<Gtk::Menu*>(sigc::ptr_fun(&shift_icons), submenu));
 
+                continue;
+            }
+            
+            if (name == "contextmenu") {
+                if (menu_ptr->attribute("id")) {
+                    Glib::ustring id = menu_ptr->attribute("id");
+                    if (id == "canvas" || id == "layers" || id == "objects") {
+                        Glib::ustring prefname = Glib::ustring::compose("/theme/menuIcons_%1", id);
+                        prefs->setBool(prefname, show_icons_curr);
+                    } else {
+                        std::cerr << "build_menu: invalid contextmenu id: " << id << std::endl;
+                    }
+                } else {
+                    std::cerr << "build_menu: contextmenu element needs a valid id" << std::endl;
+                }
                 continue;
             }
 
@@ -417,7 +432,7 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
 
                         } else if (menu_ptr->attribute("radio") != nullptr) {
 
-                            Gtk::MenuItem* menuitem = build_menu_item_from_verb(action, show_icon, true, &group);
+                            Gtk::MenuItem* menuitem = build_menu_item_from_verb(action, show_icons_curr, true, &group);
                             if (menuitem) {
                                 if (menu_ptr->attribute("default") != nullptr) {
                                     auto radiomenuitem = dynamic_cast<Gtk::RadioMenuItem*>(menuitem);
@@ -430,7 +445,7 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
 
                         } else {
 
-                            Gtk::MenuItem* menuitem = build_menu_item_from_verb(action, show_icon);
+                            Gtk::MenuItem* menuitem = build_menu_item_from_verb(action, show_icons_curr);
                             if (menuitem) {
                                 menu->append(*menuitem);
                             }
