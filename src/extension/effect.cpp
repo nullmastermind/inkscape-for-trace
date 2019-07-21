@@ -250,7 +250,7 @@ Effect::prefs (Inkscape::UI::View::View * doc)
         set_state(Extension::STATE_LOADED);
     if (!loaded()) return false;
 
-    _prefDialog = new PrefDialog(this->get_name(), this->get_help(), nullptr, this);
+    _prefDialog = new PrefDialog(this->get_name(), nullptr, this);
     _prefDialog->show();
 
     return true;

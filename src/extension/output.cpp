@@ -187,7 +187,7 @@ Output::prefs ()
         return true;
     }
 
-    PrefDialog * dialog = new PrefDialog(this->get_name(), this->get_help(), controls);
+    PrefDialog * dialog = new PrefDialog(this->get_name(), controls);
     int response = dialog->run();
     dialog->hide();
 

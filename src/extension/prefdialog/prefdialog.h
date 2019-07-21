@@ -27,8 +27,6 @@ class Parameter;
 
 /** \brief  A class to represent the preferences for an extension */
 class PrefDialog : public Gtk::Dialog {
-    /** \brief  Help string if it exists */
-    gchar const * _help;
     /** \brief  Name of the extension */
     Glib::ustring _name;
 
@@ -71,7 +69,6 @@ class PrefDialog : public Gtk::Dialog {
 
 public:
     PrefDialog (Glib::ustring name,
-                gchar const * help,
                 Gtk::Widget * controls = nullptr,
                 Effect * effect = nullptr);
     ~PrefDialog () override;

@@ -36,16 +36,14 @@ namespace Extension {
 
 /** \brief  Creates a new preference dialog for extension preferences
     \param  name  Name of the Extension whose dialog this is
-    \param  help  The help string for the extension (NULL if none)
     \param  controls  The extension specific widgets in the dialog
 
     This function initializes the dialog with the name of the extension
     in the title.  It adds a few buttons and sets up handlers for
     them.  It also places the passed-in widgets into the dialog.
 */
-PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * controls, Effect * effect) :
+PrefDialog::PrefDialog (Glib::ustring name, Gtk::Widget * controls, Effect * effect) :
     Gtk::Dialog(_(name.c_str()), true),
-    _help(help),
     _name(name),
     _button_ok(nullptr),
     _button_cancel(nullptr),
@@ -71,11 +69,6 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
 
     this->get_content_area()->pack_start(*hbox, true, true, 0);
 
-    /*
-    Gtk::Button * help_button = add_button(Gtk::Stock::HELP, Gtk::RESPONSE_HELP);
-    if (_help == NULL)
-        help_button->set_sensitive(false);
-    */
     _button_cancel = add_button(_effect == nullptr ? _("_Cancel") : _("_Close"), Gtk::RESPONSE_CANCEL);
     _button_ok     = add_button(_effect == nullptr ? _("_OK")     : _("_Apply"), Gtk::RESPONSE_OK);
     set_default_response(Gtk::RESPONSE_OK);
@@ -145,33 +138,6 @@ PrefDialog::~PrefDialog ( )
 
     return;
 }
-
-#if 0
-/** \brief  Runs the dialog
-    \return The response to the dialog
-
-    This function overrides the run function in the GTKmm dialog
-    class, but basically it only calls it.  This function only
-    handles the \c Gtk::RESPONSE_HELP return, and in that case it
-    brings up the help window.  All other return values are returned
-    to the calling function.
-*/
-int
-PrefDialog::run (void) {
-    int resp = Gtk::RESPONSE_HELP;
-    while (resp == Gtk::RESPONSE_HELP) {
-        resp = Gtk::Dialog::run();
-        if (resp == Gtk::RESPONSE_HELP) {
-            /*
-            if (_helpDialog == NULL) {
-                _helpDialog = new HelpDialog(_help);
-            }
-            */
-        }
-    }
-    return resp;
-}
-#endif
 
 void
 PrefDialog::preview_toggle () {

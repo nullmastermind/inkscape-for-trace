@@ -51,8 +51,7 @@ std::ofstream Extension::error_file;
     a name and an ID the module will be left in an errored state.
 */
 Extension::Extension (Inkscape::XML::Node * in_repr, Implementation::Implementation * in_imp)
-    : _help(nullptr)
-    , silent(false)
+    : silent(false)
     , _gui(true)
     , execution_env(nullptr)
 {
@@ -86,9 +85,6 @@ Extension::Extension (Inkscape::XML::Node * in_repr, Implementation::Implementat
             } /* id */
             if (!strcmp(chname, "name")) {
                 name = g_strdup (child_repr->firstChild()->content());
-            } /* name */
-            if (!strcmp(chname, "help")) {
-                _help = g_strdup (child_repr->firstChild()->content());
             } /* name */
             if (!strcmp(chname, "param") || !strcmp(chname, "_param")) {
                 Parameter * param;
@@ -786,29 +782,6 @@ void Extension::add_val(Glib::ustring labelstr, Glib::ustring valuestr, Gtk::Gri
     value->show();
 
     return;
-}
-
-Gtk::VBox *
-Extension::get_help_widget()
-{
-    Gtk::VBox * retval = Gtk::manage(new Gtk::VBox());
-    retval->set_border_width(4);
-
-    if (_help == nullptr) {
-        Gtk::Label * content = Gtk::manage(new Gtk::Label(_("Currently there is no help available for this Extension.  Please look on the Inkscape website or ask on the mailing lists if you have questions regarding this extension.")));
-        content->set_xalign(0);
-        content->set_yalign(0);
-        retval->pack_start(*content, true, true, 4);
-        content->set_line_wrap(true);
-        content->show();
-    } else {
-
-
-
-    }
-
-    retval->show();
-    return retval;
 }
 
 Gtk::VBox *

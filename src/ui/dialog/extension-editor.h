@@ -33,8 +33,6 @@ public:
 
     static ExtensionEditor &getInstance() { return *new ExtensionEditor(); }
 
-    static void show_help (gchar const * extension_id);
-
 protected:
     /** \brief  The view of the list of extensions on the left of the dialog */
     Gtk::TreeView _page_list;
@@ -42,8 +40,6 @@ protected:
     Glib::RefPtr<Gtk::TreeStore> _page_list_model;
     /** \brief  The notebook page that contains information */
     Gtk::ScrolledWindow _notebook_info;
-    /** \brief  The notebook page that contains help info */
-    Gtk::ScrolledWindow _notebook_help;
     /** \brief  The notebook page that holds all the parameters */
     Gtk::ScrolledWindow _notebook_params;
 
@@ -68,8 +64,8 @@ private:
                 an item in the extension list */
     Glib::ustring _selection_search;
 
-    ExtensionEditor(ExtensionEditor const &d);
-    ExtensionEditor& operator=(ExtensionEditor const &d);
+    ExtensionEditor(ExtensionEditor const &d) = delete;
+    ExtensionEditor& operator=(ExtensionEditor const &d) = delete;
 
     void on_pagelist_selection_changed();
     static void dbfunc (Inkscape::Extension::Extension * in_plug, gpointer in_data);
