@@ -863,6 +863,8 @@ TextToolbar::fontsize_value_changed()
     } else {
         osfs << size << sp_style_get_css_unit_string(unit);
     }
+
+  
     sp_repr_css_set_property (css, "font-size", osfs.str().c_str());
     SPILengthOrNormal font_size("font-size");
     font_size.read(osfs.str().c_str());
@@ -872,10 +874,35 @@ TextToolbar::fontsize_value_changed()
     // the style on the outer <text> objects we need to bypass this call.
     // bool outer = prefs->getInt("/tools/text/outer_style", false);
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    _freeze = false;
-    lineheight_value_changed_wrapped(font_size.computed);
-    _freeze = true;
-    sp_desktop_set_style(desktop, css, true, true);
+    if (_sub_selection_items.empty()) {
+        Inkscape::Selection *selection = desktop->getSelection();
+        auto itemlist= selection->items();
+        for(auto i=itemlist.begin();i!=itemlist.end(); ++i){
+            if (dynamic_cast<SPText *>(*i) || dynamic_cast<SPFlowtext *>(*i)) {
+                SPItem *item = *i;
+
+                // Scale by inverse of accumulated parent transform
+                SPCSSAttr *css_set = sp_repr_css_attr_new();
+                sp_repr_css_merge(css_set, css);
+                Geom::Affine const local(item->i2doc_affine());
+                double const ex(local.descrim());
+                if ( (ex != 0.0) && (ex != 1.0) ) {
+                    sp_css_attr_scale(css_set, 1/ex);
+                }
+                _freeze = false;
+                lineheight_value_changed_wrapped(font_size.computed);
+                _freeze = true;
+                item->changeCSS(css_set,"style");
+
+                sp_repr_css_attr_unref(css_set);
+            }
+        }
+    } else {
+        _freeze = false;
+        lineheight_value_changed_wrapped(font_size.computed);
+        _freeze = true;
+        sp_desktop_set_style (desktop, css, true, true);
+    }
 
 
     // If no selected objects, set default.
