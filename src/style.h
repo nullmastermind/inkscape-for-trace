@@ -353,7 +353,7 @@ SPCSSAttr *sp_css_attr_from_object(SPObject *object, unsigned int flags = SP_STY
 SPCSSAttr *sp_css_attr_unset_text(SPCSSAttr *css);
 SPCSSAttr *sp_css_attr_unset_blacklist(SPCSSAttr *css);
 SPCSSAttr *sp_css_attr_unset_uris(SPCSSAttr *css);
-SPCSSAttr *sp_css_attr_scale(SPCSSAttr *css, double ex);
+SPCSSAttr *sp_css_attr_scale(SPCSSAttr *css, double ex, bool scale_relative_font_size = false, bool scale_relative_line_height = false);
 
 void sp_style_unset_property_attrs(SPObject *o);
 

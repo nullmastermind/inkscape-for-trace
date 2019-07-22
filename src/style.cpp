@@ -1598,17 +1598,17 @@ sp_css_attr_scale_property_list(SPCSSAttr *css, gchar const *property, double ex
  * Scale any properties that may hold <length> by ex.
  */
 SPCSSAttr *
-sp_css_attr_scale(SPCSSAttr *css, double ex)
+sp_css_attr_scale(SPCSSAttr *css, double ex, bool scale_relative_font_size, bool scale_relative_line_height)
 {
     sp_css_attr_scale_property_single(css, "baseline-shift", ex);
     sp_css_attr_scale_property_single(css, "stroke-width", ex);
     sp_css_attr_scale_property_list  (css, "stroke-dasharray", ex);
     sp_css_attr_scale_property_single(css, "stroke-dashoffset", ex);
-    sp_css_attr_scale_property_single(css, "font-size", ex, true);
+    sp_css_attr_scale_property_single(css, "font-size", ex, !scale_relative_font_size);
     sp_css_attr_scale_property_single(css, "kerning", ex);
     sp_css_attr_scale_property_single(css, "letter-spacing", ex);
     sp_css_attr_scale_property_single(css, "word-spacing", ex);
-    sp_css_attr_scale_property_single(css, "line-height", ex, true);
+    sp_css_attr_scale_property_single(css, "line-height", ex, !scale_relative_line_height);
 
     return css;
 }
