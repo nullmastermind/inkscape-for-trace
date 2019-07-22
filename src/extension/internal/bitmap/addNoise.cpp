@@ -33,7 +33,7 @@ AddNoise::applyEffect(Magick::Image *image) {
 
 void
 AddNoise::refreshParameters(Inkscape::Extension::Effect *module) {	
-	_noiseTypeName = module->get_param_enum("noiseType");
+	_noiseTypeName = module->get_param_optiongroup("noiseType");
 }
 
 #include "../clear-n_.h"

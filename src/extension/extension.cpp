@@ -50,7 +50,7 @@ std::ofstream Extension::error_file;
     not related to the module directly.  If the Repr does not include
     a name and an ID the module will be left in an errored state.
 */
-Extension::Extension (Inkscape::XML::Node * in_repr, Implementation::Implementation * in_imp)
+Extension::Extension (Inkscape::XML::Node *in_repr, Implementation::Implementation *in_imp)
     : _gui(true)
     , execution_env(nullptr)
 {
@@ -67,50 +67,50 @@ Extension::Extension (Inkscape::XML::Node * in_repr, Implementation::Implementat
         imp = in_imp;
     }
 
-    // printf("Extension Constructor: ");
-    if (repr != nullptr) {
+    // Read XML tree and parse extension
+    if (repr) {
         Inkscape::XML::Node *child_repr = repr->firstChild();
-        /* TODO: Handle what happens if we don't have these two */
-        while (child_repr != nullptr) {
-            char const * chname = child_repr->name();
+        while (child_repr) {
+            const char *chname = child_repr->name();
 			if (!strncmp(chname, INKSCAPE_EXTENSION_NS_NC, strlen(INKSCAPE_EXTENSION_NS_NC))) {
 				chname += strlen(INKSCAPE_EXTENSION_NS);
 			}
-            if (chname[0] == '_') /* Allow _ for translation of tags */
+            if (chname[0] == '_') { // allow leading underscore in tag names for backwards-compatibility
                 chname++;
+            }
+
+            /* TODO: Handle what happens if we don't have name and id */
             if (!strcmp(chname, "id")) {
-                gchar const *val = child_repr->firstChild()->content();
-                id = g_strdup (val);
-            } /* id */
-            if (!strcmp(chname, "name")) {
-                name = g_strdup (child_repr->firstChild()->content());
-            } /* name */
-            if (!strcmp(chname, "param") || !strcmp(chname, "_param")) {
-                Parameter * param;
-                param = Parameter::make(child_repr, this);
-                if (param != nullptr)
+                const char *value = child_repr->firstChild()->content();
+                id = g_strdup(value);
+            } else if (!strcmp(chname, "name")) {
+                name = g_strdup(child_repr->firstChild()->content());
+            } else if (!strcmp(chname, "param")) {
+                Parameter *param = Parameter::make(child_repr, this);
+                if (param) {
                     parameters.push_back(param);
-            } /* param || _param */
-            if (!strcmp(chname, "dependency")) {
+                }
+            } else if (!strcmp(chname, "dependency")) {
                 _deps.push_back(new Dependency(child_repr));
-            } /* dependency */
-            if (!strcmp(chname, "script")) {
-                for (Inkscape::XML::Node *child = child_repr->firstChild(); child != nullptr ; child = child->next()) {
-                    if (child->type() == Inkscape::XML::ELEMENT_NODE) {
+            } else if (!strcmp(chname, "script")) { // check command as a dependency (see LP #505920)
+                for (Inkscape::XML::Node *child = child_repr->firstChild(); child != nullptr; child = child->next()) {
+                    if (child->type() == Inkscape::XML::ELEMENT_NODE) { // skip non-element nodes (see LP #1372200)
                         _deps.push_back(new Dependency(child));
                         break;
-                    } /* skip non-element nodes (see LP #1372200) */
+                    }
                 }
-            } /* check command as a dependency (see LP #505920) */
+            } else {
+                // We could do some sanity checking here.
+                // However, we don't really know which additional elements Extension subclasses might need...
+            }
+
             child_repr = child_repr->next();
         }
 
         db.register_ext (this);
     }
-    // printf("%s\n", name);
-    timer = nullptr;
 
-    return;
+    timer = nullptr;
 }
 
 /**
@@ -124,27 +124,27 @@ Extension::Extension (Inkscape::XML::Node * in_repr, Implementation::Implementat
 */
 Extension::~Extension ()
 {
-//    printf("Extension Destructor: %s\n", name);
     set_state(STATE_UNLOADED);
+
     db.unregister_ext(this);
+
     Inkscape::GC::release(repr);
+
     g_free(id);
     g_free(name);
+
     delete timer;
     timer = nullptr;
-    /** \todo Need to do parameters here */
 
     // delete parameters:
-    for (auto param:parameters) {
-        delete param;
+    for (auto parameter : parameters) {
+        delete parameter;
     }
 
     for (auto & _dep : _deps) {
         delete _dep;
     }
     _deps.clear();
-
-    return;
 }
 
 /**
@@ -373,7 +373,7 @@ Extension::deactivated ()
     return get_state() == STATE_DEACTIVATED;
 }
 
-Parameter *Extension::get_param(gchar const *name)
+Parameter *Extension::get_param(const gchar *name)
 {
     if (name == nullptr) {
         throw Extension::param_not_exist();
@@ -397,235 +397,238 @@ Parameter *Extension::get_param(gchar const *name)
     throw Extension::param_not_exist();
 }
 
-Parameter const *Extension::get_param(const gchar * name) const
+Parameter const *Extension::get_param(const gchar *name) const
 {
     return const_cast<Extension *>(this)->get_param(name);
-}
-
-gchar const *Extension::get_param_string(gchar const *name, SPDocument const *doc, Inkscape::XML::Node const *node) const
-{
-    Parameter const *param = get_param(name);
-    return param->get_string(doc, node);
-}
-
-const gchar *
-Extension::get_param_enum (const gchar * name, const SPDocument * doc, const Inkscape::XML::Node * node) const
-{
-    Parameter const *param = get_param(name);
-    return param->get_enum(doc, node);
-}
-
-/**
- * This is useful to find out, if a given string \c value is selectable in a ComboBox named \cname.
- *
- * @param name The name of the enum parameter to get.
- * @param doc The document to look in for document specific parameters.
- * @param node The node to look in for a specific parameter.
- * @return true if value exists, false if not
- */
-bool
-Extension::get_param_enum_contains(gchar const * name, gchar const * value, SPDocument * doc, Inkscape::XML::Node * node) const
-{
-    Parameter const *param = get_param(name);
-    return param->get_enum_contains(value, doc, node);
-}
-
-gchar const *
-Extension::get_param_optiongroup( gchar const * name, SPDocument const * doc, Inkscape::XML::Node const * node) const
-{
-    Parameter const*param = get_param(name);
-    return param->get_optiongroup(doc, node);
 }
 
 
 /**
     \return   The value of the parameter identified by the name
-    \brief    Gets a parameter identified by name with the bool placed
-              in value.
-    \param    name    The name of the parameter to get
+    \brief    Gets a parameter identified by name with the bool placed in value.
+    \param    name   The name of the parameter to get
     \param    doc    The document to look in for document specific parameters
     \param    node   The node to look in for a specific parameter
 
-    Look up in the parameters list, then execute the function on that
-    found parameter.
+    Look up in the parameters list, const then execute the function on that found parameter.
 */
 bool
-Extension::get_param_bool (const gchar * name, const SPDocument * doc, const Inkscape::XML::Node * node)
+Extension::get_param_bool (const gchar *name, const SPDocument *doc, const Inkscape::XML::Node *node) const
 {
-    Parameter * param;
+    const Parameter *param;
     param = get_param(name);
     return param->get_bool(doc, node);
 }
 
 /**
     \return   The integer value for the parameter specified
-    \brief    Gets a parameter identified by name with the integer placed
-              in value.
-    \param    name    The name of the parameter to get
+    \brief    Gets a parameter identified by name with the integer placed in value.
+    \param    name   The name of the parameter to get
     \param    doc    The document to look in for document specific parameters
     \param    node   The node to look in for a specific parameter
 
-    Look up in the parameters list, then execute the function on that
-    found parameter.
+    Look up in the parameters list, const then execute the function on that found parameter.
 */
 int
-Extension::get_param_int (const gchar * name, const SPDocument * doc, const Inkscape::XML::Node * node)
+Extension::get_param_int (const gchar *name, const SPDocument *doc, const Inkscape::XML::Node *node) const
 {
-    Parameter * param;
+    const Parameter *param;
     param = get_param(name);
     return param->get_int(doc, node);
 }
 
 /**
     \return   The float value for the parameter specified
-    \brief    Gets a parameter identified by name with the float placed
-              in value.
-    \param    name    The name of the parameter to get
+    \brief    Gets a parameter identified by name with the float in value.
+    \param    name   The name of the parameter to get
     \param    doc    The document to look in for document specific parameters
     \param    node   The node to look in for a specific parameter
 
-    Look up in the parameters list, then execute the function on that
-    found parameter.
+    Look up in the parameters list, const then execute the function on that found parameter.
 */
 float
-Extension::get_param_float (const gchar * name, const SPDocument * doc, const Inkscape::XML::Node * node)
+Extension::get_param_float (const gchar *name, const SPDocument *doc, const Inkscape::XML::Node *node) const
 {
-    Parameter * param;
+    const Parameter *param;
     param = get_param(name);
     return param->get_float(doc, node);
 }
 
 /**
     \return   The string value for the parameter specified
-    \brief    Gets a parameter identified by name with the float placed
-              in value.
-    \param    name    The name of the parameter to get
+    \brief    Gets a parameter identified by name with the string placed in value.
+    \param    name   The name of the parameter to get
     \param    doc    The document to look in for document specific parameters
     \param    node   The node to look in for a specific parameter
 
-    Look up in the parameters list, then execute the function on that
-    found parameter.
+    Look up in the parameters list, const then execute the function on that found parameter.
+*/
+const char *
+Extension::get_param_string (const gchar *name, const SPDocument *doc, const Inkscape::XML::Node *node) const
+{
+    const Parameter *param;
+    param = get_param(name);
+    return param->get_string(doc, node);
+}
+
+/**
+    \return   The string value for the parameter specified
+    \brief    Gets a parameter identified by name with the string placed in value.
+    \param    name   The name of the parameter to get
+    \param    doc    The document to look in for document specific parameters
+    \param    node   The node to look in for a specific parameter
+
+    Look up in the parameters list, const then execute the function on that found parameter.
+*/
+const char *
+Extension::get_param_optiongroup (const gchar *name, const SPDocument *doc, const Inkscape::XML::Node *node) const
+{
+    const Parameter *param;
+    param = get_param(name);
+    return param->get_optiongroup(doc, node);
+}
+
+/**
+ * This is useful to find out, if a given string \c value is selectable in a optiongroup named \cname.
+ *
+ * @param  name The name of the optiongroup parameter to get.
+ * @param  doc  The document to look in for document specific parameters.
+ * @param  node The node to look in for a specific parameter.
+ * @return true if value exists, false if not
+ */
+bool
+Extension::get_param_optiongroup_contains(const gchar *name, const char *value, const SPDocument *doc, const Inkscape::XML::Node *node) const
+{
+    const Parameter *param;
+    param = get_param(name);
+    return param->get_optiongroup_contains(value, doc, node);
+}
+
+/**
+    \return   The unsigned integer RGBA value for the parameter specified
+    \brief    Gets a parameter identified by name with the unsigned int placed in value.
+    \param    name   The name of the parameter to get
+    \param    doc    The document to look in for document specific parameters
+    \param    node   The node to look in for a specific parameter
+
+    Look up in the parameters list, const then execute the function on that found parameter.
 */
 guint32
-Extension::get_param_color (const gchar * name, const SPDocument * doc, const Inkscape::XML::Node * node) const
+Extension::get_param_color (const gchar *name, const SPDocument *doc, const Inkscape::XML::Node *node) const
 {
-    Parameter const *param = get_param(name);
+    const Parameter *param;
+    param = get_param(name);
     return param->get_color(doc, node);
 }
 
 /**
     \return   The passed in value
-    \brief    Sets a parameter identified by name with the boolean
-              in the parameter value.
-    \param    name    The name of the parameter to set
-    \param    value   The value to set the parameter to
+    \brief    Sets a parameter identified by name with the boolean in the parameter value.
+    \param    name   The name of the parameter to set
+    \param    value  The value to set the parameter to
     \param    doc    The document to look in for document specific parameters
     \param    node   The node to look in for a specific parameter
 
-    Look up in the parameters list, then execute the function on that
-    found parameter.
+    Look up in the parameters list, const then execute the function on that found parameter.
 */
 bool
-Extension::set_param_bool (const gchar * name, bool value, SPDocument * doc, Inkscape::XML::Node * node)
+Extension::set_param_bool (const gchar *name, const bool value, SPDocument *doc, Inkscape::XML::Node *node)
 {
-    Parameter * param;
+    Parameter *param;
     param = get_param(name);
     return param->set_bool(value, doc, node);
 }
 
 /**
     \return   The passed in value
-    \brief    Sets a parameter identified by name with the integer
-              in the parameter value.
-    \param    name    The name of the parameter to set
-    \param    value   The value to set the parameter to
+    \brief    Sets a parameter identified by name with the integer in the parameter value.
+    \param    name   The name of the parameter to set
+    \param    value  The value to set the parameter to
     \param    doc    The document to look in for document specific parameters
     \param    node   The node to look in for a specific parameter
 
-    Look up in the parameters list, then execute the function on that
-    found parameter.
+    Look up in the parameters list, const then execute the function on that found parameter.
 */
 int
-Extension::set_param_int (const gchar * name, int value, SPDocument * doc, Inkscape::XML::Node * node)
+Extension::set_param_int (const gchar *name, const int value, SPDocument *doc, Inkscape::XML::Node *node)
 {
-    Parameter * param;
+    Parameter *param;
     param = get_param(name);
     return param->set_int(value, doc, node);
 }
 
 /**
     \return   The passed in value
-    \brief    Sets a parameter identified by name with the integer
-              in the parameter value.
-    \param    name    The name of the parameter to set
-    \param    value   The value to set the parameter to
+    \brief    Sets a parameter identified by name with the float in the parameter value.
+    \param    name   The name of the parameter to set
+    \param    value  The value to set the parameter to
     \param    doc    The document to look in for document specific parameters
     \param    node   The node to look in for a specific parameter
 
-    Look up in the parameters list, then execute the function on that
-    found parameter.
+    Look up in the parameters list, const then execute the function on that found parameter.
 */
 float
-Extension::set_param_float (const gchar * name, float value, SPDocument * doc, Inkscape::XML::Node * node)
+Extension::set_param_float (const gchar *name, const float value, SPDocument *doc, Inkscape::XML::Node *node)
 {
-    Parameter * param;
+    Parameter *param;
     param = get_param(name);
     return param->set_float(value, doc, node);
 }
 
 /**
     \return   The passed in value
-    \brief    Sets a parameter identified by name with the string
-              in the parameter value.
-    \param    name    The name of the parameter to set
-    \param    value   The value to set the parameter to
+    \brief    Sets a parameter identified by name with the string in the parameter value.
+    \param    name   The name of the parameter to set
+    \param    value  The value to set the parameter to
     \param    doc    The document to look in for document specific parameters
     \param    node   The node to look in for a specific parameter
 
-    Look up in the parameters list, then execute the function on that
-    found parameter.
+    Look up in the parameters list, const then execute the function on that found parameter.
 */
-const gchar *
-Extension::set_param_string (const gchar * name, const gchar * value, SPDocument * doc, Inkscape::XML::Node * node)
+const char *
+Extension::set_param_string (const gchar *name, const char *value, SPDocument *doc, Inkscape::XML::Node *node)
 {
-    Parameter * param;
+    Parameter *param;
     param = get_param(name);
     return param->set_string(value, doc, node);
 }
 
-gchar const *
-Extension::set_param_optiongroup(gchar const * name, gchar const * value, SPDocument * doc, Inkscape::XML::Node * node)
-{
-    Parameter * param = get_param(name);
-    return param->set_optiongroup(value, doc, node);
-}
-
-gchar const *
-Extension::set_param_enum(gchar const * name, gchar const * value, SPDocument * doc, Inkscape::XML::Node * node)
-{
-    Parameter * param = get_param(name);
-    return param->set_enum(value, doc, node);
-}
-
-
 /**
     \return   The passed in value
-    \brief    Sets a parameter identified by name with the string
-              in the parameter value.
-    \param    name    The name of the parameter to set
-    \param    value   The value to set the parameter to
+    \brief    Sets a parameter identified by name with the string in the parameter value.
+    \param    name   The name of the parameter to set
+    \param    value  The value to set the parameter to
     \param    doc    The document to look in for document specific parameters
     \param    node   The node to look in for a specific parameter
 
-    Look up in the parameters list, then execute the function on that
-    found parameter.
+    Look up in the parameters list, const then execute the function on that found parameter.
+*/
+const char *
+Extension::set_param_optiongroup (const gchar *name, const char *value, SPDocument *doc, Inkscape::XML::Node *node)
+{
+    Parameter *param;
+    param = get_param(name);
+    return param->set_optiongroup(value, doc, node);
+}
+
+/**
+    \return   The passed in value
+    \brief    Sets a parameter identified by name with the unsigned integer RGBA value in the parameter value.
+    \param    name   The name of the parameter to set
+    \param    value  The value to set the parameter to
+    \param    doc    The document to look in for document specific parameters
+    \param    node   The node to look in for a specific parameter
+
+Look up in the parameters list, const then execute the function on that found parameter.
 */
 guint32
-Extension::set_param_color (const gchar * name, guint32 color, SPDocument * doc, Inkscape::XML::Node * node)
+Extension::set_param_color (const gchar *name, const guint32 color, SPDocument *doc, Inkscape::XML::Node *node)
 {
-    Parameter* param = get_param(name);
+    Parameter *param;
+    param = get_param(name);
     return param->set_color(color, doc, node);
 }
+
 
 /** \brief A function to open the error log file. */
 void
@@ -690,7 +693,7 @@ public:
     If all parameters are gui_hidden = true NULL is returned as well.
 */
 Gtk::Widget *
-Extension::autogui (SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
+Extension::autogui (SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal)
 {
     if (!_gui || param_visible_count() == 0) return nullptr;
 

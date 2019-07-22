@@ -139,7 +139,7 @@ CairoRendererPdfOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, 
 
     int level = 0;
     try {
-        const gchar *new_level = mod->get_param_enum("PDFversion");
+        const gchar *new_level = mod->get_param_optiongroup("PDFversion");
         if((new_level != nullptr) && (g_ascii_strcasecmp("PDF-1.5", new_level) == 0)) {
             level = 1;
         }

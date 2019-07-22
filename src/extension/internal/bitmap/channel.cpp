@@ -36,7 +36,7 @@ Channel::applyEffect(Magick::Image *image) {
 
 void
 Channel::refreshParameters(Inkscape::Extension::Effect *module) {	
-	_layerName = module->get_param_enum("layer");
+	_layerName = module->get_param_optiongroup("layer");
 }
 
 #include "../clear-n_.h"

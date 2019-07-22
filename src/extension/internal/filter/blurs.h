@@ -224,7 +224,7 @@ CrossBlur::get_filter_text (Inkscape::Extension::Extension * ext)
     fade << ext->get_param_float("fade");
     hblur << ext->get_param_float("hblur");
     vblur << ext->get_param_float("vblur");
-    blend << ext->get_param_enum("blend");
+    blend << ext->get_param_optiongroup("blend");
     
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Cross Blur\">\n"
@@ -387,7 +387,7 @@ ImageBlur::get_filter_text (Inkscape::Extension::Extension * ext)
     g << ((color >> 16) & 0xff);
     b << ((color >>  8) & 0xff);
     a << (color & 0xff) / 255.0F;
-    blend << ext->get_param_enum("blend");
+    blend << ext->get_param_optiongroup("blend");
 
     if (ext->get_param_bool("background")) {
         background << "BackgroundImage" ;

@@ -54,7 +54,7 @@ PrefDialog::PrefDialog (Glib::ustring name, Gtk::Widget * controls, Effect * eff
 {
     this->set_default_size(0,0);  // we want the window to be as small as possible instead of clobbering up space
 
-    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox());
+    Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox());
     if (controls == nullptr) {
         if (_effect == nullptr) {
             std::cout << "AH!!!  No controls and no effect!!!" << std::endl;
@@ -98,7 +98,7 @@ PrefDialog::PrefDialog (Glib::ustring name, Gtk::Widget * controls, Effect * eff
 
         this->get_content_area()->pack_start(*hbox, false, false, 0);
 
-        Gtk::Box * hbox = dynamic_cast<Gtk::Box *>(_button_preview);
+        Gtk::Box *hbox = dynamic_cast<Gtk::Box *>(_button_preview);
         if (hbox != nullptr) {
             _checkbox_preview = dynamic_cast<Gtk::CheckButton *>(hbox->get_children().front());
         }

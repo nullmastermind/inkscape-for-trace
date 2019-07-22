@@ -52,18 +52,25 @@ extern Glib::ustring const extension_pref_root;
  * different parameters.
  */
 class Parameter {
-
 public:
+
+    enum Translatable {
+        UNSET, YES, NO
+    };
+
     Parameter(gchar const *name,
               gchar const *text,
               gchar const *description,
               bool hidden,
               int indent,
-              Inkscape::Extension::Extension * ext);
+              Inkscape::Extension::Extension *ext);
 
     Parameter(gchar const *name,
               gchar const *text,
-              Inkscape::Extension::Extension * ext);
+              Inkscape::Extension::Extension *ext);
+
+    Parameter(Inkscape::XML::Node *in_repr,
+              Inkscape::Extension::Extension *ext);
 
     virtual ~Parameter();
 
@@ -77,36 +84,34 @@ public:
     float get_float(SPDocument const *doc, Inkscape::XML::Node const *node) const;
 
     /** Wrapper to cast to the object and use it's function. */
-    gchar const *get_string(SPDocument const *doc, Inkscape::XML::Node const *node) const;
+    const char *get_string(SPDocument const *doc, Inkscape::XML::Node const *node) const;
 
+    /** Wrapper to cast to the object and use it's function. */
+    const char *get_optiongroup(SPDocument const * doc, Inkscape::XML::Node const *node) const;
+    bool get_optiongroup_contains(const char *value, SPDocument const *doc, Inkscape::XML::Node const *node) const;
+
+    /** Wrapper to cast to the object and use it's function. */
     guint32 get_color(SPDocument const *doc, Inkscape::XML::Node const *node) const;
 
     /** Wrapper to cast to the object and use it's function. */
-    gchar const *get_enum(SPDocument const *doc, Inkscape::XML::Node const *node) const;
+    bool set_bool(bool in, SPDocument *doc, Inkscape::XML::Node *node);
 
     /** Wrapper to cast to the object and use it's function. */
-    bool get_enum_contains(gchar const * value, SPDocument const *doc, Inkscape::XML::Node const *node) const;
+    int set_int(int  in, SPDocument *doc, Inkscape::XML::Node *node);
 
     /** Wrapper to cast to the object and use it's function. */
-    gchar const *get_optiongroup(SPDocument const * doc, Inkscape::XML::Node const *node) const;
+    float set_float(float in, SPDocument *doc, Inkscape::XML::Node *node);
 
     /** Wrapper to cast to the object and use it's function. */
-    bool set_bool(bool in, SPDocument * doc, Inkscape::XML::Node * node);
+    const char *set_string(const char *in, SPDocument *doc, Inkscape::XML::Node *node);
 
     /** Wrapper to cast to the object and use it's function. */
-    int set_int(int  in, SPDocument * doc, Inkscape::XML::Node * node);
+    const char *set_optiongroup(const char *in, SPDocument *doc, Inkscape::XML::Node *node);
 
-    float set_float(float in, SPDocument * doc, Inkscape::XML::Node * node);
+    /** Wrapper to cast to the object and use it's function. */
+    guint32 set_color(guint32 in, SPDocument *doc, Inkscape::XML::Node *node);
 
-    gchar const *set_optiongroup(gchar const *in, SPDocument * doc, Inkscape::XML::Node *node);
-
-    gchar const *set_enum(gchar const * in, SPDocument * doc, Inkscape::XML::Node *node);
-
-    gchar const *set_string(gchar const * in, SPDocument * doc, Inkscape::XML::Node * node);
-
-    guint32 set_color(guint32 in, SPDocument * doc, Inkscape::XML::Node * node);
-
-    gchar const * name() const {return _name;}
+    gchar const *name() const { return _name; }
 
     /**
      * This function creates a parameter that can be used later.  This
@@ -132,11 +137,11 @@ public:
      * @param  in_repr The XML describing the parameter.
      * @return a pointer to a new Parameter if applicable, null otherwise..
      */
-    static Parameter *make(Inkscape::XML::Node * in_repr, Inkscape::Extension::Extension * in_ext);
+    static Parameter *make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *in_ext);
 
-    virtual Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal);
+    virtual Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal);
 
-    gchar const * get_tooltip() const { return _description; }
+    const gchar *get_tooltip() const { return _description; }
 
     /** Indicates if the GUI for this parameter is hidden or not */
     bool get_hidden() const { return _hidden; }
@@ -171,27 +176,41 @@ public:
     /** An error class for when a parameter is called on a type it is not */
     class param_no_name {};
     class param_no_type {};
+    class param_not_bool_param {};
     class param_not_color_param {};
-    class param_not_enum_param {};
-    class param_not_optiongroup_param {};
-    class param_not_string_param {};
     class param_not_float_param {};
     class param_not_int_param {};
-    class param_not_bool_param {};
+    class param_not_optiongroup_param {};
+    class param_not_string_param {};
 
 
 protected:
-    /** Parameter text to show as the GUI label. */
-    gchar * _text;
+    /** Which extension is this parameter attached to. */
+    Inkscape::Extension::Extension *_extension = nullptr;
 
-    /** Extended description of the parameter (crrently shown as tooltip on hover). */
-    gchar * _description;
+    /** The name of this parameter. */
+    gchar *_name = nullptr;
+
+    /** Parameter text to show as the GUI label. */
+    gchar *_text = nullptr;
+
+    /** Extended description of the parameter (currently shown as tooltip on hover). */
+    gchar *_description = nullptr;
 
     /** Whether the parameter is visible. */
-    bool _hidden;
+    bool _hidden = false;
 
     /** Indentation level of the parameter. */
-    int _indent;
+    int _indent = 0;
+
+    /** Appearance of the parameter (not used by all Parameters). */
+    gchar *_appearance = nullptr;
+
+    /** Is parameter translatable? */
+    Translatable _translatable = UNSET;
+
+    /** context for translation of translatable strings. */
+    gchar *_context = nullptr;
 
 
     /* **** funcs **** */
@@ -200,14 +219,6 @@ protected:
      * Build the name to write the parameter from the extension's ID and the name of this parameter.
      */
     gchar *pref_name() const;
-
-
-private:
-    /** Which extension is this parameter attached to. */
-    Inkscape::Extension::Extension *_extension;
-
-    /** The name of this parameter. */
-    gchar *_name;
 };
 
 }  // namespace Extension

@@ -130,16 +130,16 @@ FeltFeather::get_filter_text (Inkscape::Extension::Extension * ext)
     dilat << ext->get_param_float("dilat");
     erosion << -ext->get_param_float("erosion");
     
-    turbulence << ext->get_param_enum("turbulence");
+    turbulence << ext->get_param_optiongroup("turbulence");
     hfreq << ext->get_param_float("hfreq") / 100;
     vfreq << ext->get_param_float("vfreq") / 100;
     complexity << ext->get_param_int("complexity");
     variation << ext->get_param_int("variation");
     intensity << ext->get_param_float("intensity");
 
-    stroke << ext->get_param_enum("stroke");
+    stroke << ext->get_param_optiongroup("stroke");
     
-    const gchar *maptype = ext->get_param_enum("type");
+    const gchar *maptype = ext->get_param_optiongroup("type");
     if (g_ascii_strcasecmp("in", maptype) == 0) {
         map << "composite3";
     } else {
@@ -225,7 +225,7 @@ Roughen::get_filter_text (Inkscape::Extension::Extension * ext)
     std::ostringstream variation;
     std::ostringstream intensity;
     
-    type << ext->get_param_enum("type");
+    type << ext->get_param_optiongroup("type");
     hfreq << ext->get_param_float("hfreq") / 100;
     vfreq << ext->get_param_float("vfreq") / 100;
     complexity << ext->get_param_int("complexity");

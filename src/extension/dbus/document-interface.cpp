@@ -1447,7 +1447,7 @@ document_interface_get_children (DocumentInterface *doc_interface,  char *name, 
 gchar* 
 document_interface_get_parent (DocumentInterface *doc_interface,  char *name, GError **error)
 {
-  SPItem* node=(SPItem* )get_object_by_name(doc_interface->target.getDocument(), name, error);
+  SPItem*node=(SPItem* )get_object_by_name(doc_interface->target.getDocument(), name, error);
   
   SPObject* parent=node->parent;
 

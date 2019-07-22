@@ -155,7 +155,7 @@ Chromolitho::get_filter_text (Inkscape::Extension::Extension * ext)
     light << ext->get_param_float("light");
     saturation << ext->get_param_float("saturation");
     noise << (-1000 - ext->get_param_int("noise"));
-    dblend << ext->get_param_enum("dblend");
+    dblend << ext->get_param_optiongroup("dblend");
     smooth << ext->get_param_float("smooth");
 
     if (ext->get_param_bool("dented")) {
@@ -174,7 +174,7 @@ Chromolitho::get_filter_text (Inkscape::Extension::Extension * ext)
     grainyf << (ext->get_param_float("grainyf") / 1000);
     grainc << ext->get_param_int("grainc");
     grainv << ext->get_param_int("grainv");
-    gblend << ext->get_param_enum("gblend");
+    gblend << ext->get_param_optiongroup("gblend");
     grainexp << ext->get_param_float("grainexp");
     grainero << (-ext->get_param_float("grainero"));
     if (ext->get_param_bool("graincol"))
@@ -524,7 +524,7 @@ Electrize::get_filter_text (Inkscape::Extension::Extension * ext)
     std::ostringstream values;
 
     blur << ext->get_param_float("blur");
-    type << ext->get_param_enum("type");
+    type << ext->get_param_optiongroup("type");
 
     // TransfertComponent table values are calculated based on the effect level and inverted parameters.
     int val = 0;
@@ -620,8 +620,8 @@ NeonDraw::get_filter_text (Inkscape::Extension::Extension * ext)
     std::ostringstream lightness;
     std::ostringstream type;
 
-    type << ext->get_param_enum("type");
-    blend << ext->get_param_enum("blend");
+    type << ext->get_param_optiongroup("type");
+    blend << ext->get_param_optiongroup("blend");
     simply << ext->get_param_float("simply");
     width << ext->get_param_float("width");
     lightness << ext->get_param_float("lightness");
@@ -760,13 +760,13 @@ PointEngraving::get_filter_text (Inkscape::Extension::Extension * ext)
     std::ostringstream iof;
     std::ostringstream iop;
 
-    type << ext->get_param_enum("type");
+    type << ext->get_param_optiongroup("type");
     hfreq << ext->get_param_float("hfreq") / 100;
     vfreq << ext->get_param_float("vfreq") / 100;
     complexity << ext->get_param_int("complexity");
     variation << ext->get_param_int("variation");
     reduction << (-1000 - ext->get_param_int("reduction"));
-    blend << ext->get_param_enum("blend");
+    blend << ext->get_param_optiongroup("blend");
     lightness << ext->get_param_float("lightness");
     grain << ext->get_param_float("grain");
     erase << ext->get_param_float("erase");
@@ -898,8 +898,8 @@ Posterize::get_filter_text (Inkscape::Extension::Extension * ext)
     std::ostringstream transf;
     std::ostringstream antialias;
     
-    table << ext->get_param_enum("table");
-    blendmode << ext->get_param_enum("blend");
+    table << ext->get_param_optiongroup("table");
+    blendmode << ext->get_param_optiongroup("blend");
     blur1 << ext->get_param_float("blur1");
     blur2 << ext->get_param_float("blur2");
     presat << ext->get_param_float("presaturation");
@@ -908,7 +908,7 @@ Posterize::get_filter_text (Inkscape::Extension::Extension * ext)
     // TransfertComponent table values are calculated based on the poster type.
     transf << "0";
     int levels = ext->get_param_int("levels") + 1;
-    const gchar *effecttype =  ext->get_param_enum("type");
+    const gchar *effecttype =  ext->get_param_optiongroup("type");
     if (levels == 1) {
         if ((g_ascii_strcasecmp("dented", effecttype) == 0)) {
             transf << " 1 0 1";

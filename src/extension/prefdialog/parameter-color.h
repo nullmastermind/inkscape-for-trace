@@ -31,29 +31,24 @@ private:
 
     Inkscape::UI::SelectedColor _color;
     sigc::connection _color_changed;
+    sigc::connection _color_released;
 public:
-    ParamColor(const gchar * name,
-               const gchar * text,
-               const gchar * description,
-               bool hidden,
-               int indent,
-               Inkscape::Extension::Extension * ext,
-               Inkscape::XML::Node * xml);
+    ParamColor(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
     ~ParamColor() override;
 
     /** Returns \c _value, with a \i const to protect it. */
     guint32 get( SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/ ) const { return _color.value(); }
 
-    guint32 set (guint32 in, SPDocument * doc, Inkscape::XML::Node * node);
+    guint32 set (guint32 in, SPDocument *doc, Inkscape::XML::Node *node);
 
-    Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) override;
+    Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
 
     // Explicitly call superclass version to avoid method being hidden.
     void string(std::list <std::string> &list) const override { return Parameter::string(list); }
 
     void string (std::string &string) const override;
 
-    sigc::signal<void> * _changeSignal;
+    sigc::signal<void> *_changeSignal;
 
 }; // class ParamColor
 

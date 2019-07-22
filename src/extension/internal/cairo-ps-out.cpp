@@ -137,7 +137,7 @@ CairoPsOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar con
 
     int level = CAIRO_PS_LEVEL_2;
     try {
-        const gchar *new_level = mod->get_param_enum("PSlevel");
+        const gchar *new_level = mod->get_param_optiongroup("PSlevel");
         if((new_level != nullptr) && (g_ascii_strcasecmp("PS3", new_level) == 0)) {
             level = CAIRO_PS_LEVEL_3;
         }
@@ -226,7 +226,7 @@ CairoEpsOutput::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar co
 
     int level = CAIRO_PS_LEVEL_2;
     try {
-        const gchar *new_level = mod->get_param_enum("PSlevel");
+        const gchar *new_level = mod->get_param_optiongroup("PSlevel");
         if((new_level != nullptr) && (g_ascii_strcasecmp("PS3", new_level) == 0)) {
             level = CAIRO_PS_LEVEL_3;
         }

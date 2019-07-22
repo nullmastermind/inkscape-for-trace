@@ -97,7 +97,7 @@ Crosssmooth::get_filter_text (Inkscape::Extension::Extension * ext)
     std::ostringstream antialias;
     std::ostringstream content;
 
-    type << ext->get_param_enum("type");
+    type << ext->get_param_optiongroup("type");
     width << ext->get_param_float("width");
     level << ext->get_param_float("level");
     dilat << ext->get_param_float("dilat");
@@ -255,7 +255,7 @@ Outline::get_filter_text (Inkscape::Extension::Extension * ext)
     fopacity << ext->get_param_float("fopacity");
     sopacity << ext->get_param_float("sopacity");
 
-    const gchar *position = ext->get_param_enum("position");
+    const gchar *position = ext->get_param_optiongroup("position");
     if((g_ascii_strcasecmp("inside", position) == 0)) {
     // Indide
         c1in << "SourceGraphic";
@@ -279,7 +279,7 @@ Outline::get_filter_text (Inkscape::Extension::Extension * ext)
         c2in << "blur2";
     }
 
-    c2op << ext->get_param_enum("type");
+    c2op << ext->get_param_optiongroup("type");
         
     if (ext->get_param_bool("outline")) {
         c4in << "composite3";

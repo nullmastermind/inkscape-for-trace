@@ -79,7 +79,7 @@ EdgeDetect::get_filter_text (Inkscape::Extension::Extension * ext)
     std::ostringstream inverted;
     std::ostringstream level;
     
-    const gchar *type = ext->get_param_enum("type");
+    const gchar *type = ext->get_param_optiongroup("type");
 
     level << 1 / ext->get_param_float("level");
     

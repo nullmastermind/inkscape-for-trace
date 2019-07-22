@@ -86,8 +86,8 @@ Blend::get_filter_text (Inkscape::Extension::Extension * ext)
     std::ostringstream source;
     std::ostringstream mode;
 
-    source << ext->get_param_enum("source");
-    mode << ext->get_param_enum("mode");
+    source << ext->get_param_optiongroup("source");
+    mode << ext->get_param_optiongroup("mode");
 
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Blend\">\n"

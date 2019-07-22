@@ -29,17 +29,7 @@ namespace Extension {
  */
 class ParamBool : public Parameter {
 public:
-
-    /**
-     * Use the superclass' allocator and set the \c _value.
-     */
-    ParamBool(const gchar * name,
-              const gchar * text,
-              const gchar * description,
-              bool hidden,
-              int indent,
-              Inkscape::Extension::Extension * ext,
-              Inkscape::XML::Node * xml);
+    ParamBool(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
 
     /**
      * Returns the current state/value.
@@ -56,13 +46,13 @@ public:
      * @param  doc  A document that should be used to set the value.
      * @param  node The node where the value may be placed
      */
-    bool set(bool in, SPDocument * doc, Inkscape::XML::Node * node);
+    bool set(bool in, SPDocument *doc, Inkscape::XML::Node *node);
 
     /**
      * Creates a bool check button for a bool parameter.
      * Builds a hbox with a label and a check button in it.
      */
-    Gtk::Widget *get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) override;
+    Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
 
     // Explicitly call superclass version to avoid method being hidden.
     void string(std::list <std::string> &list) const override { return Parameter::string(list); }
@@ -75,7 +65,7 @@ public:
 
 private:
     /** Internal value. */
-    bool _value;
+    bool _value = true;
 };
 
 }  // namespace Extension

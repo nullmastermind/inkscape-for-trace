@@ -189,83 +189,63 @@ private:
      Parameter const *get_param(const gchar * name) const;
 
 public:
-    bool             get_param_bool   (const gchar * name,
-                                       const SPDocument *   doc = nullptr,
-                                       const Inkscape::XML::Node * node = nullptr);
-
-    int              get_param_int    (const gchar * name,
-                                       const SPDocument *   doc = nullptr,
-                                       const Inkscape::XML::Node * node = nullptr);
-
-    float            get_param_float  (const gchar * name,
-                                       const SPDocument *   doc = nullptr,
-                                       const Inkscape::XML::Node * node = nullptr);
-
-    /**
-     * Gets a parameter identified by name with the string placed in value.
-     * It isn't duplicated into the value string. Look up in the parameters list,
-     * then execute the function on that found parameter.
-     *
-     * @param name The name of the parameter to get.
-     * @param doc The document to look in for document specific parameters.
-     * @param node The node to look in for a specific parameter.
-     * @return A constant pointer to the string held by the parameters.
-     */
-    gchar const *get_param_string(gchar const *name,
-                                  SPDocument const *doc = nullptr,
-                                  Inkscape::XML::Node const *node = nullptr) const;
-
-    guint32          get_param_color  (const gchar * name,
-                                       const SPDocument *   doc = nullptr,
-                                       const Inkscape::XML::Node * node = nullptr) const;
-
-    const gchar *    get_param_enum   (const gchar * name,
-                                       const SPDocument *   doc = nullptr,
-                                       const Inkscape::XML::Node * node = nullptr) const;
-
-    gchar const *get_param_optiongroup( gchar const * name,
-                                        SPDocument const *   doc = nullptr,
-                                        Inkscape::XML::Node const * node = nullptr) const;
-
-    bool             get_param_enum_contains(gchar const * name,
-                                             gchar const * value,
-                                             SPDocument  * doc = nullptr,
-                                             Inkscape::XML::Node * node = nullptr) const;
-
-    bool             set_param_bool   (const gchar * name,
-                                       bool          value,
-                                       SPDocument *   doc = nullptr,
-                                       Inkscape::XML::Node *       node = nullptr);
-
-    int              set_param_int    (const gchar * name,
-                                       int           value,
-                                       SPDocument *   doc = nullptr,
-                                       Inkscape::XML::Node *       node = nullptr);
-
-    float            set_param_float  (const gchar * name,
-                                       float         value,
-                                       SPDocument *   doc = nullptr,
-                                       Inkscape::XML::Node *       node = nullptr);
-
-    const gchar *    set_param_string (const gchar * name,
-                                       const gchar * value,
-                                       SPDocument *   doc = nullptr,
-                                       Inkscape::XML::Node *       node = nullptr);
-
-    gchar const * set_param_optiongroup(gchar const * name,
-                                        gchar const * value,
-                                        SPDocument * doc = nullptr,
-                                        Inkscape::XML::Node * node = nullptr);
-
-    gchar const *    set_param_enum   (gchar const * name,
-                                       gchar const * value,
-                                       SPDocument * doc = nullptr,
-                                       Inkscape::XML::Node * node = nullptr);
-
-    guint32          set_param_color  (const gchar * name,
-                                       guint32 color,
-                                       SPDocument *   doc = nullptr,
-                                       Inkscape::XML::Node *       node = nullptr);
+    bool        get_param_bool          (const gchar *name,
+                                         const SPDocument *doc = nullptr,
+                                         const Inkscape::XML::Node *node = nullptr) const;
+                                        
+    int         get_param_int           (const gchar *name,
+                                         const SPDocument *doc = nullptr,
+                                         const Inkscape::XML::Node *node = nullptr) const;
+                                        
+    float       get_param_float         (const gchar *name,
+                                         const SPDocument *doc = nullptr,
+                                         const Inkscape::XML::Node *node = nullptr) const;
+                                        
+    const char *get_param_string        (const gchar *name,
+                                         const SPDocument *doc = nullptr,
+                                         const Inkscape::XML::Node *node = nullptr) const;
+                                        
+    const char *get_param_optiongroup   (const gchar *name,
+                                         const SPDocument *doc = nullptr,
+                                         const Inkscape::XML::Node *node = nullptr) const;
+    bool get_param_optiongroup_contains (const gchar *name,
+                                         const char *value,
+                                         const SPDocument *doc = nullptr,
+                                         const Inkscape::XML::Node * node = nullptr) const;
+                                        
+    guint32     get_param_color         (const gchar *name,
+                                         const SPDocument *doc = nullptr,
+                                         const Inkscape::XML::Node *node = nullptr) const;
+                                        
+    bool        set_param_bool          (const gchar *name,
+                                         const bool value,
+                                         SPDocument *doc = nullptr,
+                                         Inkscape::XML::Node *node = nullptr);
+                                        
+    int         set_param_int           (const gchar *name,
+                                         const int value,
+                                         SPDocument *doc = nullptr,
+                                         Inkscape::XML::Node *node = nullptr);
+                                        
+    float       set_param_float         (const gchar *name,
+                                         const float value,
+                                         SPDocument *doc = nullptr,
+                                         Inkscape::XML::Node *node = nullptr);
+                                        
+    const char *set_param_string        (const gchar *name,
+                                         const char *value,
+                                         SPDocument *doc = nullptr,
+                                         Inkscape::XML::Node *node = nullptr);
+                                        
+    const char *set_param_optiongroup   (const gchar *name,
+                                         const char *value,
+                                         SPDocument *doc = nullptr,
+                                         Inkscape::XML::Node *node = nullptr);
+                                        
+    guint32     set_param_color         (const gchar *name,
+                                         const guint32 color,
+                                         SPDocument *doc = nullptr,
+                                         Inkscape::XML::Node *node = nullptr);
 
     /* Error file handling */
 public:
@@ -273,7 +253,7 @@ public:
     static void      error_file_close ();
 
 public:
-    Gtk::Widget *    autogui (SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal = nullptr);
+    Gtk::Widget *    autogui (SPDocument * doc, Inkscape::XML::Node *node, sigc::signal<void> * changeSignal = nullptr);
     void paramListString (std::list <std::string> & retlist);
     void set_gui(bool s) { _gui = s; }
     bool get_gui() { return _gui; }

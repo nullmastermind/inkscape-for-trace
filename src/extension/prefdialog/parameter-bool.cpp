@@ -21,43 +21,38 @@
 namespace Inkscape {
 namespace Extension {
 
-ParamBool::ParamBool(const gchar * name,
-                     const gchar * text,
-                     const gchar * description,
-                     bool hidden,
-                     int indent,
-                     Inkscape::Extension::Extension * ext,
-                     Inkscape::XML::Node * xml)
-    : Parameter(name, text, description, hidden, indent, ext)
-    , _value(false)
+ParamBool::ParamBool(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext)
+    : Parameter(xml, ext)
 {
-    const char * defaultval = nullptr;
-    if (xml->firstChild() != nullptr) {
-        defaultval = xml->firstChild()->content();
+    // get value
+    if (xml->firstChild()) {
+        const char *value = xml->firstChild()->content();
+        if (value) {
+            if (!strcmp(value, "true")) {
+                _value = true;
+            } else if (!strcmp(value, "false")) {
+                _value = false;
+            } else {
+                g_warning("Invalid default value ('%s') for parameter '%s' in extension '%s'",
+                          value, _name, _extension->get_id());
+            }
+        }
     }
 
-    if (defaultval != nullptr && (!strcmp(defaultval, "true") || !strcmp(defaultval, "1"))) {
-        _value = true;
-    } else {
-        _value = false;
-    }
-
-    gchar * pref_name = this->pref_name();
+    gchar *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _value = prefs->getBool(extension_pref_root + pref_name, _value);
     g_free(pref_name);
-
-    return;
 }
 
 bool ParamBool::set( bool in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/ )
 {
     _value = in;
 
-    gchar * prefname = this->pref_name();
+    gchar *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool(extension_pref_root + prefname, _value);
-    g_free(prefname);
+    prefs->setBool(extension_pref_root + pref_name, _value);
+    g_free(pref_name);
 
     return _value;
 }
@@ -81,7 +76,7 @@ public:
      *
      * @param  param  Which parameter to adjust on changing the check button
      */
-    ParamBoolCheckButton (ParamBool * param, gchar * label, SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) :
+    ParamBoolCheckButton (ParamBool *param, gchar *label, SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) :
             Gtk::CheckButton(label), _pref(param), _doc(doc), _node(node), _changeSignal(changeSignal) {
         this->set_active(_pref->get(nullptr, nullptr) /**\todo fix */);
         this->signal_toggled().connect(sigc::mem_fun(this, &ParamBoolCheckButton::on_toggle));
@@ -96,10 +91,10 @@ public:
 
 private:
     /** Param to change. */
-    ParamBool * _pref;
-    SPDocument * _doc;
-    Inkscape::XML::Node * _node;
-    sigc::signal<void> * _changeSignal;
+    ParamBool *_pref;
+    SPDocument *_doc;
+    Inkscape::XML::Node *_node;
+    sigc::signal<void> *_changeSignal;
 };
 
 void ParamBoolCheckButton::on_toggle()
@@ -122,7 +117,7 @@ void ParamBool::string(std::string &string) const
     return;
 }
 
-Gtk::Widget *ParamBool::get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
+Gtk::Widget *ParamBool::get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal)
 {
     if (_hidden) {
         return nullptr;

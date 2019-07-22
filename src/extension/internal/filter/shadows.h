@@ -108,7 +108,7 @@ ColorizableDropShadow::get_filter_text (Inkscape::Extension::Extension * ext)
     std::ostringstream comp2in2;
     std::ostringstream comp2op;
     
-    const gchar *type = ext->get_param_enum("type");
+    const gchar *type = ext->get_param_optiongroup("type");
     guint32 color = ext->get_param_color("color");
 
     blur << ext->get_param_float("blur");

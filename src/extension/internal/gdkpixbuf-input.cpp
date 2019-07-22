@@ -195,17 +195,17 @@ GdkpixbufInput::init()
                   "<name>%s</name>\n"
                   "<id>org.inkscape.input.gdkpixbuf.%s</id>\n"
 
-                  "<param name='link' type='optiongroup' appearance='full' _gui-text='" N_("Image Import Type:") "' _gui-description='" N_("Embed results in stand-alone, larger SVG files. Link references a file outside this SVG document and all files must be moved together.") "' >\n"
+                  "<param name='link' type='optiongroup' _gui-text='" N_("Image Import Type:") "' _gui-description='" N_("Embed results in stand-alone, larger SVG files. Link references a file outside this SVG document and all files must be moved together.") "' >\n"
                     "<_option value='embed' >" N_("Embed") "</_option>\n"
                     "<_option value='link' >" N_("Link") "</_option>\n"
                   "</param>\n"
 
-                  "<param name='dpi' type='optiongroup' appearance='full' _gui-text='" N_("Image DPI:") "' _gui-description='" N_("Take information from file or use default bitmap import resolution as defined in the preferences.") "' >\n"
+                  "<param name='dpi' type='optiongroup' _gui-text='" N_("Image DPI:") "' _gui-description='" N_("Take information from file or use default bitmap import resolution as defined in the preferences.") "' >\n"
                     "<_option value='from_file' >" N_("From file") "</_option>\n"
                     "<_option value='from_default' >" N_("Default import resolution") "</_option>\n"
                   "</param>\n"
 
-                  "<param name='scale' type='optiongroup' appearance='full' _gui-text='" N_("Image Rendering Mode:") "' _gui-description='" N_("When an image is upscaled, apply smoothing or keep blocky (pixelated). (Will not work in all browsers.)") "' >\n"
+                  "<param name='scale' type='optiongroup' _gui-text='" N_("Image Rendering Mode:") "' _gui-description='" N_("When an image is upscaled, apply smoothing or keep blocky (pixelated). (Will not work in all browsers.)") "' >\n"
                     "<_option value='auto' >" N_("None (auto)") "</_option>\n"
                     "<_option value='optimizeQuality' >" N_("Smooth (optimizeQuality)") "</_option>\n"
                     "<_option value='optimizeSpeed' >" N_("Blocky (optimizeSpeed)") "</_option>\n"

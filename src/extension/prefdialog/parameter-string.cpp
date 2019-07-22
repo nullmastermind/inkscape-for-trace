@@ -23,12 +23,43 @@
 namespace Inkscape {
 namespace Extension {
 
-
-/** Free the allocated data. */
-ParamString::~ParamString()
+ParamString::ParamString(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext)
+    : Parameter(xml, ext)
 {
-    g_free(_value);
-    _value = nullptr;
+    // get value
+    const char *value = nullptr;
+    if (xml->firstChild()) {
+        value = xml->firstChild()->content();
+    }
+
+    gchar *pref_name = this->pref_name();
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    _value = prefs->getString(extension_pref_root + pref_name);
+    g_free(pref_name);
+
+    if (_value.empty() && value) {
+        _value = value;
+    }
+
+    // translate value
+    if (!_value.empty()) {
+        if (_translatable == YES) { // translate only if explicitly marked translatable
+            if (_context) {
+                _value = g_dpgettext2(nullptr, _context, _value.c_str());
+            } else {
+                _value = _(_value.c_str());
+            }
+        }
+    }
+
+    // max-length
+    const char *max_length = xml->attribute("max-length");
+    if (!max_length) {
+        max_length = xml->attribute("max_length"); // backwards-compatibility with old name (underscore)
+    }
+    if (max_length) {
+        _max_length = strtoul(max_length, nullptr, 0);
+    }
 }
 
 /**
@@ -46,95 +77,49 @@ ParamString::~ParamString()
  * @param  doc  A document that should be used to set the value.
  * @param  node The node where the value may be placed.
  */
-const gchar * ParamString::set(const gchar * in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/)
+const Glib::ustring& ParamString::set(const Glib::ustring in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/)
 {
-    if (in == nullptr) {
-        return nullptr; /* Can't have NULL string */
-    }
+    _value = in;
 
-    if (_value != nullptr) {
-        g_free(_value);
-    }
-
-    _value = g_strdup(in);
-
-    gchar * prefname = this->pref_name();
+    gchar *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setString(extension_pref_root + prefname, _value);
-    g_free(prefname);
+    prefs->setString(extension_pref_root + pref_name, _value);
+    g_free(pref_name);
 
     return _value;
 }
 
 void ParamString::string(std::string &string) const
 {
-    if (_value) {
-      string += _value;
-    }
+    string += _value;
 }
 
-/** Initialize the object, to do that, copy the data. */
-ParamString::ParamString(const gchar * name,
-                         const gchar * text,
-                         const gchar * description,
-                         bool hidden,
-                         int indent,
-                         Inkscape::Extension::Extension * ext,
-                         Inkscape::XML::Node * xml)
-    : Parameter(name, text, description, hidden, indent, ext)
-    , _value(nullptr)
-{
-    const char * defaultval = nullptr;
-    if (xml->firstChild() != nullptr) {
-        defaultval = xml->firstChild()->content();
-    }
-
-    gchar * pref_name = this->pref_name();
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring paramval = prefs->getString(extension_pref_root + pref_name);
-    g_free(pref_name);
-
-    if (!paramval.empty()) {
-        defaultval = paramval.data();
-    }
-    if (defaultval != nullptr) {
-        char const * chname = xml->name();
-        if (!strcmp(chname, INKSCAPE_EXTENSION_NS "_param")) {
-            if (xml->attribute("msgctxt") != nullptr) {
-                _value =  g_strdup(g_dpgettext2(nullptr, xml->attribute("msgctxt"), defaultval));
-            } else {
-                _value = g_strdup(_(defaultval));
-            }
-        } else {
-            _value = g_strdup(defaultval);
-        }
-    }
-
-    _max_length = 0;
-}
 
 /** A special type of Gtk::Entry to handle string parameteres. */
 class ParamStringEntry : public Gtk::Entry {
 private:
-    ParamString * _pref;
-    SPDocument * _doc;
-    Inkscape::XML::Node * _node;
-    sigc::signal<void> * _changeSignal;
+    ParamString *_pref;
+    SPDocument *_doc;
+    Inkscape::XML::Node *_node;
+    sigc::signal<void> *_changeSignal;
 public:
     /**
      * Build a string preference for the given parameter.
      * @param  pref  Where to get the string from, and where to put it
      *                when it changes.
      */
-    ParamStringEntry (ParamString * pref, SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) :
-        Gtk::Entry(), _pref(pref), _doc(doc), _node(node), _changeSignal(changeSignal) {
-        if (_pref->get(nullptr, nullptr) != nullptr) {
-            this->set_text(Glib::ustring(_pref->get(nullptr, nullptr)));
-        }
+    ParamStringEntry(ParamString *pref, SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal)
+        : Gtk::Entry()
+        , _pref(pref)
+        , _doc(doc)
+        , _node(node)
+        , _changeSignal(changeSignal)
+    {
+        this->set_text(_pref->get(nullptr, nullptr));
         this->set_max_length(_pref->getMaxLength()); //Set the max length - default zero means no maximum
         this->signal_changed().connect(sigc::mem_fun(this, &ParamStringEntry::changed_text));
     };
-    void changed_text ();
+    void changed_text();
 };
 
 
@@ -158,14 +143,14 @@ void ParamStringEntry::changed_text()
  *
  * Builds a hbox with a label and a text box in it.
  */
-Gtk::Widget * ParamString::get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
+Gtk::Widget *ParamString::get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal)
 {
     if (_hidden) {
         return nullptr;
     }
 
-    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false, Parameter::GUI_PARAM_WIDGETS_SPACING));
-    Gtk::Label * label = Gtk::manage(new Gtk::Label(_text, Gtk::ALIGN_START));
+    Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox(false, Parameter::GUI_PARAM_WIDGETS_SPACING));
+    Gtk::Label *label = Gtk::manage(new Gtk::Label(_text, Gtk::ALIGN_START));
     label->show();
     hbox->pack_start(*label, false, false);
 

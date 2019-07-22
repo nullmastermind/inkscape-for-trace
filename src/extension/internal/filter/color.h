@@ -297,7 +297,7 @@ ColorBlindness::get_filter_text (Inkscape::Extension::Extension * ext)
     if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream type;
-    type << ext->get_param_enum("type");
+    type << ext->get_param_optiongroup("type");
 
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" height=\"1\" width=\"1\" y=\"0\" x=\"0\" inkscape:label=\"Color Blindness\">\n"
@@ -454,8 +454,8 @@ Colorize::get_filter_text (Inkscape::Extension::Extension * ext)
 
     hlight << ext->get_param_float("hlight");
     nlight << ext->get_param_float("nlight");
-    blend1 << ext->get_param_enum("blend1");
-    blend2 << ext->get_param_enum("blend2");
+    blend1 << ext->get_param_optiongroup("blend1");
+    blend2 << ext->get_param_optiongroup("blend2");
     if (ext->get_param_bool("duotone")) {
         duotone << "0";
     } else {
@@ -526,7 +526,7 @@ ComponentTransfer::get_filter_text (Inkscape::Extension::Extension * ext)
     if (_filter != nullptr) g_free((void *)_filter);
 
     std::ostringstream CTfunction;
-    const gchar *type = ext->get_param_enum("type");
+    const gchar *type = ext->get_param_optiongroup("type");
 
     if ((g_ascii_strcasecmp("identity", type) == 0)) {
         CTfunction << "<feFuncR type=\"identity\" tableValues=\"1 0\" />\n"
@@ -635,7 +635,7 @@ Duochrome::get_filter_text (Inkscape::Extension::Extension * ext)
     guint32 color1 = ext->get_param_color("color1");
     guint32 color2 = ext->get_param_color("color2");
     float fluorescence = ext->get_param_float("fluo");
-    const gchar *swaptype = ext->get_param_enum("swap");
+    const gchar *swaptype = ext->get_param_optiongroup("swap");
 
     r1 << ((color1 >> 24) & 0xff);
     g1 << ((color1 >> 16) & 0xff);
@@ -745,9 +745,9 @@ ExtractChannel::get_filter_text (Inkscape::Extension::Extension * ext)
     std::ostringstream blend;
     std::ostringstream colors;
 
-    blend << ext->get_param_enum("blend");
+    blend << ext->get_param_optiongroup("blend");
 
-    const gchar *channel = ext->get_param_enum("source");
+    const gchar *channel = ext->get_param_optiongroup("source");
     if (ext->get_param_bool("alpha")) {
         if ((g_ascii_strcasecmp("r", channel) == 0)) {
             colors << "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0";
@@ -844,7 +844,7 @@ FadeToBW::get_filter_text (Inkscape::Extension::Extension * ext)
 
     level << ext->get_param_float("level");
 
-    const gchar *fadeto = ext->get_param_enum("fadeto");
+    const gchar *fadeto = ext->get_param_optiongroup("fadeto");
     if ((g_ascii_strcasecmp("white", fadeto) == 0)) {
     // White
         wlevel << (1 - ext->get_param_float("level"));
@@ -1031,7 +1031,7 @@ Invert::get_filter_text (Inkscape::Extension::Extension * ext)
     }
     
     if (ext->get_param_bool("lightness")) {
-        switch (atoi(ext->get_param_enum("channels"))) {
+        switch (atoi(ext->get_param_optiongroup("channels"))) {
             case 1:
                 line1 << "0 0 -1";
                 line2 << "0 -1 0";
@@ -1055,7 +1055,7 @@ Invert::get_filter_text (Inkscape::Extension::Extension * ext)
         }
         col5 << "1";
     } else {
-        switch (atoi(ext->get_param_enum("channels"))) {
+        switch (atoi(ext->get_param_optiongroup("channels"))) {
             case 1:
                 line1 << "0 0 1";
                 line2 << "0 1 0";
@@ -1526,9 +1526,9 @@ Quadritone::get_filter_text (Inkscape::Extension::Extension * ext)
 
     dist << ext->get_param_int("dist");
     colors << ext->get_param_int("colors");
-    blend1 << ext->get_param_enum("blend1");
+    blend1 << ext->get_param_optiongroup("blend1");
     sat << ext->get_param_float("sat");
-    blend2 << ext->get_param_enum("blend2");
+    blend2 << ext->get_param_optiongroup("blend2");
 
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Quadritone fantasy\">\n"
@@ -1614,7 +1614,7 @@ SimpleBlend::get_filter_text (Inkscape::Extension::Extension * ext)
     g << ((color >> 16) & 0xff);
     b << ((color >>  8) & 0xff);
     a << (color & 0xff) / 255.0F;
-    blend << ext->get_param_enum("blendmode");
+    blend << ext->get_param_optiongroup("blendmode");
 
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Simple blend\">\n"
@@ -1682,7 +1682,7 @@ Solarize::get_filter_text (Inkscape::Extension::Extension * ext)
     std::ostringstream blend2;
 
     rotate << ext->get_param_int("rotate");
-    const gchar *type = ext->get_param_enum("type");
+    const gchar *type = ext->get_param_optiongroup("type");
     if ((g_ascii_strcasecmp("solarize", type) == 0)) {
     // Solarize
         blend1 << "darken";
@@ -1808,14 +1808,14 @@ Tritone::get_filter_text (Inkscape::Extension::Extension * ext)
     g << ((color >> 16) & 0xff);
     b << ((color >>  8) & 0xff);
     a << (color & 0xff) / 255.0F;
-    globalblend << ext->get_param_enum("globalblend");
+    globalblend << ext->get_param_optiongroup("globalblend");
     dist << ext->get_param_int("dist");
     glow << ext->get_param_float("glow");
-    glowblend << ext->get_param_enum("glowblend");
+    glowblend << ext->get_param_optiongroup("glowblend");
     llight << ext->get_param_float("llight");
     glight << ext->get_param_float("glight");
     
-    const gchar *type = ext->get_param_enum("type");
+    const gchar *type = ext->get_param_optiongroup("type");
     if ((g_ascii_strcasecmp("enhue", type) == 0)) {
     // Enhance hue
         c1in2 << "flood";

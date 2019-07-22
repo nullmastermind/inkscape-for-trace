@@ -37,7 +37,7 @@ LevelChannel::applyEffect(Magick::Image* image) {
 
 void
 LevelChannel::refreshParameters(Inkscape::Extension::Effect* module) {
-	_channelName = module->get_param_enum("channel");
+	_channelName = module->get_param_optiongroup("channel");
 	_black_point = module->get_param_float("blackPoint");
 	_white_point = module->get_param_float("whitePoint");
 	_mid_point = module->get_param_float("midPoint");

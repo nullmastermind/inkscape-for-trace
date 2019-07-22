@@ -181,7 +181,7 @@ Bump::get_filter_text (Inkscape::Extension::Extension * ext)
     green << ext->get_param_float("green");
     blue << ext->get_param_float("blue");
     crop << ext->get_param_float("crop");
-    blend << ext->get_param_enum("blend");
+    blend << ext->get_param_optiongroup("blend");
     
     guint32 lightingColor = ext->get_param_color("lightingColor");
     guint32 imageColor = ext->get_param_color("imageColor");
@@ -192,7 +192,7 @@ Bump::get_filter_text (Inkscape::Extension::Extension * ext)
         bumpSource << "blur1" ;
     }
 
-    const gchar *lightType = ext->get_param_enum("lightType");
+    const gchar *lightType = ext->get_param_optiongroup("lightType");
     if ((g_ascii_strcasecmp("specular", lightType) == 0)) {
     // Specular
         lightStart << "<feSpecularLighting lighting-color=\"rgb(" << ((lightingColor >> 24) & 0xff) << ","
@@ -209,7 +209,7 @@ Bump::get_filter_text (Inkscape::Extension::Extension * ext)
         lightEnd << "</feDiffuseLighting>";
     }
 
-    const gchar *lightSource = ext->get_param_enum("lightSource");
+    const gchar *lightSource = ext->get_param_optiongroup("lightSource");
     if ((g_ascii_strcasecmp("distant", lightSource) == 0)) {
     // Distant
         lightOptions << "<feDistantLight azimuth=\"" << ext->get_param_int("distantAzimuth") << "\" elevation=\""
@@ -414,7 +414,7 @@ WaxBump::get_filter_text (Inkscape::Extension::Extension * ext)
     green << ext->get_param_float("green") - 0.72;
     blue << ext->get_param_float("blue") - 0.07;
 
-    background << ext->get_param_enum("background");
+    background << ext->get_param_optiongroup("background");
     bgopacity << ext->get_param_float("bgopacity");
 
     height << ext->get_param_float("height");
@@ -440,9 +440,9 @@ WaxBump::get_filter_text (Inkscape::Extension::Extension * ext)
         revert << "out" ;
     }
 
-    lightingblend << ext->get_param_enum("lightingblend");
-    highlightblend << ext->get_param_enum("highlightblend");
-    transparency << ext->get_param_enum("transparency");
+    lightingblend << ext->get_param_optiongroup("lightingblend");
+    highlightblend << ext->get_param_optiongroup("highlightblend");
+    transparency << ext->get_param_optiongroup("transparency");
 
     _filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" inkscape:label=\"Wax Bump\">\n"

@@ -106,7 +106,7 @@ NoiseFill::get_filter_text (Inkscape::Extension::Extension * ext)
     std::ostringstream a;
     std::ostringstream inverted;
 
-    type << ext->get_param_enum("type");
+    type << ext->get_param_optiongroup("type");
     hfreq << (ext->get_param_float("hfreq") / 1000);
     vfreq << (ext->get_param_float("vfreq") / 1000);
     complexity << ext->get_param_int("complexity");

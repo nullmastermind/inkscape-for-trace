@@ -12,33 +12,22 @@
 
 #include "parameter.h"
 
+namespace Glib {
+class ustring;
+}
+
 namespace Inkscape {
 namespace Extension {
 
 class ParamString : public Parameter {
-private:
-    /** \brief  Internal value.  This should point to a string that has
-                been allocated in memory.  And should be free'd. */
-    gchar * _value;
-    /** \brief Internal value. This indicates the maximum length of the string. Zero meaning unlimited.
-      */
-    gint _max_length;
 public:
-    ParamString(const gchar * name,
-                const gchar * text,
-                const gchar * description,
-                bool hidden,
-                int indent,
-                Inkscape::Extension::Extension * ext,
-                Inkscape::XML::Node * xml);
-    ~ParamString() override;
+    ParamString(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
 
     /** \brief  Returns \c _value, with a \i const to protect it. */
-    const gchar *get(SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/) const { return _value; }
+    const Glib::ustring& get(SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/) const { return _value; }
+    const Glib::ustring& set(const Glib::ustring in, SPDocument *doc, Inkscape::XML::Node *node);
 
-    const gchar * set (const gchar * in, SPDocument * doc, Inkscape::XML::Node * node);
-
-    Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) override;
+    Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
 
     // Explicitly call superclass version to avoid method being hidden.
     void string(std::list <std::string> &list) const override { return Parameter::string(list); }
@@ -47,6 +36,14 @@ public:
 
     void setMaxLength(int maxLength) { _max_length = maxLength; }
     int getMaxLength() { return _max_length; }
+
+private:
+    /** \brief  Internal value. */
+    Glib::ustring _value;
+
+    /** \brief Maximum length of the string in characters (zero meaning unlimited).
+      */
+    int _max_length = 0;
 };
 
 

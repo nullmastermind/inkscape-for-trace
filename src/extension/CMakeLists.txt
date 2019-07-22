@@ -57,11 +57,10 @@ set(extension_SRC
 	prefdialog/parameter-bool.cpp
 	prefdialog/parameter-color.cpp
 	prefdialog/parameter-description.cpp
-	prefdialog/parameter-enum.cpp
 	prefdialog/parameter-float.cpp
 	prefdialog/parameter-int.cpp
 	prefdialog/parameter-notebook.cpp
-	prefdialog/parameter-radiobutton.cpp
+	prefdialog/parameter-optiongroup.cpp
 	prefdialog/parameter-string.cpp
 
 	# ------
@@ -132,11 +131,10 @@ set(extension_SRC
 	prefdialog/parameter-bool.h
 	prefdialog/parameter-color.h
 	prefdialog/parameter-description.h
-	prefdialog/parameter-enum.h
 	prefdialog/parameter-float.h
 	prefdialog/parameter-int.h
 	prefdialog/parameter-notebook.h
-	prefdialog/parameter-radiobutton.h
+	prefdialog/parameter-optiongroup.h
 	prefdialog/parameter-string.h
 )
 

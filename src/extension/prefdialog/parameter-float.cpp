@@ -22,67 +22,57 @@
 namespace Inkscape {
 namespace Extension {
 
-
-/** Use the superclass' allocator and set the \c _value. */
-ParamFloat::ParamFloat(const gchar * name,
-                       const gchar * text,
-                       const gchar * description,
-                       bool hidden,
-                       int indent,
-                       Inkscape::Extension::Extension * ext,
-                       Inkscape::XML::Node * xml,
-                       AppearanceMode mode)
-    : Parameter(name, text, description, hidden, indent, ext)
-    , _value(0.0)
-    , _mode(mode)
-    , _min(0.0)
-    , _max(10.0)
+ParamFloat::ParamFloat(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext)
+    : Parameter(xml, ext)
 {
-    const gchar * defaultval = nullptr;
-    if (xml->firstChild() != nullptr) {
-        defaultval = xml->firstChild()->content();
-    }
-    if (defaultval != nullptr) {
-        _value = g_ascii_strtod (defaultval,nullptr);
-    }
-
-    const char * maxval = xml->attribute("max");
-    if (maxval != nullptr) {
-        _max = g_ascii_strtod (maxval,nullptr);
+    // get value
+    if (xml->firstChild()) {
+        const char *value = xml->firstChild()->content();
+        if (value) {
+            _value = g_ascii_strtod(value, nullptr);
+        }
     }
 
-    const char * minval = xml->attribute("min");
-    if (minval != nullptr) {
-        _min = g_ascii_strtod (minval,nullptr);
-    }
-
-    _precision = 1;
-    const char * precision = xml->attribute("precision");
-    if (precision != nullptr) {
-        _precision = atoi(precision);
-    }
-
-    /* We're handling this by just killing both values */
-    if (_max < _min) {
-        _max = 10.0;
-        _min = 0.0;
-    }
-
-    gchar * pref_name = this->pref_name();
+    gchar *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _value = prefs->getDouble(extension_pref_root + pref_name, _value);
     g_free(pref_name);
 
-    // std::cout << "New Float::  value: " << _value << "  max: " << _max << "  min: " << _min << std::endl;
-
-    if (_value > _max) {
-        _value = _max;
+    // parse and apply limits
+    const char *min = xml->attribute("min");
+    if (min) {
+        _min = g_ascii_strtod(min, nullptr);
     }
+
+    const char *max = xml->attribute("max");
+    if (max) {
+        _max = g_ascii_strtod(max, nullptr);
+    }
+
     if (_value < _min) {
         _value = _min;
     }
 
-    return;
+    if (_value > _max) {
+        _value = _max;
+    }
+    
+    // parse precision
+    const char *precision = xml->attribute("precision");
+    if (precision != nullptr) {
+        _precision = strtol(precision, nullptr, 0);
+    }
+
+
+    // parse appearance
+    if (_appearance) {
+        if (!strcmp(_appearance, "full")) {
+            _mode = FULL;
+        } else {
+            g_warning("Invalid value ('%s') for appearance of parameter '%s' in extension '%s'",
+                      _appearance, _name, _extension->get_id());
+        }
+    }
 }
 
 /**
@@ -106,10 +96,10 @@ float ParamFloat::set(float in, SPDocument * /*doc*/, Inkscape::XML::Node * /*no
         _value = _min;
     }
 
-    gchar * prefname = this->pref_name();
+    gchar *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble(extension_pref_root + prefname, _value);
-    g_free(prefname);
+    prefs->setDouble(extension_pref_root + pref_name, _value);
+    g_free(pref_name);
 
     return _value;
 }
@@ -125,14 +115,14 @@ void ParamFloat::string(std::string &string) const
 /** A class to make an adjustment that uses Extension params. */
 class ParamFloatAdjustment : public Gtk::Adjustment {
     /** The parameter to adjust. */
-    ParamFloat * _pref;
-    SPDocument * _doc;
-    Inkscape::XML::Node * _node;
-    sigc::signal<void> * _changeSignal;
+    ParamFloat *_pref;
+    SPDocument *_doc;
+    Inkscape::XML::Node *_node;
+    sigc::signal<void> *_changeSignal;
 public:
     /** Make the adjustment using an extension and the string
                 describing the parameter. */
-    ParamFloatAdjustment (ParamFloat * param, SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) :
+    ParamFloatAdjustment (ParamFloat *param, SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) :
             Gtk::Adjustment(0.0, param->min(), param->max(), 0.1, 1.0, 0), _pref(param), _doc(doc), _node(node), _changeSignal(changeSignal) {
         this->set_value(_pref->get(nullptr, nullptr) /* \todo fix */);
         this->signal_value_changed().connect(sigc::mem_fun(this, &ParamFloatAdjustment::val_changed));
@@ -163,13 +153,13 @@ void ParamFloatAdjustment::val_changed()
  *
  * Builds a hbox with a label and a float adjustment in it.
  */
-Gtk::Widget * ParamFloat::get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
+Gtk::Widget *ParamFloat::get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal)
 {
     if (_hidden) {
         return nullptr;
     }
 
-    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false, Parameter::GUI_PARAM_WIDGETS_SPACING));
+    Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox(false, Parameter::GUI_PARAM_WIDGETS_SPACING));
 
     auto pfa = new ParamFloatAdjustment(this, doc, node, changeSignal);
     Glib::RefPtr<Gtk::Adjustment> fadjust(pfa);
@@ -185,9 +175,9 @@ Gtk::Widget * ParamFloat::get_widget(SPDocument * doc, Inkscape::XML::Node * nod
         hbox->pack_start(*scale, true, true);
 
     }
-    else if (_mode == MINIMAL) {
+    else if (_mode == DEFAULT) {
 
-        Gtk::Label * label = Gtk::manage(new Gtk::Label(_text, Gtk::ALIGN_START));
+        Gtk::Label *label = Gtk::manage(new Gtk::Label(_text, Gtk::ALIGN_START));
         label->show();
         hbox->pack_start(*label, true, true);
 

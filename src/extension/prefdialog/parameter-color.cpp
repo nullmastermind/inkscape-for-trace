@@ -28,65 +28,44 @@
 namespace Inkscape {
 namespace Extension {
 
+ParamColor::ParamColor(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext)
+    : Parameter(xml, ext)
+{
+    // get value
+    unsigned int _value = 0x000000ff; // default to black
+    if (xml->firstChild()) {
+        const char *value = xml->firstChild()->content();
+        if (value) {
+            _value = strtoul(value, nullptr, 0);
+        }
+    }
+
+    gchar *pref_name = this->pref_name();
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    _value = prefs->getUInt(extension_pref_root + pref_name, _value);
+    g_free(pref_name);
+
+    _color.setValue(_value);
+
+    _color_changed = _color.signal_changed.connect(sigc::mem_fun(this, &ParamColor::_onColorChanged));
+    // TODO: SelectedColor does not properly emit signal_changed after dragging, so we also need the following
+    _color_released = _color.signal_released.connect(sigc::mem_fun(this, &ParamColor::_onColorChanged));
+}
+
 ParamColor::~ParamColor()
 {
     _color_changed.disconnect();
+    _color_released.disconnect();
 }
 
-guint32 ParamColor::set( guint32 in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/ )
+guint32 ParamColor::set(guint32 in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/)
 {
-    _color_changed.block(true);
     _color.setValue(in);
-    _color_changed.block(false);
-
-    gchar * prefname = this->pref_name();
-    std::string value;
-    string(value);
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setString(extension_pref_root + prefname, value);
-    g_free(prefname);
 
     return in;
 }
 
-ParamColor::ParamColor(const gchar * name,
-                       const gchar * text,
-                       const gchar * description,
-                       bool hidden,
-                       int indent,
-                       Inkscape::Extension::Extension * ext,
-                       Inkscape::XML::Node * xml)
-    : Parameter(name, text, description, hidden, indent, ext)
-    , _changeSignal(nullptr)
-{
-    const char * defaulthex = nullptr;
-    if (xml->firstChild() != nullptr)
-        defaulthex = xml->firstChild()->content();
-
-    gchar * pref_name = this->pref_name();
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring paramval = prefs->getString(extension_pref_root + pref_name);
-    g_free(pref_name);
-
-    if (!paramval.empty())
-        defaulthex = paramval.data();
-
-    if (defaulthex) {
-        _color.setValue(atoi(defaulthex));
-    }
-    _color_changed = _color.signal_changed.connect(sigc::mem_fun(this, &ParamColor::_onColorChanged));
-
-}
-
-void ParamColor::string(std::string &string) const
-{
-    char str[16];
-    snprintf(str, 16, "%i", _color.value());
-    string += str;
-}
-
-Gtk::Widget *ParamColor::get_widget( SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/, sigc::signal<void> * changeSignal )
+Gtk::Widget *ParamColor::get_widget( SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/, sigc::signal<void> *changeSignal )
 {
     using Inkscape::UI::Widget::ColorNotebook;
 
@@ -96,24 +75,31 @@ Gtk::Widget *ParamColor::get_widget( SPDocument * /*doc*/, Inkscape::XML::Node *
         _changeSignal = new sigc::signal<void>(*changeSignal);
     }
 
-    if (_color.value() < 1) {
-        _color_changed.block(true);
-        _color.setValue(0xFF000000);
-        _color_changed.block(false);
-    }
-
     Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox(false, Parameter::GUI_PARAM_WIDGETS_SPACING));
     Gtk::Widget *selector = Gtk::manage(new ColorNotebook(_color));
     hbox->pack_start(*selector, true, true, 0);
     selector->show();
     hbox->show();
+
     return hbox;
 }
 
 void ParamColor::_onColorChanged()
 {
+    gchar *pref_name = this->pref_name();
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setUInt(extension_pref_root + pref_name, _color.value());
+    g_free(pref_name);
+
     if (_changeSignal)
         _changeSignal->emit();
+}
+
+void ParamColor::string(std::string &string) const
+{
+    char str[16];
+    snprintf(str, 16, "%u", _color.value());
+    string += str;
 }
 
 };  /* namespace Extension */

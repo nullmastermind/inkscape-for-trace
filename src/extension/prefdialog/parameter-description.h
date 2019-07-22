@@ -28,22 +28,18 @@ namespace Extension {
 class ParamDescription : public Parameter {
 public:
     enum AppearanceMode {
-        DESCRIPTION, HEADER, URL
+        DEFAULT, HEADER, URL
     };
-    ParamDescription(const gchar * name,
-                     const gchar * text,
-                     const gchar * description,
-                     bool hidden,
-                     int indent,
-                     Inkscape::Extension::Extension * ext,
-                     Inkscape::XML::Node * xml,
-                     AppearanceMode mode);
 
-    Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) override;
+    ParamDescription(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
+
+    Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
 private:
     /** \brief  Internal value. */
-    gchar * _value;
-    AppearanceMode _mode;
+    Glib::ustring _value;
+
+    /** appearance mode **/
+    AppearanceMode _mode = DEFAULT;
 };
 
 }  /* namespace Extension */

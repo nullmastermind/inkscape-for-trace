@@ -28,27 +28,21 @@ namespace Extension {
 class ParamInt : public Parameter {
 public:
     enum AppearanceMode {
-        FULL, MINIMAL
+        DEFAULT, FULL
     };
-    ParamInt(const gchar * name,
-             const gchar * text,
-             const gchar * description,
-             bool hidden,
-             int indent,
-             Inkscape::Extension::Extension * ext,
-             Inkscape::XML::Node * xml,
-             AppearanceMode mode);
+
+    ParamInt(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
 
     /** Returns \c _value. */
     int get(const SPDocument * /*doc*/, const Inkscape::XML::Node * /*node*/) const { return _value; }
 
-    int set (int in, SPDocument * doc, Inkscape::XML::Node * node);
+    int set (int in, SPDocument *doc, Inkscape::XML::Node *node);
 
     int max () { return _max; }
 
     int min () { return _min; }
 
-    Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) override;
+    Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
 
     // Explicitly call superclass version to avoid method being hidden.
     void string(std::list <std::string> &list) const override { return Parameter::string(list); }
@@ -57,10 +51,15 @@ public:
 
 private:
     /** Internal value. */
-    int _value;
-    AppearanceMode _mode;
-    int _min;
-    int _max;
+    int _value = 0;
+
+    /** limits */
+    // TODO: do these defaults make sense or should we be unbounded by default?
+    int _min = 0;
+    int _max = 10;
+
+    /** appearance mode **/
+    AppearanceMode _mode = DEFAULT;
 };
 
 }  /* namespace Extension */

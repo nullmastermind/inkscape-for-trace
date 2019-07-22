@@ -115,7 +115,7 @@ InkBlot::get_filter_text (Inkscape::Extension::Extension * ext)
     std::ostringstream stroke;
     std::ostringstream custom;
 
-    type << ext->get_param_enum("type");
+    type << ext->get_param_optiongroup("type");
     freq << ext->get_param_float("freq") / 100;
     complexity << ext->get_param_int("complexity");
     variation << ext->get_param_int("variation");
@@ -124,14 +124,14 @@ InkBlot::get_filter_text (Inkscape::Extension::Extension * ext)
     displacement << ext->get_param_float("displacement");
     blend << ext->get_param_float("blend");
 
-    const gchar *ope = ext->get_param_enum("stroke");
+    const gchar *ope = ext->get_param_optiongroup("stroke");
     if (g_ascii_strcasecmp("arithmetic", ope) == 0) {
         custom << "k1=\"" << ext->get_param_float("k1") << "\" k2=\"" << ext->get_param_float("k2") << "\" k3=\"" << ext->get_param_float("k3") << "\"";
     } else {
         custom << "";
     }
 
-    stroke << ext->get_param_enum("stroke");
+    stroke << ext->get_param_optiongroup("stroke");
 
 	_filter = g_strdup_printf(
         "<filter xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" style=\"color-interpolation-filters:sRGB;\" x=\"-0.15\" width=\"1.3\" y=\"-0.15\" height=\"1.3\" inkscape:label=\"Ink Blot\" >\n"

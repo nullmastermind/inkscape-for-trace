@@ -22,11 +22,10 @@
 #include "parameter-bool.h"
 #include "parameter-color.h"
 #include "parameter-description.h"
-#include "parameter-enum.h"
 #include "parameter-float.h"
 #include "parameter-int.h"
 #include "parameter-notebook.h"
-#include "parameter-radiobutton.h"
+#include "parameter-optiongroup.h"
 #include "parameter-string.h"
 
 #include "extension/extension.h"
@@ -43,118 +42,36 @@ namespace Extension {
 
 Parameter *Parameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *in_ext)
 {
-    const char *name = in_repr->attribute("name");
+    Parameter *param = nullptr;
+
     const char *type = in_repr->attribute("type");
-
-    // we can't create a parameter without type
     if (!type) {
-        return nullptr;
-    }
-    // also require name unless it's a pure UI element that does not store its value
-    if (!name) {
-        static std::vector<std::string> ui_elements = {"description"};
-        if (std::find(ui_elements.begin(), ui_elements.end(), type) == ui_elements.end()) {
-            return nullptr;
-        }
-    }
-
-    const char *text = in_repr->attribute("gui-text");
-    if (text == nullptr) {
-        text = in_repr->attribute("_gui-text");
-        if (text == nullptr) {
-            // text = ""; // probably better to require devs to explicitly set an empty gui-text if this is what they want
-        } else {
-            const char *context = in_repr->attribute("msgctxt");
-            if (context != nullptr) {
-                text = g_dpgettext2(nullptr, context, text);
-            } else {
-                text = _(text);
-            }
-        }
-    }
-    const char *description = in_repr->attribute("gui-description");
-    if (description == nullptr) {
-        description = in_repr->attribute("_gui-description");
-        if (description != nullptr) {
-            const char *context = in_repr->attribute("msgctxt");
-            if (context != nullptr) {
-                description = g_dpgettext2(nullptr, context, description);
-            } else {
-                description = _(description);
-            }
-        }
-    }
-    bool hidden = false;
-    {
-        const char *gui_hide = in_repr->attribute("gui-hidden");
-        if (gui_hide != nullptr) {
-            if (strcmp(gui_hide, "1") == 0 ||
-                strcmp(gui_hide, "true") == 0) {
-                hidden = true;
-            }
-            /* else stays false */
-        }
-    }
-    int indent = 0;
-    {
-        const char *indent_attr = in_repr->attribute("indent");
-        if (indent_attr != nullptr) {
-            if (strcmp(indent_attr, "true") == 0) {
-                indent = 1;
-            } else {
-                indent = atoi(indent_attr);
-            }
-        }
-    }
-    const gchar* appearance = in_repr->attribute("appearance");
-
-    Parameter * param = nullptr;
-    if (!strcmp(type, "boolean")) {
-        param = new ParamBool(name, text, description, hidden, indent, in_ext, in_repr);
+        // we can't create a parameter without type
+        g_warning("Parameter without type in extension '%s'.", in_ext->get_id());
+    } else if(!strcmp(type, "boolean")) {
+        param = new ParamBool(in_repr, in_ext);
     } else if (!strcmp(type, "int")) {
-        if (appearance && !strcmp(appearance, "full")) {
-            param = new ParamInt(name, text, description, hidden, indent, in_ext, in_repr, ParamInt::FULL);
-        } else {
-            param = new ParamInt(name, text, description, hidden, indent, in_ext, in_repr, ParamInt::MINIMAL);
-        }
+        param = new ParamInt(in_repr, in_ext);
     } else if (!strcmp(type, "float")) {
-        if (appearance && !strcmp(appearance, "full")) {
-            param = new ParamFloat(name, text, description, hidden, indent, in_ext, in_repr, ParamFloat::FULL);
-        } else {
-            param = new ParamFloat(name, text, description, hidden, indent, in_ext, in_repr, ParamFloat::MINIMAL);
-        }
+        param = new ParamFloat(in_repr, in_ext);
     } else if (!strcmp(type, "string")) {
-        param = new ParamString(name, text, description, hidden, indent, in_ext, in_repr);
-        gchar const * max_length = in_repr->attribute("max_length");
-        if (max_length != nullptr) {
-            ParamString * ps = dynamic_cast<ParamString *>(param);
-            ps->setMaxLength(atoi(max_length));
-        }
+        param = new ParamString(in_repr, in_ext);
     } else if (!strcmp(type, "description")) {
-        ParamDescription::AppearanceMode appearance_mode = ParamDescription::DESCRIPTION;
-        if (appearance) {
-            if (!strcmp(appearance, "header")) {
-                appearance_mode = ParamDescription::HEADER;
-            } else if (!strcmp(appearance, "url")) {
-                appearance_mode = ParamDescription::URL;
-            }
-        }
-        param = new ParamDescription(name, text, description, hidden, indent, in_ext, in_repr, appearance_mode);
-    } else if (!strcmp(type, "enum")) {
-        param = new ParamComboBox(name, text, description, hidden, indent, in_ext, in_repr);
+        param = new ParamDescription(in_repr, in_ext);
     } else if (!strcmp(type, "notebook")) {
-        param = new ParamNotebook(name, text, description, hidden, indent, in_ext, in_repr);
+        param = new ParamNotebook(in_repr, in_ext);
     } else if (!strcmp(type, "optiongroup")) {
-        if (appearance && !strcmp(appearance, "minimal")) {
-            param = new ParamRadioButton(name, text, description, hidden, indent, in_ext, in_repr, ParamRadioButton::MINIMAL);
-        } else {
-            param = new ParamRadioButton(name, text, description, hidden, indent, in_ext, in_repr, ParamRadioButton::FULL);
-        }
+        param = new ParamOptionGroup(in_repr, in_ext);
+    } else if (!strcmp(type, "enum")) { // support deprecated "enum" for backwards-compatibilty
+        in_repr->setAttribute("appearance", "combo");
+        param = new ParamOptionGroup(in_repr, in_ext);
     } else if (!strcmp(type, "color")) {
-        param = new ParamColor(name, text, description, hidden, indent, in_ext, in_repr);
+        param = new ParamColor(in_repr, in_ext);
+    } else {
+        g_warning("Unknown parameter type ('%s') in extension '%s'", type, in_ext->get_id());
     }
 
-    // Note: param could equal NULL
+    // Note: param could equal nullptr
     return param;
 }
 
@@ -185,40 +102,31 @@ float Parameter::get_float(SPDocument const *doc, Inkscape::XML::Node const *nod
     return floatpntr->get(doc, node);
 }
 
-gchar const *Parameter::get_string(SPDocument const *doc, Inkscape::XML::Node const *node) const
+const char *Parameter::get_string(SPDocument const *doc, Inkscape::XML::Node const *node) const
 {
     ParamString const *stringpntr = dynamic_cast<ParamString const *>(this);
     if (!stringpntr) {
         throw param_not_string_param();
     }
-    return stringpntr->get(doc, node);
+    return stringpntr->get(doc, node).c_str();
 }
 
-gchar const *Parameter::get_enum(SPDocument const *doc, Inkscape::XML::Node const *node) const
+const char *Parameter::get_optiongroup(SPDocument const *doc, Inkscape::XML::Node const *node) const
 {
-    ParamComboBox const *param = dynamic_cast<ParamComboBox const *>(this);
-    if (!param) {
-        throw param_not_enum_param();
-    }
-    return param->get(doc, node);
-}
-
-bool Parameter::get_enum_contains(gchar const * value, SPDocument const *doc, Inkscape::XML::Node const *node) const
-{
-    ParamComboBox const *param = dynamic_cast<ParamComboBox const *>(this);
-    if (!param) {
-        throw param_not_enum_param();
-    }
-    return param->contains(value, doc, node);
-}
-
-gchar const *Parameter::get_optiongroup(SPDocument const *doc, Inkscape::XML::Node const * node) const
-{
-    ParamRadioButton const *param = dynamic_cast<ParamRadioButton const *>(this);
+    ParamOptionGroup const *param = dynamic_cast<ParamOptionGroup const *>(this);
     if (!param) {
         throw param_not_optiongroup_param();
     }
-    return param->get(doc, node);
+    return param->get(doc, node).c_str();
+}
+
+bool Parameter::get_optiongroup_contains(const char *value, SPDocument const *doc, Inkscape::XML::Node const *node) const
+{
+    ParamOptionGroup const *param = dynamic_cast<ParamOptionGroup const *>(this);
+    if (!param) {
+        throw param_not_optiongroup_param();
+    }
+    return param->contains(value, doc, node);
 }
 
 guint32 Parameter::get_color(const SPDocument* doc, Inkscape::XML::Node const *node) const
@@ -230,7 +138,7 @@ guint32 Parameter::get_color(const SPDocument* doc, Inkscape::XML::Node const *n
     return param->get(doc, node);
 }
 
-bool Parameter::set_bool(bool in, SPDocument * doc, Inkscape::XML::Node * node)
+bool Parameter::set_bool(bool in, SPDocument *doc, Inkscape::XML::Node *node)
 {
     ParamBool * boolpntr = dynamic_cast<ParamBool *>(this);
     if (boolpntr == nullptr)
@@ -238,17 +146,15 @@ bool Parameter::set_bool(bool in, SPDocument * doc, Inkscape::XML::Node * node)
     return boolpntr->set(in, doc, node);
 }
 
-int Parameter::set_int(int in, SPDocument * doc, Inkscape::XML::Node * node)
+int Parameter::set_int(int in, SPDocument *doc, Inkscape::XML::Node *node)
 {
-    ParamInt * intpntr = dynamic_cast<ParamInt *>(this);
+    ParamInt *intpntr = dynamic_cast<ParamInt *>(this);
     if (intpntr == nullptr)
         throw param_not_int_param();
     return intpntr->set(in, doc, node);
 }
 
-/** Wrapper to cast to the object and use it's function. */
-float
-Parameter::set_float (float in, SPDocument * doc, Inkscape::XML::Node * node)
+float Parameter::set_float(float in, SPDocument *doc, Inkscape::XML::Node *node)
 {
     ParamFloat * floatpntr;
     floatpntr = dynamic_cast<ParamFloat *>(this);
@@ -257,48 +163,33 @@ Parameter::set_float (float in, SPDocument * doc, Inkscape::XML::Node * node)
     return floatpntr->set(in, doc, node);
 }
 
-/** Wrapper to cast to the object and use it's function. */
-gchar const *
-Parameter::set_string (gchar const * in, SPDocument * doc, Inkscape::XML::Node * node)
+const char *Parameter::set_string(const char *in, SPDocument *doc, Inkscape::XML::Node *node)
 {
     ParamString * stringpntr = dynamic_cast<ParamString *>(this);
     if (stringpntr == nullptr)
         throw param_not_string_param();
-    return stringpntr->set(in, doc, node);
+    return stringpntr->set(in, doc, node).c_str();
 }
 
-gchar const * Parameter::set_optiongroup( gchar const * in, SPDocument * doc, Inkscape::XML::Node * node )
+const char *Parameter::set_optiongroup(const char *in, SPDocument *doc, Inkscape::XML::Node *node)
 {
-    ParamRadioButton *param = dynamic_cast<ParamRadioButton *>(this);
+    ParamOptionGroup *param = dynamic_cast<ParamOptionGroup *>(this);
     if (!param) {
         throw param_not_optiongroup_param();
     }
-    return param->set(in, doc, node);
+    return param->set(in, doc, node).c_str();
 }
 
-gchar const *Parameter::set_enum( gchar const * in, SPDocument * doc, Inkscape::XML::Node * node )
+guint32 Parameter::set_color(guint32 in, SPDocument *doc, Inkscape::XML::Node *node)
 {
-    ParamComboBox *param = dynamic_cast<ParamComboBox *>(this);
-    if (!param) {
-        throw param_not_enum_param();
-    }
-    return param->set(in, doc, node);
-}
-
-
-/** Wrapper to cast to the object and use it's function. */
-guint32
-Parameter::set_color (guint32 in, SPDocument * doc, Inkscape::XML::Node * node)
-{
-    ParamColor* param = dynamic_cast<ParamColor *>(this);
+    ParamColor*param = dynamic_cast<ParamColor *>(this);
     if (param == nullptr)
         throw param_not_color_param();
     return param->set(in, doc, node);
 }
 
 
-/** Oop, now that we need a parameter, we need it's name. */
-Parameter::Parameter(gchar const * name, gchar const * text, gchar const * description, bool hidden, int indent, Inkscape::Extension::Extension * ext) :
+Parameter::Parameter(gchar const *name, gchar const *text, gchar const *description, bool hidden, int indent, Inkscape::Extension::Extension *ext) :
     _description(nullptr),
     _text(nullptr),
     _hidden(hidden),
@@ -323,8 +214,7 @@ Parameter::Parameter(gchar const * name, gchar const * text, gchar const * descr
     return;
 }
 
-/** Oop, now that we need a parameter, we need it's name. */
-Parameter::Parameter (gchar const * name, gchar const * text, Inkscape::Extension::Extension * ext) :
+Parameter::Parameter (gchar const *name, gchar const *text, Inkscape::Extension::Extension *ext) :
     _description(nullptr),
     _text(nullptr),
     _hidden(false),
@@ -344,6 +234,92 @@ Parameter::Parameter (gchar const * name, gchar const * text, Inkscape::Extensio
     return;
 }
 
+Parameter::Parameter (Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *ext)
+    : _extension(ext)
+{
+    // name (mandatory for all paramters)
+    const char *name = in_repr->attribute("name");
+    if (!name) {
+        throw param_no_name();
+    }
+    _name = g_strdup(name);
+
+
+    // translatable (optional, required to translate gui-text and gui-description)
+    const char *translatable = in_repr->attribute("translatable");
+    if (translatable) {
+        if (!strcmp(translatable, "yes")) {
+            _translatable = YES;
+        } else if (!strcmp(translatable, "no"))  {
+            _translatable = NO;
+        } else {
+            g_warning("Invalid value ('%s') for translatable attribute of parameter '%s' in extension '%s'",
+                      translatable, _name, _extension->get_id());
+        }
+    }
+
+    // context (optional, required to translate gui-text and gui-description)
+    const char *context = in_repr->attribute("context");
+    if (!context) {
+        context = in_repr->attribute("msgctxt"); // backwards-compatibility with previous name
+    }
+    if (context) {
+        _context = g_strdup(context);
+    }
+
+    // gui-text (TODO: should likely be mandatory for all parameters; maybe not for hidden ones?)
+    const char *gui_text = in_repr->attribute("gui-text");
+    if (!gui_text) {
+        gui_text = in_repr->attribute("_gui-text"); // backwards-compatibility with underscored variants
+    }
+    if (gui_text) {
+        if (_translatable != NO) { // translate unless explicitly marked untranslatable
+            if (_context) {
+                gui_text = g_dpgettext2(nullptr, context, gui_text);
+            } else {
+                gui_text = _(gui_text);
+            }
+        }
+        _text = g_strdup(gui_text);
+    }
+
+    // gui-description (optional)
+    const char *gui_description = in_repr->attribute("gui-description");
+    if (!gui_description) {
+        gui_description = in_repr->attribute("_gui-description"); // backwards-compatibility with underscored variants
+    }
+    if (gui_description) {
+        if (_translatable != NO) { // translate unless explicitly marked untranslatable
+            if (_context) {
+                gui_description = g_dpgettext2(nullptr, context, gui_description);
+            } else {
+                gui_description = _(gui_description);
+            }
+        }
+        _description = g_strdup(gui_description);
+    }
+
+    // gui-hidden (optional)
+    const char *gui_hidden = in_repr->attribute("gui-hidden");
+    if (gui_hidden != nullptr) {
+        if (strcmp(gui_hidden, "true") == 0) {
+            _hidden = true;
+        }
+    }
+
+    // indent (optional)
+    const char *indent = in_repr->attribute("indent");
+    if (indent != nullptr) {
+        _indent = strtol(indent, nullptr, 0);
+    }
+
+    // appearance (optional, does not apply to all parameters)
+    const char *appearance = in_repr->attribute("appearance");
+    if (appearance) {
+        _appearance = g_strdup(appearance);
+    }
+}
+
 Parameter::~Parameter()
 {
     g_free(_name);
@@ -354,6 +330,12 @@ Parameter::~Parameter()
 
     g_free(_description);
     _description = nullptr;
+
+    g_free(_appearance);
+    _description = nullptr;
+
+    g_free(_context);
+    _context = nullptr;
 }
 
 gchar *Parameter::pref_name() const
@@ -389,7 +371,7 @@ void Parameter::string(std::list <std::string> &list) const
     }
 }
 
-Parameter *Parameter::get_param(gchar const * /*name*/)
+Parameter *Parameter::get_param(const gchar */*name*/)
 {
     return nullptr;
 }
