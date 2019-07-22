@@ -391,6 +391,17 @@ void Preferences::setInt(Glib::ustring const &pref_path, int value)
 }
 
 /**
+ * Set an unsigned integer attribute of a preference.
+ *
+ * @param pref_path Path of the preference to modify.
+ * @param value The new value of the pref attribute.
+ */
+void Preferences::setUInt(Glib::ustring const &pref_path, unsigned int value)
+{
+    _setRawValue(pref_path, Glib::ustring::compose("%1",value));
+}
+
+/**
  * Set a floating point attribute of a preference.
  *
  * @param pref_path Path of the preference to modify.
@@ -802,6 +813,26 @@ int Preferences::_extractInt(Entry const &v)
         v.value_int = val;
         return v.value_int;
     }
+}
+
+unsigned int Preferences::_extractUInt(Entry const &v)
+{
+    if (v.cached_uint) return v.value_uint;
+    v.cached_uint = true;
+    gchar const *s = static_cast<gchar const *>(v._value);
+
+    // Note: 'strtoul' can also read overflowed (i.e. negative) signed int values that we used to save before we
+    //       had the unsigned type, so this is fully backwards compatible and can be replaced seamlessly
+    unsigned int val = 0;
+    errno = 0;
+    val = (unsigned int)strtoul(s, nullptr, 0);
+    if (errno == ERANGE) {
+        g_warning("Unsigned integer preference out of range: '%s' (raw value: %s)", v._pref_path.c_str(), s);
+        val = 0;
+    }
+
+    v.value_uint = val;
+    return v.value_uint;
 }
 
 double Preferences::_extractDouble(Entry const &v)

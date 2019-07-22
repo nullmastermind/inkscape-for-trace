@@ -127,11 +127,17 @@ public:
     friend class Preferences; // Preferences class has to access _value
     public:
         ~Entry() = default;
-        Entry() : _pref_path(""), _value(nullptr),
-        cached_bool(false), cached_point(false), cached_int(false), cached_double(false), cached_unit(false), cached_color(false), cached_style(false) { 
-        
-        
-        } // needed to enable use in maps
+        Entry()
+            : _pref_path("")
+            , _value(nullptr)
+            , cached_bool(false)
+            , cached_point(false)
+            , cached_int(false)
+            , cached_uint(false)
+            , cached_double(false)
+            , cached_unit(false)
+            , cached_color(false)
+            , cached_style(false) {} // needed to enable use in maps
         Entry(Entry const &other) = default;
 
         /**
@@ -174,6 +180,13 @@ public:
          * @param max Maximum value allowed to return.
          */
         inline int getIntLimited(int def=0, int min=INT_MIN, int max=INT_MAX) const;
+
+        /**
+         * Interpret the preference as an unsigned integer.
+         *
+         * @param def Default value if the preference is not set.
+         */
+        inline unsigned int getUInt(unsigned int def=0) const;
 
         /**
          * Interpret the preference as a floating point value.
@@ -243,22 +256,38 @@ public:
          */
         Glib::ustring getEntryName() const;
     private:
-        Entry(Glib::ustring path, void const *v) : _pref_path(std::move(path)), _value(v),
-        cached_bool(false), cached_point (false), cached_int (false), cached_double(false), cached_unit(false), cached_color(false), cached_style(false) {}
+        Entry(Glib::ustring path, void const *v)
+            : _pref_path(std::move(path))
+            , _value(v)
+            , cached_bool(false)
+            , cached_point(false)
+            , cached_int(false)
+            , cached_uint(false)
+            , cached_double(false)
+            , cached_unit(false)
+            , cached_color(false)
+            , cached_style(false) {}
 
         Glib::ustring _pref_path;
         void const *_value;
-        
+
         mutable bool value_bool;
         mutable Geom::Point value_point;
         mutable int value_int;
+        mutable unsigned int value_uint;
         mutable double value_double;
         mutable Glib::ustring value_unit;
         mutable guint32 value_color;
         mutable SPCSSAttr* value_style;
 
-        mutable bool cached_bool, cached_point, cached_int, cached_double, cached_unit, cached_color, cached_style;
-
+        mutable bool cached_bool;
+        mutable bool cached_point;
+        mutable bool cached_int;
+        mutable bool cached_uint;
+        mutable bool cached_double;
+        mutable bool cached_unit;
+        mutable bool cached_color;
+        mutable bool cached_style;
     };
 
     // disable copying
@@ -372,6 +401,22 @@ public:
         return getEntry(pref_path).getIntLimited(def, min, max);
     }
 
+    /**
+     * Retrieve an unsigned integer.
+     *
+     * @param pref_path Path to the retrieved preference.
+     * @param def The default value to return if the preference is not set.
+     */
+    unsigned int getUInt(Glib::ustring const &pref_path, unsigned int def=0) {
+        return getEntry(pref_path).getUInt(def);
+    }
+
+    /**
+     * Retrieve a floating point value.
+     *
+     * @param pref_path Path to the retrieved preference.
+     * @param def The default value to return if the preference is not set.
+     */
     double getDouble(Glib::ustring const &pref_path, double def=0.0, Glib::ustring const &unit = "") {
         return getEntry(pref_path).getDouble(def, unit);
     }
@@ -468,6 +513,11 @@ public:
      * Set an integer value.
      */
     void setInt(Glib::ustring const &pref_path, int value);
+
+    /**
+     * Set an unsigned integer value.
+     */
+    void setUInt(Glib::ustring const &pref_path, unsigned int value);
 
     /**
      * Set a floating point value.
@@ -567,6 +617,7 @@ protected:
     bool _extractBool(Entry const &v);
     Geom::Point _extractPoint(Entry const &v);
     int _extractInt(Entry const &v);
+    unsigned int _extractUInt(Entry const &v);
     double _extractDouble(Entry const &v);
     double _extractDouble(Entry const &v, Glib::ustring const &requested_unit);
     Glib::ustring _extractString(Entry const &v);
@@ -653,6 +704,15 @@ inline int Preferences::Entry::getIntLimited(int def, int min, int max) const
     } else {
         int val = Inkscape::Preferences::get()->_extractInt(*this);
         return ( val >= min && val <= max ? val : def );
+    }
+}
+
+inline unsigned int Preferences::Entry::getUInt(unsigned int def) const
+{
+    if (!this->isValid()) {
+        return def;
+    } else {
+        return Inkscape::Preferences::get()->_extractUInt(*this);
     }
 }
 
