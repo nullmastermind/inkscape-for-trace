@@ -74,7 +74,7 @@ using Inkscape::UI::Widget::UnitTracker;
 
 // Functions for debugging:
 #ifdef DEBUG_TEXT
-
+recursively_set_properties( SP_OBJECT(*i), css_set, false);
 static void       sp_print_font( SPStyle *query ) {
 
     bool family_set   = query->font_family.set;
@@ -131,13 +131,13 @@ static bool is_relative(SPCSSUnit const unit)
 
 // Set property for object, but unset all descendents
 // Should probably be moved to desktop_style.cpp
-static void recursively_set_properties( SPObject* object, SPCSSAttr *css ) {
+static void recursively_set_properties( SPObject* object, SPCSSAttr *css, bool unset_descendents = true ) {
     object->changeCSS (css, "style");
 
     SPCSSAttr *css_unset = sp_repr_css_attr_unset_all( css );
     std::vector<SPObject *> children = object->childList(false);
     for (auto i: children) {
-        recursively_set_properties (i, css_unset);
+        recursively_set_properties (i, unset_descendents ? css_unset : css);
     }
     sp_repr_css_attr_unref (css_unset);
 }
@@ -213,14 +213,14 @@ static void set_lineheight(SPCSSAttr *css, std::vector<SPItem *> _sub_selection_
             SPItem *item = i;
             SPCSSAttr *css_fixed = sp_repr_css_attr_new();
             sp_repr_css_merge(css_fixed, css);
-            double factor_font_size = 0;
-            if (font_size > 0) {
-                factor_font_size = item->style->font_size.computed/font_size;
+            double factor_font_size = 1;
+            double item_font_size = item->style->font_size.computed;
+            if (font_size > 0 && item_font_size > 0) {
+                factor_font_size = font_size/item_font_size;
             }
             double doc_scale = 1;
             if (SP_IS_FLOWTEXT(item) && is_relative(unit) && unit_type_change) {
                 doc_scale = item->transform.descrim();
-                std::cout << doc_scale << std::endl;
                 sp_css_attr_scale(css_fixed, doc_scale, true, true);
             }
             if (SP_IS_TEXT(item) && !is_relative(unit)) {
@@ -890,20 +890,22 @@ TextToolbar::fontsize_value_changed()
                     sp_css_attr_scale(css_set, 1/ex);
                 }
                 _freeze = false;
+                DocumentUndo::setUndoSensitive(SP_ACTIVE_DOCUMENT, false);
                 lineheight_value_changed_wrapped(font_size.computed);
+                DocumentUndo::setUndoSensitive(SP_ACTIVE_DOCUMENT, true);
                 _freeze = true;
-                item->changeCSS(css_set,"style");
-
+                recursively_set_properties( SP_OBJECT(*i), css_set, false);
                 sp_repr_css_attr_unref(css_set);
             }
         }
     } else {
         _freeze = false;
+        DocumentUndo::setUndoSensitive(SP_ACTIVE_DOCUMENT, false);
         lineheight_value_changed_wrapped(font_size.computed);
+        DocumentUndo::setUndoSensitive(SP_ACTIVE_DOCUMENT, true);
         _freeze = true;
         sp_desktop_set_style (desktop, css, true, true);
     }
-
 
     // If no selected objects, set default.
     SPStyle query(SP_ACTIVE_DOCUMENT);
@@ -1383,11 +1385,7 @@ TextToolbar::lineheight_value_changed_wrapped(double font_size)
     // if ( is_relative(unit) ) {
     osfs << _line_height_adj->get_value() << unit->abbr;
     sp_repr_css_set_property (css, "line-height", osfs.str().c_str());
-    SPCSSAttr *css_flow = sp_repr_css_attr_new();
-    sp_repr_css_merge(css_flow, css);
-    // Only need to save for undo if a text item has been changed.
-    gchar *text = _font_size_item->get_active_text();
-    gchar *endptr;
+
     // Internal function to set line-height which is spacing mode dependent.
     set_lineheight(css, _sub_selection_items, _sub_unselection_items, unit, -1, font_size);
 
@@ -1413,8 +1411,10 @@ TextToolbar::lineheight_value_changed_wrapped(double font_size)
                 (*i)->updateRepr();
             }
         }
-        DocumentUndo::maybeDone(SP_ACTIVE_DESKTOP->getDocument(), "ttb:line-height", SP_VERB_NONE,
-                             _("Text: Change line-height"));
+        if (DocumentUndo::getUndoSensitive(SP_ACTIVE_DOCUMENT)) {
+            DocumentUndo::maybeDone(SP_ACTIVE_DESKTOP->getDocument(), "ttb:line-height", SP_VERB_NONE,
+                                 _("Text: Change line-height"));
+        }
     }
 
     // If no selected objects, set default.
@@ -1775,7 +1775,6 @@ TextToolbar::rotation_value_changed()
 void
 TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subselection, bool fullsubselection) // don't bother to update font list if subsel changed
 {
-    std::cout << _freeze << "AA222222222222222222222222222" << std::endl;
 #ifdef DEBUG_TEXT
     static int count = 0;
     ++count;
@@ -2006,12 +2005,19 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
             }
             if (!height && _sub_selection_items.empty()) {
                 for (auto child: item->childList(false)) {
-                    reaply = true;
-                    to_work.clear();
                     SPItem *subitem = dynamic_cast<SPItem *>(child);
                     if (subitem) {
+                        reaply = true;
+                        to_work.clear();
                         to_work.push_back(subitem);
                     }
+                }
+            } else if(!height) {
+                SPItem *parent = dynamic_cast<SPItem *>(item->parent);
+                if (parent) {
+                    reaply = true;
+                    to_work.clear();
+                    to_work.push_back(parent);
                 }
             }
         }
@@ -2054,6 +2060,14 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
                             to_work.push_back(subitem);
                         }
                     }
+                    --counter;
+                } else if (!height && !reaply && !_sub_selection_items.empty() && (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) ) {
+                    SPItem *parent = dynamic_cast<SPItem *>(_sub_selection_items[0]->parent);
+                    if (parent) {
+                        reaply = true;
+                        to_work.push_back(parent);
+                    }
+                    --counter;
                 }
                 prev_line_height_unit = line_height_unit;
                 ++counter;
@@ -2238,7 +2252,6 @@ TextToolbar::watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec) {
 void
 TextToolbar::selection_modified(Inkscape::Selection *selection, guint /*flags*/)
 {
-    std::cout << "11111111111111111111111111111" << std::endl;
 
     selection_changed(selection);
 
@@ -2247,7 +2260,6 @@ TextToolbar::selection_modified(Inkscape::Selection *selection, guint /*flags*/)
 void
 TextToolbar::subselection_changed(gpointer texttool)
 {
-    std::cout << "222222222222222222222222222" << std::endl;
 #ifdef DEBUG_TEXT
     std::cout << std::endl;
     std::cout << "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&" << std::endl;
