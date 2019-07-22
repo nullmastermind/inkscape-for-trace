@@ -123,8 +123,10 @@ static bool is_relative( Unit const *unit ) {
     return (unit->abbr == "" || unit->abbr == "em" || unit->abbr == "ex" || unit->abbr == "%");
 }
 
-static bool is_relative( SPCSSUnit const unit ) {
-    return (unit == SP_CSS_UNIT_NONE || unit == SP_CSS_UNIT_EM  || unit == SP_CSS_UNIT_EX  || unit == SP_CSS_UNIT_PERCENT);
+static bool is_relative(SPCSSUnit const unit)
+{
+    return (unit == SP_CSS_UNIT_NONE || unit == SP_CSS_UNIT_EM || unit == SP_CSS_UNIT_EX ||
+            unit == SP_CSS_UNIT_PERCENT);
 }
 
 // Set property for object, but unset all descendents
@@ -147,7 +149,7 @@ void sp_line_height_to_child(SPItem *root, SPCSSAttr *css, SPILengthOrNormal lin
         SPCSSAttr *css_item = sp_repr_css_attr_new();
         sp_repr_css_merge(css_item, css);
         if (current_line_height.computed < line_height.computed) {
-            /* 
+            /*
             @Tav you disable children units but in the spec is alowwd so I retain allowed
             Inkscape::CSSOStringStream osfs;
             osfs << line_height.computed;
@@ -155,7 +157,7 @@ void sp_line_height_to_child(SPItem *root, SPCSSAttr *css, SPILengthOrNormal lin
             sp_repr_css_set_property(css_item, "line-height", line_height.toString().c_str());
         } else {
             if (not_selected) {
-                /* 
+                /*
                 @Tav you disable children units but in the spec is alowwd so I retain allowed
                 Inkscape::CSSOStringStream osfs;
                 osfs << current_line_height.computed;
@@ -164,7 +166,7 @@ void sp_line_height_to_child(SPItem *root, SPCSSAttr *css, SPILengthOrNormal lin
             }
         }
         root->changeCSS(css_item, "style");
-        sp_repr_css_attr_unref (css_item);
+        sp_repr_css_attr_unref(css_item);
         for (auto item : root->childList(false)) {
             SPItem *subitem = dynamic_cast<SPItem *>(item);
             sp_line_height_to_child(subitem, css, line_height, not_selected);
@@ -203,10 +205,9 @@ static void set_lineheight(SPCSSAttr *css_text, std::vector<SPItem *> _sub_selec
             if (_sub_selection_items.empty() && (dynamic_cast<SPFlowtext *>(item))) {
                 Geom::Affine flowtransform((item)->transform);
                 double ex(flowtransform.descrim());
-                if (transform_flowbox && (ex != 0.0) && (ex != 1.0) ) {
+                if (transform_flowbox && (ex != 0.0) && (ex != 1.0)) {
                     // here we scale flow text elements to because it has document scale appiled to the element
-                    sp_css_attr_scale(css_fixed, 1/ex);
-                    std::cout << 1/ex << std::endl;
+                    sp_css_attr_scale(css_fixed, 1 / ex);
                 }
             }
             // Scale by inverse of accumulated parent transform
@@ -340,12 +341,12 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
     _tracker->addUnit(unit_table.getUnit("em"));
     _tracker->addUnit(unit_table.getUnit("ex"));
     _tracker->setActiveUnit(unit_table.getUnit("%"));
-/*     _line_spacing_menu = Gtk::manage(new Gtk::Popover());
-    _line_spacing_menu->set_modal(false);
-    _line_spacing_menu->signal_closed().connect(sigc::mem_fun(*this, &TextToolbar::line_height_popover_closed));
-    _line_spacing_menu->set_name("line_spacing_advanced");
-    _line_spacing_menu_content = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
-    _line_spacing_menu->add(*_line_spacing_menu_content); */
+    /*     _line_spacing_menu = Gtk::manage(new Gtk::Popover());
+        _line_spacing_menu->set_modal(false);
+        _line_spacing_menu->signal_closed().connect(sigc::mem_fun(*this, &TextToolbar::line_height_popover_closed));
+        _line_spacing_menu->set_name("line_spacing_advanced");
+        _line_spacing_menu_content = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
+        _line_spacing_menu->add(*_line_spacing_menu_content); */
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -444,18 +445,18 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         add(*_font_size_item);
     }
     /* line_spacing Menu */
-/*     {
-        _line_spacing_menu_launcher = Gtk::manage(new Gtk::ToggleToolButton());
-        _line_spacing_menu_launcher->set_label(_("Line height options"));
-        _line_spacing_menu_launcher->set_tooltip_text(_("Show line height options"));
-        _line_spacing_menu_launcher->set_icon_name(INKSCAPE_ICON("text_line_spacing"));
-        _line_spacing_menu_launcher->set_name("line_spacing_menu_launcher");
-        _line_spacing_menu->set_relative_to(*_line_spacing_menu_launcher);
-        _line_spacing_menu->set_name("line_spacing_menu");
-        _line_spacing_menu->set_default_widget(*_line_spacing_menu_launcher);
-        _line_spacing_menu_launcher->signal_toggled().connect(sigc::bind(sigc::mem_fun(*this, &TextToolbar::poptoggle), _line_spacing_menu_launcher));
-        add(*_line_spacing_menu_launcher);
-    } */
+    /*     {
+            _line_spacing_menu_launcher = Gtk::manage(new Gtk::ToggleToolButton());
+            _line_spacing_menu_launcher->set_label(_("Line height options"));
+            _line_spacing_menu_launcher->set_tooltip_text(_("Show line height options"));
+            _line_spacing_menu_launcher->set_icon_name(INKSCAPE_ICON("text_line_spacing"));
+            _line_spacing_menu_launcher->set_name("line_spacing_menu_launcher");
+            _line_spacing_menu->set_relative_to(*_line_spacing_menu_launcher);
+            _line_spacing_menu->set_name("line_spacing_menu");
+            _line_spacing_menu->set_default_widget(*_line_spacing_menu_launcher);
+            _line_spacing_menu_launcher->signal_toggled().connect(sigc::bind(sigc::mem_fun(*this,
+       &TextToolbar::poptoggle), _line_spacing_menu_launcher)); add(*_line_spacing_menu_launcher);
+        } */
     /* Line height */
     {
         // Drop down menu
@@ -464,7 +465,8 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
 
         auto line_height_val = prefs->getDouble("/tools/text/lineheight", 1.15);
         _line_height_adj = Gtk::Adjustment::create(line_height_val, 0.0, 1000.0, 0.1, 1.0);
-        _line_height_item = Gtk::manage(new UI::Widget::SpinButtonToolItem("text-line-height", "", _line_height_adj, 0.1, 2));
+        _line_height_item =
+            Gtk::manage(new UI::Widget::SpinButtonToolItem("text-line-height", "", _line_height_adj, 0.1, 2));
         _line_height_item->set_tooltip_text(_("Spacing between baselines"));
         _line_height_item->set_custom_numeric_menu_data(values, labels);
         _line_height_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
@@ -482,24 +484,25 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         add(*_line_height_units_item);
     }
 
-   /* Text outer style */
-   /*
-    {
-        _outer_style_item = Gtk::manage(new Gtk::ToggleToolButton());
-        _outer_style_item->set_label(_("Show outer style"));
-        _outer_style_item->set_tooltip_text(_("Show style of outermost text element. The 'font-size' and 'line-height' values of the outermost text element determine the minimum line spacing in the block."));
-        _outer_style_item->set_icon_name(INKSCAPE_ICON("text_outer_style"));
-        _line_spacing_menu_content->pack_start(*_outer_style_item, 10, false, false);
-        _outer_style_item->signal_toggled().connect(sigc::mem_fun(*this, &TextToolbar::outer_style_changed));
-        // need to set_active status *after* a bunch of other widgets. See end of this function.
-    } */
+    /* Text outer style */
+    /*
+     {
+         _outer_style_item = Gtk::manage(new Gtk::ToggleToolButton());
+         _outer_style_item->set_label(_("Show outer style"));
+         _outer_style_item->set_tooltip_text(_("Show style of outermost text element. The 'font-size' and 'line-height'
+     values of the outermost text element determine the minimum line spacing in the block."));
+         _outer_style_item->set_icon_name(INKSCAPE_ICON("text_outer_style"));
+         _line_spacing_menu_content->pack_start(*_outer_style_item, 10, false, false);
+         _outer_style_item->signal_toggled().connect(sigc::mem_fun(*this, &TextToolbar::outer_style_changed));
+         // need to set_active status *after* a bunch of other widgets. See end of this function.
+     } */
 
     /* Text line height unset */
     /* {
         _line_height_unset_item = Gtk::manage(new Gtk::ToggleToolButton());
         _line_height_unset_item->set_label(_("Unset line height"));
-        _line_height_unset_item->set_tooltip_text(_("If enabled, line height is set on part of selection. Click to unset."));
-        _line_height_unset_item->set_icon_name(INKSCAPE_ICON("paint-unknown"));
+        _line_height_unset_item->set_tooltip_text(_("If enabled, line height is set on part of selection. Click to
+    unset.")); _line_height_unset_item->set_icon_name(INKSCAPE_ICON("paint-unknown"));
         _line_spacing_menu_content->pack_start(*_line_height_unset_item, 10, false, false);
         _line_height_unset_item->signal_toggled().connect(sigc::mem_fun(*this, &TextToolbar::lineheight_unset_changed));
         _line_height_unset_item->set_active(prefs->getBool("/tools/text/line_height_unset", false));
@@ -538,12 +541,12 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
 
         _line_spacing_item =
             UI::Widget::ComboToolItem::create(_("Line Spacing Mode"),   // Label
-                                              _("How should multiple baselines be spaced?\n Adaptive: Line spacing adapts to font size.\n Minimum: Like Adaptive, but with a set minimum.\n Even: Evenly spaced.\n Adjustable: No restrictions."), // Tooltip
-                                             "Not Used",          // Icon
-                                             store );             // Tree store
+                                              _("How should multiple baselines be spaced?\n Adaptive: Line spacing
+    adapts to font size.\n Minimum: Like Adaptive, but with a set minimum.\n Even: Evenly spaced.\n Adjustable: No
+    restrictions."), // Tooltip "Not Used",          // Icon store );             // Tree store
         _line_spacing_item->use_icon(true);
         _line_spacing_item->use_label(true);
-        
+
         gint mode = prefs->getInt("/tools/text/line_spacing_mode", 0);
         _line_spacing_item->set_active( mode );
 
@@ -648,7 +651,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _letter_spacing_item->set_focus_widget(Glib::wrap(GTK_WIDGET(desktop->canvas)));
         _letter_spacing_adj->signal_value_changed().connect(sigc::mem_fun(*this, &TextToolbar::letterspacing_value_changed));
         add(*_letter_spacing_item);
-        
+
         _letter_spacing_item->set_sensitive(true);
         _letter_spacing_item->set_icon(INKSCAPE_ICON("text_letter_spacing"));
     }
@@ -701,7 +704,6 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _dy_item->set_sensitive(true);
         _dy_item->set_icon(INKSCAPE_ICON("text_vert_kern"));
         add(*_dy_item);
-
     }
 
     /* Character rotation */
@@ -880,7 +882,7 @@ TextToolbar::fontfamily_value_changed()
     std::cout << "  Old family: " << fontlister->get_font_family() << std::endl;
     std::cout << "  New family: " << new_family << std::endl;
     std::cout << "  Old active: " << fontlister->get_font_family_row() << std::endl;
-    //std::cout << "  New active: " << act->active << std::endl;
+    // std::cout << "  New active: " << act->active << std::endl;
 #endif
     if( new_family.compare( fontlister->get_font_family() ) != 0 ) {
         // Changed font-family
@@ -996,7 +998,7 @@ TextToolbar::fontsize_value_changed()
             }
         }
     } else { */
-    sp_desktop_set_style (desktop, css, true, true);
+    sp_desktop_set_style(desktop, css, true, true);
     //}
 
     // If no selected objects, set default.
@@ -1065,7 +1067,7 @@ TextToolbar::fontstyle_value_changed()
 
 // Handles both Superscripts and Subscripts
 /* void
-TextToolbar::poptoggle(Gtk::ToggleToolButton *btn) 
+TextToolbar::poptoggle(Gtk::ToggleToolButton *btn)
 {
     if (btn->get_active()) {
         _line_spacing_menu->show_all();
@@ -1468,7 +1470,7 @@ TextToolbar::lineheight_value_changed()
     _freeze = true;
     // Get user selected unit and save as preference
     Unit const *unit = _tracker->getActiveUnit();
-    // @Tav same disabled unit 
+    // @Tav same disabled unit
     /* if (!_line_height_units_item->is_sensitive()) {
         Unit no_unit = Unit();
         no_unit.type = Inkscape::Util::UnitType::UNIT_TYPE_NONE;
@@ -1493,13 +1495,13 @@ TextToolbar::lineheight_value_changed()
     // if ( is_relative(unit) ) {
     osfs << _line_height_adj->get_value() << unit->abbr;
     sp_repr_css_set_property (css, "line-height", osfs.str().c_str());
-    SPCSSAttr *css_flow = sp_repr_css_attr_new ();
+    SPCSSAttr *css_flow = sp_repr_css_attr_new();
     sp_repr_css_merge(css_flow, css);
     // Only need to save for undo if a text item has been changed.
 
     // Internal function to set line-height which is spacing mode dependent.
-    set_lineheight (css, _sub_selection_items, _sub_unselection_items, !is_relative(unit));
-    
+    set_lineheight(css, _sub_selection_items, _sub_unselection_items, !is_relative(unit));
+
     Inkscape::Selection *selection = SP_ACTIVE_DESKTOP->getSelection();
     bool modmade = false;
     auto itemlist= selection->items();
@@ -1509,7 +1511,7 @@ TextToolbar::lineheight_value_changed()
             break;
         }
     }
-    
+
     // Save for undo
     if (modmade) {
         // Call ensureUpToDate() causes rebuild of text layout (with all proper style
@@ -1574,20 +1576,20 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     Inkscape::Selection *selection = desktop->getSelection();
     auto itemlist = selection->items();
- 
+
     // Convert between units
     double font_size = 0;
     double doc_scale = 1;
     double flow_scale = 1;
     int count = 0;
     bool has_flow = false;
-    for(auto i=itemlist.begin();i!=itemlist.end(); ++i){
-        if (SP_IS_TEXT (*i) || SP_IS_FLOWTEXT (*i)) {
+    for (auto i = itemlist.begin(); i != itemlist.end(); ++i) {
+        if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i)) {
             doc_scale = Geom::Affine((*i)->i2dt_affine()).descrim();
             font_size += (*i)->style->font_size.computed * doc_scale;
             ++count;
         }
-        if (SP_IS_FLOWTEXT (*i)) {
+        if (SP_IS_FLOWTEXT(*i)) {
             has_flow = true;
             flow_scale = (*i)->transform.descrim();
         }
@@ -1600,20 +1602,19 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
     if (_sub_selection_items.empty() && has_flow && !is_relative(SPCSSUnit(old_unit)) && is_relative(unit)) {
         line_height /= flow_scale;
     }
-    if ((unit->abbr == "" || unit->abbr == "em") &&
-        (old_unit == SP_CSS_UNIT_NONE || old_unit == SP_CSS_UNIT_EM)) {
+    if ((unit->abbr == "" || unit->abbr == "em") && (old_unit == SP_CSS_UNIT_NONE || old_unit == SP_CSS_UNIT_EM)) {
         // Do nothing
     } else if ((unit->abbr == "" || unit->abbr == "em") && old_unit == SP_CSS_UNIT_EX) {
         line_height *= 0.5;
-    } else if ((unit->abbr) == "ex" && (old_unit == SP_CSS_UNIT_EM || old_unit == SP_CSS_UNIT_NONE) ) {
+    } else if ((unit->abbr) == "ex" && (old_unit == SP_CSS_UNIT_EM || old_unit == SP_CSS_UNIT_NONE)) {
         line_height *= 2.0;
     } else if ((unit->abbr == "" || unit->abbr == "em") && old_unit == SP_CSS_UNIT_PERCENT) {
         line_height /= 100.0;
-    } else if ((unit->abbr) == "%"  && (old_unit == SP_CSS_UNIT_EM || old_unit == SP_CSS_UNIT_NONE) ) {
+    } else if ((unit->abbr) == "%" && (old_unit == SP_CSS_UNIT_EM || old_unit == SP_CSS_UNIT_NONE)) {
         line_height *= 100;
     } else if ((unit->abbr) == "ex" && old_unit == SP_CSS_UNIT_PERCENT) {
         line_height /= 50.0;
-    } else if ((unit->abbr) == "%"  && old_unit == SP_CSS_UNIT_EX) {
+    } else if ((unit->abbr) == "%" && old_unit == SP_CSS_UNIT_EX) {
         line_height *= 50;
     } else if (is_relative(unit)) {
         // Convert absolute to relative... for the moment use average font-size
@@ -1630,8 +1631,8 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
             line_height *= 2;
         }
         line_height *= doc_scale;
-    } else if (old_unit==SP_CSS_UNIT_NONE || old_unit==SP_CSS_UNIT_PERCENT ||
-               old_unit==SP_CSS_UNIT_EM   || old_unit==SP_CSS_UNIT_EX) {
+    } else if (old_unit == SP_CSS_UNIT_NONE || old_unit == SP_CSS_UNIT_PERCENT || old_unit == SP_CSS_UNIT_EM ||
+               old_unit == SP_CSS_UNIT_EX) {
         // Convert relative to absolute... for the moment use average font-size
         if (old_unit == SP_CSS_UNIT_PERCENT) {
             line_height /= 100.0;
@@ -1650,7 +1651,7 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
     SPCSSAttr *css = sp_repr_css_attr_new ();
     Inkscape::CSSOStringStream osfs;
     // @tav the same to store units diferent than pixels
-    //if ( is_relative(unit) ) {
+    // if ( is_relative(unit) ) {
     osfs << line_height << unit->abbr;
     /* } else {
         osfs << Quantity::convert(line_height, unit, "px") << "px";
@@ -1668,12 +1669,12 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
         _line_height_adj->set_page_increment(1.0);
     }
     bool transform_flowbox = is_relative(unit) == is_relative(SPCSSUnit(old_unit));
-    if (is_relative(unit) && !is_relative(SPCSSUnit(old_unit))){
+    if (is_relative(unit) && !is_relative(SPCSSUnit(old_unit))) {
         transform_flowbox = true;
     }
 
     // Internal function to set line-height which is spacing mode dependent.
-    set_lineheight (css, _sub_selection_items, _sub_unselection_items, transform_flowbox);
+    set_lineheight(css, _sub_selection_items, _sub_unselection_items, transform_flowbox);
 
     // Only need to save for undo if a text item has been changed.
     bool modmade = false;
@@ -1703,7 +1704,7 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
 
     _freeze = false;
 }
-/* 
+/*
 void
 TextToolbar::line_spacing_mode_changed(int mode)
 {
@@ -1739,7 +1740,8 @@ TextToolbar::line_spacing_mode_changed(int mode)
             }
 
             SPStyle tspans; // Also flowPara/flowSpan
-            int result_numbers = sp_desktop_query_style_from_list (children_item, &tspans, QUERY_STYLE_PROPERTY_FONTNUMBERS);
+            int result_numbers = sp_desktop_query_style_from_list (children_item, &tspans,
+QUERY_STYLE_PROPERTY_FONTNUMBERS);
 
             Inkscape::CSSOStringStream osfs;
             if (text_style->line_height.computed != 0 || text_style->line_height.normal) {
