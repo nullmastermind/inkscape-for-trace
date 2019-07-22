@@ -93,14 +93,10 @@ protected:
      */
     bool on_my_key_press_event(GdkEventKey* event);
 
-
-    void on_value_changed();
     /**
      * Undo the editing, by resetting the value upon when the spinbutton got focus.
      */
     void undo();
-
-    int prevdigits;
 };
 
 } // namespace Widget

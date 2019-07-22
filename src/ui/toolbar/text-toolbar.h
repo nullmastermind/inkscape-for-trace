@@ -28,7 +28,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "object/sp-object.h"
+#include "object/sp-item.h"
 #include "toolbar.h"
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
@@ -98,8 +98,8 @@ private:
     Glib::RefPtr<Gtk::Adjustment> _dx_adj;
     Glib::RefPtr<Gtk::Adjustment> _dy_adj;
     Glib::RefPtr<Gtk::Adjustment> _rotation_adj;
-    std::vector<SPObject *> sub_selection_objs;
-    std::vector<SPObject *> sub_unselection_objs;
+    std::vector<SPItem *> _sub_selection_items;
+    std::vector<SPItem *> _sub_unselection_items;
     int _lineheight_unit;
 
     sigc::connection c_selection_changed;
@@ -128,7 +128,7 @@ private:
     void rotation_value_changed();
     void selection_changed(Inkscape::Selection *selection, bool subselection = false, bool fullsubselection = false);
     void selection_modified(Inkscape::Selection *selection, guint flags);
-    void subselection_changed(gpointer tc);
+    void subselection_changed(gpointer texttool);
     void watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
     void set_sizes(int unit);
     /*     void poptoggle(Gtk::ToggleToolButton *btn); */

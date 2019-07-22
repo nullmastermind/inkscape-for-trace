@@ -9,11 +9,10 @@
  */
 
 #include "spinbutton.h"
-#include "ui/tools/tool-base.h"
 #include "unit-menu.h"
 #include "unit-tracker.h"
 #include "util/expression-evaluator.h"
-#include <cmath>
+#include "ui/tools/tool-base.h"
 
 namespace Inkscape {
 namespace UI {
@@ -27,10 +26,7 @@ SpinButton::connect_signals() {
     signal_key_press_event().connect(sigc::mem_fun(*this, &SpinButton::on_my_key_press_event));
     gtk_widget_add_events(GTK_WIDGET(gobj()), GDK_SCROLL_MASK | GDK_SMOOTH_SCROLL_MASK);
     signal_scroll_event().connect(sigc::mem_fun(*this, &SpinButton::on_scroll_event));
-    signal_value_changed().connect(sigc::mem_fun(*this, &SpinButton::on_value_changed));
     set_focus_on_click(true);
-    prevdigits = get_digits();
-    on_value_changed();
 };
 
 int SpinButton::on_input(double* newvalue)
@@ -63,27 +59,6 @@ int SpinButton::on_input(double* newvalue)
     }
 
     return true;
-}
-
-void SpinButton::on_value_changed()
-{
-    double val = get_value();
-    double absval = std::abs(val);
-    int count = get_digits();
-    double intpart;
-    if (modf(absval, &intpart) == 0.0) {
-        set_digits(0);
-        count = 0;
-    } else {
-        set_digits(prevdigits);
-        count = prevdigits + 1;
-    }
-    if (val < 0) {
-        count += 1;
-    }
-    count += absval > 9 ? (int)log10(absval) + 1 : 1;
-    count = std::min(std::max(count, 3), 7);
-    set_width_chars(count);
 }
 
 bool SpinButton::on_my_focus_in_event(GdkEventFocus* /*event*/)
