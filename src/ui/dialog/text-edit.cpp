@@ -39,6 +39,7 @@ extern "C" {
 #include "inkscape.h"
 #include "text-editing.h"
 #include "verbs.h"
+#include "style.h"
 
 #include <libnrtype/font-instance.h>
 #include <libnrtype/font-lister.h>
@@ -48,7 +49,7 @@ extern "C" {
 #include "object/sp-textpath.h"
 
 #include "svg/css-ostringstream.h"
-
+#include "ui/toolbar/text-toolbar.h"
 #include "ui/icon-names.h"
 #include "ui/widget/font-selector.h"
 
@@ -422,14 +423,22 @@ void TextEdit::onApply()
     unsigned items = 0;
     auto item_list = desktop->getSelection()->items();
     SPCSSAttr *css = fillTextStyle ();
-    sp_desktop_set_style(desktop, css, true);
-
     for(auto i=item_list.begin();i!=item_list.end();++i){
         // apply style to the reprs of all text objects in the selection
         if (SP_IS_TEXT (*i) || (SP_IS_FLOWTEXT (*i)) ) {
             ++items;
         }
     }
+    if (items == 1) {
+        SPItem *item = SP_ACTIVE_DESKTOP->getSelection()->singleItem();
+        SPObject *object = dynamic_cast<SPObject *>(SP_ACTIVE_DESKTOP->getSelection()->singleItem());
+        double doc_scale = 1;
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
+        sp_lineheight_from_new_fontsize(sp_style_css_size_units_to_px(font_selector.get_fontsize(), unit), object, doc_scale);
+        
+    }
+    sp_desktop_set_style(desktop, css, true);
 
     if (items == 0) {
         // no text objects; apply style to prefs for new objects
@@ -442,6 +451,12 @@ void TextEdit::onApply()
         SPItem *item = SP_ACTIVE_DESKTOP->getSelection()->singleItem();
         if (SP_IS_TEXT (item) || SP_IS_FLOWTEXT(item)) {
             updateObjectText (item);
+            SPStyle *item_style = item->style;
+            if (item_style->inline_size.value == 0) {
+                css = sp_css_attr_from_style(item_style, SP_STYLE_FLAG_IFSET);
+                sp_repr_css_unset_property (css, "inline-size");
+                item->changeCSS (css, "style");
+            }
         }
     }
 

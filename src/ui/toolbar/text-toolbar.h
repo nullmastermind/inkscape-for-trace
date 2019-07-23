@@ -29,6 +29,7 @@
  */
 
 #include "object/sp-item.h"
+#include "object/sp-object.h"
 #include "toolbar.h"
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
@@ -74,7 +75,6 @@ private:
     Gtk::ToggleToolButton *_superscript_item;
     Gtk::ToggleToolButton *_subscript_item;
 
-
     UI::Widget::ComboToolItem *_align_item;
     UI::Widget::ComboToolItem *_writing_mode_item;
     UI::Widget::ComboToolItem *_orientation_item;
@@ -109,7 +109,7 @@ private:
     void orientation_changed(int mode);
     void direction_changed(int mode);
     void lineheight_value_changed();
-    void lineheight_value_changed_wrapped(double font_size = -1.0);
+    void lineheight_value_changed_wrapped(double font_size, bool skip_undo);
     void lineheight_unit_changed(int not_used);
     void wordspacing_value_changed();
     void letterspacing_value_changed();
@@ -127,9 +127,9 @@ private:
 public:
     static GtkWidget * create(SPDesktop *desktop);
 };
-
 }
 }
 }
+void sp_lineheight_from_new_fontsize(double font_size, SPObject *root , double doc_scale);
 
 #endif /* !SEEN_TEXT_TOOLBAR_H */
