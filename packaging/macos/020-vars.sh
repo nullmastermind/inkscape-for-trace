@@ -21,8 +21,6 @@
 ### name and directory #########################################################
 
 SELF_NAME=$(basename $0)
-SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); \
-  cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
 
 ### multithreading #############################################################
 
@@ -137,7 +135,7 @@ export PIP_CONFIG_DIR=$DEVCONFIG/pip
 if [ -z $CI_JOB_ID ]; then
   INK_DIR=$SRC_DIR/inkscape
 else
-  INK_DIR=$SELF_DIR/../..
+  INK_DIR=$SELF_DIR/../..   # SELF_DIR needs to be set by the sourcing script
   INK_DIR=$(cd $INK_DIR; pwd -P)   # make path canoncial
 fi
 

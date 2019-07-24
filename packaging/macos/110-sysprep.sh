@@ -8,9 +8,10 @@
 
 ### load settings and functions ################################################
 
-SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); \
-  cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
+SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
 for script in $SELF_DIR/0??-*.sh; do source $script; done
+
+run_annotated
 
 ### create our work directory ##################################################
 
@@ -21,7 +22,7 @@ if $RAMDISK_ENABLE; then
   create_ramdisk $WRK_DIR $RAMDISK_SIZE
 fi
 
-### housekeeping: redirect to locations below $WRK_DIR #########################
+### housekeeping: redirect to locations below WRK_DIR ##########################
 
 mkdir -p $TMP_DIR
 

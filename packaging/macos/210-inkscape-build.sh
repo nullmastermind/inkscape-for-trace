@@ -8,11 +8,12 @@
 
 ### load settings and functions ################################################
 
-SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); \
-  cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
+SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
 for script in $SELF_DIR/0??-*.sh; do source $script; done
 
 set -e
+
+run_annotated
 
 ### build Inkscape #############################################################
 
@@ -45,13 +46,15 @@ cmake \
 make
 make install
 
-# patch Poppler library locations
+### patch Poppler library locations ############################################
+
 relocate_dependency $LIB_DIR/libpoppler.85.dylib $BIN_DIR/inkscape
 relocate_dependency $LIB_DIR/libpoppler-glib.8.dylib $BIN_DIR/inkscape
 relocate_dependency $LIB_DIR/libpoppler.85.dylib $LIB_DIR/inkscape/libinkscape_base.dylib
 relocate_dependency $LIB_DIR/libpoppler-glib.8.dylib $LIB_DIR/inkscape/libinkscape_base.dylib
 
-# patch OpenMP library locations
+### patch OpenMP library locations #############################################
+
 relocate_dependency $LIB_DIR/libomp.dylib $BIN_DIR/inkscape
 relocate_dependency $LIB_DIR/libomp.dylib $LIB_DIR/inkscape/libinkscape_base.dylib
 

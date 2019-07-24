@@ -8,9 +8,10 @@
 
 ### load settings and functions ################################################
 
-SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); \
-  cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
+SELF_DIR=$(F=$0; while [ ! -z $(readlink $F) ] && F=$(readlink $F); cd $(dirname $F); F=$(basename $F); [ -L $F ]; do :; done; echo $(pwd -P))
 for script in $SELF_DIR/0??-*.sh; do source $script; done
+
+#run_annotated   disabled for now, breaks jhbuild interactive mode
 
 ### install GTK3 libraries #####################################################
 
@@ -20,7 +21,7 @@ jhbuild build \
   meta-gtk-osx-gtk3 \
   meta-gtk-osx-gtkmm3
 
-### fix loaders ################################################################
+### fix GDK pixbuf loaders #####################################################
 
 for file in $LIB_DIR/gdk-pixbuf-2.0/2.10.0/loaders/*.dylib; do
   mv $file $(dirname $file)/$(basename -s .dylib $file).so

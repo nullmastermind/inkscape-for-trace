@@ -192,3 +192,29 @@ function readlinkf
   echo $(pwd -P)/$file
 }
 
+### run script and echo comments prefixed with three hashes ####################
+
+# This little magic trick
+#   - reads the current file
+#   - turns every line that matches "### text here ###" into an echo statement
+#     (whatever follows after the last three hashes is ignored)
+#   - adds script name and line number as prefix
+#   - sets background color for that "echo" to blue
+#   - removes the call to run_annotated to avoid recursion
+#   - set SELF_DIR to correct value (piping into bash breaks existing one)
+#
+# Known side effects:
+#   - SELF_NAME no longer works (is now "bash")
+#   - interactive JHBuild (e.g. on error) breaks
+
+function run_annotated
+{
+  # The newlines in the last 'sed' statement are significant!
+
+  sed 's/\(^### .* ###\).*/echo \-e "\\033[1;44m['$SELF_NAME':$(printf '%03d' $LINENO)] \1\\033[0m"/g' $SELF_DIR/$SELF_NAME | sed 's/^run_annotated/#run_annotated/' | sed '/SELF_DIR=/a\
+SELF_DIR='$SELF_DIR'\
+' | bash
+
+  exit $?
+}
+
