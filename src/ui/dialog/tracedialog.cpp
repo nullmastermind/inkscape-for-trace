@@ -51,6 +51,7 @@ class TraceDialogImpl2 : public TraceDialog {
     void abort();
 
     void previewCallback();
+    bool previewResize(const Cairo::RefPtr<Cairo::Context>&);
     void traceCallback();
     void onSelectionModified(guint flags);
     void onSetDefaults();
@@ -76,7 +77,8 @@ class TraceDialogImpl2 : public TraceDialog {
     Gtk::Box *mainBox;
     Gtk::Stack *choice_scan;
     Gtk::Notebook *choice_tab;
-    Gtk::Image *previewImage;
+    Glib::RefPtr<Gdk::Pixbuf> scaledPreview;
+    Gtk::DrawingArea *previewArea;
 };
 
 void TraceDialogImpl2::setDesktop(SPDesktop *desktop)
@@ -181,15 +183,14 @@ void TraceDialogImpl2::traceProcess(bool do_i_trace)
         if (preview) {
             int width = preview->get_width();
             int height = preview->get_height();
-            const Gtk::Allocation &vboxAlloc = previewImage->get_allocation();
+            const Gtk::Allocation &vboxAlloc = previewArea->get_allocation();
             double scaleFX = vboxAlloc.get_width() / (double)width;
             double scaleFY = vboxAlloc.get_height() / (double)height;
             double scaleFactor = scaleFX > scaleFY ? scaleFY : scaleFX;
             int newWidth = (int)(((double)width) * scaleFactor);
             int newHeight = (int)(((double)height) * scaleFactor);
-            Glib::RefPtr<Gdk::Pixbuf> scaledPreview = preview->scale_simple(newWidth, newHeight, Gdk::INTERP_NEAREST);
-            // g_object_unref(preview);
-            previewImage->set(scaledPreview);
+            scaledPreview = preview->scale_simple(newWidth, newHeight, Gdk::INTERP_NEAREST);
+            previewArea->queue_draw();
         }
     }
     if (do_i_trace){
@@ -207,6 +208,26 @@ void TraceDialogImpl2::traceProcess(bool do_i_trace)
 
     if (desktop)
         desktop->clearWaitingCursor();
+}
+
+bool TraceDialogImpl2::previewResize(const Cairo::RefPtr<Cairo::Context>& cr)
+{
+    if (!scaledPreview) return false; // return early
+    int width = scaledPreview->get_width();
+    int height = scaledPreview->get_height();
+    const Gtk::Allocation &vboxAlloc = previewArea->get_allocation();
+    double scaleFX = vboxAlloc.get_width() / (double)width;
+    double scaleFY = vboxAlloc.get_height() / (double)height;
+    double scaleFactor = scaleFX > scaleFY ? scaleFY : scaleFX;
+    int newWidth = (int)(((double)width) * scaleFactor);
+    int newHeight = (int)(((double)height) * scaleFactor);
+    int offsetX = (vboxAlloc.get_width() - newWidth)/2;
+    int offsetY = (vboxAlloc.get_height() - newHeight)/2;
+
+    Glib::RefPtr<Gdk::Pixbuf> temp = scaledPreview->scale_simple(newWidth, newHeight, Gdk::INTERP_NEAREST);
+    Gdk::Cairo::set_source_pixbuf(cr, temp, offsetX, offsetY);
+    cr->paint();
+    return false;
 }
 
 void TraceDialogImpl2::abort()
@@ -263,7 +284,7 @@ TraceDialogImpl2::TraceDialogImpl2()
                                         "CB_MS_stack", "CB_MS_rb",  "CB_speckles", "CB_smooth",  "CB_optimize",
                                         /*"CB_live",*/ "CB_SIOX",   "CBT_SS",      "CBT_MS",     "B_RESET",
                                         "B_STOP",      "B_OK",      "mainBox",     "choice_tab", "choice_scan",
-                                        "previewImage" };
+                                        "previewArea" };
     Glib::ustring gladefile = get_filename(Inkscape::IO::Resource::UIS, "dialog-trace.glade");
     try {
         builder = Gtk::Builder::create_from_file(gladefile);
@@ -271,6 +292,7 @@ TraceDialogImpl2::TraceDialogImpl2()
         g_warning("Glade file loading failed for filter effect dialog");
         return;
     }
+
     Glib::RefPtr<Glib::Object> test;
     for (std::string w : req_widgets) {
         test = builder->get_object(w);
@@ -320,7 +342,7 @@ TraceDialogImpl2::TraceDialogImpl2()
     GET_W(mainBox)
     GET_W(choice_tab)
     GET_W(choice_scan)
-    GET_W(previewImage)
+    GET_W(previewArea)
 #undef GET_W
 #undef GET_O
     _getContents()->add(*mainBox);
@@ -332,6 +354,7 @@ TraceDialogImpl2::TraceDialogImpl2()
     B_OK->signal_clicked().connect(sigc::mem_fun(*this, &TraceDialogImpl2::traceCallback));
     B_STOP->signal_clicked().connect(sigc::mem_fun(*this, &TraceDialogImpl2::abort));
     B_RESET->signal_clicked().connect(sigc::mem_fun(*this, &TraceDialogImpl2::onSetDefaults));
+    previewArea->signal_draw().connect(sigc::mem_fun(*this, &TraceDialogImpl2::previewResize));
 }
 
 
