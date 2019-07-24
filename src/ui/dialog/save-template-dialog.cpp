@@ -24,7 +24,7 @@ SaveTemplate::SaveTemplate() :
     author_label(_("Author: "), Gtk::ALIGN_START),
     description_label(_("Description: "), Gtk::ALIGN_START),
     keywords_label(_("Keywords: "), Gtk::ALIGN_START),
-    is_default_template("Set as default template")
+    is_default_template(_("Set as default template"))
 {
     resize(400, 200);
 
