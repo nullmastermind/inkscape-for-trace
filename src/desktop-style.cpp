@@ -1066,12 +1066,14 @@ objects_query_fontnumbers (const std::vector<SPItem*> &objects, SPStyle *style_r
         // Quick way of getting document scale. Should be same as:
         // item->document->getDocumentScale().Affine().descrim()
         double doc_scale = Geom::Affine(item->i2dt_affine()).descrim();
+        
         double dummy = style->font_size.computed * doc_scale; 
         if (!std::isnan(dummy)) {
             size += dummy; /// \todo FIXME: we assume non-% units here
         } else {
             no_size++;
         }
+
         if (style->letter_spacing.normal) {
             if (!different && (letterspacing_prev == 0 || letterspacing_prev == letterspacing)) {
                 letterspacing_normal = true;
@@ -1113,7 +1115,8 @@ objects_query_fontnumbers (const std::vector<SPItem*> &objects, SPStyle *style_r
             lineheight_normal = false;
             lineheight += lineheight_current;
         } else {
-            lineheight_current = style->line_height.value;
+            // Always 'px' internally
+            lineheight_current = style->line_height.computed;
             lineheight_unit_current = style->line_height.unit;
             lineheight_unit_absolute = true;
             lineheight_normal = false;

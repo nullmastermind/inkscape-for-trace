@@ -1538,9 +1538,9 @@ sp_css_attr_unset_uris(SPCSSAttr *css)
 /**
  * Scale a single-value property.
  */
-void
+static void
 sp_css_attr_scale_property_single(SPCSSAttr *css, gchar const *property,
-                                  double ex, bool only_with_units)
+                                  double ex, bool only_with_units = false)
 {
     gchar const *w = sp_repr_css_property(css, property, nullptr);
     if (w) {
@@ -1608,7 +1608,7 @@ sp_css_attr_scale(SPCSSAttr *css, double ex)
     sp_css_attr_scale_property_single(css, "kerning", ex);
     sp_css_attr_scale_property_single(css, "letter-spacing", ex);
     sp_css_attr_scale_property_single(css, "word-spacing", ex);
-    sp_css_attr_scale_property_single(css, "line-height", true);
+    sp_css_attr_scale_property_single(css, "line-height", ex, true);
 
     return css;
 }

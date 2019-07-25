@@ -65,13 +65,11 @@ class TextToolbar : public Toolbar {
 private:
     bool _freeze;
     bool _text_style_from_prefs;
-    bool _initial;
     UI::Widget::UnitTracker *_tracker;
 
     UI::Widget::ComboBoxEntryToolItem *_font_family_item;
     UI::Widget::ComboBoxEntryToolItem *_font_size_item;
     UI::Widget::ComboBoxEntryToolItem *_font_style_item;
-    Gtk::ToggleToolButton *_line_spacing_menu_launcher;
     UI::Widget::ComboToolItem *_line_height_units_item;
     UI::Widget::SpinButtonToolItem *_line_height_item;
     Gtk::ToggleToolButton *_superscript_item;

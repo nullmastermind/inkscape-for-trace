@@ -354,7 +354,7 @@ SPCSSAttr *sp_css_attr_unset_text(SPCSSAttr *css);
 SPCSSAttr *sp_css_attr_unset_blacklist(SPCSSAttr *css);
 SPCSSAttr *sp_css_attr_unset_uris(SPCSSAttr *css);
 SPCSSAttr *sp_css_attr_scale(SPCSSAttr *css, double ex);
-void sp_css_attr_scale_property_single(SPCSSAttr *css, gchar const *property, double ex, bool only_with_units = false);
+
 void sp_style_unset_property_attrs(SPObject *o);
 
 void sp_style_set_property_url (SPObject *item, char const *property, SPObject *linked, bool recursive);

@@ -142,82 +142,6 @@ static void recursively_set_properties( SPObject* object, SPCSSAttr *css, bool u
     sp_repr_css_attr_unref (css_unset);
 }
 
-void sp_line_height_to_child(SPItem *root, SPCSSAttr *css, SPILengthOrNormal line_height, bool not_selected)
-{
-    if (root) {
-        SPILengthOrNormal current_line_height = root->style->line_height;
-        SPCSSAttr *css_item = sp_repr_css_attr_new();
-        sp_repr_css_merge(css_item, css);
-        if (current_line_height.computed < line_height.computed) {
-            /*
-            @Tav you disable children units but in the spec is alowwd so I retain allowed
-             */
-            sp_repr_css_set_property(css_item, "line-height", line_height.toString().c_str());
-        } else {
-            if (not_selected) {
-                /*
-                @Tav you disable children units but in the spec is alowwd so I retain allowed
-                */
-                sp_repr_css_set_property(css_item, "line-height", current_line_height.toString().c_str());
-            }
-        }
-        root->changeCSS(css_item, "style");
-        sp_repr_css_attr_unref(css_item);
-        for (auto item : root->childList(false)) {
-            SPItem *subitem = dynamic_cast<SPItem *>(item);
-            sp_line_height_to_child(subitem, css, line_height, not_selected);
-        }
-    }
-}
-
-std::pair<double,int>
-sp_get_line_height(SPItem *item, SPStyle *line_height_style, bool force_no_units = false)
-{
-    int line_height_unit = SP_CSS_UNIT_NONE;
-    if (line_height_style->line_height.normal) {
-        if (force_no_units) {
-            line_height_unit = SP_CSS_UNIT_PX;
-        }
-    } else {
-        if (force_no_units) {
-            line_height_unit = SP_CSS_UNIT_PX;
-        } else {
-            line_height_unit = line_height_style->line_height.unit;
-        }
-    }
-    double doc_scale = 1;
-    SPText *text = dynamic_cast<SPText *>(item);
-    SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(item);
-    SPText *ptext = dynamic_cast<SPText *>(item->parent);
-    SPFlowtext *pflowtext = dynamic_cast<SPFlowtext *>(item->parent);
-    if (flowtext && !is_relative(SPCSSUnit(line_height_unit))) {
-        doc_scale = SP_ITEM(item->parent)->transform.descrim();
-        doc_scale *= doc_scale;
-    }
-    if (pflowtext && !is_relative(SPCSSUnit(line_height_unit))) {
-        doc_scale = SP_ITEM(item->parent->parent)->transform.descrim();
-        doc_scale *= doc_scale;
-    }
-    if ((text || ptext) && !is_relative(SPCSSUnit(line_height_unit))) {
-        doc_scale = Geom::Affine(item->i2dt_affine()).descrim();
-    }
-    double height = 0;
-    if (line_height_style->line_height.normal) {
-        if (force_no_units) {
-            height = Inkscape::Text::Layout::LINE_HEIGHT_NORMAL * line_height_style->font_size.computed * doc_scale;
-        } else {
-            height = Inkscape::Text::Layout::LINE_HEIGHT_NORMAL * doc_scale;
-        }
-    } else {
-        if (force_no_units) {
-            height = line_height_style->line_height.computed * doc_scale;
-        } else {
-            height = line_height_style->line_height.value * doc_scale;
-        }
-    }
-    return std::make_pair(height, line_height_unit);
-}
-
 /*
  * Set the default list of font sizes, scaled to the users preferred unit
  */
@@ -295,7 +219,6 @@ namespace Toolbar {
 TextToolbar::TextToolbar(SPDesktop *desktop)
     : Toolbar(desktop),
      _freeze(false),
-     _initial(true),
      _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
 {
     /* Line height unit tracker */
@@ -406,7 +329,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         std::vector<Glib::ustring> labels = {_("Smaller spacing"),  "",  "",  "",  "", C_("Text tool", "Normal"),  "", "",   "",  "",  "", _("Larger spacing")};
         std::vector<double>        values = {                 0.5, 0.6, 0.7, 0.8, 0.9,                       1.0, 1.1, 1.2, 1.3, 1.4, 1.5,                 2.0};
 
-        auto line_height_val = prefs->getDouble("/tools/text/lineheight", 1.15);
+        auto line_height_val = prefs->getDouble("/tools/text/lineheight", 1.25);
         _line_height_adj = Gtk::Adjustment::create(line_height_val, 0.0, 1000.0, 0.1, 1.0);
         _line_height_item =
             Gtk::manage(new UI::Widget::SpinButtonToolItem("text-line-height", "", _line_height_adj, 0.1, 2));
@@ -1313,22 +1236,6 @@ TextToolbar::direction_changed(int mode)
     _freeze = false;
 }
 
-/* void sp_copy_property(SPItem *from, SPItem *to, Glib::ustring const &name) 
-{
-    SPStyle *from_style = from->style;
-    SPStyle *to_style = to->style;
-    SPCSSAttr *from_cssattr = sp_css_attr_from_style(from_style, SP_STYLE_FLAG_IFSET);
-    SPCSSAttr *to_cssattr = sp_css_attr_from_style(to_style, SP_STYLE_FLAG_IFSET);
-    Glib::ustring from_value = sp_repr_css_property(from_cssattr, name, "0");
-    SPCSSAttr *css = sp_repr_css_attr_new ();
-    std::cout << from_value.c_str() << std::endl;
-    sp_repr_css_set_property (css, "line-height", from_value.c_str());
-    to->changeCSS (css, "style");
-    sp_repr_css_attr_unref (css);
-    sp_repr_css_attr_unref (from_cssattr);
-    sp_repr_css_attr_unref (to_cssattr);
-} */
-
 void
 TextToolbar::lineheight_value_changed()
 {
@@ -1350,11 +1257,13 @@ TextToolbar::lineheight_value_changed()
     // Set css line height.
     SPCSSAttr *css = sp_repr_css_attr_new ();
     Inkscape::CSSOStringStream osfs;
-    // @tav is this correct why we coudent store oter units if we need to render ok if it came from outside
-    // if ( is_relative(unit) ) {
-    osfs << _line_height_adj->get_value() << unit->abbr;
+    if ( is_relative(unit) ) {
+        osfs << _line_height_adj->get_value() << unit->abbr;
+    } else {
+        // Inside SVG file, always use "px" for absolute units.
+        osfs << Quantity::convert(_line_height_adj->get_value(), unit, "px") << "px";
+    }
     sp_repr_css_set_property (css, "line-height", osfs.str().c_str());
-
     Inkscape::Selection *selection = desktop->getSelection();
     auto itemlist= selection->items();
     bool modmade = false;
@@ -1376,6 +1285,9 @@ TextToolbar::lineheight_value_changed()
             }
         }
     } else {
+        SPCSSAttr *css_unset = sp_repr_css_attr_unset_all( css );
+        SPItem *parent = dynamic_cast<SPItem *>(*itemlist.begin());
+        parent->changeCSS (css, "style");
         subselection_wrap_toggle();
         sp_desktop_set_style (desktop, css, true, true);
         subselection_wrap_toggle();
@@ -1437,8 +1349,9 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
     Inkscape::CSSOStringStream temp_stream;
     temp_stream << 1 << unit->abbr;
     temp_length.read(temp_stream.str().c_str());
-    prefs->setInt("/tools/text/lineheight/display_unit", temp_length.unit);
-    _lineheight_unit = temp_length.unit;
+    if (!is_relative(SPCSSUnit(temp_length.unit))) {
+        prefs->setInt("/tools/text/lineheight/display_unit", temp_length.unit);
+    }
     if (old_unit == temp_length.unit) {
         return;
     }
@@ -1516,8 +1429,12 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
     // Set css line height.
     SPCSSAttr *css = sp_repr_css_attr_new ();
     Inkscape::CSSOStringStream osfs;
-    // @tav the same to store units diferent than pixels
-    osfs << line_height << unit->abbr;
+    // Set css line height.
+    if ( is_relative(unit) ) {
+        osfs << line_height << unit->abbr;
+    } else {
+        osfs << Quantity::convert(line_height, unit, "px") << "px";
+    }
     sp_repr_css_set_property (css, "line-height", osfs.str().c_str());
 
     // Update GUI with line_height value.
@@ -1548,6 +1465,9 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
             }
         }
     } else {
+        SPCSSAttr *css_unset = sp_repr_css_attr_unset_all( css );
+        SPItem *parent = dynamic_cast<SPItem *>(*itemlist.begin());
+        parent->changeCSS (css, "style");
         subselection_wrap_toggle();
         sp_desktop_set_style (desktop, css, true, true);
         subselection_wrap_toggle();
@@ -2003,6 +1923,11 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
         }
 
         // We dot want to parse values just show
+        if (!is_relative(SPCSSUnit(line_height_unit))) {
+            gint absunit = prefs->getInt("/tools/text/lineheight/display_unit", 1);
+            height = Quantity::convert(height, "px", sp_style_get_css_unit_string(absunit));
+            line_height_unit = absunit;
+        }
         _line_height_adj->set_value(height);
         
 
@@ -2025,8 +1950,6 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
 
         // Save unit so we can do conversions between new/old units.
         _lineheight_unit = line_height_unit;
-        prefs->setInt("/tools/text/lineheight/display_unit", line_height_unit);
-
         // Word spacing
         double wordSpacing;
         if (query.word_spacing.normal) wordSpacing = 0.0;
