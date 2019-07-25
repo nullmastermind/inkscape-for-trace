@@ -258,13 +258,15 @@ bool TextTool::item_handler(SPItem* item, GdkEvent* event) {
     SPItem *item_ungrouped;
 
     gint ret = FALSE;
-
     sp_text_context_validate_cursor_iterators(this);
     Inkscape::Text::Layout::iterator old_start = this->text_sel_start;
 
     switch (event->type) {
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1 && !this->space_panning) {
+                // this var allow too much lees suvelection queries
+                // reducing it to cursor iteracion, mouseup and down
+                pressed = true;
                 // find out clicked item, disregarding groups
                 item_ungrouped = desktop->getItemAtPoint(Geom::Point(event->button.x, event->button.y), TRUE);
                 if (SP_IS_TEXT(item_ungrouped) || SP_IS_FLOWTEXT(item_ungrouped)) {
@@ -280,9 +282,11 @@ bool TextTool::item_handler(SPItem* item, GdkEvent* event) {
                             this->text_sel_start = this->text_sel_end = sp_te_get_position_by_coords(this->text, p);
                         }
                         // update display
+                        pressed = false;
                         sp_text_context_update_cursor(this);
                         sp_text_context_update_text_selection(this);
                         this->dragging = 1;
+                        pressed = true;
                     }
                     ret = TRUE;
                 }
@@ -318,6 +322,8 @@ bool TextTool::item_handler(SPItem* item, GdkEvent* event) {
                 this->dragging = 0;
                 sp_event_context_discard_delayed_snap_event(this);
                 ret = TRUE;
+                pressed = false;
+                desktop->emitToolSubselectionChanged((gpointer)this);
             }
             break;
         case GDK_MOTION_NOTIFY:
@@ -690,6 +696,8 @@ bool TextTool::root_handler(GdkEvent* event) {
                     }
                 }
                 this->creating = false;
+                this->pressed = false;
+                desktop->emitToolSubselectionChanged((gpointer)this);
                 return TRUE;
             }
             break;

@@ -28,9 +28,11 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <sigc++/connection.h>
 #include "object/sp-item.h"
 #include "object/sp-object.h"
 #include "toolbar.h"
+#include "text-editing.h"
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
 #include <gtkmm/popover.h>
@@ -63,7 +65,7 @@ class TextToolbar : public Toolbar {
 private:
     bool _freeze;
     bool _text_style_from_prefs;
-
+    bool _initial;
     UI::Widget::UnitTracker *_tracker;
 
     UI::Widget::ComboBoxEntryToolItem *_font_family_item;
@@ -92,16 +94,18 @@ private:
     Glib::RefPtr<Gtk::Adjustment> _dx_adj;
     Glib::RefPtr<Gtk::Adjustment> _dy_adj;
     Glib::RefPtr<Gtk::Adjustment> _rotation_adj;
-    std::vector<SPItem *> _sub_selection_items;
-    std::vector<SPItem *> _sub_unselection_items;
+    bool _outer;
+    SPItem *_sub_active_item;
     int _lineheight_unit;
-
+    double selection_fontsize;
     sigc::connection c_selection_changed;
     sigc::connection c_selection_modified;
     sigc::connection c_subselection_changed;
-
+    Inkscape::Text::Layout::iterator wrap_start;
+    Inkscape::Text::Layout::iterator wrap_end;
     void fontfamily_value_changed();
     void fontsize_value_changed();
+    void subselection_wrap_toggle();
     void fontstyle_value_changed();
     void script_changed(Gtk::ToggleToolButton *btn);
     void align_mode_changed(int mode);
@@ -109,7 +113,6 @@ private:
     void orientation_changed(int mode);
     void direction_changed(int mode);
     void lineheight_value_changed();
-    void lineheight_value_changed_wrapped(double font_size, bool skip_undo);
     void lineheight_unit_changed(int not_used);
     void wordspacing_value_changed();
     void letterspacing_value_changed();
@@ -130,6 +133,5 @@ public:
 }
 }
 }
-void sp_lineheight_from_new_fontsize(double font_size, SPObject *root , double doc_scale);
 
 #endif /* !SEEN_TEXT_TOOLBAR_H */

@@ -269,7 +269,7 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
         int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
         double size = sp_style_css_size_px_to_units(query.font_size.computed, unit); 
         font_selector.update_size (size);
-
+        selected_fontsize = size;
         // Update font features (variant) widget
         //int result_features =
         sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTVARIANTS);
@@ -430,13 +430,8 @@ void TextEdit::onApply()
         }
     }
     if (items == 1) {
-        SPItem *item = SP_ACTIVE_DESKTOP->getSelection()->singleItem();
-        SPObject *object = dynamic_cast<SPObject *>(SP_ACTIVE_DESKTOP->getSelection()->singleItem());
-        double doc_scale = 1;
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
-        sp_lineheight_from_new_fontsize(sp_style_css_size_units_to_px(font_selector.get_fontsize(), unit), object, doc_scale);
-        
+        double factor = font_selector.get_fontsize()/selected_fontsize;
+        //Todo need a signal to connect witn toolbar and scale line height
     }
     sp_desktop_set_style(desktop, css, true);
 
@@ -452,7 +447,7 @@ void TextEdit::onApply()
         if (SP_IS_TEXT (item) || SP_IS_FLOWTEXT(item)) {
             updateObjectText (item);
             SPStyle *item_style = item->style;
-            if (item_style->inline_size.value == 0) {
+            if (SP_IS_TEXT (item) && item_style->inline_size.value == 0) {
                 css = sp_css_attr_from_style(item_style, SP_STYLE_FLAG_IFSET);
                 sp_repr_css_unset_property (css, "inline-size");
                 item->changeCSS (css, "style");

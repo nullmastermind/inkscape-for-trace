@@ -353,8 +353,8 @@ SPCSSAttr *sp_css_attr_from_object(SPObject *object, unsigned int flags = SP_STY
 SPCSSAttr *sp_css_attr_unset_text(SPCSSAttr *css);
 SPCSSAttr *sp_css_attr_unset_blacklist(SPCSSAttr *css);
 SPCSSAttr *sp_css_attr_unset_uris(SPCSSAttr *css);
-SPCSSAttr *sp_css_attr_scale(SPCSSAttr *css, double ex, bool scale_relative_font_size = false, bool scale_relative_line_height = false);
-
+SPCSSAttr *sp_css_attr_scale(SPCSSAttr *css, double ex);
+void sp_css_attr_scale_property_single(SPCSSAttr *css, gchar const *property, double ex, bool only_with_units = false);
 void sp_style_unset_property_attrs(SPObject *o);
 
 void sp_style_set_property_url (SPObject *item, char const *property, SPObject *linked, bool recursive);
