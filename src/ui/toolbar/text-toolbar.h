@@ -28,7 +28,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <sigc++/connection.h>
 #include "object/sp-item.h"
 #include "object/sp-object.h"
 #include "toolbar.h"
@@ -36,6 +35,7 @@
 #include <gtkmm/box.h>
 #include <gtkmm/popover.h>
 #include <gtkmm/separatortoolitem.h>
+#include <sigc++/connection.h>
 
 class SPDesktop;
 
@@ -128,6 +128,7 @@ private:
     void subselection_changed(gpointer texttool);
     void watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
     void set_sizes(int unit);
+
   protected:
     TextToolbar(SPDesktop *desktop);
 

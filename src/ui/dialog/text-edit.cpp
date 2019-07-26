@@ -37,9 +37,9 @@ extern "C" {
 #include "document-undo.h"
 #include "document.h"
 #include "inkscape.h"
+#include "style.h"
 #include "text-editing.h"
 #include "verbs.h"
-#include "style.h"
 
 #include <libnrtype/font-instance.h>
 #include <libnrtype/font-lister.h>
@@ -49,8 +49,8 @@ extern "C" {
 #include "object/sp-textpath.h"
 
 #include "svg/css-ostringstream.h"
-#include "ui/toolbar/text-toolbar.h"
 #include "ui/icon-names.h"
+#include "ui/toolbar/text-toolbar.h"
 #include "ui/widget/font-selector.h"
 
 #include "util/units.h"
@@ -431,7 +431,7 @@ void TextEdit::onApply()
         }
     }
     if (items == 1) {
-        double factor = font_selector.get_fontsize()/selected_fontsize;
+        double factor = font_selector.get_fontsize() / selected_fontsize;
         prefs->setDouble("/options/font/scaleLineHeightFromFontSIze", factor);
     }
     sp_desktop_set_style(desktop, css, true);
@@ -447,10 +447,10 @@ void TextEdit::onApply()
         if (SP_IS_TEXT (item) || SP_IS_FLOWTEXT(item)) {
             updateObjectText (item);
             SPStyle *item_style = item->style;
-            if (SP_IS_TEXT (item) && item_style->inline_size.value == 0) {
+            if (SP_IS_TEXT(item) && item_style->inline_size.value == 0) {
                 css = sp_css_attr_from_style(item_style, SP_STYLE_FLAG_IFSET);
-                sp_repr_css_unset_property (css, "inline-size");
-                item->changeCSS (css, "style");
+                sp_repr_css_unset_property(css, "inline-size");
+                item->changeCSS(css, "style");
             }
         }
     }
