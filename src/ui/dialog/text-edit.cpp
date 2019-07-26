@@ -423,6 +423,7 @@ void TextEdit::onApply()
     unsigned items = 0;
     auto item_list = desktop->getSelection()->items();
     SPCSSAttr *css = fillTextStyle ();
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     for(auto i=item_list.begin();i!=item_list.end();++i){
         // apply style to the reprs of all text objects in the selection
         if (SP_IS_TEXT (*i) || (SP_IS_FLOWTEXT (*i)) ) {
@@ -431,13 +432,12 @@ void TextEdit::onApply()
     }
     if (items == 1) {
         double factor = font_selector.get_fontsize()/selected_fontsize;
-        //Todo need a signal to connect witn toolbar and scale line height
+        prefs->setDouble("/options/font/scaleLineHeightFromFontSIze", factor);
     }
     sp_desktop_set_style(desktop, css, true);
 
     if (items == 0) {
         // no text objects; apply style to prefs for new objects
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->mergeStyle("/tools/text/style", css);
         setasdefault_button.set_sensitive ( false );
 

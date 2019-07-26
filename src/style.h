@@ -348,7 +348,7 @@ double sp_style_css_size_px_to_units(double size, int unit, double font_size = S
 double sp_style_css_size_units_to_px(double size, int unit, double font_size = SP_CSS_FONT_SIZE_DEFAULT); // No change?
 
 
-SPCSSAttr *sp_css_attr_from_style (SPStyle const *const style, unsigned int flags);
+SPCSSAttr *sp_css_attr_from_style(SPStyle const *const style, unsigned int flags);
 SPCSSAttr *sp_css_attr_from_object(SPObject *object, unsigned int flags = SP_STYLE_FLAG_IFSET);
 SPCSSAttr *sp_css_attr_unset_text(SPCSSAttr *css);
 SPCSSAttr *sp_css_attr_unset_blacklist(SPCSSAttr *css);

@@ -32,7 +32,6 @@
 #include "object/sp-item.h"
 #include "object/sp-object.h"
 #include "toolbar.h"
-#include "text-editing.h"
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
 #include <gtkmm/popover.h>
@@ -95,15 +94,16 @@ private:
     bool _outer;
     SPItem *_sub_active_item;
     int _lineheight_unit;
+    int wrap_start;
+    int wrap_end;
     double selection_fontsize;
     sigc::connection c_selection_changed;
     sigc::connection c_selection_modified;
+    sigc::connection c_selection_modified_select_tool;
     sigc::connection c_subselection_changed;
-    Inkscape::Text::Layout::iterator wrap_start;
-    Inkscape::Text::Layout::iterator wrap_end;
     void fontfamily_value_changed();
     void fontsize_value_changed();
-    void subselection_wrap_toggle();
+    void subselection_wrap_toggle(bool start);
     void fontstyle_value_changed();
     void script_changed(Gtk::ToggleToolButton *btn);
     void align_mode_changed(int mode);
@@ -119,6 +119,7 @@ private:
     void rotation_value_changed();
     void selection_changed(Inkscape::Selection *selection, bool subselection = false, bool fullsubselection = false);
     void selection_modified(Inkscape::Selection *selection, guint flags);
+    void selection_modified_select_tool(Inkscape::Selection *selection, guint flags);
     void subselection_changed(gpointer texttool);
     void watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
     void set_sizes(int unit);
