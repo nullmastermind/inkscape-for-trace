@@ -70,7 +70,7 @@ using Inkscape::UI::Widget::UnitTracker;
 
 //#define DEBUG_TEXT
 
-//########################
+//########################setActiveUnitByAbbr
 //##    Text Toolbox    ##
 //########################
 
@@ -101,7 +101,7 @@ static void       sp_print_font( SPStyle *query ) {TextTool::~TextTool() {
               << (query->font_family.value ? query->font_family.value : "No value")
               << "    Style: "    <<  query->font_style.computed
               << "    Weight: "   <<  query->font_weight.computed
-              << "    FontSpec: "
+              << "    FontSpec: "_line_height_units_item->changeLabel("lines", 0);
               << (query->font_specification.value ? query->font_specification.value : "No value")
               << std::endl;
     std::cout << "    LineHeight: "    << query->line_height.computedif (c_selection_changed)
@@ -109,7 +109,7 @@ static void       sp_print_font( SPStyle *query ) {TextTool::~TextTool() {
         if (c_selection_modified)
             c_selection_modified.disconnect();
         if (c_subselection_changed)
-            c_subselection_changed.disconnect();
+            c_subselection_changed.disconnect();setActiveUnitByAbbr
         if (c_selection_modified_select_tool)
             c_selection_modified_select_tool.disconnect();
               << "    WordSpacing: "   << query->word_spacing.computed
@@ -131,7 +131,7 @@ static void       sp_print_fontweight( SPStyle *query ) {
         this->grabbed = nullptr;
     }
 
-    Inkscape::Rubberband::get(this->desktop)->stop();
+    Inkscape::Rubberband::get(this->desktop)->stop();_line_height_units_item->changeLabel("lines", 0);
 }
     std::cout << "    Weight: " << names[ index ]
               << " (" << query->font_weight.computed << ")" << std::endl;
@@ -248,14 +248,19 @@ namespace Toolbar {
 TextToolbar::TextToolbar(SPDesktop *desktop)
     : Toolbar(desktop),
      _freeze(false),
-     _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
+     _subselection(false),
+     _fullsubselection(false),
+     _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR)),
+     _tracker_fs(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
 {
     /* Line height unit tracker */
     _tracker->prependUnit(unit_table.getUnit("")); // Ratio
     _tracker->addUnit(unit_table.getUnit("%"));
     _tracker->addUnit(unit_table.getUnit("em"));
     _tracker->addUnit(unit_table.getUnit("ex"));
-    _tracker->setActiveUnit(unit_table.getUnit("%"));
+    _tracker->setActiveUnit(unit_table.getUnit(""));
+    _tracker->changeLabel("lines", 0);
+    _tracker_fs->setActiveUnit(unit_table.getUnit("mm"));
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -353,12 +358,18 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _font_size_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::fontsize_value_changed));
         add(*_font_size_item);
     }
+    /* Font_ size units */
+    {
+        _font_size_units_item = _tracker_fs->create_tool_item( _("Units"), ("") );
+        _font_size_units_item->signal_changed_after().connect(sigc::mem_fun(*this, &TextToolbar::fontsize_unit_changed));
+        add(*_font_size_units_item);
+    }
     {
         // Drop down menu
         std::vector<Glib::ustring> labels = {_("Smaller spacing"),  "",  "",  "",  "", C_("Text tool", "Normal"),  "", "",   "",  "",  "", _("Larger spacing")};
         std::vector<double>        values = {                 0.5, 0.6, 0.7, 0.8, 0.9,                       1.0, 1.1, 1.2, 1.3, 1.4, 1.5,                 2.0};
 
-        auto line_height_val = prefs->getDouble("/tools/text/lineheight", 1.25);
+        auto line_height_val = 1.25;
         _line_height_adj = Gtk::Adjustment::create(line_height_val, 0.0, 1000.0, 0.1, 1.0);
         _line_height_item =
             Gtk::manage(new UI::Widget::SpinButtonToolItem("text-line-height", "", _line_height_adj, 0.1, 2));
@@ -1565,6 +1576,23 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
 }
 
 void
+TextToolbar::fontsize_unit_changed(int /* Not Used */)
+{
+    // quit if run by the _changed callbacks
+    Unit const *unit = _tracker_fs->getActiveUnit();
+    g_return_if_fail(unit != nullptr);
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
+    // This nonsense is to get SP_CSS_UNIT_xx value corresponding to unit.
+    SPILength temp_size;
+    Inkscape::CSSOStringStream temp_size_stream;
+    temp_size_stream << 1 << unit->abbr;
+    temp_size.read(temp_size_stream.str().c_str());
+    prefs->setInt("/options/font/unitType", temp_size.unit);
+    selection_changed(SP_ACTIVE_DESKTOP->selection);
+}
+
+void
 TextToolbar::wordspacing_value_changed()
 {
     // quit if run by the _changed callbacks
@@ -1769,7 +1797,7 @@ TextToolbar::selection_modified_select_tool(Inkscape::Selection *selection, guin
 } 
 
 void
-TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subselection, bool fullsubselection) // don't bother to update font list if subsel changed
+TextToolbar::selection_changed(Inkscape::Selection * /*selection*/) // don't bother to update font list if subsel changed
 {
 #ifdef DEBUG_TEXT
     static int count = 0;
@@ -1799,7 +1827,7 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
         return;
     }
     _freeze = true;
-    if (!subselection) {
+    if (!this->_subselection) {
         this->_outer = true;;
         this->_sub_active_item = nullptr;
     }
@@ -1923,7 +1951,9 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
         _font_size_item->set_tooltip(tooltip.c_str());
 
         Inkscape::CSSOStringStream os;
+        // We dot want to parse values just show
 
+        _tracker_fs->setActiveUnitByAbbr(sp_style_get_css_unit_string(unit));
         int rounded_size = std::round(size);
         if (std::abs((size - rounded_size)/size) < 0.0001) {
             // We use rounded_size to avoid rounding errors when, say, converting stored 'px' values to displayed 'pt' values.
@@ -2002,6 +2032,11 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
         // We dot want to parse values just show
         if (!is_relative(SPCSSUnit(line_height_unit))) {
             gint absunit = prefs->getInt("/tools/text/lineheight/display_unit", 1);
+            // For backwards comaptibility
+            if (is_relative(SPCSSUnit(absunit))) {
+                prefs->setInt("/tools/text/lineheight/display_unit", 1);
+                absunit = 1;
+            }
             height = Quantity::convert(height, "px", sp_style_get_css_unit_string(absunit));
             line_height_unit = absunit;
         }
@@ -2020,7 +2055,7 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
         if( line_height_unit == SP_CSS_UNIT_NONE ) {
             // Function 'sp_style_get_css_unit_string' returns 'px' for unit none.
             // We need to avoid this.
-            _tracker->setActiveUnitByAbbr("");
+            _tracker->setActiveUnitByAbbr("lines");
         } else {
             _tracker->setActiveUnitByAbbr(sp_style_get_css_unit_string(line_height_unit));
         }
@@ -2087,7 +2122,6 @@ TextToolbar::selection_changed(Inkscape::Selection * /*selection*/, bool subsele
               << "  letter_spacing.value: "    << query.letter_spacing.value
               << "  letter_spacing.unit: "     << query.letter_spacing.unit  << std::endl;
     std::cout << "    GUI: writing_mode.computed: " << query.writing_mode.computed << std::endl;
-    std::cout << "    GUI: full subselection: " << (fullsubselection ? "yes" : "no") << std::endl;
     }
 #endif
 
@@ -2144,10 +2178,10 @@ TextToolbar::watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec) {
     if (SP_IS_TEXT_CONTEXT(ec)) {
         // Watch selection
         // Ensure FontLister is updated here first.................. VVVVV
-        c_selection_changed = desktop->getSelection()->connectChangedFirst(sigc::bind(sigc::mem_fun(*this, &TextToolbar::selection_changed), false, false));
+        c_selection_changed = desktop->getSelection()->connectChangedFirst(sigc::mem_fun(*this, &TextToolbar::selection_changed));
         c_selection_modified = desktop->getSelection()->connectModifiedFirst(sigc::mem_fun(*this, &TextToolbar::selection_modified));
         c_subselection_changed = desktop->connectToolSubselectionChanged(sigc::mem_fun(*this, &TextToolbar::subselection_changed));
-        selection_changed(desktop->getSelection(), false, false);
+        selection_changed(desktop->getSelection());
     } else if (SP_IS_SELECT_CONTEXT(ec)) {
         c_selection_modified_select_tool = desktop->getSelection()->connectModifiedFirst(sigc::mem_fun(*this, &TextToolbar::selection_modified_select_tool));
     } else {
@@ -2201,6 +2235,8 @@ TextToolbar::subselection_changed(gpointer texttool)
     std::cout << "subselection_changed: start " << std::endl;
 #endif
     // quit if run by the _changed callbacks
+    this->_subselection = true;
+    this->_fullsubselection = false;
     Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT(SP_EVENT_CONTEXT(texttool));
     if( tc ) {
         Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
@@ -2240,14 +2276,15 @@ TextToolbar::subselection_changed(gpointer texttool)
                     }
                     ++counter;
                 }
-                selection_changed(nullptr, true, false);
+                selection_changed(nullptr);
             } else if (start_selection == start &&
                        end_selection == end) 
             {
                 // full subselection
                 this->_sub_active_item = nullptr;
                 this->_outer = true;
-                selection_changed(nullptr, true, true);
+                this->_fullsubselection = true;
+                selection_changed(nullptr);
             } else {
                 this->_sub_active_item = nullptr;
                 this->_outer = false;
@@ -2286,7 +2323,7 @@ TextToolbar::subselection_changed(gpointer texttool)
                     wrap_end = pos;
                     finished = true;
                 }
-                selection_changed(nullptr, true, false);
+                selection_changed(nullptr);
             }
         }
     }

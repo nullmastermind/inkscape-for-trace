@@ -65,9 +65,11 @@ private:
     bool _freeze;
     bool _text_style_from_prefs;
     UI::Widget::UnitTracker *_tracker;
+    UI::Widget::UnitTracker *_tracker_fs;
 
     UI::Widget::ComboBoxEntryToolItem *_font_family_item;
     UI::Widget::ComboBoxEntryToolItem *_font_size_item;
+    UI::Widget::ComboToolItem *_font_size_units_item;
     UI::Widget::ComboBoxEntryToolItem *_font_style_item;
     UI::Widget::ComboToolItem *_line_height_units_item;
     UI::Widget::SpinButtonToolItem *_line_height_item;
@@ -96,6 +98,8 @@ private:
     int _lineheight_unit;
     int wrap_start;
     int wrap_end;
+    bool _subselection;
+    bool _fullsubselection;
     double selection_fontsize;
     sigc::connection c_selection_changed;
     sigc::connection c_selection_modified;
@@ -117,7 +121,8 @@ private:
     void dx_value_changed();
     void dy_value_changed();
     void rotation_value_changed();
-    void selection_changed(Inkscape::Selection *selection, bool subselection = false, bool fullsubselection = false);
+    void fontsize_unit_changed(int not_used);
+    void selection_changed(Inkscape::Selection *selection);
     void selection_modified(Inkscape::Selection *selection, guint flags);
     void selection_modified_select_tool(Inkscape::Selection *selection, guint flags);
     void subselection_changed(gpointer texttool);
