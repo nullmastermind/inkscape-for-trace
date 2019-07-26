@@ -77,6 +77,10 @@
     * "..combobright" Combo bright
     */
 
+*:disabled image{
+    opacity:0.4;
+}
+
 image {
     color: @theme_fg_color;
     -gtk-icon-palette: default;
