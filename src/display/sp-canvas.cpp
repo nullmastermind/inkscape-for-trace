@@ -2461,8 +2461,8 @@ int SPCanvas::paint()
             bool exact = arena->drawing.getExact();
             arena->drawing.setExact(false);
             Geom::IntRect canvas_rect = Geom::IntRect::from_xywh(_x0, _y0, allocation.width, allocation.height);
-            Geom::IntRect _xray_rect = Geom::IntRect::from_xywh(_xray_orig[0] - _xray_radius, _xray_orig[1] - _xray_radius,
-                                                                    (_xray_radius * 2), (_xray_radius * 2));
+            Geom::IntRect _xray_rect = Geom::IntRect::from_xywh(
+                _xray_orig[0] - _xray_radius, _xray_orig[1] - _xray_radius, (_xray_radius * 2), (_xray_radius * 2));
             paintXRayBuffer(_xray_rect, canvas_rect);
             arena->drawing.setExact(exact);
             arena->drawing.setRenderMode(rm);
