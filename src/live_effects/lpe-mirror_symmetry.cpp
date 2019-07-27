@@ -56,7 +56,7 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     discard_orig_path(_("Discard original path"), _("Only keep mirrored part of the path, remove the original."), "discard_orig_path", &wr, this, false),
     fuse_paths(_("Fuse paths"), _("Fuse original path and mirror image into a single path"), "fuse_paths", &wr, this, false),
     oposite_fuse(_("Fuse opposite sides"), _("Picks the part on the other side of the mirror line as the original."), "oposite_fuse", &wr, this, false),
-    split_items(_("Split elements"), _("Split original and mirror image into separate paths. (This allows gradients and other paints.)"), "split_items", &wr, this, false),
+    split_items(_("Split elements"), _("Split original and mirror image into separate paths, so each can have its own style.)"), "split_items", &wr, this, false),
     start_point(_("Mirror line start"), _("Start point of mirror line"), "start_point", &wr, this, _("Adjust start point of of mirror line")),
     end_point(_("Mirror line end"), _("End point of mirror line"), "end_point", &wr, this, _("Adjust end point of mirror line")),
     center_point(_("Mirror line mid"), _("Center point of mirror line"), "center_point", &wr, this, _("Adjust center point of mirror line"))
@@ -95,7 +95,7 @@ LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
     if (root_origin != root) {
         return;
     }
-    
+
     if (split_items && !discard_orig_path) {
         Geom::Line ls((Geom::Point)start_point, (Geom::Point)end_point);
         Geom::Affine m = Geom::reflection (ls.vector(), (Geom::Point)start_point);
@@ -108,7 +108,7 @@ LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
     }
 }
 
-Gtk::Widget * 
+Gtk::Widget *
 LPEMirrorSymmetry::newWidget()
 {
     // use manage here, because after deletion of Effect object, others might
@@ -192,7 +192,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         //force update
         center_horiz = false;
     } else {
-    
+
         if (mode == MT_Y) {
             point_a = Geom::Point(boundingbox_X.min(),center_point[Y]);
             point_b = Geom::Point(boundingbox_X.max(),center_point[Y]);
@@ -238,7 +238,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
                 Geom::Point trans = center_point - Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
                 start_point.param_setValue(start_point * trans);
                 end_point.param_setValue(end_point * trans);
-               
+
             }
         } else if ( mode == MT_V){
             SPDocument * document = SP_ACTIVE_DOCUMENT;
@@ -281,7 +281,7 @@ void LPEMirrorSymmetry::cloneStyle(SPObject *orig, SPObject *dest)
 }
 
 void
-LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset) 
+LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document) {
@@ -295,8 +295,8 @@ LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset)
         std::vector< SPObject * > childs = orig->childList(true);
         size_t index = 0;
         for (auto & child : childs) {
-            SPObject *dest_child = dest->nthChild(index); 
-            cloneD(child, dest_child, reset); 
+            SPObject *dest_child = dest->nthChild(index);
+            cloneD(child, dest_child, reset);
             index++;
         }
         return;
@@ -409,7 +409,7 @@ LPEMirrorSymmetry::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
     processObjects(LPE_VISIBILITY);
 }
 
-void 
+void
 LPEMirrorSymmetry::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
     //set "keep paths" hook on sp-lpe-item.cpp
@@ -449,7 +449,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
     }
     Geom::PathVector const original_pathv = pathv_to_linear_and_cubic_beziers(path_in);
     Geom::PathVector path_out;
-    
+
     if (!discard_orig_path && !fuse_paths) {
         path_out = pathv_to_linear_and_cubic_beziers(path_in);
     }
@@ -457,7 +457,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
     Geom::Line line_separation((Geom::Point)start_point, (Geom::Point)end_point);
     Geom::Affine m = Geom::reflection (line_separation.vector(), (Geom::Point)start_point);
     if (fuse_paths && !discard_orig_path) {
-        for (const auto & path_it : original_pathv) 
+        for (const auto & path_it : original_pathv)
         {
             if (path_it.empty()) {
                 continue;
