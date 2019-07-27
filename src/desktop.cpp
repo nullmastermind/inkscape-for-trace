@@ -768,7 +768,7 @@ SPItem *SPDesktop::getGroupAtPoint(Geom::Point const &p) const
  * Returns the mouse point in document coordinates; if mouse is
  * outside the canvas, returns the center of canvas viewpoint.
  */
-Geom::Point SPDesktop::point() const
+Geom::Point SPDesktop::point(bool outside_infinite) const
 {
     Geom::Point p = _widget->getPointer();
     Geom::Point pw = sp_canvas_window_to_world (canvas, p);
@@ -778,10 +778,13 @@ Geom::Point SPDesktop::point() const
         p = w2d(pw);
         return p;
     }
-
-    Geom::Point r0 = w2d(r.min());
-    Geom::Point r1 = w2d(r.max());
-    return (r0 + r1) / 2.0;
+    if (outside_infinite) {
+        return Geom::Point(Geom::infinity(), Geom::infinity());
+    } else {
+        Geom::Point r0 = w2d(r.min());
+        Geom::Point r1 = w2d(r.max());
+        return (r0 + r1) / 2.0;
+    }
 }
 
 
@@ -1417,22 +1420,33 @@ void
 SPDesktop::toggleRulers()
 {
     _widget->toggleRulers();
+    Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_TOGGLE_RULERS);
+    if (verb) {
+        _menu_update.emit(verb->get_code());
+    }
 }
 
 void
 SPDesktop::toggleScrollbars()
 {
     _widget->toggleScrollbars();
+    Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_TOGGLE_SCROLLBARS);
+    if (verb) {
+        _menu_update.emit(verb->get_code());
+    }
 }
 
 
-void SPDesktop::toggleToolbar(gchar const *toolbar_name)
+void SPDesktop::toggleToolbar(gchar const *toolbar_name, unsigned int verbenum)
 {
     Glib::ustring pref_path = getLayoutPrefPath(this) + toolbar_name + "/state";
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gboolean visible = prefs->getBool(pref_path, true);
     prefs->setBool(pref_path, !visible);
-
+    Inkscape::Verb *verb = Inkscape::Verb::get(verbenum);
+    if (verb) {
+        _menu_update.emit(verb->get_code());
+    }
     layoutWidget();
 }
 
@@ -1573,11 +1587,19 @@ void SPDesktop::clearWaitingCursor() {
 void SPDesktop::toggleColorProfAdjust()
 {
     _widget->toggleColorProfAdjust();
+    Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_CMS_TOGGLE);
+    if (verb) {
+        _menu_update.emit(verb->get_code());
+    }
 }
 
 void SPDesktop::toggleGuidesLock()
 {
     sp_namedview_guides_toggle_lock(this->getDocument(), namedview);
+    Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_EDIT_GUIDES_TOGGLE_LOCK);
+    if (verb) {
+        _menu_update.emit(verb->get_code());
+    }
 }
 
 bool SPDesktop::colorProfAdjustEnabled()
@@ -1596,14 +1618,28 @@ void SPDesktop::toggleGrids()
         namedview->writeNewGrid(this->getDocument(), Inkscape::GRID_RECTANGULAR);
         showGrids(true);
     }
+    Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_TOGGLE_GRID);
+    if (verb) {
+        _menu_update.emit(verb->get_code());
+    }
 }
 
 void SPDesktop::toggleSplitMode()
 {
     if (this->getToplevel()) {
         _split_canvas = !_split_canvas;
-        SPCanvas *canvas = getCanvas();
-        canvas->requestFullRedraw();
+        if (_split_canvas && _xray) {
+            _xray = !_xray;
+            Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_XRAY);
+            if (verb) {
+                _menu_update.emit(verb->get_code());
+            }
+        }
+        canvas->requestUpdate();
+        Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_SPLIT);
+        if (verb) {
+            _menu_update.emit(verb->get_code());
+        }
     }
 }
 
@@ -1613,9 +1649,17 @@ void SPDesktop::toggleXRay()
         _xray = !_xray;
         if (_split_canvas && _xray) {
             _split_canvas = !_split_canvas;
+            Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_SPLIT);
+            if (verb) {
+                _menu_update.emit(verb->get_code());
+            }
         }
         SPCanvas *canvas = getCanvas();
         canvas->requestFullRedraw();
+        Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_XRAY);
+        if (verb) {
+            _menu_update.emit(verb->get_code());
+        }
     }
 }
 

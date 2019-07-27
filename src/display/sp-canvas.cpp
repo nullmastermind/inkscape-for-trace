@@ -1743,17 +1743,14 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
         status = 1;
     } else {
         if (desktop && desktop->event_context && desktop->xrayMode()) {
-            if (!canvas->_xray) {
+            if (canvas->_xray) {
                 sp_reset_spliter(canvas);
             }
             Geom::Point prev_orig = canvas->_xray_orig;
-            canvas->_xray_orig = desktop->point();
+            canvas->_xray_orig = desktop->point(true);
             canvas->_xray_orig *= desktop->current_zoom();
             canvas->_xray = true;
-            if (!Geom::are_near(prev_orig, canvas->_xray_orig)) { //to avoid redraw when outside
-                canvas->dirtyAll();
-                canvas->addIdle();
-            }
+            canvas->addIdle();
             status = 1;
         } else {
             canvas->_xray = false;
@@ -1888,6 +1885,9 @@ void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect co
     // initialized.
     if (_backing_store == nullptr)
         return;
+    if (!canvas_rect.contains(paint_rect) && !canvas_rect.intersects(paint_rect)) {
+        return;
+    }
     Geom::IntRect rect_moved = Geom::IntRect::from_xywh(_x0, _y0, _x0 + paint_rect.width(), _y0 + paint_rect.height());
     SPCanvasBuf buf;
     buf.buf = nullptr;
@@ -1943,6 +1943,7 @@ void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect co
     // Mark the painted rectangle un-clean to remove old x-ray when mouse change position
     gtk_widget_queue_draw_area(GTK_WIDGET(this), paint_rect.left() - _x0, paint_rect.top() - _y0, paint_rect.width(),
                                paint_rect.height());
+    dirtyRect(paint_rect);
 }
 
 void SPCanvas::paintSpliter()
@@ -2424,6 +2425,7 @@ int SPCanvas::paint()
         cairo_region_get_rectangle(to_draw, i, &crect);
         if (!paintRect(crect.x, crect.y, crect.x + crect.width, crect.y + crect.height)) {
             // Aborted
+            cairo_region_subtract_rectangle(_clean_region, &crect);
             cairo_region_destroy(to_draw);
             cairo_region_destroy(to_draw_outline);
             return FALSE;
@@ -2442,6 +2444,7 @@ int SPCanvas::paint()
                 // Aborted
                 arena->drawing.setExact(exact);
                 arena->drawing.setRenderMode(rm);
+                cairo_region_subtract_rectangle(_clean_region, &crect);
                 cairo_region_destroy(to_draw);
                 cairo_region_destroy(to_draw_outline);
                 return FALSE;
@@ -2459,7 +2462,7 @@ int SPCanvas::paint()
             arena->drawing.setExact(false);
             Geom::IntRect canvas_rect = Geom::IntRect::from_xywh(_x0, _y0, allocation.width, allocation.height);
             Geom::IntRect _xray_rect = Geom::IntRect::from_xywh(_xray_orig[0] - _xray_radius, _xray_orig[1] - _xray_radius,
-                                                                (_xray_radius * 2), (_xray_radius * 2));
+                                                                    (_xray_radius * 2), (_xray_radius * 2));
             paintXRayBuffer(_xray_rect, canvas_rect);
             arena->drawing.setExact(exact);
             arena->drawing.setRenderMode(rm);

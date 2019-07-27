@@ -57,9 +57,34 @@ deselect_action(SPAction *action)
 
 // Trigger action
 static void
-item_activate(Gtk::MenuItem* menuitem, SPAction* action)
+item_activate(Gtk::MenuItem * menuitem, SPAction* action)
 {
-    sp_action_perform(action, nullptr);
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool freeze = prefs->getBool("/menu/freeze", false);
+    if (!freeze) {
+        prefs->setBool("/menu/freeze", true);
+        sp_action_perform(action, nullptr);
+        prefs->setBool("/menu/freeze", false);
+    }
+}
+
+void 
+activate_checkmenu(unsigned int emited_verb, unsigned int recibe_verb, Gtk::CheckMenuItem* menuitem)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool freeze = prefs->getBool("/menu/freeze", false);
+    if (!freeze) {
+        prefs->setBool("/menu/freeze", true);
+        if (emited_verb == recibe_verb) 
+        {
+            if (menuitem->get_active()) {
+                menuitem->property_active() = false;
+            } else {
+                menuitem->property_active() = true;
+            }
+        }
+        prefs->setBool("/menu/freeze", false);
+    }
 }
 
 // Change label name (used in the Undo/Redo menu items).
@@ -252,7 +277,7 @@ build_menu_check_item_from_verb(SPAction* action)
 
     // Set initial state before connecting signals.
     checkitem_update(menuitem, action);
-
+    
     menuitem->signal_toggled().connect(
       sigc::bind<Gtk::CheckMenuItem*, SPAction*>(sigc::ptr_fun(&item_activate), menuitem, action)); 
     menuitem->signal_select().connect(  sigc::bind<SPAction*>(sigc::ptr_fun(&select_action),   action));
@@ -427,13 +452,15 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
 
                             Gtk::CheckMenuItem* menuitem = build_menu_check_item_from_verb(action);
                             if (menuitem) {
+                                SP_ACTIVE_DESKTOP->_menu_update.connect(sigc::bind(sigc::ptr_fun(&activate_checkmenu), verb->get_code(), menuitem));
                                 menu->append(*menuitem);
                             }
-
+                            
                         } else if (menu_ptr->attribute("radio") != nullptr) {
 
                             Gtk::MenuItem* menuitem = build_menu_item_from_verb(action, show_icons_curr, true, &group);
                             if (menuitem) {
+                                // TODO: if necesary update a radio in the future we can folloe the previus checkbutton code
                                 if (menu_ptr->attribute("default") != nullptr) {
                                     auto radiomenuitem = dynamic_cast<Gtk::RadioMenuItem*>(menuitem);
                                     if (radiomenuitem) {

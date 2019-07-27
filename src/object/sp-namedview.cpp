@@ -990,7 +990,13 @@ void sp_namedview_toggle_guides(SPDocument *doc, Inkscape::XML::Node *repr)
     DocumentUndo::setUndoSensitive(doc, false);
     sp_repr_set_boolean(repr, "showguides", v);
     DocumentUndo::setUndoSensitive(doc, saved);
-
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop) {
+        Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_TOGGLE_GUIDES);
+        if (verb) {
+            desktop->_menu_update.emit(verb->get_code());
+        }
+    }
     doc->setModifiedSinceSave();
 }
 

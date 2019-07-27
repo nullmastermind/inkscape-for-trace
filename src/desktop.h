@@ -206,6 +206,7 @@ public:
     Glib::ustring _reconstruction_old_layer_id;
 
     sigc::signal<void, sp_verb_t>      _tool_changed;
+    sigc::signal<void, unsigned int>  _menu_update;
     sigc::signal<void, SPObject *>     _layer_changed_signal;
     sigc::signal<bool, const SPCSSAttr *>::accumulated<StopOnTrue> _set_style_signal;
     sigc::signal<int, SPStyle *, int>::accumulated<StopOnNonZero> _query_style_signal;
@@ -323,7 +324,7 @@ public:
     SPItem *getItemFromListAtPointBottom(const std::vector<SPItem*> &list, Geom::Point const &p) const;
     SPItem *getItemAtPoint(Geom::Point const &p, bool into_groups, SPItem *upto = nullptr) const;
     SPItem *getGroupAtPoint(Geom::Point const &p) const;
-    Geom::Point point() const;
+    Geom::Point point(bool outside_infinite = false) const;
 
     void prev_transform();
     void next_transform();
@@ -416,7 +417,7 @@ public:
     void toggleSnapGlobal();
     bool gridsEnabled() const { return grids_visible; };
     void showGrids(bool show, bool dirty_document = true);
-    void toggleToolbar(gchar const *toolbar_name);
+    void toggleToolbar(gchar const *toolbar_name, unsigned int verbenum);
 
     bool is_iconified();
     bool is_darktheme();
