@@ -436,13 +436,13 @@ public:
     Geom::Affine w2d() const; //transformation from window to desktop coordinates (zoom/rotate).
     Geom::Point w2d(Geom::Point const &p) const;
     Geom::Point d2w(Geom::Point const &p) const;
-    Geom::Affine doc2dt() const;
+    const Geom::Affine& doc2dt() const;
     Geom::Affine dt2doc() const;
     Geom::Point doc2dt(Geom::Point const &p) const;
     Geom::Point dt2doc(Geom::Point const &p) const;
 
-    bool is_yaxisdown() const { return _doc2dt[3] > 0; }
-    double yaxisdir() const { return _doc2dt[3]; }
+    bool is_yaxisdown() const { return doc2dt()[3] > 0; }
+    double yaxisdir() const { return doc2dt()[3]; }
 
     void setDocument (SPDocument* doc) override;
     bool shutdown() override;
@@ -547,8 +547,6 @@ private:
     bool _xray;
     bool _quick_zoom_enabled; ///< Signifies that currently we're in quick zoom mode
     DesktopAffine _quick_zoom_affine;  ///< The transform of the screen before quick zoom
-
-    Geom::Affine _doc2dt;
 
     /*
      * Allow redrawing or refreshing if preferences change

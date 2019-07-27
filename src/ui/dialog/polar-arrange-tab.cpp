@@ -240,9 +240,9 @@ static Geom::Point getAnchorPoint(int anchor, SPItem *item)
 	// If using center
 	if(anchor == 9)
 		source = item->getCenter();
-	else if (SP_ACTIVE_DESKTOP)
+	else
 	{
-		source *= SP_ACTIVE_DESKTOP->doc2dt();
+		source *= item->document->doc2dt();
 	}
 
 	return source;

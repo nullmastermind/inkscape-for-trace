@@ -1863,7 +1863,7 @@ void ObjectSet::rotate90(bool ccw)
         return;
 
     auto items_copy = items();
-    double y_dir = desktop() ? desktop()->yaxisdir() : 1;
+    double y_dir = document() ? document()->yaxisdir() : 1;
     Geom::Rotate const rot_90(Geom::Point(0, ccw ? -y_dir : y_dir)); // pos. or neg. rotation, depending on the value of ccw
     for (auto l=items_copy.begin();l!=items_copy.end() ;++l) {
         SPItem *item = *l;
@@ -2966,17 +2966,15 @@ void ObjectSet::cloneOriginalPathLPE(bool allow_transforms)
 void ObjectSet::toMarker(bool apply)
 {
     // sp_selection_tile has similar code
-    if (desktop() == nullptr) { // TODO: We should not need desktop for that.
-                             //       Someone get rid of the dt2doc() call.
-        return;
-    }
 
     SPDocument *doc = document();
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
 
     // check if something is selected
     if (isEmpty()) {
-        desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to convert to marker."));
+        if (desktop())
+            desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE,
+                                             _("Select <b>object(s)</b> to convert to marker."));
         return;
     }
 
@@ -2987,7 +2985,7 @@ void ObjectSet::toMarker(bool apply)
         return;
     }
 
-    Geom::Point center = desktop()->dt2doc(*c);
+    Geom::Point center = (*c) * doc->dt2doc();
 
     std::vector<SPItem*> items_(items().begin(), items().end());
 
@@ -3011,7 +3009,7 @@ void ObjectSet::toMarker(bool apply)
         repr_copies.push_back(dup);
     }
 
-    Geom::Rect bbox(desktop()->dt2doc(r->min()), desktop()->dt2doc(r->max()));
+    Geom::Rect bbox(r->min() * doc->dt2doc(), r->max() * doc->dt2doc());
 
     if (apply) {
         // Delete objects so that their clones don't get alerted;
@@ -3346,16 +3344,15 @@ void ObjectSet::unSymbol()
 void ObjectSet::tile(bool apply)
 {
     // toMarker has similar code
-    if (desktop() == nullptr) { //same remark as in toMarker: no good reason to have this.
-        return;
-    }
 
     SPDocument *doc = document();
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
 
     // check if something is selected
     if (isEmpty()) {
-        desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to convert to pattern."));
+        if (desktop())
+            desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE,
+                                             _("Select <b>object(s)</b> to convert to pattern."));
         return;
     }
 
@@ -3393,7 +3390,7 @@ void ObjectSet::tile(bool apply)
         repr_copies.push_back(dup);
     }
 
-    Geom::Rect bbox(desktop()->dt2doc(r->min()), desktop()->dt2doc(r->max()));
+    Geom::Rect bbox(r->min() * doc->dt2doc(), r->max() * doc->dt2doc());
 
     if (apply) {
         // delete objects so that their clones don't get alerted; this object will be restored shortly
@@ -3730,7 +3727,7 @@ void ObjectSet::createBitmapCopy()
     }
     Geom::Affine t;
 
-    auto bbox_doc = (*bbox) * _desktop->dt2doc();
+    auto bbox_doc = (*bbox) * doc->dt2doc();
     double shift_x = bbox_doc.left();
     double shift_y = bbox_doc.top();
     if (res == Inkscape::Util::Quantity::convert(1, "in", "px")) { // for default 96 dpi, snap it to pixel grid

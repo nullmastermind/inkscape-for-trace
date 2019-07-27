@@ -115,6 +115,12 @@ SPDocument::SPDocument() :
     _node_cache_valid(false),
     _activexmltree(nullptr)
 {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
+    if (!prefs->getBool("/options/yaxisdown", true)) {
+        _doc2dt[3] = -1;
+    }
+
     // Penalise libavoid for choosing paths with needless extra segments.
     // This results in much better looking orthogonal connector paths.
     router->setRoutingPenalty(Avoid::segmentPenalty);
@@ -761,6 +767,15 @@ void SPDocument::setHeight(const Inkscape::Util::Quantity &height, bool changeSi
     root->updateRepr();
 }
 
+const Geom::Affine &SPDocument::doc2dt() const
+{
+    if (root && !is_yaxisdown()) {
+        _doc2dt[5] = root->height.computed;
+    }
+
+    return _doc2dt;
+}
+
 Geom::Rect SPDocument::getViewBox() const
 {
     Geom::Rect viewBox;
@@ -839,7 +854,7 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
         }
     }
 
-    double y_dir = SP_ACTIVE_DESKTOP ? SP_ACTIVE_DESKTOP->yaxisdir() : 1;
+    double y_dir = yaxisdir();
 
     if (y_dir > 0) {
         std::swap(margin_top, margin_bottom);

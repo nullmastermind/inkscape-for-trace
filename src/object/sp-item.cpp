@@ -502,9 +502,7 @@ void SPItem::set(SPAttributeEnum key, gchar const* value) {
         case SP_ATTR_TRANSFORM_CENTER_Y:
             if (value) {
                 item->transform_center_y = g_strtod(value, nullptr);
-                if (SP_ACTIVE_DESKTOP) {
-                    item->transform_center_y *= -SP_ACTIVE_DESKTOP->yaxisdir();
-                }
+                item->transform_center_y *= -document->yaxisdir();
             } else {
                 item->transform_center_y = 0;
             }
@@ -745,9 +743,7 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
             repr->setAttribute ("inkscape:transform-center-x", nullptr);
         if (item->transform_center_y != 0) {
             auto y = item->transform_center_y;
-            if (SP_ACTIVE_DESKTOP) {
-                y *= -SP_ACTIVE_DESKTOP->yaxisdir();
-            }
+            y *= -document->yaxisdir();
             sp_repr_set_svg_double (repr, "inkscape:transform-center-y", y);
         } else
             repr->setAttribute ("inkscape:transform-center-y", nullptr);
@@ -918,8 +914,8 @@ Geom::OptRect SPItem::desktopGeometricBounds() const
 Geom::OptRect SPItem::desktopVisualBounds() const
 {
     Geom::OptRect ret = documentVisualBounds();
-    if (ret && SP_ACTIVE_DESKTOP) {
-        *ret *= SP_ACTIVE_DESKTOP->doc2dt();
+    if (ret) {
+        *ret *= document->doc2dt();
     }
     return ret;
 }
@@ -1590,10 +1586,7 @@ Geom::Affine SPItem::i2doc_affine() const
 Geom::Affine SPItem::i2dt_affine() const
 {
     Geom::Affine ret(i2doc_affine());
-    SPDesktop const *desktop = SP_ACTIVE_DESKTOP;
-    if ( desktop ) {
-        ret *= desktop->doc2dt();
-    }
+    ret *= document->doc2dt();
     return ret;
 }
 
@@ -1603,9 +1596,8 @@ void SPItem::set_i2d_affine(Geom::Affine const &i2dt)
     Geom::Affine dt2p; /* desktop to item parent transform */
     if (parent) {
         dt2p = static_cast<SPItem *>(parent)->i2dt_affine().inverse();
-    } else if (SP_ACTIVE_DESKTOP) {
-        SPDesktop *dt = SP_ACTIVE_DESKTOP;
-        dt2p = dt->dt2doc();
+    } else {
+        dt2p = document->dt2doc();
     }
 
     Geom::Affine const i2p( i2dt * dt2p );

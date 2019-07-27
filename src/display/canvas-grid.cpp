@@ -406,9 +406,7 @@ void CanvasGrid::align_clicked(int align)
     Geom::Point dimensions = doc->getDimensions();
     dimensions[Geom::X] *= align % 3 * 0.5;
     dimensions[Geom::Y] *= align / 3 * 0.5;
-    if (SP_ACTIVE_DESKTOP) {
-        dimensions = SP_ACTIVE_DESKTOP->doc2dt(dimensions);
-    }
+    dimensions *= doc->doc2dt();
     setOrigin(dimensions);
 }
 

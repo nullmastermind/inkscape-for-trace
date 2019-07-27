@@ -429,13 +429,8 @@ ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
 
     doc->ensureUpToDate();
 
-    Geom::Affine dt2doc;
-    if (SP_ACTIVE_DESKTOP) {
-        dt2doc = SP_ACTIVE_DESKTOP->dt2doc();
-    }
-
     /* Calculate translation by transforming to document coordinates (flipping Y)*/
-    Geom::Point translation = -(area * dt2doc).min();
+    Geom::Point translation = -(area * doc->dt2doc()).min();
 
     /*  This calculation is only valid when assumed that (x0,y0)= area.corner(0) and (x1,y1) = area.corner(2)
      * 1) a[0] * x0 + a[2] * y1 + a[4] = 0.0

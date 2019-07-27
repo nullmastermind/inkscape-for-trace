@@ -326,7 +326,7 @@ g_print("\n row = %f     col = %f selection x= %f selection y = %f", total_row_h
 
                  Geom::Point move = Geom::Point(new_x, new_y) - min;
                  Geom::Affine const affine = Geom::Affine(Geom::Translate(move));
-                 item->set_i2d_affine(item->i2doc_affine() * affine * SP_ACTIVE_DESKTOP->doc2dt());
+                 item->set_i2d_affine(item->i2doc_affine() * affine * item->document->doc2dt());
                  item->doWriteTransform(item->transform);
                  item->updateRepr();
                  cnt +=1;

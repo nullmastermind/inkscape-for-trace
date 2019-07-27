@@ -96,7 +96,7 @@ static Proj::Pt2 legacy_transform_forward(Proj::Pt2 pt, SPDocument const *doc) {
     }
 
     // <inkscape:perspective> stores inverted y-axis coordinates
-    if (!SP_ACTIVE_DESKTOP || SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+    if (doc->is_yaxisdown()) {
         pt[1] *= -1;
         if (pt[2]) {
             pt[1] += doc->getHeight().value("px");
@@ -111,7 +111,7 @@ static Proj::Pt2 legacy_transform_forward(Proj::Pt2 pt, SPDocument const *doc) {
  */
 static Proj::Pt2 legacy_transform_backward(Proj::Pt2 pt, SPDocument const *doc) {
     // <inkscape:perspective> stores inverted y-axis coordinates
-    if (!SP_ACTIVE_DESKTOP || SP_ACTIVE_DESKTOP->is_yaxisdown()) {
+    if (doc->is_yaxisdown()) {
         pt[1] *= -1;
         if (pt[2]) {
             pt[1] += doc->getHeight().value("px");

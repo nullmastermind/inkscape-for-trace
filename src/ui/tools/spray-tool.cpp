@@ -426,8 +426,7 @@ static void sp_spray_transform_path(SPItem * item, Geom::Path &path, Geom::Affin
     if (item->parent) {
         dt2p = static_cast<SPItem *>(item->parent)->i2dt_affine().inverse();
     } else {
-        SPDesktop *dt = SP_ACTIVE_DESKTOP;
-        dt2p = dt->dt2doc();
+        dt2p = item->document->dt2doc();
     }
     Geom::Affine i2dt = item->i2dt_affine() * Geom::Translate(center).inverse() * affine * Geom::Translate(center);
     path *= i2dt * dt2p;

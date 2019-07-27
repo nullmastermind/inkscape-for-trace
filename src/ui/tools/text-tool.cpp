@@ -1669,8 +1669,7 @@ static void sp_text_context_update_cursor(TextTool *tc,  bool scroll_to_see)
             if (opt_frame) {
                 // User units to screen pixels
                 Geom::Rect frame = *opt_frame;
-                frame *= SP_TEXT(tc->text)->i2doc_affine();
-                frame *= SP_ACTIVE_DESKTOP->dt2doc().inverse();
+                frame *= tc->text->i2dt_affine();
 
                 SP_CTRLRECT(tc->frame)->setRectangle(frame);
                 sp_canvas_item_show(tc->frame);
