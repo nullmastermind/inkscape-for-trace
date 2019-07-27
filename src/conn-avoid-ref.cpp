@@ -237,6 +237,7 @@ static std::vector<Geom::Point> approxItemWithPoints(SPItem const *item, const G
 {
     // The structure to hold the output
     std::vector<Geom::Point> poly_points;
+    SPCurve *item_curve = nullptr;
 
     if (SP_IS_GROUP(item))
     {
@@ -252,16 +253,24 @@ static std::vector<Geom::Point> approxItemWithPoints(SPItem const *item, const G
     else if (SP_IS_SHAPE(item))
     {
         SP_SHAPE(item)->set_shape();
-        SPCurve* item_curve = SP_SHAPE(item)->getCurve();
+        item_curve = SP_SHAPE(item)->getCurve();
         // make sure it has an associated curve
         if (item_curve)
         {
             // apply transformations (up to common ancestor)
             item_curve->transform(item_transform);
-            std::vector<Geom::Point> curve_points = approxCurveWithPoints(item_curve);
-            poly_points.insert(poly_points.end(), curve_points.begin(), curve_points.end());
-            item_curve->unref();
         }
+    } else {
+        auto bbox = item->documentPreferredBounds();
+        if (bbox) {
+            item_curve = SPCurve::new_from_rect(*bbox);
+        }
+    }
+
+    if (item_curve) {
+        std::vector<Geom::Point> curve_points = approxCurveWithPoints(item_curve);
+        poly_points.insert(poly_points.end(), curve_points.begin(), curve_points.end());
+        item_curve->unref();
     }
 
     return poly_points;
