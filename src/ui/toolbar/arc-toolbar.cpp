@@ -173,6 +173,10 @@ ArcToolbar::ArcToolbar(SPDesktop *desktop) :
         chord_btn->set_icon_name(INKSCAPE_ICON("draw-ellipse-chord"));
         _type_buttons.push_back(chord_btn);
 
+        slice_btn->set_group(type_group);
+        arc_btn->set_group(type_group);
+        chord_btn->set_group(type_group);
+
         gint type = prefs->getInt("/tools/shapes/arc/arc_type", 0);
         _type_buttons[type]->set_active();
 

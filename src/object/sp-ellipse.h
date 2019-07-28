@@ -33,8 +33,8 @@ enum GenericEllipseType {
 
 enum GenericEllipseArcType {
     SP_GENERIC_ELLIPSE_ARC_TYPE_SLICE, // Default
-    SP_GENERIC_ELLIPSE_ARC_TYPE_CHORD,
-    SP_GENERIC_ELLIPSE_ARC_TYPE_ARC
+    SP_GENERIC_ELLIPSE_ARC_TYPE_ARC,
+    SP_GENERIC_ELLIPSE_ARC_TYPE_CHORD
 };
 
 class SPGenericEllipse : public SPShape {
