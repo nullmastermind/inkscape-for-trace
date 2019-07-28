@@ -450,7 +450,7 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
 
                             Gtk::CheckMenuItem* menuitem = build_menu_check_item_from_verb(action);
                             if (menuitem) {
-                                checkmenuitems.push_back(std::make_pair(verb->get_code(), menuitem));
+                                checkmenuitems.emplace_back(verb->get_code(), menuitem);
                                 menu->append(*menuitem);
                             }
 
