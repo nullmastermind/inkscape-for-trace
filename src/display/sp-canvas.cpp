@@ -2430,7 +2430,6 @@ int SPCanvas::paint()
         cairo_region_get_rectangle(to_draw, i, &crect);
         if (!paintRect(crect.x, crect.y, crect.x + crect.width, crect.y + crect.height)) {
             // Aborted
-            cairo_region_subtract_rectangle(_clean_region, &crect);
             cairo_region_destroy(to_draw);
             cairo_region_destroy(to_draw_outline);
             return FALSE;
@@ -2449,7 +2448,6 @@ int SPCanvas::paint()
                 // Aborted
                 arena->drawing.setExact(exact);
                 arena->drawing.setRenderMode(rm);
-                cairo_region_subtract_rectangle(_clean_region, &crect);
                 cairo_region_destroy(to_draw);
                 cairo_region_destroy(to_draw_outline);
                 return FALSE;
