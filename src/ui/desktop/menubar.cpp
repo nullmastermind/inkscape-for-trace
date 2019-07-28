@@ -41,8 +41,9 @@
 
 // ================= Common ====================
 
-std::vector<std::pair<unsigned int, Gtk::CheckMenuItem *> > checkmenuitems;
-unsigned int lastverb = 0;;
+std::vector<std::pair<unsigned int, Gtk::CheckMenuItem *>> checkmenuitems;
+unsigned int lastverb = 0;
+;
 
 // Sets tip
 static void
@@ -59,8 +60,7 @@ deselect_action(SPAction *action)
 }
 
 // Trigger action
-static void 
-item_activate(Gtk::MenuItem *menuitem, SPAction *action)
+static void item_activate(Gtk::MenuItem *menuitem, SPAction *action)
 {
     if (action->verb->get_code() == lastverb) {
         lastverb = 0;
@@ -71,12 +71,11 @@ item_activate(Gtk::MenuItem *menuitem, SPAction *action)
     lastverb = 0;
 }
 
-static void 
-toggle_checkmenu(unsigned int emitting_verb, bool value)
+static void toggle_checkmenu(unsigned int emitting_verb, bool value)
 {
     for (auto menu : checkmenuitems) {
         if (emitting_verb == menu.first) {
-            if (emitting_verb  == lastverb) {
+            if (emitting_verb == lastverb) {
                 lastverb = 0;
                 return;
             }
@@ -183,8 +182,7 @@ build_menu_item_from_verb(SPAction* action,
 
 // =============== CheckMenuItem ==================
 
-bool
-getStateFromPref(SPDesktop* dt, Glib::ustring item)
+bool getStateFromPref(SPDesktop *dt, Glib::ustring item)
 {
     Glib::ustring pref_path;
 
@@ -533,7 +531,6 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
         }
     }
     SP_ACTIVE_DESKTOP->_menu_update.connect(sigc::ptr_fun(&toggle_checkmenu));
-
 }
 
 Gtk::MenuBar*

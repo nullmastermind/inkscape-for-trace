@@ -61,12 +61,12 @@
 #include "object/sp-namedview.h"
 #include "object/sp-root.h"
 
+#include "ui/desktop/menubar.h"
 #include "ui/dialog/dialog-manager.h"
-#include "ui/interface.h"  // Only for getLayoutPrefPath
+#include "ui/interface.h" // Only for getLayoutPrefPath
 #include "ui/tool-factory.h"
 #include "ui/tools/box3d-tool.h"
 #include "ui/tools/select-tool.h"
-#include "ui/desktop/menubar.h" 
 
 #include "widgets/desktop-widget.h"
 

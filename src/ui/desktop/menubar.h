@@ -29,7 +29,7 @@ namespace View {
 }
 }
 
-bool getStateFromPref(SPDesktop* dt, Glib::ustring item);
+bool getStateFromPref(SPDesktop *dt, Glib::ustring item);
 Gtk::MenuBar* build_menubar(Inkscape::UI::View::View* view);
 
 #endif // SEEN_DESKTOP_MENUBAR_H
