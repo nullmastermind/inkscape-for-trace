@@ -2369,7 +2369,7 @@ SPDesktopWidget::on_ruler_box_button_release_event(GdkEventButton *event, Gtk::E
         if (!_ruler_dragged) {
             // Ruler click (without drag) toggle the guide visibility on and off
             Inkscape::XML::Node *repr = desktop->namedview->getRepr();
-            sp_namedview_toggle_guides(desktop->getDocument(), repr);
+            sp_namedview_toggle_guides(desktop->getDocument(), desktop->namedview);
         }
 
         _ruler_clicked = false;

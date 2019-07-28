@@ -206,7 +206,7 @@ public:
     Glib::ustring _reconstruction_old_layer_id;
 
     sigc::signal<void, sp_verb_t>      _tool_changed;
-    sigc::signal<void, unsigned int> _menu_update;
+    sigc::signal<void, unsigned int, bool> _menu_update;
     sigc::signal<void, SPObject *>     _layer_changed_signal;
     sigc::signal<bool, const SPCSSAttr *>::accumulated<StopOnTrue> _set_style_signal;
     sigc::signal<int, SPStyle *, int>::accumulated<StopOnNonZero> _query_style_signal;

@@ -66,6 +66,7 @@
 #include "ui/tool-factory.h"
 #include "ui/tools/box3d-tool.h"
 #include "ui/tools/select-tool.h"
+#include "ui/desktop/menubar.h" 
 
 #include "widgets/desktop-widget.h"
 
@@ -1422,7 +1423,7 @@ SPDesktop::toggleRulers()
     _widget->toggleRulers();
     Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_TOGGLE_RULERS);
     if (verb) {
-        _menu_update.emit(verb->get_code());
+        _menu_update.emit(verb->get_code(), getStateFromPref(this, "rulers"));
     }
 }
 
@@ -1432,7 +1433,7 @@ SPDesktop::toggleScrollbars()
     _widget->toggleScrollbars();
     Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_TOGGLE_SCROLLBARS);
     if (verb) {
-        _menu_update.emit(verb->get_code());
+        _menu_update.emit(verb->get_code(), getStateFromPref(this, "scrollbars"));
     }
 }
 
@@ -1445,7 +1446,7 @@ void SPDesktop::toggleToolbar(gchar const *toolbar_name, unsigned int verbenum)
     prefs->setBool(pref_path, !visible);
     Inkscape::Verb *verb = Inkscape::Verb::get(verbenum);
     if (verb) {
-        _menu_update.emit(verb->get_code());
+        _menu_update.emit(verb->get_code(), getStateFromPref(this, toolbar_name));
     }
     layoutWidget();
 }
@@ -1589,7 +1590,7 @@ void SPDesktop::toggleColorProfAdjust()
     _widget->toggleColorProfAdjust();
     Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_CMS_TOGGLE);
     if (verb) {
-        _menu_update.emit(verb->get_code());
+        _menu_update.emit(verb->get_code(), colorProfAdjustEnabled());
     }
 }
 
@@ -1598,7 +1599,7 @@ void SPDesktop::toggleGuidesLock()
     sp_namedview_guides_toggle_lock(this->getDocument(), namedview);
     Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_EDIT_GUIDES_TOGGLE_LOCK);
     if (verb) {
-        _menu_update.emit(verb->get_code());
+        _menu_update.emit(verb->get_code(), namedview->lockguides);
     }
 }
 
@@ -1620,7 +1621,7 @@ void SPDesktop::toggleGrids()
     }
     Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_TOGGLE_GRID);
     if (verb) {
-        _menu_update.emit(verb->get_code());
+        _menu_update.emit(verb->get_code(), gridsEnabled());
     }
 }
 
@@ -1632,14 +1633,14 @@ void SPDesktop::toggleSplitMode()
             _xray = !_xray;
             Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_XRAY);
             if (verb) {
-                _menu_update.emit(verb->get_code());
+                _menu_update.emit(verb->get_code(), xrayMode());
             }
         }
         SPCanvas *canvas = getCanvas();
         canvas->requestFullRedraw();
         Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_SPLIT);
         if (verb) {
-            _menu_update.emit(verb->get_code());
+            _menu_update.emit(verb->get_code(), splitMode());
         }
     }
 }
@@ -1652,14 +1653,14 @@ void SPDesktop::toggleXRay()
             _split_canvas = !_split_canvas;
             Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_SPLIT);
             if (verb) {
-                _menu_update.emit(verb->get_code());
+                _menu_update.emit(verb->get_code(), splitMode());
             }
         }
         SPCanvas *canvas = getCanvas();
         canvas->requestFullRedraw();
         Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_XRAY);
         if (verb) {
-            _menu_update.emit(verb->get_code());
+            _menu_update.emit(verb->get_code(), xrayMode());
         }
     }
 }

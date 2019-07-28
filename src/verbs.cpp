@@ -2053,7 +2053,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
             dt->toggleToolbar("statusbar", SP_VERB_TOGGLE_STATUSBAR);
             break;
         case SP_VERB_TOGGLE_GUIDES:
-            sp_namedview_toggle_guides(doc, repr);
+            sp_namedview_toggle_guides(doc, dt->namedview);
             break;
         case SP_VERB_TOGGLE_SNAPPING:
         {

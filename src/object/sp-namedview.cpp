@@ -976,9 +976,10 @@ static void sp_namedview_lock_single_guide(SPGuide* guide, bool locked)
     guide->set_locked(locked, true);
 }
 
-void sp_namedview_toggle_guides(SPDocument *doc, Inkscape::XML::Node *repr)
+void sp_namedview_toggle_guides(SPDocument *doc, SPNamedView *namedview)
 {
     unsigned int v;
+    Inkscape::XML::Node *repr = namedview->getRepr();
     unsigned int set = sp_repr_get_boolean(repr, "showguides", &v);
     if (!set) { // hide guides if not specified, for backwards compatibility
         v = FALSE;
@@ -994,7 +995,7 @@ void sp_namedview_toggle_guides(SPDocument *doc, Inkscape::XML::Node *repr)
     if (desktop) {
         Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_TOGGLE_GUIDES);
         if (verb) {
-            desktop->_menu_update.emit(verb->get_code());
+            desktop->_menu_update.emit(verb->get_code(), namedview->getGuides());
         }
     }
     doc->setModifiedSinceSave();

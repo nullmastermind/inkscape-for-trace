@@ -41,6 +41,9 @@
 
 // ================= Common ====================
 
+std::vector<std::pair<unsigned int, Gtk::CheckMenuItem *> > checkmenuitems;
+unsigned int lastverb = 0;;
+
 // Sets tip
 static void
 select_action(SPAction *action)
@@ -56,31 +59,31 @@ deselect_action(SPAction *action)
 }
 
 // Trigger action
-static void item_activate(Gtk::MenuItem *menuitem, SPAction *action)
+static void 
+item_activate(Gtk::MenuItem *menuitem, SPAction *action)
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool freeze = prefs->getBool("/menu/freeze", false);
-    if (!freeze) {
-        prefs->setBool("/menu/freeze", true);
-        sp_action_perform(action, nullptr);
-        prefs->setBool("/menu/freeze", false);
+    if (action->verb->get_code() == lastverb) {
+        lastverb = 0;
+        return;
     }
+    lastverb = action->verb->get_code();
+    sp_action_perform(action, nullptr);
+    lastverb = 0;
 }
 
-void activate_checkmenu(unsigned int emited_verb, unsigned int recibe_verb, Gtk::CheckMenuItem *menuitem)
+static void 
+toggle_checkmenu(unsigned int emitting_verb, bool value)
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool freeze = prefs->getBool("/menu/freeze", false);
-    if (!freeze) {
-        prefs->setBool("/menu/freeze", true);
-        if (emited_verb == recibe_verb) {
-            if (menuitem->get_active()) {
-                menuitem->property_active() = false;
-            } else {
-                menuitem->property_active() = true;
+    for (auto menu : checkmenuitems) {
+        if (emitting_verb == menu.first) {
+            if (emitting_verb  == lastverb) {
+                lastverb = 0;
+                return;
             }
+            lastverb = emitting_verb;
+            menu.second->property_active() = value;
+            lastverb = 0;
         }
-        prefs->setBool("/menu/freeze", false);
     }
 }
 
@@ -180,7 +183,7 @@ build_menu_item_from_verb(SPAction* action,
 
 // =============== CheckMenuItem ==================
 
-static bool
+bool
 getStateFromPref(SPDesktop* dt, Glib::ustring item)
 {
     Glib::ustring pref_path;
@@ -449,8 +452,7 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
 
                             Gtk::CheckMenuItem* menuitem = build_menu_check_item_from_verb(action);
                             if (menuitem) {
-                                SP_ACTIVE_DESKTOP->_menu_update.connect(
-                                    sigc::bind(sigc::ptr_fun(&activate_checkmenu), verb->get_code(), menuitem));
+                                checkmenuitems.push_back(std::make_pair(verb->get_code(), menuitem));
                                 menu->append(*menuitem);
                             }
 
@@ -530,6 +532,7 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
             std::cerr << "build_menu: xml node has no name!" << std::endl;
         }
     }
+    SP_ACTIVE_DESKTOP->_menu_update.connect(sigc::ptr_fun(&toggle_checkmenu));
 
 }
 
