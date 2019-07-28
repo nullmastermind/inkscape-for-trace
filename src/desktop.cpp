@@ -1635,7 +1635,8 @@ void SPDesktop::toggleSplitMode()
                 _menu_update.emit(verb->get_code());
             }
         }
-        canvas->requestUpdate();
+        SPCanvas *canvas = getCanvas();
+        canvas->requestFullRedraw();
         Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_SPLIT);
         if (verb) {
             _menu_update.emit(verb->get_code());

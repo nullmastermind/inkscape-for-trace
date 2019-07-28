@@ -1749,8 +1749,13 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
             Geom::Point prev_orig = canvas->_xray_orig;
             canvas->_xray_orig = desktop->point(true);
             canvas->_xray_orig *= desktop->current_zoom();
+            if (!SP_ACTIVE_DOCUMENT->is_yaxisdown()) {
+                canvas->_xray_orig[Geom::Y] *= -1.0;
+            }
             canvas->_xray = true;
-            canvas->addIdle();
+            if (canvas->_xray_orig[Geom::X] != Geom::infinity()) {
+                canvas->addIdle();
+            }
             status = 1;
         } else {
             canvas->_xray = false;

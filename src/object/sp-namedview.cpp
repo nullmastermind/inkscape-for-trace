@@ -1124,8 +1124,8 @@ bool SPNamedView::getGuides()
     g_assert(this->getRepr() != nullptr);
     unsigned int v;
     unsigned int set = sp_repr_get_boolean(this->getRepr(), "showguides", &v);
-    if (!set) { // hide guides if not specified, for backwards compatibility
-        v = FALSE;
+    if (!set) { // show guides if not specified, for backwards compatibility
+        v = TRUE;
     }
 
     return v;

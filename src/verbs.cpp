@@ -3057,10 +3057,10 @@ Verb *Verb::_base_verbs[] = {
     new ZoomVerb(SP_VERB_VIEW_COLOR_MODE_TOGGLE, "ViewColorModeToggle", N_("_Toggle"),
                  N_("Toggle between normal and grayscale color display modes"), nullptr),
 
-    new ZoomVerb(SP_VERB_VIEW_TOGGLE_SPLIT, "ViewSplitModeToggle", N_("Toggle _Split View Mode"),
+    new ZoomVerb(SP_VERB_VIEW_TOGGLE_SPLIT, "ViewSplitModeToggle", N_("_Split View Mode"),
                  N_("Split canvas in 2 to show outline"), nullptr),
 
-    new ZoomVerb(SP_VERB_VIEW_TOGGLE_XRAY, "ViewXRayToggle", N_("Toggle _XRay Mode"), N_("XRay around cursor"),
+    new ZoomVerb(SP_VERB_VIEW_TOGGLE_XRAY, "ViewXRayToggle", N_("_XRay Mode"), N_("XRay around cursor"),
                  nullptr),
 
     new ZoomVerb(SP_VERB_VIEW_CMS_TOGGLE, "ViewCmsToggle", N_("Color-Managed View"),
