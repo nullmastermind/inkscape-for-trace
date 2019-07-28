@@ -702,6 +702,7 @@ void ContextMenu::MakeImageMenu ()
         mi->set_sensitive( FALSE );
     }
 
+#if HAVE_POTRACE
     /* Trace Bitmap */
     mi = Gtk::manage(new Gtk::MenuItem(_("_Trace Bitmap..."), true));
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::ImageTraceBitmap));
@@ -710,6 +711,7 @@ void ContextMenu::MakeImageMenu ()
     if (_desktop->selection->isEmpty()) {
         mi->set_sensitive(FALSE);
     }
+#endif
 
     /* Trace Pixel Art */
     mi = Gtk::manage(new Gtk::MenuItem(_("Trace Pixel Art"), true));
@@ -847,11 +849,13 @@ void ContextMenu::ImageEdit()
     }
 }
 
+#if HAVE_POTRACE
 void ContextMenu::ImageTraceBitmap()
 {
     INKSCAPE.dialogs_unhide();
     _desktop->_dlg_mgr->showDialog("Trace");
 }
+#endif
 
 void ContextMenu::ImageTracePixelArt()
 {
