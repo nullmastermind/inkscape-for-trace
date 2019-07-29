@@ -115,7 +115,9 @@ ToolBase::ToolBase(gchar const *const *cursor_shape, bool uses_snap)
     , desktop(nullptr)
     , _uses_snap(uses_snap)
     , cursor_shape(cursor_shape)
-    , _leftbutton_pressed(false)
+    , _button1on(false)
+    , _button2on(false)
+    , _button3on(false)
 {
 }
 
@@ -340,6 +342,44 @@ bool ToolBase::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
     return true;
 }
 
+/**
+ * This function allow to handle global tool events if not _pre function is full overrided.
+ */
+bool ToolBase::root_handler_impl(GdkEvent* event) {
+    switch (event->type) {
+        case GDK_BUTTON_PRESS:
+            switch (event->button.button) {
+                case 1:
+                    this->_button1on = true;
+                    break;
+                case 2:
+                    this->_button2on = true;
+                    break;
+                case 3:
+                    this->_button3on = true;
+                    break;
+            }
+            break;
+        case GDK_BUTTON_RELEASE:
+            switch (event->button.button) {
+                case 1:
+                    this->_button1on = false;
+                    break;
+                case 2:
+                    this->_button2on = false;
+                    break;
+                case 3:
+                    this->_button3on = false;
+                    break;
+            }
+            break;
+    }
+    if (!(this->_button1on == true && this->_button3on == true)) {
+        return root_handler(event);
+    }
+    return true;
+}
+
 bool ToolBase::root_handler(GdkEvent* event) {
 
     // ui_dump_event (event, "ToolBase::root_handler");
@@ -376,7 +416,6 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
         switch (event->button.button) {
         case 1:
-            this->_leftbutton_pressed = true;
             if (this->space_panning) {
                 // When starting panning, make sure there are no snap events pending because these might disable the panning again
                 if (_uses_snap) {
@@ -444,9 +483,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
                 ret = TRUE;
             } else {
-                if (!this->_leftbutton_pressed) {
-                    sp_event_root_menu_popup(desktop, nullptr, event);
-                }
+                sp_event_root_menu_popup(desktop, nullptr, event);
             }
             break;
 
@@ -535,9 +572,6 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
     case GDK_BUTTON_RELEASE:
 
-        if (event->button.button == 1) {
-            this->_leftbutton_pressed = false;
-        }
         xp = yp = 0;
 
         if (panning_cursor == 1) {
@@ -938,6 +972,45 @@ bool ToolBase::root_handler(GdkEvent* event) {
 }
 
 /**
+ * This function allow to handle global tool events if not _pre function is full overrided.
+ */
+
+bool ToolBase::item_handler_impl(SPItem* item, GdkEvent* event) {
+    switch (event->type) {
+        case GDK_BUTTON_PRESS:
+            switch (event->button.button) {
+                case 1:
+                    this->_button1on = true;
+                    break;
+                case 2:
+                    this->_button2on = true;
+                    break;
+                case 3:
+                    this->_button3on = true;
+                    break;
+            }
+            break;
+        case GDK_BUTTON_RELEASE:
+            switch (event->button.button) {
+                case 1:
+                    this->_button1on = false;
+                    break;
+                case 2:
+                    this->_button2on = false;
+                    break;
+                case 3:
+                    this->_button3on = false;
+                    break;
+            }
+            break;
+    }
+    if (!(this->_button1on == true && this->_button3on == true)) {
+        return item_handler(item, event);
+    }
+    return true;
+}
+
+/**
  * Handles item specific events. Gets called from Gdk.
  *
  * Only reacts to right mouse button at the moment.
@@ -948,7 +1021,7 @@ bool ToolBase::item_handler(SPItem* item, GdkEvent* event) {
 
     switch (event->type) {
     case GDK_BUTTON_PRESS:
-        if ((event->button.button == 3) && !((event->button.state & GDK_SHIFT_MASK) || (event->button.state & GDK_CONTROL_MASK))) {
+        if (event->button.button == 3 && !((event->button.state & GDK_SHIFT_MASK) || (event->button.state & GDK_CONTROL_MASK))) {
             sp_event_root_menu_popup(this->desktop, item, event);
             ret = TRUE;
         }
@@ -1056,8 +1129,7 @@ gint sp_event_context_root_handler(ToolBase * event_context,
     case GDK_3BUTTON_PRESS:
         // Snapping will be on hold if we're moving the mouse at high speeds. When starting
         // drawing a new shape we really should snap though.
-        event_context->desktop->namedview->snap_manager.snapprefs.setSnapPostponedGlobally(
-                false);
+        event_context->desktop->namedview->snap_manager.snapprefs.setSnapPostponedGlobally(false);
         break;
     default:
         break;
@@ -1075,7 +1147,7 @@ gint sp_event_context_virtual_root_handler(ToolBase * event_context, GdkEvent * 
         // Thus, save a pointer to the desktop before calling it.
         SPDesktop* desktop = event_context->desktop;
 
-        ret = event_context->root_handler(event);
+        ret = event_context->root_handler_impl(event);
 
         set_event_location(desktop, event);
     }
@@ -1122,7 +1194,7 @@ gint sp_event_context_virtual_item_handler(ToolBase * event_context, SPItem * it
     if (event_context) {    // If no event-context is available then do nothing, otherwise Inkscape would crash
                             // (see the comment in SPDesktop::set_event_context, and bug LP #622350)
         //ret = (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(event_context)))->item_handler(event_context, item, event);
-    	ret = event_context->item_handler(item, event);
+    	ret = event_context->item_handler_impl(item, event);
 
         if (!ret) {
             ret = sp_event_context_virtual_root_handler(event_context, event);

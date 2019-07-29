@@ -193,8 +193,9 @@ public:
 
 	// Is called by our pref_observer if a preference has been changed.
 	virtual void set(const Inkscape::Preferences::Entry& val);
-
+    virtual bool root_handler_impl(GdkEvent* event);
 	virtual bool root_handler(GdkEvent* event);
+    virtual bool item_handler_impl(SPItem* item, GdkEvent* event);
 	virtual bool item_handler(SPItem* item, GdkEvent* event);
 
 	virtual const std::string& getPrefsPath() = 0;
@@ -229,13 +230,13 @@ public:
 protected:
 	/// An xpm containing the shape of the tool's cursor.
     gchar const *const *cursor_shape;
-
+    bool _button1on;
+    bool _button2on;
+    bool _button3on;
     bool sp_event_context_knot_mouseover() const;
 
 private:
-        bool _keyboardMove(GdkEventKey const &event, Geom::Point const &dir);
-    bool _leftbutton_pressed;
-        
+    bool _keyboardMove(GdkEventKey const &event, Geom::Point const &dir);
 	void sp_event_context_set_cursor(GdkCursorType cursor_type);
 
 };
