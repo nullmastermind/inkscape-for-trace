@@ -68,7 +68,6 @@ static void item_activate(Gtk::MenuItem *menuitem, SPAction *action)
     }
     lastverb = action->verb->get_code();
     sp_action_perform(action, nullptr);
-    lastverb = 0;
 }
 
 static void toggle_checkmenu(unsigned int emitting_verb, bool value)
@@ -81,7 +80,6 @@ static void toggle_checkmenu(unsigned int emitting_verb, bool value)
             }
             lastverb = emitting_verb;
             menu.second->property_active() = value;
-            lastverb = 0;
         }
     }
 }
