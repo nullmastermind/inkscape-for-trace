@@ -193,10 +193,10 @@ public:
 
 	// Is called by our pref_observer if a preference has been changed.
 	virtual void set(const Inkscape::Preferences::Entry& val);
-    virtual bool root_handler_impl(GdkEvent* event);
-	virtual bool root_handler(GdkEvent* event);
-    virtual bool item_handler_impl(SPItem* item, GdkEvent* event);
-	virtual bool item_handler(SPItem* item, GdkEvent* event);
+    virtual bool root_handler_impl(GdkEvent *event);
+    virtual bool root_handler(GdkEvent* event);
+    virtual bool item_handler_impl(SPItem *item, GdkEvent *event);
+    virtual bool item_handler(SPItem* item, GdkEvent* event);
 
 	virtual const std::string& getPrefsPath() = 0;
 
@@ -236,8 +236,8 @@ protected:
     bool sp_event_context_knot_mouseover() const;
 
 private:
-    bool _keyboardMove(GdkEventKey const &event, Geom::Point const &dir);
-	void sp_event_context_set_cursor(GdkCursorType cursor_type);
+  bool _keyboardMove(GdkEventKey const &event, Geom::Point const &dir);
+  void sp_event_context_set_cursor(GdkCursorType cursor_type);
 
 };
 

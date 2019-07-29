@@ -345,7 +345,8 @@ bool ToolBase::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
 /**
  * This function allow to handle global tool events if not _pre function is full overrided.
  */
-bool ToolBase::root_handler_impl(GdkEvent* event) {
+bool ToolBase::root_handler_impl(GdkEvent *event)
+{
     switch (event->type) {
         case GDK_BUTTON_PRESS:
             switch (event->button.button) {
@@ -975,7 +976,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
  * This function allow to handle global tool events if not _pre function is full overrided.
  */
 
-bool ToolBase::item_handler_impl(SPItem* item, GdkEvent* event) {
+bool ToolBase::item_handler_impl(SPItem *item, GdkEvent *event)
+{
     switch (event->type) {
         case GDK_BUTTON_PRESS:
             switch (event->button.button) {
@@ -1021,7 +1023,8 @@ bool ToolBase::item_handler(SPItem* item, GdkEvent* event) {
 
     switch (event->type) {
     case GDK_BUTTON_PRESS:
-        if (event->button.button == 3 && !((event->button.state & GDK_SHIFT_MASK) || (event->button.state & GDK_CONTROL_MASK))) {
+        if (event->button.button == 3 &&
+            !((event->button.state & GDK_SHIFT_MASK) || (event->button.state & GDK_CONTROL_MASK))) {
             sp_event_root_menu_popup(this->desktop, item, event);
             ret = TRUE;
         }
@@ -1194,7 +1197,7 @@ gint sp_event_context_virtual_item_handler(ToolBase * event_context, SPItem * it
     if (event_context) {    // If no event-context is available then do nothing, otherwise Inkscape would crash
                             // (see the comment in SPDesktop::set_event_context, and bug LP #622350)
         //ret = (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(event_context)))->item_handler(event_context, item, event);
-    	ret = event_context->item_handler_impl(item, event);
+        ret = event_context->item_handler_impl(item, event);
 
         if (!ret) {
             ret = sp_event_context_virtual_root_handler(event_context, event);
