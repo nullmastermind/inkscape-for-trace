@@ -23,6 +23,10 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
+
 #include <cstring>
 #include <string>
 
@@ -2189,9 +2193,11 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_FIND:
             dt->_dlg_mgr->showDialog("Find");
             break;
+#if HAVE_ASPELL
         case SP_VERB_DIALOG_SPELLCHECK:
             dt->_dlg_mgr->showDialog("SpellCheck");
             break;
+#endif
         case SP_VERB_DIALOG_DEBUG:
             dt->_dlg_mgr->showDialog("Messages");
             break;
@@ -3110,8 +3116,10 @@ Verb *Verb::_base_verbs[] = {
                    N_("View and edit selections and CSS styles"), INKSCAPE_ICON("dialog-selectors")),
     new DialogVerb(SP_VERB_DIALOG_FIND, "DialogFind", N_("_Find/Replace..."), N_("Find objects in document"),
                    INKSCAPE_ICON("edit-find")),
+#if HAVE_ASPELL
     new DialogVerb(SP_VERB_DIALOG_SPELLCHECK, "DialogSpellcheck", N_("Check Spellin_g..."),
                    N_("Check spelling of text in document"), INKSCAPE_ICON("tools-check-spelling")),
+#endif
     new DialogVerb(SP_VERB_DIALOG_DEBUG, "DialogDebug", N_("_Messages..."), N_("View debug messages"),
                    INKSCAPE_ICON("dialog-messages")),
     new DialogVerb(SP_VERB_DIALOG_TOGGLE, "DialogsToggle", N_("Show/Hide D_ialogs"),
