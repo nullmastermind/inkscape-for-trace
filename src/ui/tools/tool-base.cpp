@@ -115,6 +115,7 @@ ToolBase::ToolBase(gchar const *const *cursor_shape, bool uses_snap)
     , desktop(nullptr)
     , _uses_snap(uses_snap)
     , cursor_shape(cursor_shape)
+    , _leftbutton_pressed(false)
 {
 }
 
@@ -375,6 +376,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
         switch (event->button.button) {
         case 1:
+            this->_leftbutton_pressed = true;
             if (this->space_panning) {
                 // When starting panning, make sure there are no snap events pending because these might disable the panning again
                 if (_uses_snap) {
@@ -442,7 +444,9 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
                 ret = TRUE;
             } else {
-                sp_event_root_menu_popup(desktop, nullptr, event);
+                if (!this->_leftbutton_pressed) {
+                    sp_event_root_menu_popup(desktop, nullptr, event);
+                }
             }
             break;
 
@@ -531,6 +535,9 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
     case GDK_BUTTON_RELEASE:
 
+        if (event->button.button == 1) {
+            this->_leftbutton_pressed = false;
+        }
         xp = yp = 0;
 
         if (panning_cursor == 1) {

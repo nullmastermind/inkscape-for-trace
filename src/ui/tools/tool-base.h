@@ -234,7 +234,7 @@ protected:
 
 private:
         bool _keyboardMove(GdkEventKey const &event, Geom::Point const &dir);
-
+    bool _leftbutton_pressed;
         
 	void sp_event_context_set_cursor(GdkCursorType cursor_type);
 
