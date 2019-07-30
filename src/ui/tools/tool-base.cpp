@@ -116,7 +116,6 @@ ToolBase::ToolBase(gchar const *const *cursor_shape, bool uses_snap)
     , _uses_snap(uses_snap)
     , cursor_shape(cursor_shape)
     , _button1on(false)
-    , _button2on(false)
     , _button3on(false)
 {
 }
@@ -342,44 +341,6 @@ bool ToolBase::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
     return true;
 }
 
-/**
- * This function allow to handle global tool events if not _pre function is full overrided.
- */
-bool ToolBase::root_handler_impl(GdkEvent *event)
-{
-    switch (event->type) {
-        case GDK_BUTTON_PRESS:
-            switch (event->button.button) {
-                case 1:
-                    this->_button1on = true;
-                    break;
-                case 2:
-                    this->_button2on = true;
-                    break;
-                case 3:
-                    this->_button3on = true;
-                    break;
-            }
-            break;
-        case GDK_BUTTON_RELEASE:
-            switch (event->button.button) {
-                case 1:
-                    this->_button1on = false;
-                    break;
-                case 2:
-                    this->_button2on = false;
-                    break;
-                case 3:
-                    this->_button3on = false;
-                    break;
-            }
-            break;
-    }
-    if (!(this->_button1on == true && this->_button3on == true)) {
-        return root_handler(event);
-    }
-    return true;
-}
 
 bool ToolBase::root_handler(GdkEvent* event) {
 
@@ -976,7 +937,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
  * This function allow to handle global tool events if not _pre function is full overrided.
  */
 
-bool ToolBase::item_handler_impl(SPItem *item, GdkEvent *event)
+bool ToolBase::block_button(GdkEvent *event)
 {
     switch (event->type) {
         case GDK_BUTTON_PRESS:
@@ -1005,11 +966,23 @@ bool ToolBase::item_handler_impl(SPItem *item, GdkEvent *event)
                     break;
             }
             break;
+        case GDK_MOTION_NOTIFY:
+            if (event->motion.state & Gdk::ModifierType::BUTTON1_MASK) {
+                this->_button1on = true;
+            } else {
+                this->_button1on = false;
+            }
+            if (event->motion.state & Gdk::ModifierType::BUTTON3_MASK) {
+                this->_button3on = true;
+            } else {
+                this->_button3on = false;
+            }
+
     }
-    if (!(this->_button1on == true && this->_button3on == true)) {
-        return item_handler(item, event);
+    if (this->_button1on == true && this->_button3on == true) {
+        return true;
     }
-    return true;
+    return false;
 }
 
 /**
@@ -1145,12 +1118,17 @@ gint sp_event_context_virtual_root_handler(ToolBase * event_context, GdkEvent * 
     gint ret = false;
 
     if (event_context) {
+        
+        if (block_button(event)) {
+            return false;
+        }
+        
         // The root handler also handles pressing the space key.
         // This will toggle the current tool and delete the current one.
         // Thus, save a pointer to the desktop before calling it.
         SPDesktop* desktop = event_context->desktop;
 
-        ret = event_context->root_handler_impl(event);
+        ret = event_context->root_handler(event);
 
         set_event_location(desktop, event);
     }
@@ -1196,8 +1174,11 @@ gint sp_event_context_virtual_item_handler(ToolBase * event_context, SPItem * it
     gint ret = false;
     if (event_context) {    // If no event-context is available then do nothing, otherwise Inkscape would crash
                             // (see the comment in SPDesktop::set_event_context, and bug LP #622350)
-        //ret = (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(event_context)))->item_handler(event_context, item, event);
-        ret = event_context->item_handler_impl(item, event);
+        if (block_button(event)) {
+            return false;
+        }
+        //et = (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(event_context)))->item_handler(event_context, item, event);
+        ret = event_context->item_handler(item, event);
 
         if (!ret) {
             ret = sp_event_context_virtual_root_handler(event_context, event);
