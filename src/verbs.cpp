@@ -802,7 +802,6 @@ Verb *Verb::getbyid(gchar const *id, bool verbose)
                 && strcmp(id, "ToolPaintBucket")  != 0
                 && strcmp(id, "SelectionTrace")   != 0
                 && strcmp(id, "PaintBucketPrefs") != 0
-                && strcmp(id, "TutorialsTracing") != 0
 #endif
 #if !HAVE_ASPELL
                 && strcmp(id, "DialogSpellcheck") != 0
@@ -3166,13 +3165,9 @@ Verb *Verb::_base_verbs[] = {
                      N_("Using shape tools to create and edit shapes"), nullptr),
     new TutorialVerb(SP_VERB_TUTORIAL_ADVANCED, "TutorialsAdvanced", N_("Inkscape: _Advanced"),
                      N_("Advanced Inkscape topics"), nullptr /*"tutorial_advanced"*/),
-
-#if HAVE_POTRACE
     // TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
     new TutorialVerb(SP_VERB_TUTORIAL_TRACING, "TutorialsTracing", N_("Inkscape: T_racing"), N_("Using bitmap tracing"),
                      nullptr /*"tutorial_tracing"*/),
-#endif
-
     new TutorialVerb(SP_VERB_TUTORIAL_TRACING_PIXELART, "TutorialsTracingPixelArt", N_("Inkscape: Tracing Pixel Art"),
                      N_("Using Trace Pixel Art dialog"), nullptr),
     new TutorialVerb(SP_VERB_TUTORIAL_CALLIGRAPHY, "TutorialsCalligraphy", N_("Inkscape: _Calligraphy"),

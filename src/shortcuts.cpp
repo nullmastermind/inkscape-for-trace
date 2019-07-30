@@ -670,7 +670,6 @@ static void read_shortcuts_file(char const *filename, bool const is_user_set) {
                 && strcmp(verb_name, "ToolPaintBucket")  != 0
                 && strcmp(verb_name, "SelectionTrace")   != 0
                 && strcmp(verb_name, "PaintBucketPrefs") != 0
-                && strcmp(verb_name, "TutorialsTracing") != 0
 #endif
 #if !HAVE_ASPELL
                 && strcmp(verb_name, "DialogSpellcheck") != 0
