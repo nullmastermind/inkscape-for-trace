@@ -193,11 +193,11 @@ public:
 
 	// Is called by our pref_observer if a preference has been changed.
 	virtual void set(const Inkscape::Preferences::Entry& val);
-    virtual bool root_handler(GdkEvent* event);
-    virtual bool item_handler(SPItem* item, GdkEvent* event);
+    virtual bool root_handler(GdkEvent *event);
+    virtual bool item_handler(SPItem *item, GdkEvent *event);
     bool block_button(GdkEvent *event);
 
-	virtual const std::string& getPrefsPath() = 0;
+    virtual const std::string& getPrefsPath() = 0;
 
 	/**
 	 * An observer that relays pref changes to the derived classes.
@@ -236,7 +236,6 @@ protected:
 private:
   bool _keyboardMove(GdkEventKey const &event, Geom::Point const &dir);
   void sp_event_context_set_cursor(GdkCursorType cursor_type);
-
 };
 
 void sp_event_context_read(ToolBase *ec, gchar const *key);

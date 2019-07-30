@@ -977,7 +977,6 @@ bool ToolBase::block_button(GdkEvent *event)
             } else {
                 this->_button3on = false;
             }
-
     }
     if (this->_button1on == true && this->_button3on == true) {
         return true;
@@ -1118,11 +1117,11 @@ gint sp_event_context_virtual_root_handler(ToolBase * event_context, GdkEvent * 
     gint ret = false;
 
     if (event_context) {
-        
+
         if (block_button(event)) {
             return false;
         }
-        
+
         // The root handler also handles pressing the space key.
         // This will toggle the current tool and delete the current one.
         // Thus, save a pointer to the desktop before calling it.
@@ -1177,7 +1176,7 @@ gint sp_event_context_virtual_item_handler(ToolBase * event_context, SPItem * it
         if (block_button(event)) {
             return false;
         }
-        //et = (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(event_context)))->item_handler(event_context, item, event);
+        // et = (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(event_context)))->item_handler(event_context, item, event);
         ret = event_context->item_handler(item, event);
 
         if (!ret) {
