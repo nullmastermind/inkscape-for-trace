@@ -3,6 +3,8 @@
     <!-- <its:translateRule selector="/inkscape-extension" translate="no"/> --><!-- doesn't work due to namespace, see https://savannah.gnu.org/bugs/index.php?54472 -->
 
     <its:preserveSpaceRule selector="//*[contains(@xml:space, 'preserve')]" space="preserve"/>
+    <its:escapeRule selector="//*" escape="no"/>
+    <its:escapeRule selector="//*/@*" escape="no"/>
 
     <its:translateRule selector="//*" translate="no"/>
     <its:translateRule selector="//*[starts-with(name(),'_')]" translate="yes"/>
