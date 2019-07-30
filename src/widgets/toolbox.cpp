@@ -726,7 +726,7 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
             gtk_widget_set_name( holder, aux_toolboxes[i].ui_name );
             gtk_widget_show(sub_toolbox);
             gtk_widget_show(holder);
-        } else {
+        } else if (aux_toolboxes[i].swatch_verb_id != SP_VERB_NONE) {
             g_warning("Could not create toolbox %s", aux_toolboxes[i].ui_name);
         }
     }

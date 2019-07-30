@@ -13,6 +13,10 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"  // only include where actually required!
+#endif
+
 #include <cstring>
 #include <string>
 #include <glibmm/ustring.h>
@@ -324,7 +328,11 @@ enum {
     SP_VERB_DIALOG_XML_EDITOR,
     SP_VERB_DIALOG_SELECTORS,
     SP_VERB_DIALOG_FIND,
+
+#if HAVE_ASPELL
     SP_VERB_DIALOG_SPELLCHECK,
+#endif
+
     SP_VERB_DIALOG_DEBUG,
     SP_VERB_DIALOG_TOGGLE,
     SP_VERB_DIALOG_CLONETILER,

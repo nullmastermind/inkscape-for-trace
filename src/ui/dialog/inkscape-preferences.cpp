@@ -64,7 +64,7 @@
 #include "widgets/desktop-widget.h"
 #include <fstream>
 
-#ifdef HAVE_ASPELL
+#if HAVE_ASPELL
 # include <aspell.h>
 # ifdef _WIN32
 #  include <windows.h>
@@ -474,7 +474,7 @@ void InkscapePreferences::initPageTools()
         cb->init ( _("Show font samples in the drop-down list"), "/tools/text/show_sample_in_list", true);
         _page_text.add_line( false, "", *cb, "", _("Show font samples alongside font names in the drop-down list in Text bar"));
 
-        _font_dialog.init(_("Show font substitution inng dialog"), "/options/font/substitutedlg", false);
+        _font_dialog.init(_("Show font substitution warning dialog"), "/options/font/substitutedlg", false);
         _page_text.add_line( false, "", _font_dialog, "", _("Show font substitution warning dialog when requested fonts are not available on the system"));
 
         cb = Gtk::manage(new PrefCheckButton);
@@ -2493,7 +2493,7 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
 
 void InkscapePreferences::initPageSpellcheck()
 {
-#ifdef HAVE_ASPELL
+#if HAVE_ASPELL
 
     std::vector<Glib::ustring> languages;
     std::vector<Glib::ustring> langValues;

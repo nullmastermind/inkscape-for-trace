@@ -75,7 +75,7 @@ SpellCheck::SpellCheck () :
     deskTrack()
 {
 
-#ifdef HAVE_ASPELL
+#if HAVE_ASPELL
     _speller = nullptr;
     _speller2 = nullptr;
     _speller3 = nullptr;
@@ -315,7 +315,7 @@ SpellCheck::init(SPDesktop *d)
     _adds = 0;
     clearRects();
 
-#ifdef HAVE_ASPELL
+#if HAVE_ASPELL
     {
         AspellConfig *config = new_aspell_config();
         aspell_config_replace(config, "lang", _lang.c_str());
@@ -375,7 +375,7 @@ SpellCheck::init(SPDesktop *d)
 void
 SpellCheck::finished ()
 {
-#ifdef HAVE_ASPELL
+#if HAVE_ASPELL
     aspell_speller_save_all_word_lists(_speller);
     delete_aspell_speller(_speller);
     _speller = nullptr;
@@ -504,7 +504,7 @@ SpellCheck::nextWord()
 
     int have = 0;
 
-#ifdef HAVE_ASPELL
+#if HAVE_ASPELL
     // run it by all active spellers
     have = aspell_speller_check(_speller, _word.c_str(), -1);
     if (_speller2)
@@ -602,7 +602,7 @@ SpellCheck::nextWord()
                 sp_text_context_place_cursor (SP_TEXT_CONTEXT(desktop->event_context), _text, _begin_w);
         } 
 
-#ifdef HAVE_ASPELL
+#if HAVE_ASPELL
 
         // get suggestions
         {
@@ -754,7 +754,7 @@ void SpellCheck::onAccept ()
 void
 SpellCheck::onIgnore ()
 {
-#ifdef HAVE_ASPELL
+#if HAVE_ASPELL
     aspell_speller_add_to_session(_speller, _word.c_str(), -1);
     if (_speller2)
         aspell_speller_add_to_session(_speller2, _word.c_str(), -1);
@@ -778,7 +778,7 @@ SpellCheck::onAdd ()
 {
     _adds++;
 
-#ifdef HAVE_ASPELL
+#if HAVE_ASPELL
     gint num = gtk_combo_box_get_active((GtkComboBox *)dictionary_combo);
     switch (num) {
         case 0:

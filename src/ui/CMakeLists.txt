@@ -135,7 +135,6 @@ set(ui_SRC
 	dialog/print.cpp
 	dialog/prototype.cpp
 	dialog/selectorsdialog.cpp
-	dialog/spellcheck.cpp
     dialog/styledialog.cpp
 	dialog/svg-fonts-dialog.cpp
         dialog/svg-preview.cpp
@@ -303,7 +302,6 @@ set(ui_SRC
 	dialog/print.h
 	dialog/prototype.h
 	dialog/selectorsdialog.h
-	dialog/spellcheck.h
         dialog/styledialog.h
 	dialog/svg-fonts-dialog.h
         dialog/svg-preview.h
@@ -478,4 +476,13 @@ set ( ui_flood_and_trace_SRC
 
 if ("${HAVE_POTRACE}")
 	add_inkscape_source("${ui_flood_and_trace_SRC}")
+endif()
+
+set ( ui_spellcheck_SRC
+	dialog/spellcheck.cpp
+	dialog/spellcheck.h
+)
+
+if ("${HAVE_ASPELL}")
+	add_inkscape_source("${ui_spellcheck_SRC}")
 endif()

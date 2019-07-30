@@ -33,7 +33,7 @@
 
 #include "text-editing.h"
 
-#ifdef HAVE_ASPELL
+#if HAVE_ASPELL
 #include <aspell.h>
 #endif  /* HAVE_ASPELL */
 
@@ -164,7 +164,7 @@ private:
 
     SPObject *_root;
 
-#ifdef HAVE_ASPELL
+#if HAVE_ASPELL
     AspellSpeller *_speller;
     AspellSpeller *_speller2;
     AspellSpeller *_speller3;

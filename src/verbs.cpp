@@ -23,10 +23,6 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"  // only include where actually required!
-#endif
-
 #include <cstring>
 #include <string>
 
@@ -83,7 +79,6 @@
 #include "ui/dialog/new-from-template.h"
 #include "ui/dialog/object-properties.h"
 #include "ui/dialog/save-template-dialog.h"
-#include "ui/dialog/spellcheck.h"
 #include "ui/dialog/swatches.h"
 #include "ui/dialog/symbols.h"
 #include "ui/icon-names.h"
@@ -613,7 +608,6 @@ SPAction *Verb::get_action(Inkscape::ActionContext const & context)
     } else {
         action = this->make_action(context);
 
-        // if (action == NULL) printf("Hmm, NULL in %s\n", _name);
         if (action == nullptr) printf("Hmm, NULL in %s\n", _name);
         if (!_default_sensitive) {
             sp_action_set_sensitive(action, 0);
@@ -808,6 +802,10 @@ Verb *Verb::getbyid(gchar const *id, bool verbose)
                 && strcmp(id, "ToolPaintBucket")  != 0
                 && strcmp(id, "SelectionTrace")   != 0
                 && strcmp(id, "PaintBucketPrefs") != 0
+                && strcmp(id, "TutorialsTracing") != 0
+#endif
+#if !HAVE_ASPELL
+                && strcmp(id, "DialogSpellcheck") != 0
 #endif
             ) {
         if (verbose)
