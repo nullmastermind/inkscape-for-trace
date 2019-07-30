@@ -945,9 +945,6 @@ bool ToolBase::block_button(GdkEvent *event)
                 case 1:
                     this->_button1on = true;
                     break;
-                case 2:
-                    this->_button2on = true;
-                    break;
                 case 3:
                     this->_button3on = true;
                     break;
@@ -957,9 +954,6 @@ bool ToolBase::block_button(GdkEvent *event)
             switch (event->button.button) {
                 case 1:
                     this->_button1on = false;
-                    break;
-                case 2:
-                    this->_button2on = false;
                     break;
                 case 3:
                     this->_button3on = false;
@@ -1118,7 +1112,7 @@ gint sp_event_context_virtual_root_handler(ToolBase * event_context, GdkEvent * 
 
     if (event_context) {
 
-        if (block_button(event)) {
+        if (event_context->block_button(event)) {
             return false;
         }
 
@@ -1173,7 +1167,7 @@ gint sp_event_context_virtual_item_handler(ToolBase * event_context, SPItem * it
     gint ret = false;
     if (event_context) {    // If no event-context is available then do nothing, otherwise Inkscape would crash
                             // (see the comment in SPDesktop::set_event_context, and bug LP #622350)
-        if (block_button(event)) {
+        if (event_context->block_button(event)) {
             return false;
         }
         // et = (SP_EVENT_CONTEXT_CLASS(G_OBJECT_GET_CLASS(event_context)))->item_handler(event_context, item, event);
