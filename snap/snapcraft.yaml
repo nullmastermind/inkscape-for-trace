@@ -52,6 +52,7 @@ parts:
       - libgtkmm-3.0-dev
       - libgtkspell-dev
       - libharfbuzz-dev
+      - libjemalloc-dev
       - liblcms2-dev
       - libmagick++-dev
       - libpango1.0-dev
@@ -84,8 +85,9 @@ parts:
       - libgsl23
       - libgslcblas0
       - libgtkmm-3.0-1v5
-      - libgtkspell0
+      - libgtkspell3-3-0
       - liblcms2-2
+      - libjemalloc1
       - libmagick++-6.q16-7
       - libpangomm-1.4-1v5
       - libpoppler-glib8
