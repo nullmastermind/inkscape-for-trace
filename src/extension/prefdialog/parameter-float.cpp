@@ -11,13 +11,16 @@
 
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
-#include <gtkmm/scale.h>
-#include "ui/widget/spinbutton.h"
+
+#include "preferences.h"
+
+#include "extension/extension.h"
+
 #include "ui/widget/spin-scale.h"
+#include "ui/widget/spinbutton.h"
 
 #include "xml/node.h"
-#include "extension/extension.h"
-#include "preferences.h"
+
 
 namespace Inkscape {
 namespace Extension {
@@ -56,7 +59,7 @@ ParamFloat::ParamFloat(Inkscape::XML::Node *xml, Inkscape::Extension::Extension 
     if (_value > _max) {
         _value = _max;
     }
-    
+
     // parse precision
     const char *precision = xml->attribute("precision");
     if (precision != nullptr) {

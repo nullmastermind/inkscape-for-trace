@@ -9,9 +9,7 @@
 
 #include "parameter-bool.h"
 
-#include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
-#include <gtkmm/spinbutton.h>
 #include <gtkmm/checkbutton.h>
 
 #include "xml/node.h"

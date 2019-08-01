@@ -13,17 +13,17 @@
 #include <iostream>
 #include <sstream>
 
-#include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
-#include <gtkmm/spinbutton.h>
 
-#include <xml/node.h>
+#include "color.h"
+#include "preferences.h"
 
 #include "extension/extension.h"
 
-#include "color.h"
 #include "ui/widget/color-notebook.h"
-#include "preferences.h"
+
+#include "xml/node.h"
+
 
 namespace Inkscape {
 namespace Extension {

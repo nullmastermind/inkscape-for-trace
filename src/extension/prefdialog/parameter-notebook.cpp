@@ -15,16 +15,14 @@
 
 #include "parameter-notebook.h"
 
-#include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
-#include <gtkmm/spinbutton.h>
 #include <gtkmm/notebook.h>
 
-
-#include <xml/node.h>
-
-#include <extension/extension.h>
 #include "preferences.h"
+
+#include "extension/extension.h"
+
+#include "xml/node.h"
 
 
 /**

@@ -9,11 +9,8 @@
 
 #include "parameter-string.h"
 
-#include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
-#include <gtkmm/spinbutton.h>
-
-#include <glibmm/value.h>
+#include <gtkmm/entry.h>
 
 #include "xml/node.h"
 #include "extension/extension.h"

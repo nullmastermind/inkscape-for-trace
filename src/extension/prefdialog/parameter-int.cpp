@@ -11,13 +11,16 @@
 
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
-#include <gtkmm/scale.h>
+
+#include "preferences.h"
+
+#include "extension/extension.h"
+
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/spin-scale.h"
 
 #include "xml/node.h"
-#include "extension/extension.h"
-#include "preferences.h"
+
 
 namespace Inkscape {
 namespace Extension {
