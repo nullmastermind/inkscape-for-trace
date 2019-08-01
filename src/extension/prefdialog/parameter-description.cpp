@@ -10,7 +10,6 @@
 
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
-#include <glibmm/i18n.h>
 #include <glibmm/markup.h>
 #include <glibmm/regex.h>
 
@@ -49,11 +48,7 @@ ParamDescription::ParamDescription(Inkscape::XML::Node *xml, Inkscape::Extension
     // translate value
     if (!_value.empty()) {
         if (_translatable != NO) { // translate unless explicitly marked untranslatable
-            if (_context) {
-                _value = g_dpgettext2(nullptr, _context, _value.c_str());
-            } else {
-                _value = _(_value.c_str());
-            }
+            _value = get_translation(_value.c_str());
         }
     }
 

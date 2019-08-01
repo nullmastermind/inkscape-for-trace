@@ -44,11 +44,11 @@ private:
      * A class to represent the pages of a notebook parameter of an extension.
      */
     class ParamNotebookPage : public Parameter {
+        friend class ParamNotebook;
     private:
         /** A table to store the parameters for this page.
           * This only gets created if there are parameters on this page */
         std::vector<Parameter *> parameters;
-
     public:
         ParamNotebookPage(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
         ~ParamNotebookPage() override;

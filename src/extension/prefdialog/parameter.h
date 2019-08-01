@@ -208,6 +208,10 @@ protected:
      * Build the name to write the parameter from the extension's ID and the name of this parameter.
      */
     gchar *pref_name() const;
+    
+    /** gets the gettext translation for msgid
+      * Handles translation domain of the extension and message context of the parameter internally */
+    const char *get_translation(const char* msgid);
 };
 
 }  // namespace Extension

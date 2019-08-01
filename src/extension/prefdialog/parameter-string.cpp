@@ -18,7 +18,6 @@
 #include "xml/node.h"
 #include "extension/extension.h"
 #include "preferences.h"
-#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace Extension {
@@ -44,11 +43,7 @@ ParamString::ParamString(Inkscape::XML::Node *xml, Inkscape::Extension::Extensio
     // translate value
     if (!_value.empty()) {
         if (_translatable == YES) { // translate only if explicitly marked translatable
-            if (_context) {
-                _value = g_dpgettext2(nullptr, _context, _value.c_str());
-            } else {
-                _value = _(_value.c_str());
-            }
+            _value = get_translation(_value.c_str());
         }
     }
 

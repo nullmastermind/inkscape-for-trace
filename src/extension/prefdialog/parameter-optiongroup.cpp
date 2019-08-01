@@ -20,7 +20,6 @@
 #include <gtkmm/box.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/radiobutton.h>
-#include <glibmm/i18n.h>
 
 #include "xml/node.h"
 #include "extension/extension.h"
@@ -60,11 +59,7 @@ ParamOptionGroup::ParamOptionGroup(Inkscape::XML::Node *xml, Inkscape::Extension
                 }
                 if (text) {
                     if (_translatable != NO) { // translate unless explicitly marked untranslatable
-                        if (_context) {
-                            newtext = g_dpgettext2(nullptr, _context, text);
-                        } else {
-                            newtext = _(text);
-                        }
+                        newtext = get_translation(text);
                     } else {
                         newtext = text;
                     }

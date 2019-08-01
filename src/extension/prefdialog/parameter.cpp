@@ -229,11 +229,7 @@ Parameter::Parameter (Inkscape::XML::Node *in_repr, Inkscape::Extension::Extensi
     }
     if (gui_text) {
         if (_translatable != NO) { // translate unless explicitly marked untranslatable
-            if (_context) {
-                gui_text = g_dpgettext2(nullptr, context, gui_text);
-            } else {
-                gui_text = _(gui_text);
-            }
+            gui_text = get_translation(gui_text);
         }
         _text = g_strdup(gui_text);
     }
@@ -245,11 +241,7 @@ Parameter::Parameter (Inkscape::XML::Node *in_repr, Inkscape::Extension::Extensi
     }
     if (gui_description) {
         if (_translatable != NO) { // translate unless explicitly marked untranslatable
-            if (_context) {
-                gui_description = g_dpgettext2(nullptr, context, gui_description);
-            } else {
-                gui_description = _(gui_description);
-            }
+            gui_description = get_translation(gui_description);
         }
         _description = g_strdup(gui_description);
     }
@@ -329,6 +321,17 @@ void Parameter::string(std::list <std::string> &list) const
 Parameter *Parameter::get_param(const gchar */*name*/)
 {
     return nullptr;
+}
+
+
+const char *Parameter::get_translation(const char* msgid) {
+    // TODO: translation domain
+
+    if (_context) {
+        return g_dpgettext2(nullptr, _context, msgid);
+    } else {
+        return _(msgid);
+    }
 }
 
 Glib::ustring const extension_pref_root = "/extensions/";

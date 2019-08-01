@@ -20,7 +20,6 @@
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/notebook.h>
 
-#include <glibmm/i18n.h>
 
 #include <xml/node.h>
 
@@ -171,7 +170,7 @@ ParamNotebook::ParamNotebook(Inkscape::XML::Node *xml, Inkscape::Extension::Exte
 
     if (_value.empty()) {
         if (!pages.empty()) {
-            _value = pages[0]->name();
+            _value = pages[0]->_name;
         }
     }
 }
@@ -202,7 +201,7 @@ const Glib::ustring& ParamNotebook::set(const int in, SPDocument * /*doc*/, Inks
     ParamNotebookPage *page = pages[i];
 
     if (page) {
-        _value = page->name();
+        _value = page->_name;
 
         gchar *pref_name = this->pref_name();
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -306,9 +305,17 @@ Gtk::Widget *ParamNotebook::get_widget(SPDocument *doc, Inkscape::XML::Node *nod
     int selected_page = -1;
     for (auto page : pages) {
         current_page++;
+
         Gtk::Widget *page_widget = page->get_widget(doc, node, changeSignal);
-        notebook->append_page(*page_widget, _(page->get_text()));
-        if (_value == page->name()) {
+
+        Glib::ustring page_text = page->_text;
+        if (_translatable != NO) { // translate unless explicitly marked untranslatable
+            page_text = page->get_translation(page_text.c_str());
+        }
+
+        notebook->append_page(*page_widget, page_text);
+
+        if (_value == page->_name) {
             selected_page = current_page;
         }
     }
