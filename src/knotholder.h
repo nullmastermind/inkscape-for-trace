@@ -62,6 +62,7 @@ public:
     void add(KnotHolderEntity *e);
 
     void add_pattern_knotholder();
+    void add_hatch_knotholder();
     void add_filter_knotholder();
 
     void setEditTransform(Geom::Affine edit_transform);

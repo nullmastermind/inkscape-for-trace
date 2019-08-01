@@ -577,6 +577,7 @@ RectKnotHolder::RectKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRel
     entity.push_back(entity_center);
 
     add_pattern_knotholder();
+    add_hatch_knotholder();
 }
 
 /* Box3D (= the new 3D box structure) */
@@ -869,6 +870,7 @@ Box3DKnotHolder::Box3DKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderR
     entity.push_back(entity_center);
 
     add_pattern_knotholder();
+    add_hatch_knotholder();
 }
 
 /* SPArc */
@@ -1177,6 +1179,7 @@ ArcKnotHolder::ArcKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRelea
     entity.push_back(entity_center);
 
     add_pattern_knotholder();
+    add_hatch_knotholder();
 }
 
 /* SPStar */
@@ -1364,6 +1367,7 @@ StarKnotHolder::StarKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRel
     entity.push_back(entity_center);
 
     add_pattern_knotholder();
+    add_hatch_knotholder();
 }
 
 /* SPSpiral */
@@ -1614,6 +1618,7 @@ SpiralKnotHolder::SpiralKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolde
     entity.push_back(entity_outer);
 
     add_pattern_knotholder();
+    add_hatch_knotholder();
 }
 
 /* SPOffset */
@@ -1661,6 +1666,7 @@ OffsetKnotHolder::OffsetKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolde
     entity.push_back(entity_offset);
 
     add_pattern_knotholder();
+    add_hatch_knotholder();
 }
 
 

@@ -28,6 +28,7 @@
 
 #include "object/box3d.h"
 #include "object/sp-ellipse.h"
+#include "object/sp-hatch.h"
 #include "object/sp-offset.h"
 #include "object/sp-pattern.h"
 #include "object/sp-rect.h"
@@ -391,6 +392,13 @@ void KnotHolder::add_pattern_knotholder()
         entity.push_back(entity_scale);
     }
     updateControlSizes();
+}
+
+void KnotHolder::add_hatch_knotholder()
+{
+    if ((item->style->fill.isPaintserver()) && dynamic_cast<SPHatch *>(item->style->getFillPaintServer())) {
+        std::cout << "add_hatch_knotholder: activated" << std::endl;
+    }
 }
 
 void KnotHolder::add_filter_knotholder() {
