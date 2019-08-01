@@ -46,7 +46,7 @@ char* collect_terms (const std::vector<SPItem*> &items)
         if (item && item->displayName()) {
             Glib::ustring term(item->displayName());
             if (term != "" && (check.insert(term).second)) {
-                ss << (first ? "" : ", ") << "<b>" << term << "</b>";
+                ss << (first ? "" : ", ") << "<b>" << term.raw() << "</b>";
                 first = false;
             }
         }
