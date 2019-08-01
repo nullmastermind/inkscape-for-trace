@@ -189,51 +189,6 @@ guint32 Parameter::set_color(guint32 in, SPDocument *doc, Inkscape::XML::Node *n
 }
 
 
-Parameter::Parameter(gchar const *name, gchar const *text, gchar const *description, bool hidden, int indent, Inkscape::Extension::Extension *ext) :
-    _description(nullptr),
-    _text(nullptr),
-    _hidden(hidden),
-    _indent(indent),
-    _extension(ext),
-    _name(nullptr)
-{
-    if (name != nullptr) {
-        _name = g_strdup(name);
-    }
-
-    if (description != nullptr) {
-        _description = g_strdup(description);
-    }
-
-    if (text != nullptr) {
-        _text = g_strdup(text);
-    } else {
-        _text = g_strdup(name);
-    }
-
-    return;
-}
-
-Parameter::Parameter (gchar const *name, gchar const *text, Inkscape::Extension::Extension *ext) :
-    _description(nullptr),
-    _text(nullptr),
-    _hidden(false),
-    _indent(0),
-    _extension(ext),
-    _name(nullptr)
-{
-    if (name != nullptr) {
-        _name = g_strdup(name);
-    }
-    if (text != nullptr) {
-        _text = g_strdup(text);
-    } else {
-        _text = g_strdup(name);
-    }
-
-    return;
-}
-
 Parameter::Parameter (Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *ext)
     : _extension(ext)
 {

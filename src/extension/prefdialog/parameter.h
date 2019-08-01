@@ -58,17 +58,6 @@ public:
         UNSET, YES, NO
     };
 
-    Parameter(gchar const *name,
-              gchar const *text,
-              gchar const *description,
-              bool hidden,
-              int indent,
-              Inkscape::Extension::Extension *ext);
-
-    Parameter(gchar const *name,
-              gchar const *text,
-              Inkscape::Extension::Extension *ext);
-
     Parameter(Inkscape::XML::Node *in_repr,
               Inkscape::Extension::Extension *ext);
 
