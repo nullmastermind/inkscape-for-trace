@@ -49,35 +49,9 @@ ParamOptionGroup::ParamOptionGroup(Inkscape::XML::Node *xml, Inkscape::Extension
                            !strcmp(chname, INKSCAPE_EXTENSION_NS "_option") ||
                            !strcmp(chname, INKSCAPE_EXTENSION_NS "item") ||
                            !strcmp(chname, INKSCAPE_EXTENSION_NS "_item")) ) {
-                Glib::ustring newtext;
-                Glib::ustring newvalue;
-
-                // get content (=label) of option and translate it
-                const char *text = nullptr;
-                if (child_repr->firstChild()) {
-                    text = child_repr->firstChild()->content();
-                }
-                if (text) {
-                    if (_translatable != NO) { // translate unless explicitly marked untranslatable
-                        newtext = get_translation(text);
-                    } else {
-                        newtext = text;
-                    }
-                } else {
-                    g_warning("Missing content in option of parameter '%s' in extension '%s'.",
-                              _name, _extension->get_id());
-                }
-
-                // get string value of option
-                const char *value = child_repr->attribute("value");
-                if (value) {
-                    newvalue = value;
-                } else {
-                    g_warning("Missing value for option '%s' of parameter '%s' in extension '%s'.",
-                              newtext.c_str(), _name, _extension->get_id());
-                }
-
-                choices.push_back(new optionentry(newvalue, newtext));
+                child_repr->setAttribute("name", "option"); // TODO: hack to allow options to be parameters
+                ParamOptionGroupOption *param = new ParamOptionGroupOption(child_repr, ext, this);
+                choices.push_back(param);
             } else if (child_repr->type() == XML::ELEMENT_NODE) {
                 g_warning("Invalid child element ('%s') for parameter '%s' in extension '%s'. Expected 'option'.",
                           chname, _name, _extension->get_id());
@@ -100,7 +74,7 @@ ParamOptionGroup::ParamOptionGroup(Inkscape::XML::Node *xml, Inkscape::Extension
 
     if (_value.empty()) {
         if (!choices.empty()) {
-            _value = choices[0]->value;
+            _value = choices[0]->_value;
         }
     }
 
@@ -157,7 +131,7 @@ const Glib::ustring& ParamOptionGroup::set(Glib::ustring in, SPDocument *doc, In
 bool ParamOptionGroup::contains(const Glib::ustring text, SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/) const
 {
     for (auto choice : choices) {
-        if (choice->value == text) {
+        if (choice->_value == text) {
             return true;
         }
     }
@@ -178,8 +152,8 @@ Glib::ustring ParamOptionGroup::value_from_label(const Glib::ustring label)
     Glib::ustring value;
 
     for (auto choice : choices) {
-        if (choice->text == label) {
-            value = choice->value;
+        if (choice->_text == label) {
+            value = choice->_value;
             break;
         }
     }
@@ -289,9 +263,9 @@ Gtk::Widget *ParamOptionGroup::get_widget(SPDocument *doc, Inkscape::XML::Node *
         ComboWidget *combo = Gtk::manage(new ComboWidget(this, doc, node, changeSignal));
 
         for (auto choice : choices) {
-            combo->append(choice->text);
-            if (choice->value == _value) {
-                combo->set_active_text(choice->text);
+            combo->append(choice->_text);
+            if (choice->_value == _value) {
+                combo->set_active_text(choice->_text);
             }
         }
 
@@ -307,9 +281,9 @@ Gtk::Widget *ParamOptionGroup::get_widget(SPDocument *doc, Inkscape::XML::Node *
         Gtk::RadioButtonGroup group;
 
         for (auto choice : choices) {
-            RadioWidget *radio = Gtk::manage(new RadioWidget(group, choice->text, this, doc, node, changeSignal));
+            RadioWidget *radio = Gtk::manage(new RadioWidget(group, choice->_text, this, doc, node, changeSignal));
             radios->pack_start(*radio, true, true);
-            if (choice->value == _value) {
+            if (choice->_value == _value) {
                 radio->set_active();
             }
         }
@@ -320,6 +294,38 @@ Gtk::Widget *ParamOptionGroup::get_widget(SPDocument *doc, Inkscape::XML::Node *
     hbox->show_all();
     return static_cast<Gtk::Widget *>(hbox);
 }
+
+
+ParamOptionGroup::ParamOptionGroupOption::ParamOptionGroupOption(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext,
+                                                                 const Inkscape::Extension::ParamOptionGroup *parent)
+    : Parameter(xml, ext)
+{
+    // get content (=label) of option and translate it
+    const char *text = nullptr;
+    if (xml->firstChild()) {
+        text = xml->firstChild()->content();
+    }
+    if (text) {
+        if (_translatable != NO) { // translate unless explicitly marked untranslatable
+            _text = get_translation(text);
+        } else {
+            _text = text;
+        }
+    } else {
+        g_warning("Missing content in option of parameter '%s' in extension '%s'.",
+                  parent->_name, _extension->get_id());
+    }
+
+    // get string value of option
+    const char *value = xml->attribute("value");
+    if (value) {
+        _value = value;
+    } else {
+        g_warning("Missing value for option '%s' of parameter '%s' in extension '%s'.",
+                  _text.c_str(), parent->_name, _extension->get_id());
+    }
+}
+
 
 
 }  /* namespace Extension */

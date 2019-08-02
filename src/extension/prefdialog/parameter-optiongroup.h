@@ -74,17 +74,17 @@ private:
     AppearanceMode _mode = RADIOBUTTON;
 
     /* For internal use only. */
-    class optionentry {
+    class ParamOptionGroupOption : public Parameter {
+        friend class ParamOptionGroup;
     public:
-        optionentry (Glib::ustring val, Glib::ustring txt)
-            : value(val)
-            , text(txt)
-        {}
-        Glib::ustring value;
-        Glib::ustring text;
+        ParamOptionGroupOption(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext,
+                               const Inkscape::Extension::ParamOptionGroup *parent);
+    private:
+        Glib::ustring _value;
+        Glib::ustring _text;
     };
 
-    std::vector<optionentry*> choices; /**< A table to store the choice strings  */
+    std::vector<ParamOptionGroupOption *> choices; /**< List of available options for the option group */
 }; /* class ParamOptionGroup */
 
 
