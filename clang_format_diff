@@ -1,0 +1,171 @@
+--- src/display/sp-canvas.h	(before formatting)
++++ src/display/sp-canvas.h	(after formatting)
+@@ -99,52 +99,52 @@
+ private:
+     /// Emits an event for an item in the canvas, be it the current
+     /// item, grabbed item, or focused item, as appropriate.
+-    int emitEvent(GdkEvent *event);    
+-
+-    /// Re-picks the current item in the canvas, based on the event's
+-    /// coordinates and emits enter/leave events for items as appropriate.
+-    int pickCurrentItem(GdkEvent *event);
+-    void shutdownTransients();
+-
+-    /// Allocates a new tile array for the canvas, copying overlapping tiles from the old array
+-    void resizeTiles(int nl, int nt, int nr, int nb);
+-
+-    /// Marks the specified area as dirty (requiring redraw)
+-    void dirtyRect(Geom::IntRect const &area);
+-    /// Marks the whole widget for redraw
+-    void dirtyAll();
+-    void markRect(Geom::IntRect const &area, uint8_t val);
+-
+-    /// Invokes update, paint, and repick on canvas.
+-    int doUpdate();
+-
+-    void paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect const &canvas_rect, int sw);
+-    void paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect const &canvas_rect);
+-
+-    /**
+-     * Paint the given rect, recursively subdividing the region until it is the size of a single
+-     * buffer.
+-     *
+-     * @return true if the drawing completes
+-     */
+-    int paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const &this_rect);
+-
+-    void paintSpliter();
+-    void set_cursor(GtkWidget *widget);
+-    /// Draws a specific rectangular part of the canvas.
+-    /// @return true if the rectangle painting succeeds.
+-    bool paintRect(int xx0, int yy0, int xx1, int yy1);
+-
+-    /// Repaints the areas in the canvas that need it.
+-    /// @return true if all the dirty parts have been redrawn
+-    int paint();
+-
+-    /// Idle handler for the canvas that deals with pending updates and redraws.
+-    static gint idle_handler(gpointer data);
+-
+-    /// Convenience function to add an idle handler to a canvas.
+-    void addIdle();
+-    void removeIdle();
++  int emitEvent(GdkEvent *event);
++
++  /// Re-picks the current item in the canvas, based on the event's
++  /// coordinates and emits enter/leave events for items as appropriate.
++  int pickCurrentItem(GdkEvent *event);
++  void shutdownTransients();
++
++  /// Allocates a new tile array for the canvas, copying overlapping tiles from the old array
++  void resizeTiles(int nl, int nt, int nr, int nb);
++
++  /// Marks the specified area as dirty (requiring redraw)
++  void dirtyRect(Geom::IntRect const &area);
++  /// Marks the whole widget for redraw
++  void dirtyAll();
++  void markRect(Geom::IntRect const &area, uint8_t val);
++
++  /// Invokes update, paint, and repick on canvas.
++  int doUpdate();
++
++  void paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect const &canvas_rect, int sw);
++  void paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect const &canvas_rect);
++
++  /**
++   * Paint the given rect, recursively subdividing the region until it is the size of a single
++   * buffer.
++   *
++   * @return true if the drawing completes
++   */
++  int paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const &this_rect);
++
++  void paintSpliter();
++  void set_cursor(GtkWidget *widget);
++  /// Draws a specific rectangular part of the canvas.
++  /// @return true if the rectangle painting succeeds.
++  bool paintRect(int xx0, int yy0, int xx1, int yy1);
++
++  /// Repaints the areas in the canvas that need it.
++  /// @return true if all the dirty parts have been redrawn
++  int paint();
++
++  /// Idle handler for the canvas that deals with pending updates and redraws.
++  static gint idle_handler(gpointer data);
++
++  /// Convenience function to add an idle handler to a canvas.
++  void addIdle();
++  void removeIdle();
+ 
+ public:
+     // GTK virtual functions.
+--- src/ui/tools/tool-base.cpp	(before formatting)
++++ src/ui/tools/tool-base.cpp	(after formatting)
+@@ -1076,14 +1076,12 @@
+ gint sp_event_context_root_handler(ToolBase * event_context,
+         GdkEvent * event)
+ {
+-    Geom::Point pos = Geom::Point(0,0);
+-    if ((event->type == GDK_BUTTON_RELEASE ||
+-        event->type == GDK_MOTION_NOTIFY) &&
+-        !event_context->desktop->canvas->_inside)
+-    {
+-         pos = event_context->desktop->d2w(event_context->desktop->point(true));
+-         event->motion.x = pos[Geom::X];
+-         event->motion.y = pos[Geom::Y];
++    Geom::Point pos = Geom::Point(0, 0);
++    if ((event->type == GDK_BUTTON_RELEASE || event->type == GDK_MOTION_NOTIFY) &&
++        !event_context->desktop->canvas->_inside) {
++        pos = event_context->desktop->d2w(event_context->desktop->point(true));
++        event->motion.x = pos[Geom::X];
++        event->motion.y = pos[Geom::Y];
+     }
+ 
+     if (!event_context->_uses_snap) {
+--- src/widgets/desktop-widget.cpp	(before formatting)
++++ src/widgets/desktop-widget.cpp	(after formatting)
+@@ -508,7 +508,7 @@
+     gtk_style_context_add_provider(style_context,
+                                    GTK_STYLE_PROVIDER(css_provider),
+                                    GTK_STYLE_PROVIDER_PRIORITY_USER);
+-    g_signal_connect (G_OBJECT (dtw), "event", G_CALLBACK (SPDesktopWidget::event), dtw);
++    g_signal_connect(G_OBJECT(dtw), "event", G_CALLBACK(SPDesktopWidget::event), dtw);
+ 
+     gtk_widget_set_hexpand(GTK_WIDGET(dtw->_canvas), TRUE);
+     gtk_widget_set_vexpand(GTK_WIDGET(dtw->_canvas), TRUE);
+@@ -1000,12 +1000,9 @@
+         // is over the canvas. This redirection is only done for key events and only if there's no
+         // current item on the canvas, because item events and all mouse events are caught
+         // and passed on by the canvas acetate (I think). --bb
+-        
+-        if ((event->type == GDK_MOTION_NOTIFY ||
+-             event->type == GDK_BUTTON_RELEASE) &&
+-             !dtw->_canvas->_inside) 
+-        {
+-            return sp_desktop_root_handler (nullptr, event, dtw->desktop);
++
++        if ((event->type == GDK_MOTION_NOTIFY || event->type == GDK_BUTTON_RELEASE) && !dtw->_canvas->_inside) {
++            return sp_desktop_root_handler(nullptr, event, dtw->desktop);
+         }
+ 
+         if ((event->type == GDK_KEY_PRESS || event->type == GDK_KEY_RELEASE)
+--- src/display/sp-canvas.cpp	(before formatting)
++++ src/display/sp-canvas.cpp	(after formatting)
+@@ -1012,7 +1012,7 @@
+     canvas->_xray = false;
+     canvas->_xray_orig = Geom::Point();
+     canvas->_changecursor = 0;
+-    canvas->_inside = false; // this could be wrong on start but we update it as far we bo to the other side. 
++    canvas->_inside = false; // this could be wrong on start but we update it as far we bo to the other side.
+     bool _is_dragging;
+ 
+ #if defined(HAVE_LIBLCMS2)
+@@ -1168,7 +1168,7 @@
+     // Allocation does not depend on device scale.
+     GtkAllocation old_allocation;
+     gtk_widget_get_allocation(widget, &old_allocation);
+-    
++
+     // For HiDPI monitors.
+     canvas->_device_scale = gtk_widget_get_scale_factor( widget );
+ 

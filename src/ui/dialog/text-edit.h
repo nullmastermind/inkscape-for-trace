@@ -188,7 +188,6 @@ private:
     sigc::connection fontFeaturesChangedConn;
 
     // Other
-    double selected_fontsize;
     bool blocked;
     const Glib::ustring samplephrase;
 

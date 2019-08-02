@@ -1076,14 +1076,12 @@ void sp_event_context_read(ToolBase *ec, gchar const *key) {
 gint sp_event_context_root_handler(ToolBase * event_context,
         GdkEvent * event)
 {
-    Geom::Point pos = Geom::Point(0,0);
-    if ((event->type == GDK_BUTTON_RELEASE ||
-        event->type == GDK_MOTION_NOTIFY) &&
-        !event_context->desktop->canvas->_inside)
-    {
-         pos = event_context->desktop->d2w(event_context->desktop->point(true));
-         event->motion.x = pos[Geom::X];
-         event->motion.y = pos[Geom::Y];
+    Geom::Point pos = Geom::Point(0, 0);
+    if ((event->type == GDK_BUTTON_RELEASE || event->type == GDK_MOTION_NOTIFY) &&
+        !event_context->desktop->canvas->_inside) {
+        pos = event_context->desktop->d2w(event_context->desktop->point(true));
+        event->motion.x = pos[Geom::X];
+        event->motion.y = pos[Geom::Y];
     }
 
     if (!event_context->_uses_snap) {

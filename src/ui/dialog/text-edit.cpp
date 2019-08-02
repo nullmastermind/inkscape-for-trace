@@ -37,7 +37,6 @@ extern "C" {
 #include "document-undo.h"
 #include "document.h"
 #include "inkscape.h"
-#include "style.h"
 #include "text-editing.h"
 #include "verbs.h"
 
@@ -49,8 +48,8 @@ extern "C" {
 #include "object/sp-textpath.h"
 
 #include "svg/css-ostringstream.h"
+
 #include "ui/icon-names.h"
-#include "ui/toolbar/text-toolbar.h"
 #include "ui/widget/font-selector.h"
 
 #include "util/units.h"
@@ -269,7 +268,7 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
         int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
         double size = sp_style_css_size_px_to_units(query.font_size.computed, unit); 
         font_selector.update_size (size);
-        selected_fontsize = size;
+
         // Update font features (variant) widget
         //int result_features =
         sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTVARIANTS);
@@ -423,21 +422,18 @@ void TextEdit::onApply()
     unsigned items = 0;
     auto item_list = desktop->getSelection()->items();
     SPCSSAttr *css = fillTextStyle ();
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    sp_desktop_set_style(desktop, css, true);
+
     for(auto i=item_list.begin();i!=item_list.end();++i){
         // apply style to the reprs of all text objects in the selection
         if (SP_IS_TEXT (*i) || (SP_IS_FLOWTEXT (*i)) ) {
             ++items;
         }
     }
-    if (items == 1) {
-        double factor = font_selector.get_fontsize() / selected_fontsize;
-        prefs->setDouble("/options/font/scaleLineHeightFromFontSIze", factor);
-    }
-    sp_desktop_set_style(desktop, css, true);
 
     if (items == 0) {
         // no text objects; apply style to prefs for new objects
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->mergeStyle("/tools/text/style", css);
         setasdefault_button.set_sensitive ( false );
 
@@ -446,12 +442,6 @@ void TextEdit::onApply()
         SPItem *item = SP_ACTIVE_DESKTOP->getSelection()->singleItem();
         if (SP_IS_TEXT (item) || SP_IS_FLOWTEXT(item)) {
             updateObjectText (item);
-            SPStyle *item_style = item->style;
-            if (SP_IS_TEXT(item) && item_style->inline_size.value == 0) {
-                css = sp_css_attr_from_style(item_style, SP_STYLE_FLAG_IFSET);
-                sp_repr_css_unset_property(css, "inline-size");
-                item->changeCSS(css, "style");
-            }
         }
     }
 
