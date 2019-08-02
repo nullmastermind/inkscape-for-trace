@@ -1147,10 +1147,6 @@ gint sp_event_context_virtual_root_handler(ToolBase * event_context, GdkEvent * 
 gint sp_event_context_item_handler(ToolBase * event_context,
         SPItem * item, GdkEvent * event)
 {
-    if ((event->state & GDK_BUTTON1_MASK) && (event->state & GDK_BUTTON3_MASK)) {
-        return;
-    }
-
     if (!event_context->_uses_snap) {
         return sp_event_context_virtual_item_handler(event_context, item, event);
     }
