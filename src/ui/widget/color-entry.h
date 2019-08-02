@@ -30,12 +30,15 @@ protected:
 
 private:
     void _onColorChanged();
+    void _inputCheck(guint pos, const gchar * /*chars*/, guint /*n_chars*/);
 
     SelectedColor &_color;
     sigc::connection _color_changed_connection;
     sigc::connection _color_dragged_connection;
     bool _updating;
     bool _updatingrgba;
+    guint32 _lastcolor;
+    int _prevpos;
 };
 
 }
