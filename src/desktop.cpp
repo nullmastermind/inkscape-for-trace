@@ -769,23 +769,19 @@ SPItem *SPDesktop::getGroupAtPoint(Geom::Point const &p) const
  * Returns the mouse point in document coordinates; if mouse is
  * outside the canvas, returns the center of canvas viewpoint.
  */
-Geom::Point SPDesktop::point(bool outside_infinite) const
+Geom::Point SPDesktop::point(bool outside_canvas) const
 {
     Geom::Point p = _widget->getPointer();
     Geom::Point pw = sp_canvas_window_to_world (canvas, p);
     Geom::Rect const r = canvas->getViewbox();
 
-    if (r.interiorContains(pw)) {
+    if (r.interiorContains(pw) || outside_canvas) {
         p = w2d(pw);
         return p;
     }
-    if (outside_infinite) {
-        return Geom::Point(Geom::infinity(), Geom::infinity());
-    } else {
-        Geom::Point r0 = w2d(r.min());
-        Geom::Point r1 = w2d(r.max());
-        return (r0 + r1) / 2.0;
-    }
+    Geom::Point r0 = w2d(r.min());
+    Geom::Point r1 = w2d(r.max());
+    return (r0 + r1) / 2.0;
 }
 
 

@@ -508,7 +508,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     gtk_style_context_add_provider(style_context,
                                    GTK_STYLE_PROVIDER(css_provider),
                                    GTK_STYLE_PROVIDER_PRIORITY_USER);
-    g_signal_connect (G_OBJECT (dtw->_canvas), "event", G_CALLBACK (SPDesktopWidget::event), dtw);
+    g_signal_connect (G_OBJECT (dtw), "event", G_CALLBACK (SPDesktopWidget::event), dtw);
 
     gtk_widget_set_hexpand(GTK_WIDGET(dtw->_canvas), TRUE);
     gtk_widget_set_vexpand(GTK_WIDGET(dtw->_canvas), TRUE);
@@ -1000,6 +1000,14 @@ SPDesktopWidget::event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
         // is over the canvas. This redirection is only done for key events and only if there's no
         // current item on the canvas, because item events and all mouse events are caught
         // and passed on by the canvas acetate (I think). --bb
+        
+        if ((event->type == GDK_MOTION_NOTIFY ||
+             event->type == GDK_BUTTON_RELEASE) &&
+             !dtw->_canvas->_inside) 
+        {
+            return sp_desktop_root_handler (nullptr, event, dtw->desktop);
+        }
+
         if ((event->type == GDK_KEY_PRESS || event->type == GDK_KEY_RELEASE)
                 && !dtw->_canvas->_current_item) {
             return sp_desktop_root_handler (nullptr, event, dtw->desktop);

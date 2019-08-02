@@ -99,7 +99,7 @@ struct SPCanvas {
 private:
     /// Emits an event for an item in the canvas, be it the current
     /// item, grabbed item, or focused item, as appropriate.
-    int emitEvent(GdkEvent *event);
+    int emitEvent(GdkEvent *event);    
 
     /// Re-picks the current item in the canvas, based on the event's
     /// coordinates and emits enter/leave events for items as appropriate.
@@ -222,6 +222,9 @@ public:
 
     /// Last known modifier state, for deferred repick when a button is down.
     int _state;
+
+    /// Get idf we are outside canvas area
+    bool _inside;
 
     /** The item containing the mouse pointer, or NULL if none. */
     SPCanvasItem *_current_item;

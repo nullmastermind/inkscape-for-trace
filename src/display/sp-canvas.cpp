@@ -1012,6 +1012,7 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_xray = false;
     canvas->_xray_orig = Geom::Point();
     canvas->_changecursor = 0;
+    canvas->_inside = false; // this could be wrong on start but we update it as far we bo to the other side. 
     bool _is_dragging;
 
 #if defined(HAVE_LIBLCMS2)
@@ -1167,7 +1168,7 @@ void SPCanvas::handle_size_allocate(GtkWidget *widget, GtkAllocation *allocation
     // Allocation does not depend on device scale.
     GtkAllocation old_allocation;
     gtk_widget_get_allocation(widget, &old_allocation);
-
+    
     // For HiDPI monitors.
     canvas->_device_scale = gtk_widget_get_scale_factor( widget );
 
@@ -2318,7 +2319,11 @@ gint SPCanvas::handle_crossing(GtkWidget *widget, GdkEventCrossing *event)
     if (event->window != getWindow(canvas)) {
         return FALSE;
     }
-
+    if (event->type == GDK_LEAVE_NOTIFY) {
+        canvas->_inside = false;
+    } else {
+        canvas->_inside = true;
+    }
     canvas->_state = event->state;
     return canvas->pickCurrentItem(reinterpret_cast<GdkEvent *>(event));
 }

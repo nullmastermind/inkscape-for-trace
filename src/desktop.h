@@ -324,7 +324,7 @@ public:
     SPItem *getItemFromListAtPointBottom(const std::vector<SPItem*> &list, Geom::Point const &p) const;
     SPItem *getItemAtPoint(Geom::Point const &p, bool into_groups, SPItem *upto = nullptr) const;
     SPItem *getGroupAtPoint(Geom::Point const &p) const;
-    Geom::Point point(bool outside_infinite = false) const;
+    Geom::Point point(bool outside_canvas = false) const;
 
     void prev_transform();
     void next_transform();
