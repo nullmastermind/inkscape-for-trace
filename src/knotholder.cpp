@@ -354,16 +354,15 @@ void KnotHolder::add_pattern_knotholder()
         PatternKnotHolderEntityScale *entity_scale = new PatternKnotHolderEntityScale(true);
         entity_xy->create(desktop, item, this, Inkscape::CTRL_TYPE_POINT,
                           // TRANSLATORS: This refers to the pattern that's inside the object
-                          _("<b>Move</b> the pattern fill inside the object"),
-                          SP_KNOT_SHAPE_CROSS);
+                          _("<b>Move</b> the pattern fill inside the object"), SP_KNOT_SHAPE_CROSS);
 
         entity_scale->create(desktop, item, this, Inkscape::CTRL_TYPE_SIZER,
-                             _("<b>Scale</b> the pattern fill; uniformly if with <b>Ctrl</b>"),
-                             SP_KNOT_SHAPE_SQUARE, SP_KNOT_MODE_XOR);
+                             _("<b>Scale</b> the pattern fill; uniformly if with <b>Ctrl</b>"), SP_KNOT_SHAPE_SQUARE,
+                             SP_KNOT_MODE_XOR);
 
         entity_angle->create(desktop, item, this, Inkscape::CTRL_TYPE_ROTATE,
-                             _("<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"),
-                             SP_KNOT_SHAPE_CIRCLE, SP_KNOT_MODE_XOR);
+                             _("<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"), SP_KNOT_SHAPE_CIRCLE,
+                             SP_KNOT_MODE_XOR);
 
         entity.push_back(entity_xy);
         entity.push_back(entity_angle);
@@ -376,15 +375,14 @@ void KnotHolder::add_pattern_knotholder()
         PatternKnotHolderEntityScale *entity_scale = new PatternKnotHolderEntityScale(false);
         entity_xy->create(desktop, item, this, Inkscape::CTRL_TYPE_POINT,
                           // TRANSLATORS: This refers to the pattern that's inside the object
-                          _("<b>Move</b> the pattern fill inside the object"),
-                          SP_KNOT_SHAPE_CROSS);
+                          _("<b>Move</b> the pattern stroke inside the object"), SP_KNOT_SHAPE_CROSS);
 
         entity_scale->create(desktop, item, this, Inkscape::CTRL_TYPE_SIZER,
-                             _("<b>Scale</b> the pattern fill; uniformly if with <b>Ctrl</b>"),
-                             SP_KNOT_SHAPE_SQUARE, SP_KNOT_MODE_XOR);
+                             _("<b>Scale</b> the pattern stroke; uniformly if with <b>Ctrl</b>"), SP_KNOT_SHAPE_SQUARE,
+                             SP_KNOT_MODE_XOR);
 
         entity_angle->create(desktop, item, this, Inkscape::CTRL_TYPE_ROTATE,
-                             _("<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"),
+                             _("<b>Rotate</b> the pattern stroke; with <b>Ctrl</b> to snap angle"),
                              SP_KNOT_SHAPE_CIRCLE, SP_KNOT_MODE_XOR);
 
         entity.push_back(entity_xy);
@@ -397,8 +395,47 @@ void KnotHolder::add_pattern_knotholder()
 void KnotHolder::add_hatch_knotholder()
 {
     if ((item->style->fill.isPaintserver()) && dynamic_cast<SPHatch *>(item->style->getFillPaintServer())) {
-        std::cout << "add_hatch_knotholder: activated" << std::endl;
+        HatchKnotHolderEntityXY *entity_xy = new HatchKnotHolderEntityXY(true);
+        HatchKnotHolderEntityAngle *entity_angle = new HatchKnotHolderEntityAngle(true);
+        HatchKnotHolderEntityScale *entity_scale = new HatchKnotHolderEntityScale(true);
+        entity_xy->create(desktop, item, this, Inkscape::CTRL_TYPE_POINT,
+                          // TRANSLATORS: This refers to the hatch that's inside the object
+                          _("<b>Move</b> the hatch fill inside the object"), SP_KNOT_SHAPE_CROSS);
+
+        entity_scale->create(desktop, item, this, Inkscape::CTRL_TYPE_SIZER,
+                             _("<b>Scale</b> the hatch fill; uniformly if with <b>Ctrl</b>"), SP_KNOT_SHAPE_SQUARE,
+                             SP_KNOT_MODE_XOR);
+
+        entity_angle->create(desktop, item, this, Inkscape::CTRL_TYPE_ROTATE,
+                             _("<b>Rotate</b> the hatch fill; with <b>Ctrl</b> to snap angle"), SP_KNOT_SHAPE_CIRCLE,
+                             SP_KNOT_MODE_XOR);
+
+        entity.push_back(entity_xy);
+        entity.push_back(entity_angle);
+        entity.push_back(entity_scale);
     }
+
+    if ((item->style->stroke.isPaintserver()) && dynamic_cast<SPHatch *>(item->style->getStrokePaintServer())) {
+        HatchKnotHolderEntityXY *entity_xy = new HatchKnotHolderEntityXY(false);
+        HatchKnotHolderEntityAngle *entity_angle = new HatchKnotHolderEntityAngle(false);
+        HatchKnotHolderEntityScale *entity_scale = new HatchKnotHolderEntityScale(false);
+        entity_xy->create(desktop, item, this, Inkscape::CTRL_TYPE_POINT,
+                          // TRANSLATORS: This refers to the pattern that's inside the object
+                          _("<b>Move</b> the hatch stroke inside the object"), SP_KNOT_SHAPE_CROSS);
+
+        entity_scale->create(desktop, item, this, Inkscape::CTRL_TYPE_SIZER,
+                             _("<b>Scale</b> the hatch stroke; uniformly if with <b>Ctrl</b>"), SP_KNOT_SHAPE_SQUARE,
+                             SP_KNOT_MODE_XOR);
+
+        entity_angle->create(desktop, item, this, Inkscape::CTRL_TYPE_ROTATE,
+                             _("<b>Rotate</b> the hatch stroke; with <b>Ctrl</b> to snap angle"), SP_KNOT_SHAPE_CIRCLE,
+                             SP_KNOT_MODE_XOR);
+
+        entity.push_back(entity_xy);
+        entity.push_back(entity_angle);
+        entity.push_back(entity_scale);
+    }
+    updateControlSizes();
 }
 
 void KnotHolder::add_filter_knotholder() {

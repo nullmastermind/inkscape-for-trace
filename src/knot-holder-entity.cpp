@@ -26,6 +26,7 @@
 #include "style.h"
 
 #include "include/macros.h"
+#include "object/sp-hatch.h"
 #include "object/sp-item.h"
 #include "object/sp-namedview.h"
 #include "object/sp-pattern.h"
@@ -260,6 +261,100 @@ PatternKnotHolderEntityScale::knot_set(Geom::Point const &p, Geom::Point const &
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
+/* Hatch manipulation */
+bool HatchKnotHolderEntity::knot_missing() const
+{
+    SPHatch *hatch = _hatch();
+    return (hatch == nullptr);
+}
+
+SPHatch *HatchKnotHolderEntity::_hatch() const
+{
+    return _fill ? SP_HATCH(item->style->getFillPaintServer()) : SP_HATCH(item->style->getStrokePaintServer());
+}
+
+static Geom::Point sp_hatch_knot_get(SPHatch const *hatch, gdouble x, gdouble y)
+{
+    return Geom::Point(x, y) * hatch->hatchTransform();
+}
+
+Geom::Point HatchKnotHolderEntityXY::knot_get() const
+{
+    SPHatch *hatch = _hatch();
+    return sp_hatch_knot_get(hatch, 0, 0);
+}
+
+Geom::Point HatchKnotHolderEntityAngle::knot_get() const
+{
+    SPHatch *hatch = _hatch();
+    return sp_hatch_knot_get(hatch, hatch->pitch(), 0);
+}
+
+Geom::Point HatchKnotHolderEntityScale::knot_get() const
+{
+    SPHatch *hatch = _hatch();
+    return sp_hatch_knot_get(hatch, hatch->pitch(), hatch->pitch());
+}
+
+void HatchKnotHolderEntityXY::knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state)
+{
+    Geom::Point p_snapped = snap_knot_position(p, state);
+
+    if (state & GDK_CONTROL_MASK) {
+        if (fabs((p - origin)[Geom::X]) > fabs((p - origin)[Geom::Y])) {
+            p_snapped[Geom::Y] = origin[Geom::Y];
+        } else {
+            p_snapped[Geom::X] = origin[Geom::X];
+        }
+    }
+
+    if (state) {
+        Geom::Point const q = p_snapped - knot_get();
+        item->adjust_hatch(Geom::Translate(q), false, _fill ? TRANSFORM_FILL : TRANSFORM_STROKE);
+    }
+
+    item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+}
+
+void HatchKnotHolderEntityAngle::knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    int const snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
+
+    SPHatch *hatch = _hatch();
+
+    // get the angle from hatch 0,0 to the cursor pos
+    Geom::Point transform_origin = sp_hatch_knot_get(hatch, 0, 0);
+    gdouble theta = atan2(p - transform_origin);
+    gdouble theta_old = atan2(knot_get() - transform_origin);
+
+    if (state & GDK_CONTROL_MASK) {
+        theta = sp_round(theta, M_PI / snaps);
+    }
+
+    Geom::Affine rot =
+        Geom::Translate(-transform_origin) * Geom::Rotate(theta - theta_old) * Geom::Translate(transform_origin);
+    item->adjust_hatch(rot, false, _fill ? TRANSFORM_FILL : TRANSFORM_STROKE);
+    item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+}
+
+void HatchKnotHolderEntityScale::knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state)
+{
+    SPHatch *hatch = _hatch();
+
+    // FIXME: this snapping should be done together with knowing whether control was pressed.
+    // If GDK_CONTROL_MASK, then constrained snapping should be used.
+    Geom::Point p_snapped = snap_knot_position(p, state);
+
+    // Get the new scale from the position of the knotholder
+    Geom::Affine transform = hatch->hatchTransform();
+    Geom::Affine transform_inverse = transform.inverse();
+    Geom::Point d = p_snapped * transform_inverse;
+    Geom::Point d_origin = origin * transform_inverse;
+    Geom::Point origin_dt;
+
+    // TODO ???
+}
 
 /* Filter manipulation */
 void FilterKnotHolderEntity::knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state)
@@ -301,7 +396,6 @@ void FilterKnotHolderEntity::knot_set(Geom::Point const &p, Geom::Point const &o
     }
 
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    
 }
 
 Geom::Point FilterKnotHolderEntity::knot_get() const

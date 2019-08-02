@@ -42,6 +42,9 @@ class Node;
 }
 }
 
+#define SP_HATCH(obj) (dynamic_cast<SPHatch *>((SPObject *)obj))
+#define SP_IS_HATCH(obj) (dynamic_cast<const SPHatch *>((SPObject *)obj) != NULL)
+
 class SPHatch : public SPPaintServer {
 public:
     enum HatchUnits {
@@ -81,6 +84,9 @@ public:
 
     std::vector<SPHatchPath *> hatchPaths();
     std::vector<SPHatchPath const *> hatchPaths() const;
+
+    SPHatch *clone_if_necessary(SPItem *item, const gchar *property);
+    void transform_multiply(Geom::Affine postmul, bool set);
 
     bool isValid() const override;
 
@@ -124,6 +130,10 @@ private:
     RenderInfo _calculateRenderInfo(View const &view) const;
     Geom::OptInterval _calculateStripExtents(Geom::OptRect const &bbox) const;
 
+    /**
+    Count how many times hatch is used by the styles of o and its descendants
+    */
+    guint _countHrefs(SPObject *o) const;
 
     /**
      * Gets called when the hatch is reattached to another <hatch>

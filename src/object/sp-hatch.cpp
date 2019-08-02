@@ -31,7 +31,9 @@
 #include "display/drawing.h"
 #include "display/drawing-pattern.h"
 
+#include "sp-defs.h"
 #include "sp-hatch-path.h"
+#include "sp-item.h"
 
 #include "svg/svg.h"
 
@@ -480,6 +482,74 @@ gdouble SPHatch::rotate() const
         }
     }
     return val;
+}
+
+guint SPHatch::_countHrefs(SPObject *o) const
+{
+    if (!o)
+        return 1;
+
+    guint i = 0;
+
+    SPStyle *style = o->style;
+    if (style && style->fill.isPaintserver() && SP_IS_HATCH(SP_STYLE_FILL_SERVER(style)) &&
+        SP_HATCH(SP_STYLE_FILL_SERVER(style)) == this) {
+        i++;
+    }
+    if (style && style->stroke.isPaintserver() && SP_IS_HATCH(SP_STYLE_STROKE_SERVER(style)) &&
+        SP_HATCH(SP_STYLE_STROKE_SERVER(style)) == this) {
+        i++;
+    }
+
+    for (auto &child : o->children) {
+        i += _countHrefs(&child);
+    }
+
+    return i;
+}
+
+SPHatch *SPHatch::clone_if_necessary(SPItem *item, const gchar *property)
+{
+    SPHatch *hatch = this;
+    if (hatch->href.empty() || hatch->hrefcount > _countHrefs(item)) {
+        Inkscape::XML::Document *xml_doc = document->getReprDoc();
+        Inkscape::XML::Node *defsrepr = document->getDefs()->getRepr();
+
+        Inkscape::XML::Node *repr = xml_doc->createElement("svg:hatch");
+        repr->setAttribute("inkscape:collect", "always");
+        Glib::ustring parent_ref = Glib::ustring::compose("#%1", getRepr()->attribute("id"));
+        repr->setAttribute("xlink:href", parent_ref);
+
+        defsrepr->addChild(repr, nullptr);
+        const gchar *child_id = repr->attribute("id");
+        SPObject *child = document->getObjectById(child_id);
+        g_assert(SP_IS_HATCH(child));
+
+        hatch = SP_HATCH(child);
+
+        Glib::ustring href = Glib::ustring::compose("url(#%1)", hatch->getRepr()->attribute("id"));
+
+        SPCSSAttr *css = sp_repr_css_attr_new();
+        sp_repr_css_set_property(css, property, href.c_str());
+        sp_repr_css_change_recursive(item->getRepr(), css, "style");
+    }
+
+    return hatch;
+}
+
+void SPHatch::transform_multiply(Geom::Affine postmul, bool set)
+{
+    if (set) {
+        _hatchTransform = postmul;
+    } else {
+        _hatchTransform = hatchTransform() * postmul;
+    }
+
+    _hatchTransform_set = true;
+
+    gchar *c = sp_svg_transform_write(_hatchTransform);
+    setAttribute("transform", c);
+    g_free(c);
 }
 
 bool SPHatch::isValid() const

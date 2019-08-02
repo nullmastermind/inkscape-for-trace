@@ -34,11 +34,12 @@
 #include "sp-clippath.h"
 #include "sp-desc.h"
 #include "sp-guide.h"
+#include "sp-hatch.h"
 #include "sp-item-rm-unsatisfied-cns.h"
 #include "sp-mask.h"
 #include "sp-pattern.h"
-#include "sp-root.h"
 #include "sp-rect.h"
+#include "sp-root.h"
 #include "sp-switch.h"
 #include "sp-text.h"
 #include "sp-textpath.h"
@@ -730,7 +731,7 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
             }
         }
     }
-    
+
     gchar *c = sp_svg_transform_write(item->transform);
     repr->setAttribute("transform", c);
     g_free(c);
@@ -825,7 +826,7 @@ Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform) const
 
         double len_x = bbox ? bbox->width() : 0;
         double len_y = bbox ? bbox->height() : 0;
-        
+
         x.update(12, 6, len_x);
         y.update(12, 6, len_y);
         w.update(12, 6, len_x);
@@ -1233,7 +1234,7 @@ void SPItem::invoke_hide(unsigned key)
 
 // Adjusters
 
-void SPItem::adjust_pattern(Geom::Affine const &postmul, bool set, PatternTransform pt)
+void SPItem::adjust_pattern(Geom::Affine const &postmul, bool set, PaintServerTransform pt)
 {
     bool fill = (pt == TRANSFORM_FILL || pt == TRANSFORM_BOTH);
     if (fill && style && (style->fill.isPaintserver())) {
@@ -1252,6 +1253,29 @@ void SPItem::adjust_pattern(Geom::Affine const &postmul, bool set, PatternTransf
         if ( serverPatt ) {
             SPPattern *pattern = serverPatt->clone_if_necessary(this, "stroke");
             pattern->transform_multiply(postmul, set);
+        }
+    }
+}
+
+void SPItem::adjust_hatch(Geom::Affine const &postmul, bool set, PaintServerTransform pt)
+{
+    bool fill = (pt == TRANSFORM_FILL || pt == TRANSFORM_BOTH);
+    if (fill && style && (style->fill.isPaintserver())) {
+        SPObject *server = style->getFillPaintServer();
+        SPHatch *serverHatch = dynamic_cast<SPHatch *>(server);
+        if (serverHatch) {
+            SPHatch *hatch = serverHatch->clone_if_necessary(this, "fill");
+            hatch->transform_multiply(postmul, set);
+        }
+    }
+
+    bool stroke = (pt == TRANSFORM_STROKE || pt == TRANSFORM_BOTH);
+    if (stroke && style && (style->stroke.isPaintserver())) {
+        SPObject *server = style->getStrokePaintServer();
+        SPHatch *serverHatch = dynamic_cast<SPHatch *>(server);
+        if (serverHatch) {
+            SPHatch *hatch = serverHatch->clone_if_necessary(this, "stroke");
+            hatch->transform_multiply(postmul, set);
         }
     }
 }

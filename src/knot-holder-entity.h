@@ -21,6 +21,7 @@
 #include "knot.h"
 #include "snapper.h"
 
+class SPHatch;
 class SPItem;
 class SPKnot;
 class SPDesktop;
@@ -59,7 +60,7 @@ public:
                         SPKnotShapeType shape = SP_KNOT_SHAPE_DIAMOND,
                         SPKnotModeType mode = SP_KNOT_MODE_XOR,
                         guint32 color = 0xffffff00);
- 
+
     /* the get/set/click handlers are virtual functions; each handler class for a knot
        should be derived from KnotHolderEntity and override these functions */
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) = 0;
@@ -108,12 +109,13 @@ protected:
 /* pattern manipulation */
 
 class PatternKnotHolderEntity : public KnotHolderEntity {
-public:
+  public:
     PatternKnotHolderEntity(bool fill) : KnotHolderEntity(), _fill(fill) {}
     bool knot_missing() const override;
-    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
-protected:
-    // true if the entity tracks fill, false for stroke 
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override{};
+
+  protected:
+    // true if the entity tracks fill, false for stroke
     bool _fill;
     SPPattern *_pattern() const;
 };
@@ -139,9 +141,57 @@ public:
     void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
 };
 
+/* Hatch manipulation */
+class HatchKnotHolderEntity : public KnotHolderEntity {
+  public:
+    HatchKnotHolderEntity(bool fill)
+        : KnotHolderEntity()
+        , _fill(fill)
+    {
+    }
+    bool knot_missing() const override;
+    void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override{};
+
+  protected:
+    // true if the entity tracks fill, false for stroke
+    bool _fill;
+    SPHatch *_hatch() const;
+};
+
+class HatchKnotHolderEntityXY : public HatchKnotHolderEntity {
+  public:
+    HatchKnotHolderEntityXY(bool fill)
+        : HatchKnotHolderEntity(fill)
+    {
+    }
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+};
+
+class HatchKnotHolderEntityAngle : public HatchKnotHolderEntity {
+  public:
+    HatchKnotHolderEntityAngle(bool fill)
+        : HatchKnotHolderEntity(fill)
+    {
+    }
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+};
+
+class HatchKnotHolderEntityScale : public HatchKnotHolderEntity {
+  public:
+    HatchKnotHolderEntityScale(bool fill)
+        : HatchKnotHolderEntity(fill)
+    {
+    }
+    Geom::Point knot_get() const override;
+    void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state) override;
+};
+
+
 /* Filter manipulation */
 class FilterKnotHolderEntity : public KnotHolderEntity {
-public: 
+  public:
     FilterKnotHolderEntity(bool topleft) : KnotHolderEntity(), _topleft(topleft) {}
     Geom::Point knot_get() const override;
     void knot_ungrabbed(Geom::Point const &p, Geom::Point const &origin, guint state) override {};
