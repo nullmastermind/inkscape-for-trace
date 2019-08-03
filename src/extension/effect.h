@@ -87,15 +87,8 @@ class Effect : public Extension {
             }
     };
 
-    /** \brief  ID used for the verb without preferences */
-    Glib::ustring _id_noprefs;
-    /** \brief  Name used for the verb without preferences */
-    Glib::ustring _name_noprefs;
-
     /** \brief  The verb representing this effect. */
     EffectVerb _verb;
-    /** \brief  The verb representing this effect.  Without preferences. */
-    EffectVerb _verb_nopref;
     /** \brief  Menu node created for this effect */
     Inkscape::XML::Node * _menu_node;
     /** \brief  Whether a working dialog should be shown */
