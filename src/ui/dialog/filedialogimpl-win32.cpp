@@ -247,7 +247,7 @@ void FileOpenDialogImplWin32::createFilterMenu()
 
     int extension_index = 0;
     int filter_length = 1;
-    
+
     if (dialogType == CUSTOM_TYPE) {
         return;
     }
@@ -281,13 +281,11 @@ void FileOpenDialogImplWin32::createFilterMenu()
             if (imod->deactivated()) continue;
 
             // Type
-            filter.name = g_utf8_to_utf16(_(imod->get_filetypename()),
-                -1, NULL, &filter.name_length, NULL);
+            filter.name = g_utf8_to_utf16(imod->get_filetypename(true), -1, NULL, &filter.name_length, NULL);
 
             // Extension
             const gchar *file_extension_name = imod->get_extension();
-            filter.filter = g_utf8_to_utf16(file_extension_name,
-                -1, NULL, &filter.filter_length, NULL);
+            filter.filter = g_utf8_to_utf16(file_extension_name, -1, NULL, &filter.filter_length, NULL);
 
             filter.mod = imod;
             filter_list.push_back(filter);
@@ -309,7 +307,7 @@ void FileOpenDialogImplWin32::createFilterMenu()
 
             // I don't know of any other way to define "bitmap" formats other than by listing them
             // if you change it here, do the same change in filedialogimpl-gtkmm
-            if ( 
+            if (
                 strncmp("image/png", imod->get_mimetype(), 9)==0 ||
                 strncmp("image/jpeg", imod->get_mimetype(), 10)==0 ||
                 strncmp("image/gif", imod->get_mimetype(), 9)==0 ||
@@ -322,7 +320,7 @@ void FileOpenDialogImplWin32::createFilterMenu()
                 strncmp("image/tiff", imod->get_mimetype(), 10)==0 ||
                 strncmp("image/x-xbitmap", imod->get_mimetype(), 15)==0 ||
                 strncmp("image/x-tga", imod->get_mimetype(), 11)==0 ||
-                strncmp("image/x-pcx", imod->get_mimetype(), 11)==0 
+                strncmp("image/x-pcx", imod->get_mimetype(), 11)==0
                 ) {
                 if(all_bitmaps_filter.length() > 0)
                     all_bitmaps_filter += ";*";
@@ -396,12 +394,12 @@ void FileOpenDialogImplWin32::createFilterMenu()
 
         const gchar *all_files_filter_name = _("All Files");
         const gchar *all_exe_files_filter_name = _("All Executable Files");
-        
+
         // Calculate the amount of memory required
         int filter_count = 2;       // 2 - All Files and All Executable Files
-        
+
         _extension_map = new Inkscape::Extension::Extension*[filter_count];
-        
+
         // Filter Executable Files
         all_exe_files.name = g_utf8_to_utf16(all_exe_files_filter_name,
             -1, NULL, &all_exe_files.name_length, NULL);
@@ -417,14 +415,14 @@ void FileOpenDialogImplWin32::createFilterMenu()
         all_files.filter_length = 0;
         all_files.mod = NULL;
         filter_list.push_front(all_files);
-        
+
         filter_length += all_files.name_length + 3 +
                         all_exe_files.filter_length +
                         all_exe_files.name_length + 3 +
                                                       1;
          // Add 3 for 2*2 \0s and a *, and 1 for a trailing \0
     }
-    
+
     _filter = new wchar_t[filter_length];
     wchar_t *filterptr = _filter;
 
@@ -546,11 +544,11 @@ UINT_PTR CALLBACK FileOpenDialogImplWin32::GetOpenFileName_hookproc(
             SetWindowLongPtr(hdlg, GWLP_USERDATA, ofn->lCustData);
             SetWindowLongPtr(hParentWnd, GWLP_USERDATA, ofn->lCustData);
             pImpl = reinterpret_cast<FileOpenDialogImplWin32*>(ofn->lCustData);
-            
+
             // Make the window a bit wider
             RECT rcRect;
             GetWindowRect(hParentWnd, &rcRect);
-            
+
             // Don't show the preview when opening executable files
             if ( pImpl->dialogType == EXE_TYPES) {
                 MoveWindow(hParentWnd, rcRect.left, rcRect.top,
@@ -577,7 +575,7 @@ UINT_PTR CALLBACK FileOpenDialogImplWin32::GetOpenFileName_hookproc(
                 TBADDBITMAP tbAddBitmap = {NULL, reinterpret_cast<UINT_PTR>(pImpl->_show_preview_button_bitmap)};
                 const int iBitmapIndex = SendMessage(pImpl->_toolbar_wnd,
                     TB_ADDBITMAP, 1, (LPARAM)&tbAddBitmap);
-                
+
 
                 TBBUTTON tbButton;
                 memset(&tbButton, 0, sizeof(TBBUTTON));
@@ -604,7 +602,7 @@ UINT_PTR CALLBACK FileOpenDialogImplWin32::GetOpenFileName_hookproc(
                         0, 0, 100, 100, hParentWnd, NULL, hInstance, NULL);
                 SetWindowLongPtr(pImpl->_preview_wnd, GWLP_USERDATA, ofn->lCustData);
             }
-            
+
             pImpl->_mutex->unlock();
 
             pImpl->layout_dialog();
@@ -727,7 +725,7 @@ LRESULT CALLBACK FileOpenDialogImplWin32::preview_wnd_proc(HWND hwnd, UINT uMsg,
                 WCHAR* noFileText=(WCHAR*)g_utf8_to_utf16(_("No file selected"),
                     -1, NULL, NULL, NULL);
                 FillRect(dc, &rcClient, reinterpret_cast<HBRUSH>(COLOR_3DFACE + 1));
-                DrawTextW(dc,  noFileText, -1, &rcClient, 
+                DrawTextW(dc,  noFileText, -1, &rcClient,
                     DT_CENTER | DT_VCENTER | DT_NOPREFIX);
                 g_free(noFileText);
             }
@@ -1592,7 +1590,7 @@ FileSaveDialogImplWin32::FileSaveDialogImplWin32(Gtk::Window &parent,
                 size_t last_slash_index = udir.find_last_of( '\\' );
                 size_t last_period_index = udir.find_last_of( '.' );
                 if (last_period_index > last_slash_index) {
-                    myFilename = udir.substr(0, last_period_index ); 
+                    myFilename = udir.substr(0, last_period_index );
                 }
             }
 
@@ -1638,8 +1636,7 @@ void FileSaveDialogImplWin32::createFilterMenu()
         knownExtensions.insert(std::pair<Glib::ustring, Inkscape::Extension::Output*>(Glib::ustring(filter_extension).casefold(), omod));
 
         // Type
-        filter.name = g_utf8_to_utf16(
-            _(omod->get_filetypename()), -1, NULL, &filter.name_length, NULL);
+        filter.name = g_utf8_to_utf16(omod->get_filetypename(true), -1, NULL, &filter.name_length, NULL);
 
         filter.mod = omod;
 
@@ -1705,7 +1702,7 @@ void FileSaveDialogImplWin32::addFileType(Glib::ustring name, Glib::ustring patt
             -1, NULL, &all_exe_files.filter_length, NULL);
     all_exe_files.mod = NULL;
     filter_list.push_front(all_exe_files);
-    
+
     filter_length = all_exe_files.name_length + all_exe_files.filter_length + 3; // Add 3 for two \0s and a *
 
     knownExtensions.insert(std::pair<Glib::ustring, Inkscape::Extension::Output*>(Glib::ustring(all_exe_files_filter).casefold(), NULL));
@@ -1883,7 +1880,7 @@ UINT_PTR CALLBACK FileSaveDialogImplWin32::GetSaveFileName_hookproc(
                                         CW_USEDEFAULT, CW_USEDEFAULT, rCB1.left-rST.left, rST.bottom-rST.top,
                                         hParentWnd, NULL, hInstance, NULL);
             g_free(title_label_str);
-                                        
+
             if(pImpl->_title_label) {
               if(dlgFont) SendMessage(pImpl->_title_label, WM_SETFONT, (WPARAM)dlgFont, MAKELPARAM(FALSE, 0));
               SetWindowPos(pImpl->_title_label, NULL, rST.left-rROOT.left, rST.top+ydelta-rROOT.top,

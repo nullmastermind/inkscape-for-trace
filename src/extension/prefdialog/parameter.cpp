@@ -325,13 +325,7 @@ Parameter *Parameter::get_param(const gchar */*name*/)
 
 
 const char *Parameter::get_translation(const char* msgid) {
-    // TODO: translation domain
-
-    if (_context) {
-        return g_dpgettext2(nullptr, _context, msgid);
-    } else {
-        return _(msgid);
-    }
+    return _extension->get_translation(msgid, _context);
 }
 
 Glib::ustring const extension_pref_root = "/extensions/";

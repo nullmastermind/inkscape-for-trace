@@ -35,7 +35,7 @@ namespace Extension {
 
 
 /** \brief  Creates a new preference dialog for extension preferences
-    \param  name  Name of the Extension whose dialog this is
+    \param  name      Name of the Extension whose dialog this is (should already be translated)
     \param  controls  The extension specific widgets in the dialog
 
     This function initializes the dialog with the name of the extension
@@ -43,7 +43,7 @@ namespace Extension {
     them.  It also places the passed-in widgets into the dialog.
 */
 PrefDialog::PrefDialog (Glib::ustring name, Gtk::Widget * controls, Effect * effect) :
-    Gtk::Dialog(_(name.c_str()), true),
+    Gtk::Dialog(name, true),
     _name(name),
     _button_ok(nullptr),
     _button_cancel(nullptr),

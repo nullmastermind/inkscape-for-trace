@@ -99,18 +99,22 @@ public:
     };
 
 private:
-    gchar     *_id = nullptr;             /**< The unique identifier for the Extension */
-    gchar     *_name = nullptr;           /**< A user friendly name for the Extension */
-    state_t    _state = STATE_UNLOADED;   /**< Which state the Extension is currently in */
-    std::vector<Dependency *>  _deps;     /**< Dependencies for this extension */
-    static std::ofstream error_file;      /**< This is the place where errors get reported */
+    gchar     *_id = nullptr;                  /**< The unique identifier for the Extension */
+    gchar     *_name = nullptr;                /**< A user friendly name for the Extension */
+    state_t    _state = STATE_UNLOADED;        /**< Which state the Extension is currently in */
+    std::vector<Dependency *>  _deps;          /**< Dependencies for this extension */
+    static std::ofstream error_file;           /**< This is the place where errors get reported */
     bool _gui;
 
 protected:
-    Inkscape::XML::Node *repr;            /**< The XML description of the Extension */
-    Implementation::Implementation * imp; /**< An object that holds all the functions for making this work */
-    ExecutionEnv * execution_env;         /**< Execution environment of the extension (currently only used by Effects) */
-    ExpirationTimer * timer;              /**< Timeout to unload after a given time */
+    Inkscape::XML::Node *repr;                 /**< The XML description of the Extension */
+    Implementation::Implementation * imp;      /**< An object that holds all the functions for making this work */
+    ExecutionEnv * execution_env;              /**< Execution environment of the extension
+                                                 *  (currently only used by Effects) */
+    ExpirationTimer * timer = nullptr;         /**< Timeout to unload after a given time */
+    bool _translation_enabled = true;          /**< Attempt translation of strings provided by the extension? */
+    const char *_translationdomain = nullptr;  /**< Domainname of gettext textdomain that should
+                                                 *  be used for translation of the extension's strings */
 
 public:
                   Extension    (Inkscape::XML::Node * in_repr,
@@ -130,6 +134,7 @@ public:
     Implementation::Implementation * get_imp () { return imp; };
     void          set_execution_env (ExecutionEnv * env) { execution_env = env; };
     ExecutionEnv *get_execution_env () { return execution_env; };
+    const char   *get_translation(const char* msgid, const char *msgctxt=nullptr);
 
 /* Parameter Stuff */
 private:

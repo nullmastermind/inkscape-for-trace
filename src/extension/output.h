@@ -48,8 +48,8 @@ public:
     bool         prefs ();
     gchar *      get_mimetype();
     gchar *      get_extension();
-    gchar *      get_filetypename();
-    gchar *      get_filetypetooltip();
+    const char * get_filetypename(bool translated=false);
+    const char * get_filetypetooltip(bool translated=false);
     bool         causes_dataloss() { return dataloss; };
 };
 

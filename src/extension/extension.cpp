@@ -64,6 +64,17 @@ Extension::Extension (Inkscape::XML::Node *in_repr, Implementation::Implementati
         imp = in_imp;
     }
 
+    // get name of the translation catalog ("gettext textdomain") that the extension wants to use for translations
+    const char *translationdomain = repr->attribute("translationdomain");
+    if (translationdomain) {
+        _translationdomain = g_strdup(translationdomain);
+
+        // special keyword "none" means the extension author does not want translation of extension strings
+        if (!strcmp(translationdomain, "none")) {
+            _translation_enabled = false;
+        }
+    }
+
     // Read XML tree and parse extension
     Inkscape::XML::Node *child_repr = repr->firstChild();
     while (child_repr) {
@@ -119,8 +130,6 @@ Extension::Extension (Inkscape::XML::Node *in_repr, Implementation::Implementati
         throw extension_no_name();
     }
     db.register_ext (this);
-
-    timer = nullptr;
 }
 
 /**
@@ -370,6 +379,30 @@ bool
 Extension::deactivated ()
 {
     return get_state() == STATE_DEACTIVATED;
+}
+
+/** Gets a translation within the context of the current extension
+  *
+  * Query gettext for the translated version of the input string,
+  * handling the preferred translation domain of the extension internally.
+  *
+  * @param   msgid   String to translate
+  * @param   msgctxt Context for the translation
+  *
+  * @return  Translated string (or original string if extension is not supposed to be translated)
+  */
+const char *Extension::get_translation(const char *msgid, const char *msgctxt) {
+    if (!_translation_enabled) {
+        return msgid;
+    }
+
+    // Note: _translationdomain might be NULL, which is fine.
+    //       We will simply default to the domain set via textdomain() in this case (which should be 'inkscape')
+    if (msgctxt) {
+        return g_dpgettext2(_translationdomain, msgctxt, msgid);
+    } else {
+        return g_dgettext(_translationdomain, msgid);
+    }
 }
 
 Parameter *Extension::get_param(const gchar *name)
@@ -746,7 +779,7 @@ Extension::get_info_widget()
     info->add(*table);
 
     int row = 0;
-    add_val(_("Name:"), _(_name), table, &row);
+    add_val(_("Name:"), get_translation(_name), table, &row);
     add_val(_("ID:"), _id, table, &row);
     add_val(_("State:"), _state == STATE_LOADED ? _("Loaded") : _state == STATE_UNLOADED ? _("Unloaded") : _("Deactivated"), table, &row);
 
