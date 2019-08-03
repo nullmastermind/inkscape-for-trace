@@ -541,7 +541,7 @@ Glib::ustring Application::get_symbolic_colors()
 /**
  * \brief Add our CSS style sheets
  */
-void Application::add_inkscape_css() 
+void Application::add_inkscape_css()
 {
     using namespace Inkscape::IO::Resource;
     auto const screen = Gdk::Screen::get_default();
@@ -565,9 +565,10 @@ void Application::add_inkscape_css()
                 customcssprovider->load_from_path(style);
             } catch (const Gtk::CssProviderError &ex) {
                 g_critical("CSSProviderError::load_from_path(): failed to load '%s'\n(%s)", style.c_str(),
-                        ex.what().c_str());
+                           ex.what().c_str());
             }
-            Gtk::StyleContext::add_provider_for_screen(screen, customcssprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+            Gtk::StyleContext::add_provider_for_screen(screen, customcssprovider,
+                                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
         }
     }
     Glib::ustring style = get_filename(UIS, "style.css");
@@ -622,8 +623,9 @@ void Application::add_gtk_css()
         Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme");
         if (gtkthemename != "") {
             if (gtkthemename.find("inkscapecustom::") != -1) {
-                //we use adwaita as base of all custom CSS, seems more standar than user default theme than can make unwanted results
-                gtkthemename = "Adwaita"; 
+                // we use adwaita as base of all custom CSS, seems more standar than user default theme than can make
+                // unwanted results
+                gtkthemename = "Adwaita";
             }
             g_object_set(settings, "gtk-theme-name", gtkthemename.c_str(), NULL);
         } else {
@@ -638,7 +640,7 @@ void Application::add_gtk_css()
         g_object_get(settings, "gtk-font-name", &gtk_font_name, NULL);
     }
     add_inkscape_css();
-    
+
     Glib::ustring css_str = "";
     if (!strncmp(gtk_font_name, "Cantarell", 9)) {
         auto provider = Gtk::CssProvider::create();

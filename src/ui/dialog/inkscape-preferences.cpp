@@ -779,8 +779,9 @@ void InkscapePreferences::themeChange()
         Glib::ustring themename = prefs->getString("/theme/gtkTheme");
         Glib::ustring customthemename = prefs->getString("/theme/gtkTheme");
         if (customthemename.find("inkscapecustom::") != -1) {
-            //we use adwaita as base of all custom CSS, seems more standar than user default theme than can make unwanted results
-            themename = "Adwaita"; 
+            // we use adwaita as base of all custom CSS, seems more standar than user default theme than can make
+            // unwanted results
+            themename = "Adwaita";
         }
         Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
         GtkSettings *settings = gtk_settings_get_default();
@@ -2616,7 +2617,7 @@ void InkscapePreferences::initPageSystem()
                           _("Location of the user’s extensions"), true);
 
     _sys_user_themes_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::THEMES, ""),
-                                 _("Open themes folder"));
+                              _("Open themes folder"));
     _page_system.add_line(true, _("User themes: "), _sys_user_themes_dir, "", _("Location of the user’s themes"), true);
 
     _sys_user_icons_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::ICONS, ""),
@@ -2632,7 +2633,7 @@ void InkscapePreferences::initPageSystem()
                                _("Open symbols folder"));
     _page_system.add_line(true, _("User symbols: "), _sys_user_symbols_dir, "", _("Location of the user’s symbols"),
                           true);
-    
+
     _sys_user_palettes_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::PALETTES, ""),
                                 _("Open palettes folder"));
     _page_system.add_line(true, _("User palettes: "), _sys_user_palettes_dir, "", _("Location of the user’s palettes"),
