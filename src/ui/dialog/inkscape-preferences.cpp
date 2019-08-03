@@ -777,12 +777,18 @@ void InkscapePreferences::themeChange()
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         bool darktheme = prefs->getBool("/theme/preferDarkTheme", false);
         Glib::ustring themename = prefs->getString("/theme/gtkTheme");
+        if (themename.find("inkscapecustom::") != -1) {
+            prefs->setString("/theme/gtkCustomTheme", themename.substr(16));
+            themename = "Adwaita";
+            prefs->setString("/theme/gtkTheme", "Adwaita");
+        }
         Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
         GtkSettings *settings = gtk_settings_get_default();
         g_object_set(settings, "gtk-theme-name", themename.c_str(), NULL);
         g_object_set(settings, "gtk-application-prefer-dark-theme", darktheme, NULL);
         gchar *gtkThemeName;
         gboolean gtkApplicationPreferDarkTheme;
+        
         bool dark = darktheme || themename.find(":dark") != -1;
         if (!dark) {
             Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
@@ -1107,6 +1113,21 @@ void InkscapePreferences::initPageUI()
             theme = (gchar *)l->data;
             labels.emplace_back(theme);
             values.emplace_back(theme);
+        }
+        using namespace Inkscape::IO::Resource;
+        auto folders = get_foldernames(THEMES, { "application" });
+        for (auto &folder : folders) {
+            // from https://stackoverflow.com/questions/8520560/get-a-file-name-from-a-path#8520871
+            // Maybe we can link boost path utilities
+            // Remove directory if present.
+            // Do this before extension removal incase directory has a period character.
+            const size_t last_slash_idx = folder.find_last_of("\\/");
+            if (std::string::npos != last_slash_idx) {
+                folder.erase(0, last_slash_idx + 1);
+            }
+
+            labels.push_back(folder);
+            values.push_back("inkscapecustom::" + folder);
         }
         labels.emplace_back(_("Use system theme"));
         values.push_back(prefs->getString("/theme/defaultTheme"));
@@ -2603,7 +2624,7 @@ void InkscapePreferences::initPageSystem()
                                _("Open symbols folder"));
     _page_system.add_line(true, _("User symbols: "), _sys_user_symbols_dir, "", _("Location of the user’s symbols"),
                           true);
-
+    
     _sys_user_palettes_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::PALETTES, ""),
                                 _("Open palettes folder"));
     _page_system.add_line(true, _("User palettes: "), _sys_user_palettes_dir, "", _("Location of the user’s palettes"),
