@@ -541,42 +541,35 @@ Glib::ustring Application::get_symbolic_colors()
 /**
  * \brief Add our CSS style sheets
  */
-void Application::add_gtk_css()
+void Application::add_inkscape_css() 
 {
     using namespace Inkscape::IO::Resource;
-    // Add style sheet (GTK3)
     auto const screen = Gdk::Screen::get_default();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    const gchar *gtk_font_name = "";
-    const gchar *gtkThemeName;
-    const gchar *gtkIconThemeName;
-    Glib::ustring themeiconname;
-    gboolean gtkApplicationPreferDarkTheme;
-    GtkSettings *settings = gtk_settings_get_default();
-    if (settings) {
-        g_object_get(settings, "gtk-icon-theme-name", &gtkIconThemeName, NULL);
-        g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
-        g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
-        g_object_set(settings, "gtk-application-prefer-dark-theme",
-                     prefs->getBool("/theme/preferDarkTheme", gtkApplicationPreferDarkTheme), NULL);
-        prefs->setString("/theme/defaultTheme", Glib::ustring(gtkThemeName));
-        prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName));
-        Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme");
-        if (gtkthemename != "") {
-            g_object_set(settings, "gtk-theme-name", gtkthemename.c_str(), NULL);
-        } else {
-            prefs->setString("/theme/gtkTheme", Glib::ustring(gtkThemeName));
-        }
-        themeiconname = prefs->getString("/theme/iconTheme");
-        if (themeiconname != "") {
-            g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
-        } else {
-            prefs->setString("/theme/iconTheme", Glib::ustring(gtkIconThemeName));
-        }
-        g_object_get(settings, "gtk-font-name", &gtk_font_name, NULL);
+    if (!customcssprovider) {
+        customcssprovider = Gtk::CssProvider::create();
+    } else {
+        Gtk::StyleContext::remove_provider_for_screen(screen, customcssprovider);
     }
-
-
+    Glib::ustring customthemename = prefs->getString("/theme/gtkTheme");
+    if (customthemename.find("inkscapecustom::") != -1) {
+        customthemename = customthemename.substr(16);
+        Glib::ustring style = customthemename + "/gtk-3.0/gtk.css";
+        bool dark = prefs->getBool("/theme/preferDarkTheme", false) || customthemename.find(":dark") != -1;
+        if (dark) {
+            style = customthemename + "/gtk-3.0/gtk-dark.css";
+        }
+        style = get_filename(THEMES, style.c_str());
+        if (!style.empty()) {
+            try {
+                customcssprovider->load_from_path(style);
+            } catch (const Gtk::CssProviderError &ex) {
+                g_critical("CSSProviderError::load_from_path(): failed to load '%s'\n(%s)", style.c_str(),
+                        ex.what().c_str());
+            }
+            Gtk::StyleContext::add_provider_for_screen(screen, customcssprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        }
+    }
     Glib::ustring style = get_filename(UIS, "style.css");
     if (!style.empty()) {
         auto provider = Gtk::CssProvider::create();
@@ -601,7 +594,52 @@ void Application::add_gtk_css()
         g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
     }
     Gtk::StyleContext::add_provider_for_screen(screen, colorizeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+}
 
+/**
+ * \brief Add our CSS style sheets
+ */
+void Application::add_gtk_css()
+{
+    using namespace Inkscape::IO::Resource;
+    // Add style sheet (GTK3)
+    auto const screen = Gdk::Screen::get_default();
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    const gchar *gtk_font_name = "";
+    const gchar *gtkThemeName;
+    const gchar *gtkIconThemeName;
+    Glib::ustring themeiconname;
+    gboolean gtkApplicationPreferDarkTheme;
+    GtkSettings *settings = gtk_settings_get_default();
+    if (settings) {
+        g_object_get(settings, "gtk-icon-theme-name", &gtkIconThemeName, NULL);
+        g_object_get(settings, "gtk-theme-name", &gtkThemeName, NULL);
+        g_object_get(settings, "gtk-application-prefer-dark-theme", &gtkApplicationPreferDarkTheme, NULL);
+        g_object_set(settings, "gtk-application-prefer-dark-theme",
+                     prefs->getBool("/theme/preferDarkTheme", gtkApplicationPreferDarkTheme), NULL);
+        prefs->setString("/theme/defaultTheme", Glib::ustring(gtkThemeName));
+        prefs->setString("/theme/defaultIconTheme", Glib::ustring(gtkIconThemeName));
+        Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme");
+        if (gtkthemename != "") {
+            if (gtkthemename.find("inkscapecustom::") != -1) {
+                //we use adwaita as base of all custom CSS, seems more standar than user default theme than can make unwanted results
+                gtkthemename = "Adwaita"; 
+            }
+            g_object_set(settings, "gtk-theme-name", gtkthemename.c_str(), NULL);
+        } else {
+            prefs->setString("/theme/gtkTheme", Glib::ustring(gtkThemeName));
+        }
+        themeiconname = prefs->getString("/theme/iconTheme");
+        if (themeiconname != "") {
+            g_object_set(settings, "gtk-icon-theme-name", themeiconname.c_str(), NULL);
+        } else {
+            prefs->setString("/theme/iconTheme", Glib::ustring(gtkIconThemeName));
+        }
+        g_object_get(settings, "gtk-font-name", &gtk_font_name, NULL);
+    }
+    add_inkscape_css();
+    
+    Glib::ustring css_str = "";
     if (!strncmp(gtk_font_name, "Cantarell", 9)) {
         auto provider = Gtk::CssProvider::create();
         css_str = "#monoStrokeWidth,";
