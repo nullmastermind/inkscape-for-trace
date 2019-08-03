@@ -54,12 +54,9 @@ Extension::Extension (Inkscape::XML::Node *in_repr, Implementation::Implementati
     : _gui(true)
     , execution_env(nullptr)
 {
+    g_return_if_fail(in_repr); // should be ensured in system.cpp
     repr = in_repr;
-    Inkscape::GC::anchor(in_repr);
-
-    id = nullptr;
-    name = nullptr;
-    _state = STATE_UNLOADED;
+    Inkscape::GC::anchor(repr);
 
     if (in_imp == nullptr) {
         imp = new Implementation::Implementation();
@@ -68,47 +65,60 @@ Extension::Extension (Inkscape::XML::Node *in_repr, Implementation::Implementati
     }
 
     // Read XML tree and parse extension
-    if (repr) {
-        Inkscape::XML::Node *child_repr = repr->firstChild();
-        while (child_repr) {
-            const char *chname = child_repr->name();
-			if (!strncmp(chname, INKSCAPE_EXTENSION_NS_NC, strlen(INKSCAPE_EXTENSION_NS_NC))) {
-				chname += strlen(INKSCAPE_EXTENSION_NS);
-			}
-            if (chname[0] == '_') { // allow leading underscore in tag names for backwards-compatibility
-                chname++;
-            }
-
-            /* TODO: Handle what happens if we don't have name and id */
-            if (!strcmp(chname, "id")) {
-                const char *value = child_repr->firstChild()->content();
-                id = g_strdup(value);
-            } else if (!strcmp(chname, "name")) {
-                name = g_strdup(child_repr->firstChild()->content());
-            } else if (!strcmp(chname, "param")) {
-                Parameter *param = Parameter::make(child_repr, this);
-                if (param) {
-                    parameters.push_back(param);
-                }
-            } else if (!strcmp(chname, "dependency")) {
-                _deps.push_back(new Dependency(child_repr));
-            } else if (!strcmp(chname, "script")) { // check command as a dependency (see LP #505920)
-                for (Inkscape::XML::Node *child = child_repr->firstChild(); child != nullptr; child = child->next()) {
-                    if (child->type() == Inkscape::XML::ELEMENT_NODE) { // skip non-element nodes (see LP #1372200)
-                        _deps.push_back(new Dependency(child));
-                        break;
-                    }
-                }
-            } else {
-                // We could do some sanity checking here.
-                // However, we don't really know which additional elements Extension subclasses might need...
-            }
-
-            child_repr = child_repr->next();
+    Inkscape::XML::Node *child_repr = repr->firstChild();
+    while (child_repr) {
+        const char *chname = child_repr->name();
+        if (!strncmp(chname, INKSCAPE_EXTENSION_NS_NC, strlen(INKSCAPE_EXTENSION_NS_NC))) {
+            chname += strlen(INKSCAPE_EXTENSION_NS);
+        }
+        if (chname[0] == '_') { // allow leading underscore in tag names for backwards-compatibility
+            chname++;
         }
 
-        db.register_ext (this);
+        if (!strcmp(chname, "id")) {
+            const char *id = child_repr->firstChild() ? child_repr->firstChild()->content() : nullptr;
+            if (id) {
+                _id = g_strdup(id);
+            } else {
+                throw extension_no_id();
+            }
+        } else if (!strcmp(chname, "name")) {
+            const char *name = child_repr->firstChild() ? child_repr->firstChild()->content() : nullptr;
+            if (name) {
+                _name = g_strdup(name);
+            } else {
+                throw extension_no_name();
+            }
+        } else if (!strcmp(chname, "param")) {
+            Parameter *param = Parameter::make(child_repr, this);
+            if (param) {
+                parameters.push_back(param);
+            }
+        } else if (!strcmp(chname, "dependency")) {
+            _deps.push_back(new Dependency(child_repr));
+        } else if (!strcmp(chname, "script")) { // check command as a dependency (see LP #505920)
+            for (Inkscape::XML::Node *child = child_repr->firstChild(); child != nullptr; child = child->next()) {
+                if (child->type() == Inkscape::XML::ELEMENT_NODE) { // skip non-element nodes (see LP #1372200)
+                    _deps.push_back(new Dependency(child));
+                    break;
+                }
+            }
+        } else {
+            // We could do some sanity checking here.
+            // However, we don't really know which additional elements Extension subclasses might need...
+        }
+
+        child_repr = child_repr->next();
     }
+
+    // register extension if we have an id and a name
+    if (!_id) {
+        throw extension_no_id();
+    }
+    if (!_name) {
+        throw extension_no_name();
+    }
+    db.register_ext (this);
 
     timer = nullptr;
 }
@@ -130,8 +140,8 @@ Extension::~Extension ()
 
     Inkscape::GC::release(repr);
 
-    g_free(id);
-    g_free(name);
+    g_free(_id);
+    g_free(_name);
 
     delete timer;
     timer = nullptr;
@@ -242,9 +252,6 @@ Extension::check ()
 {
     bool retval = true;
 
-    // static int i = 0;
-    // std::cout << "Checking module[" << i++ << "]: " << name << std::endl;
-
     const char * inx_failure = _("  This is caused by an improper .inx file for this extension."
                                  "  An improper .inx file could have been caused by a faulty installation of Inkscape.");
 
@@ -253,20 +260,12 @@ Extension::check ()
 #ifndef _WIN32
     const char* win_ext[] = {"com.vaxxine.print.win32"};
     std::vector<std::string> v (win_ext, win_ext + sizeof(win_ext)/sizeof(win_ext[0]));
-    std::string ext_id(id);
+    std::string ext_id(_id);
     if (std::find(v.begin(), v.end(), ext_id) != v.end()) {
         printFailure(Glib::ustring(_("the extension is designed for Windows only.")) + inx_failure);
         retval = false;
     }
 #endif
-    if (id == nullptr) {
-        printFailure(Glib::ustring(_("an ID was not defined for it.")) + inx_failure);
-        retval = false;
-    }
-    if (name == nullptr) {
-        printFailure(Glib::ustring(_("there was no name defined for it.")) + inx_failure);
-        retval = false;
-    }
     if (repr == nullptr) {
         printFailure(Glib::ustring(_("the XML description of it got lost.")) + inx_failure);
         retval = false;
@@ -299,7 +298,7 @@ Extension::check ()
 void
 Extension::printFailure (Glib::ustring reason)
 {
-    error_file << _("Extension \"") << name << _("\" failed to load because ");
+    error_file << _("Extension \"") << _name << _("\" failed to load because ");
     error_file << reason.raw();
     error_file << std::endl;
     return;
@@ -322,7 +321,7 @@ Extension::get_repr ()
 gchar *
 Extension::get_id ()
 {
-    return id;
+    return _id;
 }
 
 /**
@@ -332,7 +331,7 @@ Extension::get_id ()
 gchar *
 Extension::get_name ()
 {
-    return name;
+    return _name;
 }
 
 /**
@@ -747,8 +746,8 @@ Extension::get_info_widget()
     info->add(*table);
 
     int row = 0;
-    add_val(_("Name:"), _(name), table, &row);
-    add_val(_("ID:"), id, table, &row);
+    add_val(_("Name:"), _(_name), table, &row);
+    add_val(_("ID:"), _id, table, &row);
     add_val(_("State:"), _state == STATE_LOADED ? _("Loaded") : _state == STATE_UNLOADED ? _("Unloaded") : _("Deactivated"), table, &row);
 
     retval->show_all();
