@@ -1083,10 +1083,6 @@ gint sp_event_context_root_handler(ToolBase * event_context,
         event->motion.x = pos[Geom::X];
         event->motion.y = pos[Geom::Y];
     }
-    
-    if ((event->state & GDK_BUTTON1_MASK) && (event->state & GDK_BUTTON3_MASK)) {
-        return;
-    }
 
     if (!event_context->_uses_snap) {
         return sp_event_context_virtual_root_handler(event_context, event);
