@@ -777,27 +777,13 @@ void InkscapePreferences::themeChange()
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         bool darktheme = prefs->getBool("/theme/preferDarkTheme", false);
         Glib::ustring themename = prefs->getString("/theme/gtkTheme");
-        Glib::ustring customthemename = prefs->getString("/theme/gtkTheme");
-        if (customthemename.find("inkscapecustom::") != -1) {
-            // we use adwaita as base of all custom CSS, seems more standar than user default theme than can make
-            // unwanted results
-            themename = "Adwaita";
-        }
         Glib::ustring themeiconname = prefs->getString("/theme/iconTheme");
         GtkSettings *settings = gtk_settings_get_default();
         g_object_set(settings, "gtk-theme-name", themename.c_str(), NULL);
         g_object_set(settings, "gtk-application-prefer-dark-theme", darktheme, NULL);
-
         gchar *gtkThemeName;
         gboolean gtkApplicationPreferDarkTheme;
         bool dark = darktheme || themename.find(":dark") != -1;
-        if (customthemename.find("inkscapecustom::") != -1) {
-            dark = prefs->getBool("/theme/preferDarkTheme", false) || customthemename.find(":dark") != -1;
-            INKSCAPE.add_inkscape_css();
-        } else if (INKSCAPE.customcssprovider) {
-            auto const screen = Gdk::Screen::get_default();
-            Gtk::StyleContext::remove_provider_for_screen(screen, INKSCAPE.customcssprovider);
-        }
         if (!dark) {
             Glib::RefPtr<Gtk::StyleContext> stylecontext = window->get_style_context();
             Gdk::RGBA rgba;
@@ -1121,21 +1107,6 @@ void InkscapePreferences::initPageUI()
             theme = (gchar *)l->data;
             labels.emplace_back(theme);
             values.emplace_back(theme);
-        }
-        using namespace Inkscape::IO::Resource;
-        auto folders = get_foldernames(THEMES, { "application" });
-        for (auto &folder : folders) {
-            // from https://stackoverflow.com/questions/8520560/get-a-file-name-from-a-path#8520871
-            // Maybe we can link boost path utilities
-            // Remove directory if present.
-            // Do this before extension removal incase directory has a period character.
-            const size_t last_slash_idx = folder.find_last_of("\\/");
-            if (std::string::npos != last_slash_idx) {
-                folder.erase(0, last_slash_idx + 1);
-            }
-
-            labels.push_back(folder);
-            values.push_back("inkscapecustom::" + folder);
         }
         labels.emplace_back(_("Use system theme"));
         values.push_back(prefs->getString("/theme/defaultTheme"));
@@ -2616,8 +2587,7 @@ void InkscapePreferences::initPageSystem()
     _page_system.add_line(true, _("User extensions: "), _sys_user_extension_dir, "",
                           _("Location of the user’s extensions"), true);
 
-    _sys_user_themes_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::THEMES, ""),
-                              _("Open themes folder"));
+    _sys_user_themes_dir.init(g_build_filename(g_get_user_data_dir(), "themes", NULL), _("Open themes folder"));
     _page_system.add_line(true, _("User themes: "), _sys_user_themes_dir, "", _("Location of the user’s themes"), true);
 
     _sys_user_icons_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::ICONS, ""),

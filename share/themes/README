@@ -1,4 +1,0 @@
-# THEMES on inkscape
-If for any reason we dont want to bundle dark theme we can add a gtk-dark.css with this content:
-@import url("gtk.css");
-
