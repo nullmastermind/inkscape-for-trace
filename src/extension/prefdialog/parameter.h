@@ -36,12 +36,12 @@ extern Glib::ustring const extension_pref_root;
  * around.  There is also a few functions that are used by all the
  * different parameters.
  */
-class Parameter : public InxWidget {
+class InxParameter : public InxWidget {
 public:
-    Parameter(Inkscape::XML::Node *in_repr,
-              Inkscape::Extension::Extension *ext);
+    InxParameter(Inkscape::XML::Node *in_repr,
+                 Inkscape::Extension::Extension *ext);
 
-    virtual ~Parameter();
+    virtual ~InxParameter();
 
     /** Wrapper to cast to the object and use its function. */
     bool get_bool(SPDocument const *doc, Inkscape::XML::Node const *node) const;
@@ -104,9 +104,9 @@ public:
      * value from the XML and the type is set to the interpreted type.
      *
      * @param  in_repr The XML describing the parameter.
-     * @return a pointer to a new Parameter if applicable, null otherwise..
+     * @return a pointer to a new parameter if applicable, null otherwise..
      */
-    static Parameter *make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *in_ext);
+    static InxParameter *make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *in_ext);
 
     const gchar *get_tooltip() const { return _description; }
 
@@ -119,7 +119,7 @@ public:
     virtual void string(std::string &string) const;
 
     /** All the code in Notebook::get_param to get the notebook content. */
-    virtual Parameter *get_param(gchar const *name);
+    virtual InxParameter *get_param(gchar const *name);
 
 
     /** Recommended spacing between the widgets making up a single Parameter (e.g. label and input) (in px) */

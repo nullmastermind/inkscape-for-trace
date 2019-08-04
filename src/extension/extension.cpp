@@ -101,7 +101,7 @@ Extension::Extension (Inkscape::XML::Node *in_repr, Implementation::Implementati
                 throw extension_no_name();
             }
         } else if (!strcmp(chname, "param")) {
-            Parameter *param = Parameter::make(child_repr, this);
+            InxParameter *param = InxParameter::make(child_repr, this);
             if (param) {
                 parameters.push_back(param);
             }
@@ -405,7 +405,7 @@ const char *Extension::get_translation(const char *msgid, const char *msgctxt) {
     }
 }
 
-Parameter *Extension::get_param(const gchar *name)
+InxParameter *Extension::get_param(const gchar *name)
 {
     if (name == nullptr) {
         throw Extension::param_not_exist();
@@ -418,7 +418,7 @@ Parameter *Extension::get_param(const gchar *name)
         if (!strcmp(param->name(), name)) {
             return param;
         } else {
-            Parameter * subparam = param->get_param(name);
+            InxParameter * subparam = param->get_param(name);
             if (subparam) {
                 return subparam;
             }
@@ -429,7 +429,7 @@ Parameter *Extension::get_param(const gchar *name)
     throw Extension::param_not_exist();
 }
 
-Parameter const *Extension::get_param(const gchar *name) const
+InxParameter const *Extension::get_param(const gchar *name) const
 {
     return const_cast<Extension *>(this)->get_param(name);
 }
@@ -447,7 +447,7 @@ Parameter const *Extension::get_param(const gchar *name) const
 bool
 Extension::get_param_bool (const gchar *name, const SPDocument *doc, const Inkscape::XML::Node *node) const
 {
-    const Parameter *param;
+    const InxParameter *param;
     param = get_param(name);
     return param->get_bool(doc, node);
 }
@@ -464,7 +464,7 @@ Extension::get_param_bool (const gchar *name, const SPDocument *doc, const Inksc
 int
 Extension::get_param_int (const gchar *name, const SPDocument *doc, const Inkscape::XML::Node *node) const
 {
-    const Parameter *param;
+    const InxParameter *param;
     param = get_param(name);
     return param->get_int(doc, node);
 }
@@ -481,7 +481,7 @@ Extension::get_param_int (const gchar *name, const SPDocument *doc, const Inksca
 float
 Extension::get_param_float (const gchar *name, const SPDocument *doc, const Inkscape::XML::Node *node) const
 {
-    const Parameter *param;
+    const InxParameter *param;
     param = get_param(name);
     return param->get_float(doc, node);
 }
@@ -498,7 +498,7 @@ Extension::get_param_float (const gchar *name, const SPDocument *doc, const Inks
 const char *
 Extension::get_param_string (const gchar *name, const SPDocument *doc, const Inkscape::XML::Node *node) const
 {
-    const Parameter *param;
+    const InxParameter *param;
     param = get_param(name);
     return param->get_string(doc, node);
 }
@@ -515,7 +515,7 @@ Extension::get_param_string (const gchar *name, const SPDocument *doc, const Ink
 const char *
 Extension::get_param_optiongroup (const gchar *name, const SPDocument *doc, const Inkscape::XML::Node *node) const
 {
-    const Parameter *param;
+    const InxParameter *param;
     param = get_param(name);
     return param->get_optiongroup(doc, node);
 }
@@ -531,7 +531,7 @@ Extension::get_param_optiongroup (const gchar *name, const SPDocument *doc, cons
 bool
 Extension::get_param_optiongroup_contains(const gchar *name, const char *value, const SPDocument *doc, const Inkscape::XML::Node *node) const
 {
-    const Parameter *param;
+    const InxParameter *param;
     param = get_param(name);
     return param->get_optiongroup_contains(value, doc, node);
 }
@@ -548,7 +548,7 @@ Extension::get_param_optiongroup_contains(const gchar *name, const char *value, 
 guint32
 Extension::get_param_color (const gchar *name, const SPDocument *doc, const Inkscape::XML::Node *node) const
 {
-    const Parameter *param;
+    const InxParameter *param;
     param = get_param(name);
     return param->get_color(doc, node);
 }
@@ -566,7 +566,7 @@ Extension::get_param_color (const gchar *name, const SPDocument *doc, const Inks
 bool
 Extension::set_param_bool (const gchar *name, const bool value, SPDocument *doc, Inkscape::XML::Node *node)
 {
-    Parameter *param;
+    InxParameter *param;
     param = get_param(name);
     return param->set_bool(value, doc, node);
 }
@@ -584,7 +584,7 @@ Extension::set_param_bool (const gchar *name, const bool value, SPDocument *doc,
 int
 Extension::set_param_int (const gchar *name, const int value, SPDocument *doc, Inkscape::XML::Node *node)
 {
-    Parameter *param;
+    InxParameter *param;
     param = get_param(name);
     return param->set_int(value, doc, node);
 }
@@ -602,7 +602,7 @@ Extension::set_param_int (const gchar *name, const int value, SPDocument *doc, I
 float
 Extension::set_param_float (const gchar *name, const float value, SPDocument *doc, Inkscape::XML::Node *node)
 {
-    Parameter *param;
+    InxParameter *param;
     param = get_param(name);
     return param->set_float(value, doc, node);
 }
@@ -620,7 +620,7 @@ Extension::set_param_float (const gchar *name, const float value, SPDocument *do
 const char *
 Extension::set_param_string (const gchar *name, const char *value, SPDocument *doc, Inkscape::XML::Node *node)
 {
-    Parameter *param;
+    InxParameter *param;
     param = get_param(name);
     return param->set_string(value, doc, node);
 }
@@ -638,7 +638,7 @@ Extension::set_param_string (const gchar *name, const char *value, SPDocument *d
 const char *
 Extension::set_param_optiongroup (const gchar *name, const char *value, SPDocument *doc, Inkscape::XML::Node *node)
 {
-    Parameter *param;
+    InxParameter *param;
     param = get_param(name);
     return param->set_optiongroup(value, doc, node);
 }
@@ -656,7 +656,7 @@ Look up in the parameters list, const then execute the function on that found pa
 guint32
 Extension::set_param_color (const gchar *name, const guint32 color, SPDocument *doc, Inkscape::XML::Node *node)
 {
-    Parameter *param;
+    InxParameter *param;
     param = get_param(name);
     return param->set_color(color, doc, node);
 }
@@ -702,7 +702,7 @@ public:
      */
     void addWidget(Gtk::Widget *widg, gchar const *tooltip, int indent) {
         if (widg) {
-            widg->set_margin_start(indent * Parameter::GUI_INDENTATION);
+            widg->set_margin_start(indent * InxParameter::GUI_INDENTATION);
             this->pack_start(*widg, false, false, 0);
             if (tooltip) {
                 widg->set_tooltip_text(tooltip);
@@ -730,8 +730,8 @@ Extension::autogui (SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<voi
     if (!_gui || param_visible_count() == 0) return nullptr;
 
     AutoGUI * agui = Gtk::manage(new AutoGUI());
-    agui->set_border_width(Parameter::GUI_BOX_MARGIN);
-    agui->set_spacing(Parameter::GUI_BOX_SPACING);
+    agui->set_border_width(InxParameter::GUI_BOX_MARGIN);
+    agui->set_spacing(InxParameter::GUI_BOX_SPACING);
 
     //go through the list of parameters to see if there are any non-hidden ones
     for (auto param:parameters) {

@@ -81,7 +81,7 @@ PrefDialog::PrefDialog (Glib::ustring name, Gtk::Widget * controls, Effect * eff
                 std::cout << "Error encountered loading live parameter XML !!!" << std::endl;
                 return;
             }
-            _param_preview = Parameter::make(doc->root(), _effect);
+            _param_preview = InxParameter::make(doc->root(), _effect);
         }
 
         auto sep = Gtk::manage(new Gtk::Separator());

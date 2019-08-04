@@ -38,7 +38,7 @@ class Extension;
 
 
 // \brief  A class to represent an optiongroup (option with multiple predefined value choices) parameter of an extension
-class ParamOptionGroup : public Parameter {
+class ParamOptionGroup : public InxParameter {
 public:
     enum AppearanceMode {
         RADIOBUTTON, COMBOBOX
@@ -50,7 +50,7 @@ public:
     Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
 
     // Explicitly call superclass version to avoid method being hidden.
-    void string(std::list <std::string> &list) const override { return Parameter::string(list); }
+    void string(std::list <std::string> &list) const override { return InxParameter::string(list); }
 
     void string(std::string &string) const override;
 
@@ -74,7 +74,7 @@ private:
     AppearanceMode _mode = RADIOBUTTON;
 
     /* For internal use only. */
-    class ParamOptionGroupOption : public Parameter {
+    class ParamOptionGroupOption : public InxParameter {
         friend class ParamOptionGroup;
     public:
         ParamOptionGroupOption(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext,

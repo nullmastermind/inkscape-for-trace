@@ -23,7 +23,7 @@ namespace Inkscape {
 namespace Extension {
 class Effect;
 class ExecutionEnv;
-class Parameter;
+class InxParameter;
 
 /** \brief  A class to represent the preferences for an extension */
 class PrefDialog : public Gtk::Dialog {
@@ -41,7 +41,7 @@ class PrefDialog : public Gtk::Dialog {
     Gtk::CheckButton *_checkbox_preview;
 
     /** \brief  Parameter to control live preview */
-    Parameter *_param_preview;
+    InxParameter *_param_preview;
 
     /** \brief  XML to define the live effects parameter on the dialog */
     static const char * live_param_xml;

@@ -35,7 +35,7 @@ class Extension;
 
 
 /** A class to represent a notebook parameter of an extension. */
-class ParamNotebook : public Parameter {
+class ParamNotebook : public InxParameter {
 private:
     /** Internal value. */
     Glib::ustring _value;
@@ -43,12 +43,12 @@ private:
     /**
      * A class to represent the pages of a notebook parameter of an extension.
      */
-    class ParamNotebookPage : public Parameter {
+    class ParamNotebookPage : public InxParameter {
         friend class ParamNotebook;
     private:
         /** A table to store the parameters for this page.
           * This only gets created if there are parameters on this page */
-        std::vector<Parameter *> parameters;
+        std::vector<InxParameter *> parameters;
     public:
         ParamNotebookPage(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
         ~ParamNotebookPage() override;
@@ -56,7 +56,7 @@ private:
         Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
         void paramString (std::list <std::string> &list);
         gchar *get_text () {return _text;};
-        Parameter *get_param (const gchar *name) override;
+        InxParameter *get_param (const gchar *name) override;
     }; /* class ParamNotebookPage */
 
     /** A table to store the pages with parameters for this notebook.
@@ -76,10 +76,10 @@ public:
     void string (std::list <std::string> &list) const override;
 
     // Explicitly call superclass version to avoid method being hidden.
-    void string(std::string &string) const override {return Parameter::string(string);}
+    void string(std::string &string) const override {return InxParameter::string(string);}
 
 
-    Parameter *get_param (const gchar *name) override;
+    InxParameter *get_param (const gchar *name) override;
 
     const Glib::ustring& get (const SPDocument * /*doc*/, const Inkscape::XML::Node * /*node*/) { return _value; }
     const Glib::ustring& set (const int in, SPDocument *doc, Inkscape::XML::Node *node);

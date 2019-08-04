@@ -21,7 +21,7 @@ namespace Extension {
 
 
 ParamDescription::ParamDescription(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext)
-    : Parameter(xml, ext)
+    : InxParameter(xml, ext)
 {
     // construct the text content by concatenating all (non-empty) text nodes,
     // removing all other nodes (e.g. comment nodes) and replacing <extension:br> elements with "<br/>"

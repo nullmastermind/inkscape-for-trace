@@ -27,7 +27,7 @@ namespace Extension {
 /**
  * A boolean parameter.
  */
-class ParamBool : public Parameter {
+class ParamBool : public InxParameter {
 public:
     ParamBool(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
 
@@ -55,7 +55,7 @@ public:
     Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
 
     // Explicitly call superclass version to avoid method being hidden.
-    void string(std::list <std::string> &list) const override { return Parameter::string(list); }
+    void string(std::list <std::string> &list) const override { return InxParameter::string(list); }
 
     /**
      * Appends 'true' or 'false'.

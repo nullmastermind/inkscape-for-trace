@@ -20,7 +20,7 @@ namespace Inkscape {
 namespace Extension {
 
 ParamBool::ParamBool(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext)
-    : Parameter(xml, ext)
+    : InxParameter(xml, ext)
 {
     // get value
     if (xml->firstChild()) {

@@ -25,7 +25,7 @@ namespace Xml {
 namespace Extension {
 
 /** \brief  A description parameter */
-class ParamDescription : public Parameter {
+class ParamDescription : public InxParameter {
 public:
     enum AppearanceMode {
         DEFAULT, HEADER, URL

@@ -41,9 +41,9 @@
 namespace Inkscape {
 namespace Extension {
 
-Parameter *Parameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *in_ext)
+InxParameter *InxParameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *in_ext)
 {
-    Parameter *param = nullptr;
+    InxParameter *param = nullptr;
 
     const char *type = in_repr->attribute("type");
     if (!type) {
@@ -76,7 +76,7 @@ Parameter *Parameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
     return param;
 }
 
-bool Parameter::get_bool(SPDocument const *doc, Inkscape::XML::Node const *node) const
+bool InxParameter::get_bool(SPDocument const *doc, Inkscape::XML::Node const *node) const
 {
     ParamBool const *boolpntr = dynamic_cast<ParamBool const *>(this);
     if (!boolpntr) {
@@ -85,7 +85,7 @@ bool Parameter::get_bool(SPDocument const *doc, Inkscape::XML::Node const *node)
     return boolpntr->get(doc, node);
 }
 
-int Parameter::get_int(SPDocument const *doc, Inkscape::XML::Node const *node) const
+int InxParameter::get_int(SPDocument const *doc, Inkscape::XML::Node const *node) const
 {
     ParamInt const *intpntr = dynamic_cast<ParamInt const *>(this);
     if (!intpntr) {
@@ -94,7 +94,7 @@ int Parameter::get_int(SPDocument const *doc, Inkscape::XML::Node const *node) c
     return intpntr->get(doc, node);
 }
 
-float Parameter::get_float(SPDocument const *doc, Inkscape::XML::Node const *node) const
+float InxParameter::get_float(SPDocument const *doc, Inkscape::XML::Node const *node) const
 {
     ParamFloat const *floatpntr = dynamic_cast<ParamFloat const *>(this);
     if (!floatpntr) {
@@ -103,7 +103,7 @@ float Parameter::get_float(SPDocument const *doc, Inkscape::XML::Node const *nod
     return floatpntr->get(doc, node);
 }
 
-const char *Parameter::get_string(SPDocument const *doc, Inkscape::XML::Node const *node) const
+const char *InxParameter::get_string(SPDocument const *doc, Inkscape::XML::Node const *node) const
 {
     ParamString const *stringpntr = dynamic_cast<ParamString const *>(this);
     if (!stringpntr) {
@@ -112,7 +112,7 @@ const char *Parameter::get_string(SPDocument const *doc, Inkscape::XML::Node con
     return stringpntr->get(doc, node).c_str();
 }
 
-const char *Parameter::get_optiongroup(SPDocument const *doc, Inkscape::XML::Node const *node) const
+const char *InxParameter::get_optiongroup(SPDocument const *doc, Inkscape::XML::Node const *node) const
 {
     ParamOptionGroup const *param = dynamic_cast<ParamOptionGroup const *>(this);
     if (!param) {
@@ -121,7 +121,7 @@ const char *Parameter::get_optiongroup(SPDocument const *doc, Inkscape::XML::Nod
     return param->get(doc, node).c_str();
 }
 
-bool Parameter::get_optiongroup_contains(const char *value, SPDocument const *doc, Inkscape::XML::Node const *node) const
+bool InxParameter::get_optiongroup_contains(const char *value, SPDocument const *doc, Inkscape::XML::Node const *node) const
 {
     ParamOptionGroup const *param = dynamic_cast<ParamOptionGroup const *>(this);
     if (!param) {
@@ -130,7 +130,7 @@ bool Parameter::get_optiongroup_contains(const char *value, SPDocument const *do
     return param->contains(value, doc, node);
 }
 
-guint32 Parameter::get_color(const SPDocument* doc, Inkscape::XML::Node const *node) const
+guint32 InxParameter::get_color(const SPDocument* doc, Inkscape::XML::Node const *node) const
 {
     ParamColor const *param = dynamic_cast<ParamColor const *>(this);
     if (!param) {
@@ -139,7 +139,7 @@ guint32 Parameter::get_color(const SPDocument* doc, Inkscape::XML::Node const *n
     return param->get(doc, node);
 }
 
-bool Parameter::set_bool(bool in, SPDocument *doc, Inkscape::XML::Node *node)
+bool InxParameter::set_bool(bool in, SPDocument *doc, Inkscape::XML::Node *node)
 {
     ParamBool * boolpntr = dynamic_cast<ParamBool *>(this);
     if (boolpntr == nullptr)
@@ -147,7 +147,7 @@ bool Parameter::set_bool(bool in, SPDocument *doc, Inkscape::XML::Node *node)
     return boolpntr->set(in, doc, node);
 }
 
-int Parameter::set_int(int in, SPDocument *doc, Inkscape::XML::Node *node)
+int InxParameter::set_int(int in, SPDocument *doc, Inkscape::XML::Node *node)
 {
     ParamInt *intpntr = dynamic_cast<ParamInt *>(this);
     if (intpntr == nullptr)
@@ -155,7 +155,7 @@ int Parameter::set_int(int in, SPDocument *doc, Inkscape::XML::Node *node)
     return intpntr->set(in, doc, node);
 }
 
-float Parameter::set_float(float in, SPDocument *doc, Inkscape::XML::Node *node)
+float InxParameter::set_float(float in, SPDocument *doc, Inkscape::XML::Node *node)
 {
     ParamFloat * floatpntr;
     floatpntr = dynamic_cast<ParamFloat *>(this);
@@ -164,7 +164,7 @@ float Parameter::set_float(float in, SPDocument *doc, Inkscape::XML::Node *node)
     return floatpntr->set(in, doc, node);
 }
 
-const char *Parameter::set_string(const char *in, SPDocument *doc, Inkscape::XML::Node *node)
+const char *InxParameter::set_string(const char *in, SPDocument *doc, Inkscape::XML::Node *node)
 {
     ParamString * stringpntr = dynamic_cast<ParamString *>(this);
     if (stringpntr == nullptr)
@@ -172,7 +172,7 @@ const char *Parameter::set_string(const char *in, SPDocument *doc, Inkscape::XML
     return stringpntr->set(in, doc, node).c_str();
 }
 
-const char *Parameter::set_optiongroup(const char *in, SPDocument *doc, Inkscape::XML::Node *node)
+const char *InxParameter::set_optiongroup(const char *in, SPDocument *doc, Inkscape::XML::Node *node)
 {
     ParamOptionGroup *param = dynamic_cast<ParamOptionGroup *>(this);
     if (!param) {
@@ -181,7 +181,7 @@ const char *Parameter::set_optiongroup(const char *in, SPDocument *doc, Inkscape
     return param->set(in, doc, node).c_str();
 }
 
-guint32 Parameter::set_color(guint32 in, SPDocument *doc, Inkscape::XML::Node *node)
+guint32 InxParameter::set_color(guint32 in, SPDocument *doc, Inkscape::XML::Node *node)
 {
     ParamColor*param = dynamic_cast<ParamColor *>(this);
     if (param == nullptr)
@@ -190,7 +190,7 @@ guint32 Parameter::set_color(guint32 in, SPDocument *doc, Inkscape::XML::Node *n
 }
 
 
-Parameter::Parameter (Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *ext)
+InxParameter::InxParameter(Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *ext)
     : InxWidget(in_repr, ext)
 {
     // name (mandatory for all paramters)
@@ -225,7 +225,7 @@ Parameter::Parameter (Inkscape::XML::Node *in_repr, Inkscape::Extension::Extensi
     }
 }
 
-Parameter::~Parameter()
+InxParameter::~InxParameter()
 {
     g_free(_name);
     _name = nullptr;
@@ -237,18 +237,18 @@ Parameter::~Parameter()
     _description = nullptr;
 }
 
-gchar *Parameter::pref_name() const
+gchar *InxParameter::pref_name() const
 {
     return g_strdup_printf("%s.%s", _extension->get_id(), _name);
 }
 
 /** If I'm not sure which it is, just don't return a value. */
-void Parameter::string(std::string &/*string*/) const
+void InxParameter::string(std::string &/*string*/) const
 {
     // TODO investigate clearing the target string.
 }
 
-void Parameter::string(std::list <std::string> &list) const
+void InxParameter::string(std::list <std::string> &list) const
 {
     std::string value;
     string(value);
@@ -263,7 +263,7 @@ void Parameter::string(std::list <std::string> &list) const
     }
 }
 
-Parameter *Parameter::get_param(const gchar */*name*/)
+InxParameter *InxParameter::get_param(const gchar */*name*/)
 {
     return nullptr;
 }

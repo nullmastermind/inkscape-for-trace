@@ -20,7 +20,7 @@ namespace Inkscape {
 namespace Extension {
 
 ParamString::ParamString(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext)
-    : Parameter(xml, ext)
+    : InxParameter(xml, ext)
 {
     // get value
     const char *value = nullptr;

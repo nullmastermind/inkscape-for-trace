@@ -76,7 +76,7 @@ class ExecutionEnv;
 class Dependency;
 class ExpirationTimer;
 class ExpirationTimer;
-class Parameter;
+class InxParameter;
 
 namespace Implementation
 {
@@ -138,9 +138,8 @@ public:
 
 /* Parameter Stuff */
 private:
-    std::vector<Parameter *> parameters; /**< A table to store the parameters for this extension.
-                              This only gets created if there are parameters in this
-                              extension */
+    std::vector<InxParameter *> parameters; /**< A table to store the parameters for this extension.
+                                                 This only gets created if there are parameters in this extension */
 
 public:
     /** \brief  A function to get the number of parameters that
@@ -195,9 +194,9 @@ private:
      * @param name The name to search for.
      * @return Parameter structure with a name of 'name'.
      */
-     Parameter *get_param(const gchar * name);
+     InxParameter *get_param(const gchar * name);
 
-     Parameter const *get_param(const gchar * name) const;
+     InxParameter const *get_param(const gchar * name) const;
 
 public:
     bool        get_param_bool          (const gchar *name,

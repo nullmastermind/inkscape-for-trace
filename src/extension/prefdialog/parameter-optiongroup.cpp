@@ -35,7 +35,7 @@ namespace Inkscape {
 namespace Extension {
 
 ParamOptionGroup::ParamOptionGroup(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext)
-    : Parameter(xml, ext)
+    : InxParameter(xml, ext)
 {
     // Read valid optiongroup choices from XML tree, i,e.
     //   - <option> elements
@@ -298,7 +298,7 @@ Gtk::Widget *ParamOptionGroup::get_widget(SPDocument *doc, Inkscape::XML::Node *
 
 ParamOptionGroup::ParamOptionGroupOption::ParamOptionGroupOption(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext,
                                                                  const Inkscape::Extension::ParamOptionGroup *parent)
-    : Parameter(xml, ext)
+    : InxParameter(xml, ext)
 {
     // get content (=label) of option and translate it
     const char *text = nullptr;

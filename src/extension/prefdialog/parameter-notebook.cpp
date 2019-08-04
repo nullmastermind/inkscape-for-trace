@@ -36,7 +36,7 @@ namespace Extension {
 
 
 ParamNotebook::ParamNotebookPage::ParamNotebookPage(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext)
-    : Parameter(xml, ext)
+    : InxParameter(xml, ext)
 {
     // Read XML tree of page and parse parameters
     if (xml) {
@@ -51,7 +51,7 @@ ParamNotebook::ParamNotebookPage::ParamNotebookPage(Inkscape::XML::Node *xml, In
             }
 
             if (!strcmp(chname, "param") || !strcmp(chname, "_param")) {
-                Parameter *param = Parameter::make(child_repr, ext);
+                InxParameter *param = InxParameter::make(child_repr, ext);
                 if (param) {
                     parameters.push_back(param);
                 }
@@ -114,7 +114,7 @@ Gtk::Widget *ParamNotebook::ParamNotebookPage::get_widget(SPDocument *doc, Inksc
 }
 
 /** Search the parameter's name in the page content. */
-Parameter *ParamNotebook::ParamNotebookPage::get_param(const gchar *name)
+InxParameter *ParamNotebook::ParamNotebookPage::get_param(const gchar *name)
 {
     if (name == nullptr) {
         throw Extension::param_not_exist();
@@ -137,7 +137,7 @@ Parameter *ParamNotebook::ParamNotebookPage::get_param(const gchar *name)
 /** ParamNotebook **/
 
 ParamNotebook::ParamNotebook(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext)
-    : Parameter(xml, ext)
+    : InxParameter(xml, ext)
 {
     // Read XML tree to add pages (allow _page for backwards compatibility)
     if (xml) {
@@ -269,13 +269,13 @@ void NotebookWidget::changed_page(Gtk::Widget * /*page*/, guint pagenum)
 }
 
 /** Search the parameter's name in the notebook content. */
-Parameter *ParamNotebook::get_param(const gchar *name)
+InxParameter *ParamNotebook::get_param(const gchar *name)
 {
     if (name == nullptr) {
         throw Extension::param_not_exist();
     }
     for (auto page : pages) {
-        Parameter *subparam = page->get_param(name);
+        InxParameter *subparam = page->get_param(name);
         if (subparam) {
             return subparam;
         }

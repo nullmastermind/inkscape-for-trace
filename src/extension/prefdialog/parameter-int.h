@@ -25,7 +25,7 @@ class Node;
 
 namespace Extension {
 
-class ParamInt : public Parameter {
+class ParamInt : public InxParameter {
 public:
     enum AppearanceMode {
         DEFAULT, FULL
@@ -45,7 +45,7 @@ public:
     Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
 
     // Explicitly call superclass version to avoid method being hidden.
-    void string(std::list <std::string> &list) const override { return Parameter::string(list); }
+    void string(std::list <std::string> &list) const override { return InxParameter::string(list); }
 
     void string(std::string &string) const override;
 

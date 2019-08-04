@@ -29,7 +29,7 @@ namespace Inkscape {
 namespace Extension {
 
 ParamColor::ParamColor(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext)
-    : Parameter(xml, ext)
+    : InxParameter(xml, ext)
 {
     // get value
     unsigned int _value = 0x000000ff; // default to black
