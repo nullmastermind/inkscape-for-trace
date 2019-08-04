@@ -1,15 +1,21 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
-#ifndef __INK_EXTENSION_PARAMDESCRIPTION_H__
-#define __INK_EXTENSION_PARAMDESCRIPTION_H__
-
-/*
- * Copyright (C) 2005-2007 Authors:
+/** @file
+ * Description widget for extensions
+ *//*
+ * Authors:
  *   Ted Gould <ted@gould.cx>
  *   Johan Engelen <johan@shouraizou.nl> *
+ *   Patrick Storz <eduard.braun2@gmx.de>
+ *
+ * Copyright (C) 2005-2019 Authors
+ *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "parameter.h"
+#ifndef SEEN_INK_EXTENSION_WIDGET_LABEL_H
+#define SEEN_INK_EXTENSION_WIDGET_LABEL_H
+
+#include "widget.h"
 
 class SPDocument;
 
@@ -25,13 +31,13 @@ namespace Xml {
 namespace Extension {
 
 /** \brief  A description parameter */
-class ParamDescription : public InxParameter {
+class WidgetLabel : public InxWidget {
 public:
     enum AppearanceMode {
         DEFAULT, HEADER, URL
     };
 
-    ParamDescription(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
+    WidgetLabel(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
 
     Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
 private:
@@ -45,7 +51,7 @@ private:
 }  /* namespace Extension */
 }  /* namespace Inkscape */
 
-#endif /* __INK_EXTENSION_PARAMDESCRIPTION_H__ */
+#endif /* SEEN_INK_EXTENSION_WIDGET_LABEL_H */
 
 /*
   Local Variables:

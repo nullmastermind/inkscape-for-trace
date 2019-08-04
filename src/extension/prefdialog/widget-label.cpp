@@ -1,12 +1,18 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
-/*
- * Copyright (C) 2005-2007 Authors:
+/** @file
+ * Description widget for extensions
+ *//*
+ * Authors:
  *   Ted Gould <ted@gould.cx>
  *   Johan Engelen <johan@shouraizou.nl> *
+ *   Patrick Storz <eduard.braun2@gmx.de>
+ *
+ * Copyright (C) 2005-2019 Authors
+ *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "parameter-description.h"
+#include "widget-label.h"
 
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
@@ -20,8 +26,8 @@ namespace Inkscape {
 namespace Extension {
 
 
-ParamDescription::ParamDescription(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext)
-    : InxParameter(xml, ext)
+WidgetLabel::WidgetLabel(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext)
+    : InxWidget(xml, ext)
 {
     // construct the text content by concatenating all (non-empty) text nodes,
     // removing all other nodes (e.g. comment nodes) and replacing <extension:br> elements with "<br/>"
@@ -62,14 +68,14 @@ ParamDescription::ParamDescription(Inkscape::XML::Node *xml, Inkscape::Extension
         } else if (!strcmp(_appearance, "url")) {
             _mode = URL;
         } else {
-            g_warning("Invalid value ('%s') for appearance of parameter '%s' in extension '%s'",
-                      _appearance, _name, _extension->get_id());
+            g_warning("Invalid value ('%s') for appearance of label widget in extension '%s'",
+                      _appearance, _extension->get_id());
         }
     }
 }
 
 /** \brief  Create a label for the description */
-Gtk::Widget *ParamDescription::get_widget (SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/, sigc::signal<void> * /*changeSignal*/)
+Gtk::Widget *WidgetLabel::get_widget (SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/, sigc::signal<void> * /*changeSignal*/)
 {
     if (_hidden) {
         return nullptr;

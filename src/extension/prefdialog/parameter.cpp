@@ -21,13 +21,13 @@
 #include "parameter.h"
 #include "parameter-bool.h"
 #include "parameter-color.h"
-#include "parameter-description.h"
 #include "parameter-float.h"
 #include "parameter-int.h"
 #include "parameter-notebook.h"
 #include "parameter-optiongroup.h"
 #include "parameter-string.h"
 #include "widget.h"
+#include "widget-label.h"
 
 #include "extension/extension.h"
 
@@ -40,6 +40,24 @@
 
 namespace Inkscape {
 namespace Extension {
+
+
+// Re-implement ParamDescription for backwards-compatibility, deriving from both, WidgetLabel and InxParameter.
+// TODO: Should go away eventually...
+class ParamDescription : public virtual WidgetLabel, public virtual InxParameter {
+public:
+    ParamDescription(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext)
+        : WidgetLabel(xml, ext)
+        , InxParameter(xml, ext)
+    {}
+
+    Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override
+    {
+        return this->WidgetLabel::get_widget(doc, node, changeSignal);
+    }
+};
+
+
 
 InxParameter *InxParameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *in_ext)
 {
@@ -58,12 +76,13 @@ InxParameter *InxParameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extensi
     } else if (!strcmp(type, "string")) {
         param = new ParamString(in_repr, in_ext);
     } else if (!strcmp(type, "description")) {
+        // support deprecated "description" for backwards-compatibility
         param = new ParamDescription(in_repr, in_ext);
     } else if (!strcmp(type, "notebook")) {
         param = new ParamNotebook(in_repr, in_ext);
     } else if (!strcmp(type, "optiongroup")) {
         param = new ParamOptionGroup(in_repr, in_ext);
-    } else if (!strcmp(type, "enum")) { // support deprecated "enum" for backwards-compatibilty
+    } else if (!strcmp(type, "enum")) { // support deprecated "enum" for backwards-compatibility
         in_repr->setAttribute("appearance", "combo");
         param = new ParamOptionGroup(in_repr, in_ext);
     } else if (!strcmp(type, "color")) {

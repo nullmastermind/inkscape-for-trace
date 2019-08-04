@@ -11,6 +11,7 @@
  */
 
 #include "widget.h"
+#include "widget-label.h"
 
 #include <sigc++/sigc++.h>
 
@@ -26,7 +27,17 @@ InxWidget *InxWidget::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
 {
     InxWidget *widget = nullptr;
 
-    // Note: param could equal nullptr
+    const char *name = in_repr->name();
+    if (!name) {
+        // we can't create a widget without name
+        g_warning("InxWidget without name in extension '%s'.", in_ext->get_id());
+    } else if (!strcmp(name, "description")) {
+        widget = new WidgetLabel(in_repr, in_ext);
+    } else {
+        g_warning("Unknown widget name ('%s') in extension '%s'", name, in_ext->get_id());
+    }
+
+    // Note: widget could equal nullptr
     return widget;
 }
 

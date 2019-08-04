@@ -56,13 +56,13 @@ set(extension_SRC
 	prefdialog/parameter.cpp
 	prefdialog/parameter-bool.cpp
 	prefdialog/parameter-color.cpp
-	prefdialog/parameter-description.cpp
 	prefdialog/parameter-float.cpp
 	prefdialog/parameter-int.cpp
 	prefdialog/parameter-notebook.cpp
 	prefdialog/parameter-optiongroup.cpp
 	prefdialog/parameter-string.cpp
 	prefdialog/widget.cpp
+	prefdialog/widget-label.cpp
 
 	# ------
 	# Header
@@ -131,13 +131,13 @@ set(extension_SRC
 	prefdialog/parameter.h
 	prefdialog/parameter-bool.h
 	prefdialog/parameter-color.h
-	prefdialog/parameter-description.h
 	prefdialog/parameter-float.h
 	prefdialog/parameter-int.h
 	prefdialog/parameter-notebook.h
 	prefdialog/parameter-optiongroup.h
 	prefdialog/parameter-string.h
 	prefdialog/widget.h
+	prefdialog/widget-label.h
 )
 
 if(WIN32)
