@@ -39,11 +39,6 @@ class Extension;
  */
 class InxWidget {
 public:
-
-    enum Translatable {
-        UNSET, YES, NO
-    };
-
     InxWidget(Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *in_ext);
 
     virtual ~InxWidget();
@@ -81,6 +76,10 @@ public:
     const static int GUI_MAX_LINE_LENGTH = 60;
 
 protected:
+    enum Translatable {
+        UNSET, YES, NO
+    };
+
     /** Which extension is this Widget attached to. */
     Inkscape::Extension::Extension *_extension = nullptr;
 
