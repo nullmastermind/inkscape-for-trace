@@ -16,21 +16,25 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <gtkmm/box.h>
-#include <gtkmm/label.h>
-#include <gtkmm/frame.h>
-#include <gtkmm/grid.h>
+#include "extension.h"
+#include "implementation/implementation.h"
 
 #include <glibmm/i18n.h>
-#include "inkscape.h"
-#include "extension/implementation/implementation.h"
-#include "extension.h"
+#include <gtkmm/box.h>
+#include <gtkmm/frame.h>
+#include <gtkmm/grid.h>
+#include <gtkmm/label.h>
 
 #include "db.h"
 #include "dependency.h"
+#include "inkscape.h"
 #include "timer.h"
-#include "prefdialog/parameter.h"
+
 #include "io/resource.h"
+
+#include "prefdialog/parameter.h"
+#include "prefdialog/widget.h"
+
 
 namespace Inkscape {
 namespace Extension {
@@ -100,10 +104,10 @@ Extension::Extension (Inkscape::XML::Node *in_repr, Implementation::Implementati
             } else {
                 throw extension_no_name();
             }
-        } else if (!strcmp(chname, "param")) {
-            InxParameter *param = InxParameter::make(child_repr, this);
-            if (param) {
-                parameters.push_back(param);
+        } else if (InxWidget::is_valid_widget_name(chname)) {
+            InxWidget *widget = InxWidget::make(child_repr, this);
+            if (widget) {
+                _widgets.push_back(widget);
             }
         } else if (!strcmp(chname, "dependency")) {
             _deps.push_back(new Dependency(child_repr));
@@ -155,9 +159,8 @@ Extension::~Extension ()
     delete timer;
     timer = nullptr;
 
-    // delete parameters:
-    for (auto parameter : parameters) {
-        delete parameter;
+    for (auto widget : _widgets) {
+        delete widget;
     }
 
     for (auto & _dep : _deps) {
@@ -410,17 +413,20 @@ InxParameter *Extension::get_param(const gchar *name)
     if (name == nullptr) {
         throw Extension::param_not_exist();
     }
-    if (this->parameters.empty()) {
+    if (this->_widgets.empty()) {
         throw Extension::param_not_exist();
     }
 
-    for( auto param:this->parameters) {
-        if (!strcmp(param->name(), name)) {
-            return param;
-        } else {
-            InxParameter * subparam = param->get_param(name);
-            if (subparam) {
-                return subparam;
+    for(auto widget : _widgets) {
+        InxParameter *parameter = dynamic_cast<InxParameter *>(widget); // filter InxParameters from InxWidgets
+        if (parameter) {
+            if (!strcmp(parameter->name(), name)) {
+                return parameter;
+            } else {
+                InxParameter *subparam = parameter->get_param(name);
+                if (subparam) {
+                    return subparam;
+                }
             }
         }
     }
@@ -714,31 +720,35 @@ public:
     };
 };
 
-/** \brief  A function to automatically generate a GUI using the parameters
+/** \brief  A function to automatically generate a GUI from the extensions' widgets
     \return Generated widget
 
-    This function just goes through each parameter, and calls it's 'get_widget'
-    function to get each widget.  Then, each of those is placed into
-    a Gtk::VBox, which is then returned to the calling function.
+    This function just goes through each widget, and calls it's 'get_widget'.
+    Then, each of those is placed into a Gtk::VBox, which is then returned to the calling function.
 
     If there are no visible parameters, this function just returns NULL.
-    If all parameters are gui_hidden = true NULL is returned as well.
 */
 Gtk::Widget *
 Extension::autogui (SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal)
 {
-    if (!_gui || param_visible_count() == 0) return nullptr;
+    if (!_gui || widget_visible_count() == 0) {
+        return nullptr;
+    }
 
     AutoGUI * agui = Gtk::manage(new AutoGUI());
     agui->set_border_width(InxParameter::GUI_BOX_MARGIN);
     agui->set_spacing(InxParameter::GUI_BOX_SPACING);
 
-    //go through the list of parameters to see if there are any non-hidden ones
-    for (auto param:parameters) {
-        if (param->get_hidden()) continue; //Ignore hidden parameters
-        Gtk::Widget * widg = param->get_widget(doc, node, changeSignal);
-        gchar const * tip = param->get_tooltip();
-        int indent = param->get_indent();
+    // go through the list of widgets and add the all non-hidden ones
+    for (auto widget : _widgets) {
+        if (widget->get_hidden()) {
+            continue;
+        }
+
+        Gtk::Widget *widg = widget->get_widget(doc, node, changeSignal);
+        gchar const *tip = widget->get_tooltip();
+        int indent = widget->get_indent();
+
         agui->addWidget(widg, tip, indent);
     }
 
@@ -754,8 +764,11 @@ Extension::autogui (SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<voi
 void
 Extension::paramListString (std::list <std::string> &retlist)
 {
-    for(auto param:parameters) {
-        param->string(retlist);
+    for (auto widget : _widgets) {
+        InxParameter *parameter = dynamic_cast<InxParameter *>(widget); // filter InxParameters from InxWidgets
+        if (parameter) {
+            parameter->string(retlist);
+        }
     }
 
     return;
@@ -816,11 +829,13 @@ Extension::get_params_widget()
     return retval;
 }
 
-unsigned int Extension::param_visible_count ( )
+unsigned int Extension::widget_visible_count ( )
 {
     unsigned int _visible_count = 0;
-    for (auto param:parameters) {
-        if (!param->get_hidden()) _visible_count++;
+    for (auto widget : _widgets) {
+        if (!widget->get_hidden()) {
+            _visible_count++;
+        }
     }
     return _visible_count;
 }

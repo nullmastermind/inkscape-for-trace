@@ -239,7 +239,7 @@ Effect::prefs (Inkscape::UI::View::View * doc)
         return true;
     }
 
-    if (param_visible_count() == 0) {
+    if (widget_visible_count() == 0) {
         effect(doc);
         return true;
     }

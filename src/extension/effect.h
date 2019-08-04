@@ -73,7 +73,7 @@ class Effect : public Extension {
                     _elip_name(nullptr) {
                 /* No clue why, but this is required */
                 this->set_default_sensitive(true);
-                if (_showPrefs && effect != nullptr && effect->param_visible_count() != 0) {
+                if (_showPrefs && effect != nullptr && effect->widget_visible_count() != 0) {
                     _elip_name = g_strdup_printf("%s...", _(name));
                     set_name(_elip_name);
                 }

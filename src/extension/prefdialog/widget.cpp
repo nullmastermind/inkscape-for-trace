@@ -10,8 +10,11 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "parameter.h"
 #include "widget.h"
 #include "widget-label.h"
+
+#include <algorithm>
 
 #include <sigc++/sigc++.h>
 
@@ -28,11 +31,20 @@ InxWidget *InxWidget::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
     InxWidget *widget = nullptr;
 
     const char *name = in_repr->name();
+    if (!strncmp(name, INKSCAPE_EXTENSION_NS_NC, strlen(INKSCAPE_EXTENSION_NS_NC))) {
+        name += strlen(INKSCAPE_EXTENSION_NS);
+    }
+    if (name[0] == '_') { // allow leading underscore in tag names for backwards-compatibility
+        name++;
+    }
+
     if (!name) {
         // we can't create a widget without name
         g_warning("InxWidget without name in extension '%s'.", in_ext->get_id());
     } else if (!strcmp(name, "description")) {
         widget = new WidgetLabel(in_repr, in_ext);
+    } else if (!strcmp(name, "param")) {
+        widget = InxParameter::make(in_repr, in_ext);
     } else {
         g_warning("Unknown widget name ('%s') in extension '%s'", name, in_ext->get_id());
     }
@@ -40,6 +52,19 @@ InxWidget *InxWidget::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
     // Note: widget could equal nullptr
     return widget;
 }
+
+bool InxWidget::is_valid_widget_name(const char *name)
+{
+    // keep in sync with names supported in InxWidget::make() above
+    static const std::vector<std::string> valid_names = {"description", "param"};
+
+    if (std::find(valid_names.begin(), valid_names.end(), name) != valid_names.end()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 
 InxWidget::InxWidget (Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *ext)
     : _extension(ext)

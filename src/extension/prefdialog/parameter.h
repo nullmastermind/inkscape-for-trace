@@ -108,7 +108,7 @@ public:
      */
     static InxParameter *make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *in_ext);
 
-    const gchar *get_tooltip() const { return _description; }
+    const gchar *get_tooltip() const override { return _description; }
 
     virtual void string(std::list <std::string> &list) const;
 

@@ -14,6 +14,7 @@
 #define SEEN_INK_EXTENSION_WIDGET_H
 
 #include <string>
+#include <vector>
 
 #include <sigc++/sigc++.h>
 #include <glibmm/ustring.h>
@@ -57,13 +58,20 @@ public:
      */
     static InxWidget *make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *in_ext);
 
+    /** Checks if name is a valid widget name, i.e. a widget can be constructed from it using make() */
+    static bool is_valid_widget_name(const char *name);
+
+
     virtual Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal);
+
+    virtual const gchar *get_tooltip() const { return nullptr; } // tool-tips are exclusive to InxParameters for now
 
     /** Indicates if the widget is hidden or not */
     bool get_hidden() const { return _hidden; }
 
     /** Indentation level of the widget */
     int get_indent() const { return _indent; }
+
 
 
     /** Recommended margin of boxes containing multiple Widgets (in px) */

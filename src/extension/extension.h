@@ -18,9 +18,13 @@
 #include <ostream>
 #include <fstream>
 #include <vector>
-#include <glibmm/ustring.h>
 #include "xml/repr.h"
+
 #include <sigc++/signal.h>
+
+namespace Glib {
+    class ustring;
+}
 
 namespace Gtk {
 	class Grid;
@@ -70,6 +74,11 @@ namespace Gtk {
 class SPDocument;
 
 namespace Inkscape {
+
+namespace XML {
+class Node;
+}
+
 namespace Extension {
 
 class ExecutionEnv;
@@ -77,6 +86,7 @@ class Dependency;
 class ExpirationTimer;
 class ExpirationTimer;
 class InxParameter;
+class InxWidget;
 
 namespace Implementation
 {
@@ -138,24 +148,12 @@ public:
 
 /* Parameter Stuff */
 private:
-    std::vector<InxParameter *> parameters; /**< A table to store the parameters for this extension.
-                                                 This only gets created if there are parameters in this extension */
+    std::vector<InxWidget *> _widgets; /**< A list of widgets for this extension. */
 
 public:
-    /** \brief  A function to get the number of parameters that
-                the extension has.
-        \return The number of parameters. */
-    unsigned int param_count ( ) { return parameters.size(); };
-    /** \brief  A function to get the number of parameters that
-                are visible to the user that the extension has.
-        \return The number of visible parameters.
-
-        \note Currently this just calls param_count as visible isn't implemented
-              but in the future it'll do something different.  Please call
-              the appropriate function in code so that it'll work in the
-              future.
-    */
-    unsigned int param_visible_count ( );
+    /** \brief  A function to get the number of visible parameters of the extension.
+        \return The number of visible parameters. */
+    unsigned int widget_visible_count ( );
 
 public:
     /** An error class for when a parameter is looked for that just
