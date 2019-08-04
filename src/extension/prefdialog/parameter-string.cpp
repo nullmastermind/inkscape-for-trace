@@ -141,7 +141,7 @@ Gtk::Widget *ParamString::get_widget(SPDocument *doc, Inkscape::XML::Node *node,
         return nullptr;
     }
 
-    Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox(false, Parameter::GUI_PARAM_WIDGETS_SPACING));
+    Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox(false, GUI_PARAM_WIDGETS_SPACING));
     Gtk::Label *label = Gtk::manage(new Gtk::Label(_text, Gtk::ALIGN_START));
     label->show();
     hbox->pack_start(*label, false, false);

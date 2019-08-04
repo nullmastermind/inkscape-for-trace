@@ -254,7 +254,7 @@ Gtk::Widget *ParamOptionGroup::get_widget(SPDocument *doc, Inkscape::XML::Node *
         return nullptr;
     }
 
-    auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, Parameter::GUI_PARAM_WIDGETS_SPACING));
+    auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, GUI_PARAM_WIDGETS_SPACING));
 
     Gtk::Label *label = Gtk::manage(new Gtk::Label(_text, Gtk::ALIGN_START));
     hbox->pack_start(*label, false, false);

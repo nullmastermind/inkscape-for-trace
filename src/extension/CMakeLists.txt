@@ -62,6 +62,7 @@ set(extension_SRC
 	prefdialog/parameter-notebook.cpp
 	prefdialog/parameter-optiongroup.cpp
 	prefdialog/parameter-string.cpp
+	prefdialog/widget.cpp
 
 	# ------
 	# Header
@@ -136,6 +137,7 @@ set(extension_SRC
 	prefdialog/parameter-notebook.h
 	prefdialog/parameter-optiongroup.h
 	prefdialog/parameter-string.h
+	prefdialog/widget.h
 )
 
 if(WIN32)

@@ -87,10 +87,10 @@ PrefDialog::PrefDialog (Glib::ustring name, Gtk::Widget * controls, Effect * eff
         auto sep = Gtk::manage(new Gtk::Separator());
         sep->show();
 
-        this->get_content_area()->pack_start(*sep, false, false, Parameter::GUI_BOX_SPACING);
+        this->get_content_area()->pack_start(*sep, false, false, InxWidget::GUI_BOX_SPACING);
 
         hbox = Gtk::manage(new Gtk::HBox());
-        hbox->set_border_width(Parameter::GUI_BOX_MARGIN);
+        hbox->set_border_width(InxWidget::GUI_BOX_MARGIN);
         _button_preview = _param_preview->get_widget(nullptr, nullptr, &_signal_preview);
         _button_preview->show();
         hbox->pack_start(*_button_preview, true, true, 0);

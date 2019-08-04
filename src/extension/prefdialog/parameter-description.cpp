@@ -100,7 +100,7 @@ Gtk::Widget *ParamDescription::get_widget (SPDocument * /*doc*/, Inkscape::XML::
     //     This means texts can not shrink anymore (they can still grow, though) and it's also necessary
     //     to prevent https://bugzilla.gnome.org/show_bug.cgi?id=773572
     int len = newtext.length();
-    label->set_width_chars(len > Parameter::GUI_MAX_LINE_LENGTH ? Parameter::GUI_MAX_LINE_LENGTH : len);
+    label->set_width_chars(len > GUI_MAX_LINE_LENGTH ? GUI_MAX_LINE_LENGTH : len);
 
     label->show();
 

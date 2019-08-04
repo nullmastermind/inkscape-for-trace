@@ -90,15 +90,15 @@ Gtk::Widget *ParamNotebook::ParamNotebookPage::get_widget(SPDocument *doc, Inksc
     }
 
     Gtk::VBox * vbox = Gtk::manage(new Gtk::VBox);
-    vbox->set_border_width(Parameter::GUI_BOX_MARGIN);
-    vbox->set_spacing(Parameter::GUI_BOX_SPACING);
+    vbox->set_border_width(GUI_BOX_MARGIN);
+    vbox->set_spacing(GUI_BOX_SPACING);
 
     // add parameters onto page (if any)
     for (auto parameter : parameters) {
         Gtk::Widget *parameter_widget = parameter->get_widget(doc, node, changeSignal);
         if (parameter_widget) {
             int indent = parameter->get_indent();
-            parameter_widget->set_margin_start(indent *Parameter::GUI_INDENTATION);
+            parameter_widget->set_margin_start(indent *GUI_INDENTATION);
             vbox->pack_start(*parameter_widget, false, false, 0);
 
             const gchar *tooltip = parameter->get_tooltip();

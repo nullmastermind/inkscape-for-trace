@@ -121,7 +121,7 @@ Gtk::Widget *ParamBool::get_widget(SPDocument *doc, Inkscape::XML::Node *node, s
         return nullptr;
     }
 
-    auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, Parameter::GUI_PARAM_WIDGETS_SPACING));
+    auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, GUI_PARAM_WIDGETS_SPACING));
     hbox->set_homogeneous(false);
 
     ParamBoolCheckButton * checkbox = Gtk::manage(new ParamBoolCheckButton(this, _text, doc, node, changeSignal));

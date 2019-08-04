@@ -27,6 +27,7 @@
 #include "parameter-notebook.h"
 #include "parameter-optiongroup.h"
 #include "parameter-string.h"
+#include "widget.h"
 
 #include "extension/extension.h"
 
@@ -190,7 +191,7 @@ guint32 Parameter::set_color(guint32 in, SPDocument *doc, Inkscape::XML::Node *n
 
 
 Parameter::Parameter (Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *ext)
-    : _extension(ext)
+    : InxWidget(in_repr, ext)
 {
     // name (mandatory for all paramters)
     const char *name = in_repr->attribute("name");
@@ -198,29 +199,6 @@ Parameter::Parameter (Inkscape::XML::Node *in_repr, Inkscape::Extension::Extensi
         throw param_no_name();
     }
     _name = g_strdup(name);
-
-
-    // translatable (optional, required to translate gui-text and gui-description)
-    const char *translatable = in_repr->attribute("translatable");
-    if (translatable) {
-        if (!strcmp(translatable, "yes")) {
-            _translatable = YES;
-        } else if (!strcmp(translatable, "no"))  {
-            _translatable = NO;
-        } else {
-            g_warning("Invalid value ('%s') for translatable attribute of parameter '%s' in extension '%s'",
-                      translatable, _name, _extension->get_id());
-        }
-    }
-
-    // context (optional, required to translate gui-text and gui-description)
-    const char *context = in_repr->attribute("context");
-    if (!context) {
-        context = in_repr->attribute("msgctxt"); // backwards-compatibility with previous name
-    }
-    if (context) {
-        _context = g_strdup(context);
-    }
 
     // gui-text (TODO: should likely be mandatory for all parameters; maybe not for hidden ones?)
     const char *gui_text = in_repr->attribute("gui-text");
@@ -245,26 +223,6 @@ Parameter::Parameter (Inkscape::XML::Node *in_repr, Inkscape::Extension::Extensi
         }
         _description = g_strdup(gui_description);
     }
-
-    // gui-hidden (optional)
-    const char *gui_hidden = in_repr->attribute("gui-hidden");
-    if (gui_hidden != nullptr) {
-        if (strcmp(gui_hidden, "true") == 0) {
-            _hidden = true;
-        }
-    }
-
-    // indent (optional)
-    const char *indent = in_repr->attribute("indent");
-    if (indent != nullptr) {
-        _indent = strtol(indent, nullptr, 0);
-    }
-
-    // appearance (optional, does not apply to all parameters)
-    const char *appearance = in_repr->attribute("appearance");
-    if (appearance) {
-        _appearance = g_strdup(appearance);
-    }
 }
 
 Parameter::~Parameter()
@@ -277,24 +235,11 @@ Parameter::~Parameter()
 
     g_free(_description);
     _description = nullptr;
-
-    g_free(_appearance);
-    _description = nullptr;
-
-    g_free(_context);
-    _context = nullptr;
 }
 
 gchar *Parameter::pref_name() const
 {
     return g_strdup_printf("%s.%s", _extension->get_id(), _name);
-}
-
-/** Basically, if there is no widget pass a NULL. */
-Gtk::Widget *
-Parameter::get_widget (SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/, sigc::signal<void> * /*changeSignal*/)
-{
-    return nullptr;
 }
 
 /** If I'm not sure which it is, just don't return a value. */
@@ -321,11 +266,6 @@ void Parameter::string(std::list <std::string> &list) const
 Parameter *Parameter::get_param(const gchar */*name*/)
 {
     return nullptr;
-}
-
-
-const char *Parameter::get_translation(const char* msgid) {
-    return _extension->get_translation(msgid, _context);
 }
 
 Glib::ustring const extension_pref_root = "/extensions/";

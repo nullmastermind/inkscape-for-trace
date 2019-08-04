@@ -14,26 +14,11 @@
 #ifndef SEEN_INK_EXTENSION_PARAM_H__
 #define SEEN_INK_EXTENSION_PARAM_H__
 
-#include <string>
+#include "widget.h" // TODO: Necessary?
 
-#include <sigc++/sigc++.h>
-#include <glibmm/ustring.h>
-
-class SPDocument;
-
-namespace Gtk {
-class Widget;
-}
 
 namespace Inkscape {
-namespace XML {
-class Node;
-}
-
 namespace Extension {
-
-class Extension;
-
 
 /**
  * The root directory in the preferences database for extension-related parameters.
@@ -51,13 +36,8 @@ extern Glib::ustring const extension_pref_root;
  * around.  There is also a few functions that are used by all the
  * different parameters.
  */
-class Parameter {
+class Parameter : public InxWidget {
 public:
-
-    enum Translatable {
-        UNSET, YES, NO
-    };
-
     Parameter(Inkscape::XML::Node *in_repr,
               Inkscape::Extension::Extension *ext);
 
@@ -128,15 +108,7 @@ public:
      */
     static Parameter *make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *in_ext);
 
-    virtual Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal);
-
     const gchar *get_tooltip() const { return _description; }
-
-    /** Indicates if the GUI for this parameter is hidden or not */
-    bool get_hidden() const { return _hidden; }
-
-    /** Indentation level of the parameter */
-    int get_indent() const { return _indent; }
 
     virtual void string(std::list <std::string> &list) const;
 
@@ -150,16 +122,8 @@ public:
     virtual Parameter *get_param(gchar const *name);
 
 
-    /** Recommended margin of boxes containing multiple Parameters (in px) */
-    const static int GUI_BOX_MARGIN = 10;
-    /** Recommended spacing between multiple Parameters packed into a box (in px) */
-    const static int GUI_BOX_SPACING = 4;
     /** Recommended spacing between the widgets making up a single Parameter (e.g. label and input) (in px) */
     const static int GUI_PARAM_WIDGETS_SPACING = 4;
-    /** Recommended indentation width of parameters (in px) */
-    const static int GUI_INDENTATION = 12;
-    /** Recommended maximum line length for wrapping textual parameters (in chars) */
-    const static int GUI_MAX_LINE_LENGTH = 60;
 
 
     /** An error class for when a parameter is called on a type it is not */
@@ -174,9 +138,6 @@ public:
 
 
 protected:
-    /** Which extension is this parameter attached to. */
-    Inkscape::Extension::Extension *_extension = nullptr;
-
     /** The name of this parameter. */
     gchar *_name = nullptr;
 
@@ -186,32 +147,13 @@ protected:
     /** Extended description of the parameter (currently shown as tooltip on hover). */
     gchar *_description = nullptr;
 
-    /** Whether the parameter is visible. */
-    bool _hidden = false;
 
-    /** Indentation level of the parameter. */
-    int _indent = 0;
-
-    /** Appearance of the parameter (not used by all Parameters). */
-    gchar *_appearance = nullptr;
-
-    /** Is parameter translatable? */
-    Translatable _translatable = UNSET;
-
-    /** context for translation of translatable strings. */
-    gchar *_context = nullptr;
-
-
-    /* **** funcs **** */
+    /* **** member functions **** */
 
     /**
      * Build the name to write the parameter from the extension's ID and the name of this parameter.
      */
     gchar *pref_name() const;
-    
-    /** gets the gettext translation for msgid
-      * Handles translation domain of the extension and message context of the parameter internally */
-    const char *get_translation(const char* msgid);
 };
 
 }  // namespace Extension
