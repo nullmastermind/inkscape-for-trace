@@ -216,6 +216,10 @@ relocate_dependency @loader_path/libintl.9.dylib $APP_LIB_DIR/libcairo-gobject.2
 relocate_dependency @loader_path/libglib-2.0.0.dylib $APP_LIB_DIR/libgmodule-2.0.0.dylib
 relocate_dependency @loader_path/libintl.9.dylib $APP_LIB_DIR/libgmodule-2.0.0.dylib
 
+### install Python package: pySerial ###########################################
+
+pip3 install --install-option="--prefix=$APP_RES_DIR" --ignore-installed $PYTHON_PYSERIAL
+
 ### install Python package: Scour ##############################################
 
 pip3 install --install-option="--prefix=$APP_RES_DIR" --ignore-installed $PYTHON_SCOUR
