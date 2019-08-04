@@ -30,12 +30,12 @@ namespace Inkscape {
 namespace UI {
 namespace View {
 class View;
-} // namespace View
-} // namespace UI
+}
+}
 
 namespace XML {
     class Node;
-} // namespace XML
+}
 
 namespace Extension {
 
@@ -58,7 +58,7 @@ class ImplementationDocumentCache {
     Inkscape::UI::View::View * _view;
 public:
     ImplementationDocumentCache (Inkscape::UI::View::View * view) { return; };
-    
+
     virtual ~ImplementationDocumentCache ( ) { return; };
     Inkscape::UI::View::View const * view ( ) { return _view; };
 };
@@ -72,7 +72,7 @@ class Implementation {
 public:
     // ----- Constructor / destructor -----
     Implementation() = default;
-    
+
     virtual ~Implementation() = default;
 
     // ----- Basic functions for all Extension -----

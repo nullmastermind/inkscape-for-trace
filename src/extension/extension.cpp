@@ -35,6 +35,8 @@
 #include "prefdialog/parameter.h"
 #include "prefdialog/widget.h"
 
+#include "xml/repr.h"
+
 
 namespace Inkscape {
 namespace Extension {

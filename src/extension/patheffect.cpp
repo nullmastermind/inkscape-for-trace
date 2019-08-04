@@ -10,9 +10,13 @@
 
 
 #include "patheffect.h"
+
 #include "db.h"
 
 #include "object/sp-defs.h"
+
+#include "xml/repr.h"
+
 
 namespace Inkscape {
 namespace Extension {

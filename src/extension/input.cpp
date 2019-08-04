@@ -8,13 +8,16 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifdef HAVE_CONFIG_H
-#endif
+#include "input.h"
+
+#include "timer.h"
+
+#include "implementation/implementation.h"
 
 #include "prefdialog/prefdialog.h"
-#include "implementation/implementation.h"
-#include "timer.h"
-#include "input.h"
+
+#include "xml/repr.h"
+
 
 /* Inkscape::Extension::Input */
 

@@ -15,11 +15,11 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <ostream>
 #include <fstream>
+#include <ostream>
 #include <vector>
-#include "xml/repr.h"
 
+#include <glib.h>
 #include <sigc++/signal.h>
 
 namespace Glib {

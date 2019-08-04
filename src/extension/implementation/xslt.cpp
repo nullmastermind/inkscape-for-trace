@@ -13,20 +13,27 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <glibmm/fileutils.h>
-#include "file.h"
 #include "xslt.h"
-#include "../extension.h"
-#include "../output.h"
+
+#include <unistd.h>
+#include <cstring>
+
+#include <glibmm/fileutils.h>
+#include <libxslt/transform.h>
+#include <libxslt/xsltutils.h>
+
+#include "document.h"
+#include "file.h"
+
+#include "extension/extension.h"
+#include "extension/output.h"
 #include "extension/input.h"
 
 #include "io/resource.h"
-#include <unistd.h>
-#include <cstring>
-#include "document.h"
 
-#include <libxslt/transform.h>
-#include <libxslt/xsltutils.h>
+#include "xml/node.h"
+#include "xml/repr.h"
+
 
 Inkscape::XML::Document * sp_repr_do_read (xmlDocPtr doc, const gchar * default_ns);
 

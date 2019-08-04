@@ -8,10 +8,10 @@
  *
  */
 
+#include "file.h"
+
 #include <iostream>
 #include <gtkmm.h>
-
-#include "file.h"
 
 #include "document.h"
 #include "document-undo.h"
@@ -23,6 +23,9 @@
 #include "extension/input.h"
 
 #include "object/sp-root.h"
+
+#include "xml/repr.h"
+
 
 /**
  * Create a blank document, remove any template data.

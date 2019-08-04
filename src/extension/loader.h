@@ -18,6 +18,11 @@
 
 
 namespace Inkscape {
+
+namespace XML {
+class Document;
+}
+
 namespace Extension {
 
 /** This class contains the mechanism to load c++ plugins dynamically.
@@ -27,7 +32,7 @@ class Loader {
 public:
     /**
      * Sets a base directory where to look for the actual plugin to load.
-     * 
+     *
      * @param dir is the path where the plugin should be loaded from.
      */
     void set_base_directory(std::string dir) {
@@ -36,14 +41,14 @@ public:
 
     /**
      * Loads plugin dependencies which are needed for the plugin to load.
-     * 
+     *
      * @param dep
      */
     bool load_dependency(Dependency *dep);
 
     /**
      * Load the actual implementation of a plugin supplied by the plugin.
-     * 
+     *
      * @param doc The xml representation of the INX extension configuration.
      * @return The implementation of the extension loaded from the plugin.
      */

@@ -9,10 +9,15 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "prefdialog/prefdialog.h"
-#include "document.h"
-#include "implementation/implementation.h"
 #include "output.h"
+
+#include "document.h"
+
+#include "implementation/implementation.h"
+
+#include "prefdialog/prefdialog.h"
+
+#include "xml/repr.h"
 
 
 /* Inkscape::Extension::Output */
