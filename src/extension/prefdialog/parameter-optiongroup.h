@@ -47,9 +47,6 @@ public:
 
     Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
 
-    // Explicitly call superclass version to avoid method being hidden.
-    void string(std::list <std::string> &list) const override { return InxParameter::string(list); }
-
     void string(std::string &string) const override;
 
     Glib::ustring value_from_label(const Glib::ustring label);

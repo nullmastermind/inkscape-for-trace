@@ -64,14 +64,13 @@ ParamNotebook::ParamNotebookPage::ParamNotebookPage(Inkscape::XML::Node *xml, In
 
 ParamNotebook::ParamNotebookPage::~ParamNotebookPage ()
 {
-    //destroy parameters
+    // destroy parameters
     for (auto parameter : parameters) {
         delete parameter;
     }
 }
 
-/** Return the value as a string. */
-void ParamNotebook::ParamNotebookPage::paramString(std::list <std::string> &list)
+void ParamNotebook::ParamNotebookPage::string(std::list <std::string> &list) const
 {
     for (auto parameter : parameters) {
         parameter->string(list);
@@ -223,7 +222,7 @@ void ParamNotebook::string(std::list <std::string> &list) const
     list.insert(list.end(), param_string);
 
     for (auto page : pages) {
-        page->paramString(list);
+        page->string(list);
     }
 }
 

@@ -54,9 +54,6 @@ public:
      */
     Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
 
-    // Explicitly call superclass version to avoid method being hidden.
-    void string(std::list <std::string> &list) const override { return InxParameter::string(list); }
-
     /**
      * Appends 'true' or 'false'.
      * @todo investigate. Returning a value that can then be appended would probably work better/safer.
