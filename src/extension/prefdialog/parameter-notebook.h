@@ -54,7 +54,7 @@ private:
         ~ParamNotebookPage() override;
 
         Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
-        void string(std::list <std::string> &list) const override;
+        void build_param_string_list(std::list <std::string> &list) const override;
         char *get_text() { return _text; };
         InxParameter *get_param(const char *name) override;
     }; /* class ParamNotebookPage */
@@ -73,11 +73,9 @@ public:
      * A function to get the currentpage and the parameters in a string form.
      * @return A string with the 'value' and all the parameters on all pages as command line arguments.
      */
-    void string(std::list <std::string> &list) const override;
+    void build_param_string_list(std::list <std::string> &list) const override;
 
-    // Explicitly call superclass version to avoid method being hidden.
-    void string(std::string &string) const override {return InxParameter::string(string);}
-
+    std::string value_to_string() const override;
 
     InxParameter *get_param (const char *name) override;
 

@@ -104,15 +104,12 @@ void ParamBoolCheckButton::on_toggle()
     return;
 }
 
-void ParamBool::string(std::string &string) const
+std::string ParamBool::value_to_string() const
 {
     if (_value) {
-        string += "true";
-    } else {
-        string += "false";
+        return "true";
     }
-
-    return;
+    return "false";
 }
 
 Gtk::Widget *ParamBool::get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal)

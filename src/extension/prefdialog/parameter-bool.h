@@ -58,7 +58,7 @@ public:
      * Appends 'true' or 'false'.
      * @todo investigate. Returning a value that can then be appended would probably work better/safer.
      */
-    void string(std::string &string) const override;
+    std::string value_to_string() const override;
 
 private:
     /** Internal value. */

@@ -81,9 +81,9 @@ const Glib::ustring& ParamString::set(const Glib::ustring in, SPDocument * /*doc
     return _value;
 }
 
-void ParamString::string(std::string &string) const
+std::string ParamString::value_to_string() const
 {
-    string += _value;
+    return _value;
 }
 
 

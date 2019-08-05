@@ -769,7 +769,7 @@ Extension::paramListString (std::list <std::string> &retlist)
     for (auto widget : _widgets) {
         InxParameter *parameter = dynamic_cast<InxParameter *>(widget); // filter InxParameters from InxWidgets
         if (parameter) {
-            parameter->string(retlist);
+            parameter->build_param_string_list(retlist);
         }
     }
 

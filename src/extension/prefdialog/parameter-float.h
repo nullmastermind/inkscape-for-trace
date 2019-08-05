@@ -46,7 +46,7 @@ public:
 
     Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
 
-    void string(std::string &string) const override;
+    std::string value_to_string() const override;
 
 private:
     /** Internal value. */

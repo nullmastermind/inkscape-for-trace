@@ -95,11 +95,11 @@ void ParamColor::_onColorChanged()
         _changeSignal->emit();
 }
 
-void ParamColor::string(std::string &string) const
+std::string ParamColor::value_to_string() const
 {
-    char str[16];
-    snprintf(str, 16, "%u", _color.value());
-    string += str;
+    char value_string[16];
+    snprintf(value_string, 16, "%u", _color.value());
+    return value_string;
 }
 
 };  /* namespace Extension */

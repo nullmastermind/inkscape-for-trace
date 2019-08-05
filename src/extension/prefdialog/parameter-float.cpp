@@ -107,12 +107,11 @@ float ParamFloat::set(float in, SPDocument * /*doc*/, Inkscape::XML::Node * /*no
     return _value;
 }
 
-void ParamFloat::string(std::string &string) const
+std::string ParamFloat::value_to_string() const
 {
-    char startstring[G_ASCII_DTOSTR_BUF_SIZE];
-    g_ascii_dtostr(startstring, G_ASCII_DTOSTR_BUF_SIZE, _value);
-    string += startstring;
-    return;
+    char value_string[G_ASCII_DTOSTR_BUF_SIZE];
+    g_ascii_dtostr(value_string, G_ASCII_DTOSTR_BUF_SIZE, _value);
+    return value_string;
 }
 
 /** A class to make an adjustment that uses Extension params. */

@@ -25,11 +25,6 @@
 #include "extension/extension.h"
 #include "preferences.h"
 
-/**
- * The root directory in the preferences database for extension
- * related parameters.
- */
-#define PREF_DIR "extensions"
 
 namespace Inkscape {
 namespace Extension {
@@ -139,9 +134,9 @@ bool ParamOptionGroup::contains(const Glib::ustring text, SPDocument const * /*d
     return false;
 }
 
-void ParamOptionGroup::string(std::string &string) const
+std::string ParamOptionGroup::value_to_string() const
 {
-    string += _value;
+    return _value;
 }
 
 /**

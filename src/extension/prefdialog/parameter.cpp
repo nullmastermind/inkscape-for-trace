@@ -57,7 +57,7 @@ public:
     }
 
     // Well, no, I don't have a value! That's why I should not be an InxParameter!
-    void string(std::string &/*string*/) const override {}
+    std::string value_to_string() const override { return ""; }
 };
 
 
@@ -264,25 +264,25 @@ char *InxParameter::pref_name() const
     return g_strdup_printf("%s.%s", _extension->get_id(), _name);
 }
 
-void InxParameter::string(std::string &/*string*/) const
+std::string InxParameter::value_to_string() const
 {
     // if we end up here we're missing a definition of ::string() in one of the subclasses
-    g_critical("InxParameter::string called from parameter '%s' in extension '%s'", _name, _extension->get_id());
+    g_critical("InxParameter::value_to_string called from parameter '%s' in extension '%s'", _name, _extension->get_id());
     g_assert_not_reached();
+    return "";
 }
 
-void InxParameter::string(std::list <std::string> &list) const
+void InxParameter::build_param_string_list(std::list <std::string> &list) const
 {
-    std::string value;
-    string(value);
-    if (!value.empty()) {
-        std::string final;
-        final += "--";
-        final += name();
-        final += "=";
-        final += value;
+    std::string value_string = value_to_string();
+    if (!value_string.empty()) {
+        std::string parameter_string; // --param=value
+        parameter_string += "--";
+        parameter_string += name();
+        parameter_string += "=";
+        parameter_string += value_string;
 
-        list.insert(list.end(), final);
+        list.insert(list.end(), parameter_string);
     }
 }
 

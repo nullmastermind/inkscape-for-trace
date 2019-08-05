@@ -176,11 +176,11 @@ ParamInt::get_widget (SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<v
     return dynamic_cast<Gtk::Widget *>(hbox);
 }
 
-void ParamInt::string(std::string &string) const
+std::string ParamInt::value_to_string() const
 {
-    char startstring[32];
-    sprintf(startstring, "%d", _value);
-    string += startstring;
+    char value_string[32];
+    snprintf(value_string, 32, "%d", _value);
+    return value_string;
 }
 
 }  // namespace Extension

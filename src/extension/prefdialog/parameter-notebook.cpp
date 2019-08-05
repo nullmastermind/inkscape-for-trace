@@ -24,13 +24,6 @@
 
 #include "xml/node.h"
 
-
-/**
- * The root directory in the preferences database for extension
- * related parameters.
- */
-#define PREF_DIR "extensions"
-
 namespace Inkscape {
 namespace Extension {
 
@@ -70,10 +63,10 @@ ParamNotebook::ParamNotebookPage::~ParamNotebookPage ()
     }
 }
 
-void ParamNotebook::ParamNotebookPage::string(std::list <std::string> &list) const
+void ParamNotebook::ParamNotebookPage::build_param_string_list(std::list <std::string> &list) const
 {
     for (auto parameter : parameters) {
-        parameter->string(list);
+        parameter->build_param_string_list(list);
     }
 }
 
@@ -209,22 +202,22 @@ const Glib::ustring& ParamNotebook::set(const int in, SPDocument * /*doc*/, Inks
     return _value;
 }
 
-void ParamNotebook::string(std::list <std::string> &list) const
+void ParamNotebook::build_param_string_list(std::list <std::string> &list) const
 {
-    std::string param_string;
-    param_string += "--";
-    param_string += _name;
-    param_string += "=";
+    // call base-class method to add the parameter string for the notebook itself
+    InxParameter::build_param_string_list(list);
 
-    param_string += "\"";
-    param_string += _value;  // the name of the current page
-    param_string += "\"";
-    list.insert(list.end(), param_string);
-
+    // iterate over notebook pages
     for (auto page : pages) {
-        page->string(list);
+        page->build_param_string_list(list);
     }
 }
+
+std::string ParamNotebook::value_to_string() const
+{
+    return _value;
+}
+
 
 /** A special category of Gtk::Notebook to handle notebook parameters. */
 class NotebookWidget : public Gtk::Notebook {

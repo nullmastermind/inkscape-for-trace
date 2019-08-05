@@ -107,7 +107,15 @@ public:
 
     const char *get_tooltip() const override { return _description; }
 
-    virtual void string(std::list <std::string> &list) const;
+    /**
+     * Build a list of parameter strings for the current parameter and it's children (if it has any)
+     *
+     * The individual parameter strings have the form "--param=value", so they can be passed to
+     * script extensions as-is
+     *
+     * @param list Reference to a list of strings that will be appended with the new parameter strings
+     */
+    virtual void build_param_string_list(std::list <std::string> &list) const;
 
     /**
      * Gets the current value of the parameter in a string form.
@@ -118,7 +126,7 @@ public:
      *           Unfortunately it seems we can't make this a pure virtual function,
      *           as InxParameter is not supposed to be abstract.
      */
-    virtual void string(std::string &string) const;
+    virtual std::string value_to_string() const;
 
     /** All the code in Notebook::get_param to get the notebook content. */
     virtual InxParameter *get_param(char const *name);
