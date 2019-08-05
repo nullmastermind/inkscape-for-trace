@@ -14,7 +14,9 @@
 #ifndef SEEN_SELECTED_COLOR
 #define SEEN_SELECTED_COLOR
 
+#include <glib.h>
 #include <sigc++/signal.h>
+
 #include "color.h"
 
 namespace Gtk

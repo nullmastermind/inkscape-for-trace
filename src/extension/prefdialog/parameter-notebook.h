@@ -16,17 +16,17 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "parameter.h"
+
 #include <vector>
 
-#include "parameter.h"
+#include <glibmm/ustring.h>
+
 
 namespace Gtk {
 class Widget;
 }
 
-namespace Glib {
-class ustring;
-}
 
 namespace Inkscape {
 namespace Extension {
@@ -55,8 +55,8 @@ private:
 
         Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
         void paramString (std::list <std::string> &list);
-        gchar *get_text () {return _text;};
-        InxParameter *get_param (const gchar *name) override;
+        char *get_text () {return _text;};
+        InxParameter *get_param (const char *name) override;
     }; /* class ParamNotebookPage */
 
     /** A table to store the pages with parameters for this notebook.
@@ -79,7 +79,7 @@ public:
     void string(std::string &string) const override {return InxParameter::string(string);}
 
 
-    InxParameter *get_param (const gchar *name) override;
+    InxParameter *get_param (const char *name) override;
 
     const Glib::ustring& get (const SPDocument * /*doc*/, const Inkscape::XML::Node * /*node*/) { return _value; }
     const Glib::ustring& set (const int in, SPDocument *doc, Inkscape::XML::Node *node);

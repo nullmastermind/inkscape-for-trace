@@ -17,7 +17,6 @@
 #include <vector>
 
 #include <sigc++/sigc++.h>
-#include <glibmm/ustring.h>
 
 class SPDocument;
 
@@ -64,7 +63,7 @@ public:
 
     virtual Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal);
 
-    virtual const gchar *get_tooltip() const { return nullptr; } // tool-tips are exclusive to InxParameters for now
+    virtual const char *get_tooltip() const { return nullptr; } // tool-tips are exclusive to InxParameters for now
 
     /** Indicates if the widget is hidden or not */
     bool get_hidden() const { return _hidden; }
@@ -98,13 +97,13 @@ protected:
     int _indent = 0;
 
     /** Appearance of the Widget (not used by all Widgets). */
-    gchar *_appearance = nullptr;
+    char *_appearance = nullptr;
 
     /** Is Widget translatable? */
     Translatable _translatable = UNSET;
 
     /** context for translation of translatable strings. */
-    gchar *_context = nullptr;
+    char *_context = nullptr;
 
 
     /* **** member functions **** */

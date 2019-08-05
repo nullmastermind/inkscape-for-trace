@@ -14,19 +14,16 @@
 #ifndef SEEN_INK_EXTENSION_PARAM_H__
 #define SEEN_INK_EXTENSION_PARAM_H__
 
-#include "widget.h" // TODO: Necessary?
+#include "widget.h"
+
+
+namespace Glib {
+class ustring;
+}
 
 
 namespace Inkscape {
 namespace Extension {
-
-/**
- * The root directory in the preferences database for extension-related parameters.
- *
- * The directory path has both a leading and a trailing slash, so that extension_pref_root + pref_name works
- * without having to append a separator.
- */
-extern Glib::ustring const extension_pref_root;
 
 /**
  * A class to represent the parameter of an extension.
@@ -41,7 +38,7 @@ public:
     InxParameter(Inkscape::XML::Node *in_repr,
                  Inkscape::Extension::Extension *ext);
 
-    virtual ~InxParameter();
+    ~InxParameter() override;
 
     /** Wrapper to cast to the object and use its function. */
     bool get_bool(SPDocument const *doc, Inkscape::XML::Node const *node) const;
@@ -60,7 +57,7 @@ public:
     bool get_optiongroup_contains(const char *value, SPDocument const *doc, Inkscape::XML::Node const *node) const;
 
     /** Wrapper to cast to the object and use it's function. */
-    guint32 get_color(SPDocument const *doc, Inkscape::XML::Node const *node) const;
+    unsigned int get_color(SPDocument const *doc, Inkscape::XML::Node const *node) const;
 
     /** Wrapper to cast to the object and use it's function. */
     bool set_bool(bool in, SPDocument *doc, Inkscape::XML::Node *node);
@@ -78,9 +75,9 @@ public:
     const char *set_optiongroup(const char *in, SPDocument *doc, Inkscape::XML::Node *node);
 
     /** Wrapper to cast to the object and use it's function. */
-    guint32 set_color(guint32 in, SPDocument *doc, Inkscape::XML::Node *node);
+    unsigned int set_color(unsigned int in, SPDocument *doc, Inkscape::XML::Node *node);
 
-    gchar const *name() const { return _name; }
+    char const *name() const { return _name; }
 
     /**
      * This function creates a parameter that can be used later.  This
@@ -108,18 +105,23 @@ public:
      */
     static InxParameter *make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *in_ext);
 
-    const gchar *get_tooltip() const override { return _description; }
+    const char *get_tooltip() const override { return _description; }
 
     virtual void string(std::list <std::string> &list) const;
 
     /**
      * Gets the current value of the parameter in a string form.
-     * @return A string with the 'value'.
+     *
+     * @return String representation of the parameter's value.
+     *
+     * \internal Must be implemented by all derived classes.
+     *           Unfortunately it seems we can't make this a pure virtual function,
+     *           as InxParameter is not supposed to be abstract.
      */
     virtual void string(std::string &string) const;
 
     /** All the code in Notebook::get_param to get the notebook content. */
-    virtual InxParameter *get_param(gchar const *name);
+    virtual InxParameter *get_param(char const *name);
 
 
     /** Recommended spacing between the widgets making up a single Parameter (e.g. label and input) (in px) */
@@ -139,13 +141,22 @@ public:
 
 protected:
     /** The name of this parameter. */
-    gchar *_name = nullptr;
+    char *_name = nullptr;
 
     /** Parameter text to show as the GUI label. */
-    gchar *_text = nullptr;
+    char *_text = nullptr;
 
     /** Extended description of the parameter (currently shown as tooltip on hover). */
-    gchar *_description = nullptr;
+    char *_description = nullptr;
+
+
+    /**
+     * The root directory in the preferences database for extension-related parameters.
+     *
+     * The directory path has both a leading and a trailing slash, so that extension_pref_root + pref_name works
+     * without having to append a separator.
+     */
+    static const Glib::ustring extension_pref_root;
 
 
     /* **** member functions **** */
@@ -153,7 +164,7 @@ protected:
     /**
      * Build the name to write the parameter from the extension's ID and the name of this parameter.
      */
-    gchar *pref_name() const;
+    char *pref_name() const;
 };
 
 }  // namespace Extension

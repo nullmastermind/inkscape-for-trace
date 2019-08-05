@@ -37,7 +37,7 @@ ParamBool::ParamBool(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *e
         }
     }
 
-    gchar *pref_name = this->pref_name();
+    char *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _value = prefs->getBool(extension_pref_root + pref_name, _value);
     g_free(pref_name);
@@ -47,7 +47,7 @@ bool ParamBool::set( bool in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node
 {
     _value = in;
 
-    gchar *pref_name = this->pref_name();
+    char *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setBool(extension_pref_root + pref_name, _value);
     g_free(pref_name);
@@ -74,7 +74,7 @@ public:
      *
      * @param  param  Which parameter to adjust on changing the check button
      */
-    ParamBoolCheckButton (ParamBool *param, gchar *label, SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) :
+    ParamBoolCheckButton (ParamBool *param, char *label, SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) :
             Gtk::CheckButton(label), _pref(param), _doc(doc), _node(node), _changeSignal(changeSignal) {
         this->set_active(_pref->get(nullptr, nullptr) /**\todo fix */);
         this->signal_toggled().connect(sigc::mem_fun(this, &ParamBoolCheckButton::on_toggle));

@@ -28,7 +28,7 @@ ParamString::ParamString(Inkscape::XML::Node *xml, Inkscape::Extension::Extensio
         value = xml->firstChild()->content();
     }
 
-    gchar *pref_name = this->pref_name();
+    char *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _value = prefs->getString(extension_pref_root + pref_name);
     g_free(pref_name);
@@ -73,7 +73,7 @@ const Glib::ustring& ParamString::set(const Glib::ustring in, SPDocument * /*doc
 {
     _value = in;
 
-    gchar *pref_name = this->pref_name();
+    char *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setString(extension_pref_root + pref_name, _value);
     g_free(pref_name);

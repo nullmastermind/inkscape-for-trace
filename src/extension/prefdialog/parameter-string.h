@@ -12,9 +12,8 @@
 
 #include "parameter.h"
 
-namespace Glib {
-class ustring;
-}
+#include <glibmm/ustring.h>
+
 
 namespace Inkscape {
 namespace Extension {

@@ -18,16 +18,14 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "parameter.h"
+
 #include <vector>
 
-#include "parameter.h"
+#include <glibmm/ustring.h>
 
 namespace Gtk {
 class Widget;
-}
-
-namespace Glib {
-class ustring;
 }
 
 namespace Inkscape {

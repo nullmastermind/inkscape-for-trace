@@ -101,7 +101,7 @@ Gtk::Widget *ParamNotebook::ParamNotebookPage::get_widget(SPDocument *doc, Inksc
             parameter_widget->set_margin_start(indent *GUI_INDENTATION);
             vbox->pack_start(*parameter_widget, false, false, 0);
 
-            const gchar *tooltip = parameter->get_tooltip();
+            const char *tooltip = parameter->get_tooltip();
             if (tooltip) {
                 parameter_widget->set_tooltip_text(tooltip);
             }
@@ -114,7 +114,7 @@ Gtk::Widget *ParamNotebook::ParamNotebookPage::get_widget(SPDocument *doc, Inksc
 }
 
 /** Search the parameter's name in the page content. */
-InxParameter *ParamNotebook::ParamNotebookPage::get_param(const gchar *name)
+InxParameter *ParamNotebook::ParamNotebookPage::get_param(const char *name)
 {
     if (name == nullptr) {
         throw Extension::param_not_exist();
@@ -161,7 +161,7 @@ ParamNotebook::ParamNotebook(Inkscape::XML::Node *xml, Inkscape::Extension::Exte
     }
 
     // get value (initialize with value of first page if pref is empty)
-    gchar *pref_name = this->pref_name();
+    char *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _value = prefs->getString(extension_pref_root + pref_name);
     g_free(pref_name);
@@ -201,7 +201,7 @@ const Glib::ustring& ParamNotebook::set(const int in, SPDocument * /*doc*/, Inks
     if (page) {
         _value = page->_name;
 
-        gchar *pref_name = this->pref_name();
+        char *pref_name = this->pref_name();
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setString(extension_pref_root + pref_name, _value);
         g_free(pref_name);
@@ -269,7 +269,7 @@ void NotebookWidget::changed_page(Gtk::Widget * /*page*/, guint pagenum)
 }
 
 /** Search the parameter's name in the notebook content. */
-InxParameter *ParamNotebook::get_param(const gchar *name)
+InxParameter *ParamNotebook::get_param(const char *name)
 {
     if (name == nullptr) {
         throw Extension::param_not_exist();

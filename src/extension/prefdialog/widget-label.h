@@ -17,6 +17,8 @@
 
 #include "widget.h"
 
+#include <glibmm/ustring.h>
+
 class SPDocument;
 
 namespace Gtk {

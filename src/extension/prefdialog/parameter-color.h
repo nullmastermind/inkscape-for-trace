@@ -32,21 +32,22 @@ private:
     Inkscape::UI::SelectedColor _color;
     sigc::connection _color_changed;
     sigc::connection _color_released;
+
 public:
     ParamColor(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
     ~ParamColor() override;
 
     /** Returns \c _value, with a \i const to protect it. */
-    guint32 get( SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/ ) const { return _color.value(); }
+    unsigned int get(SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/ ) const { return _color.value(); }
 
-    guint32 set (guint32 in, SPDocument *doc, Inkscape::XML::Node *node);
+    unsigned int set(unsigned int in, SPDocument *doc, Inkscape::XML::Node *node);
 
     Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
 
     // Explicitly call superclass version to avoid method being hidden.
     void string(std::list <std::string> &list) const override { return InxParameter::string(list); }
 
-    void string (std::string &string) const override;
+    void string(std::string &string) const override;
 
     sigc::signal<void> *_changeSignal;
 

@@ -55,6 +55,9 @@ public:
     {
         return this->WidgetLabel::get_widget(doc, node, changeSignal);
     }
+
+    // Well, no, I don't have a value! That's why I should not be an InxParameter!
+    void string(std::string &/*string*/) const override {}
 };
 
 
@@ -149,7 +152,7 @@ bool InxParameter::get_optiongroup_contains(const char *value, SPDocument const 
     return param->contains(value, doc, node);
 }
 
-guint32 InxParameter::get_color(const SPDocument* doc, Inkscape::XML::Node const *node) const
+unsigned int InxParameter::get_color(const SPDocument* doc, Inkscape::XML::Node const *node) const
 {
     ParamColor const *param = dynamic_cast<ParamColor const *>(this);
     if (!param) {
@@ -200,7 +203,7 @@ const char *InxParameter::set_optiongroup(const char *in, SPDocument *doc, Inksc
     return param->set(in, doc, node).c_str();
 }
 
-guint32 InxParameter::set_color(guint32 in, SPDocument *doc, Inkscape::XML::Node *node)
+unsigned int InxParameter::set_color(unsigned int in, SPDocument *doc, Inkscape::XML::Node *node)
 {
     ParamColor*param = dynamic_cast<ParamColor *>(this);
     if (param == nullptr)
@@ -256,15 +259,16 @@ InxParameter::~InxParameter()
     _description = nullptr;
 }
 
-gchar *InxParameter::pref_name() const
+char *InxParameter::pref_name() const
 {
     return g_strdup_printf("%s.%s", _extension->get_id(), _name);
 }
 
-/** If I'm not sure which it is, just don't return a value. */
 void InxParameter::string(std::string &/*string*/) const
 {
-    // TODO investigate clearing the target string.
+    // if we end up here we're missing a definition of ::string() in one of the subclasses
+    g_critical("InxParameter::string called from parameter '%s' in extension '%s'", _name, _extension->get_id());
+    g_assert_not_reached();
 }
 
 void InxParameter::string(std::list <std::string> &list) const
@@ -282,12 +286,13 @@ void InxParameter::string(std::list <std::string> &list) const
     }
 }
 
-InxParameter *InxParameter::get_param(const gchar */*name*/)
+
+InxParameter *InxParameter::get_param(const char */*name*/)
 {
     return nullptr;
 }
 
-Glib::ustring const extension_pref_root = "/extensions/";
+const Glib::ustring InxParameter::extension_pref_root = "/extensions/";
 
 }  // namespace Extension
 }  // namespace Inkscape

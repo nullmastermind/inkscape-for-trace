@@ -40,7 +40,7 @@ ParamColor::ParamColor(Inkscape::XML::Node *xml, Inkscape::Extension::Extension 
         }
     }
 
-    gchar *pref_name = this->pref_name();
+    char *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _value = prefs->getUInt(extension_pref_root + pref_name, _value);
     g_free(pref_name);
@@ -58,7 +58,7 @@ ParamColor::~ParamColor()
     _color_released.disconnect();
 }
 
-guint32 ParamColor::set(guint32 in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/)
+unsigned int ParamColor::set(unsigned int in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/)
 {
     _color.setValue(in);
 
@@ -86,7 +86,7 @@ Gtk::Widget *ParamColor::get_widget( SPDocument * /*doc*/, Inkscape::XML::Node *
 
 void ParamColor::_onColorChanged()
 {
-    gchar *pref_name = this->pref_name();
+    char *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setUInt(extension_pref_root + pref_name, _color.value());
     g_free(pref_name);

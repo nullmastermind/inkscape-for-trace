@@ -67,7 +67,7 @@ ParamOptionGroup::ParamOptionGroup(Inkscape::XML::Node *xml, Inkscape::Extension
     }
 
     // get value (initialize with value of first choice if pref is empty)
-    gchar *pref_name = this->pref_name();
+    char *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _value = prefs->getString(extension_pref_root + pref_name);
     g_free(pref_name);
@@ -116,7 +116,7 @@ const Glib::ustring& ParamOptionGroup::set(Glib::ustring in, SPDocument *doc, In
 {
     if (contains(in, doc, node)) {
         _value = in;
-        gchar *pref_name = this->pref_name();
+        char *pref_name = this->pref_name();
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setString(extension_pref_root + pref_name, _value.c_str());
         g_free(pref_name);

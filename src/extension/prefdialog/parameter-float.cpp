@@ -36,7 +36,7 @@ ParamFloat::ParamFloat(Inkscape::XML::Node *xml, Inkscape::Extension::Extension 
         }
     }
 
-    gchar *pref_name = this->pref_name();
+    char *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     _value = prefs->getDouble(extension_pref_root + pref_name, _value);
     g_free(pref_name);
@@ -99,7 +99,7 @@ float ParamFloat::set(float in, SPDocument * /*doc*/, Inkscape::XML::Node * /*no
         _value = _min;
     }
 
-    gchar *pref_name = this->pref_name();
+    char *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setDouble(extension_pref_root + pref_name, _value);
     g_free(pref_name);
