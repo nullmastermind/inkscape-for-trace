@@ -70,7 +70,7 @@ InxParameter *InxParameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extensi
     if (!type) {
         // we can't create a parameter without type
         g_warning("Parameter without type in extension '%s'.", in_ext->get_id());
-    } else if(!strcmp(type, "boolean")) {
+    } else if(!strcmp(type, "bool") || !strcmp(type, "boolean")) { // support "boolean" for backwards-compatibility
         param = new ParamBool(in_repr, in_ext);
     } else if (!strcmp(type, "int")) {
         param = new ParamInt(in_repr, in_ext);
