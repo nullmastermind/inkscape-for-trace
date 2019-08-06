@@ -135,17 +135,20 @@ ParamNotebook::ParamNotebook(Inkscape::XML::Node *xml, Inkscape::Extension::Exte
                 page = new ParamNotebookPage(child_repr, ext);
 
                 if (page) {
-                    _pages.push_back(page);
+                    _children.push_back(page);
                 }
+            } else if (child_repr->type() == XML::ELEMENT_NODE) {
+                g_warning("Invalid child element ('%s') for parameter '%s' in extension '%s'. Expected 'page'.",
+                          chname, _name, _extension->get_id());
+            } else if (child_repr->type() != XML::COMMENT_NODE){
+                g_warning("Invalid child element found in parameter '%s' in extension '%s'. Expected 'page'.",
+                          _name, _extension->get_id());
             }
             child_repr = child_repr->next();
         }
     }
-    if (_pages.empty()) {
+    if (_children.empty()) {
         g_warning("No (valid) pages for parameter '%s' in extension '%s'", _name, _extension->get_id());
-    } else {
-        // TODO: We should fully replace _pages with _children eventually; only difference is pointer type.
-        _children.insert(_children.end(), _pages.begin(), _pages.end());
     }
 
     // get value (initialize with value of first page if pref is empty)
@@ -155,8 +158,9 @@ ParamNotebook::ParamNotebook(Inkscape::XML::Node *xml, Inkscape::Extension::Exte
     g_free(pref_name);
 
     if (_value.empty()) {
-        if (!_pages.empty()) {
-            _value = _pages[0]->_name;
+        if (!_children.empty()) {
+            ParamNotebookPage *first_page = dynamic_cast<ParamNotebookPage *>(_children[0]);
+            _value = first_page->_name;
         }
     }
 }
@@ -164,8 +168,8 @@ ParamNotebook::ParamNotebook(Inkscape::XML::Node *xml, Inkscape::Extension::Exte
 ParamNotebook::~ParamNotebook ()
 {
     //destroy pages
-    for (auto page : _pages) {
-        delete page;
+    for (auto child : _children) {
+        delete child;
     }
 }
 
@@ -183,8 +187,8 @@ ParamNotebook::~ParamNotebook ()
  */
 const Glib::ustring& ParamNotebook::set(const int in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/)
 {
-    int i = in < _pages.size() ? in : _pages.size()-1;
-    ParamNotebookPage *page = _pages[i];
+    int i = in < _children.size() ? in : _children.size()-1;
+    ParamNotebookPage *page = dynamic_cast<ParamNotebookPage *>(_children[i]);
 
     if (page) {
         _value = page->_name;
@@ -251,7 +255,8 @@ InxParameter *ParamNotebook::get_param(const char *name)
     if (name == nullptr) {
         throw Extension::param_not_exist();
     }
-    for (auto page : _pages) {
+    for (auto child : _children) {
+        ParamNotebookPage *page = dynamic_cast<ParamNotebookPage *>(child);
         InxParameter *subparam = page->get_param(name);
         if (subparam) {
             return subparam;
@@ -278,7 +283,10 @@ Gtk::Widget *ParamNotebook::get_widget(SPDocument *doc, Inkscape::XML::Node *nod
     // add pages (if any) and switch to previously selected page
     int current_page = -1;
     int selected_page = -1;
-    for (auto page : _pages) {
+    for (auto child : _children) {
+        ParamNotebookPage *page = dynamic_cast<ParamNotebookPage *>(child);
+        g_assert(child); // A ParamNotebook has only children of type ParamNotebookPage.
+                         // If we receive a non-page child here something is very wrong!
         current_page++;
 
         Gtk::Widget *page_widget = page->get_widget(doc, node, changeSignal);
