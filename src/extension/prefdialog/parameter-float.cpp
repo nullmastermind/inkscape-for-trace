@@ -110,6 +110,9 @@ float ParamFloat::set(float in, SPDocument * /*doc*/, Inkscape::XML::Node * /*no
 std::string ParamFloat::value_to_string() const
 {
     char value_string[G_ASCII_DTOSTR_BUF_SIZE];
+    // TODO: Some strange rounding is going on here, resulting in parameter values quite different
+    //       from the original string value. Needs some investigation to make it less bad.
+    //       See also https://gitlab.gnome.org/GNOME/glib/issues/964
     g_ascii_dtostr(value_string, G_ASCII_DTOSTR_BUF_SIZE, _value);
     return value_string;
 }
