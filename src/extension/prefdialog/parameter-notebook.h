@@ -47,7 +47,6 @@ private:
         friend class ParamNotebook;
     public:
         ParamNotebookPage(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
-        ~ParamNotebookPage() override;
 
         Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
         InxParameter *get_param(const char *name) override;
@@ -64,7 +63,6 @@ private:
 
 public:
     ParamNotebook(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
-    ~ParamNotebook() override;
 
     Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
 

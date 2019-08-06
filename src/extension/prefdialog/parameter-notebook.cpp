@@ -55,13 +55,6 @@ ParamNotebook::ParamNotebookPage::ParamNotebookPage(Inkscape::XML::Node *xml, In
     }
 }
 
-ParamNotebook::ParamNotebookPage::~ParamNotebookPage ()
-{
-    // destroy parameters
-    for (auto child : _children) {
-        delete child;
-    }
-}
 
 /**
  * Creates a notebookpage widget for a notebook.
@@ -162,14 +155,6 @@ ParamNotebook::ParamNotebook(Inkscape::XML::Node *xml, Inkscape::Extension::Exte
             ParamNotebookPage *first_page = dynamic_cast<ParamNotebookPage *>(_children[0]);
             _value = first_page->_name;
         }
-    }
-}
-
-ParamNotebook::~ParamNotebook ()
-{
-    //destroy pages
-    for (auto child : _children) {
-        delete child;
     }
 }
 

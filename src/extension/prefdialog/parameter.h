@@ -38,7 +38,7 @@ public:
     InxParameter(Inkscape::XML::Node *in_repr,
                  Inkscape::Extension::Extension *ext);
 
-    virtual ~InxParameter() override;
+    ~InxParameter() override;
 
     /** Wrapper to cast to the object and use its function. */
     bool get_bool(SPDocument const *doc, Inkscape::XML::Node const *node) const;

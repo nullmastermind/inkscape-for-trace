@@ -114,6 +114,10 @@ InxWidget::InxWidget (Inkscape::XML::Node *in_repr, Inkscape::Extension::Extensi
 
 InxWidget::~InxWidget()
 {
+    for (auto child : _children) {
+        delete child;
+    }
+
     g_free(_context);
     _context = nullptr;
 
