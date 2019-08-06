@@ -766,10 +766,27 @@ Extension::autogui (SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<voi
 void
 Extension::paramListString (std::list <std::string> &retlist)
 {
+    // first collect all widgets in the current extension
+    std::vector<const InxWidget *> widget_list;
     for (auto widget : _widgets) {
-        InxParameter *parameter = dynamic_cast<InxParameter *>(widget); // filter InxParameters from InxWidgets
+        widget->get_widgets(widget_list);
+    }
+
+    // then build a list of parameter strings from parameter names and values, as '--name=value'
+    for (auto widget : widget_list) {
+        const InxParameter *parameter = dynamic_cast<const InxParameter *>(widget); // filter InxParameters from InxWidgets
         if (parameter) {
-            parameter->build_param_string_list(retlist);
+            const char *name = parameter->name();
+            std::string value = parameter->value_to_string();
+
+            if (name && !value.empty()) { // TODO: Shouldn't empty string values be allowed?
+                std::string parameter_string;
+                parameter_string += "--";
+                parameter_string += name;
+                parameter_string += "=";
+                parameter_string += value;
+                retlist.push_back(parameter_string);
+            }
         }
     }
 

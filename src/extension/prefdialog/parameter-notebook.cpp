@@ -46,7 +46,7 @@ ParamNotebook::ParamNotebookPage::ParamNotebookPage(Inkscape::XML::Node *xml, In
             if (!strcmp(chname, "param") || !strcmp(chname, "_param")) {
                 InxParameter *param = InxParameter::make(child_repr, ext);
                 if (param) {
-                    parameters.push_back(param);
+                    _children.push_back(param);
                 }
             }
 
@@ -58,15 +58,8 @@ ParamNotebook::ParamNotebookPage::ParamNotebookPage(Inkscape::XML::Node *xml, In
 ParamNotebook::ParamNotebookPage::~ParamNotebookPage ()
 {
     // destroy parameters
-    for (auto parameter : parameters) {
-        delete parameter;
-    }
-}
-
-void ParamNotebook::ParamNotebookPage::build_param_string_list(std::list <std::string> &list) const
-{
-    for (auto parameter : parameters) {
-        parameter->build_param_string_list(list);
+    for (auto child : _children) {
+        delete child;
     }
 }
 
@@ -86,16 +79,16 @@ Gtk::Widget *ParamNotebook::ParamNotebookPage::get_widget(SPDocument *doc, Inksc
     vbox->set_spacing(GUI_BOX_SPACING);
 
     // add parameters onto page (if any)
-    for (auto parameter : parameters) {
-        Gtk::Widget *parameter_widget = parameter->get_widget(doc, node, changeSignal);
-        if (parameter_widget) {
-            int indent = parameter->get_indent();
-            parameter_widget->set_margin_start(indent *GUI_INDENTATION);
-            vbox->pack_start(*parameter_widget, false, false, 0);
+    for (auto child : _children) {
+        Gtk::Widget *child_widget = child->get_widget(doc, node, changeSignal);
+        if (child_widget) {
+            int indent = child->get_indent();
+            child_widget->set_margin_start(indent *GUI_INDENTATION);
+            vbox->pack_start(*child_widget, false, false, 0);
 
-            const char *tooltip = parameter->get_tooltip();
+            const char *tooltip = child->get_tooltip();
             if (tooltip) {
-                parameter_widget->set_tooltip_text(tooltip);
+                child_widget->set_tooltip_text(tooltip);
             }
         }
     }
@@ -111,14 +104,14 @@ InxParameter *ParamNotebook::ParamNotebookPage::get_param(const char *name)
     if (name == nullptr) {
         throw Extension::param_not_exist();
     }
-    if (this->parameters.empty()) {
-        // the list of parameters is empty
+    if (_children.empty()) {
         throw Extension::param_not_exist();
     }
 
-    for (auto param : parameters) {
-        if (!strcmp(param->name(), name)) {
-            return param;
+    for (auto child : _children) {
+        InxParameter *parameter = dynamic_cast<InxParameter *>(child);
+        if (parameter && !strcmp(parameter->name(), name)) {
+            return parameter;
         }
     }
 
@@ -142,14 +135,17 @@ ParamNotebook::ParamNotebook(Inkscape::XML::Node *xml, Inkscape::Extension::Exte
                 page = new ParamNotebookPage(child_repr, ext);
 
                 if (page) {
-                    pages.push_back(page);
+                    _pages.push_back(page);
                 }
             }
             child_repr = child_repr->next();
         }
     }
-    if (pages.empty()) {
+    if (_pages.empty()) {
         g_warning("No (valid) pages for parameter '%s' in extension '%s'", _name, _extension->get_id());
+    } else {
+        // TODO: We should fully replace _pages with _children eventually; only difference is pointer type.
+        _children.insert(_children.end(), _pages.begin(), _pages.end());
     }
 
     // get value (initialize with value of first page if pref is empty)
@@ -159,8 +155,8 @@ ParamNotebook::ParamNotebook(Inkscape::XML::Node *xml, Inkscape::Extension::Exte
     g_free(pref_name);
 
     if (_value.empty()) {
-        if (!pages.empty()) {
-            _value = pages[0]->_name;
+        if (!_pages.empty()) {
+            _value = _pages[0]->_name;
         }
     }
 }
@@ -168,7 +164,7 @@ ParamNotebook::ParamNotebook(Inkscape::XML::Node *xml, Inkscape::Extension::Exte
 ParamNotebook::~ParamNotebook ()
 {
     //destroy pages
-    for (auto page : pages) {
+    for (auto page : _pages) {
         delete page;
     }
 }
@@ -187,8 +183,8 @@ ParamNotebook::~ParamNotebook ()
  */
 const Glib::ustring& ParamNotebook::set(const int in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/)
 {
-    int i = in < pages.size() ? in : pages.size()-1;
-    ParamNotebookPage *page = pages[i];
+    int i = in < _pages.size() ? in : _pages.size()-1;
+    ParamNotebookPage *page = _pages[i];
 
     if (page) {
         _value = page->_name;
@@ -200,17 +196,6 @@ const Glib::ustring& ParamNotebook::set(const int in, SPDocument * /*doc*/, Inks
     }
 
     return _value;
-}
-
-void ParamNotebook::build_param_string_list(std::list <std::string> &list) const
-{
-    // call base-class method to add the parameter string for the notebook itself
-    InxParameter::build_param_string_list(list);
-
-    // iterate over notebook pages
-    for (auto page : pages) {
-        page->build_param_string_list(list);
-    }
 }
 
 std::string ParamNotebook::value_to_string() const
@@ -266,7 +251,7 @@ InxParameter *ParamNotebook::get_param(const char *name)
     if (name == nullptr) {
         throw Extension::param_not_exist();
     }
-    for (auto page : pages) {
+    for (auto page : _pages) {
         InxParameter *subparam = page->get_param(name);
         if (subparam) {
             return subparam;
@@ -293,7 +278,7 @@ Gtk::Widget *ParamNotebook::get_widget(SPDocument *doc, Inkscape::XML::Node *nod
     // add pages (if any) and switch to previously selected page
     int current_page = -1;
     int selected_page = -1;
-    for (auto page : pages) {
+    for (auto page : _pages) {
         current_page++;
 
         Gtk::Widget *page_widget = page->get_widget(doc, node, changeSignal);

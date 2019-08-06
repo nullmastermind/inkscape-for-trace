@@ -38,7 +38,7 @@ public:
     InxParameter(Inkscape::XML::Node *in_repr,
                  Inkscape::Extension::Extension *ext);
 
-    ~InxParameter() override;
+    virtual ~InxParameter() override;
 
     /** Wrapper to cast to the object and use its function. */
     bool get_bool(SPDocument const *doc, Inkscape::XML::Node const *node) const;
@@ -106,16 +106,6 @@ public:
     static InxParameter *make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *in_ext);
 
     const char *get_tooltip() const override { return _description; }
-
-    /**
-     * Build a list of parameter strings for the current parameter and it's children (if it has any)
-     *
-     * The individual parameter strings have the form "--param=value", so they can be passed to
-     * script extensions as-is
-     *
-     * @param list Reference to a list of strings that will be appended with the new parameter strings
-     */
-    virtual void build_param_string_list(std::list <std::string> &list) const;
 
     /**
      * Gets the current value of the parameter in a string form.

@@ -45,35 +45,24 @@ private:
      */
     class ParamNotebookPage : public InxParameter {
         friend class ParamNotebook;
-    private:
-        /** A table to store the parameters for this page.
-          * This only gets created if there are parameters on this page */
-        std::vector<InxParameter *> parameters;
     public:
         ParamNotebookPage(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
         ~ParamNotebookPage() override;
 
         Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
-        void build_param_string_list(std::list <std::string> &list) const override;
         char *get_text() { return _text; };
         InxParameter *get_param(const char *name) override;
     }; /* class ParamNotebookPage */
 
     /** A table to store the pages with parameters for this notebook.
       * This only gets created if there are pages in this notebook */
-    std::vector<ParamNotebookPage*> pages;
+    std::vector<ParamNotebookPage*> _pages;
 
 public:
     ParamNotebook(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
     ~ParamNotebook() override;
 
     Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
-
-    /**
-     * A function to get the currentpage and the parameters in a string form.
-     * @return A string with the 'value' and all the parameters on all pages as command line arguments.
-     */
-    void build_param_string_list(std::list <std::string> &list) const override;
 
     std::string value_to_string() const override;
 

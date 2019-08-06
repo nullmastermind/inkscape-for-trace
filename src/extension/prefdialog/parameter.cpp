@@ -272,21 +272,6 @@ std::string InxParameter::value_to_string() const
     return "";
 }
 
-void InxParameter::build_param_string_list(std::list <std::string> &list) const
-{
-    std::string value_string = value_to_string();
-    if (!value_string.empty()) {
-        std::string parameter_string; // --param=value
-        parameter_string += "--";
-        parameter_string += name();
-        parameter_string += "=";
-        parameter_string += value_string;
-
-        list.insert(list.end(), parameter_string);
-    }
-}
-
-
 InxParameter *InxParameter::get_param(const char */*name*/)
 {
     return nullptr;

@@ -132,6 +132,14 @@ const char *InxWidget::get_translation(const char* msgid) {
     return _extension->get_translation(msgid, _context);
 }
 
+void InxWidget::get_widgets(std::vector<const InxWidget *> &list) const
+{
+    list.push_back(this);
+    for (auto child : _children) {
+        child->get_widgets(list);
+    }
+}
+
 }  // namespace Extension
 }  // namespace Inkscape
 

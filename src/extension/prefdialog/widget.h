@@ -60,7 +60,6 @@ public:
     /** Checks if name is a valid widget name, i.e. a widget can be constructed from it using make() */
     static bool is_valid_widget_name(const char *name);
 
-
     virtual Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal);
 
     virtual const char *get_tooltip() const { return nullptr; } // tool-tips are exclusive to InxParameters for now
@@ -72,14 +71,21 @@ public:
     int get_indent() const { return _indent; }
 
 
+    /**
+     * Recursively construct a list containing the current widget and all of it's child widgets (if it has any)
+     *
+     * @param list Reference to a vector of pointers to \a InxWidget that will be appended with the new \a InxWidgets
+     */
+    virtual void get_widgets(std::vector<const InxWidget *> &list) const;
 
-    /** Recommended margin of boxes containing multiple Widgets (in px) */
+
+    /** Recommended margin of boxes containing multiple widgets (in px) */
     const static int GUI_BOX_MARGIN = 10;
-    /** Recommended spacing between multiple Widgets packed into a box (in px) */
+    /** Recommended spacing between multiple widgets packed into a box (in px) */
     const static int GUI_BOX_SPACING = 4;
-    /** Recommended indentation width of Widgets(in px) */
+    /** Recommended indentation width of widgets(in px) */
     const static int GUI_INDENTATION = 12;
-    /** Recommended maximum line length for wrapping textual Widgets (in chars) */
+    /** Recommended maximum line length for wrapping textual wdgets (in chars) */
     const static int GUI_MAX_LINE_LENGTH = 60;
 
 protected:
@@ -90,16 +96,19 @@ protected:
     /** Which extension is this Widget attached to. */
     Inkscape::Extension::Extension *_extension = nullptr;
 
-    /** Whether the Widget is visible. */
+    /** Child widgets of this widget (might be empty if there are none) */
+    std::vector<InxWidget *> _children;
+
+    /** Whether the widget is visible. */
     bool _hidden = false;
 
-    /** Indentation level of the Widget. */
+    /** Indentation level of the widget. */
     int _indent = 0;
 
-    /** Appearance of the Widget (not used by all Widgets). */
+    /** Appearance of the widget (not used by all widgets). */
     char *_appearance = nullptr;
 
-    /** Is Widget translatable? */
+    /** Is widget translatable? */
     Translatable _translatable = UNSET;
 
     /** context for translation of translatable strings. */
@@ -110,7 +119,7 @@ protected:
 
     /** gets the gettext translation for msgid
       *
-      * Handles translation domain of the extension and message context of the Widget internally
+      * Handles translation domain of the extension and message context of the widget internally
       *
       * @param msgid String to translate
       * @return      Translated string
