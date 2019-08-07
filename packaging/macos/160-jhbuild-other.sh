@@ -39,3 +39,9 @@ ln -s $(pwd)/png2icns.sh $BIN_DIR
 
 save_file $URL_PYTHON3_BIN
 
+### copy a charset.alias to lib for gtk-mac-bundler ############################
+
+# TODO this wasn't necessary before, why is this necessary now?
+
+cp $TMP_DIR/jhbuild/build/pkg-config-0.29.2/glib/glib/libcharset/charset.alias $LIB_DIR
+

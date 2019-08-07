@@ -28,5 +28,4 @@ rm -rf $OPT_DIR
 mkdir -p $BIN_DIR
 mkdir -p $TMP_DIR
 ln -sf $WRK_DIR/Python.framework/Versions/Current/bin/python3 $BIN_DIR
-ln -sf $BIN_DIR/python3 $BIN_DIR/python
 

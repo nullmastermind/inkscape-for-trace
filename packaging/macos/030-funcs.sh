@@ -166,6 +166,21 @@ function relocate_dependency
   install_name_tool -change $source $target $library
 }
 
+### relocate all neighbouring libraries in a directory #########################
+
+function relocate_neighbouring_libs
+{
+  local dir=$1
+
+  for lib in $dir/*.dylib; do
+    for linked_lib in $(otool -L $lib | tail -n +3 | awk '{ print $1 }'); do
+      if [ -f $APP_LIB_DIR/$(basename $linked_lib) ]; then
+        relocate_dependency @loader_path/$(basename $linked_lib) $lib
+      fi
+    done
+  done
+}
+
 ### 'readlink -f' replacement ##################################################
 
 # This is what the oneliner used to set SELF_DIR is based on.

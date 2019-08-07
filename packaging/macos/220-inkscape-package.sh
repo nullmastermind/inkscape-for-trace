@@ -58,11 +58,10 @@ mkdir -p $ARTIFACT_DIR
 # patch library locations
 relocate_dependency @executable_path/../Resources/lib/inkscape/libinkscape_base.dylib $APP_EXE_DIR/Inkscape-bin
 
-relocate_dependency @executable_path/../Resources/lib/libpoppler.85.dylib $APP_LIB_DIR/libpoppler-glib.8.dylib
-relocate_dependency @executable_path/../Resources/lib/libpoppler.85.dylib $APP_LIB_DIR/inkscape/libinkscape_base.dylib
-relocate_dependency @executable_path/../Resources/lib/libpoppler-glib.8.dylib $APP_LIB_DIR/inkscape/libinkscape_base.dylib
+relocate_dependency @loader_path/../libpoppler.85.dylib $APP_LIB_DIR/inkscape/libinkscape_base.dylib
+relocate_dependency @loader_path/../libpoppler-glib.8.dylib $APP_LIB_DIR/inkscape/libinkscape_base.dylib
 
-relocate_dependency @loader_path/libcrypto.1.1.dylib $APP_LIB_DIR/libssl.1.1.dylib
+relocate_neighbouring_libs $APP_LIB_DIR
 
 # set Inkscape's data directory via environment variables
 # TODO: as follow-up to https://gitlab.com/inkscape/inkscape/merge_requests/612,
@@ -134,10 +133,6 @@ relocate_dependency @loader_path/../../../libz.1.dylib $APP_LIB_DIR/python3.7/si
 relocate_dependency @loader_path/../../../libxml2.2.dylib $APP_LIB_DIR/python3.7/site-packages/lxml/objectify.cpython-37m-darwin.so
 relocate_dependency @loader_path/../../../libz.1.dylib $APP_LIB_DIR/python3.7/site-packages/lxml/objectify.cpython-37m-darwin.so
 
-# patch libxml2.dylib to use '@loader_path' to find neighbouring libraries
-relocate_dependency @loader_path/libz.1.dylib $APP_LIB_DIR/libxml2.2.dylib
-relocate_dependency @loader_path/liblzma.5.dylib $APP_LIB_DIR/libxml2.2.dylib
-
 ### install Python package: NumPy ##############################################
 
 pip3 install --install-option="--prefix=$APP_RES_DIR" --ignore-installed $PYTHON_NUMPY
@@ -148,13 +143,6 @@ pip3 install --install-option="--prefix=$APP_RES_DIR" --ignore-installed $PYTHON
 
 # patch '_cairo'
 relocate_dependency @loader_path/../../../libcairo.2.dylib $APP_LIB_DIR/python3.7/site-packages/cairo/_cairo.cpython-37m-darwin.so
-
-# patch libcairo.2.dylib to use '@loader_path' to find neighbouring libraries
-relocate_dependency @loader_path/libpixman-1.0.dylib $APP_LIB_DIR/libcairo.2.dylib
-relocate_dependency @loader_path/libfontconfig.1.dylib $APP_LIB_DIR/libcairo.2.dylib
-relocate_dependency @loader_path/libfreetype.6.dylib $APP_LIB_DIR/libcairo.2.dylib
-relocate_dependency @loader_path/libpng16.16.dylib $APP_LIB_DIR/libcairo.2.dylib
-relocate_dependency @loader_path/libz.1.dylib $APP_LIB_DIR/libcairo.2.dylib
 
 ### install Python package: PyGObject ##########################################
 
@@ -168,29 +156,6 @@ relocate_dependency @loader_path/../../../libgobject-2.0.0.dylib $APP_LIB_DIR/py
 relocate_dependency @loader_path/../../../libgirepository-1.0.1.dylib $APP_LIB_DIR/python3.7/site-packages/gi/_gi.cpython-37m-darwin.so
 relocate_dependency @loader_path/../../../libffi.6.dylib $APP_LIB_DIR/python3.7/site-packages/gi/_gi.cpython-37m-darwin.so
 
-# patch libglib-2.0.0.dylib to find neighbouring libraries
-relocate_dependency @loader_path/libintl.9.dylib $APP_LIB_DIR/libglib-2.0.0.dylib
-
-# patch libgio-2.0.0.dylib to find neighbouring libraries
-relocate_dependency @loader_path/libgobject-2.0.0.dylib $APP_LIB_DIR/libgio-2.0.0.dylib
-relocate_dependency @loader_path/libffi.6.dylib $APP_LIB_DIR/libgio-2.0.0.dylib
-relocate_dependency @loader_path/libgmodule-2.0.0.dylib $APP_LIB_DIR/libgio-2.0.0.dylib
-relocate_dependency @loader_path/libglib-2.0.0.dylib $APP_LIB_DIR/libgio-2.0.0.dylib
-relocate_dependency @loader_path/libz.1.dylib $APP_LIB_DIR/libgio-2.0.0.dylib
-relocate_dependency @loader_path/libintl.9.dylib $APP_LIB_DIR/libgio-2.0.0.dylib
-
-# patch libgobject-2.0.0.dylib to find neighbouring libraries
-relocate_dependency @loader_path/libglib-2.0.0.dylib $APP_LIB_DIR/libgobject-2.0.0.dylib
-relocate_dependency @loader_path/libffi.6.dylib $APP_LIB_DIR/libgobject-2.0.0.dylib
-relocate_dependency @loader_path/libintl.9.dylib $APP_LIB_DIR/libgobject-2.0.0.dylib
-
-# patch libgirepository-1.0.1.dylib to find neighbouring libraries
-relocate_dependency @loader_path/libgmodule-2.0.0.dylib $APP_LIB_DIR/libgirepository-1.0.1.dylib
-relocate_dependency @loader_path/libgio-2.0.0.dylib $APP_LIB_DIR/libgirepository-1.0.1.dylib
-relocate_dependency @loader_path/libgobject-2.0.0.dylib $APP_LIB_DIR/libgirepository-1.0.1.dylib
-relocate_dependency @loader_path/libglib-2.0.0.dylib $APP_LIB_DIR/libgirepository-1.0.1.dylib
-relocate_dependency @loader_path/libffi.6.dylib $APP_LIB_DIR/libgirepository-1.0.1.dylib
-
 # patch '_gi_cairo'
 relocate_dependency @loader_path/../../../libglib-2.0.0.dylib $APP_LIB_DIR/python3.7/site-packages/gi/_gi_cairo.cpython-37m-darwin.so
 relocate_dependency @loader_path/../../../libintl.9.dylib $APP_LIB_DIR/python3.7/site-packages/gi/_gi_cairo.cpython-37m-darwin.so
@@ -200,21 +165,6 @@ relocate_dependency @loader_path/../../../libgirepository-1.0.1.dylib $APP_LIB_D
 relocate_dependency @loader_path/../../../libffi.6.dylib $APP_LIB_DIR/python3.7/site-packages/gi/_gi_cairo.cpython-37m-darwin.so
 relocate_dependency @loader_path/../../../libcairo.2.dylib $APP_LIB_DIR/python3.7/site-packages/gi/_gi_cairo.cpython-37m-darwin.so
 relocate_dependency @loader_path/../../../libcairo-gobject.2.dylib $APP_LIB_DIR/python3.7/site-packages/gi/_gi_cairo.cpython-37m-darwin.so
-
-# patch libcairo-gobject.2.dylib
-relocate_dependency @loader_path/libcairo.2.dylib $APP_LIB_DIR/libcairo-gobject.2.dylib
-relocate_dependency @loader_path/libpixman-1.0.dylib $APP_LIB_DIR/libcairo-gobject.2.dylib
-relocate_dependency @loader_path/libfontconfig.1.dylib $APP_LIB_DIR/libcairo-gobject.2.dylib
-relocate_dependency @loader_path/libfreetype.6.dylib $APP_LIB_DIR/libcairo-gobject.2.dylib
-relocate_dependency @loader_path/libpng16.16.dylib $APP_LIB_DIR/libcairo-gobject.2.dylib
-relocate_dependency @loader_path/libz.1.dylib $APP_LIB_DIR/libcairo-gobject.2.dylib
-relocate_dependency @loader_path/libgobject-2.0.0.dylib $APP_LIB_DIR/libcairo-gobject.2.dylib
-relocate_dependency @loader_path/libglib-2.0.0.dylib $APP_LIB_DIR/libcairo-gobject.2.dylib
-relocate_dependency @loader_path/libintl.9.dylib $APP_LIB_DIR/libcairo-gobject.2.dylib
-
-# patch libgmodule-2.0.0.dylib
-relocate_dependency @loader_path/libglib-2.0.0.dylib $APP_LIB_DIR/libgmodule-2.0.0.dylib
-relocate_dependency @loader_path/libintl.9.dylib $APP_LIB_DIR/libgmodule-2.0.0.dylib
 
 ### install Python package: pySerial ###########################################
 

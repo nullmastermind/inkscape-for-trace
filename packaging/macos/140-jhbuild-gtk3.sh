@@ -21,11 +21,3 @@ jhbuild build \
   meta-gtk-osx-gtk3 \
   meta-gtk-osx-gtkmm3
 
-### fix GDK pixbuf loaders #####################################################
-
-for file in $LIB_DIR/gdk-pixbuf-2.0/2.10.0/loaders/*.dylib; do
-  mv $file $(dirname $file)/$(basename -s .dylib $file).so
-done
-
-gdk-pixbuf-query-loaders > $LIB_DIR/gdk-pixbuf-2.0/2.10.0/loaders.cache
-

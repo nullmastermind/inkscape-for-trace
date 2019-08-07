@@ -189,10 +189,11 @@ URL_POPPLER=https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-0.7
 URL_POTRACE=http://potrace.sourceforge.net/download/1.15/potrace-1.15.tar.gz
 # This is the relocatable framework to be bundled with the app.
 URL_PYTHON3_BIN=https://github.com/dehesselle/py3framework/releases/download/py374.1/py374_framework_1.tar.xz
-# This is for the jhbuild toolset only.
+# This is for the jhbuild toolset only. This cannot be updated to 3.7 because
+# 'Plist' class got removed in 'plistlib' and 'gtk-mac-bundler' needs that.
 URL_PYTHON3_SRC=https://github.com/dehesselle/py3framework/archive/py369.2.tar.gz
 # A pre-built version of the complete toolset.
-URL_TOOLSET_CACHE=https://github.com/dehesselle/mibap/releases/download/v0.15/mibap_v0.15.tar.xz
+URL_TOOLSET_CACHE=https://github.com/dehesselle/mibap/releases/download/v0.16/mibap_v0.16.tar.xz
 
 ### Python packages ############################################################
 
