@@ -82,14 +82,11 @@ ParamFloat::ParamFloat(Inkscape::XML::Node *xml, Inkscape::Extension::Extension 
  * A function to set the \c _value.
  *
  * This function sets the internal value, but it also sets the value
- * in the preferences structure.  To put it in the right place, \c PREF_DIR
- * and \c pref_name() are used.
+ * in the preferences structure.  To put it in the right place \c pref_name() is used.
  *
  * @param  in   The value to set to.
- * @param  doc  A document that should be used to set the value.
- * @param  node The node where the value may be placed.
  */
-float ParamFloat::set(float in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/)
+float ParamFloat::set(float in)
 {
     _value = in;
     if (_value > _max) {
@@ -121,15 +118,15 @@ std::string ParamFloat::value_to_string() const
 class ParamFloatAdjustment : public Gtk::Adjustment {
     /** The parameter to adjust. */
     ParamFloat *_pref;
-    SPDocument *_doc;
-    Inkscape::XML::Node *_node;
     sigc::signal<void> *_changeSignal;
 public:
     /** Make the adjustment using an extension and the string
                 describing the parameter. */
-    ParamFloatAdjustment (ParamFloat *param, SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) :
-            Gtk::Adjustment(0.0, param->min(), param->max(), 0.1, 1.0, 0), _pref(param), _doc(doc), _node(node), _changeSignal(changeSignal) {
-        this->set_value(_pref->get(nullptr, nullptr) /* \todo fix */);
+    ParamFloatAdjustment(ParamFloat *param, sigc::signal<void> *changeSignal)
+        : Gtk::Adjustment(0.0, param->min(), param->max(), 0.1, 1.0, 0)
+        , _pref(param)
+        , _changeSignal(changeSignal) {
+        this->set_value(_pref->get());
         this->signal_value_changed().connect(sigc::mem_fun(this, &ParamFloatAdjustment::val_changed));
         return;
     };
@@ -145,8 +142,7 @@ public:
  */
 void ParamFloatAdjustment::val_changed()
 {
-    //std::cout << "Value Changed to: " << this->get_value() << std::endl;
-    _pref->set(this->get_value(), _doc, _node);
+    _pref->set(this->get_value());
     if (_changeSignal != nullptr) {
         _changeSignal->emit();
     }
@@ -158,7 +154,7 @@ void ParamFloatAdjustment::val_changed()
  *
  * Builds a hbox with a label and a float adjustment in it.
  */
-Gtk::Widget *ParamFloat::get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal)
+Gtk::Widget *ParamFloat::get_widget(sigc::signal<void> *changeSignal)
 {
     if (_hidden) {
         return nullptr;
@@ -166,7 +162,7 @@ Gtk::Widget *ParamFloat::get_widget(SPDocument *doc, Inkscape::XML::Node *node, 
 
     Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox(false, GUI_PARAM_WIDGETS_SPACING));
 
-    auto pfa = new ParamFloatAdjustment(this, doc, node, changeSignal);
+    auto pfa = new ParamFloatAdjustment(this, changeSignal);
     Glib::RefPtr<Gtk::Adjustment> fadjust(pfa);
 
     if (_mode == FULL) {

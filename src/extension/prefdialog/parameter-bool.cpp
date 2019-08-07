@@ -43,7 +43,7 @@ ParamBool::ParamBool(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *e
     g_free(pref_name);
 }
 
-bool ParamBool::set( bool in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/ )
+bool ParamBool::set(bool in)
 {
     _value = in;
 
@@ -55,7 +55,7 @@ bool ParamBool::set( bool in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node
     return _value;
 }
 
-bool ParamBool::get(const SPDocument * /*doc*/, const Inkscape::XML::Node * /*node*/) const
+bool ParamBool::get() const
 {
     return _value;
 }
@@ -74,9 +74,11 @@ public:
      *
      * @param  param  Which parameter to adjust on changing the check button
      */
-    ParamBoolCheckButton (ParamBool *param, char *label, SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) :
-            Gtk::CheckButton(label), _pref(param), _doc(doc), _node(node), _changeSignal(changeSignal) {
-        this->set_active(_pref->get(nullptr, nullptr) /**\todo fix */);
+    ParamBoolCheckButton(ParamBool *param, char *label, sigc::signal<void> *changeSignal)
+        : Gtk::CheckButton(label)
+        , _pref(param)
+        , _changeSignal(changeSignal) {
+        this->set_active(_pref->get());
         this->signal_toggled().connect(sigc::mem_fun(this, &ParamBoolCheckButton::on_toggle));
         return;
     }
@@ -90,14 +92,12 @@ public:
 private:
     /** Param to change. */
     ParamBool *_pref;
-    SPDocument *_doc;
-    Inkscape::XML::Node *_node;
     sigc::signal<void> *_changeSignal;
 };
 
 void ParamBoolCheckButton::on_toggle()
 {
-    _pref->set(this->get_active(), nullptr /**\todo fix this */, nullptr);
+    _pref->set(this->get_active());
     if (_changeSignal != nullptr) {
         _changeSignal->emit();
     }
@@ -112,7 +112,7 @@ std::string ParamBool::value_to_string() const
     return "false";
 }
 
-Gtk::Widget *ParamBool::get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal)
+Gtk::Widget *ParamBool::get_widget(sigc::signal<void> *changeSignal)
 {
     if (_hidden) {
         return nullptr;
@@ -121,7 +121,7 @@ Gtk::Widget *ParamBool::get_widget(SPDocument *doc, Inkscape::XML::Node *node, s
     auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, GUI_PARAM_WIDGETS_SPACING));
     hbox->set_homogeneous(false);
 
-    ParamBoolCheckButton * checkbox = Gtk::manage(new ParamBoolCheckButton(this, _text, doc, node, changeSignal));
+    ParamBoolCheckButton * checkbox = Gtk::manage(new ParamBoolCheckButton(this, _text, changeSignal));
     checkbox->show();
     hbox->pack_start(*checkbox, false, false);
 

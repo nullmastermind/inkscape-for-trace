@@ -41,67 +41,55 @@ public:
     ~InxParameter() override;
 
     /** Wrapper to cast to the object and use its function. */
-    bool get_bool(SPDocument const *doc, Inkscape::XML::Node const *node) const;
+    bool get_bool() const;
 
     /** Wrapper to cast to the object and use it's function. */
-    int get_int(SPDocument const *doc, Inkscape::XML::Node const *node) const;
+    int get_int() const;
 
     /** Wrapper to cast to the object and use it's function. */
-    float get_float(SPDocument const *doc, Inkscape::XML::Node const *node) const;
+    float get_float() const;
 
     /** Wrapper to cast to the object and use it's function. */
-    const char *get_string(SPDocument const *doc, Inkscape::XML::Node const *node) const;
+    const char *get_string() const;
 
     /** Wrapper to cast to the object and use it's function. */
-    const char *get_optiongroup(SPDocument const * doc, Inkscape::XML::Node const *node) const;
-    bool get_optiongroup_contains(const char *value, SPDocument const *doc, Inkscape::XML::Node const *node) const;
+    const char *get_optiongroup() const;
+    bool get_optiongroup_contains(const char *value) const;
 
     /** Wrapper to cast to the object and use it's function. */
-    unsigned int get_color(SPDocument const *doc, Inkscape::XML::Node const *node) const;
+    unsigned int get_color() const;
 
     /** Wrapper to cast to the object and use it's function. */
-    bool set_bool(bool in, SPDocument *doc, Inkscape::XML::Node *node);
+    bool set_bool(bool in);
 
     /** Wrapper to cast to the object and use it's function. */
-    int set_int(int  in, SPDocument *doc, Inkscape::XML::Node *node);
+    int set_int(int  in);
 
     /** Wrapper to cast to the object and use it's function. */
-    float set_float(float in, SPDocument *doc, Inkscape::XML::Node *node);
+    float set_float(float in);
 
     /** Wrapper to cast to the object and use it's function. */
-    const char *set_string(const char *in, SPDocument *doc, Inkscape::XML::Node *node);
+    const char *set_string(const char *in);
 
     /** Wrapper to cast to the object and use it's function. */
-    const char *set_optiongroup(const char *in, SPDocument *doc, Inkscape::XML::Node *node);
+    const char *set_optiongroup(const char *in);
 
     /** Wrapper to cast to the object and use it's function. */
-    unsigned int set_color(unsigned int in, SPDocument *doc, Inkscape::XML::Node *node);
+    unsigned int set_color(unsigned int in);
 
     char const *name() const { return _name; }
 
     /**
-     * This function creates a parameter that can be used later.  This
-     * is typically done in the creation of the extension and defined
-     * in the XML file describing the extension (it's private so people
-     * have to use the system) :)
+     * Creates a new extension parameter for usage in a prefdialog.
      *
-     * This function first grabs all of the data out of the Repr and puts
-     * it into local variables.  Actually, these are just pointers, and the
-     * data is not duplicated so we need to be careful with it.  If there
-     * isn't a name or a type in the XML, then no parameter is created as
-     * the function just returns.
+     * The type of widget created is parsed from the XML representation passed in,
+     * and the suitable subclass constructor is called.
      *
-     * From this point on, we're pretty committed as we've allocated an
-     * object and we're starting to fill it.  The name is set first, and
-     * is created with a strdup to actually allocate memory for it.  Then
-     * there is a case statement (roughly because strcmp requires 'ifs')
-     * based on what type of parameter this is.  Depending which type it
-     * is, the value is interpreted differently, but they are relatively
-     * straight forward.  In all cases the value is set to the default
-     * value from the XML and the type is set to the interpreted type.
+     * Called from base-class method of the same name.
      *
-     * @param  in_repr The XML describing the parameter.
-     * @return a pointer to a new parameter if applicable, null otherwise..
+     * @param  in_repr The XML representation describing the widget.
+     * @param  in_ext  The extension the widget belongs to.
+     * @return a pointer to a new Widget if applicable, null otherwise..
      */
     static InxParameter *make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *in_ext);
 

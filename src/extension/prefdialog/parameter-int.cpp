@@ -75,14 +75,11 @@ ParamInt::ParamInt(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext
 /**
  * A function to set the \c _value.
  * This function sets the internal value, but it also sets the value
- * in the preferences structure.  To put it in the right place, \c PREF_DIR
- * and \c pref_name() are used.
+ * in the preferences structure.  To put it in the right place \c pref_name() is used.
  *
  * @param  in   The value to set to.
- * @param  doc  A document that should be used to set the value.
- * @param  node The node where the value may be placed.
  */
-int ParamInt::set(int in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/)
+int ParamInt::set(int in)
 {
     _value = in;
     if (_value > _max) {
@@ -104,15 +101,15 @@ int ParamInt::set(int in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/)
 class ParamIntAdjustment : public Gtk::Adjustment {
     /** The parameter to adjust. */
     ParamInt *_pref;
-    SPDocument *_doc;
-    Inkscape::XML::Node *_node;
     sigc::signal<void> *_changeSignal;
 public:
-    /** Make the adjustment using an extension and the string
-        describing the parameter. */
-    ParamIntAdjustment (ParamInt *param, SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) :
-            Gtk::Adjustment(0.0, param->min(), param->max(), 1.0, 10.0, 0), _pref(param), _doc(doc), _node(node), _changeSignal(changeSignal) {
-        this->set_value(_pref->get(nullptr, nullptr) /* \todo fix */);
+    /** Make the adjustment using an extension and the string describing the parameter. */
+    ParamIntAdjustment(ParamInt *param, sigc::signal<void> *changeSignal)
+        : Gtk::Adjustment(0.0, param->min(), param->max(), 1.0, 10.0, 0)
+        , _pref(param)
+        , _changeSignal(changeSignal)
+    {
+        this->set_value(_pref->get());
         this->signal_value_changed().connect(sigc::mem_fun(this, &ParamIntAdjustment::val_changed));
     };
 
@@ -127,8 +124,7 @@ public:
  */
 void ParamIntAdjustment::val_changed()
 {
-    //std::cout << "Value Changed to: " << this->get_value() << std::endl;
-    _pref->set((int)this->get_value(), _doc, _node);
+    _pref->set((int)this->get_value());
     if (_changeSignal != nullptr) {
         _changeSignal->emit();
     }
@@ -140,7 +136,7 @@ void ParamIntAdjustment::val_changed()
  * Builds a hbox with a label and a int adjustment in it.
  */
 Gtk::Widget *
-ParamInt::get_widget (SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal)
+ParamInt::get_widget(sigc::signal<void> *changeSignal)
 {
     if (_hidden) {
         return nullptr;
@@ -148,7 +144,7 @@ ParamInt::get_widget (SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<v
 
     Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox(false, GUI_PARAM_WIDGETS_SPACING));
 
-    auto pia = new ParamIntAdjustment(this, doc, node, changeSignal);
+    auto pia = new ParamIntAdjustment(this, changeSignal);
     Glib::RefPtr<Gtk::Adjustment> fadjust(pia);
 
     if (_mode == FULL) {

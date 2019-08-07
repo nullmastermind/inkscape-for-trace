@@ -479,118 +479,104 @@ InxParameter const *Extension::get_param(const gchar *name) const
     \return   The value of the parameter identified by the name
     \brief    Gets a parameter identified by name with the bool placed in value.
     \param    name   The name of the parameter to get
-    \param    doc    The document to look in for document specific parameters
-    \param    node   The node to look in for a specific parameter
 
     Look up in the parameters list, const then execute the function on that found parameter.
 */
 bool
-Extension::get_param_bool (const gchar *name, const SPDocument *doc, const Inkscape::XML::Node *node) const
+Extension::get_param_bool(const gchar *name) const
 {
     const InxParameter *param;
     param = get_param(name);
-    return param->get_bool(doc, node);
+    return param->get_bool();
 }
 
 /**
     \return   The integer value for the parameter specified
     \brief    Gets a parameter identified by name with the integer placed in value.
     \param    name   The name of the parameter to get
-    \param    doc    The document to look in for document specific parameters
-    \param    node   The node to look in for a specific parameter
 
     Look up in the parameters list, const then execute the function on that found parameter.
 */
 int
-Extension::get_param_int (const gchar *name, const SPDocument *doc, const Inkscape::XML::Node *node) const
+Extension::get_param_int(const gchar *name) const
 {
     const InxParameter *param;
     param = get_param(name);
-    return param->get_int(doc, node);
+    return param->get_int();
 }
 
 /**
     \return   The float value for the parameter specified
     \brief    Gets a parameter identified by name with the float in value.
     \param    name   The name of the parameter to get
-    \param    doc    The document to look in for document specific parameters
-    \param    node   The node to look in for a specific parameter
 
     Look up in the parameters list, const then execute the function on that found parameter.
 */
 float
-Extension::get_param_float (const gchar *name, const SPDocument *doc, const Inkscape::XML::Node *node) const
+Extension::get_param_float(const gchar *name) const
 {
     const InxParameter *param;
     param = get_param(name);
-    return param->get_float(doc, node);
+    return param->get_float();
 }
 
 /**
     \return   The string value for the parameter specified
     \brief    Gets a parameter identified by name with the string placed in value.
     \param    name   The name of the parameter to get
-    \param    doc    The document to look in for document specific parameters
-    \param    node   The node to look in for a specific parameter
 
     Look up in the parameters list, const then execute the function on that found parameter.
 */
 const char *
-Extension::get_param_string (const gchar *name, const SPDocument *doc, const Inkscape::XML::Node *node) const
+Extension::get_param_string(const gchar *name) const
 {
     const InxParameter *param;
     param = get_param(name);
-    return param->get_string(doc, node);
+    return param->get_string();
 }
 
 /**
     \return   The string value for the parameter specified
     \brief    Gets a parameter identified by name with the string placed in value.
     \param    name   The name of the parameter to get
-    \param    doc    The document to look in for document specific parameters
-    \param    node   The node to look in for a specific parameter
 
     Look up in the parameters list, const then execute the function on that found parameter.
 */
 const char *
-Extension::get_param_optiongroup (const gchar *name, const SPDocument *doc, const Inkscape::XML::Node *node) const
+Extension::get_param_optiongroup(const gchar *name) const
 {
     const InxParameter *param;
     param = get_param(name);
-    return param->get_optiongroup(doc, node);
+    return param->get_optiongroup();
 }
 
 /**
  * This is useful to find out, if a given string \c value is selectable in a optiongroup named \cname.
  *
  * @param  name The name of the optiongroup parameter to get.
- * @param  doc  The document to look in for document specific parameters.
- * @param  node The node to look in for a specific parameter.
  * @return true if value exists, false if not
  */
 bool
-Extension::get_param_optiongroup_contains(const gchar *name, const char *value, const SPDocument *doc, const Inkscape::XML::Node *node) const
+Extension::get_param_optiongroup_contains(const gchar *name, const char *value) const
 {
     const InxParameter *param;
     param = get_param(name);
-    return param->get_optiongroup_contains(value, doc, node);
+    return param->get_optiongroup_contains(value);
 }
 
 /**
     \return   The unsigned integer RGBA value for the parameter specified
     \brief    Gets a parameter identified by name with the unsigned int placed in value.
     \param    name   The name of the parameter to get
-    \param    doc    The document to look in for document specific parameters
-    \param    node   The node to look in for a specific parameter
 
     Look up in the parameters list, const then execute the function on that found parameter.
 */
 guint32
-Extension::get_param_color (const gchar *name, const SPDocument *doc, const Inkscape::XML::Node *node) const
+Extension::get_param_color(const gchar *name) const
 {
     const InxParameter *param;
     param = get_param(name);
-    return param->get_color(doc, node);
+    return param->get_color();
 }
 
 /**
@@ -598,17 +584,15 @@ Extension::get_param_color (const gchar *name, const SPDocument *doc, const Inks
     \brief    Sets a parameter identified by name with the boolean in the parameter value.
     \param    name   The name of the parameter to set
     \param    value  The value to set the parameter to
-    \param    doc    The document to look in for document specific parameters
-    \param    node   The node to look in for a specific parameter
 
     Look up in the parameters list, const then execute the function on that found parameter.
 */
 bool
-Extension::set_param_bool (const gchar *name, const bool value, SPDocument *doc, Inkscape::XML::Node *node)
+Extension::set_param_bool(const gchar *name, const bool value)
 {
     InxParameter *param;
     param = get_param(name);
-    return param->set_bool(value, doc, node);
+    return param->set_bool(value);
 }
 
 /**
@@ -616,17 +600,15 @@ Extension::set_param_bool (const gchar *name, const bool value, SPDocument *doc,
     \brief    Sets a parameter identified by name with the integer in the parameter value.
     \param    name   The name of the parameter to set
     \param    value  The value to set the parameter to
-    \param    doc    The document to look in for document specific parameters
-    \param    node   The node to look in for a specific parameter
 
     Look up in the parameters list, const then execute the function on that found parameter.
 */
 int
-Extension::set_param_int (const gchar *name, const int value, SPDocument *doc, Inkscape::XML::Node *node)
+Extension::set_param_int(const gchar *name, const int value)
 {
     InxParameter *param;
     param = get_param(name);
-    return param->set_int(value, doc, node);
+    return param->set_int(value);
 }
 
 /**
@@ -634,17 +616,15 @@ Extension::set_param_int (const gchar *name, const int value, SPDocument *doc, I
     \brief    Sets a parameter identified by name with the float in the parameter value.
     \param    name   The name of the parameter to set
     \param    value  The value to set the parameter to
-    \param    doc    The document to look in for document specific parameters
-    \param    node   The node to look in for a specific parameter
 
     Look up in the parameters list, const then execute the function on that found parameter.
 */
 float
-Extension::set_param_float (const gchar *name, const float value, SPDocument *doc, Inkscape::XML::Node *node)
+Extension::set_param_float(const gchar *name, const float value)
 {
     InxParameter *param;
     param = get_param(name);
-    return param->set_float(value, doc, node);
+    return param->set_float(value);
 }
 
 /**
@@ -652,17 +632,15 @@ Extension::set_param_float (const gchar *name, const float value, SPDocument *do
     \brief    Sets a parameter identified by name with the string in the parameter value.
     \param    name   The name of the parameter to set
     \param    value  The value to set the parameter to
-    \param    doc    The document to look in for document specific parameters
-    \param    node   The node to look in for a specific parameter
 
     Look up in the parameters list, const then execute the function on that found parameter.
 */
 const char *
-Extension::set_param_string (const gchar *name, const char *value, SPDocument *doc, Inkscape::XML::Node *node)
+Extension::set_param_string(const gchar *name, const char *value)
 {
     InxParameter *param;
     param = get_param(name);
-    return param->set_string(value, doc, node);
+    return param->set_string(value);
 }
 
 /**
@@ -670,17 +648,15 @@ Extension::set_param_string (const gchar *name, const char *value, SPDocument *d
     \brief    Sets a parameter identified by name with the string in the parameter value.
     \param    name   The name of the parameter to set
     \param    value  The value to set the parameter to
-    \param    doc    The document to look in for document specific parameters
-    \param    node   The node to look in for a specific parameter
 
     Look up in the parameters list, const then execute the function on that found parameter.
 */
 const char *
-Extension::set_param_optiongroup (const gchar *name, const char *value, SPDocument *doc, Inkscape::XML::Node *node)
+Extension::set_param_optiongroup(const gchar *name, const char *value)
 {
     InxParameter *param;
     param = get_param(name);
-    return param->set_optiongroup(value, doc, node);
+    return param->set_optiongroup(value);
 }
 
 /**
@@ -688,17 +664,15 @@ Extension::set_param_optiongroup (const gchar *name, const char *value, SPDocume
     \brief    Sets a parameter identified by name with the unsigned integer RGBA value in the parameter value.
     \param    name   The name of the parameter to set
     \param    value  The value to set the parameter to
-    \param    doc    The document to look in for document specific parameters
-    \param    node   The node to look in for a specific parameter
 
 Look up in the parameters list, const then execute the function on that found parameter.
 */
 guint32
-Extension::set_param_color (const gchar *name, const guint32 color, SPDocument *doc, Inkscape::XML::Node *node)
+Extension::set_param_color(const gchar *name, const guint32 color)
 {
     InxParameter *param;
     param = get_param(name);
-    return param->set_color(color, doc, node);
+    return param->set_color(color);
 }
 
 
@@ -779,7 +753,7 @@ Extension::autogui (SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<voi
             continue;
         }
 
-        Gtk::Widget *widg = widget->get_widget(doc, node, changeSignal);
+        Gtk::Widget *widg = widget->get_widget(changeSignal);
         gchar const *tip = widget->get_tooltip();
         int indent = widget->get_indent();
 

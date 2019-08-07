@@ -61,7 +61,7 @@ ParamNotebook::ParamNotebookPage::ParamNotebookPage(Inkscape::XML::Node *xml, In
  *
  * Builds a notebook page (a vbox) and puts parameters on it.
  */
-Gtk::Widget *ParamNotebook::ParamNotebookPage::get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal)
+Gtk::Widget *ParamNotebook::ParamNotebookPage::get_widget(sigc::signal<void> *changeSignal)
 {
     if (_hidden) {
         return nullptr;
@@ -73,7 +73,7 @@ Gtk::Widget *ParamNotebook::ParamNotebookPage::get_widget(SPDocument *doc, Inksc
 
     // add parameters onto page (if any)
     for (auto child : _children) {
-        Gtk::Widget *child_widget = child->get_widget(doc, node, changeSignal);
+        Gtk::Widget *child_widget = child->get_widget(changeSignal);
         if (child_widget) {
             int indent = child->get_indent();
             child_widget->set_margin_start(indent *GUI_INDENTATION);
@@ -146,14 +146,11 @@ ParamNotebook::ParamNotebook(Inkscape::XML::Node *xml, Inkscape::Extension::Exte
  * A function to set the \c _value.
  *
  * This function sets the internal value, but it also sets the value
- * in the preferences structure.  To put it in the right place, \c PREF_DIR
- * and \c pref_name() are used.
+ * in the preferences structure.  To put it in the right place \c pref_name() is used.
  *
  * @param  in   The number of the page to set as new value.
- * @param  doc  A document that should be used to set the value.
- * @param  node The node where the value may be placed.
  */
-const Glib::ustring& ParamNotebook::set(const int in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/)
+const Glib::ustring& ParamNotebook::set(const int in)
 {
     int i = in < _children.size() ? in : _children.size()-1;
     ParamNotebookPage *page = dynamic_cast<ParamNotebookPage *>(_children[i]);
@@ -180,18 +177,14 @@ std::string ParamNotebook::value_to_string() const
 class NotebookWidget : public Gtk::Notebook {
 private:
     ParamNotebook *_pref;
-    SPDocument *_doc;
-    Inkscape::XML::Node *_node;
 public:
     /**
      * Build a notebookpage preference for the given parameter.
      * @param  pref  Where to get the string (pagename) from, and where to put it when it changes.
      */
-    NotebookWidget (ParamNotebook *pref, SPDocument *doc, Inkscape::XML::Node *node)
+    NotebookWidget(ParamNotebook *pref)
         : Gtk::Notebook()
         , _pref(pref)
-        , _doc(doc)
-        , _node(node)
         , activated(false)
     {
         // don't have to set the correct page: this is done in ParamNotebook::get_widget hook function
@@ -213,7 +206,7 @@ public:
 void NotebookWidget::changed_page(Gtk::Widget * /*page*/, guint pagenum)
 {
     if (get_visible()) {
-        _pref->set((int)pagenum, _doc, _node);
+        _pref->set((int)pagenum);
     }
 }
 
@@ -222,13 +215,13 @@ void NotebookWidget::changed_page(Gtk::Widget * /*page*/, guint pagenum)
  *
  * Builds a notebook and puts pages in it.
  */
-Gtk::Widget *ParamNotebook::get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal)
+Gtk::Widget *ParamNotebook::get_widget(sigc::signal<void> *changeSignal)
 {
     if (_hidden) {
         return nullptr;
     }
 
-    NotebookWidget *notebook = Gtk::manage(new NotebookWidget(this, doc, node));
+    NotebookWidget *notebook = Gtk::manage(new NotebookWidget(this));
 
     // add pages (if any) and switch to previously selected page
     int current_page = -1;
@@ -239,7 +232,7 @@ Gtk::Widget *ParamNotebook::get_widget(SPDocument *doc, Inkscape::XML::Node *nod
                          // If we receive a non-page child here something is very wrong!
         current_page++;
 
-        Gtk::Widget *page_widget = page->get_widget(doc, node, changeSignal);
+        Gtk::Widget *page_widget = page->get_widget(changeSignal);
 
         Glib::ustring page_text = page->_text;
         if (_translatable != NO) { // translate unless explicitly marked untranslatable

@@ -18,8 +18,6 @@
 
 #include <sigc++/sigc++.h>
 
-class SPDocument;
-
 namespace Gtk {
 class Widget;
 }
@@ -52,7 +50,7 @@ public:
      * For specialized widget types (like parameters) we defer to the subclass function of the same name.
      *
      * @param  in_repr The XML representation describing the widget.
-     * @param  in_ex t The extension the widget belongs to.
+     * @param  in_ext  The extension the widget belongs to.
      * @return a pointer to a new Widget if applicable, null otherwise..
      */
     static InxWidget *make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *in_ext);
@@ -60,7 +58,14 @@ public:
     /** Checks if name is a valid widget name, i.e. a widget can be constructed from it using make() */
     static bool is_valid_widget_name(const char *name);
 
-    virtual Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal);
+    /** Return the instances GTK::Widget representation for usage in a GUI
+      *
+      * @param changeSignal Can be used to subscribe to parameter changes.
+      *                     Will be emitted whenever a parameter value changes.
+      *
+      * @teturn A Gtk::Widget for the \a InxWidget. \c nullptr if the widget is hidden.
+      */
+    virtual Gtk::Widget *get_widget(sigc::signal<void> *changeSignal);
 
     virtual const char *get_tooltip() const { return nullptr; } // tool-tips are exclusive to InxParameters for now
 

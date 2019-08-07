@@ -23,10 +23,10 @@ public:
     ParamString(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
 
     /** \brief  Returns \c _value, with a \i const to protect it. */
-    const Glib::ustring& get(SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/) const { return _value; }
-    const Glib::ustring& set(const Glib::ustring in, SPDocument *doc, Inkscape::XML::Node *node);
+    const Glib::ustring& get() const { return _value; }
+    const Glib::ustring& set(const Glib::ustring in);
 
-    Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
+    Gtk::Widget *get_widget(sigc::signal<void> *changeSignal) override;
 
     std::string value_to_string() const override;
 

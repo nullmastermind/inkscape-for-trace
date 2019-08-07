@@ -58,25 +58,25 @@ ParamColor::~ParamColor()
     _color_released.disconnect();
 }
 
-unsigned int ParamColor::set(unsigned int in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/)
+unsigned int ParamColor::set(unsigned int in)
 {
     _color.setValue(in);
 
     return in;
 }
 
-Gtk::Widget *ParamColor::get_widget( SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/, sigc::signal<void> *changeSignal )
+Gtk::Widget *ParamColor::get_widget(sigc::signal<void> *changeSignal)
 {
-    using Inkscape::UI::Widget::ColorNotebook;
-
-    if (_hidden) return nullptr;
+    if (_hidden) {
+        return nullptr;
+    }
 
     if (changeSignal) {
         _changeSignal = new sigc::signal<void>(*changeSignal);
     }
 
     Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox(false, GUI_PARAM_WIDGETS_SPACING));
-    Gtk::Widget *selector = Gtk::manage(new ColorNotebook(_color));
+    Gtk::Widget *selector = Gtk::manage(new Inkscape::UI::Widget::ColorNotebook(_color));
     hbox->pack_start(*selector, true, true, 0);
     selector->show();
     hbox->show();

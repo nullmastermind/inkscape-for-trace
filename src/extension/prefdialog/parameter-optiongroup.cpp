@@ -100,16 +100,13 @@ ParamOptionGroup::~ParamOptionGroup ()
  * A function to set the \c _value.
  *
  * This function sets ONLY the internal value, but it also sets the value
- * in the preferences structure.  To put it in the right place, \c PREF_DIR
- * and \c pref_name() are used.
+ * in the preferences structure.  To put it in the right place \c pref_name() is used.
  *
  * @param  in   The value to set.
- * @param  doc  A document that should be used to set the value.
- * @param  node The node where the value may be placed.
  */
-const Glib::ustring& ParamOptionGroup::set(Glib::ustring in, SPDocument *doc, Inkscape::XML::Node *node)
+const Glib::ustring& ParamOptionGroup::set(Glib::ustring in)
 {
-    if (contains(in, doc, node)) {
+    if (contains(in)) {
         _value = in;
         char *pref_name = this->pref_name();
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -123,7 +120,7 @@ const Glib::ustring& ParamOptionGroup::set(Glib::ustring in, SPDocument *doc, In
     return _value;
 }
 
-bool ParamOptionGroup::contains(const Glib::ustring text, SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/) const
+bool ParamOptionGroup::contains(const Glib::ustring text) const
 {
     for (auto choice : choices) {
         if (choice->_value == text) {
@@ -162,16 +159,12 @@ Glib::ustring ParamOptionGroup::value_from_label(const Glib::ustring label)
 class RadioWidget : public Gtk::RadioButton {
 private:
     ParamOptionGroup *_pref;
-    SPDocument *_doc;
-    Inkscape::XML::Node *_node;
     sigc::signal<void> *_changeSignal;
 public:
     RadioWidget(Gtk::RadioButtonGroup& group, const Glib::ustring& label,
-                ParamOptionGroup *pref, SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal)
+                ParamOptionGroup *pref, sigc::signal<void> *changeSignal)
         : Gtk::RadioButton(group, label)
         , _pref(pref)
-        , _doc(doc)
-        , _node(node)
         , _changeSignal(changeSignal)
     {
         add_changesignal();
@@ -194,7 +187,7 @@ void RadioWidget::changed()
 {
     if (this->get_active()) {
         Glib::ustring value = _pref->value_from_label(this->get_label());
-        _pref->set(value.c_str(), _doc, _node);
+        _pref->set(value.c_str());
     }
 
     if (_changeSignal) {
@@ -207,15 +200,11 @@ void RadioWidget::changed()
 class ComboWidget : public Gtk::ComboBoxText {
 private:
     ParamOptionGroup *_pref;
-    SPDocument *_doc;
-    Inkscape::XML::Node *_node;
     sigc::signal<void> *_changeSignal;
 
 public:
-    ComboWidget(ParamOptionGroup *pref, SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal)
+    ComboWidget(ParamOptionGroup *pref, sigc::signal<void> *changeSignal)
         : _pref(pref)
-        , _doc(doc)
-        , _node(node)
         , _changeSignal(changeSignal)
     {
         this->signal_changed().connect(sigc::mem_fun(this, &ComboWidget::changed));
@@ -230,7 +219,7 @@ void ComboWidget::changed()
 {
     if (_pref) {
         Glib::ustring value = _pref->value_from_label(get_active_text());
-        _pref->set(value.c_str(), _doc, _node);
+        _pref->set(value.c_str());
     }
 
     if (_changeSignal) {
@@ -243,7 +232,7 @@ void ComboWidget::changed()
 /**
  * Creates the widget for the optiongroup parameter.
  */
-Gtk::Widget *ParamOptionGroup::get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal)
+Gtk::Widget *ParamOptionGroup::get_widget(sigc::signal<void> *changeSignal)
 {
     if (_hidden) {
         return nullptr;
@@ -255,7 +244,7 @@ Gtk::Widget *ParamOptionGroup::get_widget(SPDocument *doc, Inkscape::XML::Node *
     hbox->pack_start(*label, false, false);
 
     if (_mode == COMBOBOX) {
-        ComboWidget *combo = Gtk::manage(new ComboWidget(this, doc, node, changeSignal));
+        ComboWidget *combo = Gtk::manage(new ComboWidget(this, changeSignal));
 
         for (auto choice : choices) {
             combo->append(choice->_text);
@@ -276,7 +265,7 @@ Gtk::Widget *ParamOptionGroup::get_widget(SPDocument *doc, Inkscape::XML::Node *
         Gtk::RadioButtonGroup group;
 
         for (auto choice : choices) {
-            RadioWidget *radio = Gtk::manage(new RadioWidget(group, choice->_text, this, doc, node, changeSignal));
+            RadioWidget *radio = Gtk::manage(new RadioWidget(group, choice->_text, this, changeSignal));
             radios->pack_start(*radio, true, true);
             if (choice->_value == _value) {
                 radio->set_active();

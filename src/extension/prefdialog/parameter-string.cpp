@@ -58,18 +58,15 @@ ParamString::ParamString(Inkscape::XML::Node *xml, Inkscape::Extension::Extensio
  * A function to set the \c _value.
  *
  * This function sets the internal value, but it also sets the value
- * in the preferences structure.  To put it in the right place, \c PREF_DIR
- * and \c pref_name() are used.
+ * in the preferences structure.  To put it in the right place \c pref_name() is used.
  *
  * To copy the data into _value the old memory must be free'd first.
  * It is important to note that \c g_free handles \c NULL just fine.  Then
  * the passed in value is duplicated using \c g_strdup().
  *
  * @param  in   The value to set to.
- * @param  doc  A document that should be used to set the value.
- * @param  node The node where the value may be placed.
  */
-const Glib::ustring& ParamString::set(const Glib::ustring in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/)
+const Glib::ustring& ParamString::set(const Glib::ustring in)
 {
     _value = in;
 
@@ -91,8 +88,6 @@ std::string ParamString::value_to_string() const
 class ParamStringEntry : public Gtk::Entry {
 private:
     ParamString *_pref;
-    SPDocument *_doc;
-    Inkscape::XML::Node *_node;
     sigc::signal<void> *_changeSignal;
 public:
     /**
@@ -100,14 +95,12 @@ public:
      * @param  pref  Where to get the string from, and where to put it
      *                when it changes.
      */
-    ParamStringEntry(ParamString *pref, SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal)
+    ParamStringEntry(ParamString *pref, sigc::signal<void> *changeSignal)
         : Gtk::Entry()
         , _pref(pref)
-        , _doc(doc)
-        , _node(node)
         , _changeSignal(changeSignal)
     {
-        this->set_text(_pref->get(nullptr, nullptr));
+        this->set_text(_pref->get());
         this->set_max_length(_pref->getMaxLength()); //Set the max length - default zero means no maximum
         this->signal_changed().connect(sigc::mem_fun(this, &ParamStringEntry::changed_text));
     };
@@ -124,7 +117,7 @@ public:
 void ParamStringEntry::changed_text()
 {
     Glib::ustring data = this->get_text();
-    _pref->set(data.c_str(), _doc, _node);
+    _pref->set(data.c_str());
     if (_changeSignal != nullptr) {
         _changeSignal->emit();
     }
@@ -135,7 +128,7 @@ void ParamStringEntry::changed_text()
  *
  * Builds a hbox with a label and a text box in it.
  */
-Gtk::Widget *ParamString::get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal)
+Gtk::Widget *ParamString::get_widget(sigc::signal<void> *changeSignal)
 {
     if (_hidden) {
         return nullptr;
@@ -146,7 +139,7 @@ Gtk::Widget *ParamString::get_widget(SPDocument *doc, Inkscape::XML::Node *node,
     label->show();
     hbox->pack_start(*label, false, false);
 
-    ParamStringEntry * textbox = new ParamStringEntry(this, doc, node, changeSignal);
+    ParamStringEntry * textbox = new ParamStringEntry(this, changeSignal);
     textbox->show();
     hbox->pack_start(*textbox, true, true);
 

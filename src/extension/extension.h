@@ -190,63 +190,22 @@ private:
      InxParameter const *get_param(const gchar *name) const;
 
 public:
-    bool        get_param_bool          (const gchar *name,
-                                         const SPDocument *doc = nullptr,
-                                         const Inkscape::XML::Node *node = nullptr) const;
+    bool        get_param_bool          (const gchar *name) const;
+    int         get_param_int           (const gchar *name) const;
+    float       get_param_float         (const gchar *name) const;
+    const char *get_param_string        (const gchar *name) const;
+    const char *get_param_optiongroup   (const gchar *name) const;
+    guint32     get_param_color         (const gchar *name) const;
 
-    int         get_param_int           (const gchar *name,
-                                         const SPDocument *doc = nullptr,
-                                         const Inkscape::XML::Node *node = nullptr) const;
+    bool get_param_optiongroup_contains (const gchar *name, const char *value) const;
 
-    float       get_param_float         (const gchar *name,
-                                         const SPDocument *doc = nullptr,
-                                         const Inkscape::XML::Node *node = nullptr) const;
+    bool        set_param_bool          (const gchar *name, const bool  value);
+    int         set_param_int           (const gchar *name, const int   value);
+    float       set_param_float         (const gchar *name, const float value);
+    const char *set_param_string        (const gchar *name, const char *value);
+    const char *set_param_optiongroup   (const gchar *name, const char *value);
+    guint32     set_param_color         (const gchar *name, const guint32 color);
 
-    const char *get_param_string        (const gchar *name,
-                                         const SPDocument *doc = nullptr,
-                                         const Inkscape::XML::Node *node = nullptr) const;
-
-    const char *get_param_optiongroup   (const gchar *name,
-                                         const SPDocument *doc = nullptr,
-                                         const Inkscape::XML::Node *node = nullptr) const;
-    bool get_param_optiongroup_contains (const gchar *name,
-                                         const char *value,
-                                         const SPDocument *doc = nullptr,
-                                         const Inkscape::XML::Node * node = nullptr) const;
-
-    guint32     get_param_color         (const gchar *name,
-                                         const SPDocument *doc = nullptr,
-                                         const Inkscape::XML::Node *node = nullptr) const;
-
-    bool        set_param_bool          (const gchar *name,
-                                         const bool value,
-                                         SPDocument *doc = nullptr,
-                                         Inkscape::XML::Node *node = nullptr);
-
-    int         set_param_int           (const gchar *name,
-                                         const int value,
-                                         SPDocument *doc = nullptr,
-                                         Inkscape::XML::Node *node = nullptr);
-
-    float       set_param_float         (const gchar *name,
-                                         const float value,
-                                         SPDocument *doc = nullptr,
-                                         Inkscape::XML::Node *node = nullptr);
-
-    const char *set_param_string        (const gchar *name,
-                                         const char *value,
-                                         SPDocument *doc = nullptr,
-                                         Inkscape::XML::Node *node = nullptr);
-
-    const char *set_param_optiongroup   (const gchar *name,
-                                         const char *value,
-                                         SPDocument *doc = nullptr,
-                                         Inkscape::XML::Node *node = nullptr);
-
-    guint32     set_param_color         (const gchar *name,
-                                         const guint32 color,
-                                         SPDocument *doc = nullptr,
-                                         Inkscape::XML::Node *node = nullptr);
 
     /* Error file handling */
 public:

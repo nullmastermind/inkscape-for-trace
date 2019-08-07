@@ -19,8 +19,6 @@
 
 #include <glibmm/ustring.h>
 
-class SPDocument;
-
 namespace Gtk {
 	class Widget;
 }
@@ -41,7 +39,7 @@ public:
 
     WidgetLabel(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
 
-    Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
+    Gtk::Widget *get_widget(sigc::signal<void> *changeSignal) override;
 private:
     /** \brief  Internal value. */
     Glib::ustring _value;

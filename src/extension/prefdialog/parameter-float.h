@@ -12,8 +12,6 @@
 
 #include "parameter.h"
 
-class SPDocument;
-
 namespace Gtk {
 class Widget;
 }
@@ -34,9 +32,9 @@ public:
     ParamFloat(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
 
     /** Returns \c _value. */
-    float get(const SPDocument * /*doc*/, const Inkscape::XML::Node * /*node*/) const { return _value; }
+    float get() const { return _value; }
 
-    float set (float in, SPDocument *doc, Inkscape::XML::Node *node);
+    float set(float in);
 
     float max () { return _max; }
 
@@ -44,7 +42,7 @@ public:
 
     float precision () { return _precision; }
 
-    Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
+    Gtk::Widget *get_widget(sigc::signal<void> *changeSignal) override;
 
     std::string value_to_string() const override;
 

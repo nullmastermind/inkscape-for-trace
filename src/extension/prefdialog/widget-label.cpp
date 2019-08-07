@@ -75,7 +75,7 @@ WidgetLabel::WidgetLabel(Inkscape::XML::Node *xml, Inkscape::Extension::Extensio
 }
 
 /** \brief  Create a label for the description */
-Gtk::Widget *WidgetLabel::get_widget (SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/, sigc::signal<void> * /*changeSignal*/)
+Gtk::Widget *WidgetLabel::get_widget(sigc::signal<void> * /*changeSignal*/)
 {
     if (_hidden) {
         return nullptr;

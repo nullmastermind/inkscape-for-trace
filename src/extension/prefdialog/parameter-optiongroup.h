@@ -45,21 +45,21 @@ public:
     ParamOptionGroup(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
     ~ParamOptionGroup() override;
 
-    Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
+    Gtk::Widget *get_widget(sigc::signal<void> *changeSignal) override;
 
     std::string value_to_string() const override;
 
     Glib::ustring value_from_label(const Glib::ustring label);
 
-    const Glib::ustring& get(const SPDocument * /*doc*/, const Inkscape::XML::Node * /*node*/) const { return _value; }
+    const Glib::ustring& get() const { return _value; }
 
-    const Glib::ustring& set(const Glib::ustring in, SPDocument *doc, Inkscape::XML::Node *node);
+    const Glib::ustring& set(const Glib::ustring in);
 
     /**
      * @returns    true if text is a valid choice for this option group
      * @param text string value to check (this is an actual option value, not the user-visible option name!)
      */
-    bool contains(const Glib::ustring text, SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/) const;
+    bool contains(const Glib::ustring text) const;
 
 private:
     /** \brief  Internal value. */

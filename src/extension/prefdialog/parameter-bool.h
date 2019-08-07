@@ -11,8 +11,6 @@
 
 #include "parameter.h"
 
-class SPDocument;
-
 namespace Gtk {
 class Widget;
 }
@@ -34,25 +32,22 @@ public:
     /**
      * Returns the current state/value.
      */
-    bool get(const SPDocument *doc, const Inkscape::XML::Node *node) const;
+    bool get() const;
 
     /**
      * A function to set the state/value.
      * This function sets the internal value, but it also sets the value
-     * in the preferences structure.  To put it in the right place, \c PREF_DIR
-     * and \c pref_name() are used.
+     * in the preferences structure.  To put it in the right place pref_name() is used.
      *
      * @param  in   The value to set to
-     * @param  doc  A document that should be used to set the value.
-     * @param  node The node where the value may be placed
      */
-    bool set(bool in, SPDocument *doc, Inkscape::XML::Node *node);
+    bool set(bool in);
 
     /**
      * Creates a bool check button for a bool parameter.
      * Builds a hbox with a label and a check button in it.
      */
-    Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
+    Gtk::Widget *get_widget(sigc::signal<void> *changeSignal) override;
 
     /**
      * Appends 'true' or 'false'.

@@ -12,8 +12,6 @@
 #include "parameter.h"
 #include "ui/selected-color.h"
 
-class SPDocument;
-
 namespace Gtk {
 class Widget;
 }
@@ -38,11 +36,11 @@ public:
     ~ParamColor() override;
 
     /** Returns \c _value, with a \i const to protect it. */
-    unsigned int get(SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/ ) const { return _color.value(); }
+    unsigned int get() const { return _color.value(); }
 
-    unsigned int set(unsigned int in, SPDocument *doc, Inkscape::XML::Node *node);
+    unsigned int set(unsigned int in);
 
-    Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
+    Gtk::Widget *get_widget(sigc::signal<void> *changeSignal) override;
 
     std::string value_to_string() const override;
 

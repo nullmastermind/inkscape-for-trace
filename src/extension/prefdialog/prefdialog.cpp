@@ -91,7 +91,7 @@ PrefDialog::PrefDialog (Glib::ustring name, Gtk::Widget * controls, Effect * eff
 
         hbox = Gtk::manage(new Gtk::HBox());
         hbox->set_border_width(InxWidget::GUI_BOX_MARGIN);
-        _button_preview = _param_preview->get_widget(nullptr, nullptr, &_signal_preview);
+        _button_preview = _param_preview->get_widget(&_signal_preview);
         _button_preview->show();
         hbox->pack_start(*_button_preview, true, true, 0);
         hbox->show();
@@ -144,7 +144,7 @@ PrefDialog::preview_toggle () {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     SPDocument *document = SP_ACTIVE_DOCUMENT;
     bool modified = document->isModifiedSinceSave();
-    if(_param_preview->get_bool(nullptr, nullptr)) {
+    if(_param_preview->get_bool()) {
         if (_exEnv == nullptr) {
             set_modal(true);
             _exEnv = new ExecutionEnv(_effect, SP_ACTIVE_DESKTOP, nullptr, false, false);

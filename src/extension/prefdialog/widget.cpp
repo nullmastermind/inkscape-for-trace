@@ -66,7 +66,7 @@ bool InxWidget::is_valid_widget_name(const char *name)
 }
 
 
-InxWidget::InxWidget (Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *ext)
+InxWidget::InxWidget(Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *ext)
     : _extension(ext)
 {
     // translatable (optional)
@@ -127,7 +127,7 @@ InxWidget::~InxWidget()
 
 /** Basically, if there is no widget pass a NULL. */
 Gtk::Widget *
-InxWidget::get_widget (SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/, sigc::signal<void> * /*changeSignal*/)
+InxWidget::get_widget(sigc::signal<void> * /*changeSignal*/)
 {
     return nullptr;
 }

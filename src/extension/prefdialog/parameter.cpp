@@ -51,9 +51,9 @@ public:
         , InxParameter(xml, ext)
     {}
 
-    Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override
+    Gtk::Widget *get_widget(sigc::signal<void> *changeSignal) override
     {
-        return this->WidgetLabel::get_widget(doc, node, changeSignal);
+        return this->WidgetLabel::get_widget(changeSignal);
     }
 
     // Well, no, I don't have a value! That's why I should not be an InxParameter!
@@ -98,117 +98,117 @@ InxParameter *InxParameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extensi
     return param;
 }
 
-bool InxParameter::get_bool(SPDocument const *doc, Inkscape::XML::Node const *node) const
+bool InxParameter::get_bool() const
 {
     ParamBool const *boolpntr = dynamic_cast<ParamBool const *>(this);
     if (!boolpntr) {
         throw param_not_bool_param();
     }
-    return boolpntr->get(doc, node);
+    return boolpntr->get();
 }
 
-int InxParameter::get_int(SPDocument const *doc, Inkscape::XML::Node const *node) const
+int InxParameter::get_int() const
 {
     ParamInt const *intpntr = dynamic_cast<ParamInt const *>(this);
     if (!intpntr) {
         throw param_not_int_param();
     }
-    return intpntr->get(doc, node);
+    return intpntr->get();
 }
 
-float InxParameter::get_float(SPDocument const *doc, Inkscape::XML::Node const *node) const
+float InxParameter::get_float() const
 {
     ParamFloat const *floatpntr = dynamic_cast<ParamFloat const *>(this);
     if (!floatpntr) {
         throw param_not_float_param();
     }
-    return floatpntr->get(doc, node);
+    return floatpntr->get();
 }
 
-const char *InxParameter::get_string(SPDocument const *doc, Inkscape::XML::Node const *node) const
+const char *InxParameter::get_string() const
 {
     ParamString const *stringpntr = dynamic_cast<ParamString const *>(this);
     if (!stringpntr) {
         throw param_not_string_param();
     }
-    return stringpntr->get(doc, node).c_str();
+    return stringpntr->get().c_str();
 }
 
-const char *InxParameter::get_optiongroup(SPDocument const *doc, Inkscape::XML::Node const *node) const
+const char *InxParameter::get_optiongroup() const
 {
     ParamOptionGroup const *param = dynamic_cast<ParamOptionGroup const *>(this);
     if (!param) {
         throw param_not_optiongroup_param();
     }
-    return param->get(doc, node).c_str();
+    return param->get().c_str();
 }
 
-bool InxParameter::get_optiongroup_contains(const char *value, SPDocument const *doc, Inkscape::XML::Node const *node) const
+bool InxParameter::get_optiongroup_contains(const char *value) const
 {
     ParamOptionGroup const *param = dynamic_cast<ParamOptionGroup const *>(this);
     if (!param) {
         throw param_not_optiongroup_param();
     }
-    return param->contains(value, doc, node);
+    return param->contains(value);
 }
 
-unsigned int InxParameter::get_color(const SPDocument* doc, Inkscape::XML::Node const *node) const
+unsigned int InxParameter::get_color() const
 {
     ParamColor const *param = dynamic_cast<ParamColor const *>(this);
     if (!param) {
         throw param_not_color_param();
     }
-    return param->get(doc, node);
+    return param->get();
 }
 
-bool InxParameter::set_bool(bool in, SPDocument *doc, Inkscape::XML::Node *node)
+bool InxParameter::set_bool(bool in)
 {
     ParamBool * boolpntr = dynamic_cast<ParamBool *>(this);
     if (boolpntr == nullptr)
         throw param_not_bool_param();
-    return boolpntr->set(in, doc, node);
+    return boolpntr->set(in);
 }
 
-int InxParameter::set_int(int in, SPDocument *doc, Inkscape::XML::Node *node)
+int InxParameter::set_int(int in)
 {
     ParamInt *intpntr = dynamic_cast<ParamInt *>(this);
     if (intpntr == nullptr)
         throw param_not_int_param();
-    return intpntr->set(in, doc, node);
+    return intpntr->set(in);
 }
 
-float InxParameter::set_float(float in, SPDocument *doc, Inkscape::XML::Node *node)
+float InxParameter::set_float(float in)
 {
     ParamFloat * floatpntr;
     floatpntr = dynamic_cast<ParamFloat *>(this);
     if (floatpntr == nullptr)
         throw param_not_float_param();
-    return floatpntr->set(in, doc, node);
+    return floatpntr->set(in);
 }
 
-const char *InxParameter::set_string(const char *in, SPDocument *doc, Inkscape::XML::Node *node)
+const char *InxParameter::set_string(const char *in)
 {
     ParamString * stringpntr = dynamic_cast<ParamString *>(this);
     if (stringpntr == nullptr)
         throw param_not_string_param();
-    return stringpntr->set(in, doc, node).c_str();
+    return stringpntr->set(in).c_str();
 }
 
-const char *InxParameter::set_optiongroup(const char *in, SPDocument *doc, Inkscape::XML::Node *node)
+const char *InxParameter::set_optiongroup(const char *in)
 {
     ParamOptionGroup *param = dynamic_cast<ParamOptionGroup *>(this);
     if (!param) {
         throw param_not_optiongroup_param();
     }
-    return param->set(in, doc, node).c_str();
+    return param->set(in).c_str();
 }
 
-unsigned int InxParameter::set_color(unsigned int in, SPDocument *doc, Inkscape::XML::Node *node)
+unsigned int InxParameter::set_color(unsigned int in)
 {
     ParamColor*param = dynamic_cast<ParamColor *>(this);
     if (param == nullptr)
         throw param_not_color_param();
-    return param->set(in, doc, node);
+    return param->set(in);
 }
 
 
