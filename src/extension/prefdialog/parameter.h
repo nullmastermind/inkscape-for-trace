@@ -118,10 +118,6 @@ public:
      */
     virtual std::string value_to_string() const;
 
-    /** All the code in Notebook::get_param to get the notebook content. */
-    virtual InxParameter *get_param(char const *name);
-
-
     /** Recommended spacing between the widgets making up a single Parameter (e.g. label and input) (in px) */
     const static int GUI_PARAM_WIDGETS_SPACING = 4;
 

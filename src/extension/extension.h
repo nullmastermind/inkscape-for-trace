@@ -174,27 +174,20 @@ private:
     void             make_param       (Inkscape::XML::Node * paramrepr);
 
     /**
-     * This function looks through the linked list for a parameter
-     * structure with the name of the passed in name.
+     * Looks up the parameter with the specified name.
      *
-     * This is an inline function that is used by all the get_param and
-     * set_param functions to find a param_t in the linked list with
-     * the passed in name.
+     * Searches the list of parameters attached to this extension,
+     * looking for a parameter with a matching name.
      *
      * This function can throw a 'param_not_exist' exception if the
      * name is not found.
      *
-     * The first thing that this function checks is if the list is NULL.
-     * It could be NULL because there are no parameters for this extension
-     * or because all of them have been checked.  If the list
-     * is NULL then the 'param_not_exist' exception is thrown.
-     *
-     * @param name The name to search for.
-     * @return Parameter structure with a name of 'name'.
+     * @param  name Name of the parameter to search for.
+     * @return Parameter with matching name.
      */
-     InxParameter *get_param(const gchar * name);
+     InxParameter *get_param(const gchar *name);
 
-     InxParameter const *get_param(const gchar * name) const;
+     InxParameter const *get_param(const gchar *name) const;
 
 public:
     bool        get_param_bool          (const gchar *name,
@@ -261,15 +254,15 @@ public:
     static void      error_file_close ();
 
 public:
-    Gtk::Widget *    autogui (SPDocument * doc, Inkscape::XML::Node *node, sigc::signal<void> * changeSignal = nullptr);
-    void paramListString (std::list <std::string> & retlist);
+    Gtk::Widget *autogui (SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal = nullptr);
+    void paramListString(std::list <std::string> &retlist);
     void set_gui(bool s) { _gui = s; }
     bool get_gui() { return _gui; }
 
     /* Extension editor dialog stuff */
 public:
-    Gtk::VBox *    get_info_widget();
-    Gtk::VBox *    get_params_widget();
+    Gtk::VBox *get_info_widget();
+    Gtk::VBox *get_params_widget();
 protected:
     inline static void add_val(Glib::ustring labelstr, Glib::ustring valuestr, Gtk::Grid * table, int * row);
 };

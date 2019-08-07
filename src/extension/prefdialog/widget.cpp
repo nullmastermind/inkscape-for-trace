@@ -136,7 +136,7 @@ const char *InxWidget::get_translation(const char* msgid) {
     return _extension->get_translation(msgid, _context);
 }
 
-void InxWidget::get_widgets(std::vector<const InxWidget *> &list) const
+void InxWidget::get_widgets(std::vector<InxWidget *> &list)
 {
     list.push_back(this);
     for (auto child : _children) {

@@ -91,27 +91,10 @@ Gtk::Widget *ParamNotebook::ParamNotebookPage::get_widget(SPDocument *doc, Inksc
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
-/** Search the parameter's name in the page content. */
-InxParameter *ParamNotebook::ParamNotebookPage::get_param(const char *name)
-{
-    if (name == nullptr) {
-        throw Extension::param_not_exist();
-    }
-    if (_children.empty()) {
-        throw Extension::param_not_exist();
-    }
-
-    for (auto child : _children) {
-        InxParameter *parameter = dynamic_cast<InxParameter *>(child);
-        if (parameter && !strcmp(parameter->name(), name)) {
-            return parameter;
-        }
-    }
-
-    return nullptr;
-}
-
 /** End ParamNotebookPage **/
+
+
+
 /** ParamNotebook **/
 
 ParamNotebook::ParamNotebook(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext)
@@ -233,24 +216,6 @@ void NotebookWidget::changed_page(Gtk::Widget * /*page*/, guint pagenum)
         _pref->set((int)pagenum, _doc, _node);
     }
 }
-
-/** Search the parameter's name in the notebook content. */
-InxParameter *ParamNotebook::get_param(const char *name)
-{
-    if (name == nullptr) {
-        throw Extension::param_not_exist();
-    }
-    for (auto child : _children) {
-        ParamNotebookPage *page = dynamic_cast<ParamNotebookPage *>(child);
-        InxParameter *subparam = page->get_param(name);
-        if (subparam) {
-            return subparam;
-        }
-    }
-
-    return nullptr;
-}
-
 
 /**
  * Creates a Notebook widget for a notebook parameter.

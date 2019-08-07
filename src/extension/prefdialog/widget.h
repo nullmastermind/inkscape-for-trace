@@ -76,7 +76,7 @@ public:
      *
      * @param list Reference to a vector of pointers to \a InxWidget that will be appended with the new \a InxWidgets
      */
-    virtual void get_widgets(std::vector<const InxWidget *> &list) const;
+    virtual void get_widgets(std::vector<InxWidget *> &list);
 
 
     /** Recommended margin of boxes containing multiple widgets (in px) */

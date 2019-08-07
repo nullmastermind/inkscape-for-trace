@@ -49,7 +49,6 @@ private:
         ParamNotebookPage(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
 
         Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
-        InxParameter *get_param(const char *name) override;
 
         // ParamNotebookPage is not a real parameter (it has no value), so make sure it does not return one
         std::string value_to_string() const override { return ""; };
@@ -67,8 +66,6 @@ public:
     Gtk::Widget *get_widget(SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal) override;
 
     std::string value_to_string() const override;
-
-    InxParameter *get_param (const char *name) override;
 
     const Glib::ustring& get (const SPDocument * /*doc*/, const Inkscape::XML::Node * /*node*/) { return _value; }
     const Glib::ustring& set (const int in, SPDocument *doc, Inkscape::XML::Node *node);

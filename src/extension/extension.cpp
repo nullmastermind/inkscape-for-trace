@@ -410,26 +410,58 @@ const char *Extension::get_translation(const char *msgid, const char *msgctxt) {
     }
 }
 
+/**
+    \brief  A function to get the parameters in a string form
+    \return An array with all the parameters in it.
+
+*/
+void
+Extension::paramListString (std::list <std::string> &retlist)
+{
+    // first collect all widgets in the current extension
+    std::vector<InxWidget *> widget_list;
+    for (auto widget : _widgets) {
+        widget->get_widgets(widget_list);
+    }
+
+    // then build a list of parameter strings from parameter names and values, as '--name=value'
+    for (auto widget : widget_list) {
+        InxParameter *parameter = dynamic_cast<InxParameter *>(widget); // filter InxParameters from InxWidgets
+        if (parameter) {
+            const char *name = parameter->name();
+            std::string value = parameter->value_to_string();
+
+            if (name && !value.empty()) { // TODO: Shouldn't empty string values be allowed?
+                std::string parameter_string;
+                parameter_string += "--";
+                parameter_string += name;
+                parameter_string += "=";
+                parameter_string += value;
+                retlist.push_back(parameter_string);
+            }
+        }
+    }
+
+    return;
+}
+
 InxParameter *Extension::get_param(const gchar *name)
 {
-    if (name == nullptr) {
-        throw Extension::param_not_exist();
-    }
-    if (this->_widgets.empty()) {
+    if (!name || _widgets.empty()) {
         throw Extension::param_not_exist();
     }
 
-    for(auto widget : _widgets) {
+    // first collect all widgets in the current extension
+    std::vector<InxWidget *> widget_list;
+    for (auto widget : _widgets) {
+        widget->get_widgets(widget_list);
+    }
+
+    // then search for a parameter with a matching name
+    for (auto widget : widget_list) {
         InxParameter *parameter = dynamic_cast<InxParameter *>(widget); // filter InxParameters from InxWidgets
-        if (parameter) {
-            if (!strcmp(parameter->name(), name)) {
-                return parameter;
-            } else {
-                InxParameter *subparam = parameter->get_param(name);
-                if (subparam) {
-                    return subparam;
-                }
-            }
+        if (parameter && !strcmp(parameter->name(), name)) {
+            return parameter;
         }
     }
 
@@ -757,41 +789,6 @@ Extension::autogui (SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<voi
     agui->show();
     return agui;
 };
-
-/**
-    \brief  A function to get the parameters in a string form
-    \return An array with all the parameters in it.
-
-*/
-void
-Extension::paramListString (std::list <std::string> &retlist)
-{
-    // first collect all widgets in the current extension
-    std::vector<const InxWidget *> widget_list;
-    for (auto widget : _widgets) {
-        widget->get_widgets(widget_list);
-    }
-
-    // then build a list of parameter strings from parameter names and values, as '--name=value'
-    for (auto widget : widget_list) {
-        const InxParameter *parameter = dynamic_cast<const InxParameter *>(widget); // filter InxParameters from InxWidgets
-        if (parameter) {
-            const char *name = parameter->name();
-            std::string value = parameter->value_to_string();
-
-            if (name && !value.empty()) { // TODO: Shouldn't empty string values be allowed?
-                std::string parameter_string;
-                parameter_string += "--";
-                parameter_string += name;
-                parameter_string += "=";
-                parameter_string += value;
-                retlist.push_back(parameter_string);
-            }
-        }
-    }
-
-    return;
-}
 
 /* Extension editor dialog stuff */
 

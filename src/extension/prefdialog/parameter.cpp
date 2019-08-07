@@ -272,11 +272,6 @@ std::string InxParameter::value_to_string() const
     return "";
 }
 
-InxParameter *InxParameter::get_param(const char */*name*/)
-{
-    return nullptr;
-}
-
 const Glib::ustring InxParameter::extension_pref_root = "/extensions/";
 
 }  // namespace Extension
