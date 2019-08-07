@@ -259,9 +259,9 @@ InxParameter::~InxParameter()
     _description = nullptr;
 }
 
-char *InxParameter::pref_name() const
+Glib::ustring InxParameter::pref_name() const
 {
-    return g_strdup_printf("%s.%s", _extension->get_id(), _name);
+    return Glib::ustring::compose("/extensions/%1.%2", _extension->get_id(), _name);
 }
 
 std::string InxParameter::value_to_string() const
@@ -271,8 +271,6 @@ std::string InxParameter::value_to_string() const
     g_assert_not_reached();
     return "";
 }
-
-const Glib::ustring InxParameter::extension_pref_root = "/extensions/";
 
 }  // namespace Extension
 }  // namespace Inkscape

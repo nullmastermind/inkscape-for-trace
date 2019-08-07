@@ -132,21 +132,17 @@ protected:
     char *_description = nullptr;
 
 
-    /**
-     * The root directory in the preferences database for extension-related parameters.
-     *
-     * The directory path has both a leading and a trailing slash, so that extension_pref_root + pref_name works
-     * without having to append a separator.
-     */
-    static const Glib::ustring extension_pref_root;
-
-
     /* **** member functions **** */
 
     /**
-     * Build the name to write the parameter from the extension's ID and the name of this parameter.
+     * Build preference name for the current parameter.
+     *
+     * Returns a preference name that can be used with setters and getters from Inkscape::Preferences.
+     * The name is assembled from a fixed root ("/extensions/"), extension ID and parameter name.
+     *
+     * @return: Preference name
      */
-    char *pref_name() const;
+    Glib::ustring pref_name() const;
 };
 
 }  // namespace Extension

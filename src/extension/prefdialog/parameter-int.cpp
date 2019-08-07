@@ -37,10 +37,8 @@ ParamInt::ParamInt(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext
         }
     }
 
-    char *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    _value = prefs->getInt(extension_pref_root + pref_name, _value);
-    g_free(pref_name);
+    _value = prefs->getInt(pref_name(), _value);
 
     // parse and apply limits
     const char *min = xml->attribute("min");
@@ -89,10 +87,8 @@ int ParamInt::set(int in)
         _value = _min;
     }
 
-    char *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setInt(extension_pref_root + pref_name, _value);
-    g_free(pref_name);
+    prefs->setInt(pref_name(), _value);
 
     return _value;
 }

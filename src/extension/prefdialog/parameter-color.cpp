@@ -40,10 +40,8 @@ ParamColor::ParamColor(Inkscape::XML::Node *xml, Inkscape::Extension::Extension 
         }
     }
 
-    char *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    _value = prefs->getUInt(extension_pref_root + pref_name, _value);
-    g_free(pref_name);
+    _value = prefs->getUInt(pref_name(), _value);
 
     _color.setValue(_value);
 
@@ -86,10 +84,8 @@ Gtk::Widget *ParamColor::get_widget(sigc::signal<void> *changeSignal)
 
 void ParamColor::_onColorChanged()
 {
-    char *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setUInt(extension_pref_root + pref_name, _color.value());
-    g_free(pref_name);
+    prefs->setUInt(pref_name(), _color.value());
 
     if (_changeSignal)
         _changeSignal->emit();

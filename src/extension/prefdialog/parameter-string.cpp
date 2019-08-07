@@ -28,10 +28,8 @@ ParamString::ParamString(Inkscape::XML::Node *xml, Inkscape::Extension::Extensio
         value = xml->firstChild()->content();
     }
 
-    char *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    _value = prefs->getString(extension_pref_root + pref_name);
-    g_free(pref_name);
+    _value = prefs->getString(pref_name());
 
     if (_value.empty() && value) {
         _value = value;
@@ -70,10 +68,8 @@ const Glib::ustring& ParamString::set(const Glib::ustring in)
 {
     _value = in;
 
-    char *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setString(extension_pref_root + pref_name, _value);
-    g_free(pref_name);
+    prefs->setString(pref_name(), _value);
 
     return _value;
 }

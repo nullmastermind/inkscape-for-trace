@@ -62,10 +62,8 @@ ParamOptionGroup::ParamOptionGroup(Inkscape::XML::Node *xml, Inkscape::Extension
     }
 
     // get value (initialize with value of first choice if pref is empty)
-    char *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    _value = prefs->getString(extension_pref_root + pref_name);
-    g_free(pref_name);
+    _value = prefs->getString(pref_name());
 
     if (_value.empty()) {
         if (!choices.empty()) {
@@ -108,10 +106,8 @@ const Glib::ustring& ParamOptionGroup::set(Glib::ustring in)
 {
     if (contains(in)) {
         _value = in;
-        char *pref_name = this->pref_name();
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setString(extension_pref_root + pref_name, _value.c_str());
-        g_free(pref_name);
+        prefs->setString(pref_name(), _value.c_str());
     } else {
         g_warning("Could not set value ('%s') for parameter '%s' in extension '%s'. Not a valid choice.",
                   in.c_str(), _name, _extension->get_id());

@@ -37,20 +37,16 @@ ParamBool::ParamBool(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *e
         }
     }
 
-    char *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    _value = prefs->getBool(extension_pref_root + pref_name, _value);
-    g_free(pref_name);
+    _value = prefs->getBool(pref_name(), _value);
 }
 
 bool ParamBool::set(bool in)
 {
     _value = in;
 
-    char *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool(extension_pref_root + pref_name, _value);
-    g_free(pref_name);
+    prefs->setBool(pref_name(), _value);
 
     return _value;
 }

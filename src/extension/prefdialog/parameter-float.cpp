@@ -36,10 +36,8 @@ ParamFloat::ParamFloat(Inkscape::XML::Node *xml, Inkscape::Extension::Extension 
         }
     }
 
-    char *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    _value = prefs->getDouble(extension_pref_root + pref_name, _value);
-    g_free(pref_name);
+    _value = prefs->getDouble(pref_name(), _value);
 
     // parse and apply limits
     const char *min = xml->attribute("min");
@@ -96,10 +94,8 @@ float ParamFloat::set(float in)
         _value = _min;
     }
 
-    char *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble(extension_pref_root + pref_name, _value);
-    g_free(pref_name);
+    prefs->setDouble(pref_name(), _value);
 
     return _value;
 }

@@ -128,10 +128,8 @@ ParamNotebook::ParamNotebook(Inkscape::XML::Node *xml, Inkscape::Extension::Exte
     }
 
     // get value (initialize with value of first page if pref is empty)
-    char *pref_name = this->pref_name();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    _value = prefs->getString(extension_pref_root + pref_name);
-    g_free(pref_name);
+    _value = prefs->getString(pref_name());
 
     if (_value.empty()) {
         if (!_children.empty()) {
@@ -158,10 +156,8 @@ const Glib::ustring& ParamNotebook::set(const int in)
     if (page) {
         _value = page->_name;
 
-        char *pref_name = this->pref_name();
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setString(extension_pref_root + pref_name, _value);
-        g_free(pref_name);
+        prefs->setString(pref_name(), _value);
     }
 
     return _value;
