@@ -58,7 +58,7 @@ public:
     /** Checks if name is a valid widget name, i.e. a widget can be constructed from it using make() */
     static bool is_valid_widget_name(const char *name);
 
-    /** Return the instances GTK::Widget representation for usage in a GUI
+    /** Return the instance's GTK::Widget representation for usage in a GUI
       *
       * @param changeSignal Can be used to subscribe to parameter changes.
       *                     Will be emitted whenever a parameter value changes.

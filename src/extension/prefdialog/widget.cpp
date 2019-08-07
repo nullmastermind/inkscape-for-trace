@@ -125,10 +125,13 @@ InxWidget::~InxWidget()
     _appearance = nullptr;
 }
 
-/** Basically, if there is no widget pass a NULL. */
 Gtk::Widget *
 InxWidget::get_widget(sigc::signal<void> * /*changeSignal*/)
 {
+    // if we end up here we're missing a definition of ::get_widget() in one of the subclasses
+    g_critical("InxWidget::get_widget called from widget of type '%s' in extension '%s'",
+               typeid(this).name(), _extension->get_id());
+    g_assert_not_reached();
     return nullptr;
 }
 
