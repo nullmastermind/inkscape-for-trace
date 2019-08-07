@@ -508,7 +508,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     gtk_style_context_add_provider(style_context,
                                    GTK_STYLE_PROVIDER(css_provider),
                                    GTK_STYLE_PROVIDER_PRIORITY_USER);
-    g_signal_connect(G_OBJECT(dtw), "event", G_CALLBACK(SPDesktopWidget::event), dtw);
+    g_signal_connect(G_OBJECT(dtw->_canvas), "event", G_CALLBACK(SPDesktopWidget::event), dtw);
+    g_signal_connect(G_OBJECT(dtw), "event", G_CALLBACK(SPDesktopWidget::eventoutside), dtw);
 
     gtk_widget_set_hexpand(GTK_WIDGET(dtw->_canvas), TRUE);
     gtk_widget_set_vexpand(GTK_WIDGET(dtw->_canvas), TRUE);
@@ -1014,6 +1015,17 @@ SPDesktopWidget::event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
     return FALSE;
 }
 
+/**
+ * Callback to handle desktop widget event.
+ */
+gint
+SPDesktopWidget::eventoutside(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
+{
+    if ((event->type == GDK_MOTION_NOTIFY || event->type == GDK_BUTTON_RELEASE) && !dtw->_canvas->_inside) {
+        return sp_desktop_root_handler(nullptr, event, dtw->desktop);
+    }
+    return FALSE;
+}
 
 #if defined(HAVE_LIBLCMS2)
 void
@@ -1726,6 +1738,7 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPDocument *document)
     dtw->_menubar = build_menubar(dtw->desktop);
     dtw->_menubar->set_name("MenuBar");
     dtw->_menubar->show_all();
+    g_signal_connect(dtw->_menubar->gobj(), "event", G_CALLBACK(SPDesktopWidget::eventoutside), dtw);
 
 #ifdef GDK_WINDOWING_QUARTZ
     // native macOS menu: do this later because we don't have the window handle yet

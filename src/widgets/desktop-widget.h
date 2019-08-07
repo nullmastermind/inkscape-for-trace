@@ -330,6 +330,7 @@ public:
 #endif
     static void ruler_snap_new_guide(SPDesktop *desktop, SPCanvasItem *guide, Geom::Point &event_dt, Geom::Point &normal);
     static gint event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
+    static gint eventoutside(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
     bool on_ruler_box_button_press_event(GdkEventButton *event, Gtk::EventBox *widget, bool horiz);
     bool on_ruler_box_button_release_event(GdkEventButton *event, Gtk::EventBox *widget, bool horiz);
     bool on_ruler_box_motion_notify_event(GdkEventMotion *event, Gtk::EventBox *widget, bool horiz);
