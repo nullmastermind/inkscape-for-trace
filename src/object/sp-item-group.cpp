@@ -486,7 +486,7 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
                    || !strcmp (grepr->name(), "svg:svg"));
 
     // this converts the gradient/pattern fill/stroke on the group, if any, to userSpaceOnUse
-    group->adjust_paint_recursive (Geom::identity(), Geom::identity(), false);
+    group->adjust_paint_recursive(Geom::identity(), Geom::identity());
 
     SPItem *pitem = dynamic_cast<SPItem *>(group->parent);
     g_assert(pitem);
@@ -518,7 +518,7 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
             /* Merging of style */
             // this converts the gradient/pattern fill/stroke, if any, to userSpaceOnUse; we need to do
             // it here _before_ the new transform is set, so as to use the pre-transform bbox
-            citem->adjust_paint_recursive (Geom::identity(), Geom::identity(), false);
+            citem->adjust_paint_recursive(Geom::identity(), Geom::identity());
 
             child.style->merge( group->style );
             /*
@@ -613,7 +613,7 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
     if (!objects.empty()) {
         Inkscape::XML::Node *last_def = defs->getRepr()->lastChild();
         for (auto i=objects.rbegin();i!=objects.rend();++i) {
-            Inkscape::XML::Node *repr = *i; 
+            Inkscape::XML::Node *repr = *i;
             if (!sp_repr_is_meta_element(repr)) {
                 defs->getRepr()->addChild(repr, last_def);
             }
@@ -753,7 +753,7 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p, bo
             } else if ( SPItem *item = dynamic_cast<SPItem *>(&o) ) {
                 SPGroup *group = dynamic_cast<SPGroup *>(item);
                 if (group && !dynamic_cast<SPBox3D *>(item)) {
-                    /* Using recursion breaks clipping because transforms are applied 
+                    /* Using recursion breaks clipping because transforms are applied
                        in coordinates for draws but nothing in defs is changed
                        instead change the transform on the entire group, and the transform
                        is applied after any references to clipping paths.  However NOT using
@@ -769,7 +769,7 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p, bo
                         item->set_i2d_affine(tAff);
                         tAff = item->transform;
                         // Eliminate common rounding error affecting EMF/WMF input.
-                        // When the rounding error persists it converts the simple 
+                        // When the rounding error persists it converts the simple
                         //    transform=scale() to transform=matrix().
                         if(std::abs(tAff[4]) < 1.0e-5 && std::abs(tAff[5]) < 1.0e-5){
                            tAff[4] = 0.0;
@@ -801,7 +801,7 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p, bo
                         // Scale item
                         Geom::Translate const s(p);
                         Geom::Affine final = s.inverse() * sc * s;
-                        
+
                         gchar const *conn_type = nullptr;
                         SPText *text_item = dynamic_cast<SPText *>(item);
                         bool is_text_path = text_item && text_item->firstChild() && dynamic_cast<SPTextPath *>(text_item->firstChild());
@@ -825,7 +825,7 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p, bo
                                 }
                             }
                         }
-                        
+
                         Persp3D *persp = dynamic_cast<Persp3D *>(item);
                         if (persp) {
                             persp3d_apply_affine_transformation(persp, final);
@@ -848,11 +848,11 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p, bo
                         } else {
                             item->doWriteTransform(item->transform*sc, nullptr, true);
                         }
-                        
+
                         if (conn_type != nullptr) {
                             item->setAttribute("inkscape:connector-type", conn_type);
                         }
-                        
+
                         if (item->isCenterSet() && !(final.isTranslation() || final.isIdentity())) {
                             item->scaleCenter(sc); // All coordinates have been scaled, so also the center must be scaled
                             item->updateRepr();

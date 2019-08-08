@@ -1404,7 +1404,7 @@ sp_item_adjust_rects_recursive(SPItem *item, Geom::Affine advertized_transform)
     }
 }
 
-void SPItem::adjust_paint_recursive (Geom::Affine advertized_transform, Geom::Affine t_ancestors, bool is_pattern)
+void SPItem::adjust_paint_recursive(Geom::Affine advertized_transform, Geom::Affine t_ancestors, PaintServerType type)
 {
 // _Before_ full pattern/gradient transform: t_paint * t_item * t_ancestors
 // _After_ full pattern/gradient transform: t_paint_new * t_item * t_ancestors * advertised_transform
@@ -1419,9 +1419,9 @@ void SPItem::adjust_paint_recursive (Geom::Affine advertized_transform, Geom::Af
         for (auto& o: children) {
             SPItem *item = dynamic_cast<SPItem *>(&o);
             if (item) {
-// At the level of the transformed item, t_ancestors is identity;
-// below it, it is the accumulated chain of transforms from this level to the top level
-                item->adjust_paint_recursive (advertized_transform, t_item * t_ancestors, is_pattern);
+                // At the level of the transformed item, t_ancestors is identity;
+                // below it, it is the accumulated chain of transforms from this level to the top level
+                item->adjust_paint_recursive(advertized_transform, t_item * t_ancestors, type);
             }
         }
     }
@@ -1431,10 +1431,18 @@ void SPItem::adjust_paint_recursive (Geom::Affine advertized_transform, Geom::Af
 // and paintservers on leaves inheriting their values from ancestors could adjust themselves properly
 // before ancestors themselves are adjusted, probably differently (bug 1286535)
 
-    if (is_pattern) {
-        adjust_pattern(paint_delta);
-    } else {
-        adjust_gradient(paint_delta);
+    switch (type) {
+        case PATTERN: {
+            adjust_pattern(paint_delta);
+            break;
+        }
+        case HATCH: {
+            adjust_hatch(paint_delta);
+            break;
+        }
+        default: {
+            adjust_gradient(paint_delta);
+        }
     }
 }
 
@@ -1483,16 +1491,20 @@ void SPItem::doWriteTransform(Geom::Affine const &transform, Geom::Affine const 
 
         // recursively compensate pattern fill if it's not to be transformed
         if (!prefs->getBool("/options/transform/pattern", true)) {
-            adjust_paint_recursive (advertized_transform.inverse(), Geom::identity(), true);
+            adjust_paint_recursive(advertized_transform.inverse(), Geom::identity(), PATTERN);
         }
+        if (!prefs->getBool("/options/transform/hatch", true)) {
+            adjust_paint_recursive(advertized_transform.inverse(), Geom::identity(), HATCH);
+        }
+
         /// \todo FIXME: add the same else branch as for gradients below, to convert patterns to userSpaceOnUse as well
         /// recursively compensate gradient fill if it's not to be transformed
         if (!prefs->getBool("/options/transform/gradient", true)) {
-            adjust_paint_recursive (advertized_transform.inverse(), Geom::identity(), false);
+            adjust_paint_recursive(advertized_transform.inverse(), Geom::identity(), GRADIENT);
         } else {
             // this converts the gradient/pattern fill/stroke, if any, to userSpaceOnUse; we need to do
             // it here _before_ the new transform is set, so as to use the pre-transform bbox
-            adjust_paint_recursive (Geom::identity(), Geom::identity(), false);
+            adjust_paint_recursive(Geom::identity(), Geom::identity(), GRADIENT);
         }
 
     } // endif(compensate)

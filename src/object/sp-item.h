@@ -137,6 +137,8 @@ public:
         VISUAL_BBOX
     };
 
+    enum PaintServerType { PATTERN, HATCH, GRADIENT };
+
     SPItem();
     ~SPItem() override;
 
@@ -332,7 +334,8 @@ public:
     /**
      * Recursively compensate pattern or gradient transform.
      */
-    void adjust_paint_recursive(Geom::Affine advertized_transform, Geom::Affine t_ancestors, bool is_pattern);
+    void adjust_paint_recursive(Geom::Affine advertized_transform, Geom::Affine t_ancestors,
+                                PaintServerType type = GRADIENT);
 
     /**
      * Set a new transform on an object.

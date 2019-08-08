@@ -352,8 +352,17 @@ void HatchKnotHolderEntityScale::knot_set(Geom::Point const &p, Geom::Point cons
     Geom::Point d = p_snapped * transform_inverse;
     Geom::Point d_origin = origin * transform_inverse;
     Geom::Point origin_dt;
+    gdouble hatch_pitch = hatch->pitch();
+    if (state & GDK_CONTROL_MASK) {
+        // if ctrl is pressed: use 1:1 scaling
+        d = d_origin * (d.length() / d_origin.length());
+    }
 
-    // TODO ???
+    Geom::Affine scale = Geom::Translate(-origin_dt) * Geom::Scale(d.x() / hatch_pitch, d.y() / hatch_pitch) *
+                         Geom::Translate(origin_dt) * transform;
+
+    item->adjust_hatch(scale, true, _fill ? TRANSFORM_FILL : TRANSFORM_STROKE);
+    item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 /* Filter manipulation */
