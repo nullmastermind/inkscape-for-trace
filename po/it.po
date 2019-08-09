@@ -24990,9 +24990,8 @@ msgid "Lower node"
 msgstr "Abbassa nodo"
 
 #: ../src/ui/dialog/xml-tree.cpp:181
-#, fuzzy
 msgid "Show attributes"
-msgstr "Imposta attributo"
+msgstr "Mostra attributi"
 
 #: ../src/ui/dialog/xml-tree.cpp:309
 msgid "<b>Click</b> to select nodes, <b>drag</b> to rearrange."
