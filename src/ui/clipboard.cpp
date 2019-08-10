@@ -54,6 +54,7 @@
 #include "object/sp-clippath.h"
 #include "object/sp-defs.h"
 #include "object/sp-gradient-reference.h"
+#include "object/sp-hatch.h"
 #include "object/sp-item-transform.h"
 #include "object/sp-linear-gradient.h"
 #include "object/sp-marker.h"
@@ -109,6 +110,7 @@ private:
     void _copyUsedDefs(SPItem *);
     void _copyGradient(SPGradient *);
     void _copyPattern(SPPattern *);
+    void _copyHatch(SPHatch *);
     void _copyTextPath(SPTextPath *);
     Inkscape::XML::Node *_copyNode(Inkscape::XML::Node *, Inkscape::XML::Document *, Inkscape::XML::Node *);
 
@@ -324,7 +326,7 @@ void ClipboardManagerImpl::copySymbol(Inkscape::XML::Node* symbol, gchar const* 
     if (cmobj && !user_symbol) { // convert only stock symbols
         if (!Geom::are_near(scale_units, 1.0, Geom::EPSILON)) {
             dynamic_cast<SPGroup *>(cmobj)->scaleChildItemsRec(Geom::Scale(scale_units),
-                                            Geom::Point(0, SP_ACTIVE_DESKTOP->getDocument()->getHeight().value("px")), 
+                                            Geom::Point(0, SP_ACTIVE_DESKTOP->getDocument()->getHeight().value("px")),
                                             false);
         }
     }
@@ -620,9 +622,9 @@ Glib::ustring ClipboardManagerImpl::getShapeOrTextObjectId(SPDesktop *desktop)
     // https://bugs.launchpad.net/inkscape/+bug/1293979
     // basically, when we do a depth-first search, we're stopping
     // at the first object to be <svg:path> or <svg:text>.
-    // but that could then return the id of the object's 
+    // but that could then return the id of the object's
     // clip path or mask, not the original path!
-    
+
     SPDocument *tempdoc = _retrieveClipboard(); // any target will do here
     if ( tempdoc == nullptr ) {
         _userWarn(desktop, _("Nothing on the clipboard."));
@@ -759,7 +761,7 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
             // write the complete accumulated transform passed to us
             // (we're dealing with unattached representations, so we write to their attributes
             // instead of using sp_item_set_transform)
-            
+
             SPUse *use=dynamic_cast<SPUse *>(item);
             if( use && use->get_original() && use->get_original()->parent) {
                 if (selection->includes(use->get_original())){ //we are copying something whose parent is also copied (!)
@@ -823,6 +825,10 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
         if ( pattern ) {
             _copyPattern(pattern);
         }
+        SPHatch *hatch = dynamic_cast<SPHatch *>(server);
+        if ( hatch ) {
+            _copyHatch(hatch);
+        }
     }
     if (style && (style->stroke.isPaintserver())) {
         SPPaintServer *server = item->style->getStrokePaintServer();
@@ -832,6 +838,10 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
         SPPattern *pattern = dynamic_cast<SPPattern *>(server);
         if ( pattern ) {
             _copyPattern(pattern);
+        }
+        SPHatch *hatch = dynamic_cast<SPHatch *>(server);
+        if ( hatch ) {
+            _copyHatch(hatch);
         }
     }
 
@@ -882,7 +892,7 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
             }
         }
     }
-    
+
     // Copy filters
     if (style->getFilter()) {
         SPObject *filter = style->getFilter();
@@ -953,6 +963,30 @@ void ClipboardManagerImpl::_copyPattern(SPPattern *pattern)
         }
         else{
             pattern = nullptr;
+        }
+    }
+}
+
+/**
+ * Copy a single hatch to the clipboard document's defs element.
+ */
+void ClipboardManagerImpl::_copyHatch(SPHatch *hatch)
+{
+    // climb up the references, copying each one in the chain
+    while (hatch) {
+        _copyNode(hatch->getRepr(), _doc, _defs);
+
+        for (auto& child: hatch->children) {
+            SPItem *childItem = dynamic_cast<SPItem *>(&child);
+            if (childItem) {
+                _copyUsedDefs(childItem);
+            }
+        }
+        if (hatch->ref){
+            hatch = hatch->ref->getObject();
+        }
+        else{
+            hatch = nullptr;
         }
     }
 }

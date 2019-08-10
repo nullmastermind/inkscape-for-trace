@@ -29,6 +29,7 @@
 #include "object/sp-flowdiv.h"
 #include "object/sp-flowregion.h"
 #include "object/sp-flowtext.h"
+#include "object/sp-hatch.h"
 #include "object/sp-linear-gradient.h"
 #include "object/sp-path.h"
 #include "object/sp-pattern.h"
@@ -184,7 +185,7 @@ sp_desktop_apply_css_recursive(SPObject *o, SPCSSAttr *css, bool skip_lines)
  void sp_desktop_set_style(SPDesktop *desktop, SPCSSAttr *css, bool change, bool write_current){
     return sp_desktop_set_style(desktop->getSelection(), desktop, css, change, write_current);
 }
- 
+
 void
 sp_desktop_set_style(Inkscape::ObjectSet *set, SPDesktop *desktop, SPCSSAttr *css, bool change, bool write_current)
 {
@@ -533,7 +534,7 @@ objects_query_fillstroke (const std::vector<SPItem*> &objects, SPStyle *style_re
             || dynamic_cast<SPFlowtspan *>(parent) || dynamic_cast<SPFlowline*>(parent));
 
         // 1. Bail out with QUERY_STYLE_MULTIPLE_DIFFERENT if necessary
-        
+
         // cppcheck-suppress comparisonOfBoolWithInt
         if ((!paintImpossible) && (!paint->isSameType(*paint_res) || (paint_res->set != paint_effectively_set))) {
             return QUERY_STYLE_MULTIPLE_DIFFERENT;  // different types of paint
@@ -548,6 +549,8 @@ objects_query_fillstroke (const std::vector<SPItem*> &objects, SPStyle *style_re
             SPLinearGradient *linear_res = dynamic_cast<SPLinearGradient *>(server_res);
             SPRadialGradient *radial_res = linear_res ? nullptr : dynamic_cast<SPRadialGradient *>(server_res);
             SPPattern *pattern_res = (linear_res || radial_res) ? nullptr : dynamic_cast<SPPattern *>(server_res);
+            SPHatch *hatch_res = (linear_res || radial_res || pattern_res) ? nullptr : dynamic_cast<SPHatch *>(server_res);
+            
             if (linear_res) {
                 SPLinearGradient *linear = dynamic_cast<SPLinearGradient *>(server);
                 if (!linear) {
@@ -580,6 +583,17 @@ objects_query_fillstroke (const std::vector<SPItem*> &objects, SPStyle *style_re
                 SPPattern *pat_res = SP_PATTERN (server_res)->rootPattern();
                 if (pat_res != pat) {
                    return QUERY_STYLE_MULTIPLE_DIFFERENT;  // different pattern roots
+                }
+            } else if (hatch_res) {
+                SPHatch *hatch = dynamic_cast<SPHatch *>(server);
+                if (!hatch) {
+                    return QUERY_STYLE_MULTIPLE_DIFFERENT;  // different kind of server
+                }
+
+                SPHatch *hat = SP_HATCH (server)->rootHatch();
+                SPHatch *hat_res = SP_HATCH (server_res)->rootHatch();
+                if (hat_res != hat) {
+                    return QUERY_STYLE_MULTIPLE_DIFFERENT;  // different pattern roots
                 }
             }
         }
@@ -1002,7 +1016,7 @@ objects_query_paintorder (const std::vector<SPItem*> &objects, SPStyle *style_re
         }
     }
 
-    
+
     g_free( style_res->paint_order.value );
     style_res->paint_order.value= g_strdup( prev_order.c_str() );
     style_res->paint_order.set = true;
@@ -1066,8 +1080,8 @@ objects_query_fontnumbers (const std::vector<SPItem*> &objects, SPStyle *style_r
         // Quick way of getting document scale. Should be same as:
         // item->document->getDocumentScale().Affine().descrim()
         double doc_scale = Geom::Affine(item->i2dt_affine()).descrim();
-        
-        double dummy = style->font_size.computed * doc_scale; 
+
+        double dummy = style->font_size.computed * doc_scale;
         if (!std::isnan(dummy)) {
             size += dummy; /// \todo FIXME: we assume non-% units here
         } else {
@@ -1199,7 +1213,7 @@ objects_query_fontnumbers (const std::vector<SPItem*> &objects, SPStyle *style_r
         }
     }
 
-    // Used by text toolbar unset 'line-height' 
+    // Used by text toolbar unset 'line-height'
     style_res->line_height.set = lineheight_set;
 
     if (texts > 1) {

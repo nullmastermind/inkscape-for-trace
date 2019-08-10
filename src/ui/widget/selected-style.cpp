@@ -26,6 +26,7 @@
 
 #include "include/gtkmm_version.h"
 
+#include "object/sp-hatch.h"
 #include "object/sp-linear-gradient.h"
 #include "object/sp-mesh-gradient.h"
 #include "object/sp-namedview.h"
@@ -188,6 +189,11 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
         sp_set_font_size_smaller (GTK_WIDGET(_pattern[i].gobj()));
         _pattern[i].show_all();
         __pattern[i] = (i == SS_FILL)? (_("Pattern fill")) : (_("Pattern stroke"));
+
+        _hatch[i].set_markup (_("Hatch"));
+        sp_set_font_size_smaller (GTK_WIDGET(_hatch[i].gobj()));
+        _hatch[i].show_all();
+        __hatch[i] = (i == SS_FILL)? (_("Hatch fill")) : (_("Hatch stroke"));
 
         _lgradient[i].set_markup (_("<b>L</b>"));
         sp_set_font_size_smaller (GTK_WIDGET(_lgradient[i].gobj()));
@@ -993,6 +999,10 @@ SelectedStyle::update()
                         place->add(_pattern[i]);
                         place->set_tooltip_text(__pattern[i]);
                         _mode[i] = SS_PATTERN;
+                    } else if (SP_IS_HATCH (server)) {
+                        place->add(_hatch[i]);
+                        place->set_tooltip_text(__hatch[i]);
+                        _mode[i] == SS_HATCH;
                     }
                 } else {
                     g_warning ("file %s: line %d: Unknown paint server", __FILE__, __LINE__);
@@ -1287,7 +1297,7 @@ RotateableSwatch::do_motion(double by, guint modifier) {
 	if (pixbuf != nullptr) {
 	    cr = gdk_cursor_new_from_pixbuf(gdk_display_get_default(), pixbuf, 16, 16);
 
-            g_object_unref(pixbuf);	    
+            g_object_unref(pixbuf);
             gdk_window_set_cursor(gtk_widget_get_window(w), cr);
 	    g_object_unref(cr);
 	    cr = nullptr;
