@@ -43,7 +43,7 @@ public:
         Glib::ustring display_name;
         Glib::ustring author;
         Glib::ustring short_description;
-        Glib::ustring long_description;
+        Glib::ustring long_description; // unused
         Glib::ustring preview_name;
         Glib::ustring creation_date;
         std::set<Glib::ustring> keywords;

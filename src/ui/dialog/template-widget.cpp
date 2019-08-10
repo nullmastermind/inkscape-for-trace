@@ -124,8 +124,6 @@ void TemplateWidget::_displayTemplateDetails()
     if (_current_template.path != "")
         message += _("Path: ") + _current_template.path + "\n\n";
     
-    if (_current_template.long_description != "")
-        message += _("Description: ") + _current_template.long_description + "\n\n";
     if (!_current_template.keywords.empty()){
         message += _("Keywords: ");
         for (const auto & keyword : _current_template.keywords)
