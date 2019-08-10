@@ -24060,24 +24060,21 @@ msgid "Set as default template"
 msgstr "Imposta come _predefinito"
 
 #: ../src/ui/dialog/selectorsdialog.cpp:407 ../src/ui/dialog/xml-tree.cpp:187
-#, fuzzy
 msgid "Paned vertical"
-msgstr "Motivo verticale"
+msgstr "Disponi verticalmente"
 
 #: ../src/ui/dialog/selectorsdialog.cpp:695
 #: ../src/ui/dialog/styledialog.cpp:1009
-#, fuzzy
 msgid "Edited style element."
-msgstr "Calcola tutti gli oggetti."
+msgstr "Modifica stile elemento."
 
 #: ../src/ui/dialog/selectorsdialog.cpp:1131
 msgid "Cancel"
 msgstr "Cancella"
 
 #: ../src/ui/dialog/selectorsdialog.cpp:1132
-#, fuzzy
 msgid "Add"
-msgstr "_Aggiungi"
+msgstr "Aggiungi"
 
 #: ../src/ui/dialog/selectorsdialog.cpp:1139
 #, fuzzy
@@ -33054,15 +33051,13 @@ msgstr ""
 "Modifica colore di oggetti, gradienti, ampiezza contorni, delimitatori, "
 "tratteggi..."
 
-#: ../src/verbs.cpp:3088
-#, fuzzy
-msgid "_Unicode Characters..."
-msgstr "Carattere unicode:"
-
 #: ../src/verbs.cpp:3089
-#, fuzzy
+msgid "_Unicode Characters..."
+msgstr "Caratteri _Unicode..."
+
+#: ../src/verbs.cpp:3090
 msgid "Select Unicode characters from a palette"
-msgstr "Seleziona i caratteri da una paletta di glifi"
+msgstr "Seleziona i caratteri Unicode da una paletta"
 
 #: ../src/verbs.cpp:3092
 msgid "S_watches..."
