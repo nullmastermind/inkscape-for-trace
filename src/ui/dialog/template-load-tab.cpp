@@ -235,16 +235,19 @@ TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(const std::s
 
     Inkscape::XML::Document *rdoc = sp_repr_read_file(path.data(), SP_SVG_NS_URI);
     if (rdoc){
-        Inkscape::XML::Node *myRoot = rdoc->root();
-        if (strcmp(myRoot->name(), "svg:svg") != 0){     // Wrong file format
+        Inkscape::XML::Node *root = rdoc->root();
+        if (strcmp(root->name(), "svg:svg") != 0){     // Wrong file format
             return result;
         }
 
-        myRoot = sp_repr_lookup_name(myRoot, "inkscape:_templateinfo");
+        Inkscape::XML::Node *templateinfo = sp_repr_lookup_name(root, "inkscape:templateinfo");
+        if (!templateinfo) {
+            templateinfo = sp_repr_lookup_name(root, "inkscape:_templateinfo"); // backwards-compatibility
+        }
 
-        if (myRoot == nullptr)    // No template info
+        if (templateinfo == nullptr)    // No template info
             return result;
-        _getDataFromNode(myRoot, result);
+        _getDataFromNode(templateinfo, result);
     }
 
     return result;
@@ -257,18 +260,20 @@ void TemplateLoadTab::_getProceduralTemplates()
 
     std::list<Inkscape::Extension::Effect *>::iterator it = effects.begin();
     while (it != effects.end()){
-        Inkscape::XML::Node *myRoot;
-        myRoot  = (*it)->get_repr();
-        myRoot = sp_repr_lookup_name(myRoot, "inkscape:_templateinfo");
+        Inkscape::XML::Node *repr = (*it)->get_repr();
+        Inkscape::XML::Node *templateinfo = sp_repr_lookup_name(repr, "inkscape:templateinfo");
+        if (!templateinfo) {
+            templateinfo = sp_repr_lookup_name(repr, "inkscape:_templateinfo"); // backwards-compatibility
+        }
 
-        if (myRoot){
+        if (templateinfo){
             TemplateData result;
             result.display_name = (*it)->get_name();
             result.is_procedural = true;
             result.path = "";
             result.tpl_effect = *it;
 
-            _getDataFromNode(myRoot, result);
+            _getDataFromNode(templateinfo, result);
             _tdata[result.display_name] = result;
         }
         ++it;
@@ -279,14 +284,22 @@ void TemplateLoadTab::_getProceduralTemplates()
 void TemplateLoadTab::_getDataFromNode(Inkscape::XML::Node *dataNode, TemplateData &data)
 {
     Inkscape::XML::Node *currentData;
-    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_name")) != nullptr)
+    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:name")) != nullptr)
         data.display_name = _(currentData->firstChild()->content());
+    else if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_name")) != nullptr) // backwards-compatibility
+        data.display_name = _(currentData->firstChild()->content());
+
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:author")) != nullptr)
         data.author = currentData->firstChild()->content();
-    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_shortdesc")) != nullptr)
+
+    if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:shortdesc")) != nullptr)
         data.short_description = _( currentData->firstChild()->content());
+    else if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_shortdesc")) != nullptr) // backwards-compatibility
+        data.short_description = _( currentData->firstChild()->content());
+
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:preview")) != nullptr)
         data.preview_name = currentData->firstChild()->content();
+
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:date")) != nullptr)
         data.creation_date = currentData->firstChild()->content();
 
