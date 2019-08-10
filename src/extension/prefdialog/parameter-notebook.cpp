@@ -43,11 +43,16 @@ ParamNotebook::ParamNotebookPage::ParamNotebookPage(Inkscape::XML::Node *xml, In
                 chname++;
             }
 
-            if (!strcmp(chname, "param") || !strcmp(chname, "_param")) {
-                InxParameter *param = InxParameter::make(child_repr, ext);
-                if (param) {
-                    _children.push_back(param);
+            if (InxWidget::is_valid_widget_name(chname)) {
+                InxWidget *widget = InxWidget::make(child_repr, _extension);
+                if (widget) {
+                    _children.push_back(widget);
                 }
+            } else if (child_repr->type() == XML::ELEMENT_NODE) {
+                g_warning("Invalid child element ('%s') in notebook page in extension '%s'.",
+                          chname, _extension->get_id());
+            } else if (child_repr->type() != XML::COMMENT_NODE){
+                g_warning("Invalid child element found in notebook page in extension '%s'.", _extension->get_id());
             }
 
             child_repr = child_repr->next();
@@ -231,7 +236,7 @@ Gtk::Widget *ParamNotebook::get_widget(sigc::signal<void> *changeSignal)
         Gtk::Widget *page_widget = page->get_widget(changeSignal);
 
         Glib::ustring page_text = page->_text;
-        if (_translatable != NO) { // translate unless explicitly marked untranslatable
+        if (page->_translatable != NO) { // translate unless explicitly marked untranslatable
             page_text = page->get_translation(page_text.c_str());
         }
 

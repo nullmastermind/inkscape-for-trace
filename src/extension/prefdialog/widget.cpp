@@ -12,6 +12,7 @@
 
 #include "parameter.h"
 #include "widget.h"
+#include "widget-box.h"
 #include "widget-label.h"
 
 #include <algorithm>
@@ -38,10 +39,14 @@ InxWidget *InxWidget::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
         name++;
     }
 
+    // decide on widget type based on tag name
+    // keep in sync with list of names supported in InxWidget::is_valid_widget_name() below
     if (!name) {
         // we can't create a widget without name
         g_warning("InxWidget without name in extension '%s'.", in_ext->get_id());
-    } else if (!strcmp(name, "description")) {
+    } else if (!strcmp(name, "hbox") || !strcmp(name, "vbox")) {
+        widget = new WidgetBox(in_repr, in_ext);
+    } else if (!strcmp(name, "label")) {
         widget = new WidgetLabel(in_repr, in_ext);
     } else if (!strcmp(name, "param")) {
         widget = InxParameter::make(in_repr, in_ext);
@@ -56,7 +61,7 @@ InxWidget *InxWidget::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
 bool InxWidget::is_valid_widget_name(const char *name)
 {
     // keep in sync with names supported in InxWidget::make() above
-    static const std::vector<std::string> valid_names = {"description", "param"};
+    static const std::vector<std::string> valid_names = {"hbox", "vbox", "label", "param"};
 
     if (std::find(valid_names.begin(), valid_names.end(), name) != valid_names.end()) {
         return true;

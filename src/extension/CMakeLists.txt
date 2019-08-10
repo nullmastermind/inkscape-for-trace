@@ -62,6 +62,7 @@ set(extension_SRC
 	prefdialog/parameter-optiongroup.cpp
 	prefdialog/parameter-string.cpp
 	prefdialog/widget.cpp
+	prefdialog/widget-box.cpp
 	prefdialog/widget-label.cpp
 
 	# ------
@@ -137,6 +138,7 @@ set(extension_SRC
 	prefdialog/parameter-optiongroup.h
 	prefdialog/parameter-string.h
 	prefdialog/widget.h
+	prefdialog/widget-box.h
 	prefdialog/widget-label.h
 )
 
