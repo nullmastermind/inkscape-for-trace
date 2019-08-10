@@ -217,8 +217,8 @@ static bool evaluateSVG11Feature(gchar const *feature) {
         "Extensibility", // not sure
     };
     
-    for (auto & _supported_feature : _supported_features) {
-        if ( 0 == strcasecmp(feature, _supported_feature) )
+    for ( unsigned int i = 0 ; i < sizeof(_supported_features)/sizeof(_supported_features[0]); i++ ) {
+        if ( 0 == strcasecmp(feature, _supported_features[i]) )
             return true;
     }
     return false;
@@ -235,8 +235,8 @@ static bool evaluateSVG10Feature(gchar const *feature) {
         // "svg.all",
         // "dom.svg.all"
     };
-    for (auto & _supported_feature : _supported_features) {
-        if ( 0 == strcasecmp(feature, _supported_feature) )
+    for ( unsigned int i = 0 ; i < sizeof(_supported_features)/sizeof(_supported_features[0]); i++ ) {
+        if ( 0 == strcasecmp(feature, _supported_features[i]) )
             return true;
     }
     return false;

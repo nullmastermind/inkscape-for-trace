@@ -1002,10 +1002,6 @@ SPDesktopWidget::event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
         // current item on the canvas, because item events and all mouse events are caught
         // and passed on by the canvas acetate (I think). --bb
 
-        if ((event->type == GDK_MOTION_NOTIFY || event->type == GDK_BUTTON_RELEASE) && !dtw->_canvas->_inside) {
-            return sp_desktop_root_handler(nullptr, event, dtw->desktop);
-        }
-
         if ((event->type == GDK_KEY_PRESS || event->type == GDK_KEY_RELEASE)
                 && !dtw->_canvas->_current_item) {
             return sp_desktop_root_handler (nullptr, event, dtw->desktop);
@@ -1021,9 +1017,11 @@ SPDesktopWidget::event(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
 gint
 SPDesktopWidget::eventoutside(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
 {
-    if ((event->type == GDK_MOTION_NOTIFY || event->type == GDK_BUTTON_RELEASE) && !dtw->_canvas->_inside) {
-        return sp_desktop_root_handler(nullptr, event, dtw->desktop);
+    if ((event->type == GDK_MOTION_NOTIFY || event->type == GDK_BUTTON_RELEASE) && !dtw->_canvas->_inside &&
+        dtw->desktop->event_context->_button1on) {
+        sp_desktop_root_handler(nullptr, event, dtw->desktop);
     }
+
     return FALSE;
 }
 

@@ -160,7 +160,8 @@ public:
 
     gint xp, yp;           ///< where drag started
     gint tolerance;
-
+    bool _button1on;
+    bool _button3on;
     bool within_tolerance;  ///< are we still within tolerance of origin
 
     SPItem *item_to_select; ///< the item where mouse_press occurred, to
@@ -229,8 +230,6 @@ public:
 protected:
 	/// An xpm containing the shape of the tool's cursor.
     gchar const *const *cursor_shape;
-    bool _button1on;
-    bool _button3on;
     bool sp_event_context_knot_mouseover() const;
 
 private:
