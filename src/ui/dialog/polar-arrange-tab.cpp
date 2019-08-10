@@ -38,8 +38,8 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 	  centerX("", C_("Polar arrange tab", "X coordinate of the center"), centerY),
 	  radiusY("", C_("Polar arrange tab", "Y coordinate of the radius"), UNIT_TYPE_LINEAR),
 	  radiusX("", C_("Polar arrange tab", "X coordinate of the radius"), radiusY),
-	  angleY("", C_("Polar arrange tab", "Starting angle"), UNIT_TYPE_RADIAL),
-	  angleX("", C_("Polar arrange tab", "End angle"), angleY)
+	  angleY("", C_("Polar arrange tab", "Ending angle"), UNIT_TYPE_RADIAL),
+	  angleX("", C_("Polar arrange tab", "Starting angle"), angleY)
 {
 	anchorPointLabel.set_text(C_("Polar arrange tab", "Anchor point:"));
 	anchorPointLabel.set_halign(Gtk::ALIGN_START);
@@ -271,6 +271,7 @@ void PolarArrangeTab::arrange()
 
 	bool arrangeOnEllipse = !arrangeOnParametersRadio.get_active();
 	bool arrangeOnFirstEllipse = arrangeOnEllipse && arrangeOnFirstCircleRadio.get_active();
+	float yaxisdir = parent->getDesktop()->yaxisdir();
 
 	int count = 0;
 	for(auto item : tmp)
@@ -325,7 +326,7 @@ void PolarArrangeTab::arrange()
 		rx = radiusX.getValue("px");
 		ry = radiusY.getValue("px");
 		arcBeg = angleX.getValue("rad");
-		arcEnd = angleY.getValue("rad");
+		arcEnd = angleY.getValue("rad") * yaxisdir;
 		transformation.setIdentity();
 		referenceEllipse = nullptr;
 	}
@@ -352,7 +353,7 @@ void PolarArrangeTab::arrange()
 
 			if(rotateObjectsCheckBox.get_active()) {
 				// Calculate the angle by which to rotate each object
-				angle = -atan2f(newLocation.x() - realCenter.x(), newLocation.y() - realCenter.y());
+				angle = -atan2f(-yaxisdir * (newLocation.x() - realCenter.x()), -yaxisdir * (newLocation.y() - realCenter.y()));
 				rotateAround(item, newLocation, Geom::Rotate(angle));
 			}
 
