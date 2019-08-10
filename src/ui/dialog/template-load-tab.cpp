@@ -19,6 +19,7 @@
 #include <gtkmm/scrolledwindow.h>
 #include <iostream>
 
+#include "extension/extension.h"
 #include "extension/db.h"
 #include "inkscape.h"
 #include "file.h"
@@ -273,29 +274,39 @@ void TemplateLoadTab::_getProceduralTemplates()
             result.path = "";
             result.tpl_effect = *it;
 
-            _getDataFromNode(templateinfo, result);
+            _getDataFromNode(templateinfo, result, *it);
             _tdata[result.display_name] = result;
         }
         ++it;
     }
 }
 
+// if the template data comes from a procedural template (aka Effect extension),
+// attempt to translate within the extension's context (which might use a different gettext textdomain)
+const char *_translate(const char* msgid, Extension::Extension *extension)
+{
+    if (extension) {
+        return extension->get_translation(msgid);
+    } else {
+        return _(msgid);
+    }
+}
 
-void TemplateLoadTab::_getDataFromNode(Inkscape::XML::Node *dataNode, TemplateData &data)
+void TemplateLoadTab::_getDataFromNode(Inkscape::XML::Node *dataNode, TemplateData &data, Extension::Extension *extension)
 {
     Inkscape::XML::Node *currentData;
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:name")) != nullptr)
-        data.display_name = _(currentData->firstChild()->content());
+        data.display_name = _translate(currentData->firstChild()->content(), extension);
     else if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_name")) != nullptr) // backwards-compatibility
-        data.display_name = _(currentData->firstChild()->content());
+        data.display_name = _translate(currentData->firstChild()->content(), extension);
 
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:author")) != nullptr)
         data.author = currentData->firstChild()->content();
 
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:shortdesc")) != nullptr)
-        data.short_description = _( currentData->firstChild()->content());
+        data.short_description = _translate(currentData->firstChild()->content(), extension);
     else if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_shortdesc")) != nullptr) // backwards-compatibility
-        data.short_description = _( currentData->firstChild()->content());
+        data.short_description = _translate(currentData->firstChild()->content(), extension);
 
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:preview")) != nullptr)
         data.preview_name = currentData->firstChild()->content();
@@ -304,7 +315,7 @@ void TemplateLoadTab::_getDataFromNode(Inkscape::XML::Node *dataNode, TemplateDa
         data.creation_date = currentData->firstChild()->content();
 
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_keywords")) != nullptr){
-        Glib::ustring tplKeywords = _(currentData->firstChild()->content());
+        Glib::ustring tplKeywords = _translate(currentData->firstChild()->content(), extension);
         while (!tplKeywords.empty()){
             std::size_t pos = tplKeywords.find_first_of(" ");
             if (pos == Glib::ustring::npos)

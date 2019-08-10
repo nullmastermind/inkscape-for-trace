@@ -27,11 +27,16 @@
 
 
 namespace Inkscape {
+
+namespace Extension {
+class Extension;
+}
+
 namespace UI {
 
 class TemplateWidget;
 class NewFromTemplate;
-    
+
 class TemplateLoadTab : public Gtk::HBox
 {
 
@@ -49,12 +54,12 @@ public:
         std::set<Glib::ustring> keywords;
         Inkscape::Extension::Effect *tpl_effect;
     };
-    
+
     TemplateLoadTab(NewFromTemplate* parent);
     ~TemplateLoadTab() override;
     virtual void createTemplate();
 
-protected:    
+protected:
     class StringModelColumns : public Gtk::TreeModelColumnRecord
     {
         public:
@@ -62,32 +67,32 @@ protected:
         {
             add(textValue);
         }
-        
+
         Gtk::TreeModelColumn<Glib::ustring> textValue;
     };
-    
+
     Glib::ustring _current_keyword;
     Glib::ustring _current_template;
     std::map<Glib::ustring, TemplateData> _tdata;
     std::set<Glib::ustring> _keywords;
-    
-    
+
+
     virtual void _displayTemplateInfo();
     virtual void _initKeywordsList();
     virtual void _refreshTemplatesList();
     void _loadTemplates();
     void _initLists();
-    
+
     Gtk::VBox _tlist_box;
     Gtk::HBox _search_box;
     TemplateWidget *_info_widget;
-    
+
     Gtk::ComboBoxText _keywords_combo;
-    
+
     Gtk::TreeView _tlist_view;
     Glib::RefPtr<Gtk::ListStore> _tlist_store;
-    StringModelColumns _columns;    
-    
+    StringModelColumns _columns;
+
 private:
     enum SearchType
     {
@@ -95,16 +100,16 @@ private:
         USER_SPECIFIED,
         ALL
     };
-    
+
     SearchType _current_search_type;
     NewFromTemplate* _parent_widget;
-    
-    void _getDataFromNode(Inkscape::XML::Node *, TemplateData &);
+
+    void _getDataFromNode(Inkscape::XML::Node *, TemplateData &, Extension::Extension *extension=nullptr);
     void _getProceduralTemplates();
     void _getTemplatesFromDomain(Inkscape::IO::Resource::Domain domain);
-    void _keywordSelected();    
+    void _keywordSelected();
     TemplateData _processTemplateFile(const std::string &);
-    
+
     void _onRowActivated(const Gtk::TreeModel::Path &, Gtk::TreeViewColumn*);
 };
 
