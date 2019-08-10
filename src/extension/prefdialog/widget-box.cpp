@@ -84,6 +84,12 @@ Gtk::Widget *WidgetBox::get_widget(sigc::signal<void> *changeSignal)
                                               // revisit this later, possibly implementing GtkFrame or similar
     box->set_spacing(GUI_BOX_SPACING);
 
+    if (_orientation == HORIZONTAL) {
+        box->set_vexpand(false);
+    } else {
+        box->set_hexpand(false);
+    }
+
     // add child widgets onto page (if any)
     for (auto child : _children) {
         Gtk::Widget *child_widget = child->get_widget(changeSignal);
