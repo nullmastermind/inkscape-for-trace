@@ -14,6 +14,7 @@
 #include "widget.h"
 #include "widget-box.h"
 #include "widget-label.h"
+#include "widget-separator.h"
 
 #include <algorithm>
 
@@ -48,6 +49,8 @@ InxWidget *InxWidget::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
         widget = new WidgetBox(in_repr, in_ext);
     } else if (!strcmp(name, "label")) {
         widget = new WidgetLabel(in_repr, in_ext);
+    } else if (!strcmp(name, "separator")) {
+        widget = new WidgetSeparator(in_repr, in_ext);
     } else if (!strcmp(name, "param")) {
         widget = InxParameter::make(in_repr, in_ext);
     } else {
@@ -61,7 +64,7 @@ InxWidget *InxWidget::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
 bool InxWidget::is_valid_widget_name(const char *name)
 {
     // keep in sync with names supported in InxWidget::make() above
-    static const std::vector<std::string> valid_names = {"hbox", "vbox", "label", "param"};
+    static const std::vector<std::string> valid_names = {"hbox", "vbox", "label", "separator", "param"};
 
     if (std::find(valid_names.begin(), valid_names.end(), name) != valid_names.end()) {
         return true;

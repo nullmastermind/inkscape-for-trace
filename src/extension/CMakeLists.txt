@@ -64,6 +64,7 @@ set(extension_SRC
 	prefdialog/widget.cpp
 	prefdialog/widget-box.cpp
 	prefdialog/widget-label.cpp
+	prefdialog/widget-separator.cpp
 
 	# ------
 	# Header
@@ -140,6 +141,7 @@ set(extension_SRC
 	prefdialog/widget.h
 	prefdialog/widget-box.h
 	prefdialog/widget-label.h
+	prefdialog/widget-separator.h
 )
 
 if(WIN32)
