@@ -37,6 +37,7 @@
 ../share/extensions/empty_business_card.inx
 ../share/extensions/empty_desktop.inx
 ../share/extensions/empty_dvd_cover.inx
+../share/extensions/empty_envelope.inx
 ../share/extensions/empty_generic.inx
 ../share/extensions/empty_icon.inx
 ../share/extensions/empty_page.inx
@@ -112,6 +113,8 @@
 ../share/extensions/nicechart.inx
 ../share/extensions/output_scour.inx
 ../share/extensions/param_curves.inx
+../share/extensions/path_mesh_m2p.inx
+../share/extensions/path_mesh_p2m.inx
 ../share/extensions/pathalongpath.inx
 ../share/extensions/pathscatter.inx
 ../share/extensions/pdflatex.inx
@@ -139,7 +142,6 @@
 ../share/extensions/seamless_pattern_procedural.inx
 ../share/extensions/setup_typography_canvas.inx
 ../share/extensions/spirograph.inx
-../share/extensions/text_split.inx
 ../share/extensions/straightseg.inx
 ../share/extensions/summersnight.inx
 ../share/extensions/svg2fxg.inx
@@ -155,6 +157,7 @@
 ../share/extensions/text_merge.inx
 ../share/extensions/text_randomcase.inx
 ../share/extensions/text_sentencecase.inx
+../share/extensions/text_split.inx
 ../share/extensions/text_titlecase.inx
 ../share/extensions/text_uppercase.inx
 ../share/extensions/triangle.inx
