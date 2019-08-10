@@ -92,13 +92,7 @@
 ../src/extension/internal/vsd-input.cpp
 ../src/extension/internal/wmf-inout.cpp
 ../src/extension/internal/wpg-input.cpp
-../src/extension/param/description.cpp
-../src/extension/param/enum.cpp
-../src/extension/param/notebook.cpp
-../src/extension/param/parameter.cpp
-../src/extension/param/radiobutton.cpp
-../src/extension/param/string.cpp
-../src/extension/prefdialog.cpp
+../src/extension/prefdialog/prefdialog.cpp
 ../src/extension/system.cpp
 ../src/file-update.cpp
 ../src/file.cpp
