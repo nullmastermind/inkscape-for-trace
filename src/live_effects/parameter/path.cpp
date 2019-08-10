@@ -253,7 +253,7 @@ PathParam::param_newWidget()
         pButton->show();
         pButton->signal_clicked().connect(sigc::mem_fun(*this, &PathParam::on_link_button_click));
         static_cast<Gtk::HBox*>(_widget)->pack_start(*pButton, true, true);
-        pButton->set_tooltip_text(_("Insert from clipboard"));
+        pButton->set_tooltip_text(_("Link to path in clipboard"));
     }
 
     static_cast<Gtk::HBox*>(_widget)->show_all_children();

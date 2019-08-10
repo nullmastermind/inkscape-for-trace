@@ -184,7 +184,7 @@ Gtk::Widget* OriginalPathArrayParam::param_newWidget()
         pButton->show();
         pButton->signal_clicked().connect(sigc::mem_fun(*this, &OriginalPathArrayParam::on_link_button_click));
         hbox->pack_start(*pButton, Gtk::PACK_SHRINK);
-        pButton->set_tooltip_text(_("Insert from clipboard"));
+        pButton->set_tooltip_text(_("Link to path in clipboard"));
     }
     
     { // Remove linked path
