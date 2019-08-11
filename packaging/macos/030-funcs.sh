@@ -233,3 +233,57 @@ SELF_DIR='$SELF_DIR'\
   exit $?
 }
 
+### create disk image ##########################################################
+
+function create_dmg
+{
+  local app=$1
+  local dmg=$2
+  local cfg=$3
+
+  # set application
+  sed "s/PLACEHOLDERAPPLICATION/${app//\//\\/}/" $SELF_DIR/$(basename $cfg) > $cfg
+  
+  # set disk image icon (if it exists)
+  local icon=$SRC_DIR/$(basename -s .py $cfg).icns
+  if [ -f $icon ]; then
+    sed -i '' "s/PLACEHOLDERICON/${icon//\//\\/}/" $cfg
+  fi
+
+  # set background image (if it exists)
+  local background=$SRC_DIR/$(basename -s .py $cfg).png
+  if [ -f $background ]; then
+    sed -i '' "s/PLACEHOLDERBACKGROUND/${background//\//\\/}/" $cfg
+  fi
+
+  # create disk image
+  dmgbuild -s $cfg "$(basename -s .app $app)" $dmg
+}
+
+### run script via Terminal.app ################################################
+
+# This is for commands that otherwise don't behave when running in CI.
+# It requires a running desktop session (i.e. logged in user) and special
+# permissions on newer macOS versions.
+# Adapted from: https://stackoverflow.com/a/27970527
+#               https://gist.github.com/masci/ff51d9cf40a87a80094c
+
+function run_in_terminal
+{
+  local command=$1
+
+  #local window_id=$(uuidgen)      # this would be really unique but...
+  local window_id=$(date +%s)      # ...seconds would help more with debugging
+
+  osascript <<EOF
+tell application "Terminal"
+  set _tab to do script "echo -n -e \"\\\033]0;$window_id\\\007\"; $command; exit"
+  delay 1
+  repeat while _tab is busy
+    delay 1
+  end repeat
+  close (every window whose name contains "$window_id")
+end tell
+EOF
+}
+

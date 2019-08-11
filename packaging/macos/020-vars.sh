@@ -165,7 +165,6 @@ APP_PLIST=$APP_CON_DIR/Info.plist
 
 URL_BOOST=https://dl.bintray.com/boostorg/release/1.69.0/source/boost_1_69_0.tar.bz2
 URL_CPPUNIT=https://dev-www.libreoffice.org/src/cppunit-1.14.0.tar.gz
-URL_CREATEDMG=https://github.com/andreyvit/create-dmg/archive/v1.0.0.5.tar.gz
 URL_DOUBLE_CONVERSION=https://github.com/google/double-conversion/archive/v3.1.4.tar.gz
 URL_GC=https://github.com/ivmai/bdwgc/releases/download/v8.0.4/gc-8.0.4.tar.gz
 URL_GDL=https://github.com/GNOME/gdl/archive/GDL_3_28_0.tar.gz
@@ -175,8 +174,8 @@ URL_GTK_OSX=https://raw.githubusercontent.com/dehesselle/gtk-osx/inkscape
 URL_GTK_OSX_SETUP=$URL_GTK_OSX/gtk-osx-setup.sh
 URL_GTK_OSX_MODULESET=$URL_GTK_OSX/modulesets-stable/gtk-osx.modules
 URL_IMAGEMAGICK=https://github.com/ImageMagick/ImageMagick6/archive/6.9.7-10.tar.gz
-# Inkscape Git repository
 URL_INKSCAPE=https://gitlab.com/inkscape/inkscape
+URL_INKSCAPE_DMG_ICNS=https://github.com/dehesselle/mibap/raw/master/inkscape_dmg.icns
 URL_LCMS2=https://netcologne.dl.sourceforge.net/project/lcms/lcms/2.9/lcms2-2.9.tar.gz
 URL_LIBCDR=https://github.com/LibreOffice/libcdr/archive/libcdr-0.1.5.tar.gz
 URL_LIBREVENGE=https://ayera.dl.sourceforge.net/project/libwpd/librevenge/librevenge-0.0.4/librevenge-0.0.4.tar.gz
@@ -193,16 +192,17 @@ URL_PYTHON3_BIN=https://github.com/dehesselle/py3framework/releases/download/py3
 # 'Plist' class got removed in 'plistlib' and 'gtk-mac-bundler' needs that.
 URL_PYTHON3_SRC=https://github.com/dehesselle/py3framework/archive/py369.2.tar.gz
 # A pre-built version of the complete toolset.
-URL_TOOLSET_CACHE=https://github.com/dehesselle/mibap/releases/download/v0.16/mibap_v0.16.tar.xz
+URL_TOOLSET_CACHE=https://github.com/dehesselle/mibap/releases/download/v0.17/mibap_v0.17.tar.xz
 
 ### Python packages ############################################################
 
 PYTHON_CAIROSVG=cairosvg==2.4.0
 PYTHON_CAIROCFFI=cairocffi==1.0.2
-PYTHON_LXML=lxml==4.3.3
-PYTHON_NUMPY=numpy==1.16.4
+PYTHON_DMGBUILD=dmgbuild==1.3.2
+PYTHON_LXML=lxml==4.4.0
+PYTHON_NUMPY=numpy==1.16.4   # 1.17.0 breaks (no investigation yet)
 PYTHON_PYCAIRO=pycairo==1.18.1
-PYTHON_PYGOBJECT=PyGObject==3.32.1
+PYTHON_PYGOBJECT=PyGObject==3.32.2
 PYTHON_SCOUR=scour==0.37
 PYTHON_PYSERIAL=pyserial==3.4
 

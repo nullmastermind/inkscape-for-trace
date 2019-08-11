@@ -15,23 +15,36 @@ set -e
 
 run_annotated
 
-### package Inkscape ###########################################################
+### create application bundle ##################################################
 
 mkdir -p $ARTIFACT_DIR
 
-export ARTIFACT_DIR   # referenced in 'inkscape.bundle'
+( # use subshell to fence temporary variables
 
-BUILD_DIR=$SRC_DIR/gtk-mac-bundler.build
-mkdir -p $BUILD_DIR
+  BUILD_DIR=$SRC_DIR/gtk-mac-bundler.build
+  mkdir -p $BUILD_DIR
 
-cp $SRC_DIR/gtk-mac-bundler*/examples/gtk3-launcher.sh $BUILD_DIR
-cp $SELF_DIR/inkscape.bundle $BUILD_DIR
-cp $SELF_DIR/inkscape.plist $BUILD_DIR
+  cp $SRC_DIR/gtk-mac-bundler*/examples/gtk3-launcher.sh $BUILD_DIR
+  cp $SELF_DIR/inkscape.bundle $BUILD_DIR
+  cp $SELF_DIR/inkscape.plist $BUILD_DIR
+
+  # Due to an undiagnosed instability that only occurs during CI runs (not when
+  # run interactively from the terminal), the following code will be put into
+  # a separate script and be executed via Terminal.app.
+
+  cat <<EOF >$SRC_DIR/run_gtk-mac-bundler.sh
+#!/usr/bin/env bash
+export ARTIFACT_DIR=$ARTIFACT_DIR
 cd $BUILD_DIR
-
 jhbuild run gtk-mac-bundler inkscape.bundle
+EOF
+)
 
-# patch library locations
+chmod 755 $SRC_DIR/run_gtk-mac-bundler.sh
+run_in_terminal $SRC_DIR/run_gtk-mac-bundler.sh
+
+# Patch library link paths.
+
 relocate_dependency @executable_path/../Resources/lib/inkscape/libinkscape_base.dylib $APP_EXE_DIR/Inkscape-bin
 
 relocate_dependency @loader_path/../libpoppler.85.dylib $APP_LIB_DIR/inkscape/libinkscape_base.dylib

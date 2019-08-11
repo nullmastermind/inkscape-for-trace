@@ -14,16 +14,24 @@ for script in $SELF_DIR/0??-*.sh; do source $script; done
 
 run_annotated
 
-### install create-dmg #########################################################
+### install disk image creator #################################################
 
-get_source $URL_CREATEDMG
+jhbuild run pip3 install $PYTHON_DMGBUILD
+
+### download icon for disk image ###############################################
+
+# dmgbuild offers to generate a badged version of the disk image icon, but
+# it doesn't work and I have not investigated yet. We use a pre-made image
+# for now.
+
+save_file $URL_INKSCAPE_DMG_ICNS
 
 ### install gtk-mac-bundler ####################################################
 
 get_source $URL_GTK_MAC_BUNDLER
-make install
+jhbuild run make install
 
-### install svg to pgn convertor ###############################################
+### install svg to png convertor ###############################################
 
 jhbuild run pip3 install $PYTHON_CAIROSVG
 jhbuild run pip3 install $PYTHON_CAIROCFFI
@@ -41,7 +49,8 @@ save_file $URL_PYTHON3_BIN
 
 ### copy a charset.alias to lib for gtk-mac-bundler ############################
 
-# TODO this wasn't necessary before, why is this necessary now?
+# This wasn't necessary before, but since recent gtk-osx upstream updates,
+# whatever package did install the file in LIB_DIR, isn't doing it any longer.
 
 cp $TMP_DIR/jhbuild/build/pkg-config-0.29.2/glib/glib/libcharset/charset.alias $LIB_DIR
 
