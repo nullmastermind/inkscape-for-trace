@@ -12,15 +12,15 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-07-11 20:37+0200\n"
-"PO-Revision-Date: 2009-06-15 00:04+0200\n"
+"PO-Revision-Date: 2019-08-11 11:26+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
-"Language: \n"
+"Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 0.3\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: ../share/filters/filters.svg.h:2
 #, fuzzy
@@ -245,7 +245,6 @@ msgstr "Gjør skarpere"
 #: ../share/filters/filters.svg.h:87 ../share/filters/filters.svg.h:295
 #: ../share/filters/filters.svg.h:415
 #: ../src/extension/internal/filter/image.h:63
-#, fuzzy
 msgid "Image Effects"
 msgstr "Bildeeffekter"
 
@@ -254,7 +253,6 @@ msgid "Sharpen edges and boundaries within the object, force=0.15"
 msgstr "Gjør kantene skarpere i objektet, kraft=0.15"
 
 #: ../share/filters/filters.svg.h:70
-#, fuzzy
 msgid "Sharpen More"
 msgstr "Gjør enda skarpere"
 
@@ -4318,9 +4316,8 @@ msgid "guidelines typography canvas"
 msgstr ""
 
 #: ../share/templates/templates.h:1
-#, fuzzy
 msgid "No Layers"
-msgstr "Lag"
+msgstr "Ingen lag"
 
 #: ../share/templates/templates.h:1
 msgid "Empty sheet with no layers"
@@ -4494,27 +4491,25 @@ msgstr "<b>Gjeldende lag er låst</b>. Lås den opp for å kunne tegne i det."
 
 #: ../src/desktop-events.cpp:311
 msgid "Move guide"
-msgstr "Flytt rettesnor"
+msgstr "Flytt hjelpelinje"
 
 #: ../src/desktop-events.cpp:321 ../src/desktop-events.cpp:377
 #: ../src/ui/dialog/guides.cpp:145
 msgid "Delete guide"
-msgstr "Slett rettesnor"
+msgstr "Slett hjelpelinje"
 
 #: ../src/desktop-events.cpp:357
 #, c-format
 msgid "<b>Guideline</b>: %s"
-msgstr "<b>Rettesnor</b>: %s"
+msgstr "<b>Hjelpelinje</b>: %s"
 
 #: ../src/desktop.cpp:806
-#, fuzzy
 msgid "No previous transform."
-msgstr "Ingen tidligere zoom."
+msgstr "Ingen forrige transformasjon."
 
 #: ../src/desktop.cpp:829
-#, fuzzy
 msgid "No next transform."
-msgstr "Ingen neste zoom."
+msgstr "Ingen neste transformasjon."
 
 #: ../src/display/canvas-axonomgrid.cpp:265 ../src/display/canvas-grid.cpp:657
 msgid "Grid _units:"
@@ -4522,23 +4517,23 @@ msgstr "Enhet for r_utenett:"
 
 #: ../src/display/canvas-axonomgrid.cpp:267 ../src/display/canvas-grid.cpp:659
 msgid "_Origin X:"
-msgstr "_Utgangspunkt X:"
+msgstr "_Origos X:"
 
 #: ../src/display/canvas-axonomgrid.cpp:267 ../src/display/canvas-grid.cpp:659
 #: ../src/ui/dialog/inkscape-preferences.cpp:1354
 #: ../src/ui/dialog/inkscape-preferences.cpp:1379
 msgid "X coordinate of grid origin"
-msgstr "X koordinatene av rutenettets utgangspunkt"
+msgstr "X-koordinaten til rutenettets origo"
 
 #: ../src/display/canvas-axonomgrid.cpp:270 ../src/display/canvas-grid.cpp:662
 msgid "O_rigin Y:"
-msgstr "Utgangs_punkt Y:"
+msgstr "O_rigos Y:"
 
 #: ../src/display/canvas-axonomgrid.cpp:270 ../src/display/canvas-grid.cpp:662
 #: ../src/ui/dialog/inkscape-preferences.cpp:1355
 #: ../src/ui/dialog/inkscape-preferences.cpp:1380
 msgid "Y coordinate of grid origin"
-msgstr "Y koordinatene av rutenettets utgangspunkt"
+msgstr "Y-koordinaten til rutenettets origo"
 
 #: ../src/display/canvas-axonomgrid.cpp:273 ../src/display/canvas-grid.cpp:668
 msgid "Spacing _Y:"
@@ -4618,7 +4613,7 @@ msgstr "Aksonometrisk rutenett"
 
 #: ../src/display/canvas-grid.cpp:239
 msgid "Create new grid"
-msgstr "Lag rutenett"
+msgstr "Lag nytt rutenett"
 
 #: ../src/display/canvas-grid.cpp:305
 msgid "_Enabled"
@@ -4650,7 +4645,9 @@ msgstr "Synlig"
 msgid ""
 "Determines whether the grid is displayed or not. Objects are still snapped "
 "to invisible grids."
-msgstr "Skal rutenettet være synlig"
+msgstr ""
+"Bestemmer om rutenettet skal vises eller ikke. Objektene festes til usynlige "
+"rutenettlinjer."
 
 #: ../src/display/canvas-grid.cpp:329
 msgid "_Show dots instead of lines"
@@ -4699,11 +4696,11 @@ msgstr "Perpendikular inndeler"
 
 #: ../src/display/snap-indicator.cpp:89
 msgid "guide"
-msgstr "rettesnor"
+msgstr "hjelpelinje"
 
 #: ../src/display/snap-indicator.cpp:92
 msgid "guide intersection"
-msgstr "rettesnorskryssning"
+msgstr "hjelpelinjekryss"
 
 #: ../src/display/snap-indicator.cpp:95
 #, fuzzy
@@ -4717,7 +4714,7 @@ msgstr "Perpendikular inndeler"
 
 #: ../src/display/snap-indicator.cpp:101
 msgid "grid-guide intersection"
-msgstr "krysning av rutenettlinje og rettesnor"
+msgstr "rutenett- og hjelpelinjekryss"
 
 #: ../src/display/snap-indicator.cpp:104
 msgid "cusp node"
@@ -4761,11 +4758,11 @@ msgstr "Sett maske"
 
 #: ../src/display/snap-indicator.cpp:131
 msgid "bounding box corner"
-msgstr "grenserammehjørne"
+msgstr "hjørne til avgrensingsboks"
 
 #: ../src/display/snap-indicator.cpp:134
 msgid "bounding box side"
-msgstr "grenserammeside"
+msgstr "side til avgrensingsboks"
 
 #: ../src/display/snap-indicator.cpp:137
 msgid "page border"
@@ -4863,7 +4860,7 @@ msgstr "Stikrysning"
 
 #: ../src/display/snap-indicator.cpp:219
 msgid "Guide"
-msgstr "Rettesnor"
+msgstr "Hjelpelinje"
 
 #: ../src/display/snap-indicator.cpp:222
 #, fuzzy
@@ -4952,9 +4949,8 @@ msgid " (No preferences)"
 msgstr "(Ingen instillinger)"
 
 #: ../src/extension/effect.h:70 ../src/verbs.cpp:2338
-#, fuzzy
 msgid "Extensions"
-msgstr "_Utvidelser"
+msgstr "Utvidelser"
 
 #: ../src/extension/error-file.cpp:50
 msgid ""
@@ -4979,52 +4975,52 @@ msgstr "Vis dialog ved oppstart"
 #: ../src/extension/execution-env.cpp:120
 #, c-format
 msgid "'%s' working, please wait..."
-msgstr "'%s' arbeider, vennligst vent ..."
+msgstr "'%s' arbeider, vennligst vent …"
 
 #: ../src/extension/extension.cpp:256
 msgid ""
 "  This is caused by an improper .inx file for this extension.  An improper ."
 "inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
-"  Årsaken er en uriktig .inx-fil for denne filtype. En uriktig .inx-fil kan "
-"komme fra en feil under installasjonen av Inkscape."
+"  Dette skyldes at utvidelsen har en feil i .inx-filen. En feil i .inx-filen "
+"kan komme fra en feil under installasjonen av Inkscape."
 
 #: ../src/extension/extension.cpp:266
 msgid "the extension is designed for Windows only."
-msgstr ""
+msgstr "utvidelsen er laget kun for Windows."
 
 #: ../src/extension/extension.cpp:271
 msgid "an ID was not defined for it."
-msgstr "en ID var ikke definert."
+msgstr "det var ikke definert noen ID for den."
 
 #: ../src/extension/extension.cpp:275
 msgid "there was no name defined for it."
-msgstr "det var ikke noe navn definert for den."
+msgstr "det var ikke definert noe navn for den."
 
 #: ../src/extension/extension.cpp:279
 msgid "the XML description of it got lost."
-msgstr "XML beskrivelsen er blitt tapt."
+msgstr "XML-beskrivelsen til den gikk tapt."
 
 #: ../src/extension/extension.cpp:283
 msgid "no implementation was defined for the extension."
-msgstr "ingen implementering har blitt definert for denne filtypen."
+msgstr "det var ikke definert noen implementasjon for utvidelsen."
 
 #: ../src/extension/extension.cpp:290
 msgid "a dependency was not met."
-msgstr "en avhenginghet har ikke blitt møtt."
+msgstr "en avhengighet mangler."
 
 #: ../src/extension/extension.cpp:310
 msgid "Extension \""
-msgstr "Utvidelsen \""
+msgstr "Klarte ikke laste utvidelsen «"
 
 #: ../src/extension/extension.cpp:310
 msgid "\" failed to load because "
-msgstr "\" Opplasting mislyktes fordi"
+msgstr "» fordi"
 
 #: ../src/extension/extension.cpp:656
 #, c-format
 msgid "Could not create extension error log file '%s'"
-msgstr "Kunne ikke skape filendelses error-logg fil '%s'"
+msgstr "Klarte ikke lage loggfil for feil i utvidelsen, «%s»"
 
 #: ../src/extension/extension.cpp:765
 #: ../share/extensions/webslicer_create_rect.inx:7
@@ -5049,7 +5045,7 @@ msgstr "Ulastet"
 
 #: ../src/extension/extension.cpp:767
 msgid "Deactivated"
-msgstr "Deaktivisert"
+msgstr "Ikke aktiv"
 
 #: ../src/extension/extension.cpp:798
 msgid ""
@@ -5057,13 +5053,12 @@ msgid ""
 "Inkscape website or ask on the mailing lists if you have questions regarding "
 "this extension."
 msgstr ""
-"Det er ingen hjelp tilgjengelig til denne utvidelsen for øyeblikket. Se på "
-"www.inkscape.org eller spør på epostlista hvis du trenger hjelp."
+"Denne utvidelsen har for øyeblikket ikke hjelpedokumentasjon. Se på www."
+"inkscape.org eller spør på e-postlista hvis du trenger hjelp."
 
 #: ../src/extension/implementation/script.cpp:702
-#, fuzzy
 msgid "The output from the extension could not be parsed."
-msgstr "Innstillingsfila %s kunne ikke leses."
+msgstr "Klarte ikke tolke utdata fra utvidelsen."
 
 #: ../src/extension/implementation/script.cpp:1023
 msgid ""
@@ -5181,11 +5176,11 @@ msgstr "Uniform støy"
 
 #: ../src/extension/internal/bitmap/addNoise.cpp:50
 msgid "Gaussian Noise"
-msgstr "Normalfordelt/Gaussisk støy"
+msgstr "Normalfordelt/gaussisk støy"
 
 #: ../src/extension/internal/bitmap/addNoise.cpp:51
 msgid "Multiplicative Gaussian Noise"
-msgstr "Multiplikativ Gaussisk støy"
+msgstr "Multiplikativ gaussisk støy"
 
 #: ../src/extension/internal/bitmap/addNoise.cpp:52
 msgid "Impulse Noise"
@@ -5209,7 +5204,7 @@ msgstr "Legg til tilfeldig støy til valgte rasterbilde(r)"
 #: ../src/extension/internal/filter/paint.h:711
 #: ../src/extension/internal/filter/transparency.h:344
 msgid "Blur"
-msgstr "Uklar"
+msgstr "Slør"
 
 #: ../src/extension/internal/bitmap/blur.cpp:41
 #: ../src/extension/internal/bitmap/charcoal.cpp:41
@@ -5221,9 +5216,8 @@ msgstr "Uklar"
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:44
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:47
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2805
-#, fuzzy
 msgid "Radius:"
-msgstr "Radius"
+msgstr "Radius:"
 
 #: ../src/extension/internal/bitmap/blur.cpp:42
 #: ../src/extension/internal/bitmap/charcoal.cpp:42
@@ -5231,22 +5225,20 @@ msgstr "Radius"
 #: ../src/extension/internal/bitmap/gaussianBlur.cpp:42
 #: ../src/extension/internal/bitmap/sharpen.cpp:42
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:45
-#, fuzzy
 msgid "Sigma:"
-msgstr "Sigma"
+msgstr "Sigma:"
 
 #: ../src/extension/internal/bitmap/blur.cpp:48
 msgid "Blur selected bitmap(s)"
-msgstr "Gjør valgte rasterbilde(r) uklare"
+msgstr "Slør valgt(e) punktbilde(r)"
 
 #: ../src/extension/internal/bitmap/channel.cpp:49
 msgid "Channel"
 msgstr "Kanal"
 
 #: ../src/extension/internal/bitmap/channel.cpp:51
-#, fuzzy
 msgid "Layer:"
-msgstr "Lag"
+msgstr "Lag:"
 
 #: ../src/extension/internal/bitmap/channel.cpp:52
 #: ../src/extension/internal/bitmap/levelChannel.cpp:56
@@ -5266,12 +5258,12 @@ msgstr "Blå kanal"
 #: ../src/extension/internal/bitmap/channel.cpp:55
 #: ../src/extension/internal/bitmap/levelChannel.cpp:59
 msgid "Cyan Channel"
-msgstr "Cyan kanal"
+msgstr "Cyanblå kanal"
 
 #: ../src/extension/internal/bitmap/channel.cpp:56
 #: ../src/extension/internal/bitmap/levelChannel.cpp:60
 msgid "Magenta Channel"
-msgstr "Magenta kanal"
+msgstr "Magentarød kanal"
 
 #: ../src/extension/internal/bitmap/channel.cpp:57
 #: ../src/extension/internal/bitmap/levelChannel.cpp:61
@@ -5340,27 +5332,23 @@ msgstr ""
 
 #: ../src/extension/internal/bitmap/crop.cpp:70
 msgid "Top (px):"
-msgstr ""
+msgstr "Topp (piksler):"
 
 #: ../src/extension/internal/bitmap/crop.cpp:71
-#, fuzzy
 msgid "Bottom (px):"
-msgstr "Bot"
+msgstr "Bunn (piksler):"
 
 #: ../src/extension/internal/bitmap/crop.cpp:72
-#, fuzzy
 msgid "Left (px):"
-msgstr "Forskyvning x"
+msgstr "Venstre (piksler):"
 
 #: ../src/extension/internal/bitmap/crop.cpp:73
-#, fuzzy
 msgid "Right (px):"
-msgstr "Rettigheter"
+msgstr "Høyre (piksler):"
 
 #: ../src/extension/internal/bitmap/crop.cpp:79
-#, fuzzy
 msgid "Crop selected bitmap(s)"
-msgstr "Gjør valgte rasterbilde(r) uklare"
+msgstr "Beskjær valgt(e) punktbilde(r)"
 
 #: ../src/extension/internal/bitmap/cycleColormap.cpp:38
 msgid "Cycle Colormap"
@@ -5370,9 +5358,8 @@ msgstr "Fargekartsyklus"
 #: ../src/extension/internal/bitmap/spread.cpp:40
 #: ../src/extension/internal/bitmap/unsharpmask.cpp:46
 #: ../src/ui/toolbar/spray-toolbar.cpp:145
-#, fuzzy
 msgid "Amount:"
-msgstr "Mengde"
+msgstr "Mengde:"
 
 #: ../src/extension/internal/bitmap/cycleColormap.cpp:46
 #, fuzzy
@@ -5875,7 +5862,7 @@ msgstr "PostScript (*.ps)"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:349
 msgid "PostScript File"
-msgstr "PostScript Fil"
+msgstr "PostScript-fil"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:368
 #: ../share/extensions/eps_input.inx:13
@@ -5894,17 +5881,15 @@ msgstr "Encapsulated PostScript (*.eps)"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:391
 msgid "Encapsulated PostScript File"
-msgstr "Encapsulated PostScript Fil"
+msgstr "Encapsulated PostScript-fil"
 
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:245
-#, fuzzy
 msgid "Restrict to PDF version:"
-msgstr "Avgrens til PDF-versjon"
+msgstr "Avgrens til PDF-versjon:"
 
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:247
-#, fuzzy
 msgid "PDF 1.5"
-msgstr "PDF 1.4"
+msgstr "PDF 1.5"
 
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:249
 msgid "PDF 1.4"
@@ -5948,25 +5933,22 @@ msgstr "ut av %i"
 #: ../src/ui/dialog/ocaldialogs.cpp:1085 ../src/ui/interface.cpp:240
 #: ../src/widgets/desktop-widget.cpp:1131
 #: ../src/widgets/desktop-widget.cpp:1178
-#, fuzzy
 msgid "_Cancel"
-msgstr "Avbryt"
+msgstr "_Avbryt"
 
 #: ../src/extension/internal/cdr-input.cpp:156
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:106
 #: ../src/extension/internal/vsd-input.cpp:156
 #: ../src/extension/prefdialog.cpp:79 ../src/ui/dialog/guides.cpp:177
 #: ../src/ui/dialog/pixelartdialog.cpp:304 ../src/ui/dialog/tracedialog.cpp:825
-#, fuzzy
 msgid "_OK"
-msgstr "_K"
+msgstr "_OK"
 
 #: ../src/extension/internal/cdr-input.cpp:227
 #: ../src/extension/internal/vsd-input.cpp:227
 #: ../src/ui/dialog/svg-preview.cpp:301
-#, fuzzy
 msgid "No preview"
-msgstr "Forhåndsvisning"
+msgstr "Ingen forhåndsvisning"
 
 #: ../src/extension/internal/cdr-input.cpp:326
 msgid "Corel DRAW Input"
@@ -5974,12 +5956,11 @@ msgstr ""
 
 #: ../src/extension/internal/cdr-input.cpp:331
 msgid "Corel DRAW 7-X4 files (*.cdr)"
-msgstr ""
+msgstr "Corel DRAW 7-X4-filer (*.cdr)"
 
 #: ../src/extension/internal/cdr-input.cpp:332
-#, fuzzy
 msgid "Open files saved in Corel DRAW 7-X4"
-msgstr "Åpne filer lagret med XFIG"
+msgstr "Åpne filer lagret med Corel DRAW 7-X4"
 
 #: ../src/extension/internal/cdr-input.cpp:339
 msgid "Corel DRAW templates input"
@@ -5987,12 +5968,11 @@ msgstr ""
 
 #: ../src/extension/internal/cdr-input.cpp:344
 msgid "Corel DRAW 7-13 template files (*.cdt)"
-msgstr ""
+msgstr "Corel DRAW 7-13 malfiler (*.cdt)"
 
 #: ../src/extension/internal/cdr-input.cpp:345
-#, fuzzy
 msgid "Open files saved in Corel DRAW 7-13"
-msgstr "Åpne filer lagret med XFIG"
+msgstr "Åpne filer lagret med Corel DRAW 7-13"
 
 #: ../src/extension/internal/cdr-input.cpp:352
 msgid "Corel DRAW Compressed Exchange files input"
@@ -6000,11 +5980,11 @@ msgstr ""
 
 #: ../src/extension/internal/cdr-input.cpp:357
 msgid "Corel DRAW Compressed Exchange files (*.ccx)"
-msgstr ""
+msgstr "Corel DRAW komprimerte utvekslingsfiler (*.ccx)"
 
 #: ../src/extension/internal/cdr-input.cpp:358
 msgid "Open compressed exchange files saved in Corel DRAW"
-msgstr ""
+msgstr "Åpne komprimerte utvekslingsfiler lagret med Corel DRAW"
 
 #: ../src/extension/internal/cdr-input.cpp:365
 msgid "Corel DRAW Presentation Exchange files input"
@@ -6012,15 +5992,15 @@ msgstr ""
 
 #: ../src/extension/internal/cdr-input.cpp:370
 msgid "Corel DRAW Presentation Exchange files (*.cmx)"
-msgstr ""
+msgstr "Corel DRAW presentasjonsutvekslingsfiler (*.cmx)"
 
 #: ../src/extension/internal/cdr-input.cpp:371
 msgid "Open presentation exchange files saved in Corel DRAW"
-msgstr ""
+msgstr "Åpne presentasjonsutvekslingsfiler lagret med Corel DRAW"
 
 #: ../src/extension/internal/emf-inout.cpp:3634
 msgid "EMF Input"
-msgstr "EMF Input"
+msgstr "EMF-inndata"
 
 #: ../src/extension/internal/emf-inout.cpp:3639
 msgid "Enhanced Metafiles (*.emf)"
@@ -6032,7 +6012,7 @@ msgstr "Enhanced Metafiles"
 
 #: ../src/extension/internal/emf-inout.cpp:3648
 msgid "EMF Output"
-msgstr "EMF Output"
+msgstr "EMF-utdata"
 
 #: ../src/extension/internal/emf-inout.cpp:3650
 #: ../src/extension/internal/wmf-inout.cpp:3229
@@ -6959,14 +6939,14 @@ msgstr "Dekningsgradskanal"
 #: ../src/ui/widget/color-icc-selector.cpp:182
 #: ../src/ui/widget/color-scales.cpp:464 ../src/ui/widget/color-scales.cpp:465
 msgid "Cyan"
-msgstr "Cyan"
+msgstr "Cyanblå"
 
 #: ../src/extension/internal/filter/color.h:718
 #: ../src/ui/widget/color-icc-selector.cpp:178
 #: ../src/ui/widget/color-icc-selector.cpp:183
 #: ../src/ui/widget/color-scales.cpp:467 ../src/ui/widget/color-scales.cpp:468
 msgid "Magenta"
-msgstr "Magenta"
+msgstr "Magentarød"
 
 #: ../src/extension/internal/filter/color.h:719
 #: ../src/ui/widget/color-icc-selector.cpp:179
@@ -7070,7 +7050,7 @@ msgstr "Støy-gjennomsiktighet"
 
 #: ../src/extension/internal/filter/color.h:991
 msgid "Invert hue"
-msgstr "Vreng fargetone"
+msgstr "Inverter fargetone"
 
 #: ../src/extension/internal/filter/color.h:992
 #, fuzzy
@@ -7087,14 +7067,12 @@ msgid "Manage hue, lightness and transparency inversions"
 msgstr ""
 
 #: ../src/extension/internal/filter/color.h:1119
-#, fuzzy
 msgid "Lights"
-msgstr "Rettigheter"
+msgstr "Lys"
 
 #: ../src/extension/internal/filter/color.h:1120
-#, fuzzy
 msgid "Shadows"
-msgstr "Former"
+msgstr "Skygger"
 
 #: ../src/extension/internal/filter/color.h:1121
 #: ../src/extension/internal/filter/paint.h:357 ../src/filter-enums.cpp:34
@@ -7147,9 +7125,8 @@ msgstr "X"
 #: ../src/extension/internal/filter/color.h:1391
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2813
 #: ../src/ui/dialog/input.cpp:1433 ../src/ui/widget/page-sizer.cpp:58
-#, fuzzy
 msgid "Y"
-msgstr "Y:"
+msgstr "Y"
 
 #: ../src/extension/internal/filter/color.h:1274
 #, fuzzy
@@ -8464,7 +8441,8 @@ msgstr "røff"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:166
 msgid "Replace PDF fonts by closest-named installed fonts"
-msgstr "Bytt ut PDF-fonter med installert font med likest navn"
+msgstr ""
+"Erstatt PDF-skrifttyper med de installerte skrifttypene som har likest navn"
 
 # OVERSETTERE: Det er et spørmål om Embed bør være: Innlemme
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:168
@@ -8480,50 +8458,44 @@ msgid "PDF Import Settings"
 msgstr "PDF-importinstillinger"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:448
-#, fuzzy
 msgctxt "PDF input precision"
 msgid "rough"
-msgstr "røff"
+msgstr "grov"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:449
-#, fuzzy
 msgctxt "PDF input precision"
 msgid "medium"
 msgstr "medium"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:450
-#, fuzzy
 msgctxt "PDF input precision"
 msgid "fine"
-msgstr "fine"
+msgstr "fin"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:451
-#, fuzzy
 msgctxt "PDF input precision"
 msgid "very fine"
-msgstr "very fine"
+msgstr "veldig fin"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:952
 msgid "PDF Input"
-msgstr "PDF Input"
+msgstr "PDF-inndata"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:957
-#, fuzzy
 msgid "Portable Document Format (*.pdf)"
-msgstr "Adobe Portable Document Format"
+msgstr "Portable Document Format (*.pdf)"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:958
-#, fuzzy
 msgid "Portable Document Format"
-msgstr "Adobe Portable Document Format"
+msgstr "Portable Document Format"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:965
 msgid "AI Input"
-msgstr "AI Input"
+msgstr "AI-inndata"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:970
 msgid "Adobe Illustrator 9.0 and above (*.ai)"
-msgstr "Adobe Illustrator 9.0 and above (*.ai)"
+msgstr "Adobe Illustrator 9.0 og nyere (*.ai)"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:971
 msgid "Open files saved in Adobe Illustrator 9.0 and newer versions"
@@ -8531,7 +8503,7 @@ msgstr "Åpner filer laget med Adobe Illustrator 9.0 og nyere versjoner"
 
 #: ../src/extension/internal/pov-out.cpp:712
 msgid "PovRay Output"
-msgstr "PovRay Utdata"
+msgstr "PovRay-utdata"
 
 #: ../src/extension/internal/pov-out.cpp:717
 msgid "PovRay (*.pov) (paths and shapes only)"
@@ -8539,11 +8511,11 @@ msgstr "PovRay (*.pov) (kun stier og former)"
 
 #: ../src/extension/internal/pov-out.cpp:718
 msgid "PovRay Raytracer File"
-msgstr "PovRay Raytracer Fil"
+msgstr "PovRay Raytracer-fil"
 
 #: ../src/extension/internal/svg.cpp:675
 msgid "SVG Input"
-msgstr "SVG Inndata"
+msgstr "SVG-inndata"
 
 #: ../src/extension/internal/svg.cpp:677
 msgid "SVG Image Import Type:"
@@ -8564,11 +8536,11 @@ msgstr ""
 
 #: ../src/extension/internal/svg.cpp:693
 msgid "Scalable Vector Graphic (*.svg)"
-msgstr "Skalerbar Vektor Grafikk (*.svg)"
+msgstr "Skalerbar Vektorgrafikk (*.svg)"
 
 #: ../src/extension/internal/svg.cpp:694
 msgid "Inkscape native file format and W3C standard"
-msgstr "Inkscape sitt eget filformat og W3C standard"
+msgstr "Inkscape sitt eget filformat og W3C-standard"
 
 #: ../src/extension/internal/svg.cpp:702
 msgid "SVG Output Inkscape"
@@ -8580,12 +8552,12 @@ msgstr "Inkscape SVG (*.svg)"
 
 #: ../src/extension/internal/svg.cpp:708
 msgid "SVG format with Inkscape extensions"
-msgstr "SVG format med Inkscape filendelse"
+msgstr "SVG-format med Inkscape-utvidelser"
 
 #: ../src/extension/internal/svg.cpp:716
 #: ../share/extensions/output_scour.inx:37
 msgid "SVG Output"
-msgstr "SVG Utdata"
+msgstr "SVG-utdata"
 
 #: ../src/extension/internal/svg.cpp:721
 msgid "Plain SVG (*.svg)"
@@ -8593,23 +8565,23 @@ msgstr "Vanlig SVG (*.svg)"
 
 #: ../src/extension/internal/svg.cpp:722
 msgid "Scalable Vector Graphics format as defined by the W3C"
-msgstr "Skalerbar Vektor Grafikk format som definert av W3C"
+msgstr "Skalerbar Vektorgrafikk-formatet som definert av W3C"
 
 #: ../src/extension/internal/svgz.cpp:44
 msgid "SVGZ Input"
-msgstr "SVGZ Inndata"
+msgstr "SVGZ-inndata"
 
 #: ../src/extension/internal/svgz.cpp:50 ../src/extension/internal/svgz.cpp:64
 msgid "Compressed Inkscape SVG (*.svgz)"
-msgstr "Komprimert Inkscape SVG (*.svgz)"
+msgstr "Komprimert Inkscape-SVG (*.svgz)"
 
 #: ../src/extension/internal/svgz.cpp:51
 msgid "SVG file format compressed with GZip"
-msgstr "SVG filformatet komprimert med GZip"
+msgstr "SVG-formatet komprimert med GZip"
 
 #: ../src/extension/internal/svgz.cpp:59 ../src/extension/internal/svgz.cpp:73
 msgid "SVGZ Output"
-msgstr "SVGZ Utdata"
+msgstr "SVGZ-utdata"
 
 #: ../src/extension/internal/svgz.cpp:65
 msgid "Inkscape's native file format compressed with GZip"
@@ -8621,7 +8593,7 @@ msgstr "Komprimert standard SVG (*.svgz)"
 
 #: ../src/extension/internal/svgz.cpp:79
 msgid "Scalable Vector Graphics format compressed with GZip"
-msgstr "Skalerbar Vektor Grafikk format komprimert med GZip"
+msgstr "Skalerbar Vektorgrafikk-formatet komprimert med GZip"
 
 #: ../src/extension/internal/vsd-input.cpp:326
 #, fuzzy
@@ -8629,13 +8601,12 @@ msgid "VSD Input"
 msgstr "PDF Input"
 
 #: ../src/extension/internal/vsd-input.cpp:331
-#, fuzzy
 msgid "Microsoft Visio Diagram (*.vsd)"
-msgstr "Dia Diagram (*.dia)"
+msgstr "Microsoft Visio-diagram (*.vsd)"
 
 #: ../src/extension/internal/vsd-input.cpp:332
 msgid "File format used by Microsoft Visio 6 and later"
-msgstr ""
+msgstr "Filformatet brukes av Microsoft Visio 6 og senere"
 
 #: ../src/extension/internal/vsd-input.cpp:339
 #, fuzzy
@@ -8644,11 +8615,11 @@ msgstr "DXF Inndata"
 
 #: ../src/extension/internal/vsd-input.cpp:344
 msgid "Microsoft Visio XML Diagram (*.vdx)"
-msgstr ""
+msgstr "Microsoft Visio XML-diagram (*.vdx)"
 
 #: ../src/extension/internal/vsd-input.cpp:345
 msgid "File format used by Microsoft Visio 2010 and later"
-msgstr ""
+msgstr "Filformatet brukes av Microsoft Visio 2010 og senere"
 
 #: ../src/extension/internal/vsd-input.cpp:352
 #, fuzzy
@@ -8657,12 +8628,12 @@ msgstr "EMF Input"
 
 #: ../src/extension/internal/vsd-input.cpp:357
 msgid "Microsoft Visio 2013 drawing (*.vsdm)"
-msgstr ""
+msgstr "Microsoft Visio 2013-tegning (*.vsdm)"
 
 #: ../src/extension/internal/vsd-input.cpp:358
 #: ../src/extension/internal/vsd-input.cpp:371
 msgid "File format used by Microsoft Visio 2013 and later"
-msgstr ""
+msgstr "Filformatet brukes av Microsoft Visio 2013 og senere"
 
 #: ../src/extension/internal/vsd-input.cpp:365
 #, fuzzy
@@ -8671,7 +8642,7 @@ msgstr "DXF Inndata"
 
 #: ../src/extension/internal/vsd-input.cpp:370
 msgid "Microsoft Visio 2013 drawing (*.vsdx)"
-msgstr ""
+msgstr "Microsoft Visio 2013-tegning (*.vsdx)"
 
 #: ../src/extension/internal/wmf-inout.cpp:3213
 msgid "WMF Input"
@@ -8699,17 +8670,16 @@ msgid "Windows Metafile (*.wmf)"
 msgstr "Windows Metafil (*.wmf)"
 
 #: ../src/extension/internal/wmf-inout.cpp:3242
-#, fuzzy
 msgid "Windows Metafile"
-msgstr "Windows Metafiles"
+msgstr "Windows Metafile"
 
 #: ../src/extension/internal/wpg-input.cpp:158
 msgid "WPG Input"
-msgstr "WPG inndata"
+msgstr "WPG-inndata"
 
 #: ../src/extension/internal/wpg-input.cpp:163
 msgid "WordPerfect Graphics (*.wpg)"
-msgstr "WordPerfect Graphics (*.wpg)"
+msgstr "WordPerfect-grafikk (*.wpg)"
 
 #: ../src/extension/internal/wpg-input.cpp:164
 msgid "Vector graphics format used by Corel WordPerfect"
@@ -8722,63 +8692,69 @@ msgstr "_Lukk"
 
 #: ../src/extension/prefdialog.cpp:79 ../src/ui/dialog/text-edit.cpp:69
 #: ../src/ui/dialog/transformation.cpp:156
-#, fuzzy
 msgid "_Apply"
-msgstr "Legg til lag"
+msgstr "_Bruk"
 
 #: ../src/extension/prefdialog.cpp:263
 msgid "Live preview"
-msgstr "Live forhåndsvisning"
+msgstr "Forhåndsvisning i sanntid"
 
 #: ../src/extension/prefdialog.cpp:263
 msgid "Is the effect previewed live on canvas?"
-msgstr "Skal effekten vises live på lerretet?"
+msgstr "Skal effekten vises i sanntid i tegnevinduet?"
 
 #: ../src/extension/system.cpp:134 ../src/extension/system.cpp:136
 msgid "Format autodetect failed. The file is being opened as SVG."
-msgstr "Autosporing av format feilet. Filen blir åpnet som SVG."
+msgstr "Klarte ikke gjenkjenne formatet. Filen åpnes som SVG."
 
 #: ../src/file-update.cpp:380
-#, fuzzy
 msgid "Convert legacy Inkscape file"
-msgstr "Konverter til Braille"
+msgstr "Konverter foreldet Inkscape-fil"
 
 #: ../src/file-update.cpp:386
 msgid ""
 "was created in an older version of Inkscape (90 DPI) and we need to make it "
 "compatible with newer versions (96 DPI). Tell us about this file:\n"
 msgstr ""
+"ble opprettet i en eldre versjon av Inkscape (90 DPI) og vi må gjøre den "
+"kompatibel med nyere versjoner (96 DPI). Fortell oss om denne filen:\n"
 
 #: ../src/file-update.cpp:394
 msgid ""
 "This file contains digital artwork for screen display. <b>(Choose if "
 "unsure.)</b>"
 msgstr ""
+"Denne filen er ment for visning på skjerm. <b>(Velg denne hvis du er "
+"usikker.)</b>"
 
 #: ../src/file-update.cpp:397
 msgid "This file is intended for physical output, such as paper or 3D prints."
 msgstr ""
+"Denne filen er ment for fysisk utskrift til f.eks. papir eller 3D-utskrift."
 
 #: ../src/file-update.cpp:399
 msgid ""
 "The appearance of elements such as clips, masks, filters, and clones\n"
 "is most important. <b>(Choose if unsure.)</b>"
 msgstr ""
+"Utseendet til elementer som klipping, masker, filtre og kloner\n"
+"er viktigst. <b>Velg denne hvis du er usikker.)</b>"
 
 #: ../src/file-update.cpp:403
 msgid ""
 "The accuracy of the physical unit size and position values of objects\n"
 "in the file is most important. (Experimental.)"
 msgstr ""
+"Nøyaktigheten til fysisk enhetsstørrelse og posisjonsverdiene ti objektene\n"
+"i filen er viktigst. (Eksperimentelt.)"
 
 #: ../src/file-update.cpp:405
-#, fuzzy
 msgid "Create a backup file in same directory."
-msgstr "Kan ikke skape katalog %s."
+msgstr "Reservekopier filen i samme mappe."
 
 #: ../src/file-update.cpp:406
 msgid "More details..."
-msgstr ""
+msgstr "Flere detaljer …"
 
 #: ../src/file-update.cpp:409
 msgid ""
@@ -8805,24 +8781,22 @@ msgid ""
 msgstr ""
 
 #: ../src/file-update.cpp:444
-#, fuzzy
 msgid "OK"
-msgstr "O:"
+msgstr "OK"
 
 #: ../src/file-update.cpp:628
-#, fuzzy
 msgid "Update Document"
-msgstr "Lagre dokument"
+msgstr "Oppdater dokument"
 
 #: ../src/file.cpp:181
 msgid "Document not saved yet.  Cannot revert."
-msgstr "Dokumenterer ikke lagret ennå. Kan ikke tilbakestilles."
+msgstr "Dokumentet er ikke lagret ennå, og kan ikke tilbakestilles."
 
 #: ../src/file.cpp:187
-#, fuzzy
 msgid "Changes will be lost! Are you sure you want to reload document %1?"
 msgstr ""
-"Endringer vil bli tapt! Er du sikker på at du vil gjennopplaste dokument %s?"
+"Endringer vil bli tapt. Er du sikker på at du vil laste inn dokumentet «%s» "
+"på nytt?"
 
 #: ../src/file.cpp:201
 msgid "Document reverted."
@@ -8837,9 +8811,8 @@ msgid "Select file to open"
 msgstr "Velg fil som skal åpnes"
 
 #: ../src/file.cpp:442
-#, fuzzy
 msgid "Clean up document"
-msgstr "Lagre dokument"
+msgstr "Rens dokument"
 
 #: ../src/file.cpp:449
 #, c-format
@@ -8858,8 +8831,8 @@ msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown filename extension."
 msgstr ""
-"Ingen Inkscape filtype funnet for å lagre dokument (%s).  Dette kan være på "
-"grunn av en ukjent filtypenavn."
+"Fant ingen Inkscape-filtype for å lagre dokument (%s).  Dette kan skyldes et "
+"ukjent filetternavn."
 
 #: ../src/file.cpp:489 ../src/file.cpp:499 ../src/file.cpp:508
 #: ../src/file.cpp:515 ../src/file.cpp:520 ../src/file.cpp:532
@@ -8871,12 +8844,12 @@ msgstr "Dokument er ikke lagret."
 #, c-format
 msgid ""
 "File %s is write protected. Please remove write protection and try again."
-msgstr ""
+msgstr "Filen %s er skrivebeskyttet. Fjern skrivebeskyttelsen og prøv igjen."
 
 #: ../src/file.cpp:507 ../src/file.cpp:541
 #, c-format
 msgid "File %s could not be saved."
-msgstr "Fil %s kunne ikke lagres."
+msgstr "Klarte ikke lagre filen %s."
 
 #: ../src/file.cpp:519
 #, c-format
@@ -8884,6 +8857,8 @@ msgid ""
 "File could not be saved:\n"
 "No object with ID '%s' found."
 msgstr ""
+"Klarte ikke lagre filen:\n"
+"Fant ingen objekt med ID «%s»."
 
 #: ../src/file.cpp:529
 #, c-format
@@ -8893,20 +8868,22 @@ msgid ""
 "The following additional information was returned by the output extension:\n"
 "'%s'"
 msgstr ""
+"Klarte ikke lagre filen %s.\n"
+"\n"
+"Utdatautvidelsen gav tilbake følgende informasjon:\n"
+"«%s»"
 
 #: ../src/file.cpp:564 ../src/file.cpp:566
 msgid "Document saved."
 msgstr "Dokumentet er lagret."
 
 #: ../src/file.cpp:624
-#, fuzzy
 msgid "drawing"
-msgstr "tegning%s"
+msgstr "tegning"
 
 #: ../src/file.cpp:629
-#, fuzzy
 msgid "drawing-%1"
-msgstr "tegning%s"
+msgstr "tegning-%1"
 
 #: ../src/file.cpp:646
 msgid "Select file to save a copy to"
@@ -8922,7 +8899,7 @@ msgstr "Ingen endringer som trengs å lagres."
 
 #: ../src/file.cpp:779
 msgid "Saving document..."
-msgstr "Lagrer dokument ..."
+msgstr "Lagrer dokument …"
 
 #: ../src/file.cpp:893 ../src/io/resource.cpp:155 ../src/io/resource.cpp:160
 msgid "en"
@@ -8936,16 +8913,15 @@ msgstr "Importer"
 #: ../src/file.cpp:1163
 #, c-format
 msgid "Failed to load the requested file %s"
-msgstr "Feilet i å laste forespurte fil %s"
+msgstr "Klarte ikke laste den forespurte filen %s"
 
 #: ../src/file.cpp:1210
 msgid "Select file to import"
 msgstr "Velg fil som skal importeres"
 
 #: ../src/file.cpp:1466
-#, fuzzy
 msgid "Import Clip Art"
-msgstr "Importer"
+msgstr "Importer fra bildesamling"
 
 #: ../src/filter-enums.cpp:23
 msgid "Color Matrix"
@@ -9041,9 +9017,8 @@ msgid "Clear"
 msgstr "F_jern"
 
 #: ../src/filter-enums.cpp:97
-#, fuzzy
 msgid "Copy"
-msgstr "_Kopier"
+msgstr "Kopier"
 
 #: ../src/filter-enums.cpp:98
 #, fuzzy
@@ -9286,72 +9261,67 @@ msgstr ""
 # File: ../src/inkscape-application.cpp, line: 526
 #: ../src/inkscape-application.cpp:526
 msgid "file1 [file2 [fileN]]"
-msgstr ""
+msgstr "fil1 [fil2 [filN]]"
 
 #
 # File: ../src/inkscape-application.cpp, line: 527
 #: ../src/inkscape-application.cpp:527
 msgid "Process (or open) one or more files."
-msgstr ""
+msgstr "Behandle (eller åpne) en eller flere filer."
 
 #: ../src/inkscape-application.cpp:528
-#, fuzzy
 msgid "Examples:"
-msgstr "Samplinger"
+msgstr "Eksempler:"
 
 #
 # File: ../src/inkscape-application.cpp, line: 529
 #: ../src/inkscape-application.cpp:529
 msgid "Export input SVG (%1) to PDF (%2) format:"
-msgstr ""
+msgstr "Eksporter inn-SVG (%1) til PDF (%2)-format:"
 
 #
 # File: ../src/inkscape-application.cpp, line: 531
 #: ../src/inkscape-application.cpp:531
 msgid "Export input files (%1) to PNG format keeping original name (%2):"
-msgstr ""
+msgstr "Eksporter innfiler (%1) til PNG-format med samme filnavn (%2):"
 
 #
 # File: ../src/inkscape-application.cpp, line: 533
 #: ../src/inkscape-application.cpp:533
 msgid "See %1 and %2 for more details."
-msgstr ""
+msgstr "Se %1 og %2 for flere detaljer."
 
 #: ../src/inkscape-application.cpp:536
-#, fuzzy
 msgid "Print Inkscape version"
-msgstr "Skriv ut Inkscapes versjonnummer"
+msgstr "List ut Inkscapes versjonsnummer"
 
 #: ../src/inkscape-application.cpp:537
-#, fuzzy
 msgid "Print system extension directory"
-msgstr "Skriv ut utvidelseskatalogen og avslutt"
+msgstr "List ut systemutvidelsesmappen"
 
 #: ../src/inkscape-application.cpp:540
-#, fuzzy
 msgid "File import"
-msgstr "Velg fil som skal importeres"
+msgstr "Filimport"
 
 #
 # File: ../src/inkscape-application.cpp, line: 541
 #: ../src/inkscape-application.cpp:541
 msgid "Read input file from standard input (stdin)"
-msgstr ""
+msgstr "Les innfil fra standard inndata (stdin)"
 
 #: ../src/inkscape-application.cpp:542
-#, fuzzy
 msgid "PDF page number to import"
-msgstr "Velg fil som skal importeres"
+msgstr "Sidetall til PDF-siden som skal importeres"
 
 #: ../src/inkscape-application.cpp:542
 msgid "PAGE"
-msgstr ""
+msgstr "SIDE"
 
 #
 # File: ../src/inkscape-application.cpp, line: 495
 #: ../src/inkscape-application.cpp:543
 msgid "Use poppler when importing via commandline"
-msgstr ""
+msgstr "Bruk «poppler» ved import via kommandolinjen"
 
 #
 # File: ../src/inkscape-application.cpp, line: 544
@@ -9368,69 +9338,57 @@ msgid "Do not fix pre-0.92 document's text baseline spacing on opening"
 msgstr ""
 
 #: ../src/inkscape-application.cpp:548
-#, fuzzy
 msgid "File export"
-msgstr "Gradientredigerer"
+msgstr "Fileksport"
 
 #
 # File: ../src/inkscape-application.cpp, line: 549
 #: ../src/inkscape-application.cpp:549
 msgid "Output file name (file type is guessed from extension)"
-msgstr ""
+msgstr "Navnet på utfilen (filtypen gjettes fra filetternavnet)"
 
 #: ../src/inkscape-application.cpp:549
-#, fuzzy
 msgid "EXPORT-FILENAME"
-msgstr "FILNAVN"
+msgstr "EKSPORT-FILNAVN"
 
 #: ../src/inkscape-application.cpp:550
-#, fuzzy
 msgid "Overwrite input file"
-msgstr "_Skriv sesjon fil:"
+msgstr "Overskriv innfil"
 
 #
 #: ../src/inkscape-application.cpp:551
 msgid "File type(s) to export: [svg,png,ps,eps,pdf,tex,emf,wmf,xaml]"
-msgstr ""
+msgstr "Filtype(r) som skal eksporteres: [svg,png,ps,eps,pdf,tex,emf,wmf,xaml]"
 
 #: ../src/inkscape-application.cpp:554
-#, fuzzy
 msgid "Export geometry"
-msgstr "Sett filnavn"
+msgstr "Eksporter geometri"
 
 #: ../src/inkscape-application.cpp:555
-#, fuzzy
 msgid "Area to export is page"
-msgstr "Eksportområde er tegningen"
+msgstr "Sidestørrelsen avgrenser eksporten"
 
 #: ../src/inkscape-application.cpp:556
-#, fuzzy
 msgid "Area to export is whole drawing (ignoring page size)"
-msgstr "Eksportert område er hele tegningen (ikke lerretet)"
+msgstr "Eksporter hele tegningen (se bort fra sidestørrelse)"
 
 #
 # File: ../src/inkscape-application.cpp, line: 557
 #: ../src/inkscape-application.cpp:557
 msgid "Area to export in SVG user units"
-msgstr ""
+msgstr "Området som skal eksporteres i SVG-brukerenheter"
 
 #: ../src/inkscape-application.cpp:557
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
 #: ../src/inkscape-application.cpp:558
-#, fuzzy
 msgid "Snap the bitmap export area outwards to the nearest integer values"
-msgstr ""
-"Fest punktgrafikk eksportområde utvendig til den nærmeste heltalls verdi (i "
-"SVG brukerenheter)"
+msgstr "Fest punktbildets eksportområde utover til nærmeste heltallsverdi"
 
 #: ../src/inkscape-application.cpp:559
-#, fuzzy
 msgid "Resolution for bitmaps and rasterized filters; default is 96"
-msgstr ""
-"Oppløsning for eksport av rasterbilder og for rasterfilter i PS/EPS/PDF "
-"(standard er 90)"
+msgstr "Oppløsning for eksport av punktbilder og rasterfiltre; standard er 96"
 
 #: ../src/inkscape-application.cpp:559
 #: ../src/ui/widget/rendering-options.cpp:34
@@ -9438,18 +9396,16 @@ msgid "DPI"
 msgstr "DPI"
 
 #: ../src/inkscape-application.cpp:560
-#, fuzzy
 msgid "Bitmap width in pixels (overrides --export-dpi)"
-msgstr "Bredden på eksporterte punktgrafikk i piksler (overstyrer eksport-dpi)"
+msgstr "Bredde til punktbilde i piksler (overstyrer --export-dpi)"
 
 #: ../src/inkscape-application.cpp:560
 msgid "WIDTH"
 msgstr "BREDDE"
 
 #: ../src/inkscape-application.cpp:561
-#, fuzzy
 msgid "Bitmap height in pixels (overrides --export-dpi)"
-msgstr "Bredden på eksporterte punktgrafikk i piksler (overstyrer eksport-dpi)"
+msgstr "Høyde til punktbilde i piksler (overstyrer --export-dpi)"
 
 #: ../src/inkscape-application.cpp:561
 msgid "HEIGHT"
@@ -9461,48 +9417,45 @@ msgstr "HØYDE"
 msgid ""
 "Margin around export area: units of page size for SVG, mm for PS/EPS/PDF"
 msgstr ""
+"Marg rundt eksportområde: Sidestørrelsens enhet for SVG; mm for PS/EPS/PDF"
 
 #: ../src/inkscape-application.cpp:565
-#, fuzzy
 msgid "Export options"
-msgstr "Orientering"
+msgstr "Eksportinnstillinger"
 
 #: ../src/inkscape-application.cpp:566
-#, fuzzy
 msgid "ID(s) of object(s) to export"
-msgstr "IDen på objektet som skal eksporteres"
+msgstr "ID til objekt(er) som skal eksporteres"
 
 #: ../src/inkscape-application.cpp:566
 msgid "OBJECT-ID[;OBJECT-ID]*"
-msgstr ""
+msgstr "OBJEKT-ID;[OBJEKT-ID]*"
 
 #: ../src/inkscape-application.cpp:567
-#, fuzzy
 msgid "Hide all objects except object with ID selected by export-id"
-msgstr "Skul alle objekter som ikke er valgt i det eksporterte bildet"
+msgstr "Skjul alle objekter unntatt objekter med ID valgt av export-id"
 
 #
 # File: ../src/inkscape-application.cpp, line: 568
 #: ../src/inkscape-application.cpp:568
 msgid "Remove Inkscape-specific SVG attributes/properties"
-msgstr ""
+msgstr "Fjern Inkscape-spesifikke SVG-attributter/egenskaper"
 
 #
 # File: ../src/inkscape-application.cpp, line: 569
 #: ../src/inkscape-application.cpp:569
 msgid "Postscript level (2 or 3); default is 3"
-msgstr ""
+msgstr "Postscript-nivå (2 eller 3); standard er 3"
 
 #: ../src/inkscape-application.cpp:569
-#, fuzzy
 msgid "PS-Level"
-msgstr "Niveler"
+msgstr "PS-Level"
 
 #
 # File: ../src/inkscape-application.cpp, line: 570
 #: ../src/inkscape-application.cpp:570
 msgid "PDF version (1.4 or 1.5)"
-msgstr ""
+msgstr "PDF-versjon (1.4 eller 1.5)"
 
 #
 # File: ../src/inkscape-application.cpp, line: 570
@@ -9607,122 +9560,117 @@ msgstr ""
 # File: ../src/inkscape-application.cpp, line: 588
 #: ../src/inkscape-application.cpp:588
 msgid "Advanced file processing"
-msgstr ""
+msgstr "Avansert filbehandling"
 
 #: ../src/inkscape-application.cpp:589
-#, fuzzy
 msgid "Remove unused definitions from the <defs> section(s) of document"
-msgstr "Fjern ubrukte definisjoner fra defs seksjonen(e) i dokumentet"
+msgstr "Fjern ubrukte definisjoner fra <defs>-avsnitt(ene) i dokumentet"
 
 #
 # File: ../src/inkscape-application.cpp, line: 590
 #: ../src/inkscape-application.cpp:590
 msgid "Select objects: comma-separated list of IDs"
-msgstr ""
+msgstr "Velg objekter: kommaseparert liste med ID-er"
 
 #
 # File: ../src/inkscape-application.cpp, line: 594
 #: ../src/inkscape-application.cpp:594
 msgid "List of actions (with optional arguments) to execute"
-msgstr ""
+msgstr "Liste med handlinger (med valgfrie argumenter) som skal utføres"
 
 #: ../src/inkscape-application.cpp:594
 msgid "ACTION(:ARG)[;ACTION(:ARG)]*"
-msgstr ""
+msgstr "HANDLING(:ARG)[;HANDLING(:ARG)]*"
 
 #: ../src/inkscape-application.cpp:595
-#, fuzzy
 msgid "List all available actions"
-msgstr "Sirkel (etter tre punkt på buen)"
+msgstr "List ut alle tilgjengelige handlinger"
 
 #
 # File: ../src/inkscape-application.cpp, line: 599
 #: ../src/inkscape-application.cpp:599
 msgid "List of verbs to execute"
-msgstr ""
+msgstr "Liste med verb som skal kjøres"
 
 #
 # File: ../src/inkscape-application.cpp, line: 599
 #: ../src/inkscape-application.cpp:599
 msgid "VERB[;VERB]*"
-msgstr ""
+msgstr "VERB[:VERB]*"
 
 #
 # File: ../src/inkscape-application.cpp, line: 600
 #: ../src/inkscape-application.cpp:600
 msgid "List all available verbs"
-msgstr ""
+msgstr "List ut alle tilgjengelige verb"
 
 #: ../src/inkscape-application.cpp:603
 #: ../src/ui/dialog/inkscape-preferences.cpp:941
-#, fuzzy
 msgid "Interface"
-msgstr "Interpolere (Innskyte)"
+msgstr "Grensesnitt"
 
 #
 # File: ../src/inkscape-application.cpp, line: 604
 #: ../src/inkscape-application.cpp:604
 msgid "Console interface only (no visible GUI)"
-msgstr ""
+msgstr "Kun konsollgrensesnitt (grafisk brukergrensesnitt ikke synlig)"
 
 #
 # File: ../src/inkscape-application.cpp, line: 605
 #: ../src/inkscape-application.cpp:605
 msgid "With graphical user interface (required by some actions/verbs)"
-msgstr ""
+msgstr "Med grafisk brukergrensesnitt (kreves av noen handlinger/verb)"
 
 #
 # File: ../src/inkscape-application.cpp, line: 606
 #: ../src/inkscape-application.cpp:606
 msgid "Close GUI after executing all actions/verbs"
-msgstr ""
+msgstr "Lukk brukergrensesnitt etter kjøring av alle handlinger/verb"
 
 #: ../src/inkscape-application.cpp:608
-#, fuzzy
 msgid "Start Inkscape in interactive shell mode"
-msgstr "Start Inkscape i et interaktivt skall"
+msgstr "Start Inkscape i interaktivt skallmodus"
 
 #
 # File: ../src/inkscape-application.cpp, line: 611
 #: ../src/inkscape-application.cpp:611
 msgid "D-Bus"
-msgstr ""
+msgstr "D-Bus"
 
 #
 # File: ../src/inkscape-application.cpp, line: 612
 #: ../src/inkscape-application.cpp:612
 msgid "Enter a listening loop for D-Bus messages in console mode"
-msgstr ""
+msgstr "Start en lytteløkke for D-BUS-meldinger i konsollmodus"
 
 #
 # File: ../src/inkscape-application.cpp, line: 613
 #: ../src/inkscape-application.cpp:613
 msgid "Specify the D-Bus name; default is 'org.inkscape'"
-msgstr ""
+msgstr "Angi D-Bus-navnet; standard er «org.inkscape»"
 
 #: ../src/inkscape-application.cpp:613
 msgid "BUS-NAME"
-msgstr ""
+msgstr "BUSS-NAVN"
 
 #: ../src/inkscape.cpp:236
-#, fuzzy
 msgid "Autosave failed! Cannot open directory %1."
-msgstr "Kan ikke skape katalog %s."
+msgstr "Automatisk lagring mislyktes. Klarte ikke åpne mappe %1."
 
 #: ../src/inkscape.cpp:253
 msgid "Autosaving documents..."
-msgstr "Automatisk lagring av dokumenter ..."
+msgstr "Lagrer dokumenter automatisk …"
 
 #: ../src/inkscape.cpp:320
 msgid "Autosave failed! Could not find inkscape extension to save document."
 msgstr ""
-"Automatisk lagring feilet! Kunne ikke finne Inkscape-utvidelse for å lagre "
-"dokumentet."
+"Automatisk lagring mislyktes. Klarte ikke finne Inkscape-utvidelse for å "
+"lagre dokumentet."
 
 #: ../src/inkscape.cpp:323 ../src/inkscape.cpp:330
 #, c-format
 msgid "Autosave failed! File %s could not be saved."
-msgstr "Automatisk lagring feilet! Filen %s kunne ikke lagres."
+msgstr "Automatisk lagring mislyktes. Klarte ikke lagre filen %s."
 
 #: ../src/inkscape.cpp:345
 msgid "Autosave complete."
@@ -9741,57 +9689,52 @@ msgid ""
 "Automatic backups of unsaved documents were done to the following "
 "locations:\n"
 msgstr ""
-"Automatiske sikkerhetskopier av dokumenter som ikke er lagret ble utført til "
-"følgende sted:\n"
+"Automatiske sikkerhetskopier av dokumenter som ikke er lagret ble plassert "
+"her:\n"
 
 #: ../src/inkscape.cpp:798
 msgid "Automatic backup of the following documents failed:\n"
-msgstr "Automatisk sikkerhetskopiering av følgende dokumenter feilet:\n"
+msgstr "Automatisk sikkerhetskopiering av følgende dokumenter mislyktes:\n"
 
 #: ../src/inkview-application.cpp:61
 msgid "Inkview - An SVG File Viewer"
-msgstr ""
+msgstr "Inkview – Viser SVG-filer"
 
 #: ../src/inkview-application.cpp:66
-#, fuzzy
 msgid "Print: Inkview version."
-msgstr "Skriv ut Inkscapes versjonnummer"
+msgstr "List ut: Inkviews versjonsnummer."
 
 #: ../src/inkview-application.cpp:67
 msgid "Launch in fullscreen mode"
-msgstr ""
+msgstr "Start med fullskjermsvisning"
 
 #: ../src/inkview-application.cpp:68
-#, fuzzy
 msgid "Search folders recursively"
-msgstr "Løs opp _Klone"
+msgstr "Søk i alle undermapper"
 
 #: ../src/inkview-application.cpp:69
-#, fuzzy
 msgid "Change image every NUMBER seconds"
-msgstr "Endre fargeoppsett"
+msgstr "Endre bilde hvert TALL sekunder"
 
 #: ../src/inkview-application.cpp:69 ../src/inkview-application.cpp:70
 msgid "NUMBER"
-msgstr ""
+msgstr "TALL"
 
 #: ../src/inkview-application.cpp:70
-#, fuzzy
 msgid "Scale image by factor NUMBER"
-msgstr "Skaleringsfaktor"
+msgstr "Skaler bilde med faktor TALL"
 
 #: ../src/inkview-application.cpp:71
-#, fuzzy
 msgid "Preload files"
-msgstr "Lenkeegenska_per"
+msgstr "Forhåndslast filer"
 
 #: ../src/io/resource-manager.cpp:383
 msgid "Fixup broken links"
-msgstr ""
+msgstr "Reparer ødelagte lenker"
 
 #: ../src/knot.cpp:333
 msgid "Node or handle drag canceled."
-msgstr "Node eller håndtak trekk annullert."
+msgstr "Node- eller håndtak-draing avbrutt."
 
 #: ../src/knotholder.cpp:199
 msgid "Change handle"
@@ -9803,25 +9746,23 @@ msgstr "Flytt håndtak"
 
 #: ../src/knotholder.cpp:349 ../src/knotholder.cpp:371
 msgid "<b>Move</b> the pattern fill inside the object"
-msgstr "<b>Flytt</b> på objektets mønsterfyll"
+msgstr "<b>Flytt</b> objektets mønsterfyll"
 
 #: ../src/knotholder.cpp:353 ../src/knotholder.cpp:375
-#, fuzzy
 msgid "<b>Scale</b> the pattern fill; uniformly if with <b>Ctrl</b>"
-msgstr "<b>Proposjoner</b> mønsterfyllet enhetlig"
+msgstr "<b>Skaler</b> mønsterfyllet; i begge retninger med <b>Ctrl</b>"
 
 #: ../src/knotholder.cpp:357 ../src/knotholder.cpp:379
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Roter</b> mønsterfyllet; med <b>Ctrl</b> for å gripe tak i vinkel"
+msgstr "<b>Roter</b> mønsterfyllet; med <b>Ctrl</b> for å hoppe til vinkler"
 
 #: ../src/knotholder.cpp:393 ../src/knotholder.cpp:395
-#, fuzzy
 msgid "<b>Resize</b> the filter effect region"
-msgstr "Bredden av valgte"
+msgstr "<b>Endre størrelsen</b> til filtereffektens område"
 
 #: ../src/libnrtype/FontFactory.cpp:664
 msgid "Ignoring font without family that will crash Pango"
-msgstr "Ignorer font uten familie som vil krasje Pango"
+msgstr "Ignorer skrifttype uten familie som vil krasje Pango"
 
 #: ../src/live_effects/effect.cpp:102
 msgid "Bend"
@@ -16331,34 +16272,28 @@ msgid "_Select This"
 msgstr "_Velg denne"
 
 #: ../src/ui/contextmenu.cpp:374
-#, fuzzy
 msgid "Select Same"
-msgstr "Velg side:"
+msgstr "Velg samme"
 
 #: ../src/ui/contextmenu.cpp:384
-#, fuzzy
 msgid "Fill and Stroke"
-msgstr "_Fyll og Strøk"
+msgstr "Fyll og strøk"
 
 #: ../src/ui/contextmenu.cpp:391
-#, fuzzy
 msgid "Fill Color"
-msgstr "Flat farge"
+msgstr "Fyllfarge"
 
 #: ../src/ui/contextmenu.cpp:398
-#, fuzzy
 msgid "Stroke Color"
-msgstr "Endre strøkfarge"
+msgstr "Strøkfarge"
 
 #: ../src/ui/contextmenu.cpp:405
-#, fuzzy
 msgid "Stroke Style"
-msgstr "St_røkstil"
+msgstr "Strøkstil"
 
 #: ../src/ui/contextmenu.cpp:412
-#, fuzzy
 msgid "Object Type"
-msgstr "Objekt"
+msgstr "Objekttype"
 
 #: ../src/ui/contextmenu.cpp:419
 #, fuzzy
@@ -19225,37 +19160,33 @@ msgstr "Slett attributt"
 
 #: ../src/ui/dialog/find.cpp:60
 msgid "F_ind:"
-msgstr ""
+msgstr "S_øk etter:"
 
 #: ../src/ui/dialog/find.cpp:60
-#, fuzzy
 msgid "Find objects by their content or properties (exact or partial match)"
 msgstr ""
-"Finn objekter ut fra deres tekstinnhold (presis eller delvis jamførhet)"
+"Finn objekter ut fra deres innhold eller egenskaper (fullt eller delvis "
+"samsvar)"
 
 #: ../src/ui/dialog/find.cpp:61
-#, fuzzy
 msgid "R_eplace:"
-msgstr "Bytt:"
+msgstr "_Erstatt med:"
 
 #: ../src/ui/dialog/find.cpp:61
-#, fuzzy
 msgid "Replace match with this value"
-msgstr "Støy-gjennomsiktighet"
+msgstr "Erstatt treff med denne verdien"
 
 #: ../src/ui/dialog/find.cpp:63
 msgid "_All"
-msgstr ""
+msgstr "_Alt"
 
 #: ../src/ui/dialog/find.cpp:64
-#, fuzzy
 msgid "Current _layer"
-msgstr "Gjeldende lag"
+msgstr "Gjeldende _lag"
 
 #: ../src/ui/dialog/find.cpp:65
-#, fuzzy
 msgid "Sele_ction"
-msgstr "Valg"
+msgstr "_Utvalg"
 
 #: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:65
 #: ../share/ui/menus.xml:265
@@ -19263,66 +19194,56 @@ msgid "_Text"
 msgstr "_Tekst"
 
 #: ../src/ui/dialog/find.cpp:67
-#, fuzzy
 msgid "_Properties"
-msgstr "%s egenskaper"
+msgstr "E_genskaper"
 
 #: ../src/ui/dialog/find.cpp:69
-#, fuzzy
 msgid "Search in"
-msgstr "Søk grupper"
+msgstr "Søk i"
 
 #: ../src/ui/dialog/find.cpp:70
 msgid "Scope"
-msgstr ""
+msgstr "Omfang"
 
 #: ../src/ui/dialog/find.cpp:72
-#, fuzzy
 msgid "Case sensiti_ve"
-msgstr "Grip-sensitivitet:"
+msgstr "Skill sm_å/store bokstaver"
 
 #: ../src/ui/dialog/find.cpp:73
-#, fuzzy
 msgid "E_xact match"
-msgstr "Trekk ut ett bilde"
+msgstr "_Fullt samsvar"
 
 #: ../src/ui/dialog/find.cpp:74
 msgid "Include _hidden"
 msgstr "Inkluder _skjulte"
 
 #: ../src/ui/dialog/find.cpp:75
-#, fuzzy
 msgid "Include loc_ked"
 msgstr "Inkluder lå_ste"
 
 #: ../src/ui/dialog/find.cpp:79
-#, fuzzy
 msgid "_ID"
-msgstr "_ID: "
+msgstr "_ID"
 
 #: ../src/ui/dialog/find.cpp:80
-#, fuzzy
 msgid "Attribute _name"
-msgstr "Navn på attributt"
+msgstr "Attributt_navn"
 
 #: ../src/ui/dialog/find.cpp:81
-#, fuzzy
 msgid "Attri_bute value"
-msgstr "Verdi for attributt"
+msgstr "Attributt_verdi"
 
 #: ../src/ui/dialog/find.cpp:82
-#, fuzzy
 msgid "_Style"
-msgstr "_Stil:"
+msgstr "St_il"
 
 #: ../src/ui/dialog/find.cpp:83
 msgid "F_ont"
-msgstr ""
+msgstr "Skriftt_ype"
 
 #: ../src/ui/dialog/find.cpp:84
-#, fuzzy
 msgid "Properties"
-msgstr "%s egenskaper"
+msgstr "Egenskaper"
 
 #: ../src/ui/dialog/find.cpp:86
 msgid "All types"
@@ -19357,7 +19278,6 @@ msgid "Groups"
 msgstr "Grupper"
 
 #: ../src/ui/dialog/find.cpp:96
-#, fuzzy
 msgctxt "Find dialog"
 msgid "Clones"
 msgstr "Kloner"
@@ -19373,33 +19293,28 @@ msgid "Offsets"
 msgstr "Forskyvninger"
 
 #: ../src/ui/dialog/find.cpp:100
-#, fuzzy
 msgid "Object types"
-msgstr "Objekt"
+msgstr "Objekttyper"
 
 #: ../src/ui/dialog/find.cpp:103
 msgid "_Find"
 msgstr "_Finn"
 
 #: ../src/ui/dialog/find.cpp:104
-#, fuzzy
 msgid "_Replace All"
-msgstr "Erstatt"
+msgstr "E_rstatt alle"
 
 #: ../src/ui/dialog/find.cpp:114
-#, fuzzy
 msgid "Select all objects matching the selection criteria"
-msgstr "Velg objekter som tilsvarer alle feltene du fylte inn"
+msgstr "Velg alle objektene som samsvarer med utvalgskriteriet"
 
 #: ../src/ui/dialog/find.cpp:116
-#, fuzzy
 msgid "Replace all matches"
-msgstr "Bytt tekst"
+msgstr "Erstatt alle treff"
 
 #: ../src/ui/dialog/find.cpp:118
-#, fuzzy
 msgid "Search in all layers"
-msgstr "Velg i alle lagene"
+msgstr "Søk i alle lagene"
 
 #: ../src/ui/dialog/find.cpp:120
 msgid "Limit search to the current layer"
@@ -19410,22 +19325,20 @@ msgid "Limit search to the current selection"
 msgstr "Begrens søket til gjeldende utvalgte"
 
 #: ../src/ui/dialog/find.cpp:124
-#, fuzzy
 msgid "Search in text objects"
-msgstr "Søk tekst objekter"
+msgstr "Søk i tekstobjekter"
 
 #: ../src/ui/dialog/find.cpp:126
 msgid "Search in object properties, styles, attributes and IDs"
-msgstr ""
+msgstr "Søk i objektegenskaper, stiler, attributter og ID-er"
 
 #: ../src/ui/dialog/find.cpp:128
 msgid "Match upper/lower case"
-msgstr ""
+msgstr "Skill mellom store og små bokstaver"
 
 #: ../src/ui/dialog/find.cpp:131
-#, fuzzy
 msgid "Match whole objects only"
-msgstr "Vend valgte objekter horisontalt"
+msgstr "Kun hele objekter gir treff"
 
 #: ../src/ui/dialog/find.cpp:134
 msgid "Include hidden objects in search"
@@ -20894,9 +20807,8 @@ msgid ""
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:400
-#, fuzzy
 msgid "Editing preferences"
-msgstr "Gradient innstillinger"
+msgstr "Redigeringsinnstillinger"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:401
 #, fuzzy
@@ -22806,8 +22718,8 @@ msgid ""
 "Uncheck this to be able to keep the current objects selected when the "
 "current layer changes"
 msgstr ""
-"Uavkryss denne for å kunne beholde gjeldende objekter valgte også etter "
-"gjeldende lag endres"
+"Fravelg denne for å kunne beholde gjeldende objekter i utvalget også etter "
+"at gjeldende lag endres"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1778
 #, fuzzy
@@ -23858,14 +23770,12 @@ msgid "System info"
 msgstr "System"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2587
-#, fuzzy
 msgid "Reset Preferences"
-msgstr "Tekst innstillinger"
+msgstr "Tilbakestill innstillinger"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2590
-#, fuzzy
 msgid "User preferences: "
-msgstr "Stjerne innstillinger"
+msgstr "Egne innstillinger:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2591
 #, fuzzy
@@ -24543,7 +24453,7 @@ msgstr "Lag spiral"
 
 #: ../src/ui/dialog/new-from-template.cpp:24
 msgid "New From Template"
-msgstr ""
+msgstr "Ny fra mal"
 
 #: ../src/ui/dialog/object-attributes.cpp:38
 msgid "Href:"
@@ -32695,7 +32605,7 @@ msgstr "Kan ikke flytte forbi første lag."
 #: ../src/verbs.cpp:1351 ../src/verbs.cpp:1418 ../src/verbs.cpp:1466
 #: ../src/verbs.cpp:1472 ../src/verbs.cpp:1496 ../src/verbs.cpp:1511
 msgid "No current layer."
-msgstr "Inget gjeldende lag."
+msgstr "Ingen aktive lag."
 
 #: ../src/verbs.cpp:1380 ../src/verbs.cpp:1384
 #, c-format
@@ -32776,7 +32686,7 @@ msgstr "Vend vertikalt"
 #: ../src/verbs.cpp:2500 ../src/verbs.cpp:3198
 #, fuzzy
 msgid "Unlock all objects in the current layer"
-msgstr "Omdøp det gjeldende lag"
+msgstr "Endre navn "
 
 #: ../src/verbs.cpp:2504 ../src/verbs.cpp:3200
 #, fuzzy
@@ -32864,9 +32774,8 @@ msgid "Print document"
 msgstr "Skriv ut dokument"
 
 #: ../src/verbs.cpp:2548
-#, fuzzy
 msgid "Clean _Up Document"
-msgstr "Kunne ikke ekportere til filnavn %s.\n"
+msgstr "Rens dokument"
 
 #: ../src/verbs.cpp:2549
 msgid ""
@@ -32885,9 +32794,8 @@ msgid "Import a bitmap or SVG image into this document"
 msgstr "Importer et punktgrafikk eller et SVG bilde i dokumentet"
 
 #: ../src/verbs.cpp:2555
-#, fuzzy
 msgid "Import Clip Art..."
-msgstr "_Importer ..."
+msgstr "_Importer fra bildesamling …"
 
 #: ../src/verbs.cpp:2556
 #, fuzzy
@@ -32896,7 +32804,7 @@ msgstr "Importer fra Open Clip Art Library"
 
 #: ../src/verbs.cpp:2559
 msgid "N_ext Window"
-msgstr "N_este Vindu"
+msgstr "N_este vindu"
 
 #: ../src/verbs.cpp:2559
 msgid "Switch to the next document window"
@@ -32904,7 +32812,7 @@ msgstr "Bytt til neste dokument vindu"
 
 #: ../src/verbs.cpp:2561
 msgid "P_revious Window"
-msgstr "Fo_rrige Vindu"
+msgstr "Fo_rrige vindu"
 
 #: ../src/verbs.cpp:2562
 msgid "Switch to the previous document window"
@@ -32923,9 +32831,8 @@ msgid "Quit Inkscape"
 msgstr "Avslutt Inkscape"
 
 #: ../src/verbs.cpp:2566
-#, fuzzy
 msgid "New from _Template..."
-msgstr "Farge_utvalg ..."
+msgstr "Ny fra mal …"
 
 #: ../src/verbs.cpp:2567
 #, fuzzy
@@ -32966,7 +32873,7 @@ msgstr "Lim inn objekter eller tekst fra utklippstavlen"
 
 #: ../src/verbs.cpp:2578
 msgid "Paste _Style"
-msgstr "Lim inn _Stil"
+msgstr "Lim inn _stil"
 
 #: ../src/verbs.cpp:2579
 msgid "Apply the style of the copied object to selection"
@@ -32974,7 +32881,7 @@ msgstr "Påfør stilen på det kopierte objekt til valgte"
 
 #: ../src/verbs.cpp:2580
 msgid "Paste Si_ze"
-msgstr "L_im inn Størrelse"
+msgstr "L_im inn størrelse"
 
 #: ../src/verbs.cpp:2581
 msgid "Scale selection to match the size of the copied object"
@@ -32982,7 +32889,7 @@ msgstr "Gjør valgte om for å passe til størrelsen på det kopierte objekt"
 
 #: ../src/verbs.cpp:2582
 msgid "Paste _Width"
-msgstr "Lim inn _Bredde"
+msgstr "Lim inn _bredde"
 
 #: ../src/verbs.cpp:2583
 msgid "Scale selection horizontally to match the width of the copied object"
@@ -32992,7 +32899,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:2584
 msgid "Paste _Height"
-msgstr "Lim inn _Høyde"
+msgstr "Lim inn _høyde"
 
 #: ../src/verbs.cpp:2585
 msgid "Scale selection vertically to match the height of the copied object"
@@ -33002,7 +32909,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:2586
 msgid "Paste Size Separately"
-msgstr "Lim inn Størrelsen separat"
+msgstr "Lim inn størrelsen separat"
 
 #: ../src/verbs.cpp:2587
 msgid "Scale each selected object to match the size of the copied object"
@@ -33012,7 +32919,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:2588
 msgid "Paste Width Separately"
-msgstr "Lim inn Bredde separat"
+msgstr "Lim inn bredde separat"
 
 #: ../src/verbs.cpp:2589
 msgid ""
@@ -33024,7 +32931,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:2590
 msgid "Paste Height Separately"
-msgstr "Lim inn Høyde separat"
+msgstr "Lim inn høyde separat"
 
 #: ../src/verbs.cpp:2591
 msgid ""
@@ -33036,7 +32943,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:2592
 msgid "Paste _In Place"
-msgstr "Lim inn på _Stedet"
+msgstr "Lim inn på _stedet"
 
 #: ../src/verbs.cpp:2593
 msgid "Paste objects from clipboard to the original location"
@@ -33087,49 +32994,45 @@ msgstr "Dupliser valgte objekter"
 
 #: ../src/verbs.cpp:2604
 msgid "Create Clo_ne"
-msgstr "Skap Klo_ne"
+msgstr "Skap klo_ne"
 
 #: ../src/verbs.cpp:2605
 msgid "Create a clone (a copy linked to the original) of selected object"
-msgstr "Skap en klone (en kopi lenket til originalen) av valgte objekt"
+msgstr "Skap en klone (en kopi koblet til originalen) av valgte objekt"
 
 #: ../src/verbs.cpp:2606
 msgid "Unlin_k Clone"
-msgstr "Løs opp _Klone"
+msgstr "Fristill _klone"
 
 #: ../src/verbs.cpp:2607
-#, fuzzy
 msgid ""
 "Cut the selected clones' links to the originals, turning them into "
 "standalone objects"
-msgstr ""
-"Kutt den valgte klonens lenke til dens original, slik at den gjøres til et "
-"frittstående objekt"
+msgstr "Fristiller de valgte klonene slik at de blir frittstående objekter"
 
 #: ../src/verbs.cpp:2609
-#, fuzzy
 msgid "Unlink Clones _recursively"
-msgstr "Løs opp _Klone"
+msgstr "Fristill kloner _rekursivt"
 
 #: ../src/verbs.cpp:2610
 msgid "Unlink all clones in the selection, even if they are in groups."
-msgstr ""
+msgstr "Fristiller alle klonene i utvalget, selv om de er grupperte."
 
 #: ../src/verbs.cpp:2612
 msgid "Relink to Copied"
-msgstr ""
+msgstr "Nykobling til kopiert"
 
 #: ../src/verbs.cpp:2613
 msgid "Relink the selected clones to the object currently on the clipboard"
-msgstr ""
+msgstr "Nykobler de valgte klonene til objektet på utklippstavlen"
 
 #: ../src/verbs.cpp:2614
 msgid "Select _Original"
-msgstr "Velg _Original"
+msgstr "Velg _original"
 
 #: ../src/verbs.cpp:2615
 msgid "Select the object to which the selected clone is linked"
-msgstr "Velg objektet som valgte klone er lenket til"
+msgstr "Velg objektet som den valgte klonen er koblet til"
 
 #: ../src/verbs.cpp:2616
 #, fuzzy
@@ -33206,7 +33109,7 @@ msgstr "Slett alle objekter fra dette dokument"
 
 #: ../src/verbs.cpp:2632
 msgid "Select Al_l"
-msgstr "Velg A_lle"
+msgstr "Velg a_lle"
 
 #: ../src/verbs.cpp:2632
 msgid "Select all objects or all nodes"
@@ -33214,7 +33117,7 @@ msgstr "Velg alle objekter eller alle noder"
 
 #: ../src/verbs.cpp:2634
 msgid "Select All in All La_yers"
-msgstr "Velg Alle i alle La_g"
+msgstr "Velg alle i alle la_g"
 
 #: ../src/verbs.cpp:2635
 msgid "Select all objects in all visible and unlocked layers"
@@ -33283,19 +33186,19 @@ msgstr ""
 
 #: ../src/verbs.cpp:2651
 msgid "In_vert Selection"
-msgstr "_Vreng Valgte"
+msgstr "In_verter utvalg"
 
 #: ../src/verbs.cpp:2652
 msgid "Invert selection (unselect what is selected and select everything else)"
-msgstr "Vreng valgte (avvelg det utvalgte og velg allt annet)"
+msgstr "Inverter utvalg (fravelger det som er valgt og velger alt annet)"
 
 #: ../src/verbs.cpp:2654
 msgid "Invert in All Layers"
-msgstr "Vreng i alle lag"
+msgstr "Inverter i alle lag"
 
 #: ../src/verbs.cpp:2655
 msgid "Invert selection in all visible and unlocked layers"
-msgstr "Vreng valgte i alle synlige og ulåste lag"
+msgstr "Inverter utvalg i alle synlige og ulåste lag"
 
 #: ../src/verbs.cpp:2656
 msgid "Select Next"
@@ -33315,11 +33218,11 @@ msgstr "Velg forrige objekt eller node"
 
 #: ../src/verbs.cpp:2660
 msgid "D_eselect"
-msgstr "Avv_elg"
+msgstr "Frav_elg"
 
 #: ../src/verbs.cpp:2660
 msgid "Deselect any selected objects or nodes"
-msgstr "Avvelg alle valgte objekter eller noder"
+msgstr "Fravelg alle valgte objekter eller noder"
 
 #: ../src/verbs.cpp:2663
 #, fuzzy
@@ -33657,9 +33560,8 @@ msgid "Create paths using Kopf-Lischinski algorithm to vectorize pixel art"
 msgstr ""
 
 #: ../src/verbs.cpp:2778
-#, fuzzy
 msgid "Make a _Bitmap Copy"
-msgstr "S_kap en punktgrafikk Kopi"
+msgstr "Lag en punktbildekopi"
 
 #: ../src/verbs.cpp:2779
 msgid "Export selection to a bitmap and insert it into document"
@@ -33701,11 +33603,11 @@ msgstr "Skap et nytt lag"
 
 #: ../src/verbs.cpp:2792
 msgid "Re_name Layer..."
-msgstr "O_mdøp lag ..."
+msgstr "Endre _navn på lag …"
 
 #: ../src/verbs.cpp:2792
 msgid "Rename the current layer"
-msgstr "Omdøp det gjeldende lag"
+msgstr "Endre navn på det gjeldende laget"
 
 #: ../src/verbs.cpp:2794
 msgid "Switch to Layer Abov_e"
@@ -33770,7 +33672,7 @@ msgstr "Hev det gjeldende lag"
 
 #: ../src/verbs.cpp:2810
 msgid "_Lower Layer"
-msgstr "Senk _Lag"
+msgstr "Senk _lag"
 
 #: ../src/verbs.cpp:2810
 msgid "Lower the current layer"
@@ -33795,9 +33697,8 @@ msgid "Delete the current layer"
 msgstr "Slett det gjeldende lag"
 
 #: ../src/verbs.cpp:2816
-#, fuzzy
 msgid "_Show/hide other layers"
-msgstr "Vis eller skjul lerretet linjaler"
+msgstr "Vis eller _skjul andre lag"
 
 #: ../src/verbs.cpp:2816
 #, fuzzy
@@ -33865,9 +33766,8 @@ msgid "Toggle lock on current layer"
 msgstr "Senk det gjeldende lag"
 
 #: ../src/verbs.cpp:2827
-#, fuzzy
 msgid "_Show/Hide Current Layer"
-msgstr "Vis eller skjul lerretet linjaler"
+msgstr "Vis/_skjul gjeldende lag"
 
 #: ../src/verbs.cpp:2828
 #, fuzzy
@@ -34367,7 +34267,7 @@ msgstr "Åpne Innstillinger for Stjerne verktøy"
 
 #: ../src/verbs.cpp:2955
 msgid "Zoom Preferences"
-msgstr "Zoom innstillinger"
+msgstr "Zoominnstillinger"
 
 #: ../src/verbs.cpp:2956
 msgid "Open Preferences for the Zoom tool"
@@ -34431,7 +34331,7 @@ msgstr "Åpne Innstillinger for Zoom verktøy"
 
 #: ../src/verbs.cpp:2975
 msgid "Zoom In"
-msgstr "Zoom Inn"
+msgstr "Zoom inn"
 
 #: ../src/verbs.cpp:2975
 msgid "Zoom in"
@@ -34439,7 +34339,7 @@ msgstr "Zoom inn i tegning"
 
 #: ../src/verbs.cpp:2976
 msgid "Zoom Out"
-msgstr "Zoom Ut"
+msgstr "Zoom ut"
 
 #: ../src/verbs.cpp:2976
 msgid "Zoom out"
@@ -34447,19 +34347,19 @@ msgstr "Zoom ut i tegning"
 
 #: ../src/verbs.cpp:2977
 msgid "Nex_t Zoom"
-msgstr "Nes_te Zoom"
+msgstr "Nes_te zoom"
 
 #: ../src/verbs.cpp:2977
 msgid "Next zoom (from the history of zooms)"
-msgstr "Neste zoom (fra zoom historielisten)"
+msgstr "Neste zoom (fra zoomhistorikken)"
 
 #: ../src/verbs.cpp:2979
 msgid "Pre_vious Zoom"
-msgstr "F_orrige Zoom"
+msgstr "F_orrige zoom"
 
 #: ../src/verbs.cpp:2979
 msgid "Previous zoom (from the history of zooms)"
-msgstr "Forrige zoom (fra zoom historielisten)"
+msgstr "Forrige zoom (fra zoomhistorikken)"
 
 #: ../src/verbs.cpp:2981
 msgid "Zoom 1:_1"
@@ -34685,7 +34585,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:3037
 msgid "Duplic_ate Window"
-msgstr "D_upliser Vindu"
+msgstr "D_upliser vindu"
 
 #: ../src/verbs.cpp:3037
 msgid "Open a new window with the same document"
@@ -34802,13 +34702,12 @@ msgid "Prototype Dialog"
 msgstr ""
 
 #: ../src/verbs.cpp:3076
-#, fuzzy
 msgid "P_references..."
-msgstr "Penn innstillinger"
+msgstr "_Innstillinger …"
 
 #: ../src/verbs.cpp:3077
 msgid "Edit global Inkscape preferences"
-msgstr "Rediger globale Inkscape innstillinger"
+msgstr "Rediger globale Inkscape-innstillinger"
 
 #: ../src/verbs.cpp:3078
 msgid "_Document Properties..."
@@ -34919,9 +34818,8 @@ msgid "View and edit selections and CSS styles"
 msgstr ""
 
 #: ../src/verbs.cpp:3112
-#, fuzzy
 msgid "_Find/Replace..."
-msgstr "_Finn ..."
+msgstr "S_øk/erstatt …"
 
 #: ../src/verbs.cpp:3112
 msgid "Find objects in document"
@@ -34942,7 +34840,7 @@ msgstr "Vis feilsøkings meldinger"
 
 #: ../src/verbs.cpp:3118
 msgid "Show/Hide D_ialogs"
-msgstr "Vis/Skjul D_ialoger"
+msgstr "Vis/skjul d_ialoger"
 
 #: ../src/verbs.cpp:3119
 msgid "Show or hide all open dialogs"
@@ -35054,9 +34952,8 @@ msgid ""
 msgstr ""
 
 #: ../src/verbs.cpp:3145
-#, fuzzy
 msgid "_Export PNG Image..."
-msgstr "Trekk ut ett bilde"
+msgstr "Eksporter PNG-bilde …"
 
 #: ../src/verbs.cpp:3146
 #, fuzzy
@@ -35190,9 +35087,8 @@ msgid "Fit the page to the drawing"
 msgstr "Tilpass siden til tegningen"
 
 #: ../src/verbs.cpp:3194
-#, fuzzy
 msgid "_Resize Page to Selection"
-msgstr "Tilpass side til valgte"
+msgstr "Tilpass sidestø_rrelse til utvalg"
 
 #: ../src/verbs.cpp:3195
 msgid ""
@@ -38200,9 +38096,8 @@ msgstr ""
 #: ../share/extensions/gcodetools_graffiti.inx:65
 #: ../share/extensions/gcodetools_lathe.inx:58
 #: ../share/extensions/gcodetools_path_to_gcode.inx:38
-#, fuzzy
 msgid "Preferences"
-msgstr "Penn innstillinger"
+msgstr "Innstillinger"
 
 #: ../share/extensions/gcodetools_area.inx:79
 #: ../share/extensions/gcodetools_dxf_points.inx:25
@@ -42965,9 +42860,8 @@ msgid "Find font:"
 msgstr "Legg til lag"
 
 #: ../share/extensions/replace_font.inx:12
-#, fuzzy
 msgid "Replace with:"
-msgstr "Bytt:"
+msgstr "Erstatt med:"
 
 #: ../share/extensions/replace_font.inx:15
 #, fuzzy
