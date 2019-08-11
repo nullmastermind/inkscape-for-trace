@@ -398,8 +398,6 @@ and tooltips. Only one binding for each action may have this attribute.
   <bind key="b" modifiers="Alt,Shift" action="SelectionTrace" display="true" />
   <bind key="B" modifiers="Alt,Shift" action="SelectionTrace" />
 
-  <bind action="SelectionPixelArt" />
-
   <bind key="i" modifiers="Alt" action="ObjectsToPattern" display="true" />
   <bind key="I" modifiers="Alt" action="ObjectsToPattern" />
 
