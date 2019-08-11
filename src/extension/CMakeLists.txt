@@ -63,6 +63,7 @@ set(extension_SRC
 	prefdialog/parameter-string.cpp
 	prefdialog/widget.cpp
 	prefdialog/widget-box.cpp
+	prefdialog/widget-image.cpp
 	prefdialog/widget-label.cpp
 	prefdialog/widget-separator.cpp
 	prefdialog/widget-spacer.cpp
@@ -141,6 +142,7 @@ set(extension_SRC
 	prefdialog/parameter-string.h
 	prefdialog/widget.h
 	prefdialog/widget-box.h
+	prefdialog/widget-image.h
 	prefdialog/widget-label.h
 	prefdialog/widget-separator.h
 	prefdialog/widget-spacer.h

@@ -13,6 +13,7 @@
 #include "parameter.h"
 #include "widget.h"
 #include "widget-box.h"
+#include "widget-image.h"
 #include "widget-label.h"
 #include "widget-separator.h"
 #include "widget-spacer.h"
@@ -48,6 +49,8 @@ InxWidget *InxWidget::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
         g_warning("InxWidget without name in extension '%s'.", in_ext->get_id());
     } else if (!strcmp(name, "hbox") || !strcmp(name, "vbox")) {
         widget = new WidgetBox(in_repr, in_ext);
+    } else if (!strcmp(name, "image")) {
+        widget = new WidgetImage(in_repr, in_ext);
     } else if (!strcmp(name, "label")) {
         widget = new WidgetLabel(in_repr, in_ext);
     } else if (!strcmp(name, "separator")) {
@@ -67,7 +70,8 @@ InxWidget *InxWidget::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
 bool InxWidget::is_valid_widget_name(const char *name)
 {
     // keep in sync with names supported in InxWidget::make() above
-    static const std::vector<std::string> valid_names = {"hbox", "vbox", "label", "separator", "spacer", "param"};
+    static const std::vector<std::string> valid_names =
+        {"hbox", "vbox", "image", "label", "separator", "spacer", "param"};
 
     if (std::find(valid_names.begin(), valid_names.end(), name) != valid_names.end()) {
         return true;
