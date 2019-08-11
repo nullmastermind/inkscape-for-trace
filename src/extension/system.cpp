@@ -511,28 +511,28 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
     try {
         switch (module_functional_type) {
             case MODULE_INPUT: {
-                module = new Input(repr, imp);
+                module = new Input(repr, imp, baseDir);
                 break;
             }
             case MODULE_OUTPUT: {
-                module = new Output(repr, imp);
+                module = new Output(repr, imp, baseDir);
                 break;
             }
             case MODULE_FILTER: {
-                module = new Effect(repr, imp);
+                module = new Effect(repr, imp, baseDir);
                 break;
             }
             case MODULE_PRINT: {
-                module = new Print(repr, imp);
+                module = new Print(repr, imp, baseDir);
                 break;
             }
             case MODULE_PATH_EFFECT: {
-                module = new PathEffect(repr, imp);
+                module = new PathEffect(repr, imp, baseDir);
                 break;
             }
             default: {
-                g_warning("Extension of unkonw type!"); // TODO: Should not happen! Is this even useful?
-                module = new Extension(repr, imp);
+                g_warning("Extension of unknown type!"); // TODO: Should not happen! Is this even useful?
+                module = new Extension(repr, imp, baseDir);
                 break;
             }
         }

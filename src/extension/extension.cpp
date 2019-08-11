@@ -48,7 +48,8 @@ std::ofstream Extension::error_file;
 /**
     \return  none
     \brief   Constructs an Extension from a Inkscape::XML::Node
-    \param   in_repr    The repr that should be used to build it
+    \param   in_repr        The repr that should be used to build it
+    \param   base_directory Base directory of extension that were loaded from a file (.inx file's location)
 
     This function is the basis of building an extension for Inkscape.  It
     currently extracts the fields from the Repr that are used in the
@@ -56,7 +57,7 @@ std::ofstream Extension::error_file;
     not related to the module directly.  If the Repr does not include
     a name and an ID the module will be left in an errored state.
 */
-Extension::Extension (Inkscape::XML::Node *in_repr, Implementation::Implementation *in_imp)
+Extension::Extension(Inkscape::XML::Node *in_repr, Implementation::Implementation *in_imp, std::string *base_directory)
     : _gui(true)
     , execution_env(nullptr)
 {
@@ -68,6 +69,10 @@ Extension::Extension (Inkscape::XML::Node *in_repr, Implementation::Implementati
         imp = new Implementation::Implementation();
     } else {
         imp = in_imp;
+    }
+
+    if (base_directory) {
+        _base_directory = *base_directory;
     }
 
     // get name of the translation catalog ("gettext textdomain") that the extension wants to use for translations

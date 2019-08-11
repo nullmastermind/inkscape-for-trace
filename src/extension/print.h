@@ -33,10 +33,10 @@ public: /* TODO: These are public for the short term, but this should be fixed *
     unsigned int dkey;
 
 public:
-                  Print       (Inkscape::XML::Node * in_repr,
-                               Implementation::Implementation * in_imp);
-         ~Print       () override;
-    bool  check       () override;
+    Print(Inkscape::XML::Node *in_repr, Implementation::Implementation *in_imp, std::string *base_directory);
+    ~Print() override;
+
+    bool check() override;
 
     /* FALSE means user hit cancel */
     unsigned int  setup       ();

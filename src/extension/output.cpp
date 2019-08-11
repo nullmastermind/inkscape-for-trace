@@ -41,7 +41,8 @@ namespace Extension {
     Overall, there are many levels of indentation, just to handle the
     levels of indentation in the XML file.
 */
-Output::Output (Inkscape::XML::Node * in_repr, Implementation::Implementation * in_imp) : Extension(in_repr, in_imp)
+Output::Output (Inkscape::XML::Node *in_repr, Implementation::Implementation *in_imp, std::string *base_directory)
+    : Extension(in_repr, in_imp, base_directory)
 {
     mimetype = nullptr;
     extension = nullptr;

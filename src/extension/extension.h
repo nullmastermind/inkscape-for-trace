@@ -121,15 +121,16 @@ protected:
     Implementation::Implementation * imp;      /**< An object that holds all the functions for making this work */
     ExecutionEnv * execution_env;              /**< Execution environment of the extension
                                                  *  (currently only used by Effects) */
+    std::string _base_directory;               /**< Directory containing the .inx file,
+                                                 *  relative paths in the extension should usually be relative to it */
     ExpirationTimer * timer = nullptr;         /**< Timeout to unload after a given time */
     bool _translation_enabled = true;          /**< Attempt translation of strings provided by the extension? */
     const char *_translationdomain = nullptr;  /**< Domainname of gettext textdomain that should
                                                  *  be used for translation of the extension's strings */
 
 public:
-                  Extension    (Inkscape::XML::Node * in_repr,
-                                Implementation::Implementation * in_imp);
-    virtual      ~Extension    ();
+    Extension(Inkscape::XML::Node *in_repr, Implementation::Implementation *in_imp, std::string *base_directory);
+    virtual ~Extension();
 
     void          set_state    (state_t in_state);
     state_t       get_state    ();
@@ -144,6 +145,8 @@ public:
     Implementation::Implementation * get_imp () { return imp; };
     void          set_execution_env (ExecutionEnv * env) { execution_env = env; };
     ExecutionEnv *get_execution_env () { return execution_env; };
+    std::string   get_base_directory() { return _base_directory; };
+    void          set_base_directory(std::string base_directory) { _base_directory = base_directory; };
     const char   *get_translation(const char* msgid, const char *msgctxt=nullptr);
 
 /* Parameter Stuff */

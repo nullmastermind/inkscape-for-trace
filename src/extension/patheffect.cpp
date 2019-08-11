@@ -21,8 +21,8 @@
 namespace Inkscape {
 namespace Extension {
 
-PathEffect::PathEffect (Inkscape::XML::Node * in_repr, Implementation::Implementation * in_imp)
-    : Extension(in_repr, in_imp)
+PathEffect::PathEffect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in_imp, std::string *base_directory)
+    : Extension(in_repr, in_imp, base_directory)
 {
 
 }

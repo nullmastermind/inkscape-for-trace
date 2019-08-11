@@ -68,7 +68,7 @@ class Effect : public Extension {
                        Effect *      effect,
                        bool          showPrefs) :
                     Verb(id, _(name), _(tip), image, _("Extensions")),
-                    _effect(effect), 
+                    _effect(effect),
                     _showPrefs(showPrefs),
                     _elip_name(nullptr) {
                 /* No clue why, but this is required */
@@ -78,7 +78,7 @@ class Effect : public Extension {
                     set_name(_elip_name);
                 }
             }
-            
+
             /** \brief  Destructor */
             ~EffectVerb() override {
                 if (_elip_name != nullptr) {
@@ -97,10 +97,11 @@ class Effect : public Extension {
     /** \brief  The preference dialog if it is shown */
     PrefDialog * _prefDialog;
 public:
-                 Effect  (Inkscape::XML::Node * in_repr,
-                          Implementation::Implementation * in_imp);
-        ~Effect  () override;
-    bool check                () override;
+    Effect(Inkscape::XML::Node *in_repr, Implementation::Implementation *in_imp, std::string *base_directory);
+    ~Effect  () override;
+
+    bool check() override;
+
     bool         prefs   (Inkscape::UI::View::View * doc);
     void         effect  (Inkscape::UI::View::View * doc);
     /** \brief  Accessor function for a pointer to the verb */

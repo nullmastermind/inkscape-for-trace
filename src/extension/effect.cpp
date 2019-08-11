@@ -34,11 +34,11 @@ Inkscape::XML::Node * Effect::_filters_list = nullptr;
 #define  EFFECTS_LIST  "effects-list"
 #define  FILTERS_LIST  "filters-list"
 
-Effect::Effect (Inkscape::XML::Node * in_repr, Implementation::Implementation * in_imp)
-    : Extension(in_repr, in_imp),
-      _verb(get_id(), get_name(), nullptr, nullptr, this, true),
-      _menu_node(nullptr), _workingDialog(true),
-      _prefDialog(nullptr)
+Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in_imp, std::string *base_directory)
+    : Extension(in_repr, in_imp, base_directory)
+    , _verb(get_id(), get_name(), nullptr, nullptr, this, true)
+    , _menu_node(nullptr), _workingDialog(true)
+    , _prefDialog(nullptr)
 {
     Inkscape::XML::Node * local_effects_menu = nullptr;
 
