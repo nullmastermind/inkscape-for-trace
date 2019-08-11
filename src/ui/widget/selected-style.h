@@ -63,9 +63,8 @@ enum {
 
 class SelectedStyle;
 
-class RotateableSwatch: public Rotateable
-{
-public:
+class RotateableSwatch : public Rotateable {
+  public:
     RotateableSwatch(SelectedStyle *parent, guint mode);
     ~RotateableSwatch() override;
 
@@ -89,9 +88,8 @@ private:
     bool cr_set;
 };
 
-class RotateableStrokeWidth: public Rotateable
-{
-public:
+class RotateableStrokeWidth : public Rotateable {
+  public:
     RotateableStrokeWidth(SelectedStyle *parent);
     ~RotateableStrokeWidth() override;
 

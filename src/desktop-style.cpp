@@ -26,6 +26,8 @@
 #include "selection.h"
 
 #include "object/box3d-side.h"
+#include "object/filters/blend.h"
+#include "object/filters/gaussian-blur.h"
 #include "object/sp-flowdiv.h"
 #include "object/sp-flowregion.h"
 #include "object/sp-flowtext.h"
@@ -39,8 +41,6 @@
 #include "object/sp-tspan.h"
 #include "object/sp-use.h"
 #include "style.h"
-#include "object/filters/blend.h"
-#include "object/filters/gaussian-blur.h"
 
 #include "svg/css-ostringstream.h"
 #include "svg/svg-color.h"
@@ -549,8 +549,9 @@ objects_query_fillstroke (const std::vector<SPItem*> &objects, SPStyle *style_re
             SPLinearGradient *linear_res = dynamic_cast<SPLinearGradient *>(server_res);
             SPRadialGradient *radial_res = linear_res ? nullptr : dynamic_cast<SPRadialGradient *>(server_res);
             SPPattern *pattern_res = (linear_res || radial_res) ? nullptr : dynamic_cast<SPPattern *>(server_res);
-            SPHatch *hatch_res = (linear_res || radial_res || pattern_res) ? nullptr : dynamic_cast<SPHatch *>(server_res);
-            
+            SPHatch *hatch_res =
+                (linear_res || radial_res || pattern_res) ? nullptr : dynamic_cast<SPHatch *>(server_res);
+
             if (linear_res) {
                 SPLinearGradient *linear = dynamic_cast<SPLinearGradient *>(server);
                 if (!linear) {
@@ -587,13 +588,13 @@ objects_query_fillstroke (const std::vector<SPItem*> &objects, SPStyle *style_re
             } else if (hatch_res) {
                 SPHatch *hatch = dynamic_cast<SPHatch *>(server);
                 if (!hatch) {
-                    return QUERY_STYLE_MULTIPLE_DIFFERENT;  // different kind of server
+                    return QUERY_STYLE_MULTIPLE_DIFFERENT; // different kind of server
                 }
 
-                SPHatch *hat = SP_HATCH (server)->rootHatch();
-                SPHatch *hat_res = SP_HATCH (server_res)->rootHatch();
+                SPHatch *hat = SP_HATCH(server)->rootHatch();
+                SPHatch *hat_res = SP_HATCH(server_res)->rootHatch();
                 if (hat_res != hat) {
-                    return QUERY_STYLE_MULTIPLE_DIFFERENT;  // different pattern roots
+                    return QUERY_STYLE_MULTIPLE_DIFFERENT; // different hatch roots
                 }
             }
         }

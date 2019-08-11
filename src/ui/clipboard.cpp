@@ -64,8 +64,8 @@
 #include "object/sp-rect.h"
 #include "object/sp-root.h"
 #include "object/sp-shape.h"
-#include "object/sp-use.h"
 #include "object/sp-textpath.h"
+#include "object/sp-use.h"
 #include "style.h"
 
 #include "svg/svg.h" // for sp_svg_transform_write, used in _copySelection
@@ -325,9 +325,9 @@ void ClipboardManagerImpl::copySymbol(Inkscape::XML::Node* symbol, gchar const* 
     SPObject *cmobj = _clipboardSPDoc->getObjectByRepr(repr);
     if (cmobj && !user_symbol) { // convert only stock symbols
         if (!Geom::are_near(scale_units, 1.0, Geom::EPSILON)) {
-            dynamic_cast<SPGroup *>(cmobj)->scaleChildItemsRec(Geom::Scale(scale_units),
-                                            Geom::Point(0, SP_ACTIVE_DESKTOP->getDocument()->getHeight().value("px")),
-                                            false);
+            dynamic_cast<SPGroup *>(cmobj)->scaleChildItemsRec(
+                Geom::Scale(scale_units), Geom::Point(0, SP_ACTIVE_DESKTOP->getDocument()->getHeight().value("px")),
+                false);
         }
     }
 
@@ -822,11 +822,11 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
             _copyGradient(dynamic_cast<SPGradient *>(server));
         }
         SPPattern *pattern = dynamic_cast<SPPattern *>(server);
-        if ( pattern ) {
+        if (pattern) {
             _copyPattern(pattern);
         }
         SPHatch *hatch = dynamic_cast<SPHatch *>(server);
-        if ( hatch ) {
+        if (hatch) {
             _copyHatch(hatch);
         }
     }
@@ -836,11 +836,11 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
             _copyGradient(dynamic_cast<SPGradient *>(server));
         }
         SPPattern *pattern = dynamic_cast<SPPattern *>(server);
-        if ( pattern ) {
+        if (pattern) {
             _copyPattern(pattern);
         }
         SPHatch *hatch = dynamic_cast<SPHatch *>(server);
-        if ( hatch ) {
+        if (hatch) {
             _copyHatch(hatch);
         }
     }
@@ -976,16 +976,15 @@ void ClipboardManagerImpl::_copyHatch(SPHatch *hatch)
     while (hatch) {
         _copyNode(hatch->getRepr(), _doc, _defs);
 
-        for (auto& child: hatch->children) {
+        for (auto &child : hatch->children) {
             SPItem *childItem = dynamic_cast<SPItem *>(&child);
             if (childItem) {
                 _copyUsedDefs(childItem);
             }
         }
-        if (hatch->ref){
+        if (hatch->ref) {
             hatch = hatch->ref->getObject();
-        }
-        else{
+        } else {
             hatch = nullptr;
         }
     }
