@@ -42,7 +42,7 @@
 // ================= Common ====================
 
 std::vector<std::pair<unsigned int, Gtk::CheckMenuItem *>> checkmenuitems;
-unsigned int lastverb = std::string::npos;
+unsigned int lastverb = -1;
 ;
 
 // Sets tip
@@ -63,12 +63,12 @@ deselect_action(SPAction *action)
 static void item_activate(Gtk::MenuItem *menuitem, SPAction *action)
 {
     if (action->verb->get_code() == lastverb) {
-        lastverb = std::string::npos;
+        lastverb = -1;
         return;
     }
     lastverb = action->verb->get_code();
     sp_action_perform(action, nullptr);
-    lastverb = std::string::npos;
+    lastverb = -1;
 }
 
 static void toggle_checkmenu(unsigned int emitting_verb, bool value)
@@ -76,12 +76,12 @@ static void toggle_checkmenu(unsigned int emitting_verb, bool value)
     for (auto menu : checkmenuitems) {
         if (emitting_verb == menu.first) {
             if (emitting_verb == lastverb) {
-                lastverb = std::string::npos;
+                lastverb = -1;
                 return;
             }
             lastverb = emitting_verb;
             menu.second->property_active() = value;
-            lastverb = std::string::npos;
+            lastverb = -1;
         }
     }
 }
