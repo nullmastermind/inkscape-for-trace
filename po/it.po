@@ -20756,10 +20756,12 @@ msgstr ""
 #: ../src/ui/dialog/inkscape-preferences.cpp:1058
 msgid "Origin at upper left with y-axis pointing down (requires restart)"
 msgstr ""
+"Origine in alto a sinistra con asse y verso il basso (richiede riapertura)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1060
 msgid "When off, origin is at lower left corner and y-axis points up"
 msgstr ""
+"Quando disattivo, l'origine è in basso a sinistra con l'asse y verso l'alto"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1064
 msgid "Theme changes"
@@ -20792,23 +20794,21 @@ msgstr "Cambia tema icone:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1154
 msgid "Use symbolic icons"
-msgstr ""
+msgstr "Utilizza icone simboliche"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1157
-#, fuzzy
+#: ../src/ui/dialog/inkscape-preferences.cpp:1168
 msgid "Use default colors for icons"
-msgstr "Rimuovi il colore di riempimento"
+msgstr "Utilizza colori predefiniti per icone"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1183
-#, fuzzy
+#: ../src/ui/dialog/inkscape-preferences.cpp:1194
 msgid "Icon color"
-msgstr "Colore carattere:"
+msgstr "Colore icona"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1195
 #: ../src/ui/dialog/inkscape-preferences.cpp:1184
 msgid "Base color for icons. Some icons changes need reload"
-msgstr ""
+msgstr "Colore delle icone. Alcune modifiche richiedono riapertura"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1190
 #, fuzzy
