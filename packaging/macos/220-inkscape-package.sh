@@ -52,9 +52,9 @@ insert_before $APP_EXE_DIR/Inkscape 'export XDG_CONFIG_DIRS' '\
 export XDG_DATA_HOME=\"$HOME/Library/Application Support/Inkscape/data\"\
 export XDG_CONFIG_HOME=\"$HOME/Library/Application Support/Inkscape/config\"\
 export XDG_CACHE_HOME=\"$HOME/Library/Application Support/Inkscape/cache\"\
-mkdir -p "$XDG_DATA_HOME"\
-mkdir -p "$XDG_CONFIG_HOME"\
-mkdir -p "$XDG_CACHE_HOME"\
+mkdir -p \"$XDG_DATA_HOME\"\
+mkdir -p \"$XDG_CONFIG_HOME\"\
+mkdir -p \"$XDG_CACHE_HOME\"\
 '
 
 # update Inkscape version information
