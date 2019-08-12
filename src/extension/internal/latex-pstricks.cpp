@@ -122,7 +122,7 @@ unsigned int PrintLatex::begin (Inkscape::Extension::Print *mod, SPDocument *doc
 
         os << "\\psset{xunit=.5pt,yunit=.5pt,runit=.5pt}\n";
         // from now on we can output px, but they will be treated as pt
-    
+
         os << "\\begin{pspicture}(" << doc->getWidth().value("px") << "," << doc->getHeight().value("px") << ")\n";
     }
 
@@ -203,7 +203,7 @@ unsigned int PrintLatex::fill(Inkscape::Extension::Print * /*mod*/,
         os << "}\n}\n";
 
         fprintf(_stream, "%s", os.str().c_str());
-    }        
+    }
 
     return 0;
 }
@@ -229,7 +229,7 @@ unsigned int PrintLatex::stroke(Inkscape::Extension::Print * /*mod*/,
         os << "{\n\\newrgbcolor{curcolor}{" << rgb[0] << " " << rgb[1] << " " << rgb[2] << "}\n";
 
         os << "\\pscustom[linewidth=" << style->stroke_width.computed*scale<< ",linecolor=curcolor";
-        
+
         if (stroke_opacity!=1.0) {
             os<<",strokeopacity="<<stroke_opacity;
         }
@@ -299,7 +299,7 @@ PrintLatex::print_2geomcurve(SVGOStringStream &os, Geom::Curve const &c)
         os << "\\curveto(" << points[1][X] << "," << points[1][Y] << ")("
                            << points[2][X] << "," << points[2][Y] << ")("
                            << points[3][X] << "," << points[3][Y] << ")\n";
-    }                                             
+    }
     else {
         //this case handles sbasis as well as all other curve types
         Geom::Path sbasis_path = Geom::cubicbezierpath_from_sbasis(c.toSBasis(), 0.1);
@@ -325,8 +325,8 @@ void PrintLatex::init()
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
         "<name>" N_("LaTeX Print") "</name>\n"
         "<id>" SP_MODULE_KEY_PRINT_LATEX "</id>\n"
-        "<param name=\"destination\" type=\"string\"></param>\n"
-        "<param name=\"textToPath\" type=\"boolean\">true</param>\n"
+        "<param gui-hidden=\"true\" name=\"destination\" type=\"string\"></param>\n"
+        "<param gui-hidden=\"true\" name=\"textToPath\" type=\"boolean\">true</param>\n"
         "<print/>\n"
         "</inkscape-extension>", new PrintLatex());
 }
