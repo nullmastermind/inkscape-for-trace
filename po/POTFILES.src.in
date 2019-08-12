@@ -92,6 +92,7 @@
 ../src/extension/internal/vsd-input.cpp
 ../src/extension/internal/wmf-inout.cpp
 ../src/extension/internal/wpg-input.cpp
+../src/extension/prefdialog/parameter-path.cpp
 ../src/extension/prefdialog/prefdialog.cpp
 ../src/extension/system.cpp
 ../src/file-update.cpp

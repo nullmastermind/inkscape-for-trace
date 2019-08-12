@@ -25,6 +25,7 @@
 #include "parameter-int.h"
 #include "parameter-notebook.h"
 #include "parameter-optiongroup.h"
+#include "parameter-path.h"
 #include "parameter-string.h"
 #include "widget.h"
 #include "widget-label.h"
@@ -79,6 +80,8 @@ InxParameter *InxParameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extensi
             param = new ParamFloat(in_repr, in_ext);
         } else if (!strcmp(type, "string")) {
             param = new ParamString(in_repr, in_ext);
+        } else if (!strcmp(type, "path")) {
+            param = new ParamPath(in_repr, in_ext);
         } else if (!strcmp(type, "description")) {
             // support deprecated "description" for backwards-compatibility
             in_repr->setAttribute("gui-text", "description"); // TODO: hack to allow descriptions to be parameters

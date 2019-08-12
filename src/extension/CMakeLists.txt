@@ -60,6 +60,7 @@ set(extension_SRC
 	prefdialog/parameter-int.cpp
 	prefdialog/parameter-notebook.cpp
 	prefdialog/parameter-optiongroup.cpp
+	prefdialog/parameter-path.cpp
 	prefdialog/parameter-string.cpp
 	prefdialog/widget.cpp
 	prefdialog/widget-box.cpp
@@ -139,6 +140,7 @@ set(extension_SRC
 	prefdialog/parameter-int.h
 	prefdialog/parameter-notebook.h
 	prefdialog/parameter-optiongroup.h
+	prefdialog/parameter-path.h
 	prefdialog/parameter-string.h
 	prefdialog/widget.h
 	prefdialog/widget-box.h
