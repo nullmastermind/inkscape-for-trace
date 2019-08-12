@@ -112,7 +112,7 @@ public:
 
     /** An error class for when a parameter is called on a type it is not */
     class param_no_name {};
-    class param_no_type {};
+    class param_no_text {};
     class param_not_bool_param {};
     class param_not_color_param {};
     class param_not_float_param {};

@@ -66,32 +66,38 @@ InxParameter *InxParameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extensi
 {
     InxParameter *param = nullptr;
 
-    const char *type = in_repr->attribute("type");
-    if (!type) {
-        // we can't create a parameter without type
-        g_warning("Parameter without type in extension '%s'.", in_ext->get_id());
-    } else if(!strcmp(type, "bool") || !strcmp(type, "boolean")) { // support "boolean" for backwards-compatibility
-        param = new ParamBool(in_repr, in_ext);
-    } else if (!strcmp(type, "int")) {
-        param = new ParamInt(in_repr, in_ext);
-    } else if (!strcmp(type, "float")) {
-        param = new ParamFloat(in_repr, in_ext);
-    } else if (!strcmp(type, "string")) {
-        param = new ParamString(in_repr, in_ext);
-    } else if (!strcmp(type, "description")) {
-        // support deprecated "description" for backwards-compatibility
-        param = new ParamDescription(in_repr, in_ext);
-    } else if (!strcmp(type, "notebook")) {
-        param = new ParamNotebook(in_repr, in_ext);
-    } else if (!strcmp(type, "optiongroup")) {
-        param = new ParamOptionGroup(in_repr, in_ext);
-    } else if (!strcmp(type, "enum")) { // support deprecated "enum" for backwards-compatibility
-        in_repr->setAttribute("appearance", "combo");
-        param = new ParamOptionGroup(in_repr, in_ext);
-    } else if (!strcmp(type, "color")) {
-        param = new ParamColor(in_repr, in_ext);
-    } else {
-        g_warning("Unknown parameter type ('%s') in extension '%s'", type, in_ext->get_id());
+    try {
+        const char *type = in_repr->attribute("type");
+        if (!type) {
+            // we can't create a parameter without type
+            g_warning("Parameter without type in extension '%s'.", in_ext->get_id());
+        } else if(!strcmp(type, "bool") || !strcmp(type, "boolean")) { // support "boolean" for backwards-compatibility
+            param = new ParamBool(in_repr, in_ext);
+        } else if (!strcmp(type, "int")) {
+            param = new ParamInt(in_repr, in_ext);
+        } else if (!strcmp(type, "float")) {
+            param = new ParamFloat(in_repr, in_ext);
+        } else if (!strcmp(type, "string")) {
+            param = new ParamString(in_repr, in_ext);
+        } else if (!strcmp(type, "description")) {
+            // support deprecated "description" for backwards-compatibility
+            in_repr->setAttribute("gui-text", "description"); // TODO: hack to allow descriptions to be parameters
+            param = new ParamDescription(in_repr, in_ext);
+        } else if (!strcmp(type, "notebook")) {
+            in_repr->setAttribute("gui-text", "notebook"); // notebooks have no 'gui-text' (but Parameters need one)
+            param = new ParamNotebook(in_repr, in_ext);
+        } else if (!strcmp(type, "optiongroup")) {
+            param = new ParamOptionGroup(in_repr, in_ext);
+        } else if (!strcmp(type, "enum")) { // support deprecated "enum" for backwards-compatibility
+            in_repr->setAttribute("appearance", "combo");
+            param = new ParamOptionGroup(in_repr, in_ext);
+        } else if (!strcmp(type, "color")) {
+            param = new ParamColor(in_repr, in_ext);
+        } else {
+            g_warning("Unknown parameter type ('%s') in extension '%s'", type, in_ext->get_id());
+        }
+    } catch (const param_no_name&) {
+    } catch (const param_no_text&) {
     }
 
     // Note: param could equal nullptr
@@ -218,11 +224,12 @@ InxParameter::InxParameter(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
     // name (mandatory for all paramters)
     const char *name = in_repr->attribute("name");
     if (!name) {
+        g_warning("Parameter without name in extension '%s'.", _extension->get_id());
         throw param_no_name();
     }
     _name = g_strdup(name);
 
-    // gui-text (TODO: should likely be mandatory for all parameters; maybe not for hidden ones?)
+    // gui-text
     const char *gui_text = in_repr->attribute("gui-text");
     if (!gui_text) {
         gui_text = in_repr->attribute("_gui-text"); // backwards-compatibility with underscored variants
@@ -232,6 +239,11 @@ InxParameter::InxParameter(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
             gui_text = get_translation(gui_text);
         }
         _text = g_strdup(gui_text);
+    }
+    if (!_text && !_hidden) {
+        g_warning("Parameter '%s' in extension '%s' is visible but does not have a 'gui-text'.",
+                  _name, _extension->get_id());
+        throw param_no_text();
     }
 
     // gui-description (optional)

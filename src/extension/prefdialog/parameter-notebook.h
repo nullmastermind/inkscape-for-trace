@@ -52,8 +52,6 @@ private:
 
         // ParamNotebookPage is not a real parameter (it has no value), so make sure it does not return one
         std::string value_to_string() const override { return ""; };
-
-        const char *get_text() { return _text; };
     }; /* class ParamNotebookPage */
 
     /** A table to store the pages with parameters for this notebook.

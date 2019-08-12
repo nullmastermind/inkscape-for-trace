@@ -45,6 +45,7 @@ ParamOptionGroup::ParamOptionGroup(Inkscape::XML::Node *xml, Inkscape::Extension
                            !strcmp(chname, INKSCAPE_EXTENSION_NS "item") ||
                            !strcmp(chname, INKSCAPE_EXTENSION_NS "_item")) ) {
                 child_repr->setAttribute("name", "option"); // TODO: hack to allow options to be parameters
+                child_repr->setAttribute("gui-text", "option"); // TODO: hack to allow options to be parameters
                 ParamOptionGroupOption *param = new ParamOptionGroupOption(child_repr, ext, this);
                 choices.push_back(param);
             } else if (child_repr->type() == XML::ELEMENT_NODE) {
