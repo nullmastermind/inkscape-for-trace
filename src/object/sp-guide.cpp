@@ -131,7 +131,7 @@ void SPGuide::set(SPAttributeEnum key, const gchar *value) {
 
                 // <sodipodi:guide> stores inverted y-axis coordinates
                 if (document->is_yaxisdown()) {
-                    direction[Geom::Y] *= -1.0;
+                    direction[Geom::X] *= -1.0;
                 }
 
                 direction.normalize();
@@ -217,7 +217,7 @@ SPGuide *SPGuide::createSPGuide(SPDocument *doc, Geom::Point const &pt1, Geom::P
     // <sodipodi:guide> stores inverted y-axis coordinates
     if (doc->is_yaxisdown()) {
         newy = doc->getHeight().value("px") - newy;
-        n[Geom::Y] *= -1.0;
+        n[Geom::X] *= -1.0;
     }
 
     if( root->viewBox_set ) {
@@ -442,7 +442,7 @@ void SPGuide::set_normal(Geom::Point const normal_to_line, bool const commit)
 
         // <sodipodi:guide> stores inverted y-axis coordinates
         if (document->is_yaxisdown()) {
-            normal[Geom::Y] *= -1.0;
+            normal[Geom::X] *= -1.0;
         }
 
         sp_repr_set_point(getRepr(), "orientation", normal);

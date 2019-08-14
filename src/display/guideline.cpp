@@ -111,7 +111,7 @@ static void sp_guideline_render(SPCanvasItem *item, SPCanvasBuf *buf)
         int py = round(point_on_line_dt[Geom::Y]);
         cairo_save(buf->ct);
         cairo_translate(buf->ct, px, py);
-        cairo_rotate(buf->ct, atan2(normal_dt.cw()));
+        cairo_rotate(buf->ct, atan2(normal_dt.cw()) + M_PI * (desktop && desktop->is_yaxisdown() ? 1 : 0));
         cairo_translate(buf->ct, 0, -5);
         cairo_move_to(buf->ct, 0, 0);
         cairo_show_text(buf->ct, gl->label);
