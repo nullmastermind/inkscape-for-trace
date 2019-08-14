@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-08-14 11:39+0200\n"
+"POT-Creation-Date: 2019-08-14 11:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -6600,7 +6600,7 @@ msgid "Hue distribution (°)"
 msgstr ""
 
 #: ../src/extension/internal/filter/color.h:1488
-#: ../src/ui/dialog/tracedialog.cpp:145 ../share/extensions/svgcalendar.inx:29
+#: ../src/ui/dialog/tracedialog.cpp:147 ../share/extensions/svgcalendar.inx:29
 msgid "Colors"
 msgstr ""
 
@@ -17261,7 +17261,7 @@ msgid "Sele_ction"
 msgstr ""
 
 #: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:65
-#: ../share/ui/menus.xml:266
+#: ../share/ui/menus.xml:265
 msgid "_Text"
 msgstr ""
 
@@ -23096,35 +23096,35 @@ msgstr ""
 msgid "Arrange selected objects"
 msgstr ""
 
-#: ../src/ui/dialog/tracedialog.cpp:123
+#: ../src/ui/dialog/tracedialog.cpp:125
 msgid "Brightness cutoff"
 msgstr ""
 
-#: ../src/ui/dialog/tracedialog.cpp:125
+#: ../src/ui/dialog/tracedialog.cpp:127
 msgid "Edge detection"
 msgstr ""
 
-#: ../src/ui/dialog/tracedialog.cpp:127
+#: ../src/ui/dialog/tracedialog.cpp:129
 msgid "Color quantization"
 msgstr ""
 
-#: ../src/ui/dialog/tracedialog.cpp:129
+#: ../src/ui/dialog/tracedialog.cpp:131
 msgid "Autotrace"
 msgstr ""
 
-#: ../src/ui/dialog/tracedialog.cpp:135
+#: ../src/ui/dialog/tracedialog.cpp:137
 msgid "Centerline tracing (autotrace)"
 msgstr ""
 
-#: ../src/ui/dialog/tracedialog.cpp:143
+#: ../src/ui/dialog/tracedialog.cpp:145
 msgid "Brightness steps"
 msgstr ""
 
-#: ../src/ui/dialog/tracedialog.cpp:147
+#: ../src/ui/dialog/tracedialog.cpp:149
 msgid "Grays"
 msgstr ""
 
-#: ../src/ui/dialog/tracedialog.cpp:149
+#: ../src/ui/dialog/tracedialog.cpp:151
 msgid "Autotrace (slower)"
 msgstr ""
 
@@ -31674,7 +31674,7 @@ msgstr ""
 msgid "Style of Paint Bucket fill objects"
 msgstr ""
 
-#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.xml:294
+#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.xml:293
 msgid "_Help"
 msgstr ""
 
@@ -38924,11 +38924,11 @@ msgstr ""
 msgid "_Path"
 msgstr ""
 
-#: ../share/ui/menus.xml:282
+#: ../share/ui/menus.xml:281
 msgid "Filter_s"
 msgstr ""
 
-#: ../share/ui/menus.xml:288
+#: ../share/ui/menus.xml:287
 msgid "Exte_nsions"
 msgstr ""
 
