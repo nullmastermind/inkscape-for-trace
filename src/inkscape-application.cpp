@@ -853,7 +853,7 @@ ConcreteInkscapeApplication<Gtk::Application>::destroy_all()
 {
     while (_documents.size() != 0) {
         auto it = _documents.begin();
-        while (it->second.size() != 0) {
+        if (!it->second.empty()) {
             auto it2 = it->second.begin();
             if (!destroy_window (*it2)) return; // If destroy aborted, we need to stop exit.
         }
