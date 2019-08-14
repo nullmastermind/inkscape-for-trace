@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-07-11 20:37+0200\n"
-"PO-Revision-Date: 2019-08-11 11:26+0200\n"
+"PO-Revision-Date: 2019-08-14 19:32+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: nb\n"
@@ -4726,7 +4726,7 @@ msgstr "glatt node"
 
 #: ../src/display/snap-indicator.cpp:110
 msgid "path"
-msgstr "sti"
+msgstr "bane"
 
 #: ../src/display/snap-indicator.cpp:113
 #, fuzzy
@@ -4739,7 +4739,7 @@ msgstr ""
 
 #: ../src/display/snap-indicator.cpp:119
 msgid "path intersection"
-msgstr "stikryssning"
+msgstr "banekrysning"
 
 #: ../src/display/snap-indicator.cpp:122
 #, fuzzy
@@ -4856,7 +4856,7 @@ msgstr "Håndtak"
 
 #: ../src/display/snap-indicator.cpp:216
 msgid "Path intersection"
-msgstr "Stikrysning"
+msgstr "Banekrysning"
 
 #: ../src/display/snap-indicator.cpp:219
 msgid "Guide"
@@ -5759,7 +5759,7 @@ msgstr "Antall kopier av objektet som skal lages for å simulere uskarphet"
 #: ../share/extensions/pathscatter.inx:34
 #: ../share/extensions/voronoi2svg.inx:34
 msgid "Generate from Path"
-msgstr "Generer fra Sti"
+msgstr "Generer fra bane"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:326
 #: ../share/extensions/ps_input.inx:12
@@ -5800,9 +5800,8 @@ msgstr "Innlemme bilder"
 #: ../src/extension/internal/cairo-ps-out.cpp:334
 #: ../src/extension/internal/cairo-ps-out.cpp:376
 #: ../src/extension/internal/cairo-renderer-pdf-out.cpp:253
-#, fuzzy
 msgid "Convert text to paths"
-msgstr "Konverter tekst til sti"
+msgstr "Konverter tekst til baner"
 
 #: ../src/extension/internal/cairo-ps-out.cpp:335
 #: ../src/extension/internal/cairo-ps-out.cpp:377
@@ -6017,7 +6016,7 @@ msgstr "EMF-utdata"
 #: ../src/extension/internal/emf-inout.cpp:3650
 #: ../src/extension/internal/wmf-inout.cpp:3229
 msgid "Convert texts to paths"
-msgstr "Konverter tekst til sti"
+msgstr "Konverter tekst til baner"
 
 #: ../src/extension/internal/emf-inout.cpp:3651
 #: ../src/extension/internal/wmf-inout.cpp:3230
@@ -8340,7 +8339,7 @@ msgstr "Rutenett"
 
 #: ../src/extension/internal/grid.cpp:207
 msgid "Draw a path which is a grid"
-msgstr "Tegn en sti som er et rutenett"
+msgstr "Tegn en bane som er et rutenett"
 
 #: ../src/extension/internal/latex-pstricks-out.cpp:92
 msgid "LaTeX Output"
@@ -8507,7 +8506,7 @@ msgstr "PovRay-utdata"
 
 #: ../src/extension/internal/pov-out.cpp:717
 msgid "PovRay (*.pov) (paths and shapes only)"
-msgstr "PovRay (*.pov) (kun stier og former)"
+msgstr "PovRay (*.pov) (kun baner og former)"
 
 #: ../src/extension/internal/pov-out.cpp:718
 msgid "PovRay Raytracer File"
@@ -9464,9 +9463,8 @@ msgid "PDF-VERSION"
 msgstr ""
 
 #: ../src/inkscape-application.cpp:571
-#, fuzzy
 msgid "Convert text to paths (PS/EPS/PDF/SVG)"
-msgstr "Konverter tekstobjekt til stier når de eksporteres (PS, EPS, PDF)"
+msgstr "Konverter tekst til baner (PS/EPS/PDF/SVG)"
 
 #: ../src/inkscape-application.cpp:572
 #, fuzzy
@@ -9783,7 +9781,7 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:130
 msgid "Pattern Along Path"
-msgstr "Mønster langs sti"
+msgstr "Mønster langs bane"
 
 #: ../src/live_effects/effect.cpp:134
 msgid "Place one or more copies of another path along the path."
@@ -9791,7 +9789,7 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:144
 msgid "Stitch Sub-Paths"
-msgstr "Sy understier"
+msgstr "Sy underbaner"
 
 #: ../src/live_effects/effect.cpp:148
 msgid ""
@@ -9845,7 +9843,7 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:229
 msgid "Interpolate Sub-Paths"
-msgstr "Interpolere understier"
+msgstr "Interpoler underbaner"
 
 #: ../src/live_effects/effect.cpp:233
 msgid "Create a stepwise transition between the 2 subpaths of a path."
@@ -10027,9 +10025,8 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/effect.cpp:484
-#, fuzzy
 msgid "Attach path"
-msgstr "Sy sti"
+msgstr "Sy bane"
 
 #: ../src/live_effects/effect.cpp:488
 msgid ""
@@ -10078,9 +10075,8 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/effect.cpp:555
-#, fuzzy
 msgid "Measure Segments"
-msgstr "Mål sti"
+msgstr "Mål segmenter"
 
 #: ../src/live_effects/effect.cpp:559
 msgid ""
@@ -10201,7 +10197,7 @@ msgstr "Parallel"
 
 #: ../src/live_effects/effect.cpp:808 ../src/live_effects/effect.cpp:812
 msgid "Path length"
-msgstr "Stilengde"
+msgstr "Banelengde"
 
 #: ../src/live_effects/effect.cpp:822 ../src/live_effects/effect.cpp:826
 msgid "Perpendicular bisector"
@@ -10394,13 +10390,12 @@ msgid "End path curve end:"
 msgstr ""
 
 #: ../src/live_effects/lpe-bendpath.cpp:58
-#, fuzzy
 msgid "Bend path:"
-msgstr "Bøy sit"
+msgstr "Bøy bane:"
 
 #: ../src/live_effects/lpe-bendpath.cpp:58
 msgid "Path along which to bend the original path"
-msgstr "Sti som orginalstien skal bøyes langs"
+msgstr "Bane som originalbanen skal bøyes langs"
 
 #: ../src/live_effects/lpe-bendpath.cpp:60
 #: ../src/live_effects/lpe-patternalongpath.cpp:76
@@ -10411,7 +10406,7 @@ msgstr "_Bredde:"
 
 #: ../src/live_effects/lpe-bendpath.cpp:60
 msgid "Width of the path"
-msgstr "Bredde på stien"
+msgstr "Banens bredde"
 
 #: ../src/live_effects/lpe-bendpath.cpp:61
 #, fuzzy
@@ -10420,7 +10415,7 @@ msgstr "Bredde i enheter av lengden"
 
 #: ../src/live_effects/lpe-bendpath.cpp:61
 msgid "Scale the width of the path in units of its length"
-msgstr "Skaler bredden in enheter av lengden"
+msgstr "Skaler banens bredden i lengdeenheter"
 
 #: ../src/live_effects/lpe-bendpath.cpp:62
 #, fuzzy
@@ -10429,7 +10424,7 @@ msgstr "Orginalsti er vertikal"
 
 #: ../src/live_effects/lpe-bendpath.cpp:62
 msgid "Rotates the original 90 degrees, before bending it along the bend path"
-msgstr "Roterer orginalen 90 grader før den bøyes rundt stien"
+msgstr "Roterer originalen 90 grader før den bøyes rundt banen"
 
 #: ../src/live_effects/lpe-bendpath.cpp:63
 #: ../src/live_effects/lpe-patternalongpath.cpp:93
@@ -10578,7 +10573,7 @@ msgstr "Lenk til sti"
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:20
 #, fuzzy
 msgid "Path from which to take the original path data"
-msgstr "Sti som orginalstien skal bøyes langs"
+msgstr "Bane som originalbanen skal bøyes langs"
 
 #: ../src/live_effects/lpe-bounding-box.cpp:21
 #, fuzzy
@@ -10659,7 +10654,7 @@ msgstr "Høyde:"
 #: ../src/live_effects/lpe-bspline.cpp:164
 #: ../src/live_effects/parameter/parameter.cpp:169
 msgid "Change scalar parameter"
-msgstr "Ende skalarparameter"
+msgstr "Endre skalarparameter"
 
 #: ../src/live_effects/lpe-clone-original.cpp:33
 #, fuzzy
@@ -10808,7 +10803,7 @@ msgstr "Antall kopier"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:69
 msgid "Number of copies of the original path"
-msgstr "Antal kopier langs originalstien"
+msgstr "Antall kopier langs originalbanen"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:70
 #, fuzzy
@@ -10866,7 +10861,7 @@ msgstr "Sy sti"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:37
 msgid "The path that will be used as stitch."
-msgstr "Stien som skal brukes til å sy med"
+msgstr "Banen som skal brukes til å sy med."
 
 #: ../src/live_effects/lpe-curvestitch.cpp:38
 #, fuzzy
@@ -10875,7 +10870,7 @@ msgstr "Antall stier"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:38
 msgid "The number of paths that will be generated."
-msgstr "Antal stier som blir generert"
+msgstr "Antall baner som skal dannes."
 
 #: ../src/live_effects/lpe-curvestitch.cpp:39
 #, fuzzy
@@ -10928,7 +10923,7 @@ msgstr "Skaler bredde"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:43
 msgid "Scale the width of the stitch path"
-msgstr "Skaler bredden på systien"
+msgstr "Skaler bredden til sybanen"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:44
 #, fuzzy
@@ -10937,7 +10932,7 @@ msgstr "Skaler relativ til lengden"
 
 #: ../src/live_effects/lpe-curvestitch.cpp:44
 msgid "Scale the width of the stitch path relative to its length"
-msgstr "Skaler bredden på systien relativt til lengden"
+msgstr "Skaler bredden til sybanen relativt til lengden"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:18
 #, fuzzy
@@ -11247,7 +11242,7 @@ msgstr "Øvre bøyesti"
 
 #: ../src/live_effects/lpe-envelope.cpp:18
 msgid "Top path along which to bend the original path"
-msgstr "Den øvre stien som originalstien bøyes langs"
+msgstr "Den øvre banen som originalbanen skal bøyes langs"
 
 #: ../src/live_effects/lpe-envelope.cpp:19
 #, fuzzy
@@ -11256,7 +11251,7 @@ msgstr "Høyre bøyesti"
 
 #: ../src/live_effects/lpe-envelope.cpp:19
 msgid "Right path along which to bend the original path"
-msgstr "Den høyre stien som originalstien bøyes langs"
+msgstr "Den høyre banen som originalbanen skal bøyes langs"
 
 #: ../src/live_effects/lpe-envelope.cpp:20
 #, fuzzy
@@ -11265,7 +11260,7 @@ msgstr "Nedre bøyesti"
 
 #: ../src/live_effects/lpe-envelope.cpp:20
 msgid "Bottom path along which to bend the original path"
-msgstr "Den nedre stien som originalstien bøyes langs"
+msgstr "Den nedre banen som originalbanen skal bøyes langs"
 
 #: ../src/live_effects/lpe-envelope.cpp:21
 #, fuzzy
@@ -11274,7 +11269,7 @@ msgstr "Venstre bøyesti"
 
 #: ../src/live_effects/lpe-envelope.cpp:21
 msgid "Left path along which to bend the original path"
-msgstr "Den venstre stien som originalstien bøyes langs"
+msgstr "Den venstre banen som originalbanen skal bøyes langs"
 
 #: ../src/live_effects/lpe-envelope.cpp:22
 #, fuzzy
@@ -11283,7 +11278,7 @@ msgstr "Bruk stier til høyre og venstre"
 
 #: ../src/live_effects/lpe-envelope.cpp:22
 msgid "Enable the left and right deformation paths"
-msgstr "Skrur på deformasjonsstiene til høyre og venstre"
+msgstr "Slå på deformasjonsbanene til venstre og høyre"
 
 #: ../src/live_effects/lpe-envelope.cpp:23
 #, fuzzy
@@ -11292,7 +11287,7 @@ msgstr "Bruk stier over og under"
 
 #: ../src/live_effects/lpe-envelope.cpp:23
 msgid "Enable the top and bottom deformation paths"
-msgstr "Skrur på deformasjonsstiene i topp og bunn"
+msgstr "Slå på deformasjonsbanene i topp og bunn"
 
 #: ../src/live_effects/lpe-extrude.cpp:26
 #, fuzzy
@@ -11507,7 +11502,7 @@ msgstr "Bane"
 
 #: ../src/live_effects/lpe-interpolate.cpp:30
 msgid "Path along which intermediate steps are created."
-msgstr "Stien som mellomstegene lages langs"
+msgstr "Banen som mellomstegene lages langs."
 
 #: ../src/live_effects/lpe-interpolate.cpp:32
 #, fuzzy
@@ -11524,6 +11519,7 @@ msgid "E_quidistant spacing"
 msgstr "Lik distanse"
 
 #: ../src/live_effects/lpe-interpolate.cpp:34
+#, fuzzy
 msgid ""
 "If true, the spacing between intermediates is constant along the length of "
 "the path. If false, the distance depends on the location of the nodes of the "
@@ -11759,162 +11755,132 @@ msgid "Change knot crossing"
 msgstr "Endre bindeleddsavstand"
 
 #: ../src/live_effects/lpe-lattice.cpp:35
-#, fuzzy
 msgid "Control handle 0:"
-msgstr "Håndtak 9"
+msgstr "Håndtak 0:"
 
 #: ../src/live_effects/lpe-lattice.cpp:35
-#, fuzzy
 msgid "Control handle 0"
-msgstr "Håndtak 9"
+msgstr "Håndtak 0"
 
 #: ../src/live_effects/lpe-lattice.cpp:36
-#, fuzzy
 msgid "Control handle 1:"
-msgstr "Håndtak 10"
+msgstr "Håndtak 1:"
 
 #: ../src/live_effects/lpe-lattice.cpp:36
-#, fuzzy
 msgid "Control handle 1"
-msgstr "Håndtak 10"
+msgstr "Håndtak 1"
 
 #: ../src/live_effects/lpe-lattice.cpp:37
-#, fuzzy
 msgid "Control handle 2:"
-msgstr "Håndtak 9"
+msgstr "Håndtak 2:"
 
 #: ../src/live_effects/lpe-lattice.cpp:37
-#, fuzzy
 msgid "Control handle 2"
-msgstr "Håndtak 9"
+msgstr "Håndtak 2"
 
 #: ../src/live_effects/lpe-lattice.cpp:38
-#, fuzzy
 msgid "Control handle 3:"
-msgstr "Håndtak 9"
+msgstr "Håndtak 3:"
 
 #: ../src/live_effects/lpe-lattice.cpp:38
-#, fuzzy
 msgid "Control handle 3"
-msgstr "Håndtak 9"
+msgstr "Håndtak 3"
 
 #: ../src/live_effects/lpe-lattice.cpp:39
-#, fuzzy
 msgid "Control handle 4:"
-msgstr "Håndtak 9"
+msgstr "Håndtak 4:"
 
 #: ../src/live_effects/lpe-lattice.cpp:39
-#, fuzzy
 msgid "Control handle 4"
-msgstr "Håndtak 9"
+msgstr "Håndtak 4"
 
 #: ../src/live_effects/lpe-lattice.cpp:40
-#, fuzzy
 msgid "Control handle 5:"
-msgstr "Håndtak 9"
+msgstr "Håndtak 5:"
 
 #: ../src/live_effects/lpe-lattice.cpp:40
-#, fuzzy
 msgid "Control handle 5"
-msgstr "Håndtak 9"
+msgstr "Håndtak 5"
 
 #: ../src/live_effects/lpe-lattice.cpp:41
-#, fuzzy
 msgid "Control handle 6:"
-msgstr "Håndtak 9"
+msgstr "Håndtak 6:"
 
 #: ../src/live_effects/lpe-lattice.cpp:41
-#, fuzzy
 msgid "Control handle 6"
-msgstr "Håndtak 9"
+msgstr "Håndtak 6"
 
 #: ../src/live_effects/lpe-lattice.cpp:42
-#, fuzzy
 msgid "Control handle 7:"
-msgstr "Håndtak 9"
+msgstr "Håndtak 7:"
 
 #: ../src/live_effects/lpe-lattice.cpp:42
-#, fuzzy
 msgid "Control handle 7"
-msgstr "Håndtak 9"
+msgstr "Håndtak 7"
 
 #: ../src/live_effects/lpe-lattice.cpp:43
-#, fuzzy
 msgid "Control handle 8:"
-msgstr "Håndtak 9"
+msgstr "Håndtak 8:"
 
 #: ../src/live_effects/lpe-lattice.cpp:43
-#, fuzzy
 msgid "Control handle 8"
-msgstr "Håndtak 9"
+msgstr "Håndtak 8"
 
 #: ../src/live_effects/lpe-lattice.cpp:44
-#, fuzzy
 msgid "Control handle 9:"
-msgstr "Håndtak 9"
+msgstr "Håndtak 9:"
 
 #: ../src/live_effects/lpe-lattice.cpp:44
 msgid "Control handle 9"
 msgstr "Håndtak 9"
 
 #: ../src/live_effects/lpe-lattice.cpp:45
-#, fuzzy
 msgid "Control handle 10:"
-msgstr "Håndtak 10"
+msgstr "Håndtak 10:"
 
 #: ../src/live_effects/lpe-lattice.cpp:45
-#, fuzzy
 msgid "Control handle 10"
 msgstr "Håndtak 10"
 
 #: ../src/live_effects/lpe-lattice.cpp:46
-#, fuzzy
 msgid "Control handle 11:"
-msgstr "Håndtak 10"
+msgstr "Håndtak 11:"
 
 #: ../src/live_effects/lpe-lattice.cpp:46
 msgid "Control handle 11"
-msgstr "Håndtak 10"
+msgstr "Håndtak 11"
 
 #: ../src/live_effects/lpe-lattice.cpp:47
-#, fuzzy
 msgid "Control handle 12:"
-msgstr "Håndtak 10"
+msgstr "Håndtak 12:"
 
 #: ../src/live_effects/lpe-lattice.cpp:47
-#, fuzzy
 msgid "Control handle 12"
-msgstr "Håndtak 10"
+msgstr "Håndtak 12"
 
 #: ../src/live_effects/lpe-lattice.cpp:48
-#, fuzzy
 msgid "Control handle 13:"
-msgstr "Håndtak 10"
+msgstr "Håndtak 13:"
 
 #: ../src/live_effects/lpe-lattice.cpp:48
-#, fuzzy
 msgid "Control handle 13"
-msgstr "Håndtak 10"
+msgstr "Håndtak 13"
 
 #: ../src/live_effects/lpe-lattice.cpp:49
-#, fuzzy
 msgid "Control handle 14:"
-msgstr "Håndtak 10"
+msgstr "Håndtak 14:"
 
 #: ../src/live_effects/lpe-lattice.cpp:49
-#, fuzzy
 msgid "Control handle 14"
-msgstr "Håndtak 10"
+msgstr "Håndtak 14"
 
 #: ../src/live_effects/lpe-lattice.cpp:50
-#, fuzzy
 msgid "Control handle 15:"
-msgstr "Håndtak 10"
+msgstr "Håndtak 15:"
 
 #: ../src/live_effects/lpe-lattice.cpp:50
-#, fuzzy
 msgid "Control handle 15"
-msgstr "Håndtak 10"
+msgstr "Håndtak 15"
 
 #: ../src/live_effects/lpe-lattice2.cpp:37
 #: ../src/live_effects/lpe-perspective-envelope.cpp:46
@@ -12226,14 +12192,12 @@ msgstr "Fjern rød"
 
 #: ../src/live_effects/lpe-lattice2.cpp:266
 #: ../src/live_effects/lpe-lattice2.cpp:284
-#, fuzzy
 msgid "Show Points"
-msgstr "Orientering"
+msgstr "Vis punkter"
 
 #: ../src/live_effects/lpe-lattice2.cpp:282
-#, fuzzy
 msgid "Hide Points"
-msgstr "Punkter"
+msgstr "Skjul punkter"
 
 #: ../src/live_effects/lpe-line_segment.cpp:24
 #: ../src/ui/toolbar/lpe-toolbar.cpp:127
@@ -12256,9 +12220,8 @@ msgid "Open both"
 msgstr "Åpen i begge ender"
 
 #: ../src/live_effects/lpe-line_segment.cpp:33
-#, fuzzy
 msgid "End type:"
-msgstr "Endetype"
+msgstr "Endetype:"
 
 #: ../src/live_effects/lpe-line_segment.cpp:33
 msgid "Determines on which side the line or line segment is infinite."
@@ -12266,20 +12229,17 @@ msgstr "Bestemmer hvilken side av linja eller linjesegmentet som er uendelig"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:59
 #: ../src/ui/toolbar/text-toolbar.cpp:631
-#, fuzzy
 msgid "Horizontal"
-msgstr "_Horisontal"
+msgstr "Vannrett"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:60
-#, fuzzy
 msgid "Vertical"
-msgstr "_Vertikal"
+msgstr "Loddrett"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:67
 #: ../src/live_effects/lpe-offset.cpp:77
-#, fuzzy
 msgid "Unit of measurement"
-msgstr "Hev valgte lag til toppen"
+msgstr "Måleenhet"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:68
 #: ../share/extensions/gcodetools_graffiti.inx:19
@@ -12293,9 +12253,8 @@ msgid "Orientation of the line and labels"
 msgstr "Orientering"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:69
-#, fuzzy
 msgid "Color and opacity"
-msgstr "Farge på sidens ramme"
+msgstr "Farge og dekkevne"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:69
 #, fuzzy
@@ -12303,7 +12262,6 @@ msgid "Set color and opacity of the dimensions"
 msgstr "Tegn en sti rundt"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:70
-#, fuzzy
 msgid "Font"
 msgstr "Skrifttype "
 
@@ -12332,9 +12290,8 @@ msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:73
 #: ../share/extensions/frame.inx:14
-#, fuzzy
 msgid "Position"
-msgstr "Posisjon:"
+msgstr "Posisjon"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 73
@@ -12905,7 +12862,7 @@ msgstr "Enhet for r_utenett:"
 
 #: ../src/live_effects/lpe-path_length.cpp:28
 msgid "Print unit after path length"
-msgstr "Vis enhet etter stilengden"
+msgstr "Vis enhet etter banelengden"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:65
 #: ../share/extensions/pathalongpath.inx:10
@@ -12928,26 +12885,24 @@ msgid "Repeated, stretched"
 msgstr "Repetert, strukket"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:74
-#, fuzzy
 msgid "Pattern source:"
-msgstr "Mønsterkilde"
+msgstr "Mønsterkilde:"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:74
 msgid "Path to put along the skeleton path"
-msgstr "Sti som skal legges langs skjelettstien"
+msgstr "Bane som skal legges langs skjelettbanen"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:76
 msgid "Width of the pattern"
 msgstr "Bredde på mønsteret"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:77
-#, fuzzy
 msgid "Pattern copies:"
-msgstr "Mønsterkopier"
+msgstr "Mønsterkopier:"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:77
 msgid "How many pattern copies to place along the skeleton path"
-msgstr "Hvor mange mønsterkopier skal legges langs skjelettstien"
+msgstr "Hvor mange mønsterkopier skal legges langs skjelettbanen"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:79
 #, fuzzy
@@ -13394,13 +13349,12 @@ msgid "Half-turns smoothness: 1st side, in:"
 msgstr "Glatthet av halvrunding: side 1, inn"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:222
-#, fuzzy
 msgid ""
 "Set smoothness/sharpness of path when reaching a 'bottom' half-turn. "
 "0=sharp, 1=default"
 msgstr ""
-"Setter glattheten/skarpheten i stien når den kommer til en \"bunnhalvrunding"
-"\". 0=skarp, 1=standard"
+"Velg glattheten/skarpheten til banen når den kommer til en "
+"«bunnhalvrunding». 0=skarp, 1=standard"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:223
 #, fuzzy
@@ -13510,7 +13464,7 @@ msgstr "Variasjoner i glattheten på \"topphalvrundinger\""
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:233
 msgid "Generate thick/thin path"
-msgstr "Lag tykk/tynn sti"
+msgstr "Lag tykk/tynn bane"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:233
 #, fuzzy
@@ -13709,7 +13663,6 @@ msgid "Both"
 msgstr "Begge"
 
 #: ../src/live_effects/lpe-ruler.cpp:30
-#, fuzzy
 msgctxt "Border mark"
 msgid "None"
 msgstr "Ingen"
@@ -13778,7 +13731,7 @@ msgstr "Merkeretning"
 
 #: ../src/live_effects/lpe-ruler.cpp:45
 msgid "Direction of marks (when viewing along the path from start to end)"
-msgstr "Retning på merkene (sett langs stien fra start til slutt)"
+msgstr "Retning på merkene (sett langs banen fra start til slutt)"
 
 #: ../src/live_effects/lpe-ruler.cpp:46
 #, fuzzy
@@ -13796,7 +13749,7 @@ msgstr "Grensemerker"
 
 #: ../src/live_effects/lpe-ruler.cpp:47
 msgid "Choose whether to draw marks at the beginning and end of the path"
-msgstr "Tegn merker på starten og slutten av stien?"
+msgstr "Velg om merkene skal tegnes på starten og slutten av banen"
 
 #: ../src/live_effects/lpe-show_handles.cpp:30
 #, fuzzy
@@ -13859,9 +13812,8 @@ msgid "Paths separately"
 msgstr "Lim inn størrelsen separat"
 
 #: ../src/live_effects/lpe-simplify.cpp:27
-#, fuzzy
 msgid "Simplifying paths (separately)"
-msgstr "Forenkle stier (separat):"
+msgstr "Forenkle baner (separat)"
 
 #: ../src/live_effects/lpe-simplify.cpp:29
 #, fuzzy
@@ -13879,25 +13831,23 @@ msgstr "Flyttalsparameter"
 
 #: ../src/live_effects/lpe-skeleton.cpp:33
 msgid "just a real number like 1.4!"
-msgstr "et reelt tall som for eksempel, 1.4!"
+msgstr "et reelt tall som for eksempel 1.4."
 
 #: ../src/live_effects/lpe-sketch.cpp:32
-#, fuzzy
 msgid "Strokes:"
-msgstr "Strøk"
+msgstr "Strøk:"
 
 #: ../src/live_effects/lpe-sketch.cpp:32
 msgid "Draw that many approximating strokes"
 msgstr "Tegn så mange tilnærmingsstrøk"
 
 #: ../src/live_effects/lpe-sketch.cpp:33
-#, fuzzy
 msgid "Max stroke length:"
-msgstr "Maksimal strøklengde"
+msgstr "Maksimal strøklengde:"
 
 #: ../src/live_effects/lpe-sketch.cpp:34
 msgid "Maximum length of approximating strokes"
-msgstr "Maksimal lengde av tilnærmingsstrøkene"
+msgstr "Maksimal lengde til tilnærmingsstrøkene"
 
 #: ../src/live_effects/lpe-sketch.cpp:35
 #, fuzzy
@@ -13937,8 +13887,8 @@ msgid ""
 "Maximum distance between ends of original and approximating paths (relative "
 "to maximum length)"
 msgstr ""
-"Maksimal distanse mellom endene på originalstien og tilnærmingsstien "
-"(relativ til maksimal lengde)"
+"Største avstand mellom endene til original- og tilnærmingsbanen (relativ til "
+"største lengde)"
 
 #: ../src/live_effects/lpe-sketch.cpp:43
 #, fuzzy
@@ -13947,7 +13897,7 @@ msgstr "Gjenomsnittlig forskyving"
 
 #: ../src/live_effects/lpe-sketch.cpp:44
 msgid "Average distance each stroke is away from the original path"
-msgstr "Gjennomsnittlig forskyving av hvert strøk bort fra originalstien"
+msgstr "Gjennomsnittlig forskyving av hvert strøk bort fra originalbanen"
 
 #: ../src/live_effects/lpe-sketch.cpp:45
 #, fuzzy
@@ -14157,7 +14107,7 @@ msgstr "Etikett"
 
 #: ../src/live_effects/lpe-text_label.cpp:25
 msgid "Text label attached to the path"
-msgstr "Tekst som kobles til stien"
+msgstr "Tekst som kobles til banen"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:32
 #, fuzzy
@@ -14265,8 +14215,7 @@ msgstr "Genererer sti"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:46
 msgid "Path whose segments define the iterated transforms"
-msgstr ""
-"Stien som segmentene som bestemmer den itererte transformasjonen kommer fra"
+msgstr "Banen hvis segmenter bestemmer de itererte transformasjonene"
 
 #: ../src/live_effects/lpe-vonkoch.cpp:47
 #, fuzzy
@@ -14410,7 +14359,7 @@ msgstr "Link stiparameter til sti"
 #: ../src/live_effects/parameter/originalpath.cpp:64
 #: ../src/live_effects/parameter/originalpatharray.cpp:187
 msgid "Link to path"
-msgstr "Lenk til sti"
+msgstr "Lenk til bane"
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:89
 #: ../src/ui/toolbar/gradient-toolbar.cpp:440
@@ -14426,7 +14375,7 @@ msgstr "Synlig"
 #: ../src/live_effects/parameter/originalpatharray.cpp:147
 #: ../src/live_effects/parameter/path.cpp:563
 msgid "Link path parameter to path"
-msgstr "Link stiparameter til sti"
+msgstr "Link baneparameter til bane"
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:162
 #, fuzzy
@@ -14464,11 +14413,11 @@ msgstr "Editer på lerretet"
 
 #: ../src/live_effects/parameter/path.cpp:233
 msgid "Copy path"
-msgstr "Kopier sti"
+msgstr "Kopier bane"
 
 #: ../src/live_effects/parameter/path.cpp:245
 msgid "Paste path"
-msgstr "Lim inn sti"
+msgstr "Lim inn bane"
 
 #: ../src/live_effects/parameter/path.cpp:256
 #, fuzzy
@@ -14477,7 +14426,7 @@ msgstr "Ingenting i utklippstavlen."
 
 #: ../src/live_effects/parameter/path.cpp:531
 msgid "Paste path parameter"
-msgstr "Lim inn stiparameter"
+msgstr "Lim inn baneparameter"
 
 #: ../src/live_effects/parameter/point.cpp:163
 msgid "Change point parameter"
@@ -14754,7 +14703,7 @@ msgstr "Linje"
 
 #: ../src/object/sp-lpe-item.cpp:260 ../src/object/sp-lpe-item.cpp:948
 msgid "An exception occurred during execution of the Path Effect."
-msgstr "En feil oppsto under kjøring av stieffekten."
+msgstr "En feil oppsto under kjøring av baneffekten."
 
 #: ../src/object/sp-offset.cpp:326
 #, fuzzy
@@ -14781,7 +14730,7 @@ msgstr "innfelt"
 
 #: ../src/object/sp-path.cpp:54
 msgid "Path"
-msgstr "Sti"
+msgstr "Bane"
 
 #: ../src/object/sp-path.cpp:79
 #, fuzzy, c-format
@@ -14890,7 +14839,7 @@ msgstr " fra "
 
 #: ../src/object/sp-tref.cpp:238 ../src/object/sp-use.cpp:271
 msgid "[orphaned]"
-msgstr ""
+msgstr "[foreldreløs]"
 
 #: ../src/object/sp-tspan.cpp:216
 #, fuzzy
@@ -14900,7 +14849,7 @@ msgstr "Tekst Inndata"
 #: ../src/object/sp-use.cpp:234
 #: ../share/extensions/render_barcode_qrcode.inx:43
 msgid "Symbol"
-msgstr ""
+msgstr "Symbol"
 
 #: ../src/object/sp-use.cpp:236
 #, fuzzy
@@ -14911,16 +14860,15 @@ msgstr "Kloner"
 #: ../src/object/sp-use.cpp:248
 #, c-format
 msgid "called %s"
-msgstr ""
+msgstr "som heter %s"
 
 #: ../src/object/sp-use.cpp:248
-#, fuzzy
 msgid "Unnamed Symbol"
-msgstr "Ubetegnet"
+msgstr "Navnløst symbol"
 
 #: ../src/object/sp-use.cpp:257
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #: ../src/object/sp-use.cpp:266
 #, fuzzy, c-format
@@ -14933,7 +14881,7 @@ msgstr "Velg hvilke(t) <b>objekt(er)</b> som skal kombineres."
 
 #: ../src/path-chemistry.cpp:73
 msgid "Combining paths..."
-msgstr "Kombinerer stier ..."
+msgstr "Kombinerer baner …."
 
 #: ../src/path-chemistry.cpp:180
 msgid "Combine"
@@ -14941,15 +14889,15 @@ msgstr "Kombiner"
 
 #: ../src/path-chemistry.cpp:188
 msgid "<b>No path(s)</b> to combine in the selection."
-msgstr "<b>Ingen stier</b> å kombinere i valgte."
+msgstr "Utvalget har <b>ingen baner</b> som kan kombineres."
 
 #: ../src/path-chemistry.cpp:200
 msgid "Select <b>path(s)</b> to break apart."
-msgstr "Velg <b>sti(er)</b> som skal brytes opp."
+msgstr "Velg <b>bane(r)</b> som skal brytes opp."
 
 #: ../src/path-chemistry.cpp:204
 msgid "Breaking apart paths..."
-msgstr "Bryter opp stier ..."
+msgstr "Bryter opp baner …"
 
 #: ../src/path-chemistry.cpp:291
 msgid "Break apart"
@@ -14957,39 +14905,39 @@ msgstr "Bryt opp"
 
 #: ../src/path-chemistry.cpp:295
 msgid "<b>No path(s)</b> to break apart in the selection."
-msgstr "<b>Ingen sti(er)</b> å bryte opp i det utvalgte."
+msgstr "Utvalget har <b>ingen bane(r)</b> som kan brytes opp."
 
 #: ../src/path-chemistry.cpp:303
 msgid "Select <b>object(s)</b> to convert to path."
-msgstr "Velg <b>objekt(er)</b> som skal konverteres til sti."
+msgstr "Velg <b>objekt(er)</b> som skal konverteres til bane."
 
 #: ../src/path-chemistry.cpp:309
 msgid "Converting objects to paths..."
-msgstr "Konverterer objekter til stier ..."
+msgstr "Konverterer objekter til baner …"
 
 #: ../src/path-chemistry.cpp:332
 msgid "Object to path"
-msgstr "Objekt til sti"
+msgstr "Objekt til bane"
 
 #: ../src/path-chemistry.cpp:335
 msgid "<b>No objects</b> to convert to path in the selection."
-msgstr "<b>Ingen objekter</b> å konvertere til sti i valgte."
+msgstr "Utvalget har <b>ingen objekter</b> som kan konverteres til bane."
 
 #: ../src/path-chemistry.cpp:594
 msgid "Select <b>path(s)</b> to reverse."
-msgstr "Velg <b>sti(er)</b> som skal reverseres."
+msgstr "Velg <b>bane(r)</b> som skal reverseres."
 
 #: ../src/path-chemistry.cpp:602
 msgid "Reversing paths..."
-msgstr "Reverser stier ..."
+msgstr "Reverserer baner …"
 
 #: ../src/path-chemistry.cpp:640
 msgid "Reverse path"
-msgstr "Reverser sti"
+msgstr "Reverser bane"
 
 #: ../src/path-chemistry.cpp:643
 msgid "<b>No paths</b> to reverse in the selection."
-msgstr "<b>Ingen stier</b> å reversere i valgte."
+msgstr "Utvalget har <b>ingen baner</b> som kan reverseres."
 
 #: ../src/preferences-skeleton.h:504
 #, fuzzy
@@ -15030,27 +14978,27 @@ msgstr ""
 #: ../src/preferences.cpp:132
 #, c-format
 msgid "Cannot create profile directory %s."
-msgstr "Kan ikke skape katalog %s."
+msgstr "Klarte ikke opprette profilmappe %s."
 
 #: ../src/preferences.cpp:141
 #, c-format
 msgid "%s is not a valid directory."
-msgstr "%s er ikke en gyldig katalog."
+msgstr "%s er en ugyldig mappe."
 
 #: ../src/preferences.cpp:160
 #, c-format
 msgid "Failed to create the preferences file %s."
-msgstr "Feilet i å laste innstillingsfil %s."
+msgstr "Klarte ikke laste innstillingsfila %s."
 
 #: ../src/preferences.cpp:196
 #, c-format
 msgid "The preferences file %s is not a regular file."
-msgstr "Innstillingsfilen %s er ikke en vanlig fil."
+msgstr "Innstillingsfila %s er ikke en vanlig fil."
 
 #: ../src/preferences.cpp:206
 #, c-format
 msgid "The preferences file %s could not be read."
-msgstr "Innstillingsfila %s kunne ikke leses."
+msgstr "Klarte ikke lese innstillingsfila %s."
 
 #: ../src/preferences.cpp:217
 #, c-format
@@ -15060,54 +15008,51 @@ msgstr "Innstillingsfila %s er ikke på gyldig XML-format."
 #: ../src/preferences.cpp:226
 #, c-format
 msgid "The file %s is not a valid Inkscape preferences file."
-msgstr "Fila %s er ikke en gyldig Inkscape innstillingsfil."
+msgstr "Fila %s er ikke en gyldig innstillingsfil for Inkscape."
 
 #: ../src/preferences.cpp:276
-#, fuzzy
 msgid "Preferences file was deleted."
-msgstr "Innstillingsfila %s kunne ikke leses."
+msgstr "Innstillingsfila ble slettet."
 
 #: ../src/preferences.cpp:277
-#, fuzzy
 msgid "There was an error trying to delete the preferences file."
-msgstr "Feilet i å laste innstillingsfil %s."
+msgstr "Klarte ikke slette innstillingsfila."
 
 #: ../src/rdf.cpp:178
 msgid "CC Attribution"
-msgstr "CC Tilleggelse"
+msgstr "CC Navngivelse"
 
 #: ../src/rdf.cpp:183
 msgid "CC Attribution-ShareAlike"
-msgstr "CC Tilleggelse-DelLikt"
+msgstr "CC Navngivelse-DelPåSammeVilkår"
 
 #: ../src/rdf.cpp:188
 msgid "CC Attribution-NoDerivs"
-msgstr "CC Tilleggelse-IkkeBearbeid"
+msgstr "CC Navngivelse-IngenBearbeidelser"
 
 #: ../src/rdf.cpp:193
 msgid "CC Attribution-NonCommercial"
-msgstr "CC Tilleggelse-IkkeKommersiell"
+msgstr "CC Navngivelse-IkkeKommersiell"
 
 #: ../src/rdf.cpp:198
 msgid "CC Attribution-NonCommercial-ShareAlike"
-msgstr "CC Tilleggelse-IkkeKommersiell-DelLikt"
+msgstr "CC Navngivelse-IkkeKommersiell-DelPåSammeVilkår"
 
 #: ../src/rdf.cpp:203
 msgid "CC Attribution-NonCommercial-NoDerivs"
-msgstr "CC Tilleggelse-IkkeKommersiell-IkkeBearbeid"
+msgstr "CC Navngivelse-IkkeKommersiell-IngenBearbeidelser"
 
 #: ../src/rdf.cpp:208
-#, fuzzy
 msgid "CC0 Public Domain Dedication"
-msgstr "Offentlig domene"
+msgstr "CC0 Alle rettigheter frigitt"
 
 #: ../src/rdf.cpp:213
 msgid "FreeArt"
-msgstr "FriKunst"
+msgstr "Free Art-lisens"
 
 #: ../src/rdf.cpp:218
 msgid "Open Font License"
-msgstr "Open Font License"
+msgstr "Open Font-lisens"
 
 #: ../src/rdf.cpp:238 ../src/ui/dialog/filedialogimpl-win32.cpp:1880
 #: ../src/ui/dialog/object-attributes.cpp:48
@@ -15116,156 +15061,134 @@ msgstr "Tittel:"
 
 #: ../src/rdf.cpp:239
 msgid "A name given to the resource"
-msgstr ""
+msgstr "Ressursens navn"
 
 #: ../src/rdf.cpp:241
-#, fuzzy
 msgid "Date:"
-msgstr "Dato"
+msgstr "Dato:"
 
 #: ../src/rdf.cpp:242
 msgid ""
 "A point or period of time associated with an event in the lifecycle of the "
 "resource"
 msgstr ""
+"Et tidspunkt eller en periode knyttet til en hendelse i ressursens livsløp"
 
 #: ../src/rdf.cpp:244 ../share/extensions/webslicer_create_rect.inx:8
-#, fuzzy
 msgid "Format:"
-msgstr "Format"
+msgstr "Format:"
 
 #: ../src/rdf.cpp:245
 msgid "The file format, physical medium, or dimensions of the resource"
-msgstr ""
+msgstr "Ressursens filformat, fysisk medium eller dimensjoner"
 
 #: ../src/rdf.cpp:248
 msgid "The nature or genre of the resource"
-msgstr ""
+msgstr "Ressursens art eller sjanger"
 
 #: ../src/rdf.cpp:251
-#, fuzzy
 msgid "Creator:"
-msgstr "Skaperen"
+msgstr "Opphavsperson:"
 
 #: ../src/rdf.cpp:252
-#, fuzzy
 msgid "An entity primarily responsible for making the resource"
-msgstr ""
-"Navn på hovedsakelig instans ansvarlig for å lage innholdet på dette "
-"dokument."
+msgstr "Instansen med hovedansvaret for å lage ressursen"
 
 #: ../src/rdf.cpp:254
-#, fuzzy
 msgid "Rights:"
-msgstr "Rettigheter"
+msgstr "Rettigheter:"
 
 #: ../src/rdf.cpp:255
 msgid "Information about rights held in and over the resource"
-msgstr ""
+msgstr "Informasjon om rettigheter i ressursen og dens bruk"
 
 #: ../src/rdf.cpp:257
-#, fuzzy
 msgid "Publisher:"
-msgstr "Utgiver"
+msgstr "Utgiver:"
 
 #: ../src/rdf.cpp:258
-#, fuzzy
 msgid "An entity responsible for making the resource available"
-msgstr ""
-"Navn på instans som er ansvarlig for å tilgjengeligjøre dette dokument."
+msgstr "Instansen med ansvaret for å tilgjengeliggjøre denne ressursen."
 
 #: ../src/rdf.cpp:261
-#, fuzzy
 msgid "Identifier:"
-msgstr "Identifikator "
+msgstr "Identifikator :"
 
 #: ../src/rdf.cpp:262
 msgid "An unambiguous reference to the resource within a given context"
-msgstr ""
+msgstr "En entydig referanse til ressursen i en gitt sammenheng"
 
 #: ../src/rdf.cpp:265
 msgid "A related resource from which the described resource is derived"
-msgstr ""
+msgstr "En beslektet ressurs som den beskrevne ressursen er avledet fra"
 
 #: ../src/rdf.cpp:267
-#, fuzzy
 msgid "Relation:"
-msgstr "Relasjon "
+msgstr "Relasjon:"
 
 #: ../src/rdf.cpp:268
-#, fuzzy
 msgid "A related resource"
-msgstr "end node"
+msgstr "En beslektet ressurs"
 
 #: ../src/rdf.cpp:270 ../src/ui/dialog/inkscape-preferences.cpp:2542
-#, fuzzy
 msgid "Language:"
-msgstr "Språk"
+msgstr "Språk:"
 
 #: ../src/rdf.cpp:271
-#, fuzzy
 msgid "A language of the resource"
-msgstr "Vinkel på første kopi"
+msgstr "Ressursens språk"
 
 #: ../src/rdf.cpp:273
-#, fuzzy
 msgid "Keywords:"
-msgstr "Stikkord"
+msgstr "Stikkord:"
 
 #: ../src/rdf.cpp:274
 msgid "The topic of the resource"
-msgstr ""
+msgstr "Ressursens tema"
 
 #: ../src/rdf.cpp:278
-#, fuzzy
 msgid "Coverage:"
-msgstr "Dekningsområde"
+msgstr "Dekningsområde:"
 
 #: ../src/rdf.cpp:279
 msgid ""
 "The spatial or temporal topic of the resource, the spatial applicability of "
 "the resource, or the jurisdiction under which the resource is relevant"
 msgstr ""
+"Ressursens romlige eller tidsmessige egenskaper, hvor den kan brukes, eller "
+"under hvilken rettslig myndighet den tilhører"
 
 #: ../src/rdf.cpp:282
-#, fuzzy
 msgid "Description:"
-msgstr "Beskrivelse"
+msgstr "Beskrivelse:"
 
 #: ../src/rdf.cpp:283
-#, fuzzy
 msgid "An account of the resource"
-msgstr "En kort redegjørelse for dokumentets innhold."
+msgstr "En beskrivelse av ressursen"
 
 #: ../src/rdf.cpp:287
-#, fuzzy
 msgid "Contributors:"
-msgstr "Bidragsytere"
+msgstr "Bidragsytere:"
 
 #: ../src/rdf.cpp:288
-#, fuzzy
 msgid "An entity responsible for making contributions to the resource"
-msgstr "Navn på instansene ansvarlig for bidrag til innholdet i dokumentet."
+msgstr "Instans med ansvar for å bidra til ressursen"
 
 #: ../src/rdf.cpp:292
-#, fuzzy
 msgid "URI:"
-msgstr "URI"
+msgstr "URI:"
 
 #: ../src/rdf.cpp:294
-#, fuzzy
 msgid "URI to this document's license's namespace definition"
-msgstr "URI til dette dokuments lisens-navneområde-definisjon."
+msgstr "URI til navneområdedefinisjonen til dette dokumentets lisens"
 
 #: ../src/rdf.cpp:298
-#, fuzzy
 msgid "Fragment:"
-msgstr "Fragment"
+msgstr "Fragment:"
 
 #: ../src/rdf.cpp:299
-#, fuzzy
 msgid "XML fragment for the RDF 'License' section"
-msgstr "XML fragment av RDF 'Lisens' seksjonen."
+msgstr "XML-fragmentet til RDF «Licence»-bolken"
 
 #: ../src/selection-chemistry.cpp:390
 msgid "Delete text"
@@ -15299,25 +15222,21 @@ msgid "Select <b>some objects</b> to group."
 msgstr "Velg <b>noen objekter</b> som skal grupperes."
 
 #: ../src/selection-chemistry.cpp:786
-#, fuzzy
 msgctxt "Verb"
 msgid "Group"
-msgstr "Gruppe"
+msgstr "Gruppér"
 
 #: ../src/selection-chemistry.cpp:802
-#, fuzzy
 msgid "<b>No objects selected</b> to pop out of group."
-msgstr "<b>Ingen objekter valgt</b> for å kunne ta stil fra."
+msgstr "Det er <b>ikke valgt</b> noen objekter som kan tas ut av gruppa."
 
 #: ../src/selection-chemistry.cpp:811
-#, fuzzy
 msgid "Selection <b>not in a group</b>."
-msgstr "Velg en <b>gruppe</b> som skal løses opp."
+msgstr "Utvalget er <b>ikke i en gruppe</b>."
 
 #: ../src/selection-chemistry.cpp:826
-#, fuzzy
 msgid "Pop selection from group"
-msgstr "Skap en dynamisk forskøvet objekt"
+msgstr "Ta utvalget ut av gruppe"
 
 #: ../src/selection-chemistry.cpp:888
 msgid "Select a <b>group</b> to ungroup."
@@ -15325,11 +15244,11 @@ msgstr "Velg en <b>gruppe</b> som skal løses opp."
 
 #: ../src/selection-chemistry.cpp:894
 msgid "<b>No groups</b> to ungroup in the selection."
-msgstr "<b>Ingen grupper</b> som kan løses opp i valgte."
+msgstr "Utvalget har <b>ingen grupper</b> som kan løses opp."
 
 #: ../src/selection-chemistry.cpp:988 ../src/selection-chemistry.cpp:1040
 msgid "Select <b>object(s)</b> to raise."
-msgstr "Velg hvilke(t) <b>objekt(er)</b> som skal løftes."
+msgstr "Velg hvilke(t) <b>objekt(er)</b> som skal heves."
 
 #: ../src/selection-chemistry.cpp:995 ../src/selection-chemistry.cpp:1046
 #: ../src/selection-chemistry.cpp:1072 ../src/selection-chemistry.cpp:1129
@@ -15339,7 +15258,6 @@ msgstr ""
 "Du kan ikke heve/senke fra <b>forskjellige grupper</b> eller <b>lag</b>."
 
 #: ../src/selection-chemistry.cpp:1034
-#, fuzzy
 msgctxt "Undo action"
 msgid "Raise"
 msgstr "Hev"
@@ -15353,7 +15271,6 @@ msgid "Select <b>object(s)</b> to lower."
 msgstr "Velg hvilke(t) <b>objekt(er)</b> som skal senkes."
 
 #: ../src/selection-chemistry.cpp:1115
-#, fuzzy
 msgctxt "Undo action"
 msgid "Lower"
 msgstr "Senk"
@@ -15416,15 +15333,15 @@ msgstr "Lim inn stil"
 
 #: ../src/selection-chemistry.cpp:1312
 msgid "Paste live path effect"
-msgstr "Lim inn stieffekt"
+msgstr "Lim inn sanntids baneeffekt"
 
 #: ../src/selection-chemistry.cpp:1332
 msgid "Select <b>object(s)</b> to remove live path effects from."
-msgstr "Velg <b>objekt(er)</b> som stieffekter skal fjernes fra."
+msgstr "Velg <b>objekt(er)</b> som sanntids baneeffekter skal fjernes fra."
 
 #: ../src/selection-chemistry.cpp:1345
 msgid "Remove live path effect"
-msgstr "Fjern stieffekt"
+msgstr "Fjern sanntids baneeffekt"
 
 #: ../src/selection-chemistry.cpp:1354
 msgid "Select <b>object(s)</b> to remove filters from."
@@ -15461,39 +15378,35 @@ msgstr "Velg hvilke(t) <b>objekt(er)</b> som skal flyttes til laget under."
 
 #: ../src/selection-chemistry.cpp:1483
 msgid "Lower to previous layer"
-msgstr "Flytt ned til neste lag."
+msgstr "Flytt ned til forrige lag"
 
 #: ../src/selection-chemistry.cpp:1490
 msgid "No more layers below."
 msgstr "Ingen flere lag under."
 
 #: ../src/selection-chemistry.cpp:1503
-#, fuzzy
 msgid "Select <b>object(s)</b> to move."
-msgstr "Velg hvilke(t) <b>objekt(er)</b> som skal senkes."
+msgstr "Velg hvilke(t) <b>objekt(er)</b> som skal flyttes."
 
 #: ../src/selection-chemistry.cpp:1521 ../src/verbs.cpp:2802
-#, fuzzy
 msgid "Move selection to layer"
-msgstr "Hev ut_valg ett lag opp"
+msgstr "Flytt utvalg til lag"
 
 #: ../src/selection-chemistry.cpp:1613 ../src/seltrans.cpp:400
 msgid "Cannot transform an embedded SVG."
-msgstr ""
+msgstr "Kan ikke transformere en innebygd SVG."
 
 #: ../src/selection-chemistry.cpp:1779
 msgid "Remove transform"
 msgstr "Fjern transformasjonen"
 
 #: ../src/selection-chemistry.cpp:1880
-#, fuzzy
 msgid "Rotate 90° CCW"
-msgstr "Roter objekt 90° mot klokken"
+msgstr "Roter 90° mot klokka"
 
 #: ../src/selection-chemistry.cpp:1880
-#, fuzzy
 msgid "Rotate 90° CW"
-msgstr "Roter objekt 90° med klokken"
+msgstr "Roter 90° med klokka"
 
 #: ../src/selection-chemistry.cpp:1900 ../src/seltrans.cpp:493
 #: ../src/ui/dialog/transformation.cpp:810
@@ -15510,11 +15423,11 @@ msgstr "Skaler med et helt tall"
 
 #: ../src/selection-chemistry.cpp:2313
 msgid "Move vertically"
-msgstr "Flytt vertikalt"
+msgstr "Flytt loddrett"
 
 #: ../src/selection-chemistry.cpp:2316
 msgid "Move horizontally"
-msgstr "Flytt horisontalt"
+msgstr "Flytt vannrett"
 
 #: ../src/selection-chemistry.cpp:2319 ../src/selection-chemistry.cpp:2344
 #: ../src/seltrans.cpp:487 ../src/ui/dialog/transformation.cpp:721
@@ -15523,58 +15436,56 @@ msgstr "Flytt"
 
 #: ../src/selection-chemistry.cpp:2338
 msgid "Move vertically by pixels"
-msgstr "Flytt vertikalt et antall piksler"
+msgstr "Flytt loddrett et antall piksler"
 
 #: ../src/selection-chemistry.cpp:2341
 msgid "Move horizontally by pixels"
-msgstr "Flytt horisontalt et antall piksler"
+msgstr "Flytt vannrett et antall piksler"
 
 #: ../src/selection-chemistry.cpp:2548
 msgid "The selection has no applied path effect."
-msgstr "Utvalget har ingen stieffekter"
+msgstr "Utvalget har ingen anvendte baneeffekter"
 
 #: ../src/selection-chemistry.cpp:2606 ../src/ui/dialog/clonetiler.cpp:2086
 msgid "Select an <b>object</b> to clone."
 msgstr "Velg et <b>objekt</b> som skal klones."
 
 #: ../src/selection-chemistry.cpp:2641
-#, fuzzy
 msgctxt "Action"
 msgid "Clone"
-msgstr "Kloner"
+msgstr "Klon"
 
 #: ../src/selection-chemistry.cpp:2650
 msgid "Select <b>clones</b> to relink."
-msgstr "Velg en <b>klone</b> som skal lenkes."
+msgstr "Velg en <b>klon</b> som skal omkobles."
 
 #: ../src/selection-chemistry.cpp:2658
 msgid "Copy an <b>object</b> to clipboard to relink clones to."
-msgstr "Kopier et <b>objekt</b> som kloner skal linkes til."
+msgstr "Kopier et <b>objekt</b> som kloner skal omkobles til."
 
 #: ../src/selection-chemistry.cpp:2680
 msgid "<b>No clones to relink</b> in the selection."
-msgstr "<b>Ingen kloner til å lenke</b> i utvalget."
+msgstr "Utvalget har <b>ingen kloner som kan omkobles</b>."
 
 #: ../src/selection-chemistry.cpp:2683
 msgid "Relink clone"
-msgstr "Lenke tilbake klone"
+msgstr "Omkoble klon"
 
 #: ../src/selection-chemistry.cpp:2692 ../src/selection-chemistry.cpp:2784
 msgid "Select <b>clones</b> to unlink."
-msgstr "Velg <b>kloner</b> som skal løses opp."
+msgstr "Velg <b>kloner</b> som skal frakobles."
 
 #: ../src/selection-chemistry.cpp:2771 ../src/selection-chemistry.cpp:2802
 msgid "<b>No clones to unlink</b> in the selection."
-msgstr "<b>Ingen kloner å avlenke</b> i det valgte."
+msgstr "Utvalget har <b>ingen kloner som kan frakobles</b>."
 
 #: ../src/selection-chemistry.cpp:2776
 msgid "Unlink clone"
-msgstr "Frigi klone"
+msgstr "Frakoble klon"
 
 #: ../src/selection-chemistry.cpp:2806
-#, fuzzy
 msgid "Unlink clone recursively"
-msgstr "Frigi klone"
+msgstr "Frakoble kloner rekursivt"
 
 #: ../src/selection-chemistry.cpp:2816
 msgid ""
@@ -15582,24 +15493,24 @@ msgid ""
 "to go to its source. Select a <b>text on path</b> to go to the path. Select "
 "a <b>flowed text</b> to go to its frame."
 msgstr ""
-"Velg en <b>klone</b> for å gå til dens original. Velg en <b>lenket "
-"forskyvning</b> for å gå til dens kilde. Velg <b>tekst på sti</b> for å gå "
-"til den stien. Velg <b>flytende tekst</b> for å gå til dens kilde."
+"Velg en <b>klon</b> for å gå til dens original. Velg en <b>lenket "
+"forskyvning</b> for å gå til dens kilde. Velg <b>tekst på bane</b> for å gå "
+"til den banen. Velg <b>flytende tekst</b> for å gå til dens kilde."
 
 #: ../src/selection-chemistry.cpp:2857
 msgid ""
 "<b>Cannot find</b> the object to select (orphaned clone, offset, textpath, "
 "flowed text?)"
 msgstr ""
-"<b>Kan ikke finne</b> objekt å velge (avsondret klone, forskøvet, tekststi, "
-"flytende tekst?)"
+"<b>Klarte ikke finne</b> objektet som skal velges (foreldreløs klon, "
+"forskyvning, tekstbane, flytende tekst?)"
 
 #: ../src/selection-chemistry.cpp:2864
 msgid ""
 "The object you're trying to select is <b>not visible</b> (it is in &lt;"
 "defs&gt;)"
 msgstr ""
-"Objektet du prøver å velge er <b>ikke synelig</b> (det er i &lt;defs&gt;)"
+"Objektet du prøver å velge er <b>ikke synlig</b> (det er i &lt;defs&gt;)"
 
 #: ../src/selection-chemistry.cpp:2962
 #, fuzzy
@@ -15616,11 +15527,11 @@ msgstr "Objekter til markør"
 
 #: ../src/selection-chemistry.cpp:3064
 msgid "Select <b>object(s)</b> to convert to guides."
-msgstr "Velg <b>objekt(er)</b> som skal konverteres til rettesnor."
+msgstr "Velg <b>objekt(er)</b> som skal konverteres til hjelpelinjer."
 
 #: ../src/selection-chemistry.cpp:3085
 msgid "Objects to guides"
-msgstr "Objekter til rettesnorer"
+msgstr "Objekter til hjelpelinjer"
 
 #: ../src/selection-chemistry.cpp:3116
 #, fuzzy
@@ -15670,15 +15581,15 @@ msgstr "Velg <b>objekt(er)</b> som det skal lages en punkgrafikk kopi av."
 
 #: ../src/selection-chemistry.cpp:3610
 msgid "Rendering bitmap..."
-msgstr "Tegner rasterbilde ..."
+msgstr "Tegner punktbilde …"
 
 #: ../src/selection-chemistry.cpp:3798
 msgid "Create bitmap"
-msgstr "Eksporter bitkart"
+msgstr "Opprett punktbilde"
 
 #: ../src/selection-chemistry.cpp:3820 ../src/selection-chemistry.cpp:3929
 msgid "Select <b>object(s)</b> to create clippath or mask from."
-msgstr "Velg <b>objekt(er)</b> å skape en klippelinje eller maske fra."
+msgstr "Velg <b>objekt(er)</b> det skal lages en klippebane eller maske fra."
 
 #: ../src/selection-chemistry.cpp:3905 ../src/ui/dialog/objects.cpp:1908
 #, fuzzy
@@ -15688,11 +15599,12 @@ msgstr "Skap Klo_ne"
 #: ../src/selection-chemistry.cpp:3933
 msgid "Select mask object and <b>object(s)</b> to apply clippath or mask to."
 msgstr ""
-"Velg maske objekt og <b>objekt(er)</b> å påføre klippelinje eller maske til."
+"Velg maskeobjekt og <b>objekt(er)</b> som klippebane eller maske skal brukes "
+"på."
 
 #: ../src/selection-chemistry.cpp:4101
 msgid "Set clipping path"
-msgstr "Sett stiklipping"
+msgstr "Velg klippebane"
 
 #: ../src/selection-chemistry.cpp:4103
 msgid "Set mask"
@@ -15700,11 +15612,11 @@ msgstr "Sett maske"
 
 #: ../src/selection-chemistry.cpp:4115
 msgid "Select <b>object(s)</b> to remove clippath or mask from."
-msgstr "Velg <b>objekt(er)</b> som skal ha klippelinje eller maske fjernet."
+msgstr "Velg <b>objekt(er)</b> som skal ha klippebane eller maske fjernet."
 
 #: ../src/selection-chemistry.cpp:4232
 msgid "Release clipping path"
-msgstr "Fjern stiklipping"
+msgstr "Fjern klippebane"
 
 #: ../src/selection-chemistry.cpp:4234
 msgid "Release mask"
@@ -15800,69 +15712,69 @@ msgstr ""
 
 #: ../src/selection-describer.cpp:192
 msgid "Use <b>Shift+D</b> to look up original"
-msgstr "Bruk <b>Shift+D</b> oppsøke orginal"
+msgstr "Trykk <b>Shift + D</b> for å slå opp original"
 
 #: ../src/selection-describer.cpp:198
 msgid "Use <b>Shift+D</b> to look up path"
-msgstr "Bruk <b>Shift+D</b> oppsøke sti"
+msgstr "Trykk <b>Shift + D</b> for å slå opp bane"
 
 #: ../src/selection-describer.cpp:204
 msgid "Use <b>Shift+D</b> to look up frame"
-msgstr "Bruk <b>Shift+D</b> oppsøke ramme"
+msgstr "Trykk <b>Shift + D</b> for å slå opp ramme"
 
 #: ../src/selection-describer.cpp:220
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%1$i</b> objects selected of type %2$s"
 msgid_plural "<b>%1$i</b> objects selected of types %2$s"
-msgstr[0] "<b>%i</b> objekter valgt"
-msgstr[1] "<b>%i</b> objekter valgte"
+msgstr[0] "<b>%1$i</b> objekt valgt av type %2$s"
+msgstr[1] "<b>%1$i</b> objekter valgt av type %2$s"
 
 #: ../src/selection-describer.cpp:230
-#, fuzzy, c-format
+#, c-format
 msgid "; <i>%d filtered object</i> "
 msgid_plural "; <i>%d filtered objects</i> "
-msgstr[0] "%s; <i>filtrert</i>"
-msgstr[1] "%s; <i>filtrert</i>"
+msgstr[0] "; <i>%d filtrert objekt</i> "
+msgstr[1] "; <i>%d filtrerte objekter</i> "
 
 #: ../src/seltrans-handles.cpp:18
 msgid ""
 "<b>Squeeze or stretch</b> selection; with <b>Ctrl</b> to scale uniformly; "
 "with <b>Shift</b> to scale around rotation center"
 msgstr ""
-"<b>Klem eller strekk</b> valgte; med <b>Ctrl</b> for å endre skala enhetlig; "
-"med <b>Shift</b> for å endre skala rundt rotasjons sentrum"
+"<b>Klem eller strekk</b> utvalget; med <b>Ctrl</b> for å bevare "
+"proporsjoner; med <b>Shift</b> for å skalere rundt rotasjonssentrum"
 
 #: ../src/seltrans-handles.cpp:19
 msgid ""
 "<b>Scale</b> selection; with <b>Ctrl</b> to scale uniformly; with <b>Shift</"
 "b> to scale around rotation center"
 msgstr ""
-"<b>Skaler</b> valgte; med <b>Ctrl</b>  for å endre skala enhetlig:  med "
-"<b>Shift</b> for å endre skala rundt rotasjons sentrum"
+"<b>Skaler</b> utvalget; med <b>Ctrl</b> for å bevare proporsjoner; med "
+"<b>Shift</b> for å skalere rundt rotasjonssentrum"
 
 #: ../src/seltrans-handles.cpp:20
 msgid ""
 "<b>Skew</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> to "
 "skew around the opposite side"
 msgstr ""
-"<b>Vri</b> valgte; med <b>Ctrl</b> for å feste vinkel; med <b>Shift</b> for "
-"vridning rundt den motsatte siden"
+"<b>Forskyv</b> utvalget; med <b>Ctrl</b> for å hoppe til faste vinkler; med "
+"<b>Shift</b> for å forskyve rundt motsatt side"
 
 #: ../src/seltrans-handles.cpp:21
 msgid ""
 "<b>Rotate</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> "
 "to rotate around the opposite corner"
 msgstr ""
-"<b>Roter</b> valgte; med <b>Ctrl</b> for å feste vinkel; med <b>Shift</b> "
-"for rotere rundt den motsatte hjørne"
+"<b>Roter</b> utvalget; med <b>Ctrl</b> for å hoppe til faste vinkler; med "
+"<b>Shift</b> for rotere rundt den motsatte hjørnet"
 
 #: ../src/seltrans-handles.cpp:22
 msgid ""
 "<b>Center</b> of rotation and skewing: drag to reposition; scaling with "
 "Shift also uses this center"
 msgstr ""
-"<b>Senter</b> av rotasjon og vridning: dra for å reposisjonere; skalering "
-"med Shift bruker også dette senteret"
+"<b>Rotasjons- og forskyvningssentrum</b>: Dra for å endre dets posisjon; "
+"skalering med Shift bruker også dette sentrumet"
 
 #
 # File: ../src/seltrans-handles.cpp, line: 23
@@ -15871,6 +15783,8 @@ msgid ""
 "<b>Align</b> objects to the side clicked; <b>Shift</b> click to invert side; "
 "<b>Ctrl</b> to group whole selection."
 msgstr ""
+"<b>Juster</b> objekter til den klikkede siden; <b>Shift</b>-klikk for å "
+"bytte side; <b>Ctrl</b> for å gruppere hele utvalget."
 
 #
 # File: ../src/seltrans-handles.cpp, line: 24
@@ -15879,14 +15793,16 @@ msgid ""
 "<b>Align</b> objects to center; <b>Shift</b> click to center vertically "
 "instead of horizontally."
 msgstr ""
+"<b>Juster</b> objekter til sentrum; <b>Shift</b>-klikk for å sentrere "
+"loddrett istedenfor vannrett."
 
 #: ../src/seltrans.cpp:496 ../src/ui/dialog/transformation.cpp:907
 msgid "Skew"
-msgstr "Vri"
+msgstr "Forskyv"
 
 #: ../src/seltrans.cpp:512
 msgid "Set center"
-msgstr "Sett sentrum"
+msgstr "Velg sentrum"
 
 #: ../src/seltrans.cpp:589
 msgid "Stamp"
@@ -15894,27 +15810,31 @@ msgstr "Stempel"
 
 #: ../src/seltrans.cpp:745
 msgid "Reset center"
-msgstr "Sett tilbake sentrum"
+msgstr "Tilbakestill sentrum"
 
 #: ../src/seltrans.cpp:991 ../src/seltrans.cpp:1095
 #, c-format
 msgid "<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>Ctrl</b> to lock ratio"
-msgstr "<b>Skaler</b>: %0.2f%% x %0.2f%%; med <b>Ctrl</b> for å låse forhold"
+msgstr ""
+"<b>Skalering</b>: %0.2f%% x %0.2f%%; med <b>Ctrl</b> for å låse forhold"
 
 #: ../src/seltrans.cpp:1235
 #, c-format
 msgid "<b>Skew</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Vri</b>: %0.2f&#176;; med <b>Ctrl</b> for å feste vinkel"
+msgstr ""
+"<b>Forskyvning</b>: %0.2f&#176;; med <b>Ctrl</b> for å hoppe til faste "
+"vinkler"
 
 #: ../src/seltrans.cpp:1311
 #, c-format
 msgid "<b>Rotate</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Roter</b>: %0.2f&#176;; med <b>Ctrl</b> for å feste vinkel"
+msgstr ""
+"<b>Rotasjon</b>: %0.2f&#176;; med <b>Ctrl</b> for å hoppe til faste vinkler"
 
 #: ../src/seltrans.cpp:1348
 #, c-format
 msgid "Move <b>center</b> to %s, %s"
-msgstr "Gjør <b>senter</b> til %s, %s"
+msgstr "Flytt <b>sentrum</b> til %s, %s"
 
 #: ../src/seltrans.cpp:1525
 #, c-format
@@ -15922,8 +15842,8 @@ msgid ""
 "<b>Move</b> by %s, %s; with <b>Ctrl</b> to restrict to horizontal/vertical; "
 "with <b>Shift</b> to disable snapping"
 msgstr ""
-"<b>Flytt</b> by %s, %s; med <b>Ctrl</b> for å innskrenke til horisontal/"
-"vertikal; med <b>Shift</b> for å koble ut festing"
+"<b>Flytt</b> med %s, %s; med <b>Ctrl</b> for å innskrenke til vannrett/"
+"loddrett; med <b>Shift</b> for å slå av festing"
 
 #: ../src/shortcuts.cpp:410 ../src/ui/dialog/export.cpp:1302
 #: ../src/ui/dialog/export.cpp:1332
@@ -15936,7 +15856,6 @@ msgid "Inkscape shortcuts (*.xml)"
 msgstr "Inkscape SVG (*.svg)"
 
 #: ../src/shortcuts.cpp:444
-#, fuzzy
 msgid "Select a file to import"
 msgstr "Velg fil som skal importeres"
 
@@ -15954,45 +15873,47 @@ msgstr "Inndeling"
 
 #: ../src/splivarot.cpp:106
 msgid "Cut path"
-msgstr "Kutt-sti"
+msgstr "Kutt-bane"
 
 #: ../src/splivarot.cpp:334
 msgid "Select <b>at least 1 path</b> to perform a boolean union."
-msgstr "Velg <b>minst 1 sti</b> for å utføre en boolsk (logisk) union"
+msgstr "Velg <b>minst én bane</b> for å utføre en boolsk (logisk) union."
 
 #: ../src/splivarot.cpp:337
 msgid "Select <b>at least 2 paths</b> to perform a boolean operation."
-msgstr "Velg <b>minst 2 stier</b> for å utføre en boolsk (logisk) operasjon."
+msgstr "Velg <b>minst to baner</b> for å utføre en boolsk (logisk) operasjon."
 
 #: ../src/splivarot.cpp:340
 msgid ""
 "One of the objects is <b>not a path</b>, cannot perform boolean operation."
 msgstr ""
-"En av objektene er <b>ikke en sti</b>, kan ikke utføre en boolsk operasjon."
+"Kan ikke utføre boolsk operasjon fordi ett av objektene er <b>ikke en bane</"
+"b>."
 
 #: ../src/splivarot.cpp:343
 msgid ""
 "Unable to determine the <b>z-order</b> of the objects selected for "
 "difference, XOR, division, or path cut."
 msgstr ""
-"Ikke i stand til å fastsette <b>z-orden</b> av objekter valgt for "
-"differanse, XOR, divisjon, eller sti klipping."
+"Klarte ikke fastslå <b>z-rekkefølgen</b> til objekter som valgt for "
+"differanse, XOR, divisjon, eller banekutt."
 
 #: ../src/splivarot.cpp:1631
 msgid "Select <b>stroked path(s)</b> to convert stroke to path."
-msgstr "Velg <b>sti(er) med strøk</b> som skal konverteres til sti."
+msgstr "Velg <b>bane(r) med strøk</b> for å konvertere strøk til bane."
 
 #: ../src/splivarot.cpp:1647
 msgid "Convert stroke to path"
-msgstr "Konverter strøk til sti"
+msgstr "Konverter strøk til bane"
 
 #: ../src/splivarot.cpp:1650
 msgid "<b>No stroked paths</b> in the selection."
-msgstr "<b>Ingen stier med strøk</b> å omgjøre i utvalget."
+msgstr "Utvalget har <b>ingen baner med strøk</b>."
 
 #: ../src/splivarot.cpp:1721
 msgid "Selected object is <b>not a path</b>, cannot inset/outset."
-msgstr "Valgte objekter er <b>ikke en sti</b>, kan ikke innfelle/bryte inn"
+msgstr ""
+"Det valgte objektet er <b>ikke en bane</b>, kan ikke innfelle/bryte inn"
 
 #: ../src/splivarot.cpp:1808 ../src/splivarot.cpp:1879
 msgid "Create linked offset"
@@ -16004,65 +15925,65 @@ msgstr "Skap en dynamisk forskøvet objekt"
 
 #: ../src/splivarot.cpp:1903
 msgid "Select <b>path(s)</b> to inset/outset."
-msgstr "Velg <b>sti(er)</b>, å innfelle/bryte inn."
+msgstr "Velg <b>bane(r)</b> som skal innfelles/brytes inn."
 
 #: ../src/splivarot.cpp:2086
 msgid "Outset path"
-msgstr "Utskjøvet sti"
+msgstr "Utskjøvet bane"
 
 #: ../src/splivarot.cpp:2086
 msgid "Inset path"
-msgstr "innskjøvet sti"
+msgstr "innskjøvet bane"
 
 #: ../src/splivarot.cpp:2088
 msgid "<b>No paths</b> to inset/outset in the selection."
-msgstr "<b>Ingen stier</b> å skyve inn/ut i utvalget."
+msgstr "Utvalget har <b>ingen baner</b> som kan skyves inn/ut."
 
 #: ../src/splivarot.cpp:2216
 msgid "Simplifying paths (separately):"
-msgstr "Forenkle stier (separat):"
+msgstr "Forenkle baner (separat):"
 
 #: ../src/splivarot.cpp:2218
 msgid "Simplifying paths:"
-msgstr "Forenkler stier:"
+msgstr "Forenkler baner:"
 
 #: ../src/splivarot.cpp:2255
 #, c-format
 msgid "%s <b>%d</b> of <b>%d</b> paths simplified..."
-msgstr "%s <b>%d</b> av <b>%d</b> stier forenklet ..."
+msgstr "%s <b>%d</b> av <b>%d</b> baner forenklet …"
 
 #: ../src/splivarot.cpp:2268
 #, c-format
 msgid "<b>%d</b> paths simplified."
-msgstr "<b>%d</b> stier har blitt forenklet."
+msgstr "Forenklet <b>%d</b> baner."
 
 #: ../src/splivarot.cpp:2282
 msgid "Select <b>path(s)</b> to simplify."
-msgstr "Velg <b>sti(er)</b>, å forenkle."
+msgstr "Velg <b>bane(r)</b> som skal forenkles."
 
 #: ../src/splivarot.cpp:2298
 msgid "<b>No paths</b> to simplify in the selection."
-msgstr "<b>Ingen stier</b> å forenkle i valgte."
+msgstr "Utvalget har <b>ingen baner</b> som kan forenkles."
 
 #: ../src/text-chemistry.cpp:89
 msgid "Select <b>a text and a path</b> to put text on path."
-msgstr "Velg <b>en tekst og en sti</b>, for å plassere tekst på sti."
+msgstr "Velg <b>en tekst og en bane</b> for å plassere tekst på bane."
 
 #: ../src/text-chemistry.cpp:94
 msgid ""
 "This text object is <b>already put on a path</b>. Remove it from the path "
 "first. Use <b>Shift+D</b> to look up its path."
 msgstr ""
-"Dette tekst objekt er <b>allerede plassert på en sti</b>. Fjern den fra "
-"denne stien først. Bruk <b>Shift+D</b> for å sjekke dens sti."
+"Dette tekstobjektet er <b>allerede plassert på en bane</b>. Fjern den fra "
+"banen først. Bruk <b>Shift + D</b> for å slå opp banen dens."
 
 #: ../src/text-chemistry.cpp:100
 msgid ""
 "You cannot put text on a rectangle in this version. Convert rectangle to "
 "path first."
 msgstr ""
-"Du kan ikke plassere tekst på rektangel i denne versjon. Konverter rektangel "
-"til sti først."
+"Du kan ikke plassere tekst på rektangel i denne versjon. Konverter "
+"rektangelet til en bane først."
 
 #: ../src/text-chemistry.cpp:110
 msgid "The flowed text(s) must be <b>visible</b> in order to be put on a path."
@@ -16070,19 +15991,19 @@ msgstr ""
 
 #: ../src/text-chemistry.cpp:180 ../src/verbs.cpp:2699
 msgid "Put text on path"
-msgstr "Plasser tekst på sti"
+msgstr "Plasser tekst på bane"
 
 #: ../src/text-chemistry.cpp:191
 msgid "Select <b>a text on path</b> to remove it from path."
-msgstr "Velg <b>en tekst på en sti</b>, for å fjerne den fra stien."
+msgstr "Velg <b>en tekst på en bane</b> for å fjerne den fra banen."
 
 #: ../src/text-chemistry.cpp:210
 msgid "<b>No texts-on-paths</b> in the selection."
-msgstr "<b>Ingen tekster-på-stier</b> i valgte."
+msgstr "Utvalget har <b>ingen tekster på baner</b>."
 
 #: ../src/text-chemistry.cpp:213 ../src/verbs.cpp:2702
 msgid "Remove text from path"
-msgstr "Fjern tekst fra sti"
+msgstr "Fjern tekst fra bane"
 
 #: ../src/text-chemistry.cpp:255 ../src/text-chemistry.cpp:275
 msgid "Select <b>text(s)</b> to remove kerns from."
@@ -16097,12 +16018,12 @@ msgid ""
 "Select <b>a text</b> and one or more <b>paths or shapes</b> to flow text "
 "into frame."
 msgstr ""
-"Velg <b>en tekst</b> og en eller flere <b>stier eller former</b> for å flyte "
+"Velg <b>en tekst</b> og en eller flere <b>baner eller former</b> for å flyte "
 "tekst inn i ramme."
 
 #: ../src/text-chemistry.cpp:331 ../src/text-chemistry.cpp:403
 msgid "Flow text into shape"
-msgstr "Flyt tekst inn i sti eller form"
+msgstr "Flyt tekst inn i bane eller form"
 
 #: ../src/text-chemistry.cpp:427
 msgid "Select <b>a flowed text</b> to unflow it."
@@ -16118,7 +16039,7 @@ msgstr "Velg <b>en flytende tekst</b> for å konvertere."
 
 #: ../src/text-chemistry.cpp:553
 msgid "Convert flowed text to text"
-msgstr "Konverter tekst med tekstflyting til sti"
+msgstr "Konverter tekst med tekstflyting til bane"
 
 #
 # File: ../src/text-chemistry.cpp, line: 558
@@ -16161,19 +16082,19 @@ msgstr "Avtegning: Inget aktivt skrivebord"
 
 #: ../src/trace/trace.cpp:316
 msgid "Invalid SIOX result"
-msgstr "Ugyldig SIOX resultat"
+msgstr "Ugyldig SIOX-resultat"
 
 #: ../src/trace/trace.cpp:409
 msgid "Trace: No active document"
-msgstr "Avtegning: Inget aktivt dokument"
+msgstr "Avtegning: Ingen aktive dokument"
 
 #: ../src/trace/trace.cpp:441
 msgid "Trace: Image has no bitmap data"
-msgstr "Avtegning: bilde har ikke punktgrafikkdata"
+msgstr "Avtegning: Bildet har ikke rasterdata"
 
 #: ../src/trace/trace.cpp:448
 msgid "Trace: Starting trace..."
-msgstr "Tegner av punktgrafikk ..."
+msgstr "Tegner av punktgrafikk …"
 
 #: ../src/trace/trace.cpp:550
 msgid "Trace bitmap"
@@ -16182,34 +16103,32 @@ msgstr "Tegn av punktgrafikk"
 #: ../src/trace/trace.cpp:554
 #, c-format
 msgid "Trace: Done. %ld nodes created"
-msgstr "Avtegning ferdig. %ld noder skapt"
+msgstr "Avtegning ferdig. %ld noder opprettet"
 
 #: ../src/ui/clipboard.cpp:252
 msgid "Nothing was copied."
-msgstr "Ingenting var kopiert."
+msgstr "Ingenting ble kopiert."
 
 #: ../src/ui/clipboard.cpp:383 ../src/ui/clipboard.cpp:599
 #: ../src/ui/clipboard.cpp:628 ../src/ui/clipboard.cpp:670
 msgid "Nothing on the clipboard."
-msgstr "Ingenting i utklippstavlen."
+msgstr "Utklippstavla er tom."
 
 #: ../src/ui/clipboard.cpp:441
 msgid "Select <b>object(s)</b> to paste style to."
-msgstr "Velg <b>objekt(er)</b> som stil skal limes til."
+msgstr "Velg <b>objekt(er)</b> som skal få innlimt stil."
 
 #: ../src/ui/clipboard.cpp:452 ../src/ui/clipboard.cpp:469
-#, fuzzy
 msgid "No style on the clipboard."
-msgstr "Ingenting i utklippstavlen."
+msgstr "Utklippstavla har ingen stiler."
 
 #: ../src/ui/clipboard.cpp:495
 msgid "Select <b>object(s)</b> to paste size to."
-msgstr "Velg <b>objekt(er)</b> som størrelse skal limes til."
+msgstr "Velg <b>objekt(er)</b> som skal få innlimt størrelse."
 
 #: ../src/ui/clipboard.cpp:503
-#, fuzzy
 msgid "No size on the clipboard."
-msgstr "Ingenting i utklippstavlen."
+msgstr "Utklippstavla har ingen størrelser."
 
 #: ../src/ui/clipboard.cpp:560
 #, fuzzy
@@ -16217,9 +16136,8 @@ msgid "Select <b>object(s)</b> to paste live path effect to."
 msgstr "Velg <b>objekt(er)</b> som størrelse skal limes til."
 
 #: ../src/ui/clipboard.cpp:586
-#, fuzzy
 msgid "No effect on the clipboard."
-msgstr "Ingenting i utklippstavlen."
+msgstr "Utklippstavla har ingen effekter."
 
 #: ../src/ui/clipboard.cpp:605 ../src/ui/clipboard.cpp:652
 msgid "Clipboard does not contain a path."
@@ -16231,12 +16149,11 @@ msgstr ""
 
 #: ../src/ui/contextmenu.cpp:65
 msgid "Go to parent"
-msgstr "Gå til foreldre"
+msgstr "Gå til forelder"
 
 #: ../src/ui/contextmenu.cpp:106
-#, fuzzy
 msgid "Hide Selected Objects"
-msgstr "Dupliser valgte objekter"
+msgstr "Skjul valgte objekter"
 
 #: ../src/ui/contextmenu.cpp:114
 #, fuzzy
@@ -16254,18 +16171,16 @@ msgid "Unlock Objects Below"
 msgstr "Låst opp objektet"
 
 #: ../src/ui/contextmenu.cpp:154
-#, fuzzy
 msgid "Enter group #%1"
-msgstr "Gå inn i gruppe #%s"
+msgstr "Gå inn i gruppe #%1"
 
 #: ../src/ui/contextmenu.cpp:168
-#, fuzzy
 msgid "_Pop selection out of group"
-msgstr "Skap en dynamisk forskøvet objekt"
+msgstr "_Ta utvalget ut av gruppa"
 
 #: ../src/ui/contextmenu.cpp:354 ../src/verbs.cpp:3125
 msgid "_Object Properties..."
-msgstr "_Objektegenskaper ..."
+msgstr "_Objektegenskaper …"
 
 #: ../src/ui/contextmenu.cpp:363
 msgid "_Select This"
@@ -16296,14 +16211,12 @@ msgid "Object Type"
 msgstr "Objekttype"
 
 #: ../src/ui/contextmenu.cpp:419
-#, fuzzy
 msgid "_Move to Layer..."
-msgstr "Senk lag"
+msgstr "_Flytt til lag …"
 
 #: ../src/ui/contextmenu.cpp:429
-#, fuzzy
 msgid "Create _Link"
-msgstr "_Opprett lenke"
+msgstr "Opprett _lenke"
 
 #: ../src/ui/contextmenu.cpp:452 ../src/ui/dialog/objects.cpp:1916
 #, fuzzy
@@ -16343,36 +16256,32 @@ msgid "_Ungroup"
 msgstr "_Del opp gruppe"
 
 #: ../src/ui/contextmenu.cpp:639
-#, fuzzy
 msgid "Link _Properties..."
-msgstr "Lenkeegenska_per"
+msgstr "Lenkeegenska_per …"
 
 #: ../src/ui/contextmenu.cpp:645
 msgid "_Follow Link"
-msgstr "_Følg Lenke"
+msgstr "F_ølg lenke"
 
 #: ../src/ui/contextmenu.cpp:651
 msgid "_Remove Link"
-msgstr "Fje_rn Lenke"
+msgstr "Fje_rn lenke"
 
 #: ../src/ui/contextmenu.cpp:682
-#, fuzzy
 msgid "Remove link"
-msgstr "Fje_rn Lenke"
+msgstr "Fjern lenke"
 
 #: ../src/ui/contextmenu.cpp:692
-#, fuzzy
 msgid "Image _Properties..."
-msgstr "Bildeegenska_per"
+msgstr "_Bildeegenskaper …"
 
 #: ../src/ui/contextmenu.cpp:698
-#, fuzzy
 msgid "Edit Externally..."
-msgstr "Rediger fyll..."
+msgstr "Rediger eksternt …"
 
 #: ../src/ui/contextmenu.cpp:707 ../src/verbs.cpp:2771
 msgid "_Trace Bitmap..."
-msgstr "Tegn a_v punktgrafikk ..."
+msgstr "Tegn _av punktgrafikk …"
 
 #: ../src/ui/contextmenu.cpp:716
 msgid "Trace Pixel Art"
@@ -16394,15 +16303,15 @@ msgstr "Trekk ut ett bilde"
 #: ../src/ui/contextmenu.cpp:898 ../src/ui/contextmenu.cpp:918
 #: ../src/verbs.cpp:3083
 msgid "_Fill and Stroke..."
-msgstr "_Fyll og strøk ..."
+msgstr "F_yll og strøk ..."
 
 #: ../src/ui/contextmenu.cpp:924 ../src/verbs.cpp:3105
 msgid "_Text and Font..."
-msgstr "_Tekst og skrifttype ..."
+msgstr "T_ekst og skrifttype ..."
 
 #: ../src/ui/contextmenu.cpp:930 ../src/verbs.cpp:3114
 msgid "Check Spellin_g..."
-msgstr ""
+msgstr "_Stavekontroll …"
 
 #: ../src/ui/desktop/menubar.cpp:289
 #, fuzzy
@@ -16440,20 +16349,20 @@ msgid "Open _Recent"
 msgstr "Åpne n_ylige"
 
 #: ../src/ui/dialog/aboutbox.cpp:88
-#, fuzzy
 msgid "Inkscape website"
-msgstr "Inkscape: _Grunnleggende"
+msgstr "Inkscapes nettside"
 
 #: ../src/ui/dialog/aboutbox.cpp:90
 msgid "© 2019 Inkscape Developers"
-msgstr ""
+msgstr "© 2019 Inkscapes utviklere"
 
 #: ../src/ui/dialog/aboutbox.cpp:91
-#, fuzzy
 msgid ""
 "Open Source Scalable Vector Graphics Editor\n"
 "Draw Freely."
-msgstr "Lag og rediger Skalerbar VektorGrafikk-bilder"
+msgstr ""
+"Redigeringsprogram med åpen kildekode for skalerbar vektorgrafikk\n"
+"Tegn fritt."
 
 #: ../src/ui/dialog/aboutbox.cpp:116
 msgid "about.svg"
@@ -16471,32 +16380,30 @@ msgstr ""
 #: ../src/ui/dialog/align-and-distribute.cpp:212
 #: ../src/ui/dialog/align-and-distribute.cpp:930
 msgid "Align"
-msgstr "Rette inn"
+msgstr "Juster"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:398
 #: ../src/ui/dialog/align-and-distribute.cpp:931
 msgid "Distribute"
-msgstr "Distribuer"
+msgstr "Fordel"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:473
 msgid "Minimum horizontal gap (in px units) between bounding boxes"
-msgstr "Minimum horisontal sprekk (i px enheter) mellom grenserammer"
+msgstr "Minste vannrette glipe (i piksler) mellom avgrensingsbokser"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:475
-#, fuzzy
 msgctxt "Gap"
 msgid "_H:"
-msgstr "_H"
+msgstr "_V:"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:483
 msgid "Minimum vertical gap (in px units) between bounding boxes"
-msgstr "Minimum vertikal sprekk (i px enheter) mellom grenserammer"
+msgstr "Minste loddrette glipe (i piksler) mellom avgrensingsbokser"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:485
-#, fuzzy
 msgctxt "Gap"
 msgid "_V:"
-msgstr "V:"
+msgstr "_L:"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:515
 #: ../src/ui/dialog/align-and-distribute.cpp:933
@@ -16524,11 +16431,11 @@ msgstr "Tilfeldiggjør posisjoner"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:834
 msgid "Distribute text baselines"
-msgstr "Fordele skriftlinjene"
+msgstr "Fordel tekstens grunnlinjer"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:899
 msgid "Align text baselines"
-msgstr "Rett opp skriftlinjene"
+msgstr "Juster tekstens grunnlinjer"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:932
 #, fuzzy
@@ -16547,113 +16454,100 @@ msgstr "Relativ til:"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:947 ../src/verbs.cpp:3223
 #: ../src/verbs.cpp:3224
-#, fuzzy
 msgid "Align right edges of objects to the left edge of the anchor"
-msgstr "Rett opp høyresidene på objekter til venstreside på anker "
+msgstr "Juster objektenes høyre kant mot ankerets venstre kant"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:950 ../src/verbs.cpp:3226
 #: ../src/verbs.cpp:3227
-#, fuzzy
 msgid "Align left edges"
-msgstr "Rett opp venstresider"
+msgstr "Juster kanter mot venstre"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:953 ../src/verbs.cpp:3228
 #: ../src/verbs.cpp:3229
 msgid "Center on vertical axis"
-msgstr "Senter på vertikal akse"
+msgstr "Sentrer på loddrett akse"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:956 ../src/verbs.cpp:3230
 #: ../src/verbs.cpp:3231
 msgid "Align right sides"
-msgstr "Rett opp høyresider"
+msgstr "Juster kanter mot høyre"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:959 ../src/verbs.cpp:3233
 #: ../src/verbs.cpp:3234
-#, fuzzy
 msgid "Align left edges of objects to the right edge of the anchor"
-msgstr "Rett opp venstresidene på objekter til høyreside på anker"
+msgstr "Juster objektenes venstre kant mot ankerets høyre kant"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:962 ../src/verbs.cpp:3237
 #: ../src/verbs.cpp:3238
-#, fuzzy
 msgid "Align bottom edges of objects to the top edge of the anchor"
-msgstr "Rett opp bunnen på objekter til toppen på anker"
+msgstr "Juster objektenes nedre kant mot ankerets øvre kant"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:965 ../src/verbs.cpp:3240
-#, fuzzy
 msgid "Align top edges"
-msgstr "Rett opp toppene"
+msgstr "Juster øvre kanter"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:968 ../src/verbs.cpp:3242
 #: ../src/verbs.cpp:3243
 msgid "Center on horizontal axis"
-msgstr "Senter på horisontal akse"
+msgstr "Sentrer på vannrett akse"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:971 ../src/verbs.cpp:3244
 #: ../src/verbs.cpp:3245
-#, fuzzy
 msgid "Align bottom edges"
-msgstr "Rett opp bunnen"
+msgstr "Juster nedre kanter"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:974 ../src/verbs.cpp:3247
 #: ../src/verbs.cpp:3248
-#, fuzzy
 msgid "Align top edges of objects to the bottom edge of the anchor"
-msgstr "Rett opp toppen på objekter til bunnen på anker"
+msgstr "Juster objektenes øvre kanter mot ankerets nedre kant"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:979
 msgid "Align baseline anchors of texts horizontally"
-msgstr "Rett opp grunnlinje referansepunkter på tekstene horisontalt"
+msgstr "Juster tekstenes grunnlinjeankere vannrett"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:982
-#, fuzzy
 msgid "Align baselines of texts"
-msgstr "Rett opp grunnlinje referansepunkter på tekstene vertikalt"
+msgstr "Juster tekstenes grunnlinjer"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:987
 msgid "Make horizontal gaps between objects equal"
-msgstr "Gjør horisontale mellomrom mellom objekter jevne"
+msgstr "Gjør vannrette mellomrom mellom objekter like"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:991
-#, fuzzy
 msgid "Distribute left edges equidistantly"
-msgstr "Fordel venstre side med lik avstand"
+msgstr "Fordel venstre kanter med lik avstand"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:994
 msgid "Distribute centers equidistantly horizontally"
-msgstr "Fordel sentrum med lik avstand horisontalt"
+msgstr "Fordel sentra med lik avstand vannrett"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:997
-#, fuzzy
 msgid "Distribute right edges equidistantly"
-msgstr "Fordel høyre side med lik avstand"
+msgstr "Fordel høyre kanter med lik avstand"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1001
 msgid "Make vertical gaps between objects equal"
-msgstr "Gjør vertikale mellomrom mellom objekter jevne"
+msgstr "Gjør loddrette mellomrom mellom objekter like"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1005
-#, fuzzy
 msgid "Distribute top edges equidistantly"
-msgstr "Fordel toppene med lik avstand"
+msgstr "Fordel øvre kanter med lik avstand"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1008
 msgid "Distribute centers equidistantly vertically"
-msgstr "Fordel sentrum med lik avstand vertikalt"
+msgstr "Fordel sentra med lik avstand loddrett"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1011
-#, fuzzy
 msgid "Distribute bottom edges equidistantly"
-msgstr "Fordel bunnene med lik avstand"
+msgstr "Fordel nedre kanter med lik avstand"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1016
 msgid "Distribute baseline anchors of texts horizontally"
-msgstr "Distribuer grunnlinje referansepunkter på tekstene horisontalt"
+msgstr "Fordel tekstenes grunnlinjeankere vannrett"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1019
-#, fuzzy
 msgid "Distribute baselines of texts vertically"
-msgstr "Distribuer grunnlinje referansepunkter på tekstene vertikalt"
+msgstr "Fordel tekstenes grunnlinjer loddrett"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1025
 #: ../src/ui/toolbar/connector-toolbar.cpp:126
@@ -16699,11 +16593,11 @@ msgstr "Rett opp valgte noder vertikalt"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1061
 msgid "Distribute selected nodes horizontally"
-msgstr "Distribuer valgte noder horisontalt"
+msgstr "Fordel valgte noder vannrett"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1064
 msgid "Distribute selected nodes vertically"
-msgstr "Distribuer valgte noder vertikalt"
+msgstr "Fordel valgte noder loddrett"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1069
 #: ../src/ui/dialog/align-and-distribute.cpp:1079
@@ -16716,14 +16610,12 @@ msgid "First selected"
 msgstr "Først valgte"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1071
-#, fuzzy
 msgid "Biggest object"
-msgstr "Skjul objektet"
+msgstr "Største objekt"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1072
-#, fuzzy
 msgid "Smallest object"
-msgstr "Endre objektets id"
+msgstr "Minste objekt"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1073
 #: ../src/ui/dialog/document-properties.cpp:149
@@ -16733,29 +16625,24 @@ msgid "Page"
 msgstr "Side"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1075
-#, fuzzy
 msgid "Selection Area"
-msgstr "Valg"
+msgstr "Utvalgets område"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1081
-#, fuzzy
 msgid "Middle of selection"
-msgstr "Bredden av valgte"
+msgstr "Utvalgets sentrum"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1082
-#, fuzzy
 msgid "Min value"
-msgstr "Fjern verdiene"
+msgstr "Minste verdi"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1083
-#, fuzzy
 msgid "Max value"
-msgstr "Fjern verdiene"
+msgstr "Største verdi"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1093
-#, fuzzy
 msgid "Treat selection as group"
-msgstr "Skap en dynamisk forskøvet objekt"
+msgstr "Behandle utvalget som en gruppe"
 
 #
 # File: ../src/ui/dialog/align-and-distribute.cpp, line: 1107
@@ -16764,19 +16651,16 @@ msgid "Enable on-canvas alignment handles."
 msgstr ""
 
 #: ../src/ui/dialog/attrdialog.cpp:90
-#, fuzzy
 msgid "Add a new attribute"
-msgstr "Endre attributt"
+msgstr "Legg til et nytt attributt"
 
 #: ../src/ui/dialog/attrdialog.cpp:104
-#, fuzzy
 msgid "Attribute Name"
-msgstr "Navn på attributt"
+msgstr "Attributtets navn"
 
 #: ../src/ui/dialog/attrdialog.cpp:126
-#, fuzzy
 msgid "Attribute Value"
-msgstr "Verdi for attributt"
+msgstr "Attributtets verdi"
 
 #: ../src/ui/dialog/attrdialog.cpp:129 ../src/ui/widget/color-scales.cpp:438
 #: ../src/ui/widget/color-scales.cpp:439
@@ -16785,7 +16669,7 @@ msgstr "Verdi"
 
 #: ../src/ui/dialog/attrdialog.cpp:212
 msgid "<b>Click</b> attribute to edit."
-msgstr "<b>Klikk</b> attributt for å redigere."
+msgstr "<b>Klikk</b> attributtet for å redigere det."
 
 #: ../src/ui/dialog/attrdialog.cpp:217
 #, c-format
@@ -16793,33 +16677,29 @@ msgid ""
 "Attribute <b>%s</b> selected. Press <b>Ctrl+Enter</b> when done editing to "
 "commit changes."
 msgstr ""
-"Attributt <b>%s</b> valgt. Når ferdig med endringene trykk <b>Ctrl+Enter</b> "
-"for å sette de til verks."
+"Attributtet <b>%s</b> er valgt. Trykk <b>Ctrl + Enter</b> for å ta i bruk "
+"endringene."
 
 #: ../src/ui/dialog/attrdialog.cpp:285 ../src/ui/dialog/attrdialog.cpp:313
 msgid "Delete attribute"
 msgstr "Slett attributt"
 
 #: ../src/ui/dialog/attrdialog.cpp:368
-#, fuzzy
 msgid "Rename attribute"
-msgstr "Sett attributt"
+msgstr "Endre navn på attributt"
 
 #: ../src/ui/dialog/attrdialog.cpp:393
-#, fuzzy
 msgid "Change attribute value"
-msgstr "Endre attributt"
+msgstr "Endre attributtverdi"
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:31
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:118
-#, fuzzy
 msgid "Edit profile"
-msgstr "Lenkeegenska_per"
+msgstr "Rediger profil"
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:39
-#, fuzzy
 msgid "Profile name:"
-msgstr "Sett filnavn"
+msgstr "Profilnavn:"
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:55
 #: ../src/ui/dialog/guides.cpp:179 ../src/verbs.cpp:2600
@@ -16834,9 +16714,8 @@ msgid "_Save"
 msgstr "_Lagre"
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:114
-#, fuzzy
 msgid "Add profile"
-msgstr "Legg til lag"
+msgstr "Legg til profil"
 
 #: ../src/ui/dialog/clonetiler.cpp:98
 msgid "_Symmetry"
@@ -17699,11 +17578,11 @@ msgstr "Enhet for r_utenett:"
 
 #: ../src/ui/dialog/document-properties.cpp:114
 msgid "Show _guides"
-msgstr "Vis rettes_norer"
+msgstr "Vis hjelpeli_njer"
 
 #: ../src/ui/dialog/document-properties.cpp:114
 msgid "Show or hide guides"
-msgstr "Vis eller skjul rettesnorer"
+msgstr "Vis eller skjul hjelpelinjer"
 
 #: ../src/ui/dialog/document-properties.cpp:115
 #, fuzzy
@@ -17718,15 +17597,15 @@ msgstr "Slett alle objekter fra dette dokument"
 
 #: ../src/ui/dialog/document-properties.cpp:116
 msgid "Guide co_lor:"
-msgstr "Rettesnorfarge:"
+msgstr "Hjelpelinjefarge:"
 
 #: ../src/ui/dialog/document-properties.cpp:116
 msgid "Guideline color"
-msgstr "Farge på rettesnor"
+msgstr "Fargen til hjelpelinjer"
 
 #: ../src/ui/dialog/document-properties.cpp:116
 msgid "Color of guidelines"
-msgstr "Rettesnorfarge"
+msgstr "Hjelpelinjefarge"
 
 #: ../src/ui/dialog/document-properties.cpp:117
 msgid "_Highlight color:"
@@ -17734,11 +17613,11 @@ msgstr "Uthevin_gsfarge:"
 
 #: ../src/ui/dialog/document-properties.cpp:117
 msgid "Highlighted guideline color"
-msgstr "Farge på uthevet rettesnor"
+msgstr "Fargen til uthevede hjelpelinjer"
 
 #: ../src/ui/dialog/document-properties.cpp:117
 msgid "Color of a guideline when it is under mouse"
-msgstr "Fargen på en rettesnor når den er under musen"
+msgstr "Fargen til en hjelpelinje når den er under musepekeren"
 
 #: ../src/ui/dialog/document-properties.cpp:118
 #, fuzzy
@@ -17934,7 +17813,7 @@ msgstr "<b>g</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:333
 msgid "<b>Guides</b>"
-msgstr "<b>Rettesnor</b>"
+msgstr "<b>Hjelpelinjer</b>"
 
 #: ../src/ui/dialog/document-properties.cpp:369
 #, fuzzy
@@ -19267,7 +19146,7 @@ msgstr "Spiraler"
 
 #: ../src/ui/dialog/find.cpp:91 ../src/ui/toolbar/snap-toolbar.cpp:97
 msgid "Paths"
-msgstr "Stier"
+msgstr "Baner"
 
 #: ../src/ui/dialog/find.cpp:92
 msgid "Texts"
@@ -19396,7 +19275,7 @@ msgstr "Søk spiraler"
 
 #: ../src/ui/dialog/find.cpp:170
 msgid "Search paths, lines, polylines"
-msgstr "Søk stier, linjer, polylinjer"
+msgstr "Søk baner, linjer, polylinjer"
 
 #: ../src/ui/dialog/find.cpp:173
 msgid "Search text objects"
@@ -20420,7 +20299,7 @@ msgstr "Flytt rettesnor i forhold til nåværende posisjon"
 
 #: ../src/ui/dialog/guides.cpp:137
 msgid "Set guide properties"
-msgstr "Egenskaper for rettesnor"
+msgstr "Egenskaper for hjelpelinje"
 
 #: ../src/ui/dialog/guides.cpp:151
 #, fuzzy
@@ -23260,7 +23139,7 @@ msgstr "Bruk den øverste valgte objekt som klippelinje eller maske"
 msgid ""
 "Uncheck this to use the bottom selected object as the clipping path or mask"
 msgstr ""
-"Avkryss denne for å bruke nederste valgte objekt som klippelinje eller maske"
+"Fravelg for å bruke det nederste valgte objektet som klippebane eller maske"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1970
 #, fuzzy
@@ -23272,8 +23151,8 @@ msgid ""
 "After applying, remove the object used as the clipping path or mask from the "
 "drawing"
 msgstr ""
-"Etter anvendelse, fjern objektet brukt som klippelinje eller maske fra "
-"tegningen"
+"Fjern objektet brukt som klippebane eller maske fra tegningen etter "
+"anvendelse"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1974
 #, fuzzy
@@ -25901,7 +25780,7 @@ msgstr "Lyshetsterskel for sort/hvitt"
 
 #: ../src/ui/dialog/tracedialog.cpp:525
 msgid "Single scan: creates a path"
-msgstr "Enkel avtegning: tegner en sti"
+msgstr "Enkel avtegning: oppretter en bane"
 
 #: ../src/ui/dialog/tracedialog.cpp:530
 #, fuzzy
@@ -26018,7 +25897,7 @@ msgstr "Fjerne det nederste laget (bakgrunnen) etter at avtegningen er ferdig"
 
 #: ../src/ui/dialog/tracedialog.cpp:671
 msgid "Multiple scans: creates a group of paths"
-msgstr "Flere avtegninger: lager en gruppe av stier"
+msgstr "Flere avtegninger: lager en gruppe av baner"
 
 #: ../src/ui/dialog/tracedialog.cpp:681
 #, fuzzy
@@ -26064,7 +25943,7 @@ msgstr "Optimer stiene"
 #: ../src/ui/dialog/tracedialog.cpp:726
 msgid "Try to optimize paths by joining adjacent Bezier curve segments"
 msgstr ""
-"Forsøk å optimere stiene ved å slå sammen stisegmenter som er ved siden av "
+"Forsøk å optimere baner ved å slå sammen Bézier-kurvesegment som er inntil "
 "hverandre"
 
 #: ../src/ui/dialog/tracedialog.cpp:734
@@ -26994,7 +26873,7 @@ msgstr "<b>Alt</b>: lås spiral radius"
 #, fuzzy
 msgctxt "Transform handle tip"
 msgid "<b>Scale handle</b>: drag to scale the selection"
-msgstr "<b>Ingen stier</b> å reversere i valgte."
+msgstr "Utvalget har <b>ingen baner</b> å reversere i valgte."
 
 #: ../src/ui/tool/transform-handle-set.cpp:231
 #, c-format
@@ -28237,7 +28116,7 @@ msgstr "Slå sammen valgte endenoder"
 
 #: ../src/ui/toolbar/node-toolbar.cpp:165
 msgid "Break path at selected nodes"
-msgstr "Bryt sti ved valgte noder"
+msgstr "Bryt bane i valgte noder"
 
 #: ../src/ui/toolbar/node-toolbar.cpp:174
 #, fuzzy
@@ -30215,19 +30094,19 @@ msgstr "Lag 3D-boks"
 msgid ""
 "<b>Guide path selected</b>; start drawing along the guide with <b>Ctrl</b>"
 msgstr ""
-"<b>Rettesnorsti valgt</b>; start tegning langs rettesnoren med <b>Ctrl</b>"
+"<b>Hjelpebane valgt</b>; start tegning langs hjelpebanen med <b>Ctrl</b>"
 
 #: ../src/ui/tools/calligraphic-tool.cpp:525
 msgid "<b>Select a guide path</b> to track with <b>Ctrl</b>"
-msgstr "<b>Velg rettesnorsti</b> til å følge med <b>Ctrl</b>"
+msgstr "<b>Velg hjelpebane</b> som skal følges med <b>Ctrl</b>"
 
 #: ../src/ui/tools/calligraphic-tool.cpp:660
 msgid "Tracking: <b>connection to guide path lost!</b>"
-msgstr "Følger sti: <b>mistet kontakten med rettesnorstien!</b>"
+msgstr "Følger bane: <b>mistet kontakten med hjelpebanen.</b>"
 
 #: ../src/ui/tools/calligraphic-tool.cpp:660
 msgid "<b>Tracking</b> a guide path"
-msgstr "<b>Følger</b> en rettesnorsti"
+msgstr "<b>Følger</b> en hjelpebane"
 
 #: ../src/ui/tools/calligraphic-tool.cpp:663
 msgid "<b>Drawing</b> a calligraphic stroke"
@@ -30372,15 +30251,15 @@ msgstr ""
 
 #: ../src/ui/tools/freehand-base.cpp:758 ../src/ui/tools/freehand-base.cpp:825
 msgid "Path is closed."
-msgstr "Sti er lukket."
+msgstr "Bane er lukket."
 
 #: ../src/ui/tools/freehand-base.cpp:773
 msgid "Closing path."
-msgstr "Lukker sti."
+msgstr "Lukker bane."
 
 #: ../src/ui/tools/freehand-base.cpp:907
 msgid "Draw path"
-msgstr "Tegn ny sti"
+msgstr "Tegn ny bane"
 
 #: ../src/ui/tools/freehand-base.cpp:1063
 msgid "Creating single dot"
@@ -30648,21 +30527,21 @@ msgstr "Tegning annulert"
 
 #: ../src/ui/tools/pen-tool.cpp:458 ../src/ui/tools/pencil-tool.cpp:233
 msgid "Continuing selected path"
-msgstr "Fortsett valgte sti"
+msgstr "Fortsetter valgt bane"
 
 #: ../src/ui/tools/pen-tool.cpp:468 ../src/ui/tools/pencil-tool.cpp:241
 #: ../src/ui/tools/pencil-tool.cpp:247
 msgid "Creating new path"
-msgstr "Skap ny sti"
+msgstr "Oppretter ny bane"
 
 #: ../src/ui/tools/pen-tool.cpp:470 ../src/ui/tools/pencil-tool.cpp:250
 msgid "Appending to selected path"
-msgstr "Tilføyes valgte sti"
+msgstr "Tilføyer til valgt bane"
 
 #: ../src/ui/tools/pen-tool.cpp:634
 msgid "<b>Click</b> or <b>click and drag</b> to close and finish the path."
 msgstr ""
-"<b>Klikk</b> eller <b>klikk og dra</b> for å ferdiggjøre og stenge stien."
+"<b>Klikk</b> eller <b>klikk og dra</b> for å lukke og ferdigstille banen."
 
 #: ../src/ui/tools/pen-tool.cpp:636
 #, fuzzy
@@ -30676,7 +30555,8 @@ msgstr ""
 msgid ""
 "<b>Click</b> or <b>click and drag</b> to continue the path from this point."
 msgstr ""
-"<b>Klikk</b> eller <b>klikk og dra</b> for å fortsette stien fra dette punkt."
+"<b>Klikk</b> eller <b>klikk og dra</b> for å fortsette banen fra dette "
+"punktet."
 
 #: ../src/ui/tools/pen-tool.cpp:650
 #, fuzzy
@@ -30755,15 +30635,15 @@ msgstr "Tegning avsluttet"
 
 #: ../src/ui/tools/pencil-tool.cpp:366
 msgid "<b>Release</b> here to close and finish the path."
-msgstr "<b>Slipp</b> her for å ferdiggjøre og lukke stien."
+msgstr "<b>Slipp</b> her for å lukke og ferdigstille banen."
 
 #: ../src/ui/tools/pencil-tool.cpp:374
 msgid "Drawing a freehand path"
-msgstr "Tegner en frihånds sti"
+msgstr "Tegner en frihåndsbane"
 
 #: ../src/ui/tools/pencil-tool.cpp:380
 msgid "<b>Drag</b> to continue the path from this point."
-msgstr "<b>Dra</b> for å fortsette stien fra dette punkt."
+msgstr "<b>Dra</b> for å fortsette banen fra dette punktet."
 
 #: ../src/ui/tools/pencil-tool.cpp:482
 msgid "Finishing freehand"
@@ -30775,7 +30655,7 @@ msgid ""
 "Release <b>Alt</b> to finalize."
 msgstr ""
 "<b>Tegnemodus</b>: hold inne <b>Alt</b> for å interpolere mellom opptegnede "
-"stier. Slipp <b>Alt</b> for å avslutte."
+"baner. Slipp <b>Alt</b> for å avslutte."
 
 #: ../src/ui/tools/pencil-tool.cpp:617
 msgid "Finishing freehand sketch"
@@ -32782,8 +32662,8 @@ msgid ""
 "Remove unused definitions (such as gradients or clipping paths) from the &lt;"
 "defs&gt; of the document"
 msgstr ""
-"Fjern ubrukte definisjoner (som gradienter eller stier) fra &lt;defs&gt; av "
-"dokumentet"
+"Fjern ubrukte definisjoner (slik som fargeoverganger eller baner) fra &lt;"
+"defs&gt;-delen av dokumentet"
 
 #: ../src/verbs.cpp:2551
 msgid "_Import..."
@@ -32824,7 +32704,7 @@ msgstr "Lukk dette dokument vindu"
 
 #: ../src/verbs.cpp:2565 ../share/ui/inkscape-application.glade:15
 msgid "_Quit"
-msgstr "_Slutt"
+msgstr "_Avslutt"
 
 #: ../src/verbs.cpp:2565
 msgid "Quit Inkscape"
@@ -33325,11 +33205,11 @@ msgstr "Grupper valgte objekter"
 
 #: ../src/verbs.cpp:2699
 msgid "_Put on Path"
-msgstr "_Plasser på Sti"
+msgstr "_Plasser på bane"
 
 #: ../src/verbs.cpp:2701
 msgid "_Remove from Path"
-msgstr "Fje_rn fra Sti"
+msgstr "Fje_rn fra bane"
 
 #: ../src/verbs.cpp:2703
 msgid "Remove Manual _Kerns"
@@ -33341,19 +33221,19 @@ msgstr "Fjern all kerning og bokstavrotasjon fra et tekstobjekt"
 
 #: ../src/verbs.cpp:2709
 msgid "_Union"
-msgstr "_Forbindelse"
+msgstr "_Union"
 
 #: ../src/verbs.cpp:2709
 msgid "Create union of selected paths"
-msgstr "Skap forbindelser mellom valgte stier"
+msgstr "Lag unionen av valgte baner"
 
 #: ../src/verbs.cpp:2711
 msgid "_Intersection"
-msgstr "_Skjæringsområde"
+msgstr "_Snitt"
 
 #: ../src/verbs.cpp:2712
 msgid "Create intersection of selected paths"
-msgstr "Skap skjæringsområde av valgte stier"
+msgstr "Lag snittet av valgte baner"
 
 #: ../src/verbs.cpp:2713
 msgid "_Difference"
@@ -33361,7 +33241,7 @@ msgstr "_Differanse"
 
 #: ../src/verbs.cpp:2714
 msgid "Create difference of selected paths (bottom minus top)"
-msgstr "Skap ukjæringsområde av valgte stier (bunn minus topp)"
+msgstr "Lag differansen av valgte baner (bunn minus topp)"
 
 #: ../src/verbs.cpp:2715
 msgid "E_xclusion"
@@ -33372,7 +33252,7 @@ msgid ""
 "Create exclusive OR of selected paths (those parts that belong to only one "
 "path)"
 msgstr ""
-"Skap eksklusiv ELLER av valgte stier (de delene som tilhører kun en sti)"
+"Lag eksklusiv ELLER av valgte baner (de delene som tilhører kun én bane)"
 
 #: ../src/verbs.cpp:2718
 msgid "Di_vision"
@@ -33380,15 +33260,15 @@ msgstr "Inndeling"
 
 #: ../src/verbs.cpp:2718
 msgid "Cut the bottom path into pieces"
-msgstr "Kutt bunnsti i biter"
+msgstr "Kutt bunnbanen i biter"
 
 #: ../src/verbs.cpp:2722
 msgid "Cut _Path"
-msgstr "Kutt _sti"
+msgstr "Kutt _bane"
 
 #: ../src/verbs.cpp:2723
 msgid "Cut the bottom path's stroke into pieces, removing fill"
-msgstr "Kutt bunnstiens strøk opp i deler, fjerner fyll"
+msgstr "Kutt opp bunnbanens strøk i deler og fjern fyll"
 
 #: ../src/verbs.cpp:2724
 #, fuzzy
@@ -33454,23 +33334,23 @@ msgstr "Skyv _ut"
 
 #: ../src/verbs.cpp:2739
 msgid "Outset selected paths"
-msgstr "Skyv ut valgte stier"
+msgstr "Skyv ut valgte baner"
 
 #: ../src/verbs.cpp:2741
 msgid "O_utset Path by 1 px"
-msgstr "Skyv ut sti med 1 px"
+msgstr "Skyv ut bane med 1 px"
 
 #: ../src/verbs.cpp:2742
 msgid "Outset selected paths by 1 px"
-msgstr "Skyv ut valgte stier med 1 px"
+msgstr "Skyv ut valgte baner med 1 px"
 
 #: ../src/verbs.cpp:2743
 msgid "O_utset Path by 10 px"
-msgstr "Skyv ut sti med 10 px"
+msgstr "Skyv ut bane med 10 px"
 
 #: ../src/verbs.cpp:2744
 msgid "Outset selected paths by 10 px"
-msgstr "Skyv ut valgte stier med 10 px"
+msgstr "Skyv ut valgte baner med 10 px"
 
 #: ../src/verbs.cpp:2748
 msgid "I_nset"
@@ -33478,23 +33358,23 @@ msgstr "Skyv _inn"
 
 #: ../src/verbs.cpp:2748
 msgid "Inset selected paths"
-msgstr "Skyv inn valgte stier"
+msgstr "Skyv inn valgte baner"
 
 #: ../src/verbs.cpp:2750
 msgid "I_nset Path by 1 px"
-msgstr "Skyv i_nn sti med 1 px"
+msgstr "Skyv i_nn bane med 1 px"
 
 #: ../src/verbs.cpp:2751
 msgid "Inset selected paths by 1 px"
-msgstr "Skyv inn valgte stier med 1 px"
+msgstr "Skyv inn valgte baner med 1 px"
 
 #: ../src/verbs.cpp:2752
 msgid "I_nset Path by 10 px"
-msgstr "skyv i_nn sti med 10 px"
+msgstr "skyv i_nn bane med 10 px"
 
 #: ../src/verbs.cpp:2753
 msgid "Inset selected paths by 10 px"
-msgstr "Skyv inn valgte stier med 10 px"
+msgstr "Skyv inn valgte baner med 10 px"
 
 #: ../src/verbs.cpp:2754
 msgid "D_ynamic Offset"
@@ -33510,15 +33390,15 @@ msgstr "_Lenket forskyvning"
 
 #: ../src/verbs.cpp:2757
 msgid "Create a dynamic offset object linked to the original path"
-msgstr "Skap et dynamisk sideforskyvet objekt lenket til den originale stien"
+msgstr "Lag et dynamisk sideforskjøvet objekt lenket til den originale banen"
 
 #: ../src/verbs.cpp:2759
 msgid "_Stroke to Path"
-msgstr "_Strøk til Sti"
+msgstr "_Strøk til bane"
 
 #: ../src/verbs.cpp:2760
 msgid "Convert selected object's stroke to paths"
-msgstr "Konverter valgte objekters strøk til stier"
+msgstr "Konverter det valgte objektets strøk til baner"
 
 #: ../src/verbs.cpp:2761
 #, fuzzy
@@ -33536,7 +33416,7 @@ msgstr "_Forenkle"
 
 #: ../src/verbs.cpp:2764
 msgid "Simplify selected paths (remove extra nodes)"
-msgstr "Forenkle valgte stier (fjern ekstra noder)"
+msgstr "Forenkle valgte baner (fjern ekstra noder)"
 
 #: ../src/verbs.cpp:2765
 msgid "_Reverse"
@@ -33544,11 +33424,11 @@ msgstr "_Reverser"
 
 #: ../src/verbs.cpp:2766
 msgid "Reverse the direction of selected paths (useful for flipping markers)"
-msgstr "Reverser retningen av valgte stier (nyttig for vipping av markører)"
+msgstr "Reverser de valgte banenes retning (nyttig for å vende om markører)"
 
 #: ../src/verbs.cpp:2772
 msgid "Create one or more paths from a bitmap by tracing it"
-msgstr "Avtegn en eller flere stier fra et punktgrafikkbilde"
+msgstr "Avtegn en eller flere baner fra et punktbilde"
 
 #: ../src/verbs.cpp:2775
 #, fuzzy
@@ -33573,7 +33453,7 @@ msgstr "_Kombiner"
 
 #: ../src/verbs.cpp:2782
 msgid "Combine several paths into one"
-msgstr "Kombiner flere stier til en"
+msgstr "Kombiner flere baner til én"
 
 #: ../src/verbs.cpp:2785
 msgid "Break _Apart"
@@ -33581,7 +33461,7 @@ msgstr "B_ryt opp"
 
 #: ../src/verbs.cpp:2786
 msgid "Break selected paths into subpaths"
-msgstr "Bryt opp valgte sti til understier"
+msgstr "Bryt opp valgte baner til delbaner"
 
 #: ../src/verbs.cpp:2787
 #, fuzzy
@@ -33804,11 +33684,11 @@ msgstr "Fjern transformering fra objekt"
 
 #: ../src/verbs.cpp:2841
 msgid "_Object to Path"
-msgstr "_Objekt til Sti"
+msgstr "_Objekt til bane"
 
 #: ../src/verbs.cpp:2842
 msgid "Convert selected object to path"
-msgstr "Konverter valgte objekt til sti"
+msgstr "Konverter valgt objekt til bane"
 
 #: ../src/verbs.cpp:2843
 msgid "_Flow into Frame"
@@ -33819,7 +33699,7 @@ msgid ""
 "Put text into a frame (path or shape), creating a flowed text linked to the "
 "frame object"
 msgstr ""
-"Plasser tekst på en ramme (sti eller form); skap en flytetekst lenket til "
+"Plasser tekst på en ramme (bane eller form); skap en flytetekst lenket til "
 "rammeobjektet"
 
 #: ../src/verbs.cpp:2846
@@ -33888,7 +33768,7 @@ msgstr "Fjern maskering fra valgte"
 msgid ""
 "Apply clipping path to selection (using the topmost object as clipping path)"
 msgstr ""
-"Påfør stiklipping på valgte (ved å bruke det øverste objekt som klippe sti)"
+"Bruk klippebane på utvalget (ved å bruke det øverste objektet som klippebane)"
 
 #: ../src/verbs.cpp:2866
 #, fuzzy
@@ -33915,7 +33795,7 @@ msgstr "Sett stiklipping"
 
 #: ../src/verbs.cpp:2872
 msgid "Remove clipping path from selection"
-msgstr "Fjern stiklipping fra valgte"
+msgstr "Fjern klippebane fra utvalget"
 
 #: ../src/verbs.cpp:2874
 #, fuzzy
@@ -34501,11 +34381,11 @@ msgstr "Vis eller skjul rutenett"
 
 #: ../src/verbs.cpp:3015
 msgid "G_uides"
-msgstr "Rette_snor"
+msgstr "Hjelpeli_njer"
 
 #: ../src/verbs.cpp:3016
 msgid "Show or hide guides (drag from a ruler to create a guide)"
-msgstr "Vis eller skjul rettesnor (dra fra linjalen for å skape en snor)"
+msgstr "Vis eller skjul hjelpelinjer (dra fra en linjal for å lage en linje)"
 
 #: ../src/verbs.cpp:3017
 #, fuzzy
@@ -35319,7 +35199,7 @@ msgstr "Interpolere (Innskyte)"
 
 #: ../src/widgets/desktop-widget.cpp:2351
 msgid "Create guide"
-msgstr "Lag rettesnor"
+msgstr "Lag hjelpelinje"
 
 #: ../src/widgets/ege-paint-def.cpp:85
 #, fuzzy
@@ -35453,14 +35333,14 @@ msgid ""
 "Any path self-intersections or subpaths create holes in the fill (fill-rule: "
 "evenodd)"
 msgstr ""
-"Enhver sti som krysser seg selv eller understier skaper hull i fyllet (fyll "
-"regel: jevn-ujevn)"
+"Enhver bane som krysser seg selv eller underbaner skaper hull i fyllet "
+"(fyllregel: jevn-ujevn)"
 
 #: ../src/widgets/paint-selector.cpp:250
 msgid ""
 "Fill is solid unless a subpath is counterdirectional (fill-rule: nonzero)"
 msgstr ""
-"Fyll er synlig om ikke en understi går i motsatt retning (fyll regel: ikke-"
+"Fyll er synlig om ikke en underbane går i motsatt retning (fyllregel: ikke-"
 "null)"
 
 #: ../src/widgets/paint-selector.cpp:591
@@ -35873,70 +35753,82 @@ msgstr ""
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 157
 #: ../share/extensions/inkex/deprecated.py:172
+#, fuzzy
 msgid ""
 "{} is now a method of the namedview element object. Use `self.svg.namedview."
 "add(Guide(x, y, a))` instead"
-msgstr ""
+msgstr "{} er nå en metode i «namedview"
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 178
 #: ../share/extensions/inkex/deprecated.py:178
 msgid "{} is now `Effect.run()`. The `output` argument has changed."
-msgstr ""
+msgstr "{} er nå «Effect.run()». «output»-argumentet er endret."
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 184
 #: ../share/extensions/inkex/deprecated.py:184
 msgid "self.args[-1] is now self.options.input_file"
-msgstr ""
+msgstr "self.args[-1] er nå self.options.input_file"
 
 #
 # File: ../share/extensions/inkex/deprecated.py, line: 189
 #: ../share/extensions/inkex/deprecated.py:189
 msgid "self.svg_file is now self.options.input_file"
-msgstr ""
+msgstr "self.svg_file er nå self.options.input_file"
 
 #: ../share/extensions/inkex/deprecated.py:201
 msgid ""
 "{} is now a method in the svg document.  Use `self.svg."
 "get_unique_id(old_id)` instead."
 msgstr ""
+"{} er nå en metode i svg-dokumentet. Bruk «self.svg.get_unique_id(old_id)» "
+"istedenfor."
 
 #: ../share/extensions/inkex/deprecated.py:206
 msgid "{} is now a property of the svg document. Use `self.svg.width` instead."
 msgstr ""
+"{} er nå en egenskap til svg-dokumentet. Bruk «self.svg.width» istedenfor."
 
 #: ../share/extensions/inkex/deprecated.py:211
 msgid ""
 "{} is now a property of the svg document. Use `self.svg.height` instead."
 msgstr ""
+"{} er nå en egenskap til svg-dokumentet. Bruk «self.svg.height» istedenfor."
 
 #: ../share/extensions/inkex/deprecated.py:216
 msgid "{} is now a property of the svg document. Use `self.svg.unit` instead."
 msgstr ""
+"{} er nå en egenskap til svg-dokumentet. Bruk «self.svg.unit» istedenfor."
 
 #: ../share/extensions/inkex/deprecated.py:221
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.unittouu(str)` instead."
 msgstr ""
+"{} er nå en metode i svg-dokumentet. Bruk «self.svg.unittouu(str)» "
+"istedenfor."
 
 #: ../share/extensions/inkex/deprecated.py:226
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.uutounit(value, unit)` "
 "instead."
 msgstr ""
+"{} er nå en metode i svg-dokumentet. Bruk «self.svg.uutounit(verdi, enhet)» "
+"istedenfor."
 
 #: ../share/extensions/inkex/deprecated.py:231
 msgid ""
 "{} is now a method in the svg document. Use `self.svg.add_unit(value)` "
 "instead."
 msgstr ""
+"{} er nå en metode i svg-dokumentet. Bruk «self.svg.add_unit(verdi)» "
+"istedenfor."
 
 #
 # File: ../share/extensions/interp_att_g.py, line: 92
 #: ../share/extensions/interp_att_g.py:88
 msgid "Bad values for a number field: {}, {}."
-msgstr ""
+msgstr "Ugyldige verdier i nummerfelt: {}, {}."
 
 #: ../share/extensions/interp_att_g.py:116
 #, fuzzy
@@ -35999,11 +35891,11 @@ msgstr ""
 #: ../share/extensions/jessyInk_summary.py:61
 #, python-brace-format
 msgid "JessyInk script version {0} installed."
-msgstr ""
+msgstr "JessyInk-skript versjon {0} installert."
 
 #: ../share/extensions/jessyInk_summary.py:63
 msgid "JessyInk script installed."
-msgstr ""
+msgstr "JessyInk-skript installert."
 
 #: ../share/extensions/jessyInk_summary.py:75
 #, fuzzy
@@ -36074,7 +35966,7 @@ msgstr ""
 #: ../share/extensions/jessyInk_summary.py:168
 #, python-brace-format
 msgid "{0}\tObject \"{1}\""
-msgstr ""
+msgstr "{0}\tObjektet «{1}»"
 
 #: ../share/extensions/jessyInk_summary.py:171
 #, fuzzy
@@ -36083,16 +35975,16 @@ msgstr "Fyll lukket område"
 
 #: ../share/extensions/jessyInk_summary.py:173
 msgid " will disappear"
-msgstr ""
+msgstr " vil forsvinne"
 
 #: ../share/extensions/jessyInk_summary.py:176
 #, python-brace-format
 msgid " using effect \"{0}\""
-msgstr ""
+msgstr " med effekten «{0}»"
 
 #: ../share/extensions/jessyInk_summary.py:179
 msgid " in {0!s} s"
-msgstr ""
+msgstr " i {0!s} s"
 
 #: ../share/extensions/jessyInk_transitions.py:47
 #, fuzzy
@@ -36101,7 +35993,7 @@ msgstr "Hev lag til toppen"
 
 #: ../share/extensions/jessyInk_transitions.py:49
 msgid "More than one layer with this name found.\n"
-msgstr ""
+msgstr "Fant mer enn ett lag som heter dette.\n"
 
 #: ../share/extensions/jessyInk_transitions.py:62
 #, fuzzy
@@ -36159,7 +36051,7 @@ msgstr ""
 #: ../share/extensions/pathmodifier.py:207
 #, python-format
 msgid "Please first convert objects to paths!  (Got [%s].)"
-msgstr ""
+msgstr "Konverter objektene til baner først. (Fikk [%s])."
 
 #: ../share/extensions/perspective.py:39
 msgid ""
@@ -36167,6 +36059,9 @@ msgid ""
 "required by this extension. Please install them.  On a Debian-like system "
 "this can be done with the command, sudo apt-get install python-numpy."
 msgstr ""
+"Klarte ikke importere modulene numpy eller numpy.linalg. Installer disse "
+"modulene for å bruke utvidelsen. På et Debian-lignende system kan du kjøre "
+"«sudo apt-get install python-numpy»."
 
 #: ../share/extensions/perspective.py:60 ../share/extensions/summersnight.py:47
 #, python-format
@@ -36174,67 +36069,78 @@ msgid ""
 "The first selected object is of type '%s'.\n"
 "Try using the procedure Path->Object to Path."
 msgstr ""
+"Det først valgte objektet har type «%s».\n"
+"Forsøk menyvalget Bane → Objekt til bane."
 
 #: ../share/extensions/perspective.py:67 ../share/extensions/summersnight.py:54
 msgid ""
 "This extension requires that the second selected path be four nodes long."
-msgstr ""
+msgstr "Denne utvidelsen krever at den andre valgte banen er fire noder lang."
 
 #: ../share/extensions/perspective.py:84 ../share/extensions/summersnight.py:67
 msgid ""
 "The second selected object is a group, not a path.\n"
 "Try using the procedure Object->Ungroup."
 msgstr ""
+"Det andre valgte objektet er en gruppe, ikke en bane.\n"
+"Forsøk menyvalget Objekt → Del opp gruppe."
 
 #: ../share/extensions/perspective.py:86 ../share/extensions/summersnight.py:69
 msgid ""
 "The second selected object is not a path.\n"
 "Try using the procedure Path->Object to Path."
 msgstr ""
+"Det andre valgte objektet er ikke en bane.\n"
+"Forsøk menyvalget Bane → Objekt til bane."
 
 #: ../share/extensions/perspective.py:88 ../share/extensions/summersnight.py:71
 msgid ""
 "The first selected object is not a path.\n"
 "Try using the procedure Path->Object to Path."
 msgstr ""
+"Det først valgte objektet er ikke en bane.\n"
+"Forsøk menyvalget Bane → Objekt til bane."
 
 #: ../share/extensions/plotter.py:67
 msgid ""
 "No paths where found. Please convert all objects you want to plot into paths."
-msgstr ""
+msgstr "Fant ingen baner. Konverter alle objekter du vil plotte til baner."
 
 #: ../share/extensions/plotter.py:152
 msgid "pySerial is not installed. Please follow these steps:"
-msgstr ""
+msgstr "pySerial er ikke installert. Følg følgende steg:"
 
 #: ../share/extensions/plotter.py:153
 msgid "1. Download and extract (unzip) this file to your local harddisk:"
-msgstr ""
+msgstr "1. Last ned og pakk ut (unzip) denne fila til din lokale harddisk:"
 
 #: ../share/extensions/plotter.py:155
 msgid ""
 "2. Copy the \"serial\" folder (Can be found inside the just extracted folder)"
-msgstr ""
+msgstr "2. Kopier «serial»-mappen (som finnes like inni den utpakkede mappa)"
 
 #: ../share/extensions/plotter.py:156
 msgid ""
 "   into the following Inkscape folder: C:\\[Program files]\\inkscape\\python"
 "\\Lib\\"
 msgstr ""
+" til følgende Inkscape-mappe: C:\\[Program files]\\inkscape\\python\\Lib\\"
 
 #: ../share/extensions/plotter.py:157
 msgid "3. Close and restart Inkscape."
-msgstr ""
+msgstr "3. Lukk og start Inkscape på nytt."
 
 #: ../share/extensions/plotter.py:206
 msgid ""
 "Could not open port. Please check that your plotter is running, connected "
 "and the settings are correct."
 msgstr ""
+"Klarte ikke åpne port. Undersøk om plotteren er på og tilkoblet med riktig "
+"oppsett."
 
 #: ../share/extensions/polyhedron_3d.py:373
 msgid "No face data found in specified file."
-msgstr ""
+msgstr "Fant ingen flatedata i angitt fil."
 
 #: ../share/extensions/polyhedron_3d.py:374
 msgid "Try selecting \"Edge Specified\" in the Model File tab.\n"
@@ -36242,7 +36148,7 @@ msgstr ""
 
 #: ../share/extensions/polyhedron_3d.py:380
 msgid "No edge data found in specified file."
-msgstr ""
+msgstr "Fant ingen kantdata i angitt fil."
 
 #: ../share/extensions/polyhedron_3d.py:381
 msgid "Try selecting \"Face Specified\" in the Model File tab.\n"
@@ -36254,6 +36160,9 @@ msgid ""
 "extension. Please install it and try again.  On a Debian-like system this "
 "can be done with the command 'sudo apt-get install python-numpy'."
 msgstr ""
+"Klarte ikke importere numpy-modulen. Utvidelsen krever denne modulen. "
+"Installer den og prøv igjen. På et Debian-lignende system kan du kjøre «sudo "
+"apt-get install python-numpy»."
 
 #: ../share/extensions/polyhedron_3d.py:560
 msgid ""
@@ -36263,27 +36172,28 @@ msgstr ""
 
 #: ../share/extensions/polyhedron_3d.py:562
 msgid "Internal Error. No view type selected\n"
-msgstr ""
+msgstr "Intern feil. Ingen visningstype valgt\n"
 
 #: ../share/extensions/print_win32_vector.py:177
-#, fuzzy
 msgid "Failed to open default printer"
-msgstr "Lag forvalgt gradient"
+msgstr "Klarte ikke åpne standard skriver"
 
 #: ../share/extensions/replace_font.py:121
 msgid ""
 "Couldn't find anything using that font, please ensure the spelling and "
 "spacing is correct."
 msgstr ""
+"Fant ikke noe som bruker den skrifttypen. Dobbeltsjekk skrivemåten og "
+"mellomrom."
 
 #: ../share/extensions/replace_font.py:128
 msgid "Didn't find any fonts in this document/selection."
-msgstr ""
+msgstr "Fant ingen skrifttyper i dette dokumentet/utvalget."
 
 #: ../share/extensions/replace_font.py:131
 #, python-format
 msgid "Found the following font only: %s"
-msgstr ""
+msgstr "Fant kun følgende skrifttype: %s"
 
 #: ../share/extensions/replace_font.py:133
 #, python-format
@@ -36291,23 +36201,24 @@ msgid ""
 "Found the following fonts:\n"
 "%s"
 msgstr ""
+"Fant følgende skrifttyper:\n"
+"%s"
 
 #: ../share/extensions/replace_font.py:175
-#, fuzzy
 msgid "There was nothing selected"
-msgstr "Ingenting valgt"
+msgstr "Ingenting ble valgt"
 
 #: ../share/extensions/replace_font.py:225
 msgid "Please enter a search string in the find box."
-msgstr ""
+msgstr "Angi en søkestreng i «Søk»-boksen."
 
 #: ../share/extensions/replace_font.py:229
 msgid "Please enter a replacement font in the replace with box."
-msgstr ""
+msgstr "Angi en erstatningsskrift i «Erstatt med»-boksen."
 
 #: ../share/extensions/replace_font.py:234
 msgid "Please enter a replacement font in the replace all box."
-msgstr ""
+msgstr "Angi en erstatningsskrift i «Erstatt alle»-boksen."
 
 #: ../share/extensions/restack.py:65
 #, fuzzy
@@ -36329,7 +36240,7 @@ msgstr "Dupliser valgte objekter"
 #: ../share/extensions/web_set_att.py:64
 #: ../share/extensions/web_transmit_att.py:53
 msgid "You must select at least two elements."
-msgstr ""
+msgstr "Du må velge minst to elementer."
 
 #: ../share/extensions/webslicer_create_group.py:58
 msgid ""
@@ -36394,7 +36305,7 @@ msgstr "Antall steg"
 #: ../share/extensions/straightseg.inx:11
 #: ../share/extensions/summersnight.inx:9 ../share/extensions/whirl.inx:11
 msgid "Modify Path"
-msgstr "Modifiser Sti"
+msgstr "Endre bane"
 
 #: ../share/extensions/aisvg.inx:3
 msgid "AI SVG Input"
@@ -36406,7 +36317,7 @@ msgstr "Adobe Illustrator SVG (*.ai.svg)"
 
 #: ../share/extensions/aisvg.inx:9
 msgid "Cleans the cruft out of Adobe Illustrator SVGs before opening"
-msgstr "Rens opp i Adobe Illustrator SVGer før de åpnes"
+msgstr "Rens opp i Adobe Illustrator SVG-er før de åpnes"
 
 #: ../share/extensions/color_HSL_adjust.inx:3
 #, fuzzy
@@ -36597,9 +36508,8 @@ msgid "Remove Red"
 msgstr "Fjern rød"
 
 #: ../share/extensions/color_replace.inx:3
-#, fuzzy
 msgid "Replace color"
-msgstr "Sett valgte farge"
+msgstr "Erstatt farge"
 
 #: ../share/extensions/color_replace.inx:6
 #, fuzzy
@@ -36618,9 +36528,8 @@ msgid "By color (RRGGBB hex):"
 msgstr ""
 
 #: ../share/extensions/color_replace.inx:7
-#, fuzzy
 msgid "New color"
-msgstr "Flat farge"
+msgstr "Ny farge"
 
 #: ../share/extensions/color_rgbbarrel.inx:3
 msgid "RGB Barrel"
@@ -36638,7 +36547,7 @@ msgstr "Dia Inndata"
 
 #: ../share/extensions/dhw_input.inx:9
 msgid "ACECAD Digimemo File (*.dhw)"
-msgstr ""
+msgstr "ACECAD Digimemo-fil (*.dhw)"
 
 #: ../share/extensions/dhw_input.inx:10
 msgid "Open files from ACECAD Digimemo"
@@ -36677,7 +36586,7 @@ msgstr "Visualiser Sti"
 #: ../share/extensions/dimension.inx:15 ../share/extensions/dots.inx:25
 #: ../share/extensions/handles.inx:9 ../share/extensions/measure.inx:72
 msgid "Visualize Path"
-msgstr "Visualiser Sti"
+msgstr "Visualiser bane"
 
 #: ../share/extensions/docinfo.inx:3
 msgid "DOC Info"
@@ -36975,13 +36884,12 @@ msgid "Desktop Cutting Plotter (AutoCAD DXF R12) (*.dxf)"
 msgstr "Skrivebord Utklipps Plotter (*.DXF)"
 
 #: ../share/extensions/dxf12_outlines.inx:10
-#, fuzzy
 msgid "DXF R12 Output"
-msgstr "DXF Utdata"
+msgstr "DXF R12-utdata"
 
 #: ../share/extensions/dxf_input.inx:3
 msgid "DXF Input"
-msgstr "DXF Inndata"
+msgstr "DXF-inndata"
 
 #
 # File: ../share/extensions/dxf_input.inx, line: 8
@@ -37038,13 +36946,12 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/dxf_input.inx:40
-#, fuzzy
 msgid "AutoCAD DXF R13 (*.dxf)"
-msgstr "AutoCAD DXF (*.dxf)"
+msgstr "AutoCAD DXF R13 (*.dxf)"
 
 #: ../share/extensions/dxf_input.inx:41
 msgid "Import AutoCAD's Document Exchange Format"
-msgstr "Importer AutoCAD's Dokumentutvekslingsformat"
+msgstr "Importer AutoCADs dokumentutvekslingsformat"
 
 #: ../share/extensions/dxf_outlines.inx:3
 #, fuzzy
@@ -37125,21 +37032,20 @@ msgid "Character Encoding:"
 msgstr "Stjerne: endre avrundingen"
 
 #: ../share/extensions/dxf_outlines.inx:22
-#, fuzzy
 msgid "Latin 1"
-msgstr "Sateng - ikke realistisk"
+msgstr "Latin 1"
 
 #: ../share/extensions/dxf_outlines.inx:23
 msgid "CP 1250"
-msgstr ""
+msgstr "CP 1250"
 
 #: ../share/extensions/dxf_outlines.inx:24
 msgid "CP 1252"
-msgstr ""
+msgstr "CP 1252"
 
 #: ../share/extensions/dxf_outlines.inx:25
 msgid "UTF 8"
-msgstr ""
+msgstr "UTF 8"
 
 #: ../share/extensions/dxf_outlines.inx:27
 #, fuzzy
@@ -37353,9 +37259,8 @@ msgid "Generic Canvas"
 msgstr "Cyan"
 
 #: ../share/extensions/empty_generic.inx:10
-#, fuzzy
 msgid "SVG Unit:"
-msgstr "Enheter:"
+msgstr "SVG-enhet:"
 
 #: ../share/extensions/empty_generic.inx:19
 #, fuzzy
@@ -37388,15 +37293,14 @@ msgid "Icon"
 msgstr ""
 
 #: ../share/extensions/empty_icon.inx:7
-#, fuzzy
 msgid "Icon size:"
-msgstr "Skriftstørrelse:"
+msgstr "Ikonstørrelse:"
 
 #
 # File: ../share/extensions/empty_icon.inx, line: 14
 #: ../share/extensions/empty_icon.inx:14
 msgid "Icon..."
-msgstr ""
+msgstr "Ikon …"
 
 #
 # File: ../share/extensions/empty_icon.inx, line: 16
@@ -37469,15 +37373,15 @@ msgstr ""
 
 #: ../share/extensions/eps_input.inx:3
 msgid "EPS Input"
-msgstr "EPS Inndata"
+msgstr "EPS-inndata"
 
 #: ../share/extensions/export_gimp_palette.inx:3
 msgid "Export as GIMP Palette"
-msgstr "Eksporter som palett til GIMP"
+msgstr "Eksporter som GIMP-palett"
 
 #: ../share/extensions/export_gimp_palette.inx:9
 msgid "GIMP Palette (*.gpl)"
-msgstr "GIMP Palett (*.gpl)"
+msgstr "GIMP-palett (*.gpl)"
 
 #: ../share/extensions/export_gimp_palette.inx:10
 msgid "Exports the colors of this document as GIMP Palette"
@@ -37509,18 +37413,16 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/extrude.inx:7
-#, fuzzy
 msgid "Lines"
-msgstr "Linje"
+msgstr "Linjer"
 
 #: ../share/extensions/extrude.inx:8
-#, fuzzy
 msgid "Polygons"
-msgstr "Polygon"
+msgstr "Polygoner"
 
 #: ../share/extensions/fig_input.inx:3
 msgid "XFIG Input"
-msgstr "XFIG Inndata"
+msgstr "XFIG-inndata"
 
 #: ../share/extensions/fig_input.inx:10
 msgid "XFIG Graphics File (*.fig)"
@@ -37532,7 +37434,7 @@ msgstr "Åpne filer lagret med XFIG"
 
 #: ../share/extensions/flatten.inx:3
 msgid "Flatten Beziers"
-msgstr "Flat ut Bezierkurver"
+msgstr "Flat ut Bézier-kurver"
 
 #: ../share/extensions/flatten.inx:6
 #, fuzzy
@@ -37664,9 +37566,8 @@ msgstr ""
 "rekkevidde)"
 
 #: ../share/extensions/funcplot.inx:16
-#, fuzzy
 msgid "Use polar coordinates"
-msgstr "Markør koorditater"
+msgstr "Bruk polarkoordinater"
 
 #: ../share/extensions/funcplot.inx:18 ../share/extensions/param_curves.inx:19
 #, fuzzy
@@ -37689,9 +37590,8 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/funcplot.inx:28 ../share/extensions/param_curves.inx:23
-#, fuzzy
 msgid "Functions"
-msgstr "Funksjon"
+msgstr "Funksjoner"
 
 #: ../share/extensions/funcplot.inx:29 ../share/extensions/param_curves.inx:24
 #, fuzzy
@@ -37720,7 +37620,7 @@ msgstr "Funksjon"
 
 #: ../share/extensions/funcplot.inx:41
 msgid "Calculate first derivative numerically"
-msgstr "Kalkuler først differensialen numerisk"
+msgstr "Kalkuler den førstederiverte numerisk"
 
 #: ../share/extensions/funcplot.inx:42
 #, fuzzy
@@ -37751,7 +37651,7 @@ msgstr ""
 #: ../share/extensions/gcodetools_orientation_points.inx:35
 #: ../share/extensions/hershey.inx:84 ../share/extensions/output_scour.inx:95
 msgid "About"
-msgstr ""
+msgstr "Om"
 
 #
 # File: ../share/extensions/gcodetools_about.inx, line: 10
@@ -38498,7 +38398,7 @@ msgstr "Mønster"
 
 #: ../share/extensions/gcodetools_lathe.inx:15
 msgid "Offset path"
-msgstr "Forskyvning sti"
+msgstr "Forskyv bane"
 
 #
 # File: ../share/extensions/gcodetools_lathe.inx, line: 17
@@ -38733,9 +38633,8 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/generate_voronoi.inx:3
-#, fuzzy
 msgid "Voronoi Pattern"
-msgstr "Mønster"
+msgstr "Voronoi-mønster"
 
 #: ../share/extensions/generate_voronoi.inx:9
 #, fuzzy
@@ -38827,7 +38726,7 @@ msgstr ""
 # File: ../share/extensions/grid_cartesian.inx, line: 15
 #: ../share/extensions/grid_cartesian.inx:15
 msgid "X Axis"
-msgstr ""
+msgstr "X-akse"
 
 #: ../share/extensions/grid_cartesian.inx:16
 #, fuzzy
@@ -38890,7 +38789,7 @@ msgstr "Inndeling"
 # File: ../share/extensions/grid_cartesian.inx, line: 38
 #: ../share/extensions/grid_cartesian.inx:38
 msgid "Y Axis"
-msgstr ""
+msgstr "Y-akse"
 
 #: ../share/extensions/grid_cartesian.inx:39
 #, fuzzy
@@ -39120,7 +39019,7 @@ msgstr "Rettesnorfarge:"
 #: ../share/extensions/guides_creator.inx:9
 #: ../share/extensions/guides_creator.inx:27
 msgid "Custom..."
-msgstr "Tilpasset ..."
+msgstr "Tilpasset …"
 
 #: ../share/extensions/guides_creator.inx:10
 #, fuzzy
@@ -39873,13 +39772,12 @@ msgid "HTML 5 canvas code"
 msgstr ""
 
 #: ../share/extensions/inkscape_follow_link.inx:3
-#, fuzzy
 msgid "Follow Link"
-msgstr "_Følg Lenke"
+msgstr "Følg lenke"
 
 #: ../share/extensions/inkscape_help_askaquestion.inx:3
 msgid "Ask Us a Question"
-msgstr ""
+msgstr "Still oss et spørsmål"
 
 #: ../share/extensions/inkscape_help_askaquestion.inx:6
 msgid "https://inkscape.org/en/ask/"
@@ -39896,7 +39794,7 @@ msgstr ""
 
 #: ../share/extensions/inkscape_help_faq.inx:3
 msgid "FAQ"
-msgstr "FAQ"
+msgstr "OSS"
 
 #: ../share/extensions/inkscape_help_keys.inx:3
 #, fuzzy
@@ -39919,7 +39817,7 @@ msgstr ""
 
 #: ../share/extensions/inkscape_help_relnotes.inx:3
 msgid "New in This Version"
-msgstr "Nytt i denne versjonen"
+msgstr "Nytt i denne utgivelsen"
 
 #. i18n. Please don't translate it unless a page exists in your language
 #: ../share/extensions/inkscape_help_relnotes.inx:7
@@ -39950,7 +39848,7 @@ msgstr "Interpolasjonsmetode"
 
 #: ../share/extensions/interp.inx:9
 msgid "Duplicate endpaths"
-msgstr "Dupliser stiender"
+msgstr "Dupliser endebaner"
 
 #: ../share/extensions/interp.inx:10
 #, fuzzy
@@ -40044,14 +39942,12 @@ msgid "Style"
 msgstr "Stil"
 
 #: ../share/extensions/interp_att_g.inx:30
-#, fuzzy
 msgid "Transformation"
-msgstr "Informasjon"
+msgstr "Transformasjon"
 
 #: ../share/extensions/interp_att_g.inx:33 ../share/extensions/nicechart.inx:80
-#, fuzzy
 msgid "Values"
-msgstr "Verdi"
+msgstr "Verdier"
 
 #: ../share/extensions/interp_att_g.inx:34
 #, fuzzy
@@ -40072,9 +39968,8 @@ msgid "End Value:"
 msgstr "Endeverdi x"
 
 #: ../share/extensions/interp_att_g.inx:37
-#, fuzzy
 msgid "No Unit"
-msgstr "Enhet"
+msgstr "Ingen enhet"
 
 #: ../share/extensions/interp_att_g.inx:48
 msgid ""
@@ -40222,13 +40117,12 @@ msgid "JessyInk zipped pdf or png output"
 msgstr ""
 
 #: ../share/extensions/jessyInk_export.inx:10
-#, fuzzy
 msgid "PDF"
-msgstr "PDF 1.4"
+msgstr "PDF"
 
 #: ../share/extensions/jessyInk_export.inx:11
 msgid "PNG"
-msgstr ""
+msgstr "PNG"
 
 #: ../share/extensions/jessyInk_export.inx:13
 #, fuzzy
@@ -40254,7 +40148,7 @@ msgstr ""
 
 #: ../share/extensions/jessyInk_install.inx:3
 msgid "Install/update"
-msgstr ""
+msgstr "Installer/oppdater"
 
 #: ../share/extensions/jessyInk_install.inx:9
 msgid ""
@@ -40687,8 +40581,8 @@ msgid ""
 "This effect randomly shifts the nodes (and optionally node handles) of the "
 "selected path."
 msgstr ""
-"Denne effekten flytter nodene (og valgfritt også håndtakene) tilfeldig langs "
-"den valgte stien."
+"Denne effekten flytter nodene (og om ønskelig også håndtakene) tilfeldig "
+"langs den valgte banen."
 
 #: ../share/extensions/layers2svgfont.inx:3
 msgid "3 - Convert Glyph Layers to SVG Font"
@@ -40983,7 +40877,7 @@ msgstr "Endre strøkfarge"
 
 #: ../share/extensions/measure.inx:3
 msgid "Measure Path"
-msgstr "Mål sti"
+msgstr "Mål bane"
 
 #: ../share/extensions/measure.inx:8
 #, fuzzy
@@ -41076,9 +40970,8 @@ msgid "Center of Mass"
 msgstr "Masse:"
 
 #: ../share/extensions/measure.inx:40
-#, fuzzy
 msgid "Angle (°):"
-msgstr "Vinkel X:"
+msgstr "Vinkel (°):"
 
 #: ../share/extensions/measure.inx:43
 #, fuzzy
@@ -41097,9 +40990,8 @@ msgid "Scale Factor (Drawing:Real Length) = 1:"
 msgstr ""
 
 #: ../share/extensions/measure.inx:47
-#, fuzzy
 msgid "Length Unit:"
-msgstr "Lengde:"
+msgstr "Lengdeenhet:"
 
 #
 # File: ../share/extensions/measure.inx, line: 60
@@ -41164,12 +41056,11 @@ msgstr ""
 # File: ../share/extensions/merge_styles.inx, line: 9
 #: ../share/extensions/merge_styles.inx:9
 msgid "New Class Name:"
-msgstr ""
+msgstr "Nytt klassenavn:"
 
 #: ../share/extensions/merge_styles.inx:14
-#, fuzzy
 msgid "Stylesheet"
-msgstr "Stil"
+msgstr "Stilark"
 
 #: ../share/extensions/motion.inx:3
 #, fuzzy
@@ -41357,9 +41248,8 @@ msgid "Drop shadow"
 msgstr "Skygge"
 
 #: ../share/extensions/nicechart.inx:81
-#, fuzzy
 msgid "Show values"
-msgstr "Tegn Håndtak"
+msgstr "Vis verdier"
 
 #: ../share/extensions/nicechart.inx:89
 #, fuzzy
@@ -41387,15 +41277,14 @@ msgid "Stacked bar chart"
 msgstr "Høyde:"
 
 #: ../share/extensions/output_scour.inx:3
-#, fuzzy
 msgid "Optimized SVG Output"
-msgstr "SVG Utdata"
+msgstr "Optimert SVG-utdata"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 10
 #: ../share/extensions/output_scour.inx:10
 msgid "Number of significant digits for coordinates:"
-msgstr ""
+msgstr "Antall gjeldende sifre i koordinater:"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 10
@@ -41407,6 +41296,10 @@ msgid ""
 "&quot;3&quot; is specified, the coordinate 3.14159 is output as 3.14 while "
 "the coordinate 123.675 is output as 124."
 msgstr ""
+"Angir antallet gjeldende sifre i koordinatutdata. Legg merke til at "
+"gjeldende sifre er ikke antall desimaler, men antall sifre i utdata. For "
+"eksempel vil verdien «3» føre til at koordinaten 3.14159 skrives som 3.14, "
+"og koordinaten 123.675 skrives som 124."
 
 #: ../share/extensions/output_scour.inx:14
 #, fuzzy
@@ -41490,7 +41383,7 @@ msgstr ""
 # File: ../share/extensions/output_scour.inx, line: 35
 #: ../share/extensions/output_scour.inx:35
 msgid "Work around renderer bugs"
-msgstr ""
+msgstr "Jobb rundt feil i tegnemotorer"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 35
@@ -41499,6 +41392,8 @@ msgid ""
 "Works around some common renderer bugs (mainly libRSVG) at the cost of a "
 "slightly larger SVG file."
 msgstr ""
+"Jobb rundt noen vanlige feil i tegnemotorer (hovedsakelig libRSVG) på "
+"bekostning av en litt større SVG-fil."
 
 #: ../share/extensions/output_scour.inx:38
 #, fuzzy
@@ -41534,21 +41429,19 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/output_scour.inx:47
-#, fuzzy
 msgid "Remove comments"
-msgstr "Fjern fyll"
+msgstr "Fjern kommentarer"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 47
 #: ../share/extensions/output_scour.inx:47
 msgid "Remove all XML comments from output."
-msgstr ""
+msgstr "Fjern alle XML-kommentarer fra utdata."
 
 # OVERSETTERE: Det er et spørmål om Embed bør være: Innlemme
 #: ../share/extensions/output_scour.inx:50
-#, fuzzy
 msgid "Embed raster images"
-msgstr "Innlemme bilder"
+msgstr "Bygg inn rasterbilder"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 50
@@ -41557,6 +41450,8 @@ msgid ""
 "Resolve external references to raster images and embed them as Base64-"
 "encoded data URLs."
 msgstr ""
+"Slå opp eksterne referanser til rasterbilder og bygg dem inn som Base64-"
+"kodede data-URL-er."
 
 #: ../share/extensions/output_scour.inx:53
 #, fuzzy
@@ -41606,14 +41501,12 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/output_scour.inx:62
-#, fuzzy
 msgid "Space"
-msgstr "Flekker"
+msgstr "Mellomrom"
 
 #: ../share/extensions/output_scour.inx:63
-#, fuzzy
 msgid "Tab"
-msgstr "Tabell"
+msgstr "Tabulator"
 
 #: ../share/extensions/output_scour.inx:64
 #, fuzzy
@@ -41652,14 +41545,12 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/output_scour.inx:73
-#, fuzzy
 msgid "IDs"
-msgstr "ID"
+msgstr "ID-er"
 
 #: ../share/extensions/output_scour.inx:76
-#, fuzzy
 msgid "Remove unused IDs"
-msgstr "Fjern rød"
+msgstr "Fjern ubrukte ID-er"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 76
@@ -41668,12 +41559,13 @@ msgid ""
 "Remove all unreferenced IDs from elements. Those are not needed for "
 "rendering."
 msgstr ""
+"Fjern alle urefererte ID-er fra elementer. De trengs ikke i opptegningen."
 
 #
 # File: ../share/extensions/output_scour.inx, line: 80
 #: ../share/extensions/output_scour.inx:80
 msgid "Shorten IDs"
-msgstr ""
+msgstr "Forkort ID-er"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 80
@@ -41684,24 +41576,28 @@ msgid ""
 "linearGradient5621&quot; will become &quot;a&quot; if it is the most used "
 "element."
 msgstr ""
+"Minimer ID-lengder ved å endre deres navn til små bokstaver, og gi de mest "
+"refererte elementene kortest navn. For eksempel blir &laquo;"
+"linearGradient5621&raquo; til &laquo;a&raquo; dersom det er det mest brukte "
+"elementet."
 
 #
 # File: ../share/extensions/output_scour.inx, line: 83
 #: ../share/extensions/output_scour.inx:83
 msgid "Prefix shortened IDs with:"
-msgstr ""
+msgstr "Gi forkortede ID-er prefikset: "
 
 #
 # File: ../share/extensions/output_scour.inx, line: 83
 #: ../share/extensions/output_scour.inx:83
 msgid "Prepend shortened IDs with the specified prefix."
-msgstr ""
+msgstr "Gi forkortede ID-er følgende prefiks."
 
 #
 # File: ../share/extensions/output_scour.inx, line: 87
 #: ../share/extensions/output_scour.inx:87
 msgid "Preserve manually created IDs not ending with digits"
-msgstr ""
+msgstr "Bevar manuelt opprettede ID-er som ikke slutter med tall"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 87
@@ -41712,24 +41608,28 @@ msgid ""
 "preserved while numbered IDs (as they are generated by most SVG editors "
 "including Inkscape) will be removed/shortened."
 msgstr ""
+"Bevarer beskrivende ID-er som ble opprettet manuelt for å vise til eller "
+"merke spesifikke elementer eller grupper (f.eks. #pilStart, #pilSlutt eller "
+"#tekstMerkelapp), mens nummererte ID-er (slike som dannes av Inkscape og "
+"andre SVG-tegneprogram) vil fjernes eller forkortes."
 
 #
 # File: ../share/extensions/output_scour.inx, line: 90
 #: ../share/extensions/output_scour.inx:90
 msgid "Preserve the following IDs:"
-msgstr ""
+msgstr "Bevar følgende ID-er:"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 90
 #: ../share/extensions/output_scour.inx:90
 msgid "A comma-separated list of IDs that are to be preserved."
-msgstr ""
+msgstr "En kommaseparert liste med ID-er som skal bevares."
 
 #
 # File: ../share/extensions/output_scour.inx, line: 93
 #: ../share/extensions/output_scour.inx:93
 msgid "Preserve IDs starting with:"
-msgstr ""
+msgstr "Bevar ID-er som starter med:"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 93
@@ -41738,40 +41638,38 @@ msgid ""
 "Preserve all IDs that start with the specified prefix (e.g. specify &quot;"
 "flag&quot; to preserve &quot;flag-mx&quot;, &quot;flag-pt&quot;, etc.)."
 msgstr ""
+"Bevar alle ID-er som starter med angitt prefiks (angi f.eks. &laquo;"
+"flag&raquo; for å bevare &laquo;flag-mx&raquo;, &laquo;flag-pt&raquo;, osv.)."
 
 #: ../share/extensions/output_scour.inx:97
-#, fuzzy
 msgid "Optimized SVG Output is provided by"
-msgstr "SVG Utdata"
+msgstr "Optimert SVG-utdata produseres av"
 
 #: ../share/extensions/output_scour.inx:100
 msgid "For details please refer to"
-msgstr ""
+msgstr "For detaljer se"
 
 #: ../share/extensions/output_scour.inx:105
 msgid "This version of the extension is designed for"
-msgstr ""
+msgstr "Denne versjonen av utvidelsen er laget for"
 
 #
 # File: ../share/extensions/output_scour.inx, line: 109
 #: ../share/extensions/output_scour.inx:109
 msgid "Show warnings for older versions of Scour"
-msgstr ""
+msgstr "Vis advarsler for eldre versjoner av Scour"
 
 #: ../share/extensions/output_scour.inx:115
-#, fuzzy
 msgid "Optimized SVG (*.svg)"
-msgstr "Inkscape SVG (*.svg)"
+msgstr "Optimert SVG (*.svg)"
 
 #: ../share/extensions/output_scour.inx:116
-#, fuzzy
 msgid "Scalable Vector Graphics"
-msgstr "Skalerbar Vektor Grafikk (*.svg)"
+msgstr "Skalerbar vektorgrafikk"
 
 #: ../share/extensions/param_curves.inx:3
-#, fuzzy
 msgid "Parametric Curves"
-msgstr "Parameter"
+msgstr "Parametriske kurver"
 
 #: ../share/extensions/param_curves.inx:7
 #, fuzzy
@@ -41839,7 +41737,7 @@ msgstr "Funksjon"
 
 #: ../share/extensions/pathalongpath.inx:3
 msgid "Pattern along Path"
-msgstr "Mønster langs sti"
+msgstr "Mønster langs bane"
 
 #: ../share/extensions/pathalongpath.inx:9
 msgid "Copies of the pattern:"
@@ -42129,9 +42027,8 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/plotter.inx:10
-#, fuzzy
 msgid "Connection Settings"
-msgstr "Bindepunkt"
+msgstr "Tilkoblingsvalg"
 
 #: ../share/extensions/plotter.inx:11
 #, fuzzy
@@ -42139,9 +42036,8 @@ msgid "Port type:"
 msgstr "Former"
 
 #: ../share/extensions/plotter.inx:12
-#, fuzzy
 msgid "Serial"
-msgstr "Vertikal tekst"
+msgstr "Serietilkobling"
 
 #: ../share/extensions/plotter.inx:15
 #, fuzzy
@@ -42155,6 +42051,8 @@ msgid ""
 "The port of your parallel connection, on Windows not currently supported, on "
 "Linux something like: '/dev/usb/lp2' (Default: /dev/usb/lp2)"
 msgstr ""
+"Parallelltilkoblingens port. Støttes ikke på Windows. På Linux noe sånt som "
+"«/dev/usb/lp2». (Standardverdi: /dev/usb/lp2)."
 
 #: ../share/extensions/plotter.inx:16
 #, fuzzy
@@ -42168,6 +42066,8 @@ msgid ""
 "The port of your serial connection, on Windows something like 'COM1', on "
 "Linux something like: '/dev/ttyUSB0' (Default: COM1)"
 msgstr ""
+"Serietilkoblingens port. På Windows noe sånt som «COM1», på Linux noe sånt "
+"som «/dev/ttyUSB0». (Standardverdi: COM1)."
 
 #: ../share/extensions/plotter.inx:17
 #, fuzzy
@@ -42178,7 +42078,7 @@ msgstr "_Vertikal"
 # File: ../share/extensions/plotter.inx, line: 17
 #: ../share/extensions/plotter.inx:17
 msgid "The Baud rate of your serial connection (Default: 9600)"
-msgstr ""
+msgstr "Serietilkoblingens baudrate (standardverdi: 9600)"
 
 #: ../share/extensions/plotter.inx:34
 #, fuzzy
@@ -42192,6 +42092,8 @@ msgid ""
 "The Byte size of your serial connection, 99% of all plotters use the default "
 "setting (Default: 8 Bits)"
 msgstr ""
+"Serietilkoblingens bytestørrelse, 99 % av alle plottere bruker "
+"standardverdien 8 biter"
 
 #: ../share/extensions/plotter.inx:40
 #, fuzzy
@@ -42205,6 +42107,8 @@ msgid ""
 "The Stop bits of your serial connection, 99% of all plotters use the default "
 "setting (Default: 1 Bit)"
 msgstr ""
+"Serietilkoblingens stoppbiter, 99 % av alle plottere bruker standardverdien "
+"1 bit"
 
 #: ../share/extensions/plotter.inx:45
 #, fuzzy
@@ -42218,6 +42122,8 @@ msgid ""
 "The Parity of your serial connection, 99% of all plotters use the default "
 "setting (Default: None)"
 msgstr ""
+"Serietilkoblingens paritet, 99 % av alle plottere bruker standardverdien "
+"«Ingen»"
 
 #: ../share/extensions/plotter.inx:52
 #, fuzzy
@@ -42231,19 +42137,20 @@ msgid ""
 "The Software / Hardware flow control of your serial connection (Default: "
 "Software)"
 msgstr ""
+"Hvorvidt serietilkoblingens flytkontroll styres av maskinvare eller "
+"programvare (standardverdi: Programvare)"
 
 #: ../share/extensions/plotter.inx:53
 msgid "Software (XON/XOFF)"
-msgstr ""
+msgstr "Programvare (XON/XOFF)"
 
 #: ../share/extensions/plotter.inx:54
-#, fuzzy
 msgid "Hardware (RTS/CTS)"
-msgstr "Piggtråd"
+msgstr "Maskinvare (RTS/CTS)"
 
 #: ../share/extensions/plotter.inx:55
 msgid "Hardware (DSR/DTR + RTS/CTS)"
-msgstr ""
+msgstr "Maskinvare (DSR/DTR + RTS/CTS)"
 
 #: ../share/extensions/plotter.inx:58
 #, fuzzy
@@ -42254,35 +42161,39 @@ msgstr "Språk"
 # File: ../share/extensions/plotter.inx, line: 58
 #: ../share/extensions/plotter.inx:58
 msgid "The command language to use (Default: HPGL)"
-msgstr ""
+msgstr "Bruk dette kommandospråket (standardverdi: HPGL)"
 
 #: ../share/extensions/plotter.inx:59
 msgid "HPGL"
-msgstr ""
+msgstr "HPGL"
 
 #: ../share/extensions/plotter.inx:60
 msgid "DMPL"
-msgstr ""
+msgstr "DMPL"
 
 #: ../share/extensions/plotter.inx:61
 msgid "KNK Plotter (HPGL variant)"
-msgstr ""
+msgstr "KNK-plotter (HPGL-variant)"
 
 #: ../share/extensions/plotter.inx:64
 msgid ""
 "Using wrong settings can under certain circumstances cause Inkscape to "
 "freeze. Always save your work before plotting!"
 msgstr ""
+"Feil oppsett kan under visse omstendigheter fryse Inkscape. Lagre alltid før "
+"du plotter."
 
 #: ../share/extensions/plotter.inx:65
 msgid ""
 "This can be a physical serial connection or a USB-to-Serial bridge. Ask your "
 "plotter manufacturer for drivers if needed."
 msgstr ""
+"Dette kan være en fysisk serietilkobling eller en USB-til-serie-bru. Spør om "
+"nødvendig plotterprodusenten om drivere."
 
 #: ../share/extensions/plotter.inx:66
 msgid "Parallel (LPT) connections are not supported."
-msgstr ""
+msgstr "Parallelltilkoblinger (LPT) støttes ikke."
 
 #
 # File: ../share/extensions/plotter.inx, line: 73
@@ -42292,6 +42203,9 @@ msgid ""
 "(depending on your plotter model), set to 0 to omit command. Most plotters "
 "ignore this command. (Default: 0)"
 msgstr ""
+"Den hastigheten som pennen skal bevege seg med, i cm eller mm per sekund "
+"(avhengig av plottermodellen). Velg 0 for å utelate kommando. De fleste "
+"plotterne ser bort fra denne kommandoen. (Standardverdi: 0)."
 
 #: ../share/extensions/plotter.inx:74
 #, fuzzy
@@ -42299,9 +42213,8 @@ msgid "Rotation (°, clockwise):"
 msgstr "Rotasjonen går med urviseren"
 
 #: ../share/extensions/plotter.inx:93
-#, fuzzy
 msgid "Show debug information"
-msgstr "Informasjon om minnebruk"
+msgstr "Vis feilsøkingsinformasjon"
 
 #
 # File: ../share/extensions/plotter.inx, line: 93
@@ -42310,6 +42223,8 @@ msgid ""
 "Check this to get verbose information about the plot without actually "
 "sending something to the plotter (A.k.a. data dump) (Default: Unchecked)"
 msgstr ""
+"Velg for å få utfyllende informasjon om plottingen uten å faktisk sende noe "
+"til plotteren (dvs. en datadump). (Standardverdi: Fravalgt)."
 
 #: ../share/extensions/polyhedron_3d.inx:3
 #, fuzzy
@@ -42678,7 +42593,7 @@ msgstr "Matrise"
 #: ../share/extensions/render_barcode_datamatrix.inx:7
 #: ../share/extensions/render_barcode_qrcode.inx:8
 msgid "Size, in unit squares:"
-msgstr ""
+msgstr "Størrelse i kvadratenheter:"
 
 #: ../share/extensions/render_barcode_datamatrix.inx:39
 #, fuzzy
@@ -42687,11 +42602,11 @@ msgstr "Firkant"
 
 #: ../share/extensions/render_barcode_qrcode.inx:3
 msgid "QR Code"
-msgstr ""
+msgstr "QR-kode"
 
 #: ../share/extensions/render_barcode_qrcode.inx:6
 msgid "See http://www.denso-wave.com/qrcode/index-e.html for details"
-msgstr ""
+msgstr "Se http://www.denso-wave.com/qrcode/index-e.html for detaljer"
 
 #: ../share/extensions/render_barcode_qrcode.inx:21
 msgid ""
@@ -42845,38 +42760,35 @@ msgstr ""
 
 #: ../share/extensions/replace_font.inx:3
 #: ../share/extensions/replace_font.inx:14
-#, fuzzy
 msgid "Replace font"
-msgstr "Bytt tekst"
+msgstr "Erstatt skrifttype"
 
 #: ../share/extensions/replace_font.inx:10
-#, fuzzy
 msgid "Find and Replace font"
-msgstr "Finn objekter i dokumentet"
+msgstr "Søk og erstatt skrifttype"
 
 #: ../share/extensions/replace_font.inx:11
-#, fuzzy
 msgid "Find font:"
-msgstr "Legg til lag"
+msgstr "Søk etter skrifttype:"
 
 #: ../share/extensions/replace_font.inx:12
 msgid "Replace with:"
 msgstr "Erstatt med:"
 
 #: ../share/extensions/replace_font.inx:15
-#, fuzzy
 msgid "Replace all fonts with:"
-msgstr "Bytt:"
+msgstr "Erstatt alle skrifttyper med:"
 
 #: ../share/extensions/replace_font.inx:17
-#, fuzzy
 msgid "List all fonts"
-msgstr "Sirkel (etter tre punkt på buen)"
+msgstr "List ut alle skrifttyper"
 
 #: ../share/extensions/replace_font.inx:18
 msgid ""
 "Choose this tab if you would like to see a list of the fonts used/found."
 msgstr ""
+"Velg denne fanen hvis du vil se en liste med alle skrifttypene som brukes/"
+"ble funnet."
 
 #: ../share/extensions/replace_font.inx:22
 #, fuzzy
@@ -42915,20 +42827,19 @@ msgstr "Tilbak_estill"
 
 #: ../share/extensions/restack.inx:12
 msgid "Left to Right (0)"
-msgstr ""
+msgstr "Venstre til høyre (0)"
 
 #: ../share/extensions/restack.inx:13
 msgid "Bottom to Top (90)"
-msgstr ""
+msgstr "Bunn til topp (90)"
 
 #: ../share/extensions/restack.inx:14
 msgid "Right to Left (180)"
-msgstr ""
+msgstr "Høyre til venstre (180)"
 
 #: ../share/extensions/restack.inx:15
-#, fuzzy
 msgid "Top to Bottom (270)"
-msgstr "Senk til bunnen"
+msgstr "Topp til bunn (270)"
 
 #: ../share/extensions/restack.inx:16
 #, fuzzy
@@ -42946,9 +42857,8 @@ msgid "Object Reference Point"
 msgstr "Gradient innstillinger"
 
 #: ../share/extensions/restack.inx:25
-#, fuzzy
 msgid "Horizontal:"
-msgstr "_Horisontal"
+msgstr "Vannrett:"
 
 #: ../share/extensions/restack.inx:27 ../share/extensions/restack.inx:32
 #: ../share/extensions/text_extract.inx:14
@@ -42959,9 +42869,8 @@ msgid "Middle"
 msgstr "Tittel"
 
 #: ../share/extensions/restack.inx:30
-#, fuzzy
 msgid "Vertical:"
-msgstr "_Vertikal"
+msgstr "Loddrett:"
 
 #: ../share/extensions/restack.inx:31 ../share/extensions/text_extract.inx:18
 #: ../share/extensions/text_merge.inx:18
@@ -43153,7 +43062,7 @@ msgstr ""
 # File: ../share/extensions/spirograph.inx, line: 14
 #: ../share/extensions/spirograph.inx:14
 msgid "Quality (Default = 16):"
-msgstr ""
+msgstr "Kvalitet (standard = 16):"
 
 #: ../share/extensions/split.inx:3
 #, fuzzy
@@ -43211,9 +43120,8 @@ msgid "FXG Output"
 msgstr "SVG Utdata"
 
 #: ../share/extensions/svg2fxg.inx:8
-#, fuzzy
 msgid "Flash XML Graphics (*.fxg)"
-msgstr "XFIG grafisk fil (*.fig)"
+msgstr "Flash XML-grafikk (*.fxg)"
 
 #: ../share/extensions/svg2fxg.inx:9
 msgid "Adobe's XML Graphics file format"
@@ -43232,7 +43140,7 @@ msgstr ""
 
 #: ../share/extensions/svg2xaml.inx:9 ../share/extensions/xaml2svg.inx:8
 msgid "Microsoft XAML (*.xaml)"
-msgstr ""
+msgstr "Microsoft XAML (*.xaml)"
 
 #: ../share/extensions/svg2xaml.inx:10 ../share/extensions/xaml2svg.inx:9
 msgid "Microsoft's GUI definition format"
@@ -43451,7 +43359,7 @@ msgstr "SVG Utdata"
 
 #: ../share/extensions/synfig_output.inx:11
 msgid "Synfig Animation (*.sif)"
-msgstr ""
+msgstr "Synfig-animasjon (*.sif)"
 
 #: ../share/extensions/synfig_output.inx:12
 msgid "Synfig Animation written using the sif-file exporter extension"
@@ -43463,7 +43371,7 @@ msgstr ""
 
 #: ../share/extensions/tar_layers.inx:10
 msgid "Layers as Separate SVG (*.tar)"
-msgstr ""
+msgstr "Lag som separate SVG (*.tar)"
 
 #: ../share/extensions/tar_layers.inx:11
 msgid ""
@@ -43476,35 +43384,29 @@ msgid "Convert to Braille"
 msgstr "Konverter til Braille"
 
 #: ../share/extensions/text_extract.inx:3
-#, fuzzy
 msgid "Extract"
-msgstr "Trekk ut ett bilde"
+msgstr "Trekk ut"
 
 #: ../share/extensions/text_extract.inx:6 ../share/extensions/text_merge.inx:6
-#, fuzzy
 msgid "Text direction:"
-msgstr "Merkeretning"
+msgstr "Tekstretning:"
 
 #: ../share/extensions/text_extract.inx:7 ../share/extensions/text_merge.inx:7
-#, fuzzy
 msgid "Left to right"
-msgstr "Lengde:"
+msgstr "Venstre til høyre"
 
 #: ../share/extensions/text_extract.inx:8 ../share/extensions/text_merge.inx:8
-#, fuzzy
 msgid "Bottom to top"
-msgstr "Nedre bøyesti"
+msgstr "Bunn til topp"
 
 #: ../share/extensions/text_extract.inx:9 ../share/extensions/text_merge.inx:9
-#, fuzzy
 msgid "Right to left"
-msgstr "Høyre vinkel"
+msgstr "Høyre til venstre"
 
 #: ../share/extensions/text_extract.inx:10
 #: ../share/extensions/text_merge.inx:10
-#, fuzzy
 msgid "Top to bottom"
-msgstr "Senk til bunnen"
+msgstr "Topp til bunn"
 
 #: ../share/extensions/text_extract.inx:12
 #: ../share/extensions/text_merge.inx:12
@@ -43520,7 +43422,7 @@ msgstr "Vertikal tekst"
 
 #: ../share/extensions/text_flipcase.inx:3
 msgid "fLIP cASE"
-msgstr "bYTT bOKSTAVSTØRRELSE"
+msgstr "bYTT SMÅ OG STORE BOKSTAVER"
 
 #: ../share/extensions/text_flipcase.inx:11
 #: ../share/extensions/text_lowercase.inx:11
@@ -43547,11 +43449,11 @@ msgstr "tiLfELDIg bOKstavSTØRReLSe"
 
 #: ../share/extensions/text_sentencecase.inx:3
 msgid "Sentence case"
-msgstr "Stor bokstav først i settning"
+msgstr "Stor bokstav først i setning."
 
 #: ../share/extensions/text_titlecase.inx:3
 msgid "Title Case"
-msgstr "Str Bokstav Først I Hvert Ord"
+msgstr "Stor Bokstav Først I Hvert Ord"
 
 #: ../share/extensions/text_uppercase.inx:3
 msgid "UPPERCASE"
@@ -43905,9 +43807,8 @@ msgstr ""
 
 #: ../share/extensions/web_set_att.inx:44
 #: ../share/extensions/web_transmit_att.inx:42
-#, fuzzy
 msgid "JavaScript"
-msgstr "Skript"
+msgstr "JavaScript"
 
 #: ../share/extensions/web_transmit_att.inx:3
 #, fuzzy
@@ -43963,9 +43864,8 @@ msgid "HTML class attribute:"
 msgstr "Sett attributt"
 
 #: ../share/extensions/webslicer_create_group.inx:11
-#, fuzzy
 msgid "Width unit:"
-msgstr "Bredde"
+msgstr "Breddeenhet:"
 
 #: ../share/extensions/webslicer_create_group.inx:12
 #: ../share/extensions/webslicer_create_group.inx:17
@@ -43984,15 +43884,13 @@ msgid "Undefined (relative to non-floating content size)"
 msgstr ""
 
 #: ../share/extensions/webslicer_create_group.inx:16
-#, fuzzy
 msgid "Height unit:"
-msgstr "Høyde"
+msgstr "Høydeenhet:"
 
 #: ../share/extensions/webslicer_create_group.inx:21
 #: ../share/extensions/webslicer_create_rect.inx:18
-#, fuzzy
 msgid "Background color:"
-msgstr "Bak_grunn farge:"
+msgstr "Bakgrunnsfarge:"
 
 #: ../share/extensions/webslicer_create_group.inx:24
 msgid ""
@@ -44013,78 +43911,73 @@ msgid "Create a slicer rectangle"
 msgstr "Lag rektangel"
 
 #: ../share/extensions/webslicer_create_rect.inx:13
-#, fuzzy
 msgid "DPI:"
-msgstr "DPI"
+msgstr "DPI:"
 
 #: ../share/extensions/webslicer_create_rect.inx:14
-#, fuzzy
 msgid "Force Dimension:"
-msgstr "Inndeling"
+msgstr "Tving dimensjoner:"
 
 #
 # File: ../share/extensions/webslicer_create_rect.inx, line: 16
 #. i18n. Description duplicated in a fake value attribute in order to make it translatable
 #: ../share/extensions/webslicer_create_rect.inx:16
 msgid "Force Dimension must be set as &lt;width&gt;x&lt;height&gt;"
-msgstr ""
+msgstr "«Tving dimensjoner» må velges som &lt;bredde&gt;×&lt;høyde&gt;"
 
 #: ../share/extensions/webslicer_create_rect.inx:17
 msgid "If set, this will replace DPI."
-msgstr ""
+msgstr "Velg for å erstatte DPI."
 
 #
 # File: ../share/extensions/webslicer_create_rect.inx, line: 10
 #: ../share/extensions/webslicer_create_rect.inx:20
 msgid "JPG"
-msgstr ""
+msgstr "JPG"
 
 #: ../share/extensions/webslicer_create_rect.inx:21
-#, fuzzy
 msgid "JPG specific options"
-msgstr "SVG 1.1-spesifikasjonen"
+msgstr "JPG-spesifikke valg"
 
 #: ../share/extensions/webslicer_create_rect.inx:22
-#, fuzzy
 msgid "Quality:"
-msgstr "Dekningsgrad"
+msgstr "Kvalitet:"
 
 #: ../share/extensions/webslicer_create_rect.inx:23
 msgid ""
 "0 is the lowest image quality and highest compression, and 100 is the best "
 "quality but least effective compression"
 msgstr ""
+"0 gir lavest bildekvalitet og høyest komprimering, og 100 gir best kvalitet, "
+"men minst effektiv komprimering"
 
 #
 # File: ../share/extensions/webslicer_create_rect.inx, line: 11
 #: ../share/extensions/webslicer_create_rect.inx:25
 msgid "GIF"
-msgstr ""
+msgstr "GIF"
 
 #: ../share/extensions/webslicer_create_rect.inx:26
-#, fuzzy
 msgid "GIF specific options"
-msgstr "SVG 1.1-spesifikasjonen"
+msgstr "GIF-spesifikke valg"
 
 #: ../share/extensions/webslicer_create_rect.inx:29
-#, fuzzy
 msgid "Palette"
-msgstr "_Palett"
+msgstr "Palett"
 
 #: ../share/extensions/webslicer_create_rect.inx:31
-#, fuzzy
 msgid "Palette size:"
-msgstr "L_im inn størrelse"
+msgstr "Palettstørrelse:"
 
 #
 # File: ../share/extensions/webslicer_create_rect.inx, line: 33
 #: ../share/extensions/webslicer_create_rect.inx:33
 msgid "HTML"
-msgstr ""
+msgstr "HTML"
 
 #: ../share/extensions/webslicer_create_rect.inx:36
 msgid "Options for HTML export"
-msgstr ""
+msgstr "Innstillinger for HTML-eksport"
 
 #: ../share/extensions/webslicer_create_rect.inx:37
 #, fuzzy
@@ -44189,15 +44082,14 @@ msgid "Directory path to export:"
 msgstr "Sted for å lagre bilde"
 
 #: ../share/extensions/webslicer_export.inx:10
-#, fuzzy
 msgid "Create directory, if it does not exists"
-msgstr "Katalog %s finnes ikke eller er ikke en katalog.\n"
+msgstr "Opprett mappe hvis den ikke finnes"
 
 #
 # File: ../share/extensions/webslicer_export.inx, line: 11
 #: ../share/extensions/webslicer_export.inx:11
 msgid "With HTML and CSS"
-msgstr ""
+msgstr "Med HTML og CSS"
 
 #: ../share/extensions/webslicer_export.inx:14
 msgid ""
@@ -44249,15 +44141,13 @@ msgstr "DXF Inndata"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:10
 #: ../org.inkscape.Inkscape.desktop.template:5
-#, fuzzy
 msgid "Inkscape"
-msgstr "Avslutt Inkscape"
+msgstr "Inkscape"
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:11
 #: ../org.inkscape.Inkscape.desktop.template:6
-#, fuzzy
 msgid "Vector Graphics Editor"
-msgstr "Inkscape vektor-tegneprogram"
+msgstr "Tegneprogram for vektorgrafikk"
 
 #
 # File: ../org.inkscape.Inkscape.appdata.xml.in, line: 13
@@ -44280,9 +44170,8 @@ msgid ""
 msgstr ""
 
 #: ../org.inkscape.Inkscape.appdata.xml.in:38
-#, fuzzy
 msgid "Main application window"
-msgstr "D_upliser Vindu"
+msgstr "Programmets hovedvindu"
 
 #: ../org.inkscape.Inkscape.desktop.template:8
 msgid "Create and edit Scalable Vector Graphics images"
@@ -44299,9 +44188,8 @@ msgid "${INKSCAPE_ICONPATH}"
 msgstr ""
 
 #: ../org.inkscape.Inkscape.desktop.template:21
-#, fuzzy
 msgid "New Drawing"
-msgstr "Tegning"
+msgstr "Ny tegning"
 
 #: ../share/ui/menus.xml:90
 msgid "_View"
@@ -44317,7 +44205,7 @@ msgstr "_Objekt"
 
 #: ../share/ui/menus.xml:237
 msgid "_Path"
-msgstr "_Sti"
+msgstr "_Bane"
 
 #: ../share/ui/menus.xml:281
 msgid "Filter_s"
@@ -44333,147 +44221,128 @@ msgid "Percentage"
 msgstr "Prosent"
 
 #: ../share/ui/units.xml:11
-#, fuzzy
 msgid "pixel"
-msgstr "piksler"
+msgstr "piksel"
 
 #
 # File: ../share/ui/units.xml, line: 15
 #: ../share/ui/units.xml:15
 msgid "CSS Pixels (96/inch)"
-msgstr ""
+msgstr "CSS-piksler (96/tomme)"
 
 #: ../share/ui/units.xml:18
-#, fuzzy
 msgid "point"
-msgstr "Punkt"
+msgstr "punkt"
 
 #: ../share/ui/units.xml:19
-#, fuzzy
 msgid "points"
-msgstr "Punkter"
+msgstr "punkter"
 
 #: ../share/ui/units.xml:22
-#, fuzzy
 msgid "PostScript points (72/inch)"
-msgstr "PostScript (*.ps)"
+msgstr "PostScript-punkter (72/tomme)"
 
 #
 # File: ../share/ui/units.xml, line: 25
 #: ../share/ui/units.xml:25
 msgid "pica"
-msgstr ""
+msgstr "pica"
 
 #: ../share/ui/units.xml:26
-#, fuzzy
 msgid "picas"
-msgstr "Stier"
+msgstr "pica"
 
 #: ../share/ui/units.xml:29
-#, fuzzy
 msgid "12 points"
-msgstr "DXF Inndata"
+msgstr "12 punkter"
 
 #
 # File: ../share/ui/units.xml, line: 32
 #: ../share/ui/units.xml:32
 msgid "inch"
-msgstr ""
+msgstr "tomme"
 
 #: ../share/ui/units.xml:33
-#, fuzzy
 msgid "inches"
-msgstr "Tommer"
+msgstr "tommer"
 
 #
 # File: ../share/ui/units.xml, line: 36
 #: ../share/ui/units.xml:36
 msgid "Inches (96 px/in)"
-msgstr ""
+msgstr "Tommer (96 piksler/\")"
 
 #: ../share/ui/units.xml:39
-#, fuzzy
 msgid "millimeter"
-msgstr "Millimeter"
+msgstr "millimeter"
 
 #: ../share/ui/units.xml:40
-#, fuzzy
 msgid "millimeters"
-msgstr "Millimeter"
+msgstr "millimeter"
 
 #: ../share/ui/units.xml:43
-#, fuzzy
 msgid "Millimeters (25.4 mm/in)"
-msgstr "Millimeter"
+msgstr "millimeter (25,4 mm/\")"
 
 #: ../share/ui/units.xml:46
-#, fuzzy
 msgid "centimeter"
-msgstr "Centimeter"
+msgstr "centimeter"
 
 #: ../share/ui/units.xml:47
-#, fuzzy
 msgid "centimeters"
-msgstr "Centimeter"
+msgstr "centimeter"
 
 #: ../share/ui/units.xml:50
-#, fuzzy
 msgid "Centimeters (10 mm/cm)"
-msgstr "Centimeter"
+msgstr "Centimeter (10 mm/cm)"
 
 #: ../share/ui/units.xml:53
-#, fuzzy
 msgid "degree"
-msgstr "grader"
+msgstr "grad"
 
 #: ../share/ui/units.xml:60
-#, fuzzy
 msgid "radian"
-msgstr "Gradient"
+msgstr "radian"
 
 #: ../share/ui/units.xml:61
-#, fuzzy
 msgid "radians"
-msgstr "Gradient"
+msgstr "radianer"
 
 #
 # File: ../share/ui/units.xml, line: 64
 #: ../share/ui/units.xml:64
 msgid "Radians (180/pi deg/rad)"
-msgstr ""
+msgstr "Radianer (180/π °/rad)"
 
 #: ../share/ui/units.xml:67
-#, fuzzy
 msgid "gradian"
-msgstr "Flytt gradienthåndtak"
+msgstr "gon"
 
 #: ../share/ui/units.xml:68
-#, fuzzy
 msgid "gradians"
-msgstr "Gradient"
+msgstr "gon"
 
 #
 # File: ../share/ui/units.xml, line: 71
 #: ../share/ui/units.xml:71
 msgid "Gradians (360/400 deg/grad)"
-msgstr ""
+msgstr "Gon (360/400 °/gon)"
 
 #
 # File: ../share/ui/units.xml, line: 74
 #: ../share/ui/units.xml:74
 msgid "turn"
-msgstr ""
+msgstr "omdreining"
 
 #: ../share/ui/units.xml:75
-#, fuzzy
 msgid "turns"
-msgstr "Runder:"
+msgstr "omdreininger"
 
 #
 # File: ../share/ui/units.xml, line: 78
 #: ../share/ui/units.xml:78
 msgid "Turns (360 deg/turn)"
-msgstr ""
+msgstr "Omdreininger (360 °/omdreining)"
 
 #: ../share/ui/units.xml:81
 #, fuzzy
