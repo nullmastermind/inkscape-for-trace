@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: uk\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-08-14 11:29+0200\n"
+"POT-Creation-Date: 2019-08-14 11:45+0200\n"
 "PO-Revision-Date: 2019-06-29 12:08+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -15356,18 +15356,6 @@ msgstr "У позначеному <b>немає контурного текст�
 #: ../src/text-editing.cpp:43
 msgid "You cannot edit <b>cloned character data</b>."
 msgstr "Змінювати <b>клонований текст</b> не можна."
-
-#: ../src/trace/depixelize/inkscape-depixelize.cpp:82
-msgid ""
-"Image looks too big. Process may take a while and it is wise to save your "
-"document before continuing.\n"
-"\n"
-"Continue the procedure (without saving)?"
-msgstr ""
-"Здається, зображення є надто великим. Його обробка може бути тривалою. Варто "
-"зберегти ваш документ, перш ніж продовжувати.\n"
-"\n"
-"Продовжити обробку (без збереження)?"
 
 #: ../src/trace/potrace/inkscape-potrace.cpp:522
 #: ../src/trace/potrace/inkscape-potrace.cpp:585
@@ -42097,6 +42085,17 @@ msgstr "пів-em-и"
 #: ../share/ui/units.xml:99
 msgid "Half of font height"
 msgstr "Половина висоти шрифту"
+
+#~ msgid ""
+#~ "Image looks too big. Process may take a while and it is wise to save your "
+#~ "document before continuing.\n"
+#~ "\n"
+#~ "Continue the procedure (without saving)?"
+#~ msgstr ""
+#~ "Здається, зображення є надто великим. Його обробка може бути тривалою. "
+#~ "Варто зберегти ваш документ, перш ніж продовжувати.\n"
+#~ "\n"
+#~ "Продовжити обробку (без збереження)?"
 
 #
 # File: ../src/live_effects/effect.cpp, line: 615

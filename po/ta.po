@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-08-14 11:29+0200\n"
+"POT-Creation-Date: 2019-08-14 11:45+0200\n"
 "PO-Revision-Date: 2011-06-13 10:57+0530\n"
 "Last-Translator: <kde-i18n-doc@kde.org>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -15959,14 +15959,6 @@ msgstr "தேர்ந்தெடுப்பில் மாற்றுவ�
 #: ../src/text-editing.cpp:43
 msgid "You cannot edit <b>cloned character data</b>."
 msgstr "<b>கூம்பாக்கப்பட்ட எழுத்து தரவு</b>ஐ திருத்த முடியாது."
-
-#: ../src/trace/depixelize/inkscape-depixelize.cpp:82
-msgid ""
-"Image looks too big. Process may take a while and it is wise to save your "
-"document before continuing.\n"
-"\n"
-"Continue the procedure (without saving)?"
-msgstr ""
 
 #: ../src/trace/potrace/inkscape-potrace.cpp:522
 #: ../src/trace/potrace/inkscape-potrace.cpp:585

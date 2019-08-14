@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.92.1\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-08-14 11:29+0200\n"
+"POT-Creation-Date: 2019-08-14 11:45+0200\n"
 "PO-Revision-Date: 2018-12-08 12:51+0100\n"
 "Last-Translator: Lucas Vieites <lucas@codexion.com>\n"
 "Language-Team: Español; Castellano <inkscape-translator@lists.sourceforge."
@@ -15305,18 +15305,6 @@ msgstr "<b>No hay textos fluídos</b> que se puedan convertir en la selección."
 #: ../src/text-editing.cpp:43
 msgid "You cannot edit <b>cloned character data</b>."
 msgstr "No se pueden editar los <b>datos de carácter clonados</b>."
-
-#: ../src/trace/depixelize/inkscape-depixelize.cpp:82
-msgid ""
-"Image looks too big. Process may take a while and it is wise to save your "
-"document before continuing.\n"
-"\n"
-"Continue the procedure (without saving)?"
-msgstr ""
-"La imagen parece demasiado grande. El proceso podría tardar un rato y "
-"recomendamos que guarde su documento antes de continuar.\n"
-"\n"
-"¿Desea continuar sin guardar?"
 
 #: ../src/trace/potrace/inkscape-potrace.cpp:522
 #: ../src/trace/potrace/inkscape-potrace.cpp:585
@@ -42376,6 +42364,17 @@ msgstr ""
 #: ../share/ui/units.xml:99
 msgid "Half of font height"
 msgstr ""
+
+#~ msgid ""
+#~ "Image looks too big. Process may take a while and it is wise to save your "
+#~ "document before continuing.\n"
+#~ "\n"
+#~ "Continue the procedure (without saving)?"
+#~ msgstr ""
+#~ "La imagen parece demasiado grande. El proceso podría tardar un rato y "
+#~ "recomendamos que guarde su documento antes de continuar.\n"
+#~ "\n"
+#~ "¿Desea continuar sin guardar?"
 
 #~ msgid "odd-even"
 #~ msgstr "impar-par"

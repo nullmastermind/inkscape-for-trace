@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-08-14 11:29+0200\n"
+"POT-Creation-Date: 2019-08-14 11:45+0200\n"
 "PO-Revision-Date: 2016-11-23 18:10+0800\n"
 "Last-Translator: Dongjun Wu <ziyawu@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@linux.org.tw>\n"
@@ -15034,17 +15034,6 @@ msgstr "選取區中<b>沒有可轉換的流動文字</b>。"
 #: ../src/text-editing.cpp:43
 msgid "You cannot edit <b>cloned character data</b>."
 msgstr "你無法編輯<b>仿製的字元資料</b>。"
-
-#: ../src/trace/depixelize/inkscape-depixelize.cpp:82
-msgid ""
-"Image looks too big. Process may take a while and it is wise to save your "
-"document before continuing.\n"
-"\n"
-"Continue the procedure (without saving)?"
-msgstr ""
-"影像尺寸太大。該過程可能會需要一些時間並且最好在繼續處理前先儲存你的文件。\n"
-"\n"
-"繼續處理動作嗎 (不儲存)？"
 
 #: ../src/trace/potrace/inkscape-potrace.cpp:522
 #: ../src/trace/potrace/inkscape-potrace.cpp:585
@@ -41198,6 +41187,17 @@ msgstr ""
 #: ../share/ui/units.xml:99
 msgid "Half of font height"
 msgstr ""
+
+#~ msgid ""
+#~ "Image looks too big. Process may take a while and it is wise to save your "
+#~ "document before continuing.\n"
+#~ "\n"
+#~ "Continue the procedure (without saving)?"
+#~ msgstr ""
+#~ "影像尺寸太大。該過程可能會需要一些時間並且最好在繼續處理前先儲存你的文"
+#~ "件。\n"
+#~ "\n"
+#~ "繼續處理動作嗎 (不儲存)？"
 
 #, fuzzy
 #~ msgid "odd-even"

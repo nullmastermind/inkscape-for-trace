@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-08-14 11:29+0200\n"
+"POT-Creation-Date: 2019-08-14 11:45+0200\n"
 "PO-Revision-Date: 2009-09-28 20:50+0300\n"
 "Last-Translator: Mattias Põldaru <mahfiaz gmail com>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
@@ -16358,14 +16358,6 @@ msgstr "Valikus puudub konverteeritav <b>valgtekst</b>."
 
 #: ../src/text-editing.cpp:43
 msgid "You cannot edit <b>cloned character data</b>."
-msgstr ""
-
-#: ../src/trace/depixelize/inkscape-depixelize.cpp:82
-msgid ""
-"Image looks too big. Process may take a while and it is wise to save your "
-"document before continuing.\n"
-"\n"
-"Continue the procedure (without saving)?"
 msgstr ""
 
 #: ../src/trace/potrace/inkscape-potrace.cpp:522

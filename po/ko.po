@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-08-14 11:29+0200\n"
+"POT-Creation-Date: 2019-08-14 11:45+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Sensu Iun <cieltero@gmail.com>\n"
 "Language-Team: <Dokdo@korea.land>\n"
@@ -15105,17 +15105,6 @@ msgstr "선택 영역 안에 변환할 <b>유동 문자열이 없음</b>."
 #: ../src/text-editing.cpp:43
 msgid "You cannot edit <b>cloned character data</b>."
 msgstr "<b>복제된 문자 자료</b>는 편집할 수 없습니다."
-
-#: ../src/trace/depixelize/inkscape-depixelize.cpp:82
-msgid ""
-"Image looks too big. Process may take a while and it is wise to save your "
-"document before continuing.\n"
-"\n"
-"Continue the procedure (without saving)?"
-msgstr ""
-"이미지가 커 보입니다. 처리 시간이 길어질 수 있으므로 계속하기 전에 문서를 먼"
-"저 저장하는 것이 낫습니다.\n"
-"이 절차를 계속할까요 (저장하지 않음)?"
 
 #: ../src/trace/potrace/inkscape-potrace.cpp:522
 #: ../src/trace/potrace/inkscape-potrace.cpp:585
@@ -41567,6 +41556,16 @@ msgstr ""
 #: ../share/ui/units.xml:99
 msgid "Half of font height"
 msgstr ""
+
+#~ msgid ""
+#~ "Image looks too big. Process may take a while and it is wise to save your "
+#~ "document before continuing.\n"
+#~ "\n"
+#~ "Continue the procedure (without saving)?"
+#~ msgstr ""
+#~ "이미지가 커 보입니다. 처리 시간이 길어질 수 있으므로 계속하기 전에 문서를 "
+#~ "먼저 저장하는 것이 낫습니다.\n"
+#~ "이 절차를 계속할까요 (저장하지 않음)?"
 
 #~ msgid "odd-even"
 #~ msgstr "홀짝"

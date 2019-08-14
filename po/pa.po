@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-08-14 11:29+0200\n"
+"POT-Creation-Date: 2019-08-14 11:45+0200\n"
 "PO-Revision-Date: 2006-11-05 17:58+0100\n"
 "Last-Translator: Amanpreet Singh Brar <amanpreetalam@yahoo.com>\n"
 "Language-Team: Punjabi <fedora-trans-pa@redhat.com>\n"
@@ -16328,14 +16328,6 @@ msgstr "ਚੋਣ ਵਿੱਚ ਕੋਈ <b>ਤਰਤੀਬ ਭਰਨ ਨਹੀ�
 
 #: ../src/text-editing.cpp:43
 msgid "You cannot edit <b>cloned character data</b>."
-msgstr ""
-
-#: ../src/trace/depixelize/inkscape-depixelize.cpp:82
-msgid ""
-"Image looks too big. Process may take a while and it is wise to save your "
-"document before continuing.\n"
-"\n"
-"Continue the procedure (without saving)?"
 msgstr ""
 
 #: ../src/trace/potrace/inkscape-potrace.cpp:522

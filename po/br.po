@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.49\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-08-14 11:29+0200\n"
+"POT-Creation-Date: 2019-08-14 11:45+0200\n"
 "PO-Revision-Date: 2014-12-07 17:34+0100\n"
 "Last-Translator: Alan <alan@drouizig.org>\n"
 "Language-Team: An Drouizig - www.drouizig.org <alan.monfort@free.fr>\n"
@@ -15488,17 +15488,6 @@ msgstr "<b>Testenn red ebet</b> da amdreiñ en diuzad."
 #: ../src/text-editing.cpp:43
 msgid "You cannot edit <b>cloned character data</b>."
 msgstr "N'hallit ket embann <b>roadennoù un arouez bet klonet</b>."
-
-#: ../src/trace/depixelize/inkscape-depixelize.cpp:82
-msgid ""
-"Image looks too big. Process may take a while and it is wise to save your "
-"document before continuing.\n"
-"\n"
-"Continue the procedure (without saving)?"
-msgstr ""
-"Re vras e hañval bezañ ar skeudenn. Hir e c'hallfe bezañ an argerzh\n"
-"ha gwell e vefe enrollañ ho teul kent kenderc'hel ganti.\n"
-"Kenderc'hel gant an argerzh (hep enrollañ) ?"
 
 #: ../src/trace/potrace/inkscape-potrace.cpp:522
 #: ../src/trace/potrace/inkscape-potrace.cpp:585
@@ -42709,6 +42698,16 @@ msgstr ""
 #: ../share/ui/units.xml:99
 msgid "Half of font height"
 msgstr ""
+
+#~ msgid ""
+#~ "Image looks too big. Process may take a while and it is wise to save your "
+#~ "document before continuing.\n"
+#~ "\n"
+#~ "Continue the procedure (without saving)?"
+#~ msgstr ""
+#~ "Re vras e hañval bezañ ar skeudenn. Hir e c'hallfe bezañ an argerzh\n"
+#~ "ha gwell e vefe enrollañ ho teul kent kenderc'hel ganti.\n"
+#~ "Kenderc'hel gant an argerzh (hep enrollañ) ?"
 
 #, fuzzy
 #~ msgid "odd-even"

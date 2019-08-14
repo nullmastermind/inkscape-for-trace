@@ -22,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Arabic Inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-08-14 11:29+0200\n"
+"POT-Creation-Date: 2019-08-14 11:45+0200\n"
 "PO-Revision-Date: 2015-02-05 21:43+0000\n"
 "Last-Translator: Mosaab Alzoubi <moceap@hotmail.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/projects/p/arabic-inkscape/"
@@ -15197,14 +15197,6 @@ msgstr "<b>لا نص منساب</b> في هذا الاختيار لتحويله.
 #: ../src/text-editing.cpp:43
 msgid "You cannot edit <b>cloned character data</b>."
 msgstr "لا يمكن تحرير <b>بيانات أحرف مستنسخة</b>."
-
-#: ../src/trace/depixelize/inkscape-depixelize.cpp:82
-msgid ""
-"Image looks too big. Process may take a while and it is wise to save your "
-"document before continuing.\n"
-"\n"
-"Continue the procedure (without saving)?"
-msgstr ""
 
 #: ../src/trace/potrace/inkscape-potrace.cpp:522
 #: ../src/trace/potrace/inkscape-potrace.cpp:585

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-08-14 11:29+0200\n"
+"POT-Creation-Date: 2019-08-14 11:45+0200\n"
 "PO-Revision-Date: 2015-07-13 00:09+0200\n"
 "Last-Translator: Aleksandar Marković <alleksandar.markovic@gmail.com>\n"
 "Language-Team: Serbian <gnom@prevod.org>\n"
@@ -16076,18 +16076,6 @@ msgstr "У избору <b>нема уклопљеног текста</b> за �
 #: ../src/text-editing.cpp:43
 msgid "You cannot edit <b>cloned character data</b>."
 msgstr "Не можете уредити <b>клониране податке карактера</b>."
-
-#: ../src/trace/depixelize/inkscape-depixelize.cpp:82
-msgid ""
-"Image looks too big. Process may take a while and it is wise to save your "
-"document before continuing.\n"
-"\n"
-"Continue the procedure (without saving)?"
-msgstr ""
-"Слика је превелика. Процес прецртавања може потрајати и препоручује седа "
-"сачувате документ пре него што наставите.\n"
-"\n"
-"Наставити процес (без чувања)?"
 
 #: ../src/trace/potrace/inkscape-potrace.cpp:522
 #: ../src/trace/potrace/inkscape-potrace.cpp:585
@@ -43922,6 +43910,17 @@ msgstr ""
 #: ../share/ui/units.xml:99
 msgid "Half of font height"
 msgstr ""
+
+#~ msgid ""
+#~ "Image looks too big. Process may take a while and it is wise to save your "
+#~ "document before continuing.\n"
+#~ "\n"
+#~ "Continue the procedure (without saving)?"
+#~ msgstr ""
+#~ "Слика је превелика. Процес прецртавања може потрајати и препоручује седа "
+#~ "сачувате документ пре него што наставите.\n"
+#~ "\n"
+#~ "Наставити процес (без чувања)?"
 
 #, fuzzy
 #~ msgid "odd-even"

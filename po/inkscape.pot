@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-08-14 11:41+0200\n"
+"POT-Creation-Date: 2019-08-14 11:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -6600,7 +6600,8 @@ msgid "Hue distribution (°)"
 msgstr ""
 
 #: ../src/extension/internal/filter/color.h:1488
-#: ../src/ui/dialog/tracedialog.cpp:147 ../share/extensions/svgcalendar.inx:29
+#: ../src/ui/dialog/tracedialog.cpp:147 ../share/ui/dialog-trace.glade:241
+#: ../share/ui/dialog-trace.glade:437 ../share/extensions/svgcalendar.inx:29
 msgid "Colors"
 msgstr ""
 
@@ -6971,7 +6972,7 @@ msgid "Erosion 2"
 msgstr ""
 
 #: ../src/extension/internal/filter/morphology.h:192
-#: ../src/live_effects/lpe-roughen.cpp:40
+#: ../src/live_effects/lpe-roughen.cpp:40 ../share/ui/dialog-trace.glade:450
 msgid "Smooth"
 msgstr ""
 
@@ -6995,7 +6996,8 @@ msgstr ""
 #: ../src/extension/internal/filter/paint.h:691
 #: ../src/extension/internal/filter/shadows.h:61
 #: ../src/live_effects/lpe-measure-segments.cpp:281
-#: ../src/ui/dialog/find.cpp:76 ../share/extensions/color_HSL_adjust.inx:8
+#: ../src/ui/dialog/find.cpp:76 ../share/ui/dialog-trace.glade:541
+#: ../share/extensions/color_HSL_adjust.inx:8
 #: ../share/extensions/color_custom.inx:8
 #: ../share/extensions/color_randomize.inx:7 ../share/extensions/dots.inx:7
 #: ../share/extensions/dxf_input.inx:7 ../share/extensions/dxf_outlines.inx:8
@@ -9404,6 +9406,7 @@ msgid "<b>Default value overridden:</b> "
 msgstr ""
 
 #: ../src/live_effects/effect.cpp:1557 ../src/live_effects/effect.cpp:1615
+#: ../share/ui/dialog-trace.glade:948
 msgid "Update"
 msgstr ""
 
@@ -14530,7 +14533,7 @@ msgstr ""
 msgid "Trace: Starting trace..."
 msgstr ""
 
-#: ../src/trace/trace.cpp:550
+#: ../src/trace/trace.cpp:550 ../share/ui/dialog-trace.glade:654
 msgid "Trace bitmap"
 msgstr ""
 
@@ -23096,35 +23099,35 @@ msgstr ""
 msgid "Arrange selected objects"
 msgstr ""
 
-#: ../src/ui/dialog/tracedialog.cpp:125
+#: ../src/ui/dialog/tracedialog.cpp:125 ../share/ui/dialog-trace.glade:138
 msgid "Brightness cutoff"
 msgstr ""
 
-#: ../src/ui/dialog/tracedialog.cpp:127
+#: ../src/ui/dialog/tracedialog.cpp:127 ../share/ui/dialog-trace.glade:139
 msgid "Edge detection"
 msgstr ""
 
-#: ../src/ui/dialog/tracedialog.cpp:129
+#: ../src/ui/dialog/tracedialog.cpp:129 ../share/ui/dialog-trace.glade:140
 msgid "Color quantization"
 msgstr ""
 
-#: ../src/ui/dialog/tracedialog.cpp:131
+#: ../src/ui/dialog/tracedialog.cpp:131 ../share/ui/dialog-trace.glade:141
 msgid "Autotrace"
 msgstr ""
 
-#: ../src/ui/dialog/tracedialog.cpp:137
+#: ../src/ui/dialog/tracedialog.cpp:137 ../share/ui/dialog-trace.glade:142
 msgid "Centerline tracing (autotrace)"
 msgstr ""
 
-#: ../src/ui/dialog/tracedialog.cpp:145
+#: ../src/ui/dialog/tracedialog.cpp:145 ../share/ui/dialog-trace.glade:436
 msgid "Brightness steps"
 msgstr ""
 
-#: ../src/ui/dialog/tracedialog.cpp:149
+#: ../src/ui/dialog/tracedialog.cpp:149 ../share/ui/dialog-trace.glade:438
 msgid "Grays"
 msgstr ""
 
-#: ../src/ui/dialog/tracedialog.cpp:151
+#: ../src/ui/dialog/tracedialog.cpp:151 ../share/ui/dialog-trace.glade:439
 msgid "Autotrace (slower)"
 msgstr ""
 
@@ -31674,6 +31677,205 @@ msgstr ""
 msgid "Style of Paint Bucket fill objects"
 msgstr ""
 
+#: ../share/ui/dialog-trace.glade:113
+msgid "Create a single path or create a group of paths"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:170
+msgid "Threshold (1)"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:205
+msgid "Threshold (2)"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:276 ../share/ui/dialog-trace.glade:338
+msgid "Filter iterations"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:301 ../share/ui/dialog-trace.glade:363
+msgid "Error threshold"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:399
+msgid "Invert image"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:403
+msgid "Invert black and white regions"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:422
+msgid "Single scan"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:454
+msgid "Apply Gaussian blur to the bitmap before tracing"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:464
+msgid "Stack"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:468
+msgid ""
+"Stack scans on top of one another (no gaps) instead of tiling (usually with "
+"gaps)"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:478
+msgid "Remove background"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:482
+msgid "Remove bottom (background) layer when done"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:494
+msgid "Scans"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:505
+msgid "The desired number of scans"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:526
+msgid "Multiple scans"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:559
+msgid "Speckles"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:563
+msgid "Ignore small spots (speckles) in the bitmap"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:574
+msgid "Smooth corners"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:578
+msgid "Smooth out sharp corners of the trace"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:589
+msgid "Optimize"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:593
+msgid "Try to optimize paths by joining adjacent Bezier curve segments"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:606
+msgid "Speckles of up to this many pixels will be suppressed"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:618
+msgid "Increase this to smooth corners more"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:631
+msgid ""
+"Increase this to reduce the number of nodes in the trace by more aggressive "
+"optimization"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:669
+msgid ""
+"\n"
+"Heuristics\n"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:692
+msgid "Favors connections that are part of a long curve"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:693
+msgid "Curves (multiplier)"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:704
+msgid "Avoid single disconnected pixels"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:705
+msgid "Islands (weight)"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:716 ../share/ui/dialog-trace.glade:729
+msgid "Favors connections that are part of foreground color"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:717
+msgid ""
+"Sparse pixels\n"
+"(window radius)"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:730
+msgid ""
+"Sparse pixels\n"
+"(multiplier)"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:742 ../share/ui/dialog-trace.glade:785
+msgid "The heuristic computed vote will be multiplied by this value"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:757
+msgid "A constant vote value"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:771
+msgid "The radius of the window analyzed"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:807
+msgid ""
+"\n"
+"Output\n"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:822
+msgid "Voronoi"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:826
+msgid "Output composed of straight lines"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:838
+msgid "B-splines"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:842
+msgid "Preserve staircaseing artifacts"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:862
+msgid "Pixel art"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:873
+msgid ""
+"Inkscape bitmap tracing \n"
+"is based on Potrace by Peter Selinger\n"
+"and on autotrace"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:886 ../share/extensions/hershey.inx:108
+msgid "Credits"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:961
+msgid "SIOX"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:965
+msgid "Cover the area you want to select as the foreground"
+msgstr ""
+
 #: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.xml:293
 msgid "_Help"
 msgstr ""
@@ -34852,10 +35054,6 @@ msgid ""
 "For extended help, click \"Apply\" with this tab selected.\n"
 "\n"
 "  "
-msgstr ""
-
-#: ../share/extensions/hershey.inx:108
-msgid "Credits"
 msgstr ""
 
 #: ../share/extensions/hershey.inx:109

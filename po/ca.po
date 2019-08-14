@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-08-14 11:29+0200\n"
+"POT-Creation-Date: 2019-08-14 11:45+0200\n"
 "PO-Revision-Date: 2019-03-03 11:01+0100\n"
 "Last-Translator: \n"
 "Language-Team: Catalan <gnome@llistes.softcatala.org>\n"
@@ -15334,18 +15334,6 @@ msgstr "<b>No hi ha textos flotants</b> per convertir en la selecció."
 #: ../src/text-editing.cpp:43
 msgid "You cannot edit <b>cloned character data</b>."
 msgstr "No podeu editar les <b>dades del caràcter clonat</b>."
-
-#: ../src/trace/depixelize/inkscape-depixelize.cpp:82
-msgid ""
-"Image looks too big. Process may take a while and it is wise to save your "
-"document before continuing.\n"
-"\n"
-"Continue the procedure (without saving)?"
-msgstr ""
-"La imatge és massa gran. El procés trigarà una estona i us aconsellem desar "
-"el document abans de continuar.\n"
-"\n"
-"Voleu continuar (sense desar)?"
 
 #: ../src/trace/potrace/inkscape-potrace.cpp:522
 #: ../src/trace/potrace/inkscape-potrace.cpp:585
@@ -42247,6 +42235,17 @@ msgstr ""
 #: ../share/ui/units.xml:99
 msgid "Half of font height"
 msgstr ""
+
+#~ msgid ""
+#~ "Image looks too big. Process may take a while and it is wise to save your "
+#~ "document before continuing.\n"
+#~ "\n"
+#~ "Continue the procedure (without saving)?"
+#~ msgstr ""
+#~ "La imatge és massa gran. El procés trigarà una estona i us aconsellem "
+#~ "desar el document abans de continuar.\n"
+#~ "\n"
+#~ "Voleu continuar (sense desar)?"
 
 #~ msgid "odd-even"
 #~ msgstr "imparell-parell"

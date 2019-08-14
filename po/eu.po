@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape 0.91\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-08-14 11:29+0200\n"
+"POT-Creation-Date: 2019-08-14 11:45+0200\n"
 "PO-Revision-Date: 2019-07-18 16:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asier.sarasua@gmail.com>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
@@ -15198,18 +15198,6 @@ msgstr "<b>Ez dago testu mugikorrik</b> bihurtzeko hautapenean."
 #: ../src/text-editing.cpp:43
 msgid "You cannot edit <b>cloned character data</b>."
 msgstr "Ezin duzu <b>klonatutako karakterearen datuak</b> editatu"
-
-#: ../src/trace/depixelize/inkscape-depixelize.cpp:82
-msgid ""
-"Image looks too big. Process may take a while and it is wise to save your "
-"document before continuing.\n"
-"\n"
-"Continue the procedure (without saving)?"
-msgstr ""
-"Irudia handiegia dela dirudi. Prozesuak denbora behar lezake, eta egokia "
-"litzateke zure dokumentua gordetzea aurrera jarraitu aurretik.\n"
-"\n"
-"Prozesuarekin jarraitu (gorde gabe)?"
 
 #: ../src/trace/potrace/inkscape-potrace.cpp:522
 #: ../src/trace/potrace/inkscape-potrace.cpp:585
@@ -41888,6 +41876,17 @@ msgstr "half-ems"
 #: ../share/ui/units.xml:99
 msgid "Half of font height"
 msgstr "Letra-altueraren erdia"
+
+#~ msgid ""
+#~ "Image looks too big. Process may take a while and it is wise to save your "
+#~ "document before continuing.\n"
+#~ "\n"
+#~ "Continue the procedure (without saving)?"
+#~ msgstr ""
+#~ "Irudia handiegia dela dirudi. Prozesuak denbora behar lezake, eta egokia "
+#~ "litzateke zure dokumentua gordetzea aurrera jarraitu aurretik.\n"
+#~ "\n"
+#~ "Prozesuarekin jarraitu (gorde gabe)?"
 
 #~ msgid "Power clip allows to reverse a clip, flatten it..."
 #~ msgstr ""

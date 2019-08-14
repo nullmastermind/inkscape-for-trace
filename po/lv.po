@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-08-14 11:29+0200\n"
+"POT-Creation-Date: 2019-08-14 11:45+0200\n"
 "PO-Revision-Date: 2016-12-31 14:38+0200\n"
 "Last-Translator: Jānis Eisaks <je@dv.lv>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
@@ -15273,18 +15273,6 @@ msgstr "Atlasītajā <b>nav</b> pārvēršama(-u) <b>aizpildošā(-o) teksta(-u)
 #: ../src/text-editing.cpp:43
 msgid "You cannot edit <b>cloned character data</b>."
 msgstr " <b>Klonētu rakstzīmju datus</b> labot nav iespējams."
-
-#: ../src/trace/depixelize/inkscape-depixelize.cpp:82
-msgid ""
-"Image looks too big. Process may take a while and it is wise to save your "
-"document before continuing.\n"
-"\n"
-"Continue the procedure (without saving)?"
-msgstr ""
-"Attēls izskatās pārāk liels. Process var prasīt zināmu laiku un būtu prātīgi "
-"pirms turpināšanas saglabāt dokumentu .\n"
-"\n"
-"Turpināt darbību (bez saglabāšanas)?"
 
 #: ../src/trace/potrace/inkscape-potrace.cpp:522
 #: ../src/trace/potrace/inkscape-potrace.cpp:585
@@ -42120,6 +42108,17 @@ msgstr ""
 #: ../share/ui/units.xml:99
 msgid "Half of font height"
 msgstr ""
+
+#~ msgid ""
+#~ "Image looks too big. Process may take a while and it is wise to save your "
+#~ "document before continuing.\n"
+#~ "\n"
+#~ "Continue the procedure (without saving)?"
+#~ msgstr ""
+#~ "Attēls izskatās pārāk liels. Process var prasīt zināmu laiku un būtu "
+#~ "prātīgi pirms turpināšanas saglabāt dokumentu .\n"
+#~ "\n"
+#~ "Turpināt darbību (bez saglabāšanas)?"
 
 #, fuzzy
 #~ msgid "odd-even"
