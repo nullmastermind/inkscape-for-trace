@@ -20,14 +20,25 @@
 
 #define sp_round(v,m) (((v) < 0.0) ? ((ceil((v) / (m) - 0.5)) * (m)) : ((floor((v) / (m) + 0.5)) * (m)))
 
+// "primary" modifier: Ctrl on Linux/Windows and Cmd on macOS.
+// note: Could query this at runtime with
+// `gdk_keymap_get_modifier_mask(..., GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR)`
+#ifdef GDK_WINDOWING_QUARTZ
+#define INK_GDK_PRIMARY_MASK GDK_MOD2_MASK
+#else
+#define INK_GDK_PRIMARY_MASK GDK_CONTROL_MASK
+#endif
+
+// all modifiers used by Inkscape
+#define INK_GDK_MODIFIER_MASK (GDK_SHIFT_MASK | INK_GDK_PRIMARY_MASK | GDK_MOD1_MASK)
 
 // keyboard modifiers in an event
 #define MOD__SHIFT(event) ((event)->key.state & GDK_SHIFT_MASK)
-#define MOD__CTRL(event) ((event)->key.state & GDK_CONTROL_MASK)
+#define MOD__CTRL(event) ((event)->key.state & INK_GDK_PRIMARY_MASK)
 #define MOD__ALT(event) ((event)->key.state & GDK_MOD1_MASK)
-#define MOD__SHIFT_ONLY(event) (((event)->key.state & GDK_SHIFT_MASK) && !((event)->key.state & GDK_CONTROL_MASK) && !((event)->key.state & GDK_MOD1_MASK))
-#define MOD__CTRL_ONLY(event) (!((event)->key.state & GDK_SHIFT_MASK) && ((event)->key.state & GDK_CONTROL_MASK) && !((event)->key.state & GDK_MOD1_MASK))
-#define MOD__ALT_ONLY(event) (!((event)->key.state & GDK_SHIFT_MASK) && !((event)->key.state & GDK_CONTROL_MASK) && ((event)->key.state & GDK_MOD1_MASK))
+#define MOD__SHIFT_ONLY(event) (((event)->key.state & INK_GDK_MODIFIER_MASK) == GDK_SHIFT_MASK)
+#define MOD__CTRL_ONLY(event) (((event)->key.state & INK_GDK_MODIFIER_MASK) == INK_GDK_PRIMARY_MASK)
+#define MOD__ALT_ONLY(event) (((event)->key.state & INK_GDK_MODIFIER_MASK) == GDK_MOD1_MASK)
 
 #endif  // SEEN_MACROS_H
 

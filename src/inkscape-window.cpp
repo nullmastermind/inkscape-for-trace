@@ -120,11 +120,24 @@ InkscapeWindow::change_document(SPDocument* document)
     }
 }
 
+/**
+ * Return true if this is the Cmd-Q shortcut on macOS
+ */
+inline bool is_Cmd_Q(GdkEventKey *event)
+{
+#ifdef GDK_WINDOWING_QUARTZ
+    return (event->keyval == 'q' && event->state == (GDK_MOD2_MASK | GDK_META_MASK));
+#else
+    return false;
+#endif
+}
+
 bool
 InkscapeWindow::on_key_press_event(GdkEventKey* event)
 {
     // Need to call base class method first or text tool won't work!
-    bool done = Gtk::Window::on_key_press_event(event);
+    // Intercept Cmd-Q on macOS to not bypass confirmation dialog
+    bool done = !is_Cmd_Q(event) && Gtk::Window::on_key_press_event(event);
     if (done) {
         return true;
     }

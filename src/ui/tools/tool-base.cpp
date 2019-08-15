@@ -1320,7 +1320,26 @@ guint get_latin_keyval(GdkEventKey const *event, guint *consumed_modifiers /*= N
             &keyval, nullptr, nullptr, &modifiers);
 
     if (consumed_modifiers) {
+#ifndef GDK_WINDOWING_QUARTZ
         *consumed_modifiers = modifiers;
+#else
+        // gdk_quartz_keymap_translate_keyboard_state fills the `consumed_modifiers`
+        // incorrectly, e.g. assigns 0xB instead of 0x0 when no modifiers pressed.
+
+        *consumed_modifiers = 0;
+
+        for (unsigned mod = 1, statemask = (event->state & GDK_MODIFIER_MASK); mod <= statemask; mod <<= 1) {
+            if ((mod & statemask)) {
+                guint keyval_no_mod = 0;
+                gdk_keymap_translate_keyboard_state(Gdk::Display::get_default()->get_keymap(), event->hardware_keycode,
+                                                    (GdkModifierType)(event->state & ~mod), group, &keyval_no_mod,
+                                                    nullptr, nullptr, nullptr);
+                if (keyval_no_mod != keyval) {
+                    *consumed_modifiers |= mod;
+                }
+            }
+        }
+#endif
     }
     return keyval;
 }

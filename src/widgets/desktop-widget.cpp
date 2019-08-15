@@ -952,7 +952,9 @@ sp_desktop_widget_realize (GtkWidget *widget)
     if (osxapp && menushell && window) {
         menushell->set_parent(*window);
         gtkosx_application_set_menu_bar(osxapp, menushell->gobj());
-        gtkosx_application_set_use_quartz_accelerators(osxapp, true);
+        // using quartz accelerators gives menu shortcuts priority over everything else,
+        // messes up text input because Inkscape has single key shortcuts (e.g. 1-6).
+        gtkosx_application_set_use_quartz_accelerators(osxapp, false);
         gtkosx_application_set_help_menu(osxapp, _get_help_menu(menushell->gobj()));
         gtkosx_application_set_window_menu(osxapp, nullptr);
     }
