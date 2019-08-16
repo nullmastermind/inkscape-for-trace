@@ -96,6 +96,7 @@ private:
     std::vector<SPUse*> useInDoc( SPDocument* document);
     void beforeSearch(GdkEventKey* evt);
     void unsensitive(GdkEventKey* evt);
+    void searchsymbols();
     void addSymbols();
     void addSymbolsInDoc(SPDocument* document);
     void showOverlay();
@@ -117,6 +118,7 @@ private:
     int scale_factor;
     bool sensitive;
     double previous_height;
+    double previous_width;
     bool all_docs_processed;
     size_t number_docs;
     size_t number_symbols;

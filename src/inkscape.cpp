@@ -516,6 +516,7 @@ Glib::ustring Application::get_symbolic_colors()
     sp_svg_write_color(colornamedsuccess, sizeof(colornamedsuccess), colorsetsuccess);
     sp_svg_write_color(colornamedwarning, sizeof(colornamedwarning), colorsetwarning);
     sp_svg_write_color(colornamederror, sizeof(colornamederror), colorseterror);
+    colorsetbase_inverse = colorsetbase ^ 0xffffff00;
     sp_svg_write_color(colornamed_inverse, sizeof(colornamed_inverse), colorsetbase_inverse);
     css_str += "*{-gtk-icon-palette: success ";
     css_str += colornamedsuccess;
@@ -525,13 +526,16 @@ Glib::ustring Application::get_symbolic_colors()
     css_str += colornamederror;
     css_str += ";}";
     css_str += "#InkRuler,";
-    css_str += ".bright image, .dark image";
+    css_str += "image:not(.rawimage)";
     css_str += "{color:";
     css_str += colornamed;
     css_str += ";}";
-    css_str += ".dark .brightstyle image,";
-    css_str += ".bright .darkstyle image,";
-    css_str += ".invertstyle image";
+    css_str += ".dark .forcebright image:not(.rawimage),";
+    css_str += ".bright .forcedark image:not(.rawimage),";
+    css_str += ".dark image.forcebright:not(.rawimage),";
+    css_str += ".bright image.forcedark:not(.rawimage),";
+    css_str += ".invert image:not(.rawimage),";
+    css_str += "image.invert:not(.rawimage)";
     css_str += "{color:";
     css_str += colornamed_inverse;
     css_str += ";}";

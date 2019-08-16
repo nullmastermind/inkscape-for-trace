@@ -66,10 +66,7 @@
     * ::::::: Color based
     * ::::::: apply to colors
     * ::::::: scope widget and all his childs
-    * ".invertstyle" invert window colors
-    * ".brightstyle" force bright colors no matter the UI is dark or bright
-    * ".darkstyle" same but dark
-    * ".defaultstyle" use default window color for child wigets inside a modified one
+    * ".invert" invert colors
     * :::::::: Icon Based.
     * ".symbolic" Force icon symbolic
     * ".regular" Force colorful icons
@@ -77,8 +74,8 @@
     * "..combobright" Combo bright
     */
 
-*:disabled image{
-    opacity:0.4;
+*:disabled image {
+    opacity: 0.4;
 }
 
 image {
@@ -94,24 +91,37 @@ image {
     -gtk-icon-style: regular;
 }
 
-.bright .brightstyle,
-.bright .brightstyle *,
-.dark .darkstyle,
-.dark .darkstyle * {
-    color: @theme_fg_color;
-    background-color: @theme_bg_color;
-    background-image: image(@theme_bg_color);
-}
-
-.bright .darkstyle,
-.bright .darkstyle *,
-.dark .brightstyle,
-.dark .brightstyle *,
-.invertstyle,
-.invertstyle * {
+.invert {
     color: @theme_bg_color;
     background-color: @theme_fg_color;
     background-image: image(@theme_fg_color);
+}
+
+.dark .forcebright {
+    color: @theme_bg_color;
+    background-color: @theme_fg_color;
+    background-image: image(@theme_fg_color);
+}
+
+.bright .forcedark {
+    color: @theme_bg_color;
+    background-color: @theme_fg_color;
+    background-image: image(@theme_fg_color);
+}
+
+.invert :not(overshoot):not(undershoot):not(.rawimage) {
+    color: inherit;
+    background-color: inherit;
+}
+
+.dark .forcebright :not(overshoot):not(undershoot):not(.rawimage) {
+    color: inherit;
+    background-color: inherit;
+}
+
+.bright .forcedark :not(overshoot):not(undershoot):not(.rawimage) {
+    color: inherit;
+    background-color: inherit;
 }
 
 .combobright * {
@@ -127,12 +137,6 @@ image {
     background-image: image(@theme_text_color);
     border-radius: 4px;
 }
-
-
-/* 'GtkWidget' for Gtk  <= 3.18   */
-
-
-/* 'widget'    for Gtk  <= 3.19.2 */
 
 
 /* 
@@ -163,51 +167,34 @@ image.disabled,
     opacity: 0.35;
 }
 
-GtkWidget,
-widget {
-    /*    font-size: 12pt; */
-}
-
-GtkSpinButton {
-    padding: 0;
-    outline-style: none;
-}
-
 spinbutton {
     padding: 0;
     outline-style: none;
 }
 
-GtkSpinButton entry {
-    padding-left: 2px;
-    padding-right: 0;
-}
-
 spinbutton entry {
     padding-left: 2px;
     padding-right: 0;
-}
-
-GtkSpinButton undershoot {
-    outline-style: none;
 }
 
 spinbutton undershoot {
     outline-style: none;
 }
 
-GtkSpinButton entry {
-    padding-left: 2px;
-    padding-right: 0;
-}
-
 spinbutton entry {
     padding-left: 2px;
     padding-right: 0;
 }
 
-GtkSpinButton undershoot {
-    outline-style: none;
+iconview *:hover {
+    border-width: 1px;
+    border-color: @theme_fg_color;
+    border-style: solid;
+    border-radius: 4px;
+}
+
+.dark iconview *:hover {
+    border-color: @theme_bg_color;
 }
 
 spinbutton undershoot {
@@ -327,6 +314,7 @@ spinbutton undershoot {
 #InkRuler {
     font-size: 7pt;
 }
+
 
 /* The actual canvas (Inkscape's drawing area). */
 
