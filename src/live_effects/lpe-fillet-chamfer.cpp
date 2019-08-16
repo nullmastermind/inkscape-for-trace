@@ -344,7 +344,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         } else {
             satellites_param.setGlobalKnotHide(false);
         }
-         for (size_t i = 0; i < satellites.size(); ++i) {
+        for (size_t i = 0; i < satellites.size(); ++i) {
             for (size_t j = 0; j < satellites[i].size(); ++j) {
                 if (j >= pathv[i].size()) {
                     continue;
@@ -375,7 +375,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         satellites_param.setPathVectorSatellites(_pathvector_satellites, write);
         refreshKnots();
         Glib::ustring current_unit = Glib::ustring(unit.get_abbreviation());
-        if (previous_unit != current_unit) {
+        if (previous_unit != current_unit && previous_unit != "") {
             updateAmount();
         }
         previous_unit = current_unit;
