@@ -68,7 +68,6 @@ public:
     bool over_text; // true if cursor is over a text object
 
     guint dragging : 2; // dragging selection over text
-
     bool creating; // dragging rubberband to create flowtext
     SPCanvasItem *grabbed; // we grab while we are creating, to get events even if the mouse goes out of the window
     Geom::Point p0; // initial point if the flowtext rect

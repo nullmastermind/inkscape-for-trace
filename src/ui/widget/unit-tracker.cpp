@@ -85,6 +85,12 @@ Inkscape::Util::Unit const * UnitTracker::getActiveUnit() const
     return _activeUnit;
 }
 
+void UnitTracker::changeLabel(Glib::ustring new_label, gint pos)
+{
+    ComboToolItemColumns columns;
+    _store->children()[pos][columns.col_label] = new_label;
+}
+
 void UnitTracker::setActiveUnit(Inkscape::Util::Unit const *unit)
 {
     if (unit) {
