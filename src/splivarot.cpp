@@ -2241,7 +2241,7 @@ sp_selected_path_simplify_items(SPDesktop *desktop,
           continue;
 
         if (simplifyIndividualPaths) {
-            Geom::OptRect itemBbox = item->desktopVisualBounds();
+            Geom::OptRect itemBbox = item->documentVisualBounds();
             if (itemBbox) {
                 simplifySize      = L2(itemBbox->dimensions());
             } else {

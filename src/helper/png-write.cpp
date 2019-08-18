@@ -407,6 +407,11 @@ ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
                               width, height, xdpi, ydpi, bgcolor, status, data, force_overwrite, items_only, interlace, color_type, bit_depth, zlib, antialiasing);
 }
 
+/**
+ * Export an area to a PNG file
+ *
+ * @param area Area in document coordinates
+ */
 ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
                                 Geom::Rect const &area,
                                 unsigned long width, unsigned long height, double xdpi, double ydpi,
@@ -430,7 +435,7 @@ ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
     doc->ensureUpToDate();
 
     /* Calculate translation by transforming to document coordinates (flipping Y)*/
-    Geom::Point translation = -(area * doc->dt2doc()).min();
+    Geom::Point translation = -area.min();
 
     /*  This calculation is only valid when assumed that (x0,y0)= area.corner(0) and (x1,y1) = area.corner(2)
      * 1) a[0] * x0 + a[2] * y1 + a[4] = 0.0

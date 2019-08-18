@@ -723,13 +723,17 @@ void NodeTool::update_tip(GdkEvent *event) {
     }
 }
 
+/**
+ * @param sel Area in desktop coordinates
+ */
 void NodeTool::select_area(Geom::Rect const &sel, GdkEventButton *event) {
     using namespace Inkscape::UI;
 
     if (this->_multipath->empty()) {
         // if multipath is empty, select rubberbanded items rather than nodes
         Inkscape::Selection *selection = this->desktop->selection;
-        std::vector<SPItem*> items = this->desktop->getDocument()->getItemsInBox(this->desktop->dkey, sel);
+        auto sel_doc = desktop->dt2doc() * sel;
+        std::vector<SPItem*> items = this->desktop->getDocument()->getItemsInBox(this->desktop->dkey, sel_doc);
         selection->setList(items);
     } else {
         if (!held_shift(*event)) {

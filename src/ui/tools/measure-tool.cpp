@@ -1260,8 +1260,10 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
     dimension_offset = 70;
     Geom::PathVector lineseg;
     Geom::Path p;
-    p.start(desktop->dt2doc(start_p));
-    p.appendNew<Geom::LineSegment>(desktop->dt2doc(end_p));
+    Geom::Point start_p_doc = start_p * desktop->dt2doc();
+    Geom::Point end_p_doc = end_p * desktop->dt2doc();
+    p.start(start_p_doc);
+    p.appendNew<Geom::LineSegment>(end_p_doc);
     lineseg.push_back(p);
 
     double angle = atan2(end_p - start_p);
@@ -1274,7 +1276,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
 
     std::vector<SPItem*> items;
     SPDocument *doc = desktop->getDocument();
-    Geom::Rect rect(start_p, end_p);
+    Geom::Rect rect(start_p_doc, end_p_doc);
     items = doc->getItemsPartiallyInBox(desktop->dkey, rect, false, true, false, true);
     Inkscape::LayerModel *layer_model = nullptr;
     SPObject *current_layer = nullptr;

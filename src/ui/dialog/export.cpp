@@ -1050,7 +1050,7 @@ void Export::onExport ()
             }
             pHYs = (pHYs_adj->get_value() > 0.01) ? pHYs_adj->get_value() : dpi;
 
-            Geom::OptRect area = item->desktopVisualBounds();
+            Geom::OptRect area = item->documentVisualBounds();
             if (area) {
                 gint width = (gint) (area->width() * dpi / DPI_BASE + 0.5);
                 gint height = (gint) (area->height() * dpi / DPI_BASE + 0.5);
@@ -1154,11 +1154,13 @@ void Export::onExport ()
         prog_dlg->set_data("current", GINT_TO_POINTER(0));
         prog_dlg->set_data("total", GINT_TO_POINTER(0));
 
+        auto area = Geom::Rect(Geom::Point(x0, y0), Geom::Point(x1, y1)) * desktop->dt2doc();
+
         /* Do export */
         std::vector<SPItem*> x;
         std::vector<SPItem*> selected(desktop->getSelection()->items().begin(), desktop->getSelection()->items().end());
         ExportResult status = sp_export_png_file(desktop->getDocument(), path.c_str(),
-                              Geom::Rect(Geom::Point(x0, y0), Geom::Point(x1, y1)), width, height, pHYs, pHYs, //previously xdpi, ydpi. 
+                              area, width, height, pHYs, pHYs, //previously xdpi, ydpi.
                               nv->pagecolor,
                               onProgressCallback, (void*)prog_dlg,
                               FALSE,

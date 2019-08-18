@@ -527,7 +527,6 @@ static bool fit_item(SPDesktop *desktop,
     sp_spray_transform_path(item, path, Geom::Scale(scale), center);
     sp_spray_transform_path(item, path, Geom::Rotate(angle), center);
     path *= Geom::Translate(move);
-    path *= desktop->doc2dt();
     bbox_procesed = path.boundsFast();
     double bbox_left_main = bbox_procesed->left();
     double bbox_right_main = bbox_procesed->right();
@@ -535,7 +534,7 @@ static bool fit_item(SPDesktop *desktop,
     double bbox_bottom_main = bbox_procesed->bottom();
     double width_transformed = bbox_procesed->width();
     double height_transformed = bbox_procesed->height();
-    Geom::Point mid_point = desktop->d2w(bbox_procesed->midpoint());
+    Geom::Point mid_point = desktop->d2w(bbox_procesed->midpoint() * desktop->doc2dt());
     Geom::IntRect area = Geom::IntRect::from_xywh(floor(mid_point[Geom::X]), floor(mid_point[Geom::Y]), 1, 1);
     guint32 rgba = getPickerData(area);
     guint32 rgba2 = 0xffffff00;

@@ -126,6 +126,9 @@ void Inkscape::Rubberband::setMode(int mode)
     _mode = mode;
 }
 
+/**
+ * @return Rectangle in desktop coordinates
+ */
 Geom::OptRect Inkscape::Rubberband::getRectangle() const
 {
     if (!_started) {

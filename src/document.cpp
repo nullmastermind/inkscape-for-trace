@@ -819,7 +819,7 @@ Geom::OptRect SPDocument::preferredBounds() const
  * Given a Geom::Rect that may, for example, correspond to the bbox of an object,
  * this function fits the canvas to that rect by resizing the canvas
  * and translating the document root into position.
- * \param rect fit document size to this
+ * \param rect fit document size to this, in document coordinates
  * \param with_margins add margins to rect, by taking margins from this
  *        document's namedview (<sodipodi:namedview> "fit-margin-..."
  *        attributes, and "units")
@@ -829,7 +829,6 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
     double const w = rect.width();
     double const h = rect.height();
 
-    double const old_height = getHeight().value("px");
     Inkscape::Util::Unit const *nv_units = unit_table.getUnit("px");
     if (root->height.unit && (root->height.unit != SVGLength::PERCENT))
         nv_units = unit_table.getUnit(root->height.unit);
@@ -856,26 +855,26 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
 
     double y_dir = yaxisdir();
 
-    if (y_dir > 0) {
-        std::swap(margin_top, margin_bottom);
-    }
-
     Geom::Rect const rect_with_margins(
-            rect.min() - Geom::Point(margin_left, margin_bottom),
-            rect.max() + Geom::Point(margin_right, margin_top));
+            rect.min() - Geom::Point(margin_left, margin_top),
+            rect.max() + Geom::Point(margin_right, margin_bottom));
+
+    // rect in desktop coordinates before changing document dimensions
+    auto rect_with_margins_dt_old = rect_with_margins * doc2dt();
 
     setWidthAndHeight(
         Inkscape::Util::Quantity(Inkscape::Util::Quantity::convert(rect_with_margins.width(),  "px", nv_units), nv_units),
         Inkscape::Util::Quantity(Inkscape::Util::Quantity::convert(rect_with_margins.height(), "px", nv_units), nv_units)
         );
 
-    Geom::Translate const tr(
-            Geom::Point(0, (y_dir > 0) ? 0 : old_height - rect_with_margins.height())
-            - rect_with_margins.min());
+    // rect in desktop coordinates after changing document dimensions
+    auto rect_with_margins_dt_new = rect_with_margins * doc2dt();
+
+    Geom::Translate const tr(-rect_with_margins_dt_new.min());
     root->translateChildItems(tr);
 
     if(nv) {
-        Geom::Translate tr2(-rect_with_margins.min());
+        Geom::Translate tr2(-rect_with_margins_dt_old.min());
         nv->translateGuides(tr2);
         nv->translateGrids(tr2);
 
@@ -1308,6 +1307,9 @@ static bool overlaps(Geom::Rect const &area, Geom::Rect const &box)
     return area.intersects(box);
 }
 
+/**
+ * @param area Area in document coordinates
+ */
 static std::vector<SPItem*> &find_items_in_area(std::vector<SPItem*> &s,
                                                 SPGroup *group, unsigned int dkey,
                                                 Geom::Rect const &area,
@@ -1330,7 +1332,7 @@ static std::vector<SPItem*> &find_items_in_area(std::vector<SPItem*> &s,
                     continue;
                 }
             }
-            Geom::OptRect box = item->desktopVisualBounds();
+            Geom::OptRect box = item->documentVisualBounds();
             if (box && test(area, *box)
                 && (take_insensitive || !item->isLocked())
                 && (take_hidden || !item->isHidden()))
@@ -1488,11 +1490,10 @@ static SPItem *find_group_at_point(unsigned int dkey, SPGroup *group, Geom::Poin
 }
 
 
-/*
+/**
  * Return list of items, contained in box
  *
- * Assumes box is normalized (and g_asserts it!)
- *
+ * @param box area to find items, in document coordinates
  */
 
 std::vector<SPItem*> SPDocument::getItemsInBox(unsigned int dkey, Geom::Rect const &box, bool take_hidden, bool take_insensitive, bool take_groups, bool enter_groups) const
@@ -1501,10 +1502,10 @@ std::vector<SPItem*> SPDocument::getItemsInBox(unsigned int dkey, Geom::Rect con
     return find_items_in_area(x, SP_GROUP(this->root), dkey, box, is_within, take_hidden, take_insensitive, take_groups, enter_groups);
 }
 
-/*
- * Assumes box is normalized (and g_asserts it!)
+/**
+ * Get items whose bounding box overlaps with given area.
  * @param dkey desktop view in use
- * @param box area to find items
+ * @param box area to find items, in document coordinates
  * @param take_hidden get hidden items
  * @param take_insensitive get insensitive items
  * @param take_groups get also the groups

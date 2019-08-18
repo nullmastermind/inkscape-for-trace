@@ -670,7 +670,7 @@ void EraserTool::set_to_accumulated() {
             Inkscape::XML::Document *xml_doc = this->desktop->doc()->getReprDoc();
 
             SPItem* acid = SP_ITEM(this->desktop->doc()->getObjectByRepr(this->repr));
-            eraserBbox = acid->desktopVisualBounds();
+            eraserBbox = acid->documentVisualBounds();
             std::vector<SPItem*> remainingItems;
             std::vector<SPItem*> toWorkOn;
             if (selection->isEmpty()) {
@@ -709,7 +709,7 @@ void EraserTool::set_to_accumulated() {
                         } else if (SP_IS_GROUP(item) || use ) {
                             /*Do nothing*/
                         } else {
-                            Geom::OptRect bbox = item->desktopVisualBounds();
+                            Geom::OptRect bbox = item->documentVisualBounds();
                             if (bbox && bbox->intersects(*eraserBbox)) {
                                 Inkscape::XML::Node* dup = this->repr->duplicate(xml_doc);
                                 this->repr->parent()->appendChild(dup);
@@ -758,7 +758,7 @@ void EraserTool::set_to_accumulated() {
                         for (std::vector<SPItem*>::const_iterator i = toWorkOn.begin(); i != toWorkOn.end(); ++i){
                             selection->clear();
                             SPItem *item = *i;
-                            Geom::OptRect bbox = item->desktopVisualBounds();
+                            Geom::OptRect bbox = item->documentVisualBounds();
                             Inkscape::XML::Document *xml_doc = this->desktop->doc()->getReprDoc();
                             Inkscape::XML::Node* dup = this->repr->duplicate(xml_doc);
                             this->repr->parent()->appendChild(dup);
@@ -800,7 +800,8 @@ void EraserTool::set_to_accumulated() {
                                     SPRect * rect = SP_RECT(item_repr->parent->appendChildRepr(rect_repr));
                                     Inkscape::GC::release(rect_repr);
                                     rect->setPosition (bbox->left(), bbox->top(), bbox->width(), bbox->height());
-                                    rect->transform = SP_ITEM(rect->parent)->i2dt_affine().inverse();
+                                    rect->transform = SP_ITEM(rect->parent)->i2doc_affine().inverse();
+
                                     rect->updateRepr();
                                     rect->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
                                     selection->raiseToTop(true);

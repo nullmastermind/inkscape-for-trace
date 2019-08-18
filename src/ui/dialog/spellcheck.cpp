@@ -252,15 +252,14 @@ bool SpellCheck::compareTextBboxes (gconstpointer a, gconstpointer b)//returns a
     SPItem *i1 = SP_ITEM(a);
     SPItem *i2 = SP_ITEM(b);
 
-    Geom::OptRect bbox1 = i1->desktopVisualBounds();
-    Geom::OptRect bbox2 = i2->desktopVisualBounds();
+    Geom::OptRect bbox1 = i1->documentVisualBounds();
+    Geom::OptRect bbox2 = i2->documentVisualBounds();
     if (!bbox1 || !bbox2) {
         return false;
     }
 
     // vector between top left corners
-    Geom::Point diff = Geom::Point(bbox2->min()[Geom::X], bbox2->max()[Geom::Y]) -
-                       Geom::Point(bbox1->min()[Geom::X], bbox1->max()[Geom::Y]);
+    Geom::Point diff = bbox1->min() - bbox2->min();
 
     return diff[Geom::Y] == 0 ? (diff[Geom::X] < 0) : (diff[Geom::Y] < 0);
 }

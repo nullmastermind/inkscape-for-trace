@@ -480,7 +480,7 @@ InkFileExportCmd::do_export_png(SPDocument *doc, std::string filename_in)
         } else {
 
             // Export area drawing (explicit or if object is given).
-            Geom::OptRect areaMaybe = static_cast<SPItem *>(object)->desktopVisualBounds();
+            Geom::OptRect areaMaybe = static_cast<SPItem *>(object)->documentVisualBounds();
             if (areaMaybe) {
                 area = *areaMaybe;
             } else {

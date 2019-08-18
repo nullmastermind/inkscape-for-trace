@@ -412,7 +412,7 @@ void SPOffset::set_shape() {
 
         theRes->ConvertToForme (orig, 1, originaux);
 
-        Geom::OptRect bbox = this->desktopVisualBounds();
+        Geom::OptRect bbox = this->documentVisualBounds();
 
         if ( bbox ) {
             gdouble size = L2(bbox->dimensions());

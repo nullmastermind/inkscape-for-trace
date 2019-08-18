@@ -3611,7 +3611,7 @@ void ObjectSet::createBitmapCopy()
 
     // Get the bounding box of the selection
     doc->ensureUpToDate();
-    Geom::OptRect bbox = visualBounds();
+    Geom::OptRect bbox = documentBounds(SPItem::VISUAL_BBOX);
     if (!bbox) {
         if(desktop())
             desktop()->clearWaitingCursor();
@@ -3727,9 +3727,8 @@ void ObjectSet::createBitmapCopy()
     }
     Geom::Affine t;
 
-    auto bbox_doc = (*bbox) * doc->dt2doc();
-    double shift_x = bbox_doc.left();
-    double shift_y = bbox_doc.top();
+    double shift_x = bbox->left();
+    double shift_y = bbox->top();
     if (res == Inkscape::Util::Quantity::convert(1, "in", "px")) { // for default 96 dpi, snap it to pixel grid
         shift_x = round(shift_x);
         shift_y = round(shift_y);
@@ -4247,7 +4246,7 @@ bool ObjectSet::fitCanvas(bool with_margins, bool skip_undo)
             desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to fit canvas to."));
         return false;
     }
-    Geom::OptRect const bbox(visualBounds());
+    Geom::OptRect const bbox = documentBounds(SPItem::VISUAL_BBOX);
     if (bbox) {
         document()->fitToRect(*bbox, with_margins);
         if(!skip_undo)
@@ -4340,7 +4339,7 @@ fit_canvas_to_drawing(SPDocument *doc, bool with_margins)
 
     doc->ensureUpToDate();
     SPItem const *const root = doc->getRoot();
-    Geom::OptRect bbox = root->desktopVisualBounds();
+    Geom::OptRect bbox = root->documentVisualBounds();
     if (bbox) {
         doc->fitToRect(*bbox, with_margins);
         return true;

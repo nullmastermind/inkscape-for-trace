@@ -88,7 +88,8 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     }
     AddSeparator();
     /* Lock/Unock Hide/Unhide*/
-    Geom::Rect b(_desktop->point(),_desktop->point() + Geom::Point(1,1));
+    auto point_doc = _desktop->point() * _desktop->dt2doc();
+    Geom::Rect b(point_doc, point_doc + Geom::Point(1, 1));
     std::vector< SPItem * > down_items = _desktop->getDocument()->getItemsPartiallyInBox( _desktop->dkey, b, true, true, true, true);
     bool has_down_hidden = false;
     bool has_down_locked = false;
