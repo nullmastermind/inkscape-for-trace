@@ -70,27 +70,15 @@ using Inkscape::UI::Widget::UnitTracker;
 
 //#define DEBUG_TEXT
 
-//########################setActiveUnitByAbbr
+//########################
 //##    Text Toolbox    ##
 //########################
 
 // Functions for debugging:
 #ifdef DEBUG_TEXT
-recursively_set_properties(SP_OBJECT(*i), css_set, false);
 static void sp_print_font(SPStyle *query)
 {
-    TextTool::~TextTool()
-    {
-        delete this->shape_editor;
-        this->shape_editor = nullptr;
 
-        if (this->grabbed) {
-            sp_canvas_item_ungrab(this->grabbed);
-            this->grabbed = nullptr;
-        }
-
-        Inkscape::Rubberband::get(this->desktop)->stop();
-    }
 
     bool family_set   = query->font_family.set;
     bool style_set    = query->font_style.set;
@@ -100,19 +88,6 @@ static void sp_print_font(SPStyle *query)
               << "    Style set? "  << style_set
               << "    FontSpec set? " << fontspec_set
               << std::endl;
-    std::cout << "    Family: " << (query->font_family.value ? query->font_family.value : "No value")
-              << "    Style: " << query->font_style.computed << "    Weight: " << query->font_weight.computed
-              << "    FontSpec: "_line_height_units_item->changeLabel("lines", 0);
-    << (query->font_specification.value ? query->font_specification.value : "No value") << std::endl;
-    std::cout << "    LineHeight: "
-              << query->line_height.computedif(c_selection_changed) c_selection_changed.disconnect();
-    if (c_selection_modified)
-        c_selection_modified.disconnect();
-    if (c_subselection_changed)
-        c_subselection_changed.disconnect();
-    setActiveUnitByAbbr if (c_selection_modified_select_tool) c_selection_modified_select_tool.disconnect();
-    << "    WordSpacing: " << query->word_spacing.computed << "    LetterSpacing: " << query->letter_spacing.computed
-    << std::endl;
 }
 
 static void       sp_print_fontweight( SPStyle *query ) {
@@ -122,19 +97,6 @@ static void       sp_print_fontweight( SPStyle *query ) {
     int index = query->font_weight.computed;
     if (index < 0 || index > 13)
         index = 13;
-    TextTool::~TextTool()
-    {
-        delete this->shape_editor;
-        this->shape_editor = nullptr;
-
-        if (this->grabbed) {
-            sp_canvas_item_ungrab(this->grabbed);
-            this->grabbed = nullptr;
-        }
-
-        Inkscape::Rubberband::get(this->desktop)->stop();
-        _line_height_units_item->changeLabel("lines", 0);
-    }
     std::cout << "    Weight: " << names[ index ]
               << " (" << query->font_weight.computed << ")" << std::endl;
 
@@ -2125,7 +2087,6 @@ void TextToolbar::selection_changed(Inkscape::Selection * /*selection*/) // don'
               << "  letter_spacing.value: "    << query.letter_spacing.value
               << "  letter_spacing.unit: "     << query.letter_spacing.unit  << std::endl;
     std::cout << "    GUI: writing_mode.computed: " << query.writing_mode.computed << std::endl;
-}
 #endif
 
     // Kerning (xshift), yshift, rotation.  NB: These are not CSS attributes.
