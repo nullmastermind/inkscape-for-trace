@@ -2935,167 +2935,167 @@ msgctxt "Palette"
 msgid "Jet Black"
 msgstr "Brunasvart"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:1"
 msgstr "Rendur 1:1"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:1 white"
 msgstr "Rendur 1:1 hvítt"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:1.5"
 msgstr "Rendur 1:1.5"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:1.5 white"
 msgstr "Rendur 1:1.5 hvítt"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:2"
 msgstr "Rendur 1:2"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:2 white"
 msgstr "Rendur 1:2 hvítt"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:3"
 msgstr "Rendur 1:3"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:3 white"
 msgstr "Rendur 1:3 hvítt"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:4"
 msgstr "Rendur 1:4"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:4 white"
 msgstr "Rendur 1:4 hvítt"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:5"
 msgstr "Rendur 1:5"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:5 white"
 msgstr "Rendur 1:5 hvítt"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:8"
 msgstr "Rendur 1:8"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:8 white"
 msgstr "Rendur 1:8 hvítt"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:10"
 msgstr "Rendur 1:10"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:10 white"
 msgstr "Rendur 1:10 hvítt"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:16"
 msgstr "Rendur 1:16"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:16 white"
 msgstr "Rendur 1:16 hvítt"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:32"
 msgstr "Rendur 1:32"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:32 white"
 msgstr "Rendur 1:32 hvítt"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:64"
 msgstr "Rendur 1:64"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 2:1"
 msgstr "Rendur 2:1"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 2:1 white"
 msgstr "Rendur 2:1 hvítt"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 4:1"
 msgstr "Rendur 4:1"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 4:1 white"
 msgstr "Rendur 4:1 hvítt"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Checkerboard"
 msgstr "Köflótt"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Checkerboard white"
 msgstr "Köflótt hvítt"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Packed circles"
 msgstr "Pakkaðir hringir"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, small"
 msgstr "Polkapunktar, smáir"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, small white"
 msgstr "Polkapunktar, smáir hvítir"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, medium"
 msgstr "Polkapunktar, miðlungs"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, medium white"
 msgstr "Polkapunktar, miðlungs hvítir"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, large"
 msgstr "Polkapunktar, stórir"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, large white"
 msgstr "Polkapunktar, stórir hvítir"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Wavy"
 msgstr "Bylgjað"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Wavy white"
 msgstr "Bylgjað hvítt"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Camouflage"
 msgstr "Felulitir"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Ermine"
 msgstr "Hreysiköttur"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Sand (bitmap)"
 msgstr "Sandur (bitamynd)"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Cloth (bitmap)"
 msgstr "Klútur (bitamynd)"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Old paint (bitmap)"
 msgstr "Gömul málning (bitamynd)"
 

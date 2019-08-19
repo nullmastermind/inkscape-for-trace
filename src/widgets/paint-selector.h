@@ -54,6 +54,7 @@ struct SPPaintSelector {
         MODE_GRADIENT_MESH,
 #endif
         MODE_PATTERN,
+        MODE_HATCH,
         MODE_SWATCH,
         MODE_UNSET
     } ;

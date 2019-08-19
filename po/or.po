@@ -3114,167 +3114,167 @@ msgctxt "Palette"
 msgid "Jet Black"
 msgstr "କଳା"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:1"
 msgstr "ଧାରୀ 1.1"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:1 white"
 msgstr "ଧାରୀ 1:1 ଶ୍ବେତ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:1.5"
 msgstr "ଧାରୀ 1:1 .5"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:1.5 white"
 msgstr "ଧାରୀ 1:1.5 ଶ୍ବେତ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:2"
 msgstr "ଧାରୀ 1:2"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:2 white"
 msgstr "ଧାରୀ 1:2 ଶ୍ବେତ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:3"
 msgstr "ଧାରୀ 1: 3"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:3 white"
 msgstr "ଧାରୀ 1:3 ଶ୍ବେତ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:4"
 msgstr "ଧାରୀ 1:4 ଶ୍ବେତ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:4 white"
 msgstr "ଧାରୀ 1:4 ଶ୍ବେତ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:5"
 msgstr "ଧାରୀ 1:5 "
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:5 white"
 msgstr "ଧାରୀ 1:5 ଶ୍ବେତ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:8"
 msgstr "ଧାରୀ 1:8 "
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:8 white"
 msgstr "ଧାରୀ 1:8 ଶ୍ବେତ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:10"
 msgstr "ଧାରୀ 1:10 "
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:10 white"
 msgstr "ଧାରୀ 1:1o ଶ୍ବେତ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:16"
 msgstr "ଧାରୀ 1:16 "
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:16 white"
 msgstr "ଧାରୀ 1:16 ଶ୍ବେତ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:32"
 msgstr "ଧାରୀ 1:32"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:32 white"
 msgstr "ଧାରୀ 1:32 ଶ୍ବେତ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:64"
 msgstr "ଧାରୀ 1:64"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 2:1"
 msgstr "ଧାରୀ 2:1 "
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 2:1 white"
 msgstr "ଧାରୀ 2:1 ଶ୍ବେତ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 4:1"
 msgstr "ଧାରୀ 4:1 "
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 4:1 white"
 msgstr "ଧାରୀ 4:1 ଶ୍ବେତ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Checkerboard"
 msgstr "ଚେକରବୋର୍ଡ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Checkerboard white"
 msgstr "ଚେକରବୋର୍ଡ ଶ୍ବେତ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Packed circles"
 msgstr "ପ୍ୟାକ୍ଡ ବୃତ୍ତଗୁଡିକ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, small"
 msgstr "ପୋଲ୍କା ବିନ୍ଦୁଗୁଡ୍କ,ଛୋଟ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, small white"
 msgstr "ପୋଲ୍କା ବିନ୍ଦୁଗୁଡ୍କ,ଛୋଟ ଧଳା"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, medium"
 msgstr "ପୋଲ୍କା ବିନ୍ଦୁଗୁଡ୍କ,ମଧ୍ୟମ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, medium white"
 msgstr "ପୋଲ୍କା ବିନ୍ଦୁଗୁଡ୍କ,ମଧ୍ୟମ ଧବଳ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, large"
 msgstr "ପୋଲ୍କା ବିନ୍ଦୁଗୁଡ୍କ,ବୃହତ୍"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, large white"
 msgstr "ପୋଲ୍କା ବିନ୍ଦୁଗୁଡ୍କ,ବୃହତ୍ ଧବଳ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Wavy"
 msgstr "ତରଙ୍ଗାୟିତ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Wavy white"
 msgstr "ତରଙ୍ଗାୟିତ ଧବଳ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Camouflage"
 msgstr "ଛଳାବରଣ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Ermine"
 msgstr "ଏରମାଇନ୍"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Sand (bitmap)"
 msgstr "ବାଲି (ବିଟମ୍ୟାପ)"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Cloth (bitmap)"
 msgstr "କପଡ଼ା (ବିଟମ୍ୟାପ)"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Old paint (bitmap)"
 msgstr "ପୁରୁଣା ପେଣ୍ଟ (ବିଟମୟାପ୍)"
 

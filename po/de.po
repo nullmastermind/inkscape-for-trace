@@ -2988,167 +2988,167 @@ msgctxt "Palette"
 msgid "Jet Black"
 msgstr "Tiefschwarz"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:1"
 msgstr "Streifen 1:1"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:1 white"
 msgstr "Streifen 1:1 weiß"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:1.5"
 msgstr "Streifen 1:1,5"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:1.5 white"
 msgstr "Streifen 1:1.5 weiß"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:2"
 msgstr "Streifen 1:2"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:2 white"
 msgstr "Streifen 1:2 weiß"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:3"
 msgstr "Streifen 1:3"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:3 white"
 msgstr "Streifen 1:3 weiß"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:4"
 msgstr "Streifen 1:4"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:4 white"
 msgstr "Streifen 1:4 weiß"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:5"
 msgstr "Streifen 1:5"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:5 white"
 msgstr "Streifen 1:5 weiß"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:8"
 msgstr "Streifen 1:8"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:8 white"
 msgstr "Streifen 1:8 weiß"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:10"
 msgstr "Streifen 1:10"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:10 white"
 msgstr "Streifen 1:10 weiß"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:16"
 msgstr "Streifen 1:16"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:16 white"
 msgstr "Streifen 1:16 weiß"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:32"
 msgstr "Streifen 1:32"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:32 white"
 msgstr "Streifen 1:32 weiß"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:64"
 msgstr "Streifen 1:64"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 2:1"
 msgstr "Streifen 2:1"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 2:1 white"
 msgstr "Streifen 2:1 weiß"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 4:1"
 msgstr "Streifen 4:1"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 4:1 white"
 msgstr "Streifen 4:1 weiß"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Checkerboard"
 msgstr "Schachbrett"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Checkerboard white"
 msgstr "Schachbrett weiß"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Packed circles"
 msgstr "Kugelpackung"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, small"
 msgstr "Punkte, klein"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, small white"
 msgstr "Punkte, klein und weiß"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, medium"
 msgstr "Punkte, mittel"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, medium white"
 msgstr "Punkte, mittel und weiß"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, large"
 msgstr "Punkte, groß"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, large white"
 msgstr "Punkte, groß und weiß"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Wavy"
 msgstr "Wellig"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Wavy white"
 msgstr "Wellig Weiß"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Camouflage"
 msgstr "Camouflage"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Ermine"
 msgstr "Hermelin"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Sand (bitmap)"
 msgstr "Sand (Bitmap)"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Cloth (bitmap)"
 msgstr "Stoff (Bitmap)"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Old paint (bitmap)"
 msgstr "Alte Farbe (Bitmap)"
 

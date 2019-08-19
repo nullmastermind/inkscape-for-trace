@@ -3126,167 +3126,167 @@ msgctxt "Palette"
 msgid "Jet Black"
 msgstr "ខ្មៅ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:1"
 msgstr "ឆ្នូត 1:1"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:1 white"
 msgstr "ឆ្នូត 1:1 ពណ៌​ស"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:1.5"
 msgstr "ឆ្នូត 1:1.5"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:1.5 white"
 msgstr "ឆ្នូត 1:1.5 ពណ៌​ស"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:2"
 msgstr "ឆ្នូត 1:2"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:2 white"
 msgstr "ឆ្នូត 1:2 ពណ៌ស"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:3"
 msgstr "ឆ្នូត 1:3"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:3 white"
 msgstr "ឆ្នូត 1:3 ពណ៌ស"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:4"
 msgstr "ឆ្នូត 1:4"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:4 white"
 msgstr "ឆ្នូត 1:4 ពណ៌ស"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:5"
 msgstr "ឆ្នូត 1:5"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:5 white"
 msgstr "ឆ្នូត 1:5 ពណ៌ស"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:8"
 msgstr "ឆ្នូត 1:8"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:8 white"
 msgstr "ឆ្នូត 1:8 ពណ៌​ស"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:10"
 msgstr "ឆ្នូត 1:10"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:10 white"
 msgstr "ឆ្នូត 1:10 ពណ៌​ស"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:16"
 msgstr "ឆ្នូត 1:16"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:16 white"
 msgstr "ឆ្នូត 1:16 ពណ៌ស"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:32"
 msgstr "ឆ្នូត 1:32"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:32 white"
 msgstr "ឆ្នូត 1:32 ពណ៌ស"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:64"
 msgstr "ឆ្នូត 1:64"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 2:1"
 msgstr "ឆ្នូត 2:1"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 2:1 white"
 msgstr "ឆ្នូត 2:1 ពណ៌ស"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 4:1"
 msgstr "ឆ្នូត 4:1"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 4:1 white"
 msgstr "ឆ្នូត 4:1 ពណ៌ស"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Checkerboard"
 msgstr "ក្ដារ​អុក"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Checkerboard white"
 msgstr "ក្ដារ​អុក​ពណ៌​ស"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Packed circles"
 msgstr "រង្វង់​តម្រៀប​គ្នា"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, small"
 msgstr "ចំណុច​ Polka តូច​ៗ​"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, small white"
 msgstr "ចំណុច Polka តូច​ៗ​ពណ៌​ស"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, medium"
 msgstr "ចំណុច Polka មធ្យម"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, medium white"
 msgstr "ចំណុច Polka មធ្យម​ពណ៌​ស"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, large"
 msgstr "ចំណុច Polka ធំ​ៗ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, large white"
 msgstr "ចំណុច Polka ធំៗ​ពណ៌​ស"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Wavy"
 msgstr "ជា​រលក"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Wavy white"
 msgstr "រលក​ពណ៌​ស"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Camouflage"
 msgstr "បន្លំ"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Ermine"
 msgstr "កំប្រុកស"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Sand (bitmap)"
 msgstr "ខ្សាច់ (រូបភាព)"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Cloth (bitmap)"
 msgstr "ក្រណាត់ (រូបភាព)"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Old paint (bitmap)"
 msgstr "គំនូរ​ចាស់ (រូបភាព)"
 

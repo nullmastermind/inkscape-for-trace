@@ -6,11 +6,12 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   width="744.094"
-   height="1052.362"
+   width="475"
+   height="1280"
    id="InkscapePatterns"
    sodipodi:version="0.32"
-   inkscape:version="0.46dev+devel">
+   inkscape:version="1.0alpha2 (2d4d49aaa0, 2019-06-18, custom)">
+  <title>Patterns</title>
   <defs
      id="defs2387">
     <pattern
@@ -942,7 +943,7 @@
          height="260"
          id="image9"
          x="0"
-         y="0" 
+         y="0"
          xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQIAIwAjAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB
 AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEB
 AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAEEAQQDASIA
@@ -3051,7 +3052,7 @@ SUVORK5CYII=
          height="260"
          id="image10"
          x="0"
-         y="0" 
+         y="0"
          xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQIAIwAjAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcU
 FhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/wAALCAEEAQQBAREA/8QAGwAAAwEBAQEB
 AAAAAAAAAAAAAwQFBgIBAAf/xABFEAACAQMDAwIEBAMECQMEAgMBAgMEERIABSETIjEyQQYUQlEj
@@ -3544,4 +3545,166 @@ Jum5BFiA+acWC8cWA9+OANf/2Q==
 "/>
     </pattern>
   </defs>
+
+  <g>
+    <rect fill="#FFFFFF" width="100" height="100" x="15" y="15" />
+    <rect class="preview" fill="url(#Strips1_1)" width="100" height="100" x="15" y="15" />
+  </g>
+  <g>
+    <rect fill="#000000" width="100" height="100" x="130" y="15" />
+    <rect class="preview" fill="url(#Strips1_1white)" width="100" height="100" x="130" y="15" />
+  </g>
+  <g>
+    <rect fill="#FFFFFF" width="100" height="100" x="245" y="15" />
+    <rect class="preview" fill="url(#Strips1_1.5)" width="100" height="100" x="245" y="15" />
+  </g>
+  <g>
+    <rect fill="#000000" width="100" height="100" x="360" y="15" />
+    <rect class="preview" fill="url(#Strips1_1.5white)" width="100" height="100" x="360" y="15" />
+  </g>
+  <g>
+    <rect fill="#FFFFFF" width="100" height="100" x="15" y="130" />
+    <rect class="preview" fill="url(#Strips1_2)" width="100" height="100" x="15" y="130" />
+  </g>
+  <g>
+    <rect fill="#000000" width="100" height="100" x="130" y="130" />
+    <rect class="preview" fill="url(#Strips1_2white)" width="100" height="100" x="130" y="130" />
+  </g>
+  <g>
+    <rect fill="#FFFFFF" width="100" height="100" x="245" y="130" />
+    <rect class="preview" fill="url(#Strips1_3)" width="100" height="100" x="245" y="130" />
+  </g>
+  <g>
+    <rect fill="#000000" width="100" height="100" x="360" y="130" />
+    <rect class="preview" fill="url(#Strips1_3white)" width="100" height="100" x="360" y="130" />
+  </g>
+  <g>
+    <rect fill="#FFFFFF" width="100" height="100" x="15" y="245" />
+    <rect class="preview" fill="url(#Strips1_4)" width="100" height="100" x="15" y="245" />
+  </g>
+  <g>
+    <rect fill="#000000" width="100" height="100" x="130" y="245" />
+    <rect class="preview" fill="url(#Strips1_4white)" width="100" height="100" x="130" y="245" />
+  </g>
+  <g>
+    <rect fill="#FFFFFF" width="100" height="100" x="245" y="245" />
+    <rect class="preview" fill="url(#Strips1_5)" width="100" height="100" x="245" y="245" />
+  </g>
+  <g>
+    <rect fill="#000000" width="100" height="100" x="360" y="245" />
+    <rect class="preview" fill="url(#Strips1_5white)" width="100" height="100" x="360" y="245" />
+  </g>
+  <g>
+    <rect fill="#FFFFFF" width="100" height="100" x="15" y="360" />
+    <rect class="preview" fill="url(#Strips1_8)" width="100" height="100" x="15" y="360" />
+  </g>
+  <g>
+    <rect fill="#000000" width="100" height="100" x="130" y="360" />
+    <rect class="preview" fill="url(#Strips1_8white)" width="100" height="100" x="130" y="360" />
+  </g>
+  <g>
+    <rect fill="#FFFFFF" width="100" height="100" x="245" y="360" />
+    <rect class="preview" fill="url(#Strips1_10)" width="100" height="100" x="245" y="360" />
+  </g>
+  <g>
+    <rect fill="#000000" width="100" height="100" x="360" y="360" />
+    <rect class="preview" fill="url(#Strips1_10white)" width="100" height="100" x="360" y="360" />
+  </g>
+  <g>
+    <rect fill="#FFFFFF" width="100" height="100" x="15" y="475" />
+    <rect class="preview" fill="url(#Strips1_16)" width="100" height="100" x="15" y="475" />
+  </g>
+  <g>
+    <rect fill="#000000" width="100" height="100" x="130" y="475" />
+    <rect class="preview" fill="url(#Strips1_16white)" width="100" height="100" x="130" y="475" />
+  </g>
+  <g>
+    <rect fill="#FFFFFF" width="100" height="100" x="245" y="475" />
+    <rect class="preview" fill="url(#Strips1_32)" width="100" height="100" x="245" y="475" />
+  </g>
+  <g>
+    <rect fill="#000000" width="100" height="100" x="360" y="475" />
+    <rect class="preview" fill="url(#Strips1_32white)" width="100" height="100" x="360" y="475" />
+  </g>
+  <g>
+    <rect fill="#FFFFFF" width="100" height="100" x="15" y="590" />
+    <rect class="preview" fill="url(#Strips1_64)" width="100" height="100" x="15" y="590" />
+  </g>
+  <g>
+    <rect fill="#FFFFFF" width="100" height="100" x="130" y="590" />
+    <rect class="preview" fill="url(#Strips2_1)" width="100" height="100" x="130" y="590" />
+  </g>
+  <g>
+    <rect fill="#000000" width="100" height="100" x="245" y="590" />
+    <rect class="preview" fill="url(#Strips2_1white)" width="100" height="100" x="245" y="590" />
+  </g>
+  <g>
+    <rect fill="#FFFFFF" width="100" height="100" x="360" y="590" />
+    <rect class="preview" fill="url(#Strips4_1)" width="100" height="100" x="360" y="590" />
+  </g>
+  <g>
+    <rect fill="#000000" width="100" height="100" x="15" y="705" />
+    <rect class="preview" fill="url(#Strips4_1white)" width="100" height="100" x="15" y="705" />
+  </g>
+  <g>
+    <rect fill="#FFFFFF" width="100" height="100" x="130" y="705" />
+    <rect class="preview" fill="url(#Checkerboard)" width="100" height="100" x="130" y="705" />
+  </g>
+  <g>
+    <rect fill="#000000" width="100" height="100" x="245" y="705" />
+    <rect class="preview" fill="url(#Checkerboardwhite)" width="100" height="100" x="245" y="705" />
+  </g>
+  <g>
+    <rect fill="#FFFFFF"  width="100" height="100" x="360" y="705" />
+    <rect class="preview" fill="url(#Packedcircles)" width="100" height="100" x="360" y="705" />
+  </g>
+  <g>
+    <rect fill="#FFFFFF" width="100" height="100" x="15" y="820" />
+    <rect class="preview" fill="url(#Polkadots-small)" width="100" height="100" x="15" y="820" />
+  </g>
+  <g>
+    <rect fill="#000000" width="100" height="100" x="130" y="820" />
+    <rect class="preview" fill="url(#Polkadots-smallwhite)" width="100" height="100" x="130" y="820" />
+  </g>
+  <g>
+    <rect fill="#FFFFFF" width="100" height="100" x="245" y="820" />
+    <rect class="preview" fill="url(#Polkadots-med)" width="100" height="100" x="245" y="820" />
+  </g>
+  <g>
+    <rect fill="#000000" width="100" height="100" x="360" y="820" />
+    <rect class="preview" fill="url(#Polkadots-medwhite)" width="100" height="100" x="360" y="820" />
+  </g>
+  <g>
+    <rect fill="#FFFFFF" width="100" height="100" x="15" y="935" />
+    <rect class="preview" fill="url(#Polkadots-large)" width="100" height="100" x="15" y="935" />
+  </g>
+  <g>
+    <rect fill="#000000" width="100" height="100" x="130" y="935" />
+    <rect class="preview" fill="url(#Polkadots-largewhite)" width="100" height="100" x="130" y="935" />
+  </g>
+  <g>
+    <rect fill="#FFFFFF" width="100" height="100" x="245" y="935" />
+    <rect class="preview" fill="url(#Wavy)" width="100" height="100" x="245" y="935" />
+  </g>
+  <g>
+    <rect fill="#000000" width="100" height="100" x="360" y="935" />
+    <rect class="preview" fill="url(#Wavywhite)" width="100" height="100" x="360" y="935" />
+  </g>
+  <g>
+    <rect fill="#FFFFFF" width="100" height="100" x="15" y="1050" />
+    <rect class="preview" fill="url(#Camouflage)" width="100" height="100" x="15" y="1050" />
+  </g>
+  <g>
+    <rect fill="#FFFFFF" width="100" height="100" x="130" y="1050" />
+    <rect class="preview" fill="url(#Ermine)" width="100" height="100" x="130" y="1050" />
+  </g>
+  <g>
+    <rect class="preview" fill="url(#sand_bitmap)" width="100" height="100" x="245" y="1050" />
+  </g>
+  <g>
+    <rect class="preview" fill="url(#cloth_bitmap)" width="100" height="100" x="360" y="1050" />
+  </g>
+  <g>
+    <rect class="preview" fill="url(#oldpaint_bitmap)" width="100" height="100" x="15" y="1165" />
+  </g>
 </svg>

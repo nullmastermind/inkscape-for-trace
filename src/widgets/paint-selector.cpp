@@ -35,6 +35,7 @@
 
 #include "io/sys.h"
 
+#include "object/sp-hatch.h"
 #include "object/sp-linear-gradient.h"
 #include "object/sp-mesh-gradient.h"
 #include "object/sp-pattern.h"
@@ -83,6 +84,7 @@ static void sp_paint_selector_set_mode_gradient(SPPaintSelector *psel, SPPaintSe
 static void sp_paint_selector_set_mode_mesh(SPPaintSelector *psel, SPPaintSelector::Mode mode);
 #endif
 static void sp_paint_selector_set_mode_pattern(SPPaintSelector *psel, SPPaintSelector::Mode mode);
+static void sp_paint_selector_set_mode_hatch(SPPaintSelector *psel, SPPaintSelector::Mode mode);
 static void sp_paint_selector_set_mode_swatch(SPPaintSelector *psel, SPPaintSelector::Mode mode);
 static void sp_paint_selector_set_mode_unset(SPPaintSelector *psel);
 
@@ -404,6 +406,9 @@ void SPPaintSelector::setMode(Mode mode)
             case MODE_PATTERN:
                 sp_paint_selector_set_mode_pattern(this, mode);
                 break;
+            case MODE_HATCH:
+                sp_paint_selector_set_mode_hatch(this, mode);
+                break;
             case MODE_SWATCH:
                 sp_paint_selector_set_mode_swatch(this, mode);
                 break;
@@ -658,7 +663,7 @@ static void sp_paint_selector_set_mode_color(SPPaintSelector *psel, SPPaintSelec
 {
     using Inkscape::UI::Widget::ColorNotebook;
 
-    if ((psel->mode == SPPaintSelector::MODE_SWATCH) 
+    if ((psel->mode == SPPaintSelector::MODE_SWATCH)
             || (psel->mode == SPPaintSelector::MODE_GRADIENT_LINEAR)
             || (psel->mode == SPPaintSelector::MODE_GRADIENT_RADIAL) ) {
         SPGradientSelector *gsel = getGradientFromData(psel);
@@ -1197,7 +1202,7 @@ ink_pattern_menu_populate_menu(GtkWidget *combo, SPDocument *doc)
 
     // find and load patterns.svg
     if (patterns_doc == nullptr) {
-        char *patterns_source = g_build_filename(INKSCAPE_PATTERNSDIR, "patterns.svg", NULL);
+        char *patterns_source = g_build_filename(INKSCAPE_PAINTDIR, "patterns.svg", NULL);
         if (Inkscape::IO::file_test(patterns_source, G_FILE_TEST_IS_REGULAR)) {
             patterns_doc = SPDocument::createNewDoc(patterns_source, FALSE);
         }
@@ -1378,6 +1383,26 @@ static void sp_paint_selector_set_mode_pattern(SPPaintSelector *psel, SPPaintSel
 #endif
 }
 
+static void sp_paint_selector_set_mode_hatch(SPPaintSelector *psel, SPPaintSelector::Mode mode)
+{
+    if (mode == SPPaintSelector::MODE_HATCH) {
+        sp_paint_selector_set_style_buttons(psel, psel->unset);
+    }
+
+    gtk_widget_set_sensitive(psel->style, TRUE);
+
+    if (psel->mode == SPPaintSelector::MODE_HATCH) {
+        /* Already have hatch menu, for the moment unset */
+    } else {
+        sp_paint_selector_clear_frame(psel);
+
+        gtk_label_set_markup(GTK_LABEL(psel->label), _("<b>Hatch fill</b>"));
+    }
+#ifdef SP_PS_VERBOSE
+    g_print("Hatch req\n");
+#endif
+}
+
 gboolean SPPaintSelector::isSeparator (GtkTreeModel *model, GtkTreeIter *iter, gpointer /*data*/) {
 
     gboolean sep = FALSE;
@@ -1534,6 +1559,8 @@ SPPaintSelector::Mode SPPaintSelector::getModeForStyle(SPStyle const & style, Fi
 #endif
         } else if (SP_IS_PATTERN(server)) {
             mode = MODE_PATTERN;
+        } else if (SP_IS_HATCH(server)) {
+            mode = MODE_HATCH;
         } else {
             g_warning( "file %s: line %d: Unknown paintserver", __FILE__, __LINE__ );
             mode = MODE_NONE;

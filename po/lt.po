@@ -3178,175 +3178,175 @@ msgctxt "Palette"
 msgid "Jet Black"
 msgstr "Juoda"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:1"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:1 white"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:1.5"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:1.5 white"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:2"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:2 white"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:3"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:3 white"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:4"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:4 white"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:5"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:5 white"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:8"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:8 white"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:10"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:10 white"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:16"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:16 white"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:32"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:32 white"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 1:64"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 2:1"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 2:1 white"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 4:1"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Stripes 4:1 white"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 #, fuzzy
 msgid "Checkerboard"
 msgstr "_Lenta"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 #, fuzzy
 msgid "Checkerboard white"
 msgstr "_Lenta"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 #, fuzzy
 msgid "Packed circles"
 msgstr "Apskritimas"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, small"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, small white"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, medium"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, medium white"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, large"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Polka dots, large white"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 #, fuzzy
 msgid "Wavy"
 msgstr "Iš_saugoti"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 #, fuzzy
 msgid "Wavy white"
 msgstr "Balta"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 msgid "Camouflage"
 msgstr ""
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 #, fuzzy
 msgid "Ermine"
 msgstr "Apjungimas"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 #, fuzzy
 msgid "Sand (bitmap)"
 msgstr "Taškinio vaizdo tyrimas"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 #, fuzzy
 msgid "Cloth (bitmap)"
 msgstr "Taškinio vaizdo sukūrimas"
 
-#: ../share/patterns/patterns.svg.h:1
+#: ../share/paint/patterns.svg.h:1
 #, fuzzy
 msgid "Old paint (bitmap)"
 msgstr "Spausdinti kaip taškinį vaizdą"

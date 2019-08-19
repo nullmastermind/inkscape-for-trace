@@ -340,7 +340,7 @@ protected:
     UI::Widget::PrefCheckButton _markers_color_stock;
     UI::Widget::PrefCheckButton _markers_color_custom;
     UI::Widget::PrefCheckButton _markers_color_update;
-    
+
     UI::Widget::PrefCheckButton _cleanup_swatches;
 
     UI::Widget::PrefSpinButton  _importexport_export_res;
@@ -380,6 +380,7 @@ protected:
     UI::Widget::PrefOpenFolder _sys_user_palettes_dir;
     UI::Widget::PrefOpenFolder _sys_user_templates_dir;
     UI::Widget::PrefOpenFolder _sys_user_symbols_dir;
+    UI::Widget::PrefOpenFolder _sys_user_paint_servers_dir;
     Gtk::Entry                  _sys_user_cache;
     Gtk::Entry                  _sys_data;
     Gtk::TextView               _sys_icon;
@@ -485,6 +486,7 @@ protected:
     // SVG Output export:
     UI::Widget::PrefCheckButton   _svgexport_insert_text_fallback;
     UI::Widget::PrefCheckButton   _svgexport_insert_mesh_polyfill;
+    UI::Widget::PrefCheckButton   _svgexport_insert_hatch_polyfill;
     UI::Widget::PrefCheckButton   _svgexport_remove_marker_auto_start_reverse;
     UI::Widget::PrefCheckButton   _svgexport_remove_marker_context_paint;
 

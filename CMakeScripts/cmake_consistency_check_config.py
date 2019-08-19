@@ -36,7 +36,7 @@ IGNORE = (
     # header files
     "share/filters/filters.svg.h",
     "share/palettes/palettes.h",
-    "share/patterns/patterns.svg.h",
+    "share/paint/patterns.svg.h",
     "share/templates/templates.h",
     "share/symbols/symbols.h",
     "src/libcola/cycle_detector.h",
@@ -44,7 +44,7 @@ IGNORE = (
     "src/libnr/nr-point-fns-test.h",
     "src/libnr/nr-translate-test.h",
     "src/svg/test-stubs.h",
-    
+
     # generated files, created by an in-source build
     "CMakeFiles/CompilerIdC/CMakeCCompilerId.c",
     "CMakeFiles/CompilerIdCXX/CMakeCXXCompilerId.cpp",

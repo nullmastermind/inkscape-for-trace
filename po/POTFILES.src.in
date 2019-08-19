@@ -1,6 +1,6 @@
 ../share/filters/filters.svg.h
 ../share/palettes/palettes.h
-../share/patterns/patterns.svg.h
+../share/paint/patterns.svg.h
 ../share/symbols/symbols.h
 ../share/templates/templates.h
 ../src/3rdparty/autotrace/autotrace.c
@@ -274,6 +274,8 @@
 ../src/ui/dialog/object-properties.cpp
 ../src/ui/dialog/objects.cpp
 ../src/ui/dialog/ocaldialogs.cpp
+../src/ui/dialog/paint-servers.cpp
+../src/ui/dialog/paint-servers.h
 ../src/ui/dialog/pixelartdialog.cpp
 ../src/ui/dialog/polar-arrange-tab.cpp
 ../src/ui/dialog/print-colors-preview-dialog.cpp

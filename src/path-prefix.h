@@ -42,13 +42,12 @@
 #  define INKSCAPE_EXTENSIONDIR   BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/extensions" )
 #  define INKSCAPE_FILTERDIR      BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/filters" )
 #  define INKSCAPE_FONTSDIR       BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/fonts" )
-#  define INKSCAPE_GRADIENTSDIR   BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/gradients" )
 #  define INKSCAPE_KEYSDIR        BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/keys" )
 #  define INKSCAPE_ICONSDIR       BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/icons" )
 #  define INKSCAPE_PIXMAPSDIR     BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/pixmaps" )
 #  define INKSCAPE_MARKERSDIR     BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/markers" )
+#  define INKSCAPE_PAINTDIR       BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/paint" )
 #  define INKSCAPE_PALETTESDIR    BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/palettes" )
-#  define INKSCAPE_PATTERNSDIR    BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/patterns" )
 #  define INKSCAPE_SCREENSDIR     BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/screens" )
 #  define INKSCAPE_SYMBOLSDIR     BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/symbols" )
 #  define INKSCAPE_THEMEDIR       BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/themes" )
@@ -56,9 +55,8 @@
 #  define INKSCAPE_TEMPLATESDIR   BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/templates" )
 #  define INKSCAPE_UIDIR          BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/ui" )
 //CREATE V0.1 support
-#    define CREATE_GRADIENTSDIR   BR_DATADIR( INKSCAPE_LIBPREFIX "/share/create/gradients/gimp" )
+#    define CREATE_PAINTDIR       BR_DATADIR( INKSCAPE_LIBPREFIX "/share/create/paint" )
 #    define CREATE_PALETTESDIR    BR_DATADIR( INKSCAPE_LIBPREFIX "/share/create/swatches" )
-#    define CREATE_PATTERNSDIR    BR_DATADIR( INKSCAPE_LIBPREFIX "/share/create/patterns/vector" )
 #elif defined ENABLE_OSX_APP_LOCATIONS // TODO: Is ENABLE_OSX_APP_LOCATIONS still in use?
 #    define INKSCAPE_DATADIR_REAL "Contents/Resources/share"
 #    define INKSCAPE_ATTRRELDIR   "Contents/Resources/share/inkscape/attributes"
@@ -67,13 +65,12 @@
 #    define INKSCAPE_EXTENSIONDIR "Contents/Resources/share/inkscape/extensions"
 #    define INKSCAPE_FILTERDIR    "Contents/Resources/share/inkscape/filters"
 #    define INKSCAPE_FONTSDIR     "Contents/Resources/share/inkscape/fonts"
-#    define INKSCAPE_GRADIENTSDIR "Contents/Resources/share/inkscape/gradients"
 #    define INKSCAPE_KEYSDIR      "Contents/Resources/share/inkscape/keys"
 #    define INKSCAPE_ICONSDIR     "Contents/Resources/share/inkscape/icons"
 #    define INKSCAPE_PIXMAPSDIR   "Contents/Resources/share/inkscape/pixmaps"
 #    define INKSCAPE_MARKERSDIR   "Contents/Resources/share/inkscape/markers"
+#    define INKSCAPE_PAINTDIR     "Contents/Resources/share/inkscape/paint"
 #    define INKSCAPE_PALETTESDIR  "Contents/Resources/share/inkscape/palettes"
-#    define INKSCAPE_PATTERNSDIR  "Contents/Resources/share/inkscape/patterns"
 #    define INKSCAPE_SCREENSDIR   "Contents/Resources/share/inkscape/screens"
 #    define INKSCAPE_SYMBOLSDIR   "Contents/Resources/share/inkscape/symbols"
 #    define INKSCAPE_THEMEDIR     "Contents/Resources/share/inkscape/themes"
@@ -81,9 +78,8 @@
 #    define INKSCAPE_TEMPLATESDIR "Contents/Resources/share/inkscape/templates"
 #    define INKSCAPE_UIDIR        "Contents/Resources/share/inkscape/ui"
 //CREATE V0.1 support
-#    define CREATE_GRADIENTSDIR  "/Library/Application Support/create/gradients/gimp"
+#    define CREATE_PAINTDIR      "/Library/Application Support/create/paint"
 #    define CREATE_PALETTESDIR   "/Library/Application Support/create/swatches"
-#    define CREATE_PATTERNSDIR   "/Library/Application Support/create/patterns/vector"
 #else
 #    define INKSCAPE_DATADIR_REAL append_inkscape_datadir()
 #    define INKSCAPE_ATTRRELDIR   append_inkscape_datadir("inkscape/attributes")
@@ -93,13 +89,12 @@
 #    define INKSCAPE_EXTENSIONDIR append_inkscape_datadir("inkscape/extensions")
 #    define INKSCAPE_FILTERDIR    append_inkscape_datadir("inkscape/filters")
 #    define INKSCAPE_FONTSDIR     append_inkscape_datadir("inkscape/fonts")
-#    define INKSCAPE_GRADIENTSDIR append_inkscape_datadir("inkscape/gradients")
 #    define INKSCAPE_KEYSDIR      append_inkscape_datadir("inkscape/keys")
 #    define INKSCAPE_ICONSDIR     append_inkscape_datadir("inkscape/icons")
 #    define INKSCAPE_PIXMAPSDIR   append_inkscape_datadir("inkscape/pixmaps")
 #    define INKSCAPE_MARKERSDIR   append_inkscape_datadir("inkscape/markers")
+#    define INKSCAPE_PAINTDIR     append_inkscape_datadir("inkscape/paint")
 #    define INKSCAPE_PALETTESDIR  append_inkscape_datadir("inkscape/palettes")
-#    define INKSCAPE_PATTERNSDIR  append_inkscape_datadir("inkscape/patterns")
 #    define INKSCAPE_SCREENSDIR   append_inkscape_datadir("inkscape/screens")
 #    define INKSCAPE_SYMBOLSDIR   append_inkscape_datadir("inkscape/symbols")
 #    define INKSCAPE_THEMEDIR     append_inkscape_datadir("inkscape/themes")
@@ -107,9 +102,8 @@
 #    define INKSCAPE_TEMPLATESDIR append_inkscape_datadir("inkscape/templates")
 #    define INKSCAPE_UIDIR        append_inkscape_datadir("inkscape/ui")
 //CREATE V0.1 support
-#    define CREATE_GRADIENTSDIR   append_inkscape_datadir("create/gradients/gimp")
+#    define CREATE_PAINTDIR       append_inkscape_datadir("create/paint")
 #    define CREATE_PALETTESDIR    append_inkscape_datadir("create/swatches")
-#    define CREATE_PATTERNSDIR    append_inkscape_datadir("create/patterns/vector")
 #endif
 
 

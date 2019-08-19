@@ -78,6 +78,7 @@
 #include "ui/dialog/layers.h"
 #include "ui/dialog/new-from-template.h"
 #include "ui/dialog/object-properties.h"
+#include "ui/dialog/paint-servers.h"
 #include "ui/dialog/save-template-dialog.h"
 #include "ui/dialog/swatches.h"
 #include "ui/dialog/symbols.h"
@@ -2169,6 +2170,9 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_SYMBOLS:
             dt->_dlg_mgr->showDialog("Symbols");
             break;
+        case SP_VERB_DIALOG_PAINT:
+            dt->_dlg_mgr->showDialog("PaintServers");
+            break;
         case SP_VERB_DIALOG_TRANSFORM:
             dt->_dlg_mgr->showDialog("Transformation");
             break;
@@ -3096,6 +3100,9 @@ Verb *Verb::_base_verbs[] = {
                    N_("Select colors from a swatches palette"), INKSCAPE_ICON("swatches")),
     new DialogVerb(SP_VERB_DIALOG_SYMBOLS, "DialogSymbols", N_("S_ymbols..."),
                    N_("Select symbol from a symbols palette"), INKSCAPE_ICON("symbols")),
+    new DialogVerb(SP_VERB_DIALOG_PAINT, "DialogPaintServers", N_("_Paint Servers..."),
+                   // FIXME missing Inkscape Paint Server Icon
+                   N_("Select paint server from a collection"), INKSCAPE_ICON("symbols")),
     new DialogVerb(SP_VERB_DIALOG_TRANSFORM, "DialogTransform", N_("Transfor_m..."),
                    N_("Precisely control objects' transformations"), INKSCAPE_ICON("dialog-transform")),
     new DialogVerb(SP_VERB_DIALOG_ALIGN_DISTRIBUTE, "DialogAlignDistribute", N_("_Align and Distribute..."),

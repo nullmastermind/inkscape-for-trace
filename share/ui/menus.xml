@@ -195,6 +195,7 @@
        <verb verb-id="DialogFillStroke" />
        <verb verb-id="DialogObjectProperties" />
        <verb verb-id="DialogSymbols" />
+       <verb verb-id="DialogPaintServers" />
        <separator/>
        <verb verb-id="SelectionGroup" />
        <verb verb-id="SelectionUnGroup" />

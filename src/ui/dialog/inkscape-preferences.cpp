@@ -1541,11 +1541,11 @@ void InkscapePreferences::initPageIO()
     _page_svgexport.add_group_header( _("SVG 2"));
     _svgexport_insert_text_fallback.init( _("Insert SVG 1.1 fallback in text."),                                     "/options/svgexport/text_insertfallback",    true );
     _svgexport_insert_mesh_polyfill.init( _("Insert Mesh Gradient JavaScript polyfill."),                            "/options/svgexport/mesh_insertpolyfill",    true );
-    _svgexport_insert_mesh_polyfill.init( _("Insert Hatch Paint Server JavaScript polyfill."),                       "/options/svgexport/hatch_insertpolyfill",   true );
+    _svgexport_insert_hatch_polyfill.init( _("Insert Hatch Paint Server JavaScript polyfill."),                       "/options/svgexport/hatch_insertpolyfill",   true );
 
     _page_svgexport.add_line( false, "", _svgexport_insert_text_fallback,  "", _("Adds fallback options for non-SVG 2 renderers."),                          false);
     _page_svgexport.add_line( false, "", _svgexport_insert_mesh_polyfill,  "", _("Adds JavaScript polyfill to render meshes."),                              false);
-    _page_svgexport.add_line( false, "", _svgexport_insert_mesh_polyfill,  "", _("Adds JavaScript polyfill to render hatches (linear and absolute paths)."), false);
+    _page_svgexport.add_line( false, "", _svgexport_insert_hatch_polyfill,  "", _("Adds JavaScript polyfill to render hatches (linear and absolute paths)."), false);
 
     // SVG Export Options (SVG 2 -> SVG 1)
     _page_svgexport.add_group_header( _("SVG 2 to SVG 1.1"));
@@ -2601,8 +2601,15 @@ void InkscapePreferences::initPageSystem()
 
     _sys_user_symbols_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::SYMBOLS, ""),
                                _("Open symbols folder"));
+
     _page_system.add_line(true, _("User symbols: "), _sys_user_symbols_dir, "", _("Location of the user’s symbols"),
                           true);
+
+    _sys_user_paint_servers_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::PAINT, ""),
+                                _("Open paint servers folder"));
+
+    _page_system.add_line(true, _("User paint servers: "), _sys_user_paint_servers_dir, "",
+                        _("Location of the user’s paint servers"), true);
 
     _sys_user_palettes_dir.init((char const *)IO::Resource::get_path(IO::Resource::USER, IO::Resource::PALETTES, ""),
                                 _("Open palettes folder"));

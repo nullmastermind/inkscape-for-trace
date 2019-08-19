@@ -47,13 +47,12 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
                 case EXTENSIONS: temp = INKSCAPE_EXTENSIONDIR; break;
                 case FILTERS: temp = INKSCAPE_FILTERDIR; break;
                 case FONTS: temp = INKSCAPE_FONTSDIR; break;
-                case GRADIENTS: temp = INKSCAPE_GRADIENTSDIR; break;
                 case ICONS: temp = INKSCAPE_ICONSDIR; break;
                 case KEYS: temp = INKSCAPE_KEYSDIR; break;
                 case MARKERS: temp = INKSCAPE_MARKERSDIR; break;
                 case NONE: g_assert_not_reached(); break;
+                case PAINT: temp = INKSCAPE_PAINTDIR; break;
                 case PALETTES: temp = INKSCAPE_PALETTESDIR; break;
-                case PATTERNS: temp = INKSCAPE_PATTERNSDIR; break;
                 case SCREENS: temp = INKSCAPE_SCREENSDIR; break;
                 case SYMBOLS: temp = INKSCAPE_SYMBOLSDIR; break;
                 case TEMPLATES: temp = INKSCAPE_TEMPLATESDIR; break;
@@ -68,9 +67,8 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
         case CREATE: {
             gchar const* temp = nullptr;
             switch (type) {
-                case GRADIENTS: temp = CREATE_GRADIENTSDIR; break;
+                case PAINT: temp = CREATE_PAINTDIR; break;
                 case PALETTES: temp = CREATE_PALETTESDIR; break;
-                case PATTERNS: temp = CREATE_PATTERNSDIR; break;
                 default: temp = "";
             }
             path = g_strdup(temp);
@@ -84,13 +82,12 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
                 case EXTENSIONS: name = "extensions"; break;
                 case FILTERS: name = "filters"; break;
                 case FONTS: name = "fonts"; break;
-                case GRADIENTS: name = "gradients"; break;
                 case ICONS: name = "icons"; break;
                 case KEYS: name = "keys"; break;
                 case MARKERS: name = "markers"; break;
                 case NONE: name = ""; break;
+                case PAINT: name = "paint"; break;
                 case PALETTES: name = "palettes"; break;
-                case PATTERNS: name = "patterns"; break;
                 case SYMBOLS: name = "symbols"; break;
                 case TEMPLATES: name = "templates"; break;
                 case THEMES: name = "themes"; break;
@@ -430,8 +427,8 @@ char *profile_path(const char *filename)
                 int problem = errno;
                 g_warning("Unable to create profile directory (%s) (%d)", g_strerror(problem), problem);
             } else {
-                gchar const *userDirs[] = { "keys",    "templates", "icons",    "extensions", "ui",
-                                            "symbols", "themes",    "palettes", nullptr };
+                gchar const *userDirs[] = { "keys", "templates", "icons", "extensions", "ui",
+                                            "symbols", "paint", "themes", "palettes", nullptr };
                 for (gchar const** name = userDirs; *name; ++name) {
                     gchar *dir = g_build_filename(prefdir, *name, NULL);
                     g_mkdir_with_parents(dir, mode);

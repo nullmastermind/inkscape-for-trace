@@ -140,6 +140,7 @@ set(ui_SRC
         dialog/svg-preview.cpp
 	dialog/swatches.cpp
 	dialog/symbols.cpp
+	dialog/paint-servers.cpp
 	dialog/template-load-tab.cpp
 	dialog/template-widget.cpp
 	dialog/text-edit.cpp
@@ -307,6 +308,7 @@ set(ui_SRC
         dialog/svg-preview.h
 	dialog/swatches.h
 	dialog/symbols.h
+	dialog/paint-servers.h
 	dialog/template-load-tab.h
 	dialog/template-widget.h
 	dialog/text-edit.h
@@ -426,7 +428,7 @@ set(ui_SRC
 	widget/notebook-page.h
 	widget/object-composite-settings.h
 	widget/page-sizer.h
-	widget/pages-skeleton.h 
+	widget/pages-skeleton.h
 	widget/panel.h
 	widget/point.h
 	widget/preferences-widget.h

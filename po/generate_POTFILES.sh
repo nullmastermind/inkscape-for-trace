@@ -12,7 +12,7 @@ export LC_ALL=C
 (
  echo "../share/filters/filters.svg.h"
  echo "../share/palettes/palettes.h"
- echo "../share/patterns/patterns.svg.h"
+ echo "../share/paint/patterns.svg.h"
  echo "../share/symbols/symbols.h"
  echo "../share/templates/templates.h"
 

@@ -949,14 +949,14 @@ Geom::Rect SPDesktop::get_display_area(bool use_integer_viewbox) const
 void
 SPDesktop::zoom_absolute_keep_point (Geom::Point const &c, double zoom)
 {
-    zoom = CLAMP (zoom, SP_DESKTOP_ZOOM_MIN, SP_DESKTOP_ZOOM_MAX);    
+    zoom = CLAMP (zoom, SP_DESKTOP_ZOOM_MIN, SP_DESKTOP_ZOOM_MAX);
     Geom::Point w = d2w( c ); // Must be before zoom changed.
     _current_affine.setScale( Geom::Scale(zoom, yaxisdir() * zoom) );
     set_display_area( c, w );
 }
 
 
-void 
+void
 SPDesktop::zoom_relative_keep_point (Geom::Point const &c, double zoom)
 {
     double new_zoom = _current_affine.getZoom() * zoom;
@@ -967,7 +967,7 @@ SPDesktop::zoom_relative_keep_point (Geom::Point const &c, double zoom)
 /**
  * Zoom aligning the point 'c' to the center of desktop window.
  */
-void 
+void
 SPDesktop::zoom_absolute_center_point (Geom::Point const &c, double zoom)
 {
     zoom = CLAMP (zoom, SP_DESKTOP_ZOOM_MIN, SP_DESKTOP_ZOOM_MAX);
@@ -977,7 +977,7 @@ SPDesktop::zoom_absolute_center_point (Geom::Point const &c, double zoom)
 }
 
 
-void 
+void
 SPDesktop::zoom_relative_center_point (Geom::Point const &c, double zoom)
 {
     double new_zoom = _current_affine.getZoom() * zoom;
@@ -1064,7 +1064,7 @@ SPDesktop::zoom_selection()
  */
 void SPDesktop::zoom_center_page()
 {
-    zoom_absolute_center_point(Geom::Point(doc()->getWidth().value("px")/2, doc()->getHeight().value("px")/2), this->current_zoom()); 
+    zoom_absolute_center_point(Geom::Point(doc()->getWidth().value("px")/2, doc()->getHeight().value("px")/2), this->current_zoom());
 }
 
 
@@ -1144,7 +1144,7 @@ SPDesktop::rotate_absolute_keep_point (Geom::Point const &c, double rotate)
 }
 
 
-void 
+void
 SPDesktop::rotate_relative_keep_point (Geom::Point const &c, double rotate)
 {
     Geom::Point w = d2w( c ); // Must be before rotate changed.
@@ -1156,7 +1156,7 @@ SPDesktop::rotate_relative_keep_point (Geom::Point const &c, double rotate)
 /**
  * Rotate aligning the point 'c' to the center of desktop window.
  */
-void 
+void
 SPDesktop::rotate_absolute_center_point (Geom::Point const &c, double rotate)
 {
     _current_affine.setRotate( rotate );
@@ -1165,7 +1165,7 @@ SPDesktop::rotate_absolute_center_point (Geom::Point const &c, double rotate)
 }
 
 
-void 
+void
 SPDesktop::rotate_relative_center_point (Geom::Point const &c, double rotate)
 {
     _current_affine.addRotate( rotate );
@@ -1198,7 +1198,7 @@ SPDesktop::flip_relative_keep_point (Geom::Point const &c, CanvasFlip flip)
 /**
  * Flip aligning the point 'c' to the center of desktop window.
  */
-void 
+void
 SPDesktop::flip_absolute_center_point (Geom::Point const &c, CanvasFlip flip)
 {
     _current_affine.setFlip( flip );
@@ -1207,7 +1207,7 @@ SPDesktop::flip_absolute_center_point (Geom::Point const &c, CanvasFlip flip)
 }
 
 
-void 
+void
 SPDesktop::flip_relative_center_point (Geom::Point const &c, CanvasFlip flip)
 {
     _current_affine.addFlip( flip );
@@ -2059,6 +2059,7 @@ SPDesktop::show_dialogs()
     mapVerbPreference.insert(std::make_pair ("ObjectProperties", "/dialogs/object") );
     mapVerbPreference.insert(std::make_pair ("SpellCheck", "/dialogs/spellcheck") );
     mapVerbPreference.insert(std::make_pair ("Symbols", "/dialogs/symbols") );
+    mapVerbPreference.insert(std::make_pair ("PaintServers", "/dialogs/paint") );
     mapVerbPreference.insert(std::make_pair ("ObjectsPanel", "/dialogs/objects") );
     mapVerbPreference.insert(std::make_pair ("Prototype", "/dialogs/prototype") );
 
@@ -2119,4 +2120,3 @@ SPDesktop::show_dialogs()
   End:
 */
 // vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
-

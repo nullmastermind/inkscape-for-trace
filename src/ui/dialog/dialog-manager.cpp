@@ -31,6 +31,7 @@
 #include "ui/dialog/livepatheffect-editor.h"
 #include "ui/dialog/memory.h"
 #include "ui/dialog/messages.h"
+#include "ui/dialog/paint-servers.h"
 #include "ui/dialog/prototype.h"
 #include "ui/dialog/symbols.h"
 #include "ui/dialog/tile.h"
@@ -129,6 +130,7 @@ DialogManager::DialogManager() {
         registerFactory("Swatches",            &create<SwatchesPanel,        FloatingBehavior>);
         registerFactory("TileDialog",          &create<ArrangeDialog,        FloatingBehavior>);
         registerFactory("Symbols",             &create<SymbolsDialog,        FloatingBehavior>);
+        registerFactory("PaintServers",        &create<PaintServersDialog,   FloatingBehavior>);
         registerFactory("StyleDialog",         &create<StyleDialog,          FloatingBehavior>);
 
 #if HAVE_POTRACE
@@ -149,7 +151,7 @@ DialogManager::DialogManager() {
         registerFactory("CloneTiler",          &create<CloneTiler,           FloatingBehavior>);
         registerFactory("XmlTree",             &create<XmlTree,              FloatingBehavior>);
         registerFactory("Selectors",           &create<SelectorsDialog,      FloatingBehavior>);
-    
+
     } else {
 
         registerFactory("Prototype",           &create<Prototype,            DockBehavior>);
@@ -175,6 +177,7 @@ DialogManager::DialogManager() {
         registerFactory("Swatches",            &create<SwatchesPanel,        DockBehavior>);
         registerFactory("TileDialog",          &create<ArrangeDialog,        DockBehavior>);
         registerFactory("Symbols",             &create<SymbolsDialog,        DockBehavior>);
+        registerFactory("PaintServers",        &create<PaintServersDialog,   DockBehavior>);
 
 #if HAVE_POTRACE
         registerFactory("Trace",               &create<TraceDialog,          DockBehavior>);

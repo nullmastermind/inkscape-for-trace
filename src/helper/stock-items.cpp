@@ -38,7 +38,7 @@ static SPObject *sp_gradient_load_from_svg(gchar const *name, SPDocument *curren
 
 
 // FIXME: these should be merged with the icon loading code so they
-// can share a common file/doc cache.  This function should just 
+// can share a common file/doc cache.  This function should just
 // take the dir to look in, and the file to check for, and cache
 // against that, rather than the existing copy/paste code seen here.
 
@@ -89,21 +89,21 @@ sp_pattern_load_from_svg(gchar const *name, SPDocument *current_doc)
     }
     /* Try to load from document */
     if (!edoc && !doc) {
-        gchar *patterns = g_build_filename(INKSCAPE_PATTERNSDIR, "/patterns.svg", NULL);
+        gchar *patterns = g_build_filename(INKSCAPE_PAINTDIR, "/patterns.svg", NULL);
         if (Inkscape::IO::file_test(patterns, G_FILE_TEST_IS_REGULAR)) {
             doc = SPDocument::createNewDoc(patterns, FALSE);
         }
         if (!doc) {
-        gchar *patterns = g_build_filename(CREATE_PATTERNSDIR, "/patterns.svg", NULL);
-        if (Inkscape::IO::file_test(patterns, G_FILE_TEST_IS_REGULAR)) {
-            doc = SPDocument::createNewDoc(patterns, FALSE);
-        }
-        g_free(patterns);
-        if (doc) {
-            doc->ensureUpToDate();
-        } else {
-            edoc = TRUE;
-        }
+            gchar *patterns = g_build_filename(CREATE_PAINTDIR, "/patterns.svg", NULL);
+            if (Inkscape::IO::file_test(patterns, G_FILE_TEST_IS_REGULAR)) {
+                doc = SPDocument::createNewDoc(patterns, FALSE);
+            }
+            g_free(patterns);
+            if (doc) {
+                doc->ensureUpToDate();
+            } else {
+                edoc = TRUE;
+            }
         }
     }
     if (!edoc && doc) {
@@ -132,12 +132,12 @@ sp_gradient_load_from_svg(gchar const *name, SPDocument *current_doc)
     }
     /* Try to load from document */
     if (!edoc && !doc) {
-        gchar *gradients = g_build_filename(INKSCAPE_GRADIENTSDIR, "/gradients.svg", NULL);
+        gchar *gradients = g_build_filename(INKSCAPE_PAINTDIR, "/gradients.svg", NULL);
         if (Inkscape::IO::file_test(gradients, G_FILE_TEST_IS_REGULAR)) {
             doc = SPDocument::createNewDoc(gradients, FALSE);
         }
         if (!doc) {
-        gchar *gradients = g_build_filename(CREATE_GRADIENTSDIR, "/gradients.svg", NULL);
+        gchar *gradients = g_build_filename(CREATE_PAINTDIR, "/gradients.svg", NULL);
         if (Inkscape::IO::file_test(gradients, G_FILE_TEST_IS_REGULAR)) {
             doc = SPDocument::createNewDoc(gradients, FALSE);
         }
@@ -171,7 +171,7 @@ sp_gradient_load_from_svg(gchar const *name, SPDocument *current_doc)
 SPObject *get_stock_item(gchar const *urn, gboolean stock)
 {
     g_assert(urn != nullptr);
-    
+
     /* check its an inkscape URN */
     if (!strncmp (urn, "urn:inkscape:", 13)) {
 
@@ -183,11 +183,11 @@ SPObject *get_stock_item(gchar const *urn, gboolean stock)
             name_p++;
             a++;
         }
-        
+
         if (*name_p ==':') {
             name_p++;
         }
-        
+
         gchar * base = g_strndup(e, a);
 
         SPDocument *doc = SP_ACTIVE_DOCUMENT;
@@ -207,7 +207,6 @@ SPObject *get_stock_item(gchar const *urn, gboolean stock)
                     object = &child;
                 }
             }
-            
         }
         else if (!strcmp(base,"pattern") && !stock)  {
             for (auto& child: defs->children)
@@ -219,7 +218,6 @@ SPObject *get_stock_item(gchar const *urn, gboolean stock)
                     object = &child;
                 }
             }
-            
         }
         else if (!strcmp(base,"gradient") && !stock)  {
             for (auto& child: defs->children)
@@ -231,11 +229,10 @@ SPObject *get_stock_item(gchar const *urn, gboolean stock)
                     object = &child;
                 }
             }
-            
         }
-        
+
         if (object == nullptr) {
-            
+
             if (!strcmp(base, "marker"))  {
                 object = sp_marker_load_from_svg(name_p, doc);
             }
@@ -246,19 +243,19 @@ SPObject *get_stock_item(gchar const *urn, gboolean stock)
                 object = sp_gradient_load_from_svg(name_p, doc);
             }
         }
-        
+
         g_free(base);
         g_free(name);
-        
+
         if (object) {
             object->setAttribute("inkscape:isstock", "true");
         }
 
         return object;
     }
-    
+
     else {
-        
+
         SPDocument *doc = SP_ACTIVE_DOCUMENT;
         SPObject *object = doc->getObjectById(urn);
 
