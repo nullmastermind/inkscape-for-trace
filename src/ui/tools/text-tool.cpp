@@ -540,7 +540,8 @@ bool TextTool::root_handler(GdkEvent* event) {
             ToolBase::root_handler(event);
             if ((event->motion.state & GDK_BUTTON1_MASK) && this->dragging && !this->space_panning) {
                 Inkscape::Text::Layout const *layout = te_get_layout(this->text);
-                if (!layout) break;
+                if (!layout)
+                    break;
                 // find out click point in document coordinates
                 Geom::Point p = desktop->w2d(Geom::Point(event->button.x, event->button.y));
                 // set the cursor closest to that point
@@ -550,9 +551,8 @@ bool TextTool::root_handler(GdkEvent* event) {
                     if (new_end < this->text_sel_start) {
                         if (!layout->isStartOfWord(new_end))
                             new_end.prevStartOfWord();
-                    } else
-                        if (!layout->isEndOfWord(new_end))
-                            new_end.nextEndOfWord();
+                    } else if (!layout->isEndOfWord(new_end))
+                        new_end.nextEndOfWord();
                 } else if (this->dragging == 3) {
                     // triple-click dragging: go by line
                     if (new_end < this->text_sel_start)
@@ -570,7 +570,8 @@ bool TextTool::root_handler(GdkEvent* event) {
                 break;
             }
             // find out item under mouse, disregarding groups
-            SPItem *item_ungrouped = desktop->getItemAtPoint(Geom::Point(event->button.x, event->button.y), TRUE,  nullptr);
+            SPItem *item_ungrouped =
+                desktop->getItemAtPoint(Geom::Point(event->button.x, event->button.y), TRUE, nullptr);
             if (SP_IS_TEXT(item_ungrouped) || SP_IS_FLOWTEXT(item_ungrouped)) {
                 Inkscape::Text::Layout const *layout = te_get_layout(item_ungrouped);
                 if (layout->inputTruncated()) {
@@ -587,16 +588,19 @@ bool TextTool::root_handler(GdkEvent* event) {
                 this->cursor_shape = cursor_text_insert_xpm;
                 this->sp_event_context_update_cursor();
                 sp_text_context_update_text_selection(this);
-                if (SP_IS_TEXT (item_ungrouped)) {
-                    desktop->event_context->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> to edit the text, <b>drag</b> to select part of the text."));
+                if (SP_IS_TEXT(item_ungrouped)) {
+                    desktop->event_context->defaultMessageContext()->set(
+                        Inkscape::NORMAL_MESSAGE,
+                        _("<b>Click</b> to edit the text, <b>drag</b> to select part of the text."));
                 } else {
-                    desktop->event_context->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> to edit the flowed text, <b>drag</b> to select part of the text."));
+                    desktop->event_context->defaultMessageContext()->set(
+                        Inkscape::NORMAL_MESSAGE,
+                        _("<b>Click</b> to edit the flowed text, <b>drag</b> to select part of the text."));
                 }
                 this->over_text = true;
             }
             return TRUE;
-            }
-            break;
+        } break;
 
         case GDK_BUTTON_RELEASE:
             if (event->button.button == 1 && !this->space_panning) {
