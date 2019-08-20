@@ -41,7 +41,7 @@
 
 // ================= Common ====================
 
-std::vector<std::pair<unsigned int, Gtk::CheckMenuItem *>> checkmenuitems;
+std::vector<std::pair<std::pair<unsigned int, Gtk::CheckMenuItem *>, Inkscape::UI::View::View *>> checkmenuitems;
 unsigned int lastverb = -1;
 ;
 
@@ -74,14 +74,16 @@ static void item_activate(Gtk::MenuItem *menuitem, SPAction *action)
 static void toggle_checkmenu(unsigned int emitting_verb, bool value)
 {
     for (auto menu : checkmenuitems) {
-        if (emitting_verb == menu.first) {
-            if (emitting_verb == lastverb) {
+        if (menu.second == SP_ACTIVE_DESKTOP) {
+            if (emitting_verb == menu.first.first) {
+                if (emitting_verb == lastverb) {
+                    lastverb = -1;
+                    return;
+                }
+                lastverb = emitting_verb;
+                menu.first.second->property_active() = value;
                 lastverb = -1;
-                return;
             }
-            lastverb = emitting_verb;
-            menu.second->property_active() = value;
-            lastverb = -1;
         }
     }
 }
@@ -450,7 +452,9 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
 
                             Gtk::CheckMenuItem* menuitem = build_menu_check_item_from_verb(action);
                             if (menuitem) {
-                                checkmenuitems.emplace_back(verb->get_code(), menuitem);
+                                std::pair<std::pair<unsigned int, Gtk::CheckMenuItem *>, Inkscape::UI::View::View *>
+                                    checkitem = std::make_pair(std::make_pair(verb->get_code(), menuitem), view);
+                                checkmenuitems.push_back(checkitem);
                                 menu->append(*menuitem);
                             }
 
