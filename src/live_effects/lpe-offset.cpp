@@ -75,7 +75,7 @@ static const Util::EnumDataConverter<unsigned> JoinTypeConverter(JoinTypeData, s
 LPEOffset::LPEOffset(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     unit(_("Unit"), _("Unit of measurement"), "unit", &wr, this, "mm"),
-    offset(_("Offset:"), _("Offset)"), "offset", &wr, this, 0.0),
+    offset(_("Offset:"), _("Offset"), "offset", &wr, this, 0.0),
     linejoin_type(_("Join:"), _("Determines the shape of the path's corners"),  "linejoin_type", JoinTypeConverter, &wr, this, JOIN_ROUND),
     miter_limit(_("Miter limit:"), _("Maximum length of the miter join (in units of stroke width)"), "miter_limit", &wr, this, 4.0),
     attempt_force_join(_("Force miter"), _("Overrides the miter limit and forces a join."), "attempt_force_join", &wr, this, true),
