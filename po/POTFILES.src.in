@@ -232,6 +232,7 @@
 ../src/splivarot.cpp
 ../src/text-chemistry.cpp
 ../src/text-editing.cpp
+../src/trace/depixelize/inkscape-depixelize.cpp
 ../src/trace/potrace/inkscape-potrace.cpp
 ../src/trace/trace.cpp
 ../src/ui/clipboard.cpp

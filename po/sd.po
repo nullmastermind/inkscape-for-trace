@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-08-14 11:45+0200\n"
+"POT-Creation-Date: 2019-08-21 17:37+0200\n"
 "PO-Revision-Date: 2013-09-07 15:37+0530\n"
 "Last-Translator: Nasreen <nasreen_saifee@hotmail.com>\n"
 "Language-Team: Hindi <Indlinux>\n"
@@ -5023,7 +5023,7 @@ msgstr "ميموري دستاويز %d "
 msgid "Memory document %1"
 msgstr "ميموري دستاويز %d "
 
-#: ../src/document.cpp:915
+#: ../src/document.cpp:914
 #, c-format
 msgid "Unnamed document %d"
 msgstr "بي نام دستاويز %d "
@@ -5032,11 +5032,11 @@ msgstr "بي نام دستاويز %d "
 msgid "[Unchanged]"
 msgstr "(تبديل نە ڪيل) "
 
-#: ../src/event-log.cpp:366 ../src/event-log.cpp:369 ../src/verbs.cpp:2569
+#: ../src/event-log.cpp:366 ../src/event-log.cpp:369 ../src/verbs.cpp:2573
 msgid "_Undo"
 msgstr "نئين سر ڪريو "
 
-#: ../src/event-log.cpp:376 ../src/event-log.cpp:380 ../src/verbs.cpp:2570
+#: ../src/event-log.cpp:376 ../src/event-log.cpp:380 ../src/verbs.cpp:2574
 msgid "_Redo"
 msgstr "وري ڪريو "
 
@@ -5064,7 +5064,7 @@ msgstr "بيان: "
 msgid " (No preferences)"
 msgstr "(ڪابە ترجيح نە) "
 
-#: ../src/extension/effect.h:70 ../src/verbs.cpp:2337
+#: ../src/extension/effect.h:70 ../src/verbs.cpp:2341
 #, fuzzy
 msgid "Extensions"
 msgstr "وستار "
@@ -6000,15 +6000,15 @@ msgstr "%i منجها "
 #: ../src/extension/internal/vsd-input.cpp:155
 #: ../src/extension/prefdialog.cpp:78
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:51
-#: ../src/ui/dialog/export.cpp:921 ../src/ui/dialog/export.cpp:1305
+#: ../src/ui/dialog/export.cpp:921 ../src/ui/dialog/export.cpp:1307
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:251
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:562
 #: ../src/ui/dialog/guides.cpp:180 ../src/ui/dialog/layer-properties.cpp:43
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:30
 #: ../src/ui/dialog/lpe-powerstroke-properties.cpp:36
 #: ../src/ui/dialog/ocaldialogs.cpp:1085 ../src/ui/interface.cpp:240
-#: ../src/widgets/desktop-widget.cpp:1160
-#: ../src/widgets/desktop-widget.cpp:1207
+#: ../src/widgets/desktop-widget.cpp:1162
+#: ../src/widgets/desktop-widget.cpp:1209
 #, fuzzy
 msgid "_Cancel"
 msgstr "رد ڪريو "
@@ -7053,12 +7053,12 @@ msgstr "فيڊ آئوٽ "
 #: ../src/extension/internal/filter/color.h:821
 #: ../src/ui/widget/color-icc-selector.cpp:180
 #: ../src/ui/widget/color-scales.cpp:473 ../src/ui/widget/color-scales.cpp:474
-#: ../src/ui/widget/selected-style.cpp:269
+#: ../src/ui/widget/selected-style.cpp:275
 msgid "Black"
 msgstr "ڪارو "
 
 #: ../src/extension/internal/filter/color.h:822
-#: ../src/ui/widget/selected-style.cpp:265
+#: ../src/ui/widget/selected-style.cpp:271
 #, fuzzy
 msgid "White"
 msgstr ""
@@ -7088,7 +7088,7 @@ msgid "Customize greyscale components"
 msgstr ""
 
 #: ../src/extension/internal/filter/color.h:982
-#: ../src/ui/widget/selected-style.cpp:261
+#: ../src/ui/widget/selected-style.cpp:267
 msgid "Invert"
 msgstr "اونڌو ڪريو "
 
@@ -7151,7 +7151,8 @@ msgstr "شيڊ "
 
 #: ../src/extension/internal/filter/color.h:1121
 #: ../src/extension/internal/filter/paint.h:357 ../src/filter-enums.cpp:34
-#: ../src/live_effects/effect.cpp:653 ../src/live_effects/lpe-parallel.cpp:50
+#: ../src/live_effects/effect.cpp:653 ../src/live_effects/lpe-offset.cpp:78
+#: ../src/live_effects/lpe-parallel.cpp:50
 #: ../src/live_effects/lpe-transform_2pts.cpp:41
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1030
 msgid "Offset"
@@ -7255,8 +7256,8 @@ msgid "Hue distribution (°)"
 msgstr "رنگ جي ورهاست "
 
 #: ../src/extension/internal/filter/color.h:1488
-#: ../src/ui/dialog/tracedialog.cpp:147 ../share/ui/dialog-trace.glade:241
-#: ../share/ui/dialog-trace.glade:437 ../share/extensions/svgcalendar.inx:29
+#: ../src/ui/dialog/tracedialog.cpp:147 ../share/ui/dialog-trace.glade:260
+#: ../share/ui/dialog-trace.glade:456 ../share/extensions/svgcalendar.inx:29
 msgid "Colors"
 msgstr "رنگ "
 
@@ -7404,7 +7405,7 @@ msgstr "ٻاهر "
 
 #: ../src/extension/internal/filter/distort.h:78
 #: ../src/extension/internal/filter/textures.h:76
-#: ../src/ui/widget/selected-style.cpp:126
+#: ../src/ui/widget/selected-style.cpp:127
 #: ../src/ui/widget/style-swatch.cpp:121
 msgid "Stroke:"
 msgstr "گهمڪو "
@@ -7685,7 +7686,7 @@ msgid "Erosion 2"
 msgstr "ڪٽاءُ: "
 
 #: ../src/extension/internal/filter/morphology.h:192
-#: ../src/live_effects/lpe-roughen.cpp:40 ../share/ui/dialog-trace.glade:450
+#: ../src/live_effects/lpe-roughen.cpp:40 ../share/ui/dialog-trace.glade:469
 msgid "Smooth"
 msgstr "لسو "
 
@@ -7712,7 +7713,7 @@ msgstr "آواز ڀرڻ "
 #: ../src/extension/internal/filter/paint.h:691
 #: ../src/extension/internal/filter/shadows.h:61
 #: ../src/live_effects/lpe-measure-segments.cpp:281
-#: ../src/ui/dialog/find.cpp:76 ../share/ui/dialog-trace.glade:541
+#: ../src/ui/dialog/find.cpp:76 ../share/ui/dialog-trace.glade:560
 #: ../share/extensions/color_HSL_adjust.inx:8
 #: ../share/extensions/color_custom.inx:8
 #: ../share/extensions/color_randomize.inx:7 ../share/extensions/dots.inx:7
@@ -7847,7 +7848,7 @@ msgstr "عمودي ۽ اُفقي ليڪن سان رچيل اُڪير سان عڪ
 
 #: ../src/extension/internal/filter/paint.h:332
 #: ../src/ui/dialog/align-and-distribute.cpp:1074
-#: ../src/widgets/desktop-widget.cpp:1987
+#: ../src/widgets/desktop-widget.cpp:1989
 msgid "Drawing"
 msgstr "نقش"
 
@@ -8754,7 +8755,7 @@ msgid "Vector graphics format used by Corel WordPerfect"
 msgstr "ڪورل ورڊ پرفيڪٽ دواران اِستعمال ڪيل گرافڪس جي رچنا "
 
 #: ../src/extension/prefdialog.cpp:78 ../src/ui/dialog/knot-properties.cpp:41
-#: ../src/ui/dialog/text-edit.cpp:68 ../src/verbs.cpp:2562
+#: ../src/ui/dialog/text-edit.cpp:68 ../src/verbs.cpp:2566
 msgid "_Close"
 msgstr "بند ڪريو "
 
@@ -8964,7 +8965,7 @@ msgstr "ڪابە تبديل سانڍڻ جي ضرورت ڪانهي "
 msgid "Saving document..."
 msgstr "دستاويز سانڍي پيو "
 
-#: ../src/file.cpp:893 ../src/io/resource.cpp:155 ../src/io/resource.cpp:160
+#: ../src/file.cpp:893 ../src/io/resource.cpp:152 ../src/io/resource.cpp:157
 msgid "en"
 msgstr "sd"
 
@@ -9761,21 +9762,21 @@ msgstr "خودڪار سانڍجڻ ناڪام ٿيو! فائل %s  سانڍجي �
 msgid "Autosave complete."
 msgstr "خودڪار سانڍجڻ جو ڪم پورو ٿيو۔ "
 
-#: ../src/inkscape.cpp:767 ../src/ui/dialog/symbols.cpp:626
+#: ../src/inkscape.cpp:771 ../src/ui/dialog/symbols.cpp:639
 msgid "Untitled document"
 msgstr "بنا عنوان وارو دستاويز "
 
-#: ../src/inkscape.cpp:796
+#: ../src/inkscape.cpp:800
 msgid "Inkscape encountered an internal error and will close now.\n"
 msgstr "اِنڪسڪيپ ۾ ڪا اندروني چوڪ ٿي ويئي ۽ هاڻي بند ٿي ويندو۔ \n"
 
-#: ../src/inkscape.cpp:797
+#: ../src/inkscape.cpp:801
 msgid ""
 "Automatic backups of unsaved documents were done to the following "
 "locations:\n"
 msgstr "جيڪي دستاويز سانڍيا نە ويا اُنهن جا خودڪار بئڪپ هيٺين هنڌن ڪيو ويو: \n"
 
-#: ../src/inkscape.cpp:798
+#: ../src/inkscape.cpp:802
 msgid "Automatic backup of the following documents failed:\n"
 msgstr "هيٺين دستاويز جو خودڪار بئڪپ ناڪام ٿيو: \n"
 
@@ -9824,27 +9825,72 @@ msgstr ""
 msgid "Node or handle drag canceled."
 msgstr "نوڊ يا هينڊل گهلڻ رد ڪيو ويو "
 
-#: ../src/knotholder.cpp:206
+#: ../src/knotholder.cpp:207
 msgid "Change handle"
 msgstr "هينڊل بدلايو "
 
-#: ../src/knotholder.cpp:337
+#: ../src/knotholder.cpp:338
 msgid "Move handle"
 msgstr "هينڊل گهمايو "
 
-#: ../src/knotholder.cpp:356 ../src/knotholder.cpp:378
+#: ../src/knotholder.cpp:357
 msgid "<b>Move</b> the pattern fill inside the object"
 msgstr "شئە اَندر نموني جو ڀراءُ هلايو "
 
-#: ../src/knotholder.cpp:360 ../src/knotholder.cpp:382
+#: ../src/knotholder.cpp:360
 msgid "<b>Scale</b> the pattern fill; uniformly if with <b>Ctrl</b>"
 msgstr "نموني جو ڀراءُ ماپيو؛ اگر ڪنٽرول سان ڪريو تە سمان روپ ۾ "
 
-#: ../src/knotholder.cpp:364 ../src/knotholder.cpp:386
+#: ../src/knotholder.cpp:364
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
 msgstr "نموني جو ڀراءُ گهمايو، ڪنڊ جو عڪس ڪڍڻ لاءِ ڪنٽرول سان "
 
-#: ../src/knotholder.cpp:400 ../src/knotholder.cpp:402
+#: ../src/knotholder.cpp:378
+#, fuzzy
+msgid "<b>Move</b> the pattern stroke inside the object"
+msgstr "شئە اَندر نموني جو ڀراءُ هلايو "
+
+#: ../src/knotholder.cpp:381
+#, fuzzy
+msgid "<b>Scale</b> the pattern stroke; uniformly if with <b>Ctrl</b>"
+msgstr "نموني جو ڀراءُ ماپيو؛ اگر ڪنٽرول سان ڪريو تە سمان روپ ۾ "
+
+#: ../src/knotholder.cpp:385
+#, fuzzy
+msgid "<b>Rotate</b> the pattern stroke; with <b>Ctrl</b> to snap angle"
+msgstr "نموني جو ڀراءُ گهمايو، ڪنڊ جو عڪس ڪڍڻ لاءِ ڪنٽرول سان "
+
+#: ../src/knotholder.cpp:403
+#, fuzzy
+msgid "<b>Move</b> the hatch fill inside the object"
+msgstr "شئە اَندر نموني جو ڀراءُ هلايو "
+
+#: ../src/knotholder.cpp:406
+#, fuzzy
+msgid "<b>Scale</b> the hatch fill; uniformly if with <b>Ctrl</b>"
+msgstr "نموني جو ڀراءُ ماپيو؛ اگر ڪنٽرول سان ڪريو تە سمان روپ ۾ "
+
+#: ../src/knotholder.cpp:410
+#, fuzzy
+msgid "<b>Rotate</b> the hatch fill; with <b>Ctrl</b> to snap angle"
+msgstr "نموني جو ڀراءُ گهمايو، ڪنڊ جو عڪس ڪڍڻ لاءِ ڪنٽرول سان "
+
+#: ../src/knotholder.cpp:424
+#, fuzzy
+msgid "<b>Move</b> the hatch stroke inside the object"
+msgstr "شئە اَندر نموني جو ڀراءُ هلايو "
+
+#: ../src/knotholder.cpp:427
+#, fuzzy
+msgid "<b>Scale</b> the hatch stroke; uniformly if with <b>Ctrl</b>"
+msgstr "نموني جو ڀراءُ ماپيو؛ اگر ڪنٽرول سان ڪريو تە سمان روپ ۾ "
+
+#: ../src/knotholder.cpp:431
+#, fuzzy
+msgid "<b>Rotate</b> the hatch stroke; with <b>Ctrl</b> to snap angle"
+msgstr "نموني جو ڀراءُ گهمايو، ڪنڊ جو عڪس ڪڍڻ لاءِ ڪنٽرول سان "
+
+#: ../src/knotholder.cpp:445 ../src/knotholder.cpp:447
 #, fuzzy
 msgid "<b>Resize</b> the filter effect region"
 msgstr "فلٽر جي اَثرن جي کيتر جي ويڪر "
@@ -10398,7 +10444,7 @@ msgid "<b>Default value overridden:</b> "
 msgstr ""
 
 #: ../src/live_effects/effect.cpp:1557 ../src/live_effects/effect.cpp:1615
-#: ../share/ui/dialog-trace.glade:948
+#: ../share/ui/dialog-trace.glade:978
 #, fuzzy
 msgid "Update"
 msgstr "اَپڊيٽ ڪريو "
@@ -12732,8 +12778,9 @@ msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:102
 #: ../src/live_effects/lpe-measure-segments.cpp:282
-#: ../src/ui/dialog/extension-editor.cpp:76 ../src/verbs.cpp:292
-#: ../src/verbs.cpp:311 ../share/extensions/color_HSL_adjust.inx:16
+#: ../src/ui/dialog/extension-editor.cpp:76 ../src/verbs.cpp:293
+#: ../src/verbs.cpp:312 ../share/ui/dialog-trace.glade:916
+#: ../share/extensions/color_HSL_adjust.inx:16
 #: ../share/extensions/color_custom.inx:17
 #: ../share/extensions/color_randomize.inx:13 ../share/extensions/dots.inx:13
 #: ../share/extensions/draw_from_triangle.inx:43
@@ -12889,7 +12936,7 @@ msgstr "ڪلون پنهنجي مول جيان ساڳئي ويڪر ۾ بدليا 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:59
 msgid ""
 "Split original and mirror image into separate paths, so each can have its "
-"own style.)"
+"own style."
 msgstr ""
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:60
@@ -12946,11 +12993,6 @@ msgstr "عمودي ڪناري جو پتو لڳايو۔"
 #, fuzzy
 msgid "Horizontal center"
 msgstr "اُفقي ڪنار جو پتو لڳايو "
-
-#: ../src/live_effects/lpe-offset.cpp:78
-#, fuzzy
-msgid "Offset)"
-msgstr "آفسيٽ "
 
 #
 # File: ../src/live_effects/lpe-offset.cpp, line: 82
@@ -14693,7 +14735,7 @@ msgstr[1] ""
 msgid "Create Guides Around the Page"
 msgstr "صفحي جي چؤطرف رهنمائي ڪري ٿو "
 
-#: ../src/object/sp-guide.cpp:292 ../src/verbs.cpp:2661
+#: ../src/object/sp-guide.cpp:292 ../src/verbs.cpp:2665
 #, fuzzy
 msgid "Delete All Guides"
 msgstr "رهنما ڪڍي ڇڏيو "
@@ -14756,26 +14798,26 @@ msgstr "ڪابە شئە نە "
 msgid "Ungroup"
 msgstr "گروپ ٽوڙيو"
 
-#: ../src/object/sp-item.cpp:1031 ../src/verbs.cpp:215
+#: ../src/object/sp-item.cpp:1032 ../src/verbs.cpp:216
 msgid "Object"
 msgstr "شئە "
 
-#: ../src/object/sp-item.cpp:1043
+#: ../src/object/sp-item.cpp:1044
 #, c-format
 msgid "%s; <i>clipped</i>"
 msgstr "%s; ڇانٽيل"
 
-#: ../src/object/sp-item.cpp:1049
+#: ../src/object/sp-item.cpp:1050
 #, c-format
 msgid "%s; <i>masked</i>"
 msgstr "%s; مکؤٽو چڙهيل"
 
-#: ../src/object/sp-item.cpp:1059
+#: ../src/object/sp-item.cpp:1060
 #, c-format
 msgid "%s; <i>filtered (%s)</i>"
 msgstr "%s; فلٽر ڪيل (%s)"
 
-#: ../src/object/sp-item.cpp:1061
+#: ../src/object/sp-item.cpp:1062
 #, c-format
 msgid "%s; <i>filtered</i>"
 msgstr "%s;  فلٽر ڪيل"
@@ -14886,7 +14928,7 @@ msgstr "متن شامل ڪريو "
 msgid "Text in-a-shape"
 msgstr "آڪارتيءَ منجهە متن پرواهت ڪريو "
 
-#: ../src/object/sp-text.cpp:327 ../src/verbs.cpp:330
+#: ../src/object/sp-text.cpp:327 ../src/verbs.cpp:331
 #: ../share/extensions/hershey.inx:128 ../share/extensions/lorem_ipsum.inx:19
 #: ../share/extensions/replace_font.inx:30
 #: ../share/extensions/text_braille.inx:10
@@ -15221,7 +15263,7 @@ msgstr "واسطو:"
 msgid "A related resource"
 msgstr "نموني جو مولُ "
 
-#: ../src/rdf.cpp:270 ../src/ui/dialog/inkscape-preferences.cpp:2531
+#: ../src/rdf.cpp:270 ../src/ui/dialog/inkscape-preferences.cpp:2510
 msgid "Language:"
 msgstr "ٻولي:"
 
@@ -15489,7 +15531,7 @@ msgstr "هيٺ ڪابە پرت ناهي"
 msgid "Select <b>object(s)</b> to move."
 msgstr "هيٺ ڪرڻ لاءِ شئە (شيون) چونڊيو "
 
-#: ../src/selection-chemistry.cpp:1521 ../src/verbs.cpp:2798
+#: ../src/selection-chemistry.cpp:1521 ../src/verbs.cpp:2802
 #, fuzzy
 msgid "Move selection to layer"
 msgstr "چونڊ کي سطح مٿان هلايو "
@@ -15692,61 +15734,61 @@ msgstr "بٽميپ نقل ٺاهڻ لاءِ شئە (شيون) چونڊيو "
 msgid "Rendering bitmap..."
 msgstr "پٽميپ موٽائي پيو۔۔۔"
 
-#: ../src/selection-chemistry.cpp:3795
+#: ../src/selection-chemistry.cpp:3794
 msgid "Create bitmap"
 msgstr "بٽميپ خلقيو"
 
-#: ../src/selection-chemistry.cpp:3817 ../src/selection-chemistry.cpp:3926
+#: ../src/selection-chemistry.cpp:3816 ../src/selection-chemistry.cpp:3925
 msgid "Select <b>object(s)</b> to create clippath or mask from."
 msgstr "شئە (شيون) چونڊيو جنهن (جن) سان ڪلپ جي راهە يا مکؤٽو خلقڻو آهي"
 
-#: ../src/selection-chemistry.cpp:3902
+#: ../src/selection-chemistry.cpp:3901
 #, fuzzy
 msgid "Create Clip Group"
 msgstr "ڪلون خلقيو "
 
-#: ../src/selection-chemistry.cpp:3930
+#: ../src/selection-chemistry.cpp:3929
 msgid "Select mask object and <b>object(s)</b> to apply clippath or mask to."
 msgstr "مکؤٽي واري شئە ۾ شيون چونڊيو جنهن ۾ ڪلپراهە يا مکؤٽو لاڳو ڪرڻو آهي"
 
-#: ../src/selection-chemistry.cpp:4098
+#: ../src/selection-chemistry.cpp:4097
 msgid "Set clipping path"
 msgstr "ڪلپنگ راهە سيٽ ڪريو"
 
-#: ../src/selection-chemistry.cpp:4100
+#: ../src/selection-chemistry.cpp:4099
 msgid "Set mask"
 msgstr "مکؤٽو سيٽ ڪريو "
 
-#: ../src/selection-chemistry.cpp:4112
+#: ../src/selection-chemistry.cpp:4111
 msgid "Select <b>object(s)</b> to remove clippath or mask from."
 msgstr "شئە (شيون) چونڊيو جنهن (جن) سان ڪلپ راهە يا مکؤٽو ڪڍي ڇڏڻو آهي"
 
-#: ../src/selection-chemistry.cpp:4229
+#: ../src/selection-chemistry.cpp:4228
 msgid "Release clipping path"
 msgstr "ڪلپنگ راهە ڇڏيو"
 
-#: ../src/selection-chemistry.cpp:4231
+#: ../src/selection-chemistry.cpp:4230
 msgid "Release mask"
 msgstr "مکؤٽو ڇڏيو"
 
-#: ../src/selection-chemistry.cpp:4247
+#: ../src/selection-chemistry.cpp:4246
 msgid "Select <b>object(s)</b> to fit canvas to."
 msgstr "شئە (شيون) چونڊيو جنهن (جن) سان ڪينواس ٺهڪائڻو آهي"
 
-#: ../src/selection-chemistry.cpp:4255 ../src/verbs.cpp:3182
+#: ../src/selection-chemistry.cpp:4254 ../src/verbs.cpp:3189
 msgid "Fit Page to Selection"
 msgstr "چونڊ ۾ صفحو ٺهڪايو"
 
-#: ../src/selection-chemistry.cpp:4329 ../src/verbs.cpp:2671
+#: ../src/selection-chemistry.cpp:4328 ../src/verbs.cpp:2675
 #, fuzzy
 msgid "Swap fill and stroke of an object"
 msgstr "پراو ۽ گهڪي ۾ مٽ سٽ ڪريو "
 
-#: ../src/selection-chemistry.cpp:4357 ../src/verbs.cpp:3184
+#: ../src/selection-chemistry.cpp:4356 ../src/verbs.cpp:3191
 msgid "Fit Page to Drawing"
 msgstr "نقش ۾ صفحو ٺهڪايو"
 
-#: ../src/selection-chemistry.cpp:4378
+#: ../src/selection-chemistry.cpp:4377
 msgid "Fit Page to Selection or Drawing"
 msgstr "چونڊ يا نقش ۾ صفحو ٺهڪايو"
 
@@ -15944,8 +15986,8 @@ msgstr ""
 "<b> ذريعي </b> هلايو  %s, %s; اُفقي/عموديءَ کي روڪڻ <b>Ctrl</b> سان؛ ترت عڪسي "
 "اَسمرٿ بڻائڻ <b>Shift</b> سان "
 
-#: ../src/shortcuts.cpp:425 ../src/ui/dialog/export.cpp:1302
-#: ../src/ui/dialog/export.cpp:1332
+#: ../src/shortcuts.cpp:425 ../src/ui/dialog/export.cpp:1304
+#: ../src/ui/dialog/export.cpp:1334
 msgid "Select a filename for exporting"
 msgstr "روانگيءَ لاءِ فائل جو نالو چونڊيو "
 
@@ -16083,7 +16125,7 @@ msgstr ""
 msgid "The flowed text(s) must be <b>visible</b> in order to be put on a path."
 msgstr "پرواهت متن (منٽ) راهە تي سلسلي ۾ رکڻ لاءِ ضروري نظر اَچڻ گهرجي (گهرجن)۔"
 
-#: ../src/text-chemistry.cpp:180 ../src/verbs.cpp:2698
+#: ../src/text-chemistry.cpp:180 ../src/verbs.cpp:2702
 msgid "Put text on path"
 msgstr "متن کي راهە تي رکو"
 
@@ -16095,7 +16137,7 @@ msgstr "راهە تان متن هڻائي ڇڏڻ لاءِ راهە تي متن �
 msgid "<b>No texts-on-paths</b> in the selection."
 msgstr "هن چونڊ ۾ راهن تي ڪوبە متن ناهي "
 
-#: ../src/text-chemistry.cpp:213 ../src/verbs.cpp:2701
+#: ../src/text-chemistry.cpp:213 ../src/verbs.cpp:2705
 msgid "Remove text from path"
 msgstr "راهە تان متن هٽائي ڇڏيو "
 
@@ -16148,6 +16190,14 @@ msgstr "هن چونڊ ۾ بدلائڻ لاءِ ڪوبە پرواهت متن ڪو
 msgid "You cannot edit <b>cloned character data</b>."
 msgstr "ڪلون ڪيل اکرن جي سامگري توهين سمپادت نٿا ڪري سگهيو "
 
+#: ../src/trace/depixelize/inkscape-depixelize.cpp:82
+msgid ""
+"Image looks too big. Process may take a while and it is wise to save your "
+"document before continuing.\n"
+"\n"
+"Continue the procedure (without saving)?"
+msgstr ""
+
 #: ../src/trace/potrace/inkscape-potrace.cpp:522
 #: ../src/trace/potrace/inkscape-potrace.cpp:585
 #, fuzzy
@@ -16187,7 +16237,7 @@ msgstr "پتو لڳايو: عڪس ۾ ڪابە پٽميپ سامگري ناهي"
 msgid "Trace: Starting trace..."
 msgstr "پتو لڳايو: پتو لڳائڻ شروع ڪيو پيو وڃي۔۔۔ "
 
-#: ../src/trace/trace.cpp:550 ../share/ui/dialog-trace.glade:654
+#: ../src/trace/trace.cpp:550 ../share/ui/dialog-trace.glade:673
 msgid "Trace bitmap"
 msgstr "بٽميپ جو پتو لڳايو "
 
@@ -16196,44 +16246,44 @@ msgstr "بٽميپ جو پتو لڳايو "
 msgid "Trace: Done. %ld nodes created"
 msgstr "پتو لڳايو: پورو ڪيو ويو: %ld ڳنڍيون خلقيون وييون"
 
-#: ../src/ui/clipboard.cpp:252
+#: ../src/ui/clipboard.cpp:254
 msgid "Nothing was copied."
 msgstr "ڪجهە بە نقل نە ڪيو ويو "
 
-#: ../src/ui/clipboard.cpp:383 ../src/ui/clipboard.cpp:599
-#: ../src/ui/clipboard.cpp:628 ../src/ui/clipboard.cpp:670
+#: ../src/ui/clipboard.cpp:385 ../src/ui/clipboard.cpp:601
+#: ../src/ui/clipboard.cpp:630 ../src/ui/clipboard.cpp:672
 msgid "Nothing on the clipboard."
 msgstr "ڪلپبورڊ تي ڪجهە بە ناهي "
 
-#: ../src/ui/clipboard.cpp:441
+#: ../src/ui/clipboard.cpp:443
 msgid "Select <b>object(s)</b> to paste style to."
 msgstr "شئە (شيون) چونڊيو جنهن (جن) ۾ نمونو چنبڙائڻو آهي "
 
-#: ../src/ui/clipboard.cpp:452 ../src/ui/clipboard.cpp:469
+#: ../src/ui/clipboard.cpp:454 ../src/ui/clipboard.cpp:471
 msgid "No style on the clipboard."
 msgstr "ڪلپبورڊ تي ڪوبە نمونو ناهي "
 
-#: ../src/ui/clipboard.cpp:495
+#: ../src/ui/clipboard.cpp:497
 msgid "Select <b>object(s)</b> to paste size to."
 msgstr "شئە (شيون) چونڊيو جنهن (حيب) ۾ آڪار چنبڙائڻو آهي "
 
-#: ../src/ui/clipboard.cpp:503
+#: ../src/ui/clipboard.cpp:505
 msgid "No size on the clipboard."
 msgstr "ڪلپبورڊ تي ڪوبە آڪار ناهي۔ "
 
-#: ../src/ui/clipboard.cpp:560
+#: ../src/ui/clipboard.cpp:562
 msgid "Select <b>object(s)</b> to paste live path effect to."
 msgstr "شئە (شيون) چونڊيو جنهن (جن) ۾ سجيو راهە جو اَثر چنبڙائڻو آهي۔ "
 
-#: ../src/ui/clipboard.cpp:586
+#: ../src/ui/clipboard.cpp:588
 msgid "No effect on the clipboard."
 msgstr "ڪلپبورڊ تي ڪوبە اَثر ناهي "
 
-#: ../src/ui/clipboard.cpp:605 ../src/ui/clipboard.cpp:652
+#: ../src/ui/clipboard.cpp:607 ../src/ui/clipboard.cpp:654
 msgid "Clipboard does not contain a path."
 msgstr "ڪلپبورڊ ۾ راهە مؤجود ناهي "
 
-#: ../src/ui/clipboard.cpp:700
+#: ../src/ui/clipboard.cpp:702
 #, fuzzy
 msgid "Clipboard does not contain any."
 msgstr "ڪلپبورڊ ۾ راهە مؤجود ناهي "
@@ -16242,207 +16292,207 @@ msgstr "ڪلپبورڊ ۾ راهە مؤجود ناهي "
 msgid "Go to parent"
 msgstr "مول ۾ وڃو "
 
-#: ../src/ui/contextmenu.cpp:105
+#: ../src/ui/contextmenu.cpp:106
 #, fuzzy
 msgid "Hide Selected Objects"
 msgstr "چونڊيل شيون نقل ڪريو "
 
-#: ../src/ui/contextmenu.cpp:113
+#: ../src/ui/contextmenu.cpp:114
 #, fuzzy
 msgid "Unhide Objects Below"
 msgstr "لڪل شئە کولي ڏيکاريو"
 
-#: ../src/ui/contextmenu.cpp:121
+#: ../src/ui/contextmenu.cpp:122
 #, fuzzy
 msgid "Lock Selected Objects"
 msgstr "چونڊيل شين جو گروپ بڻايو "
 
-#: ../src/ui/contextmenu.cpp:129
+#: ../src/ui/contextmenu.cpp:130
 #, fuzzy
 msgid "Unlock Objects Below"
 msgstr "شئە جو ڪلف گوليو "
 
-#: ../src/ui/contextmenu.cpp:153
+#: ../src/ui/contextmenu.cpp:154
 #, fuzzy
 msgid "Enter group #%1"
 msgstr "گروپ #%s داخل ڪريو "
 
-#: ../src/ui/contextmenu.cpp:167
+#: ../src/ui/contextmenu.cpp:168
 #, fuzzy
 msgid "_Pop selection out of group"
 msgstr "چونڊ کي گروپ مڃو: "
 
-#: ../src/ui/contextmenu.cpp:353 ../src/verbs.cpp:3122
+#: ../src/ui/contextmenu.cpp:354 ../src/verbs.cpp:3129
 msgid "_Object Properties..."
 msgstr "شئە جون خاصيتون۔۔۔ "
 
-#: ../src/ui/contextmenu.cpp:362
+#: ../src/ui/contextmenu.cpp:363
 msgid "_Select This"
 msgstr "هي چونڊيو "
 
-#: ../src/ui/contextmenu.cpp:373
+#: ../src/ui/contextmenu.cpp:374
 #, fuzzy
 msgid "Select Same"
 msgstr "صفحو چونڊو "
 
-#: ../src/ui/contextmenu.cpp:383
+#: ../src/ui/contextmenu.cpp:384
 #, fuzzy
 msgid "Fill and Stroke"
 msgstr "ڀراءُ ۽ گهڪو۔۔۔ "
 
-#: ../src/ui/contextmenu.cpp:390
+#: ../src/ui/contextmenu.cpp:391
 #, fuzzy
 msgid "Fill Color"
 msgstr "رنگ ڀريو "
 
-#: ../src/ui/contextmenu.cpp:397
+#: ../src/ui/contextmenu.cpp:398
 #, fuzzy
 msgid "Stroke Color"
 msgstr "گهڪي جو رنگ "
 
-#: ../src/ui/contextmenu.cpp:404
+#: ../src/ui/contextmenu.cpp:405
 #, fuzzy
 msgid "Stroke Style"
 msgstr "گهڪي جو نمونو "
 
-#: ../src/ui/contextmenu.cpp:411
+#: ../src/ui/contextmenu.cpp:412
 #, fuzzy
 msgid "Object Type"
 msgstr "شئە جو قسم:"
 
-#: ../src/ui/contextmenu.cpp:418
+#: ../src/ui/contextmenu.cpp:419
 msgid "_Move to Layer..."
 msgstr ""
 
-#: ../src/ui/contextmenu.cpp:428
+#: ../src/ui/contextmenu.cpp:429
 #, fuzzy
 msgid "Create _Link"
 msgstr "ڪڙي خلقيو "
 
-#: ../src/ui/contextmenu.cpp:451
+#: ../src/ui/contextmenu.cpp:452
 msgid "Set Mask"
 msgstr "مکؤٽو سيٽ ڪريو "
 
-#: ../src/ui/contextmenu.cpp:462
+#: ../src/ui/contextmenu.cpp:463
 msgid "Release Mask"
 msgstr "مکؤٽي کي ڇڏي ڏيو "
 
-#: ../src/ui/contextmenu.cpp:473
+#: ../src/ui/contextmenu.cpp:474
 #, fuzzy
 msgid "Create Clip G_roup"
 msgstr "ڪلون خلقيو "
 
-#: ../src/ui/contextmenu.cpp:480
+#: ../src/ui/contextmenu.cpp:481
 #, fuzzy
 msgid "Set Cl_ip"
 msgstr "سيٽ ڪريو "
 
-#: ../src/ui/contextmenu.cpp:491
+#: ../src/ui/contextmenu.cpp:492
 msgid "Release C_lip"
 msgstr "ڪلپ کي ڇڏي ڏيو "
 
-#: ../src/ui/contextmenu.cpp:502 ../src/verbs.cpp:2690
+#: ../src/ui/contextmenu.cpp:503 ../src/verbs.cpp:2694
 msgid "_Group"
 msgstr "گروپ "
 
-#: ../src/ui/contextmenu.cpp:573
+#: ../src/ui/contextmenu.cpp:574
 msgid "Create link"
 msgstr "ڪڙي خلقيو "
 
-#: ../src/ui/contextmenu.cpp:608 ../src/verbs.cpp:2692
+#: ../src/ui/contextmenu.cpp:609 ../src/verbs.cpp:2696
 msgid "_Ungroup"
 msgstr "گروپ ٽوڙيو "
 
-#: ../src/ui/contextmenu.cpp:638
+#: ../src/ui/contextmenu.cpp:639
 msgid "Link _Properties..."
 msgstr "خاصيتن جي ڪڙي جوڙيو۔۔۔ "
 
-#: ../src/ui/contextmenu.cpp:644
+#: ../src/ui/contextmenu.cpp:645
 msgid "_Follow Link"
 msgstr "ڪڙيءَ جي پيروي ڪريو "
 
-#: ../src/ui/contextmenu.cpp:650
+#: ../src/ui/contextmenu.cpp:651
 msgid "_Remove Link"
 msgstr "ڪڙي ڪڍِي ڇڏيو "
 
-#: ../src/ui/contextmenu.cpp:681
+#: ../src/ui/contextmenu.cpp:682
 #, fuzzy
 msgid "Remove link"
 msgstr "ڪڙي ڪڍِي ڇڏيو "
 
-#: ../src/ui/contextmenu.cpp:691
+#: ../src/ui/contextmenu.cpp:692
 msgid "Image _Properties..."
 msgstr "عڪس خاصيتون۔۔۔ "
 
-#: ../src/ui/contextmenu.cpp:697
+#: ../src/ui/contextmenu.cpp:698
 msgid "Edit Externally..."
 msgstr "ٻاهران سمپادت ڪريو۔۔۔ "
 
-#: ../src/ui/contextmenu.cpp:707 ../src/verbs.cpp:2770
+#: ../src/ui/contextmenu.cpp:708 ../src/verbs.cpp:2774
 msgid "_Trace Bitmap..."
 msgstr "بٽميپ جو پتو لڳايو "
 
-#: ../src/ui/contextmenu.cpp:717
+#: ../src/ui/contextmenu.cpp:718
 msgid "Trace Pixel Art"
 msgstr ""
 
-#: ../src/ui/contextmenu.cpp:727
+#: ../src/ui/contextmenu.cpp:728
 #, fuzzy
 msgctxt "Context menu"
 msgid "Embed Image"
 msgstr "عڪس لٽيو "
 
-#: ../src/ui/contextmenu.cpp:738
+#: ../src/ui/contextmenu.cpp:739
 #, fuzzy
 msgctxt "Context menu"
 msgid "Extract Image..."
 msgstr "عڪس جو سار ڪڍو "
 
-#: ../src/ui/contextmenu.cpp:901 ../src/ui/contextmenu.cpp:921
-#: ../src/verbs.cpp:3078
+#: ../src/ui/contextmenu.cpp:902 ../src/ui/contextmenu.cpp:922
+#: ../src/verbs.cpp:3082
 msgid "_Fill and Stroke..."
 msgstr "ڀراءُ ۽ گهڪو۔۔۔ "
 
-#: ../src/ui/contextmenu.cpp:927 ../src/verbs.cpp:3100
+#: ../src/ui/contextmenu.cpp:928 ../src/verbs.cpp:3107
 msgid "_Text and Font..."
 msgstr "متن ۽ فانٽ۔۔۔ "
 
-#: ../src/ui/contextmenu.cpp:934 ../src/verbs.cpp:3110
+#: ../src/ui/contextmenu.cpp:935 ../src/verbs.cpp:3117
 msgid "Check Spellin_g..."
 msgstr "هجي چڪاسيو۔۔۔ "
 
-#: ../src/ui/desktop/menubar.cpp:312
+#: ../src/ui/desktop/menubar.cpp:314
 #, fuzzy
 msgctxt "Interface setup"
 msgid "Default"
 msgstr "ڊيفالٽ "
 
-#: ../src/ui/desktop/menubar.cpp:312
+#: ../src/ui/desktop/menubar.cpp:314
 msgid "Default interface setup"
 msgstr "ڊيفالٽ اِنٽرفيس سيٽئپ "
 
-#: ../src/ui/desktop/menubar.cpp:313
+#: ../src/ui/desktop/menubar.cpp:315
 #, fuzzy
 msgctxt "Interface setup"
 msgid "Custom"
 msgstr "روايت "
 
-#: ../src/ui/desktop/menubar.cpp:313
+#: ../src/ui/desktop/menubar.cpp:315
 #, fuzzy
 msgid "Setup for custom task"
 msgstr "روايتي ڪاريە سيٽ ڪريو "
 
-#: ../src/ui/desktop/menubar.cpp:314
+#: ../src/ui/desktop/menubar.cpp:316
 #, fuzzy
 msgctxt "Interface setup"
 msgid "Wide"
 msgstr "ويڪرو "
 
-#: ../src/ui/desktop/menubar.cpp:314
+#: ../src/ui/desktop/menubar.cpp:316
 msgid "Setup for widescreen work"
 msgstr "ويڪريءَ اِسڪرن جي ڪاريە لاءِ سيٽئپ"
 
-#: ../src/ui/desktop/menubar.cpp:515
+#: ../src/ui/desktop/menubar.cpp:519
 msgid "Open _Recent"
 msgstr "تارو کوليو "
 
@@ -16545,52 +16595,52 @@ msgstr "ثنڍيون "
 msgid "Relative to: "
 msgstr "سان واسطو رکندڙ: "
 
-#: ../src/ui/dialog/align-and-distribute.cpp:947 ../src/verbs.cpp:3216
-#: ../src/verbs.cpp:3217
+#: ../src/ui/dialog/align-and-distribute.cpp:947 ../src/verbs.cpp:3223
+#: ../src/verbs.cpp:3224
 msgid "Align right edges of objects to the left edge of the anchor"
 msgstr "شين جي ساڄي پاسي جي ڪنارين ۽ جوڙ جي کاٻي پاسي جي ڪنار کي ترتيب ڏيو "
 
-#: ../src/ui/dialog/align-and-distribute.cpp:950 ../src/verbs.cpp:3219
-#: ../src/verbs.cpp:3220
+#: ../src/ui/dialog/align-and-distribute.cpp:950 ../src/verbs.cpp:3226
+#: ../src/verbs.cpp:3227
 msgid "Align left edges"
 msgstr "کاٻي پاسي جي ڪنارين کي ترتيب ڏيو "
 
-#: ../src/ui/dialog/align-and-distribute.cpp:953 ../src/verbs.cpp:3221
-#: ../src/verbs.cpp:3222
+#: ../src/ui/dialog/align-and-distribute.cpp:953 ../src/verbs.cpp:3228
+#: ../src/verbs.cpp:3229
 msgid "Center on vertical axis"
 msgstr "عمودي محور تي مرڪز "
 
-#: ../src/ui/dialog/align-and-distribute.cpp:956 ../src/verbs.cpp:3223
-#: ../src/verbs.cpp:3224
+#: ../src/ui/dialog/align-and-distribute.cpp:956 ../src/verbs.cpp:3230
+#: ../src/verbs.cpp:3231
 msgid "Align right sides"
 msgstr "ساڄي پاسي جي پاسن کي ترتيب ڏيو "
 
-#: ../src/ui/dialog/align-and-distribute.cpp:959 ../src/verbs.cpp:3226
-#: ../src/verbs.cpp:3227
+#: ../src/ui/dialog/align-and-distribute.cpp:959 ../src/verbs.cpp:3233
+#: ../src/verbs.cpp:3234
 msgid "Align left edges of objects to the right edge of the anchor"
 msgstr "شين جي کاٻي پاسي جي ڪنارين کي ڳنڍ جي ساڄي پاسي سان ترتيب ڏيو "
 
-#: ../src/ui/dialog/align-and-distribute.cpp:962 ../src/verbs.cpp:3230
-#: ../src/verbs.cpp:3231
+#: ../src/ui/dialog/align-and-distribute.cpp:962 ../src/verbs.cpp:3237
+#: ../src/verbs.cpp:3238
 msgid "Align bottom edges of objects to the top edge of the anchor"
 msgstr "شين جي تر جي ڪنارين کي ڳنڍ جي مٿ جي ڪناري سان ترتيب ڏيو "
 
-#: ../src/ui/dialog/align-and-distribute.cpp:965 ../src/verbs.cpp:3233
+#: ../src/ui/dialog/align-and-distribute.cpp:965 ../src/verbs.cpp:3240
 msgid "Align top edges"
 msgstr "کاٻي پاسي جي ڪنارين کي ترتيب ڏيو "
 
-#: ../src/ui/dialog/align-and-distribute.cpp:968 ../src/verbs.cpp:3235
-#: ../src/verbs.cpp:3236
+#: ../src/ui/dialog/align-and-distribute.cpp:968 ../src/verbs.cpp:3242
+#: ../src/verbs.cpp:3243
 msgid "Center on horizontal axis"
 msgstr "عمودي محور تي مرڪز"
 
-#: ../src/ui/dialog/align-and-distribute.cpp:971 ../src/verbs.cpp:3237
-#: ../src/verbs.cpp:3238
+#: ../src/ui/dialog/align-and-distribute.cpp:971 ../src/verbs.cpp:3244
+#: ../src/verbs.cpp:3245
 msgid "Align bottom edges"
 msgstr "ساڄي پاسي جي پاسن کي ترتيب ڏيو "
 
-#: ../src/ui/dialog/align-and-distribute.cpp:974 ../src/verbs.cpp:3240
-#: ../src/verbs.cpp:3241
+#: ../src/ui/dialog/align-and-distribute.cpp:974 ../src/verbs.cpp:3247
+#: ../src/verbs.cpp:3248
 msgid "Align top edges of objects to the bottom edge of the anchor"
 msgstr "شين جي مٿ جي ڪنارين کي ڳنڍ جي ترجي ڪناريءَ سان ترتيب ڏيو "
 
@@ -16711,7 +16761,7 @@ msgstr "سڀين کان ننڍي شئە "
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1073
 #: ../src/ui/dialog/document-properties.cpp:149
-#: ../src/widgets/desktop-widget.cpp:1983
+#: ../src/widgets/desktop-widget.cpp:1985
 #: ../share/extensions/voronoi2svg.inx:16
 msgid "Page"
 msgstr "صفحو "
@@ -16805,14 +16855,14 @@ msgid "Profile name:"
 msgstr "پروفائل جو نالو "
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:55
-#: ../src/ui/dialog/guides.cpp:179 ../src/verbs.cpp:2599
+#: ../src/ui/dialog/guides.cpp:179 ../src/verbs.cpp:2603
 msgid "_Delete"
 msgstr "خارج ڪري ڇڏيو "
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:60
-#: ../src/ui/dialog/export.cpp:1306
+#: ../src/ui/dialog/export.cpp:1308
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:563 ../src/ui/dialog/input.cpp:905
-#: ../src/verbs.cpp:2536 ../src/widgets/desktop-widget.cpp:1161
+#: ../src/verbs.cpp:2540 ../src/widgets/desktop-widget.cpp:1163
 msgid "_Save"
 msgstr "سانڍيو "
 
@@ -17686,7 +17736,7 @@ msgstr "رهنما ڏيکاريو يا لڪايو "
 msgid "Lock all guides"
 msgstr "پرت کي ڪرف ڏيو "
 
-#: ../src/ui/dialog/document-properties.cpp:115 ../src/verbs.cpp:2664
+#: ../src/ui/dialog/document-properties.cpp:115 ../src/verbs.cpp:2668
 #: ../src/widgets/desktop-widget.cpp:379
 #, fuzzy
 msgid "Toggle lock of all guides in the document"
@@ -17866,7 +17916,7 @@ msgstr "چونڊيل ڄار ڪڍي ڇڏيو "
 msgid "Guides"
 msgstr "رهنما "
 
-#: ../src/ui/dialog/document-properties.cpp:152 ../src/verbs.cpp:3013
+#: ../src/ui/dialog/document-properties.cpp:152 ../src/verbs.cpp:3017
 msgid "Snap"
 msgstr "ترت عڪسي "
 
@@ -17917,7 +17967,7 @@ msgstr "رهنمائن ۾ ترت عڪسي ڪريو "
 msgid "<b>Miscellaneous</b>"
 msgstr "ڇوٽڪو "
 
-#: ../src/ui/dialog/document-properties.cpp:537 ../src/verbs.cpp:3199
+#: ../src/ui/dialog/document-properties.cpp:537 ../src/verbs.cpp:3206
 msgid "Link Color Profile"
 msgstr "رنگ جي پروفائل سان ڪڙي جوڙيو "
 
@@ -17977,7 +18027,7 @@ msgstr ""
 
 #: ../src/ui/dialog/document-properties.cpp:787
 #: ../src/ui/dialog/document-properties.cpp:845
-#: ../src/ui/widget/selected-style.cpp:351
+#: ../src/ui/widget/selected-style.cpp:357
 msgid "Remove"
 msgstr "ڪڍي ڇڏيو "
 
@@ -18067,15 +18117,15 @@ msgstr "ڄار ڪڍي ڇڏيو "
 msgid "Changed default display unit"
 msgstr "ڊيفالٽ لاهە خلقيو "
 
-#: ../src/ui/dialog/export.cpp:117 ../src/verbs.cpp:2980
+#: ../src/ui/dialog/export.cpp:117 ../src/verbs.cpp:2984
 msgid "_Page"
 msgstr "صفحو "
 
-#: ../src/ui/dialog/export.cpp:117 ../src/verbs.cpp:2984
+#: ../src/ui/dialog/export.cpp:117 ../src/verbs.cpp:2988
 msgid "_Drawing"
 msgstr "نقش "
 
-#: ../src/ui/dialog/export.cpp:117 ../src/verbs.cpp:2986
+#: ../src/ui/dialog/export.cpp:117 ../src/verbs.cpp:2990
 msgid "_Selection"
 msgstr "چونڊ "
 
@@ -18257,7 +18307,7 @@ msgstr "%d فائلن جي روانگي ٿئي پيئي "
 msgid "Exporting file <b>%s</b>..."
 msgstr "%d فائلن جي روانگي ٿئي پيئي "
 
-#: ../src/ui/dialog/export.cpp:1075 ../src/ui/dialog/export.cpp:1170
+#: ../src/ui/dialog/export.cpp:1075 ../src/ui/dialog/export.cpp:1172
 #, c-format
 msgid "Could not export to filename %s.\n"
 msgstr "%s فائل جي نالي جي روانگي نٿي سگهي۔ \n"
@@ -18300,12 +18350,12 @@ msgstr "ڊائريڪٽري %s مؤجود ناهي اُها ڊائريڪٽري 
 msgid "Exporting %1 (%2 x %3)"
 msgstr "%s جي روانگي ڪئي پيئي وڃي (%lu x %lu) "
 
-#: ../src/ui/dialog/export.cpp:1181
+#: ../src/ui/dialog/export.cpp:1183
 #, fuzzy, c-format
 msgid "Drawing exported to <b>%s</b>."
 msgstr "پئمانو %s سمپادت ڪري پيو "
 
-#: ../src/ui/dialog/export.cpp:1185
+#: ../src/ui/dialog/export.cpp:1187
 #, fuzzy
 msgid "Export aborted."
 msgstr "روانگي جاري آهي "
@@ -18536,7 +18586,7 @@ msgid "_Duplicate"
 msgstr "نقل"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1328
-#: ../src/ui/dialog/svg-fonts-dialog.cpp:1001 ../src/verbs.cpp:2529
+#: ../src/ui/dialog/svg-fonts-dialog.cpp:1001 ../src/verbs.cpp:2533
 #: ../share/ui/inkscape-application.glade:10
 msgid "_New"
 msgstr "نئون "
@@ -19150,7 +19200,7 @@ msgid "Sele_ction"
 msgstr "چونڊ: "
 
 #: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:65
-#: ../share/ui/menus.xml:265
+#: ../share/ui/menus.xml:266
 msgid "_Text"
 msgstr "متن "
 
@@ -20721,7 +20771,7 @@ msgstr "شئە جي پينٽ جو نمونو "
 msgid "Zoom"
 msgstr "زوم "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:410 ../src/verbs.cpp:2902
+#: ../src/ui/dialog/inkscape-preferences.cpp:410 ../src/verbs.cpp:2906
 #, fuzzy
 msgctxt "ContextVerb"
 msgid "Measure"
@@ -20779,7 +20829,7 @@ msgid ""
 "selection)"
 msgstr "اَگر آن آهي تە هر نئين خلقيل شئە چونڊي ويندي۔ (اَڱوڻي چونڊ رد ڪرڻ)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:469 ../src/verbs.cpp:2894
+#: ../src/ui/dialog/inkscape-preferences.cpp:469 ../src/verbs.cpp:2898
 #, fuzzy
 msgctxt "ContextVerb"
 msgid "Text"
@@ -23261,7 +23311,7 @@ msgid "Number of _Threads:"
 msgstr "تندن جو تعداد "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2010
-#: ../src/ui/dialog/inkscape-preferences.cpp:2565
+#: ../src/ui/dialog/inkscape-preferences.cpp:2544
 msgid "(requires restart)"
 msgstr "(نئين سر شروع ڪرڻ جي ضرورت آهي "
 
@@ -23375,7 +23425,7 @@ msgstr "نماو لاءِ اَثرن جا گڻ فلٽر ڪريو "
 msgid "Rendering"
 msgstr "موٽائڻ "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2081 ../src/verbs.cpp:158
+#: ../src/ui/dialog/inkscape-preferences.cpp:2081 ../src/verbs.cpp:159
 #, fuzzy
 msgid "Edit"
 msgstr "سمپادن "
@@ -23583,21 +23633,21 @@ msgstr ""
 msgid "Misc"
 msgstr "ڇوٽڪو "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2511
+#: ../src/ui/dialog/inkscape-preferences.cpp:2501
 #, fuzzy
 msgctxt "Spellchecker language"
 msgid "None"
 msgstr "ڪجهە بە نە "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2532
+#: ../src/ui/dialog/inkscape-preferences.cpp:2511
 msgid "Set the main spell check language"
 msgstr "مکيە هجي چڪاس سيٽ ڪريو "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2535
+#: ../src/ui/dialog/inkscape-preferences.cpp:2514
 msgid "Second language:"
 msgstr "ٻين ٻولي: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2536
+#: ../src/ui/dialog/inkscape-preferences.cpp:2515
 msgid ""
 "Set the second spell check language; checking will only stop on words "
 "unknown in ALL chosen languages"
@@ -23605,11 +23655,11 @@ msgstr ""
 "ٻين هجي چڪاس جي ٻولي سيٽ ڪريو؛ چڪاس فقط اُنهن لفظن تي رڪندي جيڪي سڀن چونڊيل "
 "ٻولين ۾ نامعلوم هوندا۔ "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2539
+#: ../src/ui/dialog/inkscape-preferences.cpp:2518
 msgid "Third language:"
 msgstr "ٽين ٻولي: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2540
+#: ../src/ui/dialog/inkscape-preferences.cpp:2519
 msgid ""
 "Set the third spell check language; checking will only stop on words unknown "
 "in ALL chosen languages"
@@ -23617,32 +23667,32 @@ msgstr ""
 "ٽين هجي چڪاس جي ٻولي سيٽ ڪريو، چڪاس فقط انهن لفظن تي رڪندي جيڪي سڀني چونڊيل "
 "ٻولين ۾ نامعلوم هوندا۔ "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2542
+#: ../src/ui/dialog/inkscape-preferences.cpp:2521
 msgid "Ignore words with digits"
 msgstr "اَنگن سان گڏ لفظن کي نظراَنداز ڪريو "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2544
+#: ../src/ui/dialog/inkscape-preferences.cpp:2523
 msgid "Ignore words containing digits, such as \"R2D2\""
 msgstr "اُنهن لفظن کي نظرانداز ڪريو جن ۾ اَنگ مؤجود آهن، جئن تە \"R2D2\" "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2546
+#: ../src/ui/dialog/inkscape-preferences.cpp:2525
 msgid "Ignore words in ALL CAPITALS"
 msgstr "ALL CAPITALS ۾ ڏنل لفظ کي نظرانداز ڪريو "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2548
+#: ../src/ui/dialog/inkscape-preferences.cpp:2527
 msgid "Ignore words in all capitals, such as \"IUPAC\""
 msgstr "سڀني وڏن اکرن وارن لفظن کي نظرانداز ڪريو جئن تە  \"IUPAC\" "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2550
+#: ../src/ui/dialog/inkscape-preferences.cpp:2529
 msgid "Spellcheck"
 msgstr "هجي چڪاس "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2565
+#: ../src/ui/dialog/inkscape-preferences.cpp:2544
 #, fuzzy
 msgid "Latency _skew:"
 msgstr "لڪل ترڇوپڻ "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2566
+#: ../src/ui/dialog/inkscape-preferences.cpp:2545
 msgid ""
 "Factor by which the event clock is skewed from the actual time (0.9766 on "
 "some systems)"
@@ -23650,11 +23700,11 @@ msgstr ""
 "مکيە ڳالهە جنهن سان واقعي جي گهڙي حقيقي وقت سان ترڇي ٿي ويندي آهي (ڪجهە "
 "سرشتن تي 0.9766) "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2568
+#: ../src/ui/dialog/inkscape-preferences.cpp:2547
 msgid "Pre-render named icons"
 msgstr "موٽائڻ کان اڳ نالي وارا آئڪان "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2570
+#: ../src/ui/dialog/inkscape-preferences.cpp:2549
 msgid ""
 "When on, named icons will be rendered before displaying the ui. This is for "
 "working around bugs in GTK+ named icon notification"
@@ -23662,209 +23712,224 @@ msgstr ""
 "جڏهن آن آهي تڏهن ui ڏيکارڻ کان اڳ موٽائي ڏنا ويندا۔ ائين GTK+  نالي آئڪان جي "
 "پڌرائيءَ ۾ بگزجي چؤطرف ڪاريە ڪرڻ لاءِ آهي۔ "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2572
+#: ../src/ui/dialog/inkscape-preferences.cpp:2551
 msgid "System info"
 msgstr "سرشتي جي معلومات "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2576
+#: ../src/ui/dialog/inkscape-preferences.cpp:2555
 #, fuzzy
 msgid "Reset Preferences"
 msgstr "متن جون ترجيحون "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2579
+#: ../src/ui/dialog/inkscape-preferences.cpp:2558
 #, fuzzy
 msgid "User preferences: "
 msgstr "رٻڙ جون ترجيحون "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2580
+#: ../src/ui/dialog/inkscape-preferences.cpp:2559
 #, fuzzy
 msgid "Location of the user’s preferences file"
 msgstr "ترجيحن واري فائل %s خلقڻ ۾ ناڪام ٿيو۔ "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2582
+#: ../src/ui/dialog/inkscape-preferences.cpp:2561
 #, fuzzy
 msgid "Open preferences folder"
 msgstr "ڳنڍ جي ساڌن لاءِ ترجيحون کوليو "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2583
+#: ../src/ui/dialog/inkscape-preferences.cpp:2562
 msgid "User config: "
 msgstr "اِستعمال ڪندڙ جي رچنا: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2583
+#: ../src/ui/dialog/inkscape-preferences.cpp:2562
 msgid "Location of users configuration"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2586
+#: ../src/ui/dialog/inkscape-preferences.cpp:2565
 #, fuzzy
 msgid "Open extensions folder"
 msgstr "ويدڪ وستار "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2587
+#: ../src/ui/dialog/inkscape-preferences.cpp:2566
 #, fuzzy
 msgid "User extensions: "
 msgstr "ويدڪ وستار "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2588
+#: ../src/ui/dialog/inkscape-preferences.cpp:2567
 #, fuzzy
 msgid "Location of the user’s extensions"
 msgstr "اِنڪسڪيپ وستارن تي معلومات "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2590
+#: ../src/ui/dialog/inkscape-preferences.cpp:2569
 msgid "Open themes folder"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2591
+#: ../src/ui/dialog/inkscape-preferences.cpp:2570
 #, fuzzy
 msgid "User themes: "
 msgstr "اِستعمال ڪندڙ جو ڪيش "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2591
+#: ../src/ui/dialog/inkscape-preferences.cpp:2570
 #, fuzzy
 msgid "Location of the user’s themes"
 msgstr "اِنڪسڪيپ وستارن تي معلومات "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2594
+#: ../src/ui/dialog/inkscape-preferences.cpp:2573
 msgid "Open icons folder"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2595
+#: ../src/ui/dialog/inkscape-preferences.cpp:2574
 #, fuzzy
 msgid "User icons: "
 msgstr "اِستعمال ڪندڙ جي رچنا: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2595
+#: ../src/ui/dialog/inkscape-preferences.cpp:2574
 #, fuzzy
 msgid "Location of the user’s icons"
 msgstr "اِنڪسڪيپ وستارن تي معلومات "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2598
+#: ../src/ui/dialog/inkscape-preferences.cpp:2577
 #, fuzzy
 msgid "Open templates folder"
 msgstr "ڪوبە فلٽر نە چونڊيو ويو "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2599
+#: ../src/ui/dialog/inkscape-preferences.cpp:2578
 #, fuzzy
 msgid "User templates: "
 msgstr "نقل سانڍيو "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2600
+#: ../src/ui/dialog/inkscape-preferences.cpp:2579
 #, fuzzy
 msgid "Location of the user’s templates"
 msgstr "اِنڪسڪيپ وستارن تي معلومات "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2603
+#: ../src/ui/dialog/inkscape-preferences.cpp:2582
 #, fuzzy
 msgid "Open symbols folder"
 msgstr "شين جو پتو نە لڳو "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2604
+#: ../src/ui/dialog/inkscape-preferences.cpp:2584
 #, fuzzy
 msgid "User symbols: "
 msgstr "کمير علامتون "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2604
+#: ../src/ui/dialog/inkscape-preferences.cpp:2584
 #, fuzzy
 msgid "Location of the user’s symbols"
 msgstr "اِنڪسڪيپ وستارن تي معلومات "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2608
+#: ../src/ui/dialog/inkscape-preferences.cpp:2588
+#, fuzzy
+msgid "Open paint servers folder"
+msgstr " HPGL پلاٽر فائلون کوليو "
+
+#: ../src/ui/dialog/inkscape-preferences.cpp:2590
+#, fuzzy
+msgid "User paint servers: "
+msgstr "اِستعمال ڪندڙ جي سامگري: "
+
+#: ../src/ui/dialog/inkscape-preferences.cpp:2591
+#, fuzzy
+msgid "Location of the user’s paint servers"
+msgstr "اِنڪسڪيپ وستارن تي معلومات "
+
+#: ../src/ui/dialog/inkscape-preferences.cpp:2594
 #, fuzzy
 msgid "Open palettes folder"
 msgstr " HPGL پلاٽر فائلون کوليو "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2609
+#: ../src/ui/dialog/inkscape-preferences.cpp:2595
 #, fuzzy
 msgid "User palettes: "
 msgstr "اِستعمال ڪندڙ جي سامگري: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2609
+#: ../src/ui/dialog/inkscape-preferences.cpp:2595
 #, fuzzy
 msgid "Location of the user’s palettes"
 msgstr "اِنڪسڪيپ وستارن تي معلومات "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2613
+#: ../src/ui/dialog/inkscape-preferences.cpp:2599
 #, fuzzy
 msgid "Open keyboard shortcuts folder"
 msgstr "دستاويز جي روانگي PS فائل ۾ ڪريو "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2614
+#: ../src/ui/dialog/inkscape-preferences.cpp:2600
 #, fuzzy
 msgid "User keys: "
 msgstr "اِستعمال ڪندڙ جو ڪيش "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2615
+#: ../src/ui/dialog/inkscape-preferences.cpp:2601
 #, fuzzy
 msgid "Location of the user’s keyboard mapping files"
 msgstr "ترجيحن واري فائل %s خلقڻ ۾ ناڪام ٿيو۔ "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2618
+#: ../src/ui/dialog/inkscape-preferences.cpp:2604
 msgid "Open user interface folder"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2619
+#: ../src/ui/dialog/inkscape-preferences.cpp:2605
 #, fuzzy
 msgid "User UI: "
 msgstr "اِستعمال ڪندڙ جي سامگري: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2620
+#: ../src/ui/dialog/inkscape-preferences.cpp:2606
 #, fuzzy
 msgid "Location of the user’s user interface description files"
 msgstr "ترجيحن واري فائل %s خلقڻ ۾ ناڪام ٿيو۔ "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2624
+#: ../src/ui/dialog/inkscape-preferences.cpp:2610
 msgid "User cache: "
 msgstr "اِستعمال ڪندڙ جو ڪيش "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2624
+#: ../src/ui/dialog/inkscape-preferences.cpp:2610
 #, fuzzy
 msgid "Location of user’s cache"
 msgstr "اِنڪسڪيپ وستارن تي معلومات "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2632
+#: ../src/ui/dialog/inkscape-preferences.cpp:2618
 msgid "Temporary files: "
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2632
+#: ../src/ui/dialog/inkscape-preferences.cpp:2618
 msgid "Location of the temporary files used for autosave"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2636
+#: ../src/ui/dialog/inkscape-preferences.cpp:2622
 #, fuzzy
 msgid "Inkscape data: "
 msgstr "انڪسڪيپ هدايتنامو "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2636
+#: ../src/ui/dialog/inkscape-preferences.cpp:2622
 #, fuzzy
 msgid "Location of Inkscape data"
 msgstr "اِنڪسڪيپ وستارن تي معلومات "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2640
+#: ../src/ui/dialog/inkscape-preferences.cpp:2626
 #, fuzzy
 msgid "Inkscape extensions: "
 msgstr "اِنڪسڪيپ وستارن تي معلومات "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2640
+#: ../src/ui/dialog/inkscape-preferences.cpp:2626
 #, fuzzy
 msgid "Location of the Inkscape extensions"
 msgstr "اِنڪسڪيپ وستارن تي معلومات "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2650
+#: ../src/ui/dialog/inkscape-preferences.cpp:2636
 msgid "System data: "
 msgstr "سرشتي جي سامگري: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2650
+#: ../src/ui/dialog/inkscape-preferences.cpp:2636
 msgid "Locations of system data"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2664
+#: ../src/ui/dialog/inkscape-preferences.cpp:2650
 msgid "Icon theme: "
 msgstr "آئڪان جو موضوع "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2664
+#: ../src/ui/dialog/inkscape-preferences.cpp:2650
 msgid "Locations of icon themes"
 msgstr ""
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2666
+#: ../src/ui/dialog/inkscape-preferences.cpp:2652
 msgid "System"
 msgstr "سرشتو "
 
@@ -24032,8 +24097,8 @@ msgid "Rename Layer"
 msgstr "پرت کي نئين سر نالو ڏيو "
 
 #: ../src/ui/dialog/layer-properties.cpp:323
-#: ../src/ui/dialog/layer-properties.cpp:379 ../src/verbs.cpp:196
-#: ../src/verbs.cpp:2466
+#: ../src/ui/dialog/layer-properties.cpp:379 ../src/verbs.cpp:197
+#: ../src/verbs.cpp:2470
 msgid "Layer"
 msgstr "پرت "
 
@@ -24083,12 +24148,12 @@ msgid "Unlock layer"
 msgstr "پرت جو ڪرف کوليو "
 
 #: ../src/ui/dialog/layers.cpp:584 ../src/ui/dialog/objects.cpp:844
-#: ../src/verbs.cpp:1472
+#: ../src/verbs.cpp:1473
 msgid "Toggle layer solo"
 msgstr "اڪيليءَ سطح ٽوگل ڪريو "
 
 #: ../src/ui/dialog/layers.cpp:587 ../src/ui/dialog/objects.cpp:847
-#: ../src/verbs.cpp:1496
+#: ../src/verbs.cpp:1497
 #, fuzzy
 msgid "Lock other layers"
 msgstr "پرت کي ڪرف ڏيو "
@@ -24426,8 +24491,8 @@ msgstr "شئە اَسنويد نشيل بڻائڻ لاءِ جاچ ڪريو (ما
 msgid "Check to preserve aspect ratio on images"
 msgstr ""
 
-#: ../src/ui/dialog/object-properties.cpp:273 ../src/verbs.cpp:2851
-#: ../src/verbs.cpp:2859
+#: ../src/ui/dialog/object-properties.cpp:273 ../src/verbs.cpp:2855
+#: ../src/verbs.cpp:2863
 msgid "_Set"
 msgstr "سيٽ"
 
@@ -24705,6 +24770,36 @@ msgstr ""
 msgid "Search"
 msgstr "ڳوليو "
 
+#: ../src/ui/dialog/paint-servers.cpp:89
+msgid "Server: "
+msgstr ""
+
+#: ../src/ui/dialog/paint-servers.cpp:101
+#, fuzzy
+msgid "Change: "
+msgstr "حد:"
+
+#: ../src/ui/dialog/paint-servers.h:58
+#, fuzzy
+msgid "All paint servers"
+msgstr "سڀ غير متحرڪ "
+
+#: ../src/ui/dialog/paint-servers.h:59 ../src/ui/dialog/symbols.cpp:75
+#, fuzzy
+msgid "Current document"
+msgstr "دستاويز ڇاپيو "
+
+#: ../src/ui/dialog/paint-servers.h:60 ../share/extensions/frame.inx:10
+#: ../share/extensions/interp_att_g.inx:14
+#: ../share/extensions/markers_strokepaint.inx:18
+msgid "Fill"
+msgstr "ڀراءُ "
+
+#: ../src/ui/dialog/paint-servers.h:61 ../share/extensions/frame.inx:7
+#: ../share/extensions/markers_strokepaint.inx:22
+msgid "Stroke"
+msgstr "گهڪو "
+
 #: ../src/ui/dialog/polar-arrange-tab.cpp:37
 #, fuzzy
 msgctxt "Polar arrange tab"
@@ -24890,77 +24985,92 @@ msgstr "شامل ڪريو "
 msgid "Invalid CSS selector."
 msgstr "ناجائز SIOX نتيجو "
 
-#: ../src/ui/dialog/spellcheck.cpp:67
+#: ../src/ui/dialog/spellcheck.cpp:99
 msgid "_Accept"
 msgstr "قبول ڪريو "
 
-#: ../src/ui/dialog/spellcheck.cpp:68
+#: ../src/ui/dialog/spellcheck.cpp:100
 msgid "_Ignore once"
 msgstr "هڪ ڀيرو نظرانداز ڪريو "
 
-#: ../src/ui/dialog/spellcheck.cpp:69
+#: ../src/ui/dialog/spellcheck.cpp:101
 msgid "_Ignore"
 msgstr "نظر انداز ڪريو "
 
-#: ../src/ui/dialog/spellcheck.cpp:70
+#: ../src/ui/dialog/spellcheck.cpp:102
 msgid "A_dd"
 msgstr ""
 
-#: ../src/ui/dialog/spellcheck.cpp:72
+#: ../src/ui/dialog/spellcheck.cpp:103
+#, fuzzy
+msgid "Language"
+msgstr "ٻولي:"
+
+#: ../src/ui/dialog/spellcheck.cpp:105
 msgid "_Stop"
 msgstr "روڪيو "
 
-#: ../src/ui/dialog/spellcheck.cpp:73
+#: ../src/ui/dialog/spellcheck.cpp:106
 msgid "_Start"
 msgstr "شروع ڪريو "
 
-#: ../src/ui/dialog/spellcheck.cpp:103
+#: ../src/ui/dialog/spellcheck.cpp:138
 msgid "Suggestions:"
 msgstr "صلاحون: "
 
-#: ../src/ui/dialog/spellcheck.cpp:118
+#: ../src/ui/dialog/spellcheck.cpp:147
 msgid "Accept the chosen suggestion"
 msgstr "چونڊيل صلاح قبول ڪريو "
 
-#: ../src/ui/dialog/spellcheck.cpp:119
+#: ../src/ui/dialog/spellcheck.cpp:148
 msgid "Ignore this word only once"
 msgstr "هي لفظ فقط هڪ ڀيرو نظرانداز ڪريو "
 
-#: ../src/ui/dialog/spellcheck.cpp:120
+#: ../src/ui/dialog/spellcheck.cpp:149
 msgid "Ignore this word in this session"
 msgstr "هن سيشن ۾ هي لفظ نظرانداز ڪريو "
 
-#: ../src/ui/dialog/spellcheck.cpp:121
+#: ../src/ui/dialog/spellcheck.cpp:150
 msgid "Add this word to the chosen dictionary"
 msgstr "چونڊيل ڊڪشنريءَ ۾ هي لفظ شامل ڪريو "
 
-#: ../src/ui/dialog/spellcheck.cpp:135
+#: ../src/ui/dialog/spellcheck.cpp:151
+#: ../share/extensions/gcodetools_area.inx:78
+#: ../share/extensions/gcodetools_dxf_points.inx:24
+#: ../share/extensions/gcodetools_engraving.inx:36
+#: ../share/extensions/gcodetools_graffiti.inx:65
+#: ../share/extensions/gcodetools_lathe.inx:58
+#: ../share/extensions/gcodetools_path_to_gcode.inx:38
+msgid "Preferences"
+msgstr "ترجيحون "
+
+#: ../src/ui/dialog/spellcheck.cpp:167
 msgid "Stop the check"
 msgstr "چڪاس روڪيو "
 
-#: ../src/ui/dialog/spellcheck.cpp:136
+#: ../src/ui/dialog/spellcheck.cpp:168
 msgid "Start the check"
 msgstr "چڪاس شروع ڪريو "
 
-#: ../src/ui/dialog/spellcheck.cpp:411
+#: ../src/ui/dialog/spellcheck.cpp:425
 #, c-format
 msgid "<b>Finished</b>, <b>%d</b> words added to dictionary"
 msgstr "پورو ٿيو، %d لفظ ڊڪشنريءَ ۾ شامل ڪيا ويا "
 
-#: ../src/ui/dialog/spellcheck.cpp:413
+#: ../src/ui/dialog/spellcheck.cpp:427
 msgid "<b>Finished</b>, nothing suspicious found"
 msgstr "پورو ٿيو؛ شڪ جهڙو ڪجهە بە نە مليو "
 
-#: ../src/ui/dialog/spellcheck.cpp:528
-#, c-format
-msgid "Not in dictionary (%s): <b>%s</b>"
+#: ../src/ui/dialog/spellcheck.cpp:535
+#, fuzzy, c-format
+msgid "Not in dictionary: <b>%s</b>"
 msgstr "ڊڪشنريءَ ۾ ناهي (%s): <b>%s</b> "
 
-#: ../src/ui/dialog/spellcheck.cpp:677
+#: ../src/ui/dialog/spellcheck.cpp:665
 msgid "<i>Checking...</i>"
 msgstr "چڪاسجي پيو۔۔۔ "
 
-#: ../src/ui/dialog/spellcheck.cpp:746
+#: ../src/ui/dialog/spellcheck.cpp:734
 msgid "Fix spelling"
 msgstr "هجي طئە ڪريو "
 
@@ -25403,11 +25513,6 @@ msgstr ""
 "#-#-#-#-#  sd.po (inkscape)  #-#-#-#-#\n"
 "ويڙهيو "
 
-#: ../src/ui/dialog/symbols.cpp:75
-#, fuzzy
-msgid "Current document"
-msgstr "دستاويز ڇاپيو "
-
 #: ../src/ui/dialog/symbols.cpp:76
 msgid "All symbol sets"
 msgstr ""
@@ -25420,99 +25525,94 @@ msgstr ""
 msgid "Return to start search."
 msgstr ""
 
-#: ../src/ui/dialog/symbols.cpp:262
+#: ../src/ui/dialog/symbols.cpp:264
 #, fuzzy
 msgid "Add Symbol from the current document."
 msgstr "مؤجودهە سطح کي اڪيلو ڪريو "
 
-#: ../src/ui/dialog/symbols.cpp:272
+#: ../src/ui/dialog/symbols.cpp:274
 msgid "Remove Symbol from the current document."
 msgstr ""
 
-#: ../src/ui/dialog/symbols.cpp:288
+#: ../src/ui/dialog/symbols.cpp:290
 #, fuzzy
 msgid "Display more icons in row."
 msgstr "ماپڻ جي معلومات ڏيکاريو "
 
-#: ../src/ui/dialog/symbols.cpp:298
+#: ../src/ui/dialog/symbols.cpp:300
 #, fuzzy
 msgid "Display fewer icons in row."
 msgstr "ماپڻ جي معلومات ڏيکاريو "
 
-#: ../src/ui/dialog/symbols.cpp:309
+#: ../src/ui/dialog/symbols.cpp:311
 msgid "Toggle 'fit' symbols in icon space."
 msgstr ""
 
-#: ../src/ui/dialog/symbols.cpp:322
+#: ../src/ui/dialog/symbols.cpp:324
 msgid "Make symbols smaller by zooming out."
 msgstr ""
 
-#: ../src/ui/dialog/symbols.cpp:333
+#: ../src/ui/dialog/symbols.cpp:335
 msgid "Make symbols bigger by zooming in."
 msgstr ""
 
-#: ../src/ui/dialog/symbols.cpp:434 ../src/ui/dialog/symbols.cpp:1031
+#: ../src/ui/dialog/symbols.cpp:435 ../src/ui/dialog/symbols.cpp:1049
 #, fuzzy
 msgid "Searching..."
 msgstr "ڳوليو "
 
-#: ../src/ui/dialog/symbols.cpp:435 ../src/ui/dialog/symbols.cpp:1038
-#: ../src/ui/dialog/symbols.cpp:1102
+#: ../src/ui/dialog/symbols.cpp:435 ../src/ui/dialog/symbols.cpp:1056
+#: ../src/ui/dialog/symbols.cpp:1121
 msgid "Loading all symbols..."
 msgstr ""
 
-#: ../src/ui/dialog/symbols.cpp:436
-#, fuzzy
-msgid "Searching...."
-msgstr "راهون پلٽائيون پييون وڃن۔۔۔ "
-
-#: ../src/ui/dialog/symbols.cpp:455 ../src/ui/dialog/symbols.cpp:464
+#: ../src/ui/dialog/symbols.cpp:456 ../src/ui/dialog/symbols.cpp:467
 #, fuzzy
 msgid "Search in all symbol sets..."
 msgstr "سڀني پرتن ۾ چونڊيو "
 
-#: ../src/ui/dialog/symbols.cpp:457
+#: ../src/ui/dialog/symbols.cpp:458
 msgid "First search can be slow."
 msgstr ""
 
-#: ../src/ui/dialog/symbols.cpp:459 ../src/ui/dialog/symbols.cpp:469
-#: ../src/ui/dialog/symbols.cpp:475
+#: ../src/ui/dialog/symbols.cpp:460 ../src/ui/dialog/symbols.cpp:471
+#: ../src/ui/dialog/symbols.cpp:484
 #, fuzzy
 msgid "No results found"
 msgstr "شين جو پتو نە لڳو "
 
-#: ../src/ui/dialog/symbols.cpp:460
+#: ../src/ui/dialog/symbols.cpp:463
 msgid "Try a different search term."
 msgstr ""
 
-#: ../src/ui/dialog/symbols.cpp:470 ../src/ui/dialog/symbols.cpp:476
+#: ../src/ui/dialog/symbols.cpp:474 ../src/ui/dialog/symbols.cpp:487
 msgid ""
 "Try a different search term,\n"
 "or switch to a different symbol set."
 msgstr ""
 
-#: ../src/ui/dialog/symbols.cpp:472
+#: ../src/ui/dialog/symbols.cpp:477
 #, fuzzy
 msgid "No symbols found"
 msgstr "شين جو پتو نە لڳو "
 
-#: ../src/ui/dialog/symbols.cpp:473
+#: ../src/ui/dialog/symbols.cpp:481
 msgid ""
 "No symbols in current document.\n"
 "Choose a different symbol set\n"
 "or add a new symbol."
 msgstr ""
 
-#: ../src/ui/dialog/symbols.cpp:794 ../src/ui/dialog/symbols.cpp:814
+#: ../src/ui/dialog/symbols.cpp:807 ../src/ui/dialog/symbols.cpp:827
 #, fuzzy
 msgid "Unnamed Symbols"
 msgstr "کمير علامتون "
 
-#: ../src/ui/dialog/symbols.cpp:933
+#: ../src/ui/dialog/symbols.cpp:946
 msgid "notitle_"
 msgstr ""
 
-#: ../src/ui/dialog/symbols.cpp:1205
+#: ../src/ui/dialog/symbols.cpp:1224
 msgid "Symbol without title "
 msgstr ""
 
@@ -25580,41 +25680,41 @@ msgstr "سلسلو ڏيو "
 msgid "Arrange selected objects"
 msgstr "چونڊيل شين کي سلسلو ڏيو "
 
-#: ../src/ui/dialog/tracedialog.cpp:125 ../share/ui/dialog-trace.glade:138
+#: ../src/ui/dialog/tracedialog.cpp:125 ../share/ui/dialog-trace.glade:157
 #, fuzzy
 msgid "Brightness cutoff"
 msgstr "چمڪ ڪٽ آف "
 
-#: ../src/ui/dialog/tracedialog.cpp:127 ../share/ui/dialog-trace.glade:139
+#: ../src/ui/dialog/tracedialog.cpp:127 ../share/ui/dialog-trace.glade:158
 #, fuzzy
 msgid "Edge detection"
 msgstr "ڪناري جي کوج "
 
-#: ../src/ui/dialog/tracedialog.cpp:129 ../share/ui/dialog-trace.glade:140
+#: ../src/ui/dialog/tracedialog.cpp:129 ../share/ui/dialog-trace.glade:159
 #, fuzzy
 msgid "Color quantization"
 msgstr "رنگ جو مقدار مقرر ڪرڻ "
 
-#: ../src/ui/dialog/tracedialog.cpp:131 ../share/ui/dialog-trace.glade:141
+#: ../src/ui/dialog/tracedialog.cpp:131 ../share/ui/dialog-trace.glade:160
 #, fuzzy
 msgid "Autotrace"
 msgstr "خودڪار "
 
-#: ../src/ui/dialog/tracedialog.cpp:137 ../share/ui/dialog-trace.glade:142
+#: ../src/ui/dialog/tracedialog.cpp:137 ../share/ui/dialog-trace.glade:161
 msgid "Centerline tracing (autotrace)"
 msgstr ""
 
-#: ../src/ui/dialog/tracedialog.cpp:145 ../share/ui/dialog-trace.glade:436
+#: ../src/ui/dialog/tracedialog.cpp:145 ../share/ui/dialog-trace.glade:455
 #, fuzzy
 msgid "Brightness steps"
 msgstr "چمڪ جا قدم "
 
-#: ../src/ui/dialog/tracedialog.cpp:149 ../share/ui/dialog-trace.glade:438
+#: ../src/ui/dialog/tracedialog.cpp:149 ../share/ui/dialog-trace.glade:457
 #, fuzzy
 msgid "Grays"
 msgstr "ڀورا "
 
-#: ../src/ui/dialog/tracedialog.cpp:151 ../share/ui/dialog-trace.glade:439
+#: ../src/ui/dialog/tracedialog.cpp:151 ../share/ui/dialog-trace.glade:458
 #, fuzzy
 msgid "Autotrace (slower)"
 msgstr "بهتر گڻ (وڌيڪ سلهو) "
@@ -25859,7 +25959,7 @@ msgid "nodeAsInXMLinHistoryDialog|Delete node"
 msgstr "nodeAsInXMLinHistoryDialog| خارج ڪريو "
 
 #: ../src/ui/drag-and-drop.cpp:159 ../src/ui/drag-and-drop.cpp:245
-#: ../src/ui/drag-and-drop.cpp:348 ../src/ui/widget/selected-style.cpp:533
+#: ../src/ui/drag-and-drop.cpp:348 ../src/ui/widget/selected-style.cpp:539
 msgid "Drop color"
 msgstr "ڊراپ ڪلر "
 
@@ -25929,10 +26029,10 @@ msgstr ""
 msgid "Drag to move the rectangle"
 msgstr "گوني ڪنڊ چؤڪندو هٽائي ڇڏيو "
 
-#: ../src/ui/shape-editor-knotholders.cpp:826
-#: ../src/ui/shape-editor-knotholders.cpp:830
-#: ../src/ui/shape-editor-knotholders.cpp:834
-#: ../src/ui/shape-editor-knotholders.cpp:838
+#: ../src/ui/shape-editor-knotholders.cpp:827
+#: ../src/ui/shape-editor-knotholders.cpp:831
+#: ../src/ui/shape-editor-knotholders.cpp:835
+#: ../src/ui/shape-editor-knotholders.cpp:839
 msgid ""
 "Resize box in X/Y direction; with <b>Shift</b> along the Z axis; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
@@ -25940,10 +26040,10 @@ msgstr ""
 "X/Y ڏس ۾ باڪس کي نئين سر آڪار ڏيو؛ شفٽ سان Z محوس سميت؛ ڪنٽرول سان ڪنارن جي "
 "طرفن يا ڪنڊو ڪنڊ روڪڻ "
 
-#: ../src/ui/shape-editor-knotholders.cpp:842
-#: ../src/ui/shape-editor-knotholders.cpp:846
-#: ../src/ui/shape-editor-knotholders.cpp:850
-#: ../src/ui/shape-editor-knotholders.cpp:854
+#: ../src/ui/shape-editor-knotholders.cpp:843
+#: ../src/ui/shape-editor-knotholders.cpp:847
+#: ../src/ui/shape-editor-knotholders.cpp:851
+#: ../src/ui/shape-editor-knotholders.cpp:855
 msgid ""
 "Resize box along the Z axis; with <b>Shift</b> in X/Y direction; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
@@ -25951,19 +26051,19 @@ msgstr ""
 "Z محور سميت باڪس کي نئين سر آڪار ڏيو؛ شفٽ سان X/Y ڏس ۾؛ ڪنٽرول سان ڪنارن جي "
 "طرفن يا ڪنڊو ڪنڊ روڪڻ "
 
-#: ../src/ui/shape-editor-knotholders.cpp:858
+#: ../src/ui/shape-editor-knotholders.cpp:859
 msgid "Move the box in perspective"
 msgstr "منظر ۾ باڪس هلايو "
 
-#: ../src/ui/shape-editor-knotholders.cpp:1150
+#: ../src/ui/shape-editor-knotholders.cpp:1152
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
 msgstr "بيضوي ويڪر ٺهڪايو، گول ٺاهڻ لاءِ ڪنٽرول سان ٺهڪايو "
 
-#: ../src/ui/shape-editor-knotholders.cpp:1154
+#: ../src/ui/shape-editor-knotholders.cpp:1156
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
 msgstr "بيضوي اوچائي ٺهڪايو، گول ٺاهڻ لاءِ ڪنٽرول سان ٺهڪايو "
 
-#: ../src/ui/shape-editor-knotholders.cpp:1158
+#: ../src/ui/shape-editor-knotholders.cpp:1160
 #, fuzzy
 msgid ""
 "Position the <b>start point</b> of the arc or segment; with <b>Shift</b> to "
@@ -25973,7 +26073,7 @@ msgstr ""
 "قؤس يا جزي جي شروعاتي نقطي جي بيهڪ: ڪنٽرول سان ڪنڊ جي ترت عڪسي ڪرڻ، قؤس لاءِ "
 "بيضوي شڪل اَندر گهليو، جزي لاءِ ٻاهر گهليو "
 
-#: ../src/ui/shape-editor-knotholders.cpp:1164
+#: ../src/ui/shape-editor-knotholders.cpp:1166
 #, fuzzy
 msgid ""
 "Position the <b>end point</b> of the arc or segment; with <b>Shift</b> to "
@@ -25983,12 +26083,12 @@ msgstr ""
 "قوس يا جري جي آخري نقطي جي بيهڪ، ڪنٽرول سان ڪنڊ جي ترت عڪسي ڪرڻ؛ قؤس لاءِ "
 "بيضوي شڪل اَندر گهليو، جزي لاءِ ٻاهر گهليو "
 
-#: ../src/ui/shape-editor-knotholders.cpp:1170
+#: ../src/ui/shape-editor-knotholders.cpp:1172
 #, fuzzy
 msgid "Drag to move the ellipse"
 msgstr "بيضوي شڪل بڻايو "
 
-#: ../src/ui/shape-editor-knotholders.cpp:1347
+#: ../src/ui/shape-editor-knotholders.cpp:1350
 msgid ""
 "Adjust the <b>tip radius</b> of the star or polygon; with <b>Shift</b> to "
 "round; with <b>Alt</b> to randomize"
@@ -25996,7 +26096,7 @@ msgstr ""
 "تاري يا گهٽ ڪنڊ جي ترجا جي مٿ کي ٺهڪايو؛ شفٽ سان گول ڪرڻ؛ اَلٽ سان بيترتيب "
 "ڪرڻ "
 
-#: ../src/ui/shape-editor-knotholders.cpp:1355
+#: ../src/ui/shape-editor-knotholders.cpp:1358
 msgid ""
 "Adjust the <b>base radius</b> of the star; with <b>Ctrl</b> to keep star "
 "rays radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to "
@@ -26005,17 +26105,17 @@ msgstr ""
 "تاري جي آڌار ترجيا ٺهڪايو؛ ڪنٽرول سان تاري جي ڪرڻن جي ريڊيل رکڻ؛ شفٽ سان گول "
 "ڪرڻ؛ اَلٽ سان بيترتيب ڪرڻ "
 
-#: ../src/ui/shape-editor-knotholders.cpp:1362
+#: ../src/ui/shape-editor-knotholders.cpp:1365
 #, fuzzy
 msgid "Drag to move the star"
 msgstr "نوڊس کي نئين سرسلسلو ڏيڻ لاءِ گهليو "
 
-#: ../src/ui/shape-editor-knotholders.cpp:1601
+#: ../src/ui/shape-editor-knotholders.cpp:1605
 #, fuzzy
 msgid "Drag to move the spiral"
 msgstr "اِسپائرل خلقيو"
 
-#: ../src/ui/shape-editor-knotholders.cpp:1605
+#: ../src/ui/shape-editor-knotholders.cpp:1609
 msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
@@ -26023,7 +26123,7 @@ msgstr ""
 "اِسپائرل اندران رول يا اَنرول ڪريو؛ ڪنٽرول سان ڪنڊ جي ترت عڪسي ڪريو؛ اَلٽ سان "
 "هڪ پاسي جهڪايو/مختلف طرفن ۾ ترڇو ڪريو "
 
-#: ../src/ui/shape-editor-knotholders.cpp:1609
+#: ../src/ui/shape-editor-knotholders.cpp:1613
 #, fuzzy
 msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
@@ -26032,19 +26132,19 @@ msgstr ""
 "اِسپائرل ٻاهران رول/انرول ڪريو؛ ڪنٽرول سان ڪنڊ جي ترت عڪسي ڪريو۔ شفٽ سان "
 "ماپيو يا گهمايو "
 
-#: ../src/ui/shape-editor-knotholders.cpp:1660
+#: ../src/ui/shape-editor-knotholders.cpp:1665
 msgid "Adjust the <b>offset distance</b>"
 msgstr "آفسيٽ دوري ٺهڪايو "
 
-#: ../src/ui/shape-editor-knotholders.cpp:1859
+#: ../src/ui/shape-editor-knotholders.cpp:1865
 msgid "Adjust the <b>rectangular</b> region of the text."
 msgstr ""
 
-#: ../src/ui/shape-editor-knotholders.cpp:1869
+#: ../src/ui/shape-editor-knotholders.cpp:1875
 msgid "Adjust the <b>inline size</b> (line length) of the text."
 msgstr ""
 
-#: ../src/ui/shape-editor-knotholders.cpp:1908
+#: ../src/ui/shape-editor-knotholders.cpp:1914
 msgid "Drag to resize the <b>flowed text frame</b>"
 msgstr "وهڪري واري متن کي نئين سر آڪار ڏيڻ لاءِ گهلو "
 
@@ -28358,7 +28458,7 @@ msgstr ""
 msgid "Change spiral"
 msgstr "پيچدار بدلايو "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:81 ../src/ui/tools/spray-tool.cpp:1360
+#: ../src/ui/toolbar/spray-toolbar.cpp:81 ../src/ui/tools/spray-tool.cpp:1359
 msgid "Spray with copies"
 msgstr "ڪاپين سان اِسپري ڪريو"
 
@@ -28366,7 +28466,7 @@ msgstr "ڪاپين سان اِسپري ڪريو"
 msgid "Spray copies of the initial selection"
 msgstr "شروعاتي چونڊ جا نقل اِسپري ڪريو "
 
-#: ../src/ui/toolbar/spray-toolbar.cpp:86 ../src/ui/tools/spray-tool.cpp:1364
+#: ../src/ui/toolbar/spray-toolbar.cpp:86 ../src/ui/tools/spray-tool.cpp:1363
 msgid "Spray with clones"
 msgstr "ڪلونن سان اِسپري ڪريو "
 
@@ -29614,7 +29714,7 @@ msgstr "رنگ سيٽ ڪرڻ لاءِ مائوس چڏي ڏيو "
 msgid "<b>Drawing</b> an eraser stroke"
 msgstr "ميساريندڙ گهڪي جو نقش ڪڍ جي پيو "
 
-#: ../src/ui/tools/eraser-tool.cpp:858
+#: ../src/ui/tools/eraser-tool.cpp:859
 msgid "Draw eraser stroke"
 msgstr "ميساريندڙ گهڪي جو نقش ڪڍو "
 
@@ -29846,7 +29946,7 @@ msgstr "ڪجهە بە نە چونڊيو ويو "
 msgid "Press 'CTRL' to measure into group"
 msgstr ""
 
-#: ../src/ui/tools/measure-tool.cpp:1401 ../src/ui/tools/measure-tool.cpp:1403
+#: ../src/ui/tools/measure-tool.cpp:1403 ../src/ui/tools/measure-tool.cpp:1405
 #, fuzzy, c-format
 msgid "Crossing %lu"
 msgstr "گئسئن ڌنڌلو "
@@ -30263,11 +30363,11 @@ msgid ""
 msgstr ""
 "%s شروعاتي چونڊ جي واحد راهە ۾ اِسپري ڪرڻ لاءِ گهليو، ڪلڪ ڪريو يا اِسڪرول ڪريو "
 
-#: ../src/ui/tools/spray-tool.cpp:1284
+#: ../src/ui/tools/spray-tool.cpp:1283
 msgid "<b>Nothing selected!</b> Select objects to spray."
 msgstr "ڪجهە بە نە چونڊي ويو؟ اِسپري ڪرڻ لاءِ شيون چونڊيو "
 
-#: ../src/ui/tools/spray-tool.cpp:1370
+#: ../src/ui/tools/spray-tool.cpp:1369
 msgid "Spray in single path"
 msgstr "واحد راهە ۾ اِسپري ڪريو "
 
@@ -30679,7 +30779,7 @@ msgstr "گيمٽ کان ٻاهر!"
 msgid "Too much ink!"
 msgstr "تمام گهڻي مس! "
 
-#: ../src/ui/widget/color-notebook.cpp:179 ../src/verbs.cpp:2904
+#: ../src/ui/widget/color-notebook.cpp:179 ../src/verbs.cpp:2908
 msgid "Pick colors from image"
 msgstr "فڪس مان رنگ چونڊي کڻو "
 
@@ -30723,8 +30823,8 @@ msgid "Blur (%)"
 msgstr "ڌنڌلو "
 
 #: ../src/ui/widget/filter-effect-chooser.cpp:27
-#: ../src/ui/widget/selected-style.cpp:1056
-#: ../src/ui/widget/selected-style.cpp:1057
+#: ../src/ui/widget/selected-style.cpp:1066
+#: ../src/ui/widget/selected-style.cpp:1067
 msgid "Opacity (%)"
 msgstr "غير شفافيت  (%) "
 
@@ -31173,8 +31273,8 @@ msgid "Change blur/blend filter"
 msgstr "ڌنڌلائپ بدلايو "
 
 #: ../src/ui/widget/object-composite-settings.cpp:173
-#: ../src/ui/widget/selected-style.cpp:880
-#: ../src/ui/widget/selected-style.cpp:1177
+#: ../src/ui/widget/selected-style.cpp:886
+#: ../src/ui/widget/selected-style.cpp:1187
 msgid "Change opacity"
 msgstr "غير شفافيت بدلايو "
 
@@ -31377,295 +31477,310 @@ msgstr ""
 "اهي ۽ گڻ جي نقصان بنا خودمختيار نموني ماپي نە سگهبو، پر سڀ شيون هوبهو ساڳي "
 "روپ ۾ موٽي اينديون جئن ڏيکاريل آهن "
 
-#: ../src/ui/widget/selected-style.cpp:125
+#: ../src/ui/widget/selected-style.cpp:126
 #: ../src/ui/widget/style-swatch.cpp:120
 msgid "Fill:"
 msgstr "ڀريو: "
 
-#: ../src/ui/widget/selected-style.cpp:127
+#: ../src/ui/widget/selected-style.cpp:128
 msgid "O:"
 msgstr "O:"
 
-#: ../src/ui/widget/selected-style.cpp:173
+#: ../src/ui/widget/selected-style.cpp:174
 msgid "N/A"
 msgstr "N/A"
 
-#: ../src/ui/widget/selected-style.cpp:176
-#: ../src/ui/widget/selected-style.cpp:1049
-#: ../src/ui/widget/selected-style.cpp:1050
+#: ../src/ui/widget/selected-style.cpp:177
+#: ../src/ui/widget/selected-style.cpp:1059
+#: ../src/ui/widget/selected-style.cpp:1060
 msgid "Nothing selected"
 msgstr "ڪجهە بە نە چونڊيو ويو "
 
-#: ../src/ui/widget/selected-style.cpp:179
+#: ../src/ui/widget/selected-style.cpp:180
 #, fuzzy
 msgctxt "Fill"
 msgid "<i>None</i>"
 msgstr "ڪجهە بە نە"
 
-#: ../src/ui/widget/selected-style.cpp:181
+#: ../src/ui/widget/selected-style.cpp:182
 #, fuzzy
 msgctxt "Stroke"
 msgid "<i>None</i>"
 msgstr "ڪجهە بە نە"
 
-#: ../src/ui/widget/selected-style.cpp:185
+#: ../src/ui/widget/selected-style.cpp:186
 msgctxt "Fill and stroke"
 msgid "No fill, middle-click for black fill"
 msgstr ""
 
-#: ../src/ui/widget/selected-style.cpp:185
+#: ../src/ui/widget/selected-style.cpp:186
 msgctxt "Fill and stroke"
 msgid "No stroke, middle-click for black stroke"
 msgstr ""
 
-#: ../src/ui/widget/selected-style.cpp:187
-#: ../src/ui/widget/style-swatch.cpp:288 ../src/widgets/paint-selector.cpp:222
+#: ../src/ui/widget/selected-style.cpp:188
+#: ../src/ui/widget/style-swatch.cpp:288 ../src/widgets/paint-selector.cpp:224
 msgid "Pattern"
 msgstr "نمونو "
 
-#: ../src/ui/widget/selected-style.cpp:190
+#: ../src/ui/widget/selected-style.cpp:191
 #: ../src/ui/widget/style-swatch.cpp:290
 msgid "Pattern fill"
 msgstr "نموني جو ڀراءُ "
 
-#: ../src/ui/widget/selected-style.cpp:190
+#: ../src/ui/widget/selected-style.cpp:191
 #: ../src/ui/widget/style-swatch.cpp:290
 msgid "Pattern stroke"
 msgstr "نموني جو گهڪو "
 
-#: ../src/ui/widget/selected-style.cpp:192
+#: ../src/ui/widget/selected-style.cpp:193
+#, fuzzy
+msgid "Hatch"
+msgstr "نمونو "
+
+#: ../src/ui/widget/selected-style.cpp:196
+#, fuzzy
+msgid "Hatch fill"
+msgstr "ڪارو ڀراءُ "
+
+#: ../src/ui/widget/selected-style.cpp:196
+#, fuzzy
+msgid "Hatch stroke"
+msgstr "ڪارو گهڪو "
+
+#: ../src/ui/widget/selected-style.cpp:198
 msgid "<b>L</b>"
 msgstr "<b>L</b>"
 
-#: ../src/ui/widget/selected-style.cpp:195
+#: ../src/ui/widget/selected-style.cpp:201
 #: ../src/ui/widget/style-swatch.cpp:282
 msgid "Linear gradient fill"
 msgstr "سڌي ليڪ ۾ خطي لاهە جو ڀراءُ "
 
-#: ../src/ui/widget/selected-style.cpp:195
+#: ../src/ui/widget/selected-style.cpp:201
 #: ../src/ui/widget/style-swatch.cpp:282
 msgid "Linear gradient stroke"
 msgstr "سڌي ليڪ ۾ خطي لاهە جو گهڪو "
 
-#: ../src/ui/widget/selected-style.cpp:202
+#: ../src/ui/widget/selected-style.cpp:208
 msgid "<b>R</b>"
 msgstr "<b>R</b>"
 
-#: ../src/ui/widget/selected-style.cpp:205
+#: ../src/ui/widget/selected-style.cpp:211
 #: ../src/ui/widget/style-swatch.cpp:286
 msgid "Radial gradient fill"
 msgstr "ريڊئل لاهە جو ڀراءُ "
 
-#: ../src/ui/widget/selected-style.cpp:205
+#: ../src/ui/widget/selected-style.cpp:211
 #: ../src/ui/widget/style-swatch.cpp:286
 msgid "Radial gradient stroke"
 msgstr "ريڊئل لاهە جو گهڪو "
 
-#: ../src/ui/widget/selected-style.cpp:213
+#: ../src/ui/widget/selected-style.cpp:219
 #, fuzzy
 msgid "<b>M</b>"
 msgstr "<b>L</b>"
 
-#: ../src/ui/widget/selected-style.cpp:216
+#: ../src/ui/widget/selected-style.cpp:222
 #, fuzzy
 msgid "Mesh gradient fill"
 msgstr "سڌي ليڪ ۾ خطي لاهە جو ڀراءُ "
 
-#: ../src/ui/widget/selected-style.cpp:216
+#: ../src/ui/widget/selected-style.cpp:222
 #, fuzzy
 msgid "Mesh gradient stroke"
 msgstr "سڌي ليڪ ۾ خطي لاهە جو گهڪو "
 
-#: ../src/ui/widget/selected-style.cpp:224
+#: ../src/ui/widget/selected-style.cpp:230
 msgid "Different"
 msgstr "جدا "
 
-#: ../src/ui/widget/selected-style.cpp:227
+#: ../src/ui/widget/selected-style.cpp:233
 msgid "Different fills"
 msgstr "جدا جدا ڀراو "
 
-#: ../src/ui/widget/selected-style.cpp:227
+#: ../src/ui/widget/selected-style.cpp:233
 msgid "Different strokes"
 msgstr "جدا جدا گهڪا "
 
-#: ../src/ui/widget/selected-style.cpp:229
+#: ../src/ui/widget/selected-style.cpp:235
 #: ../src/ui/widget/style-swatch.cpp:312
 msgid "<b>Unset</b>"
 msgstr "سيٽ نە ڪريو "
 
-#: ../src/ui/widget/selected-style.cpp:232
-#: ../src/ui/widget/selected-style.cpp:290
-#: ../src/ui/widget/selected-style.cpp:561
+#: ../src/ui/widget/selected-style.cpp:238
+#: ../src/ui/widget/selected-style.cpp:296
+#: ../src/ui/widget/selected-style.cpp:567
 #: ../src/ui/widget/style-swatch.cpp:314 ../src/widgets/fill-style.cpp:808
 msgid "Unset fill"
 msgstr "ڀراو سيٽ نە ڪريو "
 
-#: ../src/ui/widget/selected-style.cpp:232
-#: ../src/ui/widget/selected-style.cpp:290
-#: ../src/ui/widget/selected-style.cpp:577
+#: ../src/ui/widget/selected-style.cpp:238
+#: ../src/ui/widget/selected-style.cpp:296
+#: ../src/ui/widget/selected-style.cpp:583
 #: ../src/ui/widget/style-swatch.cpp:314 ../src/widgets/fill-style.cpp:808
 msgid "Unset stroke"
 msgstr "گهڪو سيٽ نە ڪريو "
 
-#: ../src/ui/widget/selected-style.cpp:235
+#: ../src/ui/widget/selected-style.cpp:241
 msgid "Flat color fill"
 msgstr "لسو رنگ جو ڀراءُ "
 
-#: ../src/ui/widget/selected-style.cpp:235
+#: ../src/ui/widget/selected-style.cpp:241
 msgid "Flat color stroke"
 msgstr "لسو رنگ جو گهڪو "
 
-#: ../src/ui/widget/selected-style.cpp:238
+#: ../src/ui/widget/selected-style.cpp:244
 msgid "<b>a</b>"
 msgstr "<b>a</b>"
 
-#: ../src/ui/widget/selected-style.cpp:241
+#: ../src/ui/widget/selected-style.cpp:247
 msgid "Fill is averaged over selected objects"
 msgstr "ڀراو جي چونڊيل شئە جي سراسري  ڪئي وڃي ٿي "
 
-#: ../src/ui/widget/selected-style.cpp:241
+#: ../src/ui/widget/selected-style.cpp:247
 msgid "Stroke is averaged over selected objects"
 msgstr "گهڪي جي چونڊيل شئە تي سراسري ڪئي وڃي ٿي "
 
-#: ../src/ui/widget/selected-style.cpp:244
+#: ../src/ui/widget/selected-style.cpp:250
 msgid "<b>m</b>"
 msgstr "<b>m</b>"
 
-#: ../src/ui/widget/selected-style.cpp:247
+#: ../src/ui/widget/selected-style.cpp:253
 msgid "Multiple selected objects have the same fill"
 msgstr "انيڪ چونڊيل شين ۾ ساڳيو ڀراءُ آهي "
 
-#: ../src/ui/widget/selected-style.cpp:247
+#: ../src/ui/widget/selected-style.cpp:253
 msgid "Multiple selected objects have the same stroke"
 msgstr "انيڪ چونڊيل سين ۾ ساڳيو گهڪو آهي "
 
-#: ../src/ui/widget/selected-style.cpp:249
+#: ../src/ui/widget/selected-style.cpp:255
 msgid "Edit fill..."
 msgstr "ڀراءُ سمپادت ڪريو۔۔۔ "
 
-#: ../src/ui/widget/selected-style.cpp:249
+#: ../src/ui/widget/selected-style.cpp:255
 msgid "Edit stroke..."
 msgstr "گهڪو سمپادت ڪريو۔۔۔ "
 
-#: ../src/ui/widget/selected-style.cpp:253
+#: ../src/ui/widget/selected-style.cpp:259
 msgid "Last set color"
 msgstr "آخري سيٽ ڪيل رنگ "
 
-#: ../src/ui/widget/selected-style.cpp:257
+#: ../src/ui/widget/selected-style.cpp:263
 msgid "Last selected color"
 msgstr "آخري چونڊيل رنگ "
 
-#: ../src/ui/widget/selected-style.cpp:273
+#: ../src/ui/widget/selected-style.cpp:279
 msgid "Copy color"
 msgstr "رنگ جو نقل ڪريو "
 
-#: ../src/ui/widget/selected-style.cpp:277
+#: ../src/ui/widget/selected-style.cpp:283
 msgid "Paste color"
 msgstr "رنگ پيسٽ ڪريو "
 
-#: ../src/ui/widget/selected-style.cpp:281 ../src/verbs.cpp:2670
+#: ../src/ui/widget/selected-style.cpp:287 ../src/verbs.cpp:2674
 msgid "Swap fill and stroke"
 msgstr "پراو ۽ گهڪي ۾ مٽ سٽ ڪريو "
 
-#: ../src/ui/widget/selected-style.cpp:285
-#: ../src/ui/widget/selected-style.cpp:586
-#: ../src/ui/widget/selected-style.cpp:595
+#: ../src/ui/widget/selected-style.cpp:291
+#: ../src/ui/widget/selected-style.cpp:592
+#: ../src/ui/widget/selected-style.cpp:601
 msgid "Make fill opaque"
 msgstr "ڀراءُ غير شفافي بڻايو "
 
-#: ../src/ui/widget/selected-style.cpp:285
+#: ../src/ui/widget/selected-style.cpp:291
 msgid "Make stroke opaque"
 msgstr "گهڪو غير شفافي بڻايو "
 
-#: ../src/ui/widget/selected-style.cpp:294
-#: ../src/ui/widget/selected-style.cpp:543 ../src/widgets/fill-style.cpp:507
+#: ../src/ui/widget/selected-style.cpp:300
+#: ../src/ui/widget/selected-style.cpp:549 ../src/widgets/fill-style.cpp:507
 msgid "Remove fill"
 msgstr "ڀراءُ ڪڍي ڇڏيو "
 
-#: ../src/ui/widget/selected-style.cpp:294
-#: ../src/ui/widget/selected-style.cpp:552 ../src/widgets/fill-style.cpp:507
+#: ../src/ui/widget/selected-style.cpp:300
+#: ../src/ui/widget/selected-style.cpp:558 ../src/widgets/fill-style.cpp:507
 msgid "Remove stroke"
 msgstr "گهڪو ڪڍي ڇڏيو "
 
-#: ../src/ui/widget/selected-style.cpp:607
+#: ../src/ui/widget/selected-style.cpp:613
 msgid "Apply last set color to fill"
 msgstr "ڀراو ۾ آخري سيٽ ڪيل رنگ اِستعمال ڪريو "
 
-#: ../src/ui/widget/selected-style.cpp:619
+#: ../src/ui/widget/selected-style.cpp:625
 msgid "Apply last set color to stroke"
 msgstr "گهڪي ۾ آخري چونڊيل رنگ اِستعمال ڪريو "
 
-#: ../src/ui/widget/selected-style.cpp:630
+#: ../src/ui/widget/selected-style.cpp:636
 msgid "Apply last selected color to fill"
 msgstr "ڀراو ۾ آخري چونڊيل رنگ اِستعمال ڪريو "
 
-#: ../src/ui/widget/selected-style.cpp:641
+#: ../src/ui/widget/selected-style.cpp:647
 msgid "Apply last selected color to stroke"
 msgstr "گهڪي ۾ آخري چونڊيل رنگ اِستعمال ڪريو "
 
-#: ../src/ui/widget/selected-style.cpp:667
+#: ../src/ui/widget/selected-style.cpp:673
 msgid "Invert fill"
 msgstr "ڀراءُ اونڌو ڪريو "
 
-#: ../src/ui/widget/selected-style.cpp:691
+#: ../src/ui/widget/selected-style.cpp:697
 msgid "Invert stroke"
 msgstr "گهڪو اونڌو ڪريو "
 
-#: ../src/ui/widget/selected-style.cpp:703
+#: ../src/ui/widget/selected-style.cpp:709
 msgid "White fill"
 msgstr "اَڇو ڀراءُ "
 
-#: ../src/ui/widget/selected-style.cpp:715
+#: ../src/ui/widget/selected-style.cpp:721
 msgid "White stroke"
 msgstr "اَڇو گهڪو "
 
-#: ../src/ui/widget/selected-style.cpp:727
+#: ../src/ui/widget/selected-style.cpp:733
 msgid "Black fill"
 msgstr "ڪارو ڀراءُ "
 
-#: ../src/ui/widget/selected-style.cpp:739
+#: ../src/ui/widget/selected-style.cpp:745
 msgid "Black stroke"
 msgstr "ڪارو گهڪو "
 
-#: ../src/ui/widget/selected-style.cpp:782
+#: ../src/ui/widget/selected-style.cpp:788
 msgid "Paste fill"
 msgstr "ڀراءُ پيسٽ ڪريو "
 
-#: ../src/ui/widget/selected-style.cpp:800
+#: ../src/ui/widget/selected-style.cpp:806
 msgid "Paste stroke"
 msgstr "گهڪو پيسٽ ڪريو "
 
-#: ../src/ui/widget/selected-style.cpp:907
+#: ../src/ui/widget/selected-style.cpp:913
 msgid "Change stroke width"
 msgstr "گهڪي جي ويڪر بدلايو "
 
-#: ../src/ui/widget/selected-style.cpp:1010
+#: ../src/ui/widget/selected-style.cpp:1020
 msgid ", drag to adjust, middle-click to remove"
 msgstr ""
 
-#: ../src/ui/widget/selected-style.cpp:1094
+#: ../src/ui/widget/selected-style.cpp:1104
 #, c-format
 msgid "Stroke width: %.5g%s%s"
 msgstr "گهڪي جي ويڪر: %.5g%s%s "
 
-#: ../src/ui/widget/selected-style.cpp:1098
+#: ../src/ui/widget/selected-style.cpp:1108
 msgid " (averaged)"
 msgstr "(سراسر ڪيل) "
 
-#: ../src/ui/widget/selected-style.cpp:1124
+#: ../src/ui/widget/selected-style.cpp:1134
 msgid "0 (transparent)"
 msgstr "0 (شفافيت) "
 
-#: ../src/ui/widget/selected-style.cpp:1148
+#: ../src/ui/widget/selected-style.cpp:1158
 msgid "100% (opaque)"
 msgstr "100%  (غير شفافيت) "
 
-#: ../src/ui/widget/selected-style.cpp:1313
+#: ../src/ui/widget/selected-style.cpp:1322
 #, fuzzy
 msgid "Adjust alpha"
 msgstr "رنگ ٺهڪايو "
 
-#: ../src/ui/widget/selected-style.cpp:1315
+#: ../src/ui/widget/selected-style.cpp:1324
 #, fuzzy, c-format
 msgid ""
 "Adjusting <b>alpha</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Ctrl</"
@@ -31675,11 +31790,11 @@ msgstr ""
 "چمڪ  ٺهڪائي پيئي وڃي: %.3g هيءَ  هاڻي %.3g (فرق %.3g) آهي، تراوت ٺهڪائڻ لاءِ "
 "شفٽ سان، رنگ ٺهڪائڻ لاءِ بنا ڦيرڦار ڪندڙ "
 
-#: ../src/ui/widget/selected-style.cpp:1319
+#: ../src/ui/widget/selected-style.cpp:1328
 msgid "Adjust saturation"
 msgstr "تراوت ٺهڪايو "
 
-#: ../src/ui/widget/selected-style.cpp:1321
+#: ../src/ui/widget/selected-style.cpp:1330
 #, fuzzy, c-format
 msgid ""
 "Adjusting <b>saturation</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with "
@@ -31689,11 +31804,11 @@ msgstr ""
 "تراوت ٺهڪائي پيئي وڃي: %.3g هئي، هاڻي %.3g (فرق %.3g) آهي، چمڪ ٺهڪائڻ لاءِ "
 "ڪنٽرول سان، رنگ ٺهڪائڻ لاءِ بنا ڦيرڦار ڪندڙ "
 
-#: ../src/ui/widget/selected-style.cpp:1325
+#: ../src/ui/widget/selected-style.cpp:1334
 msgid "Adjust lightness"
 msgstr "چمڪ ٺهڪايو "
 
-#: ../src/ui/widget/selected-style.cpp:1327
+#: ../src/ui/widget/selected-style.cpp:1336
 #, fuzzy, c-format
 msgid ""
 "Adjusting <b>lightness</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with "
@@ -31703,11 +31818,11 @@ msgstr ""
 "چمڪ  ٺهڪائي پيئي وڃي: %.3g هيءَ  هاڻي %.3g (فرق %.3g) آهي، تراوت ٺهڪائڻ لاءِ "
 "شفٽ سان، رنگ ٺهڪائڻ لاءِ بنا ڦيرڦار ڪندڙ "
 
-#: ../src/ui/widget/selected-style.cpp:1331
+#: ../src/ui/widget/selected-style.cpp:1340
 msgid "Adjust hue"
 msgstr "رنگ ٺهڪايو "
 
-#: ../src/ui/widget/selected-style.cpp:1333
+#: ../src/ui/widget/selected-style.cpp:1342
 #, fuzzy, c-format
 msgid ""
 "Adjusting <b>hue</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Shift</"
@@ -31717,12 +31832,12 @@ msgstr ""
 "رنگ ٺهڪائي پيو: %.3g هو، هاڻي %.3g (فرق %.3g) آهي، تراوت  ٺهڪائڻ لاءِ شفٽ "
 "سان، چمڪ ٺهڪائڻ لاءِ ڪنٽرول سان۔ "
 
-#: ../src/ui/widget/selected-style.cpp:1442
-#: ../src/ui/widget/selected-style.cpp:1456
+#: ../src/ui/widget/selected-style.cpp:1451
+#: ../src/ui/widget/selected-style.cpp:1465
 msgid "Adjust stroke width"
 msgstr "گهڪي جي ويڪر ٺهڪايو "
 
-#: ../src/ui/widget/selected-style.cpp:1443
+#: ../src/ui/widget/selected-style.cpp:1452
 #, c-format
 msgid "Adjusting <b>stroke width</b>: was %.3g, now <b>%.3g</b> (diff %.3g)"
 msgstr "گهڪي جي ويڪر  ٺهڪائي پيو: %.3g هو، هاڻي %.3g (فرق %.3g) آهي، "
@@ -31830,224 +31945,224 @@ msgid_plural ""
 msgstr[0] "%d باڪس دواران ونڊيل، چونڊيل باڪس (باڪس) ڌار ڪرڻ لاءِ شفٽ سان گهليو"
 msgstr[1] ""
 
-#: ../src/verbs.cpp:139
+#: ../src/verbs.cpp:140
 msgid "File"
 msgstr "فائل "
 
-#: ../src/verbs.cpp:177 ../src/widgets/desktop-widget.cpp:1991
+#: ../src/verbs.cpp:178 ../src/widgets/desktop-widget.cpp:1993
 #: ../share/extensions/printing_marks.inx:19
 msgid "Selection"
 msgstr "چونڊ "
 
-#: ../src/verbs.cpp:234
+#: ../src/verbs.cpp:235
 #, fuzzy
 msgid "Context"
 msgstr "فرق "
 
-#: ../src/verbs.cpp:253 ../src/verbs.cpp:2400
+#: ../src/verbs.cpp:254 ../src/verbs.cpp:2404
 #: ../share/extensions/jessyInk_view.inx:3
 #: ../share/extensions/polyhedron_3d.inx:33
 msgid "View"
 msgstr "منظر "
 
-#: ../src/verbs.cpp:273
+#: ../src/verbs.cpp:274
 #, fuzzy
 msgid "Dialog"
 msgstr "تاگا لوگ "
 
-#: ../src/verbs.cpp:1312
+#: ../src/verbs.cpp:1313
 msgid "Switch to next layer"
 msgstr "اڳليءَ سطح ۾ وڃو "
 
-#: ../src/verbs.cpp:1313
+#: ../src/verbs.cpp:1314
 msgid "Switched to next layer."
 msgstr "اَڳليءَ سطح ۾ ويو "
 
-#: ../src/verbs.cpp:1315
+#: ../src/verbs.cpp:1316
 msgid "Cannot go past last layer."
 msgstr "گذريل آخري سطح ۾ نٿو وڃي سگهي ٿو "
 
-#: ../src/verbs.cpp:1324
+#: ../src/verbs.cpp:1325
 msgid "Switch to previous layer"
 msgstr "اڳوڻيءَ سطح ۾ وڃو "
 
-#: ../src/verbs.cpp:1325
+#: ../src/verbs.cpp:1326
 msgid "Switched to previous layer."
 msgstr "اڳوڻيءَ سطح ۾ ويو "
 
-#: ../src/verbs.cpp:1327
+#: ../src/verbs.cpp:1328
 msgid "Cannot go before first layer."
 msgstr "پهرينءَ سطح کان اڳ نٿو وڃي سگهي "
 
-#: ../src/verbs.cpp:1348 ../src/verbs.cpp:1415 ../src/verbs.cpp:1463
-#: ../src/verbs.cpp:1469 ../src/verbs.cpp:1493 ../src/verbs.cpp:1508
+#: ../src/verbs.cpp:1349 ../src/verbs.cpp:1416 ../src/verbs.cpp:1464
+#: ../src/verbs.cpp:1470 ../src/verbs.cpp:1494 ../src/verbs.cpp:1509
 msgid "No current layer."
 msgstr "ڪابە مؤجودهە سطح ناهي "
 
-#: ../src/verbs.cpp:1377 ../src/verbs.cpp:1381
+#: ../src/verbs.cpp:1378 ../src/verbs.cpp:1382
 #, c-format
 msgid "Raised layer <b>%s</b>."
 msgstr "مٿي چڙهيل سطح %s "
 
-#: ../src/verbs.cpp:1378
+#: ../src/verbs.cpp:1379
 msgid "Layer to top"
 msgstr "سطح جو مٿ "
 
-#: ../src/verbs.cpp:1382
+#: ../src/verbs.cpp:1383
 msgid "Raise layer"
 msgstr "سطح مٿي چاڙهيو "
 
-#: ../src/verbs.cpp:1385 ../src/verbs.cpp:1389
+#: ../src/verbs.cpp:1386 ../src/verbs.cpp:1390
 #, c-format
 msgid "Lowered layer <b>%s</b>."
 msgstr "هيٺ آندل سطح %s "
 
-#: ../src/verbs.cpp:1386
+#: ../src/verbs.cpp:1387
 msgid "Layer to bottom"
 msgstr "تر ۾ سطح "
 
-#: ../src/verbs.cpp:1390
+#: ../src/verbs.cpp:1391
 msgid "Lower layer"
 msgstr "هيٺائين سطح "
 
-#: ../src/verbs.cpp:1399
+#: ../src/verbs.cpp:1400
 msgid "Cannot move layer any further."
 msgstr "سطح ان کان وڌيڪ نٿي هلي سگهي۔ "
 
-#: ../src/verbs.cpp:1410
+#: ../src/verbs.cpp:1411
 msgid "Duplicate layer"
 msgstr "سطح جو نقل ڪريو "
 
-#: ../src/verbs.cpp:1413
+#: ../src/verbs.cpp:1414
 msgid "Duplicated layer."
 msgstr "نقل ڪيل سطح "
 
-#: ../src/verbs.cpp:1458
+#: ../src/verbs.cpp:1459
 msgid "Delete layer"
 msgstr "سطح خارج ڪري"
 
-#: ../src/verbs.cpp:1461
+#: ../src/verbs.cpp:1462
 msgid "Deleted layer."
 msgstr "خارج ڪيل سطح "
 
-#: ../src/verbs.cpp:1478
+#: ../src/verbs.cpp:1479
 #, fuzzy
 msgid "Show all layers"
 msgstr "سڀني پرتن ۾ چونڊيو "
 
-#: ../src/verbs.cpp:1483
+#: ../src/verbs.cpp:1484
 #, fuzzy
 msgid "Hide all layers"
 msgstr "پرت لڪايو "
 
-#: ../src/verbs.cpp:1488
+#: ../src/verbs.cpp:1489
 #, fuzzy
 msgid "Lock all layers"
 msgstr "پرت کي ڪرف ڏيو "
 
-#: ../src/verbs.cpp:1502
+#: ../src/verbs.cpp:1503
 #, fuzzy
 msgid "Unlock all layers"
 msgstr "پرت جو ڪرف کوليو "
 
-#: ../src/verbs.cpp:1586
+#: ../src/verbs.cpp:1587
 msgid "Flip horizontally"
 msgstr "اُفقي نموني اُڇل ڏياريو "
 
-#: ../src/verbs.cpp:1591
+#: ../src/verbs.cpp:1592
 msgid "Flip vertically"
 msgstr "عمودي نموني اُڇل ڏياريو "
 
-#: ../src/verbs.cpp:2499 ../src/verbs.cpp:3191
+#: ../src/verbs.cpp:2503 ../src/verbs.cpp:3198
 msgid "Unlock all objects in the current layer"
 msgstr "مؤجودهە سطح ۾ سڀني شين جا ڪلف کوليو "
 
-#: ../src/verbs.cpp:2503 ../src/verbs.cpp:3193
+#: ../src/verbs.cpp:2507 ../src/verbs.cpp:3200
 msgid "Unlock all objects in all layers"
 msgstr "سڀني سطحن ۾ سڀني شين جا ڪلف کوليو "
 
-#: ../src/verbs.cpp:2507 ../src/verbs.cpp:3195
+#: ../src/verbs.cpp:2511 ../src/verbs.cpp:3202
 msgid "Unhide all objects in the current layer"
 msgstr "مؤجودهە سطح ۾ سڀئي شيون ظاهر "
 
-#: ../src/verbs.cpp:2511 ../src/verbs.cpp:3197
+#: ../src/verbs.cpp:2515 ../src/verbs.cpp:3204
 msgid "Unhide all objects in all layers"
 msgstr "سڀني سطحن ۾ سڀئي شيون ظاهر ڪريو "
 
-#: ../src/verbs.cpp:2526
+#: ../src/verbs.cpp:2530
 #, fuzzy
 msgctxt "Verb"
 msgid "None"
 msgstr "ڪجهە بە نە "
 
-#: ../src/verbs.cpp:2526
+#: ../src/verbs.cpp:2530
 msgid "Does nothing"
 msgstr "ڪجهە نٿو ڪري "
 
-#: ../src/verbs.cpp:2529
+#: ../src/verbs.cpp:2533
 msgid "Create new document from the default template"
 msgstr "ڊيفالٽ خاڪي مان نئون دستاويز خلقيو "
 
-#: ../src/verbs.cpp:2531
+#: ../src/verbs.cpp:2535
 msgid "_Open..."
 msgstr "کوليو۔۔۔ "
 
-#: ../src/verbs.cpp:2531
+#: ../src/verbs.cpp:2535
 msgid "Open an existing document"
 msgstr "مؤجودهە دستاويز کوليو "
 
-#: ../src/verbs.cpp:2533
+#: ../src/verbs.cpp:2537
 msgid "Re_vert"
 msgstr "موٽ کائو "
 
-#: ../src/verbs.cpp:2534
+#: ../src/verbs.cpp:2538
 msgid "Revert to the last saved version of document (changes will be lost)"
 msgstr "دستاويز جي آخري سانڍيل سنسڪرڻ ۾ موٽ کائو (بدلاو گم ٿي ويندا) "
 
-#: ../src/verbs.cpp:2536
+#: ../src/verbs.cpp:2540
 msgid "Save document"
 msgstr "دستاويز سانڍيو "
 
-#: ../src/verbs.cpp:2537
+#: ../src/verbs.cpp:2541
 msgid "Save _As..."
 msgstr "ساڍيو جئن۔۔۔ "
 
-#: ../src/verbs.cpp:2537
+#: ../src/verbs.cpp:2541
 msgid "Save document under a new name"
 msgstr "نئين نالي تخت دستاويز سانڍيو "
 
-#: ../src/verbs.cpp:2539
+#: ../src/verbs.cpp:2543
 msgid "Save a Cop_y..."
 msgstr "نقل سانڍيو "
 
-#: ../src/verbs.cpp:2540
+#: ../src/verbs.cpp:2544
 msgid "Save a copy of the document under a new name"
 msgstr "نئين نالي تخت دستاويز جو نقل سانڍيو "
 
-#: ../src/verbs.cpp:2541
+#: ../src/verbs.cpp:2545
 #, fuzzy
 msgid "Save Template..."
 msgstr "نقل سانڍيو "
 
-#: ../src/verbs.cpp:2542
+#: ../src/verbs.cpp:2546
 #, fuzzy
 msgid "Save a copy of the document as template"
 msgstr "نئين نالي تخت دستاويز جو نقل سانڍيو "
 
-#: ../src/verbs.cpp:2543
+#: ../src/verbs.cpp:2547
 msgid "_Print..."
 msgstr "ڇاپيو "
 
-#: ../src/verbs.cpp:2543
+#: ../src/verbs.cpp:2547
 msgid "Print document"
 msgstr "دستاويز ڇاپيو "
 
-#: ../src/verbs.cpp:2547
+#: ../src/verbs.cpp:2551
 #, fuzzy
 msgid "Clean _Up Document"
 msgstr "دستاويز سيٽ نە ٿي سگهيو "
 
-#: ../src/verbs.cpp:2548
+#: ../src/verbs.cpp:2552
 msgid ""
 "Remove unused definitions (such as gradients or clipping paths) from the &lt;"
 "defs&gt; of the document"
@@ -32055,563 +32170,563 @@ msgstr ""
 "دستاويز جي (وصفون) مان اِستعمال نە ڪيل وصفون (جئن تە لاهە يا ڪٽجندڙ راهون) "
 "ڪڍي ڇڏيو "
 
-#: ../src/verbs.cpp:2550
+#: ../src/verbs.cpp:2554
 msgid "_Import..."
 msgstr "آمد ڪريو "
 
-#: ../src/verbs.cpp:2551
+#: ../src/verbs.cpp:2555
 msgid "Import a bitmap or SVG image into this document"
 msgstr "هن دستاويز ۾ بٽميپ يا SVG عڪس جي آمد ڪريو "
 
-#: ../src/verbs.cpp:2554
+#: ../src/verbs.cpp:2558
 #, fuzzy
 msgid "Import Clip Art..."
 msgstr "آمد ڪريو "
 
-#: ../src/verbs.cpp:2555
+#: ../src/verbs.cpp:2559
 #, fuzzy
 msgid "Import clipart from Open Clip Art Library"
 msgstr "اوپن ڪلپ آرٽ لائبريءَ مان آمد ڪريو "
 
-#: ../src/verbs.cpp:2558
+#: ../src/verbs.cpp:2562
 msgid "N_ext Window"
 msgstr "اَڳلي ونڊو "
 
-#: ../src/verbs.cpp:2558
+#: ../src/verbs.cpp:2562
 msgid "Switch to the next document window"
 msgstr "ايندڙ دستاويز جي ونڊو ۾ وڃو "
 
-#: ../src/verbs.cpp:2560
+#: ../src/verbs.cpp:2564
 msgid "P_revious Window"
 msgstr "اَڳوڻي ونڊو "
 
-#: ../src/verbs.cpp:2561
+#: ../src/verbs.cpp:2565
 msgid "Switch to the previous document window"
 msgstr "اَڳوڻيءَ دستاويز جي ونڊو ۾ وڃو "
 
-#: ../src/verbs.cpp:2562
+#: ../src/verbs.cpp:2566
 msgid "Close this document window"
 msgstr "هيءَ دستاويز جي ونڊو بند ڪريو "
 
-#: ../src/verbs.cpp:2564 ../share/ui/inkscape-application.glade:15
+#: ../src/verbs.cpp:2568 ../share/ui/inkscape-application.glade:15
 msgid "_Quit"
 msgstr "ڇڏي نڪري وڃو "
 
-#: ../src/verbs.cpp:2564
+#: ../src/verbs.cpp:2568
 msgid "Quit Inkscape"
 msgstr "اِنسڪيپ ڇڏي نڪري وڃو "
 
-#: ../src/verbs.cpp:2565
+#: ../src/verbs.cpp:2569
 msgid "New from _Template..."
 msgstr ""
 
-#: ../src/verbs.cpp:2566
+#: ../src/verbs.cpp:2570
 #, fuzzy
 msgid "Create new project from template"
 msgstr "ڊيفالٽ خاڪي مان نئون دستاويز خلقيو "
 
-#: ../src/verbs.cpp:2569
+#: ../src/verbs.cpp:2573
 msgid "Undo last action"
 msgstr "آخري ڪيل ڪاريە رد ڪيو "
 
-#: ../src/verbs.cpp:2570
+#: ../src/verbs.cpp:2574
 msgid "Do again the last undone action"
 msgstr "آخري نە ڪيل ڪاريە وري ڪريو "
 
-#: ../src/verbs.cpp:2572
+#: ../src/verbs.cpp:2576
 msgid "Cu_t"
 msgstr "ڪٽيو "
 
-#: ../src/verbs.cpp:2572
+#: ../src/verbs.cpp:2576
 msgid "Cut selection to clipboard"
 msgstr "ڪلپ بورڊ ۾ چونڊ ڪٽيو "
 
-#: ../src/verbs.cpp:2573
+#: ../src/verbs.cpp:2577
 msgid "_Copy"
 msgstr "نقل ڪريو "
 
-#: ../src/verbs.cpp:2573
+#: ../src/verbs.cpp:2577
 msgid "Copy selection to clipboard"
 msgstr "ڪلپ بورڊ ۾ چونڊ جو نقل ڪريو "
 
-#: ../src/verbs.cpp:2575
+#: ../src/verbs.cpp:2579
 msgid "_Paste"
 msgstr "چنبڙايو "
 
-#: ../src/verbs.cpp:2576
+#: ../src/verbs.cpp:2580
 msgid "Paste objects from clipboard to mouse point, or paste text"
 msgstr "ڪلپبورڊ مان شيون مائوس پائنٽ ۾ چنبڙايو يا متن جنبڙايو "
 
-#: ../src/verbs.cpp:2577
+#: ../src/verbs.cpp:2581
 msgid "Paste _Style"
 msgstr "نمونو چنبڙايو "
 
-#: ../src/verbs.cpp:2578
+#: ../src/verbs.cpp:2582
 msgid "Apply the style of the copied object to selection"
 msgstr "نقل ڪيل شئە جو نمونو چونڊ ۾ اِستعمال ڪريو "
 
-#: ../src/verbs.cpp:2579
+#: ../src/verbs.cpp:2583
 msgid "Paste Si_ze"
 msgstr "چنبڻائڻ جو آڪار "
 
-#: ../src/verbs.cpp:2580
+#: ../src/verbs.cpp:2584
 msgid "Scale selection to match the size of the copied object"
 msgstr "نقل ڪيل آڪار سان ميل موجب چونڊ ماپيو "
 
-#: ../src/verbs.cpp:2581
+#: ../src/verbs.cpp:2585
 msgid "Paste _Width"
 msgstr "ويڪر چنبڙايو "
 
-#: ../src/verbs.cpp:2582
+#: ../src/verbs.cpp:2586
 msgid "Scale selection horizontally to match the width of the copied object"
 msgstr "نقل ڪيل شئە جي ويڪر جي ميل موجب اُفقي نموني چونڊ ماپيو "
 
-#: ../src/verbs.cpp:2583
+#: ../src/verbs.cpp:2587
 msgid "Paste _Height"
 msgstr "اوچائي چنبڙايو "
 
-#: ../src/verbs.cpp:2584
+#: ../src/verbs.cpp:2588
 msgid "Scale selection vertically to match the height of the copied object"
 msgstr "نقل ڪيل شئە جي اوچائيءَ جي ميل موجب عمودي چونڊ ماپيو "
 
-#: ../src/verbs.cpp:2585
+#: ../src/verbs.cpp:2589
 msgid "Paste Size Separately"
 msgstr "آڪار جدا جدا چنبڙايو "
 
-#: ../src/verbs.cpp:2586
+#: ../src/verbs.cpp:2590
 msgid "Scale each selected object to match the size of the copied object"
 msgstr "نقل ڪيل شئە جي آڪار جي ميل موجب هر چونڊيل شئە ماپيو "
 
-#: ../src/verbs.cpp:2587
+#: ../src/verbs.cpp:2591
 msgid "Paste Width Separately"
 msgstr "ويڪر جدا جدا چنبڙايو "
 
-#: ../src/verbs.cpp:2588
+#: ../src/verbs.cpp:2592
 msgid ""
 "Scale each selected object horizontally to match the width of the copied "
 "object"
 msgstr "نقل ڪيل شئە جي ويڪر جي ميل موجب هر چونڊيل شئە اُفقي نموني ماپيو "
 
-#: ../src/verbs.cpp:2589
+#: ../src/verbs.cpp:2593
 msgid "Paste Height Separately"
 msgstr "اوچائي جدا جدا چنبرايو "
 
-#: ../src/verbs.cpp:2590
+#: ../src/verbs.cpp:2594
 msgid ""
 "Scale each selected object vertically to match the height of the copied "
 "object"
 msgstr "نقل ڪيل شئە جي اوچائيءَ جي ميل موجب هر چونڊيل شئە عمودي نموني ماپيو "
 
-#: ../src/verbs.cpp:2591
+#: ../src/verbs.cpp:2595
 msgid "Paste _In Place"
 msgstr "آسٿان تي چنبڙايو "
 
-#: ../src/verbs.cpp:2592
+#: ../src/verbs.cpp:2596
 msgid "Paste objects from clipboard to the original location"
 msgstr "ڪلپ بورڊ مان شيون مول آسٿان تي چنبڙايو "
 
-#: ../src/verbs.cpp:2593
+#: ../src/verbs.cpp:2597
 msgid "Paste Path _Effect"
 msgstr "راهە جو اَثر چنبڙايو "
 
-#: ../src/verbs.cpp:2594
+#: ../src/verbs.cpp:2598
 msgid "Apply the path effect of the copied object to selection"
 msgstr "نقل ڪيل شئە جي راهە جو اثر چونڊ ۾ اِستعمال ڪريو "
 
-#: ../src/verbs.cpp:2595
+#: ../src/verbs.cpp:2599
 msgid "Remove Path _Effect"
 msgstr "راهە جو اَثر ڪڍي ڇڏيو "
 
-#: ../src/verbs.cpp:2596
+#: ../src/verbs.cpp:2600
 msgid "Remove any path effects from selected objects"
 msgstr "چونڊيل شين مان ڪي راهە جا اَثر ڪڍي ڇڏيو "
 
-#: ../src/verbs.cpp:2597
+#: ../src/verbs.cpp:2601
 #, fuzzy
 msgid "_Remove Filters"
 msgstr "فلٽر ڪڍي ڇڏيو "
 
-#: ../src/verbs.cpp:2598
+#: ../src/verbs.cpp:2602
 msgid "Remove any filters from selected objects"
 msgstr "چونڊيل شين مان ڪي فلٽر ڪڍي ڇڏيو "
 
-#: ../src/verbs.cpp:2599
+#: ../src/verbs.cpp:2603
 msgid "Delete selection"
 msgstr "چونڊ خارج ڪري ڇڏيو "
 
-#: ../src/verbs.cpp:2601
+#: ../src/verbs.cpp:2605
 msgid "Duplic_ate"
 msgstr "نقل ڪريو "
 
-#: ../src/verbs.cpp:2601
+#: ../src/verbs.cpp:2605
 msgid "Duplicate Selected Objects"
 msgstr "چونڊيل شيون نقل ڪريو "
 
-#: ../src/verbs.cpp:2603
+#: ../src/verbs.cpp:2607
 msgid "Create Clo_ne"
 msgstr "ڪلون خلقيو "
 
-#: ../src/verbs.cpp:2604
+#: ../src/verbs.cpp:2608
 msgid "Create a clone (a copy linked to the original) of selected object"
 msgstr "چونڊيل شئە جو ڪلون (مول سان ڪڙي ڪيل نقل) خلقيو "
 
-#: ../src/verbs.cpp:2605
+#: ../src/verbs.cpp:2609
 msgid "Unlin_k Clone"
 msgstr "ڪلون جي ڪڙي هٽائي ڇڏيو "
 
-#: ../src/verbs.cpp:2606
+#: ../src/verbs.cpp:2610
 msgid ""
 "Cut the selected clones' links to the originals, turning them into "
 "standalone objects"
 msgstr ""
 "چونڊيل ڪلونن جون ڪڙيون مول روپ ۾ ڪٽيو، جيڪي اُنهن کي آزاد شيون بڻائي ڇڏيندا"
 
-#: ../src/verbs.cpp:2608
+#: ../src/verbs.cpp:2612
 #, fuzzy
 msgid "Unlink Clones _recursively"
 msgstr "ڪلون جي ڪڙي هٽائي ڇڏيو "
 
-#: ../src/verbs.cpp:2609
+#: ../src/verbs.cpp:2613
 msgid "Unlink all clones in the selection, even if they are in groups."
 msgstr ""
 
-#: ../src/verbs.cpp:2611
+#: ../src/verbs.cpp:2615
 msgid "Relink to Copied"
 msgstr "نقل ڪيلن کي نئين سر ڪڙيءَ سان جوڙيو "
 
-#: ../src/verbs.cpp:2612
+#: ../src/verbs.cpp:2616
 msgid "Relink the selected clones to the object currently on the clipboard"
 msgstr "ڪلپ بورڊ تي هن وقت مؤجود شئە سان چونڊيل ڪلون نئين سر جوڙيو "
 
-#: ../src/verbs.cpp:2613
+#: ../src/verbs.cpp:2617
 msgid "Select _Original"
 msgstr "مول چونڊيو "
 
-#: ../src/verbs.cpp:2614
+#: ../src/verbs.cpp:2618
 msgid "Select the object to which the selected clone is linked"
 msgstr "اُها شئە چونڊيو جنهن سان ڪلون جي ڪڙي جوڙيل آهي "
 
-#: ../src/verbs.cpp:2615
+#: ../src/verbs.cpp:2619
 msgid "Clone original path (LPE)"
 msgstr ""
 
-#: ../src/verbs.cpp:2616
+#: ../src/verbs.cpp:2620
 msgid ""
 "Creates a new path, applies the Clone original LPE, and refers it to the "
 "selected path"
 msgstr ""
 
-#: ../src/verbs.cpp:2617
+#: ../src/verbs.cpp:2621
 msgid "Objects to _Marker"
 msgstr "شين کان مارڪر ۾ "
 
-#: ../src/verbs.cpp:2618
+#: ../src/verbs.cpp:2622
 msgid "Convert selection to a line marker"
 msgstr "چونڊ کي ليڪ جي مارڪر ۾ بدلايو "
 
-#: ../src/verbs.cpp:2619
+#: ../src/verbs.cpp:2623
 msgid "Objects to Gu_ides"
 msgstr "شيون رهنمائن ۾ "
 
-#: ../src/verbs.cpp:2620
+#: ../src/verbs.cpp:2624
 msgid ""
 "Convert selected objects to a collection of guidelines aligned with their "
 "edges"
 msgstr "چونڊيل شيون پنهنجي ڪنارن سان ترتيب ڏنل هدايتن جي سنگرهە ۾ بدلايو "
 
-#: ../src/verbs.cpp:2621
+#: ../src/verbs.cpp:2625
 msgid "Objects to Patter_n"
 msgstr "شيون نموني ۾ "
 
-#: ../src/verbs.cpp:2622
+#: ../src/verbs.cpp:2626
 msgid "Convert selection to a rectangle with tiled pattern fill"
 msgstr "چونڊئائل واري نموني جي ڀراو سان گوني ڪنڊ چؤڪنڊي ۾ بدلايو "
 
-#: ../src/verbs.cpp:2623
+#: ../src/verbs.cpp:2627
 msgid "Pattern to _Objects"
 msgstr "نمونو شين ۾ "
 
-#: ../src/verbs.cpp:2624
+#: ../src/verbs.cpp:2628
 msgid "Extract objects from a tiled pattern fill"
 msgstr "ٽائل واري نموني جي ڀراو مان شيون ڪڍي ڇڏيو"
 
-#: ../src/verbs.cpp:2625
+#: ../src/verbs.cpp:2629
 msgid "Group to Symbol"
 msgstr ""
 
-#: ../src/verbs.cpp:2625
+#: ../src/verbs.cpp:2629
 #, fuzzy
 msgid "Convert group to a symbol"
 msgstr "گهڪي کي راهە ۾ بدلايو "
 
-#: ../src/verbs.cpp:2627
+#: ../src/verbs.cpp:2631
 msgid "Symbol to Group"
 msgstr ""
 
-#: ../src/verbs.cpp:2627
+#: ../src/verbs.cpp:2631
 msgid "Extract group from a symbol"
 msgstr ""
 
-#: ../src/verbs.cpp:2629
+#: ../src/verbs.cpp:2633
 msgid "Clea_r All"
 msgstr "سڀ صاف ڪري ڇڏيو "
 
-#: ../src/verbs.cpp:2629
+#: ../src/verbs.cpp:2633
 msgid "Delete all objects from document"
 msgstr "دستاويز مان سڀ شيون خارج ڪري ڇڏيو "
 
-#: ../src/verbs.cpp:2631
+#: ../src/verbs.cpp:2635
 msgid "Select Al_l"
 msgstr "سڀ چونڊيو "
 
-#: ../src/verbs.cpp:2631
+#: ../src/verbs.cpp:2635
 msgid "Select all objects or all nodes"
 msgstr "سڀ شيون يا سڀ ڳنڍيون چونڊيو "
 
-#: ../src/verbs.cpp:2633
+#: ../src/verbs.cpp:2637
 msgid "Select All in All La_yers"
 msgstr "سڀني سطحن ۾ سڀ چونڊيو "
 
-#: ../src/verbs.cpp:2634
+#: ../src/verbs.cpp:2638
 msgid "Select all objects in all visible and unlocked layers"
 msgstr "سڀني نظر ايندڙ ۽ ڪلف کوليل سطحن ۾ سڀ شيون چونڊيو "
 
-#: ../src/verbs.cpp:2635
+#: ../src/verbs.cpp:2639
 #, fuzzy
 msgid "Fill _and Stroke"
 msgstr "ڀراءُ ۽ گهڪو۔۔۔ "
 
-#: ../src/verbs.cpp:2636
+#: ../src/verbs.cpp:2640
 #, fuzzy
 msgid ""
 "Select all objects with the same fill and stroke as the selected objects"
 msgstr "نموني جي ڀراو سان اُها شئە چونڊيو جنهن سان شيون ڪڍي ڇڏجن"
 
-#: ../src/verbs.cpp:2638
+#: ../src/verbs.cpp:2642
 #, fuzzy
 msgid "_Fill Color"
 msgstr "رنگ ڀريو "
 
-#: ../src/verbs.cpp:2639
+#: ../src/verbs.cpp:2643
 #, fuzzy
 msgid "Select all objects with the same fill as the selected objects"
 msgstr "نموني جي ڀراو سان اُها شئە چونڊيو جنهن سان شيون ڪڍي ڇڏجن"
 
-#: ../src/verbs.cpp:2640
+#: ../src/verbs.cpp:2644
 #, fuzzy
 msgid "_Stroke Color"
 msgstr "گهڪي جو رنگ "
 
-#: ../src/verbs.cpp:2641
+#: ../src/verbs.cpp:2645
 #, fuzzy
 msgid "Select all objects with the same stroke as the selected objects"
 msgstr "نقل ڪيل شئە جي آڪار جي ميل موجب هر چونڊيل شئە ماپيو "
 
-#: ../src/verbs.cpp:2643
+#: ../src/verbs.cpp:2647
 #, fuzzy
 msgid "Stroke St_yle"
 msgstr "گهڪي جو نمونو "
 
-#: ../src/verbs.cpp:2644
+#: ../src/verbs.cpp:2648
 msgid ""
 "Select all objects with the same stroke style (width, dash, markers) as the "
 "selected objects"
 msgstr ""
 
-#: ../src/verbs.cpp:2647
+#: ../src/verbs.cpp:2651
 #, fuzzy
 msgid "_Object Type"
 msgstr "شئە جو قسم:"
 
-#: ../src/verbs.cpp:2648
+#: ../src/verbs.cpp:2652
 msgid ""
 "Select all objects with the same object type (rect, arc, text, path, bitmap "
 "etc) as the selected objects"
 msgstr ""
 
-#: ../src/verbs.cpp:2650
+#: ../src/verbs.cpp:2654
 msgid "In_vert Selection"
 msgstr "چونڊ اوُنڌي ڪريو "
 
-#: ../src/verbs.cpp:2651
+#: ../src/verbs.cpp:2655
 msgid "Invert selection (unselect what is selected and select everything else)"
 msgstr ""
 "چونڊ اوُنڌي ڪريو (جيڪي چونڊيل آهن اُنهن جي چونڊ رد ڪريو ۽ ٻيون سڀ شيون چونڊيو) "
 
-#: ../src/verbs.cpp:2653
+#: ../src/verbs.cpp:2657
 msgid "Invert in All Layers"
 msgstr "سڀني سطحن ۾ اونڌو ڪريو "
 
-#: ../src/verbs.cpp:2654
+#: ../src/verbs.cpp:2658
 msgid "Invert selection in all visible and unlocked layers"
 msgstr "سڀني نظر ايندڙ ۽ ڪلف کوليل سطحن ۾ چونڊ اونڌي ڪريو "
 
-#: ../src/verbs.cpp:2655
+#: ../src/verbs.cpp:2659
 msgid "Select Next"
 msgstr "اَڳلو چونڊيو "
 
-#: ../src/verbs.cpp:2655
+#: ../src/verbs.cpp:2659
 msgid "Select next object or node"
 msgstr "اڳلي شئە يا ڳنڍ چونڊيو "
 
-#: ../src/verbs.cpp:2657
+#: ../src/verbs.cpp:2661
 msgid "Select Previous"
 msgstr "اَڳوڻو چونڊيو "
 
-#: ../src/verbs.cpp:2658
+#: ../src/verbs.cpp:2662
 msgid "Select previous object or node"
 msgstr "اَڳوڻي شئە يا ڳنڍ چونڊيو "
 
-#: ../src/verbs.cpp:2659
+#: ../src/verbs.cpp:2663
 msgid "D_eselect"
 msgstr "چونڊ رد ڪريو "
 
-#: ../src/verbs.cpp:2659
+#: ../src/verbs.cpp:2663
 msgid "Deselect any selected objects or nodes"
 msgstr "ڪي چونڊيل شين يا ڳنڍين جي چونڊ رد ڪريو "
 
-#: ../src/verbs.cpp:2662
+#: ../src/verbs.cpp:2666
 #, fuzzy
 msgid "Delete all the guides in the document"
 msgstr "دستاويز مان سڀ شيون خارج ڪري ڇڏيو "
 
-#: ../src/verbs.cpp:2663
+#: ../src/verbs.cpp:2667
 #, fuzzy
 msgid "Lock All Guides"
 msgstr "سڀني جو ڪلف کوليو "
 
-#: ../src/verbs.cpp:2665
+#: ../src/verbs.cpp:2669
 #, fuzzy
 msgid "Create _Guides Around the Page"
 msgstr "صفحي جي چؤطرف رهنما "
 
-#: ../src/verbs.cpp:2666
+#: ../src/verbs.cpp:2670
 msgid "Create four guides aligned with the page borders"
 msgstr "صفحي جي ڪنارن سان ترتيب ڏنل چار رهنما خلقيو "
 
-#: ../src/verbs.cpp:2668
+#: ../src/verbs.cpp:2672
 msgid "Next path effect parameter"
 msgstr "اڳلو راهە جي اثر جو پئمانو "
 
-#: ../src/verbs.cpp:2668
+#: ../src/verbs.cpp:2672
 msgid "Show next editable path effect parameter"
 msgstr "ايندڙ سمپادن جوڳو راهە جي اَثر جو پئمانو ڏيکاريو "
 
-#: ../src/verbs.cpp:2674
+#: ../src/verbs.cpp:2678
 msgid "Raise to _Top"
 msgstr "مٿ تائين مٿي چاڙهيو "
 
-#: ../src/verbs.cpp:2674
+#: ../src/verbs.cpp:2678
 msgid "Raise selection to top"
 msgstr "چونڊ کي مٿ تائين مٿ چاڙهيو "
 
-#: ../src/verbs.cpp:2676
+#: ../src/verbs.cpp:2680
 msgid "Lower to _Bottom"
 msgstr "تر تائين هيٺ آڻيو "
 
-#: ../src/verbs.cpp:2677
+#: ../src/verbs.cpp:2681
 msgid "Lower selection to bottom"
 msgstr "چونڊ تر تائين هيٺ آڻيو "
 
-#: ../src/verbs.cpp:2678
+#: ../src/verbs.cpp:2682
 msgid "_Raise"
 msgstr "مٿي چاڙهيو "
 
-#: ../src/verbs.cpp:2678
+#: ../src/verbs.cpp:2682
 msgid "Raise selection one step"
 msgstr "هڪ قدم چونڊ مٿي چاڙهيو "
 
-#: ../src/verbs.cpp:2680
+#: ../src/verbs.cpp:2684
 msgid "_Lower"
 msgstr "هيٺ ڪريو "
 
-#: ../src/verbs.cpp:2680
+#: ../src/verbs.cpp:2684
 msgid "Lower selection one step"
 msgstr "هڪ قدم چونڊ هيٺ آڻيو "
 
-#: ../src/verbs.cpp:2684
+#: ../src/verbs.cpp:2688
 #, fuzzy
 msgid "_Stack up"
 msgstr "پٺيون حصو "
 
-#: ../src/verbs.cpp:2685
+#: ../src/verbs.cpp:2689
 #, fuzzy
 msgid "Stack selection one step up"
 msgstr "هڪ قدم چونڊ مٿي چاڙهيو "
 
-#: ../src/verbs.cpp:2686
+#: ../src/verbs.cpp:2690
 #, fuzzy
 msgid "_Stack down"
 msgstr "پٺيون حصو "
 
-#: ../src/verbs.cpp:2687
+#: ../src/verbs.cpp:2691
 #, fuzzy
 msgid "Stack selection one step down"
 msgstr "هڪ قدم چونڊ مٿي چاڙهيو "
 
-#: ../src/verbs.cpp:2690
+#: ../src/verbs.cpp:2694
 msgid "Group selected objects"
 msgstr "چونڊيل شين جو گروپ بڻايو "
 
-#: ../src/verbs.cpp:2692
+#: ../src/verbs.cpp:2696
 msgid "Ungroup selected groups"
 msgstr "چونڊيل گروپ ٽوڙيو "
 
-#: ../src/verbs.cpp:2695
+#: ../src/verbs.cpp:2699
 #, fuzzy
 msgid "_Pop Selected Objects out of Group"
 msgstr "چونڊيل شين جو گروپ بڻايو "
 
-#: ../src/verbs.cpp:2695
+#: ../src/verbs.cpp:2699
 #, fuzzy
 msgid "Pop selected objects out of group"
 msgstr "چونڊيل شين جو گروپ بڻايو "
 
-#: ../src/verbs.cpp:2698
+#: ../src/verbs.cpp:2702
 msgid "_Put on Path"
 msgstr "راهە تي رکو "
 
-#: ../src/verbs.cpp:2700
+#: ../src/verbs.cpp:2704
 msgid "_Remove from Path"
 msgstr "راهە تان ڪڍي ڇڏيو "
 
-#: ../src/verbs.cpp:2702
+#: ../src/verbs.cpp:2706
 msgid "Remove Manual _Kerns"
 msgstr "مينئل ڪرنس ڪڍي ڇڏيو "
 
-#: ../src/verbs.cpp:2705
+#: ../src/verbs.cpp:2709
 msgid "Remove all manual kerns and glyph rotations from a text object"
 msgstr "متن جي شئە مان سڀ مينئل ڪرنس ۽ گلف جي گماون کي ڪڍي ڇڏيو "
 
-#: ../src/verbs.cpp:2708
+#: ../src/verbs.cpp:2712
 msgid "_Union"
 msgstr "يونئن "
 
-#: ../src/verbs.cpp:2708
+#: ../src/verbs.cpp:2712
 msgid "Create union of selected paths"
 msgstr "چونڊيل راهن جي يونين خلقيو "
 
-#: ../src/verbs.cpp:2710
+#: ../src/verbs.cpp:2714
 msgid "_Intersection"
 msgstr "اِنٽرسيڪشن "
 
-#: ../src/verbs.cpp:2711
+#: ../src/verbs.cpp:2715
 msgid "Create intersection of selected paths"
 msgstr "چونڊيل راهن جا اِنٽرسيڪشن خلقيو "
 
-#: ../src/verbs.cpp:2712
+#: ../src/verbs.cpp:2716
 msgid "_Difference"
 msgstr "فرق "
 
-#: ../src/verbs.cpp:2713
+#: ../src/verbs.cpp:2717
 msgid "Create difference of selected paths (bottom minus top)"
 msgstr "چونڊيل راهن جا فرق خلقيو (مٿ ڇڏي تر) "
 
-#: ../src/verbs.cpp:2714
+#: ../src/verbs.cpp:2718
 msgid "E_xclusion"
 msgstr "اَلڳتا "
 
-#: ../src/verbs.cpp:2715
+#: ../src/verbs.cpp:2719
 msgid ""
 "Create exclusive OR of selected paths (those parts that belong to only one "
 "path)"
@@ -32619,434 +32734,434 @@ msgstr ""
 "چونڊيل راهن جو الڳتا وارو OR خلقيو (اُهي حصا جيڪي فقط هڪ راهە سان واسطو رکن "
 "ٿا "
 
-#: ../src/verbs.cpp:2717
+#: ../src/verbs.cpp:2721
 msgid "Di_vision"
 msgstr "ونڊ "
 
-#: ../src/verbs.cpp:2717
+#: ../src/verbs.cpp:2721
 msgid "Cut the bottom path into pieces"
 msgstr "ترجي راهە ٽڪرن ۾ ڪٽيو "
 
-#: ../src/verbs.cpp:2721
+#: ../src/verbs.cpp:2725
 msgid "Cut _Path"
 msgstr "راهە ڪٽيو "
 
-#: ../src/verbs.cpp:2722
+#: ../src/verbs.cpp:2726
 msgid "Cut the bottom path's stroke into pieces, removing fill"
 msgstr "ترجي راهە جي گهڪي کي ڀراو هٽائيندي، ڪٽيو "
 
-#: ../src/verbs.cpp:2723
+#: ../src/verbs.cpp:2727
 #, fuzzy
 msgid "_Grow"
 msgstr "گروپ "
 
-#: ../src/verbs.cpp:2723
+#: ../src/verbs.cpp:2727
 #, fuzzy
 msgid "Make selected objects bigger"
 msgstr "چونڊيل ڳنڍين جي ڪنڊ ٺاهيو "
 
-#: ../src/verbs.cpp:2725
+#: ../src/verbs.cpp:2729
 msgid "_Grow on screen"
 msgstr ""
 
-#: ../src/verbs.cpp:2726
+#: ../src/verbs.cpp:2730
 #, fuzzy
 msgid "Make selected objects bigger relative to screen"
 msgstr "چونڊيل شيون تختيءَ ۾ سلسلي ۾ رکو "
 
-#: ../src/verbs.cpp:2727
+#: ../src/verbs.cpp:2731
 #, fuzzy
 msgid "_Double size"
 msgstr "نفظي جو آڪارُ: "
 
-#: ../src/verbs.cpp:2728
+#: ../src/verbs.cpp:2732
 #, fuzzy
 msgid "Double the size of selected objects"
 msgstr "چونڊيل شين جا رنگ ڪنبايو "
 
-#: ../src/verbs.cpp:2729
+#: ../src/verbs.cpp:2733
 msgid "_Shrink"
 msgstr ""
 
-#: ../src/verbs.cpp:2729
+#: ../src/verbs.cpp:2733
 #, fuzzy
 msgid "Make selected objects smaller"
 msgstr "چونڊيل ڳنڍيون هڪ سمان بڻايو "
 
-#: ../src/verbs.cpp:2731
+#: ../src/verbs.cpp:2735
 msgid "_Shrink on screen"
 msgstr ""
 
-#: ../src/verbs.cpp:2732
+#: ../src/verbs.cpp:2736
 #, fuzzy
 msgid "Make selected objects smaller relative to screen"
 msgstr "چونڊيل شيون تختيءَ ۾ سلسلي ۾ رکو "
 
-#: ../src/verbs.cpp:2733
+#: ../src/verbs.cpp:2737
 #, fuzzy
 msgid "_Halve size"
 msgstr "نقاشي پٽيءَ جو آڪارُ: "
 
-#: ../src/verbs.cpp:2734
+#: ../src/verbs.cpp:2738
 #, fuzzy
 msgid "Halve the size of selected objects"
 msgstr "چونڊيل شين جا رنگ ڪنبايو "
 
-#: ../src/verbs.cpp:2738
+#: ../src/verbs.cpp:2742
 msgid "Outs_et"
 msgstr "آئوٽ سيٽ "
 
-#: ../src/verbs.cpp:2738
+#: ../src/verbs.cpp:2742
 msgid "Outset selected paths"
 msgstr "چونڊيل راهون آئوٽسيٽ ڪريو "
 
-#: ../src/verbs.cpp:2740
+#: ../src/verbs.cpp:2744
 msgid "O_utset Path by 1 px"
 msgstr " 1 px موجب راهە آئوٽسيٽ ڪريو "
 
-#: ../src/verbs.cpp:2741
+#: ../src/verbs.cpp:2745
 msgid "Outset selected paths by 1 px"
 msgstr " 1 px موجب چونڊيل راهون آئوٽ سيٽ ڪريو "
 
-#: ../src/verbs.cpp:2742
+#: ../src/verbs.cpp:2746
 msgid "O_utset Path by 10 px"
 msgstr "10 px موجب راهە آئوٽ سيٽ ڪريو "
 
-#: ../src/verbs.cpp:2743
+#: ../src/verbs.cpp:2747
 msgid "Outset selected paths by 10 px"
 msgstr "10 px چونڊيل راهون آئوٽسيٽ ڪريو "
 
-#: ../src/verbs.cpp:2747
+#: ../src/verbs.cpp:2751
 msgid "I_nset"
 msgstr "اِنسيٽ "
 
-#: ../src/verbs.cpp:2747
+#: ../src/verbs.cpp:2751
 msgid "Inset selected paths"
 msgstr "چونڊيل راهون اِنسيٽ ڪريو "
 
-#: ../src/verbs.cpp:2749
+#: ../src/verbs.cpp:2753
 msgid "I_nset Path by 1 px"
 msgstr "1 px موجب راهە اِنسيٽ ڪريو "
 
-#: ../src/verbs.cpp:2750
+#: ../src/verbs.cpp:2754
 msgid "Inset selected paths by 1 px"
 msgstr "  1 px موجب چونڊيل راهون اِنسيٽ ڪريو "
 
-#: ../src/verbs.cpp:2751
+#: ../src/verbs.cpp:2755
 msgid "I_nset Path by 10 px"
 msgstr " 10 px موجب راهە اِنسيٽ ڪريو "
 
-#: ../src/verbs.cpp:2752
+#: ../src/verbs.cpp:2756
 msgid "Inset selected paths by 10 px"
 msgstr " 10 px موجب چونڊيل راهون اِنسيٽ ڪريو "
 
-#: ../src/verbs.cpp:2753
+#: ../src/verbs.cpp:2757
 msgid "D_ynamic Offset"
 msgstr "سڪريە آفسيٽ "
 
-#: ../src/verbs.cpp:2754
+#: ../src/verbs.cpp:2758
 msgid "Create a dynamic offset object"
 msgstr "سڪريە آفسيٽ شئە خلقيو "
 
-#: ../src/verbs.cpp:2755
+#: ../src/verbs.cpp:2759
 msgid "_Linked Offset"
 msgstr "ڪڙي جوڙيل آفسيٽ "
 
-#: ../src/verbs.cpp:2756
+#: ../src/verbs.cpp:2760
 msgid "Create a dynamic offset object linked to the original path"
 msgstr "مول راهە سان ڪڙي جوڙيل سڪريە آفسيٽ شئە خلقيو "
 
-#: ../src/verbs.cpp:2758
+#: ../src/verbs.cpp:2762
 msgid "_Stroke to Path"
 msgstr "گهڪي کان راهە ۾ "
 
-#: ../src/verbs.cpp:2759
+#: ../src/verbs.cpp:2763
 msgid "Convert selected object's stroke to paths"
 msgstr "چونڊيل شئە جو گهڪو راهن ۾ بدلايو "
 
-#: ../src/verbs.cpp:2760
+#: ../src/verbs.cpp:2764
 #, fuzzy
 msgid "_Stroke to Path Legacy"
 msgstr "گهڪي کان راهە ۾ "
 
-#: ../src/verbs.cpp:2761
+#: ../src/verbs.cpp:2765
 #, fuzzy
 msgid "Convert selected object's stroke to paths legacy mode"
 msgstr "چونڊيل شئە جو گهڪو راهن ۾ بدلايو "
 
-#: ../src/verbs.cpp:2762
+#: ../src/verbs.cpp:2766
 msgid "Si_mplify"
 msgstr "آسان بڻايو "
 
-#: ../src/verbs.cpp:2763
+#: ../src/verbs.cpp:2767
 msgid "Simplify selected paths (remove extra nodes)"
 msgstr "چونڊيل راهون آسان بڻايو (واڌو ڳنڍيون هٽائي ڇڏيو) "
 
-#: ../src/verbs.cpp:2764
+#: ../src/verbs.cpp:2768
 msgid "_Reverse"
 msgstr "موٽ کارايو "
 
-#: ../src/verbs.cpp:2765
+#: ../src/verbs.cpp:2769
 msgid "Reverse the direction of selected paths (useful for flipping markers)"
 msgstr "چونڊيل راهن جي ڏس کي موٽ کارايو (مارڪن جي اُڇل ڏکارڻ لاءِ ڪارائتو) "
 
-#: ../src/verbs.cpp:2771
+#: ../src/verbs.cpp:2775
 msgid "Create one or more paths from a bitmap by tracing it"
 msgstr "بٽميپ جو پتو لڳائيندي اُن مان هڪ يا وڌيڪ راهون خلقيو "
 
-#: ../src/verbs.cpp:2774
+#: ../src/verbs.cpp:2778
 #, fuzzy
 msgid "Make a _Bitmap Copy"
 msgstr "بٽميپ جو نقل بڻايو "
 
-#: ../src/verbs.cpp:2775
+#: ../src/verbs.cpp:2779
 msgid "Export selection to a bitmap and insert it into document"
 msgstr "چونڊ جي بٽميپ ۾ روانگي ڪريو ۽ اُن کي دستاويز ۾ داخل ڪريو "
 
-#: ../src/verbs.cpp:2777
+#: ../src/verbs.cpp:2781
 msgid "_Combine"
 msgstr "جوڙيو "
 
-#: ../src/verbs.cpp:2778
+#: ../src/verbs.cpp:2782
 msgid "Combine several paths into one"
 msgstr "مختلف راهون هڪ ۾ جوڙيو "
 
-#: ../src/verbs.cpp:2781
+#: ../src/verbs.cpp:2785
 msgid "Break _Apart"
 msgstr "جدا جدا ڪري ٽوڙيو "
 
-#: ../src/verbs.cpp:2782
+#: ../src/verbs.cpp:2786
 msgid "Break selected paths into subpaths"
 msgstr "چونڊيل راهون گؤڻ راهن ۾ ٽوڙيو "
 
-#: ../src/verbs.cpp:2783
+#: ../src/verbs.cpp:2787
 #, fuzzy
 msgid "_Arrange..."
 msgstr "سلسلو ڏيو "
 
-#: ../src/verbs.cpp:2784
+#: ../src/verbs.cpp:2788
 #, fuzzy
 msgid "Arrange selected objects in a table or circle"
 msgstr "چونڊيل شيون تختيءَ ۾ سلسلي ۾ رکو "
 
-#: ../src/verbs.cpp:2786
+#: ../src/verbs.cpp:2790
 msgid "_Add Layer..."
 msgstr "سطح شامل ڪريو "
 
-#: ../src/verbs.cpp:2786
+#: ../src/verbs.cpp:2790
 msgid "Create a new layer"
 msgstr "نئن سطح خلقيو "
 
-#: ../src/verbs.cpp:2788
+#: ../src/verbs.cpp:2792
 msgid "Re_name Layer..."
 msgstr "سطح کي نئين سر نالو ڏيو "
 
-#: ../src/verbs.cpp:2788
+#: ../src/verbs.cpp:2792
 msgid "Rename the current layer"
 msgstr "مؤجودهە کي نئين سر نالو ڏيو "
 
-#: ../src/verbs.cpp:2790
+#: ../src/verbs.cpp:2794
 msgid "Switch to Layer Abov_e"
 msgstr "سطح مٿي کڻي وڃو "
 
-#: ../src/verbs.cpp:2791
+#: ../src/verbs.cpp:2795
 msgid "Switch to the layer above the current"
 msgstr "مؤجودهە مٿان سطح کڻي وڃو "
 
-#: ../src/verbs.cpp:2792
+#: ../src/verbs.cpp:2796
 msgid "Switch to Layer Belo_w"
 msgstr "سطح هيٺ کڻي وڃو "
 
-#: ../src/verbs.cpp:2793
+#: ../src/verbs.cpp:2797
 msgid "Switch to the layer below the current"
 msgstr "مؤجودهە هيٺان سطح کڻي وڃو "
 
-#: ../src/verbs.cpp:2794
+#: ../src/verbs.cpp:2798
 msgid "Move Selection to Layer Abo_ve"
 msgstr "چونڊ کي سطح مٿان هلايو "
 
-#: ../src/verbs.cpp:2795
+#: ../src/verbs.cpp:2799
 msgid "Move selection to the layer above the current"
 msgstr "چونڊ کي مؤجودهە مٿان سطح ۾ هلايو "
 
-#: ../src/verbs.cpp:2796
+#: ../src/verbs.cpp:2800
 msgid "Move Selection to Layer Bel_ow"
 msgstr "چونڊ کي هيٺ سطح ۾ هلايو "
 
-#: ../src/verbs.cpp:2797
+#: ../src/verbs.cpp:2801
 msgid "Move selection to the layer below the current"
 msgstr "چونڊ کي مؤجودهە هيٺان سطح ۾ هلايو "
 
-#: ../src/verbs.cpp:2798
+#: ../src/verbs.cpp:2802
 #, fuzzy
 msgid "Move Selection to Layer..."
 msgstr "چونڊ کي سطح مٿان هلايو "
 
-#: ../src/verbs.cpp:2800
+#: ../src/verbs.cpp:2804
 msgid "Layer to _Top"
 msgstr "سطح مٿ تائين "
 
-#: ../src/verbs.cpp:2800
+#: ../src/verbs.cpp:2804
 msgid "Raise the current layer to the top"
 msgstr "مؤجود مٿ تائين مٿي چاڙهيو "
 
-#: ../src/verbs.cpp:2802
+#: ../src/verbs.cpp:2806
 msgid "Layer to _Bottom"
 msgstr "سطح تر تائين "
 
-#: ../src/verbs.cpp:2803
+#: ../src/verbs.cpp:2807
 msgid "Lower the current layer to the bottom"
 msgstr "مؤجود سطح تر تائين هيٺ آڻيو "
 
-#: ../src/verbs.cpp:2804
+#: ../src/verbs.cpp:2808
 msgid "_Raise Layer"
 msgstr "سطح مٿي کڻو "
 
-#: ../src/verbs.cpp:2804
+#: ../src/verbs.cpp:2808
 msgid "Raise the current layer"
 msgstr "مؤجودهە سطح مٿي کڻو "
 
-#: ../src/verbs.cpp:2806
+#: ../src/verbs.cpp:2810
 msgid "_Lower Layer"
 msgstr "سطح هيٺ آڻيو "
 
-#: ../src/verbs.cpp:2806
+#: ../src/verbs.cpp:2810
 msgid "Lower the current layer"
 msgstr "مؤجودهە سطح هيٺ آڻيو "
 
-#: ../src/verbs.cpp:2808
+#: ../src/verbs.cpp:2812
 msgid "D_uplicate Current Layer"
 msgstr "مؤجودهە سطح جو نقل ڪريو "
 
-#: ../src/verbs.cpp:2809
+#: ../src/verbs.cpp:2813
 msgid "Duplicate an existing layer"
 msgstr "مؤجودهە سطح جو نقل ڪريو "
 
-#: ../src/verbs.cpp:2810
+#: ../src/verbs.cpp:2814
 msgid "_Delete Current Layer"
 msgstr "مؤجودهە سطح خارج ڪريو "
 
-#: ../src/verbs.cpp:2810
+#: ../src/verbs.cpp:2814
 msgid "Delete the current layer"
 msgstr "مؤجودهە سطح خارج ڪريو "
 
-#: ../src/verbs.cpp:2812
+#: ../src/verbs.cpp:2816
 msgid "_Show/hide other layers"
 msgstr "ٻيون سطحون ڏيکاريو/لڪايو "
 
-#: ../src/verbs.cpp:2812
+#: ../src/verbs.cpp:2816
 msgid "Solo the current layer"
 msgstr "مؤجودهە سطح کي اڪيلو ڪريو "
 
-#: ../src/verbs.cpp:2814
+#: ../src/verbs.cpp:2818
 #, fuzzy
 msgid "_Show all layers"
 msgstr "سڀني پرتن ۾ چونڊيو "
 
-#: ../src/verbs.cpp:2814
+#: ../src/verbs.cpp:2818
 #, fuzzy
 msgid "Show all the layers"
 msgstr "ٻيون سطحون ڏيکاريو/لڪايو "
 
-#: ../src/verbs.cpp:2815
+#: ../src/verbs.cpp:2819
 #, fuzzy
 msgid "_Hide all layers"
 msgstr "پرت لڪايو "
 
-#: ../src/verbs.cpp:2815
+#: ../src/verbs.cpp:2819
 #, fuzzy
 msgid "Hide all the layers"
 msgstr "پرت لڪايو "
 
-#: ../src/verbs.cpp:2816
+#: ../src/verbs.cpp:2820
 #, fuzzy
 msgid "_Lock all layers"
 msgstr "پرت کي ڪرف ڏيو "
 
-#: ../src/verbs.cpp:2816
+#: ../src/verbs.cpp:2820
 #, fuzzy
 msgid "Lock all the layers"
 msgstr "پرت کي ڪرف ڏيو "
 
-#: ../src/verbs.cpp:2817
+#: ../src/verbs.cpp:2821
 #, fuzzy
 msgid "Lock/Unlock _other layers"
 msgstr "پرت جو ڪرف کوليو "
 
-#: ../src/verbs.cpp:2818
+#: ../src/verbs.cpp:2822
 #, fuzzy
 msgid "Lock all the other layers"
 msgstr "ٻيون سطحون ڏيکاريو/لڪايو "
 
-#: ../src/verbs.cpp:2819
+#: ../src/verbs.cpp:2823
 #, fuzzy
 msgid "_Unlock all layers"
 msgstr "پرت جو ڪرف کوليو "
 
-#: ../src/verbs.cpp:2819
+#: ../src/verbs.cpp:2823
 #, fuzzy
 msgid "Unlock all the layers"
 msgstr "سڀني سطحن ۾ سڀني جا ڪلف کوليو "
 
-#: ../src/verbs.cpp:2821
+#: ../src/verbs.cpp:2825
 #, fuzzy
 msgid "_Lock/Unlock Current Layer"
 msgstr "مؤجودهە پرت کي ڪلف ڏيو يا ان جو ڪلف کوليو "
 
-#: ../src/verbs.cpp:2822
+#: ../src/verbs.cpp:2826
 #, fuzzy
 msgid "Toggle lock on current layer"
 msgstr "مؤجودهە سطح کي اڪيلو ڪريو "
 
-#: ../src/verbs.cpp:2823
+#: ../src/verbs.cpp:2827
 #, fuzzy
 msgid "_Show/Hide Current Layer"
 msgstr "ٻيون سطحون ڏيکاريو/لڪايو "
 
-#: ../src/verbs.cpp:2824
+#: ../src/verbs.cpp:2828
 #, fuzzy
 msgid "Toggle visibility of current layer"
 msgstr "مؤجودهە سطح کي اڪيلو ڪريو "
 
-#: ../src/verbs.cpp:2827
+#: ../src/verbs.cpp:2831
 #, fuzzy
 msgid "Rotate _90° CW"
 msgstr "_90&#176; CW گهمايو "
 
-#: ../src/verbs.cpp:2830
+#: ../src/verbs.cpp:2834
 msgid "Rotate selection 90° clockwise"
 msgstr "چونڊ گهڙيءَ جي ڏس ۾ 90° گهمايو "
 
-#: ../src/verbs.cpp:2831
+#: ../src/verbs.cpp:2835
 #, fuzzy
 msgid "Rotate 9_0° CCW"
 msgstr " 9_0&#176; CCW گهمايو "
 
-#: ../src/verbs.cpp:2834
+#: ../src/verbs.cpp:2838
 msgid "Rotate selection 90° counter-clockwise"
 msgstr " چونڊ گهڙيءَ جي ڏس جي اُبتڙ 90° گهمايو "
 
-#: ../src/verbs.cpp:2835
+#: ../src/verbs.cpp:2839
 msgid "Remove _Transformations"
 msgstr "روپ بدلايل ڪڍي ڇڏيو "
 
-#: ../src/verbs.cpp:2836
+#: ../src/verbs.cpp:2840
 msgid "Remove transformations from object"
 msgstr "شئە مان روپ بدلايل ڪڍي ڇڏيو "
 
-#: ../src/verbs.cpp:2837
+#: ../src/verbs.cpp:2841
 msgid "_Object to Path"
 msgstr "شئە کان راهە ۾ "
 
-#: ../src/verbs.cpp:2838
+#: ../src/verbs.cpp:2842
 msgid "Convert selected object to path"
 msgstr "چونڊيل شئە لاءِ ۾ بدلايو "
 
-#: ../src/verbs.cpp:2839
+#: ../src/verbs.cpp:2843
 msgid "_Flow into Frame"
 msgstr "فريم ۾ پرواهت ڪريو "
 
-#: ../src/verbs.cpp:2840
+#: ../src/verbs.cpp:2844
 msgid ""
 "Put text into a frame (path or shape), creating a flowed text linked to the "
 "frame object"
@@ -33054,79 +33169,79 @@ msgstr ""
 "متن کي هڪ فريم (راهە يا آڪار) ۾ رکو، جنهن ۾ فريم جي شئە سان ڪڙي جوڙيل پرواهت "
 "متن خلقڻ "
 
-#: ../src/verbs.cpp:2842
+#: ../src/verbs.cpp:2846
 msgid "_Unflow"
 msgstr "پرواهە روڪيو "
 
-#: ../src/verbs.cpp:2843
+#: ../src/verbs.cpp:2847
 msgid "Remove text from frame (creates a single-line text object)"
 msgstr "فريم مان متن ڪڍي ڇڏيو (هڪ سٽي متن جي شئە خلقي ٿو) "
 
-#: ../src/verbs.cpp:2844
+#: ../src/verbs.cpp:2848
 msgid "_Convert to Text"
 msgstr "متن ۾ بدلايو "
 
-#: ../src/verbs.cpp:2845
+#: ../src/verbs.cpp:2849
 msgid "Convert flowed text to regular text object (preserves appearance)"
 msgstr "پرواهت متن کي نيمائتي متن ۾ بدلايو۔ (ڏيک سانڍي رکي ٿو) "
 
-#: ../src/verbs.cpp:2847
+#: ../src/verbs.cpp:2851
 msgid "Flip _Horizontal"
 msgstr "اُفقي نموني اُڇل ڏياريو "
 
-#: ../src/verbs.cpp:2848
+#: ../src/verbs.cpp:2852
 msgid "Flip selected objects horizontally"
 msgstr "چونڊيل شين کي اُفقي نموني اُڇل ڏياريو "
 
-#: ../src/verbs.cpp:2849
+#: ../src/verbs.cpp:2853
 msgid "Flip _Vertical"
 msgstr "عمودي نموني اُڇل ڏياريو "
 
-#: ../src/verbs.cpp:2850
+#: ../src/verbs.cpp:2854
 msgid "Flip selected objects vertically"
 msgstr "چونڊيل شين کي عمودي نموني اُڇل ڏياريو "
 
-#: ../src/verbs.cpp:2852
+#: ../src/verbs.cpp:2856
 msgid "Apply mask to selection (using the topmost object as mask)"
 msgstr ""
 "چونڊ ۾ مکؤٽي جو اِستعمال ڪريو (سڀني کان مٿينءَ شئە جو مکؤٽي جو روپ ۾ اِستعمال "
 "ڪندي) "
 
-#: ../src/verbs.cpp:2853 ../src/verbs.cpp:2861
+#: ../src/verbs.cpp:2857 ../src/verbs.cpp:2865
 msgid "_Set Inverse (LPE)"
 msgstr ""
 
-#: ../src/verbs.cpp:2854
+#: ../src/verbs.cpp:2858
 #, fuzzy
 msgid "Apply inverse mask to selection (using the topmost object as mask)"
 msgstr ""
 "چونڊ ۾ مکؤٽي جو اِستعمال ڪريو (سڀني کان مٿينءَ شئە جو مکؤٽي جو روپ ۾ اِستعمال "
 "ڪندي) "
 
-#: ../src/verbs.cpp:2855 ../src/verbs.cpp:2865 ../share/ui/menus.xml:32
+#: ../src/verbs.cpp:2859 ../src/verbs.cpp:2869 ../share/ui/menus.xml:32
 msgid "_Edit"
 msgstr "سمپادن "
 
-#: ../src/verbs.cpp:2855
+#: ../src/verbs.cpp:2859
 msgid "Edit mask"
 msgstr "مکؤٽو سمپادت ڪريو "
 
-#: ../src/verbs.cpp:2857 ../src/verbs.cpp:2867
+#: ../src/verbs.cpp:2861 ../src/verbs.cpp:2871
 msgid "_Release"
 msgstr "چڏي ڏيو "
 
-#: ../src/verbs.cpp:2857
+#: ../src/verbs.cpp:2861
 msgid "Remove mask from selection"
 msgstr "چونڊ مان مکؤٽو ڪڍي ڇڏيو "
 
-#: ../src/verbs.cpp:2860
+#: ../src/verbs.cpp:2864
 msgid ""
 "Apply clipping path to selection (using the topmost object as clipping path)"
 msgstr ""
 "چونڊ ۾ ڪلپنگ راهە جو اِستعمال ڪريو (سڀني کان مٿينءَ شئە جو ڪلپنگ راهە جي روپ ۾ "
 "اِستعمال ڪندي) "
 
-#: ../src/verbs.cpp:2862
+#: ../src/verbs.cpp:2866
 #, fuzzy
 msgid ""
 "Apply inverse clipping path to selection (using the topmost object as "
@@ -33135,1271 +33250,1281 @@ msgstr ""
 "چونڊ ۾ ڪلپنگ راهە جو اِستعمال ڪريو (سڀني کان مٿينءَ شئە جو ڪلپنگ راهە جي روپ ۾ "
 "اِستعمال ڪندي) "
 
-#: ../src/verbs.cpp:2863
+#: ../src/verbs.cpp:2867
 #, fuzzy
 msgid "Create Cl_ip Group"
 msgstr "ڪلون خلقيو "
 
-#: ../src/verbs.cpp:2864
+#: ../src/verbs.cpp:2868
 #, fuzzy
 msgid "Creates a clip group using the selected objects as a base"
 msgstr "چونڊيل شيون تختيءَ ۾ سلسلي ۾ رکو "
 
-#: ../src/verbs.cpp:2865
+#: ../src/verbs.cpp:2869
 msgid "Edit clipping path"
 msgstr "ڪلپنگ راهە سمپادت ڪريو "
 
-#: ../src/verbs.cpp:2868
+#: ../src/verbs.cpp:2872
 msgid "Remove clipping path from selection"
 msgstr "چونڊ مان ڪلپنگ راهە ڪڍي ڇڏيو "
 
-#: ../src/verbs.cpp:2870
+#: ../src/verbs.cpp:2874
 #, fuzzy
 msgctxt "ContextVerb"
 msgid "Select"
 msgstr "چونڊيو "
 
-#: ../src/verbs.cpp:2871
+#: ../src/verbs.cpp:2875
 msgid "Select and transform objects"
 msgstr "شيون چونڊيو ۽ اُنهن جا روپ بدلايو "
 
-#: ../src/verbs.cpp:2872
+#: ../src/verbs.cpp:2876
 #, fuzzy
 msgctxt "ContextVerb"
 msgid "Node Edit"
 msgstr "ڳنڍ جو سمپادن "
 
-#: ../src/verbs.cpp:2872
+#: ../src/verbs.cpp:2876
 msgid "Edit paths by nodes"
 msgstr "ڳنڍين سان راهون سمپاد ڪريو "
 
-#: ../src/verbs.cpp:2874
+#: ../src/verbs.cpp:2878
 #, fuzzy
 msgctxt "ContextVerb"
 msgid "Tweak"
 msgstr "ٽويڪ"
 
-#: ../src/verbs.cpp:2875
+#: ../src/verbs.cpp:2879
 msgid "Tweak objects by sculpting or painting"
 msgstr "تراشي يا پينٽ ڪري شيون موڙيو "
 
-#: ../src/verbs.cpp:2876
+#: ../src/verbs.cpp:2880
 #, fuzzy
 msgctxt "ContextVerb"
 msgid "Spray"
 msgstr "اِسپري "
 
-#: ../src/verbs.cpp:2877
+#: ../src/verbs.cpp:2881
 msgid "Spray objects by sculpting or painting"
 msgstr "تراشي يا پينٽ ڪري شيون اِسپري ڪريو "
 
-#: ../src/verbs.cpp:2878
+#: ../src/verbs.cpp:2882
 #, fuzzy
 msgctxt "ContextVerb"
 msgid "Rectangle"
 msgstr "چؤڪندو"
 
-#: ../src/verbs.cpp:2879
+#: ../src/verbs.cpp:2883
 msgid "Create rectangles and squares"
 msgstr "گوني ڪنڊ چؤڪنڊا ۽ چؤرسون خلقيو "
 
-#: ../src/verbs.cpp:2880
+#: ../src/verbs.cpp:2884
 #, fuzzy
 msgctxt "ContextVerb"
 msgid "3D Box"
 msgstr " ٣ ڊي باڪس"
 
-#: ../src/verbs.cpp:2880
+#: ../src/verbs.cpp:2884
 msgid "Create 3D boxes"
 msgstr "3D باڪس خلقيو "
 
-#: ../src/verbs.cpp:2882
+#: ../src/verbs.cpp:2886
 #, fuzzy
 msgctxt "ContextVerb"
 msgid "Ellipse"
 msgstr "بيضوي شڪل"
 
-#: ../src/verbs.cpp:2883
+#: ../src/verbs.cpp:2887
 msgid "Create circles, ellipses, and arcs"
 msgstr "گول بيضوي شڪليون ۽ قؤس خلقيو "
 
-#: ../src/verbs.cpp:2884
+#: ../src/verbs.cpp:2888
 #, fuzzy
 msgctxt "ContextVerb"
 msgid "Star"
 msgstr "تارو"
 
-#: ../src/verbs.cpp:2884
+#: ../src/verbs.cpp:2888
 msgid "Create stars and polygons"
 msgstr "تارا ۽ گهڻڪنڊ خلقيو "
 
-#: ../src/verbs.cpp:2886
+#: ../src/verbs.cpp:2890
 #, fuzzy
 msgctxt "ContextVerb"
 msgid "Spiral"
 msgstr "اِسپائرل"
 
-#: ../src/verbs.cpp:2886
+#: ../src/verbs.cpp:2890
 msgid "Create spirals"
 msgstr "پيچدار آڪار خلقيو "
 
-#: ../src/verbs.cpp:2888
+#: ../src/verbs.cpp:2892
 #, fuzzy
 msgctxt "ContextVerb"
 msgid "Pencil"
 msgstr "پينسل"
 
-#: ../src/verbs.cpp:2888
+#: ../src/verbs.cpp:2892
 msgid "Draw freehand lines"
 msgstr "فريهينڊ ليڪون ڪڍو "
 
-#: ../src/verbs.cpp:2890
+#: ../src/verbs.cpp:2894
 #, fuzzy
 msgctxt "ContextVerb"
 msgid "Pen"
 msgstr "قلم "
 
-#: ../src/verbs.cpp:2891
+#: ../src/verbs.cpp:2895
 msgid "Draw Bezier curves and straight lines"
 msgstr "بيزئر موڙ ۽ سڌيون ليڪون ڪڍو "
 
-#: ../src/verbs.cpp:2892
+#: ../src/verbs.cpp:2896
 #, fuzzy
 msgctxt "ContextVerb"
 msgid "Calligraphy"
 msgstr "خوش نويسي "
 
-#: ../src/verbs.cpp:2893
+#: ../src/verbs.cpp:2897
 msgid "Draw calligraphic or brush strokes"
 msgstr "خوش نويسيءَ وارن يا برش جي گهڪن جا نقش ڪڍو "
 
-#: ../src/verbs.cpp:2894
+#: ../src/verbs.cpp:2898
 msgid "Create and edit text objects"
 msgstr "متن جون شيون خلقيو ۽ سمپادت ڪريو "
 
-#: ../src/verbs.cpp:2896
+#: ../src/verbs.cpp:2900
 #, fuzzy
 msgctxt "ContextVerb"
 msgid "Gradient"
 msgstr "لاهە "
 
-#: ../src/verbs.cpp:2897
+#: ../src/verbs.cpp:2901
 msgid "Create and edit gradients"
 msgstr "لاهە خلقيو ۽ سمپادت ڪريو "
 
-#: ../src/verbs.cpp:2898
+#: ../src/verbs.cpp:2902
 msgctxt "ContextVerb"
 msgid "Mesh"
 msgstr ""
 
-#: ../src/verbs.cpp:2898
+#: ../src/verbs.cpp:2902
 #, fuzzy
 msgid "Create and edit meshes"
 msgstr "لاهە خلقيو ۽ سمپادت ڪريو "
 
-#: ../src/verbs.cpp:2900
+#: ../src/verbs.cpp:2904
 #, fuzzy
 msgctxt "ContextVerb"
 msgid "Zoom"
 msgstr "زوم "
 
-#: ../src/verbs.cpp:2900
+#: ../src/verbs.cpp:2904
 msgid "Zoom in or out"
 msgstr "زوم ان يا آئوٽ ڪريو "
 
-#: ../src/verbs.cpp:2902
+#: ../src/verbs.cpp:2906
 #, fuzzy
 msgid "Measurement tool"
 msgstr "ماپ جو قسم: "
 
-#: ../src/verbs.cpp:2904
+#: ../src/verbs.cpp:2908
 #, fuzzy
 msgctxt "ContextVerb"
 msgid "Dropper"
 msgstr "ڊراپر"
 
-#: ../src/verbs.cpp:2906
+#: ../src/verbs.cpp:2910
 #, fuzzy
 msgctxt "ContextVerb"
 msgid "Connector"
 msgstr "ڳنڍيندڙ "
 
-#: ../src/verbs.cpp:2907
+#: ../src/verbs.cpp:2911
 msgid "Create diagram connectors"
 msgstr "نقش ڳنڍيندڙ خلقيو "
 
-#: ../src/verbs.cpp:2910
+#: ../src/verbs.cpp:2914
 #, fuzzy
 msgctxt "ContextVerb"
 msgid "Paint Bucket"
 msgstr "پينٽ بڪيٽ"
 
-#: ../src/verbs.cpp:2911
+#: ../src/verbs.cpp:2915
 msgid "Fill bounded areas"
 msgstr "گهيريل کيتر ڀريو "
 
-#: ../src/verbs.cpp:2914
+#: ../src/verbs.cpp:2918
 #, fuzzy
 msgctxt "ContextVerb"
 msgid "LPE Edit"
 msgstr "LPE سمپادن "
 
-#: ../src/verbs.cpp:2914
+#: ../src/verbs.cpp:2918
 msgid "Edit Path Effect parameters"
 msgstr "راهە جي اثر جا پئمانا سمپاد ڪريو "
 
-#: ../src/verbs.cpp:2916
+#: ../src/verbs.cpp:2920
 #, fuzzy
 msgctxt "ContextVerb"
 msgid "Eraser"
 msgstr "رٻڙ"
 
-#: ../src/verbs.cpp:2916
+#: ../src/verbs.cpp:2920
 msgid "Erase existing paths"
 msgstr "مؤجود راهون ميساري ڇڏيو "
 
-#: ../src/verbs.cpp:2918
+#: ../src/verbs.cpp:2922
 #, fuzzy
 msgctxt "ContextVerb"
 msgid "LPE Tool"
 msgstr "LPE  ساڌن "
 
-#: ../src/verbs.cpp:2919
+#: ../src/verbs.cpp:2923
 msgid "Do geometric constructions"
 msgstr "جاميٽري واري اَڏاوت ڪريو "
 
-#: ../src/verbs.cpp:2921
+#: ../src/verbs.cpp:2925
 msgid "Selector Preferences"
 msgstr "چونڊيندڙ جون ترجيحون "
 
-#: ../src/verbs.cpp:2922
+#: ../src/verbs.cpp:2926
 msgid "Open Preferences for the Selector tool"
 msgstr "چونڊيندڙ جي ساڌن لاءِ ترجيحون کوليو "
 
-#: ../src/verbs.cpp:2923
+#: ../src/verbs.cpp:2927
 msgid "Node Tool Preferences"
 msgstr "ڳنڍ جون ترجيحون "
 
-#: ../src/verbs.cpp:2924
+#: ../src/verbs.cpp:2928
 msgid "Open Preferences for the Node tool"
 msgstr "ڳنڍ جي ساڌن لاءِ ترجيحون کوليو "
 
-#: ../src/verbs.cpp:2925
+#: ../src/verbs.cpp:2929
 msgid "Tweak Tool Preferences"
 msgstr "مروڙڻ جي ساڌن جون ترجيحون "
 
-#: ../src/verbs.cpp:2926
+#: ../src/verbs.cpp:2930
 msgid "Open Preferences for the Tweak tool"
 msgstr "مروڙڻ جي ساڌن لاءِ ترجيحون کوليو "
 
-#: ../src/verbs.cpp:2927
+#: ../src/verbs.cpp:2931
 msgid "Spray Tool Preferences"
 msgstr "ساڌنن جي ترجيحن کي اِسپري ڪريو "
 
-#: ../src/verbs.cpp:2928
+#: ../src/verbs.cpp:2932
 msgid "Open Preferences for the Spray tool"
 msgstr "اِسپري ساڌن لاءِ ترجيحون کوليو "
 
-#: ../src/verbs.cpp:2929
+#: ../src/verbs.cpp:2933
 msgid "Rectangle Preferences"
 msgstr "گوني ڪنڊ چؤڪنڊي جون ترجيحون "
 
-#: ../src/verbs.cpp:2930
+#: ../src/verbs.cpp:2934
 msgid "Open Preferences for the Rectangle tool"
 msgstr "گوني ڪنڊ چؤڪنڊي ساڌن  لاءِ ترجيحون کوليو"
 
-#: ../src/verbs.cpp:2931
+#: ../src/verbs.cpp:2935
 msgid "3D Box Preferences"
 msgstr "٣ ڊي باڪس جون ترجيحون "
 
-#: ../src/verbs.cpp:2932
+#: ../src/verbs.cpp:2936
 msgid "Open Preferences for the 3D Box tool"
 msgstr "٣ ڊي باڪس ساڌن لاءِ ترجيحون کوليو "
 
-#: ../src/verbs.cpp:2933
+#: ../src/verbs.cpp:2937
 msgid "Ellipse Preferences"
 msgstr "پيضوي شڪل جون ترجيحون "
 
-#: ../src/verbs.cpp:2934
+#: ../src/verbs.cpp:2938
 msgid "Open Preferences for the Ellipse tool"
 msgstr "بيضوي شڪل ساڌن لاءِ ترجيحون کوليو "
 
-#: ../src/verbs.cpp:2935
+#: ../src/verbs.cpp:2939
 msgid "Star Preferences"
 msgstr "تاري جون ترجيحون "
 
-#: ../src/verbs.cpp:2936
+#: ../src/verbs.cpp:2940
 msgid "Open Preferences for the Star tool"
 msgstr "تاري جو ساڌن لاءِ ترجيحون کوليو "
 
-#: ../src/verbs.cpp:2937
+#: ../src/verbs.cpp:2941
 msgid "Spiral Preferences"
 msgstr "پيچدار شڪل جون ترجيحون "
 
-#: ../src/verbs.cpp:2938
+#: ../src/verbs.cpp:2942
 msgid "Open Preferences for the Spiral tool"
 msgstr "پيچدار شڪل جي ساڌن لاءِ ترجيحون کوليو "
 
-#: ../src/verbs.cpp:2939
+#: ../src/verbs.cpp:2943
 msgid "Pencil Preferences"
 msgstr "پينسل جون پرجيحون "
 
-#: ../src/verbs.cpp:2940
+#: ../src/verbs.cpp:2944
 msgid "Open Preferences for the Pencil tool"
 msgstr "پينسل ساڌن لاءِ ترجيحون کوليو "
 
-#: ../src/verbs.cpp:2941
+#: ../src/verbs.cpp:2945
 msgid "Pen Preferences"
 msgstr "پين جون ترجيحون "
 
-#: ../src/verbs.cpp:2942
+#: ../src/verbs.cpp:2946
 msgid "Open Preferences for the Pen tool"
 msgstr "پين جي ساڌن لاءِ ترجيحون کوليو "
 
-#: ../src/verbs.cpp:2943
+#: ../src/verbs.cpp:2947
 msgid "Calligraphic Preferences"
 msgstr "خوش نويسيءَ جون ترجيحون "
 
-#: ../src/verbs.cpp:2944
+#: ../src/verbs.cpp:2948
 msgid "Open Preferences for the Calligraphy tool"
 msgstr "خوش نويسيءَ جي ساڌن لاءِ ترجيحون کوليو "
 
-#: ../src/verbs.cpp:2945
+#: ../src/verbs.cpp:2949
 msgid "Text Preferences"
 msgstr "متن جون ترجيحون "
 
-#: ../src/verbs.cpp:2946
+#: ../src/verbs.cpp:2950
 msgid "Open Preferences for the Text tool"
 msgstr "متن جي ساڌن لاءِ ترجيحون کوليو "
 
-#: ../src/verbs.cpp:2947
+#: ../src/verbs.cpp:2951
 msgid "Gradient Preferences"
 msgstr "لاهە جون ترجيحون "
 
-#: ../src/verbs.cpp:2948
+#: ../src/verbs.cpp:2952
 msgid "Open Preferences for the Gradient tool"
 msgstr "لاهە جي ساڌن لاءِ ترجيحون کوليو "
 
-#: ../src/verbs.cpp:2949
+#: ../src/verbs.cpp:2953
 #, fuzzy
 msgid "Mesh Preferences"
 msgstr "پين جون ترجيحون "
 
-#: ../src/verbs.cpp:2950
+#: ../src/verbs.cpp:2954
 #, fuzzy
 msgid "Open Preferences for the Mesh tool"
 msgstr "پين جي ساڌن لاءِ ترجيحون کوليو "
 
-#: ../src/verbs.cpp:2951
+#: ../src/verbs.cpp:2955
 msgid "Zoom Preferences"
 msgstr "زوم جون ترجيحون "
 
-#: ../src/verbs.cpp:2952
+#: ../src/verbs.cpp:2956
 msgid "Open Preferences for the Zoom tool"
 msgstr "زوم جي ساڌن لاءِ پرجيحون کوليو "
 
-#: ../src/verbs.cpp:2953
+#: ../src/verbs.cpp:2957
 #, fuzzy
 msgid "Measure Preferences"
 msgstr "رٻڙ جون ترجيحون "
 
-#: ../src/verbs.cpp:2954
+#: ../src/verbs.cpp:2958
 #, fuzzy
 msgid "Open Preferences for the Measure tool"
 msgstr "رٻڙ جي ساڌن لاءِ ترجيحون کوليو "
 
-#: ../src/verbs.cpp:2955
+#: ../src/verbs.cpp:2959
 msgid "Dropper Preferences"
 msgstr "ڊراپر جون ترجيحون "
 
-#: ../src/verbs.cpp:2956
+#: ../src/verbs.cpp:2960
 msgid "Open Preferences for the Dropper tool"
 msgstr "ڊراپر جي ساڌن لاءِ ترجيحون کوليو "
 
-#: ../src/verbs.cpp:2957
+#: ../src/verbs.cpp:2961
 msgid "Connector Preferences"
 msgstr "ڳنڏيندڙ جون ترجيحون "
 
-#: ../src/verbs.cpp:2958
+#: ../src/verbs.cpp:2962
 msgid "Open Preferences for the Connector tool"
 msgstr "ڳنڍيندڙ جي ساڌن لاءِ ترجيحون کوليو "
 
-#: ../src/verbs.cpp:2961
+#: ../src/verbs.cpp:2965
 msgid "Paint Bucket Preferences"
 msgstr "رنگ جي بالٽيءَ جو ترجيحون "
 
-#: ../src/verbs.cpp:2962
+#: ../src/verbs.cpp:2966
 msgid "Open Preferences for the Paint Bucket tool"
 msgstr "رنگ جي بالٽيءَ جي ساڌن لاءِ ترجيحون کوليو "
 
-#: ../src/verbs.cpp:2965
+#: ../src/verbs.cpp:2969
 msgid "Eraser Preferences"
 msgstr "رٻڙ جون ترجيحون "
 
-#: ../src/verbs.cpp:2966
+#: ../src/verbs.cpp:2970
 msgid "Open Preferences for the Eraser tool"
 msgstr "رٻڙ جي ساڌن لاءِ ترجيحون کوليو "
 
-#: ../src/verbs.cpp:2967
+#: ../src/verbs.cpp:2971
 msgid "LPE Tool Preferences"
 msgstr "LPE اوزار جون ترجيحون "
 
-#: ../src/verbs.cpp:2968
+#: ../src/verbs.cpp:2972
 msgid "Open Preferences for the LPETool tool"
 msgstr "LPE  اوزار جي ساڌن جون ترجيحون کوليو "
 
-#: ../src/verbs.cpp:2971
+#: ../src/verbs.cpp:2975
 msgid "Zoom In"
 msgstr "زوم اَندر "
 
-#: ../src/verbs.cpp:2971
+#: ../src/verbs.cpp:2975
 msgid "Zoom in"
 msgstr "زوم اَندر "
 
-#: ../src/verbs.cpp:2972
+#: ../src/verbs.cpp:2976
 msgid "Zoom Out"
 msgstr "زوم ٻاهر "
 
-#: ../src/verbs.cpp:2972
+#: ../src/verbs.cpp:2976
 msgid "Zoom out"
 msgstr "زوم ٻاهر "
 
-#: ../src/verbs.cpp:2973
+#: ../src/verbs.cpp:2977
 msgid "Nex_t Zoom"
 msgstr "اَڳلو زوم "
 
-#: ../src/verbs.cpp:2973
+#: ../src/verbs.cpp:2977
 msgid "Next zoom (from the history of zooms)"
 msgstr "اَڳلو زوم (زومس جي اِتهاس مان) "
 
-#: ../src/verbs.cpp:2975
+#: ../src/verbs.cpp:2979
 msgid "Pre_vious Zoom"
 msgstr "اَڳوڻو زوم "
 
-#: ../src/verbs.cpp:2975
+#: ../src/verbs.cpp:2979
 msgid "Previous zoom (from the history of zooms)"
 msgstr "اَڳلو زوم (زومس جي اِتهاس مان) "
 
-#: ../src/verbs.cpp:2977
+#: ../src/verbs.cpp:2981
 msgid "Zoom 1:_1"
 msgstr "زوم 1:_1 "
 
-#: ../src/verbs.cpp:2977
+#: ../src/verbs.cpp:2981
 msgid "Zoom to 1:1"
 msgstr " 1:1 ۾ زوم ڪريو "
 
-#: ../src/verbs.cpp:2978
+#: ../src/verbs.cpp:2982
 msgid "Zoom 1:_2"
 msgstr " 1:_2 زوم "
 
-#: ../src/verbs.cpp:2978
+#: ../src/verbs.cpp:2982
 msgid "Zoom to 1:2"
 msgstr "1:2 ۾ زوم ڪريو "
 
-#: ../src/verbs.cpp:2979
+#: ../src/verbs.cpp:2983
 msgid "_Zoom 2:1"
 msgstr " 2:1 زوم "
 
-#: ../src/verbs.cpp:2979
+#: ../src/verbs.cpp:2983
 msgid "Zoom to 2:1"
 msgstr "2:1 ۾ زوم ڪريو "
 
-#: ../src/verbs.cpp:2980
+#: ../src/verbs.cpp:2984
 msgid "Zoom to fit page in window"
 msgstr "ونڊو ۾ صفحو ٺهڪڻ لاءِ زوم ڪريو "
 
-#: ../src/verbs.cpp:2982
+#: ../src/verbs.cpp:2986
 msgid "Page _Width"
 msgstr "صفحي جي ويڪر "
 
-#: ../src/verbs.cpp:2982
+#: ../src/verbs.cpp:2986
 msgid "Zoom to fit page width in window"
 msgstr "ونڊو ۾ صفحي جي ويڪر ٺهڪڻ لاءِ زوم ڪريو "
 
-#: ../src/verbs.cpp:2984
+#: ../src/verbs.cpp:2988
 msgid "Zoom to fit drawing in window"
 msgstr "ونڊو ۾ نقش ٺهڪڻ لاءِ زوم ڪريو "
 
-#: ../src/verbs.cpp:2986
+#: ../src/verbs.cpp:2990
 msgid "Zoom to fit selection in window"
 msgstr "ونڊو ۾ چونڊ ٺهڪڻ لاءِ زوم ڪريو "
 
-#: ../src/verbs.cpp:2988
+#: ../src/verbs.cpp:2992
 #, fuzzy
 msgid "_Center Page"
 msgstr "اندريان صفحا "
 
-#: ../src/verbs.cpp:2988
+#: ../src/verbs.cpp:2992
 #, fuzzy
 msgid "Center page in window"
 msgstr "ونڊو ۾ صفحو ٺهڪڻ لاءِ زوم ڪريو "
 
-#: ../src/verbs.cpp:2991
+#: ../src/verbs.cpp:2995
 #, fuzzy
 msgid "Rotate Clockwise"
 msgstr "گهڙيءَ جي ڏس ۾ گهمايو "
 
-#: ../src/verbs.cpp:2991
+#: ../src/verbs.cpp:2995
 #, fuzzy
 msgid "Rotate canvas clockwise"
 msgstr "گهڙيءَ جي ڏس ۾ گهمايو "
 
-#: ../src/verbs.cpp:2992
+#: ../src/verbs.cpp:2996
 #, fuzzy
 msgid "Rotate Counter-Clockwise"
 msgstr "گهڙيءَ جي اُبتڙ ڏس ۾ گهمايو "
 
-#: ../src/verbs.cpp:2993
+#: ../src/verbs.cpp:2997
 #, fuzzy
 msgid "Rotate canvas counter-clockwise"
 msgstr "گهڙيءَ جي اُبتڙ ڏس ۾ گهمايو "
 
-#: ../src/verbs.cpp:2994
+#: ../src/verbs.cpp:2998
 #, fuzzy
 msgid "Reset Rotation"
 msgstr "گهماءُ "
 
-#: ../src/verbs.cpp:2994
+#: ../src/verbs.cpp:2998
 msgid "Reset canvas rotation to zero"
 msgstr ""
 
-#: ../src/verbs.cpp:2996
+#: ../src/verbs.cpp:3000
 #, fuzzy
 msgid "Flip Horizontally"
 msgstr "اُفقي نموني اُڇل ڏياريو "
 
-#: ../src/verbs.cpp:2996
+#: ../src/verbs.cpp:3000
 #, fuzzy
 msgid "Flip canvas horizontally"
 msgstr "ڳنڍين کي اُفقي نموني اُڇل ڏياريو "
 
-#: ../src/verbs.cpp:2998
+#: ../src/verbs.cpp:3002
 #, fuzzy
 msgid "Flip Vertically"
 msgstr "عمودي نموني اُڇل ڏياريو "
 
-#: ../src/verbs.cpp:2998
+#: ../src/verbs.cpp:3002
 #, fuzzy
 msgid "Flip canvas vertically"
 msgstr "ڳنڍين کي عمودي نموني اُڇل ڏياريو "
 
-#: ../src/verbs.cpp:3000
+#: ../src/verbs.cpp:3004
 #, fuzzy
 msgid "Reset Flip"
 msgstr "ڄار ڪڍي ڇڏيو "
 
-#: ../src/verbs.cpp:3000
+#: ../src/verbs.cpp:3004
 msgid "Undo any flip"
 msgstr ""
 
-#: ../src/verbs.cpp:3006
+#: ../src/verbs.cpp:3010
 msgid "_Rulers"
 msgstr "ليڪڻو "
 
-#: ../src/verbs.cpp:3006
+#: ../src/verbs.cpp:3010
 msgid "Show or hide the canvas rulers"
 msgstr "ڪينواس جا ليڪڻا ڏيکاريو يا لڪايو "
 
-#: ../src/verbs.cpp:3007
+#: ../src/verbs.cpp:3011
 msgid "Scroll_bars"
 msgstr "اِسڪرول پٽيون "
 
-#: ../src/verbs.cpp:3008
+#: ../src/verbs.cpp:3012
 msgid "Show or hide the canvas scrollbars"
 msgstr "ڪينواس جون اِسڪرول پٽيون ڏيکاريو يا لڪايو "
 
-#: ../src/verbs.cpp:3009
+#: ../src/verbs.cpp:3013
 #, fuzzy
 msgid "Page _Grid"
 msgstr "صفحي جي ويڪر "
 
-#: ../src/verbs.cpp:3009
+#: ../src/verbs.cpp:3013
 #, fuzzy
 msgid "Show or hide the page grid"
 msgstr "ڄار ڏيکاريو يا لڪايو "
 
-#: ../src/verbs.cpp:3011
+#: ../src/verbs.cpp:3015
 msgid "G_uides"
 msgstr "رهنما "
 
-#: ../src/verbs.cpp:3012
+#: ../src/verbs.cpp:3016
 msgid "Show or hide guides (drag from a ruler to create a guide)"
 msgstr "رهنما ڏيکاريو يا لڪايو (رهنما خلقڻ لاءِ ليڪڻي وٽان گهليو) "
 
-#: ../src/verbs.cpp:3013
+#: ../src/verbs.cpp:3017
 msgid "Enable snapping"
 msgstr "وٿي ڏيڻ کي سمرٿ بڻايو "
 
-#: ../src/verbs.cpp:3014
+#: ../src/verbs.cpp:3018
 #, fuzzy
 msgid "_Commands Bar"
 msgstr "آديشن جي پٽي "
 
-#: ../src/verbs.cpp:3015
+#: ../src/verbs.cpp:3019
 msgid "Show or hide the Commands bar (under the menu)"
 msgstr "آديشن جي پٽي ڏيکاريو يا لڪايو (مينوءَ هيٺان) "
 
-#: ../src/verbs.cpp:3016
+#: ../src/verbs.cpp:3020
 #, fuzzy
 msgid "Sn_ap Controls Bar"
 msgstr "صابطن جي، پٽيءَ جو عڪس ڪڍو "
 
-#: ../src/verbs.cpp:3017
+#: ../src/verbs.cpp:3021
 msgid "Show or hide the snapping controls"
 msgstr "عڪس ڪڍندڙ ضانطا ڏيکاريو يا لڪايو "
 
-#: ../src/verbs.cpp:3018
+#: ../src/verbs.cpp:3022
 #, fuzzy
 msgid "T_ool Controls Bar"
 msgstr "ساڌنن جي ضابطن جي پٽي "
 
-#: ../src/verbs.cpp:3019
+#: ../src/verbs.cpp:3023
 msgid "Show or hide the Tool Controls bar"
 msgstr "ساڌنن جي ضابطن جي پٽي ڏيکاريو يا لڪايو "
 
-#: ../src/verbs.cpp:3020
+#: ../src/verbs.cpp:3024
 msgid "_Toolbox"
 msgstr "ساڌنن جو باڪس "
 
-#: ../src/verbs.cpp:3021
+#: ../src/verbs.cpp:3025
 msgid "Show or hide the main toolbox (on the left)"
 msgstr "مکيە ساڌنن جو باڪس (کاٻي پاسي) ڏيکاريو يا لڪايو "
 
-#: ../src/verbs.cpp:3022
+#: ../src/verbs.cpp:3026
 msgid "_Palette"
 msgstr "پئليٽ "
 
-#: ../src/verbs.cpp:3022
+#: ../src/verbs.cpp:3026
 msgid "Show or hide the color palette"
 msgstr "ڪلر پئليٽ ڏيکاريو يا لڪايو "
 
-#: ../src/verbs.cpp:3024
+#: ../src/verbs.cpp:3028
 msgid "_Statusbar"
 msgstr "اسٽيٽ بار "
 
-#: ../src/verbs.cpp:3025
+#: ../src/verbs.cpp:3029
 msgid "Show or hide the statusbar (at the bottom of the window)"
 msgstr "اِسٽيٽ بار ڏيکاريو يا لڪايو (ونڊو جي هيٺئين ڀاڱي ۾) "
 
-#: ../src/verbs.cpp:3027
+#: ../src/verbs.cpp:3031
 msgid "_Fullscreen"
 msgstr "سڄي اِسڪرن "
 
-#: ../src/verbs.cpp:3027 ../src/verbs.cpp:3030
+#: ../src/verbs.cpp:3031 ../src/verbs.cpp:3034
 msgid "Stretch this document window to full screen"
 msgstr "هيءَ دستاويز ونڊيو سڄيءَ اِسڪرن ۾ ڦهلايو "
 
-#: ../src/verbs.cpp:3029
+#: ../src/verbs.cpp:3033
 #, fuzzy
 msgid "Fullscreen & Focus Mode"
 msgstr "فوڪس جو ڍنگ ٽوڪل ڪريو "
 
-#: ../src/verbs.cpp:3031
+#: ../src/verbs.cpp:3035
 msgid "Toggle _Focus Mode"
 msgstr "فوڪس جو ڍنگ ٽوڪل ڪريو "
 
-#: ../src/verbs.cpp:3032
+#: ../src/verbs.cpp:3036
 msgid "Remove excess toolbars to focus on drawing"
 msgstr "نقش تي فوڪس ڪرڻ لاءِ واڌو اوزار پٽيون ڪڍي ڇڏيو "
 
-#: ../src/verbs.cpp:3033
+#: ../src/verbs.cpp:3037
 msgid "Duplic_ate Window"
 msgstr "نقلي ونڊو "
 
-#: ../src/verbs.cpp:3033
+#: ../src/verbs.cpp:3037
 msgid "Open a new window with the same document"
 msgstr "ساڳئي دستاويز سان نئين ونڊو کوليو "
 
-#: ../src/verbs.cpp:3036 ../src/verbs.cpp:3046
+#: ../src/verbs.cpp:3040 ../src/verbs.cpp:3050
 msgid "_Normal"
 msgstr "ساڌارڻ "
 
-#: ../src/verbs.cpp:3036
+#: ../src/verbs.cpp:3040
 msgid "Switch to normal display mode"
 msgstr "ساڌارڻ نماو جي ڍنگ ۾ وڃو "
 
-#: ../src/verbs.cpp:3038
+#: ../src/verbs.cpp:3042
 msgid "No _Filters"
 msgstr "ڪوبە فلٽر ناهي "
 
-#: ../src/verbs.cpp:3039
+#: ../src/verbs.cpp:3043
 msgid "Switch to normal display without filters"
 msgstr "بنا فلٽرن جي ساڌارڻ نماو ۾ وڃو "
 
-#: ../src/verbs.cpp:3040
+#: ../src/verbs.cpp:3044
 msgid "_Outline"
 msgstr "روپريکا "
 
-#: ../src/verbs.cpp:3041
+#: ../src/verbs.cpp:3045
 msgid "Switch to outline (wireframe) display mode"
 msgstr "روپريکا (واير فريم) نما جي ڍنگ ۾ وڃو "
 
-#: ../src/verbs.cpp:3042
+#: ../src/verbs.cpp:3046
 #, fuzzy
 msgid "Visible _Hairlines"
 msgstr "نظر ايندڙ رنگ "
 
-#: ../src/verbs.cpp:3043
+#: ../src/verbs.cpp:3047
 msgid "Make sure hairlines are always drawn thick enough to see"
 msgstr ""
 
-#: ../src/verbs.cpp:3044 ../src/verbs.cpp:3053
+#: ../src/verbs.cpp:3048 ../src/verbs.cpp:3057
 msgid "_Toggle"
 msgstr "ٽوگل "
 
-#: ../src/verbs.cpp:3045
+#: ../src/verbs.cpp:3049
 msgid "Toggle between normal and outline display modes"
 msgstr "ساڌارڻ ۽ روپريکا وارن نماو جي ڍنگن جي وچ ۾ ٽوگل ڪريو "
 
-#: ../src/verbs.cpp:3047
+#: ../src/verbs.cpp:3051
 msgid "Switch to normal color display mode"
 msgstr "ساڌارڻ رنگ جي نماو جي ڍنگ ۾ وڃو "
 
-#: ../src/verbs.cpp:3048
+#: ../src/verbs.cpp:3052
 msgid "_Grayscale"
 msgstr "گريسڪيل "
 
-#: ../src/verbs.cpp:3049
+#: ../src/verbs.cpp:3053
 msgid "Switch to grayscale display mode"
 msgstr "گريسڪيل نماو جي ڍنگ ۾ وجو "
 
-#: ../src/verbs.cpp:3054
+#: ../src/verbs.cpp:3058
 msgid "Toggle between normal and grayscale color display modes"
 msgstr "ساڌارڻ ۽ گريسڪيل رنگ جي نماو جي ڍنگن جي وچ ۾ ٽوگل ڪريو "
 
-#: ../src/verbs.cpp:3056
+#: ../src/verbs.cpp:3060
 #, fuzzy
 msgid "_Split View Mode"
 msgstr "فوڪس جو ڍنگ ٽوڪل ڪريو "
 
-#: ../src/verbs.cpp:3057
+#: ../src/verbs.cpp:3061
 #, fuzzy
 msgid "Split canvas in 2 to show outline"
 msgstr "هميشهە روپريکا ڏيکاريو "
 
-#: ../src/verbs.cpp:3059
+#: ../src/verbs.cpp:3063
 #, fuzzy
 msgid "_XRay Mode"
 msgstr "فوڪس جو ڍنگ ٽوڪل ڪريو "
 
-#: ../src/verbs.cpp:3059
+#: ../src/verbs.cpp:3063
 #, fuzzy
 msgid "XRay around cursor"
 msgstr "ڪرسر هيٺان "
 
-#: ../src/verbs.cpp:3061
+#: ../src/verbs.cpp:3065
 msgid "Color-Managed View"
 msgstr "رنگ۔۔۔ اِنتظام ڪيل منظر "
 
-#: ../src/verbs.cpp:3062
+#: ../src/verbs.cpp:3066
 msgid "Toggle color-managed display for this document window"
 msgstr "هن دستاويز جي ونڊو لاءِ رنگ - اِنتظام ڪيل نماو ۾ ٽوگل ڪريو "
 
-#: ../src/verbs.cpp:3064
+#: ../src/verbs.cpp:3068
 msgid "Ico_n Preview..."
 msgstr "آئڪان اڳ منظر ڪشي "
 
-#: ../src/verbs.cpp:3065
+#: ../src/verbs.cpp:3069
 msgid "Open a window to preview objects at different icon resolutions"
 msgstr "مختلف آئڪان ريزليوشنس ۾ شين جي اڳ منظر ڪشيءَ لاءِ ونڊو کوليو "
 
-#: ../src/verbs.cpp:3069
+#: ../src/verbs.cpp:3073
 msgid "Prototype..."
 msgstr ""
 
-#: ../src/verbs.cpp:3069
+#: ../src/verbs.cpp:3073
 msgid "Prototype Dialog"
 msgstr ""
 
-#: ../src/verbs.cpp:3071
+#: ../src/verbs.cpp:3075
 #, fuzzy
 msgid "P_references..."
 msgstr "ترجيحون "
 
-#: ../src/verbs.cpp:3072
+#: ../src/verbs.cpp:3076
 msgid "Edit global Inkscape preferences"
 msgstr "عالمي اِنڪسڪيپ جون ترجيحون سمپادت ڪريو "
 
-#: ../src/verbs.cpp:3073
+#: ../src/verbs.cpp:3077
 msgid "_Document Properties..."
 msgstr "دستاويز جون خاصيتون "
 
-#: ../src/verbs.cpp:3074
+#: ../src/verbs.cpp:3078
 msgid "Edit properties of this document (to be saved with the document)"
 msgstr "هن دستاويز جون خاصيتون سمپادت ڪريو (دستاويز سان سانڍبيون) "
 
-#: ../src/verbs.cpp:3076
+#: ../src/verbs.cpp:3080
 msgid "Document _Metadata..."
 msgstr "دستاويز جي ميٽا سامگري۔۔۔ "
 
-#: ../src/verbs.cpp:3077
+#: ../src/verbs.cpp:3081
 msgid "Edit document metadata (to be saved with the document)"
 msgstr "دستاويز جي ميٽا سامگري (دستاويز سان سانڍبي) "
 
-#: ../src/verbs.cpp:3079
+#: ../src/verbs.cpp:3083
 msgid ""
 "Edit objects' colors, gradients, arrowheads, and other fill and stroke "
 "properties..."
 msgstr ""
 "شين جا رنگ، لاهە، تير جون چهنبون ۽ ٻيا ڀراو ۽ گهڪي جون خصيتون سمپادت ڪريو۔۔۔ "
 
-#: ../src/verbs.cpp:3084
+#: ../src/verbs.cpp:3088
 #, fuzzy
 msgid "_Unicode Characters..."
 msgstr "يونيڪوڊ اکر داخل ڪريو "
 
-#: ../src/verbs.cpp:3085
+#: ../src/verbs.cpp:3089
 #, fuzzy
 msgid "Select Unicode characters from a palette"
 msgstr "گلفس نقاشي پٽيءَ مان اَکر چونڊيو "
 
-#: ../src/verbs.cpp:3088
+#: ../src/verbs.cpp:3092
 msgid "S_watches..."
 msgstr "نمونا۔۔۔ "
 
-#: ../src/verbs.cpp:3089
+#: ../src/verbs.cpp:3093
 msgid "Select colors from a swatches palette"
 msgstr "نمونن جي نقاشي پٽيءَ مان رنگ چونڊيو "
 
-#: ../src/verbs.cpp:3090
+#: ../src/verbs.cpp:3094
 msgid "S_ymbols..."
 msgstr ""
 
-#: ../src/verbs.cpp:3091
+#: ../src/verbs.cpp:3095
 #, fuzzy
 msgid "Select symbol from a symbols palette"
 msgstr "نمونن جي نقاشي پٽيءَ مان رنگ چونڊيو "
 
-#: ../src/verbs.cpp:3092
+#: ../src/verbs.cpp:3096
+#, fuzzy
+msgid "_Paint Servers..."
+msgstr "اِنپٽ وسيلا "
+
+#: ../src/verbs.cpp:3098
+#, fuzzy
+msgid "Select paint server from a collection"
+msgstr "چونڊ مان موڙ حاصل ڪريو۔۔۔ "
+
+#: ../src/verbs.cpp:3099
 msgid "Transfor_m..."
 msgstr "روپ بدلايو "
 
-#: ../src/verbs.cpp:3093
+#: ../src/verbs.cpp:3100
 msgid "Precisely control objects' transformations"
 msgstr "شين جي روپ جي ڦيرن تي تز نموني ضابطو رکو "
 
-#: ../src/verbs.cpp:3094
+#: ../src/verbs.cpp:3101
 msgid "_Align and Distribute..."
 msgstr "ترتيب ڏيو ۽ ورهاست ڪريو "
 
-#: ../src/verbs.cpp:3095
+#: ../src/verbs.cpp:3102
 msgid "Align and distribute objects"
 msgstr "شين کي ترتيب ڏيو ۽ اُنهن کي ورهاست ڪريو "
 
-#: ../src/verbs.cpp:3096
+#: ../src/verbs.cpp:3103
 msgid "_Spray options..."
 msgstr "وڪلپ اِسپري ڪريو۔۔۔ "
 
-#: ../src/verbs.cpp:3097
+#: ../src/verbs.cpp:3104
 msgid "Some options for the spray"
 msgstr "اِسپري لاءِ ڪجهە وڪلپ "
 
-#: ../src/verbs.cpp:3098
+#: ../src/verbs.cpp:3105
 msgid "Undo _History..."
 msgstr "اِتهاس تي ڪيل ڪم رد ڪريو "
 
-#: ../src/verbs.cpp:3098
+#: ../src/verbs.cpp:3105
 msgid "Undo History"
 msgstr "اِتهاس تي ڪيل ڪم رد ڪريو "
 
-#: ../src/verbs.cpp:3101
+#: ../src/verbs.cpp:3108
 msgid "View and select font family, font size and other text properties"
 msgstr "فانٽ جو پريوار، فانٽ جو آڪار ۽ متن جون خاصيتون نظر مان ڪڍو ۽ چونڊيو "
 
-#: ../src/verbs.cpp:3103
+#: ../src/verbs.cpp:3110
 msgid "_XML Editor..."
 msgstr "_XML سمپادڪ۔۔۔ "
 
-#: ../src/verbs.cpp:3104
+#: ../src/verbs.cpp:3111
 msgid "View and edit the XML tree of the document"
 msgstr "دستاويز جو XML ٽري نظر مان ڪڍو ۽ سمپاد ڪريو "
 
-#: ../src/verbs.cpp:3105
+#: ../src/verbs.cpp:3112
 #, fuzzy
 msgid "_Selectors and CSS..."
 msgstr "چونڊ "
 
 #
 # File: ../src/verbs.cpp, line: 3111
-#: ../src/verbs.cpp:3106
+#: ../src/verbs.cpp:3113
 msgid "View and edit selections and CSS styles"
 msgstr ""
 
-#: ../src/verbs.cpp:3107
+#: ../src/verbs.cpp:3114
 #, fuzzy
 msgid "_Find/Replace..."
 msgstr "متن جو پتو لڳايو ۽ مٽايو "
 
-#: ../src/verbs.cpp:3107
+#: ../src/verbs.cpp:3114
 msgid "Find objects in document"
 msgstr "دستاويز ۾ شين جو پيو لڳايو "
 
-#: ../src/verbs.cpp:3111
+#: ../src/verbs.cpp:3118
 msgid "Check spelling of text in document"
 msgstr "دستاويز ۾ متن جي هجي چڪاسو "
 
-#: ../src/verbs.cpp:3113
+#: ../src/verbs.cpp:3120
 msgid "_Messages..."
 msgstr "سنديش۔۔۔ "
 
-#: ../src/verbs.cpp:3113
+#: ../src/verbs.cpp:3120
 msgid "View debug messages"
 msgstr "چوڪون سڃاڻي ڪڍي ڇڏي ڇڏيل سنديش نظر مان ڪڍو "
 
-#: ../src/verbs.cpp:3115
+#: ../src/verbs.cpp:3122
 msgid "Show/Hide D_ialogs"
 msgstr "گفتا ڏيکاريو/لڪايو "
 
-#: ../src/verbs.cpp:3116
+#: ../src/verbs.cpp:3123
 msgid "Show or hide all open dialogs"
 msgstr "سڀ کليل گفتا ڏيکاريو يا لڪايو "
 
-#: ../src/verbs.cpp:3117
+#: ../src/verbs.cpp:3124
 msgid "Create Tiled Clones..."
 msgstr "ٽائل وارا ڪلون خلقيو "
 
-#: ../src/verbs.cpp:3118
+#: ../src/verbs.cpp:3125
 msgid ""
 "Create multiple clones of selected object, arranging them into a pattern or "
 "scattering"
 msgstr ""
 "چونڊيل شين کي نموني يا پکڙڻ ۾ سلسلو ڏيندي چونڊيل شين جا گهڻا ڪلون خلقيو "
 
-#: ../src/verbs.cpp:3120
+#: ../src/verbs.cpp:3127
 #, fuzzy
 msgid "_Object attributes..."
 msgstr "شئە جون خاصيتون۔۔۔ "
 
-#: ../src/verbs.cpp:3121
+#: ../src/verbs.cpp:3128
 #, fuzzy
 msgid "Edit the object attributes..."
 msgstr "راهە جي اثر جا پئمانا سمپاد ڪريو "
 
-#: ../src/verbs.cpp:3123
+#: ../src/verbs.cpp:3130
 msgid "Edit the ID, locked and visible status, and other object properties"
 msgstr "آءِ ڊي سمپادت ڪريو، ڪلف ڏنل ۽ نظر ايندڙ حالت ۽ ٻيون خاصيتون "
 
-#: ../src/verbs.cpp:3125
+#: ../src/verbs.cpp:3132
 msgid "_Input Devices..."
 msgstr "اِنپٽ وسيلا "
 
-#: ../src/verbs.cpp:3126
+#: ../src/verbs.cpp:3133
 msgid "Configure extended input devices, such as a graphics tablet"
 msgstr "وڌايل اِنپٽ وسيلا جئن تە گرافڪس ٽبليٽ جي رچنا ڪريو "
 
-#: ../src/verbs.cpp:3128
+#: ../src/verbs.cpp:3135
 msgid "_Extensions..."
 msgstr "وستارَ "
 
-#: ../src/verbs.cpp:3129
+#: ../src/verbs.cpp:3136
 msgid "Query information about extensions"
 msgstr "وستارن بابت پڇا سان واسطو رکندڙ معلومات "
 
-#: ../src/verbs.cpp:3130
+#: ../src/verbs.cpp:3137
 msgid "Layer_s..."
 msgstr "سطحون "
 
-#: ../src/verbs.cpp:3130
+#: ../src/verbs.cpp:3137
 msgid "View Layers"
 msgstr "سطحون نظر مان ڪڍو "
 
-#: ../src/verbs.cpp:3132
+#: ../src/verbs.cpp:3139
 #, fuzzy
 msgid "Object_s..."
 msgstr "شيون "
 
-#: ../src/verbs.cpp:3132
+#: ../src/verbs.cpp:3139
 #, fuzzy
 msgid "View Objects"
 msgstr "شيون "
 
-#: ../src/verbs.cpp:3134
+#: ../src/verbs.cpp:3141
 msgid "Style Dialog..."
 msgstr ""
 
-#: ../src/verbs.cpp:3134
+#: ../src/verbs.cpp:3141
 msgid "View Style Dialog"
 msgstr ""
 
-#: ../src/verbs.cpp:3135
+#: ../src/verbs.cpp:3142
 #, fuzzy
 msgid "Path E_ffects..."
 msgstr "راهە جي اَثر جو سمپادڪ "
 
-#: ../src/verbs.cpp:3136
+#: ../src/verbs.cpp:3143
 msgid "Manage, edit, and apply path effects"
 msgstr "راهە جي اَثرن جو اِنتظام ڪريو، سمپادت ڪريو ۽ اِستعمال ڪريو "
 
-#: ../src/verbs.cpp:3137
+#: ../src/verbs.cpp:3144
 #, fuzzy
 msgid "Filter _Editor..."
 msgstr "فلٽر جو سمپادڪ۔۔۔ "
 
-#: ../src/verbs.cpp:3138
+#: ../src/verbs.cpp:3145
 msgid "Manage, edit, and apply SVG filters"
 msgstr " SVG فلٽرن جو اِنتظام ڪريو، سمپادن ڪريو ۽ اِستعمال ڪريو "
 
-#: ../src/verbs.cpp:3139
+#: ../src/verbs.cpp:3146
 msgid "SVG Font Editor..."
 msgstr "SVG فانٽ سمپادڪ "
 
-#: ../src/verbs.cpp:3139
+#: ../src/verbs.cpp:3146
 msgid "Edit SVG fonts"
 msgstr "SVG فانٽ سمپادت ڪريو "
 
-#: ../src/verbs.cpp:3140
+#: ../src/verbs.cpp:3147
 msgid "Print Colors..."
 msgstr "ڇپائيءَ جا رنگ "
 
-#: ../src/verbs.cpp:3141
+#: ../src/verbs.cpp:3148
 msgid ""
 "Select which color separations to render in Print Colors Preview rendermode"
 msgstr ""
 "ان ڳالهە جي چونڊ ڪريو تە ڪهڙا رنگ ڌار ڪرڻ کي پرنٽ ڪلر پريويون جي موٽ جي ڍنگ "
 "۾ پيش ڪريو "
 
-#: ../src/verbs.cpp:3142
+#: ../src/verbs.cpp:3149
 #, fuzzy
 msgid "_Export PNG Image..."
 msgstr "بٽميپ جي آمد ڪريو "
 
-#: ../src/verbs.cpp:3143
+#: ../src/verbs.cpp:3150
 #, fuzzy
 msgid "Export this document or a selection as a PNG image"
 msgstr "هن دستاويز يا بٽميپ جي عڪس جي روپ ۾ چونڊ جي روانگي ڪريو "
 
-#: ../src/verbs.cpp:3145
+#: ../src/verbs.cpp:3152
 msgid "About E_xtensions"
 msgstr "وستارن بابت "
 
-#: ../src/verbs.cpp:3146
+#: ../src/verbs.cpp:3153
 msgid "Information on Inkscape extensions"
 msgstr "اِنڪسڪيپ وستارن تي معلومات "
 
-#: ../src/verbs.cpp:3147
+#: ../src/verbs.cpp:3154
 msgid "About _Memory"
 msgstr "يادگيريءَ - بابت "
 
-#: ../src/verbs.cpp:3147
+#: ../src/verbs.cpp:3154
 msgid "Memory usage information"
 msgstr "يادگيريءَ جي اُپيوگتا بابت معلومات "
 
-#: ../src/verbs.cpp:3149
+#: ../src/verbs.cpp:3156
 msgid "_About Inkscape"
 msgstr "اِنڪسڪيپ بابت "
 
-#: ../src/verbs.cpp:3149
+#: ../src/verbs.cpp:3156
 msgid "Inkscape version, authors, license"
 msgstr "اِنڪسڪيپ سنسڪرڻ، ليکڪ، ليسن "
 
-#: ../src/verbs.cpp:3155
+#: ../src/verbs.cpp:3162
 msgid "Inkscape: _Basic"
 msgstr "اِنڪسڪيپ: بنيادي "
 
-#: ../src/verbs.cpp:3156
+#: ../src/verbs.cpp:3163
 msgid "Getting started with Inkscape"
 msgstr "اِنڪسڪيپ سان شروع ڪجي ٿو"
 
-#: ../src/verbs.cpp:3157
+#: ../src/verbs.cpp:3164
 msgid "Inkscape: _Shapes"
 msgstr "اِنڪسڪيپ:- آڪار "
 
-#: ../src/verbs.cpp:3158
+#: ../src/verbs.cpp:3165
 msgid "Using shape tools to create and edit shapes"
 msgstr "آڪار خلقڻ ۽ سمپادت ڪرڻ لاءِ آڪار ساڌنن جو اِستعمال ڪري پيو "
 
-#: ../src/verbs.cpp:3159
+#: ../src/verbs.cpp:3166
 msgid "Inkscape: _Advanced"
 msgstr "اِنڪسڪيپ:- اوچ "
 
-#: ../src/verbs.cpp:3160
+#: ../src/verbs.cpp:3167
 msgid "Advanced Inkscape topics"
 msgstr "اوچ اِنڪسڪيپ بابت "
 
-#: ../src/verbs.cpp:3162
+#: ../src/verbs.cpp:3169
 msgid "Inkscape: T_racing"
 msgstr "اِنڪسڪيپ: پتو لڳائڻ "
 
-#: ../src/verbs.cpp:3162
+#: ../src/verbs.cpp:3169
 msgid "Using bitmap tracing"
 msgstr "بٽميپ پتو لڳائڻ جو اِستعمال ڪري پيو "
 
-#: ../src/verbs.cpp:3164
+#: ../src/verbs.cpp:3171
 #, fuzzy
 msgid "Inkscape: Tracing Pixel Art"
 msgstr "اِنڪسڪيپ: پتو لڳائڻ "
 
-#: ../src/verbs.cpp:3165
+#: ../src/verbs.cpp:3172
 msgid "Using Trace Pixel Art dialog"
 msgstr ""
 
-#: ../src/verbs.cpp:3166
+#: ../src/verbs.cpp:3173
 msgid "Inkscape: _Calligraphy"
 msgstr "اِنڪسڪيپ خوش نويسي "
 
-#: ../src/verbs.cpp:3167
+#: ../src/verbs.cpp:3174
 msgid "Using the Calligraphy pen tool"
 msgstr "خوش نويسيءَ جي پين جو اُپڪرڻ اِستعمال ڪري پيو "
 
-#: ../src/verbs.cpp:3168
+#: ../src/verbs.cpp:3175
 msgid "Inkscape: _Interpolate"
 msgstr "اِنڪسڪيپ شامل ڪرڻ "
 
-#: ../src/verbs.cpp:3169
+#: ../src/verbs.cpp:3176
 msgid "Using the interpolate extension"
 msgstr "شامل ڪرڻ جو وستار اِستعمال ڪري ٿو "
 
-#: ../src/verbs.cpp:3170
+#: ../src/verbs.cpp:3177
 msgid "_Elements of Design"
 msgstr "ڊزائن جا عناسر "
 
-#: ../src/verbs.cpp:3171
+#: ../src/verbs.cpp:3178
 msgid "Principles of design in the tutorial form"
 msgstr "ٽيوٽورئل روپ ۾ ڊزائن جا اُصول "
 
-#: ../src/verbs.cpp:3172
+#: ../src/verbs.cpp:3179
 msgid "_Tips and Tricks"
 msgstr "اِشارا ۽ اَٽڪل بازيون "
 
-#: ../src/verbs.cpp:3173
+#: ../src/verbs.cpp:3180
 msgid "Miscellaneous tips and tricks"
 msgstr "ڇوٽڪو اِشارا ۽ اَٽڪل بازيون "
 
-#: ../src/verbs.cpp:3176
+#: ../src/verbs.cpp:3183
 #, fuzzy
 msgid "Previous Exte_nsion"
 msgstr "اَڳوڻو وستارُ "
 
-#: ../src/verbs.cpp:3177
+#: ../src/verbs.cpp:3184
 msgid "Repeat the last extension with the same settings"
 msgstr "ساڳين طئە ڪيل ترتيبن سان اَڳوڻو وستار دهرايو "
 
-#: ../src/verbs.cpp:3178
+#: ../src/verbs.cpp:3185
 #, fuzzy
 msgid "_Previous Extension Settings..."
 msgstr "اَڳوڻي وستار جون طئە ڪيل ترتيبون "
 
-#: ../src/verbs.cpp:3179
+#: ../src/verbs.cpp:3186
 msgid "Repeat the last extension with new settings"
 msgstr "نين طئە ڪيل ترتيبن سان اَڳوڻو وستار دهرايو "
 
-#: ../src/verbs.cpp:3183
+#: ../src/verbs.cpp:3190
 msgid "Fit the page to the current selection"
 msgstr "مؤجودهە چوڊ ۾ صفحو ٺهڪايو "
 
-#: ../src/verbs.cpp:3185
+#: ../src/verbs.cpp:3192
 msgid "Fit the page to the drawing"
 msgstr "نقش ۾ صفحو ٺهڪايو "
 
-#: ../src/verbs.cpp:3187
+#: ../src/verbs.cpp:3194
 #, fuzzy
 msgid "_Resize Page to Selection"
 msgstr "چونڊ ۾ صفحو ٺهڪايو"
 
-#: ../src/verbs.cpp:3188
+#: ../src/verbs.cpp:3195
 msgid ""
 "Fit the page to the current selection or the drawing if there is no selection"
 msgstr "اَگر ڪا چونڊ ناهي تە مؤجودهە چونڊ يا نقش ۾ صفحو ٺهڪايو "
 
-#: ../src/verbs.cpp:3190
+#: ../src/verbs.cpp:3197
 msgid "Unlock All"
 msgstr "سڀني جو ڪلف کوليو "
 
-#: ../src/verbs.cpp:3192
+#: ../src/verbs.cpp:3199
 msgid "Unlock All in All Layers"
 msgstr "سڀني سطحن ۾ سڀني جا ڪلف کوليو "
 
-#: ../src/verbs.cpp:3194
+#: ../src/verbs.cpp:3201
 msgid "Unhide All"
 msgstr "سڀ ظاهر ڪريو "
 
-#: ../src/verbs.cpp:3196
+#: ../src/verbs.cpp:3203
 msgid "Unhide All in All Layers"
 msgstr "سڀني سطحن ۾ سڀ ظاهر ڪريو "
 
-#: ../src/verbs.cpp:3200
+#: ../src/verbs.cpp:3207
 msgid "Link an ICC color profile"
 msgstr " ICC رنگ جي پروفائل کي ڪڙيءَ سان جوڙيو "
 
-#: ../src/verbs.cpp:3201
+#: ../src/verbs.cpp:3208
 msgid "Remove Color Profile"
 msgstr "رنگ جي پروفائل ڪڍي ڇڏيو"
 
-#: ../src/verbs.cpp:3202
+#: ../src/verbs.cpp:3209
 msgid "Remove a linked ICC color profile"
 msgstr "ڪڙيءَ سان جوڙيل  ICC رنگ جي پروفائم ڪڍي ڇڏيو "
 
-#: ../src/verbs.cpp:3204
+#: ../src/verbs.cpp:3211
 #, fuzzy
 msgid "Add External Script"
 msgstr "ٻاهرين اِسڪرپٽ شامل ڪريو۔۔۔ "
 
-#: ../src/verbs.cpp:3205
+#: ../src/verbs.cpp:3212
 #, fuzzy
 msgid "Add an external script"
 msgstr "ٻاهرين اِسڪرپٽ شامل ڪريو۔۔۔ "
 
-#: ../src/verbs.cpp:3206
+#: ../src/verbs.cpp:3213
 msgid "Add Embedded Script"
 msgstr ""
 
-#: ../src/verbs.cpp:3207
+#: ../src/verbs.cpp:3214
 msgid "Add an embedded script"
 msgstr ""
 
-#: ../src/verbs.cpp:3208
+#: ../src/verbs.cpp:3215
 msgid "Edit Embedded Script"
 msgstr ""
 
-#: ../src/verbs.cpp:3209
+#: ../src/verbs.cpp:3216
 msgid "Edit an embedded script"
 msgstr ""
 
-#: ../src/verbs.cpp:3210
+#: ../src/verbs.cpp:3217
 #, fuzzy
 msgid "Remove External Script"
 msgstr "ٻاهرين اِسڪرپٽ ڪڍي ڇڏيو "
 
-#: ../src/verbs.cpp:3211
+#: ../src/verbs.cpp:3218
 #, fuzzy
 msgid "Remove an external script"
 msgstr "ٻاهرين اِسڪرپٽ ڪڍي ڇڏيو "
 
-#: ../src/verbs.cpp:3212
+#: ../src/verbs.cpp:3219
 #, fuzzy
 msgid "Remove Embedded Script"
 msgstr "اِسڪرپٽ ڪڍي ڇڏيو "
 
-#: ../src/verbs.cpp:3213
+#: ../src/verbs.cpp:3220
 #, fuzzy
 msgid "Remove an embedded script"
 msgstr "اِسڪرپٽ ڪڍي ڇڏيو "
 
-#: ../src/verbs.cpp:3244 ../src/verbs.cpp:3245 ../src/verbs.cpp:3260
-#: ../src/verbs.cpp:3261
+#: ../src/verbs.cpp:3251 ../src/verbs.cpp:3252 ../src/verbs.cpp:3267
+#: ../src/verbs.cpp:3268
 #, fuzzy
 msgid "Align edges of objects to the top-left corner of the anchor"
 msgstr "شين جي ساڄي پاسي جي ڪنارين ۽ جوڙ جي کاٻي پاسي جي ڪنار کي ترتيب ڏيو "
 
-#: ../src/verbs.cpp:3248 ../src/verbs.cpp:3249 ../src/verbs.cpp:3264
-#: ../src/verbs.cpp:3265
+#: ../src/verbs.cpp:3255 ../src/verbs.cpp:3256 ../src/verbs.cpp:3271
+#: ../src/verbs.cpp:3272
 #, fuzzy
 msgid "Align edges of objects to the top-right corner of the anchor"
 msgstr "شين جي کاٻي پاسي جي ڪنارين کي ڳنڍ جي ساڄي پاسي سان ترتيب ڏيو "
 
-#: ../src/verbs.cpp:3252 ../src/verbs.cpp:3253 ../src/verbs.cpp:3268
-#: ../src/verbs.cpp:3269
+#: ../src/verbs.cpp:3259 ../src/verbs.cpp:3260 ../src/verbs.cpp:3275
+#: ../src/verbs.cpp:3276
 #, fuzzy
 msgid "Align edges of objects to the bottom-right corner of the anchor"
 msgstr "شين جي مٿ جي ڪنارين کي ڳنڍ جي ترجي ڪناريءَ سان ترتيب ڏيو "
 
-#: ../src/verbs.cpp:3256 ../src/verbs.cpp:3257 ../src/verbs.cpp:3272
-#: ../src/verbs.cpp:3273
+#: ../src/verbs.cpp:3263 ../src/verbs.cpp:3264 ../src/verbs.cpp:3279
+#: ../src/verbs.cpp:3280
 #, fuzzy
 msgid "Align edges of objects to the bottom-left corner of the anchor"
 msgstr "شين جي مٿ جي ڪنارين کي ڳنڍ جي ترجي ڪناريءَ سان ترتيب ڏيو "
 
-#: ../src/verbs.cpp:3276
+#: ../src/verbs.cpp:3283
 #, fuzzy
 msgid "Center on horizontal and vertical axis"
 msgstr "عمودي محور تي مرڪز"
@@ -34453,25 +34578,25 @@ msgstr "گريسڪيل "
 msgid "print colors preview"
 msgstr "اَڳ منظر ڇاپيو "
 
-#: ../src/widgets/desktop-widget.cpp:1076
+#: ../src/widgets/desktop-widget.cpp:1078
 #, fuzzy
 msgid "Locked all guides"
 msgstr "پرت کي ڪرف ڏيو "
 
-#: ../src/widgets/desktop-widget.cpp:1078
+#: ../src/widgets/desktop-widget.cpp:1080
 #, fuzzy
 msgid "Unlocked all guides"
 msgstr "پرت جو ڪرف کوليو "
 
-#: ../src/widgets/desktop-widget.cpp:1096
+#: ../src/widgets/desktop-widget.cpp:1098
 msgid "Color-managed display is <b>enabled</b> in this window"
 msgstr "هن ونڊو ۾ رنگن جو اِنتظام ڪيل نماءُ سمرٿ آهي "
 
-#: ../src/widgets/desktop-widget.cpp:1098
+#: ../src/widgets/desktop-widget.cpp:1100
 msgid "Color-managed display is <b>disabled</b> in this window"
 msgstr "هن ونڊو ۾ رنگن جو اِنتظام ڪيل نماءُ اَسمرٿ آهي "
 
-#: ../src/widgets/desktop-widget.cpp:1145
+#: ../src/widgets/desktop-widget.cpp:1147
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -34483,12 +34608,12 @@ msgstr ""
 "\n"
 " اگر توهين بنا سانڍئي بند ڪندا تە توهانجون تبديليون رد ٿي وينديون "
 
-#: ../src/widgets/desktop-widget.cpp:1156
-#: ../src/widgets/desktop-widget.cpp:1203
+#: ../src/widgets/desktop-widget.cpp:1158
+#: ../src/widgets/desktop-widget.cpp:1205
 msgid "Close _without saving"
 msgstr "بنا سانڍئي بند ڪريو "
 
-#: ../src/widgets/desktop-widget.cpp:1192
+#: ../src/widgets/desktop-widget.cpp:1194
 #, fuzzy, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a "
@@ -34499,21 +34624,21 @@ msgstr ""
 "\"%s\" اَهڙيءَ رچنا  (%s) سان سانڍي ويئي هئي جنهن سبب سامگري گم ٿي سگهي ٿي؟ ڇا "
 "توهين اِها فائم اِنڪسڪيپ مان SVG جي روپ ۾ سانڍڻ چاهيو ٿا؟ "
 
-#: ../src/widgets/desktop-widget.cpp:1209
+#: ../src/widgets/desktop-widget.cpp:1211
 #, fuzzy
 msgid "_Save as Inkscape SVG"
 msgstr "SVG جيان سانڍيو "
 
-#: ../src/widgets/desktop-widget.cpp:1407
+#: ../src/widgets/desktop-widget.cpp:1409
 msgid "Note:"
 msgstr ""
 
-#: ../src/widgets/desktop-widget.cpp:1995
+#: ../src/widgets/desktop-widget.cpp:1997
 #, fuzzy
 msgid "Centre Page"
 msgstr "اندريان صفحا "
 
-#: ../src/widgets/desktop-widget.cpp:2381
+#: ../src/widgets/desktop-widget.cpp:2383
 msgid "Create guide"
 msgstr "رهنما خلقيو "
 
@@ -34570,7 +34695,7 @@ msgid "Edit gradient"
 msgstr "ڪرڻي وارو لاهە "
 
 #: ../src/widgets/gradient-selector.cpp:265
-#: ../src/widgets/paint-selector.cpp:224
+#: ../src/widgets/paint-selector.cpp:226
 msgid "Swatch"
 msgstr "نمونو "
 
@@ -34579,8 +34704,8 @@ msgstr "نمونو "
 msgid "Rename gradient"
 msgstr "لاهە اونڌو ڪريو "
 
-#: ../src/widgets/gradient-vector.cpp:292 ../src/widgets/paint-selector.cpp:904
-#: ../src/widgets/paint-selector.cpp:1240
+#: ../src/widgets/gradient-vector.cpp:292 ../src/widgets/paint-selector.cpp:909
+#: ../src/widgets/paint-selector.cpp:1245
 #: ../src/widgets/stroke-marker-selector.cpp:145
 msgid "No document selected"
 msgstr "ڪوبە دستاويز نە چونڊيو ويو "
@@ -34617,33 +34742,33 @@ msgstr "لاهە جو سمپادڪ "
 msgid "Change gradient stop color"
 msgstr "لاهە جي رڪاوٽ جو رنگ بدلايو "
 
-#: ../src/widgets/paint-selector.cpp:210
+#: ../src/widgets/paint-selector.cpp:212
 msgid "No paint"
 msgstr "ڪابە پينٽ نە "
 
-#: ../src/widgets/paint-selector.cpp:212
+#: ../src/widgets/paint-selector.cpp:214
 msgid "Flat color"
 msgstr "سڌو رنگ "
 
-#: ../src/widgets/paint-selector.cpp:214
+#: ../src/widgets/paint-selector.cpp:216
 msgid "Linear gradient"
 msgstr "سڌي ليڪ ۾ خطيءَ وارو لاهە "
 
-#: ../src/widgets/paint-selector.cpp:216
+#: ../src/widgets/paint-selector.cpp:218
 msgid "Radial gradient"
 msgstr "ڪرڻي وارو لاهە "
 
-#: ../src/widgets/paint-selector.cpp:219
+#: ../src/widgets/paint-selector.cpp:221
 #, fuzzy
 msgid "Mesh gradient"
 msgstr "لاهە هلايو "
 
-#: ../src/widgets/paint-selector.cpp:226
+#: ../src/widgets/paint-selector.cpp:228
 msgid "Unset paint (make it undefined so it can be inherited)"
 msgstr ""
 "سيٽ ڪيل پينٽ رد ڪريو (ان کي بنا وضف وارو بڻايو جئن ورثي ۾ حاصل ڪري سگهجي) "
 
-#: ../src/widgets/paint-selector.cpp:239
+#: ../src/widgets/paint-selector.cpp:241
 msgid ""
 "Any path self-intersections or subpaths create holes in the fill (fill-rule: "
 "evenodd)"
@@ -34651,58 +34776,58 @@ msgstr ""
 "ڪابە راهە خود - وچان ڪٽيندڙ يا گؤڻ راهون ڀراو ۾ ٽنگ خلقي ٿي۔ (ڀراو جو قاعدو "
 "اِڪي ٻڌي) "
 
-#: ../src/widgets/paint-selector.cpp:250
+#: ../src/widgets/paint-selector.cpp:252
 msgid ""
 "Fill is solid unless a subpath is counterdirectional (fill-rule: nonzero)"
 msgstr ""
 "جيسين گوڻ راهە اُبتيءَ ڏس ۾ ناهي تسين ڀراءُ ٺوس هوندو۔ (ڀراو جو قاعدو: غير "
 "نقطو) "
 
-#: ../src/widgets/paint-selector.cpp:591
+#: ../src/widgets/paint-selector.cpp:596
 #, fuzzy
 msgid "<b>No objects</b>"
 msgstr "شين ۾ ترت عڪسي ڪريو "
 
-#: ../src/widgets/paint-selector.cpp:602
+#: ../src/widgets/paint-selector.cpp:607
 #, fuzzy
 msgid "<b>Multiple styles</b>"
 msgstr "گهڻا نمونا "
 
-#: ../src/widgets/paint-selector.cpp:613
+#: ../src/widgets/paint-selector.cpp:618
 #, fuzzy
 msgid "<b>Paint is undefined</b>"
 msgstr "پينٽ جي وصف ڏنل ناهي "
 
-#: ../src/widgets/paint-selector.cpp:624
+#: ../src/widgets/paint-selector.cpp:629
 #, fuzzy
 msgid "<b>No paint</b>"
 msgstr "متن جو ڦهلاءُ"
 
-#: ../src/widgets/paint-selector.cpp:704
+#: ../src/widgets/paint-selector.cpp:709
 #, fuzzy
 msgid "<b>Flat color</b>"
 msgstr "سڌو رنگ "
 
-#: ../src/widgets/paint-selector.cpp:768
+#: ../src/widgets/paint-selector.cpp:773
 #, fuzzy
 msgid "<b>Linear gradient</b>"
 msgstr "سڌي ليڪ ۾ خطيءَ وارو لاهە "
 
-#: ../src/widgets/paint-selector.cpp:771
+#: ../src/widgets/paint-selector.cpp:776
 #, fuzzy
 msgid "<b>Radial gradient</b>"
 msgstr "ڪرڻي وارو لاهە "
 
-#: ../src/widgets/paint-selector.cpp:1025
+#: ../src/widgets/paint-selector.cpp:1030
 msgid "Use the <b>Mesh tool</b> to modify the mesh."
 msgstr ""
 
-#: ../src/widgets/paint-selector.cpp:1038
+#: ../src/widgets/paint-selector.cpp:1043
 #, fuzzy
 msgid "<b>Mesh fill</b>"
 msgstr "نموني جو ڀراءُ "
 
-#: ../src/widgets/paint-selector.cpp:1361
+#: ../src/widgets/paint-selector.cpp:1366
 msgid ""
 "Use the <b>Node tool</b> to adjust position, scale, and rotation of the "
 "pattern on canvas. Use <b>Object &gt; Pattern &gt; Objects to Pattern</b> to "
@@ -34711,12 +34836,17 @@ msgstr ""
 "گئنواس تي نموني جي حالت، ماپ ۽ گهماءُ ٺهڪائڻ لاءِ ڳنڍ جي اُپڪرڻ جو اِستعمال "
 "ڪريو۔ چونڊ مان نئون نمنوو خلقڻ لاءِ شئە >نمونو< شين کان نمونو اِستعمال ڪريو "
 
-#: ../src/widgets/paint-selector.cpp:1374
+#: ../src/widgets/paint-selector.cpp:1379
 #, fuzzy
 msgid "<b>Pattern fill</b>"
 msgstr "نموني جو ڀراءُ "
 
-#: ../src/widgets/paint-selector.cpp:1472
+#: ../src/widgets/paint-selector.cpp:1399
+#, fuzzy
+msgid "<b>Hatch fill</b>"
+msgstr "نموني جو ڀراءُ "
+
+#: ../src/widgets/paint-selector.cpp:1497
 #, fuzzy
 msgid "<b>Swatch fill</b>"
 msgstr "نموني جو ڀراءُ "
@@ -34891,55 +35021,86 @@ msgstr "TBD"
 msgid "Style of Paint Bucket fill objects"
 msgstr "رنگ جي بالٽيءَ جي ڀراو جي شين جو نمونو "
 
-#: ../share/ui/dialog-trace.glade:113
+#: ../share/ui/dialog-trace.glade:92
+msgid ""
+"\n"
+"  This dialog allows you to automatically convert a raster graphic into "
+"vector paths. Several options are available for different use cases:\n"
+" * \"Brightness cutoff\" detects areas that are darker than the threshold "
+"value and creates a path enclosing them (using potrace).\n"
+" * \"Edge detection\" detects changes greater than the given threshold value "
+"in the brightness of color patches and creates paths to separate them (using "
+"potrace).\n"
+" * \"Color quantization\" separates the image into the given number of "
+"colors, and separates them with a path (using potrace).\n"
+" * \"Autotrace\" uses the autotrace algorithm with the given option.\n"
+" * \"Centerline tracing\" tries to vectorize a line drawing (with "
+"autotrace).\n"
+" * \"Multiple scans\" options separate the image into a number of scans, "
+"depending on brightness, color separation, or gray levels, and creates "
+"several paths for those. It can also use autotrace.\n"
+" * The \"Pixel art\" tab allows to use the depixelize algorithm to vectorize "
+"pixel art images.\n"
+"\n"
+" * NOTE:\n"
+"  1) Save your work before tracing\n"
+"  2) Watch your pixel count: \"Trace pixel art\" creates one path per pixel. "
+"It is not recommended for images that are not pixel art.\n"
+"  3) Autotrace is slower than potrace, it is not recommended for big images. "
+"Preprocessing your images to increase contrast is recommended.\n"
+"  4) If your goal is to get few nodes and good precision, manual tracing is "
+"always best.\n"
+msgstr ""
+
+#: ../share/ui/dialog-trace.glade:132
 #, fuzzy
 msgid "Create a single path or create a group of paths"
 msgstr "انيڪ اسڪينس: راهن جو گروپ خلقي ٿو "
 
-#: ../share/ui/dialog-trace.glade:170
+#: ../share/ui/dialog-trace.glade:189
 #, fuzzy
-msgid "Threshold (1)"
-msgstr "حد"
+msgid "Brightness threshold"
+msgstr "چمڪ جا قدم "
 
-#: ../share/ui/dialog-trace.glade:205
+#: ../share/ui/dialog-trace.glade:224
 #, fuzzy
-msgid "Threshold (2)"
-msgstr "حد"
+msgid "Edge threshold"
+msgstr "حد: "
 
-#: ../share/ui/dialog-trace.glade:276 ../share/ui/dialog-trace.glade:338
+#: ../share/ui/dialog-trace.glade:295 ../share/ui/dialog-trace.glade:357
 #, fuzzy
 msgid "Filter iterations"
 msgstr "فلٽر جون عام طئە ڪيل ترتيبون "
 
-#: ../share/ui/dialog-trace.glade:301 ../share/ui/dialog-trace.glade:363
+#: ../share/ui/dialog-trace.glade:320 ../share/ui/dialog-trace.glade:382
 #, fuzzy
 msgid "Error threshold"
 msgstr "حد: "
 
-#: ../share/ui/dialog-trace.glade:399
+#: ../share/ui/dialog-trace.glade:418
 #, fuzzy
 msgid "Invert image"
 msgstr "عڪس اونڌو ڪريو "
 
-#: ../share/ui/dialog-trace.glade:403
+#: ../share/ui/dialog-trace.glade:422
 msgid "Invert black and white regions"
 msgstr "ڪارا ۽ اَڇا کيتر اونڌا ڪريو "
 
-#: ../share/ui/dialog-trace.glade:422
+#: ../share/ui/dialog-trace.glade:441
 #, fuzzy
 msgid "Single scan"
 msgstr "واحد "
 
-#: ../share/ui/dialog-trace.glade:454
+#: ../share/ui/dialog-trace.glade:473
 msgid "Apply Gaussian blur to the bitmap before tracing"
 msgstr "پتو لڳائڻ کان اڳ بٽميپ ۾ گؤسئن ڌنڌ ليپڻ جو اِستعمال ڪريو"
 
-#: ../share/ui/dialog-trace.glade:464
+#: ../share/ui/dialog-trace.glade:483
 #, fuzzy
 msgid "Stack"
 msgstr "پٺيون حصو "
 
-#: ../share/ui/dialog-trace.glade:468
+#: ../share/ui/dialog-trace.glade:487
 msgid ""
 "Stack scans on top of one another (no gaps) instead of tiling (usually with "
 "gaps)"
@@ -34947,176 +35108,160 @@ msgstr ""
 "ٽائل ٺاهڻ (اڪثر خالن سان) بدران هڪ ٻئي جي مٿ تي اِسڪينن جو سٿ لڳايو (ڪوبە خال "
 "نە) "
 
-#: ../share/ui/dialog-trace.glade:478
+#: ../share/ui/dialog-trace.glade:497
 #, fuzzy
 msgid "Remove background"
 msgstr "پس منظر "
 
-#: ../share/ui/dialog-trace.glade:482
+#: ../share/ui/dialog-trace.glade:501
 msgid "Remove bottom (background) layer when done"
 msgstr "پورو ڪرڻ وقت تر (پس منظر) جي پرت ڪڍي ڇڏيو "
 
-#: ../share/ui/dialog-trace.glade:494
+#: ../share/ui/dialog-trace.glade:513
 msgid "Scans"
 msgstr ""
 
-#: ../share/ui/dialog-trace.glade:505
+#: ../share/ui/dialog-trace.glade:524
 msgid "The desired number of scans"
 msgstr "اِسڪينس جو گهربل انگ "
 
-#: ../share/ui/dialog-trace.glade:526
+#: ../share/ui/dialog-trace.glade:545
 #, fuzzy
 msgid "Multiple scans"
 msgstr "گهڻا نمونا "
 
-#: ../share/ui/dialog-trace.glade:559
+#: ../share/ui/dialog-trace.glade:578
 #, fuzzy
 msgid "Speckles"
 msgstr "چٽو"
 
-#: ../share/ui/dialog-trace.glade:563
+#: ../share/ui/dialog-trace.glade:582
 msgid "Ignore small spots (speckles) in the bitmap"
 msgstr "بٽميپ ۾ ننڍن نسانن (چٽن) کي نظر اَنداز ڪريو "
 
-#: ../share/ui/dialog-trace.glade:574
+#: ../share/ui/dialog-trace.glade:593
 #, fuzzy
 msgid "Smooth corners"
 msgstr "لسيون ڪنڊون "
 
-#: ../share/ui/dialog-trace.glade:578
+#: ../share/ui/dialog-trace.glade:597
 msgid "Smooth out sharp corners of the trace"
 msgstr "ٽريس جي تيز ڪنڊن کي لسو بڻايو "
 
-#: ../share/ui/dialog-trace.glade:589
+#: ../share/ui/dialog-trace.glade:608
 #, fuzzy
 msgid "Optimize"
 msgstr "خير اَنديش "
 
-#: ../share/ui/dialog-trace.glade:593
+#: ../share/ui/dialog-trace.glade:612
 msgid "Try to optimize paths by joining adjacent Bezier curve segments"
 msgstr "آسپاس جي بيزئر موڙي جي جزن کي جوڙي خير انديش بڻائڻ جي ڪوشش ڪريو "
 
-#: ../share/ui/dialog-trace.glade:606
+#: ../share/ui/dialog-trace.glade:625
 msgid "Speckles of up to this many pixels will be suppressed"
 msgstr "هيترن پڪسلس تائين چٽن کي دٻايو ويندو "
 
-#: ../share/ui/dialog-trace.glade:618
+#: ../share/ui/dialog-trace.glade:637
 msgid "Increase this to smooth corners more"
 msgstr "ڪنڊن کي وڌيڪ لسو ڪرڻ لاءِ هن کي وڌايو "
 
-#: ../share/ui/dialog-trace.glade:631
+#: ../share/ui/dialog-trace.glade:650
 msgid ""
 "Increase this to reduce the number of nodes in the trace by more aggressive "
 "optimization"
 msgstr ""
 "وڌيڪ هلان ڪندڙ خير انديشيءَ سان ٽريس ۾ ڳنڍين جي تعداد کي گهٽائڻ لاءِ هي وڌآيو "
 
-#: ../share/ui/dialog-trace.glade:669
+#: ../share/ui/dialog-trace.glade:688
 msgid ""
 "\n"
 "Heuristics\n"
 msgstr ""
 
-#: ../share/ui/dialog-trace.glade:692
+#: ../share/ui/dialog-trace.glade:711
 msgid "Favors connections that are part of a long curve"
 msgstr ""
 
-#: ../share/ui/dialog-trace.glade:693
+#: ../share/ui/dialog-trace.glade:712
 msgid "Curves (multiplier)"
 msgstr ""
 
-#: ../share/ui/dialog-trace.glade:704
+#: ../share/ui/dialog-trace.glade:723
 msgid "Avoid single disconnected pixels"
 msgstr ""
 
-#: ../share/ui/dialog-trace.glade:705
+#: ../share/ui/dialog-trace.glade:724
 msgid "Islands (weight)"
 msgstr ""
 
-#: ../share/ui/dialog-trace.glade:716 ../share/ui/dialog-trace.glade:729
+#: ../share/ui/dialog-trace.glade:735 ../share/ui/dialog-trace.glade:748
 msgid "Favors connections that are part of foreground color"
 msgstr ""
 
-#: ../share/ui/dialog-trace.glade:717
+#: ../share/ui/dialog-trace.glade:736
 msgid ""
 "Sparse pixels\n"
 "(window radius)"
 msgstr ""
 
-#: ../share/ui/dialog-trace.glade:730
+#: ../share/ui/dialog-trace.glade:749
 msgid ""
 "Sparse pixels\n"
 "(multiplier)"
 msgstr ""
 
-#: ../share/ui/dialog-trace.glade:742 ../share/ui/dialog-trace.glade:785
+#: ../share/ui/dialog-trace.glade:761 ../share/ui/dialog-trace.glade:804
 msgid "The heuristic computed vote will be multiplied by this value"
 msgstr ""
 
-#: ../share/ui/dialog-trace.glade:757
+#: ../share/ui/dialog-trace.glade:776
 #, fuzzy
 msgid "A constant vote value"
 msgstr "بندش وڌل ڪنڊ "
 
-#: ../share/ui/dialog-trace.glade:771
+#: ../share/ui/dialog-trace.glade:790
 msgid "The radius of the window analyzed"
 msgstr ""
 
-#: ../share/ui/dialog-trace.glade:807
+#: ../share/ui/dialog-trace.glade:826
 #, fuzzy
 msgid ""
 "\n"
 "Output\n"
 msgstr "آئوٽپٽ "
 
-#: ../share/ui/dialog-trace.glade:822
+#: ../share/ui/dialog-trace.glade:841
 #, fuzzy
 msgid "Voronoi"
 msgstr "وورو نوءِ نمونو "
 
-#: ../share/ui/dialog-trace.glade:826
+#: ../share/ui/dialog-trace.glade:845
 msgid "Output composed of straight lines"
 msgstr ""
 
-#: ../share/ui/dialog-trace.glade:838
+#: ../share/ui/dialog-trace.glade:857
 #, fuzzy
 msgid "B-splines"
 msgstr "ليڪون "
 
-#: ../share/ui/dialog-trace.glade:842
+#: ../share/ui/dialog-trace.glade:861
 msgid "Preserve staircaseing artifacts"
 msgstr ""
 
-#: ../share/ui/dialog-trace.glade:862
+#: ../share/ui/dialog-trace.glade:881
 #, fuzzy
 msgid "Pixel art"
 msgstr "پڪسل دٻو "
 
-#: ../share/ui/dialog-trace.glade:873
-#, fuzzy
-msgid ""
-"Inkscape bitmap tracing \n"
-"is based on Potrace by Peter Selinger\n"
-"and on autotrace"
-msgstr ""
-"اِنسڪيپ بٽميپ ٽريسنگ \n"
-" پوٽريس جي آڌار تي آهي \n"
-" پيٽر سيلنگر دواران خلقيل \n"
-"http://potrace.sourceforge.net"
-
-#: ../share/ui/dialog-trace.glade:886 ../share/extensions/hershey.inx:108
-msgid "Credits"
-msgstr "ڪريڊٽس "
-
-#: ../share/ui/dialog-trace.glade:961
+#: ../share/ui/dialog-trace.glade:991
 msgid "SIOX"
 msgstr ""
 
-#: ../share/ui/dialog-trace.glade:965
+#: ../share/ui/dialog-trace.glade:995
 msgid "Cover the area you want to select as the foreground"
 msgstr "اُهو کيتر ڍڪيو جيڪو توهين اڳئين حصي جي روپ ۾ چونڊڻ چاهيو ٿا "
 
-#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.xml:293
+#: ../share/ui/inkscape-application.glade:22 ../share/ui/menus.xml:294
 msgid "_Help"
 msgstr "مدد "
 
@@ -37034,20 +37179,10 @@ msgstr "گؤڻ ڀاڱا "
 msgid "Frame"
 msgstr ""
 
-#: ../share/extensions/frame.inx:7
-#: ../share/extensions/markers_strokepaint.inx:22
-msgid "Stroke"
-msgstr "گهڪو "
-
 #: ../share/extensions/frame.inx:8
 #, fuzzy
 msgid "Stroke Color:"
 msgstr "گهڪي جو رنگ "
-
-#: ../share/extensions/frame.inx:10 ../share/extensions/interp_att_g.inx:14
-#: ../share/extensions/markers_strokepaint.inx:18
-msgid "Fill"
-msgstr "ڀراءُ "
 
 #: ../share/extensions/frame.inx:11
 #, fuzzy
@@ -37522,15 +37657,6 @@ msgstr ""
 #, fuzzy
 msgid "Get additional comments from object's properties"
 msgstr "واڌو پوسٽ - پروسيسر "
-
-#: ../share/extensions/gcodetools_area.inx:78
-#: ../share/extensions/gcodetools_dxf_points.inx:24
-#: ../share/extensions/gcodetools_engraving.inx:36
-#: ../share/extensions/gcodetools_graffiti.inx:65
-#: ../share/extensions/gcodetools_lathe.inx:58
-#: ../share/extensions/gcodetools_path_to_gcode.inx:38
-msgid "Preferences"
-msgstr "ترجيحون "
 
 #: ../share/extensions/gcodetools_area.inx:79
 #: ../share/extensions/gcodetools_dxf_points.inx:25
@@ -38811,6 +38937,10 @@ msgid ""
 "\n"
 "  "
 msgstr ""
+
+#: ../share/extensions/hershey.inx:108
+msgid "Credits"
+msgstr "ڪريڊٽس "
 
 #
 # File: ../share/extensions/hershey.inx, line: 109
@@ -43447,15 +43577,15 @@ msgstr "پرت "
 msgid "_Object"
 msgstr "شئە "
 
-#: ../share/ui/menus.xml:238
+#: ../share/ui/menus.xml:239
 msgid "_Path"
 msgstr "راهە "
 
-#: ../share/ui/menus.xml:281
+#: ../share/ui/menus.xml:282
 msgid "Filter_s"
 msgstr "فلٽر "
 
-#: ../share/ui/menus.xml:287
+#: ../share/ui/menus.xml:288
 msgid "Exte_nsions"
 msgstr "وستار "
 
@@ -43654,6 +43784,33 @@ msgstr ""
 #: ../share/ui/units.xml:99
 msgid "Half of font height"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Offset)"
+#~ msgstr "آفسيٽ "
+
+#, fuzzy
+#~ msgid "Searching...."
+#~ msgstr "راهون پلٽائيون پييون وڃن۔۔۔ "
+
+#, fuzzy
+#~ msgid "Threshold (1)"
+#~ msgstr "حد"
+
+#, fuzzy
+#~ msgid "Threshold (2)"
+#~ msgstr "حد"
+
+#, fuzzy
+#~ msgid ""
+#~ "Inkscape bitmap tracing \n"
+#~ "is based on Potrace by Peter Selinger\n"
+#~ "and on autotrace"
+#~ msgstr ""
+#~ "اِنسڪيپ بٽميپ ٽريسنگ \n"
+#~ " پوٽريس جي آڌار تي آهي \n"
+#~ " پيٽر سيلنگر دواران خلقيل \n"
+#~ "http://potrace.sourceforge.net"
 
 #, fuzzy
 #~ msgid "odd-even"
