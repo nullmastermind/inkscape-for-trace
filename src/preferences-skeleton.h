@@ -204,7 +204,7 @@ R"=====(
     <group id="align"/>
     <group id="xml"/>
     <group id="find"/>
-    <group id="spellcheck" w="200" h="250" lang="en_US" ignorenumbers="1"/>
+    <group id="spellcheck" w="200" h="250" ignorenumbers="1"/>
     <group id="documentoptions" state="1"/>
     <group id="preferences" state="1"/>
     <group id="gradienteditor"/>

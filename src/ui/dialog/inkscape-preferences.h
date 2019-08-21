@@ -91,9 +91,7 @@ enum {
     PREFS_PAGE_SYSTEM,
     PREFS_PAGE_BITMAPS,
     PREFS_PAGE_RENDERING,
-#if HAVE_ASPELL
     PREFS_PAGE_SPELLCHECK
-#endif
 };
 
 namespace Gtk {

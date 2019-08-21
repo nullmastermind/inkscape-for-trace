@@ -24,6 +24,8 @@
 #include "document.h"
 #include "desktop.h"
 
+#include "ui/dialog/dialog-manager.h"
+#include "ui/dialog/inkscape-preferences.h" // for PREFS_PAGE_SPELLCHECK
 #include "ui/tools-switch.h"
 #include "ui/tools/text-tool.h"
 
@@ -51,6 +53,39 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+/**
+ * Get the list of installed aspell dictionaries/languages
+ */
+std::vector<std::string> SpellCheck::get_available_langs()
+{
+    std::vector<std::string> langs;
+
+#if HAVE_ASPELL
+    auto *config = new_aspell_config();
+    auto const *dlist = get_aspell_dict_info_list(config);
+    auto *elements = aspell_dict_info_list_elements(dlist);
+
+    for (AspellDictInfo const *entry; (entry = aspell_dict_info_enumeration_next(elements)) != nullptr;) {
+        // skip duplicates (I get "de_DE" twice)
+        if (!langs.empty() && langs.back() == entry->name) {
+            continue;
+        }
+
+        langs.emplace_back(entry->name);
+    }
+
+    delete_aspell_dict_info_enumeration(elements);
+    delete_aspell_config(config);
+#endif
+
+    return langs;
+}
+
+static void show_spellcheck_preferences_dialog()
+{
+    Inkscape::Preferences::get()->setInt("/dialogs/preferences/page", PREFS_PAGE_SPELLCHECK);
+    SP_ACTIVE_DESKTOP->_dlg_mgr->showDialog("InkscapePreferences");
+}
 
 SpellCheck::SpellCheck () :
     UI::Widget::Panel("/dialogs/spellcheck/", SP_VERB_DIALOG_SPELLCHECK),
@@ -61,37 +96,37 @@ SpellCheck::SpellCheck () :
     _working(false),
     _local_change(false),
     _prefs(nullptr),
-    _lang("en"),
-    _lang2(""),
-    _lang3(""),
     accept_button(_("_Accept"), true),
     ignoreonce_button(_("_Ignore once"), true),
     ignore_button(_("_Ignore"), true),
     add_button(_("A_dd"), true),
+    dictionary_label(_("Language")),
     dictionary_hbox(false, 0),
     stop_button(_("_Stop"), true),
     start_button(_("_Start"), true),
     desktop(nullptr),
     deskTrack()
 {
-
-#if HAVE_ASPELL
-    _speller = nullptr;
-    _speller2 = nullptr;
-    _speller3 = nullptr;
-#endif /* HAVE_ASPELL */
-
     _prefs = Inkscape::Preferences::get();
 
     // take languages from prefs
-    _lang  = _prefs->getString(_prefs_path + "lang");
-    _lang2 = _prefs->getString(_prefs_path + "lang2");
-    _lang3 = _prefs->getString(_prefs_path + "lang3");
-    if (_lang == "")
-        _lang = "en";
+    for (const char *langkey : { "lang", "lang2", "lang3" }) {
+        auto lang = _prefs->getString(_prefs_path + langkey);
+        if (!lang.empty()) {
+            _langs.push_back(lang);
+        }
+    }
 
     banner_hbox.set_layout(Gtk::BUTTONBOX_START);
     banner_hbox.add(banner_label);
+
+    if (_langs.empty()) {
+        _langs = get_available_langs();
+
+        if (_langs.empty()) {
+            banner_label.set_markup("<i>No aspell dictionaries installed</i>");
+        }
+    }
 
     scrolled_window.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     scrolled_window.set_shadow_type(Gtk::SHADOW_IN);
@@ -102,32 +137,29 @@ SpellCheck::SpellCheck () :
     tree_view.set_model(model);
     tree_view.append_column(_("Suggestions:"), tree_columns.suggestions);
 
-    {
-        dictionary_combo = gtk_combo_box_text_new();
-        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (dictionary_combo),  _lang.c_str());
-        if (_lang2 != "") {
-            gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (dictionary_combo), _lang2.c_str());
+    if (!_langs.empty()) {
+        for (auto const &lang : _langs) {
+            dictionary_combo.append(lang);
         }
-        if (_lang3 != "") {
-            gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (dictionary_combo), _lang3.c_str());
-        }
-        gtk_combo_box_set_active (GTK_COMBO_BOX (dictionary_combo), 0);
-        gtk_widget_show_all (dictionary_combo);
+        dictionary_combo.set_active(0);
     }
 
     accept_button.set_tooltip_text(_("Accept the chosen suggestion"));
     ignoreonce_button.set_tooltip_text(_("Ignore this word only once"));
     ignore_button.set_tooltip_text(_("Ignore this word in this session"));
     add_button.set_tooltip_text(_("Add this word to the chosen dictionary"));
+    pref_button.set_tooltip_text(_("Preferences"));
+    pref_button.set_image_from_icon_name("preferences-system");
 
-    dictionary_hbox.pack_start(add_button, true, true, 0);
-    dictionary_hbox.pack_start(*Gtk::manage(Glib::wrap(dictionary_combo)), false, false, 0);
+    dictionary_hbox.pack_start(dictionary_label, false, false, 6);
+    dictionary_hbox.pack_start(dictionary_combo, true, true, 0);
+    dictionary_hbox.pack_start(pref_button, false, false, 0);
 
     changebutton_vbox.set_spacing(4);
     changebutton_vbox.pack_start(accept_button, false, false, 0);
     changebutton_vbox.pack_start(ignoreonce_button, false, false, 0);
     changebutton_vbox.pack_start(ignore_button, false, false, 0);
-    changebutton_vbox.pack_start(dictionary_hbox, false, false, 0);
+    changebutton_vbox.pack_start(add_button, false, false, 0);
 
     suggestion_hbox.pack_start (scrolled_window, true, true, 4);
     suggestion_hbox.pack_end (changebutton_vbox, false, false, 0);
@@ -147,6 +179,7 @@ SpellCheck::SpellCheck () :
     contents->set_spacing(6);
     contents->pack_start (banner_hbox, false, false, 0);
     contents->pack_start (suggestion_hbox, true, true, 0);
+    contents->pack_start (dictionary_hbox, false, false, 0);
     contents->pack_start (action_sep, false, false, 6);
     contents->pack_start (actionbutton_hbox, false, false, 0);
 
@@ -160,6 +193,8 @@ SpellCheck::SpellCheck () :
     start_button.signal_clicked().connect(sigc::mem_fun(*this, &SpellCheck::onStart));
     stop_button.signal_clicked().connect(sigc::mem_fun(*this, &SpellCheck::onStop));
     tree_view.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &SpellCheck::onTreeSelectionChange));
+    dictionary_combo.signal_changed().connect(sigc::mem_fun(*this, &SpellCheck::onLanguageChanged));
+    pref_button.signal_clicked().connect(sigc::ptr_fun(show_spellcheck_preferences_dialog));
     desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &SpellCheck::setTargetDesktop) );
     deskTrack.connect(GTK_WIDGET(gobj()));
 
@@ -297,6 +332,41 @@ SpellCheck::nextText()
     _word.clear();
 }
 
+void SpellCheck::deleteSpeller() {
+#if HAVE_ASPELL
+    if (_speller) {
+        aspell_speller_save_all_word_lists(_speller);
+        delete_aspell_speller(_speller);
+        _speller = nullptr;
+    }
+#endif
+}
+
+bool SpellCheck::updateSpeller() {
+#if HAVE_ASPELL
+    deleteSpeller();
+
+    auto lang = dictionary_combo.get_active_text();
+    if (!lang.empty()) {
+        AspellConfig *config = new_aspell_config();
+        aspell_config_replace(config, "lang", lang.c_str());
+        aspell_config_replace(config, "encoding", "UTF-8");
+        AspellCanHaveError *ret = new_aspell_speller(config);
+        delete_aspell_config(config);
+        if (aspell_error(ret) != nullptr) {
+            banner_label.set_text(aspell_error_message(ret));
+            delete_aspell_can_have_error(ret);
+        } else {
+            _speller = to_aspell_speller(ret);
+        }
+    }
+
+    return _speller != nullptr;
+#else
+    return false;
+#endif
+}
+
 bool
 SpellCheck::init(SPDesktop *d)
 {
@@ -307,56 +377,15 @@ SpellCheck::init(SPDesktop *d)
     ignore_button.set_sensitive(false);
     ignoreonce_button.set_sensitive(false);
     add_button.set_sensitive(false);
-    gtk_widget_set_sensitive(dictionary_combo, false);
+    stop_button.set_sensitive(false);
     start_button.set_sensitive(false);
 
     _stops = 0;
     _adds = 0;
     clearRects();
 
-#if HAVE_ASPELL
-    {
-        AspellConfig *config = new_aspell_config();
-        aspell_config_replace(config, "lang", _lang.c_str());
-        aspell_config_replace(config, "encoding", "UTF-8");
-        AspellCanHaveError *ret = new_aspell_speller(config);
-        delete_aspell_config(config);
-        if (aspell_error(ret) != nullptr) {
-            g_warning("Error: %s\n", aspell_error_message(ret));
-            delete_aspell_can_have_error(ret);
-            return false;
-        }
-        _speller = to_aspell_speller(ret);
-    }
-
-    if (_lang2 != "") {
-        AspellConfig *config = new_aspell_config();
-        aspell_config_replace(config, "lang", _lang2.c_str());
-        aspell_config_replace(config, "encoding", "UTF-8");
-        AspellCanHaveError *ret = new_aspell_speller(config);
-        delete_aspell_config(config);
-        if (aspell_error(ret) != nullptr) {
-            g_warning("Error: %s\n", aspell_error_message(ret));
-            delete_aspell_can_have_error(ret);
-            return false;
-        }
-        _speller2 = to_aspell_speller(ret);
-    }
-
-    if (_lang3 != "") {
-        AspellConfig *config = new_aspell_config();
-        aspell_config_replace(config, "lang", _lang3.c_str());
-        aspell_config_replace(config, "encoding", "UTF-8");
-        AspellCanHaveError *ret = new_aspell_speller(config);
-        delete_aspell_config(config);
-        if (aspell_error(ret) != nullptr) {
-            g_warning("Error: %s\n", aspell_error_message(ret));
-            delete_aspell_can_have_error(ret);
-            return false;
-        }
-        _speller3 = to_aspell_speller(ret);
-    }
-#endif  /* HAVE_ASPELL */
+    if (!updateSpeller())
+        return false;
 
     _root = desktop->getDocument()->getRoot();
 
@@ -374,32 +403,18 @@ SpellCheck::init(SPDesktop *d)
 void
 SpellCheck::finished ()
 {
-#if HAVE_ASPELL
-    aspell_speller_save_all_word_lists(_speller);
-    delete_aspell_speller(_speller);
-    _speller = nullptr;
-    if (_speller2) {
-        aspell_speller_save_all_word_lists(_speller2);
-        delete_aspell_speller(_speller2);
-        _speller2 = nullptr;
-    }
-    if (_speller3) {
-        aspell_speller_save_all_word_lists(_speller3);
-        delete_aspell_speller(_speller3);
-        _speller3 = nullptr;
-    }
-#endif  /* HAVE_ASPELL */
+    deleteSpeller();
 
     clearRects();
     disconnect();
 
     //desktop->clearWaitingCursor();
 
+    tree_view.unset_model();
     tree_view.set_sensitive(false);
     accept_button.set_sensitive(false);
     ignore_button.set_sensitive(false);
     ignoreonce_button.set_sensitive(false);
-    gtk_widget_set_sensitive(dictionary_combo, false);
     add_button.set_sensitive(false);
     stop_button.set_sensitive(false);
     start_button.set_sensitive(true);
@@ -505,11 +520,9 @@ SpellCheck::nextWord()
 
 #if HAVE_ASPELL
     // run it by all active spellers
-    have = aspell_speller_check(_speller, _word.c_str(), -1);
-    if (_speller2)
-        have += aspell_speller_check(_speller2, _word.c_str(), -1);
-    if (_speller3)
-        have += aspell_speller_check(_speller3, _word.c_str(), -1);
+    if (_speller) {
+        have += aspell_speller_check(_speller, _word.c_str(), -1);
+    }
 #endif  /* HAVE_ASPELL */
 
     if (have == 0) { // not found in any!
@@ -519,12 +532,7 @@ SpellCheck::nextWord()
 
         // display it in window
         {
-            Glib::ustring langs = _lang;
-            if (_lang2 != "")
-                langs = langs + ", " + _lang2;
-            if (_lang3 != "")
-                langs = langs + ", " + _lang3;
-            gchar *label = g_strdup_printf(_("Not in dictionary (%s): <b>%s</b>"), langs.c_str(), _word.c_str());
+            gchar *label = g_strdup_printf(_("Not in dictionary: <b>%s</b>"), _word.c_str());
             banner_label.set_markup(label);
             g_free(label);
         }
@@ -532,7 +540,6 @@ SpellCheck::nextWord()
         tree_view.set_sensitive(true);
         ignore_button.set_sensitive(true);
         ignoreonce_button.set_sensitive(true);
-        gtk_widget_set_sensitive(dictionary_combo, true);
         add_button.set_sensitive(true);
         stop_button.set_sensitive(true);
 
@@ -604,11 +611,11 @@ SpellCheck::nextWord()
 #if HAVE_ASPELL
 
         // get suggestions
-        {
-            model = Gtk::ListStore::create(tree_columns);
-            tree_view.set_model(model);
+        model = Gtk::ListStore::create(tree_columns);
+        tree_view.set_model(model);
+        unsigned n_sugg = 0;
 
-            {
+        if (_speller) {
             const AspellWordList *wl = aspell_speller_suggest(_speller, _word.c_str(), -1);
             AspellStringEnumeration * els = aspell_word_list_elements(wl);
             const char *sugg;
@@ -618,38 +625,16 @@ SpellCheck::nextWord()
                 iter = model->append();
                 Gtk::TreeModel::Row row = *iter;
                 row[tree_columns.suggestions] = sugg;
+
+                // select first suggestion
+                if (++n_sugg == 1) {
+                    tree_view.get_selection()->select(iter);
+                }
             }
             delete_aspell_string_enumeration(els);
-            }
-
-            if (_speller2) {
-            const AspellWordList *wl = aspell_speller_suggest(_speller2, _word.c_str(), -1);
-            AspellStringEnumeration * els = aspell_word_list_elements(wl);
-            const char *sugg;
-            Gtk::TreeModel::iterator iter;
-            while ((sugg = aspell_string_enumeration_next(els)) != nullptr) {
-                iter = model->append();
-                Gtk::TreeModel::Row row = *iter;
-                row[tree_columns.suggestions] = sugg;
-            }
-            delete_aspell_string_enumeration(els);
-            }
-
-            if (_speller3) {
-            const AspellWordList *wl = aspell_speller_suggest(_speller3, _word.c_str(), -1);
-            AspellStringEnumeration * els = aspell_word_list_elements(wl);
-            const char *sugg;
-            Gtk::TreeModel::iterator iter;
-            while ((sugg = aspell_string_enumeration_next(els)) != nullptr) {
-                iter = model->append();
-                Gtk::TreeModel::Row row = *iter;
-                row[tree_columns.suggestions] = sugg;
-            }
-            delete_aspell_string_enumeration(els);
-            }
-
-            accept_button.set_sensitive(false);  // gray it out until something is chosen
         }
+
+        accept_button.set_sensitive(n_sugg > 0);
 
 #endif  /* HAVE_ASPELL */
 
@@ -673,6 +658,10 @@ SpellCheck::deleteLastRect ()
 
 void SpellCheck::doSpellcheck ()
 {
+    if (_langs.empty()) {
+        return;
+    }
+
     banner_label.set_markup(_("<i>Checking...</i>"));
 
     //desktop->setWaitingCursor();
@@ -754,11 +743,9 @@ void
 SpellCheck::onIgnore ()
 {
 #if HAVE_ASPELL
-    aspell_speller_add_to_session(_speller, _word.c_str(), -1);
-    if (_speller2)
-        aspell_speller_add_to_session(_speller2, _word.c_str(), -1);
-    if (_speller3)
-        aspell_speller_add_to_session(_speller3, _word.c_str(), -1);
+    if (_speller) {
+        aspell_speller_add_to_session(_speller, _word.c_str(), -1);
+    }
 #endif  /* HAVE_ASPELL */
 
     deleteLastRect();
@@ -778,21 +765,8 @@ SpellCheck::onAdd ()
     _adds++;
 
 #if HAVE_ASPELL
-    gint num = gtk_combo_box_get_active((GtkComboBox *)dictionary_combo);
-    switch (num) {
-        case 0:
-            aspell_speller_add_to_personal(_speller, _word.c_str(), -1);
-            break;
-        case 1:
-            if (_speller2)
-                aspell_speller_add_to_personal(_speller2, _word.c_str(), -1);
-            break;
-        case 2:
-            if (_speller3)
-                aspell_speller_add_to_personal(_speller3, _word.c_str(), -1);
-            break;
-        default:
-            break;
+    if (_speller) {
+        aspell_speller_add_to_personal(_speller, _word.c_str(), -1);
     }
 #endif  /* HAVE_ASPELL */
 
@@ -813,7 +787,22 @@ SpellCheck::onStart ()
         doSpellcheck();
 }
 
+void SpellCheck::onLanguageChanged()
+{
+    if (!_working) {
+        onStart();
+        return;
+    }
 
+    if (!updateSpeller()) {
+        return;
+    }
+
+    // recheck current word
+    _end_w = _begin_w;
+    deleteLastRect();
+    doSpellcheck();
+}
 }
 }
 }

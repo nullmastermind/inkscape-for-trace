@@ -65,7 +65,7 @@
 #include <fstream>
 
 #if HAVE_ASPELL
-# include <aspell.h>
+# include "ui/dialog/spellcheck.h" // for get_available_langs
 # ifdef _WIN32
 #  include <windows.h>
 # endif
@@ -2498,36 +2498,15 @@ void InkscapePreferences::initPageSpellcheck()
     std::vector<Glib::ustring> languages;
     std::vector<Glib::ustring> langValues;
 
-    AspellConfig *config = new_aspell_config();
-
-    /* the returned pointer should _not_ need to be deleted */
-    AspellDictInfoList *dlist = get_aspell_dict_info_list(config);
-
-    /* config is no longer needed */
-    delete_aspell_config(config);
-
-    AspellDictInfoEnumeration *dels = aspell_dict_info_list_elements(dlist);
-
     languages.emplace_back(C_("Spellchecker language", "None"));
     langValues.emplace_back("");
 
-    const AspellDictInfo *entry;
-    int en_index = 0;
-    int i = 0;
-    while ( (entry = aspell_dict_info_enumeration_next(dels)) != nullptr)
-    {
-        languages.emplace_back(entry->name);
-        langValues.emplace_back(entry->name);
-        if (!strcmp (entry->name, "en"))
-        {
-            en_index = i;
-        }
-        i++;
+    for (auto const &lang : SpellCheck::get_available_langs()) {
+        languages.emplace_back(lang);
+        langValues.emplace_back(lang);
     }
 
-    delete_aspell_dict_info_enumeration(dels);
-
-    _spell_language.init( "/dialogs/spellcheck/lang", &languages[0], &langValues[0], languages.size(), languages[en_index]);
+    _spell_language.init( "/dialogs/spellcheck/lang", &languages[0], &langValues[0], languages.size(), languages[0]);
     _page_spellcheck.add_line( false, _("Language:"), _spell_language, "",
                               _("Set the main spell check language"), false);
 
