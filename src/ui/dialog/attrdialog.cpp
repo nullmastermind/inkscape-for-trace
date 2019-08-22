@@ -336,10 +336,7 @@ void AttrDialog::onAttrChanged(Inkscape::XML::Node *repr, const gchar * name, co
             break;
         }
     }
-    if (new_value &&
-        (strcmp(new_value, "") != 0 ||
-        (repr->type() == Inkscape::XML::TEXT_NODE || 
-         repr->type() == Inkscape::XML::COMMENT_NODE))) {
+    if (new_value) {
         Gtk::TreeModel::Row row = *(_store->prepend());
         row[_attrColumns._attributeName] = name;
         row[_attrColumns._attributeValue] = new_value;
@@ -500,7 +497,8 @@ void AttrDialog::nameEdited (const Glib::ustring& path, const Glib::ustring& nam
             row[_attrColumns._attributeName] = name;
             grab_focus();
             _updating = true;
-            _repr->setAttribute(name.c_str(), value, false);
+            char const *valueto = value.c_str(); // this allow store empty values
+            _repr->setAttribute(name.c_str(), "", false);
             _updating = false;
             g_timeout_add(50, &sp_attrdialog_store_move_to_next, this);
         }
