@@ -48,6 +48,7 @@ set(ui_SRC
 	toolbar/measure-toolbar.cpp
 	toolbar/mesh-toolbar.cpp
 	toolbar/node-toolbar.cpp
+	toolbar/paintbucket-toolbar.cpp
 	toolbar/pencil-toolbar.cpp
 	toolbar/rect-toolbar.cpp
 	toolbar/select-toolbar.cpp
@@ -67,6 +68,7 @@ set(ui_SRC
 	tools/dropper-tool.cpp
 	tools/dynamic-base.cpp
 	tools/eraser-tool.cpp
+	tools/flood-tool.cpp
 	tools/freehand-base.cpp
 	tools/gradient-tool.cpp
 	tools/lpe-tool.cpp
@@ -144,6 +146,7 @@ set(ui_SRC
 	dialog/template-widget.cpp
 	dialog/text-edit.cpp
 	dialog/tile.cpp
+	dialog/tracedialog.cpp
 	dialog/transformation.cpp
 	dialog/undo-history.cpp
 	dialog/xml-tree.cpp
@@ -344,6 +347,7 @@ set(ui_SRC
 	toolbar/measure-toolbar.h
 	toolbar/mesh-toolbar.h
 	toolbar/node-toolbar.h
+	toolbar/paintbucket-toolbar.h
 	toolbar/pencil-toolbar.h
 	toolbar/rect-toolbar.h
 	toolbar/select-toolbar.h
@@ -464,19 +468,6 @@ if(WIN32)
 endif()
 
 add_inkscape_source("${ui_SRC}")
-
-set ( ui_flood_and_trace_SRC
-	tools/flood-tool.h
-	tools/flood-tool.cpp
-	dialog/tracedialog.cpp
-	dialog/tracedialog.h
-	toolbar/paintbucket-toolbar.cpp
-	toolbar/paintbucket-toolbar.h
-)
-
-if ("${HAVE_POTRACE}")
-	add_inkscape_source("${ui_flood_and_trace_SRC}")
-endif()
 
 set ( ui_spellcheck_SRC
 	dialog/spellcheck.cpp

@@ -35,10 +35,7 @@
 #include "ui/dialog/prototype.h"
 #include "ui/dialog/symbols.h"
 #include "ui/dialog/tile.h"
-
-#if HAVE_POTRACE
 # include "ui/dialog/tracedialog.h"
-#endif
 
 #include "ui/dialog/transformation.h"
 #include "ui/dialog/undo-history.h"
@@ -131,10 +128,7 @@ DialogManager::DialogManager() {
         registerFactory("Symbols",             &create<SymbolsDialog,        FloatingBehavior>);
         registerFactory("PaintServers",        &create<PaintServersDialog,   FloatingBehavior>);
         registerFactory("StyleDialog",         &create<StyleDialog,          FloatingBehavior>);
-
-#if HAVE_POTRACE
         registerFactory("Trace",               &create<TraceDialog,          FloatingBehavior>);
-#endif
 
         registerFactory("Transformation",      &create<Transformation,       FloatingBehavior>);
         registerFactory("UndoHistory",         &create<UndoHistory,          FloatingBehavior>);
@@ -176,10 +170,7 @@ DialogManager::DialogManager() {
         registerFactory("TileDialog",          &create<ArrangeDialog,        DockBehavior>);
         registerFactory("Symbols",             &create<SymbolsDialog,        DockBehavior>);
         registerFactory("PaintServers",        &create<PaintServersDialog,   DockBehavior>);
-
-#if HAVE_POTRACE
         registerFactory("Trace",               &create<TraceDialog,          DockBehavior>);
-#endif
 
         registerFactory("Transformation",      &create<Transformation,       DockBehavior>);
         registerFactory("UndoHistory",         &create<UndoHistory,          DockBehavior>);

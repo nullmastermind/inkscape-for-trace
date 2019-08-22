@@ -798,12 +798,6 @@ Verb *Verb::getbyid(gchar const *id, bool verbose)
     }
 
     if (verb == nullptr
-#if !HAVE_POTRACE
-                // Squash warning about disabled features
-                && strcmp(id, "ToolPaintBucket")  != 0
-                && strcmp(id, "SelectionTrace")   != 0
-                && strcmp(id, "PaintBucketPrefs") != 0
-#endif
 #if !HAVE_ASPELL
                 && strcmp(id, "DialogSpellcheck") != 0
 #endif
@@ -1253,14 +1247,10 @@ void SelectionVerb::perform(SPAction *action, void *data)
             selection->toCurves(true);
             SelectionHelper::reverse(dt);
             break;
-
-#if HAVE_POTRACE
         case SP_VERB_SELECTION_TRACE:
             INKSCAPE.dialogs_unhide();
             dt->_dlg_mgr->showDialog("Trace");
             break;
-#endif
-
         case SP_VERB_SELECTION_CREATE_BITMAP:
             dt->selection->createBitmapCopy();
             break;
@@ -1712,13 +1702,9 @@ void ContextVerb::perform(SPAction *action, void *data)
         case SP_VERB_CONTEXT_CONNECTOR:
             tools_switch(dt,  TOOLS_CONNECTOR);
             break;
-
-#if HAVE_POTRACE
         case SP_VERB_CONTEXT_PAINTBUCKET:
             tools_switch(dt, TOOLS_PAINTBUCKET);
             break;
-#endif
-
         case SP_VERB_CONTEXT_ERASER:
             tools_switch(dt, TOOLS_ERASER);
             break;
@@ -1802,14 +1788,10 @@ void ContextVerb::perform(SPAction *action, void *data)
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_CONNECTOR);
             dt->_dlg_mgr->showDialog("InkscapePreferences");
             break;
-
-#if HAVE_POTRACE
         case SP_VERB_CONTEXT_PAINTBUCKET_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_PAINTBUCKET);
             dt->_dlg_mgr->showDialog("InkscapePreferences");
             break;
-#endif
-
         case SP_VERB_CONTEXT_ERASER_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_ERASER);
             dt->_dlg_mgr->showDialog("InkscapePreferences");
@@ -2294,13 +2276,9 @@ void TutorialVerb::perform(SPAction *action, void *data)
         case SP_VERB_TUTORIAL_ADVANCED:
             sp_help_open_tutorial("tutorial-advanced");
             break;
-
-#if HAVE_POTRACE
         case SP_VERB_TUTORIAL_TRACING:
             sp_help_open_tutorial("tutorial-tracing");
             break;
-#endif
-
         case SP_VERB_TUTORIAL_TRACING_PIXELART:
             sp_help_open_tutorial("tutorial-tracing-pixelart");
             break;
@@ -2768,13 +2746,9 @@ Verb *Verb::_base_verbs[] = {
     new SelectionVerb(SP_VERB_SELECTION_REVERSE, "SelectionReverse", N_("_Reverse"),
                       N_("Reverse the direction of selected paths (useful for flipping markers)"),
                       INKSCAPE_ICON("path-reverse")),
-
-#if HAVE_POTRACE
     // TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
     new SelectionVerb(SP_VERB_SELECTION_TRACE, "SelectionTrace", N_("_Trace Bitmap..."),
                       N_("Create one or more paths from a bitmap by tracing it"), INKSCAPE_ICON("bitmap-trace")),
-#endif
-
     new SelectionVerb(SP_VERB_SELECTION_CREATE_BITMAP, "SelectionCreateBitmap", N_("Make a _Bitmap Copy"),
                       N_("Export selection to a bitmap and insert it into document"),
                       INKSCAPE_ICON("selection-make-bitmap-copy")),
@@ -2909,12 +2883,8 @@ Verb *Verb::_base_verbs[] = {
                     INKSCAPE_ICON("color-picker")),
     new ContextVerb(SP_VERB_CONTEXT_CONNECTOR, "ToolConnector", NC_("ContextVerb", "Connector"),
                     N_("Create diagram connectors"), INKSCAPE_ICON("draw-connector")),
-
-#if HAVE_POTRACE
     new ContextVerb(SP_VERB_CONTEXT_PAINTBUCKET, "ToolPaintBucket", NC_("ContextVerb", "Paint Bucket"),
                     N_("Fill bounded areas"), INKSCAPE_ICON("color-fill")),
-#endif
-
     new ContextVerb(SP_VERB_CONTEXT_LPE, "ToolLPE", NC_("ContextVerb", "LPE Edit"), N_("Edit Path Effect parameters"),
                     nullptr),
     new ContextVerb(SP_VERB_CONTEXT_ERASER, "ToolEraser", NC_("ContextVerb", "Eraser"), N_("Erase existing paths"),
@@ -2960,12 +2930,8 @@ Verb *Verb::_base_verbs[] = {
                     N_("Open Preferences for the Dropper tool"), nullptr),
     new ContextVerb(SP_VERB_CONTEXT_CONNECTOR_PREFS, "ConnectorPrefs", N_("Connector Preferences"),
                     N_("Open Preferences for the Connector tool"), nullptr),
-
-#if HAVE_POTRACE
     new ContextVerb(SP_VERB_CONTEXT_PAINTBUCKET_PREFS, "PaintBucketPrefs", N_("Paint Bucket Preferences"),
                     N_("Open Preferences for the Paint Bucket tool"), nullptr),
-#endif
-
     new ContextVerb(SP_VERB_CONTEXT_ERASER_PREFS, "EraserPrefs", N_("Eraser Preferences"),
                     N_("Open Preferences for the Eraser tool"), nullptr),
     new ContextVerb(SP_VERB_CONTEXT_LPETOOL_PREFS, "LPEToolPrefs", N_("LPE Tool Preferences"),

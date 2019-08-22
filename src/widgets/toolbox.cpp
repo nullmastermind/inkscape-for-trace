@@ -79,11 +79,7 @@
 #include "ui/toolbar/measure-toolbar.h"
 #include "ui/toolbar/node-toolbar.h"
 #include "ui/toolbar/rect-toolbar.h"
-
-#if HAVE_POTRACE
-# include "ui/toolbar/paintbucket-toolbar.h"
-#endif
-
+#include "ui/toolbar/paintbucket-toolbar.h"
 #include "ui/toolbar/pencil-toolbar.h"
 #include "ui/toolbar/select-toolbar.h"
 #include "ui/toolbar/snap-toolbar.h"
@@ -164,12 +160,7 @@ static struct {
 	{ "/tools/calligraphic", "dyna_draw_tool", SP_VERB_CONTEXT_CALLIGRAPHIC, SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS },
 	{ "/tools/lpetool",  "lpetool_tool",   SP_VERB_CONTEXT_LPETOOL, SP_VERB_CONTEXT_LPETOOL_PREFS },
 	{ "/tools/eraser",   "eraser_tool",    SP_VERB_CONTEXT_ERASER, SP_VERB_CONTEXT_ERASER_PREFS },
-#if HAVE_POTRACE
 	{ "/tools/paintbucket",    "paintbucket_tool",     SP_VERB_CONTEXT_PAINTBUCKET, SP_VERB_CONTEXT_PAINTBUCKET_PREFS },
-#else
-        // Replacement blank action for ToolPaintBucket to prevent loading errors in ui file
-	{ "/tools/paintbucket",    "ToolPaintBucket",     SP_VERB_NONE, SP_VERB_NONE },
-#endif
 	{ "/tools/text",     "text_tool",      SP_VERB_CONTEXT_TEXT, SP_VERB_CONTEXT_TEXT_PREFS },
 	{ "/tools/connector","connector_tool", SP_VERB_CONTEXT_CONNECTOR, SP_VERB_CONTEXT_CONNECTOR_PREFS },
 	{ "/tools/gradient", "gradient_tool",  SP_VERB_CONTEXT_GRADIENT, SP_VERB_CONTEXT_GRADIENT_PREFS },
@@ -231,13 +222,8 @@ static struct {
       SP_VERB_INVALID,                    nullptr,                   nullptr},
     { "/tools/mesh",            "mesh_toolbox",        Inkscape::UI::Toolbar::MeshToolbar::create,          "MeshToolbar",
       SP_VERB_INVALID,                    nullptr,                   nullptr},
-#if HAVE_POTRACE
     { "/tools/paintbucket",     "paintbucket_toolbox", Inkscape::UI::Toolbar::PaintbucketToolbar::create,   "PaintbucketToolbar",
       SP_VERB_CONTEXT_PAINTBUCKET_PREFS, "/tools/paintbucket",       N_("Style of Paint Bucket fill objects")},
-#else
-    { "/tools/paintbucket",     "paintbucket_toolbox", nullptr,                                             "PaintbucketToolbar",
-        SP_VERB_NONE,                    "/tools/paintbucket",       N_("Disabled")},
-#endif
     { nullptr,                  nullptr,               nullptr,                                             nullptr,
         SP_VERB_INVALID,                 nullptr,                    nullptr }
 };

@@ -1,6 +1,4 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
-if (${HAVE_POTRACE})
-
 set(trace_SRC
 	filterset.cpp
 	imagemap.cpp
@@ -29,7 +27,5 @@ set(trace_SRC
 	depixelize/inkscape-depixelize.h
 )
 
-# add_inkscape_lib(trace_LIB "${trace_SRC}")
 add_inkscape_source("${trace_SRC}")
 
-endif()

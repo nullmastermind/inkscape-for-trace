@@ -480,9 +480,6 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
                             }
                         }
                     } else if (true
-#if !HAVE_POTRACE
-                        && !strcmp(verb_name.c_str(), "SelectionTrace")
-#endif
 #if !HAVE_ASPELL
                         && !strcmp(verb_name.c_str(), "DialogSpellcheck")
 #endif
