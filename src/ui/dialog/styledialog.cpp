@@ -1082,7 +1082,7 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
 
         std::string pos = std::to_string(selectorpos);
         std::string selectormatch = "(";
-        for (selectorpos; selectorpos > 1; selectorpos--) {
+        for (; selectorpos > 1; selectorpos--) {
             selectormatch = selectormatch + "[^}]*?}";
         }
         selectormatch = selectormatch + ")([^}]*?})((.|\n)*)";

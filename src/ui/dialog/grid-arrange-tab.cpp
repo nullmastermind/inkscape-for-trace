@@ -563,7 +563,7 @@ void GridArrangeTab::updateSelection()
 GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     : Parent(parent),
       XPadding(_("X:"), _("Horizontal spacing between columns."), UNIT_TYPE_LINEAR, "", "object-columns", &PaddingUnitMenu),
-      YPadding(_("Y:"), _("Vertical spacing between rows."), XPadding, "", "object-rows", &PaddingUnitMenu),
+      YPadding(_("Y:"), _("Vertical spacing between rows."), XPadding, "", "object-rows"),
       PaddingTable(Gtk::manage(new Gtk::Grid()))
 {
      // bool used by spin button callbacks to stop loops where they change each other.

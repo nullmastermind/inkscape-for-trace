@@ -1820,7 +1820,7 @@ void SPDocument::_importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, 
         if (src && SP_IS_GRADIENT(src)) {
             SPGradient *s_gr = SP_GRADIENT(src);
             for (auto& trg: getDefs()->children) {
-                if (&trg && (src != &trg) && SP_IS_GRADIENT(&trg)) {
+                if ((src != &trg) && SP_IS_GRADIENT(&trg)) {
                     SPGradient *t_gr = SP_GRADIENT(&trg);
                     if (t_gr && s_gr->isEquivalent(t_gr)) {
                          // Change object references to the existing equivalent gradient
@@ -1891,7 +1891,7 @@ void SPDocument::_importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, 
 
                 // Check that it really is a duplicate
                 for (auto& trg: getDefs()->children) {
-                    if(&trg && SP_IS_SYMBOL(&trg) && src != &trg ) {
+                    if (SP_IS_SYMBOL(&trg) && src != &trg) {
                         std::string id2 = trg.getRepr()->attribute("id");
 
                         if( !id.compare( id2 ) ) {

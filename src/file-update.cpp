@@ -319,20 +319,20 @@ void sp_file_convert_dpi(SPDocument *doc)
 
     // Check if potentially need viewbox or unit fix                                           
     switch (root->width.unit) {
-        case SP_CSS_UNIT_PC:
-        case SP_CSS_UNIT_PT:
-        case SP_CSS_UNIT_MM:
-        case SP_CSS_UNIT_CM:
-        case SP_CSS_UNIT_IN:
+        case SVGLength::PC:
+        case SVGLength::PT:
+        case SVGLength::MM:
+        case SVGLength::CM:
+        case SVGLength::INCH:
             need_fix_viewbox = true;
             break;
-        case SP_CSS_UNIT_NONE:
-        case SP_CSS_UNIT_PX:
+        case SVGLength::NONE:
+        case SVGLength::PX:
             need_fix_units = true;
             break;
-        case SP_CSS_UNIT_EM:
-        case SP_CSS_UNIT_EX:
-        case SP_CSS_UNIT_PERCENT:
+        case SVGLength::EM:
+        case SVGLength::EX:
+        case SVGLength::PERCENT:
             // OK                                                                              
             break;
         default:
@@ -340,20 +340,20 @@ void sp_file_convert_dpi(SPDocument *doc)
     }
 
     switch (root->height.unit) {
-        case SP_CSS_UNIT_PC:
-        case SP_CSS_UNIT_PT:
-        case SP_CSS_UNIT_MM:
-        case SP_CSS_UNIT_CM:
-        case SP_CSS_UNIT_IN:
+        case SVGLength::PC:
+        case SVGLength::PT:
+        case SVGLength::MM:
+        case SVGLength::CM:
+        case SVGLength::INCH:
             need_fix_viewbox = true;
             break;
-        case SP_CSS_UNIT_NONE:
-        case SP_CSS_UNIT_PX:
+        case SVGLength::NONE:
+        case SVGLength::PX:
             need_fix_units = true;
             break;
-        case SP_CSS_UNIT_EM:
-        case SP_CSS_UNIT_EX:
-        case SP_CSS_UNIT_PERCENT:
+        case SVGLength::EM:
+        case SVGLength::EX:
+        case SVGLength::PERCENT:
             // OK                                                                              
             break;
         default:

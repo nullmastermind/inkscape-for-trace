@@ -32,11 +32,6 @@ enum PreviewStyle {
     PREVIEW_STYLE_PREVIEW_BLURB
 };
 
-enum ViewType {
-    VIEW_TYPE_LIST = 0,
-    VIEW_TYPE_GRID
-};
-
 
 class Previewable
 {

@@ -264,26 +264,23 @@ void Handle::setDirection(Geom::Point const &dir)
     setRelativePos(unitdir * length());
 }
 
+/**
+ * See also: Node::node_type_to_localized_string(NodeType type)
+ */
 char const *Handle::handle_type_to_localized_string(NodeType type)
 {
-    char const *s = "";
-
     switch(type) {
     case NODE_CUSP:
-        s = _("Corner node handle");
-        break;
+        return _("Corner node handle");
     case NODE_SMOOTH:
-        s = _("Smooth node handle");
-        break;
+        return _("Smooth node handle");
     case NODE_SYMMETRIC:
-        s = _("Symmetric node handle");
-        break;
+        return _("Symmetric node handle");
     case NODE_AUTO:
-        s = _("Auto-smooth node handle");
-        break;
+        return _("Auto-smooth node handle");
+    default:
+        return "";
     }
-
-    return (s);
 }
 
 bool Handle::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEvent *event)
@@ -1627,26 +1624,23 @@ Glib::ustring Node::_getDragTip(GdkEventMotion */*event*/) const
     return ret;
 }
 
+/**
+ * See also: Handle::handle_type_to_localized_string(NodeType type)
+ */
 char const *Node::node_type_to_localized_string(NodeType type)
 {
-    char const *s = "";
-
     switch (type) {
     case NODE_CUSP:
-        s = _("Corner node");
-        break;
+        return _("Corner node");
     case NODE_SMOOTH:
-        s = _("Smooth node");
-        break;
+        return _("Smooth node");
     case NODE_SYMMETRIC:
-        s = _("Symmetric node");
-        break;
+        return _("Symmetric node");
     case NODE_AUTO:
-        s = _("Auto-smooth node");
-        break;
+        return _("Auto-smooth node");
+    default:
+        return "";
     }
-
-    return (s);
 }
 
 bool Node::_is_line_segment(Node *first, Node *second)

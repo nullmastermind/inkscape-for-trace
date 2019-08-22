@@ -1516,7 +1516,7 @@ bool PrintEmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
 
             if (is_straight_curve(*cit)) {
                 lines++;
-            } else if (&*cit) {
+            } else if (dynamic_cast<Geom::CubicBezier const *>(&*cit)) {
                 curves++;
             }
         }

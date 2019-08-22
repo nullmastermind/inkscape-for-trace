@@ -856,20 +856,20 @@ void InputDialogImpl::setupTree( Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeIt
                 deviceRow[getCols().device] = dev;
                 deviceRow[getCols().mode] = dev->getMode();
                 switch ( dev->getSource() ) {
-                    case GDK_SOURCE_MOUSE:
+                    case Gdk::SOURCE_MOUSE:
                         deviceRow[getCols().thumbnail] = getPix(PIX_CORE);
                         break;
-                    case GDK_SOURCE_PEN:
+                    case Gdk::SOURCE_PEN:
                         if (deviceRow[getCols().description] == _("pad")) {
                             deviceRow[getCols().thumbnail] = getPix(PIX_SIDEBUTTONS);
                         } else {
                             deviceRow[getCols().thumbnail] = getPix(PIX_TIP);
                         }
                         break;
-                    case GDK_SOURCE_CURSOR:
+                    case Gdk::SOURCE_CURSOR:
                         deviceRow[getCols().thumbnail] = getPix(PIX_MOUSE);
                         break;
-                    case GDK_SOURCE_ERASER:
+                    case Gdk::SOURCE_ERASER:
                         deviceRow[getCols().thumbnail] = getPix(PIX_ERASER);
                         break;
                     default:
@@ -1759,10 +1759,11 @@ bool InputDialogImpl::eventSnoop(GdkEvent* event)
             /// \fixme GTK3 added new GDK_SOURCEs that should be handled here!
             case GDK_SOURCE_KEYBOARD:
             case GDK_SOURCE_TOUCHSCREEN:
-            case GDK_SOURCE_TOUCHPAD: {
+            case GDK_SOURCE_TOUCHPAD:
+            case GDK_SOURCE_TRACKPOINT:
+            case GDK_SOURCE_TABLET_PAD:
                  g_warning("InputDialogImpl::eventSnoop : unhandled GDK_SOURCE type!");
                  break;
-            }
         }
 
         updateTestButtons(key, hotButton);

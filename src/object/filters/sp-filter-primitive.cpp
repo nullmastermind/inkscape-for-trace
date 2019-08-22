@@ -170,7 +170,7 @@ Inkscape::XML::Node* SPFilterPrimitive::write(Inkscape::XML::Document *doc, Inks
 
 int SPFilterPrimitive::read_in(gchar const *name)
 {
-    if (!name || !this){
+    if (!name){
         return Inkscape::Filters::NR_FILTER_SLOT_NOT_SET;
     }
     // TODO: are these case sensitive or not? (assumed yes)

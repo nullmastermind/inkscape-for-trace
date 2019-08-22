@@ -137,7 +137,7 @@ void PreviewHolder::addPreview( Previewable* preview )
         int i = items.size() - 1;
 
         switch(_view) {
-            case VIEW_TYPE_LIST:
+            case UI::Widget::VIEW_TYPE_LIST:
                 {
                     Gtk::Widget* label = Gtk::manage(preview->getPreview(UI::Widget::PREVIEW_STYLE_BLURB,
                                                                          UI::Widget::VIEW_TYPE_LIST,
@@ -156,7 +156,7 @@ void PreviewHolder::addPreview( Previewable* preview )
                 }
 
                 break;
-            case VIEW_TYPE_GRID:
+            case UI::Widget::VIEW_TYPE_GRID:
                 {
                     Gtk::Widget* item = Gtk::manage(items[i]->getPreview(UI::Widget::PREVIEW_STYLE_PREVIEW,
                                                                          UI::Widget::VIEW_TYPE_GRID,
@@ -367,7 +367,7 @@ void PreviewHolder::rebuildUI()
     }
 
     switch (_view) {
-        case VIEW_TYPE_LIST:
+        case UI::Widget::VIEW_TYPE_LIST:
         {
             _insides->set_column_spacing(8);
 
@@ -388,7 +388,7 @@ void PreviewHolder::rebuildUI()
         }
         break;
 
-        case VIEW_TYPE_GRID:
+        case UI::Widget::VIEW_TYPE_GRID:
         {
             int col = 0;
             int row = 0;

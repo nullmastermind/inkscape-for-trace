@@ -707,7 +707,7 @@ static const gchar *sp_color_scales_hue_map()
             *p++ = SP_COLOR_F_TO_U(rgb[0]);
             *p++ = SP_COLOR_F_TO_U(rgb[1]);
             *p++ = SP_COLOR_F_TO_U(rgb[2]);
-            *p++ = 255;
+            *p++ = 0xFF;
         }
     }
 
