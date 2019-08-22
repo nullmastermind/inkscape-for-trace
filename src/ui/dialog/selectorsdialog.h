@@ -15,12 +15,13 @@
 #ifndef SELECTORSDIALOG_H
 #define SELECTORSDIALOG_H
 
-#include "ui/dialog/styledialog.h"
 #include "ui/dialog/desktop-tracker.h"
 #include "ui/dialog/dialog-manager.h"
+#include "ui/dialog/styledialog.h"
 #include "ui/widget/panel.h"
 #include <gtkmm/dialog.h>
 #include <gtkmm/paned.h>
+#include <gtkmm/radiobutton.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/switch.h>
 #include <gtkmm/treemodelfilter.h>
@@ -64,7 +65,6 @@ class SelectorsDialog : public Widget::Panel {
     // Monitor all objects for addition/removal/attribute change
     class NodeWatcher;
     enum SelectorType { CLASS, ID, TAG };
-    void fixCSSSelectors(Glib::ustring &selector);
     std::vector<SelectorsDialog::NodeWatcher *> _nodeWatchers;
     void _nodeAdded(   Inkscape::XML::Node &repr );
     void _nodeRemoved( Inkscape::XML::Node &repr );
@@ -117,10 +117,10 @@ class SelectorsDialog : public Widget::Panel {
     Glib::RefPtr<Gtk::TreeModelFilter> _modelfilter;
     Glib::RefPtr<TreeStore> _store;
     Gtk::TreeView _treeView;
+    Gtk::TreeModel::Path _lastpath;
     // Widgets
     Gtk::Paned _paned;
     Glib::RefPtr<Gtk::Adjustment> _vadj;
-    Gtk::Switch _direction;
     Gtk::Box _button_box;
     Gtk::Box _selectors_box;
     Gtk::ScrolledWindow _scrolled_window_selectors;
@@ -146,9 +146,11 @@ class SelectorsDialog : public Widget::Panel {
     void _insertClass(SPObject *obj, const Glib::ustring &className);
     void _removeClass(const std::vector<SPObject *> &objVec, const Glib::ustring &className, bool all = false);
     void _removeClass(SPObject *obj, const Glib::ustring &className, bool all = false);
-    void _toggleDirection();
+    void _toggleDirection(Gtk::RadioButton *vertical);
     void _showWidgets();
-    bool _resized(GdkEventButton *event);
+    void _resized();
+    void _childresized();
+    void _panedresized(Gtk::Allocation allocation);
 
     void _selectObjects(int, int);
     // Variables

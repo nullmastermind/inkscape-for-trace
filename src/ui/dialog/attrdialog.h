@@ -17,7 +17,9 @@
 #include "message.h"
 #include <gtkmm/dialog.h>
 #include <gtkmm/liststore.h>
+#include <gtkmm/popover.h>
 #include <gtkmm/scrolledwindow.h>
+#include <gtkmm/textview.h>
 #include <gtkmm/treeview.h>
 #include <ui/widget/panel.h>
 
@@ -61,6 +63,11 @@ public:
     Gtk::CellRendererText *_valueRenderer;
     Gtk::TreeViewColumn *_nameCol;
     Gtk::TreeViewColumn *_valueCol;
+    Gtk::TreeModel::Path _modelpath;
+    Gtk::Popover *_popover;
+    Gtk::TextView *_textview;
+    Gtk::Button *_update;
+    Glib::ustring valuepath;
 
     /**
      * Status bar
@@ -71,14 +78,15 @@ public:
     // Widgets
     Gtk::VBox _mainBox;
     Gtk::ScrolledWindow _scrolledWindow;
+    Gtk::ScrolledWindow _scrolled_text_view;
     Gtk::HBox _buttonBox;
     Gtk::Button _buttonAddAttribute;
-
     // Variables - Inkscape
     SPDesktop* _desktop;
     Inkscape::XML::Node* _repr;
     Gtk::HBox status_box;
     Gtk::Label status;
+    bool _updating;
 
     // Helper functions
     void setDesktop(SPDesktop* desktop) override;
@@ -95,12 +103,17 @@ public:
      */
     sigc::connection _message_changed_connection;
     void onAttrChanged(Inkscape::XML::Node *repr, const gchar * name, const gchar * new_value);
+    bool onNameKeyPressed(GdkEventKey *event, Gtk::Entry *entry);
+    bool onValueKeyPressed(GdkEventKey *event, Gtk::Entry *entry);
     void onAttrDelete(Glib::ustring path);
     bool onAttrCreate(GdkEventButton *event);
     bool onKeyPressed(GdkEventKey *event);
+    void popClosed();
+    void startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &path);
+    void startValueEdit(Gtk::CellEditable *cell, const Glib::ustring &path);
     void nameEdited(const Glib::ustring &path, const Glib::ustring &name);
     void valueEdited(const Glib::ustring &path, const Glib::ustring &value);
-
+    void valueEditedPop();
 };
 
 

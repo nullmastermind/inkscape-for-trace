@@ -19,9 +19,10 @@
 #include "inkscape.h"
 #include "selection.h"
 #include "style.h"
-#include "verbs.h"
 #include "ui/icon-loader.h"
+#include "ui/icon-names.h"
 #include "ui/widget/iconrenderer.h"
+#include "verbs.h"
 
 #include "xml/attribute-record.h"
 #include "xml/node-observer.h"
@@ -200,69 +201,6 @@ bool SelectorsDialog::TreeStore::row_draggable_vfunc(const Gtk::TreeModel::Path 
     return Gtk::TreeStore::row_draggable_vfunc(path);
 }
 
-void SelectorsDialog::fixCSSSelectors(Glib::ustring &selector)
-{
-    g_debug("SelectorsDialog::fixCSSSelectors");
-    REMOVE_SPACES(selector);
-    Glib::ustring my_selector = selector + " {"; // Parsing fails sometimes without '{'. Fix me
-    CRSelector *cr_selector = cr_selector_parse_from_buf((guchar *)my_selector.c_str(), CR_UTF_8);
-    selector = Glib::ustring("");
-    CRSelector const *cur = nullptr;
-    for (cur = cr_selector; cur; cur = cur->next) {
-        if (cur->simple_sel) {
-            gchar *selectorchar = reinterpret_cast<gchar *>(cr_simple_sel_to_string(cur->simple_sel));
-            if (selectorchar) {
-                Glib::ustring toadd = Glib::ustring(selectorchar);
-                selector = selector.empty() ? toadd : selector + "," + toadd;
-                g_free(selectorchar);
-            }
-        }
-    }
-    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[,]+", selector);
-    std::vector<Glib::ustring> selectorresult;
-    selector = Glib::ustring("");
-    for (auto token : tokens) {
-        REMOVE_SPACES(token);
-        std::vector<Glib::ustring> tokensplus = Glib::Regex::split_simple("[ ]+", token);
-        Glib::ustring selectorpart = Glib::ustring("");
-        for (auto tokenplus : tokensplus) {
-            REMOVE_SPACES(tokenplus);
-            Glib::ustring toparse = Glib::ustring(tokenplus);
-            Glib::ustring tag = Glib::ustring("");
-            if (toparse[0] != '.' && toparse[0] != '#') {
-                auto i = std::min(toparse.find("#"), toparse.find("."));
-                tag = toparse.substr(0, i);
-                if (!SPAttributeRelSVG::isSVGElement(tag)) {
-                    continue;
-                }
-                if (i != std::string::npos) {
-                    toparse.erase(0, i);
-                } else {
-                    toparse = tag;
-                    selectorpart = selectorpart == Glib::ustring("") ? toparse : selectorpart + " " + toparse;
-                    continue;
-                }
-            }
-            auto i = toparse.find("#");
-            if (i != std::string::npos) {
-                toparse.erase(i, 1);
-            }
-            auto j = toparse.find("#");
-            if (i != std::string::npos && j != std::string::npos) {
-                continue;
-            } else if (i != std::string::npos) {
-                toparse.insert(i, "#");
-            }
-            toparse = tag + toparse;
-            selectorpart = selectorpart == Glib::ustring("") ? toparse : selectorpart + " " + toparse;
-        }
-        selectorresult.push_back(selectorpart);
-    }
-    for (auto selectorpart : selectorresult) {
-        selector = selector == Glib::ustring("") ? selectorpart : selector + "," + selectorpart;
-    }
-}
-
 /**
  * Allow dropping only in between other selectors.
  */
@@ -404,19 +342,30 @@ void SelectorsDialog::_showWidgets()
     _vadj = _scrolled_window_selectors.get_vadjustment();
     _vadj->signal_value_changed().connect(sigc::mem_fun(*this, &SelectorsDialog::_vscrool));
     _selectors_box.pack_start(_scrolled_window_selectors, Gtk::PACK_EXPAND_WIDGET);
-    Gtk::Label *dirtogglerlabel = Gtk::manage(new Gtk::Label(_("Paned vertical")));
+    /* Gtk::Label *dirtogglerlabel = Gtk::manage(new Gtk::Label(_("Paned vertical")));
     dirtogglerlabel->get_style_context()->add_class("inksmall");
     _direction.property_active() = dir;
     _direction.property_active().signal_changed().connect(sigc::mem_fun(*this, &SelectorsDialog::_toggleDirection));
-    _direction.get_style_context()->add_class("inkswitch");
+    _direction.get_style_context()->add_class("inkswitch"); */
     _styleButton(_create, "list-add", "Add a new CSS Selector");
     _create.signal_clicked().connect(sigc::mem_fun(*this, &SelectorsDialog::_addSelector));
     _styleButton(_del, "list-remove", "Remove a CSS Selector");
     _button_box.pack_start(_create, Gtk::PACK_SHRINK);
     _button_box.pack_start(_del, Gtk::PACK_SHRINK);
-    _button_box.pack_start(_direction, false, false, 0);
-    _button_box.pack_start(*dirtogglerlabel, false, false, 0);
-    _selectors_box.pack_end(_button_box, false, false, 0);
+    Gtk::RadioButton::Group group;
+    Gtk::RadioButton *_horizontal = Gtk::manage(new Gtk::RadioButton());
+    Gtk::RadioButton *_vertical = Gtk::manage(new Gtk::RadioButton());
+    _horizontal->set_image_from_icon_name(INKSCAPE_ICON("horizontal"));
+    _vertical->set_image_from_icon_name(INKSCAPE_ICON("vertical"));
+    _horizontal->set_group(group);
+    _vertical->set_group(group);
+    _vertical->set_active(dir);
+    _vertical->signal_toggled().connect(
+        sigc::bind(sigc::mem_fun(*this, &SelectorsDialog::_toggleDirection), _vertical));
+    _horizontal->property_draw_indicator() = false;
+    _vertical->property_draw_indicator() = false;
+    _button_box.pack_end(*_horizontal, false, false, 0);
+    _button_box.pack_end(*_vertical, false, false, 0);
     _del.signal_clicked().connect(sigc::mem_fun(*this, &SelectorsDialog::_delSelector));
     _del.hide();
     _style_dialog = new StyleDialog;
@@ -424,36 +373,62 @@ void SelectorsDialog::_showWidgets()
     _paned.pack1(*_style_dialog, Gtk::SHRINK);
     _paned.pack2(_selectors_box, true, true);
     _getContents()->pack_start(_paned, Gtk::PACK_EXPAND_WIDGET);
+    _getContents()->pack_start(_button_box, false, false, 0);
     show_all();
     int widthpos = _paned.property_max_position();
     int panedpos = prefs->getInt("/dialogs/selectors/panedpos", 130);
 
     _paned.set_position(panedpos);
     _paned.property_wide_handle() = true;
-    _paned.signal_button_release_event().connect(sigc::mem_fun(*this, &SelectorsDialog::_resized), false);
+    _paned.property_position().signal_changed().connect(sigc::mem_fun(*this, &SelectorsDialog::_childresized));
+    _paned.signal_size_allocate().connect(sigc::mem_fun(*this, &SelectorsDialog::_panedresized));
     set_size_request(320, 260);
     set_name("SelectorsAndStyleDialog");
 }
 
-bool SelectorsDialog::_resized(GdkEventButton *event)
+void SelectorsDialog::_panedresized(Gtk::Allocation allocation)
+{
+    g_debug("SelectorsDialog::_panedresized");
+    _resized();
+}
+
+void SelectorsDialog::_childresized()
+{
+    g_debug("SelectorsDialog::_childresized");
+    _resized();
+}
+
+void SelectorsDialog::_resized()
 {
     g_debug("SelectorsDialog::_resized");
     _scroollock = true;
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setInt("/dialogs/selectors/panedpos", _paned.get_position());
-    return false;
-}
-
-
-void SelectorsDialog::_toggleDirection()
-{
-    g_debug("SelectorsDialog::_toggleDirection");
-
+    if (_updating) {
+        return;
+    }
+    _updating = true;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool dir = !prefs->getBool("/dialogs/selectors/vertical", true);
+    int max = int(_paned.property_max_position() * 0.95);
+    int min = int(_paned.property_max_position() * 0.05);
+    if (_paned.get_position() > max) {
+        _paned.property_position() = max;
+    }
+    if (_paned.get_position() < min) {
+        _paned.property_position() = min;
+    }
+    prefs->setInt("/dialogs/selectors/panedpos", _paned.get_position());
+    _updating = false;
+}
+
+void SelectorsDialog::_toggleDirection(Gtk::RadioButton *vertical)
+{
+    g_debug("SelectorsDialog::_toggleDirection");
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool dir = vertical->get_active();
     prefs->setBool("/dialogs/selectors/vertical", dir);
     _paned.set_orientation(dir ? Gtk::ORIENTATION_VERTICAL : Gtk::ORIENTATION_HORIZONTAL);
-    int widthpos = _paned.property_max_position();
+    _paned.check_resize();
+    int widthpos = _paned.property_max_position() - _paned.property_min_position();
     prefs->setInt("/dialogs/selectors/panedpos", widthpos / 2);
     _paned.set_position(widthpos / 2);
 }
@@ -573,7 +548,7 @@ void SelectorsDialog::_readStyleElement()
     for (unsigned i = 0; i < tokens.size() - 1; i += 2) {
         Glib::ustring selector = tokens[i];
         REMOVE_SPACES(selector); // Remove leading/trailing spaces
-        fixCSSSelectors(selector);
+        selector = _style_dialog->fixCSSSelectors(selector);
         for (auto &row : _store->children()) {
             Glib::ustring selectorold = row[_mColumns._colSelector];
             if (selectorold == selector) {
@@ -588,7 +563,7 @@ void SelectorsDialog::_readStyleElement()
         Glib::ustring selector = tokens[i];
         REMOVE_SPACES(selector); // Remove leading/trailing spaces
         Glib::ustring selector_old = selector;
-        fixCSSSelectors(selector);
+        selector = _style_dialog->fixCSSSelectors(selector);
         if (selector_old != selector) {
             rewrite = true;
         }
@@ -778,8 +753,12 @@ Glib::ustring sp_get_selector_classes(Glib::ustring selector) //, SelectorType s
     REMOVE_SPACES(selector);
     Glib::ustring toparse = Glib::ustring(selector);
     selector = Glib::ustring("");
+    auto i = toparse.find(".");
+    if (i == std::string::npos) {
+        return "";
+    }
     if (toparse[0] != '.' && toparse[0] != '#') {
-        auto i = std::min(toparse.find("#"), toparse.find("."));
+        i = std::min(toparse.find("#"), toparse.find("."));
         Glib::ustring tag = toparse.substr(0, i);
         if (!SPAttributeRelSVG::isSVGElement(tag)) {
             return selector;
@@ -788,7 +767,7 @@ Glib::ustring sp_get_selector_classes(Glib::ustring selector) //, SelectorType s
             toparse.erase(0, i);
         }
     }
-    auto i = toparse.find("#");
+    i = toparse.find("#");
     if (i != std::string::npos) {
         toparse.erase(i, 1);
     }
@@ -856,7 +835,7 @@ void SelectorsDialog::_addToSelector(Gtk::TreeModel::Row row)
             if (insertid) {
                 multiselector = multiselector + ",#" + id;
             }
-            Gtk::TreeModel::Row childrow = *(_store->append(row->children()));
+            Gtk::TreeModel::Row childrow = *(_store->prepend(row->children()));
             childrow[_mColumns._colSelector] = "#" + Glib::ustring(id);
             childrow[_mColumns._colExpand] = false;
             childrow[_mColumns._colType] = OBJECT;
@@ -1093,6 +1072,9 @@ void SelectorsDialog::_selectObjects(int eventX, int eventY)
     int y2 = 0;
     // To do: We should be able to do this via passing in row.
     if (_treeView.get_path_at_pos(eventX, eventY, path, col, x2, y2)) {
+        if (_lastpath.size() && _lastpath == path) {
+            return;
+        }
         if (col == _treeView.get_column(1) && x2 > 25) {
             getDesktop()->selection->clear();
             Gtk::TreeModel::iterator iter = _store->get_iter(path);
@@ -1108,6 +1090,7 @@ void SelectorsDialog::_selectObjects(int eventX, int eventY)
                     getDesktop()->selection->add(obj);
                 }
             }
+            _lastpath = path;
         }
     }
 }
@@ -1179,9 +1162,8 @@ void SelectorsDialog::_addSelector()
          * for selector. If the entrybox is empty, the text (thus selectorName) is
          * set to ".Class1"
          */
-        selectorValue = textEditPtr->get_text();
+        selectorValue = _style_dialog->fixCSSSelectors(Glib::ustring(textEditPtr->get_text()));
         _del.show();
-        fixCSSSelectors(selectorValue);
         if (selectorValue.empty()) {
             textLabelPtr->show();
         } else {
@@ -1190,7 +1172,6 @@ void SelectorsDialog::_addSelector()
     }
     delete textDialogPtr;
     // ==== Handle response ====
-
     // If class selector, add selector name to class attribute for each object
     REMOVE_SPACES(selectorValue);
     std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("[,]+", selectorValue);
@@ -1214,7 +1195,7 @@ void SelectorsDialog::_addSelector()
         }
     }
     objVec = _getObjVec(selectorValue);
-    Gtk::TreeModel::Row row = *(_store->append());
+    Gtk::TreeModel::Row row = *(_store->prepend());
     row[_mColumns._colExpand] = true;
     row[_mColumns._colType] = SELECTOR;
     row[_mColumns._colSelector] = selectorValue;
@@ -1223,7 +1204,7 @@ void SelectorsDialog::_addSelector()
     row[_mColumns._colVisible] = true;
     row[_mColumns._colSelected] = 400;
     for (auto &obj : objVec) {
-        Gtk::TreeModel::Row childrow = *(_store->append(row->children()));
+        Gtk::TreeModel::Row childrow = *(_store->prepend(row->children()));
         childrow[_mColumns._colSelector] = "#" + Glib::ustring(obj->getId());
         childrow[_mColumns._colExpand] = false;
         childrow[_mColumns._colType] = OBJECT;
@@ -1382,6 +1363,7 @@ void SelectorsDialog::_handleDesktopChanged(SPDesktop *desktop)
 void SelectorsDialog::_handleSelectionChanged()
 {
     g_debug("SelectorsDialog::_handleSelectionChanged()");
+    _lastpath.clear();
     _treeView.get_selection()->set_mode(Gtk::SELECTION_MULTIPLE);
     _selectRow();
 }

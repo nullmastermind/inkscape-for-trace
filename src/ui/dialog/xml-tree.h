@@ -19,6 +19,7 @@
 #include <gtkmm/button.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/paned.h>
+#include <gtkmm/radiobutton.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/separatortoolitem.h>
 #include <gtkmm/switch.h>
@@ -166,8 +167,10 @@ private:
 
     void present() override;
     void _attrtoggler();
-    void _toggleDirection();
-    bool _resized(GdkEventButton *event);
+    void _toggleDirection(Gtk::RadioButton *vertical);
+    void _resized();
+    void _childresized();
+    void _panedresized(Gtk::Allocation allocation);
     bool in_dt_coordsys(SPObject const &item);
 
     /**
@@ -180,6 +183,7 @@ private:
      */
     gint blocked;
 
+    bool _updating;
     /**
      * Status bar
      */
@@ -217,8 +221,6 @@ private:
     Gtk::VBox node_box;
     Gtk::HBox status_box;
     Gtk::Switch _attrswitch;
-    Gtk::Switch _direction;
-    Gtk::Label *_dirtogglerlabel;
     Gtk::Label status;
     Gtk::Toolbar tree_toolbar;
     Gtk::ToolButton xml_element_new_button;

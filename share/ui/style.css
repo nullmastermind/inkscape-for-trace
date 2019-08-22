@@ -66,7 +66,7 @@
     * ::::::: Color based
     * ::::::: apply to colors
     * ::::::: scope widget and all his childs
-    * ".invert" invert colors
+    * ".inverted" invert colors
     * :::::::: Icon Based.
     * ".symbolic" Force icon symbolic
     * ".regular" Force colorful icons
@@ -91,37 +91,22 @@ image {
     -gtk-icon-style: regular;
 }
 
-.invert {
-    color: @theme_bg_color;
-    background-color: @theme_fg_color;
-    background-image: image(@theme_fg_color);
-}
-
-.dark .forcebright {
-    color: @theme_bg_color;
-    background-color: @theme_fg_color;
-    background-image: image(@theme_fg_color);
-}
-
+.inverted,
+.dark .forcebright,
 .bright .forcedark {
     color: @theme_bg_color;
     background-color: @theme_fg_color;
     background-image: image(@theme_fg_color);
 }
 
-.invert :not(overshoot):not(undershoot):not(.rawimage) {
-    color: inherit;
-    background-color: inherit;
-}
 
-.dark .forcebright :not(overshoot):not(undershoot):not(.rawimage) {
-    color: inherit;
-    background-color: inherit;
-}
 
-.bright .forcedark :not(overshoot):not(undershoot):not(.rawimage) {
+.inverted :not(menuitem):not(.rawstyle):not(overshoot):not(undershoot):not(selection),
+.bright .forcedark :not(menuitem):not(.rawstyle):not(overshoot):not(undershoot):not(selection),
+.dark .forcebright :not(menuitem):not(.rawstyle):not(overshoot):not(undershoot):not(selection) {
     color: inherit;
     background-color: inherit;
+    background-image: inherit;
 }
 
 .combobright * {
@@ -225,8 +210,8 @@ spinbutton undershoot {
 
 #LPESelectorFlowBox flowboxchild:selected image,
 #LPESelectorFlowBox flowboxchild:selected label {
-    background-color: @theme_selected_bg_color;
     color: @theme_selected_fg_color;
+    background-color: @theme_selected_bg_color;
     background-image: image(@theme_selected_bg_color);
 }
 
@@ -309,6 +294,41 @@ spinbutton undershoot {
     padding-right: 6px;
     padding-top: 0;
     padding-bottom: 0;
+}
+
+#XMLAndAttributesDialog .radio.image-button,
+#SelectorsAndStyleDialog .radio.image-button {
+    margin: 0;
+    padding: 0px;
+    border-radius: 2px 0 0 2px;
+}
+
+#XMLAndAttributesDialog .radio.image-button:last-child,
+#SelectorsAndStyleDialog .radio.image-button:last-child {
+    border-radius: 0 2px 2px 0;
+    border-left-width: 0;
+}
+
+#SelectorsAndStyleDialog treeview button {
+    border-width: 0;
+    margin: 0 0 1px 0;
+}
+
+#SelectorsAndStyleDialog treeview button:nth-child(3),
+#SelectorsAndStyleDialog treeview.style_sheet button:nth-child(4) {
+    border-width: 0 0 0 2px;
+    border-color: @theme_fg_color;
+    border-style: solid;
+    opacity: 0.5;
+}
+
+#SelectorsAndStyleDialog treeview.style_sheet button:nth-child(3) {
+    border-width: 0;
+}
+
+#SelectorsAndStyleDialog treeview button {
+    min-height: 3px;
+    font-size: 1px;
 }
 
 #InkRuler {

@@ -46,7 +46,7 @@ private:
     SPDesktop *base;
     SPDesktop *desktop;
     GtkWidget *widget;
-    gulong hierID;
+    unsigned long hierID;
     sigc::connection inkID;
     bool trackActive;
     sigc::signal<void, SPDesktop*> desktopChangedSig;

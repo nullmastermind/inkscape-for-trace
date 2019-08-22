@@ -526,16 +526,23 @@ Glib::ustring Application::get_symbolic_colors()
     css_str += colornamederror;
     css_str += ";}";
     css_str += "#InkRuler,";
-    css_str += "image:not(.rawimage)";
+    /* ":not(.rawstyle) > image" works only on images in first level of widget container
+    if in the future we use a complex widget with more levels and we dont want to tweak the color
+    here, retaining default we can add more lines like ":not(.rawstyle) > > image" */
+    css_str += ":not(.rawstyle) > image";
     css_str += "{color:";
     css_str += colornamed;
     css_str += ";}";
-    css_str += ".dark .forcebright image:not(.rawimage),";
-    css_str += ".bright .forcedark image:not(.rawimage),";
-    css_str += ".dark image.forcebright:not(.rawimage),";
-    css_str += ".bright image.forcedark:not(.rawimage),";
-    css_str += ".invert image:not(.rawimage),";
-    css_str += "image.invert:not(.rawimage)";
+    css_str += ".dark .forcebright :not(.rawstyle) > image,";
+    css_str += ".dark .forcebright image:not(.rawstyle),";
+    css_str += ".bright .forcedark :not(.rawstyle) > image,";
+    css_str += ".bright .forcedark image:not(.rawstyle),";
+    css_str += ".dark :not(.rawstyle) > image.forcebright,";
+    css_str += ".dark image.forcebright:not(.rawstyle),";
+    css_str += ".bright :not(.rawstyle) > image.forcedark,";
+    css_str += ".bright image.forcedark:not(.rawstyle),";
+    css_str += ".inverse :not(.rawstyle) > image,";
+    css_str += ".inverse image:not(.rawstyle)";
     css_str += "{color:";
     css_str += colornamed_inverse;
     css_str += ";}";

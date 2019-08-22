@@ -46,27 +46,28 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-XmlTree::XmlTree() :
-    UI::Widget::Panel("/dialogs/xml/", SP_VERB_DIALOG_XML_EDITOR),
-    blocked (0),
-    _message_stack (nullptr),
-    _message_context (nullptr),
-    current_desktop (nullptr),
-    current_document (nullptr),
-    selected_attr (0),
-    selected_repr (nullptr),
-    tree (nullptr),
-    status (""),
-    tree_toolbar(),
-    xml_element_new_button ( _("New element node")),
-    xml_text_new_button ( _("New text node")),
-    xml_node_delete_button ( Q_("nodeAsInXMLdialogTooltip|Delete node")),
-    xml_node_duplicate_button ( _("Duplicate node")),
-    unindent_node_button(),
-    indent_node_button(),
-    raise_node_button(),
-    lower_node_button(),
-    new_window(nullptr)
+XmlTree::XmlTree()
+    : UI::Widget::Panel("/dialogs/xml/", SP_VERB_DIALOG_XML_EDITOR)
+    , blocked(0)
+    , _message_stack(nullptr)
+    , _message_context(nullptr)
+    , current_desktop(nullptr)
+    , current_document(nullptr)
+    , selected_attr(0)
+    , selected_repr(nullptr)
+    , tree(nullptr)
+    , status("")
+    , tree_toolbar()
+    , xml_element_new_button(_("New element node"))
+    , xml_text_new_button(_("New text node"))
+    , xml_node_delete_button(Q_("nodeAsInXMLdialogTooltip|Delete node"))
+    , xml_node_duplicate_button(_("Duplicate node"))
+    , unindent_node_button()
+    , indent_node_button()
+    , raise_node_button()
+    , lower_node_button()
+    , new_window(nullptr)
+    , _updating(false)
 {
 
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
@@ -79,6 +80,7 @@ XmlTree::XmlTree() :
     status.set_size_request(1, -1);
     status.set_markup("");
     status.set_line_wrap(true);
+    status.get_style_context()->add_class("inksmall");
     status_box.pack_start( status, TRUE, TRUE, 0);
     contents->pack_start(_paned, true, true, 0);
     contents->set_valign(Gtk::ALIGN_FILL);
@@ -172,28 +174,35 @@ XmlTree::XmlTree() :
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool attrtoggler = prefs->getBool("/dialogs/xml/attrtoggler", true);
     bool dir = prefs->getBool("/dialogs/xml/vertical", true);
-    attributes = new AttrDialog;
+    attributes = new AttrDialog();
     _paned.set_orientation(dir ? Gtk::ORIENTATION_VERTICAL : Gtk::ORIENTATION_HORIZONTAL);
+    _paned.check_resize();
     _paned.pack1(node_box, Gtk::SHRINK);
     /* attributes */
     Gtk::Box *actionsbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
     actionsbox->set_valign(Gtk::ALIGN_START);
     Gtk::Label *attrtogglerlabel = Gtk::manage(new Gtk::Label(_("Show attributes")));
     attrtogglerlabel->set_margin_right(5);
-    _attrswitch.property_active() = attrtoggler;
     _attrswitch.get_style_context()->add_class("inkswitch");
+    _attrswitch.get_style_context()->add_class("rawstyle");
+    _attrswitch.property_active() = attrtoggler;
     _attrswitch.property_active().signal_changed().connect(sigc::mem_fun(*this, &XmlTree::_attrtoggler));
     attrtogglerlabel->get_style_context()->add_class("inksmall");
-    _dirtogglerlabel = Gtk::manage(new Gtk::Label(_("Paned vertical")));
-    _direction.property_active() = dir;
-    _direction.property_active().signal_changed().connect(sigc::mem_fun(*this, &XmlTree::_toggleDirection));
-    _direction.get_style_context()->add_class("inkswitch");
-    _dirtogglerlabel->get_style_context()->add_class("inksmall");
-    actionsbox->pack_start(_attrswitch, Gtk::PACK_SHRINK);
     actionsbox->pack_start(*attrtogglerlabel, Gtk::PACK_SHRINK);
-    actionsbox->pack_start(_direction, Gtk::PACK_SHRINK);
-    actionsbox->pack_start(*_dirtogglerlabel, Gtk::PACK_SHRINK);
-
+    actionsbox->pack_start(_attrswitch, Gtk::PACK_SHRINK);
+    Gtk::RadioButton::Group group;
+    Gtk::RadioButton *_horizontal = Gtk::manage(new Gtk::RadioButton());
+    Gtk::RadioButton *_vertical = Gtk::manage(new Gtk::RadioButton());
+    _horizontal->set_image_from_icon_name(INKSCAPE_ICON("horizontal"));
+    _vertical->set_image_from_icon_name(INKSCAPE_ICON("vertical"));
+    _horizontal->set_group(group);
+    _vertical->set_group(group);
+    _vertical->set_active(dir);
+    _vertical->signal_toggled().connect(sigc::bind(sigc::mem_fun(*this, &XmlTree::_toggleDirection), _vertical));
+    _horizontal->property_draw_indicator() = false;
+    _vertical->property_draw_indicator() = false;
+    actionsbox->pack_end(*_horizontal, false, false, 0);
+    actionsbox->pack_end(*_vertical, false, false, 0);
     _paned.pack2(*attributes, true, true);
     contents->pack_start(*actionsbox, false, false, 0);
     /* Signal handlers */
@@ -213,22 +222,16 @@ XmlTree::XmlTree() :
     desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &XmlTree::set_tree_desktop) );
     deskTrack.connect(GTK_WIDGET(gobj()));
     int widthpos = _paned.property_max_position();
-    int panedpos = prefs->getInt("/dialogs/xml/panedpos", 130);
-
-    _paned.set_position(panedpos);
-    _paned.signal_button_release_event().connect(sigc::mem_fun(*this, &XmlTree::_resized),
-                                                 false); /* initial show/hide */
+    _paned.property_position().signal_changed().connect(sigc::mem_fun(*this, &XmlTree::_childresized));
+    _paned.signal_size_allocate().connect(sigc::mem_fun(*this, &XmlTree::_panedresized));
     set_name("XMLAndAttributesDialog");
     set_spacing(0);
     set_size_request(320, 260);
     show_all();
     _paned.property_wide_handle() = true;
-    if (!attrtoggler) {
-        attributes->hide();
-        _dirtogglerlabel->hide();
-        _direction.hide();
-        _paned.set_position(widthpos);
-    }
+    int panedpos = prefs->getInt("/dialogs/xml/panedpos", 130);
+    _paned.set_position(panedpos);
+    _resized();
     tree_reset_context();
 
     g_assert(desktop != nullptr);
@@ -236,20 +239,43 @@ XmlTree::XmlTree() :
 
 }
 
-bool XmlTree::_resized(GdkEventButton *event)
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setInt("/dialogs/xml/panedpos", _paned.get_position());
-    return true;
-}
+void XmlTree::_panedresized(Gtk::Allocation allocation) { _resized(); }
 
-void XmlTree::_toggleDirection()
+void XmlTree::_childresized() { _resized(); }
+
+void XmlTree::_resized()
 {
+    if (_updating) {
+        return;
+    }
+    _updating = true;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool dir = !prefs->getBool("/dialogs/xml/vertical", true);
+    int max = int(_paned.property_max_position() * 0.95);
+    int min = int(_paned.property_max_position() * 0.05);
+    bool attrtoggler = prefs->getBool("/dialogs/xml/attrtoggler", true);
+    if (attrtoggler && _paned.get_position() > max) {
+        _paned.property_position() = max;
+    }
+    if (attrtoggler && _paned.get_position() < min) {
+        _paned.property_position() = min;
+    }
+    if (!attrtoggler) {
+        attributes->hide();
+        _paned.property_position() = _paned.property_max_position();
+    }
+    prefs->setInt("/dialogs/xml/panedpos", _paned.get_position());
+    _updating = false;
+}
+
+void XmlTree::_toggleDirection(Gtk::RadioButton *vertical)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool dir = vertical->get_active();
     prefs->setBool("/dialogs/xml/vertical", dir);
     _paned.set_orientation(dir ? Gtk::ORIENTATION_VERTICAL : Gtk::ORIENTATION_HORIZONTAL);
-    int widthpos = _paned.property_max_position();
+    _paned.check_resize();
+    int widthpos = _paned.property_max_position() - _paned.property_min_position();
     prefs->setInt("/dialogs/xml/panedpos", widthpos / 2);
     _paned.set_position(widthpos / 2);
 }
@@ -261,15 +287,11 @@ void XmlTree::_attrtoggler()
     prefs->setBool("/dialogs/xml/attrtoggler", attrtoggler);
     if (attrtoggler) {
         attributes->show();
-        _dirtogglerlabel->show();
-        _direction.show();
-        int widthpos = _paned.property_max_position();
+        int widthpos = _paned.property_max_position() - _paned.property_min_position();
         prefs->setInt("/dialogs/xml/panedpos", widthpos / 2);
         _paned.set_position(widthpos / 2);
     } else {
         attributes->hide();
-        _dirtogglerlabel->hide();
-        _direction.hide();
         int widthpos = _paned.property_max_position();
         _paned.set_position(widthpos);
     }

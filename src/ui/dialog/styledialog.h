@@ -67,6 +67,10 @@ class StyleDialog : public Widget::Panel {
 
     static StyleDialog &getInstance() { return *new StyleDialog(); }
     void setCurrentSelector(Glib::ustring current_selector);
+    Gtk::TreeView *_current_css_tree;
+    Gtk::TreeViewColumn *_current_value_col;
+    Gtk::TreeModel::Path _current_path;
+    Glib::ustring fixCSSSelectors(Glib::ustring selector);
 
   private:
     // Monitor <style> element for changes.
@@ -119,21 +123,26 @@ class StyleDialog : public Widget::Panel {
     Glib::RefPtr<Gtk::Adjustment> _vadj;
     Gtk::Box _mainBox;
     Gtk::Box _styleBox;
-    Gtk::Switch *_all_css;
-
     // Reading and writing the style element.
     Inkscape::XML::Node *_getStyleTextNode();
     void _readStyleElement();
     Glib::RefPtr<Gtk::TreeModel> _selectTree(Glib::ustring selector);
-    void _writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::ustring selector);
+    void _writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::ustring selector,
+                            Glib::ustring new_selector = "");
+    void _selectorActivate(Glib::RefPtr<Gtk::TreeStore> store, Gtk::Label *selector, Gtk::Entry *selector_edit);
+    bool _selectorEditKeyPress(GdkEventKey *event, Glib::RefPtr<Gtk::TreeStore> store, Gtk::Label *selector,
+                               Gtk::Entry *selector_edit);
+    bool _selectorStartEdit(GdkEventButton *event, Gtk::Label *selector, Gtk::Entry *selector_edit);
     void _activeToggled(const Glib::ustring &path, Glib::RefPtr<Gtk::TreeStore> store);
     bool _addRow(GdkEventButton *evt, Glib::RefPtr<Gtk::TreeStore> store, Gtk::TreeView *css_tree,
                  Glib::ustring selector, gint pos);
     void _onPropDelete(Glib::ustring path, Glib::RefPtr<Gtk::TreeStore> store);
     void _nameEdited(const Glib::ustring &path, const Glib::ustring &name, Glib::RefPtr<Gtk::TreeStore> store,
                      Gtk::TreeView *css_tree);
-    bool _onNameKeyReleased(GdkEventKey *event, Gtk::CellEditable *cell);
-    bool _onValueKeyReleased(GdkEventKey *event, Gtk::CellEditable *cell);
+    bool _onNameKeyReleased(GdkEventKey *event, Gtk::Entry *entry);
+    bool _onValueKeyReleased(GdkEventKey *event, Gtk::Entry *entry);
+    bool _onNameKeyPressed(GdkEventKey *event, Gtk::Entry *entry);
+    bool _onValueKeyPressed(GdkEventKey *event, Gtk::Entry *entry);
     void _onLinkObj(Glib::ustring path, Glib::RefPtr<Gtk::TreeStore> store);
     void _valueEdited(const Glib::ustring &path, const Glib::ustring &value, Glib::RefPtr<Gtk::TreeStore> store);
     void _startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &path);

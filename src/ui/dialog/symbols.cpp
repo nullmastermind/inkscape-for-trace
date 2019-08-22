@@ -207,7 +207,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   overlay_opacity = new Gtk::Image();
   overlay_opacity->set_halign(Gtk::ALIGN_START);
   overlay_opacity->set_valign(Gtk::ALIGN_START);
-  overlay_opacity->get_style_context()->add_class("rawimage");
+  overlay_opacity->get_style_context()->add_class("rawstyle");
 
   // No results
   overlay_icon = sp_get_icon_image("searching", Gtk::ICON_SIZE_DIALOG);
