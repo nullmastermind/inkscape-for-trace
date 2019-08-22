@@ -163,6 +163,7 @@ AttrDialog::AttrDialog()
     _popover->set_position(Gtk::PositionType::POS_BOTTOM);
     _popover->signal_closed().connect(sigc::mem_fun(*this, &AttrDialog::popClosed));
     _popover->get_style_context()->add_class("inverted");
+    _popover->get_style_context()->add_class("attrpop");
     attr_reset_context(0);
     _getContents()->pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
     setDesktop(getDesktop());

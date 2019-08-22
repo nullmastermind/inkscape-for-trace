@@ -97,9 +97,9 @@ image {
     color: @theme_bg_color;
     background-color: @theme_fg_color;
     background-image: image(@theme_fg_color);
+    caret-color: @theme_bg_color;
+    -gtk-secondary-caret-color: @theme_fg_color;
 }
-
-
 
 .inverted :not(menuitem):not(.rawstyle):not(overshoot):not(undershoot):not(selection),
 .bright .forcedark :not(menuitem):not(.rawstyle):not(overshoot):not(undershoot):not(selection),
@@ -121,6 +121,10 @@ image {
     background-color: @theme_text_color;
     background-image: image(@theme_text_color);
     border-radius: 4px;
+}
+
+.attrpop textview {
+    font-size: 13px;
 }
 
 
