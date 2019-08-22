@@ -379,7 +379,6 @@ void SelectorsDialog::_showWidgets()
     int panedpos = prefs->getInt("/dialogs/selectors/panedpos", 130);
 
     _paned.set_position(panedpos);
-    _paned.property_wide_handle() = true;
     _paned.property_position().signal_changed().connect(sigc::mem_fun(*this, &SelectorsDialog::_childresized));
     _paned.signal_size_allocate().connect(sigc::mem_fun(*this, &SelectorsDialog::_panedresized));
     set_size_request(320, 260);

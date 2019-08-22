@@ -228,7 +228,6 @@ XmlTree::XmlTree()
     set_spacing(0);
     set_size_request(320, 260);
     show_all();
-    _paned.property_wide_handle() = true;
     int panedpos = prefs->getInt("/dialogs/xml/panedpos", 130);
     _paned.set_position(panedpos);
     _resized();

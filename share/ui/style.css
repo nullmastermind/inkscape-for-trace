@@ -130,7 +130,7 @@ image {
 
 /* 
 *to get system default colors
-* with Gdk::RGBA success =_symbolic_error_color.get_style_context()->get_color();
+* with Gdk::RGBA success =_symbolic_error_color.get_stseparatole_context()->get_color();
 * _symbolic_error_color has one of this calsses applied
 */
 
@@ -283,12 +283,29 @@ spinbutton undershoot {
 
 .inkswitch image {
     color: transparent;
+    background-color: transparent;
+    background-image: image(transparent);
+    -gtk-icon-style:symbolic;
 }
 
 .inkswitch {
     margin: 2px;
     padding: 0;
     font-size: 8px;
+}
+
+#SelectorsAndStyleDialog paned > separator,
+#XMLAndAttributesDialog paned > separator{
+    background-color: alpha(@theme_fg_color,0.35);
+    background-image: none;
+    margin:5px;
+    padding:1px;
+}
+
+#SelectorsAndStyleDialog paned > separator:hover,
+#XMLAndAttributesDialog paned > separator:hover {
+    padding:3px;
+    margin:3px;
 }
 
 #XMLAndAttributesDialog .toggle,
