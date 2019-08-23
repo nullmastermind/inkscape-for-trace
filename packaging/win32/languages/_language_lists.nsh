@@ -24,6 +24,7 @@
     !insertmacro ${_MACRONAME} German       1031
     !insertmacro ${_MACRONAME} Greek        1032
     !insertmacro ${_MACRONAME} Hebrew       1037
+    !insertmacro ${_MACRONAME} Hungarian    1038
     !insertmacro ${_MACRONAME} Icelandic    1039
     !insertmacro ${_MACRONAME} Indonesian   1057
     !insertmacro ${_MACRONAME} Italian      1040
