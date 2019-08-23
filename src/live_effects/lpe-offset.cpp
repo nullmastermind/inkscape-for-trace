@@ -99,14 +99,7 @@ LPEOffset::LPEOffset(LivePathEffectObject *lpeobject) :
 LPEOffset::~LPEOffset()
 = default;
 
-enum fill_type
-{
-  fill_oddEven   = 0,
-  fill_nonZero   = 1,
-  fill_positive  = 2,
-  fill_justDont = 3
-};
-typedef enum fill_type FillRuleFlatten;
+typedef FillRule FillRuleFlatten;
 
 static void
 sp_flatten(Geom::PathVector &pathvector, FillRuleFlatten fillkind)
@@ -287,12 +280,8 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
     const gchar *val;
     css = sp_repr_css_attr (item->getRepr() , "style");
     val = sp_repr_css_property (css, "fill-rule", nullptr);
-    FillRuleFlatten fillrule;
-    if (val && strcmp (val, "nonzero") == 0)
-    {
-        fillrule = fill_nonZero;
-    }
-    else if (val && strcmp (val, "evenodd") == 0)
+    FillRuleFlatten fillrule = fill_nonZero;
+    if (val && strcmp (val, "evenodd") == 0)
     {
         fillrule = fill_oddEven;
     }

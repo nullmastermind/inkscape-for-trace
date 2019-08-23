@@ -930,26 +930,12 @@ Gtk::Dialog * Export::create_progress_dialog (Glib::ustring progress_text) {
 // FIXME: Some lib function should be available to do this ...
 Glib::ustring Export::filename_add_extension (Glib::ustring filename, Glib::ustring extension)
 {
-    Glib::ustring::size_type dot;
-    Glib::ustring::size_type dot_ext;
+    auto pos = int(filename.size()) - int(extension.size());
+    if (pos > 0 && filename[pos - 1] == '.' && filename.substr(pos).lowercase() == extension.lowercase()) {
+        return filename;
+    }
 
-    dot = filename.find_last_of(".");
-    dot_ext = filename.lowercase().rfind("." + extension.lowercase());
-    if ( dot == std::string::npos )
-    {
-        return filename = filename + "." + extension;
-    }
-    else
-    {
-        if (dot == dot_ext)
-        {
-            return filename = filename;
-        }
-        else
-        {
-            return filename = filename + "." + extension;
-        }
-    }
+    return filename + "." + extension;
 }
 
 Glib::ustring Export::absolutize_path_from_document_location (SPDocument *doc, const Glib::ustring &filename)

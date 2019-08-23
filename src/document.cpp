@@ -1344,23 +1344,6 @@ static std::vector<SPItem*> &find_items_in_area(std::vector<SPItem*> &s,
     return s;
 }
 
-/**
-Returns true if an item is among the descendants of group (recursively).
- */
-static bool item_is_in_group(SPItem *item, SPGroup *group)
-{
-    for (auto& o: group->children) {
-        if ( SP_IS_ITEM(&o) ) {
-            if (SP_ITEM(&o) == item) {
-                return true;
-            } else if (SP_IS_GROUP(&o) && item_is_in_group(item, SP_GROUP(&o))) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
 SPItem *SPDocument::getItemFromListAtPointBottom(unsigned int dkey, SPGroup *group, std::vector<SPItem*> const &list,Geom::Point const &p, bool take_insensitive)
 {
     g_return_val_if_fail(group, NULL);

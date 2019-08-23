@@ -36,8 +36,6 @@ static void sp_ctrlrect_destroy(SPCanvasItem *object);
 static void sp_ctrlrect_update(SPCanvasItem *item, Geom::Affine const &affine, unsigned int flags);
 static void sp_ctrlrect_render(SPCanvasItem *item, SPCanvasBuf *buf);
 
-static const guint DASH_LENGTH = 4;
-
 G_DEFINE_TYPE(CtrlRect, sp_ctrlrect, SP_TYPE_CANVAS_ITEM);
 
 static void sp_ctrlrect_class_init(CtrlRectClass *c)

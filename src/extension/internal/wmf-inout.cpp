@@ -1100,12 +1100,12 @@ Wmf::select_brush(PWMF_CALLBACK_DATA d, int index)
         uint32_t    tidx;
         uint16_t    Style;
         uint16_t    cUsage;
-        const char *Bm16h;  // Pointer to Bitmap16 header (px follows)
-        const char *dib;    // Pointer to DIB
+        const char *Bm16h = nullptr;  // Pointer to Bitmap16 header (px follows)
+        const char *dib = nullptr;    // Pointer to DIB
         (void) U_WMRDIBCREATEPATTERNBRUSH_get(record, &Style, &cUsage, &Bm16h, &dib);
         if(dib || Bm16h){
             if(dib){ tidx = add_dib_image(d, dib, cUsage); }
-            else if(Bm16h){
+            else {
                 U_BITMAP16  Bm16;
                 const char *px;
                 memcpy(&Bm16, Bm16h, U_SIZE_BITMAP16);

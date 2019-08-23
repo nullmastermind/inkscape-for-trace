@@ -46,7 +46,7 @@ public:
         : name(n), value(std::move(v)) {}
         PropertyPair(char const *n, char const *v)
         : name(n),
-          value(std::move(std::make_shared<std::string>(v))) {}
+          value(std::make_shared<std::string>(v)) {}
 
         char const *name;
         std::shared_ptr<std::string> value;

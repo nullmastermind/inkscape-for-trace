@@ -60,7 +60,7 @@ std::shared_ptr<std::string> stringify_node(Node const &node) {
     }
     std::shared_ptr<std::string> result = std::make_shared<std::string>(string);
     g_free(string);
-    return std::move(result);
+    return result;
 }
 
 typedef Debug::SimpleEvent<Debug::Event::XML> DebugXML;

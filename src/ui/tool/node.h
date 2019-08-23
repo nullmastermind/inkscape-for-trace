@@ -392,10 +392,10 @@ public:
     iterator before(double t, double *fracpart = nullptr);
     iterator before(Geom::PathTime const &pvp);
     const_iterator before(double t, double *fracpart = nullptr) const {
-        return const_iterator(before(t, fracpart)._node);
+        return const_cast<NodeList *>(this)->before(t, fracpart)._node;
     }
     const_iterator before(Geom::PathTime const &pvp) const {
-        return const_iterator(before(pvp)._node);
+        return const_cast<NodeList *>(this)->before(pvp)._node;
     }
 
     // list operations

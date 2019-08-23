@@ -28,7 +28,7 @@ std::shared_ptr<std::string> timestamp() {
     gchar *value = g_strdup_printf( "%d.%06d", static_cast<gint>(timestamp.tv_sec), static_cast<gint>(timestamp.tv_usec) );
     std::shared_ptr<std::string> result = std::make_shared<std::string>(value);
     g_free(value);
-    return std::move(result);
+    return result;
 }
 
 }

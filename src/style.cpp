@@ -1222,9 +1222,6 @@ sp_repr_sel_eng()
     return ret;
 }
 
-/** Indexed by SP_CSS_FONT_SIZE_blah.   These seem a bit small */
-static float const font_size_table[] = {6.0, 8.0, 10.0, 12.0, 14.0, 18.0, 24.0};
-
 // The following functions should be incorporated into SPIPaint. FIXME
 // Called in: style.cpp, style-internal.cpp
 void

@@ -66,12 +66,6 @@ guint32 const GR_KNOT_COLOR_SELECTED   = 0x0000ff00;
 guint32 const GR_KNOT_COLOR_HIGHLIGHT  = 0xffffff00;
 guint32 const GR_KNOT_COLOR_MESHCORNER = 0xbfbfbf00;
 
-guint32 const GR_LINE_COLOR_FILL       = 0x0000ff7f;
-guint32 const GR_LINE_COLOR_STROKE     = 0x9999007f;
-
-// screen pixels between knots when they snap:
-#define SNAP_DIST 5
-
 // absolute distance between gradient points for them to become a single dragger when the drag is created:
 #define MERGE_DIST 0.1
 

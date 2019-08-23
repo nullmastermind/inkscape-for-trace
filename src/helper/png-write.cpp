@@ -51,8 +51,6 @@
  * working PNG reader/writer, see pngtest.c, included in this distribution.
  */
 
-static unsigned int const MAX_STRIPE_SIZE = 1024*1024;
-
 struct SPEBP {
     unsigned long int width, height, sheight;
     guint32 background;

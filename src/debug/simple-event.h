@@ -48,7 +48,7 @@ protected:
         _properties.push_back(PropertyPair(name, std::move(value)));
     }
     void _addProperty(char const *name, char const *value) {
-        _addProperty(name, std::move(std::make_shared<std::string>(value)));
+        _addProperty(name, std::make_shared<std::string>(value));
     }
     void _addProperty(char const *name, long value) {
         _addFormattedProperty(name, "%ld", value);

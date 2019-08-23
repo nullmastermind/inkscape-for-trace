@@ -409,7 +409,6 @@ void SPILength::setDouble(double v)
 // Generate a string and allow emove name for parsing dasharray, etc.
 const Glib::ustring SPILength::toString(bool wname) const
 {
-Inkscape:
     CSSOStringStream os;
     if (wname) {
         os << name << ":";

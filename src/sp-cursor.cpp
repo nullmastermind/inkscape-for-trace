@@ -58,7 +58,7 @@ struct RGBA {
 GdkCursor *sp_cursor_from_xpm(char const *const *xpm, guint32 fill, guint32 stroke)
 {
     GdkPixbuf *pixbuf;
-    GdkCursor *cursor;
+    GdkCursor *cursor = nullptr;
     GdkDisplay *display = gdk_display_get_default();
 
     int height = 0;
