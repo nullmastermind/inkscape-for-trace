@@ -1,7 +1,6 @@
 ### Hebrew (he) translations for language names
 # This file has been automatically created by '_language_lists.py', do not edit it manually!
 # Strings that should be translated are in 'Hebrew.nsh'
-${LangFileString} lng_am "אמהרית (am)"
 ${LangFileString} lng_ar "ערבית (ar)"
 ${LangFileString} lng_as "Assamese (as)"
 ${LangFileString} lng_az "אזרבייג׳נית (az)"

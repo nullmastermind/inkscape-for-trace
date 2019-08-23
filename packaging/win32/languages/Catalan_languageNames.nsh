@@ -1,7 +1,6 @@
 ### Catalan (ca) translations for language names
 # This file has been automatically created by '_language_lists.py', do not edit it manually!
 # Strings that should be translated are in 'Catalan.nsh'
-${LangFileString} lng_am "Amhàric (am)"
 ${LangFileString} lng_ar "Àrab (ar)"
 ${LangFileString} lng_as "Assamès (as)"
 ${LangFileString} lng_az "Àzeri (az)"
@@ -12,7 +11,7 @@ ${LangFileString} lng_bn_BD "Bengalí/Bangladesh (bn_BD)"
 ${LangFileString} lng_br "Bretó (br)"
 ${LangFileString} lng_brx "Bodo (brx)"
 ${LangFileString} lng_ca "Català (ca)"
-${LangFileString} lng_ca@valencia "Català de València (ca@valencia)"
+${LangFileString} lng_ca@valencia "Català (valencià) (ca@valencia)"
 ${LangFileString} lng_cs "Txec (cs)"
 ${LangFileString} lng_da "Danès (da)"
 ${LangFileString} lng_de "Alemany (de)"

@@ -1,7 +1,6 @@
 ### Greek (el) translations for language names
 # This file has been automatically created by '_language_lists.py', do not edit it manually!
 # Strings that should be translated are in 'Greek.nsh'
-${LangFileString} lng_am "Αμχαρικά (am)"
 ${LangFileString} lng_ar "Αραβικά (ar)"
 ${LangFileString} lng_as "Ασαμικά (as)"
 ${LangFileString} lng_az "Αζέρικα (az)"

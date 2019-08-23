@@ -1,7 +1,6 @@
 ### Korean (ko) translations for language names
 # This file has been automatically created by '_language_lists.py', do not edit it manually!
 # Strings that should be translated are in 'Korean.nsh'
-${LangFileString} lng_am "에티오피아 어 (am)"
 ${LangFileString} lng_ar "아라비아 어 (ar)"
 ${LangFileString} lng_as "Assamese (as)"
 ${LangFileString} lng_az "아제르바이잔 어 (az)"

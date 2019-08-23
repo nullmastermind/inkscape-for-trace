@@ -1,7 +1,6 @@
 ### Portuguese (pt) translations for language names
 # This file has been automatically created by '_language_lists.py', do not edit it manually!
 # Strings that should be translated are in 'Portuguese.nsh'
-${LangFileString} lng_am "Amárico (am)"
 ${LangFileString} lng_ar "Arábico (ar)"
 ${LangFileString} lng_as "Assamês (as)"
 ${LangFileString} lng_az "Azerbaijano (az)"

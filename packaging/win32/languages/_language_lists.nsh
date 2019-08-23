@@ -50,7 +50,6 @@
 #    - specify a language code (e.g. "am") that has a matching PO file (e.g. "am.po")
 #      in the /po folder in the root of Inkscape source directory
 !macro INKSCAPE_TRANSLATIONS _MACRONAME
-    !insertmacro ${_MACRONAME} Amharic             am
     !insertmacro ${_MACRONAME} Arabic              ar
     !insertmacro ${_MACRONAME} Assamese            as
     !insertmacro ${_MACRONAME} Azerbaijani         az

@@ -1,7 +1,6 @@
 ### Ukrainian (uk) translations for language names
 # This file has been automatically created by '_language_lists.py', do not edit it manually!
 # Strings that should be translated are in 'Ukrainian.nsh'
-${LangFileString} lng_am "Амхарська (am)"
 ${LangFileString} lng_ar "Арабська (ar)"
 ${LangFileString} lng_as "Ассамська (as)"
 ${LangFileString} lng_az "Азербайджанська (az)"

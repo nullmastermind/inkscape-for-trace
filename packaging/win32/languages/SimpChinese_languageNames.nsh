@@ -1,7 +1,6 @@
 ### Chinese/China (zh_CN) translations for language names
 # This file has been automatically created by '_language_lists.py', do not edit it manually!
 # Strings that should be translated are in 'SimpChinese.nsh'
-${LangFileString} lng_am "阿姆哈拉语(am)"
 ${LangFileString} lng_ar "阿拉伯语(ar)"
 ${LangFileString} lng_as "阿萨姆语(as)"
 ${LangFileString} lng_az "阿塞拜疆语(az)"

@@ -1,7 +1,6 @@
 ### Danish (da) translations for language names
 # This file has been automatically created by '_language_lists.py', do not edit it manually!
 # Strings that should be translated are in 'Danish.nsh'
-${LangFileString} lng_am "Amharic (am)"
 ${LangFileString} lng_ar "Arabic (ar)"
 ${LangFileString} lng_as "Assamese (as)"
 ${LangFileString} lng_az "Azerbaijani (az)"

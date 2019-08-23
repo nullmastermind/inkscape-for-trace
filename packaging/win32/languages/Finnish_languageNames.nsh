@@ -1,7 +1,6 @@
 ### Finnish (fi) translations for language names
 # This file has been automatically created by '_language_lists.py', do not edit it manually!
 # Strings that should be translated are in 'Finnish.nsh'
-${LangFileString} lng_am "Amharic (am)"
 ${LangFileString} lng_ar "Arabia (ar)"
 ${LangFileString} lng_as "Assamese (as)"
 ${LangFileString} lng_az "Azerbaijani (az)"

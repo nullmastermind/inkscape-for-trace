@@ -1,7 +1,6 @@
 ### Italian (it) translations for language names
 # This file has been automatically created by '_language_lists.py', do not edit it manually!
 # Strings that should be translated are in 'Italian.nsh'
-${LangFileString} lng_am "Amarico (am)"
 ${LangFileString} lng_ar "Arabo (ar)"
 ${LangFileString} lng_as "Assamese (as)"
 ${LangFileString} lng_az "Azero (az)"

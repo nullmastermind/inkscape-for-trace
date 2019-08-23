@@ -1,7 +1,6 @@
 ### Galician (gl) translations for language names
 # This file has been automatically created by '_language_lists.py', do not edit it manually!
 # Strings that should be translated are in 'Galician.nsh'
-${LangFileString} lng_am "Amharic (am)"
 ${LangFileString} lng_ar "Árabe (ar)"
 ${LangFileString} lng_as "Assamese (as)"
 ${LangFileString} lng_az "Acerí (az)"

@@ -1,7 +1,6 @@
 ### Japanese (ja) translations for language names
 # This file has been automatically created by '_language_lists.py', do not edit it manually!
 # Strings that should be translated are in 'Japanese.nsh'
-${LangFileString} lng_am "アムハラ語 (am)"
 ${LangFileString} lng_ar "アラビア語 (ar)"
 ${LangFileString} lng_as "Assamese (as)"
 ${LangFileString} lng_az "アゼルバイジャン語 (az)"

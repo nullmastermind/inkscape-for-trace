@@ -1,7 +1,6 @@
 ### Spanish (es) translations for language names
 # This file has been automatically created by '_language_lists.py', do not edit it manually!
 # Strings that should be translated are in 'Spanish.nsh'
-${LangFileString} lng_am "Amárico (am)"
 ${LangFileString} lng_ar "Árabe (ar)"
 ${LangFileString} lng_as "Asamés (as)"
 ${LangFileString} lng_az "Azerbayano (az)"

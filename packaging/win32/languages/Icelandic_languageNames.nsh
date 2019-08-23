@@ -1,7 +1,6 @@
 ### Icelandic (is) translations for language names
 # This file has been automatically created by '_language_lists.py', do not edit it manually!
 # Strings that should be translated are in 'Icelandic.nsh'
-${LangFileString} lng_am "Amharíska (am)"
 ${LangFileString} lng_ar "Arabíska (ar)"
 ${LangFileString} lng_as "Assamíska (as)"
 ${LangFileString} lng_az "Azerbaijanska (az)"
