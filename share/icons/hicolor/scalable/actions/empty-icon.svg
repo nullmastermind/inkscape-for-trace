@@ -7,17 +7,16 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:version="1.0alpha2 (997e2b2816, 2019-07-05, custom)"
-   sodipodi:docname="empty-symbolic.svg"
+   inkscape:version="1.0alpha2 (747d63c5bf, 2019-08-27, custom)"
+   sodipodi:docname="empty-icon.svg"
    viewBox="0 0 16 16"
    height="16"
    width="16"
    id="svg1"
    version="1.1">
-
-  
-  
-<metadata
+  <style
+     id="style1643"></style>
+  <metadata
      id="metadata1181">
     <rdf:RDF>
       <cc:Work
@@ -39,9 +38,9 @@
      inkscape:window-x="0"
      inkscape:window-height="1376"
      inkscape:window-width="2560"
-     inkscape:cy="-8.4509631"
-     inkscape:cx="28.612479"
-     inkscape:zoom="12.300793"
+     inkscape:cy="1.2622511"
+     inkscape:cx="17.275235"
+     inkscape:zoom="22.4"
      showgrid="true"
      id="namedview"
      guidetolerance="10"
@@ -52,7 +51,6 @@
        type="xygrid" />
   </sodipodi:namedview>
   <g
-     id="empty"
-     inkscape:label="00277"
-     transform="matrix(0.666667,0,0,0.666666,-696.00001,-446.9076)" />
+     id="empty-icon">
+  </g>
 </svg>

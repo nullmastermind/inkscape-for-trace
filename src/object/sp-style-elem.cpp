@@ -468,6 +468,9 @@ void SPStyleElem::read_content() {
 
     //XML Tree being used directly here while it shouldn't be.
     Glib::ustring const text = concat_children(*getRepr());
+    if (!(text.find_first_not_of(" \t\r\n") != std::string::npos)) {
+        return;
+    }
     CRStatus const parse_status =
         cr_parser_parse_buf (parser, reinterpret_cast<const guchar *>(text.c_str()), text.bytes(), CR_UTF_8);
 
@@ -491,10 +494,11 @@ void SPStyleElem::read_content() {
 
     cr_parser_destroy(parser);
     delete parse_tmp;
-
-    //Record each css statement as an SPStyle
-    gint count = cr_stylesheet_nr_rules(style_sheet);
-
+    gint count = 0;
+    if (style_sheet) {
+        // Record each css statement as an SPStyle
+        count = cr_stylesheet_nr_rules(style_sheet);
+    }
     // Clean out any previous styles
     for (auto& style:styles)
         sp_style_unref(style);
@@ -506,7 +510,6 @@ void SPStyleElem::read_content() {
         item->mergeStatement(statement);
         styles.push_back(item);
     }
-
     // If style sheet has changed, we need to cascade the entire object tree, top down
     // Get root, read style, loop through children
     update_style_recursively( (SPObject *)document->getRoot() );

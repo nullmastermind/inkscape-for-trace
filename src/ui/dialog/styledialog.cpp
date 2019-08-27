@@ -534,16 +534,17 @@ void StyleDialog::_readStyleElement()
     col = css_tree->get_column(addCol);
     if (col) {
         col->add_attribute(value->property_text(), _mColumns._colValue);
+        col->set_expand(true);
         col->add_attribute(value->property_strikethrough(), _mColumns._colStrike);
     }
     Inkscape::UI::Widget::IconRenderer *urlRenderer = manage(new Inkscape::UI::Widget::IconRenderer());
-    urlRenderer->add_icon("empty");
+    urlRenderer->add_icon("empty-icon");
     urlRenderer->add_icon("edit-redo");
     int urlCol = css_tree->append_column("", *urlRenderer) - 1;
     Gtk::TreeViewColumn *urlcol = css_tree->get_column(urlCol);
     if (urlcol) {
-        urlRenderer->signal_activated().connect(
-            sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_onLinkObj), store));
+        urlcol->set_min_width(40);
+        urlRenderer->signal_activated().connect(sigc::bind(sigc::mem_fun(*this, &StyleDialog::_onLinkObj), store));
         urlcol->add_attribute(urlRenderer->property_icon(), _mColumns._colLinked);
     }
     std::map<Glib::ustring, Glib::ustring> attr_prop;
@@ -638,12 +639,15 @@ void StyleDialog::_readStyleElement()
         css_tree->get_style_context()->add_class("style_sheet");
         Glib::RefPtr<Gtk::TreeStore> store = Gtk::TreeStore::create(_mColumns);
         css_tree->set_model(store);
-        css_selector_event_box->signal_button_release_event().connect(
+        // I comment this feature, is working but seems obscure to undertand
+        // the user can edit selector name in current implementation
+        /* css_selector_event_box->signal_button_release_event().connect(
             sigc::bind(sigc::mem_fun(*this, &StyleDialog::_selectorStartEdit), css_selector, css_edit_selector));
         css_edit_selector->signal_key_press_event().connect(sigc::bind(
             sigc::mem_fun(*this, &StyleDialog::_selectorEditKeyPress), store, css_selector, css_edit_selector));
         css_edit_selector->signal_activate().connect(
             sigc::bind(sigc::mem_fun(*this, &StyleDialog::_selectorActivate), store, css_selector, css_edit_selector));
+         */
         Inkscape::UI::Widget::IconRenderer *addRenderer = manage(new Inkscape::UI::Widget::IconRenderer());
         addRenderer->add_icon("edit-delete");
         int addCol = css_tree->append_column("Delete row", *addRenderer) - 1;
@@ -670,6 +674,7 @@ void StyleDialog::_readStyleElement()
         col = css_tree->get_column(addCol);
         if (col) {
             col->set_resizable(true);
+            col->set_expand(true);
             col->add_attribute(label->property_text(), _mColumns._colName);
         }
         Gtk::CellRendererText *value = Gtk::manage(new Gtk::CellRendererText());
@@ -804,6 +809,7 @@ void StyleDialog::_readStyleElement()
                             col = css_tree->get_column(addCol);
                             if (col) {
                                 col->set_resizable(true);
+                                col->set_expand(true);
                                 col->add_attribute(label->property_text(), _mColumns._colName);
                             }
                             Gtk::CellRendererText *value = Gtk::manage(new Gtk::CellRendererText());

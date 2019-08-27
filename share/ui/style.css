@@ -294,20 +294,6 @@ spinbutton undershoot {
     font-size: 8px;
 }
 
-#SelectorsAndStyleDialog paned > separator,
-#XMLAndAttributesDialog paned > separator{
-    background-color: mix(@theme_fg_color, @theme_bg_color, 0.6);
-    background-image: none;
-    margin:5px;
-    padding:1px;
-    border-radius:4px;
-}
-
-#SelectorsAndStyleDialog paned > separator:hover,
-#XMLAndAttributesDialog paned > separator:hover {
-    padding:3px;
-    margin:3px;
-}
 
 #XMLAndAttributesDialog .toggle,
 #SelectorsAndStyleDialog .toggle {

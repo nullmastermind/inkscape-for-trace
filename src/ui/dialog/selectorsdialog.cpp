@@ -260,7 +260,7 @@ SelectorsDialog::SelectorsDialog()
     _store = TreeStore::create(this);
     _treeView.set_model(_store);
 
-    _treeView.set_headers_visible(true);
+    _treeView.set_headers_visible(false);
     _treeView.enable_model_drag_source();
     _treeView.enable_model_drag_dest( Gdk::ACTION_MOVE );
     int addCol = _treeView.append_column("", *addRenderer) - 1;
@@ -372,15 +372,17 @@ void SelectorsDialog::_showWidgets()
     _style_dialog->set_name("StyleDialog");
     _paned.pack1(*_style_dialog, Gtk::SHRINK);
     _paned.pack2(_selectors_box, true, true);
+    _paned.set_wide_handle(true);
     _getContents()->pack_start(_paned, Gtk::PACK_EXPAND_WIDGET);
     _getContents()->pack_start(_button_box, false, false, 0);
     show_all();
-    int widthpos = _paned.property_max_position();
-    int panedpos = prefs->getInt("/dialogs/selectors/panedpos", 130);
-
-    _paned.set_position(panedpos);
+    int widthpos = _paned.property_max_position() - _paned.property_min_position();
+    int panedpos = prefs->getInt("/dialogs/selectors/panedpos", widthpos / 2);
     _paned.property_position().signal_changed().connect(sigc::mem_fun(*this, &SelectorsDialog::_childresized));
     _paned.signal_size_allocate().connect(sigc::mem_fun(*this, &SelectorsDialog::_panedresized));
+    _updating = true;
+    _paned.property_position() = panedpos;
+    _updating = false;
     set_size_request(320, 260);
     set_name("SelectorsAndStyleDialog");
 }
@@ -409,13 +411,13 @@ void SelectorsDialog::_resized()
     bool dir = !prefs->getBool("/dialogs/selectors/vertical", true);
     int max = int(_paned.property_max_position() * 0.95);
     int min = int(_paned.property_max_position() * 0.05);
-    if (_paned.get_position() > max) {
+    if (_paned.property_position() > max) {
         _paned.property_position() = max;
     }
-    if (_paned.get_position() < min) {
+    if (_paned.property_position() < min) {
         _paned.property_position() = min;
     }
-    prefs->setInt("/dialogs/selectors/panedpos", _paned.get_position());
+    prefs->setInt("/dialogs/selectors/panedpos", _paned.property_position());
     _updating = false;
 }
 
@@ -429,7 +431,7 @@ void SelectorsDialog::_toggleDirection(Gtk::RadioButton *vertical)
     _paned.check_resize();
     int widthpos = _paned.property_max_position() - _paned.property_min_position();
     prefs->setInt("/dialogs/selectors/panedpos", widthpos / 2);
-    _paned.set_position(widthpos / 2);
+    _paned.property_position() = widthpos / 2;
 }
 
 /**
@@ -543,6 +545,7 @@ void SelectorsDialog::_readStyleElement()
         _updating = false;
         return;
     }
+    _treeView.show_all();
     std::vector<std::pair<Glib::ustring, bool>> expanderstatus;
     for (unsigned i = 0; i < tokens.size() - 1; i += 2) {
         Glib::ustring selector = tokens[i];
@@ -557,6 +560,7 @@ void SelectorsDialog::_readStyleElement()
     }
     _store->clear();
     bool rewrite = false;
+
     for (unsigned i = 0; i < tokens.size()-1; i += 2) {
 
         Glib::ustring selector = tokens[i];

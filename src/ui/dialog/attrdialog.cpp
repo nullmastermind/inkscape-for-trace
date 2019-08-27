@@ -15,7 +15,6 @@
 #include "verbs.h"
 #include "selection.h"
 #include "document-undo.h"
-
 #include "message-context.h"
 #include "message-stack.h"
 #include "style.h"
@@ -58,6 +57,7 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+static gboolean key_callback(GtkWidget *widget, GdkEventKey *event, AttrDialog *attrdialog);
 /**
  * Constructor
  * A treeview whose each row corresponds to an XML attribute of a selected node
@@ -91,7 +91,6 @@ AttrDialog::AttrDialog()
         col->set_widget(*add_icon);
         add_icon->set_tooltip_text(_("Add a new attribute"));
         add_icon->show();
-        // This gets the GtkButton inside the GtkBox, inside the GtkAlignment, inside the GtkImage icon.
         auto button = add_icon->get_parent()->get_parent()->get_parent();
         // Assign the button event so that create happens BEFORE delete. If this code
         // isn't in this exact way, the onAttrDelete is called when the header lines are pressed.
@@ -152,22 +151,55 @@ AttrDialog::AttrDialog()
     _scrolled_text_view.set_max_content_height(450);
     _scrolled_text_view.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     _scrolled_text_view.set_propagate_natural_width(true);
-    _update = Gtk::manage(new Gtk::Button(_("Update")));
-    _update->signal_clicked().connect(sigc::mem_fun(*this, &AttrDialog::valueEditedPop));
-    hbox->pack_end(*_update, Gtk::PACK_EXPAND_WIDGET, 3);
+    Gtk::Label *helpreturn = Gtk::manage(new Gtk::Label(_("Shift+Return new line")));
+    helpreturn->get_style_context()->add_class("inksmall");
+    Gtk::Button *apply = Gtk::manage(new Gtk::Button());
+    Gtk::Image *icon = Gtk::manage(sp_get_icon_image("on", 26));
+    apply->set_relief(Gtk::RELIEF_NONE);
+    icon->show();
+    apply->add(*icon);
+    apply->signal_clicked().connect(sigc::mem_fun(*this, &AttrDialog::valueEditedPop));
+    Gtk::Button *cancel = Gtk::manage(new Gtk::Button());
+    icon = Gtk::manage(sp_get_icon_image("off", 26));
+    cancel->set_relief(Gtk::RELIEF_NONE);
+    icon->show();
+    cancel->add(*icon);
+    cancel->signal_clicked().connect(sigc::mem_fun(*this, &AttrDialog::valueCanceledPop));
+    hbox->pack_end(*apply, Gtk::PACK_SHRINK, 3);
+    hbox->pack_end(*cancel, Gtk::PACK_SHRINK, 3);
+    hbox->pack_end(*helpreturn, Gtk::PACK_SHRINK, 3);
     vbox->pack_start(_scrolled_text_view, Gtk::PACK_EXPAND_WIDGET, 3);
     vbox->pack_start(*hbox, Gtk::PACK_EXPAND_WIDGET, 3);
     _popover->add(*vbox);
-    _popover->hide();
+    _popover->show();
     _popover->set_relative_to(_treeView);
     _popover->set_position(Gtk::PositionType::POS_BOTTOM);
     _popover->signal_closed().connect(sigc::mem_fun(*this, &AttrDialog::popClosed));
-    _popover->get_style_context()->add_class("inverted");
     _popover->get_style_context()->add_class("attrpop");
     attr_reset_context(0);
     _getContents()->pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
     setDesktop(getDesktop());
+    // I couldent get the signal go well not using C way signals
+    g_signal_connect(GTK_WIDGET(_popover->gobj()), "key-press-event", G_CALLBACK(key_callback), this);
+    _popover->hide();
     _updating = false;
+}
+
+static gboolean key_callback(GtkWidget *widget, GdkEventKey *event, AttrDialog *attrdialog)
+{
+    switch (event->keyval) {
+        case GDK_KEY_Return:
+        case GDK_KEY_KP_Enter: {
+            if (attrdialog->_popover->is_visible()) {
+                if (!(event->state & GDK_SHIFT_MASK)) {
+                    attrdialog->valueEditedPop();
+                    attrdialog->_popover->hide();
+                    return true;
+                }
+            }
+        } break;
+    }
+    return false;
 }
 
 /**
@@ -189,9 +221,10 @@ void AttrDialog::startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &pat
     entry->signal_key_press_event().connect(sigc::bind(sigc::mem_fun(*this, &AttrDialog::onNameKeyPressed), entry));
 }
 
-gboolean sp_show_attr_pop(gpointer data)
+gboolean sp_show_pop_realiced(gpointer data)
 {
     AttrDialog *attrdialog = reinterpret_cast<AttrDialog *>(data);
+
     auto vscroll = attrdialog->_scrolled_text_view.get_vadjustment();
     int height = vscroll->get_upper() + 12; // padding 6+6
     if (height < 450) {
@@ -202,22 +235,39 @@ gboolean sp_show_attr_pop(gpointer data)
     return FALSE;
 }
 
+gboolean sp_show_attr_pop(gpointer data)
+{
+    AttrDialog *attrdialog = reinterpret_cast<AttrDialog *>(data);
+    attrdialog->_popover->show_all();
+    attrdialog->_popover->check_resize();
+    g_timeout_add(50, &sp_show_pop_realiced, attrdialog);
+    return FALSE;
+}
+
+gboolean sp_close_entry(gpointer data)
+{
+    Gtk::CellEditable *cell = reinterpret_cast<Gtk::CellEditable *>(data);
+    cell->editing_done();
+    cell->remove_widget();
+    return FALSE;
+}
+
 void AttrDialog::startValueEdit(Gtk::CellEditable *cell, const Glib::ustring &path)
 {
     Gtk::Entry *entry = dynamic_cast<Gtk::Entry *>(cell);
-    entry->signal_key_press_event().connect(sigc::bind(sigc::mem_fun(*this, &AttrDialog::onValueKeyPressed), entry));
     int width = 0;
     int height = 0;
     int colwidth = _valueCol->get_width();
-    _textview->set_size_request(colwidth - 6, -1);
-    _popover->set_size_request(colwidth, -1);
+    _textview->set_size_request(510, -1);
+    _popover->set_size_request(520, -1);
     valuepath = path;
     entry->get_layout()->get_pixel_size(width, height);
     Gtk::TreeIter iter = *_store->get_iter(path);
     Gtk::TreeModel::Row row = *iter;
     if (row && this->_repr) {
         Glib::ustring name = row[_attrColumns._attributeName];
-        if (colwidth < width || name == "content") {
+        if (colwidth - 10 < width || name == "content") {
+            valueediting = entry->get_text();
             Gtk::TreeIter iter = *_store->get_iter(path);
             Gdk::Rectangle rect;
             _treeView.get_cell_area((Gtk::TreeModel::Path)iter, *_valueCol, rect);
@@ -228,16 +278,16 @@ void AttrDialog::startValueEdit(Gtk::CellEditable *cell, const Glib::ustring &pa
             Glib::RefPtr<Gtk::TextBuffer> textbuffer = Gtk::TextBuffer::create();
             textbuffer->set_text(entry->get_text());
             _textview->set_buffer(textbuffer);
-            cell->editing_done();
-            cell->remove_widget();
             int scrolledcontentheight = 20;
             if (name == "content") {
                 scrolledcontentheight = 450;
             }
             _scrolled_text_view.set_min_content_height(scrolledcontentheight);
-            _popover->show_all();
-            _popover->check_resize();
+            g_timeout_add(50, &sp_close_entry, cell);
             g_timeout_add(50, &sp_show_attr_pop, this);
+        } else {
+            entry->signal_key_press_event().connect(
+                sigc::bind(sigc::mem_fun(*this, &AttrDialog::onValueKeyPressed), entry));
         }
     }
 }
@@ -280,12 +330,6 @@ void AttrDialog::setRepr(Inkscape::XML::Node * repr)
     }
 }
 
-/**
- * @brief AttrDialog::onKeyPressed
- * @param event_description
- * @return
- * Send an undo message and mark this point for undo
- */
 void AttrDialog::setUndo(Glib::ustring const &event_description)
 {
     SPDocument *document = this->_desktop->doc();
@@ -389,11 +433,11 @@ void AttrDialog::onAttrDelete(Glib::ustring path)
  */
 bool AttrDialog::onKeyPressed(GdkEventKey *event)
 {
+    bool ret = false;
     if(this->_repr) {
         auto selection = this->_treeView.get_selection();
         Gtk::TreeModel::Row row = *(selection->get_selected());
         Gtk::TreeIter iter = *(selection->get_selected());
-        bool ret = false;
         switch (event->keyval)
         {
             case GDK_KEY_Delete:
@@ -417,9 +461,19 @@ bool AttrDialog::onKeyPressed(GdkEventKey *event)
                 grab_focus();
                 ret = true;
             } break;
+            case GDK_KEY_Return:
+            case GDK_KEY_KP_Enter: {
+                if (_popover->is_visible()) {
+                    if (!(event->state & GDK_SHIFT_MASK)) {
+                        valueEditedPop();
+                        _popover->hide();
+                        ret = true;
+                    }
+                }
+            } break;
         }
     }
-    return false;
+    return ret;
 }
 
 bool AttrDialog::onNameKeyPressed(GdkEventKey *event, Gtk::Entry *entry)
@@ -498,7 +552,7 @@ void AttrDialog::nameEdited (const Glib::ustring& path, const Glib::ustring& nam
             row[_attrColumns._attributeName] = name;
             grab_focus();
             _updating = true;
-            char const *valueto = value.c_str(); // this allow store empty values
+            // this allow store empty values
             _repr->setAttribute(name.c_str(), "", false);
             _updating = false;
             g_timeout_add(50, &sp_attrdialog_store_move_to_next, this);
@@ -511,6 +565,18 @@ void AttrDialog::valueEditedPop()
 {
     Glib::ustring value = _textview->get_buffer()->get_text();
     valueEdited(valuepath, value);
+    valueediting = "";
+    _popover->hide();
+}
+
+void AttrDialog::valueCanceledPop()
+{
+    if (!valueediting.empty()) {
+        Glib::RefPtr<Gtk::TextBuffer> textbuffer = Gtk::TextBuffer::create();
+        textbuffer->set_text(valueediting);
+        _textview->set_buffer(textbuffer);
+    }
+    _popover->hide();
 }
 
 /**

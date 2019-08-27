@@ -66,8 +66,8 @@ public:
     Gtk::TreeModel::Path _modelpath;
     Gtk::Popover *_popover;
     Gtk::TextView *_textview;
-    Gtk::Button *_update;
     Glib::ustring valuepath;
+    Glib::ustring valueediting;
 
     /**
      * Status bar
@@ -113,6 +113,7 @@ public:
     void startValueEdit(Gtk::CellEditable *cell, const Glib::ustring &path);
     void nameEdited(const Glib::ustring &path, const Glib::ustring &name);
     void valueEdited(const Glib::ustring &path, const Glib::ustring &value);
+    void valueCanceledPop();
     void valueEditedPop();
 };
 

@@ -177,6 +177,7 @@ XmlTree::XmlTree()
     attributes = new AttrDialog();
     _paned.set_orientation(dir ? Gtk::ORIENTATION_VERTICAL : Gtk::ORIENTATION_HORIZONTAL);
     _paned.check_resize();
+    _paned.set_wide_handle(true);
     _paned.pack1(node_box, Gtk::SHRINK);
     /* attributes */
     Gtk::Box *actionsbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL));
@@ -221,16 +222,17 @@ XmlTree::XmlTree()
 
     desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &XmlTree::set_tree_desktop) );
     deskTrack.connect(GTK_WIDGET(gobj()));
-    int widthpos = _paned.property_max_position();
     _paned.property_position().signal_changed().connect(sigc::mem_fun(*this, &XmlTree::_childresized));
     _paned.signal_size_allocate().connect(sigc::mem_fun(*this, &XmlTree::_panedresized));
     set_name("XMLAndAttributesDialog");
     set_spacing(0);
     set_size_request(320, 260);
     show_all();
-    int panedpos = prefs->getInt("/dialogs/xml/panedpos", 130);
-    _paned.set_position(panedpos);
-    _resized();
+    int widthpos = _paned.property_max_position() - _paned.property_min_position();
+    int panedpos = prefs->getInt("/dialogs/xml/panedpos", widthpos / 2);
+    _updating = true;
+    _paned.property_position() = panedpos;
+    _updating = false;
     tree_reset_context();
 
     g_assert(desktop != nullptr);
@@ -253,17 +255,17 @@ void XmlTree::_resized()
     int max = int(_paned.property_max_position() * 0.95);
     int min = int(_paned.property_max_position() * 0.05);
     bool attrtoggler = prefs->getBool("/dialogs/xml/attrtoggler", true);
-    if (attrtoggler && _paned.get_position() > max) {
+    if (attrtoggler && _paned.property_position() > max) {
         _paned.property_position() = max;
     }
-    if (attrtoggler && _paned.get_position() < min) {
+    if (attrtoggler && _paned.property_position() < min) {
         _paned.property_position() = min;
     }
     if (!attrtoggler) {
         attributes->hide();
         _paned.property_position() = _paned.property_max_position();
     }
-    prefs->setInt("/dialogs/xml/panedpos", _paned.get_position());
+    prefs->setInt("/dialogs/xml/panedpos", _paned.property_position());
     _updating = false;
 }
 
@@ -276,7 +278,7 @@ void XmlTree::_toggleDirection(Gtk::RadioButton *vertical)
     _paned.check_resize();
     int widthpos = _paned.property_max_position() - _paned.property_min_position();
     prefs->setInt("/dialogs/xml/panedpos", widthpos / 2);
-    _paned.set_position(widthpos / 2);
+    _paned.property_position() = widthpos / 2;
 }
 
 void XmlTree::_attrtoggler()
@@ -288,11 +290,12 @@ void XmlTree::_attrtoggler()
         attributes->show();
         int widthpos = _paned.property_max_position() - _paned.property_min_position();
         prefs->setInt("/dialogs/xml/panedpos", widthpos / 2);
-        _paned.set_position(widthpos / 2);
+        _paned.property_position() = widthpos / 2;
     } else {
         attributes->hide();
-        int widthpos = _paned.property_max_position();
-        _paned.set_position(widthpos);
+        int widthpos = _paned.property_max_position() - _paned.property_min_position();
+        prefs->setInt("/dialogs/xml/panedpos", widthpos);
+        _paned.property_position() = widthpos;
     }
 }
 
