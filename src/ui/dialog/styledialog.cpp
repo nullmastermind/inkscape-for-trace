@@ -79,7 +79,7 @@ void StyleDialog::NodeObserver::notifyContentChanged(Inkscape::XML::Node & /*nod
 
     g_debug("StyleDialog::NodeObserver::notifyContentChanged");
     _styledialog->_updating = false;
-    _styledialog->_readStyleElement();
+    _styledialog->readStyleElement();
 }
 
 
@@ -148,7 +148,7 @@ void StyleDialog::_nodeAdded(Inkscape::XML::Node &node)
     node.addObserver(*w);
     _nodeWatchers.push_back(w);
 
-    _readStyleElement();
+    readStyleElement();
 }
 
 void StyleDialog::_nodeRemoved(Inkscape::XML::Node &repr)
@@ -163,19 +163,19 @@ void StyleDialog::_nodeRemoved(Inkscape::XML::Node &repr)
             break;
         }
     }
-    _readStyleElement();
+    readStyleElement();
 }
 
 void StyleDialog::_nodeChanged(Inkscape::XML::Node &object)
 {
     g_debug("StyleDialog::_nodeChanged");
-    _readStyleElement();
+    readStyleElement();
 }
 
 /* void
 StyleDialog::_stylesheetChanged( Inkscape::XML::Node &repr ) {
     std::cout << "Style tag modified" << std::endl;
-    _readStyleElement();
+    readStyleElement();
 } */
 
 /**
@@ -221,7 +221,7 @@ StyleDialog::StyleDialog()
     _updateWatchers();
 
     // Load tree
-    _readStyleElement();
+    readStyleElement();
 }
 
 void StyleDialog::_vscrool()
@@ -282,7 +282,7 @@ StyleDialog::~StyleDialog()
     _selection_changed_connection.disconnect();
 }
 
-void StyleDialog::_reload() { _readStyleElement(); }
+void StyleDialog::_reload() { readStyleElement(); }
 
 /**
  * @return Inkscape::XML::Node* pointing to a style element's text node.
@@ -379,7 +379,7 @@ void StyleDialog::setCurrentSelector(Glib::ustring current_selector)
 {
     g_debug("StyleDialog::setCurrentSelector");
     _current_selector = current_selector;
-    _readStyleElement();
+    readStyleElement();
 }
 
 // copied from style.cpp:1499
@@ -397,9 +397,9 @@ static bool is_url(char const *p)
 /**
  * Fill the Gtk::TreeStore from the svg:style element.
  */
-void StyleDialog::_readStyleElement()
+void StyleDialog::readStyleElement()
 {
-    g_debug("StyleDialog::_readStyleElement");
+    g_debug("StyleDialog::readStyleElement");
 
     if (_updating)
         return; // Don't read if we wrote style element.
@@ -407,7 +407,7 @@ void StyleDialog::_readStyleElement()
     _scroollock = true;
     Inkscape::XML::Node *textNode = _getStyleTextNode();
     if (textNode == nullptr) {
-        std::cerr << "StyleDialog::_readStyleElement: No text node!" << std::endl;
+        std::cerr << "StyleDialog::readStyleElement: No text node!" << std::endl;
     }
     SPDocument *document = SP_ACTIVE_DOCUMENT;
 
@@ -620,7 +620,7 @@ void StyleDialog::_readStyleElement()
         if ((i + 1) < tokens.size()) {
             properties = tokens[i + 1];
         } else {
-            std::cerr << "StyleDialog::_readStyleElement: Missing values "
+            std::cerr << "StyleDialog::readStyleElement: Missing values "
                          "for last selector!"
                       << std::endl;
         }
@@ -659,14 +659,14 @@ void StyleDialog::_readStyleElement()
          */
         Inkscape::UI::Widget::IconRenderer *addRenderer = manage(new Inkscape::UI::Widget::IconRenderer());
         addRenderer->add_icon("edit-delete");
-        int addCol = css_tree->append_column("Delete row", *addRenderer) - 1;
+        int addCol = css_tree->append_column("", *addRenderer) - 1;
         Gtk::TreeViewColumn *col = css_tree->get_column(addCol);
         if (col) {
             addRenderer->signal_activated().connect(
                 sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_onPropDelete), store));
         }
         Gtk::CellRendererToggle *active = Gtk::manage(new Gtk::CellRendererToggle);
-        addCol = css_tree->append_column("Active Property", *active) - 1;
+        addCol = css_tree->append_column("", *active) - 1;
         col = css_tree->get_column(addCol);
         if (col) {
             col->add_attribute(active->property_active(), _mColumns._colActive);
@@ -692,7 +692,7 @@ void StyleDialog::_readStyleElement()
             sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_valueEdited), store));
         value->signal_editing_started().connect(
             sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_startValueEdit), store));
-        addCol = css_tree->append_column("CSS Value", *value) - 1;
+        addCol = css_tree->append_column("", *value) - 1;
         col = css_tree->get_column(addCol);
         if (col) {
             col->add_attribute(value->property_text(), _mColumns._colValue);
@@ -808,7 +808,7 @@ void StyleDialog::_readStyleElement()
                             Inkscape::UI::Widget::IconRenderer *addRenderer =
                                 manage(new Inkscape::UI::Widget::IconRenderer());
                             addRenderer->add_icon("edit-delete");
-                            int addCol = css_tree->append_column("Delete row", *addRenderer) - 1;
+                            int addCol = css_tree->append_column("", *addRenderer) - 1;
                             Gtk::TreeViewColumn *col = css_tree->get_column(addCol);
                             if (col) {
                                 addRenderer->signal_activated().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(
@@ -820,7 +820,7 @@ void StyleDialog::_readStyleElement()
                             label->signal_edited().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore>, Gtk::TreeView *>(
                                 sigc::mem_fun(*this, &StyleDialog::_nameEdited), store, css_tree));
                             label->signal_editing_started().connect(sigc::mem_fun(*this, &StyleDialog::_startNameEdit));
-                            addCol = css_tree->append_column("CSS Property", *label) - 1;
+                            addCol = css_tree->append_column("", *label) - 1;
                             col = css_tree->get_column(addCol);
                             if (col) {
                                 col->set_resizable(true);
@@ -834,7 +834,7 @@ void StyleDialog::_readStyleElement()
                             value->signal_editing_started().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(
                                 sigc::mem_fun(*this, &StyleDialog::_startValueEdit), store));
 
-                            addCol = css_tree->append_column("CSS Value", *value) - 1;
+                            addCol = css_tree->append_column("", *value) - 1;
                             col = css_tree->get_column(addCol);
                             if (col) {
                                 col->add_attribute(value->property_text(), _mColumns._colValue);
@@ -1046,7 +1046,7 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
         obj = getDesktop()->getDocument()->getXMLDialogSelectedObject();
     }
     if (selection->objects().size() < 2 && !obj) {
-        _readStyleElement();
+        readStyleElement();
         return;
     }
     _updating = true;
@@ -1119,7 +1119,7 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
         INKSCAPE.readStyleSheets(true);
     }
     _updating = false;
-    _readStyleElement();
+    readStyleElement();
     /*     SPDocument *document = SP_ACTIVE_DOCUMENT;
         for (auto iter : document->getObjectsBySelector(selector)) {
             std::cout << std::endl;
@@ -1556,7 +1556,7 @@ void StyleDialog::_handleDocumentReplaced(SPDesktop *desktop, SPDocument * /* do
         desktop->getSelection()->connectChanged(sigc::hide(sigc::mem_fun(this, &StyleDialog::_handleSelectionChanged)));
 
     _updateWatchers();
-    _readStyleElement();
+    readStyleElement();
 }
 
 
@@ -1583,7 +1583,7 @@ void StyleDialog::_handleDesktopChanged(SPDesktop *desktop)
         desktop->connectDocumentReplaced(sigc::mem_fun(this, &StyleDialog::_handleDocumentReplaced));
 
     _updateWatchers();
-    _readStyleElement();
+    readStyleElement();
 }
 
 
@@ -1595,7 +1595,7 @@ void StyleDialog::_handleSelectionChanged()
     g_debug("StyleDialog::_handleSelectionChanged()");
     _scroolpos = 0;
     _vadj->set_value(0);
-    _readStyleElement();
+    readStyleElement();
 }
 
 } // namespace Dialog

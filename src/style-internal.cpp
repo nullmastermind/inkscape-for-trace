@@ -2847,7 +2847,11 @@ const Glib::ustring SPIVectorEffect::get_value() const
     if (this->size)   ret += " non-scaling-size";
     if (this->rotate) ret += " non-rotation";
     if (this->fixed)  ret += " fixed-position";
-    if (ret.empty())  ret += "none";
+    if (ret.empty()) {
+        ret += "none";
+    } else {
+        ret.erase(0,1);
+    }
     return ret;
 }
 

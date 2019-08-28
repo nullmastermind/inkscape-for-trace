@@ -55,9 +55,8 @@ class SelectorsDialog : public Widget::Panel {
     SelectorsDialog();
     SelectorsDialog(SelectorsDialog const &d) = delete;
     SelectorsDialog operator=(SelectorsDialog const &d) = delete;
-
     static SelectorsDialog &getInstance() { return *new SelectorsDialog(); }
-
+    
   private:
     // Monitor <style> element for changes.
     class NodeObserver;
@@ -119,6 +118,7 @@ class SelectorsDialog : public Widget::Panel {
     Gtk::TreeView _treeView;
     Gtk::TreeModel::Path _lastpath;
     // Widgets
+    StyleDialog *_style_dialog;
     Gtk::Paned _paned;
     Glib::RefPtr<Gtk::Adjustment> _vadj;
     Gtk::Box _button_box;
@@ -127,7 +127,6 @@ class SelectorsDialog : public Widget::Panel {
 
     Gtk::Button _del;
     Gtk::Button _create;
-    StyleDialog *_style_dialog;
     // Reading and writing the style element.
     Inkscape::XML::Node *_getStyleTextNode();
     void _readStyleElement();
@@ -154,9 +153,9 @@ class SelectorsDialog : public Widget::Panel {
 
     void _selectObjects(int, int);
     // Variables
-    bool _updating;  // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
     double _scroolpos;
     bool _scroollock;
+    bool _updating;  // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
     Inkscape::XML::Node *_textNode; // Track so we know when to add a NodeObserver.
 
     // Signals and handlers - External
@@ -167,6 +166,7 @@ class SelectorsDialog : public Widget::Panel {
     void _handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
     void _handleDesktopChanged(SPDesktop* desktop);
     void _handleSelectionChanged();
+    void _panedrealized();
     void _rowExpand(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);
     void _rowCollapse(const Gtk::TreeModel::iterator &iter, const Gtk::TreeModel::Path &path);
     void _closeDialog(Gtk::Dialog *textDialogPtr);
