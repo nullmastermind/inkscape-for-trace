@@ -544,16 +544,19 @@ void StyleDialog::_readStyleElement()
     Gtk::TreeViewColumn *urlcol = css_tree->get_column(urlCol);
     if (urlcol) {
         urlcol->set_min_width(40);
+        urlcol->set_max_width(40);
         urlRenderer->signal_activated().connect(sigc::bind(sigc::mem_fun(*this, &StyleDialog::_onLinkObj), store));
         urlcol->add_attribute(urlRenderer->property_icon(), _mColumns._colLinked);
     }
     std::map<Glib::ustring, Glib::ustring> attr_prop;
     Gtk::TreeModel::Path path;
+    bool empty = true;
     if (obj && obj->getRepr()->attribute("style")) {
         Glib::ustring style = obj->getRepr()->attribute("style");
         attr_prop = parseStyle(style);
         for (auto iter : obj->style->properties()) {
             if (attr_prop.count(iter->name)) {
+                empty = false;
                 Gtk::TreeModel::Row row = *(store->prepend());
                 row[_mColumns._colSelector] = "style_properties";
                 row[_mColumns._colSelectorPos] = 0;
@@ -575,6 +578,12 @@ void StyleDialog::_readStyleElement()
                 }
                 _addOwnerStyle(iter->name, "style attribute");
             }
+        }
+        // this is to fix a bug on cairo win: 
+        // https://gitlab.freedesktop.org/cairo/cairo/issues/338
+        // TODO: check if inkscape min cairo version has applied the patch proposed and remove (3 times)
+        if (empty) {
+            css_tree->hide();
         }
         _styleBox.pack_start(*css_selector_container, Gtk::PACK_EXPAND_WIDGET);
     }
@@ -674,7 +683,6 @@ void StyleDialog::_readStyleElement()
         col = css_tree->get_column(addCol);
         if (col) {
             col->set_resizable(true);
-            col->set_expand(true);
             col->add_attribute(label->property_text(), _mColumns._colName);
         }
         Gtk::CellRendererText *value = Gtk::manage(new Gtk::CellRendererText());
@@ -709,11 +717,13 @@ void StyleDialog::_readStyleElement()
         for (auto styled : attr_prop_styleshet_comments) {
             result_props[styled.first] = std::make_pair(styled.second, false);
         }
+        empty = true;
         css_selector_event_add->signal_button_release_event().connect(
             sigc::bind<Glib::RefPtr<Gtk::TreeStore>, Gtk::TreeView *, Glib::ustring, gint>(
                 sigc::mem_fun(*this, &StyleDialog::_addRow), store, css_tree, selector, selectorpos));
         if (obj) {
             for (auto iter : result_props) {
+                empty = false;
                 Gtk::TreeIter iterstore = store->append();
                 Gtk::TreeModel::Path path = (Gtk::TreeModel::Path)iterstore;
                 Gtk::TreeModel::Row row = *(iterstore);
@@ -751,6 +761,7 @@ void StyleDialog::_readStyleElement()
             }
         } else {
             for (auto iter : result_props) {
+                empty = false;
                 Gtk::TreeModel::Row row = *(store->prepend());
                 row[_mColumns._colSelector] = selector;
                 row[_mColumns._colSelectorPos] = selectorpos;
@@ -760,6 +771,9 @@ void StyleDialog::_readStyleElement()
                 row[_mColumns._colStrike] = false;
                 row[_mColumns._colOwner] = Glib::ustring("Stylesheet value");
             }
+        }
+        if (empty) {
+            css_tree->hide();
         }
         _styleBox.pack_start(*css_selector_container, Gtk::PACK_EXPAND_WIDGET);
         selectorpos++;
@@ -783,6 +797,7 @@ void StyleDialog::_readStyleElement()
         sigc::bind<Glib::RefPtr<Gtk::TreeStore>, Gtk::TreeView *, Glib::ustring, gint>(
             sigc::mem_fun(*this, &StyleDialog::_addRow), store, css_tree, "attributes", selectorpos));
     bool hasattributes = false;
+    empty = true;
     if (obj) {
         for (auto iter : obj->style->properties()) {
             if (iter->style_src != SP_STYLE_SRC_UNSET) {
@@ -809,7 +824,6 @@ void StyleDialog::_readStyleElement()
                             col = css_tree->get_column(addCol);
                             if (col) {
                                 col->set_resizable(true);
-                                col->set_expand(true);
                                 col->add_attribute(label->property_text(), _mColumns._colName);
                             }
                             Gtk::CellRendererText *value = Gtk::manage(new Gtk::CellRendererText());
@@ -827,6 +841,7 @@ void StyleDialog::_readStyleElement()
                                 col->add_attribute(value->property_strikethrough(), _mColumns._colStrike);
                             }
                         }
+                        empty = false;
                         Gtk::TreeIter iterstore = store->prepend();
                         Gtk::TreeModel::Path path = (Gtk::TreeModel::Path)iterstore;
                         Gtk::TreeModel::Row row = *(iterstore);
@@ -848,6 +863,9 @@ void StyleDialog::_readStyleElement()
                     }
                 }
             }
+        }
+        if (empty) {
+            css_tree->hide();
         }
         if (!hasattributes) {
             for (auto widg : css_selector_container->get_children()) {
@@ -1132,6 +1150,7 @@ bool StyleDialog::_addRow(GdkEventButton *evt, Glib::RefPtr<Gtk::TreeStore> stor
         if (pos < 1) {
             col = 1;
         }
+        css_tree->show();
         css_tree->set_cursor(path, *(css_tree->get_column(col)), true);
         grab_focus();
         return true;

@@ -1114,6 +1114,9 @@ void SelectorsDialog::_addSelector()
 
     // ==== Create popup dialog ====
     Gtk::Dialog *textDialogPtr =  new Gtk::Dialog();
+    textDialogPtr->property_modal() = true;
+    textDialogPtr->property_title() = _("CSS selector");
+    textDialogPtr->property_window_position() = Gtk::WIN_POS_CENTER_ON_PARENT;
     textDialogPtr->add_button(_("Cancel"), Gtk::RESPONSE_CANCEL);
     textDialogPtr->add_button(_("Add"),    Gtk::RESPONSE_OK);
 
