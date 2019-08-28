@@ -406,6 +406,8 @@ void sp_file_convert_dpi(SPDocument *doc)
             Gtk::Expander moreinfo(_("More details..."));
             Gtk::Label moreinfo_text("", Gtk::ALIGN_START);
             moreinfo_text.set_markup(
+                // TRANSLATORS: Please don't translate link unless the page exists in your language. Add your language
+                // code to the link this way: https://inkscape.org/[lang]/learn/faq#dpi_change
                 _("<small>We've updated Inkscape to follow the CSS standard of 96 DPI for "
                 "better browser compatibility; we used to use 90 DPI. Digital artwork for screen\n"
                 "display will be converted to 96 DPI without scaling and should be unaffected.\n"

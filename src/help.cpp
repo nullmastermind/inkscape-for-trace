@@ -43,9 +43,11 @@ void sp_help_open_tutorial(Glib::ustring name)
         ConcreteInkscapeApplication<Gtk::Application>* app = &(ConcreteInkscapeApplication<Gtk::Application>::get_instance());
         app->create_window(file, false, false);
     } else {
+        // TRANSLATORS: Please don't translate link unless the page exists in your language. Add your language code to
+        // the link this way: https://inkscape.org/[lang]/learn/tutorials/
         sp_ui_error_dialog(_("The tutorial files are not installed.\nFor Linux, you may need to install "
                              "'inkscape-tutorials'; for Windows, please re-run the setup and select 'Tutorials'.\nThe "
-                             "tutorials can also be found online at https://inkscape.org/learn/tutorials/"));
+                             "tutorials can also be found online at https://inkscape.org/en/learn/tutorials/"));
     }
 }
 
