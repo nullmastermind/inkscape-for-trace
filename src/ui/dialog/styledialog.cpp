@@ -579,7 +579,7 @@ void StyleDialog::_readStyleElement()
                 _addOwnerStyle(iter->name, "style attribute");
             }
         }
-        // this is to fix a bug on cairo win: 
+        // this is to fix a bug on cairo win:
         // https://gitlab.freedesktop.org/cairo/cairo/issues/338
         // TODO: check if inkscape min cairo version has applied the patch proposed and remove (3 times)
         if (empty) {
