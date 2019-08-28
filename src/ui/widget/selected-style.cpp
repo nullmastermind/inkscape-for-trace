@@ -240,13 +240,13 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
         _color_preview[i] = new Inkscape::UI::Widget::ColorPreview (0);
         __color[i] = (i == SS_FILL)? (_("Flat color fill")) : (_("Flat color stroke"));
 
-        // TRANSLATOR COMMENT: A means "Averaged"
+        // TRANSLATORS: A means "Averaged"
         _averaged[i].set_markup (_("<b>a</b>"));
         sp_set_font_size_smaller (GTK_WIDGET(_averaged[i].gobj()));
         _averaged[i].show_all();
         __averaged[i] = (i == SS_FILL)? (_("Fill is averaged over selected objects")) : (_("Stroke is averaged over selected objects"));
 
-        // TRANSLATOR COMMENT: M means "Multiple"
+        // TRANSLATORS: M means "Multiple"
         _multiple[i].set_markup (_("<b>m</b>"));
         sp_set_font_size_smaller (GTK_WIDGET(_multiple[i].gobj()));
         _multiple[i].show_all();
