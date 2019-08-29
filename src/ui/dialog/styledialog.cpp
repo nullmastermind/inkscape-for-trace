@@ -508,7 +508,7 @@ void StyleDialog::readStyleElement()
             sigc::mem_fun(*this, &StyleDialog::_addRow), store, css_tree, "style_properties", selectorpos));
     Inkscape::UI::Widget::IconRenderer *addRenderer = manage(new Inkscape::UI::Widget::IconRenderer());
     addRenderer->add_icon("edit-delete");
-    int addCol = css_tree->append_column("", *addRenderer) - 1;
+    int addCol = css_tree->append_column(" ", *addRenderer) - 1;
     Gtk::TreeViewColumn *col = css_tree->get_column(addCol);
     if (col) {
         addRenderer->signal_activated().connect(
@@ -520,7 +520,7 @@ void StyleDialog::readStyleElement()
     label->signal_edited().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore>, Gtk::TreeView *>(
         sigc::mem_fun(*this, &StyleDialog::_nameEdited), store, css_tree));
     label->signal_editing_started().connect(sigc::mem_fun(*this, &StyleDialog::_startNameEdit));
-    addCol = css_tree->append_column("", *label) - 1;
+    addCol = css_tree->append_column(" ", *label) - 1;
     col = css_tree->get_column(addCol);
     if (col) {
         col->set_resizable(true);
@@ -533,7 +533,7 @@ void StyleDialog::readStyleElement()
         sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_valueEdited), store));
     value->signal_editing_started().connect(
         sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_startValueEdit), store));
-    addCol = css_tree->append_column("", *value) - 1;
+    addCol = css_tree->append_column(" ", *value) - 1;
     col = css_tree->get_column(addCol);
     if (col) {
         col->add_attribute(value->property_text(), _mColumns._colValue);
@@ -543,7 +543,7 @@ void StyleDialog::readStyleElement()
     Inkscape::UI::Widget::IconRenderer *urlRenderer = manage(new Inkscape::UI::Widget::IconRenderer());
     urlRenderer->add_icon("empty-icon");
     urlRenderer->add_icon("edit-redo");
-    int urlCol = css_tree->append_column("", *urlRenderer) - 1;
+    int urlCol = css_tree->append_column(" ", *urlRenderer) - 1;
     Gtk::TreeViewColumn *urlcol = css_tree->get_column(urlCol);
     if (urlcol) {
         urlcol->set_min_width(40);
@@ -683,18 +683,19 @@ void StyleDialog::readStyleElement()
          */
         Inkscape::UI::Widget::IconRenderer *addRenderer = manage(new Inkscape::UI::Widget::IconRenderer());
         addRenderer->add_icon("edit-delete");
-        int addCol = css_tree->append_column("", *addRenderer) - 1;
+        int addCol = css_tree->append_column(" ", *addRenderer) - 1;
         Gtk::TreeViewColumn *col = css_tree->get_column(addCol);
         if (col) {
             addRenderer->signal_activated().connect(
                 sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_onPropDelete), store));
         }
-        Gtk::CellRendererToggle *active = Gtk::manage(new Gtk::CellRendererToggle);
-        addCol = css_tree->append_column("", *active) - 1;
+        Gtk::CellRendererToggle *isactive = Gtk::manage(new Gtk::CellRendererToggle());
+        isactive->property_activatable() = true;
+        addCol = css_tree->append_column(" ", *isactive) - 1;
         col = css_tree->get_column(addCol);
         if (col) {
-            col->add_attribute(active->property_active(), _mColumns._colActive);
-            active->signal_toggled().connect(
+            col->add_attribute(isactive->property_active(), _mColumns._colActive);
+            isactive->signal_toggled().connect(
                 sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_activeToggled), store));
         }
         Gtk::CellRendererText *label = Gtk::manage(new Gtk::CellRendererText());
@@ -703,7 +704,7 @@ void StyleDialog::readStyleElement()
         label->signal_edited().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore>, Gtk::TreeView *>(
             sigc::mem_fun(*this, &StyleDialog::_nameEdited), store, css_tree));
         label->signal_editing_started().connect(sigc::mem_fun(*this, &StyleDialog::_startNameEdit));
-        addCol = css_tree->append_column("CSS Selector", *label) - 1;
+        addCol = css_tree->append_column(" ", *label) - 1;
         col = css_tree->get_column(addCol);
         if (col) {
             col->set_resizable(true);
@@ -716,7 +717,7 @@ void StyleDialog::readStyleElement()
             sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_valueEdited), store));
         value->signal_editing_started().connect(
             sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(sigc::mem_fun(*this, &StyleDialog::_startValueEdit), store));
-        addCol = css_tree->append_column("", *value) - 1;
+        addCol = css_tree->append_column(" ", *value) - 1;
         col = css_tree->get_column(addCol);
         if (col) {
             col->add_attribute(value->property_text(), _mColumns._colValue);
@@ -832,7 +833,7 @@ void StyleDialog::readStyleElement()
                             Inkscape::UI::Widget::IconRenderer *addRenderer =
                                 manage(new Inkscape::UI::Widget::IconRenderer());
                             addRenderer->add_icon("edit-delete");
-                            int addCol = css_tree->append_column("", *addRenderer) - 1;
+                            int addCol = css_tree->append_column(" ", *addRenderer) - 1;
                             Gtk::TreeViewColumn *col = css_tree->get_column(addCol);
                             if (col) {
                                 addRenderer->signal_activated().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(
@@ -844,7 +845,7 @@ void StyleDialog::readStyleElement()
                             label->signal_edited().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore>, Gtk::TreeView *>(
                                 sigc::mem_fun(*this, &StyleDialog::_nameEdited), store, css_tree));
                             label->signal_editing_started().connect(sigc::mem_fun(*this, &StyleDialog::_startNameEdit));
-                            addCol = css_tree->append_column("", *label) - 1;
+                            addCol = css_tree->append_column(" ", *label) - 1;
                             col = css_tree->get_column(addCol);
                             if (col) {
                                 col->set_resizable(true);
@@ -858,7 +859,7 @@ void StyleDialog::readStyleElement()
                             value->signal_editing_started().connect(sigc::bind<Glib::RefPtr<Gtk::TreeStore>>(
                                 sigc::mem_fun(*this, &StyleDialog::_startValueEdit), store));
 
-                            addCol = css_tree->append_column("", *value) - 1;
+                            addCol = css_tree->append_column(" ", *value) - 1;
                             col = css_tree->get_column(addCol);
                             if (col) {
                                 col->add_attribute(value->property_text(), _mColumns._colValue);
