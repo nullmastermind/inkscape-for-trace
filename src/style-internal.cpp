@@ -2850,7 +2850,7 @@ const Glib::ustring SPIVectorEffect::get_value() const
     if (ret.empty()) {
         ret += "none";
     } else {
-        ret.erase(0,1);
+        ret.erase(0, 1);
     }
     return ret;
 }

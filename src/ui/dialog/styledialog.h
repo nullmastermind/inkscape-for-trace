@@ -73,6 +73,7 @@ class StyleDialog : public Widget::Panel {
     bool _deletion;
     Glib::ustring fixCSSSelectors(Glib::ustring selector);
     void readStyleElement();
+
   private:
     // Monitor <style> element for changes.
     class NodeObserver;

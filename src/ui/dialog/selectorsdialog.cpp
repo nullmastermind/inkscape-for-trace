@@ -25,8 +25,8 @@
 #include "verbs.h"
 
 #include "xml/attribute-record.h"
-#include "xml/sp-css-attr.h"
 #include "xml/node-observer.h"
+#include "xml/sp-css-attr.h"
 
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
@@ -395,10 +395,7 @@ void SelectorsDialog::_panedresized(Gtk::Allocation allocation)
     _resized();
 }
 
-void SelectorsDialog::_panedrealized()
-{
-    _style_dialog->readStyleElement();
-}
+void SelectorsDialog::_panedrealized() { _style_dialog->readStyleElement(); }
 
 void SelectorsDialog::_childresized()
 {
@@ -877,10 +874,8 @@ void SelectorsDialog::_addToSelector(Gtk::TreeModel::Row row)
             sp_repr_css_attr_add_from_string(css, obj->getRepr()->attribute("style"));
             Glib::ustring selprops = row[_mColumns._colProperties];
             sp_repr_css_attr_add_from_string(css_selector, selprops.c_str());
-            for ( List<AttributeRecord const> iter = css_selector->attributeList() ;
-                iter ; ++iter )
-            {
-                gchar const * key = g_quark_to_string(iter->key);
+            for (List<AttributeRecord const> iter = css_selector->attributeList(); iter; ++iter) {
+                gchar const *key = g_quark_to_string(iter->key);
                 css->setAttribute(key, nullptr);
             }
             sp_repr_css_write_string(css, css_str);

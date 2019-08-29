@@ -1004,7 +1004,7 @@ void StyleDialog::_onPropDelete(Glib::ustring path, Glib::RefPtr<Gtk::TreeStore>
     if (row) {
         Glib::ustring selector = row[_mColumns._colSelector];
         row[_mColumns._colName] = "";
-        _deleted_pos =  row[_mColumns._colSelectorPos];
+        _deleted_pos = row[_mColumns._colSelectorPos];
         store->erase(row);
         _deletion = true;
         _writeStyleElement(store, selector);
@@ -1136,7 +1136,7 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
             selectormatch = selectormatch + "[^}]*?}";
         }
         selectormatch = selectormatch + ")([^}]*?})((.|\n)*)";
-        
+
         Inkscape::XML::Node *textNode = _getStyleTextNode();
         std::regex e(selectormatch.c_str());
         std::string content = (textNode->content() ? textNode->content() : "");
@@ -1336,7 +1336,8 @@ gboolean sp_styledialog_store_move_to_next(gpointer data)
         Gtk::TreeIter iter = *(selection->get_selected());
         Gtk::TreeModel::Path model = (Gtk::TreeModel::Path)iter;
         if (model == styledialog->_current_path) {
-            styledialog->_current_css_tree->set_cursor(styledialog->_current_path, *styledialog->_current_value_col, true);
+            styledialog->_current_css_tree->set_cursor(styledialog->_current_path, *styledialog->_current_value_col,
+                                                       true);
         }
     }
     return FALSE;
@@ -1375,7 +1376,7 @@ void StyleDialog::_nameEdited(const Glib::ustring &path, const Glib::ustring &na
         Glib::ustring old_name = row[_mColumns._colName];
         row[_mColumns._colName] = finalname;
         if (finalname.empty() && value.empty()) {
-            _deleted_pos =  row[_mColumns._colSelectorPos];
+            _deleted_pos = row[_mColumns._colSelectorPos];
             store->erase(row);
         }
         gint col = 3;
@@ -1435,13 +1436,13 @@ void StyleDialog::_valueEdited(const Glib::ustring &path, const Glib::ustring &v
         Glib::ustring selector = row[_mColumns._colSelector];
         Glib::ustring name = row[_mColumns._colName];
         if (name.empty() && finalvalue.empty()) {
-            _deleted_pos =  row[_mColumns._colSelectorPos];
+            _deleted_pos = row[_mColumns._colSelectorPos];
             store->erase(row);
         }
         _writeStyleElement(store, selector);
         if (selector != "style_properties" && selector != "attributes") {
             std::vector<SPObject *> objs = _getObjVec(selector);
-            for (auto obj : objs){
+            for (auto obj : objs) {
                 Glib::ustring css_str = "";
                 SPCSSAttr *css = sp_repr_css_attr_new();
                 sp_repr_css_attr_add_from_string(css, obj->getRepr()->attribute("style"));

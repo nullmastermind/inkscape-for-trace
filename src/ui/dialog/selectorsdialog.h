@@ -56,7 +56,7 @@ class SelectorsDialog : public Widget::Panel {
     SelectorsDialog(SelectorsDialog const &d) = delete;
     SelectorsDialog operator=(SelectorsDialog const &d) = delete;
     static SelectorsDialog &getInstance() { return *new SelectorsDialog(); }
-    
+
   private:
     // Monitor <style> element for changes.
     class NodeObserver;
@@ -155,7 +155,7 @@ class SelectorsDialog : public Widget::Panel {
     // Variables
     double _scroolpos;
     bool _scroollock;
-    bool _updating;  // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
+    bool _updating;                 // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
     Inkscape::XML::Node *_textNode; // Track so we know when to add a NodeObserver.
 
     // Signals and handlers - External
