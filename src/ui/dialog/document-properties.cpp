@@ -1299,13 +1299,15 @@ void DocumentProperties::update_gridspage()
     SPDesktop *dt = getDesktop();
     SPNamedView *nv = dt->getNamedView();
 
+    int prev_page_count = _grids_notebook.get_n_pages();
+    int prev_page_pos = _grids_notebook.get_current_page();
+
     //remove all tabs
     while (_grids_notebook.get_n_pages() != 0) {
         _grids_notebook.remove_page(-1); // this also deletes the page.
     }
 
     //add tabs
-    bool grids_present = false;
     for(std::vector<Inkscape::CanvasGrid *>::const_iterator it = nv->grids.begin(); it != nv->grids.end(); ++it) {
         if (!(*it)->repr->attribute("id")) continue; // update_gridspage is called again when "id" is added
         Glib::ustring name((*it)->repr->attribute("id"));
@@ -1321,14 +1323,24 @@ void DocumentProperties::update_gridspage()
                 break;
         }
         _grids_notebook.append_page(*(*it)->newWidget(), _createPageTabLabel(name, icon));
-        grids_present = true;
     }
     _grids_notebook.show_all();
 
-    if (grids_present)
+    int cur_page_count = _grids_notebook.get_n_pages();
+    if (cur_page_count > 0) {
         _grids_button_remove.set_sensitive(true);
-    else
+
+        // The following is not correct if grid added/removed via XML
+        if (cur_page_count == prev_page_count + 1) {
+            _grids_notebook.set_current_page(cur_page_count - 1);
+        } else if (cur_page_count == prev_page_count) {
+            _grids_notebook.set_current_page(prev_page_pos);
+        } else if (cur_page_count == prev_page_count - 1) {
+            _grids_notebook.set_current_page(prev_page_pos < 1 ? 0 : prev_page_pos - 1);
+        }
+    } else {
         _grids_button_remove.set_sensitive(false);
+    }
 }
 
 /**
