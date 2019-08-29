@@ -70,6 +70,7 @@ class StyleDialog : public Widget::Panel {
     Gtk::TreeView *_current_css_tree;
     Gtk::TreeViewColumn *_current_value_col;
     Gtk::TreeModel::Path _current_path;
+    bool _deletion;
     Glib::ustring fixCSSSelectors(Glib::ustring selector);
     void readStyleElement();
   private:
@@ -117,7 +118,7 @@ class StyleDialog : public Widget::Panel {
         Gtk::TreeModelColumn<Glib::ustring> _colCSSData; // Name of the property.
     };
     CSSData _mCSSData;
-
+    guint _deleted_pos;
     // Widgets
     Gtk::ScrolledWindow _scrolledWindow;
     Glib::RefPtr<Gtk::Adjustment> _vadj;
