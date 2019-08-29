@@ -879,6 +879,8 @@ void SelectorsDialog::_addToSelector(Gtk::TreeModel::Row row)
                 css->setAttribute(key, nullptr);
             }
             sp_repr_css_write_string(css, css_str);
+            sp_repr_css_attr_unref(css);
+            sp_repr_css_attr_unref(css_selector);
             obj->getRepr()->setAttribute("style", css_str.c_str());
             obj->style->readFromObject(obj);
             obj->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);

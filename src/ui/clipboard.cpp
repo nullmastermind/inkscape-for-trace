@@ -24,6 +24,7 @@
 #include <glib/gstdio.h> // for g_file_set_contents etc., used in _onGet and paste
 #include "inkgc/gc-core.h"
 #include "xml/repr.h"
+#include "xml/sp-css-attr.h"
 #include "inkscape.h"
 #include "desktop.h"
 
@@ -753,6 +754,12 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
 
             // copy complete inherited style
             SPCSSAttr *css = sp_repr_css_attr_inherited(obj, "style");
+            for (auto iter : item->style->properties()) {
+                if (iter->style_src == SP_STYLE_SRC_STYLE_SHEET) {
+                    Glib::ustring val = iter->get_value();
+                    css->setAttribute(iter->name, val.c_str());
+                }
+            }
             sp_repr_css_set(obj_copy, css, "style");
             sp_repr_css_attr_unref(css);
 
@@ -922,7 +929,6 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
         }
     }
 }
-
 
 /**
  * Copy a single gradient to the clipboard's defs element.

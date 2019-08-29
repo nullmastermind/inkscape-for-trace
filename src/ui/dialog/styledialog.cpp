@@ -262,7 +262,12 @@ Glib::ustring StyleDialog::fixCSSSelectors(Glib::ustring selector)
                         tag = tag.substr(0, i);
                     }
                     if (!SPAttributeRelSVG::isSVGElement(tag)) {
-                        return "";
+                        if (tokens.size() == 1) {
+                            tag = "." + tag;
+                            return tag;
+                        } else {
+                            return "";
+                        }
                     }
                 }
             }
