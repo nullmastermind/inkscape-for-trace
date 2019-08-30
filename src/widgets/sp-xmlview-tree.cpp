@@ -179,7 +179,9 @@ add_node (SPXMLViewTree * tree, GtkTreeIter *parent, GtkTreeIter *before, Inksca
     }
 
     GtkTreeRowReference  *rowref = tree_iter_to_ref (tree, &iter);
+
     data = node_data_new (tree, &iter, rowref, repr);
+
     g_assert (data != nullptr);
 
 	gtk_tree_store_set (tree->store, &iter, STORE_TEXT_COL, default_text, STORE_DATA_COL, data, STORE_REPR_COL, repr, -1);
@@ -310,6 +312,28 @@ void element_order_changed(Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node *
     }
 }
 
+Glib::ustring sp_remove_newlines_and_tabs(Glib::ustring val)
+{
+    int pos = 0;
+    Glib::ustring newlinesign = "␤";
+    Glib::ustring tabsign = "⇥";
+    while ((pos = val.find("\r\n")) != std::string::npos) {
+        val.erase(pos, 2);
+        val.insert(pos, newlinesign);
+    }
+    pos = 0;
+    while ((pos = val.find('\n')) != std::string::npos) {
+        val.erase(pos, 1);
+        val.insert(pos, newlinesign);
+    }
+    pos = 0;
+    while ((pos = val.find('\t')) != std::string::npos) {
+        val.erase(pos, 1);
+        val.insert(pos, tabsign);
+    }
+    return val;
+}
+
 void text_content_changed(Inkscape::XML::Node * /*repr*/, const gchar * /*old_content*/, const gchar * new_content, gpointer ptr)
 {
     NodeData *data = static_cast<NodeData *>(ptr);
@@ -317,9 +341,12 @@ void text_content_changed(Inkscape::XML::Node * /*repr*/, const gchar * /*old_co
     if (data->tree->blocked) return;
 
     gchar *label = g_strdup_printf ("\"%s\"", new_content);
+    Glib::ustring nolinecontent = label;
+    nolinecontent = sp_remove_newlines_and_tabs(nolinecontent);
+
     GtkTreeIter iter;
     if (tree_ref_to_iter(data->tree, &iter,  data->rowref)) {
-        gtk_tree_store_set (GTK_TREE_STORE(data->tree->store), &iter, STORE_TEXT_COL, label, -1);
+        gtk_tree_store_set(GTK_TREE_STORE(data->tree->store), &iter, STORE_TEXT_COL, nolinecontent.c_str(), -1);
     }
 
     g_free (label);
@@ -332,9 +359,12 @@ void comment_content_changed(Inkscape::XML::Node * /*repr*/, const gchar * /*old
     if (data->tree->blocked) return;
 
     gchar *label = g_strdup_printf ("<!--%s-->", new_content);
+    Glib::ustring nolinecontent = label;
+    nolinecontent = sp_remove_newlines_and_tabs(nolinecontent);
+
     GtkTreeIter iter;
     if (tree_ref_to_iter(data->tree, &iter,  data->rowref)) {
-        gtk_tree_store_set (GTK_TREE_STORE(data->tree->store), &iter, STORE_TEXT_COL, label, -1);
+        gtk_tree_store_set(GTK_TREE_STORE(data->tree->store), &iter, STORE_TEXT_COL, nolinecontent.c_str(), -1);
     }
     g_free (label);
 }
@@ -346,9 +376,12 @@ void pi_content_changed(Inkscape::XML::Node *repr, const gchar * /*old_content*/
     if (data->tree->blocked) return;
 
     gchar *label = g_strdup_printf ("<?%s %s?>", repr->name(), new_content);
+    Glib::ustring nolinecontent = label;
+    nolinecontent = sp_remove_newlines_and_tabs(nolinecontent);
+
     GtkTreeIter iter;
     if (tree_ref_to_iter(data->tree, &iter,  data->rowref)) {
-        gtk_tree_store_set (GTK_TREE_STORE(data->tree->store), &iter, STORE_TEXT_COL, label, -1);
+        gtk_tree_store_set(GTK_TREE_STORE(data->tree->store), &iter, STORE_TEXT_COL, nolinecontent.c_str(), -1);
     }
     g_free (label);
 }

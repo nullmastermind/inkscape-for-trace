@@ -50,9 +50,11 @@ public:
         AttrColumns() {
 	  add(_attributeName);
 	  add(_attributeValue);
-	}
+      add(_attributeValueRender);
+        }
         Gtk::TreeModelColumn<Glib::ustring> _attributeName;
         Gtk::TreeModelColumn<Glib::ustring> _attributeValue;
+        Gtk::TreeModelColumn<Glib::ustring> _attributeValueRender;
     };
     AttrColumns _attrColumns;
 
@@ -113,6 +115,7 @@ public:
     void startValueEdit(Gtk::CellEditable *cell, const Glib::ustring &path);
     void nameEdited(const Glib::ustring &path, const Glib::ustring &name);
     void valueEdited(const Glib::ustring &path, const Glib::ustring &value);
+    void textViewMap();
     void valueCanceledPop();
     void valueEditedPop();
 };

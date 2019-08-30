@@ -24,8 +24,8 @@
 #include "xml/node-event-vector.h"
 #include "xml/attribute-record.h"
 
-#include <glibmm/i18n.h>
 #include <gdk/gdkkeysyms.h>
+#include <glibmm/i18n.h>
 
 static void on_attr_changed (Inkscape::XML::Node * repr,
                          const gchar * name,
@@ -134,7 +134,7 @@ AttrDialog::AttrDialog()
     _treeView.append_column(_("Value"), *_valueRenderer);
     _valueCol = _treeView.get_column(2);
     if (_valueCol) {
-      _valueCol->add_attribute(_valueRenderer->property_text(), _attrColumns._attributeValue);
+        _valueCol->add_attribute(_valueRenderer->property_text(), _attrColumns._attributeValueRender);
     }
     _popover = Gtk::manage(new Gtk::Popover());
     Gtk::Box *vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
@@ -144,6 +144,7 @@ AttrDialog::AttrDialog()
     _textview->set_editable(true);
     _textview->set_monospace(true);
     _textview->set_border_width(6);
+    _textview->signal_map().connect(sigc::mem_fun(*this, &AttrDialog::textViewMap));
     Glib::RefPtr<Gtk::TextBuffer> textbuffer = Gtk::TextBuffer::create();
     textbuffer->set_text("");
     _textview->set_buffer(textbuffer);
@@ -185,6 +186,25 @@ AttrDialog::AttrDialog()
     _updating = false;
 }
 
+void AttrDialog::textViewMap()
+{
+    auto vscroll = _scrolled_text_view.get_vadjustment();
+    int height = vscroll->get_upper() + 12; // padding 6+6
+    if (height < 450) {
+        _scrolled_text_view.set_min_content_height(height);
+        vscroll->set_value(vscroll->get_lower());
+    } else {
+        _scrolled_text_view.set_min_content_height(450);
+    }
+}
+
+gboolean sp_show_pop_map(gpointer data)
+{
+    AttrDialog *attrdialog = reinterpret_cast<AttrDialog *>(data);
+    attrdialog->textViewMap();
+    return FALSE;
+}
+
 static gboolean key_callback(GtkWidget *widget, GdkEventKey *event, AttrDialog *attrdialog)
 {
     switch (event->keyval) {
@@ -195,6 +215,8 @@ static gboolean key_callback(GtkWidget *widget, GdkEventKey *event, AttrDialog *
                     attrdialog->valueEditedPop();
                     attrdialog->_popover->hide();
                     return true;
+                } else {
+                    g_timeout_add(50, &sp_show_pop_map, attrdialog);
                 }
             }
         } break;
@@ -221,34 +243,22 @@ void AttrDialog::startNameEdit(Gtk::CellEditable *cell, const Glib::ustring &pat
     entry->signal_key_press_event().connect(sigc::bind(sigc::mem_fun(*this, &AttrDialog::onNameKeyPressed), entry));
 }
 
-gboolean sp_show_pop_realiced(gpointer data)
-{
-    AttrDialog *attrdialog = reinterpret_cast<AttrDialog *>(data);
-
-    auto vscroll = attrdialog->_scrolled_text_view.get_vadjustment();
-    int height = vscroll->get_upper() + 12; // padding 6+6
-    if (height < 450) {
-        attrdialog->_scrolled_text_view.set_min_content_height(height);
-    } else {
-        attrdialog->_scrolled_text_view.set_min_content_height(450);
-    }
-    return FALSE;
-}
 
 gboolean sp_show_attr_pop(gpointer data)
 {
     AttrDialog *attrdialog = reinterpret_cast<AttrDialog *>(data);
     attrdialog->_popover->show_all();
-    attrdialog->_popover->check_resize();
-    g_timeout_add(50, &sp_show_pop_realiced, attrdialog);
+
     return FALSE;
 }
 
 gboolean sp_close_entry(gpointer data)
 {
     Gtk::CellEditable *cell = reinterpret_cast<Gtk::CellEditable *>(data);
-    cell->editing_done();
-    cell->remove_widget();
+    if (cell) {
+        cell->property_editing_canceled() = true;
+        cell->remove_widget();
+    }
     return FALSE;
 }
 
@@ -266,9 +276,9 @@ void AttrDialog::startValueEdit(Gtk::CellEditable *cell, const Glib::ustring &pa
     Gtk::TreeModel::Row row = *iter;
     if (row && this->_repr) {
         Glib::ustring name = row[_attrColumns._attributeName];
-        if (colwidth - 10 < width || name == "content") {
+        if (row[_attrColumns._attributeValue] != row[_attrColumns._attributeValueRender] || colwidth - 10 < width ||
+            name == "content") {
             valueediting = entry->get_text();
-            Gtk::TreeIter iter = *_store->get_iter(path);
             Gdk::Rectangle rect;
             _treeView.get_cell_area((Gtk::TreeModel::Path)iter, *_valueCol, rect);
             if (_popover->get_position() == Gtk::PositionType::POS_BOTTOM) {
@@ -276,13 +286,8 @@ void AttrDialog::startValueEdit(Gtk::CellEditable *cell, const Glib::ustring &pa
             }
             _popover->set_pointing_to(rect);
             Glib::RefPtr<Gtk::TextBuffer> textbuffer = Gtk::TextBuffer::create();
-            textbuffer->set_text(entry->get_text());
+            textbuffer->set_text(row[_attrColumns._attributeValue]);
             _textview->set_buffer(textbuffer);
-            int scrolledcontentheight = 20;
-            if (name == "content") {
-                scrolledcontentheight = 450;
-            }
-            _scrolled_text_view.set_min_content_height(scrolledcontentheight);
             g_timeout_add(50, &sp_close_entry, cell);
             g_timeout_add(50, &sp_show_attr_pop, this);
         } else {
@@ -297,6 +302,7 @@ void AttrDialog::popClosed()
     Glib::RefPtr<Gtk::TextBuffer> textbuffer = Gtk::TextBuffer::create();
     textbuffer->set_text("");
     _textview->set_buffer(textbuffer);
+    _scrolled_text_view.set_min_content_height(20);
 }
 
 /**
@@ -358,6 +364,29 @@ void AttrDialog::attr_reset_context(gint attr)
     }
 }
 
+// TODO: improve and find a good location
+// duplicated in sp-xmlview.cpp:315
+Glib::ustring sp_remove_newlines_and_tabs(Glib::ustring val)
+{
+    int pos = 0;
+    Glib::ustring newlinesign = "␤";
+    Glib::ustring tabsign = "⇥";
+    while ((pos = val.find("\r\n")) != std::string::npos) {
+        val.erase(pos, 2);
+        val.insert(pos, newlinesign);
+    }
+    pos = 0;
+    while ((pos = val.find('\n')) != std::string::npos) {
+        val.erase(pos, 1);
+        val.insert(pos, newlinesign);
+    }
+    pos = 0;
+    while ((pos = val.find('\t')) != std::string::npos) {
+        val.erase(pos, 1);
+        val.insert(pos, tabsign);
+    }
+    return val;
+}
 /**
  * @brief AttrDialog::onAttrChanged
  * This is called when the XML has an updated attribute
@@ -367,6 +396,10 @@ void AttrDialog::onAttrChanged(Inkscape::XML::Node *repr, const gchar * name, co
     if (_updating) {
         return;
     }
+    Glib::ustring renderval = "";
+    if (new_value) {
+        renderval = sp_remove_newlines_and_tabs(Glib::ustring(new_value));
+    }
     for(auto iter: this->_store->children())
     {
         Gtk::TreeModel::Row row = *iter;
@@ -374,6 +407,7 @@ void AttrDialog::onAttrChanged(Inkscape::XML::Node *repr, const gchar * name, co
         if(name == col_name) {
             if(new_value) {
                 row[_attrColumns._attributeValue] = new_value;
+                row[_attrColumns._attributeValueRender] = renderval;
                 new_value = nullptr; // Don't make a new one
             } else {
                 _store->erase(iter);
@@ -385,6 +419,7 @@ void AttrDialog::onAttrChanged(Inkscape::XML::Node *repr, const gchar * name, co
         Gtk::TreeModel::Row row = *(_store->prepend());
         row[_attrColumns._attributeName] = name;
         row[_attrColumns._attributeValue] = new_value;
+        row[_attrColumns._attributeValueRender] = renderval;
     }
 }
 
@@ -510,8 +545,10 @@ gboolean sp_attrdialog_store_move_to_next(gpointer data)
     AttrDialog *attrdialog = reinterpret_cast<AttrDialog *>(data);
     auto selection = attrdialog->_treeView.get_selection();
     Gtk::TreeIter iter = *(selection->get_selected());
-    Gtk::TreeModel::Path model = (Gtk::TreeModel::Path)iter;
-    if (model == attrdialog->_modelpath) {
+    Gtk::TreeModel::Path path = (Gtk::TreeModel::Path)iter;
+    Gtk::TreeViewColumn *focus_column;
+    attrdialog->_treeView.get_cursor(path, focus_column);
+    if (path == attrdialog->_modelpath && focus_column == attrdialog->_treeView.get_column(1)) {
         attrdialog->_treeView.set_cursor(attrdialog->_modelpath, *attrdialog->_valueCol, true);
     }
     return FALSE;
@@ -602,6 +639,8 @@ void AttrDialog::valueEdited (const Glib::ustring& path, const Glib::ustring& va
         }
         if(!value.empty()) {
             row[_attrColumns._attributeValue] = value;
+            Glib::ustring renderval = sp_remove_newlines_and_tabs(value);
+            row[_attrColumns._attributeValueRender] = renderval;
         }
         Inkscape::Selection *selection = _desktop->getSelection();
         SPObject *obj = nullptr;
