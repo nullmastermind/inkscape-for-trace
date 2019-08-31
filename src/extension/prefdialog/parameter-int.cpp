@@ -152,13 +152,12 @@ ParamInt::get_widget(sigc::signal<void> *changeSignal)
         scale->set_size_request(400, -1);
         scale->show();
         hbox->pack_start(*scale, true, true);
-    }
-    else if (_mode == DEFAULT) {
+    } else if (_mode == DEFAULT) {
         Gtk::Label *label = Gtk::manage(new Gtk::Label(_text, Gtk::ALIGN_START));
         label->show();
         hbox->pack_start(*label, true, true);
 
-	auto spin = Gtk::manage(new Inkscape::UI::Widget::SpinButton(fadjust, 1.0, 0));
+        auto spin = Gtk::manage(new Inkscape::UI::Widget::SpinButton(fadjust, 1.0, 0));
         spin->show();
         hbox->pack_start(*spin, false, false);
     }

@@ -14,6 +14,7 @@
 
 namespace Gtk {
 class Widget;
+class ColorButton;
 }
 
 namespace Inkscape {
@@ -24,14 +25,11 @@ class Node;
 namespace Extension {
 
 class ParamColor : public InxParameter {
-private:
-    void _onColorChanged();
-
-    Inkscape::UI::SelectedColor _color;
-    sigc::connection _color_changed;
-    sigc::connection _color_released;
-
 public:
+    enum AppearanceMode {
+        DEFAULT, COLOR_BUTTON
+    };
+
     ParamColor(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
     ~ParamColor() override;
 
@@ -46,6 +44,20 @@ public:
 
     sigc::signal<void> *_changeSignal;
 
+private:
+    void _onColorChanged();
+    void _onColorButtonChanged();
+
+    /** Internal value of this parameter */
+    Inkscape::UI::SelectedColor _color;
+
+    sigc::connection _color_changed;
+    sigc::connection _color_released;
+
+    Gtk::ColorButton *_color_button;
+
+    /** appearance mode **/
+    AppearanceMode _mode = DEFAULT;
 }; // class ParamColor
 
 }  // namespace Extension
