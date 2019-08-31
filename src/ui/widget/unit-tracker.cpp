@@ -50,6 +50,7 @@ UnitTracker::UnitTracker(UnitType unit_type) :
 
         row = *(_store->append());
         row[columns.col_label    ] = unit;
+        row[columns.col_value    ] = unit;
         row[columns.col_tooltip  ] = ("");
         row[columns.col_icon     ] = "NotUsed";
         row[columns.col_sensitive] = true;
@@ -85,10 +86,13 @@ Inkscape::Util::Unit const * UnitTracker::getActiveUnit() const
     return _activeUnit;
 }
 
-void UnitTracker::changeLabel(Glib::ustring new_label, gint pos)
+void UnitTracker::changeLabel(Glib::ustring new_label, gint pos, bool onlylabel)
 {
     ComboToolItemColumns columns;
     _store->children()[pos][columns.col_label] = new_label;
+    if (!onlylabel) {
+        _store->children()[pos][columns.col_value] = new_label;
+    }
 }
 
 void UnitTracker::setActiveUnit(Inkscape::Util::Unit const *unit)
@@ -98,7 +102,7 @@ void UnitTracker::setActiveUnit(Inkscape::Util::Unit const *unit)
         ComboToolItemColumns columns;
         int index = 0;
         for (auto& row: _store->children() ) {
-            Glib::ustring storedUnit = row[columns.col_label];
+            Glib::ustring storedUnit = row[columns.col_value];
             if (!unit->abbr.compare (storedUnit)) {
                 _setActive (index);
                 break;
@@ -131,6 +135,7 @@ void UnitTracker::addUnit(Inkscape::Util::Unit const *u)
     Gtk::TreeModel::Row row;
     row = *(_store->append());
     row[columns.col_label    ] = u ? u->abbr.c_str() : "";
+    row[columns.col_value    ] = u ? u->abbr.c_str() : "";
     row[columns.col_tooltip  ] = ("");
     row[columns.col_icon     ] = "NotUsed";
     row[columns.col_sensitive] = true;
@@ -143,6 +148,7 @@ void UnitTracker::prependUnit(Inkscape::Util::Unit const *u)
     Gtk::TreeModel::Row row;
     row = *(_store->prepend());
     row[columns.col_label    ] = u ? u->abbr.c_str() : "";
+    row[columns.col_value    ] = u ? u->abbr.c_str() : "";
     row[columns.col_tooltip  ] = ("");
     row[columns.col_icon     ] = "NotUsed";
     row[columns.col_sensitive] = true;
@@ -207,10 +213,10 @@ void UnitTracker::_setActive(gint active)
             Glib::ustring newAbbr( "NotFound" );
             for (auto& row: _store->children() ) {
                 if (index == _active) {
-                    oldAbbr = row[columns.col_label];
+                    oldAbbr = row[columns.col_value];
                 }
                 if (index == active) {
-                    newAbbr = row[columns.col_label];
+                    newAbbr = row[columns.col_value];
                 }
                 if (newAbbr != "NotFound" && oldAbbr != "NotFound") break;
                 ++index;

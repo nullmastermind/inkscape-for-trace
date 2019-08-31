@@ -50,7 +50,7 @@ public:
     void addAdjustment(GtkAdjustment *adj);
     void prependUnit(Inkscape::Util::Unit const *u);
     void setFullVal(GtkAdjustment *adj, gdouble val);
-    void changeLabel(Glib::ustring new_label, gint pos);
+    void changeLabel(Glib::ustring new_label, gint pos, bool onlylabel = false);
 
     ComboToolItem *create_tool_item(Glib::ustring const &label,
                                     Glib::ustring const &tooltip);

@@ -48,7 +48,6 @@
 #include "object/sp-root.h"
 #include "object/sp-text.h"
 #include "object/sp-tspan.h"
-#include "style.h"
 
 #include "svg/css-ostringstream.h"
 #include "ui/icon-names.h"
@@ -217,6 +216,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
     , _fullsubselection(false)
     , _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
     , _tracker_fs(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
+    , _cusor_numbers(0)
 {
     /* Line height unit tracker */
     _tracker->prependUnit(unit_table.getUnit("")); // Ratio
@@ -224,7 +224,8 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
     _tracker->addUnit(unit_table.getUnit("em"));
     _tracker->addUnit(unit_table.getUnit("ex"));
     _tracker->setActiveUnit(unit_table.getUnit(""));
-    _tracker->changeLabel("lines", 0);
+    // We change only the display value
+    _tracker->changeLabel("lines", 0, true);
     _tracker_fs->setActiveUnit(unit_table.getUnit("mm"));
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -785,7 +786,7 @@ TextToolbar::fontsize_value_changed()
     }
     Unit const *unit_lh = _tracker->getActiveUnit();
     g_return_if_fail(unit_lh != nullptr);
-    if (!is_relative(unit_lh)) {
+    if (!is_relative(unit_lh) && _outer) {
         double lineheight = _line_height_adj->get_value();
         _freeze = false;
         _line_height_adj->set_value(lineheight * factor);
@@ -1368,10 +1369,9 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
     Inkscape::CSSOStringStream temp_stream;
     temp_stream << 1 << unit->abbr;
     temp_length.read(temp_stream.str().c_str());
-    if (!is_relative(SPCSSUnit(temp_length.unit))) {
-        prefs->setInt("/tools/text/lineheight/display_unit", temp_length.unit);
-    }
+    prefs->setInt("/tools/text/lineheight/display_unit", temp_length.unit);
     if (old_unit == temp_length.unit) {
+        _freeze = false;
         return;
     }
 
@@ -1748,17 +1748,18 @@ void TextToolbar::selection_modified_select_tool(Inkscape::Selection *selection,
     if (factor != 1.0) {
         Unit const *unit_lh = _tracker->getActiveUnit();
         g_return_if_fail(unit_lh != nullptr);
-        if (!is_relative(unit_lh)) {
+        if (!is_relative(unit_lh) && _outer) {
             double lineheight = _line_height_adj->get_value();
+            bool is_freeze = _freeze;
             _freeze = false;
             _line_height_adj->set_value(lineheight * factor);
-            _freeze = true;
+            _freeze = is_freeze;
         }
         prefs->setDouble("/options/font/scaleLineHeightFromFontSIze", 1.0);
     }
 }
 
-void TextToolbar::selection_changed(Inkscape::Selection * /*selection*/) // don't bother to update font list if subsel
+void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bother to update font list if subsel
                                                                          // changed
 {
 #ifdef DEBUG_TEXT
@@ -1789,9 +1790,10 @@ void TextToolbar::selection_changed(Inkscape::Selection * /*selection*/) // don'
         return;
     }
     _freeze = true;
-    if (!this->_subselection) {
+    if (selection && selection->objects().size()) {
         this->_outer = true;
-        ;
+        this->_subselection = false;
+        this->_fullsubselection = false;
         this->_sub_active_item = nullptr;
     }
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -1831,7 +1833,6 @@ void TextToolbar::selection_changed(Inkscape::Selection * /*selection*/) // don'
      */
     SPStyle query(document);
     SPStyle query_fallback(document);
-    SPStyle query_super_fallback(document);
     int result_family = sp_desktop_query_style(desktop, &query, QUERY_STYLE_PROPERTY_FONTFAMILY);
     int result_style = sp_desktop_query_style(desktop, &query, QUERY_STYLE_PROPERTY_FONTSTYLE);
     int result_baseline = sp_desktop_query_style(desktop, &query, QUERY_STYLE_PROPERTY_BASELINES);
@@ -1844,23 +1845,21 @@ void TextToolbar::selection_changed(Inkscape::Selection * /*selection*/) // don'
     // The desktop selection never includes the elements inside the <text> element.
     int result_numbers = 0;
     int result_numbers_fallback = 0;
-    int result_numbers_super_fallback = 0;
 
     if (_outer && this->_sub_active_item) {
-        std::vector<SPItem *> fallback{ this->_sub_active_item };
-        SPItem *sfallback = dynamic_cast<SPItem *>(this->_sub_active_item->parent);
-        std::vector<SPItem *> super_fallback{ sfallback };
-        result_numbers = sp_desktop_query_style(desktop, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
+        std::vector<SPItem *> qactive{ this->_sub_active_item };
+        SPItem *parent = dynamic_cast<SPItem *>(this->_sub_active_item->parent);
+        std::vector<SPItem *> qparent{ parent };
+        result_numbers =
+            sp_desktop_query_style_from_list(qactive, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
         result_numbers_fallback =
-            sp_desktop_query_style_from_list(fallback, &query_fallback, QUERY_STYLE_PROPERTY_FONTNUMBERS);
-        result_numbers_super_fallback =
-            sp_desktop_query_style_from_list(super_fallback, &query_fallback, QUERY_STYLE_PROPERTY_FONTNUMBERS);
+            sp_desktop_query_style_from_list(qparent, &query_fallback, QUERY_STYLE_PROPERTY_FONTNUMBERS);
     } else if (_outer) {
         result_numbers = sp_desktop_query_style_from_list(to_work, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
     } else {
         result_numbers = sp_desktop_query_style(desktop, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
     }
-
+    
     /*
      * If no text in selection (querying returned nothing), read the style from
      * the /tools/text preferences (default style for new texts). Return if
@@ -1903,13 +1902,14 @@ void TextToolbar::selection_changed(Inkscape::Selection * /*selection*/) // don'
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
-        double size = sp_style_css_size_px_to_units(query.font_size.computed, unit);
+        double size = sp_style_css_size_px_to_units(query_cursor.font_size.computed, unit);
+        if (!size && result_numbers != QUERY_STYLE_NOTHING) {
+            size = sp_style_css_size_px_to_units(query.font_size.computed, unit);
+        }
         if (!size && result_numbers_fallback != QUERY_STYLE_NOTHING) {
             size = sp_style_css_size_px_to_units(query_fallback.font_size.computed, unit);
         }
-        if (!size && result_numbers_super_fallback != QUERY_STYLE_NOTHING) {
-            size = sp_style_css_size_px_to_units(query_super_fallback.font_size.computed, unit);
-        }
+        
         auto unit_str = sp_style_get_css_unit_string(unit);
         Glib::ustring tooltip = Glib::ustring::format(_("Font size"), " (", unit_str, ")");
 
@@ -1980,30 +1980,24 @@ void TextToolbar::selection_changed(Inkscape::Selection * /*selection*/) // don'
 
         double height = query.line_height.value;
         gint line_height_unit = query.line_height.unit;
-
         if (!height && result_numbers_fallback != QUERY_STYLE_NOTHING) {
             height = query_fallback.line_height.value;
             line_height_unit = query_fallback.line_height.unit;
         }
-        if (!height && result_numbers_super_fallback != QUERY_STYLE_NOTHING) {
-            height = query_super_fallback.line_height.value;
-            line_height_unit = query_super_fallback.line_height.unit;
-        }
-
         if (line_height_unit == SP_CSS_UNIT_PERCENT) {
             height *= 100.0; // Inkscape store % as fraction in .value
         }
 
         // We dot want to parse values just show
         if (!is_relative(SPCSSUnit(line_height_unit))) {
-            gint absunit = prefs->getInt("/tools/text/lineheight/display_unit", 1);
+            gint curunit = prefs->getInt("/tools/text/lineheight/display_unit", 1);
             // For backwards comaptibility
-            if (is_relative(SPCSSUnit(absunit))) {
+            if (is_relative(SPCSSUnit(curunit))) {
                 prefs->setInt("/tools/text/lineheight/display_unit", 1);
-                absunit = 1;
+                curunit = 1;
             }
-            height = Quantity::convert(height, "px", sp_style_get_css_unit_string(absunit));
-            line_height_unit = absunit;
+            height = Quantity::convert(height, "px", sp_style_get_css_unit_string(curunit));
+            line_height_unit = curunit;
         }
         _line_height_adj->set_value(height);
 
@@ -2020,7 +2014,7 @@ void TextToolbar::selection_changed(Inkscape::Selection * /*selection*/) // don'
         if( line_height_unit == SP_CSS_UNIT_NONE ) {
             // Function 'sp_style_get_css_unit_string' returns 'px' for unit none.
             // We need to avoid this.
-            _tracker->setActiveUnitByAbbr("lines");
+            _tracker->setActiveUnitByAbbr("");
         } else {
             _tracker->setActiveUnitByAbbr(sp_style_get_css_unit_string(line_height_unit));
         }
@@ -2213,7 +2207,6 @@ void TextToolbar::subselection_changed(gpointer texttool)
             Inkscape::Text::Layout::iterator end = layout->end();
             Inkscape::Text::Layout::iterator start_selection = tc->text_sel_start;
             Inkscape::Text::Layout::iterator end_selection = tc->text_sel_end;
-
             if (start_selection > end_selection) {
                 Inkscape::Text::Layout::iterator tmp_selection = start_selection;
                 start_selection = end_selection;
@@ -2236,6 +2229,21 @@ void TextToolbar::subselection_changed(gpointer texttool)
                     SPItem *item = dynamic_cast<SPItem *>(child);
                     if (counter == startline) {
                         this->_sub_active_item = item;
+                        int origin_selection = layout->iteratorToCharIndex(tc->text_sel_start);
+                        Inkscape::Text::Layout::iterator next = layout->charIndexToIterator(origin_selection + 1);
+                        Inkscape::Text::Layout::iterator prev = layout->charIndexToIterator(origin_selection - 1);
+                        //TODO: find a better way to init
+                        _updating = true;
+                        SPStyle query(SP_ACTIVE_DOCUMENT);
+                        query_cursor = query;
+                        if (end_selection.nextStartOfSpan()) {
+                            tc->text_sel_start = prev;
+                        } else {
+                            tc->text_sel_start = next;
+                        }
+                        _cusor_numbers = sp_desktop_query_style(SP_ACTIVE_DESKTOP, &query_cursor, QUERY_STYLE_PROPERTY_FONTNUMBERS);
+                        tc->text_sel_start = layout->charIndexToIterator(origin_selection);
+                        _updating = false;
                         break;
                     }
                     ++counter;

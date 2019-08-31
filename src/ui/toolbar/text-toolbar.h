@@ -31,6 +31,7 @@
 #include "object/sp-item.h"
 #include "object/sp-object.h"
 #include "toolbar.h"
+#include "style.h"
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
 #include <gtkmm/popover.h>
@@ -101,6 +102,8 @@ private:
     bool _subselection;
     bool _fullsubselection;
     bool _updating;
+    int _cusor_numbers;
+    SPStyle query_cursor;
     double selection_fontsize;
     sigc::connection c_selection_changed;
     sigc::connection c_selection_modified;

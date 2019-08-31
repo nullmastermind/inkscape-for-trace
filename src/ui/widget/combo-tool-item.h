@@ -33,6 +33,7 @@ class ComboToolItemColumns : public Gtk::TreeModel::ColumnRecord {
 public:
     ComboToolItemColumns() {
         add (col_label);
+        add (col_value);
         add (col_icon);
         add (col_pixbuf);
         add (col_data);  // Used to store a pointer
@@ -40,6 +41,7 @@ public:
         add (col_sensitive);
     }
     Gtk::TreeModelColumn<Glib::ustring> col_label;
+    Gtk::TreeModelColumn<Glib::ustring> col_value;
     Gtk::TreeModelColumn<Glib::ustring> col_icon;
     Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> >   col_pixbuf;
     Gtk::TreeModelColumn<void *>        col_data;
