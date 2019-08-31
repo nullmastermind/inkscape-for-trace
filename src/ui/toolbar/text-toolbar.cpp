@@ -2229,20 +2229,22 @@ void TextToolbar::subselection_changed(gpointer texttool)
                     SPItem *item = dynamic_cast<SPItem *>(child);
                     if (counter == startline) {
                         this->_sub_active_item = item;
-                        int origin_selection = layout->iteratorToCharIndex(tc->text_sel_start);
+                        int origin_selection = layout->iteratorToCharIndex(start_selection);
                         Inkscape::Text::Layout::iterator next = layout->charIndexToIterator(origin_selection + 1);
                         Inkscape::Text::Layout::iterator prev = layout->charIndexToIterator(origin_selection - 1);
                         //TODO: find a better way to init
                         _updating = true;
                         SPStyle query(SP_ACTIVE_DOCUMENT);
                         query_cursor = query;
-                        if (end_selection.nextStartOfSpan()) {
-                            tc->text_sel_start = prev;
-                        } else {
+                        Inkscape::Text::Layout::iterator start_line = tc->text_sel_start;
+                        start_line.thisStartOfLine();
+                        if (tc->text_sel_start == start_line) {
                             tc->text_sel_start = next;
+                        } else {
+                            tc->text_sel_start = prev;
                         }
                         _cusor_numbers = sp_desktop_query_style(SP_ACTIVE_DESKTOP, &query_cursor, QUERY_STYLE_PROPERTY_FONTNUMBERS);
-                        tc->text_sel_start = layout->charIndexToIterator(origin_selection);
+                        tc->text_sel_start = start_selection;
                         _updating = false;
                         break;
                     }
