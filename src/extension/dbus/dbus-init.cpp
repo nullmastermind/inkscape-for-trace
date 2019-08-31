@@ -189,12 +189,18 @@ dbus_init_desktop_interface (SPDesktop * dt)
     connection = dbus_get_connection();
     proxy = dbus_get_proxy(connection);
 
-    DocumentInterface *doc_interface = (DocumentInterface*) dbus_register_object (connection, 
-          proxy, TYPE_DOCUMENT_INTERFACE,
-          &dbus_glib_document_interface_object_info, name.c_str());
-    doc_interface->target = Inkscape::ActionContext(dt);
-    doc_interface->updates = TRUE;
-    dt->dbus_document_interface=doc_interface;
+    if (!dbus_g_connection_lookup_g_object(connection, name.c_str())) {
+        DocumentInterface *doc_interface = (DocumentInterface*) dbus_register_object (connection,
+            proxy,
+            TYPE_DOCUMENT_INTERFACE,
+            &dbus_glib_document_interface_object_info,
+            name.c_str());
+
+        // Set the document info for this interface
+        doc_interface->target = Inkscape::ActionContext(dt);
+        doc_interface->updates = TRUE;
+        dt->dbus_document_interface=doc_interface;
+    }
     return strdup(name.c_str());
 }
 
