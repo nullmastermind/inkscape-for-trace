@@ -9,6 +9,7 @@
  */
 
 #include "prefdialog.h"
+
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/separator.h>
 #include <glibmm/i18n.h>
@@ -22,11 +23,11 @@
 #include "document.h"
 #include "document-undo.h"
 
-#include "effect.h"
-#include "implementation/implementation.h"
+#include "extension/effect.h"
+#include "extension/execution-env.h"
+#include "extension/implementation/implementation.h"
 
-#include "execution-env.h"
-#include "param/parameter.h"
+#include "parameter.h"
 
 
 namespace Inkscape {
@@ -34,17 +35,15 @@ namespace Extension {
 
 
 /** \brief  Creates a new preference dialog for extension preferences
-    \param  name  Name of the Extension whose dialog this is
-    \param  help  The help string for the extension (NULL if none)
+    \param  name      Name of the Extension whose dialog this is (should already be translated)
     \param  controls  The extension specific widgets in the dialog
 
     This function initializes the dialog with the name of the extension
     in the title.  It adds a few buttons and sets up handlers for
     them.  It also places the passed-in widgets into the dialog.
 */
-PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * controls, Effect * effect) :
-    Gtk::Dialog(_(name.c_str()), true),
-    _help(help),
+PrefDialog::PrefDialog (Glib::ustring name, Gtk::Widget * controls, Effect * effect) :
+    Gtk::Dialog(name, true),
     _name(name),
     _button_ok(nullptr),
     _button_cancel(nullptr),
@@ -55,7 +54,7 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
 {
     this->set_default_size(0,0);  // we want the window to be as small as possible instead of clobbering up space
 
-    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox());
+    Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox());
     if (controls == nullptr) {
         if (_effect == nullptr) {
             std::cout << "AH!!!  No controls and no effect!!!" << std::endl;
@@ -70,11 +69,6 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
 
     this->get_content_area()->pack_start(*hbox, true, true, 0);
 
-    /*
-    Gtk::Button * help_button = add_button(Gtk::Stock::HELP, Gtk::RESPONSE_HELP);
-    if (_help == NULL)
-        help_button->set_sensitive(false);
-    */
     _button_cancel = add_button(_effect == nullptr ? _("_Cancel") : _("_Close"), Gtk::RESPONSE_CANCEL);
     _button_ok     = add_button(_effect == nullptr ? _("_OK")     : _("_Apply"), Gtk::RESPONSE_OK);
     set_default_response(Gtk::RESPONSE_OK);
@@ -87,24 +81,24 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
                 std::cout << "Error encountered loading live parameter XML !!!" << std::endl;
                 return;
             }
-            _param_preview = Parameter::make(doc->root(), _effect);
+            _param_preview = InxParameter::make(doc->root(), _effect);
         }
 
         auto sep = Gtk::manage(new Gtk::Separator());
         sep->show();
 
-        this->get_content_area()->pack_start(*sep, false, false, Parameter::GUI_BOX_SPACING);
+        this->get_content_area()->pack_start(*sep, false, false, InxWidget::GUI_BOX_SPACING);
 
         hbox = Gtk::manage(new Gtk::HBox());
-        hbox->set_border_width(Parameter::GUI_BOX_MARGIN);
-        _button_preview = _param_preview->get_widget(nullptr, nullptr, &_signal_preview);
+        hbox->set_border_width(InxWidget::GUI_BOX_MARGIN);
+        _button_preview = _param_preview->get_widget(&_signal_preview);
         _button_preview->show();
         hbox->pack_start(*_button_preview, true, true, 0);
         hbox->show();
 
         this->get_content_area()->pack_start(*hbox, false, false, 0);
 
-        Gtk::Box * hbox = dynamic_cast<Gtk::Box *>(_button_preview);
+        Gtk::Box *hbox = dynamic_cast<Gtk::Box *>(_button_preview);
         if (hbox != nullptr) {
             _checkbox_preview = dynamic_cast<Gtk::CheckButton *>(hbox->get_children().front());
         }
@@ -145,39 +139,12 @@ PrefDialog::~PrefDialog ( )
     return;
 }
 
-#if 0
-/** \brief  Runs the dialog
-    \return The response to the dialog
-
-    This function overrides the run function in the GTKmm dialog
-    class, but basically it only calls it.  This function only
-    handles the \c Gtk::RESPONSE_HELP return, and in that case it
-    brings up the help window.  All other return values are returned
-    to the calling function.
-*/
-int
-PrefDialog::run (void) {
-    int resp = Gtk::RESPONSE_HELP;
-    while (resp == Gtk::RESPONSE_HELP) {
-        resp = Gtk::Dialog::run();
-        if (resp == Gtk::RESPONSE_HELP) {
-            /*
-            if (_helpDialog == NULL) {
-                _helpDialog = new HelpDialog(_help);
-            }
-            */
-        }
-    }
-    return resp;
-}
-#endif
-
 void
 PrefDialog::preview_toggle () {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     SPDocument *document = SP_ACTIVE_DOCUMENT;
     bool modified = document->isModifiedSinceSave();
-    if(_param_preview->get_bool(nullptr, nullptr)) {
+    if(_param_preview->get_bool()) {
         if (_exEnv == nullptr) {
             set_modal(true);
             _exEnv = new ExecutionEnv(_effect, SP_ACTIVE_DESKTOP, nullptr, false, false);
@@ -258,9 +225,9 @@ PrefDialog::on_response (int signal) {
     return;
 }
 
-#include "internal/clear-n_.h"
+#include "extension/internal/clear-n_.h"
 
-const char * PrefDialog::live_param_xml = "<param name=\"__live_effect__\" type=\"boolean\" _gui-text=\"" N_("Live preview") "\" gui-description=\"" N_("Is the effect previewed live on canvas?") "\">false</param>";
+const char * PrefDialog::live_param_xml = "<param name=\"__live_effect__\" type=\"bool\" gui-text=\"" N_("Live preview") "\" gui-description=\"" N_("Is the effect previewed live on canvas?") "\">false</param>";
 
 }; }; /* namespace Inkscape, Extension */
 

@@ -8,10 +8,10 @@
  *
  */
 
+#include "file.h"
+
 #include <iostream>
 #include <gtkmm.h>
-
-#include "file.h"
 
 #include "document.h"
 #include "document-undo.h"
@@ -23,6 +23,9 @@
 #include "extension/input.h"
 
 #include "object/sp-root.h"
+
+#include "xml/repr.h"
+
 
 /**
  * Create a blank document, remove any template data.
@@ -36,7 +39,15 @@ ink_file_new(const std::string &Template)
     if (doc) {
         // Remove all the template info from xml tree
         Inkscape::XML::Node *myRoot = doc->getReprRoot();
-        Inkscape::XML::Node *nodeToRemove = sp_repr_lookup_name(myRoot, "inkscape:_templateinfo");
+        Inkscape::XML::Node *nodeToRemove;
+
+        nodeToRemove = sp_repr_lookup_name(myRoot, "inkscape:templateinfo");
+        if (nodeToRemove != nullptr) {
+            Inkscape::DocumentUndo::ScopedInsensitive no_undo(doc);
+            sp_repr_unparent(nodeToRemove);
+            delete nodeToRemove;
+        }
+        nodeToRemove = sp_repr_lookup_name(myRoot, "inkscape:_templateinfo"); // backwards-compatibility
         if (nodeToRemove != nullptr) {
             Inkscape::DocumentUndo::ScopedInsensitive no_undo(doc);
             sp_repr_unparent(nodeToRemove);

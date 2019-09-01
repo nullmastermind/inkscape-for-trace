@@ -37,7 +37,7 @@ Swirl::init()
 		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
 			"<name>" N_("Swirl") "</name>\n"
 			"<id>org.inkscape.effect.bitmap.swirl</id>\n"
-			"<param name=\"degrees\" _gui-text=\"" N_("Degrees:") "\" type=\"int\" min=\"-360\" max=\"360\">30</param>\n"
+			"<param name=\"degrees\" gui-text=\"" N_("Degrees:") "\" type=\"int\" min=\"-360\" max=\"360\">30</param>\n"
 			"<effect>\n"
 				"<object-type>all</object-type>\n"
 				"<effects-menu>\n"

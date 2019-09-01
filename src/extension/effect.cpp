@@ -9,15 +9,16 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "prefdialog.h"
-#include "inkscape.h"
-#include "helper/action.h"
-#include "ui/view/view.h"
-
-#include "implementation/implementation.h"
 #include "effect.h"
+
 #include "execution-env.h"
+#include "inkscape.h"
 #include "timer.h"
+
+#include "helper/action.h"
+#include "implementation/implementation.h"
+#include "prefdialog/prefdialog.h"
+#include "ui/view/view.h"
 
 
 
@@ -33,14 +34,11 @@ Inkscape::XML::Node * Effect::_filters_list = nullptr;
 #define  EFFECTS_LIST  "effects-list"
 #define  FILTERS_LIST  "filters-list"
 
-Effect::Effect (Inkscape::XML::Node * in_repr, Implementation::Implementation * in_imp)
-    : Extension(in_repr, in_imp),
-      _id_noprefs(Glib::ustring(get_id()) + ".noprefs"),
-      _name_noprefs(Glib::ustring(_(get_name())) + _(" (No preferences)")),
-      _verb(get_id(), get_name(), nullptr, nullptr, this, true),
-      _verb_nopref(_id_noprefs.c_str(), _name_noprefs.c_str(), nullptr, nullptr, this, false),
-      _menu_node(nullptr), _workingDialog(true),
-      _prefDialog(nullptr)
+Effect::Effect (Inkscape::XML::Node *in_repr, Implementation::Implementation *in_imp, std::string *base_directory)
+    : Extension(in_repr, in_imp, base_directory)
+    , _verb(get_id(), get_name(), nullptr, nullptr, this, true)
+    , _menu_node(nullptr), _workingDialog(true)
+    , _prefDialog(nullptr)
 {
     Inkscape::XML::Node * local_effects_menu = nullptr;
 
@@ -107,8 +105,8 @@ Effect::Effect (Inkscape::XML::Node * in_repr, Implementation::Implementation * 
 
         if (!hidden) {
             if (_filters_list &&
-                local_effects_menu && 
-                local_effects_menu->attribute("name") && 
+                local_effects_menu &&
+                local_effects_menu->attribute("name") &&
                 !strcmp(local_effects_menu->attribute("name"), ("Filters"))) {
                 merge_menu(_filters_list->parent(), _filters_list, local_effects_menu->firstChild(), _menu_node);
             } else if (_effects_list) {
@@ -129,24 +127,25 @@ Effect::merge_menu (Inkscape::XML::Node * base,
     Inkscape::XML::Node * tomerge = nullptr;
     Inkscape::XML::Node * submenu = nullptr;
 
-    /* printf("Merge menu with '%s' '%s' '%s'\n",
-            base != NULL ? base->name() : "NULL",
-            pattern != NULL ? pattern->name() : "NULL",
-            merge != NULL ? merge->name() : "NULL"); */
-
     if (pattern == nullptr) {
         // Merge the verb name
         tomerge = merge;
-        mergename = _(this->get_name());
+        mergename = get_translation(get_name());
     } else {
-        gchar const * menuname = pattern->attribute("name");
+        gchar const *menuname = pattern->attribute("name");
         if (menuname == nullptr) menuname = pattern->attribute("_name");
         if (menuname == nullptr) return;
-        
+
         Inkscape::XML::Document *xml_doc;
         xml_doc = base->document();
         tomerge = xml_doc->createElement("submenu");
-        mergename = _(menuname);
+        if (_translation_enabled) {
+            mergename = get_translation(menuname);
+        } else {
+            // Even if the extension author requested the extension not to be translated,
+            // it still seems desirable to be able to put the extension into the existing (translated) submenus.
+            mergename = _(menuname);
+        }
         tomerge->setAttribute("name", mergename, false);
     }
 
@@ -240,7 +239,7 @@ Effect::prefs (Inkscape::UI::View::View * doc)
         return true;
     }
 
-    if (param_visible_count() == 0) {
+    if (widget_visible_count() == 0) {
         effect(doc);
         return true;
     }
@@ -249,7 +248,8 @@ Effect::prefs (Inkscape::UI::View::View * doc)
         set_state(Extension::STATE_LOADED);
     if (!loaded()) return false;
 
-    _prefDialog = new PrefDialog(this->get_name(), this->get_help(), nullptr, this);
+    Glib::ustring name = get_translation(this->get_name());
+    _prefDialog = new PrefDialog(name, nullptr, this);
     _prefDialog->show();
 
     return true;
@@ -288,7 +288,7 @@ Effect::effect (Inkscape::UI::View::View * doc)
 
 /** \brief  Sets which effect was called last
     \param in_effect  The effect that has been called
-    
+
     This function sets the static variable \c _last_effect and it
     ensures that the last effect verb is sensitive.
 

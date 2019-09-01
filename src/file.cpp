@@ -827,10 +827,10 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
     auto root = document->getReprRoot();
     auto xml_doc = document->getReprDoc();
 
-    auto templateinfo_node = xml_doc->createElement("inkscape:_templateinfo");
+    auto templateinfo_node = xml_doc->createElement("inkscape:templateinfo");
     Inkscape::GC::release(templateinfo_node);
 
-    auto element_node = xml_doc->createElement("inkscape:_name");
+    auto element_node = xml_doc->createElement("inkscape:name");
     Inkscape::GC::release(element_node);
 
     element_node->appendChild(xml_doc->createTextNode(name.c_str()));
@@ -847,7 +847,7 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
 
     if (description.length() != 0) {
 
-        element_node = xml_doc->createElement("inkscape:_shortdesc");
+        element_node = xml_doc->createElement("inkscape:shortdesc");
         Inkscape::GC::release(element_node);
 
         element_node->appendChild(xml_doc->createTextNode(description.c_str()));
@@ -864,7 +864,7 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
 
     if (keywords.length() != 0) {
 
-        element_node = xml_doc->createElement("inkscape:_keywords");
+        element_node = xml_doc->createElement("inkscape:keywords");
         Inkscape::GC::release(element_node);
 
         element_node->appendChild(xml_doc->createTextNode(keywords.c_str()));
@@ -888,7 +888,7 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
             Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
 
         if (isDefault) {
-            // save as "default.svg" by default (so it works intependent of UI language)unless
+            // save as "default.svg" by default (so it works independently of UI language), unless
             // a localized template like "default.de.svg" is already present (which overrides "default.svg")
             Glib::ustring default_svg_localized = Glib::ustring("default.") + _("en") + ".svg";
             filename = Inkscape::IO::Resource::get_path_ustring(USER, TEMPLATES, default_svg_localized.c_str());

@@ -50,7 +50,7 @@ public:
 
 	/* File loader related */
 	static void filters_all_files();
-	static void filters_load_node(Inkscape::XML::Node * node, gchar * menuname);
+	static void filters_load_node(Inkscape::XML::Node *node, gchar * menuname);
 
 };
 

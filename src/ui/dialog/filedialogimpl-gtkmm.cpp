@@ -330,7 +330,7 @@ void FileOpenDialogImplGtk::createFilterMenu()
             Glib::ustring extension = imod->get_extension();
             fileDialogExtensionToPattern(upattern, extension);
 
-            Glib::ustring uname(_(imod->get_filetypename()));
+            Glib::ustring uname(imod->get_filetypename(true));
 
             auto filter = Gtk::FileFilter::create();
             filter->set_name(uname);
@@ -624,10 +624,10 @@ void FileSaveDialogImplGtk::fileTypeChangedCallback()
     auto filter = Gtk::FileFilter::create();
     filter->add_pattern(type.pattern);
     set_filter(filter);
-    
+
     if (fromCB) {
         //do not update if called from a name change
-        fromCB = false; 
+        fromCB = false;
         return;
     }
 
@@ -642,7 +642,7 @@ void FileSaveDialogImplGtk::fileNameChanged() {
     if (extension && Glib::ustring(dynamic_cast<Inkscape::Extension::Output *>(extension)->get_extension()).casefold() == ext ) return;
     if (knownExtensions.find(ext) == knownExtensions.end()) return;
     fromCB = true;
-    fileTypeComboBox.set_active_text(_(knownExtensions[ext]->get_filetypename()));
+    fileTypeComboBox.set_active_text(knownExtensions[ext]->get_filetypename(true));
 }
 
 void FileSaveDialogImplGtk::addFileType(Glib::ustring name, Glib::ustring pattern)
@@ -672,7 +672,7 @@ void FileSaveDialogImplGtk::createFileTypeMenu()
             continue;
 
         FileType type;
-        type.name = (_(omod->get_filetypename()));
+        type.name = omod->get_filetypename(true);
         type.pattern = "*";
         Glib::ustring extension = omod->get_extension();
         knownExtensions.insert(std::pair<Glib::ustring, Inkscape::Extension::Output*>(extension.casefold(), omod));

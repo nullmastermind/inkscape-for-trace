@@ -821,7 +821,7 @@ Geom::Path PrintEmf::pathv_to_simple_polygon(Geom::PathVector const &pathv, int 
         v2 = unit_vector(P1_lead - P1      );
         if(Geom::are_near(dot(v1,v2), 1.0, 1e-5)){ // P1 is within a straight line
             P1 = P1_lead;
-            continue;  
+            continue;
         }
         // P1 is the center point of a turn of some angle
         if(!*vertices){
@@ -841,7 +841,7 @@ Geom::Path PrintEmf::pathv_to_simple_polygon(Geom::PathVector const &pathv, int 
         }
         P1_trail = P1;
         P1 = P1_lead;
-    }    
+    }
     return(output);
 }
 
@@ -872,7 +872,7 @@ Geom::Path PrintEmf::pathv_to_rect(Geom::PathVector const &pathv, bool *is_rect,
             }
             if(cit == pR.end_open())break;
         }
-        
+
         /*  For increased numerical stability, snap the angle to the nearest 1/100th of a degree. */
         double convert = 36000.0/ (2.0 * M_PI);
         *angle = round(*angle * convert)/convert;
@@ -969,11 +969,11 @@ U_TRIVERTEX PrintEmf::make_trivertex(Geom::Point Pt, U_COLORREF uc){
     U_TRIVERTEX tv;
     using Geom::X;
     using Geom::Y;
-    tv.x     = (int32_t) round(Pt[X]);            
-    tv.y     = (int32_t) round(Pt[Y]);          
-    tv.Red   = uc.Red      << 8;            
-    tv.Green = uc.Green    << 8;          
-    tv.Blue  = uc.Blue     << 8;           
+    tv.x     = (int32_t) round(Pt[X]);
+    tv.y     = (int32_t) round(Pt[Y]);
+    tv.Red   = uc.Red      << 8;
+    tv.Green = uc.Green    << 8;
+    tv.Blue  = uc.Blue     << 8;
     tv.Alpha = uc.Reserved << 8;          // EMF will ignore this
     return(tv);
 }
@@ -997,7 +997,7 @@ void  PrintEmf::do_clip_if_present(SPStyle const *style){
         /* The current implementation converts only one level of clipping.  If there were more
            clips further up the stack they should be combined with the pathvector using "and".  Since this
            comes up rarely, and would involve a lot of searching (all the way up the stack for every
-           draw operation), it has not yet been implemented.  
+           draw operation), it has not yet been implemented.
 
            Note, to debug this section of code use print statements on sp_svg_write_path(combined_pathvector).
         */
@@ -1010,7 +1010,7 @@ void  PrintEmf::do_clip_if_present(SPStyle const *style){
             item = SP_ITEM(item->parent);
             if(!item || SP_IS_ROOT(item))break; // this will never be a clipping path
         }
-        
+
         if(scp != scpActive){  // change or remove the clipping
             if(scpActive){  // clear the existing clip
                 rec = U_EMRRESTOREDC_set(-1);
@@ -1044,10 +1044,10 @@ void  PrintEmf::do_clip_if_present(SPStyle const *style){
                     if (SP_IS_GROUP(item)) {      // not implemented
                         // return sp_group_render(item);
                         combined_pathvector = merge_PathVector_with_group(combined_pathvector, item, tfc);
-                    } else if (SP_IS_SHAPE(item)) {                
+                    } else if (SP_IS_SHAPE(item)) {
                         combined_pathvector = merge_PathVector_with_shape(combined_pathvector, item, tfc);
-                    } else {        // not implemented           
-                    }                                              
+                    } else {        // not implemented
+                    }
                 }
 
                 if (!combined_pathvector.empty()) { // if clipping path isn't empty, define EMF clipping record
@@ -1086,10 +1086,10 @@ Geom::PathVector PrintEmf::merge_PathVector_with_group(Geom::PathVector const &c
         }
         if (SP_IS_GROUP(item)) {
             new_combined_pathvector = merge_PathVector_with_group(new_combined_pathvector, item, tfc); // could be endlessly recursive on a badly formed SVG
-        } else if (SP_IS_SHAPE(item)) {                
+        } else if (SP_IS_SHAPE(item)) {
             new_combined_pathvector = merge_PathVector_with_shape(new_combined_pathvector, item, tfc);
-        } else {        // not implemented           
-        }                                              
+        } else {        // not implemented
+        }
     }
     return new_combined_pathvector;
 }
@@ -1129,9 +1129,9 @@ unsigned int PrintEmf::fill(
     use_stroke = false;
 
     fill_transform = tf;
-    
+
     int brush_stat = create_brush(style, nullptr);
-    
+
     /* native linear gradients are only used if the object is a rectangle AND the gradient is parallel to the sides of the object */
     bool is_Rect = false;
     double angle;
@@ -1278,17 +1278,17 @@ unsigned int PrintEmf::fill(
                 if (!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)) {
                     g_error("Fatal programming error in PrintEmf::image at EMRMODIFYWORLDTRANSFORM");
                 }
-                
+
                 for(;istop<nstops;istop++){
                      doff_range = tg->vector.stops[istop].offset;  // next or last stop
-                     if(rectDir == 1 || rectDir == 2){ 
-                         outUL = Geom::Point(doff_base *wRect, 0    ); 
-                         outLR = Geom::Point(doff_range*wRect, hRect); 
+                     if(rectDir == 1 || rectDir == 2){
+                         outUL = Geom::Point(doff_base *wRect, 0    );
+                         outLR = Geom::Point(doff_range*wRect, hRect);
                          gMode = U_GRADIENT_FILL_RECT_H;
                      }
                      else {
-                         outUL = Geom::Point(0,    doff_base *hRect); 
-                         outLR = Geom::Point(wRect,doff_range*hRect); 
+                         outUL = Geom::Point(0,    doff_base *hRect);
+                         outLR = Geom::Point(wRect,doff_range*hRect);
                          gMode = U_GRADIENT_FILL_RECT_V;
                      }
 
@@ -1810,7 +1810,7 @@ unsigned int PrintEmf::draw_pathv_to_EMF(Geom::PathVector const &pathv, const Ge
     /*  inkscape to EMF scaling is done below, but NOT the rotation/translation transform,
         that is handled by the EMF MODIFYWORLDTRANSFORM record
     */
-    
+
     Geom::PathVector pv = pathv_to_linear_and_cubic_beziers(pathv * transform);
 
     rec = U_EMRBEGINPATH_set();
@@ -2185,15 +2185,15 @@ void PrintEmf::init()
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
         "<name>Enhanced Metafile Print</name>\n"
         "<id>org.inkscape.print.emf</id>\n"
-        "<param name=\"destination\" type=\"string\"></param>\n"
-        "<param name=\"textToPath\" type=\"boolean\">true</param>\n"
-        "<param name=\"pageBoundingBox\" type=\"boolean\">true</param>\n"
-        "<param name=\"FixPPTCharPos\" type=\"boolean\">false</param>\n"
-        "<param name=\"FixPPTDashLine\" type=\"boolean\">false</param>\n"
-        "<param name=\"FixPPTGrad2Polys\" type=\"boolean\">false</param>\n"
-        "<param name=\"FixPPTLinGrad\" type=\"boolean\">false</param>\n"
-        "<param name=\"FixPPTPatternAsHatch\" type=\"boolean\">false</param>\n"
-        "<param name=\"FixImageRot\" type=\"boolean\">false</param>\n"
+        "<param gui-hidden=\"true\" name=\"destination\" type=\"string\"></param>\n"
+        "<param gui-hidden=\"true\" name=\"textToPath\" type=\"bool\">true</param>\n"
+        "<param gui-hidden=\"true\" name=\"pageBoundingBox\" type=\"bool\">true</param>\n"
+        "<param gui-hidden=\"true\" name=\"FixPPTCharPos\" type=\"bool\">false</param>\n"
+        "<param gui-hidden=\"true\" name=\"FixPPTDashLine\" type=\"bool\">false</param>\n"
+        "<param gui-hidden=\"true\" name=\"FixPPTGrad2Polys\" type=\"bool\">false</param>\n"
+        "<param gui-hidden=\"true\" name=\"FixPPTLinGrad\" type=\"bool\">false</param>\n"
+        "<param gui-hidden=\"true\" name=\"FixPPTPatternAsHatch\" type=\"bool\">false</param>\n"
+        "<param gui-hidden=\"true\" name=\"FixImageRot\" type=\"bool\">false</param>\n"
         "<print/>\n"
         "</inkscape-extension>", new PrintEmf());
 

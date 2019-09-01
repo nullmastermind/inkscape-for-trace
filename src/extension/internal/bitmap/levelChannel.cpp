@@ -37,7 +37,7 @@ LevelChannel::applyEffect(Magick::Image* image) {
 
 void
 LevelChannel::refreshParameters(Inkscape::Extension::Effect* module) {
-	_channelName = module->get_param_enum("channel");
+	_channelName = module->get_param_optiongroup("channel");
 	_black_point = module->get_param_float("blackPoint");
 	_white_point = module->get_param_float("whitePoint");
 	_mid_point = module->get_param_float("midPoint");
@@ -52,20 +52,20 @@ LevelChannel::init()
 		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
 			"<name>" N_("Level (with Channel)") "</name>\n"
 			"<id>org.inkscape.effect.bitmap.levelChannel</id>\n"
-			"<param name=\"channel\" _gui-text=\"" N_("Channel:") "\" type=\"enum\" >\n"
-				"<_item value='Red Channel'>" N_("Red Channel") "</_item>\n"
-				"<_item value='Green Channel'>" N_("Green Channel") "</_item>\n"
-				"<_item value='Blue Channel'>" N_("Blue Channel") "</_item>\n"
-				"<_item value='Cyan Channel'>" N_("Cyan Channel") "</_item>\n"
-				"<_item value='Magenta Channel'>" N_("Magenta Channel") "</_item>\n"
-				"<_item value='Yellow Channel'>" N_("Yellow Channel") "</_item>\n"
-				"<_item value='Black Channel'>" N_("Black Channel") "</_item>\n"
-				"<_item value='Opacity Channel'>" N_("Opacity Channel") "</_item>\n"
-				"<_item value='Matte Channel'>" N_("Matte Channel") "</_item>\n"
+			"<param name=\"channel\" gui-text=\"" N_("Channel:") "\" type=\"optiongroup\" appearance=\"combo\" >\n"
+				"<option value='Red Channel'>" N_("Red Channel") "</option>\n"
+				"<option value='Green Channel'>" N_("Green Channel") "</option>\n"
+				"<option value='Blue Channel'>" N_("Blue Channel") "</option>\n"
+				"<option value='Cyan Channel'>" N_("Cyan Channel") "</option>\n"
+				"<option value='Magenta Channel'>" N_("Magenta Channel") "</option>\n"
+				"<option value='Yellow Channel'>" N_("Yellow Channel") "</option>\n"
+				"<option value='Black Channel'>" N_("Black Channel") "</option>\n"
+				"<option value='Opacity Channel'>" N_("Opacity Channel") "</option>\n"
+				"<option value='Matte Channel'>" N_("Matte Channel") "</option>\n"
 			"</param>\n"
-			"<param name=\"blackPoint\" _gui-text=\"" N_("Black Point:") "\" type=\"float\" min=\"0.0\" max=\"100.0\">0.0</param>\n"			
-			"<param name=\"whitePoint\" _gui-text=\"" N_("White Point:") "\" type=\"float\" min=\"0.0\" max=\"100.0\">100.0</param>\n"			
-			"<param name=\"midPoint\" _gui-text=\"" N_("Gamma Correction:") "\" type=\"float\" min=\"0.0\" max=\"10.0\">1.0</param>\n"
+			"<param name=\"blackPoint\" gui-text=\"" N_("Black Point:") "\" type=\"float\" min=\"0.0\" max=\"100.0\">0.0</param>\n"			
+			"<param name=\"whitePoint\" gui-text=\"" N_("White Point:") "\" type=\"float\" min=\"0.0\" max=\"100.0\">100.0</param>\n"			
+			"<param name=\"midPoint\" gui-text=\"" N_("Gamma Correction:") "\" type=\"float\" min=\"0.0\" max=\"10.0\">1.0</param>\n"
 			"<effect>\n"
 				"<object-type>all</object-type>\n"
 				"<effects-menu>\n"

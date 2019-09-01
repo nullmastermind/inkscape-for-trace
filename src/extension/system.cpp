@@ -508,31 +508,38 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
     }
 
     Extension *module = nullptr;
-    switch (module_functional_type) {
-        case MODULE_INPUT: {
-            module = new Input(repr, imp);
-            break;
+    try {
+        switch (module_functional_type) {
+            case MODULE_INPUT: {
+                module = new Input(repr, imp, baseDir);
+                break;
+            }
+            case MODULE_OUTPUT: {
+                module = new Output(repr, imp, baseDir);
+                break;
+            }
+            case MODULE_FILTER: {
+                module = new Effect(repr, imp, baseDir);
+                break;
+            }
+            case MODULE_PRINT: {
+                module = new Print(repr, imp, baseDir);
+                break;
+            }
+            case MODULE_PATH_EFFECT: {
+                module = new PathEffect(repr, imp, baseDir);
+                break;
+            }
+            default: {
+                g_warning("Extension of unknown type!"); // TODO: Should not happen! Is this even useful?
+                module = new Extension(repr, imp, baseDir);
+                break;
+            }
         }
-        case MODULE_OUTPUT: {
-            module = new Output(repr, imp);
-            break;
-        }
-        case MODULE_FILTER: {
-            module = new Effect(repr, imp);
-            break;
-        }
-        case MODULE_PRINT: {
-            module = new Print(repr, imp);
-            break;
-        }
-        case MODULE_PATH_EFFECT: {
-            module = new PathEffect(repr, imp);
-            break;
-        }
-        default: {
-            module = new Extension(repr, imp);
-            break;
-        }
+    } catch (const Extension::extension_no_id& e) {
+        g_warning("Building extension failed. Extension does not have a valid ID");
+    } catch (const Extension::extension_no_name& e) {
+        g_warning("Building extension failed. Extension does not have a valid name");
     }
 
     return module;
@@ -552,10 +559,10 @@ build_from_file(gchar const *filename)
     Inkscape::XML::Document *doc = sp_repr_read_file(filename, INKSCAPE_EXTENSION_URI);
     std::string dir = Glib::path_get_dirname(filename);
     Extension *ext = build_from_reprdoc(doc, nullptr, &dir);
-    if (ext != nullptr)
-        Inkscape::GC::release(doc);
-    else
+    Inkscape::GC::release(doc);
+    if (!ext) {
         g_warning("Unable to create extension from definition file %s.\n", filename);
+    }
     return ext;
 }
 
@@ -646,7 +653,7 @@ get_file_save_path (SPDocument *doc, FileSaveMethod method) {
             }
             break;
         case FILE_SAVE_METHOD_EXPORT:
-            /// \todo no default path set for Export? 
+            /// \todo no default path set for Export?
             // defaults to g_get_home_dir()
             break;
     }

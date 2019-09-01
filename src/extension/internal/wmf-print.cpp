@@ -622,7 +622,7 @@ int PrintWmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
                 if(mark_long == mark_short){  // only one mark size
                    penstyle = U_PS_DOT;
                 }
-                else if (n_dash==2) { 
+                else if (n_dash==2) {
                    penstyle = U_PS_DASH;
                 }
                 else if (n_dash==4) {
@@ -1581,13 +1581,13 @@ void PrintWmf::init()
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
         "<name>Windows Metafile Print</name>\n"
         "<id>org.inkscape.print.wmf</id>\n"
-        "<param name=\"destination\" type=\"string\"></param>\n"
-        "<param name=\"textToPath\" type=\"boolean\">true</param>\n"
-        "<param name=\"pageBoundingBox\" type=\"boolean\">true</param>\n"
-        "<param name=\"FixPPTCharPos\" type=\"boolean\">false</param>\n"
-        "<param name=\"FixPPTDashLine\" type=\"boolean\">false</param>\n"
-        "<param name=\"FixPPTGrad2Polys\" type=\"boolean\">false</param>\n"
-        "<param name=\"FixPPTPatternAsHatch\" type=\"boolean\">false</param>\n"
+        "<param gui-hidden=\"true\" name=\"destination\" type=\"string\"></param>\n"
+        "<param gui-hidden=\"true\" name=\"textToPath\" type=\"bool\">true</param>\n"
+        "<param gui-hidden=\"true\" name=\"pageBoundingBox\" type=\"bool\">true</param>\n"
+        "<param gui-hidden=\"true\" name=\"FixPPTCharPos\" type=\"bool\">false</param>\n"
+        "<param gui-hidden=\"true\" name=\"FixPPTDashLine\" type=\"bool\">false</param>\n"
+        "<param gui-hidden=\"true\" name=\"FixPPTGrad2Polys\" type=\"bool\">false</param>\n"
+        "<param gui-hidden=\"true\" name=\"FixPPTPatternAsHatch\" type=\"bool\">false</param>\n"
         "<print/>\n"
         "</inkscape-extension>", new PrintWmf());
 

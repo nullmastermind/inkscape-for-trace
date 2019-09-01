@@ -12,8 +12,6 @@
 
 #include "parameter.h"
 
-class SPDocument;
-
 namespace Gtk {
 class Widget;
 }
@@ -25,24 +23,18 @@ class Node;
 
 namespace Extension {
 
-class ParamFloat : public Parameter {
+class ParamFloat : public InxParameter {
 public:
     enum AppearanceMode {
-        FULL, MINIMAL
+        DEFAULT, FULL
     };
-    ParamFloat(const gchar * name,
-               const gchar * text,
-               const gchar * description,
-               bool hidden,
-               int indent,
-               Inkscape::Extension::Extension * ext,
-               Inkscape::XML::Node * xml,
-               AppearanceMode mode);
+
+    ParamFloat(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
 
     /** Returns \c _value. */
-    float get(const SPDocument * /*doc*/, const Inkscape::XML::Node * /*node*/) const { return _value; }
+    float get() const { return _value; }
 
-    float set (float in, SPDocument * doc, Inkscape::XML::Node * node);
+    float set(float in);
 
     float max () { return _max; }
 
@@ -50,20 +42,24 @@ public:
 
     float precision () { return _precision; }
 
-    Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) override;
+    Gtk::Widget *get_widget(sigc::signal<void> *changeSignal) override;
 
-    // Explicitly call superclass version to avoid method being hidden.
-    void string(std::list <std::string> &list) const override { return Parameter::string(list); }
-
-    void string(std::string &string) const override;
+    std::string value_to_string() const override;
 
 private:
     /** Internal value. */
-    float _value;
-    AppearanceMode _mode;
-    float _min;
-    float _max;
-    int _precision;
+    float _value = 0;
+
+    /** limits */
+    // TODO: do these defaults make sense or should we be unbounded by default?
+    float _min = 0;
+    float _max = 10;
+
+    /** numeric precision (i.e. number of digits) */
+    int _precision = 1;
+
+    /** appearance mode **/
+    AppearanceMode _mode = DEFAULT;
 };
 
 }  /* namespace Extension */

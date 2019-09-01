@@ -611,12 +611,12 @@ InkFileExportCmd::do_export_ps_pdf(SPDocument* doc, std::string filename_in, std
         const gchar *pdfver_param_name = "PDFversion";
         if (!export_pdf_level.empty()) {
             // combine "PDF " and the given command line
-            std::string version_gui_string = std::string("PDF ") + export_pdf_level;
-            try{
+            std::string version_gui_string = std::string("PDF-") + export_pdf_level;
+            try {
                 // first, check if the given pdf version is selectable in the ComboBox
-                if((*i)->get_param_enum_contains("PDFversion", version_gui_string.c_str())) {
-                    (*i)->set_param_enum(pdfver_param_name, version_gui_string.c_str());
-                    set_export_pdf_version_fail=false;
+                if ((*i)->get_param_optiongroup_contains("PDFversion", version_gui_string.c_str())) {
+                    (*i)->set_param_optiongroup(pdfver_param_name, version_gui_string.c_str());
+                    set_export_pdf_version_fail = false;
                 } else {
                     g_warning("Desired PDF export version \"%s\" not supported! Hint: input one of the versions found in the pdf export dialog e.g. \"1.4\".",
                               export_pdf_level.c_str());
@@ -631,7 +631,7 @@ InkFileExportCmd::do_export_ps_pdf(SPDocument* doc, std::string filename_in, std
 
         // set default pdf export version to 1.4, also if something went wrong
         if(set_export_pdf_version_fail) {
-            (*i)->set_param_enum(pdfver_param_name, "PDF 1.4");
+            (*i)->set_param_optiongroup(pdfver_param_name, "PDF-1.4");
         }
     }
 
@@ -642,8 +642,7 @@ InkFileExportCmd::do_export_ps_pdf(SPDocument* doc, std::string filename_in, std
             export_ps_level = 2;
         }
 
-        (*i)->set_param_enum("PSlevel", (export_ps_level == 3)
-                             ? "PostScript level 3" : "PostScript level 2");
+        (*i)->set_param_optiongroup("PSlevel", (export_ps_level == 3) ? "PS3" : "PS2");
     }
 
 

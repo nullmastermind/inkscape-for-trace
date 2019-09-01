@@ -1,58 +1,44 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
-/*
- * Copyright (C) 2005-2007 Authors:
+/** @file
+ * Description widget for extensions
+ *//*
+ * Authors:
  *   Ted Gould <ted@gould.cx>
  *   Johan Engelen <johan@shouraizou.nl> *
+ *   Patrick Storz <eduard.braun2@gmx.de>
+ *
+ * Copyright (C) 2005-2019 Authors
+ *
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifdef linux  // does the dollar sign need escaping when passed as string parameter?
-# define ESCAPE_DOLLAR_COMMANDLINE
-#endif
+#include "widget-label.h"
 
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
-#include <glibmm/i18n.h>
 #include <glibmm/markup.h>
 #include <glibmm/regex.h>
 
 #include "xml/node.h"
 #include "extension/extension.h"
-#include "description.h"
 
 namespace Inkscape {
 namespace Extension {
 
 
-/** \brief  Initialize the object, to do that, copy the data. */
-ParamDescription::ParamDescription(const gchar * name,
-                                   const gchar * text,
-                                   const gchar * description,
-                                   bool hidden,
-                                   int indent,
-                                   Inkscape::Extension::Extension * ext,
-                                   Inkscape::XML::Node * xml,
-                                   AppearanceMode mode)
-    : Parameter(name, text, description, hidden, indent, ext)
-    , _value(nullptr)
-    , _mode(mode)
+WidgetLabel::WidgetLabel(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext)
+    : InxWidget(xml, ext)
 {
     // construct the text content by concatenating all (non-empty) text nodes,
     // removing all other nodes (e.g. comment nodes) and replacing <extension:br> elements with "<br/>"
-    Glib::ustring value;
     Inkscape::XML::Node * cur_child = xml->firstChild();
     while (cur_child != nullptr) {
         if (cur_child->type() == XML::TEXT_NODE && cur_child->content() != nullptr) {
-            value += cur_child->content();
+            _value += cur_child->content();
         } else if (cur_child->type() == XML::ELEMENT_NODE && !g_strcmp0(cur_child->name(), "extension:br")) {
-            value += "<br/>";
+            _value += "<br/>";
         }
         cur_child = cur_child->next();
-    }
-
-    // if there is no text content we can return immediately (the description will be invisible)
-    if (value == Glib::ustring("")) {
-        return;
     }
 
     // do replacements in the source string to account for the attribute xml:space="preserve"
@@ -61,42 +47,43 @@ ParamDescription::ParamDescription(const gchar * name,
         // xgettext copies the source string verbatim in this case, so no changes needed
     } else {
         // remove all whitespace from start/end of string and replace intermediate whitespace with a single space
-        value = Glib::Regex::create("^\\s+|\\s+$")->replace_literal(value, 0, "", (Glib::RegexMatchFlags)0);
-        value = Glib::Regex::create("\\s+")->replace_literal(value, 0, " ", (Glib::RegexMatchFlags)0);
+        _value = Glib::Regex::create("^\\s+|\\s+$")->replace_literal(_value, 0, "", (Glib::RegexMatchFlags)0);
+        _value = Glib::Regex::create("\\s+")->replace_literal(_value, 0, " ", (Glib::RegexMatchFlags)0);
     }
 
-    // translate if underscored version (_param) was used
-    if (g_str_has_prefix(xml->name(), "extension:_")) {
-        const gchar * context = xml->attribute("msgctxt");
-        if (context != nullptr) {
-            value = g_dpgettext2(nullptr, context, value.c_str());
-        } else {
-            value = _(value.c_str());
+    // translate value
+    if (!_value.empty()) {
+        if (_translatable != NO) { // translate unless explicitly marked untranslatable
+            _value = get_translation(_value.c_str());
         }
     }
 
     // finally replace all remaining <br/> with a real newline character
-    value = Glib::Regex::create("<br/>")->replace_literal(value, 0, "\n", (Glib::RegexMatchFlags)0);
+    _value = Glib::Regex::create("<br/>")->replace_literal(_value, 0, "\n", (Glib::RegexMatchFlags)0);
 
-    _value = g_strdup(value.c_str());
-
-    return;
+    // parse appearance
+    if (_appearance) {
+        if (!strcmp(_appearance, "header")) {
+            _mode = HEADER;
+        } else if (!strcmp(_appearance, "url")) {
+            _mode = URL;
+        } else {
+            g_warning("Invalid value ('%s') for appearance of label widget in extension '%s'",
+                      _appearance, _extension->get_id());
+        }
+    }
 }
 
 /** \brief  Create a label for the description */
-Gtk::Widget *
-ParamDescription::get_widget (SPDocument * /*doc*/, Inkscape::XML::Node * /*node*/, sigc::signal<void> * /*changeSignal*/)
+Gtk::Widget *WidgetLabel::get_widget(sigc::signal<void> * /*changeSignal*/)
 {
     if (_hidden) {
-        return nullptr;
-    }
-    if (_value == nullptr) {
         return nullptr;
     }
 
     Glib::ustring newtext = _value;
 
-    Gtk::Label * label = Gtk::manage(new Gtk::Label());
+    Gtk::Label *label = Gtk::manage(new Gtk::Label());
     if (_mode == HEADER) {
         label->set_markup(Glib::ustring("<b>") + Glib::Markup::escape_text(newtext) + Glib::ustring("</b>"));
         label->set_margin_top(5);
@@ -112,18 +99,18 @@ ParamDescription::get_widget (SPDocument * /*doc*/, Inkscape::XML::Node * /*node
 
     // TODO: Ugly "fix" for gtk3 width/height calculation of labels.
     //   - If not applying any limits long labels will make the window grow horizontally until it uses up
-    //     most of the available space (i.e. most of the screen area) which is ridicously wide
+    //     most of the available space (i.e. most of the screen area) which is ridiculously wide.
     //   - By using "set_default_size(0,0)" in prefidalog.cpp we tell the window to shrink as much as possible,
-    //     however this can result in a much to narrow dialog instead and much unnecessary wrapping
-    //   - Here we set a lower limit of GUI_MAX_LINE_LENGTH characters per line that long texts will always use
+    //     however this can result in a much too narrow dialog instead and a lot of unnecessary wrapping.
+    //   - Here we set a lower limit of GUI_MAX_LINE_LENGTH characters per line that long texts will always use.
     //     This means texts can not shrink anymore (they can still grow, though) and it's also necessary
     //     to prevent https://bugzilla.gnome.org/show_bug.cgi?id=773572
     int len = newtext.length();
-    label->set_width_chars(len > Parameter::GUI_MAX_LINE_LENGTH ? Parameter::GUI_MAX_LINE_LENGTH : len);
+    label->set_width_chars(len > GUI_MAX_LINE_LENGTH ? GUI_MAX_LINE_LENGTH : len);
 
     label->show();
 
-    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox());
+    Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox());
     hbox->pack_start(*label, true, true);
     hbox->show();
 

@@ -8,13 +8,16 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#ifdef HAVE_CONFIG_H
-#endif
-
-#include "prefdialog.h"
-#include "implementation/implementation.h"
-#include "timer.h"
 #include "input.h"
+
+#include "timer.h"
+
+#include "implementation/implementation.h"
+
+#include "prefdialog/prefdialog.h"
+
+#include "xml/repr.h"
+
 
 /* Inkscape::Extension::Input */
 
@@ -37,7 +40,8 @@ namespace Extension {
     Overall, there are many levels of indentation, just to handle the
     levels of indentation in the XML file.
 */
-Input::Input (Inkscape::XML::Node * in_repr, Implementation::Implementation * in_imp) : Extension(in_repr, in_imp)
+Input::Input (Inkscape::XML::Node *in_repr, Implementation::Implementation *in_imp, std::string *base_directory)
+    : Extension(in_repr, in_imp, base_directory)
 {
     mimetype = nullptr;
     extension = nullptr;
@@ -182,23 +186,35 @@ Input::get_extension()
     \return  The name of the filetype supported
     \brief   Get the name of the filetype supported
 */
-gchar *
-Input::get_filetypename()
+const char *
+Input::get_filetypename(bool translated)
 {
-    if (filetypename != nullptr)
-        return filetypename;
+    const char *name;
+
+    if (filetypename)
+        name = filetypename;
     else
-        return get_name();
+        name = get_name();
+
+    if (name && translated) {
+        return get_translation(name);
+    } else {
+        return name;
+    }
 }
 
 /**
     \return  Tooltip giving more information on the filetype
     \brief   Get the tooltip for more information on the filetype
 */
-gchar *
-Input::get_filetypetooltip()
+const char *
+Input::get_filetypetooltip(bool translated)
 {
-    return filetypetooltip;
+    if (filetypetooltip && translated) {
+        return get_translation(filetypetooltip);
+    } else {
+        return filetypetooltip;
+    }
 }
 
 /**
@@ -224,7 +240,8 @@ Input::prefs (const gchar *uri)
         return true;
     }
 
-    PrefDialog * dialog = new PrefDialog(this->get_name(), this->get_help(), controls);
+    Glib::ustring name = get_translation(this->get_name());
+    PrefDialog *dialog = new PrefDialog(name, controls);
     int response = dialog->run();
     dialog->hide();
 

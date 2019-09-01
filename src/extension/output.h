@@ -38,18 +38,19 @@ public:
             export_id_not_found(const gchar * const id = nullptr) : id{id} {};
     };
 
-                 Output (Inkscape::XML::Node * in_repr,
-                         Implementation::Implementation * in_imp);
-        ~Output () override;
-    bool check                () override;
+    Output(Inkscape::XML::Node *in_repr, Implementation::Implementation *in_imp, std::string *base_directory);
+    ~Output () override;
+
+    bool check() override;
+
     void         save (SPDocument *doc,
                        gchar const *filename,
                        bool detachbase = false);
     bool         prefs ();
     gchar *      get_mimetype();
     gchar *      get_extension();
-    gchar *      get_filetypename();
-    gchar *      get_filetypetooltip();
+    const char * get_filetypename(bool translated=false);
+    const char * get_filetypetooltip(bool translated=false);
     bool         causes_dataloss() { return dataloss; };
 };
 

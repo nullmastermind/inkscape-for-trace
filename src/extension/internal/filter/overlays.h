@@ -57,21 +57,21 @@ public:
               "<name>" N_("Noise Fill") "</name>\n"
               "<id>org.inkscape.effect.filter.NoiseFill</id>\n"
               "<param name=\"tab\" type=\"notebook\">\n"
-                "<page name=\"optionstab\" _gui-text=\"" N_("Options") "\">\n"
-                  "<param name=\"type\" _gui-text=\"" N_("Turbulence type:") "\" type=\"enum\">\n"
-                    "<_item value=\"fractalNoise\">" N_("Fractal noise") "</_item>\n"
-                    "<_item value=\"turbulence\">" N_("Turbulence") "</_item>\n"
+                "<page name=\"optionstab\" gui-text=\"" N_("Options") "\">\n"
+                  "<param name=\"type\" gui-text=\"" N_("Turbulence type:") "\" type=\"optiongroup\" appearance=\"combo\">\n"
+                    "<option value=\"fractalNoise\">" N_("Fractal noise") "</option>\n"
+                    "<option value=\"turbulence\">" N_("Turbulence") "</option>\n"
                   "</param>\n"
-                  "<param name=\"hfreq\" _gui-text=\"" N_("Horizontal frequency:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.01\" max=\"10000.00\">20</param>\n"
-                  "<param name=\"vfreq\" _gui-text=\"" N_("Vertical frequency:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.01\" max=\"10000.00\">40</param>\n"
-                  "<param name=\"complexity\" _gui-text=\"" N_("Complexity:") "\" type=\"int\" appearance=\"full\" min=\"1\" max=\"5\">5</param>\n"
-                  "<param name=\"variation\" _gui-text=\"" N_("Variation:") "\" type=\"int\" appearance=\"full\" min=\"1\" max=\"360\">0</param>\n"
-                  "<param name=\"dilat\" _gui-text=\"" N_("Dilatation:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"1\" max=\"50\">3</param>\n"
-                  "<param name=\"erosion\" _gui-text=\"" N_("Erosion:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0\" max=\"50\">1</param>\n"
-                  "<param name=\"inverted\" _gui-text=\"" N_("Inverted") "\" type=\"boolean\" >false</param>\n"
+                  "<param name=\"hfreq\" gui-text=\"" N_("Horizontal frequency:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.01\" max=\"10000.00\">20</param>\n"
+                  "<param name=\"vfreq\" gui-text=\"" N_("Vertical frequency:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.01\" max=\"10000.00\">40</param>\n"
+                  "<param name=\"complexity\" gui-text=\"" N_("Complexity:") "\" type=\"int\" appearance=\"full\" min=\"1\" max=\"5\">5</param>\n"
+                  "<param name=\"variation\" gui-text=\"" N_("Variation:") "\" type=\"int\" appearance=\"full\" min=\"1\" max=\"360\">0</param>\n"
+                  "<param name=\"dilat\" gui-text=\"" N_("Dilatation:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"1\" max=\"50\">3</param>\n"
+                  "<param name=\"erosion\" gui-text=\"" N_("Erosion:") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0\" max=\"50\">1</param>\n"
+                  "<param name=\"inverted\" gui-text=\"" N_("Inverted") "\" type=\"bool\" >false</param>\n"
                 "</page>\n"
-                "<page name=\"co11tab\" _gui-text=\"" N_("Noise color") "\">\n"
-                  "<param name=\"color\" _gui-text=\"" N_("Color") "\" type=\"color\">354957823</param>\n"
+                "<page name=\"co11tab\" gui-text=\"" N_("Noise color") "\">\n"
+                  "<param name=\"color\" gui-text=\"" N_("Color") "\" type=\"color\">354957823</param>\n"
                 "</page>\n"
               "</param>\n"
               "<effect>\n"
@@ -106,7 +106,7 @@ NoiseFill::get_filter_text (Inkscape::Extension::Extension * ext)
     std::ostringstream a;
     std::ostringstream inverted;
 
-    type << ext->get_param_enum("type");
+    type << ext->get_param_optiongroup("type");
     hfreq << (ext->get_param_float("hfreq") / 1000);
     vfreq << (ext->get_param_float("vfreq") / 1000);
     complexity << ext->get_param_int("complexity");

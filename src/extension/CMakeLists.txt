@@ -11,7 +11,6 @@ set(extension_SRC
 	input.cpp
 	output.cpp
 	patheffect.cpp
-	prefdialog.cpp
 	print.cpp
 	system.cpp
 	timer.cpp
@@ -20,17 +19,6 @@ set(extension_SRC
 	implementation/implementation.cpp
 	implementation/xslt.cpp
 	implementation/script.cpp
-
-	param/bool.cpp
-	param/color.cpp
-	param/description.cpp
-	param/enum.cpp
-	param/float.cpp
-	param/int.cpp
-	param/notebook.cpp
-	param/parameter.cpp
-	param/radiobutton.cpp
-	param/string.cpp
 
 	internal/bluredge.cpp
 	internal/cairo-ps-out.cpp
@@ -64,6 +52,23 @@ set(extension_SRC
 	internal/pdfinput/pdf-parser.cpp
 	internal/pdfinput/svg-builder.cpp
 
+	prefdialog/prefdialog.cpp
+	prefdialog/parameter.cpp
+	prefdialog/parameter-bool.cpp
+	prefdialog/parameter-color.cpp
+	prefdialog/parameter-float.cpp
+	prefdialog/parameter-int.cpp
+	prefdialog/parameter-notebook.cpp
+	prefdialog/parameter-optiongroup.cpp
+	prefdialog/parameter-path.cpp
+	prefdialog/parameter-string.cpp
+	prefdialog/widget.cpp
+	prefdialog/widget-box.cpp
+	prefdialog/widget-image.cpp
+	prefdialog/widget-label.cpp
+	prefdialog/widget-separator.cpp
+	prefdialog/widget-spacer.cpp
+
 	# ------
 	# Header
 	db.h
@@ -75,18 +80,7 @@ set(extension_SRC
 	init.h
 	input.h
 	output.h
-	param/bool.h
-	param/color.h
-	param/description.h
-	param/enum.h
-	param/float.h
-	param/int.h
-	param/notebook.h
-	param/parameter.h
-	param/radiobutton.h
-	param/string.h
 	patheffect.h
-	prefdialog.h
 	print.h
 	system.h
 	timer.h
@@ -137,6 +131,23 @@ set(extension_SRC
 	internal/text_reassemble.h
 	internal/wmf-inout.h
 	internal/wmf-print.h
+
+	prefdialog/prefdialog.h
+	prefdialog/parameter.h
+	prefdialog/parameter-bool.h
+	prefdialog/parameter-color.h
+	prefdialog/parameter-float.h
+	prefdialog/parameter-int.h
+	prefdialog/parameter-notebook.h
+	prefdialog/parameter-optiongroup.h
+	prefdialog/parameter-path.h
+	prefdialog/parameter-string.h
+	prefdialog/widget.h
+	prefdialog/widget-box.h
+	prefdialog/widget-image.h
+	prefdialog/widget-label.h
+	prefdialog/widget-separator.h
+	prefdialog/widget-spacer.h
 )
 
 if(WIN32)

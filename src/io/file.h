@@ -11,6 +11,19 @@
 #ifndef INK_FILE_IO_H
 #define INK_FILE_IO_H
 
+#include <string>
+
+namespace Gio {
+class File;
+}
+
+namespace Glib {
+class ustring;
+
+template <class T>
+class RefPtr;
+}
+
 class SPDocument;
 
 SPDocument* ink_file_new(const std::string &Template = nullptr);

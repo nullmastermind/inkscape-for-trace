@@ -26,7 +26,7 @@
 
 namespace Inkscape {
 namespace UI {
-    
+
 
 TemplateWidget::TemplateWidget()
     : _more_info_button(_("More info"))
@@ -36,18 +36,18 @@ TemplateWidget::TemplateWidget()
 {
     pack_start(_template_name_label, Gtk::PACK_SHRINK, 10);
     pack_start(_preview_box, Gtk::PACK_SHRINK, 0);
-    
+
     _preview_box.pack_start(_preview_image, Gtk::PACK_EXPAND_PADDING, 15);
     _preview_box.pack_start(_preview_render, Gtk::PACK_EXPAND_PADDING, 10);
-    
+
     _short_description_label.set_line_wrap(true);
 
     _more_info_button.set_halign(Gtk::ALIGN_END);
     _more_info_button.set_valign(Gtk::ALIGN_CENTER);
     pack_end(_more_info_button, Gtk::PACK_SHRINK);
-    
+
     pack_end(_short_description_label, Gtk::PACK_SHRINK, 5);
-    
+
     _more_info_button.signal_clicked().connect(
     sigc::mem_fun(*this, &TemplateWidget::_displayTemplateDetails));
     _more_info_button.set_sensitive(false);
@@ -58,7 +58,7 @@ void TemplateWidget::create()
 {
     if (_current_template.display_name == "")
         return;
-    
+
     if (_current_template.is_procedural){
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         SPDesktop *desc = sp_file_new_default();
@@ -98,7 +98,7 @@ void TemplateWidget::display(TemplateLoadTab::TemplateData data)
     }
 
     if (data.is_procedural){
-        _effect_prefs = data.tpl_effect->get_imp()->prefs_effect(data.tpl_effect, SP_ACTIVE_DESKTOP, nullptr, nullptr); 
+        _effect_prefs = data.tpl_effect->get_imp()->prefs_effect(data.tpl_effect, SP_ACTIVE_DESKTOP, nullptr, nullptr);
         pack_start(*_effect_prefs);
     }
     _more_info_button.set_sensitive(true);
@@ -118,24 +118,32 @@ void TemplateWidget::clear()
 }
 
 void TemplateWidget::_displayTemplateDetails()
-{    
+{
     Glib::ustring message = _current_template.display_name + "\n\n";
-    
-    if (_current_template.path != "")
-        message += _("Path: ") + _current_template.path + "\n\n";
-    
-    if (_current_template.long_description != "")
-        message += _("Description: ") + _current_template.long_description + "\n\n";
+
+    if (!_current_template.author.empty()) {
+        message += _("Author");
+        message += ": ";
+        message += _current_template.author + " " + _current_template.creation_date + "\n\n";
+    }
+
     if (!_current_template.keywords.empty()){
-        message += _("Keywords: ");
-        for (const auto & keyword : _current_template.keywords)
-            message += keyword + " ";
+        message += _("Keywords");
+        message += ":";
+        for (const auto & keyword : _current_template.keywords) {
+            message += " ";
+            message += keyword;
+        }
         message += "\n\n";
     }
-    
-    if (_current_template.author != "")
-        message += _("By: ") + _current_template.author + " " + _current_template.creation_date + "\n\n";
-    
+
+    if (!_current_template.path.empty()) {
+        message += _("Path");
+        message += ": ";
+        message += _current_template.path;
+        message += "\n\n";
+    }
+
     Gtk::MessageDialog dl(message, false, Gtk::MESSAGE_OTHER);
     dl.run();
 }

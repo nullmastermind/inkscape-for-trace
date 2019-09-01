@@ -68,17 +68,17 @@ class Effect : public Extension {
                        Effect *      effect,
                        bool          showPrefs) :
                     Verb(id, _(name), _(tip), image, _("Extensions")),
-                    _effect(effect), 
+                    _effect(effect),
                     _showPrefs(showPrefs),
                     _elip_name(nullptr) {
                 /* No clue why, but this is required */
                 this->set_default_sensitive(true);
-                if (_showPrefs && effect != nullptr && effect->param_visible_count() != 0) {
+                if (_showPrefs && effect != nullptr && effect->widget_visible_count() != 0) {
                     _elip_name = g_strdup_printf("%s...", _(name));
                     set_name(_elip_name);
                 }
             }
-            
+
             /** \brief  Destructor */
             ~EffectVerb() override {
                 if (_elip_name != nullptr) {
@@ -87,15 +87,8 @@ class Effect : public Extension {
             }
     };
 
-    /** \brief  ID used for the verb without preferences */
-    Glib::ustring _id_noprefs;
-    /** \brief  Name used for the verb without preferences */
-    Glib::ustring _name_noprefs;
-
     /** \brief  The verb representing this effect. */
     EffectVerb _verb;
-    /** \brief  The verb representing this effect.  Without preferences. */
-    EffectVerb _verb_nopref;
     /** \brief  Menu node created for this effect */
     Inkscape::XML::Node * _menu_node;
     /** \brief  Whether a working dialog should be shown */
@@ -104,10 +97,11 @@ class Effect : public Extension {
     /** \brief  The preference dialog if it is shown */
     PrefDialog * _prefDialog;
 public:
-                 Effect  (Inkscape::XML::Node * in_repr,
-                          Implementation::Implementation * in_imp);
-        ~Effect  () override;
-    bool check                () override;
+    Effect(Inkscape::XML::Node *in_repr, Implementation::Implementation *in_imp, std::string *base_directory);
+    ~Effect  () override;
+
+    bool check() override;
+
     bool         prefs   (Inkscape::UI::View::View * doc);
     void         effect  (Inkscape::UI::View::View * doc);
     /** \brief  Accessor function for a pointer to the verb */

@@ -58,21 +58,21 @@ public:
               "<name>" N_("Drop Shadow") "</name>\n"
               "<id>org.inkscape.effect.filter.ColorDropShadow</id>\n"
               "<param name=\"tab\" type=\"notebook\">\n"
-                "<page name=\"optionstab\" _gui-text=\"" N_("Options") "\">\n"
-                  "<param name=\"blur\" _gui-text=\"" N_("Blur radius (px)") "\" type=\"float\" appearance=\"full\" min=\"0.0\" max=\"200.0\">3.0</param>\n"
-                  "<param name=\"xoffset\" _gui-text=\"" N_("Horizontal offset (px)") "\" type=\"float\" appearance=\"full\" min=\"-50.0\" max=\"50.0\">6.0</param>\n"
-                  "<param name=\"yoffset\" _gui-text=\"" N_("Vertical offset (px)") "\" type=\"float\" appearance=\"full\" min=\"-50.0\" max=\"50.0\">6.0</param>\n"
-                  "<param name=\"type\" _gui-text=\"" N_("Shadow type:") "\" type=\"enum\" >\n"
-                    "<_item value=\"outer\">" N_("Outer") "</_item>\n"
-                    "<_item value=\"inner\">" N_("Inner") "</_item>\n"
-                    "<_item value=\"outercut\">" N_("Outer cutout") "</_item>\n"
-                    "<_item value=\"innercut\">" N_("Inner cutout") "</_item>\n"
-                    "<_item value=\"shadow\">" N_("Shadow only") "</_item>\n"
+                "<page name=\"optionstab\" gui-text=\"" N_("Options") "\">\n"
+                  "<param name=\"blur\" gui-text=\"" N_("Blur radius (px)") "\" type=\"float\" appearance=\"full\" min=\"0.0\" max=\"200.0\">3.0</param>\n"
+                  "<param name=\"xoffset\" gui-text=\"" N_("Horizontal offset (px)") "\" type=\"float\" appearance=\"full\" min=\"-50.0\" max=\"50.0\">6.0</param>\n"
+                  "<param name=\"yoffset\" gui-text=\"" N_("Vertical offset (px)") "\" type=\"float\" appearance=\"full\" min=\"-50.0\" max=\"50.0\">6.0</param>\n"
+                  "<param name=\"type\" gui-text=\"" N_("Shadow type:") "\" type=\"optiongroup\" appearance=\"combo\" >\n"
+                    "<option value=\"outer\">" N_("Outer") "</option>\n"
+                    "<option value=\"inner\">" N_("Inner") "</option>\n"
+                    "<option value=\"outercut\">" N_("Outer cutout") "</option>\n"
+                    "<option value=\"innercut\">" N_("Inner cutout") "</option>\n"
+                    "<option value=\"shadow\">" N_("Shadow only") "</option>\n"
                   "</param>\n"
                 "</page>\n"
-                "<page name=\"coltab\" _gui-text=\"" N_("Blur color") "\">\n"
-                  "<param name=\"color\" _gui-text=\"" N_("Color") "\" type=\"color\">127</param>\n"
-                  "<param name=\"objcolor\" _gui-text=\"" N_("Use object's color") "\" type=\"boolean\" >false</param>\n"
+                "<page name=\"coltab\" gui-text=\"" N_("Blur color") "\">\n"
+                  "<param name=\"color\" gui-text=\"" N_("Color") "\" type=\"color\">127</param>\n"
+                  "<param name=\"objcolor\" gui-text=\"" N_("Use object's color") "\" type=\"bool\" >false</param>\n"
                 "</page>\n"
               "</param>\n"
               "<effect>\n"
@@ -108,7 +108,7 @@ ColorizableDropShadow::get_filter_text (Inkscape::Extension::Extension * ext)
     std::ostringstream comp2in2;
     std::ostringstream comp2op;
     
-    const gchar *type = ext->get_param_enum("type");
+    const gchar *type = ext->get_param_optiongroup("type");
     guint32 color = ext->get_param_color("color");
 
     blur << ext->get_param_float("blur");

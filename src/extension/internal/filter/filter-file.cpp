@@ -91,7 +91,7 @@ void mywriter::put (char ch) { _str += ch; }
 
 
 void
-Filter::filters_load_node (Inkscape::XML::Node * node, gchar * menuname)
+Filter::filters_load_node (Inkscape::XML::Node *node, gchar * menuname)
 {
 	gchar const * label = node->attribute("inkscape:label");
 	gchar const * menu = node->attribute("inkscape:menu");

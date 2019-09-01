@@ -60,7 +60,6 @@ public:
     virtual ~Dependency ();
     bool check  () const;
     const gchar* get_name();
-    Glib::ustring &get_help () const;
     Glib::ustring &get_link () const;
 
     friend std::ostream & operator<< (std::ostream &out_file, const Dependency & in_dep);

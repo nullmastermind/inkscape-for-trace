@@ -39,7 +39,7 @@ Solarize::init()
 		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
 			"<name>" N_("Solarize") "</name>\n"
 			"<id>org.inkscape.effect.bitmap.solarize</id>\n"
-			"<param name=\"factor\" _gui-text=\"" N_("Factor:") "\" type=\"float\" min=\"0\" max=\"100\">50</param>\n"
+			"<param name=\"factor\" gui-text=\"" N_("Factor:") "\" type=\"float\" min=\"0\" max=\"100\">50</param>\n"
 			"<effect>\n"
 				"<object-type>all</object-type>\n"
 				"<effects-menu>\n"

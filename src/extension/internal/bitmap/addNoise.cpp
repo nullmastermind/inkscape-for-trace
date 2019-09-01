@@ -33,7 +33,7 @@ AddNoise::applyEffect(Magick::Image *image) {
 
 void
 AddNoise::refreshParameters(Inkscape::Extension::Effect *module) {	
-	_noiseTypeName = module->get_param_enum("noiseType");
+	_noiseTypeName = module->get_param_optiongroup("noiseType");
 }
 
 #include "../clear-n_.h"
@@ -45,13 +45,13 @@ AddNoise::init()
 		"<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
 			"<name>" N_("Add Noise") "</name>\n"
 			"<id>org.inkscape.effect.bitmap.addNoise</id>\n"
-			"<param name=\"noiseType\" _gui-text=\"" N_("Type:") "\" type=\"enum\" >\n"
-				"<_item value='Uniform Noise'>" N_("Uniform Noise") "</_item>\n"
-				"<_item value='Gaussian Noise'>" N_("Gaussian Noise") "</_item>\n"
-				"<_item value='Multiplicative Gaussian Noise'>" N_("Multiplicative Gaussian Noise") "</_item>\n"
-				"<_item value='Impulse Noise'>" N_("Impulse Noise") "</_item>\n"
-				"<_item value='Laplacian Noise'>" N_("Laplacian Noise") "</_item>\n"
-				"<_item value='Poisson Noise'>" N_("Poisson Noise") "</_item>\n"
+			"<param name=\"noiseType\" gui-text=\"" N_("Type:") "\" type=\"optiongroup\" appearance=\"combo\" >\n"
+				"<option value='Uniform Noise'>" N_("Uniform Noise") "</option>\n"
+				"<option value='Gaussian Noise'>" N_("Gaussian Noise") "</option>\n"
+				"<option value='Multiplicative Gaussian Noise'>" N_("Multiplicative Gaussian Noise") "</option>\n"
+				"<option value='Impulse Noise'>" N_("Impulse Noise") "</option>\n"
+				"<option value='Laplacian Noise'>" N_("Laplacian Noise") "</option>\n"
+				"<option value='Poisson Noise'>" N_("Poisson Noise") "</option>\n"
 			"</param>\n"
 			"<effect>\n"
 				"<object-type>all</object-type>\n"

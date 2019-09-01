@@ -15,12 +15,16 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <ostream>
 #include <fstream>
+#include <ostream>
 #include <vector>
-#include <glibmm/ustring.h>
-#include "xml/repr.h"
+
+#include <glib.h>
 #include <sigc++/signal.h>
+
+namespace Glib {
+    class ustring;
+}
 
 namespace Gtk {
 	class Grid;
@@ -70,13 +74,19 @@ namespace Gtk {
 class SPDocument;
 
 namespace Inkscape {
+
+namespace XML {
+class Node;
+}
+
 namespace Extension {
 
 class ExecutionEnv;
 class Dependency;
 class ExpirationTimer;
 class ExpirationTimer;
-class Parameter;
+class InxParameter;
+class InxWidget;
 
 namespace Implementation
 {
@@ -99,25 +109,28 @@ public:
     };
 
 private:
-    gchar     *id;                        /**< The unique identifier for the Extension */
-    gchar     *name;                      /**< A user friendly name for the Extension */
-    gchar     *_help;                     /**< A string that contains a help text for the user */
-    state_t    _state;                    /**< Which state the Extension is currently in */
-    std::vector<Dependency *>  _deps;     /**< Dependencies for this extension */
-    static std::ofstream error_file;      /**< This is the place where errors get reported */
-    bool silent;
+    gchar     *_id = nullptr;                  /**< The unique identifier for the Extension */
+    gchar     *_name = nullptr;                /**< A user friendly name for the Extension */
+    state_t    _state = STATE_UNLOADED;        /**< Which state the Extension is currently in */
+    std::vector<Dependency *>  _deps;          /**< Dependencies for this extension */
+    static std::ofstream error_file;           /**< This is the place where errors get reported */
     bool _gui;
 
 protected:
-    Inkscape::XML::Node *repr;            /**< The XML description of the Extension */
-    Implementation::Implementation * imp; /**< An object that holds all the functions for making this work */
-    ExecutionEnv * execution_env;         /**< Execution environment of the extension (currently only used by Effects) */
-    ExpirationTimer * timer;              /**< Timeout to unload after a given time */
+    Inkscape::XML::Node *repr;                 /**< The XML description of the Extension */
+    Implementation::Implementation * imp;      /**< An object that holds all the functions for making this work */
+    ExecutionEnv * execution_env;              /**< Execution environment of the extension
+                                                 *  (currently only used by Effects) */
+    std::string _base_directory;               /**< Directory containing the .inx file,
+                                                 *  relative paths in the extension should usually be relative to it */
+    ExpirationTimer * timer = nullptr;         /**< Timeout to unload after a given time */
+    bool _translation_enabled = true;          /**< Attempt translation of strings provided by the extension? */
+    const char *_translationdomain = nullptr;  /**< Domainname of gettext textdomain that should
+                                                 *  be used for translation of the extension's strings */
 
 public:
-                  Extension    (Inkscape::XML::Node * in_repr,
-                                Implementation::Implementation * in_imp);
-    virtual      ~Extension    ();
+    Extension(Inkscape::XML::Node *in_repr, Implementation::Implementation *in_imp, std::string *base_directory);
+    virtual ~Extension();
 
     void          set_state    (state_t in_state);
     state_t       get_state    ();
@@ -126,52 +139,35 @@ public:
     Inkscape::XML::Node *      get_repr     ();
     gchar *       get_id       ();
     gchar *       get_name     ();
-    /** \brief  Gets the help string for this extension */
-    gchar const * get_help     () { return _help; }
-    bool          is_silent ();
     void          deactivate   ();
     bool          deactivated  ();
     void          printFailure (Glib::ustring reason);
     Implementation::Implementation * get_imp () { return imp; };
     void          set_execution_env (ExecutionEnv * env) { execution_env = env; };
     ExecutionEnv *get_execution_env () { return execution_env; };
+    std::string   get_base_directory() { return _base_directory; };
+    void          set_base_directory(std::string base_directory) { _base_directory = base_directory; };
+    const char   *get_translation(const char* msgid, const char *msgctxt=nullptr);
 
 /* Parameter Stuff */
 private:
-    std::vector<Parameter *> parameters; /**< A table to store the parameters for this extension.
-                              This only gets created if there are parameters in this
-                              extension */
+    std::vector<InxWidget *> _widgets; /**< A list of widgets for this extension. */
 
 public:
-    /** \brief  A function to get the number of parameters that
-                the extension has.
-        \return The number of parameters. */
-    unsigned int param_count ( ) { return parameters.size(); };
-    /** \brief  A function to get the number of parameters that
-                are visible to the user that the extension has.
-        \return The number of visible parameters.
-
-        \note Currently this just calls param_count as visible isn't implemented
-              but in the future it'll do something different.  Please call
-              the appropriate function in code so that it'll work in the
-              future.
-    */
-    unsigned int param_visible_count ( );
+    /** \brief  A function to get the number of visible parameters of the extension.
+        \return The number of visible parameters. */
+    unsigned int widget_visible_count ( );
 
 public:
-    /** An error class for when a parameter is called on a type it is not */
-    class param_wrong_type {};
-    class param_not_color_param {};
-    class param_not_enum_param {};
-    class param_not_optiongroup_param {};
-    class param_not_string_param {};
-    class param_not_float_param {};
-    class param_not_int_param {};
-    class param_not_bool_param {};
-
     /** An error class for when a parameter is looked for that just
      * simply doesn't exist */
     class param_not_exist {};
+
+    /** no valid ID found while parsing XML representation */
+    class extension_no_id{};
+
+    /** no valid name found while parsing XML representation */
+    class extension_no_name{};
 
     /** An error class for when a filename already exists, but the user
      * doesn't want to overwrite it */
@@ -181,106 +177,38 @@ private:
     void             make_param       (Inkscape::XML::Node * paramrepr);
 
     /**
-     * This function looks through the linked list for a parameter
-     * structure with the name of the passed in name.
+     * Looks up the parameter with the specified name.
      *
-     * This is an inline function that is used by all the get_param and
-     * set_param functions to find a param_t in the linked list with
-     * the passed in name.
+     * Searches the list of parameters attached to this extension,
+     * looking for a parameter with a matching name.
      *
      * This function can throw a 'param_not_exist' exception if the
      * name is not found.
      *
-     * The first thing that this function checks is if the list is NULL.
-     * It could be NULL because there are no parameters for this extension
-     * or because all of them have been checked.  If the list
-     * is NULL then the 'param_not_exist' exception is thrown.
-     *
-     * @param name The name to search for.
-     * @return Parameter structure with a name of 'name'.
+     * @param  name Name of the parameter to search for.
+     * @return Parameter with matching name.
      */
-     Parameter *get_param(const gchar * name);
+     InxParameter *get_param(const gchar *name);
 
-     Parameter const *get_param(const gchar * name) const;
+     InxParameter const *get_param(const gchar *name) const;
 
 public:
-    bool             get_param_bool   (const gchar * name,
-                                       const SPDocument *   doc = nullptr,
-                                       const Inkscape::XML::Node * node = nullptr);
+    bool        get_param_bool          (const gchar *name) const;
+    int         get_param_int           (const gchar *name) const;
+    float       get_param_float         (const gchar *name) const;
+    const char *get_param_string        (const gchar *name) const;
+    const char *get_param_optiongroup   (const gchar *name) const;
+    guint32     get_param_color         (const gchar *name) const;
 
-    int              get_param_int    (const gchar * name,
-                                       const SPDocument *   doc = nullptr,
-                                       const Inkscape::XML::Node * node = nullptr);
+    bool get_param_optiongroup_contains (const gchar *name, const char *value) const;
 
-    float            get_param_float  (const gchar * name,
-                                       const SPDocument *   doc = nullptr,
-                                       const Inkscape::XML::Node * node = nullptr);
+    bool        set_param_bool          (const gchar *name, const bool  value);
+    int         set_param_int           (const gchar *name, const int   value);
+    float       set_param_float         (const gchar *name, const float value);
+    const char *set_param_string        (const gchar *name, const char *value);
+    const char *set_param_optiongroup   (const gchar *name, const char *value);
+    guint32     set_param_color         (const gchar *name, const guint32 color);
 
-    /**
-     * Gets a parameter identified by name with the string placed in value.
-     * It isn't duplicated into the value string. Look up in the parameters list,
-     * then execute the function on that found parameter.
-     *
-     * @param name The name of the parameter to get.
-     * @param doc The document to look in for document specific parameters.
-     * @param node The node to look in for a specific parameter.
-     * @return A constant pointer to the string held by the parameters.
-     */
-    gchar const *get_param_string(gchar const *name,
-                                  SPDocument const *doc = nullptr,
-                                  Inkscape::XML::Node const *node = nullptr) const;
-
-    guint32          get_param_color  (const gchar * name,
-                                       const SPDocument *   doc = nullptr,
-                                       const Inkscape::XML::Node * node = nullptr) const;
-
-    const gchar *    get_param_enum   (const gchar * name,
-                                       const SPDocument *   doc = nullptr,
-                                       const Inkscape::XML::Node * node = nullptr) const;
-
-    gchar const *get_param_optiongroup( gchar const * name,
-                                        SPDocument const *   doc = nullptr,
-                                        Inkscape::XML::Node const * node = nullptr) const;
-
-    bool             get_param_enum_contains(gchar const * name,
-                                             gchar const * value,
-                                             SPDocument  * doc = nullptr,
-                                             Inkscape::XML::Node * node = nullptr) const;
-
-    bool             set_param_bool   (const gchar * name,
-                                       bool          value,
-                                       SPDocument *   doc = nullptr,
-                                       Inkscape::XML::Node *       node = nullptr);
-
-    int              set_param_int    (const gchar * name,
-                                       int           value,
-                                       SPDocument *   doc = nullptr,
-                                       Inkscape::XML::Node *       node = nullptr);
-
-    float            set_param_float  (const gchar * name,
-                                       float         value,
-                                       SPDocument *   doc = nullptr,
-                                       Inkscape::XML::Node *       node = nullptr);
-
-    const gchar *    set_param_string (const gchar * name,
-                                       const gchar * value,
-                                       SPDocument *   doc = nullptr,
-                                       Inkscape::XML::Node *       node = nullptr);
-
-    gchar const * set_param_optiongroup(gchar const * name,
-                                        gchar const * value,
-                                        SPDocument * doc = nullptr,
-                                        Inkscape::XML::Node * node = nullptr);
-
-    gchar const *    set_param_enum   (gchar const * name,
-                                       gchar const * value,
-                                       SPDocument * doc = nullptr,
-                                       Inkscape::XML::Node * node = nullptr);
-
-    guint32          set_param_color  (const gchar * name,
-                                       guint32 color,
-                                       SPDocument *   doc = nullptr,
-                                       Inkscape::XML::Node *       node = nullptr);
 
     /* Error file handling */
 public:
@@ -288,16 +216,15 @@ public:
     static void      error_file_close ();
 
 public:
-    Gtk::Widget *    autogui (SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal = nullptr);
-    void paramListString (std::list <std::string> & retlist);
+    Gtk::Widget *autogui (SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal = nullptr);
+    void paramListString(std::list <std::string> &retlist);
     void set_gui(bool s) { _gui = s; }
     bool get_gui() { return _gui; }
 
     /* Extension editor dialog stuff */
 public:
-    Gtk::VBox *    get_info_widget();
-    Gtk::VBox *    get_help_widget();
-    Gtk::VBox *    get_params_widget();
+    Gtk::VBox *get_info_widget();
+    Gtk::VBox *get_params_widget();
 protected:
     inline static void add_val(Glib::ustring labelstr, Glib::ustring valuestr, Gtk::Grid * table, int * row);
 };

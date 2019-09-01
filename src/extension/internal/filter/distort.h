@@ -67,29 +67,29 @@ public:
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Felt Feather") "</name>\n"
               "<id>org.inkscape.effect.filter.FeltFeather</id>\n"
-              "<param name=\"type\" _gui-text=\"" N_("Type:") "\" type=\"enum\">\n"
-                "<_item value=\"in\">" N_("In") "</_item>\n"
-                "<_item value=\"out\">" N_("Out") "</_item>\n"
+              "<param name=\"type\" gui-text=\"" N_("Type:") "\" type=\"optiongroup\" appearance=\"combo\">\n"
+                "<option value=\"in\">" N_("In") "</option>\n"
+                "<option value=\"out\">" N_("Out") "</option>\n"
               "</param>\n"
-              "<param name=\"hblur\" _gui-text=\"" N_("Horizontal blur") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.01\" max=\"30.00\">15</param>\n"
-              "<param name=\"vblur\" _gui-text=\"" N_("Vertical blur") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.01\" max=\"30.00\">15</param>\n"
-              "<param name=\"dilat\" _gui-text=\"" N_("Dilatation") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0\" max=\"100\">1</param>\n"
-              "<param name=\"erosion\" _gui-text=\"" N_("Erosion") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0\" max=\"100\">0</param>\n"
-              "<param name=\"stroke\" _gui-text=\"" N_("Stroke:") "\" type=\"enum\">\n"
-                "<_item value=\"atop\">" N_("Normal") "</_item>\n"
-                "<_item value=\"over\">" N_("Wide") "</_item>\n"
-                "<_item value=\"in\">" N_("Narrow") "</_item>\n"
-                "<_item value=\"xor\">" N_("No fill") "</_item>\n"
+              "<param name=\"hblur\" gui-text=\"" N_("Horizontal blur") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.01\" max=\"30.00\">15</param>\n"
+              "<param name=\"vblur\" gui-text=\"" N_("Vertical blur") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.01\" max=\"30.00\">15</param>\n"
+              "<param name=\"dilat\" gui-text=\"" N_("Dilatation") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0\" max=\"100\">1</param>\n"
+              "<param name=\"erosion\" gui-text=\"" N_("Erosion") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0\" max=\"100\">0</param>\n"
+              "<param name=\"stroke\" gui-text=\"" N_("Stroke:") "\" type=\"optiongroup\" appearance=\"combo\">\n"
+                "<option value=\"atop\">" N_("Normal") "</option>\n"
+                "<option value=\"over\">" N_("Wide") "</option>\n"
+                "<option value=\"in\">" N_("Narrow") "</option>\n"
+                "<option value=\"xor\">" N_("No fill") "</option>\n"
               "</param>\n"
-              "<param name=\"turbulence\" indent=\"1\" _gui-text=\"" N_("Turbulence:") "\" type=\"enum\">\n"
-                "<_item value=\"fractalNoise\">" N_("Fractal noise") "</_item>\n"
-                "<_item value=\"turbulence\">" N_("Turbulence") "</_item>\n"
+              "<param name=\"turbulence\" indent=\"1\" gui-text=\"" N_("Turbulence:") "\" type=\"optiongroup\" appearance=\"combo\">\n"
+                "<option value=\"fractalNoise\">" N_("Fractal noise") "</option>\n"
+                "<option value=\"turbulence\">" N_("Turbulence") "</option>\n"
               "</param>\n"
-              "<param name=\"hfreq\" _gui-text=\"" N_("Horizontal frequency") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.01\" max=\"100.\">5</param>\n"
-              "<param name=\"vfreq\" _gui-text=\"" N_("Vertical frequency") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.01\" max=\"100.\">5</param>\n"
-              "<param name=\"complexity\" _gui-text=\"" N_("Complexity") "\" type=\"int\" appearance=\"full\" min=\"1\" max=\"5\">3</param>\n"
-              "<param name=\"variation\" _gui-text=\"" N_("Variation") "\" type=\"int\" appearance=\"full\" min=\"1\" max=\"100\">0</param>\n"
-              "<param name=\"intensity\" _gui-text=\"" N_("Intensity") "\" type=\"float\" appearance=\"full\" min=\"0.0\" max=\"100\">30</param>\n"
+              "<param name=\"hfreq\" gui-text=\"" N_("Horizontal frequency") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.01\" max=\"100.\">5</param>\n"
+              "<param name=\"vfreq\" gui-text=\"" N_("Vertical frequency") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.01\" max=\"100.\">5</param>\n"
+              "<param name=\"complexity\" gui-text=\"" N_("Complexity") "\" type=\"int\" appearance=\"full\" min=\"1\" max=\"5\">3</param>\n"
+              "<param name=\"variation\" gui-text=\"" N_("Variation") "\" type=\"int\" appearance=\"full\" min=\"1\" max=\"100\">0</param>\n"
+              "<param name=\"intensity\" gui-text=\"" N_("Intensity") "\" type=\"float\" appearance=\"full\" min=\"0.0\" max=\"100\">30</param>\n"
               "<effect>\n"
                 "<object-type>all</object-type>\n"
                 "<effects-menu>\n"
@@ -130,16 +130,16 @@ FeltFeather::get_filter_text (Inkscape::Extension::Extension * ext)
     dilat << ext->get_param_float("dilat");
     erosion << -ext->get_param_float("erosion");
     
-    turbulence << ext->get_param_enum("turbulence");
+    turbulence << ext->get_param_optiongroup("turbulence");
     hfreq << ext->get_param_float("hfreq") / 100;
     vfreq << ext->get_param_float("vfreq") / 100;
     complexity << ext->get_param_int("complexity");
     variation << ext->get_param_int("variation");
     intensity << ext->get_param_float("intensity");
 
-    stroke << ext->get_param_enum("stroke");
+    stroke << ext->get_param_optiongroup("stroke");
     
-    const gchar *maptype = ext->get_param_enum("type");
+    const gchar *maptype = ext->get_param_optiongroup("type");
     if (g_ascii_strcasecmp("in", maptype) == 0) {
         map << "composite3";
     } else {
@@ -190,15 +190,15 @@ public:
             "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
               "<name>" N_("Roughen") "</name>\n"
               "<id>org.inkscape.effect.filter.Roughen</id>\n"
-              "<param name=\"type\" _gui-text=\"" N_("Turbulence type:") "\" type=\"enum\">\n"
-                "<_item value=\"fractalNoise\">" N_("Fractal noise") "</_item>\n"
-                "<_item value=\"turbulence\">" N_("Turbulence") "</_item>\n"
+              "<param name=\"type\" gui-text=\"" N_("Turbulence type:") "\" type=\"optiongroup\" appearance=\"combo\">\n"
+                "<option value=\"fractalNoise\">" N_("Fractal noise") "</option>\n"
+                "<option value=\"turbulence\">" N_("Turbulence") "</option>\n"
               "</param>\n"
-              "<param name=\"hfreq\" _gui-text=\"" N_("Horizontal frequency") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.1\" max=\"1000.00\">1.3</param>\n"
-              "<param name=\"vfreq\" _gui-text=\"" N_("Vertical frequency") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.1\" max=\"1000.00\">1.3</param>\n"
-              "<param name=\"complexity\" _gui-text=\"" N_("Complexity") "\" type=\"int\" appearance=\"full\" min=\"1\" max=\"5\">5</param>\n"
-              "<param name=\"variation\" _gui-text=\"" N_("Variation") "\" type=\"int\" appearance=\"full\" min=\"1\" max=\"360\">0</param>\n"
-              "<param name=\"intensity\" _gui-text=\"" N_("Intensity") "\" type=\"float\" appearance=\"full\" min=\"0.0\" max=\"50\">6.6</param>\n"
+              "<param name=\"hfreq\" gui-text=\"" N_("Horizontal frequency") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.1\" max=\"1000.00\">1.3</param>\n"
+              "<param name=\"vfreq\" gui-text=\"" N_("Vertical frequency") "\" type=\"float\" appearance=\"full\" precision=\"2\" min=\"0.1\" max=\"1000.00\">1.3</param>\n"
+              "<param name=\"complexity\" gui-text=\"" N_("Complexity") "\" type=\"int\" appearance=\"full\" min=\"1\" max=\"5\">5</param>\n"
+              "<param name=\"variation\" gui-text=\"" N_("Variation") "\" type=\"int\" appearance=\"full\" min=\"1\" max=\"360\">0</param>\n"
+              "<param name=\"intensity\" gui-text=\"" N_("Intensity") "\" type=\"float\" appearance=\"full\" min=\"0.0\" max=\"50\">6.6</param>\n"
               "<effect>\n"
                 "<object-type>all</object-type>\n"
                 "<effects-menu>\n"
@@ -225,7 +225,7 @@ Roughen::get_filter_text (Inkscape::Extension::Extension * ext)
     std::ostringstream variation;
     std::ostringstream intensity;
     
-    type << ext->get_param_enum("type");
+    type << ext->get_param_optiongroup("type");
     hfreq << ext->get_param_float("hfreq") / 100;
     vfreq << ext->get_param_float("vfreq") / 100;
     complexity << ext->get_param_int("complexity");

@@ -11,8 +11,6 @@
 
 #include "parameter.h"
 
-class SPDocument;
-
 namespace Gtk {
 class Widget;
 }
@@ -27,55 +25,39 @@ namespace Extension {
 /**
  * A boolean parameter.
  */
-class ParamBool : public Parameter {
+class ParamBool : public InxParameter {
 public:
-
-    /**
-     * Use the superclass' allocator and set the \c _value.
-     */
-    ParamBool(const gchar * name,
-              const gchar * text,
-              const gchar * description,
-              bool hidden,
-              int indent,
-              Inkscape::Extension::Extension * ext,
-              Inkscape::XML::Node * xml);
+    ParamBool(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
 
     /**
      * Returns the current state/value.
      */
-    bool get(const SPDocument *doc, const Inkscape::XML::Node *node) const;
+    bool get() const;
 
     /**
      * A function to set the state/value.
      * This function sets the internal value, but it also sets the value
-     * in the preferences structure.  To put it in the right place, \c PREF_DIR
-     * and \c pref_name() are used.
+     * in the preferences structure.  To put it in the right place pref_name() is used.
      *
      * @param  in   The value to set to
-     * @param  doc  A document that should be used to set the value.
-     * @param  node The node where the value may be placed
      */
-    bool set(bool in, SPDocument * doc, Inkscape::XML::Node * node);
+    bool set(bool in);
 
     /**
      * Creates a bool check button for a bool parameter.
      * Builds a hbox with a label and a check button in it.
      */
-    Gtk::Widget *get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal) override;
-
-    // Explicitly call superclass version to avoid method being hidden.
-    void string(std::list <std::string> &list) const override { return Parameter::string(list); }
+    Gtk::Widget *get_widget(sigc::signal<void> *changeSignal) override;
 
     /**
      * Appends 'true' or 'false'.
      * @todo investigate. Returning a value that can then be appended would probably work better/safer.
      */
-    void string(std::string &string) const override;
+    std::string value_to_string() const override;
 
 private:
     /** Internal value. */
-    bool _value;
+    bool _value = true;
 };
 
 }  // namespace Extension

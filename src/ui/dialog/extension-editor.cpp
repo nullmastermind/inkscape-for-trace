@@ -41,7 +41,6 @@ ExtensionEditor::ExtensionEditor()
     : UI::Widget::Panel("/dialogs/extensioneditor", SP_VERB_DIALOG_EXTENSIONEDITOR)
 {
     _notebook_info.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-    _notebook_help.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     _notebook_params.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
  
     //Main HBox
@@ -73,7 +72,6 @@ ExtensionEditor::ExtensionEditor()
     hbox_list_page->pack_start(*vbox_page, true, true, 0);
     Gtk::Notebook * notebook = Gtk::manage(new Gtk::Notebook());
     notebook->append_page(_notebook_info, *Gtk::manage(new Gtk::Label(_("Information"))));
-    notebook->append_page(_notebook_help, *Gtk::manage(new Gtk::Label(_("Help"))));
     notebook->append_page(_notebook_params, *Gtk::manage(new Gtk::Label(_("Parameters"))));
     vbox_page->pack_start(*notebook, true, true, 0);
 
@@ -140,28 +138,22 @@ void ExtensionEditor::on_pagelist_selection_changed()
 
         /* Clear the notbook pages */
         _notebook_info.remove();
-        _notebook_help.remove();
         _notebook_params.remove();
 
         Inkscape::Extension::Extension * ext = Inkscape::Extension::db.get(id.c_str());
 
         /* Make sure we have all the widgets */
         Gtk::Widget * info = nullptr;
-        Gtk::Widget * help = nullptr;
         Gtk::Widget * params = nullptr;
 
         if (ext != nullptr) {
             info = ext->get_info_widget();
-            help = ext->get_help_widget();
             params = ext->get_params_widget();
         }
 
         /* Place them in the pages */
         if (info != nullptr) {
             _notebook_info.add(*info);
-        }
-        if (help != nullptr) {
-            _notebook_help.add(*help);
         }
         if (params != nullptr) {
             _notebook_params.add(*params);
