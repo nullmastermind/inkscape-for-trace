@@ -96,7 +96,8 @@ Gtk::Widget *WidgetBox::get_widget(sigc::signal<void> *changeSignal)
         if (child_widget) {
             int indent = child->get_indent();
             child_widget->set_margin_start(indent * GUI_INDENTATION);
-            box->pack_start(*child_widget, false, false, 0);
+            box->pack_start(*child_widget, false, true, 0); // fill=true does not have an effect here, but allows the
+                                                            // child to choose to expand by setting hexpand/vexpand
 
             const char *tooltip = child->get_tooltip();
             if (tooltip) {

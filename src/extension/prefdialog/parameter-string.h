@@ -20,6 +20,10 @@ namespace Extension {
 
 class ParamString : public InxParameter {
 public:
+    enum AppearanceMode {
+        DEFAULT, MULTILINE
+    };
+
     ParamString(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
 
     /** \brief  Returns \c _value, with a \i const to protect it. */
@@ -37,8 +41,10 @@ private:
     /** \brief  Internal value. */
     Glib::ustring _value;
 
-    /** \brief Maximum length of the string in characters (zero meaning unlimited).
-      */
+    /** appearance mode **/
+    AppearanceMode _mode = DEFAULT;
+
+    /** \brief Maximum length of the string in characters (zero meaning unlimited). */
     int _max_length = 0;
 };
 

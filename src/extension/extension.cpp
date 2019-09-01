@@ -722,7 +722,8 @@ public:
     void addWidget(Gtk::Widget *widg, gchar const *tooltip, int indent) {
         if (widg) {
             widg->set_margin_start(indent * InxParameter::GUI_INDENTATION);
-            this->pack_start(*widg, false, false, 0);
+            this->pack_start(*widg, false, true, 0); // fill=true does not have an effect here, but allows the
+                                                     // child to choose to expand by setting hexpand/vexpand
             if (tooltip) {
                 widg->set_tooltip_text(tooltip);
             } else {

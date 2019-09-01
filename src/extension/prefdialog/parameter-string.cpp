@@ -11,6 +11,9 @@
 
 #include <gtkmm/box.h>
 #include <gtkmm/entry.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/textview.h>
+#include <glibmm/regex.h>
 
 #include "xml/node.h"
 #include "extension/extension.h"
@@ -50,6 +53,16 @@ ParamString::ParamString(Inkscape::XML::Node *xml, Inkscape::Extension::Extensio
     if (max_length) {
         _max_length = strtoul(max_length, nullptr, 0);
     }
+
+    // parse appearance
+    if (_appearance) {
+        if (!strcmp(_appearance, "multiline")) {
+            _mode = MULTILINE;
+        } else {
+            g_warning("Invalid value ('%s') for appearance of parameter '%s' in extension '%s'",
+                      _appearance, _name, _extension->get_id());
+        }
+    }
 }
 
 /**
@@ -80,7 +93,8 @@ std::string ParamString::value_to_string() const
 }
 
 
-/** A special type of Gtk::Entry to handle string parameteres. */
+
+/** A special type of Gtk::Entry to handle string parameters. */
 class ParamStringEntry : public Gtk::Entry {
 private:
     ParamString *_pref;
@@ -119,6 +133,54 @@ void ParamStringEntry::changed_text()
     }
 }
 
+
+
+/** A special type of Gtk::TextView to handle multiline string parameters. */
+class ParamMultilineStringEntry : public Gtk::TextView {
+private:
+    ParamString *_pref;
+    sigc::signal<void> *_changeSignal;
+public:
+    /**
+     * Build a string preference for the given parameter.
+     * @param  pref  Where to get the string from, and where to put it
+     *                when it changes.
+     */
+    ParamMultilineStringEntry(ParamString *pref, sigc::signal<void> *changeSignal)
+        : Gtk::TextView()
+        , _pref(pref)
+        , _changeSignal(changeSignal)
+    {
+        // replace literal '\n' with actual newlines for multiline strings
+        Glib::ustring value = Glib::Regex::create("\\\\n")->replace_literal(_pref->get(), 0, "\n", (Glib::RegexMatchFlags)0);
+
+        this->get_buffer()->set_text(value);
+        this->get_buffer()->signal_changed().connect(sigc::mem_fun(this, &ParamMultilineStringEntry::changed_text));
+    };
+    void changed_text();
+};
+
+/**
+ * Respond to the text box changing.
+ *
+ * This function responds to the box changing by grabbing the value
+ * from the text box and putting it in the parameter.
+ */
+void ParamMultilineStringEntry::changed_text()
+{
+    Glib::ustring data = this->get_buffer()->get_text();
+
+    // always store newlines as literal '\n'
+    data = Glib::Regex::create("\n")->replace_literal(data, 0, "\\n", (Glib::RegexMatchFlags)0);
+
+    _pref->set(data.c_str());
+    if (_changeSignal != nullptr) {
+        _changeSignal->emit();
+    }
+}
+
+
+
 /**
  * Creates a text box for the string parameter.
  *
@@ -130,18 +192,36 @@ Gtk::Widget *ParamString::get_widget(sigc::signal<void> *changeSignal)
         return nullptr;
     }
 
-    Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox(false, GUI_PARAM_WIDGETS_SPACING));
+    Gtk::Box *box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, GUI_PARAM_WIDGETS_SPACING));
+
     Gtk::Label *label = Gtk::manage(new Gtk::Label(_text, Gtk::ALIGN_START));
     label->show();
-    hbox->pack_start(*label, false, false);
+    box->pack_start(*label, false, false);
 
-    ParamStringEntry * textbox = new ParamStringEntry(this, changeSignal);
-    textbox->show();
-    hbox->pack_start(*textbox, true, true);
+    if (_mode == MULTILINE) {
+        box->set_orientation(Gtk::ORIENTATION_VERTICAL);
 
-    hbox->show();
+        Gtk::ScrolledWindow *textarea = new Gtk::ScrolledWindow();
+        textarea->set_vexpand();
+        textarea->set_shadow_type(Gtk::SHADOW_IN);
 
-    return dynamic_cast<Gtk::Widget *>(hbox);
+        ParamMultilineStringEntry *entry = new ParamMultilineStringEntry(this, changeSignal);
+        entry->show();
+
+        textarea->add(*entry);
+        textarea->show();
+
+        box->pack_start(*textarea, true, true);
+    } else {
+        Gtk::Widget *entry = new ParamStringEntry(this, changeSignal);
+        entry->show();
+
+        box->pack_start(*entry, true, true);
+    }
+
+    box->show();
+
+    return dynamic_cast<Gtk::Widget *>(box);
 }
 
 }  /* namespace Extension */
