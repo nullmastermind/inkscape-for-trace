@@ -326,7 +326,7 @@ void PrintLatex::init()
         "<name>" N_("LaTeX Print") "</name>\n"
         "<id>" SP_MODULE_KEY_PRINT_LATEX "</id>\n"
         "<param gui-hidden=\"true\" name=\"destination\" type=\"string\"></param>\n"
-        "<param gui-hidden=\"true\" name=\"textToPath\" type=\"boolean\">true</param>\n"
+        "<param gui-hidden=\"true\" name=\"textToPath\" type=\"bool\">true</param>\n"
         "<print/>\n"
         "</inkscape-extension>", new PrintLatex());
 }
