@@ -210,6 +210,13 @@ push @{$properties{ "solid-opacity" }->{elements}}, @graphics_elements;
 $properties{ "solid-opacity" }->{default} = "1";
 $properties{ "solid-opacity" }->{inherit} = "no";
 
+push @{$properties{ "vector-effect" }->{elements}}, @container_elements;
+push @{$properties{ "vector-effect" }->{elements}}, @graphics_elements;
+$properties{ "vector-effect" }->{default} = "none";
+$properties{ "vector-effect" }->{inherit} = "no";
+
+
+# SVG2 Text
 push @{$properties{ "white-space" }->{elements}}, @container_elements;
 push @{$properties{ "white-space" }->{elements}}, @text_content_elements;
 $properties{ "white-space" }->{default} = "normal";

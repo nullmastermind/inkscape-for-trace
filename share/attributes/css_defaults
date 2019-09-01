@@ -186,6 +186,8 @@
 
 "unicode-bidi" - "normal" - "no"
 
+"vector-effect" - "none" - "no"
+
 "visibility" - "visible" - "yes"
 
 "white-space" - "normal" - "yes"
