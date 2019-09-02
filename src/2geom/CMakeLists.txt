@@ -3,6 +3,10 @@ if (CMAKE_BUILD_TYPE MATCHES Strict)
 	set(CMAKE_CXX_FLAGS_STRICT "${CMAKE_CXX_FLAGS_STRICT} -Wno-error=deprecated-declarations")
 endif()
 
+if(HAVE_SINCOS)
+	add_definitions(-DHAVE_SINCOS)
+endif()
+
 set(2geom_SRC
 	affine.cpp
 	basic-intersection.cpp

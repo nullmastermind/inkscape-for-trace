@@ -1,16 +1,11 @@
 include(${CMAKE_CURRENT_LIST_DIR}/ConfigPaths.cmake)
 
-#---------------
-# From here on:
 # Set all HAVE_XXX variables, to correctly set all defines in config.h
-#SET(CMAKE_REQUIRED_INCLUDES ${INK_INCLUDES})
 include(CheckIncludeFiles)
 include(CheckIncludeFileCXX)
 include(CheckFunctionExists)
 include(CheckStructHasMember)
-# usage: CHECK_INCLUDE_FILES (<header> <RESULT_VARIABLE> )
-# usage: CHECK_FUNCTION_EXISTS (<function name> <RESULT_VARIABLE> )
-# usage: CHECK_STRUCT_HAS_MEMBER (<struct> <member> <header> <RESULT_VARIABLE>)
+include(CheckCXXSymbolExists)
 
 set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${INKSCAPE_LIBS})
 set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${INKSCAPE_INCS_SYS})
@@ -24,6 +19,7 @@ CHECK_STRUCT_HAS_MEMBER(fsmblks mallinfo malloc.h HAVE_STRUCT_MALLINFO_FSMBLKS)
 CHECK_STRUCT_HAS_MEMBER(hblkhd mallinfo malloc.h HAVE_STRUCT_MALLINFO_HBLKHD)
 CHECK_STRUCT_HAS_MEMBER(uordblks mallinfo malloc.h HAVE_STRUCT_MALLINFO_UORDBLKS)
 CHECK_STRUCT_HAS_MEMBER(usmblks mallinfo malloc.h HAVE_STRUCT_MALLINFO_USMBLKS)
+CHECK_CXX_SYMBOL_EXISTS(sincos math.h HAVE_SINCOS)  # 2geom define
 
 # Create the configuration files config.h in the binary root dir
 configure_file(${CMAKE_SOURCE_DIR}/config.h.cmake ${CMAKE_BINARY_DIR}/include/config.h)
