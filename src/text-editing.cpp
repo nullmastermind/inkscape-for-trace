@@ -427,6 +427,8 @@ Inkscape::Text::Layout::iterator sp_te_insert_line (SPItem *item, Inkscape::Text
         if (split_obj) {
             Inkscape::XML::Document *xml_doc = split_obj->document->getReprDoc();
             Inkscape::XML::Node *new_node = duplicate_node_without_children(xml_doc, split_obj->getRepr());
+            // if we finaly go to a text element without TSpan we mist set content to none
+            // new_node->setContent("");
             split_obj->parent->getRepr()->addChild(new_node, split_obj->getRepr());
             Inkscape::GC::release(new_node);
         }

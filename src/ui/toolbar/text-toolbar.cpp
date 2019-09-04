@@ -1299,11 +1299,7 @@ TextToolbar::lineheight_value_changed()
         sp_repr_css_set_property(cssfit, "line-height", parent_lineheight.c_str());
         double minheight = 0;
         if (parent_style) {
-            if (parent_style->line_height.normal) {
-                minheight = Inkscape::Text::Layout::LINE_HEIGHT_NORMAL;
-            } else {
-                minheight = parent_style->line_height.computed;
-            }
+            minheight = parent_style->line_height.computed;
         }
         if (minheight) {
             for (auto i : parent->childList(false)) {
@@ -1311,17 +1307,7 @@ TextToolbar::lineheight_value_changed()
                 if (!child) {
                     continue;
                 }
-                double childheight = 0;
-                if (child->style) {
-                    if (child->style->line_height.normal) {
-                        childheight = Inkscape::Text::Layout::LINE_HEIGHT_NORMAL;
-                    } else {
-                        childheight = child->style->line_height.computed;
-                    }
-                }
-                if (minheight == childheight) {
-                    recursively_set_properties(child, cssfit);
-                }
+                recursively_set_properties(child, cssfit);
             }
         }
         sp_repr_css_set_property(cssfit, "line-height", "0");
@@ -1509,11 +1495,7 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
         sp_repr_css_set_property(cssfit, "line-height", parent_lineheight.c_str());
         double minheight = 0;
         if (parent_style) {
-            if (parent_style->line_height.normal) {
-                minheight = Inkscape::Text::Layout::LINE_HEIGHT_NORMAL;
-            } else {
-                minheight = parent_style->line_height.computed;
-            }
+            minheight = parent_style->line_height.computed;
         }
         if (minheight) {
             for (auto i : parent->childList(false)) {
@@ -1521,17 +1503,7 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
                 if (!child) {
                     continue;
                 }
-                double childheight = 0;
-                if (child->style) {
-                    if (child->style->line_height.normal) {
-                        childheight = Inkscape::Text::Layout::LINE_HEIGHT_NORMAL;
-                    } else {
-                        childheight = child->style->line_height.computed;
-                    }
-                }
-                if (minheight == childheight) {
-                    recursively_set_properties(child, cssfit);
-                }
+                recursively_set_properties(child, cssfit);
             }
         }
         sp_repr_css_set_property(cssfit, "line-height", "0");

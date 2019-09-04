@@ -838,10 +838,13 @@ void SPText::rebuildLayout()
 #endif
 
     // set the x,y attributes on role:line spans
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool svg2text = prefs->getBool("/tools/text/use_svg2");
     for (auto& child: children) {
         if (SP_IS_TSPAN(&child)) {
             SPTSpan *tspan = SP_TSPAN(&child);
-            if ( (tspan->role != SP_TSPAN_ROLE_UNSPECIFIED)
+            if (!svg2text && 
+                (tspan->role != SP_TSPAN_ROLE_UNSPECIFIED)
                  && tspan->attributes.singleXYCoordinates() ) {
                 Inkscape::Text::Layout::iterator iter = layout.sourceToIterator(tspan);
                 Geom::Point anchor_point = layout.chunkAnchorPoint(iter);
@@ -1112,12 +1115,17 @@ SPItem *create_text_with_rectangle (SPDesktop *desktop, Geom::Point p0, Geom::Po
     sp_repr_css_set(text_repr, css, "style");
     sp_repr_css_attr_unref(css);
 
+    /* Create <tspan> */
+    Inkscape::XML::Node *rtspan = xml_doc->createElement("svg:tspan");
+    rtspan->setAttribute("sodipodi:role", "line"); // otherwise, why bother creating the tspan?
     Inkscape::XML::Node *text_node = xml_doc->createTextNode("");
-    text_repr->appendChild(text_node);
+    rtspan->appendChild(text_node);
+    text_repr->appendChild(rtspan);
 
     SPItem *item = dynamic_cast<SPItem *>(desktop->currentLayer());
     g_assert(item != nullptr);
 
+    Inkscape::GC::release(rtspan);
     Inkscape::GC::release(text_repr);
     Inkscape::GC::release(text_node);
     Inkscape::GC::release(defs_repr);
