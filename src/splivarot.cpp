@@ -1001,48 +1001,29 @@ Geom::PathVector* item_outline(SPItem const *item, bool bbox_only)
     res->SetBackData(false);
 
     if (!i_style->stroke_dasharray.values.empty()) {
-        // For dashed strokes, use Stroke method, because Outline can't do dashes
-        // However Stroke adds lots of extra nodes _or_ makes the path crooked, so consider this a temporary workaround
-
-        orig->ConvertWithBackData(0.1);
+        double size = Geom::L2(Geom::bounds_fast(pathv)->dimensions());
+        orig->ConvertWithBackData(0.005);
 
         orig->DashPolylineFromStyle(i_style, scale, 0);
+        orig->Simplify(size * 0.00005);
+    }
+    orig->Outline(res, 0.5 * o_width, o_join, o_butt, 0.5 * o_miter);
 
-        Shape* theShape = new Shape;
-        orig->Stroke(theShape, false, 0.5*o_width, o_join, o_butt,
-                     0.5 * o_miter);
-        orig->Outline(res, 0.5 * o_width, o_join, o_butt, 0.5 * o_miter);
+    if (!bbox_only) {
+        orig->Coalesce(0.5 * o_width);
+        Shape *theShape = new Shape;
+        Shape *theRes = new Shape;
 
-        if (!bbox_only) {
-            Shape *theRes = new Shape;
-            theRes->ConvertToShape(theShape, fill_positive);
+        res->ConvertWithBackData(1.0);
+        res->Fill(theShape, 0);
+        theRes->ConvertToShape(theShape, fill_positive);
 
-            Path *originaux[1];
-            originaux[0] = res;
-            theRes->ConvertToForme(orig, 1, originaux);
-            res->Coalesce(5.0);
-            delete theRes;
-        }
+        Path *originaux[1];
+        originaux[0] = res;
+        theRes->ConvertToForme(orig, 1, originaux);
+
         delete theShape;
-    } else {
-        orig->Outline(res, 0.5 * o_width, o_join, o_butt, 0.5 * o_miter);
-
-        if (!bbox_only) {
-            orig->Coalesce(0.5 * o_width);
-            Shape *theShape = new Shape;
-            Shape *theRes = new Shape;
-
-            res->ConvertWithBackData(1.0);
-            res->Fill(theShape, 0);
-            theRes->ConvertToShape(theShape, fill_positive);
-
-            Path *originaux[1];
-            originaux[0] = res;
-            theRes->ConvertToForme(orig, 1, originaux);
-
-            delete theShape;
-            delete theRes;
-        }
+        delete theRes;
     }
 
     if (orig->descr_cmd.size() <= 1) {
@@ -1292,54 +1273,33 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
             }
 
 
+
             orig->LoadPathVector(pathv);
             res->SetBackData(false);
 
             if (!i_style->stroke_dasharray.values.empty()) {
-                // For dashed strokes, use Stroke method, because Outline can't do dashes
-                // However Stroke adds lots of extra nodes _or_ makes the path crooked, so consider this a temporary workaround
-
-                orig->ConvertWithBackData(0.1);
+                double size = Geom::L2(Geom::bounds_fast(pathv)->dimensions());
+                orig->ConvertWithBackData(0.005);
 
                 orig->DashPolylineFromStyle(i_style, scale, 0);
-
-                Shape* theShape = new Shape;
-                orig->Stroke(theShape, false, 0.5*o_width, o_join, o_butt,
-                             0.5 * o_miter);
-                orig->Outline(res, 0.5 * o_width, o_join, o_butt, 0.5 * o_miter);
-
-                Shape *theRes = new Shape;
-
-                theRes->ConvertToShape(theShape, fill_positive);
-
-                Path *originaux[1];
-                originaux[0] = res;
-                theRes->ConvertToForme(orig, 1, originaux);
-
-                res->Coalesce(5.0);
-
-                delete theShape;
-                delete theRes;
-
-            } else {
-                orig->Outline(res, 0.5 * o_width, o_join, o_butt, 0.5 * o_miter);
-
-                orig->Coalesce(0.5 * o_width);
-
-                Shape *theShape = new Shape;
-                Shape *theRes = new Shape;
-
-                res->ConvertWithBackData(1.0);
-                res->Fill(theShape, 0);
-                theRes->ConvertToShape(theShape, fill_positive);
-
-                Path *originaux[1];
-                originaux[0] = res;
-                theRes->ConvertToForme(orig, 1, originaux);
-
-                delete theShape;
-                delete theRes;
+                orig->Simplify(size * 0.00005);
             }
+            orig->Outline(res, 0.5 * o_width, o_join, o_butt, 0.5 * o_miter);
+            orig->Coalesce(0.5 * o_width);
+
+            Shape *theShape = new Shape;
+            Shape *theRes = new Shape;
+
+            res->ConvertWithBackData(1.0);
+            res->Fill(theShape, 0);
+            theRes->ConvertToShape(theShape, fill_positive);
+
+            Path *originaux[1];
+            originaux[0] = res;
+            theRes->ConvertToForme(orig, 1, originaux);
+
+            delete theShape;
+            delete theRes;
 
             if (orig->descr_cmd.size() <= 1) {
                 // ca a merd, ou bien le resultat est vide
