@@ -350,7 +350,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
     }
     /* Line height units */
     {
-        _line_height_units_item = _tracker->create_tool_item( _("Units"), ("") );
+        _line_height_units_item = _tracker->create_tool_item( _("Units"), (""));
         _line_height_units_item->signal_changed_after().connect(sigc::mem_fun(*this, &TextToolbar::lineheight_unit_changed));
         add(*_line_height_units_item);
     }
@@ -522,19 +522,19 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         row = *(store->append());
         row[columns.col_label    ] = _("Horizontal");
         row[columns.col_tooltip  ] = _("Horizontal text");
-        row[columns.col_icon     ] = INKSCAPE_ICON("format-text-direction-horizontal");
+        row[columns.col_icon     ] = INKSCAPE_ICON("frmt-text-direction-horizontal");
         row[columns.col_sensitive] = true;
 
         row = *(store->append());
         row[columns.col_label    ] = _("Vertical — RL");
         row[columns.col_tooltip  ] = _("Vertical text — lines: right to left");
-        row[columns.col_icon     ] = INKSCAPE_ICON("format-text-direction-vertical");
+        row[columns.col_icon     ] = INKSCAPE_ICON("frmt-text-direction-vertical");
         row[columns.col_sensitive] = true;
 
         row = *(store->append());
         row[columns.col_label    ] = _("Vertical — LR");
         row[columns.col_tooltip  ] = _("Vertical text — lines: left to right");
-        row[columns.col_icon     ] = INKSCAPE_ICON("format-text-direction-vertical-lr");
+        row[columns.col_icon     ] = INKSCAPE_ICON("frmt-text-direction-vertical-lr");
         row[columns.col_sensitive] = true;
 
         _writing_mode_item =
@@ -584,7 +584,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
                                               "Not Used",               // Icon
                                               store );                  // List store
         _orientation_item->use_icon(true);
-        _orientation_item->use_label( false );
+        _orientation_item->use_label(false);
         gint mode = prefs->getInt("/tools/text/text_orientation", 0);
         _orientation_item->set_active( mode );
         add(*_orientation_item);
@@ -603,13 +603,13 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         row = *(store->append());
         row[columns.col_label    ] = _("LTR");
         row[columns.col_tooltip  ] = _("Left to right text");
-        row[columns.col_icon     ] = INKSCAPE_ICON("format-text-direction-horizontal");
+        row[columns.col_icon     ] = INKSCAPE_ICON("frmt-text-direction-horizontal");
         row[columns.col_sensitive] = true;
 
         row = *(store->append());
         row[columns.col_label    ] = _("RTL");
         row[columns.col_tooltip  ] = _("Right to left text");
-        row[columns.col_icon     ] = INKSCAPE_ICON("format-text-direction-r2l");
+        row[columns.col_icon     ] = INKSCAPE_ICON("frmt-text-direction-r2l");
         row[columns.col_sensitive] = true;
 
         _direction_item =
@@ -622,6 +622,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         gint mode = prefs->getInt("/tools/text/text_direction", 0);
         _direction_item->set_active( mode );
         add(*_direction_item);
+
         _direction_item->signal_changed_after().connect(sigc::mem_fun(*this, &TextToolbar::direction_changed));
     }
 

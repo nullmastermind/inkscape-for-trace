@@ -16,7 +16,9 @@
       <stop offset="1" style="stop-color:#e2e1e1"/>
     </linearGradient>
   </defs>
-  <g id="format-text-direction-horizontal" inkscape:label="#writing_mode_lr">
+
+  <!-- Note "frmt-text-direction-rtl" is the GTK icon name but we want to use our own. -->
+  <g id="frmt-text-direction-r2l" inkscape:label="#writing_mode_rl">
 
     <!-- Background -->
     <path d="m 1,1 h 22 l 1,1 v 20 l -2,2 h -20 l -1,-1 z" style="fill:black;fill-opacity:0.0667" />
@@ -24,13 +26,12 @@
     <path d="m 2,21 h -1 v -20 h 20 v 1 h -19 z" style="fill:white" />
 
     <!-- A -->
-    <path d="m 3.5,9.75 v -4 c 0,-3 5,-3 5,0 v 4" style="fill:none;stroke:#383838;stroke-linecap:round" />
-    <path d="m 3.5,7 h 5.1" style="fill:none;stroke:#383838" />
+    <path d="m 18.5,9.75 v -4 c 0,-3 -5,-3 -5,0 v 4" style="fill:none;stroke:#383838;stroke-linecap:round" />
+    <path d="m 18.5,7 h -5.1" style="fill:none;stroke:#383838" />
 
     <!-- Arrows -->
-    <path d="m 20,5.5 -3,-2.5 v 2 h -7 v 1 h 7 v 2 z" style="fill:#5a5a5a" />
-    <path d="m 20,11.5 -3,-2.5 v 2 h -15 v 1 h 15 v 2 z" style="fill:#5a5a5a" />
-    <path d="m 20,17.5 -3,-2.5 v 2 h -15 v 1 h 15 v 2 z" style="fill:#5a5a5a" />
+    <path d="m 2,5.5 3,-2.5 v 2 h 7 v 1 h -7 v 2 z"    style="fill:#5a5a5a" />
+    <path d="m 2,11.5 3,-2.5 v 2 h 15 v 1 h -15 v 2 z" style="fill:#5a5a5a" />
+    <path d="m 2,17.5 3,-2.5 v 2 h 15 v 1 h -15 v 2 z" style="fill:#5a5a5a" />
   </g>
-
 </svg>

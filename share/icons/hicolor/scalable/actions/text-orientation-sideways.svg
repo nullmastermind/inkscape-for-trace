@@ -17,8 +17,8 @@
     </linearGradient>
   </defs>
 
-  <!-- Note "format-text-direction-rtl" is the GTK icon name but we want to use our own. -->
-  <g id="format-text-direction-r2l" inkscape:label="#writing_mode_rl">
+  <!-- Note "frmt-text-direction-rtl" is the GTK icon name but we want to use our own. -->
+  <g id="frmt-text-direction-r2l" inkscape:label="#writing_mode_rl">
 
     <!-- Background -->
     <path d="m 1,1 h 22 l 1,1 v 20 l -2,2 h -20 l -1,-1 z" style="fill:black;fill-opacity:0.0667" />

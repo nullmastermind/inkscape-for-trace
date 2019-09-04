@@ -1773,13 +1773,13 @@
 <path style="opacity:0.3;fill:url(#linearGradient19282)" d="m 589,841.3622 2.6875,3.5 -2.6875,3.5 2.6562,0 1.3438,-1.75 1.3437,1.75 2.6563,0 -2.6875,-3.5 2.6875,-3.5 -2.6563,0 -1.3437,1.75 -1.3438,-1.75 -2.6562,0 z" id="path15886" inkscape:connector-curvature="0" />
 <path sodipodi:nodetypes="ccccccccc" style="fill:url(#linearGradient19282)" d="m 595.9062,844.3622 3.4032,4.5745 -2.3094,3.4255 2.8772,0 5.1228,-8 -2.5237,0 -1.9062,2.9763 -2.0076,-2.9763 z" id="path15888" inkscape:connector-curvature="0" />
 </g>
-<g id="format-text-direction-vertical" inkscape:label="#writing_mode_tb" transform="translate(59.99,31.00002)">
+<g id="frmt-text-direction-vertical" inkscape:label="#writing_mode_tb" transform="translate(59.99,31.00002)">
 <rect y="805.3622" x="559" height="16" width="16" id="rect15925" style="opacity:0.3;fill:none" />
 <path sodipodi:nodetypes="cccccccc" style="fill:url(#linearGradient19282)" d="m 561,806.3622 2,0 0.01,11.0058 2,0 -3,2.9883 -3,-2.9883 2,0 z" id="path15933" inkscape:connector-curvature="0" />
 <path inkscape:connector-curvature="0" id="path15956" d="m 571,806.3622 2,0 0.01,11.0058 2,0 -3,2.9883 -3,-2.9883 2,0 z" style="fill:url(#linearGradient19282)" sodipodi:nodetypes="cccccccc" />
 <path style="fill:url(#linearGradient19282)" d="m 565.9864,807.3681 -2.5031,6.9896 1.5019,0 c 0.744,-1.997 0,10e-4 0.7424,-1.9955 l 2.5585,0.018 0.7041,1.9775 1.5019,0 -2.5031,-6.9896 z m 1.0013,1.4978 1.0123,2.4963 -2.0025,0 z" id="path15962" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccccccccccc" />
 </g>
-<g id="format-text-direction-horizontal" inkscape:label="#writing_mode_lr" transform="translate(59.99,31.00002)">
+<g id="frmt-text-direction-horizontal" inkscape:label="#writing_mode_lr" transform="translate(59.99,31.00002)">
 <rect style="opacity:0.3;fill:none" id="rect15975" width="16" height="16" x="589" y="805.3622" />
 <path sodipodi:nodetypes="cccccccc" style="fill:url(#linearGradient19282)" d="m 589.9942,809.3682 0,-2 11.0058,-0.01 0,-2 2.9883,3 -2.9883,3 0,-2 z" id="path15977" inkscape:connector-curvature="0" />
 <path id="path15979" transform="translate(0,512.3622)" d="m 601,304 0,2 -11,0 0,2 11,0 0,1 1,0 2,-2 -3,-3 z" style="fill:url(#linearGradient19282)" inkscape:connector-curvature="0" />

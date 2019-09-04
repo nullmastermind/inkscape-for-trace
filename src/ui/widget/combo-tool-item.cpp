@@ -14,7 +14,7 @@
 */
 
 #include "combo-tool-item.h"
-
+#include "preferences.h"
 #include <iostream>
 #include <utility>
 #include <gtkmm/toolitem.h>
@@ -106,10 +106,22 @@ ComboToolItem::populate_combobox()
 
     ComboToolItemColumns columns;
     if (_use_icon) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        if (prefs->getBool("/theme/symbolicIcons", false)) {
+            auto children = _store->children();
+            for (auto row : children) {
+                Glib::ustring icon = row[columns.col_icon];
+                gint pos = icon.find("-symbolic");
+                if (pos == std::string::npos) {
+                    icon += "-symbolic";
+                }
+                row[columns.col_icon] = icon;
+            }
+        }
         Gtk::CellRendererPixbuf *renderer = new Gtk::CellRendererPixbuf;
         renderer->set_property ("stock_size", Gtk::ICON_SIZE_LARGE_TOOLBAR);
         _combobox->pack_start (*renderer, false);
-        _combobox->add_attribute (*renderer, "icon_name", columns.col_icon   );
+        _combobox->add_attribute (*renderer, "icon_name", columns.col_icon );
     } else if (_use_pixbuf) {
         Gtk::CellRendererPixbuf *renderer = new Gtk::CellRendererPixbuf;
         //renderer->set_property ("stock_size", Gtk::ICON_SIZE_LARGE_TOOLBAR);

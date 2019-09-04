@@ -28,7 +28,7 @@
     </linearGradient>
     <linearGradient gradientUnits="userSpaceOnUse" id="linearGradient10133" inkscape:collect="always" x1="860.239" x2="843.9635" xlink:href="#linearGradient6524" y1="45.30668" y2="28.96459"/>
   </defs>
-<g id="format-text-direction-vertical-lr" inkscape:label="#writing_mode_tb_lr" transform="translate(-840,-25)">
+<g id="frmt-text-direction-vertical-lr" inkscape:label="#writing_mode_tb_lr" transform="translate(-840,-25)">
   <path d="m 841,26 22,0 1,1 0,20 -2,2 -20,0 -1,-1 0,-22 z" id="path10109" inkscape:connector-curvature="0" sodipodi:nodetypes="cccccccc" style="color:#000000;fill:#000000;fill-opacity:0.06666673;fill-rule:evenodd"/>
   <path d="m 840,26 1,0 0,20 -1,0 0,-20 z" id="path10111" inkscape:connector-curvature="0" style="color:#000000;fill:#000000;fill-rule:evenodd"/>
   <rect height="20" id="rect10113" style="color:#000000;fill:#000000;fill-rule:evenodd" width="1" x="861" y="26"/>

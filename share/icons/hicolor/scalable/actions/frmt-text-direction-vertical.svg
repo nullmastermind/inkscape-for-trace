@@ -16,7 +16,7 @@
       <stop offset="1" style="stop-color:#e2e1e1"/>
     </linearGradient>
   </defs>
-  <g id="format-text-direction-vertical" inkscape:label="#writing_mode_tb">
+  <g id="frmt-text-direction-vertical" inkscape:label="#writing_mode_tb">
 
     <!-- Background -->
     <path d="m 1,1 h 22 l 1,1 v 20 l -2,2 h -20 l -1,-1 z"
