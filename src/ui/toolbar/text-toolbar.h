@@ -31,6 +31,7 @@
 #include "object/sp-item.h"
 #include "object/sp-object.h"
 #include "toolbar.h"
+#include "text-editing.h"
 #include "style.h"
 #include <gtkmm/adjustment.h>
 #include <gtkmm/box.h>
@@ -97,8 +98,8 @@ private:
     bool _outer;
     SPItem *_sub_active_item;
     int _lineheight_unit;
-    int wrap_start;
-    int wrap_end;
+    Inkscape::Text::Layout::iterator wrap_start;
+    Inkscape::Text::Layout::iterator wrap_end;
     bool _subselection;
     bool _fullsubselection;
     bool _updating;

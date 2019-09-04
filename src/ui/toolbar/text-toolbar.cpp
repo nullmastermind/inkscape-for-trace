@@ -37,7 +37,6 @@
 #include "document.h"
 #include "inkscape.h"
 #include "selection-chemistry.h"
-#include "text-editing.h"
 #include "verbs.h"
 
 #include "libnrtype/font-lister.h"
@@ -1297,11 +1296,28 @@ TextToolbar::lineheight_value_changed()
         Glib::ustring parent_lineheight = sp_repr_css_property(parent_cssatr, "line-height", "1.25");
         SPCSSAttr *cssfit = sp_repr_css_attr_new();
         sp_repr_css_set_property(cssfit, "line-height", parent_lineheight.c_str());
-        double minheight = parent_style->line_height.computed;
+        double minheight = 0;
+        if (parent_style) {
+            if (parent_style->line_height.normal) {
+                minheight = Inkscape::Text::Layout::LINE_HEIGHT_NORMAL;
+            } else {
+                minheight = parent_style->line_height.computed;
+            }
+        }
         if (minheight) {
             for (auto i : parent->childList(false)) {
                 SPItem *child = dynamic_cast<SPItem *>(i);
-                double childheight = child->style->line_height.computed;
+                if (!child) {
+                    continue;
+                }
+                double childheight = 0;
+                if (child->style) {
+                    if (child->style->line_height.normal) {
+                        childheight = Inkscape::Text::Layout::LINE_HEIGHT_NORMAL;
+                    } else {
+                        childheight = child->style->line_height.computed;
+                    }
+                }
                 if (minheight == childheight) {
                     recursively_set_properties(child, cssfit);
                 }
@@ -1490,11 +1506,28 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
         Glib::ustring parent_lineheight = sp_repr_css_property(parent_cssatr, "line-height", "1.25");
         SPCSSAttr *cssfit = sp_repr_css_attr_new();
         sp_repr_css_set_property(cssfit, "line-height", parent_lineheight.c_str());
-        double minheight = parent_style->line_height.computed;
+        double minheight = 0;
+        if (parent_style) {
+            if (parent_style->line_height.normal) {
+                minheight = Inkscape::Text::Layout::LINE_HEIGHT_NORMAL;
+            } else {
+                minheight = parent_style->line_height.computed;
+            }
+        }
         if (minheight) {
             for (auto i : parent->childList(false)) {
                 SPItem *child = dynamic_cast<SPItem *>(i);
-                double childheight = child->style->line_height.computed;
+                if (!child) {
+                    continue;
+                }
+                double childheight = 0;
+                if (child->style) {
+                    if (child->style->line_height.normal) {
+                        childheight = Inkscape::Text::Layout::LINE_HEIGHT_NORMAL;
+                    } else {
+                        childheight = child->style->line_height.computed;
+                    }
+                }
                 if (minheight == childheight) {
                     recursively_set_properties(child, cssfit);
                 }
@@ -2132,7 +2165,7 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
 }
 
 void
-TextToolbar::watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec) {
+TextToolbar::watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec) {https://gitlab.com/inkscape/inkscape/merge_requests/796
     if (SP_IS_TEXT_CONTEXT(ec)) {
         // Watch selection
         // Ensure FontLister is updated here first.................. VVVVV
@@ -2172,10 +2205,10 @@ void TextToolbar::subselection_wrap_toggle(bool start)
             _updating = true;
             Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
             if (layout) {
-                int start_selection = layout->iteratorToCharIndex(tc->text_sel_start);
-                int end_selection = layout->iteratorToCharIndex(tc->text_sel_end);
-                tc->text_sel_start = layout->charIndexToIterator(wrap_start);
-                tc->text_sel_end = layout->charIndexToIterator(wrap_end);
+                Inkscape::Text::Layout::iterator start_selection = tc->text_sel_start;
+                Inkscape::Text::Layout::iterator end_selection = tc->text_sel_end;
+                tc->text_sel_start = wrap_start;
+                tc->text_sel_end = wrap_end;
                 wrap_start = start_selection;
                 wrap_end = end_selection;
             }
@@ -2260,41 +2293,10 @@ void TextToolbar::subselection_changed(gpointer texttool)
             } else {
                 this->_sub_active_item = nullptr;
                 this->_outer = false;
-                gint counter = 0;
-                gint pos = -1;
-                gint prevpos = 0;
-                bool started = false;
-                bool finished = false;
-                for (auto child : tc->text->childList(false)) {
-                    SPItem *item = dynamic_cast<SPItem *>(child);
-                    if (!dynamic_cast<SPFlowpara *>(item) && !dynamic_cast<SPTSpan *>(item)) {
-                        pos += sp_text_get_length(child);
-                        prevpos = pos;
-                        continue;
-                    }
-                    pos += sp_text_get_length(child);
-                    if (counter >= startline && counter < endline) {
-                        if (!started) {
-                            started = true;
-                            wrap_start = prevpos;
-                        }
-                        if (!finished && startline == endline) {
-                            wrap_end = pos;
-                            finished = true;
-                        }
-                    } else {
-                        if (started && !finished) {
-                            wrap_end = pos;
-                            finished = true;
-                        }
-                    }
-                    prevpos = pos;
-                    ++counter;
-                }
-                if (!finished) {
-                    wrap_end = pos;
-                    finished = true;
-                }
+                wrap_start = tc->text_sel_start;
+                wrap_end = tc->text_sel_end;
+                wrap_start.thisStartOfLine();
+                wrap_end.thisEndOfLine();
                 selection_changed(nullptr);
             }
         }
