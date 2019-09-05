@@ -177,9 +177,9 @@ ln -sf ../../Frameworks/Python.framework/Versions/Current/bin/python3 python
 
 # add override check to launch script
 insert_before $APP_EXE_DIR/Inkscape '\$EXEC' '\
-INKSCAPE_PREFERENCES=$HOME/Library/Application\\ Support/Inkscape/config/inkscape/preferences.xml\
-if [ -f $INKSCAPE_PREFERENCES ]; then   # Has Inkscape been launched before?\
-  PYTHON_INTERPRETER=$\(xmllint --xpath '\''string\(//inkscape/group[@id=\"extensions\"]/@python-interpreter\)'\'' $INKSCAPE_PREFERENCES\)\
+INKSCAPE_PREFERENCES=\"$HOME/Library/Application Support/Inkscape/config/inkscape/preferences.xml\"\
+if [ -f \"$INKSCAPE_PREFERENCES\" ]; then   # Has Inkscape been launched before?\
+  PYTHON_INTERPRETER=$\(xmllint --xpath '\''string\(//inkscape/group[@id=\"extensions\"]/@python-interpreter\)'\'' \"$INKSCAPE_PREFERENCES\"\)\
   if [ -z $PYTHON_INTERPRETER ]\; then   # No override for Python interpreter?\
     export PATH=$bundle_bin:$PATH        # make bundled Python default one\
   fi\
@@ -212,4 +212,16 @@ cp $SELF_DIR/fonts.conf $APP_ETC_DIR/fonts
 # Set environment variable for GIO to find its modules.
 # (https://developer.gnome.org/gio//2.52/running-gio-apps.html)
 insert_before $APP_EXE_DIR/Inkscape '\$EXEC' 'export GIO_MODULE_DIR=$bundle_lib/gio/modules'
+
+### fix messages in GTK launch script ##########################################
+
+# Some parts of the GTK launch script cause unnecessary messages.
+
+# silence "does not exist" message
+replace_line $APP_EXE_DIR/Inkscape AppleCollationOrder \
+  'APPLECOLLATION=$(defaults read .GlobalPreferences AppleCollationOrder 2>/dev/null)'
+
+# add quotes so test does not complain to missing (because empty) argument
+replace_line $APP_EXE_DIR/Inkscape '-a -n $APPLECOLLATION;' \
+  'if test -z ${LANG} -a -n "$APPLECOLLATION"; then'
 

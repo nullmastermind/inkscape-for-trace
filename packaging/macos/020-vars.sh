@@ -75,7 +75,7 @@ TOOLSET_CACHE_ENABLE=true
 # In regards to (2), using an arbitrary system-level location like
 # $DEFAULT_SYSTEM_WRK_DIR is considered optional as in "you have to opt-in"
 # (and not mandatory at all). You can tell us that you "opted-in" by creating
-# that directory beforehand and ensuring it's writable (2a). Than it's going to
+# that directory beforehand and ensuring it's writable (2a). Then it's going to
 # be used. (I don't like writing scripts that write to arbitrary locations on
 # their own. Also, that would require 'sudo' permission.)
 # If $DEFAULT_SYSTEM_WRK_DIR does not exist, it means that you did not

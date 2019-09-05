@@ -28,7 +28,7 @@ else
     # on the runner and is disabled on CI.
     [ ! -z $CI_JOB_ID ] && RAMDISK_ENABLE=false
     $SELF_DIR/110-sysprep.sh
-    get_source $URL_TOOLSET_CACHE $WRK_DIR
+    get_source $URL_TOOLSET_CACHE $WRK_DIR "--exclude opt/src/boost* --exclude opt/src/checkout --exclude opt/tmp/jhbuild/build"
     mkdir -p $HOME/.config
     rm -f $HOME/.config/jhbuild*
     ln -sf $DEVCONFIG/jhbuild* $HOME/.config
