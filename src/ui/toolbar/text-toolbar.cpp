@@ -47,6 +47,7 @@
 #include "object/sp-root.h"
 #include "object/sp-text.h"
 #include "object/sp-tspan.h"
+#include "object/sp-string.h"
 
 #include "svg/css-ostringstream.h"
 #include "ui/icon-names.h"
@@ -211,6 +212,7 @@ namespace Toolbar {
 TextToolbar::TextToolbar(SPDesktop *desktop)
     : Toolbar(desktop)
     , _freeze(false)
+    , _outer(true)
     , _subselection(false)
     , _fullsubselection(false)
     , _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
@@ -1291,6 +1293,7 @@ TextToolbar::lineheight_value_changed()
             }
         }
     } else {
+        // prepare_inner();
         SPItem *parent = dynamic_cast<SPItem *>(*itemlist.begin());
         SPStyle *parent_style = parent->style;
         SPCSSAttr *parent_cssatr = sp_css_attr_from_style(parent_style, SP_STYLE_FLAG_IFSET);
@@ -1487,6 +1490,7 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
             }
         }
     } else {
+        // prepare_inner();
         SPItem *parent = dynamic_cast<SPItem *>(*itemlist.begin());
         SPStyle *parent_style = parent->style;
         SPCSSAttr *parent_cssatr = sp_css_attr_from_style(parent_style, SP_STYLE_FLAG_IFSET);
@@ -1908,7 +1912,10 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
-        double size = sp_style_css_size_px_to_units(query_cursor.font_size.computed, unit);
+        double size = 0;
+        if (!size && _cusor_numbers != QUERY_STYLE_NOTHING) {
+            size = sp_style_css_size_px_to_units(query_cursor.font_size.computed, unit);
+        }
         if (!size && result_numbers != QUERY_STYLE_NOTHING) {
             size = sp_style_css_size_px_to_units(query.font_size.computed, unit);
         }
@@ -2190,6 +2197,141 @@ void TextToolbar::subselection_wrap_toggle(bool start)
     }
 }
 
+void TextToolbar::prepare_inner()
+{
+    Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context);
+    if (tc) {
+        Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
+        if (layout) {
+            SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+            SPDocument *doc = SP_ACTIVE_DOCUMENT;
+            bool wrapped = false;
+            Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+            SPItem *spitem = dynamic_cast<SPItem *>(tc->text);
+            if (!spitem) {
+                return;
+            }
+            // Maybe we can enable this for update outside SVG
+            // Need to check is a SVG2 flowtewxt to apply
+            /* if (spitem) {
+                std::vector<SPObject *> children = sptext->childList(false);
+                for (auto child: children) {
+                    if (SP_IS_STRING(child) ) {
+                        size_t pos = child->getPosition();
+                        Inkscape::XML::Node *rtspan = xml_doc->createElement("svg:tspan");
+                        rtspan->setAttribute("sodipodi:role", "line"); // otherwise, why bother creating the tspan?
+                        spitem->getRepr()->removeChild(child->getRepr());
+                        rtspan->appendChild(child->getRepr());
+                        rtspan->setPosition(pos);
+                        tc->text->appendChildRepr(rtspan);
+                        Inkscape::GC::release(rtspan);
+                        wrapped = true;
+                    }
+                }
+                if (wrapped) {
+                    spitem->rebuildLayout();;
+                }
+            } */
+            Inkscape::Text::Layout::iterator start_selection = tc->text_sel_start;
+            Inkscape::Text::Layout::iterator end_selection = tc->text_sel_end;
+            if (start_selection > end_selection) {
+                Inkscape::Text::Layout::iterator tmp_selection = start_selection;
+                start_selection = end_selection;
+                end_selection = tmp_selection;
+            }
+            
+
+            Inkscape::Text::Layout::iterator start_line = start_selection;
+            start_line.thisStartOfLine();
+            Inkscape::Text::Layout::iterator end_line = end_selection;
+            end_line.thisEndOfLine();
+            Inkscape::Text::Layout::iterator start_para = start_selection;
+            start_para.thisStartOfParagraph();
+            Inkscape::Text::Layout::iterator end_para = end_selection;
+            end_para.nextStartOfParagraph();
+            Inkscape::Text::Layout::iterator wrap_start_orig = wrap_start;
+            Inkscape::Text::Layout::iterator wrap_end_orig = wrap_end;
+            SPObject *container = nullptr;
+            void *rawptr = nullptr;
+            layout->getSourceOfCharacter(start_para, &rawptr);
+            if (!rawptr || !SP_IS_OBJECT(rawptr)) {
+                return;
+            }
+
+            container = SP_OBJECT(rawptr);
+            while (SP_IS_STRING(container) && container->parent) {
+                container = container->parent;   // SPStrings don't have style
+            }
+            SPCSSAttr *css = sp_repr_css_attr_new();
+            sp_repr_css_set_property (css, "opacity", "1");
+            bool tmpstyle = true;
+            
+            if (container) {
+                if (container->getRepr()->attribute("style")) {
+                    tmpstyle = false;
+                    css = sp_repr_css_attr(container->getRepr(), "style");
+                }
+                unindent_node(SP_OBJECT(rawptr)->getRepr());
+                tc->text->getRepr()->removeChild(container->getRepr());
+            }
+            /* int startsel = layout->iteratorToCharIndex(start_selection);
+            int endsel = layout->iteratorToCharIndex(end_selection);
+            int startline = layout->iteratorToCharIndex(start_line);
+            int endline = layout->iteratorToCharIndex(end_line);
+            int startpara = layout->iteratorToCharIndex(start_para);
+            int endpara = layout->iteratorToCharIndex(end_para) - 1;
+            if (container) {
+                wrap_start = layout->charIndexToIterator(startpara + 1);
+                wrap_end = layout->charIndexToIterator(startline -1);
+                subselection_wrap_toggle(true);
+                sp_desktop_set_style(desktop, css, true, true);
+                subselection_wrap_toggle(false);
+/*                 wrap_start = layout->charIndexToIterator(endline);
+                wrap_end = layout->charIndexToIterator(endpara);
+                subselection_wrap_toggle(true);
+                sp_desktop_set_style(desktop, css, true, true);
+                subselection_wrap_toggle(false); 
+                wrap_start = wrap_start_orig;
+                wrap_end = wrap_end_orig;
+                sp_repr_css_attr_unref (css);
+                /* layout->getSourceOfCharacter(tc->text_sel_start, &rawptr);
+                if (!rawptr || !SP_IS_OBJECT(rawptr)) {
+                    return;
+                }
+                container = SP_OBJECT(rawptr);
+                while (SP_IS_STRING(container) && container->parent) {
+                    container = container->parent;   // SPStrings don't have style
+                }
+                std::cout << container->getId() << std::endl; 
+                tc->text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_CONTENT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+                for (auto child : tc->text->childList(false)) {
+                    std::cout << "dfdgdgdsdgsgdgds" << std::endl;
+                    SPItem *item = dynamic_cast<SPItem *>(child);
+                    SPText *text = dynamic_cast<SPText *>(child);
+                    SPFlowpara *flowpara = dynamic_cast<SPFlowpara *>(child);
+                    SPTSpan *tspan = dynamic_cast<SPTSpan *>(child);
+                    if (tspan) {
+                        item->getRepr()->setAttribute("sodipodi::role", "line");
+                    }
+                }
+                tc->text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_CONTENT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+            } */
+        }
+    }
+}
+
+void TextToolbar::unindent_node(Inkscape::XML::Node *repr)
+{
+    g_assert(repr != nullptr);
+
+    Inkscape::XML::Node *parent = repr->parent();
+    g_return_if_fail(parent);
+    Inkscape::XML::Node *grandparent = parent->parent();
+    g_return_if_fail(grandparent);
+
+    parent->removeChild(repr);
+    grandparent->addChild(repr, parent);
+}
 
 void TextToolbar::subselection_changed(gpointer texttool)
 {

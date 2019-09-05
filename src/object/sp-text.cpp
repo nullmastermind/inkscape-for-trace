@@ -838,13 +838,10 @@ void SPText::rebuildLayout()
 #endif
 
     // set the x,y attributes on role:line spans
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool svg2text = prefs->getBool("/tools/text/use_svg2");
     for (auto& child: children) {
         if (SP_IS_TSPAN(&child)) {
             SPTSpan *tspan = SP_TSPAN(&child);
-            if (!svg2text && 
-                (tspan->role != SP_TSPAN_ROLE_UNSPECIFIED)
+            if ((tspan->role != SP_TSPAN_ROLE_UNSPECIFIED)
                  && tspan->attributes.singleXYCoordinates() ) {
                 Inkscape::Text::Layout::iterator iter = layout.sourceToIterator(tspan);
                 Geom::Point anchor_point = layout.chunkAnchorPoint(iter);
