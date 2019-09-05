@@ -1293,7 +1293,6 @@ TextToolbar::lineheight_value_changed()
             }
         }
     } else {
-        // prepare_inner();
         SPItem *parent = dynamic_cast<SPItem *>(*itemlist.begin());
         SPStyle *parent_style = parent->style;
         SPCSSAttr *parent_cssatr = sp_css_attr_from_style(parent_style, SP_STYLE_FLAG_IFSET);
@@ -1319,6 +1318,7 @@ TextToolbar::lineheight_value_changed()
         sp_desktop_set_style(desktop, css, true, true);
         subselection_wrap_toggle(false);
         sp_repr_css_attr_unref(cssfit);
+        // prepare_inner();
     }
 
     // Save for undo
@@ -1490,7 +1490,6 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
             }
         }
     } else {
-        // prepare_inner();
         SPItem *parent = dynamic_cast<SPItem *>(*itemlist.begin());
         SPStyle *parent_style = parent->style;
         SPCSSAttr *parent_cssatr = sp_css_attr_from_style(parent_style, SP_STYLE_FLAG_IFSET);
@@ -1516,6 +1515,7 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
         sp_desktop_set_style(desktop, css, true, true);
         subselection_wrap_toggle(false);
         sp_repr_css_attr_unref(cssfit);
+        // prepare_inner();
     }
 
     // Only need to save for undo if a text item has been changed.
@@ -2197,7 +2197,7 @@ void TextToolbar::subselection_wrap_toggle(bool start)
     }
 }
 
-void TextToolbar::prepare_inner()
+/* void TextToolbar::prepare_inner()
 {
     Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context);
     if (tc) {
@@ -2213,7 +2213,7 @@ void TextToolbar::prepare_inner()
             }
             // Maybe we can enable this for update outside SVG
             // Need to check is a SVG2 flowtewxt to apply
-            /* if (spitem) {
+            if (spitem) {
                 std::vector<SPObject *> children = sptext->childList(false);
                 for (auto child: children) {
                     if (SP_IS_STRING(child) ) {
@@ -2231,91 +2231,58 @@ void TextToolbar::prepare_inner()
                 if (wrapped) {
                     spitem->rebuildLayout();;
                 }
-            } */
-            Inkscape::Text::Layout::iterator start_selection = tc->text_sel_start;
-            Inkscape::Text::Layout::iterator end_selection = tc->text_sel_end;
-            if (start_selection > end_selection) {
-                Inkscape::Text::Layout::iterator tmp_selection = start_selection;
-                start_selection = end_selection;
-                end_selection = tmp_selection;
             }
-            
-
-            Inkscape::Text::Layout::iterator start_line = start_selection;
-            start_line.thisStartOfLine();
-            Inkscape::Text::Layout::iterator end_line = end_selection;
-            end_line.thisEndOfLine();
-            Inkscape::Text::Layout::iterator start_para = start_selection;
-            start_para.thisStartOfParagraph();
-            Inkscape::Text::Layout::iterator end_para = end_selection;
-            end_para.nextStartOfParagraph();
-            Inkscape::Text::Layout::iterator wrap_start_orig = wrap_start;
-            Inkscape::Text::Layout::iterator wrap_end_orig = wrap_end;
-            SPObject *container = nullptr;
             void *rawptr = nullptr;
-            layout->getSourceOfCharacter(start_para, &rawptr);
+            layout->getSourceOfCharacter(tc->text_sel_start, &rawptr);
             if (!rawptr || !SP_IS_OBJECT(rawptr)) {
                 return;
             }
-
-            container = SP_OBJECT(rawptr);
-            while (SP_IS_STRING(container) && container->parent) {
-                container = container->parent;   // SPStrings don't have style
+            SPObject *startobj = SP_OBJECT(rawptr);
+            SPObject *container = dynamic_cast<SPObject *>(startobj->parent);
+            SPText *text = dynamic_cast<SPText *>(startobj->parent);
+            SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(startobj->parent);
+            while (!text && !flowtext) {
+                startobj = startobj->parent;
+                text = dynamic_cast<SPText *>(container->parent);
+                flowtext = dynamic_cast<SPFlowtext *>(container->parent);
+                container = container->parent;
             }
-            SPCSSAttr *css = sp_repr_css_attr_new();
-            sp_repr_css_set_property (css, "opacity", "1");
-            bool tmpstyle = true;
-            
-            if (container) {
-                if (container->getRepr()->attribute("style")) {
-                    tmpstyle = false;
-                    css = sp_repr_css_attr(container->getRepr(), "style");
-                }
-                unindent_node(SP_OBJECT(rawptr)->getRepr());
-                tc->text->getRepr()->removeChild(container->getRepr());
+            SPText *textstop = dynamic_cast<SPText *>(startobj->parent);
+            SPFlowtext *flowtextstop = dynamic_cast<SPFlowtext *>(startobj->parent);
+            if (textstop || flowtextstop) {
+                return; // we do not need do nothing selection is direct child of text element
             }
-            /* int startsel = layout->iteratorToCharIndex(start_selection);
-            int endsel = layout->iteratorToCharIndex(end_selection);
-            int startline = layout->iteratorToCharIndex(start_line);
-            int endline = layout->iteratorToCharIndex(end_line);
-            int startpara = layout->iteratorToCharIndex(start_para);
-            int endpara = layout->iteratorToCharIndex(end_para) - 1;
             if (container) {
-                wrap_start = layout->charIndexToIterator(startpara + 1);
-                wrap_end = layout->charIndexToIterator(startline -1);
-                subselection_wrap_toggle(true);
-                sp_desktop_set_style(desktop, css, true, true);
-                subselection_wrap_toggle(false);
-/*                 wrap_start = layout->charIndexToIterator(endline);
-                wrap_end = layout->charIndexToIterator(endpara);
-                subselection_wrap_toggle(true);
-                sp_desktop_set_style(desktop, css, true, true);
-                subselection_wrap_toggle(false); 
-                wrap_start = wrap_start_orig;
-                wrap_end = wrap_end_orig;
-                sp_repr_css_attr_unref (css);
-                /* layout->getSourceOfCharacter(tc->text_sel_start, &rawptr);
-                if (!rawptr || !SP_IS_OBJECT(rawptr)) {
-                    return;
-                }
-                container = SP_OBJECT(rawptr);
-                while (SP_IS_STRING(container) && container->parent) {
-                    container = container->parent;   // SPStrings don't have style
-                }
-                std::cout << container->getId() << std::endl; 
-                tc->text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_CONTENT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
-                for (auto child : tc->text->childList(false)) {
-                    std::cout << "dfdgdgdsdgsgdgds" << std::endl;
-                    SPItem *item = dynamic_cast<SPItem *>(child);
-                    SPText *text = dynamic_cast<SPText *>(child);
+                const gchar * style = container->getRepr()->attribute("style");
+                SPObject *prevchild = nullptr; 
+                for (auto child : container->childList(false)) {
+                    SPObject *object = dynamic_cast<SPObject *>(child);
+                    SPString *string = dynamic_cast<SPString *>(child);
                     SPFlowpara *flowpara = dynamic_cast<SPFlowpara *>(child);
                     SPTSpan *tspan = dynamic_cast<SPTSpan *>(child);
-                    if (tspan) {
-                        item->getRepr()->setAttribute("sodipodi::role", "line");
+                    if (tspan || flowpara) {
+                        unindent_node(object->getRepr());
                     }
+                    if (string) {
+                        SPText *text = dynamic_cast<SPText *>(startobj->parent);
+                        SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(startobj->parent);
+                        if (text) {
+                            Inkscape::XML::Node *rtspan = xml_doc->createElement("svg:tspan");
+                            rtspan->setAttribute("sodipodi:role", "line");
+                            rtspan->setAttribute("style", container->getRepr()->attribute("style"));
+                            text->getRepr()->addChild(rtspan, prevchild->getRepr());
+                            Inkscape::GC::release(rtspan);
+                        } else if (flowtext) {
+                            Inkscape::XML::Node *rflowpara = xml_doc->createElement("svg:tspan");
+                            rflowpara->setAttribute("style", container->getRepr()->attribute("style"));
+                            flowtext->getRepr()->addChild(rflowpara, prevchild->getRepr());
+                            Inkscape::GC::release(rflowpara);
+                        }
+                    }
+                    prevchild = object;
                 }
-                tc->text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_CONTENT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
-            } */
+                tc->text->getRepr()->removeChild(container->getRepr());
+            }
         }
     }
 }
@@ -2331,7 +2298,7 @@ void TextToolbar::unindent_node(Inkscape::XML::Node *repr)
 
     parent->removeChild(repr);
     grandparent->addChild(repr, parent);
-}
+} */
 
 void TextToolbar::subselection_changed(gpointer texttool)
 {
