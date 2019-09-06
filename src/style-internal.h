@@ -716,6 +716,28 @@ public:
     gchar *value_default;
 };
 
+/// Shapes type internal to SPStyle.
+// Used for 'shape-inside', shape-subtract'
+// Differs from SPIString by creating/deleting listeners on referenced shapes.
+class SPIShapes : public SPIString
+{
+
+public:
+    SPIShapes()
+        : SPIString()
+    {}
+
+    // TODO probably want to avoid gchar* and c-style strings.
+    SPIShapes( Glib::ustring const &name, gchar const* value_default_in = nullptr )
+        : SPIString( name, value_default_in )
+    {}
+
+    void read( gchar const *str ) override;
+
+public:
+    std::vector<Glib::ustring> shape_ids;
+};
+
 /// Color type internal to SPStyle, FIXME Add string value to store SVG named color.
 class SPIColor : public SPIBase
 {

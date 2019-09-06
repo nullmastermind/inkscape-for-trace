@@ -35,6 +35,8 @@
 #include "streq.h"
 #include "strneq.h"
 
+#include "object/sp-text.h"
+
 #include "svg/svg.h"
 #include "svg/svg-color.h"
 #include "svg/css-ostringstream.h"
@@ -1098,6 +1100,61 @@ SPIString::operator==(const SPIBase& rhs) {
     }
 }
 
+
+// SPIShapes ------------------------------------------------------------
+
+// Used to add/remove listeners for text wrapped in shapes.
+// Note: this is done differently than for patterns, etc. where presentation attributes can be used.
+// 'shape-inside' and 'shape-subtract' are only properties.
+void
+SPIShapes::read( gchar const *str) {
+
+    if (!style) {
+        std::cerr << "SPIShapes::read: no style!" << std::endl;
+        return;
+    }
+
+    if( !str ) return;
+
+    set = true;
+    inherit = false;
+    value = g_strdup(str);
+
+    // The object/repr this property is connected to..
+    SPObject* object = style->object;
+    SPDocument* document = object->document;
+    Inkscape::XML::Node *text_repr = object->getRepr();
+
+    // Clear previously set listeners
+    for (auto shape_id : shape_ids) {
+        SPObject* shape_object = document->getObjectById (shape_id);
+        if (shape_object) {
+            Inkscape::XML::Node *shape_node = shape_object->getRepr();
+            shape_node->removeListenerByData(object);
+        }
+    }
+    shape_ids.clear();
+
+    // Add new listeners
+    std::vector<Glib::ustring> shapes_url = Glib::Regex::split_simple(" ", str);
+    for (auto shape_url : shapes_url) {
+
+        if ( shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0 ){
+            std::cerr << "SPIShapes::read: Invalid shape value: " << shape_url << std::endl;
+        } else {
+            shape_url.erase(0,5);
+            shape_url.erase(shape_url.size()-1,1);
+
+            shape_ids.push_back(shape_url);
+
+            SPObject* shape_object = document->getObjectById (shape_url);
+            if (shape_object) {
+                Inkscape::XML::Node *shape_node = shape_object->getRepr();
+                shape_node->addListener(&text_shape_events, object);
+            }
+        }
+    }
+}
 
 
 // SPIColor -------------------------------------------------------------

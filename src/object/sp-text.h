@@ -17,12 +17,14 @@
 #include <cstddef>
 #include <sigc++/sigc++.h>
 
-#include "libnrtype/Layout-TNG.h"
+#include "desktop.h"
 #include "sp-item.h"
 #include "sp-string.h" // Provides many other headers with SP_IS_STRING
 #include "text-tag-attributes.h"
 
-#include "desktop.h"
+#include "libnrtype/Layout-TNG.h"
+
+#include "xml/node-event-vector.h"
 
 #define SP_TEXT(obj) (dynamic_cast<SPText*>((SPObject*)obj))
 #define SP_IS_TEXT(obj) (dynamic_cast<const SPText*>((SPObject*)obj) != NULL)
@@ -95,6 +97,10 @@ public:
     void modified(unsigned int flags) override;
     Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 
+    /** Callback for when a shape changes and we must reflow text. */
+    static void shape_changed (Inkscape::XML::Node *repr, char const *key, char const *oldval,
+                               char const *newval, bool is_interactive, void* data);
+
     Geom::OptRect bbox(Geom::Affine const &transform, SPItem::BBoxType type) const override;
     void print(SPPrintContext *ctx) override;
     const char* displayName() const override;
@@ -110,6 +116,15 @@ public:
     Geom::OptRect get_frame();                        // Gets inline-size or shape-inside frame.
     Inkscape::XML::Node* get_first_rectangle();       // Gets first shape-inside rectangle (if it exists).
     std::vector<Glib::ustring> get_shapes() const;    // Gets list of shapes in shape-inside.
+};
+
+// For listeners in shapes that hold wrapped text.
+static const Inkscape::XML::NodeEventVector text_shape_events = {
+    nullptr,               /* child added       */
+    nullptr,               /* child removed     */
+    SPText::shape_changed, /* attribute changed */
+    nullptr,               /* content changed   */
+    nullptr,               /* order changed     */
 };
 
 SPItem *create_text_with_inline_size (SPDesktop *desktop, Geom::Point p0, Geom::Point p1);

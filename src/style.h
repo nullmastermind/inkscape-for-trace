@@ -173,8 +173,8 @@ public:
     SPIEnum white_space;
 
     /** SVG2 Text Wrapping */
-    SPIString shape_inside;
-    SPIString shape_subtract;
+    SPIShapes shape_inside;
+    SPIShapes shape_subtract;
     SPILength shape_padding;
     SPILength shape_margin;
     SPILength inline_size;

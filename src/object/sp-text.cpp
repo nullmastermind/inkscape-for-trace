@@ -285,6 +285,21 @@ Inkscape::XML::Node *SPText::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     return repr;
 }
 
+
+void
+SPText::shape_changed (Inkscape::XML::Node *repr, char const *key, char const *oldval,
+                       char const *newval, bool is_interactive, void* data) {
+
+    SPText* text = static_cast<SPText*>(data);
+    if (text) {
+        text->updateRepr(); // Why is this necessary, it is definitely overkill!
+        // text->rebuildLayout();
+    } else {
+        std::cerr << "SPText::shape_changed: no text object!" << std::endl;
+    }
+}
+
+
 Geom::OptRect SPText::bbox(Geom::Affine const &transform, SPItem::BBoxType type) const {
     Geom::OptRect bbox = SP_TEXT(this)->layout.bounds(transform);
 
@@ -473,17 +488,10 @@ void SPText::_buildLayoutInit()
                 exclusion_shape = _buildExclusionShape();
             }
 
-            // Extract out shapes (a comma separated list of urls)
-            Glib::ustring shapeInside_value = style->shape_inside.value;
-            std::vector<Glib::ustring> shapes_url = Glib::Regex::split_simple(" ", shapeInside_value);
-            for (auto shape_url : shapes_url) {
-                if ( shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0 ){
-                    std::cerr << "SPText::_buildLayoutInit(): Invalid shape-inside value: " << shape_url << std::endl;
-                } else {
-                    shape_url.erase(0,5);
-                    shape_url.erase(shape_url.size()-1,1);
-                    // std::cout << "SPText::_buildLayoutInit(): shape-inside: " << shape_url << std::endl;
-                    SPShape *shape = dynamic_cast<SPShape *>(document->getObjectById( shape_url ));
+            // Find inside shape curves
+            for (auto shape_id : style->shape_inside.shape_ids) {
+
+                    SPShape *shape = dynamic_cast<SPShape *>(document->getObjectById( shape_id ));
                     if ( shape ) {
 
                         // This code adapted from sp-flowregion.cpp: GetDest()
@@ -535,9 +543,6 @@ void SPText::_buildLayoutInit()
                         } else {
                             std::cerr << "SPText::_buildLayoutInit(): Failed to get curve." << std::endl;
                         }
-                    } else {
-                        std::cerr << "SPText::_buildLayoutInit(): Failed to find shape." << std::endl;
-                    }
                 }
             }
 
@@ -726,19 +731,9 @@ Shape* SPText::_buildExclusionShape() const
     Shape *result = new Shape(); // Union of all exclusion shapes
     Shape *shape_temp = new Shape();
 
-    Glib::ustring shapeSubtract_value = style->shape_subtract.value;
+    for(auto shape_id : style->shape_subtract.shape_ids) {
 
-    // Extract out shapes (a comma separated list of urls)
-    std::vector<Glib::ustring> shapes_url = Glib::Regex::split_simple(" ", shapeSubtract_value);
-
-    for(auto shape_url : shapes_url) {
-        if ( shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0 ){
-                std::cerr << "SPText::_buildExclusionShape(): Invalid shape-inside value: " << shape_url << std::endl;
-        } else {
-            shape_url.erase(0,5);
-            shape_url.erase(shape_url.size()-1,1);
-            // std::cout << "SPText::_buildExclusionShape(): shape-inside: " << shape_url << std::endl;
-            SPShape *shape = dynamic_cast<SPShape *>(document->getObjectById( shape_url ));
+            SPShape *shape = dynamic_cast<SPShape *>(document->getObjectById( shape_id ));
             if ( shape ) {
                 // This code adapted from sp-flowregion.cpp: GetDest()
                 if (!(shape->_curve)) {
@@ -772,7 +767,6 @@ Shape* SPText::_buildExclusionShape() const
                     }
                 }
             }
-        }
     }
     return result;
 }

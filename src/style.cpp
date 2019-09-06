@@ -456,6 +456,8 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     // SPIPaint, SPIFilter needs access to 'this' (SPStyle)
     // for setting up signals...  'fill', 'stroke' already done
     filter.setStylePointer( this );
+    shape_inside.setStylePointer( this );
+    shape_subtract.setStylePointer( this );
 
     // Used to iterate over markers
     marker_ptrs[SP_MARKER_LOC]       = &marker;
