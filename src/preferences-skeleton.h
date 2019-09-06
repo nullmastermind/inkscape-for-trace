@@ -127,7 +127,7 @@ R"=====(
     <eventcontext id="text"  usecurrent="0" gradientdrag="1"
                        font_sample="AaBbCcIiPpQq12369$\342\202\254\302\242?.;/()"
                        show_sample_in_list="1" use_svg2="0"
-                  style="fill:black;fill-opacity:1;stroke:none;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;" selcue="1"/>
+                  style="fill:black;fill-opacity:1;line-height:1.25;stroke:none;font-family:sans-serif;font-style:normal;font-weight:normal;font-size:40px;" selcue="1"/>
 
     <eventcontext id="nodes" selcue="1" gradientdrag="1" highlight_color="0xff0000ff" pathflash_enabled="1" pathflash_unselected="0" pathflash_timeout="500" show_handles="1" show_outline="0"
       sculpting_profile="1" single_node_transform_handles="0" show_transform_handles="0" live_outline="1" live_objects="1" show_helperpath="0" x="0" y="0" edit_clipping_paths="0" edit_masks="0" />

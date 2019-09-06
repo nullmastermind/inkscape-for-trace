@@ -75,7 +75,6 @@ void SPText::build(SPDocument *doc, Inkscape::XML::Node *repr) {
     // textLength and friends
     this->readAttr( "textLength" );
     this->readAttr( "lengthAdjust" );
-
     SPItem::build(doc, repr);
 
     this->readAttr( "sodipodi:linespacing" );    // has to happen after the styles are read

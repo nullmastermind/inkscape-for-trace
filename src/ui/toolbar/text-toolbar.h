@@ -125,8 +125,8 @@ private:
     void letterspacing_value_changed();
     void dx_value_changed();
     void dy_value_changed();
-    // void prepare_inner();
-    // void unindent_node(Inkscape::XML::Node *repr);
+    void prepare_inner();
+    void unindent_node(Inkscape::XML::Node *repr, Inkscape::XML::Node *before);
     void rotation_value_changed();
     void fontsize_unit_changed(int not_used);
     void selection_changed(Inkscape::Selection *selection);

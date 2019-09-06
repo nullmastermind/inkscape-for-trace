@@ -664,7 +664,14 @@ bool TextTool::root_handler(GdkEvent* event) {
 
                             /* Set style */
                             sp_desktop_apply_style_tool(desktop, text->getRepr(), "/tools/text", true);
-
+                            SPCSSAttr *css = sp_repr_css_attr(text->getRepr(), "style" );
+                            Geom::Affine const local(text->i2doc_affine());
+                            double const ex(local.descrim());
+                            if ( (ex != 0.0) && (ex != 1.0) ) {
+                                sp_css_attr_scale(css, 1/ex);
+                            }
+                            text->setCSS(css,"style");
+                            sp_repr_css_attr_unref(css);
                             /* Restore "shape-inside" */
                             text->style->shape_inside.read( shape_inside );
                             g_free( shape_inside );
