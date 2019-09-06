@@ -90,7 +90,7 @@ public:
     void split(RatQuad &a, RatQuad &b) const;
 
     D2<SBasis> hermite() const;
-    std::vector<SBasis> homogenous() const;
+    std::vector<SBasis> homogeneous() const;
 };
 
 
@@ -335,7 +335,7 @@ public:
     }
 
     /*
-     *  Compute the centre of simmetry of the conic section when it exists,
+     *  Compute the centre of symmetry of the conic section when it exists,
      *  else it return an uninitialized boost::optional<Point> instance.
      */
     boost::optional<Point> centre() const

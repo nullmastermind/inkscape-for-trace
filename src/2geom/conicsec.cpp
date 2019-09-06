@@ -193,7 +193,7 @@ D2<SBasis> RatQuad::hermite() const {
   return out;
 }
 
-  std::vector<SBasis> RatQuad::homogenous() const {
+  std::vector<SBasis> RatQuad::homogeneous() const {
     std::vector<SBasis> res(3, SBasis());
   Bezier xt(P[0][0], P[1][0]*w, P[2][0]);
   bezier_to_sbasis(res[0],xt);
@@ -549,7 +549,7 @@ xAx xAx::operator*(double const &b) const {
 	RatQuad rq = RatQuad::fromPointsTangents(A, rot90(dA),
 						 B, C, rot90(dC));
 	return rq;
-	//std::vector<SBasis> hrq = rq.homogenous();
+	//std::vector<SBasis> hrq = rq.homogeneous();
 	/*SBasis vertex_poly = evaluate_at(hrq[0], hrq[1], hrq[2]);
 	  std::vector<double> rts = roots(vertex_poly);
 	  for(unsigned i = 0; i < rts.size(); i++) {

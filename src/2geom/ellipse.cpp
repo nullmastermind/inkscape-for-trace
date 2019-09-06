@@ -536,6 +536,7 @@ std::vector<ShapeIntersection> Ellipse::intersect(Ellipse const &other) const
     Coord ee = mu * E + e;
     Coord ff = mu * F + f;
 
+    unsigned line_num = 0;
     Line lines[2];
 
     if (aa != 0) {
@@ -545,6 +546,7 @@ std::vector<ShapeIntersection> Ellipse::intersect(Ellipse const &other) const
         Coord alpha = (dd - cc*q) / (s - q);
         Coord beta = cc - alpha;
 
+        line_num = 2;
         lines[0] = Line(1, q, alpha);
         lines[1] = Line(1, s, beta);
     } else if (bb != 0) {
@@ -554,15 +556,20 @@ std::vector<ShapeIntersection> Ellipse::intersect(Ellipse const &other) const
         Coord alpha = cc / ee;
         Coord beta = ff * ee / cc;
 
+        line_num = 2;
         lines[0] = Line(q, 1, alpha);
         lines[1] = Line(s, 1, beta);
-    } else {
+    } else if (ee != 0) {
+        line_num = 2;
         lines[0] = Line(ee, 0, dd);
         lines[1] = Line(0, 1, cc/ee);
+    } else if (cc != 0 || dd != 0) {
+        line_num = 1;
+        lines[0] = Line(cc, dd, ff);
     }
 
     // intersect with the obtained lines and report intersections
-    for (unsigned li = 0; li < 2; ++li) {
+    for (unsigned li = 0; li < line_num; ++li) {
         std::vector<ShapeIntersection> as = intersect(lines[li]);
         std::vector<ShapeIntersection> bs = other.intersect(lines[li]);
 

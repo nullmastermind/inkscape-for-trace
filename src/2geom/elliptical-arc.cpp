@@ -722,7 +722,7 @@ D2<SBasis> EllipticalArc::toSBasis() const
     return arc;
 }
 
-// All operations that do not contain skew can be evaulated
+// All operations that do not contain skew can be evaluated
 // without passing through the implicit form of the ellipse,
 // which preserves precision.
 
