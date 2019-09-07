@@ -384,7 +384,16 @@ void SPText::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::
 }
 
 Geom::Affine SPText::set_transform(Geom::Affine const &xform) {
+    // See if 'shape-inside' has rectangle
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (prefs->getBool("/tools/text/use_svg2")) {
+        Inkscape::XML::Node* rectangle = get_first_rectangle();
+        if (rectangle) {
+            return xform;
+        }
+    }
     // we cannot optimize textpath because changing its fontsize will break its match to the path
+    
     if (SP_IS_TEXT_TEXTPATH (this)) {
         if (!this->_optimizeTextpathText) {
             return xform;
