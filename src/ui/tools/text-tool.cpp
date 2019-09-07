@@ -1530,6 +1530,17 @@ bool TextTool::_styleSet(SPCSSAttr const *css)
         return false;    // will get picked up by the parent and applied to the whole text object
 
     sp_te_apply_style(this->text, this->text_sel_start, this->text_sel_end, css);
+
+    // This is a bandaid fix... whenever a style is changed it might cause the text layout to
+    // change which requires rewriting the 'x' and 'y' attributes of the tpsans for Inkscape
+    // multi-line text (with sodipodi:role="line"). We need to rewrite the repr after this is
+    // done. rebuldLayout() will be called a second time unnecessarily.
+    SPText* sptext = dynamic_cast<SPText*>(text);
+    if (sptext) {
+        sptext->rebuildLayout();
+        sptext->updateRepr();
+    }
+
     DocumentUndo::done(this->desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
                _("Set text style"));
     sp_text_context_update_cursor(this);

@@ -846,6 +846,7 @@ void SPText::rebuildLayout()
                 Inkscape::Text::Layout::iterator iter = layout.sourceToIterator(tspan);
                 Geom::Point anchor_point = layout.chunkAnchorPoint(iter);
                 tspan->attributes.setFirstXY(anchor_point);
+                // repr needs to be updated but if we do it here we get a loop.
             }
         }
     }
