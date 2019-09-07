@@ -380,7 +380,7 @@ void SelectorsDialog::_showWidgets()
     contents->set_valign(Gtk::ALIGN_FILL);
     contents->child_property_fill(_paned);
     Gtk::ScrolledWindow *dialog_scroller = new Gtk::ScrolledWindow();
-    dialog_scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
+    dialog_scroller->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     dialog_scroller->set_shadow_type(Gtk::SHADOW_IN);
     dialog_scroller->add(*Gtk::manage(contents));
     _getContents()->pack_start(*dialog_scroller, Gtk::PACK_EXPAND_WIDGET);

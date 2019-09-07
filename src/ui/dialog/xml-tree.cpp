@@ -74,7 +74,7 @@ XmlTree::XmlTree()
     if (!desktop) {
         return;
     }
-    
+
     Gtk::Box *root = _getContents();
     Gtk::Box *contents = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     status.set_halign(Gtk::ALIGN_START);
@@ -87,7 +87,7 @@ XmlTree::XmlTree()
     contents->pack_start(_paned, true, true, 0);
     contents->set_valign(Gtk::ALIGN_FILL);
     contents->child_property_fill(_paned);
-    
+
     _paned.set_vexpand(true);
     _message_stack = std::make_shared<Inkscape::MessageStack>();
     _message_context = std::unique_ptr<Inkscape::MessageContext>(new Inkscape::MessageContext(_message_stack));
@@ -238,7 +238,7 @@ XmlTree::XmlTree()
     _updating = false;
     tree_reset_context();
     Gtk::ScrolledWindow *dialog_scroller = new Gtk::ScrolledWindow();
-    dialog_scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
+    dialog_scroller->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     dialog_scroller->set_shadow_type(Gtk::SHADOW_IN);
     dialog_scroller->add(*Gtk::manage(contents));
     root->pack_start(*dialog_scroller, true, true, 0);
