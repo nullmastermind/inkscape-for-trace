@@ -2307,7 +2307,9 @@ void TextToolbar::prepare_inner()
             }
             SPObject *startobj = reinterpret_cast<SPObject *>(rawptr);
             SPString *string = dynamic_cast<SPString *>(startobj);
-            if (string) {
+            while (startobj->parent != SP_OBJECT(text) && 
+                   startobj->parent != SP_OBJECT(flowtext))
+            {
                 startobj = startobj->parent;   // SPStrings don't have style
             }
             SPObject *container = dynamic_cast<SPObject *>(startobj->parent);
@@ -2328,20 +2330,31 @@ void TextToolbar::prepare_inner()
                     if (flowtspan) {
                         Inkscape::XML::Node *rflowpara = xml_doc->createElement("svg:flowPara");
                         std::vector<SPObject*> childparas = flowtspan->childList(false);
+                        bool hascontent = false;
                         for (auto childpara : childparas) {
                             if (childpara) {
                                 Inkscape::XML::Node *childparanode = childpara->getRepr()->duplicate(xml_doc);
                                 flowtspan->getRepr()->removeChild(childpara->getRepr());
                                 rflowpara->addChild(childparanode, nullptr);
+                                Inkscape::GC::release(childparanode);
+                                hascontent = true;
                             }
                         }
-                        flowtext->getRepr()->addChild(rflowpara, prevchild);
-                        prevchild = rflowpara; 
+                        if (hascontent) {
+                            flowtext->getRepr()->addChild(rflowpara, prevchild);
+                            Inkscape::GC::release(rflowpara);
+                            prevchild = rflowpara;
+                        }
                         container->getRepr()->removeChild(flowtspan->getRepr());
                     } else if (tspan) {
-                        object->getRepr()->setAttribute("sodipodi:role", "line");
-                        unindent_node(object->getRepr(), prevchild);
-                        prevchild = object->getRepr(); 
+                        if (object->childList(false).size()) {
+                            object->getRepr()->setAttribute("sodipodi:role", "line");
+                            unindent_node(object->getRepr(), prevchild);
+                            prevchild->setAttribute("sodipodi:role", "line");
+                        } else {
+                            Inkscape::XML::Node *parent = object->getRepr()->parent();
+                            parent->removeChild(object->getRepr());
+                        }
                     } else if (spstring) {
                         SPText *text = dynamic_cast<SPText *>(container->parent);
                         SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(container->parent);
@@ -2375,7 +2388,7 @@ void TextToolbar::prepare_inner()
     }
 }
 
-void TextToolbar::unindent_node(Inkscape::XML::Node *repr, Inkscape::XML::Node *before)
+void TextToolbar::unindent_node(Inkscape::XML::Node *repr, Inkscape::XML::Node *prevchild)
 {
     g_assert(repr != nullptr);
 
@@ -2383,9 +2396,13 @@ void TextToolbar::unindent_node(Inkscape::XML::Node *repr, Inkscape::XML::Node *
     g_return_if_fail(parent);
     Inkscape::XML::Node *grandparent = parent->parent();
     g_return_if_fail(grandparent);
-
+    SPDocument *doc = SP_ACTIVE_DOCUMENT;
+    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+    Inkscape::XML::Node *newrepr = repr->duplicate(xml_doc);
     parent->removeChild(repr);
-    grandparent->addChild(repr, before);
+    grandparent->addChild(newrepr, prevchild);
+    Inkscape::GC::release(newrepr);
+    prevchild = newrepr; 
 }
 
 void TextToolbar::subselection_changed(gpointer texttool)
