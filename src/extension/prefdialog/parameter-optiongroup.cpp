@@ -302,8 +302,17 @@ ParamOptionGroup::ParamOptionGroupOption::ParamOptionGroupOption(Inkscape::XML::
     if (value) {
         _value = value;
     } else {
-        g_warning("Missing value for option '%s' of parameter '%s' in extension '%s'.",
-                  _text.c_str(), parent->_name, _extension->get_id());
+        if (text) {
+            const char *name = xml->name();
+            if (!strcmp(name, INKSCAPE_EXTENSION_NS "item") || !strcmp(name, INKSCAPE_EXTENSION_NS "_item")) {
+                _value = text; // use untranslated UI text as value (for backwards-compatibility)
+            } else {
+                _value = _text; // use translated UI text as value
+            }
+        } else {
+            g_warning("Missing value for option '%s' of parameter '%s' in extension '%s'.",
+                      _text.c_str(), parent->_name, _extension->get_id());
+        }
     }
 }
 

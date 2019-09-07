@@ -51,9 +51,6 @@ Gtk::Widget *WidgetSpacer::get_widget(sigc::signal<void> *changeSignal)
     if (_expand) {
         spacer->set_hexpand();
         spacer->set_vexpand();
-    } else {
-        spacer->set_margin_start(_size);
-        spacer->set_margin_top(_size);
     }
 
     spacer->show();

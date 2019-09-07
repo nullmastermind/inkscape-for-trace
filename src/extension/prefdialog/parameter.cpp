@@ -224,7 +224,7 @@ unsigned int InxParameter::set_color(unsigned int in)
 InxParameter::InxParameter(Inkscape::XML::Node *in_repr, Inkscape::Extension::Extension *ext)
     : InxWidget(in_repr, ext)
 {
-    // name (mandatory for all paramters)
+    // name (mandatory for all parameters)
     const char *name = in_repr->attribute("name");
     if (!name) {
         g_warning("Parameter without name in extension '%s'.", _extension->get_id());
