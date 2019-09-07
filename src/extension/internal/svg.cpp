@@ -454,7 +454,6 @@ static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *doc, In
                         std::swap(attrs.dx, attrs.dy);
                     }
                     TextTagAttributes(attrs).writeTo(span_tspan);
-                    span_tspan->setAttribute("sodipodi:role", "line");
                     void *rawptr = nullptr;
                     Glib::ustring::iterator span_text_start_iter;
                     text->layout.getSourceOfCharacter(it, &rawptr, &span_text_start_iter);
@@ -497,6 +496,7 @@ static void insert_text_fallback( Inkscape::XML::Node *repr, SPDocument *doc, In
 
                     // Add tspan to document
                     line_tspan->appendChild(span_tspan);
+                    line_tspan->setAttribute("sodipodi:role", "line");
                     Inkscape::GC::release(span_tspan);
                 }
 

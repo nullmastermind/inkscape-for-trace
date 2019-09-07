@@ -104,7 +104,7 @@ private:
     bool _fullsubselection;
     bool _updating;
     int _cusor_numbers;
-    SPStyle query_cursor;
+    SPStyle _query_cursor;
     double selection_fontsize;
     sigc::connection c_selection_changed;
     sigc::connection c_selection_modified;

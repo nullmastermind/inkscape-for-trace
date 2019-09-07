@@ -1318,6 +1318,7 @@ TextToolbar::lineheight_value_changed()
         sp_repr_css_attr_unref(cssfit);
     }
     // Only need to save for undo if a text item has been changed.
+    itemlist= selection->items();
     bool modmade = false;
     for (auto i : itemlist) {
         SPText *text = dynamic_cast<SPText *>(i);
@@ -1526,7 +1527,7 @@ TextToolbar::lineheight_unit_changed(int /* Not Used */)
         subselection_wrap_toggle(false);
         sp_repr_css_attr_unref(cssfit);
     }
-
+    itemlist= selection->items();
     // Only need to save for undo if a text item has been changed.
     bool modmade = false;
     for (auto i : itemlist) {
@@ -1949,7 +1950,7 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
         int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
         double size = 0;
         if (!size && _cusor_numbers != QUERY_STYLE_NOTHING) {
-            size = sp_style_css_size_px_to_units(query_cursor.font_size.computed, unit);
+            size = sp_style_css_size_px_to_units(_query_cursor.font_size.computed, unit);
         }
         if (!size && result_numbers != QUERY_STYLE_NOTHING) {
             size = sp_style_css_size_px_to_units(query.font_size.computed, unit);
@@ -2032,6 +2033,12 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
             height = query_fallback.line_height.value;
             line_height_unit = query_fallback.line_height.unit;
         }
+
+        if (!height && _cusor_numbers != QUERY_STYLE_NOTHING) {
+            height = _query_cursor.line_height.value;
+            line_height_unit = _query_cursor.line_height.unit;
+        }
+
         if (line_height_unit == SP_CSS_UNIT_PERCENT) {
             height *= 100.0; // Inkscape store % as fraction in .value
         }
@@ -2431,7 +2438,7 @@ void TextToolbar::subselection_changed(gpointer texttool)
                         //TODO: find a better way to init
                         _updating = true;
                         SPStyle query(SP_ACTIVE_DOCUMENT);
-                        query_cursor = query;
+                        _query_cursor = query;
                         Inkscape::Text::Layout::iterator start_line = tc->text_sel_start;
                         start_line.thisStartOfLine();
                         if (tc->text_sel_start == start_line) {
@@ -2439,7 +2446,7 @@ void TextToolbar::subselection_changed(gpointer texttool)
                         } else {
                             tc->text_sel_start = prev;
                         }
-                        _cusor_numbers = sp_desktop_query_style(SP_ACTIVE_DESKTOP, &query_cursor, QUERY_STYLE_PROPERTY_FONTNUMBERS);
+                        _cusor_numbers = sp_desktop_query_style(SP_ACTIVE_DESKTOP, &_query_cursor, QUERY_STYLE_PROPERTY_FONTNUMBERS);
                         tc->text_sel_start = start_selection;
                         _updating = false;
                         break;

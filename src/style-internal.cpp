@@ -1122,6 +1122,9 @@ SPIShapes::read( gchar const *str) {
 
     // The object/repr this property is connected to..
     SPObject* object = style->object;
+    if (!object) {
+        return;
+    }
     SPDocument* document = object->document;
     Inkscape::XML::Node *text_repr = object->getRepr();
 
