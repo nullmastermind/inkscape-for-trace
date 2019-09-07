@@ -572,7 +572,7 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::selection_update()
     }
 
     std::pair<Glib::ustring, Glib::ustring> ui = ui_from_fontspec(fontspec);
-    set_font_family(ui.first);
+    (ui.first);
     set_font_style(ui.second);
 
 #ifdef DEBUG_FONT
@@ -601,8 +601,8 @@ void FontLister::set_fontspec(Glib::ustring new_fontspec, bool /*check*/)
               << "   style:" << new_style << std::endl;
 #endif
 
-    set_font_family(new_family, false);
-    set_font_style(new_style);
+    set_font_family(new_family, false, false);
+    set_font_style(new_style, false);
 
     emit_update();
 }
@@ -678,7 +678,7 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::new_font_family(Glib::ustrin
     return std::make_pair(new_family, best_style);
 }
 
-std::pair<Glib::ustring, Glib::ustring> FontLister::set_font_family(Glib::ustring new_family, bool check_style)
+std::pair<Glib::ustring, Glib::ustring> FontLister::set_font_family(Glib::ustring new_family, bool check_style, bool emit)
 {
 
 #ifdef DEBUG_FONT
@@ -697,14 +697,14 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::set_font_family(Glib::ustrin
     std::cout << "FontLister::set_font_family: end" << std::endl;
     std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n" << std::endl;
 #endif
-
-    emit_update();
-
+    if (emit) {
+        emit_update();
+    }
     return ui;
 }
 
 
-std::pair<Glib::ustring, Glib::ustring> FontLister::set_font_family(int row, bool check_style)
+std::pair<Glib::ustring, Glib::ustring> FontLister::set_font_family(int row, bool check_style, bool emit)
 {
 
 #ifdef DEBUG_FONT
@@ -721,7 +721,7 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::set_font_family(int row, boo
         new_family = (*iter)[FontList.family];
     }
 
-    std::pair<Glib::ustring, Glib::ustring> ui = set_font_family(new_family, check_style);
+    std::pair<Glib::ustring, Glib::ustring> ui = set_font_family(new_family, check_style, emit);
 
 #ifdef DEBUG_FONT
     std::cout << "FontLister::set_font_family( row ): end" << std::endl;
@@ -731,7 +731,7 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::set_font_family(int row, boo
 }
 
 
-void FontLister::set_font_style(Glib::ustring new_style)
+void FontLister::set_font_style(Glib::ustring new_style, bool emit)
 {
 
 // TODO: Validate input using Pango. If Pango doesn't recognize a style it will
@@ -749,8 +749,9 @@ void FontLister::set_font_style(Glib::ustring new_style)
     std::cout << "FontLister::set_font_style: end" << std::endl;
     std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n" << std::endl;
 #endif
-
-    emit_update();
+    if (emit) {
+        emit_update();
+    }
 }
 
 

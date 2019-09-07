@@ -217,7 +217,7 @@ public:
      *  Calls new_font_family().
      *  (For use in text-toolbar where update is immediate.)
      */
-    std::pair<Glib::ustring, Glib::ustring> set_font_family(Glib::ustring family, bool check_style = true);
+    std::pair<Glib::ustring, Glib::ustring> set_font_family(Glib::ustring family, bool check_style = true, bool emit = true);
 
     /**
      * Sets font-family from row in list store.
@@ -227,7 +227,7 @@ public:
      *  font-family list correctly.
      *  Calls set_font_family().
      */
-    std::pair<Glib::ustring, Glib::ustring> set_font_family(int row, bool check_style = true);
+    std::pair<Glib::ustring, Glib::ustring> set_font_family(int row, bool check_style = true, bool emit = true);
 
     Glib::ustring get_font_family()
     {
@@ -242,7 +242,7 @@ public:
     /**
      * Sets style. Does not validate style for family.
      */
-    void set_font_style(Glib::ustring style);
+    void set_font_style(Glib::ustring style, bool emit = true);
 
     Glib::ustring get_font_style()
     {
