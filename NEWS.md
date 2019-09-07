@@ -1,3 +1,21 @@
+Inkscape 1.0beta
+
+Release highlights
+
+Released on 2019-09-07
+
+  • Changes to extensions translation system and to .inx format
+  • New trace dialog with basic autotrace support
+  • Improved XML dialog
+  • Hatches and pattern UI (GSOC 2019)
+
+Known issues
+
+  • Various warnings printed to console output
+  • Performance issues when Objects dialog or XML dialog has been opened
+  • Text toolbar and UX is subject to change, specially for setting line heights
+
+
 Inkscape 1.0alpha2
 
 Release highlights

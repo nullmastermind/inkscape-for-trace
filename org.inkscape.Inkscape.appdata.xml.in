@@ -39,6 +39,21 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="1.0-beta" date="2019-09-07">
+      <description>
+        <p>Beta package for the next version of Inkscape, for testing. Known issues about text UX.</p>
+      </description>
+  </release>
+    <release version="1.0-alpha2" date="2019-06-02">
+      <description>
+        <p>This is the second public alpha release of Inkscape 1.0! This package is intended to test against regressions, try new features, and get a taste of the future of Inkscape!</p>
+      </description>
+  </release>
+    <release version="1.0-alpha" date="2019-01-04">
+      <description>
+        <p>This is the first public alpha release of Inkscape 1.0! This package is intended to test against regressions, try new features, and get a taste of the future of Inkscape!</p>
+      </description>
+  </release>
     <release version="0.92.4" date="2019-01-16">
       <description>
         <ul>
@@ -51,16 +66,6 @@
         </ul>
       </description>
     </release>
-    <release version="1.0-alpha2" date="2019-06-02">
-      <description>
-        <p>This is the second public alpha release of Inkscape 1.0! This package is intended to test against regressions, try new features, and get a taste of the future of Inkscape!</p>
-      </description>
-  </release>
-    <release version="1.0-alpha" date="2019-01-04">
-      <description>
-        <p>This is the first public alpha release of Inkscape 1.0! This package is intended to test against regressions, try new features, and get a taste of the future of Inkscape!</p>
-      </description>
-  </release>
     <release version="0.92.3" date="2018-03-23">
       <description>
         <ul>
