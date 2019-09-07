@@ -378,7 +378,6 @@ void PaintServersDialog::load_current_document(SPObject * /*object*/, guint /*fl
             paints_missing.push_back(s);
         }
     }
-    std::cout << std::endl;
 
     if (!paints_missing.size()) {
         return;
