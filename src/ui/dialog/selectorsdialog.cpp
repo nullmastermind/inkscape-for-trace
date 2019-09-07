@@ -374,8 +374,16 @@ void SelectorsDialog::_showWidgets()
     _paned.pack1(*_style_dialog, Gtk::SHRINK);
     _paned.pack2(_selectors_box, true, true);
     _paned.set_wide_handle(true);
-    _getContents()->pack_start(_paned, Gtk::PACK_EXPAND_WIDGET);
-    _getContents()->pack_start(_button_box, false, false, 0);
+    Gtk::Box *contents = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
+    contents->pack_start(_paned, Gtk::PACK_EXPAND_WIDGET);
+    contents->pack_start(_button_box, false, false, 0);
+    contents->set_valign(Gtk::ALIGN_FILL);
+    contents->child_property_fill(_paned);
+    Gtk::ScrolledWindow *dialog_scroller = new Gtk::ScrolledWindow();
+    dialog_scroller->set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
+    dialog_scroller->set_shadow_type(Gtk::SHADOW_IN);
+    dialog_scroller->add(*Gtk::manage(contents));
+    _getContents()->pack_start(*dialog_scroller, Gtk::PACK_EXPAND_WIDGET);
     show_all();
     int widthpos = _paned.property_max_position() - _paned.property_min_position();
     int panedpos = prefs->getInt("/dialogs/selectors/panedpos", widthpos / 2);
