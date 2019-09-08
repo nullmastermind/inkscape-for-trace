@@ -36,6 +36,8 @@ public:
     InkviewWindow(const Gio::Application::type_vec_files files,
                   bool fullscreen, bool recursive, int timer, double scale, bool preload);
 
+    class NoValidFilesException : public std::exception {};
+
 private:
     std::vector<Glib::RefPtr<Gio::File> >
     create_file_list(const std::vector<Glib::RefPtr<Gio::File > >& files);

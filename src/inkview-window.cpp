@@ -49,6 +49,10 @@ InkviewWindow::InkviewWindow(const Gio::Application::type_vec_files files,
         preload_documents();
     }
 
+    if (_files.empty()) {
+        throw NoValidFilesException();
+    }
+
     _documents.resize( _files.size(), nullptr); // We keep _documents and _files in sync.
 
     // Callbacks
@@ -278,7 +282,7 @@ InkviewWindow::show_control()
             return;
         }
 
-        
+
         builder->get_widget("ControlWindow", _controlwindow);
         if (!_controlwindow) {
             std::cerr << "InkviewWindow::show_control: Control Window not found!" << std::endl;
