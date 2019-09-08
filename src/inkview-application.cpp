@@ -22,6 +22,8 @@
 
 #include <glibmm/i18n.h>  // Internationalization
 
+#include <gtkmm/filechooserdialog.h>
+
 #include "inkview-application.h"
 
 #include "inkscape.h"             // Inkscape::Application
@@ -69,7 +71,7 @@ InkviewApplication::InkviewApplication()
     add_main_option_entry(OPTION_TYPE_INT,      "timer",      't', N_("Change image every NUMBER seconds"), N_("NUMBER"));
     add_main_option_entry(OPTION_TYPE_DOUBLE,   "scale",      's', N_("Scale image by factor NUMBER"),      N_("NUMBER"));
     add_main_option_entry(OPTION_TYPE_BOOL,     "preload",    'p', N_("Preload files"),                               "");
-   
+
     signal_handle_local_options().connect(sigc::mem_fun(*this, &InkviewApplication::on_handle_local_options));
 
     // This is normally called for us... but after the "handle_local_options" signal is emitted. If
@@ -97,7 +99,26 @@ InkviewApplication::on_startup()
 void
 InkviewApplication::on_activate()
 {
-    std::cerr << "InkviewApplication: No documents to open!" << std::endl;
+    // show file chooser dialog if no files/folders are given on the command line
+    // TODO: A FileChooserNative would be preferential, but offers no easy way to allow files AND folders
+    Glib::ustring title = _("Select Files or Folders to view");
+    Gtk::FileChooserDialog file_chooser(title + "…", Gtk::FILE_CHOOSER_ACTION_OPEN);
+    file_chooser.add_button(_("Select"), 42); // use custom response ID that is not intercepted by the file chooser
+                                              // (allows to pick files AND folders)
+    file_chooser.set_select_multiple();
+
+    Glib::RefPtr<Gtk::FileFilter> file_filter = Gtk::FileFilter::create();
+    file_filter->add_pattern("*.svg");
+    file_filter->set_name(_("Scalable Vector Graphics"));
+    file_chooser.add_filter(file_filter);
+
+    int res = file_chooser.run();
+    if (res == 42) {
+        auto files = file_chooser.get_files();
+        if (!files.empty()) {
+            on_open(files, "");
+        }
+    }
 }
 
 // Open document window for each file. Either this or on_activate() is called.
