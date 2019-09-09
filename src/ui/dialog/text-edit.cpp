@@ -41,6 +41,7 @@ extern "C" {
 #include "text-editing.h"
 #include "verbs.h"
 
+#include <libnrtype/FontFactory.h>
 #include <libnrtype/font-instance.h>
 #include <libnrtype/font-lister.h>
 
@@ -160,7 +161,7 @@ TextEdit::TextEdit()
     close_button.signal_clicked().connect(sigc::bind(_signal_response.make_slot(), GTK_RESPONSE_CLOSE));
     fontChangedConn = font_selector.connectChanged (sigc::mem_fun(*this, &TextEdit::onFontChange));
     fontFeaturesChangedConn = font_features.connectChanged(sigc::mem_fun(*this, &TextEdit::onChange));
-
+    notebook.signal_switch_page().connect(sigc::mem_fun(*this, &TextEdit::onFontFeatures));
     desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &TextEdit::setTargetDesktop) );
     deskTrack.connect(GTK_WIDGET(gobj()));
 
@@ -473,6 +474,20 @@ void TextEdit::onApply()
     font_lister->update_font_list(SP_ACTIVE_DESKTOP->getDocument());
 
     blocked = false;
+}
+
+void TextEdit::onFontFeatures(Gtk::Widget * widgt, int pos)
+{
+    if (pos == 1) {
+        Glib::ustring fontspec = font_selector.get_fontspec();
+        if (!fontspec.empty()) {
+            font_instance *res = font_factory::Default()->FaceFromFontSpecification(fontspec.c_str());
+            if (res && !res->fulloaded) {
+                res->InitTheFace(true);
+                font_features.update_opentype(fontspec);
+            }
+        }
+    }
 }
 
 void TextEdit::onChange()

@@ -113,7 +113,8 @@ font_instance::font_instance() :
     maxGlyph(0),
     glyphs(nullptr),
     theFace(nullptr),
-    fontHasSVG(false)
+    fontHasSVG(false),
+    fulloaded(false)
 {
     //printf("font instance born\n");
     _ascent  = _ascent_max  = 0.8;
@@ -186,10 +187,12 @@ void font_instance::Unref()
     }
 }
 
-void font_instance::InitTheFace()
+void font_instance::InitTheFace(bool loadgsub)
 {
-    if (theFace == nullptr && pFont != nullptr) {
-
+    if (pFont != nullptr && (theFace == nullptr || (loadgsub && !fulloaded))) {
+        if (theFace) {
+            theFace = nullptr;
+        }
 #ifdef USE_PANGO_WIN32
 
         LOGFONT *lf=pango_win32_font_logfont(pFont);
@@ -213,8 +216,10 @@ void font_instance::InitTheFace()
 #endif
 
 #ifndef USE_PANGO_WIN32
-
-        readOpenTypeGsubTable( theFace, openTypeTables );
+        if (loadgsub) {
+            readOpenTypeGsubTable( theFace, openTypeTables );
+            fulloaded = true;
+        }
         readOpenTypeFvarAxes(  theFace, openTypeVarAxes );
         readOpenTypeSVGTable(  theFace, openTypeSVGGlyphs );
 

@@ -93,6 +93,7 @@ protected:
      * @param self pointer to the current instance of the dialog.
      */
     void onChange ();
+    void onFontFeatures (Gtk::Widget * widgt, int pos);
     static void onTextChange (GtkTextBuffer *text_buffer, TextEdit *self);
     
     /**
