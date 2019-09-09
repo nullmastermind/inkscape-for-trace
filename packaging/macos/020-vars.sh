@@ -29,29 +29,24 @@ export MAKEFLAGS="-j $CORES"
 
 ### target OS version ##########################################################
 
-# There are a lot of ways to appraoch this. Recommendation:
-#   - OS X El Capitan (10.11)
-#   - Xcode 8.2.1 (latest Xcode to support 10.11) for its clang 8.x
-#   - MacOSX10.11.sdk from Xcode 7.3.1
+# You can build an macOS Mojave 10.14 using Xcode 10.3 using the SDK
+# from OS X Mavericks 10.9 (part of Xcode 6.3).
 
-export MACOSX_DEPLOYMENT_TARGET=10.11   # minimum version El Capitan
-
-FLAG_MMACOSXVERSIONMIN="-mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
-
-export CFLAGS="$CFLAGS $FLAG_MMACOSXVERSIONMIN"
-export CXXFLAGS="$CXXFLAGS $FLAG_MMACOSXVERSIONMIN"
-export CPPFLAGS="$CPPFLAGS $FLAG_MMACOSXVERSIONMIN"
+export MACOSX_DEPLOYMENT_TARGET=10.9   # OS X Mavericks
+export SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX${MACOSX_DEPLOYMENT_TARGET}.sdk
 
 ### ramdisk ####################################################################
 
-RAMDISK_ENABLE=true   # mount ramdisk to $WRK_DIR
+# 9 GiB to build toolset, 5 GiB when using pre-built toolset
+
+RAMDISK_ENABLE=true   # mount ramdisk to WRK_DIR
 RAMDISK_SIZE=9        # unit is GiB
 
 ### try to use pre-built toolset ###############################################
 
 # In order to just download and extract a pre-built toolset
 #   - it has to be enabled ('TOOLSET_CACHE_ENABLE=true')
-#   - you have to use $DEFAULT_SYSTEM_WRK_DIR as your $WRK_DIR
+#   - you have to use DEFAULT_SYSTEM_WRK_DIR as your WRK_DIR
 #     (see commentary in the section below for explanation)
 #
 # It does not hurt to have it enabled by default, because if it cannot be
@@ -59,51 +54,16 @@ RAMDISK_SIZE=9        # unit is GiB
 
 TOOLSET_CACHE_ENABLE=true
 
-### workspace/build environment paths ##########################################
+### work directory and subdirectories ##########################################
 
-# The current behavior of selecting a $WRK_DIR:
-#   1. If there IS a pre-existing value (user configuration), use that.
-#     a. If it IS NOT writable, exit with error.
-#   2. If there IS NOT a pre-existing value, try to use $DEFAULT_SYSTEM_WRK_DIR.
-#     a. If it DOES exist and IS writable, continue using that.
-#     b. If it DOES exist and IS NOT writable, exit with error.
-#     c. If it DOES NOT exist, use $DEFAULT_USER_WRK_DIR.
-#
-# The reasoning behind this:
-# In regards to (1), if the user configured a directory, it has to be used. If
-# it can't be used, exit with error (as a user would expect).
-# In regards to (2), using an arbitrary system-level location like
-# $DEFAULT_SYSTEM_WRK_DIR is considered optional as in "you have to opt-in"
-# (and not mandatory at all). You can tell us that you "opted-in" by creating
-# that directory beforehand and ensuring it's writable (2a). Then it's going to
-# be used. (I don't like writing scripts that write to arbitrary locations on
-# their own. Also, that would require 'sudo' permission.)
-# If $DEFAULT_SYSTEM_WRK_DIR does not exist, it means that you did not
-# "opt-in" (2c) and we're going to use the user-based default location,
-# $DEFAULT_USER_WRK_DIR. If $DEFAULT_SYSTEM_WRK_DIR does exist but is not
-# writable, the situation is unclear and we exit in error (2b).
-#
-# But why bother with a $DEFAULT_SYSTEM_WRK_DIR at all? Because that's the only
-# way a pre-built build environment can be used (hard-coded library locations).
-
-if [ -z $WRK_DIR ]; then     # no pre-existing value
-  WRK_DIR=$DEFAULT_SYSTEM_WRK_DIR   # try default first
-
-  if [ -d $WRK_DIR ]; then      # needs to exist and
-    if [ ! -w $WRK_DIR ]; then  # must be writable
-      echo "directory exists but not writable: $WRK_DIR"
-      exit 1
-    fi
-  else   # use work directory below user's home (writable for sure)
-    WRK_DIR=$DEFAULT_USER_WRK_DIR
-  fi
-fi
+[ -z $WRK_DIR ] && WRK_DIR=/Users/Shared/work
 
 if [ $(mkdir -p $WRK_DIR 2>/dev/null; echo $?) -eq 0 ] &&
-   [ -w $WRK_DIR ]; then
+   [ -w $WRK_DIR ] &&
+   [ "$(stat -f '%Su' $WRK_DIR)" = "$(whoami)" ] ; then
   echo "using build directory: $WRK_DIR"
 else
-  echo "directory not writable: $WRK_DIR"
+  echo "directory not usable: $WRK_DIR"
   exit 1
 fi
 
@@ -125,7 +85,7 @@ export DEVROOT=$WRK_DIR/gtk-osx
 export DEVPREFIX=$DEVROOT/local
 export PYTHONUSERBASE=$DEVPREFIX
 export DEV_SRC_ROOT=$DEVROOT/source
-DEVCONFIG=$DEVROOT/config   # no export because this is a made-up variable
+DEVCONFIG=$DEVROOT/config   # no export because this is an intermediate variable
 export PIP_CONFIG_DIR=$DEVCONFIG/pip
 
 ### Inkscape Git repository directory ##########################################
@@ -169,7 +129,7 @@ URL_DOUBLE_CONVERSION=https://github.com/google/double-conversion/archive/v3.1.4
 URL_GC=https://github.com/ivmai/bdwgc/releases/download/v8.0.4/gc-8.0.4.tar.gz
 URL_GDL=https://github.com/GNOME/gdl/archive/GDL_3_28_0.tar.gz
 URL_GSL=http://ftp.fau.de/gnu/gsl/gsl-2.5.tar.gz
-URL_GTK_MAC_BUNDLER=https://gitlab.gnome.org/GNOME/gtk-mac-bundler/-/archive/727793cfae08dec0e1e2621078d53a02ec5f7fb3.tar.gz
+URL_GTK_MAC_BUNDLER=https://gitlab.gnome.org/GNOME/gtk-mac-bundler/-/archive/93edee7e2d0ec8230aaf5acb21452202b10cd678.tar.gz
 URL_GTK_OSX=https://raw.githubusercontent.com/dehesselle/gtk-osx/inkscape
 URL_GTK_OSX_SETUP=$URL_GTK_OSX/gtk-osx-setup.sh
 URL_GTK_OSX_MODULESET=$URL_GTK_OSX/modulesets-stable/gtk-osx.modules
@@ -187,10 +147,10 @@ URL_PNG2ICNS=https://github.com/bitboss-ca/png2icns/archive/v0.1.tar.gz
 URL_POPPLER=https://gitlab.freedesktop.org/poppler/poppler/-/archive/poppler-0.74.0/poppler-poppler-0.74.0.tar.gz
 URL_POTRACE=http://potrace.sourceforge.net/download/1.15/potrace-1.15.tar.gz
 # This is the relocatable framework to be bundled with the app.
-URL_PYTHON3_BIN=https://github.com/dehesselle/py3framework/releases/download/py374.1/py374_framework_1.tar.xz
-# This is for the jhbuild toolset only. This cannot be updated to 3.7 because
-# 'Plist' class got removed in 'plistlib' and 'gtk-mac-bundler' needs that.
-URL_PYTHON3_SRC=https://github.com/dehesselle/py3framework/archive/py369.2.tar.gz
+URL_PYTHON3_BIN=https://github.com/dehesselle/py3framework/releases/download/py374.3/py374_framework_3.tar.xz
+# This is for JHBuild only.
+URL_PYTHON36_SRC=https://github.com/dehesselle/py3framework/archive/py369.3.tar.gz
+URL_PYTHON36_BIN=https://github.com/dehesselle/py3framework/releases/download/py369.3/py369_framework_3.tar.xz
 # A pre-built version of the complete toolset.
 URL_TOOLSET_CACHE=https://github.com/dehesselle/mibap/releases/download/v0.17/mibap_v0.17.tar.xz
 

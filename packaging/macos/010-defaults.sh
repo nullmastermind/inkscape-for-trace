@@ -16,16 +16,12 @@
 ### path for pre-built build environment #######################################
 
 # This is the path the pre-built build environment has been built in. Therefore,
-# all binaries and libraries have hard-coded library locations relative to this
+# all binaries and libraries have hard-coded absolute library locations to this
 # path. If you decide to not build the build environment yourself and want to
-# use the pre-built one, it is essential that the $WRK_DIR you are using is the
-# same as $DEFAULT_SYSTEM_WRK_DIR, otherwise it doesn't work.
+# use the pre-built one, it is essential that the WRK_DIR you are using is the
+# same as DEFAULT_WRK_DIR, otherwise it doesn't work.
 # The scripts will make their decision if the pre-built build environment can be
-# used based on comparing values between $WRK_DIR and $DEFAULT_SYSTEM_WRK_DIR.
+# used based on comparing values between WRK_DIR and DEFAULT_WRK_DIR.
 
-DEFAULT_SYSTEM_WRK_DIR=/work
+DEFAULT_WRK_DIR=/Users/Shared/work
 
-# If using $DEFAULT_SYSTEM_WRK_DIR is not on option, use there is a default
-# user-based location.
-
-DEFAULT_USER_WRK_DIR=$HOME/work

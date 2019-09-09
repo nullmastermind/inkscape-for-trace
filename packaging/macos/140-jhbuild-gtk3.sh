@@ -13,6 +13,15 @@ for script in $SELF_DIR/0??-*.sh; do source $script; done
 
 #run_annotated   disabled for now, breaks jhbuild interactive mode
 
+### install prerequisites ######################################################
+
+# We're doing this to get Python.h, because gobject-introspection fails
+# otherwise.
+
+jhbuild build \
+  openssl \
+  python3
+
 ### install GTK3 libraries #####################################################
 
 jhbuild build \

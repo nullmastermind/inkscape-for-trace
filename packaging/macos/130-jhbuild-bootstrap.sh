@@ -35,6 +35,9 @@ ln -sf $DEVCONFIG/jhbuild* $HOME/.config
   # configure SDK
   sed -i "" "s/^setup_sdk/#setup_sdk/" $JHBUILDRC   # disable existing setting
   echo "setup_sdk(target=\"$MACOSX_DEPLOYMENT_TARGET\")" >> $JHBUILDRC
+  echo "os.environ[\"SDKROOT\"]=\"$SDKROOT\"" >> $JHBUILDRC
+  echo "if \"openssl\" in skip:" >> $JHBUILDRC
+  echo "  skip.remove(\"openssl\")" >> $JHBUILDRC
 )
 
 ### bootstrap JHBuild ##########################################################
