@@ -213,7 +213,6 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
     : Toolbar(desktop)
     , _freeze(false)
     , _outer(true)
-    , _subselection(false)
     , _fullsubselection(false)
     , _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
     , _tracker_fs(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
@@ -1826,12 +1825,6 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
         return;
     }
     _freeze = true;
-    if (selection && selection->objects().size()) {
-        this->_outer = true;
-        this->_subselection = false;
-        this->_fullsubselection = false;
-        this->_sub_active_item = nullptr;
-    }
     bool outside = false;
     if (selection && selection->objects().size() == 0) {
         outside = true;
@@ -2195,6 +2188,7 @@ TextToolbar::watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec) {ht
             desktop->getSelection()->connectChangedFirst(sigc::mem_fun(*this, &TextToolbar::selection_changed));
         c_selection_modified = desktop->getSelection()->connectModifiedFirst(sigc::mem_fun(*this, &TextToolbar::selection_modified));
         c_subselection_changed = desktop->connectToolSubselectionChanged(sigc::mem_fun(*this, &TextToolbar::subselection_changed));
+        this->_sub_active_item = nullptr;
         selection_changed(desktop->getSelection());
     } else if (SP_IS_SELECT_CONTEXT(ec)) {
         c_selection_modified_select_tool = desktop->getSelection()->connectModifiedFirst(
@@ -2214,7 +2208,7 @@ TextToolbar::watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec) {ht
 void
 TextToolbar::selection_modified(Inkscape::Selection *selection, guint /*flags*/)
 {
-
+    this->_sub_active_item = nullptr;
     selection_changed(selection);
 
 }
@@ -2413,24 +2407,24 @@ void TextToolbar::subselection_changed(gpointer texttool)
     std::cout << "subselection_changed: start " << std::endl;
 #endif
     // quit if run by the _changed callbacks
-    this->_subselection = true;
     this->_fullsubselection = false;
+    if (_updating) {
+        return;
+    }
     Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT(SP_EVENT_CONTEXT(texttool));
     if (tc) {
         Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
         if (layout) {
-            if (_updating || tc->_button1on) {
-                // realy it decrease preformance and dont be important live update,
-                return;
-            }
             Inkscape::Text::Layout::iterator start = layout->begin();
             Inkscape::Text::Layout::iterator end = layout->end();
             Inkscape::Text::Layout::iterator start_selection = tc->text_sel_start;
-            if (tc->text_sel_start > tc->text_sel_end) {
-                tc->text_sel_start = tc->text_sel_end;
-                tc->text_sel_end = start_selection;
+            if (!(_updating || tc->_button1on)) {
+                if (tc->text_sel_start > tc->text_sel_end) {
+                    tc->text_sel_start = tc->text_sel_end;
+                    tc->text_sel_end = start_selection;
+                }
+                start_selection = tc->text_sel_start;
             }
-            start_selection = tc->text_sel_start;
             Inkscape::Text::Layout::iterator end_selection = tc->text_sel_end;
 #ifdef DEBUG_TEXT
             std::cout << "    GUI: Start of text: " << layout->iteratorToCharIndex(start) << std::endl;
@@ -2471,13 +2465,16 @@ void TextToolbar::subselection_changed(gpointer texttool)
                     ++counter;
                 }
                 selection_changed(nullptr);
+                _clearsubactive = true;
             } else if ((start_selection == start && end_selection == end)) {
                 // full subselection
+                _cusor_numbers = 0;
                 this->_sub_active_item = nullptr;
                 this->_outer = true;
                 this->_fullsubselection = true;
                 selection_changed(nullptr);
             } else {
+                _cusor_numbers = 0;
                 this->_sub_active_item = nullptr;
                 this->_outer = false;
                 wrap_start = tc->text_sel_start;
