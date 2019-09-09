@@ -80,6 +80,17 @@ configure_make_makeinstall
 ### install ImageMagick 6 ######################################################
 
 get_source $URL_IMAGEMAGICK
+
+# Recently a new issue manifested out of thin air: linking to pango fails with
+# missing symbols like '_g_object_unref'. Pango requires '-lgobject-2.0',
+# but this does not appear in the linker flags (check invocation with
+# 'make V=1'). Easiest way for a quick & dirty fix is to configure with
+# PANGO_LIBS set accordingly, but the configure scripts deletes the setting
+# although claiming to respect it. Therefore we patch the configure
+# script first.
+
+sed -i "" 's/^  pkg_cv_PANGO_LIBS=`$PKG_CONFIG --libs "pangocairo.*/  pkg_cv_PANGO_LIBS="$($PKG_CONFIG --libs pangocairo) -lgobject-2.0"/' configure
+
 configure_make_makeinstall
 
 ### install Poppler ############################################################
