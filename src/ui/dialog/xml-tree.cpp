@@ -57,15 +57,6 @@ XmlTree::XmlTree()
     , selected_repr(nullptr)
     , tree(nullptr)
     , status("")
-    , tree_toolbar()
-    , xml_element_new_button(_("New element node"))
-    , xml_text_new_button(_("New text node"))
-    , xml_node_delete_button(Q_("nodeAsInXMLdialogTooltip|Delete node"))
-    , xml_node_duplicate_button(_("Duplicate node"))
-    , unindent_node_button()
-    , indent_node_button()
-    , raise_node_button()
-    , lower_node_button()
     , new_window(nullptr)
     , _updating(false)
 {
@@ -103,6 +94,7 @@ XmlTree::XmlTree()
     auto xml_element_new_icon = Gtk::manage(sp_get_icon_image("xml-element-new", Gtk::ICON_SIZE_LARGE_TOOLBAR));
 
     xml_element_new_button.set_icon_widget(*xml_element_new_icon);
+    xml_element_new_button.set_label(_("New element node"));
     xml_element_new_button.set_tooltip_text(_("New element node"));
     xml_element_new_button.set_sensitive(false);
     tree_toolbar.add(xml_element_new_button);
@@ -110,6 +102,7 @@ XmlTree::XmlTree()
     auto xml_text_new_icon = Gtk::manage(sp_get_icon_image("xml-text-new", Gtk::ICON_SIZE_LARGE_TOOLBAR));
 
     xml_text_new_button.set_icon_widget(*xml_text_new_icon);
+    xml_text_new_button.set_label(_("New text node"));
     xml_text_new_button.set_tooltip_text(_("New text node"));
     xml_text_new_button.set_sensitive(false);
     tree_toolbar.add(xml_text_new_button);
@@ -117,6 +110,7 @@ XmlTree::XmlTree()
     auto xml_node_duplicate_icon = Gtk::manage(sp_get_icon_image("xml-node-duplicate", Gtk::ICON_SIZE_LARGE_TOOLBAR));
 
     xml_node_duplicate_button.set_icon_widget(*xml_node_duplicate_icon);
+    xml_node_duplicate_button.set_label(_("Duplicate node"));
     xml_node_duplicate_button.set_tooltip_text(_("Duplicate node"));
     xml_node_duplicate_button.set_sensitive(false);
     tree_toolbar.add(xml_node_duplicate_button);
@@ -126,7 +120,8 @@ XmlTree::XmlTree()
     auto xml_node_delete_icon = Gtk::manage(sp_get_icon_image("xml-node-delete", Gtk::ICON_SIZE_LARGE_TOOLBAR));
 
     xml_node_delete_button.set_icon_widget(*xml_node_delete_icon);
-    xml_node_delete_button.set_tooltip_text(Q_("nodeAsInXMLdialogTooltip|Delete node"));
+    xml_node_delete_button.set_label(_("Delete node"));
+    xml_node_delete_button.set_tooltip_text(_("Delete node"));
     xml_node_delete_button.set_sensitive(false);
     tree_toolbar.add(xml_node_delete_button);
 
@@ -448,10 +443,10 @@ void XmlTree::set_tree_select(Inkscape::XML::Node *repr)
 
 void XmlTree::propagate_tree_select(Inkscape::XML::Node *repr)
 {
-    if (repr && 
+    if (repr &&
        (repr->type() == Inkscape::XML::ELEMENT_NODE ||
         repr->type() == Inkscape::XML::TEXT_NODE ||
-        repr->type() == Inkscape::XML::COMMENT_NODE)) 
+        repr->type() == Inkscape::XML::COMMENT_NODE))
     {
         attributes->setRepr(repr);
     } else {
@@ -554,7 +549,7 @@ void XmlTree::after_tree_move(SPXMLViewTree * /*tree*/, gpointer value, gpointer
 
     if (val) {
         DocumentUndo::done(self->current_document, SP_VERB_DIALOG_XML_EDITOR,
-                                   _("Drag XML subtree"));
+                           Q_("Undo History / XML dialog|Drag XML subtree"));
     } else {
         //DocumentUndo::cancel(self->current_document);
         /*
@@ -770,7 +765,7 @@ void XmlTree::cmd_new_element_node()
             set_dt_select(new_repr);
 
             DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR,
-                               _("Create new element node"));
+                               Q_("Undo History / XML dialog|Create new element node"));
         }
     }
 } // end of cmd_new_element_node()
@@ -785,7 +780,7 @@ void XmlTree::cmd_new_text_node()
     selected_repr->appendChild(text);
 
     DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR,
-                       _("Create new text node"));
+                       Q_("Undo History / XML dialog|Create new text node"));
 
     set_tree_select(text);
     set_dt_select(text);
@@ -799,8 +794,7 @@ void XmlTree::cmd_duplicate_node()
     Inkscape::XML::Node *dup = selected_repr->duplicate(parent->document());
     parent->addChild(dup, selected_repr);
 
-    DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR,
-                       _("Duplicate node"));
+    DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR, Q_("Undo History / XML dialog|Duplicate node"));
 
     GtkTreeIter node;
 
@@ -816,8 +810,7 @@ void XmlTree::cmd_delete_node()
     sp_repr_unparent(selected_repr);
 
     reinterpret_cast<SPObject *>(current_desktop->currentLayer())->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR,
-                       Q_("nodeAsInXMLinHistoryDialog|Delete node"));
+    DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR, Q_("Undo History / XML dialog|Delete node"));
 }
 
 void XmlTree::cmd_raise_node()
@@ -838,8 +831,7 @@ void XmlTree::cmd_raise_node()
 
     parent->changeOrder(selected_repr, ref);
 
-    DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR,
-                       _("Raise node"));
+    DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR, Q_("Undo History / XML dialog|Raise node"));
 
     set_tree_select(selected_repr);
     set_dt_select(selected_repr);
@@ -856,8 +848,7 @@ void XmlTree::cmd_lower_node()
 
     parent->changeOrder(selected_repr, selected_repr->next());
 
-    DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR,
-                       _("Lower node"));
+    DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR, Q_("Undo History / XML dialog|Lower node"));
 
     set_tree_select(selected_repr);
     set_dt_select(selected_repr);
@@ -887,8 +878,7 @@ void XmlTree::cmd_indent_node()
     parent->removeChild(repr);
     prev->addChild(repr, ref);
 
-    DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR,
-                       _("Indent node"));
+    DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR, Q_("Undo History / XML dialog|Indent node"));
     set_tree_select(repr);
     set_dt_select(repr);
 
@@ -909,8 +899,8 @@ void XmlTree::cmd_unindent_node()
     parent->removeChild(repr);
     grandparent->addChild(repr, parent);
 
-    DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR,
-                       _("Unindent node"));
+    DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR, Q_("Undo History / XML dialog|Unindent node"));
+
     set_tree_select(repr);
     set_dt_select(repr);
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-09-10 23:00+0200\n"
+"POT-Creation-Date: 2019-09-11 00:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23501,69 +23501,95 @@ msgstr ""
 msgid "Rotation angle (positive = clockwise)"
 msgstr ""
 
-#: ../src/ui/dialog/xml-tree.cpp:61 ../src/ui/dialog/xml-tree.cpp:106
-msgid "New element node"
-msgstr ""
-
-#: ../src/ui/dialog/xml-tree.cpp:62 ../src/ui/dialog/xml-tree.cpp:113
-msgid "New text node"
-msgstr ""
-
-#: ../src/ui/dialog/xml-tree.cpp:63 ../src/ui/dialog/xml-tree.cpp:129
-msgid "nodeAsInXMLdialogTooltip|Delete node"
-msgstr ""
-
-#: ../src/ui/dialog/xml-tree.cpp:64 ../src/ui/dialog/xml-tree.cpp:120
-#: ../src/ui/dialog/xml-tree.cpp:803
-msgid "Duplicate node"
-msgstr ""
-
-#: ../src/ui/dialog/xml-tree.cpp:99
+#: ../src/ui/dialog/xml-tree.cpp:90
 msgid "Drag to reorder nodes"
 msgstr ""
 
-#: ../src/ui/dialog/xml-tree.cpp:138 ../src/ui/dialog/xml-tree.cpp:139
-#: ../src/ui/dialog/xml-tree.cpp:913
+#: ../src/ui/dialog/xml-tree.cpp:97 ../src/ui/dialog/xml-tree.cpp:98
+msgid "New element node"
+msgstr ""
+
+#: ../src/ui/dialog/xml-tree.cpp:105 ../src/ui/dialog/xml-tree.cpp:106
+msgid "New text node"
+msgstr ""
+
+#: ../src/ui/dialog/xml-tree.cpp:113 ../src/ui/dialog/xml-tree.cpp:114
+msgid "Duplicate node"
+msgstr ""
+
+#: ../src/ui/dialog/xml-tree.cpp:123 ../src/ui/dialog/xml-tree.cpp:124
+#: ../src/ui/tool/path-manipulator.cpp:1570
+#: ../src/ui/toolbar/node-toolbar.cpp:146
+msgid "Delete node"
+msgstr ""
+
+#: ../src/ui/dialog/xml-tree.cpp:133 ../src/ui/dialog/xml-tree.cpp:134
 msgid "Unindent node"
 msgstr ""
 
-#: ../src/ui/dialog/xml-tree.cpp:146 ../src/ui/dialog/xml-tree.cpp:147
-#: ../src/ui/dialog/xml-tree.cpp:891
+#: ../src/ui/dialog/xml-tree.cpp:141 ../src/ui/dialog/xml-tree.cpp:142
 msgid "Indent node"
 msgstr ""
 
-#: ../src/ui/dialog/xml-tree.cpp:154 ../src/ui/dialog/xml-tree.cpp:155
-#: ../src/ui/dialog/xml-tree.cpp:842
+#: ../src/ui/dialog/xml-tree.cpp:149 ../src/ui/dialog/xml-tree.cpp:150
 msgid "Raise node"
 msgstr ""
 
-#: ../src/ui/dialog/xml-tree.cpp:162 ../src/ui/dialog/xml-tree.cpp:163
-#: ../src/ui/dialog/xml-tree.cpp:860
+#: ../src/ui/dialog/xml-tree.cpp:157 ../src/ui/dialog/xml-tree.cpp:158
 msgid "Lower node"
 msgstr ""
 
-#: ../src/ui/dialog/xml-tree.cpp:188
+#: ../src/ui/dialog/xml-tree.cpp:183
 msgid "Show attributes"
 msgstr ""
 
-#: ../src/ui/dialog/xml-tree.cpp:340
+#: ../src/ui/dialog/xml-tree.cpp:335
 msgid "<b>Click</b> to select nodes, <b>drag</b> to rearrange."
 msgstr ""
 
-#: ../src/ui/dialog/xml-tree.cpp:557
+#: ../src/ui/dialog/xml-tree.cpp:552
+msgctxt "Undo History / XML dialog"
 msgid "Drag XML subtree"
 msgstr ""
 
-#: ../src/ui/dialog/xml-tree.cpp:773
+#: ../src/ui/dialog/xml-tree.cpp:768
+msgctxt "Undo History / XML dialog"
 msgid "Create new element node"
 msgstr ""
 
-#: ../src/ui/dialog/xml-tree.cpp:788
+#: ../src/ui/dialog/xml-tree.cpp:783
+msgctxt "Undo History / XML dialog"
 msgid "Create new text node"
 msgstr ""
 
-#: ../src/ui/dialog/xml-tree.cpp:820
-msgid "nodeAsInXMLinHistoryDialog|Delete node"
+#: ../src/ui/dialog/xml-tree.cpp:797
+msgctxt "Undo History / XML dialog"
+msgid "Duplicate node"
+msgstr ""
+
+#: ../src/ui/dialog/xml-tree.cpp:813
+msgctxt "Undo History / XML dialog"
+msgid "Delete node"
+msgstr ""
+
+#: ../src/ui/dialog/xml-tree.cpp:834
+msgctxt "Undo History / XML dialog"
+msgid "Raise node"
+msgstr ""
+
+#: ../src/ui/dialog/xml-tree.cpp:851
+msgctxt "Undo History / XML dialog"
+msgid "Lower node"
+msgstr ""
+
+#: ../src/ui/dialog/xml-tree.cpp:881
+msgctxt "Undo History / XML dialog"
+msgid "Indent node"
+msgstr ""
+
+#: ../src/ui/dialog/xml-tree.cpp:902
+msgctxt "Undo History / XML dialog"
+msgid "Unindent node"
 msgstr ""
 
 #: ../src/ui/drag-and-drop.cpp:159 ../src/ui/drag-and-drop.cpp:245
@@ -24052,11 +24078,6 @@ msgstr ""
 
 #: ../src/ui/tool/path-manipulator.cpp:878
 msgid "Rotate handle"
-msgstr ""
-
-#: ../src/ui/tool/path-manipulator.cpp:1570
-#: ../src/ui/toolbar/node-toolbar.cpp:146
-msgid "Delete node"
 msgstr ""
 
 #: ../src/ui/tool/path-manipulator.cpp:1578
@@ -28368,7 +28389,8 @@ msgid "Proprietary"
 msgstr ""
 
 #: ../src/ui/widget/licensor.cpp:39
-msgid "MetadataLicence|Other"
+msgctxt "MetadataLicence"
+msgid "Other"
 msgstr ""
 
 #: ../src/ui/widget/licensor.cpp:68
