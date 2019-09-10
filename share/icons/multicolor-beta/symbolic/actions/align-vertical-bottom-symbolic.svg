@@ -7,20 +7,23 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:version="1.0alpha2 (e9298ea62f, 2019-07-05, custom)"
-   sodipodi:docname="align-vertical-bottom-symbolic.svg"
-   viewBox="0 0 16 16"
-   height="16"
-   width="16"
+   version="1.1"
    id="svg1"
-   version="1.1">
-<style id="style0001">
-.success{fill:#33d17a}
-.warning{fill:#f57900}
-.danger{fill:#cc0000}
-</style>
- 
-  
+   width="16"
+   height="16"
+   viewBox="0 0 16 16"
+   sodipodi:docname="align-vertical-bottom-symbolic.svg"
+   inkscape:version="1.0beta0 (1b5d333, 2019-09-08)">
+     <style id="s0">
+   .base    { fill: #000000; }
+   .success { fill: #009909; }
+   .warning { fill: #FF1990; }
+   .error   { fill: #00AAFF; }
+   .dark    {  }
+  </style>
+  <style id="s2"> 
+     @import '../../highlights.css'; 
+  </style>
 <metadata
      id="metadata969">
     <rdf:RDF>
@@ -35,70 +38,73 @@
   <defs
      id="defs967" />
   <sodipodi:namedview
-     inkscape:snap-global="false"
-     inkscape:document-rotation="0"
-     inkscape:current-layer="svg1"
-     inkscape:window-maximized="1"
-     inkscape:window-y="27"
-     inkscape:window-x="0"
-     inkscape:window-height="704"
-     inkscape:window-width="1360"
-     inkscape:cy="8"
-     inkscape:cx="8"
-     inkscape:zoom="31.5625"
-     showgrid="true"
-     id="namedview"
-     guidetolerance="10"
+     objecttolerance="10"
      gridtolerance="10"
-     objecttolerance="10">
+     guidetolerance="10"
+     id="namedview"
+     showgrid="true"
+     inkscape:zoom="22.4"
+     inkscape:cx="19.527398"
+     inkscape:cy="10.379764"
+     inkscape:window-width="1858"
+     inkscape:window-height="1177"
+     inkscape:window-x="54"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1"
+     inkscape:document-rotation="0"
+     inkscape:snap-global="true">
     <inkscape:grid
-       id="grid"
-       type="xygrid" />
+       type="xygrid"
+       id="grid" />
   </sodipodi:namedview>
   <g
-     id="align-vertical-bottom"
-     inkscape:label="00274"
-     transform="matrix(0.666667,0,0,0.666667,-772,-421.57455)">
+     id="align-horizontal-right"
+     inkscape:label="00273"
+     transform="matrix(0,0.666667,-0.666666,0,412.90772,-772.00039)">
     <g
-       transform="matrix(1,0,0,-1,76,1288.724)"
-       id="g22358"
-       inkscape:label="#al_top_in">
-      <path
-         transform="matrix(0,-1,-1,0,0,0)"
-         style="opacity:0;fill:none"
-         d="m -656.36218,-1106 h 24 v 24 h -24 z"
-         id="rect22360"
-         inkscape:connector-curvature="0" />
-      <path
-         class="success"
-         style="opacity:1;stroke-width:1.22474"
-         d="m 1106,636.36218 v -1.5 h -24 v 1.5 z"
-         id="rect22362"
-         inkscape:connector-curvature="0" />
-      <path
-         transform="matrix(0,-1,-1,0,0,0)"
-         style="opacity:1"
-         d="m -653.36218,-1095 h 16 v 5 h -16 z"
-         id="rect22364"
-         inkscape:connector-curvature="0" />
-      <path
-         transform="matrix(0,-1,-1,0,0,0)"
-         style="opacity:1"
-         d="m -647.36218,-1100 h 10 v 3 h -10 z"
-         id="rect22366"
-         inkscape:connector-curvature="0" />
-      <path
-         transform="matrix(0,-1,-1,0,0,0)"
-         style="opacity:1"
-         d="m -651.36218,-1106 h 14 v 4 h -14 z"
-         id="rect22368"
-         inkscape:connector-curvature="0" />
-      <path
-         class="warning"
-         transform="matrix(1.4999993,0,0,-1.4999993,1081.9994,656.36249)"
-         d="M 1.3339844 4.6660156 L 1.3339844 10.666016 L 0 10.666016 L 2 12.666016 L 4 10.666016 L 2.6679688 10.666016 L 2.6679688 4.6660156 L 1.3339844 4.6660156 z "
-         style="opacity:1;stroke-width:0.666667"
-         id="path22370" />
+       transform="matrix(-1,0,0,1,2264,0)"
+       id="g22329"
+       inkscape:label="#al_left_in">
+      <g
+         id="g22331">
+        <path
+           transform="scale(-1,1)"
+           style="opacity:0;fill:none"
+           d="m -1106,595.36218 h 24 v 24 h -24 z"
+           id="rect22333"
+           inkscape:connector-curvature="0" />
+        <path
+           class="success"
+           style="opacity:1;fill-opacity:1"
+           d="m 1086,595.36218 h -1.5 v 24 h 1.5 z"
+           id="rect22335"
+           inkscape:connector-curvature="0" />
+        <path
+           transform="scale(-1,1)"
+           style="opacity:1"
+           d="m -1103,595.36218 h 16 v 5 h -16 z"
+           id="rect22337"
+           inkscape:connector-curvature="0" />
+        <path
+           transform="scale(-1,1)"
+           style="opacity:1"
+           d="m -1097,602.36218 h 10 v 3.00001 h -10 z"
+           id="rect22339"
+           inkscape:connector-curvature="0" />
+        <path
+           transform="scale(-1,1)"
+           style="opacity:1"
+           d="m -1101,607.36218 h 14 v 4 h -14 z"
+           id="rect22341"
+           inkscape:connector-curvature="0" />
+        <path
+           inkscape:connector-curvature="0"
+           id="path22343"
+           style="opacity:1;fill:#000000;fill-opacity:0.501961;"
+           d="m 10.667969,12 v 1.333984 H 4.6679688 v 1.332032 H 10.667969 V 16 l 2,-2 z"
+           transform="matrix(-1.4999993,0,0,1.5000015,1106.0006,595.36228)" />
+      </g>
     </g>
   </g>
 </svg>

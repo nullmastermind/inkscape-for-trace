@@ -7,42 +7,45 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:version="1.0alpha2 (e9298ea62f, 2019-07-05, custom)"
-   sodipodi:docname="align-on-canvas.svg"
-   viewBox="0 0 16 16"
-   height="16"
-   width="16"
+   version="1.1"
    id="svg1"
-   version="1.1">
-<style id="style0001">
-.success{fill:#33d17a}
-.warning{fill:#f57900}
-.danger{fill:#cc0000}
-</style>
-
+   width="16"
+   height="16"
+   viewBox="0 0 16 16"
+   sodipodi:docname="align-on-canvas-symbolic.svg"
+   inkscape:version="1.0beta0 (1b5d333, 2019-09-08)">
   <defs
      id="defs10" />
   <sodipodi:namedview
-     inkscape:window-maximized="1"
-     inkscape:window-height="704"
-     inkscape:window-width="1360"
-     inkscape:document-rotation="0"
-     inkscape:current-layer="layercompo"
-     inkscape:window-y="27"
-     inkscape:window-x="0"
-     inkscape:cy="6.9721374"
-     inkscape:cx="0.78771883"
-     inkscape:zoom="27.166187"
-     showgrid="true"
-     id="namedview"
-     guidetolerance="10"
+     objecttolerance="10"
      gridtolerance="10"
-     objecttolerance="10">
+     guidetolerance="10"
+     id="namedview"
+     showgrid="true"
+     inkscape:zoom="19.209395"
+     inkscape:cx="11.609506"
+     inkscape:cy="9.0016399"
+     inkscape:window-x="54"
+     inkscape:window-y="-8"
+     inkscape:current-layer="layercompo"
+     inkscape:document-rotation="0"
+     inkscape:window-width="1858"
+     inkscape:window-height="1177"
+     inkscape:window-maximized="1">
     <inkscape:grid
-       id="grid"
-       type="xygrid" />
+       type="xygrid"
+       id="grid" />
   </sodipodi:namedview>
-  
+     <style id="s0">
+   .base    { fill: #000000; }
+   .success { fill: #009909; }
+   .warning { fill: #FF1990; }
+   .error   { fill: #00AAFF; }
+   .dark    {  }
+  </style>
+  <style id="s2"> 
+     @import '../../highlights.css'; 
+  </style>
 <metadata
      id="metadata1906">
     <rdf:RDF>
@@ -102,28 +105,29 @@ Jabier Arraiza</dc:title>
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="dashed-stroke"
+     inkscape:groupmode="layer"
      id="layercompo"
-     inkscape:groupmode="layer">
+     inkscape:label="dashed-stroke">
     <path
-       style="opacity:0;fill:none"
+       inkscape:connector-curvature="0"
+       id="rect22048"
        d="M 0,0 H 16 V 16 H 0 Z"
-       id="rect22048" />
+       style="opacity:0;fill:none" />
     <path
        class="success"
-       id="path6"
-       style="opacity:1"
-       d="M 1.0390625 1.078125 L 1.0390625 1.6367188 L 1.0390625 3.0546875 L 2.1542969 3.0546875 L 2.1542969 2.1933594 L 3.0253906 2.1933594 L 3.0253906 1.078125 L 1.0390625 1.078125 z M 4.4550781 1.078125 L 4.4550781 2.1933594 L 5.8828125 2.1933594 L 5.8828125 1.078125 L 4.4550781 1.078125 z M 7.3125 1.078125 L 7.3125 2.1933594 L 8.7402344 2.1933594 L 8.7402344 1.078125 L 7.3125 1.078125 z M 10.169922 1.078125 L 10.169922 2.1933594 L 11.599609 2.1933594 L 11.599609 1.078125 L 10.169922 1.078125 z M 13.027344 1.078125 L 13.027344 2.1933594 L 13.898438 2.1933594 L 13.898438 3.0546875 L 15.013672 3.0546875 L 15.013672 1.078125 L 13.027344 1.078125 z M 1.0390625 4.4726562 L 1.0390625 5.890625 L 2.1542969 5.890625 L 2.1542969 4.4726562 L 1.0390625 4.4726562 z M 13.898438 4.4726562 L 13.898438 5.890625 L 15.013672 5.890625 L 15.013672 4.4726562 L 13.898438 4.4726562 z M 1.0390625 7.3105469 L 1.0390625 8.7285156 L 2.1542969 8.7285156 L 2.1542969 7.3105469 L 1.0390625 7.3105469 z M 13.898438 7.3105469 L 13.898438 8.7285156 L 15.013672 8.7285156 L 15.013672 7.3105469 L 13.898438 7.3105469 z M 1.0390625 10.146484 L 1.0390625 11.564453 L 2.1542969 11.564453 L 2.1542969 10.146484 L 1.0390625 10.146484 z M 13.898438 10.146484 L 13.898438 11.564453 L 15.013672 11.564453 L 15.013672 10.146484 L 13.898438 10.146484 z M 1.0390625 12.982422 L 1.0390625 14.958984 L 3.0253906 14.958984 L 3.0253906 13.84375 L 2.1542969 13.84375 L 2.1542969 12.982422 L 1.0390625 12.982422 z M 13.898438 12.982422 L 13.898438 13.84375 L 13.027344 13.84375 L 13.027344 14.958984 L 15.013672 14.958984 L 15.013672 12.982422 L 13.898438 12.982422 z M 4.4550781 13.84375 L 4.4550781 14.958984 L 5.8828125 14.958984 L 5.8828125 13.84375 L 4.4550781 13.84375 z M 7.3125 13.84375 L 7.3125 14.958984 L 8.7402344 14.958984 L 8.7402344 13.84375 L 7.3125 13.84375 z M 10.169922 13.84375 L 10.169922 14.958984 L 11.599609 14.958984 L 11.599609 13.84375 L 10.169922 13.84375 z"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       d="M 1.0390625,1.078125 V 1.6367188 3.0546875 H 2.1542969 V 2.1933594 H 3.0253906 V 1.078125 Z m 3.4160156,0 V 2.1933594 H 5.8828125 V 1.078125 Z m 2.8574219,0 V 2.1933594 H 8.7402344 V 1.078125 Z m 2.857422,0 v 1.1152344 h 1.429687 V 1.078125 Z m 2.857422,0 v 1.1152344 h 0.871094 v 0.8613281 h 1.115234 V 1.078125 Z M 1.0390625,4.4726562 V 5.890625 H 2.1542969 V 4.4726562 Z m 12.8593755,0 V 5.890625 h 1.115234 V 4.4726562 Z M 1.0390625,7.3105469 V 8.7285156 H 2.1542969 V 7.3105469 Z m 12.8593755,0 v 1.4179687 h 1.115234 V 7.3105469 Z M 1.0390625,10.146484 v 1.417969 h 1.1152344 v -1.417969 z m 12.8593755,0 v 1.417969 h 1.115234 V 10.146484 Z M 1.0390625,12.982422 v 1.976562 H 3.0253906 V 13.84375 H 2.1542969 v -0.861328 z m 12.8593755,0 v 0.861328 h -0.871094 v 1.115234 h 1.986328 V 12.982422 Z M 4.4550781,13.84375 v 1.115234 H 5.8828125 V 13.84375 Z m 2.8574219,0 v 1.115234 H 8.7402344 V 13.84375 Z m 2.857422,0 v 1.115234 h 1.429687 V 13.84375 Z"
+       style="opacity:1;fill-opacity:1"
+       id="path6" />
     <path
-       style="opacity:0;fill:none;stroke-width:0.66666698"
-       d="M -15.767012,-0.42960155 H 0.232996 V 15.570406 H -15.767012 Z"
+       inkscape:connector-curvature="0"
        id="rect22036"
-       inkscape:connector-curvature="0" />
+       d="M -15.767012,-0.42960155 H 0.232996 V 15.570406 h -16.000008 z"
+       style="opacity:0;fill:none;"/>
     <path
-       style="opacity:1;stroke-width:0.66666698"
-       d="M 4.9999984,4.9999878 H 11.000001 V 10.999984 H 4.9999984 Z"
+       inkscape:connector-curvature="0"
        id="rect22038"
-       inkscape:connector-curvature="0" />
+       d="M 4.9999984,4.9999878 H 11.000001 V 10.999984 H 4.9999984 Z"
+       style="opacity:1;"/>
   </g>
 </svg>

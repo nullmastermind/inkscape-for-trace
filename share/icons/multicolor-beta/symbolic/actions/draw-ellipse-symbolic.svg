@@ -7,14 +7,24 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:version="1.0alpha2 (9f2c3edcd0, 2019-06-24, custom)"
+   inkscape:version="1.0alpha2 (1abfb7c, 2019-06-25)"
    sodipodi:docname="draw-ellipse-symbolic.svg"
    viewBox="0 0 16 16"
    height="16"
    width="16"
    id="svg1"
    version="1.1">
-  <metadata
+     <style id="s0">
+   .base    { fill: #000000; }
+   .success { fill: #009909; }
+   .warning { fill: #FF1990; }
+   .error   { fill: #00AAFF; }
+   .dark    {  }
+  </style>
+  <style id="s2"> 
+     @import '../../highlights.css'; 
+  </style>
+<metadata
      id="metadata1213">
     <rdf:RDF>
       <cc:Work
@@ -26,24 +36,23 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <style
-     id="s0">.base {  }
-.success {  }
-.warning {  }
-.error {  }
-.dark {  }
-</style>
-  <style
-     id="s2"> 
-     @import '../../highlights.css'; 
-  </style>
+
   <defs
      id="defs1211">
     <inkscape:path-effect
        attempt_force_join="true"
        miter_limit="100"
        linejoin_type="extrp_arc"
-       line_width="2"
+       line_width="1.75"
+       linecap_type="butt"
+       is_visible="true"
+       id="path-effect992"
+       effect="join_type" />
+    <inkscape:path-effect
+       attempt_force_join="true"
+       miter_limit="100"
+       linejoin_type="extrp_arc"
+       line_width="2.5"
        linecap_type="butt"
        is_visible="true"
        id="path-effect950"
@@ -63,13 +72,13 @@
      inkscape:document-rotation="0"
      inkscape:current-layer="g0"
      inkscape:window-maximized="1"
-     inkscape:window-y="27"
-     inkscape:window-x="0"
-     inkscape:window-height="704"
-     inkscape:window-width="1360"
-     inkscape:cy="18.106338"
-     inkscape:cx="28.18301"
-     inkscape:zoom="7.9195959"
+     inkscape:window-y="-8"
+     inkscape:window-x="54"
+     inkscape:window-height="1177"
+     inkscape:window-width="1858"
+     inkscape:cy="8.9101704"
+     inkscape:cx="10.185935"
+     inkscape:zoom="15.839192"
      showgrid="true"
      id="namedview"
      guidetolerance="10"
@@ -89,19 +98,19 @@
        d="M 0,0 H 16 V 16 H 0 Z"
        id="background" />
     <path
-       class="warning"
+              class="warning"
        id="path949"
-       d="m 7.9999957,13.598599 c -3.092032,0 -5.598617,-2.506578 -5.598617,-5.5986123 0,-3.0920333 2.506585,-5.5986179 5.598617,-5.5986179 3.0920313,0 5.5986113,2.5065846 5.5986113,5.5986179 0,3.0920283 -2.506585,5.5986123 -5.5986113,5.5986123 z"
+       d="m 7.9999953,14.058221 c -3.3458752,0 -6.0582406,-2.712357 -6.0582406,-6.0582348 0,-3.3458766 2.7123654,-6.0582415 6.0582406,-6.0582415 3.3458737,0 6.0582337,2.7123649 6.0582337,6.0582415 0,3.3458708 -2.712365,6.0582348 -6.0582337,6.0582348 z"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sssss" />
     <path
-       transform="matrix(0.82855242,0,0,0.82855242,1.3715807,1.3715807)"
-       inkscape:original-d="M 8.0000038,15 C 4.1340072,15 1.0000002,11.866 1.0000002,8.0000038 c 0,-3.8659966 3.134007,-7.0000036 7.0000036,-7.0000036 C 11.866,1.0000002 15,4.1340072 15,8.0000038 15,11.865993 11.865993,15 8.0000038,15 Z"
-       inkscape:path-effect="#path-effect950"
+              transform="matrix(1.082096,0,0,1.082096,-0.65676737,-0.65676663)"
+       inkscape:original-d="m 7.9999957,13.598599 c -3.092032,0 -5.598617,-2.506578 -5.598617,-5.5986123 0,-3.0920333 2.506585,-5.5986179 5.598617,-5.5986179 3.0920313,0 5.5986113,2.5065846 5.5986113,5.5986179 0,3.0920283 -2.506585,5.5986123 -5.5986113,5.5986123 z"
+       inkscape:path-effect="#path-effect992"
+       class="base"
        sodipodi:nodetypes="sssss"
        inkscape:connector-curvature="0"
-       d="m 2.0000002,8.0000038 c 0,-3.3086682 2.6913354,-6.0000036 6.0000036,-6.0000036 C 11.308672,2.0000002 14,4.6913344 14,8.0000038 14,11.308664 11.308664,14 8.0000038,14 4.6913344,14 2.0000002,11.308672 2.0000002,8.0000038 Z M 16,8.0000038 C 16,3.57668 12.423328,2e-7 8.0000038,2e-7 3.5766788,2e-7 2e-7,3.5766788 2e-7,8.0000038 2e-7,12.423328 3.57668,16 8.0000038,16 12.423322,16 16,12.423322 16,8.0000038 Z"
-       id="path1215"
-       class="base" />
+       d="m 3.2763787,7.9999867 c 0,-2.6043712 2.1192473,-4.7236179 4.723617,-4.7236179 2.6043693,0 4.7236113,2.1192458 4.7236113,4.7236179 0,2.6043653 -2.119248,4.7236123 -4.7236113,4.7236123 -2.604371,0 -4.723617,-2.11924 -4.723617,-4.7236123 z m 11.1972283,0 c 0,-3.5796945 -2.893918,-6.4736179 -6.4736113,-6.4736179 -3.5796943,0 -6.473617,2.8939225 -6.473617,6.4736179 0,3.5796963 2.893924,6.4736123 6.473617,6.4736123 3.5796893,0 6.4736113,-2.893921 6.4736113,-6.4736123 z"
+       id="path990" />
   </g>
 </svg>

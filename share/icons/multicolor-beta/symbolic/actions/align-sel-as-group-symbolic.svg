@@ -12,14 +12,17 @@
    height="16"
    version="1.1"
    sodipodi:docname="align-sel-as-group-symbolic.svg"
-   inkscape:version="1.0alpha2 (e9298ea62f, 2019-07-05, custom)">
-<style id="style0001">
-.success{fill:#33d17a}
-.warning{fill:#f57900}
-.danger{fill:#cc0000}
-</style>
-
-  
+   inkscape:version="1.0beta0 (1b5d333, 2019-09-08)">
+     <style id="s0">
+   .base    { fill: #000000; }
+   .success { fill: #009909; }
+   .warning { fill: #FF1990; }
+   .error   { fill: #00AAFF; }
+   .dark    {  }
+  </style>
+  <style id="s2"> 
+     @import '../../highlights.css'; 
+  </style>
 <metadata
      id="metadata41">
     <rdf:RDF>
@@ -33,18 +36,19 @@
     </rdf:RDF>
   </metadata>
   <sodipodi:namedview
-     inkscape:snap-global="false"
+     inkscape:showpageshadow="false"
+     inkscape:snap-global="true"
      id="base"
      showgrid="true"
-     inkscape:zoom="19.003262"
-     inkscape:cx="11.963599"
-     inkscape:cy="10.928958"
-     inkscape:current-layer="svg1"
+     inkscape:zoom="31.678384"
+     inkscape:cx="14.304564"
+     inkscape:cy="9.8483496"
+     inkscape:current-layer="align-horizontal-right-to-anchor"
      inkscape:document-rotation="0"
-     inkscape:window-width="1360"
-     inkscape:window-height="704"
-     inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:window-width="1858"
+     inkscape:window-height="1177"
+     inkscape:window-x="54"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1">
     <inkscape:grid
        id="GridFromPre046Settings"
@@ -95,38 +99,53 @@
          style="stop-color:#ffffff;stop-opacity:1" />
     </linearGradient>
   </defs>
-  <rect
-     style="opacity:0"
-     y="0"
-     x="0"
-     width="16"
-     id="rect5073"
-     height="16" />
-  <path
-     inkscape:connector-curvature="0"
-     id="rect22040"
-     d="m 14.2985,0.60807436 h 1 V 15.274447 h -1 z"
-     style="opacity:1;stroke-width:0.898975"
-     class="success" />
-  <path
-     inkscape:connector-curvature="0"
-     id="rect22042"
-     d="m 5.9142579,0.6812329 h 7.3331861 v 3.819367 H 5.9142579 Z"
-     style="opacity:1;stroke-width:0.785699" />
-  <path
-     inkscape:connector-curvature="0"
-     id="rect22044"
-     d="M 4.6770941,7.5966962 H 12.374849 V 9.8883261 H 4.6770941 Z"
-     style="opacity:1;stroke-width:0.842155" />
-  <path
-     inkscape:connector-curvature="0"
-     id="rect22046"
-     d="m 2.780854,11.559104 h 7.660579 v 3.670992 H 2.780854 Z"
-     style="opacity:1;stroke-width:0.861206" />
-  <path
-     style="opacity:1;stroke-width:0.898975"
-     d="M 0.68758012,0.61656136 H 1.6875801 V 15.282934 H 0.68758012 Z"
-     id="path64"
-     inkscape:connector-curvature="0"
-     class="success" />
+  <g
+     transform="matrix(0.666667,0,0,0.666667,-696.00036,-396.90832)"
+     inkscape:label="00267"
+     id="align-horizontal-right-to-anchor">
+    <path
+       inkscape:connector-curvature="0"
+       id="rect22036"
+       d="m 1044,595.36218 h 24 v 24 h -24 z"
+       style="opacity:0;fill:none" />
+    <path
+       class="success"
+       style="opacity:1;"
+       d="m 1064,595.36218 h 4 v 3.99999 h -4 z"
+       id="path983"
+       inkscape:connector-curvature="0" />
+    <path
+       class="success"
+       style="opacity:1;"
+       d="m 1044,595.36218 h 4 v 4 h -4 z"
+       id="path985"
+       inkscape:connector-curvature="0" />
+    <path
+       class="success"
+       style="opacity:1;"
+       d="m 1064,615.36218 h 4 v 3.99999 h -4 z"
+       id="path987"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:connector-curvature="0"
+       id="rect22038"
+       d="m 1044,615.36217 h 4 v 4 h -4 z"
+       style="opacity:1;"
+       class="success" />
+    <path
+       inkscape:connector-curvature="0"
+       id="rect22042"
+       d="m 1048,599.36218 h 12 v 4 h -12 z"
+       style="opacity:1;"/>
+    <path
+       inkscape:connector-curvature="0"
+       id="rect22044"
+       d="m 1056,605.36218 h 8 v 4 h -8 z"
+       style="opacity:1;"/>
+    <path
+       inkscape:connector-curvature="0"
+       id="rect22046"
+       d="m 1050,611.36217 h 12 v 4 h -12 z"
+       style="opacity:1;"/>
+  </g>
 </svg>

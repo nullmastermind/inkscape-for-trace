@@ -7,14 +7,24 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:version="1.0alpha2 (119fb3b5e8, 2019-06-21, custom)"
+   inkscape:version="1.0alpha2 (e79591e, 2019-06-22)"
    sodipodi:docname="draw-cuboid-symbolic.svg"
    viewBox="0 0 16 16"
    height="16"
    width="16"
    id="svg1"
    version="1.1">
-  <metadata
+     <style id="s0">
+   .base    { fill: #000000; }
+   .success { fill: #009909; }
+   .warning { fill: #FF1990; }
+   .error   { fill: #00AAFF; }
+   .dark    {  }
+  </style>
+  <style id="s2"> 
+     @import '../../highlights.css'; 
+  </style>
+<metadata
      id="metadata1282">
     <rdf:RDF>
       <cc:Work
@@ -25,17 +35,7 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <style
-     id="s0">.base {  }
-.success {  }
-.warning {  }
-.error {  }
-.dark {  }
-</style>
-  <style
-     id="s2"> 
-     @import '../../highlights.css'; 
-  </style>
+
   <defs
      id="defs1280">
     <inkscape:path-effect
@@ -49,16 +49,17 @@
        effect="join_type" />
   </defs>
   <sodipodi:namedview
+     showguides="false"
      inkscape:document-rotation="0"
      inkscape:current-layer="svg1"
      inkscape:window-maximized="1"
-     inkscape:window-y="27"
-     inkscape:window-x="0"
-     inkscape:window-height="1016"
-     inkscape:window-width="1920"
-     inkscape:cy="10.823388"
-     inkscape:cx="6.7490701"
-     inkscape:zoom="31.678384"
+     inkscape:window-y="-8"
+     inkscape:window-x="54"
+     inkscape:window-height="1177"
+     inkscape:window-width="1858"
+     inkscape:cy="18.886013"
+     inkscape:cx="5.0207625"
+     inkscape:zoom="15.839192"
      showgrid="true"
      id="namedview"
      guidetolerance="10"
@@ -78,13 +79,15 @@
        d="M 0,0 H 16 V 16 H 0 Z"
        id="background" />
     <path
+       inkscape:connector-curvature="0"
        id="polygon1116"
-       style="opacity:0.4"
+       style="opacity:0.5;"
        inkscape:label="right"
        transform="matrix(0.49102052,0,0,0.49102052,-473.83817,-187.11363)"
        d="m 993.53,404.59 -12.23,7.09 v -14.31 l 12.23,-7.1 z"
        class="warning" />
     <path
+       inkscape:connector-curvature="0"
        id="polygon1118"
        style="opacity:1"
        inkscape:label="left"
@@ -92,12 +95,13 @@
        d="m 969.08,390.27 v 14.32 l 12.22,7.09 v -14.31 z"
        class="warning" />
     <path
+       class="warning"
+       inkscape:connector-curvature="0"
        id="polygon1122"
-       style="opacity:0.2"
+       style="display:inline;opacity:0.15;"
        inkscape:label="top"
        transform="matrix(0.49102052,0,0,0.49102052,-473.83817,-187.11363)"
-       d="m 981.3,397.37 -12.22,-7.1 12.22,-7.09 12.23,7.09 z"
-       class="warning" />
+       d="m 981.3,397.37 -12.22,-7.1 12.22,-7.09 12.23,7.09 z" />
     <path
        class="base"
        inkscape:label="outline"

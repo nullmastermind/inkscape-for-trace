@@ -14,18 +14,18 @@
    width="16"
    id="svg1"
    version="1.1">
-  <style
-     id="s0">.base {  }
-.success {  }
-.warning {  }
-.error {  }
-.dark {  }
-</style>
-  <style
-     id="s2"> 
+
+     <style id="s0">
+   .base    { fill: #000000; }
+   .success { fill: #009909; }
+   .warning { fill: #FF1990; }
+   .error   { fill: #00AAFF; }
+   .dark    {  }
+  </style>
+  <style id="s2"> 
      @import '../../highlights.css'; 
   </style>
-  <metadata
+<metadata
      id="metadata1012">
     <rdf:RDF>
       <cc:Work

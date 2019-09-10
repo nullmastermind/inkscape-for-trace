@@ -13,14 +13,17 @@
    height="16"
    viewBox="0 0 16 16"
    sodipodi:docname="align-horizontal-left-to-anchor-symbolic.svg"
-   inkscape:version="1.0alpha2 (e9298ea62f, 2019-07-05, custom)">
-<style id="style0001">
-.success{fill:#33d17a}
-.warning{fill:#f57900}
-.danger{fill:#cc0000}
-</style>
-
-  
+   inkscape:version="1.0beta0 (1b5d333, 2019-09-08)">
+     <style id="s0">
+   .base    { fill: #000000; }
+   .success { fill: #009909; }
+   .warning { fill: #FF1990; }
+   .error   { fill: #00AAFF; }
+   .dark    {  }
+  </style>
+  <style id="s2"> 
+     @import '../../highlights.css'; 
+  </style>
 <metadata
      id="metadata374">
     <rdf:RDF>
@@ -41,14 +44,14 @@
      id="namedview"
      showgrid="true"
      inkscape:zoom="31.5625"
-     inkscape:cx="8"
+     inkscape:cx="5.180198"
      inkscape:cy="8"
-     inkscape:window-width="1360"
-     inkscape:window-height="704"
-     inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:window-width="1858"
+     inkscape:window-height="1177"
+     inkscape:window-x="54"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg1"
+     inkscape:current-layer="g22384"
      inkscape:document-rotation="0"
      inkscape:snap-global="false">
     <inkscape:grid
@@ -72,28 +75,29 @@
          inkscape:connector-curvature="0"
          id="rect22388"
          d="m 1064,595.36218 h 4 v 4 h -4 z"
-         style="opacity:1" />
+         style="opacity:0.5;fill-opacity:1"
+         class="success" />
       <path
          inkscape:connector-curvature="0"
          id="rect22390"
          d="m 1061.5,595.36218 h 1.5 v 24 h -1.5 z"
-         style="opacity:1;stroke-width:1.22474"
+         style="opacity:1;fill-opacity:1;"
          class="success" />
       <path
          inkscape:connector-curvature="0"
          id="rect22392"
          d="m 1045,599.36218 h 15.4151 v 5 H 1045 Z"
-         style="opacity:1;stroke-width:0.981552" />
+         style="opacity:1;"/>
       <path
          inkscape:connector-curvature="0"
          id="rect22394"
          d="m 1050.7807,606.36218 h 9.6344 v 3.00001 h -9.6344 z"
-         style="opacity:1;stroke-width:0.981552" />
+         style="opacity:1;"/>
       <path
          inkscape:connector-curvature="0"
          id="rect22396"
          d="m 1046.9269,611.36218 h 13.4882 v 4 h -13.4882 z"
-         style="opacity:1;stroke-width:0.981552" />
+         style="opacity:1;"/>
     </g>
   </g>
 </svg>

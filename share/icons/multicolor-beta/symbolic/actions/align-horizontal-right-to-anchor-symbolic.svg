@@ -7,20 +7,23 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   version="1.1"
-   id="svg1"
-   width="16"
-   height="16"
-   viewBox="0 0 16 16"
+   inkscape:version="1.0beta0 (1b5d333, 2019-09-08)"
    sodipodi:docname="align-horizontal-right-to-anchor-symbolic.svg"
-   inkscape:version="1.0alpha2 (e9298ea62f, 2019-07-05, custom)">
-<style id="style0001">
-.success{fill:#33d17a}
-.warning{fill:#f57900}
-.danger{fill:#cc0000}
-</style>
-
-  
+   viewBox="0 0 16 16"
+   height="16"
+   width="16"
+   id="svg1"
+   version="1.1">
+     <style id="s0">
+   .base    { fill: #000000; }
+   .success { fill: #009909; }
+   .warning { fill: #FF1990; }
+   .error   { fill: #00AAFF; }
+   .dark    {  }
+  </style>
+  <style id="s2"> 
+     @import '../../highlights.css'; 
+  </style>
 <metadata
      id="metadata592">
     <rdf:RDF>
@@ -35,60 +38,56 @@
   <defs
      id="defs590" />
   <sodipodi:namedview
-     inkscape:snap-global="false"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     id="namedview"
-     showgrid="true"
-     inkscape:zoom="31.5625"
-     inkscape:cx="8"
-     inkscape:cy="8"
-     inkscape:window-width="1360"
-     inkscape:window-height="704"
-     inkscape:window-x="0"
-     inkscape:window-y="27"
-     inkscape:window-maximized="1"
+     inkscape:document-rotation="0"
      inkscape:current-layer="svg1"
-     inkscape:document-rotation="0">
+     inkscape:window-maximized="1"
+     inkscape:window-y="-8"
+     inkscape:window-x="54"
+     inkscape:window-height="1177"
+     inkscape:window-width="1858"
+     inkscape:cy="18.9312"
+     inkscape:cx="7.576463"
+     inkscape:zoom="15.839192"
+     showgrid="true"
+     id="namedview"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     inkscape:snap-global="true">
     <inkscape:grid
-       type="xygrid"
-       id="grid" />
+       id="grid"
+       type="xygrid" />
   </sodipodi:namedview>
-  <g
-     transform="matrix(0.666667,0,0,0.666667,-696,-396.90812)"
-     inkscape:label="00267"
-     id="align-horizontal-right-to-anchor">
-    <path
-       inkscape:connector-curvature="0"
-       id="rect22036"
-       d="m 1044,595.36218 h 24 v 24 h -24 z"
-       style="opacity:0;fill:none" />
-    <path
-       inkscape:connector-curvature="0"
-       id="rect22038"
-       d="m 1064,595.36218 h 4 v 4 h -4 z"
-       style="opacity:1" />
-    <path
-       inkscape:connector-curvature="0"
-       id="rect22040"
-       d="m 1061.4019,595.36188 h 1.5 v 24 h -1.5 z"
-       style="opacity:1;stroke-width:1.22474"
-       class="success" />
-    <path
-       inkscape:connector-curvature="0"
-       id="rect22042"
-       d="m 1045,599.36218 h 15.0382 v 5 H 1045 Z"
-       style="opacity:1;stroke-width:0.969478" />
-    <path
-       inkscape:connector-curvature="0"
-       id="rect22044"
-       d="m 1050.6393,606.36218 h 9.3989 v 3.00001 h -9.3989 z"
-       style="opacity:1;stroke-width:0.969478" />
-    <path
-       inkscape:connector-curvature="0"
-       id="rect22046"
-       d="m 1046.8798,611.36218 h 13.1584 v 4 h -13.1584 z"
-       style="opacity:1;stroke-width:0.969478" />
-  </g>
+  <path
+     inkscape:connector-curvature="0"
+     id="rect22386"
+     d="M 0,0 H 16.000008 V 16.000008 H 0 Z"
+     style="opacity:0;fill:none;"/>
+  <path
+     inkscape:connector-curvature="0"
+     id="rect22388"
+     d="m 13.33334,0 h 2.666668 V 2.666668 H 13.33334 Z"
+     style="opacity:0.5;fill-opacity:1;"
+     class="success" />
+  <path
+     inkscape:connector-curvature="0"
+     id="rect22390"
+     d="m 11.666673,0 h 1 v 16.000008 h -1 z"
+     style="opacity:1;fill-opacity:1;"
+     class="success" />
+  <path
+     inkscape:connector-curvature="0"
+     id="rect22392"
+     d="M 0.666667,2.666668 H 10.943406 V 6.000003 H 0.666667 Z"
+     style="opacity:1;"/>
+  <path
+     inkscape:connector-curvature="0"
+     id="rect22394"
+     d="m 4.520469,7.333337 h 6.422937 V 9.333344 H 4.520469 Z"
+     style="opacity:1;"/>
+  <path
+     inkscape:connector-curvature="0"
+     id="rect22396"
+     d="m 1.951268,10.666672 h 8.992138 V 13.33334 H 1.951268 Z"
+     style="opacity:1;"/>
 </svg>

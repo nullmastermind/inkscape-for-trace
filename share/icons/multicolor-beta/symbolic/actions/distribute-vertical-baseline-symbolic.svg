@@ -13,13 +13,17 @@
    height="16"
    viewBox="0 0 16 16"
    sodipodi:docname="distribute-vertical-baseline-symbolic.svg"
-   inkscape:version="1.0alpha2 (e9bc48ab64, 2019-07-09)">
-<style id="style0001">
-.success{fill:#33d17a}
-.warning{fill:#f57900}
-.danger{fill:#cc0000}
-</style>
-  
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
+     <style id="s0">
+   .base    { fill: #000000; }
+   .success { fill: #009909; }
+   .warning { fill: #FF1990; }
+   .error   { fill: #00AAFF; }
+   .dark    {  }
+  </style>
+  <style id="s2"> 
+     @import '../../highlights.css'; 
+  </style>
 <metadata
      id="metadata3192">
     <rdf:RDF>
@@ -39,15 +43,15 @@
      guidetolerance="10"
      id="namedview"
      showgrid="true"
-     inkscape:zoom="31.5625"
-     inkscape:cx="8"
-     inkscape:cy="8"
-     inkscape:window-width="1360"
-     inkscape:window-height="704"
-     inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:zoom="21.668997"
+     inkscape:cx="22.698338"
+     inkscape:cy="7.8486008"
+     inkscape:window-width="1858"
+     inkscape:window-height="1177"
+     inkscape:window-x="54"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg1"
+     inkscape:current-layer="distribute-vertical-baseline"
      inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
@@ -57,18 +61,6 @@
      transform="matrix(0.666667,0,0,0.666667,-721.33333,-523.57479)"
      inkscape:label="00288"
      id="distribute-vertical-baseline">
-    <path
-       inkscape:connector-curvature="0"
-       id="rect19009"
-       d="m 1106,804.2552 v 1.5 h -24 v -1.5 z"
-       style="opacity:1;stroke-width:1.22474"
-       class="success" />
-    <path
-       inkscape:connector-curvature="0"
-       id="rect19011"
-       d="m 1106,793.25764 v 1.5 h -24 v -1.5 z"
-       style="opacity:1;stroke-width:1.22474"
-       class="success" />
     <path
        inkscape:connector-curvature="0"
        id="rect19003"
@@ -86,10 +78,22 @@
        id="path19007"
        inkscape:connector-curvature="0" />
     <path
-       style="opacity:1;stroke-width:0.833151"
-       d="m 1084.5006,797.36179 2.4995,-2.49946 2.4994,2.49946 h -1.6663 v 4.16575 h 1.6663 l -2.4994,2.49945 -2.4995,-2.49945 h 1.6663 v -4.16575 z"
-       id="path19013"
        inkscape:connector-curvature="0"
-       class="warning" />
+       id="rect19009"
+       d="m 1106,804.2552 v 1.5 h -24 v -1.5 z"
+       style="opacity:1;fill-opacity:1;"
+       class="success" />
+    <path
+       inkscape:connector-curvature="0"
+       id="rect19011"
+       d="m 1106,793.25764 v 1.5 h -24 v -1.5 z"
+       style="opacity:1;fill-opacity:1;"
+       class="success" />
+    <path
+       style="opacity:0.5;"
+       d="m 1089.5866,798.15147 -3.0001,-2.9795 -2.9999,2.9795 h 2.25 v 0.7617 1.1836 0.7617 h -2.25 l 2.9999,2.9824 3.0001,-2.9824 h -2.25 v -0.7617 -1.1836 -0.7617 z"
+       id="path826"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccccccccccc" />
   </g>
 </svg>

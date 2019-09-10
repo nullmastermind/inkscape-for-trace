@@ -5,22 +5,25 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:version="1.0alpha2 (e9bc48ab64, 2019-07-09)"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
    sodipodi:docname="distribute-horizontal-gaps-symbolic.svg"
    viewBox="0 0 16 16"
    height="16"
    width="16"
    id="svg1"
    version="1.1">
-<style id="style0001">
-.success{fill:#33d17a}
-.warning{fill:#f57900}
-.danger{fill:#cc0000}
-</style>
-  
+     <style id="s0">
+   .base    { fill: #000000; }
+   .success { fill: #009909; }
+   .warning { fill: #FF1990; }
+   .error   { fill: #00AAFF; }
+   .dark    {  }
+  </style>
+  <style id="s2"> 
+     @import '../../highlights.css'; 
+  </style>
 <metadata
      id="metadata2602">
     <rdf:RDF>
@@ -29,7 +32,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -38,15 +41,15 @@
   <sodipodi:namedview
      inkscape:snap-global="false"
      inkscape:document-rotation="0"
-     inkscape:current-layer="svg1"
+     inkscape:current-layer="distribute-horizontal-gaps"
      inkscape:window-maximized="1"
-     inkscape:window-y="27"
-     inkscape:window-x="0"
-     inkscape:window-height="704"
-     inkscape:window-width="1360"
-     inkscape:cy="8.5001935"
-     inkscape:cx="8.4592215"
-     inkscape:zoom="44.636116"
+     inkscape:window-y="-8"
+     inkscape:window-x="54"
+     inkscape:window-height="1177"
+     inkscape:window-width="1858"
+     inkscape:cy="10.312132"
+     inkscape:cx="4.0075318"
+     inkscape:zoom="43.982267"
      showgrid="true"
      id="namedview"
      guidetolerance="10"
@@ -60,17 +63,9 @@
      id="distribute-horizontal-gaps"
      inkscape:label="00282"
      transform="matrix(0.666667,0,0,0.666655,-772.66667,-472.23283)">
-    <use
-       height="1250"
-       width="1250"
-       transform="matrix(1,0,0,0.7500174,124,177.0778)"
-       id="use18776"
-       y="0"
-       x="0"
-       xlink:href="#path5265" />
     <path
-       style="opacity:1;stroke-width:0.971171"
-       d="m 1159,732.36206 v -14.90647 h 2.8364 v 14.90647 z"
+       style="opacity:1;"
+       d="m 1159,732.36206 v -14.90647 h 3.0069 v 14.90647 z"
        id="rect18780"
        inkscape:connector-curvature="0" />
     <path
@@ -79,62 +74,58 @@
        id="rect18784"
        inkscape:connector-curvature="0" />
     <path
-       inkscape:connector-curvature="0"
-       id="path307"
-       d="m 1165.1374,712.32408 -1.8564,-1.85647 1.8564,-1.85648 v 1.23766 l 1.2971,9.6e-4 v -1.23766 l 1.8565,1.85649 -1.8565,1.85647 v -1.23766 l -1.2971,-9.7e-4 z"
-       style="opacity:1;stroke-width:0.618827"
-       class="warning"
-       sodipodi:nodetypes="ccccccccccc" />
-    <path
-       sodipodi:nodetypes="ccccccccccc"
-       class="warning"
-       style="opacity:1;stroke-width:0.618827"
-       d="m 1175.9346,712.30858 -1.8564,-1.85647 1.8564,-1.85648 v 1.23766 l 1.2971,9.6e-4 v -1.23766 l 1.8565,1.85649 -1.8565,1.85647 v -1.23766 l -1.2971,-9.7e-4 z"
-       id="path964"
-       inkscape:connector-curvature="0" />
-    <use
-       xlink:href="#path5265"
-       x="0"
-       y="0"
-       id="use18794"
-       transform="matrix(1,0,0,0.7500174,127,177.0778)"
-       width="1250"
-       height="1250" />
-    <path
-       class="success"
-       id="path18778"
-       d="m 1161.7704,708.36399 v 0.9231 22.1538 0.9231 h 1.5 v -0.9231 -22.1538 -0.9231 z"
-       style="opacity:1;stroke-width:1.22474"
-       inkscape:connector-curvature="0" />
-    <path
-       inkscape:connector-curvature="0"
-       style="opacity:1;stroke-width:1.22474"
-       d="m 1168.1958,708.3622 v 0.9231 22.1538 0.9231 h 1.5 v -0.9231 -22.1538 -0.9231 z"
-       id="path817"
-       class="success" />
-    <path
-       class="success"
-       id="path962"
-       d="m 1172.5674,708.3622 v 0.9231 22.1538 0.9231 h 1.5 v -0.9231 -22.1538 -0.9231 z"
-       style="opacity:1;stroke-width:1.22474"
-       inkscape:connector-curvature="0" />
-    <path
-       inkscape:connector-curvature="0"
-       style="opacity:1;stroke-width:1.22474"
-       d="m 1179.0353,708.3622 v 0.9231 22.1538 0.9231 h 1.5 v -0.9231 -22.1538 -0.9231 z"
-       id="path966"
-       class="success" />
-    <path
-       style="opacity:1;stroke-width:1.29082"
-       d="m 1169.4095,715.60142 h 3.5857 v 16.76257 h -3.5857 z"
+       style="opacity:1;"
+       d="m 1169.441,718.32984 h 3.7562 v 10.00973 h -3.7562 z"
        id="rect18782"
        inkscape:connector-curvature="0" />
+    <path
+       inkscape:connector-curvature="0"
+       style="opacity:1;fill-opacity:1;"
+       d="m 1168.7153,708.3622 v 0.9231 22.1538 0.9231 h 0.75 v -0.9231 -22.1538 -0.9231 z"
+       id="path904"
+       class="success
+" />
+    <path
+       class="success
+"
+       id="path892"
+       d="m 1179.8289,708.3622 v 0.9231 22.1538 0.9231 h 0.75 v -0.9231 -22.1538 -0.9231 z"
+       style="opacity:1;fill-opacity:1;"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:connector-curvature="0"
+       style="opacity:1;fill-opacity:1;"
+       d="m 1161.9994,708.3622 v 0.9231 22.1538 0.9231 h 0.75 v -0.9231 -22.1538 -0.9231 z"
+       id="path906"
+       class="success
+" />
+    <path
+       class="success
+"
+       id="path894"
+       d="m 1173.113,708.3622 v 0.9231 22.1538 0.9231 h 0.75 v -0.9231 -22.1538 -0.9231 z"
+       style="opacity:1;fill-opacity:1;"
+       inkscape:connector-curvature="0" />
+    <rect
+       style="opacity:0.5;fill:#000000;fill-opacity:1;"
+       id="rect912"
+       width="3.8606291"
+       height="2.4136133"
+       x="1163.802"
+       y="709.57239" />
+    <rect
+       y="709.57239"
+       x="1174.9156"
+       height="2.4136133"
+       width="3.8606291"
+       id="rect910"
+       style="opacity:0.5;fill:#000000;fill-opacity:1;" />
   </g>
   <rect
      id="rect968"
-     width="1.9018716"
-     height="6.3902216"
-     x="14.137016"
+     width="1.6858754"
+     height="9.9876719"
+     x="14.353012"
      y="6.0123286"
-     style="opacity:1;stroke-width:1.06089" />
+     style="opacity:1;"/>
 </svg>
