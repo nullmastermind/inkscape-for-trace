@@ -494,13 +494,6 @@ bool TextTool::root_handler(GdkEvent* event) {
             }
             break;
         case GDK_MOTION_NOTIFY: {
-            if (this->over_text) {
-                this->over_text = false;
-                // update cursor and statusbar: we are not over a text object now
-                this->cursor_shape = cursor_text_xpm;
-                this->sp_event_context_update_cursor();
-                desktop->event_context->defaultMessageContext()->clear();
-            }
             if (this->creating && (event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
                 if ( this->within_tolerance
                      && ( abs( (gint) event->motion.x - this->xp ) < this->tolerance )
@@ -599,6 +592,12 @@ bool TextTool::root_handler(GdkEvent* event) {
                         _("<b>Click</b> to edit the flowed text, <b>drag</b> to select part of the text."));
                 }
                 this->over_text = true;
+            } else {
+                this->over_text = false;
+                // update cursor and statusbar: we are not over a text object now
+                this->cursor_shape = cursor_text_xpm;
+                this->sp_event_context_update_cursor();
+                desktop->event_context->defaultMessageContext()->clear();
             }
             return TRUE;
         } break;

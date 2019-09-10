@@ -123,13 +123,14 @@ unsigned DrawingGlyphs::_updateItem(Geom::IntRect const &/*area*/, UpdateContext
 
     Geom::OptRect pb;
     if(_drawable){
-        pb  = bounds_exact_transformed(*_font->PathVector(_glyph), ctx.ctm);
+        pb  = bounds_exact_transformed(*_font->PathVector(42), ctx.ctm); //we fix to "X" char to allow always a reasonable bbox
+        pb->expandBy(pb->height()/20.0);  //we scale a bit the area to in between char gaps mainly
     }
-    if(!pb){ // Fallback, spaces mostly
+    if(!pb){ // Fallback, spaces mostly, this never happendd with fixed gliph
         Geom::Rect pbigbox(Geom::Point(0.0, _asc*scale_bigbox*0.66),Geom::Point(_width*scale_bigbox, 0.0));
         pb = pbigbox * ctx.ctm;
     }
-
+ 
 #if 0
     /* FIXME  if this is commented out then not even an approximation of pick on decorations */
     /* adjust the pick box up or down to include the decorations.
