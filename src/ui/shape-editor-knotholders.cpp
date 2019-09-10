@@ -1814,16 +1814,17 @@ TextKnotHolderEntityShapeInside::knot_get() const
     // SVG 2 'shape-inside'. We only get here if there is a rectangle shape.
     SPText *text = dynamic_cast<SPText *>(item);
     g_assert(text != nullptr);
-    g_assert(text->style->shape_inside.set);
-
+    // we have a crash on undo cration so remove assert
+    // g_assert(text->style->shape_inside.set);
     Geom::Point p;
-    Geom::OptRect frame = text->get_frame();
-    if (frame) {
-        p = (*frame).corner(2);
-    } else {
-        std::cerr << "TextKnotHolderEntityShapeInside::knot_get(): no frame!" << std::endl;
+    if (text->style->shape_inside.set) {
+        Geom::OptRect frame = text->get_frame();
+        if (frame) {
+            p = (*frame).corner(2);
+        } else {
+            std::cerr << "TextKnotHolderEntityShapeInside::knot_get(): no frame!" << std::endl;
+        }
     }
-
     return p;
 }
 
