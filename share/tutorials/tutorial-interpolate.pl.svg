@@ -37,7 +37,7 @@
    <path id="path831" d="m359.24 21.363c-11.313 0-22.606 4.3206-31.275 12.99l-154.09 154.06c-8.4969 8.4967-12.762 19.543-12.931 30.631h-0.0585c0 0.0395 0.0566 0.0774 0.0585 0.11702-0.002 0.18609-0.0585 0.36977-0.0585 0.55586h0.2633c2.9491 11.221 79.15 25.523 87.651 34.025 12.839 12.839-49.233 22.268-36.395 35.107 12.839 12.839 77.59 24.843 90.43 37.682 12.839 12.839-26.238 26.51-13.399 39.349s55.967-3.2094 48.155 30.28c17.338 17.338 53.512 9.0588 77.733-8.2795 12.839-12.839-24.629-11.707-11.79-24.546s45.247-12.908 72.555-43.621c-10.992-17.095-46.981-24.375-34.142-37.214s37.8-6.3179 91.659-30.777c26.292-11.941 24.12-21.01 24.019-32.006-0.002-0.23138 0-0.43973 0-0.67288h-0.0585c-0.16-11.07-4.46-22.12-12.95-30.62l-154.07-154.06c-8.66-8.667-19.99-12.987-31.3-12.987zm-1.3165 20.04c5.0295 0.13102 9.0916 3.9651 17.056 9.1279l72.789 53.977c0.79681 0.51671 1.5557 1.0557 2.2527 1.6091 0.69703 0.55327 1.3337 1.1401 1.9309 1.7261 0.5972 0.58495 1.14 1.1721 1.6383 1.7846 0.49726 0.61244 0.94845 1.2385 1.3458 1.8724 0.39844 0.6349 0.75476 1.2798 1.0532 1.9309 0.29867 0.65226 0.53281 1.325 0.7314 1.9894 0.19976 0.66341 0.36832 1.319 0.46811 1.9894 0.0999 0.67165 0.14627 1.3452 0.14627 2.0187l-43.123-20.83-4.3006 32.562-23.727-11.117-36.629 24.458-14.014-48.331-18.051 42.275-50.408 5.032 0.55587-22.439c0-5.3897 29.057-43.122 46.751-52.105l32.386-23.259c4.7787-3.0977 8.1289-4.35 11.147-4.2714zm-66.996 220.21c22.944 5.9503 48.476 13.757 68.957 13.897l0.87768 9.2157c-17.538-1.8078-54.648-10.276-63.398-14.745l-6.4363-8.3672z" stroke-width="1pt"/>
   </g>
   <use id="use2086" style="color:#000000" xlink:href="#path1124" transform="matrix(3.7991 0 0 3.7991 -428.74 -36.475)" height="1052.3622" fill-opacity=".11077" width="320.00000" y="0.0000000" x="0.0000000" font-family="sans-serif" fill="#ffffff"/>
-  <text id="text7519" opacity=".5" line-height="125%" xml:space="preserve" transform="rotate(90)" font-size="6.9693px" y="-326.81229" x="3.6203015" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan2869" sodipodi:role="line" x="3.6203015" y="-326.81229">Użyj <tspan id="tspan2871" font-weight="bold">Ctrl+strzałka w dół</tspan> aby przewinąć</tspan></text>
+  <text id="text7519" opacity=".5" line-height="125%"  transform="rotate(90)" font-size="6.9693px" y="-326.81229" x="3.6203015" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan2869" sodipodi:role="line" x="3.6203015" y="-326.81229">Użyj <tspan id="tspan2871" font-weight="bold">Ctrl+strzałka w dół</tspan> aby przewinąć</tspan></text>
   <path id="path7527" opacity=".5" style="color:#000000" d="m338.53 197.82-13.108-1.2709 7.6547-10.717z" fill-rule="evenodd" transform="matrix(.61496 .045496 .061919 -.45186 112.46 227.47)"/>
  </g>
  <text id="text1920" font-family="sans-serif" font-size="7" transform="scale(1.1307)" y="30" x="35" fill="#ffffff">
@@ -45,63 +45,63 @@
  </text>
 <!--Author: Ryan Lerch, ryanlerch at gmail dot com-->
  <rect id="d0e15" display="none" height="1e3px" width="264" y="46" x="35"/>
- <flowRoot font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
+ <flowRoot xml:space="preserve" font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e15"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ten poradnik wyjaśnia, jak używać rozszerzenia „Interpolacja”</flowDiv>
+  <flowPara >Ten poradnik wyjaśnia, jak używać rozszerzenia „Interpolacja”</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="78.0808592" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="78.0808592" x="10">Wstęp</tspan>
  </text>
  <rect id="d0e24" display="none" height="1e3px" width="288" y="83.281" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e24"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Interpolacja jest <flowSpan font-style="italic">liniowym wypełnieniem</flowSpan> pomiędzy dwoma lub więcej zaznaczonymi ścieżkami. Oznacza to wypełnienie odstępu pomiędzy ścieżkami i przekształcanie go według liczby zadanych kroków.</flowDiv>
+  <flowPara >Interpolacja jest <flowSpan font-style="italic">liniowym wypełnieniem</flowSpan> pomiędzy dwoma lub więcej zaznaczonymi ścieżkami. Oznacza to wypełnienie odstępu pomiędzy ścieżkami i przekształcanie go według liczby zadanych kroków.</flowPara>
  </flowRoot>
  <rect id="d0e30" display="none" height="1e3px" width="288" y="122.42" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e30"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">To use the Interpolate extension, select the paths that you wish to transform, and choose <flowSpan font-family="sans-serif">Extensions &gt; Generate From Path &gt; Interpolate</flowSpan> from the menu.</flowDiv>
+  <flowPara >To use the Interpolate extension, select the paths that you wish to transform, and choose <flowSpan font-family="sans-serif">Extensions &gt; Generate From Path &gt; Interpolate</flowSpan> from the menu.</flowPara>
  </flowRoot>
  <rect id="d0e36" display="none" height="1e3px" width="288" y="159.89" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e36"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Before invoking the extension, the objects that you are going to transform need to be <flowSpan font-style="italic">paths</flowSpan>. This is done by selecting the object and using <flowSpan font-family="sans-serif">Path &gt; Object to Path</flowSpan> or <flowSpan font-weight="bold">Shift+Ctrl+C</flowSpan>. If your objects are not paths, the extension will do nothing.</flowDiv>
+  <flowPara >Before invoking the extension, the objects that you are going to transform need to be <flowSpan font-style="italic">paths</flowSpan>. This is done by selecting the object and using <flowSpan font-family="sans-serif">Path &gt; Object to Path</flowSpan> or <flowSpan font-weight="bold">Shift+Ctrl+C</flowSpan>. If your objects are not paths, the extension will do nothing.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="222.46320620000003" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="222.46320620000003" x="10">Interpolation between two identical paths</tspan>
  </text>
  <rect id="d0e54" display="none" height="1e3px" width="288" y="227.66" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e54"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">The simplest use of the Interpolate extension is to interpolate between two paths that are identical. When the extension is called, the result is that the space between the two paths is filled with duplicates of the original paths. The number of steps defines how many of these duplicates are placed.</flowDiv>
+  <flowPara >The simplest use of the Interpolate extension is to interpolate between two paths that are identical. When the extension is called, the result is that the space between the two paths is filled with duplicates of the original paths. The number of steps defines how many of these duplicates are placed.</flowPara>
  </flowRoot>
  <rect id="d0e57" display="none" height="1e3px" width="288" y="287.97" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e57"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Dla przykładu weźmy następujące dwie ścieżki:</flowDiv>
+  <flowPara >Dla przykładu weźmy następujące dwie ścieżki:</flowPara>
  </flowRoot>
  <g id="interpolate-f01-pl.svgg2896" stroke-linejoin="round" transform="translate(10 313.96)" stroke="#2e75ac" stroke-width="4.0482" fill="#0cf">
   <path id="interpolate-f01-pl.svgrect4368" d="m20.29 2.0163c10.119 0 18.265 8.1467 18.265 18.266s-8.146 18.265-18.265 18.265c-10.12 0-18.266-8.146-18.266-18.265 0.0001-10.119 8.146-18.266 18.266-18.266z" inkscape:export-ydpi="88.379997" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate1.png" inkscape:export-xdpi="88.379997"/>
   <path id="interpolate-f01-pl.svgrect4370" d="m245.44 2.0163c10.12 0 18.27 8.1467 18.27 18.266s-8.15 18.265-18.27 18.265-18.27-8.146-18.27-18.265 8.15-18.266 18.27-18.266z" inkscape:export-ydpi="88.379997" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate1.png" inkscape:export-xdpi="88.379997"/>
  </g>
  <rect id="d0e70" display="none" height="1e3px" width="288" y="366.53" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e70"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Now, select the two paths, and run the Interpolate extension with the settings shown in the following image.</flowDiv>
+  <flowPara >Now, select the two paths, and run the Interpolate extension with the settings shown in the following image.</flowPara>
  </flowRoot>
  <g id="interpolate-f02-pl.svgg3003" transform="translate(10 403.05)">
   <path id="interpolate-f02-pl.svgpath4419" stroke-linejoin="round" d="m20.29 2.0037c10.119 0 18.265 8.1463 18.265 18.265s-8.146 18.266-18.265 18.266c-10.12 0-18.266-8.147-18.266-18.266 0.0001-10.119 8.146-18.265 18.266-18.265z" inkscape:export-ydpi="88.379997" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate2.png" stroke="#2e75ac" inkscape:export-xdpi="88.379997" stroke-width="4.0482" fill="#0cf"/>
@@ -114,42 +114,42 @@
    <path id="interpolate-f02-pl.svgpath4433" d="m370.31 53.791c19.39 0 35 15.61 35 35 0 19.389-15.61 34.999-35 34.999s-35-15.61-35-34.999c0-19.39 15.61-35 35-35"/>
    <path id="interpolate-f02-pl.svgpath4435" d="m431.94 53.791c19.39 0 35 15.61 35 35 0 19.389-15.61 34.999-35 34.999s-35-15.61-35-34.999c0-19.39 15.61-35 35-35"/>
   </g>
-  <flowRoot id="interpolate-f02-pl.svgflowRoot2609" xml:space="preserve" transform="translate(-291.31 26.336)" font-size="6px" font-family="sans-serif" fill="#000000"><flowRegion id="interpolate-f02-pl.svgflowRegion2611"><rect id="interpolate-f02-pl.svgrect2613" height="133.57" width="127.14" y="15.934" x="290.71"/></flowRegion><flowPara id="interpolate-f02-pl.svgflowPara2615">Wykładnik: 0.0</flowPara><flowPara id="interpolate-f02-pl.svgflowPara2617">Kroki interpolacji: 6</flowPara><flowPara id="interpolate-f02-pl.svgflowPara2619">Metoda interpolacji: 2</flowPara><flowPara id="interpolate-f02-pl.svgflowPara2621">Powiel ścieżki końcowe: niezaznaczone</flowPara><flowPara id="interpolate-f02-pl.svgflowPara2623">Modelowanie: niezaznaczone</flowPara></flowRoot>
+  <flowRoot xml:space="preserve" id="interpolate-f02-pl.svgflowRoot2609"  transform="translate(-291.31 26.336)" font-size="6px" font-family="sans-serif" fill="#000000"><flowRegion id="interpolate-f02-pl.svgflowRegion2611"><rect id="interpolate-f02-pl.svgrect2613" height="133.57" width="127.14" y="15.934" x="290.71"/></flowRegion><flowPara id="interpolate-f02-pl.svgflowPara2615">Wykładnik: 0.0</flowPara><flowPara id="interpolate-f02-pl.svgflowPara2617">Kroki interpolacji: 6</flowPara><flowPara id="interpolate-f02-pl.svgflowPara2619">Metoda interpolacji: 2</flowPara><flowPara id="interpolate-f02-pl.svgflowPara2621">Powiel ścieżki końcowe: niezaznaczone</flowPara><flowPara id="interpolate-f02-pl.svgflowPara2623">Modelowanie: niezaznaczone</flowPara></flowRoot>
  </g>
  <rect id="d0e83" display="none" height="1e3px" width="288" y="492.71" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e83"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">As can be seen from the above result, the space between the two circle-shaped paths has been filled with 6 (the number of interpolation steps) other circle-shaped paths. Also note that the extension groups these shapes together.</flowDiv>
+  <flowPara >As can be seen from the above result, the space between the two circle-shaped paths has been filled with 6 (the number of interpolation steps) other circle-shaped paths. Also note that the extension groups these shapes together.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="555.2869224" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="555.2869224" x="10">Interpolacja pomiędzy dwoma różnymi ścieżkami</tspan>
  </text>
  <rect id="d0e92" display="none" height="1e3px" width="288" y="560.49" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e92"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Gdy interpolacja jest wykonywana pomiędzy dwoma różnymi ścieżkami, program interpoluje kształt jednej ścieżki do drugiej. W wyniku tego otrzymuje się płynne przejście z jednej ścieżki do drugiej z regularnością określoną przez liczbę kroków interpolacji.</flowDiv>
+  <flowPara >Gdy interpolacja jest wykonywana pomiędzy dwoma różnymi ścieżkami, program interpoluje kształt jednej ścieżki do drugiej. W wyniku tego otrzymuje się płynne przejście z jednej ścieżki do drugiej z regularnością określoną przez liczbę kroków interpolacji.</flowPara>
  </flowRoot>
  <rect id="d0e95" display="none" height="1e3px" width="288" y="610.58" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e95"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Dla przykładu weźmy następujące dwie ścieżki:</flowDiv>
+  <flowPara >Dla przykładu weźmy następujące dwie ścieżki:</flowPara>
  </flowRoot>
  <g id="interpolate-f03-pl.svgg15756" stroke-linejoin="round" transform="translate(-7.883 569.45)" stroke="#2e75ac" stroke-width="4.0482" fill="#0cf">
   <path id="interpolate-f03-pl.svgpath4455" d="m38.172 69.145c10.119 0 18.266 8.147 18.266 18.266s-8.147 18.269-18.266 18.269-18.265-8.15-18.265-18.269 8.146-18.266 18.265-18.266z" inkscape:export-ydpi="88.379997" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate1.png" inkscape:export-xdpi="88.379997"/>
   <path id="interpolate-f03-pl.svgpath4457" d="m281.59 76.452l-18.27 29.228-18.26-29.228h36.53z" inkscape:export-ydpi="88.379997" sodipodi:nodetypes="cccc" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate1.png" inkscape:export-xdpi="88.379997"/>
  </g>
  <rect id="d0e108" display="none" height="1e3px" width="288" y="689.15" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e108"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Now, select the two paths, and run the Interpolate extension. The result should be like this:</flowDiv>
+  <flowPara >Now, select the two paths, and run the Interpolate extension. The result should be like this:</flowPara>
  </flowRoot>
  <g id="interpolate-f04-pl.svgg2967" transform="translate(10 723.56)">
   <path id="interpolate-f04-pl.svgpath2532" stroke-linejoin="round" d="m263.71 9.755s-8.58 13.718-13.98 22.357c-2.48 3.97-4.29 6.868-4.29 6.868s-4.94-7.903-9.68-15.49c-4.38-7.002-8.59-13.735-8.59-13.735h10.17 26.37" stroke="#2e75ac" stroke-width="4.0482" fill="#0cf"/>
@@ -162,28 +162,28 @@
    <path id="interpolate-f04-pl.svgpath2544" d="m120.62 399.84c16.62 0 27.66 17.13 26.18 36.11-0.68 6.13-2.41 11.66-4.58 15.82-5 9.57-16.37 13.9-29.25 11.82-11.45-1.91-21.626-8.85-27.032-16.66-3.354-4.84-4.108-10.73-2.532-17.09 2.959-16.62 20.594-30 37.214-30"/>
   </g>
   <path id="interpolate-f04-pl.svgpath2546" stroke-linejoin="round" d="m20.29 2.4488c10.119 0 18.265 8.1462 18.265 18.265 0 3.067-0.748 5.952-2.072 8.485-3.046 5.824-9.141 9.781-16.193 9.781-6.245 0-11.738-3.102-15.029-7.856-2.0425-2.95-3.2369-6.535-3.2369-10.41 0-10.119 8.1459-18.265 18.266-18.265v-0.0002" stroke="#2e75ac" stroke-width="4.0482" fill="#0cf"/>
-  <flowRoot id="interpolate-f04-pl.svgflowRoot2609" xml:space="preserve" transform="translate(-291.31 26.535)" font-size="6px" font-family="sans-serif" fill="#000000"><flowRegion id="interpolate-f04-pl.svgflowRegion2611"><rect id="interpolate-f04-pl.svgrect2613" height="133.57" width="127.14" y="15.934" x="290.71"/></flowRegion><flowPara id="interpolate-f04-pl.svgflowPara2615">Wykładnik: 0.0</flowPara><flowPara id="interpolate-f04-pl.svgflowPara2617">Kroki interpolacji: 6</flowPara><flowPara id="interpolate-f04-pl.svgflowPara2619">Metoda interpolacji: 2</flowPara><flowPara id="interpolate-f04-pl.svgflowPara2621">Powiel ścieżki końcowe: niezaznaczone</flowPara><flowPara id="interpolate-f04-pl.svgflowPara2623">Modelowanie: niezaznaczone</flowPara></flowRoot>
+  <flowRoot xml:space="preserve" id="interpolate-f04-pl.svgflowRoot2609"  transform="translate(-291.31 26.535)" font-size="6px" font-family="sans-serif" fill="#000000"><flowRegion id="interpolate-f04-pl.svgflowRegion2611"><rect id="interpolate-f04-pl.svgrect2613" height="133.57" width="127.14" y="15.934" x="290.71"/></flowRegion><flowPara id="interpolate-f04-pl.svgflowPara2615">Wykładnik: 0.0</flowPara><flowPara id="interpolate-f04-pl.svgflowPara2617">Kroki interpolacji: 6</flowPara><flowPara id="interpolate-f04-pl.svgflowPara2619">Metoda interpolacji: 2</flowPara><flowPara id="interpolate-f04-pl.svgflowPara2621">Powiel ścieżki końcowe: niezaznaczone</flowPara><flowPara id="interpolate-f04-pl.svgflowPara2623">Modelowanie: niezaznaczone</flowPara></flowRoot>
  </g>
  <rect id="d0e121" display="none" height="1e3px" width="288" y="813.42" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e121"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Jak można zauważyć powyżej, przestrzeń pomiędzy okrągłym kształtem a trójkątnym, została wypełniona sześcioma ścieżkami z przejściem kształtu od jednej do drugiej ścieżki.</flowDiv>
+  <flowPara >Jak można zauważyć powyżej, przestrzeń pomiędzy okrągłym kształtem a trójkątnym, została wypełniona sześcioma ścieżkami z przejściem kształtu od jednej do drugiej ścieżki.</flowPara>
  </flowRoot>
  <rect id="d0e124" display="none" height="1e3px" width="288" y="852.87" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e124"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">When using the Interpolate extension on two different paths, the <flowSpan font-style="italic">position</flowSpan> of the starting node of each path is important. To find the starting node of a path, select the path, then choose the Node Tool so that the nodes appear and press <flowSpan font-weight="bold">TAB</flowSpan>. The first node that is selected is the starting node of that path.</flowDiv>
+  <flowPara >When using the Interpolate extension on two different paths, the <flowSpan font-style="italic">position</flowSpan> of the starting node of each path is important. To find the starting node of a path, select the path, then choose the Node Tool so that the nodes appear and press <flowSpan font-weight="bold">TAB</flowSpan>. The first node that is selected is the starting node of that path.</flowPara>
  </flowRoot>
  <rect id="d0e133" display="none" height="1e3px" width="288" y="913.29" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e133"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Popatrz na obrazek znajdujący się poniżej. Jest on identyczny, jak w poprzednim przykładzie, ale są wyświetlone węzły. Węzły wyświetlone na zielono są węzłami początkowymi.</flowDiv>
+  <flowPara >Popatrz na obrazek znajdujący się poniżej. Jest on identyczny, jak w poprzednim przykładzie, ale są wyświetlone węzły. Węzły wyświetlone na zielono są węzłami początkowymi.</flowPara>
  </flowRoot>
  <g id="interpolate-f05-pl.svgg2898" transform="translate(10.094 960.43)">
   <path id="interpolate-f05-pl.svgpath4455" stroke-linejoin="round" d="m20.262 2.0739c10.119 0 18.265 8.1461 18.265 18.265 0 10.12-8.146 18.266-18.265 18.266s-18.266-8.146-18.266-18.266c0.0001-10.119 8.147-18.265 18.266-18.265z" inkscape:export-ydpi="88.379997" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate1.png" stroke="#2e75ac" inkscape:export-xdpi="88.379997" stroke-width="4.0482" fill="#0cf"/>
@@ -197,11 +197,11 @@
   <rect id="interpolate-f05-pl.svgrect2485" transform="rotate(135.48)" height="2.9821" width="2.9821" y="-200.55" x="-150.15" fill="#ccc"/>
  </g>
  <rect id="d0e146" display="none" height="1e3px" width="288" y="1013.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e146"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Poprzedni przykład (teraz wyświetlany poniżej) został wykonany przy użyciu tych węzłów początkowych.</flowDiv>
+  <flowPara >Poprzedni przykład (teraz wyświetlany poniżej) został wykonany przy użyciu tych węzłów początkowych.</flowPara>
  </flowRoot>
  <g id="interpolate-f04-pl.svgg2967" transform="translate(10 1049.8)">
   <path id="interpolate-f04-pl.svgpath2532" stroke-linejoin="round" d="m263.71 9.755s-8.58 13.718-13.98 22.357c-2.48 3.97-4.29 6.868-4.29 6.868s-4.94-7.903-9.68-15.49c-4.38-7.002-8.59-13.735-8.59-13.735h10.17 26.37" stroke="#2e75ac" stroke-width="4.0482" fill="#0cf"/>
@@ -214,14 +214,14 @@
    <path id="interpolate-f04-pl.svgpath2544" d="m120.62 399.84c16.62 0 27.66 17.13 26.18 36.11-0.68 6.13-2.41 11.66-4.58 15.82-5 9.57-16.37 13.9-29.25 11.82-11.45-1.91-21.626-8.85-27.032-16.66-3.354-4.84-4.108-10.73-2.532-17.09 2.959-16.62 20.594-30 37.214-30"/>
   </g>
   <path id="interpolate-f04-pl.svgpath2546" stroke-linejoin="round" d="m20.29 2.4488c10.119 0 18.265 8.1462 18.265 18.265 0 3.067-0.748 5.952-2.072 8.485-3.046 5.824-9.141 9.781-16.193 9.781-6.245 0-11.738-3.102-15.029-7.856-2.0425-2.95-3.2369-6.535-3.2369-10.41 0-10.119 8.1459-18.265 18.266-18.265v-0.0002" stroke="#2e75ac" stroke-width="4.0482" fill="#0cf"/>
-  <flowRoot id="interpolate-f04-pl.svgflowRoot2609" xml:space="preserve" transform="translate(-291.31 26.535)" font-size="6px" font-family="sans-serif" fill="#000000"><flowRegion id="interpolate-f04-pl.svgflowRegion2611"><rect id="interpolate-f04-pl.svgrect2613" height="133.57" width="127.14" y="15.934" x="290.71"/></flowRegion><flowPara id="interpolate-f04-pl.svgflowPara2615">Wykładnik: 0.0</flowPara><flowPara id="interpolate-f04-pl.svgflowPara2617">Kroki interpolacji: 6</flowPara><flowPara id="interpolate-f04-pl.svgflowPara2619">Metoda interpolacji: 2</flowPara><flowPara id="interpolate-f04-pl.svgflowPara2621">Powiel ścieżki końcowe: niezaznaczone</flowPara><flowPara id="interpolate-f04-pl.svgflowPara2623">Modelowanie: niezaznaczone</flowPara></flowRoot>
+  <flowRoot xml:space="preserve" id="interpolate-f04-pl.svgflowRoot2609"  transform="translate(-291.31 26.535)" font-size="6px" font-family="sans-serif" fill="#000000"><flowRegion id="interpolate-f04-pl.svgflowRegion2611"><rect id="interpolate-f04-pl.svgrect2613" height="133.57" width="127.14" y="15.934" x="290.71"/></flowRegion><flowPara id="interpolate-f04-pl.svgflowPara2615">Wykładnik: 0.0</flowPara><flowPara id="interpolate-f04-pl.svgflowPara2617">Kroki interpolacji: 6</flowPara><flowPara id="interpolate-f04-pl.svgflowPara2619">Metoda interpolacji: 2</flowPara><flowPara id="interpolate-f04-pl.svgflowPara2621">Powiel ścieżki końcowe: niezaznaczone</flowPara><flowPara id="interpolate-f04-pl.svgflowPara2623">Modelowanie: niezaznaczone</flowPara></flowRoot>
  </g>
  <rect id="d0e159" display="none" height="1e3px" width="288" y="1139.6" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e159"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Zaobserwuj zmiany podczas lustrzanego odbijania trójkątnego kształtu, gdy węzeł początkowy jest w innej pozycji: </flowDiv>
+  <flowPara >Zaobserwuj zmiany podczas lustrzanego odbijania trójkątnego kształtu, gdy węzeł początkowy jest w innej pozycji: </flowPara>
  </flowRoot>
  <g id="interpolate-f07-pl.svgg2958" transform="translate(10 1176.7)">
   <g id="interpolate-f07-pl.svgg2900">
@@ -252,18 +252,18 @@
   <tspan y="1302.9247735999998" x="10">Metoda interpolacji</tspan>
  </text>
  <rect id="d0e188" display="none" height="1e3px" width="288" y="1308.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e188"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">One of the parameters of the Interpolate extension is the Interpolation Method. There are 2 interpolation methods implemented, and they differ in the way that they calculate the curves of the new shapes. The choices are either Interpolation Method 1 or 2.</flowDiv>
+  <flowPara >One of the parameters of the Interpolate extension is the Interpolation Method. There are 2 interpolation methods implemented, and they differ in the way that they calculate the curves of the new shapes. The choices are either Interpolation Method 1 or 2.</flowPara>
  </flowRoot>
  <rect id="d0e191" display="none" height="1e3px" width="288" y="1357.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e191"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">W powyższym przykładzie została użyta metoda nr 2 i jej wynik jest następujący:</flowDiv>
+  <flowPara >W powyższym przykładzie została użyta metoda nr 2 i jej wynik jest następujący:</flowPara>
  </flowRoot>
  <g id="interpolate-f09-pl.svgg2939" stroke-linejoin="round" transform="translate(10 1394.3)" stroke="#2e75ac" fill="#0cf">
   <path id="interpolate-f09-pl.svgpath2532" d="m263.71 9.3346s-8.58 13.717-13.98 22.356c-2.48 3.971-4.29 6.868-4.29 6.868s-4.94-7.903-9.68-15.489c-4.38-7.003-8.59-13.735-8.59-13.735 0-0.0004 4.42-0.0004 10.17-0.0004h26.37" stroke-width="4.0482"/>
@@ -278,11 +278,11 @@
   <path id="interpolate-f09-pl.svgpath2546" d="m20.29 2.0284c10.119 0 18.265 8.1466 18.265 18.266 0 3.066-0.748 5.952-2.072 8.484-3.046 5.824-9.141 9.781-16.193 9.781-6.245 0-11.738-3.102-15.029-7.855-2.0425-2.95-3.2369-6.535-3.2369-10.41 0-10.119 8.1459-18.266 18.266-18.266v0.0004" stroke-width="4.0482"/>
  </g>
  <rect id="d0e204" display="none" height="1e3px" width="288" y="1446.9" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e204"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Teraz porównamy to z metodą nr 1:</flowDiv>
+  <flowPara >Teraz porównamy to z metodą nr 1:</flowPara>
  </flowRoot>
  <g id="interpolate-f10-pl.svgg2607" stroke-linejoin="round" transform="translate(-9.278 1456.6)" stroke="#2e75ac" fill="#0cf">
   <path id="interpolate-f10-pl.svgpath4460" d="m39.568 18.382c10.119 0 18.265 8.147 18.265 18.266s-8.146 18.265-18.265 18.265-18.266-8.146-18.266-18.265 8.147-18.266 18.266-18.266z" inkscape:export-ydpi="88.379997" inkscape:export-filename="C:\Documents and Settings\ryan\Desktop\interpolate1.png" inkscape:export-xdpi="88.379997" stroke-width="4.0482"/>
@@ -297,28 +297,28 @@
   </g>
  </g>
  <rect id="d0e217" display="none" height="1e3px" width="288" y="1525.6" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e217"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ten poradnik nie obejmuje swoim zakresem opisu różnic w sposobie przeliczania liczb przez te metody, tak więc wypróbuj te metody i zastosuj tę, która Ci najbardziej odpowiada.</flowDiv>
+  <flowPara >Ten poradnik nie obejmuje swoim zakresem opisu różnic w sposobie przeliczania liczb przez te metody, tak więc wypróbuj te metody i zastosuj tę, która Ci najbardziej odpowiada.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="1577.8723107999997" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="1577.8723107999997" x="10">Wykładnik</tspan>
  </text>
  <rect id="d0e226" display="none" height="1e3px" width="288" y="1583.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e226"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Parametr <flowSpan font-style="italic">wykładnik</flowSpan> odpowiada za odstępy pomiędzy krokami interpolacji. Wartość 0 daje w rezultacie równy odstęp pomiędzy kopiami.</flowDiv>
+  <flowPara >Parametr <flowSpan font-style="italic">wykładnik</flowSpan> odpowiada za odstępy pomiędzy krokami interpolacji. Wartość 0 daje w rezultacie równy odstęp pomiędzy kopiami.</flowPara>
  </flowRoot>
  <rect id="d0e232" display="none" height="1e3px" width="288" y="1622.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e232"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Tutaj znajduje się wynik innego podstawowego przykładu z wykładnikiem 0.</flowDiv>
+  <flowPara >Tutaj znajduje się wynik innego podstawowego przykładu z wykładnikiem 0.</flowPara>
  </flowRoot>
  <g id="interpolate-f11-pl.svgg2920" transform="translate(10 1658.6)">
   <path id="interpolate-f11-pl.svgpath5198" stroke-linejoin="round" d="m247.6 27.441h-10.65l-5.33-9.226 5.33-9.226h10.65l5.33 9.226-5.33 9.226z" stroke="#17a500" stroke-width=".86884" fill="#0f0"/>
@@ -331,14 +331,14 @@
    <path id="interpolate-f11-pl.svgpath6555" d="m184.7 1153.1s-5.13-4.5-5.83-4.5c-0.35 0-1.64 6.6-2.08 6.6-0.38 0-3.84-5.7-4.26-5.7s-3.72 6-4.13 6-1.94-6.4-2.29-6.4c-0.53 0-5.56 4.9-5.8 4.9-0.35 0-0.27-2.4-0.05-4.3 0.15-1.3 0.2-2.4 0.07-2.7-0.15-0.2-6.23 2.6-6.46 2.2-0.19-0.3 2.42-6.5 2.21-6.9-0.21-0.3-6.98 0.5-7.18 0.1-0.2-0.3 4.08-5.3 3.9-5.6-0.25-0.5-7.07-1.7-7.21-2-0.19-0.3 5.42-3.7 5.41-4-0.06-0.2-0.86-0.7-1.83-1.2-1.74-0.9-4.07-2.3-3.85-2.7 0.15-0.3 6.69-1.7 6.88-2.1 0.17-0.2-4.48-5.2-4.3-5.5 0.17-0.3 6.75 0.3 6.92 0 0.18-0.3-2.81-6.5-2.64-6.8 0.21-0.3 6.23 2.2 6.4 1.9 0.35-0.6-0.47-6.8-0.6-7.5 0-0.1-0.01-0.1 0-0.1 0.06 0 5.17 4.5 5.83 4.5 0.35 0 1.64-6.7 2.07-6.7 0.39 0 3.85 5.7 4.27 5.7 0.41 0 3.72-6 4.13-6s1.93 6.4 2.29 6.4c0.53 0 5.56-4.8 5.8-4.8 0.34 0 0.26 2.3 0.04 4.2-0.15 1.3-0.2 2.5-0.06 2.7 0.15 0.3 6.22-2.5 6.46-2.1 0.19 0.3-2.43 6.5-2.22 6.8 0.18 0.3 6.92-0.6 7.09-0.2 0.18 0.3-4.13 5.2-3.97 5.5 0.22 0.4 7.04 1.6 7.22 1.9 0.26 0.5-5.23 3.9-5.13 4.1 0.09 0.1 1.03 0.7 2.12 1.2 1.73 0.9 3.83 2.3 3.6 2.7-0.17 0.2-6.73 1.7-6.96 2.1-0.16 0.3 4.49 5.2 4.3 5.5-0.17 0.3-6.74-0.3-6.91 0-0.22 0.4 2.74 6.6 2.54 7-0.21 0.3-6.22-2.1-6.39-1.8-0.36 0.6 0.6 7.6 0.6 7.6"/>
    <path id="interpolate-f11-pl.svgpath6557" d="m123.21 1153.4s-5.9-5.4-6.38-5.4c-0.24 0-1.58 7.9-1.87 7.9-0.27 0-4.22-6.8-4.51-6.8s-4.05 7.2-4.33 7.2-1.91-7.6-2.15-7.6c-0.39 0-6.214 5.8-6.336 5.8-0.175 0 0.081-2.9 0.345-5.2 0.172-1.5 0.273-2.8 0.181-3-0.106-0.1-7.288 3.4-7.445 3.1-0.133-0.2 3.109-7.4 2.96-7.7-0.144-0.2-8.163 1-8.306 0.7-0.139-0.2 5.104-6.1 4.981-6.3-0.188-0.3-8.268-1.6-8.336-1.7-0.092-0.2 6.744-4.1 6.802-4.4-0.022-0.1-0.946-0.6-2.109-1.2-2.092-1.1-4.97-2.7-4.832-2.9 0.093-0.2 7.838-1.7 7.954-1.9 0.104-0.2-5.577-5.9-5.465-6.1 0.106-0.2 7.897 0.7 8.003 0.5 0.111-0.2-3.58-7.4-3.477-7.6 0.145-0.3 7.258 2.9 7.374 2.7 0.234-0.4-0.866-7.6-1.021-8.5-0.01-0.1-0.014-0.1-0.011-0.1 0.031 0 5.928 5.4 6.388 5.4 0.23 0 1.57-7.9 1.87-7.9 0.27 0 4.21 6.8 4.51 6.8 0.29 0 4.05-7.2 4.33-7.2s1.91 7.6 2.15 7.6c0.39 0 6.21-5.8 6.33-5.8 0.17 0-0.07 2.8-0.34 5.1-0.17 1.5-0.28 2.9-0.19 3.1 0.11 0.1 7.29-3.4 7.45-3.1 0.13 0.2-3.11 7.4-2.96 7.7 0.11 0.2 8.09-1.1 8.2-0.9s-5.17 6-5.06 6.1c0.14 0.3 8.22 1.6 8.34 1.8 0.19 0.3-6.51 4.2-6.45 4.3 0.04 0.1 1.14 0.7 2.45 1.4 2.06 1 4.66 2.5 4.51 2.8-0.11 0.2-7.89 1.8-8.04 2-0.1 0.2 5.58 5.9 5.47 6.1s-7.9-0.7-8-0.5c-0.15 0.3 3.5 7.6 3.36 7.8-0.14 0.3-7.25-2.9-7.37-2.7-0.24 0.4 1.03 8.6 1.03 8.6"/>
   </g>
-  <flowRoot id="interpolate-f11-pl.svgflowRoot2609" xml:space="preserve" transform="translate(-291.31 14.935)" font-size="6px" font-family="sans-serif" fill="#000000"><flowRegion id="interpolate-f11-pl.svgflowRegion2611"><rect id="interpolate-f11-pl.svgrect2613" height="133.57" width="127.14" y="15.934" x="290.71"/></flowRegion><flowPara id="interpolate-f11-pl.svgflowPara2615">Wykładnik: 0.0</flowPara><flowPara id="interpolate-f11-pl.svgflowPara2617">Kroki interpolacji: 6</flowPara><flowPara id="interpolate-f11-pl.svgflowPara2619">Metoda interpolacji: 2</flowPara><flowPara id="interpolate-f11-pl.svgflowPara2621">Powiel ścieżki końcowe: niezaznaczone</flowPara><flowPara id="interpolate-f11-pl.svgflowPara2623">Modelowanie: niezaznaczone</flowPara></flowRoot>
+  <flowRoot xml:space="preserve" id="interpolate-f11-pl.svgflowRoot2609"  transform="translate(-291.31 14.935)" font-size="6px" font-family="sans-serif" fill="#000000"><flowRegion id="interpolate-f11-pl.svgflowRegion2611"><rect id="interpolate-f11-pl.svgrect2613" height="133.57" width="127.14" y="15.934" x="290.71"/></flowRegion><flowPara id="interpolate-f11-pl.svgflowPara2615">Wykładnik: 0.0</flowPara><flowPara id="interpolate-f11-pl.svgflowPara2617">Kroki interpolacji: 6</flowPara><flowPara id="interpolate-f11-pl.svgflowPara2619">Metoda interpolacji: 2</flowPara><flowPara id="interpolate-f11-pl.svgflowPara2621">Powiel ścieżki końcowe: niezaznaczone</flowPara><flowPara id="interpolate-f11-pl.svgflowPara2623">Modelowanie: niezaznaczone</flowPara></flowRoot>
  </g>
  <rect id="d0e245" display="none" height="1e3px" width="288" y="1736.9" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e245"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ten sam przykład z wykładnikiem 1:</flowDiv>
+  <flowPara >Ten sam przykład z wykładnikiem 1:</flowPara>
  </flowRoot>
  <g id="interpolate-f12-pl.svgg2771" stroke-linejoin="round" transform="translate(-14.034 1744.3)" stroke="#17a500" fill="#0f0">
   <path id="interpolate-f12-pl.svgpath6640" d="m271.63 45.832h-10.65l-5.33-9.226 5.33-9.226h10.65l5.33 9.226-5.33 9.226z" stroke-width=".86884"/>
@@ -353,11 +353,11 @@
   </g>
  </g>
  <rect id="d0e258" display="none" height="1e3px" width="288" y="1805.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e258"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">z wykładnikiem 2:</flowDiv>
+  <flowPara >z wykładnikiem 2:</flowPara>
  </flowRoot>
  <g id="interpolate-f13-pl.svgg2760" stroke-linejoin="round" transform="translate(-14.034 1813)" stroke="#17a500" fill="#0f0">
   <path id="interpolate-f13-pl.svgpath6644" d="m271.63 45.832h-10.65l-5.33-9.226 5.33-9.226h10.65l5.33 9.226-5.33 9.226z" stroke-width=".86884"/>
@@ -372,11 +372,11 @@
   </g>
  </g>
  <rect id="d0e271" display="none" height="1e3px" width="288" y="1874.2" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e271"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">i z wykładnikiem -1:</flowDiv>
+  <flowPara >i z wykładnikiem -1:</flowPara>
  </flowRoot>
  <g id="interpolate-f14-pl.svgg2749" stroke-linejoin="round" transform="translate(-14.748 1881.6)" stroke="#17a500" fill="#0f0">
   <path id="interpolate-f14-pl.svgpath6648" d="m272.35 45.832h-10.66l-5.32-9.226 5.32-9.226h10.66l5.32 9.226-5.32 9.226z" stroke-width=".86884"/>
@@ -391,18 +391,18 @@
   </g>
  </g>
  <rect id="d0e284" display="none" height="1e3px" width="288" y="1942.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e284"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">When dealing with exponents in the Interpolate extension, the <flowSpan font-style="italic">order</flowSpan> that you select the objects is important. In the examples above, the star-shaped path on the left was selected first, and the hexagon-shaped path on the right was selected second.</flowDiv>
+  <flowPara >When dealing with exponents in the Interpolate extension, the <flowSpan font-style="italic">order</flowSpan> that you select the objects is important. In the examples above, the star-shaped path on the left was selected first, and the hexagon-shaped path on the right was selected second.</flowPara>
  </flowRoot>
  <rect id="d0e290" display="none" height="1e3px" width="288" y="1992.6" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e290"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Zobacz wynik, gdy kształt po prawej został zaznaczony jako pierwszy. Wykładnik w tym przykładzie był ustawiony na 1:</flowDiv>
+  <flowPara >Zobacz wynik, gdy kształt po prawej został zaznaczony jako pierwszy. Wykładnik w tym przykładzie był ustawiony na 1:</flowPara>
  </flowRoot>
  <g id="interpolate-f15-pl.svgg2738" stroke-linejoin="round" transform="translate(-14.748 2010)" stroke="#17a500" fill="#0f0">
   <path id="interpolate-f15-pl.svgpath6652" d="m272.35 46.546h-10.66l-5.32-9.226 5.32-9.226h10.66l5.32 9.226-5.32 9.226z" stroke-width=".86884"/>
@@ -420,28 +420,28 @@
   <tspan y="2084.6879301999993" x="10">Powiel ścieżki końcowe</tspan>
  </text>
  <rect id="d0e309" display="none" height="1e3px" width="288" y="2089.9" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e309"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">This parameter defines whether the group of paths that is generated by the extension <flowSpan font-style="italic">includes a copy</flowSpan> of the original paths that interpolate was applied on.</flowDiv>
+  <flowPara >This parameter defines whether the group of paths that is generated by the extension <flowSpan font-style="italic">includes a copy</flowSpan> of the original paths that interpolate was applied on.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="2141.710118199999" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="2141.710118199999" x="10">Modelowanie</tspan>
  </text>
  <rect id="d0e321" display="none" height="1e3px" width="288" y="2146.9" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e321"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">This parameter is one of the neat functions of the interpolate extension. It tells the extension to attempt to change the style of the paths at each step. So if the start and end paths are different colors, the paths that are generated will incrementally change as well.</flowDiv>
+  <flowPara >This parameter is one of the neat functions of the interpolate extension. It tells the extension to attempt to change the style of the paths at each step. So if the start and end paths are different colors, the paths that are generated will incrementally change as well.</flowPara>
  </flowRoot>
  <rect id="d0e324" display="none" height="1e3px" width="288" y="2196.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e324"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">To jest przykład użycia funkcji „Modelowanie” na wypełnieniu ścieżki:</flowDiv>
+  <flowPara >To jest przykład użycia funkcji „Modelowanie” na wypełnieniu ścieżki:</flowPara>
  </flowRoot>
  <g id="interpolate-f16-pl.svgg2861" transform="translate(-11.812 2205.7)">
   <path id="interpolate-f16-pl.svgpath13980" fill="#fc0" d="m52.663 48.163c-2.997 2.904-3.507-5.427-7.12-3.193-3.685 2.279 1.132 7.941-3.228 8.47-4.276 0.518 1.544-6.96-2.678-7.53-4.305-0.581-3.831 7.272-7.908 5.69-3.998-1.551 4.538-5.716 1.63-8.871-2.966-3.217-6.213 5.723-8.463 1.962-2.206-3.688 5.568-2.554 4.959-6.686-0.622-4.213-8.403-0.204-8.03-4.444 0.365-4.158 8.015 2.747 9.9-1.062 1.923-3.885-6.953-4.673-4.277-7.898 2.625-3.162 4.671 4.579 8.371 2.365 3.773-2.258-2.707-7.438 1.458-8.427 4.085-0.969 0.184 7.803 4.35 8.286 4.249 0.493 2.825-8.477 6.66-6.673 3.761 1.769-3.613 6.481-0.834 9.63 2.834 3.212 5.587-5.828 7.763-2.1 2.132 3.655-5.516 3.234-4.864 7.501 0.665 4.351 8.878 0.224 8.029 4.487-0.834 4.18-8.373-3.756-9.995 0.204-1.653 4.037 7.334 5.326 4.277 8.289z"/>
@@ -456,11 +456,11 @@
   </g>
  </g>
  <rect id="d0e337" display="none" height="1e3px" width="288" y="2271.2" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e337"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Modelowanie oddziałuje także na kontur ścieżki:</flowDiv>
+  <flowPara >Modelowanie oddziałuje także na kontur ścieżki:</flowPara>
  </flowRoot>
  <g id="interpolate-f17-pl.svgg2850" stroke-linejoin="round" transform="translate(-10.689 2282.8)">
   <path id="interpolate-f17-pl.svgpath14293" d="m52.29 44.87c-2.997 2.905-3.507-5.427-7.12-3.192-3.685 2.278 1.132 7.941-3.228 8.469-4.276 0.518 1.544-6.96-2.678-7.53-4.305-0.58-3.831 7.273-7.907 5.691-3.998-1.552 4.538-5.716 1.629-8.871-2.966-3.218-6.213 5.722-8.463 1.961-2.206-3.687 5.568-2.554 4.959-6.685-0.621-4.213-8.403-0.204-8.03-4.444 0.365-4.158 8.015 2.747 9.9-1.063 1.923-3.885-6.953-4.672-4.276-7.897 2.624-3.163 4.67 4.578 8.37 2.364 3.773-2.258-2.706-7.438 1.459-8.426 4.084-0.97 0.183 7.802 4.35 8.285 4.248 0.493 2.824-8.476 6.659-6.672 3.761 1.769-3.613 6.48-0.834 9.63 2.834 3.211 5.588-5.829 7.763-2.101 2.133 3.656-5.515 3.235-4.864 7.502 0.665 4.351 8.879 0.224 8.029 4.487-0.834 4.18-8.372-3.756-9.994 0.203-1.654 4.038 7.333 5.327 4.276 8.289z" stroke="#000" stroke-width="1.5004" fill="#fc0"/>
@@ -475,11 +475,11 @@
   </g>
  </g>
  <rect id="d0e350" display="none" height="1e3px" width="288" y="2347.9" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e350"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ścieżka w punkcie początkowym i końcowym nie musi być taka sama, ale:</flowDiv>
+  <flowPara >Ścieżka w punkcie początkowym i końcowym nie musi być taka sama, ale:</flowPara>
  </flowRoot>
  <g id="interpolate-f18-pl.svgg2826" transform="translate(-10.839 2369.4)">
   <path id="interpolate-f18-pl.svgpath7836" fill="#fc0" d="m52.441 44.409c-2.997 2.905-3.507-5.427-7.12-3.192-3.685 2.278 1.132 7.941-3.228 8.469-4.276 0.518 1.544-6.96-2.678-7.53-4.305-0.581-3.831 7.273-7.908 5.691-3.998-1.552 4.538-5.716 1.63-8.871-2.966-3.218-6.213 5.722-8.463 1.961-2.206-3.687 5.568-2.554 4.959-6.685-0.622-4.213-8.403-0.204-8.031-4.444 0.366-4.158 8.016 2.747 9.901-1.063 1.923-3.885-6.953-4.672-4.277-7.897 2.625-3.163 4.671 4.578 8.371 2.364 3.773-2.258-2.707-7.438 1.458-8.426 4.085-0.97 0.184 7.802 4.35 8.285 4.249 0.493 2.825-8.476 6.66-6.672 3.761 1.769-3.613 6.48-0.834 9.63 2.834 3.211 5.587-5.829 7.762-2.101 2.133 3.656-5.515 3.235-4.863 7.502 0.665 4.351 8.878 0.224 8.029 4.487-0.834 4.18-8.373-3.756-9.995 0.203-1.654 4.038 7.334 5.327 4.277 8.289z"/>
@@ -507,22 +507,22 @@
   <tspan y="2488.4556455999996" x="10">Stosowanie interpolacji do imitowania nieregularnych gradientów</tspan>
  </text>
  <rect id="d0e369" display="none" height="1e3px" width="288" y="2493.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e369"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">It is not possible in Inkscape (yet) to create a gradient other than linear (straight line) or radial (round). However, it can be faked using the Interpolate extension and Interpolate Style. A simple example follows — draw two lines of different strokes:</flowDiv>
+  <flowPara >It is not possible in Inkscape (yet) to create a gradient other than linear (straight line) or radial (round). However, it can be faked using the Interpolate extension and Interpolate Style. A simple example follows — draw two lines of different strokes:</flowPara>
  </flowRoot>
  <g id="interpolate-f19-pl.svgg2846" transform="translate(-7.25 2530.2)" stroke-width="5.5" fill="none">
   <path id="interpolate-f19-pl.svgpath2180" d="m20 132.36l75-32.855 85.71 33.575 77.15-32.86" stroke="#35b8ff"/>
   <path id="interpolate-f19-pl.svgpath3007" d="m20 55.219l75-32.857 85.71 33.572 77.15-32.858" stroke="#ffed35"/>
  </g>
  <rect id="d0e382" display="none" height="1e3px" width="288" y="2678.4" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e382"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Użyj interpolacji pomiędzy tymi dwoma liniami, aby utworzyć gradient:</flowDiv>
+  <flowPara >Użyj interpolacji pomiędzy tymi dwoma liniami, aby utworzyć gradient:</flowPara>
  </flowRoot>
  <g id="interpolate-f20-pl.svgg2805" transform="translate(-7.25 2695.6)" stroke-width="5.5" fill="none">
   <path id="interpolate-f20-pl.svgpath2180" d="m20 132.36l75-32.855 85.71 33.575 77.15-32.86" stroke="#35b8ff"/>
@@ -550,11 +550,11 @@
   <tspan y="2856.7053756" x="10">Podsumowanie</tspan>
  </text>
  <rect id="d0e401" display="none" height="1e3px" width="288" y="2861.9" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e401"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">As demonstrated above, the Inkscape Interpolate extension is a powerful tool. This tutorial covers the basics of this extension, but experimentation is the key to exploring interpolation further.</flowDiv>
+  <flowPara >As demonstrated above, the Inkscape Interpolate extension is a powerful tool. This tutorial covers the basics of this extension, but experimentation is the key to exploring interpolation further.</flowPara>
  </flowRoot>
  <g transform="translate(0 2901)">
   <defs id="defs3" xmlns:cc="http://creativecommons.org/ns#">
@@ -587,7 +587,7 @@
     <path id="path1521" d="m359.24 21.363c-11.313 0-22.606 4.3206-31.275 12.99l-154.09 154.06c-8.4969 8.4967-12.762 19.543-12.931 30.631h-0.0585c0 0.0395 0.0566 0.0774 0.0585 0.11702-0.002 0.18609-0.0585 0.36977-0.0585 0.55586h0.2633c2.9491 11.221 79.15 25.523 87.651 34.025 12.839 12.839-49.233 22.268-36.395 35.107 12.839 12.839 77.59 24.843 90.43 37.682 12.839 12.839-26.238 26.51-13.399 39.349s55.967-3.2094 48.155 30.28c17.338 17.338 53.512 9.0588 77.733-8.2795 12.839-12.839-24.629-11.707-11.79-24.546s45.247-12.908 72.555-43.621c-10.992-17.095-46.981-24.375-34.142-37.214s37.8-6.3179 91.659-30.777c26.292-11.941 24.12-21.01 24.019-32.006-0.002-0.23138 0-0.43973 0-0.67288h-0.0585c-0.16-11.07-4.46-22.12-12.95-30.62l-154.07-154.06c-8.66-8.667-19.99-12.987-31.3-12.987zm-1.3165 20.04c5.0295 0.13102 9.0916 3.9651 17.056 9.1279l72.789 53.977c0.79681 0.51671 1.5557 1.0557 2.2527 1.6091 0.69703 0.55327 1.3337 1.1401 1.9309 1.7261 0.5972 0.58495 1.14 1.1721 1.6383 1.7846 0.49726 0.61244 0.94845 1.2385 1.3458 1.8724 0.39844 0.6349 0.75476 1.2798 1.0532 1.9309 0.29867 0.65226 0.53281 1.325 0.7314 1.9894 0.19976 0.66341 0.36832 1.319 0.46811 1.9894 0.0999 0.67165 0.14627 1.3452 0.14627 2.0187l-43.123-20.83-4.3006 32.562-23.727-11.117-36.629 24.458-14.014-48.331-18.051 42.275-50.408 5.032 0.55587-22.439c0-5.3897 29.057-43.122 46.751-52.105l32.386-23.259c4.7787-3.0977 8.1289-4.35 11.147-4.2714zm-66.996 220.21c22.944 5.9503 48.476 13.757 68.957 13.897l0.87768 9.2157c-17.538-1.8078-54.648-10.276-63.398-14.745l-6.4363-8.3672z" stroke-width="1pt"/>
    </g>
    <use id="use1328" style="color:#000000" xlink:href="#path1508" transform="matrix(5.1767 0 0 5.1767 -102.7 -256.62)" height="1052.3622" fill-opacity=".064615" width="744.09448" y="0" x="0" font-family="sans-serif" fill="#ffffff"/>
-   <text id="text7519" opacity=".5" line-height="125%" xml:space="preserve" transform="rotate(-90)" font-size="6.9693px" y="-6.5672836" x="-70.83046" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan2875" sodipodi:role="line" x="-70.83046" y="-6.5672836">Użyj <tspan id="tspan2877" font-weight="bold">Ctrl+strzałka do góry</tspan>, aby przewinąć</tspan></text>
+   <text id="text7519" opacity=".5" line-height="125%"  transform="rotate(-90)" font-size="6.9693px" y="-6.5672836" x="-70.83046" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan2875" sodipodi:role="line" x="-70.83046" y="-6.5672836">Użyj <tspan id="tspan2877" font-weight="bold">Ctrl+strzałka do góry</tspan>, aby przewinąć</tspan></text>
    <path id="path7527" opacity=".5" style="color:#000000" d="m338.53 197.82-13.108-1.2709 7.6547-10.717z" fill-rule="evenodd" transform="matrix(-.61496 -.045496 -.061919 .45186 207.79 -162.25)"/>
   </g>
  </g>

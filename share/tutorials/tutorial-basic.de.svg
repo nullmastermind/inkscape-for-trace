@@ -37,7 +37,7 @@
    <path id="path831" d="m359.24 21.363c-11.313 0-22.606 4.3206-31.275 12.99l-154.09 154.06c-8.4969 8.4967-12.762 19.543-12.931 30.631h-0.0585c0 0.0395 0.0566 0.0774 0.0585 0.11702-0.002 0.18609-0.0585 0.36977-0.0585 0.55586h0.2633c2.9491 11.221 79.15 25.523 87.651 34.025 12.839 12.839-49.233 22.268-36.395 35.107 12.839 12.839 77.59 24.843 90.43 37.682 12.839 12.839-26.238 26.51-13.399 39.349s55.967-3.2094 48.155 30.28c17.338 17.338 53.512 9.0588 77.733-8.2795 12.839-12.839-24.629-11.707-11.79-24.546s45.247-12.908 72.555-43.621c-10.992-17.095-46.981-24.375-34.142-37.214s37.8-6.3179 91.659-30.777c26.292-11.941 24.12-21.01 24.019-32.006-0.002-0.23138 0-0.43973 0-0.67288h-0.0585c-0.16-11.07-4.46-22.12-12.95-30.62l-154.07-154.06c-8.66-8.667-19.99-12.987-31.3-12.987zm-1.3165 20.04c5.0295 0.13102 9.0916 3.9651 17.056 9.1279l72.789 53.977c0.79681 0.51671 1.5557 1.0557 2.2527 1.6091 0.69703 0.55327 1.3337 1.1401 1.9309 1.7261 0.5972 0.58495 1.14 1.1721 1.6383 1.7846 0.49726 0.61244 0.94845 1.2385 1.3458 1.8724 0.39844 0.6349 0.75476 1.2798 1.0532 1.9309 0.29867 0.65226 0.53281 1.325 0.7314 1.9894 0.19976 0.66341 0.36832 1.319 0.46811 1.9894 0.0999 0.67165 0.14627 1.3452 0.14627 2.0187l-43.123-20.83-4.3006 32.562-23.727-11.117-36.629 24.458-14.014-48.331-18.051 42.275-50.408 5.032 0.55587-22.439c0-5.3897 29.057-43.122 46.751-52.105l32.386-23.259c4.7787-3.0977 8.1289-4.35 11.147-4.2714zm-66.996 220.21c22.944 5.9503 48.476 13.757 68.957 13.897l0.87768 9.2157c-17.538-1.8078-54.648-10.276-63.398-14.745l-6.4363-8.3672z" stroke-width="1pt"/>
   </g>
   <use id="use2086" style="color:#000000" xlink:href="#path1124" transform="matrix(3.7991 0 0 3.7991 -428.74 -36.475)" height="1052.3622" fill-opacity=".11077" width="320.00000" y="0.0000000" x="0.0000000" font-family="sans-serif" fill="#ffffff"/>
-  <text id="text7519" opacity=".5" line-height="125%" xml:space="preserve" transform="rotate(90)" font-size="6.9693px" y="-326.81229" x="3.6203015" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan7521" sodipodi:role="line" x="3.6203015" style="letter-spacing:.29056" y="-326.81229">Verwenden Sie <tspan id="tspan7523" font-weight="bold">Strg+Pfeiltaste nach unten</tspan> zum Verschieben </tspan></text>
+  <text id="text7519" opacity=".5" line-height="125%"  transform="rotate(90)" font-size="6.9693px" y="-326.81229" x="3.6203015" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan7521" sodipodi:role="line" x="3.6203015" style="letter-spacing:.29056" y="-326.81229">Verwenden Sie <tspan id="tspan7523" font-weight="bold">Strg+Pfeiltaste nach unten</tspan> zum Verschieben </tspan></text>
   <path id="path7527" opacity=".5" style="color:#000000" d="m338.53 197.82-13.108-1.2709 7.6547-10.717z" fill-rule="evenodd" transform="matrix(.61496 .045496 .061919 -.45186 112.46 321.6)"/>
  </g>
  <text id="text1920" font-family="sans-serif" font-size="7" transform="scale(1.1307)" y="30" x="35" fill="#ffffff">
@@ -45,103 +45,103 @@
  </text>
 <!--Author: Bulia Byak -->
  <rect id="d0e15" display="none" height="1e3px" width="264" y="46" x="35"/>
- <flowRoot font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
+ <flowRoot xml:space="preserve" font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e15"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Dieses Tutorial beschreibt die Grundlagen der Verwendung von Inkscape. Es ist ein normales Inkscape-Dokument, das man anschauen, verändern, aus dem man Teile herauskopieren, und das man speichern kann.</flowDiv>
+  <flowPara >Dieses Tutorial beschreibt die Grundlagen der Verwendung von Inkscape. Es ist ein normales Inkscape-Dokument, das man anschauen, verändern, aus dem man Teile herauskopieren, und das man speichern kann.</flowPara>
  </flowRoot>
  <rect id="d0e18" display="none" height="1e3px" width="264" y="89.972" x="35"/>
- <flowRoot font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
+ <flowRoot xml:space="preserve" font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e18"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Das Grundlagentutorial behandelt die Themen Seitennavigation, Dokumentenerstellung, Grundlagen der Formwerkzeuge, Techniken der Objektauswahl, Objektmanipulation mit dem Auswahlwerkzeug, Gruppierung, Ändern von Füllfarbe und Kontur, Ausrichten von Objekten und die Stapelordnung. Anleitungen zu anspruchsvolleren Themen finden Sie in den anderen Tutorien im Hilfe-Menü.</flowDiv>
+  <flowPara >Das Grundlagentutorial behandelt die Themen Seitennavigation, Dokumentenerstellung, Grundlagen der Formwerkzeuge, Techniken der Objektauswahl, Objektmanipulation mit dem Auswahlwerkzeug, Gruppierung, Ändern von Füllfarbe und Kontur, Ausrichten von Objekten und die Stapelordnung. Anleitungen zu anspruchsvolleren Themen finden Sie in den anderen Tutorien im Hilfe-Menü.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="174.344525" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="174.344525" x="10">Den Arbeitsbereich verschieben</tspan>
  </text>
  <rect id="d0e27" display="none" height="1e3px" width="288" y="179.54" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e27"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Es gibt viele Möglichkeiten, den Arbeitsbereich zu verschieben. Entweder benutzt man <flowSpan font-weight="bold">Strg+Pfeiltasten</flowSpan> zum Verschieben mit der Tastatur, oder man bewegt den Arbeitsbereich mit der mittleren Maustaste (probieren Sie das doch gleich mal aus). Natürlich können Sie auch die seitlichen Verschiebeleisten verwenden, die mit <flowSpan font-weight="bold">Strg+B</flowSpan> ein- und ausgeblendet werden können. Man kann auch das <flowSpan font-weight="bold">Mausrad</flowSpan> verwenden, um den Arbeitsbereich vertikal zu verschieben; durch gleichzeitiges Drücken der <flowSpan font-weight="bold">Umschalt</flowSpan>-Taste auch in horizontaler Richtung.</flowDiv>
+  <flowPara >Es gibt viele Möglichkeiten, den Arbeitsbereich zu verschieben. Entweder benutzt man <flowSpan font-weight="bold">Strg+Pfeiltasten</flowSpan> zum Verschieben mit der Tastatur, oder man bewegt den Arbeitsbereich mit der mittleren Maustaste (probieren Sie das doch gleich mal aus). Natürlich können Sie auch die seitlichen Verschiebeleisten verwenden, die mit <flowSpan font-weight="bold">Strg+B</flowSpan> ein- und ausgeblendet werden können. Man kann auch das <flowSpan font-weight="bold">Mausrad</flowSpan> verwenden, um den Arbeitsbereich vertikal zu verschieben; durch gleichzeitiges Drücken der <flowSpan font-weight="bold">Umschalt</flowSpan>-Taste auch in horizontaler Richtung.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="295.37077800000003" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="295.37077800000003" x="10">Herein- und Herauszoomen</tspan>
  </text>
  <rect id="d0e48" display="none" height="1e3px" width="288" y="300.57" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e48"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Die einfachste Möglichkeit zu zoomen bieten die Tasten <flowSpan font-weight="bold">-</flowSpan> und <flowSpan font-weight="bold">+</flowSpan> (oder <flowSpan font-weight="bold">=</flowSpan>). Alternativ kann man per <flowSpan font-weight="bold">Strg+Mittelklick</flowSpan> oder <flowSpan font-weight="bold">Strg+Rechtsklick</flowSpan> hereinzoomen bzw. mit <flowSpan font-weight="bold">Umschalt+Mittelklick</flowSpan> oder <flowSpan font-weight="bold">Umschalt+Rechtsklick</flowSpan> herauszoomen, oder aber man dreht das Mausrad bei gedrückter <flowSpan font-weight="bold">Strg</flowSpan>-Taste. Außerdem lässt sich der Zoomwert in Prozent direkt in das Zoomeingabefeld (in der rechten unteren Ecke des Dokumentenfensters) eingeben und mit der Eingabetaste bestätigen. Außerdem gibt es da noch das Zoom-Werkzeug (links in der Werkzeugleiste), mit dem Sie in ein Gebiet hereinzoomen können, indem Sie ein Rechteck darum ziehen.</flowDiv>
+  <flowPara >Die einfachste Möglichkeit zu zoomen bieten die Tasten <flowSpan font-weight="bold">-</flowSpan> und <flowSpan font-weight="bold">+</flowSpan> (oder <flowSpan font-weight="bold">=</flowSpan>). Alternativ kann man per <flowSpan font-weight="bold">Strg+Mittelklick</flowSpan> oder <flowSpan font-weight="bold">Strg+Rechtsklick</flowSpan> hereinzoomen bzw. mit <flowSpan font-weight="bold">Umschalt+Mittelklick</flowSpan> oder <flowSpan font-weight="bold">Umschalt+Rechtsklick</flowSpan> herauszoomen, oder aber man dreht das Mausrad bei gedrückter <flowSpan font-weight="bold">Strg</flowSpan>-Taste. Außerdem lässt sich der Zoomwert in Prozent direkt in das Zoomeingabefeld (in der rechten unteren Ecke des Dokumentenfensters) eingeben und mit der Eingabetaste bestätigen. Außerdem gibt es da noch das Zoom-Werkzeug (links in der Werkzeugleiste), mit dem Sie in ein Gebiet hereinzoomen können, indem Sie ein Rechteck darum ziehen.</flowPara>
  </flowRoot>
  <rect id="d0e75" display="none" height="1e3px" width="288" y="413.55" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e75"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Inkscape merkt sich die gewählten Zoomstufen, die Sie in der aktuellen Sitzung verwendet haben. Durch Drücken der <flowSpan font-weight="bold">`</flowSpan>-Taste springt man zur vorherigen, durch <flowSpan font-weight="bold">Umschalt+`</flowSpan> zur nächsten Zoomstufe (Anm. d. Übersetzers: Mit einer deutschen Tastatur nicht möglich.).</flowDiv>
+  <flowPara >Inkscape merkt sich die gewählten Zoomstufen, die Sie in der aktuellen Sitzung verwendet haben. Durch Drücken der <flowSpan font-weight="bold">`</flowSpan>-Taste springt man zur vorherigen, durch <flowSpan font-weight="bold">Umschalt+`</flowSpan> zur nächsten Zoomstufe (Anm. d. Übersetzers: Mit einer deutschen Tastatur nicht möglich.).</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="486.815779" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="486.815779" x="10">Inkscape-Werkzeuge</tspan>
  </text>
  <rect id="d0e90" display="none" height="1e3px" width="288" y="492.02" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e90"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Die senkrechte Werkzeugleiste auf der linken Seite zeigt Inkscapes Zeichen- und Bearbeitungswerkzeuge. Im oberen Bereich des Fensters, unter der Fensterleiste, liegt die <flowSpan font-style="italic">Befehlsleiste</flowSpan> mit Schaltflächen für verschieden allgemeine Befehle, darunter die <flowSpan font-style="italic">Werkzeugeinstellungsleiste</flowSpan> für werkzeugabhängige Eingaben. Die <flowSpan font-style="italic">Statusleiste</flowSpan> am unteren Fensterrand zeigt nützliche Hinweise und Informationen an, während man arbeitet.</flowDiv>
+  <flowPara >Die senkrechte Werkzeugleiste auf der linken Seite zeigt Inkscapes Zeichen- und Bearbeitungswerkzeuge. Im oberen Bereich des Fensters, unter der Fensterleiste, liegt die <flowSpan font-style="italic">Befehlsleiste</flowSpan> mit Schaltflächen für verschieden allgemeine Befehle, darunter die <flowSpan font-style="italic">Werkzeugeinstellungsleiste</flowSpan> für werkzeugabhängige Eingaben. Die <flowSpan font-style="italic">Statusleiste</flowSpan> am unteren Fensterrand zeigt nützliche Hinweise und Informationen an, während man arbeitet.</flowPara>
  </flowRoot>
  <rect id="d0e102" display="none" height="1e3px" width="288" y="573.02" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e102"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Viele Funktionen sind durch Tastaturkurzbefehle erreichbar. Öffnen Sie Hilfe &gt; Referenz der Tasten- und Mausbefehle, um alle Befehle zu sehen.</flowDiv>
+  <flowPara >Viele Funktionen sind durch Tastaturkurzbefehle erreichbar. Öffnen Sie Hilfe &gt; Referenz der Tasten- und Mausbefehle, um alle Befehle zu sehen.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="624.576405" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="624.576405" x="10">Erstellen und Verwenden von Dokumenten</tspan>
  </text>
  <rect id="d0e111" display="none" height="1e3px" width="288" y="629.78" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e111"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Um ein neues, leeres Dokument zu erzeugen, benutzt man <flowSpan font-family="sans-serif">Datei &gt; Neu</flowSpan> oder drückt <flowSpan font-weight="bold">Strg+N</flowSpan>. Um ein neues Dokument aus einer der vielen verfügbaren Vorlagen für Inkscape zu erstellen, verwendet man <flowSpan font-family="sans-serif">Datei &gt; Neu aus Vorlage</flowSpan> oder drückt <flowSpan font-weight="bold">Strg+Alt+N</flowSpan>.</flowDiv>
+  <flowPara >Um ein neues, leeres Dokument zu erzeugen, benutzt man <flowSpan font-family="sans-serif">Datei &gt; Neu</flowSpan> oder drückt <flowSpan font-weight="bold">Strg+N</flowSpan>. Um ein neues Dokument aus einer der vielen verfügbaren Vorlagen für Inkscape zu erstellen, verwendet man <flowSpan font-family="sans-serif">Datei &gt; Neu aus Vorlage</flowSpan> oder drückt <flowSpan font-weight="bold">Strg+Alt+N</flowSpan>.</flowPara>
  </flowRoot>
  <rect id="d0e126" display="none" height="1e3px" width="288" y="679.55" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e126"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ein bestehendes SVG-Dokument öffnet man mit <flowSpan font-family="sans-serif">Datei &gt; Öffnen...</flowSpan> (<flowSpan font-weight="bold">Strg+O</flowSpan>). Zum Speichern wählt man <flowSpan font-family="sans-serif">Datei &gt; Speichern</flowSpan> (<flowSpan font-weight="bold">Strg+S</flowSpan>), oder <flowSpan font-family="sans-serif">Speichern unter…</flowSpan> (<flowSpan font-weight="bold">Umschalt+Strg+S</flowSpan>), um das Dokument unter einem neuen Namen zu speichern (Inkscape kann gelegentlich noch abstürzen, daher besser öfter speichern!).</flowDiv>
+  <flowPara >Ein bestehendes SVG-Dokument öffnet man mit <flowSpan font-family="sans-serif">Datei &gt; Öffnen...</flowSpan> (<flowSpan font-weight="bold">Strg+O</flowSpan>). Zum Speichern wählt man <flowSpan font-family="sans-serif">Datei &gt; Speichern</flowSpan> (<flowSpan font-weight="bold">Strg+S</flowSpan>), oder <flowSpan font-family="sans-serif">Speichern unter…</flowSpan> (<flowSpan font-weight="bold">Umschalt+Strg+S</flowSpan>), um das Dokument unter einem neuen Namen zu speichern (Inkscape kann gelegentlich noch abstürzen, daher besser öfter speichern!).</flowPara>
  </flowRoot>
  <rect id="d0e147" display="none" height="1e3px" width="288" y="741.08" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e147"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Inkscape verwendet das SVG-Format (Scalable Vector Graphics) für seine Dateien. SVG ist ein offener Standard, der von vielen Zeichenprogrammen unterstützt wird. SVG-Dateien basieren auf dem XML-Standard und können mit jedem Text- oder XML-Editor (zusätzlich zu dem in Inkscape, natürlich) verändert werden. Neben SVG kann Inkscape auch einige andere Formate importieren und exportieren (z. B. EPS und PNG).</flowDiv>
+  <flowPara >Inkscape verwendet das SVG-Format (Scalable Vector Graphics) für seine Dateien. SVG ist ein offener Standard, der von vielen Zeichenprogrammen unterstützt wird. SVG-Dateien basieren auf dem XML-Standard und können mit jedem Text- oder XML-Editor (zusätzlich zu dem in Inkscape, natürlich) verändert werden. Neben SVG kann Inkscape auch einige andere Formate importieren und exportieren (z. B. EPS und PNG).</flowPara>
  </flowRoot>
  <rect id="d0e150" display="none" height="1e3px" width="288" y="822.71" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e150"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Inkscape öffnet ein separates Programmfenster für jedes einzelne Dokument. Man kann mit dem Fenster-Manager dazwischen wechseln (z. B. durch <flowSpan font-weight="bold">Alt+Tab</flowSpan>) oder auch mit dem Inkscape-eigenen Kurzbefehl <flowSpan font-weight="bold">Strg+Tab</flowSpan>, der durch alle geöffneten Dokument-Fenster wandert (erstellen Sie jetzt ein neues Dokument und schalten Sie zur Übung zwischen diesem und dem Tutorial hin und her). Hinweis: Inkscape behandelt diese Fenster wie Reiter in einem Webbrowser. Das bedeutet, dass der Kurzbefehl </flowDiv>
+  <flowPara >Inkscape öffnet ein separates Programmfenster für jedes einzelne Dokument. Man kann mit dem Fenster-Manager dazwischen wechseln (z. B. durch <flowSpan font-weight="bold">Alt+Tab</flowSpan>) oder auch mit dem Inkscape-eigenen Kurzbefehl <flowSpan font-weight="bold">Strg+Tab</flowSpan>, der durch alle geöffneten Dokument-Fenster wandert (erstellen Sie jetzt ein neues Dokument und schalten Sie zur Übung zwischen diesem und dem Tutorial hin und her). Hinweis: Inkscape behandelt diese Fenster wie Reiter in einem Webbrowser. Das bedeutet, dass der Kurzbefehl </flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="927.212349" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="927.212349" x="10">Formen erstellen</tspan>
  </text>
  <rect id="d0e165" display="none" height="1e3px" width="288" y="932.41" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e165"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Nun ist es Zeit, ein paar schicke Formen zu erstellen! Klicken Sie auf das Rechteckwerkzeug in der Werkzeugleiste links (oder drücken Sie <flowSpan font-weight="bold">F4</flowSpan>) und klicken und ziehen Sie, entweder in einem neuen, leeren Dokument oder gleich hier:</flowDiv>
+  <flowPara >Nun ist es Zeit, ein paar schicke Formen zu erstellen! Klicken Sie auf das Rechteckwerkzeug in der Werkzeugleiste links (oder drücken Sie <flowSpan font-weight="bold">F4</flowSpan>) und klicken und ziehen Sie, entweder in einem neuen, leeren Dokument oder gleich hier:</flowPara>
  </flowRoot>
  <rect id="basic-f01-de.svgrect824" fill-rule="evenodd" transform="translate(10 990.19)" height="21.106" width="19.394" stroke="#000" y="11.835" x="8.2426" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1.25" fill="#00f"/>
  <rect id="basic-f01-de.svgrect825" fill-rule="evenodd" transform="translate(10 990.19)" height="15.972" width="23.387" stroke="#000" y="7.2717" x="37.905" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1.25" fill="#00f"/>
@@ -155,11 +155,11 @@
  <rect id="basic-f01-de.svgrect744" fill-rule="evenodd" transform="translate(10 990.19)" height="1.7641" width="4.1162" stroke="#000" y="20.472" x="247.49" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#00f"/>
  <rect id="basic-f01-de.svgrect745" fill-rule="evenodd" transform="translate(10 990.19)" height="1.1761" width="2.9402" stroke="#000" y="17.532" x="259.25" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#00f"/>
  <rect id="d0e181" display="none" height="1e3px" width="288" y="1051.9" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e181"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Wie Sie sehen können, sind Standard-Rechtecke blau gefüllt, mit einer schwarzen <flowSpan font-style="italic">Kontur</flowSpan> (der Umrandung), und vollständig deckend. Wir werden noch sehen, wie man das ändern kann. Mit anderen Werkzeugen lassen sich auch Ellipsen, Sterne und Spiralen erstellen:</flowDiv>
+  <flowPara >Wie Sie sehen können, sind Standard-Rechtecke blau gefüllt, mit einer schwarzen <flowSpan font-style="italic">Kontur</flowSpan> (der Umrandung), und vollständig deckend. Wir werden noch sehen, wie man das ändern kann. Mit anderen Werkzeugen lassen sich auch Ellipsen, Sterne und Spiralen erstellen:</flowPara>
  </flowRoot>
  <path id="basic-f02-de.svgpath750" sodipodi:rx="9.7025042" sodipodi:ry="3.8221989" sodipodi:type="arc" d="m27.637 659.92a9.7025 3.8222 0 1 1 -19.405 0 9.7025 3.8222 0 1 1 19.405 0z" fill-rule="evenodd" fill-opacity=".75" transform="translate(12.776 463.73)" stroke="#000" sodipodi:cy="659.92175" sodipodi:cx="17.934933" stroke-width="1pt" fill="#f00"/>
  <path id="basic-f02-de.svgpath751" sodipodi:rx="5.2922754" sodipodi:ry="14.406750" sodipodi:type="arc" d="m31.166 681.68a5.2923 14.407 0 1 1 -10.585 0 5.2923 14.407 0 1 1 10.585 0z" fill-rule="evenodd" fill-opacity=".75" transform="translate(12.776 463.73)" stroke="#000" sodipodi:cy="681.67889" sodipodi:cx="25.873346" stroke-width="1pt" fill="#f00"/>
@@ -178,174 +178,174 @@
  <path id="basic-f02-de.svgpath1314" sodipodi:sides="5" fill-opacity=".75" inkscape:flatsided="false" stroke="#000" stroke-width="1pt" fill="#ff0" style="color:#000000" fill-rule="evenodd" transform="translate(26.429 1064.8)" inkscape:rounded="0.0000000" sodipodi:r1="7.9859571" sodipodi:r2="3.9929783" sodipodi:arg1="0.46364761" sodipodi:arg2="1.0919661" sodipodi:type="star" d="m162.5 66.648l-5.3-0.028-3.03 4.353-1.61-5.052-5.08-1.535 4.31-3.095-0.11-5.302 4.27 3.139 5.01-1.741-1.66 5.035 3.2 4.226z" inkscape:randomized="0.0000000" sodipodi:cy="63.076466" sodipodi:cx="155.35715"/>
  <path id="basic-f02-de.svgpath1316" sodipodi:sides="5" fill-opacity=".75" inkscape:flatsided="false" stroke="#000" stroke-width="1pt" fill="#ff0" style="color:#000000" fill-rule="evenodd" transform="translate(26.429 1064.8)" inkscape:rounded="0.0000000" sodipodi:r1="5.8138647" sodipodi:r2="2.9069321" sodipodi:arg1="0.74194727" sodipodi:arg2="1.3702658" sodipodi:type="star" d="m180 69.505l-3.71-1.08-2.99 2.441-0.12-3.859-3.24-2.09 3.63-1.305 0.99-3.733 2.36 3.052 3.85-0.216-2.17 3.191 1.4 3.599z" inkscape:randomized="0.0000000" sodipodi:cy="65.576469" sodipodi:cx="175.71429"/>
  <rect id="d0e197" display="none" height="1e3px" width="288" y="1182.3" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e197"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Diese Werkzeuge werden unter dem Begriff <flowSpan font-style="italic">Form-Werkzeuge</flowSpan> zusammengefasst. Jede erzeugte Form zeigt einen oder mehrere rautenförmige <flowSpan font-style="italic">Anfasser</flowSpan>. Ziehen Sie mit der Maus daran, um zu sehen wie sich die Form dadurch verändert. Die Werkzeugeinstellungsleiste für Formen bietet ebenfalls die Möglichkeit, die Form zu verändern. Die Einstellungen verändern die aktuell ausgewählten Objekte (die, die die entsprechenden Anfasser haben) <flowSpan font-style="italic">und</flowSpan> setzt den Standard für alle neuen Objekte.</flowDiv>
+  <flowPara >Diese Werkzeuge werden unter dem Begriff <flowSpan font-style="italic">Form-Werkzeuge</flowSpan> zusammengefasst. Jede erzeugte Form zeigt einen oder mehrere rautenförmige <flowSpan font-style="italic">Anfasser</flowSpan>. Ziehen Sie mit der Maus daran, um zu sehen wie sich die Form dadurch verändert. Die Werkzeugeinstellungsleiste für Formen bietet ebenfalls die Möglichkeit, die Form zu verändern. Die Einstellungen verändern die aktuell ausgewählten Objekte (die, die die entsprechenden Anfasser haben) <flowSpan font-style="italic">und</flowSpan> setzt den Standard für alle neuen Objekte.</flowPara>
  </flowRoot>
  <rect id="d0e209" display="none" height="1e3px" width="288" y="1274.6" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e209"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Um die letzte Aktion <flowSpan font-style="italic">rückgängig</flowSpan> zu machen, drückt man <flowSpan font-weight="bold">Strg+Z</flowSpan>. (Oder, wenn Sie es sich wieder anders überlegen, benutzen Sie <flowSpan font-style="italic">Wiederherstellen</flowSpan> durch <flowSpan font-weight="bold">Umschalt+Strg+Z</flowSpan>.)</flowDiv>
+  <flowPara >Um die letzte Aktion <flowSpan font-style="italic">rückgängig</flowSpan> zu machen, drückt man <flowSpan font-weight="bold">Strg+Z</flowSpan>. (Oder, wenn Sie es sich wieder anders überlegen, benutzen Sie <flowSpan font-style="italic">Wiederherstellen</flowSpan> durch <flowSpan font-weight="bold">Umschalt+Strg+Z</flowSpan>.)</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="1326.6269360000001" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="1326.6269360000001" x="10">Bewegen, Größe ändern, Drehen</tspan>
  </text>
  <rect id="d0e230" display="none" height="1e3px" width="288" y="1331.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e230"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Das am häufigsten verwendete Werkzeug in Inkscape ist das <flowSpan font-style="italic">Auswahlwerkzeug</flowSpan>. Klicken Sie den obersten Knopf (mit dem Pfeil) in der Werkzeugleiste, oder drücken Sie <flowSpan font-weight="bold">F1</flowSpan> oder <flowSpan font-weight="bold">Leertaste</flowSpan>. Nun können Sie jedes Objekt auf der Seite auswählen. Probieren Sie das an dem Rechteck unten.</flowDiv>
+  <flowPara >Das am häufigsten verwendete Werkzeug in Inkscape ist das <flowSpan font-style="italic">Auswahlwerkzeug</flowSpan>. Klicken Sie den obersten Knopf (mit dem Pfeil) in der Werkzeugleiste, oder drücken Sie <flowSpan font-weight="bold">F1</flowSpan> oder <flowSpan font-weight="bold">Leertaste</flowSpan>. Nun können Sie jedes Objekt auf der Seite auswählen. Probieren Sie das an dem Rechteck unten.</flowPara>
  </flowRoot>
  <rect id="basic-f03-de.svgrect804" fill-rule="evenodd" fill-opacity=".75" transform="translate(10 1398.6)" height="38.81" width="40.574" stroke="#000" y="-.47140" x="25.427" stroke-width="1pt" fill="#00f"/>
  <rect id="d0e252" display="none" height="1e3px" width="288" y="1450.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e252"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Sie sehen jetzt acht pfeilförmige Anfasser um das markierte Objekt. Jetzt haben Sie mehrere Möglichkeiten:</flowDiv>
+  <flowPara >Sie sehen jetzt acht pfeilförmige Anfasser um das markierte Objekt. Jetzt haben Sie mehrere Möglichkeiten:</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 1485.3)"/>
  <rect id="d0e259" display="none" height="1e3px" width="258" y="1479.3" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e259"/>
   </flowRegion>
-  <flowDiv xml:space="preserve"><flowSpan font-style="italic">Verschieben</flowSpan> des Objekts durch Ziehen mit gedrückter linker Maustaste. (Drücken Sie <flowSpan font-weight="bold">Strg</flowSpan>, um die Bewegung auf horizontale oder vertikale Richtung zu beschränken.)</flowDiv>
+  <flowPara ><flowSpan font-style="italic">Verschieben</flowSpan> des Objekts durch Ziehen mit gedrückter linker Maustaste. (Drücken Sie <flowSpan font-weight="bold">Strg</flowSpan>, um die Bewegung auf horizontale oder vertikale Richtung zu beschränken.)</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 1524.5)"/>
  <rect id="d0e270" display="none" height="1e3px" width="258" y="1518.5" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e270"/>
   </flowRegion>
-  <flowDiv xml:space="preserve"><flowSpan font-style="italic">Ändern Sie die Größe</flowSpan> des Objektes durch Klicken und Ziehen an einem Anfasser. (Drücken Sie <flowSpan font-weight="bold">Strg</flowSpan> zum Beibehalten des Seitenverhältnisses.)</flowDiv>
+  <flowPara ><flowSpan font-style="italic">Ändern Sie die Größe</flowSpan> des Objektes durch Klicken und Ziehen an einem Anfasser. (Drücken Sie <flowSpan font-weight="bold">Strg</flowSpan> zum Beibehalten des Seitenverhältnisses.)</flowPara>
  </flowRoot>
  <rect id="d0e279" display="none" height="1e3px" width="288" y="1558.4" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e279"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Nun klicken Sie noch einmal auf das Rechteck. Die Anfasser sehen jetzt anders aus. Jetzt gibt es folgende Möglichkeiten:</flowDiv>
+  <flowPara >Nun klicken Sie noch einmal auf das Rechteck. Die Anfasser sehen jetzt anders aus. Jetzt gibt es folgende Möglichkeiten:</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 1592.9)"/>
  <rect id="d0e286" display="none" height="1e3px" width="258" y="1586.9" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e286"/>
   </flowRegion>
-  <flowDiv xml:space="preserve"><flowSpan font-style="italic">Drehen</flowSpan> des Objektes durch Klicken und Ziehen an den Eck-Anfassern. (Zum stufenweisen Drehen in Schritten von 15° halten Sie <flowSpan font-weight="bold">Strg</flowSpan> gedrückt. Verschieben Sie das Kreuz, um den Drehmittelpunkt festzulegen.)</flowDiv>
+  <flowPara ><flowSpan font-style="italic">Drehen</flowSpan> des Objektes durch Klicken und Ziehen an den Eck-Anfassern. (Zum stufenweisen Drehen in Schritten von 15° halten Sie <flowSpan font-weight="bold">Strg</flowSpan> gedrückt. Verschieben Sie das Kreuz, um den Drehmittelpunkt festzulegen.)</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 1642.7)"/>
  <rect id="d0e297" display="none" height="1e3px" width="258" y="1636.7" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e297"/>
   </flowRegion>
-  <flowDiv xml:space="preserve"><flowSpan font-style="italic">Scheren</flowSpan> Sie das Objekt durch Klicken und Ziehen an den Anfassern an den Längsseiten. (Drücken Sie <flowSpan font-weight="bold">Strg</flowSpan> zum stufenweisen Scheren in Schritten von 15°.)</flowDiv>
+  <flowPara ><flowSpan font-style="italic">Scheren</flowSpan> Sie das Objekt durch Klicken und Ziehen an den Anfassern an den Längsseiten. (Drücken Sie <flowSpan font-weight="bold">Strg</flowSpan> zum stufenweisen Scheren in Schritten von 15°.)</flowPara>
  </flowRoot>
  <rect id="d0e306" display="none" height="1e3px" width="288" y="1675.3" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e306"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Wenn man das Auswahlwerkzeug verwendet und das Objekt ausgewählt ist, kann man auch die Eingabefelder (über der Zeichenfläche) benutzen, um genaue Werte für die Koordinaten (X und Y) und die Größe (B und H) einzugeben.</flowDiv>
+  <flowPara >Wenn man das Auswahlwerkzeug verwendet und das Objekt ausgewählt ist, kann man auch die Eingabefelder (über der Zeichenfläche) benutzen, um genaue Werte für die Koordinaten (X und Y) und die Größe (B und H) einzugeben.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="1737.8410750000003" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="1737.8410750000003" x="10">Verändern mit der Tastatur</tspan>
  </text>
  <rect id="d0e315" display="none" height="1e3px" width="288" y="1743" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e315"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Eine der Eigenschaften von Inkscape, die es von vielen anderen Vektorzeichenprogrammen unterscheidet, ist die gute Tastaturbedienbarkeit. Es gibt fast keinen Befehl oder keine Aktion, die nicht mit der Tastatur ausführbar sind, und Objektmanipulation ist da keine Ausnahme.</flowDiv>
+  <flowPara >Eine der Eigenschaften von Inkscape, die es von vielen anderen Vektorzeichenprogrammen unterscheidet, ist die gute Tastaturbedienbarkeit. Es gibt fast keinen Befehl oder keine Aktion, die nicht mit der Tastatur ausführbar sind, und Objektmanipulation ist da keine Ausnahme.</flowPara>
  </flowRoot>
  <rect id="d0e318" display="none" height="1e3px" width="288" y="1801.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e318"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Man kann Objekte mit der Tastatur verschieben (<flowSpan font-weight="bold">Pfeil</flowSpan>-Tasten), ihre Größe ändern (<flowSpan font-weight="bold">&lt;</flowSpan>- und <flowSpan font-weight="bold">&gt;</flowSpan>-Tasten) und sie drehen (<flowSpan font-weight="bold">[</flowSpan>- und <flowSpan font-weight="bold">]</flowSpan>-Tasten). Die Standardschrittweite für Bewegung und Größenänderung mit der Tastatur ist 2 px, mit <flowSpan font-weight="bold">Umschalt</flowSpan> das Zehnfache davon. <flowSpan font-weight="bold">Strg+&lt;</flowSpan> und <flowSpan font-weight="bold">Strg+&gt;</flowSpan> vergrößern auf 200% oder verkleinern auf 50% der Originalgröße. Standardmäßig werden Objekte in Schritten von 15° gedreht, mit gedrückter <flowSpan font-weight="bold">Strg</flowSpan>-Taste in 90°-Schritten.</flowDiv>
+  <flowPara >Man kann Objekte mit der Tastatur verschieben (<flowSpan font-weight="bold">Pfeil</flowSpan>-Tasten), ihre Größe ändern (<flowSpan font-weight="bold">&lt;</flowSpan>- und <flowSpan font-weight="bold">&gt;</flowSpan>-Tasten) und sie drehen (<flowSpan font-weight="bold">[</flowSpan>- und <flowSpan font-weight="bold">]</flowSpan>-Tasten). Die Standardschrittweite für Bewegung und Größenänderung mit der Tastatur ist 2 px, mit <flowSpan font-weight="bold">Umschalt</flowSpan> das Zehnfache davon. <flowSpan font-weight="bold">Strg+&lt;</flowSpan> und <flowSpan font-weight="bold">Strg+&gt;</flowSpan> vergrößern auf 200% oder verkleinern auf 50% der Originalgröße. Standardmäßig werden Objekte in Schritten von 15° gedreht, mit gedrückter <flowSpan font-weight="bold">Strg</flowSpan>-Taste in 90°-Schritten.</flowPara>
  </flowRoot>
  <rect id="d0e348" display="none" height="1e3px" width="288" y="1883.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e348"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Besonders nützlich sind <flowSpan font-style="italic">pixelgenaue Manipulationen</flowSpan> durch gleichzeitiges Drücken von <flowSpan font-weight="bold">Alt</flowSpan> mit den entsprechenden Tasten. Mit <flowSpan font-weight="bold">Alt+Pfeiltaste</flowSpan> verschiebt man das markierte Objekt um 1 Pixel <flowSpan font-style="italic">bei gewähltem Zoomfaktor</flowSpan> (also 1 <flowSpan font-style="italic">Bildschirm-Pixel</flowSpan>, nicht zu verwechseln mit der px-Einheit, welche eine SVG-Längeneinheit unabhängig vom Zoomfaktor ist). Das bedeutet, wenn man hineinzoomt, dann entspricht ein einmaliger Druck auf <flowSpan font-weight="bold">Alt+Pfeil</flowSpan> einer <flowSpan font-style="italic">kleineren</flowSpan> absoluten Bewegung, obwohl es auf dem Bildschirm immer noch eine Bewegung um 1 Pixel ist. So ist es möglich, Objekte mit einer beliebig hohen Präzision zu positionieren, einfach indem man hinein- oder herauszoomt.</flowDiv>
+  <flowPara >Besonders nützlich sind <flowSpan font-style="italic">pixelgenaue Manipulationen</flowSpan> durch gleichzeitiges Drücken von <flowSpan font-weight="bold">Alt</flowSpan> mit den entsprechenden Tasten. Mit <flowSpan font-weight="bold">Alt+Pfeiltaste</flowSpan> verschiebt man das markierte Objekt um 1 Pixel <flowSpan font-style="italic">bei gewähltem Zoomfaktor</flowSpan> (also 1 <flowSpan font-style="italic">Bildschirm-Pixel</flowSpan>, nicht zu verwechseln mit der px-Einheit, welche eine SVG-Längeneinheit unabhängig vom Zoomfaktor ist). Das bedeutet, wenn man hineinzoomt, dann entspricht ein einmaliger Druck auf <flowSpan font-weight="bold">Alt+Pfeil</flowSpan> einer <flowSpan font-style="italic">kleineren</flowSpan> absoluten Bewegung, obwohl es auf dem Bildschirm immer noch eine Bewegung um 1 Pixel ist. So ist es möglich, Objekte mit einer beliebig hohen Präzision zu positionieren, einfach indem man hinein- oder herauszoomt.</flowPara>
  </flowRoot>
  <rect id="d0e372" display="none" height="1e3px" width="288" y="2006.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e372"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Genauso ändern <flowSpan font-weight="bold">Alt+&lt;</flowSpan> und <flowSpan font-weight="bold">Alt+&gt;</flowSpan> die Objektgröße so, das die sichtbare Größe um jeweils ein Bildschirm-Pixel verändert wird. Die Tasten <flowSpan font-weight="bold">Alt+[</flowSpan> und <flowSpan font-weight="bold">Alt+]</flowSpan> drehen den Punkt, der am weitesten vom Zentrum entfernt ist, um ein Bildschirm-Pixel weiter.</flowDiv>
+  <flowPara >Genauso ändern <flowSpan font-weight="bold">Alt+&lt;</flowSpan> und <flowSpan font-weight="bold">Alt+&gt;</flowSpan> die Objektgröße so, das die sichtbare Größe um jeweils ein Bildschirm-Pixel verändert wird. Die Tasten <flowSpan font-weight="bold">Alt+[</flowSpan> und <flowSpan font-weight="bold">Alt+]</flowSpan> drehen den Punkt, der am weitesten vom Zentrum entfernt ist, um ein Bildschirm-Pixel weiter.</flowPara>
  </flowRoot>
  <rect id="d0e387" display="none" height="1e3px" width="288" y="2055.3" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e387"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Anmerkung: Linux-Benutzer erhalten möglicherweise nicht den gewünschten Effekt mit <flowSpan font-weight="bold">Alt+Pfeiltaste</flowSpan> und ein paar anderen Tastenkombinationen, wenn ihr Fenstermanager diese Tastendrücke abfängt, bevor sie zu Inkscape gelangen. Eine Lösung ist es, die Einstellungen des Fenstermanagers entsprechend zu ändern.</flowDiv>
+  <flowPara >Anmerkung: Linux-Benutzer erhalten möglicherweise nicht den gewünschten Effekt mit <flowSpan font-weight="bold">Alt+Pfeiltaste</flowSpan> und ein paar anderen Tastenkombinationen, wenn ihr Fenstermanager diese Tastendrücke abfängt, bevor sie zu Inkscape gelangen. Eine Lösung ist es, die Einstellungen des Fenstermanagers entsprechend zu ändern.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="2128.5351450000007" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="2128.5351450000007" x="10">Mehrfachauswahl</tspan>
  </text>
  <rect id="d0e399" display="none" height="1e3px" width="288" y="2133.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e399"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Man kann mehrere Objekte gleichzeitig durch <flowSpan font-weight="bold">Umschalt+Klick</flowSpan>, oder durch <flowSpan font-weight="bold">Ziehen</flowSpan> um die Objekte herum auswählen. Letzteres wird <flowSpan font-style="italic">Gummibandauswahl</flowSpan> genannt. (Das Auswahlwerkzeug erzeugt das Gummiband durch Ziehen über einem leeren Teil der Seite, aber immer auch, wenn vor dem Ziehen <flowSpan font-weight="bold">Umschalt</flowSpan> gedrückt wird.) Üben Sie das Markieren aller drei Formen hier unten:</flowDiv>
+  <flowPara >Man kann mehrere Objekte gleichzeitig durch <flowSpan font-weight="bold">Umschalt+Klick</flowSpan>, oder durch <flowSpan font-weight="bold">Ziehen</flowSpan> um die Objekte herum auswählen. Letzteres wird <flowSpan font-style="italic">Gummibandauswahl</flowSpan> genannt. (Das Auswahlwerkzeug erzeugt das Gummiband durch Ziehen über einem leeren Teil der Seite, aber immer auch, wenn vor dem Ziehen <flowSpan font-weight="bold">Umschalt</flowSpan> gedrückt wird.) Üben Sie das Markieren aller drei Formen hier unten:</flowPara>
  </flowRoot>
  <rect id="basic-f04-de.svgrect878" fill-rule="evenodd" fill-opacity=".75" transform="translate(10 2211.1)" height="26.656" width="25.253" stroke="#000" y="5.9827" x="58.428" xmlns:cc="http://creativecommons.org/ns#" stroke-width=".80106pt" fill="#00f"/>
  <path id="basic-f04-de.svgpath879" d="m134.86 1251.7c0 9.8339-9.8015 17.806-21.892 17.806-12.091 0-21.892-7.9719-21.892-17.806 0-9.8338 9.8015-17.806 21.892-17.806 12.091 0 21.892 7.9719 21.892 17.806z" fill-rule="evenodd" fill-opacity=".75" transform="translate(10 2211.1) matrix(.80106 0 0 .80106 32.311 -983.83)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#f00"/>
  <path id="basic-f04-de.svgpath1290" style="color:#000000" d="m182.84 29.583-13.183-3.2184-10.125 9.0355-1.013-13.533-11.722-6.8373 12.557-5.1452 2.8804-13.261 8.7737 10.353 13.502-1.3585-7.1347 11.543z" fill-rule="evenodd" fill-opacity=".75" transform="translate(10 2211.1) matrix(.87302 0 0 .87302 27.6 4.0534)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width=".91757pt" fill="#ff0"/>
  <rect id="d0e424" display="none" height="1e3px" width="288" y="2259.3" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e424"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Jetzt benutzen Sie das Gummiband (durch Ziehen oder <flowSpan font-weight="bold">Umschalt+Ziehen</flowSpan>), um beide Ellipsen, aber nicht das Rechteck zu markieren:</flowDiv>
+  <flowPara >Jetzt benutzen Sie das Gummiband (durch Ziehen oder <flowSpan font-weight="bold">Umschalt+Ziehen</flowSpan>), um beide Ellipsen, aber nicht das Rechteck zu markieren:</flowPara>
  </flowRoot>
  <rect id="basic-f05-de.svgrect894" fill-rule="evenodd" fill-opacity=".75" transform="translate(10 2295.7)" height="39.698" width="151.14" stroke="#000" y="1.7363" x="46.657" xmlns:cc="http://creativecommons.org/ns#" stroke-width=".93523pt" fill="#00f"/>
  <path id="basic-f05-de.svgpath1290" style="color:#000000" d="m94.643 25.041c0 6.9036-2.9581 12.5-6.6071 12.5s-6.6071-5.5964-6.6071-12.5 2.9581-12.5 6.6071-12.5 6.6071 5.5964 6.6071 12.5z" fill-rule="evenodd" fill-opacity=".75" transform="translate(10 2295.7) matrix(.70711 -.70711 .70711 .70711 28.793 65.478)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width=".48693pt" fill="#f00"/>
  <path id="basic-f05-de.svgpath1292" style="color:#000000" d="m94.643 25.041c0 6.9036-2.9581 12.5-6.6071 12.5s-6.6071-5.5964-6.6071-12.5 2.9581-12.5 6.6071-12.5 6.6071 5.5964 6.6071 12.5z" fill-rule="evenodd" fill-opacity=".75" transform="translate(10 2295.7) matrix(.70711 -.70711 .70711 .70711 56.471 65.835)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width=".48693pt" fill="#f00"/>
  <rect id="d0e440" display="none" height="1e3px" width="288" y="2348.6" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e440"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Jedes einzelne Objekt einer Auswahl zeigt einen <flowSpan font-style="italic">Objektrahmen</flowSpan> – normalerweise einen gestrichelten, rechteckigen Rahmen. So kann man ganz einfach sehen, was ausgewählt ist und was nicht. Wenn man zum Beispiel beide Ellipsen und das Rechteck auswählt, dann hätte man es ohne diese Hinweise schwer zu sagen, ob die Ellipsen markiert sind oder nicht.</flowDiv>
+  <flowPara >Jedes einzelne Objekt einer Auswahl zeigt einen <flowSpan font-style="italic">Objektrahmen</flowSpan> – normalerweise einen gestrichelten, rechteckigen Rahmen. So kann man ganz einfach sehen, was ausgewählt ist und was nicht. Wenn man zum Beispiel beide Ellipsen und das Rechteck auswählt, dann hätte man es ohne diese Hinweise schwer zu sagen, ob die Ellipsen markiert sind oder nicht.</flowPara>
  </flowRoot>
  <rect id="d0e446" display="none" height="1e3px" width="288" y="2418" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e446"/>
   </flowRegion>
-  <flowDiv xml:space="preserve"><flowSpan font-weight="bold">Umschalt+Klick</flowSpan> auf ein markiertes Objekt entfernt es aus der Auswahl. Wählen Sie alle drei Objekte oben aus, dann benutzen Sie <flowSpan font-weight="bold">Umschalt+Klick</flowSpan>, um beide Ellipsen aus der Auswahl herauszunehmen und nur das Rechteck ausgewählt zu lassen.</flowDiv>
+  <flowPara ><flowSpan font-weight="bold">Umschalt+Klick</flowSpan> auf ein markiertes Objekt entfernt es aus der Auswahl. Wählen Sie alle drei Objekte oben aus, dann benutzen Sie <flowSpan font-weight="bold">Umschalt+Klick</flowSpan>, um beide Ellipsen aus der Auswahl herauszunehmen und nur das Rechteck ausgewählt zu lassen.</flowPara>
  </flowRoot>
  <rect id="d0e454" display="none" height="1e3px" width="288" y="2467.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e454"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Nach einem Druck auf <flowSpan font-weight="bold">Esc</flowSpan> sind keine Objekte mehr ausgewählt. <flowSpan font-weight="bold">Strg+A</flowSpan> wählt dagegen alle Objekte der momentan aktivierten Ebene aus. (Wenn Sie keine weiteren Ebenen erstellt haben, entspricht das allen Objekten im Dokument).</flowDiv>
+  <flowPara >Nach einem Druck auf <flowSpan font-weight="bold">Esc</flowSpan> sind keine Objekte mehr ausgewählt. <flowSpan font-weight="bold">Strg+A</flowSpan> wählt dagegen alle Objekte der momentan aktivierten Ebene aus. (Wenn Sie keine weiteren Ebenen erstellt haben, entspricht das allen Objekten im Dokument).</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="2530.3891730000005" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="2530.3891730000005" x="10">Gruppieren</tspan>
  </text>
  <rect id="d0e469" display="none" height="1e3px" width="288" y="2535.6" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e469"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Mehrere Objekte können zu einer <flowSpan font-style="italic">Gruppe</flowSpan> zusammengefasst werden. Eine Gruppe verhält sich wie ein einzelnes Objekt, wenn man sie verschiebt oder mit den Anfassern verformt. Die drei Objekte unten links sind alle noch einzeln; die gleichen drei Objekte auf der rechten Seite sind gruppiert. Versuchen Sie, die Gruppe zu verschieben.</flowDiv>
+  <flowPara >Mehrere Objekte können zu einer <flowSpan font-style="italic">Gruppe</flowSpan> zusammengefasst werden. Eine Gruppe verhält sich wie ein einzelnes Objekt, wenn man sie verschiebt oder mit den Anfassern verformt. Die drei Objekte unten links sind alle noch einzeln; die gleichen drei Objekte auf der rechten Seite sind gruppiert. Versuchen Sie, die Gruppe zu verschieben.</flowPara>
  </flowRoot>
  <path id="basic-f06-de.svgrect1370" d="m14.389 22.485h31.525v33.276h-31.525z" fill-rule="evenodd" fill-opacity=".75" transform="translate(10 2604.1)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#00f"/>
  <path id="basic-f06-de.svgpath1371" d="m134.86 1251.7c0 9.8339-9.8015 17.806-21.892 17.806-12.091 0-21.892-7.9719-21.892-17.806 0-9.8338 9.8015-17.806 21.892-17.806 12.091 0 21.892 7.9719 21.892 17.806z" fill-rule="evenodd" fill-opacity=".75" transform="translate(-57.837 1371.8)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#f00"/>
@@ -356,57 +356,57 @@
   <path id="basic-f06-de.svgpolygon1375" d="m184.48 1254.9-15.238-3.72-11.703 10.444-1.1708-15.642-13.549-7.9029 14.514-5.9471 3.3293-15.328 10.141 11.966 15.607-1.5703-8.2467 13.343z" transform="translate(86.386 261.2)" fill="#ff0"/>
  </g>
  <rect id="d0e485" display="none" height="1e3px" width="288" y="2682.4" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e485"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Um eine Gruppe zu erzeugen, wählt man ein oder mehrere Objekte aus und drückt <flowSpan font-weight="bold">Strg+G</flowSpan>. Um die Gruppierung bei einer oder mehreren Gruppen aufzuheben, markiert man diese und drückt <flowSpan font-weight="bold">Strg+U</flowSpan>. Gruppierungen können selbst auch gruppiert werden, wie jedes andere Objekt auch. Solche verschachtelten Gruppierungen können beliebig tief weitergeführt werden. Einmaliges <flowSpan font-weight="bold">Strg+U</flowSpan> hebt nur die oberste (letzte) Gruppierung einer ausgewählten Gruppe auf. Um alle Gruppierungen der Auswahl aufzuheben, müssen Sie <flowSpan font-weight="bold">Strg+U</flowSpan> mehrfach drücken.</flowDiv>
+  <flowPara >Um eine Gruppe zu erzeugen, wählt man ein oder mehrere Objekte aus und drückt <flowSpan font-weight="bold">Strg+G</flowSpan>. Um die Gruppierung bei einer oder mehreren Gruppen aufzuheben, markiert man diese und drückt <flowSpan font-weight="bold">Strg+U</flowSpan>. Gruppierungen können selbst auch gruppiert werden, wie jedes andere Objekt auch. Solche verschachtelten Gruppierungen können beliebig tief weitergeführt werden. Einmaliges <flowSpan font-weight="bold">Strg+U</flowSpan> hebt nur die oberste (letzte) Gruppierung einer ausgewählten Gruppe auf. Um alle Gruppierungen der Auswahl aufzuheben, müssen Sie <flowSpan font-weight="bold">Strg+U</flowSpan> mehrfach drücken.</flowPara>
  </flowRoot>
  <rect id="d0e500" display="none" height="1e3px" width="288" y="2783.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e500"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Es ist nicht unbedingt nötig, alle Gruppierungen aufzuheben, wenn man ein Objekt in einer Gruppe bearbeiten will. <flowSpan font-weight="bold">Strg+Klick</flowSpan> auf ein solches Objekt wählt es aus und erlaubt, es zu bearbeiten. Um mehrere Objekte innerhalb oder außerhalb einer Gruppe auszuwählen, drücken Sie <flowSpan font-weight="bold">Umschalt+Strg+Klick</flowSpan>. Versuchen Sie, einzelne Objekte in der Gruppe (oben rechts) zu verschieben oder zu verändern, ohne die Gruppierung aufzuheben. Anschließend heben Sie die Markierung wieder auf und markieren die Gruppe normal, um zu sehen, dass die Gruppierung erhalten geblieben ist.</flowDiv>
+  <flowPara >Es ist nicht unbedingt nötig, alle Gruppierungen aufzuheben, wenn man ein Objekt in einer Gruppe bearbeiten will. <flowSpan font-weight="bold">Strg+Klick</flowSpan> auf ein solches Objekt wählt es aus und erlaubt, es zu bearbeiten. Um mehrere Objekte innerhalb oder außerhalb einer Gruppe auszuwählen, drücken Sie <flowSpan font-weight="bold">Umschalt+Strg+Klick</flowSpan>. Versuchen Sie, einzelne Objekte in der Gruppe (oben rechts) zu verschieben oder zu verändern, ohne die Gruppierung aufzuheben. Anschließend heben Sie die Markierung wieder auf und markieren die Gruppe normal, um zu sehen, dass die Gruppierung erhalten geblieben ist.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="2899.6010450000003" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="2899.6010450000003" x="10">Füllung und Kontur</tspan>
  </text>
  <rect id="d0e515" display="none" height="1e3px" width="288" y="2904.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e515"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Die wohl einfachste Möglichkeit, wie man ein Objekt einfärben kann, ist es auszuwählen und dann auf eines der farbigen Kästchen unterhalb der Zeichenfläche zu klicken (dies ändert die Füllfarbe). Alternativ kann der Farbmuster-Dialog vom Ansicht-Menü aus geöffnet werden (oder mittels <flowSpan font-weight="bold">Shift+Ctrl+W<flowSpan font-weight="bold">), das Objekt markiert werden, und ein Farbfeld angeklickt werden (auch dies ändert die Füllfarbe).</flowSpan></flowSpan></flowDiv>
+  <flowPara >Die wohl einfachste Möglichkeit, wie man ein Objekt einfärben kann, ist es auszuwählen und dann auf eines der farbigen Kästchen unterhalb der Zeichenfläche zu klicken (dies ändert die Füllfarbe). Alternativ kann der Farbmuster-Dialog vom Ansicht-Menü aus geöffnet werden (oder mittels <flowSpan font-weight="bold">Shift+Ctrl+W<flowSpan font-weight="bold">), das Objekt markiert werden, und ein Farbfeld angeklickt werden (auch dies ändert die Füllfarbe).</flowSpan></flowSpan></flowPara>
  </flowRoot>
  <rect id="d0e522" display="none" height="1e3px" width="288" y="2986" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e522"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Viel leistungsfähiger ist der Dialog »Füllung und Kontur« aus dem Objekt-Menü (<flowSpan font-weight="bold">Umschalt+Strg+F</flowSpan>). Wählen Sie das Objekt unten aus und öffnen Sie den Dialog.</flowDiv>
+  <flowPara >Viel leistungsfähiger ist der Dialog »Füllung und Kontur« aus dem Objekt-Menü (<flowSpan font-weight="bold">Umschalt+Strg+F</flowSpan>). Wählen Sie das Objekt unten aus und öffnen Sie den Dialog.</flowPara>
  </flowRoot>
  <path id="basic-f07-de.svgpath930" d="m190.32 1450.2c0 9.0277-29.666 16.346-66.261 16.346s-66.261-7.3185-66.261-16.346c0-9.0278 29.666-16.346 66.261-16.346s66.261 7.3185 66.261 16.346z" fill-rule="evenodd" fill-opacity=".75" transform="translate(13.066 1600.9)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#f00"/>
  <rect id="d0e541" display="none" height="1e3px" width="288" y="3079.2" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e541"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Sie werden sehen, dass der Dialog drei Reiter hat: Füllung, Farbe der Kontur, und Muster der Kontur. Im Reiter »Füllung« ändert man die <flowSpan font-style="italic">Füllfarbe</flowSpan> (Innenfarbe) des markierten Objekts. Mit den Knöpfen direkt unter dem Reiter kann man die Füllungsart verändern: die Füllung ganz ausschalten (mit dem Knopf mit dem X), einfach (einfarbig) füllen, oder einen Linear- und Radialverlauf auswählen. Bei dem Objekt oben ist der Knopf »Einfache Farbe« aktiviert.</flowDiv>
+  <flowPara >Sie werden sehen, dass der Dialog drei Reiter hat: Füllung, Farbe der Kontur, und Muster der Kontur. Im Reiter »Füllung« ändert man die <flowSpan font-style="italic">Füllfarbe</flowSpan> (Innenfarbe) des markierten Objekts. Mit den Knöpfen direkt unter dem Reiter kann man die Füllungsart verändern: die Füllung ganz ausschalten (mit dem Knopf mit dem X), einfach (einfarbig) füllen, oder einen Linear- und Radialverlauf auswählen. Bei dem Objekt oben ist der Knopf »Einfache Farbe« aktiviert.</flowPara>
  </flowRoot>
  <rect id="d0e547" display="none" height="1e3px" width="288" y="3161" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e547"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Weiter unten sieht man verschiedene <flowSpan font-style="italic">Farbwahlmöglichkeiten</flowSpan>. Jede hat einen eigenen Reiter: RGB, HSL, CMYK und Farbrad. Wahrscheinlich am praktischsten ist das Farbrad, bei dem man das Dreieck verdrehen kann, um den Farbton zu wählen und dann die gewünschte Helligkeit im Dreieck auswählt. Alle Farbwähler besitzen einen Schieberegler, um den <flowSpan font-style="italic">Alpha-Kanal</flowSpan> (die Deckkraft) der Objektfarbe einzustellen.</flowDiv>
+  <flowPara >Weiter unten sieht man verschiedene <flowSpan font-style="italic">Farbwahlmöglichkeiten</flowSpan>. Jede hat einen eigenen Reiter: RGB, HSL, CMYK und Farbrad. Wahrscheinlich am praktischsten ist das Farbrad, bei dem man das Dreieck verdrehen kann, um den Farbton zu wählen und dann die gewünschte Helligkeit im Dreieck auswählt. Alle Farbwähler besitzen einen Schieberegler, um den <flowSpan font-style="italic">Alpha-Kanal</flowSpan> (die Deckkraft) der Objektfarbe einzustellen.</flowPara>
  </flowRoot>
  <rect id="d0e556" display="none" height="1e3px" width="288" y="3242.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e556"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Immer, wenn Sie ein Objekt auswählen, zeigt der Farbwähler dessen aktuelle Farbe und Kontur. Bei mehr als einem markierten Objekt wird die <flowSpan font-style="italic">Durchschnittsfarbe</flowSpan> angezeigt. Üben Sie an diesen Beispielobjekten oder erzeugen Sie selbst welche:</flowDiv>
+  <flowPara >Immer, wenn Sie ein Objekt auswählen, zeigt der Farbwähler dessen aktuelle Farbe und Kontur. Bei mehr als einem markierten Objekt wird die <flowSpan font-style="italic">Durchschnittsfarbe</flowSpan> angezeigt. Üben Sie an diesen Beispielobjekten oder erzeugen Sie selbst welche:</flowPara>
  </flowRoot>
  <path id="basic-f08-de.svgpath969" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" fill-opacity="0.75" transform="translate(10 3300.5) matrix(.99777 0 0 .93574 .12843 -1529.6)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#80765b"/>
  <path id="basic-f08-de.svgpath970" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" fill-opacity=".26769" transform="translate(10 3300.5) matrix(.99777 0 0 .93574 35.037 -1529)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#d0765b"/>
@@ -416,11 +416,11 @@
  <path id="basic-f08-de.svgpath974" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" fill-opacity=".74902" transform="translate(10 3300.5) matrix(.99777 0 0 .93574 167.81 -1529)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#6fe225"/>
  <path id="basic-f08-de.svgpath975" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" transform="translate(10 3300.5) matrix(.99777 0 0 .93574 199.63 -1529)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#ff3077"/>
  <rect id="d0e572" display="none" height="1e3px" width="288" y="3347.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e572"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Mit dem Reiter »Farbe der Kontur« kann man die <flowSpan font-style="italic">Kontur</flowSpan> (Außenlinie) des Objektes entfernen, oder ihr eine beliebige Farbe und Deckkraft zuordnen:</flowDiv>
+  <flowPara >Mit dem Reiter »Farbe der Kontur« kann man die <flowSpan font-style="italic">Kontur</flowSpan> (Außenlinie) des Objektes entfernen, oder ihr eine beliebige Farbe und Deckkraft zuordnen:</flowPara>
  </flowRoot>
  <path id="basic-f09-de.svgpath1010" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" transform="translate(10 3393.1) matrix(.99850 0 0 .93643 .81318 -1530.2)" xmlns:cc="http://creativecommons.org/ns#" fill="#dbdbdb"/>
  <path id="basic-f09-de.svgpath1011" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" transform="translate(10 3393.1) matrix(.99850 0 0 .93643 27.358 -1530.2)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#dbdbdb"/>
@@ -431,11 +431,11 @@
  <path id="basic-f09-de.svgpath1016" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" transform="translate(10 3393.1) matrix(.99850 0 0 .93643 176.67 -1530.2)" stroke="#7c7016" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#dbdbdb"/>
  <path id="basic-f09-de.svgpath1017" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" transform="translate(10 3393.1) matrix(.99850 0 0 .93643 203.21 -1530.2)" xmlns:cc="http://creativecommons.org/ns#" fill="#dbdbdb"/>
  <rect id="d0e588" display="none" height="1e3px" width="288" y="3439.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e588"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Der letzte Reiter »Muster der Kontur« dient zum Einstellen der Breite und anderer Eigenschaften der Kontur:</flowDiv>
+  <flowPara >Der letzte Reiter »Muster der Kontur« dient zum Einstellen der Breite und anderer Eigenschaften der Kontur:</flowPara>
  </flowRoot>
  <path id="basic-f10-de.svgpath1033" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" transform="translate(10 3476.2) matrix(.98881 0 0 .92734 3.8016 -1511.2)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width=".012105" fill="#dbdbdb"/>
  <path id="basic-f10-de.svgpath1034" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" transform="translate(10 3476.2) matrix(.98881 0 0 .92734 30.089 -1511.2)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="2.4211" fill="#dbdbdb"/>
@@ -445,11 +445,11 @@
  <path id="basic-f10-de.svgpath1038" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" transform="translate(10 3476.2) matrix(.98881 0 0 .92734 168.1 -1511.2)" stroke="#000" stroke-dasharray="7.26312, 3.63156, 1.81578, 3.63156" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1.8158" fill="#dbdbdb"/>
  <path id="basic-f10-de.svgpath1039" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" transform="translate(10 3476.2) matrix(.98881 0 0 .92734 204.24 -1511.2)" stroke="#000" stroke-dasharray="0.847366, 0.847366" xmlns:cc="http://creativecommons.org/ns#" stroke-width=".84737" fill="#dbdbdb"/>
  <rect id="d0e601" display="none" height="1e3px" width="288" y="3530.2" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e601"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Statt einer einfachen Farbe kann man auch <flowSpan font-style="italic">Farbverläufe</flowSpan> für Füllung und/oder Kontur benutzen:</flowDiv>
+  <flowPara >Statt einer einfachen Farbe kann man auch <flowSpan font-style="italic">Farbverläufe</flowSpan> für Füllung und/oder Kontur benutzen:</flowPara>
  </flowRoot>
  <defs id="basic-f11-de.svgdefs3">
   <linearGradient id="basic-f11-de.svglinearGradient1054" y2="2084.7" gradientUnits="userSpaceOnUse" y1="2043.7" gradientTransform="scale(1.2479 .80132)" x2="31.507" x1="28.86">
@@ -496,36 +496,36 @@
  <path id="basic-f11-de.svgpath1075" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" transform="translate(10 3565.7) matrix(-1.0663 0 0 -1 263.1 1673.3)" stroke="url(#basic-f11-de.svgradialGradient1076)" xmlns:cc="http://creativecommons.org/ns#" stroke-width="3.6437" fill="url(#basic-f11-de.svgradialGradient1083)"/>
  <path id="basic-f11-de.svgpath1084" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" transform="translate(10 3565.7) matrix(1.0663 0 0 1 214.49 -1632.8)" stroke="url(#basic-f11-de.svgradialGradient1085)" stroke-dasharray="3.64368, 3.64368" xmlns:cc="http://creativecommons.org/ns#" stroke-width="3.6437" fill="url(#basic-f11-de.svgradialGradient1086)"/>
  <rect id="d0e617" display="none" height="1e3px" width="288" y="3617" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e617"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Wenn man von einer einfachen Farbe auf einen Farbverlauf umschaltet, hat der neue Farbverlauf an beiden Enden zunächst die zuvor eingestellte Farbe - an einem Ende ist diese voll deckend, am anderen komplett transparent. Schalten Sie zum Farbverlaufswerkzeug (<flowSpan font-weight="bold">Strg+F1</flowSpan>), um die <flowSpan font-style="italic">Verlaufs-Anfasser</flowSpan> zu verschieben – das sind durch Linien verbundene Anfasser, mit denen man Richtung und Länge des Verlaufs einstellen kann. Wenn einer der Verlaufs-Anfasser ausgewählt ist (blau hervorgehoben), dann setzt der Dialog »Füllung und Kontur« nur die Farbe dieses einen Anfassers statt der Farbe des ganzen Objekts.</flowDiv>
+  <flowPara >Wenn man von einer einfachen Farbe auf einen Farbverlauf umschaltet, hat der neue Farbverlauf an beiden Enden zunächst die zuvor eingestellte Farbe - an einem Ende ist diese voll deckend, am anderen komplett transparent. Schalten Sie zum Farbverlaufswerkzeug (<flowSpan font-weight="bold">Strg+F1</flowSpan>), um die <flowSpan font-style="italic">Verlaufs-Anfasser</flowSpan> zu verschieben – das sind durch Linien verbundene Anfasser, mit denen man Richtung und Länge des Verlaufs einstellen kann. Wenn einer der Verlaufs-Anfasser ausgewählt ist (blau hervorgehoben), dann setzt der Dialog »Füllung und Kontur« nur die Farbe dieses einen Anfassers statt der Farbe des ganzen Objekts.</flowPara>
  </flowRoot>
  <rect id="d0e626" display="none" height="1e3px" width="288" y="3730.6" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e626"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Eine andere praktische Möglichkeit, die Farbe eines Objektes zu ändern, ist die Pipette (<flowSpan font-weight="bold">F7</flowSpan>). <flowSpan font-weight="bold">Klicken</flowSpan> Sie einfach mit der Pipette auf die Zeichnung, und die dort gewählte Farbe wird automatisch als Füllfarbe für das aktuelle Objekt benutzt. (<flowSpan font-weight="bold">Umschalt+Klick</flowSpan> ändert die Farbe der Kontur.)</flowDiv>
+  <flowPara >Eine andere praktische Möglichkeit, die Farbe eines Objektes zu ändern, ist die Pipette (<flowSpan font-weight="bold">F7</flowSpan>). <flowSpan font-weight="bold">Klicken</flowSpan> Sie einfach mit der Pipette auf die Zeichnung, und die dort gewählte Farbe wird automatisch als Füllfarbe für das aktuelle Objekt benutzt. (<flowSpan font-weight="bold">Umschalt+Klick</flowSpan> ändert die Farbe der Kontur.)</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="3803.352469000001" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="3803.352469000001" x="10">Duplizieren, Ausrichten, Verteilen</tspan>
  </text>
  <rect id="d0e644" display="none" height="1e3px" width="288" y="3808.6" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e644"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Einer der häufigsten Arbeitsschritte ist das <flowSpan font-style="italic">Duplizieren</flowSpan> eines Objekts (<flowSpan font-weight="bold">Strg+D</flowSpan>). Die Kopie des Objektes liegt danach direkt über dem kopierten Objekt und ist ausgewählt, so dass es sofort mit der Maus oder den Pfeiltasten verschoben werden kann. Versuchen Sie doch einmal zur Übung, Kopien des schwarzen Quadrats in einer Linie nebeneinander anzuordnen:</flowDiv>
+  <flowPara >Einer der häufigsten Arbeitsschritte ist das <flowSpan font-style="italic">Duplizieren</flowSpan> eines Objekts (<flowSpan font-weight="bold">Strg+D</flowSpan>). Die Kopie des Objektes liegt danach direkt über dem kopierten Objekt und ist ausgewählt, so dass es sofort mit der Maus oder den Pfeiltasten verschoben werden kann. Versuchen Sie doch einmal zur Übung, Kopien des schwarzen Quadrats in einer Linie nebeneinander anzuordnen:</flowPara>
  </flowRoot>
  <rect id="basic-f12-de.svgrect1117" fill-rule="evenodd" transform="translate(10 3886)" height="11.092" width="11.092" y=".90725" x="-.11450"/>
  <rect id="d0e663" display="none" height="1e3px" width="288" y="3909.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e663"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Es ist gut möglich, dass Ihre Quadrate jetzt einigermaßen zufällig platziert sind. Hier hilft der Dialog »Ausrichten und Verteilen« (<flowSpan font-weight="bold">Strg+Umschalt+A</flowSpan>). Wählen Sie alle Quadrate aus (mit <flowSpan font-weight="bold">Umschalt+Klick</flowSpan> oder dem Gummiband), öffnen Sie dann den Dialog und drücken »Zentren horizontal ausrichten«. Danach benutzen Sie »Horizontale Abstände zwischen Objekten ausgleichen« (lesen Sie die Tooltips der Schaltflächen). Die Objekte sind jetzt gleichmäßig ausgerichtet und verteilt. Hier sind weitere Übungsmöglichkeiten für Sie:</flowDiv>
+  <flowPara >Es ist gut möglich, dass Ihre Quadrate jetzt einigermaßen zufällig platziert sind. Hier hilft der Dialog »Ausrichten und Verteilen« (<flowSpan font-weight="bold">Strg+Umschalt+A</flowSpan>). Wählen Sie alle Quadrate aus (mit <flowSpan font-weight="bold">Umschalt+Klick</flowSpan> oder dem Gummiband), öffnen Sie dann den Dialog und drücken »Zentren horizontal ausrichten«. Danach benutzen Sie »Horizontale Abstände zwischen Objekten ausgleichen« (lesen Sie die Tooltips der Schaltflächen). Die Objekte sind jetzt gleichmäßig ausgerichtet und verteilt. Hier sind weitere Übungsmöglichkeiten für Sie:</flowPara>
  </flowRoot>
  <defs id="basic-f13-de.svgdefs3">
   <radialGradient id="basic-f13-de.svgradialGradient1670" cx="188.95" xlink:href="#basic-f13-de.svglinearGradient841" gradientUnits="userSpaceOnUse" cy="2278" r="19.568" gradientTransform="scale(1.0695 .93503)"/>
@@ -589,18 +589,18 @@
   <tspan y="4090.343688000001" x="10">Z-Ordnung</tspan>
  </text>
  <rect id="d0e688" display="none" height="1e3px" width="288" y="4095.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e688"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Der Begriff <flowSpan font-style="italic">Z-Ordnung</flowSpan> beschreibt die Stapelordnung von Objekten in einer Zeichnung – d.h. welche Objekte oben liegen und dadurch andere, darunterliegende, Objekte verdecken. Die zwei Befehle im Objektmenü, »Nach ganz oben anheben« (die <flowSpan font-weight="bold">Pos 1</flowSpan>-Taste) und »Nach ganz unten absenken« (die <flowSpan font-weight="bold">Ende</flowSpan>-Taste), bringen das ausgewählte Objekt nach ganz oben oder ganz unten in der Z-Ordnung der aktuellen Ebene. Zwei weitere Befehle, »Anheben« (<flowSpan font-weight="bold">Bild hoch</flowSpan>) und »Absenken« (<flowSpan font-weight="bold">Bild runter</flowSpan>), heben oder senken das ausgewählte Objekt <flowSpan font-style="italic">nur um eine Stufe</flowSpan>; das heißt, sie bewegen das Objekt an einem einzigen, nicht ausgewählten, Objekt in der Z-Ordnung vorbei. (Dazu zählen nur Objekte, die mit ihrem Begrenzungsrahmen die Auswahl überdecken).</flowDiv>
+  <flowPara >Der Begriff <flowSpan font-style="italic">Z-Ordnung</flowSpan> beschreibt die Stapelordnung von Objekten in einer Zeichnung – d.h. welche Objekte oben liegen und dadurch andere, darunterliegende, Objekte verdecken. Die zwei Befehle im Objektmenü, »Nach ganz oben anheben« (die <flowSpan font-weight="bold">Pos 1</flowSpan>-Taste) und »Nach ganz unten absenken« (die <flowSpan font-weight="bold">Ende</flowSpan>-Taste), bringen das ausgewählte Objekt nach ganz oben oder ganz unten in der Z-Ordnung der aktuellen Ebene. Zwei weitere Befehle, »Anheben« (<flowSpan font-weight="bold">Bild hoch</flowSpan>) und »Absenken« (<flowSpan font-weight="bold">Bild runter</flowSpan>), heben oder senken das ausgewählte Objekt <flowSpan font-style="italic">nur um eine Stufe</flowSpan>; das heißt, sie bewegen das Objekt an einem einzigen, nicht ausgewählten, Objekt in der Z-Ordnung vorbei. (Dazu zählen nur Objekte, die mit ihrem Begrenzungsrahmen die Auswahl überdecken).</flowPara>
  </flowRoot>
  <rect id="d0e709" display="none" height="1e3px" width="288" y="4229.9" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e709"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Üben Sie diese Befehle, indem Sie die Z-Ordnung der Objekte unten umkehren, so dass am Ende die ganz linke Ellipse oben und die ganz rechte Ellipse unten liegt:</flowDiv>
+  <flowPara >Üben Sie diese Befehle, indem Sie die Z-Ordnung der Objekte unten umkehren, so dass am Ende die ganz linke Ellipse oben und die ganz rechte Ellipse unten liegt:</flowPara>
  </flowRoot>
  <path id="basic-f14-de.svgpath1127" d="m70.423 2348c0 7.6166-10.51 13.791-23.474 13.791s-23.474-6.1744-23.474-13.791 10.51-13.791 23.474-13.791 23.474 6.1745 23.474 13.791z" fill-rule="evenodd" transform="translate(10 4278.3) matrix(1.3625 0 0 1.7447 16.798 -4067.1)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width=".39901" fill="#f90"/>
  <path id="basic-f14-de.svgpath1128" d="m100.94 2351.2c0 9.7234-11.429 17.606-25.528 17.606s-25.528-7.8823-25.528-17.606c0-9.7233 11.429-17.606 25.528-17.606s25.528 7.8823 25.528 17.606z" fill-rule="evenodd" transform="translate(10 4278.3) matrix(1 0 0 1.0513 31.763 -2451.9)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="0.6" fill="#f90"/>
@@ -609,49 +609,49 @@
  <path id="basic-f14-de.svgpath1131" d="m142.61 2347.1c0 4.2135-5.2549 7.6291-11.737 7.6291-6.4822 0-11.737-3.4156-11.737-7.6291 0-4.2134 5.2549-7.6291 11.737-7.6291 6.4822 0 11.737 3.4157 11.737 7.6291z" fill-rule="evenodd" transform="translate(10 4278.3) matrix(1 0 0 1.0513 37.632 -2444.9)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="0.6" fill="#f90"/>
  <path id="basic-f14-de.svgpath1132" d="m150.23 2347.4c0 3.079-3.2843 5.5751-7.3357 5.5751s-7.3357-2.4961-7.3357-5.5751c0-3.0791 3.2843-5.5751 7.3357-5.5751s7.3357 2.496 7.3357 5.5751z" fill-rule="evenodd" transform="translate(10 4278.3) matrix(1 0 0 1.0513 37.045 -2450.2)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="0.6" fill="#f90"/>
  <rect id="d0e722" display="none" height="1e3px" width="288" y="4343.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e722"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Eine sehr nützliche Auswahlhilfe ist die <flowSpan font-weight="bold">Tab</flowSpan>-Taste. Wenn nichts ausgewählt ist, dann wählt sie das unterste Objekt; andernfalls wählt sie das Objekt <flowSpan font-style="italic">über den markierten Objekten</flowSpan> in Z-Ordnung. <flowSpan font-weight="bold">Umschalt+Tab</flowSpan> arbeitet genau anders herum – man beginnt beim obersten Objekt und arbeitet sich dann nach unten. Objekte, die man neu erzeugt, liegen zuoberst auf dem Stapel, und so wählt <flowSpan font-weight="bold">Umschalt+Tab</flowSpan> praktischerweise das zuletzt erzeugte Objekt, solange nichts anderes markiert ist. Üben Sie <flowSpan font-weight="bold">Tab</flowSpan> und <flowSpan font-weight="bold">Umschalt+Tab</flowSpan> ein wenig an dem Stapel Ellipsen oben.</flowDiv>
+  <flowPara >Eine sehr nützliche Auswahlhilfe ist die <flowSpan font-weight="bold">Tab</flowSpan>-Taste. Wenn nichts ausgewählt ist, dann wählt sie das unterste Objekt; andernfalls wählt sie das Objekt <flowSpan font-style="italic">über den markierten Objekten</flowSpan> in Z-Ordnung. <flowSpan font-weight="bold">Umschalt+Tab</flowSpan> arbeitet genau anders herum – man beginnt beim obersten Objekt und arbeitet sich dann nach unten. Objekte, die man neu erzeugt, liegen zuoberst auf dem Stapel, und so wählt <flowSpan font-weight="bold">Umschalt+Tab</flowSpan> praktischerweise das zuletzt erzeugte Objekt, solange nichts anderes markiert ist. Üben Sie <flowSpan font-weight="bold">Tab</flowSpan> und <flowSpan font-weight="bold">Umschalt+Tab</flowSpan> ein wenig an dem Stapel Ellipsen oben.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="4458.831041" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="4458.831041" x="10">Verdeckte Objekte auswählen und verschieben</tspan>
  </text>
  <rect id="d0e749" display="none" height="1e3px" width="288" y="4464" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e749"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Wie kommt man an ein Objekt heran, das von einem anderen verdeckt wird? Es kann sein, das man das untere Objekt zwar sehen kann, wenn das obere Objekt (teilweise) durchsichtig ist. Doch bei dem Versuch, es auszuwählen, markiert man das obere Objekt und nicht das, das man haben möchte.</flowDiv>
+  <flowPara >Wie kommt man an ein Objekt heran, das von einem anderen verdeckt wird? Es kann sein, das man das untere Objekt zwar sehen kann, wenn das obere Objekt (teilweise) durchsichtig ist. Doch bei dem Versuch, es auszuwählen, markiert man das obere Objekt und nicht das, das man haben möchte.</flowPara>
  </flowRoot>
  <rect id="d0e752" display="none" height="1e3px" width="288" y="4523.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e752"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Dafür gibt es <flowSpan font-weight="bold">Alt+Klick</flowSpan>. Mit dem ersten <flowSpan font-weight="bold">Alt+Klick</flowSpan> wählt man das oberste Objekt, genau wie mit einem gewöhnlichen Klick. Das nächste Mal <flowSpan font-weight="bold">Alt+Klick</flowSpan> an der gleichen Stelle wählt jedoch das Objekt <flowSpan font-style="italic">unter</flowSpan> dem obersten; dann das nächste darunter, noch eines tiefer u.s.w. Auf diese Weise kommt man durch mehrere <flowSpan font-weight="bold">Alt+Klick</flowSpan>s nacheinander von ganz oben nach ganz unten, durch den ganzen Z-Ordnungsstapel von Objekten an der Stelle des Klicks. Wenn das unterste Objekt erreicht ist, wird durch das nächste <flowSpan font-weight="bold">Alt+Klick</flowSpan> natürlich wieder das oberste Objekt markiert.</flowDiv>
+  <flowPara >Dafür gibt es <flowSpan font-weight="bold">Alt+Klick</flowSpan>. Mit dem ersten <flowSpan font-weight="bold">Alt+Klick</flowSpan> wählt man das oberste Objekt, genau wie mit einem gewöhnlichen Klick. Das nächste Mal <flowSpan font-weight="bold">Alt+Klick</flowSpan> an der gleichen Stelle wählt jedoch das Objekt <flowSpan font-style="italic">unter</flowSpan> dem obersten; dann das nächste darunter, noch eines tiefer u.s.w. Auf diese Weise kommt man durch mehrere <flowSpan font-weight="bold">Alt+Klick</flowSpan>s nacheinander von ganz oben nach ganz unten, durch den ganzen Z-Ordnungsstapel von Objekten an der Stelle des Klicks. Wenn das unterste Objekt erreicht ist, wird durch das nächste <flowSpan font-weight="bold">Alt+Klick</flowSpan> natürlich wieder das oberste Objekt markiert.</flowPara>
  </flowRoot>
  <rect id="d0e773" display="none" height="1e3px" width="288" y="4626.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e773"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">[Wenn Sie unter Linux arbeiten, dann könnte es sein, dass <flowSpan font-weight="bold">Alt+Klick</flowSpan> nicht korrekt funktioniert und stattdessen z.B. das ganze Inkscape-Fenster verschiebt. Dies passiert, wenn Ihr Fenstermanager Alt+Klick für eine andere Aktion reserviert hat. Sie können in diesem Fall im Einstellungsdialog für Ihren Fenstermanager das Fensterverhalten anders einstellen, indem Sie die Aktion für diese Tastenkombination abschalten, oder sie auf die Meta-Taste (meist gleichbedeutend mit der Windows-Taste) umstellen. Dies erlaubt es Inkscape und anderen Anwendungen, die Alt-Taste frei zu verwenden.]</flowDiv>
+  <flowPara >[Wenn Sie unter Linux arbeiten, dann könnte es sein, dass <flowSpan font-weight="bold">Alt+Klick</flowSpan> nicht korrekt funktioniert und stattdessen z.B. das ganze Inkscape-Fenster verschiebt. Dies passiert, wenn Ihr Fenstermanager Alt+Klick für eine andere Aktion reserviert hat. Sie können in diesem Fall im Einstellungsdialog für Ihren Fenstermanager das Fensterverhalten anders einstellen, indem Sie die Aktion für diese Tastenkombination abschalten, oder sie auf die Meta-Taste (meist gleichbedeutend mit der Windows-Taste) umstellen. Dies erlaubt es Inkscape und anderen Anwendungen, die Alt-Taste frei zu verwenden.]</flowPara>
  </flowRoot>
  <rect id="d0e779" display="none" height="1e3px" width="288" y="4729.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e779"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Das ist zwar schön, aber was kann man mit einem markierten und verdeckten Objekt anfangen? Man kann es durch Tastaturbefehle verändern, und man kann die Anfasser benutzen. Aber beim Versuch, das Objekt selbst mit der Maus zu verschieben, wird automatisch wieder das oberste Objekt markiert. (So funktioniert »Klicken und Ziehen« nunmal – es wählt das (oberste) Objekt unter dem Mauszeiger, dann verschiebt es das gewählte Objekt). Um Inkscape mitzuteilen, das man das <flowSpan font-style="italic">gerade gewählte</flowSpan> Objekt verschieben will, und nicht etwa ein anderes auswählen möchte, benutzt man <flowSpan font-weight="bold">Alt+Ziehen</flowSpan>. Das verschiebt das aktuell markierte Objekt, egal wo man mit der Maus hinklickt.</flowDiv>
+  <flowPara >Das ist zwar schön, aber was kann man mit einem markierten und verdeckten Objekt anfangen? Man kann es durch Tastaturbefehle verändern, und man kann die Anfasser benutzen. Aber beim Versuch, das Objekt selbst mit der Maus zu verschieben, wird automatisch wieder das oberste Objekt markiert. (So funktioniert »Klicken und Ziehen« nunmal – es wählt das (oberste) Objekt unter dem Mauszeiger, dann verschiebt es das gewählte Objekt). Um Inkscape mitzuteilen, das man das <flowSpan font-style="italic">gerade gewählte</flowSpan> Objekt verschieben will, und nicht etwa ein anderes auswählen möchte, benutzt man <flowSpan font-weight="bold">Alt+Ziehen</flowSpan>. Das verschiebt das aktuell markierte Objekt, egal wo man mit der Maus hinklickt.</flowPara>
  </flowRoot>
  <rect id="d0e788" display="none" height="1e3px" width="288" y="4852.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e788"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Üben Sie <flowSpan font-weight="bold">Alt+Klick</flowSpan> und <flowSpan font-weight="bold">Alt+Ziehen</flowSpan> an den zwei braunen Objekten unter dem transparent-grünen Rechteck:</flowDiv>
+  <flowPara >Üben Sie <flowSpan font-weight="bold">Alt+Klick</flowSpan> und <flowSpan font-weight="bold">Alt+Ziehen</flowSpan> an den zwei braunen Objekten unter dem transparent-grünen Rechteck:</flowPara>
  </flowRoot>
  <path id="basic-f15-de.svgpath2575" sodipodi:sides="7" inkscape:flatsided="false" fill="#ac7335" style="color:#000000" transform="translate(10 4890.2) matrix(.39512 .68437 -.68437 .39512 2780 -1592.9)" inkscape:rounded="0.21000000" sodipodi:r1="28.739008" sodipodi:r2="16.983238" sodipodi:arg1="0.52143444" sodipodi:arg2="0.97023339" sodipodi:type="star" d="m126.89 3940.5c-1.71 2.8-13.23-2-15.92-0.2-2.69 1.7-2.72 13.9-5.86 14.5-3.14 0.5-6.349-10.3-9.539-11.1s-13.307 5.7-15.627 3.5 6.076-11.8 4.656-14.7c-1.419-3-12.432-3.1-12.315-6.3s12.009-3.8 13.505-6.6c1.495-2.7-2.945-13.2-0.399-15.1 2.547-1.8 10.874 5.7 14.077 5.1 3.202-0.6 7.302-9.5 10.362-8.7 3.07 0.9 0.25 11.3 2.78 13.4 2.53 2 12.65-0.8 13.8 2.2 1.16 3.1-8.72 9.8-8.76 13-0.04 3.1 10.95 8.3 9.24 11z" inkscape:randomized="0.047000000" sodipodi:cy="3927.1016" sodipodi:cx="100.73942"/>
  <path id="basic-f15-de.svgpath2574" sodipodi:sides="6" inkscape:flatsided="false" fill="#ff9400" style="color:#000000" transform="translate(10 4890.2) matrix(.83260 .48070 -.48070 .83260 1947.5 -3288.4)" inkscape:rounded="0.21000000" sodipodi:r1="19.212250" sodipodi:r2="9.3934679" sodipodi:arg1="0.48833395" sodipodi:arg2="0.77161843" sodipodi:type="star" d="m107.62 3941.6c-0.53 2.1-9.076-3.5-10.951-2.4-2.497 1.5-1.972 11.9-4.862 12.6-2.17 0.6-1.585-8.5-3.563-9.5-2.636-1.2-11.029 4.1-13.221 2.2-1.646-1.5 6.95-5.7 6.894-8-0.075-3-9.644-9.8-9.082-12.7 0.421-2.2 9.473 5.2 11.397 4 2.564-1.5 2.337-12.6 5.229-13.2 2.17-0.5 1.693 9 3.66 10.1 2.621 1.3 12.059-3.4 14.219-1.4 1.61 1.6-7.377 4.8-7.27 7 0.15 3 8.25 8.5 7.55 11.3z" inkscape:randomized="0.047000000" sodipodi:cy="3933.4641" sodipodi:cx="90.665482"/>
@@ -660,11 +660,11 @@
   <tspan y="4971.594589" x="10">Ähnliche Objekte auswählen</tspan>
  </text>
  <rect id="d0e813" display="none" height="1e3px" width="288" y="4976.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e813"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Inkscape kann Objekte auswählen, die dem aktuell gewählten Objekt ähneln. Wenn man z.B. alle blauen Quadrate unten auswählen möchte, kann man einfach eines davon auswählen, und dann über das Menü <flowSpan font-family="sans-serif">Bearbeiten &gt; Das Gleiche auswählen &gt; Füllfarbe</flowSpan> verwenden. Alle Objekte mit derselben blauen Füllfarbe sind nun ausgewählt.</flowDiv>
+  <flowPara >Inkscape kann Objekte auswählen, die dem aktuell gewählten Objekt ähneln. Wenn man z.B. alle blauen Quadrate unten auswählen möchte, kann man einfach eines davon auswählen, und dann über das Menü <flowSpan font-family="sans-serif">Bearbeiten &gt; Das Gleiche auswählen &gt; Füllfarbe</flowSpan> verwenden. Alle Objekte mit derselben blauen Füllfarbe sind nun ausgewählt.</flowPara>
  </flowRoot>
  <rect id="basic-f16-de.svgrect4101" opacity="0.924" ry="0" style="color-rendering:auto;color:#000000;isolation:auto;shape-rendering:auto;image-rendering:auto" rx="0" transform="translate(10 5045.3)" height="14.205" width="15.152" y="4.0448" x="48.992" xmlns:cc="http://creativecommons.org/ns#" fill="#204a87"/>
  <rect id="basic-f16-de.svgrect4105" opacity="0.924" ry="0" style="color-rendering:auto;color:#000000;isolation:auto;shape-rendering:auto;image-rendering:auto" rx="0" transform="translate(10 5045.3)" height="14.205" width="15.152" y="21.722" x="48.992" xmlns:cc="http://creativecommons.org/ns#" fill="#204a87"/>
@@ -706,21 +706,21 @@
  <rect id="basic-f16-de.svgrect4179" opacity="0.924" ry="0" style="color-rendering:auto;color:#000000;isolation:auto;shape-rendering:auto;image-rendering:auto" rx="0" transform="translate(10 5045.3)" height="14.205" width="15.152" y="38.895" x="28.789" xmlns:cc="http://creativecommons.org/ns#" fill="#204a87"/>
  <rect id="basic-f16-de.svgrect4167" opacity="0.924" style="color-rendering:auto;color:#000000;isolation:auto;shape-rendering:auto;image-rendering:auto" rx="0" transform="translate(10 5045.3)" ry="0" width="15.152" y="38.895" x="233.85" xmlns:cc="http://creativecommons.org/ns#" height="14.205" fill="#204a87"/>
  <rect id="d0e829" display="none" height="1e3px" width="288" y="5106.3" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e829"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Man kann ähnliche Objekte nicht nur nach deren Füllfarbe, sondern auch nach Konturfarbe, Konturstil, Füllung und Kontur zusammen und nach Objekttyp auswählen.</flowDiv>
+  <flowPara >Man kann ähnliche Objekte nicht nur nach deren Füllfarbe, sondern auch nach Konturfarbe, Konturstil, Füllung und Kontur zusammen und nach Objekttyp auswählen.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="5158.302624" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="5158.302624" x="10">Schlusswort</tspan>
  </text>
  <rect id="d0e838" display="none" height="1e3px" width="288" y="5163.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e838"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Dies ist das Ende des Grundlagen-Tutorials. Das waren längst noch nicht alle Funktionen in Inkscape, aber mit den hier vermittelten Techniken können Sie schon einfache, aber nützliche Grafiken erstellen. Um kompliziertere Techniken zu erlernen, schauen Sie sich das Tutorial »Inkscape: Fortgeschrittene Benutzung« und die anderen Tutorials in <flowSpan font-family="sans-serif">Hilfe &gt; Einführungen</flowSpan> an.</flowDiv>
+  <flowPara >Dies ist das Ende des Grundlagen-Tutorials. Das waren längst noch nicht alle Funktionen in Inkscape, aber mit den hier vermittelten Techniken können Sie schon einfache, aber nützliche Grafiken erstellen. Um kompliziertere Techniken zu erlernen, schauen Sie sich das Tutorial »Inkscape: Fortgeschrittene Benutzung« und die anderen Tutorials in <flowSpan font-family="sans-serif">Hilfe &gt; Einführungen</flowSpan> an.</flowPara>
  </flowRoot>
  <g transform="translate(0 5234.5)">
   <defs id="defs3" xmlns:cc="http://creativecommons.org/ns#">
@@ -753,7 +753,7 @@
     <path id="path1521" d="m359.24 21.363c-11.313 0-22.606 4.3206-31.275 12.99l-154.09 154.06c-8.4969 8.4967-12.762 19.543-12.931 30.631h-0.0585c0 0.0395 0.0566 0.0774 0.0585 0.11702-0.002 0.18609-0.0585 0.36977-0.0585 0.55586h0.2633c2.9491 11.221 79.15 25.523 87.651 34.025 12.839 12.839-49.233 22.268-36.395 35.107 12.839 12.839 77.59 24.843 90.43 37.682 12.839 12.839-26.238 26.51-13.399 39.349s55.967-3.2094 48.155 30.28c17.338 17.338 53.512 9.0588 77.733-8.2795 12.839-12.839-24.629-11.707-11.79-24.546s45.247-12.908 72.555-43.621c-10.992-17.095-46.981-24.375-34.142-37.214s37.8-6.3179 91.659-30.777c26.292-11.941 24.12-21.01 24.019-32.006-0.002-0.23138 0-0.43973 0-0.67288h-0.0585c-0.16-11.07-4.46-22.12-12.95-30.62l-154.07-154.06c-8.66-8.667-19.99-12.987-31.3-12.987zm-1.3165 20.04c5.0295 0.13102 9.0916 3.9651 17.056 9.1279l72.789 53.977c0.79681 0.51671 1.5557 1.0557 2.2527 1.6091 0.69703 0.55327 1.3337 1.1401 1.9309 1.7261 0.5972 0.58495 1.14 1.1721 1.6383 1.7846 0.49726 0.61244 0.94845 1.2385 1.3458 1.8724 0.39844 0.6349 0.75476 1.2798 1.0532 1.9309 0.29867 0.65226 0.53281 1.325 0.7314 1.9894 0.19976 0.66341 0.36832 1.319 0.46811 1.9894 0.0999 0.67165 0.14627 1.3452 0.14627 2.0187l-43.123-20.83-4.3006 32.562-23.727-11.117-36.629 24.458-14.014-48.331-18.051 42.275-50.408 5.032 0.55587-22.439c0-5.3897 29.057-43.122 46.751-52.105l32.386-23.259c4.7787-3.0977 8.1289-4.35 11.147-4.2714zm-66.996 220.21c22.944 5.9503 48.476 13.757 68.957 13.897l0.87768 9.2157c-17.538-1.8078-54.648-10.276-63.398-14.745l-6.4363-8.3672z" stroke-width="1pt"/>
    </g>
    <use id="use1328" style="color:#000000" xlink:href="#path1508" transform="matrix(5.1767 0 0 5.1767 -102.7 -256.62)" height="1052.3622" fill-opacity=".064615" width="744.09448" y="0" x="0" font-family="sans-serif" fill="#ffffff"/>
-   <text id="text7519" opacity=".5" line-height="125%" xml:space="preserve" transform="rotate(-90)" font-size="6.9693px" y="-6.5672836" x="-70.83046" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan7521" sodipodi:role="line" x="-70.83046" style="letter-spacing:.29056" y="-6.5672836">Verwenden Sie <tspan id="tspan7523" font-weight="bold">Strg+Pfeiltaste nach oben</tspan> zum Verschieben </tspan></text>
+   <text id="text7519" opacity=".5" line-height="125%"  transform="rotate(-90)" font-size="6.9693px" y="-6.5672836" x="-70.83046" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan7521" sodipodi:role="line" x="-70.83046" style="letter-spacing:.29056" y="-6.5672836">Verwenden Sie <tspan id="tspan7523" font-weight="bold">Strg+Pfeiltaste nach oben</tspan> zum Verschieben </tspan></text>
    <path id="path7527" opacity=".5" style="color:#000000" d="m338.53 197.82-13.108-1.2709 7.6547-10.717z" fill-rule="evenodd" transform="matrix(-.61496 -.045496 -.061919 .45186 207.79 -245.15)"/>
   </g>
  </g>

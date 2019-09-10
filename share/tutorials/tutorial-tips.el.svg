@@ -37,42 +37,42 @@
    <path id="path831" d="m359.24 21.363c-11.313 0-22.606 4.3206-31.275 12.99l-154.09 154.06c-8.4969 8.4967-12.762 19.543-12.931 30.631h-0.0585c0 0.0395 0.0566 0.0774 0.0585 0.11702-0.002 0.18609-0.0585 0.36977-0.0585 0.55586h0.2633c2.9491 11.221 79.15 25.523 87.651 34.025 12.839 12.839-49.233 22.268-36.395 35.107 12.839 12.839 77.59 24.843 90.43 37.682 12.839 12.839-26.238 26.51-13.399 39.349s55.967-3.2094 48.155 30.28c17.338 17.338 53.512 9.0588 77.733-8.2795 12.839-12.839-24.629-11.707-11.79-24.546s45.247-12.908 72.555-43.621c-10.992-17.095-46.981-24.375-34.142-37.214s37.8-6.3179 91.659-30.777c26.292-11.941 24.12-21.01 24.019-32.006-0.002-0.23138 0-0.43973 0-0.67288h-0.0585c-0.16-11.07-4.46-22.12-12.95-30.62l-154.07-154.06c-8.66-8.667-19.99-12.987-31.3-12.987zm-1.3165 20.04c5.0295 0.13102 9.0916 3.9651 17.056 9.1279l72.789 53.977c0.79681 0.51671 1.5557 1.0557 2.2527 1.6091 0.69703 0.55327 1.3337 1.1401 1.9309 1.7261 0.5972 0.58495 1.14 1.1721 1.6383 1.7846 0.49726 0.61244 0.94845 1.2385 1.3458 1.8724 0.39844 0.6349 0.75476 1.2798 1.0532 1.9309 0.29867 0.65226 0.53281 1.325 0.7314 1.9894 0.19976 0.66341 0.36832 1.319 0.46811 1.9894 0.0999 0.67165 0.14627 1.3452 0.14627 2.0187l-43.123-20.83-4.3006 32.562-23.727-11.117-36.629 24.458-14.014-48.331-18.051 42.275-50.408 5.032 0.55587-22.439c0-5.3897 29.057-43.122 46.751-52.105l32.386-23.259c4.7787-3.0977 8.1289-4.35 11.147-4.2714zm-66.996 220.21c22.944 5.9503 48.476 13.757 68.957 13.897l0.87768 9.2157c-17.538-1.8078-54.648-10.276-63.398-14.745l-6.4363-8.3672z" stroke-width="1pt"/>
   </g>
   <use id="use2086" style="color:#000000" xlink:href="#path1124" transform="matrix(3.7991 0 0 3.7991 -428.74 -36.475)" height="1052.3622" fill-opacity=".11077" width="320.00000" y="0.0000000" x="0.0000000" font-family="sans-serif" fill="#ffffff"/>
-  <text id="text7519" opacity=".5" line-height="125%" xml:space="preserve" transform="rotate(90)" font-size="6.9693px" y="-326.81229" x="3.6203015" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan7521" sodipodi:role="line" x="3.6203015" style="letter-spacing:.29056" y="-326.81229">Χρήση <tspan id="tspan7523" font-weight="bold">Ctrl+κάτω βέλος</tspan> για κύλιση </tspan></text>
+  <text id="text7519" opacity=".5" line-height="125%"  transform="rotate(90)" font-size="6.9693px" y="-326.81229" x="3.6203015" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan7521" sodipodi:role="line" x="3.6203015" style="letter-spacing:.29056" y="-326.81229">Χρήση <tspan id="tspan7523" font-weight="bold">Ctrl+κάτω βέλος</tspan> για κύλιση </tspan></text>
   <path id="path7527" opacity=".5" style="color:#000000" d="m338.53 197.82-13.108-1.2709 7.6547-10.717z" fill-rule="evenodd" transform="matrix(.61496 .045496 .061919 -.45186 112.46 216.6)"/>
  </g>
  <text id="text1920" font-family="sans-serif" font-size="7" transform="scale(1.1307)" y="30" x="35" fill="#ffffff">
   <tspan id="tspan1668" style="letter-spacing:2.1813" fill="#ffffff" dx="0 -0.57057059 0 0 0 0 0">::ΣΥΜΒΟΥΛΈΣ ΚΑΙ ΚΌΛΠΑ</tspan>
  </text>
  <rect id="d0e10" display="none" height="1e3px" width="264" y="46" x="35"/>
- <flowRoot font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
+ <flowRoot xml:space="preserve" font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e10"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Αυτό το μάθημα θα παρουσιάσει ποικίλες συμβουλές και κόλπα που οι χρήστες έμαθαν μέσα από τη χρήση του Inkscape και μερικά “κρυφά” χαρακτηριστικά που μπορούν να σας βοηθήσουν να επιταχύνετε τις εργασίες παραγωγής.</flowDiv>
+  <flowPara >Αυτό το μάθημα θα παρουσιάσει ποικίλες συμβουλές και κόλπα που οι χρήστες έμαθαν μέσα από τη χρήση του Inkscape και μερικά “κρυφά” χαρακτηριστικά που μπορούν να σας βοηθήσουν να επιταχύνετε τις εργασίες παραγωγής.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="110.47031" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="110.47031" x="10">Ακτινική τοποθέτηση με παρατιθέμενους κλώνους</tspan>
  </text>
  <rect id="d0e19" display="none" height="1e3px" width="288" y="115.67" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e19"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Είναι εύκολο να δείτε τη χρήση του διαλόγου <flowSpan font-family="sans-serif">Δημιουργία κλώνων παράθεσης</flowSpan> για ορθογώνια πλέγματα και μοτίβα. Αλλά τι γίνεται εάν χρειάζεσθε <flowSpan font-style="italic">ακτινική</flowSpan> τοποθέτηση, όπου τα αντικείμενα μοιράζονται ένα κοινό κέντρο περιστροφής; Είναι επίσης δυνατό!</flowDiv>
+  <flowPara >Είναι εύκολο να δείτε τη χρήση του διαλόγου <flowSpan font-family="sans-serif">Δημιουργία κλώνων παράθεσης</flowSpan> για ορθογώνια πλέγματα και μοτίβα. Αλλά τι γίνεται εάν χρειάζεσθε <flowSpan font-style="italic">ακτινική</flowSpan> τοποθέτηση, όπου τα αντικείμενα μοιράζονται ένα κοινό κέντρο περιστροφής; Είναι επίσης δυνατό!</flowPara>
  </flowRoot>
  <rect id="d0e28" display="none" height="1e3px" width="288" y="165.66" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e28"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Εάν το ακτινικό σας μοτίβο χρειάζεται να έχει μόνο 3, 4, 6, 8 ή 12 στοιχεία, τότε μπορείτε να δοκιμάσετε τις συμμετρίες P3, P31M, P3M1, P4, P4M, P6 ή P6M. Αυτές θα δουλέψουν όμορφα για νιφάδες και τα παρόμοια. Μια πιο γενική μέθοδος, όμως, είναι η ακόλουθη.</flowDiv>
+  <flowPara >Εάν το ακτινικό σας μοτίβο χρειάζεται να έχει μόνο 3, 4, 6, 8 ή 12 στοιχεία, τότε μπορείτε να δοκιμάσετε τις συμμετρίες P3, P31M, P3M1, P4, P4M, P6 ή P6M. Αυτές θα δουλέψουν όμορφα για νιφάδες και τα παρόμοια. Μια πιο γενική μέθοδος, όμως, είναι η ακόλουθη.</flowPara>
  </flowRoot>
  <rect id="d0e31" display="none" height="1e3px" width="288" y="215.65" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e31"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Επιλέξτε τη συμμετρία P1 (απλή μετατόπιση) και έπειτα <flowSpan font-style="italic">αντιστάθμιση</flowSpan> για αυτήν την μετατόπιση πηγαίνοντας στην καρτέλα <flowSpan font-family="sans-serif">μετατόπιση</flowSpan> και ορίζοντας <flowSpan font-family="sans-serif">ανά γραμμή/μετατόπιση Y</flowSpan> and <flowSpan font-family="sans-serif">ανά στήλη/μετατόπιση X</flowSpan> και τις δυο στο -100%. Τώρα όλοι οι κλώνοι θα στοιβαχθούν ακριβώς στην κορυφή της αρχικής. Αυτό που μένει να γίνει είναι να πάτε στην καρτέλα <flowSpan font-family="sans-serif">περιστροφή</flowSpan> και να ορίσετε κάποια γωνία περιστροφής ανά στήλη, έπειτα δημιουργήστε το μοτίβο με μία γραμμή και πολλαπλές στήλες. Π.χ., ιδού ένα μοτίβο φτιαγμένο από μια οριζόντια γραμμή, με τριάντα στήλες, με κάθε στήλη περιστρεμμένη κατά 6 μοίρες:</flowDiv>
+  <flowPara >Επιλέξτε τη συμμετρία P1 (απλή μετατόπιση) και έπειτα <flowSpan font-style="italic">αντιστάθμιση</flowSpan> για αυτήν την μετατόπιση πηγαίνοντας στην καρτέλα <flowSpan font-family="sans-serif">μετατόπιση</flowSpan> και ορίζοντας <flowSpan font-family="sans-serif">ανά γραμμή/μετατόπιση Y</flowSpan> and <flowSpan font-family="sans-serif">ανά στήλη/μετατόπιση X</flowSpan> και τις δυο στο -100%. Τώρα όλοι οι κλώνοι θα στοιβαχθούν ακριβώς στην κορυφή της αρχικής. Αυτό που μένει να γίνει είναι να πάτε στην καρτέλα <flowSpan font-family="sans-serif">περιστροφή</flowSpan> και να ορίσετε κάποια γωνία περιστροφής ανά στήλη, έπειτα δημιουργήστε το μοτίβο με μία γραμμή και πολλαπλές στήλες. Π.χ., ιδού ένα μοτίβο φτιαγμένο από μια οριζόντια γραμμή, με τριάντα στήλες, με κάθε στήλη περιστρεμμένη κατά 6 μοίρες:</flowPara>
  </flowRoot>
  <path id="tips-f01-el.svgpath25" stroke="#000" stroke-width="0.3" fill="none" style="color:#000000" transform="translate(10 337.47)" inkscape:tile-cx="160.25000" inkscape:tile-cy="346.50000" d="m81.5 58.9h117.5" inkscape:tile-w="117.80000" inkscape:tile-h="0.30000001"/>
  <use id="tips-f01-el.svguse55" xlink:href="#tips-f01-el.svgpath25" transform="translate(10 337.47) matrix(.99452 .10453 -.10453 .99452 6.9252 -14.337) translate(-10 -337.47)" height="1052.3622" width="744.09448" inkscape:tiled-clone-of="#path25" y="0.0000000" x="0.0000000"/>
@@ -105,18 +105,18 @@
  <use id="tips-f01-el.svguse82" xlink:href="#tips-f01-el.svgpath25" transform="translate(10 337.47) matrix(-.97815 .20791 -.20791 -.97815 289.68 87.353) translate(-10 -337.47)" height="1052.3622" width="744.09448" inkscape:tiled-clone-of="#path25" y="0.0000000" x="0.0000000"/>
  <use id="tips-f01-el.svguse83" xlink:href="#tips-f01-el.svgpath25" transform="translate(10 337.47) matrix(-.99452 .10453 -.10453 -.99452 285.89 102.82) translate(-10 -337.47)" height="1052.3622" width="744.09448" inkscape:tiled-clone-of="#path25" y="0.0000000" x="0.0000000"/>
  <rect id="d0e59" display="none" height="1e3px" width="288" y="466.97" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e59"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Για να πάρετε μια πλάκα ρολογιού, χρειαζόσαστε να κόψετε ή απλά να επικαλύψετε το κεντρικό μέρος με ένα λευκό κύκλο (για πράξεις boole σε κλώνους, αποσυνδέστε τους πρώτα).</flowDiv>
+  <flowPara >Για να πάρετε μια πλάκα ρολογιού, χρειαζόσαστε να κόψετε ή απλά να επικαλύψετε το κεντρικό μέρος με ένα λευκό κύκλο (για πράξεις boole σε κλώνους, αποσυνδέστε τους πρώτα).</flowPara>
  </flowRoot>
  <rect id="d0e62" display="none" height="1e3px" width="288" y="506.32" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e62"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Πιο ενδιαφέροντα εφέ μπορούν να δημιουργηθούν χρησιμοποιώντας γραμμές και στήλες. Ιδού ένα μοτίβο με 10 στήλες και 8 γραμμές, με περιστροφή 2 μοιρών ανά γραμμή και 18 μοιρών ανά στήλη. Κάθε ομάδα γραμμών εδώ είναι μία “στήλη”, έτσι οι ομάδες είναι 18 μοίρες μεταξύ τους. Μέσα σε κάθε στήλη, οι ατομικές γραμμές είναι μακριά 2 μοίρες:</flowDiv>
+  <flowPara >Πιο ενδιαφέροντα εφέ μπορούν να δημιουργηθούν χρησιμοποιώντας γραμμές και στήλες. Ιδού ένα μοτίβο με 10 στήλες και 8 γραμμές, με περιστροφή 2 μοιρών ανά γραμμή και 18 μοιρών ανά στήλη. Κάθε ομάδα γραμμών εδώ είναι μία “στήλη”, έτσι οι ομάδες είναι 18 μοίρες μεταξύ τους. Μέσα σε κάθε στήλη, οι ατομικές γραμμές είναι μακριά 2 μοίρες:</flowPara>
  </flowRoot>
  <path id="tips-f02-el.svgpath92" stroke="#000" stroke-width="0.3" fill="none" style="color:#000000" transform="translate(10 585.59)" inkscape:tile-cx="164.00000" inkscape:tile-cy="543.50000" d="m72.5 71.65h143" inkscape:tile-w="143.30000" inkscape:tile-h="0.30000001"/>
  <use id="tips-f02-el.svguse1473" xlink:href="#tips-f02-el.svgpath92" transform="translate(10 585.59) matrix(.99966 .026177 -.026177 .99966 1.9249 -3.7451) translate(-10 -585.59)" height="2150.5000" width="320.00000" inkscape:tiled-clone-of="#path92" y="0.0000000" x="0.0000000"/>
@@ -199,11 +199,11 @@
  <use id="tips-f02-el.svguse1550" xlink:href="#tips-f02-el.svgpath92" transform="translate(10 585.59) matrix(-.98769 .15643 -.15643 -.98769 297.44 119.89) translate(-10 -585.59)" height="2150.5000" width="320.00000" inkscape:tiled-clone-of="#path92" y="0.0000000" x="0.0000000"/>
  <use id="tips-f02-el.svguse1551" xlink:href="#tips-f02-el.svgpath92" transform="translate(10 585.59) matrix(-.99144 .13053 -.13053 -.99144 296.12 123.89) translate(-10 -585.59)" height="2150.5000" width="320.00000" inkscape:tiled-clone-of="#path92" y="0.0000000" x="0.0000000"/>
  <rect id="d0e75" display="none" height="1e3px" width="288" y="740.59" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e75"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Στα παραπάνω παραδείγματα, η γραμμή περιστράφηκε γύρω από το κέντρο της. Αλλά τι γίνεται εάν θέλετε το κέντρο να είναι έξω από το σχήμα σας; Απλά πατήστε στο αντικείμενο δύο φορές με το εργαλείο επιλογής για να εισέλθετε δτην κατάσταση περιστροφής. Τώρα, μετακινήστε το κέντρο περιστροφής του αντικειμένου (που αναπαριστάνεται από μια μικρή σταυροειδή λαβή) στο σημείο που θα θέλατε να είναι το κέντρο της περιστροφής για τη λειτουργία κλώνων παράθεσης. Έπειτα, χρησιμοποιήστε την <flowSpan font-family="sans-serif">Δημιουργία κλώνων παράθεσης</flowSpan> στο αντικείμενο. Έτσι μπορείτε να κάνετε όμορφες “εκρήξεις” ή “αστεροσκόνες” με τυχαία κλιμάκωση, περιστροφή και ίσως αδιαφάνεια:</flowDiv>
+  <flowPara >Στα παραπάνω παραδείγματα, η γραμμή περιστράφηκε γύρω από το κέντρο της. Αλλά τι γίνεται εάν θέλετε το κέντρο να είναι έξω από το σχήμα σας; Απλά πατήστε στο αντικείμενο δύο φορές με το εργαλείο επιλογής για να εισέλθετε δτην κατάσταση περιστροφής. Τώρα, μετακινήστε το κέντρο περιστροφής του αντικειμένου (που αναπαριστάνεται από μια μικρή σταυροειδή λαβή) στο σημείο που θα θέλατε να είναι το κέντρο της περιστροφής για τη λειτουργία κλώνων παράθεσης. Έπειτα, χρησιμοποιήστε την <flowSpan font-family="sans-serif">Δημιουργία κλώνων παράθεσης</flowSpan> στο αντικείμενο. Έτσι μπορείτε να κάνετε όμορφες “εκρήξεις” ή “αστεροσκόνες” με τυχαία κλιμάκωση, περιστροφή και ίσως αδιαφάνεια:</flowPara>
  </flowRoot>
  <g id="tips-f03-el.svgg1768" inkscape:tile-w="87.999840" transform="translate(10 873.05) matrix(.63768 0 0 .63768 37.609 -470.92)" inkscape:tile-h="7.3333200" inkscape:tile-cx="158.99982" inkscape:tile-cy="859.24904">
   <path id="tips-f03-el.svgpath1592" style="color:#000000" d="m210.17 859.92c4.54-2.08 15.81-3.8 15.81-0.12 0 3.67-15.81 0.12-15.81 0.12z" fill-rule="evenodd"/>
@@ -284,42 +284,42 @@
   <tspan y="1051.863758" x="10">Πώς να τεμαχίσετε (περιοχές εξαγωγής πολλαπλών ορθογωνίων);</tspan>
  </text>
  <rect id="d0e97" display="none" height="1e3px" width="288" y="1057.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e97"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Δημιουργήστε μια νέα στρώση και σε αυτή τη στρώση δημιουργήστε αόρατα ορθογώνια που καλύπτουν μέρη της εικόνας σας. Βεβαιωθείτε ότι το έγγραφό σας χρησιμοποιεί μονάδες px (προεπιλογή), ενεργοποιήστε πλέγμα και προσκόλληση των ορθογωνίων στο πλέγμα, έτσι ώστε το καθένα να καλύπτει ένα συνολικό αριθμό μονάδων εικονοστοιχείων. Δώστε ταυτότητες με νόημα στα ορθογώνια και εξάγετε καθένα στο αρχείο του (<flowSpan font-family="sans-serif">Αρχείο &gt; Εξαγωγή εικόνας PNG</flowSpan> (<flowSpan font-weight="bold">Shift+Ctrl+E</flowSpan>)). Έπειτα τα ορθογώνια θα θυμούνται τα ονόματα αρχείων εξαγωγής τους. Μετά από αυτό, είναι πολύ εύκολο να ξαναεξάγετε μερικά από τα ορθογώνια: μετάβαση στη στοιβάδα εξαγωγής, χρησιμοποιήστε Tab για επιλογή του επιθυμητού (ή χρησιμοποιήστε εύρεση κατά αναγνωριστικό) και πατήστε εξαγωγή στον διάλογο. Ή μπορείτε να γράψετε ένα σενάριο κελύφους ή ομαδικό αρχείο για εξαγωγή όλων των περιοχών σας, με μια εντολή όπως:</flowDiv>
+  <flowPara >Δημιουργήστε μια νέα στρώση και σε αυτή τη στρώση δημιουργήστε αόρατα ορθογώνια που καλύπτουν μέρη της εικόνας σας. Βεβαιωθείτε ότι το έγγραφό σας χρησιμοποιεί μονάδες px (προεπιλογή), ενεργοποιήστε πλέγμα και προσκόλληση των ορθογωνίων στο πλέγμα, έτσι ώστε το καθένα να καλύπτει ένα συνολικό αριθμό μονάδων εικονοστοιχείων. Δώστε ταυτότητες με νόημα στα ορθογώνια και εξάγετε καθένα στο αρχείο του (<flowSpan font-family="sans-serif">Αρχείο &gt; Εξαγωγή εικόνας PNG</flowSpan> (<flowSpan font-weight="bold">Shift+Ctrl+E</flowSpan>)). Έπειτα τα ορθογώνια θα θυμούνται τα ονόματα αρχείων εξαγωγής τους. Μετά από αυτό, είναι πολύ εύκολο να ξαναεξάγετε μερικά από τα ορθογώνια: μετάβαση στη στοιβάδα εξαγωγής, χρησιμοποιήστε Tab για επιλογή του επιθυμητού (ή χρησιμοποιήστε εύρεση κατά αναγνωριστικό) και πατήστε εξαγωγή στον διάλογο. Ή μπορείτε να γράψετε ένα σενάριο κελύφους ή ομαδικό αρχείο για εξαγωγή όλων των περιοχών σας, με μια εντολή όπως:</flowPara>
  </flowRoot>
  <rect id="d0e106" display="none" height="1e3px" width="288" y="1224.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e106"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">inkscape -i area-id -t filename.svg</flowDiv>
+  <flowPara >inkscape -i area-id -t filename.svg</flowPara>
  </flowRoot>
  <rect id="d0e109" display="none" height="1e3px" width="288" y="1241.9" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e109"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">για κάθε εξαγόμενη περιοχή. Ο διακόπτης -t της λέει να χρησιμοποιήσει την υπόδειξη υπόμνησης ονόματος αρχείου, αλλιώς μπορείτε να δώσετε το όνομα αρχείου εξαγωγής με το διακόπτη -e. Εναλλακτικά, μπορείτε να χρησιμοποιήσετε τις επεκτάσεις <flowSpan font-family="sans-serif">Επεκτάσεις &gt; Ιστός &gt; Τεμαχιστής</flowSpan>, ή <flowSpan font-family="sans-serif">Επεκτάσεις &gt; Εξαγωγή &gt; Λαιμητόμος</flowSpan> για παρόμοια αποτελέσματα.</flowDiv>
+  <flowPara >για κάθε εξαγόμενη περιοχή. Ο διακόπτης -t της λέει να χρησιμοποιήσει την υπόδειξη υπόμνησης ονόματος αρχείου, αλλιώς μπορείτε να δώσετε το όνομα αρχείου εξαγωγής με το διακόπτη -e. Εναλλακτικά, μπορείτε να χρησιμοποιήσετε τις επεκτάσεις <flowSpan font-family="sans-serif">Επεκτάσεις &gt; Ιστός &gt; Τεμαχιστής</flowSpan>, ή <flowSpan font-family="sans-serif">Επεκτάσεις &gt; Εξαγωγή &gt; Λαιμητόμος</flowSpan> για παρόμοια αποτελέσματα.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="1326.0237627999998" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="1326.0237627999998" x="10">Μη γραμμικές διαβαθμίσεις</tspan>
  </text>
  <rect id="d0e124" display="none" height="1e3px" width="288" y="1331.2" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e124"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Η έκδοση 1.1 του SVG δεν υποστηρίζει μη γραμμικές διαβαθμίσεις (δηλαδή διαβαθμίσεις που έχουν μη γραμμικές μετατοπίσεις μεταξύ των χρωμάτων). Μπορείτε, όμως, να τις προσομοιώσετε με διαβαθμίσεις <flowSpan font-style="italic">πολλαπλών φάσεων</flowSpan>.</flowDiv>
+  <flowPara >Η έκδοση 1.1 του SVG δεν υποστηρίζει μη γραμμικές διαβαθμίσεις (δηλαδή διαβαθμίσεις που έχουν μη γραμμικές μετατοπίσεις μεταξύ των χρωμάτων). Μπορείτε, όμως, να τις προσομοιώσετε με διαβαθμίσεις <flowSpan font-style="italic">πολλαπλών φάσεων</flowSpan>.</flowPara>
  </flowRoot>
  <rect id="d0e130" display="none" height="1e3px" width="288" y="1381.2" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e130"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ξεκινήστε με μια απλή διαβάθμιση δύο φάσεων (μπορείτε να χρησιμοποιήσετε τον διάλογο Γέμισμα και πινελία ή το εργαλείο διαβάθμισης). Τώρα, με το εργαλείο διαβάθμισης, προσθέστε μια νέα διαβαθμισμένη φάση στο μέσο· είτε διπλοπατώντας στη γραμμή διαβάθμισης, είτε επιλέγοντας την τετραγωνοειδή φάση διαβάθμισης και πατώντας στο κουμπί <flowSpan font-family="sans-serif">Εισαγωγή νέας φάσης</flowSpan> στη γραμμή εργαλείων του εργαλείου διαβάθμισης στην κορυφή. Μετακινήστε τη νέα φάση λίγο. Έπειτα προσθέσετε περισσότερες φάσεις πριν και μετά τη μεσαία φάση και μετακινήστε τες επίσης, έτσι ώστε η διαβάθμιση να δείχνει ομαλή. Όσες περισσότερες φάσεις προσθέτετε, τόσο πιο ομαλή κάνατε την τελική διαβάθμιση. Ιδού η αρχική ασπρόμαυρη διαβάθμιση με δύο φάσεις:</flowDiv>
+  <flowPara >Ξεκινήστε με μια απλή διαβάθμιση δύο φάσεων (μπορείτε να χρησιμοποιήσετε τον διάλογο Γέμισμα και πινελία ή το εργαλείο διαβάθμισης). Τώρα, με το εργαλείο διαβάθμισης, προσθέστε μια νέα διαβαθμισμένη φάση στο μέσο· είτε διπλοπατώντας στη γραμμή διαβάθμισης, είτε επιλέγοντας την τετραγωνοειδή φάση διαβάθμισης και πατώντας στο κουμπί <flowSpan font-family="sans-serif">Εισαγωγή νέας φάσης</flowSpan> στη γραμμή εργαλείων του εργαλείου διαβάθμισης στην κορυφή. Μετακινήστε τη νέα φάση λίγο. Έπειτα προσθέσετε περισσότερες φάσεις πριν και μετά τη μεσαία φάση και μετακινήστε τες επίσης, έτσι ώστε η διαβάθμιση να δείχνει ομαλή. Όσες περισσότερες φάσεις προσθέτετε, τόσο πιο ομαλή κάνατε την τελική διαβάθμιση. Ιδού η αρχική ασπρόμαυρη διαβάθμιση με δύο φάσεις:</flowPara>
  </flowRoot>
  <defs id="tips-f04-el.svgdefs3">
   <linearGradient id="tips-f04-el.svglinearGradient844" y2="-5.6264" gradientUnits="userSpaceOnUse" x2="-753.98" gradientTransform="matrix(.23728 0 0 4.2145 178.9 1.6151e-15)" y1="-71.602" x1="-753.98">
@@ -329,11 +329,11 @@
  </defs>
  <rect id="tips-f04-el.svgrect1511" fill-rule="evenodd" fill-opacity=".75" transform="translate(10 1524.3) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" height="286.4" width="16.125" y="-305.42" x="-16.125" fill="url(#tips-f04-el.svglinearGradient844)"/>
  <rect id="d0e146" display="none" height="1e3px" width="288" y="1552.4" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e146"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Και εδώ είναι ποικίλες “μη γραμμικές” πολυφασικές διαβαθμίσεις (εξετάστε τες στον επεξεργαστή διαβαθμίσεων):</flowDiv>
+  <flowPara >Και εδώ είναι ποικίλες “μη γραμμικές” πολυφασικές διαβαθμίσεις (εξετάστε τες στον επεξεργαστή διαβαθμίσεων):</flowPara>
  </flowRoot>
  <defs id="tips-f05-el.svgdefs3">
   <linearGradient id="tips-f05-el.svglinearGradient3979" y2="-4.5118" gradientUnits="userSpaceOnUse" x2="-1484.6" gradientTransform="matrix(.23728 0 0 4.2145 241.38 2.1791e-15)" y1="-72.469" x1="-1484.6" inkscape:collect="always">
@@ -428,11 +428,11 @@
   <tspan y="1742.4727787999998" x="10">Εκκεντρικές ακτινικές διαβαθμίσεις</tspan>
  </text>
  <rect id="d0e165" display="none" height="1e3px" width="288" y="1747.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e165"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Οι ακτινικές διαβαθμίσεις δεν πρέπει να είναι συμμετρικές. Στο εργαλείο διαβάθμισης, σύρτε την κεντρική λαβή της ελλειπτικής διαβάθμισης με <flowSpan font-weight="bold">Shift</flowSpan>. Αυτό θα μετακινήσει την σχήματος x <flowSpan font-style="italic">λαβή εστίασης</flowSpan> της διαβάθμισης μακριά από το κέντρο της. Όταν δεν την χρειάζεσθε, μπορείτε να προσκολλήσετε την εστίαση πίσω σύροντας την κοντά στο κέντρο.</flowDiv>
+  <flowPara >Οι ακτινικές διαβαθμίσεις δεν πρέπει να είναι συμμετρικές. Στο εργαλείο διαβάθμισης, σύρτε την κεντρική λαβή της ελλειπτικής διαβάθμισης με <flowSpan font-weight="bold">Shift</flowSpan>. Αυτό θα μετακινήσει την σχήματος x <flowSpan font-style="italic">λαβή εστίασης</flowSpan> της διαβάθμισης μακριά από το κέντρο της. Όταν δεν την χρειάζεσθε, μπορείτε να προσκολλήσετε την εστίαση πίσω σύροντας την κοντά στο κέντρο.</flowPara>
  </flowRoot>
  <defs id="tips-f06-el.svgdefs3">
   <radialGradient id="tips-f06-el.svgradialGradient4031" gradientUnits="userSpaceOnUse" fx="164.26" fy="495.96" cx="187.87" cy="494.13" r="40.258" gradientTransform="matrix(.93031 0 0 .85381 16.079 -387.24)" inkscape:collect="always">
@@ -450,208 +450,208 @@
   <tspan y="1921.1142607999998" x="10">Ευθυγράμμιση στο κέντρο της σελίδας</tspan>
  </text>
  <rect id="d0e190" display="none" height="1e3px" width="288" y="1926.3" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e190"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Για να ευθυγραμμίσετε κάτι στο κέντρο ή την πλευρά της σελίδας, επιλέξτε το αντικείμενο ή την ομάδα και έπειτα διαλέξτε <flowSpan font-family="sans-serif">Σελίδα</flowSpan> από τον κατάλογο <flowSpan font-family="sans-serif">Σχετικά με:</flowSpan> στο διάλογο Ευθυγράμμιση και κατανομή (<flowSpan font-weight="bold">Ctrl+Shift+A</flowSpan>).</flowDiv>
+  <flowPara >Για να ευθυγραμμίσετε κάτι στο κέντρο ή την πλευρά της σελίδας, επιλέξτε το αντικείμενο ή την ομάδα και έπειτα διαλέξτε <flowSpan font-family="sans-serif">Σελίδα</flowSpan> από τον κατάλογο <flowSpan font-family="sans-serif">Σχετικά με:</flowSpan> στο διάλογο Ευθυγράμμιση και κατανομή (<flowSpan font-weight="bold">Ctrl+Shift+A</flowSpan>).</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="1988.6787937999998" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="1988.6787937999998" x="10">Καθαρίζοντας το έγγραφο</tspan>
  </text>
  <rect id="d0e208" display="none" height="1e3px" width="288" y="1993.9" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e208"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Πολλές από τις μη χρησιμοποιούμενες διαβαθμίσεις, μοτίβα και σημειωτές (με πιο ακρίβεια, αυτές που επεξεργαστήκατε χειροκίνητα) παραμένουν στις αντίστοιχες παλέτες και μπορούν να ξαναχρησιμοποιηθούν για νέα αντικείμενα. Όμως, εάν θέλετε να βελτιώσετε το αντικείμενο σας, χρησιμοποιήστε την εντολή <flowSpan font-family="sans-serif">Καθαρισμός ορισμών</flowSpan> στο μενού αρχείο. Θα αφαιρέσει κάθε διαβάθμιση, μοτίβο ή σημειωτή που δεν χρησιμοποιείται από κάτι στο έγγραφο, κάνοντας το αρχείο μικρότερο.</flowDiv>
+  <flowPara >Πολλές από τις μη χρησιμοποιούμενες διαβαθμίσεις, μοτίβα και σημειωτές (με πιο ακρίβεια, αυτές που επεξεργαστήκατε χειροκίνητα) παραμένουν στις αντίστοιχες παλέτες και μπορούν να ξαναχρησιμοποιηθούν για νέα αντικείμενα. Όμως, εάν θέλετε να βελτιώσετε το αντικείμενο σας, χρησιμοποιήστε την εντολή <flowSpan font-family="sans-serif">Καθαρισμός ορισμών</flowSpan> στο μενού αρχείο. Θα αφαιρέσει κάθε διαβάθμιση, μοτίβο ή σημειωτή που δεν χρησιμοποιείται από κάτι στο έγγραφο, κάνοντας το αρχείο μικρότερο.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="2099.3345788" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="2099.3345788" x="10">Κρυμμένα χαρακτηριστικά και ο επεξεργαστής XML</tspan>
  </text>
  <rect id="d0e220" display="none" height="1e3px" width="288" y="2104.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e220"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ο επεξεργαστής XML (<flowSpan font-weight="bold">Shift+Ctrl+X</flowSpan>) σας επιτρέπει να αλλάξετε σχεδόν κάθε όψη του εγγράφου χωρίς να χρησιμοποιήσετε έναν εξωτερικό επεξεργαστή κειμένου. Επίσης, το Inkscape συνήθως υποστηρίζει περισσότερα χαρακτηριστικά SVG από όσα είναι προσβάσιμα από το GUI. Ο επεξεργαστής XML είναι ένας τρόπος να προσπελάσετε αυτά τα χαρακτηριστικά (εάν ξέρετε SVG).</flowDiv>
+  <flowPara >Ο επεξεργαστής XML (<flowSpan font-weight="bold">Shift+Ctrl+X</flowSpan>) σας επιτρέπει να αλλάξετε σχεδόν κάθε όψη του εγγράφου χωρίς να χρησιμοποιήσετε έναν εξωτερικό επεξεργαστή κειμένου. Επίσης, το Inkscape συνήθως υποστηρίζει περισσότερα χαρακτηριστικά SVG από όσα είναι προσβάσιμα από το GUI. Ο επεξεργαστής XML είναι ένας τρόπος να προσπελάσετε αυτά τα χαρακτηριστικά (εάν ξέρετε SVG).</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="2188.7103608" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="2188.7103608" x="10">Αλλαγή των μονάδων μέτρησης του χάρακα</tspan>
  </text>
  <rect id="d0e232" display="none" height="1e3px" width="288" y="2193.9" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e232"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Στο προεπιλεγμένο πρότυπο, η μονάδα μέτρησης που χρησιμοποιείται από τους χάρακες είναι mm. Αυτή είναι επίσης η μονάδα που χρησιμοποιείται στην εμφάνιση συντεταγμένων στην κάτω αριστερή γωνία και προεπιλεγμένη για όλα τα μενού μονάδων. (Μπορείτε να αφήσετε το ποντίκι σας πάνω από έναν χάρακα για να δείτε την συμβουλή με τις μονάδες που χρησιμοποιεί.) Για να το αλλάξετε αυτό, ανοίξτε το <flowSpan font-family="sans-serif">Ιδιότητες εγγράφου</flowSpan> (<flowSpan font-weight="bold">Ctrl+Shift+D</flowSpan>) και αλλάξτε το <flowSpan font-family="sans-serif">Προεπιλεγμένες μονάδες</flowSpan> στην καρτέλα <flowSpan font-family="sans-serif">Σελίδα</flowSpan>.</flowDiv>
+  <flowPara >Στο προεπιλεγμένο πρότυπο, η μονάδα μέτρησης που χρησιμοποιείται από τους χάρακες είναι mm. Αυτή είναι επίσης η μονάδα που χρησιμοποιείται στην εμφάνιση συντεταγμένων στην κάτω αριστερή γωνία και προεπιλεγμένη για όλα τα μενού μονάδων. (Μπορείτε να αφήσετε το ποντίκι σας πάνω από έναν χάρακα για να δείτε την συμβουλή με τις μονάδες που χρησιμοποιεί.) Για να το αλλάξετε αυτό, ανοίξτε το <flowSpan font-family="sans-serif">Ιδιότητες εγγράφου</flowSpan> (<flowSpan font-weight="bold">Ctrl+Shift+D</flowSpan>) και αλλάξτε το <flowSpan font-family="sans-serif">Προεπιλεγμένες μονάδες</flowSpan> στην καρτέλα <flowSpan font-family="sans-serif">Σελίδα</flowSpan>.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="2299.2684888000003" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="2299.2684888000003" x="10">Σφράγισμα</tspan>
  </text>
  <rect id="d0e253" display="none" height="1e3px" width="288" y="2304.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e253"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Για να δημιουργήσετε πολλά αντίγραφα ενός αντικειμένου, χρησιμοποιήστε <flowSpan font-style="italic">σφράγισμα</flowSpan>. Απλά σύρτε ένα αντικείμενο (ή κλιμακώστε το ή περιστρέψτε το) και ενώ κρατάτε το πλήκτρο του ποντικιού πατημένο, πιέστε <flowSpan font-weight="bold">διάστημα</flowSpan>. Αυτό αφήνει μια “σφραγίδα” του τρέχοντος σχήματος του αντικειμένου. Μπορείτε να το επαναλάβετε όσες φορές θέλετε.</flowDiv>
+  <flowPara >Για να δημιουργήσετε πολλά αντίγραφα ενός αντικειμένου, χρησιμοποιήστε <flowSpan font-style="italic">σφράγισμα</flowSpan>. Απλά σύρτε ένα αντικείμενο (ή κλιμακώστε το ή περιστρέψτε το) και ενώ κρατάτε το πλήκτρο του ποντικιού πατημένο, πιέστε <flowSpan font-weight="bold">διάστημα</flowSpan>. Αυτό αφήνει μια “σφραγίδα” του τρέχοντος σχήματος του αντικειμένου. Μπορείτε να το επαναλάβετε όσες φορές θέλετε.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="2388.5348958000004" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="2388.5348958000004" x="10">Κόλπα εργαλείου πένας</tspan>
  </text>
  <rect id="d0e268" display="none" height="1e3px" width="288" y="2393.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e268"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Στο εργαλείο πένας (Bezier), έχετε τις παρακάτω επιλογές για να τελειώσετε την τρέχουσα γραμμή:</flowDiv>
+  <flowPara >Στο εργαλείο πένας (Bezier), έχετε τις παρακάτω επιλογές για να τελειώσετε την τρέχουσα γραμμή:</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 2428.6)"/>
  <rect id="d0e274" display="none" height="1e3px" width="258" y="2422.6" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e274"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Πατήστε <flowSpan font-weight="bold">Enter</flowSpan></flowDiv>
+  <flowPara >Πατήστε <flowSpan font-weight="bold">Enter</flowSpan></flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 2446.6)"/>
  <rect id="d0e280" display="none" height="1e3px" width="258" y="2440.6" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e280"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Διπλό κλικ με το αριστερό πλήκτρο του ποντικιού</flowDiv>
+  <flowPara >Διπλό κλικ με το αριστερό πλήκτρο του ποντικιού</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 2464.7)"/>
  <rect id="d0e284" display="none" height="1e3px" width="258" y="2458.7" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e284"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Πατήστε με το δεξί πλήκτρο του ποντικιού</flowDiv>
+  <flowPara >Πατήστε με το δεξί πλήκτρο του ποντικιού</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 2482.7)"/>
  <rect id="d0e288" display="none" height="1e3px" width="258" y="2476.7" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e288"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Επιλέξτε ένα άλλο εργαλείο</flowDiv>
+  <flowPara >Επιλέξτε ένα άλλο εργαλείο</flowPara>
  </flowRoot>
  <rect id="d0e292" display="none" height="1e3px" width="288" y="2494.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e292"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Σημειώστε ότι ενώ το μονοπάτι είναι ατελείωτο (δηλαδή φαίνεται πράσινο, με το τρέχον κομμάτι κόκκινο) δεν υπάρχει ακόμα ως αντικείμενο στο έγγραφο. Συνεπώς, για να το ακυρώσετε χρησιμοποιήστε είτε <flowSpan font-weight="bold">Esc</flowSpan> (ακύρωση όλου του μονοπατιού) ή <flowSpan font-weight="bold">οπισθοδιαγραφή</flowSpan> (αφαιρεί το τελευταίο κομμάτι του ατελείωτου μονοπατιού) αντί για <flowSpan font-family="sans-serif">Αναίρεση</flowSpan>.</flowDiv>
+  <flowPara >Σημειώστε ότι ενώ το μονοπάτι είναι ατελείωτο (δηλαδή φαίνεται πράσινο, με το τρέχον κομμάτι κόκκινο) δεν υπάρχει ακόμα ως αντικείμενο στο έγγραφο. Συνεπώς, για να το ακυρώσετε χρησιμοποιήστε είτε <flowSpan font-weight="bold">Esc</flowSpan> (ακύρωση όλου του μονοπατιού) ή <flowSpan font-weight="bold">οπισθοδιαγραφή</flowSpan> (αφαιρεί το τελευταίο κομμάτι του ατελείωτου μονοπατιού) αντί για <flowSpan font-family="sans-serif">Αναίρεση</flowSpan>.</flowPara>
  </flowRoot>
  <rect id="d0e304" display="none" height="1e3px" width="288" y="2566.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e304"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Για να προσθέσετε ένα νέο υπομονοπάτι σε ένα υπάρχον μονοπάτι, επιλέξτε αυτό το μονοπάτι και αρχίστε τη σχεδίαση με <flowSpan font-weight="bold">Shift</flowSpan> από ένα ελεύθερο σημείο. Εάν, όμως, θέλετε απλά να <flowSpan font-style="italic">συνεχίσετε</flowSpan> ένα υπάρχον μονοπάτι, το Shift δεν είναι απαραίτητο. Απλά ξεκινήστε να σχεδιάζετε από μία από τις τελικές άγκυρες ρου επιλεγμένου μονοπατιού.</flowDiv>
+  <flowPara >Για να προσθέσετε ένα νέο υπομονοπάτι σε ένα υπάρχον μονοπάτι, επιλέξτε αυτό το μονοπάτι και αρχίστε τη σχεδίαση με <flowSpan font-weight="bold">Shift</flowSpan> από ένα ελεύθερο σημείο. Εάν, όμως, θέλετε απλά να <flowSpan font-style="italic">συνεχίσετε</flowSpan> ένα υπάρχον μονοπάτι, το Shift δεν είναι απαραίτητο. Απλά ξεκινήστε να σχεδιάζετε από μία από τις τελικές άγκυρες ρου επιλεγμένου μονοπατιού.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="2650.145874200001" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="2650.145874200001" x="10">Εισαγωγή τιμών Unicode</tspan>
  </text>
  <rect id="d0e319" display="none" height="1e3px" width="288" y="2655.3" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e319"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ενώ βρίσκεσθε στο εργαλείο κειμένου, πατώντας <flowSpan font-weight="bold">Ctrl+U</flowSpan> εναλλάσσεται η κατάσταση μεταξύ Unicode και κανονικής. Στην κατάσταση Unicode, κάθε ομάδα των 4 δεκαεξαδικών ψηφίων που πληκτρολογείτε γίνεται ένας μόνο χαρακτήρας Unicode, έτσι σας επιτρέπει να εισάγετε ελεύθερα σύμβολα (εφόσον ξέρετε τα σημεία κωδικού Unicode και η γραμματοσειρά τα υποστηρίζει). Για να τελειώσετε την είσοδο Unicode, πατήστε <flowSpan font-weight="bold">Enter</flowSpan>. Π.χ., <flowSpan font-weight="bold">Ctrl+U 2 0 1 4 Enter</flowSpan> εισάγει μια em-dash (—). Για να αφήσετε την κατάσταση Unicode χωρίς να εισάγετε τίποτα πατήστε <flowSpan font-weight="bold">Esc</flowSpan>.</flowDiv>
+  <flowPara >Ενώ βρίσκεσθε στο εργαλείο κειμένου, πατώντας <flowSpan font-weight="bold">Ctrl+U</flowSpan> εναλλάσσεται η κατάσταση μεταξύ Unicode και κανονικής. Στην κατάσταση Unicode, κάθε ομάδα των 4 δεκαεξαδικών ψηφίων που πληκτρολογείτε γίνεται ένας μόνο χαρακτήρας Unicode, έτσι σας επιτρέπει να εισάγετε ελεύθερα σύμβολα (εφόσον ξέρετε τα σημεία κωδικού Unicode και η γραμματοσειρά τα υποστηρίζει). Για να τελειώσετε την είσοδο Unicode, πατήστε <flowSpan font-weight="bold">Enter</flowSpan>. Π.χ., <flowSpan font-weight="bold">Ctrl+U 2 0 1 4 Enter</flowSpan> εισάγει μια em-dash (—). Για να αφήσετε την κατάσταση Unicode χωρίς να εισάγετε τίποτα πατήστε <flowSpan font-weight="bold">Esc</flowSpan>.</flowPara>
  </flowRoot>
  <rect id="d0e334" display="none" height="1e3px" width="288" y="2758.6" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e334"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Μπορείτε να χρησιμοποιήσετε επίσης τον διάλογο <flowSpan font-family="sans-serif">Κείμενο &gt; γλυφες</flowSpan> για να αναζητήσετε και να εισάγετε γλύφες στο έγγραφό σας.</flowDiv>
+  <flowPara >Μπορείτε να χρησιμοποιήσετε επίσης τον διάλογο <flowSpan font-family="sans-serif">Κείμενο &gt; γλυφες</flowSpan> για να αναζητήσετε και να εισάγετε γλύφες στο έγγραφό σας.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="2800.152303200001" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="2800.152303200001" x="10">Χρησιμοποιώντας το πλέγμα για σχεδίαση εικόνων</tspan>
  </text>
  <rect id="d0e346" display="none" height="1e3px" width="288" y="2805.4" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e346"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ας υποθέσουμε ότι θέλετε να δημιουργήσετε ένα εικονίδιο 24x24 εικονοστοιχείων. Δημιουργήστε έναν καμβά 24x24 px (χρησιμοποιήστε την εντολή <flowSpan font-family="sans-serif">Προτιμήσεις εγγράφου</flowSpan>) και ορίστε το πλέγμα σε 0,5 px (48x48 γραμμές πλέγματος). Τώρα, εάν ευθυγραμμίσετε τα γεμισμένα αντικείμενα σε <flowSpan font-style="italic">ζυγές</flowSpan> γραμμές πλέγματος και τα βαμμένα αντικείμενα σε <flowSpan font-style="italic">μονές</flowSpan> γραμμές πλέγματος με το πλάτος της πινελιάς σε px να είναι ζυγός αριθμός και το εξάγετε στο προεπιλεγμένο 96dpi (έτσι ώστε 1 px να γίνεται 1 px ψηφιογραφίας), παίρνετε μια καθαρή ψηφιογραφική εικόνα χωρίς αχρείαστη εξομάλυνση.</flowDiv>
+  <flowPara >Ας υποθέσουμε ότι θέλετε να δημιουργήσετε ένα εικονίδιο 24x24 εικονοστοιχείων. Δημιουργήστε έναν καμβά 24x24 px (χρησιμοποιήστε την εντολή <flowSpan font-family="sans-serif">Προτιμήσεις εγγράφου</flowSpan>) και ορίστε το πλέγμα σε 0,5 px (48x48 γραμμές πλέγματος). Τώρα, εάν ευθυγραμμίσετε τα γεμισμένα αντικείμενα σε <flowSpan font-style="italic">ζυγές</flowSpan> γραμμές πλέγματος και τα βαμμένα αντικείμενα σε <flowSpan font-style="italic">μονές</flowSpan> γραμμές πλέγματος με το πλάτος της πινελιάς σε px να είναι ζυγός αριθμός και το εξάγετε στο προεπιλεγμένο 96dpi (έτσι ώστε 1 px να γίνεται 1 px ψηφιογραφίας), παίρνετε μια καθαρή ψηφιογραφική εικόνα χωρίς αχρείαστη εξομάλυνση.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="2932.0880832000007" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="2932.0880832000007" x="10">Περιστροφή αντικειμένου</tspan>
  </text>
  <rect id="d0e364" display="none" height="1e3px" width="288" y="2937.3" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e364"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ευρισκόμενοι στο εργαλείο επιλογής, <flowSpan font-weight="bold">πατήστε</flowSpan> σε ένα αντικείμενο για να δείτε τα κλιμακούμενα βέλη, έπειτα <flowSpan font-weight="bold">ξαναπατήστε</flowSpan> στο αντικείμενο για να δείτε την περιστροφή και τα βέλη μετατόπισης. Εάν τα βέλη στις γωνίες πατηθούν και συρθούν, το αντικείμενο θα περιστραφεί γύρω από το κέντρο (φαίνεται σαν σταυρός). Αν κρατήσετε πατημένο το πλήκτρο <flowSpan font-weight="bold">Shift</flowSpan> ενώ κάνετε αυτό, η περιστροφή θα συμβεί γύρω από την αντίθετη γωνία. Μπορείτε επίσης να σύρετε το κέντρο περιστροφής σε οποιαδήποτε θέση.</flowDiv>
+  <flowPara >Ευρισκόμενοι στο εργαλείο επιλογής, <flowSpan font-weight="bold">πατήστε</flowSpan> σε ένα αντικείμενο για να δείτε τα κλιμακούμενα βέλη, έπειτα <flowSpan font-weight="bold">ξαναπατήστε</flowSpan> στο αντικείμενο για να δείτε την περιστροφή και τα βέλη μετατόπισης. Εάν τα βέλη στις γωνίες πατηθούν και συρθούν, το αντικείμενο θα περιστραφεί γύρω από το κέντρο (φαίνεται σαν σταυρός). Αν κρατήσετε πατημένο το πλήκτρο <flowSpan font-weight="bold">Shift</flowSpan> ενώ κάνετε αυτό, η περιστροφή θα συμβεί γύρω από την αντίθετη γωνία. Μπορείτε επίσης να σύρετε το κέντρο περιστροφής σε οποιαδήποτε θέση.</flowPara>
  </flowRoot>
  <rect id="d0e376" display="none" height="1e3px" width="288" y="3029.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e376"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ή, μπορείτε να περιστρέψετε από το πληκτρολόγιο πατώντας <flowSpan font-weight="bold">[</flowSpan> και <flowSpan font-weight="bold">]</flowSpan> (κατά 15 μοίρες) ή <flowSpan font-weight="bold">Ctrl+[</flowSpan> και <flowSpan font-weight="bold">Ctrl+]</flowSpan> (κατά 90 μοίρες). Τα ίδια πλήκτρα <flowSpan font-weight="bold">[]</flowSpan> με <flowSpan font-weight="bold">Alt</flowSpan> εκτελούν αργή περιστροφή μεγέθους εικονοστοιχείου.</flowDiv>
+  <flowPara >Ή, μπορείτε να περιστρέψετε από το πληκτρολόγιο πατώντας <flowSpan font-weight="bold">[</flowSpan> και <flowSpan font-weight="bold">]</flowSpan> (κατά 15 μοίρες) ή <flowSpan font-weight="bold">Ctrl+[</flowSpan> και <flowSpan font-weight="bold">Ctrl+]</flowSpan> (κατά 90 μοίρες). Τα ίδια πλήκτρα <flowSpan font-weight="bold">[]</flowSpan> με <flowSpan font-weight="bold">Alt</flowSpan> εκτελούν αργή περιστροφή μεγέθους εικονοστοιχείου.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="3092.730276200001" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="3092.730276200001" x="10">Πίπτουσες σκιές</tspan>
  </text>
  <rect id="d0e403" display="none" height="1e3px" width="288" y="3097.9" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e403"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Για τη γρήγορη δημιουργία πιπτουσών σκιών για αντικείμενα, χρησιμοποιήστε το γνώρισμα <flowSpan font-family="sans-serif">Φίλτρα &gt; Σκιές και λάμψεις &gt; Πίπτουσα σκιά...</flowSpan>.</flowDiv>
+  <flowPara >Για τη γρήγορη δημιουργία πιπτουσών σκιών για αντικείμενα, χρησιμοποιήστε το γνώρισμα <flowSpan font-family="sans-serif">Φίλτρα &gt; Σκιές και λάμψεις &gt; Πίπτουσα σκιά...</flowSpan>.</flowPara>
  </flowRoot>
  <rect id="d0e409" display="none" height="1e3px" width="288" y="3135.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e409"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Μπορείτε επίσης να δημιουργήσετε εύκολα θολές πίπτουσες σκιές για αντικείμενα χειροκίνητα με θόλωση στον διάλογο Γέμισμα και πινελιά. Διαλέξτε ένα αντικείμενο, διπλασιάστε το με <flowSpan font-weight="bold">Ctrl+D</flowSpan>, πατήστε <flowSpan font-weight="bold">PgDown</flowSpan> για να το βάλετε κάτω από το αρχικό αντικείμενο, βάλτε το λίγο στα δεξιά και χαμηλότερα από το αρχικό αντικείμενο. Τώρα ανοίξτε τον διάλογο Γέμισμα και πινελιά και αλλάξτε την τιμή θόλωσης σε, ας πούμε, 5,0. Αυτό είναι!</flowDiv>
+  <flowPara >Μπορείτε επίσης να δημιουργήσετε εύκολα θολές πίπτουσες σκιές για αντικείμενα χειροκίνητα με θόλωση στον διάλογο Γέμισμα και πινελιά. Διαλέξτε ένα αντικείμενο, διπλασιάστε το με <flowSpan font-weight="bold">Ctrl+D</flowSpan>, πατήστε <flowSpan font-weight="bold">PgDown</flowSpan> για να το βάλετε κάτω από το αρχικό αντικείμενο, βάλτε το λίγο στα δεξιά και χαμηλότερα από το αρχικό αντικείμενο. Τώρα ανοίξτε τον διάλογο Γέμισμα και πινελιά και αλλάξτε την τιμή θόλωσης σε, ας πούμε, 5,0. Αυτό είναι!</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="3230.4284012000007" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="3230.4284012000007" x="10">Τοποθετώντας κείμενο σε μονοπάτι</tspan>
  </text>
  <rect id="d0e424" display="none" height="1e3px" width="288" y="3235.6" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e424"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Για τοποθέτηση κειμένου κατά μήκος της καμπύλης, επιλέξτε το κείμενο και την καμπύλη μαζί και διαλέξτε <flowSpan font-family="sans-serif">Τοποθέτηση σε μονοπάτι</flowSpan> από το μενού κειμένου. Το κείμενο θα ξεκινά στην αρχή του μονοπατιού. Γενικά, είναι καλύτερο να δημιουργείτε ένα μονοπάτι στο οποίο θέλετε να ταιριάσετε το κείμενο, παρά να το προσαρμόζετε σε κάποιο άλλο στοιχείο σχεδίασης — αυτό θα σας δώσει περισσότερο έλεγχο χωρίς αλλαγές στο σχέδιο.</flowDiv>
+  <flowPara >Για τοποθέτηση κειμένου κατά μήκος της καμπύλης, επιλέξτε το κείμενο και την καμπύλη μαζί και διαλέξτε <flowSpan font-family="sans-serif">Τοποθέτηση σε μονοπάτι</flowSpan> από το μενού κειμένου. Το κείμενο θα ξεκινά στην αρχή του μονοπατιού. Γενικά, είναι καλύτερο να δημιουργείτε ένα μονοπάτι στο οποίο θέλετε να ταιριάσετε το κείμενο, παρά να το προσαρμόζετε σε κάποιο άλλο στοιχείο σχεδίασης — αυτό θα σας δώσει περισσότερο έλεγχο χωρίς αλλαγές στο σχέδιο.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="3330.444182200001" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="3330.444182200001" x="10">Επιλογή του αρχικού</tspan>
  </text>
  <rect id="d0e436" display="none" height="1e3px" width="288" y="3335.6" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e436"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Όταν έχετε κείμενο στο μονοπάτι, μια συνδεμένη μετατόπιση, ή ένας κλώνος, το πηγαίο αντικείμενο/μονοπάτι ίσως να είναι δύσκολο να επιλεγεί, επειδή μπορεί να είναι ακριβώς από κάτω ή να είναι αόρατο και/ή κλειδωμένο. Το μαγικό κλειδί <flowSpan font-weight="bold">Shift+D</flowSpan> θα σας βοηθήσει. Επιλέξτε το κείμενο, τη συνδεμένη μετατόπιση ή τον κλώνο και πατήστε <flowSpan font-weight="bold">Shift+D</flowSpan> για να μετακινήσετε την επιλογή στο αντίστοιχο μονοπάτι, πηγή μετατόπισης ή αρχικό κλώνο.</flowDiv>
+  <flowPara >Όταν έχετε κείμενο στο μονοπάτι, μια συνδεμένη μετατόπιση, ή ένας κλώνος, το πηγαίο αντικείμενο/μονοπάτι ίσως να είναι δύσκολο να επιλεγεί, επειδή μπορεί να είναι ακριβώς από κάτω ή να είναι αόρατο και/ή κλειδωμένο. Το μαγικό κλειδί <flowSpan font-weight="bold">Shift+D</flowSpan> θα σας βοηθήσει. Επιλέξτε το κείμενο, τη συνδεμένη μετατόπιση ή τον κλώνο και πατήστε <flowSpan font-weight="bold">Shift+D</flowSpan> για να μετακινήσετε την επιλογή στο αντίστοιχο μονοπάτι, πηγή μετατόπισης ή αρχικό κλώνο.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="3430.459963200001" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="3430.459963200001" x="10">Ανάκτηση παραθύρου εκτός οθόνης</tspan>
  </text>
  <rect id="d0e451" display="none" height="1e3px" width="288" y="3435.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e451"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Όταν μετακινείται αντικείμενα μεταξύ συστημάτων με διαφορετικές αναλύσεις ή αριθμό οθονών, μπορεί να βρείτε ότι το Inkscape αποθήκευσε τη θέση του παραθύρου που τοποθετεί το παράθυρο εκτός της δικής σας οθόνης. Απλά μεγιστοποιήστε το παράθυρο (που θα το ξαναεμφανίσει, χρησιμοποιώντας τη γραμμή εργασιών), αποθηκεύστε και επαναφορτώστε. Μπορείτε να το αποφύγετε γενικά αποεπιλέγοντας τη γενική επιλογή αποθήκευσης της γεωμετρίας του παραθύρου (<flowSpan font-family="sans-serif">Προτιμήσεις Inkscape</flowSpan>, ενότητα <flowSpan font-family="sans-serif">Διεπαφή &gt; Παράθυρα</flowSpan>).</flowDiv>
+  <flowPara >Όταν μετακινείται αντικείμενα μεταξύ συστημάτων με διαφορετικές αναλύσεις ή αριθμό οθονών, μπορεί να βρείτε ότι το Inkscape αποθήκευσε τη θέση του παραθύρου που τοποθετεί το παράθυρο εκτός της δικής σας οθόνης. Απλά μεγιστοποιήστε το παράθυρο (που θα το ξαναεμφανίσει, χρησιμοποιώντας τη γραμμή εργασιών), αποθηκεύστε και επαναφορτώστε. Μπορείτε να το αποφύγετε γενικά αποεπιλέγοντας τη γενική επιλογή αποθήκευσης της γεωμετρίας του παραθύρου (<flowSpan font-family="sans-serif">Προτιμήσεις Inkscape</flowSpan>, ενότητα <flowSpan font-family="sans-serif">Διεπαφή &gt; Παράθυρα</flowSpan>).</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="3541.018091200001" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="3541.018091200001" x="10">Εξαγωγή διαφάνειας, διαβάθμισης και PostScript</tspan>
  </text>
  <rect id="d0e466" display="none" height="1e3px" width="288" y="3546.2" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e466"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">PostScript ή μορφές EPS δεν υποστηρίζουν <flowSpan font-style="italic">διαφάνεια</flowSpan>, έτσι δεν θα πρέπει ποτέ να τις χρησιμοποιήσετε, εάν πρόκειται να εξάγετε σε PS/EPS. Στην περίπτωση της επίπεδης διαφάνειας που επικαλύπτει το επίπεδο χρώμα, είναι εύκολο να το διορθώσετε: Επιλέξτε ένα από τα διαφανή αντικείμενα. Μετάβαση στο εργαλείο σταγονόμετρου (<flowSpan font-weight="bold">F7</flowSpan> ή <flowSpan font-weight="bold">d</flowSpan>). Βεβαιωθείτε ότι το πλήκτρο <flowSpan font-family="sans-serif">Αδιαφάνεια: Επιλογή</flowSpan> στην εργαλειοθήκη του εργαλείου σταγονομέτρου είναι απενεροποιημένο. Πατήστε στο ίδιο το αντικείμενο. Θα επιλέξει το ορατό χρώμα και θα το αποδώσει πίσω στο αντικείμενο, αλλά αυτή τη φορά χωρίς διαφάνεια. Επαναλάβετε για όλα τα διαφανή αντικείμενα. Εάν το διαφανές σας αντικείμενο επικαλύπτει πολλές επίπεδες χρωματικές περιοχές, θα πρέπει να το σπάσετε κατάλληλα σε κομμάτια και να εφαρμόσετε αυτή τη διαδικασία σε κάθε κομμάτι. Σημειώστε ότι το εργαλείο σταγονιδίου δεν αλλάζει την τιμή αδιαφάνειας του αντικειμένου, αλλά μόνο την τιμή άλφα του χρώματος γεμίσματος ή πινελιάς, για αυτό βεβαιωθείτε ότι η τιμή αδιαφάνειας κάθε αντικειμένου ορίζεται σε 100% πριν να ξεκινήσετε.</flowDiv>
+  <flowPara >PostScript ή μορφές EPS δεν υποστηρίζουν <flowSpan font-style="italic">διαφάνεια</flowSpan>, έτσι δεν θα πρέπει ποτέ να τις χρησιμοποιήσετε, εάν πρόκειται να εξάγετε σε PS/EPS. Στην περίπτωση της επίπεδης διαφάνειας που επικαλύπτει το επίπεδο χρώμα, είναι εύκολο να το διορθώσετε: Επιλέξτε ένα από τα διαφανή αντικείμενα. Μετάβαση στο εργαλείο σταγονόμετρου (<flowSpan font-weight="bold">F7</flowSpan> ή <flowSpan font-weight="bold">d</flowSpan>). Βεβαιωθείτε ότι το πλήκτρο <flowSpan font-family="sans-serif">Αδιαφάνεια: Επιλογή</flowSpan> στην εργαλειοθήκη του εργαλείου σταγονομέτρου είναι απενεροποιημένο. Πατήστε στο ίδιο το αντικείμενο. Θα επιλέξει το ορατό χρώμα και θα το αποδώσει πίσω στο αντικείμενο, αλλά αυτή τη φορά χωρίς διαφάνεια. Επαναλάβετε για όλα τα διαφανή αντικείμενα. Εάν το διαφανές σας αντικείμενο επικαλύπτει πολλές επίπεδες χρωματικές περιοχές, θα πρέπει να το σπάσετε κατάλληλα σε κομμάτια και να εφαρμόσετε αυτή τη διαδικασία σε κάθε κομμάτι. Σημειώστε ότι το εργαλείο σταγονιδίου δεν αλλάζει την τιμή αδιαφάνειας του αντικειμένου, αλλά μόνο την τιμή άλφα του χρώματος γεμίσματος ή πινελιάς, για αυτό βεβαιωθείτε ότι η τιμή αδιαφάνειας κάθε αντικειμένου ορίζεται σε 100% πριν να ξεκινήσετε.</flowPara>
  </flowRoot>
  <g transform="translate(0 3734.5)">
   <defs id="defs3" xmlns:cc="http://creativecommons.org/ns#">
@@ -684,7 +684,7 @@
     <path id="path1521" d="m359.24 21.363c-11.313 0-22.606 4.3206-31.275 12.99l-154.09 154.06c-8.4969 8.4967-12.762 19.543-12.931 30.631h-0.0585c0 0.0395 0.0566 0.0774 0.0585 0.11702-0.002 0.18609-0.0585 0.36977-0.0585 0.55586h0.2633c2.9491 11.221 79.15 25.523 87.651 34.025 12.839 12.839-49.233 22.268-36.395 35.107 12.839 12.839 77.59 24.843 90.43 37.682 12.839 12.839-26.238 26.51-13.399 39.349s55.967-3.2094 48.155 30.28c17.338 17.338 53.512 9.0588 77.733-8.2795 12.839-12.839-24.629-11.707-11.79-24.546s45.247-12.908 72.555-43.621c-10.992-17.095-46.981-24.375-34.142-37.214s37.8-6.3179 91.659-30.777c26.292-11.941 24.12-21.01 24.019-32.006-0.002-0.23138 0-0.43973 0-0.67288h-0.0585c-0.16-11.07-4.46-22.12-12.95-30.62l-154.07-154.06c-8.66-8.667-19.99-12.987-31.3-12.987zm-1.3165 20.04c5.0295 0.13102 9.0916 3.9651 17.056 9.1279l72.789 53.977c0.79681 0.51671 1.5557 1.0557 2.2527 1.6091 0.69703 0.55327 1.3337 1.1401 1.9309 1.7261 0.5972 0.58495 1.14 1.1721 1.6383 1.7846 0.49726 0.61244 0.94845 1.2385 1.3458 1.8724 0.39844 0.6349 0.75476 1.2798 1.0532 1.9309 0.29867 0.65226 0.53281 1.325 0.7314 1.9894 0.19976 0.66341 0.36832 1.319 0.46811 1.9894 0.0999 0.67165 0.14627 1.3452 0.14627 2.0187l-43.123-20.83-4.3006 32.562-23.727-11.117-36.629 24.458-14.014-48.331-18.051 42.275-50.408 5.032 0.55587-22.439c0-5.3897 29.057-43.122 46.751-52.105l32.386-23.259c4.7787-3.0977 8.1289-4.35 11.147-4.2714zm-66.996 220.21c22.944 5.9503 48.476 13.757 68.957 13.897l0.87768 9.2157c-17.538-1.8078-54.648-10.276-63.398-14.745l-6.4363-8.3672z" stroke-width="1pt"/>
    </g>
    <use id="use1328" style="color:#000000" xlink:href="#path1508" transform="matrix(5.1767 0 0 5.1767 -102.7 -256.62)" height="1052.3622" fill-opacity=".064615" width="744.09448" y="0" x="0" font-family="sans-serif" fill="#ffffff"/>
-   <text id="text7519" opacity=".5" line-height="125%" xml:space="preserve" transform="rotate(-90)" font-size="6.9693px" y="-6.5672836" x="-70.83046" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan7521" sodipodi:role="line" x="-70.83046" style="letter-spacing:.29056" y="-6.5672836">Χρήση <tspan id="tspan7523" font-weight="bold">Ctrl+πάνω βέλος</tspan> για κύλιση </tspan></text>
+   <text id="text7519" opacity=".5" line-height="125%"  transform="rotate(-90)" font-size="6.9693px" y="-6.5672836" x="-70.83046" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan7521" sodipodi:role="line" x="-70.83046" style="letter-spacing:.29056" y="-6.5672836">Χρήση <tspan id="tspan7523" font-weight="bold">Ctrl+πάνω βέλος</tspan> για κύλιση </tspan></text>
    <path id="path7527" opacity=".5" style="color:#000000" d="m338.53 197.82-13.108-1.2709 7.6547-10.717z" fill-rule="evenodd" transform="matrix(-.61496 -.045496 -.061919 .45186 207.79 -145)"/>
   </g>
  </g>

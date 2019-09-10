@@ -51,51 +51,51 @@
   <tspan id="tspan1668" style="letter-spacing:2.1813099;" dx="0 -0.57057059 0 0 0 0 0" fill="#ffffff">::ELEMENTS</tspan>
  </text>
  <rect id="d0e10" display="none" height="1000px" width="264" y="36" x="35"/>
- <flowRoot id="flowRoot1347" style="writing-mode:lr-tb;text-anchor:start;" font-family="Sans" font-size="7.19999981px" line-height="150%" font-style="italic" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot1347" style="writing-mode:lr-tb;text-anchor:start;" font-family="Sans" font-size="7.19999981px" line-height="150%" font-style="italic" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion1349">
    <use id="use1351" xlink:href="#d0e10" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv1353" xml:space="preserve">Aquest tutorial us mostrarà els elements i principis de disseny que normalment s&apos;ensenyen als estudiants d&apos;art novells per tal que comprenguin vàries propietats usades en la creació artística. No es tracta d&apos;una llista exhaustiva, per tant sumeu, resteu i combineu per tal de fer aquest tutorial més comprensible. </flowDiv>
+  <flowPara id="flowPara1353" >Aquest tutorial us mostrarà els elements i principis de disseny que normalment s&apos;ensenyen als estudiants d&apos;art novells per tal que comprenguin vàries propietats usades en la creació artística. No es tracta d&apos;una llista exhaustiva, per tant sumeu, resteu i combineu per tal de fer aquest tutorial més comprensible. </flowPara>
  </flowRoot>
  <rect id="elements-f01.svgrect1801" fill-rule="evenodd" transform="translate(10, 106.167966) " height="167.44" width="305.16" stroke="#000" y="0.32084" x="7.5753" stroke-width="0.64164" fill="#e1e1e1"/>
  <path id="elements-f01.svgpath1721" sodipodi:rx="46.044163" sodipodi:ry="46.044163" style="stroke-dasharray:none;" sodipodi:type="arc" d="M-40.289,236.82a46.044,46.044,0,1,1,-92.091,0,46.044,46.044,0,1,1,92.091,0z" stroke-opacity="0.33000001" fill-opacity="0.30459800" fill-rule="evenodd" transform="translate(10, 106.167966) matrix(1.353293,-4.258673e-17,4.258673e-17,1.353293,309.8639,-242.9186)" stroke="#000" sodipodi:cy="236.81662" sodipodi:cx="-86.332802" stroke-width="1.2500000" fill="#00F"/>
  <path id="elements-f01.svgpath1722" sodipodi:rx="46.044163" sodipodi:ry="46.044163" style="stroke-dasharray:none;" sodipodi:type="arc" d="M-40.289,236.82a46.044,46.044,0,1,1,-92.091,0,46.044,46.044,0,1,1,92.091,0z" stroke-opacity="0.32758597" fill-opacity="0.28160897" fill-rule="evenodd" transform="translate(10, 106.167966) matrix(1.353293,4.258673e-17,4.258673e-17,-1.353293,248.6654,398.0456)" stroke="#000" sodipodi:cy="236.81662" sodipodi:cx="-86.332802" stroke-width="1.2500000" fill="#ff00f5"/>
- <text id="elements-f01.svgtext1752" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" fill-opacity="0.59770101" sodipodi:linespacing="100.00000%" transform="translate(10, 106.167966) " font-style="normal" font-stretch="normal" xml:space="preserve" line-height="100.00000%" font-size="10.000000" font-variant="normal" y="154.377" x="102.01891" font-family="Sans" fill="#ff00f7"><tspan id="elements-f01.svgtspan1732" sodipodi:role="line" fill-opacity="0.59770101" dx="0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0" y="154.377" x="102.01891" fill="#ff00f7">Elements</tspan></text>
- <text id="elements-f01.svgtext1755" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" fill-opacity="0.6" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal" xml:space="preserve" line-height="100%" font-size="10px" font-variant="normal" y="154.377" x="168.60974" font-family="Sans" fill="#0000ff"><tspan id="elements-f01.svgtspan1738" sodipodi:role="line" fill-opacity="0.6" dx="0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0" y="154.377" x="168.60974" fill="#0000ff">Principis</tspan></text>
- <text id="elements-f01.svgtext1758" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100.00000%" transform="translate(10, 106.167966) " font-style="normal" font-stretch="normal" xml:space="preserve" line-height="100.00000%" font-size="8.0000000" font-variant="normal" y="100.13462" x="90.54583" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1741" sodipodi:role="line" dx="0 0 0 0" dy="0 0 0 0" y="100.13462" x="90.54583">Color</tspan></text>
- <text id="elements-f01.svgtext1761" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal" xml:space="preserve" line-height="100%" font-size="8px" font-variant="normal" y="32.645866" x="116.87344" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1744" sodipodi:role="line" dx="0 0 0 0 0" dy="0 0 0 0 0" y="32.645866" x="116.87344">Línia</tspan></text>
- <text id="elements-f01.svgtext1764" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal" xml:space="preserve" line-height="100%" font-size="8px" font-variant="normal" y="47.565285" x="95.306877" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1747" sodipodi:role="line" dx="0 0 0 0 0" dy="0 0 0 0 0" y="47.565285" x="95.306877">Forma</tspan></text>
- <text id="elements-f01.svgtext1767" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal" xml:space="preserve" line-height="100%" font-size="8px" font-variant="normal" y="83.103767" x="83.459221" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1750" sodipodi:role="line" dx="0 0 0 0 0" dy="0 0 0 0 0" y="83.103767" x="83.459221">Espai</tspan></text>
- <text id="elements-f01.svgtext1770" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal" xml:space="preserve" line-height="100%" font-size="8px" font-variant="normal" y="114.99348" x="101.17574" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1753" sodipodi:role="line" dx="0 0 0 0 0 0" dy="0 0 0 0 0 0" y="114.99348" x="101.17574">Textura</tspan></text>
- <text id="elements-f01.svgtext1773" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal" xml:space="preserve" line-height="100%" font-size="8px" font-variant="normal" y="129.16661" x="118.89227" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1756" sodipodi:role="line" dx="0 0 0 0 0" dy="0 0 0 0 0" y="129.16661" x="118.89227">Valor</tspan></text>
- <text id="elements-f01.svgtext1776" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal" xml:space="preserve" line-height="100%" font-size="8px" font-variant="normal" y="65.387245" x="83.459221" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1759" sodipodi:role="line" dx="0 0 0 0" dy="0 0 0 0" y="65.387245" x="83.459221">Mida</tspan></text>
- <text id="elements-f01.svgtext1779" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal" xml:space="preserve" line-height="100%" font-size="8px" font-variant="normal" y="34.637756" x="184.08173" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1762" sodipodi:role="line" dx="0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0" y="34.637756" x="184.08173">Equilibri</tspan></text>
- <text id="elements-f01.svgtext1782" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100.00000%" transform="translate(10, 106.167966) " font-style="normal" font-stretch="normal" xml:space="preserve" line-height="100.00000%" font-size="8.0000000" font-variant="normal" y="51.614323" x="194.48068" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1765" sodipodi:role="line" dx="0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0" y="51.614323" x="194.48068">Contrast</tspan></text>
- <text id="elements-f01.svgtext1785" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal" xml:space="preserve" line-height="100%" font-size="8px" font-variant="normal" y="71.448875" x="199.68022" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1768" sodipodi:role="line" dx="0 0 0 0 0 0" dy="0 0 0 0 0 0" y="71.448875" x="199.68022">Èmfasi</tspan></text>
- <text id="elements-f01.svgtext1788" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal" xml:space="preserve" line-height="100%" font-size="8px" font-variant="normal" y="91.283318" x="199.44937" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1771" sodipodi:role="line" dx="0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0" y="91.283318" x="199.44937">Proporció</tspan></text>
- <text id="elements-f01.svgtext1791" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal" xml:space="preserve" line-height="100%" font-size="8px" font-variant="normal" y="111.11781" x="193.78815" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1774" sodipodi:role="line" dx="0 0 0" dy="0 0 0" y="111.11781" x="193.78815">Patró</tspan></text>
- <text id="elements-f01.svgtext1803" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100%" transform="matrix(1.000025,0,0,0.999975,10,106.168)" font-style="normal" font-stretch="normal" xml:space="preserve" line-height="100%" font-size="7.99980402px" font-variant="normal" y="129.04839" x="178.64687" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1786" sodipodi:role="line" y="129.04839" x="178.64687">Degradat</tspan></text>
- <text id="elements-f01.svgtext1806" style="writing-mode:lr-tb;text-anchor:start;" line-height="100%" font-weight="bold" sodipodi:linespacing="100%" font-size="8px" font-style="normal" y="186.78105" x="145.85378" font-family="Sans" xml:space="preserve" fill="#ffffff"><tspan id="elements-f01.svgtspan1792" sodipodi:role="line" dx="0 0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0 0" y="186.78105" x="145.85378" fill="#ffffff">Composició</tspan></text>
- <text id="elements-f01.svgtext1809" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" fill-opacity="0.21476494" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal" xml:space="preserve" line-height="100%" font-size="10px" font-variant="normal" y="12.44677" x="12.456144" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1803" sodipodi:role="line" fill-opacity="0.21476494" dx="0 0 0 0 0" dy="0 0 0 0 0" y="12.44677" x="12.456144" fill="#000000">Resum</tspan></text>
+ <text id="elements-f01.svgtext1752" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" fill-opacity="0.59770101" sodipodi:linespacing="100.00000%" transform="translate(10, 106.167966) " font-style="normal" font-stretch="normal"  line-height="100.00000%" font-size="10.000000" font-variant="normal" y="154.377" x="102.01891" font-family="Sans" fill="#ff00f7"><tspan id="elements-f01.svgtspan1732" sodipodi:role="line" fill-opacity="0.59770101" dx="0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0" y="154.377" x="102.01891" fill="#ff00f7">Elements</tspan></text>
+ <text id="elements-f01.svgtext1755" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" fill-opacity="0.6" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal"  line-height="100%" font-size="10px" font-variant="normal" y="154.377" x="168.60974" font-family="Sans" fill="#0000ff"><tspan id="elements-f01.svgtspan1738" sodipodi:role="line" fill-opacity="0.6" dx="0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0" y="154.377" x="168.60974" fill="#0000ff">Principis</tspan></text>
+ <text id="elements-f01.svgtext1758" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100.00000%" transform="translate(10, 106.167966) " font-style="normal" font-stretch="normal"  line-height="100.00000%" font-size="8.0000000" font-variant="normal" y="100.13462" x="90.54583" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1741" sodipodi:role="line" dx="0 0 0 0" dy="0 0 0 0" y="100.13462" x="90.54583">Color</tspan></text>
+ <text id="elements-f01.svgtext1761" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal"  line-height="100%" font-size="8px" font-variant="normal" y="32.645866" x="116.87344" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1744" sodipodi:role="line" dx="0 0 0 0 0" dy="0 0 0 0 0" y="32.645866" x="116.87344">Línia</tspan></text>
+ <text id="elements-f01.svgtext1764" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal"  line-height="100%" font-size="8px" font-variant="normal" y="47.565285" x="95.306877" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1747" sodipodi:role="line" dx="0 0 0 0 0" dy="0 0 0 0 0" y="47.565285" x="95.306877">Forma</tspan></text>
+ <text id="elements-f01.svgtext1767" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal"  line-height="100%" font-size="8px" font-variant="normal" y="83.103767" x="83.459221" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1750" sodipodi:role="line" dx="0 0 0 0 0" dy="0 0 0 0 0" y="83.103767" x="83.459221">Espai</tspan></text>
+ <text id="elements-f01.svgtext1770" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal"  line-height="100%" font-size="8px" font-variant="normal" y="114.99348" x="101.17574" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1753" sodipodi:role="line" dx="0 0 0 0 0 0" dy="0 0 0 0 0 0" y="114.99348" x="101.17574">Textura</tspan></text>
+ <text id="elements-f01.svgtext1773" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal"  line-height="100%" font-size="8px" font-variant="normal" y="129.16661" x="118.89227" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1756" sodipodi:role="line" dx="0 0 0 0 0" dy="0 0 0 0 0" y="129.16661" x="118.89227">Valor</tspan></text>
+ <text id="elements-f01.svgtext1776" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal"  line-height="100%" font-size="8px" font-variant="normal" y="65.387245" x="83.459221" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1759" sodipodi:role="line" dx="0 0 0 0" dy="0 0 0 0" y="65.387245" x="83.459221">Mida</tspan></text>
+ <text id="elements-f01.svgtext1779" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal"  line-height="100%" font-size="8px" font-variant="normal" y="34.637756" x="184.08173" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1762" sodipodi:role="line" dx="0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0" y="34.637756" x="184.08173">Equilibri</tspan></text>
+ <text id="elements-f01.svgtext1782" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100.00000%" transform="translate(10, 106.167966) " font-style="normal" font-stretch="normal"  line-height="100.00000%" font-size="8.0000000" font-variant="normal" y="51.614323" x="194.48068" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1765" sodipodi:role="line" dx="0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0" y="51.614323" x="194.48068">Contrast</tspan></text>
+ <text id="elements-f01.svgtext1785" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal"  line-height="100%" font-size="8px" font-variant="normal" y="71.448875" x="199.68022" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1768" sodipodi:role="line" dx="0 0 0 0 0 0" dy="0 0 0 0 0 0" y="71.448875" x="199.68022">Èmfasi</tspan></text>
+ <text id="elements-f01.svgtext1788" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal"  line-height="100%" font-size="8px" font-variant="normal" y="91.283318" x="199.44937" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1771" sodipodi:role="line" dx="0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0" y="91.283318" x="199.44937">Proporció</tspan></text>
+ <text id="elements-f01.svgtext1791" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal"  line-height="100%" font-size="8px" font-variant="normal" y="111.11781" x="193.78815" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1774" sodipodi:role="line" dx="0 0 0" dy="0 0 0" y="111.11781" x="193.78815">Patró</tspan></text>
+ <text id="elements-f01.svgtext1803" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" sodipodi:linespacing="100%" transform="matrix(1.000025,0,0,0.999975,10,106.168)" font-style="normal" font-stretch="normal"  line-height="100%" font-size="7.99980402px" font-variant="normal" y="129.04839" x="178.64687" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1786" sodipodi:role="line" y="129.04839" x="178.64687">Degradat</tspan></text>
+ <text id="elements-f01.svgtext1806" style="writing-mode:lr-tb;text-anchor:start;" line-height="100%" font-weight="bold" sodipodi:linespacing="100%" font-size="8px" font-style="normal" y="186.78105" x="145.85378" font-family="Sans"  fill="#ffffff"><tspan id="elements-f01.svgtspan1792" sodipodi:role="line" dx="0 0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0 0" y="186.78105" x="145.85378" fill="#ffffff">Composició</tspan></text>
+ <text id="elements-f01.svgtext1809" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" fill-opacity="0.21476494" sodipodi:linespacing="100%" transform="translate(10,106.168)" font-style="normal" font-stretch="normal"  line-height="100%" font-size="10px" font-variant="normal" y="12.44677" x="12.456144" font-family="Sans" fill="#000000"><tspan id="elements-f01.svgtspan1803" sodipodi:role="line" fill-opacity="0.21476494" dx="0 0 0 0 0" dy="0 0 0 0 0" y="12.44677" x="12.456144" fill="#000000">Resum</tspan></text>
  <text id="text1392" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" font-size="8.5px" font-style="normal" y="299.85147" x="10" font-family="Sans" fill="#000000">
   <tspan id="tspan1394" y="299.85147" x="10">Elements del Disseny</tspan>
  </text>
  <rect id="d0e29" display="none" height="1000px" width="288" y="304.75" x="10"/>
- <flowRoot id="flowRoot1397" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot1397" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion1399">
    <use id="use1401" xlink:href="#d0e29" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv1403" xml:space="preserve">Els següents elements són els blocs constructius del disseny.</flowDiv>
+  <flowPara id="flowPara1403" >Els següents elements són els blocs constructius del disseny.</flowPara>
  </flowRoot>
  <text id="text1405" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" font-size="7.5px" font-style="italic" y="334.99969" x="10" font-family="Sans" fill="#000000">
   <tspan id="tspan1407" y="334.99969" x="10">Línia</tspan>
  </text>
  <rect id="d0e37" display="none" height="1000px" width="288" y="340.5" x="10"/>
- <flowRoot id="flowRoot1410" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot1410" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion1412">
    <use id="use1414" xlink:href="#d0e37" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2164" xml:space="preserve">Una línia es defineix com una marca amb una longitud i direcció, creada per un punt que es mou a través d&apos;una superfície. Una línia pot variar en longitud, amplada, direcció, corbatura i color. La línia pot ser bidimensional (una línia de llapis sobre un paper) o tridimensional implícita.</flowDiv>
+  <flowPara id="flowPara2164" >Una línia es defineix com una marca amb una longitud i direcció, creada per un punt que es mou a través d&apos;una superfície. Una línia pot variar en longitud, amplada, direcció, corbatura i color. La línia pot ser bidimensional (una línia de llapis sobre un paper) o tridimensional implícita.</flowPara>
  </flowRoot>
  <g id="elements-f02.svgg2037" transform="translate(10, 400.1450028) translate(0.000000,-424.1680)">
   <rect id="elements-f02.svgrect1933" height="100.99" width="305.16" stroke="#000" y="424.42" x="7.5753" stroke-width="0.49832" fill="none"/>
@@ -113,11 +113,11 @@
   <tspan id="tspan1431" y="525.63708" x="10">Forma</tspan>
  </text>
  <rect id="d0e56" display="none" height="1000px" width="288" y="531.14" x="10"/>
- <flowRoot id="flowRoot1434" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot1434" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion1436">
    <use id="use1438" xlink:href="#d0e56" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv1440" xml:space="preserve">Una figura plana o forma es crea quan una sèrie de línies reals o implícites es troben per a encerclar un espai. Un canvi de color o d&apos;ombra pot definir una forma.  Les formes es poden dividir en diversos tipus: geomètriques (quadrat, triangle, cercle) i orgàniques (de contorn irregular). </flowDiv>
+  <flowPara id="flowPara1440" >Una figura plana o forma es crea quan una sèrie de línies reals o implícites es troben per a encerclar un espai. Un canvi de color o d&apos;ombra pot definir una forma.  Les formes es poden dividir en diversos tipus: geomètriques (quadrat, triangle, cercle) i orgàniques (de contorn irregular). </flowPara>
  </flowRoot>
  <g id="elements-f03.svgg2063" stroke="#000" transform="translate(10, 590.9013237999999) translate(0.000000,-611.9634)">
   <rect id="elements-f03.svgrect1943" height="100.99" width="305.16" y="612.21" x="7.5753" stroke-width="0.49832" fill="none"/>
@@ -129,24 +129,24 @@
   <tspan id="tspan1449" y="716.39343" x="10">Mida</tspan>
  </text>
  <rect id="d0e75" display="none" height="1000px" width="288" y="721.89" x="10"/>
- <flowRoot id="flowRoot1452" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot1452" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion1454">
    <use id="use1456" xlink:href="#d0e75" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv1458" xml:space="preserve">Això fa referència a variacions en les proporcions dels objectes, línies o formes.  Hi ha una variació de mides en els objectes, bé sigui real o imaginària. </flowDiv>
+  <flowPara id="flowPara1458" >Això fa referència a variacions en les proporcions dels objectes, línies o formes.  Hi ha una variació de mides en els objectes, bé sigui real o imaginària. </flowPara>
  </flowRoot>
  <rect id="elements-f04.svgrect1955" transform="translate(10, 770.4856457999999) " height="100.99" width="305.16" stroke="#000" y="0.24915" x="7.5753" stroke-width="0.49832" fill="none"/>
- <text id="elements-f04.svgtext3148" style="writing-mode:lr-tb;text-anchor:start;" font-family="Sans" font-weight="bold" sodipodi:linespacing="100%" transform="scale(0.985326,1.014893)" font-style="normal" font-stretch="normal" xml:space="preserve" line-height="100%" font-size="87.29173279px" font-variant="normal" y="853.99463" x="50.736828" stroke-width="3pt" fill="#000000"><tspan id="elements-f04.svgtspan3149" sodipodi:role="line" dx="0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0" y="853.99463" x="50.736828" fill="#000000">GRAN</tspan></text>
- <text id="elements-f04.svgtext3154" style="writing-mode:lr-tb;text-anchor:start;" font-family="Sans" font-weight="bold" sodipodi:linespacing="100%" transform="scale(0.999982,1.000018)" font-style="normal" font-stretch="normal" xml:space="preserve" line-height="100%" font-size="10.07663822px" font-variant="normal" y="866.12402" x="20.097126" stroke-width="3pt" fill="#000000"><tspan id="elements-f04.svgtspan3155" sodipodi:role="line" dx="0 0 0 0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0 0 0 0" y="866.12402" x="20.097126" fill="#000000">petit</tspan></text>
+ <text id="elements-f04.svgtext3148" style="writing-mode:lr-tb;text-anchor:start;" font-family="Sans" font-weight="bold" sodipodi:linespacing="100%" transform="scale(0.985326,1.014893)" font-style="normal" font-stretch="normal"  line-height="100%" font-size="87.29173279px" font-variant="normal" y="853.99463" x="50.736828" stroke-width="3pt" fill="#000000"><tspan id="elements-f04.svgtspan3149" sodipodi:role="line" dx="0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0" y="853.99463" x="50.736828" fill="#000000">GRAN</tspan></text>
+ <text id="elements-f04.svgtext3154" style="writing-mode:lr-tb;text-anchor:start;" font-family="Sans" font-weight="bold" sodipodi:linespacing="100%" transform="scale(0.999982,1.000018)" font-style="normal" font-stretch="normal"  line-height="100%" font-size="10.07663822px" font-variant="normal" y="866.12402" x="20.097126" stroke-width="3pt" fill="#000000"><tspan id="elements-f04.svgtspan3155" sodipodi:role="line" dx="0 0 0 0 0 0 0 0 0 0 0 0" dy="0 0 0 0 0 0 0 0 0 0 0 0" y="866.12402" x="20.097126" fill="#000000">petit</tspan></text>
  <text id="text1465" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" font-size="7.5px" font-style="italic" y="895.97772" x="10" font-family="Sans" fill="#000000">
   <tspan id="tspan1467" y="895.97772" x="10">Espai</tspan>
  </text>
  <rect id="d0e94" display="none" height="1000px" width="288" y="901.48" x="10"/>
- <flowRoot id="flowRoot1470" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot1470" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion1472">
    <use id="use1474" xlink:href="#d0e94" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv1476" xml:space="preserve">L&apos;espai és l&apos;àrea buida o oberta entre, al voltant, a sobre, a sota o entre objectes. Les siluetes i les formes estan formades per l&apos;espai que hi ha al seu voltant i el seu inetrior. L&apos;espai sovint s&apos;anomena tridimensional o bidimensional. L&apos;espai positiu és omplert per una silueta o forma. L&apos;espai negatiu envolta una silueta o una forma. </flowDiv>
+  <flowPara id="flowPara1476" >L&apos;espai és l&apos;àrea buida o oberta entre, al voltant, a sobre, a sota o entre objectes. Les siluetes i les formes estan formades per l&apos;espai que hi ha al seu voltant i el seu inetrior. L&apos;espai sovint s&apos;anomena tridimensional o bidimensional. L&apos;espai positiu és omplert per una silueta o forma. L&apos;espai negatiu envolta una silueta o una forma. </flowPara>
  </flowRoot>
  <rect id="elements-f05.svgrect1991" transform="translate(10, 972.2950217999999) " height="100.99" width="305.16" stroke="#000" y="0.24914" x="7.5753" stroke-width="0.49832" fill="none"/>
  <rect id="elements-f05.svgrect2044" fill-rule="evenodd" transform="translate(10, 972.2950217999999) " height="90.929" width="100.6" y="3.9333" x="36.104" fill="#000"/>
@@ -156,11 +156,11 @@
   <tspan id="tspan1484" y="1097.7871017999998" x="10">Color</tspan>
  </text>
  <rect id="d0e113" display="none" height="1000px" width="288" y="1103.3" x="10"/>
- <flowRoot id="flowRoot1487" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot1487" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion1489">
    <use id="use1491" xlink:href="#d0e113" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv1493" xml:space="preserve">El color és el caràcter percebut d&apos;una superfície d&apos;acord amb la longitud d&apos;ona de la llum relectida per aquesta. El color té tres dimensions: MATÍS (un altre mot pel color, indicat pel seu nom com a vermell o groc),  VALOR (la seva lluminositat o foscor), INTENSITAT (la seva brillantor o palidesa). </flowDiv>
+  <flowPara id="flowPara1493" >El color és el caràcter percebut d&apos;una superfície d&apos;acord amb la longitud d&apos;ona de la llum relectida per aquesta. El color té tres dimensions: MATÍS (un altre mot pel color, indicat pel seu nom com a vermell o groc),  VALOR (la seva lluminositat o foscor), INTENSITAT (la seva brillantor o palidesa). </flowPara>
  </flowRoot>
  <defs id="elements-f06.svgdefs3">
   <linearGradient id="elements-f06.svglinearGradient2620" y2="2135.3" gradientUnits="userSpaceOnUse" y1="2135.3" gradientTransform="matrix(1.735401,0.000000,0.000000,0.576236,0.000000,-1179.712)" x2="180.35" x1="4.2216" inkscape:collect="always">
@@ -178,11 +178,11 @@
   <tspan id="tspan1508" y="1299.7155" x="10">Textura</tspan>
  </text>
  <rect id="d0e132" display="none" height="1000px" width="288" y="1305.2" x="10"/>
- <flowRoot id="flowRoot1511" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot1511" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion1513">
    <use id="use1515" xlink:href="#d0e132" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv1517" xml:space="preserve">La textura és com se sent una superfície (textura real) o quin aspecte té (textura implícita). Les textures es descriuen mitjançant mots com rugós, sedós o pedregós. </flowDiv>
+  <flowPara id="flowPara1517" >La textura és com se sent una superfície (textura real) o quin aspecte té (textura implícita). Les textures es descriuen mitjançant mots com rugós, sedós o pedregós. </flowPara>
  </flowRoot>
  <defs id="elements-f07.svgdefs3">
   <pattern id="elements-f07.svgpattern2172" inkscape:collect="always" xlink:href="#elements-f07.svgpattern2655" patternTransform="matrix(0.25,0,0,0.25,0,0)"/>
@@ -203,11 +203,11 @@
   <tspan id="tspan1534" y="1479.2998" x="10">Valor</tspan>
  </text>
  <rect id="d0e151" display="none" height="1000px" width="288" y="1484.8" x="10"/>
- <flowRoot id="flowRoot1537" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot1537" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion1539">
    <use id="use1541" xlink:href="#d0e151" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv1543" xml:space="preserve">El valor és com de clara o fosca es veu alguna cosa. Aconseguim canvis de valor en un color afegint-hi negre o blanc. El clarobscur usa el valor en el dibuix contrastant de forma dramàtica llums i ombres en una composició. </flowDiv>
+  <flowPara id="flowPara1543" >El valor és com de clara o fosca es veu alguna cosa. Aconseguim canvis de valor en un color afegint-hi negre o blanc. El clarobscur usa el valor en el dibuix contrastant de forma dramàtica llums i ombres en una composició. </flowPara>
  </flowRoot>
  <defs id="elements-f08.svgdefs3">
   <linearGradient id="elements-f08.svglinearGradient2224" y2="5730.5" gradientUnits="userSpaceOnUse" y1="5730.5" gradientTransform="matrix(3.700601,0.000000,0.000000,0.270226,0.000000,-1539.931)" x2="81.905" x1="4.2527" inkscape:collect="always">
@@ -238,21 +238,21 @@
   <tspan id="tspan1579" y="1671.5371" x="10">Principis de disseny</tspan>
  </text>
  <rect id="d0e171" display="none" height="1000px" width="288" y="1676.4" x="10"/>
- <flowRoot id="flowRoot1582" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot1582" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion1584">
    <use id="use1586" xlink:href="#d0e171" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv1588" xml:space="preserve">Els principis usen els elements de disseny per a crear una composició.</flowDiv>
+  <flowPara id="flowPara1588" >Els principis usen els elements de disseny per a crear una composició.</flowPara>
  </flowRoot>
  <text id="text1590" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" font-size="7.5px" font-style="italic" y="1712.6853" x="10" font-family="Sans" fill="#000000">
   <tspan id="tspan1592" y="1712.6853" x="10">Equilibri</tspan>
  </text>
  <rect id="d0e179" display="none" height="1000px" width="288" y="1712.2" x="10"/>
- <flowRoot id="flowRoot1595" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,6)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot1595" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,6)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion1597">
    <use id="use1599" xlink:href="#d0e179" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv1601" xml:space="preserve">L&apos;equilibri és la sensació d&apos;igualtat visual en silueta, forma, valor, color, etc.  L&apos;equilibri pot ser simètric o equilibrat uniformement o assimètric o no equilibrat uniformement. Poden usar-se objectes, valors, colors, textures, siluetes, formes,  etc. a l&apos;hora de crear un equilibri en una composició. </flowDiv>
+  <flowPara id="flowPara1601" >L&apos;equilibri és la sensació d&apos;igualtat visual en silueta, forma, valor, color, etc.  L&apos;equilibri pot ser simètric o equilibrat uniformement o assimètric o no equilibrat uniformement. Poden usar-se objectes, valors, colors, textures, siluetes, formes,  etc. a l&apos;hora de crear un equilibri en una composició. </flowPara>
  </flowRoot>
  <rect id="elements-f09.svgrect2170" transform="translate(10, 1783.0026585999997) " height="100.99" width="305.16" stroke="#000" y="0.24922" x="7.5753" stroke-width="0.49832" fill="none"/>
  <path id="elements-f09.svgrect2562" d="M160.08,0.2492v100.99-100.99z" sodipodi:nodetypes="ccc" transform="translate(10, 1783.0026585999997) " stroke="#000" stroke-width="0.49831799" fill="none"/>
@@ -264,11 +264,11 @@
   <tspan id="tspan1611" y="1908.4947785999998" x="10">Contrast</tspan>
  </text>
  <rect id="d0e198" display="none" height="1000px" width="288" y="1914" x="10"/>
- <flowRoot id="flowRoot1614" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot1614" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion1616">
    <use id="use1618" xlink:href="#d0e198" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv1620" xml:space="preserve">El contrast és la juxtaposició d&apos;elements oposats </flowDiv>
+  <flowPara id="flowPara1620" >El contrast és la juxtaposició d&apos;elements oposats </flowPara>
  </flowRoot>
  <rect id="elements-f10.svgrect2578" fill-rule="evenodd" transform="translate(10, 1940.2430203999998) " height="100.99" width="152.52" stroke="#000" y="0.24905" x="159.95" stroke-width="0.49832" fill="#000"/>
  <rect id="elements-f10.svgrect2579" fill-rule="evenodd" transform="translate(10, 1940.2430203999998) " height="58.64" width="88.56" y="21.426" x="191.93" fill="#FFF"/>
@@ -278,11 +278,11 @@
   <tspan id="tspan1628" y="2065.7351" x="10">Èmfasis</tspan>
  </text>
  <rect id="d0e217" display="none" height="1000px" width="288" y="2071.2" x="10"/>
- <flowRoot id="flowRoot1631" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot1631" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion1633">
    <use id="use1635" xlink:href="#d0e217" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv1637" xml:space="preserve">L&apos;èmfasi s&apos;usa per a fer que certes parts d&apos;una obra destaquin i captin la vostra atenció. El centre d&apos;interès o punt focal és la part d&apos;una obra on el vostre ull es dirigeix primer.</flowDiv>
+  <flowPara id="flowPara1637" >L&apos;èmfasi s&apos;usa per a fer que certes parts d&apos;una obra destaquin i captin la vostra atenció. El centre d&apos;interès o punt focal és la part d&apos;una obra on el vostre ull es dirigeix primer.</flowPara>
  </flowRoot>
  <rect id="elements-f11.svgrect2584" fill-rule="evenodd" transform="translate(10, 2119.8273424) " height="100.99" width="152.52" stroke="#000" y="0.24905" x="159.95" stroke-width="0.49832" fill="#c8c8c8"/>
  <rect id="elements-f11.svgrect2585" fill-rule="evenodd" transform="translate(10, 2119.8273424) " height="58.64" width="88.56" y="21.426" x="191.93" fill="#d4d4d4"/>
@@ -293,11 +293,11 @@
   <tspan id="tspan1646" y="2245.3193" x="10">Proporció</tspan>
  </text>
  <rect id="d0e236" display="none" height="1000px" width="288" y="2250.8" x="10"/>
- <flowRoot id="flowRoot1649" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot1649" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion1651">
    <use id="use1653" xlink:href="#d0e236" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv1655" xml:space="preserve">La proporció descriu la mida, posició o quantitat d&apos;una cosa comparada amb una altra. </flowDiv>
+  <flowPara id="flowPara1655" >La proporció descriu la mida, posició o quantitat d&apos;una cosa comparada amb una altra. </flowPara>
  </flowRoot>
  <defs id="elements-f12.svgdefs3">
   <linearGradient id="elements-f12.svglinearGradient1516">
@@ -388,8 +388,8 @@
   </g>
   <path id="elements-f12.svgpath1714" sodipodi:rx="56.143108" sodipodi:ry="56.143108" sodipodi:type="arc" d="m82.055,175.84c0,31.007-25.136,56.143-56.143,56.143s-56.143-25.136-56.143-56.143,25.136-56.143,56.143-56.143,56.143,25.136,56.143,56.143z" fill-opacity="0.75000000" transform="matrix(1.080927,0.000000,0.000000,0.286993,146.7630,3332.854)" sodipodi:cy="175.83524" sodipodi:cx="25.912205" stroke-width="1.0000000pt" fill="url(#elements-f12.svgradialGradient2185)"/>
  </g>
- <text id="elements-f12.svgtext1232" font-family="helvetica" xml:space="preserve" transform="translate(10, 2288.1207184) " font-size="5.1805081" y="109.55157" x="7.0871472" stroke-width="1.0000000pt"><tspan id="elements-f12.svgtspan1233">Random Ant &amp; 4WD</tspan></text>
- <text id="elements-f12.svgtext1235" font-family="helvetica" xml:space="preserve" transform="translate(10, 2288.1207184) " font-size="1.2781800" y="111.84713" x="7.7085347" stroke-width="1.0000000pt"><tspan id="elements-f12.svgtspan1236">SVG  Image Created by Andrew Fitzsimon</tspan><tspan id="elements-f12.svgtspan2442" y="113.44485" x="7.7085347" sodipodi:role="line">Courtesy of Open Clip Art Library</tspan><tspan id="elements-f12.svgtspan2444" y="115.04258" x="7.7085347" sodipodi:role="line">http://www.openclipart.org/</tspan><tspan id="elements-f12.svgtspan2950" y="116.6403" x="7.7085347" sodipodi:role="line"/></text>
+ <text id="elements-f12.svgtext1232" font-family="helvetica"  transform="translate(10, 2288.1207184) " font-size="5.1805081" y="109.55157" x="7.0871472" stroke-width="1.0000000pt"><tspan id="elements-f12.svgtspan1233">Random Ant &amp; 4WD</tspan></text>
+ <text id="elements-f12.svgtext1235" font-family="helvetica"  transform="translate(10, 2288.1207184) " font-size="1.2781800" y="111.84713" x="7.7085347" stroke-width="1.0000000pt"><tspan id="elements-f12.svgtspan1236">SVG  Image Created by Andrew Fitzsimon</tspan><tspan id="elements-f12.svgtspan2442" y="113.44485" x="7.7085347" sodipodi:role="line">Courtesy of Open Clip Art Library</tspan><tspan id="elements-f12.svgtspan2444" y="115.04258" x="7.7085347" sodipodi:role="line">http://www.openclipart.org/</tspan><tspan id="elements-f12.svgtspan2950" y="116.6403" x="7.7085347" sodipodi:role="line"/></text>
  <g id="elements-f12.svgg2864" transform="translate(10, 2288.1207184) matrix(1.120145,0.000000,0.000000,1.120145,-199.5482,-2562.726)">
   <path id="elements-f12.svgpath924" d="M147.45,91.908l-16.76-7.699,28.54-4.076,2.26,3.17" transform="matrix(0.311908,0.000000,0.000000,0.311908,184.8265,2289.170)" stroke="#000" stroke-width="4.5308385" fill="none"/>
   <path id="elements-f12.svgpath923" d="M155.46,108.55l4.98,18.12,14.49-24.46" transform="matrix(0.311908,0.000000,0.000000,0.311908,184.8265,2289.170)" stroke="#000" stroke-width="4.5308385" fill="none"/>
@@ -416,11 +416,11 @@
   <tspan id="tspan1785" y="2427.4297" x="10">Patró</tspan>
  </text>
  <rect id="d0e255" display="none" height="1000px" width="288" y="2432.9" x="10"/>
- <flowRoot id="flowRoot1788" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot1788" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion1790">
    <use id="use1792" xlink:href="#d0e255" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv1794" xml:space="preserve">Un patró es crea repetint un element (línia, forma o color) un cop rera l&apos;altre. </flowDiv>
+  <flowPara id="flowPara1794" >Un patró es crea repetint un element (línia, forma o color) un cop rera l&apos;altre. </flowPara>
  </flowRoot>
  <defs id="elements-f13.svgdefs3">
   <pattern id="elements-f13.svgpattern2289" inkscape:collect="always" xlink:href="#elements-f13.svgpattern3032" patternTransform="matrix(1.180948,0.332239,-0.332239,1.180948,43.37934,31.64300)"/>
@@ -439,11 +439,11 @@
   <tspan id="tspan1809" y="2595.8418" x="10">Gradació</tspan>
  </text>
  <rect id="d0e274" display="none" height="1000px" width="288" y="2601.3" x="10"/>
- <flowRoot id="flowRoot1812" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot1812" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion1814">
    <use id="use1816" xlink:href="#d0e274" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv1818" xml:space="preserve">La gradació de mida i direcció produeix una perspectiva lineal. La gradació de color de càlid a fred i de to de fosc a clar produeix perspectiva aèria. La gradació pot afegir interèsi moviment a una forma. Una gradació de fosc a clar pot fer que l&apos;ull es mogui al llarg d&apos;una forma. </flowDiv>
+  <flowPara id="flowPara1818" >La gradació de mida i direcció produeix una perspectiva lineal. La gradació de color de càlid a fred i de to de fosc a clar produeix perspectiva aèria. La gradació pot afegir interèsi moviment a una forma. Una gradació de fosc a clar pot fer que l&apos;ull es mogui al llarg d&apos;una forma. </flowPara>
  </flowRoot>
  <defs id="elements-f14.svgdefs3">
   <linearGradient id="elements-f14.svglinearGradient3164">
@@ -465,11 +465,11 @@
   <tspan id="tspan1844" y="2799.3701" x="10">Composició</tspan>
  </text>
  <rect id="d0e294" display="none" height="1000px" width="288" y="2804.3" x="10"/>
- <flowRoot id="flowRoot1847" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot1847" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion1849">
    <use id="use1851" xlink:href="#d0e294" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv1853" xml:space="preserve">La combinació de diferents elements per a formar un tot.</flowDiv>
+  <flowPara id="flowPara1853" >La combinació de diferents elements per a formar un tot.</flowPara>
  </flowRoot>
  <defs id="elements-f15.svgdefs3">
   <pattern id="elements-f15.svgpattern2540" inkscape:collect="always" xlink:href="#elements-f15.svgpattern2585" patternTransform="matrix(1.791325e-2,1.217899e-2,-1.217899e-2,1.791325e-2,7.869785,48.26800)"/>
@@ -585,88 +585,88 @@
   <tspan id="tspan1973" y="2958.5571" x="10">Bibliografia</tspan>
  </text>
  <rect id="d0e313" display="none" height="1000px" width="288" y="2963.5" x="10"/>
- <flowRoot id="flowRoot1976" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot1976" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion1978">
    <use id="use1980" xlink:href="#d0e313" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv1982" xml:space="preserve">Bibliografia parcial usada per a elaborar aquest document.</flowDiv>
+  <flowPara id="flowPara1982" >Bibliografia parcial usada per a elaborar aquest document.</flowPara>
  </flowRoot>
  <circle id="circle1984" cy="0" cx="0" r="2" transform="translate(15, 2987.705456)"/>
  <rect id="d0e319" display="none" height="1000px" width="258" y="2981.7" x="20"/>
- <flowRoot id="flowRoot1987" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.4" line-height="133.00000%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot1987" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.4" line-height="133.00000%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion1989">
    <use id="use1991" y="0" x="0" xlink:href="#d0e319"/>
   </flowRegion>
-  <flowDiv id="flowDiv1993" xml:space="preserve"><flowSpan id="flowSpan1995" font-weight="bold" font-family="Sans">
+  <flowPara id="flowPara1993" ><flowSpan id="flowSpan1995" font-weight="bold" font-family="Sans">
 http://sanford-artedventures.com/study/study.html</flowSpan>
-</flowDiv>
+</flowPara>
  </flowRoot>
  <circle id="circle1997" cy="0" cx="0" r="2" transform="translate(15, 3005.9003775)"/>
  <rect id="d0e326" display="none" height="1000px" width="258" y="2999.9" x="20"/>
- <flowRoot id="flowRoot2000" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.4" line-height="133.00000%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2000" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.4" line-height="133.00000%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion2002">
    <use id="use2004" y="0" x="0" xlink:href="#d0e326"/>
   </flowRegion>
-  <flowDiv id="flowDiv2006" xml:space="preserve"><flowSpan id="flowSpan2008" font-weight="bold" font-family="Sans">
+  <flowPara id="flowPara2006" ><flowSpan id="flowSpan2008" font-weight="bold" font-family="Sans">
 http://www.makart.com/resources/artclass/EPlist.html</flowSpan>
-</flowDiv>
+</flowPara>
  </flowRoot>
  <circle id="circle2010" cy="0" cx="0" r="2" transform="translate(15, 3033.5733535)"/>
  <rect id="d0e333" display="none" height="1000px" width="258" y="3027.6" x="20"/>
- <flowRoot id="flowRoot2013" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.4" line-height="133.00000%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2013" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.4" line-height="133.00000%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion2015">
    <use id="use2017" y="0" x="0" xlink:href="#d0e333"/>
   </flowRegion>
-  <flowDiv id="flowDiv2019" xml:space="preserve"><flowSpan id="flowSpan2021" font-weight="bold" font-family="Sans">
+  <flowPara id="flowPara2019" ><flowSpan id="flowSpan2021" font-weight="bold" font-family="Sans">
 http://www.princetonol.com/groups/iad/Files/elements2.htm</flowSpan>
-</flowDiv>
+</flowPara>
  </flowRoot>
  <circle id="circle2023" cy="0" cx="0" r="2" transform="translate(15, 3061.2463295)"/>
  <rect id="d0e340" display="none" height="1000px" width="258" y="3055.2" x="20"/>
- <flowRoot id="flowRoot2026" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.4" line-height="133.00000%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2026" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.4" line-height="133.00000%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion2028">
    <use id="use2030" y="0" x="0" xlink:href="#d0e340"/>
   </flowRegion>
-  <flowDiv id="flowDiv2032" xml:space="preserve"><flowSpan id="flowSpan2034" font-weight="bold" font-family="Sans">
+  <flowPara id="flowPara2032" ><flowSpan id="flowSpan2034" font-weight="bold" font-family="Sans">
 http://oswego.org/staff/bpeterso/web/elements_and_principles.htm</flowSpan>
-</flowDiv>
+</flowPara>
  </flowRoot>
  <circle id="circle2036" cy="0" cx="0" r="2" transform="translate(15, 3090.7814144999998)"/>
  <rect id="d0e347" display="none" height="1000px" width="258" y="3084.8" x="20"/>
- <flowRoot id="flowRoot2039" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.4" line-height="133.00000%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2039" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.4" line-height="133.00000%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion2041">
    <use id="use2043" y="0" x="0" xlink:href="#d0e347"/>
   </flowRegion>
-  <flowDiv id="flowDiv2045" xml:space="preserve"><flowSpan id="flowSpan2047" font-weight="bold" font-family="Sans">
+  <flowPara id="flowPara2045" ><flowSpan id="flowSpan2047" font-weight="bold" font-family="Sans">
 http://www.johnlovett.com/test.htm</flowSpan>
-</flowDiv>
+</flowPara>
  </flowRoot>
  <circle id="circle2049" cy="0" cx="0" r="2" transform="translate(15, 3108.9763359999997)"/>
  <rect id="d0e354" display="none" height="1000px" width="258" y="3103" x="20"/>
- <flowRoot id="flowRoot2052" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.4" line-height="133.00000%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2052" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.4" line-height="133.00000%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion2054">
    <use id="use2056" y="0" x="0" xlink:href="#d0e354"/>
   </flowRegion>
-  <flowDiv id="flowDiv2058" xml:space="preserve"><flowSpan id="flowSpan2060" font-weight="bold" font-family="Sans">
+  <flowPara id="flowPara2058" ><flowSpan id="flowSpan2060" font-weight="bold" font-family="Sans">
 http://digital-web.com/articles/elements_of_design/</flowSpan>
-</flowDiv>
+</flowPara>
  </flowRoot>
  <circle id="circle2062" cy="0" cx="0" r="2" transform="translate(15, 3127.3394215999997)"/>
  <rect id="d0e361" display="none" height="1000px" width="258" y="3121.3" x="20"/>
- <flowRoot id="flowRoot2065" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.4" line-height="133.00000%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2065" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.4" line-height="133.00000%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion2067">
    <use id="use2069" y="0" x="0" xlink:href="#d0e361"/>
   </flowRegion>
-  <flowDiv id="flowDiv2071" xml:space="preserve"><flowSpan id="flowSpan2073" font-weight="bold" font-family="Sans">
+  <flowPara id="flowPara2071" ><flowSpan id="flowSpan2073" font-weight="bold" font-family="Sans">
 http://digital-web.com/articles/principles_of_design/</flowSpan>
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e368" display="none" height="1000px" width="288" y="3139.7" x="10"/>
- <flowRoot id="flowRoot2076" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2076" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion2078">
    <use id="use2080" xlink:href="#d0e368" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2082" xml:space="preserve">Un agraïment especial a la Linda Kim (<flowSpan id="flowSpan2084" font-weight="bold" font-family="Sans">http://www.redlucite.org</flowSpan>) per ajudar-me (<flowSpan id="flowSpan2086" font-weight="bold" font-family="Sans">http://www.rejon.org/</flowSpan>) amb aquest tutorial. També a la Open Clip Art Library (<flowSpan id="flowSpan2088" font-weight="bold" font-family="Sans">http://www.openclipart.org/</flowSpan>) i als gràfics que la gent ha enviat a aquest projecte. </flowDiv>
+  <flowPara id="flowPara2082" >Un agraïment especial a la Linda Kim (<flowSpan id="flowSpan2084" font-weight="bold" font-family="Sans">http://www.redlucite.org</flowSpan>) per ajudar-me (<flowSpan id="flowSpan2086" font-weight="bold" font-family="Sans">http://www.rejon.org/</flowSpan>) amb aquest tutorial. També a la Open Clip Art Library (<flowSpan id="flowSpan2088" font-weight="bold" font-family="Sans">http://www.openclipart.org/</flowSpan>) i als gràfics que la gent ha enviat a aquest projecte. </flowPara>
  </flowRoot>
  <g id="g2090" transform="translate(0, 3202.6387492)">
   <defs id="defs2092">

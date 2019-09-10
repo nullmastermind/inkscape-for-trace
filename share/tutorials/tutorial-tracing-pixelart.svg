@@ -37,65 +37,65 @@
    <path id="path831" d="m359.24 21.363c-11.313 0-22.606 4.3206-31.275 12.99l-154.09 154.06c-8.4969 8.4967-12.762 19.543-12.931 30.631h-0.0585c0 0.0395 0.0566 0.0774 0.0585 0.11702-0.002 0.18609-0.0585 0.36977-0.0585 0.55586h0.2633c2.9491 11.221 79.15 25.523 87.651 34.025 12.839 12.839-49.233 22.268-36.395 35.107 12.839 12.839 77.59 24.843 90.43 37.682 12.839 12.839-26.238 26.51-13.399 39.349s55.967-3.2094 48.155 30.28c17.338 17.338 53.512 9.0588 77.733-8.2795 12.839-12.839-24.629-11.707-11.79-24.546s45.247-12.908 72.555-43.621c-10.992-17.095-46.981-24.375-34.142-37.214s37.8-6.3179 91.659-30.777c26.292-11.941 24.12-21.01 24.019-32.006-0.002-0.23138 0-0.43973 0-0.67288h-0.0585c-0.16-11.07-4.46-22.12-12.95-30.62l-154.07-154.06c-8.66-8.667-19.99-12.987-31.3-12.987zm-1.3165 20.04c5.0295 0.13102 9.0916 3.9651 17.056 9.1279l72.789 53.977c0.79681 0.51671 1.5557 1.0557 2.2527 1.6091 0.69703 0.55327 1.3337 1.1401 1.9309 1.7261 0.5972 0.58495 1.14 1.1721 1.6383 1.7846 0.49726 0.61244 0.94845 1.2385 1.3458 1.8724 0.39844 0.6349 0.75476 1.2798 1.0532 1.9309 0.29867 0.65226 0.53281 1.325 0.7314 1.9894 0.19976 0.66341 0.36832 1.319 0.46811 1.9894 0.0999 0.67165 0.14627 1.3452 0.14627 2.0187l-43.123-20.83-4.3006 32.562-23.727-11.117-36.629 24.458-14.014-48.331-18.051 42.275-50.408 5.032 0.55587-22.439c0-5.3897 29.057-43.122 46.751-52.105l32.386-23.259c4.7787-3.0977 8.1289-4.35 11.147-4.2714zm-66.996 220.21c22.944 5.9503 48.476 13.757 68.957 13.897l0.87768 9.2157c-17.538-1.8078-54.648-10.276-63.398-14.745l-6.4363-8.3672z" stroke-width="1pt"/>
   </g>
   <use id="use2086" style="color:#000000" xlink:href="#path1124" transform="matrix(3.7991 0 0 3.7991 -428.74 -36.475)" height="1052.3622" fill-opacity=".11077" width="320.00000" y="0.0000000" x="0.0000000" font-family="sans-serif" fill="#ffffff"/>
-  <text id="text7519" opacity=".5" line-height="125%" xml:space="preserve" transform="rotate(90)" font-size="6.9693px" y="-326.81229" x="3.6203015" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan7521" sodipodi:role="line" x="3.6203015" style="letter-spacing:.29056" y="-326.81229">Use <tspan id="tspan7523" font-weight="bold">Ctrl+down arrow</tspan> to scroll </tspan></text>
+  <text id="text7519" opacity=".5" line-height="125%"  transform="rotate(90)" font-size="6.9693px" y="-326.81229" x="3.6203015" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan7521" sodipodi:role="line" x="3.6203015" style="letter-spacing:.29056" y="-326.81229">Use <tspan id="tspan7523" font-weight="bold">Ctrl+down arrow</tspan> to scroll </tspan></text>
   <path id="path7527" opacity=".5" style="color:#000000" d="m338.53 197.82-13.108-1.2709 7.6547-10.717z" fill-rule="evenodd" transform="matrix(.61496 .045496 .061919 -.45186 112.46 201.6)"/>
  </g>
  <text id="text1920" font-family="sans-serif" font-size="7" transform="scale(1.1307)" y="30" x="35" fill="#ffffff">
   <tspan id="tspan1668" style="letter-spacing:2.1813" fill="#ffffff" dx="0 -0.57057059 0 0 0 0 0">::TRACING PIXEL ART</tspan>
  </text>
  <rect id="d0e10" display="none" height="1e3px" width="264" y="46" x="35"/>
- <flowRoot font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
+ <flowRoot xml:space="preserve" font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e10"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Before we had access to great vector graphics editing software...
-</flowDiv>
+  <flowPara >Before we had access to great vector graphics editing software...
+</flowPara>
  </flowRoot>
  <rect id="d0e13" display="none" height="1e3px" width="264" y="58.968" x="35"/>
- <flowRoot font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
+ <flowRoot xml:space="preserve" font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e13"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Even before we had 640x480 computer displays...
-</flowDiv>
+  <flowPara >Even before we had 640x480 computer displays...
+</flowPara>
  </flowRoot>
  <rect id="d0e16" display="none" height="1e3px" width="264" y="71.936" x="35"/>
- <flowRoot font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
+ <flowRoot xml:space="preserve" font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e16"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">It was common to play video games with carefully crafted pixels in low
+  <flowPara >It was common to play video games with carefully crafted pixels in low
 resolutions displays.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e19" display="none" height="1e3px" width="264" y="95.704" x="35"/>
- <flowRoot font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
+ <flowRoot xml:space="preserve" font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e19"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">We name &quot;Pixel Art&quot; the kind of art born in this age.
-</flowDiv>
+  <flowPara >We name &quot;Pixel Art&quot; the kind of art born in this age.
+</flowPara>
  </flowRoot>
  <rect id="d0e25" display="none" height="1e3px" width="288" y="114.67" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e25"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Inkscape is powered by <flowSpan font-weight="bold" font-family="sans-serif">libdepixelize</flowSpan> with the ability
+  <flowPara >Inkscape is powered by <flowSpan font-weight="bold" font-family="sans-serif">libdepixelize</flowSpan> with the ability
 to automatically vectorize these &quot;special&quot; Pixel Art images. You can try other
 types of input images too, but be warned: The result won&apos;t be equally good and
 it is a better idea to use the other Inkscape tracer, potrace.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e31" display="none" height="1e3px" width="288" y="164.33" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e31"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Let&apos;s start with a sample image to show you the capabilities of this tracer
+  <flowPara >Let&apos;s start with a sample image to show you the capabilities of this tracer
 engine. Below there is an example of a raster image (taken from a Liberated
 Pixel Cup entry) on the left and its vectorized output on the right.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <g id="tracing-pixelart-f01-en.svglayer1-4" xmlns:cc="http://creativecommons.org/ns#" inkscape:label="Layer 1" transform="translate(10 222.11) matrix(1.5291 0 0 1.5291 -42.714 -435.54)">
   <image id="tracing-pixelart-f01-en.svgimage3063" xlink:href="data:image/png;base64,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 7V/otDX4FA/ZBAAAAABJRU5ErkJggg== " height="54" width="53" y="288.71" x="79.57"/>
@@ -340,18 +340,18 @@ Pixel Cup entry) on the left and its vectorized output on the right.
   </g>
  </g>
  <rect id="d0e44" display="none" height="1e3px" width="288" y="316.68" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e44"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">libdepixelize uses Kopf-Lischinski algorithm to vectorize images. This algorithm
+  <flowPara >libdepixelize uses Kopf-Lischinski algorithm to vectorize images. This algorithm
 uses ideas of several computer science techniques and math concepts to produce a
 good result for pixel art images. One thing to notice is that the alpha channel
 is completely ignored by the algorithm. libdepixelize has currently no
 extensions to give a first-class citizen treatment for this class of images, but
 all pixel art images with alpha channel support are producing results similar
 to the main class of images recognized by Kopf-Lischinski.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <g id="tracing-pixelart-f02-en.svglayer1-3" xmlns:cc="http://creativecommons.org/ns#" inkscape:label="Layer 1" transform="translate(10 417.02) matrix(.74809 0 0 .74809 -90.352 -216.94)">
   <image id="tracing-pixelart-f02-en.svgimage6827" xlink:href="data:image/png;base64,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 xz7jf4MwidrFWy5FAAAAAElFTkSuQmCC " height="64" width="224" y="292.64" x="224.09"/>
@@ -718,47 +718,47 @@ to the main class of images recognized by Kopf-Lischinski.
   </g>
  </g>
  <rect id="d0e57" display="none" height="1e3px" width="288" y="524.77" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e57"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">The image above has alpha channel and the result is just fine. Still, if you
+  <flowPara >The image above has alpha channel and the result is just fine. Still, if you
 find a pixel art image with a bad result and you believe that the reason is the
 alpha channel, then contact libdepixelize maintainer (e.g. fill a bug on the
 project page) and he will be happy to extend the algorithm. He can&apos;t extend the
 algorithm if he don&apos;t know what images are giving bad results.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e60" display="none" height="1e3px" width="288" y="595.83" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e60"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">The image below is a screenshot of <flowSpan font-family="sans-serif">Trace Pixel Art</flowSpan> dialog in the English localisation.
+  <flowPara >The image below is a screenshot of <flowSpan font-family="sans-serif">Trace Pixel Art</flowSpan> dialog in the English localisation.
 You can open this dialog using the <flowSpan font-family="sans-serif">Path &gt; Trace Pixel Art...</flowSpan>
 menu or right-clicking on an image object and then <flowSpan font-family="sans-serif">Trace Pixel
 Art</flowSpan>.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <g id="tracing-pixelart-f03-en.svglayer1-42" xmlns:cc="http://creativecommons.org/ns#" inkscape:label="Camada 1" transform="translate(10 651.94) matrix(.38212 0 0 .38212 -160.25 -203)">
   <image id="tracing-pixelart-f03-en.svgimage3399" width="329" xlink:href="pixelart-dialog.en.png" height="272" sodipodi:absref="/pixelart-dialog.en.png" y="540.79" x="685.14"/>
  </g>
  <rect id="d0e82" display="none" height="1e3px" width="288" y="767.88" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e82"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">This dialog has two sections: Heuristics and output. Heuristics is targeted at
+  <flowPara >This dialog has two sections: Heuristics and output. Heuristics is targeted at
 advanced uses, but there already good defaults and you shouldn&apos;t worry about
 that, so let&apos;s leave it for later and starting with the explanation for output.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e85" display="none" height="1e3px" width="288" y="817.54" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e85"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Kopf-Lischinski algorithm works (from a high-level point of view) like a
+  <flowPara >Kopf-Lischinski algorithm works (from a high-level point of view) like a
 compiler, converting the data among several types of representation. At each
 step the algorithm has the opportunity to explore the operations that this
 representation offers. Some of these intermediate representations have a correct
@@ -766,26 +766,26 @@ visual representation (like the reshaped cell graph Voronoi output) and some
 don&apos;t (like the similarity graph). During development of libdepixelize users
 kept asking for adding the possibility of export these intermediate stages to
 the libdepixelize and the original libdepixelize author granted their wishes.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e88" display="none" height="1e3px" width="288" y="929.49" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e88"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">The default output should give the smoothest result and is probably what you
+  <flowPara >The default output should give the smoothest result and is probably what you
 want. You saw already the default output on the first samples of this
 tutorial. If you want to try it yourself, just open the <flowSpan font-family="sans-serif">Trace Pixel Art
 </flowSpan> dialog and click in <flowSpan font-family="sans-serif">OK</flowSpan> after choosing some image
 on Inkscape.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e97" display="none" height="1e3px" width="288" y="989.79" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e97"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">You can see the Voronoi output below and this is a &quot;reshaped pixel image&quot;, where
+  <flowPara >You can see the Voronoi output below and this is a &quot;reshaped pixel image&quot;, where
 the cells (previously pixels) got reshaped to connect pixels that are part of
 the same feature. No curves will be created and the image continues to be
 composed of straight lines. The difference can be observed when you magnify the image.
@@ -794,7 +794,7 @@ was meant to be part of the same feature. But now (thanks to a color similarity
 graph and the heuristics that you can tune to achieve a better result), it&apos;s
 possible to make two diagonal cells share an edge (previously only single
 vertices were shared by two diagonal cells).
-</flowDiv>
+</flowPara>
  </flowRoot>
  <g id="tracing-pixelart-f04-en.svglayer1-0" xmlns:cc="http://creativecommons.org/ns#" inkscape:label="Layer 1" transform="translate(-161.02 820.69)">
   <image id="tracing-pixelart-f04-en.svgimage6827" xlink:href="data:image/png;base64,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 xz7jf4MwidrFWy5FAAAAAElFTkSuQmCC " height="64" width="224" y="292.64" x="224.09"/>
@@ -15138,23 +15138,23 @@ vertices were shared by two diagonal cells).
   </g>
  </g>
  <rect id="d0e110" display="none" height="1e3px" width="288" y="1251.4" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e110"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">The standard B-splines output will give you smooth results, because the previous
+  <flowPara >The standard B-splines output will give you smooth results, because the previous
 Voronoi output will be converted to quadratic Bézier curves. However, the conversion
 won&apos;t be 1:1 because there are more heuristics working to decide which curves
 will be merged into one when the algorithm reaches a T-junction among the visible
 colors. A hint about the heuristics of this stage: You can&apos;t tune them.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e113" display="none" height="1e3px" width="288" y="1322.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e113"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">The final stage of libdepixelize (currently not exportable by the Inkscape GUI
+  <flowPara >The final stage of libdepixelize (currently not exportable by the Inkscape GUI
 because of its experimental and incomplete state) is &quot;optimize
 curves&quot; to remove the staircasing effect of the B-Spline curves. This stage also
 performs a border detection technique to prevent some features from being
@@ -15162,41 +15162,41 @@ smoothed and a triangulation technique to fix the position of the nodes after
 optimization. You should be able to individually disable each of these features
 when this output leaves the &quot;experimental stage&quot; in libdepixelize (hopefully
 soon).
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e116" display="none" height="1e3px" width="288" y="1424.9" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e116"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">The heuristics section in the gui allows you to tune the heuristics used by
+  <flowPara >The heuristics section in the gui allows you to tune the heuristics used by
 libdepixelize to decide what to do when it encounters a 2x2 pixel block where
 the two diagonals have similar colors. &quot;What connection should I keep?&quot; is what
 libdepixelize asks. It tries to apply all heuristics to the conflicting
 diagonals and keeps the connection of the winner. If a tie happens, both
 connections are erased.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e119" display="none" height="1e3px" width="288" y="1495.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e119"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">If you want to analyze the effect of each heuristic and play with the numbers,
+  <flowPara >If you want to analyze the effect of each heuristic and play with the numbers,
 the best output is the Voronoi output. You can see more easily the effects of
 the heuristics in the Voronoi output and when you are satisfied with the
 settings you got, you can just change the output type to the one you want.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e122" display="none" height="1e3px" width="288" y="1556.3" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e122"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">The image below has an image and the B-Splines output with only one of the
+  <flowPara >The image below has an image and the B-Splines output with only one of the
 heuristics turned on for each try. Pay attention to the purple circles that
 highlight the differences that each heuristic performs.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <g id="tracing-pixelart-f05-en.svglayer1-0" xmlns:cc="http://creativecommons.org/ns#" inkscape:label="Layer 1" transform="translate(-138.35 1320.8)">
   <image id="tracing-pixelart-f05-en.svgimage37000" xlink:href="data:image/png;base64,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 " height="63" width="61" y="287.93" x="250.21"/>
@@ -15580,11 +15580,11 @@ highlight the differences that each heuristic performs.
   <path id="tracing-pixelart-f05-en.svgpath38831" sodipodi:rx="2.5145068" sodipodi:ry="2.5145068" sodipodi:type="arc" d="m362.98 341.92c0 1.3887-1.1258 2.5145-2.5145 2.5145s-2.5145-1.1258-2.5145-2.5145 1.1258-2.5145 2.5145-2.5145 2.5145 1.1258 2.5145 2.5145z" stroke="#f0f" sodipodi:cy="341.92422" sodipodi:cx="360.46292" stroke-width="1.1" fill="none"/>
  </g>
  <rect id="d0e135" display="none" height="1e3px" width="288" y="1804.4" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e135"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">For the first try (top image), we only enable the curves heuristic. This
+  <flowPara >For the first try (top image), we only enable the curves heuristic. This
 heuristic tries to keep long curves connected together. You can notice that its
 result is similar to the last image, where the sparse pixels heuristic is
 applied. One difference is that its &quot;strength&quot; is more fair and it only gives a
@@ -15593,26 +15593,26 @@ high value to its vote when it&apos;s really important to keep these connections
 database analysed. Another difference is that this heuristic can&apos;t decide what
 to do when the connections group large blocks instead of long curves (think
 about a chess board).
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e138" display="none" height="1e3px" width="288" y="1917.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e138"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">For the second try (the middle image), we only enable the islands heuristic. The
+  <flowPara >For the second try (the middle image), we only enable the islands heuristic. The
 only thing this heuristic does is trying to keep the connection that otherwise would
 result in several isolated pixels (islands) with a constant weight vote. This
 kind of situation is not as common as the kind of situation handled by the other
 heuristics, but this heuristic is cool and help to give still better results.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e141" display="none" height="1e3px" width="288" y="1988.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e141"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">For the third try (the bottom image), we only enable the sparse pixels
+  <flowPara >For the third try (the bottom image), we only enable the sparse pixels
 heuristic. This heuristic tries to keep the curves with the foreground color
 connected. To find out what is the foreground color the heuristic analyzes a
 window with the pixels around the conflicting curves. For this heuristic, you
@@ -15621,69 +15621,69 @@ in mind that when you increase the window of pixels analyzed the maximum
 &quot;strength&quot; for its vote will increase too and you might want to adjust the
 multiplier for its vote. The original libdepixelize author think this heuristic
 is too greedy and likes to use the &quot;0.25&quot; value for its multiplier.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e144" display="none" height="1e3px" width="288" y="2102" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e144"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Even if the results of the curves heuristic and the sparse pixels heuristic give
+  <flowPara >Even if the results of the curves heuristic and the sparse pixels heuristic give
 similar results, you may want to leave both enabled, because the curves
 heuristic may give an extra safety that the important curves of contour pixels
 won&apos;t be hampered and there are cases that can be only answered by the sparse
 pixels heuristic.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e147" display="none" height="1e3px" width="288" y="2162.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e147"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Hint: You can disable all heuristics by setting its multiplier/weight values to
+  <flowPara >Hint: You can disable all heuristics by setting its multiplier/weight values to
 zero. You can make any heuristic act against its principles using negative
 values for its multiplier/weight values. Why would you ever want to replace
 behaviour that was created to give better quality by the opposite behaviour?
 Because you can... because you might want a &quot;artistic&quot; result... whatever... you
 just can.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e150" display="none" height="1e3px" width="288" y="2233.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e150"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">And that&apos;s it! For this initial release of libdepixelize these are all the
+  <flowPara >And that&apos;s it! For this initial release of libdepixelize these are all the
 options you got. But if the research of the original libdepixelize author and
 its creative mentor succeeds, you may receive extra options that broaden even
 yet the range of images for which libdepixelize gives a good result. Wish them
 luck.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e153" display="none" height="1e3px" width="288" y="2293.9" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e153"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">All images used here were taken from Liberated Pixel Cup to avoid copyright
+  <flowPara >All images used here were taken from Liberated Pixel Cup to avoid copyright
 problems. The links are:
-</flowDiv>
+</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 2328.4)"/>
  <rect id="d0e159" display="none" height="1e3px" width="258" y="2322.4" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e159"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">http://opengameart.org/content/memento</flowDiv>
+  <flowPara >http://opengameart.org/content/memento</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 2346.3)"/>
  <rect id="d0e163" display="none" height="1e3px" width="258" y="2340.3" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e163"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">http://opengameart.org/content/rpg-enemies-bathroom-tiles</flowDiv>
+  <flowPara >http://opengameart.org/content/rpg-enemies-bathroom-tiles</flowPara>
  </flowRoot>
  <g transform="translate(0 2358.1)">
   <defs id="defs3" xmlns:cc="http://creativecommons.org/ns#">
@@ -15716,7 +15716,7 @@ problems. The links are:
     <path id="path1521" d="m359.24 21.363c-11.313 0-22.606 4.3206-31.275 12.99l-154.09 154.06c-8.4969 8.4967-12.762 19.543-12.931 30.631h-0.0585c0 0.0395 0.0566 0.0774 0.0585 0.11702-0.002 0.18609-0.0585 0.36977-0.0585 0.55586h0.2633c2.9491 11.221 79.15 25.523 87.651 34.025 12.839 12.839-49.233 22.268-36.395 35.107 12.839 12.839 77.59 24.843 90.43 37.682 12.839 12.839-26.238 26.51-13.399 39.349s55.967-3.2094 48.155 30.28c17.338 17.338 53.512 9.0588 77.733-8.2795 12.839-12.839-24.629-11.707-11.79-24.546s45.247-12.908 72.555-43.621c-10.992-17.095-46.981-24.375-34.142-37.214s37.8-6.3179 91.659-30.777c26.292-11.941 24.12-21.01 24.019-32.006-0.002-0.23138 0-0.43973 0-0.67288h-0.0585c-0.16-11.07-4.46-22.12-12.95-30.62l-154.07-154.06c-8.66-8.667-19.99-12.987-31.3-12.987zm-1.3165 20.04c5.0295 0.13102 9.0916 3.9651 17.056 9.1279l72.789 53.977c0.79681 0.51671 1.5557 1.0557 2.2527 1.6091 0.69703 0.55327 1.3337 1.1401 1.9309 1.7261 0.5972 0.58495 1.14 1.1721 1.6383 1.7846 0.49726 0.61244 0.94845 1.2385 1.3458 1.8724 0.39844 0.6349 0.75476 1.2798 1.0532 1.9309 0.29867 0.65226 0.53281 1.325 0.7314 1.9894 0.19976 0.66341 0.36832 1.319 0.46811 1.9894 0.0999 0.67165 0.14627 1.3452 0.14627 2.0187l-43.123-20.83-4.3006 32.562-23.727-11.117-36.629 24.458-14.014-48.331-18.051 42.275-50.408 5.032 0.55587-22.439c0-5.3897 29.057-43.122 46.751-52.105l32.386-23.259c4.7787-3.0977 8.1289-4.35 11.147-4.2714zm-66.996 220.21c22.944 5.9503 48.476 13.757 68.957 13.897l0.87768 9.2157c-17.538-1.8078-54.648-10.276-63.398-14.745l-6.4363-8.3672z" stroke-width="1pt"/>
    </g>
    <use id="use1328" style="color:#000000" xlink:href="#path1508" transform="matrix(5.1767 0 0 5.1767 -102.7 -256.62)" height="1052.3622" fill-opacity=".064615" width="744.09448" y="0" x="0" font-family="sans-serif" fill="#ffffff"/>
-   <text id="text7519" opacity=".5" line-height="125%" xml:space="preserve" transform="rotate(-90)" font-size="6.9693px" y="-6.5672836" x="-70.83046" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan7521" sodipodi:role="line" x="-70.83046" style="letter-spacing:.29056" y="-6.5672836">Use <tspan id="tspan7523" font-weight="bold">Ctrl+up arrow</tspan> to scroll </tspan></text>
+   <text id="text7519" opacity=".5" line-height="125%"  transform="rotate(-90)" font-size="6.9693px" y="-6.5672836" x="-70.83046" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan7521" sodipodi:role="line" x="-70.83046" style="letter-spacing:.29056" y="-6.5672836">Use <tspan id="tspan7523" font-weight="bold">Ctrl+up arrow</tspan> to scroll </tspan></text>
    <path id="path7527" opacity=".5" style="color:#000000" d="m338.53 197.82-13.108-1.2709 7.6547-10.717z" fill-rule="evenodd" transform="matrix(-.61496 -.045496 -.061919 .45186 207.79 -117.15)"/>
   </g>
  </g>

@@ -37,7 +37,7 @@
    <path id="path831" d="m359.24 21.363c-11.313 0-22.606 4.3206-31.275 12.99l-154.09 154.06c-8.4969 8.4967-12.762 19.543-12.931 30.631h-0.0585c0 0.0395 0.0566 0.0774 0.0585 0.11702-0.002 0.18609-0.0585 0.36977-0.0585 0.55586h0.2633c2.9491 11.221 79.15 25.523 87.651 34.025 12.839 12.839-49.233 22.268-36.395 35.107 12.839 12.839 77.59 24.843 90.43 37.682 12.839 12.839-26.238 26.51-13.399 39.349s55.967-3.2094 48.155 30.28c17.338 17.338 53.512 9.0588 77.733-8.2795 12.839-12.839-24.629-11.707-11.79-24.546s45.247-12.908 72.555-43.621c-10.992-17.095-46.981-24.375-34.142-37.214s37.8-6.3179 91.659-30.777c26.292-11.941 24.12-21.01 24.019-32.006-0.002-0.23138 0-0.43973 0-0.67288h-0.0585c-0.16-11.07-4.46-22.12-12.95-30.62l-154.07-154.06c-8.66-8.667-19.99-12.987-31.3-12.987zm-1.3165 20.04c5.0295 0.13102 9.0916 3.9651 17.056 9.1279l72.789 53.977c0.79681 0.51671 1.5557 1.0557 2.2527 1.6091 0.69703 0.55327 1.3337 1.1401 1.9309 1.7261 0.5972 0.58495 1.14 1.1721 1.6383 1.7846 0.49726 0.61244 0.94845 1.2385 1.3458 1.8724 0.39844 0.6349 0.75476 1.2798 1.0532 1.9309 0.29867 0.65226 0.53281 1.325 0.7314 1.9894 0.19976 0.66341 0.36832 1.319 0.46811 1.9894 0.0999 0.67165 0.14627 1.3452 0.14627 2.0187l-43.123-20.83-4.3006 32.562-23.727-11.117-36.629 24.458-14.014-48.331-18.051 42.275-50.408 5.032 0.55587-22.439c0-5.3897 29.057-43.122 46.751-52.105l32.386-23.259c4.7787-3.0977 8.1289-4.35 11.147-4.2714zm-66.996 220.21c22.944 5.9503 48.476 13.757 68.957 13.897l0.87768 9.2157c-17.538-1.8078-54.648-10.276-63.398-14.745l-6.4363-8.3672z" stroke-width="1pt"/>
   </g>
   <use id="use2086" style="color:#000000" xlink:href="#path1124" transform="matrix(3.7991 0 0 3.7991 -428.74 -36.475)" height="1052.3622" fill-opacity=".11077" width="320.00000" y="0.0000000" x="0.0000000" font-family="sans-serif" fill="#ffffff"/>
-  <text id="text7519" opacity=".5" line-height="125%" xml:space="preserve" transform="rotate(90)" font-size="6.9693px" y="-326.81229" x="3.6203015" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan7521" sodipodi:role="line" x="3.6203015" style="letter-spacing:.29056" y="-326.81229">Use <tspan id="tspan7523" font-weight="bold">Ctrl+frecha abaixo</tspan> para desprazar </tspan></text>
+  <text id="text7519" opacity=".5" line-height="125%"  transform="rotate(90)" font-size="6.9693px" y="-326.81229" x="3.6203015" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan7521" sodipodi:role="line" x="3.6203015" style="letter-spacing:.29056" y="-326.81229">Use <tspan id="tspan7523" font-weight="bold">Ctrl+frecha abaixo</tspan> para desprazar </tspan></text>
   <path id="path7527" opacity=".5" style="color:#000000" d="m332.89 162.52-8.1397-0.0221 4.0438 5.1906z" fill-rule="evenodd" inkscape:connector-curvature="0"/>
  </g>
  <text id="text1920" font-family="sans-serif" font-size="7" transform="scale(1.1307)" y="30" x="35" fill="#ffffff">
@@ -45,188 +45,188 @@
  </text>
 <!--Author: bulia byak, buliabyak@users.sf.net-->
  <rect id="d0e15" display="none" height="1e3px" width="264" y="46" x="35"/>
- <flowRoot font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
+ <flowRoot xml:space="preserve" font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e15"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Este titorial aborda as catro ferramentas de figura: Rectángulo, Elipse, Estrela e Espiral. A continuación mostraremos as capacidades das figuras de Inkscape veremos exemplos de como e cando se poden usar.</flowDiv>
+  <flowPara >Este titorial aborda as catro ferramentas de figura: Rectángulo, Elipse, Estrela e Espiral. A continuación mostraremos as capacidades das figuras de Inkscape veremos exemplos de como e cando se poden usar.</flowPara>
  </flowRoot>
  <rect id="d0e18" display="none" height="1e3px" width="264" y="80.856" x="35"/>
- <flowRoot font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
+ <flowRoot xml:space="preserve" font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e18"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Use <flowSpan font-weight="bold">Ctrl+frechas</flowSpan>, a <flowSpan font-weight="bold">roda do rato</flowSpan>, ou <flowSpan font-weight="bold">arrastre co botón central do rato</flowSpan> para desprazar a páxina cara abaixo. Para ver os fundamentos sobre a creación, selección e transformación de obxectos consulte o titorial de Fundamentos que está dispoñible en <flowSpan font-family="sans-serif">Axuda &gt; Titoriais</flowSpan>.</flowDiv>
+  <flowPara >Use <flowSpan font-weight="bold">Ctrl+frechas</flowSpan>, a <flowSpan font-weight="bold">roda do rato</flowSpan>, ou <flowSpan font-weight="bold">arrastre co botón central do rato</flowSpan> para desprazar a páxina cara abaixo. Para ver os fundamentos sobre a creación, selección e transformación de obxectos consulte o titorial de Fundamentos que está dispoñible en <flowSpan font-family="sans-serif">Axuda &gt; Titoriais</flowSpan>.</flowPara>
  </flowRoot>
  <rect id="d0e36" display="none" height="1e3px" width="288" y="132.51" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e36"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Inkscape dispón de catro versátiles <flowSpan font-style="italic">ferramentas de figura</flowSpan>, cada unha delas capaz de crear e modificar o seu propio tipo de figura. Unha figura é un obxecto que se pode modificar de formas diferentes dependendo do tipo de figura, usando <flowSpan font-style="italic">asas</flowSpan> que se poden arrastrar e <flowSpan font-style="italic">parámetros</flowSpan> numéricos que determinan a aparencia da figura.</flowDiv>
+  <flowPara >Inkscape dispón de catro versátiles <flowSpan font-style="italic">ferramentas de figura</flowSpan>, cada unha delas capaz de crear e modificar o seu propio tipo de figura. Unha figura é un obxecto que se pode modificar de formas diferentes dependendo do tipo de figura, usando <flowSpan font-style="italic">asas</flowSpan> que se poden arrastrar e <flowSpan font-style="italic">parámetros</flowSpan> numéricos que determinan a aparencia da figura.</flowPara>
  </flowRoot>
  <rect id="d0e48" display="none" height="1e3px" width="288" y="193.25" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e48"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">For example, with a star you can alter the number of tips, their length, angle,
+  <flowPara >For example, with a star you can alter the number of tips, their length, angle,
 rounding, etc. — but a star remains a star. A shape is “less free” than a simple
 path, but it&apos;s often more interesting and useful. You can always convert a shape
 to a path (<flowSpan font-weight="bold">Shift+Ctrl+C</flowSpan>), but the reverse conversion is not possible.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e54" display="none" height="1e3px" width="288" y="253.55" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e54"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">As ferramentas de figura son o <flowSpan font-style="italic">Rectángulo</flowSpan>, a <flowSpan font-style="italic">Elipse</flowSpan>, a <flowSpan font-style="italic">Estrela</flowSpan>, e a <flowSpan font-style="italic">Espiral</flowSpan>. Vexamos primeiro como funcionan en xeral as ferramentas de figura; despois investigaremos cada tipo de ferramenta con detalle.</flowDiv>
+  <flowPara >As ferramentas de figura son o <flowSpan font-style="italic">Rectángulo</flowSpan>, a <flowSpan font-style="italic">Elipse</flowSpan>, a <flowSpan font-style="italic">Estrela</flowSpan>, e a <flowSpan font-style="italic">Espiral</flowSpan>. Vexamos primeiro como funcionan en xeral as ferramentas de figura; despois investigaremos cada tipo de ferramenta con detalle.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="305.80625000000003" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="305.80625000000003" x="10">Consellos xerais</tspan>
  </text>
  <rect id="d0e75" display="none" height="1e3px" width="288" y="311.01" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e75"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">A new shape is created by <flowSpan font-weight="bold">drag</flowSpan>ging on canvas with the 
+  <flowPara >A new shape is created by <flowSpan font-weight="bold">drag</flowSpan>ging on canvas with the 
 corresponding tool. Once the shape is created (and so long as it is 
 selected), it displays its handles as white diamond, square or round
 marks (depending on the tools), so you can immediately edit what you
 created by dragging these handles. 
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e81" display="none" height="1e3px" width="288" y="371.42" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e81"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Os catro tipos de figuras mostran as súas asas cas catro ferramentas de figura e tamén ca ferramenta Nodo (<flowSpan font-weight="bold">F2</flowSpan>). Cando pasa co rato por riba dunha asa indícaselle na barra de estado o que pode facer dita asa ao arrastrala ou premer nela con diferentes modificadores.</flowDiv>
+  <flowPara >Os catro tipos de figuras mostran as súas asas cas catro ferramentas de figura e tamén ca ferramenta Nodo (<flowSpan font-weight="bold">F2</flowSpan>). Cando pasa co rato por riba dunha asa indícaselle na barra de estado o que pode facer dita asa ao arrastrala ou premer nela con diferentes modificadores.</flowPara>
  </flowRoot>
  <rect id="d0e87" display="none" height="1e3px" width="288" y="421.4" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e87"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ademais cada ferramenta de figura mostra os seus parámetros na <flowSpan font-style="italic">barra de controis da ferramenta</flowSpan> (que é horizontal e está enriba do lenzo). Normalmente ten uns poucos campo de entrada numéricos e un botón para restablecer as predefinicións. Cando se seleccionan figuras do tipo creado pola ferramenta actual, os valores de edición da barra de controis cambian aos valores das figuras seleccionadas.</flowDiv>
+  <flowPara >Ademais cada ferramenta de figura mostra os seus parámetros na <flowSpan font-style="italic">barra de controis da ferramenta</flowSpan> (que é horizontal e está enriba do lenzo). Normalmente ten uns poucos campo de entrada numéricos e un botón para restablecer as predefinicións. Cando se seleccionan figuras do tipo creado pola ferramenta actual, os valores de edición da barra de controis cambian aos valores das figuras seleccionadas.</flowPara>
  </flowRoot>
  <rect id="d0e93" display="none" height="1e3px" width="288" y="492.78" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e93"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Calquera cambio que se faga na barra de controis lémbrase e úsase para o seguinte obxecto que debuxe con esa ferramenta. Por exemplo, despois de cambiar o número de puntas dunha estrela, as novas estrelas tamén terán este número de puntas ao debuxalas. É máis, incluso a simple selección dunha figura envía os seus parámetros á barra de controis da ferramenta e polo tanto define os valores das novas figuras deste tipo que se creen.</flowDiv>
+  <flowPara >Calquera cambio que se faga na barra de controis lémbrase e úsase para o seguinte obxecto que debuxe con esa ferramenta. Por exemplo, despois de cambiar o número de puntas dunha estrela, as novas estrelas tamén terán este número de puntas ao debuxalas. É máis, incluso a simple selección dunha figura envía os seus parámetros á barra de controis da ferramenta e polo tanto define os valores das novas figuras deste tipo que se creen.</flowPara>
  </flowRoot>
  <rect id="d0e96" display="none" height="1e3px" width="288" y="574.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e96"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">When in a shape tool, selecting an object can be done by <flowSpan font-weight="bold">click</flowSpan>ing
+  <flowPara >When in a shape tool, selecting an object can be done by <flowSpan font-weight="bold">click</flowSpan>ing
 on it. <flowSpan font-weight="bold">Ctrl+click</flowSpan> (select in group) and <flowSpan font-weight="bold">Alt+click</flowSpan>
 (select under) also work as they do in Selector tool. <flowSpan font-weight="bold">Esc</flowSpan> deselects.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="626.731254" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="626.731254" x="10">Rectángulos</tspan>
  </text>
  <rect id="d0e117" display="none" height="1e3px" width="288" y="631.93" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e117"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Un <flowSpan font-style="italic">rectángulo</flowSpan> é a figura máis simple pero quizais a máis común no deseño e na ilustración. Inkscape intenta facer a creación e modificación de rectángulos todo o simple e útil posible.</flowDiv>
+  <flowPara >Un <flowSpan font-style="italic">rectángulo</flowSpan> é a figura máis simple pero quizais a máis común no deseño e na ilustración. Inkscape intenta facer a creación e modificación de rectángulos todo o simple e útil posible.</flowPara>
  </flowRoot>
  <rect id="d0e123" display="none" height="1e3px" width="288" y="671.39" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e123"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Cambie á ferramenta Rectángulo premendo <flowSpan font-weight="bold">F4</flowSpan> ou premendo no seu botón na barra de ferramentas. Debuxe un novo rectángulo a carón deste rectángulo azul:</flowDiv>
+  <flowPara >Cambie á ferramenta Rectángulo premendo <flowSpan font-weight="bold">F4</flowSpan> ou premendo no seu botón na barra de ferramentas. Debuxe un novo rectángulo a carón deste rectángulo azul:</flowPara>
  </flowRoot>
- <text id="shapes-f01-gl.svgtext1578" opacity=".065574" xml:space="preserve" transform="translate(10 718.84)" font-size="16.8" y="26.427183" x="44.104698" font-family="serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f01-gl.svgtspan1451" y="26.427183" x="44.104698" sodipodi:role="line">debuxe aquí</tspan></text>
+ <text id="shapes-f01-gl.svgtext1578" opacity=".065574"  transform="translate(10 718.84)" font-size="16.8" y="26.427183" x="44.104698" font-family="serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f01-gl.svgtspan1451" y="26.427183" x="44.104698" sodipodi:role="line">debuxe aquí</tspan></text>
  <rect id="shapes-f01-gl.svgrect1449" style="color:#000000" fill-rule="evenodd" fill-opacity=".75" transform="translate(10 718.84)" height="53.706" width="77.318" stroke="#000" y="0.625" x="184.79" stroke-width="1pt" fill="#00f"/>
  <rect id="d0e139" display="none" height="1e3px" width="288" y="785.88" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e139"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Agora, sen deixar a ferramenta Rectángulo, cambie a selección dun rectángulo ao outro premendo nel.</flowDiv>
+  <flowPara >Agora, sen deixar a ferramenta Rectángulo, cambie a selección dun rectángulo ao outro premendo nel.</flowPara>
  </flowRoot>
  <rect id="d0e142" display="none" height="1e3px" width="288" y="814.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e142"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Atallos de teclado para debuxar rectángulos:</flowDiv>
+  <flowPara >Atallos de teclado para debuxar rectángulos:</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 838.87)"/>
  <rect id="d0e148" display="none" height="1e3px" width="258" y="832.87" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e148"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Use <flowSpan font-weight="bold">Ctrl</flowSpan> para debuxar un cadrado ou un rectángulo cunha proporción enteira (2:1, 3:1, etc).</flowDiv>
+  <flowPara >Use <flowSpan font-weight="bold">Ctrl</flowSpan> para debuxar un cadrado ou un rectángulo cunha proporción enteira (2:1, 3:1, etc).</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 867.58)"/>
  <rect id="d0e155" display="none" height="1e3px" width="258" y="861.58" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e155"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Use <flowSpan font-weight="bold">Maiús</flowSpan> para debuxar arredor do punto de inicio, que será o punto central.</flowDiv>
+  <flowPara >Use <flowSpan font-weight="bold">Maiús</flowSpan> para debuxar arredor do punto de inicio, que será o punto central.</flowPara>
  </flowRoot>
  <rect id="d0e162" display="none" height="1e3px" width="288" y="890.28" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e162"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Como pode ver o rectángulo seleccionado (o cadrado acabado de debuxar sempre está seleccionado) mostra tres asas en tres das súas esquinas. De feito hai catro asas, pero dúas delas (as da esquina superior dereita) sobrepóñense cando o rectángulo non está redondeado. Estas dúas son as <flowSpan font-style="italic">asas de redondeo</flowSpan>; as outras dúas (a da esquina superior esquerda e a da inferior dereita) son as <flowSpan font-style="italic">asas de redimensionamento</flowSpan>.</flowDiv>
+  <flowPara >Como pode ver o rectángulo seleccionado (o cadrado acabado de debuxar sempre está seleccionado) mostra tres asas en tres das súas esquinas. De feito hai catro asas, pero dúas delas (as da esquina superior dereita) sobrepóñense cando o rectángulo non está redondeado. Estas dúas son as <flowSpan font-style="italic">asas de redondeo</flowSpan>; as outras dúas (a da esquina superior esquerda e a da inferior dereita) son as <flowSpan font-style="italic">asas de redimensionamento</flowSpan>.</flowPara>
  </flowRoot>
  <rect id="d0e171" display="none" height="1e3px" width="288" y="970.63" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e171"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Fixémonos primeiro nas asas de redondeo. Seleccione unha e arrástrea cara abaixo. As catro esquinas do rectángulo redondeanse, e pode ver outra asa de redondeo — permanece na súa posición orixinal na esquina. Se desexa obter esquinas redondeadas circulares, isto é todo o que ten que facer. Se desexa obter esquinas máis redondeadas cara un lado que cara o outro pode mover esoutra asa cara a esquerda.</flowDiv>
+  <flowPara >Fixémonos primeiro nas asas de redondeo. Seleccione unha e arrástrea cara abaixo. As catro esquinas do rectángulo redondeanse, e pode ver outra asa de redondeo — permanece na súa posición orixinal na esquina. Se desexa obter esquinas redondeadas circulares, isto é todo o que ten que facer. Se desexa obter esquinas máis redondeadas cara un lado que cara o outro pode mover esoutra asa cara a esquerda.</flowPara>
  </flowRoot>
  <rect id="d0e174" display="none" height="1e3px" width="288" y="1052.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e174"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Aquí debaixo os dous primeiros rectángulos teñen esquinas redondeadas circulares, e os outros dous teñen esquinas redondeadas elípticas:</flowDiv>
+  <flowPara >Aquí debaixo os dous primeiros rectángulos teñen esquinas redondeadas circulares, e os outros dous teñen esquinas redondeadas elípticas:</flowPara>
  </flowRoot>
- <text id="shapes-f02-gl.svgtext3150" line-height="120.00000%" xml:space="preserve" transform="translate(10 1099.9)" sodipodi:linespacing="120.00000%" font-size="5.9589" y="4.9780722" x="196.08449" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f02-gl.svgtspan3151" sodipodi:role="line" x="196.08449" y="4.9780722">Esquinas redondeadas elípticas</tspan></text>
- <text id="shapes-f02-gl.svgtext3143" line-height="120.00000%" xml:space="preserve" transform="translate(10 1099.9)" sodipodi:linespacing="120.00000%" font-size="5.9589" y="-2.6239278" x="47.265598" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f02-gl.svgtspan3144" sodipodi:role="line" x="47.265598" y="-2.6239278"/><tspan id="shapes-f02-gl.svgtspan3146"/><tspan id="shapes-f02-gl.svgtspan3148" sodipodi:role="line" x="47.265598" y="4.5267232">Esquinas redondeadas circulares</tspan></text>
+ <text id="shapes-f02-gl.svgtext3150" line-height="120.00000%"  transform="translate(10 1099.9)" sodipodi:linespacing="120.00000%" font-size="5.9589" y="4.9780722" x="196.08449" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f02-gl.svgtspan3151" sodipodi:role="line" x="196.08449" y="4.9780722">Esquinas redondeadas elípticas</tspan></text>
+ <text id="shapes-f02-gl.svgtext3143" line-height="120.00000%"  transform="translate(10 1099.9)" sodipodi:linespacing="120.00000%" font-size="5.9589" y="-2.6239278" x="47.265598" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f02-gl.svgtspan3144" sodipodi:role="line" x="47.265598" y="-2.6239278"/><tspan id="shapes-f02-gl.svgtspan3146"/><tspan id="shapes-f02-gl.svgtspan3148" sodipodi:role="line" x="47.265598" y="4.5267232">Esquinas redondeadas circulares</tspan></text>
  <rect id="shapes-f02-gl.svgrect1185" ry="7.1429" fill-rule="evenodd" fill-opacity=".75" transform="translate(10 1099.9)" height="33.94" width="56.849" stroke="#000" y="11.833" x="17.277" stroke-width="1pt" fill="#00f"/>
  <rect id="shapes-f02-gl.svgrect1186" ry="16.97" fill-rule="evenodd" fill-opacity=".75" transform="translate(10 1099.9)" height="33.94" width="56.849" stroke="#000" y="11.833" x="92.003" stroke-width="1pt" fill="#00f"/>
  <rect id="shapes-f02-gl.svgrect1187" ry="16.97" fill-rule="evenodd" fill-opacity=".75" rx="6.6372" transform="translate(10 1099.9)" height="33.94" width="56.849" stroke="#000" y="11.833" x="168.13" stroke-width="1pt" fill="#00f"/>
  <rect id="shapes-f02-gl.svgrect1188" ry="5.9394" fill-rule="evenodd" fill-opacity=".75" rx="24.046" transform="translate(10 1099.9)" height="33.94" width="56.849" stroke="#000" y="11.833" x="242.69" stroke-width="1pt" fill="#00f"/>
  <rect id="d0e187" display="none" height="1e3px" width="288" y="1158.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e187"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Seguindo ca ferramenta Rectángulo, prema agora nestes rectángulos para seleccionar e observar as súas asas de redondeo.</flowDiv>
+  <flowPara >Seguindo ca ferramenta Rectángulo, prema agora nestes rectángulos para seleccionar e observar as súas asas de redondeo.</flowPara>
  </flowRoot>
  <rect id="d0e190" display="none" height="1e3px" width="288" y="1186.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e190"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">A miúdo o raio e a forma das esquinas redondeadas debe ser constante en toda a composición, incluso se os tamaños dos rectángulos son diferentes (pense en diagramas con caixas redondeadas de diferentes tamaños). Inkscape fai que isto sexa fácil. Cambie á ferramenta Selector; na súa barra de controis de ferramenta hai un grupo de catro botóns, o segundo empezando pola esquerda mostra dúas esquinas redondeadas concéntricas. Así é como se controla se as esquinas redondeadas se escalan ou non cando se escalan os rectángulos.</flowDiv>
+  <flowPara >A miúdo o raio e a forma das esquinas redondeadas debe ser constante en toda a composición, incluso se os tamaños dos rectángulos son diferentes (pense en diagramas con caixas redondeadas de diferentes tamaños). Inkscape fai que isto sexa fácil. Cambie á ferramenta Selector; na súa barra de controis de ferramenta hai un grupo de catro botóns, o segundo empezando pola esquerda mostra dúas esquinas redondeadas concéntricas. Así é como se controla se as esquinas redondeadas se escalan ou non cando se escalan os rectángulos.</flowPara>
  </flowRoot>
  <rect id="d0e193" display="none" height="1e3px" width="288" y="1290.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e193"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Por exemplo aquí abaixo o rectángulo vermello orixinal duplicouse e escalouse varias veces, cara arriba e cara abaixo, con diferentes proporcións, tendo <flowSpan font-style="italic">desactivado</flowSpan> o botón &quot;Escalar as esquinas redondeadas dos rectángulos&quot;:</flowDiv>
+  <flowPara >Por exemplo aquí abaixo o rectángulo vermello orixinal duplicouse e escalouse varias veces, cara arriba e cara abaixo, con diferentes proporcións, tendo <flowSpan font-style="italic">desactivado</flowSpan> o botón &quot;Escalar as esquinas redondeadas dos rectángulos&quot;:</flowPara>
  </flowRoot>
- <text id="shapes-f03-gl.svgtext3161" sodipodi:linespacing="140.00000%" transform="translate(10 1348.2)" xml:space="preserve" line-height="140.00000%" font-size="5.9589" y="145.20607" x="37.091438" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f03-gl.svgtspan3162" y="145.20607" x="37.091438" sodipodi:role="line">Redimensión de rectángulos redondeados</tspan><tspan id="shapes-f03-gl.svgtspan3166" y="153.54850" x="37.091438" sodipodi:role="line">con &quot;Escalar as esquinas redondeadas dos rectángulos&quot; desactivado</tspan><tspan id="shapes-f03-gl.svgtspan3164" y="161.89092" x="37.091438" sodipodi:role="line"/></text>
+ <text id="shapes-f03-gl.svgtext3161" sodipodi:linespacing="140.00000%" transform="translate(10 1348.2)"  line-height="140.00000%" font-size="5.9589" y="145.20607" x="37.091438" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f03-gl.svgtspan3162" y="145.20607" x="37.091438" sodipodi:role="line">Redimensión de rectángulos redondeados</tspan><tspan id="shapes-f03-gl.svgtspan3166" y="153.54850" x="37.091438" sodipodi:role="line">con &quot;Escalar as esquinas redondeadas dos rectángulos&quot; desactivado</tspan><tspan id="shapes-f03-gl.svgtspan3164" y="161.89092" x="37.091438" sodipodi:role="line"/></text>
  <rect id="shapes-f03-gl.svgrect2134" ry="16.97" stroke-dasharray="0.62500000 1.2500000" fill-rule="evenodd" fill-opacity=".11037" rx="6.6372" transform="translate(10 1348.2)" height="122.77" width="196.91" stroke="#000" y=".32251" x="69.228" stroke-width=".625" fill="#00f"/>
  <rect id="shapes-f03-gl.svgrect2133" ry="16.97" stroke-dasharray="0.62500000 1.2500000" fill-rule="evenodd" fill-opacity=".11037" rx="6.6372" transform="translate(10 1348.2)" height="63.106" width="196.91" stroke="#000" y=".32092" x="69.228" stroke-width=".625" fill="#00f"/>
  <rect id="shapes-f03-gl.svgrect2756" ry="16.97" stroke-dasharray="0.62500000 1.2500000" fill-rule="evenodd" fill-opacity=".11037" rx="6.6372" transform="translate(10 1348.2)" height="105.78" width="151.47" stroke="#000" y=".32849" x="114.8" stroke-width=".625" fill="#00f"/>
@@ -236,20 +236,20 @@ on it. <flowSpan font-weight="bold">Ctrl+click</flowSpan> (select in group) and 
  <rect id="shapes-f03-gl.svgrect2758" ry="16.97" stroke-dasharray="0.62500000 1.2500000" fill-rule="evenodd" fill-opacity=".11037" rx="6.6371" transform="translate(10 1348.2)" height="28.79" width="38.352" stroke="#000" y=".31225" x="227.64" stroke-width=".625" fill="#00f"/>
  <rect id="shapes-f03-gl.svgrect1911" ry="16.97" stroke-dasharray="0.62499992 1.2499998" fill-rule="evenodd" fill-opacity=".11037" rx="6.6371" transform="translate(10 1348.2)" height="41.087" width="229.82" stroke="#000" y=".35815" x="36.352" stroke-width="0.625" fill="#00f"/>
  <rect id="d0e209" display="none" height="1e3px" width="288" y="1515" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e209"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Pode comprobar que o tamaño e a forma das esquinas redondeadas é a mesma en todos os rectángulos, de forma que os redondeos se aliñan de forma exacta na esquina superior dereita onde todos os rectángulos se reúnen. Todos os rectángulos azuis punteados obtéñense a partir do rectángulo vermello orixinal escalando no Selector, sen ningún axuste manual das asas de redondeo.</flowDiv>
+  <flowPara >Pode comprobar que o tamaño e a forma das esquinas redondeadas é a mesma en todos os rectángulos, de forma que os redondeos se aliñan de forma exacta na esquina superior dereita onde todos os rectángulos se reúnen. Todos os rectángulos azuis punteados obtéñense a partir do rectángulo vermello orixinal escalando no Selector, sen ningún axuste manual das asas de redondeo.</flowPara>
  </flowRoot>
  <rect id="d0e212" display="none" height="1e3px" width="288" y="1586.4" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e212"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Compare agora o resultado da mesma composición que se creou esta vez co botón &quot;Escalar as esquinas redondeadas dos rectángulos&quot; <flowSpan font-style="italic">activado</flowSpan>:</flowDiv>
+  <flowPara >Compare agora o resultado da mesma composición que se creou esta vez co botón &quot;Escalar as esquinas redondeadas dos rectángulos&quot; <flowSpan font-style="italic">activado</flowSpan>:</flowPara>
  </flowRoot>
- <text id="shapes-f04-gl.svgtext3168" sodipodi:linespacing="140.00000%" transform="translate(10 1632.2)" xml:space="preserve" line-height="140.00000%" font-size="5.9589" y="145.20508" x="37.091438" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f04-gl.svgtspan3169" y="145.20508" x="37.091438" sodipodi:role="line">Redimensión de rectángulos redondeados</tspan><tspan id="shapes-f04-gl.svgtspan3171" y="153.54750" x="37.091438" sodipodi:role="line">con &quot;Escalar as esquinas redondeadas dos rectángulos&quot; activado</tspan><tspan id="shapes-f04-gl.svgtspan3173" y="161.88993" x="37.091438" sodipodi:role="line"/></text>
+ <text id="shapes-f04-gl.svgtext3168" sodipodi:linespacing="140.00000%" transform="translate(10 1632.2)"  line-height="140.00000%" font-size="5.9589" y="145.20508" x="37.091438" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f04-gl.svgtspan3169" y="145.20508" x="37.091438" sodipodi:role="line">Redimensión de rectángulos redondeados</tspan><tspan id="shapes-f04-gl.svgtspan3171" y="153.54750" x="37.091438" sodipodi:role="line">con &quot;Escalar as esquinas redondeadas dos rectángulos&quot; activado</tspan><tspan id="shapes-f04-gl.svgtspan3173" y="161.88993" x="37.091438" sodipodi:role="line"/></text>
  <rect id="shapes-f04-gl.svgrect2217" fill-opacity=".11037" transform="translate(10 1632.2)" stroke="#000" stroke-width="0.625" fill="#00f" style="color:#000000" fill-rule="evenodd" rx="15.76" ry="16.984" width="196.68" height="63.16" stroke-dasharray="0.62499982 1.2499996" y=".40561" x="62.142"/>
  <rect id="shapes-f04-gl.svgrect2218" fill-opacity=".11037" transform="translate(10 1632.2)" stroke="#000" stroke-width="0.625" fill="#00f" style="color:#000000" fill-rule="evenodd" rx="15.76" ry="32.93" width="196.68" height="122.46" stroke-dasharray="0.62499984 1.2499996" y=".33054" x="62.142"/>
  <rect id="shapes-f04-gl.svgrect2216" fill-opacity=".11037" transform="translate(10 1632.2)" stroke="#000" stroke-width=".625" fill="#00f" style="color:#000000" fill-rule="evenodd" rx="12.157" ry="28.506" width="151.72" height="106.01" stroke-dasharray="0.62500000 1.2500000" y=".35556" x="107.19"/>
@@ -259,100 +259,100 @@ on it. <flowSpan font-weight="bold">Ctrl+click</flowSpan> (select in group) and 
  <rect id="shapes-f04-gl.svgrect2222" fill-opacity=".11037" transform="translate(10 1632.2)" stroke="#000" stroke-width="0.625" fill="#00f" style="color:#000000" fill-rule="evenodd" rx="3.0813" ry="7.8653" width="38.454" height="29.249" stroke-dasharray="0.62499970 1.2499994" y=".31296" x="220.76"/>
  <rect id="shapes-f04-gl.svgrect1912" fill-opacity=".11037" transform="translate(10 1632.2)" stroke="#000" stroke-width=".625" fill="#00f" style="color:#000000" fill-rule="evenodd" rx="18.207" ry="11.527" width="227.21" height="42.865" stroke-dasharray="0.62499996 1.2499999" y=".31247" x="31.024"/>
  <rect id="d0e228" display="none" height="1e3px" width="288" y="1798.9" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e228"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Agora as esquinas redondeadas son tan diferentes como os rectángulos aos que pertencen, e non hai ningún parecido na esquina superior dereita (aumente o zoom para comprobalo). Este é o mesmo resultado (visible) que obtería convertendo o rectángulo orixinal nun camiño (<flowSpan font-weight="bold">Ctrl+Maiús+C</flowSpan>) e escalándoo como camiño.</flowDiv>
+  <flowPara >Agora as esquinas redondeadas son tan diferentes como os rectángulos aos que pertencen, e non hai ningún parecido na esquina superior dereita (aumente o zoom para comprobalo). Este é o mesmo resultado (visible) que obtería convertendo o rectángulo orixinal nun camiño (<flowSpan font-weight="bold">Ctrl+Maiús+C</flowSpan>) e escalándoo como camiño.</flowPara>
  </flowRoot>
  <rect id="d0e234" display="none" height="1e3px" width="288" y="1858.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e234"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Aquí ten os atallos para as asas de redondeo dun rectángulo:</flowDiv>
+  <flowPara >Aquí ten os atallos para as asas de redondeo dun rectángulo:</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 1883)"/>
  <rect id="d0e240" display="none" height="1e3px" width="258" y="1877" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e240"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Arrastre mentre preme <flowSpan font-weight="bold">Ctrl</flowSpan> para facer que o outro raio sexa igual (redondeo circular).</flowDiv>
+  <flowPara >Arrastre mentre preme <flowSpan font-weight="bold">Ctrl</flowSpan> para facer que o outro raio sexa igual (redondeo circular).</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 1911.5)"/>
  <rect id="d0e247" display="none" height="1e3px" width="258" y="1905.5" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e247"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Use <flowSpan font-weight="bold">Ctrl+clic</flowSpan> para igualar o outro raio a este sen arrastrar.</flowDiv>
+  <flowPara >Use <flowSpan font-weight="bold">Ctrl+clic</flowSpan> para igualar o outro raio a este sen arrastrar.</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 1929.4)"/>
  <rect id="d0e254" display="none" height="1e3px" width="258" y="1923.4" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e254"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Use <flowSpan font-weight="bold">Maiús+clic</flowSpan> para eliminar o redondeo.</flowDiv>
+  <flowPara >Use <flowSpan font-weight="bold">Maiús+clic</flowSpan> para eliminar o redondeo.</flowPara>
  </flowRoot>
  <rect id="d0e261" display="none" height="1e3px" width="288" y="1941.4" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e261"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Pode que se decatara de que na barra de controis da ferramenta Rectángulo móstranse os raios de redondeo horizontal (<flowSpan font-style="italic">Rx</flowSpan>) e vertical (<flowSpan font-style="italic">Ry</flowSpan>) do rectángulo seleccionado e que lle permite definilos de forma precisa usando calquera unidade de lonxitde. O botón <flowSpan font-family="sans-serif">Non redondeado</flowSpan> fai o que di — elimina o redondeo dos rectángulos seleccionados.</flowDiv>
+  <flowPara >Pode que se decatara de que na barra de controis da ferramenta Rectángulo móstranse os raios de redondeo horizontal (<flowSpan font-style="italic">Rx</flowSpan>) e vertical (<flowSpan font-style="italic">Ry</flowSpan>) do rectángulo seleccionado e que lle permite definilos de forma precisa usando calquera unidade de lonxitde. O botón <flowSpan font-family="sans-serif">Non redondeado</flowSpan> fai o que di — elimina o redondeo dos rectángulos seleccionados.</flowPara>
  </flowRoot>
  <rect id="d0e273" display="none" height="1e3px" width="288" y="2010.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e273"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Unha vantaxe importante destes controis é que lle poden afectar a varios rectángulos á vez. Por exemplo, se desexa cambiar todos os rectángulos da capa, só ten que premer <flowSpan font-weight="bold">Ctrl+A</flowSpan> (<flowSpan font-family="sans-serif">Seleccionar todo</flowSpan>) e definir os parámetros que precise na barra de controis. Se se selecciona algo que non sexa un rectángulo, ignorarase — só cambiarán os rectángulos.</flowDiv>
+  <flowPara >Unha vantaxe importante destes controis é que lle poden afectar a varios rectángulos á vez. Por exemplo, se desexa cambiar todos os rectángulos da capa, só ten que premer <flowSpan font-weight="bold">Ctrl+A</flowSpan> (<flowSpan font-family="sans-serif">Seleccionar todo</flowSpan>) e definir os parámetros que precise na barra de controis. Se se selecciona algo que non sexa un rectángulo, ignorarase — só cambiarán os rectángulos.</flowPara>
  </flowRoot>
  <rect id="d0e282" display="none" height="1e3px" width="288" y="2082.2" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e282"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Vexamos agora asas de redimensionamento dun rectángulo. Poderíase estar preguntando para que as necesitamos, se se pode redimensionar perfectamente ben o rectángulo usando o Selector.</flowDiv>
+  <flowPara >Vexamos agora asas de redimensionamento dun rectángulo. Poderíase estar preguntando para que as necesitamos, se se pode redimensionar perfectamente ben o rectángulo usando o Selector.</flowPara>
  </flowRoot>
  <rect id="d0e285" display="none" height="1e3px" width="288" y="2121.6" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e285"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">O problema que ten o Selector é que a súa noción de horizontal e vertical sempre é a da páxina do documento. En cambio as asas de redimensionamento dun rectángulo escálano <flowSpan font-style="italic">ao longo dos lados do rectángulo</flowSpan>, incluso cando se rota ou inclina o rectángulo. Por exemplo, probe a redimensionar primeiro este rectángulo co Selector e despois cas súas asas de redimensionamento usando a ferramenta Rectángulo:</flowDiv>
+  <flowPara >O problema que ten o Selector é que a súa noción de horizontal e vertical sempre é a da páxina do documento. En cambio as asas de redimensionamento dun rectángulo escálano <flowSpan font-style="italic">ao longo dos lados do rectángulo</flowSpan>, incluso cando se rota ou inclina o rectángulo. Por exemplo, probe a redimensionar primeiro este rectángulo co Selector e despois cas súas asas de redimensionamento usando a ferramenta Rectángulo:</flowPara>
  </flowRoot>
  <rect id="shapes-f05-gl.svgrect2270" fill-opacity=".99666" transform="translate(10 2211.7) matrix(.69601 -.71803 -.95272 -.30385 0 0)" stroke="#000" stroke-width="1pt" fill="#00f" style="color:#000000" fill-rule="evenodd" rx="5.8251" ry="3.8355" width="41.625" height="64.103" y="-179.49" x="7.7759"/>
  <rect id="d0e301" display="none" height="1e3px" width="288" y="2272" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e301"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Xa que hai dúas asas de redimensionamento poderá redimensionar o rectángulo en calquera dirección ou incluso movelo ao longo dos seus lados. As asas de redimensionamento sempre conservan o raio de redondeo.</flowDiv>
+  <flowPara >Xa que hai dúas asas de redimensionamento poderá redimensionar o rectángulo en calquera dirección ou incluso movelo ao longo dos seus lados. As asas de redimensionamento sempre conservan o raio de redondeo.</flowPara>
  </flowRoot>
  <rect id="d0e304" display="none" height="1e3px" width="288" y="2320.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e304"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Aquí ten os atallos para asas de redimensionamento:</flowDiv>
+  <flowPara >Aquí ten os atallos para asas de redimensionamento:</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 2344.5)"/>
  <rect id="d0e310" display="none" height="1e3px" width="258" y="2338.5" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e310"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Arrastre usando <flowSpan font-weight="bold">Ctrl</flowSpan> para axustar aos lados da diagonal do rectángulo. En outras palabras, <flowSpan font-weight="bold">Ctrl</flowSpan> conserva a largura, ou a altura, ou a proporción largura/altura do rectángulo (outra vez co seu propio sistema de coordenadas que pode rotarse ou inclinarse).</flowDiv>
+  <flowPara >Arrastre usando <flowSpan font-weight="bold">Ctrl</flowSpan> para axustar aos lados da diagonal do rectángulo. En outras palabras, <flowSpan font-weight="bold">Ctrl</flowSpan> conserva a largura, ou a altura, ou a proporción largura/altura do rectángulo (outra vez co seu propio sistema de coordenadas que pode rotarse ou inclinarse).</flowPara>
  </flowRoot>
  <rect id="d0e320" display="none" height="1e3px" width="288" y="2398.4" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e320"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Aquí ten o mesmo rectángulo, con liñas de puntos grises que mostran as direccións ás que se axustan as asas de redimensionamento ao arrastralas usando <flowSpan font-weight="bold">Ctrl</flowSpan> (próbeo):</flowDiv>
+  <flowPara >Aquí ten o mesmo rectángulo, con liñas de puntos grises que mostran as direccións ás que se axustan as asas de redimensionamento ao arrastralas usando <flowSpan font-weight="bold">Ctrl</flowSpan> (próbeo):</flowPara>
  </flowRoot>
  <g id="shapes-f06-gl.svgg6992" transform="translate(10 276.3)" stroke="#cfcfcf" sodipodi:insensitive="true" fill="none">
   <path id="shapes-f06-gl.svgpath6370" d="m200.86 2297.1l-80.74-126.8" sodipodi:nodetypes="cc" stroke-dasharray="1.7028247 1.7028247" stroke-width="1.7028"/>
@@ -362,13 +362,13 @@ on it. <flowSpan font-weight="bold">Ctrl+click</flowSpan> (select in group) and 
   <path id="shapes-f06-gl.svgpath5743" d="m77.695 2188.1l193.8 62.2" stroke-dasharray="1.7028220 1.7028220" stroke-width="1.7028"/>
  </g>
  <rect id="shapes-f06-gl.svgrect5742" fill-opacity=".99666" transform="translate(10 2445.8) matrix(.69601 -.71803 -.95272 -.30385 0 0)" stroke="#000" stroke-width="1pt" fill="#00f" style="color:#000000" fill-rule="evenodd" rx="5.825" ry="3.8355" width="41.625" height="64.103" y="-211.02" x="-35.379"/>
- <flowRoot id="shapes-f06-gl.svgflowRoot2609" xml:space="preserve" transform="translate(10 2445.8)" font-size="6" font-family="sans-serif" fill="#000000"><flowRegion id="shapes-f06-gl.svgflowRegion2611"><rect id="shapes-f06-gl.svgrect2613" height="26.786" width="115" y="120.93" x="78.571"/></flowRegion><flowPara id="shapes-f06-gl.svgflowPara2615">Axuste de rectángulo - asas de redimensionamento con Ctrl</flowPara></flowRoot>
+ <flowRoot xml:space="preserve" id="shapes-f06-gl.svgflowRoot2609"  transform="translate(10 2445.8)" font-size="6" font-family="sans-serif" fill="#000000"><flowRegion id="shapes-f06-gl.svgflowRegion2611"><rect id="shapes-f06-gl.svgrect2613" height="26.786" width="115" y="120.93" x="78.571"/></flowRegion><flowPara id="shapes-f06-gl.svgflowPara2615">Axuste de rectángulo - asas de redimensionamento con Ctrl</flowPara></flowRoot>
  <rect id="d0e336" display="none" height="1e3px" width="288" y="2591.2" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e336"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Inclinando e rotando un rectángulo, e duplicándoo e redimensionándoo usando as súas asas de redimensionamento pódense crear composicións en 3D de forma sinxela:</flowDiv>
+  <flowPara >Inclinando e rotando un rectángulo, e duplicándoo e redimensionándoo usando as súas asas de redimensionamento pódense crear composicións en 3D de forma sinxela:</flowPara>
  </flowRoot>
  <rect id="shapes-f07-gl.svgrect3610" style="color:#000000" fill-rule="evenodd" transform="translate(10 2638.5) matrix(.91237 -.40937 0 1 0 0)" height="14.448" width="18.786" stroke="#fff" y="170.13" x="233.42" stroke-width=".39259" fill="#ff6300"/>
  <rect id="shapes-f07-gl.svgrect3609" style="color:#000000" fill-rule="evenodd" transform="translate(10 2638.5) matrix(.91237 -.40937 0 1 0 0)" height="41.475" width="17.586" stroke="#fff" y="84.772" x="174.11" stroke-width=".39259" fill="#ff6300"/>
@@ -390,14 +390,14 @@ on it. <flowSpan font-weight="bold">Ctrl+click</flowSpan> (select in group) and 
  <rect id="shapes-f07-gl.svgrect3611" style="color:#000000" fill-rule="evenodd" transform="translate(10 2638.5) matrix(.91237 -.40937 0 1 0 0)" height="30.657" width="9.7845" stroke="#fff" y="170.05" x="234.5" stroke-width=".39259" fill="#ff6300"/>
  <rect id="shapes-f07-gl.svgrect3612" style="color:#000000" fill-rule="evenodd" transform="translate(10 2638.5) matrix(.99480 .10183 -.91351 .40681 0 0)" height="18.241" width="25.212" stroke="#fff" y="-24.113" x="128.84" stroke-width=".53154" fill="#ff6300"/>
  <rect id="shapes-f07-gl.svgrect1913" style="color:#000000" fill-rule="evenodd" transform="translate(10 2638.5) matrix(.91237 -.40937 0 1 0 0)" height="20.233" width="31.198" stroke="#fff" y="106.61" x="224.88" stroke-width=".39259" fill="#ff6300"/>
- <flowRoot id="shapes-f07-gl.svgflowRoot2632" style="text-anchor:middle;text-align:center" xml:space="preserve" transform="translate(8 2628.5)" font-size="6px" font-family="sans-serif" fill="#000000"><flowRegion id="shapes-f07-gl.svgflowRegion2634"><rect id="shapes-f07-gl.svgrect2636" height="43.571" width="61.786" y="61.648" x="27.5"/></flowRegion><flowPara id="shapes-f07-gl.svgflowPara2638">3 rectángulos orixinais</flowPara></flowRoot>
- <flowRoot id="shapes-f07-gl.svgflowRoot2640" xml:space="preserve" transform="translate(10 2638.5)" font-size="6" font-family="sans-serif" fill="#000000"><flowRegion id="shapes-f07-gl.svgflowRegion2642"><rect id="shapes-f07-gl.svgrect2644" height="90.357" width="56.786" y="12.005" x="241.07"/></flowRegion><flowPara id="shapes-f07-gl.svgflowPara2646">Varios rectángulos copiados e redimensionados usando asas, sobre todo con Ctrl</flowPara></flowRoot>
+ <flowRoot xml:space="preserve" id="shapes-f07-gl.svgflowRoot2632" style="text-anchor:middle;text-align:center"  transform="translate(8 2628.5)" font-size="6px" font-family="sans-serif" fill="#000000"><flowRegion id="shapes-f07-gl.svgflowRegion2634"><rect id="shapes-f07-gl.svgrect2636" height="43.571" width="61.786" y="61.648" x="27.5"/></flowRegion><flowPara id="shapes-f07-gl.svgflowPara2638">3 rectángulos orixinais</flowPara></flowRoot>
+ <flowRoot xml:space="preserve" id="shapes-f07-gl.svgflowRoot2640"  transform="translate(10 2638.5)" font-size="6" font-family="sans-serif" fill="#000000"><flowRegion id="shapes-f07-gl.svgflowRegion2642"><rect id="shapes-f07-gl.svgrect2644" height="90.357" width="56.786" y="12.005" x="241.07"/></flowRegion><flowPara id="shapes-f07-gl.svgflowPara2646">Varios rectángulos copiados e redimensionados usando asas, sobre todo con Ctrl</flowPara></flowRoot>
  <rect id="d0e349" display="none" height="1e3px" width="288" y="2763.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e349"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Aquí ten algúns exemplos máis de composicións de rectángulos, incluíndo redondeos e recheos con degradados:</flowDiv>
+  <flowPara >Aquí ten algúns exemplos máis de composicións de rectángulos, incluíndo redondeos e recheos con degradados:</flowPara>
  </flowRoot>
  <defs id="shapes-f08-gl.svgdefs3">
   <linearGradient id="shapes-f08-gl.svglinearGradient2343">
@@ -489,42 +489,42 @@ on it. <flowSpan font-weight="bold">Ctrl+click</flowSpan> (select in group) and 
   <tspan y="2938.6047492000002" x="10">Elipses</tspan>
  </text>
  <rect id="d0e368" display="none" height="1e3px" width="288" y="2943.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e368"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">A ferramenta Elipse (<flowSpan font-weight="bold">F5</flowSpan>) pode crear elipses e círculos, que se poden converter en sectores ou arcos. Os atallos de debuxo son os mesmos que os da ferramenta Rectángulo:</flowDiv>
+  <flowPara >A ferramenta Elipse (<flowSpan font-weight="bold">F5</flowSpan>) pode crear elipses e círculos, que se poden converter en sectores ou arcos. Os atallos de debuxo son os mesmos que os da ferramenta Rectángulo:</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 2989.3)"/>
  <rect id="d0e377" display="none" height="1e3px" width="258" y="2983.3" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e377"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Use <flowSpan font-weight="bold">Ctrl</flowSpan> para debuxar un círculo ou unha elipse de proporción enteira (2:1, 3:1, etc.).</flowDiv>
+  <flowPara >Use <flowSpan font-weight="bold">Ctrl</flowSpan> para debuxar un círculo ou unha elipse de proporción enteira (2:1, 3:1, etc.).</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 3017.5)"/>
  <rect id="d0e384" display="none" height="1e3px" width="258" y="3011.5" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e384"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Use <flowSpan font-weight="bold">Maiús</flowSpan> para debuxar arredor do punto de inicio, que será o punto central.</flowDiv>
+  <flowPara >Use <flowSpan font-weight="bold">Maiús</flowSpan> para debuxar arredor do punto de inicio, que será o punto central.</flowPara>
  </flowRoot>
  <rect id="d0e391" display="none" height="1e3px" width="288" y="3040.2" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e391"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Investiguemos as asas dunha elipse. Seleccione esta elipse:</flowDiv>
+  <flowPara >Investiguemos as asas dunha elipse. Seleccione esta elipse:</flowPara>
  </flowRoot>
  <path id="shapes-f09-gl.svgpath1932" sodipodi:rx="54.031982" sodipodi:ry="30.248674" fill-opacity=".99666" stroke="#000" stroke-width="1.25" fill="#ff000b" style="color:#000000" fill-rule="evenodd" transform="translate(-6.962 156.5)" sodipodi:type="arc" d="m221.21 2940.5a54.032 30.249 0 1 1 -108.07 0 54.032 30.249 0 1 1 108.07 0z" sodipodi:cy="2940.5042" sodipodi:cx="167.17587"/>
  <rect id="d0e404" display="none" height="1e3px" width="288" y="3139.9" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e404"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Unha vez máis verá inicialmente tres asas, pero de feito son catro. A asa que está máis á dereita son dúas asas sobrepostas que lle permiten &quot;abrir&quot; a elipse. Arrastre esa asa que está máis á dereita, e despois arrastre a outra asa que estaba debaixo e se fixo visible, para obter unha serie de sectores de diagramas de tarta ou arcos:</flowDiv>
+  <flowPara >Unha vez máis verá inicialmente tres asas, pero de feito son catro. A asa que está máis á dereita son dúas asas sobrepostas que lle permiten &quot;abrir&quot; a elipse. Arrastre esa asa que está máis á dereita, e despois arrastre a outra asa que estaba debaixo e se fixo visible, para obter unha serie de sectores de diagramas de tarta ou arcos:</flowPara>
  </flowRoot>
  <path id="shapes-f10-gl.svgpath1225" sodipodi:rx="19.072769" sodipodi:ry="29.636148" sodipodi:type="arc" d="m48.122 2743a19.073 29.636 0 1 1 -5.586 -21l-13.487 21z" fill-opacity=".75" fill="#f00" fill-rule="evenodd" transform="translate(10 3208.6) matrix(1.306 0 0 0.597 13.336 -1619.4)" stroke="#000" sodipodi:cy="2742.9695" sodipodi:cx="29.049295" stroke-width=".79606pt" sodipodi:end="5.4977871" sodipodi:start="0.0000000"/>
  <path id="shapes-f10-gl.svgpath1226" sodipodi:rx="19.072769" sodipodi:ry="29.636148" sodipodi:type="arc" d="m48.122 2743a19.073 29.636 0 0 1 -33.658 19.1l14.585-19.1z" fill-opacity=".75" fill="#f00" fill-rule="evenodd" transform="translate(10 3208.6) matrix(1.306 0 0 0.597 77.095 -1619.4)" stroke="#000" sodipodi:cy="2742.9695" sodipodi:cx="29.049295" stroke-width=".79606pt" sodipodi:end="2.4413969" sodipodi:start="0.0000000"/>
@@ -534,21 +534,21 @@ on it. <flowSpan font-weight="bold">Ctrl+click</flowSpan> (select in group) and 
  <path id="shapes-f10-gl.svgpath3205" sodipodi:rx="19.072769" sodipodi:ry="29.636148" sodipodi:type="arc" d="m11.841 2730.2a19.073 29.636 0 0 1 35.456 4.1" fill-opacity=".75" sodipodi:open="true" fill-rule="evenodd" transform="translate(10 3208.6) matrix(1.306 0 0 0.597 207.7 -1619.4)" stroke="#000" sodipodi:cy="2742.9695" sodipodi:cx="29.049295" fill="#f00" stroke-width=".79606pt" sodipodi:end="5.9880333" sodipodi:start="3.5874838"/>
  <path id="shapes-f10-gl.svgpath3206" sodipodi:rx="19.072769" sodipodi:ry="29.636148" sodipodi:type="arc" d="m27.76 2713.4a19.073 29.636 0 0 1 19.12 19.1l-17.831 10.5z" fill-opacity=".75" fill="#f00" fill-rule="evenodd" transform="translate(10 3208.6) matrix(1.306 0 0 0.597 77.095 -1619.4)" stroke="#000" sodipodi:cy="2742.9695" sodipodi:cx="29.049295" stroke-width=".79606pt" sodipodi:end="5.9203236" sodipodi:start="4.6447262"/>
  <rect id="d0e417" display="none" height="1e3px" width="288" y="3256.6" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e417"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Para obter un <flowSpan font-style="italic">sector</flowSpan> (un arco e dous raios), arrastre <flowSpan font-style="italic">fóra<flowSpan> da elipse; para obter un <flowSpan font-style="italic">arco</flowSpan> arrastre <flowSpan font-style="italic">dentro<flowSpan font-style="italic"> da elipse. Arriba hai 4 sectores á esquerda e 3 arcos á dereita. Teña en conta que os arcos son figuras sen pechar, é dicir, o seu trazo só segue a elipse pero non conecta os extremos do arco. Pode facer que isto sexa máis evidente ao eliminar o recheo e deixar só o trazo:</flowSpan></flowSpan></flowSpan></flowSpan></flowDiv>
+  <flowPara >Para obter un <flowSpan font-style="italic">sector</flowSpan> (un arco e dous raios), arrastre <flowSpan font-style="italic">fóra<flowSpan> da elipse; para obter un <flowSpan font-style="italic">arco</flowSpan> arrastre <flowSpan font-style="italic">dentro<flowSpan font-style="italic"> da elipse. Arriba hai 4 sectores á esquerda e 3 arcos á dereita. Teña en conta que os arcos son figuras sen pechar, é dicir, o seu trazo só segue a elipse pero non conecta os extremos do arco. Pode facer que isto sexa máis evidente ao eliminar o recheo e deixar só o trazo:</flowSpan></flowSpan></flowSpan></flowSpan></flowPara>
  </flowRoot>
  <g id="shapes-f11-gl.svgg4447" sodipodi:insensitive="true" transform="translate(10 130.5)">
   <path id="shapes-f11-gl.svgpath3194" d="m78.137 3274.7l-47.158-27" sodipodi:nodetypes="cc" stroke="#d3d3d3" stroke-width=".25pt" fill="none"/>
   <path id="shapes-f11-gl.svgpath3195" d="m82.405 3271.7l-40.649-39.7" sodipodi:nodetypes="cc" stroke="#d3d3d3" stroke-width=".25pt" fill="none"/>
   <path id="shapes-f11-gl.svgpath3196" sodipodi:rx="59.578407" sodipodi:ry="58.560177" stroke="#d3d3d3" stroke-width=".64783" sodipodi:end="3.9269908" fill="none" style="color:#000000" sodipodi:start="3.6651914" transform="matrix(1.1577 0 0 1.1577 21.522 -466.22)" sodipodi:type="arc" d="m11.441 3210a59.578 58.56 0 0 1 9.468 -12.1" sodipodi:open="true" sodipodi:cy="3239.2964" sodipodi:cx="63.037315"/>
-  <text id="shapes-f11-gl.svgtext3818" sodipodi:linespacing="120.00000%" transform="matrix(.70939 0 0 .70939 10.286 1617.1)" xml:space="preserve" line-height="120.00000%" font-size="8.4" y="2279.1907" x="30.19973" font-family="sans-serif" fill="#d3d3d3"><tspan id="shapes-f11-gl.svgtspan3819" y="2279.1907" x="30.199730" sodipodi:role="line"/><tspan id="shapes-f11-gl.svgtspan3821" fill="#d3d3d3"/><tspan id="shapes-f11-gl.svgtspan3823" sodipodi:role="line" dx="0 -0.23659326" dy="0 0" y="2289.2707" x="30.199730">15</tspan></text>
+  <text id="shapes-f11-gl.svgtext3818" sodipodi:linespacing="120.00000%" transform="matrix(.70939 0 0 .70939 10.286 1617.1)"  line-height="120.00000%" font-size="8.4" y="2279.1907" x="30.19973" font-family="sans-serif" fill="#d3d3d3"><tspan id="shapes-f11-gl.svgtspan3819" y="2279.1907" x="30.199730" sodipodi:role="line"/><tspan id="shapes-f11-gl.svgtspan3821" fill="#d3d3d3"/><tspan id="shapes-f11-gl.svgtspan3823" sodipodi:role="line" dx="0 -0.23659326" dy="0 0" y="2289.2707" x="30.199730">15</tspan></text>
   <path id="shapes-f11-gl.svgpath3825" sodipodi:rx="0.89163345" sodipodi:ry="0.89163345" style="color:#000000" sodipodi:type="arc" d="m41.375 3238a0.89163 0.89163 0 1 1 -1.783 0 0.89163 0.89163 0 1 1 1.783 0z" transform="matrix(.88208 0 0 .88208 4.5191 381.48)" stroke="#d3d3d3" sodipodi:cy="3237.9563" sodipodi:cx="40.483158" stroke-width=".48604" fill="none"/>
  </g>
- <text id="shapes-f11-gl.svgtext3883" sodipodi:linespacing="120.00000%" transform="translate(10 3334.4)" xml:space="preserve" line-height="120.00000%" font-size="5.9589" y="4.4230723" x="61.438835" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f11-gl.svgtspan3884" y="4.4230723" x="61.438835" sodipodi:role="line">Sectores</tspan><tspan id="shapes-f11-gl.svgtspan3893" y="11.573723" x="61.438835" sodipodi:role="line"/></text>
- <text id="shapes-f11-gl.svgtext3888" sodipodi:linespacing="120.00000%" transform="translate(10 3334.4)" xml:space="preserve" line-height="120.00000%" font-size="5.9589" y="-2.6629279" x="224.43098" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f11-gl.svgtspan3889" y="-2.6629279" x="224.43098" sodipodi:role="line"/><tspan id="shapes-f11-gl.svgtspan3891" y="4.4877232" x="224.43098" sodipodi:role="line">Arcos</tspan></text>
+ <text id="shapes-f11-gl.svgtext3883" sodipodi:linespacing="120.00000%" transform="translate(10 3334.4)"  line-height="120.00000%" font-size="5.9589" y="4.4230723" x="61.438835" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f11-gl.svgtspan3884" y="4.4230723" x="61.438835" sodipodi:role="line">Sectores</tspan><tspan id="shapes-f11-gl.svgtspan3893" y="11.573723" x="61.438835" sodipodi:role="line"/></text>
+ <text id="shapes-f11-gl.svgtext3888" sodipodi:linespacing="120.00000%" transform="translate(10 3334.4)"  line-height="120.00000%" font-size="5.9589" y="-2.6629279" x="224.43098" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f11-gl.svgtspan3889" y="-2.6629279" x="224.43098" sodipodi:role="line"/><tspan id="shapes-f11-gl.svgtspan3891" y="4.4877232" x="224.43098" sodipodi:role="line">Arcos</tspan></text>
  <path id="shapes-f11-gl.svgpath3234" sodipodi:rx="30.710485" sodipodi:ry="10.852578" stroke="#000" stroke-width=".75" sodipodi:end="5.4977871" fill="none" style="color:#000000" sodipodi:start="2.2993372" transform="translate(41.469 175.1)" sodipodi:type="arc" d="m42.591 3247.4a30.71 10.853 0 1 1 42.162 -15.8l-21.716 7.7z" sodipodi:cy="3239.2964" sodipodi:cx="63.037315"/>
  <path id="shapes-f11-gl.svgpath3856" sodipodi:rx="30.710485" sodipodi:ry="30.962814" stroke="#000" stroke-width=".75" sodipodi:end="5.4977871" fill="none" style="color:#000000" sodipodi:start="2.2993372" transform="translate(41.469 175.1)" sodipodi:type="arc" d="m42.591 3262.4a30.71 30.963 0 1 1 42.162 -45l-21.716 21.9z" sodipodi:cy="3239.2964" sodipodi:cx="63.037315"/>
  <path id="shapes-f11-gl.svgpath3857" sodipodi:rx="30.710485" sodipodi:ry="58.560177" stroke="#000" stroke-width=".75" sodipodi:end="5.4977871" fill="none" style="color:#000000" sodipodi:start="2.2993372" transform="translate(41.469 175.1)" sodipodi:type="arc" d="m42.591 3283a30.71 58.56 0 1 1 42.162 -85.1l-21.716 41.4z" sodipodi:cy="3239.2964" sodipodi:cx="63.037315"/>
@@ -569,65 +569,65 @@ on it. <flowSpan font-weight="bold">Ctrl+click</flowSpan> (select in group) and 
  <path id="shapes-f11-gl.svgpath3873" sodipodi:rx="75.147621" sodipodi:ry="10.852578" stroke="#000" stroke-width=".75" sodipodi:end="5.4977871" fill="none" style="color:#000000" sodipodi:start="2.2993372" transform="translate(182.89 175.1)" sodipodi:type="arc" d="m13.005 3247.4a75.148 10.853 0 1 1 103.16 -15.8" sodipodi:open="true" sodipodi:cy="3239.2964" sodipodi:cx="63.037315"/>
  <path id="shapes-f11-gl.svgpath3925" sodipodi:rx="59.578407" sodipodi:ry="58.560177" stroke="#000" stroke-width=".75" sodipodi:end="3.4033920" fill="none" style="color:#000000" sodipodi:start="2.2993372" transform="translate(41.469 175.1)" sodipodi:type="arc" d="m23.371 3283a59.578 58.56 0 0 1 -17.882 -58.9l57.548 15.2z" sodipodi:cy="3239.2964" sodipodi:cx="63.037315"/>
  <rect id="d0e444" display="none" height="1e3px" width="288" y="3471.6" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e444"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Fíxese no grupo de sectores da esquerda. É fácil de crear se se usa o <flowSpan font-style="italic">axuste de ángulo</flowSpan> das asas usando <flowSpan font-weight="bold">Ctrl</flowSpan>. Aquí ten os atallos de asa para os arcos e sectores:</flowDiv>
+  <flowPara >Fíxese no grupo de sectores da esquerda. É fácil de crear se se usa o <flowSpan font-style="italic">axuste de ángulo</flowSpan> das asas usando <flowSpan font-weight="bold">Ctrl</flowSpan>. Aquí ten os atallos de asa para os arcos e sectores:</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 3516.4)"/>
  <rect id="d0e456" display="none" height="1e3px" width="258" y="3510.4" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e456"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Con <flowSpan font-weight="bold">Ctrl</flowSpan>, axústase a asa cada 15 graos ao arrastrar.</flowDiv>
+  <flowPara >Con <flowSpan font-weight="bold">Ctrl</flowSpan>, axústase a asa cada 15 graos ao arrastrar.</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 3534.6)"/>
  <rect id="d0e463" display="none" height="1e3px" width="258" y="3528.6" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e463"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Use <flowSpan font-weight="bold">Maiús+clic</flowSpan> para completar a elipse (facer que non sexa arco nin segmento).</flowDiv>
+  <flowPara >Use <flowSpan font-weight="bold">Maiús+clic</flowSpan> para completar a elipse (facer que non sexa arco nin segmento).</flowPara>
  </flowRoot>
  <rect id="d0e470" display="none" height="1e3px" width="288" y="3557.4" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e470"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">The snap angle can be changed in Inkscape Preferences (in <flowSpan font-family="sans-serif">Behavior &gt; Steps</flowSpan>). 
-</flowDiv>
+  <flowPara >The snap angle can be changed in Inkscape Preferences (in <flowSpan font-family="sans-serif">Behavior &gt; Steps</flowSpan>). 
+</flowPara>
  </flowRoot>
  <rect id="d0e476" display="none" height="1e3px" width="288" y="3585.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e476"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">As outras dúas asas da elipse úsanse para redimensionala arredor do seu centro. Os seus atallos son semellantes aos das asas de redondeo dun rectángulo:</flowDiv>
+  <flowPara >As outras dúas asas da elipse úsanse para redimensionala arredor do seu centro. Os seus atallos son semellantes aos das asas de redondeo dun rectángulo:</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 3631.2)"/>
  <rect id="d0e482" display="none" height="1e3px" width="258" y="3625.2" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e482"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Arrastre usando <flowSpan font-weight="bold">Ctrl</flowSpan> para crear un círculo (facer que o outro raio sexa igual).</flowDiv>
+  <flowPara >Arrastre usando <flowSpan font-weight="bold">Ctrl</flowSpan> para crear un círculo (facer que o outro raio sexa igual).</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 3660.1)"/>
  <rect id="d0e489" display="none" height="1e3px" width="258" y="3654.1" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e489"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Use <flowSpan font-weight="bold">Ctrl+clic</flowSpan> para crear un círculo sen arrastrar.</flowDiv>
+  <flowPara >Use <flowSpan font-weight="bold">Ctrl+clic</flowSpan> para crear un círculo sen arrastrar.</flowPara>
  </flowRoot>
  <rect id="d0e496" display="none" height="1e3px" width="288" y="3672.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e496"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">E o mesmo que cas asas de redimensionamento do rectángulo, estas asas da elipse axusta a altura e a largura da elipse nas <flowSpan font-style="italic">propias coordenadas da elipse</flowSpan>. Isto significa que unha elipse rotada ou inclinada pode estirarse ou comprimirse facilmente ao longo dos seus eixes orixinais mentres permanece rotada ou inclinada. Probe a redimensionar calquera destas elipses usando as súas asas de redimensionamento:</flowDiv>
+  <flowPara >E o mesmo que cas asas de redimensionamento do rectángulo, estas asas da elipse axusta a altura e a largura da elipse nas <flowSpan font-style="italic">propias coordenadas da elipse</flowSpan>. Isto significa que unha elipse rotada ou inclinada pode estirarse ou comprimirse facilmente ao longo dos seus eixes orixinais mentres permanece rotada ou inclinada. Probe a redimensionar calquera destas elipses usando as súas asas de redimensionamento:</flowPara>
  </flowRoot>
  <path id="shapes-f12-gl.svgpath2133" sodipodi:rx="43.680855" sodipodi:ry="7.3592744" fill-opacity=".14716" stroke="#000" stroke-width=".75" fill="#ffd300" style="color:#000000" fill-rule="evenodd" transform="translate(10 3760.5) matrix(1.2719 .56475 -.78871 .43604 2855.3 -1599.1)" sodipodi:type="arc" d="m150.98 3607.9a43.681 7.3593 0 1 1 -87.358 0 43.681 7.3593 0 1 1 87.358 0z" sodipodi:cy="3607.9023" sodipodi:cx="107.30297"/>
  <path id="shapes-f12-gl.svgpath2136" sodipodi:rx="58.547005" sodipodi:ry="13.607653" fill-opacity=".14716" stroke="#000" stroke-width=".75" fill="#ffd300" style="color:#000000" fill-rule="evenodd" transform="translate(10 3760.5) matrix(1.2719 .56475 -.78871 .43604 2855.3 -1599.1)" sodipodi:type="arc" d="m165.85 3607.9a58.547 13.608 0 1 1 -117.09 0 58.547 13.608 0 1 1 117.09 0z" sodipodi:cy="3607.9023" sodipodi:cx="107.30297"/>
@@ -639,67 +639,67 @@ on it. <flowSpan font-weight="bold">Ctrl+click</flowSpan> (select in group) and 
   <tspan y="3854.4979102" x="10">Estrelas</tspan>
  </text>
  <rect id="d0e518" display="none" height="1e3px" width="288" y="3859.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e518"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">As estrelas son a figura máis complexa e máis emocionante de Inkscape. Se desexa deixar parvos aos seus amigos con Inkscape déixelles xogar ca ferramenta Estrela. O gozo nunca acaba — e é claramente adictivo!</flowDiv>
+  <flowPara >As estrelas son a figura máis complexa e máis emocionante de Inkscape. Se desexa deixar parvos aos seus amigos con Inkscape déixelles xogar ca ferramenta Estrela. O gozo nunca acaba — e é claramente adictivo!</flowPara>
  </flowRoot>
  <rect id="d0e521" display="none" height="1e3px" width="288" y="3908.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e521"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">A ferramenta Estrela pode crear dous tipos de obxectos semellantes pero distintos: estrelas e polígonos. Unha estrela ten dúas asas que definen a lonxitude e a forma das súas puntas; un polígono só ten unha asa que simplemente rota e redimensiona o polígono ao arrastrala:</flowDiv>
+  <flowPara >A ferramenta Estrela pode crear dous tipos de obxectos semellantes pero distintos: estrelas e polígonos. Unha estrela ten dúas asas que definen a lonxitude e a forma das súas puntas; un polígono só ten unha asa que simplemente rota e redimensiona o polígono ao arrastrala:</flowPara>
  </flowRoot>
  <g id="shapes-f13-gl.svgg2711" xmlns:cc="http://creativecommons.org/ns#" transform="translate(10 3974.9)">
   <path id="shapes-f13-gl.svgpath2190" sodipodi:sides="5" inkscape:flatsided="false" stroke="#000" stroke-width=".98589" fill="#fff100" style="color:#000000" fill-rule="evenodd" transform="matrix(.67263 .35535 -.35535 .67263 1407.5 -2577.2)" inkscape:rounded="0.0000000" sodipodi:r1="38.010052" sodipodi:r2="19.005026" sodipodi:arg1="0.45247489" sodipodi:arg2="1.0807934" sodipodi:type="star" d="m107.3 3871.6l-25.238 0.2-14.185 20.9-7.943-24-24.24-7 20.331-15-0.796-25.2 20.509 14.7 23.748-8.5-7.656 24 15.47 19.9z" inkscape:randomized="0.0000000" sodipodi:cy="3855.0315" sodipodi:cx="73.117950"/>
-  <flowRoot id="shapes-f13-gl.svgflowRoot2695" style="text-anchor:middle;text-align:center" xml:space="preserve" transform="translate(-1.825)" font-size="6px" font-family="sans-serif" fill="#000000"><flowRegion id="shapes-f13-gl.svgflowRegion2697"><rect id="shapes-f13-gl.svgrect2699" height="15" width="57.5" y="-.13782" x="59.643"/></flowRegion><flowPara id="shapes-f13-gl.svgflowPara2701">Estrela</flowPara></flowRoot>
+  <flowRoot xml:space="preserve" id="shapes-f13-gl.svgflowRoot2695" style="text-anchor:middle;text-align:center"  transform="translate(-1.825)" font-size="6px" font-family="sans-serif" fill="#000000"><flowRegion id="shapes-f13-gl.svgflowRegion2697"><rect id="shapes-f13-gl.svgrect2699" height="15" width="57.5" y="-.13782" x="59.643"/></flowRegion><flowPara id="shapes-f13-gl.svgflowPara2701">Estrela</flowPara></flowRoot>
  </g>
  <g id="shapes-f13-gl.svgg2718" xmlns:cc="http://creativecommons.org/ns#" transform="translate(10 3974.9)">
   <path id="shapes-f13-gl.svgpath2191" sodipodi:sides="5" inkscape:flatsided="true" stroke="#000" stroke-width=".98589" fill="#fff100" style="color:#000000" fill-rule="evenodd" transform="matrix(.67263 .35535 -.35535 .67263 1513.8 -2577.2)" inkscape:rounded="0.0000000" sodipodi:r1="38.010052" sodipodi:r2="19.005026" sodipodi:arg1="0.45247489" sodipodi:arg2="1.0807934" sodipodi:type="star" d="m107.3 3871.6l-39.423 21.1-32.183-31 19.535-40.2 44.257 6.2 7.814 43.9z" inkscape:randomized="0.0000000" sodipodi:cy="3855.0315" sodipodi:cx="73.117950"/>
-  <flowRoot id="shapes-f13-gl.svgflowRoot2703" style="text-anchor:middle;text-align:center" xml:space="preserve" transform="translate(104.63 -.59495)" font-size="6px" font-family="sans-serif" fill="#000000"><flowRegion id="shapes-f13-gl.svgflowRegion2705"><rect id="shapes-f13-gl.svgrect2707" height="15" width="57.5" y="-.13782" x="59.643"/></flowRegion><flowPara id="shapes-f13-gl.svgflowPara2709">Polígono</flowPara></flowRoot>
+  <flowRoot xml:space="preserve" id="shapes-f13-gl.svgflowRoot2703" style="text-anchor:middle;text-align:center"  transform="translate(104.63 -.59495)" font-size="6px" font-family="sans-serif" fill="#000000"><flowRegion id="shapes-f13-gl.svgflowRegion2705"><rect id="shapes-f13-gl.svgrect2707" height="15" width="57.5" y="-.13782" x="59.643"/></flowRegion><flowPara id="shapes-f13-gl.svgflowPara2709">Polígono</flowPara></flowRoot>
  </g>
  <rect id="d0e534" display="none" height="1e3px" width="288" y="4053.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e534"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">In the Controls bar of the Star tool, the first two buttons control how the shape is 
+  <flowPara >In the Controls bar of the Star tool, the first two buttons control how the shape is 
 drawn (regular polygon or star). Next, a numeric field sets the <flowSpan font-style="italic">number of
 vertices</flowSpan> of a star or polygon. This parameter is only editable via the
 Controls bar. The allowed range is from 3 (obviously) to 1024, but you shouldn&apos;t try
 large numbers (say, over 200) if your computer is slow.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e540" display="none" height="1e3px" width="288" y="4124.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e540"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ao debuxar unha nova estrela ou polígono,</flowDiv>
+  <flowPara >Ao debuxar unha nova estrela ou polígono,</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 4148.3)"/>
  <rect id="d0e546" display="none" height="1e3px" width="258" y="4142.3" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e546"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Arrastre usando <flowSpan font-weight="bold">Ctrl</flowSpan> para axustar o ángulo a incrementos de 15 graos.</flowDiv>
+  <flowPara >Arrastre usando <flowSpan font-weight="bold">Ctrl</flowSpan> para axustar o ángulo a incrementos de 15 graos.</flowPara>
  </flowRoot>
  <rect id="d0e553" display="none" height="1e3px" width="288" y="4171.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e553"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Naturalmente unha estrela é unha figura moito máis interesante (aínda que os polígonos son a miúdo moitos máis útiles na práctica). As dúas asas dunha estrela teñen funcións lixeiramente diferentes. A primeira asa (que inicialmente está nun vértice, é dicir nunha esquina <flowSpan font-style="italic">convexa</flowSpan> da estrela) fai que os raios da estrela se alonguen ou se acurten, pero cando se rota a asa (en relación ao centro da figura), a outra asa tamén rota. Isto quere dicir que non pode inclinar os raios dunha estrela usando esta asa.</flowDiv>
+  <flowPara >Naturalmente unha estrela é unha figura moito máis interesante (aínda que os polígonos son a miúdo moitos máis útiles na práctica). As dúas asas dunha estrela teñen funcións lixeiramente diferentes. A primeira asa (que inicialmente está nun vértice, é dicir nunha esquina <flowSpan font-style="italic">convexa</flowSpan> da estrela) fai que os raios da estrela se alonguen ou se acurten, pero cando se rota a asa (en relación ao centro da figura), a outra asa tamén rota. Isto quere dicir que non pode inclinar os raios dunha estrela usando esta asa.</flowPara>
  </flowRoot>
  <rect id="d0e559" display="none" height="1e3px" width="288" y="4262.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e559"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">A outra asa (que inicialmente está nunha esquina <flowSpan font-style="italic">cóncava</flowSpan> entre dous vértices) en cambio pode moverse libremente tanto radialmente como tanxencialmente, sen afectarlle á asa do vértice. (De feito esta asa pode converterse nun vértice ao movela máis lonxe do centro que a outra asa). Esta é a asa que pode inclinar as puntas da estrela para conseguir todo tipo de cristais, mandalas, flocos de neve e porco espiños:</flowDiv>
+  <flowPara >A outra asa (que inicialmente está nunha esquina <flowSpan font-style="italic">cóncava</flowSpan> entre dous vértices) en cambio pode moverse libremente tanto radialmente como tanxencialmente, sen afectarlle á asa do vértice. (De feito esta asa pode converterse nun vértice ao movela máis lonxe do centro que a outra asa). Esta é a asa que pode inclinar as puntas da estrela para conseguir todo tipo de cristais, mandalas, flocos de neve e porco espiños:</flowPara>
  </flowRoot>
  <path id="shapes-f14-gl.svgpath2725" sodipodi:sides="48" inkscape:flatsided="false" stroke="#000" stroke-width=".015394" fill="none" style="color:#000000" transform="translate(10 4352) matrix(2.436 0 0 2.436 -239.62 -10265)" inkscape:rounded="0.0000000" sodipodi:r1="15.977139" sodipodi:r2="5.2552228" sodipodi:arg1="0.54696605" sodipodi:arg2="2.0469000" sodipodi:type="star" d="m184.95 4242.3l-16.06-3.6 14.86 5.3-15.45-5.7 14.03 7.2-14.56-7.6 12.96 9-13.44-9.5 11.67 10.6-12.08-11.2 10.19 12.1-10.52-12.7 8.52 13.3-8.77-13.9 6.72 14.3-6.89-15 4.8 15.1-4.88-15.8 2.8 15.6-2.79-16.3 0.75 15.8-0.64-16.4-1.33 15.7 1.52-16.4-3.37 15.4 3.64-16-5.35 14.8 5.7-15.4-7.24 14 7.67-14.5-9.01 12.9 9.51-13.4-10.63 11.6 11.18-12-12.06 10.2 12.66-10.6-13.28 8.6 13.92-8.8-14.28 6.7 14.95-6.9-15.04 4.8 15.72-4.9-15.54 2.8 16.23-2.8-15.77 0.8 16.45-0.6-15.73-1.4 16.39 1.5-15.42-3.3 16.05 3.6-14.85-5.3 15.44 5.7-14.03-7.3 14.57 7.7-12.97-9 13.44 9.5-11.67-10.6 12.08 11.1-10.19-12 10.53 12.6-8.53-13.2 8.78 13.9-6.72-14.3 6.88 15-4.8-15.1 4.88 15.7-2.79-15.5 2.78 16.2-0.74-15.7 0.64 16.4 1.32-15.7-1.51 16.4 3.36-15.5-3.64 16.1 5.35-14.9-5.7 15.5 7.24-14-7.67 14.5 9.01-12.9-9.51 13.4 10.63-11.7-11.18 12.1 12.06-10.2-12.66 10.5 13.29-8.5-13.93 8.8 14.29-6.7-14.96 6.9 15.04-4.8-15.72 4.8 15.54-2.8-16.23 2.8 15.77-0.7-16.45 0.6 15.74 1.3-16.4-1.5 15.43 3.4z" inkscape:randomized="0.0000000" sodipodi:cy="4233.9868" sodipodi:cx="171.30144"/>
  <path id="shapes-f14-gl.svgpath2918" sodipodi:sides="5" inkscape:flatsided="false" fill="#520100" style="color:#000000" fill-rule="evenodd" transform="translate(10 4352) matrix(.99630 -.085991 .085991 .99630 -255.75 -4191.3)" inkscape:rounded="0.0000000" sodipodi:r1="24.878733" sodipodi:r2="24.610689" sodipodi:arg1="0.85670563" sodipodi:arg2="-1.3248582" sodipodi:type="star" d="m45.957 4353.5l-10.302-42.7-18.837 45.2 37.399-23-48.787-3.9 33.416 28.4-11.314-47.6-16.747 40.6 41.794-25.5-43.766-3.4 37.144 31.9z" inkscape:randomized="0.0000000" sodipodi:cy="4334.6870" sodipodi:cx="29.663147"/>
@@ -711,93 +711,93 @@ large numbers (say, over 200) if your computer is slow.
  <path id="shapes-f14-gl.svgpath3347" sodipodi:sides="8" inkscape:flatsided="false" stroke="#000" stroke-width=".34380" fill="none" style="color:#000000" transform="translate(10 4352) matrix(.72717 0 0 .72717 28.258 -3046.2)" inkscape:rounded="0.0000000" sodipodi:r1="27.155294" sodipodi:r2="27.241930" sodipodi:arg1="1.5707963" sodipodi:arg2="-2.3580603" sodipodi:type="star" d="m104.6 4261l-19.304-46.4 0.098 38.4 19.146-46.4-27.1 27.2 46.38-19.3-38.426 0.1 46.446 19.2-27.24-27.1 19.29 46.4-0.09-38.5-19.15 46.5 27.1-27.3-46.382 19.3 38.432-0.1-46.447-19.1 27.247 27.1z" inkscape:randomized="0.0000000" sodipodi:cy="4233.8340" sodipodi:cx="104.59527"/>
  <path id="shapes-f14-gl.svgpath5832" sodipodi:sides="17" inkscape:flatsided="false" fill="#520100" style="color:#000000" fill-rule="evenodd" transform="translate(10 169.7)" inkscape:rounded="0.0000000" sodipodi:r1="52.870548" sodipodi:r2="14.993350" sodipodi:arg1="0.52982957" sodipodi:arg2="-2.2448164" sodipodi:type="star" d="m114.31 4305.9l-54.977-38.4 42.247 53.1-37.383-55.7 20.208 64.8-14.737-65.4-4.56 67.7 9.899-66.4-28.712 61.5 33.197-58.3-48.986 47 52.013-42.4-62.644 26.1 63.804-20.7-67.842 1.7 66.977 3.8-63.877-23 61.105 27.7-51.286-44.4 46.981 47.9-31.768-60 26.511 61.6-7.959-67.4 2.461 67 16.924-65.7-21.921 63.4 39.522-55.1-43.344 51.2 56.787-37.2-58.916 32.1 66.376-14.2-66.526 8.7 66.996 10.8-65.147-16 58.577 34.2z" inkscape:randomized="0.0000000" sodipodi:cy="4279.2217" sodipodi:cx="68.691193"/>
  <rect id="d0e575" display="none" height="1e3px" width="288" y="4513.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e575"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Se só desexa obter unha estrela normal e simple sen eses reviraganchos, pode facer que a asa de inclinación se comporte como unha asa que non incline:</flowDiv>
+  <flowPara >Se só desexa obter unha estrela normal e simple sen eses reviraganchos, pode facer que a asa de inclinación se comporte como unha asa que non incline:</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 4559.1)"/>
  <rect id="d0e581" display="none" height="1e3px" width="258" y="4553.1" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e581"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Arrastre usando <flowSpan font-weight="bold">Ctrl</flowSpan> para facer que os raios da estrela sexan estritamente radiais (sen inclinación).</flowDiv>
+  <flowPara >Arrastre usando <flowSpan font-weight="bold">Ctrl</flowSpan> para facer que os raios da estrela sexan estritamente radiais (sen inclinación).</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 4587)"/>
  <rect id="d0e588" display="none" height="1e3px" width="258" y="4581" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e588"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Use <flowSpan font-weight="bold">Ctrl+clic</flowSpan> para eliminar a inclinación ao arrastrar.</flowDiv>
+  <flowPara >Use <flowSpan font-weight="bold">Ctrl+clic</flowSpan> para eliminar a inclinación ao arrastrar.</flowPara>
  </flowRoot>
  <rect id="d0e595" display="none" height="1e3px" width="288" y="4599.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e595"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">O campo de <flowSpan font-family="sans-serif">relación de aspecto</flowSpan> que está na barra de Controis define a relación entre as distancias das dúas asas ao centro, e é un complemento útil para o arrastre das asas no lenzo.</flowDiv>
+  <flowPara >O campo de <flowSpan font-family="sans-serif">relación de aspecto</flowSpan> que está na barra de Controis define a relación entre as distancias das dúas asas ao centro, e é un complemento útil para o arrastre das asas no lenzo.</flowPara>
  </flowRoot>
  <rect id="d0e601" display="none" height="1e3px" width="288" y="4638.4" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e601"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">As estrelas de Inkscape agochan máis trucos. En xeometría un polígono é unha figura con lados rectos e esquinas puntiagudas. En troques, no mundo real normalmente existen diferentes niveis de curvatura e redondez — e Inkscape tamén pode facer iso. Aínda así, redondear unha estrela ou polígono é un pouco diferente a redondear un rectángulo. Non hai unha asa dedicada para isto, pero</flowDiv>
+  <flowPara >As estrelas de Inkscape agochan máis trucos. En xeometría un polígono é unha figura con lados rectos e esquinas puntiagudas. En troques, no mundo real normalmente existen diferentes niveis de curvatura e redondez — e Inkscape tamén pode facer iso. Aínda así, redondear unha estrela ou polígono é un pouco diferente a redondear un rectángulo. Non hai unha asa dedicada para isto, pero</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 4715.8)"/>
  <rect id="d0e607" display="none" height="1e3px" width="258" y="4709.8" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e607"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Use <flowSpan font-weight="bold">Maiús+arrastrar</flowSpan> unha asa tanxencialmente para redondear a estrela ou polígono.</flowDiv>
+  <flowPara >Use <flowSpan font-weight="bold">Maiús+arrastrar</flowSpan> unha asa tanxencialmente para redondear a estrela ou polígono.</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 4744.6)"/>
  <rect id="d0e614" display="none" height="1e3px" width="258" y="4738.6" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e614"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Use <flowSpan font-weight="bold">Maiús+clic</flowSpan> nunha asa para para eliminar o redondeo.</flowDiv>
+  <flowPara >Use <flowSpan font-weight="bold">Maiús+clic</flowSpan> nunha asa para para eliminar o redondeo.</flowPara>
  </flowRoot>
  <rect id="d0e621" display="none" height="1e3px" width="288" y="4756.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e621"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">«Tanxencialmente» significa nunha dirección perpendicular á dirección cara ao centro. Se «rota» unha asa no sentido contrario ás agullas do reloxo usando Maiús arredor do centro obterá unha redondez positiva; se rota no sentido das agullas do reloxo obterá unha redondez negativa. (Mire abaixo para ver exemplos de redondez negativa).</flowDiv>
+  <flowPara >«Tanxencialmente» significa nunha dirección perpendicular á dirección cara ao centro. Se «rota» unha asa no sentido contrario ás agullas do reloxo usando Maiús arredor do centro obterá unha redondez positiva; se rota no sentido das agullas do reloxo obterá unha redondez negativa. (Mire abaixo para ver exemplos de redondez negativa).</flowPara>
  </flowRoot>
  <rect id="d0e624" display="none" height="1e3px" width="288" y="4828.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e624"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Aquí ten unha comparación dun cadrado redondeado (ferramenta Rectángulo) cun polígono de 4 lados redondeado (ferramenta Estrela):</flowDiv>
+  <flowPara >Aquí ten unha comparación dun cadrado redondeado (ferramenta Rectángulo) cun polígono de 4 lados redondeado (ferramenta Estrela):</flowPara>
  </flowRoot>
  <g id="shapes-f15-gl.svgg3367" xmlns:cc="http://creativecommons.org/ns#" transform="translate(10 4864.9)">
   <path id="shapes-f15-gl.svgpath4264" sodipodi:sides="4" inkscape:flatsided="true" style="color:#000000" fill-rule="evenodd" transform="matrix(1.1746 0 0 1.1746 -.54892 -5471.6)" inkscape:rounded="0.18435333" sodipodi:r1="45.711628" sodipodi:r2="32.323002" sodipodi:arg1="0.78539816" sodipodi:arg2="1.5707963" sodipodi:type="star" d="m203.96 4729.2c-8.43 8.4-56.22 8.4-64.65 0s-8.43-56.2 0-64.6c8.43-8.5 56.22-8.5 64.65 0 8.42 8.4 8.42 56.2 0 64.6z" inkscape:randomized="0.0000000" sodipodi:cy="4696.8921" sodipodi:cx="171.63371"/>
-  <flowRoot id="shapes-f15-gl.svgflowRoot2696" style="text-anchor:middle;text-align:center" xml:space="preserve" transform="translate(.29604 29.62)" line-height="125%" font-size="10px" font-family="sans-serif" fill="#ffffff"><flowRegion id="shapes-f15-gl.svgflowRegion2698"><rect id="shapes-f15-gl.svgrect2700" height="85.863" width="82.327" y="2.3086" x="159.1" fill="#fff"/></flowRegion><flowPara id="shapes-f15-gl.svgflowPara2702">Polígono redondeado</flowPara></flowRoot>
+  <flowRoot xml:space="preserve" id="shapes-f15-gl.svgflowRoot2696" style="text-anchor:middle;text-align:center"  transform="translate(.29604 29.62)" line-height="125%" font-size="10px" font-family="sans-serif" fill="#ffffff"><flowRegion id="shapes-f15-gl.svgflowRegion2698"><rect id="shapes-f15-gl.svgrect2700" height="85.863" width="82.327" y="2.3086" x="159.1" fill="#fff"/></flowRegion><flowPara id="shapes-f15-gl.svgflowPara2702">Polígono redondeado</flowPara></flowRoot>
  </g>
  <g id="shapes-f15-gl.svgg3360" xmlns:cc="http://creativecommons.org/ns#" transform="translate(10 4864.9)">
   <rect id="shapes-f15-gl.svgrect4263" style="color:#000000" fill-rule="evenodd" rx="18.04" ry="18.04" height="87.192" width="87.192" y="1.8127" x="56.117"/>
-  <flowRoot id="shapes-f15-gl.svgflowRoot3352" style="text-anchor:middle;text-align:center" xml:space="preserve" transform="translate(-100.74 29.637)" line-height="125%" font-size="10px" font-family="sans-serif" fill="#ffffff"><flowRegion id="shapes-f15-gl.svgflowRegion3354"><rect id="shapes-f15-gl.svgrect3356" height="85.863" width="82.327" y="2.3086" x="159.1" fill="#fff"/></flowRegion><flowPara id="shapes-f15-gl.svgflowPara3358">Rectángulo redondeado</flowPara></flowRoot>
+  <flowRoot xml:space="preserve" id="shapes-f15-gl.svgflowRoot3352" style="text-anchor:middle;text-align:center"  transform="translate(-100.74 29.637)" line-height="125%" font-size="10px" font-family="sans-serif" fill="#ffffff"><flowRegion id="shapes-f15-gl.svgflowRegion3354"><rect id="shapes-f15-gl.svgrect3356" height="85.863" width="82.327" y="2.3086" x="159.1" fill="#fff"/></flowRegion><flowPara id="shapes-f15-gl.svgflowPara3358">Rectángulo redondeado</flowPara></flowRoot>
  </g>
  <rect id="d0e637" display="none" height="1e3px" width="288" y="4967.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e637"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Como pode ver, mentres un rectángulo redondeado ten segmentos de recta nos seus lados e esquinas redondeadas circulares (normalmente elípticas) un polígono ou estrela redondeado non ten ningunha liña recta; a súa curvatura varía lixeiramente desde o máximo (nas esquinas) ata o mínimo (a medio camiño entre as esquinas). Inkscape fai isto simplemente engadindo tanxentes de Bézier colineares a cada nodo da figura (pode velas se converte a figura nun camiño e o examina ca ferramenta Nodo).</flowDiv>
+  <flowPara >Como pode ver, mentres un rectángulo redondeado ten segmentos de recta nos seus lados e esquinas redondeadas circulares (normalmente elípticas) un polígono ou estrela redondeado non ten ningunha liña recta; a súa curvatura varía lixeiramente desde o máximo (nas esquinas) ata o mínimo (a medio camiño entre as esquinas). Inkscape fai isto simplemente engadindo tanxentes de Bézier colineares a cada nodo da figura (pode velas se converte a figura nun camiño e o examina ca ferramenta Nodo).</flowPara>
  </flowRoot>
  <rect id="d0e640" display="none" height="1e3px" width="288" y="5059.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e640"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">O parámetro <flowSpan font-family="sans-serif">Redondez</flowSpan>, que pode axustar na barra de Controis, é a relación entre a lonxitude destas tanxentes e a lonxitude dos lados do polígono/estrela aos que son adxacentes. Este parámetro pode ser negativo, o que fai que se inverta a dirección das tanxentes. Os valores arredor de 0,2 e 0,4 proporcionan da redondez «normal» que pode agardar; outros valores tenden a producir patróns bonitos, intricados e totalmente impredicibles. Unha estrela cun valor de redondez moi grande pode chegar máis alá das posicións das súas asas. Aquí ten uns poucos exemplos cada un cunha indicación do seu valor de redondez:</flowDiv>
+  <flowPara >O parámetro <flowSpan font-family="sans-serif">Redondez</flowSpan>, que pode axustar na barra de Controis, é a relación entre a lonxitude destas tanxentes e a lonxitude dos lados do polígono/estrela aos que son adxacentes. Este parámetro pode ser negativo, o que fai que se inverta a dirección das tanxentes. Os valores arredor de 0,2 e 0,4 proporcionan da redondez «normal» que pode agardar; outros valores tenden a producir patróns bonitos, intricados e totalmente impredicibles. Unha estrela cun valor de redondez moi grande pode chegar máis alá das posicións das súas asas. Aquí ten uns poucos exemplos cada un cunha indicación do seu valor de redondez:</flowPara>
  </flowRoot>
  <path id="shapes-f16-gl.svgpath1575" sodipodi:sides="5" inkscape:flatsided="false" stroke="#000" stroke-width="3.375" fill="none" transform="translate(10 5180.1) matrix(.30797 -.032335 -.032335 -.30797 -34.052 272.34)" inkscape:rounded="5.1300000" sodipodi:r1="27.797562" sodipodi:r2="27.797562" sodipodi:arg1="0.22082877" sodipodi:arg2="0.84914730" sodipodi:type="star" d="m281.19 558.07c-19.31 85.99 57.4-43.45-8.76 14.78-66.16 58.22 71.98-1.41-15.77 6.81-87.75 8.21 59.05 41.17-16.77-3.77-75.81-44.93 23.58 68.02-11.35-12.89-34.92-80.92-20.9 68.88-1.6-17.11 19.31-85.99-57.4 43.44 8.76-14.78 66.17-58.22-71.97 1.41 15.78-6.81 87.74-8.21-59.06-41.17 16.76 3.77 75.82 44.93-23.58-68.02 11.35 12.89 34.93 80.92 20.9-68.88 1.6 17.11z" stroke-opacity=".13115" inkscape:randomized="0.0000000" sodipodi:cy="551.97913" sodipodi:cx="254.06618"/>
  <path id="shapes-f16-gl.svgpath1556" sodipodi:sides="18" inkscape:flatsided="false" stroke="#000" stroke-width=".03125" fill="none" style="color:#000000" transform="translate(10 5180.1) matrix(1.2522 0 0 -1.2522 -268.86 649.33)" inkscape:rounded="0.37000000" sodipodi:r1="56.586357" sodipodi:r2="2.4662609" sodipodi:arg1="1.1708920" sodipodi:arg2="-2.6860230" sodipodi:type="star" d="m399.24 511.26c6.01-20.78-3.16-58.04-24.24-53.2-20.86 4.78-7.53 74.88 5.09 57.6 12.75-17.48 16.88-55.63-4.59-58.29-21.23-2.64-32.68 67.79-14.92 55.86 17.97-12.06 34.89-46.49 15.63-56.34-19.05-9.74-53.89 52.52-33.12 47.39 21-5.18 48.68-31.75 33.95-47.6-14.57-15.67-68.61 30.93-47.33 33.21 21.51 2.31 56.61-13.19 48.18-33.12-8.33-19.7-75.04 5.6-55.84 15.02 19.43 9.53 57.71 6.97 56.61-14.64-1.08-21.37-72.43-20.41-57.6-4.99 14.99 15.6 51.84 26.29 58.2 5.61 6.28-20.45-61.09-43.96-52.43-24.39 8.76 19.78 39.73 42.43 52.77 25.17 12.91-17.07-42.36-62.2-40.92-40.85 1.46 21.58 22.82 53.46 40.98 41.71 17.96-11.63-18.54-72.94-24.48-52.39-6.01 20.78 3.16 58.04 24.24 53.21 20.86-4.78 7.53-74.88-5.09-57.6-12.75 17.47-16.88 55.62 4.59 58.29 21.23 2.64 32.68-67.79 14.92-55.87-17.97 12.06-34.89 46.5-15.63 56.35 19.05 9.74 53.89-52.53 33.12-47.4-21 5.19-48.68 31.76-33.95 47.6 14.56 15.67 68.61-30.92 47.33-33.2-21.51-2.31-56.61 13.19-48.18 33.11 8.33 19.71 75.04-5.59 55.84-15.01-19.43-9.53-57.71-6.97-56.61 14.64 1.08 21.36 72.43 20.41 57.6 4.98-14.99-15.59-51.84-26.28-58.2-5.6-6.28 20.45 61.09 43.95 52.43 24.39-8.76-19.78-39.73-42.43-52.77-25.17-12.91 17.06 42.36 62.19 40.92 40.85-1.46-21.59-22.82-53.46-40.98-41.71-17.96 11.63 18.54 72.94 24.48 52.38z" inkscape:randomized="0.0000000" sodipodi:cy="459.14322" sodipodi:cx="377.20990"/>
@@ -812,91 +812,91 @@ large numbers (say, over 200) if your computer is slow.
  <path id="shapes-f16-gl.svgpath4053" sodipodi:sides="6" fill-opacity=".75" inkscape:flatsided="false" stroke="#acacac" stroke-width="1pt" fill="#fcfcfc" fill-rule="evenodd" transform="translate(10 5180.1) matrix(.47781 .073715 .073715 -.47781 -114.92 309.1)" inkscape:rounded="3.0000000" sodipodi:r1="27.681587" sodipodi:r2="11.966143" sodipodi:arg1="0.20131714" sodipodi:arg2="-3.0483195" sodipodi:type="star" d="m299.45 611.76c-49.54-107.97 39.73-95.58-39.03-6.65-68.24 77.04-38.87 111.31 20.68 27.37 68.74-96.89 102.64-13.38-13.76-37.13-100.84-20.57-115.83 21.99-13.36 31.6 118.28 11.08 62.91 82.19 25.27-30.49-32.6-97.61-76.96-89.31-34.04 4.23 49.54 107.97-39.73 95.58 39.04 6.65 68.23-77.05 38.87-111.31-20.69-27.37-68.73 96.89-102.64 13.38 13.76 37.13 100.85 20.57 115.84-21.99 13.37-31.6-118.28-11.08-62.91-82.19-25.28 30.48 32.6 97.62 76.96 89.32 34.04-4.22z" inkscape:randomized="0.0000000" sodipodi:cy="606.22424" sodipodi:cx="272.33234"/>
  <path id="shapes-f16-gl.svgpath1545" sodipodi:sides="3" inkscape:flatsided="false" style="color:#000000" fill-rule="evenodd" transform="translate(10 5180.1) matrix(.27028 -.080435 -.080435 -.27028 39.032 168.46)" inkscape:rounded="-3.0000000" sodipodi:r1="39.614254" sodipodi:r2="1.0779980" sodipodi:arg1="2.3198469" sodipodi:arg2="3.3670445" sodipodi:type="star" d="m370.53 449.24c85.87 79.85 52.13-143.54 25.92-29.25s101.5-72.07-10.59-37.63c-112.08 34.45 98.25 116.93 12.37 37.08-85.87-79.85 11.67 123.94 37.88 9.64 26.22-114.29-150.38 26.62-38.29-7.82 112.08-34.45-113.17-51.87-27.29 27.98z" inkscape:randomized="0.0000000" sodipodi:cy="420.22922" sodipodi:cx="397.50070"/>
  <path id="shapes-f16-gl.svgpath1591" sodipodi:sides="3" fill-opacity=".75" inkscape:flatsided="false" stroke="#000" stroke-width=".57521" fill="#8eff00" style="color:#000000" fill-rule="evenodd" transform="translate(10 5180.1) matrix(1.6275 0 0 1.6275 -153.18 -574.14)" inkscape:rounded="0.25000000" sodipodi:r1="17.850517" sodipodi:r2="2.4989247" sodipodi:arg1="0.51914611" sodipodi:arg2="1.5663437" sodipodi:type="star" d="m278.42 385.92c-2.08 3.64-11.3-6.37-15.49-6.35-4.18 0.01-13.32 10.11-15.43 6.49-2.11-3.61 11.18-6.6 13.25-10.23 2.08-3.64-2.09-16.6 2.09-16.61 4.19-0.02 0.13 12.97 2.24 16.59 2.11 3.61 15.42 6.48 13.34 10.11z" inkscape:randomized="0.0000000" sodipodi:cy="377.06650" sodipodi:cx="262.92249"/>
- <text id="shapes-f16-gl.svgtext2547" line-height="120.00000%" xml:space="preserve" transform="translate(10 5180.1)" sodipodi:linespacing="120.00000%" font-size="3.979" y="72.533112" x="269.70953" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan2548" sodipodi:role="line" x="269.70953" y="72.533112"/><tspan id="shapes-f16-gl.svgtspan2550"/><tspan id="shapes-f16-gl.svgtspan2552" sodipodi:role="line" x="269.70953" y="77.307917">0.25</tspan></text>
- <text id="shapes-f16-gl.svgtext2856" line-height="120.00000%" xml:space="preserve" transform="translate(10 5180.1)" sodipodi:linespacing="120.00000%" font-size="3.979" y="37.697109" x="270.21283" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan2555" sodipodi:role="line" x="270.21283" y="37.697109"/><tspan id="shapes-f16-gl.svgtspan2557"/><tspan id="shapes-f16-gl.svgtspan2559" sodipodi:role="line" x="270.21283" y="42.471914">0.25</tspan></text>
- <text id="shapes-f16-gl.svgtext2561" line-height="120.00000%" xml:space="preserve" transform="translate(10 5180.1)" sodipodi:linespacing="120.00000%" font-size="3.979" y="114.07111" x="270.13705" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan2562" sodipodi:role="line" x="270.13705" y="114.07111"/><tspan id="shapes-f16-gl.svgtspan2564"/><tspan id="shapes-f16-gl.svgtspan2566" sodipodi:role="line" x="270.13705" y="118.84592">0.25</tspan></text>
- <text id="shapes-f16-gl.svgtext2568" line-height="120.00000%" xml:space="preserve" transform="translate(10 5180.1) matrix(0.5 .86602 -.86602 0.5 0 0)" sodipodi:linespacing="120.00000%" font-size="3.979" y="-106.66351" x="214.9263" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan2569" sodipodi:role="line" x="214.92630" y="-106.66351"/><tspan id="shapes-f16-gl.svgtspan2571"/><tspan id="shapes-f16-gl.svgtspan2573" sodipodi:role="line" x="214.92630" y="-101.88870">0.37</tspan></text>
+ <text id="shapes-f16-gl.svgtext2547" line-height="120.00000%"  transform="translate(10 5180.1)" sodipodi:linespacing="120.00000%" font-size="3.979" y="72.533112" x="269.70953" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan2548" sodipodi:role="line" x="269.70953" y="72.533112"/><tspan id="shapes-f16-gl.svgtspan2550"/><tspan id="shapes-f16-gl.svgtspan2552" sodipodi:role="line" x="269.70953" y="77.307917">0.25</tspan></text>
+ <text id="shapes-f16-gl.svgtext2856" line-height="120.00000%"  transform="translate(10 5180.1)" sodipodi:linespacing="120.00000%" font-size="3.979" y="37.697109" x="270.21283" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan2555" sodipodi:role="line" x="270.21283" y="37.697109"/><tspan id="shapes-f16-gl.svgtspan2557"/><tspan id="shapes-f16-gl.svgtspan2559" sodipodi:role="line" x="270.21283" y="42.471914">0.25</tspan></text>
+ <text id="shapes-f16-gl.svgtext2561" line-height="120.00000%"  transform="translate(10 5180.1)" sodipodi:linespacing="120.00000%" font-size="3.979" y="114.07111" x="270.13705" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan2562" sodipodi:role="line" x="270.13705" y="114.07111"/><tspan id="shapes-f16-gl.svgtspan2564"/><tspan id="shapes-f16-gl.svgtspan2566" sodipodi:role="line" x="270.13705" y="118.84592">0.25</tspan></text>
+ <text id="shapes-f16-gl.svgtext2568" line-height="120.00000%"  transform="translate(10 5180.1) matrix(0.5 .86602 -.86602 0.5 0 0)" sodipodi:linespacing="120.00000%" font-size="3.979" y="-106.66351" x="214.9263" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan2569" sodipodi:role="line" x="214.92630" y="-106.66351"/><tspan id="shapes-f16-gl.svgtspan2571"/><tspan id="shapes-f16-gl.svgtspan2573" sodipodi:role="line" x="214.92630" y="-101.88870">0.37</tspan></text>
  <path id="shapes-f16-gl.svgpath1554" sodipodi:sides="9" fill-opacity=".75" inkscape:flatsided="false" stroke="#000" stroke-width=".375" fill="#cecece" fill-rule="evenodd" transform="translate(10 5180.1) matrix(.96459 .067199 .067199 -.96459 -356.57 688.7)" inkscape:rounded="0.43000000" sodipodi:r1="23.086590" sodipodi:r2="14.298160" sodipodi:arg1="1.1382904" sodipodi:arg2="1.4814137" sodipodi:type="star" d="m461.58 641.84c-4.19 1.97-3.79-7.1-8.4-6.72-4.67 0.39-2.82 9.24-7.34 8.04-4.47-1.19 1.66-7.88-2.12-10.55-3.82-2.7-8.09 5.27-10.78 1.44-2.66-3.78 6.34-4.97 5.16-9.44-1.2-4.52-9.59-1.17-9.19-5.83 0.39-4.61 8.05 0.27 10.02-3.91 1.99-4.24-6.59-7.06-3.29-10.38 3.26-3.27 5.99 5.38 10.19 3.45 4.25-1.97-0.51-9.65 4.15-10.06 4.6-0.42 1.13 7.97 5.59 9.18 4.52 1.23 5.81-7.71 9.64-5.04 3.8 2.65-4.25 6.84-1.62 10.64 2.67 3.84 9.41-2.19 10.63 2.33 1.21 4.47-7.65 2.5-8.07 7.11-0.43 4.66 8.6 4.37 6.64 8.62-1.95 4.19-7.48-3.01-10.76 0.25-3.32 3.3 3.78 8.89-0.45 10.87z" inkscape:randomized="0.0000000" sodipodi:cy="620.88135" sodipodi:cx="451.89960"/>
- <text id="shapes-f16-gl.svgtext2575" line-height="120.00000%" xml:space="preserve" transform="translate(10 5180.1)" sodipodi:linespacing="120.00000%" font-size="3.979" y="117.60011" x="116.22874" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan2576" sodipodi:role="line" x="116.22874" y="117.60011"/><tspan id="shapes-f16-gl.svgtspan2578"/><tspan id="shapes-f16-gl.svgtspan2580" sodipodi:role="line" x="116.22874" y="122.37492">0.43</tspan></text>
- <text id="shapes-f16-gl.svgtext2582" line-height="120.00000%" xml:space="preserve" transform="translate(10 5180.1) matrix(.38491 .92296 -.92296 .38491 0 0)" sodipodi:linespacing="120.00000%" font-size="3.979" y="-39.030281" x="32.583221" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan2583" sodipodi:role="line" x="32.583221" y="-39.030281"/><tspan id="shapes-f16-gl.svgtspan2585"/><tspan id="shapes-f16-gl.svgtspan2587" sodipodi:role="line" x="32.583221" y="-34.255495">3.00</tspan></text>
- <text id="shapes-f16-gl.svgtext2589" line-height="120.00000%" xml:space="preserve" transform="translate(10 5180.1) matrix(1 -.00059743 .00059743 1 0 0)" sodipodi:linespacing="120.00000%" font-size="3.979" y="38.639725" x="107.11456" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan2590" sodipodi:role="line" x="107.11456" y="43.414501">-</tspan><tspan id="shapes-f16-gl.svgtspan2592"/><tspan id="shapes-f16-gl.svgtspan2594">3.00</tspan><tspan id="shapes-f16-gl.svgtspan2596" sodipodi:role="line" x="107.11456" y="43.414501"/></text>
+ <text id="shapes-f16-gl.svgtext2575" line-height="120.00000%"  transform="translate(10 5180.1)" sodipodi:linespacing="120.00000%" font-size="3.979" y="117.60011" x="116.22874" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan2576" sodipodi:role="line" x="116.22874" y="117.60011"/><tspan id="shapes-f16-gl.svgtspan2578"/><tspan id="shapes-f16-gl.svgtspan2580" sodipodi:role="line" x="116.22874" y="122.37492">0.43</tspan></text>
+ <text id="shapes-f16-gl.svgtext2582" line-height="120.00000%"  transform="translate(10 5180.1) matrix(.38491 .92296 -.92296 .38491 0 0)" sodipodi:linespacing="120.00000%" font-size="3.979" y="-39.030281" x="32.583221" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan2583" sodipodi:role="line" x="32.583221" y="-39.030281"/><tspan id="shapes-f16-gl.svgtspan2585"/><tspan id="shapes-f16-gl.svgtspan2587" sodipodi:role="line" x="32.583221" y="-34.255495">3.00</tspan></text>
+ <text id="shapes-f16-gl.svgtext2589" line-height="120.00000%"  transform="translate(10 5180.1) matrix(1 -.00059743 .00059743 1 0 0)" sodipodi:linespacing="120.00000%" font-size="3.979" y="38.639725" x="107.11456" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan2590" sodipodi:role="line" x="107.11456" y="43.414501">-</tspan><tspan id="shapes-f16-gl.svgtspan2592"/><tspan id="shapes-f16-gl.svgtspan2594">3.00</tspan><tspan id="shapes-f16-gl.svgtspan2596" sodipodi:role="line" x="107.11456" y="43.414501"/></text>
  <path id="shapes-f16-gl.svgpath896" sodipodi:sides="3" inkscape:flatsided="false" style="color:#000000" fill-rule="evenodd" transform="translate(10 5180.1) matrix(.12086 0 0 -.12086 214.1 80.908)" inkscape:rounded="0.41000000" sodipodi:r1="120.20276" sodipodi:r2="60.101379" sodipodi:arg1="0.52807445" sodipodi:arg2="1.5752720" sodipodi:type="star" d="m328.28 553.07c-21.5 36.87-61.42-0.28-104.1-0.47s-82.92 36.59-104.09-0.46c-21.178-37.06 30.94-53.05 52.45-89.92 21.5-36.87 9.77-90.11 52.45-89.92s30.47 53.33 51.65 90.38c21.17 37.06 73.15 53.52 51.64 90.39z" inkscape:randomized="0.0000000" sodipodi:cy="492.50204" sodipodi:cx="224.45302"/>
- <text id="shapes-f16-gl.svgtext2598" line-height="120.00000%" xml:space="preserve" transform="translate(10 5180.1)" sodipodi:linespacing="120.00000%" font-size="3.979" y="17.90111" x="236.78233" font-family="sans-serif" sodipodi:insensitive="true" fill="#ffffff"><tspan id="shapes-f16-gl.svgtspan2599" sodipodi:role="line" x="236.78233" y="17.901110"/><tspan id="shapes-f16-gl.svgtspan2601"/><tspan id="shapes-f16-gl.svgtspan2603" sodipodi:role="line" x="236.78233" y="22.675915">0.41</tspan></text>
- <text id="shapes-f16-gl.svgtext2909" line-height="120.00000%" xml:space="preserve" transform="translate(10 5180.1)" sodipodi:linespacing="120.00000%" font-size="3.979" y="95.56311" x="21.764177" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan2606" sodipodi:role="line" x="21.764177" y="100.33792">5.43</tspan><tspan id="shapes-f16-gl.svgtspan2608"/><tspan id="shapes-f16-gl.svgtspan2610" sodipodi:role="line" x="21.764177" y="100.33792"/></text>
- <text id="shapes-f16-gl.svgtext2613" line-height="120.00000%" xml:space="preserve" transform="translate(10 5180.1)" sodipodi:linespacing="120.00000%" font-size="3.979" y="89.486107" x="63.424889" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan2613" sodipodi:role="line" x="63.424889" y="89.486107"/><tspan id="shapes-f16-gl.svgtspan2615"/><tspan id="shapes-f16-gl.svgtspan2617" sodipodi:role="line" x="63.424889" y="94.260912">1.85</tspan></text>
- <text id="shapes-f16-gl.svgtext3240" line-height="120.00000%" xml:space="preserve" transform="translate(10 5180.1)" sodipodi:linespacing="120.00000%" font-size="3.979" y="141.7691" x="62.71822" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan3241" sodipodi:role="line" x="62.718220" y="141.76910"/><tspan id="shapes-f16-gl.svgtspan3243"/><tspan id="shapes-f16-gl.svgtspan3245" sodipodi:role="line" x="62.718220" y="146.54391">0.21</tspan></text>
- <text id="shapes-f16-gl.svgtext3868" line-height="120.00000%" xml:space="preserve" transform="translate(10 5180.1) matrix(1 -.00059743 .00059743 1 0 0)" sodipodi:linespacing="120.00000%" font-size="3.979" y="66.356537" x="106.78857" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan3869" sodipodi:role="line" x="106.78857" y="71.131313">-</tspan><tspan id="shapes-f16-gl.svgtspan3871"/><tspan id="shapes-f16-gl.svgtspan3873">3.00</tspan><tspan id="shapes-f16-gl.svgtspan3875" sodipodi:role="line" x="106.78857" y="71.131313"/></text>
+ <text id="shapes-f16-gl.svgtext2598" line-height="120.00000%"  transform="translate(10 5180.1)" sodipodi:linespacing="120.00000%" font-size="3.979" y="17.90111" x="236.78233" font-family="sans-serif" sodipodi:insensitive="true" fill="#ffffff"><tspan id="shapes-f16-gl.svgtspan2599" sodipodi:role="line" x="236.78233" y="17.901110"/><tspan id="shapes-f16-gl.svgtspan2601"/><tspan id="shapes-f16-gl.svgtspan2603" sodipodi:role="line" x="236.78233" y="22.675915">0.41</tspan></text>
+ <text id="shapes-f16-gl.svgtext2909" line-height="120.00000%"  transform="translate(10 5180.1)" sodipodi:linespacing="120.00000%" font-size="3.979" y="95.56311" x="21.764177" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan2606" sodipodi:role="line" x="21.764177" y="100.33792">5.43</tspan><tspan id="shapes-f16-gl.svgtspan2608"/><tspan id="shapes-f16-gl.svgtspan2610" sodipodi:role="line" x="21.764177" y="100.33792"/></text>
+ <text id="shapes-f16-gl.svgtext2613" line-height="120.00000%"  transform="translate(10 5180.1)" sodipodi:linespacing="120.00000%" font-size="3.979" y="89.486107" x="63.424889" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan2613" sodipodi:role="line" x="63.424889" y="89.486107"/><tspan id="shapes-f16-gl.svgtspan2615"/><tspan id="shapes-f16-gl.svgtspan2617" sodipodi:role="line" x="63.424889" y="94.260912">1.85</tspan></text>
+ <text id="shapes-f16-gl.svgtext3240" line-height="120.00000%"  transform="translate(10 5180.1)" sodipodi:linespacing="120.00000%" font-size="3.979" y="141.7691" x="62.71822" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan3241" sodipodi:role="line" x="62.718220" y="141.76910"/><tspan id="shapes-f16-gl.svgtspan3243"/><tspan id="shapes-f16-gl.svgtspan3245" sodipodi:role="line" x="62.718220" y="146.54391">0.21</tspan></text>
+ <text id="shapes-f16-gl.svgtext3868" line-height="120.00000%"  transform="translate(10 5180.1) matrix(1 -.00059743 .00059743 1 0 0)" sodipodi:linespacing="120.00000%" font-size="3.979" y="66.356537" x="106.78857" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan3869" sodipodi:role="line" x="106.78857" y="71.131313">-</tspan><tspan id="shapes-f16-gl.svgtspan3871"/><tspan id="shapes-f16-gl.svgtspan3873">3.00</tspan><tspan id="shapes-f16-gl.svgtspan3875" sodipodi:role="line" x="106.78857" y="71.131313"/></text>
  <path id="shapes-f16-gl.svgpath4498" sodipodi:sides="9" fill-opacity=".75" inkscape:flatsided="false" stroke="#000" stroke-width=".71102" fill="#cecece" style="color:#000000" fill-rule="evenodd" transform="translate(10 5180.1) matrix(.50303 .083862 -.083862 .50303 540.58 -2474.8)" inkscape:rounded="-0.43000000" sodipodi:r1="46.149918" sodipodi:r2="18.172943" sodipodi:arg1="0.93231400" sodipodi:arg2="1.2813799" sodipodi:type="star" d="m132.89 5179.5c10.26-7.6-34.571-16-22.32-19.6 12.25-3.7-20.697 27.9-7.94 28.6 12.76 0.8-16.198-34.4-4.468-29.4 11.728 5.1-33.782 8.1-24.496 16.9 9.285 8.8 9.746-36.8 15.467-25.4s-31.059-15.5-29.594-2.8c1.466 12.7 31.136-22 28.169-9.6-2.966 12.5-13.803-31.8-20.843-21.2-7.041 10.7 37.955 3.3 27.689 10.9-10.265 7.6 9.916-33.3-2.34-29.7-12.252 3.7 27.016 26.9 14.256 26.1-12.763-0.7 28.99-19.1 17.26-24.2s3.43 38-5.85 29.2c-9.29-8.8 34.5 3.9 28.78-7.5s-21.76 31.3-23.22 18.6c-1.47-12.7 23.87 25.2 26.84 12.8 2.96-12.5-36.77 9.9-29.73-0.7 7.04-10.7 2.07 34.6 12.34 27z" inkscape:randomized="0.0000000" sodipodi:cy="5142.4639" sodipodi:cx="105.38494"/>
- <text id="shapes-f16-gl.svgtext4499" line-height="120.00000%" xml:space="preserve" transform="translate(10 5180.1)" sodipodi:linespacing="120.00000%" font-size="3.979" y="122.21311" x="156.34573" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan4500" sodipodi:role="line" x="156.34573" y="126.98792">-0.43</tspan><tspan id="shapes-f16-gl.svgtspan4502"/><tspan id="shapes-f16-gl.svgtspan4504" sodipodi:role="line" x="156.34573" y="126.98792"/></text>
+ <text id="shapes-f16-gl.svgtext4499" line-height="120.00000%"  transform="translate(10 5180.1)" sodipodi:linespacing="120.00000%" font-size="3.979" y="122.21311" x="156.34573" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan4500" sodipodi:role="line" x="156.34573" y="126.98792">-0.43</tspan><tspan id="shapes-f16-gl.svgtspan4502"/><tspan id="shapes-f16-gl.svgtspan4504" sodipodi:role="line" x="156.34573" y="126.98792"/></text>
  <path id="shapes-f16-gl.svgpath5127" sodipodi:sides="5" fill-opacity=".75" inkscape:flatsided="false" stroke="#000" stroke-width=".71102" fill="#00edff" style="color:#000000" fill-rule="evenodd" transform="translate(10 5180.1) matrix(.30673 -.042679 .042679 .30673 -195.03 -1440.1)" inkscape:rounded="-8.9362223" sodipodi:r1="17.613136" sodipodi:r2="8.1117020" sodipodi:arg1="-2.7000003" sodipodi:arg2="-2.0716818" sodipodi:type="star" d="m-6.3694 5101.1c-45.965 97.2 106.37-51.3 12.028 0.4-94.339 51.6 112.81 3.3 6.1344-10.4-106.68-13.6 81.595 85.3 3.324 11.6-78.27-73.8 31.71 108.3 11.744 2.6s-55.938 104-9.973 6.8c45.965-97.3-93.215 63.6 1.124 11.9 94.338-51.6-116.17-21-9.4888-7.4 106.68 13.7-89.319-69-11.049 4.8 78.271 73.8-15.857-117 4.1092-11.3s38.013-106.3-7.9528-9z" inkscape:randomized="0.0000000" sodipodi:cy="5108.5903" sodipodi:cx="9.5541286"/>
- <text id="shapes-f16-gl.svgtext6108" line-height="120.00000%" xml:space="preserve" transform="translate(10 5180.1)" sodipodi:linespacing="120.00000%" font-size="3.979" y="143.25011" x="21.20429" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan5129" sodipodi:role="line" x="21.204290" y="148.02491">-8.94</tspan><tspan id="shapes-f16-gl.svgtspan5131"/><tspan id="shapes-f16-gl.svgtspan5133" sodipodi:role="line" x="21.204290" y="148.02491"/></text>
+ <text id="shapes-f16-gl.svgtext6108" line-height="120.00000%"  transform="translate(10 5180.1)" sodipodi:linespacing="120.00000%" font-size="3.979" y="143.25011" x="21.20429" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f16-gl.svgtspan5129" sodipodi:role="line" x="21.204290" y="148.02491">-8.94</tspan><tspan id="shapes-f16-gl.svgtspan5131"/><tspan id="shapes-f16-gl.svgtspan5133" sodipodi:role="line" x="21.204290" y="148.02491"/></text>
  <path id="shapes-f16-gl.svgpath5833" sodipodi:sides="4" inkscape:flatsided="true" style="color:#000000" fill-rule="evenodd" transform="translate(10 5180.1) matrix(.24131 0 0 .24131 59.66 -1049.7)" inkscape:rounded="0.39000000" sodipodi:r1="45.711628" sodipodi:r2="32.323002" sodipodi:arg1="0.78539816" sodipodi:arg2="1.5707963" sodipodi:type="star" d="m203.96 4729.2c-17.83 17.8-46.82 17.8-64.65 0s-17.83-46.8 0-64.6c17.83-17.9 46.82-17.9 64.65 0 17.82 17.8 17.82 46.8 0 64.6z" inkscape:randomized="0.0000000" sodipodi:cy="4696.8921" sodipodi:cx="171.63371"/>
- <text id="shapes-f16-gl.svgtext5837" line-height="120.00000%" xml:space="preserve" transform="translate(10 5180.1)" sodipodi:linespacing="120.00000%" font-size="3.979" y="80.288109" x="96.318428" font-family="sans-serif" sodipodi:insensitive="true" fill="#ffffff"><tspan id="shapes-f16-gl.svgtspan5838" sodipodi:role="line" x="96.318428" y="80.288109"/><tspan id="shapes-f16-gl.svgtspan5840"/><tspan id="shapes-f16-gl.svgtspan5842" sodipodi:role="line" x="96.318428" y="85.062914">0.39</tspan></text>
+ <text id="shapes-f16-gl.svgtext5837" line-height="120.00000%"  transform="translate(10 5180.1)" sodipodi:linespacing="120.00000%" font-size="3.979" y="80.288109" x="96.318428" font-family="sans-serif" sodipodi:insensitive="true" fill="#ffffff"><tspan id="shapes-f16-gl.svgtspan5838" sodipodi:role="line" x="96.318428" y="80.288109"/><tspan id="shapes-f16-gl.svgtspan5840"/><tspan id="shapes-f16-gl.svgtspan5842" sodipodi:role="line" x="96.318428" y="85.062914">0.39</tspan></text>
  <rect id="d0e656" display="none" height="1e3px" width="288" y="5342.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e656"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">If you want the tips of a star to be sharp but the concaves smooth or vice versa, this
+  <flowPara >If you want the tips of a star to be sharp but the concaves smooth or vice versa, this
 is easy to do by creating an <flowSpan font-style="italic">offset</flowSpan> (<flowSpan font-weight="bold">Ctrl+J</flowSpan>)
 from the star:
-</flowDiv>
+</flowPara>
  </flowRoot>
  <path id="shapes-f17-gl.svgpath2694" sodipodi:type="inkscape:offset" d="m62.5 24.969c-0.50562 1.2622-0.99255 2.2942-1.5312 3.7812-0.96476 2.6631-1.9459 5.4939-3.2812 8.0312-1.3353 2.5374-2.9963 5.2707-6.625 6.2812-3.813 1.062-6.832-0.502-9.532-2.062-2.699-1.56-5.288-3.546-7.719-5.344-1.182-0.875-1.987-1.272-3.031-1.968 0.64117 0.8241 0.95878 1.3746 1.7188 2.2812 1.9008 2.2675 4.002 4.6899 5.6875 7.25 1.6854 2.5601 3.4706 5.4524 2.4688 9.3438-0.98604 3.8299-3.8641 5.6611-6.5625 7.2188-2.6984 1.5576-5.6995 2.7948-8.4688 4-1.3716 0.59692-2.1439 1.0922-3.2812 1.6562 1.0486-0.14499 1.6895-0.13443 2.875-0.34375 2.9122-0.5142 6.0662-1.1312 9.125-1.3125s6.4747-0.28202 9.3438 2.5312c2.8239 2.769 2.9707 6.1663 2.9688 9.2812-0.002 3.115-0.43846 6.3445-0.78125 9.3438-0.16486 1.4425-0.10553 2.3235-0.1875 3.5625 0.38791-0.95721 0.69431-1.4967 1.0938-2.5938 1.0114-2.7779 2.0645-5.7926 3.4375-8.5312s3.0053-5.7348 6.875-6.8125c3.812-1.0616 6.8319 0.50266 9.5312 2.0625 2.6994 1.5598 5.2884 3.5458 7.7188 5.3438 1.1826 0.87488 1.9876 1.2724 3.0312 1.9688-0.64117-0.8241-0.95878-1.3746-1.7188-2.2812-1.9008-2.2675-4.002-4.6899-5.6875-7.25-1.686-2.56-3.471-5.452-2.469-9.344 0.98604-3.8299 3.8641-5.6611 6.5625-7.2188 2.6984-1.5576 5.6995-2.7948 8.4688-4 1.3716-0.59692 2.1439-1.0922 3.2812-1.6562-1.0486 0.14499-1.6895 0.13443-2.875 0.34375-2.9122 0.5142-6.0662 1.1312-9.125 1.3125s-6.4747 0.28202-9.3438-2.5312c-2.8239-2.769-2.9707-6.1663-2.9688-9.2812 0.002-3.115 0.43846-6.3445 0.78125-9.3438 0.172-1.507 0.139-2.44 0.219-3.719z" fill-rule="evenodd" xlink:href="#shapes-f17-gl.svgpath2693" inkscape:original="M 63.34375 16.28125 C 57.845938 17.170119 55.922201 37.128396 49.875 38.8125 C 43.139438 40.688307 29.350635 22.780244 24.25 27.5625 C 19.365349 32.142254 38.044466 44.984396 36.375 51.46875 C 34.631716 58.239822 12.252512 61.222842 13.84375 68.03125 C 15.367608 74.551359 35.812868 64.780773 40.59375 69.46875 C 45.586028 74.364015 36.964377 95.223849 43.65625 97.25 C 50.064759 99.190355 51.830902 76.608877 58.28125 74.8125 C 65.016812 72.936693 78.805615 90.844756 83.90625 86.0625 C 88.790901 81.482746 70.111784 68.640604 71.78125 62.15625 C 73.524534 55.385178 95.903738 52.402158 94.3125 45.59375 C 92.788642 39.073641 72.343382 48.844227 67.5625 44.15625 C 62.570222 39.260985 71.191873 18.401151 64.5 16.375 C 64.099468 16.253728 63.710271 16.221992 63.34375 16.28125 z " transform="translate(10 5387.6) matrix(1.3205 0 0 1.3205 80.682 -18) translate(-10 -5387.6)" stroke="#000" fill-opacity=".75" inkscape:href="#shapes-f17-gl.svgpath2693" inkscape:radius="-4.4234619" xmlns:cc="http://creativecommons.org/ns#" stroke-width=".47330" fill="#ffb800"/>
  <path id="shapes-f17-gl.svgpath2696" style="color:#000000" sodipodi:type="inkscape:offset" d="m64.719 6.375c-0.947-0.0763-1.964-0.0375-2.969 0.125-7.0587 1.1412-9.2371 5.8951-10.781 8.875-1.5441 2.9799-2.5128 5.8613-3.4688 8.5-0.46102 1.2726-0.80157 1.9503-1.2188 3-1.2612-0.87541-2.3722-1.592-3.9375-2.75-2.5373-1.8771-5.1596-3.9184-8.7188-5.5625-1.7796-0.82203-3.8867-1.6254-6.7812-1.7188-2.8945-0.09337-6.7971 1.0518-9.375 3.4688-2.6051 2.4424-4.0912 6.7317-3.9375 9.8125 0.15371 3.0808 1.1188 5.1305 2.0312 6.8438 1.8249 3.4265 3.9573 5.8564 5.9375 8.2188 1.1531 1.3756 1.8525 2.305 2.75 3.4375-1.3875 0.65445-2.5587 1.2231-4.3438 2-2.8914 1.2584-5.9858 2.5201-9.1875 4.7812-1.6009 1.1306-3.3485 2.5395-4.875 5s-2.4598 6.4368-1.6562 9.875c0.81236 3.4758 3.7848 6.9051 6.5312 8.3125 2.7465 1.4074 4.9976 1.591 6.9375 1.6562 3.8798 0.13042 7.0287-0.49558 10.062-1.0312 1.7646-0.31156 2.9166-0.44456 4.3438-0.65625-0.12795 1.525-0.2172 2.8224-0.4375 4.75-0.3579 3.1315-0.79258 6.4403-0.4375 10.344 0.17754 1.9517 0.50748 4.134 1.875 6.6875s4.3403 5.3833 7.7188 6.4062c3.4154 1.0341 7.8766 0.1735 10.469-1.5 2.5921-1.6735 3.8792-3.5406 4.9062-5.1875 2.0541-3.2938 3.0713-6.356 4.125-9.25 0.60906-1.6728 1.0658-2.7263 1.5938-4.0625 1.2612 0.87541 2.3722 1.592 3.9375 2.75 2.5373 1.8771 5.1596 3.9184 8.7188 5.5625 1.7796 0.82203 3.8867 1.6254 6.7812 1.7188 2.8945 0.09337 6.7971-1.0518 9.375-3.4688 2.6051-2.4424 4.0912-6.7317 3.9375-9.8125-0.15371-3.0808-1.1188-5.1305-2.0312-6.8438-1.8249-3.4265-3.9573-5.8564-5.9375-8.2188-1.1531-1.3756-1.8525-2.305-2.75-3.4375 1.3875-0.65445 2.5587-1.2231 4.3438-2 2.8914-1.2584 5.9858-2.5201 9.1875-4.7812 1.6009-1.1306 3.3485-2.5395 4.875-5s2.4598-6.4368 1.6562-9.875c-0.81236-3.4758-3.7848-6.9051-6.5312-8.3125-2.747-1.408-4.998-1.592-6.938-1.657-3.8798-0.13042-7.0287 0.49558-10.062 1.0312-1.7646 0.31156-2.9166 0.44456-4.3438 0.65625 0.12795-1.525 0.2172-2.8224 0.4375-4.75 0.3579-3.1315 0.79258-6.4403 0.4375-10.344-0.17754-1.9517-0.50748-4.134-1.875-6.6875-1.369-2.553-4.342-5.3831-7.72-6.406-0.823-0.2493-1.71-0.4237-2.656-0.5z" fill-rule="evenodd" xlink:href="#shapes-f17-gl.svgpath2693" inkscape:original="M 63.34375 16.28125 C 57.845938 17.170119 55.922201 37.128396 49.875 38.8125 C 43.139438 40.688307 29.350635 22.780244 24.25 27.5625 C 19.365349 32.142254 38.044466 44.984396 36.375 51.46875 C 34.631716 58.239822 12.252512 61.222842 13.84375 68.03125 C 15.367608 74.551359 35.812868 64.780773 40.59375 69.46875 C 45.586028 74.364015 36.964377 95.223849 43.65625 97.25 C 50.064759 99.190355 51.830902 76.608877 58.28125 74.8125 C 65.016812 72.936693 78.805615 90.844756 83.90625 86.0625 C 88.790901 81.482746 70.111784 68.640604 71.78125 62.15625 C 73.524534 55.385178 95.903738 52.402158 94.3125 45.59375 C 92.788642 39.073641 72.343382 48.844227 67.5625 44.15625 C 62.570222 39.260985 71.191873 18.401151 64.5 16.375 C 64.099468 16.253728 63.710271 16.221992 63.34375 16.28125 z " transform="translate(10 5387.6) matrix(.82737 0 0 .82737 205.7 10.537) translate(-10 -5387.6)" stroke="#000" fill-opacity=".75" inkscape:href="#shapes-f17-gl.svgpath2693" inkscape:radius="9.9201479" xmlns:cc="http://creativecommons.org/ns#" stroke-width=".75541" fill="#ffb800"/>
  <path id="shapes-f17-gl.svgpath2693" sodipodi:sides="6" fill-opacity=".75" inkscape:flatsided="false" stroke="#000" stroke-width=".625" fill="#ffb800" style="color:#000000" fill-rule="evenodd" transform="translate(-22.785 186.4)" inkscape:rounded="0.25000000" sodipodi:r1="41.765072" sodipodi:r2="18.491833" sodipodi:arg1="0.77559456" sodipodi:arg2="1.3411834" xmlns:cc="http://creativecommons.org/ns#" sodipodi:type="star" d="m116.68 5287.2c-5.1 4.8-18.88-13.1-25.616-11.2-6.45 1.8-8.213 24.4-14.622 22.4-6.692-2 1.916-22.9-3.076-27.8-4.781-4.7-25.22 5.1-26.744-1.4-1.592-6.8 20.792-9.8 22.535-16.6 1.67-6.5-17.006-19.3-12.122-23.9 5.101-4.7 18.876 13.2 25.612 11.3 6.45-1.8 8.214-24.4 14.622-22.5 6.691 2.1-1.916 22.9 3.081 27.8 4.78 4.7 25.22-5 26.74 1.5 1.59 6.8-20.79 9.8-22.54 16.5-1.67 6.5 17.01 19.3 12.13 23.9z" inkscape:randomized="0.0000000" sodipodi:cy="5257.9824" sodipodi:cx="86.855721"/>
- <flowRoot id="shapes-f17-gl.svgflowRoot2701" style="text-anchor:middle;text-align:center" xml:space="preserve" transform="translate(9.7685 5387.6)" font-size="6" xmlns:cc="http://creativecommons.org/ns#"><flowRegion id="shapes-f17-gl.svgflowRegion2703"><rect id="shapes-f17-gl.svgrect2705" height="15" width="84.643" y="-.13782" x="11.786"/></flowRegion><flowPara id="shapes-f17-gl.svgflowPara2707">Estrela orixinal</flowPara></flowRoot>
- <flowRoot id="shapes-f17-gl.svgflowRoot2709" style="text-anchor:middle;text-align:center" xml:space="preserve" transform="translate(103.08 5387.5)" font-size="6" xmlns:cc="http://creativecommons.org/ns#"><flowRegion id="shapes-f17-gl.svgflowRegion2711"><rect id="shapes-f17-gl.svgrect2713" height="15" width="84.643" y="-.13782" x="11.786"/></flowRegion><flowPara id="shapes-f17-gl.svgflowPara2715">Linked offset, inset</flowPara></flowRoot>
- <flowRoot id="shapes-f17-gl.svgflowRoot2717" style="text-anchor:middle;text-align:center" xml:space="preserve" transform="translate(205.27 5387.5)" font-size="6" xmlns:cc="http://creativecommons.org/ns#"><flowRegion id="shapes-f17-gl.svgflowRegion2719"><rect id="shapes-f17-gl.svgrect2721" height="15" width="84.643" y="-.13782" x="11.786"/></flowRegion><flowPara id="shapes-f17-gl.svgflowPara2723">Linked offset, outset</flowPara></flowRoot>
+ <flowRoot xml:space="preserve" id="shapes-f17-gl.svgflowRoot2701" style="text-anchor:middle;text-align:center"  transform="translate(9.7685 5387.6)" font-size="6" xmlns:cc="http://creativecommons.org/ns#"><flowRegion id="shapes-f17-gl.svgflowRegion2703"><rect id="shapes-f17-gl.svgrect2705" height="15" width="84.643" y="-.13782" x="11.786"/></flowRegion><flowPara id="shapes-f17-gl.svgflowPara2707">Estrela orixinal</flowPara></flowRoot>
+ <flowRoot xml:space="preserve" id="shapes-f17-gl.svgflowRoot2709" style="text-anchor:middle;text-align:center"  transform="translate(103.08 5387.5)" font-size="6" xmlns:cc="http://creativecommons.org/ns#"><flowRegion id="shapes-f17-gl.svgflowRegion2711"><rect id="shapes-f17-gl.svgrect2713" height="15" width="84.643" y="-.13782" x="11.786"/></flowRegion><flowPara id="shapes-f17-gl.svgflowPara2715">Linked offset, inset</flowPara></flowRoot>
+ <flowRoot xml:space="preserve" id="shapes-f17-gl.svgflowRoot2717" style="text-anchor:middle;text-align:center"  transform="translate(205.27 5387.5)" font-size="6" xmlns:cc="http://creativecommons.org/ns#"><flowRegion id="shapes-f17-gl.svgflowRegion2719"><rect id="shapes-f17-gl.svgrect2721" height="15" width="84.643" y="-.13782" x="11.786"/></flowRegion><flowPara id="shapes-f17-gl.svgflowPara2723">Linked offset, outset</flowPara></flowRoot>
  <rect id="d0e675" display="none" height="1e3px" width="288" y="5498.6" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e675"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Usar <flowSpan font-weight="bold">Maiús+arrastrar</flowSpan> nas asas dunha estrela en Inkscape é un dos mellores enredos coñecidos pola humanidade. Pero aínda pode ser mellor.</flowDiv>
+  <flowPara >Usar <flowSpan font-weight="bold">Maiús+arrastrar</flowSpan> nas asas dunha estrela en Inkscape é un dos mellores enredos coñecidos pola humanidade. Pero aínda pode ser mellor.</flowPara>
  </flowRoot>
  <rect id="d0e681" display="none" height="1e3px" width="288" y="5536.4" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e681"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">To closer imitate real world shapes, Inkscape can <flowSpan font-style="italic">randomize</flowSpan> (i.e.
+  <flowPara >To closer imitate real world shapes, Inkscape can <flowSpan font-style="italic">randomize</flowSpan> (i.e.
 randomly distort) its stars and polygons. Slight randomization makes a star less
 regular, more humane, often funny; strong randomization is an exciting way to obtain a
 variety of crazily unpredictable shapes. A rounded star remains smoothly rounded when
 randomized. Here are the shortcuts:
-</flowDiv>
+</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 5611.8)"/>
  <rect id="d0e690" display="none" height="1e3px" width="258" y="5605.8" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e690"/>
   </flowRegion>
-  <flowDiv xml:space="preserve"><flowSpan font-weight="bold">Alt+drag</flowSpan> a handle tangentially to randomize the star or polygon.
-</flowDiv>
+  <flowPara ><flowSpan font-weight="bold">Alt+drag</flowSpan> a handle tangentially to randomize the star or polygon.
+</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 5640.3)"/>
  <rect id="d0e697" display="none" height="1e3px" width="258" y="5634.3" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e697"/>
   </flowRegion>
-  <flowDiv xml:space="preserve"><flowSpan font-weight="bold">Alt+click</flowSpan> a handle to remove randomization.
-</flowDiv>
+  <flowPara ><flowSpan font-weight="bold">Alt+click</flowSpan> a handle to remove randomization.
+</flowPara>
  </flowRoot>
  <rect id="d0e704" display="none" height="1e3px" width="288" y="5650.4" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e704"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">As you draw or handle-drag-edit a randomized star, it will “tremble” because each unique
+  <flowPara >As you draw or handle-drag-edit a randomized star, it will “tremble” because each unique
 position of its handles corresponds to its own unique randomization. So, moving a handle
 without Alt re-randomizes the shape at the same randomization level, while Alt-dragging
 it keeps the same randomization but adjusts its level. Here are stars whose parameters
 are exactly the same, but each one is re-randomized by very slightly moving its handle
 (randomization level is 0.1 throughout):
-</flowDiv>
+</flowPara>
  </flowRoot>
  <path id="shapes-f18-gl.svgpath2788" sodipodi:sides="7" inkscape:flatsided="false" fill="#ff6c2e" style="color:#000000" fill-rule="evenodd" transform="translate(10 5750.8) matrix(.84722 0 0 .84722 6.3302 -4695.8)" inkscape:rounded="0.22000000" sodipodi:r1="30.728476" sodipodi:r2="15.364238" sodipodi:arg1="0.50595040" sodipodi:arg2="0.98389742" sodipodi:type="star" d="m58.553 5590.9c-2.573 3.4-15.025-3.5-17.918-0.9-2.79 2.5 2.345 13.8-1.678 14.3-4.171 0.5-3.815-14.6-7.67-15.8-3.717-1.1-17.979 13.8-20.426 10.9-2.5377-3 10.265-12.7 9.009-16.5-1.211-3.7-17.879-6.6-17.172-10.4 0.7341-3.8 17.703-1.3 20.075-4.5 2.287-3.2-12.72-18.7-9.402-20.4 3.441-1.8 15.229 12.9 19.096 12 3.729-0.8 9.056-18.4 12.69-16.9 3.767 1.5-1.457 17.7 1.295 20.6 2.654 2.8 15.207-3.8 16.541-0.2 1.384 3.8-13.038 9.9-12.837 14.1 0.193 4 10.878 10.5 8.397 13.7z" inkscape:randomized="0.10000000" sodipodi:cy="5574.6763" sodipodi:cx="34.143131"/>
  <path id="shapes-f18-gl.svgpath2789" sodipodi:sides="7" inkscape:flatsided="false" fill="#ff6c2e" style="color:#000000" fill-rule="evenodd" transform="translate(10 5750.8) matrix(.84722 0 0 .84722 66.37 -4695.8)" inkscape:rounded="0.22000000" sodipodi:r1="29.479511" sodipodi:r2="15.188270" sodipodi:arg1="0.16874813" sodipodi:arg2="0.64669515" sodipodi:type="star" d="m62.192 5577.2c-0.733 3.7-11.065 1.3-13.354 4.4-2.202 3 0.954 16.5-2.147 18.6-3.224 2.1-10.016-9.4-13.797-9.6-3.637-0.2-5.862 11.4-9.399 10.1-3.677-1.3 2.956-10.2 0.649-13.4-2.22-3.2-17.575-0.2-18.85-3.8-1.3261-3.8 12.33-5.9 12.606-9.9 0.266-3.9-11.16-13.3-8.5838-16.1 2.6778-2.9 16.669 7.8 20.11 5.9 3.311-1.8 1.811-16.6 5.419-16.4 3.751 0.2 4.374 11.2 7.702 12.9 3.203 1.6 11.043-5.2 13.397-2.2 2.447 3.1-8.982 7.4-8.346 11.1 0.611 3.7 15.299 4.9 14.594 8.4z" inkscape:randomized="0.10000000" sodipodi:cy="5574.6763" sodipodi:cx="34.143131"/>
@@ -904,37 +904,37 @@ are exactly the same, but each one is re-randomized by very slightly moving its 
  <path id="shapes-f18-gl.svgpath2791" sodipodi:sides="7" inkscape:flatsided="false" fill="#ff6c2e" style="color:#000000" fill-rule="evenodd" transform="translate(10 5750.8) matrix(.84722 0 0 .84722 186.45 -4695.8)" inkscape:rounded="0.22000000" sodipodi:r1="30.324377" sodipodi:r2="15.162188" sodipodi:arg1="0.59796906" sodipodi:arg2="1.0759160" sodipodi:type="star" d="m60.008 5593.6c-1.883 3.4-12.402-8.2-15.83-6.5-3.306 1.6-1.726 20.6-5.635 20.7-4.053 0.1-4.988-16.2-8.797-17.4-3.673-1.1-13.903 7-16.41 4-2.598-3 9.392-11.8 8.745-15.9-0.624-3.8-15.727-2.2-15.135-6 0.6134-4 11.013-1.7 12.747-5.1 1.672-3.3-1.474-16.7 2.196-18.5 3.805-1.7 6.817 10.2 10.617 9.3 3.665-0.9 10.537-11.7 14.221-10.6 3.821 1.2-4.262 11.4-1.488 14.2 2.676 2.8 14.591-1.9 15.512 1.8 0.956 3.8-9.663 10.4-9.963 14.4-0.289 3.9 11.036 12.4 9.22 15.6z" inkscape:randomized="0.10000000" sodipodi:cy="5574.6763" sodipodi:cx="34.143131"/>
  <path id="shapes-f18-gl.svgpath2792" sodipodi:sides="7" inkscape:flatsided="false" fill="#ff6c2e" style="color:#000000" fill-rule="evenodd" transform="translate(10 5750.8) matrix(.84722 0 0 .84722 246.49 -4695.8)" inkscape:rounded="0.22000000" sodipodi:r1="30.103865" sodipodi:r2="15.051932" sodipodi:arg1="0.72564034" sodipodi:arg2="1.2035873" sodipodi:type="star" d="m59.226 5596.8c-2.425 3.3-15.132-7.7-18.888-6.7-3.624 1-6.802 16.9-10.457 16.7-3.789-0.1 2.399-14.8-1.253-16.7-3.522-1.7-14.588 7.8-16.308 4.3-1.783-3.6 6.846-14.3 5.691-18-1.114-3.6-16.06-6.3-14.948-10.2 1.1537-4 19.097 2.1 21.458-1.3 2.278-3.4-4.961-14.2-1.253-15 3.844-0.8 9.38 11.6 13.462 12.2 3.937 0.6 9.297-19 12.452-16.6 3.272 2.4-7.578 16.5-4.826 19.6 2.655 3 18.78-2 18.937 1.9 0.164 4-12.063 8.2-12.607 12.1-0.525 3.7 10.879 14.6 8.54 17.7z" inkscape:randomized="0.10000000" sodipodi:cy="5574.6763" sodipodi:cx="34.143131"/>
  <rect id="d0e717" display="none" height="1e3px" width="288" y="5818" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e717"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">And here is the middle star from the previous row, with the randomization level varying
+  <flowPara >And here is the middle star from the previous row, with the randomization level varying
 from -0.2 to 0.2:
-</flowDiv>
+</flowPara>
  </flowRoot>
- <text id="shapes-f19-gl.svgtext2848" sodipodi:linespacing="120.00000%" transform="translate(10 5854.5)" xml:space="preserve" line-height="120.00000%" font-size="5.365" y="-2.4563127" x="274.15491" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f19-gl.svgtspan2849" y="-2.4563127" x="274.15491" sodipodi:role="line"/><tspan id="shapes-f19-gl.svgtspan2851"/><tspan id="shapes-f19-gl.svgtspan2853" y="3.9817331" x="274.15491" sodipodi:role="line">+0.2</tspan></text>
- <text id="shapes-f19-gl.svgtext2841" sodipodi:linespacing="120.00000%" transform="translate(10 5854.5)" xml:space="preserve" line-height="120.00000%" font-size="5.365" y="-2.4563127" x="212.89142" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f19-gl.svgtspan2842" y="-2.4563127" x="212.89142" sodipodi:role="line"/><tspan id="shapes-f19-gl.svgtspan2844"/><tspan id="shapes-f19-gl.svgtspan2846" y="3.9817331" x="212.89142" sodipodi:role="line">+0.1</tspan></text>
- <text id="shapes-f19-gl.svgtext2833" sodipodi:linespacing="120.00000%" transform="translate(10 5854.5)" xml:space="preserve" line-height="120.00000%" font-size="5.365" y="4.1156874" x="151.42322" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f19-gl.svgtspan2835" y="10.553733" x="151.42322" sodipodi:role="line">0</tspan><tspan id="shapes-f19-gl.svgtspan2837"/><tspan id="shapes-f19-gl.svgtspan2839" y="10.553733" x="151.42322" sodipodi:role="line"/></text>
- <text id="shapes-f19-gl.svgtext2814" sodipodi:linespacing="120.00000%" transform="translate(10 5854.5)" xml:space="preserve" line-height="120.00000%" font-size="5.365" y="4.1156874" x="83.021225" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f19-gl.svgtspan2821" y="10.553733" x="83.021225" sodipodi:role="line">-0.1</tspan><tspan id="shapes-f19-gl.svgtspan2829"/><tspan id="shapes-f19-gl.svgtspan2831" y="10.553733" x="83.021225" sodipodi:role="line"/></text>
- <text id="shapes-f19-gl.svgtext2805" sodipodi:linespacing="120.00000%" transform="translate(10 5854.5)" xml:space="preserve" line-height="120.00000%" font-size="5.365" y="4.1156874" x="26.32832" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f19-gl.svgtspan2807" y="10.553733" x="26.328320" sodipodi:role="line">-0.2</tspan><tspan id="shapes-f19-gl.svgtspan2809"/><tspan id="shapes-f19-gl.svgtspan2811" y="10.553733" x="26.328320" sodipodi:role="line"/></text>
+ <text id="shapes-f19-gl.svgtext2848" sodipodi:linespacing="120.00000%" transform="translate(10 5854.5)"  line-height="120.00000%" font-size="5.365" y="-2.4563127" x="274.15491" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f19-gl.svgtspan2849" y="-2.4563127" x="274.15491" sodipodi:role="line"/><tspan id="shapes-f19-gl.svgtspan2851"/><tspan id="shapes-f19-gl.svgtspan2853" y="3.9817331" x="274.15491" sodipodi:role="line">+0.2</tspan></text>
+ <text id="shapes-f19-gl.svgtext2841" sodipodi:linespacing="120.00000%" transform="translate(10 5854.5)"  line-height="120.00000%" font-size="5.365" y="-2.4563127" x="212.89142" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f19-gl.svgtspan2842" y="-2.4563127" x="212.89142" sodipodi:role="line"/><tspan id="shapes-f19-gl.svgtspan2844"/><tspan id="shapes-f19-gl.svgtspan2846" y="3.9817331" x="212.89142" sodipodi:role="line">+0.1</tspan></text>
+ <text id="shapes-f19-gl.svgtext2833" sodipodi:linespacing="120.00000%" transform="translate(10 5854.5)"  line-height="120.00000%" font-size="5.365" y="4.1156874" x="151.42322" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f19-gl.svgtspan2835" y="10.553733" x="151.42322" sodipodi:role="line">0</tspan><tspan id="shapes-f19-gl.svgtspan2837"/><tspan id="shapes-f19-gl.svgtspan2839" y="10.553733" x="151.42322" sodipodi:role="line"/></text>
+ <text id="shapes-f19-gl.svgtext2814" sodipodi:linespacing="120.00000%" transform="translate(10 5854.5)"  line-height="120.00000%" font-size="5.365" y="4.1156874" x="83.021225" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f19-gl.svgtspan2821" y="10.553733" x="83.021225" sodipodi:role="line">-0.1</tspan><tspan id="shapes-f19-gl.svgtspan2829"/><tspan id="shapes-f19-gl.svgtspan2831" y="10.553733" x="83.021225" sodipodi:role="line"/></text>
+ <text id="shapes-f19-gl.svgtext2805" sodipodi:linespacing="120.00000%" transform="translate(10 5854.5)"  line-height="120.00000%" font-size="5.365" y="4.1156874" x="26.32832" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f19-gl.svgtspan2807" y="10.553733" x="26.328320" sodipodi:role="line">-0.2</tspan><tspan id="shapes-f19-gl.svgtspan2809"/><tspan id="shapes-f19-gl.svgtspan2811" y="10.553733" x="26.328320" sodipodi:role="line"/></text>
  <path id="shapes-f19-gl.svgpath2797" sodipodi:sides="7" inkscape:flatsided="false" fill="#ff6c2e" style="color:#000000" fill-rule="evenodd" transform="translate(10 5854.5) matrix(.84722 0 0 .84722 190.19 -4686.5)" inkscape:rounded="0.22000000" sodipodi:r1="30.461117" sodipodi:r2="15.230559" sodipodi:arg1="0.53837452" sodipodi:arg2="1.0163215" sodipodi:type="star" d="m62.487 5591.1c-2.584 3.2-19.795-4.8-23.125-2.6-3.211 2.1 1.401 15.8-2.556 16.8-4.103 1-1.338-12.7-5.129-13.9-3.657-1-19.069 8.4-21.492 5.3-2.5119-3.3 10.704-13.8 9.457-17.8-1.203-3.8-19.512-0.1-18.462-3.9 1.0885-4 14.981-5.7 17.32-9.1 2.256-3.2-6.854-14-3.398-16.1 3.584-2 15.403 9.4 19.48 9.5 3.933 0.1 6.508-13.9 9.898-12.1 3.515 1.8-4.156 14.7-1.096 17.2 2.951 2.4 17.494-6.3 19.072-2.7 1.636 3.7-13.965 11.1-14.782 15.1-0.788 3.7 17.305 11.1 14.813 14.3z" inkscape:randomized="0.10000000" sodipodi:cy="5574.6763" sodipodi:cx="34.143131"/>
  <path id="shapes-f19-gl.svgpath2798" sodipodi:sides="7" inkscape:flatsided="false" fill="#ff6c2e" style="color:#000000" fill-rule="evenodd" transform="translate(10 5854.5) matrix(.84722 0 0 .84722 126.41 -4686.5)" inkscape:rounded="0.22000000" sodipodi:r1="30.461117" sodipodi:r2="15.230559" sodipodi:arg1="0.53837452" sodipodi:arg2="1.0163215" sodipodi:type="star" d="m60.295 5590.3c-2.167 3.4-14.768-4.9-18.133-2.7-3.245 2.2-0.057 16.9-3.924 17.3-4.01 0.4-5.384-14.6-9.219-15.9-3.699-1.2-13.19 10.5-15.922 7.7-2.833-2.9 8.055-13.3 6.638-17.1-1.367-3.6-16.392-3.8-15.931-7.6 0.4778-4.1 15.429-2 17.496-5.5 1.994-3.3-7.249-15.2-3.942-17.2 3.428-2.2 11.183 10.8 15.179 10.2 3.853-0.5 7.352-15.1 11.014-13.8 3.797 1.4-1.483 15.5 1.432 18.3 2.811 2.7 16.416-3.7 17.677 0 1.307 3.8-13.033 8.5-13.394 12.5-0.347 3.9 13.12 10.5 11.029 13.8z" inkscape:randomized="0.0000000" sodipodi:cy="5574.6763" sodipodi:cx="34.143131"/>
  <path id="shapes-f19-gl.svgpath2799" sodipodi:sides="7" inkscape:flatsided="false" fill="#ff6c2e" style="color:#000000" fill-rule="evenodd" transform="translate(10 5854.5) matrix(.84722 0 0 .84722 253.97 -4686.5)" inkscape:rounded="0.22000000" sodipodi:r1="30.461117" sodipodi:r2="15.230559" sodipodi:arg1="0.53837452" sodipodi:arg2="1.0163215" sodipodi:type="star" d="m64.679 5591.8c-2.999 3.2-24.823-4.6-28.117-2.4-3.177 2.1 2.773 14.7-1.188 16.2-4.107 1.7 2.703-10.7-1.04-11.7-3.611-1-24.996 6.3-27.06 2.8-2.1398-3.6 13.334-14.3 12.275-18.5-1.022-4-22.639 3.6-20.993-0.2 1.7065-3.9 14.536-9.3 17.144-12.6 2.515-3.2-6.4602-13-2.853-15 3.739-2 19.716 8 23.781 8.7 3.921 0.6 5.725-12.7 8.781-10.5 3.169 2.3-6.804 14-3.625 16.3 3.067 2.1 18.584-8.9 20.468-5.5 1.954 3.6-14.914 13.9-16.17 17.6-1.212 3.7 21.489 11.8 18.597 14.8z" inkscape:randomized="0.20000000" sodipodi:cy="5574.6763" sodipodi:cx="34.143131"/>
  <path id="shapes-f19-gl.svgpath2800" sodipodi:sides="7" inkscape:flatsided="false" fill="#ff6c2e" style="color:#000000" fill-rule="evenodd" transform="translate(10 5854.5) matrix(.84722 0 0 .84722 59.088 -4686.5)" inkscape:rounded="0.22000000" sodipodi:r1="30.461117" sodipodi:r2="15.230559" sodipodi:arg1="0.53837452" sodipodi:arg2="1.0163215" sodipodi:type="star" d="m58.104 5589.5c-1.756 3.5-9.742-5-13.142-2.8-3.28 2.2-1.593 17.9-5.293 17.8-3.835-0.2-9.433-16.5-13.307-17.9-3.737-1.3-7.367 12.5-10.354 10.1-3.098-2.5 5.388-12.8 3.82-16.4-1.513-3.4-13.292-7.6-13.4-11.4-0.1115-3.9 15.877 1.7 17.672-1.9 1.732-3.4-7.644-16.3-4.487-18.3 3.273-2.2 7.054 12.2 10.878 11.1 3.687-1.1 8.266-16.3 12.131-15.6 4.007 0.9 1.214 16.3 3.96 19.3 2.648 3 15.348-1 16.282 2.7 0.968 3.9-12.112 5.9-12.005 10 0.103 3.9 8.938 10 7.245 13.3z" inkscape:randomized="-0.10000000" sodipodi:cy="5574.6763" sodipodi:cx="34.143131"/>
  <path id="shapes-f19-gl.svgpath2801" sodipodi:sides="7" inkscape:flatsided="false" fill="#ff6c2e" style="color:#000000" fill-rule="evenodd" transform="translate(10 5854.5) matrix(.84722 0 0 .84722 2.3953 -4686.5)" inkscape:rounded="0.22000000" sodipodi:r1="30.461117" sodipodi:r2="15.230559" sodipodi:arg1="0.53837452" sodipodi:arg2="1.0163215" sodipodi:type="star" d="m55.912 5588.8c-1.352 3.4-4.714-5.2-8.15-3-3.314 2.2-3.197 18.9-6.661 18.3-3.591-0.6-13.488-18.4-17.397-19.9-3.77-1.5-1.597 14.5-4.785 12.5-3.305-2 2.703-12.3 1.002-15.7-1.641-3.2-10.225-11.5-10.868-15.1-0.6673-3.8 16.323 5.3 17.848 1.7 1.47-3.4-8.041-17.4-5.033-19.5 3.12-2.2 3.01 13.6 6.577 11.9 3.44-1.6 9.257-17.4 13.247-17.2 4.138 0.2 3.937 17 6.489 20.3 2.462 3.2 14.285 1.6 14.887 5.4 0.624 4-11.195 3.4-10.617 7.4 0.558 3.9 4.765 9.5 3.461 12.9z" inkscape:randomized="-0.20000000" sodipodi:cy="5574.6763" sodipodi:cx="34.143131"/>
  <rect id="d0e730" display="none" height="1e3px" width="288" y="5929.2" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e730"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Use <flowSpan font-weight="bold">Alt+arrastrar</flowSpan> nunha asa da estrela central desta fila e observe como se vai transformando nas súas estrelas veciñas tanto da dereita como da esquerda — e como segue cambiando de forma.</flowDiv>
+  <flowPara >Use <flowSpan font-weight="bold">Alt+arrastrar</flowSpan> nunha asa da estrela central desta fila e observe como se vai transformando nas súas estrelas veciñas tanto da dereita como da esquerda — e como segue cambiando de forma.</flowPara>
  </flowRoot>
  <rect id="d0e736" display="none" height="1e3px" width="288" y="5968.3" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e736"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Probablemente atope os seus propios usos para as estrelas aleatorias, pero persoalmente encántanme as manchas con forma de ameba redondeada e os planetas bastos con paisaxes fantásticas:</flowDiv>
+  <flowPara >Probablemente atope os seus propios usos para as estrelas aleatorias, pero persoalmente encántanme as manchas con forma de ameba redondeada e os planetas bastos con paisaxes fantásticas:</flowPara>
  </flowRoot>
  <path id="shapes-f20-gl.svgpath1599" style="color:#000000" d="m-37.728 155.36c4.2268 5.7132 9.7471 7.8679 17.311 4.3502 40.796-18.97-86.673-90.888-45.309-108.75 41.367-17.871 38.426 133.61 79.447 115.95 41.021-17.65-85.882-102.37-43.768-118.02 42.114-15.66 10.671 111.76 52.829 96.85 42.157-14.9-66.905-108.38-24.487-123.77 42.418-15.396 6.3065 143.19 49.273 130.56 42.966-12.64-78.565-123.49-35.751-136.42 42.814-12.921 15.198 146.6 58.146 134.79 42.947-11.81-78.229-132.05-34.315-142.3 43.914-10.257-9.116 133.12 34.2 123.57 43.312-9.55-55.846-112.53-11.336-119.51 44.508-6.9782-13.312 122.66 31.18 117.54 44.488-5.12-45.236-120.29-0.842-125.27 44.39-4.9757-14.104 134.72 30.31 130.13 44.42-4.59-38.921-132.64 6.05-134.45 44.96-1.7977-41.683 133.51 3.31 131.19 44.99-2.32-24.87-122.59 19.84-122.69 44.7-0.0924-25.39 112.8 18.95 113.58 44.35 0.77-45.2-127.22-0.28-125.5 44.92 1.7209-33.15 131.8 11.65 134.88 44.8 3.09-19.34-129.92 25.3-126.81 44.63 3.107-49.14 114.08-4.38 118.97 44.75 4.89-14.85-128.64 29.28-121.21 44.12 7.431-61.17 122.66-17.13 131.19 44.04 8.54-13.12-140.8 30.73-132.29 43.84 8.517-40.4 123.15 2.99 134 43.4 10.85-5.71-129.78 37.05-118.25 42.76 11.524-72.52 105.89-29.78 118.07 42.737 12.179-0.71732-125.38 41.836-112.09 42.553 13.287-66.615 102.32-24.046 116.44 42.569 14.114 13.337-115.43 55.144-99.755 41.807 15.673-83.282 110.42-41.37 125.72 41.912 15.309 23.595-141.93 64.915-125.23 41.32 16.701-75.913 110.59-35.427 128.69 40.487 18.092 19.601-145.73 59.911-126.04 39.688 19.384-87.015 109.19-53.099 132" inkscape:connector-curvature="0" transform="translate(10 6015.4)" stroke="#d9d9d9" xmlns:cc="http://creativecommons.org/ns#" stroke-width=".69435" fill="none"/>
  <path id="shapes-f20-gl.svgrect1295" sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccccccccccccccccccc" stroke="#000" stroke-width="1.0607" fill="none" style="color:#000000" transform="translate(10 6015.4)" xmlns:cc="http://creativecommons.org/ns#" d="m328.54 123.82c-2.04 2.51-3.88 4.35-4.99 3.66-3.33-2.05 0.34-25.26-3.01-27.22-3.69-2.163-6.36 12.8-10.07 10.7-3.37-1.91 9.25-8.58 5.79-10.35-3.83-1.946-14.7 5.13-18.57 3.32-3.5-1.64-2.36-13.322-5.88-14.985-3.87-1.837-3.35 14.265-7.33 12.595-3.61-1.51 6.69-16.724 3.09-18.164-3.97-1.59-20.54 13.704-24.53 12.199-3.61-1.364 10.79-12.038 7.12-13.304-4.05-1.397-14.43 13.878-18.52 12.552-3.7-1.201 7.5-21.868 3.8-22.982-4.09-1.23-10.7 11.069-14.85 9.988-3.76-0.978 4.93-10.615 1.15-11.491-4.18-0.967-10 14.484-14.14 13.436-3.76-0.949-6.84-13.073-10.66-13.745-4.21-0.743-3.03 11.415-7.24 10.563-3.82-0.772 2.79-21.082-1.06-21.657-4.26-0.635-6.91 16.709-11.14 16.088-3.83-0.562-1.2-11.067-5.08-11.535-4.29-0.518-14.76 11.12-19.01 10.695-3.85-0.385 8.19-11.526 4.29-11.756-4.32-0.254-15.9 14.753-20.2 14.496-3.89-0.232 2.93-17.09-0.97-17.148-4.31-0.064-8.5 14.957-12.78 14.983-3.87 0.023-4.31-20.487-8.17-20.331-4.27 0.173 1.13 16.525-3.18 16.839-3.91 0.285-4.59-7.679-8.45-7.381-4.25 0.329-0.49 7.461-4.73 7.956-3.83 0.448-11.19-13.514-15.02-12.994-4.235 0.574-2.67 21.621-6.941 22.275-3.87 0.592 0.631-18.393-3.182-17.634-4.211 0.837-2.413 14.4-6.586 15.292-3.778 0.807-6.453-18.313-10.209-17.37-4.148 1.042 3.682 20.97-0.442 22.055-3.734 0.982-11.935-16.567-15.646-15.469-4.098 1.212 2.892 16.488-1.237 17.634-3.74 1.038-13.97-8.376-17.635-7.116-4.047 1.393 6.564 16.692 2.519 18.165-3.662 1.334-9.859-20.465-13.48-19.093-3.998 1.516 0.721 24.664-3.27 26.294-3.615 1.48-12.287-23.561-15.823-21.962-3.9044 1.765 10.94 19.832 7.027 21.652-3.543 1.66-19.163-10.446-22.629-8.658-3.8267 1.973 12.636 13.638 8.7956 15.558-3.4775 1.74-13.58-17.343-16.928-15.426-3.696 2.118 1.6126 18.456-2.121 20.506-3.381 1.86-7.656-7.7-11.005-5.74-3.699 2.16 5.923 11.37 2.254 13.65-2.198 1.37-7.606-4.02-12.022-7.33"/>
@@ -949,111 +949,111 @@ from -0.2 to 0.2:
   <tspan y="6219.0982466" x="10">Espirais</tspan>
  </text>
  <rect id="d0e755" display="none" height="1e3px" width="288" y="6224.3" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e755"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">A espiral de Inkscape é unha figura versátil, e aínda que non é tan complicada como a estrela a veces é moi útil. Unha espiral, ao igual que unha estrela, debúxase desde o centro; ao debuxar e tamén ao editar,</flowDiv>
+  <flowPara >A espiral de Inkscape é unha figura versátil, e aínda que non é tan complicada como a estrela a veces é moi útil. Unha espiral, ao igual que unha estrela, debúxase desde o centro; ao debuxar e tamén ao editar,</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 6279.7)"/>
  <rect id="d0e761" display="none" height="1e3px" width="258" y="6273.7" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e761"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Use <flowSpan font-weight="bold">Ctrl+arrastrar</flowSpan> para axustar o ángulo a incrementos de 15 graos.</flowDiv>
+  <flowPara >Use <flowSpan font-weight="bold">Ctrl+arrastrar</flowSpan> para axustar o ángulo a incrementos de 15 graos.</flowPara>
  </flowRoot>
  <rect id="d0e768" display="none" height="1e3px" width="288" y="6302.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e768"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Unha vez debuxada, unha espiral ten dúas asas nos seus extremos interior e exterior. As dúas asas ao arrastralas, enrolan ou desenrolan a espiral (é dicir «continuan» a espiral, cambiando o número de revolucións). Outros atallos son:</flowDiv>
+  <flowPara >Unha vez debuxada, unha espiral ten dúas asas nos seus extremos interior e exterior. As dúas asas ao arrastralas, enrolan ou desenrolan a espiral (é dicir «continuan» a espiral, cambiando o número de revolucións). Outros atallos son:</flowPara>
  </flowRoot>
  <rect id="d0e771" display="none" height="1e3px" width="288" y="6352.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e771"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Asa exterior:</flowDiv>
+  <flowPara >Asa exterior:</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 6374.1)"/>
  <rect id="d0e777" display="none" height="1e3px" width="258" y="6368.1" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e777"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Use <flowSpan font-weight="bold">Maiús+arrastrar</flowSpan> para escalar/rotar arredor do centro (sen enrolar/desenrolar).</flowDiv>
+  <flowPara >Use <flowSpan font-weight="bold">Maiús+arrastrar</flowSpan> para escalar/rotar arredor do centro (sen enrolar/desenrolar).</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 6402.4)"/>
  <rect id="d0e784" display="none" height="1e3px" width="258" y="6396.4" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e784"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Use <flowSpan font-weight="bold">Alt+arrastrar</flowSpan> para bloquear o raio ao enrolar/desenrolar.</flowDiv>
+  <flowPara >Use <flowSpan font-weight="bold">Alt+arrastrar</flowSpan> para bloquear o raio ao enrolar/desenrolar.</flowPara>
  </flowRoot>
  <rect id="d0e791" display="none" height="1e3px" width="288" y="6414.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e791"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Asa interior:</flowDiv>
+  <flowPara >Asa interior:</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 6436.1)"/>
  <rect id="d0e797" display="none" height="1e3px" width="258" y="6430.1" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e797"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Use <flowSpan font-weight="bold">Alt+arrastrar verticalmente</flowSpan> para converxer/diverxer.</flowDiv>
+  <flowPara >Use <flowSpan font-weight="bold">Alt+arrastrar verticalmente</flowSpan> para converxer/diverxer.</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 6453.9)"/>
  <rect id="d0e804" display="none" height="1e3px" width="258" y="6447.9" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e804"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Use <flowSpan font-weight="bold">Alt+clic</flowSpan> para restablecer a diverxencia.</flowDiv>
+  <flowPara >Use <flowSpan font-weight="bold">Alt+clic</flowSpan> para restablecer a diverxencia.</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 6471.6)"/>
  <rect id="d0e811" display="none" height="1e3px" width="258" y="6465.6" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e811"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Use <flowSpan font-weight="bold">Maiús+clic</flowSpan> para mover a asa interior cara ao centro.</flowDiv>
+  <flowPara >Use <flowSpan font-weight="bold">Maiús+clic</flowSpan> para mover a asa interior cara ao centro.</flowPara>
  </flowRoot>
  <rect id="d0e818" display="none" height="1e3px" width="288" y="6483.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e818"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">A <flowSpan font-style="italic">diverxencia</flowSpan> dunha espiral é a medida da non linearidade das súas revolucións. Cando é igual a 1, a espiral é uniforme; cando é menor de 1 (<flowSpan font-weight="bold">Alt+arrastrar</flowSpan> cara arriba) a espiral é máis densa na periferia; cando é maior de 1 (<flowSpan font-weight="bold">Alt+arrastrar</flowSpan> cara abaixo) a espiral é máis densa no centro:</flowDiv>
+  <flowPara >A <flowSpan font-style="italic">diverxencia</flowSpan> dunha espiral é a medida da non linearidade das súas revolucións. Cando é igual a 1, a espiral é uniforme; cando é menor de 1 (<flowSpan font-weight="bold">Alt+arrastrar</flowSpan> cara arriba) a espiral é máis densa na periferia; cando é maior de 1 (<flowSpan font-weight="bold">Alt+arrastrar</flowSpan> cara abaixo) a espiral é máis densa no centro:</flowPara>
  </flowRoot>
- <text id="shapes-f21-gl.svgtext2996" sodipodi:linespacing="120.00000%" transform="translate(10 6550.7)" xml:space="preserve" line-height="120.00000%" font-size="5.365" y="-2.4563127" x="45.595207" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f21-gl.svgtspan2985" y="-2.4563127" x="45.595207" sodipodi:role="line"/><tspan id="shapes-f21-gl.svgtspan2987"/><tspan id="shapes-f21-gl.svgtspan2989" y="3.9817331" x="45.595207" sodipodi:role="line">0.2</tspan></text>
- <text id="shapes-f21-gl.svgtext3053" sodipodi:linespacing="120.00000%" transform="translate(10 6550.7)" xml:space="preserve" line-height="120.00000%" font-size="5.365" y="-2.4563127" x="105.28775" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f21-gl.svgtspan2978" y="-2.4563127" x="105.28775" sodipodi:role="line"/><tspan id="shapes-f21-gl.svgtspan2980"/><tspan id="shapes-f21-gl.svgtspan2982" y="3.9817331" x="105.28775" sodipodi:role="line">0.5</tspan></text>
- <text id="shapes-f21-gl.svgtext2982" sodipodi:linespacing="120.00000%" transform="translate(10 6550.7)" xml:space="preserve" line-height="120.00000%" font-size="5.365" y="-2.4563127" x="285.30881" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f21-gl.svgtspan2971" y="-2.4563127" x="285.30881" sodipodi:role="line"/><tspan id="shapes-f21-gl.svgtspan2973"/><tspan id="shapes-f21-gl.svgtspan2975" y="3.9817331" x="285.30881" sodipodi:role="line">6</tspan></text>
- <text id="shapes-f21-gl.svgtext3039" sodipodi:linespacing="120.00000%" transform="translate(10 6550.7)" xml:space="preserve" line-height="120.00000%" font-size="5.365" y="-2.4563127" x="227.84541" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f21-gl.svgtspan2964" y="-2.4563127" x="227.84541" sodipodi:role="line"/><tspan id="shapes-f21-gl.svgtspan2966"/><tspan id="shapes-f21-gl.svgtspan2968" y="3.9817331" x="227.84541" sodipodi:role="line">2</tspan></text>
- <text id="shapes-f21-gl.svgtext2960" sodipodi:linespacing="120.00000%" transform="translate(10 6550.7)" xml:space="preserve" line-height="120.00000%" font-size="5.365" y="-2.4563127" x="167.37082" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f21-gl.svgtspan2956" y="-2.4563127" x="167.37082" sodipodi:role="line"/><tspan id="shapes-f21-gl.svgtspan2958"/><tspan id="shapes-f21-gl.svgtspan2960" y="3.9817331" x="167.37082" sodipodi:role="line">1</tspan></text>
+ <text id="shapes-f21-gl.svgtext2996" sodipodi:linespacing="120.00000%" transform="translate(10 6550.7)"  line-height="120.00000%" font-size="5.365" y="-2.4563127" x="45.595207" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f21-gl.svgtspan2985" y="-2.4563127" x="45.595207" sodipodi:role="line"/><tspan id="shapes-f21-gl.svgtspan2987"/><tspan id="shapes-f21-gl.svgtspan2989" y="3.9817331" x="45.595207" sodipodi:role="line">0.2</tspan></text>
+ <text id="shapes-f21-gl.svgtext3053" sodipodi:linespacing="120.00000%" transform="translate(10 6550.7)"  line-height="120.00000%" font-size="5.365" y="-2.4563127" x="105.28775" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f21-gl.svgtspan2978" y="-2.4563127" x="105.28775" sodipodi:role="line"/><tspan id="shapes-f21-gl.svgtspan2980"/><tspan id="shapes-f21-gl.svgtspan2982" y="3.9817331" x="105.28775" sodipodi:role="line">0.5</tspan></text>
+ <text id="shapes-f21-gl.svgtext2982" sodipodi:linespacing="120.00000%" transform="translate(10 6550.7)"  line-height="120.00000%" font-size="5.365" y="-2.4563127" x="285.30881" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f21-gl.svgtspan2971" y="-2.4563127" x="285.30881" sodipodi:role="line"/><tspan id="shapes-f21-gl.svgtspan2973"/><tspan id="shapes-f21-gl.svgtspan2975" y="3.9817331" x="285.30881" sodipodi:role="line">6</tspan></text>
+ <text id="shapes-f21-gl.svgtext3039" sodipodi:linespacing="120.00000%" transform="translate(10 6550.7)"  line-height="120.00000%" font-size="5.365" y="-2.4563127" x="227.84541" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f21-gl.svgtspan2964" y="-2.4563127" x="227.84541" sodipodi:role="line"/><tspan id="shapes-f21-gl.svgtspan2966"/><tspan id="shapes-f21-gl.svgtspan2968" y="3.9817331" x="227.84541" sodipodi:role="line">2</tspan></text>
+ <text id="shapes-f21-gl.svgtext2960" sodipodi:linespacing="120.00000%" transform="translate(10 6550.7)"  line-height="120.00000%" font-size="5.365" y="-2.4563127" x="167.37082" font-family="sans-serif" sodipodi:insensitive="true" fill="#000000"><tspan id="shapes-f21-gl.svgtspan2956" y="-2.4563127" x="167.37082" sodipodi:role="line"/><tspan id="shapes-f21-gl.svgtspan2958"/><tspan id="shapes-f21-gl.svgtspan2960" y="3.9817331" x="167.37082" sodipodi:role="line">1</tspan></text>
  <path id="shapes-f21-gl.svgpath2948" sodipodi:argument="-36.758350" stroke="#000" stroke-width="1pt" fill="none" style="color:#000000" transform="translate(10 6550.7) matrix(-1 0 0 1 308.13 -6286.4)" sodipodi:t0="0.0000000" sodipodi:radius="28.251171" sodipodi:expansion="1.0000000" sodipodi:revolution="6.0000000" sodipodi:type="spiral" d="m138.39 6322.5c0.42 0.6-0.57 0.8-0.95 0.7-1.05-0.4-1-1.8-0.44-2.6 1.01-1.4 3.06-1.3 4.24-0.2 1.74 1.6 1.49 4.3-0.08 5.9-2.09 2.1-5.56 1.7-7.53-0.3-2.47-2.7-1.99-6.9 0.6-9.2 3.14-2.9 8.09-2.3 10.82 0.8 3.21 3.7 2.51 9.4-1.11 12.5-4.19 3.6-10.62 2.8-14.11-1.4-3.97-4.7-3.03-11.9 1.62-15.7 5.23-4.4 13.15-3.3 17.4 1.9 4.72 5.7 3.55 14.4-2.14 19-6.26 5.1-15.68 3.8-20.69-2.4-5.47-6.8-4.06-16.9 2.66-22.3 7.3-5.9 18.21-4.4 23.98 2.9 6.22 7.8 4.59 19.5-3.17 25.6-8.34 6.6-20.75 4.9-27.27-3.4-6.98-8.9-5.11-22 3.69-28.9 9.37-7.4 23.27-5.4 30.55 3.9 7.74 9.9 5.63 24.6-4.2 32.2-10.41 8.1-25.81 5.9-33.84-4.4-8.49-11-6.15-27.1 4.71-35.5 11.45-8.9 28.34-6.4 37.14 4.9 9.24 12 6.67 29.6-5.24 38.8" sodipodi:cy="6322.4868" sodipodi:cx="138.38965"/>
  <path id="shapes-f21-gl.svgpath2949" sodipodi:argument="-36.758350" stroke="#000" stroke-width="1pt" fill="none" style="color:#000000" transform="translate(10 6550.7) matrix(-1 0 0 1 368.36 -6287.8)" sodipodi:t0="0.0000000" sodipodi:radius="28.251171" sodipodi:expansion="2.0000000" sodipodi:revolution="6.0000000" sodipodi:type="spiral" d="m138.39 6322.5h-0.04c-0.09 0-0.1-0.1-0.08-0.2 0.08-0.2 0.33-0.2 0.48-0.1 0.31 0.2 0.3 0.7 0.1 0.9-0.34 0.5-1.03 0.5-1.45 0.1-0.66-0.5-0.59-1.5-0.05-2.1 0.79-0.9 2.17-0.8 2.98 0 1.13 1 0.96 2.9-0.09 3.9-1.4 1.4-3.73 1.2-5.06-0.2-1.72-1.7-1.42-4.6 0.32-6.3 2.19-2 5.7-1.7 7.68 0.5 2.45 2.6 1.97 6.8-0.63 9.2-3.15 2.8-8.1 2.3-10.86-0.8-3.29-3.7-2.6-9.5 1.04-12.7 4.28-3.7 10.92-2.9 14.58 1.3 4.26 4.9 3.32 12.5-1.52 16.6-5.59 4.8-14.17 3.7-18.85-1.8-5.36-6.3-4.13-15.9 2.09-21.2 7.06-5.9 17.83-4.5 23.67 2.5 6.58 7.8 5.02 19.8-2.75 26.2-8.72 7.3-21.92 5.5-29.04-3.1-7.93-9.6-6-24.1 3.49-31.9 10.54-8.7 26.44-6.5 34.95 3.9 9.42 11.5 7.07 28.8-4.32 38.1" sodipodi:cy="6322.4868" sodipodi:cx="138.38965"/>
  <path id="shapes-f21-gl.svgpath2950" sodipodi:argument="-36.758350" stroke="#000" stroke-width="1pt" fill="none" style="color:#000000" transform="translate(10 6550.7) matrix(-1 0 0 1 428.6 -6293)" sodipodi:t0="0.0000000" sodipodi:radius="28.251171" sodipodi:expansion="6.0000000" sodipodi:revolution="6.0000000" sodipodi:type="spiral" d="m138.39 6322.5c-0.01 0-0.01 0 0 0h0.01 0.01-0.08c-0.06 0-0.06-0.1-0.03-0.1 0.07-0.1 0.21-0.1 0.3-0.1 0.17 0.1 0.16 0.4 0.05 0.5-0.2 0.3-0.59 0.3-0.84 0.1-0.41-0.3-0.38-0.9-0.08-1.3 0.5-0.6 1.44-0.6 2.02-0.1 0.91 0.8 0.83 2.1 0.1 3-1.11 1.3-3.12 1.2-4.34 0.1-1.83-1.6-1.62-4.5-0.08-6.2 2.25-2.5 6.21-2.2 8.58 0 3.4 3.1 2.96 8.5-0.05 11.7-4.24 4.6-11.51 4-15.82-0.1-5.97-5.7-5.13-15.4 0.37-21.1 7.52-7.7 20.15-6.6 27.56 0.7 10 9.8 8.47 26.2-1.04 35.7" sodipodi:cy="6322.4868" sodipodi:cx="138.38965"/>
  <path id="shapes-f21-gl.svgpath2952" sodipodi:argument="-36.758350" stroke="#000" stroke-width="1pt" fill="none" style="color:#000000" transform="translate(10 6550.7) matrix(-1 0 0 1 247.89 -6285.4)" sodipodi:t0="0.0000000" sodipodi:radius="28.251171" sodipodi:expansion="0.50000000" sodipodi:revolution="6.0000000" sodipodi:type="spiral" d="m138.39 6322.5c2.66 3.6-2.06 5.3-4.66 3.4-3.29-2.4-2.8-7.3-0.15-10 3.6-3.6 9.58-2.9 12.88 0.7 4.01 4.4 3.15 11.4-1.28 15.2-5.11 4.4-12.98 3.4-17.21-1.7-4.75-5.7-3.58-14.4 2.1-19 6.25-5.1 15.66-3.8 20.65 2.4 5.41 6.8 3.99 16.8-2.72 22.2-7.22 5.7-17.96 4.2-23.59-3-6-7.7-4.38-19 3.24-24.9 8.06-6.3 19.98-4.6 26.19 3.4 6.55 8.5 4.73 20.9-3.68 27.4-8.83 6.8-21.83 4.9-28.57-3.9-7.05-9.1-5.06-22.7 4.09-29.6 9.53-7.3 23.52-5.3 30.76 4.2 7.51 9.9 5.36 24.4-4.46 31.8-10.18 7.8-25.11 5.5-32.8-4.6-7.96-10.5-5.66-25.9 4.79-33.8 10.8-8.2 26.6-5.8 34.73 5 8.38 11.1 5.94 27.3-5.12 35.6-11.38 8.6-28 6.1-36.54-5.2-8.78-11.7-6.21-28.7 5.41-37.5 11.94-8.9 29.36-6.3 38.29 5.6 9.15 12.2 6.46 30-5.71 39.1" sodipodi:cy="6322.4868" sodipodi:cx="138.38965"/>
  <path id="shapes-f21-gl.svgpath2953" sodipodi:argument="-36.758350" stroke="#000" stroke-width="1pt" fill="none" style="color:#000000" transform="translate(10 6550.7) matrix(-1 0 0 1 187.66 -6285.4)" sodipodi:t0="0.0000000" sodipodi:radius="28.251171" sodipodi:expansion="0.20000000" sodipodi:revolution="6.0000000" sodipodi:type="spiral" d="m138.39 6322.5c9.96 13.6-4.98 16.3-12.09 8.8-6.17-6.5-4.74-17.1 1.96-22.7 7.59-6.3 19.13-4.7 25.19 2.9 6.56 8.2 4.8 20.5-3.43 26.9-8.72 6.8-21.62 4.9-28.31-3.8-7.01-9.1-5.03-22.5 4.07-29.4 9.44-7.2 23.31-5.1 30.45 4.3 7.38 9.7 5.24 24-4.48 31.3-10 7.6-24.62 5.3-32.12-4.6-7.69-10.3-5.43-25.2 4.79-32.9 10.45-7.8 25.7-5.5 33.5 4.9 7.96 10.7 5.6 26.2-5.04 34.2-10.84 8-26.63 5.6-34.68-5.2-8.2-11-5.75-27 5.25-35.2 11.18-8.3 27.43-5.8 35.72 5.3 8.41 11.4 5.88 27.8-5.43 36.2-11.48 8.5-28.17 6-36.66-5.5-8.6-11.6-6.01-28.5 5.6-37.1 11.75-8.7 28.82-6 37.49 5.7 8.79 11.9 6.13 29.1-5.73 37.9-12 8.9-29.42 6.2-38.28-5.8-8.95-12.1-6.23-29.7 5.87-38.6 12.23-9.1 29.98-6.3 38.99 5.9 9.11 12.3 6.34 30.2-5.99 39.3" sodipodi:cy="6322.4868" sodipodi:cx="138.38965"/>
  <rect id="d0e840" display="none" height="1e3px" width="288" y="6623.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e840"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">O número máximo de voltas da espiral é 1024.</flowDiv>
+  <flowPara >O número máximo de voltas da espiral é 1024.</flowPara>
  </flowRoot>
  <rect id="d0e843" display="none" height="1e3px" width="288" y="6641.2" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e843"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ao igual que a ferramenta Elipse non só é boa para facer elipses senón tamén para facer arcos (liñas de curvatura constante), a ferramenta Espiral é útil para facer curvas cuxa curvatura <flowSpan font-style="italic">varía lixeiramente</flowSpan>. Comparada cunha simple curva Bézier, un arco ou unha espiral normalmente é máis conveniente porque pode alongala ou acurtala arrastrando unha asa ao longo da curva e sen afectarlle á súa forma. Aínda que normalmente as espirais se debuxan sen recheo, tamén pode engadirlle un recheo e eliminar o trazo para conseguir efectos interesantes.</flowDiv>
+  <flowPara >Ao igual que a ferramenta Elipse non só é boa para facer elipses senón tamén para facer arcos (liñas de curvatura constante), a ferramenta Espiral é útil para facer curvas cuxa curvatura <flowSpan font-style="italic">varía lixeiramente</flowSpan>. Comparada cunha simple curva Bézier, un arco ou unha espiral normalmente é máis conveniente porque pode alongala ou acurtala arrastrando unha asa ao longo da curva e sen afectarlle á súa forma. Aínda que normalmente as espirais se debuxan sen recheo, tamén pode engadirlle un recheo e eliminar o trazo para conseguir efectos interesantes.</flowPara>
  </flowRoot>
  <path id="shapes-f22-gl.svgpath3031" style="color:#000000" sodipodi:revolution="3.3807619" sodipodi:radius="40.249962" d="m84.272 6515.5c-0.242-12 11.069-20.8 22.538-20.1 13.64 0.9 23.48 13.7 22.21 27.1-1.42 14.9-15.51 25.6-30.22 24-15.983-1.8-27.382-17-25.491-32.8 2.021-16.9 18.085-28.9 34.831-26.8 17.69 2.3 30.27 19.1 27.98 36.7-2.4 18.4-19.98 31.5-38.288 29-19.079-2.5-32.606-20.8-30.025-39.7 2.679-19.7 21.521-33.7 41.113-31 20.25 2.8 34.59 22.2 31.77 42.4-2.9 20.8-22.82 35.5-43.522 32.6-21.279-3-36.334-23.5-33.315-44.7 1.448-10.1 6.893-19.5 14.978-25.8" fill-rule="evenodd" transform="translate(10 6750.8) matrix(-.12864 .67933 -.67933 -.12864 4573.6 795.76)" sodipodi:argument="-17.179831" sodipodi:cy="6518.4199" sodipodi:cx="103.19778" sodipodi:expansion="0.28900903" sodipodi:type="spiral" fill="#ff6c2e" sodipodi:t0="0.076614626"/>
  <path id="shapes-f22-gl.svgpath2997" sodipodi:argument="-16.245340" stroke="#000" stroke-width="1.4463pt" fill="none" style="color:#000000" transform="translate(10 6750.8) matrix(.69140 0 0 .69140 18.847 -4437)" sodipodi:t0="0.77700925" sodipodi:radius="36.507183" sodipodi:expansion="13.200652" sodipodi:revolution="2.8106463" sodipodi:type="spiral" d="m241.28 6460.6c-0.33-2.3 2.45-3.6 4.23-3.7 8.24-0.8 12.7 9.2 13.01 15.9 0.43 9.3-4.18 18.1-10.49 24.6" sodipodi:cy="6461.3071" sodipodi:cx="242.34204"/>
@@ -1076,11 +1076,11 @@ from -0.2 to 0.2:
  <path id="shapes-f22-gl.svgpath3636" sodipodi:argument="-16.245340" stroke="#000" stroke-width="1.4463pt" fill="none" style="color:#000000" transform="translate(10 6750.8) matrix(-.69140 6.1207e-8 -6.1207e-8 -.69140 425.78 4523.9)" sodipodi:t0="0.79712820" sodipodi:radius="36.849499" sodipodi:expansion="13.200652" sodipodi:revolution="2.8126345" sodipodi:type="spiral" d="m241.32 6459.8c0.7-3 4.87-3.3 7.23-2.6 10.57 3 11.3 17.5 8.39 26-1.88 5.5-5.22 10.5-9.32 14.6" sodipodi:cy="6461.3071" sodipodi:cx="242.34204"/>
  <path id="shapes-f22-gl.svgpath3089" sodipodi:argument="-16.245340" stroke="#000" stroke-width="1.4463pt" fill="none" style="color:#000000" transform="translate(10 6750.8) matrix(-.34570 .59877 -.59877 -.34570 4235.7 2172)" sodipodi:t0="0.77057040" sodipodi:radius="57.635422" sodipodi:expansion="13.200652" sodipodi:revolution="2.9095716" sodipodi:type="spiral" d="m241.32 6459.8c0.7-3 4.87-3.3 7.23-2.6 10.57 3 11.3 17.5 8.39 26-5.81 17-23.61 26.9-40.46 29.6" sodipodi:cy="6461.3071" sodipodi:cx="242.34204"/>
  <rect id="d0e859" display="none" height="1e3px" width="288" y="6862.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e859"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Especialmente interesante son as espirais con trazo punteado — combinan a suave concentración da figura con marcas normais equidistantes (puntos ou guións) para obter efectos de «moiré» fermosos:</flowDiv>
+  <flowPara >Especialmente interesante son as espirais con trazo punteado — combinan a suave concentración da figura con marcas normais equidistantes (puntos ou guións) para obter efectos de «moiré» fermosos:</flowPara>
  </flowRoot>
  <path id="shapes-f23-gl.svgpath3032" sodipodi:argument="-36.806286" stroke="#000" stroke-width="3.75" fill="none" style="color:#000000" transform="translate(10 6918.8) matrix(-.17215 .64245 -.64245 -.17215 4263.8 1103.8)" sodipodi:t0="0.0000000" sodipodi:radius="68.998032" sodipodi:expansion="0.98582262" sodipodi:revolution="18.821123" sodipodi:type="spiral" d="m103.2 6518.4c0.37 0.5-0.43 0.7-0.76 0.6-0.87-0.3-0.89-1.4-0.45-2.1 0.77-1.1 2.44-1.1 3.45-0.3 1.47 1.2 1.37 3.5 0.15 4.8-1.61 1.8-4.43 1.6-6.101 0-2.092-2-1.871-5.4 0.134-7.4 2.417-2.4 6.427-2.1 8.747 0.3 2.72 2.8 2.37 7.4-0.43 10-3.22 3.1-8.406 2.6-11.363-0.5-3.354-3.7-2.878-9.4 0.705-12.7 4.018-3.7 10.388-3.2 13.988 0.8 3.98 4.4 3.38 11.4-0.99 15.3-4.81 4.3-12.365 3.6-16.596-1.1-4.616-5.2-3.884-13.4 1.272-17.9 5.594-4.9 14.334-4.2 19.194 1.4 5.25 6 4.39 15.3-1.55 20.5-6.38 5.6-16.299 4.6-21.796-1.7-5.875-6.8-4.889-17.3 1.835-23.1 7.16-6.2 18.261-5.1 24.391 2 6.5 7.5 5.39 19.2-2.12 25.7-7.94 6.8-20.219 5.6-26.976-2.3-7.132-8.3-5.891-21.2 2.395-28.3 8.724-7.4 22.181-6.1 29.561 2.6 7.76 9.1 6.39 23.1-2.67 30.8-9.5 8.1-24.135 6.7-32.149-2.8-8.385-9.9-6.89-25.1 2.954-33.4 10.283-8.7 26.085-7.2 34.725 3.1 9.01 10.6 7.39 27-3.23 36-11.06 9.3-28.038 7.6-37.305-3.4-9.636-11.4-7.888-29 3.511-38.6 11.839-9.9 29.984-8.1 39.884 3.7 10.26 12.2 8.38 30.9-3.79 41.1-12.62 10.6-31.937 8.7-42.455-3.9-10.886-13-8.885-32.9 4.067-43.7 13.391-11.2 33.878-9.2 45.018 4.2 11.51 13.8 9.39 34.8-4.34 46.3-14.17 11.8-35.824 9.6-47.591-4.5-12.132-14.5-9.879-36.8 4.622-48.9 14.941-12.4 37.769-10.1 50.159 4.8 12.75 15.3 10.37 38.7-4.9 51.4-15.72 13.1-39.709 10.7-52.722-5-13.378-16.1-10.873-40.7 5.176-54 16.488-13.7 41.646-11.1 55.286 5.3 14 16.9 11.37 42.6-5.46 56.6-17.26 14.3-43.581 11.6-57.839-5.6-14.622-17.7-11.865-44.6 5.729-59.1 18.033-15 45.52-12.2 60.4 5.8 15.24 18.4 12.36 46.5-6 61.7-18.81 15.6-47.461 12.6-62.963-6.1-15.864-19.2-12.856-48.5 6.282-64.3 19.576-16.2 49.391-13.1 65.511 6.4 16.49 20 13.36 50.4-6.55 66.8-20.35 16.8-51.33 13.6-68.073-6.7-17.105-20.7-13.847-52.3 6.833-69.3 21.118-17.4 53.26-14.1 70.62 7 17.73 21.5 14.34 54.2-7.11 71.9-21.88 18-55.187 14.5-73.17-7.3-18.345-22.3-14.836-56.1 7.384-74.4 22.658-18.7 57.126-15.1 75.726 7.5 18.96 23 15.33 58.1-7.66 77-23.43 19.3-59.052 15.6-78.275-7.8-19.583-23.8-15.823-60 7.934-79.6 24.197-19.9 60.981-16 80.821 8.1 20.2 24.6 16.32 62-8.21 82.1-24.96 20.5-62.906 16.6-83.367-8.3-20.82-25.4-16.811-63.9 8.485-84.7 25.733-21.1 64.832-17 85.912 8.6 21.44 26.2 17.31 65.8-8.76 87.2-26.5 21.8-66.759 17.6-88.456-8.9-22.057-26.9-17.797-67.7 9.033-89.7 27.269-22.4 68.683-18 91.003 9.2 22.68 27.6 18.29 69.6-9.31 92.2-28.03 23-70.61 18.6-93.543-9.4-23.293-28.4-18.783-71.6 9.582-94.8 28.804-23.6 72.541-19 96.091 9.7 6.5 7.9 11.19 17.3 13.62 27.3" sodipodi:cy="6518.4199" sodipodi:cx="103.19778" stroke-dasharray="1.8749997 1.8749997"/>
  <path id="shapes-f23-gl.svgpath3088" sodipodi:argument="-36.806286" stroke="#000" stroke-width="7.5" fill="none" style="color:#000000" transform="translate(10 6918.8) matrix(-.17929 .65451 -.66912 -.17538 4637.7 1123.6)" sodipodi:t0="0.0000000" sodipodi:radius="68.998032" sodipodi:expansion="0.98582262" sodipodi:revolution="18.821123" sodipodi:type="spiral" d="m103.2 6518.4c0.37 0.5-0.43 0.7-0.76 0.6-0.87-0.3-0.89-1.4-0.45-2.1 0.77-1.1 2.44-1.1 3.45-0.3 1.47 1.2 1.37 3.5 0.15 4.8-1.61 1.8-4.43 1.6-6.101 0-2.092-2-1.871-5.4 0.134-7.4 2.417-2.4 6.427-2.1 8.747 0.3 2.72 2.8 2.37 7.4-0.43 10-3.22 3.1-8.406 2.6-11.363-0.5-3.354-3.7-2.878-9.4 0.705-12.7 4.018-3.7 10.388-3.2 13.988 0.8 3.98 4.4 3.38 11.4-0.99 15.3-4.81 4.3-12.365 3.6-16.596-1.1-4.616-5.2-3.884-13.4 1.272-17.9 5.594-4.9 14.334-4.2 19.194 1.4 5.25 6 4.39 15.3-1.55 20.5-6.38 5.6-16.299 4.6-21.796-1.7-5.875-6.8-4.889-17.3 1.835-23.1 7.16-6.2 18.261-5.1 24.391 2 6.5 7.5 5.39 19.2-2.12 25.7-7.94 6.8-20.219 5.6-26.976-2.3-7.132-8.3-5.891-21.2 2.395-28.3 8.724-7.4 22.181-6.1 29.561 2.6 7.76 9.1 6.39 23.1-2.67 30.8-9.5 8.1-24.135 6.7-32.149-2.8-8.385-9.9-6.89-25.1 2.954-33.4 10.283-8.7 26.085-7.2 34.725 3.1 9.01 10.6 7.39 27-3.23 36-11.06 9.3-28.038 7.6-37.305-3.4-9.636-11.4-7.888-29 3.511-38.6 11.839-9.9 29.984-8.1 39.884 3.7 10.26 12.2 8.38 30.9-3.79 41.1-12.62 10.6-31.937 8.7-42.455-3.9-10.886-13-8.885-32.9 4.067-43.7 13.391-11.2 33.878-9.2 45.018 4.2 11.51 13.8 9.39 34.8-4.34 46.3-14.17 11.8-35.824 9.6-47.591-4.5-12.132-14.5-9.879-36.8 4.622-48.9 14.941-12.4 37.769-10.1 50.159 4.8 12.75 15.3 10.37 38.7-4.9 51.4-15.72 13.1-39.709 10.7-52.722-5-13.378-16.1-10.873-40.7 5.176-54 16.488-13.7 41.646-11.1 55.286 5.3 14 16.9 11.37 42.6-5.46 56.6-17.26 14.3-43.581 11.6-57.839-5.6-14.622-17.7-11.865-44.6 5.729-59.1 18.033-15 45.52-12.2 60.4 5.8 15.24 18.4 12.36 46.5-6 61.7-18.81 15.6-47.461 12.6-62.963-6.1-15.864-19.2-12.856-48.5 6.282-64.3 19.576-16.2 49.391-13.1 65.511 6.4 16.49 20 13.36 50.4-6.55 66.8-20.35 16.8-51.33 13.6-68.073-6.7-17.105-20.7-13.847-52.3 6.833-69.3 21.118-17.4 53.26-14.1 70.62 7 17.73 21.5 14.34 54.2-7.11 71.9-21.88 18-55.187 14.5-73.17-7.3-18.345-22.3-14.836-56.1 7.384-74.4 22.658-18.7 57.126-15.1 75.726 7.5 18.96 23 15.33 58.1-7.66 77-23.43 19.3-59.052 15.6-78.275-7.8-19.583-23.8-15.823-60 7.934-79.6 24.197-19.9 60.981-16 80.821 8.1 20.2 24.6 16.32 62-8.21 82.1-24.96 20.5-62.906 16.6-83.367-8.3-20.82-25.4-16.811-63.9 8.485-84.7 25.733-21.1 64.832-17 85.912 8.6 21.44 26.2 17.31 65.8-8.76 87.2-26.5 21.8-66.759 17.6-88.456-8.9-22.057-26.9-17.797-67.7 9.033-89.7 27.269-22.4 68.683-18 91.003 9.2 22.68 27.6 18.29 69.6-9.31 92.2-28.03 23-70.61 18.6-93.543-9.4-23.293-28.4-18.783-71.6 9.582-94.8 28.804-23.6 72.541-19 96.091 9.7 6.5 7.9 11.19 17.3 13.62 27.3" sodipodi:cy="6518.4199" sodipodi:cx="103.19778" stroke-dasharray="3.7499994 3.7499994"/>
@@ -1089,11 +1089,11 @@ from -0.2 to 0.2:
   <tspan y="7040.878718099998" x="10">Conclusión</tspan>
  </text>
  <rect id="d0e878" display="none" height="1e3px" width="288" y="7046.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e878"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">As ferramentas de figura de Inkscape son moi potentes. Aprenda os seus trucos e xogue con elas só por pracer — isto valerá a pena cando faga deseños, porque o uso de figuras en vez de simples camiños a miúdo fai que sexa máis rápido crear arte vectorial e máis fácil modificalo. Se ten ideas para mellorar as figuras, por favor contacte cos desenvolvedores.</flowDiv>
+  <flowPara >As ferramentas de figura de Inkscape son moi potentes. Aprenda os seus trucos e xogue con elas só por pracer — isto valerá a pena cando faga deseños, porque o uso de figuras en vez de simples camiños a miúdo fai que sexa máis rápido crear arte vectorial e máis fácil modificalo. Se ten ideas para mellorar as figuras, por favor contacte cos desenvolvedores.</flowPara>
  </flowRoot>
  <g transform="translate(0 7115.5)">
   <defs id="defs3" xmlns:cc="http://creativecommons.org/ns#">
@@ -1126,7 +1126,7 @@ from -0.2 to 0.2:
     <path id="path1521" d="m359.24 21.363c-11.313 0-22.606 4.3206-31.275 12.99l-154.09 154.06c-8.4969 8.4967-12.762 19.543-12.931 30.631h-0.0585c0 0.0395 0.0566 0.0774 0.0585 0.11702-0.002 0.18609-0.0585 0.36977-0.0585 0.55586h0.2633c2.9491 11.221 79.15 25.523 87.651 34.025 12.839 12.839-49.233 22.268-36.395 35.107 12.839 12.839 77.59 24.843 90.43 37.682 12.839 12.839-26.238 26.51-13.399 39.349s55.967-3.2094 48.155 30.28c17.338 17.338 53.512 9.0588 77.733-8.2795 12.839-12.839-24.629-11.707-11.79-24.546s45.247-12.908 72.555-43.621c-10.992-17.095-46.981-24.375-34.142-37.214s37.8-6.3179 91.659-30.777c26.292-11.941 24.12-21.01 24.019-32.006-0.002-0.23138 0-0.43973 0-0.67288h-0.0585c-0.16-11.07-4.46-22.12-12.95-30.62l-154.07-154.06c-8.66-8.667-19.99-12.987-31.3-12.987zm-1.3165 20.04c5.0295 0.13102 9.0916 3.9651 17.056 9.1279l72.789 53.977c0.79681 0.51671 1.5557 1.0557 2.2527 1.6091 0.69703 0.55327 1.3337 1.1401 1.9309 1.7261 0.5972 0.58495 1.14 1.1721 1.6383 1.7846 0.49726 0.61244 0.94845 1.2385 1.3458 1.8724 0.39844 0.6349 0.75476 1.2798 1.0532 1.9309 0.29867 0.65226 0.53281 1.325 0.7314 1.9894 0.19976 0.66341 0.36832 1.319 0.46811 1.9894 0.0999 0.67165 0.14627 1.3452 0.14627 2.0187l-43.123-20.83-4.3006 32.562-23.727-11.117-36.629 24.458-14.014-48.331-18.051 42.275-50.408 5.032 0.55587-22.439c0-5.3897 29.057-43.122 46.751-52.105l32.386-23.259c4.7787-3.0977 8.1289-4.35 11.147-4.2714zm-66.996 220.21c22.944 5.9503 48.476 13.757 68.957 13.897l0.87768 9.2157c-17.538-1.8078-54.648-10.276-63.398-14.745l-6.4363-8.3672z" stroke-width="1pt"/>
    </g>
    <use id="use1328" style="color:#000000" xlink:href="#path1508" transform="matrix(5.1767 0 0 5.1767 -102.7 -256.62)" height="1052.3622" fill-opacity=".064615" width="744.09448" y="0" x="0" font-family="sans-serif" fill="#ffffff"/>
-   <text id="text1944" opacity=".5" line-height="125%" xml:space="preserve" transform="rotate(-90)" font-size="6.9693px" y="-6.6619034" x="-70.787514" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan1946" sodipodi:role="line" x="-70.787514" style="letter-spacing:.29056" y="-6.6619034">Use <tspan id="tspan1948" font-weight="bold">Ctrl+frecha arriba <tspan id="tspan2979" font-weight="normal">para desprazar </tspan></tspan></tspan></text>
+   <text id="text1944" opacity=".5" line-height="125%"  transform="rotate(-90)" font-size="6.9693px" y="-6.6619034" x="-70.787514" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan1946" sodipodi:role="line" x="-70.787514" style="letter-spacing:.29056" y="-6.6619034">Use <tspan id="tspan1948" font-weight="bold">Ctrl+frecha arriba <tspan id="tspan2979" font-weight="normal">para desprazar </tspan></tspan></tspan></text>
    <path id="path1951" opacity=".5" style="color:#000000" d="m338.53 197.82-13.108-1.2709 7.6547-10.717z" fill-rule="evenodd" transform="matrix(-.61496 -.045496 -.061919 .45186 207.69 -163.2)"/>
   </g>
  </g>

@@ -37,7 +37,7 @@
    <path id="path831" d="m359.24 21.363c-11.313 0-22.606 4.3206-31.275 12.99l-154.09 154.06c-8.4969 8.4967-12.762 19.543-12.931 30.631h-0.0585c0 0.0395 0.0566 0.0774 0.0585 0.11702-0.002 0.18609-0.0585 0.36977-0.0585 0.55586h0.2633c2.9491 11.221 79.15 25.523 87.651 34.025 12.839 12.839-49.233 22.268-36.395 35.107 12.839 12.839 77.59 24.843 90.43 37.682 12.839 12.839-26.238 26.51-13.399 39.349s55.967-3.2094 48.155 30.28c17.338 17.338 53.512 9.0588 77.733-8.2795 12.839-12.839-24.629-11.707-11.79-24.546s45.247-12.908 72.555-43.621c-10.992-17.095-46.981-24.375-34.142-37.214s37.8-6.3179 91.659-30.777c26.292-11.941 24.12-21.01 24.019-32.006-0.002-0.23138 0-0.43973 0-0.67288h-0.0585c-0.16-11.07-4.46-22.12-12.95-30.62l-154.07-154.06c-8.66-8.667-19.99-12.987-31.3-12.987zm-1.3165 20.04c5.0295 0.13102 9.0916 3.9651 17.056 9.1279l72.789 53.977c0.79681 0.51671 1.5557 1.0557 2.2527 1.6091 0.69703 0.55327 1.3337 1.1401 1.9309 1.7261 0.5972 0.58495 1.14 1.1721 1.6383 1.7846 0.49726 0.61244 0.94845 1.2385 1.3458 1.8724 0.39844 0.6349 0.75476 1.2798 1.0532 1.9309 0.29867 0.65226 0.53281 1.325 0.7314 1.9894 0.19976 0.66341 0.36832 1.319 0.46811 1.9894 0.0999 0.67165 0.14627 1.3452 0.14627 2.0187l-43.123-20.83-4.3006 32.562-23.727-11.117-36.629 24.458-14.014-48.331-18.051 42.275-50.408 5.032 0.55587-22.439c0-5.3897 29.057-43.122 46.751-52.105l32.386-23.259c4.7787-3.0977 8.1289-4.35 11.147-4.2714zm-66.996 220.21c22.944 5.9503 48.476 13.757 68.957 13.897l0.87768 9.2157c-17.538-1.8078-54.648-10.276-63.398-14.745l-6.4363-8.3672z" stroke-width="1pt"/>
   </g>
   <use id="use2086" style="color:#000000" xlink:href="#path1124" transform="matrix(3.7991 0 0 3.7991 -428.74 -36.475)" height="1052.3622" fill-opacity=".11077" width="320.00000" y="0.0000000" x="0.0000000" font-family="sans-serif" fill="#ffffff"/>
-  <text id="text7519" opacity=".5" line-height="125%" xml:space="preserve" transform="rotate(90)" font-size="6.9693px" y="-326.81229" x="3.6203015" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan7521" sodipodi:role="line" x="3.6203015" style="letter-spacing:.29056" y="-326.81229">Na posunutie ďalej použite <tspan id="tspan7523" font-weight="bold">Ctrl+šípka dolu</tspan></tspan></text>
+  <text id="text7519" opacity=".5" line-height="125%"  transform="rotate(90)" font-size="6.9693px" y="-326.81229" x="3.6203015" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan7521" sodipodi:role="line" x="3.6203015" style="letter-spacing:.29056" y="-326.81229">Na posunutie ďalej použite <tspan id="tspan7523" font-weight="bold">Ctrl+šípka dolu</tspan></tspan></text>
   <path id="path7527" opacity=".5" style="color:#000000" d="m343.53 147.82-13.108-1.2709 7.6547-10.717z" fill-rule="evenodd" transform="matrix(.61496 .045496 .061919 -.45186 112.46 226.1)"/>
  </g>
  <text id="text1920" font-family="sans-serif" font-size="7" transform="scale(1.1307)" y="30" x="35" fill="#ffffff">
@@ -45,103 +45,103 @@
  </text>
 <!--Author: bulia byak, buliabyak@users.sf.net-->
  <rect id="d0e15" display="none" height="1e3px" width="264" y="46" x="35"/>
- <flowRoot font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
+ <flowRoot xml:space="preserve" font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e15"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Tento návod sa týka základov používania Inkscape. Toto je regulárny dokument Inkscape, ktorý môžete prehliadať, upravovať, kopírovať z neho a ukladať zmeny.</flowDiv>
+  <flowPara >Tento návod sa týka základov používania Inkscape. Toto je regulárny dokument Inkscape, ktorý môžete prehliadať, upravovať, kopírovať z neho a ukladať zmeny.</flowPara>
  </flowRoot>
  <rect id="d0e18" display="none" height="1e3px" width="264" y="80.856" x="35"/>
- <flowRoot font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
+ <flowRoot xml:space="preserve" font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e18"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Návod Základy pokrýva témy: navigácia na plátne, správa dokumentov, základy nástrojov na úpravu tvarov, techniky výberu, transformácia objektov pomocou výberu, zoskupovanie, nastavenie výplne a ťahu, zarovnanie a vertikálne poradie. V ponuke Pomocníka nájdete ďalšie návody zaoberajúce sa pokročilými témami.</flowDiv>
+  <flowPara >Návod Základy pokrýva témy: navigácia na plátne, správa dokumentov, základy nástrojov na úpravu tvarov, techniky výberu, transformácia objektov pomocou výberu, zoskupovanie, nastavenie výplne a ťahu, zarovnanie a vertikálne poradie. V ponuke Pomocníka nájdete ďalšie návody zaoberajúce sa pokročilými témami.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="156.112495" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="156.112495" x="10">Posúvanie plátna</tspan>
  </text>
  <rect id="d0e27" display="none" height="1e3px" width="288" y="161.31" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e27"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Je veľa spôsobov ako posúvať (skrolovať) plátno (pracovnú plochu). Skúste kombináciu <flowSpan font-weight="bold">Ctrl+šípka</flowSpan>, čím plátno posuniete pomocou klávesnice. (Skúste to teraz použiť a posunúť sa nižšie v tomto dokumente.) Tiež môžete ťahať plátno pomocou stredného tlačidla myši. Alebo môžete použiť posuvníky okna (stlačením <flowSpan font-weight="bold">Ctrl+B</flowSpan> ich zobrazíte alebo skryjete). <flowSpan font-weight="bold">Koliesko</flowSpan> vašej myši umožňuje zvislé posúvanie; podržaním klávesu <flowSpan font-weight="bold">Shift</flowSpan> pri otáčaní kolieskom môžete posúvať plátno vodorovne.</flowDiv>
+  <flowPara >Je veľa spôsobov ako posúvať (skrolovať) plátno (pracovnú plochu). Skúste kombináciu <flowSpan font-weight="bold">Ctrl+šípka</flowSpan>, čím plátno posuniete pomocou klávesnice. (Skúste to teraz použiť a posunúť sa nižšie v tomto dokumente.) Tiež môžete ťahať plátno pomocou stredného tlačidla myši. Alebo môžete použiť posuvníky okna (stlačením <flowSpan font-weight="bold">Ctrl+B</flowSpan> ich zobrazíte alebo skryjete). <flowSpan font-weight="bold">Koliesko</flowSpan> vašej myši umožňuje zvislé posúvanie; podržaním klávesu <flowSpan font-weight="bold">Shift</flowSpan> pri otáčaní kolieskom môžete posúvať plátno vodorovne.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="266.654998" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="266.654998" x="10">Približovanie a odďaľovanie</tspan>
  </text>
  <rect id="d0e48" display="none" height="1e3px" width="288" y="271.85" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e48"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Najjednoduchší spôsob zmeny mierky je pomocou klávesov <flowSpan font-weight="bold">-</flowSpan> a <flowSpan font-weight="bold">+</flowSpan> (alebo <flowSpan font-weight="bold">=</flowSpan>). Môžete tiež použiť <flowSpan font-weight="bold">Ctrl+kliknutie stredným tlačidlom</flowSpan> alebo <flowSpan font-weight="bold">Ctrl+kliknutie pravým tlačidlom</flowSpan> pre priblíženie, <flowSpan font-weight="bold">Shift+kliknutie stredným tlačidlom</flowSpan> alebo <flowSpan font-weight="bold">Shift+kliknutie pravým tlačidlom</flowSpan> na oddialenie alebo otáčanie kolieska myši pri stlačenom <flowSpan font-weight="bold">Ctrl</flowSpan>. Tiež môžete kliknúť do políčka pre zmenu mierky (v pravom dolnom rohu okna dokumentu), napísať presnú hodnotu mierky v % a stlačiť Enter. Tiež máme nástroj Zmena mierky (v paneli nástrojov naľavo), ktorý vám umožní približovanie oblasti tým, že cez ňu potiahnete myšou.</flowDiv>
+  <flowPara >Najjednoduchší spôsob zmeny mierky je pomocou klávesov <flowSpan font-weight="bold">-</flowSpan> a <flowSpan font-weight="bold">+</flowSpan> (alebo <flowSpan font-weight="bold">=</flowSpan>). Môžete tiež použiť <flowSpan font-weight="bold">Ctrl+kliknutie stredným tlačidlom</flowSpan> alebo <flowSpan font-weight="bold">Ctrl+kliknutie pravým tlačidlom</flowSpan> pre priblíženie, <flowSpan font-weight="bold">Shift+kliknutie stredným tlačidlom</flowSpan> alebo <flowSpan font-weight="bold">Shift+kliknutie pravým tlačidlom</flowSpan> na oddialenie alebo otáčanie kolieska myši pri stlačenom <flowSpan font-weight="bold">Ctrl</flowSpan>. Tiež môžete kliknúť do políčka pre zmenu mierky (v pravom dolnom rohu okna dokumentu), napísať presnú hodnotu mierky v % a stlačiť Enter. Tiež máme nástroj Zmena mierky (v paneli nástrojov naľavo), ktorý vám umožní približovanie oblasti tým, že cez ňu potiahnete myšou.</flowPara>
  </flowRoot>
  <rect id="d0e75" display="none" height="1e3px" width="288" y="385.79" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e75"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Inkscape si tiež udržiava históriu úrovní priblíženia, ktoré ste počas tejto pracovnej relácie použili. Stlačením tlačidla <flowSpan font-weight="bold">`</flowSpan> sa vrátite k predchádzajúcej úrovni a stlačením  <flowSpan font-weight="bold">Shift+`</flowSpan> prejdete na nasledujúcu.</flowDiv>
+  <flowPara >Inkscape si tiež udržiava históriu úrovní priblíženia, ktoré ste počas tejto pracovnej relácie použili. Stlačením tlačidla <flowSpan font-weight="bold">`</flowSpan> sa vrátite k predchádzajúcej úrovni a stlačením  <flowSpan font-weight="bold">Shift+`</flowSpan> prejdete na nasledujúcu.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="438.04655999999994" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="438.04655999999994" x="10">Nástroje Inkscape</tspan>
  </text>
  <rect id="d0e90" display="none" height="1e3px" width="288" y="443.25" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e90"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Zvislý panel nástrojov naľavo zobrazuje nástroje Inkscape na kreslenie a úpravy. Vo vrchnej časti okna pod ponukou sa nachádza <flowSpan font-style="italic">Panel príkazov</flowSpan> s tlačidlami všeobecných príkazov a <flowSpan font-style="italic">Panel ovládania nástrojov</flowSpan>, ktorý nastavuje špecifické parametre  každého nástroja. <flowSpan font-style="italic">Stavový panel</flowSpan> v dolnej časti okna zobrazuje počas toho ako pracujete užitočné rady a správy.</flowDiv>
+  <flowPara >Zvislý panel nástrojov naľavo zobrazuje nástroje Inkscape na kreslenie a úpravy. Vo vrchnej časti okna pod ponukou sa nachádza <flowSpan font-style="italic">Panel príkazov</flowSpan> s tlačidlami všeobecných príkazov a <flowSpan font-style="italic">Panel ovládania nástrojov</flowSpan>, ktorý nastavuje špecifické parametre  každého nástroja. <flowSpan font-style="italic">Stavový panel</flowSpan> v dolnej časti okna zobrazuje počas toho ako pracujete užitočné rady a správy.</flowPara>
  </flowRoot>
  <rect id="d0e102" display="none" height="1e3px" width="288" y="514.62" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e102"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Množstvo operácií je dostupných vo forme klávesových skratiek. Otvorte Pomocník &gt; Klávesnica a myš a uvidíte kompletnú príručku.</flowDiv>
+  <flowPara >Množstvo operácií je dostupných vo forme klávesových skratiek. Otvorte Pomocník &gt; Klávesnica a myš a uvidíte kompletnú príručku.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="556.2381239999999" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="556.2381239999999" x="10">Vytváranie a spravovanie dokumentov</tspan>
  </text>
  <rect id="d0e111" display="none" height="1e3px" width="288" y="561.44" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e111"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ak chcete vytvoriť nový prázdny dokument, vyberte <flowSpan font-family="sans-serif">Súbor &gt; Nový</flowSpan> alebo stlačte <flowSpan font-weight="bold">Ctrl+N</flowSpan>. Ak chcete vytvoriť nový dokument z jednej z mnohých šablón Inkscape, vyberte <flowSpan font-family="sans-serif">Súbor &gt; Nový zo šablóny</flowSpan> alebo stlačte <flowSpan font-weight="bold">Ctrl+Alt+N</flowSpan></flowDiv>
+  <flowPara >Ak chcete vytvoriť nový prázdny dokument, vyberte <flowSpan font-family="sans-serif">Súbor &gt; Nový</flowSpan> alebo stlačte <flowSpan font-weight="bold">Ctrl+N</flowSpan>. Ak chcete vytvoriť nový dokument z jednej z mnohých šablón Inkscape, vyberte <flowSpan font-family="sans-serif">Súbor &gt; Nový zo šablóny</flowSpan> alebo stlačte <flowSpan font-weight="bold">Ctrl+Alt+N</flowSpan></flowPara>
  </flowRoot>
  <rect id="d0e125" display="none" height="1e3px" width="288" y="609.87" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e125"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Na otvorenie existujúceho dokumentu SVG použite <flowSpan font-family="sans-serif">Súbor &gt; Otvoriť</flowSpan> (<flowSpan font-weight="bold">Ctrl+O</flowSpan>). Na uloženie použite <flowSpan font-family="sans-serif">Súbor &gt; Uložiť</flowSpan> (<flowSpan font-weight="bold">Ctrl+S</flowSpan>) alebo <flowSpan font-family="sans-serif">Uložiť ako</flowSpan> (<flowSpan font-weight="bold">Shift+Ctrl+S</flowSpan>) na uloženie pod novým názvom. (Inkscape môže ešte stále byť nestabilný, preto radšej ukladajte často!)</flowDiv>
+  <flowPara >Na otvorenie existujúceho dokumentu SVG použite <flowSpan font-family="sans-serif">Súbor &gt; Otvoriť</flowSpan> (<flowSpan font-weight="bold">Ctrl+O</flowSpan>). Na uloženie použite <flowSpan font-family="sans-serif">Súbor &gt; Uložiť</flowSpan> (<flowSpan font-weight="bold">Ctrl+S</flowSpan>) alebo <flowSpan font-family="sans-serif">Uložiť ako</flowSpan> (<flowSpan font-weight="bold">Shift+Ctrl+S</flowSpan>) na uloženie pod novým názvom. (Inkscape môže ešte stále byť nestabilný, preto radšej ukladajte často!)</flowPara>
  </flowRoot>
  <rect id="d0e146" display="none" height="1e3px" width="288" y="660.08" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e146"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Inkscape používa pre svoje súbory formát SVG (Scalable Vector Graphics). SVG je otvorený štandard, ktorý široko podporujú grafické aplikácie. SVG súbory sú založené na XML a je ich možné upravovať akýmkoľvek textovým alebo XML editorom (teda okrem Inkscape). Popri SVG Inkscape dokáže importovať a exportovať niekoľko ďalších formátov (EPS, PNG).</flowDiv>
+  <flowPara >Inkscape používa pre svoje súbory formát SVG (Scalable Vector Graphics). SVG je otvorený štandard, ktorý široko podporujú grafické aplikácie. SVG súbory sú založené na XML a je ich možné upravovať akýmkoľvek textovým alebo XML editorom (teda okrem Inkscape). Popri SVG Inkscape dokáže importovať a exportovať niekoľko ďalších formátov (EPS, PNG).</flowPara>
  </flowRoot>
  <rect id="d0e149" display="none" height="1e3px" width="288" y="730.92" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e149"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Inkscape otvára pre každý dokument samostatné okno. Môžete sa medzi nimi pohybovať pomocou vášho správcu okien (napr. pomocou <flowSpan font-weight="bold">Alt+Tab</flowSpan>) alebo môžete použiť skratku Inkscape — <flowSpan font-weight="bold">Ctrl+Tab</flowSpan>, ktorou sa dajú dokola prepínať jednotlivé otvorené okná dokumentov. (Teraz vytvorte nový dokument a aby ste si to vyskúšali, prepínajte sa medzi ním a týmto dokumentom.) Pozn.: Inkscape pracuje s týmito oknami podobne ako webový prehliadač s kartami, t.j. klávesová skratka <flowSpan font-weight="bold">Ctrl+Tab</flowSpan> bude prepínať iba medzi dokumentami jedného procesu. Ak otvoríte viacero okien zo správcu súborov alebo spustíte viac ako jeden proces Inkscape prostredníctvom ikony, prepínanie nebude fungovať.</flowDiv>
+  <flowPara >Inkscape otvára pre každý dokument samostatné okno. Môžete sa medzi nimi pohybovať pomocou vášho správcu okien (napr. pomocou <flowSpan font-weight="bold">Alt+Tab</flowSpan>) alebo môžete použiť skratku Inkscape — <flowSpan font-weight="bold">Ctrl+Tab</flowSpan>, ktorou sa dajú dokola prepínať jednotlivé otvorené okná dokumentov. (Teraz vytvorte nový dokument a aby ste si to vyskúšali, prepínajte sa medzi ním a týmto dokumentom.) Pozn.: Inkscape pracuje s týmito oknami podobne ako webový prehliadač s kartami, t.j. klávesová skratka <flowSpan font-weight="bold">Ctrl+Tab</flowSpan> bude prepínať iba medzi dokumentami jedného procesu. Ak otvoríte viacero okien zo správcu súborov alebo spustíte viac ako jeden proces Inkscape prostredníctvom ikony, prepínanie nebude fungovať.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="868.2953149999998" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="868.2953149999998" x="10">Vytváranie tvarov</tspan>
  </text>
  <rect id="d0e167" display="none" height="1e3px" width="288" y="873.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e167"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Je čas na nejaké pekné tvary! Kliknite na nástroj Obdĺžnik na paneli nástrojov (alebo stlačte  <flowSpan font-weight="bold">F4</flowSpan>) a potom kliknite a ťahajte, buď v novom dokumente alebo priamo tu:</flowDiv>
+  <flowPara >Je čas na nejaké pekné tvary! Kliknite na nástroj Obdĺžnik na paneli nástrojov (alebo stlačte  <flowSpan font-weight="bold">F4</flowSpan>) a potom kliknite a ťahajte, buď v novom dokumente alebo priamo tu:</flowPara>
  </flowRoot>
  <rect id="basic-f01-sk.svgrect824" fill-rule="evenodd" transform="translate(10 921.86)" height="21.106" width="19.394" stroke="#000" y="11.835" x="8.2426" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1.25" fill="#00f"/>
  <rect id="basic-f01-sk.svgrect825" fill-rule="evenodd" transform="translate(10 921.86)" height="15.972" width="23.387" stroke="#000" y="7.2717" x="37.905" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1.25" fill="#00f"/>
@@ -155,11 +155,11 @@
  <rect id="basic-f01-sk.svgrect744" fill-rule="evenodd" transform="translate(10 921.86)" height="1.7641" width="4.1162" stroke="#000" y="20.472" x="247.49" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#00f"/>
  <rect id="basic-f01-sk.svgrect745" fill-rule="evenodd" transform="translate(10 921.86)" height="1.1761" width="2.9402" stroke="#000" y="17.532" x="259.25" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#00f"/>
  <rect id="d0e183" display="none" height="1e3px" width="288" y="983.6" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e183"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ako môžete vidieť, štandardné obdĺžniky sú modré s čiernym <flowSpan font-style="italic">ťahom</flowSpan> (obrysom) a čiastočne priesvitné. Nižšie uvidíme ako to zmeniť. Pomocou ďalších nástrojov tiež môžete vytvárať elipsy, hviezdy a špirály:</flowDiv>
+  <flowPara >Ako môžete vidieť, štandardné obdĺžniky sú modré s čiernym <flowSpan font-style="italic">ťahom</flowSpan> (obrysom) a čiastočne priesvitné. Nižšie uvidíme ako to zmeniť. Pomocou ďalších nástrojov tiež môžete vytvárať elipsy, hviezdy a špirály:</flowPara>
  </flowRoot>
  <path id="basic-f02-sk.svgpath750" sodipodi:rx="9.7025042" sodipodi:ry="3.8221989" sodipodi:type="arc" d="m27.637 659.92a9.7025 3.8222 0 1 1 -19.405 0 9.7025 3.8222 0 1 1 19.405 0z" fill-rule="evenodd" fill-opacity=".75" transform="translate(12.776 396.63)" stroke="#000" sodipodi:cy="659.92175" sodipodi:cx="17.934933" stroke-width="1pt" fill="#f00"/>
  <path id="basic-f02-sk.svgpath751" sodipodi:rx="5.2922754" sodipodi:ry="14.406750" sodipodi:type="arc" d="m31.166 681.68a5.2923 14.407 0 1 1 -10.585 0 5.2923 14.407 0 1 1 10.585 0z" fill-rule="evenodd" fill-opacity=".75" transform="translate(12.776 396.63)" stroke="#000" sodipodi:cy="681.67889" sodipodi:cx="25.873346" stroke-width="1pt" fill="#f00"/>
@@ -178,174 +178,174 @@
  <path id="basic-f02-sk.svgpath1314" sodipodi:sides="5" fill-opacity=".75" inkscape:flatsided="false" stroke="#000" stroke-width="1pt" fill="#ff0" style="color:#000000" fill-rule="evenodd" transform="translate(26.429 997.7)" inkscape:rounded="0.0000000" sodipodi:r1="7.9859571" sodipodi:r2="3.9929783" sodipodi:arg1="0.46364761" sodipodi:arg2="1.0919661" sodipodi:type="star" d="m162.5 66.648l-5.3-0.028-3.03 4.353-1.61-5.052-5.08-1.535 4.31-3.095-0.11-5.302 4.27 3.139 5.01-1.741-1.66 5.035 3.2 4.226z" inkscape:randomized="0.0000000" sodipodi:cy="63.076466" sodipodi:cx="155.35715"/>
  <path id="basic-f02-sk.svgpath1316" sodipodi:sides="5" fill-opacity=".75" inkscape:flatsided="false" stroke="#000" stroke-width="1pt" fill="#ff0" style="color:#000000" fill-rule="evenodd" transform="translate(26.429 997.7)" inkscape:rounded="0.0000000" sodipodi:r1="5.8138647" sodipodi:r2="2.9069321" sodipodi:arg1="0.74194727" sodipodi:arg2="1.3702658" sodipodi:type="star" d="m180 69.505l-3.71-1.08-2.99 2.441-0.12-3.859-3.24-2.09 3.63-1.305 0.99-3.733 2.36 3.052 3.85-0.216-2.17 3.191 1.4 3.599z" inkscape:randomized="0.0000000" sodipodi:cy="65.576469" sodipodi:cx="175.71429"/>
  <rect id="d0e199" display="none" height="1e3px" width="288" y="1115.3" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e199"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Tieto nástroje sa spoločne nazývajú <flowSpan font-style="italic">nástroje tvarov</flowSpan>. Každý tvar, ktorý vytvoríte, bude mať jeden alebo viac <flowSpan font-style="italic">úchopov</flowSpan> v tvare diamantu; skúste nimi ťahať, aby ste videli ako tvar reaguje. Panel Ovládanie pre nástroj tvar je ďalším spôsobom ako meniť tvar; toto ovládanie ovplyvňuje momentálne vybrané tvary (napr. tie, ktoré majú úchopy) <flowSpan font-style="italic">a zároveň</flowSpan> nastavujú štandardné hodnoty, ktoré sa použijú na novovytvorené tvary.</flowDiv>
+  <flowPara >Tieto nástroje sa spoločne nazývajú <flowSpan font-style="italic">nástroje tvarov</flowSpan>. Každý tvar, ktorý vytvoríte, bude mať jeden alebo viac <flowSpan font-style="italic">úchopov</flowSpan> v tvare diamantu; skúste nimi ťahať, aby ste videli ako tvar reaguje. Panel Ovládanie pre nástroj tvar je ďalším spôsobom ako meniť tvar; toto ovládanie ovplyvňuje momentálne vybrané tvary (napr. tie, ktoré majú úchopy) <flowSpan font-style="italic">a zároveň</flowSpan> nastavujú štandardné hodnoty, ktoré sa použijú na novovytvorené tvary.</flowPara>
  </flowRoot>
  <rect id="d0e211" display="none" height="1e3px" width="288" y="1197.3" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e211"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ak chcete <flowSpan font-style="italic">vrátiť</flowSpan> vašu poslednú činnosť, stlačte <flowSpan font-weight="bold">Ctrl+Z</flowSpan>. (Alebo ak si to znova rozmyslíte, môžete <flowSpan font-style="italic">opakovať</flowSpan> vrátenú činnosť pomocou <flowSpan font-weight="bold">Shift+Ctrl+Z</flowSpan>.)</flowDiv>
+  <flowPara >Ak chcete <flowSpan font-style="italic">vrátiť</flowSpan> vašu poslednú činnosť, stlačte <flowSpan font-weight="bold">Ctrl+Z</flowSpan>. (Alebo ak si to znova rozmyslíte, môžete <flowSpan font-style="italic">opakovať</flowSpan> vrátenú činnosť pomocou <flowSpan font-weight="bold">Shift+Ctrl+Z</flowSpan>.)</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="1249.011928" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="1249.011928" x="10">Posúvanie, zmena veľkosti, otáčanie</tspan>
  </text>
  <rect id="d0e232" display="none" height="1e3px" width="288" y="1254.2" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e232"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Najčastejšie používaným nástrojom v Inkscape je nástroj <flowSpan font-style="italic">Výber</flowSpan>. Kliknite na najvrchnejšie tlačidlo (má na sebe symbol šípky) na paneli nástrojov alebo stlačte <flowSpan font-weight="bold">F1</flowSpan> alebo <flowSpan font-weight="bold">medzerník</flowSpan>. Teraz môžete vybrať ktorýkoľvek objekt na plátne. Kliknite dolu na obdĺžnik.</flowDiv>
+  <flowPara >Najčastejšie používaným nástrojom v Inkscape je nástroj <flowSpan font-style="italic">Výber</flowSpan>. Kliknite na najvrchnejšie tlačidlo (má na sebe symbol šípky) na paneli nástrojov alebo stlačte <flowSpan font-weight="bold">F1</flowSpan> alebo <flowSpan font-weight="bold">medzerník</flowSpan>. Teraz môžete vybrať ktorýkoľvek objekt na plátne. Kliknite dolu na obdĺžnik.</flowPara>
  </flowRoot>
  <rect id="basic-f03-sk.svgrect804" fill-rule="evenodd" fill-opacity=".75" transform="translate(10 1312.3)" height="38.81" width="40.574" stroke="#000" y="-.47140" x="25.427" stroke-width="1pt" fill="#00f"/>
  <rect id="d0e254" display="none" height="1e3px" width="288" y="1364.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e254"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Uvidíte okolo objektu úchopy v tvare šípok. Teraz môžete:</flowDiv>
+  <flowPara >Uvidíte okolo objektu úchopy v tvare šípok. Teraz môžete:</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 1388.6)"/>
  <rect id="d0e261" display="none" height="1e3px" width="258" y="1382.6" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e261"/>
   </flowRegion>
-  <flowDiv xml:space="preserve"><flowSpan font-style="italic">Posúvať</flowSpan> objekt ťahaním. (Držaním <flowSpan font-weight="bold">Ctrl</flowSpan> obmedzíte pohyb na vertikálny a horizontálny posun.)</flowDiv>
+  <flowPara ><flowSpan font-style="italic">Posúvať</flowSpan> objekt ťahaním. (Držaním <flowSpan font-weight="bold">Ctrl</flowSpan> obmedzíte pohyb na vertikálny a horizontálny posun.)</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 1417.4)"/>
  <rect id="d0e272" display="none" height="1e3px" width="258" y="1411.4" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e272"/>
   </flowRegion>
-  <flowDiv xml:space="preserve"><flowSpan font-style="italic">Meniť veľkosť</flowSpan> objektu ťahaním ktoréhokoľvek úchopu. (Držaním <flowSpan font-weight="bold">Ctrl</flowSpan> zachováte pôvodný pomer výšky/šírky.)</flowDiv>
+  <flowPara ><flowSpan font-style="italic">Meniť veľkosť</flowSpan> objektu ťahaním ktoréhokoľvek úchopu. (Držaním <flowSpan font-weight="bold">Ctrl</flowSpan> zachováte pôvodný pomer výšky/šírky.)</flowPara>
  </flowRoot>
  <rect id="d0e281" display="none" height="1e3px" width="288" y="1440.3" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e281"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Teraz znova kliknite na obdĺžnik. Úchopy sa zmenia. Teraz môžete:</flowDiv>
+  <flowPara >Teraz znova kliknite na obdĺžnik. Úchopy sa zmenia. Teraz môžete:</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 1465.5)"/>
  <rect id="d0e288" display="none" height="1e3px" width="258" y="1459.5" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e288"/>
   </flowRegion>
-  <flowDiv xml:space="preserve"><flowSpan font-style="italic">Otáčať</flowSpan> objekt ťahaním úchopov rohov. (Držaním <flowSpan font-weight="bold">Ctrl</flowSpan> obmedzíte otáčanie na kroky po 15 stupňoch. Ťahaním značky kríža zmeníte stred otáčania.)</flowDiv>
+  <flowPara ><flowSpan font-style="italic">Otáčať</flowSpan> objekt ťahaním úchopov rohov. (Držaním <flowSpan font-weight="bold">Ctrl</flowSpan> obmedzíte otáčanie na kroky po 15 stupňoch. Ťahaním značky kríža zmeníte stred otáčania.)</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 1504.4)"/>
  <rect id="d0e299" display="none" height="1e3px" width="258" y="1498.4" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e299"/>
   </flowRegion>
-  <flowDiv xml:space="preserve"><flowSpan font-style="italic">Skosiť</flowSpan> (nakloniť) objekt ťahaním úchopov mimo rohov. (Držaním <flowSpan font-weight="bold">Ctrl</flowSpan> obmedzíte skosenie na kroky po 15 stupňoch.)</flowDiv>
+  <flowPara ><flowSpan font-style="italic">Skosiť</flowSpan> (nakloniť) objekt ťahaním úchopov mimo rohov. (Držaním <flowSpan font-weight="bold">Ctrl</flowSpan> obmedzíte skosenie na kroky po 15 stupňoch.)</flowPara>
  </flowRoot>
  <rect id="d0e308" display="none" height="1e3px" width="288" y="1527.2" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e308"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Kým používate nástroj Výber, môžete tiež nastaviť presné hodnoty súradníc (X a Y) a veľkosti (W a H) výberu pomocou číselných vstupných polí v Paneli ovládania (nad plátnom).</flowDiv>
+  <flowPara >Kým používate nástroj Výber, môžete tiež nastaviť presné hodnoty súradníc (X a Y) a veľkosti (W a H) výberu pomocou číselných vstupných polí v Paneli ovládania (nad plátnom).</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="1579.4537209999996" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="1579.4537209999996" x="10">Transformácia pomocou klávesov</tspan>
  </text>
  <rect id="d0e317" display="none" height="1e3px" width="288" y="1584.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e317"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Jedna z vlastností Inkscape, ktorá ho odlišuje od väčšiny ostatných vektorových editorov, je dôraz na prístupnosť z klávesnice. Ťažko existuje nejaký príkaz alebo činnosť, ktorú nie je možné vykonať pomocou klávesnice a transformácie objektov nie sú výnimkou.</flowDiv>
+  <flowPara >Jedna z vlastností Inkscape, ktorá ho odlišuje od väčšiny ostatných vektorových editorov, je dôraz na prístupnosť z klávesnice. Ťažko existuje nejaký príkaz alebo činnosť, ktorú nie je možné vykonať pomocou klávesnice a transformácie objektov nie sú výnimkou.</flowPara>
  </flowRoot>
  <rect id="d0e320" display="none" height="1e3px" width="288" y="1634.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e320"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Pomocou klávesnice sa môžete pohybovať (klávesy <flowSpan font-weight="bold">šípok</flowSpan>), meniť veľkosť (klávesy <flowSpan font-weight="bold">&lt;</flowSpan> a <flowSpan font-weight="bold">&gt;</flowSpan>) a otáčať (klávesy <flowSpan font-weight="bold">[</flowSpan> a <flowSpan font-weight="bold">]</flowSpan>) objekty. Štandardný posun a zmena veľkosti je o 2 px; pri držaní klávesu <flowSpan font-weight="bold">Shift</flowSpan> posúvate o desaťnásobok. <flowSpan font-weight="bold">Ctrl+&gt;</flowSpan> a <flowSpan font-weight="bold">Ctrl+&lt;</flowSpan> zväčšujú resp. zmenšujú na 200 resp. 50 % originálu. Štandardné otočenie je o 15 stupňov; pri držaní <flowSpan font-weight="bold">Ctrl</flowSpan> otáčate o 90 stupňov.</flowDiv>
+  <flowPara >Pomocou klávesnice sa môžete pohybovať (klávesy <flowSpan font-weight="bold">šípok</flowSpan>), meniť veľkosť (klávesy <flowSpan font-weight="bold">&lt;</flowSpan> a <flowSpan font-weight="bold">&gt;</flowSpan>) a otáčať (klávesy <flowSpan font-weight="bold">[</flowSpan> a <flowSpan font-weight="bold">]</flowSpan>) objekty. Štandardný posun a zmena veľkosti je o 2 px; pri držaní klávesu <flowSpan font-weight="bold">Shift</flowSpan> posúvate o desaťnásobok. <flowSpan font-weight="bold">Ctrl+&gt;</flowSpan> a <flowSpan font-weight="bold">Ctrl+&lt;</flowSpan> zväčšujú resp. zmenšujú na 200 resp. 50 % originálu. Štandardné otočenie je o 15 stupňov; pri držaní <flowSpan font-weight="bold">Ctrl</flowSpan> otáčate o 90 stupňov.</flowPara>
  </flowRoot>
  <rect id="d0e350" display="none" height="1e3px" width="288" y="1706" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e350"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ale snáď najužitočnejšie sú <flowSpan font-style="italic">transformácie vo veľkosti pixelov</flowSpan>, ktoré sa vyvolávajú držaním <flowSpan font-weight="bold">Alt</flowSpan> spolu s transformačnými klávesmi. Napríklad, <flowSpan font-weight="bold">Alt+šípky</flowSpan> posunú výber o 1 pixel <flowSpan font-style="italic">pri súčasnej mierke</flowSpan> (t.j. o 1 <flowSpan font-style="italic">obrazový pixel</flowSpan>, nemýliť si s jednotkou px, ktorá je dĺžkovou jednotkou v SVG nezávislou od mierky zobrazenia). To znamená, že ak zväčšíte mierku, jedným stlačením <flowSpan font-weight="bold">Alt+šípka</flowSpan> dosiahnete <flowSpan font-style="italic">menšieho</flowSpan> absolútneho posunu, ktorý stále bude vyzerať ako posunutie o jeden pixel na vašej obrazovke. Tak je možné meniť pozíciu objektov s ľubovoľnou presnosťou jednoduchou zmenou mierky podľa potreby.</flowDiv>
+  <flowPara >Ale snáď najužitočnejšie sú <flowSpan font-style="italic">transformácie vo veľkosti pixelov</flowSpan>, ktoré sa vyvolávajú držaním <flowSpan font-weight="bold">Alt</flowSpan> spolu s transformačnými klávesmi. Napríklad, <flowSpan font-weight="bold">Alt+šípky</flowSpan> posunú výber o 1 pixel <flowSpan font-style="italic">pri súčasnej mierke</flowSpan> (t.j. o 1 <flowSpan font-style="italic">obrazový pixel</flowSpan>, nemýliť si s jednotkou px, ktorá je dĺžkovou jednotkou v SVG nezávislou od mierky zobrazenia). To znamená, že ak zväčšíte mierku, jedným stlačením <flowSpan font-weight="bold">Alt+šípka</flowSpan> dosiahnete <flowSpan font-style="italic">menšieho</flowSpan> absolútneho posunu, ktorý stále bude vyzerať ako posunutie o jeden pixel na vašej obrazovke. Tak je možné meniť pozíciu objektov s ľubovoľnou presnosťou jednoduchou zmenou mierky podľa potreby.</flowPara>
  </flowRoot>
  <rect id="d0e374" display="none" height="1e3px" width="288" y="1809.3" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e374"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Podobne, <flowSpan font-weight="bold">Alt+&gt;</flowSpan> a <flowSpan font-weight="bold">Alt+&lt;</flowSpan> menia veľkosť výberu tak, že sa zmení o jeden obrazový pixel, a <flowSpan font-weight="bold">Alt+[</flowSpan> a <flowSpan font-weight="bold">Alt+]</flowSpan> ho otáčajú tak, že sa bod naviac vzdialený od stredu posunie o jeden pixel.</flowDiv>
+  <flowPara >Podobne, <flowSpan font-weight="bold">Alt+&gt;</flowSpan> a <flowSpan font-weight="bold">Alt+&lt;</flowSpan> menia veľkosť výberu tak, že sa zmení o jeden obrazový pixel, a <flowSpan font-weight="bold">Alt+[</flowSpan> a <flowSpan font-weight="bold">Alt+]</flowSpan> ho otáčajú tak, že sa bod naviac vzdialený od stredu posunie o jeden pixel.</flowPara>
  </flowRoot>
  <rect id="d0e389" display="none" height="1e3px" width="288" y="1848.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e389"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Pozn.: Používatelia Linuxu nemusia dosiahnuť očakávané výsledky pri použití <flowSpan font-weight="bold">Alt+šípka</flowSpan> a niekoľkých ďalších kombinácií kláves, ak ich správca okien tieto udalosti klávesnice zachytí predtým, než dosiahnu aplikáciu Inkscape. Jedným riešením by bolo zmeniť konfiguráciu Správcu okien tak, ako je potrebné.</flowDiv>
+  <flowPara >Pozn.: Používatelia Linuxu nemusia dosiahnuť očakávané výsledky pri použití <flowSpan font-weight="bold">Alt+šípka</flowSpan> a niekoľkých ďalších kombinácií kláves, ak ich správca okien tieto udalosti klávesnice zachytí predtým, než dosiahnu aplikáciu Inkscape. Jedným riešením by bolo zmeniť konfiguráciu Správcu okien tak, ako je potrebné.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="1922.2993539999995" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="1922.2993539999995" x="10">Viacnásobný výber</tspan>
  </text>
  <rect id="d0e401" display="none" height="1e3px" width="288" y="1927.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e401"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Môžete naraz vybrať ľubovoľný počet objektov držaním klávesu <flowSpan font-weight="bold">Shift+kliknutím</flowSpan> na ne. Alebo môžete <flowSpan font-weight="bold">ťahať</flowSpan> myšou okolo objektov, ktoré chcete vybrať; to sa nazýva <flowSpan font-style="italic">výber pomocou gumovej pásky</flowSpan>. (Nástroj Výber sa zmení na gumovú pásku, keď začnete ťahať z prázdneho miesta. Keď však stlačíte pred začiatkom ťahania <flowSpan font-weight="bold">Shift</flowSpan>, Inkscape vždy vytvorí gumovú pásku.) Cvičte vybranie všetkých troch tvarov dolu:</flowDiv>
+  <flowPara >Môžete naraz vybrať ľubovoľný počet objektov držaním klávesu <flowSpan font-weight="bold">Shift+kliknutím</flowSpan> na ne. Alebo môžete <flowSpan font-weight="bold">ťahať</flowSpan> myšou okolo objektov, ktoré chcete vybrať; to sa nazýva <flowSpan font-style="italic">výber pomocou gumovej pásky</flowSpan>. (Nástroj Výber sa zmení na gumovú pásku, keď začnete ťahať z prázdneho miesta. Keď však stlačíte pred začiatkom ťahania <flowSpan font-weight="bold">Shift</flowSpan>, Inkscape vždy vytvorí gumovú pásku.) Cvičte vybranie všetkých troch tvarov dolu:</flowPara>
  </flowRoot>
  <rect id="basic-f04-sk.svgrect878" fill-rule="evenodd" fill-opacity=".75" transform="translate(10 2006.9)" height="26.656" width="25.253" stroke="#000" y="5.9827" x="58.428" xmlns:cc="http://creativecommons.org/ns#" stroke-width=".80106pt" fill="#00f"/>
  <path id="basic-f04-sk.svgpath879" d="m134.86 1251.7c0 9.8339-9.8015 17.806-21.892 17.806-12.091 0-21.892-7.9719-21.892-17.806 0-9.8338 9.8015-17.806 21.892-17.806 12.091 0 21.892 7.9719 21.892 17.806z" fill-rule="evenodd" fill-opacity=".75" transform="translate(10 2006.9) matrix(.80106 0 0 .80106 32.311 -983.83)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#f00"/>
  <path id="basic-f04-sk.svgpath1290" style="color:#000000" d="m182.84 29.583-13.183-3.2184-10.125 9.0355-1.013-13.533-11.722-6.8373 12.557-5.1452 2.8804-13.261 8.7737 10.353 13.502-1.3585-7.1347 11.543z" fill-rule="evenodd" fill-opacity=".75" transform="translate(10 2006.9) matrix(.87302 0 0 .87302 27.6 4.0534)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width=".91757pt" fill="#ff0"/>
  <rect id="d0e426" display="none" height="1e3px" width="288" y="2055" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e426"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Teraz použite gumovú pásku (ťahaním alebo <flowSpan font-weight="bold">Shift+ťahaním</flowSpan>) na výber dvoch elíps, ale nie obdĺžnika:</flowDiv>
+  <flowPara >Teraz použite gumovú pásku (ťahaním alebo <flowSpan font-weight="bold">Shift+ťahaním</flowSpan>) na výber dvoch elíps, ale nie obdĺžnika:</flowPara>
  </flowRoot>
  <rect id="basic-f05-sk.svgrect894" fill-rule="evenodd" fill-opacity=".75" transform="translate(10 2091.8)" height="39.698" width="151.14" stroke="#000" y="1.7363" x="46.657" xmlns:cc="http://creativecommons.org/ns#" stroke-width=".93523pt" fill="#00f"/>
  <path id="basic-f05-sk.svgpath1290" style="color:#000000" d="m94.643 25.041c0 6.9036-2.9581 12.5-6.6071 12.5s-6.6071-5.5964-6.6071-12.5 2.9581-12.5 6.6071-12.5 6.6071 5.5964 6.6071 12.5z" fill-rule="evenodd" fill-opacity=".75" transform="translate(10 2091.8) matrix(.70711 -.70711 .70711 .70711 28.793 65.478)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width=".48693pt" fill="#f00"/>
  <path id="basic-f05-sk.svgpath1292" style="color:#000000" d="m94.643 25.041c0 6.9036-2.9581 12.5-6.6071 12.5s-6.6071-5.5964-6.6071-12.5 2.9581-12.5 6.6071-12.5 6.6071 5.5964 6.6071 12.5z" fill-rule="evenodd" fill-opacity=".75" transform="translate(10 2091.8) matrix(.70711 -.70711 .70711 .70711 56.471 65.835)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width=".48693pt" fill="#f00"/>
  <rect id="d0e442" display="none" height="1e3px" width="288" y="2144.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e442"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Každý jednotlivý objekt v rámci výberu zobrazuje <flowSpan font-style="italic">indikátor výberu</flowSpan> — štandardne obdĺžnikový rámec s prerušovaným okrajom. Tieto indikátory uľahčujú vidieť, čo je vybrané a čo nie. Napríklad ak vyberiete obe elipsy a obdĺžnik, bez indikátora by ste mali problém uhádnuť, či sú elipsy vybrané alebo nie.</flowDiv>
+  <flowPara >Každý jednotlivý objekt v rámci výberu zobrazuje <flowSpan font-style="italic">indikátor výberu</flowSpan> — štandardne obdĺžnikový rámec s prerušovaným okrajom. Tieto indikátory uľahčujú vidieť, čo je vybrané a čo nie. Napríklad ak vyberiete obe elipsy a obdĺžnik, bez indikátora by ste mali problém uhádnuť, či sú elipsy vybrané alebo nie.</flowPara>
  </flowRoot>
  <rect id="d0e448" display="none" height="1e3px" width="288" y="2205.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e448"/>
   </flowRegion>
-  <flowDiv xml:space="preserve"><flowSpan font-weight="bold">Shift+kliknutie</flowSpan> na vybraný objekt ho odoberie z výberu. Vyberte všetky tri objekty hore, potom použite <flowSpan font-weight="bold">Shift+kliknutie</flowSpan> na odobranie oboch elíps z výberu, čím ponecháte vybraný iba obdĺžnik.</flowDiv>
+  <flowPara ><flowSpan font-weight="bold">Shift+kliknutie</flowSpan> na vybraný objekt ho odoberie z výberu. Vyberte všetky tri objekty hore, potom použite <flowSpan font-weight="bold">Shift+kliknutie</flowSpan> na odobranie oboch elíps z výberu, čím ponecháte vybraný iba obdĺžnik.</flowPara>
  </flowRoot>
  <rect id="d0e456" display="none" height="1e3px" width="288" y="2245" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e456"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Stlačením klávesu <flowSpan font-weight="bold">Esc</flowSpan> zrušíte výber akýchkoľvek vybraných objektov. <flowSpan font-weight="bold">Ctrl+A</flowSpan> vyberie všetky objekty na aktuálnej vrstve (ak ste nevytvorili vrstvy, je to to isté ako všetky objekty v dokumente).</flowDiv>
+  <flowPara >Stlačením klávesu <flowSpan font-weight="bold">Esc</flowSpan> zrušíte výber akýchkoľvek vybraných objektov. <flowSpan font-weight="bold">Ctrl+A</flowSpan> vyberie všetky objekty na aktuálnej vrstve (ak ste nevytvorili vrstvy, je to to isté ako všetky objekty v dokumente).</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="2297.2255680000003" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="2297.2255680000003" x="10">Zoskupovanie</tspan>
  </text>
  <rect id="d0e471" display="none" height="1e3px" width="288" y="2302.4" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e471"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Niekoľko objektov je možné skombinovať do <flowSpan font-style="italic">skupiny</flowSpan>. Skupina sa správa ako jediný objekt, keď ju ťaháte alebo transformujete. Tri objekty dolu sú nezávislé; rovnaké tri objekty napravo sú zoskupené. Skúste ťahať skupinu.</flowDiv>
+  <flowPara >Niekoľko objektov je možné skombinovať do <flowSpan font-style="italic">skupiny</flowSpan>. Skupina sa správa ako jediný objekt, keď ju ťaháte alebo transformujete. Tri objekty dolu sú nezávislé; rovnaké tri objekty napravo sú zoskupené. Skúste ťahať skupinu.</flowPara>
  </flowRoot>
  <path id="basic-f06-sk.svgrect1370" d="m14.389 22.485h31.525v33.276h-31.525z" fill-rule="evenodd" fill-opacity=".75" transform="translate(10 2360.4)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#00f"/>
  <path id="basic-f06-sk.svgpath1371" d="m134.86 1251.7c0 9.8339-9.8015 17.806-21.892 17.806-12.091 0-21.892-7.9719-21.892-17.806 0-9.8338 9.8015-17.806 21.892-17.806 12.091 0 21.892 7.9719 21.892 17.806z" fill-rule="evenodd" fill-opacity=".75" transform="translate(-57.837 1128.1)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#f00"/>
@@ -356,57 +356,57 @@
   <path id="basic-f06-sk.svgpolygon1375" d="m184.48 1254.9-15.238-3.72-11.703 10.444-1.1708-15.642-13.549-7.9029 14.514-5.9471 3.3293-15.328 10.141 11.966 15.607-1.5703-8.2467 13.343z" transform="translate(86.386 261.2)" fill="#ff0"/>
  </g>
  <rect id="d0e487" display="none" height="1e3px" width="288" y="2438.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e487"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Skupinu vytvoríte vybraním jedného alebo viacerých objektov a stlačením <flowSpan font-weight="bold">Ctrl+G</flowSpan>. Jedno alebo viacero zoskupení zrušíte stlačením <flowSpan font-weight="bold">Ctrl+U</flowSpan>. Samotné skupiny je možné zoskupovať rovnako ako akékoľvek iné objekty. Takéto rekurzívne skupiny môžu byť ľubovoľne komplexné. Avšak <flowSpan font-weight="bold">Ctrl+U</flowSpan> ruší zoskupenie iba najvrchnejšej úrovne zoskupenia vo výbere. Ak chcete zrušiť zoskupenie hlboko vnorených skupín, budete musieť stláčať <flowSpan font-weight="bold">Ctrl+U</flowSpan> opakovane.</flowDiv>
+  <flowPara >Skupinu vytvoríte vybraním jedného alebo viacerých objektov a stlačením <flowSpan font-weight="bold">Ctrl+G</flowSpan>. Jedno alebo viacero zoskupení zrušíte stlačením <flowSpan font-weight="bold">Ctrl+U</flowSpan>. Samotné skupiny je možné zoskupovať rovnako ako akékoľvek iné objekty. Takéto rekurzívne skupiny môžu byť ľubovoľne komplexné. Avšak <flowSpan font-weight="bold">Ctrl+U</flowSpan> ruší zoskupenie iba najvrchnejšej úrovne zoskupenia vo výbere. Ak chcete zrušiť zoskupenie hlboko vnorených skupín, budete musieť stláčať <flowSpan font-weight="bold">Ctrl+U</flowSpan> opakovane.</flowPara>
  </flowRoot>
  <rect id="d0e502" display="none" height="1e3px" width="288" y="2520.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e502"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ak chcete upravovať objekt v rámci skupiny, nemusíte nutne zoskupenie rušiť. <flowSpan font-weight="bold">Ctrl+kliknutím</flowSpan> objekt vyberiete a bude možné ho samostatne upravovať. <flowSpan font-weight="bold">Shift+Ctrl+kliknutím</flowSpan> vyberiete viacero objektov (v rámci alebo mimo akejkoľvek skupiny) nezávisle od zoskupenia. Pokúste sa presunúť alebo transformovať jednotlivé tvary v skupine (vpravo hore) bez toho, aby ste zrušili zoskupenie. Potom zrušte výber a normálne vyberte skupinu, aby ste videli, že zostala zoskupená.</flowDiv>
+  <flowPara >Ak chcete upravovať objekt v rámci skupiny, nemusíte nutne zoskupenie rušiť. <flowSpan font-weight="bold">Ctrl+kliknutím</flowSpan> objekt vyberiete a bude možné ho samostatne upravovať. <flowSpan font-weight="bold">Shift+Ctrl+kliknutím</flowSpan> vyberiete viacero objektov (v rámci alebo mimo akejkoľvek skupiny) nezávisle od zoskupenia. Pokúste sa presunúť alebo transformovať jednotlivé tvary v skupine (vpravo hore) bez toho, aby ste zrušili zoskupenie. Potom zrušte výber a normálne vyberte skupinu, aby ste videli, že zostala zoskupená.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="2626.0102510000006" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="2626.0102510000006" x="10">Výplň a ťah</tspan>
  </text>
  <rect id="d0e517" display="none" height="1e3px" width="288" y="2631.2" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e517"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Pravdepodobne najjednoduchší spôsob ako vyfarbiť objekt nejakou farbou je vybrať objekt a kliknúť na farbu vzorkovníka na palete pod plátnom, čím sa objekt vyfarbí (zmení farbu výplne). Namiesto toho môžete otvoriť dialóg Vzorkovník z ponuky Zobraziť (alebo stlačiť <flowSpan font-weight="bold">Shift+Ctrl+W</flowSpan>), vybrať objekt a kliknúť na farbu vzorkovníka.</flowDiv>
+  <flowPara >Pravdepodobne najjednoduchší spôsob ako vyfarbiť objekt nejakou farbou je vybrať objekt a kliknúť na farbu vzorkovníka na palete pod plátnom, čím sa objekt vyfarbí (zmení farbu výplne). Namiesto toho môžete otvoriť dialóg Vzorkovník z ponuky Zobraziť (alebo stlačiť <flowSpan font-weight="bold">Shift+Ctrl+W</flowSpan>), vybrať objekt a kliknúť na farbu vzorkovníka.</flowPara>
  </flowRoot>
  <rect id="d0e523" display="none" height="1e3px" width="288" y="2691.9" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e523"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Mocnejší je dialóg Výplň a ťah z ponuky Objekt (alebo po stlačení <flowSpan font-weight="bold">Shift+Ctrl+F</flowSpan>). Vyberte tvar dolu a otvorte dialóg Výplň a ťah.</flowDiv>
+  <flowPara >Mocnejší je dialóg Výplň a ťah z ponuky Objekt (alebo po stlačení <flowSpan font-weight="bold">Shift+Ctrl+F</flowSpan>). Vyberte tvar dolu a otvorte dialóg Výplň a ťah.</flowPara>
  </flowRoot>
  <path id="basic-f07-sk.svgpath930" d="m190.32 1450.2c0 9.0277-29.666 16.346-66.261 16.346s-66.261-7.3185-66.261-16.346c0-9.0278 29.666-16.346 66.261-16.346s66.261 7.3185 66.261 16.346z" fill-rule="evenodd" fill-opacity=".75" transform="translate(13.066 1296.5)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#f00"/>
  <rect id="d0e542" display="none" height="1e3px" width="288" y="2774.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e542"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Uvidíte, že dialóg má tri záložky: Výplň, Farba ťahu a Štýl ťahu. Záložka Výplň vám umožňuje upraviť  <flowSpan font-style="italic">výplň</flowSpan> (vnútro) vybraného objektu či objektov. Pomocou tlačidiel hneď pod záložkou môžete vybrať typ výplne vrátane žiadnej výplne (tlačidlo s krížikom), jednoduchú farebnú výplň ako aj lineárne a radiálne farebné prechody. Pre tvar hore sa aktivuje tlačidlo Jednoduchá výplň.</flowDiv>
+  <flowPara >Uvidíte, že dialóg má tri záložky: Výplň, Farba ťahu a Štýl ťahu. Záložka Výplň vám umožňuje upraviť  <flowSpan font-style="italic">výplň</flowSpan> (vnútro) vybraného objektu či objektov. Pomocou tlačidiel hneď pod záložkou môžete vybrať typ výplne vrátane žiadnej výplne (tlačidlo s krížikom), jednoduchú farebnú výplň ako aj lineárne a radiálne farebné prechody. Pre tvar hore sa aktivuje tlačidlo Jednoduchá výplň.</flowPara>
  </flowRoot>
  <rect id="d0e548" display="none" height="1e3px" width="288" y="2847.2" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e548"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ďalej nižšie uvidíte niekoľko nástrojov pre <flowSpan font-style="italic">výber farby</flowSpan>, každý na vlastnej záložke: RGB, CMYK, HSL a Koleso. Snáď najpohodlnejší je nástroj Koleso, kde môžete otáčať trojuholníkom pre výber farby na kolese a potom vybrať odtieň tejto farby z trojuholníka. Všetky nástroje pre výber farby obsahujú posuvník pre výber hodnoty <flowSpan font-style="italic">alfa</flowSpan> (krytia) vybraných objektov.</flowDiv>
+  <flowPara >Ďalej nižšie uvidíte niekoľko nástrojov pre <flowSpan font-style="italic">výber farby</flowSpan>, každý na vlastnej záložke: RGB, CMYK, HSL a Koleso. Snáď najpohodlnejší je nástroj Koleso, kde môžete otáčať trojuholníkom pre výber farby na kolese a potom vybrať odtieň tejto farby z trojuholníka. Všetky nástroje pre výber farby obsahujú posuvník pre výber hodnoty <flowSpan font-style="italic">alfa</flowSpan> (krytia) vybraných objektov.</flowPara>
  </flowRoot>
  <rect id="d0e557" display="none" height="1e3px" width="288" y="2919.6" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e557"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Kedykoľvek vyberiete objekt, nástroj pre výber farby sa aktualizuje, aby zobrazil aktuálnu výplň a ťah (pri viacerých vybraných objektoch dialóg zobrazuje ich <flowSpan font-style="italic">priemernú</flowSpan> farbu). Hrajte sa s týmito vzorkami alebo si vytvorte vlastné:</flowDiv>
+  <flowPara >Kedykoľvek vyberiete objekt, nástroj pre výber farby sa aktualizuje, aby zobrazil aktuálnu výplň a ťah (pri viacerých vybraných objektoch dialóg zobrazuje ich <flowSpan font-style="italic">priemernú</flowSpan> farbu). Hrajte sa s týmito vzorkami alebo si vytvorte vlastné:</flowPara>
  </flowRoot>
  <path id="basic-f08-sk.svgpath969" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" fill-opacity="0.75" transform="translate(10 2977.7) matrix(.99777 0 0 .93574 .12843 -1529.6)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#80765b"/>
  <path id="basic-f08-sk.svgpath970" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" fill-opacity=".26769" transform="translate(10 2977.7) matrix(.99777 0 0 .93574 35.037 -1529)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#d0765b"/>
@@ -416,11 +416,11 @@
  <path id="basic-f08-sk.svgpath974" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" fill-opacity=".74902" transform="translate(10 2977.7) matrix(.99777 0 0 .93574 167.81 -1529)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#6fe225"/>
  <path id="basic-f08-sk.svgpath975" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" transform="translate(10 2977.7) matrix(.99777 0 0 .93574 199.63 -1529)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#ff3077"/>
  <rect id="d0e573" display="none" height="1e3px" width="288" y="3024.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e573"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Pomocou záložky Farba ťahu môžete odstrániť <flowSpan font-style="italic">ťah</flowSpan> (obrys) objektu alebo mu prideliť akúkoľvek farbu a priesvitnosť.</flowDiv>
+  <flowPara >Pomocou záložky Farba ťahu môžete odstrániť <flowSpan font-style="italic">ťah</flowSpan> (obrys) objektu alebo mu prideliť akúkoľvek farbu a priesvitnosť.</flowPara>
  </flowRoot>
  <path id="basic-f09-sk.svgpath1010" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" transform="translate(10 3061.5) matrix(.99850 0 0 .93643 .81318 -1530.2)" xmlns:cc="http://creativecommons.org/ns#" fill="#dbdbdb"/>
  <path id="basic-f09-sk.svgpath1011" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" transform="translate(10 3061.5) matrix(.99850 0 0 .93643 27.358 -1530.2)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#dbdbdb"/>
@@ -431,11 +431,11 @@
  <path id="basic-f09-sk.svgpath1016" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" transform="translate(10 3061.5) matrix(.99850 0 0 .93643 176.67 -1530.2)" stroke="#7c7016" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1pt" fill="#dbdbdb"/>
  <path id="basic-f09-sk.svgpath1017" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" transform="translate(10 3061.5) matrix(.99850 0 0 .93643 203.21 -1530.2)" xmlns:cc="http://creativecommons.org/ns#" fill="#dbdbdb"/>
  <rect id="d0e589" display="none" height="1e3px" width="288" y="3108.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e589"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Na poslednej záložke, Štýl ťahu, môžete nastaviť šírku a iné parametre ťahu:</flowDiv>
+  <flowPara >Na poslednej záložke, Štýl ťahu, môžete nastaviť šírku a iné parametre ťahu:</flowPara>
  </flowRoot>
  <path id="basic-f10-sk.svgpath1033" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" transform="translate(10 3144.3) matrix(.98881 0 0 .92734 3.8016 -1511.2)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width=".012105" fill="#dbdbdb"/>
  <path id="basic-f10-sk.svgpath1034" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" transform="translate(10 3144.3) matrix(.98881 0 0 .92734 30.089 -1511.2)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="2.4211" fill="#dbdbdb"/>
@@ -445,11 +445,11 @@
  <path id="basic-f10-sk.svgpath1038" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" transform="translate(10 3144.3) matrix(.98881 0 0 .92734 168.1 -1511.2)" stroke="#000" stroke-dasharray="7.26312, 3.63156, 1.81578, 3.63156" xmlns:cc="http://creativecommons.org/ns#" stroke-width="1.8158" fill="#dbdbdb"/>
  <path id="basic-f10-sk.svgpath1039" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" transform="translate(10 3144.3) matrix(.98881 0 0 .92734 204.24 -1511.2)" stroke="#000" stroke-dasharray="0.847366, 0.847366" xmlns:cc="http://creativecommons.org/ns#" stroke-width=".84737" fill="#dbdbdb"/>
  <rect id="d0e602" display="none" height="1e3px" width="288" y="3198.3" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e602"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Nakoniec, namiesto jednoduchej farby môžete použiť pre výplne a ťahy <flowSpan font-style="italic">farebné prechody</flowSpan>:</flowDiv>
+  <flowPara >Nakoniec, namiesto jednoduchej farby môžete použiť pre výplne a ťahy <flowSpan font-style="italic">farebné prechody</flowSpan>:</flowPara>
  </flowRoot>
  <defs id="basic-f11-sk.svgdefs3">
   <linearGradient id="basic-f11-sk.svglinearGradient1054" y2="2084.7" gradientUnits="userSpaceOnUse" y1="2043.7" gradientTransform="scale(1.2479 .80132)" x2="31.507" x1="28.86">
@@ -496,36 +496,36 @@
  <path id="basic-f11-sk.svgpath1075" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" transform="translate(10 3235.1) matrix(-1.0663 0 0 -1 263.1 1673.3)" stroke="url(#basic-f11-sk.svgradialGradient1076)" xmlns:cc="http://creativecommons.org/ns#" stroke-width="3.6437" fill="url(#basic-f11-sk.svgradialGradient1083)"/>
  <path id="basic-f11-sk.svgpath1084" d="m67.136 1653c0 9.8338-12.415 17.806-27.73 17.806s-27.73-7.9719-27.73-17.806c0-9.8338 12.415-17.806 27.73-17.806s27.73 7.9719 27.73 17.806z" fill-rule="evenodd" transform="translate(10 3235.1) matrix(1.0663 0 0 1 214.49 -1632.8)" stroke="url(#basic-f11-sk.svgradialGradient1085)" stroke-dasharray="3.64368, 3.64368" xmlns:cc="http://creativecommons.org/ns#" stroke-width="3.6437" fill="url(#basic-f11-sk.svgradialGradient1086)"/>
  <rect id="d0e618" display="none" height="1e3px" width="288" y="3286.3" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e618"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Keď prepnete z jednoduchej farby na farebný prechod, novovytvorený farebný prechod použije ako základ prechod z predošlej jednoduchej farby z nepriesvitnej do priehľadnej. Prepnite na nástroj Farebný prechod (<flowSpan font-weight="bold">Ctrl+F1</flowSpan>) a ťahajte <flowSpan font-style="italic">úchopy farebného prechodu</flowSpan> — ovládacie prvky pripojené čiarami, ktoré definujú smer a dĺžku farebného prechodu. Keď je vybraný niektorý z úchopov farebného prechodu (zvýraznený modrou), dialóg Výplň a ťah nastavuje farbu daného úchopu namiesto farby celého objektu.</flowDiv>
+  <flowPara >Keď prepnete z jednoduchej farby na farebný prechod, novovytvorený farebný prechod použije ako základ prechod z predošlej jednoduchej farby z nepriesvitnej do priehľadnej. Prepnite na nástroj Farebný prechod (<flowSpan font-weight="bold">Ctrl+F1</flowSpan>) a ťahajte <flowSpan font-style="italic">úchopy farebného prechodu</flowSpan> — ovládacie prvky pripojené čiarami, ktoré definujú smer a dĺžku farebného prechodu. Keď je vybraný niektorý z úchopov farebného prechodu (zvýraznený modrou), dialóg Výplň a ťah nastavuje farbu daného úchopu namiesto farby celého objektu.</flowPara>
  </flowRoot>
  <rect id="d0e627" display="none" height="1e3px" width="288" y="3379" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e627"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ešte ďalší pohodlný spôsob ako zmeniť farbu objektu je pomocou nástroja Pipeta. (<flowSpan font-weight="bold">F7</flowSpan>). Jednoducho <flowSpan font-weight="bold">kliknite</flowSpan> týmto nástrojom kdekoľvek v kresbe a vybraná farba sa priradí výplni vybraného objektu (<flowSpan font-weight="bold">Shift+kliknutie</flowSpan> priradí farbu ťahu).</flowDiv>
+  <flowPara >Ešte ďalší pohodlný spôsob ako zmeniť farbu objektu je pomocou nástroja Pipeta. (<flowSpan font-weight="bold">F7</flowSpan>). Jednoducho <flowSpan font-weight="bold">kliknite</flowSpan> týmto nástrojom kdekoľvek v kresbe a vybraná farba sa priradí výplni vybraného objektu (<flowSpan font-weight="bold">Shift+kliknutie</flowSpan> priradí farbu ťahu).</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="3441.779024000001" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="3441.779024000001" x="10">Duplikácia, zarovnanie, rozloženie</tspan>
  </text>
  <rect id="d0e645" display="none" height="1e3px" width="288" y="3447" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e645"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Jedna z najčastejších operácií je <flowSpan font-style="italic">duplikácia</flowSpan> objektu (<flowSpan font-weight="bold">Ctrl+D</flowSpan>). Duplikát sa umiestni presne nad originál a je vybraný, takže ho môžete odtiahnuť myšou alebo klávesmi šípok. Pre precvičenie skúste zaplniť čiaru kópiami tohto čierneho štvorca:</flowDiv>
+  <flowPara >Jedna z najčastejších operácií je <flowSpan font-style="italic">duplikácia</flowSpan> objektu (<flowSpan font-weight="bold">Ctrl+D</flowSpan>). Duplikát sa umiestni presne nad originál a je vybraný, takže ho môžete odtiahnuť myšou alebo klávesmi šípok. Pre precvičenie skúste zaplniť čiaru kópiami tohto čierneho štvorca:</flowPara>
  </flowRoot>
  <rect id="basic-f12-sk.svgrect1117" fill-rule="evenodd" transform="translate(10 3505)" height="11.092" width="11.092" y=".90725" x="-.11450"/>
  <rect id="d0e664" display="none" height="1e3px" width="288" y="3528.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e664"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Je pravdepodobné, že vaše kópie štvorca budú rozložené viacmenej náhodne. Tu prichádza vhod dialóg Zarovnanie a umiestnenie (<flowSpan font-weight="bold">Ctrl+Shift+A</flowSpan>). Vyberte všetky štvorce (<flowSpan font-weight="bold">Shift+kliknutie</flowSpan> alebo ťahaním gumovou páskou), otvorte dialóg a stlačte tlačidlo „Centrovať na vodorovnej osi“, potom „Rovnomerne vodorovne rozmiestniť objekty“ (čítajte bublinové texty tlačidiel). Objekty sú teraz pekne zarovnané a ekvidištantne rozložené. Tu sú ďalšie príklady zarovnania a umiestnenia:</flowDiv>
+  <flowPara >Je pravdepodobné, že vaše kópie štvorca budú rozložené viacmenej náhodne. Tu prichádza vhod dialóg Zarovnanie a umiestnenie (<flowSpan font-weight="bold">Ctrl+Shift+A</flowSpan>). Vyberte všetky štvorce (<flowSpan font-weight="bold">Shift+kliknutie</flowSpan> alebo ťahaním gumovou páskou), otvorte dialóg a stlačte tlačidlo „Centrovať na vodorovnej osi“, potom „Rovnomerne vodorovne rozmiestniť objekty“ (čítajte bublinové texty tlačidiel). Objekty sú teraz pekne zarovnané a ekvidištantne rozložené. Tu sú ďalšie príklady zarovnania a umiestnenia:</flowPara>
  </flowRoot>
  <defs id="basic-f13-sk.svgdefs3">
   <radialGradient id="basic-f13-sk.svgradialGradient1670" cx="188.95" xlink:href="#basic-f13-sk.svglinearGradient841" gradientUnits="userSpaceOnUse" cy="2278" r="19.568" gradientTransform="scale(1.0695 .93503)"/>
@@ -589,18 +589,18 @@
   <tspan y="3707.916026000001" x="10">Vertikálne poradie</tspan>
  </text>
  <rect id="d0e689" display="none" height="1e3px" width="288" y="3713.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e689"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Termín <flowSpan font-style="italic">vertikálne poradie</flowSpan> znamená poradie, v akom sú objekty na seba poskladané na kresbe, t.j. ktoré sú na vrchu a zakrývajú iné. Dva príkazy v ponuke Objekt — „Presunúť na vrch“ (kláves <flowSpan font-weight="bold">Home</flowSpan>) a „Presunúť na spodok“ (kláves <flowSpan font-weight="bold">End</flowSpan>) presunú objekty celkom navrch resp. celkom naspodok vertikálneho poradia aktuálnej vrstvy. Ďalšie dva príkazy — „Presunúť vyššie“  (<flowSpan font-weight="bold">PgUp</flowSpan>) a „Presunúť nižšie“ (<flowSpan font-weight="bold">PgDn</flowSpan>) znížia alebo zvýšia výber iba o <flowSpan font-style="italic">jeden krok</flowSpan>, t.j. posunú ho o jeden nevybraný objekt vo vertikálnom poradí (v sa poradí počítajú iba objekty, ktoré sa prekrývajú; ak sa s výberom nič neprekrýva, „Presunúť vyššie“ a „Presunúť nižšie“ ho presunú celkom navrch resp. celkom naspodok).</flowDiv>
+  <flowPara >Termín <flowSpan font-style="italic">vertikálne poradie</flowSpan> znamená poradie, v akom sú objekty na seba poskladané na kresbe, t.j. ktoré sú na vrchu a zakrývajú iné. Dva príkazy v ponuke Objekt — „Presunúť na vrch“ (kláves <flowSpan font-weight="bold">Home</flowSpan>) a „Presunúť na spodok“ (kláves <flowSpan font-weight="bold">End</flowSpan>) presunú objekty celkom navrch resp. celkom naspodok vertikálneho poradia aktuálnej vrstvy. Ďalšie dva príkazy — „Presunúť vyššie“  (<flowSpan font-weight="bold">PgUp</flowSpan>) a „Presunúť nižšie“ (<flowSpan font-weight="bold">PgDn</flowSpan>) znížia alebo zvýšia výber iba o <flowSpan font-style="italic">jeden krok</flowSpan>, t.j. posunú ho o jeden nevybraný objekt vo vertikálnom poradí (v sa poradí počítajú iba objekty, ktoré sa prekrývajú; ak sa s výberom nič neprekrýva, „Presunúť vyššie“ a „Presunúť nižšie“ ho presunú celkom navrch resp. celkom naspodok).</flowPara>
  </flowRoot>
  <rect id="d0e710" display="none" height="1e3px" width="288" y="3837.6" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e710"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Precvičte si použitie týchto príkazov tým, že obrátite vertikálne poradie objektov dolu tak, že elipsa celkom vľavo bude navrchu a tá celkom vpravo bude naspodku:</flowDiv>
+  <flowPara >Precvičte si použitie týchto príkazov tým, že obrátite vertikálne poradie objektov dolu tak, že elipsa celkom vľavo bude navrchu a tá celkom vpravo bude naspodku:</flowPara>
  </flowRoot>
  <path id="basic-f14-sk.svgpath1127" d="m70.423 2348c0 7.6166-10.51 13.791-23.474 13.791s-23.474-6.1744-23.474-13.791 10.51-13.791 23.474-13.791 23.474 6.1745 23.474 13.791z" fill-rule="evenodd" transform="translate(10 3884.9) matrix(1.3625 0 0 1.7447 16.798 -4067.1)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width=".39901" fill="#f90"/>
  <path id="basic-f14-sk.svgpath1128" d="m100.94 2351.2c0 9.7234-11.429 17.606-25.528 17.606s-25.528-7.8823-25.528-17.606c0-9.7233 11.429-17.606 25.528-17.606s25.528 7.8823 25.528 17.606z" fill-rule="evenodd" transform="translate(10 3884.9) matrix(1 0 0 1.0513 31.763 -2451.9)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="0.6" fill="#f90"/>
@@ -609,49 +609,49 @@
  <path id="basic-f14-sk.svgpath1131" d="m142.61 2347.1c0 4.2135-5.2549 7.6291-11.737 7.6291-6.4822 0-11.737-3.4156-11.737-7.6291 0-4.2134 5.2549-7.6291 11.737-7.6291 6.4822 0 11.737 3.4157 11.737 7.6291z" fill-rule="evenodd" transform="translate(10 3884.9) matrix(1 0 0 1.0513 37.632 -2444.9)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="0.6" fill="#f90"/>
  <path id="basic-f14-sk.svgpath1132" d="m150.23 2347.4c0 3.079-3.2843 5.5751-7.3357 5.5751s-7.3357-2.4961-7.3357-5.5751c0-3.0791 3.2843-5.5751 7.3357-5.5751s7.3357 2.496 7.3357 5.5751z" fill-rule="evenodd" transform="translate(10 3884.9) matrix(1 0 0 1.0513 37.045 -2450.2)" stroke="#000" xmlns:cc="http://creativecommons.org/ns#" stroke-width="0.6" fill="#f90"/>
  <rect id="d0e723" display="none" height="1e3px" width="288" y="3949.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e723"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Veľmi užitočná skratka na výber je kláves <flowSpan font-weight="bold">Tab</flowSpan>. Ak nie je nič vybrané, vyberie najspodnejší objekt; inak vyberie objekt <flowSpan font-style="italic">nad vybraným objektom</flowSpan> vo vertikálnom poradí. <flowSpan font-weight="bold">Shift+Tab</flowSpan> funguje opačne, začínajúc od najvrchnejšieho objektu a postupujúc smerom dolu. Keďže objekty, ktoré vytvárate, sa pridávajú na vrch poradia, stlačením <flowSpan font-weight="bold">Shift+Tab</flowSpan> ak nie je nič vybrané pohodlne vyberiete objekt, ktorý ste práve <flowSpan font-style="italic">posledný</flowSpan> vytvorili. Precvičte si klávesy <flowSpan font-weight="bold">Tab</flowSpan> a <flowSpan font-weight="bold">Shift+Tab</flowSpan> na elipsách vyššie.</flowDiv>
+  <flowPara >Veľmi užitočná skratka na výber je kláves <flowSpan font-weight="bold">Tab</flowSpan>. Ak nie je nič vybrané, vyberie najspodnejší objekt; inak vyberie objekt <flowSpan font-style="italic">nad vybraným objektom</flowSpan> vo vertikálnom poradí. <flowSpan font-weight="bold">Shift+Tab</flowSpan> funguje opačne, začínajúc od najvrchnejšieho objektu a postupujúc smerom dolu. Keďže objekty, ktoré vytvárate, sa pridávajú na vrch poradia, stlačením <flowSpan font-weight="bold">Shift+Tab</flowSpan> ak nie je nič vybrané pohodlne vyberiete objekt, ktorý ste práve <flowSpan font-style="italic">posledný</flowSpan> vytvorili. Precvičte si klávesy <flowSpan font-weight="bold">Tab</flowSpan> a <flowSpan font-weight="bold">Shift+Tab</flowSpan> na elipsách vyššie.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="4044.530251000001" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="4044.530251000001" x="10">Výber pod a ťahanie výberu</tspan>
  </text>
  <rect id="d0e753" display="none" height="1e3px" width="288" y="4049.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e753"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Čo robiť ak je objekt, ktorý potrebujete, skrytý pod iným objektom? Objekt dolu môžete vidieť, ak je ten navrchu (čiastočne) priesvitný, ale kliknutím naň sa vyberie vrchný objekt, nie ten, ktorý potrebujete.</flowDiv>
+  <flowPara >Čo robiť ak je objekt, ktorý potrebujete, skrytý pod iným objektom? Objekt dolu môžete vidieť, ak je ten navrchu (čiastočne) priesvitný, ale kliknutím naň sa vyberie vrchný objekt, nie ten, ktorý potrebujete.</flowPara>
  </flowRoot>
  <rect id="d0e756" display="none" height="1e3px" width="288" y="4090.2" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e756"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Na to slúži <flowSpan font-weight="bold">Alt+kliknutie</flowSpan>. <flowSpan font-weight="bold">Alt+kliknutie</flowSpan> najprv vyberie vrchný objekt ako obyčajné kliknutie. Avšak ďalšie <flowSpan font-weight="bold">Alt+kliknutie</flowSpan> na rovnaké miesto vyberie objekt <flowSpan font-style="italic">pod</flowSpan> vrchným objektom; ďalšie kliknutie ešte nižší objekt atď. Tak niekoľko <flowSpan font-weight="bold">Alt+kliknutí</flowSpan> za sebou prejde dokola, od vrchu dolu, celým vertikálnym poradím objektov v mieste kliknutia. Po dosiahnutí spodku ďalšie <flowSpan font-weight="bold">Alt+kliknutie</flowSpan> prirodzene vyberie opäť najvrchnejší objekt.</flowDiv>
+  <flowPara >Na to slúži <flowSpan font-weight="bold">Alt+kliknutie</flowSpan>. <flowSpan font-weight="bold">Alt+kliknutie</flowSpan> najprv vyberie vrchný objekt ako obyčajné kliknutie. Avšak ďalšie <flowSpan font-weight="bold">Alt+kliknutie</flowSpan> na rovnaké miesto vyberie objekt <flowSpan font-style="italic">pod</flowSpan> vrchným objektom; ďalšie kliknutie ešte nižší objekt atď. Tak niekoľko <flowSpan font-weight="bold">Alt+kliknutí</flowSpan> za sebou prejde dokola, od vrchu dolu, celým vertikálnym poradím objektov v mieste kliknutia. Po dosiahnutí spodku ďalšie <flowSpan font-weight="bold">Alt+kliknutie</flowSpan> prirodzene vyberie opäť najvrchnejší objekt.</flowPara>
  </flowRoot>
  <rect id="d0e777" display="none" height="1e3px" width="288" y="4172.2" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e777"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">[Ak používate Linux, môže sa stať, že <flowSpan font-weight="bold">Alt+kliknutie</flowSpan>nepracuje správne. Namiesto toho sa môže presúvať celé okno Inkscape. To je preto, že váš správca okien vyhradil Alt+kliknutie na inú činnosť. Spôsob ako to napraviť je nájsť konfiguráciu Správania okien vo vašom Správcovi okien a buď ho vypnúť, alebo namapovať použitie klávesu Super (tiež známeho ako kláves Windows), aby Inkscape a iné aplikácie mohli slobodne používať kláves Alt.]</flowDiv>
+  <flowPara >[Ak používate Linux, môže sa stať, že <flowSpan font-weight="bold">Alt+kliknutie</flowSpan>nepracuje správne. Namiesto toho sa môže presúvať celé okno Inkscape. To je preto, že váš správca okien vyhradil Alt+kliknutie na inú činnosť. Spôsob ako to napraviť je nájsť konfiguráciu Správania okien vo vašom Správcovi okien a buď ho vypnúť, alebo namapovať použitie klávesu Super (tiež známeho ako kláves Windows), aby Inkscape a iné aplikácie mohli slobodne používať kláves Alt.]</flowPara>
  </flowRoot>
  <rect id="d0e783" display="none" height="1e3px" width="288" y="4254.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e783"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">To je pekné, ale keď raz vyberiete objekt pod povrchom, čo s ním môžete robiť? Môžete použiť klávesy na jeho transformáciu a môžete ťahať úchopy výberu. Avšak ťahaním samotného objektu znova zmeníte výber na najvrchnejší objekt (tak je navrhnuté fungovanie kliknutia a ťahania — vyberie prvý (vrchný) objekt pod kurzorom a potom ťahá výber). Aby ste Inkscape povedali, aby ťahal <flowSpan font-style="italic">to, čo je vybrané teraz</flowSpan> bez toho, aby sa vybralo niečo iné, použite <flowSpan font-weight="bold">Alt+ťahanie</flowSpan>. Tým sa presunie aktuálny výber bez ohľadu na to, kde ťaháte myšou.</flowDiv>
+  <flowPara >To je pekné, ale keď raz vyberiete objekt pod povrchom, čo s ním môžete robiť? Môžete použiť klávesy na jeho transformáciu a môžete ťahať úchopy výberu. Avšak ťahaním samotného objektu znova zmeníte výber na najvrchnejší objekt (tak je navrhnuté fungovanie kliknutia a ťahania — vyberie prvý (vrchný) objekt pod kurzorom a potom ťahá výber). Aby ste Inkscape povedali, aby ťahal <flowSpan font-style="italic">to, čo je vybrané teraz</flowSpan> bez toho, aby sa vybralo niečo iné, použite <flowSpan font-weight="bold">Alt+ťahanie</flowSpan>. Tým sa presunie aktuálny výber bez ohľadu na to, kde ťaháte myšou.</flowPara>
  </flowRoot>
  <rect id="d0e792" display="none" height="1e3px" width="288" y="4357.4" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e792"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Precvičte si <flowSpan font-weight="bold">Alt+kliknutie</flowSpan> and <flowSpan font-weight="bold">Alt+ťahanie</flowSpan> na dvoch hnedých tvaroch pod zeleným priesvitným obdĺžnikom:</flowDiv>
+  <flowPara >Precvičte si <flowSpan font-weight="bold">Alt+kliknutie</flowSpan> and <flowSpan font-weight="bold">Alt+ťahanie</flowSpan> na dvoch hnedých tvaroch pod zeleným priesvitným obdĺžnikom:</flowPara>
  </flowRoot>
  <path id="basic-f15-sk.svgpath2575" sodipodi:sides="7" inkscape:flatsided="false" fill="#ac7335" style="color:#000000" transform="translate(10 4394.2) matrix(.39512 .68437 -.68437 .39512 2780 -1592.9)" inkscape:rounded="0.21000000" sodipodi:r1="28.739008" sodipodi:r2="16.983238" sodipodi:arg1="0.52143444" sodipodi:arg2="0.97023339" sodipodi:type="star" d="m126.89 3940.5c-1.71 2.8-13.23-2-15.92-0.2-2.69 1.7-2.72 13.9-5.86 14.5-3.14 0.5-6.349-10.3-9.539-11.1s-13.307 5.7-15.627 3.5 6.076-11.8 4.656-14.7c-1.419-3-12.432-3.1-12.315-6.3s12.009-3.8 13.505-6.6c1.495-2.7-2.945-13.2-0.399-15.1 2.547-1.8 10.874 5.7 14.077 5.1 3.202-0.6 7.302-9.5 10.362-8.7 3.07 0.9 0.25 11.3 2.78 13.4 2.53 2 12.65-0.8 13.8 2.2 1.16 3.1-8.72 9.8-8.76 13-0.04 3.1 10.95 8.3 9.24 11z" inkscape:randomized="0.047000000" sodipodi:cy="3927.1016" sodipodi:cx="100.73942"/>
  <path id="basic-f15-sk.svgpath2574" sodipodi:sides="6" inkscape:flatsided="false" fill="#ff9400" style="color:#000000" transform="translate(10 4394.2) matrix(.83260 .48070 -.48070 .83260 1947.5 -3288.4)" inkscape:rounded="0.21000000" sodipodi:r1="19.212250" sodipodi:r2="9.3934679" sodipodi:arg1="0.48833395" sodipodi:arg2="0.77161843" sodipodi:type="star" d="m107.62 3941.6c-0.53 2.1-9.076-3.5-10.951-2.4-2.497 1.5-1.972 11.9-4.862 12.6-2.17 0.6-1.585-8.5-3.563-9.5-2.636-1.2-11.029 4.1-13.221 2.2-1.646-1.5 6.95-5.7 6.894-8-0.075-3-9.644-9.8-9.082-12.7 0.421-2.2 9.473 5.2 11.397 4 2.564-1.5 2.337-12.6 5.229-13.2 2.17-0.5 1.693 9 3.66 10.1 2.621 1.3 12.059-3.4 14.219-1.4 1.61 1.6-7.377 4.8-7.27 7 0.15 3 8.25 8.5 7.55 11.3z" inkscape:randomized="0.047000000" sodipodi:cy="3933.4641" sodipodi:cx="90.665482"/>
@@ -660,11 +660,11 @@
   <tspan y="4475.599574000001" x="10">Výber podobných objektov</tspan>
  </text>
  <rect id="d0e817" display="none" height="1e3px" width="288" y="4480.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e817"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Inkscape dokáže vyberať ďalšie objekty podobné aktuálne vybranému objektu. Napríklad ak chcete vybrať všetky modré štvorčeky nižšie, najskôr vyberte jeden z modrých štvorčekov a v menu zvoľte <flowSpan font-family="sans-serif">Upraviť &gt; Vybrať rovnaké &gt; Farba výplne</flowSpan>. Všetky objekty s výplňou rovnakého odtieňa modrej farby budú vybrané.</flowDiv>
+  <flowPara >Inkscape dokáže vyberať ďalšie objekty podobné aktuálne vybranému objektu. Napríklad ak chcete vybrať všetky modré štvorčeky nižšie, najskôr vyberte jeden z modrých štvorčekov a v menu zvoľte <flowSpan font-family="sans-serif">Upraviť &gt; Vybrať rovnaké &gt; Farba výplne</flowSpan>. Všetky objekty s výplňou rovnakého odtieňa modrej farby budú vybrané.</flowPara>
  </flowRoot>
  <rect id="basic-f16-sk.svgrect4101" opacity="0.924" ry="0" style="color-rendering:auto;color:#000000;isolation:auto;shape-rendering:auto;image-rendering:auto" rx="0" transform="translate(10 4549.5)" height="14.205" width="15.152" y="4.0448" x="48.992" xmlns:cc="http://creativecommons.org/ns#" fill="#204a87"/>
  <rect id="basic-f16-sk.svgrect4105" opacity="0.924" ry="0" style="color-rendering:auto;color:#000000;isolation:auto;shape-rendering:auto;image-rendering:auto" rx="0" transform="translate(10 4549.5)" height="14.205" width="15.152" y="21.722" x="48.992" xmlns:cc="http://creativecommons.org/ns#" fill="#204a87"/>
@@ -706,21 +706,21 @@
  <rect id="basic-f16-sk.svgrect4179" opacity="0.924" ry="0" style="color-rendering:auto;color:#000000;isolation:auto;shape-rendering:auto;image-rendering:auto" rx="0" transform="translate(10 4549.5)" height="14.205" width="15.152" y="38.895" x="28.789" xmlns:cc="http://creativecommons.org/ns#" fill="#204a87"/>
  <rect id="basic-f16-sk.svgrect4167" opacity="0.924" style="color-rendering:auto;color:#000000;isolation:auto;shape-rendering:auto;image-rendering:auto" rx="0" transform="translate(10 4549.5)" ry="0" width="15.152" y="38.895" x="233.85" xmlns:cc="http://creativecommons.org/ns#" height="14.205" fill="#204a87"/>
  <rect id="d0e833" display="none" height="1e3px" width="288" y="4610.6" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e833"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Okrem výberu na základe zhodnej farby výplne môžete vybrať viacero podobných objektov aj podľa farby či štýlu ťahu,  výplne a ťahu a typu objektu.</flowDiv>
+  <flowPara >Okrem výberu na základe zhodnej farby výplne môžete vybrať viacero podobných objektov aj podľa farby či štýlu ťahu,  výplne a ťahu a typu objektu.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="4662.846672000001" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="4662.846672000001" x="10">Záver</tspan>
  </text>
  <rect id="d0e842" display="none" height="1e3px" width="288" y="4668" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e842"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Týmto končí návod Základy. Inkscape toho zvládne oveľa viac, ale tu opísanými technikami už budete schopní vytvárať jednoduchú a predsa užitočnú grafiku. Komplikovanejšie veci sa naučíte v návode Pokročilé a ďalších v ponuke <flowSpan font-family="sans-serif">Pomocník &gt; Návody</flowSpan>.</flowDiv>
+  <flowPara >Týmto končí návod Základy. Inkscape toho zvládne oveľa viac, ale tu opísanými technikami už budete schopní vytvárať jednoduchú a predsa užitočnú grafiku. Komplikovanejšie veci sa naučíte v návode Pokročilé a ďalších v ponuke <flowSpan font-family="sans-serif">Pomocník &gt; Návody</flowSpan>.</flowPara>
  </flowRoot>
  <g transform="translate(0 4718)">
   <defs id="defs3" xmlns:cc="http://creativecommons.org/ns#">
@@ -753,7 +753,7 @@
     <path id="path1521" d="m359.24 21.363c-11.313 0-22.606 4.3206-31.275 12.99l-154.09 154.06c-8.4969 8.4967-12.762 19.543-12.931 30.631h-0.0585c0 0.0395 0.0566 0.0774 0.0585 0.11702-0.002 0.18609-0.0585 0.36977-0.0585 0.55586h0.2633c2.9491 11.221 79.15 25.523 87.651 34.025 12.839 12.839-49.233 22.268-36.395 35.107 12.839 12.839 77.59 24.843 90.43 37.682 12.839 12.839-26.238 26.51-13.399 39.349s55.967-3.2094 48.155 30.28c17.338 17.338 53.512 9.0588 77.733-8.2795 12.839-12.839-24.629-11.707-11.79-24.546s45.247-12.908 72.555-43.621c-10.992-17.095-46.981-24.375-34.142-37.214s37.8-6.3179 91.659-30.777c26.292-11.941 24.12-21.01 24.019-32.006-0.002-0.23138 0-0.43973 0-0.67288h-0.0585c-0.16-11.07-4.46-22.12-12.95-30.62l-154.07-154.06c-8.66-8.667-19.99-12.987-31.3-12.987zm-1.3165 20.04c5.0295 0.13102 9.0916 3.9651 17.056 9.1279l72.789 53.977c0.79681 0.51671 1.5557 1.0557 2.2527 1.6091 0.69703 0.55327 1.3337 1.1401 1.9309 1.7261 0.5972 0.58495 1.14 1.1721 1.6383 1.7846 0.49726 0.61244 0.94845 1.2385 1.3458 1.8724 0.39844 0.6349 0.75476 1.2798 1.0532 1.9309 0.29867 0.65226 0.53281 1.325 0.7314 1.9894 0.19976 0.66341 0.36832 1.319 0.46811 1.9894 0.0999 0.67165 0.14627 1.3452 0.14627 2.0187l-43.123-20.83-4.3006 32.562-23.727-11.117-36.629 24.458-14.014-48.331-18.051 42.275-50.408 5.032 0.55587-22.439c0-5.3897 29.057-43.122 46.751-52.105l32.386-23.259c4.7787-3.0977 8.1289-4.35 11.147-4.2714zm-66.996 220.21c22.944 5.9503 48.476 13.757 68.957 13.897l0.87768 9.2157c-17.538-1.8078-54.648-10.276-63.398-14.745l-6.4363-8.3672z" stroke-width="1pt"/>
    </g>
    <use id="use1328" style="color:#000000" xlink:href="#path1508" transform="matrix(5.1767 0 0 5.1767 -102.7 -256.62)" height="1052.3622" fill-opacity=".064615" width="744.09448" y="0" x="0" font-family="sans-serif" fill="#ffffff"/>
-   <text id="text7519" opacity=".5" line-height="125%" xml:space="preserve" transform="rotate(-90)" font-size="6.9693px" y="-6.5672836" x="-70.83046" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan7521" sodipodi:role="line" x="-70.83046" style="letter-spacing:.29056" y="-6.5672836">Na posunutie späť použite <tspan id="tspan7523" font-weight="bold">Ctrl+šípka hore</tspan></tspan></text>
+   <text id="text7519" opacity=".5" line-height="125%"  transform="rotate(-90)" font-size="6.9693px" y="-6.5672836" x="-70.83046" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan7521" sodipodi:role="line" x="-70.83046" style="letter-spacing:.29056" y="-6.5672836">Na posunutie späť použite <tspan id="tspan7523" font-weight="bold">Ctrl+šípka hore</tspan></tspan></text>
    <path id="path7527" opacity=".5" style="color:#000000" d="m338.53 197.82-13.108-1.2709 7.6547-10.717z" fill-rule="evenodd" transform="matrix(-.61496 -.045496 -.061919 .45186 207.79 -174.15)"/>
   </g>
  </g>

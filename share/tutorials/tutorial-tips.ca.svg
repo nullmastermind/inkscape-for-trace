@@ -55,33 +55,33 @@
   <tspan id="tspan1668" style="letter-spacing:2.46647263;" dx="0 -0.64516127 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" fill="#ffffff">::TRUCS I CONSELLS</tspan>
  </text>
  <rect id="d0e10" display="none" height="1000px" width="264" y="36" x="35"/>
- <flowRoot id="flowRoot2301" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,-8)" font-size="7.19999981px" font-style="italic" font-family="Sans" line-height="150%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2301" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,-8)" font-size="7.19999981px" font-style="italic" font-family="Sans" line-height="150%" fill="#000000">
   <flowRegion id="flowRegion2303">
    <use id="use2305" xlink:href="#d0e10" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2307" xml:space="preserve">Aquest tutorial busca exposar els diversos trucs i consells que els usuaris han après usant l&apos;Inkscape, així com algunes característiques &quot;amagades&quot; que poden ajudar-vos a accelerar-ne les tasques de producció.</flowDiv>
+  <flowPara id="flowPara2307" >Aquest tutorial busca exposar els diversos trucs i consells que els usuaris han après usant l&apos;Inkscape, així com algunes característiques &quot;amagades&quot; que poden ajudar-vos a accelerar-ne les tasques de producció.</flowPara>
  </flowRoot>
  <text id="text3233" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" font-size="8.5px" font-style="normal" y="90.167969" x="10" font-family="Sans" fill="#000000">Col·locació radial amb &quot;Mosaic&quot;</text>
  <rect id="d0e19" display="none" height="1000px" width="288" y="95.068" x="10"/>
- <flowRoot id="flowRoot2314" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2314" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion2316">
    <use id="use2318" xlink:href="#d0e19" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2320" xml:space="preserve">És fàcil aprendre a usar el diàleg de <flowSpan id="flowSpan2322" font-family="Sans">Mosaic </flowSpan>per a patrons i quadrícules. Però, què es necessita per fer una col·locació <flowSpan id="flowSpan2324" font-style="italic">radial</flowSpan>  on els objectes comparteixen el mateix centre de rotació? També és pot fer!</flowDiv>
+  <flowPara id="flowPara2320" >És fàcil aprendre a usar el diàleg de <flowSpan id="flowSpan2322" font-family="Sans">Mosaic </flowSpan>per a patrons i quadrícules. Però, què es necessita per fer una col·locació <flowSpan id="flowSpan2324" font-style="italic">radial</flowSpan>  on els objectes comparteixen el mateix centre de rotació? També és pot fer!</flowPara>
  </flowRoot>
  <rect id="d0e28" display="none" height="1000px" width="288" y="135.66" x="10"/>
- <flowRoot id="flowRoot2327" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,8)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2327" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,8)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2329">
    <use id="use2331" xlink:href="#d0e28" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2333" xml:space="preserve">Si el vostre patró radial necessita només 3, 4, 6 o 12 elements, llavors podeu provar les simetries P3, P31M, P3M1, P4, P4M, P6, o P6M. Això funcionaria força bé amb les volves de neu o altres objectes per l&apos;estil. De totes maneres, un mètode més general és el que es mostra a continuació.</flowDiv>
+  <flowPara id="flowPara2333" >Si el vostre patró radial necessita només 3, 4, 6 o 12 elements, llavors podeu provar les simetries P3, P31M, P3M1, P4, P4M, P6, o P6M. Això funcionaria força bé amb les volves de neu o altres objectes per l&apos;estil. De totes maneres, un mètode més general és el que es mostra a continuació.</flowPara>
  </flowRoot>
  <rect id="d0e31" display="none" height="1000px" width="288" y="187.42" x="10"/>
- <flowRoot id="flowRoot2336" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,14)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2336" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,14)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2338">
    <use id="use2340" xlink:href="#d0e31" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2342" xml:space="preserve">Escolliu la simetria P1 (desplaçament simple) i, a continuació, <flowSpan id="flowSpan2344" font-style="italic">compenseu</flowSpan> aquell desplaçament anant a la pestanya <flowSpan id="flowSpan2346" font-family="Sans">Desplaça</flowSpan> i establint <flowSpan id="flowSpan2348" font-family="Sans">Per fila/Desplaçament Y</flowSpan> i <flowSpan id="flowSpan2350" font-family="Sans">Per columna/Desplaçament X</flowSpan> ambdós a -100%. D&apos;aquesta manera tindreu tots els clons apilats damunt de l&apos;original. L&apos;únic que queda per fer llavors és anar a la pestanya <flowSpan id="flowSpan2352" font-family="Sans">Rotació</flowSpan> i configurar l&apos;angle de rotació per a cada columna i, a continuació, crear el patró amb una fila i múltiples columnes. Per exemple, aquí tenim el patró que es crea a partir d&apos;una línia horizontal amb 30 columnes, cada una d&apos;elles amb una rotació de 6 graus: </flowDiv>
+  <flowPara id="flowPara2342" >Escolliu la simetria P1 (desplaçament simple) i, a continuació, <flowSpan id="flowSpan2344" font-style="italic">compenseu</flowSpan> aquell desplaçament anant a la pestanya <flowSpan id="flowSpan2346" font-family="Sans">Desplaça</flowSpan> i establint <flowSpan id="flowSpan2348" font-family="Sans">Per fila/Desplaçament Y</flowSpan> i <flowSpan id="flowSpan2350" font-family="Sans">Per columna/Desplaçament X</flowSpan> ambdós a -100%. D&apos;aquesta manera tindreu tots els clons apilats damunt de l&apos;original. L&apos;únic que queda per fer llavors és anar a la pestanya <flowSpan id="flowSpan2352" font-family="Sans">Rotació</flowSpan> i configurar l&apos;angle de rotació per a cada columna i, a continuació, crear el patró amb una fila i múltiples columnes. Per exemple, aquí tenim el patró que es crea a partir d&apos;una línia horizontal amb 30 columnes, cada una d&apos;elles amb una rotació de 6 graus: </flowPara>
  </flowRoot>
  <path id="tips-f01.svgpath25" stroke-linejoin="miter" style="marker-end:none;color:#000000;marker-start:none;marker-mid:none;" d="M91.5,380.78h117.5" inkscape:tile-w="117.80000" stroke-dashoffset="0" stroke="#000" stroke-linecap="butt" inkscape:tile-h="0.30000001" stroke-miterlimit="4" inkscape:tile-cx="160.25000" inkscape:tile-cy="346.50000" stroke-width="0.30000001" fill="none"/>
  <use id="tips-f01.svguse55" xlink:href="#tips-f01.svgpath25" transform="matrix(0.994522,0.104528,-0.104528,0.994522,40.62514,-13.61941)" height="1052.3622" width="744.09448" inkscape:tiled-clone-of="#path25" y="0" x="0"/>
@@ -114,18 +114,18 @@
  <use id="tips-f01.svguse82" xlink:href="#tips-f01.svgpath25" transform="matrix(-0.978148,0.207912,-0.207912,-0.978148,376.3842,721.9938)" height="1052.3622" width="744.09448" inkscape:tiled-clone-of="#path25" y="0" x="0"/>
  <use id="tips-f01.svguse83" xlink:href="#tips-f01.svgpath25" transform="matrix(-0.994522,0.104528,-0.104528,-0.994522,339.4795,743.7615)" height="1052.3622" width="744.09448" inkscape:tiled-clone-of="#path25" y="0" x="0"/>
  <rect id="d0e59" display="none" height="1000px" width="288" y="421.68" x="10"/>
- <flowRoot id="flowRoot2385" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,20)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2385" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,20)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2387">
    <use id="use2389" xlink:href="#d0e59" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2391" xml:space="preserve">Per convertir això en una esfera de rellotge, el que necessiteu és talllar-ho o simplement recobrir la part central amb un cercle blanc (per realitzar operaciones booleanes en clons, desenllaceu-los primer).</flowDiv>
+  <flowPara id="flowPara2391" >Per convertir això en una esfera de rellotge, el que necessiteu és talllar-ho o simplement recobrir la part central amb un cercle blanc (per realitzar operaciones booleanes en clons, desenllaceu-los primer).</flowPara>
  </flowRoot>
  <rect id="d0e62" display="none" height="1000px" width="288" y="462.15" x="10"/>
- <flowRoot id="flowRoot2394" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,28)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2394" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,28)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2396">
    <use id="use2398" xlink:href="#d0e62" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2400" xml:space="preserve">Poden crear-se més efectes interessants usant tant les files com les columnes. Aquí tenim un patró amb 10 columnes i 8 files i amb una rotació de 2 graus per fila i 18 per columna. Cada grup de línies és una columna, per tant els grups tenen 18 graus entre ells; dins de cada columna, les línies individuals tenen 2 graus de separació:</flowDiv>
+  <flowPara id="flowPara2400" >Poden crear-se més efectes interessants usant tant les files com les columnes. Aquí tenim un patró amb 10 columnes i 8 files i amb una rotació de 2 graus per fila i 18 per columna. Cada grup de línies és una columna, per tant els grups tenen 18 graus entre ells; dins de cada columna, les línies individuals tenen 2 graus de separació:</flowPara>
  </flowRoot>
  <path id="tips-f02.svgpath92" stroke-linejoin="miter" style="marker-end:none;color:#000000;marker-start:none;marker-mid:none;" d="M82.5,623.91h143" inkscape:tile-w="143.30000" stroke-dashoffset="0" stroke="#000" stroke-linecap="butt" inkscape:tile-h="0.30000001" stroke-miterlimit="4" inkscape:tile-cx="164.00000" inkscape:tile-cy="543.50000" stroke-width="0.30000001" fill="none"/>
  <use id="tips-f02.svguse1473" xlink:href="#tips-f02.svgpath92" transform="matrix(0.999657,2.617695e-2,-2.617695e-2,0.999657,16.38476,-3.817431)" height="2150.5" width="320" inkscape:tiled-clone-of="#path92" y="0" x="0"/>
@@ -208,12 +208,12 @@
  <use id="tips-f02.svguse1550" xlink:href="#tips-f02.svgpath92" transform="matrix(-0.987688,0.156434,-0.156434,-0.987688,403.705,1216.042)" height="2150.5" width="320" inkscape:tiled-clone-of="#path92" y="0" x="0"/>
  <use id="tips-f02.svguse1551" xlink:href="#tips-f02.svgpath92" transform="matrix(-0.991445,0.130526,-0.130526,-0.991445,388.1188,1222.38)" height="2150.5" width="320" inkscape:tiled-clone-of="#path92" y="0" x="0"/>
  <rect id="d0e75" display="none" height="1000px" width="288" y="699.56" x="10"/>
- <flowRoot id="flowRoot2483" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.4" line-height="133.00000%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2483" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.4" line-height="133.00000%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion2485">
    <use id="use2487" y="0" x="0" xlink:href="#d0e75"/>
   </flowRegion>
-  <flowDiv id="flowDiv2489" xml:space="preserve">En els exemples anteriors, s&apos;ha fet una rotació de la línia sobre el centre. Però, què passaria si volguéssiu que el centre quedés fora de la vostra figura? Llavors simplement heu de crear un rectangle invisible (sense emplenat ni contorn) que la cobreixi, el centre de la qual és el punt que busqueu, agrupeu la figura i el rectangle junts i, a continuació, utilitzeu <flowSpan id="flowSpan2491" font-family="Sans">Mosaic</flowSpan> sobre el grup. Aleatoritzant l&apos;escala, la rotació i, fins i tot, potser l&apos;opacitat es poden fer &quot;explosions&quot; o &quot;esclats&quot; ben bonics:
-</flowDiv>
+  <flowPara id="flowPara2489" >En els exemples anteriors, s&apos;ha fet una rotació de la línia sobre el centre. Però, què passaria si volguéssiu que el centre quedés fora de la vostra figura? Llavors simplement heu de crear un rectangle invisible (sense emplenat ni contorn) que la cobreixi, el centre de la qual és el punt que busqueu, agrupeu la figura i el rectangle junts i, a continuació, utilitzeu <flowSpan id="flowSpan2491" font-family="Sans">Mosaic</flowSpan> sobre el grup. Aleatoritzant l&apos;escala, la rotació i, fins i tot, potser l&apos;opacitat es poden fer &quot;explosions&quot; o &quot;esclats&quot; ben bonics:
+</flowPara>
  </flowRoot>
  <g id="tips-f03.svgg1768" inkscape:tile-w="87.999840" transform="matrix(0.63768,0,0,0.63768,47.6087,331.9176)" inkscape:tile-h="7.3333200" inkscape:tile-cx="158.99982" inkscape:tile-cy="859.24904">
   <path id="tips-f03.svgpath1592" style="marker-end:none;color:#000000;marker-start:none;marker-mid:none;" fill-rule="evenodd" fill="#000" d="M210.17,859.92c4.54-2.08,15.81-3.8,15.81-0.12,0,3.67-15.81,0.12-15.81,0.12z"/>
@@ -294,49 +294,49 @@
   <tspan id="tspan2569" y="972.449224" x="10">Com fer talls (múltiples àrees d&apos;exportació rectangulars)?</tspan>
  </text>
  <rect id="d0e97" display="none" height="1000px" width="288" y="977.35" x="10"/>
- <flowRoot id="flowRoot2572" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2572" style="writing-mode:lr-tb;text-anchor:start;" font-family="Serif" font-size="8.39999962px" line-height="133.00000429%" font-style="normal" font-weight="normal" fill="#000000">
   <flowRegion id="flowRegion2574">
    <use id="use2576" xlink:href="#d0e97" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2578" xml:space="preserve">Creeu una nova capa i a cada capa creeu rectangles invisibles recobrint parts de la vostra imatge. Assegureu-vos de que el vostre document utilitza la unitat px (unitat per defecte), habiliteu la graella i ajusteu-hi els rectangles de forma que cadascun s&apos;extengui un nombre total d&apos;unitats px. Assigneu identificadors amb significats per a cada rectangle i exporteu-ne cadascun al seu propi fitxer. A continuació, els rectangles retindran els noms dels fitxers exportats. Després de fer això, és molt fàcil reexportar alguns dels rectangles: aneu a la capa exportada, utilitzeu la tecla de tabulació que necessitessiu (o utilitzeu Cerca per identificador) i feu clic a Exporta al diàleg. També podeu escriure un fitxer d&apos;intèrpret d&apos;ordres o un fitxer batch per exportar totes les vostres àrees amb una ordre com aquesta:</flowDiv>
+  <flowPara id="flowPara2578" >Creeu una nova capa i a cada capa creeu rectangles invisibles recobrint parts de la vostra imatge. Assegureu-vos de que el vostre document utilitza la unitat px (unitat per defecte), habiliteu la graella i ajusteu-hi els rectangles de forma que cadascun s&apos;extengui un nombre total d&apos;unitats px. Assigneu identificadors amb significats per a cada rectangle i exporteu-ne cadascun al seu propi fitxer. A continuació, els rectangles retindran els noms dels fitxers exportats. Després de fer això, és molt fàcil reexportar alguns dels rectangles: aneu a la capa exportada, utilitzeu la tecla de tabulació que necessitessiu (o utilitzeu Cerca per identificador) i feu clic a Exporta al diàleg. També podeu escriure un fitxer d&apos;intèrpret d&apos;ordres o un fitxer batch per exportar totes les vostres àrees amb una ordre com aquesta:</flowPara>
  </flowRoot>
  <rect id="d0e100" display="none" height="1000px" width="288" y="1096.1" x="10"/>
- <flowRoot id="flowRoot2581" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(14,32)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2581" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(14,32)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2583">
    <use id="use2585" xlink:href="#d0e100" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2587" xml:space="preserve">inkscape -i &lt;id-area&gt; -t &lt;nomDeFitxer.svg&gt; </flowDiv>
+  <flowPara id="flowPara2587" >inkscape -i &lt;id-area&gt; -t &lt;nomDeFitxer.svg&gt; </flowPara>
  </flowRoot>
  <rect id="d0e103" display="none" height="1000px" width="288" y="1114.4" x="10"/>
- <flowRoot id="flowRoot2590" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,32)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2590" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,32)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2592">
    <use id="use2594" xlink:href="#d0e103" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2596" xml:space="preserve">per cadascuna de les àrees exportades. El commutador -t dirà que recordi el nom de fitxer, en cas contrari podeu proporcionar el nom de fitxer a exportar amb el commutador -e. També teniu l&apos;opció d&apos;utilitzar la funció <flowSpan id="flowSpan2598" font-weight="bold" font-family="Sans">svgslice</flowSpan> per automatitzar l&apos;exportació de documents SVG d&apos;Inkscape utilitzant o bé una capa de talls o bé unes guies.</flowDiv>
+  <flowPara id="flowPara2596" >per cadascuna de les àrees exportades. El commutador -t dirà que recordi el nom de fitxer, en cas contrari podeu proporcionar el nom de fitxer a exportar amb el commutador -e. També teniu l&apos;opció d&apos;utilitzar la funció <flowSpan id="flowSpan2598" font-weight="bold" font-family="Sans">svgslice</flowSpan> per automatitzar l&apos;exportació de documents SVG d&apos;Inkscape utilitzant o bé una capa de talls o bé unes guies.</flowPara>
  </flowRoot>
  <text id="text2600" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" font-size="8.5px" font-style="normal" y="1230.9299" x="10" font-family="Sans" fill="#000000">
   <tspan id="tspan2602" y="1230.9299" x="10">Degradats no lineals</tspan>
  </text>
  <rect id="d0e115" display="none" height="1000px" width="288" y="1195.8" x="10"/>
- <flowRoot id="flowRoot2605" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,40)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2605" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,40)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2607">
    <use id="use2609" xlink:href="#d0e115" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2611" xml:space="preserve">La versió 1.1 d&apos;SVG no suporta degradats no lineals (aquells que tenen una transició no lineal entre colors). Tanmatexi, podeu emular-ho mitjançant degradats <flowSpan id="flowSpan2613" font-style="italic">multifase</flowSpan>.</flowDiv>
+  <flowPara id="flowPara2611" >La versió 1.1 d&apos;SVG no suporta degradats no lineals (aquells que tenen una transició no lineal entre colors). Tanmatexi, podeu emular-ho mitjançant degradats <flowSpan id="flowSpan2613" font-style="italic">multifase</flowSpan>.</flowPara>
  </flowRoot>
  <rect id="d0e121" display="none" height="1000px" width="288" y="1236.4" x="10"/>
- <flowRoot id="flowRoot2616" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,38)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2616" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,38)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2618">
    <use id="use2620" xlink:href="#d0e121" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2622" xml:space="preserve">Comenceu amb un simple degradat de dues fases. Obriu l&apos;editor de Degradats (p.e. fent doble clic a qualsevol manejador de degradat a la eina Degradat). Afegiu una nova fase en el centre; arrossegueu-lo una mica. Aneu afegint fases abans i després de la fase central i arrossegueu-los també, perquè el degradat sigui suau. Com més fases afegiu, el degradat resultant serà més suau. Aquí teniu el degradat blanc i negre inicial amb dues fases:</flowDiv>
+  <flowPara id="flowPara2622" >Comenceu amb un simple degradat de dues fases. Obriu l&apos;editor de Degradats (p.e. fent doble clic a qualsevol manejador de degradat a la eina Degradat). Afegiu una nova fase en el centre; arrossegueu-lo una mica. Aneu afegint fases abans i després de la fase central i arrossegueu-los també, perquè el degradat sigui suau. Com més fases afegiu, el degradat resultant serà més suau. Aquí teniu el degradat blanc i negre inicial amb dues fases:</flowPara>
  </flowRoot>
  <rect id="d0e134" display="none" height="1000px" width="288" y="1357.8" x="10"/>
- <flowRoot id="flowRoot2631" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,48)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2631" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,48)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2633">
    <use id="use2635" xlink:href="#d0e134" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2637" xml:space="preserve">I aquí hi ha varis degradats &quot;no lineals&quot; multifase (examineu-los a l&apos;Editor de degradats):</flowDiv>
+  <flowPara id="flowPara2637" >I aquí hi ha varis degradats &quot;no lineals&quot; multifase (examineu-los a l&apos;Editor de degradats):</flowPara>
  </flowRoot>
  <defs id="tips-f05.svgdefs3">
   <linearGradient id="tips-f05.svglinearGradient3979" y2="-4.5118" gradientUnits="userSpaceOnUse" x2="-1484.6" gradientTransform="matrix(0.237277,0,0,4.21448,-1193.312,-10)" y1="-72.469" x1="-1484.6" inkscape:collect="always">
@@ -420,11 +420,11 @@
   <tspan id="tspan2745" y="1580.8104" x="10">Degradats radials excèntrics</tspan>
  </text>
  <rect id="d0e153" display="none" height="1000px" width="288" y="1553.7" x="10"/>
- <flowRoot id="flowRoot2748" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,32)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2748" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,32)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2750">
    <use id="use2752" xlink:href="#d0e153" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2754" xml:space="preserve">Els degradats radials no tenen per què ser simètrics. A l&apos;eina de Degradat, arrossegueu el manejador central d&apos;un degradat el·líptic amb <flowSpan id="flowSpan2756" font-weight="bold">Majúscula</flowSpan>. Això mourà el manejador amb forma de creu <flowSpan id="flowSpan2758" font-style="italic">focus</flowSpan> del degradat lluny del seu centre. Quan no el necessiteu, podeu ajustar el focus com abans arrosegant-lo a prop del centre.</flowDiv>
+  <flowPara id="flowPara2754" >Els degradats radials no tenen per què ser simètrics. A l&apos;eina de Degradat, arrossegueu el manejador central d&apos;un degradat el·líptic amb <flowSpan id="flowSpan2756" font-weight="bold">Majúscula</flowSpan>. Això mourà el manejador amb forma de creu <flowSpan id="flowSpan2758" font-style="italic">focus</flowSpan> del degradat lluny del seu centre. Quan no el necessiteu, podeu ajustar el focus com abans arrosegant-lo a prop del centre.</flowPara>
  </flowRoot>
  <defs id="tips-f06.svgdefs3">
   <radialGradient id="tips-f06.svgradialGradient4031" gradientUnits="userSpaceOnUse" fx="164.26" fy="495.96" cx="187.87" cy="494.13" r="40.258" gradientTransform="matrix(0.930312,0,0,0.853811,26.07898,1267.684)" inkscape:collect="always">
@@ -442,222 +442,222 @@
   <tspan id="tspan2777" y="1737.8246" x="10">Aliniar al centre de la pàgina</tspan>
  </text>
  <rect id="d0e178" display="none" height="1000px" width="288" y="1722.7" x="10"/>
- <flowRoot id="flowRoot2780" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,20)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2780" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,20)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2782">
    <use id="use2784" xlink:href="#d0e178" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2786" xml:space="preserve">Per a aliniar algun objecte al centre o costat d&apos;una pàgina, seleccioneu l&apos;objecte o grup d&apos;objectes i, a continuació, escolliu l&apos;opció <flowSpan id="flowSpan2788" font-family="Sans">Pàgina</flowSpan> de la llista <flowSpan id="flowSpan2790" font-family="Sans">Relatiu a:</flowSpan> en el diàleg Alinea (<flowSpan id="flowSpan2792" font-weight="bold">Ctrl+Maj+A</flowSpan>).  </flowDiv>
+  <flowPara id="flowPara2786" >Per a aliniar algun objecte al centre o costat d&apos;una pàgina, seleccioneu l&apos;objecte o grup d&apos;objectes i, a continuació, escolliu l&apos;opció <flowSpan id="flowSpan2788" font-family="Sans">Pàgina</flowSpan> de la llista <flowSpan id="flowSpan2790" font-family="Sans">Relatiu a:</flowSpan> en el diàleg Alinea (<flowSpan id="flowSpan2792" font-weight="bold">Ctrl+Maj+A</flowSpan>).  </flowPara>
  </flowRoot>
  <text id="text2794" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" font-size="8.5px" font-style="normal" y="1810.9375" x="10" font-family="Sans" fill="#000000">
   <tspan id="tspan2796" y="1810.9375" x="10">Netejar el document</tspan>
  </text>
  <rect id="d0e196" display="none" height="1000px" width="288" y="1781.8" x="10"/>
- <flowRoot id="flowRoot2799" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,34)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2799" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,34)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2801">
    <use id="use2803" xlink:href="#d0e196" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2805" xml:space="preserve">Molts dels degradats, patrons i marcadors (concretament, aquells que han estat editats manualment) dels quals ja no s&apos;en fa cap ús, es queden a les paletes corresponents i poden ser reutilitzats amb nous objectes. Amb tot, si voleu optimitzar el vostre document, utilitzeu l&apos;ordre <flowSpan id="flowSpan2807" font-family="Sans">Neteja definicions</flowSpan> del menú Fitxer. Això eliminarà qualsevol degradat, patró o marcador que ja no s&apos;utilitzi i aconseguireu fer el fitxer més petit.</flowDiv>
+  <flowPara id="flowPara2805" >Molts dels degradats, patrons i marcadors (concretament, aquells que han estat editats manualment) dels quals ja no s&apos;en fa cap ús, es queden a les paletes corresponents i poden ser reutilitzats amb nous objectes. Amb tot, si voleu optimitzar el vostre document, utilitzeu l&apos;ordre <flowSpan id="flowSpan2807" font-family="Sans">Neteja definicions</flowSpan> del menú Fitxer. Això eliminarà qualsevol degradat, patró o marcador que ja no s&apos;utilitzi i aconseguireu fer el fitxer més petit.</flowPara>
  </flowRoot>
  <text id="text2809" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" font-size="8.5px" font-style="normal" y="1920.7177" x="10" font-family="Sans" fill="#000000">
   <tspan id="tspan2811" y="1920.7177" x="10">Fer retalls o recobrir un mapa de bits</tspan>
  </text>
  <rect id="d0e208" display="none" height="1000px" width="288" y="1885.6" x="10"/>
- <flowRoot id="flowRoot2814" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,40)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2814" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,40)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2816">
    <use id="use2818" xlink:href="#d0e208" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2820" xml:space="preserve">Per defecte, una mapa de bits importat (per exemple, una foto) és un element &lt;image&gt; que no és editable amb l&apos;eina de Node. Per treballar amb això, convertiu la imatge en un rectangle amb farciment de patró amb <flowSpan id="flowSpan2822" font-family="Sans">Objecte a patró</flowSpan> (<flowSpan id="flowSpan2824" font-weight="bold">Alt+I</flowSpan>). Amb això obtindreu un rectangle <flowSpan id="flowSpan2826" font-style="italic">emplenat</flowSpan> amb un mapa de bits. I ara podeu convertir aquest objecte en un camí que es pugui editar amb Node, intersecar-lo amb altres figures, etc. A <flowSpan id="flowSpan2828" font-family="Sans">Preferències de l&apos;Inkscape</flowSpan> (pestanya <flowSpan id="flowSpan2830" font-family="Sans">Miscel·lània</flowSpan>), podeu establir l&apos;opció d&apos;importar sempre els mapes de bits com a rectangles patró farcits.</flowDiv>
+  <flowPara id="flowPara2820" >Per defecte, una mapa de bits importat (per exemple, una foto) és un element &lt;image&gt; que no és editable amb l&apos;eina de Node. Per treballar amb això, convertiu la imatge en un rectangle amb farciment de patró amb <flowSpan id="flowSpan2822" font-family="Sans">Objecte a patró</flowSpan> (<flowSpan id="flowSpan2824" font-weight="bold">Alt+I</flowSpan>). Amb això obtindreu un rectangle <flowSpan id="flowSpan2826" font-style="italic">emplenat</flowSpan> amb un mapa de bits. I ara podeu convertir aquest objecte en un camí que es pugui editar amb Node, intersecar-lo amb altres figures, etc. A <flowSpan id="flowSpan2828" font-family="Sans">Preferències de l&apos;Inkscape</flowSpan> (pestanya <flowSpan id="flowSpan2830" font-family="Sans">Miscel·lània</flowSpan>), podeu establir l&apos;opció d&apos;importar sempre els mapes de bits com a rectangles patró farcits.</flowPara>
  </flowRoot>
  <text id="text2832" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" font-size="8.5px" font-style="normal" y="2055.6907" x="10" font-family="Sans" fill="#000000">
   <tspan id="tspan2834" y="2055.6907" x="10">Característiques amagades i l&apos;editor XML</tspan>
  </text>
  <rect id="d0e232" display="none" height="1000px" width="288" y="2000.6" x="10"/>
- <flowRoot id="flowRoot2837" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,60)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2837" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,60)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2839">
    <use id="use2841" xlink:href="#d0e232" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2843" xml:space="preserve">L&apos;editor XML us permet canviar gairebé tots els aspectes d&apos;un document sense haver d&apos;utilitzar un editor de text extern. Per altra banda, l&apos;Inkscape també suporta més propietats SVG de les que són accessibles des de la seva interfície. L&apos;editor XML és una de les opcions per accedir a aquestes propietats (si coneixeu el format SVG). </flowDiv>
+  <flowPara id="flowPara2843" >L&apos;editor XML us permet canviar gairebé tots els aspectes d&apos;un document sense haver d&apos;utilitzar un editor de text extern. Per altra banda, l&apos;Inkscape també suporta més propietats SVG de les que són accessibles des de la seva interfície. L&apos;editor XML és una de les opcions per accedir a aquestes propietats (si coneixeu el format SVG). </flowPara>
  </flowRoot>
  <text id="text2845" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" font-size="8.5px" font-style="normal" y="2148.9131" x="10" font-family="Sans" fill="#000000">
   <tspan id="tspan2847" y="2148.9131" x="10">Canviar la unitat de mesura dels regles</tspan>
  </text>
  <rect id="d0e241" display="none" height="1000px" width="288" y="2103.8" x="10"/>
- <flowRoot id="flowRoot2850" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,48)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2850" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,48)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2852">
    <use id="use2854" xlink:href="#d0e241" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2856" xml:space="preserve">En la plantilla que es proporciona per defecte, la unitat de mesura que s&apos;utilitza és px (&quot;unitat d&apos;usuari SVG&quot;, a Inkscape equival a 0,8pt o 1/90 polzades). Aquesta és també la unitat que s&apos;utilitza per mostrar les coordenades a la cantonada inferior esquerra i la preseleccionada de totes les unitats de menús. (Podeu arrastrar el ratolí per sobre d&apos;un regle per veure la punta de l&apos;eina amb les unitats que usa.) Per canviar-ho, obriu <flowSpan id="flowSpan2858" font-family="Sans">Preferències del document</flowSpan> (<flowSpan id="flowSpan2860" font-weight="bold">Ctrl+Shift+D</flowSpan>) i canvieu <flowSpan id="flowSpan2862" font-family="Sans">Unitats per defecte</flowSpan> a la pestanya <flowSpan id="flowSpan2864" font-family="Sans">Pàgina</flowSpan>. </flowDiv>
+  <flowPara id="flowPara2856" >En la plantilla que es proporciona per defecte, la unitat de mesura que s&apos;utilitza és px (&quot;unitat d&apos;usuari SVG&quot;, a Inkscape equival a 0,8pt o 1/90 polzades). Aquesta és també la unitat que s&apos;utilitza per mostrar les coordenades a la cantonada inferior esquerra i la preseleccionada de totes les unitats de menús. (Podeu arrastrar el ratolí per sobre d&apos;un regle per veure la punta de l&apos;eina amb les unitats que usa.) Per canviar-ho, obriu <flowSpan id="flowSpan2858" font-family="Sans">Preferències del document</flowSpan> (<flowSpan id="flowSpan2860" font-weight="bold">Ctrl+Shift+D</flowSpan>) i canvieu <flowSpan id="flowSpan2862" font-family="Sans">Unitats per defecte</flowSpan> a la pestanya <flowSpan id="flowSpan2864" font-family="Sans">Pàgina</flowSpan>. </flowPara>
  </flowRoot>
  <text id="text2866" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" font-size="8.5px" font-style="normal" y="2262.7346" x="10" font-family="Sans" fill="#000000">
   <tspan id="tspan2868" y="2262.7346" x="10">Duplicar</tspan>
  </text>
  <rect id="d0e262" display="none" height="1000px" width="288" y="2207.6" x="10"/>
- <flowRoot id="flowRoot2871" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,60)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2871" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,60)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2873">
    <use id="use2875" xlink:href="#d0e262" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2877" xml:space="preserve">Per crear còpies rapidament d&apos;un objecte, utilitzeu <flowSpan id="flowSpan2879" font-style="italic">duplicar</flowSpan>. Arrossegueu un objecte (o bé doneu-li una escala o feu-lo rotar) i mentre manteniu premut el botó del ratolí, premeu <flowSpan id="flowSpan2881" font-weight="bold">Espai</flowSpan>. Això deixarà una &quot;còpia exacta&quot; de l&apos;objecte amb què estàveu treballant. Podeu repetir l&apos;operació tants cops com vulgueu.
-</flowDiv>
+  <flowPara id="flowPara2877" >Per crear còpies rapidament d&apos;un objecte, utilitzeu <flowSpan id="flowSpan2879" font-style="italic">duplicar</flowSpan>. Arrossegueu un objecte (o bé doneu-li una escala o feu-lo rotar) i mentre manteniu premut el botó del ratolí, premeu <flowSpan id="flowSpan2881" font-weight="bold">Espai</flowSpan>. Això deixarà una &quot;còpia exacta&quot; de l&apos;objecte amb què estàveu treballant. Podeu repetir l&apos;operació tants cops com vulgueu.
+</flowPara>
  </flowRoot>
  <text id="text2883" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" font-size="8.5px" font-style="normal" y="2343.0195" x="10" font-family="Sans" fill="#000000">
   <tspan id="tspan2885" y="2343.0195" x="10">Trucs de l&apos;eina retolador</tspan>
  </text>
  <rect id="d0e277" display="none" height="1000px" width="288" y="2277.9" x="10"/>
- <flowRoot id="flowRoot2888" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,70)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2888" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,70)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2890">
    <use id="use2892" xlink:href="#d0e277" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2894" xml:space="preserve">A l&apos;eina Retolador (Bezier), teniu les opcions següents per acabar la línia actual: </flowDiv>
+  <flowPara id="flowPara2894" >A l&apos;eina Retolador (Bezier), teniu les opcions següents per acabar la línia actual: </flowPara>
  </flowRoot>
  <circle id="circle2896" sodipodi:rx="2" sodipodi:cy="0" sodipodi:ry="2" cx="0" transform="translate(15,2381.593)" cy="0" sodipodi:cx="0" r="2"/>
  <rect id="d0e283" display="none" height="1000px" width="258" y="2305.6" x="20"/>
- <flowRoot id="flowRoot2899" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,70)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2899" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,70)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2901">
    <use id="use2903" xlink:href="#d0e283" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2905" xml:space="preserve">Premeu <flowSpan id="flowSpan2907" font-weight="bold">Entrar</flowSpan> </flowDiv>
+  <flowPara id="flowPara2905" >Premeu <flowSpan id="flowSpan2907" font-weight="bold">Entrar</flowSpan> </flowPara>
  </flowRoot>
  <circle id="circle2909" sodipodi:rx="2" sodipodi:cy="0" sodipodi:ry="2" cx="0" transform="translate(15,2397.835)" cy="0" sodipodi:cx="0" r="2"/>
  <rect id="d0e290" display="none" height="1000px" width="258" y="2321.8" x="20"/>
- <flowRoot id="flowRoot2912" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,70)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2912" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,70)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2914">
    <use id="use2916" xlink:href="#d0e290" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2918" xml:space="preserve">Feu doble clic amb el botó esquerre del ratolí </flowDiv>
+  <flowPara id="flowPara2918" >Feu doble clic amb el botó esquerre del ratolí </flowPara>
  </flowRoot>
  <circle id="circle2920" sodipodi:rx="2" sodipodi:cy="0" sodipodi:ry="2" cx="0" transform="translate(15,2414.336)" cy="0" sodipodi:cx="0" r="2"/>
  <rect id="d0e294" display="none" height="1000px" width="258" y="2338.3" x="20"/>
- <flowRoot id="flowRoot2923" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,70)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2923" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,70)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2925">
    <use id="use2927" xlink:href="#d0e294" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2929" xml:space="preserve">Torneu a seleccionar l&apos;eina bolígraf </flowDiv>
+  <flowPara id="flowPara2929" >Torneu a seleccionar l&apos;eina bolígraf </flowPara>
  </flowRoot>
  <circle id="circle2931" sodipodi:rx="2" sodipodi:cy="0" sodipodi:ry="2" cx="0" transform="translate(15,2432.584)" cy="0" sodipodi:cx="0" r="2"/>
  <rect id="d0e298" display="none" height="1000px" width="258" y="2356.6" x="20"/>
- <flowRoot id="flowRoot2934" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,70)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2934" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,70)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2936">
    <use id="use2938" xlink:href="#d0e298" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2940" xml:space="preserve">Seleccioneu una altra eina </flowDiv>
+  <flowPara id="flowPara2940" >Seleccioneu una altra eina </flowPara>
  </flowRoot>
  <rect id="d0e302" display="none" height="1000px" width="288" y="2373.1" x="10"/>
- <flowRoot id="flowRoot2943" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,70)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2943" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,70)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2945">
    <use id="use2947" xlink:href="#d0e302" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2949" xml:space="preserve">Observeu que mentre el camí està inacabat (és a dir, apareix verd amb el segment en curs vermell) no existeix encara com a objecte en el document. Per tant, per cancelar-ho, utilitzeu o bé  <flowSpan id="flowSpan2951" font-weight="bold">Esc</flowSpan> (cancel·leu tot el camí) o <flowSpan id="flowSpan2953" font-weight="bold">Retrocés</flowSpan> (elimineu l&apos;últim segment del camí inacabat) en comptes de <flowSpan id="flowSpan2955" font-family="Sans">Desfés</flowSpan>. </flowDiv>
+  <flowPara id="flowPara2949" >Observeu que mentre el camí està inacabat (és a dir, apareix verd amb el segment en curs vermell) no existeix encara com a objecte en el document. Per tant, per cancelar-ho, utilitzeu o bé  <flowSpan id="flowSpan2951" font-weight="bold">Esc</flowSpan> (cancel·leu tot el camí) o <flowSpan id="flowSpan2953" font-weight="bold">Retrocés</flowSpan> (elimineu l&apos;últim segment del camí inacabat) en comptes de <flowSpan id="flowSpan2955" font-family="Sans">Desfés</flowSpan>. </flowPara>
  </flowRoot>
  <rect id="d0e314" display="none" height="1000px" width="288" y="2435.9" x="10"/>
- <flowRoot id="flowRoot2958" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,70)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2958" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,70)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2960">
    <use id="use2962" xlink:href="#d0e314" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2964" xml:space="preserve">Per afegir un subcamí a un camí existent, seleccioneu el camí i comenceu a dibuixar amb <flowSpan id="flowSpan2966" font-weight="bold">Maj</flowSpan> des d&apos;un punt qualsevol. Tanmateix, si el que voleu és simplement <flowSpan id="flowSpan2968" font-style="italic">continuar</flowSpan> un camí existent, no us cal la tecla Majúscula; només comenceu a dibuixar des d&apos;una de les àncores finals del camí seleccionat.</flowDiv>
+  <flowPara id="flowPara2964" >Per afegir un subcamí a un camí existent, seleccioneu el camí i comenceu a dibuixar amb <flowSpan id="flowSpan2966" font-weight="bold">Maj</flowSpan> des d&apos;un punt qualsevol. Tanmateix, si el que voleu és simplement <flowSpan id="flowSpan2968" font-style="italic">continuar</flowSpan> un camí existent, no us cal la tecla Majúscula; només comenceu a dibuixar des d&apos;una de les àncores finals del camí seleccionat.</flowPara>
  </flowRoot>
  <text id="text2970" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" font-size="8.5px" font-style="normal" y="2580.3821" x="10" font-family="Sans" fill="#000000">
   <tspan id="tspan2972" y="2580.3821" x="10">Introduir valors Unicode</tspan>
  </text>
  <rect id="d0e329" display="none" height="1000px" width="288" y="2517.3" x="10"/>
- <flowRoot id="flowRoot2975" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,68)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2975" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,68)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2977">
    <use id="use2979" xlink:href="#d0e329" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv2981" xml:space="preserve">Quan esteu a l&apos;eina de text, si premeu <flowSpan id="flowSpan2983" font-weight="bold">Ctrl+U</flowSpan> commutareu entre mode Unicode i el mode normal. En el mode Unicode, cada grup de 4 dígits hexadecimals que escriviu esdevenen un únic caràcter Unicode, de forma que us permet introduir símbols arbitraris (si en sabéssiu el codi Unicode i el tipus de lletra que el suporta). Per sortir del mode Unicode, podeu prémer <flowSpan id="flowSpan2985" font-weight="bold">Esc</flowSpan>. Per exemple, <flowSpan id="flowSpan2987" font-weight="bold">Ctrl+U 2 0 1 4 Esc</flowSpan> insereix un guió llarg (—). </flowDiv>
+  <flowPara id="flowPara2981" >Quan esteu a l&apos;eina de text, si premeu <flowSpan id="flowSpan2983" font-weight="bold">Ctrl+U</flowSpan> commutareu entre mode Unicode i el mode normal. En el mode Unicode, cada grup de 4 dígits hexadecimals que escriviu esdevenen un únic caràcter Unicode, de forma que us permet introduir símbols arbitraris (si en sabéssiu el codi Unicode i el tipus de lletra que el suporta). Per sortir del mode Unicode, podeu prémer <flowSpan id="flowSpan2985" font-weight="bold">Esc</flowSpan>. Per exemple, <flowSpan id="flowSpan2987" font-weight="bold">Ctrl+U 2 0 1 4 Esc</flowSpan> insereix un guió llarg (—). </flowPara>
  </flowRoot>
  <text id="text2989" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" font-size="8.5px" font-style="normal" y="2683.6252" x="10" font-family="Sans" fill="#000000">
   <tspan id="tspan2991" y="2683.6252" x="10">Com utilitzar la graella per dibuixar icones</tspan>
  </text>
  <rect id="d0e347" display="none" height="1000px" width="288" y="2620.5" x="10"/>
- <flowRoot id="flowRoot2994" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,68)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot2994" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,68)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion2996">
    <use id="use2998" xlink:href="#d0e347" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv3000" xml:space="preserve">Imagineu que voleu crear una icona de 24x24 píxels. Creeu un llenç de 24x24 px (utiitzeu les <flowSpan id="flowSpan3002" font-family="Sans">Preferències del document</flowSpan>) i establiu la graella a 0,5 px (48x48 línies). Si ara alinieu els objectes emplenats a les línies <flowSpan id="flowSpan3004" font-style="italic">parelles</flowSpan>, i els objectes amb traç a les <flowSpan id="flowSpan3006" font-style="italic">senars</flowSpan> amb el gruix del contorn en px, essent un número parell, i l&apos;exporteu al valor per defecte 90 ppp (de manera que 1 px esdevé 1 píxel del mapa de bits), aconseguireu una imatge d&apos;un mapa de bits nítida sense necessitat de suavització. </flowDiv>
+  <flowPara id="flowPara3000" >Imagineu que voleu crear una icona de 24x24 píxels. Creeu un llenç de 24x24 px (utiitzeu les <flowSpan id="flowSpan3002" font-family="Sans">Preferències del document</flowSpan>) i establiu la graella a 0,5 px (48x48 línies). Si ara alinieu els objectes emplenats a les línies <flowSpan id="flowSpan3004" font-style="italic">parelles</flowSpan>, i els objectes amb traç a les <flowSpan id="flowSpan3006" font-style="italic">senars</flowSpan> amb el gruix del contorn en px, essent un número parell, i l&apos;exporteu al valor per defecte 90 ppp (de manera que 1 px esdevé 1 píxel del mapa de bits), aconseguireu una imatge d&apos;un mapa de bits nítida sense necessitat de suavització. </flowPara>
  </flowRoot>
  <text id="text3008" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" font-size="8.5px" font-style="normal" y="2799.4055" x="10" font-family="Sans" fill="#000000">
   <tspan id="tspan3010" y="2799.4055" x="10">Rotació de l&apos;objecte</tspan>
  </text>
  <rect id="d0e365" display="none" height="1000px" width="288" y="2724.3" x="10"/>
- <flowRoot id="flowRoot3013" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,80)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot3013" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,80)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion3015">
    <use id="use3017" xlink:href="#d0e365" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv3019" xml:space="preserve">Quan feu servir l&apos;eina de selecció, <flowSpan id="flowSpan3021" font-weight="bold">cliqueu</flowSpan> en un objecte per veure les fletxes d&apos;escalat, després <flowSpan id="flowSpan3023" font-weight="bold">cliqueu de nou</flowSpan> en l&apos;objecte per veure les fletxes de rotació i desplaçament. Si feu clic a les fletxes a les cantonades i les arrossegueu, l&apos;objecte rotarà al voltant del centre (mostrat com a una creu). Si premu la tecla <flowSpan id="flowSpan3025" font-weight="bold">Majúscula</flowSpan> mentre ho feu, la rotació es produïrà al voltant de la cantonada oposada. També podeu arrosegar el centre de rotació a qualsevol altre lloc.</flowDiv>
+  <flowPara id="flowPara3019" >Quan feu servir l&apos;eina de selecció, <flowSpan id="flowSpan3021" font-weight="bold">cliqueu</flowSpan> en un objecte per veure les fletxes d&apos;escalat, després <flowSpan id="flowSpan3023" font-weight="bold">cliqueu de nou</flowSpan> en l&apos;objecte per veure les fletxes de rotació i desplaçament. Si feu clic a les fletxes a les cantonades i les arrossegueu, l&apos;objecte rotarà al voltant del centre (mostrat com a una creu). Si premu la tecla <flowSpan id="flowSpan3025" font-weight="bold">Majúscula</flowSpan> mentre ho feu, la rotació es produïrà al voltant de la cantonada oposada. També podeu arrosegar el centre de rotació a qualsevol altre lloc.</flowPara>
  </flowRoot>
  <rect id="d0e377" display="none" height="1000px" width="288" y="2809.6" x="10"/>
- <flowRoot id="flowRoot3028" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,84)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot3028" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,84)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion3030">
    <use id="use3032" xlink:href="#d0e377" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv3034" xml:space="preserve">O, també podeu rotar des del teclat prement <flowSpan id="flowSpan3036" font-weight="bold">[</flowSpan> o <flowSpan id="flowSpan3038" font-weight="bold">]</flowSpan> (cada 15 graus) o <flowSpan id="flowSpan3040" font-weight="bold">Ctrl+[</flowSpan> i <flowSpan id="flowSpan3042" font-weight="bold">Ctrl+]</flowSpan> (cada 90 graus). Les mateixes tecles <flowSpan id="flowSpan3044" font-weight="bold">[]</flowSpan> amb <flowSpan id="flowSpan3046" font-weight="bold">Alt</flowSpan> realitzen una rotació lenta de mida de píxel.</flowDiv>
+  <flowPara id="flowPara3034" >O, també podeu rotar des del teclat prement <flowSpan id="flowSpan3036" font-weight="bold">[</flowSpan> o <flowSpan id="flowSpan3038" font-weight="bold">]</flowSpan> (cada 15 graus) o <flowSpan id="flowSpan3040" font-weight="bold">Ctrl+[</flowSpan> i <flowSpan id="flowSpan3042" font-weight="bold">Ctrl+]</flowSpan> (cada 90 graus). Les mateixes tecles <flowSpan id="flowSpan3044" font-weight="bold">[]</flowSpan> amb <flowSpan id="flowSpan3046" font-weight="bold">Alt</flowSpan> realitzen una rotació lenta de mida de píxel.</flowPara>
  </flowRoot>
  <text id="text3048" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" font-size="8.5px" font-style="normal" y="2943.7417" x="10" font-family="Sans" fill="#000000">
   <tspan id="tspan3050" y="2943.7417" x="10">Diàleg &quot;Obre&quot; com a paleta d&apos;objectes</tspan>
  </text>
  <rect id="d0e404" display="none" height="1000px" width="288" y="2868.6" x="10"/>
- <flowRoot id="flowRoot3053" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,80)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot3053" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,80)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion3055">
    <use id="use3057" xlink:href="#d0e404" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv3059" xml:space="preserve">Si teniu alguns fitxers petits SVG, el contingut dels quals sovint reutilitzeu en d&apos;altres documents, podeu usar convenientment el diàleg &quot;Obre&quot; com a paleta. Afegiu el directori amb les vostres fonts SVG a la llista de marcadors de forma que podeu obrir-la ràpidament. I, a continuació, navegueu pel directori mirant les vistes prèvies. Un cop trobeu el fitxer que necessiteu, el podeu arrossegar fins al llenç i s&apos;importarà al vostre document.</flowDiv>
+  <flowPara id="flowPara3059" >Si teniu alguns fitxers petits SVG, el contingut dels quals sovint reutilitzeu en d&apos;altres documents, podeu usar convenientment el diàleg &quot;Obre&quot; com a paleta. Afegiu el directori amb les vostres fonts SVG a la llista de marcadors de forma que podeu obrir-la ràpidament. I, a continuació, navegueu pel directori mirant les vistes prèvies. Un cop trobeu el fitxer que necessiteu, el podeu arrossegar fins al llenç i s&apos;importarà al vostre document.</flowPara>
  </flowRoot>
  <text id="text3061" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" font-size="8.5px" font-style="normal" y="3043.7747" x="10" font-family="Sans" fill="#000000">
   <tspan id="tspan3063" y="3043.7747" x="10">Mapa de bits amb ombres</tspan>
  </text>
  <rect id="d0e413" display="none" height="1000px" width="288" y="2970.7" x="10"/>
- <flowRoot id="flowRoot3066" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,78)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot3066" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,78)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion3068">
    <use id="use3070" xlink:href="#d0e413" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv3072" xml:space="preserve">L&apos;Inkscape no suporta encara el filtre de difuminació gaussiana d&apos;SVG, però podeu crear fàcilment ombres borroses per a objectes com mapes de bits mitjançant &quot;Crea una còpia del mapa de bits&quot; amb un fitxer de seqüència de filtre. Vegeu share/extensions/inkscape-shadow.README per a més detalls i informació sobre aquesta metodologia. </flowDiv>
+  <flowPara id="flowPara3072" >L&apos;Inkscape no suporta encara el filtre de difuminació gaussiana d&apos;SVG, però podeu crear fàcilment ombres borroses per a objectes com mapes de bits mitjançant &quot;Crea una còpia del mapa de bits&quot; amb un fitxer de seqüència de filtre. Vegeu share/extensions/inkscape-shadow.README per a més detalls i informació sobre aquesta metodologia. </flowPara>
  </flowRoot>
  <text id="text3074" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" font-size="8.5px" font-style="normal" y="3137.4636" x="10" font-family="Sans" fill="#000000">
   <tspan id="tspan3076" y="3137.4636" x="10">Posar un text a un camí</tspan>
  </text>
  <rect id="d0e422" display="none" height="1000px" width="288" y="3050.4" x="10"/>
- <flowRoot id="flowRoot3079" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,92)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot3079" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,92)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion3081">
    <use id="use3083" xlink:href="#d0e422" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv3085" xml:space="preserve">Per posar un text a una corba, seleccioneu el text i la corba junts i seleccioneu <flowSpan id="flowSpan3087" font-family="Sans">Posa a camí</flowSpan> des del menú Text. El text començarà al principi del camí. En general és millor crear un camí explícit a on voleu ajustar el text, en comptes d&apos;ajustar-lo a un altre element de dibuix — això us donara més control sense desordenar el vostre dibuix.</flowDiv>
+  <flowPara id="flowPara3085" >Per posar un text a una corba, seleccioneu el text i la corba junts i seleccioneu <flowSpan id="flowSpan3087" font-family="Sans">Posa a camí</flowSpan> des del menú Text. El text començarà al principi del camí. En general és millor crear un camí explícit a on voleu ajustar el text, en comptes d&apos;ajustar-lo a un altre element de dibuix — això us donara més control sense desordenar el vostre dibuix.</flowPara>
  </flowRoot>
  <text id="text3089" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" font-size="8.5px" font-style="normal" y="3232.072" x="10" font-family="Sans" fill="#000000">
   <tspan id="tspan3091" y="3232.072" x="10">Seleccionar l&apos;original</tspan>
  </text>
  <rect id="d0e434" display="none" height="1000px" width="288" y="3143" x="10"/>
- <flowRoot id="flowRoot3094" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,94)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot3094" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,94)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion3096">
    <use id="use3098" xlink:href="#d0e434" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv3100" xml:space="preserve">Quan tingueu un text a un camí, un desplaçament enllaçat o un clon, pot ser difícil seleccionar l&apos;objecte/camí font perquè pot estar amagat per sota, o s&apos;ha fet invisible o blocat. La tecla <flowSpan id="flowSpan3102" font-weight="bold">Maj+D</flowSpan> us ajudarà; seleccioneu el text, desplaçament enllaçat o clon, i premeu <flowSpan id="flowSpan3104" font-weight="bold">Maj+D</flowSpan> per moure la selecció al camí corresponent, font del desplaçament o l&apos;original del clon.</flowDiv>
+  <flowPara id="flowPara3100" >Quan tingueu un text a un camí, un desplaçament enllaçat o un clon, pot ser difícil seleccionar l&apos;objecte/camí font perquè pot estar amagat per sota, o s&apos;ha fet invisible o blocat. La tecla <flowSpan id="flowSpan3102" font-weight="bold">Maj+D</flowSpan> us ajudarà; seleccioneu el text, desplaçament enllaçat o clon, i premeu <flowSpan id="flowSpan3104" font-weight="bold">Maj+D</flowSpan> per moure la selecció al camí corresponent, font del desplaçament o l&apos;original del clon.</flowPara>
  </flowRoot>
  <text id="text3106" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" font-size="8.5px" font-style="normal" y="3324.7217" x="10" font-family="Sans" fill="#000000">
   <tspan id="tspan3108" y="3324.7217" x="10">Recuperació d&apos;una finestra fora de la pantalla</tspan>
  </text>
  <rect id="d0e449" display="none" height="1000px" width="288" y="3235.6" x="10"/>
- <flowRoot id="flowRoot3111" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,94)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot3111" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,94)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion3113">
    <use id="use3115" xlink:href="#d0e449" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv3117" xml:space="preserve">Quan es mouen documents entre sistemes amb diferents resolucions o nombre de pantalles, podeu trobar-vos amb què l&apos;Inkscape ha desat una posició de finestra que col·loca la finestra fora de la vostra pantalla. Maximitzeu simplement la finestra (que la tornarà a posar a la vista; utilitzeu la barra de tasques), deseu i recarregueu. Podeu evitar tot això si inhabiliteu l&apos;opció global per a guardar la geomentria de la finestra (<flowSpan id="flowSpan3119" font-family="Sans">Preferències de l&apos;Inkscape</flowSpan>, pestanya <flowSpan id="flowSpan3121" font-family="Sans">Finestres</flowSpan>). </flowDiv>
+  <flowPara id="flowPara3117" >Quan es mouen documents entre sistemes amb diferents resolucions o nombre de pantalles, podeu trobar-vos amb què l&apos;Inkscape ha desat una posició de finestra que col·loca la finestra fora de la vostra pantalla. Maximitzeu simplement la finestra (que la tornarà a posar a la vista; utilitzeu la barra de tasques), deseu i recarregueu. Podeu evitar tot això si inhabiliteu l&apos;opció global per a guardar la geomentria de la finestra (<flowSpan id="flowSpan3119" font-family="Sans">Preferències de l&apos;Inkscape</flowSpan>, pestanya <flowSpan id="flowSpan3121" font-family="Sans">Finestres</flowSpan>). </flowPara>
  </flowRoot>
  <text id="text3123" style="writing-mode:lr-tb;text-anchor:start;" font-weight="bold" font-size="8.5px" font-style="normal" y="3442.502" x="10" font-family="Sans" fill="#000000">
   <tspan id="tspan3125" y="3442.502" x="10">Transparències, degradats i exportació a PostScript</tspan>
  </text>
  <rect id="d0e464" display="none" height="1000px" width="288" y="3339.4" x="10"/>
- <flowRoot id="flowRoot3128" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,108)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot3128" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,108)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion3130">
    <use id="use3132" xlink:href="#d0e464" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv3134" xml:space="preserve">Els formats PostScript o EPS no suporten <flowSpan id="flowSpan3136" font-style="italic">transparència</flowSpan>, de manera que no hauríeu de fer-ho servir si voleu exportar a PS/EPS. En el cas d&apos;una transparència d&apos;un color només, és fàcil d&apos;arreglar: seleccioneu un dels objectes transparents, commuteu a l&apos;eina Comptagotes (<flowSpan id="flowSpan3138" font-weight="bold">F7</flowSpan>); assegureu-vos que no està en el mode &quot;selecciona el color visible sense transparència&quot;; cliqueu en el mateix objecte. Això seleccionarà el color visible i l&apos;assignarà a l&apos;objecte, però aquesta vegada sense transparència. Repetiu-ho per a tots els objectes transparents. Si el vostre objecte transparent es troba a sobre de múltiples àrees de colors diferents, haureu de trencar-lo en trossos i aplicar el procediment a cada tros.</flowDiv>
+  <flowPara id="flowPara3134" >Els formats PostScript o EPS no suporten <flowSpan id="flowSpan3136" font-style="italic">transparència</flowSpan>, de manera que no hauríeu de fer-ho servir si voleu exportar a PS/EPS. En el cas d&apos;una transparència d&apos;un color només, és fàcil d&apos;arreglar: seleccioneu un dels objectes transparents, commuteu a l&apos;eina Comptagotes (<flowSpan id="flowSpan3138" font-weight="bold">F7</flowSpan>); assegureu-vos que no està en el mode &quot;selecciona el color visible sense transparència&quot;; cliqueu en el mateix objecte. Això seleccionarà el color visible i l&apos;assignarà a l&apos;objecte, però aquesta vegada sense transparència. Repetiu-ho per a tots els objectes transparents. Si el vostre objecte transparent es troba a sobre de múltiples àrees de colors diferents, haureu de trencar-lo en trossos i aplicar el procediment a cada tros.</flowPara>
  </flowRoot>
  <rect id="d0e473" display="none" height="1000px" width="288" y="3469.3" x="10"/>
- <flowRoot id="flowRoot3141" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,108)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
+ <flowRoot xml:space="preserve" id="flowRoot3141" style="writing-mode:lr-tb;text-anchor:start;" font-weight="normal" transform="translate(0,108)" font-size="8.39999962px" font-style="normal" font-family="Serif" line-height="133.00000429%" fill="#000000">
   <flowRegion id="flowRegion3143">
    <use id="use3145" xlink:href="#d0e473" height="3962.5" width="320" y="0" x="0"/>
   </flowRegion>
-  <flowDiv id="flowDiv3147" xml:space="preserve">L&apos;exportació de <flowSpan id="flowSpan3149" font-style="italic">degradats</flowSpan> a PS o EPS no funciona amb el text (excepte si el text es converteix en camí) ni amb el traç pintat. També, com que es perd la transparència en exportar a PS o EPS, no podeu usar un degradat d&apos;un blau <flowSpan id="flowSpan3151" font-style="italic">opac</flowSpan> a un blau <flowSpan id="flowSpan3153" font-style="italic">transparent</flowSpan> (per exemple); com a solució, reemplaceu el degradat d&apos;un blau <flowSpan id="flowSpan3155" font-style="italic">opac</flowSpan> a un color de fons <flowSpan id="flowSpan3157" font-style="italic">opac</flowSpan>.</flowDiv>
+  <flowPara id="flowPara3147" >L&apos;exportació de <flowSpan id="flowSpan3149" font-style="italic">degradats</flowSpan> a PS o EPS no funciona amb el text (excepte si el text es converteix en camí) ni amb el traç pintat. També, com que es perd la transparència en exportar a PS o EPS, no podeu usar un degradat d&apos;un blau <flowSpan id="flowSpan3151" font-style="italic">opac</flowSpan> a un blau <flowSpan id="flowSpan3153" font-style="italic">transparent</flowSpan> (per exemple); com a solució, reemplaceu el degradat d&apos;un blau <flowSpan id="flowSpan3155" font-style="italic">opac</flowSpan> a un color de fons <flowSpan id="flowSpan3157" font-style="italic">opac</flowSpan>.</flowPara>
  </flowRoot>
  <g id="g3159" transform="translate(0,3643.401)">
   <defs id="defs3161">

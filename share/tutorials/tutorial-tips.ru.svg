@@ -38,47 +38,47 @@
   </g>
   <use id="use2086" style="color:#000000" xlink:href="#path1124" transform="matrix(3.7991 0 0 3.7991 -428.74 -36.475)" height="1052.3622" fill-opacity=".11077" width="320.00000" y="0.0000000" x="0.0000000" font-family="sans-serif" fill="#ffffff"/>
   <path id="path7527" opacity=".5" style="color:#000000" d="m338.53 197.82-13.108-1.2709 7.6547-10.717z" fill-rule="evenodd" transform="matrix(.61496 .045496 .061919 -.45186 112.46 270.87)"/>
-  <text id="text2191" opacity=".5" line-height="125%" xml:space="preserve" transform="rotate(90)" font-size="6.9693px" y="-326.81229" x="3.6203015" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan2193" sodipodi:role="line" x="3.6203015" style="letter-spacing:.29056" y="-326.81229">Используйте для прокрутки <tspan id="tspan2195" font-weight="bold">Ctrl+стрелка вниз</tspan></tspan></text>
+  <text id="text2191" opacity=".5" line-height="125%"  transform="rotate(90)" font-size="6.9693px" y="-326.81229" x="3.6203015" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan2193" sodipodi:role="line" x="3.6203015" style="letter-spacing:.29056" y="-326.81229">Используйте для прокрутки <tspan id="tspan2195" font-weight="bold">Ctrl+стрелка вниз</tspan></tspan></text>
  </g>
  <text id="text1920" font-family="sans-serif" font-size="7" transform="scale(1.1307)" y="30" x="35" fill="#ffffff">
   <tspan id="tspan1668" style="letter-spacing:2.1813" fill="#ffffff" dx="0 -0.57057059 0 0 0 0 0">::СОВЕТЫ И ХИТРОСТИ</tspan>
  </text>
  <rect id="d0e10" display="none" height="1e3px" width="264" y="46" x="35"/>
- <flowRoot font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
+ <flowRoot xml:space="preserve" font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e10"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">В этом разделе учебника вы ознакомитесь с некоторыми хитростями и «скрытыми» возможностями Inkscape, заметно ускоряющими работу.</flowDiv>
+  <flowPara >В этом разделе учебника вы ознакомитесь с некоторыми хитростями и «скрытыми» возможностями Inkscape, заметно ускоряющими работу.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="99.49101399999999" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="99.49101399999999" x="10">Radial placement with Tiled Clones</tspan>
  </text>
  <rect id="d0e19" display="none" height="1e3px" width="288" y="104.69" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e19"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">It&apos;s easy to see how to use the <flowSpan font-family="sans-serif">Create Tiled Clones</flowSpan> dialog for rectangular grids and
+  <flowPara >It&apos;s easy to see how to use the <flowSpan font-family="sans-serif">Create Tiled Clones</flowSpan> dialog for rectangular grids and
 patterns. But what if you need <flowSpan font-style="italic">radial</flowSpan> placement, where objects
 share a common center of rotation? It&apos;s possible too!
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e28" display="none" height="1e3px" width="288" y="154.35" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e28"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">If your radial pattern only needs to have 3, 4, 6, 8, or 12 elements, then you can try the
+  <flowPara >If your radial pattern only needs to have 3, 4, 6, 8, or 12 elements, then you can try the
 P3, P31M, P3M1, P4, P4M, P6, or P6M symmetries. These will work nicely for snowflakes
 and the like. A more general method, however, is as follows.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e31" display="none" height="1e3px" width="288" y="204.13" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e31"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Выберите симметрию P1 (простое смещение) и <flowSpan font-style="italic">скомпенсируйте</flowSpan> это смещение, перейдя на вкладку «<flowSpan font-family="sans-serif">Смещение</flowSpan>» и установив значение «<flowSpan font-family="sans-serif">На строку/Смещение по Y</flowSpan>» и «<flowSpan font-family="sans-serif">На столбец/Смещение по X</flowSpan>» равным -100%. За счёт этого все клоны будут расположены точно над оригиналом. Все, что остаётся — это перейти на вкладку «<flowSpan font-family="sans-serif">Поворот</flowSpan>» и установить некоторый угол вращения на столбец, а затем создать узор в одну строку и несколько столбцов. Вот пример шаблона из горизонтальной линии и 30 столбцов, каждый из которых повёрнут на шесть градусов:</flowDiv>
+  <flowPara >Выберите симметрию P1 (простое смещение) и <flowSpan font-style="italic">скомпенсируйте</flowSpan> это смещение, перейдя на вкладку «<flowSpan font-family="sans-serif">Смещение</flowSpan>» и установив значение «<flowSpan font-family="sans-serif">На строку/Смещение по Y</flowSpan>» и «<flowSpan font-family="sans-serif">На столбец/Смещение по X</flowSpan>» равным -100%. За счёт этого все клоны будут расположены точно над оригиналом. Все, что остаётся — это перейти на вкладку «<flowSpan font-family="sans-serif">Поворот</flowSpan>» и установить некоторый угол вращения на столбец, а затем создать узор в одну строку и несколько столбцов. Вот пример шаблона из горизонтальной линии и 30 столбцов, каждый из которых повёрнут на шесть градусов:</flowPara>
  </flowRoot>
  <path id="tips-f01-ru.svgpath25" stroke="#000" stroke-width="0.3" fill="none" style="color:#000000" transform="translate(10 315.24)" inkscape:tile-cx="160.25000" inkscape:tile-cy="346.50000" d="m81.5 58.9h117.5" inkscape:tile-w="117.80000" inkscape:tile-h="0.30000001"/>
  <use id="tips-f01-ru.svguse55" xlink:href="#tips-f01-ru.svgpath25" transform="translate(10 315.24) matrix(.99452 .10453 -.10453 .99452 6.9252 -14.337) translate(-10 -315.24)" height="1052.3622" width="744.09448" inkscape:tiled-clone-of="#path25" y="0.0000000" x="0.0000000"/>
@@ -111,18 +111,18 @@ and the like. A more general method, however, is as follows.
  <use id="tips-f01-ru.svguse82" xlink:href="#tips-f01-ru.svgpath25" transform="translate(10 315.24) matrix(-.97815 .20791 -.20791 -.97815 289.68 87.353) translate(-10 -315.24)" height="1052.3622" width="744.09448" inkscape:tiled-clone-of="#path25" y="0.0000000" x="0.0000000"/>
  <use id="tips-f01-ru.svguse83" xlink:href="#tips-f01-ru.svgpath25" transform="translate(10 315.24) matrix(-.99452 .10453 -.10453 -.99452 285.89 102.82) translate(-10 -315.24)" height="1052.3622" width="744.09448" inkscape:tiled-clone-of="#path25" y="0.0000000" x="0.0000000"/>
  <rect id="d0e59" display="none" height="1e3px" width="288" y="444.74" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e59"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Чтобы получить из этого часовой циферблат, вам нужно лишь вырезать центральную часть или положить поверх неё белый круг (отсоедините клоны, чтобы иметь возможность выполнять логические действия с ними).</flowDiv>
+  <flowPara >Чтобы получить из этого часовой циферблат, вам нужно лишь вырезать центральную часть или положить поверх неё белый круг (отсоедините клоны, чтобы иметь возможность выполнять логические действия с ними).</flowPara>
  </flowRoot>
  <rect id="d0e62" display="none" height="1e3px" width="288" y="494.11" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e62"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Более интересный эффект может быть создан при использовании строк и столбцов одновременно. Вот шаблон из 10 столбцов и 8 строк с поворотом в 2 градуса на строку и 18 градусов на столбец. Каждая группа линий здесь — «столбец», так что каждая группа отстоит от другой на 18 градусов; внутри каждого столбца интервал между линиями равен 2 градусам:</flowDiv>
+  <flowPara >Более интересный эффект может быть создан при использовании строк и столбцов одновременно. Вот шаблон из 10 столбцов и 8 строк с поворотом в 2 градуса на строку и 18 градусов на столбец. Каждая группа линий здесь — «столбец», так что каждая группа отстоит от другой на 18 градусов; внутри каждого столбца интервал между линиями равен 2 градусам:</flowPara>
  </flowRoot>
  <path id="tips-f02-ru.svgpath92" stroke="#000" stroke-width="0.3" fill="none" style="color:#000000" transform="translate(10 573.3)" inkscape:tile-cx="164.00000" inkscape:tile-cy="543.50000" d="m72.5 71.65h143" inkscape:tile-w="143.30000" inkscape:tile-h="0.30000001"/>
  <use id="tips-f02-ru.svguse1473" xlink:href="#tips-f02-ru.svgpath92" transform="translate(10 573.3) matrix(.99966 .026177 -.026177 .99966 1.9249 -3.7451) translate(-10 -573.3)" height="2150.5000" width="320.00000" inkscape:tiled-clone-of="#path92" y="0.0000000" x="0.0000000"/>
@@ -205,17 +205,17 @@ and the like. A more general method, however, is as follows.
  <use id="tips-f02-ru.svguse1550" xlink:href="#tips-f02-ru.svgpath92" transform="translate(10 573.3) matrix(-.98769 .15643 -.15643 -.98769 297.44 119.89) translate(-10 -573.3)" height="2150.5000" width="320.00000" inkscape:tiled-clone-of="#path92" y="0.0000000" x="0.0000000"/>
  <use id="tips-f02-ru.svguse1551" xlink:href="#tips-f02-ru.svgpath92" transform="translate(10 573.3) matrix(-.99144 .13053 -.13053 -.99144 296.12 123.89) translate(-10 -573.3)" height="2150.5000" width="320.00000" inkscape:tiled-clone-of="#path92" y="0.0000000" x="0.0000000"/>
  <rect id="d0e75" display="none" height="1e3px" width="288" y="728.3" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e75"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">In the above examples, the line was rotated around its center. But what if you want the 
+  <flowPara >In the above examples, the line was rotated around its center. But what if you want the 
 center to be outside of your shape? Just click on the object twice with the Selector tool 
 to enter rotation mode. Now move the object&apos;s rotation center (represented by a small cross-shaped handle) 
 to the point you would like to be the center of the rotation for the Tiled Clones operation.
 Then use <flowSpan font-family="sans-serif">Create Tiled Clones</flowSpan> on the object. This is how you can do nice “explosions” 
 or “starbursts” by randomizing scale, rotation, and possibly opacity:
-</flowDiv>
+</flowPara>
  </flowRoot>
  <g id="tips-f03-ru.svgg1768" inkscape:tile-w="87.999840" transform="translate(10 828.64) matrix(.63768 0 0 .63768 37.609 -470.92)" inkscape:tile-h="7.3333200" inkscape:tile-cx="158.99982" inkscape:tile-cy="859.24904">
   <path id="tips-f03-ru.svgpath1592" style="color:#000000" d="m210.17 859.92c4.54-2.08 15.81-3.8 15.81-0.12 0 3.67-15.81 0.12-15.81 0.12z" fill-rule="evenodd"/>
@@ -296,11 +296,11 @@ or “starbursts” by randomizing scale, rotation, and possibly opacity:
   <tspan y="1007.448505" x="10">Как сделать нарезку работы (на несколько прямоугольных областей)?</tspan>
  </text>
  <rect id="d0e97" display="none" height="1e3px" width="288" y="1012.6" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e97"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Create a new layer, in that layer create invisible rectangles covering parts of your
+  <flowPara >Create a new layer, in that layer create invisible rectangles covering parts of your
 image. Make sure your document uses the px unit (default), turn on grid and snap the
 rects to the grid so that each one spans a whole number of px units. Assign meaningful
 ids to the rects, and export each one to its own file (<flowSpan font-family="sans-serif">File
@@ -309,41 +309,41 @@ their export filenames. After that, it&apos;s very easy to re-export some of the
 switch to the export layer, use Tab to select the one you need (or use Find by id), and
 click Export in the dialog. Or, you can write a shell script or batch file to export
 all of your areas, with a command like:
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e106" display="none" height="1e3px" width="288" y="1126.3" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e106"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">inkscape -i area-id -t filename.svg</flowDiv>
+  <flowPara >inkscape -i area-id -t filename.svg</flowPara>
  </flowRoot>
  <rect id="d0e109" display="none" height="1e3px" width="288" y="1144.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e109"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">for each exported area. The -t switch tells it to use the remembered filename hint,
+  <flowPara >for each exported area. The -t switch tells it to use the remembered filename hint,
 otherwise you can provide the export filename with the -e switch. Alternatively, you can
 use the <flowSpan font-family="sans-serif">Extensions &gt; Web &gt; Slicer</flowSpan> extensions, or <flowSpan font-family="sans-serif">Extensions &gt; Export &gt; Guillotine</flowSpan> for similar results.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="1206.5816327999999" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="1206.5816327999999" x="10">Нелинейные градиенты</tspan>
  </text>
  <rect id="d0e124" display="none" height="1e3px" width="288" y="1211.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e124"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Версия 1.1 SVG не поддерживает нелинейные градиенты (т.е. нелинейно переходящие из цвета в цвет), но вы можете создать их подобие, используя градиент с <flowSpan font-style="italic">множеством</flowSpan> опорных точек.</flowDiv>
+  <flowPara >Версия 1.1 SVG не поддерживает нелинейные градиенты (т.е. нелинейно переходящие из цвета в цвет), но вы можете создать их подобие, используя градиент с <flowSpan font-style="italic">множеством</flowSpan> опорных точек.</flowPara>
  </flowRoot>
  <rect id="d0e130" display="none" height="1e3px" width="288" y="1250.9" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e130"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Start with a simple two-stop gradient (you can assign that in the Fill and Stroke dialog 
+  <flowPara >Start with a simple two-stop gradient (you can assign that in the Fill and Stroke dialog 
 or use the gradient tool). Now, with the gradient tool, add a new gradient stop in
 the middle; either by double-clicking on the gradient line, or by selecting the square-shaped 
 gradient stop and clicking on the button <flowSpan font-family="sans-serif">Insert new stop</flowSpan> in the gradient 
@@ -351,7 +351,7 @@ tool&apos;s tool bar at the top. Drag the new stop a bit. Then add more stops be
 middle stop and drag them too, so that the gradient looks smooth. The more stops you add, the 
 smoother you can make the resulting gradient. Here&apos;s the initial black-white gradient with two 
 stops:
-</flowDiv>
+</flowPara>
  </flowRoot>
  <defs id="tips-f04-ru.svgdefs3">
   <linearGradient id="tips-f04-ru.svglinearGradient844" y2="-5.6264" gradientUnits="userSpaceOnUse" x2="-753.98" gradientTransform="matrix(.23728 0 0 4.2145 178.9 1.6151e-15)" y1="-71.602" x1="-753.98">
@@ -361,11 +361,11 @@ stops:
  </defs>
  <rect id="tips-f04-ru.svgrect1511" fill-rule="evenodd" fill-opacity=".75" transform="translate(10 1372.4) matrix(9.0277e-18 -1 -1 -5.3334e-18 0 0)" height="286.4" width="16.125" y="-305.42" x="-16.125" fill="url(#tips-f04-ru.svglinearGradient844)"/>
  <rect id="d0e146" display="none" height="1e3px" width="288" y="1400.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e146"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">А тут — примеры разных «нелинейных» градиентов с множеством опорных точек (проверьте это при помощи инструмента редактирования градиента).</flowDiv>
+  <flowPara >А тут — примеры разных «нелинейных» градиентов с множеством опорных точек (проверьте это при помощи инструмента редактирования градиента).</flowPara>
  </flowRoot>
  <defs id="tips-f05-ru.svgdefs3">
   <linearGradient id="tips-f05-ru.svglinearGradient3979" y2="-4.5118" gradientUnits="userSpaceOnUse" x2="-1484.6" gradientTransform="matrix(.23728 0 0 4.2145 241.38 2.1791e-15)" y1="-72.469" x1="-1484.6" inkscape:collect="always">
@@ -460,11 +460,11 @@ stops:
   <tspan y="1600.7776577999998" x="10">Радиальный градиент со смещённым фокусом</tspan>
  </text>
  <rect id="d0e165" display="none" height="1e3px" width="288" y="1606" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e165"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Радиальные градиенты не обязательно должны быть симметричными. Используя инструмент для редактирования градиентов, сместите центральный узел эллиптического градиента с нажатой клавишей <flowSpan font-weight="bold">Shift</flowSpan>. Это сдвинет крестик, являющийся <flowSpan font-style="italic">узлом фокуса</flowSpan> градиента. Если вам это не нужно, вы можете вернуть узел фокуса в центр, просто перетащив его в центр.</flowDiv>
+  <flowPara >Радиальные градиенты не обязательно должны быть симметричными. Используя инструмент для редактирования градиентов, сместите центральный узел эллиптического градиента с нажатой клавишей <flowSpan font-weight="bold">Shift</flowSpan>. Это сдвинет крестик, являющийся <flowSpan font-style="italic">узлом фокуса</flowSpan> градиента. Если вам это не нужно, вы можете вернуть узел фокуса в центр, просто перетащив его в центр.</flowPara>
  </flowRoot>
  <defs id="tips-f06-ru.svgdefs3">
   <radialGradient id="tips-f06-ru.svgradialGradient4031" gradientUnits="userSpaceOnUse" fx="164.26" fy="495.96" cx="187.87" cy="494.13" r="40.258" gradientTransform="matrix(.93031 0 0 .85381 16.079 -387.24)" inkscape:collect="always">
@@ -482,249 +482,249 @@ stops:
   <tspan y="1789.8716387999998" x="10">Выравнивание по центру страницы</tspan>
  </text>
  <rect id="d0e190" display="none" height="1e3px" width="288" y="1795.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e190"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">To align something to the center or side of a page, select the object or group and then
+  <flowPara >To align something to the center or side of a page, select the object or group and then
 choose <flowSpan font-family="sans-serif">Page</flowSpan> from the <flowSpan font-family="sans-serif">Relative to:</flowSpan> list in the
 Align and Distribute dialog (<flowSpan font-weight="bold">Shift+Ctrl+A</flowSpan>). 
-</flowDiv>
+</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="1847.0071077999999" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="1847.0071077999999" x="10">Удаление ненужного из документа</tspan>
  </text>
  <rect id="d0e208" display="none" height="1e3px" width="288" y="1852.2" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e208"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Many of the no-longer-used gradients, patterns, and markers (more precisely, those which
+  <flowPara >Many of the no-longer-used gradients, patterns, and markers (more precisely, those which
 you edited manually) remain in the corresponding palettes and can be reused for new
 objects. However if you want to optimize your document, use the <flowSpan font-family="sans-serif">Clean up Document</flowSpan> command in File menu. It will remove any gradients, patterns, or markers
 which are not used by anything in the document, making the file smaller.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="1945.0385138" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="1945.0385138" x="10">Скрытые возможности и редактор XML</tspan>
  </text>
  <rect id="d0e220" display="none" height="1e3px" width="288" y="1950.2" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e220"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">XML-редактор (<flowSpan font-weight="bold">Shift+Ctrl+X</flowSpan>) позволяет вам изменить почти все параметры документа без необходимости использования внешнего текстового редактора. Кроме того, Inkscape обычно поддерживает больше возможностей формата SVG, чем доступно через графический интерфейс. К ним относятся, например, отображение масок и обтравочных контуров, которые нельзя ни создать, ни изменить через графический интерфейс. XML-редактор позволяет использовать эти возможности (если вы знаете SVG).</flowDiv>
+  <flowPara >XML-редактор (<flowSpan font-weight="bold">Shift+Ctrl+X</flowSpan>) позволяет вам изменить почти все параметры документа без необходимости использования внешнего текстового редактора. Кроме того, Inkscape обычно поддерживает больше возможностей формата SVG, чем доступно через графический интерфейс. К ним относятся, например, отображение масок и обтравочных контуров, которые нельзя ни создать, ни изменить через графический интерфейс. XML-редактор позволяет использовать эти возможности (если вы знаете SVG).</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="2065.4827348" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="2065.4827348" x="10">Изменение единицы измерений для линеек</tspan>
  </text>
  <rect id="d0e232" display="none" height="1e3px" width="288" y="2070.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e232"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">In the default template, the unit of measure used by the rulers is mm. This is also the unit used in
+  <flowPara >In the default template, the unit of measure used by the rulers is mm. This is also the unit used in
 displaying coordinates at the lower-left corner and preselected in all units menus. (You
 can always hover your mouse over a ruler to see the tooltip with the units it uses.) To
 change this, open <flowSpan font-family="sans-serif">Document Properties</flowSpan>
 (<flowSpan font-weight="bold">Shift+Ctrl+D</flowSpan>) and change the <flowSpan font-family="sans-serif">Display units</flowSpan> on the
 <flowSpan font-family="sans-serif">Page</flowSpan> tab.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="2154.4249228" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="2154.4249228" x="10">Штамповка</tspan>
  </text>
  <rect id="d0e253" display="none" height="1e3px" width="288" y="2159.6" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e253"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Для быстрого создания множества копий объекта используйте <flowSpan font-style="italic">штамповку</flowSpan>. Просто перемещайте объект (либо меняйте его размер или поворачивайте) и, не отпуская клавиши мыши, нажимайте <flowSpan font-weight="bold">Пробел</flowSpan>. Это оставит «штамп», а попросту копию данного объекта на том месте, где он находился во время нажатия пробела. Вы можете сделать сколько угодно штампов.</flowDiv>
+  <flowPara >Для быстрого создания множества копий объекта используйте <flowSpan font-style="italic">штамповку</flowSpan>. Просто перемещайте объект (либо меняйте его размер или поворачивайте) и, не отпуская клавиши мыши, нажимайте <flowSpan font-weight="bold">Пробел</flowSpan>. Это оставит «штамп», а попросту копию данного объекта на том месте, где он находился во время нажатия пробела. Вы можете сделать сколько угодно штампов.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="2243.6132048" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="2243.6132048" x="10">Трюки с пером</tspan>
  </text>
  <rect id="d0e268" display="none" height="1e3px" width="288" y="2248.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e268"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Используя инструмент, рисующий кривые Безье и прямые линии, вы можете завершить контур несколькими способами, описанными ниже:</flowDiv>
+  <flowPara >Используя инструмент, рисующий кривые Безье и прямые линии, вы можете завершить контур несколькими способами, описанными ниже:</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 2292.2)"/>
  <rect id="d0e274" display="none" height="1e3px" width="258" y="2286.2" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e274"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Нажать клавишу <flowSpan font-weight="bold">Ввод</flowSpan></flowDiv>
+  <flowPara >Нажать клавишу <flowSpan font-weight="bold">Ввод</flowSpan></flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 2309.8)"/>
  <rect id="d0e280" display="none" height="1e3px" width="258" y="2303.8" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e280"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Дважды щёлкнуть левой клавишей мыши</flowDiv>
+  <flowPara >Дважды щёлкнуть левой клавишей мыши</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 2327.7)"/>
  <rect id="d0e284" display="none" height="1e3px" width="258" y="2321.7" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e284"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Click with the right mouse button
-</flowDiv>
+  <flowPara >Click with the right mouse button
+</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 2345.5)"/>
  <rect id="d0e288" display="none" height="1e3px" width="258" y="2339.5" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e288"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Выбрать другой инструмент</flowDiv>
+  <flowPara >Выбрать другой инструмент</flowPara>
  </flowRoot>
  <rect id="d0e292" display="none" height="1e3px" width="288" y="2357.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e292"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Обратите внимание, что пока контур не завершён (т.е. отображается зелёным или, если сегмент текущий, то красным) он ещё не является объектом документа. Следовательно, чтобы отменить его, можно использовать клавишу <flowSpan font-weight="bold">Esc</flowSpan> (отменить весь контур) или клавишу <flowSpan font-weight="bold">Backspace</flowSpan> (убрать последний сегмент незаконченного контура) вместо команды «<flowSpan font-family="sans-serif">Отменить</flowSpan>».</flowDiv>
+  <flowPara >Обратите внимание, что пока контур не завершён (т.е. отображается зелёным или, если сегмент текущий, то красным) он ещё не является объектом документа. Следовательно, чтобы отменить его, можно использовать клавишу <flowSpan font-weight="bold">Esc</flowSpan> (отменить весь контур) или клавишу <flowSpan font-weight="bold">Backspace</flowSpan> (убрать последний сегмент незаконченного контура) вместо команды «<flowSpan font-family="sans-serif">Отменить</flowSpan>».</flowPara>
  </flowRoot>
  <rect id="d0e304" display="none" height="1e3px" width="288" y="2428.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e304"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Для добавления нового сегмента контура к уже существующему контуру, выберите контур и начните рисовать, удерживая нажатой клавишу <flowSpan font-weight="bold">Shift</flowSpan> любого из узлов. Если всё, что вам нужно — это <flowSpan font-style="italic">продолжить</flowSpan> контур, то Shift не нужен, просто начните рисовать с одного из конечных узлов выбранного контура.</flowDiv>
+  <flowPara >Для добавления нового сегмента контура к уже существующему контуру, выберите контур и начните рисовать, удерживая нажатой клавишу <flowSpan font-weight="bold">Shift</flowSpan> любого из узлов. Если всё, что вам нужно — это <flowSpan font-style="italic">продолжить</flowSpan> контур, то Shift не нужен, просто начните рисовать с одного из конечных узлов выбранного контура.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="2512.7111758" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="2512.7111758" x="10">Ввод значений Unicode</tspan>
  </text>
  <rect id="d0e319" display="none" height="1e3px" width="288" y="2517.9" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e319"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">При использовании инструмента Текст, нажатие <flowSpan font-weight="bold">Ctrl+U</flowSpan> переключает режим ввода с обычного на Unicode и обратно. В режиме Unicode каждая группа из вводимых вами четырёх шестнадцатеричных цифр превращается в символ Unicode. Это позволяет вам вводить произвольные символы (конечно, если вы знаете их Unicode-коды и шрифт). По окончании ввода Unicode нажмите <flowSpan font-weight="bold">Enter</flowSpan>. Например, введя <flowSpan font-weight="bold">Ctrl+U 2 0 1 4 Enter</flowSpan>, вы получите тирe (—). Для выхода из Unicode-режима нажмите <flowSpan font-weight="bold">Esc</flowSpan>.</flowDiv>
+  <flowPara >При использовании инструмента Текст, нажатие <flowSpan font-weight="bold">Ctrl+U</flowSpan> переключает режим ввода с обычного на Unicode и обратно. В режиме Unicode каждая группа из вводимых вами четырёх шестнадцатеричных цифр превращается в символ Unicode. Это позволяет вам вводить произвольные символы (конечно, если вы знаете их Unicode-коды и шрифт). По окончании ввода Unicode нажмите <flowSpan font-weight="bold">Enter</flowSpan>. Например, введя <flowSpan font-weight="bold">Ctrl+U 2 0 1 4 Enter</flowSpan>, вы получите тирe (—). Для выхода из Unicode-режима нажмите <flowSpan font-weight="bold">Esc</flowSpan>.</flowPara>
  </flowRoot>
  <rect id="d0e334" display="none" height="1e3px" width="288" y="2610.2" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e334"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">You can also use the <flowSpan font-family="sans-serif">Text &gt; Glyphs</flowSpan> dialog to search for and insert 
+  <flowPara >You can also use the <flowSpan font-family="sans-serif">Text &gt; Glyphs</flowSpan> dialog to search for and insert 
 glyphs into your document.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="2651.5421168000003" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="2651.5421168000003" x="10">Использование сетки для рисования значков</tspan>
  </text>
  <rect id="d0e346" display="none" height="1e3px" width="288" y="2656.7" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e346"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Suppose you want to create a 24x24 pixel icon. Create a 24x24 px canvas (use the
+  <flowPara >Suppose you want to create a 24x24 pixel icon. Create a 24x24 px canvas (use the
 <flowSpan font-family="sans-serif">Document Preferences</flowSpan>) and set the grid to 0.5 px (48x48 gridlines).
 Now, if you align filled objects to <flowSpan font-style="italic">even</flowSpan> gridlines, and stroked
 objects to <flowSpan font-style="italic">odd</flowSpan> gridlines with the stroke width in px being an even
 number, and export it at the default 96dpi (so that 1 px becomes 1 bitmap pixel), you
 get a crisp bitmap image without unneeded antialiasing.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="2751.2375858000005" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="2751.2375858000005" x="10">Вращение объекта</tspan>
  </text>
  <rect id="d0e364" display="none" height="1e3px" width="288" y="2756.4" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e364"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">When in the Selector tool, <flowSpan font-weight="bold">click</flowSpan> on an object to see the scaling arrows,
+  <flowPara >When in the Selector tool, <flowSpan font-weight="bold">click</flowSpan> on an object to see the scaling arrows,
 then <flowSpan font-weight="bold">click again</flowSpan> on the object to see the rotation and skew arrows. If
 the arrows at the corners are clicked and dragged, the object will rotate around the
 center (shown as a cross mark). If you hold down the <flowSpan font-weight="bold">Shift</flowSpan> key while
 doing this, the rotation will occur around the opposite corner. You can also drag the
 rotation center to any place.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e376" display="none" height="1e3px" width="288" y="2838.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e376"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Вращение можно производить и с клавиатуры нажатием клавиш <flowSpan font-weight="bold">[</flowSpan> и <flowSpan font-weight="bold">]</flowSpan> (на 15 градусов) или <flowSpan font-weight="bold">Ctrl+[</flowSpan> и <flowSpan font-weight="bold">Ctrl+]</flowSpan> (на 90 градусов). Эти же клавиши <flowSpan font-weight="bold">[]</flowSpan> с нажатием <flowSpan font-weight="bold">Alt</flowSpan> поворачивают объект(ы) с шагом в один пиксел.</flowDiv>
+  <flowPara >Вращение можно производить и с клавиатуры нажатием клавиш <flowSpan font-weight="bold">[</flowSpan> и <flowSpan font-weight="bold">]</flowSpan> (на 15 градусов) или <flowSpan font-weight="bold">Ctrl+[</flowSpan> и <flowSpan font-weight="bold">Ctrl+]</flowSpan> (на 90 градусов). Эти же клавиши <flowSpan font-weight="bold">[]</flowSpan> с нажатием <flowSpan font-weight="bold">Alt</flowSpan> поворачивают объект(ы) с шагом в один пиксел.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="2899.7905568000006" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="2899.7905568000006" x="10">Отбрасывание тени у растровых изображений</tspan>
  </text>
  <rect id="d0e403" display="none" height="1e3px" width="288" y="2905" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e403"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">To quickly create drop shadows for objects, use the 
+  <flowPara >To quickly create drop shadows for objects, use the 
 <flowSpan font-family="sans-serif">Filters &gt; Shadows and Glows &gt; Drop Shadow...</flowSpan> feature.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <rect id="d0e409" display="none" height="1e3px" width="288" y="2933.4" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e409"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">You can also easily create blurred drop shadows for objects manually with blur in the
+  <flowPara >You can also easily create blurred drop shadows for objects manually with blur in the
 Fill and Stroke dialog. Select an object, duplicate it by <flowSpan font-weight="bold">Ctrl+D</flowSpan>, press 
 <flowSpan font-weight="bold">PgDown</flowSpan> to put it beneath original object, place it a little to the right 
 and lower than original object. Now open Fill And Stroke dialog and change Blur value to, 
 say, 5.0. That&apos;s it!
-</flowDiv>
+</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="3006.5882148000005" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="3006.5882148000005" x="10">Размещение текста по контуру</tspan>
  </text>
  <rect id="d0e424" display="none" height="1e3px" width="288" y="3011.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e424"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Чтобы разместить текст по поверхности кривой, выберите текст и контур одновременно и используйте функцию «<flowSpan font-family="sans-serif">Разместить по контуру</flowSpan>» из меню «Текст». Текст будет размещён от начала контура. Лучший вариант — использовать отдельный контур для заполнения текстом, чем заполнять текстом один из существующих элементов — это даст вам больше контроля без лишних проблем.</flowDiv>
+  <flowPara >Чтобы разместить текст по поверхности кривой, выберите текст и контур одновременно и используйте функцию «<flowSpan font-family="sans-serif">Разместить по контуру</flowSpan>» из меню «Текст». Текст будет размещён от начала контура. Лучший вариант — использовать отдельный контур для заполнения текстом, чем заполнять текстом один из существующих элементов — это даст вам больше контроля без лишних проблем.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="3106.3032148000007" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="3106.3032148000007" x="10">Поиск оригинала</tspan>
  </text>
  <rect id="d0e436" display="none" height="1e3px" width="288" y="3111.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e436"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Когда у вас есть текст, направленный по контуру, связанный объект или клон, то порой очень сложно найти их исходный объект, потому что он может находиться под другими объектами, быть невидимым или просто закрытым для изменений (функция «запереть»). Магическая комбинация клавиш <flowSpan font-weight="bold">Shift+D</flowSpan> поможет вам. Выберите текст, связанный объект или клон и нажмите <flowSpan font-weight="bold">Shift+D</flowSpan>, чтобы выделение переключилось на соответствующий контур, оригинал клона или оригинал связанного объекта.</flowDiv>
+  <flowPara >Когда у вас есть текст, направленный по контуру, связанный объект или клон, то порой очень сложно найти их исходный объект, потому что он может находиться под другими объектами, быть невидимым или просто закрытым для изменений (функция «запереть»). Магическая комбинация клавиш <flowSpan font-weight="bold">Shift+D</flowSpan> поможет вам. Выберите текст, связанный объект или клон и нажмите <flowSpan font-weight="bold">Shift+D</flowSpan>, чтобы выделение переключилось на соответствующий контур, оригинал клона или оригинал связанного объекта.</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="3216.4160308000005" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="3216.4160308000005" x="10">Возвращение ушедших за экран окон.</tspan>
  </text>
  <rect id="d0e451" display="none" height="1e3px" width="288" y="3221.6" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e451"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">When moving documents between systems with different resolutions or number of displays,
+  <flowPara >When moving documents between systems with different resolutions or number of displays,
 you may find Inkscape has saved a window position that places the window out of reach on
 your screen. Simply maximise the window (which will bring it back into view, use the
 task bar), save and reload. You can avoid this altogether by unchecking the global
 option to save window geometry (<flowSpan font-family="sans-serif">Inkscape Preferences</flowSpan>,
 <flowSpan font-family="sans-serif">Interface &gt; Windows</flowSpan> section).
-</flowDiv>
+</flowPara>
  </flowRoot>
  <text style="writing-mode:lr" font-weight="bold" font-size="8" y="3315.5802498000003" x="10" font-family="sans-serif" fill="#000000">
   <tspan y="3315.5802498000003" x="10">Прозрачность, градиенты и экспорт в формат PostScript</tspan>
  </text>
  <rect id="d0e466" display="none" height="1e3px" width="288" y="3320.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e466"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">PostScript or EPS formats do not support <flowSpan font-style="italic">transparency</flowSpan>, so you
+  <flowPara >PostScript or EPS formats do not support <flowSpan font-style="italic">transparency</flowSpan>, so you
 should never use it if you are going to export to PS/EPS. In the case of flat
 transparency which overlays flat color, it&apos;s easy to fix it: Select one of the
 transparent objects; switch to the Dropper tool (<flowSpan font-weight="bold">F7</flowSpan> or <flowSpan font-weight="bold">d</flowSpan>); 
@@ -736,7 +736,7 @@ several flat color areas, you will need to break it correspondingly into pieces 
 apply this procedure to each piece. Note that the dropper tool does not change the opacity 
 value of the object, but only the alpha value of its fill or stroke color, so make sure that 
 every object&apos;s opacity value is set to 100% before you start out.
-</flowDiv>
+</flowPara>
  </flowRoot>
  <g transform="translate(0 3466.3)">
   <defs id="defs3" xmlns:cc="http://creativecommons.org/ns#">
@@ -770,7 +770,7 @@ every object&apos;s opacity value is set to 100% before you start out.
    </g>
    <use id="use1328" style="color:#000000" xlink:href="#path1508" transform="matrix(5.1767 0 0 5.1767 -102.7 -256.62)" height="1052.3622" fill-opacity=".064615" width="744.09448" y="0" x="0" font-family="sans-serif" fill="#ffffff"/>
    <path id="path7527" opacity=".5" style="color:#000000" d="m338.53 197.82-13.108-1.2709 7.6547-10.717z" fill-rule="evenodd" transform="matrix(-.61496 -.045496 -.061919 .45186 207.79 -203.9)"/>
-   <text id="text2201" opacity=".5" line-height="125%" xml:space="preserve" transform="rotate(-90)" font-size="6.9693px" y="-6.5672836" x="-70.95546" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan2203" sodipodi:role="line" x="-70.95546" style="letter-spacing:.29056" y="-6.5672836">Используйте для прокрутки <tspan id="tspan2205" font-weight="bold">Ctrl+стрелка вверх</tspan></tspan></text>
+   <text id="text2201" opacity=".5" line-height="125%"  transform="rotate(-90)" font-size="6.9693px" y="-6.5672836" x="-70.95546" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan2203" sodipodi:role="line" x="-70.95546" style="letter-spacing:.29056" y="-6.5672836">Используйте для прокрутки <tspan id="tspan2205" font-weight="bold">Ctrl+стрелка вверх</tspan></tspan></text>
   </g>
  </g>
 </svg>

@@ -37,53 +37,53 @@
    <path id="path831" d="m359.24 21.363c-11.313 0-22.606 4.3206-31.275 12.99l-154.09 154.06c-8.4969 8.4967-12.762 19.543-12.931 30.631h-0.0585c0 0.0395 0.0566 0.0774 0.0585 0.11702-0.002 0.18609-0.0585 0.36977-0.0585 0.55586h0.2633c2.9491 11.221 79.15 25.523 87.651 34.025 12.839 12.839-49.233 22.268-36.395 35.107 12.839 12.839 77.59 24.843 90.43 37.682 12.839 12.839-26.238 26.51-13.399 39.349s55.967-3.2094 48.155 30.28c17.338 17.338 53.512 9.0588 77.733-8.2795 12.839-12.839-24.629-11.707-11.79-24.546s45.247-12.908 72.555-43.621c-10.992-17.095-46.981-24.375-34.142-37.214s37.8-6.3179 91.659-30.777c26.292-11.941 24.12-21.01 24.019-32.006-0.002-0.23138 0-0.43973 0-0.67288h-0.0585c-0.16-11.07-4.46-22.12-12.95-30.62l-154.07-154.06c-8.66-8.667-19.99-12.987-31.3-12.987zm-1.3165 20.04c5.0295 0.13102 9.0916 3.9651 17.056 9.1279l72.789 53.977c0.79681 0.51671 1.5557 1.0557 2.2527 1.6091 0.69703 0.55327 1.3337 1.1401 1.9309 1.7261 0.5972 0.58495 1.14 1.1721 1.6383 1.7846 0.49726 0.61244 0.94845 1.2385 1.3458 1.8724 0.39844 0.6349 0.75476 1.2798 1.0532 1.9309 0.29867 0.65226 0.53281 1.325 0.7314 1.9894 0.19976 0.66341 0.36832 1.319 0.46811 1.9894 0.0999 0.67165 0.14627 1.3452 0.14627 2.0187l-43.123-20.83-4.3006 32.562-23.727-11.117-36.629 24.458-14.014-48.331-18.051 42.275-50.408 5.032 0.55587-22.439c0-5.3897 29.057-43.122 46.751-52.105l32.386-23.259c4.7787-3.0977 8.1289-4.35 11.147-4.2714zm-66.996 220.21c22.944 5.9503 48.476 13.757 68.957 13.897l0.87768 9.2157c-17.538-1.8078-54.648-10.276-63.398-14.745l-6.4363-8.3672z" stroke-width="1pt"/>
   </g>
   <use id="use2086" style="color:#000000" xlink:href="#path1124" transform="matrix(3.7991 0 0 3.7991 -428.74 -36.475)" height="1052.3622" fill-opacity=".11077" width="320.00000" y="0.0000000" x="0.0000000" font-family="sans-serif" fill="#ffffff"/>
-  <text id="text7519" opacity=".5" line-height="125%" xml:space="preserve" transform="rotate(90)" font-size="6.9693px" y="-326.81229" x="3.6203015" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan7521" sodipodi:role="line" x="3.6203015" style="letter-spacing:.29056" y="-326.81229">Χρήση <tspan id="tspan7523" font-weight="bold">Ctrl+κάτω βέλος</tspan> για κύλιση </tspan></text>
+  <text id="text7519" opacity=".5" line-height="125%"  transform="rotate(90)" font-size="6.9693px" y="-326.81229" x="3.6203015" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan7521" sodipodi:role="line" x="3.6203015" style="letter-spacing:.29056" y="-326.81229">Χρήση <tspan id="tspan7523" font-weight="bold">Ctrl+κάτω βέλος</tspan> για κύλιση </tspan></text>
   <path id="path7527" opacity=".5" style="color:#000000" d="m338.53 197.82-13.108-1.2709 7.6547-10.717z" fill-rule="evenodd" transform="matrix(.61496 .045496 .061919 -.45186 112.46 216.6)"/>
  </g>
  <text id="text1920" font-family="sans-serif" font-size="7" transform="scale(1.1307)" y="30" x="35" fill="#ffffff">
   <tspan id="tspan1668" style="letter-spacing:2.1813" fill="#ffffff" dx="0 -0.57057059 0 0 0 0 0">::ΕΝΤΟΠΙΣΜΌΣ ΤΈΧΝΗΣ ΕΙΚΟΝΟΣΤΟΙΧΕΊΩΝ</tspan>
  </text>
  <rect id="d0e10" display="none" height="1e3px" width="264" y="46" x="35"/>
- <flowRoot font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
+ <flowRoot xml:space="preserve" font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e10"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Παλιότερα είχαμε πρόσβαση σε λογισμικό επεξεργασίας μεγάλων γραφικών διανυσμάτων...</flowDiv>
+  <flowPara >Παλιότερα είχαμε πρόσβαση σε λογισμικό επεξεργασίας μεγάλων γραφικών διανυσμάτων...</flowPara>
  </flowRoot>
  <rect id="d0e13" display="none" height="1e3px" width="264" y="70.056" x="35"/>
- <flowRoot font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
+ <flowRoot xml:space="preserve" font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e13"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ακόμα πιο παλιά είχαμε οθόνες υπολογιστή 640x480...</flowDiv>
+  <flowPara >Ακόμα πιο παλιά είχαμε οθόνες υπολογιστή 640x480...</flowPara>
  </flowRoot>
  <rect id="d0e16" display="none" height="1e3px" width="264" y="83.327" x="35"/>
- <flowRoot font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
+ <flowRoot xml:space="preserve" font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e16"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ήταν συνηθισμένο να παίζουμε παιχνίδια βίντεο με προσεκτικά φτιαγμένα εικονοστοιχεία σε οθόνες χαμηλών αναλύσεων.</flowDiv>
+  <flowPara >Ήταν συνηθισμένο να παίζουμε παιχνίδια βίντεο με προσεκτικά φτιαγμένα εικονοστοιχεία σε οθόνες χαμηλών αναλύσεων.</flowPara>
  </flowRoot>
  <rect id="d0e19" display="none" height="1e3px" width="264" y="107.4" x="35"/>
- <flowRoot font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
+ <flowRoot xml:space="preserve" font-family="sans-serif" font-size="7.2" font-style="italic" line-height="150%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e19"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ονομάζουμε &quot;τέχνη εικονοστοιχείων (Pixel Art)&quot; το είδος της τέχνης που γεννήθηκε αυτήν την εποχή.</flowDiv>
+  <flowPara >Ονομάζουμε &quot;τέχνη εικονοστοιχείων (Pixel Art)&quot; το είδος της τέχνης που γεννήθηκε αυτήν την εποχή.</flowPara>
  </flowRoot>
  <rect id="d0e25" display="none" height="1e3px" width="288" y="137.46" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e25"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Το Inkscape τροφοδοτείται από το <flowSpan font-weight="bold" font-family="sans-serif">libdepixelize</flowSpan> με την ικανότητα αυτόματης διανυσματοποίησης αυτών των &quot;ειδικών&quot; εικόνων τέχνης εικονοστοιχείων. Μπορείτε να δοκιμάσετε άλλους τύπους εισαγωγής εικόνων επίσης, αλλά σας προειδοποιούμε: Το αποτέλεσμα δεν θα είναι εξίσου καλό και είναι καλύτερη ιδέα να χρησιμοποιήσετε τον άλλο ανιχνευτή του Inkscape, potrace.</flowDiv>
+  <flowPara >Το Inkscape τροφοδοτείται από το <flowSpan font-weight="bold" font-family="sans-serif">libdepixelize</flowSpan> με την ικανότητα αυτόματης διανυσματοποίησης αυτών των &quot;ειδικών&quot; εικόνων τέχνης εικονοστοιχείων. Μπορείτε να δοκιμάσετε άλλους τύπους εισαγωγής εικόνων επίσης, αλλά σας προειδοποιούμε: Το αποτέλεσμα δεν θα είναι εξίσου καλό και είναι καλύτερη ιδέα να χρησιμοποιήσετε τον άλλο ανιχνευτή του Inkscape, potrace.</flowPara>
  </flowRoot>
  <rect id="d0e31" display="none" height="1e3px" width="288" y="208.83" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e31"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ας αρχίσουμε με ένα δείγμα εικόνας για να σας εμφανίσουμε τις δυνατότητες αυτής της μηχανής ανίχνευσης. Παρακάτω υπάρχει ένα παράδειγμα εικονογραφίας (που ελήφθη από μια καταχώριση στο Liberated Pixel Cup) στα αριστερά και την διανυσματική του έξοδο στα δεξιά.</flowDiv>
+  <flowPara >Ας αρχίσουμε με ένα δείγμα εικόνας για να σας εμφανίσουμε τις δυνατότητες αυτής της μηχανής ανίχνευσης. Παρακάτω υπάρχει ένα παράδειγμα εικονογραφίας (που ελήφθη από μια καταχώριση στο Liberated Pixel Cup) στα αριστερά και την διανυσματική του έξοδο στα δεξιά.</flowPara>
  </flowRoot>
  <g id="tracing-pixelart-f01-el.svglayer1-4" xmlns:cc="http://creativecommons.org/ns#" inkscape:label="Layer 1" transform="translate(10 277.46) matrix(1.5291 0 0 1.5291 -42.714 -435.54)">
   <image id="tracing-pixelart-f01-el.svgimage3063" xlink:href="data:image/png;base64,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 7V/otDX4FA/ZBAAAAABJRU5ErkJggg== " height="54" width="53" y="288.71" x="79.57"/>
@@ -328,11 +328,11 @@
   </g>
  </g>
  <rect id="d0e44" display="none" height="1e3px" width="288" y="372.03" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e44"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Το libdepixelize χρησιμοποιεί τον αλγόριθμο Kopf-Lischinski για να κάνει διανύσματα εικόνων. Αυτός ο αλγόριθμος χρησιμοποιεί ιδέες πολλών τεχνικών της επιστήμης των υπολογιστών και μαθηματικές έννοιες για να παράξει ένα καλό αποτέλεσμα για εικόνες τέχνης εικονοστοιχείων. Πρέπει να σημειώσετε ότι το κανάλι άλφα παραβλέπεται ολότελα από τον αλγόριθμο. Το libdepixelize δεν έχει προς το παρόν επεκτάσεις για να σας δώσει μια πρώτης τάξης συμπεριφορά για αυτήν την κλάση εικόνων, αλλά όλες οι εικόνες τέχνης εικονοστοιχείων (pixel art) με υποστήριξη καναλιού άλφα παράγουν παρόμοια αποτελέσματα με την κύρια κλάση των εικόνων που αναγνωρίζονται από τον Kopf-Lischinski.</flowDiv>
+  <flowPara >Το libdepixelize χρησιμοποιεί τον αλγόριθμο Kopf-Lischinski για να κάνει διανύσματα εικόνων. Αυτός ο αλγόριθμος χρησιμοποιεί ιδέες πολλών τεχνικών της επιστήμης των υπολογιστών και μαθηματικές έννοιες για να παράξει ένα καλό αποτέλεσμα για εικόνες τέχνης εικονοστοιχείων. Πρέπει να σημειώσετε ότι το κανάλι άλφα παραβλέπεται ολότελα από τον αλγόριθμο. Το libdepixelize δεν έχει προς το παρόν επεκτάσεις για να σας δώσει μια πρώτης τάξης συμπεριφορά για αυτήν την κλάση εικόνων, αλλά όλες οι εικόνες τέχνης εικονοστοιχείων (pixel art) με υποστήριξη καναλιού άλφα παράγουν παρόμοια αποτελέσματα με την κύρια κλάση των εικόνων που αναγνωρίζονται από τον Kopf-Lischinski.</flowPara>
  </flowRoot>
  <g id="tracing-pixelart-f02-el.svglayer1-3" xmlns:cc="http://creativecommons.org/ns#" inkscape:label="Layer 1" transform="translate(10 504.5) matrix(.74809 0 0 .74809 -90.352 -216.94)">
   <image id="tracing-pixelart-f02-el.svgimage6827" xlink:href="data:image/png;base64,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 xz7jf4MwidrFWy5FAAAAAElFTkSuQmCC " height="64" width="224" y="292.64" x="224.09"/>
@@ -699,49 +699,49 @@
   </g>
  </g>
  <rect id="d0e57" display="none" height="1e3px" width="288" y="612.26" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e57"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Η παραπάνω εικόνα έχει κανάλι άλφα και το αποτέλεσμα είναι απλώς θαυμάσιο. Παρόλα αυτά, αν βρείτε μια εικόνα τέχνης εικονοστοιχείων με άσχημο αποτέλεσμα και πιστεύετε ότι η αιτία είναι το κανάλι άλφα, τότε επικοινωνήστε με τον συντηρητή του libdepixelize (π.χ. συμπληρώστε ένα σφάλμα στη σελίδα έργου) και θα είναι ευχαριστημένος να επεκτείνει τον αλγόριθμο. Δεν μπορεί να επεκτείνει τον αλγόριθμο αν δεν ξέρει ποιες εικόνες δίνουν άσχημα αποτελέσματα.</flowDiv>
+  <flowPara >Η παραπάνω εικόνα έχει κανάλι άλφα και το αποτέλεσμα είναι απλώς θαυμάσιο. Παρόλα αυτά, αν βρείτε μια εικόνα τέχνης εικονοστοιχείων με άσχημο αποτέλεσμα και πιστεύετε ότι η αιτία είναι το κανάλι άλφα, τότε επικοινωνήστε με τον συντηρητή του libdepixelize (π.χ. συμπληρώστε ένα σφάλμα στη σελίδα έργου) και θα είναι ευχαριστημένος να επεκτείνει τον αλγόριθμο. Δεν μπορεί να επεκτείνει τον αλγόριθμο αν δεν ξέρει ποιες εικόνες δίνουν άσχημα αποτελέσματα.</flowPara>
  </flowRoot>
  <rect id="d0e60" display="none" height="1e3px" width="288" y="704.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e60"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Η παρακάτω εικόνα είναι ένα στιγμιότυπο του διαλόγου <flowSpan font-family="sans-serif">Ανίχνευση τέχνης εικονοστοιχείων</flowSpan> στην αγγλική τοπικοποίηση. Μπορείτε να ανοίξετε αυτόν τον διάλογο χρησιμοποιώντας το μενού <flowSpan font-family="sans-serif">Διαδρομή &gt; Ανίχνευση τέχνης εικονοστοιχείων...</flowSpan> ή δεξιοπατώντας σε ένα αντικείμενο εικόνας και έπειτα <flowSpan font-family="sans-serif">Ανίχνευση τέχνης εικονοστοιχείων</flowSpan>.</flowDiv>
+  <flowPara >Η παρακάτω εικόνα είναι ένα στιγμιότυπο του διαλόγου <flowSpan font-family="sans-serif">Ανίχνευση τέχνης εικονοστοιχείων</flowSpan> στην αγγλική τοπικοποίηση. Μπορείτε να ανοίξετε αυτόν τον διάλογο χρησιμοποιώντας το μενού <flowSpan font-family="sans-serif">Διαδρομή &gt; Ανίχνευση τέχνης εικονοστοιχείων...</flowSpan> ή δεξιοπατώντας σε ένα αντικείμενο εικόνας και έπειτα <flowSpan font-family="sans-serif">Ανίχνευση τέχνης εικονοστοιχείων</flowSpan>.</flowPara>
  </flowRoot>
  <g id="tracing-pixelart-f03-el.svglayer1-42" xmlns:cc="http://creativecommons.org/ns#" inkscape:label="Camada 1" transform="translate(10 773.44) matrix(.38212 0 0 .38212 -160.25 -203)">
   <image id="tracing-pixelart-f03-el.svgimage3399" width="329" xlink:href="pixelart-dialog.el.png" height="272" sodipodi:absref="/pixelart-dialog.el.png" y="540.79" x="685.14"/>
  </g>
  <rect id="d0e82" display="none" height="1e3px" width="288" y="889.37" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e82"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Αυτός ο διάλογος έχει δύο ενότητες: Ευρετική και έξοδος. Η ευρετική αποσκοπεί σε προχωρημένες χρήσεις, αλλά υπάρχουν ήδη καλές προεπιλογές και δεν πρέπει να ανησυχείτε για αυτό, έτσι ας το αφήσουμε για αργότερα και να ξεκινήσουμε με την εξήγηση της εξόδου.</flowDiv>
+  <flowPara >Αυτός ο διάλογος έχει δύο ενότητες: Ευρετική και έξοδος. Η ευρετική αποσκοπεί σε προχωρημένες χρήσεις, αλλά υπάρχουν ήδη καλές προεπιλογές και δεν πρέπει να ανησυχείτε για αυτό, έτσι ας το αφήσουμε για αργότερα και να ξεκινήσουμε με την εξήγηση της εξόδου.</flowPara>
  </flowRoot>
  <rect id="d0e85" display="none" height="1e3px" width="288" y="950" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e85"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ο αλγόριθμος Kopf-Lischinski δουλεύει (από ένα σημείο υψηλού επιπέδου προβολής) όπως ένας μεταγλωττιστής, στη μετατροπή δεδομένων μεταξύ πολλών τύπων παρουσίασης. Σε κάθε βήμα ο αλγόριθμος έχει την ευκαιρία να εξερευνήσει τις λειτουργίες που προσφέρει αυτή η απεικόνιση. Κάποιες από αυτές τις ενδιάμεσες αναπαραστάσεις έχουν μια σωστή οπτική παρουσίαση (όπως η ανασχεδιασμένη έξοδος Voronoi του γραφήματος κελιού) και κάποιες δεν έχουν (όπως το γράφημα ομοιότητας). Κατά την ανάπτυξη του libdepixelize οι χρήστες συνέχισαν να ρωτούν για την προσθήκη της δυνατότητας εξαγωγής αυτών των ενδιάμεσων σταδίων στο libdepixelize και ο αρχικός συγγραφέας του libdepixelize δέχτηκε τις επιθυμίες τους.</flowDiv>
+  <flowPara >Ο αλγόριθμος Kopf-Lischinski δουλεύει (από ένα σημείο υψηλού επιπέδου προβολής) όπως ένας μεταγλωττιστής, στη μετατροπή δεδομένων μεταξύ πολλών τύπων παρουσίασης. Σε κάθε βήμα ο αλγόριθμος έχει την ευκαιρία να εξερευνήσει τις λειτουργίες που προσφέρει αυτή η απεικόνιση. Κάποιες από αυτές τις ενδιάμεσες αναπαραστάσεις έχουν μια σωστή οπτική παρουσίαση (όπως η ανασχεδιασμένη έξοδος Voronoi του γραφήματος κελιού) και κάποιες δεν έχουν (όπως το γράφημα ομοιότητας). Κατά την ανάπτυξη του libdepixelize οι χρήστες συνέχισαν να ρωτούν για την προσθήκη της δυνατότητας εξαγωγής αυτών των ενδιάμεσων σταδίων στο libdepixelize και ο αρχικός συγγραφέας του libdepixelize δέχτηκε τις επιθυμίες τους.</flowPara>
  </flowRoot>
  <rect id="d0e88" display="none" height="1e3px" width="288" y="1085.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e88"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Η προεπιλεγμένη έξοδος πρέπει να δίνει το πιο ομαλό αποτέλεσμα και είναι προφανώς αυτή που θέλετε. Είδατε ήδη την προεπιλεγμένη έξοδο στα πρώτα δείγματα αυτού του μαθήματος. Αν θέλετε να το δοκιμάσετε οι ίδιοι, ανοίξτε απλά τον διάλογο <flowSpan font-family="sans-serif">Ανίχνευση τέχνης εικονοστοιχείων</flowSpan> και πατήστε στο <flowSpan font-family="sans-serif">Εντάξει</flowSpan> μετά την επιλογή κάποιας εικόνας στο Inkscape.</flowDiv>
+  <flowPara >Η προεπιλεγμένη έξοδος πρέπει να δίνει το πιο ομαλό αποτέλεσμα και είναι προφανώς αυτή που θέλετε. Είδατε ήδη την προεπιλεγμένη έξοδο στα πρώτα δείγματα αυτού του μαθήματος. Αν θέλετε να το δοκιμάσετε οι ίδιοι, ανοίξτε απλά τον διάλογο <flowSpan font-family="sans-serif">Ανίχνευση τέχνης εικονοστοιχείων</flowSpan> και πατήστε στο <flowSpan font-family="sans-serif">Εντάξει</flowSpan> μετά την επιλογή κάποιας εικόνας στο Inkscape.</flowPara>
  </flowRoot>
  <rect id="d0e97" display="none" height="1e3px" width="288" y="1156.4" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e97"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Μπορείτε να δείτε την παρακάτω έξοδο Voronoi και αυτή είναι μια &quot;ανασχεδιασμένη εικόνα εικονοστοιχείων&quot;, όπου τα κελιά (προηγουμένως εικονοστοιχεία) ανασχεδιάστηκαν για να συνδέσουν εικονοστοιχεία που είναι μέρη του ίδιου γνωρίσματος. Δεν θα δημιουργηθούν καμπύλες και η εικόνα συνεχίζει να αποτελείται από ευθείες γραμμές. Η διαφορά μπορεί να παρατηρηθεί όταν μεγεθύνετε την εικόνα. Προηγουμένως, τα εικονοστοιχεία δεν μπορούσαν να μοιραστούν μια άκρη με έναν διαγώνιο γείτονα, ακόμα κι αν προοριζόταν να είναι μέρος του ίδιου γνωρίσματος. Αλλά τώρα (χάρη σε ένα γράφημα ομοιότητας χρώματος και την ευρετική μπορείτε να πετύχετε ένα καλύτερο αποτέλεσμα), είναι δυνατό να κάνετε δύο διαγώνια κελιά να μοιραστούν μια άκρη (προηγουμένως μόνο μεμονωμένες κορυφές μοιραζόντουσαν από δύο διαγώνια κελιά).</flowDiv>
+  <flowPara >Μπορείτε να δείτε την παρακάτω έξοδο Voronoi και αυτή είναι μια &quot;ανασχεδιασμένη εικόνα εικονοστοιχείων&quot;, όπου τα κελιά (προηγουμένως εικονοστοιχεία) ανασχεδιάστηκαν για να συνδέσουν εικονοστοιχεία που είναι μέρη του ίδιου γνωρίσματος. Δεν θα δημιουργηθούν καμπύλες και η εικόνα συνεχίζει να αποτελείται από ευθείες γραμμές. Η διαφορά μπορεί να παρατηρηθεί όταν μεγεθύνετε την εικόνα. Προηγουμένως, τα εικονοστοιχεία δεν μπορούσαν να μοιραστούν μια άκρη με έναν διαγώνιο γείτονα, ακόμα κι αν προοριζόταν να είναι μέρος του ίδιου γνωρίσματος. Αλλά τώρα (χάρη σε ένα γράφημα ομοιότητας χρώματος και την ευρετική μπορείτε να πετύχετε ένα καλύτερο αποτέλεσμα), είναι δυνατό να κάνετε δύο διαγώνια κελιά να μοιραστούν μια άκρη (προηγουμένως μόνο μεμονωμένες κορυφές μοιραζόντουσαν από δύο διαγώνια κελιά).</flowPara>
  </flowRoot>
  <g id="tracing-pixelart-f04-el.svglayer1-0" xmlns:cc="http://creativecommons.org/ns#" inkscape:label="Layer 1" transform="translate(-161.02 1019.4)">
   <image id="tracing-pixelart-f04-el.svgimage6827" xlink:href="data:image/png;base64,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 xz7jf4MwidrFWy5FAAAAAElFTkSuQmCC " height="64" width="224" y="292.64" x="224.09"/>
@@ -15085,39 +15085,39 @@
   </g>
  </g>
  <rect id="d0e110" display="none" height="1e3px" width="288" y="1450.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e110"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Η τυπική έξοδο Β-ευλύγιστων καμπυλών θα σας δώσει ομαλά αποτελέσματα, επειδή η προηγούμενη έξοδος Βορονόι θα μετατραπεί σε δευτεροβάθμιες καμπύλες Μπεζιέ. Όμως, η μετατροπή δεν θα είναι 1:1 επειδή υπάρχουν περισσότερα ευρετικά που δουλεύουν για να αποφασίσουν ποιες καμπύλες θα συγχωνευτούν σε μία όταν ο αλγόριθμος φτάσει μια ένωση Τ μεταξύ των ορατών χρωμάτων. Μια υπόδειξη για την ευρετική αυτού του σταδίου: Δεν μπορείτε να την συντονίσετε.</flowDiv>
+  <flowPara >Η τυπική έξοδο Β-ευλύγιστων καμπυλών θα σας δώσει ομαλά αποτελέσματα, επειδή η προηγούμενη έξοδος Βορονόι θα μετατραπεί σε δευτεροβάθμιες καμπύλες Μπεζιέ. Όμως, η μετατροπή δεν θα είναι 1:1 επειδή υπάρχουν περισσότερα ευρετικά που δουλεύουν για να αποφασίσουν ποιες καμπύλες θα συγχωνευτούν σε μία όταν ο αλγόριθμος φτάσει μια ένωση Τ μεταξύ των ορατών χρωμάτων. Μια υπόδειξη για την ευρετική αυτού του σταδίου: Δεν μπορείτε να την συντονίσετε.</flowPara>
  </flowRoot>
  <rect id="d0e113" display="none" height="1e3px" width="288" y="1541.2" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e113"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Το τελικό στάδιο του libdepixelize (προς το παρόν μη εξαγώγιμο από το GUI Inkscape λόγω της πειραματικής και ατελούς κατάστασης) είναι &quot;βελτιστοποίηση καμπυλών&quot; για να αφαιρέσετε το αποτέλεσμα της σκάλας των Β-εύκαμπτων καμπυλών. Αυτό το στάδιο εκτελεί επίσης μια τεχνική αναγνώρισης ορίου για να αποτρέψει κάποια γνωρίσματα από την εξομάλυνση και μια τεχνική τριγωνισμού για να διορθώσει τη θέση των κόμβων μετά τη βελτιστοποίηση. Θα πρέπει να μπορείτε να απενεργοποιήσετε ξεχωριστά κάθε ένα από αυτά τα γνωρίσματα όταν αυτή η έξοδος αφήνει το &quot;πειραματικό στάδιο&quot; στο libdepixelize (ελπίζουμε σύντομα).</flowDiv>
+  <flowPara >Το τελικό στάδιο του libdepixelize (προς το παρόν μη εξαγώγιμο από το GUI Inkscape λόγω της πειραματικής και ατελούς κατάστασης) είναι &quot;βελτιστοποίηση καμπυλών&quot; για να αφαιρέσετε το αποτέλεσμα της σκάλας των Β-εύκαμπτων καμπυλών. Αυτό το στάδιο εκτελεί επίσης μια τεχνική αναγνώρισης ορίου για να αποτρέψει κάποια γνωρίσματα από την εξομάλυνση και μια τεχνική τριγωνισμού για να διορθώσει τη θέση των κόμβων μετά τη βελτιστοποίηση. Θα πρέπει να μπορείτε να απενεργοποιήσετε ξεχωριστά κάθε ένα από αυτά τα γνωρίσματα όταν αυτή η έξοδος αφήνει το &quot;πειραματικό στάδιο&quot; στο libdepixelize (ελπίζουμε σύντομα).</flowPara>
  </flowRoot>
  <rect id="d0e116" display="none" height="1e3px" width="288" y="1655" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e116"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Η ενότητα ευρετικών στη γραφική διεπαφή σας επιτρέπει να συντονίσετε τα χρησιμοποιούμενα ευρετικά από το libdepixelize για να αποφασίσει τι να κάνει όταν αντιμετωπίσει μια ομάδα 2x2 εικονοστοιχείων όπου οι δύο διαγώνιοι έχουν παρόμοια χρώματα. &quot;Ποια σύνδεση πρέπει να κρατήσω;&quot; είναι αυτό που ρωτά το libdepixelize. Προσπαθεί να εφαρμόσει όλα τα ευρετικά στις συγκρουόμενες διαγωνίους και κρατά τη σύνδεση του νικητή. Αν συμβεί ισοπαλία και οι δυο συνδέσεις σβήνονται.</flowDiv>
+  <flowPara >Η ενότητα ευρετικών στη γραφική διεπαφή σας επιτρέπει να συντονίσετε τα χρησιμοποιούμενα ευρετικά από το libdepixelize για να αποφασίσει τι να κάνει όταν αντιμετωπίσει μια ομάδα 2x2 εικονοστοιχείων όπου οι δύο διαγώνιοι έχουν παρόμοια χρώματα. &quot;Ποια σύνδεση πρέπει να κρατήσω;&quot; είναι αυτό που ρωτά το libdepixelize. Προσπαθεί να εφαρμόσει όλα τα ευρετικά στις συγκρουόμενες διαγωνίους και κρατά τη σύνδεση του νικητή. Αν συμβεί ισοπαλία και οι δυο συνδέσεις σβήνονται.</flowPara>
  </flowRoot>
  <rect id="d0e119" display="none" height="1e3px" width="288" y="1747.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e119"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Αν θέλετε να αναλύσετε το αποτέλεσμα κάθε ευρετικού και να παίξετε με τους αριθμούς, η άριστη έξοδος είναι η έξοδος Βορονόι. Μπορείτε να δείτε πιο εύκολα τα αποτελέσματα των ευρετικών στην έξοδο Βορονόι και όταν είσαστε ικανοποιημένοι με τις ρυθμίσεις που πήρατε, μπορείτε απλώς να αλλάξετε τον τύπο εξόδου στον επιθυμητό.</flowDiv>
+  <flowPara >Αν θέλετε να αναλύσετε το αποτέλεσμα κάθε ευρετικού και να παίξετε με τους αριθμούς, η άριστη έξοδος είναι η έξοδος Βορονόι. Μπορείτε να δείτε πιο εύκολα τα αποτελέσματα των ευρετικών στην έξοδο Βορονόι και όταν είσαστε ικανοποιημένοι με τις ρυθμίσεις που πήρατε, μπορείτε απλώς να αλλάξετε τον τύπο εξόδου στον επιθυμητό.</flowPara>
  </flowRoot>
  <rect id="d0e122" display="none" height="1e3px" width="288" y="1818.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e122"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Η παρακάτω εικόνα έχει μια εικόνα και την έξοδο των ευλύγιστων καμπυλών Β με μόνο μια από τις ευρετικές ενεργή για κάθε προσπάθεια. Προσέξτε τους πορφυρούς κύκλους που επισημαίνουν τις διαφορές που κάθε ευρετική εκτελεί.</flowDiv>
+  <flowPara >Η παρακάτω εικόνα έχει μια εικόνα και την έξοδο των ευλύγιστων καμπυλών Β με μόνο μια από τις ευρετικές ενεργή για κάθε προσπάθεια. Προσέξτε τους πορφυρούς κύκλους που επισημαίνουν τις διαφορές που κάθε ευρετική εκτελεί.</flowPara>
  </flowRoot>
  <g id="tracing-pixelart-f05-el.svglayer1-0" xmlns:cc="http://creativecommons.org/ns#" inkscape:label="Layer 1" transform="translate(-138.35 1594.2)">
   <image id="tracing-pixelart-f05-el.svgimage37000" xlink:href="data:image/png;base64,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 " height="63" width="61" y="287.93" x="250.21"/>
@@ -15501,69 +15501,69 @@
   <path id="tracing-pixelart-f05-el.svgpath38831" sodipodi:rx="2.5145068" sodipodi:ry="2.5145068" sodipodi:type="arc" d="m362.98 341.92c0 1.3887-1.1258 2.5145-2.5145 2.5145s-2.5145-1.1258-2.5145-2.5145 1.1258-2.5145 2.5145-2.5145 2.5145 1.1258 2.5145 2.5145z" stroke="#f0f" sodipodi:cy="341.92422" sodipodi:cx="360.46292" stroke-width="1.1" fill="none"/>
  </g>
  <rect id="d0e135" display="none" height="1e3px" width="288" y="2077.8" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e135"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Για την πρώτη προσπάθεια (πάνω εικόνα), ενεργοποιήσαμε μόνο τις ευρετικές καμπύλες. Αυτή η ευρετική προσπαθεί να κρατήσει τις μεγάλες καμπύλες συνδεμένες μαζί. Μπορείτε να σημειώστε ότι το αποτέλεσμά του είναι παρόμοιο με την τελευταία εικόνα, όπου τα αραιά ευρετικά εικονοστοιχεία εφαρμόζονται. Μια διαφορά είναι ότι η &quot;δύναμή&quot; του είναι περισσότερο επαρκής και δίνει μόνο μια υψηλή τιμή στον ψήφο του όταν είναι πραγματικά σημαντικό να κρατήσετε αυτές τις συνδέσεις. Ο &quot;επαρκής&quot; ορισμός/έννοια εδώ βασίζεται στην &quot;ανθρώπινη διαίσθηση&quot; με δεδομένη την αναλυμένη βάση δεδομένων του εικονοστοιχείου. Μια άλλη διαφορά είναι ότι αυτή η ευρετική δεν μπορεί να αποφασίσει τι να κάνει όταν υπάρχουν μεγάλα μπλοκ ομάδας συνδέσεων αντί για μεγάλες καμπύλες (σκεφτείτε μια σκακιέρα).</flowDiv>
+  <flowPara >Για την πρώτη προσπάθεια (πάνω εικόνα), ενεργοποιήσαμε μόνο τις ευρετικές καμπύλες. Αυτή η ευρετική προσπαθεί να κρατήσει τις μεγάλες καμπύλες συνδεμένες μαζί. Μπορείτε να σημειώστε ότι το αποτέλεσμά του είναι παρόμοιο με την τελευταία εικόνα, όπου τα αραιά ευρετικά εικονοστοιχεία εφαρμόζονται. Μια διαφορά είναι ότι η &quot;δύναμή&quot; του είναι περισσότερο επαρκής και δίνει μόνο μια υψηλή τιμή στον ψήφο του όταν είναι πραγματικά σημαντικό να κρατήσετε αυτές τις συνδέσεις. Ο &quot;επαρκής&quot; ορισμός/έννοια εδώ βασίζεται στην &quot;ανθρώπινη διαίσθηση&quot; με δεδομένη την αναλυμένη βάση δεδομένων του εικονοστοιχείου. Μια άλλη διαφορά είναι ότι αυτή η ευρετική δεν μπορεί να αποφασίσει τι να κάνει όταν υπάρχουν μεγάλα μπλοκ ομάδας συνδέσεων αντί για μεγάλες καμπύλες (σκεφτείτε μια σκακιέρα).</flowPara>
  </flowRoot>
  <rect id="d0e138" display="none" height="1e3px" width="288" y="2223.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e138"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Για τη δεύτερη προσπάθεια (την μεσαία εικόνα), ενεργοποιούμε μόνο τις ευρετικές νησίδων. Το μόνο πράγμα που αυτή η ευρετική κάνει είναι η προσπάθεια διατήρησης της σύνδεσης που αλλιώς θα κατέληγε σε πολλά απομονωμένα εικονοστοιχεία (νησίδες) με ένα σταθερό βάρος συμφωνίας. Αυτό το είδος κατάστασης δεν είναι τόσο συνηθισμένο όσο το είδος της κατάστασης που χειρίζονται οι άλλες ευρετικές, αλλά αυτή η ευρετική είναι πολύ καλή και βοηθάει στην παραγωγή ακόμα καλύτερων αποτελεσμάτων.</flowDiv>
+  <flowPara >Για τη δεύτερη προσπάθεια (την μεσαία εικόνα), ενεργοποιούμε μόνο τις ευρετικές νησίδων. Το μόνο πράγμα που αυτή η ευρετική κάνει είναι η προσπάθεια διατήρησης της σύνδεσης που αλλιώς θα κατέληγε σε πολλά απομονωμένα εικονοστοιχεία (νησίδες) με ένα σταθερό βάρος συμφωνίας. Αυτό το είδος κατάστασης δεν είναι τόσο συνηθισμένο όσο το είδος της κατάστασης που χειρίζονται οι άλλες ευρετικές, αλλά αυτή η ευρετική είναι πολύ καλή και βοηθάει στην παραγωγή ακόμα καλύτερων αποτελεσμάτων.</flowPara>
  </flowRoot>
  <rect id="d0e141" display="none" height="1e3px" width="288" y="2316.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e141"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Για την τρίτη προσπάθεια (η κάτω εικόνα), ενεργοποιήσαμε μόνο την αραιή ευρετική των εικονοστοιχείων. Αυτή η ευρετική προσπαθεί να κρατήσει τις καμπύλες με το χρώμα προσκηνίου συνδεμένες. Για να βρει ποιο είναι το χρώμα παρασκηνίου η ευρετική αναλύει ένα παράθυρο με τα εικονοστοιχεία γύρω από τις συγκρουόμενες καμπύλες. Για αυτήν την ευρετική, δεν συντονίζετε μόνο τη &quot;δύναμή&quot; της, αλλά επίσης το παράθυρο των εικονοστοιχείων που αναλύει. Να θυμόσαστε ότι όταν αυξάνετε το παράθυρο των αναλυμένων εικονοστοιχείων η μέγιστη &quot;δύναμη&quot; για τη συμφωνία του θα αυξηθεί επίσης και μπορεί να θελήσετε να προσαρμόσετε τον πολλαπλασιαστή για την συμφωνία του. Ο αρχικός συγγραφέας του libdepixelize θεωρεί ότι αυτή η ευρετική είναι υπερβολικά αδηφάγος και του αρέσει να χρησιμοποιεί την τιμή &quot;0.25&quot; για τον πολλαπλασιαστή του.</flowDiv>
+  <flowPara >Για την τρίτη προσπάθεια (η κάτω εικόνα), ενεργοποιήσαμε μόνο την αραιή ευρετική των εικονοστοιχείων. Αυτή η ευρετική προσπαθεί να κρατήσει τις καμπύλες με το χρώμα προσκηνίου συνδεμένες. Για να βρει ποιο είναι το χρώμα παρασκηνίου η ευρετική αναλύει ένα παράθυρο με τα εικονοστοιχεία γύρω από τις συγκρουόμενες καμπύλες. Για αυτήν την ευρετική, δεν συντονίζετε μόνο τη &quot;δύναμή&quot; της, αλλά επίσης το παράθυρο των εικονοστοιχείων που αναλύει. Να θυμόσαστε ότι όταν αυξάνετε το παράθυρο των αναλυμένων εικονοστοιχείων η μέγιστη &quot;δύναμη&quot; για τη συμφωνία του θα αυξηθεί επίσης και μπορεί να θελήσετε να προσαρμόσετε τον πολλαπλασιαστή για την συμφωνία του. Ο αρχικός συγγραφέας του libdepixelize θεωρεί ότι αυτή η ευρετική είναι υπερβολικά αδηφάγος και του αρέσει να χρησιμοποιεί την τιμή &quot;0.25&quot; για τον πολλαπλασιαστή του.</flowPara>
  </flowRoot>
  <rect id="d0e144" display="none" height="1e3px" width="288" y="2472.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e144"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Ακόμα κι αν τα αποτελέσματα των ευρετικών καμπυλών και των αραιών ευρετικών εικονοστοιχείων δίνουν παρόμοια αποτελέσματα, μπορεί να θελήσετε να τα αφήσετε και τα δυο ενεργά, επειδή οι ευρετικές καμπύλες μπορεί να δώσουν μια πρόσθετη ασφάλεια έτσι ώστε οι σημαντικές καμπύλες των εικονοστοιχείων περιγράμματος δεν θα εμποδίζονται και υπάρχουν περιπτώσεις που μπορούν να απαντηθούν μόνο από την αραιή ευρετική εικονοστοιχείων.</flowDiv>
+  <flowPara >Ακόμα κι αν τα αποτελέσματα των ευρετικών καμπυλών και των αραιών ευρετικών εικονοστοιχείων δίνουν παρόμοια αποτελέσματα, μπορεί να θελήσετε να τα αφήσετε και τα δυο ενεργά, επειδή οι ευρετικές καμπύλες μπορεί να δώσουν μια πρόσθετη ασφάλεια έτσι ώστε οι σημαντικές καμπύλες των εικονοστοιχείων περιγράμματος δεν θα εμποδίζονται και υπάρχουν περιπτώσεις που μπορούν να απαντηθούν μόνο από την αραιή ευρετική εικονοστοιχείων.</flowPara>
  </flowRoot>
  <rect id="d0e147" display="none" height="1e3px" width="288" y="2554.5" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e147"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Υπόδειξη: Μπορείτε να απενεργοποιήσετε όλες τις ευρετικές ορίζοντας τις τιμές του πολλαπλασιαστή/βάρους στο μηδέν. Μπορείτε να κάνετε οποιαδήποτε ευρετική πράξη αντίθετα προς τις αρχές τους χρησιμοποιώντας αρνητικές τιμές για τις τιμές πολλαπλασιαστή/βάρους. Γιατί θα θέλατε κάποτε να αντικαταστήσετε τη συμπεριφορά που δημιουργήθηκε για να δώσετε καλύτερη ποιότητα με την αντίθετη συμπεριφορά; Επειδή μπορείτε... επειδή μπορεί να θελήσετε ένα &quot;καλλιτεχνικό&quot; αποτέλεσμα... ο,τιδήποτε απλά μπορείτε.</flowDiv>
+  <flowPara >Υπόδειξη: Μπορείτε να απενεργοποιήσετε όλες τις ευρετικές ορίζοντας τις τιμές του πολλαπλασιαστή/βάρους στο μηδέν. Μπορείτε να κάνετε οποιαδήποτε ευρετική πράξη αντίθετα προς τις αρχές τους χρησιμοποιώντας αρνητικές τιμές για τις τιμές πολλαπλασιαστή/βάρους. Γιατί θα θέλατε κάποτε να αντικαταστήσετε τη συμπεριφορά που δημιουργήθηκε για να δώσετε καλύτερη ποιότητα με την αντίθετη συμπεριφορά; Επειδή μπορείτε... επειδή μπορεί να θελήσετε ένα &quot;καλλιτεχνικό&quot; αποτέλεσμα... ο,τιδήποτε απλά μπορείτε.</flowPara>
  </flowRoot>
  <rect id="d0e150" display="none" height="1e3px" width="288" y="2647.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e150"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Αυτό ήτανε. Για αυτήν την αρχική έκδοση του libdepixelize αυτές είναι όλες οι επιλογές που έχετε. Αλλά αν η αναζήτηση του αρχικού συγγραφέα του libdepixelize και των δημιουργικών συμβούλων πετύχει, μπορεί να δεχτείτε πρόσθετες επιλογές που διευρύνουν ακόμα περισσότερο το εύρος των εικόνων για τις οποίες το libdepixelize δίνει ένα καλό αποτέλεσμα. Να τους ευχηθούμε καλή τύχη.</flowDiv>
+  <flowPara >Αυτό ήτανε. Για αυτήν την αρχική έκδοση του libdepixelize αυτές είναι όλες οι επιλογές που έχετε. Αλλά αν η αναζήτηση του αρχικού συγγραφέα του libdepixelize και των δημιουργικών συμβούλων πετύχει, μπορεί να δεχτείτε πρόσθετες επιλογές που διευρύνουν ακόμα περισσότερο το εύρος των εικόνων για τις οποίες το libdepixelize δίνει ένα καλό αποτέλεσμα. Να τους ευχηθούμε καλή τύχη.</flowPara>
  </flowRoot>
  <rect id="d0e153" display="none" height="1e3px" width="288" y="2729.1" x="10"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e153"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">Όλες οι χρησιμοποιούμενες εικόνες ελήφθησαν από το Liberated Pixel Cup προς αποφυγή προβλημάτων πνευματικών δικαιωμάτων. Οι σύνδεσμοι είναι:</flowDiv>
+  <flowPara >Όλες οι χρησιμοποιούμενες εικόνες ελήφθησαν από το Liberated Pixel Cup προς αποφυγή προβλημάτων πνευματικών δικαιωμάτων. Οι σύνδεσμοι είναι:</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 2774.5)"/>
  <rect id="d0e159" display="none" height="1e3px" width="258" y="2768.5" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e159"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">http://opengameart.org/content/memento</flowDiv>
+  <flowPara >http://opengameart.org/content/memento</flowPara>
  </flowRoot>
  <circle cy="0" cx="0" r="2" transform="translate(15 2792.3)"/>
  <rect id="d0e163" display="none" height="1e3px" width="258" y="2786.3" x="20"/>
- <flowRoot font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
+ <flowRoot xml:space="preserve" font-size="8" font-family="serif" line-height="133.00000%" fill="#000000">
   <flowRegion>
    <use y="0" x="0" xlink:href="#d0e163"/>
   </flowRegion>
-  <flowDiv xml:space="preserve">http://opengameart.org/content/rpg-enemies-bathroom-tiles</flowDiv>
+  <flowPara >http://opengameart.org/content/rpg-enemies-bathroom-tiles</flowPara>
  </flowRoot>
  <g transform="translate(0 2804.2)">
   <defs id="defs3" xmlns:cc="http://creativecommons.org/ns#">
@@ -15596,7 +15596,7 @@
     <path id="path1521" d="m359.24 21.363c-11.313 0-22.606 4.3206-31.275 12.99l-154.09 154.06c-8.4969 8.4967-12.762 19.543-12.931 30.631h-0.0585c0 0.0395 0.0566 0.0774 0.0585 0.11702-0.002 0.18609-0.0585 0.36977-0.0585 0.55586h0.2633c2.9491 11.221 79.15 25.523 87.651 34.025 12.839 12.839-49.233 22.268-36.395 35.107 12.839 12.839 77.59 24.843 90.43 37.682 12.839 12.839-26.238 26.51-13.399 39.349s55.967-3.2094 48.155 30.28c17.338 17.338 53.512 9.0588 77.733-8.2795 12.839-12.839-24.629-11.707-11.79-24.546s45.247-12.908 72.555-43.621c-10.992-17.095-46.981-24.375-34.142-37.214s37.8-6.3179 91.659-30.777c26.292-11.941 24.12-21.01 24.019-32.006-0.002-0.23138 0-0.43973 0-0.67288h-0.0585c-0.16-11.07-4.46-22.12-12.95-30.62l-154.07-154.06c-8.66-8.667-19.99-12.987-31.3-12.987zm-1.3165 20.04c5.0295 0.13102 9.0916 3.9651 17.056 9.1279l72.789 53.977c0.79681 0.51671 1.5557 1.0557 2.2527 1.6091 0.69703 0.55327 1.3337 1.1401 1.9309 1.7261 0.5972 0.58495 1.14 1.1721 1.6383 1.7846 0.49726 0.61244 0.94845 1.2385 1.3458 1.8724 0.39844 0.6349 0.75476 1.2798 1.0532 1.9309 0.29867 0.65226 0.53281 1.325 0.7314 1.9894 0.19976 0.66341 0.36832 1.319 0.46811 1.9894 0.0999 0.67165 0.14627 1.3452 0.14627 2.0187l-43.123-20.83-4.3006 32.562-23.727-11.117-36.629 24.458-14.014-48.331-18.051 42.275-50.408 5.032 0.55587-22.439c0-5.3897 29.057-43.122 46.751-52.105l32.386-23.259c4.7787-3.0977 8.1289-4.35 11.147-4.2714zm-66.996 220.21c22.944 5.9503 48.476 13.757 68.957 13.897l0.87768 9.2157c-17.538-1.8078-54.648-10.276-63.398-14.745l-6.4363-8.3672z" stroke-width="1pt"/>
    </g>
    <use id="use1328" style="color:#000000" xlink:href="#path1508" transform="matrix(5.1767 0 0 5.1767 -102.7 -256.62)" height="1052.3622" fill-opacity=".064615" width="744.09448" y="0" x="0" font-family="sans-serif" fill="#ffffff"/>
-   <text id="text7519" opacity=".5" line-height="125%" xml:space="preserve" transform="rotate(-90)" font-size="6.9693px" y="-6.5672836" x="-70.83046" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan7521" sodipodi:role="line" x="-70.83046" style="letter-spacing:.29056" y="-6.5672836">Χρήση <tspan id="tspan7523" font-weight="bold">Ctrl+πάνω βέλος</tspan> για κύλιση </tspan></text>
+   <text id="text7519" opacity=".5" line-height="125%"  transform="rotate(-90)" font-size="6.9693px" y="-6.5672836" x="-70.83046" font-family="sans-serif" sodipodi:linespacing="125%" fill="#000000"><tspan id="tspan7521" sodipodi:role="line" x="-70.83046" style="letter-spacing:.29056" y="-6.5672836">Χρήση <tspan id="tspan7523" font-weight="bold">Ctrl+πάνω βέλος</tspan> για κύλιση </tspan></text>
    <path id="path7527" opacity=".5" style="color:#000000" d="m338.53 197.82-13.108-1.2709 7.6547-10.717z" fill-rule="evenodd" transform="matrix(-.61496 -.045496 -.061919 .45186 207.79 -145)"/>
   </g>
  </g>
