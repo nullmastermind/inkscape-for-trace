@@ -114,7 +114,7 @@ set_name(Glib::ustring const &name, Gtk::MenuItem* menuitem)
             label->set_markup_with_mnemonic(name);
         } else {
             std::cerr << "set_name: could not find label!" << std::endl;
-        }           
+        }
     }
 }
 
@@ -261,7 +261,7 @@ checkitem_update(Gtk::CheckMenuItem* menuitem, SPAction* action)
         menuitem->set_active(active);
     } else {
         std::cerr << "checkitem_update: unknown action" << std::endl;
-    }      
+    }
 }
 
 static Gtk::CheckMenuItem*
@@ -279,7 +279,7 @@ build_menu_check_item_from_verb(SPAction* action)
     checkitem_update(menuitem, action);
 
     menuitem->signal_toggled().connect(
-      sigc::bind<Gtk::CheckMenuItem*, SPAction*>(sigc::ptr_fun(&item_activate), menuitem, action)); 
+      sigc::bind<Gtk::CheckMenuItem*, SPAction*>(sigc::ptr_fun(&item_activate), menuitem, action));
     menuitem->signal_select().connect(  sigc::bind<SPAction*>(sigc::ptr_fun(&select_action),   action));
     menuitem->signal_deselect().connect(sigc::bind<SPAction*>(sigc::ptr_fun(&deselect_action), action));
 
@@ -329,7 +329,7 @@ add_tasks(Gtk::MenuShell* menu, SPDesktop* dt)
             }
 
             menuitem->signal_toggled().connect(
-                sigc::bind<SPDesktop*, int>(sigc::ptr_fun(&task_activated), dt, i)); 
+                sigc::bind<SPDesktop*, int>(sigc::ptr_fun(&task_activated), dt, i));
             menuitem->signal_select().connect(
                 sigc::bind<SPDesktop*, Glib::ustring>(sigc::ptr_fun(&select_task),  dt, data[i][1]));
             menuitem->signal_deselect().connect(
@@ -407,12 +407,13 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
             }
 
             if (name == "submenu") {
-                Gtk::MenuItem* menuitem = nullptr;
-                if (menu_ptr->attribute("_name") != nullptr) {
-                    menuitem = Gtk::manage(new Gtk::MenuItem(_(menu_ptr->attribute("_name")), true));
-                } else {
-                    menuitem = Gtk::manage(new Gtk::MenuItem(  menu_ptr->attribute("name"),   true));
+                const char *name = menu_ptr->attribute("name");
+                if (!name) {
+                    g_warning("menus.xml: skipping submenu without name.");
+                    continue;
                 }
+
+                Gtk::MenuItem* menuitem = Gtk::manage(new Gtk::MenuItem(_(name), true));
                 Gtk::Menu* submenu = Gtk::manage(new Gtk::Menu());
                 build_menu(submenu, menu_ptr->firstChild(), view, show_icons_curr);
                 menuitem->set_submenu(*submenu);
@@ -423,7 +424,7 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
 
                 continue;
             }
-            
+
             if (name == "contextmenu") {
                 if (menu_ptr->attribute("id")) {
                     Glib::ustring id = menu_ptr->attribute("id");

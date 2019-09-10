@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-09-09 21:21+0200\n"
+"POT-Creation-Date: 2019-09-10 23:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -7985,13 +7985,13 @@ msgid "Cancel"
 msgstr ""
 
 #: ../src/extension/prefdialog/prefdialog.cpp:72
-#: ../src/ui/dialog/knot-properties.cpp:41 ../src/ui/dialog/text-edit.cpp:69
+#: ../src/ui/dialog/knot-properties.cpp:41 ../src/ui/dialog/text-edit.cpp:70
 #: ../src/verbs.cpp:2544
 msgid "_Close"
 msgstr ""
 
 #: ../src/extension/prefdialog/prefdialog.cpp:73
-#: ../src/ui/dialog/text-edit.cpp:70 ../src/ui/dialog/transformation.cpp:156
+#: ../src/ui/dialog/text-edit.cpp:71 ../src/ui/dialog/transformation.cpp:156
 msgid "_Apply"
 msgstr ""
 
@@ -10478,7 +10478,7 @@ msgid "Reverses the second path order"
 msgstr ""
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:32
-#: ../src/ui/toolbar/text-toolbar.cpp:566
+#: ../src/ui/toolbar/text-toolbar.cpp:565
 #: ../share/extensions/render_barcode_qrcode.inx:9
 msgid "Auto"
 msgstr ""
@@ -11221,7 +11221,7 @@ msgid "Determines on which side the line or line segment is infinite."
 msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:59
-#: ../src/ui/toolbar/text-toolbar.cpp:525 ../share/extensions/empty_page.inx:18
+#: ../src/ui/toolbar/text-toolbar.cpp:524 ../share/extensions/empty_page.inx:18
 msgid "Horizontal"
 msgstr ""
 
@@ -14886,7 +14886,7 @@ msgstr ""
 msgid "Setup for widescreen work"
 msgstr ""
 
-#: ../src/ui/desktop/menubar.cpp:516
+#: ../src/ui/desktop/menubar.cpp:517
 msgid "Open _Recent"
 msgstr ""
 
@@ -17421,7 +17421,7 @@ msgstr ""
 msgid "Sele_ction"
 msgstr ""
 
-#: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:66
+#: ../src/ui/dialog/find.cpp:66 ../src/ui/dialog/text-edit.cpp:67
 #: ../share/ui/menus.xml:266
 msgid "_Text"
 msgstr ""
@@ -23267,15 +23267,15 @@ msgstr ""
 msgid "Keywords"
 msgstr ""
 
-#: ../src/ui/dialog/text-edit.cpp:65
+#: ../src/ui/dialog/text-edit.cpp:66
 msgid "_Font"
 msgstr ""
 
-#: ../src/ui/dialog/text-edit.cpp:67
+#: ../src/ui/dialog/text-edit.cpp:68
 msgid "_Features"
 msgstr ""
 
-#: ../src/ui/dialog/text-edit.cpp:68
+#: ../src/ui/dialog/text-edit.cpp:69
 msgid "Set as _default"
 msgstr ""
 
@@ -23283,11 +23283,11 @@ msgstr ""
 #. * text has been entered) to get a preview of the font.  Choose
 #. * some representative characters that users of your locale will be
 #. * interested in.
-#: ../src/ui/dialog/text-edit.cpp:82
+#: ../src/ui/dialog/text-edit.cpp:83
 msgid "AaBbCcIiPpQq12369$€¢?.;/()"
 msgstr ""
 
-#: ../src/ui/dialog/text-edit.cpp:467 ../src/ui/tools/text-tool.cpp:1556
+#: ../src/ui/dialog/text-edit.cpp:468 ../src/ui/tools/text-tool.cpp:1556
 msgid "Set text style"
 msgstr ""
 
@@ -24211,8 +24211,8 @@ msgstr ""
 #: ../src/ui/toolbar/paintbucket-toolbar.cpp:111
 #: ../src/ui/toolbar/rect-toolbar.cpp:163
 #: ../src/ui/toolbar/select-toolbar.cpp:174
-#: ../src/ui/toolbar/text-toolbar.cpp:330
-#: ../src/ui/toolbar/text-toolbar.cpp:355
+#: ../src/ui/toolbar/text-toolbar.cpp:329
+#: ../src/ui/toolbar/text-toolbar.cpp:354
 msgid "Units"
 msgstr ""
 
@@ -26193,287 +26193,287 @@ msgstr ""
 msgid "Star: Change randomization"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:244
+#: ../src/ui/toolbar/text-toolbar.cpp:243
 msgid "Font Family"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:245
+#: ../src/ui/toolbar/text-toolbar.cpp:244
 msgid "Select Font Family (Alt-X to access)"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:254
+#: ../src/ui/toolbar/text-toolbar.cpp:253
 msgid "Select all text with this font-family"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:258
+#: ../src/ui/toolbar/text-toolbar.cpp:257
 msgid "Font not found on system"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:288
+#: ../src/ui/toolbar/text-toolbar.cpp:287
 msgid "Font Style"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:289
+#: ../src/ui/toolbar/text-toolbar.cpp:288
 msgid "Font style"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:313
-#: ../src/ui/toolbar/text-toolbar.cpp:1963
+#: ../src/ui/toolbar/text-toolbar.cpp:312
+#: ../src/ui/toolbar/text-toolbar.cpp:1956
 #: ../src/ui/widget/font-selector.cpp:32 ../src/ui/widget/font-selector.cpp:145
 msgid "Font size"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:316
+#: ../src/ui/toolbar/text-toolbar.cpp:315
 msgid "Font Size"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:337
+#: ../src/ui/toolbar/text-toolbar.cpp:336
 msgid "Smaller spacing"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:337
-#: ../src/ui/toolbar/text-toolbar.cpp:435
-#: ../src/ui/toolbar/text-toolbar.cpp:453
+#: ../src/ui/toolbar/text-toolbar.cpp:336
+#: ../src/ui/toolbar/text-toolbar.cpp:434
+#: ../src/ui/toolbar/text-toolbar.cpp:452
 msgctxt "Text tool"
 msgid "Normal"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:337
+#: ../src/ui/toolbar/text-toolbar.cpp:336
 msgid "Larger spacing"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:344
+#: ../src/ui/toolbar/text-toolbar.cpp:343
 msgid "Spacing between baselines"
 msgstr ""
 
+#: ../src/ui/toolbar/text-toolbar.cpp:369
 #: ../src/ui/toolbar/text-toolbar.cpp:370
-#: ../src/ui/toolbar/text-toolbar.cpp:371
 msgid "Align left"
 msgstr ""
 
+#: ../src/ui/toolbar/text-toolbar.cpp:375
 #: ../src/ui/toolbar/text-toolbar.cpp:376
-#: ../src/ui/toolbar/text-toolbar.cpp:377
 msgid "Align center"
 msgstr ""
 
+#: ../src/ui/toolbar/text-toolbar.cpp:381
 #: ../src/ui/toolbar/text-toolbar.cpp:382
-#: ../src/ui/toolbar/text-toolbar.cpp:383
 msgid "Align right"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:388
+#: ../src/ui/toolbar/text-toolbar.cpp:387
 msgid "Justify"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:389
+#: ../src/ui/toolbar/text-toolbar.cpp:388
 msgid "Justify (only flowed text)"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:394
+#: ../src/ui/toolbar/text-toolbar.cpp:393
 msgid "Alignment"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:395
+#: ../src/ui/toolbar/text-toolbar.cpp:394
 msgid "Text alignment"
 msgstr ""
 
+#: ../src/ui/toolbar/text-toolbar.cpp:410
 #: ../src/ui/toolbar/text-toolbar.cpp:411
-#: ../src/ui/toolbar/text-toolbar.cpp:412
 msgid "Toggle superscript"
 msgstr ""
 
+#: ../src/ui/toolbar/text-toolbar.cpp:422
 #: ../src/ui/toolbar/text-toolbar.cpp:423
-#: ../src/ui/toolbar/text-toolbar.cpp:424
 msgid "Toggle subscript"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:435
-#: ../src/ui/toolbar/text-toolbar.cpp:453
+#: ../src/ui/toolbar/text-toolbar.cpp:434
+#: ../src/ui/toolbar/text-toolbar.cpp:452
 msgid "Negative spacing"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:435
-#: ../src/ui/toolbar/text-toolbar.cpp:453
+#: ../src/ui/toolbar/text-toolbar.cpp:434
+#: ../src/ui/toolbar/text-toolbar.cpp:452
 msgid "Positive spacing"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:439
+#: ../src/ui/toolbar/text-toolbar.cpp:438
 msgid "Letter:"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:440
+#: ../src/ui/toolbar/text-toolbar.cpp:439
 msgid "Spacing between letters (px)"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:457
+#: ../src/ui/toolbar/text-toolbar.cpp:456
 msgid "Word:"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:458
+#: ../src/ui/toolbar/text-toolbar.cpp:457
 msgid "Spacing between words (px)"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:474
+#: ../src/ui/toolbar/text-toolbar.cpp:473
 msgid "Kern:"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:476
+#: ../src/ui/toolbar/text-toolbar.cpp:475
 msgid "Horizontal kerning (px)"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:490
+#: ../src/ui/toolbar/text-toolbar.cpp:489
 msgid "Vert:"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:491
+#: ../src/ui/toolbar/text-toolbar.cpp:490
 msgid "Vertical kerning (px)"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:505
+#: ../src/ui/toolbar/text-toolbar.cpp:504
 msgid "Rot:"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:506
+#: ../src/ui/toolbar/text-toolbar.cpp:505
 msgid "Character rotation (degrees)"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:526
+#: ../src/ui/toolbar/text-toolbar.cpp:525
 msgid "Horizontal text"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:531
+#: ../src/ui/toolbar/text-toolbar.cpp:530
 msgid "Vertical — RL"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:532
+#: ../src/ui/toolbar/text-toolbar.cpp:531
 msgid "Vertical text — lines: right to left"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:537
+#: ../src/ui/toolbar/text-toolbar.cpp:536
 msgid "Vertical — LR"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:538
+#: ../src/ui/toolbar/text-toolbar.cpp:537
 msgid "Vertical text — lines: left to right"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:543
+#: ../src/ui/toolbar/text-toolbar.cpp:542
 msgid "Writing mode"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:544
+#: ../src/ui/toolbar/text-toolbar.cpp:543
 msgid "Block progression"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:567
+#: ../src/ui/toolbar/text-toolbar.cpp:566
 msgid "Auto glyph orientation"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:572
+#: ../src/ui/toolbar/text-toolbar.cpp:571
 msgid "Upright"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:573
+#: ../src/ui/toolbar/text-toolbar.cpp:572
 msgid "Upright glyph orientation"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:578
+#: ../src/ui/toolbar/text-toolbar.cpp:577
 msgid "Sideways"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:579
+#: ../src/ui/toolbar/text-toolbar.cpp:578
 msgid "Sideways glyph orientation"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:584
+#: ../src/ui/toolbar/text-toolbar.cpp:583
 msgid "Text orientation"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:585
+#: ../src/ui/toolbar/text-toolbar.cpp:584
 msgid "Text (glyph) orientation in vertical text."
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:606
+#: ../src/ui/toolbar/text-toolbar.cpp:605
 msgid "LTR"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:607
+#: ../src/ui/toolbar/text-toolbar.cpp:606
 msgid "Left to right text"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:612
+#: ../src/ui/toolbar/text-toolbar.cpp:611
 msgid "RTL"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:613
+#: ../src/ui/toolbar/text-toolbar.cpp:612
 msgid "Right to left text"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:618
+#: ../src/ui/toolbar/text-toolbar.cpp:617
 msgid "Text direction"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:619
+#: ../src/ui/toolbar/text-toolbar.cpp:618
 msgid "Text direction for normally horizontal text."
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:696
+#: ../src/ui/toolbar/text-toolbar.cpp:695
 msgid "Text: Change font family"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:808
+#: ../src/ui/toolbar/text-toolbar.cpp:807
 msgid "Text: Change font size"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:851
+#: ../src/ui/toolbar/text-toolbar.cpp:850
 msgid "Text: Change font style"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:935
+#: ../src/ui/toolbar/text-toolbar.cpp:934
 msgid "Text: Change superscript or subscript"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1079
+#: ../src/ui/toolbar/text-toolbar.cpp:1078
 msgid "Text: Change alignment"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1134
+#: ../src/ui/toolbar/text-toolbar.cpp:1133
 msgid "Text: Change writing mode"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1189
+#: ../src/ui/toolbar/text-toolbar.cpp:1188
 msgid "Text: Change orientation"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1238
+#: ../src/ui/toolbar/text-toolbar.cpp:1237
 msgid "Text: Change direction"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1350
+#: ../src/ui/toolbar/text-toolbar.cpp:1349
 msgid "Text: Change line-height"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1560
+#: ../src/ui/toolbar/text-toolbar.cpp:1559
 msgid "Text: Change line-height unit"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1624
+#: ../src/ui/toolbar/text-toolbar.cpp:1623
 msgid "Text: Change word-spacing"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1665
+#: ../src/ui/toolbar/text-toolbar.cpp:1664
 msgid "Text: Change letter-spacing"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1703
+#: ../src/ui/toolbar/text-toolbar.cpp:1702
 msgid "Text: Change dx (kern)"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1738
+#: ../src/ui/toolbar/text-toolbar.cpp:1737
 msgid "Text: Change dy"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1774
+#: ../src/ui/toolbar/text-toolbar.cpp:1773
 msgid "Text: Change rotate"
 msgstr ""
 
@@ -27549,37 +27549,37 @@ msgstr ""
 msgid "Create star"
 msgstr ""
 
-#: ../src/ui/tools/text-tool.cpp:373
+#: ../src/ui/tools/text-tool.cpp:374
 msgid "Create text"
 msgstr ""
 
-#: ../src/ui/tools/text-tool.cpp:398
+#: ../src/ui/tools/text-tool.cpp:399
 msgid "Non-printable character"
 msgstr ""
 
-#: ../src/ui/tools/text-tool.cpp:413
+#: ../src/ui/tools/text-tool.cpp:414
 msgid "Insert Unicode character"
 msgstr ""
 
-#: ../src/ui/tools/text-tool.cpp:448
+#: ../src/ui/tools/text-tool.cpp:449
 #, c-format
 msgid "Unicode (<b>Enter</b> to finish): %s: %s"
 msgstr ""
 
-#: ../src/ui/tools/text-tool.cpp:450 ../src/ui/tools/text-tool.cpp:850
+#: ../src/ui/tools/text-tool.cpp:451 ../src/ui/tools/text-tool.cpp:850
 msgid "Unicode (<b>Enter</b> to finish): "
 msgstr ""
 
-#: ../src/ui/tools/text-tool.cpp:530
+#: ../src/ui/tools/text-tool.cpp:524
 #, c-format
 msgid "<b>Flowed text frame</b>: %s &#215; %s"
 msgstr ""
 
-#: ../src/ui/tools/text-tool.cpp:594
+#: ../src/ui/tools/text-tool.cpp:588
 msgid "<b>Click</b> to edit the text, <b>drag</b> to select part of the text."
 msgstr ""
 
-#: ../src/ui/tools/text-tool.cpp:598
+#: ../src/ui/tools/text-tool.cpp:592
 msgid ""
 "<b>Click</b> to edit the flowed text, <b>drag</b> to select part of the text."
 msgstr ""
@@ -27689,7 +27689,7 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/ui/tools/text-tool.cpp:1820
+#: ../src/ui/tools/text-tool.cpp:1823
 msgid "Type text"
 msgstr ""
 
@@ -29315,7 +29315,7 @@ msgstr ""
 msgid "Apply the style of the copied object to selection"
 msgstr ""
 
-#: ../src/verbs.cpp:2561
+#: ../src/verbs.cpp:2561 ../share/ui/menus.xml:42
 msgid "Paste Si_ze"
 msgstr ""
 
@@ -31082,7 +31082,7 @@ msgid "_Selectors and CSS..."
 msgstr ""
 
 #: ../src/verbs.cpp:3079
-msgid "View and edit selections and CSS styles"
+msgid "View and edit CSS selectors and styles"
 msgstr ""
 
 #: ../src/verbs.cpp:3080
@@ -39377,8 +39377,36 @@ msgstr ""
 msgid "New Drawing"
 msgstr ""
 
+#: ../share/ui/menus.xml:54
+msgid "Clo_ne"
+msgstr ""
+
+#: ../share/ui/menus.xml:69
+msgid "Select Sa_me"
+msgstr ""
+
 #: ../share/ui/menus.xml:91
 msgid "_View"
+msgstr ""
+
+#: ../share/ui/menus.xml:92
+msgid "_Zoom"
+msgstr ""
+
+#: ../share/ui/menus.xml:109
+msgid "_Display Mode"
+msgstr ""
+
+#: ../share/ui/menus.xml:119
+msgid "_Color Display Mode"
+msgstr ""
+
+#: ../share/ui/menus.xml:127
+msgid "_Canvas Orientation"
+msgstr ""
+
+#: ../share/ui/menus.xml:141
+msgid "Sh_ow/Hide"
 msgstr ""
 
 #: ../share/ui/menus.xml:168
@@ -39387,6 +39415,18 @@ msgstr ""
 
 #: ../share/ui/menus.xml:192
 msgid "_Object"
+msgstr ""
+
+#: ../share/ui/menus.xml:204
+msgid "Cli_p"
+msgstr ""
+
+#: ../share/ui/menus.xml:209
+msgid "Mas_k"
+msgstr ""
+
+#: ../share/ui/menus.xml:214
+msgid "Patter_n"
 msgstr ""
 
 #: ../share/ui/menus.xml:239
@@ -39399,6 +39439,10 @@ msgstr ""
 
 #: ../share/ui/menus.xml:288
 msgid "Exte_nsions"
+msgstr ""
+
+#: ../share/ui/menus.xml:298
+msgid "Tutorials"
 msgstr ""
 
 #: ../share/ui/units.xml:8
