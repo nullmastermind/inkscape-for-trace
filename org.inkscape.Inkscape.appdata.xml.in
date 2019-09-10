@@ -94,5 +94,8 @@
       </description>
     </release>
   </releases>
+  <provides>
+    <id>inkscape.desktop</id>
+  </provides>
   <content_rating type="oars-1.1" />
 </component>
