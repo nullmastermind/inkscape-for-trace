@@ -2418,13 +2418,6 @@ void TextToolbar::subselection_changed(gpointer texttool)
             Inkscape::Text::Layout::iterator start = layout->begin();
             Inkscape::Text::Layout::iterator end = layout->end();
             Inkscape::Text::Layout::iterator start_selection = tc->text_sel_start;
-            if (!(_updating || tc->_button1on)) {
-                if (tc->text_sel_start > tc->text_sel_end) {
-                    tc->text_sel_start = tc->text_sel_end;
-                    tc->text_sel_end = start_selection;
-                }
-                start_selection = tc->text_sel_start;
-            }
             Inkscape::Text::Layout::iterator end_selection = tc->text_sel_end;
 #ifdef DEBUG_TEXT
             std::cout << "    GUI: Start of text: " << layout->iteratorToCharIndex(start) << std::endl;
@@ -2479,8 +2472,13 @@ void TextToolbar::subselection_changed(gpointer texttool)
                 this->_outer = false;
                 wrap_start = tc->text_sel_start;
                 wrap_end = tc->text_sel_end;
-                wrap_start.thisStartOfLine();
-                wrap_end.thisEndOfLine();
+                if (tc->text_sel_start > tc->text_sel_end) {
+                    wrap_start.thisEndOfLine();
+                    wrap_end.thisStartOfLine();
+                } else {
+                    wrap_start.thisStartOfLine();
+                    wrap_end.thisEndOfLine();
+                }
                 selection_changed(nullptr);
             } 
         }
