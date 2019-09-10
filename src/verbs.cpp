@@ -3076,7 +3076,7 @@ Verb *Verb::_base_verbs[] = {
     new DialogVerb(SP_VERB_DIALOG_XML_EDITOR, "DialogXMLEditor", N_("_XML Editor..."),
                    N_("View and edit the XML tree of the document"), INKSCAPE_ICON("dialog-xml-editor")),
     new DialogVerb(SP_VERB_DIALOG_SELECTORS, "DialogSelectors", N_("_Selectors and CSS..."),
-                   N_("View and edit selections and CSS styles"), INKSCAPE_ICON("dialog-selectors")),
+                   N_("View and edit CSS selectors and styles"), INKSCAPE_ICON("dialog-selectors")),
     new DialogVerb(SP_VERB_DIALOG_FIND, "DialogFind", N_("_Find/Replace..."), N_("Find objects in document"),
                    INKSCAPE_ICON("edit-find")),
 #if HAVE_ASPELL
