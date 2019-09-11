@@ -482,12 +482,9 @@ void InkscapePreferences::initPageTools()
         _page_text.add_line( false, "", *cb, "", _("Use SVG2 auto-flowed text instead of SVG1.2 auto-flowed text. (Recommended)"));
     }
 
-    Glib::ustring sizeLabels[] = {_("Pixel"), _("Point"), _("Pica"), _("Millimeter"), _("Centimeter"), _("Inch"), _("Em square")/*, _("Ex square"), _("Percent")*/};
-    int sizeValues[] = {SP_CSS_UNIT_PX, SP_CSS_UNIT_PT, SP_CSS_UNIT_PC, SP_CSS_UNIT_MM, SP_CSS_UNIT_CM, SP_CSS_UNIT_IN, SP_CSS_UNIT_EM/*, SP_CSS_UNIT_EX, SP_CSS_UNIT_PERCENT*/};
-
-    _page_text.add_group_header( _("Text units"));
-    _font_output_px.init ( _("Always output text size in pixels (px)"), "/options/font/textOutputPx", true);
-//    _page_text.add_line( false, "", _font_output_px, "", _("Always convert the text size units above into pixels (px) before saving to file"));
+    //_page_text.add_group_header( _("Text units"));
+    //_font_output_px.init ( _("Always output text size in pixels (px)"), "/options/font/textOutputPx", true);
+    //_page_text.add_line( true, "", _font_output_px, "", _("Always convert the text size units above into pixels (px) before saving to file"));
 
     _page_text.add_group_header( _("Font directories"));
     _font_fontsdir_system.init( _("Use Inkscape's fonts directory"), "/options/font/use_fontsdir_system", true);
