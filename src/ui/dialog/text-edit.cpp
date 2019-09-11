@@ -522,7 +522,7 @@ void TextEdit::onTextChange (GtkTextBuffer *text_buffer, TextEdit *self)
 
 void TextEdit::onFontChange(Glib::ustring fontspec)
 {
-    font_features.update_opentype ( fontspec );
+    // Is not necesary update open type features this done when user click on font features tab
     onChange();
 }
 
