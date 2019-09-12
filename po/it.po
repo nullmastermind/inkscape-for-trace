@@ -9886,9 +9886,8 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:1557 ../src/live_effects/effect.cpp:1615
 #: ../share/ui/dialog-trace.glade:978
-#, fuzzy
 msgid "Update"
-msgstr "_Aggiorna"
+msgstr "Aggiorna"
 
 #: ../src/live_effects/effect.cpp:1558 ../src/live_effects/effect.cpp:1618
 msgid "<b>Default value:</b> <s>"
@@ -20208,7 +20207,6 @@ msgstr ""
 "discesa nella barra di testo"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:477
-#, fuzzy
 msgid "Show font substitution warning dialog"
 msgstr "Mostra finestra di avviso sostituzione carattere"
 
@@ -22783,9 +22781,8 @@ msgid "Resolution used by the Create Bitmap Copy command"
 msgstr "Risoluzione usata dal comando Crea una copia bitmap"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2095
-#, fuzzy
 msgid "Ask about linking and scaling when importing bitmap images"
-msgstr "Chiedi modalità e risoluzione dell'importazione"
+msgstr "Chiedi modalità e risoluzione dell'importazione delle immagini bitmap"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2097
 msgid "Pop-up linking and scaling dialog when importing bitmap image."
@@ -22794,16 +22791,14 @@ msgstr ""
 "dell'immagine quando un'immagine bitmap è importata."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2098
-#, fuzzy
 msgid "Ask about linking and scaling when importing SVG images"
-msgstr "Chiedi modalità e risoluzione dell'importazione"
+msgstr "Chiedi modalità e risoluzione dell'importazione delle immagini SVG"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2100
-#, fuzzy
 msgid "Pop-up linking and scaling dialog when importing SVG image."
 msgstr ""
 "Mostra la finestra sulla modalità di importazione e risoluzione "
-"dell'immagine quando un'immagine bitmap è importata."
+"dell'immagine quando un'immagine SVG è importata."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2106
 msgid "Bitmap import/open mode:"
@@ -22818,9 +22813,8 @@ msgid "SVG import mode:"
 msgstr "Modalità importazione SVG:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2120
-#, fuzzy
 msgid "Image scale (image-rendering):"
-msgstr "Ridimensionamento bitmap (rendering):"
+msgstr "Ridimensionamento bitmap (image-rendering):"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2125
 msgid "Default _import resolution:"
@@ -24872,14 +24866,12 @@ msgid "Brightness cutoff"
 msgstr "Riduzione _luminosità"
 
 #: ../src/ui/dialog/tracedialog.cpp:127 ../share/ui/dialog-trace.glade:158
-#, fuzzy
 msgid "Edge detection"
-msgstr "Rilevamento _bordo"
+msgstr "Rilevamento bordo"
 
 #: ../src/ui/dialog/tracedialog.cpp:129 ../share/ui/dialog-trace.glade:159
-#, fuzzy
 msgid "Color quantization"
-msgstr "_Quantizzazione colore"
+msgstr "Quantizzazione colore"
 
 #: ../src/ui/dialog/tracedialog.cpp:131 ../share/ui/dialog-trace.glade:160
 #, fuzzy
@@ -24891,14 +24883,12 @@ msgid "Centerline tracing (autotrace)"
 msgstr ""
 
 #: ../src/ui/dialog/tracedialog.cpp:145 ../share/ui/dialog-trace.glade:455
-#, fuzzy
 msgid "Brightness steps"
-msgstr "Passaggi di lu_minosità"
+msgstr "Passaggi di luminosità"
 
 #: ../src/ui/dialog/tracedialog.cpp:149 ../share/ui/dialog-trace.glade:457
-#, fuzzy
 msgid "Grays"
-msgstr "_Grigi"
+msgstr "Grigi"
 
 #: ../src/ui/dialog/tracedialog.cpp:151 ../share/ui/dialog-trace.glade:458
 #, fuzzy
@@ -26492,9 +26482,8 @@ msgid "Reverse the direction of the gradient"
 msgstr "Inverti la direzione del gradiente"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:450
-#, fuzzy
 msgid "Repeat: "
-msgstr "Ripetizione:"
+msgstr "Ripetizione: "
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:453
 msgctxt "Gradient repeat type"
@@ -34122,9 +34111,8 @@ msgid "Create a single path or create a group of paths"
 msgstr "Scansione multipla: crea un gruppo di tracciati"
 
 #: ../share/ui/dialog-trace.glade:189
-#, fuzzy
 msgid "Brightness threshold"
-msgstr "Passaggi di lu_minosità"
+msgstr "Soglia luminosità"
 
 #: ../share/ui/dialog-trace.glade:224
 #, fuzzy
@@ -34137,23 +34125,20 @@ msgid "Filter iterations"
 msgstr "Impostazioni generali filtri"
 
 #: ../share/ui/dialog-trace.glade:320 ../share/ui/dialog-trace.glade:382
-#, fuzzy
 msgid "Error threshold"
-msgstr "Soglia:"
+msgstr "Soglia errore"
 
 #: ../share/ui/dialog-trace.glade:418
-#, fuzzy
 msgid "Invert image"
-msgstr "_Negativo immagine"
+msgstr "Inverti immagine"
 
 #: ../share/ui/dialog-trace.glade:422
 msgid "Invert black and white regions"
 msgstr "Inverte le regioni di bianco e nero"
 
 #: ../share/ui/dialog-trace.glade:441
-#, fuzzy
 msgid "Single scan"
-msgstr "Singolo"
+msgstr "Scansione unica"
 
 #: ../share/ui/dialog-trace.glade:473
 msgid "Apply Gaussian blur to the bitmap before tracing"
@@ -34173,9 +34158,8 @@ msgstr ""
 "(solitamente con interruzioni)"
 
 #: ../share/ui/dialog-trace.glade:497
-#, fuzzy
 msgid "Remove background"
-msgstr "Rimuo_vi sfondo"
+msgstr "Rimuovi sfondo"
 
 #: ../share/ui/dialog-trace.glade:501
 msgid "Remove bottom (background) layer when done"
@@ -34183,16 +34167,15 @@ msgstr "Rimuovi ultimo livello (sfondo) quando finito"
 
 #: ../share/ui/dialog-trace.glade:513
 msgid "Scans"
-msgstr ""
+msgstr "Scansioni"
 
 #: ../share/ui/dialog-trace.glade:524
 msgid "The desired number of scans"
 msgstr "Il numero voluto di scansioni"
 
 #: ../share/ui/dialog-trace.glade:545
-#, fuzzy
 msgid "Multiple scans"
-msgstr "Più passaggi"
+msgstr "Scansioni multiple"
 
 #: ../share/ui/dialog-trace.glade:578
 #, fuzzy
@@ -34204,18 +34187,16 @@ msgid "Ignore small spots (speckles) in the bitmap"
 msgstr "Ignora le piccole macchie nella bitmap"
 
 #: ../share/ui/dialog-trace.glade:593
-#, fuzzy
 msgid "Smooth corners"
-msgstr "Smussa _angoli"
+msgstr "Smussa angoli"
 
 #: ../share/ui/dialog-trace.glade:597
 msgid "Smooth out sharp corners of the trace"
 msgstr "Smussa gli angoli della vettorizzazione"
 
 #: ../share/ui/dialog-trace.glade:608
-#, fuzzy
 msgid "Optimize"
-msgstr "Ottimizzato"
+msgstr "Ottimizza"
 
 #: ../share/ui/dialog-trace.glade:612
 msgid "Try to optimize paths by joining adjacent Bezier curve segments"
@@ -34239,11 +34220,12 @@ msgstr ""
 "ottimizzazioni più spinte"
 
 #: ../share/ui/dialog-trace.glade:688
-#, fuzzy
 msgid ""
 "\n"
 "Heuristics\n"
-msgstr "Euristico"
+msgstr ""
+"\n"
+"Euristico\n"
 
 #: ../share/ui/dialog-trace.glade:711
 msgid "Favors connections that are part of a long curve"
@@ -34292,11 +34274,12 @@ msgid "The radius of the window analyzed"
 msgstr ""
 
 #: ../share/ui/dialog-trace.glade:826
-#, fuzzy
 msgid ""
 "\n"
 "Output\n"
-msgstr "Output"
+msgstr ""
+"\n"
+"Output\n"
 
 #: ../share/ui/dialog-trace.glade:841
 #, fuzzy
