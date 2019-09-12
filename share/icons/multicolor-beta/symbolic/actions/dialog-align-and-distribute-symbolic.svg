@@ -14,9 +14,7 @@
    width="16"
    id="svg1"
    version="1.1">
-  <style
-     id="style2188"></style>
-     <style id="s0">
+   <style id="s0">
    .base    { fill: #000000; }
    .success { fill: #009909; }
    .warning { fill: #FF1990; }

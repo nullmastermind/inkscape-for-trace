@@ -7,15 +7,14 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   version="1.1"
-   id="svg1"
-   width="16"
-   height="16"
-   viewBox="0 0 16 16"
+   inkscape:version="1.0beta0 (1d85f8e, 2019-09-11)"
    sodipodi:docname="draw-path-symbolic.svg"
-   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
-
-     <style id="s0">
+   viewBox="0 0 16 16"
+   height="16"
+   width="16"
+   id="svg1"
+   version="1.1">
+  <style id="s0">
    .base    { fill: #000000; }
    .success { fill: #009909; }
    .warning { fill: #FF1990; }
@@ -25,7 +24,7 @@
   <style id="s2"> 
      @import '../../highlights.css'; 
   </style>
-<metadata
+  <metadata
      id="metadata2927">
     <rdf:RDF>
       <cc:Work
@@ -40,78 +39,78 @@
   <defs
      id="defs2925">
     <inkscape:path-effect
-       attempt_force_join="true"
-       miter_limit="100"
-       linejoin_type="extrp_arc"
-       line_width="1.7"
-       linecap_type="butt"
-       is_visible="true"
+       effect="join_type"
        id="path-effect2216"
-       effect="join_type" />
+       is_visible="true"
+       linecap_type="butt"
+       line_width="1.7"
+       linejoin_type="extrp_arc"
+       miter_limit="100"
+       attempt_force_join="true" />
   </defs>
   <sodipodi:namedview
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     id="namedview"
-     showgrid="true"
-     inkscape:zoom="62.42869"
-     inkscape:cx="3.0516306"
-     inkscape:cy="7.9875461"
-     inkscape:window-width="1858"
-     inkscape:window-height="1177"
-     inkscape:window-x="54"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="g0"
+     inkscape:snap-global="true"
      inkscape:document-rotation="0"
-     inkscape:snap-global="false">
+     inkscape:current-layer="g0"
+     inkscape:window-maximized="1"
+     inkscape:window-y="-8"
+     inkscape:window-x="54"
+     inkscape:window-height="1177"
+     inkscape:window-width="1858"
+     inkscape:cy="8.4677457"
+     inkscape:cx="4.8852383"
+     inkscape:zoom="62.42869"
+     showgrid="true"
+     id="namedview"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10">
     <inkscape:grid
-       type="xygrid"
-       id="grid" />
+       id="grid"
+       type="xygrid" />
   </sodipodi:namedview>
   <g
-     inkscape:label="draw-path"
-     id="g0">
+     id="g0"
+     inkscape:label="draw-path">
     <path
-       id="background"
-       d="M 0,0 H 16 V 16 H 0 Z"
+       inkscape:connector-curvature="0"
        style="opacity:0"
+       d="M 0,0 H 16 V 16 H 0 Z"
+       id="background" />
+    <path
+       sodipodi:nodetypes="cc"
+       transform="matrix(0.47265641,0,0,0.47265641,-435.19742,-104.40719)"
+       inkscape:original-d="m 925.2,243.33 c -0.0507,-5.35146 5.04257,-19.00161 20.92914,-19.13681"
+       inkscape:path-effect="#path-effect2216"
+       style="opacity:0.6"
+       class="st5  base"
+       d="m 926.04996,243.32195 c -0.0458,-4.83308 4.65481,-18.14746 20.08641,-18.27879 l -0.0145,-1.69994 c -16.34154,0.13907 -21.82748,14.12499 -21.77187,19.99483 z"
+       id="path1021"
        inkscape:connector-curvature="0" />
     <path
+       style="fill-opacity:1;stroke-width:1.02509"
        inkscape:connector-curvature="0"
-       id="path1021"
-       d="m 926.04996,243.32195 c -0.0227,-2.39965 1.1774,-6.84595 4.29113,-10.58257 3.11374,-3.73662 8.08075,-6.8511 15.79528,-6.91675 l -0.0145,-1.69994 c -8.17204,0.0695 -13.69495,3.45801 -17.08681,7.5284 -3.39187,4.07038 -4.71303,8.73515 -4.68506,11.68696 z"
-       class="st5  base"
-       style="opacity:0.5"
-       inkscape:path-effect="#path-effect2216"
-       inkscape:original-d="m 925.2,243.33 c -0.0507,-5.35146 5.04257,-18.22214 20.92914,-18.35734"
-       transform="matrix(0.47265641,0,0,0.47265641,-435.60562,-104.40719)"
-       sodipodi:nodetypes="cc" />
-    <path
-       id="rect1023"
-       d="M 0.01287798,8.6978635 H 3.915006 V 12.599991 H 0.01287798 Z"
        class="success"
-       inkscape:connector-curvature="0"
-       style="fill-opacity:1" />
+       d="m 0,9 h 4 v 4 H 0 Z"
+       id="rect1023" />
     <path
-       id="rect946"
-       d="m 1.6524054,1.951945 h 0.623073 V 12.59999 h -0.623073 z"
+       sodipodi:nodetypes="ccccc"
+       style="fill-opacity:1;stroke-width:1.15169"
+       inkscape:connector-curvature="0"
        class="success"
-       inkscape:connector-curvature="0"
-       style="fill-opacity:1"
-       sodipodi:nodetypes="ccccc" />
+       d="m 1.5639419,2 h 0.8 v 11 h -0.8 z"
+       id="rect946" />
     <path
-       class="base"
+       sodipodi:nodetypes="cccccccccccccccc"
+       inkscape:connector-curvature="0"
+       d="M 5.6986783,15.971348 13.178561,13.565393 14.545982,8.9992981 15.774274,7.7710084 15,5.7169706 12.93897,4.930587 11.710679,6.158877 7.1394668,7.5262997 4.733513,15.00618 8.6666,11.073094 8.9059415,9.2927744 11.473563,8.4620436 12.27953,9.2689379 11.412086,11.798918 9.631766,12.03826 Z"
        id="polygon1025"
-       d="M 5.6986783,15.971348 13.178561,13.565393 14.545982,8.9992981 15.774274,7.7710084 14.810833,5.8965868 12.93897,4.930587 11.710679,6.158877 7.1394668,7.5262997 4.733513,15.00618 8.6666,11.073094 8.9059415,9.2927744 11.873548,8.8338792 11.412086,11.798918 9.631766,12.03826 Z"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccccccccccccc" />
+       class="base" />
     <path
-       id="circle1027"
-       d="M 3.9078723,1.9670688 A 1.9439304,1.9439304 0 0 1 1.9639419,3.9109992 1.9439304,1.9439304 0 0 1 0.0200115,1.9670688 1.9439304,1.9439304 0 0 1 1.9639419,0.02313839 1.9439304,1.9439304 0 0 1 3.9078723,1.9670688"
-       class="success"
+       style="fill-opacity:1"
        inkscape:connector-curvature="0"
-       style="fill-opacity:1" />
+       class="success"
+       d="M 3.9078723,1.9670688 A 1.9439304,1.9439304 0 0 1 1.9639419,3.9109992 1.9439304,1.9439304 0 0 1 0.0200115,1.9670688 1.9439304,1.9439304 0 0 1 1.9639419,0.02313839 1.9439304,1.9439304 0 0 1 3.9078723,1.9670688"
+       id="circle1027" />
   </g>
 </svg>

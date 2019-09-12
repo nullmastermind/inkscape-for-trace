@@ -105,11 +105,6 @@
     <inkscape:grid
        type="xygrid"
        id="grid" />
-    <style
-       id="style862">.success { fill:#25FF4E; }
-.error { fill:#CC0000; }
-.warning { fill:#FF25CE; }
-</style>
   </sodipodi:namedview>
   <g
      inkscape:label="tool-measure"

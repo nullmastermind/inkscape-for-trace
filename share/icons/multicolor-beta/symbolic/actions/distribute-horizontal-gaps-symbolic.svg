@@ -107,7 +107,7 @@
        style="opacity:1;fill-opacity:1;"
        inkscape:connector-curvature="0" />
     <rect
-       style="opacity:0.5;fill:#000000;fill-opacity:1;"
+       style="opacity:0.5;fill-opacity:1;"
        id="rect912"
        width="3.8606291"
        height="2.4136133"
@@ -119,7 +119,7 @@
        height="2.4136133"
        width="3.8606291"
        id="rect910"
-       style="opacity:0.5;fill:#000000;fill-opacity:1;" />
+       style="opacity:0.5;fill-opacity:1;" />
   </g>
   <rect
      id="rect968"

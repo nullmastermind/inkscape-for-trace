@@ -7,14 +7,14 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   version="1.1"
-   id="svg1"
-   width="16"
-   height="16"
-   viewBox="0 0 16 16"
+   inkscape:version="1.0beta0 (1d85f8e, 2019-09-11)"
    sodipodi:docname="dialog-fill-and-stroke-symbolic.svg"
-   inkscape:version="1.0alpha2 (119fb3b5e8, 2019-06-21, custom)">
-     <style id="s0">
+   viewBox="0 0 16 16"
+   height="16"
+   width="16"
+   id="svg1"
+   version="1.1">
+  <style id="s0">
    .base    { fill: #000000; }
    .success { fill: #009909; }
    .warning { fill: #FF1990; }
@@ -24,7 +24,7 @@
   <style id="s2"> 
      @import '../../highlights.css'; 
   </style>
-<metadata
+  <metadata
      id="metadata1160">
     <rdf:RDF>
       <cc:Work
@@ -36,71 +36,62 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <style id="s0">
-     .base {  }
-     .success {  }
-     .warning {  }
-     .error {  }
-     .dark {  }
-  </style>
-  <style id="s2"> 
-     @import '../../highlights.css'; 
-  </style>
   <defs
      id="defs1158" />
   <sodipodi:namedview
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     id="namedview"
-     showgrid="true"
-     inkscape:zoom="31.678384"
-     inkscape:cx="16.65179"
-     inkscape:cy="11.615726"
-     inkscape:window-width="1920"
-     inkscape:window-height="1016"
-     inkscape:window-x="0"
-     inkscape:window-y="27"
-     inkscape:window-maximized="1"
+     inkscape:document-rotation="0"
      inkscape:current-layer="svg1"
-     inkscape:document-rotation="0">
+     inkscape:window-maximized="1"
+     inkscape:window-y="-8"
+     inkscape:window-x="54"
+     inkscape:window-height="1177"
+     inkscape:window-width="1858"
+     inkscape:cy="10.321468"
+     inkscape:cx="6.2661592"
+     inkscape:zoom="31.678384"
+     showgrid="true"
+     id="namedview"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10">
     <inkscape:grid
-       type="xygrid"
-       id="grid" />
+       id="grid"
+       type="xygrid" />
   </sodipodi:namedview>
   <g
-     id="g0"
-     inkscape:label="dialog-fill-and-stroke">
+     inkscape:label="dialog-fill-and-stroke"
+     id="g0">
     <path
-       id="background"
-       d="M 0,0 H 16 V 16 H 0 Z"
+       inkscape:connector-curvature="0"
        style="opacity:0"
-       inkscape:connector-curvature="0" />
+       d="M 0,0 H 16 V 16 H 0 Z"
+       id="background" />
     <!--Add this to all icons at dirst place and do not change the id or style-->
     <path
-       inkscape:connector-curvature="0"
-       id="path3292"
-       d="M 5.384614,12.785273 C 4.9111683,15.112517 1.9793067,15.483291 0,15.061183 1.8367031,14.599147 2.024933,11.370682 4.2323932,11.638763 Z"
+       inkscape:label="tip"
        class="error"
-       inkscape:label="tip" />
+       d="M 5.384614,12.785273 C 4.9111683,15.112517 1.9793067,15.483291 0,15.061183 1.8367031,14.599147 2.024933,11.370682 4.2323932,11.638763 Z"
+       id="path3292"
+       inkscape:connector-curvature="0" />
     <path
-       sodipodi:nodetypes="ccccc"
-       inkscape:connector-curvature="0"
-       d="M 6.1468328,8.881729 5.2115696,10.820094 6.2961354,11.90466 8.2345047,10.96941 Z"
-       id="polygon3296"
+       class="base"
        inkscape:label="mid"
+       id="polygon3296"
+       d="M 6.1468328,8.881729 5.2115696,10.820094 6.2961354,11.90466 8.2345047,10.96941 Z"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       inkscape:label="top"
+       d="M 15.160564,2.5180128 9.1264707,10 7.0273889,7.9009357 14.379113,1.7422779 c 0.216766,-0.1882299 0.541879,-0.171126 0.747217,0.028579 v 0 c 0.199631,0.2053512 0.216765,0.5304688 0.03426,0.7472212 z"
+       id="path3290"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccc"
        class="base" />
     <path
-       class="base"
-       sodipodi:nodetypes="cccccccc"
+       sodipodi:nodetypes="ccccccccc"
        inkscape:connector-curvature="0"
-       id="path3290"
-       d="M 15.160564,2.5180128 9.1264707,10 7.0273889,7.9009357 14.379113,1.7422779 c 0.216766,-0.1882299 0.541879,-0.171126 0.747217,0.028579 v 0 c 0.199631,0.2053512 0.216765,0.5304688 0.03426,0.7472212 z"
-       inkscape:label="top" />
-    <path
-       class="base"
+       d="M 0,0 V 0.9570773 L 0,12 h 0.95707778 l 0,-11.0429227 H 12 V 0 H 0.95707778 Z"
        id="rect44369"
-       d="M 0,0 V 0.9570773 12.442005 H 0.95707778 V 0.9570773 H 11.484929 V 0 H 0.95707778 Z"
-       inkscape:connector-curvature="0" />
+       class="base" />
   </g>
 </svg>

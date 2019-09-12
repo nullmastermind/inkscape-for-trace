@@ -107,10 +107,10 @@
        height="1.6090474"
        width="2.5737541"
        id="rect912"
-       style="opacity:0.5;fill:#000000;fill-opacity:1;" />
+       style="opacity:0.5;fill-opacity:1;" />
     <rect
        transform="rotate(-90)"
-       style="opacity:0.5;fill:#000000;fill-opacity:1;"
+       style="opacity:0.5;fill-opacity:1;"
        id="rect910"
        width="2.5737541"
        height="1.6090474"

@@ -15,16 +15,6 @@
    sodipodi:docname="color-gradient-symbolic.svg"
    inkscape:version="1.0alpha2 (119fb3b5e8, 2019-06-21, custom)">
   <style id="s0">
-     .base {  }
-     .success {  }
-     .warning {  }
-     .error {  }
-     .dark {  }
-  </style>
-  <style id="s2"> 
-     @import '../../highlights.css'; 
-  </style>
-     <style id="s0">
    .base    { fill: #000000; }
    .success { fill: #009909; }
    .warning { fill: #FF1990; }

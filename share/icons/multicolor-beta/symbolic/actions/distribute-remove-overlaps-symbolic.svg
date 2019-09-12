@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) and export_objects.py -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -9,14 +7,14 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   version="1.1"
-   id="svg1"
-   width="16"
-   height="16"
-   viewBox="0 0 16 16"
+   inkscape:version="1.0beta0 (1d85f8e, 2019-09-11)"
    sodipodi:docname="distribute-remove-overlaps-symbolic.svg"
-   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
-     <style id="s0">
+   viewBox="0 0 16 16"
+   height="16"
+   width="16"
+   id="svg1"
+   version="1.1">
+  <style id="s0">
    .base    { fill: #000000; }
    .success { fill: #009909; }
    .warning { fill: #FF1990; }
@@ -26,7 +24,7 @@
   <style id="s2"> 
      @import '../../highlights.css'; 
   </style>
-<metadata
+  <metadata
      id="metadata13">
     <rdf:RDF>
       <cc:Work
@@ -41,57 +39,60 @@
   <defs
      id="defs11" />
   <sodipodi:namedview
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     id="namedview"
-     showgrid="true"
-     inkscape:zoom="26.768245"
-     inkscape:cx="9.3496567"
-     inkscape:cy="4.1491873"
-     inkscape:window-width="1858"
-     inkscape:window-height="1177"
-     inkscape:window-x="54"
-     inkscape:window-y="-8"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="distribute-remove-overlaps"
      inkscape:window-maximized="1"
-     inkscape:current-layer="distribute-remove-overlaps">
+     inkscape:window-y="-8"
+     inkscape:window-x="54"
+     inkscape:window-height="1177"
+     inkscape:window-width="1858"
+     inkscape:cy="7.6847332"
+     inkscape:cx="7.1263746"
+     inkscape:zoom="53.53649"
+     showgrid="true"
+     id="namedview"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10">
     <inkscape:grid
-       type="xygrid"
-       id="grid"
+       originy="0"
+       originx="0"
+       empopacity="0.54509804"
+       empcolor="#32ef79"
+       opacity="0.15686275"
+       color="#25e27c"
        dotted="false"
-       color="#000000"
-       opacity="0.07843137"
-       empcolor="#000000"
-       empopacity="0.52941176" />
+       id="grid"
+       type="xygrid" />
   </sodipodi:namedview>
   <g
-     transform="matrix(0.727273,0,0,0.666667,-840.72727,-548.90812)"
+     id="distribute-remove-overlaps"
      inkscape:label="00292"
-     id="distribute-remove-overlaps">
+     transform="matrix(0.727273,0,0,0.666667,-840.72727,-548.90812)">
     <path
-       inkscape:connector-curvature="0"
-       id="rect19455"
+       style="opacity:0;fill:none"
        d="m 1156,823.36218 h 22 v 24 h -22 z"
-       style="opacity:0;fill:none" />
+       id="rect19455"
+       inkscape:connector-curvature="0" />
     <path
-       inkscape:connector-curvature="0"
+       style="opacity:1;stroke-width:0.922088"
+       d="m 1158.7496,824.86177 h 4.125 v 4.5 h -4.125 z"
        id="rect19457"
-       d="m 1157.3746,824.86177 h 4.6725 v 4.67248 h -4.6725 z"
-       style="opacity:1;"/>
+       inkscape:connector-curvature="0" />
     <path
-       inkscape:connector-curvature="0"
+       style="opacity:1;stroke-width:0.93959"
+       d="m 1158.7496,832.36176 h 4.125 v 13.5 h -4.125 z"
        id="rect19459"
-       d="m 1157.3746,832.36176 h 4.6725 v 13.5 h -4.6725 z"
-       style="opacity:1;"/>
+       inkscape:connector-curvature="0" />
     <path
-       inkscape:connector-curvature="0"
+       style="opacity:1;stroke-width:0.939592"
+       d="m 1165.6246,824.86177 h 4.125 v 20.99999 h -4.125 z"
        id="rect19461"
-       d="m 1165.0771,824.86177 h 4.6725 v 20.99999 h -4.6725 z"
-       style="opacity:1;"/>
+       inkscape:connector-curvature="0" />
     <path
-       inkscape:connector-curvature="0"
+       style="opacity:1;stroke-width:0.939598"
+       d="m 1172.4996,824.86177 h 4.125 v 20.99999 h -4.125 z"
        id="rect19463"
-       d="m 1171.9521,824.86177 h 4.6725 v 20.99999 h -4.6725 z"
-       style="opacity:1;"/>
+       inkscape:connector-curvature="0" />
   </g>
 </svg>

@@ -7,15 +7,14 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   version="1.1"
-   id="svg1"
-   width="16"
-   height="16"
-   viewBox="0 0 16 16"
+   inkscape:version="1.0beta0 (1d85f8e, 2019-09-11)"
    sodipodi:docname="draw-text-symbolic.svg"
-   inkscape:version="1.0alpha2 (119fb3b5e8, 2019-06-21, custom)">
-
-     <style id="s0">
+   viewBox="0 0 16 16"
+   height="16"
+   width="16"
+   id="svg1"
+   version="1.1">
+  <style id="s0">
    .base    { fill: #000000; }
    .success { fill: #009909; }
    .warning { fill: #FF1990; }
@@ -25,7 +24,7 @@
   <style id="s2"> 
      @import '../../highlights.css'; 
   </style>
-<metadata
+  <metadata
      id="metadata1053">
     <rdf:RDF>
       <cc:Work
@@ -37,43 +36,64 @@
     </rdf:RDF>
   </metadata>
   <defs
-     id="defs1051" />
+     id="defs1051">
+    <inkscape:path-effect
+       hide_knots="false"
+       only_selected="true"
+       apply_with_radius="true"
+       apply_no_radius="true"
+       use_knot_distance="false"
+       flexible="false"
+       chamfer_steps="1"
+       radius="0"
+       mode="C"
+       method="auto"
+       unit="px"
+       satellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 | C,0,1,1,0,0.9719378,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1"
+       is_visible="true"
+       id="path-effect2891"
+       effect="fillet_chamfer" />
+  </defs>
   <sodipodi:namedview
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     id="namedview"
-     showgrid="true"
-     inkscape:zoom="31.678384"
-     inkscape:cx="12.62107"
-     inkscape:cy="11.836159"
-     inkscape:window-width="1920"
-     inkscape:window-height="1016"
-     inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="g0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg1"
-     inkscape:document-rotation="0">
+     inkscape:window-y="-8"
+     inkscape:window-x="54"
+     inkscape:window-height="1177"
+     inkscape:window-width="1858"
+     inkscape:cy="13.30449"
+     inkscape:cx="2.8185758"
+     inkscape:zoom="31.678384"
+     showgrid="true"
+     id="namedview"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10">
     <inkscape:grid
-       type="xygrid"
-       id="grid" />
+       id="grid"
+       type="xygrid" />
   </sodipodi:namedview>
   <g
-     inkscape:label="draw-text"
-     id="g0">
+     id="g0"
+     inkscape:label="draw-text">
     <path
-       id="background"
-       d="M 0,0 H 16 V 16 H 0 Z"
+       inkscape:connector-curvature="0"
        style="opacity:0"
-       inkscape:connector-curvature="0" />
+       d="M 0,0 H 16 V 16 H 0 Z"
+       id="background" />
     <path
-       class="base"
-       d="M 8.8419145,11.835478 H 3.9760811 L 3.2624218,13.71428 H 0 L 4.8797359,2.2857133 H 7.989237 L 12.855065,13.71428 H 9.5602006 Z M 6.4182624,5.4884385 5.0187597,9.1292269 H 7.799236 Z"
+       sodipodi:nodetypes="ccccccccccccc"
+       style="stroke-width:0.962502"
+       inkscape:connector-curvature="0"
        id="path1713"
-       inkscape:connector-curvature="0" />
+       d="M 8.3086493,12.191652 H 3.6868973 L 3,14 H 0 L 4.6967477,3 H 7.3166388 L 12,14 H 9 Z M 6.0374978,6.0826243 4.6904759,10 h 2.614595 z"
+       class="base" />
     <path
-       id="rect1717"
-       d="M 14.391706,0 H 16 v 16 h -1.608294 z"
-       class="success" />
+       style="stroke-width:1.12034"
+       inkscape:connector-curvature="0"
+       class="success"
+       d="M 13.981332,0 H 16 v 16 h -2.018668 z"
+       id="rect1717" />
   </g>
 </svg>
