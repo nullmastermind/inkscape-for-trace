@@ -62,10 +62,15 @@ InkviewApplication::InkviewApplication()
 
     Glib::set_application_name(N_("Inkview - An SVG File Viewer"));  // After gettext() init.
 
+    // Additional informational strings for --help output
+    // TODO: Claims to be translated automatically, but seems broken, so pass already translated strings
+    set_option_context_parameter_string(_("path1 [path2 pathN]]"));
+    set_option_context_summary(_("Open one or more SVG files (or folders containing SVG files) for viewing."));
+
     // Will automatically handle character conversions.
     // Note: OPTION_TYPE_FILENAME => std::string, OPTION_TYPE_STRING => Glib::ustring.
 
-    add_main_option_entry(OPTION_TYPE_BOOL,   "version",    'V', N_("Print: Inkview version."),                     "");
+    add_main_option_entry(OPTION_TYPE_BOOL,   "version",    'V', N_("Print Inkview version"),                       "");
     add_main_option_entry(OPTION_TYPE_BOOL,   "fullscreen", 'f', N_("Launch in fullscreen mode"),                   "");
     add_main_option_entry(OPTION_TYPE_BOOL,   "recursive",  'r', N_("Search folders recursively"),                  "");
     add_main_option_entry(OPTION_TYPE_INT,    "timer",      't', N_("Change image every NUMBER seconds"), N_("NUMBER"));
