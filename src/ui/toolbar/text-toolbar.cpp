@@ -249,7 +249,6 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
                                                                (gpointer)font_lister_separator_func2,
                                                                GTK_WIDGET(desktop->canvas))); // Focus widget
         _font_family_item->popup_enable(); // Enable entry completion
-
         gchar *const info = _("Select all text with this font-family");
         _font_family_item->set_info( info ); // Show selection icon
         _font_family_item->set_info_cb( (gpointer)sp_text_toolbox_select_cb );
@@ -272,6 +271,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
                                         -1, nullptr);
 
         auto screen = gdk_screen_get_default();
+        _font_family_item->focus_on_click(false);
         gtk_style_context_add_provider_for_screen(screen,
                                                   GTK_STYLE_PROVIDER(css_provider),
                                                   GTK_STYLE_PROVIDER_PRIORITY_USER);
@@ -294,6 +294,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
                                                                               GTK_WIDGET(desktop->canvas))); // Focus widget
 
         _font_style_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::fontstyle_value_changed));
+        _font_style_item->focus_on_click(false);
         add(*_font_style_item);
     }
 
@@ -322,6 +323,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
                                                                              GTK_WIDGET(desktop->canvas))); // Focus widget
 
         _font_size_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::fontsize_value_changed));
+        _font_size_item->focus_on_click(false);
         add(*_font_size_item);
     }
     /* Font_ size units */
@@ -329,6 +331,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _font_size_units_item = _tracker_fs->create_tool_item(_("Units"), (""));
         _font_size_units_item->signal_changed_after().connect(
             sigc::mem_fun(*this, &TextToolbar::fontsize_unit_changed));
+        _font_size_units_item->focus_on_click(false);
         add(*_font_size_units_item);
     }
     {
@@ -353,6 +356,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
     {
         _line_height_units_item = _tracker->create_tool_item( _("Units"), (""));
         _line_height_units_item->signal_changed_after().connect(sigc::mem_fun(*this, &TextToolbar::lineheight_unit_changed));
+        _line_height_units_item->focus_on_click(false);
         add(*_line_height_units_item);
     }
 
@@ -400,7 +404,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _align_item->set_active( mode );
 
         add(*_align_item);
-
+        _align_item->focus_on_click(false);
         _align_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::align_mode_changed));
     }
 
@@ -548,7 +552,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         gint mode = prefs->getInt("/tools/text/writing_mode", 0);
         _writing_mode_item->set_active( mode );
         add(*_writing_mode_item);
-
+        _writing_mode_item->focus_on_click(false);
         _writing_mode_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::writing_mode_changed));
     }
 
@@ -588,6 +592,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _orientation_item->use_label(false);
         gint mode = prefs->getInt("/tools/text/text_orientation", 0);
         _orientation_item->set_active( mode );
+        _orientation_item->focus_on_click(false);
         add(*_orientation_item);
 
         _orientation_item->signal_changed().connect(sigc::mem_fun(*this, &TextToolbar::orientation_changed));
@@ -622,6 +627,7 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
         _direction_item->use_label(false);
         gint mode = prefs->getInt("/tools/text/text_direction", 0);
         _direction_item->set_active( mode );
+        _direction_item->focus_on_click(false);
         add(*_direction_item);
 
         _direction_item->signal_changed_after().connect(sigc::mem_fun(*this, &TextToolbar::direction_changed));

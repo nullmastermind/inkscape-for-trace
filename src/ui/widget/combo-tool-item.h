@@ -62,6 +62,7 @@ public:
     /* Style of combobox */
     void use_label(  bool use_label  );
     void use_icon(   bool use_icon   );
+    void focus_on_click( bool focus_on_click );
     void use_pixbuf( bool use_pixbuf );
     void use_group_label( bool use_group_label ) { _use_group_label = use_group_label; }
   

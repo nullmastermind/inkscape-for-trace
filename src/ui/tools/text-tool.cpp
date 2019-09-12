@@ -160,7 +160,6 @@ void TextTool::setup() {
         gtk_im_context_set_client_window(this->imc, 
             gtk_widget_get_window (canvas));
 
-        g_signal_connect(G_OBJECT(canvas), "motion_notify_event", G_CALLBACK(sptc_focus_in), this);
         g_signal_connect(G_OBJECT(canvas), "focus_in_event", G_CALLBACK(sptc_focus_in), this);
         g_signal_connect(G_OBJECT(canvas), "focus_out_event", G_CALLBACK(sptc_focus_out), this);
         g_signal_connect(G_OBJECT(this->imc), "commit", G_CALLBACK(sptc_commit), this);
@@ -1795,9 +1794,6 @@ static void sp_text_context_forget_text(TextTool *tc)
 
 gint sptc_focus_in(GtkWidget *widget, GdkEventFocus */*event*/, TextTool *tc)
 {
-    if (!gtk_widget_is_focus (widget)) {
-        gtk_widget_grab_focus(widget);
-    }
     gtk_im_context_focus_in(tc->imc);
     return FALSE;
 }

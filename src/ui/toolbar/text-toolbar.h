@@ -126,6 +126,7 @@ private:
     void dx_value_changed();
     void dy_value_changed();
     void prepare_inner();
+    void focus_text();
     void unindent_node(Inkscape::XML::Node *repr, Inkscape::XML::Node *before);
     void rotation_value_changed();
     void fontsize_unit_changed(int not_used);

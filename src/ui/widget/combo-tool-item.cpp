@@ -58,7 +58,6 @@ ComboToolItem::ComboToolItem(Glib::ustring group_label,
 {
     Gtk::Box* box = Gtk::manage(new Gtk::Box());
     add(*box);
-
     if (_use_group_label) {
         Gtk::Label *group_label = Gtk::manage (new Gtk::Label( _group_label + ": " ));
         box->add( *group_label );
@@ -72,11 +71,17 @@ ComboToolItem::ComboToolItem(Glib::ustring group_label,
 
     _combobox->signal_changed().connect(
             sigc::mem_fun(*this, &ComboToolItem::on_changed_combobox));
-
     box->add (*_combobox);
 
     show_all();
 }
+
+void
+ComboToolItem::focus_on_click( bool focus_on_click )
+{ 
+    _combobox->set_focus_on_click(focus_on_click); 
+}
+    
 
 void
 ComboToolItem::use_label(bool use_label)

@@ -335,6 +335,14 @@ ComboBoxEntryToolItem::set_extra_width( gint extra_width )
 }
 
 void
+ComboBoxEntryToolItem::focus_on_click( bool focus_on_click )
+{ 
+    if (_combobox) {
+      gtk_widget_set_focus_on_click(GTK_WIDGET(_combobox), focus_on_click);
+    }
+}
+
+void
 ComboBoxEntryToolItem::popup_enable()
 {
     _popup = true;

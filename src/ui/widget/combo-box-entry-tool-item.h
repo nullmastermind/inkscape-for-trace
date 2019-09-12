@@ -102,6 +102,7 @@ public:
 
     void     popup_enable();
     void     popup_disable();
+    void     focus_on_click( bool focus_on_click );
 
     void     set_info(      const gchar* info );
     void     set_info_cb(   gpointer info_cb );
