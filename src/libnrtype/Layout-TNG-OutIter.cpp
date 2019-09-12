@@ -543,7 +543,7 @@ void Layout::queryCursorShape(iterator const &it, Geom::Point &position, double 
 
 void Layout::getSourceOfCharacter(iterator const &it, void **source_cookie, Glib::ustring::iterator *text_iterator) const
 {
-    if (it._char_index == _characters.size()) {
+    if (it._char_index >= _characters.size()) {
         *source_cookie = nullptr;
         return;
     }
