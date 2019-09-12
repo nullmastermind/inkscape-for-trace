@@ -254,7 +254,8 @@ FontSelector::get_fontspec(bool use_variations) {
 
     if (use_variations) {
         // Clip any font_variation data in 'style' as we'll replace it.
-        if (auto pos = style.find('@') != Glib::ustring::npos) {
+        auto pos = style.find('@');
+        if (pos != Glib::ustring::npos) {
             style.erase (pos, style.length()-1);
         }
 
