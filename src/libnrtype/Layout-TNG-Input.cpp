@@ -115,6 +115,18 @@ void Layout::appendControlCode(TextControlCode code, void *source_cookie, double
     _input_stream.push_back(new_code);
 }
 
+void Layout::hideWrapShapes()
+{
+    _input_wrap_shapes_hided = _input_wrap_shapes;
+    _input_wrap_shapes.clear();
+}
+
+void Layout::showWrapShapes()
+{
+    _input_wrap_shapes = _input_wrap_shapes_hided;
+    _input_wrap_shapes_hided.clear();
+}
+
 // more saving of the parameters
 void Layout::appendWrapShape(Shape const *shape, DisplayAlign display_align)
 {

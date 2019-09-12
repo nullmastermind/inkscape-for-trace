@@ -159,6 +159,7 @@ public:
     /** Used to specify orientation of glyphs in vertical text. */
     enum Orientation {ORIENTATION_UPRIGHT, ORIENTATION_SIDEWAYS};
 
+
     /** Display alignment for shapes. See appendWrapShape(). */
     enum DisplayAlign {DISPLAY_ALIGN_BEFORE, DISPLAY_ALIGN_CENTER, DISPLAY_ALIGN_AFTER};
 
@@ -302,7 +303,11 @@ public:
     */
     void appendWrapShape(Shape const *shape, DisplayAlign display_align = DISPLAY_ALIGN_BEFORE);
 
-    //@}
+    // Hide wrap shapes
+    void hideWrapShapes();
+    
+    // Show wrap shapes
+    void showWrapShapes();
 
     // ************************** textLength and friends *************************
 
@@ -798,6 +803,7 @@ private:
         DisplayAlign display_align;   /// as passed to Layout::appendWrapShape()
     };
     std::vector<InputWrapShape> _input_wrap_shapes;
+    std::vector<InputWrapShape> _input_wrap_shapes_hided;
 
     // ******************* output
 

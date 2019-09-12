@@ -127,7 +127,6 @@ private:
     void dy_value_changed();
     void prepare_inner();
     void focus_text();
-    void unindent_node(Inkscape::XML::Node *repr, Inkscape::XML::Node *before);
     void rotation_value_changed();
     void fontsize_unit_changed(int not_used);
     void selection_changed(Inkscape::Selection *selection);
@@ -136,6 +135,7 @@ private:
     void subselection_changed(gpointer texttool);
     void watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
     void set_sizes(int unit);
+    Inkscape::XML::Node * unindent_node(Inkscape::XML::Node *repr, Inkscape::XML::Node *before);
 
   protected:
     TextToolbar(SPDesktop *desktop);

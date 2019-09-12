@@ -260,7 +260,36 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
         Inkscape::UI::Tools::sp_update_helperpath();
         break;
     case GDK_MOTION_NOTIFY:
-        if (grabbed && knot->desktop && knot->desktop->event_context && !knot->desktop->event_context->space_panning) {
+        if (!(event->motion.state & GDK_BUTTON1_MASK) && knot->flags & SP_KNOT_DRAGGING) {
+            // If we have any pending snap event, then invoke it now
+            if (knot->desktop->event_context->_delayed_snap_event) {
+                sp_event_context_snap_watchdog_callback(knot->desktop->event_context->_delayed_snap_event);
+            }
+            sp_event_context_discard_delayed_snap_event(knot->desktop->event_context);
+            knot->pressure = 0;
+
+            if (transform_escaped) {
+                transform_escaped = false;
+                consumed = TRUE;
+            } else {
+                knot->setFlag(SP_KNOT_GRABBED, FALSE);
+
+                if (!nograb) {
+                    sp_canvas_item_ungrab(knot->item);
+                }
+
+                if (moved) {
+                    knot->setFlag(SP_KNOT_DRAGGING, FALSE);
+                    knot->ungrabbed_signal.emit(knot, event->motion.state);
+                } else {
+                    knot->click_signal.emit(knot, event->motion.state);
+                }
+
+                grabbed = FALSE;
+                moved = FALSE;
+                consumed = TRUE;
+            }
+        } else if (grabbed && knot->desktop && knot->desktop->event_context && !knot->desktop->event_context->space_panning) {
             consumed = TRUE;
 
             if ( within_tolerance
