@@ -135,7 +135,7 @@ private:
     void subselection_changed(gpointer texttool);
     void watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec);
     void set_sizes(int unit);
-    Inkscape::XML::Node * unindent_node(Inkscape::XML::Node *repr, Inkscape::XML::Node *before);
+    Inkscape::XML::Node *unindent_node(Inkscape::XML::Node *repr, Inkscape::XML::Node *before);
 
   protected:
     TextToolbar(SPDesktop *desktop);

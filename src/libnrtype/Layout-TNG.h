@@ -305,7 +305,7 @@ public:
 
     // Hide wrap shapes
     void hideWrapShapes();
-    
+
     // Show wrap shapes
     void showWrapShapes();
 

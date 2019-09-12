@@ -2033,7 +2033,7 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
             height = _query_cursor.line_height.value;
             line_height_unit = _query_cursor.line_height.unit;
         }
-        
+
         if (!height && result_numbers != QUERY_STYLE_NOTHING) {
             height = query.line_height.value;
             line_height_unit = query.line_height.unit;
@@ -2334,7 +2334,7 @@ void TextToolbar::prepare_inner()
             if (flowtext) {
                 flowtext->rebuildLayout();
             }
-            
+
             SPObject *current = start->parent;
             SPObject *span_start = start->parent;
             SPObject *span_end = end->parent;
@@ -2352,11 +2352,9 @@ void TextToolbar::prepare_inner()
 
             SPObject *endobj = span_end;
             SPObject *prevendobj = span_end;
-            while (endobj->parent != SP_OBJECT(text) && 
-                   endobj->parent != SP_OBJECT(flowtext))
-            {
+            while (endobj->parent != SP_OBJECT(text) && endobj->parent != SP_OBJECT(flowtext)) {
                 prevendobj = endobj;
-                endobj = endobj->parent;   // SPStrings don't have style
+                endobj = endobj->parent; // SPStrings don't have style
             }
             SPObject *container = startobj->parent;
             SPObject *end_container = endobj->parent;
@@ -2364,7 +2362,7 @@ void TextToolbar::prepare_inner()
             SPFlowtext *topflowtext = dynamic_cast<SPFlowtext *>(container);
             if (toptext || topflowtext) {
                 container = startobj;
-                end_container = endobj; 
+                end_container = endobj;
                 startobj = prevstartobj;
             }
             std::cout << prevstartobj->getId() << std::endl;
@@ -2376,7 +2374,7 @@ void TextToolbar::prepare_inner()
             if (container) {
                 containers.push_back(container);
             }
-            for(auto container : containers) {
+            for (auto container : containers) {
                 if (!container) {
                     continue;
                 }

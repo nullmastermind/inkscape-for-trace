@@ -289,7 +289,8 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
                 moved = FALSE;
                 consumed = TRUE;
             }
-        } else if (grabbed && knot->desktop && knot->desktop->event_context && !knot->desktop->event_context->space_panning) {
+        } else if (grabbed && knot->desktop && knot->desktop->event_context &&
+                   !knot->desktop->event_context->space_panning) {
             consumed = TRUE;
 
             if ( within_tolerance
