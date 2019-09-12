@@ -11,13 +11,6 @@
 
 [ -z $VARS_INCLUDED ] && VARS_INCLUDED=true || return   # include guard
 
-### source .profile ############################################################
-
-# This is necessary on the first run and after changing directory settings.
-# So, we're better safe than sorry and source it.
-
-[ -f $HOME/.profile ] && source $HOME/.profile
-
 ### name and directory #########################################################
 
 SELF_NAME=$(basename $0)
@@ -165,4 +158,11 @@ PYTHON_PYCAIRO=pycairo==1.18.1
 PYTHON_PYGOBJECT=PyGObject==3.32.2
 PYTHON_SCOUR=scour==0.37
 PYTHON_PYSERIAL=pyserial==3.4
+
+### profile ####################################################################
+
+# Settings that would otherwise go into '.profile'.
+
+export PATH=$DEVPREFIX/bin:$BIN_DIR:/usr/bin:/bin:/usr/sbin:/sbin
+export LANG=de_DE.UTF-8   # jhbuild complains otherwise   FIXME hard-coded value
 

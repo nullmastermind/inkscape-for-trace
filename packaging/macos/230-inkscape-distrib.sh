@@ -39,9 +39,9 @@ convert -size 560x400 xc:transparent \
 
 cat <<EOF >$SRC_DIR/run_dmgbuild.sh
 #!/usr/bin/env bash
-SELF_DIR=$SELF_DIR
-for script in $SELF_DIR/0??-*.sh; do source \$script; done
-create_dmg $ARTIFACT_DIR/Inkscape.app $TMP_DIR/Inkscape.dmg $SRC_DIR/inkscape_dmg.py
+SCRIPT_DIR=$SELF_DIR
+for script in \$SCRIPT_DIR/0??-*.sh; do source \$script; done
+create_dmg \$ARTIFACT_DIR/Inkscape.app \$TMP_DIR/Inkscape.dmg \$SRC_DIR/inkscape_dmg.py
 EOF
 
 chmod 755 $SRC_DIR/run_dmgbuild.sh

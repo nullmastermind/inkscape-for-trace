@@ -22,7 +22,7 @@ if $RAMDISK_ENABLE; then
   create_ramdisk $WRK_DIR $RAMDISK_SIZE
 fi
 
-### housekeeping: redirect to locations below WRK_DIR ##########################
+### redirect to locations below WRK_DIR ########################################
 
 mkdir -p $TMP_DIR
 
@@ -31,12 +31,4 @@ ln -sf $TMP_DIR $HOME/.cache
 
 rm -rf $HOME/.local   # used by gtk-mac-bundler
 ln -sf $OPT_DIR $HOME/.local
-
-### setup path #################################################################
-
-# WARNING: Operations like this are the reason why you're supposed to use
-# a dedicated user for building.
-
-echo "export PATH=$DEVPREFIX/bin:$BIN_DIR:/usr/bin:/bin:/usr/sbin:/sbin" > $HOME/.profile
-echo "export LANG=de_DE.UTF-8" >> $HOME/.profile   # jhbuild complains otherwise
 
