@@ -37,6 +37,8 @@ convert -size 560x400 xc:transparent \
 # a separate script and be executed via Terminal.app.
 # See: https://github.com/al45tair/dmgbuild/pull/11
 
+cp $SELF_DIR/inkscape_dmg.py $SRC_DIR
+
 cat <<EOF >$SRC_DIR/run_dmgbuild.sh
 #!/usr/bin/env bash
 SCRIPT_DIR=$SELF_DIR

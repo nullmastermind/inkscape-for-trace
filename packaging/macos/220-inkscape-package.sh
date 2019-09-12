@@ -37,6 +37,7 @@ mkdir -p $ARTIFACT_DIR
 SCRIPT_DIR=$SELF_DIR
 for script in \$SCRIPT_DIR/0??-*.sh; do source \$script; done
 export ARTIFACT_DIR
+BUILD_DIR=$BUILD_DIR
 cd \$BUILD_DIR
 jhbuild run gtk-mac-bundler inkscape.bundle
 EOF

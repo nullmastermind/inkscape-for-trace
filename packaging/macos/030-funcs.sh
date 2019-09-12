@@ -274,7 +274,7 @@ function create_dmg
   local cfg=$3
 
   # set application
-  sed "s/PLACEHOLDERAPPLICATION/$(escape_sed $app)/" $SELF_DIR/$(basename $cfg) > $cfg
+  sed -i '' "s/PLACEHOLDERAPPLICATION/$(escape_sed $app)/" $cfg
   
   # set disk image icon (if it exists)
   local icon=$SRC_DIR/$(basename -s .py $cfg).icns
