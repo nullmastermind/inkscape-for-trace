@@ -96,12 +96,10 @@ private:
     Glib::RefPtr<Gtk::Adjustment> _dy_adj;
     Glib::RefPtr<Gtk::Adjustment> _rotation_adj;
     bool _outer;
-    bool _clearsubactive;
     SPItem *_sub_active_item;
     int _lineheight_unit;
     Inkscape::Text::Layout::iterator wrap_start;
     Inkscape::Text::Layout::iterator wrap_end;
-    bool _fullsubselection;
     bool _updating;
     int _cusor_numbers;
     SPStyle _query_cursor;

@@ -303,12 +303,6 @@ public:
     */
     void appendWrapShape(Shape const *shape, DisplayAlign display_align = DISPLAY_ALIGN_BEFORE);
 
-    // Hide wrap shapes
-    void hideWrapShapes();
-
-    // Show wrap shapes
-    void showWrapShapes();
-
     // ************************** textLength and friends *************************
 
     /** Gives the length target of this layout, as given by textLength attribute.
@@ -803,7 +797,6 @@ private:
         DisplayAlign display_align;   /// as passed to Layout::appendWrapShape()
     };
     std::vector<InputWrapShape> _input_wrap_shapes;
-    std::vector<InputWrapShape> _input_wrap_shapes_hided;
 
     // ******************* output
 

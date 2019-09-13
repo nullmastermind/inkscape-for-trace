@@ -213,7 +213,6 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
     : Toolbar(desktop)
     , _freeze(false)
     , _outer(true)
-    , _fullsubselection(false)
     , _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
     , _tracker_fs(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
     , _cusor_numbers(0)
@@ -779,12 +778,6 @@ TextToolbar::fontsize_value_changed()
                     sp_css_attr_scale(css_set, 1/ex);
                 }
                 recursively_set_properties(item, css_set);
-                SPStyle *item_style = item->style;
-                if (item_style->inline_size.value == 0) {
-                    css_set = sp_css_attr_from_style(item_style, SP_STYLE_FLAG_IFSET);
-                    sp_repr_css_unset_property(css_set, "inline-size");
-                    item->changeCSS(css_set, "style");
-                }
                 sp_repr_css_attr_unref(css_set);
             }
         }
@@ -2245,200 +2238,184 @@ void TextToolbar::subselection_wrap_toggle(bool start)
     }
 }
 
+/*
+* This function parse the just created line height in one or more lines of a text subselection
+* can recibe 2 kinds of input because when we store a text element we apply a fallback that change 
+* structure. This visualy is not reflected but user maybe want to change a part of this subselection
+* once the falback is created, so we need more complex here to fill the gap.
+* Basicaly we have a line height changed in the new wraper element/s between wrap_start and wrap_end
+* this variables store starting iterator of first char in line and last char in line in a subselection
+* this elements are styled well but we can have orphands text nodes before and after the subselection.
+* this normaly 3 elements are inside a container as direct child of a text element, so we need to apply
+* the container style to the optional previous and last text nodes warping into a new element that get the
+* container style (this are not part to the subsselection). After wrap we unindent all child of the container and
+* remove the container
+* 
+*/  
 void TextToolbar::prepare_inner()
 {
     Inkscape::UI::Tools::TextTool *const tc = SP_TEXT_CONTEXT((SP_ACTIVE_DESKTOP)->event_context);
     if (tc) {
         Inkscape::Text::Layout *layout = const_cast<Inkscape::Text::Layout *>(te_get_layout(tc->text));
         if (layout) {
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-            SPDocument *doc = SP_ACTIVE_DOCUMENT;
+            Inkscape::Preferences   *prefs    = Inkscape::Preferences::get();
+            SPDesktop               *desktop  = SP_ACTIVE_DESKTOP;
+            SPDocument              *doc      = SP_ACTIVE_DOCUMENT;
+            SPObject                *spobject = dynamic_cast<SPObject   *>(tc->text);
+            SPItem                  *spitem   = dynamic_cast<SPItem     *>(tc->text);
+            SPText                  *text     = dynamic_cast<SPText     *>(tc->text);
+            SPFlowtext              *flowtext = dynamic_cast<SPFlowtext *>(tc->text);
             Inkscape::XML::Document *xml_doc = doc->getReprDoc();
-            SPItem *spitem = dynamic_cast<SPItem *>(tc->text);
-            if (!spitem) {
+            if (!spobject) {
                 return;
             }
-            // Maybe we can enable this for update outside SVG
-            // Need to check is a SVG2 flowtewxt to apply
-            if (spitem) {
-                std::vector<SPObject*> childs = spitem->childList(false);
+            // We check for external files with text nodes direct children of text elemet
+            // and wrap it into a tspan elements as inkscape do.
+            if (text) {
+                std::vector<SPObject *> childs = spitem->childList(false);
                 for (auto child : childs) {
-                    SPObject *object = dynamic_cast<SPObject *>(child);
                     SPString *spstring = dynamic_cast<SPString *>(child);
-                    if (SP_IS_STRING(spstring) ) {
-                        SPText *text = dynamic_cast<SPText *>(spitem);
-                        SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(spitem);
+                    if (spstring) {
                         Glib::ustring content = spstring->string;
-                        if (text &&  content != "\n") {
+                        if (content != "\n") {
                             Inkscape::XML::Node *rstring = xml_doc->createTextNode(content.c_str());
-                            Inkscape::XML::Node *rtspan = xml_doc->createElement("svg:tspan");
-                            Inkscape::XML::Node *rnl = xml_doc->createTextNode("\n");
+                            Inkscape::XML::Node *rtspan  = xml_doc->createElement("svg:tspan");
+                            Inkscape::XML::Node *rnl     = xml_doc->createTextNode("\n");
+                            rtspan->setAttribute("sodipodi:role", "line");
                             rtspan->addChild(rstring, nullptr);
                             text->getRepr()->addChild(rtspan, child->getRepr());
-                            if (prefs->getBool("/tools/text/use_svg2")) {
-                                Inkscape::XML::Node *rnl = xml_doc->createTextNode("\n");
-                                text->getRepr()->addChild(rnl, rtspan);
-                                Inkscape::GC::release(rnl);
-                            } else {
-                                rtspan->setAttribute("sodipodi:role", "line");
-                            }
                             Inkscape::GC::release(rstring);
                             Inkscape::GC::release(rtspan);
                             text->getRepr()->removeChild(spstring->getRepr());
-                        } else if (flowtext) {
-                            Inkscape::XML::Node *rstring = xml_doc->createTextNode(spstring->string.c_str());
-                            Inkscape::XML::Node *rflowspan = xml_doc->createElement("svg:flowspan");
-                            rflowspan->addChild(rstring, nullptr);
-                            flowtext->getRepr()->addChild(rflowspan, child->getRepr());
-                            Inkscape::GC::release(rstring);
-                            Inkscape::GC::release(rflowspan);
-                            flowtext->getRepr()->removeChild(spstring->getRepr());
                         }
                     }
                 }
             }
-            SPText *text = dynamic_cast<SPText *>(tc->text);
-            SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(tc->text);
-            layout->hideWrapShapes();
+            // Here we remove temporary the shape to allow layout calculate where are the warp_end and warpo_start
+            // position if one of this are hiden because the previous line height changed
+            SPCSSAttr *css = nullptr;
             if (text) {
-                text->rebuildLayout();
-            }
-            if (flowtext) {
-                flowtext->rebuildLayout();
-            }
-            void *rawptr = nullptr;
-            if (tc->text_sel_start > tc->text_sel_end) {
-                layout->getSourceOfCharacter(tc->text_sel_end, &rawptr);
-            } else {
-                layout->getSourceOfCharacter(tc->text_sel_start, &rawptr);
-            }
-            if (!rawptr || !SP_IS_OBJECT(rawptr)) {
-                return;
-            }
-            SPObject *start = reinterpret_cast<SPObject *>(rawptr);
-            rawptr = nullptr;
-            if (tc->text_sel_start > tc->text_sel_end) {
-                layout->getSourceOfCharacter(tc->text_sel_start, &rawptr);
-            } else {
-                layout->getSourceOfCharacter(tc->text_sel_end, &rawptr);
-            }
-            if (!rawptr || !SP_IS_OBJECT(rawptr)) {
-                return;
-            }
-            SPObject *end = reinterpret_cast<SPObject *>(rawptr);
-            layout->showWrapShapes();
-            if (text) {
-                text->rebuildLayout();
-            }
-            if (flowtext) {
-                flowtext->rebuildLayout();
-            }
-
-            SPObject *current = start->parent;
-            SPObject *span_start = start->parent;
-            SPObject *span_end = end->parent;
-            if (text && span_start->parent == text || span_start->parent == flowtext) {
-                return;
-            }
-            SPObject *startobj = span_start;
-            SPObject *prevstartobj = span_start;
-            while (startobj->parent != SP_OBJECT(text) && 
-                   startobj->parent != SP_OBJECT(flowtext))
-            {
-                prevstartobj = startobj;
-                startobj = startobj->parent;   // SPStrings don't have style
-            }
-
-            SPObject *endobj = span_end;
-            SPObject *prevendobj = span_end;
-            while (endobj->parent != SP_OBJECT(text) && endobj->parent != SP_OBJECT(flowtext)) {
-                prevendobj = endobj;
-                endobj = endobj->parent; // SPStrings don't have style
-            }
-            SPObject *container = startobj->parent;
-            SPObject *end_container = endobj->parent;
-            SPText *toptext = dynamic_cast<SPText *>(container);
-            SPFlowtext *topflowtext = dynamic_cast<SPFlowtext *>(container);
-            if (toptext || topflowtext) {
-                container = startobj;
-                end_container = endobj;
-                startobj = prevstartobj;
-            }
-            std::cout << prevstartobj->getId() << std::endl;
-            std::vector<SPObject *> containers;
-            while (container && container != end_container) {
-                containers.push_back(container);
-                container = container->getNext();
-            }
-            if (container) {
-                containers.push_back(container);
-            }
-            for (auto container : containers) {
-                if (!container) {
-                    continue;
+                SPStyle *item_style = spitem->style;
+                if (item_style->shape_inside.set) {
+                    SPCSSAttr *css_unset = sp_css_attr_from_style(item_style, SP_STYLE_FLAG_IFSET);
+                    css = sp_css_attr_from_style(item_style, SP_STYLE_FLAG_IFSET);
+                    sp_repr_css_unset_property(css_unset, "shape-inside");
+                    spitem->changeCSS(css_unset, "style");
+                    spitem->updateRepr();
                 }
+            }
+            /* if (text) {
+                text->rebuildLayout();
+            } else if (flowtext) {
+                flowtext->rebuildLayout();
+            } */
+            void *rawptr_start = nullptr;
+            void *rawptr_end = nullptr;
+            layout->getSourceOfCharacter(wrap_start, &rawptr_start);
+            layout->getSourceOfCharacter(wrap_end, &rawptr_end);
+            if (css) {
+                spitem->changeCSS(css, "style");
+            }
+            if (!rawptr_start || !rawptr_end || !SP_IS_OBJECT(rawptr_start)|| !SP_IS_OBJECT(rawptr_end)) {
+                return;
+            }
+            SPObject *startobj = reinterpret_cast<SPObject *>(rawptr_start);
+            SPObject *endobj = reinterpret_cast<SPObject *>(rawptr_end);
+            // here we try to slect the elements where we need to work
+            // looping parent while text element in start and end
+            // and geting this and the inbetween elements
+            SPObject *start = startobj;
+            SPObject *end   = endobj;
+            if (start->parent != spobject) {
+                start = start->parent;
+            }
+            if (end->parent != spobject) {
+                end = end->parent;
+            }
+            while (start->parent != spobject)
+            {
+                start = start->parent;
+            }
+            while (end->parent != spobject)
+            {
+                end = end->parent;
+            }
+            std::vector<SPObject *> containers;
+            while (start && start != end) {
+                containers.push_back(start);
+                start = start->getNext();
+            }
+            containers.push_back(start);
+            for (auto container : containers) {
+                //we store the parent style to apply to the childs unselected
                 const gchar * style = container->getRepr()->attribute("style");
                 Inkscape::XML::Node *prevchild = container->getRepr(); 
                 std::vector<SPObject*> childs = container->childList(false);
                 for (auto child : childs) {
-                    SPObject *object = dynamic_cast<SPObject *>(child);
-                    SPString *spstring = dynamic_cast<SPString *>(child);
+                    SPString    *spstring  = dynamic_cast<SPString    *>(child);
                     SPFlowtspan *flowtspan = dynamic_cast<SPFlowtspan *>(child);
-                    SPTSpan *tspan = dynamic_cast<SPTSpan *>(child);
+                    SPTSpan     *tspan     = dynamic_cast<SPTSpan     *>(child);
+                    // we need to upper all flowtspans to container level
+                    // to this we need to change the element from flowspan to flowpara
                     if (flowtspan) {
-                        Inkscape::XML::Node *rflowpara = xml_doc->createElement("svg:flowPara");
-                        std::vector<SPObject*> childparas = flowtspan->childList(false);
+                        Inkscape::XML::Node *flowpara = xml_doc->createElement("svg:flowPara");
+                        std::vector<SPObject*> fts_childs = flowtspan->childList(false);
                         bool hascontent = false;
-                        for (auto childpara : childparas) {
-                            if (childpara) {
-                                Inkscape::XML::Node *childparanode = childpara->getRepr()->duplicate(xml_doc);
-                                flowtspan->getRepr()->removeChild(childpara->getRepr());
-                                rflowpara->addChild(childparanode, nullptr);
-                                Inkscape::GC::release(childparanode);
+                        // we need to move the contents to the new created element
+                        // mayve we can move directly but the safer for me is duplicate
+                        // inject into the new element and delete original
+                        for (auto fts_child : fts_childs) {
+                            // is this check necesary?
+                            if (fts_child) {
+                                Inkscape::XML::Node *fts_child_node = fts_child->getRepr()->duplicate(xml_doc);
+                                flowtspan->getRepr()->removeChild(fts_child->getRepr());
+                                flowpara->addChild(fts_child_node, nullptr);
+                                Inkscape::GC::release(fts_child_node);
                                 hascontent = true;
                             }
                         }
+                        // if no contents we dont want to add
                         if (hascontent) {
-                            rflowpara->setAttribute("style", flowtspan->getRepr()->attribute("style"));
-                            flowtext->getRepr()->addChild(rflowpara, prevchild);
-                            Inkscape::GC::release(rflowpara);
-                            prevchild = rflowpara;
+                            flowpara->setAttribute("style", flowtspan->getRepr()->attribute("style"));
+                            spobject->getRepr()->addChild(flowpara, prevchild);
+                            Inkscape::GC::release(flowpara);
+                            prevchild = flowpara;
                         }
                         container->getRepr()->removeChild(flowtspan->getRepr());
                     } else if (tspan) {
-                        if (object->childList(false).size()) {
-                            object->getRepr()->setAttribute("sodipodi:role", "line");
-                            prevchild = unindent_node(object->getRepr(), prevchild);
+                        if (child->childList(false).size()) {
+                            child->getRepr()->setAttribute("sodipodi:role", "line");
+                            // maybe we need to move unindent fiunction here 
+                            // to be the same as other here
+                            prevchild = unindent_node(child->getRepr(), prevchild);
                         } else {
-                            Inkscape::XML::Node *parent = object->getRepr()->parent();
-                            parent->removeChild(object->getRepr());
+                            // if no contents we dont want to add
+                            container->getRepr()->removeChild(child->getRepr());
                         }
                     } else if (spstring) {
-                        SPText *text = dynamic_cast<SPText *>(container->parent);
-                        SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(container->parent);
+                        // we are on a text node, we act diferent if in a text or flowtext. 
+                        // wrap a duplicate of the element and unindent after the prevchild
+                        // and finaly delete original
+                        Inkscape::XML::Node *string_node = xml_doc->createTextNode(spstring->string.c_str());
                         if (text) {
-                            Inkscape::XML::Node *rstring = xml_doc->createTextNode(spstring->string.c_str());
-                            Inkscape::XML::Node *rtspan = xml_doc->createElement("svg:tspan");
-                            rtspan->setAttribute("style", container->getRepr()->attribute("style"));
-                            rtspan->addChild(rstring, nullptr);
-                            rtspan->setAttribute("sodipodi:role", "line");
-                            text->getRepr()->addChild(rtspan, prevchild);
-                            Inkscape::GC::release(rstring);
-                            Inkscape::GC::release(rtspan);
-                            prevchild = rtspan;
-                            container->getRepr()->removeChild(spstring->getRepr());
+                            Inkscape::XML::Node *tspan_node = xml_doc->createElement("svg:tspan");
+                            tspan_node->setAttribute("style", container->getRepr()->attribute("style"));
+                            tspan_node->addChild(string_node, nullptr);
+                            tspan_node->setAttribute("sodipodi:role", "line");
+                            text->getRepr()->addChild(tspan_node, prevchild);
+                            Inkscape::GC::release(string_node);
+                            Inkscape::GC::release(tspan_node);
+                            prevchild = tspan_node;
                         } else if (flowtext) {
-                            Inkscape::XML::Node *rstring = xml_doc->createTextNode(spstring->string.c_str());
-                            Inkscape::XML::Node *rflowpara = xml_doc->createElement("svg:flowPara");
-                            rflowpara->setAttribute("style", container->getRepr()->attribute("style"));
-                            rflowpara->addChild(rstring, nullptr);
-                            flowtext->getRepr()->addChild(rflowpara, prevchild);
-                            Inkscape::GC::release(rstring);
-                            Inkscape::GC::release(rflowpara);
-                            prevchild = rflowpara;
-                            container->getRepr()->removeChild(spstring->getRepr());
+                            Inkscape::XML::Node *flowpara_node = xml_doc->createElement("svg:flowPara");
+                            flowpara_node->setAttribute("style", container->getRepr()->attribute("style"));
+                            flowpara_node->addChild(string_node, nullptr);
+                            flowtext->getRepr()->addChild(flowpara_node, prevchild);
+                            Inkscape::GC::release(string_node);
+                            Inkscape::GC::release(flowpara_node);
+                            prevchild = flowpara_node;
                         }
+                        container->getRepr()->removeChild(spstring->getRepr());
                     }
                 }
                 tc->text->getRepr()->removeChild(container->getRepr());
@@ -2465,7 +2442,7 @@ Inkscape::XML::Node *TextToolbar::unindent_node(Inkscape::XML::Node *repr, Inksc
             return newrepr;
         }
     }
-    std::cout << "error on TextToolbar.cpp::2423" << std::endl;
+    std::cout << "error on TextToolbar.cpp::2433" << std::endl;
     return repr;
 }
 
@@ -2477,7 +2454,7 @@ void TextToolbar::subselection_changed(gpointer texttool)
     std::cout << "subselection_changed: start " << std::endl;
 #endif
     // quit if run by the _changed callbacks
-    this->_fullsubselection = false;
+    this->_sub_active_item = nullptr;
     if (_updating) {
         return;
     }
@@ -2485,10 +2462,10 @@ void TextToolbar::subselection_changed(gpointer texttool)
     if (tc) {
         Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
         if (layout) {
-            Inkscape::Text::Layout::iterator start = layout->begin();
-            Inkscape::Text::Layout::iterator end = layout->end();
+            Inkscape::Text::Layout::iterator start           = layout->begin();
+            Inkscape::Text::Layout::iterator end             = layout->end();
             Inkscape::Text::Layout::iterator start_selection = tc->text_sel_start;
-            Inkscape::Text::Layout::iterator end_selection = tc->text_sel_end;
+            Inkscape::Text::Layout::iterator end_selection   = tc->text_sel_end;
 #ifdef DEBUG_TEXT
             std::cout << "    GUI: Start of text: " << layout->iteratorToCharIndex(start) << std::endl;
             std::cout << "    GUI: End of text: " << layout->iteratorToCharIndex(end) << std::endl;
@@ -2498,7 +2475,7 @@ void TextToolbar::subselection_changed(gpointer texttool)
             std::cout << "    ::::::::::::::::::::::::::::::::::::::::::::: " << std::endl;
 #endif
             gint startline = layout->paragraphIndex(start_selection);
-            gint endline = layout->paragraphIndex(end_selection);
+            gint endline   = layout->paragraphIndex(end_selection);
             if (start_selection == end_selection) {
                 this->_outer = true;
                 gint counter = 0;
@@ -2528,17 +2505,13 @@ void TextToolbar::subselection_changed(gpointer texttool)
                     ++counter;
                 }
                 selection_changed(nullptr);
-                _clearsubactive = true;
             } else if ((start_selection == start && end_selection == end)) {
                 // full subselection
                 _cusor_numbers = 0;
-                this->_sub_active_item = nullptr;
                 this->_outer = true;
-                this->_fullsubselection = true;
                 selection_changed(nullptr);
             } else {
                 _cusor_numbers = 0;
-                this->_sub_active_item = nullptr;
                 this->_outer = false;
                 wrap_start = tc->text_sel_start;
                 wrap_end = tc->text_sel_end;
