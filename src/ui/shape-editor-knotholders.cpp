@@ -1772,15 +1772,40 @@ TextKnotHolderEntityInlineSize::knot_set(Geom::Point const &p, Geom::Point const
     double size = 0.0;
     if (mode == SP_CSS_WRITING_MODE_LR_TB ||
         mode == SP_CSS_WRITING_MODE_RL_TB) {
-        size = abs(delta[Geom::X]);
+        // horizontal
+
+        size = delta[Geom::X];
+        if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_START  ) ||
+             (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_END) ) {
+            // Do nothing
+        } else if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_END  ) ||
+                    (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_START) ) {
+            size = -size;
+        } else if ( anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+            size = 2.0 * abs(size);
+        } else {
+            std::cerr << "TextKnotHolderEntityInlinSize: Should not be reached!" << std::endl;
+        }
+
     } else {
+        // vertical
+
         size = delta[Geom::Y];
-    }
-    if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
-        size *= 2.0;
+        if (anchor == SP_CSS_TEXT_ANCHOR_START) {
+            // Do nothing
+        } else if (anchor == SP_CSS_TEXT_ANCHOR_END) {
+            size = -size;
+        } else if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+            size = 2.0 * abs(size);
+        }
     }
 
-    text->style->inline_size.setDouble(abs(size));
+    // Size should never be negative
+    if (size < 0.0) {
+        size = 0.0;
+    }
+
+    text->style->inline_size.setDouble(size);
     text->style->inline_size.set = true;
 
     text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
