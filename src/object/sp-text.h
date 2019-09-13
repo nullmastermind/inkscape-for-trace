@@ -59,6 +59,12 @@ public:
     completely specified by transformations. */
     static void _adjustCoordsRecursive(SPItem *item, Geom::Affine const &m, double ex, bool is_root = true);
     static void _adjustFontsizeRecursive(SPItem *item, double ex, bool is_root = true);
+    /**
+    This two functions are useful because layout calculations need text visible for example
+    Calculating a invisible char position object or pasting text with paragraps that overflow
+    shape defined. I have doubts abot trransform into a toggle function*/
+    void show_shape_inside();
+    void hide_shape_inside();
 
     /** discards the drawing objects representing this text. */
     void _clearFlow(Inkscape::DrawingGroup *in_arena);
@@ -83,8 +89,9 @@ private:
     /** Find first x/y values which may be in a descendent element. */
     SVGLength* _getFirstXLength();
     SVGLength* _getFirstYLength();
+    SPCSSAttr *css;
 
-public:
+  public:
     /** Optimize textpath text on next set_transform. */
     void optimizeTextpathText() {_optimizeTextpathText = true;}
 

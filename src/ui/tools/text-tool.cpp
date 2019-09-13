@@ -1315,6 +1315,10 @@ bool sp_text_paste_inline(ToolBase *ec)
         Glib::ustring const clip_text = refClipboard->wait_for_text();
 
         if (!clip_text.empty()) {
+            SPText *textitem = dynamic_cast<SPText *>(tc->text);
+            if (textitem) {
+                textitem->hide_shape_inside();
+            }
             // Fix for 244940
             // The XML standard defines the following as valid characters
             // (Extensible Markup Language (XML) 1.0 (Fourth Edition) paragraph 2.2)
@@ -1359,6 +1363,9 @@ bool sp_text_paste_inline(ToolBase *ec)
                 tc->text_sel_start = tc->text_sel_end = sp_te_replace(tc->text, tc->text_sel_start, tc->text_sel_end, text.substr(begin, end - begin).c_str());
                 tc->text_sel_start = tc->text_sel_end = sp_te_insert_line(tc->text, tc->text_sel_start);
                 begin = end + 1;
+            }
+            if (textitem) {
+                textitem->show_shape_inside();
             }
             DocumentUndo::done(ec->desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
                                _("Paste text"));

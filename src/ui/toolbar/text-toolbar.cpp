@@ -2293,28 +2293,15 @@ void TextToolbar::prepare_inner()
             }
             // Here we remove temporary the shape to allow layout calculate where are the warp_end and warpo_start
             // position if one of this are hiden because the previous line height changed
-            SPCSSAttr *css = nullptr;
             if (text) {
-                SPStyle *item_style = spitem->style;
-                if (item_style->shape_inside.set) {
-                    SPCSSAttr *css_unset = sp_css_attr_from_style(item_style, SP_STYLE_FLAG_IFSET);
-                    css = sp_css_attr_from_style(item_style, SP_STYLE_FLAG_IFSET);
-                    sp_repr_css_unset_property(css_unset, "shape-inside");
-                    spitem->changeCSS(css_unset, "style");
-                    spitem->updateRepr();
-                }
+                text->hide_shape_inside();
             }
-            /* if (text) {
-                text->rebuildLayout();
-            } else if (flowtext) {
-                flowtext->rebuildLayout();
-            } */
             void *rawptr_start = nullptr;
             void *rawptr_end = nullptr;
             layout->getSourceOfCharacter(wrap_start, &rawptr_start);
             layout->getSourceOfCharacter(wrap_end, &rawptr_end);
-            if (css) {
-                spitem->changeCSS(css, "style");
+            if (text) {
+                text->show_shape_inside();
             }
             if (!rawptr_start || !rawptr_end || !SP_IS_OBJECT(rawptr_start)|| !SP_IS_OBJECT(rawptr_end)) {
                 return;

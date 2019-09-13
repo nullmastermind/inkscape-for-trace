@@ -63,7 +63,12 @@
 SPText::SPText() : SPItem() {
 }
 
-SPText::~SPText() = default;
+SPText::~SPText()
+{
+    if (css) {
+        sp_repr_css_attr_unref(css);
+    }
+};
 
 void SPText::build(SPDocument *doc, Inkscape::XML::Node *repr) {
     this->readAttr( "x" );
@@ -76,7 +81,7 @@ void SPText::build(SPDocument *doc, Inkscape::XML::Node *repr) {
     this->readAttr( "textLength" );
     this->readAttr( "lengthAdjust" );
     SPItem::build(doc, repr);
-
+    css = nullptr;
     this->readAttr( "sodipodi:linespacing" );    // has to happen after the styles are read
 }
 
@@ -380,6 +385,29 @@ void SPText::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::
                 p.emplace_back((*pt) * this->i2dt_affine(), Inkscape::SNAPSOURCE_TEXT_ANCHOR, Inkscape::SNAPTARGET_TEXT_ANCHOR);
             }
         }
+    }
+}
+
+void SPText::hide_shape_inside()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    SPStyle *item_style = this->style;
+    if (item_style && prefs->getBool("/tools/text/use_svg2") && item_style->shape_inside.set) {
+        SPCSSAttr *css_unset = sp_css_attr_from_style(item_style, SP_STYLE_FLAG_IFSET);
+        css = sp_css_attr_from_style(item_style, SP_STYLE_FLAG_IFSET);
+        sp_repr_css_unset_property(css_unset, "shape-inside");
+        sp_repr_css_attr_unref(css_unset);
+        this->changeCSS(css_unset, "style");
+    } else {
+        css = nullptr;
+    }
+}
+
+void SPText::show_shape_inside()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (prefs->getBool("/tools/text/use_svg2") && css) {
+        this->changeCSS(css, "style");
     }
 }
 

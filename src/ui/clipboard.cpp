@@ -1089,7 +1089,10 @@ bool ClipboardManagerImpl::_pasteText(SPDesktop *desktop)
             Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
             Inkscape::Text::Layout::iterator it_next;
             Inkscape::Text::Layout::iterator it = tc->text_sel_end;
-
+            SPText *textitem = dynamic_cast<SPText *>(tc->text);
+            if (textitem) {
+                textitem->hide_shape_inside();
+            }
             SPCSSAttr *css = take_style_from_item(tc->text);
             for (int i = 0; i < nr_blocks; ++i)
             {
@@ -1115,6 +1118,9 @@ bool ClipboardManagerImpl::_pasteText(SPDesktop *desktop)
                 te_update_layout_now_recursive(tc->text);
                 for (unsigned int j = te_selected_style_positions[i]; j < te_selected_style_positions[i+1]; ++j)
                     it.nextCharacter();
+            }
+            if (textitem) {
+                textitem->show_shape_inside();
             }
         }
         return true;
