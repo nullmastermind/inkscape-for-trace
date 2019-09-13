@@ -1693,7 +1693,7 @@ TextKnotHolderEntityInlineSize::knot_get() const
 
     Geom::Point p(text->attributes.firstXY());
 
-    if (text->style->inline_size.set) {
+    if (text->has_inline_size()) {
         // SVG 2 'inline-size'
 
         // Keep handle at end of text line.

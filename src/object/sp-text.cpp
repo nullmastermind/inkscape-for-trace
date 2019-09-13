@@ -166,7 +166,7 @@ void SPText::update(SPCtx *ctx, guint flags) {
         attributes.update( em, ex, w, h );
 
         // Set inline_size computed value if necessary (i.e. if unit is %).
-        if (style->inline_size.set) {
+        if (has_inline_size()) {
             if (style->inline_size.unit == SP_CSS_UNIT_PERCENT) {
                 if (is_horizontal()) {
                     style->inline_size.computed = style->inline_size.value * ictx->viewport.width();
@@ -554,7 +554,7 @@ void SPText::_buildLayoutInit()
                 }
             }
 
-        } else if (style->inline_size.set) {
+        } else if (has_inline_size()) {
 
             layout.wrap_mode = Inkscape::Text::Layout::WRAP_INLINE_SIZE;
 
@@ -922,7 +922,8 @@ bool SPText::is_horizontal() const
 
 bool SPText::has_inline_size() const
 {
-    return (style->inline_size.set);
+    // If inline size is '0' it is as if it is not set.
+    return (style->inline_size.set && style->inline_size.value != 0);
 }
 
 bool SPText::has_shape_inside() const
@@ -936,7 +937,7 @@ Geom::OptRect SPText::get_frame()
     Geom::OptRect opt_frame;
     Geom::Rect frame;
 
-    if (style->inline_size.set) {
+    if (has_inline_size()) {
         double inline_size = style->inline_size.computed;
         unsigned mode      = style->writing_mode.computed;
         unsigned anchor    = style->text_anchor.computed;
