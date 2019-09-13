@@ -136,11 +136,11 @@ protected:
     bool legacy;
     bool pixel;
 
-    Inkscape::UI::Widget::RegisteredCheckButton *_rcb_enabled;
-    Inkscape::UI::Widget::RegisteredCheckButton *_rcb_snap_visible_only;
-    Inkscape::UI::Widget::RegisteredCheckButton *_rcb_visible;
-    Inkscape::UI::Widget::RegisteredCheckButton *_rcb_dotted;
-    Inkscape::UI::Widget::AlignmentSelector     *_as_alignment;
+    Inkscape::UI::Widget::RegisteredCheckButton *_rcb_enabled = nullptr;
+    Inkscape::UI::Widget::RegisteredCheckButton *_rcb_snap_visible_only = nullptr;
+    Inkscape::UI::Widget::RegisteredCheckButton *_rcb_visible = nullptr;
+    Inkscape::UI::Widget::RegisteredCheckButton *_rcb_dotted = nullptr;
+    Inkscape::UI::Widget::AlignmentSelector     *_as_alignment = nullptr;
 
 private:
     CanvasGrid(const CanvasGrid&) = delete;
@@ -176,14 +176,14 @@ private:
 
     void updateWidgets();
 
-    Inkscape::UI::Widget::RegisteredUnitMenu *_rumg;
-    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_ox;
-    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_oy;
-    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_sx;
-    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_sy;
-    Inkscape::UI::Widget::RegisteredColorPicker *_rcp_gcol;
-    Inkscape::UI::Widget::RegisteredColorPicker *_rcp_gmcol;
-    Inkscape::UI::Widget::RegisteredSuffixedInteger *_rsi;
+    Inkscape::UI::Widget::RegisteredUnitMenu *_rumg = nullptr;
+    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_ox = nullptr;
+    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_oy = nullptr;
+    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_sx = nullptr;
+    Inkscape::UI::Widget::RegisteredScalarUnit *_rsu_sy = nullptr;
+    Inkscape::UI::Widget::RegisteredColorPicker *_rcp_gcol = nullptr;
+    Inkscape::UI::Widget::RegisteredColorPicker *_rcp_gmcol = nullptr;
+    Inkscape::UI::Widget::RegisteredSuffixedInteger *_rsi = nullptr;
 };
 
 
