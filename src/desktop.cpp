@@ -531,7 +531,7 @@ void SPDesktop::_setDisplayColorMode(Inkscape::ColorMode mode) {
                                                r, g, b, 0, 0,
                                                r, g, b, 0, 0,
                                                0, 0, 0, 1, 0 };
-        g_message("%g",grayscale_value_matrix[0]);
+        // g_message("%g",grayscale_value_matrix[0]);
         SP_CANVAS_ARENA (drawing)->drawing.setGrayscaleMatrix(grayscale_value_matrix);
     }
 
@@ -542,39 +542,72 @@ void SPDesktop::_setDisplayColorMode(Inkscape::ColorMode mode) {
     _widget->setTitle( this->getDocument()->getDocumentName() );
 }
 
-void SPDesktop::displayModeToggle() {
+bool SPDesktop::displayModeToggle() {
+    Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_MODE_NORMAL);
     switch (_display_mode) {
     case Inkscape::RENDERMODE_NORMAL:
         _setDisplayMode(Inkscape::RENDERMODE_NO_FILTERS);
+        verb = Inkscape::Verb::get(SP_VERB_VIEW_MODE_NO_FILTERS);
+        if (verb) {
+            _menu_update.emit(verb->get_code(), setDisplayModeNoFilters());
+        }
         break;
     case Inkscape::RENDERMODE_NO_FILTERS:
         _setDisplayMode(Inkscape::RENDERMODE_OUTLINE);
+        verb = Inkscape::Verb::get(SP_VERB_VIEW_MODE_OUTLINE);
+        if (verb) {
+            _menu_update.emit(verb->get_code(), setDisplayModeOutline());
+        }
+        
         break;
     case Inkscape::RENDERMODE_OUTLINE:
         _setDisplayMode(Inkscape::RENDERMODE_VISIBLE_HAIRLINES);
+        verb = Inkscape::Verb::get(SP_VERB_VIEW_MODE_VISIBLE_HAIRLINES);
+        if (verb) {
+            _menu_update.emit(verb->get_code(), setDisplayModeVisibleHairlines());
+        }
         break;
     case Inkscape::RENDERMODE_VISIBLE_HAIRLINES:
         _setDisplayMode(Inkscape::RENDERMODE_NORMAL);
+        if (verb) {
+            _menu_update.emit(verb->get_code(), setDisplayModeNormal());
+        }
         break;
     default:
         _setDisplayMode(Inkscape::RENDERMODE_NORMAL);
+        if (verb) {
+            _menu_update.emit(verb->get_code(), setDisplayModeNormal());
+        }
     }
     if (_display_mode == Inkscape::RENDERMODE_OUTLINE) {
         _split_canvas = false;
     }
+    return true;
 }
-void SPDesktop::displayColorModeToggle() {
+bool SPDesktop::displayColorModeToggle() {
+    Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_COLOR_MODE_NORMAL);
     switch (_display_color_mode) {
     case Inkscape::COLORMODE_NORMAL:
         _setDisplayColorMode(Inkscape::COLORMODE_GRAYSCALE);
+        verb = Inkscape::Verb::get(SP_VERB_VIEW_COLOR_MODE_GRAYSCALE);
+        if (verb) {
+            _menu_update.emit(verb->get_code(), setDisplayColorModeGrayscale());
+        }
         break;
     case Inkscape::COLORMODE_GRAYSCALE:
         _setDisplayColorMode(Inkscape::COLORMODE_NORMAL);
+        if (verb) {
+            _menu_update.emit(verb->get_code(), setDisplayColorModeNormal());
+        }
         break;
 //    case Inkscape::COLORMODE_PRINT_COLORS_PREVIEW:
     default:
         _setDisplayColorMode(Inkscape::COLORMODE_NORMAL);
+        if (verb) {
+            _menu_update.emit(verb->get_code(), setDisplayColorModeNormal());
+        }
     }
+    return true;
 }
 
 // Pass-through LayerModel functions
@@ -1192,6 +1225,7 @@ SPDesktop::flip_relative_keep_point (Geom::Point const &c, CanvasFlip flip)
     Geom::Point w = d2w( c ); // Must be before flip.
     _current_affine.addFlip( flip );
     set_display_area( c, w );
+    return true;
 }
 
 
@@ -1204,6 +1238,7 @@ SPDesktop::flip_absolute_center_point (Geom::Point const &c, CanvasFlip flip)
     _current_affine.setFlip( flip );
     Geom::Rect viewbox = canvas->getViewbox();
     set_display_area( c, viewbox.midpoint() );
+    return true;
 }
 
 
@@ -1213,6 +1248,7 @@ SPDesktop::flip_relative_center_point (Geom::Point const &c, CanvasFlip flip)
     _current_affine.addFlip( flip );
     Geom::Rect viewbox = canvas->getViewbox();
     set_display_area( c, viewbox.midpoint() );
+    return true;
 }
 
 
