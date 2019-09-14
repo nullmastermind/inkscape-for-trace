@@ -1225,7 +1225,6 @@ SPDesktop::flip_relative_keep_point (Geom::Point const &c, CanvasFlip flip)
     Geom::Point w = d2w( c ); // Must be before flip.
     _current_affine.addFlip( flip );
     set_display_area( c, w );
-    return true;
 }
 
 
@@ -1238,7 +1237,6 @@ SPDesktop::flip_absolute_center_point (Geom::Point const &c, CanvasFlip flip)
     _current_affine.setFlip( flip );
     Geom::Rect viewbox = canvas->getViewbox();
     set_display_area( c, viewbox.midpoint() );
-    return true;
 }
 
 
@@ -1248,7 +1246,6 @@ SPDesktop::flip_relative_center_point (Geom::Point const &c, CanvasFlip flip)
     _current_affine.addFlip( flip );
     Geom::Rect viewbox = canvas->getViewbox();
     set_display_area( c, viewbox.midpoint() );
-    return true;
 }
 
 
