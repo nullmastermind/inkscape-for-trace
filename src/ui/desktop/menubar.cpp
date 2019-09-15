@@ -81,7 +81,13 @@ static void set_menuitems(unsigned int emitting_verb, bool value)
                     return;
                 }
                 lastverb = emitting_verb;
-                menu.first.second->property_active() = value;
+                Gtk::CheckMenuItem *check = dynamic_cast<Gtk::CheckMenuItem *>(menu.first.second);
+                Gtk::RadioMenuItem *radio = dynamic_cast<Gtk::RadioMenuItem *>(menu.first.second);
+                if (check) {
+                    check->property_active() = value;
+                } else if (radio) {
+                    radio->property_active() = value;
+                }
                 lastverb = -1;
             }
         }
@@ -448,17 +454,29 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
 
                         SPAction* action = verb->get_action(Inkscape::ActionContext(view));
 
-                        if (menu_ptr->attribute("check") != nullptr ||
-                            menu_ptr->attribute("radio") != nullptr) 
+                        if (menu_ptr->attribute("check") != nullptr)
                         {
                             Gtk::MenuItem* menuitem = build_menu_check_item_from_verb(action);
                             if (menuitem) {
                                 std::pair<std::pair<unsigned int, Gtk::MenuItem *>, Inkscape::UI::View::View *>
-                                    itemmenu = std::make_pair(std::make_pair(verb->get_code(), menuitem), view);
-                                menuitems.push_back(itemmenu);
+                                    verbmenuitem = std::make_pair(std::make_pair(verb->get_code(), menuitem), view);
+                                menuitems.push_back(verbmenuitem);
                                 menu->append(*menuitem);
                             }
-
+                        } else if (menu_ptr->attribute("radio") != nullptr) {
+                            Gtk::MenuItem* menuitem = build_menu_item_from_verb(action, show_icons_curr, true, &group);
+                            if (menuitem) {
+                                if (menu_ptr->attribute("default") != nullptr) {
+                                    auto radiomenuitem = dynamic_cast<Gtk::RadioMenuItem*>(menuitem);
+                                    if (radiomenuitem) {
+                                        radiomenuitem->set_active(true);
+                                    }
+                                }
+                                std::pair<std::pair<unsigned int, Gtk::MenuItem *>, Inkscape::UI::View::View *>
+                                    verbmenuitem = std::make_pair(std::make_pair(verb->get_code(), menuitem), view);
+                                menuitems.push_back(verbmenuitem);
+                                menu->append(*menuitem);
+                            }
                         } else {
                             Gtk::MenuItem* menuitem = build_menu_item_from_verb(action, show_icons_curr);
                             if (menuitem) {
