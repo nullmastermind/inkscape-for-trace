@@ -1093,7 +1093,8 @@ bool ClipboardManagerImpl::_pasteText(SPDesktop *desktop)
             if (textitem) {
                 textitem->hide_shape_inside();
             }
-            SPCSSAttr *css = take_style_from_item(tc->text);
+            // we realy only want to inherit container style
+            /* SPCSSAttr *css = take_style_from_item(tc->text);
             for (int i = 0; i < nr_blocks; ++i)
             {
                 gchar const *w = sp_repr_css_property(css, "font-size", "0px");
@@ -1102,7 +1103,7 @@ bool ClipboardManagerImpl::_pasteText(SPDesktop *desktop)
                 if (w && strcmp(w, "0px") != 0) {
                     sp_repr_css_set_property(te_selected_style[i], "font-size", w);
                 }
-            }
+            } */
 
             for (unsigned int i = 0; i < text.length(); ++i)
                 it.prevCharacter();
@@ -1114,7 +1115,7 @@ bool ClipboardManagerImpl::_pasteText(SPDesktop *desktop)
                 for (unsigned int j = te_selected_style_positions[i]; j < te_selected_style_positions[i+1]; ++j)
                     it_next.nextCharacter();
 
-                sp_te_apply_style(tc->text, it, it_next, te_selected_style[i]);
+                // sp_te_apply_style(tc->text, it, it_next, te_selected_style[i]);
                 te_update_layout_now_recursive(tc->text);
                 for (unsigned int j = te_selected_style_positions[i]; j < te_selected_style_positions[i+1]; ++j)
                     it.nextCharacter();

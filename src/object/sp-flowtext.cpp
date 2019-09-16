@@ -666,7 +666,10 @@ SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, Geom::Point p0,
     Geom::Coord const w  = x1 - x0;
     Geom::Coord const h  = y1 - y0;
 
+    SPItem *item = dynamic_cast<SPItem *>(desktop->currentLayer());
+    g_assert(item != nullptr);
     rect->setPosition(x0, y0, w, h);
+    rect->doWriteTransform(item->i2doc_affine().inverse(), nullptr, true);
     rect->updateRepr();
 
     Inkscape::XML::Node *para_repr = xml_doc->createElement("svg:flowPara");
@@ -681,11 +684,6 @@ SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, Geom::Point p0,
     Inkscape::GC::release(region_repr);
     Inkscape::GC::release(para_repr);
     Inkscape::GC::release(rect_repr);
-
-  
-    SPItem *item = dynamic_cast<SPItem *>(desktop->currentLayer());
-    g_assert(item != nullptr);
-    ft_item->transform = item->i2doc_affine().inverse();
 
     return ft_item;
 }
