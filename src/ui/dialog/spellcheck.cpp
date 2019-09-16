@@ -470,14 +470,14 @@ SpellCheck::nextWord()
     void *rawptr;
     Glib::ustring::iterator text_iter;
     _layout->getSourceOfCharacter(_end_w, &rawptr, &text_iter);
-    SPObject *char_item = SP_OBJECT(rawptr);
+    SPObject *char_item = reinterpret_cast<SPObject *>(rawptr);
     if (SP_IS_STRING(char_item)) {
         int this_char = *text_iter;
         if (this_char == '\'' || this_char == 0x2019) {
             Inkscape::Text::Layout::iterator end_t = _end_w;
             end_t.nextCharacter();
             _layout->getSourceOfCharacter(end_t, &rawptr, &text_iter);
-            SPObject *char_item = SP_OBJECT(rawptr);
+            SPObject *char_item = reinterpret_cast<SPObject *>(rawptr);
             if (SP_IS_STRING(char_item)) {
                 int this_char = *text_iter;
                 if (g_ascii_isalpha(this_char)) { // 's

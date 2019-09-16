@@ -515,7 +515,7 @@ objects_query_fillstroke (const std::vector<SPItem*> &objects, SPStyle *style_re
     prev[0] = prev[1] = prev[2] = 0.0;
     bool same_color = true;
 
-        for (auto obj : objects) {
+    for (auto obj : objects) {
         if (!obj) {
             continue;
         }
@@ -525,6 +525,9 @@ objects_query_fillstroke (const std::vector<SPItem*> &objects, SPStyle *style_re
         }
 
         SPIPaint *paint = isfill? &style->fill : &style->stroke;
+        if (!paint) {
+            continue;
+        }
 
         // We consider paint "effectively set" for anything within text hierarchy
         SPObject *parent = obj->parent;

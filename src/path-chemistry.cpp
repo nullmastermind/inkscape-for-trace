@@ -507,8 +507,8 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
             void *rawptr = nullptr;
             te_get_layout(item)->getSourceOfCharacter(iter, &rawptr);
             if (!rawptr || !SP_IS_OBJECT(rawptr)) // no source for glyph, abort
-                break;
-            pos_obj = SP_OBJECT(rawptr);
+                break;       
+            pos_obj = reinterpret_cast<SPObject *>(rawptr);
             while (dynamic_cast<SPString const *>(pos_obj) && pos_obj->parent) {
                pos_obj = pos_obj->parent;   // SPStrings don't have style
             }

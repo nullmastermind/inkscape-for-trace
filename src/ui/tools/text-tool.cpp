@@ -1612,7 +1612,7 @@ int TextTool::_styleQueried(SPStyle *style, int property)
         if (!rawptr || !SP_IS_OBJECT(rawptr)) {
             continue;
         }
-        pos_obj = SP_OBJECT(rawptr);
+        pos_obj = reinterpret_cast<SPObject *>(rawptr);
         while (SP_IS_STRING(pos_obj) && pos_obj->parent) {
            pos_obj = pos_obj->parent;   // SPStrings don't have style
         }

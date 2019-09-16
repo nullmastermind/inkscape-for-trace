@@ -147,7 +147,7 @@ SPObject const * sp_te_object_at_position(SPItem const *text, Inkscape::Text::La
     SPObject const *pos_obj = nullptr;
     void *rawptr = nullptr;
     layout->getSourceOfCharacter(position, &rawptr);
-    pos_obj = SP_OBJECT(rawptr);
+    pos_obj = reinterpret_cast<SPObject *>(rawptr);
     if (pos_obj == nullptr) {
         pos_obj = text;
     }
@@ -413,7 +413,7 @@ Inkscape::Text::Layout::iterator sp_te_insert_line (SPItem *item, Inkscape::Text
     if (position != layout->end()) {
         void *rawptr = nullptr;
         layout->getSourceOfCharacter(position, &rawptr, &split_text_iter);
-        split_obj = SP_OBJECT(rawptr);
+        split_obj = reinterpret_cast<SPObject *>(rawptr);
     }
 
     if (split_obj == nullptr || is_line_break_object(split_obj)) {
@@ -534,7 +534,7 @@ sp_te_insert(SPItem *item, Inkscape::Text::Layout::iterator const &position, gch
     bool cursor_at_start = !it_prev_char.prevCharacter();
     bool cursor_at_end = position == layout->end();
     layout->getSourceOfCharacter(it_prev_char, &rawptr, &iter_text);
-    source_obj = SP_OBJECT(rawptr);
+    source_obj = reinterpret_cast<SPObject *>(rawptr);
     if (SP_IS_STRING(source_obj)) {
         // If the parent is a tref, editing on this particular string is disallowed.
         if (SP_IS_TREF(source_obj->parent)) {
@@ -778,9 +778,9 @@ sp_te_delete (SPItem *item, Inkscape::Text::Layout::iterator const &start,
     void *rawptr = nullptr;
     Glib::ustring::iterator start_text_iter, end_text_iter;
     layout->getSourceOfCharacter(iter_pair.first, &rawptr, &start_text_iter);
-    start_item = SP_OBJECT(rawptr);
+    start_item = reinterpret_cast<SPObject *>(rawptr);
     layout->getSourceOfCharacter(iter_pair.second, &rawptr, &end_text_iter);
-    end_item = SP_OBJECT(rawptr);
+    end_item = reinterpret_cast<SPObject *>(rawptr);
     if (start_item == nullptr) {
         return success;   // start is at end of text
     }
@@ -929,7 +929,7 @@ sp_te_get_string_multiline (SPItem const *text, Inkscape::Text::Layout::iterator
         void *rawptr = nullptr;
         Glib::ustring::iterator text_iter;
         layout->getSourceOfCharacter(first, &rawptr, &text_iter);
-        char_item = SP_OBJECT(rawptr);
+        char_item = reinterpret_cast<SPObject *>(rawptr);
         if (SP_IS_STRING(char_item)) {
             result += *text_iter;
         } else {
@@ -1018,7 +1018,7 @@ text_tag_attributes_at_position(SPItem *item, Inkscape::Text::Layout::iterator c
     void *rawptr = nullptr;
     Glib::ustring::iterator source_text_iter;
     text->layout.getSourceOfCharacter(position, &rawptr, &source_text_iter);
-    source_item = SP_OBJECT(rawptr);
+    source_item = reinterpret_cast<SPObject *>(rawptr);
 
     if (!SP_IS_STRING(source_item)) {
         return nullptr;
@@ -1103,7 +1103,7 @@ sp_te_adjust_rotation_screen(SPItem *text, Inkscape::Text::Layout::iterator cons
     SPObject *source_item = nullptr;
     void *rawptr = nullptr;
     layout->getSourceOfCharacter(std::min(start, end), &rawptr);
-    source_item = SP_OBJECT(rawptr);
+    source_item = reinterpret_cast<SPObject *>(rawptr);
     if (source_item == nullptr) {
         return;
     }
@@ -1165,7 +1165,7 @@ sp_te_adjust_tspan_letterspacing_screen(SPItem *text, Inkscape::Text::Layout::it
     void *rawptr = nullptr;
     unsigned nb_let;
     layout->getSourceOfCharacter(std::min(start, end), &rawptr);
-    source_obj = SP_OBJECT(rawptr);
+    source_obj = reinterpret_cast<SPObject *>(rawptr);
 
     if (source_obj == nullptr) {   // end of text
         source_obj = text->lastChild();
@@ -2038,9 +2038,9 @@ void sp_te_apply_style(SPItem *text, Inkscape::Text::Layout::iterator const &sta
     void *rawptr = nullptr;
     Glib::ustring::iterator start_text_iter, end_text_iter;
     layout->getSourceOfCharacter(first, &rawptr, &start_text_iter);
-    start_item = SP_OBJECT(rawptr);
+    start_item = reinterpret_cast<SPObject *>(rawptr);
     layout->getSourceOfCharacter(last, &rawptr, &end_text_iter);
-    end_item = SP_OBJECT(rawptr);
+    end_item = reinterpret_cast<SPObject *>(rawptr);
     if (start_item == nullptr) {
         return;   // start is at end of text
     }
