@@ -1312,7 +1312,6 @@ bool sp_text_paste_inline(ToolBase *ec)
 {
     if (!SP_IS_TEXT_CONTEXT(ec))
         return false;
-
     TextTool *tc = SP_TEXT_CONTEXT(ec);
 
     if ((tc->text) || (tc->nascent_object)) {
@@ -1385,7 +1384,12 @@ bool sp_text_paste_inline(ToolBase *ec)
                                _("Paste text"));
 
             return true;
+        } else {
+            // TODO: look why "wait_for_text()" sometimes return empty string
+            // I notice coping all text content and pasting twice
+            return true; //clip test is empty, so we return true to avoid further processing and crashes
         }
+        
     } // FIXME: else create and select a new object under cursor!
 
     return false;
