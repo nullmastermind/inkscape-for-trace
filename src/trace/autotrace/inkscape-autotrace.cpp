@@ -60,12 +60,12 @@ static guchar* to_3channels(GdkPixbuf* input) {
     int rs = gdk_pixbuf_get_rowstride (input);
     for(int row=0;row<gdk_pixbuf_get_height(input);row++) {
         for (int col=0;col<gdk_pixbuf_get_width(input);col++) {
-            char alpha = *(pix + row * rs + col * 4 + 3);
-            char white = 255 - alpha;
+            guchar alpha = *(pix + row * rs + col * 4 + 3);
+            guchar white = 255 - alpha;
             for(int chan=0;chan<3;chan++) {
                 guchar *pnew = (pix + row * rs + col * 3 + chan);
                 guchar *pold = (pix + row * rs + col * 4 + chan);
-                out[x++] = (char)(((int)(*pold) * (int)alpha / 256) + white);
+                out[x++] = (guchar)(((int)(*pold) * (int)alpha / 256) + white);
             }
         }
     }
