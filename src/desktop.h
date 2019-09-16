@@ -267,19 +267,23 @@ public:
     void redrawDesktop();
 
     void _setDisplayMode(Inkscape::RenderMode mode);
-    bool setDisplayModeNormal() {
+    bool setDisplayModeNormal()
+    {
         _setDisplayMode(Inkscape::RENDERMODE_NORMAL);
         return true;
     }
-    bool setDisplayModeNoFilters() {
+    bool setDisplayModeNoFilters()
+    {
         _setDisplayMode(Inkscape::RENDERMODE_NO_FILTERS);
         return true;
     }
-    bool setDisplayModeOutline() {
+    bool setDisplayModeOutline()
+    {
         _setDisplayMode(Inkscape::RENDERMODE_OUTLINE);
         return true;
     }
-    bool setDisplayModeVisibleHairlines() {
+    bool setDisplayModeVisibleHairlines()
+    {
         _setDisplayMode(Inkscape::RENDERMODE_VISIBLE_HAIRLINES);
         return true;
     }
@@ -288,11 +292,13 @@ public:
     Inkscape::RenderMode getMode() const { return _display_mode; }
 
     void _setDisplayColorMode(Inkscape::ColorMode mode);
-    bool setDisplayColorModeNormal() {
+    bool setDisplayColorModeNormal()
+    {
         _setDisplayColorMode(Inkscape::COLORMODE_NORMAL);
         return true;
     }
-    bool setDisplayColorModeGrayscale() {
+    bool setDisplayColorModeGrayscale()
+    {
         _setDisplayColorMode(Inkscape::COLORMODE_GRAYSCALE);
         return true;
     }

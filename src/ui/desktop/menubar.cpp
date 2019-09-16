@@ -454,9 +454,8 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
 
                         SPAction* action = verb->get_action(Inkscape::ActionContext(view));
 
-                        if (menu_ptr->attribute("check") != nullptr)
-                        {
-                            Gtk::MenuItem* menuitem = build_menu_check_item_from_verb(action);
+                        if (menu_ptr->attribute("check") != nullptr) {
+                            Gtk::MenuItem *menuitem = build_menu_check_item_from_verb(action);
                             if (menuitem) {
                                 std::pair<std::pair<unsigned int, Gtk::MenuItem *>, Inkscape::UI::View::View *>
                                     verbmenuitem = std::make_pair(std::make_pair(verb->get_code(), menuitem), view);

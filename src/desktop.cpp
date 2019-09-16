@@ -542,7 +542,8 @@ void SPDesktop::_setDisplayColorMode(Inkscape::ColorMode mode) {
     _widget->setTitle( this->getDocument()->getDocumentName() );
 }
 
-bool SPDesktop::displayModeToggle() {
+bool SPDesktop::displayModeToggle()
+{
     Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_MODE_NORMAL);
     switch (_display_mode) {
     case Inkscape::RENDERMODE_NORMAL:
@@ -558,7 +559,7 @@ bool SPDesktop::displayModeToggle() {
         if (verb) {
             _menu_update.emit(verb->get_code(), setDisplayModeOutline());
         }
-        
+
         break;
     case Inkscape::RENDERMODE_OUTLINE:
         _setDisplayMode(Inkscape::RENDERMODE_VISIBLE_HAIRLINES);
@@ -584,7 +585,8 @@ bool SPDesktop::displayModeToggle() {
     }
     return true;
 }
-bool SPDesktop::displayColorModeToggle() {
+bool SPDesktop::displayColorModeToggle()
+{
     Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_COLOR_MODE_NORMAL);
     switch (_display_color_mode) {
     case Inkscape::COLORMODE_NORMAL:
