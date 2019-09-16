@@ -300,7 +300,7 @@ text_flow_into_shape()
     }
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool("/tools/text/use_svg2")) {
+    if (prefs->getBool("/tools/text/use_svg2", true)) {
         // SVG 2 Text
 
         if (SP_IS_TEXT(text)) {
