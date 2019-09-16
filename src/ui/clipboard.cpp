@@ -65,6 +65,7 @@
 #include "object/sp-rect.h"
 #include "object/sp-root.h"
 #include "object/sp-shape.h"
+#include "object/sp-flowtext.h"
 #include "object/sp-textpath.h"
 #include "object/sp-use.h"
 #include "style.h"
@@ -1093,6 +1094,10 @@ bool ClipboardManagerImpl::_pasteText(SPDesktop *desktop)
             if (textitem) {
                 textitem->hide_shape_inside();
             }
+            SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(tc->text);
+            if (flowtext) {
+                flowtext->fix_overflow_flowregion(false);
+            }
             // we realy only want to inherit container style
             /* SPCSSAttr *css = take_style_from_item(tc->text);
             for (int i = 0; i < nr_blocks; ++i)
@@ -1122,6 +1127,9 @@ bool ClipboardManagerImpl::_pasteText(SPDesktop *desktop)
             }
             if (textitem) {
                 textitem->show_shape_inside();
+            }
+            if (flowtext) {
+                flowtext->fix_overflow_flowregion(true);
             }
         }
         return true;

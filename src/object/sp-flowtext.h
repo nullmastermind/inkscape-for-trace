@@ -87,6 +87,7 @@ public:
 
 	void update(SPCtx* ctx, unsigned int flags) override;
 	void modified(unsigned int flags) override;
+    void fix_overflow_flowregion(bool inverse);
 
 	Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags) override;
 

@@ -1326,6 +1326,10 @@ bool sp_text_paste_inline(ToolBase *ec)
             if (textitem) {
                 textitem->hide_shape_inside();
             }
+            SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(tc->text);
+            if (flowtext) {
+                flowtext->fix_overflow_flowregion(false);
+            }
             // Fix for 244940
             // The XML standard defines the following as valid characters
             // (Extensible Markup Language (XML) 1.0 (Fourth Edition) paragraph 2.2)
@@ -1373,6 +1377,9 @@ bool sp_text_paste_inline(ToolBase *ec)
             }
             if (textitem) {
                 textitem->show_shape_inside();
+            }
+            if (flowtext) {
+                flowtext->fix_overflow_flowregion(true);
             }
             DocumentUndo::done(ec->desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
                                _("Paste text"));

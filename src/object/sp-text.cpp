@@ -50,6 +50,7 @@
 #include "sp-textpath.h"
 #include "sp-tref.h"
 #include "sp-tspan.h"
+#include "sp-flowregion.h"
 
 #include "text-editing.h"
 
@@ -390,9 +391,10 @@ void SPText::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::
 
 void SPText::hide_shape_inside()
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    SPText *text = dynamic_cast<SPText *>(this);
+    SPObject *object = dynamic_cast<SPObject *>(this);
     SPStyle *item_style = this->style;
-    if (item_style && prefs->getBool("/tools/text/use_svg2") && item_style->shape_inside.set) {
+    if (item_style && text && item_style->shape_inside.set) {
         SPCSSAttr *css_unset = sp_css_attr_from_style(item_style, SP_STYLE_FLAG_IFSET);
         css = sp_css_attr_from_style(item_style, SP_STYLE_FLAG_IFSET);
         sp_repr_css_unset_property(css_unset, "shape-inside");
@@ -405,8 +407,9 @@ void SPText::hide_shape_inside()
 
 void SPText::show_shape_inside()
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool("/tools/text/use_svg2") && css) {
+    SPText *text = dynamic_cast<SPText *>(this);
+    SPObject *object = dynamic_cast<SPObject *>(this);
+    if (text && css) {
         this->changeCSS(css, "style");
     }
 }

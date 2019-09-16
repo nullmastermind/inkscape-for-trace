@@ -2296,12 +2296,18 @@ void TextToolbar::prepare_inner()
             if (text) {
                 text->hide_shape_inside();
             }
+            if (flowtext) {
+                flowtext->fix_overflow_flowregion(false);
+            }
             void *rawptr_start = nullptr;
             void *rawptr_end = nullptr;
             layout->getSourceOfCharacter(wrap_start, &rawptr_start);
             layout->getSourceOfCharacter(wrap_end, &rawptr_end);
             if (text) {
                 text->show_shape_inside();
+            }
+            if (flowtext) {
+                flowtext->fix_overflow_flowregion(true);
             }
             if (!rawptr_start || !rawptr_end || !SP_IS_OBJECT(rawptr_start)|| !SP_IS_OBJECT(rawptr_end)) {
                 return;
