@@ -65,7 +65,7 @@ static guchar* to_3channels(GdkPixbuf* input) {
             for(int chan=0;chan<3;chan++) {
                 guchar *pnew = (pix + row * rs + col * 3 + chan);
                 guchar *pold = (pix + row * rs + col * 4 + chan);
-                out[x++] = ((*pold) * alpha / 256 + white);
+                out[x++] = (char)(((int)(*pold) * (int)alpha / 256) + white);
             }
         }
     }
