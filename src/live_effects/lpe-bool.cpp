@@ -373,7 +373,11 @@ void LPEBool::doEffect(SPCurve *curve)
             operand->setHidden(false);
         }
         bool_op_ex op = bool_operation.get_value();
+<<<<<<< HEAD
         bool swap =  !(swap_operands.get_value());
+=======
+        bool swap =  !swap_operands.get_value();
+>>>>>>> Fix operands in LPE bool
 
         // operand->set_transform(i2anc_affine(sp_lpe_item, sp_lpe_item->parent));
         Geom::Affine current = sp_item_transform_repr(sp_lpe_item);
