@@ -130,22 +130,24 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEventBox" id="LPESelectorEffectEventFavShow">
-                        <property name="name">LPESelectorEffectEventFavShow</property>
+                      <object class="GtkRadioButton" id="LPESelectorEffectRadioPackLess">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="no_show_all">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
                         <property name="halign">center</property>
                         <property name="valign">center</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">False</property>
+                        <property name="group">LPESelectorEffectRadioList</property>
                         <child>
-                          <object class="GtkImage" id="LPESelectorEffectFavShowImage">
+                          <object class="GtkImage" id="LPESelectorEffectPackLessImage">
                             <property name="name">LPESelectorEffectFavShowImage</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">center</property>
                             <property name="valign">center</property>
-                            <property name="pixel_size">27</property>
-                            <property name="icon_name">draw-star-outline</property>
+                            <property name="pixel_size">22</property>
+                            <property name="icon_name">pack-less</property>
                             <property name="icon_size">2</property>
                             <style>
                               <class name="fab"/>
@@ -156,31 +158,52 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
+                        <property name="padding">1</property>
                         <property name="position">5</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSeparator">
+                      <object class="GtkRadioButton" id="LPESelectorEffectRadioPackMore">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="draw_indicator">False</property>
+                        <property name="group">LPESelectorEffectRadioList</property>
+                        <child>
+                          <object class="GtkImage" id="LPESelectorEffectPackMoreImage">
+                            <property name="name">LPESelectorEffectFavShowImage</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">center</property>
+                            <property name="valign">center</property>
+                            <property name="pixel_size">22</property>
+                            <property name="icon_name">pack-more</property>
+                            <property name="icon_size">2</property>
+                            <style>
+                              <class name="fab"/>
+                            </style>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="padding">4</property>
+                        <property name="padding">1</property>
                         <property name="position">6</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEventBox" id="LPESelectorEffectEventHamburgerTooggle">
-                        <property name="name">LPESelectorEffectEventFavShow</property>
+                      <object class="GtkRadioButton" id="LPESelectorEffectRadioList">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="no_show_all">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
                         <property name="halign">center</property>
                         <property name="valign">center</property>
+                        <property name="draw_indicator">False</property>
                         <child>
-                          <object class="GtkImage" id="LPESelectorEffectEventHamburgerToggleImage">
+                          <object class="GtkImage" id="LPESelectorEffectListImage">
                             <property name="name">LPESelectorEffectFavShowImage</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -198,7 +221,50 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
+                        <property name="padding">1</property>
                         <property name="position">7</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSeparator">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="padding">4</property>
+                        <property name="position">8</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEventBox" id="LPESelectorEffectEventFavShow">
+                        <property name="name">LPESelectorEffectEventFavShow</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="no_show_all">True</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <child>
+                          <object class="GtkImage" id="LPESelectorEffectFavShowImage">
+                            <property name="name">LPESelectorEffectFavShowImage</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">center</property>
+                            <property name="valign">center</property>
+                            <property name="pixel_size">22</property>
+                            <property name="icon_name">draw-star-outline</property>
+                            <property name="icon_size">2</property>
+                            <style>
+                              <class name="fab"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">9</property>
                       </packing>
                     </child>
                   </object>
@@ -472,8 +538,9 @@
             <property name="no_show_all">True</property>
             <property name="label" translatable="yes">Description</property>
             <property name="use_markup">True</property>
-            <property name="justify">center</property>
-            <property name="wrap">True</property>
+            <property name="ellipsize">end</property>
+            <property name="single_line_mode">True</property>
+            <property name="lines">1</property>
           </object>
           <packing>
             <property name="expand">False</property>

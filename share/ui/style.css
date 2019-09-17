@@ -265,6 +265,17 @@ spinbutton undershoot {
     color: @theme_fg_color;
 }
 
+#LPEDialogSelector.LPEPackLess flowboxchild {
+margin:1px;
+padding:1px;
+} 
+#LPEDialogSelector.LPEPackLess flowboxchild label {
+font-size:14px;
+} 
+#LPEDialogSelector.LPEPackLess #LPESelectorEffectInfoPop label{
+font-size:13px;
+}
+
 #SelectorsAndStyleDialog button {
     padding: 4px;
     min-height: 16px;

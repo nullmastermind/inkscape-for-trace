@@ -96,10 +96,13 @@ LivePathEffectAdd::LivePathEffectAdd()
     _builder->get_widget("LPEExperimental", _LPEExperimental);
     _builder->get_widget("LPEScrolled", _LPEScrolled);
     _builder->get_widget("LPESelectorEffectEventFavShow", _LPESelectorEffectEventFavShow);
-    _builder->get_widget("LPESelectorEffectEventHamburgerTooggle", _LPESelectorEffectEventHamburgerTooggle);
     _builder->get_widget("LPESelectorEffectInfoEventBox", _LPESelectorEffectInfoEventBox);
+    _builder->get_widget("LPESelectorEffectRadioList", _LPESelectorEffectRadioList);
+    _builder->get_widget("LPESelectorEffectRadioPackLess", _LPESelectorEffectRadioPackLess);
+    _builder->get_widget("LPESelectorEffectRadioPackMore", _LPESelectorEffectRadioPackMore);
     
-    _LPEFilter->signal_search_changed().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_search));
+    
+    _LPEFilter->signal_search_changed().connect(sigc::bind(sigc::mem_fun(*this, &LivePathEffectAdd::on_search), false));
     _LPEDialogSelector->add_events(Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK |
                                    Gdk::ENTER_NOTIFY_MASK | Gdk::LEAVE_NOTIFY_MASK | Gdk::KEY_PRESS_MASK);
     _LPESelectorFlowBox->signal_set_focus_child().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_focus));
@@ -190,8 +193,12 @@ LivePathEffectAdd::LivePathEffectAdd()
     _LPESelectorFlowBox->set_activate_on_single_click(false);
     _visiblelpe = _LPESelectorFlowBox->get_children().size();
     _LPEInfo->set_visible(false);
-    _LPESelectorEffectEventHamburgerTooggle->signal_button_press_event().connect(
-        sigc::mem_fun(*this, &LivePathEffectAdd::togglelist));
+    _LPESelectorEffectRadioList->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this,
+              &LivePathEffectAdd::viewChanged), 2) );
+    _LPESelectorEffectRadioPackLess->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this,
+              &LivePathEffectAdd::viewChanged), 1) );
+    _LPESelectorEffectRadioPackMore->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this,
+              &LivePathEffectAdd::viewChanged), 0) );
     _LPESelectorEffectEventFavShow->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(
         sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(_LPESelectorEffectEventFavShow->gobj())));
     _LPESelectorEffectEventFavShow->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(
@@ -215,22 +222,64 @@ LivePathEffectAdd::LivePathEffectAdd()
     _LPESelectorFlowBox->set_focus_vadjustment(_LPEScrolled->get_vadjustment());
     _LPEDialogSelector->show_all_children();
     _lasteffect = nullptr;
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gint mode = prefs->getInt("/dialogs/livepatheffect/dialogmode", 0);
+    switch (mode) {
+        case 0:
+            _LPESelectorEffectRadioPackLess->set_active();
+        break;
+        case 1:
+            _LPESelectorEffectRadioPackMore->set_active();
+        break;
+        default:
+            _LPESelectorEffectRadioList->set_active();
+            
+    }
 }
 const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *LivePathEffectAdd::getActiveData()
 {
     return instance()._to_add;
 }
 
-bool LivePathEffectAdd::togglelist(GdkEventButton *evt)
+void LivePathEffectAdd::viewChanged(gint mode)
 {
-    if (_LPEDialogSelector->get_style_context()->has_class("LPElist")) {
-        _LPEDialogSelector->get_style_context()->remove_class("LPElist");
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (mode == 2 &&
+        !_LPEDialogSelector->get_style_context()->has_class("LPEList")) 
+    {
+        _LPEDialogSelector->get_style_context()->add_class("LPEList");
+        _LPEDialogSelector->get_style_context()->remove_class("LPEPackLess");
+        _LPEDialogSelector->get_style_context()->remove_class("LPEPackMore");
+        _LPESelectorEffectRadioList->get_style_context()->add_class("active");
+        _LPESelectorEffectRadioPackLess->get_style_context()->remove_class("active");
+        _LPESelectorEffectRadioPackMore->get_style_context()->remove_class("active");
         _LPESelectorFlowBox->set_max_children_per_line(1);
-    } else {
-        _LPEDialogSelector->get_style_context()->add_class("LPElist");
+        prefs->setInt("/dialogs/livepatheffect/dialogmode", 2);
+        on_search(true);
+    } else if (mode == 1 &&
+              !_LPEDialogSelector->get_style_context()->has_class("LPEPackMore")) 
+    {
+        _LPESelectorEffectRadioList->get_style_context()->remove_class("active");
+        _LPESelectorEffectRadioPackLess->get_style_context()->remove_class("active");
+        _LPESelectorEffectRadioPackMore->get_style_context()->add_class("active");
+        _LPEDialogSelector->get_style_context()->remove_class("LPEList");
+        _LPEDialogSelector->get_style_context()->remove_class("LPEPackLess");
+        _LPEDialogSelector->get_style_context()->add_class("LPEPackMore");
         _LPESelectorFlowBox->set_max_children_per_line(30);
+        prefs->setInt("/dialogs/livepatheffect/dialogmode", 1);
+        on_search(true);
+    } else if (!_LPEDialogSelector->get_style_context()->has_class("LPEPackLess")) 
+    {
+        _LPESelectorEffectRadioList->get_style_context()->remove_class("active");
+        _LPESelectorEffectRadioPackLess->get_style_context()->add_class("active");
+        _LPESelectorEffectRadioPackMore->get_style_context()->remove_class("active");
+        _LPEDialogSelector->get_style_context()->remove_class("LPEList");
+        _LPEDialogSelector->get_style_context()->add_class("LPEPackLess");
+        _LPEDialogSelector->get_style_context()->remove_class("LPEPackMore");
+        _LPESelectorFlowBox->set_max_children_per_line(30);
+        prefs->setInt("/dialogs/livepatheffect/dialogmode", 0);
+        on_search(true);
     }
-    return true;
 }
 
 void LivePathEffectAdd::on_focus(Gtk::Widget *widget)
@@ -436,11 +485,35 @@ bool LivePathEffectAdd::on_filter(Gtk::FlowBoxChild *child)
     }
     child->set_valign(Gtk::ALIGN_START);
     Gtk::EventBox *eventbox = dynamic_cast<Gtk::EventBox *>(child->get_child());
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gint mode = prefs->getInt("/dialogs/livepatheffect/dialogmode", 0);
+    if (mode == 2) {
+        eventbox->set_halign(Gtk::ALIGN_START);
+    } else {
+        eventbox->set_halign(Gtk::ALIGN_CENTER);
+    }
     if (eventbox) {
         Gtk::Box *box = dynamic_cast<Gtk::Box *>(eventbox->get_child());
+        if (mode == 2) {
+            box->set_orientation(Gtk::ORIENTATION_HORIZONTAL);
+        } else {
+            box->set_orientation(Gtk::ORIENTATION_VERTICAL);
+        }
         if (box) {
             std::vector<Gtk::Widget *> contents = box->get_children();
+            Gtk::Overlay *overlay = dynamic_cast<Gtk::Overlay *>(contents[0]);
+            std::vector<Gtk::Widget *> content_overlay = overlay->get_children();
+            
             Gtk::Label *lpename = dynamic_cast<Gtk::Label *>(contents[1]);
+            if (lpename) {
+                if (mode == 2) {
+                    lpename->set_justify(Gtk::JUSTIFY_LEFT);
+                    lpename->set_halign(Gtk::ALIGN_START);
+                } else {
+                    lpename->set_justify(Gtk::JUSTIFY_CENTER);
+                    lpename->set_halign(Gtk::ALIGN_CENTER);
+                }
+            }
             if (!sp_has_fav(lpename->get_text()) && _showfavs) {
                 return false;
             }
@@ -450,20 +523,43 @@ bool LivePathEffectAdd::on_filter(Gtk::FlowBoxChild *child)
                     return false;
                 }
             }
+            Gtk::Image *icon = dynamic_cast<Gtk::Image *>(content_overlay[0]);
+            if (icon) {
+                if (mode == 2) {
+                    icon->set_pixel_size(40);
+                } else {
+                    icon->set_pixel_size(60);
+                }
+            }
+            Gtk::EventBox *lpemore = dynamic_cast<Gtk::EventBox *>(contents[4]);
+            if (lpemore) {
+                if (mode == 2) {
+                    lpemore->hide();
+                } else {
+                    lpemore->show();
+                }
+            }
+            Gtk::Label *lpedesc = dynamic_cast<Gtk::Label *>(contents[2]);
+            if (lpedesc) {
+                if (mode == 2) {
+                    lpedesc->show();
+                    lpedesc->set_ellipsize(Pango::ELLIPSIZE_END);
+                } else {
+                    lpedesc->hide();
+                    lpedesc->set_ellipsize(Pango::ELLIPSIZE_NONE);
+                }
+                size_t s = lpedesc->get_text().uppercase().find(_LPEFilter->get_text().uppercase(), 0);
+                if (s != -1) {
+                    _visiblelpe++;
+                    return true;
+                }
+            }
             if (_LPEFilter->get_text().length() < 1) {
                 _visiblelpe++;
                 return true;
             }
             if (lpename) {
                 size_t s = lpename->get_text().uppercase().find(_LPEFilter->get_text().uppercase(), 0);
-                if (s != -1) {
-                    _visiblelpe++;
-                    return true;
-                }
-            }
-            Gtk::Label *lpedesc = dynamic_cast<Gtk::Label *>(contents[2]);
-            if (lpedesc) {
-                size_t s = lpedesc->get_text().uppercase().find(_LPEFilter->get_text().uppercase(), 0);
                 if (s != -1) {
                     _visiblelpe++;
                     return true;
@@ -500,7 +596,7 @@ void LivePathEffectAdd::reload_effect_list()
     }
 }
 
-void LivePathEffectAdd::on_search()
+void LivePathEffectAdd::on_search(bool nowarn)
 {
     _visiblelpe = 0;
     _LPESelectorFlowBox->invalidate_filter();
@@ -510,11 +606,6 @@ void LivePathEffectAdd::on_search()
             _LPEInfo->set_visible(true);
             _LPEInfo->get_style_context()->add_class("lpeinfowarn");
         } else {
-            if (_LPEFilter->get_text().empty()) {
-                _LPEInfo->set_text(_("This is your favorite effects"));
-            } else {
-                _LPEInfo->set_text(_("This is your favorite effects search result"));
-            }
             _LPEInfo->set_visible(true);
             _LPEInfo->get_style_context()->add_class("lpeinfowarn");
         }
@@ -527,6 +618,9 @@ void LivePathEffectAdd::on_search()
             _LPEInfo->set_visible(false);
             _LPEInfo->get_style_context()->remove_class("lpeinfowarn");
         }
+    }
+    if (nowarn) {
+        _LPEInfo->set_visible(false);
     }
 }
 
