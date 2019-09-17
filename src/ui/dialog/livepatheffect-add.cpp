@@ -96,7 +96,9 @@ LivePathEffectAdd::LivePathEffectAdd()
     _builder->get_widget("LPEExperimental", _LPEExperimental);
     _builder->get_widget("LPEScrolled", _LPEScrolled);
     _builder->get_widget("LPESelectorEffectEventFavShow", _LPESelectorEffectEventFavShow);
+    _builder->get_widget("LPESelectorEffectEventHamburgerTooggle", _LPESelectorEffectEventHamburgerTooggle);
     _builder->get_widget("LPESelectorEffectInfoEventBox", _LPESelectorEffectInfoEventBox);
+    
     _LPEFilter->signal_search_changed().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_search));
     _LPEDialogSelector->add_events(Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK |
                                    Gdk::ENTER_NOTIFY_MASK | Gdk::LEAVE_NOTIFY_MASK | Gdk::KEY_PRESS_MASK);
@@ -188,6 +190,8 @@ LivePathEffectAdd::LivePathEffectAdd()
     _LPESelectorFlowBox->set_activate_on_single_click(false);
     _visiblelpe = _LPESelectorFlowBox->get_children().size();
     _LPEInfo->set_visible(false);
+    _LPESelectorEffectEventHamburgerTooggle->signal_button_press_event().connect(
+        sigc::mem_fun(*this, &LivePathEffectAdd::togglelist));
     _LPESelectorEffectEventFavShow->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(
         sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(_LPESelectorEffectEventFavShow->gobj())));
     _LPESelectorEffectEventFavShow->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(
@@ -215,6 +219,18 @@ LivePathEffectAdd::LivePathEffectAdd()
 const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *LivePathEffectAdd::getActiveData()
 {
     return instance()._to_add;
+}
+
+bool LivePathEffectAdd::togglelist(GdkEventButton *evt)
+{
+    if (_LPEDialogSelector->get_style_context()->has_class("LPElist")) {
+        _LPEDialogSelector->get_style_context()->remove_class("LPElist");
+        _LPESelectorFlowBox->set_max_children_per_line(1);
+    } else {
+        _LPEDialogSelector->get_style_context()->add_class("LPElist");
+        _LPESelectorFlowBox->set_max_children_per_line(30);
+    }
+    return true;
 }
 
 void LivePathEffectAdd::on_focus(Gtk::Widget *widget)

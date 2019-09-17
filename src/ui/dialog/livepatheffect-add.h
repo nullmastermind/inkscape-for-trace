@@ -75,6 +75,7 @@ class LivePathEffectAdd {
                         const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *to_add);
     bool expand(GdkEventButton *evt, Glib::RefPtr<Gtk::Builder> builder_effect);
     bool show_fav_toggler(GdkEventButton *evt);
+    bool togglelist(GdkEventButton *evt);
     bool mouseover(GdkEventCrossing *evt, GtkWidget *wdg);
     bool mouseout(GdkEventCrossing *evt, GtkWidget *wdg);
     void reload_effect_list();
@@ -100,6 +101,7 @@ private:
   Gtk::Popover *_LPESelectorEffectInfoPop;
   Gtk::EventBox *_LPESelectorEffectEventFavShow;
   Gtk::EventBox *_LPESelectorEffectInfoEventBox;
+  Gtk::EventBox *_LPESelectorEffectEventHamburgerTooggle;
   Gtk::Switch *_LPEExperimental;
   Gtk::SearchEntry *_LPEFilter;
   Gtk::ScrolledWindow *_LPEScrolled;
