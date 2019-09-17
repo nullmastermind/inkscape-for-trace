@@ -34965,6 +34965,7 @@ msgstr ""
 "  Funzione rosso: r*0.5\n"
 "  Funzione verde: b\n"
 "  Funzione blu: g\n"
+"            "
 
 #: ../share/extensions/color_darker.inx:3
 msgid "Darker"
