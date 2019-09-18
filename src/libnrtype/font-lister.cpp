@@ -572,7 +572,7 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::selection_update()
     }
 
     std::pair<Glib::ustring, Glib::ustring> ui = ui_from_fontspec(fontspec);
-    (ui.first);
+    set_font_family(ui.first);
     set_font_style(ui.second);
 
 #ifdef DEBUG_FONT
