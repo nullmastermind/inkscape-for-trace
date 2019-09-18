@@ -845,9 +845,10 @@ private:
         float font_size;
         float x_start;   /// relative to the start of the chunk
         float x_end;     /// relative to the start of the chunk
+        float y_offset;  /// relative to line baseline (without baseline shift)
         inline float width() const {return std::abs(x_start - x_end);}
         FontMetrics line_height;
-        double baseline_shift;  /// relative to the line's baseline
+        double baseline_shift;  /// relative to the line's baseline (CSS)
         SPCSSTextOrientation text_orientation;
         Direction direction;     /// See CSS3 section 3.2. Either rtl or ltr
         Direction block_progression;  /// See CSS3 section 3.2. The direction in which lines go.
@@ -915,10 +916,11 @@ private:
     inline unsigned _sourceToCharacter(unsigned source_index) const
         {return std::lower_bound(_characters.begin(), _characters.end(), source_index, PredicateSourceToCharacter(this)) - _characters.begin();}
 
-    /** given an x coordinate and a line number, returns an iterator
+    /** given an x and y coordinate and a line number, returns an iterator
     pointing to the closest cursor position on that line to the
-    coordinate. */
-    iterator _cursorXOnLineToIterator(unsigned line_index, double local_x) const;
+    coordinate.
+    ('y' is needed to handle cases where multiline text is simulated via the 'y' attribute.) */
+    iterator _cursorXOnLineToIterator(unsigned line_index, double local_x, double local_y = 0) const;
 
     /** calculates the width of a chunk, which is the largest x
     coordinate (start or end) of the spans contained within it. */

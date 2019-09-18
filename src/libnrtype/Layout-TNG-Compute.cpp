@@ -571,6 +571,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
         // add the chunk to the list
         Layout::Chunk new_chunk;
         new_chunk.in_line = _flow._lines.size() - 1;
+
         TRACE(("    New chunk: in_line: %d\n", new_chunk.in_line));
         new_chunk.left_x = _getChunkLeftWithAlignment(para, it_chunk, &add_to_each_whitespace);
 
@@ -722,6 +723,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                 counter_directional_width_remaining = 0.0;    // we want to go increasingly negative
             }
             new_span.x_start = current_x;
+            new_span.y_offset = _y_offset;  // Offset from baseline due to 'y' and 'dy' attributes (used to simulate multiline text).
 
             if (_flow._input_stream[unbroken_span.input_index]->Type() == TEXT_SOURCE) {
                 // the span is set up, push the glyphs and chars
@@ -897,6 +899,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                     }
 
                     while (char_byte < end_byte) {
+
                         /* Hack to survive ligatures:  in log_cluster keep the number of available chars >= number of glyphs remaining.
                            When there are no ligatures these two sizes are always the same.
                         */
@@ -904,6 +907,8 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                            log_cluster_size_glyphs--;
                            break;
                         }
+
+
                         Layout::Character new_character;
                         new_character.in_span = _flow._spans.size();
                         new_character.x = x_in_span;

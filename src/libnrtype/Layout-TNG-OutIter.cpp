@@ -20,37 +20,76 @@
 namespace Inkscape {
 namespace Text {
 
-Layout::iterator Layout::_cursorXOnLineToIterator(unsigned line_index, double local_x) const
+// Comment 18 Sept 2019:
+// Cursor code might be simpler if Character was turned into a proper
+// class and kept track of its absolute postion and extent. This would
+// make handling multi-line text (including multi-line text using
+// 'white-space:pre') easier. This would also avoid problems where
+// 'dx','dy' moved the character a long distance from its nominal
+// position.
+
+Layout::iterator Layout::_cursorXOnLineToIterator(unsigned line_index, double local_x, double local_y) const
 {
     unsigned char_index = _lineToCharacter(line_index);
     int best_char_index = -1;
-    double best_x_difference = DBL_MAX;
+    double best_difference = DBL_MAX;
 
     if (char_index == _characters.size()) return end();
     for ( ; char_index < _characters.size() ; char_index++) {
         if (_characters[char_index].chunk(this).in_line != line_index) break;
         if (_characters[char_index].char_attributes.is_mandatory_break) break;
         if (!_characters[char_index].char_attributes.is_cursor_position) continue;
-        double this_x_difference = fabs(_characters[char_index].x + _characters[char_index].span(this).x_start + _characters[char_index].chunk(this).left_x - local_x);
-        if (this_x_difference < best_x_difference) {
-            best_char_index = char_index;
-            best_x_difference = this_x_difference;
+
+        double delta_x =
+          _characters[char_index].x +
+          _characters[char_index].span(this).x_start +
+          _characters[char_index].chunk(this).left_x -
+          local_x;
+
+        double delta_y =
+          _characters[char_index].span(this).y_offset +
+          _characters[char_index].line(this).baseline_y -
+          local_y;
+
+        double this_difference = std::sqrt(delta_x*delta_x + delta_y*delta_y);
+
+        if (this_difference < best_difference) {
+          best_difference = this_difference;
+          best_char_index = char_index;
         }
     }
+
     // also try the very end of a para (not lines though because the space wraps)
     if (char_index == _characters.size() || _characters[char_index].char_attributes.is_mandatory_break) {
-        double this_x_difference;
-        if (char_index == 0) this_x_difference = fabs(_spans.front().x_end + _chunks.front().left_x - local_x);
-        else this_x_difference = fabs(_characters[char_index - 1].span(this).x_end + _characters[char_index - 1].chunk(this).left_x - local_x);
-        if (this_x_difference < best_x_difference) {
+
+        double delta_x = 0.0;
+        double delta_y = 0.0;
+
+        if (char_index == 0) {
+            delta_x = _spans.front().x_end + _chunks.front().left_x - local_x;
+            delta_y = _spans.front().y_offset + _spans.front().line(this).baseline_y - local_y;
+        } else {
+            delta_x = _characters[char_index - 1].span(this).x_end    + _characters[char_index - 1].chunk(this).left_x - local_x;
+            delta_y = _characters[char_index - 1].span(this).y_offset + _characters[char_index - 1].line(this).baseline_y - local_y;
+        }
+
+        double this_difference = std::sqrt(delta_x*delta_x + delta_y*delta_y);
+
+        if (this_difference < best_difference) {
             best_char_index = char_index;
-            best_x_difference = this_x_difference;
+            best_difference = this_difference;
         }
     }
-    if (best_char_index == -1)
+
+
+    if (best_char_index == -1) {
         best_char_index = char_index;
-    if (best_char_index == _characters.size())
+    }
+
+    if (best_char_index == _characters.size()) {
         return end();
+    }
+
     return iterator(this, best_char_index);
 }
 
@@ -61,10 +100,14 @@ double Layout::_getChunkWidth(unsigned chunk_index) const
     if (chunk_index) {
         span_index = _lineToSpan(_chunks[chunk_index].in_line);
         for ( ; span_index < _spans.size() && _spans[span_index].in_chunk < chunk_index ; span_index++){};
-    } else
+    } else {
         span_index = 0;
-    for ( ; span_index < _spans.size() && _spans[span_index].in_chunk == chunk_index ; span_index++)
+    }
+
+    for ( ; span_index < _spans.size() && _spans[span_index].in_chunk == chunk_index ; span_index++) {
         chunk_width = std::max(chunk_width, (double)std::max(_spans[span_index].x_start, _spans[span_index].x_end));
+    }
+
     return chunk_width;
 }
 
@@ -99,6 +142,7 @@ Layout::iterator Layout::getNearestCursorPositionTo(double x, double y) const
         local_x = y;
         local_y = x;
     }
+
     // stage 1:
     for (const auto & _span : _spans) {
         double span_left, span_right;
@@ -109,11 +153,13 @@ Layout::iterator Layout::getNearestCursorPositionTo(double x, double y) const
             span_left = _span.x_end;
             span_right = _span.x_start;
         }
+
+        double y_line = _span.line(this).baseline_y + _span.baseline_shift + _span.y_offset;
         if (   local_x >= _chunks[_span.in_chunk].left_x + span_left
             && local_x <= _chunks[_span.in_chunk].left_x + span_right
-            && local_y >= _span.line(this).baseline_y + _span.baseline_shift - _span.line_height.ascent
-            && local_y <= _span.line(this).baseline_y + _span.baseline_shift + _span.line_height.descent) {
-            return _cursorXOnLineToIterator(_chunks[_span.in_chunk].in_line, local_x);
+            && local_y >= y_line - _span.line_height.ascent
+            && local_y <= y_line + _span.line_height.descent) {
+          return _cursorXOnLineToIterator(_chunks[_span.in_chunk].in_line, local_x, local_y);
         }
     }
     
@@ -157,7 +203,7 @@ Layout::iterator Layout::getNearestCursorPositionTo(double x, double y) const
 
     // stage 3:
     if (best_chunk_index == -1) return begin();    // never happens
-    return _cursorXOnLineToIterator(_chunks[best_chunk_index].in_line, local_x);
+    return _cursorXOnLineToIterator(_chunks[best_chunk_index].in_line, local_x, local_y);
 }
 
 Layout::iterator Layout::getLetterAt(double x, double y) const
@@ -515,7 +561,7 @@ void Layout::queryCursorShape(iterator const &it, Geom::Point &position, double 
                 if (it._char_index != 0 && _characters[it._char_index - 1].chunk(this).in_line == _chunks[span->in_chunk].in_line)
                     span = &_spans[_characters[it._char_index - 1].in_span];
             }
-            position[Geom::Y] = span->line(this).baseline_y + span->baseline_shift;
+            position[Geom::Y] = span->line(this).baseline_y + span->baseline_shift + span->y_offset;
         }
         // up to now *position is the baseline point, not the final point which will be the bottom of the descent
         double vertical_scale = _glyphs.empty() ? 1.0 : _glyphs.back().vertical_scale;
