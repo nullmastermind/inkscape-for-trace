@@ -965,6 +965,9 @@ ConcreteInkscapeApplication<T>::on_activate()
             shell(); // Shell will create its own windows.
         } else {
             create_window();
+            for (auto action: _command_line_actions) {
+                Gio::Application::activate_action( action.first, action.second );
+            }
         }
     } else {
         std::cerr << "InkscapeApplication::on_activate:  Without GUI" << std::endl;
