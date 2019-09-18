@@ -522,7 +522,7 @@ bool LivePathEffectAdd::on_filter(Gtk::FlowBoxChild *child)
             }
             Gtk::ToggleButton *experimental = dynamic_cast<Gtk::ToggleButton *>(contents[3]);
             if (experimental) {
-                if (experimental->get_active() && _LPEExperimental->get_active()) {
+                if (experimental->get_active() && !_LPEExperimental->get_active()) {
                     return false;
                 }
             }
