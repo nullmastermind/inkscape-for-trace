@@ -190,6 +190,29 @@ spinbutton undershoot {
     outline-style: none;
 }
 
+.inksmall {
+    font-size: 11px;
+}
+
+.inkswitch slider {
+    min-width: 18px;
+    min-height: 18px;
+}
+
+.inkswitch image {
+    color: transparent;
+    background-color: transparent;
+    background-image: image(transparent);
+    -gtk-icon-style:symbolic;
+}
+
+.inkswitch {
+    margin: 2px;
+    padding: 0;
+    font-size: 8px;
+}
+
+
 #LPEDialogSelector,
 #LPEDialogSelector .frame,
 #LPEDialogSelector .searchbar {
@@ -266,8 +289,8 @@ spinbutton undershoot {
 }
 
 #LPEDialogSelector.LPEPackLess flowboxchild {
-margin:1px;
-padding:1px;
+margin:5px 1px 0px;
+padding:3px 3px 10px 3px;
 } 
 #LPEDialogSelector.LPEPackLess flowboxchild label {
 font-size:14px;
@@ -276,35 +299,35 @@ font-size:14px;
 font-size:13px;
 }
 
+#LPEDialogSelector.LPEList .lpename {
+    margin-bottom: 1px;
+    font-weight:bold;
+}
+#LPEDialogSelector.LPEList flowboxchild {
+    padding:3px 1px 3px 10px;
+    margin:1px 0px 1px;
+    border-radius:0;
+    border-style:dotted;
+    border-color:@theme_fg_color;
+    border-width: 0 0 1px 0;
+}
+#LPEDialogSelector.LPEList flowboxchild:selected {
+    border-style:none;
+    margin:-3px 0px 0px;
+    padding:4px 1px 4px 10px;
+}
+
+#LPEDialogSelector.LPEList #LPESelectorFlowBox *:selected #LPESelectorEffectFavTop,
+#LPEDialogSelector.LPEList #LPESelectorFlowBox *:selected:focus #LPESelectorEffectFavTop {
+    opacity: 1;
+}
+
 #SelectorsAndStyleDialog button {
     padding: 4px;
     min-height: 16px;
     margin: 2px;
     padding: 2px;
 }
-
-.inksmall {
-    font-size: 11px;
-}
-
-.inkswitch slider {
-    min-width: 18px;
-    min-height: 18px;
-}
-
-.inkswitch image {
-    color: transparent;
-    background-color: transparent;
-    background-image: image(transparent);
-    -gtk-icon-style:symbolic;
-}
-
-.inkswitch {
-    margin: 2px;
-    padding: 0;
-    font-size: 8px;
-}
-
 
 #XMLAndAttributesDialog .toggle,
 #SelectorsAndStyleDialog .toggle {

@@ -65,7 +65,7 @@ class LivePathEffectAdd {
     void onClose();
     bool on_filter(Gtk::FlowBoxChild *child);
     int on_sort(Gtk::FlowBoxChild *child1, Gtk::FlowBoxChild *child2);
-    void on_search(bool nowarn);
+    void on_search();
     void on_focus(Gtk::Widget *widg);
     bool pop_description(GdkEventCrossing *evt, Glib::RefPtr<Gtk::Builder> builder_effect);
     bool hide_pop_description(GdkEventCrossing *evt);
