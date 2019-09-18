@@ -54,6 +54,7 @@
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">start</property>
                     <child>
                       <object class="GtkSearchEntry" id="LPEFilter">
                         <property name="width_request">400</property>
@@ -130,22 +131,20 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkButtonBox">
+                      <object class="GtkButtonBox" id="LPESelectorAllButtonBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="valign">center</property>
-                        <property name="homogeneous">True</property>
-                        <property name="layout_style">start</property>
+                        <property name="layout_style">expand</property>
                         <child>
                           <object class="GtkRadioButton" id="LPESelectorEffectRadioPackLess">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="halign">start</property>
+                            <property name="halign">end</property>
                             <property name="valign">center</property>
                             <property name="draw_indicator">False</property>
-                            <property name="group">LPESelectorEffectRadioList</property>
                             <child>
                               <object class="GtkImage" id="LPESelectorEffectPackLessImage">
                                 <property name="name">LPESelectorEffectFavShowImage</property>
@@ -163,10 +162,10 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
+                            <property name="expand">True</property>
                             <property name="fill">True</property>
-                            <property name="padding">1</property>
                             <property name="position">0</property>
+                            <property name="non_homogeneous">True</property>
                           </packing>
                         </child>
                         <child>
@@ -174,10 +173,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="halign">start</property>
+                            <property name="halign">center</property>
                             <property name="valign">center</property>
                             <property name="draw_indicator">False</property>
-                            <property name="group">LPESelectorEffectRadioList</property>
+                            <property name="group">LPESelectorEffectRadioPackLess</property>
                             <child>
                               <object class="GtkImage" id="LPESelectorEffectPackMoreImage">
                                 <property name="name">LPESelectorEffectFavShowImage</property>
@@ -195,10 +194,10 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
+                            <property name="expand">True</property>
                             <property name="fill">True</property>
-                            <property name="padding">1</property>
                             <property name="position">1</property>
+                            <property name="non_homogeneous">True</property>
                           </packing>
                         </child>
                         <child>
@@ -208,8 +207,8 @@
                             <property name="receives_default">False</property>
                             <property name="halign">start</property>
                             <property name="valign">center</property>
-                            <property name="active">True</property>
                             <property name="draw_indicator">False</property>
+                            <property name="group">LPESelectorEffectRadioPackLess</property>
                             <child>
                               <object class="GtkImage" id="LPESelectorEffectListImage">
                                 <property name="name">LPESelectorEffectFavShowImage</property>
@@ -217,7 +216,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="halign">center</property>
                                 <property name="valign">center</property>
-                                <property name="pixel_size">27</property>
+                                <property name="pixel_size">22</property>
                                 <property name="icon_name">hamburger-menu</property>
                                 <property name="icon_size">2</property>
                                 <style>
@@ -229,14 +228,13 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="padding">1</property>
                             <property name="position">2</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
                         <property name="position">5</property>
                       </packing>
                     </child>
@@ -460,8 +458,7 @@
   <object class="GtkEventBox" id="LPESelectorEffect">
     <property name="name">LPESelectorEffect</property>
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="halign">center</property>
+    <property name="can_focus">True</property>
     <property name="valign">start</property>
     <property name="visible_window">False</property>
     <child>
@@ -469,7 +466,7 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="double_buffered">False</property>
-        <property name="halign">center</property>
+        <property name="halign">start</property>
         <property name="hexpand">False</property>
         <property name="orientation">vertical</property>
         <property name="baseline_position">top</property>
