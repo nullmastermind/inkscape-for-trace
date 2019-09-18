@@ -541,7 +541,6 @@ build_menu(Gtk::MenuShell* menu, Inkscape::XML::Node* xml, Inkscape::UI::View::V
             std::cerr << "build_menu: xml node has no name!" << std::endl;
         }
     }
-    SP_ACTIVE_DESKTOP->_menu_update.connect(sigc::ptr_fun(&set_menuitems));
 }
 
 Gtk::MenuBar*
@@ -549,6 +548,7 @@ build_menubar(Inkscape::UI::View::View* view)
 {
     Gtk::MenuBar* menubar = Gtk::manage(new Gtk::MenuBar());
     build_menu(menubar, INKSCAPE.get_menus()->parent(), view);
+    SP_ACTIVE_DESKTOP->_menu_update.connect(sigc::ptr_fun(&set_menuitems));
     return menubar;
 }
 
