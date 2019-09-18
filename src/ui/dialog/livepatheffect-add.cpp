@@ -100,8 +100,8 @@ LivePathEffectAdd::LivePathEffectAdd()
     _builder->get_widget("LPESelectorEffectRadioList", _LPESelectorEffectRadioList);
     _builder->get_widget("LPESelectorEffectRadioPackLess", _LPESelectorEffectRadioPackLess);
     _builder->get_widget("LPESelectorEffectRadioPackMore", _LPESelectorEffectRadioPackMore);
-    
-    
+
+
     _LPEFilter->signal_search_changed().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_search));
     _LPEDialogSelector->add_events(Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK |
                                    Gdk::ENTER_NOTIFY_MASK | Gdk::LEAVE_NOTIFY_MASK | Gdk::KEY_PRESS_MASK);
@@ -200,12 +200,12 @@ LivePathEffectAdd::LivePathEffectAdd()
     _LPESelectorFlowBox->set_activate_on_single_click(false);
     _visiblelpe = _LPESelectorFlowBox->get_children().size();
     _LPEInfo->set_visible(false);
-    _LPESelectorEffectRadioList->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this,
-              &LivePathEffectAdd::viewChanged), 2) );
-    _LPESelectorEffectRadioPackLess->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this,
-              &LivePathEffectAdd::viewChanged), 1) );
-    _LPESelectorEffectRadioPackMore->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this,
-              &LivePathEffectAdd::viewChanged), 0) );
+    _LPESelectorEffectRadioList->signal_clicked().connect(
+        sigc::bind(sigc::mem_fun(*this, &LivePathEffectAdd::viewChanged), 2));
+    _LPESelectorEffectRadioPackLess->signal_clicked().connect(
+        sigc::bind(sigc::mem_fun(*this, &LivePathEffectAdd::viewChanged), 1));
+    _LPESelectorEffectRadioPackMore->signal_clicked().connect(
+        sigc::bind(sigc::mem_fun(*this, &LivePathEffectAdd::viewChanged), 0));
     _LPESelectorEffectEventFavShow->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(
         sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(_LPESelectorEffectEventFavShow->gobj())));
     _LPESelectorEffectEventFavShow->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(
@@ -234,13 +234,12 @@ LivePathEffectAdd::LivePathEffectAdd()
     switch (mode) {
         case 0:
             _LPESelectorEffectRadioPackLess->set_active();
-        break;
+            break;
         case 1:
             _LPESelectorEffectRadioPackMore->set_active();
-        break;
+            break;
         default:
             _LPESelectorEffectRadioList->set_active();
-            
     }
 }
 const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *LivePathEffectAdd::getActiveData()
@@ -252,9 +251,7 @@ void LivePathEffectAdd::viewChanged(gint mode)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool changed = false;
-    if (mode == 2 &&
-        !_LPEDialogSelector->get_style_context()->has_class("LPEList")) 
-    {
+    if (mode == 2 && !_LPEDialogSelector->get_style_context()->has_class("LPEList")) {
         prefs->setInt("/dialogs/livepatheffect/dialogmode", 2);
         _LPEDialogSelector->get_style_context()->add_class("LPEList");
         _LPEDialogSelector->get_style_context()->remove_class("LPEPackLess");
@@ -264,9 +261,7 @@ void LivePathEffectAdd::viewChanged(gint mode)
         _LPESelectorEffectRadioPackMore->get_style_context()->remove_class("active");
         _LPESelectorFlowBox->set_max_children_per_line(1);
         changed = true;
-    } else if (mode == 1 &&
-              !_LPEDialogSelector->get_style_context()->has_class("LPEPackMore")) 
-    {
+    } else if (mode == 1 && !_LPEDialogSelector->get_style_context()->has_class("LPEPackMore")) {
         prefs->setInt("/dialogs/livepatheffect/dialogmode", 1);
         _LPESelectorEffectRadioList->get_style_context()->remove_class("active");
         _LPESelectorEffectRadioPackLess->get_style_context()->remove_class("active");
@@ -276,9 +271,7 @@ void LivePathEffectAdd::viewChanged(gint mode)
         _LPEDialogSelector->get_style_context()->add_class("LPEPackMore");
         _LPESelectorFlowBox->set_max_children_per_line(30);
         changed = true;
-    } else if (mode == 0 &&
-               !_LPEDialogSelector->get_style_context()->has_class("LPEPackLess")) 
-    {
+    } else if (mode == 0 && !_LPEDialogSelector->get_style_context()->has_class("LPEPackLess")) {
         prefs->setInt("/dialogs/livepatheffect/dialogmode", 0);
         _LPESelectorEffectRadioList->get_style_context()->remove_class("active");
         _LPESelectorEffectRadioPackLess->get_style_context()->add_class("active");
@@ -288,12 +281,11 @@ void LivePathEffectAdd::viewChanged(gint mode)
         _LPEDialogSelector->get_style_context()->remove_class("LPEPackMore");
         _LPESelectorFlowBox->set_max_children_per_line(30);
         changed = true;
-        
     }
     if (changed) {
         _LPESelectorFlowBox->unset_sort_func();
         _LPESelectorFlowBox->set_sort_func(sigc::mem_fun(this, &LivePathEffectAdd::on_sort));
-        std::vector< Gtk::FlowBoxChild* > selected = _LPESelectorFlowBox->get_selected_children();
+        std::vector<Gtk::FlowBoxChild *> selected = _LPESelectorFlowBox->get_selected_children();
         if (selected.size() == 1) {
             _LPESelectorFlowBox->get_selected_children()[0]->grab_focus();
         }
@@ -400,7 +392,8 @@ bool LivePathEffectAdd::fav_toggler(GdkEventButton *evt, Glib::RefPtr<Gtk::Build
                 LPESelectorEffectEventFavTop->set_visible(false);
                 LPESelectorEffectEventFavTop->hide();
             }
-            LPESelectorEffectFavTop->set_from_icon_name("draw-star-outline", Gtk::IconSize(Gtk::ICON_SIZE_SMALL_TOOLBAR));
+            LPESelectorEffectFavTop->set_from_icon_name("draw-star-outline",
+                                                        Gtk::IconSize(Gtk::ICON_SIZE_SMALL_TOOLBAR));
             LPESelectorEffectFav->set_from_icon_name("draw-star-outline", Gtk::IconSize(Gtk::ICON_SIZE_SMALL_TOOLBAR));
             sp_remove_fav(LPEName->get_text());
             LPESelectorEffect->get_parent()->get_style_context()->remove_class("lpefav");
@@ -522,7 +515,7 @@ bool LivePathEffectAdd::on_filter(Gtk::FlowBoxChild *child)
             std::vector<Gtk::Widget *> contents = box->get_children();
             Gtk::Overlay *overlay = dynamic_cast<Gtk::Overlay *>(contents[0]);
             std::vector<Gtk::Widget *> content_overlay = overlay->get_children();
-            
+
             Gtk::Label *lpename = dynamic_cast<Gtk::Label *>(contents[1]);
             if (!sp_has_fav(lpename->get_text()) && _showfavs) {
                 return false;
