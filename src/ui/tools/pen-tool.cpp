@@ -147,7 +147,7 @@ PenTool::~PenTool() {
         this->cl1 = nullptr;
     }
 
-    if (this->expecting_clicks_for_LPE > 0) {
+    if (this->waiting_item && this->expecting_clicks_for_LPE > 0) {
         // we received too few clicks to sanely set the parameter path so we remove the LPE from the item
         this->waiting_item->removeCurrentPathEffect(false);
     }
