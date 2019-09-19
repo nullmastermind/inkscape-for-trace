@@ -106,6 +106,7 @@ LivePathEffectAdd::LivePathEffectAdd()
     _LPEDialogSelector->add_events(Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK |
                                    Gdk::ENTER_NOTIFY_MASK | Gdk::LEAVE_NOTIFY_MASK | Gdk::KEY_PRESS_MASK);
     _LPESelectorFlowBox->signal_set_focus_child().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_focus));
+    
     for (int i = 0; i < static_cast<int>(converter._length); ++i) {
         Glib::RefPtr<Gtk::Builder> builder_effect;
         try {
@@ -234,13 +235,17 @@ LivePathEffectAdd::LivePathEffectAdd()
     switch (mode) {
         case 0:
             _LPESelectorEffectRadioPackLess->set_active();
+            viewChanged(0);
             break;
         case 1:
             _LPESelectorEffectRadioPackMore->set_active();
+            viewChanged(1);
             break;
         default:
             _LPESelectorEffectRadioList->set_active();
+            viewChanged(2);
     }
+    // viewChanged();
 }
 const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *LivePathEffectAdd::getActiveData()
 {
