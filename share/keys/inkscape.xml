@@ -249,6 +249,7 @@ override) the bindings in the main default.xml.
 <!-- View -->
 
   <bind key="F11" action="FullScreen" display="true" />
+  <bind key="f" modifiers="Ctrl,Meta" action="FullScreen" /> <!-- macOS -->
   <bind key="F11" action="FocusToggle" modifiers="Shift" display="true" />
   <bind key="F11" action="FullScreenFocus" modifiers="Primary" display="true" />
 
