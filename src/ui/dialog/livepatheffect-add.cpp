@@ -140,7 +140,8 @@ LivePathEffectAdd::LivePathEffectAdd()
         }
         Gtk::Label *LPEDescription;
         builder_effect->get_widget("LPEDescription", LPEDescription);
-        LPEDescription->set_text(converter.get_description(data->id));
+        const Glib::ustring description = _(converter.get_description(data->id).c_str());
+        LPEDescription->set_text(description);
         Gtk::ToggleButton *LPEExperimentalToggle;
         builder_effect->get_widget("LPEExperimentalToggle", LPEExperimentalToggle);
         bool active = converter.get_experimental(data->id) ? true : false;
