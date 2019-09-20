@@ -699,7 +699,7 @@ Inkscape::Pixbuf* font_instance::PixBuf(int glyph_id)
             Glib::ustring svg = glyph_iter->second.svg;
 
             Glib::RefPtr<Glib::Regex> regex =
-                Glib::Regex::create("viewBox=\"\\s*(\\d*)\\s*,?\\s*(\\d*)\\s*,?\\s*(\\d*)\\s*,?\\s*(\\d*)\\s*\"");
+                Glib::Regex::create("viewBox=\"\\s*(\\d*\\.?\\d+)\\s*,?\\s*(\\d*\\.?\\d+)\\s*,?\\s*(\\d+\\.?\\d+)\\s*,?\\s*(\\d+\\.?\\d+)\\s*\"");
             Glib::MatchInfo matchInfo;
             regex->match(svg, matchInfo);
             if (matchInfo.matches()) {
