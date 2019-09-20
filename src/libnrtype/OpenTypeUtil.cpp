@@ -24,6 +24,9 @@
 #include <harfbuzz/hb-ft.h>
 #include <harfbuzz/hb-ot.h>
 
+// SVG in OpenType
+#include "util/ziptool.h"
+
 
 // Utilities used in this file
 
@@ -378,8 +381,29 @@ void readOpenTypeSVGTable(const FT_Face ft_face,
         //           << "  Offset: " << offsetGlyph << " Length: " << lengthGlyph << std::endl;
 
         std::string svg;
-        for (unsigned int c = offsetGlyph; c < offsetGlyph + lengthGlyph; ++c) {
-            svg += (char) data[offset + c];
+
+        if (lengthGlyph > 1 && data[offset] & 0x1f && data[offset + 1] & 0x8b) {
+            // Glyph is gzipped
+
+            std::vector<unsigned char> buffer;
+            for (unsigned int c = offsetGlyph; c < offsetGlyph + lengthGlyph; ++c) {
+                buffer.push_back(data[offset + c]);
+            }
+
+            GzipFile zipped;
+            zipped.readBuffer(buffer);
+
+            std::vector<unsigned char> unzipped_data = zipped.getData();
+            for (auto i : unzipped_data) {
+                svg += (char)i;
+            }
+
+        } else {
+            // Glyph is not compressed
+
+            for (unsigned int c = offsetGlyph; c < offsetGlyph + lengthGlyph; ++c) {
+                svg += (unsigned char) data[offset + c];
+            }
         }
 
         for (unsigned int i = startGlyphID; i < endGlyphID+1; ++i) {
