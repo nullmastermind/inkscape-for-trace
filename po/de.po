@@ -24021,7 +24021,6 @@ msgid "All paint servers"
 msgstr "Alles inaktiv"
 
 #: ../src/ui/dialog/paint-servers.h:59 ../src/ui/dialog/symbols.cpp:75
-#, fuzzy
 msgid "Current document"
 msgstr "Aktuelles Dokument"
 
@@ -24693,13 +24692,12 @@ msgid "Wrap"
 msgstr "Umbrechen"
 
 #: ../src/ui/dialog/symbols.cpp:76
-#, fuzzy
 msgid "All symbol sets"
-msgstr "Symbolsatz:"
+msgstr "Alle Symbolsätze"
 
 #: ../src/ui/dialog/symbols.cpp:128
-msgid "Symbol set: "
-msgstr "Symbolsatz:"
+msgid "Symbol set"
+msgstr "Symbolsatz"
 
 #: ../src/ui/dialog/symbols.cpp:157
 msgid "Return to start search."
@@ -24789,8 +24787,8 @@ msgid "notitle_"
 msgstr ""
 
 #: ../src/ui/dialog/symbols.cpp:1224
-msgid "Symbol without title "
-msgstr ""
+msgid "Symbol without title"
+msgstr "Symbol ohne Namen"
 
 #: ../src/ui/dialog/template-widget.cpp:32
 msgid "More info"

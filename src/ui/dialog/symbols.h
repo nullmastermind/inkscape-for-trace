@@ -70,6 +70,9 @@ private:
 
     static SymbolColumns *getColumns();
 
+    Glib::ustring CURRENTDOC;
+    Glib::ustring ALLDOCS;
+
     void packless();
     void packmore();
     void zoomin();

@@ -72,8 +72,7 @@ namespace Inkscape {
 namespace UI {
 
 namespace Dialog {
-const Glib::ustring CURRENTDOC = _("Current document");
-const Glib::ustring ALLDOCS    = _("All symbol sets");
+
 // See: http://developer.gnome.org/gtkmm/stable/classGtk_1_1TreeModelColumnRecord.html
 class SymbolColumns : public Gtk::TreeModel::ColumnRecord
 {
@@ -111,7 +110,9 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   desk_track(),
   current_document(nullptr),
   preview_document(nullptr),
-  instanceConns()
+  instanceConns(),
+  CURRENTDOC(_("Current document")),
+  ALLDOCS(_("All symbol sets"))
 {
 
     /********************    Table    *************************/
@@ -125,7 +126,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   guint row = 0;
 
   /******************** Symbol Sets *************************/
-  Gtk::Label* label_set = new Gtk::Label(_("Symbol set: "));
+  Gtk::Label* label_set = new Gtk::Label(Glib::ustring(_("Symbol set")) + ": ");
   table->attach(*Gtk::manage(label_set),0,row,1,1);
   symbol_set = new Gtk::ComboBoxText();  // Fill in later
   symbol_set->append(CURRENTDOC);
@@ -814,6 +815,7 @@ void SymbolsDialog::getSymbolsTitle() {
           while (std::getline(infile, line)) {
               std::string title_res = std::regex_replace (line, matchtitle,"$1",std::regex_constants::format_no_copy);
               if (!title_res.empty()) {
+                  title_res = g_dpgettext2(nullptr, "Symbol", title_res.c_str());
                   symbol_sets[ellipsize(Glib::ustring(title_res), 33)]= nullptr;
                   ++number_docs;
                   break;
@@ -884,6 +886,7 @@ SymbolsDialog::getSymbolsSet(Glib::ustring title)
             while (std::getline(infile, line)) {
                 std::string title_res = std::regex_replace (line, matchtitle,"$1",std::regex_constants::format_no_copy);
                 if (!title_res.empty()) {
+                  title_res = g_dpgettext2(nullptr, "Symbol", title_res.c_str());
                   new_title = ellipsize(Glib::ustring(title_res), 33);
                 }
                 std::size_t pos = filename.find_last_of("/\\");
@@ -1208,31 +1211,35 @@ void SymbolsDialog::addSymbols() {
   }
 }
 
-void SymbolsDialog::addSymbol( SPObject* symbol, Glib::ustring doc_title) {
-
-  SymbolColumns* columns = getColumns();
-
-  gchar const *id    = symbol->getRepr()->attribute("id");
-  gchar * title = symbol->title(); // From title element
+void SymbolsDialog::addSymbol( SPObject* symbol, Glib::ustring doc_title)
+{
+  gchar const *id = symbol->getRepr()->attribute("id");
+  
   if (doc_title.empty()) {
     doc_title = CURRENTDOC;
-  }
-  Glib::ustring symbol_title = "";
-  if(title) {
-    symbol_title = Glib::ustring(title) + Glib::ustring(" (") + doc_title + Glib::ustring(")");
   } else {
-    symbol_title = Glib::ustring(_("Symbol without title ")) + Glib::ustring(id) + Glib::ustring(" (") + doc_title + Glib::ustring(")");
+      doc_title = g_dpgettext2(nullptr, "Symbol", doc_title.c_str());
   }
+  
+  Glib::ustring symbol_title;
+  gchar *title = symbol->title(); // From title element
+  if (title) {
+    symbol_title = Glib::ustring::compose("%1 (%2)", g_dpgettext2(nullptr, "Symbol", title), doc_title.c_str());
+  } else {
+    symbol_title = Glib::ustring::compose("%1 %2 (%3)", _("Symbol without title"), Glib::ustring(id), doc_title);
+  }
+  g_free(title);
+  
   Glib::RefPtr<Gdk::Pixbuf> pixbuf = drawSymbol( symbol );
   if( pixbuf ) {
     Gtk::ListStore::iterator row = store->append();
+    SymbolColumns* columns = getColumns();
     (*row)[columns->symbol_id]        = Glib::ustring( id );
-    (*row)[columns->symbol_title]     = Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(nullptr, "Symbol", symbol_title.c_str()) ));
-    (*row)[columns->symbol_doc_title] = Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(nullptr, "SymbolDoc", doc_title.c_str()) ));
+    (*row)[columns->symbol_title]     = Glib::Markup::escape_text(symbol_title);
+    (*row)[columns->symbol_doc_title] = Glib::Markup::escape_text(doc_title);
     (*row)[columns->symbol_image]     = pixbuf;
+    delete columns;
   }
-  g_free(title);
-  delete columns;
 }
 
 /*
