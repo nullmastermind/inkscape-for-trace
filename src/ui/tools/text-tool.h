@@ -94,7 +94,7 @@ private:
 bool sp_text_paste_inline(ToolBase *ec);
 Glib::ustring sp_text_get_selected_text(ToolBase const *ec);
 SPCSSAttr *sp_text_get_style_at_cursor(ToolBase const *ec);
-std::vector<SPCSSAttr*> sp_text_get_selected_style(ToolBase const *ec, unsigned *k, int *b, std::vector<unsigned> *positions);
+// std::vector<SPCSSAttr*> sp_text_get_selected_style(ToolBase const *ec, unsigned *k, int *b, std::vector<unsigned> *positions);
 bool sp_text_delete_selection(ToolBase *ec);
 void sp_text_context_place_cursor (TextTool *tc, SPObject *text, Inkscape::Text::Layout::iterator where);
 void sp_text_context_place_cursor_at (TextTool *tc, SPObject *text, Geom::Point const p);

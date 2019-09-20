@@ -1422,8 +1422,13 @@ SPCSSAttr *sp_text_get_style_at_cursor(ToolBase const *ec)
 
     return nullptr;
 }
+// this two functions are commented because are used on clipboard
+// and because slow the text pastinbg and usage a lot
+// and couldent get it working properly we miss font size font style or never work
+// and user usualy want paste as plain text and get the position context
+// style. Anyway I retain for further usage.
 
-static bool css_attrs_are_equal(SPCSSAttr const *first, SPCSSAttr const *second)
+/* static bool css_attrs_are_equal(SPCSSAttr const *first, SPCSSAttr const *second)
 {
     if (!first && !second) {
         return true;
@@ -1481,6 +1486,7 @@ std::vector<SPCSSAttr*> sp_text_get_selected_style(ToolBase const *ec, unsigned 
     positions->push_back(*k);
     return vec;
 }
+ */
 
 /**
  Deletes the currently selected characters. Returns false if there is no

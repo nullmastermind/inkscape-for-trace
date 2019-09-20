@@ -245,9 +245,6 @@ void ClipboardManagerImpl::copy(ObjectSet *set)
                 sp_repr_css_attr_unref(_text_style);
                 _text_style = nullptr;
             }
-            te_selected_style.clear();
-            te_selected_style_positions.clear();
-            te_selected_style = Inkscape::UI::Tools::sp_text_get_selected_style(desktop->event_context, &copied_style_length, &nr_blocks, &te_selected_style_positions);
             _text_style = Inkscape::UI::Tools::sp_text_get_style_at_cursor(desktop->event_context);
             return;
         }
@@ -1078,8 +1075,8 @@ bool ClipboardManagerImpl::_pasteText(SPDesktop *desktop)
 
     // if the text editing tool is active, paste the text into the active text object
     if (tools_isactive(desktop, TOOLS_TEXT)) {
-        if(Inkscape::UI::Tools::sp_text_paste_inline(desktop->event_context) == false)
-            return false;
+        return Inkscape::UI::Tools::sp_text_paste_inline(desktop->event_context);
+        /* return false;
         //apply the saved style to pasted text
         Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get();
         Glib::ustring const clip_text = refClipboard->wait_for_text();
@@ -1091,9 +1088,9 @@ bool ClipboardManagerImpl::_pasteText(SPDesktop *desktop)
             // maybe for 1.0 we can make a special type of clipboard
             // that handle layout or maybe we can use the last desktop text style
             // so I comment unneded code.
-            /* Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
+            Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
             Inkscape::Text::Layout::iterator it_next;
-            Inkscape::Text::Layout::iterator it = tc->text_sel_end; */
+            Inkscape::Text::Layout::iterator it = tc->text_sel_end;
             SPText *textitem = dynamic_cast<SPText *>(tc->text);
             if (textitem) {
                 textitem->rebuildLayout();
@@ -1103,7 +1100,7 @@ bool ClipboardManagerImpl::_pasteText(SPDesktop *desktop)
                 flowtext->rebuildLayout();
             }
             // we realy only want to inherit container style
-            /* SPCSSAttr *css = take_style_from_item(tc->text);
+            SPCSSAttr *css = take_style_from_item(tc->text);
             for (int i = 0; i < nr_blocks; ++i)
             {
                 gchar const *w = sp_repr_css_property(css, "font-size", "0px");
@@ -1129,21 +1126,22 @@ bool ClipboardManagerImpl::_pasteText(SPDesktop *desktop)
                 tc->text_sel_end = it;
                 for (unsigned int j = te_selected_style_positions[i]; j < te_selected_style_positions[i+1]; ++j)
                     it.nextCharacter();
-            } */
+            }
         }
         return true;
+    
     }
     // old(try to parse the text as a color and, if successful, apply it as the current style)
     // we realy only want to inherit container style
     // maybe for 1.0 we can make a special type of clipboard
     // that handle layout or maybe we can use the last desktop text style
-    /* SPCSSAttr *css = sp_repr_css_attr_parse_color_to_fill(_clipboard->wait_for_text());
+    SPCSSAttr *css = sp_repr_css_attr_parse_color_to_fill(_clipboard->wait_for_text());
     if (css) {
         sp_desktop_set_style(desktop, css);
         return true;
-    } */
-
+    }
     return false;
+    */
 }
 
 
