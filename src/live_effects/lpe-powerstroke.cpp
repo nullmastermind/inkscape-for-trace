@@ -617,12 +617,15 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
         Geom::Point start = Geom::Point( pwd2_in.domain().min(), ts.front()[Geom::Y]);
         Geom::Point end   = Geom::Point( pwd2_in.domain().max(), ts.front()[Geom::Y]); 
         if (ts.size() > 1) {
-            ts_close.push_back(ts[ts.size()-2]);
-            ts_close.push_back(ts.back());
-            ts_close.push_back(ts.front());
-            ts_close.push_back(ts[1]);
+            ts_close.push_back(ts[ts.size()-1]);
+            /* double big = std::max(ts[ts.size()-1][Geom::Y], ts[0][Geom::Y]);
+            double small = middle_point(ts[ts.size()-1][Geom::Y], ts[0][Geom::Y]);
+            int sign = big > 0 ? 1 : -1; */
+            Geom::Point inbetween = Geom::Point((ts[ts.size()-1][Geom::X] + ts[0][Geom::X])/2.0, middle_point(ts[ts.size()-1], ts[0])[Geom::Y]);
+            ts_close.push_back(inbetween);
+            ts_close.push_back(ts[0]);
             Geom::Path closepath = interpolator->interpolateToPath(ts_close);
-            start = closepath.pointAt(Geom::nearest_time(Geom::Point( pwd2_in.domain().min(),0), closepath));
+            start = closepath.pointAt(Geom::nearest_time(pathv[0].initialPoint(), closepath));
             start[Geom::X] = pwd2_in.domain().min();
             end   = start;
             end[Geom::X] = pwd2_in.domain().max();
