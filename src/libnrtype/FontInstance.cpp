@@ -698,42 +698,92 @@ Inkscape::Pixbuf* font_instance::PixBuf(int glyph_id)
         if (!pixbuf) {
             Glib::ustring svg = glyph_iter->second.svg;
 
+            // std::cout << svg << std::endl;
+
+            // Create new viewbox which determines pixbuf size.
+            Glib::ustring viewbox("viewBox=\"0 ");
+            viewbox += std::to_string(-_design_units);
+            viewbox += " ";
+            viewbox += std::to_string(_design_units);
+            viewbox += " ";
+            viewbox += std::to_string(_design_units*2);
+            viewbox += "\"";
+
+            // Search for existing viewbox
             Glib::RefPtr<Glib::Regex> regex =
                 Glib::Regex::create("viewBox=\"\\s*(\\d*\\.?\\d+)\\s*,?\\s*(\\d*\\.?\\d+)\\s*,?\\s*(\\d+\\.?\\d+)\\s*,?\\s*(\\d+\\.?\\d+)\\s*\"");
             Glib::MatchInfo matchInfo;
             regex->match(svg, matchInfo);
+
             if (matchInfo.matches()) {
-                int x = std::stod(matchInfo.fetch(1));
-                int y = std::stod(matchInfo.fetch(2));
-                int w = std::stod(matchInfo.fetch(3));
-                int h = std::stod(matchInfo.fetch(4));
+                // We have viewBox! We must transform so viewBox corresponds to design units.
+
+                // Replace viewbox
+                svg = regex->replace_literal(svg, 0, viewbox, static_cast<Glib::RegexMatchFlags >(0));
+
+                // Insert group with required transform to map glyph to new viewbox.
+                double x = std::stod(matchInfo.fetch(1));
+                double y = std::stod(matchInfo.fetch(2));
+                double w = std::stod(matchInfo.fetch(3));
+                double h = std::stod(matchInfo.fetch(4));
                 // std::cout << " x: " << x
                 //           << " y: " << y
                 //           << " w: " << w
                 //           << " h: " << h << std::endl;
-                Glib::ustring replacement("viewBox=\"");
-                replacement += std::to_string(x);
-                replacement += " ";
-                replacement += std::to_string(y-h);
-                replacement += " ";
-                replacement += std::to_string(w);
-                replacement += " ";
-                replacement += std::to_string(h*2); // Baseline is at y=0 so we need larger box to get decent.
-                replacement += "\"";
-                // std::cout << "replacement: |" << replacement << "|" << std::endl;
-                svg = regex->replace_literal(svg, 0, replacement, static_cast<Glib::RegexMatchFlags >(0));
+
+                if (w <= 0.0 or h <= 0.0) {
+                    std::cerr << "font_instance::PixBuf: Invalid glyph width or height!" << std::endl;
+                } else {
+
+                    double xscale = _design_units/w;
+                    double yscale = _design_units/h;
+                    double xtrans = _design_units/w * x;
+                    double ytrans = _design_units/h * y;
+
+                    if (xscale != 1.0 || yscale != 1.0) {
+                        Glib::ustring group = "<g transform=\"matrix(";
+                        group += std::to_string(xscale);
+                        group += ", 0, 0, ";
+                        group += std::to_string(yscale);
+                        group += std::to_string(-xtrans);
+                        group += ", ";
+                        group += std::to_string(-ytrans);
+                        group += ")\">";
+
+                        // Insert start group tag after initial <svg>
+                        Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("<\\s*svg.*?>");
+                        regex->match(svg, matchInfo);
+                        if (matchInfo.matches()) {
+                            int start = -1;
+                            int end   = -1;
+                            matchInfo.fetch_pos(0, start, end);
+                            svg.insert(end, group);
+                        } else {
+                            std::cerr << "font_instance::PixBuf: Could not find <svg> tag!" << std::endl;
+                        }
+
+                        // Insert end group tag before final </svg> (To do: make sure it is final </svg>)
+                        regex = Glib::Regex::create("<\\s*\\/\\s*svg.*?>");
+                        regex->match(svg, matchInfo);
+                        if (matchInfo.matches()) {
+                            int start = -1;
+                            int end   = -1;
+                            matchInfo.fetch_pos(0, start, end);
+                            svg.insert(start, "</g>");
+                        } else {
+                            std::cerr << "font_instance::PixBuf: Could not find </svg> tag!" << std::endl;
+                        }
+                    }
+                }
+
             } else {
-                // No viewBox! We insert one.
+                // No viewBox! We insert one. (To do: Look at 'width' and 'height' to see if we must scale.)
                 Glib::RefPtr<Glib::Regex> regex = Glib::Regex::create("<\\s*svg");
-                Glib::ustring viewbox("<svg viewBox=\"0 ");
-                viewbox += std::to_string(-_design_units);
-                viewbox += " ";
-                viewbox += std::to_string(_design_units);
-                viewbox += " ";
-                viewbox += std::to_string(_design_units*2);
-                viewbox += "\"";
+                viewbox.insert(0, "<svg ");
                 svg = regex->replace_literal(svg, 0, viewbox, static_cast<Glib::RegexMatchFlags >(0));
             }
+
+            // std::cout << svg << std::endl;
 
             // Finally create pixbuf!
             pixbuf = Inkscape::Pixbuf::create_from_buffer(svg);
