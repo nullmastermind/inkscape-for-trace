@@ -55,10 +55,8 @@ public:
     void on_item_activated(const Gtk::TreeModel::Path &path);
     std::vector<SPObject *> extract_elements(SPObject *item);
 
-    const Glib::ustring ALLDOCS = _("All paint servers");
-    const Glib::ustring CURRENTDOC = _("Current document");
-    const Glib::ustring FILL = _("Fill");
-    const Glib::ustring STROKE = _("Stroke");
+    const Glib::ustring ALLDOCS;
+    const Glib::ustring CURRENTDOC;
     std::map<Glib::ustring, Glib::RefPtr<Gtk::ListStore>> store;
     Glib::ustring current_store;
     std::map<Glib::ustring, SPDocument *> document_map;

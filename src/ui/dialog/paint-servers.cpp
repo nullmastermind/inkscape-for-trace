@@ -70,10 +70,13 @@ PaintServersColumns *PaintServersDialog::getColumns() { return new PaintServersC
 // Constructor
 PaintServersDialog::PaintServersDialog(gchar const *prefsPath)
     : Inkscape::UI::Widget::Panel(prefsPath, SP_VERB_DIALOG_PAINT)
-    , current_store(ALLDOCS)
     , desktop(SP_ACTIVE_DESKTOP)
     , target_selected(true)
+    , ALLDOCS(_("All paint servers"))
+    , CURRENTDOC(_("Current document"))
 {
+    current_store = ALLDOCS;
+
     store[ALLDOCS] = Gtk::ListStore::create(*getColumns());
     store[CURRENTDOC] = Gtk::ListStore::create(*getColumns());
 
@@ -86,7 +89,7 @@ PaintServersDialog::PaintServersDialog(gchar const *prefsPath)
     _getContents()->pack_start(*grid, Gtk::PACK_EXPAND_WIDGET);
 
     // Grid row 0
-    Gtk::Label *file_label = Gtk::manage(new Gtk::Label(_("Server: ")));
+    Gtk::Label *file_label = Gtk::manage(new Gtk::Label(Glib::ustring(_("Server")) + ": "));
     grid->attach(*file_label, 0, 0, 1, 1);
 
     dropdown = Gtk::manage(new Gtk::ComboBoxText());
@@ -98,13 +101,13 @@ PaintServersDialog::PaintServersDialog(gchar const *prefsPath)
     grid->attach(*dropdown, 1, 0, 1, 1);
 
     // Grid row 1
-    Gtk::Label *fill_label = Gtk::manage(new Gtk::Label(_("Change: ")));
+    Gtk::Label *fill_label = Gtk::manage(new Gtk::Label(Glib::ustring(_("Change")) + ": "));
     grid->attach(*fill_label, 0, 1, 1, 1);
 
     target_dropdown = Gtk::manage(new Gtk::ComboBoxText());
-    target_dropdown->append(FILL);
-    target_dropdown->append(STROKE);
-    target_dropdown->set_active_text(FILL);
+    target_dropdown->append(_("Fill"));
+    target_dropdown->append(_("Stroke"));
+    target_dropdown->set_active_text(_("Fill"));
     target_dropdown->set_hexpand();
     grid->attach(*target_dropdown, 1, 1, 1, 1);
 

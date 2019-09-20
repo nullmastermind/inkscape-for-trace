@@ -271,7 +271,6 @@
 ../src/ui/dialog/objects.cpp
 ../src/ui/dialog/ocaldialogs.cpp
 ../src/ui/dialog/paint-servers.cpp
-../src/ui/dialog/paint-servers.h
 ../src/ui/dialog/polar-arrange-tab.cpp
 ../src/ui/dialog/print-colors-preview-dialog.cpp
 ../src/ui/dialog/print.cpp
