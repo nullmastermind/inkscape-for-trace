@@ -83,10 +83,10 @@ static void set_menuitems(unsigned int emitting_verb, bool value)
                 lastverb = emitting_verb;
                 Gtk::CheckMenuItem *check = dynamic_cast<Gtk::CheckMenuItem *>(menu.first.second);
                 Gtk::RadioMenuItem *radio = dynamic_cast<Gtk::RadioMenuItem *>(menu.first.second);
-                if (check) {
-                    check->property_active() = value;
-                } else if (radio) {
+                if (radio) {
                     radio->property_active() = value;
+                } else if (check) {
+                    check->property_active() = value;
                 }
                 lastverb = -1;
             }
