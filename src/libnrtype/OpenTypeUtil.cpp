@@ -366,7 +366,7 @@ void readOpenTypeSVGTable(const FT_Face ft_face,
     // std::cout << "Offset: "  << offset << std::endl;
     // Bytes 6-9 are reserved.
 
-    uint16_t entries = (data[offset] << 8) + data[offset+1];
+    uint16_t entries = ((data[offset] & 0xff) << 8) + (data[offset+1] & 0xff);
     // std::cout << "Number of entries: " << entries << std::endl;
 
     for (int entry = 0; entry < entries; ++entry) {
