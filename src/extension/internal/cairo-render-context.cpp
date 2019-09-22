@@ -1674,18 +1674,23 @@ bool CairoRenderContext::renderImage(Inkscape::Pixbuf *pb,
     // See cairo-pdf-surface.c
     if (style) {
         // See: http://www.w3.org/TR/SVG/painting.html#ImageRenderingProperty
-        //      http://www.w3.org/TR/css4-images/#the-image-rendering
-        //      style.h/style.cpp
+        //      https://drafts.csswg.org/css-images-3/#the-image-rendering
+        //      style.h/style.cpp, drawing-image.cpp
+        //
+        // CSS 3 defines:
+        //   'optimizeSpeed' as alias for "pixelated"
+        //   'optimizeQuality' as alias for "smooth"
         switch (style->image_rendering.computed) {
-            case SP_CSS_IMAGE_RENDERING_AUTO:
-            case SP_CSS_IMAGE_RENDERING_OPTIMIZEQUALITY:
-            case SP_CSS_IMAGE_RENDERING_CRISPEDGES:
-                cairo_pattern_set_filter(cairo_get_source(_cr), CAIRO_FILTER_BEST );
-                break;
             case SP_CSS_IMAGE_RENDERING_OPTIMIZESPEED:
             case SP_CSS_IMAGE_RENDERING_PIXELATED:
+            // we don't have an implementation for crisp-edges, but it should *not* smooth or blur
+            case SP_CSS_IMAGE_RENDERING_CRISPEDGES:
+                cairo_pattern_set_filter(cairo_get_source(_cr), CAIRO_FILTER_NEAREST);
+                break;
+            case SP_CSS_IMAGE_RENDERING_OPTIMIZEQUALITY:
+            case SP_CSS_IMAGE_RENDERING_AUTO:
             default:
-                cairo_pattern_set_filter(cairo_get_source(_cr), CAIRO_FILTER_NEAREST );
+                cairo_pattern_set_filter(cairo_get_source(_cr), CAIRO_FILTER_BEST);
                 break;
         }
     }
