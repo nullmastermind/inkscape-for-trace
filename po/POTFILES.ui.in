@@ -1,3 +1,5 @@
+../share/ui/dialog-css.glade
+../share/ui/dialog-filter-editor.glade
 ../share/ui/dialog-livepatheffect-add.glade
 ../share/ui/dialog-trace.glade
 ../share/ui/inkscape-application.glade

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-09-22 16:40+0200\n"
+"POT-Creation-Date: 2019-09-22 17:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12962,6 +12962,7 @@ msgstr ""
 #: ../src/ui/dialog/attrdialog.cpp:108
 #: ../src/ui/dialog/inkscape-preferences.cpp:2162
 #: ../src/ui/widget/page-sizer.cpp:94 ../src/widgets/gradient-selector.cpp:139
+#: ../share/ui/dialog-filter-editor.glade:234
 #: ../share/ui/dialog-livepatheffect-add.glade:404
 msgid "Name"
 msgstr ""
@@ -18769,6 +18770,7 @@ msgid "Don't attach connectors to text objects"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:348
+#: ../share/ui/dialog-css.glade:41
 msgid "Selector"
 msgstr ""
 
@@ -22651,6 +22653,7 @@ msgid "CSS selector"
 msgstr ""
 
 #: ../src/ui/dialog/selectorsdialog.cpp:1163
+#: ../share/ui/dialog-filter-editor.glade:280
 msgid "Add"
 msgstr ""
 
@@ -31894,6 +31897,82 @@ msgstr ""
 
 #: ../src/widgets/toolbox.cpp:226
 msgid "Style of Paint Bucket fill objects"
+msgstr ""
+
+#: ../share/ui/dialog-css.glade:112
+msgid "}"
+msgstr ""
+
+#: ../share/ui/dialog-filter-editor.glade:18
+msgid "test1"
+msgstr ""
+
+#: ../share/ui/dialog-filter-editor.glade:19
+msgid "a"
+msgstr ""
+
+#: ../share/ui/dialog-filter-editor.glade:24
+msgid "test2"
+msgstr ""
+
+#: ../share/ui/dialog-filter-editor.glade:25
+msgid "b"
+msgstr ""
+
+#: ../share/ui/dialog-filter-editor.glade:30
+msgid "test3"
+msgstr ""
+
+#: ../share/ui/dialog-filter-editor.glade:31
+msgid "c"
+msgstr ""
+
+#: ../share/ui/dialog-filter-editor.glade:50
+msgid "whatever"
+msgstr ""
+
+#: ../share/ui/dialog-filter-editor.glade:53
+msgid "second choice"
+msgstr ""
+
+#: ../share/ui/dialog-filter-editor.glade:70
+msgid "filter1"
+msgstr ""
+
+#: ../share/ui/dialog-filter-editor.glade:71
+msgid "filter2"
+msgstr ""
+
+#: ../share/ui/dialog-filter-editor.glade:84
+msgid "FER: "
+msgstr ""
+
+#: ../share/ui/dialog-filter-editor.glade:96
+msgid "X: "
+msgstr ""
+
+#: ../share/ui/dialog-filter-editor.glade:122
+msgid "Y: "
+msgstr ""
+
+#: ../share/ui/dialog-filter-editor.glade:146
+msgid "W: "
+msgstr ""
+
+#: ../share/ui/dialog-filter-editor.glade:170
+msgid "H: "
+msgstr ""
+
+#: ../share/ui/dialog-filter-editor.glade:222
+msgid "Effect"
+msgstr ""
+
+#: ../share/ui/dialog-filter-editor.glade:246
+msgid "Origin(s)"
+msgstr ""
+
+#: ../share/ui/dialog-filter-editor.glade:345
+msgid "This effect does this and that."
 msgstr ""
 
 #: ../share/ui/dialog-livepatheffect-add.glade:8

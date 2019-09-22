@@ -21,8 +21,6 @@ export LC_ALL=C
 ) | grep -vx -f POTFILES.skip > POTFILES.src.in
 
 
-find ../share/extensions -name '*.py' -type f -print0 | xargs -0 egrep -l '(\<[QNC]?_|gettext) *\(' | sort > POTFILES.py.in
-find ../share/extensions -name '*.inx' -type f -print | sort > POTFILES.inx.in
-find ../share/ui -name '*.glade' -type f -print | sort > POTFILES.ui.in
-
-
+find ../share/extensions -name '*.py' -type f -print0 | xargs -0 egrep -l '(\<[QNC]?_|gettext) *\(' | grep -vx -f POTFILES.skip | sort > POTFILES.py.in
+find ../share/extensions -name '*.inx' -type f -print | grep -vx -f POTFILES.skip | sort > POTFILES.inx.in
+find ../share/ui -name '*.glade' -type f -print | grep -vx -f POTFILES.skip | sort > POTFILES.ui.in

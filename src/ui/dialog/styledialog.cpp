@@ -486,7 +486,7 @@ void StyleDialog::readStyleElement()
         obj = getDesktop()->getDocument()->getXMLDialogSelectedObject();
     }
 
-    Glib::ustring gladefile = get_filename(Inkscape::IO::Resource::UIS, "dialog-css.ui");
+    Glib::ustring gladefile = get_filename(Inkscape::IO::Resource::UIS, "dialog-css.glade");
     Glib::RefPtr<Gtk::Builder> _builder;
     try {
         _builder = Gtk::Builder::create_from_file(gladefile);

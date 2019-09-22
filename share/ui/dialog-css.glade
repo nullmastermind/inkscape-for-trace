@@ -109,7 +109,7 @@
         <property name="no_show_all">True</property>
         <property name="halign">start</property>
         <property name="valign">start</property>
-        <property name="label" translatable="yes">}</property>
+        <property name="label">}</property>
       </object>
       <packing>
         <property name="expand">False</property>

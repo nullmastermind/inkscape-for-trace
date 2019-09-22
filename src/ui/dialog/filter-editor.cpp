@@ -65,7 +65,7 @@ FilterEditorDialog::FilterEditorDialog() : UI::Widget::Panel("/dialogs/filtereff
 {
      
     const std::string req_widgets[] = {"FilterEditor", "FilterList", "FilterFERX", "FilterFERY", "FilterFERH", "FilterFERW", "FilterPreview", "FilterPrimitiveDescImage", "FilterPrimitiveList", "FilterPrimitiveDescText", "FilterPrimitiveAdd"};
-    Glib::ustring gladefile = get_filename(UIS, "dialog-filter-editor.ui");
+    Glib::ustring gladefile = get_filename(UIS, "dialog-filter-editor.glade");
     try {
         builder = Gtk::Builder::create_from_file(gladefile);
     } catch(const Glib::Error& ex) {
