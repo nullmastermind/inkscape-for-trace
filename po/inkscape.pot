@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-09-22 16:39+0200\n"
+"POT-Creation-Date: 2019-09-22 16:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12962,6 +12962,7 @@ msgstr ""
 #: ../src/ui/dialog/attrdialog.cpp:108
 #: ../src/ui/dialog/inkscape-preferences.cpp:2162
 #: ../src/ui/widget/page-sizer.cpp:94 ../src/widgets/gradient-selector.cpp:139
+#: ../share/ui/dialog-livepatheffect-add.glade:404
 msgid "Name"
 msgstr ""
 
@@ -21393,6 +21394,8 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2164
 #: ../src/ui/widget/page-sizer.cpp:96
+#: ../share/ui/dialog-livepatheffect-add.glade:438
+#: ../share/ui/dialog-livepatheffect-add.glade:550
 msgid "Description"
 msgstr ""
 
@@ -31891,6 +31894,26 @@ msgstr ""
 
 #: ../src/widgets/toolbox.cpp:226
 msgid "Style of Paint Bucket fill objects"
+msgstr ""
+
+#: ../share/ui/dialog-livepatheffect-add.glade:8
+msgid "Live Path Effects Selector"
+msgstr ""
+
+#: ../share/ui/dialog-livepatheffect-add.glade:273
+msgid "Show Experimental"
+msgstr ""
+
+#: ../share/ui/dialog-livepatheffect-add.glade:298
+msgid "Message"
+msgstr ""
+
+#: ../share/ui/dialog-livepatheffect-add.glade:529
+msgid "LPEName"
+msgstr ""
+
+#: ../share/ui/dialog-livepatheffect-add.glade:565
+msgid "Experimental"
 msgstr ""
 
 #: ../share/ui/dialog-trace.glade:92

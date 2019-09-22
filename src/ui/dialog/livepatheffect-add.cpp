@@ -81,7 +81,7 @@ LivePathEffectAdd::LivePathEffectAdd()
     , _applied(false)
     , _showfavs(false)
 {
-    Glib::ustring gladefile = get_filename(Inkscape::IO::Resource::UIS, "dialog-livepatheffect-add.ui");
+    Glib::ustring gladefile = get_filename(Inkscape::IO::Resource::UIS, "dialog-livepatheffect-add.glade");
     try {
         _builder = Gtk::Builder::create_from_file(gladefile);
     } catch (const Glib::Error &ex) {
