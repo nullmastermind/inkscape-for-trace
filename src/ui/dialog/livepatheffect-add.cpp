@@ -107,6 +107,7 @@ LivePathEffectAdd::LivePathEffectAdd()
                                    Gdk::ENTER_NOTIFY_MASK | Gdk::LEAVE_NOTIFY_MASK | Gdk::KEY_PRESS_MASK);
     _LPESelectorFlowBox->signal_set_focus_child().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_focus));
     
+    gladefile = get_filename(Inkscape::IO::Resource::UIS, "dialog-livepatheffect-effect.glade");
     for (int i = 0; i < static_cast<int>(converter._length); ++i) {
         Glib::RefPtr<Gtk::Builder> builder_effect;
         try {
