@@ -216,10 +216,17 @@ void ObjectProperties::_init()
     grid_top->attach(_label_image_rendering, 0, 4, 1, 1);
 
     /* Create the combo box text for the 'image-rendering' property  */
-    for (unsigned i = 0; enum_shape_rendering[i].key; ++i) {
-        _combo_image_rendering.append(enum_shape_rendering[i].key);
+    for (unsigned i = 0; enum_image_rendering[i].key; ++i) {
+        _combo_image_rendering.append(enum_image_rendering[i].key);
     }
-    _combo_image_rendering.set_tooltip_text(_("The 'image-rendering' property can influence how a bitmap is up-scaled:\n\t'auto' no preference;\n\t'optimizeQuality' smooth;\n\t'optimizeSpeed' blocky.\nNote that this behaviour is not defined in the SVG 1.1 specification and not all browsers follow this interpretation."));
+    _combo_image_rendering.set_tooltip_text(_("The 'image-rendering' property can influence how a bitmap is re-scaled:\n"
+                                              "\t• 'auto' no preference (usually smooth but blurred)\n"
+                                              "\t• 'optimizeQuality' prefer rendering quality (usually smooth but blurred)\n"
+                                              "\t• 'optimizeSpeed' prefer rendering speed (usually blocky)\n"
+                                              "\t• 'crisp-edges' rescale without blurring edges (often blocky)\n"
+                                              "\t• 'pixelated' render blocky\n"
+                                              "Note that the specification of this property is not finalized. "
+                                              "Support and interpretation of these values varies between renderers."));
 
     _combo_image_rendering.set_valign(Gtk::ALIGN_CENTER);
     grid_top->attach(_combo_image_rendering, 1, 4, 1, 1);
