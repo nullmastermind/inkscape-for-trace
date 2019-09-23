@@ -97,10 +97,9 @@ LivePathEffectAdd::LivePathEffectAdd()
     _builder->get_widget("LPEScrolled", _LPEScrolled);
     _builder->get_widget("LPESelectorEffectEventFavShow", _LPESelectorEffectEventFavShow);
     _builder->get_widget("LPESelectorEffectInfoEventBox", _LPESelectorEffectInfoEventBox);
-    _builder->get_widget("LPESelectorEffectRadioList", _LPESelectorEffectRadioList);
     _builder->get_widget("LPESelectorEffectRadioPackLess", _LPESelectorEffectRadioPackLess);
     _builder->get_widget("LPESelectorEffectRadioPackMore", _LPESelectorEffectRadioPackMore);
-
+    _builder->get_widget("LPESelectorEffectRadioList", _LPESelectorEffectRadioList);
 
     _LPEFilter->signal_search_changed().connect(sigc::mem_fun(*this, &LivePathEffectAdd::on_search));
     _LPEDialogSelector->add_events(Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK |
@@ -203,12 +202,12 @@ LivePathEffectAdd::LivePathEffectAdd()
     _LPESelectorFlowBox->set_activate_on_single_click(false);
     _visiblelpe = _LPESelectorFlowBox->get_children().size();
     _LPEInfo->set_visible(false);
+    _LPESelectorEffectRadioPackLess->signal_clicked().connect(
+        sigc::bind(sigc::mem_fun(*this, &LivePathEffectAdd::viewChanged), 0));
+    _LPESelectorEffectRadioPackMore->signal_clicked().connect(
+        sigc::bind(sigc::mem_fun(*this, &LivePathEffectAdd::viewChanged), 1));
     _LPESelectorEffectRadioList->signal_clicked().connect(
         sigc::bind(sigc::mem_fun(*this, &LivePathEffectAdd::viewChanged), 2));
-    _LPESelectorEffectRadioPackLess->signal_clicked().connect(
-        sigc::bind(sigc::mem_fun(*this, &LivePathEffectAdd::viewChanged), 1));
-    _LPESelectorEffectRadioPackMore->signal_clicked().connect(
-        sigc::bind(sigc::mem_fun(*this, &LivePathEffectAdd::viewChanged), 0));
     _LPESelectorEffectEventFavShow->signal_enter_notify_event().connect(sigc::bind<GtkWidget *>(
         sigc::mem_fun(*this, &LivePathEffectAdd::mouseover), GTK_WIDGET(_LPESelectorEffectEventFavShow->gobj())));
     _LPESelectorEffectEventFavShow->signal_leave_notify_event().connect(sigc::bind<GtkWidget *>(
@@ -247,7 +246,6 @@ LivePathEffectAdd::LivePathEffectAdd()
             _LPESelectorEffectRadioList->set_active();
             viewChanged(2);
     }
-    // viewChanged();
 }
 const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *LivePathEffectAdd::getActiveData()
 {
@@ -259,36 +257,25 @@ void LivePathEffectAdd::viewChanged(gint mode)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool changed = false;
     if (mode == 2 && !_LPEDialogSelector->get_style_context()->has_class("LPEList")) {
-        prefs->setInt("/dialogs/livepatheffect/dialogmode", 2);
         _LPEDialogSelector->get_style_context()->add_class("LPEList");
         _LPEDialogSelector->get_style_context()->remove_class("LPEPackLess");
         _LPEDialogSelector->get_style_context()->remove_class("LPEPackMore");
-        _LPESelectorEffectRadioList->get_style_context()->add_class("active");
-        _LPESelectorEffectRadioPackLess->get_style_context()->remove_class("active");
-        _LPESelectorEffectRadioPackMore->get_style_context()->remove_class("active");
         _LPESelectorFlowBox->set_max_children_per_line(1);
         changed = true;
     } else if (mode == 1 && !_LPEDialogSelector->get_style_context()->has_class("LPEPackMore")) {
-        prefs->setInt("/dialogs/livepatheffect/dialogmode", 1);
-        _LPESelectorEffectRadioList->get_style_context()->remove_class("active");
-        _LPESelectorEffectRadioPackLess->get_style_context()->remove_class("active");
-        _LPESelectorEffectRadioPackMore->get_style_context()->add_class("active");
         _LPEDialogSelector->get_style_context()->remove_class("LPEList");
         _LPEDialogSelector->get_style_context()->remove_class("LPEPackLess");
         _LPEDialogSelector->get_style_context()->add_class("LPEPackMore");
         _LPESelectorFlowBox->set_max_children_per_line(30);
         changed = true;
     } else if (mode == 0 && !_LPEDialogSelector->get_style_context()->has_class("LPEPackLess")) {
-        prefs->setInt("/dialogs/livepatheffect/dialogmode", 0);
-        _LPESelectorEffectRadioList->get_style_context()->remove_class("active");
-        _LPESelectorEffectRadioPackLess->get_style_context()->add_class("active");
-        _LPESelectorEffectRadioPackMore->get_style_context()->remove_class("active");
         _LPEDialogSelector->get_style_context()->remove_class("LPEList");
         _LPEDialogSelector->get_style_context()->add_class("LPEPackLess");
         _LPEDialogSelector->get_style_context()->remove_class("LPEPackMore");
         _LPESelectorFlowBox->set_max_children_per_line(30);
         changed = true;
     }
+    prefs->setInt("/dialogs/livepatheffect/dialogmode", mode);
     if (changed) {
         _LPESelectorFlowBox->unset_sort_func();
         _LPESelectorFlowBox->set_sort_func(sigc::mem_fun(this, &LivePathEffectAdd::on_sort));

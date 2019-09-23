@@ -91,6 +91,10 @@ image {
     -gtk-icon-style: regular;
 }
 
+.regular .symbolic image {
+    -gtk-icon-style: symbolic;
+}
+
 .inverted,
 .dark .forcebright,
 .bright .forcedark {
@@ -288,14 +292,14 @@ spinbutton undershoot {
     color: @theme_fg_color;
 }
 
-#LPEDialogSelector.LPEPackLess flowboxchild {
+#LPEDialogSelector.LPEPackMore flowboxchild {
 margin:5px 1px 0px;
 padding:3px 3px 10px 3px;
 } 
-#LPEDialogSelector.LPEPackLess flowboxchild label {
+#LPEDialogSelector.LPEPackMore flowboxchild label {
 font-size:14px;
 } 
-#LPEDialogSelector.LPEPackLess #LPESelectorEffectInfoPop label{
+#LPEDialogSelector.LPEPackMore #LPESelectorEffectInfoPop label{
 font-size:13px;
 }
 

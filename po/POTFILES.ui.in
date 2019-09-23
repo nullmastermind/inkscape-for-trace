@@ -1,4 +1,5 @@
 ../share/ui/dialog-css.glade
 ../share/ui/dialog-livepatheffect-add.glade
+../share/ui/dialog-livepatheffect-effect.glade
 ../share/ui/dialog-trace.glade
 ../share/ui/inkscape-application.glade
