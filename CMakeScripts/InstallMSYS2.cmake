@@ -173,7 +173,7 @@ if(WIN32)
   # adjust fonts.conf
   #   - add "%localappdata%\Microsoft\Windows\Fonts" as font dir
   #     which is the default path for fonts installed per-user in Windows 10 (version 1809)
-  #   - store font cache in non-temporary directory in "%localappdata%\fontconfig\cache" 
+  #   - store font cache in non-temporary directory in "%localappdata%\fontconfig\cache"
   set(fontdir_default    "\\t^<dir^>WINDOWSFONTDIR^</dir^>")  # the '^' are needed to escape angle brackets on Windows command shell
   set(fontdir_additional "\\t^<dir^>~/AppData/Local/Microsoft/Windows/Fonts^</dir^>")
   set(cachedir_default   "\\t^<cachedir^>/var/cache/fontconfig^</cachedir^>")
@@ -206,7 +206,7 @@ if(WIN32)
 
   # Typelibs for gtk, pango, cairo -> can be used in Python extensions
   # ToDo: Automate the creation of this collection!
-  install (FILES 
+  install (FILES
     ${MINGW_LIB}/girepository-1.0/Atk-1.0.typelib
     ${MINGW_LIB}/girepository-1.0/cairo-1.0.typelib
     ${MINGW_LIB}/girepository-1.0/Gdk-3.0.typelib
@@ -265,6 +265,7 @@ if(WIN32)
     DESTINATION lib
     PATTERN "python3.7/site-packages" EXCLUDE # specify individual packages to install below
     PATTERN "python3.7/test" EXCLUDE # we don't need the Python testsuite
+    PATTERN "*.pyc" EXCLUDE
   )
 
   set(site_packages "lib/python3.7/site-packages")
@@ -275,6 +276,7 @@ if(WIN32)
     install_list(FILES ${paths}
       ROOT ${MINGW_PATH}
       INCLUDE ${site_packages} # only include content from "site-packages" (we might consider to install everything)
+      EXCLUDE ".pyc$"
     )
   endforeach()
   # Python packages installed via pip
@@ -285,9 +287,13 @@ if(WIN32)
       ROOT ${MINGW_PATH}/${site_packages}
       DESTINATION ${site_packages}/
       EXCLUDE "^\\.\\.\\/" # exclude content in parent directories (notably scripts installed to /bin)
+      EXCLUDE ".pyc$"
     )
   endforeach()
-  
+  install(CODE
+    "MESSAGE(\"Pre-compiling Python byte-code (.pyc files)\")
+     execute_process(COMMAND \${CMAKE_INSTALL_PREFIX}/bin/python -m compileall -qq \${CMAKE_INSTALL_PREFIX})")
+
   # gdb
   install(FILES
     ${MINGW_BIN}/gdb.exe
@@ -295,7 +301,8 @@ if(WIN32)
     DESTINATION bin)
   install(DIRECTORY
     ${MINGW_PATH}/share/gdb
-    DESTINATION share)
+    DESTINATION share
+    PATTERN "*.pyc" EXCLUDE)
   install(FILES
     packaging/win32/gdb_create_backtrace.bat
     DESTINATION bin)
