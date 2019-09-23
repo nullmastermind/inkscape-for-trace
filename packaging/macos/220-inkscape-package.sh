@@ -102,9 +102,14 @@ mv inkscape.icns $APP_RES_DIR
 mkdir $APP_FRA_DIR
 get_source file://$SRC_DIR/$(basename $URL_PYTHON3_BIN) $APP_FRA_DIR
 
+# remove 'test' folder to save space
+rm -rf $APP_FRA_DIR/Python.framework/Versions/Current/lib/python3.7/test
+
 # add it to '$PATH' in launch script
 insert_before $APP_EXE_DIR/Inkscape '\$EXEC' 'export PATH=$bundle_contents/Frameworks/Python.framework/Versions/Current/bin:$PATH'
-# add it to '$PATH' here and now (for package installation below)
+# Add it to '$PATH' here and now (for package installation below). This is an
+# exception: normally we'd not change the global environment but fence it
+# using subshells.
 export PATH=$APP_FRA_DIR/Python.framework/Versions/Current/bin:$PATH
 
 # create '.pth' file inside Framework to include our site-packages directory
@@ -121,20 +126,17 @@ echo "./../../../../../../../Resources/lib/python3.7/site-packages" > $APP_FRA_D
 # patch 'etree'
 relocate_dependency @loader_path/../../../libxml2.2.dylib $APP_LIB_DIR/python3.7/site-packages/lxml/etree.cpython-37m-darwin.so
 relocate_dependency @loader_path/../../../libz.1.dylib $APP_LIB_DIR/python3.7/site-packages/lxml/etree.cpython-37m-darwin.so
+relocate_dependency @loader_path/../../../libxslt.1.dylib $APP_LIB_DIR/python3.7/site-packages/lxml/etree.cpython-37m-darwin.so
+relocate_dependency @loader_path/../../../libexslt.0.dylib $APP_LIB_DIR/python3.7/site-packages/lxml/etree.cpython-37m-darwin.so
 # patch 'objectify'
 relocate_dependency @loader_path/../../../libxml2.2.dylib $APP_LIB_DIR/python3.7/site-packages/lxml/objectify.cpython-37m-darwin.so
 relocate_dependency @loader_path/../../../libz.1.dylib $APP_LIB_DIR/python3.7/site-packages/lxml/objectify.cpython-37m-darwin.so
+relocate_dependency @loader_path/../../../libxslt.1.dylib $APP_LIB_DIR/python3.7/site-packages/lxml/objectify.cpython-37m-darwin.so
+relocate_dependency @loader_path/../../../libexslt.0.dylib $APP_LIB_DIR/python3.7/site-packages/lxml/objectify.cpython-37m-darwin.so
 
 ### install Python package: NumPy ##############################################
 
 pip3 install --install-option="--prefix=$APP_RES_DIR" --ignore-installed $PYTHON_NUMPY
-
-### install Python package: Pycairo ############################################
-
-pip3 install --install-option="--prefix=$APP_RES_DIR" --ignore-installed $PYTHON_PYCAIRO
-
-# patch '_cairo'
-relocate_dependency @loader_path/../../../libcairo.2.dylib $APP_LIB_DIR/python3.7/site-packages/cairo/_cairo.cpython-37m-darwin.so
 
 ### install Python package: PyGObject ##########################################
 
@@ -158,6 +160,14 @@ relocate_dependency @loader_path/../../../libffi.6.dylib $APP_LIB_DIR/python3.7/
 relocate_dependency @loader_path/../../../libcairo.2.dylib $APP_LIB_DIR/python3.7/site-packages/gi/_gi_cairo.cpython-37m-darwin.so
 relocate_dependency @loader_path/../../../libcairo-gobject.2.dylib $APP_LIB_DIR/python3.7/site-packages/gi/_gi_cairo.cpython-37m-darwin.so
 
+### install Python package: Pycairo ############################################
+
+# PyGObject pulls in Pycairo, so not going to install again.
+#pip3 install --install-option="--prefix=$APP_RES_DIR" --ignore-installed $PYTHON_PYCAIRO
+
+# patch '_cairo'
+relocate_dependency @loader_path/../../../libcairo.2.dylib $APP_LIB_DIR/python3.7/site-packages/cairo/_cairo.cpython-37m-darwin.so
+
 ### install Python package: pySerial ###########################################
 
 pip3 install --install-option="--prefix=$APP_RES_DIR" --ignore-installed $PYTHON_PYSERIAL
@@ -165,6 +175,10 @@ pip3 install --install-option="--prefix=$APP_RES_DIR" --ignore-installed $PYTHON
 ### install Python package: Scour ##############################################
 
 pip3 install --install-option="--prefix=$APP_RES_DIR" --ignore-installed $PYTHON_SCOUR
+
+### precompile all Python packages #############################################
+
+python3 -m compileall -f $APP_DIR || true
 
 ### set default Python interpreter #############################################
 
