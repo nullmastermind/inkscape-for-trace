@@ -457,7 +457,7 @@ bool sp_shortcut_file_import() {
                  open_path,
                  Inkscape::UI::Dialog::CUSTOM_TYPE,
                  _("Select a file to import"));
-        importFileDialog->addFilterMenu("All Files", "*");
+    importFileDialog->addFilterMenu(_("Inkscape shortcuts (*.xml)"), "*.xml");
 
     //# Show the dialog
     bool const success = importFileDialog->show();
