@@ -8093,7 +8093,7 @@ msgid ""
 "No object with ID '%s' found."
 msgstr ""
 "파일을 저장할 수 없었음:\n"
-"ID '%'인 개체를 찾지 못함."
+"ID '%s'인 개체를 찾지 못함."
 
 #: ../src/file.cpp:529
 #, c-format
