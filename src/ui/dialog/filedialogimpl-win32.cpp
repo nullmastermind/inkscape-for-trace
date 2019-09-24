@@ -187,26 +187,27 @@ void FileOpenDialogImplWin32::addFilterMenu(Glib::ustring name, Glib::ustring pa
 {
     std::list<Filter> filter_list;
 
-    int extension_index = 0;
-    int filter_length = 1;
-
-    ustring all_exe_files_filter = pattern;
     Filter all_exe_files;
 
     const gchar *all_exe_files_filter_name = name.data();
+    const gchar *all_exe_files_filter = pattern.data();
 
     // Calculate the amount of memory required
     int filter_count = 1;
+    int filter_length = 1;
 
+    int extension_index = 0;
     _extension_map = new Inkscape::Extension::Extension*[filter_count];
 
     // Filter Executable Files
     all_exe_files.name = g_utf8_to_utf16(all_exe_files_filter_name,
         -1, NULL, &all_exe_files.name_length, NULL);
-    all_exe_files.filter = g_utf8_to_utf16(all_exe_files_filter.data(),
+    all_exe_files.filter = g_utf8_to_utf16(all_exe_files_filter,
             -1, NULL, &all_exe_files.filter_length, NULL);
     all_exe_files.mod = NULL;
     filter_list.push_front(all_exe_files);
+
+    filter_length = all_exe_files.name_length + all_exe_files.filter_length + 3; // Add 3 for two \0s and a *
 
     _filter = new wchar_t[filter_length];
     wchar_t *filterptr = _filter;
@@ -290,8 +291,7 @@ void FileOpenDialogImplWin32::createFilterMenu()
             filter.mod = imod;
             filter_list.push_back(filter);
 
-            filter_length += filter.name_length +
-                filter.filter_length + 3;   // Add 3 for two \0s and a *
+            filter_length += filter.name_length + filter.filter_length + 3;   // Add 3 for two \0s and a *
 
             // Add to the "All Inkscape Files" Entry
             if(all_inkscape_files_filter.length() > 0)
