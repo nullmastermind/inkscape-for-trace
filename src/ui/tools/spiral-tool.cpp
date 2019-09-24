@@ -26,18 +26,20 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "include/macros.h"
 #include "message-context.h"
-#include "ui/pixmaps/cursor-spiral.xpm"
 #include "selection.h"
 #include "verbs.h"
 
 #include "display/sp-canvas-item.h"
 #include "display/sp-canvas.h"
 
+#include "include/sp-round.h"
+#include "include/macros.h"
+
 #include "object/sp-namedview.h"
 #include "object/sp-spiral.h"
 
+#include "ui/pixmaps/cursor-spiral.xpm"
 #include "ui/shape-editor.h"
 #include "ui/tools/spiral-tool.h"
 
@@ -361,10 +363,13 @@ void SpiralTool::drag(Geom::Point const &p, guint state) {
     Geom::Point const delta = p1 - p0;
     gdouble const rad = Geom::L2(delta);
 
-    gdouble arg = Geom::atan2(delta) - 2.0*M_PI*this->spiral->revo;
+    // Start angle calculated from end angle and number of revolutions.
+    gdouble arg = Geom::atan2(delta) - 2.0*M_PI * spiral->revo;
 
     if (state & GDK_CONTROL_MASK) {
-        arg = sp_round(arg, M_PI/snaps);
+        /* Snap start angle */
+        double snaps_radian = M_PI/snaps;
+        arg = std::round(arg/snaps_radian) * snaps_radian;
     }
 
     /* Fixme: these parameters should be got from dialog box */
@@ -378,8 +383,8 @@ void SpiralTool::drag(Geom::Point const &p, guint state) {
     Inkscape::Util::Quantity q = Inkscape::Util::Quantity(rad, "px");
     Glib::ustring rads = q.string(desktop->namedview->display_units);
     this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE,
-                               _("<b>Spiral</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"),
-                               rads.c_str(), sp_round((arg + 2.0*M_PI*this->spiral->revo)*180/M_PI, 0.0001));
+                               _("<b>Spiral</b>: radius %s, angle %.2f&#176;; with <b>Ctrl</b> to snap angle"),
+                                rads.c_str(), arg * 180/M_PI + 360*spiral->revo);
 }
 
 void SpiralTool::finishItem() {

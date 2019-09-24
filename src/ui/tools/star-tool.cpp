@@ -26,13 +26,14 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "include/macros.h"
 #include "message-context.h"
 #include "selection.h"
 #include "verbs.h"
 
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-item.h"
+
+#include "include/macros.h"
 
 #include "object/sp-namedview.h"
 #include "object/sp-star.h"
@@ -381,7 +382,8 @@ void StarTool::drag(Geom::Point p, guint state)
 
     if (state & GDK_CONTROL_MASK) {
         /* Snap angle */
-        arg1 = sp_round(arg1, M_PI / snaps);
+        double snaps_radian = M_PI/snaps;
+        arg1 = std::round(arg1/snaps_radian) * snaps_radian;
     }
 
     sp_star_position_set(this->star, this->magnitude, p0, r1, r1 * this->proportion,
@@ -392,9 +394,9 @@ void StarTool::drag(Geom::Point p, guint state)
     Glib::ustring rads = q.string(desktop->namedview->display_units);
     this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE,
                                ( this->isflatsided?
-                                 _("<b>Polygon</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle")
-                                 : _("<b>Star</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle") ),
-                               rads.c_str(), sp_round((arg1) * 180 / M_PI, 0.0001));
+                                 _("<b>Polygon</b>: radius %s, angle %.2f&#176;; with <b>Ctrl</b> to snap angle") :
+                                 _("<b>Star</b>: radius %s, angle %.2f&#176;; with <b>Ctrl</b> to snap angle") ),
+                               rads.c_str(), arg1 * 180 / M_PI);
 }
 
 void StarTool::finishItem() {
