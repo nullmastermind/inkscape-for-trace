@@ -25,11 +25,11 @@
 #include "snap.h"
 #include "style.h"
 
-#include "include/macros.h"
 #include "object/sp-hatch.h"
 #include "object/sp-item.h"
 #include "object/sp-namedview.h"
 #include "object/sp-pattern.h"
+
 
 int KnotHolderEntity::counter = 0;
 
@@ -221,7 +221,9 @@ PatternKnotHolderEntityAngle::knot_set(Geom::Point const &p, Geom::Point const &
     gdouble theta_old = atan2(knot_get() - transform_origin);
 
     if ( state & GDK_CONTROL_MASK ) {
-        theta = sp_round(theta, M_PI/snaps);
+        /* Snap theta */
+        double snaps_radian = M_PI/snaps;
+        theta = std::round(theta/snaps_radian) * snaps_radian;
     }
 
     Geom::Affine rot = Geom::Translate(-transform_origin)
@@ -329,7 +331,9 @@ void HatchKnotHolderEntityAngle::knot_set(Geom::Point const &p, Geom::Point cons
     gdouble theta_old = atan2(knot_get() - transform_origin);
 
     if (state & GDK_CONTROL_MASK) {
-        theta = sp_round(theta, M_PI / snaps);
+        /* Snap theta */
+        double snaps_radian = M_PI/snaps;
+        theta = std::round(theta/snaps_radian) * snaps_radian;
     }
 
     Geom::Affine rot =

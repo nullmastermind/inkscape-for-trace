@@ -18,6 +18,7 @@
 #include "desktop.h"
 #include "knotholder.h"
 #include "knot-holder-entity.h"
+#include "style.h"
 
 #include "live_effects/effect.h"
 
@@ -32,9 +33,6 @@
 #include "object/sp-spiral.h"
 #include "object/sp-star.h"
 #include "object/sp-text.h"
-#include "style.h"
-
-#include "include/macros.h"
 
 class RectKnotHolder : public KnotHolder {
 public:
@@ -955,7 +953,8 @@ ArcKnotHolderEntityStart::knot_set(Geom::Point const &p, Geom::Point const &/*or
     arc->start -= offset;
 
     if ((state & GDK_CONTROL_MASK) && snaps) {
-        arc->start = sp_round(arc->start, M_PI / snaps);
+        double snaps_radian = M_PI/snaps;
+        arc->start = std::round(arc->start/snaps_radian) * snaps_radian;
     }
     if (state & GDK_SHIFT_MASK) {
         arc->end -= offset;
@@ -1006,7 +1005,8 @@ ArcKnotHolderEntityEnd::knot_set(Geom::Point const &p, Geom::Point const &/*orig
     arc->end -= offset;
 
     if ((state & GDK_CONTROL_MASK) && snaps) {
-        arc->end = sp_round(arc->end, M_PI/snaps);
+        double snaps_radian = M_PI/snaps;
+        arc->end = std::round(arc->end/snaps_radian) * snaps_radian;
     }
     if (state & GDK_SHIFT_MASK) {
         arc->start -= offset;
@@ -1437,7 +1437,8 @@ SpiralKnotHolderEntityInner::knot_set(Geom::Point const &p, Geom::Point const &o
              && ( fabs(spiral->revo) > SP_EPSILON_2 )
              && ( snaps != 0 ) ) {
             gdouble arg = 2.0*M_PI*spiral->revo*spiral->t0 + spiral->arg;
-            spiral->t0 = (sp_round(arg, M_PI/snaps) - spiral->arg)/(2.0*M_PI*spiral->revo);
+            double snaps_radian = M_PI/snaps;
+            spiral->t0 = (std::round(arg/snaps_radian)*snaps_radian - spiral->arg)/(2.0*M_PI*spiral->revo);
         }
 
         spiral->t0 = CLAMP(spiral->t0, 0.0, 0.999);
@@ -1469,9 +1470,9 @@ SpiralKnotHolderEntityOuter::knot_set(Geom::Point const &p, Geom::Point const &/
             // if alt not pressed, change also rad; otherwise it is locked
             spiral->rad = MAX(hypot(dx, dy), 0.001);
         }
-        if ( ( state & GDK_CONTROL_MASK )
-             && snaps ) {
-            spiral->arg = sp_round(spiral->arg, M_PI/snaps);
+        if ( ( state & GDK_CONTROL_MASK ) && snaps ) {
+            double snaps_radian = M_PI/snaps;
+            spiral->arg = std::round(spiral->arg/snaps_radian) * snaps_radian;
         }
     } else { // roll/unroll
         // arg of the spiral outer end
@@ -1479,28 +1480,30 @@ SpiralKnotHolderEntityOuter::knot_set(Geom::Point const &p, Geom::Point const &/
         spiral->getPolar(1, nullptr, &arg_1);
 
         // its fractional part after the whole turns are subtracted
-        double arg_r = arg_1 - sp_round(arg_1, 2.0*M_PI);
+        static double _2PI = 2.0 * M_PI;
+        double arg_r = arg_1 - std::round(arg_1/_2PI) * _2PI;
 
         // arg of the mouse point relative to spiral center
         double mouse_angle = atan2(dy, dx);
         if (mouse_angle < 0)
-            mouse_angle += 2*M_PI;
+            mouse_angle += _2PI;
 
         // snap if ctrl
         if ( ( state & GDK_CONTROL_MASK ) && snaps ) {
-            mouse_angle = sp_round(mouse_angle, M_PI/snaps);
+            double snaps_radian = M_PI/snaps;
+            mouse_angle = std::round(mouse_angle/snaps_radian) * snaps_radian;
         }
 
         // by how much we want to rotate the outer point
         double diff = mouse_angle - arg_r;
         if (diff > M_PI)
-            diff -= 2*M_PI;
+            diff -= _2PI;
         else if (diff < -M_PI)
-            diff += 2*M_PI;
+            diff += _2PI;
 
         // calculate the new rad;
         // the value of t corresponding to the angle arg_1 + diff:
-        double t_temp = ((arg_1 + diff) - spiral->arg)/(2*M_PI*spiral->revo);
+        double t_temp = ((arg_1 + diff) - spiral->arg)/(_2PI*spiral->revo);
         // the rad at that t:
         double rad_new = 0;
         if (t_temp > spiral->t0)

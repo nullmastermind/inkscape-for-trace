@@ -33,7 +33,6 @@
 #include "display/sp-canvas-item.h"
 #include "display/sp-canvas.h"
 
-#include "include/sp-round.h"
 #include "include/macros.h"
 
 #include "object/sp-namedview.h"
