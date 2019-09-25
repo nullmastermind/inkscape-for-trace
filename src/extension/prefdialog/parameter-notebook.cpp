@@ -15,6 +15,8 @@
 
 #include "parameter-notebook.h"
 
+#include <unordered_set>
+
 #include <gtkmm/box.h>
 #include <gtkmm/notebook.h>
 
@@ -131,6 +133,17 @@ ParamNotebook::ParamNotebook(Inkscape::XML::Node *xml, Inkscape::Extension::Exte
     }
     if (_children.empty()) {
         g_warning("No (valid) pages for parameter '%s' in extension '%s'", _name, _extension->get_id());
+    }
+
+    // check for duplicate page names
+    std::unordered_set<std::string> names;
+    for (auto child : _children) {
+        ParamNotebookPage *page = static_cast<ParamNotebookPage *>(child);
+        auto ret = names.emplace(page->_name);
+        if (!ret.second) {
+            g_warning("Duplicate page name ('%s') for parameter '%s' in extension '%s'.",
+                      page->_name, _name, _extension->get_id());
+        }
     }
 
     // get value (initialize with value of first page if pref is empty)

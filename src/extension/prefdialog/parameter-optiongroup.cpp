@@ -17,6 +17,8 @@
 
 #include "parameter-optiongroup.h"
 
+#include <unordered_set>
+
 #include <gtkmm/box.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/radiobutton.h>
@@ -60,6 +62,22 @@ ParamOptionGroup::ParamOptionGroup(Inkscape::XML::Node *xml, Inkscape::Extension
     }
     if (choices.empty()) {
         g_warning("No (valid) choices for parameter '%s' in extension '%s'", _name, _extension->get_id());
+    }
+
+    // check for duplicate option texts and values
+    std::unordered_set<std::string> texts;
+    std::unordered_set<std::string> values;
+    for (auto choice : choices) {
+        auto ret1 = texts.emplace(choice->_text);
+        if (!ret1.second) {
+            g_warning("Duplicate option text ('%s') for parameter '%s' in extension '%s'.",
+                      choice->_text.c_str(), _name, _extension->get_id());
+        }
+        auto ret2 = values.emplace(choice->_value);
+        if (!ret2.second) {
+            g_warning("Duplicate option value ('%s') for parameter '%s' in extension '%s'.",
+                      choice->_value.c_str(), _name, _extension->get_id());
+        }
     }
 
     // get value (initialize with value of first choice if pref is empty)

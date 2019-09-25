@@ -54,10 +54,6 @@ private:
         std::string value_to_string() const override { return ""; };
     }; /* class ParamNotebookPage */
 
-    /** A table to store the pages with parameters for this notebook.
-      * This only gets created if there are pages in this notebook */
-    std::vector<ParamNotebookPage*> _pages;
-
 public:
     ParamNotebook(Inkscape::XML::Node *xml, Inkscape::Extension::Extension *ext);
 
