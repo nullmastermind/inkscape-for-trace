@@ -148,7 +148,7 @@ ParamInt::get_widget(sigc::signal<void> *changeSignal)
         Glib::ustring text;
         if (_text != nullptr)
             text = _text;
-        UI::Widget::SpinScale *scale = new UI::Widget::SpinScale(text, fadjust, 0);
+        UI::Widget::SpinScale *scale = Gtk::manage(new UI::Widget::SpinScale(text, fadjust, 0));
         scale->set_size_request(400, -1);
         scale->show();
         hbox->pack_start(*scale, true, true);

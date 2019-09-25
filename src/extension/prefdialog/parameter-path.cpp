@@ -166,7 +166,7 @@ Gtk::Widget *ParamPath::get_widget(sigc::signal<void> *changeSignal)
     label->show();
     hbox->pack_start(*label, false, false);
 
-    ParamPathEntry *textbox = new ParamPathEntry(this, changeSignal);
+    ParamPathEntry *textbox = Gtk::manage(new ParamPathEntry(this, changeSignal));
     textbox->show();
     hbox->pack_start(*textbox, true, true);
     _entry = textbox;

@@ -201,11 +201,11 @@ Gtk::Widget *ParamString::get_widget(sigc::signal<void> *changeSignal)
     if (_mode == MULTILINE) {
         box->set_orientation(Gtk::ORIENTATION_VERTICAL);
 
-        Gtk::ScrolledWindow *textarea = new Gtk::ScrolledWindow();
+        Gtk::ScrolledWindow *textarea = Gtk::manage(new Gtk::ScrolledWindow());
         textarea->set_vexpand();
         textarea->set_shadow_type(Gtk::SHADOW_IN);
 
-        ParamMultilineStringEntry *entry = new ParamMultilineStringEntry(this, changeSignal);
+        ParamMultilineStringEntry *entry = Gtk::manage(new ParamMultilineStringEntry(this, changeSignal));
         entry->show();
 
         textarea->add(*entry);
@@ -213,7 +213,7 @@ Gtk::Widget *ParamString::get_widget(sigc::signal<void> *changeSignal)
 
         box->pack_start(*textarea, true, true);
     } else {
-        Gtk::Widget *entry = new ParamStringEntry(this, changeSignal);
+        Gtk::Widget *entry = Gtk::manage(new ParamStringEntry(this, changeSignal));
         entry->show();
 
         box->pack_start(*entry, true, true);
