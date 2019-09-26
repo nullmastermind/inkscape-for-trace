@@ -1040,6 +1040,9 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     bool cancelled = false;
+    
+    // store mouse pointer location before opening any dialogs, so we can drop the item where initially intended
+    auto pointer_location = desktop->point();
 
     //DEBUG_MESSAGE( fileImport, "file_import( in_doc:%p uri:[%s], key:%p", in_doc, uri, key );
     SPDocument *doc;
@@ -1150,7 +1153,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
                 desktop->getDocument()->ensureUpToDate();
                 Geom::OptRect sel_bbox = selection->visualBounds();
                 if (sel_bbox) {
-                    Geom::Point m( desktop->point() - sel_bbox->midpoint() );
+                    Geom::Point m( pointer_location - sel_bbox->midpoint() );
                     selection->moveRelative(m, false);
                 }
             }
