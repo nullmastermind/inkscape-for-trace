@@ -50,6 +50,7 @@ Ruler::Ruler(Gtk::Orientation orientation)
     , _max_size(1000)
     , _unit(nullptr)
     , _backing_store_valid(false)
+    , _rect()
 {
     set_name("InkRuler");
 
