@@ -1824,25 +1824,12 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
         return;
     }
     _freeze = true;
-    bool outside = false;
-    if (selection && selection->objects().size() == 0) {
-        outside = true;
-    }
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    SPDocument *document = SP_ACTIVE_DOCUMENT;
-    Inkscape::FontLister* fontlister = Inkscape::FontLister::get_instance();
-    fontlister->selection_update();
-
-    // Update font list, but only if widget already created.
-    if( _font_family_item->get_combobox() != nullptr ) {
-        _font_family_item->set_active_text( fontlister->get_font_family().c_str(), fontlister->get_font_family_row() );
-        _font_style_item->set_active_text( fontlister->get_font_style().c_str() );
-    }
-
     // Only flowed text can be justified, only normal text can be kerned...
     // Find out if we have flowed text now so we can use it several places
     gboolean isFlow = false;
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPDocument *document = SP_ACTIVE_DOCUMENT;
     auto itemlist = desktop->getSelection()->items();
     std::vector<SPItem *> to_work;
     for (auto i : itemlist) {
@@ -1856,6 +1843,19 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
             isFlow = true;
         }
     }
+    bool outside = false;
+    if (selection && to_work.size() == 0) {
+        outside = true;
+    }
+
+    Inkscape::FontLister *fontlister = Inkscape::FontLister::get_instance();
+    fontlister->selection_update();
+    // Update font list, but only if widget already created.
+    if (_font_family_item->get_combobox() != nullptr) {
+        _font_family_item->set_active_text(fontlister->get_font_family().c_str(), fontlister->get_font_family_row());
+        _font_style_item->set_active_text(fontlister->get_font_style().c_str());
+    }
+
     /*
      * Query from current selection:
      *   Font family (font-family)
@@ -1893,8 +1893,6 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
         }
     } else {
         result_numbers =
-                sp_desktop_query_style(desktop, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
-        result_numbers_fallback =
                 sp_desktop_query_style(desktop, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
     }
     
