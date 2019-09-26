@@ -62,10 +62,9 @@ public:
     const gchar* get_name();
     Glib::ustring &get_link () const;
 
-    friend std::ostream & operator<< (std::ostream &out_file, const Dependency & in_dep);
+    Glib::ustring info_string();
 }; /* class Dependency */
 
-std::ostream & operator<< (std::ostream &out_file, const Dependency & in_dep);
 
 } }  /* namespace Extension, Inkscape */
 

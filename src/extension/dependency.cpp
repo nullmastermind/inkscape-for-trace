@@ -244,21 +244,19 @@ const gchar* Dependency::get_name()
 /**
     \brief   Print out a dependency to a string.
 */
-std::ostream &
-operator<< (std::ostream &out_file, const Dependency & in_dep)
+Glib::ustring Dependency::info_string()
 {
-    out_file << _("Dependency:") << '\n';
-    out_file << _("  type: ") << _(in_dep._type_str[in_dep._type]) << '\n';
-    out_file << _("  location: ") << _(in_dep._location_str[in_dep._location]) << '\n';
-    out_file << _("  string: ") << in_dep._string << '\n';
+    Glib::ustring str = Glib::ustring::compose("%1:\n\t%2: %3\n\t%4: %5\n\t%6: %7",
+                                               _("Dependency"),
+                                               _("type"),     _(_type_str[_type]),
+                                               _("location"), _(_location_str[_location]),
+                                               _("string"),     _string);
 
-    if (in_dep._description != nullptr) {
-        out_file << _("  description: ") << _(in_dep._description) << '\n';
+    if (_description) {
+        str += Glib::ustring::compose("\n\t%1: %2\n", _("  description: "), _(_description));
     }
 
-    out_file << std::flush;
-
-    return out_file;
+    return str;
 }
 
 } }  /* namespace Inkscape, Extension */

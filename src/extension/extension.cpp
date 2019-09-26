@@ -19,6 +19,9 @@
 #include "extension.h"
 #include "implementation/implementation.h"
 
+#include <glib/gstdio.h>
+#include <glib/gprintf.h>
+
 #include <glibmm/i18n.h>
 #include <gtkmm/box.h>
 #include <gtkmm/frame.h>
@@ -31,6 +34,7 @@
 #include "timer.h"
 
 #include "io/resource.h"
+#include "io/sys.h"
 
 #include "prefdialog/parameter.h"
 #include "prefdialog/widget.h"
@@ -43,7 +47,7 @@ namespace Extension {
 
 /* Inkscape::Extension::Extension */
 
-std::ofstream Extension::error_file;
+FILE *Extension::error_file = nullptr;
 
 /**
     \return  none
@@ -294,17 +298,19 @@ Extension::check ()
         retval = false;
     }
 
-    for (auto & _dep : _deps) {
+    for (auto _dep : _deps) {
         if (_dep->check() == FALSE) {
-            // std::cout << "Failed: " << *(_deps[i]) << std::endl;
             printFailure(Glib::ustring(_("a dependency was not met.")));
-            error_file << *_dep << std::endl;
+            error_file_write(_dep->info_string());
             retval = false;
         }
     }
 
-    if (retval)
+    if (retval) {
         return imp->check(this);
+    }
+    
+    error_file_write("");
     return retval;
 }
 
@@ -317,9 +323,7 @@ Extension::check ()
 void
 Extension::printFailure (Glib::ustring reason)
 {
-    error_file << _("Extension \"") << _name << _("\" failed to load because ");
-    error_file << reason.raw();
-    error_file << std::endl;
+    error_file_write(Glib::ustring::compose(_("Extension \"%1\" failed to load because %2"), _name, reason));
     return;
 }
 
@@ -685,14 +689,11 @@ Extension::set_param_color(const gchar *name, const guint32 color)
 void
 Extension::error_file_open ()
 {
-    gchar * ext_error_file = Inkscape::IO::Resource::log_path(EXTENSION_ERROR_LOG_FILENAME);
-    gchar * filename = g_filename_from_utf8( ext_error_file, -1, nullptr, nullptr, nullptr );
-    error_file.open(filename);
-    if (!error_file.is_open()) {
-        g_warning(_("Could not create extension error log file '%s'"),
-                  filename);
+    gchar *ext_error_file = Inkscape::IO::Resource::log_path(EXTENSION_ERROR_LOG_FILENAME);
+    error_file = Inkscape::IO::fopen_utf8name(ext_error_file, "w+");		
+    if (!error_file) {
+        g_warning(_("Could not create extension error log file '%s'"), ext_error_file);
     }
-    g_free(filename);
     g_free(ext_error_file);
 };
 
@@ -700,7 +701,14 @@ Extension::error_file_open ()
 void
 Extension::error_file_close ()
 {
-    error_file.close();
+    fclose(error_file);
+};
+
+/** \brief A function to write to the error log file. */
+void
+Extension::error_file_write (Glib::ustring text)
+{
+    g_fprintf(error_file, "%s\n", text.c_str());
 };
 
 /** \brief  A widget to represent the inside of an AutoGUI widget */

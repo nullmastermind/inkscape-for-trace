@@ -113,7 +113,7 @@ private:
     gchar     *_name = nullptr;                /**< A user friendly name for the Extension */
     state_t    _state = STATE_UNLOADED;        /**< Which state the Extension is currently in */
     std::vector<Dependency *>  _deps;          /**< Dependencies for this extension */
-    static std::ofstream error_file;           /**< This is the place where errors get reported */
+    static FILE *error_file;                   /**< This is the place where errors get reported */
     bool _gui;
 
 protected:
@@ -214,6 +214,7 @@ public:
 public:
     static void      error_file_open  ();
     static void      error_file_close ();
+    static void      error_file_write (Glib::ustring text);
 
 public:
     Gtk::Widget *autogui (SPDocument *doc, Inkscape::XML::Node *node, sigc::signal<void> *changeSignal = nullptr);
