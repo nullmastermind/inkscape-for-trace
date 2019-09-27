@@ -18,6 +18,7 @@
 #include "object/sp-shape.h"
 #include "object/sp-item.h"
 #include "object/sp-item-group.h"
+#include "object/sp-use.h"
 #include "object/uri.h"
 
 // TODO due to internal breakage in glibmm headers, this must be last:
@@ -362,13 +363,24 @@ void sp_inverse_powerclip(Inkscape::Selection *sel) {
         for(auto i = boost::rbegin(selList); i != boost::rend(selList); ++i) {
             SPLPEItem* lpeitem = dynamic_cast<SPLPEItem*>(*i);
             if (lpeitem) {
-                Effect::createAndApply(POWERCLIP, SP_ACTIVE_DOCUMENT, lpeitem);
-                Effect* lpe = lpeitem->getCurrentLPE();
-                lpe->getRepr()->setAttribute("is_inverse", "false");
-                lpe->getRepr()->setAttribute("is_visible", "true");
-                lpe->getRepr()->setAttribute("inverse", "true");
-                lpe->getRepr()->setAttribute("flatten", "false");
-                lpe->getRepr()->setAttribute("hide_clip", "false");
+                SPClipPath *clip_path = SP_ITEM(lpeitem)->clip_ref->getObject();
+                if(clip_path) {
+                    std::vector<SPObject*> clip_path_list = clip_path->childList(true);
+                    for (std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
+                        SPUse *use = dynamic_cast<SPUse*>(*iter);
+                        if (use) {
+                            g_warning("We can`t add inverse clip on clones");
+                            return;
+                        }
+                    }
+                    Effect::createAndApply(POWERCLIP, SP_ACTIVE_DOCUMENT, lpeitem);
+                    Effect* lpe = lpeitem->getCurrentLPE();
+                    lpe->getRepr()->setAttribute("is_inverse", "false");
+                    lpe->getRepr()->setAttribute("is_visible", "true");
+                    lpe->getRepr()->setAttribute("inverse", "true");
+                    lpe->getRepr()->setAttribute("flatten", "false");
+                    lpe->getRepr()->setAttribute("hide_clip", "false");
+                }
             }
         }
     }

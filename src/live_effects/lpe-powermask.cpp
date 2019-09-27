@@ -330,13 +330,16 @@ void sp_inverse_powermask(Inkscape::Selection *sel) {
         for(auto i = boost::rbegin(selList); i != boost::rend(selList); ++i) {
             SPLPEItem* lpeitem = dynamic_cast<SPLPEItem*>(*i);
             if (lpeitem) {
-                Effect::createAndApply(POWERMASK, SP_ACTIVE_DOCUMENT, lpeitem);
-                Effect* lpe = lpeitem->getCurrentLPE();
-                lpe->getRepr()->setAttribute("invert", "false");
-                lpe->getRepr()->setAttribute("is_visible", "true");
-                lpe->getRepr()->setAttribute("hide_mask", "false");
-                lpe->getRepr()->setAttribute("background", "true");
-                lpe->getRepr()->setAttribute("background_color", "#ffffffff");
+                SPMask *mask = lpeitem->mask_ref->getObject();
+                if (mask) {
+                    Effect::createAndApply(POWERMASK, SP_ACTIVE_DOCUMENT, lpeitem);
+                    Effect* lpe = lpeitem->getCurrentLPE();
+                    lpe->getRepr()->setAttribute("invert", "false");
+                    lpe->getRepr()->setAttribute("is_visible", "true");
+                    lpe->getRepr()->setAttribute("hide_mask", "false");
+                    lpe->getRepr()->setAttribute("background", "true");
+                    lpe->getRepr()->setAttribute("background_color", "#ffffffff");
+                }
             }
         }
     }
