@@ -678,7 +678,8 @@ std::pair<Glib::ustring, Glib::ustring> FontLister::new_font_family(Glib::ustrin
     return std::make_pair(new_family, best_style);
 }
 
-std::pair<Glib::ustring, Glib::ustring> FontLister::set_font_family(Glib::ustring new_family, bool check_style, bool emit)
+std::pair<Glib::ustring, Glib::ustring> FontLister::set_font_family(Glib::ustring new_family, bool check_style,
+                                                                    bool emit)
 {
 
 #ifdef DEBUG_FONT
