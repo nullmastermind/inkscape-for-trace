@@ -50,9 +50,11 @@ public:
     int numberOfMarkers (int type) const;
 
     // bbox cache
-    mutable bool bbox_cache_is_valid = false;
+    mutable bool bbox_geom_cache_is_valid = false;
+    mutable bool bbox_vis_cache_is_valid = false;
     mutable Geom::Affine bbox_transform_cache;
-    mutable Geom::OptRect bbox_cache;
+    mutable Geom::OptRect bbox_geom_cache;
+    mutable Geom::OptRect bbox_vis_cache;
 
 
 public: // temporarily public, until SPPath is properly classed, etc.

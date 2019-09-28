@@ -120,7 +120,8 @@ Inkscape::XML::Node* SPShape::write(Inkscape::XML::Document *xml_doc, Inkscape::
 void SPShape::update(SPCtx* ctx, guint flags) {
     // Any update can change the bounding box,
     // so the cached version can no longer be used.
-    bbox_cache_is_valid = false;
+    bbox_vis_cache_is_valid = false;
+    bbox_geom_cache_is_valid = false;
 
     // std::cout << "SPShape::update(): " << (getId()?getId():"null") << std::endl;
     SPLPEItem::update(ctx, flags);
@@ -464,8 +465,9 @@ Geom::OptRect SPShape::bbox(Geom::Affine const &transform, SPItem::BBoxType bbox
     // If the object is clipped, the update funcation that invalidates
     // the cache doesn't get called if the object is moved, so we need
     // to compare the transformations as well.
-    if (bbox_cache_is_valid && transform == bbox_transform_cache) {
-        return bbox_cache;
+    bool cached = (bboxtype == SPItem::VISUAL_BBOX) ? bbox_vis_cache_is_valid : bbox_geom_cache_is_valid;
+    if (cached && transform == bbox_transform_cache) {
+        return (bboxtype == SPItem::VISUAL_BBOX) ? bbox_vis_cache : bbox_geom_cache;
     }
 
     Geom::OptRect bbox;
@@ -654,8 +656,13 @@ Geom::OptRect SPShape::bbox(Geom::Affine const &transform, SPItem::BBoxType bbox
     }
 
     bbox_transform_cache = transform;
-    bbox_cache = bbox;
-    bbox_cache_is_valid = true;
+    if (bboxtype == SPItem::VISUAL_BBOX) {
+        bbox_vis_cache = bbox;
+        bbox_vis_cache_is_valid = true;
+    } else {
+        bbox_geom_cache = bbox;
+        bbox_geom_cache_is_valid = true;
+    }
 
     return bbox;
 }
