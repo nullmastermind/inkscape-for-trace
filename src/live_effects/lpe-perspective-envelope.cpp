@@ -67,120 +67,32 @@ LPEPerspectiveEnvelope::LPEPerspectiveEnvelope(LivePathEffectObject *lpeobject) 
 LPEPerspectiveEnvelope::~LPEPerspectiveEnvelope()
 = default;
 
-void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
+bool pointInTriangle(Geom::Point const &p, std::vector<Geom::Point> points)
 {
+    if (points.size() != 3) {
+        g_warning("Incorrect number of points in pointInTriangle\n");
+        return false;
+    }
+    Geom::Point p1 = points[0];
+    Geom::Point p2 = points[1];
+    Geom::Point p3 = points[2];
+    // http://totologic.blogspot.com.es/2014/01/accurate-point-in-triangle-test.html
     using Geom::X;
     using Geom::Y;
-    if(are_near(up_left_point, up_right_point) &&
-            are_near(up_right_point, down_left_point) &&
-            are_near(down_left_point, down_right_point)) {
-        g_warning("Perspective/Envelope LPE::doBeforeEffect - lpeobj with invalid parameter, the same value in 4 handles!");
-        resetGrid();
-        return;
-    }
+    double denominator = (p1[X] * (p2[Y] - p3[Y]) + p1[Y] * (p3[X] - p2[X]) + p2[X] * p3[Y] - p2[Y] * p3[X]);
+    double t1 = (p[X] * (p3[Y] - p1[Y]) + p[Y] * (p1[X] - p3[X]) - p1[X] * p3[Y] + p1[Y] * p3[X]) / denominator;
+    double t2 = (p[X] * (p2[Y] - p1[Y]) + p[Y] * (p1[X] - p2[X]) - p1[X] * p2[Y] + p1[Y] * p2[X]) / -denominator;
+    double s = t1 + t2;
+
+    return 0 <= t1 && t1 <= 1 && 0 <= t2 && t2 <= 1 && s <= 1;
+}
+
+void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
+{
     double projmatrix[3][3];
     if(deform_type == DEFORMATION_PERSPECTIVE) {
-        if (!overflow_perspective && handles.size() == 4) {
-            bool move0 = false;
-            if (handles[0] != down_left_point) {
-                move0 = true;
-            }
-            bool move1 = false;
-            if (handles[1] != up_left_point) {
-                move1 = true;
-            }
-            bool move2 = false;
-            if (handles[2] != up_right_point) {
-                move2 = true;
-            }
-            bool move3 = false;
-            if (handles[3] != down_right_point) {
-                move3 = true;
-            }
-            handles.resize(4);
-            handles[0] = down_left_point;
-            handles[1] = up_left_point;
-            handles[2] = up_right_point;
-            handles[3] = down_right_point;
-            Geom::Line line_a(handles[3],handles[1]);
-            Geom::Line line_b(handles[1],handles[2]);
-            Geom::Line line_c(handles[2],handles[3]);
-            int position_a = Geom::sgn(Geom::cross(handles[3] - handles[1], handles[0] - handles[1]));
-            int position_b = Geom::sgn(Geom::cross(handles[1] - handles[2], handles[0] - handles[2]));
-            int position_c = Geom::sgn(Geom::cross(handles[2] - handles[3], handles[0] - handles[3]));
-            if (position_a != 1 && move0) {
-                Geom::Point point_a = line_a.pointAt(line_a.nearestTime(handles[0]));
-                down_left_point.param_setValue(point_a);
-            }
-            if (position_b == 1 && move0) {
-                Geom::Point point_b = line_b.pointAt(line_b.nearestTime(handles[0]));
-                down_left_point.param_setValue(point_b);
-            }
-            if (position_c == 1 && move0) {
-                Geom::Point point_c = line_c.pointAt(line_c.nearestTime(handles[0]));
-                down_left_point.param_setValue(point_c);
-            }
-            line_a.setPoints(handles[0],handles[2]);
-            line_b.setPoints(handles[2],handles[3]);
-            line_c.setPoints(handles[3],handles[0]);
-            position_a = Geom::sgn(Geom::cross(handles[0] - handles[2], handles[1] - handles[2]));
-            position_b = Geom::sgn(Geom::cross(handles[2] - handles[3], handles[1] - handles[3]));
-            position_c = Geom::sgn(Geom::cross(handles[3] - handles[0], handles[1] - handles[0]));
-            if (position_a != 1 && move1) {
-                Geom::Point point_a = line_a.pointAt(line_a.nearestTime(handles[1]));
-                up_left_point.param_setValue(point_a);
-            }
-            if (position_b == 1 && move1) {
-                Geom::Point point_b = line_b.pointAt(line_b.nearestTime(handles[1]));
-                up_left_point.param_setValue(point_b);
-            }
-            if (position_c == 1 && move1) {
-                Geom::Point point_c = line_c.pointAt(line_c.nearestTime(handles[1]));
-                up_left_point.param_setValue(point_c);
-            }
-            line_a.setPoints(handles[1],handles[3]);
-            line_b.setPoints(handles[3],handles[0]);
-            line_c.setPoints(handles[0],handles[1]);
-            position_a = Geom::sgn(Geom::cross(handles[1] - handles[3], handles[2] - handles[3]));
-            position_b = Geom::sgn(Geom::cross(handles[3] - handles[0], handles[2] - handles[0]));
-            position_c = Geom::sgn(Geom::cross(handles[0] - handles[1], handles[2] - handles[1]));
-            if (position_a != 1 && move2) {
-                Geom::Point point_a = line_a.pointAt(line_a.nearestTime(handles[2]));
-                up_right_point.param_setValue(point_a);
-            }
-            if (position_b == 1 && move2) {
-                Geom::Point point_b = line_b.pointAt(line_b.nearestTime(handles[2]));
-                up_right_point.param_setValue(point_b);
-            }
-            if (position_c == 1 && move2) {
-                Geom::Point point_c = line_c.pointAt(line_c.nearestTime(handles[2]));
-                up_right_point.param_setValue(point_c);
-            }
-            line_a.setPoints(handles[2],handles[0]);
-            line_b.setPoints(handles[0],handles[1]);
-            line_c.setPoints(handles[1],handles[2]);
-            position_a = Geom::sgn(Geom::cross(handles[2] - handles[0], handles[3] - handles[0]));
-            position_b = Geom::sgn(Geom::cross(handles[0] - handles[1], handles[3] - handles[1]));
-            position_c = Geom::sgn(Geom::cross(handles[1] - handles[2], handles[3] - handles[2]));
-            if (position_a != 1 && move3) {
-                Geom::Point point_a = line_a.pointAt(line_a.nearestTime(handles[3]));
-                down_right_point.param_setValue(point_a);
-            }
-            if (position_b == 1 && move3) {
-                Geom::Point point_b = line_b.pointAt(line_b.nearestTime(handles[3]));
-                down_right_point.param_setValue(point_b);
-            }
-            if (position_c == 1 && move3) {
-                Geom::Point point_c = line_c.pointAt(line_c.nearestTime(handles[3]));
-                down_right_point.param_setValue(point_c);
-            }
-        } else {
-            handles.resize(4);
-            handles[0] = down_left_point;
-            handles[1] = up_left_point;
-            handles[2] = up_right_point;
-            handles[3] = down_right_point;
-        }
+        using Geom::X;
+        using Geom::Y;
         std::vector<Geom::Point> source_handles(4);
         source_handles[0] = Geom::Point(boundingbox_X.min(), boundingbox_Y.max());
         source_handles[1] = Geom::Point(boundingbox_X.min(), boundingbox_Y.min());
@@ -246,18 +158,16 @@ void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
         //Itreadores
         SPCurve *nCurve = new SPCurve();
         Geom::Path::const_iterator curve_it1 = path_it.begin();
-        Geom::Path::const_iterator curve_it2 = ++(path_it.begin());
         Geom::Path::const_iterator curve_endit = path_it.end_default();
 
         if (path_it.closed()) {
-            const Geom::Curve &closingline =
-                path_it.back_closed();
+            const Geom::Curve &closingline = path_it.back_closed();
             if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
                 curve_endit = path_it.end_open();
             }
         }
         if(deform_type == DEFORMATION_PERSPECTIVE) {
-            nCurve->moveto(projectPoint(curve_it1->initialPoint(),projmatrix));
+            nCurve->moveto(projectPoint(curve_it1->initialPoint(), projmatrix));
         } else {
             nCurve->moveto(projectPoint(curve_it1->initialPoint()));
         }
@@ -272,19 +182,20 @@ void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
             }
             point_at3 = curve_it1->finalPoint();
             if(deform_type == DEFORMATION_PERSPECTIVE) {
-                point_at1 = projectPoint(point_at1,projmatrix);
-                point_at2 = projectPoint(point_at2,projmatrix);
-                point_at3 = projectPoint(point_at3,projmatrix);
+                point_at1 = projectPoint(point_at1, projmatrix);
+                point_at2 = projectPoint(point_at2, projmatrix);
+                point_at3 = projectPoint(point_at3, projmatrix);
             } else {
                 point_at1 = projectPoint(point_at1);
                 point_at2 = projectPoint(point_at2);
                 point_at3 = projectPoint(point_at3);
             }
-            nCurve->curveto(point_at1, point_at2, point_at3);
-            ++curve_it1;
-            if(curve_it2 != curve_endit) {
-                ++curve_it2;
+            if (cubic) {
+                nCurve->curveto(point_at1, point_at2, point_at3);
+            } else {
+                nCurve->lineto(point_at3);
             }
+            ++curve_it1;
         }
         //y cerramos la curva
         if (path_it.closed()) {
@@ -477,6 +388,116 @@ LPEPerspectiveEnvelope::doBeforeEffect (SPLPEItem const* lpeitem)
         horizontal(up_right_point, down_right_point,horiz);
     }
     setDefaults();
+    if (are_near(up_left_point, up_right_point) && are_near(up_right_point, down_left_point) &&
+        are_near(down_left_point, down_right_point)) {
+        g_warning(
+            "Perspective/Envelope LPE::doBeforeEffect - lpeobj with invalid parameter, the same value in 4 handles!");
+        resetGrid();
+        return;
+    }
+    if (deform_type == DEFORMATION_PERSPECTIVE) {
+        if (!overflow_perspective && handles.size() == 4) {
+            bool move0 = false;
+            if (handles[0] != down_left_point) {
+                move0 = true;
+            }
+            bool move1 = false;
+            if (handles[1] != up_left_point) {
+                move1 = true;
+            }
+            bool move2 = false;
+            if (handles[2] != up_right_point) {
+                move2 = true;
+            }
+            bool move3 = false;
+            if (handles[3] != down_right_point) {
+                move3 = true;
+            }
+            handles.resize(4);
+            handles[0] = down_left_point;
+            handles[1] = up_left_point;
+            handles[2] = up_right_point;
+            handles[3] = down_right_point;
+            Geom::Line line_a(handles[3], handles[1]);
+            Geom::Line line_b(handles[1], handles[2]);
+            Geom::Line line_c(handles[2], handles[3]);
+            int position_a = Geom::sgn(Geom::cross(handles[3] - handles[1], handles[0] - handles[1]));
+            int position_b = Geom::sgn(Geom::cross(handles[1] - handles[2], handles[0] - handles[2]));
+            int position_c = Geom::sgn(Geom::cross(handles[2] - handles[3], handles[0] - handles[3]));
+            if (position_a != 1 && move0) {
+                Geom::Point point_a = line_a.pointAt(line_a.nearestTime(handles[0]));
+                down_left_point.param_setValue(point_a, true);
+            }
+            if (position_b == 1 && move0) {
+                Geom::Point point_b = line_b.pointAt(line_b.nearestTime(handles[0]));
+                down_left_point.param_setValue(point_b, true);
+            }
+            if (position_c == 1 && move0) {
+                Geom::Point point_c = line_c.pointAt(line_c.nearestTime(handles[0]));
+                down_left_point.param_setValue(point_c, true);
+            }
+            line_a.setPoints(handles[0], handles[2]);
+            line_b.setPoints(handles[2], handles[3]);
+            line_c.setPoints(handles[3], handles[0]);
+            position_a = Geom::sgn(Geom::cross(handles[0] - handles[2], handles[1] - handles[2]));
+            position_b = Geom::sgn(Geom::cross(handles[2] - handles[3], handles[1] - handles[3]));
+            position_c = Geom::sgn(Geom::cross(handles[3] - handles[0], handles[1] - handles[0]));
+            if (position_a != 1 && move1) {
+                Geom::Point point_a = line_a.pointAt(line_a.nearestTime(handles[1]));
+                up_left_point.param_setValue(point_a, true);
+            }
+            if (position_b == 1 && move1) {
+                Geom::Point point_b = line_b.pointAt(line_b.nearestTime(handles[1]));
+                up_left_point.param_setValue(point_b, true);
+            }
+            if (position_c == 1 && move1) {
+                Geom::Point point_c = line_c.pointAt(line_c.nearestTime(handles[1]));
+                up_left_point.param_setValue(point_c, true);
+            }
+            line_a.setPoints(handles[1], handles[3]);
+            line_b.setPoints(handles[3], handles[0]);
+            line_c.setPoints(handles[0], handles[1]);
+            position_a = Geom::sgn(Geom::cross(handles[1] - handles[3], handles[2] - handles[3]));
+            position_b = Geom::sgn(Geom::cross(handles[3] - handles[0], handles[2] - handles[0]));
+            position_c = Geom::sgn(Geom::cross(handles[0] - handles[1], handles[2] - handles[1]));
+            if (position_a != 1 && move2) {
+                Geom::Point point_a = line_a.pointAt(line_a.nearestTime(handles[2]));
+                up_right_point.param_setValue(point_a, true);
+            }
+            if (position_b == 1 && move2) {
+                Geom::Point point_b = line_b.pointAt(line_b.nearestTime(handles[2]));
+                up_right_point.param_setValue(point_b, true);
+            }
+            if (position_c == 1 && move2) {
+                Geom::Point point_c = line_c.pointAt(line_c.nearestTime(handles[2]));
+                up_right_point.param_setValue(point_c, true);
+            }
+            line_a.setPoints(handles[2], handles[0]);
+            line_b.setPoints(handles[0], handles[1]);
+            line_c.setPoints(handles[1], handles[2]);
+            position_a = Geom::sgn(Geom::cross(handles[2] - handles[0], handles[3] - handles[0]));
+            position_b = Geom::sgn(Geom::cross(handles[0] - handles[1], handles[3] - handles[1]));
+            position_c = Geom::sgn(Geom::cross(handles[1] - handles[2], handles[3] - handles[2]));
+            if (position_a != 1 && move3) {
+                Geom::Point point_a = line_a.pointAt(line_a.nearestTime(handles[3]));
+                down_right_point.param_setValue(point_a, true);
+            }
+            if (position_b == 1 && move3) {
+                Geom::Point point_b = line_b.pointAt(line_b.nearestTime(handles[3]));
+                down_right_point.param_setValue(point_b, true);
+            }
+            if (position_c == 1 && move3) {
+                Geom::Point point_c = line_c.pointAt(line_c.nearestTime(handles[3]));
+                down_right_point.param_setValue(point_c, true);
+            }
+        } else {
+            handles.resize(4);
+            handles[0] = down_left_point;
+            handles[1] = up_left_point;
+            handles[2] = up_right_point;
+            handles[3] = down_right_point;
+        }
+    }
 }
 
 void
