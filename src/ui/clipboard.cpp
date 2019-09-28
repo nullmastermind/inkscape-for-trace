@@ -1076,6 +1076,8 @@ bool ClipboardManagerImpl::_pasteText(SPDesktop *desktop)
     // if the text editing tool is active, paste the text into the active text object
     if (tools_isactive(desktop, TOOLS_TEXT)) {
         return Inkscape::UI::Tools::sp_text_paste_inline(desktop->event_context);
+    }
+    return false;
         /* return false;
         //apply the saved style to pasted text
         Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get();
