@@ -121,6 +121,7 @@ URL_CPPUNIT=https://dev-www.libreoffice.org/src/cppunit-1.14.0.tar.gz
 URL_DOUBLE_CONVERSION=https://github.com/google/double-conversion/archive/v3.1.4.tar.gz
 URL_GC=https://github.com/ivmai/bdwgc/releases/download/v8.0.4/gc-8.0.4.tar.gz
 URL_GDL=https://github.com/GNOME/gdl/archive/GDL_3_28_0.tar.gz
+URL_GHOSTSCRIPT=https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs927/ghostscript-9.27.tar.gz
 URL_GSL=http://ftp.fau.de/gnu/gsl/gsl-2.5.tar.gz
 URL_GTK_MAC_BUNDLER=https://gitlab.gnome.org/GNOME/gtk-mac-bundler/-/archive/93edee7e2d0ec8230aaf5acb21452202b10cd678.tar.gz
 URL_GTK_OSX=https://raw.githubusercontent.com/dehesselle/gtk-osx/inkscape
@@ -145,7 +146,7 @@ URL_PYTHON3_BIN=https://github.com/dehesselle/py3framework/releases/download/py3
 URL_PYTHON36_SRC=https://github.com/dehesselle/py3framework/archive/py369.3.tar.gz
 URL_PYTHON36_BIN=https://github.com/dehesselle/py3framework/releases/download/py369.3/py369_framework_3.tar.xz
 # A pre-built version of the complete toolset.
-URL_TOOLSET_CACHE=https://github.com/dehesselle/mibap/releases/download/v0.20/mibap_v0.20.tar.xz
+URL_TOOLSET_CACHE=https://github.com/dehesselle/mibap/releases/download/v0.22/mibap_v0.22.tar.xz
 
 ### Python packages ############################################################
 

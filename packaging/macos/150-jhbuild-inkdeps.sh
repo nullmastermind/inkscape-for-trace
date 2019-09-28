@@ -115,3 +115,8 @@ configure_make_makeinstall --with-libpotrace
 get_source $URL_OPENMP
 cmake_make_makeinstall
 
+### install Ghostscript ########################################################
+
+get_source $URL_GHOSTSCRIPT
+configure_make_makeinstall
+

@@ -100,10 +100,7 @@ mv inkscape.icns $APP_RES_DIR
 # This section deals with bundling Python.framework into the application.
 
 mkdir $APP_FRA_DIR
-get_source file://$SRC_DIR/$(basename $URL_PYTHON3_BIN) $APP_FRA_DIR
-
-# remove 'test' folder to save space
-rm -rf $APP_FRA_DIR/Python.framework/Versions/Current/lib/python3.7/test
+get_source file://$SRC_DIR/$(basename $URL_PYTHON3_BIN) $APP_FRA_DIR --exclude='Versions/3.7/lib/python3.7/test/*'
 
 # add it to '$PATH' in launch script
 insert_before $APP_EXE_DIR/Inkscape '\$EXEC' 'export PATH=$bundle_contents/Frameworks/Python.framework/Versions/Current/bin:$PATH'
@@ -188,20 +185,20 @@ python3 -m compileall -f $APP_DIR || true
 
 # Default interpreter is an unversioned environment lookup for 'python', so
 # we prepare to override it.
-mkdir -p $APP_BIN_DIR
-cd $APP_BIN_DIR
-ln -sf ../../Frameworks/Python.framework/Versions/Current/bin/python3 python
+mkdir -p $APP_BIN_DIR/python_override
+cd $APP_BIN_DIR/python_override
+ln -sf ../../../Frameworks/Python.framework/Versions/Current/bin/python3 python
 
 # add override check to launch script
 insert_before $APP_EXE_DIR/Inkscape '\$EXEC' '\
 INKSCAPE_PREFERENCES=\"$HOME/Library/Application Support/Inkscape/config/inkscape/preferences.xml\"\
-if [ -f \"$INKSCAPE_PREFERENCES\" ]; then   # Has Inkscape been launched before?\
+if [ -f \"$INKSCAPE_PREFERENCES\" ]; then            # Has Inkscape been launched before?\
   PYTHON_INTERPRETER=$\(xmllint --xpath '\''string\(//inkscape/group[@id=\"extensions\"]/@python-interpreter\)'\'' \"$INKSCAPE_PREFERENCES\"\)\
-  if [ -z $PYTHON_INTERPRETER ]\; then   # No override for Python interpreter?\
-    export PATH=$bundle_bin:$PATH        # make bundled Python default one\
+  if [ -z $PYTHON_INTERPRETER ]\; then               # No override for Python interpreter?\
+    export PATH=$bundle_bin/python_override:$PATH    # make bundled Python default one\
   fi\
-else                                     # Inkscape has not been launched before\
-  export PATH=$bundle_bin:$PATH          # make bundled Python default one\
+else                                                 # Inkscape has not been launched before?\
+  export PATH=$bundle_bin/python_override:$PATH      # make bundled Python default one\
 fi\
 '
 
@@ -241,4 +238,15 @@ replace_line $APP_EXE_DIR/Inkscape AppleCollationOrder \
 # add quotes so test does not complain to missing (because empty) argument
 replace_line $APP_EXE_DIR/Inkscape '-a -n $APPLECOLLATION;' \
   'if test -z ${LANG} -a -n "$APPLECOLLATION"; then'
+
+### Ghostscript ################################################################
+
+relocate_dependency @executable_path/../lib/libz.1.dylib $APP_BIN_DIR/gs
+relocate_dependency @executable_path/../lib/libfontconfig.1.dylib $APP_BIN_DIR/gs
+relocate_dependency @executable_path/../lib/libfreetype.6.dylib $APP_BIN_DIR/gs
+
+### final changes to PATH ######################################################
+
+insert_before $APP_EXE_DIR/Inkscape '\$EXEC' \
+  'export PATH=$bundle_bin:$PATH'
 
