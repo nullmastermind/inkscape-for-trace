@@ -617,10 +617,10 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
         Geom::Point start = Geom::Point( pwd2_in.domain().min(), ts.front()[Geom::Y]);
         Geom::Point end   = Geom::Point( pwd2_in.domain().max(), ts.front()[Geom::Y]); 
         if (ts.size() > 1) {
-            end   = Geom::Point( pwd2_in.domain().max(), 0); 
-            Geom::Point tmpstart(0,0);
+            end = Geom::Point(pwd2_in.domain().max(), 0);
+            Geom::Point tmpstart(0, 0);
             tmpstart[Geom::X] = end[Geom::X] + ts.front()[Geom::X];
-            tmpstart[Geom::Y]  = ts.front()[Geom::Y];
+            tmpstart[Geom::Y] = ts.front()[Geom::Y];
             ts_close.push_back(ts.back());
             ts_close.push_back(middle_point(tmpstart, ts.back()));
             ts_close.push_back(tmpstart);
