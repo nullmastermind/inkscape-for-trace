@@ -1129,7 +1129,7 @@ bool ClipboardManagerImpl::_pasteText(SPDesktop *desktop)
             }
         }
         return true;
-    
+
     }
     // old(try to parse the text as a color and, if successful, apply it as the current style)
     // we realy only want to inherit container style

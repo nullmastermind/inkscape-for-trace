@@ -1445,7 +1445,8 @@ SPCSSAttr *sp_text_get_style_at_cursor(ToolBase const *ec)
     return true;
 }
 
-std::vector<SPCSSAttr*> sp_text_get_selected_style(ToolBase const *ec, unsigned *k, int *b, std::vector<unsigned> *positions)
+std::vector<SPCSSAttr*> sp_text_get_selected_style(ToolBase const *ec, unsigned *k, int *b, std::vector<unsigned>
+*positions)
 {
     std::vector<SPCSSAttr*> vec;
     SPCSSAttr *css, *css_new;
