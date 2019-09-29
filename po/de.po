@@ -16,7 +16,7 @@
 # Benjamin Weis <benjamin.weis@gmx.com>, 2014.
 # Heiko Wöhrle <mail@heikowoehrle.de>, 2014.
 # Sönke Roggatz <s.roggatz@mailing-werkstatt.de>, 2015.
-# Maren Hachmann <marenhachmann@yahoo.com>, 2015, 2016.
+# Maren Hachmann <marenhachmann@yahoo.com>, 2015, 2016, 2019.
 # Patrick Storz <eduard.braun2@gmx.de>, 2015-2019.
 # Michael Rack <miohna@freenet.de>, 2018.
 msgid ""
@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-09-09 21:21+0200\n"
-"PO-Revision-Date: 2016-10-20 22:55+0100\n"
+"PO-Revision-Date: 2019-09-29 02:28+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -1140,7 +1140,6 @@ msgstr "Comic sahnig"
 #: ../share/filters/filters.svg.h:779 ../share/filters/filters.svg.h:783
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
-#, fuzzy
 msgid "Non-Realistic 3D Shaders"
 msgstr "Übersteigerte Schattierungen"
 
@@ -1159,9 +1158,8 @@ msgid ""
 msgstr "Erzeugt farbige Kleckse, die weich über innere Strukturen fließen"
 
 #: ../share/filters/filters.svg.h:434
-#, fuzzy
 msgid "Dark and Glow"
-msgstr "Licht und Schatten"
+msgstr "Glühende Vertiefung"
 
 #: ../share/filters/filters.svg.h:436
 msgid "Darkens the edge with an inner blur and adds a flexible glow"
@@ -1981,9 +1979,8 @@ msgstr ""
 "Cyan-, Magenta- und Gelb-Kanäle mit einem einfärbbaren Hintergrund rendern"
 
 #: ../share/filters/filters.svg.h:834
-#, fuzzy
 msgid "Contouring Table"
-msgstr "Formgebender Tisch"
+msgstr "Multiple Konturen (weich)"
 
 #: ../share/filters/filters.svg.h:836
 msgid "Blurred multiple contours for objects"
@@ -1998,9 +1995,8 @@ msgid "Converts blurred contour to posterized steps"
 msgstr "Erzeugt eine verschwommene Kontur aus posterisierten Teilschritten"
 
 #: ../share/filters/filters.svg.h:842
-#, fuzzy
 msgid "Contouring Discrete"
-msgstr "Multiple Konturen"
+msgstr "Multiple Konturen (hart)"
 
 #: ../share/filters/filters.svg.h:844
 msgid "Sharp multiple contour for objects"
@@ -4253,14 +4249,12 @@ msgid "<b>Guideline</b>: %s"
 msgstr "<b>Hilfslinie</b>: %s"
 
 #: ../src/desktop.cpp:801
-#, fuzzy
 msgid "No previous transform."
-msgstr "Kein vorheriger Zoomfaktor."
+msgstr "Keine vorherige Ansicht."
 
 #: ../src/desktop.cpp:824
-#, fuzzy
 msgid "No next transform."
-msgstr "Kein nächster Zoomfaktor."
+msgstr "Keine nächste Ansicht."
 
 #: ../src/display/canvas-axonomgrid.cpp:265 ../src/display/canvas-grid.cpp:655
 msgid "Grid _units:"
@@ -4408,9 +4402,8 @@ msgstr ""
 "Gitterlinien angezeigt"
 
 #: ../src/display/canvas-grid.cpp:335
-#, fuzzy
 msgid "Align to page:"
-msgstr "Oberkanten ausrichten"
+msgstr "An der Seite ausrichten:"
 
 #: ../src/display/canvas-grid.cpp:663
 msgid "Spacing _X:"
@@ -7985,10 +7978,14 @@ msgstr "SVG-Bild als bearbeitbeare Objekte in aktueller Datei einbinden"
 #: ../src/extension/internal/svg.cpp:679
 msgid "Embed the SVG file in a image tag (not editable in this document)"
 msgstr ""
+"Die SVG-Datei in einem „image“-Tag einbetten (in diesem Dokument nicht"
+" bearbeitbar)"
 
 #: ../src/extension/internal/svg.cpp:680
 msgid "Link the SVG file in a image tag (not editable in this document)."
 msgstr ""
+"Die SVG-Datei in einem „image“-Tag verknüpfen (in diesem Dokument nicht"
+" bearbeitbar)"
 
 #: ../src/extension/internal/svg.cpp:693
 msgid "Scalable Vector Graphic (*.svg)"
@@ -8186,9 +8183,8 @@ msgstr "S_chließen"
 
 #: ../src/extension/prefdialog/prefdialog.cpp:73
 #: ../src/ui/dialog/text-edit.cpp:70 ../src/ui/dialog/transformation.cpp:156
-#, fuzzy
 msgid "_Apply"
-msgstr "Anwenden auf:"
+msgstr "_Anwenden"
 
 #: ../src/extension/prefdialog/prefdialog.cpp:230
 msgid "Live preview"
@@ -8311,7 +8307,6 @@ msgid "OK"
 msgstr "OK"
 
 #: ../src/file-update.cpp:630
-#, fuzzy
 msgid "Update Document"
 msgstr "Dokument aktualisieren"
 
@@ -8713,7 +8708,7 @@ msgstr " (Kontur)"
 #: ../src/gradient-drag.cpp:1469
 #, c-format
 msgid "%s for: %s%s"
-msgstr ""
+msgstr "%s für: %s%s"
 
 #: ../src/gradient-drag.cpp:1476
 #, c-format
@@ -8874,7 +8869,7 @@ msgstr ""
 
 #: ../src/inkscape-application.cpp:549
 msgid "EXPORT-FILENAME"
-msgstr "DATEINAME"
+msgstr "EXPORT-DATEINAME"
 
 #: ../src/inkscape-application.cpp:550
 #, fuzzy
@@ -8909,7 +8904,7 @@ msgstr ""
 
 #: ../src/inkscape-application.cpp:557
 msgid "x0:y0:x1:y1"
-msgstr "X0:Y0:X1:Y1"
+msgstr "x0:y0:x1:y1"
 
 #: ../src/inkscape-application.cpp:558
 #, fuzzy
@@ -8968,7 +8963,7 @@ msgstr "IDs der zu exportierenden Objekte"
 
 #: ../src/inkscape-application.cpp:566
 msgid "OBJECT-ID[;OBJECT-ID]*"
-msgstr ""
+msgstr "OBJEKT-ID[;OBJEKT-ID]*"
 
 #: ../src/inkscape-application.cpp:567
 #, fuzzy
@@ -9061,7 +9056,7 @@ msgstr "IDs der Objekte, deren Abmessungen abgefragt werden"
 
 #: ../src/inkscape-application.cpp:580 ../src/inkscape-application.cpp:590
 msgid "OBJECT-ID[,OBJECT-ID]*"
-msgstr ""
+msgstr "OBJEKT-ID[,OBJEKT-ID]*"
 
 #: ../src/inkscape-application.cpp:581
 #, fuzzy
@@ -9120,7 +9115,7 @@ msgstr ""
 
 #: ../src/inkscape-application.cpp:594
 msgid "ACTION(:ARG)[;ACTION(:ARG)]*"
-msgstr ""
+msgstr "AKTION(:ARG)[;AKTION(:ARG)]*"
 
 #: ../src/inkscape-application.cpp:595
 #, fuzzy
@@ -9245,7 +9240,7 @@ msgstr ""
 
 #: ../src/inkview-application.cpp:63
 msgid "Inkview - An SVG File Viewer"
-msgstr ""
+msgstr "Inkview - Ein Betrachter für SVG-Dateien"
 
 #: ../src/inkview-application.cpp:68
 msgid "Print: Inkview version."
@@ -9256,9 +9251,8 @@ msgid "Launch in fullscreen mode"
 msgstr "In Vollbild öffnen"
 
 #: ../src/inkview-application.cpp:70
-#, fuzzy
 msgid "Search folders recursively"
-msgstr "Klonverbindung auf_trennen"
+msgstr "Ordner rekursiv durchsuchen"
 
 #: ../src/inkview-application.cpp:71
 msgid "Change image every NUMBER seconds"
@@ -9273,9 +9267,8 @@ msgid "Scale image by factor NUMBER"
 msgstr "Saklierungsfaktor"
 
 #: ../src/inkview-application.cpp:73
-#, fuzzy
 msgid "Preload files"
-msgstr "Aus Datei"
+msgstr "Dateien im Voraus laden"
 
 #: ../src/inkview-application.cpp:104
 #, fuzzy
@@ -9375,7 +9368,7 @@ msgstr "<b>Drehen</b> des Füllmusters; <b>Strg</b> rastet Winkel ein"
 
 #: ../src/knotholder.cpp:445 ../src/knotholder.cpp:447
 msgid "<b>Resize</b> the filter effect region"
-msgstr ""
+msgstr "<b>Größe</b> des Filterbereichs ändern"
 
 #: ../src/libnrtype/FontFactory.cpp:664
 msgid "Ignoring font without family that will crash Pango"
@@ -9422,18 +9415,18 @@ msgid "VonKoch"
 msgstr "VonKoch"
 
 #: ../src/live_effects/effect.cpp:163
-#, fuzzy
 msgid "Create VonKoch fractal"
-msgstr "Rechteck erzeugen"
+msgstr "Erstellt eine Koch-Kurve"
 
 #: ../src/live_effects/effect.cpp:173
 msgid "Knot"
 msgstr "Knoten"
 
 #: ../src/live_effects/effect.cpp:177
-#, fuzzy
 msgid "Create gaps in self-intersections, as in Celtic knots"
-msgstr "Überschneidung der gewählten Pfade erzeugen"
+msgstr ""
+"Öffnet Lücken an Überschneidungen des Pfades mit sich selbst, wie bei einem"
+" keltischen Knoten"
 
 #: ../src/live_effects/effect.cpp:187
 msgid "Construct grid"
@@ -9452,6 +9445,9 @@ msgid ""
 "Make the path curl like wire, using Spiro B-Splines. This effect is usually "
 "used directly on the canvas with the Spiro mode of the drawing tools."
 msgstr ""
+"Lässt den Pfad sich mittels B-Splines wie einen Draht krümmen. Dieser Effekt"
+" wird normalerweise direkt auf der Zeichenfläche mit dem Spiro-Modus der"
+" Zeichenwerkzeuge erzeugt."
 
 #: ../src/live_effects/effect.cpp:215
 msgid "Envelope Deformation"
@@ -9508,6 +9504,9 @@ msgid ""
 "This effect can also be used directly on the canvas with a pressure "
 "sensitive stylus and the Pencil tool."
 msgstr ""
+"Erzeugt kalligrafische Striche, deren variable Breite und Krümmung anpassbar"
+" sind. Dieser Effekt kann auch mit einem druckempfindlichen Stift und dem"
+" Malwerkzeug auf der Zeichenfläche erzeugt werden."
 
 #: ../src/live_effects/effect.cpp:300 ../src/selection-chemistry.cpp:2957
 msgid "Clone original"
@@ -9536,7 +9535,7 @@ msgstr "Gitterverformung 2"
 
 #: ../src/live_effects/effect.cpp:333
 msgid "Warp an object's shape based on a 5x5 grid"
-msgstr ""
+msgstr "Verformt ein Objekt auf der Basis eines 5x5-Gitters"
 
 #: ../src/live_effects/effect.cpp:343
 msgid "Perspective/Envelope"
@@ -9593,6 +9592,9 @@ msgid ""
 "Create a BSpline that molds into the path's corners. This effect is usually "
 "used directly on the canvas with the BSpline mode of the drawing tools."
 msgstr ""
+"Erstellt eine BSpline-Kurve, die sich in die Ecken des Pfades schmiegt."
+" Dieser Effekt wird normalerweise direkt auf der Zeichenfläche mit dem"
+" BSpline-Modus der Zeichenwerkzeuge erzeugt."
 
 #: ../src/live_effects/effect.cpp:427
 msgid "Join type"
@@ -9623,6 +9625,9 @@ msgid ""
 "Mirror an object along a movable axis, or around the page center. The "
 "mirrored copy can be styled independently."
 msgstr ""
+"Spiegelt ein Objekt entlang einer verschiebbaren Achse oder um den"
+" Seitenmittelpunkt. Die Spiegelung kann andere Stileigenschaften als das"
+" Original haben."
 
 #: ../src/live_effects/effect.cpp:469
 msgid "Rotate copies"
@@ -9633,6 +9638,8 @@ msgid ""
 "Create multiple rotated copies of an object, as in a kaleidoscope. The "
 "copies can be styled independently."
 msgstr ""
+"Erstellt mehrere gedrehte Kopien eines Objektes, wie bei einem Kaleidoskop."
+" Die Kopien können andere Stileigenschaften als das Original haben."
 
 #: ../src/live_effects/effect.cpp:484
 msgid "Attach path"
@@ -9652,6 +9659,8 @@ msgid ""
 "Turn the path into a fill between two other open paths (e.g. between two "
 "paths with PowerStroke applied to them)"
 msgstr ""
+"Wandelt den Pfad in eine Füllung zwischen zwei anderen, offenen Pfaden um"
+" (z.B. zwischen zwei Strichen mit dem Power-Stroke-Pfadeffekt)"
 
 #: ../src/live_effects/effect.cpp:512 ../src/selection-chemistry.cpp:2955
 msgid "Fill between many"
@@ -9662,6 +9671,8 @@ msgid ""
 "Turn the path into a fill between multiple other open paths (e.g. between "
 "paths with PowerStroke applied to them)"
 msgstr ""
+"Wandelt den Pfad in eine Füllung zwischen mehreren anderen, offenen Pfaden um"
+" (z.B. zwischen zwei Strichen mit dem Power-Stroke-Pfadeffekt)"
 
 #: ../src/live_effects/effect.cpp:526
 msgid "Ellipse by 5 points"
@@ -9702,7 +9713,7 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:583
 msgid "Boolean operation"
-msgstr ""
+msgstr "Boolsche Operation"
 
 #: ../src/live_effects/effect.cpp:587
 msgid ""
@@ -9712,11 +9723,11 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:597 ../src/live_effects/effect.cpp:601
 msgid "Embroidery stitch"
-msgstr ""
+msgstr "Stickerei"
 
 #: ../src/live_effects/effect.cpp:611
 msgid "Power clip"
-msgstr ""
+msgstr "Ausschneiden"
 
 #: ../src/live_effects/effect.cpp:615
 msgid "Invert, hide or flatten a clip (apply like a Boolean operation)"
@@ -9724,7 +9735,7 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:625
 msgid "Power mask"
-msgstr ""
+msgstr "Maskieren"
 
 #: ../src/live_effects/effect.cpp:629
 msgid "Invert or hide a mask, or use its negative"
@@ -9743,7 +9754,6 @@ msgid "Offset the path, optionally keeping cusp corners cusp"
 msgstr ""
 
 #: ../src/live_effects/effect.cpp:667
-#, fuzzy
 msgid "Dashed Stroke"
 msgstr "Gestrichelte Kontur"
 
@@ -9904,7 +9914,6 @@ msgstr ""
 "Mausklicks."
 
 #: ../src/live_effects/effect.cpp:1554 ../src/live_effects/effect.cpp:1633
-#, fuzzy
 msgid "<b>Default value:</b> "
 msgstr "<b>Standardwert:</b> "
 
@@ -10103,7 +10112,7 @@ msgstr "Differenz"
 
 #: ../src/live_effects/lpe-bool.cpp:42
 msgid "symmetric difference"
-msgstr "symmetrische Differenz"
+msgstr "Symmetrische Differenz"
 
 #: ../src/live_effects/lpe-bool.cpp:43
 msgid "division"
@@ -10111,15 +10120,15 @@ msgstr "Division"
 
 #: ../src/live_effects/lpe-bool.cpp:47
 msgid "cut"
-msgstr ""
+msgstr "Zerschneiden"
 
 #: ../src/live_effects/lpe-bool.cpp:48
 msgid "cut inside"
-msgstr ""
+msgstr "Innen zerschneiden"
 
 #: ../src/live_effects/lpe-bool.cpp:49
 msgid "cut outside"
-msgstr ""
+msgstr "Außen zerschneiden"
 
 #: ../src/live_effects/lpe-bool.cpp:55 ../src/live_effects/lpe-bool.cpp:64
 #, fuzzy
@@ -10140,13 +10149,12 @@ msgid "take from object"
 msgstr "Von Objekt"
 
 #: ../src/live_effects/lpe-bool.cpp:73
-#, fuzzy
 msgid "Operand path:"
-msgstr "Verbiegepfad:"
+msgstr "Operand:"
 
 #: ../src/live_effects/lpe-bool.cpp:73
 msgid "Operand for the boolean operation"
-msgstr ""
+msgstr "Pfad, der bei der Booleschen Operation als Operand dient"
 
 #: ../src/live_effects/lpe-bool.cpp:74
 msgid "Operation:"
@@ -10154,15 +10162,15 @@ msgstr "Operator:"
 
 #: ../src/live_effects/lpe-bool.cpp:74
 msgid "Boolean Operation"
-msgstr ""
+msgstr "Boolesche Operation"
 
 #: ../src/live_effects/lpe-bool.cpp:75
 msgid "Swap operands:"
-msgstr ""
+msgstr "Operanden vertauschen"
 
 #: ../src/live_effects/lpe-bool.cpp:75
 msgid "Swap operands (useful e.g. for difference)"
-msgstr ""
+msgstr "Reihenfolge der Operanden vertauschen (nützlich z.B. für Differenz)"
 
 #: ../src/live_effects/lpe-bool.cpp:76
 #, fuzzy
@@ -10176,13 +10184,15 @@ msgstr "Verknüpfter Pfad:"
 
 #: ../src/live_effects/lpe-bool.cpp:78
 msgid "Remove inner:"
-msgstr ""
+msgstr "Innenliegendes entfernen"
 
 #: ../src/live_effects/lpe-bool.cpp:79
 msgid ""
 "For cut operations: remove inner (non-contour) lines of cutting path to "
 "avoid invisible extra points"
 msgstr ""
+"Beim Zerschneiden innenliegende Linien des Zerschneidepfades entfernen, um"
+" unsichtbare zusätzliche Knoten zu vermeiden"
 
 #: ../src/live_effects/lpe-bool.cpp:81
 #, fuzzy
@@ -10199,7 +10209,6 @@ msgid "Fill type operand:"
 msgstr "Füllregel für den Operand"
 
 #: ../src/live_effects/lpe-bool.cpp:83
-#, fuzzy
 msgid "Fill type (winding mode) for operand path"
 msgstr "Füllregel (winding-mode) für den Operand-Pfad"
 
@@ -10318,9 +10327,8 @@ msgid "Shape"
 msgstr "Formen"
 
 #: ../src/live_effects/lpe-clone-original.cpp:43
-#, fuzzy
 msgid "Shape linked"
-msgstr "Form verknüpfen"
+msgstr "Verknüpfe Form"
 
 #: ../src/live_effects/lpe-clone-original.cpp:49
 #, fuzzy
@@ -10328,9 +10336,8 @@ msgid "Allow Transforms"
 msgstr "Transformationen"
 
 #: ../src/live_effects/lpe-clone-original.cpp:49
-#, fuzzy
 msgid "Allow transforms"
-msgstr "Transformationen"
+msgstr "Transformation erlauben"
 
 #
 # File: ../src/live_effects/lpe-clone-original.cpp, line: 118
@@ -10452,7 +10459,7 @@ msgstr "Zwischen den Kopien spiegeln"
 #: ../src/live_effects/lpe-copy_rotate.cpp:73
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:59
 msgid "Split elements"
-msgstr "Elemente aufspalten"
+msgstr "Elemente trennen"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:73
 msgid "Split elements, so each can have its own style"
@@ -10891,9 +10898,8 @@ msgid "Defines the direction and magnitude of the extrusion"
 msgstr "Definiert Richtung und Ausmaß der Extrusion"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:28
-#, fuzzy
 msgid "With Spiro or BSpline"
-msgstr "Spiro Spline"
+msgstr "Mit Spiro oder BSpline"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:35
 msgid "Paths from which to take the original path data"
@@ -20192,7 +20198,6 @@ msgstr ""
 "der Textwerkzeugleiste"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:477
-#, fuzzy
 msgid "Show font substitution warning dialog"
 msgstr "Zeige Warndialog für Schriftersetzung"
 
@@ -25537,13 +25542,11 @@ msgstr ""
 "Zurücknehmen"
 
 #: ../src/ui/tool/node.cpp:592
-#, fuzzy
 msgctxt "Path handle tip"
 msgid "<b>Shift</b>: rotate both handles by the same angle"
 msgstr "<b>Umschalt</b>: Dreht beide Anfasser um den gleichen Winkel"
 
 #: ../src/ui/tool/node.cpp:596
-#, fuzzy
 msgctxt "Path handle tip"
 msgid "<b>Shift</b>: move handle"
 msgstr "<b>Umschalt</b>: Anfasser verschieben"
@@ -27176,7 +27179,6 @@ msgid "Shape of new paths drawn by this tool"
 msgstr "Stil von neuen Pfaden mit diesem Werkzeug"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:432
-#, fuzzy
 msgctxt "Cap"
 msgid "Butt"
 msgstr "Stoß"
@@ -35280,9 +35282,8 @@ msgstr "Ersetze Farbe (RRGGBB hex):"
 
 # # !!! just make the menu item insensitive
 #: ../share/extensions/color_replace.inx:6
-#, fuzzy
 msgid "Color to replace"
-msgstr "Es gibt nichts zu ersetzen"
+msgstr "Farbe zum Ersetzen"
 
 #: ../share/extensions/color_replace.inx:7
 msgid "By color (RRGGBB hex):"
@@ -35347,9 +35348,8 @@ msgid "DOC Info"
 msgstr ""
 
 #: ../share/extensions/docinfo.inx:7
-#, fuzzy
 msgid "Show page info"
-msgstr "_Rand der Seite anzeigen"
+msgstr "Seiteninformationen anzeigen"
 
 #: ../share/extensions/docinfo.inx:8
 msgid ""
@@ -35383,7 +35383,6 @@ msgid "Step:"
 msgstr "Schrittweite:"
 
 #: ../share/extensions/dots.inx:14
-#, fuzzy
 msgid ""
 "This extension replaces the selection's nodes with numbered dots according "
 "to the following options:\n"
@@ -35564,7 +35563,6 @@ msgid "Report this triangle's properties"
 msgstr "Eigenschaften dieses Dreiecks anzeigen"
 
 #: ../share/extensions/draw_from_triangle.inx:44
-#, fuzzy
 msgid ""
 "This extension draws constructions about a triangle defined by the first 3 "
 "nodes of a selected path. You may select one of preset objects or create "
@@ -35597,7 +35595,8 @@ msgid ""
 "            "
 msgstr ""
 "Diese Erweiterung zeichnet Geometrien bezüglich eines Dreiecks definiert "
-"durch die ersten drei Punkte eines Pfades. Sie können vorgegebene Objekte "
+"durch die ersten drei Punkte des ausgewählten Pfades. Sie können vorgegebene"
+" Objekte "
 "wählen oder eigene erstellen.\n"
 "             \n"
 "Alle Längeneinheiten sind Inkscape-Pixel, Winkel werden in Radiant "
@@ -35667,7 +35666,6 @@ msgid "Read from file"
 msgstr "Lade von Datei"
 
 #: ../share/extensions/dxf_input.inx:13
-#, fuzzy
 msgid "Manual scale factor:"
 msgstr "Manueller Skalierungsfaktor:"
 
@@ -35693,7 +35691,6 @@ msgid "Text Font:"
 msgstr "Text-Schriftart"
 
 #: ../share/extensions/dxf_input.inx:27
-#, fuzzy
 msgid ""
 "- AutoCAD Release 13 and newer.\n"
 "- for manual scaling, assume dxf drawing is in mm.\n"
@@ -35833,7 +35830,6 @@ msgid "Layer match name:"
 msgstr "Übereinstimmender Ebenenname"
 
 #: ../share/extensions/dxf_outlines.inx:35
-#, fuzzy
 msgid ""
 "- AutoCAD Release 14 DXF format.\n"
 "- The base unit parameter specifies in what unit the coordinates are output "
@@ -35886,9 +35882,8 @@ msgid "Shades:"
 msgstr "Schatten:"
 
 #: ../share/extensions/edge3d.inx:8
-#, fuzzy
 msgid "Only black and white:"
-msgstr "Schwarz-Weiß"
+msgstr "Nur Schwarz-Weiß:"
 
 #: ../share/extensions/edge3d.inx:10
 msgid "Blur stdDeviation:"
@@ -35920,7 +35915,6 @@ msgid "Business Card"
 msgstr "Visitenkarte"
 
 #: ../share/extensions/empty_business_card.inx:7
-#, fuzzy
 msgid "Business card size:"
 msgstr "Größe der Visitenkarte:"
 
@@ -36367,7 +36361,6 @@ msgid "Use"
 msgstr "Verwendung"
 
 #: ../share/extensions/funcplot.inx:19
-#, fuzzy
 msgid ""
 "Select a rectangle before calling the extension,\n"
 "it will determine X and Y scales. If you wish to fill the area, then add x-"
@@ -36396,7 +36389,6 @@ msgid "Functions"
 msgstr "Funktionen"
 
 #: ../share/extensions/funcplot.inx:29 ../share/extensions/param_curves.inx:24
-#, fuzzy
 msgid ""
 "Standard Python math functions are available:\n"
 "\n"
@@ -36528,9 +36520,8 @@ msgstr ""
 #: ../share/extensions/gcodetools_path_to_gcode.inx:88
 #: ../share/extensions/gcodetools_prepare_path_for_plasma.inx:54
 #: ../share/extensions/gcodetools_tools_library.inx:57
-#, fuzzy
 msgid "Gcodetools"
-msgstr "Gcode-Werkzeug"
+msgstr "Gcode-Werkzeuge"
 
 #: ../share/extensions/gcodetools_area.inx:4
 #: ../share/extensions/gcodetools_area.inx:9
@@ -36895,7 +36886,6 @@ msgid "DXF Points"
 msgstr "DXF-Punkte"
 
 #: ../share/extensions/gcodetools_dxf_points.inx:9
-#, fuzzy
 msgid "DXF points"
 msgstr "DXF-Punkte"
 
@@ -37358,7 +37348,6 @@ msgid "Size of Border (px):"
 msgstr "Größe des Randes (px)"
 
 #: ../share/extensions/generate_voronoi.inx:13
-#, fuzzy
 msgid ""
 "Generate a random pattern of Voronoi cells. The pattern will be accessible "
 "in the Fill and Stroke dialog. You must select an object or a group.\n"
@@ -37400,7 +37389,6 @@ msgid "File Resolution:"
 msgstr "Dateiauflösung:"
 
 #: ../share/extensions/gimp_xcf.inx:16
-#, fuzzy
 msgid ""
 "This extension exports the document to Gimp XCF format according to the "
 "following options:\n"
@@ -37414,8 +37402,8 @@ msgid ""
 "concatenated and converted with their first level parent layer into a single "
 "Gimp layer."
 msgstr ""
-"Diese Erweiterung exportiert das Dokument in das Gimp XCF-Format nach den "
-"folgenden Optionen:\n"
+"Diese Erweiterung exportiert das Dokument mit den "
+"folgenden Optionen in das Gimp XCF-Format :\n"
 "     * Hilfslinien speichern: Konvertiert alle Hilfslinien zu Gimp-"
 "Hilfslinien.\n"
 "     * Gitter speichern: Wandelt das erste rechteckige Gitter in ein Gimp-"
@@ -37423,9 +37411,11 @@ msgstr ""
 "wenn es in Gimp angezeigt wird).\n"
 "     * Hintergrund speichern: Fügt den Dokument-Hintergrund in jede "
 "konvertierte Ebene ein.\n"
+"    * Dateiauflösung: Auflösung der XCF-Datei in DPI.\n"
 "\n"
-"Jede erste Ebene wird in eine Gimp-Ebene umgewandelt. Unterebenen werden mit "
-"ihrer ersten übergeordneten Ebene in einer einzigen Gimp-Ebene verkettet und "
+"Jede Ebene ersten Ranges wird in eine Gimp-Ebene umgewandelt. Unterebenen"
+" werden miteinander verknüpft und zusammen mit ihrer Elternebene ersten"
+" Ranges in eine einzige Gimp-Ebene umgewandelt."
 "konvertiert."
 
 #: ../share/extensions/gimp_xcf.inx:28 ../share/extensions/gimp_xcf.inx:29
@@ -37567,7 +37557,6 @@ msgid "X Divisions [x2]:"
 msgstr "X-Teilungen (x2):"
 
 #: ../share/extensions/grid_isometric.inx:7
-#, fuzzy
 msgid "Y Divisions [x2] [> 1/2 X Div]:"
 msgstr "Y-Teilung (x2) (> 1/2 X Div):"
 
@@ -38620,7 +38609,6 @@ msgstr ""
 #: ../share/extensions/jessyInk_uninstall.inx:23
 #: ../share/extensions/jessyInk_video.inx:14
 #: ../share/extensions/jessyInk_view.inx:20
-#, fuzzy
 msgid "JessyInk"
 msgstr "JessyInk"
 
@@ -39238,7 +39226,6 @@ msgid "Margin box"
 msgstr "Randbox"
 
 #: ../share/extensions/layout_nup.inx:49
-#, fuzzy
 msgid ""
 "\n"
 "Parameters:\n"
@@ -39253,15 +39240,17 @@ msgid ""
 msgstr ""
 "\n"
 "Parameter:\n"
-"     * Seitengröße: Breite und Höhe\n"
-"     * Seitenränder: Zusätzlicher Platz um jede Seite.\n"
-"     * Layout: Zeilen und Spalten.\n"
-"     * Layout: Breite und Höhe automatisch berechnen, wenn eines davon 0 "
+"    * Seitengröße: Breite und Höhe\n"
+"    * Seitenränder: Zusätzlicher Platz um jede Seite.\n"
+"    * Layout: Zeilen und Spalten.\n"
+"    * Layout-Abmessungen: Breite und Höhe automatisch berechnen, wenn eines"
+" davon 0 "
 "ist.\n"
-"     * Layoutgröße automatisch berechnen: Verwendet nicht nicht die Werte "
+"    * Layoutgröße automatisch berechnen: Verwendet nicht nicht die Werte "
 "für Layout-Abmessungen.\n"
-"     * Layout-Ränder: Leerraum um jeden Teil des Layouts.\n"
-"     * Layout-Innenabstand:  Abstand zum Inhalt jedes Layoutteils."
+"     * Layout-Ränder: Leerraum um jeden Teil des Layouts.\n"
+"     * Layout-Innenabstand:  Abstand zum Inhalt jedes Layoutteils.\n"
+"      "
 
 # !!! used for too many different things, translation difficult...
 #: ../share/extensions/layout_nup.inx:66
@@ -39309,7 +39298,6 @@ msgid "Randomize angle (%):"
 msgstr "Winkel zufällig machen (%):"
 
 #: ../share/extensions/lindenmayer.inx:18
-#, fuzzy
 msgid ""
 "\n"
 "The path is generated by applying the \n"
@@ -39513,7 +39501,6 @@ msgid "Angle (°):"
 msgstr "Winkel (°):"
 
 #: ../share/extensions/measure.inx:41
-#, fuzzy
 msgid ""
 "This effect measures the length, area, or center-of-mass of the selected "
 "paths. Length and area are added as a text object with the selected units. "
@@ -39533,17 +39520,18 @@ msgid ""
 msgstr ""
 "Dieser Effekt misst die Länge, Fläche oder Flächenmittelpunkt des gewählten "
 "Pfades. Länge und Fläche werden als Textobjekt mit den gewählten Einheiten "
-"eingefügt.\n"
+"eingefügt. Der Masseschwerpunkt wird als Kreuz dargestellt.\n"
 "\n"
 "  * Der Text kann entweder entlang des Pfades oder als eigenständiger Text "
-"in einem festgelegten Winkel ausgerichtet werden \n"
+"in einem festgelegten Winkel ausgerichtet werden. \n"
 "  * Die Anzahl der Nachkommastellen wird durch \"Präzision\" gewählt.\n"
 "  * Das Feld \"Versatz\" kontrolliert die Entfernung Text-Pfad. \n"
-"  * Der \"Maßstab\" kann zur Messung skalierter Pfade verwendet werden (M = "
-"250 -> 1cm entspricht 2,5m).\n"
+"  * Der \"Maßstab\" kann zur Messung skalierter Pfade verwendet werden. Wenn"
+" zum Beispiel 1 cm in der Zeichnung 2,50 m in der Realität entspricht, muss"
+" der Maßstab auf 250 gesetzt werden.\n"
 "  * Wenn die Fläche berechnet wird, sollte das Ergebnis für Polygone und "
-"Bézier-Kurven präzise sein. Bei einem Kreis kann die Fläche zu groß sein "
-"(0.03%)."
+"Bézier-Kurven präzise sein. Bei einem Kreis kann die Fläche um bis zu 0,03%"
+" zu groß sein."
 
 #: ../share/extensions/measure.inx:50
 msgid "Font size (px):"
@@ -39763,9 +39751,8 @@ msgid "Bar chart"
 msgstr "Balkendiagramm"
 
 #: ../share/extensions/nicechart.inx:90
-#, fuzzy
 msgid "Pie chart"
-msgstr "Balkendiagramm"
+msgstr "Tortendiagramm"
 
 #: ../share/extensions/nicechart.inx:91
 msgid "Pie chart (percentage)"
@@ -39784,7 +39771,6 @@ msgid "Number of significant digits for coordinates:"
 msgstr "Anzahl der signifikanten Stellen für Koordinaten:"
 
 #: ../share/extensions/output_scour.inx:10
-#, fuzzy
 msgid ""
 "Specifies the number of significant digits that should be output for "
 "coordinates. Note that significant digits are *not* the number of decimals "
@@ -39792,11 +39778,11 @@ msgid ""
 "\"3\" is specified, the coordinate 3.14159 is output as 3.14 while the "
 "coordinate 123.675 is output as 124."
 msgstr ""
-"Legt die Anzahl der signifikanten Stellen für Koordinaten fest. Signifikante "
-"Stellen entsprechen *nicht* der Anzahl an Nachkommastellen, sondern der "
-"Gesamtzahl der Stellen in der Ausgabe. Wird zum Beispiel ein Wert von \"3\" "
-"festgelegt, wird die Koordinate 3.14159 als 3.14 ausgegeben während die "
-"Koordinate 123.675 als 124 ausgegeben wird."
+"Legt die Anzahl der signifikanten Stellen für die ausgegebenen Koordinaten"
+" fest. Signifikante  Stellen entsprechen *nicht* der Anzahl an"
+" Nachkommastellen, sondern der Gesamtzahl der Stellen in der Ausgabe. Wird"
+" zum Beispiel ein Wert von \"3\" festgelegt, wird die Koordinate 3.14159 als"
+" 3.14 ausgegeben während die Koordinate 123.675 als 124 ausgegeben wird."
 
 #: ../share/extensions/output_scour.inx:14
 msgid "Shorten color values"
@@ -39814,7 +39800,6 @@ msgid "Convert CSS attributes to XML attributes"
 msgstr "CSS-Attribute in XML-Attribute umwandeln"
 
 #: ../share/extensions/output_scour.inx:17
-#, fuzzy
 msgid ""
 "Convert styles from style tags and inline style=\"\" declarations into XML "
 "attributes."
@@ -39827,7 +39812,6 @@ msgid "Collapse groups"
 msgstr "Gruppen zusammenklappen"
 
 #: ../share/extensions/output_scour.inx:21
-#, fuzzy
 msgid ""
 "Remove useless groups, promoting their contents up one level. Requires "
 "\"Remove unused IDs\" to be set."
@@ -39967,7 +39951,6 @@ msgid "Indentation characters:"
 msgstr "Zeichen für Einrückungen:"
 
 #: ../share/extensions/output_scour.inx:61
-#, fuzzy
 msgid ""
 "The type of indentation used for each level of nesting in the output. "
 "Specify \"None\" to disable indentation. This option has no effect if "
@@ -39975,7 +39958,7 @@ msgid ""
 msgstr ""
 "Gibt die Art der Einrückung an, die für jede Gliederungsebene in der Ausgabe "
 "hinzugefügt wird. \"Keine\" deaktiviert die Einrückung. Diese Einstellung "
-"hat keine Wirkung wenn \"Ausgabe mit Zeilenumbrüchen und Einrückungen "
+"hat keine Wirkung, wenn \"Ausgabe mit Zeilenumbrüchen und Einrückungen "
 "formatieren\" deaktiviert ist."
 
 #: ../share/extensions/output_scour.inx:62
@@ -39996,7 +39979,6 @@ msgid "Depth of indentation:"
 msgstr "Einrücktiefe:"
 
 #: ../share/extensions/output_scour.inx:68
-#, fuzzy
 msgid ""
 "The depth of the chosen type of indentation. E.g. if you choose \"2\" every "
 "nesting level in the output will be indented by two additional spaces/tabs."
@@ -40006,19 +39988,17 @@ msgstr ""
 "Tabs eingerückt."
 
 #: ../share/extensions/output_scour.inx:71
-#, fuzzy
 msgid "Strip the \"xml:space\" attribute from the root SVG element"
 msgstr "\"xml:space\"-Attribut vom SVG-Wurzelelement entfernen"
 
 #: ../share/extensions/output_scour.inx:71
-#, fuzzy
 msgid ""
 "This is useful if the input file specifies \"xml:space='preserve'\" in the "
 "root SVG element which instructs the SVG editor not to change whitespace in "
 "the document at all (and therefore overrides the options above)."
 msgstr ""
 "Nützlich wenn die Eingabedatei die Angabe \"xml:space='preserve'\" im SVG-"
-"Wurzelelement enthält, welche den SVG-Editor anweist Leerraum, d.h. "
+"Wurzelelement enthält, welche den SVG-Editor anweist, Leerraum, d.h. "
 "Zeilenumbrüche und Leerzeichen, im Dokument nicht zu verändern (was die "
 "vorigen Optionen außer Kraft setzt)."
 
@@ -40043,7 +40023,6 @@ msgid "Shorten IDs"
 msgstr "IDs kürzen"
 
 #: ../share/extensions/output_scour.inx:80
-#, fuzzy
 msgid ""
 "Minimize the length of IDs using only lowercase letters, assigning the "
 "shortest values to the most-referenced elements. For instance, "
@@ -40093,7 +40072,6 @@ msgid "Preserve IDs starting with:"
 msgstr "IDs mit folgendem Präfix erhalten:"
 
 #: ../share/extensions/output_scour.inx:93
-#, fuzzy
 msgid ""
 "Preserve all IDs that start with the specified prefix (e.g. specify \"flag\" "
 "to preserve \"flag-mx\", \"flag-pt\", etc.)."
@@ -40178,7 +40156,6 @@ msgid "Samples:"
 msgstr "Beispiele:"
 
 #: ../share/extensions/param_curves.inx:20
-#, fuzzy
 msgid ""
 "Select a rectangle before calling the extension, it will determine X and Y "
 "scales.\n"
@@ -40225,7 +40202,6 @@ msgstr "Gewähltes Objekt in Pfad umwandeln"
 
 #: ../share/extensions/path_mesh_m2p.inx:30
 #: ../share/extensions/path_mesh_p2m.inx:25
-#, fuzzy
 msgid "Mesh"
 msgstr "Gitterverlauf"
 
@@ -40876,7 +40852,7 @@ msgstr "Maximum"
 
 #: ../share/extensions/polyhedron_3d.inx:85
 msgid "Minimum"
-msgstr "Minimun"
+msgstr "Minimum"
 
 #: ../share/extensions/polyhedron_3d.inx:86
 msgid "Mean"
@@ -41801,13 +41777,11 @@ msgid "Lines"
 msgstr "Linien"
 
 #: ../share/extensions/text_split.inx:10
-#, fuzzy
 msgctxt "split"
 msgid "Words"
 msgstr "Wörter"
 
 #: ../share/extensions/text_split.inx:11
-#, fuzzy
 msgctxt "split"
 msgid "Letters"
 msgstr "Buchstaben"
@@ -42246,7 +42220,6 @@ msgstr "Erzwungene Dimension:"
 
 #. i18n. Description duplicated in a fake value attribute in order to make it translatable
 #: ../share/extensions/webslicer_create_rect.inx:16
-#, fuzzy
 msgid "Force Dimension must be set as <width>x<height>"
 msgstr "Die erzwungene Dimension muss als <Breite>x<Höhe> gesetzt werden."
 
