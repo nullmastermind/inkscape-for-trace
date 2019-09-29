@@ -1880,6 +1880,8 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     // Mark the painted rectangle clean
     markRect(paint_rect, 0);
 
+    cairo_surface_destroy(imgs);
+
     gtk_widget_queue_draw_area(GTK_WIDGET(this), paint_rect.left() -_x0, paint_rect.top() - _y0,
         paint_rect.width(), paint_rect.height());
 }

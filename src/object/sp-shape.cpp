@@ -454,7 +454,8 @@ void SPShape::modified(unsigned int flags) {
             }
         }
     }
-    if (!this->getCurve()) {
+
+    if (!this->getCurve(TRUE)) { // avoid copy
         sp_lpe_item_update_patheffect(this, true, false);
     }
 }
