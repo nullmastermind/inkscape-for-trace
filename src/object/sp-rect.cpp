@@ -162,7 +162,10 @@ Inkscape::XML::Node * SPRect::write(Inkscape::XML::Document *xml_doc, Inkscape::
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:rect");
     }
-
+    if (this->hasPathEffectOnClipOrMaskRecursive(this) && repr && strcmp(repr->name(), "svg:rect") == 0) {
+        repr->setCodeUnsafe(g_quark_from_string("svg:path"));
+        repr->setAttribute("sodipodi:type", "rect");
+    }
     sp_repr_set_svg_length(repr, "width",  this->width);
     sp_repr_set_svg_length(repr, "height", this->height);
 
@@ -176,8 +179,12 @@ Inkscape::XML::Node * SPRect::write(Inkscape::XML::Document *xml_doc, Inkscape::
 
     sp_repr_set_svg_length(repr, "x", this->x);
     sp_repr_set_svg_length(repr, "y", this->y);
-
-    this->set_shape(); // evaluate SPCurve
+    // write d=
+    if (strcmp(repr->name(), "svg:rect") != 0) {
+        set_rect_path_attribute(repr); // include set_shape()
+    } else {
+        this->set_shape(); // evaluate SPCurve
+    }
     SPShape::write(xml_doc, repr, flags);
 
 #ifdef OBJECT_TRACE
@@ -195,7 +202,7 @@ const char* SPRect::displayName() const {
 
 void SPRect::set_shape() {
     if (hasBrokenPathEffect()) {
-        g_warning ("The spiral shape has unknown LPE on it! Convert to path to make it editable preserving the appearance; editing it as spiral will remove the bad LPE");
+        g_warning("The rect shape has unknown LPE on it!");
 
         if (this->getRepr()->attribute("d")) {
             // unconditionally read the curve from d, if any, to preserve appearance
@@ -277,6 +284,7 @@ void SPRect::set_shape() {
 
     c->closepath();
 
+
     /* Reset the shape's curve to the "original_curve"
     * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
     SPCurve * before = this->getCurveBeforeLPE();
@@ -297,7 +305,41 @@ void SPRect::set_shape() {
     if (before) {
         before->unref();
     }
+    if (this->hasPathEffectOnClipOrMaskRecursive(this)) {
+        Inkscape::XML::Node *rectrepr = this->getRepr();
+        if (strcmp(rectrepr->name(), "svg:rect") == 0) {
+            sp_lpe_item_update_patheffect(this, true, false);
+            this->write(rectrepr->document(), rectrepr, SP_OBJECT_MODIFIED_FLAG);
+        }
+    }
     c->unref();
+}
+
+bool SPRect::set_rect_path_attribute(Inkscape::XML::Node *repr)
+{
+    // Make sure our pathvector is up to date.
+    this->set_shape();
+
+    if (_curve) {
+        gchar *d = sp_svg_write_path(_curve->get_pathvector());
+
+        repr->setAttribute("d", d);
+
+        g_free(d);
+    } else {
+        repr->setAttribute("d", nullptr);
+    }
+
+    return true;
+}
+
+void SPRect::modified(guint flags)
+{
+    if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
+        this->set_shape();
+    }
+
+    SPShape::modified(flags);
 }
 
 /* fixme: Think (Lauris) */

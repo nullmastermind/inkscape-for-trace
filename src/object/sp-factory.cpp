@@ -216,6 +216,8 @@ SPObject *SPFactory::createObject(std::string const& id)
         ret = new SPRadialGradient;
     else if (id == "svg:rect")
         ret = new SPRect;
+    else if (id == "rect") // LPE rect
+        ret = new SPRect;
     else if (id == "svg:svg")
         ret = new SPRoot;
     else if (id == "svg:script")
