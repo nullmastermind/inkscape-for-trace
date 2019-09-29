@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-09-10 23:00+0200\n"
-"PO-Revision-Date: 2019-09-19 19:34+0200\n"
+"PO-Revision-Date: 2019-09-29 17:15+0200\n"
 "Last-Translator: Kjell Cato Heskjestad <cato@heskjestad.xyz>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: nb\n"
@@ -53,7 +53,7 @@ msgstr "Metallstøping"
 
 #: ../share/filters/filters.svg.h:8
 msgid "Smooth drop-like bevel with metallic finish"
-msgstr "Jevn og dråpeaktig skråskjæring med finpuss av metall"
+msgstr "Jevn og dråpeaktig skråkant med finpuss av metall."
 
 #: ../share/filters/filters.svg.h:10
 msgid "Apparition"
@@ -79,7 +79,7 @@ msgstr "Puslespillbit"
 
 #: ../share/filters/filters.svg.h:16
 msgid "Low, sharp bevel"
-msgstr "Lav og skarp skråskjæring"
+msgstr "Lav og skarp skråkant."
 
 #: ../share/filters/filters.svg.h:18
 msgid "Rubber Stamp"
@@ -107,14 +107,12 @@ msgid "Overlays"
 msgstr "Overlegging"
 
 #: ../share/filters/filters.svg.h:20
-#, fuzzy
 msgid "Random whiteouts inside"
-msgstr "Tilfeldiggjør posisjoner"
+msgstr "Lag tilfeldige hvite flekker inni."
 
 #: ../share/filters/filters.svg.h:22
-#, fuzzy
 msgid "Ink Bleed"
-msgstr "Fargesøl"
+msgstr "Blekksøl"
 
 #: ../share/filters/filters.svg.h:23 ../share/filters/filters.svg.h:27
 #: ../share/filters/filters.svg.h:115 ../share/filters/filters.svg.h:431
@@ -139,15 +137,15 @@ msgstr "Blomsterblad"
 
 #: ../share/filters/filters.svg.h:32
 msgid "Soft, cushion-like bevel with matte highlights"
-msgstr "Myk, puteaktig skråskjæring med matte høylys"
+msgstr "Myk, puteaktig skråkant med matte høylys."
 
 #: ../share/filters/filters.svg.h:34
 msgid "Ridged Border"
-msgstr "Møneformet kantlinje"
+msgstr "Opphøyd kantlinje"
 
 #: ../share/filters/filters.svg.h:36
 msgid "Ridged border with inner bevel"
-msgstr "Møneformet kantlinje med indre skråskjæring"
+msgstr "Opphøyd kantlinje med indre skråkant."
 
 #: ../share/filters/filters.svg.h:38
 msgid "Ripple"
@@ -271,7 +269,7 @@ msgstr "Oljemaleri"
 #: ../src/extension/internal/filter/paint.h:878
 #: ../src/extension/internal/filter/paint.h:982
 msgid "Image Paint and Draw"
-msgstr ""
+msgstr "Mal og tegn i bildet"
 
 #: ../share/filters/filters.svg.h:76
 msgid "Simulate oil painting style"
@@ -379,7 +377,6 @@ msgid "Random paint streaks downwards"
 msgstr "Spredde malingstriper nedover"
 
 #: ../share/filters/filters.svg.h:118
-#, fuzzy
 msgid "Jam Spread"
 msgstr "Syltetøy"
 
@@ -404,9 +401,8 @@ msgid "Under a cracked glass"
 msgstr "Bildet legges under knust glass"
 
 #: ../share/filters/filters.svg.h:130
-#, fuzzy
 msgid "Bubbly Bumps"
-msgstr "HSL-humper, alfa"
+msgstr "Boblete rugler"
 
 #: ../share/filters/filters.svg.h:131 ../share/filters/filters.svg.h:307
 #: ../share/filters/filters.svg.h:311 ../share/filters/filters.svg.h:347
@@ -429,7 +425,7 @@ msgstr "Rugler"
 
 #: ../share/filters/filters.svg.h:132
 msgid "Flexible bubbles effect with some displacement"
-msgstr ""
+msgstr "Fleksibel bobleeffekt med litt forskyvning."
 
 #: ../share/filters/filters.svg.h:134
 msgid "Glowing Bubble"
@@ -440,7 +436,7 @@ msgstr "Lysende boble"
 #: ../share/filters/filters.svg.h:207 ../share/filters/filters.svg.h:215
 #: ../share/filters/filters.svg.h:223
 msgid "Ridges"
-msgstr "Møner"
+msgstr "Opphøyde linjer"
 
 #: ../share/filters/filters.svg.h:136
 msgid "Bubble effect with refraction and glow"
@@ -467,17 +463,16 @@ msgid "Pressed Steel"
 msgstr "Presset stål"
 
 #: ../share/filters/filters.svg.h:148
-#, fuzzy
 msgid "Pressed metal with a rolled edge"
-msgstr "Strøk med rund ende"
+msgstr "Presset metall med bøyd kant."
 
 #: ../share/filters/filters.svg.h:150
 msgid "Matte Bevel"
-msgstr "Matt skråskjæring"
+msgstr "Matt skråkant"
 
 #: ../share/filters/filters.svg.h:152
 msgid "Soft, pastel-colored, blurry bevel"
-msgstr "Myk, pastellfarget, uklar skråskjæring"
+msgstr "Myk, pastellfarget, uklar skråkant."
 
 #: ../share/filters/filters.svg.h:154
 msgid "Thin Membrane"
@@ -489,11 +484,11 @@ msgstr "Såpetynn membran"
 
 #: ../share/filters/filters.svg.h:158
 msgid "Matte Ridge"
-msgstr "Diffus møne"
+msgstr "Diffus opphøyd linje"
 
 #: ../share/filters/filters.svg.h:160
 msgid "Soft pastel ridge"
-msgstr "Myk pastellfarget ås"
+msgstr "Myk pastellfarget opphøyd linje"
 
 #: ../share/filters/filters.svg.h:162
 msgid "Glowing Metal"
@@ -536,13 +531,12 @@ msgstr ""
 "Voksaktig tekstur som beholder fargerikheten gjennom fargefyllforandringer"
 
 #: ../share/filters/filters.svg.h:178
-#, fuzzy
 msgid "Eroded Metal"
 msgstr "Erodert metall"
 
 #: ../share/filters/filters.svg.h:180
 msgid "Eroded metal texture with ridges, grooves, holes and bumps"
-msgstr "Erodert metalltekstur med åser, daler, hull og humper"
+msgstr "Erodert metalltekstur med opphøyde og senkede linjer, hull og rugler"
 
 #: ../share/filters/filters.svg.h:182
 msgid "Cracked Lava"
@@ -554,7 +548,7 @@ msgstr "Vulkansk tekstur, litt som lær"
 
 #: ../share/filters/filters.svg.h:186
 msgid "Bark"
-msgstr ""
+msgstr "Bark"
 
 #: ../share/filters/filters.svg.h:188
 msgid "Bark texture, vertical; use with deep colors"
@@ -573,9 +567,8 @@ msgid "Stone Wall"
 msgstr "Steinmur"
 
 #: ../share/filters/filters.svg.h:196
-#, fuzzy
 msgid "Stone wall texture to use with not too saturated colors"
-msgstr "Steinmurtekstur til bruk med mørke farger"
+msgstr "Steinmurtekstur til bruk med farger som er lavt mettet"
 
 #: ../share/filters/filters.svg.h:198
 msgid "Silk Carpet"
@@ -586,32 +579,29 @@ msgid "Silk carpet texture, horizontal stripes"
 msgstr "Silketeppetekstur, horisontale striper"
 
 #: ../share/filters/filters.svg.h:202
-#, fuzzy
 msgid "Refractive Gel A"
-msgstr "Lysbrytende gele A"
+msgstr "Lysbrytende gelé A"
 
 #: ../share/filters/filters.svg.h:204
 msgid "Gel effect with light refraction"
-msgstr "Geleeffekt med lysbryting"
+msgstr "Geléeffekt med lysbryting"
 
 #: ../share/filters/filters.svg.h:206
-#, fuzzy
 msgid "Refractive Gel B"
-msgstr "Lysbrytene gele B"
+msgstr "Lysbrytende gelé B"
 
 #: ../share/filters/filters.svg.h:208
 msgid "Gel effect with strong refraction"
-msgstr "Geleeffekt med sterk lysbryting"
+msgstr "Geléeffekt med sterk lysbryting"
 
 #: ../share/filters/filters.svg.h:210
-#, fuzzy
 msgid "Metallized Paint"
-msgstr "Metalisert maling"
+msgstr "Metallisert maling"
 
 #: ../share/filters/filters.svg.h:212
 msgid ""
 "Metallized effect with a soft lighting, slightly translucent at the edges"
-msgstr "Metalisert maling med mykt lys, forsiktig gjennomsiktig i kantene"
+msgstr "Metallisert maling med mykt lys, litt gjennomskinnelig i kantene"
 
 #: ../share/filters/filters.svg.h:214
 msgid "Dragee"
@@ -619,10 +609,9 @@ msgstr "Glassert"
 
 #: ../share/filters/filters.svg.h:216
 msgid "Gel Ridge with a pearlescent look"
-msgstr "Geleås med perleaktig utseende"
+msgstr "Geléaktig opphøyd linje med perleaktig utseende"
 
 #: ../share/filters/filters.svg.h:218
-#, fuzzy
 msgid "Raised Border"
 msgstr "Hevet kant"
 
@@ -631,13 +620,12 @@ msgid "Strongly raised border around a flat surface"
 msgstr "Sterkt hevet kant rundt en flat overflate"
 
 #: ../share/filters/filters.svg.h:222
-#, fuzzy
 msgid "Metallized Ridge"
-msgstr "Metalisert ås"
+msgstr "Metallisert opphøyd linje"
 
 #: ../share/filters/filters.svg.h:224
 msgid "Gel Ridge metallized at its top"
-msgstr "Geleås med metalisert topp"
+msgstr "Geléaktig opphøyd linje med metallisert topp"
 
 #: ../share/filters/filters.svg.h:226
 msgid "Fat Oil"
@@ -672,7 +660,6 @@ msgid "Scattered cubes; adjust the Morphology primitive to vary size"
 msgstr "Spredde kuber, juster morfologien for å variere størrelsen"
 
 #: ../share/filters/filters.svg.h:238
-#, fuzzy
 msgid "Peel Off"
 msgstr "Avflaking"
 
@@ -681,7 +668,6 @@ msgid "Peeling painting on a wall"
 msgstr "Avflakende maling på en vegg"
 
 #: ../share/filters/filters.svg.h:242
-#, fuzzy
 msgid "Gold Splatter"
 msgstr "Gulldråper"
 
@@ -690,7 +676,6 @@ msgid "Splattered cast metal, with golden highlights"
 msgstr "Dråper av flytende metall med gyldne høylys"
 
 #: ../share/filters/filters.svg.h:246
-#, fuzzy
 msgid "Gold Paste"
 msgstr "Gullpasta"
 
@@ -699,7 +684,6 @@ msgid "Fat pasted cast metal, with golden highlights"
 msgstr "Feit metallpasta med gyldne høylys"
 
 #: ../share/filters/filters.svg.h:250
-#, fuzzy
 msgid "Crumpled Plastic"
 msgstr "Krøllet plastikk"
 
@@ -709,35 +693,31 @@ msgstr "Sammenkrøllet matt plastikk med smeltet kant"
 
 #: ../share/filters/filters.svg.h:254
 msgid "Enamel Jewelry"
-msgstr ""
+msgstr "Emaljesmykke"
 
 #: ../share/filters/filters.svg.h:256
-#, fuzzy
 msgid "Slightly cracked enameled texture"
-msgstr "Lett oppsprukket"
+msgstr "Lett oppsprukket emaljert mønster"
 
 #: ../share/filters/filters.svg.h:258
-#, fuzzy
 msgid "Rough Paper"
 msgstr "Grovt papir"
 
 #: ../share/filters/filters.svg.h:260
 msgid "Aquarelle paper effect which can be used for pictures as for objects"
-msgstr "Akvarellpapireffekt som kan brukes med pilder som objekt"
+msgstr "Akvarellpapireffekt som kan brukes med både bilder og objekter"
 
 #: ../share/filters/filters.svg.h:262
-#, fuzzy
 msgid "Rough and Glossy"
-msgstr "Grovt og glatt"
+msgstr "Grovt og glanset"
 
 #: ../share/filters/filters.svg.h:264
-#, fuzzy
 msgid ""
 "Crumpled glossy paper effect which can be used for pictures as for objects"
-msgstr "Krøllet "
+msgstr ""
+"Sammenkrøllet glanset papir. Effekten kan brukes både med bilder og objekter."
 
 #: ../share/filters/filters.svg.h:266
-#, fuzzy
 msgid "In and Out"
 msgstr "Inni og utenpå"
 
@@ -746,13 +726,12 @@ msgid "Inner colorized shadow, outer black shadow"
 msgstr "Fargelagt skygge inni, svart skygge utenpå"
 
 #: ../share/filters/filters.svg.h:270
-#, fuzzy
 msgid "Air Spray"
 msgstr "Spray"
 
 #: ../share/filters/filters.svg.h:272
 msgid "Convert to small scattered particles with some thickness"
-msgstr ""
+msgstr "Konverter til små, spredte partikler med litt tykkelse"
 
 #: ../share/filters/filters.svg.h:274
 msgid "Warm Inside"
@@ -788,13 +767,12 @@ msgid "Checkered tartan pattern"
 msgstr "Flislagt tartanmønster"
 
 #: ../share/filters/filters.svg.h:290
-#, fuzzy
 msgid "Shaken Liquid"
-msgstr "Væske"
+msgstr "Rørt væske"
 
 #: ../share/filters/filters.svg.h:292
 msgid "Colorizable filling with flow inside like transparency"
-msgstr ""
+msgstr "Fargeleggbart fyll med gjennomskinnelig indre flyt"
 
 #: ../share/filters/filters.svg.h:294
 msgid "Soft Focus Lens"
@@ -821,22 +799,20 @@ msgid "Illuminated glass effect with light coming from beneath"
 msgstr "Opplyst glasseffekt med lys fra undersiden"
 
 #: ../share/filters/filters.svg.h:306
-#, fuzzy
 msgid "HSL Bumps Alpha"
-msgstr "HSL-humper, alfa"
+msgstr "HSL-rugler alfa"
 
 #: ../share/filters/filters.svg.h:308
 msgid "Same as HSL Bumps but with transparent highlights"
-msgstr ""
+msgstr "Samme som HSL-rugler, men med gjennomsiktige høylys"
 
 #: ../share/filters/filters.svg.h:310
-#, fuzzy
 msgid "Bubbly Bumps Alpha"
-msgstr "HSL-humper, alfa"
+msgstr "Boblete rugler alfa"
 
 #: ../share/filters/filters.svg.h:312
 msgid "Same as Bubbly Bumps but with transparent highlights"
-msgstr ""
+msgstr "Samme som boblete rugler, men med gjennomsiktige høylys"
 
 #: ../share/filters/filters.svg.h:314 ../share/filters/filters.svg.h:362
 msgid "Torn Edges"
@@ -909,43 +885,40 @@ msgstr "Utklippsglød"
 
 #: ../share/filters/filters.svg.h:344
 msgid "In and out glow with a possible offset and colorizable flood"
-msgstr ""
+msgstr "Glød inni og utenpå med valgfri forskyvning og fargeleggbart fyll"
 
 #: ../share/filters/filters.svg.h:346
-#, fuzzy
 msgid "Dark Emboss"
-msgstr "Tegning"
+msgstr "Mørk preging"
 
 #: ../share/filters/filters.svg.h:348
 msgid "Emboss effect : 3D relief where white is replaced by black"
-msgstr ""
+msgstr "Pregingseffekt: 3D-relieff der hvitt erstattes av svart"
 
 #: ../share/filters/filters.svg.h:350
-#, fuzzy
 msgid "Bubbly Bumps Matte"
-msgstr "HSL-humper, alfa"
+msgstr "Boblete rugler, matt"
 
 #: ../share/filters/filters.svg.h:352
 msgid "Same as Bubbly Bumps but with a diffuse light instead of a specular one"
 msgstr ""
+"Samme som boblete rugler, men med diffust lys istedenfor spekulære høylys."
 
 #: ../share/filters/filters.svg.h:354
-#, fuzzy
 msgid "Blotting Paper"
-msgstr "Grovt papir"
+msgstr "Trekkpapir"
 
 #: ../share/filters/filters.svg.h:356
 msgid "Inkblot on blotting paper"
-msgstr ""
+msgstr "Blekkflekk på trekkpapir"
 
 #: ../share/filters/filters.svg.h:358
-#, fuzzy
 msgid "Wax Print"
 msgstr "Vokstrykk"
 
 #: ../share/filters/filters.svg.h:360
 msgid "Wax print on tissue texture"
-msgstr ""
+msgstr "Vokstrykk på papirmønster"
 
 #: ../share/filters/filters.svg.h:366
 msgid "Watercolor"
@@ -953,63 +926,56 @@ msgstr "Vannfarger"
 
 #: ../share/filters/filters.svg.h:368
 msgid "Cloudy watercolor effect"
-msgstr ""
+msgstr "Tåkete vannfargeeffekt"
 
 #: ../share/filters/filters.svg.h:370
-#, fuzzy
 msgid "Felt"
-msgstr "FriKunst"
+msgstr "Filt"
 
 #: ../share/filters/filters.svg.h:372
 msgid ""
 "Felt like texture with color turbulence and slightly darker at the edges"
-msgstr ""
+msgstr "Filtlignende mønster med fargeturbulens og litt mørkere mot kantene."
 
 #: ../share/filters/filters.svg.h:374
-#, fuzzy
 msgid "Ink Paint"
-msgstr "Oljemaling"
+msgstr "Blekkmaling"
 
 #: ../share/filters/filters.svg.h:376
 msgid "Ink paint on paper with some turbulent color shift"
-msgstr ""
+msgstr "Blekkmaling på papir med turbulent fargeforskyvning"
 
 #: ../share/filters/filters.svg.h:378
-#, fuzzy
 msgid "Tinted Rainbow"
-msgstr "Smeltet regnbue"
+msgstr "Tonet regnbue"
 
 #: ../share/filters/filters.svg.h:380
 msgid "Smooth rainbow colors melted along the edges and colorizable"
-msgstr ""
+msgstr "Jevne regnbuefarger som smelter langs kantene og er fargeleggbare."
 
 #: ../share/filters/filters.svg.h:382
-#, fuzzy
 msgid "Melted Rainbow"
 msgstr "Smeltet regnbue"
 
 #: ../share/filters/filters.svg.h:384
 msgid "Smooth rainbow colors slightly melted along the edges"
-msgstr ""
+msgstr "Jevne regnbuefarger, litt smeltet langs kantene"
 
 #: ../share/filters/filters.svg.h:386
-#, fuzzy
 msgid "Flex Metal"
 msgstr "Fleksibelt metall"
 
 #: ../share/filters/filters.svg.h:388
 msgid "Bright, polished uneven metal casting, colorizable"
-msgstr ""
+msgstr "Lyst, polert, ujevnt metallstøp, fargeleggbar."
 
 #: ../share/filters/filters.svg.h:390
-#, fuzzy
 msgid "Wavy Tartan"
 msgstr "Bølgete tartan"
 
 #: ../share/filters/filters.svg.h:392
-#, fuzzy
 msgid "Tartan pattern with a wavy displacement and bevel around the edges"
-msgstr "Tigerpelsmønster med folder og fuger langs kanten"
+msgstr "Tartanmønster med bølgete forskyvning og skråkant rundt kantene."
 
 #: ../share/filters/filters.svg.h:394
 msgid "3D Marble"
@@ -1017,7 +983,7 @@ msgstr "3D-marmor"
 
 #: ../share/filters/filters.svg.h:396
 msgid "3D warped marble texture"
-msgstr "3D, formet marmortekstur"
+msgstr "3D-deformert marmormønster"
 
 #: ../share/filters/filters.svg.h:398
 msgid "3D Wood"
@@ -1025,17 +991,15 @@ msgstr "3D-tre"
 
 #: ../share/filters/filters.svg.h:400
 msgid "3D warped, fibered wood texture"
-msgstr "3D, formet, fibret trevirke"
+msgstr "3D-deformert tremønster med fibre"
 
 #: ../share/filters/filters.svg.h:402
-#, fuzzy
 msgid "3D Mother of Pearl"
-msgstr "Bredde på papir"
+msgstr "3D-perlemor"
 
 #: ../share/filters/filters.svg.h:404
-#, fuzzy
 msgid "3D warped, iridescent pearly shell texture"
-msgstr "3D, formet marmortekstur"
+msgstr "3D-deformert, iriserende perlemormønster"
 
 #: ../share/filters/filters.svg.h:406
 msgid "Tiger Fur"
@@ -1043,7 +1007,7 @@ msgstr "Tigerpels"
 
 #: ../share/filters/filters.svg.h:408
 msgid "Tiger fur pattern with folds and bevel around the edges"
-msgstr "Tigerpelsmønster med folder og fuger langs kanten"
+msgstr "Tigerpelsmønster med folder og skråkant langs kantene."
 
 #: ../share/filters/filters.svg.h:410
 msgid "Black Light"
@@ -1129,26 +1093,22 @@ msgid "Adds a small scale graininess"
 msgstr "Legger til litt korning."
 
 #: ../share/filters/filters.svg.h:418
-#, fuzzy
 msgid "Plaster Color"
-msgstr "Lim inn farge"
+msgstr "Gipsfarge"
 
 #: ../share/filters/filters.svg.h:420
-#, fuzzy
 msgid "Colored plaster emboss effect"
-msgstr "Fjern grønn"
+msgstr "Fargelagt gipspreging"
 
 #: ../share/filters/filters.svg.h:422
-#, fuzzy
 msgid "Velvet Bumps"
-msgstr "Fløyelshump"
+msgstr "Fløyelsrugler"
 
 #: ../share/filters/filters.svg.h:424
 msgid "Gives Smooth Bumps velvet like"
-msgstr ""
+msgstr "Lager glatte fløyelsaktige rugler."
 
 #: ../share/filters/filters.svg.h:426
-#, fuzzy
 msgid "Comics Cream"
 msgstr "Tegneseriekrem"
 
@@ -1162,41 +1122,39 @@ msgstr "Tegneseriekrem"
 #: ../share/filters/filters.svg.h:779 ../share/filters/filters.svg.h:783
 #: ../share/filters/filters.svg.h:787 ../share/filters/filters.svg.h:791
 #: ../share/filters/filters.svg.h:795
-#, fuzzy
 msgid "Non-Realistic 3D Shaders"
-msgstr "Ikke-realistiske shadere"
+msgstr "Ikke-realistiske 3D-fargeleggere"
 
 #: ../share/filters/filters.svg.h:428
 msgid "Comics shader with creamy waves transparency"
-msgstr "Tegneserie-shader med kremete bølgende gjennomsiktighet"
+msgstr "Tegneserie-fargelegger med kremete bølgende gjennomsiktighet"
 
 #: ../share/filters/filters.svg.h:430
 msgid "Chewing Gum"
-msgstr ""
+msgstr "Tyggegummi"
 
 #: ../share/filters/filters.svg.h:432
 msgid ""
 "Creates colorizable blotches which smoothly flow over the edges of the lines "
 "at their crossings"
 msgstr ""
+"Lager fargeleggbare flekker som flyter fint over linjekanter der de krysser."
 
 #: ../share/filters/filters.svg.h:434
-#, fuzzy
 msgid "Dark and Glow"
 msgstr "Mørke og glød"
 
 #: ../share/filters/filters.svg.h:436
 msgid "Darkens the edge with an inner blur and adds a flexible glow"
-msgstr ""
+msgstr "Gjør kanten mørkere, innsiden slørete og justerbar glød."
 
 #: ../share/filters/filters.svg.h:438
-#, fuzzy
 msgid "Warped Rainbow"
-msgstr "Smeltet regnbue"
+msgstr "Deformert regnbue"
 
 #: ../share/filters/filters.svg.h:440
 msgid "Smooth rainbow colors warped along the edges and colorizable"
-msgstr ""
+msgstr "Jevne regnebuefarger deformert langs kanten. Fargeleggbar."
 
 #: ../share/filters/filters.svg.h:442
 msgid "Rough and Dilate"
@@ -1207,36 +1165,32 @@ msgid "Create a turbulent contour around"
 msgstr "Lager et turbulent omriss rundt."
 
 #: ../share/filters/filters.svg.h:446
-#, fuzzy
 msgid "Old Postcard"
-msgstr "Oljemaling"
+msgstr "Gammelt postkort"
 
 #: ../share/filters/filters.svg.h:448
 msgid "Slightly posterize and draw edges like on old printed postcards"
-msgstr ""
+msgstr "En forsiktig plakateffekt med tegnede kanter som på gamle postkort."
 
 #: ../share/filters/filters.svg.h:450
-#, fuzzy
 msgid "Dots Transparency"
-msgstr "Støy-gjennomsiktighet"
+msgstr "Prikkete gjennomsiktighet"
 
 #: ../share/filters/filters.svg.h:452
 msgid "Gives a pointillist HSL sensitive transparency"
-msgstr ""
+msgstr "Lager en pointillistisk HSL-følsom gjennomsiktighet"
 
 #: ../share/filters/filters.svg.h:454
-#, fuzzy
 msgid "Canvas Transparency"
-msgstr "Støy-gjennomsiktighet"
+msgstr "Lerretsgjennomsiktighet"
 
 #: ../share/filters/filters.svg.h:456
 msgid "Gives a canvas like HSL sensitive transparency."
-msgstr ""
+msgstr "Lager en lerretaktiv gjennomsiktighet, HSL-følsom "
 
 #: ../share/filters/filters.svg.h:458
-#, fuzzy
 msgid "Smear Transparency"
-msgstr "Støy-gjennomsiktighet"
+msgstr "Utsmørt gjennomsiktighet"
 
 #: ../share/filters/filters.svg.h:460
 msgid ""
@@ -1250,129 +1204,125 @@ msgstr "Tjukk maling"
 
 #: ../share/filters/filters.svg.h:464
 msgid "Thick painting effect with turbulence"
-msgstr ""
+msgstr "Tjukk malingseffekt med turbulens"
 
 #: ../share/filters/filters.svg.h:466
-#, fuzzy
 msgid "Burst"
-msgstr "Blå"
+msgstr "Sprukket"
 
 #: ../share/filters/filters.svg.h:468
 msgid "Burst balloon texture crumpled and with holes"
-msgstr ""
+msgstr "Sprukket ballongmønster, sammenkrøllet og med hull."
 
 #: ../share/filters/filters.svg.h:470
-#, fuzzy
 msgid "Embossed Leather"
-msgstr "Normal forskyvning"
+msgstr "Preget lær"
 
 #: ../share/filters/filters.svg.h:472
 msgid ""
 "Combine a HSL edges detection bump with a leathery or woody and colorizable "
 "texture"
 msgstr ""
+"Kombinerer en HSL-kantgjenkjennende rugling med læraktig/treaktiv "
+"fargeleggbart mønster."
 
 #: ../share/filters/filters.svg.h:474
-#, fuzzy
 msgid "Carnaval"
-msgstr "Cyan"
+msgstr "Karneval"
 
 #: ../share/filters/filters.svg.h:476
 msgid "White splotches evocating carnaval masks"
-msgstr ""
+msgstr "Hvite flekker som minner om karnevalmasker."
 
 #: ../share/filters/filters.svg.h:478
-#, fuzzy
 msgid "Plastify"
-msgstr "Tilpass"
+msgstr "Plastifisér"
 
 #: ../share/filters/filters.svg.h:480
 msgid ""
 "HSL edges detection bump with a wavy reflective surface effect and variable "
 "crumple"
 msgstr ""
+"HSL-kantgjenkjennende rugling med bølgete, reflektiv overflate. Varierende "
+"sammenkrølling."
 
 #: ../share/filters/filters.svg.h:482
-#, fuzzy
 msgid "Plaster"
-msgstr "Lim inn"
+msgstr "Gips"
 
 #: ../share/filters/filters.svg.h:484
 msgid ""
 "Combine a HSL edges detection bump with a matte and crumpled surface effect"
 msgstr ""
+"Kombinerer en HSL-kantgjenkjennende rugling med matt og sammenkrøllet "
+"overflate."
 
 #: ../share/filters/filters.svg.h:486
-#, fuzzy
 msgid "Rough Transparency"
-msgstr "Støy-gjennomsiktighet"
+msgstr "Grov gjennomsiktighet"
 
 #: ../share/filters/filters.svg.h:488
 msgid "Adds a turbulent transparency which displaces pixels at the same time"
 msgstr ""
+"Legger til en turbulent gjennomsiktighet som samtidig forskyver piksler."
 
 #: ../share/filters/filters.svg.h:490
-#, fuzzy
 msgid "Gouache"
-msgstr "Kilde"
+msgstr "Gouache"
 
 #: ../share/filters/filters.svg.h:492
 msgid "Partly opaque water color effect with bleed"
-msgstr ""
+msgstr "Delvis gjennomsiktig vannfargeeffekt med fargeblødning."
 
 #: ../share/filters/filters.svg.h:494
-#, fuzzy
 msgid "Alpha Engraving"
 msgstr "Alfa-inngravering"
 
 #: ../share/filters/filters.svg.h:496
 msgid "Gives a transparent engraving effect with rough line and filling"
-msgstr ""
+msgstr "Gir en gjennomsiktig graveringseffekt med grov linje og fyll."
 
 #: ../share/filters/filters.svg.h:498
-#, fuzzy
 msgid "Alpha Draw Liquid"
-msgstr "Mørk alfa-inngravering"
+msgstr "Alfavæske"
 
 #: ../share/filters/filters.svg.h:500
 msgid "Gives a transparent fluid drawing effect with rough line and filling"
-msgstr ""
+msgstr "Gir en gjennomsiktig flytende tegningseffekt med grov linje og fyll."
 
 #: ../share/filters/filters.svg.h:502
-#, fuzzy
 msgid "Liquid Drawing"
-msgstr "tegning%s"
+msgstr "Flytende tegning"
 
 #: ../share/filters/filters.svg.h:504
 msgid "Gives a fluid and wavy expressionist drawing effect to images"
-msgstr ""
+msgstr "Gir en jevn og bølgete ekspresjonistisk effekt i bildene."
 
 #: ../share/filters/filters.svg.h:506
-#, fuzzy
 msgid "Marbled Ink"
-msgstr "Piggtråd"
+msgstr "Marmorert blekk"
 
 #: ../share/filters/filters.svg.h:508
 msgid "Marbled transparency effect which conforms to image detected edges"
-msgstr ""
+msgstr "Marmorert gjennomsiktighet som svarer til kanter i bildet."
 
 #: ../share/filters/filters.svg.h:510
 msgid "Thick Acrylic"
-msgstr ""
+msgstr "Tjukk akryl"
 
 #: ../share/filters/filters.svg.h:512
 msgid "Thick acrylic paint texture with high texture depth"
-msgstr ""
+msgstr "Tjukt akrylmønster med stor mønsterdybde."
 
 #: ../share/filters/filters.svg.h:514
-#, fuzzy
 msgid "Alpha Engraving B"
-msgstr "Alfa-inngravering"
+msgstr "Alfa-inngravering B"
 
 #: ../share/filters/filters.svg.h:516
 msgid ""
 "Gives a controllable roughness engraving effect to bitmaps and materials"
 msgstr ""
+"Påfører punktbilder og materialer en graveringseffekt med justerbar grovhet."
 
 #: ../share/filters/filters.svg.h:518
 msgid "Lapping"
@@ -1383,9 +1333,8 @@ msgid "Something like a water noise"
 msgstr "Rører rundt i vannet."
 
 #: ../share/filters/filters.svg.h:522
-#, fuzzy
 msgid "Monochrome Transparency"
-msgstr "Støy-gjennomsiktighet"
+msgstr "Monokrom gjennomsiktighet"
 
 #: ../share/filters/filters.svg.h:523 ../share/filters/filters.svg.h:527
 #: ../share/filters/filters.svg.h:647 ../share/filters/filters.svg.h:651
@@ -1395,125 +1344,115 @@ msgstr "Støy-gjennomsiktighet"
 #: ../src/extension/internal/filter/transparency.h:216
 #: ../src/extension/internal/filter/transparency.h:289
 #: ../src/extension/internal/filter/transparency.h:351
-#, fuzzy
 msgid "Fill and Transparency"
-msgstr "Støy-gjennomsiktighet"
+msgstr "Fyll og gjennomsiktighet"
 
 #: ../share/filters/filters.svg.h:524
-#, fuzzy
 msgid "Convert to a colorizable transparent positive or negative"
-msgstr "Tilpass siden til tegningen"
+msgstr "Konverter til en fargeleggbar transparent, positiv eller negativ."
 
 #: ../share/filters/filters.svg.h:526
-#, fuzzy
 msgid "Saturation Map"
-msgstr "Metning"
+msgstr "Fargemetningskart"
 
 #: ../share/filters/filters.svg.h:528
 msgid ""
 "Creates an approximative semi-transparent and colorizable image of the "
 "saturation levels"
 msgstr ""
+"Lager en omtrentlig oversikt over fargemetningsnivåene. Halvgjennomsiktig og "
+"fargeleggbar."
 
 #: ../share/filters/filters.svg.h:530
-#, fuzzy
 msgid "Riddled"
-msgstr "Tittel"
+msgstr "Hagleskutt"
 
 #: ../share/filters/filters.svg.h:532
 msgid "Riddle the surface and add bump to images"
-msgstr ""
+msgstr "Hagleskyter overflaten og gjør den ruglete."
 
 #: ../share/filters/filters.svg.h:534
-#, fuzzy
 msgid "Wrinkled Varnish"
-msgstr "Skriv ut med PDF operatørene"
+msgstr "Krøllete lakk"
 
 #: ../share/filters/filters.svg.h:536
 msgid "Thick glossy and translucent paint texture with high depth"
-msgstr ""
+msgstr "Tjukk, glanset og gjennomskinnelig malingmønster med stor dybde."
 
 #: ../share/filters/filters.svg.h:538
-#, fuzzy
 msgid "Canvas Bumps"
-msgstr "Cyan"
+msgstr "Lerretsrugler"
 
 #: ../share/filters/filters.svg.h:540
 msgid "Canvas texture with an HSL sensitive height map"
-msgstr ""
+msgstr "Lerretsmønster med et HSL-følsomt høydekart."
 
 #: ../share/filters/filters.svg.h:542
-#, fuzzy
 msgid "Canvas Bumps Matte"
-msgstr "Cyan"
+msgstr "Lerretsrugler, matt"
 
 #: ../share/filters/filters.svg.h:544
 msgid "Same as Canvas Bumps but with a diffuse light instead of a specular one"
 msgstr ""
+"Samme som lerretsrugler, men med diffust lys istedenfor spekulære høylys."
 
 #: ../share/filters/filters.svg.h:546
-#, fuzzy
 msgid "Canvas Bumps Alpha"
-msgstr "HSL-humper, alfa"
+msgstr "Lerretsrugler, alfa"
 
 #: ../share/filters/filters.svg.h:548
 msgid "Same as Canvas Bumps but with transparent highlights"
-msgstr ""
+msgstr "Samme som lerretsrugler, men med gjennomsiktige høylys."
 
 #: ../share/filters/filters.svg.h:550
-#, fuzzy
 msgid "Bright Metal"
-msgstr "Lysere"
+msgstr "Lyst metall"
 
 #: ../share/filters/filters.svg.h:552
 msgid "Bright metallic effect for any color"
-msgstr ""
+msgstr "Lys metalleffekt for alle farger."
 
 #: ../share/filters/filters.svg.h:554
 msgid "Deep Colors Plastic"
-msgstr ""
+msgstr "Plast med dype farger"
 
 #: ../share/filters/filters.svg.h:556
-#, fuzzy
 msgid "Transparent plastic with deep colors"
-msgstr "Barktekstur, vertikal. Bruk med dype farger"
+msgstr "Gjennomsiktig plast med dype farger."
 
 #: ../share/filters/filters.svg.h:558
-#, fuzzy
 msgid "Melted Jelly Matte"
-msgstr "Mønster fyll"
+msgstr "Smeltet gelé, matt"
 
 #: ../share/filters/filters.svg.h:560
-#, fuzzy
 msgid "Matte bevel with blurred edges"
-msgstr "Strøk med rund ende"
+msgstr "Matt skråkant med slørete kanter."
 
 #: ../share/filters/filters.svg.h:562
 msgid "Melted Jelly"
 msgstr "Smeltet gelé"
 
 #: ../share/filters/filters.svg.h:564
-#, fuzzy
 msgid "Glossy bevel with blurred edges"
-msgstr "Strøk med rund ende"
+msgstr "Glansete skråkant med slørete kanter."
 
 #: ../share/filters/filters.svg.h:566
-#, fuzzy
 msgid "Combined Lighting"
-msgstr "Kombinert"
+msgstr "Kombinert lyssetting"
 
 #: ../share/filters/filters.svg.h:568
 #: ../src/extension/internal/filter/bevels.h:232
 msgid "Basic specular bevel to use for building textures"
-msgstr ""
+msgstr "Enkel, skinnende skråkant som kan brukes til å lage mønster."
 
 #: ../share/filters/filters.svg.h:570
 msgid "Tinfoil"
-msgstr ""
+msgstr "Aluminiumsfolie"
 
 #: ../share/filters/filters.svg.h:572
 msgid "Metallic foil effect combining two lighting types and variable crumple"
 msgstr ""
+"Etterligner aluminiumsfolie med to lystyper og variabel sammenkrølling."
 
 #: ../share/filters/filters.svg.h:574
 msgid "Soft Colors"
@@ -1524,22 +1463,20 @@ msgid "Adds a colorizable edges glow inside objects and pictures"
 msgstr "Legger til en fargeleggbar kantglød inni objekter og bilder."
 
 #: ../share/filters/filters.svg.h:578
-#, fuzzy
 msgid "Relief Print"
-msgstr "Arbeidstegning"
+msgstr "Høytrykk"
 
 #: ../share/filters/filters.svg.h:580
 msgid "Bumps effect with a bevel, color flood and complex lighting"
-msgstr ""
+msgstr "Rugleeffekt med skråkant, fargefyll og kompleks lyssetting."
 
 #: ../share/filters/filters.svg.h:582
-#, fuzzy
 msgid "Growing Cells"
-msgstr "Lysende metall"
+msgstr "Voksende celler"
 
 #: ../share/filters/filters.svg.h:584
 msgid "Random rounded living cells like fill"
-msgstr ""
+msgstr "Fyll med tilfeldig avrundede levende celler."
 
 #: ../share/filters/filters.svg.h:586
 msgid "Fluorescence"
@@ -1550,9 +1487,8 @@ msgid "Oversaturate colors which can be fluorescent in real world"
 msgstr "Øk metningen til farger som kan fluorescere i virkeligheten."
 
 #: ../share/filters/filters.svg.h:590
-#, fuzzy
 msgid "Pixellize"
-msgstr "Piksel"
+msgstr "Pikseleffekt"
 
 #: ../share/filters/filters.svg.h:591
 msgid "Pixel Tools"
@@ -1563,78 +1499,64 @@ msgid "Reduce or remove antialiasing around shapes"
 msgstr "Mink eller fjern kantutjevning rundt figurer"
 
 #: ../share/filters/filters.svg.h:594
-#, fuzzy
 msgid "Basic Diffuse Bump"
-msgstr "Eksponent"
+msgstr "Enkel, diffus rugling"
 
 #: ../share/filters/filters.svg.h:596
-#, fuzzy
 msgid "Matte emboss effect"
-msgstr "Fjern grønn"
+msgstr "Matt pregingseffekt."
 
 #: ../share/filters/filters.svg.h:598
-#, fuzzy
 msgid "Basic Specular Bump"
-msgstr "Eksponent"
+msgstr "Enkel, skinnende rugling"
 
 #: ../share/filters/filters.svg.h:600
-#, fuzzy
 msgid "Specular emboss effect"
-msgstr "Eksponent"
+msgstr "Skinnende pregingseffekt."
 
 #: ../share/filters/filters.svg.h:602
 msgid "Basic Two Lights Bump"
-msgstr ""
+msgstr "Enkel rugling med to lys"
 
 #: ../share/filters/filters.svg.h:604
-#, fuzzy
 msgid "Two types of lighting emboss effect"
-msgstr "Lim inn stieffekt"
+msgstr "Pregingseffekt med to lystyper."
 
 #: ../share/filters/filters.svg.h:606
-#, fuzzy
 msgid "Linen Canvas"
-msgstr "Cyan"
+msgstr "Linlerret"
 
 #: ../share/filters/filters.svg.h:608 ../share/filters/filters.svg.h:616
-#, fuzzy
 msgid "Painting canvas emboss effect"
-msgstr "Lim inn stieffekt"
+msgstr "Pregingseffekt: Lerret."
 
 #: ../share/filters/filters.svg.h:610
-#, fuzzy
 msgid "Plasticine"
-msgstr "Lim inn"
+msgstr "Plastilina"
 
 #: ../share/filters/filters.svg.h:612
-#, fuzzy
 msgid "Matte modeling paste emboss effect"
-msgstr "Lim inn stieffekt"
+msgstr "Matt pregingseffekt, som modellervoks."
 
 #: ../share/filters/filters.svg.h:614
-#, fuzzy
 msgid "Rough Canvas Painting"
-msgstr "Oljemaleri"
+msgstr "Grov lerretsmaling"
 
 #: ../share/filters/filters.svg.h:618
-#, fuzzy
 msgid "Paper Bump"
-msgstr "Humper"
+msgstr "Papirrugling"
 
 #: ../share/filters/filters.svg.h:620
-#, fuzzy
 msgid "Paper like emboss effect"
-msgstr "Lim inn stieffekt"
+msgstr "Papirlignende pregingseffekt."
 
 #: ../share/filters/filters.svg.h:622
-#, fuzzy
 msgid "Jelly Bump"
-msgstr "Fløyelshump"
+msgstr "Gelérugling"
 
 #: ../share/filters/filters.svg.h:624
-#, fuzzy
 msgid "Convert pictures to thick jelly"
-msgstr "Konverter tekst til sti"
+msgstr "Konverter bilder til tjukk gelé."
 
 #: ../share/filters/filters.svg.h:626
 msgid "Blend Opposites"
@@ -1661,6 +1583,7 @@ msgstr "Rør rundt"
 msgid ""
 "Paint objects with a transparent turbulence which wraps around color edges"
 msgstr ""
+"Mal objekter med en gjennomsiktig turbulens som føyer seg rundt fargekanter."
 
 #: ../share/filters/filters.svg.h:638
 msgid "Pointillism"
@@ -1668,16 +1591,15 @@ msgstr "Pointillisme"
 
 #: ../share/filters/filters.svg.h:640
 msgid "Gives a turbulent pointillist HSL sensitive transparency"
-msgstr ""
+msgstr "Lager en turbulent pointillistisk HSL-følsom gjennomsiktighet."
 
 #: ../share/filters/filters.svg.h:642
 msgid "Silhouette Marbled"
-msgstr ""
+msgstr "Marmorert silhuett"
 
 #: ../share/filters/filters.svg.h:644
-#, fuzzy
 msgid "Basic noise transparency texture"
-msgstr "Støy-gjennomsiktighet"
+msgstr "Enkelt støymønster med gjennomsiktighet."
 
 #: ../share/filters/filters.svg.h:646
 msgid "Fill Background"
@@ -1688,14 +1610,12 @@ msgid "Adds a colorizable opaque background"
 msgstr "Legger til en fargeleggbar ugjennomsiktig bakgrunn."
 
 #: ../share/filters/filters.svg.h:650
-#, fuzzy
 msgid "Flatten Transparency"
-msgstr "Støy-gjennomsiktighet"
+msgstr "Hvit bakgrunn"
 
 #: ../share/filters/filters.svg.h:652
-#, fuzzy
 msgid "Adds a white opaque background"
-msgstr "Fjerne bakgrunn"
+msgstr "Legger til en hvit, ugjennomsiktig bakgrunn."
 
 #: ../share/filters/filters.svg.h:654
 msgid "Blur Double"
@@ -1708,182 +1628,158 @@ msgid ""
 msgstr "Legger to kopier med ulik sløringsmengde over hverandre. "
 
 #: ../share/filters/filters.svg.h:658
-#, fuzzy
 msgid "Image Drawing Basic"
-msgstr "Tegning"
+msgstr "Enkel avtegning"
 
 #: ../share/filters/filters.svg.h:660
-#, fuzzy
 msgid "Enhance and redraw color edges in 1 bit black and white"
-msgstr "Inverter svarte og hvite områder for enkel avtegning"
+msgstr "Forsterk og avtegn fargekanter i svart og hvitt."
 
 #: ../share/filters/filters.svg.h:662
-#, fuzzy
 msgid "Poster Draw"
-msgstr "Lim inn"
+msgstr "Plakattegning"
 
 #: ../share/filters/filters.svg.h:664
-#, fuzzy
 msgid "Enhance and redraw edges around posterized areas"
-msgstr "Inverter svarte og hvite områder for enkel avtegning"
+msgstr "Forsterk og avtegn kanter rundt områder med plakateffekt."
 
 #: ../share/filters/filters.svg.h:666
-#, fuzzy
 msgid "Cross Noise Poster"
-msgstr "Poissonstøy"
+msgstr "Kornete plakat"
 
 #: ../share/filters/filters.svg.h:668
 msgid "Overlay with a small scale screen like noise"
-msgstr ""
+msgstr "Legg over filmaktige korn."
 
 #: ../share/filters/filters.svg.h:670
-#, fuzzy
 msgid "Cross Noise Poster B"
-msgstr "Poissonstøy"
+msgstr "Kornete plakat B"
 
 #: ../share/filters/filters.svg.h:672
 msgid "Adds a small scale screen like noise locally"
-msgstr ""
+msgstr "Legg over filmaktive korn lokalt."
 
 #: ../share/filters/filters.svg.h:674
-#, fuzzy
 msgid "Poster Color Fun"
-msgstr "Lim inn farge"
+msgstr "Plakatfargemoro"
 
 #: ../share/filters/filters.svg.h:678
-#, fuzzy
 msgid "Poster Rough"
-msgstr "Lim inn"
+msgstr "Grov plakat"
 
 #: ../share/filters/filters.svg.h:680
 msgid "Adds roughness to one of the two channels of the Poster paint filter"
-msgstr ""
+msgstr "Gjør en av de to kanalene til plakateffekten grovere."
 
 #: ../share/filters/filters.svg.h:682
 msgid "Alpha Monochrome Cracked"
-msgstr ""
+msgstr "Alfa-monokrom, krakelert"
 
 #: ../share/filters/filters.svg.h:684 ../share/filters/filters.svg.h:688
 #: ../share/filters/filters.svg.h:692 ../share/filters/filters.svg.h:704
 #: ../share/filters/filters.svg.h:708 ../share/filters/filters.svg.h:712
 msgid "Basic noise fill texture; adjust color in Flood"
-msgstr ""
+msgstr "Enkelt kornmønster. Fyllfarge kan tilpasses."
 
 #: ../share/filters/filters.svg.h:686
-#, fuzzy
 msgid "Alpha Turbulent"
-msgstr "Alfa-inngravering"
+msgstr "Alfa-turbulent"
 
 #: ../share/filters/filters.svg.h:690
-#, fuzzy
 msgid "Colorize Turbulent"
-msgstr "Fargelegg"
+msgstr "Fargeleggbar turbulens."
 
 #: ../share/filters/filters.svg.h:694
-#, fuzzy
 msgid "Cross Noise B"
-msgstr "Poissonstøy"
+msgstr "Krysskorn B"
 
 #: ../share/filters/filters.svg.h:696
 msgid "Adds a small scale crossy graininess"
-msgstr ""
+msgstr "Legger til små kryssaktige korn."
 
 #: ../share/filters/filters.svg.h:698
-#, fuzzy
 msgid "Cross Noise"
-msgstr "Poissonstøy"
+msgstr "Krysskorn"
 
 #: ../share/filters/filters.svg.h:700
 msgid "Adds a small scale screen like graininess"
-msgstr ""
+msgstr "Legger til skjermdøraktige korn."
 
 #: ../share/filters/filters.svg.h:702
-#, fuzzy
 msgid "Duotone Turbulent"
-msgstr "Turbulens"
+msgstr "Tofarget turbulens"
 
 #: ../share/filters/filters.svg.h:706
-#, fuzzy
 msgid "Light Eraser Cracked"
-msgstr "Lyshet"
+msgstr "Lysviskelær, krakelert"
 
 #: ../share/filters/filters.svg.h:710
-#, fuzzy
 msgid "Poster Turbulent"
-msgstr "Turbulens"
+msgstr "Plakat-turbulens"
 
 #: ../share/filters/filters.svg.h:714
-#, fuzzy
 msgid "Tartan Smart"
-msgstr "Tartan"
+msgstr "Smart tartanmønster"
 
 #: ../share/filters/filters.svg.h:716
-#, fuzzy
 msgid "Highly configurable checkered tartan pattern"
-msgstr "Flislagt tartanmønster"
+msgstr "Tartanmønster som kan settes opp i detalj."
 
 #: ../share/filters/filters.svg.h:718
-#, fuzzy
 msgid "Light Contour"
-msgstr "Kilde"
+msgstr "Lyst omriss"
 
 #: ../share/filters/filters.svg.h:720
 msgid "Uses vertical specular light to draw lines"
-msgstr ""
+msgstr "Bruker loddrett skinnende lys til å tegne linjer."
 
 #: ../share/filters/filters.svg.h:722
 msgid "Liquid"
 msgstr "Væske"
 
 #: ../share/filters/filters.svg.h:724
-#, fuzzy
 msgid "Colorizable filling with liquid transparency"
-msgstr "Støy-gjennomsiktighet"
+msgstr "Fargeleggbart fyll med væskeaktig gjennomsiktighet."
 
 #: ../share/filters/filters.svg.h:726
 msgid "Aluminium"
 msgstr "Aluminium"
 
 #: ../share/filters/filters.svg.h:728
-#, fuzzy
 msgid "Aluminium effect with sharp brushed reflections"
-msgstr "Geleeffekt med sterk lysbryting"
+msgstr "Aluminiumseffekt med skarpt børstede speilbilder."
 
 #: ../share/filters/filters.svg.h:730
 msgid "Comics"
 msgstr "Tegneserie"
 
 #: ../share/filters/filters.svg.h:732
-#, fuzzy
 msgid "Comics cartoon drawing effect"
-msgstr "Tilpass siden til tegningen"
+msgstr "Tegneserieeffekt."
 
 #: ../share/filters/filters.svg.h:734
-#, fuzzy
 msgid "Comics Draft"
 msgstr "Tegneserieskisse"
 
 #: ../share/filters/filters.svg.h:736 ../share/filters/filters.svg.h:768
 msgid "Draft painted cartoon shading with a glassy look"
-msgstr ""
+msgstr "Tegneseriefargelegging med glassaktig utseende."
 
 #: ../share/filters/filters.svg.h:738
-#, fuzzy
 msgid "Comics Fading"
-msgstr "Tegneserieeffekt med utviskede kanter"
+msgstr "Tegneserie med uttoning"
 
 #: ../share/filters/filters.svg.h:740
 msgid "Cartoon paint style with some fading at the edges"
-msgstr ""
+msgstr "Tegneseriestil med noe uttoning av kantene."
 
 #: ../share/filters/filters.svg.h:742
 msgid "Brushed Metal"
 msgstr "Børstet metall"
 
 #: ../share/filters/filters.svg.h:744
-#, fuzzy
 msgid "Satiny metal surface effect"
-msgstr "Opplyst farget glasseffekt"
+msgstr "Satengaktig metallisk overflate."
 
 #: ../share/filters/filters.svg.h:746
 #, fuzzy
@@ -1899,159 +1795,133 @@ msgid "Chrome"
 msgstr "Krom"
 
 #: ../share/filters/filters.svg.h:752
-#, fuzzy
 msgid "Bright chrome effect"
-msgstr "Lysere"
+msgstr "Lys kromeffekt."
 
 #: ../share/filters/filters.svg.h:754
-#, fuzzy
 msgid "Deep Chrome"
-msgstr "Krom - ikke realistisk"
+msgstr "Dyp krom"
 
 #: ../share/filters/filters.svg.h:756
-#, fuzzy
 msgid "Dark chrome effect"
-msgstr "Gjeldende lag"
+msgstr "Mørk kromeffekt."
 
 #: ../share/filters/filters.svg.h:758
-#, fuzzy
 msgid "Emboss Shader"
-msgstr "Normal forskyvning"
+msgstr "Pregingsfargelegger"
 
 #: ../share/filters/filters.svg.h:760
-#, fuzzy
 msgid "Combination of satiny and emboss effect"
-msgstr "Fjern grønn"
+msgstr "Kombinasjon av sateng- og pregingseffekt. "
 
 #: ../share/filters/filters.svg.h:762
-#, fuzzy
 msgid "Sharp Metal"
-msgstr "Gjør skarpere"
+msgstr "Skarpt metall"
 
 #: ../share/filters/filters.svg.h:764
-#, fuzzy
 msgid "Chrome effect with darkened edges"
-msgstr "Strøk med rund ende"
+msgstr "Kromeffekt med mørke kanter."
 
 #: ../share/filters/filters.svg.h:766
-#, fuzzy
 msgid "Brush Draw"
-msgstr "Blå"
+msgstr "Penselstrøk"
 
 #: ../share/filters/filters.svg.h:770
-#, fuzzy
 msgid "Chrome Emboss"
-msgstr "Fargetrykk"
+msgstr "Krompreging"
 
 #: ../share/filters/filters.svg.h:772
-#, fuzzy
 msgid "Embossed chrome effect"
-msgstr "Fjern grønn"
+msgstr "Preget kromeffekt"
 
 #: ../share/filters/filters.svg.h:774
-#, fuzzy
 msgid "Contour Emboss"
-msgstr "Fargetrykk"
+msgstr "Omrisspreging"
 
 #: ../share/filters/filters.svg.h:776
-#, fuzzy
 msgid "Satiny and embossed contour effect"
-msgstr "Opplyst farget glasseffekt"
+msgstr "Satengaktig og preget omrisseffekt."
 
 #: ../share/filters/filters.svg.h:778
-#, fuzzy
 msgid "Sharp Deco"
-msgstr "Gjør skarpere"
+msgstr "Skarp deco"
 
 #: ../share/filters/filters.svg.h:780
-#, fuzzy
 msgid "Unrealistic reflections with sharp edges"
-msgstr "Strøk med rund ende"
+msgstr "Virkelighetsfjerne speilinger med skarpe kanter."
 
 #: ../share/filters/filters.svg.h:782
-#, fuzzy
 msgid "Deep Metal"
-msgstr "Fleksibelt metall"
+msgstr "Dypt metall"
 
 #: ../share/filters/filters.svg.h:784
 msgid "Deep and dark metal shading"
-msgstr ""
+msgstr "Dyp og mørk metallfargelegging"
 
 #: ../share/filters/filters.svg.h:786
-#, fuzzy
 msgid "Aluminium Emboss"
-msgstr "Aluminium - ikke realistisk"
+msgstr "Aluminiumspreging"
 
 #: ../share/filters/filters.svg.h:788
 msgid "Satiny aluminium effect with embossing"
-msgstr ""
+msgstr "Satengaktiv aluminiumseffekt med preging."
 
 #: ../share/filters/filters.svg.h:790
-#, fuzzy
 msgid "Refractive Glass"
-msgstr "Lysbrytende gele A"
+msgstr "Lysbrytende glass"
 
 #: ../share/filters/filters.svg.h:792
-#, fuzzy
 msgid "Double reflection through glass with some refraction"
-msgstr "Geleeffekt med sterk lysbryting"
+msgstr "Dobbel refleksjon gjennom glass med noe lysbryting."
 
 #: ../share/filters/filters.svg.h:794
-#, fuzzy
 msgid "Frosted Glass"
-msgstr "Iset glass - ikke realistisk"
+msgstr "Frostet glass"
 
 #: ../share/filters/filters.svg.h:796
-#, fuzzy
 msgid "Satiny glass effect"
-msgstr "Opplyst farget glasseffekt"
+msgstr "Satengaktig glasseffekt."
 
 #: ../share/filters/filters.svg.h:798
-#, fuzzy
 msgid "Bump Engraving"
-msgstr "Alfa-inngravering"
+msgstr "Rugleinngravering"
 
 #: ../share/filters/filters.svg.h:800
-#, fuzzy
 msgid "Carving emboss effect"
-msgstr "Lim inn stieffekt"
+msgstr "Innskåret pregingseffekt."
 
 #: ../share/filters/filters.svg.h:802
 msgid "Chromolitho Alternate"
-msgstr ""
+msgstr "Kromolito-variant"
 
 #: ../share/filters/filters.svg.h:804
-#, fuzzy
 msgid "Old chromolithographic effect"
-msgstr "Skap en dynamisk forskøvet objekt"
+msgstr "Gammel kromolitografisk effekt."
 
 #: ../share/filters/filters.svg.h:806
-#, fuzzy
 msgid "Convoluted Bump"
-msgstr "Klone"
+msgstr "Foldende rugler"
 
 #: ../share/filters/filters.svg.h:808
-#, fuzzy
 msgid "Convoluted emboss effect"
-msgstr "Fjern grønn"
+msgstr "Foldende pregingseffekt."
 
 #: ../share/filters/filters.svg.h:810
-#, fuzzy
 msgid "Emergence"
-msgstr "Forskjell:"
+msgstr "Tre fram"
 
 #: ../share/filters/filters.svg.h:812
 msgid "Cut out, add inner shadow and colorize some parts of an image"
 msgstr ""
+"Klipper ut, legger til indre skygge og fargelegger noen deler av bildet."
 
 #: ../share/filters/filters.svg.h:814
 msgid "Litho"
 msgstr "Lito"
 
 #: ../share/filters/filters.svg.h:816
-#, fuzzy
 msgid "Create a two colors lithographic effect"
-msgstr "Skap en dynamisk forskøvet objekt"
+msgstr "Lager en tofargers litografisk effekt."
 
 #: ../share/filters/filters.svg.h:818
 msgid "Paint Channels"
@@ -2062,13 +1932,12 @@ msgid "Colorize separately the three color channels"
 msgstr "Fargelegg de tre fargekanalene separat."
 
 #: ../share/filters/filters.svg.h:822
-#, fuzzy
 msgid "Posterized Light Eraser"
-msgstr "Lyshet"
+msgstr "Plakateffekt med lysviskelær"
 
 #: ../share/filters/filters.svg.h:824
 msgid "Create a semi transparent posterized image"
-msgstr ""
+msgstr "Lag et halvgjennomsiktig bilde med plakateffekt."
 
 #: ../share/filters/filters.svg.h:826
 msgid "Trichrome"
@@ -2089,33 +1958,28 @@ msgstr ""
 "fargelegges."
 
 #: ../share/filters/filters.svg.h:834
-#, fuzzy
 msgid "Contouring Table"
-msgstr "Vinkel"
+msgstr "Omrisstabell"
 
 #: ../share/filters/filters.svg.h:836
-#, fuzzy
 msgid "Blurred multiple contours for objects"
-msgstr "Uskarp, fargelagt kontur, tom inni"
+msgstr "Slørede omriss av objektene."
 
 #: ../share/filters/filters.svg.h:838
-#, fuzzy
 msgid "Posterized Blur"
-msgstr "Lyshet"
+msgstr "Sløring med plakateffekt"
 
 #: ../share/filters/filters.svg.h:840
 msgid "Converts blurred contour to posterized steps"
-msgstr ""
+msgstr "Konverterer slørede omriss til skarpe fargeoverganger."
 
 #: ../share/filters/filters.svg.h:842
-#, fuzzy
 msgid "Contouring Discrete"
-msgstr "Fortsett valgte sti"
+msgstr "Diskrete omriss"
 
 #: ../share/filters/filters.svg.h:844
-#, fuzzy
 msgid "Sharp multiple contour for objects"
-msgstr "Fest noder til objekter"
+msgstr "Skarpe omriss av objektene."
 
 #: ../share/palettes/palettes.h:2
 msgctxt "Palette"
@@ -4119,55 +3983,56 @@ msgstr "Blank"
 
 #: ../share/templates/templates.h:1
 msgid "A4 leaflet 3-fold Roll"
-msgstr ""
+msgstr "A4-brosjyre med tredobbel bretting"
 
 #: ../share/templates/templates.h:1
 msgid ""
 "An A4 page 3-fold Roll template with guides, print marks, and marked leaflet "
 "pages. Inner and outer page contents go into their respective Layers."
 msgstr ""
+"Malen er en A4-side med tredobbel bretting innover, og har hjelpelinjer, "
+"utskriftsmerker og framhevede brosjyresider. Indre og ytre sideinnhold er i "
+"sine respektive lag."
 
 #: ../share/templates/templates.h:1
 msgid "A4 leaflet 3-fold"
-msgstr ""
+msgstr "A4-brosjyre med tredobbel bretting"
 
 #: ../share/templates/templates.h:1
 msgid "CD Label 120mmx120mm "
-msgstr ""
+msgstr "CD-etikett 120 mm × 120 mm "
 
 #: ../share/templates/templates.h:1
 msgid "Simple CD Label template with disc's pattern."
-msgstr ""
+msgstr "Malen er en enkel CD-etikett der disken er fremhevet."
 
 #: ../share/templates/templates.h:1
 msgid "CD label 120x120 disc disk"
-msgstr ""
+msgstr "CD-etikett 120 × 120"
 
 #: ../share/templates/templates.h:1
-#, fuzzy
 msgid "LaTeX Beamer"
-msgstr "LaTeX Utskrift"
+msgstr "LaTeX Beamer"
 
 #: ../share/templates/templates.h:1
 msgid "LaTeX beamer template with helping grid."
-msgstr ""
+msgstr "Malen er en LaTeX Beamer med hjelperutenett."
 
 #: ../share/templates/templates.h:1
 msgid "LaTex LaTeX latex grid beamer"
-msgstr ""
+msgstr "LaTex LaTeX latex rutenett beamer"
 
 #: ../share/templates/templates.h:1
-#, fuzzy
 msgid "Typography Canvas"
-msgstr "Spiral"
+msgstr "Typografisk tegnevindu"
 
 #: ../share/templates/templates.h:1
 msgid "Empty typography canvas with helping guidelines."
-msgstr ""
+msgstr "Tomt typografisk tegnevindu med hjelpelinjer."
 
 #: ../share/templates/templates.h:1
 msgid "guidelines typography canvas"
-msgstr ""
+msgstr "hjelpelinjer typografi tegnevindu"
 
 #: ../share/templates/templates.h:1
 msgid "No Layers"
@@ -4512,7 +4377,7 @@ msgstr "På"
 # File: ../src/display/canvas-grid.cpp, line: 306
 #: ../src/display/canvas-grid.cpp:306
 msgid "Makes the grid available for working with on the canvas."
-msgstr ""
+msgstr "Gjør at rutenettet kan jobbes med i tegnevinduet."
 
 #: ../src/display/canvas-grid.cpp:310
 msgid "Snap to visible _grid lines only"
@@ -4579,9 +4444,8 @@ msgid "grid intersection"
 msgstr "krysningspunkt i rutenett"
 
 #: ../src/display/snap-indicator.cpp:86
-#, fuzzy
 msgid "grid line (perpendicular)"
-msgstr "Perpendikular inndeler"
+msgstr "rutenettlinje (vinkelrett)"
 
 #: ../src/display/snap-indicator.cpp:89
 msgid "guide"
@@ -4592,18 +4456,16 @@ msgid "guide intersection"
 msgstr "hjelpelinjekryss"
 
 #: ../src/display/snap-indicator.cpp:95
-#, fuzzy
 msgid "guide origin"
-msgstr "Farge på rettesnor"
+msgstr "hjelpelinjeorigo"
 
 #: ../src/display/snap-indicator.cpp:98
-#, fuzzy
 msgid "guide (perpendicular)"
-msgstr "Perpendikular inndeler"
+msgstr "hjelpelinje (vinkelrett)"
 
 #: ../src/display/snap-indicator.cpp:101
 msgid "grid-guide intersection"
-msgstr "rutenett- og hjelpelinjekryss"
+msgstr "skjæring mellom rutenett og hjelpelinje"
 
 #: ../src/display/snap-indicator.cpp:104
 msgid "cusp node"
@@ -4630,19 +4492,16 @@ msgid "path intersection"
 msgstr "banekrysning"
 
 #: ../src/display/snap-indicator.cpp:122
-#, fuzzy
 msgid "guide-path intersection"
-msgstr "rettesnorskryssning"
+msgstr "skjæring mellom hjelpelinje og bane"
 
 #: ../src/display/snap-indicator.cpp:125
-#, fuzzy
 msgid "clip-path"
-msgstr "Sett stiklipping"
+msgstr "beskjæringsbane"
 
 #: ../src/display/snap-indicator.cpp:128
-#, fuzzy
 msgid "mask-path"
-msgstr "Sett maske"
+msgstr "maskebane"
 
 #: ../src/display/snap-indicator.cpp:131
 msgid "bounding box corner"
@@ -4697,26 +4556,24 @@ msgid "text baseline"
 msgstr "tekstgrunnlinje"
 
 #: ../src/display/snap-indicator.cpp:171
-#, fuzzy
 msgid "constrained angle"
-msgstr "Rotasjonsvinkel"
+msgstr "tvunget vinkel"
 
 #: ../src/display/snap-indicator.cpp:174
-#, fuzzy
 msgid "constraint"
-msgstr "Tilkoble"
+msgstr "begrensning"
 
 #: ../src/display/snap-indicator.cpp:188
 msgid "Bounding box corner"
-msgstr "Grenserammehjørne"
+msgstr "Hjørne til avgrensingsboks"
 
 #: ../src/display/snap-indicator.cpp:191
 msgid "Bounding box midpoint"
-msgstr "Grenserammemidtpunkt"
+msgstr "Midtpunkt til avgrensingsboks"
 
 #: ../src/display/snap-indicator.cpp:194
 msgid "Bounding box side midpoint"
-msgstr "Grenserammeside-midtpunkt"
+msgstr "Midtpunkt til avgrensingsboksside"
 
 #: ../src/display/snap-indicator.cpp:197 ../src/ui/tool/node.cpp:1636
 msgid "Smooth node"
@@ -4772,7 +4629,7 @@ msgstr "Tekstanker"
 
 #: ../src/display/snap-indicator.cpp:238
 msgid "Multiple of grid spacing"
-msgstr ""
+msgstr "Multippel av rutenettavstanden"
 
 #: ../src/display/snap-indicator.cpp:287
 msgid " to "
@@ -5007,9 +4864,8 @@ msgid "Raster"
 msgstr "Raster"
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:50
-#, fuzzy
 msgid "Apply adaptive thresholding to selected bitmap(s)"
-msgstr "Bruk adaptiv terskel for å velge rasterbilde(r)"
+msgstr "Bruk adaptiv terskel på valgte punktbilde(r)"
 
 #: ../src/extension/internal/bitmap/addNoise.cpp:46
 msgid "Add Noise"
@@ -5220,9 +5076,8 @@ msgid "Amount:"
 msgstr "Mengde:"
 
 #: ../src/extension/internal/bitmap/cycleColormap.cpp:46
-#, fuzzy
 msgid "Cycle colormap(s) of selected bitmap(s)"
-msgstr "Kjør fargekartet i sylus for valgte rasterbilde(r)"
+msgstr "Kjør fargekartet i syklus for valgte rasterbilde(r)"
 
 #: ../src/extension/internal/bitmap/despeckle.cpp:37
 msgid "Despeckle"
@@ -5238,42 +5093,38 @@ msgstr "Kantmerking"
 
 # OVERSETTERE: Det er et spørmål om Embed bør være: Innlemme
 #: ../src/extension/internal/bitmap/edge.cpp:46
-#, fuzzy
 msgid "Highlight edges of selected bitmap(s)"
 msgstr "Uthev kanter i valgte rasterbilde(r)"
 
 #: ../src/extension/internal/bitmap/emboss.cpp:39
 msgid "Emboss"
-msgstr ""
+msgstr "Preging"
 
 #: ../src/extension/internal/bitmap/emboss.cpp:48
-#, fuzzy
 msgid "Emboss selected bitmap(s); highlight edges with 3D effect"
-msgstr "Uthev kanter med 3D-effekt"
+msgstr ""
+"Pregingseffekt på valgte punktbilde(r). Uthev kantene med en 3D-effekt."
 
 #: ../src/extension/internal/bitmap/enhance.cpp:36
-#, fuzzy
 msgid "Enhance"
-msgstr "Avbryt"
+msgstr "Forbedring"
 
 #: ../src/extension/internal/bitmap/enhance.cpp:43
-#, fuzzy
 msgid "Enhance selected bitmap(s); minimize noise"
-msgstr "Gjør valgte rasterbilde(r) skarpere"
+msgstr "Forbedrer valgte punktbilde(r). Minimerer støy."
 
 #: ../src/extension/internal/bitmap/equalize.cpp:36
-#, fuzzy
 msgid "Equalize"
-msgstr "Likestilt bredde"
+msgstr "Histogramutjevning"
 
 #: ../src/extension/internal/bitmap/equalize.cpp:43
 msgid "Equalize selected bitmap(s); histogram equalization"
-msgstr ""
+msgstr "Histogramutjevning av valgte punktbilde(r)."
 
 #: ../src/extension/internal/bitmap/gaussianBlur.cpp:39
 #: ../src/filter-enums.cpp:30
 msgid "Gaussian Blur"
-msgstr "Gaussisk uklarhet"
+msgstr "Gaussisk sløring"
 
 #: ../src/extension/internal/bitmap/gaussianBlur.cpp:41
 #: ../src/extension/internal/bitmap/implode.cpp:40
@@ -5282,16 +5133,14 @@ msgid "Factor:"
 msgstr "Faktor:"
 
 #: ../src/extension/internal/bitmap/gaussianBlur.cpp:48
-#, fuzzy
 msgid "Gaussian blur selected bitmap(s)"
-msgstr "Gaussisk uklarhet på valgte rasterbilde(r)"
+msgstr "Slør valgte punktbilde(r)."
 
 #: ../src/extension/internal/bitmap/implode.cpp:38
 msgid "Implode"
 msgstr "Imploder"
 
 #: ../src/extension/internal/bitmap/implode.cpp:46
-#, fuzzy
 msgid "Implode selected bitmap(s)"
 msgstr "Imploder valgte rasterbilde(r)"
 
@@ -5301,7 +5150,7 @@ msgstr "Imploder valgte rasterbilde(r)"
 #: ../src/extension/internal/filter/morphology.h:67
 #: ../src/extension/internal/filter/paint.h:346
 msgid "Level"
-msgstr "Niveler"
+msgstr "Nivå"
 
 #: ../src/extension/internal/bitmap/level.cpp:44
 #: ../src/extension/internal/bitmap/levelChannel.cpp:66
@@ -5319,17 +5168,16 @@ msgid "Gamma Correction:"
 msgstr "Gammakorrigering:"
 
 #: ../src/extension/internal/bitmap/level.cpp:52
-#, fuzzy
 msgid ""
 "Level selected bitmap(s) by scaling values falling between the given ranges "
 "to the full color range"
 msgstr ""
-"Niveler valgte rasterbilde(r) ved å skalere verdier mellom to ytterpunkter "
-"til å dekke hele fargespennet."
+"Juster nivået til valgte punktbilde(r) ved å skalere verdier som faller inni "
+"oppgitt intervall til fullt fargeintervall."
 
 #: ../src/extension/internal/bitmap/levelChannel.cpp:53
 msgid "Level (with Channel)"
-msgstr "Niveller (med kanal)"
+msgstr "Nivå (med kanal)"
 
 #: ../src/extension/internal/bitmap/levelChannel.cpp:55
 #: ../src/extension/internal/filter/color.h:713
@@ -5337,13 +5185,12 @@ msgid "Channel:"
 msgstr "Kanal:"
 
 #: ../src/extension/internal/bitmap/levelChannel.cpp:74
-#, fuzzy
 msgid ""
 "Level the specified channel of selected bitmap(s) by scaling values falling "
 "between the given ranges to the full color range"
 msgstr ""
-"Niveler valgte kanal i rasterbilde(r) ved å skalere verdiene mellom to "
-"ytterpunkter til å dekke hele fargespennet"
+"Juster nivået til valgte punktbilde(r) ved å skalere verdier som faller inni "
+"oppgitt intervall til fullt fargeintervall."
 
 #: ../src/extension/internal/bitmap/medianFilter.cpp:38
 msgid "Median"
@@ -5360,7 +5207,7 @@ msgstr "Juster HSB"
 
 #: ../src/extension/internal/bitmap/modulate.cpp:43
 msgid "Hue:"
-msgstr "Kulør:"
+msgstr "Fargetone:"
 
 #: ../src/extension/internal/bitmap/modulate.cpp:44
 msgid "Saturation:"
@@ -5373,7 +5220,7 @@ msgstr "Lysstyrke:"
 #: ../src/extension/internal/bitmap/modulate.cpp:51
 msgid ""
 "Adjust the amount of hue, saturation, and brightness in selected bitmap(s)"
-msgstr "Juster kulør, metning og lysstyrke i valgt(e) punktbilde(r)"
+msgstr "Juster fargetone, metning og lysstyrke i valgt(e) punktbilde(r)"
 
 #: ../src/extension/internal/bitmap/negate.cpp:37
 msgid "Negate"
@@ -5400,11 +5247,10 @@ msgid "Oil Paint"
 msgstr "Oljemaling"
 
 #: ../src/extension/internal/bitmap/oilPaint.cpp:46
-#, fuzzy
 msgid "Stylize selected bitmap(s) so that they appear to be painted with oils"
 msgstr ""
-"Stilisert effekt for rasterbilde(r) slik at de ser ut som de er malt med "
-"oljemaling "
+"Stilisert effekt for valgt(e)rasterbilde(r) slik at de ser ut som de er malt "
+"med oljemaling."
 
 #: ../src/extension/internal/bitmap/opacity.cpp:39
 #: ../src/extension/internal/filter/blurs.h:334
@@ -5433,12 +5279,10 @@ msgid "Raised"
 msgstr "Hevet"
 
 #: ../src/extension/internal/bitmap/raise.cpp:51
-#, fuzzy
 msgid ""
 "Alter lightness the edges of selected bitmap(s) to create a raised appearance"
 msgstr ""
-"Endre lysheten i kantene for å skape inntrykk av en forhøyning for valgte "
-"rasterbilde(r)"
+"Endre lysheten i kantene slik at valgte rasterbilde(r) ser forhøyede ut."
 
 #: ../src/extension/internal/bitmap/reduceNoise.cpp:41
 msgid "Reduce Noise"
@@ -5455,12 +5299,11 @@ msgid "Order:"
 msgstr "Rekkefølge:"
 
 #: ../src/extension/internal/bitmap/reduceNoise.cpp:49
-#, fuzzy
 msgid ""
 "Reduce noise in selected bitmap(s) using a noise peak elimination filter"
 msgstr ""
-"Reduser støyen i valgte rasterbilde(r) ved bruk av et "
-"støytoppelimineringsfilter."
+"Reduser støyen i valgte rasterbilde(r) ved å bruke et filter som tar "
+"støytoppene."
 
 #: ../src/extension/internal/bitmap/sample.cpp:40
 msgid "Resample"
@@ -6439,9 +6282,8 @@ msgid "Bump color"
 msgstr "Ruglefarge"
 
 #: ../src/extension/internal/filter/bumps.h:352
-#, fuzzy
 msgid "Revert bump"
-msgstr "Til_bakestill"
+msgstr "Tilbakestill rugling"
 
 #: ../src/extension/internal/filter/bumps.h:353
 msgid "Transparency type:"
@@ -7124,12 +6966,11 @@ msgstr "Gjør innhold og kanter litt mer ujevne."
 
 #: ../src/extension/internal/filter/filter-file.cpp:69
 msgid "Personal"
-msgstr "Personlig"
+msgstr "Personlige"
 
 #: ../src/extension/internal/filter/filter-file.cpp:72
-#, fuzzy
 msgid "Bundled"
-msgstr "Avrundet:"
+msgstr "Integrerte"
 
 #: ../src/extension/internal/filter/image.h:50
 msgid "Edge Detect"
@@ -7452,9 +7293,8 @@ msgstr "Fyllfarge"
 
 #: ../src/extension/internal/filter/paint.h:352
 #: ../src/extension/internal/filter/paint.h:715
-#, fuzzy
 msgid "Image on fill"
-msgstr "Bilde"
+msgstr "Bilde som fyll"
 
 #: ../src/extension/internal/filter/paint.h:355
 #: ../share/extensions/markers_strokepaint.inx:24
@@ -7462,9 +7302,8 @@ msgid "Stroke color"
 msgstr "Strekfarge"
 
 #: ../src/extension/internal/filter/paint.h:356
-#, fuzzy
 msgid "Image on stroke"
-msgstr "Mønster strøk"
+msgstr "Bilde som strek"
 
 #: ../src/extension/internal/filter/paint.h:367
 msgid "Convert images to duochrome drawings"
@@ -7532,9 +7371,8 @@ msgid "Points color"
 msgstr "Punktfarge"
 
 #: ../src/extension/internal/filter/paint.h:719
-#, fuzzy
 msgid "Image on points"
-msgstr "Bilde"
+msgstr "Bilde på punkter"
 
 #: ../src/extension/internal/filter/paint.h:729
 msgid "Convert image to a transparent point engraving"
@@ -7687,15 +7525,15 @@ msgstr "Tilpassede strekvalg"
 
 #: ../src/extension/internal/filter/textures.h:85
 msgid "k1:"
-msgstr ""
+msgstr "k1:"
 
 #: ../src/extension/internal/filter/textures.h:86
 msgid "k2:"
-msgstr ""
+msgstr "k2:"
 
 #: ../src/extension/internal/filter/textures.h:87
 msgid "k3:"
-msgstr ""
+msgstr "k3:"
 
 #: ../src/extension/internal/filter/textures.h:95
 msgid "Inkblot on tissue or rough paper"
@@ -7751,9 +7589,8 @@ msgid "Make the lightest parts of the object progressively transparent"
 msgstr "La de lyse delene av objektet bli gradvis mer gjennomsiktige"
 
 #: ../src/extension/internal/filter/transparency.h:292
-#, fuzzy
 msgid "Set opacity and strength of opacity boundaries"
-msgstr "Velg dekkevne og styrke til dekkevnekanter"
+msgstr "Velg dekkevne og styrke til avgrensingen"
 
 #: ../src/extension/internal/filter/transparency.h:342
 msgid "Silhouette"
@@ -8282,40 +8119,28 @@ msgid "Vector graphics format used by Corel WordPerfect"
 msgstr "Vektorgrafikkformat brukt av Corel WordPerfect"
 
 #: ../src/extension/prefdialog/parameter-path.cpp:197
-#, fuzzy
-#| msgid "Delete existing guides"
 msgid "Select existing files"
-msgstr "Slett eksisterende hjelpelinjer"
+msgstr "Velg eksisterende filer"
 
 #: ../src/extension/prefdialog/parameter-path.cpp:199
-#, fuzzy
-#| msgid "Delete existing guides"
 msgid "Select existing file"
-msgstr "Slett eksisterende hjelpelinjer"
+msgstr "Velg eksisterende fil"
 
 #: ../src/extension/prefdialog/parameter-path.cpp:205
-#, fuzzy
-#| msgid "Delete existing guides"
 msgid "Select existing folders"
-msgstr "Slett eksisterende hjelpelinjer"
+msgstr "Velg eksisterende mapper"
 
 #: ../src/extension/prefdialog/parameter-path.cpp:207
-#, fuzzy
-#| msgid "Delete existing guides"
 msgid "Select existing folder"
-msgstr "Slett eksisterende hjelpelinjer"
+msgstr "Velg eksisterende mappe"
 
 #: ../src/extension/prefdialog/parameter-path.cpp:211
-#, fuzzy
-#| msgid "Set filename"
 msgid "Choose file name"
-msgstr "Sett filnavn"
+msgstr "Velg filnavn"
 
 #: ../src/extension/prefdialog/parameter-path.cpp:214
-#, fuzzy
-#| msgid "Choose pen type"
 msgid "Choose folder name"
-msgstr "Velg pennetype"
+msgstr "Velg mappenavn"
 
 #: ../src/extension/prefdialog/parameter-path.cpp:222
 #: ../src/extension/prefdialog/parameter-path.cpp:226
@@ -8672,24 +8497,20 @@ msgid "Destination"
 msgstr "Mål"
 
 #: ../src/filter-enums.cpp:99
-#, fuzzy
 msgid "Destination Over"
-msgstr "Utskriftsmål"
+msgstr "Målet over"
 
 #: ../src/filter-enums.cpp:100
-#, fuzzy
 msgid "Destination In"
-msgstr "Utskriftsmål"
+msgstr "Målet inni"
 
 #: ../src/filter-enums.cpp:101
-#, fuzzy
 msgid "Destination Out"
-msgstr "Utskriftsmål"
+msgstr "Målet utenfor"
 
 #: ../src/filter-enums.cpp:102
-#, fuzzy
 msgid "Destination Atop"
-msgstr "Utskriftsmål"
+msgstr "Målet på toppen av"
 
 #: ../src/filter-enums.cpp:103
 msgid "Lighter"
@@ -8802,7 +8623,7 @@ msgstr "Maskenettovergangens <b>tensor</b>"
 
 #: ../src/gradient-drag.cpp:550
 msgid "Added patch row or column"
-msgstr ""
+msgstr "La til flaterad eller -kolonne"
 
 #: ../src/gradient-drag.cpp:793
 msgid "Merge gradient handles"
@@ -8889,6 +8710,11 @@ msgid ""
 "The tutorials can also be found online at https://inkscape.org/en/learn/"
 "tutorials/"
 msgstr ""
+"Innføringsfilene er ikke installerte.\n"
+"Linux: Du må kanskje installere «inkscape-tutorials». Windows: Kjør "
+"installasjonsprogrammet om igjen og velg «Tutorials».\n"
+"Innføringene ligger også på internett. Adressen er https://inkscape.org/en/"
+"learn/tutorials/"
 
 #: ../src/inkscape-application.cpp:323
 msgid "Broken links have been changed to point to existing files."
@@ -8967,12 +8793,16 @@ msgid ""
 "Method used to convert pre-0.92 document dpi, if needed: [none|scale-viewbox|"
 "scale-document]"
 msgstr ""
+"Konverter DPI i dokumenter laget med eldre versjon enn 0.92 med denne "
+"metoden hvis nødvendig: [none|scale-viewbox|scale-document]"
 
 #
 # File: ../src/inkscape-application.cpp, line: 545
 #: ../src/inkscape-application.cpp:545
 msgid "Do not fix pre-0.92 document's text baseline spacing on opening"
 msgstr ""
+"Ikke hold fast grunnlinjeavstand i dokumenter laget med eldre versjon enn "
+"0.92 ved åpning"
 
 #: ../src/inkscape-application.cpp:548
 msgid "File export"
@@ -9086,7 +8916,7 @@ msgstr "Postscript-nivå (2 eller 3); standard er 3"
 
 #: ../src/inkscape-application.cpp:569
 msgid "PS-Level"
-msgstr "PS-Level"
+msgstr "PS-NIVÅ"
 
 #
 # File: ../src/inkscape-application.cpp, line: 570
@@ -9098,7 +8928,7 @@ msgstr "PDF-versjon (1.4 eller 1.5)"
 # File: ../src/inkscape-application.cpp, line: 570
 #: ../src/inkscape-application.cpp:570
 msgid "PDF-VERSION"
-msgstr ""
+msgstr "PDF-VERSJON"
 
 #: ../src/inkscape-application.cpp:571
 msgid "Convert text to paths (PS/EPS/PDF/SVG)"
@@ -9504,15 +9334,16 @@ msgid ""
 "Make the path curl like wire, using Spiro B-Splines. This effect is usually "
 "used directly on the canvas with the Spiro mode of the drawing tools."
 msgstr ""
+"La banen krumme seg som en klotoide med spiro b-spline. Denne effekten "
+"brukes vanligvis rett i tegnevinduet i et tegneverktøys spiro-modus."
 
 #: ../src/live_effects/effect.cpp:215
-#, fuzzy
 msgid "Envelope Deformation"
-msgstr "Informasjon"
+msgstr "Hylsteromforming"
 
 #: ../src/live_effects/effect.cpp:219
 msgid "Adjust the shape of an object by transforming paths on its four sides"
-msgstr ""
+msgstr "Justerer formen til et objekt ved å omforme banene på dens fire sider."
 
 #: ../src/live_effects/effect.cpp:229
 msgid "Interpolate Sub-Paths"
@@ -9553,9 +9384,8 @@ msgstr ""
 "strekstil."
 
 #: ../src/live_effects/effect.cpp:286
-#, fuzzy
 msgid "Power stroke"
-msgstr "Mønster strøk"
+msgstr "Variabel strek"
 
 #: ../src/live_effects/effect.cpp:290
 msgid ""
@@ -9563,9 +9393,11 @@ msgid ""
 "This effect can also be used directly on the canvas with a pressure "
 "sensitive stylus and the Pencil tool."
 msgstr ""
+"Lag kalligrafiske streker og styr variasjonen til tykkelse og krumning. "
+"Effekten kan også brukes direkte i tegnevinduet med en trykksensitiv "
+"pekepenn og blyantverktøyet."
 
 #: ../src/live_effects/effect.cpp:300 ../src/selection-chemistry.cpp:2957
-#, fuzzy
 msgid "Clone original"
 msgstr "Klon original"
 
@@ -9574,8 +9406,8 @@ msgid ""
 "Let an object take on the shape, fill, stroke and/or other attributes of "
 "another object."
 msgstr ""
-"La et objekt få figur, fyll, strek og/eller andre attributter til et annet "
-"objekt,"
+"La et objekt få figuren, fyllet, streken og/eller andre attributter til et "
+"annet objekt."
 
 #
 # File: ../src/live_effects/effect.cpp, line: 319
@@ -9588,24 +9420,24 @@ msgstr ""
 "blyantverktøyets valg."
 
 #: ../src/live_effects/effect.cpp:329
-#, fuzzy
 msgid "Lattice Deformation 2"
-msgstr "Bokstavrotasjon"
+msgstr "Gitteromforming 2"
 
 #: ../src/live_effects/effect.cpp:333
 msgid "Warp an object's shape based on a 5x5 grid"
 msgstr "Omform et objekts form basert på et 5×5 rutenett"
 
 #: ../src/live_effects/effect.cpp:343
-#, fuzzy
 msgid "Perspective/Envelope"
-msgstr "Nærvær"
+msgstr "Perspektiv/hylster"
 
 #: ../src/live_effects/effect.cpp:347
 msgid ""
 "Transform the object to fit into a shape with four corners, either by "
 "stretching it or creating the illusion of a 3D-perspective"
 msgstr ""
+"Omform objektet til å passe i en figur med fire hjørner, enten ved å strekke "
+"det eller ved å etterligne et 3D-perspektiv."
 
 #: ../src/live_effects/effect.cpp:357
 msgid "Interpolate points"
@@ -9618,6 +9450,8 @@ msgid ""
 "Connect the nodes of the object (e.g. corresponding to data points) by "
 "different types of lines."
 msgstr ""
+"Forbinder objektets noder (svarer f.eks. til datapunkter) med ulike typer "
+"linjer."
 
 #: ../src/live_effects/effect.cpp:371
 msgid "Transform by 2 points"
@@ -9654,6 +9488,9 @@ msgid ""
 "Create a BSpline that molds into the path's corners. This effect is usually "
 "used directly on the canvas with the BSpline mode of the drawing tools."
 msgstr ""
+"Lag en BSpline som former seg etter banens hjørner. Denne effekten brukes "
+"vanligvis direkte i tegnevinduet med BSpline-modusen til ett av "
+"tegneverktøyene."
 
 #: ../src/live_effects/effect.cpp:427
 msgid "Join type"
@@ -9666,15 +9503,16 @@ msgid ""
 "Select among various join types for a object's corner nodes (mitre, rounded, "
 "extrapolated arc, ...)"
 msgstr ""
+"Velg blant ulike sammenføyningstyper for et objekts hjørnenoder (spiss, "
+"avrundet, ekstrapolert bue, …)"
 
 #: ../src/live_effects/effect.cpp:441
-#, fuzzy
 msgid "Taper stroke"
-msgstr "Mønster strøk"
+msgstr "Smalere strek"
 
 #: ../src/live_effects/effect.cpp:445
 msgid "Let the path's ends narrow down to a tip"
-msgstr ""
+msgstr "Gjør banen smalere og smalere til et punkt."
 
 #: ../src/live_effects/effect.cpp:455
 msgid "Mirror symmetry"
@@ -9685,6 +9523,8 @@ msgid ""
 "Mirror an object along a movable axis, or around the page center. The "
 "mirrored copy can be styled independently."
 msgstr ""
+"Speil et objekt langs en flyttbar akse eller rundt sidesentrum. Den "
+"speilvendte kopien kan stiles uavhengig."
 
 #: ../src/live_effects/effect.cpp:469
 msgid "Rotate copies"
@@ -9695,6 +9535,8 @@ msgid ""
 "Create multiple rotated copies of an object, as in a kaleidoscope. The "
 "copies can be styled independently."
 msgstr ""
+"Lag flere roterte kopier av et objekt, som i et kaleidoskop. Kopiene kan "
+"stiles uavhengig."
 
 #: ../src/live_effects/effect.cpp:484
 msgid "Attach path"
@@ -9704,6 +9546,8 @@ msgstr "Sy bane"
 msgid ""
 "Glue the current path's ends to a specific position on one or two other paths"
 msgstr ""
+"Sy sammen den gjeldende banens endepunkter til angitte posisjoner på en "
+"eller to andre baner."
 
 #: ../src/live_effects/effect.cpp:498
 msgid "Fill between strokes"
@@ -9714,6 +9558,8 @@ msgid ""
 "Turn the path into a fill between two other open paths (e.g. between two "
 "paths with PowerStroke applied to them)"
 msgstr ""
+"Gjør om banen til et fyll mellom to andre åpne baner (f.eks. mellom to baner "
+"som har effekten «Variabel strek»)."
 
 #: ../src/live_effects/effect.cpp:512 ../src/selection-chemistry.cpp:2955
 msgid "Fill between many"
@@ -9724,15 +9570,16 @@ msgid ""
 "Turn the path into a fill between multiple other open paths (e.g. between "
 "paths with PowerStroke applied to them)"
 msgstr ""
+"Gjør om banen til et fyll mellom flere andre åpne baner (f.eks. mellom baner "
+"som har effekten «Variabel strek»)."
 
 #: ../src/live_effects/effect.cpp:526
-#, fuzzy
 msgid "Ellipse by 5 points"
-msgstr "Sirkel (etter tre punkt på buen)"
+msgstr "Ellipse fra 5 punkter"
 
 #: ../src/live_effects/effect.cpp:530
 msgid "Create an ellipse from 5 nodes on its circumference"
-msgstr ""
+msgstr "Lag en ellipse fra 5 noder på dens avgrensing"
 
 #: ../src/live_effects/effect.cpp:540
 msgid "Bounding Box"
@@ -9752,6 +9599,8 @@ msgid ""
 "Add dimensioning for distances between nodes, optionally with projection and "
 "many other configuration options"
 msgstr ""
+"Legg til dimensjoner til avstander mellom noder, om ønskelig projisert og "
+"mange andre innstillinger."
 
 #: ../src/live_effects/effect.cpp:569
 msgid "Fillet/Chamfer"
@@ -9772,28 +9621,30 @@ msgid ""
 "Cut, union, subtract, intersect and divide a path non-destructively with "
 "another path"
 msgstr ""
+"Utfør kutt, union, subtraksjon, snitt eller divisjon mellom to baner uten å "
+"ødelegge dem"
 
 #: ../src/live_effects/effect.cpp:597 ../src/live_effects/effect.cpp:601
 msgid "Embroidery stitch"
-msgstr ""
+msgstr "Broderisøm"
 
 #: ../src/live_effects/effect.cpp:611
-#, fuzzy
 msgid "Power clip"
-msgstr "Ny linje"
+msgstr "Avansert beskjæring"
 
 #: ../src/live_effects/effect.cpp:615
 msgid "Invert, hide or flatten a clip (apply like a Boolean operation)"
 msgstr ""
+"Inverter, skjul eller gjør en beskjæring flat (anvend som en boolsk "
+"operasjon)"
 
 #: ../src/live_effects/effect.cpp:625
-#, fuzzy
 msgid "Power mask"
-msgstr "Mønster strøk"
+msgstr "Avansert maske"
 
 #: ../src/live_effects/effect.cpp:629
 msgid "Invert or hide a mask, or use its negative"
-msgstr ""
+msgstr "Inverter eller skjul en maske, eller bruk negativen dens"
 
 #: ../src/live_effects/effect.cpp:639
 msgid "Ellipse from points"
@@ -9802,7 +9653,7 @@ msgstr "Ellipse fra punkter"
 #: ../src/live_effects/effect.cpp:643
 #, fuzzy
 msgid "Draw a circle, ellipse, arc or slice based on the nodes of a path"
-msgstr "Tegn en sirkel, ellipse, bue"
+msgstr "Tegn en sirkel, ellipse, bue eller skive basert på nodene til en bane"
 
 #: ../src/live_effects/effect.cpp:657
 msgid "Offset the path, optionally keeping cusp corners cusp"
@@ -9817,6 +9668,8 @@ msgid ""
 "Add a dashed stroke whose dashes end exactly on a node, optionally with the "
 "same number of dashes per path segment"
 msgstr ""
+"Legg til en stiplet strek der stiplingene slutter nøyaktig i en node, om "
+"ønskelig med samme antall stiplinger per banesegment."
 
 #: ../src/live_effects/effect.cpp:682
 msgid "doEffect stack test"
@@ -9824,7 +9677,7 @@ msgstr ""
 
 #: ../src/live_effects/effect.cpp:686
 msgid "Test LPE"
-msgstr ""
+msgstr "Test baneeffekt"
 
 #: ../src/live_effects/effect.cpp:696
 msgid "Angle bisector"
@@ -9969,7 +9822,7 @@ msgstr "Ingen effekt"
 #: ../src/live_effects/effect.cpp:1304
 #, c-format
 msgid "Please specify a parameter path for the LPE '%s' with %d mouse clicks"
-msgstr ""
+msgstr "Velg en parameterbane for baneeffekten «%s» med %d museklikk"
 
 #: ../src/live_effects/effect.cpp:1554 ../src/live_effects/effect.cpp:1633
 msgid "<b>Default value:</b> "
@@ -10280,7 +10133,7 @@ msgstr "Lenket bane:"
 #: ../src/live_effects/lpe-bounding-box.cpp:20
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:20
 msgid "Path from which to take the original path data"
-msgstr "Hent original banedata fra denne banen."
+msgstr "Hent originale banedata fra denne banen."
 
 #: ../src/live_effects/lpe-bounding-box.cpp:21
 msgid "Visual Bounds"
@@ -10361,12 +10214,12 @@ msgstr "Ingen figur"
 #: ../src/live_effects/lpe-clone-original.cpp:34
 #: ../src/live_effects/lpe-fill-between-many.cpp:29
 msgid "With LPE's"
-msgstr ""
+msgstr "Med baneeffekter"
 
 #: ../src/live_effects/lpe-clone-original.cpp:35
 #: ../src/live_effects/lpe-fill-between-many.cpp:27
 msgid "Without LPE's"
-msgstr ""
+msgstr "Uten baneeffekter"
 
 #: ../src/live_effects/lpe-clone-original.cpp:36
 msgid "Spiro or BSpline Only"
@@ -10433,7 +10286,7 @@ msgstr "Utskjøvet sti"
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:43
 #: ../src/live_effects/lpe-pts2ellipse.cpp:53
 msgid "Method:"
-msgstr "Måte:"
+msgstr "Metode:"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:64
 msgid "Rotate methods"
@@ -10961,17 +10814,16 @@ msgid "With Spiro or BSpline"
 msgstr "Med spiro eller B-spline"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:35
-#, fuzzy
 msgid "Paths from which to take the original path data"
-msgstr "Sti som orginalstien skal bøyes langs"
+msgstr "Hent originale banedata fra disse banene"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:36
 msgid "LPE's on linked:"
-msgstr ""
+msgstr "Baneeffekter på lenket:"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:36
 msgid "LPE's on linked"
-msgstr ""
+msgstr "Baneeffekter på lenket"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:37
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:23
@@ -12757,9 +12609,8 @@ msgid "Zero width"
 msgstr "Ingen tykkelse"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:36
-#, fuzzy
 msgid "Auto ellipse"
-msgstr "Lag ellipse"
+msgstr "Auto-ellipse"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:37
 msgid "Force circle"
@@ -12770,19 +12621,16 @@ msgid "Isometric circle"
 msgstr "Isometrisk sirkel"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:40
-#, fuzzy
 msgid "Perspective circle"
-msgstr "Nærvær"
+msgstr "Sirkel i perspektiv"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:43
-#, fuzzy
 msgid "Steiner ellipse"
-msgstr "Lag ellipse"
+msgstr "Steiners omskrevne ellipse"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:45
-#, fuzzy
 msgid "Steiner inellipse"
-msgstr "Lag ellipse"
+msgstr "Steiners innskrevne ellipse"
 
 #
 # File: ../src/live_effects/lpe-pts2ellipse.cpp, line: 54
@@ -12797,21 +12645,28 @@ msgid ""
 "- Steiner ellipse: (3 points) ellipse on a triangle\n"
 "- Steiner inellipse: (3 points) ellipse inside a triangle"
 msgstr ""
+"Metoder som kan danne en ellipse:\n"
+"– Auto-ellipse: Tilpasser en sirkel (2–4 punkter) eller en ellipse (minst 5 "
+"punkter).\n"
+"– Tving sirkel: (Minst 2 punkter). Tilpass alltid en sirkel.\n"
+"– Isometrisk sirkel: (3 punkter). Bruk de første to kantene.\n"
+"– Sirkel i perspektiv: (4 punkter). Sirkel i et kvadrat vist perspektivisk.\n"
+"– Steiners omskrevne ellipse: (3 punkter). Ellipse som omskriver en "
+"trekant.\n"
+"– Steiners innskrevne ellipse: (3 punkter). Ellipse som innskriver en "
+"trekant."
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:59
-#, fuzzy
 msgid "_Frame (isometric rectangle)"
-msgstr "Lag rektangel"
+msgstr "_Ramme (isometrisk rektangel)"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:59
-#, fuzzy
 msgid "Draw parallelogram around the ellipse"
-msgstr "Lag ellipse"
+msgstr "Tegn parallellogram rundt ellipsen."
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:62
-#, fuzzy
 msgid "_Perspective square"
-msgstr "Perspektivsti"
+msgstr "_Kvadrat i perspektiv"
 
 #
 # File: ../src/live_effects/lpe-pts2ellipse.cpp, line: 63
@@ -12820,6 +12675,8 @@ msgid ""
 "Draw square surrounding the circle in perspective view\n"
 "(only in method \"Perspective circle\")"
 msgstr ""
+"Tegn et kvadrat som omslutter sirkelen, vist perspektivisk.\n"
+"(Gjelder kun metoden «Sirkel i perspektiv»)."
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:65
 msgid "_Arc"
@@ -12832,26 +12689,24 @@ msgid ""
 "Generate open arc (open ellipse) based on first and last point\n"
 "(only for methods \"Auto ellipse\" and \"Force circle\")"
 msgstr ""
+"Dann åpen bue (åpen ellipse) basert på første og siste punkt.\n"
+"(Gjelder kun metodene «Auto-ellipse» og «Tving sirkel»)."
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:69
-#, fuzzy
 msgid "_Other arc side"
-msgstr "Attributt"
+msgstr "M_otsatt side av buen"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:69
-#, fuzzy
 msgid "Switch sides of the arc"
-msgstr "Bredde i piksler av det uklare området"
+msgstr "Lag buen på motsatt side."
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:70
-#, fuzzy
 msgid "_Slice arc"
-msgstr "Spredning"
+msgstr "_Skive"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:70
-#, fuzzy
 msgid "Slice the arc"
-msgstr "Utfør avtegningen"
+msgstr "Gjør buen til en skive."
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:71
 msgid "A_xes"
@@ -12859,12 +12714,11 @@ msgstr "A_kser"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:71
 msgid "Draw both semi-major and semi-minor axes"
-msgstr ""
+msgstr "Tegn både de store og lille halvaksene."
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:72
-#, fuzzy
 msgid "Perspective axes"
-msgstr "Nærvær"
+msgstr "Akser i perspektiv"
 
 #
 # File: ../src/live_effects/lpe-pts2ellipse.cpp, line: 73
@@ -12873,26 +12727,24 @@ msgid ""
 "Draw the axes in perspective view\n"
 "(only in method \"Perspective circle\")"
 msgstr ""
+"Tegn aksene perspektivisk.\n"
+"(Gjelder kun metoden «Sirkel i perspektiv»)."
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:75
-#, fuzzy
 msgid "Axes rotation"
-msgstr "_Rotasjon"
+msgstr "Akserotasjon"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:75
-#, fuzzy
 msgid "Axes rotation angle [deg]"
-msgstr "Startverdi x"
+msgstr "Akserotasjon [grader]"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:76
-#, fuzzy
 msgid "Source _path"
-msgstr "Kildens bredde"
+msgstr "Kilde_bane"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:76
-#, fuzzy
 msgid "Show the original source path"
-msgstr "Bytt tekst"
+msgstr "Vis originalbanen"
 
 #: ../src/live_effects/lpe-recursiveskeleton.cpp:26
 msgid "Iterations:"
@@ -13274,7 +13126,7 @@ msgstr "Hovedsteg"
 
 #: ../src/live_effects/lpe-ruler.cpp:43
 msgid "Draw a major mark every ... steps"
-msgstr "Tegn et hovedmerke hvert ... steg"
+msgstr "Tegn et hovedmerke hvert … steg"
 
 #: ../src/live_effects/lpe-ruler.cpp:44
 #, fuzzy
@@ -13627,9 +13479,8 @@ msgid "End point of the taper"
 msgstr "Bredde på mønsteret"
 
 #: ../src/live_effects/lpe-test-doEffect-stack.cpp:19
-#, fuzzy
 msgid "Stack step:"
-msgstr "Stabelsteg"
+msgstr "Stablingssteg:"
 
 #: ../src/live_effects/lpe-test-doEffect-stack.cpp:20
 #, fuzzy
@@ -13869,9 +13720,8 @@ msgstr "Koble «itemarray»-parameteren til elementet"
 #: ../src/live_effects/parameter/originalpath.cpp:64
 #: ../src/live_effects/parameter/originalpatharray.cpp:187
 #: ../src/live_effects/parameter/path.cpp:256
-#, fuzzy
 msgid "Link to path in clipboard"
-msgstr "Ingenting i utklippstavlen."
+msgstr "Lenk til bane på utklippstavla"
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:89
 #: ../src/ui/toolbar/gradient-toolbar.cpp:440
@@ -14779,9 +14629,8 @@ msgid "Lower to bottom"
 msgstr "Senk til bunnen"
 
 #: ../src/selection-chemistry.cpp:1159
-#, fuzzy
 msgid "Select <b>object(s)</b> to stack up."
-msgstr "Velg hvilke(t) <b>objekt(er)</b> som skal løftes til toppen."
+msgstr "Velg hvilke(t) <b>objekt(er)</b> som skal opp i stabelen."
 
 #: ../src/selection-chemistry.cpp:1170
 msgid "We hit top."
@@ -14789,15 +14638,13 @@ msgstr "Traff toppen."
 
 #. TRANSLATORS: undo history: "stack up" means to raise an object of its ordinal position by 1
 #: ../src/selection-chemistry.cpp:1178
-#, fuzzy
 msgctxt "Undo action"
 msgid "stack up"
-msgstr "Tilbak_estill"
+msgstr "opp i stabel"
 
 #: ../src/selection-chemistry.cpp:1183
-#, fuzzy
 msgid "Select <b>object(s)</b> to stack down."
-msgstr "Velg hvilke(t) <b>objekt(er)</b> som skal kombineres."
+msgstr "Velg hvilke(t) <b>objekt(er)</b> som skal ned i stabelen."
 
 #: ../src/selection-chemistry.cpp:1194
 msgid "We hit bottom."
@@ -14805,10 +14652,9 @@ msgstr "Traff bunnen."
 
 #. TRANSLATORS: undo history: "stack down" means to lower an object of its ordinal position by 1
 #: ../src/selection-chemistry.cpp:1202
-#, fuzzy
 msgctxt "Undo action"
 msgid "stack down"
-msgstr "Tilbak_estill"
+msgstr "ned i stabel"
 
 #: ../src/selection-chemistry.cpp:1212
 msgid "Nothing to undo."
@@ -14828,15 +14674,15 @@ msgstr "Lim inn stil"
 
 #: ../src/selection-chemistry.cpp:1312
 msgid "Paste live path effect"
-msgstr "Lim inn sanntids baneeffekt"
+msgstr "Lim inn baneeffekt"
 
 #: ../src/selection-chemistry.cpp:1332
 msgid "Select <b>object(s)</b> to remove live path effects from."
-msgstr "Velg <b>objekt(er)</b> som sanntids baneeffekter skal fjernes fra."
+msgstr "Velg <b>objekt(er)</b> som baneeffekter skal fjernes fra."
 
 #: ../src/selection-chemistry.cpp:1345
 msgid "Remove live path effect"
-msgstr "Fjern sanntids baneeffekt"
+msgstr "Fjern baneeffekt"
 
 #: ../src/selection-chemistry.cpp:1354
 msgid "Select <b>object(s)</b> to remove filters from."
@@ -14939,7 +14785,7 @@ msgstr "Flytt vannrett et antall piksler"
 
 #: ../src/selection-chemistry.cpp:2548
 msgid "The selection has no applied path effect."
-msgstr "Utvalget har ingen anvendte baneeffekter"
+msgstr "Utvalget har ingen anvendte baneeffekter."
 
 #: ../src/selection-chemistry.cpp:2606 ../src/ui/dialog/clonetiler.cpp:2086
 msgid "Select an <b>object</b> to clone."
@@ -15632,9 +15478,8 @@ msgid "No size on the clipboard."
 msgstr "Utklippstavla har ingen størrelser."
 
 #: ../src/ui/clipboard.cpp:563
-#, fuzzy
 msgid "Select <b>object(s)</b> to paste live path effect to."
-msgstr "Velg <b>objekt(er)</b> som størrelse skal limes til."
+msgstr "Velg <b>objekt(er)</b> som skal få innlimt baneeffekt."
 
 #: ../src/ui/clipboard.cpp:589
 msgid "No effect on the clipboard."
@@ -15921,9 +15766,8 @@ msgid "Arrange connector network"
 msgstr "Ordne valgte koplingsnettverk"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:637
-#, fuzzy
 msgid "Exchange Positions"
-msgstr "Tilfeldiggjør posisjoner"
+msgstr "Bytt om posisjoner"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:672
 msgid "Unclump"
@@ -16060,15 +15904,15 @@ msgstr "Pyntlig ordne valgte koplings nettverk"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1028
 msgid "Exchange positions of selected objects - selection order"
-msgstr ""
+msgstr "Bytt om posisjoner til valgte objekter – utvalgsrekkefølge"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1031
 msgid "Exchange positions of selected objects - stacking order"
-msgstr ""
+msgstr "Bytt om posisjoner til valgte objekter – stablingsrekkefølge"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1034
 msgid "Exchange positions of selected objects - clockwise rotate"
-msgstr ""
+msgstr "Bytt om posisjoner til valgte objekter – roter med klokka"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1039
 msgid "Randomize centers in both dimensions"
@@ -16171,7 +16015,7 @@ msgstr "Verdi"
 
 #: ../src/ui/dialog/attrdialog.cpp:155
 msgid "Shift+Return new line"
-msgstr ""
+msgstr "Shift + Enter ny linje"
 
 #: ../src/ui/dialog/attrdialog.cpp:358
 msgid "<b>Click</b> attribute to edit."
@@ -16394,11 +16238,11 @@ msgstr "<small>Ekskluder flis:</small>"
 
 #: ../src/ui/dialog/clonetiler.cpp:301
 msgid "Exclude tile height in shift"
-msgstr ""
+msgstr "Utelat flishøyde i forskyvning"
 
 #: ../src/ui/dialog/clonetiler.cpp:306
 msgid "Exclude tile width in shift"
-msgstr ""
+msgstr "Utelat flisbredde i forskyvning"
 
 #: ../src/ui/dialog/clonetiler.cpp:315
 msgid "Sc_ale"
@@ -16650,9 +16494,8 @@ msgid "_Trace"
 msgstr "_Tegn av"
 
 #: ../src/ui/dialog/clonetiler.cpp:784
-#, fuzzy
 msgid "Trace the drawing under the clones/sprayed items"
-msgstr "Tegn av tegningen under flisene"
+msgstr "Tegn av tegningen under klonene/de sprayede elementene"
 
 #: ../src/ui/dialog/clonetiler.cpp:788
 #, fuzzy
@@ -16928,7 +16771,7 @@ msgstr ""
 
 #: ../src/ui/dialog/clonetiler.cpp:2100
 msgid "<small>Creating tiled clones...</small>"
-msgstr "<small>Lager flislagte kloner ...</small>"
+msgstr "<small>Lager flislagte kloner …</small>"
 
 #: ../src/ui/dialog/clonetiler.cpp:2516
 msgid "Create tiled clones"
@@ -17530,10 +17373,12 @@ msgid ""
 "Enables ADAM7 interlacing for PNG output. This results in slightly heavier "
 "images, but big images will look better sooner when loading the file"
 msgstr ""
+"Slår på ADAM7-linjefletting når PNG-filer skrives. Dette gir litt økt "
+"filstørrelse, men store bilder vil raskere se bra ut mens fila lastes."
 
 #: ../src/ui/dialog/export.cpp:171
 msgid "Once the export completes, close this dialog"
-msgstr ""
+msgstr "Lukk dette vinduet så snart eksporten er ferdig"
 
 #: ../src/ui/dialog/export.cpp:178
 msgid "<b>Export area</b>"
@@ -17601,13 +17446,15 @@ msgstr "Eksporter punktgrafikk bilde med disse instillingene"
 
 #: ../src/ui/dialog/export.cpp:331
 msgid "Advanced"
-msgstr ""
+msgstr "Avansert"
 
 #: ../src/ui/dialog/export.cpp:346
 msgid ""
 "Will force-set the physical dpi for the png file. Set this to 72 if you're "
 "planning to work on your png with Photoshop"
 msgstr ""
+"Dette vil tvinge PNG-filens fysiske DPI. Sett denne til 72 hvis du skal "
+"bruke den i Photoshop."
 
 #: ../src/ui/dialog/export.cpp:492
 msgid "bitmap"
@@ -17650,7 +17497,7 @@ msgstr "Klarte ikke eksportere til filnavnet <b>%s</b>."
 #: ../src/ui/dialog/export.cpp:1079
 #, c-format
 msgid "Successfully exported <b>%d</b> files from <b>%d</b> selected items."
-msgstr ""
+msgstr "Eksporterte <b>%d</b> filer fra <b>%d</b> valgte elementer."
 
 #: ../src/ui/dialog/export.cpp:1090
 msgid "You have to enter a filename."
@@ -20217,9 +20064,8 @@ msgid "If on, connector attachment points will not be shown for text objects"
 msgstr "Hvis på, bindepunkt forbindelsene vil ikke bli vist for tekst objekter"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:546
-#, fuzzy
 msgid "LPE Tool"
-msgstr "Verktøy"
+msgstr "Baneeffekt-verktøy"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:867
 #: ../src/ui/dialog/inkscape-preferences.cpp:1155
@@ -24067,7 +23913,7 @@ msgstr "Ikke i ordlista: <b>%s</b>"
 
 #: ../src/ui/dialog/spellcheck.cpp:665
 msgid "<i>Checking...</i>"
-msgstr "<b>Sjekker ...</b>"
+msgstr "<b>Sjekker …</b>"
 
 #: ../src/ui/dialog/spellcheck.cpp:734
 msgid "Fix spelling"
@@ -24370,7 +24216,7 @@ msgstr "Velg strek"
 
 #: ../src/ui/dialog/swatches.cpp:292
 msgid "Edit..."
-msgstr "Rediger ..."
+msgstr "Rediger …"
 
 #: ../src/ui/dialog/swatches.cpp:304
 msgid "Convert"
@@ -25290,7 +25136,7 @@ msgstr "<b>Shift + Ctrl</b>: Stegroter %g° om gangen, og roter begge håndtak."
 #: ../src/ui/tool/node.cpp:580
 msgctxt "Path handle tip"
 msgid "<b>Ctrl</b>: Snap handle to steps defined in BSpline Live Path Effect"
-msgstr "<b>Ctrl</b>: Fest til steg definert i BSpline-sanntidsbaneeffekt."
+msgstr "<b>Ctrl</b>: Fest til steg definert i BSpline-baneeffekt."
 
 #: ../src/ui/tool/node.cpp:585
 #, c-format
@@ -26340,11 +26186,11 @@ msgstr "Vis måleinformasjon for utvalgte elementer"
 
 #: ../src/ui/toolbar/lpe-toolbar.cpp:164
 msgid "Open LPE dialog"
-msgstr ""
+msgstr "Åpne baneeffektvindu"
 
 #: ../src/ui/toolbar/lpe-toolbar.cpp:165
 msgid "Open LPE dialog (to adapt parameters numerically)"
-msgstr ""
+msgstr "Åpne baneeffektvindu (for å tilpasse parametrene numerisk)"
 
 #: ../src/ui/toolbar/measure-toolbar.cpp:81
 msgid "Font Size:"
@@ -26844,7 +26690,7 @@ msgstr ""
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:165
 msgid "LPE based interactive simplify"
-msgstr ""
+msgstr "Baneeffektbasert interaktiv forenkling"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:173
 #: ../src/ui/toolbar/pencil-toolbar.cpp:174
@@ -29037,7 +28883,7 @@ msgstr "Lag rektangel"
 #: ../src/ui/tools/select-tool.cpp:157
 msgid "Click selection to toggle scale/rotation handles (or Shift+s)"
 msgstr ""
-"Klikk utvalget for slå av/på skalerings-/rotasjonshåndtak (eller Shift + S)."
+"Klikk utvalget for å slå av/på skalerings-/rotasjonshåndtak (eller Shift + S)"
 
 #: ../src/ui/tools/select-tool.cpp:158
 msgid ""
@@ -30200,7 +30046,7 @@ msgstr "Velg visningsboks"
 
 #: ../src/ui/widget/preferences-widget.cpp:756
 msgid "_Browse..."
-msgstr "_Bla gjennom ..."
+msgstr "_Bla gjennom …"
 
 #: ../src/ui/widget/preferences-widget.cpp:842
 msgid "Select a bitmap editor"
@@ -30878,7 +30724,7 @@ msgstr "Opprett nytt dokument fra standard mal"
 
 #: ../src/verbs.cpp:2513
 msgid "_Open..."
-msgstr "_Åpne..."
+msgstr "_Åpne …"
 
 #: ../src/verbs.cpp:2513
 msgid "Open an existing document"
@@ -30908,7 +30754,7 @@ msgstr "Lagre dokument med nytt navn"
 
 #: ../src/verbs.cpp:2521
 msgid "Save a Cop_y..."
-msgstr "La_gre kopi ..."
+msgstr "La_gre kopi …"
 
 #: ../src/verbs.cpp:2522
 msgid "Save a copy of the document under a new name"
@@ -30924,7 +30770,7 @@ msgstr "Lagre en kopi av dokumentet som mal"
 
 #: ../src/verbs.cpp:2525
 msgid "_Print..."
-msgstr "Skri_v ut..."
+msgstr "Skri_v ut …"
 
 #: ../src/verbs.cpp:2525
 msgid "Print document"
@@ -30944,7 +30790,7 @@ msgstr ""
 
 #: ../src/verbs.cpp:2532
 msgid "_Import..."
-msgstr "_Importer ..."
+msgstr "_Importer …"
 
 #: ../src/verbs.cpp:2533
 msgid "Import a bitmap or SVG image into this document"
@@ -31111,7 +30957,7 @@ msgstr "Lim inn baneeffekt"
 
 #: ../src/verbs.cpp:2576
 msgid "Apply the path effect of the copied object to selection"
-msgstr "Bruk baneeffekten til det kopierte objektet på utvalget."
+msgstr "Bruk baneeffekten til det kopierte objektet på utvalget"
 
 #: ../src/verbs.cpp:2577
 msgid "Remove Path _Effect"
@@ -31184,15 +31030,16 @@ msgid "Select the object to which the selected clone is linked"
 msgstr "Velg objektet som den valgte klonen er koblet til"
 
 #: ../src/verbs.cpp:2597
-#, fuzzy
 msgid "Clone original path (LPE)"
-msgstr "Bytt tekst"
+msgstr "Klon originalbane (baneeffekt)"
 
 #: ../src/verbs.cpp:2598
 msgid ""
 "Creates a new path, applies the Clone original LPE, and refers it to the "
 "selected path"
 msgstr ""
+"Oppretter en ny bane, bruker baneeffekten «Klon originalbane» og henviser "
+"den til valgt bane"
 
 #: ../src/verbs.cpp:2599
 msgid "Objects to _Marker"
@@ -31416,24 +31263,20 @@ msgid "Lower selection one step"
 msgstr "Senk valgte objekter ett nivå"
 
 #: ../src/verbs.cpp:2666
-#, fuzzy
 msgid "_Stack up"
-msgstr "Stabelsteg"
+msgstr "_Opp i stabel"
 
 #: ../src/verbs.cpp:2667
-#, fuzzy
 msgid "Stack selection one step up"
-msgstr "Hev valgte objekter et nivå"
+msgstr "Hev utvalget ett trinn opp i stabelen"
 
 #: ../src/verbs.cpp:2668
-#, fuzzy
 msgid "_Stack down"
-msgstr "Bak_grunn:"
+msgstr "_Ned i stabel"
 
 #: ../src/verbs.cpp:2669
-#, fuzzy
 msgid "Stack selection one step down"
-msgstr "Hev valgte objekter et nivå"
+msgstr "Senk utvalget ett trinn ned i stabelen"
 
 #: ../src/verbs.cpp:2672
 msgid "Group selected objects"
@@ -32215,10 +32058,9 @@ msgid "Erase existing paths"
 msgstr "Visk ut eksisterende baner"
 
 #: ../src/verbs.cpp:2892
-#, fuzzy
 msgctxt "ContextVerb"
 msgid "LPE Tool"
-msgstr "Verktøy"
+msgstr "Baneeffektverktøy"
 
 #: ../src/verbs.cpp:2893
 msgid "Do geometric constructions"
@@ -32393,9 +32235,8 @@ msgid "Open Preferences for the Eraser tool"
 msgstr "Åpne oppsettdialogen til viskelærverktøyet."
 
 #: ../src/verbs.cpp:2937
-#, fuzzy
 msgid "LPE Tool Preferences"
-msgstr "Node verktøy innstillinger"
+msgstr "Oppsett av baneeffektverktøyet"
 
 #: ../src/verbs.cpp:2938
 #, fuzzy
@@ -32814,7 +32655,7 @@ msgstr "Velg malingskilde fra en samling"
 
 #: ../src/verbs.cpp:3065
 msgid "Transfor_m..."
-msgstr "O_mform ..."
+msgstr "O_mform …"
 
 #: ../src/verbs.cpp:3066
 msgid "Precisely control objects' transformations"
@@ -33103,7 +32944,7 @@ msgstr "Gjenta forrige utvidelse med samme innstillinger."
 
 #: ../src/verbs.cpp:3151
 msgid "_Previous Extension Settings..."
-msgstr "Forrige utvidelse-_innstillinger …"
+msgstr "Forrige utvidelses _innstillinger …"
 
 #: ../src/verbs.cpp:3152
 msgid "Repeat the last extension with new settings"
@@ -34561,9 +34402,8 @@ msgid "Please enter a replacement font in the replace all box."
 msgstr "Angi en erstatningsskrift i «Erstatt alle»-boksen."
 
 #: ../share/extensions/restack.py:65
-#, fuzzy
 msgid "There is no selection to restack."
-msgstr "Hev valgte objekter til toppen"
+msgstr "Det er ikke valgt noe som kan omstables."
 
 #: ../share/extensions/summersnight.py:28
 msgid ""
@@ -35544,7 +35384,7 @@ msgstr "3,5\" × 2\" (USA, Kanada)"
 # File: ../share/extensions/empty_business_card.inx, line: 22
 #: ../share/extensions/empty_business_card.inx:22
 msgid "Business Card..."
-msgstr "Visittkord …"
+msgstr "Visittkort …"
 
 #
 # File: ../share/extensions/empty_business_card.inx, line: 24
@@ -40948,19 +40788,16 @@ msgid "Selected objects only"
 msgstr "Kun valgte objekter"
 
 #: ../share/extensions/restack.inx:3
-#, fuzzy
 msgid "Restack"
-msgstr "Tilbak_estill"
+msgstr "Omstable"
 
 #: ../share/extensions/restack.inx:7
-#, fuzzy
 msgid "Based on Position"
-msgstr "Posisjon:"
+msgstr "Basert på posisjon"
 
 #: ../share/extensions/restack.inx:8
-#, fuzzy
 msgid "Restack Direction"
-msgstr "Beskrivelse"
+msgstr "Omstablingsrekkefølge"
 
 #: ../share/extensions/restack.inx:10
 msgid "Presets"
@@ -41024,9 +40861,8 @@ msgid "Based on Z-Order"
 msgstr "Basert på z-rekkefølge"
 
 #: ../share/extensions/restack.inx:37
-#, fuzzy
 msgid "Restack Mode"
-msgstr "Tilbak_estill"
+msgstr "Omstablingsmodus"
 
 #: ../share/extensions/restack.inx:39
 msgid "Reverse Z-Order"
@@ -41043,6 +40879,10 @@ msgid ""
 "objects inside a single selected group, or a selection of multiple objects "
 "on the current drawing level (layer or group)."
 msgstr ""
+"Denne utvidelsen endrer z-rekkefølgen til objekter basert på deres posisjon "
+"i tegnevinduet eller deres gjeldende z-rekkefølge. Utvidelsen omstabler "
+"enten objekter inni en særskilt valgt gruppe, eller et utvalg av flere "
+"objekter i gjeldende tegnenivå (lag eller gruppe)."
 
 #: ../share/extensions/restack.inx:53 ../share/extensions/ungroup_deep.inx:13
 msgid "Arrange"
@@ -41053,9 +40893,8 @@ msgid "Random Tree"
 msgstr "Tilfeldig tre"
 
 #: ../share/extensions/rtree.inx:6
-#, fuzzy
 msgid "Initial size:"
-msgstr "Innledende størrelse"
+msgstr "Startstørrelse:"
 
 #: ../share/extensions/rtree.inx:7
 msgid "Minimum size:"
