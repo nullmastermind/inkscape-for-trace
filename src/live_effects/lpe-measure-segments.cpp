@@ -310,7 +310,7 @@ LPEMeasureSegments::on_my_switch_page(Gtk::Widget* page, guint page_number)
 void
 LPEMeasureSegments::createArrowMarker(Glib::ustring mode)
 {
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    SPDocument *document = getSPDoc();
     if (!document || !sp_lpe_item|| !sp_lpe_item->getId()) {
         return;
     }
@@ -380,7 +380,7 @@ LPEMeasureSegments::createArrowMarker(Glib::ustring mode)
 void
 LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double length, Geom::Coord angle, bool remove, bool valid)
 {
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    SPDocument *document = getSPDoc();
     if (!document || !sp_lpe_item || !sp_lpe_item->getId()) {
         return;
     }
@@ -528,7 +528,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
 void
 LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, Glib::ustring name, size_t counter, bool main, bool remove, bool arrows)
 {
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    SPDocument *document = getSPDoc();
     if (!document || !sp_lpe_item || !sp_lpe_item->getId()) {
         return;
     }
@@ -651,12 +651,12 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
         item->removeCurrentPathEffect(false);
         return;
     }
-    SPDocument *document = SP_ACTIVE_DOCUMENT;
+    SPDocument *document = getSPDoc();
     bool saved = DocumentUndo::getUndoSensitive(document);
     DocumentUndo::setUndoSensitive(document, false);
     Inkscape::XML::Node *styleNode = nullptr;
     Inkscape::XML::Node* textNode = nullptr;
-    Inkscape::XML::Node *root = SP_ACTIVE_DOCUMENT->getReprRoot();
+    Inkscape::XML::Node *root = document->getReprRoot();
     for (unsigned i = 0; i < root->childCount(); ++i) {
         if (Glib::ustring(root->nthChild(i)->name()) == "svg:style") {
 
@@ -671,7 +671,7 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
             if (textNode == nullptr) {
                 // Style element found but does not contain text node!
                 std::cerr << "StyleDialog::_getStyleTextNode(): No text node!" << std::endl;
-                textNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
+                textNode = document->getReprDoc()->createTextNode("");
                 styleNode->appendChild(textNode);
                 Inkscape::GC::release(textNode);
             }
@@ -680,8 +680,8 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
 
     if (styleNode == nullptr) {
         // Style element not found, create one
-        styleNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createElement("svg:style");
-        textNode  = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
+        styleNode = document->getReprDoc()->createElement("svg:style");
+        textNode = document->getReprDoc()->createTextNode("");
         root->addChild(styleNode, nullptr);
         Inkscape::GC::release(styleNode);
 
@@ -819,16 +819,12 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
     Glib::ustring lpobjid = this->lpeobj->getId();
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    SPDocument *document = getSPDoc();
     if (!document) {
         return;
     }
     //Avoid crashes on previews
-    Inkscape::XML::Node *root = splpeitem->document->getReprRoot();
-    Inkscape::XML::Node *root_origin = document->getReprRoot();
-    if (root_origin != root) {
-        return;
-    }
+    Inkscape::XML::Node *root = document->getReprRoot();
     Geom::Affine parentaffinetransform = i2anc_affine(SP_OBJECT(lpeitem->parent), SP_OBJECT(document->getRoot()));
     Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(document->getRoot()));
     Geom::Affine itemtransform = affinetransform * parentaffinetransform.inverse();

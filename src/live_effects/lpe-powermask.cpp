@@ -125,15 +125,11 @@ void
 LPEPowerMask::setMask(){
     SPMask *mask = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
     SPObject *elemref = nullptr;
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    SPDocument *document = getSPDoc();
     if (!document || !mask) {
         return;
     }
-    Inkscape::XML::Node *root = sp_lpe_item->document->getReprRoot();
-    Inkscape::XML::Node *root_origin = document->getReprRoot();
-    if (root_origin != root) {
-        return;
-    }
+    Inkscape::XML::Node *root = document->getReprRoot();
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     Inkscape::XML::Node *box = nullptr;
     Inkscape::XML::Node *filter = nullptr;
@@ -314,7 +310,7 @@ LPEPowerMask::doOnRemove (SPLPEItem const* lpeitem)
             background.param_setValue(false);
             setMask();
             SPObject *elemref = nullptr;
-            SPDocument * document = SP_ACTIVE_DOCUMENT;
+            SPDocument *document = getSPDoc();
             Glib::ustring mask_id = (Glib::ustring)mask->getId();
             Glib::ustring filter_id = mask_id + (Glib::ustring)"_inverse";
             if ((elemref = document->getObjectById(filter_id))) {

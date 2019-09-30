@@ -96,7 +96,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
         Satellites satellites;
         double power = radius;
         if (!flexible) {
-            SPDocument * document = SP_ACTIVE_DOCUMENT;
+            SPDocument *document = getSPDoc();
             Glib::ustring display_unit = document->getDisplayUnit()->abbr.c_str();
             power = Inkscape::Util::Quantity::convert(power, unit.get_abbreviation(), display_unit.c_str());
         }
@@ -250,7 +250,7 @@ void LPEFilletChamfer::updateAmount()
     setSelected(_pathvector_satellites);
     double power = radius;
     if (!flexible) {
-        SPDocument * document = SP_ACTIVE_DOCUMENT;
+        SPDocument *document = getSPDoc();
         Glib::ustring display_unit = document->getDisplayUnit()->abbr.c_str();
         power = Inkscape::Util::Quantity::convert(power, unit.get_abbreviation(), display_unit.c_str());
     }
@@ -315,7 +315,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             if (number_nodes != previous_number_nodes) {
                 double power = radius;
                 if (!flexible) {
-                    SPDocument * document = SP_ACTIVE_DOCUMENT;
+                    SPDocument *document = getSPDoc();
                     Glib::ustring display_unit = document->getDisplayUnit()->abbr.c_str();
                     power = Inkscape::Util::Quantity::convert(power, unit.get_abbreviation(), display_unit.c_str());
                 }

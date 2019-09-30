@@ -137,7 +137,7 @@ LPEPowerClip::doAfterEffect (SPLPEItem const* lpeitem){
 void
 LPEPowerClip::addInverse (SPItem * clip_data, SPCurve * clipcurve, Geom::Affine affine, bool root){
     gchar * is_inverse_str = is_inverse.param_getSVGValue();
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    SPDocument *document = getSPDoc();
     if (!document) {
         return;
     }
@@ -200,7 +200,7 @@ LPEPowerClip::addInverse (SPItem * clip_data, SPCurve * clipcurve, Geom::Affine 
 
 void
 LPEPowerClip::updateInverse (SPItem * clip_data) {
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    SPDocument *document = getSPDoc();
     if (!document) {
         return;
     }
@@ -239,7 +239,7 @@ LPEPowerClip::updateInverse (SPItem * clip_data) {
 
 void
 LPEPowerClip::removeInverse (SPItem * clip_data){
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    SPDocument *document = getSPDoc();
     if (!document) {
         return;
     }
@@ -295,7 +295,7 @@ LPEPowerClip::doEffect_path(Geom::PathVector const & path_in){
     SPClipPath *clip_path = SP_ITEM(sp_lpe_item)->clip_ref->getObject();
     if (!hide_clip && flatten && isVisible()) {
         path_out *= sp_item_transform_repr (sp_lpe_item).inverse();
-        SPDocument * document = SP_ACTIVE_DOCUMENT;
+        SPDocument *document = getSPDoc();
         if (!document) {
             return path_out;
         }

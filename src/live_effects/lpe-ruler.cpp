@@ -77,7 +77,7 @@ LPERuler::ruler_mark(Geom::Point const &A, Geom::Point const &n, MarkType const 
     using namespace Geom;
 
     double real_mark_length = mark_length;
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    SPDocument *document = getSPDoc();
     if (document) {
         real_mark_length = Inkscape::Util::Quantity::convert(real_mark_length, unit.get_abbreviation(), document->getDisplayUnit()->abbr.c_str());
     }
@@ -133,7 +133,7 @@ LPERuler::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_i
     std::vector<double> s_cuts;
 
     double real_mark_distance = mark_distance;
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    SPDocument *document = getSPDoc();
     if (document) {
         real_mark_distance = Inkscape::Util::Quantity::convert(real_mark_distance, unit.get_abbreviation(), document->getDisplayUnit()->abbr.c_str());
     }  

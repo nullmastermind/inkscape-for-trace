@@ -115,7 +115,7 @@ ColorPickerParam::param_newWidget()
                                                         *param_wr,
                                                          param_effect->getRepr(),
                                                          param_effect->getSPDoc() );
-    SPDocument *document = SP_ACTIVE_DOCUMENT;
+    SPDocument *document = param_effect->getSPDoc();
     bool saved = DocumentUndo::getUndoSensitive(document);
     DocumentUndo::setUndoSensitive(document, false);
     colorpickerwdg->setRgba32(value);

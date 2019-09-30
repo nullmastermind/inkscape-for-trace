@@ -127,7 +127,7 @@ LPECloneOriginal::newWidget()
 void
 LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar * attributes, const gchar * css_properties) 
 {
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    SPDocument *document = getSPDoc();
     if (!document || !origin || !dest) {
         return;
     }
@@ -282,7 +282,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const gchar *
 void
 LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
     start_listening();
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    SPDocument *document = getSPDoc();
     if (!document) {
         return;
     }

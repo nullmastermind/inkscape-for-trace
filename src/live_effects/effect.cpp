@@ -1177,7 +1177,7 @@ Effect::isNodePointSelected(Geom::Point const &nodePoint) const
 void
 Effect::processObjects(LPEAction lpe_action)
 {
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    SPDocument *document = getSPDoc();
     if (!document) {
         return;
     }

@@ -85,16 +85,12 @@ void
 LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
 {
     is_load = false;
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    SPDocument *document = getSPDoc();
     if (!document) {
         return;
     }
     container = dynamic_cast<SPObject *>(sp_lpe_item->parent);
-    Inkscape::XML::Node *root = sp_lpe_item->document->getReprRoot();
-    Inkscape::XML::Node *root_origin = document->getReprRoot();
-    if (root_origin != root) {
-        return;
-    }
+    Inkscape::XML::Node *root = document->getReprRoot();
 
     if (split_items && !discard_orig_path) {
         Geom::Line ls((Geom::Point)start_point, (Geom::Point)end_point);
@@ -241,7 +237,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 
             }
         } else if ( mode == MT_V){
-            SPDocument * document = SP_ACTIVE_DOCUMENT;
+            SPDocument *document = getSPDoc();
             if (document) {
                 Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), nullptr).inverse();
                 Geom::Point sp = Geom::Point(document->getWidth().value("px")/2.0, 0) * transform;
@@ -251,7 +247,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
                 center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point));
             }
         } else { //horizontal page
-            SPDocument * document = SP_ACTIVE_DOCUMENT;
+            SPDocument *document = getSPDoc();
             if (document) {
                 Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), nullptr).inverse();
                 Geom::Point sp = Geom::Point(0, document->getHeight().value("px")/2.0) * transform;
@@ -283,7 +279,7 @@ void LPEMirrorSymmetry::cloneStyle(SPObject *orig, SPObject *dest)
 void
 LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset)
 {
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    SPDocument *document = getSPDoc();
     if (!document) {
         return;
     }
@@ -334,7 +330,7 @@ LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool reset)
 
 Inkscape::XML::Node *
 LPEMirrorSymmetry::createPathBase(SPObject *elemref) {
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    SPDocument *document = getSPDoc();
     if (!document) {
         return nullptr;
     }
@@ -361,7 +357,7 @@ LPEMirrorSymmetry::createPathBase(SPObject *elemref) {
 void
 LPEMirrorSymmetry::toMirror(Geom::Affine transform, bool reset)
 {
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    SPDocument *document = getSPDoc();
     if (!document) {
         return;
     }
