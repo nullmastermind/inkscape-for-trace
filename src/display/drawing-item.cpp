@@ -274,8 +274,8 @@ DrawingItem::setTransform(Geom::Affine const &new_trans)
     if (!Geom::are_near(current, new_trans, 1e-18)) {
         // mark the area where the object was for redraw.
         _markForRendering();
+        delete _transform;
         if (new_trans.isIdentity()) {
-            delete _transform; // delete NULL; is safe
             _transform = nullptr;
         } else {
             _transform = new Geom::Affine(new_trans);
