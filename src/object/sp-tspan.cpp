@@ -247,22 +247,6 @@ void SPTextPath::build(SPDocument *doc, Inkscape::XML::Node *repr) {
     this->readAttr( "side" );
     this->readAttr( "xlink:href" );
 
-    bool  no_content = true;
-
-    for (Inkscape::XML::Node* rch = repr->firstChild() ; rch != nullptr; rch = rch->next()) {
-        if ( rch->type() == Inkscape::XML::TEXT_NODE )
-        {
-            no_content = false;
-            break;
-        }
-    }
-
-    if ( no_content ) {
-        Inkscape::XML::Document *xml_doc = doc->getReprDoc();
-        Inkscape::XML::Node* rch = xml_doc->createTextNode("");
-        repr->addChild(rch, nullptr);
-    }
-
     SPItem::build(doc, repr);
 }
 
