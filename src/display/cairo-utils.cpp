@@ -1544,15 +1544,16 @@ const guchar* pixbuf_to_png(guchar const**rows, guchar* px, int num_rows, int nu
                         *((guint64*)ptr) = (guint64)((b<<40)+(b<<32)+(g<<24)+(g<<16)+(r<<8)+r);
                 }
             } else { //Grayscale
+		int realpad = 8 - bit_depth - pad; // in PNG numbers are stored left to right, but in most significant bits first, so the first one processed is the ``big'' mask, etc.
                 if(bit_depth==16) 
                     *(guint16*)ptr= ((gray & 0xff00)>>8) + ((gray &0x00ff)<<8);
-                else *((guint16*)ptr) += guint16(((gray >> (16-bit_depth))<<pad) ); //note the "+="
+                else *((guint16*)ptr) += guint16(((gray >> (16-bit_depth))<<realpad) ); //note the "+="
                 
                 if(color_type & 4) { //Alpha channel
                     if (bit_depth == 16)
                         *((guint32*)(ptr+2)) = a + (a<<8);
                     else
-                        *((guint32*)(ptr)) += guint32((a << 8) >> (16 - bit_depth))<<(bit_depth + pad);
+                        *((guint32*)(ptr)) += guint32((a << 8) >> (16 - bit_depth))<<(bit_depth + realpad);
                 }
             }
 
