@@ -322,19 +322,21 @@ void sp_add_top_window_classes(Gtk::Widget *widg)
             if (!current_window) {
                 current_window = dynamic_cast<Gtk::Window *>(widg->get_toplevel());
             }
-            if (toplevel_window->get_style_context()->has_class("dark")) {
-                current_window->get_style_context()->add_class("dark");
-                current_window->get_style_context()->remove_class("bright");
-            } else {
-                current_window->get_style_context()->add_class("bright");
-                current_window->get_style_context()->remove_class("dark");
-            }
-            if (toplevel_window->get_style_context()->has_class("symbolic")) {
-                current_window->get_style_context()->add_class("symbolic");
-                current_window->get_style_context()->remove_class("regular");
-            } else {
-                current_window->get_style_context()->remove_class("symbolic");
-                current_window->get_style_context()->add_class("regular");
+            if (current_window)  {
+                if (toplevel_window->get_style_context()->has_class("dark")) {
+                    current_window->get_style_context()->add_class("dark");
+                    current_window->get_style_context()->remove_class("bright");
+                } else {
+                    current_window->get_style_context()->add_class("bright");
+                    current_window->get_style_context()->remove_class("dark");
+                }
+                if (toplevel_window->get_style_context()->has_class("symbolic")) {
+                    current_window->get_style_context()->add_class("symbolic");
+                    current_window->get_style_context()->remove_class("regular");
+                } else {
+                    current_window->get_style_context()->remove_class("symbolic");
+                    current_window->get_style_context()->add_class("regular");
+                }
             }
         }
     }
