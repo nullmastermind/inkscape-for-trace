@@ -311,7 +311,7 @@ Dialog::_getSelection()
     return SP_ACTIVE_DESKTOP->getSelection();
 }
 
-void sp_add_top_window_classes(Gtk::Widget *widg)
+void sp_add_top_window_classes_callback(Gtk::Widget *widg)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop) {
@@ -322,7 +322,7 @@ void sp_add_top_window_classes(Gtk::Widget *widg)
             if (!current_window) {
                 current_window = dynamic_cast<Gtk::Window *>(widg->get_toplevel());
             }
-            if (current_window)  {
+            if (current_window) {
                 if (toplevel_window->get_style_context()->has_class("dark")) {
                     current_window->get_style_context()->add_class("dark");
                     current_window->get_style_context()->remove_class("bright");
@@ -339,6 +339,13 @@ void sp_add_top_window_classes(Gtk::Widget *widg)
                 }
             }
         }
+    }
+}
+
+void sp_add_top_window_classes(Gtk::Widget *widg)
+{
+    if (widg) {
+        widg->signal_realize().connect(sigc::bind(sigc::ptr_fun(&sp_add_top_window_classes_callback), widg));
     }
 }
 
