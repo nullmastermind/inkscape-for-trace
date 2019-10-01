@@ -1148,6 +1148,14 @@ void  Layout::Calculator::_buildPangoItemizationForPara(ParagraphInfo *para) con
             pango_attr_list_insert(attributes_list, attribute_font_features);
 #endif
 
+            // Set language
+            SPObject * object = static_cast<SPObject *>(text_source->source_cookie);
+            if (!object->lang.empty()) {
+                PangoLanguage* language = pango_language_from_string(object->lang.c_str());
+                PangoAttribute *attribute_language = pango_attr_language_new( language );
+                pango_attr_list_insert(attributes_list, attribute_language);
+            }
+
             // ownership of attribute is assumed by the list
             font->Unref();
         }

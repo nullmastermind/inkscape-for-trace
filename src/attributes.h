@@ -415,6 +415,7 @@ enum SPAttributeEnum : unsigned {
 
     /* XML */
     SP_ATTR_XML_SPACE,
+    SP_ATTR_XML_LANG,
 
     /* typeset */
     SP_ATTR_TEXT_NOMARKUP,

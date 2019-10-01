@@ -657,8 +657,16 @@ void SPObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
     debug("id=%p, typename=%s", object, g_type_name_from_instance((GTypeInstance*)object));
 
     object->readAttr("xml:space");
+    object->readAttr("lang");
+    object->readAttr("xml:lang");   // "xml:lang" overrides "lang" per spec, read it last.
     object->readAttr("inkscape:label");
     object->readAttr("inkscape:collect");
+
+    // Inherit if not set
+    if (lang.empty() && object->parent) {
+        lang = object->parent->lang;
+    }
+
     if(object->cloned && (repr->attribute("id")) ) // The cases where this happens are when the "original" has no id. This happens
                                                    // if it is a SPString (a TextNode, e.g. in a <title>), or when importing
                                                    // stuff externally modified to have no id. 
@@ -888,6 +896,7 @@ void SPObject::set(SPAttributeEnum key, gchar const* value) {
     SPObject* object = this;
 
     switch (key) {
+
         case SP_ATTR_ID:
 
             //XML Tree being used here.
@@ -928,6 +937,7 @@ void SPObject::set(SPAttributeEnum key, gchar const* value) {
                 object->_default_label = nullptr;
             }
             break;
+
         case SP_ATTR_INKSCAPE_LABEL:
             g_free(object->_label);
             if (value) {
@@ -938,6 +948,7 @@ void SPObject::set(SPAttributeEnum key, gchar const* value) {
             g_free(object->_default_label);
             object->_default_label = nullptr;
             break;
+
         case SP_ATTR_INKSCAPE_COLLECT:
             if ( value && !std::strcmp(value, "always") ) {
                 object->setCollectionPolicy(SPObject::ALWAYS_COLLECT);
@@ -945,6 +956,7 @@ void SPObject::set(SPAttributeEnum key, gchar const* value) {
                 object->setCollectionPolicy(SPObject::COLLECT_WITH_PARENT);
             }
             break;
+
         case SP_ATTR_XML_SPACE:
             if (value && !std::strcmp(value, "preserve")) {
                 object->xml_space.value = SP_XML_SPACE_PRESERVE;
@@ -959,10 +971,26 @@ void SPObject::set(SPAttributeEnum key, gchar const* value) {
             }
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             break;
+
+        case SP_ATTR_LANG:
+            if (value) {
+                lang = value;
+                // To do: sanity check
+            }
+            break;
+
+        case SP_ATTR_XML_LANG:
+            if (value) {
+                lang = value;
+                // To do: sanity check
+            }
+            break;
+
         case SP_ATTR_STYLE:
             object->style->readFromObject( object );
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             break;
+
         default:
             break;
     }
@@ -1372,7 +1400,6 @@ void SPObject::setAttribute(Glib::ustring const &key, Glib::ustring const &value
     setAttribute( key.empty()   ? nullptr : key.c_str(),
                   value.empty() ? nullptr : value.c_str(), ex);
 }
-
 
 void SPObject::removeAttribute(gchar const *key, SPException *ex)
 {

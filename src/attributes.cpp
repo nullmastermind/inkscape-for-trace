@@ -409,6 +409,7 @@ static SPStyleProp const props[] = {
 
     /* XML */
     {SP_ATTR_XML_SPACE, "xml:space"},
+    {SP_ATTR_XML_LANG,  "xml:lang"},
 
     /* typeset */
     {SP_ATTR_TEXT_NOMARKUP, "inkscape:srcNoMarkup"},

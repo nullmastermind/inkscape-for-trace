@@ -210,6 +210,7 @@ public:
     unsigned int uflags : 8;
     unsigned int mflags : 8;
     SPIXmlSpace xml_space;
+    Glib::ustring lang;
     unsigned int hrefcount; /* number of xlink:href references */
     unsigned int _total_hrefcount; /* our hrefcount + total descendants */
     SPDocument *document; /* Document we are part of */
