@@ -992,20 +992,16 @@ void SPDocument::bindObjectToId(gchar const *id, SPObject *object) {
 
 SPObject *SPDocument::getObjectById(Glib::ustring const &id) const
 {
-    if (id.empty() || iddef.empty()) {
-    	return nullptr;
+    if (iddef.empty()) {
+        return nullptr;
     }
 
     std::map<std::string, SPObject *>::const_iterator rv = iddef.find(id);
-    if(rv != iddef.end())
-    {
+    if (rv != iddef.end()) {
         return (rv->second);
-    }
-    else
-    {
+    } else {
         return nullptr;
     }
-    return getObjectById( id );
 }
 
 SPObject *SPDocument::getObjectById(gchar const *id) const
