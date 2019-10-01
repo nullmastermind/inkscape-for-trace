@@ -50,11 +50,15 @@
 
 using Inkscape::Debug::GdkEventLatencyTracker;
 
+
 // Disabled by Mentalguy, many years ago in commit 427a81 
 static bool const HAS_BROKEN_MOTION_HINTS = true;
 
 // Define this to visualize the regions to be redrawn
 //#define DEBUG_REDRAW 1;
+
+// Define this to output the time spent in a full iddle loop and the number of "tiles" painted
+//#define DEBUG_CANVAS 1;
 
 // Tiles are a way to minimize the number of redraws, eliminating too small redraws.
 // The canvas stores a 2D array of ints, each representing a TILE_SIZExTILE_SIZE pixels tile.
@@ -2119,6 +2123,7 @@ int SPCanvas::paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const
         */
 
         paintSingleBuffer(this_rect, setup->canvas_rect, bw);
+        _splits++;
         //gdk_window_end_paint(window);
         return 1;
     }
@@ -2527,6 +2532,15 @@ gint SPCanvas::idle_handler(gpointer data)
     if (ret) {
         // Reset idle id
         canvas->_idle_id = 0;
+#ifdef DEBUG_CANVAS
+        GTimeVal now;
+        g_get_current_time (&now);
+        glong elapsed = (now.tv_sec - canvas->_iddle_time.tv_sec) * 1000000
+        + (now.tv_usec - canvas->_iddle_time.tv_usec);
+        g_message("%f iddle loop duration", elapsed/(double)1000000);
+        g_message("%i splits", canvas->_splits);
+        canvas->_splits = 0;
+#endif
     }
     return !ret;
 }
@@ -2534,6 +2548,9 @@ gint SPCanvas::idle_handler(gpointer data)
 void SPCanvas::addIdle()
 {
     if (_idle_id == 0) {
+#ifdef DEBUG_CANVAS
+        g_get_current_time (&_iddle_time);
+#endif
         _idle_id = gdk_threads_add_idle_full(UPDATE_PRIORITY, idle_handler, this, nullptr);
     }
 }
@@ -2542,6 +2559,15 @@ void SPCanvas::removeIdle()
     if (_idle_id) {
         g_source_remove(_idle_id);
         _idle_id = 0;
+#ifdef DEBUG_CANVAS
+        GTimeVal now;
+        g_get_current_time (&now);
+        glong elapsed = (now.tv_sec - _iddle_time.tv_sec) * 1000000
+        + (now.tv_usec - _iddle_time.tv_usec);
+        g_message("%f iddle loop duration", elapsed/(double)1000000);
+        g_message("%i splits", _splits);
+        _splits = 0;
+#endif
     }
 }
 

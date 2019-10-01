@@ -207,6 +207,8 @@ public:
     int _y0; ///< World coordinate of the topmost pixels of window
 
     int _device_scale; ///< Scale for high DPI montiors
+    GTimeVal _iddle_time;
+    int _splits;
 
     /// Image surface storing the contents of the widget
     cairo_surface_t *_backing_store;
