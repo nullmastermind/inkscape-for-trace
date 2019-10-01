@@ -368,6 +368,7 @@ std::vector<AttributeInfo> getKnownAttrs()
         AttributeInfo("xlink:title", true),
         AttributeInfo("xlink:type", true),
         AttributeInfo("xml:base", false),
+        AttributeInfo("xml:lang", true),
         AttributeInfo("xml:space", true),
         AttributeInfo("xmlns", false),
         AttributeInfo("xmlns:xlink", false),
