@@ -9,10 +9,11 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include "livepatheffect-add.h"
 #include "desktop.h"
+#include "dialog.h"
 #include "io/resource.h"
 #include "live_effects/effect.h"
-#include "livepatheffect-add.h"
 #include "object/sp-item-group.h"
 #include "object/sp-path.h"
 #include "object/sp-shape.h"
@@ -246,6 +247,9 @@ LivePathEffectAdd::LivePathEffectAdd()
             _LPESelectorEffectRadioList->set_active();
             viewChanged(2);
     }
+    Gtk::Widget *widg = dynamic_cast<Gtk::Widget *>(_LPEDialogSelector);
+    INKSCAPE.signal_change_theme.connect(sigc::bind(sigc::ptr_fun(sp_add_top_window_classes), widg));
+    sp_add_top_window_classes(widg);
 }
 const LivePathEffect::EnumEffectData<LivePathEffect::EffectType> *LivePathEffectAdd::getActiveData()
 {

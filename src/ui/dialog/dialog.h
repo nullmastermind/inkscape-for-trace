@@ -148,7 +148,6 @@ protected:
 
   private:
     Behavior::Behavior* _behavior;
-    void addTopWindowClasses();
 
     Dialog() = delete; // no constructor without params
 
@@ -159,9 +158,12 @@ protected:
     friend class Behavior::DockBehavior;
 };
 
+void sp_add_top_window_classes(Gtk::Widget *widg);
 } // namespace Dialog
 } // namespace UI
 } // namespace Inkscape
+
+
 
 #endif //INKSCAPE_DIALOG_H
 

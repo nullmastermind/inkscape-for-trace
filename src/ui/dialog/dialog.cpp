@@ -70,17 +70,18 @@ Dialog::Dialog(Behavior::BehaviorFactory behavior_factory, const char *prefs_pat
     _behavior = behavior_factory(*this);
     _desktop = SP_ACTIVE_DESKTOP;
 
+    Gtk::Widget *widg = dynamic_cast<Gtk::Widget *>(Glib::wrap(_behavior->gobj()));
     INKSCAPE.signal_activate_desktop.connect(sigc::mem_fun(*this, &Dialog::onDesktopActivated));
     INKSCAPE.signal_dialogs_hide.connect(sigc::mem_fun(*this, &Dialog::onHideF12));
     INKSCAPE.signal_dialogs_unhide.connect(sigc::mem_fun(*this, &Dialog::onShowF12));
     INKSCAPE.signal_shut_down.connect(sigc::mem_fun(*this, &Dialog::onShutdown));
-    INKSCAPE.signal_change_theme.connect(sigc::mem_fun(*this, &Dialog::addTopWindowClasses));
+    INKSCAPE.signal_change_theme.connect(sigc::bind(sigc::ptr_fun(&sp_add_top_window_classes), widg));
 
     Glib::wrap(gobj())->signal_event().connect(sigc::mem_fun(*this, &Dialog::_onEvent));
     Glib::wrap(gobj())->signal_key_press_event().connect(sigc::mem_fun(*this, &Dialog::_onKeyPress));
 
     read_geometry();
-    addTopWindowClasses();
+    sp_add_top_window_classes(widg);
 }
 
 Dialog::~Dialog()
@@ -310,27 +311,30 @@ Dialog::_getSelection()
     return SP_ACTIVE_DESKTOP->getSelection();
 }
 
-void Dialog::addTopWindowClasses()
+void sp_add_top_window_classes(Gtk::Widget *widg)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop) {
         Gtk::Widget *canvas = Glib::wrap(GTK_WIDGET(desktop->canvas));
         Gtk::Window *toplevel_window = dynamic_cast<Gtk::Window *>(canvas->get_toplevel());
         if (toplevel_window) {
-            Gtk::Widget *dialog_window = Glib::wrap(gobj());
+            Gtk::Window *current_window = dynamic_cast<Gtk::Window *>(widg);
+            if (!current_window) {
+                current_window = dynamic_cast<Gtk::Window *>(widg->get_toplevel());
+            }
             if (toplevel_window->get_style_context()->has_class("dark")) {
-                dialog_window->get_style_context()->add_class("dark");
-                dialog_window->get_style_context()->remove_class("bright");
+                current_window->get_style_context()->add_class("dark");
+                current_window->get_style_context()->remove_class("bright");
             } else {
-                dialog_window->get_style_context()->add_class("bright");
-                dialog_window->get_style_context()->remove_class("dark");
+                current_window->get_style_context()->add_class("bright");
+                current_window->get_style_context()->remove_class("dark");
             }
             if (toplevel_window->get_style_context()->has_class("symbolic")) {
-                dialog_window->get_style_context()->add_class("symbolic");
-                dialog_window->get_style_context()->remove_class("regular");
+                current_window->get_style_context()->add_class("symbolic");
+                current_window->get_style_context()->remove_class("regular");
             } else {
-                dialog_window->get_style_context()->remove_class("symbolic");
-                dialog_window->get_style_context()->add_class("regular");
+                current_window->get_style_context()->remove_class("symbolic");
+                current_window->get_style_context()->add_class("regular");
             }
         }
     }
