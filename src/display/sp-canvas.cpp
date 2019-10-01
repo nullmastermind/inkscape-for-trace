@@ -58,7 +58,7 @@ static bool const HAS_BROKEN_MOTION_HINTS = true;
 //#define DEBUG_REDRAW 1;
 
 // Define this to output the time spent in a full iddle loop and the number of "tiles" painted
-//#define DEBUG_CANVAS 1;
+//#define DEBUG_PERFORMANCE 1;
 
 // Tiles are a way to minimize the number of redraws, eliminating too small redraws.
 // The canvas stores a 2D array of ints, each representing a TILE_SIZExTILE_SIZE pixels tile.
@@ -1017,6 +1017,7 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_xray_orig = Geom::Point();
     canvas->_changecursor = 0;
     canvas->_inside = false; // this could be wrong on start but we update it as far we bo to the other side.
+    canvas->_splits = 0;
     bool _is_dragging;
 
 #if defined(HAVE_LIBLCMS2)
@@ -2532,11 +2533,11 @@ gint SPCanvas::idle_handler(gpointer data)
     if (ret) {
         // Reset idle id
         canvas->_idle_id = 0;
-#ifdef DEBUG_CANVAS
+#ifdef DEBUG_PERFORMANCE
         GTimeVal now;
         g_get_current_time (&now);
-        glong elapsed = (now.tv_sec - canvas->_iddle_time.tv_sec) * 1000000
-        + (now.tv_usec - canvas->_iddle_time.tv_usec);
+        glong elapsed = (now.tv_sec - canvas->_idle_time.tv_sec) * 1000000
+        + (now.tv_usec - canvas->_idle_time.tv_usec);
         g_message("%f iddle loop duration", elapsed/(double)1000000);
         g_message("%i splits", canvas->_splits);
         canvas->_splits = 0;
@@ -2548,8 +2549,8 @@ gint SPCanvas::idle_handler(gpointer data)
 void SPCanvas::addIdle()
 {
     if (_idle_id == 0) {
-#ifdef DEBUG_CANVAS
-        g_get_current_time (&_iddle_time);
+#ifdef DEBUG_PERFORMANCE
+        g_get_current_time (&_idle_time);
 #endif
         _idle_id = gdk_threads_add_idle_full(UPDATE_PRIORITY, idle_handler, this, nullptr);
     }
@@ -2559,11 +2560,11 @@ void SPCanvas::removeIdle()
     if (_idle_id) {
         g_source_remove(_idle_id);
         _idle_id = 0;
-#ifdef DEBUG_CANVAS
+#ifdef DEBUG_PERFORMANCE
         GTimeVal now;
         g_get_current_time (&now);
-        glong elapsed = (now.tv_sec - _iddle_time.tv_sec) * 1000000
-        + (now.tv_usec - _iddle_time.tv_usec);
+        glong elapsed = (now.tv_sec - _idle_time.tv_sec) * 1000000
+        + (now.tv_usec - _idle_time.tv_usec);
         g_message("%f iddle loop duration", elapsed/(double)1000000);
         g_message("%i splits", _splits);
         _splits = 0;
