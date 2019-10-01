@@ -304,11 +304,13 @@ class GlyphColumns : public Gtk::TreeModel::ColumnRecord
 public:
     Gtk::TreeModelColumn<gunichar> code;
     Gtk::TreeModelColumn<Glib::ustring> name;
+    Gtk::TreeModelColumn<Glib::ustring> tooltip;
 
     GlyphColumns()
     {
         add(code);
         add(name);
+        add(tooltip);
     }
 };
 
@@ -403,6 +405,7 @@ GlyphsPanel::GlyphsPanel() :
 
     iconView = new Gtk::IconView(static_cast<Glib::RefPtr<Gtk::TreeModel> >(store));
     iconView->set_text_column(columns->name);
+    iconView->set_tooltip_column(2); // Uses Pango merkup, must use column number.
     //iconView->set_columns(16);
 
     sigc::connection conn;
@@ -694,6 +697,7 @@ void GlyphsPanel::rebuild()
             tmp += it;
             (*row)[columns->code] = it;
             (*row)[columns->name] = tmp;
+            (*row)[columns->tooltip] = "<span font_desc=\"" + fontspec + "\" size=\"32000\">" + tmp + "</span>";
         }
 
         // Reconnect the model once it has been updated:
