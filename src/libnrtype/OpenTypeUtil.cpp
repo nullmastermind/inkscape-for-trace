@@ -382,7 +382,7 @@ void readOpenTypeSVGTable(const FT_Face ft_face,
 
         std::string svg;
 
-        if (lengthGlyph > 1 && data[offset] & 0x1f && data[offset + 1] & 0x8b) {
+        if (lengthGlyph > 1 && data[offsetGlyph] == 0x1f && data[offsetGlyph + 1] == 0x8b) {
             // Glyph is gzipped
 
             std::vector<unsigned char> buffer;
