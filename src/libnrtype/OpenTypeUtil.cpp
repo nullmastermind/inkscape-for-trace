@@ -382,7 +382,8 @@ void readOpenTypeSVGTable(const FT_Face ft_face,
 
         std::string svg;
 
-        if (lengthGlyph > 1 && data[offsetGlyph] == 0x1f && data[offsetGlyph + 1] == 0x8b) {
+        // static cast is needed as hb_blob_get_length returns char but we are comparing to a value greater than allowed by char.
+        if (lengthGlyph > 1 && data[offsetGlyph] == 0x1f && static_cast<unsigned char>(data[offsetGlyph + 1]) == 0x8b) {
             // Glyph is gzipped
 
             std::vector<unsigned char> buffer;
