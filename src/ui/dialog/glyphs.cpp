@@ -221,7 +221,11 @@ static std::vector<NamedRange> & getRanges()
     static std::vector<NamedRange> ranges;
     if (!init) {
         init = true;
-        ranges.emplace_back(std::make_pair(0x0000, 0xFFFD), _("all"));
+        ranges.emplace_back(std::make_pair(0x00000, 0x2FFFF), _("all"));
+        ranges.emplace_back(std::make_pair(0x00000, 0x0FFFF), _("Basic Plane"));
+        ranges.emplace_back(std::make_pair(0x10000, 0x1FFFF), _("Extended Multilingual Plane"));
+        ranges.emplace_back(std::make_pair(0x20000, 0x2FFFF), _("Supplementary Ideographic Plane"));
+
         ranges.emplace_back(std::make_pair(0x0000, 0x007F), _("Basic Latin"));
         ranges.emplace_back(std::make_pair(0x0080, 0x00FF), _("Latin-1 Supplement"));
         ranges.emplace_back(std::make_pair(0x0100, 0x017F), _("Latin Extended-A"));
@@ -372,6 +376,19 @@ static std::vector<NamedRange> & getRanges()
         ranges.emplace_back(std::make_pair(0xFE70, 0xFEFF), _("Arabic Presentation Forms-B"));
         ranges.emplace_back(std::make_pair(0xFF00, 0xFFEF), _("Halfwidth and Fullwidth Forms"));
         ranges.emplace_back(std::make_pair(0xFFF0, 0xFFFF), _("Specials"));
+
+        // Selected ranges in Extended Multilingual Plane
+        ranges.emplace_back(std::make_pair(0x1F300, 0x1F5FF), _("Miscellaneous Symbols and Pictographs"));
+        ranges.emplace_back(std::make_pair(0x1F600, 0x1F64F), _("Emoticons"));
+        ranges.emplace_back(std::make_pair(0x1F650, 0x1F67F), _("Ornamental Dingbats"));
+        ranges.emplace_back(std::make_pair(0x1F680, 0x1F6FF), _("Transport and Map Symbols"));
+        ranges.emplace_back(std::make_pair(0x1F700, 0x1F77F), _("Alchemical Symbols"));
+        ranges.emplace_back(std::make_pair(0x1F780, 0x1F7FF), _("Geometric Shapes Extended"));
+        ranges.emplace_back(std::make_pair(0x1F800, 0x1F8FF), _("Supplemental Arrows-C"));
+        ranges.emplace_back(std::make_pair(0x1F900, 0x1F9FF), _("Supplemental Symbols and Pictographs"));
+        ranges.emplace_back(std::make_pair(0x1FA00, 0x1FA7F), _("Chess Symbols"));
+        ranges.emplace_back(std::make_pair(0x1FA80, 0x1FAFF), _("Symbols and Pictographs Extended-A"));
+
     }
 
     return ranges;
@@ -465,7 +482,7 @@ GlyphsPanel::GlyphsPanel() :
             rangeCombo->append(it.second);
         }
 
-        rangeCombo->set_active_text(getRanges()[1].second);
+        rangeCombo->set_active_text(getRanges()[4].second);
         sigc::connection conn = rangeCombo->signal_changed().connect(sigc::mem_fun(*this, &GlyphsPanel::rebuild));
         instanceConns.push_back(conn);
 
@@ -749,8 +766,8 @@ void GlyphsPanel::rebuild()
         Glib::RefPtr<Gtk::ListStore> tmp = Gtk::ListStore::create(*getColumns());
         iconView->set_model(tmp);
 
-        gunichar lower = 0x0001;
-        gunichar upper = 0xFFFD;
+        gunichar lower = 0x00001;
+        gunichar upper = 0x2FFFF;
         int active = rangeCombo->get_active_row_number();
         if (active >= 0) {
             lower = getRanges()[active].first.first;
