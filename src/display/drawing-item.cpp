@@ -712,11 +712,18 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     bool render_filters = _drawing.renderFilters();
     // stop_at is handled in DrawingGroup, but this check is required to handle the case
     // where a filtered item with background-accessing filter has enable-background: new
-    if (this == stop_at) return RENDER_STOP;
+    if (this == stop_at) {
+        return RENDER_STOP;
+    }
 
     // If we are invisible, return immediately
-    if (!_visible) return RENDER_OK;
-    if (_ctm.isSingular(1e-18)) return RENDER_OK;
+    if (!_visible) {
+        return RENDER_OK;
+    }
+
+    if (_ctm.isSingular(1e-18)) {
+        return RENDER_OK;
+    }
 
     // TODO convert outline rendering to a separate virtual function
     if (outline) {
@@ -726,7 +733,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 
     // carea is the area to paint
     Geom::OptIntRect carea = Geom::intersect(area, _drawbox);
-    
+
     // expand render on filtered items
     Geom::OptIntRect cl = _cacheRect();
     if (_filter != nullptr && render_filters && cl) {
@@ -734,7 +741,9 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
         carea = cl;
     }
     
-    if (!carea) return RENDER_OK;
+    if (!carea) {
+        return RENDER_OK;
+    }
 
     // Device scale for HiDPI screens (typically 1 or 2)
     int device_scale = dc.surface()->device_scale();
@@ -756,14 +765,17 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
             g_assert_not_reached();
     }
 
-    // render from cache if possible
-    if (_cached) {
+    // Render from cache if possible
+    // Bypass in case of pattern, see below.
+    if (_cached && flags & ~RENDER_BYPASS_CACHE) {
         if (_cache) {
             _cache->prepare();
             set_cairo_blend_operator( dc, _mix_blend_mode );
 
             _cache->paintFromCache(dc, carea);
-            if (!carea) return RENDER_OK;
+            if (!carea) {
+                return RENDER_OK;
+            }
         } else {
             // There is no cache. This could be because caching of this item
             // was just turned on after the last update phase, or because
@@ -783,11 +795,11 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     bool needs_opacity = (_opacity < 0.995);
 
     // this item needs an intermediate rendering if:
-    nir |= (_clip != nullptr); // 1. it has a clipping path
-    nir |= (_mask != nullptr); // 2. it has a mask
-    nir |= (_filter != nullptr && render_filters); // 3. it has a filter
-    nir |= needs_opacity; // 4. it is non-opaque
-    nir |= (_cache != nullptr); // 5. it is cached
+    nir |= (_clip != nullptr);                       // 1. it has a clipping path
+    nir |= (_mask != nullptr);                       // 2. it has a mask
+    nir |= (_filter != nullptr && render_filters);   // 3. it has a filter
+    nir |= needs_opacity;                            // 4. it is non-opaque
+    nir |= (_cache != nullptr);                      // 5. it is to be cached
     nir |= (_mix_blend_mode != SP_CSS_BLEND_NORMAL); // 6. Blend mode not normal
     nir |= (_isolation == SP_CSS_ISOLATION_ISOLATE); // 7. Explicit isolatiom
 
@@ -825,6 +837,17 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 
     DrawingSurface intermediate(*iarea, device_scale);
     DrawingContext ict(intermediate);
+
+    // This path fails for patterns/hatches when stepping the pattern to handle overflows.
+    // The offsets are applied to drawing context (dc) but they are not copied to the
+    // intermediate context. Something like this is needed:
+    // Copy cairo matrix from dc to intermediate, needed for patterns/hatches
+    // cairo_matrix_t cairo_matrix;
+    // cairo_get_matrix(dc.raw(), &cairo_matrix);
+    // cairo_set_matrix(ict.raw(), &cairo_matrix);
+    // For the moment we disable caching for patterns,
+    //   see https://gitlab.com/inkscape/inkscape/issues/309
+
     unsigned render_result = RENDER_OK;
 
     // 1. Render clipping path with alpha = opacity.

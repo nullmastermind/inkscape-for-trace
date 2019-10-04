@@ -111,15 +111,18 @@ DrawingPattern::renderPattern(float opacity) {
         Geom::Affine idt = pattern_surface.drawingTransform().inverse();
         Geom::Affine initial_transform = idt * _overflow_initial_transform * dt;
         Geom::Affine step_transform = idt * _overflow_step_transform * dt;
-
         dc.transform(initial_transform);
         for (int i = 0; i < _overflow_steps; i++) {
-            render(dc, one_tile, RENDER_DEFAULT);
+            // render() fails to handle transforms applied here when using cache.
+            render(dc, one_tile, RENDER_BYPASS_CACHE);
             dc.transform(step_transform);
+            // cairo_surface_t* raw = pattern_surface.raw();
+            // std::string filename = "drawing-pattern" + std::to_string(i) + ".png";
+            // cairo_surface_write_to_png( pattern_surface.raw(), filename.c_str() );
         }
     }
 
-    //Uncomment to debug
+    // Uncomment to debug
     // cairo_surface_t* raw = pattern_surface.raw();
     // std::cout << "  cairo_surface (sp-pattern): "
     //           << " width: "  << cairo_image_surface_get_width( raw )
