@@ -58,6 +58,7 @@ void DrawingContext::Save::save(DrawingContext &dc)
  * for drawing entire SPObjects when exporting.
  */
 
+// Uses existing Cairo surface
 DrawingContext::DrawingContext(cairo_t *ct, Geom::Point const &origin)
     : _ct(ct)
     , _surface(new DrawingSurface(cairo_get_group_target(ct), origin))
@@ -70,6 +71,7 @@ DrawingContext::DrawingContext(cairo_t *ct, Geom::Point const &origin)
     cairo_translate(_ct, -origin[Geom::X], -origin[Geom::Y]);
 }
 
+// Uses existing Cairo surface
 DrawingContext::DrawingContext(cairo_surface_t *surface, Geom::Point const &origin)
     : _ct(nullptr)
     , _surface(new DrawingSurface(surface, origin))
@@ -110,6 +112,7 @@ void DrawingContext::arc(Geom::Point const &center, double radius, Geom::AngleIn
     }
 }
 
+// Applies transform to Cairo surface
 void DrawingContext::transform(Geom::Affine const &trans) {
     ink_cairo_transform(_ct, trans);
 }
