@@ -2534,12 +2534,25 @@ gint SPCanvas::idle_handler(gpointer data)
         // Reset idle id
         canvas->_idle_id = 0;
 #ifdef DEBUG_PERFORMANCE
+        static glong totalelapsed = 0;
         GTimeVal now;
         g_get_current_time (&now);
         glong elapsed = (now.tv_sec - canvas->_idle_time.tv_sec) * 1000000
         + (now.tv_usec - canvas->_idle_time.tv_usec);
-        g_message("%f iddle loop duration", elapsed/(double)1000000);
-        g_message("%i splits", canvas->_splits);
+        totalelapsed += elapsed;
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+        if (desktop) {
+            SPCanvasArena *arena = SP_CANVAS_ARENA(desktop->drawing);
+            Inkscape::RenderMode rm = arena->drawing.renderMode();
+            if (rm == Inkscape::RENDERMODE_OUTLINE) {
+                totalelapsed = 0;
+                g_message("Outline mode, we reset and stop total counter");
+            }
+            g_message("%i splits in last idle loop", canvas->_splits);
+            g_message("%f last idle loop duration", elapsed/(double)1000000);
+            g_message("%f total rendering duration (change to outline mode to reset)", totalelapsed/(double)1000000);
+        }
+        
         canvas->_splits = 0;
 #endif
     }
@@ -2561,12 +2574,7 @@ void SPCanvas::removeIdle()
         g_source_remove(_idle_id);
         _idle_id = 0;
 #ifdef DEBUG_PERFORMANCE
-        GTimeVal now;
-        g_get_current_time (&now);
-        glong elapsed = (now.tv_sec - _idle_time.tv_sec) * 1000000
-        + (now.tv_usec - _idle_time.tv_usec);
-        g_message("%f iddle loop duration", elapsed/(double)1000000);
-        g_message("%i splits", _splits);
+        g_message("idle aborted in split %i", _splits);
         _splits = 0;
 #endif
     }
