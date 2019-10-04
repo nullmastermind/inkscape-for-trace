@@ -192,6 +192,7 @@ void TemplateLoadTab::_refreshTemplatesList()
         }
     }
     if (_tlist_store->children().size() == 1) {
+        delete item_to_select;
         item_to_select = new Gtk::TreeIter(_tlist_store->children().begin());
     }
     if (item_to_select) {

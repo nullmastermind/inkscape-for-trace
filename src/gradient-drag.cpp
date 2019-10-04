@@ -2915,6 +2915,8 @@ void GrDrag::deleteSelected(bool just_one)
                             }
                             if (!present)
                                 endstoplist.push_back(stopinfo);
+                            else
+                                delete stopinfo;
                         }
                     }
                     break;

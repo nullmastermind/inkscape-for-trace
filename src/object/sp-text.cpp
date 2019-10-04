@@ -767,8 +767,8 @@ unsigned SPText::_buildLayoutInput(SPObject *object, Inkscape::Text::Layout::Opt
 
 Shape* SPText::_buildExclusionShape() const
 {
-    Shape *result = new Shape(); // Union of all exclusion shapes
-    Shape *shape_temp = new Shape();
+    std::unique_ptr<Shape> result(new Shape()); // Union of all exclusion shapes
+    std::unique_ptr<Shape> shape_temp(new Shape());
 
     for(auto shape_id : style->shape_subtract.shape_ids) {
 
@@ -799,7 +799,7 @@ Shape* SPText::_buildExclusionShape() const
                     uncross->ConvertToShape( sh );
 
                     if (result->hasEdges()) {
-                        shape_temp->Booleen(result, uncross, bool_op_union);
+                        shape_temp->Booleen(result.get(), uncross, bool_op_union);
                         std::swap(result, shape_temp);
                     } else {
                         result->Copy(uncross);
@@ -807,7 +807,7 @@ Shape* SPText::_buildExclusionShape() const
                 }
             }
     }
-    return result;
+    return result.release();
 }
 
 

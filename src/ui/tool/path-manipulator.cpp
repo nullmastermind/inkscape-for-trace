@@ -1023,7 +1023,7 @@ NodeList::iterator PathManipulator::subdivideSegment(NodeList::iterator first, d
             n->setType(NODE_SMOOTH, false);
         } else {
             Geom::D2< Geom::SBasis > sbasis_inside_nodes;
-            SPCurve *line_inside_nodes = new SPCurve();
+            std::unique_ptr<SPCurve> line_inside_nodes(new SPCurve());
             if(second->back()->isDegenerate()){
                 line_inside_nodes->moveto(n->position());
                 line_inside_nodes->lineto(second->position());
@@ -1311,7 +1311,7 @@ Geom::Point PathManipulator::_bsplineHandleReposition(Handle *h,double pos){
     Geom::Point ret = h->position();
     Node *n = h->parent();
     Geom::D2< Geom::SBasis > sbasis_inside_nodes;
-    SPCurve *line_inside_nodes = new SPCurve();
+    std::unique_ptr<SPCurve> line_inside_nodes(new SPCurve());
     Node * next_node = nullptr;
     next_node = n->nodeToward(h);
     if(next_node && pos != NO_POWER){

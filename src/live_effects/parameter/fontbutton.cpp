@@ -38,7 +38,7 @@ FontButtonParam::param_set_default()
 void 
 FontButtonParam::param_update_default(const gchar * default_value)
 {
-    defvalue = (Glib::ustring)strdup(default_value);
+    defvalue = Glib::ustring(default_value);
 }
 
 bool

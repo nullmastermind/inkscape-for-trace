@@ -294,7 +294,6 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
     Geom::PathVector ret;
     Geom::PathVector open_ret;
     Geom::PathVector ret_outline;
-    Geom::PathIntersectionGraph *pig;
     for (Geom::PathVector::const_iterator path_it = filled_rule_pathv.begin(); path_it != filled_rule_pathv.end(); ++path_it) {
         Geom::Path original = (*path_it);
         if (original.empty()) {
@@ -430,7 +429,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
 
     if (offset < 0) {
         sp_flatten(ret_outline, fill_nonZero);
-        pig = new Geom::PathIntersectionGraph(ret, ret_outline);
+        std::unique_ptr<Geom::PathIntersectionGraph> pig(new Geom::PathIntersectionGraph(ret, ret_outline));
         if (pig && !ret_outline.empty() && !ret.empty()) {
             ret = pig->getAminusB();
         }

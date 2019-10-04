@@ -183,6 +183,7 @@ void Box3DSide::set_shape() {
         !box3d_get_corner_screen(box, corners[3]).isFinite() )
     {
         g_warning ("Trying to draw a 3D box side with invalid coordinates.\n");
+        delete c;
         return;
     }
 

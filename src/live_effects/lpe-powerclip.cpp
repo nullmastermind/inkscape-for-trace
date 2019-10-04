@@ -306,7 +306,7 @@ LPEPowerClip::doEffect_path(Geom::PathVector const & path_in){
             if (c) {
                 Geom::PathVector c_pv = c->get_pathvector();
                 c_pv *= sp_item_transform_repr (sp_lpe_item).inverse();
-                Geom::PathIntersectionGraph *pig = new Geom::PathIntersectionGraph(c_pv, path_out);
+                std::unique_ptr<Geom::PathIntersectionGraph> pig(new Geom::PathIntersectionGraph(c_pv, path_out));
                 if (pig && !c_pv.empty() && !path_in.empty()) {
                     path_out = pig->getIntersection();
                 }
@@ -348,7 +348,7 @@ LPEPowerClip::flattenClip(SPItem * clip_data, Geom::PathVector &path_in)
         if (c) {
             Geom::PathVector c_pv = c->get_pathvector();
             c_pv *= sp_item_transform_repr (sp_lpe_item).inverse();
-            Geom::PathIntersectionGraph *pig = new Geom::PathIntersectionGraph(c_pv, path_in);
+            std::unique_ptr<Geom::PathIntersectionGraph> pig(new Geom::PathIntersectionGraph(c_pv, path_in));
             if (pig && !c_pv.empty() && !path_in.empty()) {
                 path_in = pig->getIntersection();
             }

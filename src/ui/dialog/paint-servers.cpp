@@ -351,7 +351,7 @@ void PaintServersDialog::load_document(SPDocument *document)
 
 void PaintServersDialog::load_current_document(SPObject * /*object*/, guint /*flags*/)
 {
-    PaintServersColumns *columns = getColumns();
+    std::unique_ptr<PaintServersColumns> columns(getColumns());
     SPDocument *document = desktop->getDocument();
     Glib::RefPtr<Gtk::ListStore> current = store[CURRENTDOC];
 

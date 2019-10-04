@@ -531,7 +531,7 @@ LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
         }
         Geom::PathVector triangle;
         triangle.push_back(divider);
-        Geom::PathIntersectionGraph *pig = new Geom::PathIntersectionGraph(triangle, path_out);
+        std::unique_ptr<Geom::PathIntersectionGraph> pig(new Geom::PathIntersectionGraph(triangle, path_out));
         if (pig && !path_out.empty() && !triangle.empty()) {
             path_out = pig->getIntersection();
         }

@@ -160,7 +160,6 @@ void sp_xmlview_tree_destroy(GtkWidget * object)
 GtkTreeRowReference *
 add_node (SPXMLViewTree * tree, GtkTreeIter *parent, GtkTreeIter *before, Inkscape::XML::Node * repr)
 {
-	NodeData * data = nullptr;
 	const Inkscape::XML::NodeEventVector * vec;
 	static const gchar *default_text[] = { "???" };
 
@@ -180,7 +179,7 @@ add_node (SPXMLViewTree * tree, GtkTreeIter *parent, GtkTreeIter *before, Inksca
 
     GtkTreeRowReference  *rowref = tree_iter_to_ref (tree, &iter);
 
-    data = node_data_new (tree, &iter, rowref, repr);
+    NodeData * data = node_data_new (tree, &iter, rowref, repr);
 
     g_assert (data != nullptr);
 

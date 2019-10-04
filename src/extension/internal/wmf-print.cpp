@@ -1402,7 +1402,7 @@ unsigned int PrintWmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
     free(unicode_text);
 
     // in some cases a UTF string may reduce to NO latin1 characters, which returns NULL
-    if(!latin1_text){ return 0; }
+    if(!latin1_text){free(adx); return 0; }
 
     //PPT gets funky with text within +-1 degree of a multiple of 90, but only for SOME fonts.Snap those to the central value
     //Some funky ones:  Arial, Times New Roman
