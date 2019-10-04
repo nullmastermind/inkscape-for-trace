@@ -685,7 +685,7 @@ cr_font_size_adjust_to_string (CRFontSizeAdjust const * a_this)
                 if (a_this->num)
                         str = (gchar *) cr_num_to_string (a_this->num);
                 else
-                        str = g_strdup ("unknow font-size-adjust property value"); /* Should raise an error no?*/
+                        str = g_strdup ("unknown font-size-adjust property value"); /* Should raise an error no?*/
                 break;
         case FONT_SIZE_ADJUST_INHERIT:
                 str = g_strdup ("inherit");

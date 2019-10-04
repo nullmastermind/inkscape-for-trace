@@ -785,7 +785,7 @@ void StyleDialog::readStyleElement()
                     }
                 } else {
                     row[_mColumns._colStrike] = true;
-                    Glib::ustring tooltiptext = _("This value is comented");
+                    Glib::ustring tooltiptext = _("This value is commented");
                     row[_mColumns._colOwner] = tooltiptext;
                 }
             }
