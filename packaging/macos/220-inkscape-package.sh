@@ -250,3 +250,25 @@ relocate_dependency @executable_path/../lib/libfreetype.6.dylib $APP_BIN_DIR/gs
 insert_before $APP_EXE_DIR/Inkscape '\$EXEC' \
   'export PATH=$bundle_bin:$PATH'
 
+### create GObject introspection repository ####################################
+
+mkdir $APP_LIB_DIR/girepository-1.0
+
+# remove fully qualified paths from libraries in *.gir files
+for gir in $OPT_DIR/share/gir-1.0/*.gir; do
+  sed "s/$(escape_sed $LIB_DIR/)//g" $gir > $SRC_DIR/$(basename $gir)
+done
+
+# compile *.gir into *.typelib files
+for gir in $SRC_DIR/*.gir; do
+  jhbuild run g-ir-compiler -o $APP_LIB_DIR/girepository-1.0/$(basename -s .gir $gir).typelib $gir
+done
+
+# tell GObject where to find the repository
+insert_before $APP_EXE_DIR/Inkscape '\$EXEC' \
+  'export GI_TYPELIB_PATH=$bundle_lib/girepository-1.0'
+
+# set library path so dlopen() can find libraries without fully qualified paths
+insert_before $APP_EXE_DIR/Inkscape '\$EXEC' \
+  'export DYLD_LIBRARY_PATH=$bundle_lib'
+
