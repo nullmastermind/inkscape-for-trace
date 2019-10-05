@@ -1355,7 +1355,11 @@ SPItem *SPDocument::getItemFromListAtPointBottom(unsigned int dkey, SPGroup *gro
         if (SP_IS_ITEM(&o)) {
             SPItem *item = SP_ITEM(&o);
             Inkscape::DrawingItem *arenaitem = item->get_arenaitem(dkey);
-            arenaitem->drawing().update();
+
+            if (arenaitem) {
+                arenaitem->drawing().update();
+            }
+
             if (arenaitem && arenaitem->pick(p, delta, 1) != nullptr
                 && (take_insensitive || item->isVisibleAndUnlocked(dkey))) {
                 if (find(list.begin(), list.end(), item) != list.end()) {
