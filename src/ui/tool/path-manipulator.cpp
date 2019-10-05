@@ -1284,7 +1284,7 @@ double PathManipulator::_bsplineHandlePosition(Handle *h, bool check_other)
     Node * next_node = nullptr;
     next_node = n->nodeToward(h);
     if(next_node){
-        SPCurve *line_inside_nodes = new SPCurve();
+        std::unique_ptr<SPCurve> line_inside_nodes(new SPCurve());
         line_inside_nodes->moveto(n->position());
         line_inside_nodes->lineto(next_node->position());
         if(!are_near(h->position(), n->position())){
