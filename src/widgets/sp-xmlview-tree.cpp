@@ -313,19 +313,17 @@ void element_order_changed(Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node *
 
 Glib::ustring sp_remove_newlines_and_tabs(Glib::ustring val)
 {
-    int pos = 0;
+    int pos;
     Glib::ustring newlinesign = "␤";
     Glib::ustring tabsign = "⇥";
     while ((pos = val.find("\r\n")) != std::string::npos) {
         val.erase(pos, 2);
         val.insert(pos, newlinesign);
     }
-    pos = 0;
     while ((pos = val.find('\n')) != std::string::npos) {
         val.erase(pos, 1);
         val.insert(pos, newlinesign);
     }
-    pos = 0;
     while ((pos = val.find('\t')) != std::string::npos) {
         val.erase(pos, 1);
         val.insert(pos, tabsign);

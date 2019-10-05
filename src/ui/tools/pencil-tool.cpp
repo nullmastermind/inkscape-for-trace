@@ -733,7 +733,6 @@ void PencilTool::addPowerStrokePencil()
         Geom::Affine transform_coordinate = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2dt_affine().inverse();
         curvepressure->transform(transform_coordinate);
         Geom::Path path = curvepressure->get_pathvector()[0];
-        int original_size = path.size();
         if (!path.empty()) {
             Inkscape::XML::Document *xml_doc = document->getReprDoc();
             Inkscape::XML::Node *pp = nullptr;
@@ -936,7 +935,6 @@ void PencilTool::powerStrokeInterpolate(Geom::Path const path)
 
     using Geom::X;
     using Geom::Y;
-    gint points_size = this->_wps.size();
     gint path_size = path.size();
     std::vector<Geom::Point> tmp_points;
     Geom::Point previous = Geom::Point(Geom::infinity(), 0);

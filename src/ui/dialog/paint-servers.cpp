@@ -196,6 +196,8 @@ Glib::ustring get_url(Glib::ustring paint)
 void recurse_find_paint(SPObject* in, std::vector<Glib::ustring>& list)
 {
 
+    g_return_if_fail(in != nullptr);
+
     // Add paint servers in <defs> section.
     if (dynamic_cast<SPPaintServer *>(in)) {
         if (in->getId()) {

@@ -392,7 +392,6 @@ void SPText::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::
 void SPText::hide_shape_inside()
 {
     SPText *text = dynamic_cast<SPText *>(this);
-    SPObject *object = dynamic_cast<SPObject *>(this);
     SPStyle *item_style = this->style;
     if (item_style && text && item_style->shape_inside.set) {
         SPCSSAttr *css_unset = sp_css_attr_from_style(item_style, SP_STYLE_FLAG_IFSET);
@@ -408,7 +407,6 @@ void SPText::hide_shape_inside()
 void SPText::show_shape_inside()
 {
     SPText *text = dynamic_cast<SPText *>(this);
-    SPObject *object = dynamic_cast<SPObject *>(this);
     if (text && css) {
         this->changeCSS(css, "style");
     }
@@ -569,7 +567,6 @@ void SPText::_buildLayoutInit()
                                     copy->Copy(uncross);
                                 }
                                 layout.appendWrapShape( copy );
-                                //delete exclusion_shape;
                                 continue;
                             }
 
@@ -584,6 +581,7 @@ void SPText::_buildLayoutInit()
                         }
                 }
             }
+            delete exclusion_shape;
 
         } else if (has_inline_size()) {
 
@@ -931,6 +929,9 @@ void SPText::_adjustCoordsRecursive(SPItem *item, Geom::Affine const &m, double 
         SP_TEXTPATH(item)->attributes.transform(m, ex, ex, is_root);
     else if (SP_IS_TREF(item)) {
         SP_TREF(item)->attributes.transform(m, ex, ex, is_root);
+    } else {
+        g_warning("element is not text");
+	return;
     }
 
     for(auto& o: item->children) {
@@ -970,7 +971,7 @@ Geom::OptRect SPText::get_frame()
 
     if (has_inline_size()) {
         double inline_size = style->inline_size.computed;
-        unsigned mode      = style->writing_mode.computed;
+        //unsigned mode      = style->writing_mode.computed;
         unsigned anchor    = style->text_anchor.computed;
         unsigned direction = style->direction.computed;
 
@@ -1098,8 +1099,6 @@ SPItem *create_text_with_inline_size (SPDesktop *desktop, Geom::Point p0, Geom::
     // text_object->transform = item->i2doc_affine().inverse();
 
     text_object->updateRepr();
-
-    SPCSSAttr* css = sp_repr_css_attr (text_repr, "style");
 
     Inkscape::GC::release(text_repr);
     Inkscape::GC::release(text_node);

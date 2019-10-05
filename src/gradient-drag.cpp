@@ -1444,6 +1444,8 @@ GrDragger::moveMeshHandles ( Geom::Point pc_old,  MeshNodeOperation op )
  */
 void GrDragger::updateTip()
 {
+    g_return_if_fail(this->knot != nullptr);
+    
     if (this->knot && this->knot->tip) {
         g_free (this->knot->tip);
         this->knot->tip = nullptr;

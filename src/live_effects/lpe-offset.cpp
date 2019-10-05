@@ -352,7 +352,7 @@ LPEOffset::doEffect_path(Geom::PathVector const & path_in)
         if (offset > 0 &&
             ((original_width  < against_dir_width &&
               original_width  < with_dir_width) ||
-             (original_height < against_dir_width &&
+             (original_height < against_dir_height &&
               original_height < with_dir_height)))
 
         {

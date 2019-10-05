@@ -111,6 +111,7 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
             if(!strcmp(is_inverse_str,"false") && inverse && isVisible()) {
                 SPCurve * clipcurve = new SPCurve();
                 addInverse(SP_ITEM(clip_data), clipcurve, Geom::Affine::identity(), true);     
+	        clipcurve->unref();
             } else if((!strcmp(is_inverse_str,"true") && !inverse && isVisible()) ||
                 (inverse && !is_visible && is_inverse_str == (Glib::ustring)"true"))
             {
@@ -335,7 +336,6 @@ LPEPowerClip::doOnVisibilityToggled(SPLPEItem const* lpeitem)
 void
 LPEPowerClip::flattenClip(SPItem * clip_data, Geom::PathVector &path_in)
 {
-    SPClipPath *clip_path = SP_ITEM(sp_lpe_item)->clip_ref->getObject();
     if (SP_IS_GROUP(clip_data)) {
         std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(clip_data));
         for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {

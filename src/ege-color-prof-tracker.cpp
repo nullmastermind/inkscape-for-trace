@@ -207,7 +207,7 @@ void ege_color_prof_tracker_get_profile( EgeColorProfTracker const * tracker, gp
     guint dataLen = 0;
     if (tracker) {
         if (priv->_target ) {
-            GdkScreen* screen = gtk_widget_get_screen(priv->_target);
+            //GdkScreen* screen = gtk_widget_get_screen(priv->_target);
             if ( tracked_screen ) {
                 if ( priv->_monitor >= 0 && priv->_monitor < (static_cast<gint>(tracked_screen->profiles->len))) {
                     GByteArray* gba = static_cast<GByteArray*>(g_ptr_array_index(tracked_screen->profiles, priv->_monitor));

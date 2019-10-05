@@ -199,7 +199,7 @@ public:
         Spiro::spiro_run(controlpoints, len, fit);
 
         fit *= Scale(1,scale_y);
-        delete controlpoints;
+        g_free(controlpoints);
         return fit;
     };
 

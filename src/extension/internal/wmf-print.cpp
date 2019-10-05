@@ -1372,7 +1372,8 @@ unsigned int PrintWmf::text(Inkscape::Extension::Print * /*mod*/, char const *te
     double ky;
 
     // the dx array is smuggled in like: text<nul>w1 w2 w3 ...wn<nul><nul>, where the widths are floats 7 characters wide, including the space
-    int ndx, rtl;
+    int ndx = 0;
+    int rtl = 0;
     int16_t *adx;
     smuggle_adxky_out(text, &adx, &ky, &rtl, &ndx, PX2WORLD * std::min(tf.expansionX(), tf.expansionY())); // side effect: free() adx
 

@@ -120,7 +120,6 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
         }
         items.clear();
         container = dynamic_cast<SPObject *>(sp_lpe_item->parent);
-        Inkscape::XML::Node *root = getSPDoc()->getReprRoot();
         if (previous_num_copies != num_copies) {
             gint numcopies_gap = previous_num_copies - num_copies;
             if (numcopies_gap > 0 && num_copies != 0) {
@@ -209,7 +208,6 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
     if (!document) {
         return;
     }
-    Inkscape::XML::Document *xml_doc = document->getReprDoc();
     if ( SP_IS_GROUP(orig) && SP_IS_GROUP(dest) && SP_GROUP(orig)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
         if (reset) {
             cloneStyle(orig, dest);
@@ -578,7 +576,7 @@ LPECopyRotate::doEffect_path_post (Geom::PathVector const & path_in)
         if (method != RM_NORMAL) {
             Geom::PathVector join_pv = original_pathv * t;
             join_pv *= Geom::Translate(half_dir * rot * gap);
-            Geom::PathIntersectionGraph *pig = new Geom::PathIntersectionGraph(output_pv, join_pv);
+	    std::unique_ptr<Geom::PathIntersectionGraph> pig(new Geom::PathIntersectionGraph(output_pv, join_pv));
             if (pig) {
                 if (!output_pv.empty()) {
                     output_pv = pig->getUnion();
