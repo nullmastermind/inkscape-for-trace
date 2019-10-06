@@ -58,7 +58,7 @@ static bool const HAS_BROKEN_MOTION_HINTS = true;
 //#define DEBUG_REDRAW 1;
 
 // Define this to output the time spent in a full iddle loop and the number of "tiles" painted
-//#define DEBUG_PERFORMANCE 1;
+//define DEBUG_PERFORMANCE 1;
 
 // Tiles are a way to minimize the number of redraws, eliminating too small redraws.
 // The canvas stores a 2D array of ints, each representing a TILE_SIZExTILE_SIZE pixels tile.
@@ -2434,10 +2434,14 @@ int SPCanvas::paint()
         to_draw = cairo_region_create_rectangle(&crect);
         to_draw_outline = cairo_region_create_rectangle(&crect_outline);
     }
+    cairo_rectangle_int_t crectbounds;
+    cairo_region_get_extents(_clean_region, &crectbounds);
+    cairo_region_subtract_rectangle (_clean_region, &crectbounds);
     cairo_region_subtract(to_draw, _clean_region);
     cairo_region_subtract(to_draw_outline, _clean_region);
 
     int n_rects = cairo_region_num_rectangles(to_draw);
+    std::cout << n_rects << "dggdgsdgsdgsd" << std::endl;
     for (int i = 0; i < n_rects; ++i) {
         cairo_rectangle_int_t crect;
         cairo_region_get_rectangle(to_draw, i, &crect);
@@ -2530,6 +2534,12 @@ gint SPCanvas::idle_handler(gpointer data)
 {
     SPCanvas *canvas = SP_CANVAS (data);
     int const ret = canvas->doUpdate();
+#ifdef DEBUG_PERFORMANCE
+    static gint totaloops = 1;
+    if (!ret) {
+        totaloops++;
+    }
+#endif
     if (ret) {
         // Reset idle id
         canvas->_idle_id = 0;
@@ -2548,11 +2558,12 @@ gint SPCanvas::idle_handler(gpointer data)
                 totalelapsed = 0;
                 g_message("Outline mode, we reset and stop total counter");
             }
-            g_message("%i splits in last idle loop", canvas->_splits);
+            g_message("%i loops in last idle", totaloops);
+            g_message("%i splits in last idle", canvas->_splits);
             g_message("%f last idle loop duration", elapsed/(double)1000000);
             g_message("%f total rendering duration (change to outline mode to reset)", totalelapsed/(double)1000000);
         }
-        
+        totaloops = 1;
         canvas->_splits = 0;
 #endif
     }
