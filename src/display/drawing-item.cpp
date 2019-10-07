@@ -767,7 +767,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 
     // Render from cache if possible
     // Bypass in case of pattern, see below.
-    if (_cached && flags & ~RENDER_BYPASS_CACHE) {
+    if (_cached && !(flags & RENDER_BYPASS_CACHE)) {
         if (_cache) {
             _cache->prepare();
             set_cairo_blend_operator( dc, _mix_blend_mode );
