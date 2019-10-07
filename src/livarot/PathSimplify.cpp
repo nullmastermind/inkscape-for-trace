@@ -10,6 +10,7 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
+#include <memory>
 #include <glib.h>
 #include <2geom/affine.h>
 #include "livarot/Path.h"
@@ -1195,7 +1196,7 @@ void Path::Coalesce(double tresh)
     ** It's a hack anyway, and probably only needs to be a type rather than
     ** a full PathDescr.
     */
-    PathDescr *lastAddition = new PathDescrMoveTo(Geom::Point(0, 0));
+    std::unique_ptr<PathDescr> lastAddition(new PathDescrMoveTo(Geom::Point(0, 0)));
     bool containsForced = false;
     PathDescrCubicTo pending_cubic(Geom::Point(0, 0), Geom::Point(0, 0), Geom::Point(0, 0));
   
@@ -1206,11 +1207,11 @@ void Path::Coalesce(double tresh)
         if (typ == descr_moveto) {
 
             if (lastAddition->flags != descr_moveto) {
-                FlushPendingAddition(tempDest,lastAddition,pending_cubic,lastAP);
+                FlushPendingAddition(tempDest,lastAddition.get(),pending_cubic,lastAP);
             }
-            lastAddition = descr_cmd[curP];
+            lastAddition.reset(descr_cmd[curP]);
             lastAP = curP;
-            FlushPendingAddition(tempDest, lastAddition, pending_cubic, lastAP);
+            FlushPendingAddition(tempDest, lastAddition.get(), pending_cubic, lastAP);
             // Added automatically (too bad about multiple moveto's).
             // [fr: (tant pis pour les moveto multiples)]
             containsForced = false;
@@ -1228,14 +1229,14 @@ void Path::Coalesce(double tresh)
                 PathDescrCubicTo res(Geom::Point(0, 0), Geom::Point(0, 0), Geom::Point(0, 0));
                 int worstP = -1;
                 if (AttemptSimplify(lastA, nextA - lastA + 1, (containsForced) ? 0.05 * tresh : tresh, res, worstP)) {
-                    lastAddition = new PathDescrCubicTo(Geom::Point(0, 0),
+                    lastAddition.reset(new PathDescrCubicTo(Geom::Point(0, 0),
                                                           Geom::Point(0, 0),
-                                                          Geom::Point(0, 0));
+                                                          Geom::Point(0, 0)));
                     pending_cubic = res;
                     lastAP = -1;
                 }
 
-                FlushPendingAddition(tempDest, lastAddition, pending_cubic, lastAP);
+                FlushPendingAddition(tempDest, lastAddition.get(), pending_cubic, lastAP);
                 FlushPendingAddition(tempDest, descr_cmd[curP], pending_cubic, curP);
         
 	    } else {
@@ -1243,7 +1244,7 @@ void Path::Coalesce(double tresh)
 	    }
             
             containsForced = false;
-            lastAddition = new PathDescrMoveTo(Geom::Point(0, 0));
+            lastAddition.reset(new PathDescrMoveTo(Geom::Point(0, 0)));
             prevA = lastA = nextA;
             lastP = curP;
             lastAP = curP;
@@ -1262,8 +1263,8 @@ void Path::Coalesce(double tresh)
                     containsForced = true;
                 } else  {
                     // Force the addition.
-                    FlushPendingAddition(tempDest, lastAddition, pending_cubic, lastAP);
-                    lastAddition = new PathDescrMoveTo(Geom::Point(0, 0));
+                    FlushPendingAddition(tempDest, lastAddition.get(), pending_cubic, lastAP);
+                    lastAddition.reset(new PathDescrMoveTo(Geom::Point(0, 0)));
                     prevA = lastA = nextA;
                     lastP = curP;
                     lastAP = curP;
@@ -1279,9 +1280,9 @@ void Path::Coalesce(double tresh)
                 PathDescrCubicTo res(Geom::Point(0, 0), Geom::Point(0, 0), Geom::Point(0, 0));
                 int worstP = -1;
                 if (AttemptSimplify(lastA, nextA - lastA + 1, tresh, res, worstP)) {
-                    lastAddition = new PathDescrCubicTo(Geom::Point(0, 0),
+                    lastAddition.reset(new PathDescrCubicTo(Geom::Point(0, 0),
                                                           Geom::Point(0, 0),
-                                                          Geom::Point(0, 0));
+                                                          Geom::Point(0, 0)));
                     pending_cubic = res;
                     lastAddition->associated = lastA;
                     lastP = curP;
@@ -1289,8 +1290,8 @@ void Path::Coalesce(double tresh)
                 }  else {
                     lastA = descr_cmd[lastP]->associated;	// pourrait etre surecrit par la ligne suivante
                         /* (possible translation: Could be overwritten by the next line.) */
-                    FlushPendingAddition(tempDest, lastAddition, pending_cubic, lastAP);
-                    lastAddition = descr_cmd[curP];
+                    FlushPendingAddition(tempDest, lastAddition.get(), pending_cubic, lastAP);
+                    lastAddition.reset(descr_cmd[curP]);
                     if ( typ == descr_cubicto ) {
                         pending_cubic = *(dynamic_cast<PathDescrCubicTo*>(descr_cmd[curP]));
                     }
@@ -1300,7 +1301,7 @@ void Path::Coalesce(double tresh)
         
 	    } else {
                 lastA = prevA /*descr_cmd[curP-1]->associated */ ;
-                lastAddition = descr_cmd[curP];
+                lastAddition.reset(descr_cmd[curP]);
                 if ( typ == descr_cubicto ) {
                     pending_cubic = *(dynamic_cast<PathDescrCubicTo*>(descr_cmd[curP]));
                 }
@@ -1312,8 +1313,8 @@ void Path::Coalesce(double tresh)
         } else if (typ == descr_bezierto) {
 
             if (lastAddition->flags != descr_moveto) {
-                FlushPendingAddition(tempDest, lastAddition, pending_cubic, lastAP);
-                lastAddition = new PathDescrMoveTo(Geom::Point(0, 0));
+                FlushPendingAddition(tempDest, lastAddition.get(), pending_cubic, lastAP);
+                lastAddition.reset(new PathDescrMoveTo(Geom::Point(0, 0)));
 	    }
             lastAP = -1;
             lastA = descr_cmd[curP]->associated;
@@ -1333,7 +1334,7 @@ void Path::Coalesce(double tresh)
     }
     
     if (lastAddition->flags != descr_moveto) {
-        FlushPendingAddition(tempDest, lastAddition, pending_cubic, lastAP);
+        FlushPendingAddition(tempDest, lastAddition.get(), pending_cubic, lastAP);
     }
   
     Copy(tempDest);
