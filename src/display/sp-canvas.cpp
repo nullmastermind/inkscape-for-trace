@@ -58,7 +58,7 @@ static bool const HAS_BROKEN_MOTION_HINTS = true;
 //#define DEBUG_REDRAW 1;
 
 // Define this to output the time spent in a full iddle loop and the number of "tiles" painted
-//define DEBUG_PERFORMANCE 1;
+//#define DEBUG_PERFORMANCE 1;
 
 // Tiles are a way to minimize the number of redraws, eliminating too small redraws.
 // The canvas stores a 2D array of ints, each representing a TILE_SIZExTILE_SIZE pixels tile.
