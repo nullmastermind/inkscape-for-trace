@@ -2425,6 +2425,7 @@ int SPCanvas::paint()
                                             _y0 + int(allocation.height * split_y),
                                             int(allocation.width * (1 - split_x)),
                                             int(allocation.height * (1 - split_y)) };
+    cairo_region_t *draw = nullptr;
     cairo_region_t *to_draw = nullptr;
     cairo_region_t *to_draw_outline = nullptr;
     if (_split_inverse && split) {
@@ -2434,14 +2435,15 @@ int SPCanvas::paint()
         to_draw = cairo_region_create_rectangle(&crect);
         to_draw_outline = cairo_region_create_rectangle(&crect_outline);
     }
-    cairo_rectangle_int_t crectbounds;
-    cairo_region_get_extents(_clean_region, &crectbounds);
-    cairo_region_subtract_rectangle (_clean_region, &crectbounds);
+    cairo_region_get_extents(_clean_region, &crect);
+    draw = cairo_region_create_rectangle(&crect);
+    cairo_region_subtract(draw, _clean_region);
+    cairo_region_get_extents(draw, &crect);
+    cairo_region_subtract_rectangle(_clean_region, &crect); 
     cairo_region_subtract(to_draw, _clean_region);
     cairo_region_subtract(to_draw_outline, _clean_region);
-
+    cairo_region_destroy(draw);
     int n_rects = cairo_region_num_rectangles(to_draw);
-    std::cout << n_rects << "dggdgsdgsdgsd" << std::endl;
     for (int i = 0; i < n_rects; ++i) {
         cairo_rectangle_int_t crect;
         cairo_region_get_rectangle(to_draw, i, &crect);
