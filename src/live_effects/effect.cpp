@@ -676,21 +676,6 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , false //on_text
         , false //experimental
     },
-#ifdef LPE_ENABLE_TEST_EFFECTS
-    {
-        DOEFFECTSTACK_TEST
-        , N_("doEffect stack test") //label
-        , "doeffectstacktest" //key
-        , "experimental" //icon
-        , "doEffect stack test" //untranslated name
-        , N_("Test LPE") //description
-        , true  //on_path
-        , true  //on_shape
-        , true  //on_group
-        , false //on_image
-        , false //on_text
-        , true //experimental
-    },
     {
         ANGLE_BISECTOR
         , N_("Angle bisector") //label
@@ -734,40 +719,12 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true //experimental
     },
     {
-        DYNASTROKE
-        , N_("Dynamic stroke") //label
-        , "dynastroke" //key
-        , "experimental" //icon
-        , "Dynamic stroke" //untranslated name
-        , N_("Create calligraphic strokes with variably shaped ends, making use of a parameter for the brush angle") //description
-        , true  //on_path
-        , true  //on_shape
-        , true  //on_group
-        , false //on_image
-        , false //on_text
-        , true //experimental
-    },
-    {
         EXTRUDE
         , N_("Extrude") //label
         , "extrude" //key
         , "experimental" //icon
         , "Extrude" //untranslated name
         , N_("Extrude the path, creating a face for each path segment") //description
-        , true  //on_path
-        , true  //on_shape
-        , true  //on_group
-        , false //on_image
-        , false //on_text
-        , true //experimental
-    },
-    {
-        LATTICE
-        , N_("Lattice Deformation") //label
-        , "lattice" //key
-        , "experimental" //icon
-        , "Lattice Deformation" //untranslated name
-        , N_("Deform an object using a 4x4 grid") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
@@ -804,20 +761,6 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true //experimental
     },
     {
-        PATH_LENGTH
-        , N_("Path length") //label
-        , "path_length" //key
-        , "experimental" //icon
-        , "Path length" //untranslated name
-        , N_("Display the total length of a (curved) path") //description
-        , true  //on_path
-        , true  //on_shape
-        , true  //on_group
-        , false //on_image
-        , false //on_text
-        , true //experimental
-    },
-    {
         PERP_BISECTOR
         , N_("Perpendicular bisector") //label
         , "perp_bisector" //key
@@ -832,12 +775,27 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true //experimental
     },
     {
-        RECURSIVE_SKELETON
-        , N_("Recursive skeleton") //label
-        , "recursive_skeleton" //key
+        TANGENT_TO_CURVE
+        , N_("Tangent to curve") //label
+        , "tangent_to_curve" //key
         , "experimental" //icon
-        , "Recursive skeleton" //untranslated name
-        , N_("Draw a path recursively") //description
+        , "Tangent to curve" //untranslated name
+        , N_("Draw a tangent with variable length and additional angle that can be moved along the path") //description
+        , true  //on_path
+        , true  //on_shape
+        , true  //on_group
+        , false //on_image
+        , false //on_text
+        , true //experimental
+    },
+#ifdef LPE_ENABLE_TEST_EFFECTS
+    {
+        DOEFFECTSTACK_TEST
+        , N_("doEffect stack test") //label
+        , "doeffectstacktest" //key
+        , "experimental" //icon
+        , "doEffect stack test" //untranslated name
+        , N_("Test LPE") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group
@@ -846,12 +804,54 @@ const EnumEffectData<EffectType> LPETypeData[] = {
         , true //experimental
     },
     {
-        TANGENT_TO_CURVE
-        , N_("Tangent to curve") //label
-        , "tangent_to_curve" //key
+        DYNASTROKE
+        , N_("Dynamic stroke") //label
+        , "dynastroke" //key
         , "experimental" //icon
-        , "Tangent to curve" //untranslated name
-        , N_("Draw a tangent with variable length and additional angle that can be moved along the path") //description
+        , "Dynamic stroke" //untranslated name
+        , N_("Create calligraphic strokes with variably shaped ends, making use of a parameter for the brush angle") //description
+        , true  //on_path
+        , true  //on_shape
+        , true  //on_group
+        , false //on_image
+        , false //on_text
+        , true //experimental
+    },
+    {
+        LATTICE
+        , N_("Lattice Deformation") //label
+        , "lattice" //key
+        , "experimental" //icon
+        , "Lattice Deformation" //untranslated name
+        , N_("Deform an object using a 4x4 grid") //description
+        , true  //on_path
+        , true  //on_shape
+        , true  //on_group
+        , false //on_image
+        , false //on_text
+        , true //experimental
+    },
+    {
+        PATH_LENGTH
+        , N_("Path length") //label
+        , "path_length" //key
+        , "experimental" //icon
+        , "Path length" //untranslated name
+        , N_("Display the total length of a (curved) path") //description
+        , true  //on_path
+        , true  //on_shape
+        , true  //on_group
+        , false //on_image
+        , false //on_text
+        , true //experimental
+    },
+    {
+        RECURSIVE_SKELETON
+        , N_("Recursive skeleton") //label
+        , "recursive_skeleton" //key
+        , "experimental" //icon
+        , "Recursive skeleton" //untranslated name
+        , N_("Draw a path recursively") //description
         , true  //on_path
         , true  //on_shape
         , true  //on_group

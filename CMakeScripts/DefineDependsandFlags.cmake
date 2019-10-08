@@ -228,12 +228,6 @@ else()
     add_definitions(-UWITH_MESH -UWITH_CSSBLEND -UWITH_CSSCOMPOSITE -UWITH_SVG2)
 endif()
 
-if(WITH_LPETOOL)
-    set(LPE_ENABLE_TEST_EFFECTS ON)
-else()
-    set(LPE_ENABLE_TEST_EFFECTS OFF)
-endif()
-
 if(APPLE)
     pkg_check_modules(MacIntegration REQUIRED gtk-mac-integration-gtk3)
     list(APPEND INKSCAPE_INCS_SYS ${MacIntegration_INCLUDE_DIRS})
