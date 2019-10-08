@@ -163,11 +163,13 @@ ColorWheel::get_rgb()
     return hsv_to_rgb(_hue, _saturation, _value);
 }
 
+/* Pad triangle vertically if necessary */
+void
+draw_vertical_padding(color_point p0, color_point p1, int padding, bool pad_upwards,
+                      guint32 *buffer, int height, int stride);
+
 bool
 ColorWheel::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr) {
-
-    Cairo::RefPtr<Cairo::Surface> surface = cr->get_target();
-
     Gtk::Allocation allocation = get_allocation();
     const int width  = allocation.get_width();
     const int height = allocation.get_height();
@@ -256,7 +258,7 @@ ColorWheel::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr) {
      * White corner: v = 1, s = 0
      * Color corner; v = 1, s = 1
      */
-    const int padding = 3; // Avoid edge artifacts (only needed in y).
+    const int padding = 3; // Avoid edge artifacts.
     double x0, y0, x1, y1, x2, y2;
     triangle_corners(x0, y0, x1, y1, x2, y2);
     guint32 color0 = hsv_to_rgb(_hue, 1.0, 1.0);
@@ -281,20 +283,21 @@ ColorWheel::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr) {
     }
 
     guint32* buffer_triangle = g_new (guint32, height * stride / 4);
-  
+
     for (int y = 0; y < height; ++y) {
-        guint32* p = buffer_triangle + y * width;
+        guint32 *p = buffer_triangle + y * (stride / 4);
 
         if (p0.y <= y+padding && y-padding < p2.y) {
 
             // Get values on side at position y.
             color_point side0;
+            double y_inter = clamp(y, p0.y, p2.y);
             if (y < p1.y) {
-                side0 = lerp(p0, p1, p0.y, p1.y, y);
+                side0 = lerp(p0, p1, p0.y, p1.y, y_inter);
             } else {
-                side0 = lerp(p1, p2, p1.y, p2.y, y);
+                side0 = lerp(p1, p2, p1.y, p2.y, y_inter);
             }
-            color_point side1 = lerp(p0, p2, p0.y, p2.y, y);
+            color_point side1 = lerp(p0, p2, p0.y, p2.y, y_inter);
 
             // side0 should be on left
             if (side0.x > side1.x) {
@@ -305,7 +308,7 @@ ColorWheel::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr) {
             int x_end   = std::min(int(side1.x), width);
 
             for (int x = 0; x < width; ++x) {
-                if (x < x_start) {
+                if (x <= x_start) {
                     *p++ = side0.get_color();
                 } else if (x < x_end) {
                     *p++ = lerp(side0, side1, side0.x, side1.x, x).get_color();
@@ -315,6 +318,19 @@ ColorWheel::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr) {
             }
         }
     }
+
+    // add vertical padding to each side separately
+    color_point temp_point = lerp(p0, p1, p0.x, p1.x, (p0.x + p1.x) / 2.0);
+    bool pad_upwards = is_in_triangle(temp_point.x, temp_point.y + 1);
+    draw_vertical_padding(p0, p1, padding, pad_upwards, buffer_triangle, height, stride / 4);
+
+    temp_point = lerp(p0, p2, p0.x, p2.x, (p0.x + p2.x) / 2.0);
+    pad_upwards = is_in_triangle(temp_point.x, temp_point.y + 1);
+    draw_vertical_padding(p0, p2, padding, pad_upwards, buffer_triangle, height, stride / 4);
+
+    temp_point = lerp(p1, p2, p1.x, p2.x, (p1.x + p2.x) / 2.0);
+    pad_upwards = is_in_triangle(temp_point.x, temp_point.y + 1);
+    draw_vertical_padding(p1, p2, padding, pad_upwards, buffer_triangle, height, stride / 4);
 
     Cairo::RefPtr<::Cairo::ImageSurface> source_triangle =
         ::Cairo::ImageSurface::create((unsigned char *)buffer_triangle,
@@ -357,6 +373,45 @@ ColorWheel::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr) {
     }
 
     return true;
+}
+
+void
+draw_vertical_padding(color_point p0, color_point p1, int padding, bool pad_upwards,
+                      guint32 *buffer, int height, int stride)
+{
+    // skip if horizontal padding is more accurate
+    double gradient = (p1.y - p0.y) / (p1.x - p0.x);
+    if (std::abs(gradient) > 1.0) {
+        return;
+    }
+
+    double min_y = std::min(p0.y, p1.y);
+    double max_y = std::max(p0.y, p1.y);
+
+    double min_x = std::min(p0.x, p1.x);
+    double max_x = std::max(p0.x, p1.x);
+
+    for (int y = min_y; y <= max_y; ++y) {
+        int start_x = lerp(p0, p1, p0.y, p1.y, y).x;
+        int end_x = lerp(p0, p1, p0.y, p1.y, clamp(y + 1, min_y, max_y)).x;
+        if (start_x > end_x) {
+            std::swap(start_x, end_x);
+        }
+
+        guint32 *p = buffer + y * stride;
+        p += start_x;
+        for (int x = start_x; x <= end_x; ++x) {
+            color_point point = lerp(p0, p1, p0.x, p1.x, clamp(x, min_x, max_x));
+            for (int offset = 0; offset <= padding; ++offset) {
+                if (pad_upwards && (point.y - offset) >= 0) {
+                    *(p - (offset * stride)) = point.get_color();
+                } else if (!pad_upwards && (point.y + offset) < height) {
+                    *(p + (offset * stride)) = point.get_color();
+                }
+            }
+            ++p;
+        }
+    }
 }
 
 // Find triangle corners given hue and radius.
