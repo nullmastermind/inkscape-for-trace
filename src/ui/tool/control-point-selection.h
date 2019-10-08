@@ -70,12 +70,13 @@ public:
         for (; first != last; ++first) {
             insert(*first, false);
         }
+        _update();
         signal_selection_changed.emit(std::vector<key_type>(first, last), true);
     }
 
     // erase
     void clear();
-    void erase(iterator pos);
+    void erase(iterator pos, bool to_update = true);
     size_type erase(const key_type& k, bool notify = true);
     void erase(iterator first, iterator last);
 
@@ -130,9 +131,9 @@ private:
     void _pointDragged(Geom::Point &, GdkEventMotion *);
     void _pointUngrabbed();
     bool _pointClicked(SelectableControlPoint *, GdkEventButton *);
-    void _pointChanged(SelectableControlPoint *, bool);
     void _mouseoverChanged();
 
+    void _update();
     void _updateTransformHandles(bool preserve_center);
     void _updateBounds();
     bool _keyboardMove(GdkEventKey const &, Geom::Point const &);
