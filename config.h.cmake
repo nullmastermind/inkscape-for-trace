@@ -115,9 +115,9 @@
 #cmakedefine WORDS_BIGENDIAN 1
 
 /* Enable LPE Tool? */
-#cmakedefine WITH_LPETOOL 1
+#cmakedefine WITH_LPETOOL 0
 
 /* Do we want experimental, unsupported, unguaranteed, etc., LivePathEffects enabled? */
-#cmakedefine LPE_ENABLE_TEST_EFFECTS 1
+#cmakedefine LPE_ENABLE_TEST_EFFECTS 0
 
 #endif /* _CONFIG_H_ */
