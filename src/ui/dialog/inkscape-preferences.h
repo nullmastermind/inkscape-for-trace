@@ -237,6 +237,7 @@ protected:
     UI::Widget::PrefColorPicker _t_node_pathoutline_color;
 
     UI::Widget::PrefCombo _gtk_theme;
+    UI::Widget::PrefOpenFolder _sys_user_themes_dir_copy;
     UI::Widget::PrefCombo _icon_theme;
     UI::Widget::PrefCheckButton _dark_theme;
     UI::Widget::PrefCheckButton _symbolic_icons;

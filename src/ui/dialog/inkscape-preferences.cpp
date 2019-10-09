@@ -1109,6 +1109,8 @@ void InkscapePreferences::initPageUI()
         _page_theme.add_line(false, _("Change Gtk theme:"), _gtk_theme, "", "", false);
         _gtk_theme.signal_changed().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
     }
+    _sys_user_themes_dir_copy.init(g_build_filename(g_get_user_data_dir(), "themes", NULL), _("Open themes folder"));
+    _page_theme.add_line(true, _("User themes: "), _sys_user_themes_dir_copy, "", _("Location of the user’s themes"), true);
     _dark_theme.init(_("Use dark theme"), "/theme/preferDarkTheme", false);
     _page_theme.add_line(true, "", _dark_theme, "", _("Use dark theme"), true);
     _dark_theme.signal_clicked().connect(sigc::mem_fun(*this, &InkscapePreferences::themeChange));
