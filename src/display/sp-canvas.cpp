@@ -57,7 +57,7 @@ static bool const HAS_BROKEN_MOTION_HINTS = true;
 // Define this to visualize the regions to be redrawn
 //#define DEBUG_REDRAW 1;
 
-// Define this to output the time spent in a full iddle loop and the number of "tiles" painted
+// Define this to output the time spent in a full idle loop and the number of "tiles" painted
 //#define DEBUG_PERFORMANCE 1;
 
 // Tiles are a way to minimize the number of redraws, eliminating too small redraws.
@@ -2535,17 +2535,19 @@ int SPCanvas::doUpdate()
 gint SPCanvas::idle_handler(gpointer data)
 {
     SPCanvas *canvas = SP_CANVAS (data);
-    int const ret = canvas->doUpdate();
-#ifdef DEBUG_PERFORMANCE
-    static gint totaloops = 1;
-    if (!ret) {
-        totaloops++;
+    int ret = canvas->doUpdate();
+    int n_rects = cairo_region_num_rectangles(canvas->_clean_region);
+    if (n_rects > 1) { // not fully painted, maybe clean region is updated in middle of idle, reload again
+        ret = 0;
     }
-#endif
+#ifdef DEBUG_PERFORMANCE
+    static int totaloops = 1;
+    if (ret == 0) {
+        totaloops += 1;
+    }
     if (ret) {
         // Reset idle id
         canvas->_idle_id = 0;
-#ifdef DEBUG_PERFORMANCE
         static glong totalelapsed = 0;
         GTimeVal now;
         g_get_current_time (&now);
@@ -2567,6 +2569,10 @@ gint SPCanvas::idle_handler(gpointer data)
         }
         totaloops = 1;
         canvas->_splits = 0;
+#else
+    if (ret) {
+        // Reset idle id
+        canvas->_idle_id = 0;
 #endif
     }
     return !ret;
@@ -2713,7 +2719,20 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
 void SPCanvas::updateNow()
 {
     if (_need_update) {
+#ifdef DEBUG_PERFORMANCE
+        GTimeVal now;
+        g_get_current_time (&now);
+        glong elapsed = (now.tv_sec - _idle_time.tv_sec) * 1000000
+        + (now.tv_usec - _idle_time.tv_usec);
+        g_message("updateNow() started %f", elapsed/(double)1000000);
+#endif
         doUpdate();
+#ifdef DEBUG_PERFORMANCE
+        g_get_current_time (&now);
+        elapsed = (now.tv_sec - _idle_time.tv_sec) * 1000000
+        + (now.tv_usec - _idle_time.tv_usec);
+        g_message("updateNow() ended %f", elapsed/(double)1000000);
+#endif
     }
 }
 

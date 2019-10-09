@@ -2101,8 +2101,8 @@ void ZoomVerb::perform(SPAction *action, void *data)
         default:
             break;
     }
-
-    dt->updateNow();
+    // this is not needed canvas is updated correctly in all 
+    // dt->updateNow();
 
 } // end of sp_verb_action_zoom_perform()
 
