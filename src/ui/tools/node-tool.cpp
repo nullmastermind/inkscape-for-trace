@@ -185,6 +185,7 @@ NodeTool::~NodeTool() {
     destroy_group(data.outline_group);
     destroy_group(data.dragpoint_group);
     destroy_group(this->_transform_handle_group);
+    this->desktop->canvas->endForcedFullRedraws();
 }
 
 void NodeTool::setup() {
@@ -288,6 +289,7 @@ void NodeTool::setup() {
 void NodeTool::finish() 
 {
     this->_selected_nodes->clear();
+    this->desktop->canvas->endForcedFullRedraws();
     ToolBase::finish();
 }
 
@@ -554,9 +556,8 @@ bool NodeTool::root_handler(GdkEvent* event) {
                 //prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff), 1.0,
                 over_item->highlight_color(), 1.0,
                 SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-
+            
             sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(flash), 0, SP_WIND_RULE_NONZERO);
-            desktop->canvas->forceFullRedrawAfterInterruptions(5);
             this->flash_tempitem = desktop->add_temporary_canvasitem(flash,
                 prefs->getInt("/tools/nodes/pathflash_timeout", 500));
 
@@ -639,13 +640,14 @@ bool NodeTool::root_handler(GdkEvent* event) {
                 }
             }
         }
-        desktop->canvas->forceFullRedrawAfterInterruptions(5);
+
         break;
 
     default:
         break;
     }
-    
+    // we realy dont want to stop any node operation we want to success all even the time consume it
+    this->desktop->canvas->forceFullRedrawAfterInterruptions(0);
     return ToolBase::root_handler(event);
 }
 
@@ -737,7 +739,7 @@ void NodeTool::update_tip(GdkEvent *event) {
  */
 void NodeTool::select_area(Geom::Rect const &sel, GdkEventButton *event) {
     using namespace Inkscape::UI;
-
+    
     if (this->_multipath->empty()) {
         // if multipath is empty, select rubberbanded items rather than nodes
         Inkscape::Selection *selection = this->desktop->selection;
@@ -755,7 +757,7 @@ void NodeTool::select_area(Geom::Rect const &sel, GdkEventButton *event) {
 
 void NodeTool::select_point(Geom::Point const &/*sel*/, GdkEventButton *event) {
     using namespace Inkscape::UI; // pull in event helpers
-
+    
     if (!event) {
         return;
     }
