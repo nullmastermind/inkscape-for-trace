@@ -499,9 +499,13 @@ GlyphsPanel::GlyphsPanel() :
     GlyphColumns *columns = getColumns();
 
     iconView = new Gtk::IconView(static_cast<Glib::RefPtr<Gtk::TreeModel> >(store));
+    iconView->set_name("UnicodeIconView");
     iconView->set_markup_column(columns->name);
-    iconView->set_tooltip_column(2); // Uses Pango merkup, must use column number.
-    //iconView->set_columns(16);
+    iconView->set_tooltip_column(2); // Uses Pango markup, must use column number.
+    iconView->set_margin(0);
+    iconView->set_item_padding(0);
+    iconView->set_row_spacing(0);
+    iconView->set_column_spacing(0);
 
     sigc::connection conn;
     conn = iconView->signal_item_activated().connect(sigc::mem_fun(*this, &GlyphsPanel::glyphActivated));

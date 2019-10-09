@@ -492,3 +492,7 @@ combobox window.popup scrolledwindow treeview separator {}
     padding: 0;
     outline-style: none;
 }
+
+#UnicodeIconView {
+    font-size: 16px;
+}
