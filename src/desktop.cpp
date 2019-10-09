@@ -515,11 +515,17 @@ void SPDesktop::_setDisplayMode(Inkscape::RenderMode mode) {
     canvas->_rendermode = mode;
     _display_mode = mode;
     if (_display_mode == Inkscape::RENDERMODE_OUTLINE) {
-        _split_canvas = false;
+        if (_split_canvas) {
+            toggleSplitMode();
+        }
+        if (_xray) {
+            toggleXRay();
+        }
     }
     redrawDesktop();
     _widget->setTitle( this->getDocument()->getDocumentName() );
 }
+
 void SPDesktop::_setDisplayColorMode(Inkscape::ColorMode mode) {
     // reload grayscale matrix from prefs
     if (mode == Inkscape::COLORMODE_GRAYSCALE) {
@@ -579,9 +585,6 @@ bool SPDesktop::displayModeToggle()
         if (verb) {
             _menu_update.emit(verb->get_code(), setDisplayModeNormal());
         }
-    }
-    if (_display_mode == Inkscape::RENDERMODE_OUTLINE) {
-        _split_canvas = false;
     }
     return true;
 }
@@ -1661,17 +1664,18 @@ void SPDesktop::toggleSplitMode()
     if (this->getToplevel()) {
         _split_canvas = !_split_canvas;
         if (_split_canvas && _xray) {
-            _xray = !_xray;
-            Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_XRAY);
-            if (verb) {
-                _menu_update.emit(verb->get_code(), xrayMode());
-            }
+            toggleXRay();
         }
         SPCanvas *canvas = getCanvas();
         canvas->requestFullRedraw();
         Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_SPLIT);
         if (verb) {
             _menu_update.emit(verb->get_code(), splitMode());
+        }
+        if (_display_mode == Inkscape::RENDERMODE_OUTLINE) {
+            if (_split_canvas) {
+                toggleSplitMode();
+            }
         }
     }
 }
@@ -1681,17 +1685,18 @@ void SPDesktop::toggleXRay()
     if (this->getToplevel()) {
         _xray = !_xray;
         if (_split_canvas && _xray) {
-            _split_canvas = !_split_canvas;
-            Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_SPLIT);
-            if (verb) {
-                _menu_update.emit(verb->get_code(), splitMode());
-            }
+            toggleSplitMode();
         }
         SPCanvas *canvas = getCanvas();
         canvas->requestFullRedraw();
         Inkscape::Verb *verb = Inkscape::Verb::get(SP_VERB_VIEW_TOGGLE_XRAY);
         if (verb) {
             _menu_update.emit(verb->get_code(), xrayMode());
+        }
+        if (_display_mode == Inkscape::RENDERMODE_OUTLINE) {
+            if (_xray) {
+                toggleXRay();
+            }
         }
     }
 }

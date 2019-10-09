@@ -1235,8 +1235,7 @@ void SPCanvas::handle_size_allocate(GtkWidget *widget, GtkAllocation *allocation
     // Schedule redraw of any newly exposed regions
     canvas->_split_value = 0.5;
     canvas->_spliter_control_pos = Geom::Point();
-    canvas->dirtyAll();
-    canvas->addIdle();
+    canvas->requestFullRedraw();
 }
 
 int SPCanvas::emitEvent(GdkEvent *event)
@@ -1606,8 +1605,7 @@ gint SPCanvas::handle_button(GtkWidget *widget, GdkEventButton *event)
                     canvas->_split_vertical = true;
                 }
                 if (spliter_clicked) {
-                    canvas->dirtyAll();
-                    canvas->addIdle();
+                    canvas->requestFullRedraw();
                 }
             }
             canvas->_split_control_pressed = false;
@@ -1725,7 +1723,7 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
     }
 
     canvas->set_cursor(widget);
-    if (canvas->_split_pressed) {
+    if (canvas->_split_pressed && desktop && desktop->event_context && desktop->splitMode()) {
         GtkAllocation allocation;
         canvas->_split_dragging = true;
         gtk_widget_get_allocation(GTK_WIDGET(canvas), &allocation);
@@ -1744,14 +1742,11 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
                 canvas->_spliter_control_pos = cursor_pos - canvas->_spliter_in_control_pos;
             }
         }
-        canvas->dirtyAll();
-        canvas->addIdle();
+        canvas->requestFullRedraw();
         status = 1;
     } else {
         if (desktop && desktop->event_context && desktop->xrayMode()) {
-            if (canvas->_xray) {
-                sp_reset_spliter(canvas);
-            }
+            sp_reset_spliter(canvas);
             Geom::Point prev_orig = canvas->_xray_orig;
             canvas->_xray_orig = desktop->point(true);
             canvas->_xray_orig *= desktop->current_zoom();
@@ -2435,6 +2430,7 @@ int SPCanvas::paint()
         to_draw = cairo_region_create_rectangle(&crect);
         to_draw_outline = cairo_region_create_rectangle(&crect_outline);
     }
+
     cairo_region_get_extents(_clean_region, &crect);
     draw = cairo_region_create_rectangle(&crect);
     cairo_region_subtract(draw, _clean_region);
@@ -2775,8 +2771,7 @@ void SPCanvas::setBackgroundColor(guint32 rgba) {
     }
     _background = cairo_pattern_create_rgb(new_r, new_g, new_b);
     _background_is_checkerboard = false;
-    dirtyAll();
-    addIdle();
+    requestFullRedraw();
 }
 
 void SPCanvas::setBackgroundCheckerboard(guint32 rgba)
@@ -2787,8 +2782,7 @@ void SPCanvas::setBackgroundCheckerboard(guint32 rgba)
     }
     _background = ink_cairo_pattern_create_checkerboard(rgba);
     _background_is_checkerboard = true;
-    dirtyAll();
-    addIdle();
+    requestFullRedraw();
 }
 
 /**
