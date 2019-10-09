@@ -860,9 +860,8 @@ bool SPMeshNodeArray::read( SPMeshGradient *mg_in ) {
                                 new_patch.setOpacity( istop, opacity );
                                 new_patch.setStopPtr( istop, stop );
                             }
-
+                            ++istop;
                         }
-                        ++istop;
                     } // Loop over stops
 
                     // Read in tensor string after stops since tensor nodes defined relative to corner nodes.
@@ -887,13 +886,12 @@ bool SPMeshNodeArray::read( SPMeshGradient *mg_in ) {
                             }
                         }
                     }
+                    ++icolumn;
+                    if( max_column < icolumn ) max_column = icolumn;
                 }
-
-                ++icolumn;
-                if( max_column < icolumn ) max_column = icolumn;
             }
+            ++irow;
         }
-        ++irow;
     }
 
     // Insure we have a true array.
