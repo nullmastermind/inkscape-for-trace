@@ -12,6 +12,7 @@
  */
 
 #include <cstring>
+#include <ctime>
 #include <sstream>
 #include <utility>
 #include <glibmm/fileutils.h>
@@ -271,11 +272,22 @@ void Preferences::save()
  */
 void Preferences::reset()
 {
+    time_t sptime = time (nullptr);
+    struct tm *sptm = localtime (&sptime);
+    gchar sptstr[256];
+    strftime (sptstr, 256, "%Y_%m_%d_%H_%M_%S", sptm);
+
+    char *new_name = g_strdup_printf("%s_%s", _prefs_filename.c_str(), sptstr);
+
+
     if (g_file_test(_prefs_filename.c_str(), G_FILE_TEST_EXISTS)) {
-        int retcode = g_unlink (_prefs_filename.c_str());
-        if (retcode == 0) g_warning("%s", _("Preferences file was deleted."));
-        else g_warning("%s", _("There was an error trying to delete the preferences file."));
+        //int retcode = g_unlink (_prefs_filename.c_str());
+        int retcode = g_rename (_prefs_filename.c_str(), new_name );
+        if (retcode == 0) g_warning("%s %s.", _("Preferences file was backed up to"), new_name);
+        else g_warning("%s", _("There was an error trying to reset the preferences file."));
     }
+
+    g_free(new_name);
     _observer_map.clear();
     Inkscape::GC::release(_prefs_doc);
     _prefs_doc = nullptr;
