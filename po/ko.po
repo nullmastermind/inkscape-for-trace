@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-09-22 17:15+0200\n"
+"POT-Creation-Date: 2019-10-09 15:17+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: sensu iun <cieltero@gmail.com>\n"
 "Language-Team: <Dokdo@korea.land>\n"
@@ -4036,11 +4036,11 @@ msgstr "안내선 삭제"
 msgid "<b>Guideline</b>: %s"
 msgstr "<b>안내선</b>: %s"
 
-#: ../src/desktop.cpp:836
+#: ../src/desktop.cpp:839
 msgid "No previous transform."
 msgstr "이전 변형 없음."
 
-#: ../src/desktop.cpp:859
+#: ../src/desktop.cpp:862
 msgid "No next transform."
 msgstr "다음 변형 없음."
 
@@ -4439,19 +4439,23 @@ msgid "_Redo"
 msgstr "재실행(_R)"
 
 #: ../src/extension/dependency.cpp:250
-msgid "Dependency:"
+#, fuzzy
+msgid "Dependency"
 msgstr "의존성:"
 
 #: ../src/extension/dependency.cpp:251
-msgid "  type: "
+#, fuzzy
+msgid "type"
 msgstr "  유형: "
 
 #: ../src/extension/dependency.cpp:252
-msgid "  location: "
-msgstr "  위치: "
+#, fuzzy
+msgid "location"
+msgstr "X 위치"
 
 #: ../src/extension/dependency.cpp:253
-msgid "  string: "
+#, fuzzy
+msgid "string"
 msgstr "  문자열: "
 
 #: ../src/extension/dependency.cpp:256
@@ -4487,7 +4491,7 @@ msgstr "시동시 대화창 보이기"
 msgid "'%s' working, please wait..."
 msgstr "‘%s’ 작업 중, 기다리세요..."
 
-#: ../src/extension/extension.cpp:274
+#: ../src/extension/extension.cpp:278
 msgid ""
 "  This is caused by an improper .inx file for this extension.  An improper ."
 "inx file could have been caused by a faulty installation of Inkscape."
@@ -4495,57 +4499,54 @@ msgstr ""
 " 이 확장기능 용의 부적합한 .inx 파일에 의해 문제가 생겼습니다. 부적합한 .inx "
 "파일은 잉크스케이프 설치가 잘못되어서 생길 수 있습니다."
 
-#: ../src/extension/extension.cpp:284
+#: ../src/extension/extension.cpp:288
 msgid "the extension is designed for Windows only."
 msgstr "그 확장 기능은 Windows 전용입니다."
 
-#: ../src/extension/extension.cpp:289
+#: ../src/extension/extension.cpp:293
 msgid "the XML description of it got lost."
 msgstr "그 항목의 XML 설명을 잃어 버렸습니다."
 
-#: ../src/extension/extension.cpp:293
+#: ../src/extension/extension.cpp:297
 msgid "no implementation was defined for the extension."
 msgstr "그 확장기능에 사용할 구현이 정의되지 않았습니다."
 
-#: ../src/extension/extension.cpp:300
+#: ../src/extension/extension.cpp:303
 msgid "a dependency was not met."
 msgstr "의존성 하나가 충족되지 않았음."
 
-#: ../src/extension/extension.cpp:320
-msgid "Extension \""
-msgstr "확장기능 “"
-
-#: ../src/extension/extension.cpp:320
-msgid "\" failed to load because "
+#: ../src/extension/extension.cpp:326
+#, fuzzy
+msgid "Extension \"%1\" failed to load because %2"
 msgstr "” 불러들이기 실패. 원인은  "
 
-#: ../src/extension/extension.cpp:692
+#: ../src/extension/extension.cpp:695
 #, c-format
 msgid "Could not create extension error log file '%s'"
 msgstr "확장기능 오류 로그 파일 ‘%s’ 를 작성할 수 없었습니다"
 
-#: ../src/extension/extension.cpp:791
+#: ../src/extension/extension.cpp:799
 #: ../share/extensions/webslicer_create_rect.inx:7
 msgid "Name:"
 msgstr "이름:"
 
-#: ../src/extension/extension.cpp:792
+#: ../src/extension/extension.cpp:800
 msgid "ID:"
 msgstr "ID:"
 
-#: ../src/extension/extension.cpp:793
+#: ../src/extension/extension.cpp:801
 msgid "State:"
 msgstr "상태:"
 
-#: ../src/extension/extension.cpp:793
+#: ../src/extension/extension.cpp:801
 msgid "Loaded"
 msgstr "불러들였음"
 
-#: ../src/extension/extension.cpp:793
+#: ../src/extension/extension.cpp:801
 msgid "Unloaded"
 msgstr "불러들이기 해제됨"
 
-#: ../src/extension/extension.cpp:793
+#: ../src/extension/extension.cpp:801
 msgid "Deactivated"
 msgstr "비활성화됨"
 
@@ -4591,6 +4592,7 @@ msgid "Height:"
 msgstr "높이:"
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:44
+#: ../src/live_effects/lpe-offset.cpp:78
 #: ../src/ui/toolbar/measure-toolbar.cpp:223
 #: ../share/extensions/printing_marks.inx:28
 msgid "Offset:"
@@ -6399,7 +6401,8 @@ msgstr "그림자"
 
 #: ../src/extension/internal/filter/color.h:1121
 #: ../src/extension/internal/filter/paint.h:357 ../src/filter-enums.cpp:34
-#: ../src/live_effects/effect.cpp:653
+#: ../src/live_effects/effect.cpp:653 ../src/live_effects/lpe-offset.cpp:78
+#: ../src/live_effects/lpe-parallel.cpp:50
 #: ../src/live_effects/lpe-transform_2pts.cpp:41
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1030
 msgid "Offset"
@@ -8142,21 +8145,21 @@ msgstr "문서 저장..."
 msgid "en"
 msgstr "ko"
 
-#: ../src/file.cpp:1160 ../src/ui/dialog/inkscape-preferences.cpp:2091
+#: ../src/file.cpp:1163 ../src/ui/dialog/inkscape-preferences.cpp:2091
 #: ../src/ui/dialog/ocaldialogs.cpp:1087
 msgid "Import"
 msgstr "들여오기"
 
-#: ../src/file.cpp:1163
+#: ../src/file.cpp:1166
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "요청한 파일 %s를 읽어오지 못 함"
 
-#: ../src/file.cpp:1210
+#: ../src/file.cpp:1213
 msgid "Select file to import"
 msgstr "들여올 파일 선택"
 
-#: ../src/file.cpp:1466
+#: ../src/file.cpp:1469
 msgid "Import Clip Art"
 msgstr "Clip Art 들여오기"
 
@@ -8400,7 +8403,7 @@ msgstr "그레이디언트 핸들 이동하기"
 msgid "Delete gradient stop"
 msgstr "그레이디언트 조절점 삭제하기"
 
-#: ../src/gradient-drag.cpp:1459
+#: ../src/gradient-drag.cpp:1461
 #, c-format
 msgid ""
 "%s %d for: %s%s; drag with <b>Ctrl</b> to snap offset; click with <b>Ctrl"
@@ -8409,17 +8412,17 @@ msgstr ""
 "%3$s%4$s용 %1$s %2$d; <b>Ctrl</b> 드래그 -- 오프셋 붙이기; <b>Ctrl+Alt</b> 클"
 "릭 -- 조절점 삭제"
 
-#: ../src/gradient-drag.cpp:1463 ../src/gradient-drag.cpp:1472
-#: ../src/gradient-drag.cpp:1479
+#: ../src/gradient-drag.cpp:1465 ../src/gradient-drag.cpp:1474
+#: ../src/gradient-drag.cpp:1481
 msgid " (stroke)"
 msgstr " (윤곽선)"
 
-#: ../src/gradient-drag.cpp:1469
+#: ../src/gradient-drag.cpp:1471
 #, c-format
 msgid "%s for: %s%s"
 msgstr "%2$s%3$s용 %1$s"
 
-#: ../src/gradient-drag.cpp:1476
+#: ../src/gradient-drag.cpp:1478
 #, c-format
 msgid ""
 "%s for: %s%s; drag with <b>Ctrl</b> to snap angle, with <b>Ctrl+Alt</b> to "
@@ -8428,13 +8431,13 @@ msgstr ""
 "%2$s%3$s용 %1$s <b>Ctrl</b>+끌기 -- 각도 붙이기, <b>Ctrl+Alt</b> -- 각도 유"
 "지, <b>Ctrl+Shift</b> --중심을 기준으로 배율 변경"
 
-#: ../src/gradient-drag.cpp:1484
+#: ../src/gradient-drag.cpp:1486
 msgid ""
 "Radial gradient <b>center</b> and <b>focus</b>; drag with <b>Shift</b> to "
 "separate focus"
 msgstr "방사 그레이디언트 <b>중심</b>과 <b>초점</b>; <b>Shift</b> -- 초점 분리"
 
-#: ../src/gradient-drag.cpp:1487
+#: ../src/gradient-drag.cpp:1489
 #, c-format
 msgid ""
 "Gradient point shared by <b>%d</b> gradient; drag with <b>Shift</b> to "
@@ -8446,15 +8449,15 @@ msgstr[0] ""
 "<b>%d</b>개의 그레이디언트에 의해 공유된 그레이디언트 점; <b>Shift</b> -- 분"
 "리하기"
 
-#: ../src/gradient-drag.cpp:2765
+#: ../src/gradient-drag.cpp:2767
 msgid "Move gradient handle(s)"
 msgstr "그레이디언트 핸들 이동"
 
-#: ../src/gradient-drag.cpp:2799
+#: ../src/gradient-drag.cpp:2801
 msgid "Move gradient mid stop(s)"
 msgstr "그레이디언트 중간 조절점 이동"
 
-#: ../src/gradient-drag.cpp:3086
+#: ../src/gradient-drag.cpp:3090
 msgid "Delete gradient stop(s)"
 msgstr "그레이디언트 조절점 삭제"
 
@@ -9408,126 +9411,126 @@ msgstr ""
 "대시가 정확히 한 노드에서 끝나는 대시 윤곽선을 추가. 선택적으로 경로 선분 하"
 "나당 동일한 개수의 노드를 사용"
 
-#: ../src/live_effects/effect.cpp:682
-msgid "doEffect stack test"
-msgstr "doEffect 스택 테스트"
-
-#: ../src/live_effects/effect.cpp:686
-msgid "Test LPE"
-msgstr "LPE 테스트"
-
-#: ../src/live_effects/effect.cpp:696
+#: ../src/live_effects/effect.cpp:681
 msgid "Angle bisector"
 msgstr "각도 2등분선"
 
-#: ../src/live_effects/effect.cpp:700
+#: ../src/live_effects/effect.cpp:685
 msgid ""
 "Draw a line that halves the angle between the first three nodes of the path"
 msgstr "경로의 처음 세 노드 사이의 각도를 절반으로 나누는 그리기"
 
-#: ../src/live_effects/effect.cpp:710
+#: ../src/live_effects/effect.cpp:695
 msgid "Circle (by center and radius)"
 msgstr "원 (중심 + 반지름으로)"
 
-#: ../src/live_effects/effect.cpp:714
+#: ../src/live_effects/effect.cpp:699
 msgid ""
 "Draw a circle, where the first node of the path is the center, and the last "
 "determines its radius"
 msgstr ""
 "경로의 첫 번째 노드가 중심이고 마지막 노드가 반지름을 결정하는 원을 그립니다"
 
-#: ../src/live_effects/effect.cpp:724
+#: ../src/live_effects/effect.cpp:709
 msgid "Circle by 3 points"
 msgstr "3점에 의한 원"
 
-#: ../src/live_effects/effect.cpp:728
+#: ../src/live_effects/effect.cpp:713
 msgid ""
 "Draw a circle whose circumference passes through the first three nodes of "
 "the path"
 msgstr "원주가 경로의 처음 세 노드를 통과하는 원을 그립니다"
 
-#: ../src/live_effects/effect.cpp:738
-msgid "Dynamic stroke"
-msgstr "동적 윤곽선"
-
-#: ../src/live_effects/effect.cpp:742
-msgid ""
-"Create calligraphic strokes with variably shaped ends, making use of a "
-"parameter for the brush angle"
-msgstr ""
-"브러시 각도용 매개변수를 사용하여, 다양한 모양의 끝이 있는 서예 획 만들기"
-
-#: ../src/live_effects/effect.cpp:752 ../share/extensions/extrude.inx:3
+#: ../src/live_effects/effect.cpp:723 ../share/extensions/extrude.inx:3
 msgid "Extrude"
 msgstr "밀어내기"
 
-#: ../src/live_effects/effect.cpp:756
+#: ../src/live_effects/effect.cpp:727
 msgid "Extrude the path, creating a face for each path segment"
 msgstr "경로를 압출, 각 경로 선분에 대해 면을 만듦"
 
-#: ../src/live_effects/effect.cpp:766
-msgid "Lattice Deformation"
-msgstr "라티스 변형"
-
-#: ../src/live_effects/effect.cpp:770
-msgid "Deform an object using a 4x4 grid"
-msgstr "4x4 격자를 사용하여 개체를 변형"
-
-#: ../src/live_effects/effect.cpp:780
+#: ../src/live_effects/effect.cpp:737
 msgid "Line Segment"
 msgstr "직선 선분"
 
-#: ../src/live_effects/effect.cpp:784
+#: ../src/live_effects/effect.cpp:741
 msgid "Draw a straight line that connects the first and last node of a path"
 msgstr "경로의 첫 번째 및 마지막 노드를 연결하는 직선 그리기"
 
-#: ../src/live_effects/effect.cpp:794
+#: ../src/live_effects/effect.cpp:751
 #: ../src/live_effects/lpe-measure-segments.cpp:61
 #: ../share/extensions/plotter.inx:13
 msgid "Parallel"
 msgstr "평행"
 
-#: ../src/live_effects/effect.cpp:798
+#: ../src/live_effects/effect.cpp:755
 msgid "Create a draggable line that will always be parallel to a two-node path"
 msgstr "항상 2-노드 경로에 평행한 끌기 가능한 선 만들기"
 
-#: ../src/live_effects/effect.cpp:808
-msgid "Path length"
-msgstr "경로 길이"
-
-#: ../src/live_effects/effect.cpp:812
-msgid "Display the total length of a (curved) path"
-msgstr "한 (곡선) 경로의 총 길이 표시"
-
-#: ../src/live_effects/effect.cpp:822
+#: ../src/live_effects/effect.cpp:765
 msgid "Perpendicular bisector"
 msgstr "수직 이등분선"
 
-#: ../src/live_effects/effect.cpp:826
+#: ../src/live_effects/effect.cpp:769
 msgid ""
 "Draw a perpendicular line in the middle of the (imaginary) line that "
 "connects the start and end nodes"
 msgstr "시작 노드와 끝 노드를 연결하는 (가상의) 선의 중간에 수직 선을 그립니다"
 
-#: ../src/live_effects/effect.cpp:836
-msgid "Recursive skeleton"
-msgstr "내부반복 골격"
-
-#: ../src/live_effects/effect.cpp:840
-msgid "Draw a path recursively"
-msgstr "경로를 재귀적으로 그립니다"
-
-#: ../src/live_effects/effect.cpp:850
+#: ../src/live_effects/effect.cpp:779
 msgid "Tangent to curve"
 msgstr "접선을 곡선으로"
 
-#: ../src/live_effects/effect.cpp:854
+#: ../src/live_effects/effect.cpp:783
 msgid ""
 "Draw a tangent with variable length and additional angle that can be moved "
 "along the path"
 msgstr ""
 "가변 길이의 그리고 추가적으로 경로를 따라 이동할 수 있는 각도가 있는 접선 그"
 "리기"
+
+#: ../src/live_effects/effect.cpp:794
+msgid "doEffect stack test"
+msgstr "doEffect 스택 테스트"
+
+#: ../src/live_effects/effect.cpp:798
+msgid "Test LPE"
+msgstr "LPE 테스트"
+
+#: ../src/live_effects/effect.cpp:808
+msgid "Dynamic stroke"
+msgstr "동적 윤곽선"
+
+#: ../src/live_effects/effect.cpp:812
+msgid ""
+"Create calligraphic strokes with variably shaped ends, making use of a "
+"parameter for the brush angle"
+msgstr ""
+"브러시 각도용 매개변수를 사용하여, 다양한 모양의 끝이 있는 서예 획 만들기"
+
+#: ../src/live_effects/effect.cpp:822
+msgid "Lattice Deformation"
+msgstr "라티스 변형"
+
+#: ../src/live_effects/effect.cpp:826
+msgid "Deform an object using a 4x4 grid"
+msgstr "4x4 격자를 사용하여 개체를 변형"
+
+#: ../src/live_effects/effect.cpp:836
+msgid "Path length"
+msgstr "경로 길이"
+
+#: ../src/live_effects/effect.cpp:840
+msgid "Display the total length of a (curved) path"
+msgstr "한 (곡선) 경로의 총 길이 표시"
+
+#: ../src/live_effects/effect.cpp:850
+msgid "Recursive skeleton"
+msgstr "내부반복 골격"
+
+#: ../src/live_effects/effect.cpp:854
+msgid "Draw a path recursively"
+msgstr "경로를 재귀적으로 그립니다"
 
 #: ../src/live_effects/effect.cpp:864
 msgid "Text label"
@@ -9601,6 +9604,40 @@ msgstr "인자 편집 중 <b>%s</b>."
 #: ../src/live_effects/effect.cpp:1710
 msgid "None of the applied path effect's parameters can be edited on-canvas."
 msgstr "캔버스상에서 적용 경로 효과 인자를 편집할 수 없습니다."
+
+#: ../src/live_effects/lpe-angle_bisector.cpp:45
+#: ../src/live_effects/lpe-parallel.cpp:51
+#: ../src/live_effects/lpe-perp_bisector.cpp:98
+#: ../src/live_effects/lpe-tangent_to_curve.cpp:63
+msgid "Length left:"
+msgstr "길이 왼쪽:"
+
+#: ../src/live_effects/lpe-angle_bisector.cpp:45
+#: ../src/live_effects/lpe-perp_bisector.cpp:98
+msgid "Specifies the left end of the bisector"
+msgstr "이등분선의 왼쪽 끝을 지정함"
+
+#: ../src/live_effects/lpe-angle_bisector.cpp:46
+#: ../src/live_effects/lpe-parallel.cpp:52
+#: ../src/live_effects/lpe-perp_bisector.cpp:99
+#: ../src/live_effects/lpe-tangent_to_curve.cpp:64
+msgid "Length right:"
+msgstr "길이 오른쪽:"
+
+#: ../src/live_effects/lpe-angle_bisector.cpp:46
+#: ../src/live_effects/lpe-perp_bisector.cpp:99
+msgid "Specifies the right end of the bisector"
+msgstr "이등분선의 오른쪽 끝을 지정함"
+
+#: ../src/live_effects/lpe-angle_bisector.cpp:85
+#: ../src/live_effects/lpe-perp_bisector.cpp:159
+msgid "Adjust the \"left\" end of the bisector"
+msgstr "이등분선의 \"왼쪽\" 끝을 조정"
+
+#: ../src/live_effects/lpe-angle_bisector.cpp:91
+#: ../src/live_effects/lpe-perp_bisector.cpp:165
+msgid "Adjust the \"right\" end of the bisector"
+msgstr "이등분선의 \"오른쪽\" 끝을 조정"
 
 #: ../src/live_effects/lpe-attach-path.cpp:20
 msgid "Start path:"
@@ -10057,8 +10094,8 @@ msgstr "요소를 분리"
 msgid "Split elements, so each can have its own style"
 msgstr "요소를 분할햇, 각 요소가 자신만의 스타일을 가질 수 있게 함"
 
-#: ../src/live_effects/lpe-copy_rotate.cpp:373
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:148
+#: ../src/live_effects/lpe-copy_rotate.cpp:367
+#: ../src/live_effects/lpe-mirror_symmetry.cpp:144
 msgid "Reset styles"
 msgstr "스타일 초기화"
 
@@ -10163,12 +10200,12 @@ msgid "Approximately unify the dashes length using the minimal length segment"
 msgstr "최소 길이 선분을 사용하여 대시 길이를 대략 통합"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:24
-#: ../src/live_effects/lpe-powerclip.cpp:36
+#: ../src/live_effects/lpe-powerclip.cpp:37
 msgid "Info Box"
 msgstr "정보 상자"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:24
-#: ../src/live_effects/lpe-powerclip.cpp:36
+#: ../src/live_effects/lpe-powerclip.cpp:37
 msgid "Important messages"
 msgstr "중요한 메시지"
 
@@ -10430,7 +10467,7 @@ msgstr "베지어를 강제"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:40
 #: ../src/live_effects/lpe-measure-segments.cpp:67
-#: ../src/live_effects/lpe-ruler.cpp:40
+#: ../src/live_effects/lpe-offset.cpp:77 ../src/live_effects/lpe-ruler.cpp:40
 msgid "Unit"
 msgstr "단위"
 
@@ -10589,6 +10626,7 @@ msgstr ""
 "결정합니다"
 
 #: ../src/live_effects/lpe-jointype.cpp:36
+#: ../src/live_effects/lpe-offset.cpp:62
 #: ../src/live_effects/lpe-powerstroke.cpp:147
 #: ../src/live_effects/lpe-taperstroke.cpp:65
 msgid "Beveled"
@@ -10596,35 +10634,42 @@ msgstr "빗면 적용됨"
 
 #: ../src/live_effects/lpe-jointype.cpp:37
 #: ../src/live_effects/lpe-jointype.cpp:48
+#: ../src/live_effects/lpe-offset.cpp:63
 #: ../src/live_effects/lpe-powerstroke.cpp:148
 #: ../src/live_effects/lpe-taperstroke.cpp:66
 msgid "Rounded"
 msgstr "둥긂"
 
 #: ../src/live_effects/lpe-jointype.cpp:38
+#: ../src/live_effects/lpe-offset.cpp:64
 #: ../src/live_effects/lpe-powerstroke.cpp:151
 #: ../src/live_effects/lpe-taperstroke.cpp:67
 msgid "Miter"
 msgstr "뾰족 이음"
 
 #: ../src/live_effects/lpe-jointype.cpp:39
+#: ../src/live_effects/lpe-offset.cpp:65
 msgid "Miter Clip"
 msgstr "뾰족 이음 자르기"
 
 #: ../src/live_effects/lpe-jointype.cpp:40
+#: ../src/live_effects/lpe-offset.cpp:66
 #: ../src/live_effects/lpe-powerstroke.cpp:150
 msgid "Extrapolated arc"
 msgstr "바깥 사이 보충된 원호"
 
 #: ../src/live_effects/lpe-jointype.cpp:41
+#: ../src/live_effects/lpe-offset.cpp:67
 msgid "Extrapolated arc Alt1"
 msgstr "바깥 사이 보충된 원호 대체1"
 
 #: ../src/live_effects/lpe-jointype.cpp:42
+#: ../src/live_effects/lpe-offset.cpp:68
 msgid "Extrapolated arc Alt2"
 msgstr "바깥 사이 보충된 원호 대체2"
 
 #: ../src/live_effects/lpe-jointype.cpp:43
+#: ../src/live_effects/lpe-offset.cpp:69
 msgid "Extrapolated arc Alt3"
 msgstr "바깥 사이 보충된 원호 대체3"
 
@@ -10660,31 +10705,37 @@ msgstr "윤곽선의 끝 모양"
 #. TRANSLATORS: The line join style specifies the shape to be used at the
 #. corners of paths. It can be "miter", "round" or "bevel".
 #: ../src/live_effects/lpe-jointype.cpp:61
+#: ../src/live_effects/lpe-offset.cpp:79
 #: ../src/live_effects/lpe-powerstroke.cpp:164
 #: ../src/widgets/stroke-style.cpp:271
 msgid "Join:"
 msgstr "이음:"
 
 #: ../src/live_effects/lpe-jointype.cpp:61
+#: ../src/live_effects/lpe-offset.cpp:79
 #: ../src/live_effects/lpe-powerstroke.cpp:164
 msgid "Determines the shape of the path's corners"
 msgstr "경로의 모퉁이의 모양을 결정합니다"
 
 #: ../src/live_effects/lpe-jointype.cpp:64
+#: ../src/live_effects/lpe-offset.cpp:80
 #: ../src/live_effects/lpe-powerstroke.cpp:165
 #: ../src/live_effects/lpe-taperstroke.cpp:80
 msgid "Miter limit:"
 msgstr "뾰족이음 한계:"
 
 #: ../src/live_effects/lpe-jointype.cpp:64
+#: ../src/live_effects/lpe-offset.cpp:80
 msgid "Maximum length of the miter join (in units of stroke width)"
 msgstr "뾰족부리 이음의 최대 길이 (윤곽선 폭 단위로)"
 
 #: ../src/live_effects/lpe-jointype.cpp:65
+#: ../src/live_effects/lpe-offset.cpp:81
 msgid "Force miter"
 msgstr "뾰족이음 강제"
 
 #: ../src/live_effects/lpe-jointype.cpp:65
+#: ../src/live_effects/lpe-offset.cpp:81
 msgid "Overrides the miter limit and forces a join."
 msgstr "뾰족부리 한계를 무시하고 이음을 강제."
 
@@ -11011,6 +11062,36 @@ msgstr "포인트 보이기"
 msgid "Hide Points"
 msgstr "포인트 숨기기"
 
+#: ../src/live_effects/lpe-line_segment.cpp:24
+#: ../src/ui/toolbar/lpe-toolbar.cpp:127
+msgid "Closed"
+msgstr "닫힘"
+
+#: ../src/live_effects/lpe-line_segment.cpp:25
+#: ../src/ui/toolbar/lpe-toolbar.cpp:128
+msgid "Open start"
+msgstr "열린 시작"
+
+#: ../src/live_effects/lpe-line_segment.cpp:26
+#: ../src/ui/toolbar/lpe-toolbar.cpp:129
+msgid "Open end"
+msgstr "열린 끝"
+
+#: ../src/live_effects/lpe-line_segment.cpp:27
+#: ../src/ui/toolbar/lpe-toolbar.cpp:130
+msgid "Open both"
+msgstr "열린 양쪽"
+
+#: ../src/live_effects/lpe-line_segment.cpp:33
+msgid "End type:"
+msgstr "끝 유형:"
+
+#
+# File: ../src/live_effects/lpe-line_segment.cpp, line: 33
+#: ../src/live_effects/lpe-line_segment.cpp:33
+msgid "Determines on which side the line or line segment is infinite."
+msgstr "어느 쪽에서 선 또는 선분이 무한한지 결정합니다."
+
 #: ../src/live_effects/lpe-measure-segments.cpp:59
 #: ../src/ui/toolbar/text-toolbar.cpp:527 ../share/extensions/empty_page.inx:18
 msgid "Horizontal"
@@ -11022,6 +11103,7 @@ msgid "Vertical"
 msgstr "수직"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:67
+#: ../src/live_effects/lpe-offset.cpp:77
 msgid "Unit of measurement"
 msgstr "측정 단위"
 
@@ -11536,13 +11618,53 @@ msgstr "거울 선의 중심 점"
 msgid "Adjust center point of mirror line"
 msgstr "거울 선의 중심 점을 조정"
 
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:142
+#: ../src/live_effects/lpe-mirror_symmetry.cpp:138
 msgid "Vertical center"
 msgstr "수직 중심"
 
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:145
+#: ../src/live_effects/lpe-mirror_symmetry.cpp:141
 msgid "Horizontal center"
 msgstr "수평 중심"
+
+#: ../src/live_effects/lpe-offset.cpp:82
+#, fuzzy
+msgid "Live update"
+msgstr "실시간 미리보기"
+
+#: ../src/live_effects/lpe-offset.cpp:82
+#, fuzzy
+msgid "Update while moving handle"
+msgstr "매듭을 이동할 동안 업데이트 (느릴 수도 있습니다)"
+
+#: ../src/live_effects/lpe-offset.cpp:450
+msgid "Offset point"
+msgstr "오프셋 포인트"
+
+#: ../src/live_effects/lpe-parallel.cpp:50
+msgid "Adjust the offset"
+msgstr "오프셋 조정"
+
+#
+# File: ../src/live_effects/lpe-parallel.cpp, line: 51
+#: ../src/live_effects/lpe-parallel.cpp:51
+msgid "Specifies the left end of the parallel"
+msgstr "평행선의 왼쪽 끝을 지정"
+
+#
+# File: ../src/live_effects/lpe-parallel.cpp, line: 52
+#: ../src/live_effects/lpe-parallel.cpp:52
+msgid "Specifies the right end of the parallel"
+msgstr "평행선의 오른쪽 끝을 지정"
+
+#
+# File: ../src/live_effects/lpe-parallel.cpp, line: 107
+#: ../src/live_effects/lpe-parallel.cpp:107
+msgid "Adjust the \"left\" end of the parallel"
+msgstr "평행선의 \"왼쪽\" 끝을 지정"
+
+#: ../src/live_effects/lpe-parallel.cpp:113
+msgid "Adjust the \"right\" end of the parallel"
+msgstr "평행선의 \"오른쪽\" 끝을 지정"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:65
 #: ../share/extensions/pathalongpath.inx:10
@@ -11695,33 +11817,33 @@ msgid "Down Right - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
 "아래 오른쪽 - <b>Ctrl+Alt+Click</b>: 다시 설정, <b>Ctrl</b>: 축을 따라 이동"
 
-#: ../src/live_effects/lpe-perspective-envelope.cpp:369
+#: ../src/live_effects/lpe-perspective-envelope.cpp:280
 msgid "Handles:"
 msgstr "핸들:"
 
-#: ../src/live_effects/lpe-perspective-envelope.cpp:411
+#: ../src/live_effects/lpe-perspective-envelope.cpp:322
 #: ../src/ui/dialog/debug.cpp:75 ../src/ui/dialog/messages.cpp:45
 #: ../src/ui/dialog/transformation.cpp:149
 msgid "_Clear"
 msgstr "제거(_C)"
 
-#: ../src/live_effects/lpe-powerclip.cpp:31
+#: ../src/live_effects/lpe-powerclip.cpp:32
 msgid "Hide clip"
 msgstr "클립 숨기기"
 
-#: ../src/live_effects/lpe-powerclip.cpp:34
+#: ../src/live_effects/lpe-powerclip.cpp:35
 msgid "Inverse clip"
 msgstr "클립 반전"
 
-#: ../src/live_effects/lpe-powerclip.cpp:35
+#: ../src/live_effects/lpe-powerclip.cpp:36
 msgid "Flatten clip"
 msgstr "클립 평탄화"
 
-#: ../src/live_effects/lpe-powerclip.cpp:35
+#: ../src/live_effects/lpe-powerclip.cpp:36
 msgid "Flatten clip, see fill rule once convert to paths"
 msgstr "클립 평탄화. 경로로 변환하고서 채우기 규칙 참조"
 
-#: ../src/live_effects/lpe-powerclip.cpp:36
+#: ../src/live_effects/lpe-powerclip.cpp:37
 msgid ""
 "Use fill-rule evenodd on <b>fill and stroke</b> dialog if no flatten result "
 "after convert clip to paths."
@@ -12523,6 +12645,52 @@ msgstr "k_최대:"
 msgid "max curvature"
 msgstr "최대 굽어짐"
 
+#: ../src/live_effects/lpe-tangent_to_curve.cpp:61
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:154
+#: ../share/extensions/motion.inx:7 ../share/extensions/restack.inx:21
+msgid "Angle:"
+msgstr "각도:"
+
+#
+# File: ../src/live_effects/lpe-tangent_to_curve.cpp, line: 61
+#: ../src/live_effects/lpe-tangent_to_curve.cpp:61
+msgid "Additional angle between tangent and curve"
+msgstr "접선과 곡선 사이이의 추가적 각도"
+
+#: ../src/live_effects/lpe-tangent_to_curve.cpp:62
+msgid "Location along curve:"
+msgstr "곡선 따라가는 위치:"
+
+#
+# File: ../src/live_effects/lpe-tangent_to_curve.cpp, line: 62
+#: ../src/live_effects/lpe-tangent_to_curve.cpp:62
+msgid ""
+"Location of the point of attachment along the curve (between 0.0 and number-"
+"of-segments)"
+msgstr "곡선을 따라가는 부착점의 위치 (0.0부터 선분 수 사이)"
+
+#: ../src/live_effects/lpe-tangent_to_curve.cpp:63
+msgid "Specifies the left end of the tangent"
+msgstr "접선의 왼쪽 끝 지정"
+
+#: ../src/live_effects/lpe-tangent_to_curve.cpp:64
+msgid "Specifies the right end of the tangent"
+msgstr "접선의 오른쪽 끝 지정"
+
+#
+# File: ../src/live_effects/lpe-tangent_to_curve.cpp, line: 104
+#: ../src/live_effects/lpe-tangent_to_curve.cpp:104
+msgid "Adjust the point of attachment of the tangent"
+msgstr "접선의 부착점을 조정"
+
+#: ../src/live_effects/lpe-tangent_to_curve.cpp:110
+msgid "Adjust the <b>left</b> end of the tangent"
+msgstr "접선의 <b>왼쪽</b> 끝 조정"
+
+#: ../src/live_effects/lpe-tangent_to_curve.cpp:116
+msgid "Adjust the <b>right</b> end of the tangent"
+msgstr "접선의 <b>오른쪽</b> 끝 조정"
+
 #: ../src/live_effects/lpe-taperstroke.cpp:68
 msgid "Extrapolated"
 msgstr "바깥 사이 보충됨"
@@ -12746,7 +12914,7 @@ msgstr "활성"
 #: ../src/ui/dialog/attrdialog.cpp:108
 #: ../src/ui/dialog/inkscape-preferences.cpp:2162
 #: ../src/ui/widget/page-sizer.cpp:94 ../src/widgets/gradient-selector.cpp:139
-#: ../share/ui/dialog-livepatheffect-add.glade:404
+#: ../share/ui/dialog-livepatheffect-add.glade:397
 msgid "Name"
 msgstr "이름"
 
@@ -13021,7 +13189,7 @@ msgid "Linked Flowed Text"
 msgstr "연결된 흐름 문자열"
 
 #: ../src/object/sp-flowtext.cpp:288 ../src/object/sp-text.cpp:367
-#: ../src/ui/tools/text-tool.cpp:1685
+#: ../src/ui/tools/text-tool.cpp:1692
 msgid " [truncated]"
 msgstr " [잘림]"
 
@@ -13178,7 +13346,7 @@ msgstr "<b>다각형</b>"
 msgid "<b>Polyline</b>"
 msgstr "<b>다각선</b>"
 
-#: ../src/object/sp-rect.cpp:191 ../src/ui/dialog/inkscape-preferences.cpp:422
+#: ../src/object/sp-rect.cpp:198 ../src/ui/dialog/inkscape-preferences.cpp:422
 msgid "Rectangle"
 msgstr "사각형"
 
@@ -14255,7 +14423,7 @@ msgstr ""
 msgid "Select a filename for exporting"
 msgstr "내보내기 할 파일명 선택"
 
-#: ../src/shortcuts.cpp:430
+#: ../src/shortcuts.cpp:430 ../src/shortcuts.cpp:460
 msgid "Inkscape shortcuts (*.xml)"
 msgstr "잉크스케이프 단축키 (*.xml)"
 
@@ -14513,44 +14681,44 @@ msgstr "비트맵 따라 그리기"
 msgid "Trace: Done. %ld nodes created"
 msgstr "따라 그리기: 완료. %ld개의 노드를 만듦"
 
-#: ../src/ui/clipboard.cpp:256
+#: ../src/ui/clipboard.cpp:253
 msgid "Nothing was copied."
 msgstr "복사된 것 없음."
 
-#: ../src/ui/clipboard.cpp:387 ../src/ui/clipboard.cpp:603
-#: ../src/ui/clipboard.cpp:632 ../src/ui/clipboard.cpp:674
+#: ../src/ui/clipboard.cpp:384 ../src/ui/clipboard.cpp:600
+#: ../src/ui/clipboard.cpp:629 ../src/ui/clipboard.cpp:671
 msgid "Nothing on the clipboard."
 msgstr "클립보드에 아무 것도 없음."
 
-#: ../src/ui/clipboard.cpp:445
+#: ../src/ui/clipboard.cpp:442
 msgid "Select <b>object(s)</b> to paste style to."
 msgstr "스타일을 붙여 넣을 <b>개체</b>를 선택하세요."
 
-#: ../src/ui/clipboard.cpp:456 ../src/ui/clipboard.cpp:473
+#: ../src/ui/clipboard.cpp:453 ../src/ui/clipboard.cpp:470
 msgid "No style on the clipboard."
 msgstr "클립보드 상에 스타일 없음."
 
-#: ../src/ui/clipboard.cpp:499
+#: ../src/ui/clipboard.cpp:496
 msgid "Select <b>object(s)</b> to paste size to."
 msgstr "크기를 붙여 넣을 <b>개체</b>를 선택하세요."
 
-#: ../src/ui/clipboard.cpp:507
+#: ../src/ui/clipboard.cpp:504
 msgid "No size on the clipboard."
 msgstr "클립보드 상에 크기 없음."
 
-#: ../src/ui/clipboard.cpp:564
+#: ../src/ui/clipboard.cpp:561
 msgid "Select <b>object(s)</b> to paste live path effect to."
 msgstr "활성 경로 효과를 붙여넣을 <b>개체</b>를 선택하세요."
 
-#: ../src/ui/clipboard.cpp:590
+#: ../src/ui/clipboard.cpp:587
 msgid "No effect on the clipboard."
 msgstr "클립보드 상에 효과 없음."
 
-#: ../src/ui/clipboard.cpp:609 ../src/ui/clipboard.cpp:656
+#: ../src/ui/clipboard.cpp:606 ../src/ui/clipboard.cpp:653
 msgid "Clipboard does not contain a path."
 msgstr "클립보드에 경로가 없음."
 
-#: ../src/ui/clipboard.cpp:704
+#: ../src/ui/clipboard.cpp:701
 msgid "Clipboard does not contain any."
 msgstr "클립보드에 아무 것도 없음."
 
@@ -16579,32 +16747,32 @@ msgstr "열기(_O)"
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:286
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:293
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:307
-#: ../src/ui/dialog/filedialogimpl-win32.cpp:266
+#: ../src/ui/dialog/filedialogimpl-win32.cpp:267
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:395
 msgid "All Files"
 msgstr "전체 파일"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:290
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:304
-#: ../src/ui/dialog/filedialogimpl-win32.cpp:267
+#: ../src/ui/dialog/filedialogimpl-win32.cpp:268
 msgid "All Inkscape Files"
 msgstr "모든 잉크스케이프 파일"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:297
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:310
-#: ../src/ui/dialog/filedialogimpl-win32.cpp:268
+#: ../src/ui/dialog/filedialogimpl-win32.cpp:269
 msgid "All Images"
 msgstr "모든 이미지"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:300
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:313
-#: ../src/ui/dialog/filedialogimpl-win32.cpp:269
+#: ../src/ui/dialog/filedialogimpl-win32.cpp:270
 msgid "All Vectors"
 msgstr "모든 벡터"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:303
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:316
-#: ../src/ui/dialog/filedialogimpl-win32.cpp:270
+#: ../src/ui/dialog/filedialogimpl-win32.cpp:271
 msgid "All Bitmaps"
 msgstr "모든 비트맵"
 
@@ -17672,727 +17840,990 @@ msgstr "이 경고를 다시 표시하지 않기"
 msgid "Font '%1' substituted with '%2'"
 msgstr "글꼴 ‘%1’이 ‘%2’로 대체되었습니다"
 
-#: ../src/ui/dialog/glyphs.cpp:54 ../src/ui/dialog/glyphs.cpp:146
+#: ../src/ui/dialog/glyphs.cpp:55 ../src/ui/dialog/glyphs.cpp:224
 msgid "all"
 msgstr "전체"
 
-#: ../src/ui/dialog/glyphs.cpp:55
+#: ../src/ui/dialog/glyphs.cpp:56
 msgid "common"
 msgstr "일반"
 
-#: ../src/ui/dialog/glyphs.cpp:56
+#: ../src/ui/dialog/glyphs.cpp:57
 msgid "inherited"
 msgstr "상속됨"
 
-#: ../src/ui/dialog/glyphs.cpp:57 ../src/ui/dialog/glyphs.cpp:159
+#: ../src/ui/dialog/glyphs.cpp:58 ../src/ui/dialog/glyphs.cpp:241
 msgid "Arabic"
 msgstr "Arabic"
 
-#: ../src/ui/dialog/glyphs.cpp:58 ../src/ui/dialog/glyphs.cpp:157
+#: ../src/ui/dialog/glyphs.cpp:59 ../src/ui/dialog/glyphs.cpp:239
 msgid "Armenian"
 msgstr "Armenian"
 
-#: ../src/ui/dialog/glyphs.cpp:59 ../src/ui/dialog/glyphs.cpp:166
+#: ../src/ui/dialog/glyphs.cpp:60 ../src/ui/dialog/glyphs.cpp:248
 msgid "Bengali"
 msgstr "Bengali"
 
-#: ../src/ui/dialog/glyphs.cpp:60 ../src/ui/dialog/glyphs.cpp:248
+#: ../src/ui/dialog/glyphs.cpp:61 ../src/ui/dialog/glyphs.cpp:330
 msgid "Bopomofo"
 msgstr "Bopomofo"
 
-#: ../src/ui/dialog/glyphs.cpp:61 ../src/ui/dialog/glyphs.cpp:183
+#: ../src/ui/dialog/glyphs.cpp:62 ../src/ui/dialog/glyphs.cpp:265
 msgid "Cherokee"
 msgstr "Cherokee"
 
-#: ../src/ui/dialog/glyphs.cpp:62 ../src/ui/dialog/glyphs.cpp:236
+#: ../src/ui/dialog/glyphs.cpp:63 ../src/ui/dialog/glyphs.cpp:318
 msgid "Coptic"
 msgstr "Coptic"
 
-#: ../src/ui/dialog/glyphs.cpp:63 ../src/ui/dialog/glyphs.cpp:155
+#: ../src/ui/dialog/glyphs.cpp:64 ../src/ui/dialog/glyphs.cpp:237
 msgid "Cyrillic"
 msgstr "Cyrillic"
 
-#: ../src/ui/dialog/glyphs.cpp:64
+#: ../src/ui/dialog/glyphs.cpp:65
 msgid "Deseret"
 msgstr "Deseret"
 
-#: ../src/ui/dialog/glyphs.cpp:65 ../src/ui/dialog/glyphs.cpp:165
+#: ../src/ui/dialog/glyphs.cpp:66 ../src/ui/dialog/glyphs.cpp:247
 msgid "Devanagari"
 msgstr "Devanagari"
 
-#: ../src/ui/dialog/glyphs.cpp:66 ../src/ui/dialog/glyphs.cpp:181
+#: ../src/ui/dialog/glyphs.cpp:67 ../src/ui/dialog/glyphs.cpp:263
 msgid "Ethiopic"
 msgstr "Ethiopic"
 
-#: ../src/ui/dialog/glyphs.cpp:67 ../src/ui/dialog/glyphs.cpp:179
+#: ../src/ui/dialog/glyphs.cpp:68 ../src/ui/dialog/glyphs.cpp:261
 msgid "Georgian"
 msgstr "Georgian"
 
-#: ../src/ui/dialog/glyphs.cpp:68
+#: ../src/ui/dialog/glyphs.cpp:69
 msgid "Gothic"
 msgstr "Gothic"
 
-#: ../src/ui/dialog/glyphs.cpp:69
+#: ../src/ui/dialog/glyphs.cpp:70
 msgid "Greek"
 msgstr "Greek"
 
-#: ../src/ui/dialog/glyphs.cpp:70 ../src/ui/dialog/glyphs.cpp:168
+#: ../src/ui/dialog/glyphs.cpp:71 ../src/ui/dialog/glyphs.cpp:250
 msgid "Gujarati"
 msgstr "Gujarati"
 
-#: ../src/ui/dialog/glyphs.cpp:71 ../src/ui/dialog/glyphs.cpp:167
+#: ../src/ui/dialog/glyphs.cpp:72 ../src/ui/dialog/glyphs.cpp:249
 msgid "Gurmukhi"
 msgstr "Gurmukhi"
 
-#: ../src/ui/dialog/glyphs.cpp:72
+#: ../src/ui/dialog/glyphs.cpp:73
 msgid "Han"
 msgstr "Han"
 
-#: ../src/ui/dialog/glyphs.cpp:73
+#: ../src/ui/dialog/glyphs.cpp:74
 msgid "Hangul"
 msgstr "한글"
 
-#: ../src/ui/dialog/glyphs.cpp:74 ../src/ui/dialog/glyphs.cpp:158
+#: ../src/ui/dialog/glyphs.cpp:75 ../src/ui/dialog/glyphs.cpp:240
 msgid "Hebrew"
 msgstr "Hebrew"
 
-#: ../src/ui/dialog/glyphs.cpp:75 ../src/ui/dialog/glyphs.cpp:246
+#: ../src/ui/dialog/glyphs.cpp:76 ../src/ui/dialog/glyphs.cpp:328
 msgid "Hiragana"
 msgstr "Hiragana"
 
-#: ../src/ui/dialog/glyphs.cpp:76 ../src/ui/dialog/glyphs.cpp:172
+#: ../src/ui/dialog/glyphs.cpp:77 ../src/ui/dialog/glyphs.cpp:254
 msgid "Kannada"
 msgstr "Kannada"
 
-#: ../src/ui/dialog/glyphs.cpp:77 ../src/ui/dialog/glyphs.cpp:247
+#: ../src/ui/dialog/glyphs.cpp:78 ../src/ui/dialog/glyphs.cpp:329
 msgid "Katakana"
 msgstr "Katakana"
 
-#: ../src/ui/dialog/glyphs.cpp:78 ../src/ui/dialog/glyphs.cpp:191
+#: ../src/ui/dialog/glyphs.cpp:79 ../src/ui/dialog/glyphs.cpp:273
 msgid "Khmer"
 msgstr "Khmer"
 
-#: ../src/ui/dialog/glyphs.cpp:79 ../src/ui/dialog/glyphs.cpp:176
+#: ../src/ui/dialog/glyphs.cpp:80 ../src/ui/dialog/glyphs.cpp:258
 msgid "Lao"
 msgstr "Lao"
 
-#: ../src/ui/dialog/glyphs.cpp:80
+#: ../src/ui/dialog/glyphs.cpp:81
 msgid "Latin"
 msgstr "Latin"
 
-#: ../src/ui/dialog/glyphs.cpp:81 ../src/ui/dialog/glyphs.cpp:173
+#: ../src/ui/dialog/glyphs.cpp:82 ../src/ui/dialog/glyphs.cpp:255
 msgid "Malayalam"
 msgstr "Malayalam"
 
-#: ../src/ui/dialog/glyphs.cpp:82 ../src/ui/dialog/glyphs.cpp:192
+#: ../src/ui/dialog/glyphs.cpp:83 ../src/ui/dialog/glyphs.cpp:274
 msgid "Mongolian"
 msgstr "Mongolian"
 
-#: ../src/ui/dialog/glyphs.cpp:83 ../src/ui/dialog/glyphs.cpp:178
+#: ../src/ui/dialog/glyphs.cpp:84 ../src/ui/dialog/glyphs.cpp:260
 msgid "Myanmar"
 msgstr "Myanmar"
 
-#: ../src/ui/dialog/glyphs.cpp:84 ../src/ui/dialog/glyphs.cpp:185
+#: ../src/ui/dialog/glyphs.cpp:85 ../src/ui/dialog/glyphs.cpp:267
 msgid "Ogham"
 msgstr "Ogham"
 
-#: ../src/ui/dialog/glyphs.cpp:85
+#: ../src/ui/dialog/glyphs.cpp:86
 msgid "Old Italic"
 msgstr "Old Italic"
 
-#: ../src/ui/dialog/glyphs.cpp:86 ../src/ui/dialog/glyphs.cpp:169
+#: ../src/ui/dialog/glyphs.cpp:87 ../src/ui/dialog/glyphs.cpp:251
 msgid "Oriya"
 msgstr "Oriya"
 
-#: ../src/ui/dialog/glyphs.cpp:87 ../src/ui/dialog/glyphs.cpp:186
+#: ../src/ui/dialog/glyphs.cpp:88 ../src/ui/dialog/glyphs.cpp:268
 msgid "Runic"
 msgstr "Runic"
 
-#: ../src/ui/dialog/glyphs.cpp:88 ../src/ui/dialog/glyphs.cpp:174
+#: ../src/ui/dialog/glyphs.cpp:89 ../src/ui/dialog/glyphs.cpp:256
 msgid "Sinhala"
 msgstr "Sinhala"
 
-#: ../src/ui/dialog/glyphs.cpp:89 ../src/ui/dialog/glyphs.cpp:160
+#: ../src/ui/dialog/glyphs.cpp:90 ../src/ui/dialog/glyphs.cpp:242
 msgid "Syriac"
 msgstr "Syriac"
 
-#: ../src/ui/dialog/glyphs.cpp:90 ../src/ui/dialog/glyphs.cpp:170
+#: ../src/ui/dialog/glyphs.cpp:91 ../src/ui/dialog/glyphs.cpp:252
 msgid "Tamil"
 msgstr "Tamil"
 
-#: ../src/ui/dialog/glyphs.cpp:91 ../src/ui/dialog/glyphs.cpp:171
+#: ../src/ui/dialog/glyphs.cpp:92 ../src/ui/dialog/glyphs.cpp:253
 msgid "Telugu"
 msgstr "Telugu"
 
-#: ../src/ui/dialog/glyphs.cpp:92 ../src/ui/dialog/glyphs.cpp:162
+#: ../src/ui/dialog/glyphs.cpp:93 ../src/ui/dialog/glyphs.cpp:244
 msgid "Thaana"
 msgstr "Thaana"
 
-#: ../src/ui/dialog/glyphs.cpp:93 ../src/ui/dialog/glyphs.cpp:175
+#: ../src/ui/dialog/glyphs.cpp:94 ../src/ui/dialog/glyphs.cpp:257
 msgid "Thai"
 msgstr "Thai"
 
-#: ../src/ui/dialog/glyphs.cpp:94 ../src/ui/dialog/glyphs.cpp:177
+#: ../src/ui/dialog/glyphs.cpp:95 ../src/ui/dialog/glyphs.cpp:259
 msgid "Tibetan"
 msgstr "Tibetan"
 
-#: ../src/ui/dialog/glyphs.cpp:95
+#: ../src/ui/dialog/glyphs.cpp:96
 msgid "Canadian Aboriginal"
 msgstr "Canadian Aboriginal"
 
-#: ../src/ui/dialog/glyphs.cpp:96
+#: ../src/ui/dialog/glyphs.cpp:97
 msgid "Yi"
 msgstr "Yi"
 
-#: ../src/ui/dialog/glyphs.cpp:97 ../src/ui/dialog/glyphs.cpp:187
+#: ../src/ui/dialog/glyphs.cpp:98 ../src/ui/dialog/glyphs.cpp:269
 msgid "Tagalog"
 msgstr "Tagalog"
 
-#: ../src/ui/dialog/glyphs.cpp:98 ../src/ui/dialog/glyphs.cpp:188
+#: ../src/ui/dialog/glyphs.cpp:99 ../src/ui/dialog/glyphs.cpp:270
 msgid "Hanunoo"
 msgstr "Hanunoo"
 
-#: ../src/ui/dialog/glyphs.cpp:99 ../src/ui/dialog/glyphs.cpp:189
+#: ../src/ui/dialog/glyphs.cpp:100 ../src/ui/dialog/glyphs.cpp:271
 msgid "Buhid"
 msgstr "Buhid"
 
-#: ../src/ui/dialog/glyphs.cpp:100 ../src/ui/dialog/glyphs.cpp:190
+#: ../src/ui/dialog/glyphs.cpp:101 ../src/ui/dialog/glyphs.cpp:272
 msgid "Tagbanwa"
 msgstr "Tagbanwa"
 
-#: ../src/ui/dialog/glyphs.cpp:101
+#: ../src/ui/dialog/glyphs.cpp:102
 msgid "Braille"
 msgstr "점자"
 
-#: ../src/ui/dialog/glyphs.cpp:102
+#: ../src/ui/dialog/glyphs.cpp:103
 msgid "Cypriot"
 msgstr "Cypriot"
 
-#: ../src/ui/dialog/glyphs.cpp:103 ../src/ui/dialog/glyphs.cpp:194
+#: ../src/ui/dialog/glyphs.cpp:104 ../src/ui/dialog/glyphs.cpp:276
 msgid "Limbu"
 msgstr "Limbu"
 
-#: ../src/ui/dialog/glyphs.cpp:104
+#: ../src/ui/dialog/glyphs.cpp:105
 msgid "Osmanya"
 msgstr "Osmanya"
 
-#: ../src/ui/dialog/glyphs.cpp:105
+#: ../src/ui/dialog/glyphs.cpp:106
 msgid "Shavian"
 msgstr "Shavian"
 
-#: ../src/ui/dialog/glyphs.cpp:106
+#: ../src/ui/dialog/glyphs.cpp:107
 msgid "Linear B"
 msgstr "선형 B"
 
-#: ../src/ui/dialog/glyphs.cpp:107 ../src/ui/dialog/glyphs.cpp:195
+#: ../src/ui/dialog/glyphs.cpp:108 ../src/ui/dialog/glyphs.cpp:277
 msgid "Tai Le"
 msgstr "Tai Le"
 
-#: ../src/ui/dialog/glyphs.cpp:108
+#: ../src/ui/dialog/glyphs.cpp:109
 msgid "Ugaritic"
 msgstr "Ugaritic"
 
-#: ../src/ui/dialog/glyphs.cpp:109 ../src/ui/dialog/glyphs.cpp:196
+#: ../src/ui/dialog/glyphs.cpp:110 ../src/ui/dialog/glyphs.cpp:278
 msgid "New Tai Lue"
 msgstr "New Tai Lue"
 
-#: ../src/ui/dialog/glyphs.cpp:110 ../src/ui/dialog/glyphs.cpp:198
+#: ../src/ui/dialog/glyphs.cpp:111 ../src/ui/dialog/glyphs.cpp:280
 msgid "Buginese"
 msgstr "Buginese"
 
-#: ../src/ui/dialog/glyphs.cpp:111 ../src/ui/dialog/glyphs.cpp:234
+#: ../src/ui/dialog/glyphs.cpp:112 ../src/ui/dialog/glyphs.cpp:316
 msgid "Glagolitic"
 msgstr "Glagolitic"
 
-#: ../src/ui/dialog/glyphs.cpp:112 ../src/ui/dialog/glyphs.cpp:238
+#: ../src/ui/dialog/glyphs.cpp:113 ../src/ui/dialog/glyphs.cpp:320
 msgid "Tifinagh"
 msgstr "Tifinagh"
 
-#: ../src/ui/dialog/glyphs.cpp:113 ../src/ui/dialog/glyphs.cpp:267
+#: ../src/ui/dialog/glyphs.cpp:114 ../src/ui/dialog/glyphs.cpp:349
 msgid "Syloti Nagri"
 msgstr "Syloti Nagri"
 
-#: ../src/ui/dialog/glyphs.cpp:114
+#: ../src/ui/dialog/glyphs.cpp:115
 msgid "Old Persian"
 msgstr "Old Persian"
 
-#: ../src/ui/dialog/glyphs.cpp:115
+#: ../src/ui/dialog/glyphs.cpp:116
 msgid "Kharoshthi"
 msgstr "Kharoshthi"
 
-#: ../src/ui/dialog/glyphs.cpp:116
+#: ../src/ui/dialog/glyphs.cpp:117
 msgid "unassigned"
 msgstr "미부여"
 
-#: ../src/ui/dialog/glyphs.cpp:117 ../src/ui/dialog/glyphs.cpp:200
+#: ../src/ui/dialog/glyphs.cpp:118 ../src/ui/dialog/glyphs.cpp:282
 msgid "Balinese"
 msgstr "Balinese"
 
-#: ../src/ui/dialog/glyphs.cpp:118
+#: ../src/ui/dialog/glyphs.cpp:119
 msgid "Cuneiform"
 msgstr "쐐기꼴"
 
-#: ../src/ui/dialog/glyphs.cpp:119
+#: ../src/ui/dialog/glyphs.cpp:120
 msgid "Phoenician"
 msgstr "Phoenician"
 
-#: ../src/ui/dialog/glyphs.cpp:120 ../src/ui/dialog/glyphs.cpp:269
+#: ../src/ui/dialog/glyphs.cpp:121 ../src/ui/dialog/glyphs.cpp:351
 msgid "Phags-pa"
 msgstr "Phags-pa"
 
-#: ../src/ui/dialog/glyphs.cpp:121
+#: ../src/ui/dialog/glyphs.cpp:122
 msgid "N'Ko"
 msgstr "N'Ko"
 
-#: ../src/ui/dialog/glyphs.cpp:122 ../src/ui/dialog/glyphs.cpp:272
+#: ../src/ui/dialog/glyphs.cpp:123 ../src/ui/dialog/glyphs.cpp:354
 msgid "Kayah Li"
 msgstr "Kayah Li"
 
-#: ../src/ui/dialog/glyphs.cpp:123 ../src/ui/dialog/glyphs.cpp:202
+#: ../src/ui/dialog/glyphs.cpp:124 ../src/ui/dialog/glyphs.cpp:284
 msgid "Lepcha"
 msgstr "Lepcha"
 
-#: ../src/ui/dialog/glyphs.cpp:124 ../src/ui/dialog/glyphs.cpp:273
+#: ../src/ui/dialog/glyphs.cpp:125 ../src/ui/dialog/glyphs.cpp:355
 msgid "Rejang"
 msgstr "Rejang"
 
-#: ../src/ui/dialog/glyphs.cpp:125 ../src/ui/dialog/glyphs.cpp:201
+#: ../src/ui/dialog/glyphs.cpp:126 ../src/ui/dialog/glyphs.cpp:283
 msgid "Sundanese"
 msgstr "Sundanese"
 
-#: ../src/ui/dialog/glyphs.cpp:126 ../src/ui/dialog/glyphs.cpp:270
+#: ../src/ui/dialog/glyphs.cpp:127 ../src/ui/dialog/glyphs.cpp:352
 msgid "Saurashtra"
 msgstr "Saurashtra"
 
-#: ../src/ui/dialog/glyphs.cpp:127 ../src/ui/dialog/glyphs.cpp:276
+#: ../src/ui/dialog/glyphs.cpp:128 ../src/ui/dialog/glyphs.cpp:358
 msgid "Cham"
 msgstr "Cham"
 
-#: ../src/ui/dialog/glyphs.cpp:128 ../src/ui/dialog/glyphs.cpp:203
+#: ../src/ui/dialog/glyphs.cpp:129 ../src/ui/dialog/glyphs.cpp:285
 msgid "Ol Chiki"
 msgstr "Ol Chiki"
 
-#: ../src/ui/dialog/glyphs.cpp:129 ../src/ui/dialog/glyphs.cpp:262
+#: ../src/ui/dialog/glyphs.cpp:130 ../src/ui/dialog/glyphs.cpp:344
 msgid "Vai"
 msgstr "Vai"
 
-#: ../src/ui/dialog/glyphs.cpp:130
+#: ../src/ui/dialog/glyphs.cpp:131
 msgid "Carian"
 msgstr "Carian"
 
-#: ../src/ui/dialog/glyphs.cpp:131
+#: ../src/ui/dialog/glyphs.cpp:132
 msgid "Lycian"
 msgstr "Lycian"
 
-#: ../src/ui/dialog/glyphs.cpp:132
+#: ../src/ui/dialog/glyphs.cpp:133
 msgid "Lydian"
 msgstr "Lydian"
 
-#: ../src/ui/dialog/glyphs.cpp:147
-msgid "Basic Latin"
-msgstr "Basic Latin"
-
-#: ../src/ui/dialog/glyphs.cpp:148
-msgid "Latin-1 Supplement"
-msgstr "Latin-1 Supplement"
-
-#: ../src/ui/dialog/glyphs.cpp:149
-msgid "Latin Extended-A"
-msgstr "Latin Extended-A"
-
-#: ../src/ui/dialog/glyphs.cpp:150
-msgid "Latin Extended-B"
-msgstr "Latin Extended-B"
-
-#: ../src/ui/dialog/glyphs.cpp:151
-msgid "IPA Extensions"
-msgstr "IPA 확장"
-
-#: ../src/ui/dialog/glyphs.cpp:152
-msgid "Spacing Modifier Letters"
-msgstr "여백 수정자 문자"
-
-#: ../src/ui/dialog/glyphs.cpp:153
-msgid "Combining Diacritical Marks"
-msgstr "결합 구별 표시"
-
-#: ../src/ui/dialog/glyphs.cpp:154
-msgid "Greek and Coptic"
-msgstr "Greek and Coptic"
-
-#: ../src/ui/dialog/glyphs.cpp:156
-msgid "Cyrillic Supplement"
-msgstr "Cyrillic Supplement"
-
-#: ../src/ui/dialog/glyphs.cpp:161
-msgid "Arabic Supplement"
-msgstr "Arabic Supplement"
-
-#: ../src/ui/dialog/glyphs.cpp:163
-msgid "NKo"
-msgstr "NKo"
-
-#: ../src/ui/dialog/glyphs.cpp:164
-msgid "Samaritan"
-msgstr "Samaritan"
-
-#: ../src/ui/dialog/glyphs.cpp:180
-msgid "Hangul Jamo"
-msgstr "한글 자모"
-
-#: ../src/ui/dialog/glyphs.cpp:182
-msgid "Ethiopic Supplement"
-msgstr "Ethiopic Supplement"
-
-#: ../src/ui/dialog/glyphs.cpp:184
-msgid "Unified Canadian Aboriginal Syllabics"
-msgstr "Unified Canadian Aboriginal Syllabics"
-
-#: ../src/ui/dialog/glyphs.cpp:193
-msgid "Unified Canadian Aboriginal Syllabics Extended"
-msgstr "Unified Canadian Aboriginal Syllabics Extended"
-
-#: ../src/ui/dialog/glyphs.cpp:197
-msgid "Khmer Symbols"
-msgstr "Khmer Symbols"
-
-#: ../src/ui/dialog/glyphs.cpp:199
-msgid "Tai Tham"
-msgstr "Tai Tham"
-
-#: ../src/ui/dialog/glyphs.cpp:204
-msgid "Vedic Extensions"
-msgstr "Vedic Extensions"
-
-#: ../src/ui/dialog/glyphs.cpp:205
-msgid "Phonetic Extensions"
-msgstr "음성 확장"
-
-#: ../src/ui/dialog/glyphs.cpp:206
-msgid "Phonetic Extensions Supplement"
-msgstr "음성 확장 보충"
-
-#: ../src/ui/dialog/glyphs.cpp:207
-msgid "Combining Diacritical Marks Supplement"
-msgstr "결합 구별 표시 보충"
-
-#: ../src/ui/dialog/glyphs.cpp:208
-msgid "Latin Extended Additional"
-msgstr "Latin Extended Additional"
-
-#: ../src/ui/dialog/glyphs.cpp:209
-msgid "Greek Extended"
-msgstr "Greek Extended"
-
-#: ../src/ui/dialog/glyphs.cpp:210
-msgid "General Punctuation"
-msgstr "일반 구두점"
-
-#: ../src/ui/dialog/glyphs.cpp:211
-msgid "Superscripts and Subscripts"
-msgstr "위첨자와 아래첨자"
-
-#: ../src/ui/dialog/glyphs.cpp:212
-msgid "Currency Symbols"
-msgstr "통화 기호"
-
-#: ../src/ui/dialog/glyphs.cpp:213
-msgid "Combining Diacritical Marks for Symbols"
-msgstr "심볼용 결합 구별 표시"
-
-#: ../src/ui/dialog/glyphs.cpp:214
-msgid "Letterlike Symbols"
-msgstr "문자같은 심볼"
-
-#: ../src/ui/dialog/glyphs.cpp:215
-msgid "Number Forms"
-msgstr "숫자 형식"
-
-#: ../src/ui/dialog/glyphs.cpp:216
-msgid "Arrows"
-msgstr "화살표"
-
-#: ../src/ui/dialog/glyphs.cpp:217
-msgid "Mathematical Operators"
-msgstr "수학 연산자"
-
-#: ../src/ui/dialog/glyphs.cpp:218
-msgid "Miscellaneous Technical"
-msgstr "기타 기술"
-
-#: ../src/ui/dialog/glyphs.cpp:219
-msgid "Control Pictures"
-msgstr "제어 그림"
-
-#: ../src/ui/dialog/glyphs.cpp:220
-msgid "Optical Character Recognition"
-msgstr "광학 문자 인식"
-
-#: ../src/ui/dialog/glyphs.cpp:221
-msgid "Enclosed Alphanumerics"
-msgstr "둘러싸인 알파벳 및 숫자"
-
-#: ../src/ui/dialog/glyphs.cpp:222
-msgid "Box Drawing"
-msgstr "상자 그리기"
-
-#: ../src/ui/dialog/glyphs.cpp:223
-msgid "Block Elements"
-msgstr "블록 요소"
-
-#: ../src/ui/dialog/glyphs.cpp:224
-msgid "Geometric Shapes"
-msgstr "기하학적 모양"
-
-#: ../src/ui/dialog/glyphs.cpp:225
-msgid "Miscellaneous Symbols"
-msgstr "기타 심볼"
-
-#: ../src/ui/dialog/glyphs.cpp:226
-msgid "Dingbats"
-msgstr "딩뱃"
-
-#: ../src/ui/dialog/glyphs.cpp:227
-msgid "Miscellaneous Mathematical Symbols-A"
-msgstr "기타 수학적 심볼-A"
-
-#: ../src/ui/dialog/glyphs.cpp:228
-msgid "Supplemental Arrows-A"
-msgstr "보충 화살표-A"
-
-#: ../src/ui/dialog/glyphs.cpp:229
-msgid "Braille Patterns"
-msgstr "점자 패턴"
-
-#: ../src/ui/dialog/glyphs.cpp:230
-msgid "Supplemental Arrows-B"
-msgstr "보충 화살표-B"
-
-#: ../src/ui/dialog/glyphs.cpp:231
-msgid "Miscellaneous Mathematical Symbols-B"
-msgstr "기타 수학적 심볼-B"
-
-#: ../src/ui/dialog/glyphs.cpp:232
-msgid "Supplemental Mathematical Operators"
-msgstr "보충 수학 연산자"
-
-#: ../src/ui/dialog/glyphs.cpp:233
-msgid "Miscellaneous Symbols and Arrows"
-msgstr "기타 심볼과 화살표"
-
-#: ../src/ui/dialog/glyphs.cpp:235
-msgid "Latin Extended-C"
-msgstr "Latin Extended-C"
-
-#: ../src/ui/dialog/glyphs.cpp:237
-msgid "Georgian Supplement"
-msgstr "Georgian Supplement"
-
-#: ../src/ui/dialog/glyphs.cpp:239
-msgid "Ethiopic Extended"
-msgstr "Ethiopic Extended"
-
-#: ../src/ui/dialog/glyphs.cpp:240
-msgid "Cyrillic Extended-A"
-msgstr "Cyrillic Extended-A"
-
-#: ../src/ui/dialog/glyphs.cpp:241
-msgid "Supplemental Punctuation"
-msgstr "보충 구두점"
-
-#: ../src/ui/dialog/glyphs.cpp:242
-msgid "CJK Radicals Supplement"
-msgstr "CJK(한중일) 부수 보충"
-
-#: ../src/ui/dialog/glyphs.cpp:243
-msgid "Kangxi Radicals"
-msgstr "Kangxi Radicals"
-
-#: ../src/ui/dialog/glyphs.cpp:244
-msgid "Ideographic Description Characters"
-msgstr "표의 요약 문자"
-
-#: ../src/ui/dialog/glyphs.cpp:245
-msgid "CJK Symbols and Punctuation"
-msgstr "CJK(한중일) 심볼 및 구두점"
-
-#: ../src/ui/dialog/glyphs.cpp:249
-msgid "Hangul Compatibility Jamo"
-msgstr "한글 호환 자모"
-
-#: ../src/ui/dialog/glyphs.cpp:250
-msgid "Kanbun"
-msgstr "Kanbun"
-
-#: ../src/ui/dialog/glyphs.cpp:251
-msgid "Bopomofo Extended"
-msgstr "Bopomofo Extended"
-
-#: ../src/ui/dialog/glyphs.cpp:252
-msgid "CJK Strokes"
-msgstr "CJK(한중일) 획"
-
-#: ../src/ui/dialog/glyphs.cpp:253
-msgid "Katakana Phonetic Extensions"
-msgstr "Katakana Phonetic Extensions"
-
-#: ../src/ui/dialog/glyphs.cpp:254
-msgid "Enclosed CJK Letters and Months"
-msgstr "둘러싸인 CJK(한중일) 글자 및 달"
-
-#: ../src/ui/dialog/glyphs.cpp:255
-msgid "CJK Compatibility"
-msgstr "CJK(한중일) 호환성"
-
-#: ../src/ui/dialog/glyphs.cpp:256
-msgid "CJK Unified Ideographs Extension A"
-msgstr "CJK(한중일) 통합 표의문자 확장 A"
-
-#: ../src/ui/dialog/glyphs.cpp:257
-msgid "Yijing Hexagram Symbols"
-msgstr "Yijing Hexagram Symbols"
-
-#: ../src/ui/dialog/glyphs.cpp:258
-msgid "CJK Unified Ideographs"
-msgstr "CJK(한중일) 통합 표의문자"
-
-#: ../src/ui/dialog/glyphs.cpp:259
-msgid "Yi Syllables"
-msgstr "Yi Syllables"
-
-#: ../src/ui/dialog/glyphs.cpp:260
-msgid "Yi Radicals"
-msgstr "Yi Radicals"
-
-#: ../src/ui/dialog/glyphs.cpp:261
-msgid "Lisu"
-msgstr "Lisu"
-
-#: ../src/ui/dialog/glyphs.cpp:263
-msgid "Cyrillic Extended-B"
-msgstr "Cyrillic Extended-B"
-
-#: ../src/ui/dialog/glyphs.cpp:264
-msgid "Bamum"
+#: ../src/ui/dialog/glyphs.cpp:134
+msgid "Avestan"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:135
+#, fuzzy
+msgid "Bamum. "
 msgstr "Bamum"
 
-#: ../src/ui/dialog/glyphs.cpp:265
-msgid "Modifier Tone Letters"
-msgstr "어조 수식 자모"
+#: ../src/ui/dialog/glyphs.cpp:136
+msgid "Egyptian Hieroglpyhs"
+msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:266
-msgid "Latin Extended-D"
-msgstr "Latin Extended-D"
+#: ../src/ui/dialog/glyphs.cpp:137
+msgid "Imperial Aramaic"
+msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:268
-msgid "Common Indic Number Forms"
-msgstr "공통 인도 숫자 형식"
+#: ../src/ui/dialog/glyphs.cpp:138
+msgid "Inscriptional Pahlavi"
+msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:271
-msgid "Devanagari Extended"
-msgstr "Devanagari Extended"
+#: ../src/ui/dialog/glyphs.cpp:139
+msgid "Inscriptional Parthian"
+msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:274
-msgid "Hangul Jamo Extended-A"
-msgstr "한글 자모 확장-A"
-
-#: ../src/ui/dialog/glyphs.cpp:275
+#: ../src/ui/dialog/glyphs.cpp:140 ../src/ui/dialog/glyphs.cpp:357
 msgid "Javanese"
 msgstr "Javanese"
 
-#: ../src/ui/dialog/glyphs.cpp:277
-msgid "Myanmar Extended-A"
-msgstr "Myanmar Extended-A"
+#: ../src/ui/dialog/glyphs.cpp:141
+msgid "Kaithi."
+msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:278
-msgid "Tai Viet"
-msgstr "Tai Viet"
+#: ../src/ui/dialog/glyphs.cpp:142 ../src/ui/dialog/glyphs.cpp:343
+msgid "Lisu"
+msgstr "Lisu"
 
-#: ../src/ui/dialog/glyphs.cpp:279
+#: ../src/ui/dialog/glyphs.cpp:143 ../src/ui/dialog/glyphs.cpp:361
 msgid "Meetei Mayek"
 msgstr "Meetei Mayek"
 
-#: ../src/ui/dialog/glyphs.cpp:280
+#: ../src/ui/dialog/glyphs.cpp:144
+msgid "Old South Arabian"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:145
+#, fuzzy
+msgid "Old Turkic"
+msgstr "Old Italic"
+
+#: ../src/ui/dialog/glyphs.cpp:146 ../src/ui/dialog/glyphs.cpp:246
+msgid "Samaritan"
+msgstr "Samaritan"
+
+#: ../src/ui/dialog/glyphs.cpp:147 ../src/ui/dialog/glyphs.cpp:281
+msgid "Tai Tham"
+msgstr "Tai Tham"
+
+#: ../src/ui/dialog/glyphs.cpp:148 ../src/ui/dialog/glyphs.cpp:360
+msgid "Tai Viet"
+msgstr "Tai Viet"
+
+#: ../src/ui/dialog/glyphs.cpp:149
+#, fuzzy
+msgid "Batak"
+msgstr "Katakana"
+
+#: ../src/ui/dialog/glyphs.cpp:150
+msgid "Brahmi"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:151
+msgid "Mandaic"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:152
+msgid "Chakma"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:153
+#, fuzzy
+msgid "Meroitic Cursive"
+msgstr "매개 곡선"
+
+#: ../src/ui/dialog/glyphs.cpp:154
+msgid "Meroitic Hieroglyphs"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:155
+msgid "Miao"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:156
+#, fuzzy
+msgid "Sharada"
+msgstr "날카로우"
+
+#: ../src/ui/dialog/glyphs.cpp:157
+msgid "Sora Sompeng"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:158
+msgid "Takri"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:159
+msgid "Bassa"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:160
+msgid "Caucasian Albanian"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:161
+msgid "Duployan"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:162
+msgid "Elbasan"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:163
+msgid "Grantha"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:164
+msgid "Kjohki"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:165
+msgid "Khudawadi, Sindhi"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:166
+#, fuzzy
+msgid "Linear A"
+msgstr "선형 B"
+
+#: ../src/ui/dialog/glyphs.cpp:167
+msgid "Mahajani"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:168
+msgid "Manichaean"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:169
+msgid "Mende Kikakui"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:170
+#, fuzzy
+msgid "Modi"
+msgstr "수정(_M)"
+
+#: ../src/ui/dialog/glyphs.cpp:171
+msgid "Mro"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:172
+msgid "Nabataean"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:173
+msgid "Old North Arabian"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:174
+#, fuzzy
+msgid "Old Permic"
+msgstr "Old Persian"
+
+#: ../src/ui/dialog/glyphs.cpp:175
+msgid "Pahawh Hmong"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:176
+msgid "Palmyrene"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:177
+msgid "Pau Cin Hau"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:178
+#, fuzzy
+msgid "Psalter Pahlavi"
+msgstr "포스터 칠"
+
+#: ../src/ui/dialog/glyphs.cpp:179
+msgid "Siddham"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:180
+msgid "Tirhuta"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:181
+msgid "Warang Citi"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:182
+msgid "Ahom"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:183
+msgid "Anatolian Hieroglyphs"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:184
+msgid "Hatran"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:185
+#, fuzzy
+msgid "Multani"
+msgstr "곱하기"
+
+#: ../src/ui/dialog/glyphs.cpp:186
+#, fuzzy
+msgid "Old Hungarian"
+msgstr "헝가리 어 (hu)"
+
+#: ../src/ui/dialog/glyphs.cpp:187
+#, fuzzy
+msgid "Signwriting"
+msgstr "스크립트"
+
+#: ../src/ui/dialog/glyphs.cpp:225
+#, fuzzy
+msgid "Basic Plane"
+msgstr "Basic Latin"
+
+#: ../src/ui/dialog/glyphs.cpp:226
+msgid "Extended Multilingual Plane"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:227
+msgid "Supplementary Ideographic Plane"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:229
+msgid "Basic Latin"
+msgstr "Basic Latin"
+
+#: ../src/ui/dialog/glyphs.cpp:230
+msgid "Latin-1 Supplement"
+msgstr "Latin-1 Supplement"
+
+#: ../src/ui/dialog/glyphs.cpp:231
+msgid "Latin Extended-A"
+msgstr "Latin Extended-A"
+
+#: ../src/ui/dialog/glyphs.cpp:232
+msgid "Latin Extended-B"
+msgstr "Latin Extended-B"
+
+#: ../src/ui/dialog/glyphs.cpp:233
+msgid "IPA Extensions"
+msgstr "IPA 확장"
+
+#: ../src/ui/dialog/glyphs.cpp:234
+msgid "Spacing Modifier Letters"
+msgstr "여백 수정자 문자"
+
+#: ../src/ui/dialog/glyphs.cpp:235
+msgid "Combining Diacritical Marks"
+msgstr "결합 구별 표시"
+
+#: ../src/ui/dialog/glyphs.cpp:236
+msgid "Greek and Coptic"
+msgstr "Greek and Coptic"
+
+#: ../src/ui/dialog/glyphs.cpp:238
+msgid "Cyrillic Supplement"
+msgstr "Cyrillic Supplement"
+
+#: ../src/ui/dialog/glyphs.cpp:243
+msgid "Arabic Supplement"
+msgstr "Arabic Supplement"
+
+#: ../src/ui/dialog/glyphs.cpp:245
+msgid "NKo"
+msgstr "NKo"
+
+#: ../src/ui/dialog/glyphs.cpp:262
+msgid "Hangul Jamo"
+msgstr "한글 자모"
+
+#: ../src/ui/dialog/glyphs.cpp:264
+msgid "Ethiopic Supplement"
+msgstr "Ethiopic Supplement"
+
+#: ../src/ui/dialog/glyphs.cpp:266
+msgid "Unified Canadian Aboriginal Syllabics"
+msgstr "Unified Canadian Aboriginal Syllabics"
+
+#: ../src/ui/dialog/glyphs.cpp:275
+msgid "Unified Canadian Aboriginal Syllabics Extended"
+msgstr "Unified Canadian Aboriginal Syllabics Extended"
+
+#: ../src/ui/dialog/glyphs.cpp:279
+msgid "Khmer Symbols"
+msgstr "Khmer Symbols"
+
+#: ../src/ui/dialog/glyphs.cpp:286
+msgid "Vedic Extensions"
+msgstr "Vedic Extensions"
+
+#: ../src/ui/dialog/glyphs.cpp:287
+msgid "Phonetic Extensions"
+msgstr "음성 확장"
+
+#: ../src/ui/dialog/glyphs.cpp:288
+msgid "Phonetic Extensions Supplement"
+msgstr "음성 확장 보충"
+
+#: ../src/ui/dialog/glyphs.cpp:289
+msgid "Combining Diacritical Marks Supplement"
+msgstr "결합 구별 표시 보충"
+
+#: ../src/ui/dialog/glyphs.cpp:290
+msgid "Latin Extended Additional"
+msgstr "Latin Extended Additional"
+
+#: ../src/ui/dialog/glyphs.cpp:291
+msgid "Greek Extended"
+msgstr "Greek Extended"
+
+#: ../src/ui/dialog/glyphs.cpp:292
+msgid "General Punctuation"
+msgstr "일반 구두점"
+
+#: ../src/ui/dialog/glyphs.cpp:293
+msgid "Superscripts and Subscripts"
+msgstr "위첨자와 아래첨자"
+
+#: ../src/ui/dialog/glyphs.cpp:294
+msgid "Currency Symbols"
+msgstr "통화 기호"
+
+#: ../src/ui/dialog/glyphs.cpp:295
+msgid "Combining Diacritical Marks for Symbols"
+msgstr "심볼용 결합 구별 표시"
+
+#: ../src/ui/dialog/glyphs.cpp:296
+msgid "Letterlike Symbols"
+msgstr "문자같은 심볼"
+
+#: ../src/ui/dialog/glyphs.cpp:297
+msgid "Number Forms"
+msgstr "숫자 형식"
+
+#: ../src/ui/dialog/glyphs.cpp:298
+msgid "Arrows"
+msgstr "화살표"
+
+#: ../src/ui/dialog/glyphs.cpp:299
+msgid "Mathematical Operators"
+msgstr "수학 연산자"
+
+#: ../src/ui/dialog/glyphs.cpp:300
+msgid "Miscellaneous Technical"
+msgstr "기타 기술"
+
+#: ../src/ui/dialog/glyphs.cpp:301
+msgid "Control Pictures"
+msgstr "제어 그림"
+
+#: ../src/ui/dialog/glyphs.cpp:302
+msgid "Optical Character Recognition"
+msgstr "광학 문자 인식"
+
+#: ../src/ui/dialog/glyphs.cpp:303
+msgid "Enclosed Alphanumerics"
+msgstr "둘러싸인 알파벳 및 숫자"
+
+#: ../src/ui/dialog/glyphs.cpp:304
+msgid "Box Drawing"
+msgstr "상자 그리기"
+
+#: ../src/ui/dialog/glyphs.cpp:305
+msgid "Block Elements"
+msgstr "블록 요소"
+
+#: ../src/ui/dialog/glyphs.cpp:306
+msgid "Geometric Shapes"
+msgstr "기하학적 모양"
+
+#: ../src/ui/dialog/glyphs.cpp:307
+msgid "Miscellaneous Symbols"
+msgstr "기타 심볼"
+
+#: ../src/ui/dialog/glyphs.cpp:308
+msgid "Dingbats"
+msgstr "딩뱃"
+
+#: ../src/ui/dialog/glyphs.cpp:309
+msgid "Miscellaneous Mathematical Symbols-A"
+msgstr "기타 수학적 심볼-A"
+
+#: ../src/ui/dialog/glyphs.cpp:310
+msgid "Supplemental Arrows-A"
+msgstr "보충 화살표-A"
+
+#: ../src/ui/dialog/glyphs.cpp:311
+msgid "Braille Patterns"
+msgstr "점자 패턴"
+
+#: ../src/ui/dialog/glyphs.cpp:312
+msgid "Supplemental Arrows-B"
+msgstr "보충 화살표-B"
+
+#: ../src/ui/dialog/glyphs.cpp:313
+msgid "Miscellaneous Mathematical Symbols-B"
+msgstr "기타 수학적 심볼-B"
+
+#: ../src/ui/dialog/glyphs.cpp:314
+msgid "Supplemental Mathematical Operators"
+msgstr "보충 수학 연산자"
+
+#: ../src/ui/dialog/glyphs.cpp:315
+msgid "Miscellaneous Symbols and Arrows"
+msgstr "기타 심볼과 화살표"
+
+#: ../src/ui/dialog/glyphs.cpp:317
+msgid "Latin Extended-C"
+msgstr "Latin Extended-C"
+
+#: ../src/ui/dialog/glyphs.cpp:319
+msgid "Georgian Supplement"
+msgstr "Georgian Supplement"
+
+#: ../src/ui/dialog/glyphs.cpp:321
+msgid "Ethiopic Extended"
+msgstr "Ethiopic Extended"
+
+#: ../src/ui/dialog/glyphs.cpp:322
+msgid "Cyrillic Extended-A"
+msgstr "Cyrillic Extended-A"
+
+#: ../src/ui/dialog/glyphs.cpp:323
+msgid "Supplemental Punctuation"
+msgstr "보충 구두점"
+
+#: ../src/ui/dialog/glyphs.cpp:324
+msgid "CJK Radicals Supplement"
+msgstr "CJK(한중일) 부수 보충"
+
+#: ../src/ui/dialog/glyphs.cpp:325
+msgid "Kangxi Radicals"
+msgstr "Kangxi Radicals"
+
+#: ../src/ui/dialog/glyphs.cpp:326
+msgid "Ideographic Description Characters"
+msgstr "표의 요약 문자"
+
+#: ../src/ui/dialog/glyphs.cpp:327
+msgid "CJK Symbols and Punctuation"
+msgstr "CJK(한중일) 심볼 및 구두점"
+
+#: ../src/ui/dialog/glyphs.cpp:331
+msgid "Hangul Compatibility Jamo"
+msgstr "한글 호환 자모"
+
+#: ../src/ui/dialog/glyphs.cpp:332
+msgid "Kanbun"
+msgstr "Kanbun"
+
+#: ../src/ui/dialog/glyphs.cpp:333
+msgid "Bopomofo Extended"
+msgstr "Bopomofo Extended"
+
+#: ../src/ui/dialog/glyphs.cpp:334
+msgid "CJK Strokes"
+msgstr "CJK(한중일) 획"
+
+#: ../src/ui/dialog/glyphs.cpp:335
+msgid "Katakana Phonetic Extensions"
+msgstr "Katakana Phonetic Extensions"
+
+#: ../src/ui/dialog/glyphs.cpp:336
+msgid "Enclosed CJK Letters and Months"
+msgstr "둘러싸인 CJK(한중일) 글자 및 달"
+
+#: ../src/ui/dialog/glyphs.cpp:337
+msgid "CJK Compatibility"
+msgstr "CJK(한중일) 호환성"
+
+#: ../src/ui/dialog/glyphs.cpp:338
+msgid "CJK Unified Ideographs Extension A"
+msgstr "CJK(한중일) 통합 표의문자 확장 A"
+
+#: ../src/ui/dialog/glyphs.cpp:339
+msgid "Yijing Hexagram Symbols"
+msgstr "Yijing Hexagram Symbols"
+
+#: ../src/ui/dialog/glyphs.cpp:340
+msgid "CJK Unified Ideographs"
+msgstr "CJK(한중일) 통합 표의문자"
+
+#: ../src/ui/dialog/glyphs.cpp:341
+msgid "Yi Syllables"
+msgstr "Yi Syllables"
+
+#: ../src/ui/dialog/glyphs.cpp:342
+msgid "Yi Radicals"
+msgstr "Yi Radicals"
+
+#: ../src/ui/dialog/glyphs.cpp:345
+msgid "Cyrillic Extended-B"
+msgstr "Cyrillic Extended-B"
+
+#: ../src/ui/dialog/glyphs.cpp:346
+msgid "Bamum"
+msgstr "Bamum"
+
+#: ../src/ui/dialog/glyphs.cpp:347
+msgid "Modifier Tone Letters"
+msgstr "어조 수식 자모"
+
+#: ../src/ui/dialog/glyphs.cpp:348
+msgid "Latin Extended-D"
+msgstr "Latin Extended-D"
+
+#: ../src/ui/dialog/glyphs.cpp:350
+msgid "Common Indic Number Forms"
+msgstr "공통 인도 숫자 형식"
+
+#: ../src/ui/dialog/glyphs.cpp:353
+msgid "Devanagari Extended"
+msgstr "Devanagari Extended"
+
+#: ../src/ui/dialog/glyphs.cpp:356
+msgid "Hangul Jamo Extended-A"
+msgstr "한글 자모 확장-A"
+
+#: ../src/ui/dialog/glyphs.cpp:359
+msgid "Myanmar Extended-A"
+msgstr "Myanmar Extended-A"
+
+#: ../src/ui/dialog/glyphs.cpp:362
 msgid "Hangul Syllables"
 msgstr "한글 음절"
 
-#: ../src/ui/dialog/glyphs.cpp:281
+#: ../src/ui/dialog/glyphs.cpp:363
 msgid "Hangul Jamo Extended-B"
 msgstr "한글 자모 확장-B"
 
-#: ../src/ui/dialog/glyphs.cpp:282
+#: ../src/ui/dialog/glyphs.cpp:364
 msgid "High Surrogates"
 msgstr "높은 대용물"
 
-#: ../src/ui/dialog/glyphs.cpp:283
+#: ../src/ui/dialog/glyphs.cpp:365
 msgid "High Private Use Surrogates"
 msgstr "높은 개인 사용 대용물"
 
-#: ../src/ui/dialog/glyphs.cpp:284
+#: ../src/ui/dialog/glyphs.cpp:366
 msgid "Low Surrogates"
 msgstr "낮은 대용물"
 
-#: ../src/ui/dialog/glyphs.cpp:285
+#: ../src/ui/dialog/glyphs.cpp:367
 msgid "Private Use Area"
 msgstr "개인 사용 영역"
 
-#: ../src/ui/dialog/glyphs.cpp:286
+#: ../src/ui/dialog/glyphs.cpp:368
 msgid "CJK Compatibility Ideographs"
 msgstr "CJK(한중일) 호환 표의문자"
 
-#: ../src/ui/dialog/glyphs.cpp:287
+#: ../src/ui/dialog/glyphs.cpp:369
 msgid "Alphabetic Presentation Forms"
 msgstr "알파벳 표현 형식"
 
-#: ../src/ui/dialog/glyphs.cpp:288
+#: ../src/ui/dialog/glyphs.cpp:370
 msgid "Arabic Presentation Forms-A"
 msgstr "아랍 표현 형식-A"
 
-#: ../src/ui/dialog/glyphs.cpp:289
+#: ../src/ui/dialog/glyphs.cpp:371
 msgid "Variation Selectors"
 msgstr "변형 선택자"
 
-#: ../src/ui/dialog/glyphs.cpp:290
+#: ../src/ui/dialog/glyphs.cpp:372
 msgid "Vertical Forms"
 msgstr "수직 형식"
 
-#: ../src/ui/dialog/glyphs.cpp:291
+#: ../src/ui/dialog/glyphs.cpp:373
 msgid "Combining Half Marks"
 msgstr "결합 절반 표시"
 
-#: ../src/ui/dialog/glyphs.cpp:292
+#: ../src/ui/dialog/glyphs.cpp:374
 msgid "CJK Compatibility Forms"
 msgstr "CJK(한중일) 호환 형식"
 
-#: ../src/ui/dialog/glyphs.cpp:293
+#: ../src/ui/dialog/glyphs.cpp:375
 msgid "Small Form Variants"
 msgstr "작은 형식 변형"
 
-#: ../src/ui/dialog/glyphs.cpp:294
+#: ../src/ui/dialog/glyphs.cpp:376
 msgid "Arabic Presentation Forms-B"
 msgstr "Arabic Presentation Forms-B"
 
-#: ../src/ui/dialog/glyphs.cpp:295
+#: ../src/ui/dialog/glyphs.cpp:377
 msgid "Halfwidth and Fullwidth Forms"
 msgstr "절반 너비 및 전체 너비 형식"
 
-#: ../src/ui/dialog/glyphs.cpp:296
+#: ../src/ui/dialog/glyphs.cpp:378
 msgid "Specials"
 msgstr "특수"
 
-#: ../src/ui/dialog/glyphs.cpp:355
+#: ../src/ui/dialog/glyphs.cpp:381
+#, fuzzy
+msgid "Miscellaneous Symbols and Pictographs"
+msgstr "기타 심볼과 화살표"
+
+#: ../src/ui/dialog/glyphs.cpp:382
+#, fuzzy
+msgid "Emoticons"
+msgstr "모션"
+
+#: ../src/ui/dialog/glyphs.cpp:383
+msgid "Ornamental Dingbats"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:384
+msgid "Transport and Map Symbols"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:385
+#, fuzzy
+msgid "Alchemical Symbols"
+msgstr "Khmer Symbols"
+
+#: ../src/ui/dialog/glyphs.cpp:386
+#, fuzzy
+msgid "Geometric Shapes Extended"
+msgstr "기하학적 모양"
+
+#: ../src/ui/dialog/glyphs.cpp:387
+#, fuzzy
+msgid "Supplemental Arrows-C"
+msgstr "보충 화살표-A"
+
+#: ../src/ui/dialog/glyphs.cpp:388
+msgid "Supplemental Symbols and Pictographs"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:389
+#, fuzzy
+msgid "Chess Symbols"
+msgstr "Khmer Symbols"
+
+#: ../src/ui/dialog/glyphs.cpp:390
+msgid "Symbols and Pictographs Extended-A"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:452
 msgid "Script: "
 msgstr "스크립트: "
 
-#: ../src/ui/dialog/glyphs.cpp:380
+#: ../src/ui/dialog/glyphs.cpp:477
 msgid "Range: "
 msgstr "구간: "
 
-#: ../src/ui/dialog/glyphs.cpp:443
+#: ../src/ui/dialog/glyphs.cpp:545
 msgid "Append"
 msgstr "덧붙이기"
 
-#: ../src/ui/dialog/glyphs.cpp:551
+#: ../src/ui/dialog/glyphs.cpp:653
 msgid "Append text"
 msgstr "문자열 덧붙이기"
 
@@ -21510,8 +21941,8 @@ msgstr "바로가기"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2164
 #: ../src/ui/widget/page-sizer.cpp:96
-#: ../share/ui/dialog-livepatheffect-add.glade:438
-#: ../share/ui/dialog-livepatheffect-add.glade:550
+#: ../share/ui/dialog-livepatheffect-add.glade:431
+#: ../share/ui/dialog-livepatheffect-effect.glade:98
 msgid "Description"
 msgstr "설명"
 
@@ -22089,17 +22520,17 @@ msgstr "맨 위"
 
 #
 # File: ../src/ui/dialog/livepatheffect-add.cpp, line: 472
-#: ../src/ui/dialog/livepatheffect-add.cpp:570
+#: ../src/ui/dialog/livepatheffect-add.cpp:562
 msgid "You don't have any favorites yet, please disable the favorites star"
 msgstr "총애가 아직 없음. 총애 별을 비활성화하십시오"
 
-#: ../src/ui/dialog/livepatheffect-add.cpp:574
+#: ../src/ui/dialog/livepatheffect-add.cpp:566
 msgid "This is your favorite effects"
 msgstr "이것은 사용자의 총애 효과입니다"
 
-#: ../src/ui/dialog/livepatheffect-add.cpp:579
-#: ../src/ui/dialog/livepatheffect-add.cpp:591
-#: ../src/ui/dialog/livepatheffect-add.cpp:600
+#: ../src/ui/dialog/livepatheffect-add.cpp:571
+#: ../src/ui/dialog/livepatheffect-add.cpp:583
+#: ../src/ui/dialog/livepatheffect-add.cpp:592
 msgid "Your search do a empty result, please try again"
 msgstr "검색의 결과가 비었습니다. 다시 시도하십시오"
 
@@ -22299,9 +22730,9 @@ msgid "URL:"
 msgstr "URL:"
 
 #: ../src/ui/dialog/object-properties.cpp:56
-#: ../src/ui/dialog/object-properties.cpp:340
-#: ../src/ui/dialog/object-properties.cpp:411
+#: ../src/ui/dialog/object-properties.cpp:347
 #: ../src/ui/dialog/object-properties.cpp:418
+#: ../src/ui/dialog/object-properties.cpp:425
 msgid "_ID:"
 msgstr "_ID:"
 
@@ -22348,93 +22779,88 @@ msgstr "설명(_D):"
 
 #: ../src/ui/dialog/object-properties.cpp:222
 msgid ""
-"The 'image-rendering' property can influence how a bitmap is up-scaled:\n"
-"\t'auto' no preference;\n"
-"\t'optimizeQuality' smooth;\n"
-"\t'optimizeSpeed' blocky.\n"
-"Note that this behaviour is not defined in the SVG 1.1 specification and not "
-"all browsers follow this interpretation."
+"The 'image-rendering' property can influence how a bitmap is re-scaled:\n"
+"\t• 'auto' no preference (usually smooth but blurred)\n"
+"\t• 'optimizeQuality' prefer rendering quality (usually smooth but blurred)\n"
+"\t• 'optimizeSpeed' prefer rendering speed (usually blocky)\n"
+"\t• 'crisp-edges' rescale without blurring edges (often blocky)\n"
+"\t• 'pixelated' render blocky\n"
+"Note that the specification of this property is not finalized. Support and "
+"interpretation of these values varies between renderers."
 msgstr ""
-"‘image-rendering’ (이미지 렌더링) 속성은 비트맵의 배율이 커지는 방법에 영향"
-"을 줄 수 있습니다:\n"
-"\t‘auto’(자동)는 우선하는 것 없음;\n"
-"\t‘optimizeQuality’(화질최적화)는 매끄럽게;\n"
-"\t‘optimzieSpeed’(속도최적화)는 투박하게;\n"
-"유념하세요: 이 작동방식은 SVG 1.1 명세서에는 정해지지 않았으며 모든 브라우저"
-"가 이 해석을 따르지는 않습니다 ."
 
-#: ../src/ui/dialog/object-properties.cpp:247
+#: ../src/ui/dialog/object-properties.cpp:254
 msgid "Check to make the object invisible"
 msgstr "개체를 안 보이게 하려면 체크"
 
 #. TRANSLATORS: "Lock" is a verb here
-#: ../src/ui/dialog/object-properties.cpp:256
+#: ../src/ui/dialog/object-properties.cpp:263
 msgid "Check to make the object insensitive (not selectable by mouse)"
 msgstr "개체를 반응이 없게 (마우스로 선택할 수 없게) 하려면 체크"
 
-#: ../src/ui/dialog/object-properties.cpp:264
+#: ../src/ui/dialog/object-properties.cpp:271
 msgid "Check to preserve aspect ratio on images"
 msgstr "이미지의 종횡비를 유지하려면 체크하십시오"
 
-#: ../src/ui/dialog/object-properties.cpp:273 ../src/verbs.cpp:2829
+#: ../src/ui/dialog/object-properties.cpp:280 ../src/verbs.cpp:2829
 #: ../src/verbs.cpp:2837
 msgid "_Set"
 msgstr "설정(_S)"
 
-#: ../src/ui/dialog/object-properties.cpp:327
-#: ../src/ui/dialog/object-properties.cpp:332
+#: ../src/ui/dialog/object-properties.cpp:334
+#: ../src/ui/dialog/object-properties.cpp:339
 msgid "Ref"
 msgstr "참조"
 
-#: ../src/ui/dialog/object-properties.cpp:413
+#: ../src/ui/dialog/object-properties.cpp:420
 msgid "Id invalid! "
 msgstr "ID 잘못됨! "
 
-#: ../src/ui/dialog/object-properties.cpp:415
+#: ../src/ui/dialog/object-properties.cpp:422
 msgid "Id exists! "
 msgstr "ID 존재함! "
 
-#: ../src/ui/dialog/object-properties.cpp:421
+#: ../src/ui/dialog/object-properties.cpp:428
 msgid "Set object ID"
 msgstr "개체 ID 설정"
 
-#: ../src/ui/dialog/object-properties.cpp:436
+#: ../src/ui/dialog/object-properties.cpp:443
 msgid "Set object label"
 msgstr "개체 라벨 설정"
 
-#: ../src/ui/dialog/object-properties.cpp:442
+#: ../src/ui/dialog/object-properties.cpp:449
 msgid "Set object title"
 msgstr "개체 제목 설정"
 
-#: ../src/ui/dialog/object-properties.cpp:449
+#: ../src/ui/dialog/object-properties.cpp:456
 msgid "Set image DPI"
 msgstr "이미지 DPI 설정"
 
-#: ../src/ui/dialog/object-properties.cpp:458
+#: ../src/ui/dialog/object-properties.cpp:465
 msgid "Set object description"
 msgstr "개체 설명을 설정"
 
-#: ../src/ui/dialog/object-properties.cpp:484
+#: ../src/ui/dialog/object-properties.cpp:491
 msgid "Set image rendering option"
 msgstr "이미지 렌더링 옵션 설정"
 
-#: ../src/ui/dialog/object-properties.cpp:503
+#: ../src/ui/dialog/object-properties.cpp:510
 msgid "Lock object"
 msgstr "개체 잠금"
 
-#: ../src/ui/dialog/object-properties.cpp:503
+#: ../src/ui/dialog/object-properties.cpp:510
 msgid "Unlock object"
 msgstr "개체 잠금 해제"
 
-#: ../src/ui/dialog/object-properties.cpp:529
+#: ../src/ui/dialog/object-properties.cpp:536
 msgid "Set preserve ratio"
 msgstr "비율 유지 설정"
 
-#: ../src/ui/dialog/object-properties.cpp:546
+#: ../src/ui/dialog/object-properties.cpp:553
 msgid "Hide object"
 msgstr "개체 숨기기"
 
-#: ../src/ui/dialog/object-properties.cpp:546
+#: ../src/ui/dialog/object-properties.cpp:553
 msgid "Unhide object"
 msgstr "개체 보이기"
 
@@ -22916,7 +23342,8 @@ msgstr "값"
 #
 # File: ../src/ui/dialog/styledialog.cpp, line: 698
 #: ../src/ui/dialog/styledialog.cpp:788
-msgid "This value is comented"
+#, fuzzy
+msgid "This value is commented"
 msgstr "이 값은 주석 처리 되었음"
 
 #: ../src/ui/dialog/styledialog.cpp:975
@@ -23426,7 +23853,7 @@ msgstr "기본값(_D)으로 설정"
 msgid "AaBbCcIiPpQq12369$€¢?.;/()"
 msgstr "AaBbCcIiPpQq12369$€¢?.;/()"
 
-#: ../src/ui/dialog/text-edit.cpp:468 ../src/ui/tools/text-tool.cpp:1576
+#: ../src/ui/dialog/text-edit.cpp:468 ../src/ui/tools/text-tool.cpp:1583
 msgid "Set text style"
 msgstr "문자열 스타일 설정"
 
@@ -23781,22 +24208,22 @@ msgstr ""
 msgid "Replace"
 msgstr "바꾸기"
 
-#: ../src/ui/shape-editor-knotholders.cpp:550
+#: ../src/ui/shape-editor-knotholders.cpp:548
 msgid ""
 "Adjust the <b>horizontal rounding</b> radius; with <b>Ctrl</b> to make the "
 "vertical radius the same"
 msgstr ""
 "<b>수평 둥글기</b> 반지름 조정, <b>Ctrl</b> -- 수직 반지름을 동일하게 조정"
 
-#: ../src/ui/shape-editor-knotholders.cpp:555
+#: ../src/ui/shape-editor-knotholders.cpp:553
 msgid ""
 "Adjust the <b>vertical rounding</b> radius; with <b>Ctrl</b> to make the "
 "horizontal radius the same"
 msgstr ""
 "<b>수직 둥글기</b> 반지름 조정, <b>Ctrl</b> -- 수평 반지름을 동일하게 조정"
 
-#: ../src/ui/shape-editor-knotholders.cpp:560
-#: ../src/ui/shape-editor-knotholders.cpp:565
+#: ../src/ui/shape-editor-knotholders.cpp:558
+#: ../src/ui/shape-editor-knotholders.cpp:563
 msgid ""
 "Adjust the <b>width and height</b> of the rectangle; with <b>Ctrl</b> to "
 "lock ratio or stretch in one dimension only"
@@ -23804,14 +24231,14 @@ msgstr ""
 "직사각형의 <b>너비과 높이</b>를 조정; <b>Ctrl</b>-- 비율을 잠그거나 한 쪽 방"
 "향에서만 늘임"
 
-#: ../src/ui/shape-editor-knotholders.cpp:570
+#: ../src/ui/shape-editor-knotholders.cpp:568
 msgid "Drag to move the rectangle"
 msgstr "사각형을 제거하려면 끌기"
 
-#: ../src/ui/shape-editor-knotholders.cpp:827
-#: ../src/ui/shape-editor-knotholders.cpp:831
-#: ../src/ui/shape-editor-knotholders.cpp:835
-#: ../src/ui/shape-editor-knotholders.cpp:839
+#: ../src/ui/shape-editor-knotholders.cpp:825
+#: ../src/ui/shape-editor-knotholders.cpp:829
+#: ../src/ui/shape-editor-knotholders.cpp:833
+#: ../src/ui/shape-editor-knotholders.cpp:837
 msgid ""
 "Resize box in X/Y direction; with <b>Shift</b> along the Z axis; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
@@ -23819,10 +24246,10 @@ msgstr ""
 "X/Y 방향으로 상자 크기 변경; <b>Shift</b> - Z축을 따라 ; <b>Ctrl</b> -- 가장"
 "자리나 대각선 방향으로 제한"
 
-#: ../src/ui/shape-editor-knotholders.cpp:843
-#: ../src/ui/shape-editor-knotholders.cpp:847
-#: ../src/ui/shape-editor-knotholders.cpp:851
-#: ../src/ui/shape-editor-knotholders.cpp:855
+#: ../src/ui/shape-editor-knotholders.cpp:841
+#: ../src/ui/shape-editor-knotholders.cpp:845
+#: ../src/ui/shape-editor-knotholders.cpp:849
+#: ../src/ui/shape-editor-knotholders.cpp:853
 msgid ""
 "Resize box along the Z axis; with <b>Shift</b> in X/Y direction; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
@@ -23830,7 +24257,7 @@ msgstr ""
 "Z축을 따라 상자 크기 변경; <b>Shift</b>: X/Y 방향 , <b>Ctrl</b>: 가장자리나 "
 "대각선 방향으로 제한"
 
-#: ../src/ui/shape-editor-knotholders.cpp:859
+#: ../src/ui/shape-editor-knotholders.cpp:857
 msgid "Move the box in perspective"
 msgstr "원근에 맞추어 상자 이동"
 
@@ -23887,11 +24314,11 @@ msgstr ""
 msgid "Drag to move the star"
 msgstr "별을 이동하려면 끌기"
 
-#: ../src/ui/shape-editor-knotholders.cpp:1605
+#: ../src/ui/shape-editor-knotholders.cpp:1608
 msgid "Drag to move the spiral"
 msgstr "나선을 이동하려면 끌기"
 
-#: ../src/ui/shape-editor-knotholders.cpp:1609
+#: ../src/ui/shape-editor-knotholders.cpp:1612
 msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
@@ -23899,7 +24326,7 @@ msgstr ""
 "<b>안쪽</b>으로부터 나선 감기/풀기; <b>Ctrl</b> -- 각도 붙이기; <b>Alt</b> "
 "-- 확대/축소"
 
-#: ../src/ui/shape-editor-knotholders.cpp:1613
+#: ../src/ui/shape-editor-knotholders.cpp:1616
 msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Shift</b> to scale/rotate; with <b>Alt</b> to lock radius"
@@ -23907,19 +24334,19 @@ msgstr ""
 "<b>바깥쪽</b>부터 나선 감기/풀기; <b>Ctrl</b> -- 각도 붙이기; <b>Shift</b> "
 "-- 배율/회전 변경; <b>Alt</b> -- 반지름 고정"
 
-#: ../src/ui/shape-editor-knotholders.cpp:1665
+#: ../src/ui/shape-editor-knotholders.cpp:1668
 msgid "Adjust the <b>offset distance</b>"
 msgstr "<b>오프셋 거리</b> 조정"
 
-#: ../src/ui/shape-editor-knotholders.cpp:1890
+#: ../src/ui/shape-editor-knotholders.cpp:1893
 msgid "Adjust the <b>rectangular</b> region of the text."
 msgstr "문자열의 <b>직사각형</b> 영역을 조정합니다."
 
-#: ../src/ui/shape-editor-knotholders.cpp:1900
+#: ../src/ui/shape-editor-knotholders.cpp:1903
 msgid "Adjust the <b>inline size</b> (line length) of the text."
 msgstr "문자열의 <b>인라인 크기</b> (줄 높이) 조정."
 
-#: ../src/ui/shape-editor-knotholders.cpp:1939
+#: ../src/ui/shape-editor-knotholders.cpp:1942
 msgid "Drag to resize the <b>flowed text frame</b>"
 msgstr "<b>유동 문자열 프레임</b> 크기를 바꾸려면 끌기"
 
@@ -23969,97 +24396,97 @@ msgstr ""
 "<b>베지어 세그먼트</b>: 선분의 모양을 바꾸려면 끌기, 노드를 삽입하려면 이중 "
 "클릭, 선택하려면 클릭 (더: Shift, Ctrl+Alt)"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:317
+#: ../src/ui/tool/multi-path-manipulator.cpp:324
 msgid "Retract handles"
 msgstr "핸들 숨기기"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:317 ../src/ui/tool/node.cpp:315
+#: ../src/ui/tool/multi-path-manipulator.cpp:324 ../src/ui/tool/node.cpp:315
 #: ../src/ui/tool/node.cpp:340
 msgid "Change node type"
 msgstr "노드 유형 변경"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:325
+#: ../src/ui/tool/multi-path-manipulator.cpp:332
 msgid "Straighten segments"
 msgstr "선분 곧게 하기"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:327
+#: ../src/ui/tool/multi-path-manipulator.cpp:334
 msgid "Make segments curves"
 msgstr "선분을 곡선으로 바꾸기"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:335
-#: ../src/ui/tool/multi-path-manipulator.cpp:349
+#: ../src/ui/tool/multi-path-manipulator.cpp:342
+#: ../src/ui/tool/multi-path-manipulator.cpp:356
 msgid "Add nodes"
 msgstr "노드 더하기"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:341
+#: ../src/ui/tool/multi-path-manipulator.cpp:348
 msgid "Add extremum nodes"
 msgstr "극값 노드 더하기"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:356
+#: ../src/ui/tool/multi-path-manipulator.cpp:363
 msgid "Duplicate nodes"
 msgstr "노드의 부본 작성"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:419
+#: ../src/ui/tool/multi-path-manipulator.cpp:426
 #: ../src/ui/toolbar/node-toolbar.cpp:156
 msgid "Join nodes"
 msgstr "노드 잇기"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:426
+#: ../src/ui/tool/multi-path-manipulator.cpp:433
 #: ../src/ui/toolbar/node-toolbar.cpp:164
 msgid "Break nodes"
 msgstr "노드 나누기"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:433
+#: ../src/ui/tool/multi-path-manipulator.cpp:440
 msgid "Delete nodes"
 msgstr "노드 삭제"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:779
+#: ../src/ui/tool/multi-path-manipulator.cpp:786
 msgid "Move nodes"
 msgstr "노드 이동"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:782
+#: ../src/ui/tool/multi-path-manipulator.cpp:789
 msgid "Move nodes horizontally"
 msgstr "노드를 수평으로 이동"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:786
+#: ../src/ui/tool/multi-path-manipulator.cpp:793
 msgid "Move nodes vertically"
 msgstr "노드를 수직으로 이동"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:790
-#: ../src/ui/tool/multi-path-manipulator.cpp:793
+#: ../src/ui/tool/multi-path-manipulator.cpp:797
+#: ../src/ui/tool/multi-path-manipulator.cpp:800
 msgid "Rotate nodes"
 msgstr "노드 회전"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:797
-#: ../src/ui/tool/multi-path-manipulator.cpp:803
+#: ../src/ui/tool/multi-path-manipulator.cpp:804
+#: ../src/ui/tool/multi-path-manipulator.cpp:810
 msgid "Scale nodes uniformly"
 msgstr "균일하게 노드 배율 변경"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:800
+#: ../src/ui/tool/multi-path-manipulator.cpp:807
 msgid "Scale nodes"
 msgstr "노드 배율 변경"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:807
+#: ../src/ui/tool/multi-path-manipulator.cpp:814
 msgid "Scale nodes horizontally"
 msgstr "수평으로 노드 배율 변경"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:811
+#: ../src/ui/tool/multi-path-manipulator.cpp:818
 msgid "Scale nodes vertically"
 msgstr "수직으로 노드 배율 변경"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:815
+#: ../src/ui/tool/multi-path-manipulator.cpp:822
 msgid "Skew nodes horizontally"
 msgstr "수평으로 노드를 기울이기"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:819
+#: ../src/ui/tool/multi-path-manipulator.cpp:826
 msgid "Skew nodes vertically"
 msgstr "수직으로 노드를 기울이기"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:823
+#: ../src/ui/tool/multi-path-manipulator.cpp:830
 msgid "Flip nodes horizontally"
 msgstr "노드를 수평으로 뒤집기"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:826
+#: ../src/ui/tool/multi-path-manipulator.cpp:833
 msgid "Flip nodes vertically"
 msgstr "노드를 수직으로 뒤집기"
 
@@ -24642,11 +25069,6 @@ msgstr "(수평)"
 msgid "(right edge up)"
 msgstr "(오른쪽 가장자리 위로)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:154
-#: ../share/extensions/motion.inx:7 ../share/extensions/restack.inx:21
-msgid "Angle:"
-msgstr "각도:"
-
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:155
 msgid ""
 "The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if "
@@ -25127,22 +25549,6 @@ msgid ""
 "Set limiting bounding box (used to cut infinite lines) to the bounding box "
 "of current selection"
 msgstr "제한 경계 상자를 현재 선택 영역의 경계상자로 설정하기"
-
-#: ../src/ui/toolbar/lpe-toolbar.cpp:127
-msgid "Closed"
-msgstr "닫힘"
-
-#: ../src/ui/toolbar/lpe-toolbar.cpp:128
-msgid "Open start"
-msgstr "열린 시작"
-
-#: ../src/ui/toolbar/lpe-toolbar.cpp:129
-msgid "Open end"
-msgstr "열린 끝"
-
-#: ../src/ui/toolbar/lpe-toolbar.cpp:130
-msgid "Open both"
-msgstr "열린 양쪽"
 
 #: ../src/ui/toolbar/lpe-toolbar.cpp:132
 msgid "Choose a line segment type"
@@ -26497,7 +26903,7 @@ msgid "Font style"
 msgstr "글꼴 스타일"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:312
-#: ../src/ui/toolbar/text-toolbar.cpp:1955
+#: ../src/ui/toolbar/text-toolbar.cpp:1953
 #: ../src/ui/widget/font-selector.cpp:32 ../src/ui/widget/font-selector.cpp:145
 msgid "Font size"
 msgstr "글꼴 크기"
@@ -27043,7 +27449,7 @@ msgstr ""
 "서예 획을 그리려면 <b>끌기</b>. 안내선을 뒤따르려면 <b>Ctrl</b>, 너비(왼쪽/오"
 "른쪽) 및 각도(위/아래)를 조정하려면 <b>화살표 키</b>를 사용."
 
-#: ../src/ui/tools-switch.cpp:101 ../src/ui/tools/text-tool.cpp:1732
+#: ../src/ui/tools-switch.cpp:101 ../src/ui/tools/text-tool.cpp:1739
 msgid ""
 "<b>Click</b> to select or create text, <b>drag</b> to create flowed text; "
 "then type."
@@ -27538,52 +27944,52 @@ msgstr "경계 상자 안쪽에 메시 맞추기."
 msgid "Create mesh"
 msgstr "메시 만들기"
 
-#: ../src/ui/tools/node-tool.cpp:655
+#: ../src/ui/tools/node-tool.cpp:657
 msgctxt "Node tool tip"
 msgid ""
 "<b>Shift</b>: drag to add nodes to the selection, click to toggle object "
 "selection"
 msgstr "<b>Shift</b>: 노드를 선택에 더하려면 끌기, 개체 선택을 토글하려면 클릭"
 
-#: ../src/ui/tools/node-tool.cpp:659
+#: ../src/ui/tools/node-tool.cpp:661
 msgctxt "Node tool tip"
 msgid "<b>Shift</b>: drag to add nodes to the selection"
 msgstr "<b>Shift</b>: 노드를 선택에 더하려면 끌기"
 
-#: ../src/ui/tools/node-tool.cpp:688
+#: ../src/ui/tools/node-tool.cpp:690
 #, c-format
 msgid "<b>%u of %u</b> node selected."
 msgid_plural "<b>%u of %u</b> nodes selected."
 msgstr[0] "<b>%2$u개 중 %1$u개</b>의 노드가 선택됨."
 
-#: ../src/ui/tools/node-tool.cpp:695
+#: ../src/ui/tools/node-tool.cpp:697
 #, c-format
 msgctxt "Node tool tip"
 msgid "%s Drag to select nodes, click to edit only this object (more: Shift)"
 msgstr "%s 끌기로 노드 선택, 클릭으로 이 개체만 편집 (더: Shift)"
 
-#: ../src/ui/tools/node-tool.cpp:701
+#: ../src/ui/tools/node-tool.cpp:703
 #, c-format
 msgctxt "Node tool tip"
 msgid "%s Drag to select nodes, click clear the selection"
 msgstr "%s 끌기로 노드 선택, 클릭으로 선택 해제"
 
-#: ../src/ui/tools/node-tool.cpp:710
+#: ../src/ui/tools/node-tool.cpp:712
 msgctxt "Node tool tip"
 msgid "Drag to select nodes, click to edit only this object"
 msgstr "노드를 선택하려면 끌기, 이 개체만 편집하려면 클릭"
 
-#: ../src/ui/tools/node-tool.cpp:713
+#: ../src/ui/tools/node-tool.cpp:715
 msgctxt "Node tool tip"
 msgid "Drag to select nodes, click to clear the selection"
 msgstr "노드를 선택하려면 끌기, 선택을 제거하려면 클릭"
 
-#: ../src/ui/tools/node-tool.cpp:718
+#: ../src/ui/tools/node-tool.cpp:720
 msgctxt "Node tool tip"
 msgid "Drag to select objects to edit, click to edit this object (more: Shift)"
 msgstr "편집 개체를 선택하려면 끌기, 이 개체를 편집하려면 클릭(더: Shift)"
 
-#: ../src/ui/tools/node-tool.cpp:721
+#: ../src/ui/tools/node-tool.cpp:723
 msgctxt "Node tool tip"
 msgid "Drag to select objects to edit"
 msgstr "편집 개체를 선택하려면 끌기"
@@ -27630,7 +28036,7 @@ msgstr ""
 "<b>클릭</b> 또는 <b>클릭하고 끌기</b>로 이 점에서부터 경로를 계속하기. Shift"
 "+Click은 날카로운 노드로 바꾸기"
 
-#: ../src/ui/tools/pen-tool.cpp:1796
+#: ../src/ui/tools/pen-tool.cpp:1795
 #, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;; with <b>Shift+Click</b> cusp node,"
@@ -27639,7 +28045,7 @@ msgstr ""
 "<b>곡선 선분</b>: 각도 %3.2f° ; <b>Shift+클릭</b> -- 날카로운 노드로, "
 "<b>ALT</b> 이전 이동, <b>Enter</b> 또는 <b>Shift+Enter</b> -- 경로를 끝내기"
 
-#: ../src/ui/tools/pen-tool.cpp:1797
+#: ../src/ui/tools/pen-tool.cpp:1796
 #, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;; with <b>Shift+Click</b> cusp node,"
@@ -27648,7 +28054,7 @@ msgstr ""
 "<b>직선 선분</b>: 각도 %3.2f°; <b>Shit+Ctrl</b> -- 날카로운 노드, <b>ALT</b> "
 "이전 이동, <b>Enter</b> 또는 <b>Shift+Enter</b> -- 경로 끝내기"
 
-#: ../src/ui/tools/pen-tool.cpp:1801
+#: ../src/ui/tools/pen-tool.cpp:1800
 #, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -27657,7 +28063,7 @@ msgstr ""
 "<b>곡선 선분</b>: 각도 %3.2f°, 거리 %s; <b>Ctrl</b> -- 각도 붙이기; "
 "<b>Enter</b> 또는 <b>Shift+Enter</b> -- 경로를 끝내기"
 
-#: ../src/ui/tools/pen-tool.cpp:1802
+#: ../src/ui/tools/pen-tool.cpp:1801
 #, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -27666,14 +28072,14 @@ msgstr ""
 "<b>직선 선분</b>: 각도 %3.2f°, 거리 %s; <b>Ctrl</b> -- 각도 붙이기; "
 "<b>Enter</b> 또는 <b>Shift+Enter</b> -- 경로를 끝내기"
 
-#: ../src/ui/tools/pen-tool.cpp:1820
+#: ../src/ui/tools/pen-tool.cpp:1819
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
 "angle"
 msgstr "<b>곡선 핸들</b>: 각도 %3.2f°, 길이 %s; <b>Ctrl</b> -- 각도 붙이기"
 
-#: ../src/ui/tools/pen-tool.cpp:1844
+#: ../src/ui/tools/pen-tool.cpp:1843
 #, c-format
 msgid ""
 "<b>Curve handle, symmetric</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</"
@@ -27682,7 +28088,7 @@ msgstr ""
 "<b>곡선 핸들, 대칭</b>: 각도 %3.2f°, 길이 %s; <b>Ctrl</b> -- 각도 붙이기, "
 "<b>Shift</b> -- 이 핸들만 이동"
 
-#: ../src/ui/tools/pen-tool.cpp:1845
+#: ../src/ui/tools/pen-tool.cpp:1844
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -27691,7 +28097,7 @@ msgstr ""
 "<b>곡선 핸들</b>: 각도 %3.2f°, 길이 %s; <b>Ctrl</b> -- 각도 붙이기, "
 "<b>Shift</b> -- 이 핸들만 이동"
 
-#: ../src/ui/tools/pen-tool.cpp:1988
+#: ../src/ui/tools/pen-tool.cpp:1987
 msgid "Drawing finished"
 msgstr "그리기 끝남"
 
@@ -27826,21 +28232,21 @@ msgstr ""
 msgid "Selected object is not a group. Cannot enter."
 msgstr "선택된 개체가 그룹이 아님. 들어갈 수 없음."
 
-#: ../src/ui/tools/spiral-tool.cpp:249
+#: ../src/ui/tools/spiral-tool.cpp:250
 msgid "<b>Ctrl</b>: snap angle"
 msgstr "<b>Ctrl</b>: 각도 붙이기"
 
-#: ../src/ui/tools/spiral-tool.cpp:251
+#: ../src/ui/tools/spiral-tool.cpp:252
 msgid "<b>Alt</b>: lock spiral radius"
 msgstr "<b>Alt</b>: 나선 반지름 잠금"
 
-#: ../src/ui/tools/spiral-tool.cpp:381
-#, c-format
+#: ../src/ui/tools/spiral-tool.cpp:385
+#, fuzzy, c-format
 msgid ""
-"<b>Spiral</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"
+"<b>Spiral</b>: radius %s, angle %.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr "<b>나선</b>: 반지름 %s, 각도 %5g°; <b>Ctrl</b> -- 각도 붙이기"
 
-#: ../src/ui/tools/spiral-tool.cpp:402
+#: ../src/ui/tools/spiral-tool.cpp:406
 msgid "Create spiral"
 msgstr "나선 만들기"
 
@@ -27889,22 +28295,23 @@ msgstr "<b>선택된 것 없음!</b> 뿌릴 개체를 선택하세요."
 msgid "Spray in single path"
 msgstr "단일 경로 안에 뿌리기"
 
-#: ../src/ui/tools/star-tool.cpp:258
+#: ../src/ui/tools/star-tool.cpp:259
 msgid "<b>Ctrl</b>: snap angle; keep rays radial"
 msgstr "<b>Ctrl</b>: 각도 붙이기; 빛살을 방사형으로 유지"
 
-#: ../src/ui/tools/star-tool.cpp:395
-#, c-format
+#: ../src/ui/tools/star-tool.cpp:397
+#, fuzzy, c-format
 msgid ""
-"<b>Polygon</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"
+"<b>Polygon</b>: radius %s, angle %.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr "<b>다각형</b>: 반지름 %s, 각도 %5g°; 각도를 붙이려면 <b>Ctrl</b>"
 
-#: ../src/ui/tools/star-tool.cpp:396
-#, c-format
-msgid "<b>Star</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"
+#: ../src/ui/tools/star-tool.cpp:398
+#, fuzzy, c-format
+msgid ""
+"<b>Star</b>: radius %s, angle %.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr "<b>별</b>: 반지름 %s, 각도 %5g°;각도를 붙이려면 <b>Ctrl</b>을 사용"
 
-#: ../src/ui/tools/star-tool.cpp:421
+#: ../src/ui/tools/star-tool.cpp:423
 msgid "Create star"
 msgstr "별 만들기"
 
@@ -28033,7 +28440,7 @@ msgstr "문자 간격 확대"
 msgid "Paste text"
 msgstr "문자열 붙여넣기"
 
-#: ../src/ui/tools/text-tool.cpp:1705
+#: ../src/ui/tools/text-tool.cpp:1712
 #, c-format
 msgid ""
 "Type or edit flowed text (%d character%s); <b>Enter</b> to start new "
@@ -28044,14 +28451,14 @@ msgid_plural ""
 msgstr[0] ""
 "유동 문자열 입력 또는 편집 (%d 문자%s); 새 문단을 시작하려면 <b>Enter</b>."
 
-#: ../src/ui/tools/text-tool.cpp:1724
+#: ../src/ui/tools/text-tool.cpp:1731
 #, c-format
 msgid "Type or edit text (%d character%s); <b>Enter</b> to start new line."
 msgid_plural ""
 "Type or edit text (%d characters%s); <b>Enter</b> to start new line."
 msgstr[0] "문자열 입력 또는 편집(%d 문자%s); 새 줄을 시작하려면 <b>Enter</b>."
 
-#: ../src/ui/tools/text-tool.cpp:1840
+#: ../src/ui/tools/text-tool.cpp:1847
 msgid "Type text"
 msgstr "문자열 입력"
 
@@ -32339,19 +32746,19 @@ msgstr "‘페인트통’ 개체 채움의 스타일"
 msgid "Live Path Effects Selector"
 msgstr "실시간 경로 효과 선택기"
 
-#: ../share/ui/dialog-livepatheffect-add.glade:273
+#: ../share/ui/dialog-livepatheffect-add.glade:266
 msgid "Show Experimental"
 msgstr "실험적 기능 보이기"
 
-#: ../share/ui/dialog-livepatheffect-add.glade:298
+#: ../share/ui/dialog-livepatheffect-add.glade:291
 msgid "Message"
 msgstr "메시지"
 
-#: ../share/ui/dialog-livepatheffect-add.glade:529
+#: ../share/ui/dialog-livepatheffect-effect.glade:77
 msgid "LPEName"
 msgstr "LPE이름"
 
-#: ../share/ui/dialog-livepatheffect-add.glade:565
+#: ../share/ui/dialog-livepatheffect-effect.glade:113
 msgid "Experimental"
 msgstr "실험적"
 
@@ -40846,6 +41253,28 @@ msgstr "반-em"
 msgid "Half of font height"
 msgstr "글꼴 높이의 절반"
 
+#~ msgid "  location: "
+#~ msgstr "  위치: "
+
+#~ msgid "Extension \""
+#~ msgstr "확장기능 “"
+
+#~ msgid ""
+#~ "The 'image-rendering' property can influence how a bitmap is up-scaled:\n"
+#~ "\t'auto' no preference;\n"
+#~ "\t'optimizeQuality' smooth;\n"
+#~ "\t'optimizeSpeed' blocky.\n"
+#~ "Note that this behaviour is not defined in the SVG 1.1 specification and "
+#~ "not all browsers follow this interpretation."
+#~ msgstr ""
+#~ "‘image-rendering’ (이미지 렌더링) 속성은 비트맵의 배율이 커지는 방법에 영"
+#~ "향을 줄 수 있습니다:\n"
+#~ "\t‘auto’(자동)는 우선하는 것 없음;\n"
+#~ "\t‘optimizeQuality’(화질최적화)는 매끄럽게;\n"
+#~ "\t‘optimzieSpeed’(속도최적화)는 투박하게;\n"
+#~ "유념하세요: 이 작동방식은 SVG 1.1 명세서에는 정해지지 않았으며 모든 브라우"
+#~ "저가 이 해석을 따르지는 않습니다 ."
+
 #
 # File: ../src/3rdparty/autotrace/autotrace.h, line: 114
 #~ msgid ""
@@ -41020,24 +41449,6 @@ msgstr "글꼴 높이의 절반"
 #~ "현재 이 확장기능용으로 사용가능한 도움말이 없습니다. 이 확장 기능에 대해 "
 #~ "궁금한 점이 있으면 잉크스케이프 웹사이트를 방문하거나 메일로 문의하세요."
 
-#~ msgid "Length left:"
-#~ msgstr "길이 왼쪽:"
-
-#~ msgid "Specifies the left end of the bisector"
-#~ msgstr "이등분선의 왼쪽 끝을 지정함"
-
-#~ msgid "Length right:"
-#~ msgstr "길이 오른쪽:"
-
-#~ msgid "Specifies the right end of the bisector"
-#~ msgstr "이등분선의 오른쪽 끝을 지정함"
-
-#~ msgid "Adjust the \"left\" end of the bisector"
-#~ msgstr "이등분선의 \"왼쪽\" 끝을 조정"
-
-#~ msgid "Adjust the \"right\" end of the bisector"
-#~ msgstr "이등분선의 \"오른쪽\" 끝을 조정"
-
 #~ msgid "Elliptic Pen"
 #~ msgstr "타원형 펜"
 
@@ -41048,9 +41459,6 @@ msgstr "글꼴 높이의 절반"
 # File: ../src/live_effects/lpe-dynastroke.cpp, line: 33
 #~ msgid "Thick-Thin strokes (slow)"
 #~ msgstr "두꺼움-얇음 윤곽선 (느림)"
-
-#~ msgid "Sharp"
-#~ msgstr "날카로우"
 
 #~ msgid "Pen width:"
 #~ msgstr "펜 너비:"
@@ -41201,42 +41609,10 @@ msgstr "글꼴 높이의 절반"
 #~ msgid "Control handle 15"
 #~ msgstr "컨트롤 핸들 15"
 
-#~ msgid "End type:"
-#~ msgstr "끝 유형:"
-
-#
-# File: ../src/live_effects/lpe-line_segment.cpp, line: 33
-#~ msgid "Determines on which side the line or line segment is infinite."
-#~ msgstr "어느 쪽에서 선 또는 선분이 무한한지 결정합니다."
-
 #
 # File: ../src/live_effects/lpe-offset.cpp, line: 82
 #~ msgid "Update on knot move"
 #~ msgstr "매듭 이동할 때 업데이트"
-
-#~ msgid "Offset point"
-#~ msgstr "오프셋 포인트"
-
-#~ msgid "Adjust the offset"
-#~ msgstr "오프셋 조정"
-
-#
-# File: ../src/live_effects/lpe-parallel.cpp, line: 51
-#~ msgid "Specifies the left end of the parallel"
-#~ msgstr "평행선의 왼쪽 끝을 지정"
-
-#
-# File: ../src/live_effects/lpe-parallel.cpp, line: 52
-#~ msgid "Specifies the right end of the parallel"
-#~ msgstr "평행선의 오른쪽 끝을 지정"
-
-#
-# File: ../src/live_effects/lpe-parallel.cpp, line: 107
-#~ msgid "Adjust the \"left\" end of the parallel"
-#~ msgstr "평행선의 \"왼쪽\" 끝을 지정"
-
-#~ msgid "Adjust the \"right\" end of the parallel"
-#~ msgstr "평행선의 \"오른쪽\" 끝을 지정"
 
 #~ msgid "Display unit"
 #~ msgstr "표시 단위"
@@ -41259,38 +41635,6 @@ msgstr "글꼴 높이의 절반"
 # File: ../src/live_effects/lpe-skeleton.cpp, line: 33
 #~ msgid "just a real number like 1.4!"
 #~ msgstr "단지 1.4같은 실수!"
-
-#
-# File: ../src/live_effects/lpe-tangent_to_curve.cpp, line: 61
-#~ msgid "Additional angle between tangent and curve"
-#~ msgstr "접선과 곡선 사이이의 추가적 각도"
-
-#~ msgid "Location along curve:"
-#~ msgstr "곡선 따라가는 위치:"
-
-#
-# File: ../src/live_effects/lpe-tangent_to_curve.cpp, line: 62
-#~ msgid ""
-#~ "Location of the point of attachment along the curve (between 0.0 and "
-#~ "number-of-segments)"
-#~ msgstr "곡선을 따라가는 부착점의 위치 (0.0부터 선분 수 사이)"
-
-#~ msgid "Specifies the left end of the tangent"
-#~ msgstr "접선의 왼쪽 끝 지정"
-
-#~ msgid "Specifies the right end of the tangent"
-#~ msgstr "접선의 오른쪽 끝 지정"
-
-#
-# File: ../src/live_effects/lpe-tangent_to_curve.cpp, line: 104
-#~ msgid "Adjust the point of attachment of the tangent"
-#~ msgstr "접선의 부착점을 조정"
-
-#~ msgid "Adjust the <b>left</b> end of the tangent"
-#~ msgstr "접선의 <b>왼쪽</b> 끝 조정"
-
-#~ msgid "Adjust the <b>right</b> end of the tangent"
-#~ msgstr "접선의 <b>오른쪽</b> 끝 조정"
 
 #~ msgid "Stack step:"
 #~ msgstr "스택 단계:"
@@ -42230,10 +42574,6 @@ msgstr "글꼴 높이의 절반"
 #, fuzzy
 #~ msgid "measure.py"
 #~ msgstr "측정"
-
-#, fuzzy
-#~ msgid "motion.py"
-#~ msgstr "모션"
 
 #, fuzzy
 #~ msgid "n"
