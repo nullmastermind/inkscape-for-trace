@@ -76,7 +76,7 @@ ControlPointSelection::~ControlPointSelection()
 }
 
 /** Add a control point to the selection. */
-std::pair<ControlPointSelection::iterator, bool> ControlPointSelection::insert(const value_type &x, bool notify)
+std::pair<ControlPointSelection::iterator, bool> ControlPointSelection::insert(const value_type &x, bool notify, bool to_update)
 {
     iterator found = _points.find(x);
     if (found != _points.end()) {
@@ -88,8 +88,10 @@ std::pair<ControlPointSelection::iterator, bool> ControlPointSelection::insert(c
 
     x->updateState();
 
-    if (notify) {
+    if (to_update) {
         _update();
+    }
+    if (notify) {
         signal_selection_changed.emit(std::vector<key_type>(1, x), true);
     }
 
@@ -148,7 +150,7 @@ void ControlPointSelection::clear()
 void ControlPointSelection::selectAll()
 {
     for (auto _all_point : _all_points) {
-        insert(_all_point, false);
+        insert(_all_point, false, false);
     }
     std::vector<SelectableControlPoint *> out(_all_points.begin(), _all_points.end());
     if (!out.empty()) {
@@ -162,7 +164,7 @@ void ControlPointSelection::selectArea(Geom::Rect const &r)
     std::vector<SelectableControlPoint *> out;
     for (auto _all_point : _all_points) {
         if (r.contains(*_all_point)) {
-            insert(_all_point, false);
+            insert(_all_point, false, false);
             out.push_back(_all_point);
         }
     }
@@ -182,7 +184,7 @@ void ControlPointSelection::invertSelection()
         }
         else {
             out.push_back(_all_point);
-            insert(_all_point, false); 
+            insert(_all_point, false, false); 
         }
     }
     _update();

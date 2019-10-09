@@ -64,11 +64,11 @@ public:
     const_iterator end() const { return _points.end(); }
 
     // insert
-    std::pair<iterator, bool> insert(const value_type& x, bool notify = true);
+    std::pair<iterator, bool> insert(const value_type& x, bool notify = true, bool to_update = true);
     template <class InputIterator>
     void insert(InputIterator first, InputIterator last) {
         for (; first != last; ++first) {
-            insert(*first, false);
+            insert(*first, false, false);
         }
         _update();
         signal_selection_changed.emit(std::vector<key_type>(first, last), true);
