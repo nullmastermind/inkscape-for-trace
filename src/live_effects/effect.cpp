@@ -566,10 +566,10 @@ const EnumEffectData<EffectType> LPETypeData[] = {
     },
     {
         FILLET_CHAMFER
-        , N_("Fillet/Chamfer") //label
+        , N_("Corners (Fillet/Chamfer)") //label
         , "fillet_chamfer" //key
         , "fillet-chamfer" //icon
-        , "Fillet/Chamfer" //untranslated name
+        , "Corners (Fillet/Chamfer)" //untranslated name
         , N_("Adjust the shape of a path's corners, rounding them to a specified radius, or cutting them off") //description
         , true  //on_path
         , true  //on_shape
