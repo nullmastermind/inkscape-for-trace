@@ -284,6 +284,12 @@ void NodeTool::setup() {
     sp_update_helperpath();
 }
 
+// Clean selection on tool change
+void NodeTool::finish() {
+    this->_selected_nodes->clear();
+    ToolBase::finish();
+}
+
 // show helper paths of the applied LPE, if any
 void sp_update_helperpath() {
     SPDesktop * desktop = SP_ACTIVE_DESKTOP;

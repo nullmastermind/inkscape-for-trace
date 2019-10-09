@@ -58,6 +58,7 @@ public:
     static const std::string prefsPath;
 
     void setup() override;
+    void finish() override;
     void set(const Inkscape::Preferences::Entry& val) override;
     bool root_handler(GdkEvent* event) override;
 
