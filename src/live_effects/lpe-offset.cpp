@@ -79,7 +79,7 @@ LPEOffset::LPEOffset(LivePathEffectObject *lpeobject) :
     linejoin_type(_("Join:"), _("Determines the shape of the path's corners"),  "linejoin_type", JoinTypeConverter, &wr, this, JOIN_ROUND),
     miter_limit(_("Miter limit:"), _("Maximum length of the miter join (in units of stroke width)"), "miter_limit", &wr, this, 4.0),
     attempt_force_join(_("Force miter"), _("Overrides the miter limit and forces a join."), "attempt_force_join", &wr, this, true),
-    update_on_knot_move(_("Update on knot move"), _("Update on knot move"), "update_on_knot_move", &wr, this, true)
+    update_on_knot_move(_("Live update"), _("Update while moving handle"), "update_on_knot_move", &wr, this, true)
 {
     show_orig_path = true;
     registerParameter(&linejoin_type);
