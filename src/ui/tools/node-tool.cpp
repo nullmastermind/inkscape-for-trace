@@ -285,7 +285,8 @@ void NodeTool::setup() {
 }
 
 // Clean selection on tool change
-void NodeTool::finish() {
+void NodeTool::finish() 
+{
     this->_selected_nodes->clear();
     ToolBase::finish();
 }
