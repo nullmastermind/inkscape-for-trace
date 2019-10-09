@@ -240,6 +240,8 @@ ColorWheel::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr) {
     cr->stroke();
     cr->restore();
 
+    g_free(buffer_ring);
+
     // Draw focus
     if (has_focus() && _focus_on_ring) {
         Glib::RefPtr<Gtk::StyleContext> style_context = get_style_context();
@@ -347,7 +349,8 @@ ColorWheel::on_draw(const::Cairo::RefPtr<::Cairo::Context>& cr) {
     cr->fill();
     cr->restore();
 
-  
+    g_free(buffer_triangle);
+
     // Draw marker
     double mx = x1 + (x2-x1) * _value + (x0-x2) * _saturation * _value;
     double my = y1 + (y2-y1) * _value + (y0-y2) * _saturation * _value;
