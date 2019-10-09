@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-09-22 17:15+0200\n"
+"POT-Creation-Date: 2019-10-09 15:17+0200\n"
 "PO-Revision-Date: 2019-09-29 02:28+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -4095,11 +4095,11 @@ msgstr "Hilfslinie löschen"
 msgid "<b>Guideline</b>: %s"
 msgstr "<b>Hilfslinie</b>: %s"
 
-#: ../src/desktop.cpp:836
+#: ../src/desktop.cpp:839
 msgid "No previous transform."
 msgstr "Keine vorherige Ansicht."
 
-#: ../src/desktop.cpp:859
+#: ../src/desktop.cpp:862
 msgid "No next transform."
 msgstr "Keine nächste Ansicht."
 
@@ -4505,19 +4505,23 @@ msgid "_Redo"
 msgstr "_Wiederherstellen"
 
 #: ../src/extension/dependency.cpp:250
-msgid "Dependency:"
+#, fuzzy
+msgid "Dependency"
 msgstr "Abhängigkeit:"
 
 #: ../src/extension/dependency.cpp:251
-msgid "  type: "
+#, fuzzy
+msgid "type"
 msgstr "  Typ: "
 
 #: ../src/extension/dependency.cpp:252
-msgid "  location: "
-msgstr "  Speicherort: "
+#, fuzzy
+msgid "location"
+msgstr "X (Quelle)"
 
 #: ../src/extension/dependency.cpp:253
-msgid "  string: "
+#, fuzzy
+msgid "string"
 msgstr "  Zeichenkette: "
 
 #: ../src/extension/dependency.cpp:256
@@ -4554,7 +4558,7 @@ msgstr "Dialog bei Programmstart anzeigen"
 msgid "'%s' working, please wait..."
 msgstr "„%s“ arbeitet, bitte warten..."
 
-#: ../src/extension/extension.cpp:274
+#: ../src/extension/extension.cpp:278
 msgid ""
 "  This is caused by an improper .inx file for this extension.  An improper ."
 "inx file could have been caused by a faulty installation of Inkscape."
@@ -4563,58 +4567,55 @@ msgstr ""
 "verursacht. Eine fehlerhafte „.inx“-Datei kann Folge einer Fehlinstallation "
 "von Inkscape sein."
 
-#: ../src/extension/extension.cpp:284
+#: ../src/extension/extension.cpp:288
 msgid "the extension is designed for Windows only."
 msgstr "diese Erweiterung nur für Windows entwickelt wurde."
 
-#: ../src/extension/extension.cpp:289
+#: ../src/extension/extension.cpp:293
 msgid "the XML description of it got lost."
 msgstr "die zugehörige XML-Beschreibung nicht auffindbar ist."
 
-#: ../src/extension/extension.cpp:293
+#: ../src/extension/extension.cpp:297
 msgid "no implementation was defined for the extension."
 msgstr "für diese Erweiterung keine Implementierung existiert."
 
-#: ../src/extension/extension.cpp:300
+#: ../src/extension/extension.cpp:303
 msgid "a dependency was not met."
 msgstr "eine Abhängigkeit nicht aufgelöst werden konnte."
 
-#: ../src/extension/extension.cpp:320
-msgid "Extension \""
-msgstr "Erweiterung „"
-
-#: ../src/extension/extension.cpp:320
-msgid "\" failed to load because "
+#: ../src/extension/extension.cpp:326
+#, fuzzy
+msgid "Extension \"%1\" failed to load because %2"
 msgstr "“: Laden fehlgeschlagen, da "
 
-#: ../src/extension/extension.cpp:692
+#: ../src/extension/extension.cpp:695
 #, c-format
 msgid "Could not create extension error log file '%s'"
 msgstr ""
 "Fehlerprotokolldatei für Erweiterungen „%s“ konnte nicht erzeugt werden."
 
-#: ../src/extension/extension.cpp:791
+#: ../src/extension/extension.cpp:799
 #: ../share/extensions/webslicer_create_rect.inx:7
 msgid "Name:"
 msgstr "Name:"
 
-#: ../src/extension/extension.cpp:792
+#: ../src/extension/extension.cpp:800
 msgid "ID:"
 msgstr "Kennung:"
 
-#: ../src/extension/extension.cpp:793
+#: ../src/extension/extension.cpp:801
 msgid "State:"
 msgstr "Status:"
 
-#: ../src/extension/extension.cpp:793
+#: ../src/extension/extension.cpp:801
 msgid "Loaded"
 msgstr "Geladen"
 
-#: ../src/extension/extension.cpp:793
+#: ../src/extension/extension.cpp:801
 msgid "Unloaded"
 msgstr "Nicht geladen"
 
-#: ../src/extension/extension.cpp:793
+#: ../src/extension/extension.cpp:801
 msgid "Deactivated"
 msgstr "Deaktiviert"
 
@@ -4661,6 +4662,7 @@ msgid "Height:"
 msgstr "Höhe:"
 
 #: ../src/extension/internal/bitmap/adaptiveThreshold.cpp:44
+#: ../src/live_effects/lpe-offset.cpp:78
 #: ../src/ui/toolbar/measure-toolbar.cpp:223
 #: ../share/extensions/printing_marks.inx:28
 msgid "Offset:"
@@ -6481,7 +6483,8 @@ msgstr "Schatten"
 
 #: ../src/extension/internal/filter/color.h:1121
 #: ../src/extension/internal/filter/paint.h:357 ../src/filter-enums.cpp:34
-#: ../src/live_effects/effect.cpp:653
+#: ../src/live_effects/effect.cpp:653 ../src/live_effects/lpe-offset.cpp:78
+#: ../src/live_effects/lpe-parallel.cpp:50
 #: ../src/live_effects/lpe-transform_2pts.cpp:41
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1030
 msgid "Offset"
@@ -8276,21 +8279,21 @@ msgstr "Dokument wird gespeichert..."
 msgid "en"
 msgstr "de"
 
-#: ../src/file.cpp:1160 ../src/ui/dialog/inkscape-preferences.cpp:2091
+#: ../src/file.cpp:1163 ../src/ui/dialog/inkscape-preferences.cpp:2091
 #: ../src/ui/dialog/ocaldialogs.cpp:1087
 msgid "Import"
 msgstr "Importieren"
 
-#: ../src/file.cpp:1163
+#: ../src/file.cpp:1166
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "Laden der gewünschten Datei %s fehlgeschlagen"
 
-#: ../src/file.cpp:1210
+#: ../src/file.cpp:1213
 msgid "Select file to import"
 msgstr "Wählen Sie die zu importierende Datei"
 
-#: ../src/file.cpp:1466
+#: ../src/file.cpp:1469
 msgid "Import Clip Art"
 msgstr "Importiere Clipart"
 
@@ -8535,7 +8538,7 @@ msgstr "Farbverlaufs-Anfasser verschieben"
 msgid "Delete gradient stop"
 msgstr "Zwischenfarbe des Farbverlaufs löschen"
 
-#: ../src/gradient-drag.cpp:1459
+#: ../src/gradient-drag.cpp:1461
 #, c-format
 msgid ""
 "%s %d for: %s%s; drag with <b>Ctrl</b> to snap offset; click with <b>Ctrl"
@@ -8544,17 +8547,17 @@ msgstr ""
 "%s %d für %s%s; Ziehen mit <b>Strg</b> rastet Versatz ein, Klick mit <b>Strg"
 "+Alt</b> löscht Zwischenfarbe"
 
-#: ../src/gradient-drag.cpp:1463 ../src/gradient-drag.cpp:1472
-#: ../src/gradient-drag.cpp:1479
+#: ../src/gradient-drag.cpp:1465 ../src/gradient-drag.cpp:1474
+#: ../src/gradient-drag.cpp:1481
 msgid " (stroke)"
 msgstr " (Kontur)"
 
-#: ../src/gradient-drag.cpp:1469
+#: ../src/gradient-drag.cpp:1471
 #, c-format
 msgid "%s for: %s%s"
 msgstr "%s für: %s%s"
 
-#: ../src/gradient-drag.cpp:1476
+#: ../src/gradient-drag.cpp:1478
 #, c-format
 msgid ""
 "%s for: %s%s; drag with <b>Ctrl</b> to snap angle, with <b>Ctrl+Alt</b> to "
@@ -8563,7 +8566,7 @@ msgstr ""
 "%s für %s%s; Ziehen mit <b>Strg</b> rastet Winkel ein, Ziehen mit <b>Strg"
 "+Alt</b> behält Winkel bei; <b>Strg+Umschalt</b> skaliert um den Mittelpunkt"
 
-#: ../src/gradient-drag.cpp:1484
+#: ../src/gradient-drag.cpp:1486
 msgid ""
 "Radial gradient <b>center</b> and <b>focus</b>; drag with <b>Shift</b> to "
 "separate focus"
@@ -8571,7 +8574,7 @@ msgstr ""
 "<b>Zentrum</b> und <b>Fokus</b> des radialen Farbverlaufs; Ziehen mit "
 "<b>Umschalt</b>, um den Fokus einzeln zu bewegen"
 
-#: ../src/gradient-drag.cpp:1487
+#: ../src/gradient-drag.cpp:1489
 #, c-format
 msgid ""
 "Gradient point shared by <b>%d</b> gradient; drag with <b>Shift</b> to "
@@ -8586,15 +8589,15 @@ msgstr[1] ""
 "Farbverlaufspunkt ist <b>%d</b> weiteren Farbverläufen zugewiesen. Ziehen "
 "mit <b>Umschalt</b> trennt die Zuweisung"
 
-#: ../src/gradient-drag.cpp:2765
+#: ../src/gradient-drag.cpp:2767
 msgid "Move gradient handle(s)"
 msgstr "Farbverlaufs-Anfasser verschieben"
 
-#: ../src/gradient-drag.cpp:2799
+#: ../src/gradient-drag.cpp:2801
 msgid "Move gradient mid stop(s)"
 msgstr "Zwischenfarbe(n) des Farbverlaufs verschieben"
 
-#: ../src/gradient-drag.cpp:3086
+#: ../src/gradient-drag.cpp:3090
 msgid "Delete gradient stop(s)"
 msgstr "Zwischenfarbe(n) des Farbverlaufs löschen"
 
@@ -9617,123 +9620,123 @@ msgid ""
 "same number of dashes per path segment"
 msgstr ""
 
-#: ../src/live_effects/effect.cpp:682
-msgid "doEffect stack test"
-msgstr "AusführenEffekt-Reihentest"
-
-#: ../src/live_effects/effect.cpp:686
-msgid "Test LPE"
-msgstr ""
-
-#: ../src/live_effects/effect.cpp:696
+#: ../src/live_effects/effect.cpp:681
 msgid "Angle bisector"
 msgstr "Winkelhalbierende"
 
-#: ../src/live_effects/effect.cpp:700
+#: ../src/live_effects/effect.cpp:685
 msgid ""
 "Draw a line that halves the angle between the first three nodes of the path"
 msgstr ""
 
-#: ../src/live_effects/effect.cpp:710
+#: ../src/live_effects/effect.cpp:695
 msgid "Circle (by center and radius)"
 msgstr "Kreis (Mittelpunkt+Radius)"
 
-#: ../src/live_effects/effect.cpp:714
+#: ../src/live_effects/effect.cpp:699
 msgid ""
 "Draw a circle, where the first node of the path is the center, and the last "
 "determines its radius"
 msgstr ""
 
-#: ../src/live_effects/effect.cpp:724
+#: ../src/live_effects/effect.cpp:709
 msgid "Circle by 3 points"
 msgstr "Kreis durch 3 Punkte"
 
-#: ../src/live_effects/effect.cpp:728
+#: ../src/live_effects/effect.cpp:713
 msgid ""
 "Draw a circle whose circumference passes through the first three nodes of "
 "the path"
 msgstr ""
 
-#: ../src/live_effects/effect.cpp:738
-msgid "Dynamic stroke"
-msgstr "Dynamische Kontur"
-
-#: ../src/live_effects/effect.cpp:742
-msgid ""
-"Create calligraphic strokes with variably shaped ends, making use of a "
-"parameter for the brush angle"
-msgstr ""
-
-#: ../src/live_effects/effect.cpp:752 ../share/extensions/extrude.inx:3
+#: ../src/live_effects/effect.cpp:723 ../share/extensions/extrude.inx:3
 msgid "Extrude"
 msgstr "Extrudieren"
 
-#: ../src/live_effects/effect.cpp:756
+#: ../src/live_effects/effect.cpp:727
 msgid "Extrude the path, creating a face for each path segment"
 msgstr ""
 
-#: ../src/live_effects/effect.cpp:766
-msgid "Lattice Deformation"
-msgstr "Gitterverformung"
-
-#: ../src/live_effects/effect.cpp:770
-msgid "Deform an object using a 4x4 grid"
-msgstr ""
-
-#: ../src/live_effects/effect.cpp:780
+#: ../src/live_effects/effect.cpp:737
 msgid "Line Segment"
 msgstr "Liniensegment"
 
-#: ../src/live_effects/effect.cpp:784
+#: ../src/live_effects/effect.cpp:741
 msgid "Draw a straight line that connects the first and last node of a path"
 msgstr ""
 
-#: ../src/live_effects/effect.cpp:794
+#: ../src/live_effects/effect.cpp:751
 #: ../src/live_effects/lpe-measure-segments.cpp:61
 #: ../share/extensions/plotter.inx:13
 msgid "Parallel"
 msgstr "Parallel"
 
-#: ../src/live_effects/effect.cpp:798
+#: ../src/live_effects/effect.cpp:755
 msgid "Create a draggable line that will always be parallel to a two-node path"
 msgstr ""
 
-#: ../src/live_effects/effect.cpp:808
-msgid "Path length"
-msgstr "Pfadlänge"
-
-#: ../src/live_effects/effect.cpp:812
-msgid "Display the total length of a (curved) path"
-msgstr ""
-
-#: ../src/live_effects/effect.cpp:822
+#: ../src/live_effects/effect.cpp:765
 msgid "Perpendicular bisector"
 msgstr "Senkrechte Winkelhalbierende"
 
-#: ../src/live_effects/effect.cpp:826
+#: ../src/live_effects/effect.cpp:769
 msgid ""
 "Draw a perpendicular line in the middle of the (imaginary) line that "
 "connects the start and end nodes"
 msgstr ""
 
-#: ../src/live_effects/effect.cpp:836
-msgid "Recursive skeleton"
-msgstr "Rekursives Gitter"
-
-#: ../src/live_effects/effect.cpp:840
-#, fuzzy
-msgid "Draw a path recursively"
-msgstr "Pfad zeichnen, der ein Gitter ist"
-
-#: ../src/live_effects/effect.cpp:850
+#: ../src/live_effects/effect.cpp:779
 msgid "Tangent to curve"
 msgstr "Tangente an Kurve"
 
-#: ../src/live_effects/effect.cpp:854
+#: ../src/live_effects/effect.cpp:783
 msgid ""
 "Draw a tangent with variable length and additional angle that can be moved "
 "along the path"
 msgstr ""
+
+#: ../src/live_effects/effect.cpp:794
+msgid "doEffect stack test"
+msgstr "AusführenEffekt-Reihentest"
+
+#: ../src/live_effects/effect.cpp:798
+msgid "Test LPE"
+msgstr ""
+
+#: ../src/live_effects/effect.cpp:808
+msgid "Dynamic stroke"
+msgstr "Dynamische Kontur"
+
+#: ../src/live_effects/effect.cpp:812
+msgid ""
+"Create calligraphic strokes with variably shaped ends, making use of a "
+"parameter for the brush angle"
+msgstr ""
+
+#: ../src/live_effects/effect.cpp:822
+msgid "Lattice Deformation"
+msgstr "Gitterverformung"
+
+#: ../src/live_effects/effect.cpp:826
+msgid "Deform an object using a 4x4 grid"
+msgstr ""
+
+#: ../src/live_effects/effect.cpp:836
+msgid "Path length"
+msgstr "Pfadlänge"
+
+#: ../src/live_effects/effect.cpp:840
+msgid "Display the total length of a (curved) path"
+msgstr ""
+
+#: ../src/live_effects/effect.cpp:850
+msgid "Recursive skeleton"
+msgstr "Rekursives Gitter"
+
+#: ../src/live_effects/effect.cpp:854
+#, fuzzy
+msgid "Draw a path recursively"
+msgstr "Pfad zeichnen, der ein Gitter ist"
 
 #: ../src/live_effects/effect.cpp:864
 msgid "Text label"
@@ -9812,6 +9815,41 @@ msgid "None of the applied path effect's parameters can be edited on-canvas."
 msgstr ""
 "Keine Parameter der auf den Pfad angewandten Effekte können auf der "
 "Arbeitsfläche verändert werden."
+
+#: ../src/live_effects/lpe-angle_bisector.cpp:45
+#: ../src/live_effects/lpe-parallel.cpp:51
+#: ../src/live_effects/lpe-perp_bisector.cpp:98
+#: ../src/live_effects/lpe-tangent_to_curve.cpp:63
+msgid "Length left:"
+msgstr "Länge links:"
+
+#: ../src/live_effects/lpe-angle_bisector.cpp:45
+#: ../src/live_effects/lpe-perp_bisector.cpp:98
+msgid "Specifies the left end of the bisector"
+msgstr "Legt das linke Ende der Halbierenden fest"
+
+#: ../src/live_effects/lpe-angle_bisector.cpp:46
+#: ../src/live_effects/lpe-parallel.cpp:52
+#: ../src/live_effects/lpe-perp_bisector.cpp:99
+#: ../src/live_effects/lpe-tangent_to_curve.cpp:64
+msgid "Length right:"
+msgstr "Länge rechts:"
+
+#: ../src/live_effects/lpe-angle_bisector.cpp:46
+#: ../src/live_effects/lpe-perp_bisector.cpp:99
+msgid "Specifies the right end of the bisector"
+msgstr "Legt das rechte Ende der Halbierenden fest"
+
+#: ../src/live_effects/lpe-angle_bisector.cpp:85
+#: ../src/live_effects/lpe-perp_bisector.cpp:159
+msgid "Adjust the \"left\" end of the bisector"
+msgstr "Einstellen des \"linken\" Endes der Halbierenden"
+
+#: ../src/live_effects/lpe-angle_bisector.cpp:91
+#: ../src/live_effects/lpe-perp_bisector.cpp:165
+#, fuzzy
+msgid "Adjust the \"right\" end of the bisector"
+msgstr "Einstellen des \"rechten\" Endes der Halbierenden"
 
 #: ../src/live_effects/lpe-attach-path.cpp:20
 msgid "Start path:"
@@ -10283,8 +10321,8 @@ msgstr "Elemente trennen"
 msgid "Split elements, so each can have its own style"
 msgstr ""
 
-#: ../src/live_effects/lpe-copy_rotate.cpp:373
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:148
+#: ../src/live_effects/lpe-copy_rotate.cpp:367
+#: ../src/live_effects/lpe-mirror_symmetry.cpp:144
 msgid "Reset styles"
 msgstr "Stil zurücksetzen"
 
@@ -10398,12 +10436,12 @@ msgid "Approximately unify the dashes length using the minimal length segment"
 msgstr ""
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:24
-#: ../src/live_effects/lpe-powerclip.cpp:36
+#: ../src/live_effects/lpe-powerclip.cpp:37
 msgid "Info Box"
 msgstr ""
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:24
-#: ../src/live_effects/lpe-powerclip.cpp:36
+#: ../src/live_effects/lpe-powerclip.cpp:37
 msgid "Important messages"
 msgstr "Wichtige Nachrichten"
 
@@ -10683,7 +10721,7 @@ msgstr "Bézierkurven erzwingen"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:40
 #: ../src/live_effects/lpe-measure-segments.cpp:67
-#: ../src/live_effects/lpe-ruler.cpp:40
+#: ../src/live_effects/lpe-offset.cpp:77 ../src/live_effects/lpe-ruler.cpp:40
 msgid "Unit"
 msgstr "Einheit"
 
@@ -10849,6 +10887,7 @@ msgstr ""
 "Strichstärken entlang des Pfades verwendet wird"
 
 #: ../src/live_effects/lpe-jointype.cpp:36
+#: ../src/live_effects/lpe-offset.cpp:62
 #: ../src/live_effects/lpe-powerstroke.cpp:147
 #: ../src/live_effects/lpe-taperstroke.cpp:65
 msgid "Beveled"
@@ -10856,35 +10895,42 @@ msgstr "Abgeschrägt"
 
 #: ../src/live_effects/lpe-jointype.cpp:37
 #: ../src/live_effects/lpe-jointype.cpp:48
+#: ../src/live_effects/lpe-offset.cpp:63
 #: ../src/live_effects/lpe-powerstroke.cpp:148
 #: ../src/live_effects/lpe-taperstroke.cpp:66
 msgid "Rounded"
 msgstr "Abgerundet"
 
 #: ../src/live_effects/lpe-jointype.cpp:38
+#: ../src/live_effects/lpe-offset.cpp:64
 #: ../src/live_effects/lpe-powerstroke.cpp:151
 #: ../src/live_effects/lpe-taperstroke.cpp:67
 msgid "Miter"
 msgstr "Gehrung"
 
 #: ../src/live_effects/lpe-jointype.cpp:39
+#: ../src/live_effects/lpe-offset.cpp:65
 msgid "Miter Clip"
 msgstr "Gehrungslimit"
 
 #: ../src/live_effects/lpe-jointype.cpp:40
+#: ../src/live_effects/lpe-offset.cpp:66
 #: ../src/live_effects/lpe-powerstroke.cpp:150
 msgid "Extrapolated arc"
 msgstr "Abgeleitete Kurve"
 
 #: ../src/live_effects/lpe-jointype.cpp:41
+#: ../src/live_effects/lpe-offset.cpp:67
 msgid "Extrapolated arc Alt1"
 msgstr "Abgeleitete Kurve Variante 1"
 
 #: ../src/live_effects/lpe-jointype.cpp:42
+#: ../src/live_effects/lpe-offset.cpp:68
 msgid "Extrapolated arc Alt2"
 msgstr "Abgeleitete Kurve Variante 2"
 
 #: ../src/live_effects/lpe-jointype.cpp:43
+#: ../src/live_effects/lpe-offset.cpp:69
 msgid "Extrapolated arc Alt3"
 msgstr "Abgeleitete Kurve Variante 3"
 
@@ -10920,32 +10966,38 @@ msgstr "Form des Konturendes"
 #. TRANSLATORS: The line join style specifies the shape to be used at the
 #. corners of paths. It can be "miter", "round" or "bevel".
 #: ../src/live_effects/lpe-jointype.cpp:61
+#: ../src/live_effects/lpe-offset.cpp:79
 #: ../src/live_effects/lpe-powerstroke.cpp:164
 #: ../src/widgets/stroke-style.cpp:271
 msgid "Join:"
 msgstr "Verbindung:"
 
 #: ../src/live_effects/lpe-jointype.cpp:61
+#: ../src/live_effects/lpe-offset.cpp:79
 #: ../src/live_effects/lpe-powerstroke.cpp:164
 msgid "Determines the shape of the path's corners"
 msgstr "Bestimmt die Form der Pfad-Ecken"
 
 #: ../src/live_effects/lpe-jointype.cpp:64
+#: ../src/live_effects/lpe-offset.cpp:80
 #: ../src/live_effects/lpe-powerstroke.cpp:165
 #: ../src/live_effects/lpe-taperstroke.cpp:80
 msgid "Miter limit:"
 msgstr "Gehrungslimit:"
 
 #: ../src/live_effects/lpe-jointype.cpp:64
+#: ../src/live_effects/lpe-offset.cpp:80
 msgid "Maximum length of the miter join (in units of stroke width)"
 msgstr ""
 "Maximale Länge der Gehrungsverbindung (in Vielfachen der Konturlinienbreite)"
 
 #: ../src/live_effects/lpe-jointype.cpp:65
+#: ../src/live_effects/lpe-offset.cpp:81
 msgid "Force miter"
 msgstr "Gehrung erzwingen"
 
 #: ../src/live_effects/lpe-jointype.cpp:65
+#: ../src/live_effects/lpe-offset.cpp:81
 msgid "Overrides the miter limit and forces a join."
 msgstr "Hebt das Gehrungslimit auf und erzwingt eine Verbindung."
 
@@ -11305,6 +11357,34 @@ msgstr "Punkte anzeigen"
 msgid "Hide Points"
 msgstr "Punkte ausblenden"
 
+#: ../src/live_effects/lpe-line_segment.cpp:24
+#: ../src/ui/toolbar/lpe-toolbar.cpp:127
+msgid "Closed"
+msgstr "Geschlossen"
+
+#: ../src/live_effects/lpe-line_segment.cpp:25
+#: ../src/ui/toolbar/lpe-toolbar.cpp:128
+msgid "Open start"
+msgstr "Offener Anfang"
+
+#: ../src/live_effects/lpe-line_segment.cpp:26
+#: ../src/ui/toolbar/lpe-toolbar.cpp:129
+msgid "Open end"
+msgstr "Offenes Ende"
+
+#: ../src/live_effects/lpe-line_segment.cpp:27
+#: ../src/ui/toolbar/lpe-toolbar.cpp:130
+msgid "Open both"
+msgstr "Öffne beide"
+
+#: ../src/live_effects/lpe-line_segment.cpp:33
+msgid "End type:"
+msgstr "Endtyp:"
+
+#: ../src/live_effects/lpe-line_segment.cpp:33
+msgid "Determines on which side the line or line segment is infinite."
+msgstr "Bestimmt, welche Seite der Linie oder des Segments unendlich ist."
+
 #: ../src/live_effects/lpe-measure-segments.cpp:59
 #: ../src/ui/toolbar/text-toolbar.cpp:527 ../share/extensions/empty_page.inx:18
 msgid "Horizontal"
@@ -11316,6 +11396,7 @@ msgid "Vertical"
 msgstr "Vertikal:"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:67
+#: ../src/live_effects/lpe-offset.cpp:77
 #, fuzzy
 msgid "Unit of measurement"
 msgstr "Phantombild des aktuellen Maßstabs erstellen"
@@ -11866,15 +11947,51 @@ msgstr "Zentrierter Nullpunkt"
 msgid "Adjust center point of mirror line"
 msgstr "Einstellen des Ursprungs"
 
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:142
+#: ../src/live_effects/lpe-mirror_symmetry.cpp:138
 #, fuzzy
 msgid "Vertical center"
 msgstr "Erkennung vertikaler Kanten"
 
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:145
+#: ../src/live_effects/lpe-mirror_symmetry.cpp:141
 #, fuzzy
 msgid "Horizontal center"
 msgstr "Horizontale Kantenerkennung"
+
+#: ../src/live_effects/lpe-offset.cpp:82
+#, fuzzy
+msgid "Live update"
+msgstr "Vorschau"
+
+#: ../src/live_effects/lpe-offset.cpp:82
+#, fuzzy
+msgid "Update while moving handle"
+msgstr ""
+"Während des Verschiebens von Knoten aktualisieren (möglicherweise langsam)"
+
+#: ../src/live_effects/lpe-offset.cpp:450
+#, fuzzy
+msgid "Offset point"
+msgstr "Versatzpunkte"
+
+#: ../src/live_effects/lpe-parallel.cpp:50
+msgid "Adjust the offset"
+msgstr "<b>Versatz-Abstand</b> anpassen"
+
+#: ../src/live_effects/lpe-parallel.cpp:51
+msgid "Specifies the left end of the parallel"
+msgstr "Legt das linke Ende der Parallele fest"
+
+#: ../src/live_effects/lpe-parallel.cpp:52
+msgid "Specifies the right end of the parallel"
+msgstr "Legt das linke Ende der Parallele fest"
+
+#: ../src/live_effects/lpe-parallel.cpp:107
+msgid "Adjust the \"left\" end of the parallel"
+msgstr "Einstellen des \"linken\" Endes der Parallele"
+
+#: ../src/live_effects/lpe-parallel.cpp:113
+msgid "Adjust the \"right\" end of the parallel"
+msgstr "Einstellen des \"rechten\" Endes der Parallele"
 
 #: ../src/live_effects/lpe-patternalongpath.cpp:65
 #: ../share/extensions/pathalongpath.inx:10
@@ -12039,37 +12156,37 @@ msgstr ""
 "Rechts unten - <b>Strg+Alt+Klick</b>: zurücksetzen, <b>Ctrl</b>: nur entlang "
 "Hauptachsen verschieben"
 
-#: ../src/live_effects/lpe-perspective-envelope.cpp:369
+#: ../src/live_effects/lpe-perspective-envelope.cpp:280
 msgid "Handles:"
 msgstr "Anfasser:"
 
-#: ../src/live_effects/lpe-perspective-envelope.cpp:411
+#: ../src/live_effects/lpe-perspective-envelope.cpp:322
 #: ../src/ui/dialog/debug.cpp:75 ../src/ui/dialog/messages.cpp:45
 #: ../src/ui/dialog/transformation.cpp:149
 msgid "_Clear"
 msgstr "_Leeren"
 
 # !!! mnemonics
-#: ../src/live_effects/lpe-powerclip.cpp:31
+#: ../src/live_effects/lpe-powerclip.cpp:32
 #, fuzzy
 msgid "Hide clip"
 msgstr "Alle ausblenden"
 
-#: ../src/live_effects/lpe-powerclip.cpp:34
+#: ../src/live_effects/lpe-powerclip.cpp:35
 #, fuzzy
 msgid "Inverse clip"
 msgstr "Invertierte Abrundung"
 
-#: ../src/live_effects/lpe-powerclip.cpp:35
+#: ../src/live_effects/lpe-powerclip.cpp:36
 #, fuzzy
 msgid "Flatten clip"
 msgstr "Bézierkurven begradigen"
 
-#: ../src/live_effects/lpe-powerclip.cpp:35
+#: ../src/live_effects/lpe-powerclip.cpp:36
 msgid "Flatten clip, see fill rule once convert to paths"
 msgstr ""
 
-#: ../src/live_effects/lpe-powerclip.cpp:36
+#: ../src/live_effects/lpe-powerclip.cpp:37
 msgid ""
 "Use fill-rule evenodd on <b>fill and stroke</b> dialog if no flatten result "
 "after convert clip to paths."
@@ -12913,6 +13030,48 @@ msgstr "k_max:"
 msgid "max curvature"
 msgstr "maximale Krümmung"
 
+#: ../src/live_effects/lpe-tangent_to_curve.cpp:61
+#: ../src/ui/toolbar/calligraphy-toolbar.cpp:154
+#: ../share/extensions/motion.inx:7 ../share/extensions/restack.inx:21
+msgid "Angle:"
+msgstr "Winkel:"
+
+#: ../src/live_effects/lpe-tangent_to_curve.cpp:61
+msgid "Additional angle between tangent and curve"
+msgstr "Winkel, um den Tangente zu Kurve gedreht wird."
+
+#: ../src/live_effects/lpe-tangent_to_curve.cpp:62
+msgid "Location along curve:"
+msgstr "Ort des Benutzer-Caches"
+
+#: ../src/live_effects/lpe-tangent_to_curve.cpp:62
+msgid ""
+"Location of the point of attachment along the curve (between 0.0 and number-"
+"of-segments)"
+msgstr ""
+
+#: ../src/live_effects/lpe-tangent_to_curve.cpp:63
+msgid "Specifies the left end of the tangent"
+msgstr "Legt das linke Ende der Tangente fest"
+
+#: ../src/live_effects/lpe-tangent_to_curve.cpp:64
+msgid "Specifies the right end of the tangent"
+msgstr "Legt das rechte Ende der Tangente fest"
+
+#: ../src/live_effects/lpe-tangent_to_curve.cpp:104
+msgid "Adjust the point of attachment of the tangent"
+msgstr "Zwischenfarbe des Farbverlaufs bearbeiten"
+
+#: ../src/live_effects/lpe-tangent_to_curve.cpp:110
+#, fuzzy
+msgid "Adjust the <b>left</b> end of the tangent"
+msgstr "Einstellen des \"rechten\" Endes der Tangente"
+
+#: ../src/live_effects/lpe-tangent_to_curve.cpp:116
+#, fuzzy
+msgid "Adjust the <b>right</b> end of the tangent"
+msgstr "Einstellen des \"rechten\" Endes der Tangente"
+
 #: ../src/live_effects/lpe-taperstroke.cpp:68
 msgid "Extrapolated"
 msgstr "Abgeleitet"
@@ -13143,7 +13302,7 @@ msgstr "Alles inaktiv"
 #: ../src/ui/dialog/attrdialog.cpp:108
 #: ../src/ui/dialog/inkscape-preferences.cpp:2162
 #: ../src/ui/widget/page-sizer.cpp:94 ../src/widgets/gradient-selector.cpp:139
-#: ../share/ui/dialog-livepatheffect-add.glade:404
+#: ../share/ui/dialog-livepatheffect-add.glade:397
 msgid "Name"
 msgstr "Name"
 
@@ -13427,7 +13586,7 @@ msgid "Linked Flowed Text"
 msgstr "Verknüpfter Fließtext"
 
 #: ../src/object/sp-flowtext.cpp:288 ../src/object/sp-text.cpp:367
-#: ../src/ui/tools/text-tool.cpp:1685
+#: ../src/ui/tools/text-tool.cpp:1692
 msgid " [truncated]"
 msgstr "[abgeschnitten]"
 
@@ -13589,7 +13748,7 @@ msgstr "<b>Polygon</b>"
 msgid "<b>Polyline</b>"
 msgstr "<b>Linienzug</b>"
 
-#: ../src/object/sp-rect.cpp:191 ../src/ui/dialog/inkscape-preferences.cpp:422
+#: ../src/object/sp-rect.cpp:198 ../src/ui/dialog/inkscape-preferences.cpp:422
 msgid "Rectangle"
 msgstr "Rechteck"
 
@@ -14730,7 +14889,7 @@ msgstr ""
 msgid "Select a filename for exporting"
 msgstr "Wählen Sie einen Namen für die zu exportierende Datei"
 
-#: ../src/shortcuts.cpp:430
+#: ../src/shortcuts.cpp:430 ../src/shortcuts.cpp:460
 #, fuzzy
 msgid "Inkscape shortcuts (*.xml)"
 msgstr "Inkscape-SVG (*.svg)"
@@ -15005,44 +15164,44 @@ msgstr "Bitmap nachzeichnen"
 msgid "Trace: Done. %ld nodes created"
 msgstr "Nachzeichnen: Abgeschlossen. %ld Knoten erstellt"
 
-#: ../src/ui/clipboard.cpp:256
+#: ../src/ui/clipboard.cpp:253
 msgid "Nothing was copied."
 msgstr "Es wurde nichts kopiert."
 
-#: ../src/ui/clipboard.cpp:387 ../src/ui/clipboard.cpp:603
-#: ../src/ui/clipboard.cpp:632 ../src/ui/clipboard.cpp:674
+#: ../src/ui/clipboard.cpp:384 ../src/ui/clipboard.cpp:600
+#: ../src/ui/clipboard.cpp:629 ../src/ui/clipboard.cpp:671
 msgid "Nothing on the clipboard."
 msgstr "Es ist nichts in der Zwischenablage."
 
-#: ../src/ui/clipboard.cpp:445
+#: ../src/ui/clipboard.cpp:442
 msgid "Select <b>object(s)</b> to paste style to."
 msgstr "Objekt(e) auswählen, um Stil darauf anzuwenden."
 
-#: ../src/ui/clipboard.cpp:456 ../src/ui/clipboard.cpp:473
+#: ../src/ui/clipboard.cpp:453 ../src/ui/clipboard.cpp:470
 msgid "No style on the clipboard."
 msgstr "Kein Stil in der Zwischenablage."
 
-#: ../src/ui/clipboard.cpp:499
+#: ../src/ui/clipboard.cpp:496
 msgid "Select <b>object(s)</b> to paste size to."
 msgstr "<b>Objekt(e)</b> auswählen, um Größe einzufügen."
 
-#: ../src/ui/clipboard.cpp:507
+#: ../src/ui/clipboard.cpp:504
 msgid "No size on the clipboard."
 msgstr "Keine Größe in der Zwischenablage."
 
-#: ../src/ui/clipboard.cpp:564
+#: ../src/ui/clipboard.cpp:561
 msgid "Select <b>object(s)</b> to paste live path effect to."
 msgstr "<b>Objekt(e)</b> auswählen, um den Pfadeffekt einzufügen."
 
-#: ../src/ui/clipboard.cpp:590
+#: ../src/ui/clipboard.cpp:587
 msgid "No effect on the clipboard."
 msgstr "Kein Effekt in der Zwischenablage."
 
-#: ../src/ui/clipboard.cpp:609 ../src/ui/clipboard.cpp:656
+#: ../src/ui/clipboard.cpp:606 ../src/ui/clipboard.cpp:653
 msgid "Clipboard does not contain a path."
 msgstr "Die Zwischenablage enthält keinen Pfad."
 
-#: ../src/ui/clipboard.cpp:704
+#: ../src/ui/clipboard.cpp:701
 #, fuzzy
 msgid "Clipboard does not contain any."
 msgstr "Die Zwischenablage enthält keinen Pfad."
@@ -17156,32 +17315,32 @@ msgstr "Öffnen"
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:286
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:293
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:307
-#: ../src/ui/dialog/filedialogimpl-win32.cpp:266
+#: ../src/ui/dialog/filedialogimpl-win32.cpp:267
 #: ../src/ui/dialog/filedialogimpl-win32.cpp:395
 msgid "All Files"
 msgstr "Alle Dateitypen"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:290
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:304
-#: ../src/ui/dialog/filedialogimpl-win32.cpp:267
+#: ../src/ui/dialog/filedialogimpl-win32.cpp:268
 msgid "All Inkscape Files"
 msgstr "Alle Inkscape-Dateien"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:297
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:310
-#: ../src/ui/dialog/filedialogimpl-win32.cpp:268
+#: ../src/ui/dialog/filedialogimpl-win32.cpp:269
 msgid "All Images"
 msgstr "Alle Bilder"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:300
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:313
-#: ../src/ui/dialog/filedialogimpl-win32.cpp:269
+#: ../src/ui/dialog/filedialogimpl-win32.cpp:270
 msgid "All Vectors"
 msgstr "Alle Vektorgrafiken"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:303
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:316
-#: ../src/ui/dialog/filedialogimpl-win32.cpp:270
+#: ../src/ui/dialog/filedialogimpl-win32.cpp:271
 msgid "All Bitmaps"
 msgstr "Alle Rastergrafiken"
 
@@ -18282,730 +18441,994 @@ msgstr "Diese Warnung nicht erneut zeigen"
 msgid "Font '%1' substituted with '%2'"
 msgstr "Schrift '%1' ersetzt durch '%2'"
 
-#: ../src/ui/dialog/glyphs.cpp:54 ../src/ui/dialog/glyphs.cpp:146
+#: ../src/ui/dialog/glyphs.cpp:55 ../src/ui/dialog/glyphs.cpp:224
 msgid "all"
 msgstr "alles"
 
-#: ../src/ui/dialog/glyphs.cpp:55
+#: ../src/ui/dialog/glyphs.cpp:56
 msgid "common"
 msgstr "allgemein"
 
-#: ../src/ui/dialog/glyphs.cpp:56
+#: ../src/ui/dialog/glyphs.cpp:57
 msgid "inherited"
 msgstr "geerbt"
 
-#: ../src/ui/dialog/glyphs.cpp:57 ../src/ui/dialog/glyphs.cpp:159
+#: ../src/ui/dialog/glyphs.cpp:58 ../src/ui/dialog/glyphs.cpp:241
 msgid "Arabic"
 msgstr "Arabisch"
 
-#: ../src/ui/dialog/glyphs.cpp:58 ../src/ui/dialog/glyphs.cpp:157
+#: ../src/ui/dialog/glyphs.cpp:59 ../src/ui/dialog/glyphs.cpp:239
 msgid "Armenian"
 msgstr "Armenisch"
 
-#: ../src/ui/dialog/glyphs.cpp:59 ../src/ui/dialog/glyphs.cpp:166
+#: ../src/ui/dialog/glyphs.cpp:60 ../src/ui/dialog/glyphs.cpp:248
 msgid "Bengali"
 msgstr "Bengalisch"
 
-#: ../src/ui/dialog/glyphs.cpp:60 ../src/ui/dialog/glyphs.cpp:248
+#: ../src/ui/dialog/glyphs.cpp:61 ../src/ui/dialog/glyphs.cpp:330
 msgid "Bopomofo"
 msgstr "Bopomofo"
 
-#: ../src/ui/dialog/glyphs.cpp:61 ../src/ui/dialog/glyphs.cpp:183
+#: ../src/ui/dialog/glyphs.cpp:62 ../src/ui/dialog/glyphs.cpp:265
 msgid "Cherokee"
 msgstr "Cherokee"
 
-#: ../src/ui/dialog/glyphs.cpp:62 ../src/ui/dialog/glyphs.cpp:236
+#: ../src/ui/dialog/glyphs.cpp:63 ../src/ui/dialog/glyphs.cpp:318
 msgid "Coptic"
 msgstr "Koptisch"
 
-#: ../src/ui/dialog/glyphs.cpp:63 ../src/ui/dialog/glyphs.cpp:155
+#: ../src/ui/dialog/glyphs.cpp:64 ../src/ui/dialog/glyphs.cpp:237
 msgid "Cyrillic"
 msgstr "Kyrillisch"
 
-#: ../src/ui/dialog/glyphs.cpp:64
+#: ../src/ui/dialog/glyphs.cpp:65
 msgid "Deseret"
 msgstr "Mormonenalphabet"
 
-#: ../src/ui/dialog/glyphs.cpp:65 ../src/ui/dialog/glyphs.cpp:165
+#: ../src/ui/dialog/glyphs.cpp:66 ../src/ui/dialog/glyphs.cpp:247
 msgid "Devanagari"
 msgstr "Devanagari"
 
-#: ../src/ui/dialog/glyphs.cpp:66 ../src/ui/dialog/glyphs.cpp:181
+#: ../src/ui/dialog/glyphs.cpp:67 ../src/ui/dialog/glyphs.cpp:263
 msgid "Ethiopic"
 msgstr "Äthiopisch"
 
-#: ../src/ui/dialog/glyphs.cpp:67 ../src/ui/dialog/glyphs.cpp:179
+#: ../src/ui/dialog/glyphs.cpp:68 ../src/ui/dialog/glyphs.cpp:261
 msgid "Georgian"
 msgstr "Georgisch"
 
-#: ../src/ui/dialog/glyphs.cpp:68
+#: ../src/ui/dialog/glyphs.cpp:69
 msgid "Gothic"
 msgstr "Gotisch"
 
-#: ../src/ui/dialog/glyphs.cpp:69
+#: ../src/ui/dialog/glyphs.cpp:70
 msgid "Greek"
 msgstr "Griechisch"
 
-#: ../src/ui/dialog/glyphs.cpp:70 ../src/ui/dialog/glyphs.cpp:168
+#: ../src/ui/dialog/glyphs.cpp:71 ../src/ui/dialog/glyphs.cpp:250
 msgid "Gujarati"
 msgstr "Gujarati"
 
-#: ../src/ui/dialog/glyphs.cpp:71 ../src/ui/dialog/glyphs.cpp:167
+#: ../src/ui/dialog/glyphs.cpp:72 ../src/ui/dialog/glyphs.cpp:249
 msgid "Gurmukhi"
 msgstr "Gurmukhi"
 
-#: ../src/ui/dialog/glyphs.cpp:72
+#: ../src/ui/dialog/glyphs.cpp:73
 msgid "Han"
 msgstr "Han"
 
-#: ../src/ui/dialog/glyphs.cpp:73
+#: ../src/ui/dialog/glyphs.cpp:74
 msgid "Hangul"
 msgstr "Hangeul-Jamo"
 
-#: ../src/ui/dialog/glyphs.cpp:74 ../src/ui/dialog/glyphs.cpp:158
+#: ../src/ui/dialog/glyphs.cpp:75 ../src/ui/dialog/glyphs.cpp:240
 msgid "Hebrew"
 msgstr "Hebräisch"
 
-#: ../src/ui/dialog/glyphs.cpp:75 ../src/ui/dialog/glyphs.cpp:246
+#: ../src/ui/dialog/glyphs.cpp:76 ../src/ui/dialog/glyphs.cpp:328
 msgid "Hiragana"
 msgstr "Hiragana"
 
-#: ../src/ui/dialog/glyphs.cpp:76 ../src/ui/dialog/glyphs.cpp:172
+#: ../src/ui/dialog/glyphs.cpp:77 ../src/ui/dialog/glyphs.cpp:254
 msgid "Kannada"
 msgstr "Kannada"
 
-#: ../src/ui/dialog/glyphs.cpp:77 ../src/ui/dialog/glyphs.cpp:247
+#: ../src/ui/dialog/glyphs.cpp:78 ../src/ui/dialog/glyphs.cpp:329
 msgid "Katakana"
 msgstr "Katakana"
 
-#: ../src/ui/dialog/glyphs.cpp:78 ../src/ui/dialog/glyphs.cpp:191
+#: ../src/ui/dialog/glyphs.cpp:79 ../src/ui/dialog/glyphs.cpp:273
 msgid "Khmer"
 msgstr "Khmer"
 
-#: ../src/ui/dialog/glyphs.cpp:79 ../src/ui/dialog/glyphs.cpp:176
+#: ../src/ui/dialog/glyphs.cpp:80 ../src/ui/dialog/glyphs.cpp:258
 msgid "Lao"
 msgstr "Laotisch"
 
-#: ../src/ui/dialog/glyphs.cpp:80
+#: ../src/ui/dialog/glyphs.cpp:81
 msgid "Latin"
 msgstr "Latein"
 
-#: ../src/ui/dialog/glyphs.cpp:81 ../src/ui/dialog/glyphs.cpp:173
+#: ../src/ui/dialog/glyphs.cpp:82 ../src/ui/dialog/glyphs.cpp:255
 msgid "Malayalam"
 msgstr "Malayalam"
 
-#: ../src/ui/dialog/glyphs.cpp:82 ../src/ui/dialog/glyphs.cpp:192
+#: ../src/ui/dialog/glyphs.cpp:83 ../src/ui/dialog/glyphs.cpp:274
 msgid "Mongolian"
 msgstr "Mongolisch"
 
-#: ../src/ui/dialog/glyphs.cpp:83 ../src/ui/dialog/glyphs.cpp:178
+#: ../src/ui/dialog/glyphs.cpp:84 ../src/ui/dialog/glyphs.cpp:260
 msgid "Myanmar"
 msgstr "Birmanisch"
 
-#: ../src/ui/dialog/glyphs.cpp:84 ../src/ui/dialog/glyphs.cpp:185
+#: ../src/ui/dialog/glyphs.cpp:85 ../src/ui/dialog/glyphs.cpp:267
 msgid "Ogham"
 msgstr "Ogam"
 
-#: ../src/ui/dialog/glyphs.cpp:85
+#: ../src/ui/dialog/glyphs.cpp:86
 msgid "Old Italic"
 msgstr "Altitalisch"
 
-#: ../src/ui/dialog/glyphs.cpp:86 ../src/ui/dialog/glyphs.cpp:169
+#: ../src/ui/dialog/glyphs.cpp:87 ../src/ui/dialog/glyphs.cpp:251
 msgid "Oriya"
 msgstr "Oriya"
 
-#: ../src/ui/dialog/glyphs.cpp:87 ../src/ui/dialog/glyphs.cpp:186
+#: ../src/ui/dialog/glyphs.cpp:88 ../src/ui/dialog/glyphs.cpp:268
 msgid "Runic"
 msgstr "Runen"
 
-#: ../src/ui/dialog/glyphs.cpp:88 ../src/ui/dialog/glyphs.cpp:174
+#: ../src/ui/dialog/glyphs.cpp:89 ../src/ui/dialog/glyphs.cpp:256
 msgid "Sinhala"
 msgstr "Singhalesisch"
 
-#: ../src/ui/dialog/glyphs.cpp:89 ../src/ui/dialog/glyphs.cpp:160
+#: ../src/ui/dialog/glyphs.cpp:90 ../src/ui/dialog/glyphs.cpp:242
 msgid "Syriac"
 msgstr "Syrisch"
 
-#: ../src/ui/dialog/glyphs.cpp:90 ../src/ui/dialog/glyphs.cpp:170
+#: ../src/ui/dialog/glyphs.cpp:91 ../src/ui/dialog/glyphs.cpp:252
 msgid "Tamil"
 msgstr "Tamilisch"
 
-#: ../src/ui/dialog/glyphs.cpp:91 ../src/ui/dialog/glyphs.cpp:171
+#: ../src/ui/dialog/glyphs.cpp:92 ../src/ui/dialog/glyphs.cpp:253
 msgid "Telugu"
 msgstr "Telugu"
 
-#: ../src/ui/dialog/glyphs.cpp:92 ../src/ui/dialog/glyphs.cpp:162
+#: ../src/ui/dialog/glyphs.cpp:93 ../src/ui/dialog/glyphs.cpp:244
 msgid "Thaana"
 msgstr "Thaana"
 
-#: ../src/ui/dialog/glyphs.cpp:93 ../src/ui/dialog/glyphs.cpp:175
+#: ../src/ui/dialog/glyphs.cpp:94 ../src/ui/dialog/glyphs.cpp:257
 msgid "Thai"
 msgstr "Thailändisch"
 
-#: ../src/ui/dialog/glyphs.cpp:94 ../src/ui/dialog/glyphs.cpp:177
+#: ../src/ui/dialog/glyphs.cpp:95 ../src/ui/dialog/glyphs.cpp:259
 msgid "Tibetan"
 msgstr "Tibetisch"
 
-#: ../src/ui/dialog/glyphs.cpp:95
+#: ../src/ui/dialog/glyphs.cpp:96
 msgid "Canadian Aboriginal"
 msgstr "Kanadisch Indigen"
 
-#: ../src/ui/dialog/glyphs.cpp:96
+#: ../src/ui/dialog/glyphs.cpp:97
 msgid "Yi"
 msgstr "Yi"
 
-#: ../src/ui/dialog/glyphs.cpp:97 ../src/ui/dialog/glyphs.cpp:187
+#: ../src/ui/dialog/glyphs.cpp:98 ../src/ui/dialog/glyphs.cpp:269
 msgid "Tagalog"
 msgstr "Tagalog"
 
-#: ../src/ui/dialog/glyphs.cpp:98 ../src/ui/dialog/glyphs.cpp:188
+#: ../src/ui/dialog/glyphs.cpp:99 ../src/ui/dialog/glyphs.cpp:270
 msgid "Hanunoo"
 msgstr "Hanunó'o"
 
-#: ../src/ui/dialog/glyphs.cpp:99 ../src/ui/dialog/glyphs.cpp:189
+#: ../src/ui/dialog/glyphs.cpp:100 ../src/ui/dialog/glyphs.cpp:271
 msgid "Buhid"
 msgstr "Buid"
 
-#: ../src/ui/dialog/glyphs.cpp:100 ../src/ui/dialog/glyphs.cpp:190
+#: ../src/ui/dialog/glyphs.cpp:101 ../src/ui/dialog/glyphs.cpp:272
 msgid "Tagbanwa"
 msgstr "Tagbanuwa"
 
-#: ../src/ui/dialog/glyphs.cpp:101
+#: ../src/ui/dialog/glyphs.cpp:102
 msgid "Braille"
 msgstr "Braille (Blindenschrift)"
 
-#: ../src/ui/dialog/glyphs.cpp:102
+#: ../src/ui/dialog/glyphs.cpp:103
 msgid "Cypriot"
 msgstr "Kyprisch"
 
-#: ../src/ui/dialog/glyphs.cpp:103 ../src/ui/dialog/glyphs.cpp:194
+#: ../src/ui/dialog/glyphs.cpp:104 ../src/ui/dialog/glyphs.cpp:276
 msgid "Limbu"
 msgstr "Limbu"
 
-#: ../src/ui/dialog/glyphs.cpp:104
+#: ../src/ui/dialog/glyphs.cpp:105
 msgid "Osmanya"
 msgstr "Osmaniya"
 
-#: ../src/ui/dialog/glyphs.cpp:105
+#: ../src/ui/dialog/glyphs.cpp:106
 msgid "Shavian"
 msgstr "Schaw"
 
-#: ../src/ui/dialog/glyphs.cpp:106
+#: ../src/ui/dialog/glyphs.cpp:107
 msgid "Linear B"
 msgstr "Linearschrift B"
 
-#: ../src/ui/dialog/glyphs.cpp:107 ../src/ui/dialog/glyphs.cpp:195
+#: ../src/ui/dialog/glyphs.cpp:108 ../src/ui/dialog/glyphs.cpp:277
 msgid "Tai Le"
 msgstr "Tai Le"
 
-#: ../src/ui/dialog/glyphs.cpp:108
+#: ../src/ui/dialog/glyphs.cpp:109
 msgid "Ugaritic"
 msgstr "Ugaritisch"
 
-#: ../src/ui/dialog/glyphs.cpp:109 ../src/ui/dialog/glyphs.cpp:196
+#: ../src/ui/dialog/glyphs.cpp:110 ../src/ui/dialog/glyphs.cpp:278
 msgid "New Tai Lue"
 msgstr "Neu-Tai-Lue"
 
-#: ../src/ui/dialog/glyphs.cpp:110 ../src/ui/dialog/glyphs.cpp:198
+#: ../src/ui/dialog/glyphs.cpp:111 ../src/ui/dialog/glyphs.cpp:280
 msgid "Buginese"
 msgstr "Buginesisch"
 
-#: ../src/ui/dialog/glyphs.cpp:111 ../src/ui/dialog/glyphs.cpp:234
+#: ../src/ui/dialog/glyphs.cpp:112 ../src/ui/dialog/glyphs.cpp:316
 msgid "Glagolitic"
 msgstr "Glagolitisch"
 
-#: ../src/ui/dialog/glyphs.cpp:112 ../src/ui/dialog/glyphs.cpp:238
+#: ../src/ui/dialog/glyphs.cpp:113 ../src/ui/dialog/glyphs.cpp:320
 msgid "Tifinagh"
 msgstr "Tifinagh"
 
-#: ../src/ui/dialog/glyphs.cpp:113 ../src/ui/dialog/glyphs.cpp:267
+#: ../src/ui/dialog/glyphs.cpp:114 ../src/ui/dialog/glyphs.cpp:349
 msgid "Syloti Nagri"
 msgstr "Syloti Nagri"
 
-#: ../src/ui/dialog/glyphs.cpp:114
+#: ../src/ui/dialog/glyphs.cpp:115
 msgid "Old Persian"
 msgstr "Altpersisch"
 
-#: ../src/ui/dialog/glyphs.cpp:115
+#: ../src/ui/dialog/glyphs.cpp:116
 msgid "Kharoshthi"
 msgstr "Kharoshthi"
 
-#: ../src/ui/dialog/glyphs.cpp:116
+#: ../src/ui/dialog/glyphs.cpp:117
 msgid "unassigned"
 msgstr "nicht zugeordnet"
 
-#: ../src/ui/dialog/glyphs.cpp:117 ../src/ui/dialog/glyphs.cpp:200
+#: ../src/ui/dialog/glyphs.cpp:118 ../src/ui/dialog/glyphs.cpp:282
 msgid "Balinese"
 msgstr "Balinesisch"
 
-#: ../src/ui/dialog/glyphs.cpp:118
+#: ../src/ui/dialog/glyphs.cpp:119
 msgid "Cuneiform"
 msgstr "Keilschrift"
 
-#: ../src/ui/dialog/glyphs.cpp:119
+#: ../src/ui/dialog/glyphs.cpp:120
 msgid "Phoenician"
 msgstr "Phönizisch"
 
-#: ../src/ui/dialog/glyphs.cpp:120 ../src/ui/dialog/glyphs.cpp:269
+#: ../src/ui/dialog/glyphs.cpp:121 ../src/ui/dialog/glyphs.cpp:351
 msgid "Phags-pa"
 msgstr "Phagspa"
 
-#: ../src/ui/dialog/glyphs.cpp:121
+#: ../src/ui/dialog/glyphs.cpp:122
 msgid "N'Ko"
 msgstr "N'Ko"
 
-#: ../src/ui/dialog/glyphs.cpp:122 ../src/ui/dialog/glyphs.cpp:272
+#: ../src/ui/dialog/glyphs.cpp:123 ../src/ui/dialog/glyphs.cpp:354
 msgid "Kayah Li"
 msgstr "Kayah Li"
 
-#: ../src/ui/dialog/glyphs.cpp:123 ../src/ui/dialog/glyphs.cpp:202
+#: ../src/ui/dialog/glyphs.cpp:124 ../src/ui/dialog/glyphs.cpp:284
 msgid "Lepcha"
 msgstr "Lepcha"
 
-#: ../src/ui/dialog/glyphs.cpp:124 ../src/ui/dialog/glyphs.cpp:273
+#: ../src/ui/dialog/glyphs.cpp:125 ../src/ui/dialog/glyphs.cpp:355
 msgid "Rejang"
 msgstr "Rejang"
 
-#: ../src/ui/dialog/glyphs.cpp:125 ../src/ui/dialog/glyphs.cpp:201
+#: ../src/ui/dialog/glyphs.cpp:126 ../src/ui/dialog/glyphs.cpp:283
 msgid "Sundanese"
 msgstr "Sundanesisch"
 
-#: ../src/ui/dialog/glyphs.cpp:126 ../src/ui/dialog/glyphs.cpp:270
+#: ../src/ui/dialog/glyphs.cpp:127 ../src/ui/dialog/glyphs.cpp:352
 msgid "Saurashtra"
 msgstr "Saurashtra"
 
-#: ../src/ui/dialog/glyphs.cpp:127 ../src/ui/dialog/glyphs.cpp:276
+#: ../src/ui/dialog/glyphs.cpp:128 ../src/ui/dialog/glyphs.cpp:358
 msgid "Cham"
 msgstr "Cham"
 
-#: ../src/ui/dialog/glyphs.cpp:128 ../src/ui/dialog/glyphs.cpp:203
+#: ../src/ui/dialog/glyphs.cpp:129 ../src/ui/dialog/glyphs.cpp:285
 msgid "Ol Chiki"
 msgstr "Ol Chiki"
 
-#: ../src/ui/dialog/glyphs.cpp:129 ../src/ui/dialog/glyphs.cpp:262
+#: ../src/ui/dialog/glyphs.cpp:130 ../src/ui/dialog/glyphs.cpp:344
 msgid "Vai"
 msgstr "Vai"
 
-#: ../src/ui/dialog/glyphs.cpp:130
+#: ../src/ui/dialog/glyphs.cpp:131
 msgid "Carian"
 msgstr "Karisch"
 
-#: ../src/ui/dialog/glyphs.cpp:131
+#: ../src/ui/dialog/glyphs.cpp:132
 msgid "Lycian"
 msgstr "Lykisch"
 
-#: ../src/ui/dialog/glyphs.cpp:132
+#: ../src/ui/dialog/glyphs.cpp:133
 msgid "Lydian"
 msgstr "Lydisch"
 
-#: ../src/ui/dialog/glyphs.cpp:147
-msgid "Basic Latin"
-msgstr "Basis-Lateinisch"
+#: ../src/ui/dialog/glyphs.cpp:134
+msgid "Avestan"
+msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:148
-msgid "Latin-1 Supplement"
-msgstr "Lateinisch-1, Ergänzung"
+#: ../src/ui/dialog/glyphs.cpp:135
+#, fuzzy
+msgid "Bamum. "
+msgstr "Bamum"
 
-#: ../src/ui/dialog/glyphs.cpp:149
-msgid "Latin Extended-A"
-msgstr "Lateinisch, erweitert-A"
+#: ../src/ui/dialog/glyphs.cpp:136
+msgid "Egyptian Hieroglpyhs"
+msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:150
-msgid "Latin Extended-B"
-msgstr "Lateinisch, erweitert-B"
+#: ../src/ui/dialog/glyphs.cpp:137
+msgid "Imperial Aramaic"
+msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:151
-msgid "IPA Extensions"
-msgstr "IPA Erweiterungen"
+#: ../src/ui/dialog/glyphs.cpp:138
+msgid "Inscriptional Pahlavi"
+msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:152
-msgid "Spacing Modifier Letters"
-msgstr "Spacing Modifier Letters"
+#: ../src/ui/dialog/glyphs.cpp:139
+msgid "Inscriptional Parthian"
+msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:153
-msgid "Combining Diacritical Marks"
-msgstr "Kombinierende diaktritische Zeichen"
+#: ../src/ui/dialog/glyphs.cpp:140 ../src/ui/dialog/glyphs.cpp:357
+msgid "Javanese"
+msgstr "Javanisch"
 
-#: ../src/ui/dialog/glyphs.cpp:154
-msgid "Greek and Coptic"
-msgstr "Griechisch und Koptisch"
+#: ../src/ui/dialog/glyphs.cpp:141
+msgid "Kaithi."
+msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:156
-msgid "Cyrillic Supplement"
-msgstr "Kyrillisch, Ergänzung"
+#: ../src/ui/dialog/glyphs.cpp:142 ../src/ui/dialog/glyphs.cpp:343
+msgid "Lisu"
+msgstr "Lisu"
 
-#: ../src/ui/dialog/glyphs.cpp:161
-msgid "Arabic Supplement"
-msgstr "Arabisch, Ergänzung"
+#: ../src/ui/dialog/glyphs.cpp:143 ../src/ui/dialog/glyphs.cpp:361
+msgid "Meetei Mayek"
+msgstr "Meitei-Mayek"
 
-#: ../src/ui/dialog/glyphs.cpp:163
-msgid "NKo"
-msgstr "N'Ko"
+#: ../src/ui/dialog/glyphs.cpp:144
+msgid "Old South Arabian"
+msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:164
+#: ../src/ui/dialog/glyphs.cpp:145
+#, fuzzy
+msgid "Old Turkic"
+msgstr "Altitalisch"
+
+#: ../src/ui/dialog/glyphs.cpp:146 ../src/ui/dialog/glyphs.cpp:246
 msgid "Samaritan"
 msgstr "Samaritanisch"
 
-#: ../src/ui/dialog/glyphs.cpp:180
-msgid "Hangul Jamo"
-msgstr "Hangeul-Jamo"
-
-#: ../src/ui/dialog/glyphs.cpp:182
-msgid "Ethiopic Supplement"
-msgstr "Äthiopisch, Ergänzung"
-
-#: ../src/ui/dialog/glyphs.cpp:184
-msgid "Unified Canadian Aboriginal Syllabics"
-msgstr "Vereinheitlichte Silbenzeichen kanadischer Ureinwohner"
-
-#: ../src/ui/dialog/glyphs.cpp:193
-msgid "Unified Canadian Aboriginal Syllabics Extended"
-msgstr "Vereinheitlichte Silbenzeichen kanadischer Ureinwohner, erweitert"
-
-#: ../src/ui/dialog/glyphs.cpp:197
-msgid "Khmer Symbols"
-msgstr "Khmer-Symbole"
-
-#: ../src/ui/dialog/glyphs.cpp:199
+#: ../src/ui/dialog/glyphs.cpp:147 ../src/ui/dialog/glyphs.cpp:281
 msgid "Tai Tham"
 msgstr "Lanna"
 
-#: ../src/ui/dialog/glyphs.cpp:204
+#: ../src/ui/dialog/glyphs.cpp:148 ../src/ui/dialog/glyphs.cpp:360
+msgid "Tai Viet"
+msgstr "Tai Viet"
+
+#: ../src/ui/dialog/glyphs.cpp:149
+#, fuzzy
+msgid "Batak"
+msgstr "Katakana"
+
+#: ../src/ui/dialog/glyphs.cpp:150
+msgid "Brahmi"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:151
+msgid "Mandaic"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:152
+msgid "Chakma"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:153
+#, fuzzy
+msgid "Meroitic Cursive"
+msgstr "Parametrische Kurven"
+
+#: ../src/ui/dialog/glyphs.cpp:154
+msgid "Meroitic Hieroglyphs"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:155
+msgid "Miao"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:156
+#, fuzzy
+msgid "Sharada"
+msgstr "Schärfen"
+
+#: ../src/ui/dialog/glyphs.cpp:157
+msgid "Sora Sompeng"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:158
+msgid "Takri"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:159
+msgid "Bassa"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:160
+msgid "Caucasian Albanian"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:161
+msgid "Duployan"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:162
+msgid "Elbasan"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:163
+msgid "Grantha"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:164
+msgid "Kjohki"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:165
+msgid "Khudawadi, Sindhi"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:166
+#, fuzzy
+msgid "Linear A"
+msgstr "Linearschrift B"
+
+#: ../src/ui/dialog/glyphs.cpp:167
+msgid "Mahajani"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:168
+msgid "Manichaean"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:169
+msgid "Mende Kikakui"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:170
+#, fuzzy
+msgid "Modi"
+msgstr "Bearbeiten"
+
+#: ../src/ui/dialog/glyphs.cpp:171
+msgid "Mro"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:172
+msgid "Nabataean"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:173
+msgid "Old North Arabian"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:174
+#, fuzzy
+msgid "Old Permic"
+msgstr "Altpersisch"
+
+#: ../src/ui/dialog/glyphs.cpp:175
+msgid "Pahawh Hmong"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:176
+msgid "Palmyrene"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:177
+msgid "Pau Cin Hau"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:178
+#, fuzzy
+msgid "Psalter Pahlavi"
+msgstr "Poster-Malen"
+
+#: ../src/ui/dialog/glyphs.cpp:179
+msgid "Siddham"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:180
+msgid "Tirhuta"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:181
+msgid "Warang Citi"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:182
+msgid "Ahom"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:183
+msgid "Anatolian Hieroglyphs"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:184
+msgid "Hatran"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:185
+#, fuzzy
+msgid "Multani"
+msgstr "Multiplizieren"
+
+#: ../src/ui/dialog/glyphs.cpp:186
+#, fuzzy
+msgid "Old Hungarian"
+msgstr "Ungarisch (hu)"
+
+#: ../src/ui/dialog/glyphs.cpp:187
+#, fuzzy
+msgid "Signwriting"
+msgstr "Skripte"
+
+#: ../src/ui/dialog/glyphs.cpp:225
+#, fuzzy
+msgid "Basic Plane"
+msgstr "Basis-Lateinisch"
+
+#: ../src/ui/dialog/glyphs.cpp:226
+msgid "Extended Multilingual Plane"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:227
+msgid "Supplementary Ideographic Plane"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:229
+msgid "Basic Latin"
+msgstr "Basis-Lateinisch"
+
+#: ../src/ui/dialog/glyphs.cpp:230
+msgid "Latin-1 Supplement"
+msgstr "Lateinisch-1, Ergänzung"
+
+#: ../src/ui/dialog/glyphs.cpp:231
+msgid "Latin Extended-A"
+msgstr "Lateinisch, erweitert-A"
+
+#: ../src/ui/dialog/glyphs.cpp:232
+msgid "Latin Extended-B"
+msgstr "Lateinisch, erweitert-B"
+
+#: ../src/ui/dialog/glyphs.cpp:233
+msgid "IPA Extensions"
+msgstr "IPA Erweiterungen"
+
+#: ../src/ui/dialog/glyphs.cpp:234
+msgid "Spacing Modifier Letters"
+msgstr "Spacing Modifier Letters"
+
+#: ../src/ui/dialog/glyphs.cpp:235
+msgid "Combining Diacritical Marks"
+msgstr "Kombinierende diaktritische Zeichen"
+
+#: ../src/ui/dialog/glyphs.cpp:236
+msgid "Greek and Coptic"
+msgstr "Griechisch und Koptisch"
+
+#: ../src/ui/dialog/glyphs.cpp:238
+msgid "Cyrillic Supplement"
+msgstr "Kyrillisch, Ergänzung"
+
+#: ../src/ui/dialog/glyphs.cpp:243
+msgid "Arabic Supplement"
+msgstr "Arabisch, Ergänzung"
+
+#: ../src/ui/dialog/glyphs.cpp:245
+msgid "NKo"
+msgstr "N'Ko"
+
+#: ../src/ui/dialog/glyphs.cpp:262
+msgid "Hangul Jamo"
+msgstr "Hangeul-Jamo"
+
+#: ../src/ui/dialog/glyphs.cpp:264
+msgid "Ethiopic Supplement"
+msgstr "Äthiopisch, Ergänzung"
+
+#: ../src/ui/dialog/glyphs.cpp:266
+msgid "Unified Canadian Aboriginal Syllabics"
+msgstr "Vereinheitlichte Silbenzeichen kanadischer Ureinwohner"
+
+#: ../src/ui/dialog/glyphs.cpp:275
+msgid "Unified Canadian Aboriginal Syllabics Extended"
+msgstr "Vereinheitlichte Silbenzeichen kanadischer Ureinwohner, erweitert"
+
+#: ../src/ui/dialog/glyphs.cpp:279
+msgid "Khmer Symbols"
+msgstr "Khmer-Symbole"
+
+#: ../src/ui/dialog/glyphs.cpp:286
 msgid "Vedic Extensions"
 msgstr "Verdische Erweiterungen"
 
-#: ../src/ui/dialog/glyphs.cpp:205
+#: ../src/ui/dialog/glyphs.cpp:287
 msgid "Phonetic Extensions"
 msgstr "Phonetische Erweiterungen"
 
-#: ../src/ui/dialog/glyphs.cpp:206
+#: ../src/ui/dialog/glyphs.cpp:288
 msgid "Phonetic Extensions Supplement"
 msgstr "Phonetische Erweiterungen, Ergänzung"
 
-#: ../src/ui/dialog/glyphs.cpp:207
+#: ../src/ui/dialog/glyphs.cpp:289
 msgid "Combining Diacritical Marks Supplement"
 msgstr "Kombinierende diakritische Zeichen, Ergänzung"
 
-#: ../src/ui/dialog/glyphs.cpp:208
+#: ../src/ui/dialog/glyphs.cpp:290
 msgid "Latin Extended Additional"
 msgstr "Lateinisch, weiterer Zusatz"
 
-#: ../src/ui/dialog/glyphs.cpp:209
+#: ../src/ui/dialog/glyphs.cpp:291
 msgid "Greek Extended"
 msgstr "Griechisch, Zusatz"
 
-#: ../src/ui/dialog/glyphs.cpp:210
+#: ../src/ui/dialog/glyphs.cpp:292
 msgid "General Punctuation"
 msgstr "Allgemeine Interpunktion"
 
-#: ../src/ui/dialog/glyphs.cpp:211
+#: ../src/ui/dialog/glyphs.cpp:293
 msgid "Superscripts and Subscripts"
 msgstr "Hoch- und tiefgestellte Zeichen"
 
-#: ../src/ui/dialog/glyphs.cpp:212
+#: ../src/ui/dialog/glyphs.cpp:294
 msgid "Currency Symbols"
 msgstr "Währungszeichen"
 
-#: ../src/ui/dialog/glyphs.cpp:213
+#: ../src/ui/dialog/glyphs.cpp:295
 msgid "Combining Diacritical Marks for Symbols"
 msgstr "Kombinierende diakritische Zeichen für Symbole"
 
-#: ../src/ui/dialog/glyphs.cpp:214
+#: ../src/ui/dialog/glyphs.cpp:296
 msgid "Letterlike Symbols"
 msgstr "Buchstabenähnliche Symbole"
 
-#: ../src/ui/dialog/glyphs.cpp:215
+#: ../src/ui/dialog/glyphs.cpp:297
 msgid "Number Forms"
 msgstr "Zahlzeichen"
 
-#: ../src/ui/dialog/glyphs.cpp:216
+#: ../src/ui/dialog/glyphs.cpp:298
 msgid "Arrows"
 msgstr "Pfeile"
 
-#: ../src/ui/dialog/glyphs.cpp:217
+#: ../src/ui/dialog/glyphs.cpp:299
 msgid "Mathematical Operators"
 msgstr "Mathematische Operatoren"
 
-#: ../src/ui/dialog/glyphs.cpp:218
+#: ../src/ui/dialog/glyphs.cpp:300
 msgid "Miscellaneous Technical"
 msgstr "Verschiedene technische Zeichen"
 
-#: ../src/ui/dialog/glyphs.cpp:219
+#: ../src/ui/dialog/glyphs.cpp:301
 msgid "Control Pictures"
 msgstr "Symbole für Steuerzeichen"
 
-#: ../src/ui/dialog/glyphs.cpp:220
+#: ../src/ui/dialog/glyphs.cpp:302
 msgid "Optical Character Recognition"
 msgstr "Optische Zeichenerkennung"
 
-#: ../src/ui/dialog/glyphs.cpp:221
+#: ../src/ui/dialog/glyphs.cpp:303
 msgid "Enclosed Alphanumerics"
 msgstr "Umschlossene alphanumerische Zeichen"
 
 # not sure here -cm-
-#: ../src/ui/dialog/glyphs.cpp:222
+#: ../src/ui/dialog/glyphs.cpp:304
 msgid "Box Drawing"
 msgstr "Rahmenzeichnung"
 
-#: ../src/ui/dialog/glyphs.cpp:223
+#: ../src/ui/dialog/glyphs.cpp:305
 msgid "Block Elements"
 msgstr "Blockelemente"
 
-#: ../src/ui/dialog/glyphs.cpp:224
+#: ../src/ui/dialog/glyphs.cpp:306
 msgid "Geometric Shapes"
 msgstr "Geometrische Formen"
 
-#: ../src/ui/dialog/glyphs.cpp:225
+#: ../src/ui/dialog/glyphs.cpp:307
 msgid "Miscellaneous Symbols"
 msgstr "Verschiedene Symbole"
 
-#: ../src/ui/dialog/glyphs.cpp:226
+#: ../src/ui/dialog/glyphs.cpp:308
 msgid "Dingbats"
 msgstr "Dingbats"
 
-#: ../src/ui/dialog/glyphs.cpp:227
+#: ../src/ui/dialog/glyphs.cpp:309
 msgid "Miscellaneous Mathematical Symbols-A"
 msgstr "Verschiedene mathematische Symbole-A"
 
-#: ../src/ui/dialog/glyphs.cpp:228
+#: ../src/ui/dialog/glyphs.cpp:310
 msgid "Supplemental Arrows-A"
 msgstr "Zusätzliche Pfeile-A"
 
-#: ../src/ui/dialog/glyphs.cpp:229
+#: ../src/ui/dialog/glyphs.cpp:311
 msgid "Braille Patterns"
 msgstr "Braille-Zeichen"
 
-#: ../src/ui/dialog/glyphs.cpp:230
+#: ../src/ui/dialog/glyphs.cpp:312
 msgid "Supplemental Arrows-B"
 msgstr "Zusätzliche Pfeile-B"
 
-#: ../src/ui/dialog/glyphs.cpp:231
+#: ../src/ui/dialog/glyphs.cpp:313
 msgid "Miscellaneous Mathematical Symbols-B"
 msgstr "Verschiedene mathematische Symbole-B"
 
-#: ../src/ui/dialog/glyphs.cpp:232
+#: ../src/ui/dialog/glyphs.cpp:314
 msgid "Supplemental Mathematical Operators"
 msgstr "Zusätzliche mathematische Operatoren"
 
-#: ../src/ui/dialog/glyphs.cpp:233
+#: ../src/ui/dialog/glyphs.cpp:315
 msgid "Miscellaneous Symbols and Arrows"
 msgstr "Verschiedene Symbole und Pfeile"
 
-#: ../src/ui/dialog/glyphs.cpp:235
+#: ../src/ui/dialog/glyphs.cpp:317
 msgid "Latin Extended-C"
 msgstr "Lateinisch, erweitert-C"
 
 # !!!
-#: ../src/ui/dialog/glyphs.cpp:237
+#: ../src/ui/dialog/glyphs.cpp:319
 msgid "Georgian Supplement"
 msgstr "Georgisch, Ergänzung"
 
-#: ../src/ui/dialog/glyphs.cpp:239
+#: ../src/ui/dialog/glyphs.cpp:321
 msgid "Ethiopic Extended"
 msgstr "Äthiopisch, erweitert"
 
-#: ../src/ui/dialog/glyphs.cpp:240
+#: ../src/ui/dialog/glyphs.cpp:322
 msgid "Cyrillic Extended-A"
 msgstr "Kyrillisch, erweitert-A"
 
-#: ../src/ui/dialog/glyphs.cpp:241
+#: ../src/ui/dialog/glyphs.cpp:323
 msgid "Supplemental Punctuation"
 msgstr "Zusätzliche Interpunktion"
 
-#: ../src/ui/dialog/glyphs.cpp:242
+#: ../src/ui/dialog/glyphs.cpp:324
 msgid "CJK Radicals Supplement"
 msgstr "CJK-Radikale, Ergänzung"
 
-#: ../src/ui/dialog/glyphs.cpp:243
+#: ../src/ui/dialog/glyphs.cpp:325
 msgid "Kangxi Radicals"
 msgstr "Kangxi-Radikale"
 
-#: ../src/ui/dialog/glyphs.cpp:244
+#: ../src/ui/dialog/glyphs.cpp:326
 msgid "Ideographic Description Characters"
 msgstr "Ideographische Beschreibungszeichen"
 
-#: ../src/ui/dialog/glyphs.cpp:245
+#: ../src/ui/dialog/glyphs.cpp:327
 msgid "CJK Symbols and Punctuation"
 msgstr "CJK-Symbole und Interpunktion"
 
-#: ../src/ui/dialog/glyphs.cpp:249
+#: ../src/ui/dialog/glyphs.cpp:331
 msgid "Hangul Compatibility Jamo"
 msgstr "Hangeul-Jamo, Kompatibilität"
 
-#: ../src/ui/dialog/glyphs.cpp:250
+#: ../src/ui/dialog/glyphs.cpp:332
 msgid "Kanbun"
 msgstr "Kanbun"
 
-#: ../src/ui/dialog/glyphs.cpp:251
+#: ../src/ui/dialog/glyphs.cpp:333
 msgid "Bopomofo Extended"
 msgstr "Bopomofo, erweitert"
 
-#: ../src/ui/dialog/glyphs.cpp:252
+#: ../src/ui/dialog/glyphs.cpp:334
 msgid "CJK Strokes"
 msgstr "CJK-Striche"
 
-#: ../src/ui/dialog/glyphs.cpp:253
+#: ../src/ui/dialog/glyphs.cpp:335
 msgid "Katakana Phonetic Extensions"
 msgstr "Katakana, Phonetische Erweiterungen"
 
-#: ../src/ui/dialog/glyphs.cpp:254
+#: ../src/ui/dialog/glyphs.cpp:336
 msgid "Enclosed CJK Letters and Months"
 msgstr "Umschlossene CJK-Zeichen und -Monate"
 
-#: ../src/ui/dialog/glyphs.cpp:255
+#: ../src/ui/dialog/glyphs.cpp:337
 msgid "CJK Compatibility"
 msgstr "CJK-Kompatibilität"
 
-#: ../src/ui/dialog/glyphs.cpp:256
+#: ../src/ui/dialog/glyphs.cpp:338
 msgid "CJK Unified Ideographs Extension A"
 msgstr "Vereinheitlichte CJK-Ideogramme, Erweiterung A"
 
-#: ../src/ui/dialog/glyphs.cpp:257
+#: ../src/ui/dialog/glyphs.cpp:339
 msgid "Yijing Hexagram Symbols"
 msgstr "I-Ging-Hexagramme"
 
-#: ../src/ui/dialog/glyphs.cpp:258
+#: ../src/ui/dialog/glyphs.cpp:340
 msgid "CJK Unified Ideographs"
 msgstr "Vereinheitlichte CJK-Ideogramme"
 
-#: ../src/ui/dialog/glyphs.cpp:259
+#: ../src/ui/dialog/glyphs.cpp:341
 msgid "Yi Syllables"
 msgstr "Yi-Silbenzeichen"
 
-#: ../src/ui/dialog/glyphs.cpp:260
+#: ../src/ui/dialog/glyphs.cpp:342
 msgid "Yi Radicals"
 msgstr "Yi-Radikale"
 
-#: ../src/ui/dialog/glyphs.cpp:261
-msgid "Lisu"
-msgstr "Lisu"
-
-#: ../src/ui/dialog/glyphs.cpp:263
+#: ../src/ui/dialog/glyphs.cpp:345
 msgid "Cyrillic Extended-B"
 msgstr "Kyrillisch, erweitert-B"
 
-#: ../src/ui/dialog/glyphs.cpp:264
+#: ../src/ui/dialog/glyphs.cpp:346
 msgid "Bamum"
 msgstr "Bamum"
 
-#: ../src/ui/dialog/glyphs.cpp:265
+#: ../src/ui/dialog/glyphs.cpp:347
 msgid "Modifier Tone Letters"
 msgstr "Modifizierende Tonzeichen"
 
-#: ../src/ui/dialog/glyphs.cpp:266
+#: ../src/ui/dialog/glyphs.cpp:348
 msgid "Latin Extended-D"
 msgstr "Lateinisch, erweitert-D"
 
-#: ../src/ui/dialog/glyphs.cpp:268
+#: ../src/ui/dialog/glyphs.cpp:350
 msgid "Common Indic Number Forms"
 msgstr "Allgemeine indische Ziffern"
 
-#: ../src/ui/dialog/glyphs.cpp:271
+#: ../src/ui/dialog/glyphs.cpp:353
 msgid "Devanagari Extended"
 msgstr "Devanagari, erweitert"
 
-#: ../src/ui/dialog/glyphs.cpp:274
+#: ../src/ui/dialog/glyphs.cpp:356
 msgid "Hangul Jamo Extended-A"
 msgstr "Hangeul-Jamo, erweitert-A"
 
-#: ../src/ui/dialog/glyphs.cpp:275
-msgid "Javanese"
-msgstr "Javanisch"
-
-#: ../src/ui/dialog/glyphs.cpp:277
+#: ../src/ui/dialog/glyphs.cpp:359
 msgid "Myanmar Extended-A"
 msgstr "Birmanisch, erweitert-A"
 
-#: ../src/ui/dialog/glyphs.cpp:278
-msgid "Tai Viet"
-msgstr "Tai Viet"
-
-#: ../src/ui/dialog/glyphs.cpp:279
-msgid "Meetei Mayek"
-msgstr "Meitei-Mayek"
-
-#: ../src/ui/dialog/glyphs.cpp:280
+#: ../src/ui/dialog/glyphs.cpp:362
 msgid "Hangul Syllables"
 msgstr "Hangeul-Silbenzeichen"
 
-#: ../src/ui/dialog/glyphs.cpp:281
+#: ../src/ui/dialog/glyphs.cpp:363
 msgid "Hangul Jamo Extended-B"
 msgstr "Hangeul-Jamo, erweitert-B"
 
-#: ../src/ui/dialog/glyphs.cpp:282
+#: ../src/ui/dialog/glyphs.cpp:364
 msgid "High Surrogates"
 msgstr "High Surrogates"
 
-#: ../src/ui/dialog/glyphs.cpp:283
+#: ../src/ui/dialog/glyphs.cpp:365
 msgid "High Private Use Surrogates"
 msgstr "High Surrogates (privater Bereich)"
 
-#: ../src/ui/dialog/glyphs.cpp:284
+#: ../src/ui/dialog/glyphs.cpp:366
 msgid "Low Surrogates"
 msgstr "Low Surrogates"
 
-#: ../src/ui/dialog/glyphs.cpp:285
+#: ../src/ui/dialog/glyphs.cpp:367
 msgid "Private Use Area"
 msgstr "Private Use Zone"
 
-#: ../src/ui/dialog/glyphs.cpp:286
+#: ../src/ui/dialog/glyphs.cpp:368
 msgid "CJK Compatibility Ideographs"
 msgstr "CJK-Ideogramme, Kompatibilität"
 
-#: ../src/ui/dialog/glyphs.cpp:287
+#: ../src/ui/dialog/glyphs.cpp:369
 msgid "Alphabetic Presentation Forms"
 msgstr "Alphabetische Präsentationsformen"
 
-#: ../src/ui/dialog/glyphs.cpp:288
+#: ../src/ui/dialog/glyphs.cpp:370
 msgid "Arabic Presentation Forms-A"
 msgstr "Arabische Präsentationsformen-A"
 
-#: ../src/ui/dialog/glyphs.cpp:289
+#: ../src/ui/dialog/glyphs.cpp:371
 msgid "Variation Selectors"
 msgstr "Variantenselektoren"
 
-#: ../src/ui/dialog/glyphs.cpp:290
+#: ../src/ui/dialog/glyphs.cpp:372
 msgid "Vertical Forms"
 msgstr "Vertikale Formen"
 
-#: ../src/ui/dialog/glyphs.cpp:291
+#: ../src/ui/dialog/glyphs.cpp:373
 msgid "Combining Half Marks"
 msgstr "Kombinierende halbe diakritische Zeichen"
 
-#: ../src/ui/dialog/glyphs.cpp:292
+#: ../src/ui/dialog/glyphs.cpp:374
 msgid "CJK Compatibility Forms"
 msgstr "CJK-Kompatibilitätsformen"
 
-#: ../src/ui/dialog/glyphs.cpp:293
+#: ../src/ui/dialog/glyphs.cpp:375
 msgid "Small Form Variants"
 msgstr "Kleine Formvarianten"
 
-#: ../src/ui/dialog/glyphs.cpp:294
+#: ../src/ui/dialog/glyphs.cpp:376
 msgid "Arabic Presentation Forms-B"
 msgstr "Arabische Präsentationsformen-B"
 
-#: ../src/ui/dialog/glyphs.cpp:295
+#: ../src/ui/dialog/glyphs.cpp:377
 msgid "Halfwidth and Fullwidth Forms"
 msgstr "Halbbreite und vollbreite Formen"
 
-#: ../src/ui/dialog/glyphs.cpp:296
+#: ../src/ui/dialog/glyphs.cpp:378
 msgid "Specials"
 msgstr "Spezielles"
 
-#: ../src/ui/dialog/glyphs.cpp:355
+#: ../src/ui/dialog/glyphs.cpp:381
+#, fuzzy
+msgid "Miscellaneous Symbols and Pictographs"
+msgstr "Verschiedene Symbole und Pfeile"
+
+#: ../src/ui/dialog/glyphs.cpp:382
+#, fuzzy
+msgid "Emoticons"
+msgstr "Bewegung"
+
+#: ../src/ui/dialog/glyphs.cpp:383
+msgid "Ornamental Dingbats"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:384
+#, fuzzy
+msgid "Transport and Map Symbols"
+msgstr "Symbol fallenlassen"
+
+#: ../src/ui/dialog/glyphs.cpp:385
+#, fuzzy
+msgid "Alchemical Symbols"
+msgstr "Khmer-Symbole"
+
+#: ../src/ui/dialog/glyphs.cpp:386
+#, fuzzy
+msgid "Geometric Shapes Extended"
+msgstr "Geometrische Formen"
+
+#: ../src/ui/dialog/glyphs.cpp:387
+#, fuzzy
+msgid "Supplemental Arrows-C"
+msgstr "Zusätzliche Pfeile-A"
+
+#: ../src/ui/dialog/glyphs.cpp:388
+msgid "Supplemental Symbols and Pictographs"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:389
+#, fuzzy
+msgid "Chess Symbols"
+msgstr "Khmer-Symbole"
+
+#: ../src/ui/dialog/glyphs.cpp:390
+msgid "Symbols and Pictographs Extended-A"
+msgstr ""
+
+#: ../src/ui/dialog/glyphs.cpp:452
 msgid "Script: "
 msgstr "Schriftsystem:"
 
-#: ../src/ui/dialog/glyphs.cpp:380
+#: ../src/ui/dialog/glyphs.cpp:477
 msgid "Range: "
 msgstr "Bereich:"
 
 # not sure here -cm-
-#: ../src/ui/dialog/glyphs.cpp:443
+#: ../src/ui/dialog/glyphs.cpp:545
 msgid "Append"
 msgstr "Hinzufügen"
 
-#: ../src/ui/dialog/glyphs.cpp:551
+#: ../src/ui/dialog/glyphs.cpp:653
 msgid "Append text"
 msgstr "Text hinzufügen"
 
@@ -22250,8 +22673,8 @@ msgstr "Tastenkürzel"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2164
 #: ../src/ui/widget/page-sizer.cpp:96
-#: ../share/ui/dialog-livepatheffect-add.glade:438
-#: ../share/ui/dialog-livepatheffect-add.glade:550
+#: ../share/ui/dialog-livepatheffect-add.glade:431
+#: ../share/ui/dialog-livepatheffect-effect.glade:98
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -22840,17 +23263,17 @@ msgstr "Oben"
 
 #
 # File: ../src/ui/dialog/livepatheffect-add.cpp, line: 472
-#: ../src/ui/dialog/livepatheffect-add.cpp:570
+#: ../src/ui/dialog/livepatheffect-add.cpp:562
 msgid "You don't have any favorites yet, please disable the favorites star"
 msgstr ""
 
-#: ../src/ui/dialog/livepatheffect-add.cpp:574
+#: ../src/ui/dialog/livepatheffect-add.cpp:566
 msgid "This is your favorite effects"
 msgstr ""
 
-#: ../src/ui/dialog/livepatheffect-add.cpp:579
-#: ../src/ui/dialog/livepatheffect-add.cpp:591
-#: ../src/ui/dialog/livepatheffect-add.cpp:600
+#: ../src/ui/dialog/livepatheffect-add.cpp:571
+#: ../src/ui/dialog/livepatheffect-add.cpp:583
+#: ../src/ui/dialog/livepatheffect-add.cpp:592
 msgid "Your search do a empty result, please try again"
 msgstr ""
 
@@ -23050,9 +23473,9 @@ msgid "URL:"
 msgstr "URL:"
 
 #: ../src/ui/dialog/object-properties.cpp:56
-#: ../src/ui/dialog/object-properties.cpp:340
-#: ../src/ui/dialog/object-properties.cpp:411
+#: ../src/ui/dialog/object-properties.cpp:347
 #: ../src/ui/dialog/object-properties.cpp:418
+#: ../src/ui/dialog/object-properties.cpp:425
 msgid "_ID:"
 msgstr "_Kennung:"
 
@@ -23102,93 +23525,88 @@ msgstr "Beschreibung:"
 
 #: ../src/ui/dialog/object-properties.cpp:222
 msgid ""
-"The 'image-rendering' property can influence how a bitmap is up-scaled:\n"
-"\t'auto' no preference;\n"
-"\t'optimizeQuality' smooth;\n"
-"\t'optimizeSpeed' blocky.\n"
-"Note that this behaviour is not defined in the SVG 1.1 specification and not "
-"all browsers follow this interpretation."
+"The 'image-rendering' property can influence how a bitmap is re-scaled:\n"
+"\t• 'auto' no preference (usually smooth but blurred)\n"
+"\t• 'optimizeQuality' prefer rendering quality (usually smooth but blurred)\n"
+"\t• 'optimizeSpeed' prefer rendering speed (usually blocky)\n"
+"\t• 'crisp-edges' rescale without blurring edges (often blocky)\n"
+"\t• 'pixelated' render blocky\n"
+"Note that the specification of this property is not finalized. Support and "
+"interpretation of these values varies between renderers."
 msgstr ""
-"Die 'Bild-Darstellung' Eigenschaft kann die Vergrößerung von Bitmaps "
-"beeinflussen: \n"
-"\t'auto' keine Vorgabe;\n"
-"\t'Qualität optimieren' glatter;\n"
-"\t'Geschwindigkeit optimieren' pixeliger.\n"
-"Beachte, dass dieses Verhalten nicht in der SVG 1.1 Spezifikation definiert "
-"ist und nicht von allen Browsern unterstützt wird."
 
-#: ../src/ui/dialog/object-properties.cpp:247
+#: ../src/ui/dialog/object-properties.cpp:254
 msgid "Check to make the object invisible"
 msgstr "Aktivieren macht das Objekt unsichtbar"
 
 #. TRANSLATORS: "Lock" is a verb here
-#: ../src/ui/dialog/object-properties.cpp:256
+#: ../src/ui/dialog/object-properties.cpp:263
 msgid "Check to make the object insensitive (not selectable by mouse)"
 msgstr "Aktivieren macht das Objekt unempfindlich (nicht durch Maus anwählbar)"
 
-#: ../src/ui/dialog/object-properties.cpp:264
+#: ../src/ui/dialog/object-properties.cpp:271
 msgid "Check to preserve aspect ratio on images"
 msgstr ""
 
-#: ../src/ui/dialog/object-properties.cpp:273 ../src/verbs.cpp:2829
+#: ../src/ui/dialog/object-properties.cpp:280 ../src/verbs.cpp:2829
 #: ../src/verbs.cpp:2837
 msgid "_Set"
 msgstr "_Setzen"
 
-#: ../src/ui/dialog/object-properties.cpp:327
-#: ../src/ui/dialog/object-properties.cpp:332
+#: ../src/ui/dialog/object-properties.cpp:334
+#: ../src/ui/dialog/object-properties.cpp:339
 msgid "Ref"
 msgstr "Ref"
 
-#: ../src/ui/dialog/object-properties.cpp:413
+#: ../src/ui/dialog/object-properties.cpp:420
 msgid "Id invalid! "
 msgstr "ID-Kennung ungültig!"
 
-#: ../src/ui/dialog/object-properties.cpp:415
+#: ../src/ui/dialog/object-properties.cpp:422
 msgid "Id exists! "
 msgstr "ID-Kennung existiert!"
 
-#: ../src/ui/dialog/object-properties.cpp:421
+#: ../src/ui/dialog/object-properties.cpp:428
 msgid "Set object ID"
 msgstr "Objektkennung setzen"
 
-#: ../src/ui/dialog/object-properties.cpp:436
+#: ../src/ui/dialog/object-properties.cpp:443
 msgid "Set object label"
 msgstr "Objektbezeichner setzen"
 
-#: ../src/ui/dialog/object-properties.cpp:442
+#: ../src/ui/dialog/object-properties.cpp:449
 msgid "Set object title"
 msgstr "Objekttitel setzen"
 
-#: ../src/ui/dialog/object-properties.cpp:449
+#: ../src/ui/dialog/object-properties.cpp:456
 msgid "Set image DPI"
 msgstr "Auflösung des Bildes (DPI):"
 
-#: ../src/ui/dialog/object-properties.cpp:458
+#: ../src/ui/dialog/object-properties.cpp:465
 msgid "Set object description"
 msgstr "Objektbeschreibung setzen"
 
-#: ../src/ui/dialog/object-properties.cpp:484
+#: ../src/ui/dialog/object-properties.cpp:491
 msgid "Set image rendering option"
 msgstr "Darstellung von Grafiken anpassen"
 
-#: ../src/ui/dialog/object-properties.cpp:503
+#: ../src/ui/dialog/object-properties.cpp:510
 msgid "Lock object"
 msgstr "Objekt sperren"
 
-#: ../src/ui/dialog/object-properties.cpp:503
+#: ../src/ui/dialog/object-properties.cpp:510
 msgid "Unlock object"
 msgstr "Objektsperrung aufheben"
 
-#: ../src/ui/dialog/object-properties.cpp:529
+#: ../src/ui/dialog/object-properties.cpp:536
 msgid "Set preserve ratio"
 msgstr "\"Seitenverhältnis beibehalten\" geändert"
 
-#: ../src/ui/dialog/object-properties.cpp:546
+#: ../src/ui/dialog/object-properties.cpp:553
 msgid "Hide object"
 msgstr "Objekte ausblenden"
 
-#: ../src/ui/dialog/object-properties.cpp:546
+#: ../src/ui/dialog/object-properties.cpp:553
 msgid "Unhide object"
 msgstr "Ausgeblendete Objekte anzeigen"
 
@@ -23684,10 +24102,8 @@ msgstr "Eigenschaften"
 msgid "value"
 msgstr "Wert"
 
-#
-# File: ../src/ui/dialog/styledialog.cpp, line: 698
 #: ../src/ui/dialog/styledialog.cpp:788
-msgid "This value is comented"
+msgid "This value is commented"
 msgstr ""
 
 #: ../src/ui/dialog/styledialog.cpp:975
@@ -24213,7 +24629,7 @@ msgstr "Als _Standard festlegen"
 msgid "AaBbCcIiPpQq12369$€¢?.;/()"
 msgstr "AaBbCcIiPpQqÜü12369$€ß?.;/()"
 
-#: ../src/ui/dialog/text-edit.cpp:468 ../src/ui/tools/text-tool.cpp:1576
+#: ../src/ui/dialog/text-edit.cpp:468 ../src/ui/tools/text-tool.cpp:1583
 msgid "Set text style"
 msgstr "Textstil setzen"
 
@@ -24591,7 +25007,7 @@ msgstr ""
 msgid "Replace"
 msgstr "Ersetzen"
 
-#: ../src/ui/shape-editor-knotholders.cpp:550
+#: ../src/ui/shape-editor-knotholders.cpp:548
 msgid ""
 "Adjust the <b>horizontal rounding</b> radius; with <b>Ctrl</b> to make the "
 "vertical radius the same"
@@ -24599,7 +25015,7 @@ msgstr ""
 "Radius der <b>horizontalen Rundung</b> anpassen; <b>Strg</b> setzt vertikale "
 "und horizontale Rundung gleich"
 
-#: ../src/ui/shape-editor-knotholders.cpp:555
+#: ../src/ui/shape-editor-knotholders.cpp:553
 msgid ""
 "Adjust the <b>vertical rounding</b> radius; with <b>Ctrl</b> to make the "
 "horizontal radius the same"
@@ -24607,8 +25023,8 @@ msgstr ""
 "Radius der <b>vertikalen Rundung</b> anpassen; <b>Strg</b> setzt vertikale "
 "und horizontale Rundung gleich"
 
-#: ../src/ui/shape-editor-knotholders.cpp:560
-#: ../src/ui/shape-editor-knotholders.cpp:565
+#: ../src/ui/shape-editor-knotholders.cpp:558
+#: ../src/ui/shape-editor-knotholders.cpp:563
 msgid ""
 "Adjust the <b>width and height</b> of the rectangle; with <b>Ctrl</b> to "
 "lock ratio or stretch in one dimension only"
@@ -24616,14 +25032,14 @@ msgstr ""
 "<b>Höhe/Breite</b> des Rechtecks anpassen; <b>Strg</b> um Seitenverhältnis "
 "bei zu behalten oder nur in eine Richtung zu strecken"
 
-#: ../src/ui/shape-editor-knotholders.cpp:570
+#: ../src/ui/shape-editor-knotholders.cpp:568
 msgid "Drag to move the rectangle"
 msgstr ""
 
-#: ../src/ui/shape-editor-knotholders.cpp:827
-#: ../src/ui/shape-editor-knotholders.cpp:831
-#: ../src/ui/shape-editor-knotholders.cpp:835
-#: ../src/ui/shape-editor-knotholders.cpp:839
+#: ../src/ui/shape-editor-knotholders.cpp:825
+#: ../src/ui/shape-editor-knotholders.cpp:829
+#: ../src/ui/shape-editor-knotholders.cpp:833
+#: ../src/ui/shape-editor-knotholders.cpp:837
 msgid ""
 "Resize box in X/Y direction; with <b>Shift</b> along the Z axis; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
@@ -24631,10 +25047,10 @@ msgstr ""
 "Größe der Box in X/Y-Richtung ändern; mit <b>Umschalt</b> entlang der Z-"
 "Achse; Mit <b>Strg</b> auf Richtung der Seiten oder Diagonalen beschränkt"
 
-#: ../src/ui/shape-editor-knotholders.cpp:843
-#: ../src/ui/shape-editor-knotholders.cpp:847
-#: ../src/ui/shape-editor-knotholders.cpp:851
-#: ../src/ui/shape-editor-knotholders.cpp:855
+#: ../src/ui/shape-editor-knotholders.cpp:841
+#: ../src/ui/shape-editor-knotholders.cpp:845
+#: ../src/ui/shape-editor-knotholders.cpp:849
+#: ../src/ui/shape-editor-knotholders.cpp:853
 msgid ""
 "Resize box along the Z axis; with <b>Shift</b> in X/Y direction; with "
 "<b>Ctrl</b> to constrain to the directions of edges or diagonals"
@@ -24642,7 +25058,7 @@ msgstr ""
 "Größe der Box entlang der Z-Achse ändern; mit <b>Umschalt</b> in X/Y-"
 "Richtung; Mit <b>Strg</b> auf Richtung der Seiten und Diagonalen beschränkt"
 
-#: ../src/ui/shape-editor-knotholders.cpp:859
+#: ../src/ui/shape-editor-knotholders.cpp:857
 msgid "Move the box in perspective"
 msgstr "Bewegen der Box in der Perspektive"
 
@@ -24702,11 +25118,11 @@ msgstr ""
 msgid "Drag to move the star"
 msgstr ""
 
-#: ../src/ui/shape-editor-knotholders.cpp:1605
+#: ../src/ui/shape-editor-knotholders.cpp:1608
 msgid "Drag to move the spiral"
 msgstr ""
 
-#: ../src/ui/shape-editor-knotholders.cpp:1609
+#: ../src/ui/shape-editor-knotholders.cpp:1612
 msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
@@ -24714,7 +25130,7 @@ msgstr ""
 "Spirale von <b>innen</b> einrollen/ausrollen; Winkel mit <b>Strg</b> "
 "einrasten; <b>Alt</b> konvergiert/divergiert"
 
-#: ../src/ui/shape-editor-knotholders.cpp:1613
+#: ../src/ui/shape-editor-knotholders.cpp:1616
 msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Shift</b> to scale/rotate; with <b>Alt</b> to lock radius"
@@ -24722,19 +25138,19 @@ msgstr ""
 "Spirale von <b>außen</b> ausrollen/einrollen; Winkel mit <b>Strg</b> "
 "einrasten; <b>Umschalt</b> skaliert/rotiert; mit <b>Alt</b> Radius sperren"
 
-#: ../src/ui/shape-editor-knotholders.cpp:1665
+#: ../src/ui/shape-editor-knotholders.cpp:1668
 msgid "Adjust the <b>offset distance</b>"
 msgstr "<b>Versatz-Abstand</b> anpassen"
 
-#: ../src/ui/shape-editor-knotholders.cpp:1890
+#: ../src/ui/shape-editor-knotholders.cpp:1893
 msgid "Adjust the <b>rectangular</b> region of the text."
 msgstr ""
 
-#: ../src/ui/shape-editor-knotholders.cpp:1900
+#: ../src/ui/shape-editor-knotholders.cpp:1903
 msgid "Adjust the <b>inline size</b> (line length) of the text."
 msgstr ""
 
-#: ../src/ui/shape-editor-knotholders.cpp:1939
+#: ../src/ui/shape-editor-knotholders.cpp:1942
 msgid "Drag to resize the <b>flowed text frame</b>"
 msgstr "Ziehen, um die Größe des <b>Fließtext-Rahmens</b> zu ändern"
 
@@ -24786,97 +25202,97 @@ msgstr ""
 "<b>Bézier-Segment</b>: Ziehen, um das Segment zu formen, Doppelklick zum "
 "Einfügen eines Knotens oder Klicken zum Auswählen (mehr: Umschalt, Strg+Alt)"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:317
+#: ../src/ui/tool/multi-path-manipulator.cpp:324
 msgid "Retract handles"
 msgstr "Anfasser zurückziehen"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:317 ../src/ui/tool/node.cpp:315
+#: ../src/ui/tool/multi-path-manipulator.cpp:324 ../src/ui/tool/node.cpp:315
 #: ../src/ui/tool/node.cpp:340
 msgid "Change node type"
 msgstr "Knotentyp ändern"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:325
+#: ../src/ui/tool/multi-path-manipulator.cpp:332
 msgid "Straighten segments"
 msgstr "Segmente begradigen"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:327
+#: ../src/ui/tool/multi-path-manipulator.cpp:334
 msgid "Make segments curves"
 msgstr "Die gewählten Abschnitte in Kurven umwandeln"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:335
-#: ../src/ui/tool/multi-path-manipulator.cpp:349
+#: ../src/ui/tool/multi-path-manipulator.cpp:342
+#: ../src/ui/tool/multi-path-manipulator.cpp:356
 msgid "Add nodes"
 msgstr "Mehrere Knoten hinzufügen"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:341
+#: ../src/ui/tool/multi-path-manipulator.cpp:348
 msgid "Add extremum nodes"
 msgstr "Extremwert-Knoten hinzufügen"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:356
+#: ../src/ui/tool/multi-path-manipulator.cpp:363
 msgid "Duplicate nodes"
 msgstr "Knoten duplizieren"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:419
+#: ../src/ui/tool/multi-path-manipulator.cpp:426
 #: ../src/ui/toolbar/node-toolbar.cpp:156
 msgid "Join nodes"
 msgstr "Knoten verbinden"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:426
+#: ../src/ui/tool/multi-path-manipulator.cpp:433
 #: ../src/ui/toolbar/node-toolbar.cpp:164
 msgid "Break nodes"
 msgstr "Knoten unterbrechen"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:433
+#: ../src/ui/tool/multi-path-manipulator.cpp:440
 msgid "Delete nodes"
 msgstr "Knoten löschen"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:779
+#: ../src/ui/tool/multi-path-manipulator.cpp:786
 msgid "Move nodes"
 msgstr "Knoten verschieben"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:782
+#: ../src/ui/tool/multi-path-manipulator.cpp:789
 msgid "Move nodes horizontally"
 msgstr "Knoten horizontal verschieben"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:786
+#: ../src/ui/tool/multi-path-manipulator.cpp:793
 msgid "Move nodes vertically"
 msgstr "Knoten vertikal verschieben"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:790
-#: ../src/ui/tool/multi-path-manipulator.cpp:793
+#: ../src/ui/tool/multi-path-manipulator.cpp:797
+#: ../src/ui/tool/multi-path-manipulator.cpp:800
 msgid "Rotate nodes"
 msgstr "Knoten rotieren"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:797
-#: ../src/ui/tool/multi-path-manipulator.cpp:803
+#: ../src/ui/tool/multi-path-manipulator.cpp:804
+#: ../src/ui/tool/multi-path-manipulator.cpp:810
 msgid "Scale nodes uniformly"
 msgstr "Knoten skalieren"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:800
+#: ../src/ui/tool/multi-path-manipulator.cpp:807
 msgid "Scale nodes"
 msgstr "Knoten skalieren"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:807
+#: ../src/ui/tool/multi-path-manipulator.cpp:814
 msgid "Scale nodes horizontally"
 msgstr "Knoten horizontal skalieren"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:811
+#: ../src/ui/tool/multi-path-manipulator.cpp:818
 msgid "Scale nodes vertically"
 msgstr "Knoten vertikal skalieren"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:815
+#: ../src/ui/tool/multi-path-manipulator.cpp:822
 msgid "Skew nodes horizontally"
 msgstr "Knoten horizontal krümmen"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:819
+#: ../src/ui/tool/multi-path-manipulator.cpp:826
 msgid "Skew nodes vertically"
 msgstr "Knoten vertikal krümmen"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:823
+#: ../src/ui/tool/multi-path-manipulator.cpp:830
 msgid "Flip nodes horizontally"
 msgstr "Knoten Horizontal umkehren"
 
-#: ../src/ui/tool/multi-path-manipulator.cpp:826
+#: ../src/ui/tool/multi-path-manipulator.cpp:833
 msgid "Flip nodes vertically"
 msgstr "Knoten Vertikal umkehren"
 
@@ -25496,11 +25912,6 @@ msgstr "(horizontal)"
 msgid "(right edge up)"
 msgstr "(rechte Kante oben)"
 
-#: ../src/ui/toolbar/calligraphy-toolbar.cpp:154
-#: ../share/extensions/motion.inx:7 ../share/extensions/restack.inx:21
-msgid "Angle:"
-msgstr "Winkel:"
-
 #: ../src/ui/toolbar/calligraphy-toolbar.cpp:155
 msgid ""
 "The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if "
@@ -26002,22 +26413,6 @@ msgid ""
 msgstr ""
 "Objektrahmen (beschneidet unendliche Linien) entsprechend der aktuellen "
 "Auswahl setzen"
-
-#: ../src/ui/toolbar/lpe-toolbar.cpp:127
-msgid "Closed"
-msgstr "Geschlossen"
-
-#: ../src/ui/toolbar/lpe-toolbar.cpp:128
-msgid "Open start"
-msgstr "Offener Anfang"
-
-#: ../src/ui/toolbar/lpe-toolbar.cpp:129
-msgid "Open end"
-msgstr "Offenes Ende"
-
-#: ../src/ui/toolbar/lpe-toolbar.cpp:130
-msgid "Open both"
-msgstr "Öffne beide"
 
 #: ../src/ui/toolbar/lpe-toolbar.cpp:132
 msgid "Choose a line segment type"
@@ -27400,7 +27795,7 @@ msgid "Font style"
 msgstr "Schriftstil"
 
 #: ../src/ui/toolbar/text-toolbar.cpp:312
-#: ../src/ui/toolbar/text-toolbar.cpp:1955
+#: ../src/ui/toolbar/text-toolbar.cpp:1953
 #: ../src/ui/widget/font-selector.cpp:32 ../src/ui/widget/font-selector.cpp:145
 msgid "Font size"
 msgstr "Schriftgröße"
@@ -27963,7 +28358,7 @@ msgstr ""
 "Führungspfad. <b>Pfeiltasten</b> verändern Breite (links/rechts) und Winkel "
 "(hoch/runter)."
 
-#: ../src/ui/tools-switch.cpp:101 ../src/ui/tools/text-tool.cpp:1732
+#: ../src/ui/tools-switch.cpp:101 ../src/ui/tools/text-tool.cpp:1739
 msgid ""
 "<b>Click</b> to select or create text, <b>drag</b> to create flowed text; "
 "then type."
@@ -28489,7 +28884,7 @@ msgstr ""
 msgid "Create mesh"
 msgstr "Verlaufsgitter erstellen"
 
-#: ../src/ui/tools/node-tool.cpp:655
+#: ../src/ui/tools/node-tool.cpp:657
 msgctxt "Node tool tip"
 msgid ""
 "<b>Shift</b>: drag to add nodes to the selection, click to toggle object "
@@ -28498,19 +28893,19 @@ msgstr ""
 "<b>Umschalt</b>: Ziehen, um Knoten zur Auswahl hinzuzufügen. Klicken, um die "
 "Auswahl umzuschalten."
 
-#: ../src/ui/tools/node-tool.cpp:659
+#: ../src/ui/tools/node-tool.cpp:661
 msgctxt "Node tool tip"
 msgid "<b>Shift</b>: drag to add nodes to the selection"
 msgstr "<b>Umschalt</b>: Ziehen, um Knoten zur Auswahl hinzuzufügen"
 
-#: ../src/ui/tools/node-tool.cpp:688
+#: ../src/ui/tools/node-tool.cpp:690
 #, c-format
 msgid "<b>%u of %u</b> node selected."
 msgid_plural "<b>%u of %u</b> nodes selected."
 msgstr[0] "<b>%u von %u</b> Knoten ausgewählt."
 msgstr[1] "<b>%u von %u</b> Knoten ausgewählt."
 
-#: ../src/ui/tools/node-tool.cpp:695
+#: ../src/ui/tools/node-tool.cpp:697
 #, c-format
 msgctxt "Node tool tip"
 msgid "%s Drag to select nodes, click to edit only this object (more: Shift)"
@@ -28518,31 +28913,31 @@ msgstr ""
 "%s Ziehen, um Knoten auszuwählen. Klicken, um nur dieses Objekt zu "
 "bearbeiten (mehr: Umschalt)"
 
-#: ../src/ui/tools/node-tool.cpp:701
+#: ../src/ui/tools/node-tool.cpp:703
 #, c-format
 msgctxt "Node tool tip"
 msgid "%s Drag to select nodes, click clear the selection"
 msgstr "%s Ziehen, um Knoten auszuwählen. Klicken, um Auswahl zu löschen"
 
-#: ../src/ui/tools/node-tool.cpp:710
+#: ../src/ui/tools/node-tool.cpp:712
 msgctxt "Node tool tip"
 msgid "Drag to select nodes, click to edit only this object"
 msgstr ""
 "Ziehen, um Knoten auszuwählen. Klicken, um nur dieses Objekt zu bearbeiten."
 
-#: ../src/ui/tools/node-tool.cpp:713
+#: ../src/ui/tools/node-tool.cpp:715
 msgctxt "Node tool tip"
 msgid "Drag to select nodes, click to clear the selection"
 msgstr "Ziehen, um Knoten auszuwählen. Klicken, um Auswahl zu löschen"
 
-#: ../src/ui/tools/node-tool.cpp:718
+#: ../src/ui/tools/node-tool.cpp:720
 msgctxt "Node tool tip"
 msgid "Drag to select objects to edit, click to edit this object (more: Shift)"
 msgstr ""
 "Ziehen um Objekte zum Bearbeiten auszuwählen und Klicken, um das Objekt zu "
 "bearbeiten (mehr: Umschalt)"
 
-#: ../src/ui/tools/node-tool.cpp:721
+#: ../src/ui/tools/node-tool.cpp:723
 msgctxt "Node tool tip"
 msgid "Drag to select objects to edit"
 msgstr "Ziehen, um Objekte zum Bearbeiten auszuwählen"
@@ -28592,7 +28987,7 @@ msgstr ""
 "<b>Klick</b> oder <b>Klick und Ziehen</b>, um den Pfad von diesem Punkt aus "
 "fortzusetzen. Umschalt+Klick um spitzen Knoten zu erzeugen"
 
-#: ../src/ui/tools/pen-tool.cpp:1796
+#: ../src/ui/tools/pen-tool.cpp:1795
 #, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;; with <b>Shift+Click</b> cusp node,"
@@ -28602,7 +28997,7 @@ msgstr ""
 "spitzen Winkel; <b>Eingabe</b> oder<b>Umschalt+Eingabe</b> schließen den "
 "Pfad ab"
 
-#: ../src/ui/tools/pen-tool.cpp:1797
+#: ../src/ui/tools/pen-tool.cpp:1796
 #, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;; with <b>Shift+Click</b> cusp node,"
@@ -28612,7 +29007,7 @@ msgstr ""
 "spitzen Winkel; <b>Eingabe</b> oder <b>Umschalt+Eingabe</b> schließen den "
 "Pfad ab"
 
-#: ../src/ui/tools/pen-tool.cpp:1801
+#: ../src/ui/tools/pen-tool.cpp:1800
 #, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -28621,7 +29016,7 @@ msgstr ""
 "<b>Kurvensegment</b>: Winkel %3.2f&#176;, Abstand %s; <b>Strg</b> rastet den "
 "Winkel ein; <b>Eingabe</b> oder <b>Umschalt+Eingabe</b> schließen den Pfad ab"
 
-#: ../src/ui/tools/pen-tool.cpp:1802
+#: ../src/ui/tools/pen-tool.cpp:1801
 #, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
@@ -28630,7 +29025,7 @@ msgstr ""
 "<b>Liniensegment</b>: Winkel %3.2f&#176;, Abstand %s; <b>Strg</b> rastet den "
 "Winkel ein; <b>Eingabe</b> oder <b>Umschalt+Eingabe</b> schließen den Pfad ab"
 
-#: ../src/ui/tools/pen-tool.cpp:1820
+#: ../src/ui/tools/pen-tool.cpp:1819
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -28639,7 +29034,7 @@ msgstr ""
 "<b>Kurvenanfasser</b>: Winkel %3.2f°; Länge %s; Winkel mit <b>Strg</b> "
 "einrasten"
 
-#: ../src/ui/tools/pen-tool.cpp:1844
+#: ../src/ui/tools/pen-tool.cpp:1843
 #, c-format
 msgid ""
 "<b>Curve handle, symmetric</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</"
@@ -28648,7 +29043,7 @@ msgstr ""
 "<b>Symmetrischer Kurvenanfasser</b>: Winkel %3.2f&#176;, Länge %s; <b>Strg</"
 "b> rastet den Winkel ein; <b>Umschalt</b> bewegt nur diesen Anfasser"
 
-#: ../src/ui/tools/pen-tool.cpp:1845
+#: ../src/ui/tools/pen-tool.cpp:1844
 #, c-format
 msgid ""
 "<b>Curve handle</b>: angle %3.2f&#176;, length %s; with <b>Ctrl</b> to snap "
@@ -28658,7 +29053,7 @@ msgstr ""
 "Winkel ein; <b>Umschalt</b> bewegt nur diesen Anfasser"
 
 # not sure here -cm-
-#: ../src/ui/tools/pen-tool.cpp:1988
+#: ../src/ui/tools/pen-tool.cpp:1987
 msgid "Drawing finished"
 msgstr "Zeichnen beendet"
 
@@ -28804,22 +29199,22 @@ msgstr ""
 msgid "Selected object is not a group. Cannot enter."
 msgstr "Ausgewähltes Objekt ist keine Gruppe - kann diese nicht betreten."
 
-#: ../src/ui/tools/spiral-tool.cpp:249
+#: ../src/ui/tools/spiral-tool.cpp:250
 msgid "<b>Ctrl</b>: snap angle"
 msgstr "<b>Strg</b>: Winkel einrasten"
 
-#: ../src/ui/tools/spiral-tool.cpp:251
+#: ../src/ui/tools/spiral-tool.cpp:252
 msgid "<b>Alt</b>: lock spiral radius"
 msgstr "<b>Alt</b>: Radius der Spirale einrasten"
 
-#: ../src/ui/tools/spiral-tool.cpp:381
-#, c-format
+#: ../src/ui/tools/spiral-tool.cpp:385
+#, fuzzy, c-format
 msgid ""
-"<b>Spiral</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"
+"<b>Spiral</b>: radius %s, angle %.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr ""
 "<b>Spirale</b>: Radius %s, Winkel %5g&#176;; Winkel mit <b>Strg</b> einrasten"
 
-#: ../src/ui/tools/spiral-tool.cpp:402
+#: ../src/ui/tools/spiral-tool.cpp:406
 msgid "Create spiral"
 msgstr "Spirale erstellen"
 
@@ -28869,24 +29264,25 @@ msgstr "<b>Nichts ausgewählt!</b> Wähle Objekte zum Sprühen aus."
 msgid "Spray in single path"
 msgstr "Sprühen in einen einzelnen Pfad"
 
-#: ../src/ui/tools/star-tool.cpp:258
+#: ../src/ui/tools/star-tool.cpp:259
 msgid "<b>Ctrl</b>: snap angle; keep rays radial"
 msgstr "<b>Strg</b>: Winkel einrasten; Strahlen bleiben radial ausgerichtet"
 
-#: ../src/ui/tools/star-tool.cpp:395
-#, c-format
+#: ../src/ui/tools/star-tool.cpp:397
+#, fuzzy, c-format
 msgid ""
-"<b>Polygon</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"
+"<b>Polygon</b>: radius %s, angle %.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr ""
 "<b>Polygon</b>: Radius %s, Winkel %5g°; Winkel mit <b>Strg</b> einrasten"
 
-#: ../src/ui/tools/star-tool.cpp:396
-#, c-format
-msgid "<b>Star</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle"
+#: ../src/ui/tools/star-tool.cpp:398
+#, fuzzy, c-format
+msgid ""
+"<b>Star</b>: radius %s, angle %.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr ""
 "<b>Stern</b>: Radius %s, Winkel %5g&#176;; Winkel mit <b>Strg</b> einrasten"
 
-#: ../src/ui/tools/star-tool.cpp:421
+#: ../src/ui/tools/star-tool.cpp:423
 msgid "Create star"
 msgstr "Stern erstellen"
 
@@ -29017,7 +29413,7 @@ msgstr "Zeichenabstand vergrößern"
 msgid "Paste text"
 msgstr "Text einfügen"
 
-#: ../src/ui/tools/text-tool.cpp:1705
+#: ../src/ui/tools/text-tool.cpp:1712
 #, c-format
 msgid ""
 "Type or edit flowed text (%d character%s); <b>Enter</b> to start new "
@@ -29032,7 +29428,7 @@ msgstr[1] ""
 "Fließtext schreiben (%d Zeichen%s); <b>Eingabe</b>, um einen neuen Absatz zu "
 "beginnen."
 
-#: ../src/ui/tools/text-tool.cpp:1724
+#: ../src/ui/tools/text-tool.cpp:1731
 #, c-format
 msgid "Type or edit text (%d character%s); <b>Enter</b> to start new line."
 msgid_plural ""
@@ -29044,7 +29440,7 @@ msgstr[1] ""
 "Text eintippen oder bearbeiten (%d Zeichen%s); <b>Eingabe</b>, um eine neue "
 "Zeile zu beginnen."
 
-#: ../src/ui/tools/text-tool.cpp:1840
+#: ../src/ui/tools/text-tool.cpp:1847
 msgid "Type text"
 msgstr "Text eingeben"
 
@@ -33524,22 +33920,22 @@ msgstr "Stil von neuen Farbeimer-Objekten"
 msgid "Live Path Effects Selector"
 msgstr "Nächster Pfadeffekt-Parameter"
 
-#: ../share/ui/dialog-livepatheffect-add.glade:273
+#: ../share/ui/dialog-livepatheffect-add.glade:266
 #, fuzzy
 msgid "Show Experimental"
 msgstr "Original auswählen"
 
-#: ../share/ui/dialog-livepatheffect-add.glade:298
+#: ../share/ui/dialog-livepatheffect-add.glade:291
 #, fuzzy
 msgid "Message"
 msgstr "Meldungen"
 
-#: ../share/ui/dialog-livepatheffect-add.glade:529
+#: ../share/ui/dialog-livepatheffect-effect.glade:77
 #, fuzzy
 msgid "LPEName"
 msgstr "Name"
 
-#: ../share/ui/dialog-livepatheffect-add.glade:565
+#: ../share/ui/dialog-livepatheffect-effect.glade:113
 msgid "Experimental"
 msgstr ""
 
@@ -42199,24 +42595,27 @@ msgstr ""
 msgid "Half of font height"
 msgstr ""
 
-#~ msgid "Length left:"
-#~ msgstr "Länge links:"
+#~ msgid "  location: "
+#~ msgstr "  Speicherort: "
 
-#~ msgid "Specifies the left end of the bisector"
-#~ msgstr "Legt das linke Ende der Halbierenden fest"
+#~ msgid "Extension \""
+#~ msgstr "Erweiterung „"
 
-#~ msgid "Length right:"
-#~ msgstr "Länge rechts:"
-
-#~ msgid "Specifies the right end of the bisector"
-#~ msgstr "Legt das rechte Ende der Halbierenden fest"
-
-#~ msgid "Adjust the \"left\" end of the bisector"
-#~ msgstr "Einstellen des \"linken\" Endes der Halbierenden"
-
-#, fuzzy
-#~ msgid "Adjust the \"right\" end of the bisector"
-#~ msgstr "Einstellen des \"rechten\" Endes der Halbierenden"
+#~ msgid ""
+#~ "The 'image-rendering' property can influence how a bitmap is up-scaled:\n"
+#~ "\t'auto' no preference;\n"
+#~ "\t'optimizeQuality' smooth;\n"
+#~ "\t'optimizeSpeed' blocky.\n"
+#~ "Note that this behaviour is not defined in the SVG 1.1 specification and "
+#~ "not all browsers follow this interpretation."
+#~ msgstr ""
+#~ "Die 'Bild-Darstellung' Eigenschaft kann die Vergrößerung von Bitmaps "
+#~ "beeinflussen: \n"
+#~ "\t'auto' keine Vorgabe;\n"
+#~ "\t'Qualität optimieren' glatter;\n"
+#~ "\t'Geschwindigkeit optimieren' pixeliger.\n"
+#~ "Beachte, dass dieses Verhalten nicht in der SVG 1.1 Spezifikation "
+#~ "definiert ist und nicht von allen Browsern unterstützt wird."
 
 #~ msgid "Elliptic Pen"
 #~ msgstr "Elliptischer Stift"
@@ -42226,9 +42625,6 @@ msgstr ""
 
 #~ msgid "Thick-Thin strokes (slow)"
 #~ msgstr "Dick-Dünn-Striche (langsam)"
-
-#~ msgid "Sharp"
-#~ msgstr "Schärfen"
 
 #~ msgid "Choose pen type"
 #~ msgstr "Wähle den Stifttyp"
@@ -42392,31 +42788,6 @@ msgstr ""
 #~ msgid "Control handle 15"
 #~ msgstr "Knotenanfasser verschieben"
 
-#~ msgid "End type:"
-#~ msgstr "Endtyp:"
-
-#~ msgid "Determines on which side the line or line segment is infinite."
-#~ msgstr "Bestimmt, welche Seite der Linie oder des Segments unendlich ist."
-
-#, fuzzy
-#~ msgid "Offset point"
-#~ msgstr "Versatzpunkte"
-
-#~ msgid "Adjust the offset"
-#~ msgstr "<b>Versatz-Abstand</b> anpassen"
-
-#~ msgid "Specifies the left end of the parallel"
-#~ msgstr "Legt das linke Ende der Parallele fest"
-
-#~ msgid "Specifies the right end of the parallel"
-#~ msgstr "Legt das linke Ende der Parallele fest"
-
-#~ msgid "Adjust the \"left\" end of the parallel"
-#~ msgstr "Einstellen des \"linken\" Endes der Parallele"
-
-#~ msgid "Adjust the \"right\" end of the parallel"
-#~ msgstr "Einstellen des \"rechten\" Endes der Parallele"
-
 #, fuzzy
 #~ msgid "Display unit"
 #~ msgstr "Anzeige_einheiten:"
@@ -42435,29 +42806,6 @@ msgstr ""
 
 #~ msgid "just a real number like 1.4!"
 #~ msgstr "Nur reelle Zahlen wie 1,4!"
-
-#~ msgid "Additional angle between tangent and curve"
-#~ msgstr "Winkel, um den Tangente zu Kurve gedreht wird."
-
-#~ msgid "Location along curve:"
-#~ msgstr "Ort des Benutzer-Caches"
-
-#~ msgid "Specifies the left end of the tangent"
-#~ msgstr "Legt das linke Ende der Tangente fest"
-
-#~ msgid "Specifies the right end of the tangent"
-#~ msgstr "Legt das rechte Ende der Tangente fest"
-
-#~ msgid "Adjust the point of attachment of the tangent"
-#~ msgstr "Zwischenfarbe des Farbverlaufs bearbeiten"
-
-#, fuzzy
-#~ msgid "Adjust the <b>left</b> end of the tangent"
-#~ msgstr "Einstellen des \"rechten\" Endes der Tangente"
-
-#, fuzzy
-#~ msgid "Adjust the <b>right</b> end of the tangent"
-#~ msgstr "Einstellen des \"rechten\" Endes der Tangente"
 
 #, fuzzy
 #~ msgid "Stack step:"
@@ -43485,10 +43833,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "measure.py"
 #~ msgstr "Maßstab"
-
-#, fuzzy
-#~ msgid "motion.py"
-#~ msgstr "Bewegung"
 
 #, fuzzy
 #~ msgid "n"
@@ -45800,10 +46144,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Die obigen Textgrößen-Einheiten vor dem Speichern immer in Pixel (px) "
 #~ "umwandeln"
-
-#~ msgctxt "Symbol"
-#~ msgid "Map Symbols"
-#~ msgstr "Symbol fallenlassen"
 
 #~ msgctxt "Symbol"
 #~ msgid "Bed and Breakfast"
