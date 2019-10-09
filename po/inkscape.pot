@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-10-09 15:17+0200\n"
+"POT-Creation-Date: 2019-10-09 23:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -9174,7 +9174,7 @@ msgid ""
 msgstr ""
 
 #: ../src/live_effects/effect.cpp:569
-msgid "Fillet/Chamfer"
+msgid "Corners (Fillet/Chamfer)"
 msgstr ""
 
 #: ../src/live_effects/effect.cpp:573
@@ -9625,7 +9625,7 @@ msgid "Boolean Operation"
 msgstr ""
 
 #: ../src/live_effects/lpe-bool.cpp:75
-msgid "Swap operands:"
+msgid "Swap operands"
 msgstr ""
 
 #: ../src/live_effects/lpe-bool.cpp:75
@@ -9633,7 +9633,7 @@ msgid "Swap operands (useful e.g. for difference)"
 msgstr ""
 
 #: ../src/live_effects/lpe-bool.cpp:76
-msgid "Hide Linked:"
+msgid "Hide Linked"
 msgstr ""
 
 #: ../src/live_effects/lpe-bool.cpp:76
@@ -9641,7 +9641,7 @@ msgid "Hide linked path"
 msgstr ""
 
 #: ../src/live_effects/lpe-bool.cpp:78
-msgid "Remove inner:"
+msgid "Remove inner"
 msgstr ""
 
 #: ../src/live_effects/lpe-bool.cpp:79
@@ -27085,53 +27085,53 @@ msgstr ""
 msgid "Create mesh"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:657
+#: ../src/ui/tools/node-tool.cpp:664
 msgctxt "Node tool tip"
 msgid ""
 "<b>Shift</b>: drag to add nodes to the selection, click to toggle object "
 "selection"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:661
+#: ../src/ui/tools/node-tool.cpp:668
 msgctxt "Node tool tip"
 msgid "<b>Shift</b>: drag to add nodes to the selection"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:690
+#: ../src/ui/tools/node-tool.cpp:697
 #, c-format
 msgid "<b>%u of %u</b> node selected."
 msgid_plural "<b>%u of %u</b> nodes selected."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/ui/tools/node-tool.cpp:697
+#: ../src/ui/tools/node-tool.cpp:704
 #, c-format
 msgctxt "Node tool tip"
 msgid "%s Drag to select nodes, click to edit only this object (more: Shift)"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:703
+#: ../src/ui/tools/node-tool.cpp:710
 #, c-format
 msgctxt "Node tool tip"
 msgid "%s Drag to select nodes, click clear the selection"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:712
+#: ../src/ui/tools/node-tool.cpp:719
 msgctxt "Node tool tip"
 msgid "Drag to select nodes, click to edit only this object"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:715
+#: ../src/ui/tools/node-tool.cpp:722
 msgctxt "Node tool tip"
 msgid "Drag to select nodes, click to clear the selection"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:720
+#: ../src/ui/tools/node-tool.cpp:727
 msgctxt "Node tool tip"
 msgid "Drag to select objects to edit, click to edit this object (more: Shift)"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:723
+#: ../src/ui/tools/node-tool.cpp:730
 msgctxt "Node tool tip"
 msgid "Drag to select objects to edit"
 msgstr ""
