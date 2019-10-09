@@ -72,10 +72,10 @@ LPEBool::LPEBool(LivePathEffectObject *lpeobject)
     : Effect(lpeobject)
     , operand_path(_("Operand path:"), _("Operand for the boolean operation"), "operand-path", &wr, this)
     , bool_operation(_("Operation:"), _("Boolean Operation"), "operation", BoolOpConverter, &wr, this, bool_op_ex_union)
-    , swap_operands(_("Swap operands:"), _("Swap operands (useful e.g. for difference)"), "swap-operands", &wr, this)
-    , hide_linked(_("Hide Linked:"), _("Hide linked path"), "hide-linked", &wr, this, true)
+    , swap_operands(_("Swap operands"), _("Swap operands (useful e.g. for difference)"), "swap-operands", &wr, this)
+    , hide_linked(_("Hide Linked"), _("Hide linked path"), "hide-linked", &wr, this, true)
     , rmv_inner(
-          _("Remove inner:"),
+          _("Remove inner"),
           _("For cut operations: remove inner (non-contour) lines of cutting path to avoid invisible extra points"),
           "rmv-inner", &wr, this)
     , fill_type_this(_("Fill type this:"), _("Fill type (winding mode) for this path"), "filltype-this",
