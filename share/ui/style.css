@@ -114,7 +114,7 @@
     caret-color: @theme_base_color;
     -gtk-secondary-caret-color: @theme_base_color;
 }
-.dark .combobright box{
+.dark .combobright box *{
     color: @theme_base_color;
 }
 .dark .combobright .combo *,
