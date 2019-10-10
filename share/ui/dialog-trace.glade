@@ -858,7 +858,7 @@ Output
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Preserve staircaseing artifacts</property>
+                    <property name="tooltip_text" translatable="yes">Preserve staircasing artifacts</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">RB_PA_voronoi</property>

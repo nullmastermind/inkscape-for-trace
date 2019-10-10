@@ -132,13 +132,13 @@ static std::map<GUnicodeScript, Glib::ustring> & getScriptToName()
         mappings[G_UNICODE_SCRIPT_LYCIAN]               = _("Lycian");
         mappings[G_UNICODE_SCRIPT_LYDIAN]               = _("Lydian");
         mappings[G_UNICODE_SCRIPT_AVESTAN]              = _("Avestan");                 // Since: 2.26
-        mappings[G_UNICODE_SCRIPT_BAMUM]                = _("Bamum. ");                 // Since: 2.26
+        mappings[G_UNICODE_SCRIPT_BAMUM]                = _("Bamum");                 // Since: 2.26
         mappings[G_UNICODE_SCRIPT_EGYPTIAN_HIEROGLYPHS] = _("Egyptian Hieroglpyhs");    // Since: 2.26
         mappings[G_UNICODE_SCRIPT_IMPERIAL_ARAMAIC]     = _("Imperial Aramaic");        // Since: 2.26
         mappings[G_UNICODE_SCRIPT_INSCRIPTIONAL_PAHLAVI]= _("Inscriptional Pahlavi");   // Since: 2.26
         mappings[G_UNICODE_SCRIPT_INSCRIPTIONAL_PARTHIAN]= _("Inscriptional Parthian"); // Since: 2.26
         mappings[G_UNICODE_SCRIPT_JAVANESE]             = _("Javanese");                // Since: 2.26
-        mappings[G_UNICODE_SCRIPT_KAITHI]               = _("Kaithi.");                 // Since: 2.26
+        mappings[G_UNICODE_SCRIPT_KAITHI]               = _("Kaithi");                 // Since: 2.26
         mappings[G_UNICODE_SCRIPT_LISU]                 = _("Lisu");                    // Since: 2.26
         mappings[G_UNICODE_SCRIPT_MEETEI_MAYEK]         = _("Meetei Mayek");            // Since: 2.26
         mappings[G_UNICODE_SCRIPT_OLD_SOUTH_ARABIAN]    = _("Old South Arabian");       // Since: 2.26
