@@ -9,20 +9,20 @@
 # Meskó Balázs <mesko.balazs@fsf.hu>, 2018-2019.
 # Gyuris Gellért <bubu@ujevangelizacio.hu>, 2017-2019.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-10-09 15:17+0200\n"
-"PO-Revision-Date: 2017-08-20 17:58+0000\n"
+"POT-Creation-Date: 2019-10-10 21:27+0200\n"
+"PO-Revision-Date: 2019-10-10 21:48+0200\n"
 "Last-Translator: Gyuris Gellért <bubu@ujevangelizacio.hu>, 2019\n"
 "Language-Team: Hungarian (https://www.transifex.com/fsf-hu/teams/77907/hu/)\n"
-"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Gtranslator 3.32.0\n"
 
 #: ../share/filters/filters.svg.h:2
 msgid "Smart Jelly"
@@ -4106,8 +4106,8 @@ msgid "_Origin X:"
 msgstr "X-_origó:"
 
 #: ../src/display/canvas-axonomgrid.cpp:267 ../src/display/canvas-grid.cpp:657
-#: ../src/ui/dialog/inkscape-preferences.cpp:1335
-#: ../src/ui/dialog/inkscape-preferences.cpp:1360
+#: ../src/ui/dialog/inkscape-preferences.cpp:1337
+#: ../src/ui/dialog/inkscape-preferences.cpp:1362
 msgid "X coordinate of grid origin"
 msgstr "A rács origójának X koordinátája"
 
@@ -4116,8 +4116,8 @@ msgid "O_rigin Y:"
 msgstr "Y-o_rigó:"
 
 #: ../src/display/canvas-axonomgrid.cpp:270 ../src/display/canvas-grid.cpp:660
-#: ../src/ui/dialog/inkscape-preferences.cpp:1336
-#: ../src/ui/dialog/inkscape-preferences.cpp:1361
+#: ../src/ui/dialog/inkscape-preferences.cpp:1338
+#: ../src/ui/dialog/inkscape-preferences.cpp:1363
 msgid "Y coordinate of grid origin"
 msgstr "A rács origójának Y koordinátája"
 
@@ -4126,29 +4126,29 @@ msgid "Spacing _Y:"
 msgstr "_Y-távolság:"
 
 #: ../src/display/canvas-axonomgrid.cpp:273
-#: ../src/ui/dialog/inkscape-preferences.cpp:1364
+#: ../src/ui/dialog/inkscape-preferences.cpp:1366
 msgid "Base length of z-axis"
 msgstr "A z tengely alaphosszúsága"
 
 #: ../src/display/canvas-axonomgrid.cpp:276
-#: ../src/ui/dialog/inkscape-preferences.cpp:1367
+#: ../src/ui/dialog/inkscape-preferences.cpp:1369
 #: ../src/ui/toolbar/box3d-toolbar.cpp:77
 msgid "Angle X:"
 msgstr "X-szög:"
 
 #: ../src/display/canvas-axonomgrid.cpp:276
-#: ../src/ui/dialog/inkscape-preferences.cpp:1367
+#: ../src/ui/dialog/inkscape-preferences.cpp:1369
 msgid "Angle of x-axis"
 msgstr "Az x tengely szöge"
 
 #: ../src/display/canvas-axonomgrid.cpp:278
-#: ../src/ui/dialog/inkscape-preferences.cpp:1368
+#: ../src/ui/dialog/inkscape-preferences.cpp:1370
 #: ../src/ui/toolbar/box3d-toolbar.cpp:140
 msgid "Angle Z:"
 msgstr "Z-szög:"
 
 #: ../src/display/canvas-axonomgrid.cpp:278
-#: ../src/ui/dialog/inkscape-preferences.cpp:1368
+#: ../src/ui/dialog/inkscape-preferences.cpp:1370
 msgid "Angle of z-axis"
 msgstr "A z tengely szöge"
 
@@ -4157,7 +4157,7 @@ msgid "Minor grid line _color:"
 msgstr "Alrácsvonalak színe:"
 
 #: ../src/display/canvas-axonomgrid.cpp:281 ../src/display/canvas-grid.cpp:670
-#: ../src/ui/dialog/inkscape-preferences.cpp:1319
+#: ../src/ui/dialog/inkscape-preferences.cpp:1321
 msgid "Minor grid line color"
 msgstr "Alrácsvonalak színe"
 
@@ -4170,7 +4170,7 @@ msgid "Ma_jor grid line color:"
 msgstr "A fő-rácsvonalak szí_ne:"
 
 #: ../src/display/canvas-axonomgrid.cpp:284 ../src/display/canvas-grid.cpp:674
-#: ../src/ui/dialog/inkscape-preferences.cpp:1321
+#: ../src/ui/dialog/inkscape-preferences.cpp:1323
 msgid "Major grid line color"
 msgstr "A fő-rácsvonalak színe"
 
@@ -4249,12 +4249,12 @@ msgid "Spacing _X:"
 msgstr "_X-távolság:"
 
 #: ../src/display/canvas-grid.cpp:663
-#: ../src/ui/dialog/inkscape-preferences.cpp:1341
+#: ../src/ui/dialog/inkscape-preferences.cpp:1343
 msgid "Distance between vertical grid lines"
 msgstr "A függőleges rácsvonalak közti távolság"
 
 #: ../src/display/canvas-grid.cpp:666
-#: ../src/ui/dialog/inkscape-preferences.cpp:1342
+#: ../src/ui/dialog/inkscape-preferences.cpp:1344
 msgid "Distance between horizontal grid lines"
 msgstr "A vízszintes rácsvonalak közti távolság"
 
@@ -4496,24 +4496,20 @@ msgid "_Redo"
 msgstr "Új_ra végrehajtás"
 
 #: ../src/extension/dependency.cpp:250
-#, fuzzy
 msgid "Dependency"
-msgstr "Függőség:"
+msgstr "Függőség"
 
 #: ../src/extension/dependency.cpp:251
-#, fuzzy
 msgid "type"
-msgstr "  típus: "
+msgstr "típus"
 
 #: ../src/extension/dependency.cpp:252
-#, fuzzy
 msgid "location"
-msgstr "Elhelyezkedés X"
+msgstr "elhelyezkedés"
 
 #: ../src/extension/dependency.cpp:253
-#, fuzzy
 msgid "string"
-msgstr "  szöveg: "
+msgstr "szöveg"
 
 #: ../src/extension/dependency.cpp:256
 msgid "  description: "
@@ -4573,9 +4569,8 @@ msgid "a dependency was not met."
 msgstr "egy függőség nem teljesül."
 
 #: ../src/extension/extension.cpp:326
-#, fuzzy
 msgid "Extension \"%1\" failed to load because %2"
-msgstr "” kiterjesztést nem sikerült betölteni, mivel "
+msgstr "„%1” kiterjesztést nem sikerült betölteni: %2"
 
 #: ../src/extension/extension.cpp:695
 #, c-format
@@ -5123,7 +5118,8 @@ msgstr ""
 msgid "Reduce Noise"
 msgstr "Zaj csökkentése"
 
-#. TRANSLATORS: Paint order determines the order the 'fill', 'stroke', and 'markers are painted.
+#. TRANSLATORS: Paint order determines the order the 'fill', 'stroke', and
+#. 'markers are painted.
 #: ../src/extension/internal/bitmap/reduceNoise.cpp:43
 #: ../src/widgets/stroke-style.cpp:353
 #: ../share/extensions/jessyInk_effects.inx:9
@@ -5655,7 +5651,7 @@ msgstr "Megvilágítási szín"
 #: ../src/extension/internal/filter/transparency.h:215
 #: ../src/extension/internal/filter/transparency.h:288
 #: ../src/extension/internal/filter/transparency.h:350
-#: ../src/ui/dialog/inkscape-preferences.cpp:2414
+#: ../src/ui/dialog/inkscape-preferences.cpp:2416
 msgid "Filters"
 msgstr "Szűrők"
 
@@ -5873,7 +5869,7 @@ msgstr "Színkeverési típus:"
 #: ../src/extension/internal/filter/textures.h:78
 #: ../src/extension/internal/filter/transparency.h:62
 #: ../src/filter-enums.cpp:53 ../src/live_effects/lpe-copy_rotate.cpp:41
-#: ../src/ui/dialog/inkscape-preferences.cpp:1238
+#: ../src/ui/dialog/inkscape-preferences.cpp:1240
 #: ../share/extensions/empty_generic.inx:20
 #: ../share/extensions/empty_page.inx:22
 msgid "Normal"
@@ -6168,7 +6164,7 @@ msgstr "Csatorna festés"
 #: ../src/extension/internal/filter/color.h:334
 #: ../src/extension/internal/filter/color.h:1575
 #: ../src/extension/internal/filter/paint.h:88 ../src/filter-enums.cpp:67
-#: ../src/ui/dialog/inkscape-preferences.cpp:1558
+#: ../src/ui/dialog/inkscape-preferences.cpp:1560
 #: ../src/ui/tools/flood-tool.cpp:94
 #: ../src/ui/widget/color-icc-selector.cpp:170
 #: ../src/ui/widget/color-icc-selector.cpp:175
@@ -6856,7 +6852,7 @@ msgstr "Külső"
 #: ../src/extension/internal/filter/morphology.h:64
 #: ../src/ui/widget/preferences-widget.cpp:884
 msgid "Open"
-msgstr "Nyílt"
+msgstr "Megnyitás"
 
 #: ../src/extension/internal/filter/morphology.h:66
 #: ../src/ui/tools/measure-tool.cpp:1233 ../src/ui/widget/page-sizer.cpp:59
@@ -7459,15 +7455,15 @@ msgstr ""
 "mozgatni."
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:199
-#: ../src/ui/dialog/inkscape-preferences.cpp:2100
-#: ../src/ui/dialog/inkscape-preferences.cpp:2107
+#: ../src/ui/dialog/inkscape-preferences.cpp:2102
+#: ../src/ui/dialog/inkscape-preferences.cpp:2109
 msgid "Embed"
 msgstr "Beágyaz"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:200
 #: ../src/object/sp-anchor.cpp:141
-#: ../src/ui/dialog/inkscape-preferences.cpp:2100
-#: ../src/ui/dialog/inkscape-preferences.cpp:2107
+#: ../src/ui/dialog/inkscape-preferences.cpp:2102
+#: ../src/ui/dialog/inkscape-preferences.cpp:2109
 msgid "Link"
 msgstr "Hivatkozás"
 
@@ -7507,19 +7503,19 @@ msgstr ""
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:209
 #: ../src/extension/internal/svg.cpp:684
-#: ../src/ui/dialog/inkscape-preferences.cpp:2114
+#: ../src/ui/dialog/inkscape-preferences.cpp:2116
 msgid "None (auto)"
 msgstr "Nincs (automatikus)"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:210
 #: ../src/extension/internal/svg.cpp:685
-#: ../src/ui/dialog/inkscape-preferences.cpp:2114
+#: ../src/ui/dialog/inkscape-preferences.cpp:2116
 msgid "Smooth (optimizeQuality)"
 msgstr "Simított (optimizeQuality)"
 
 #: ../src/extension/internal/gdkpixbuf-input.cpp:211
 #: ../src/extension/internal/svg.cpp:686
-#: ../src/ui/dialog/inkscape-preferences.cpp:2114
+#: ../src/ui/dialog/inkscape-preferences.cpp:2116
 msgid "Blocky (optimizeSpeed)"
 msgstr "Darabos (optimizeSpeed)"
 
@@ -7573,7 +7569,7 @@ msgid "Vertical Offset:"
 msgstr "Függőleges eltolás:"
 
 #: ../src/extension/internal/grid.cpp:203
-#: ../src/ui/dialog/inkscape-preferences.cpp:2128
+#: ../src/ui/dialog/inkscape-preferences.cpp:2130
 #: ../share/extensions/draw_from_triangle.inx:71
 #: ../share/extensions/foldablebox.inx:22 ../share/extensions/frame.inx:25
 #: ../share/extensions/funcplot.inx:50
@@ -7602,7 +7598,7 @@ msgstr "Megjelenítés"
 
 #: ../src/extension/internal/grid.cpp:204
 #: ../src/ui/dialog/document-properties.cpp:151
-#: ../src/ui/dialog/inkscape-preferences.cpp:1376
+#: ../src/ui/dialog/inkscape-preferences.cpp:1378
 #: ../src/ui/toolbar/snap-toolbar.cpp:181
 #: ../share/extensions/grid_cartesian.inx:67
 #: ../share/extensions/grid_isometric.inx:19
@@ -7643,7 +7639,8 @@ msgid "OpenDocument drawing file"
 msgstr "OpenDocument-rajzfájl"
 
 #. TRANSLATORS: The following are document crop settings for PDF import
-#. more info: http://www.acrobatusers.com/tech_corners/javascript_corner/tips/2006/page_bounds/
+#. more info:
+#. http://www.acrobatusers.com/tech_corners/javascript_corner/tips/2006/page_bounds/
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:92
 msgid "media box"
 msgstr "adathordozó (media)-téglalap"
@@ -8071,7 +8068,8 @@ msgstr "Készüljön biztonsági másolat ugyanabban a mappában."
 msgid "More details..."
 msgstr "További részletek..."
 
-#. TRANSLATORS: Please don't translate link unless the page exists in your language. Add your language
+#. TRANSLATORS: Please don't translate link unless the page exists in your
+#. language. Add your language
 #. code to the link this way: https://inkscape.org/[lang]/learn/faq#dpi_change
 #: ../src/file-update.cpp:411
 msgid ""
@@ -8242,12 +8240,13 @@ msgid "Saving document..."
 msgstr "Dokumentum mentése..."
 
 #. TRANSLATORS: 'en' is an ISO 639-1 language code.
-#. Replace with language code for your language, i.e. the name of your .po file
+#. Replace with language code for your language, i.e. the name of your .po
+#. file
 #: ../src/file.cpp:893 ../src/io/resource.cpp:152 ../src/io/resource.cpp:157
 msgid "en"
 msgstr "hu"
 
-#: ../src/file.cpp:1163 ../src/ui/dialog/inkscape-preferences.cpp:2091
+#: ../src/file.cpp:1163 ../src/ui/dialog/inkscape-preferences.cpp:2093
 #: ../src/ui/dialog/ocaldialogs.cpp:1087
 msgid "Import"
 msgstr "Importálás"
@@ -8568,7 +8567,8 @@ msgstr "Színátmenet egy vagy több közbenső fázisának áthelyezése"
 msgid "Delete gradient stop(s)"
 msgstr "Színátmenet egy vagy több fázisának törlése"
 
-#. TRANSLATORS: Please don't translate link unless the page exists in your language. Add your language code to
+#. TRANSLATORS: Please don't translate link unless the page exists in your
+#. language. Add your language code to
 #. the link this way: https://inkscape.org/[lang]/learn/tutorials/
 #: ../src/help.cpp:48
 msgid ""
@@ -8712,6 +8712,7 @@ msgstr ""
 
 #: ../src/inkscape-application.cpp:559
 #: ../src/ui/widget/rendering-options.cpp:34
+#: ../share/extensions/layer2png.inx:11
 msgid "DPI"
 msgstr "DPI"
 
@@ -8986,17 +8987,18 @@ msgstr "Inkview – SVG fájlmegjelenítő"
 
 #: ../src/inkview-application.cpp:67
 msgid "path1 [path2 pathN]]"
-msgstr ""
+msgstr "útvonal1 [útvonal2 útvonalN]"
 
 #: ../src/inkview-application.cpp:68
 msgid ""
 "Open one or more SVG files (or folders containing SVG files) for viewing."
 msgstr ""
+"Egy vagy több SVG-fájl (vagy SVG-fájlokat tartalmazó mappát) nyit meg "
+"megtekintésre."
 
 #: ../src/inkview-application.cpp:73
-#, fuzzy
 msgid "Print Inkview version"
-msgstr "Kiírás: Az Inkscape verziószáma."
+msgstr "Inkview verziószámának kiíratása"
 
 #: ../src/inkview-application.cpp:74
 msgid "Launch in fullscreen mode"
@@ -9461,8 +9463,8 @@ msgstr ""
 "vetülettel és több további beállítási lehetőséggel"
 
 #: ../src/live_effects/effect.cpp:569
-msgid "Fillet/Chamfer"
-msgstr "Lekerekítés és letörés"
+msgid "Corners (Fillet/Chamfer)"
+msgstr "Csúcsok (lekerekítés és letörés)"
 
 #: ../src/live_effects/effect.cpp:573
 msgid ""
@@ -9946,24 +9948,24 @@ msgid "Boolean Operation"
 msgstr "Logikai művelet"
 
 #: ../src/live_effects/lpe-bool.cpp:75
-msgid "Swap operands:"
-msgstr "Operátorok cseréje:"
+msgid "Swap operands"
+msgstr "Operátorok cseréje"
 
 #: ../src/live_effects/lpe-bool.cpp:75
 msgid "Swap operands (useful e.g. for difference)"
 msgstr "Operátorok felcserélése (hasznos pl. a különbség esetén)"
 
 #: ../src/live_effects/lpe-bool.cpp:76
-msgid "Hide Linked:"
-msgstr "Kapcsolt elrejtése:"
+msgid "Hide Linked"
+msgstr "Kapcsolt elrejtése"
 
 #: ../src/live_effects/lpe-bool.cpp:76
 msgid "Hide linked path"
 msgstr "Kapcsolt úvtonal elrejtése"
 
 #: ../src/live_effects/lpe-bool.cpp:78
-msgid "Remove inner:"
-msgstr "Belső eltávolítása:"
+msgid "Remove inner"
+msgstr "Belső eltávolítása"
 
 #: ../src/live_effects/lpe-bool.cpp:79
 msgid ""
@@ -11780,14 +11782,12 @@ msgid "Horizontal center"
 msgstr "Vízszintes középpont"
 
 #: ../src/live_effects/lpe-offset.cpp:82
-#, fuzzy
 msgid "Live update"
-msgstr "Élő előnézet"
+msgstr "Élő frissítés"
 
 #: ../src/live_effects/lpe-offset.cpp:82
-#, fuzzy
 msgid "Update while moving handle"
-msgstr "Frissítés a csomók mozgatása közben"
+msgstr "Frissítés a fogantyúk mozgatása közben"
 
 #: ../src/live_effects/lpe-offset.cpp:450
 msgid "Offset point"
@@ -12987,7 +12987,7 @@ msgid "Change index of knot"
 msgstr "Csomó kitevőjének módosítása"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:358
-#: ../src/ui/dialog/inkscape-preferences.cpp:2207
+#: ../src/ui/dialog/inkscape-preferences.cpp:2209
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:802
 #: ../src/ui/widget/preferences-widget.cpp:704
 msgid "Reset"
@@ -13089,7 +13089,7 @@ msgstr "Aktív"
 #: ../src/live_effects/parameter/originalitemarray.cpp:81
 #: ../src/live_effects/parameter/originalpatharray.cpp:104
 #: ../src/ui/dialog/attrdialog.cpp:108
-#: ../src/ui/dialog/inkscape-preferences.cpp:2162
+#: ../src/ui/dialog/inkscape-preferences.cpp:2164
 #: ../src/ui/widget/page-sizer.cpp:94 ../src/widgets/gradient-selector.cpp:139
 #: ../share/ui/dialog-livepatheffect-add.glade:397
 msgid "Name"
@@ -13355,10 +13355,12 @@ msgstr "Kör"
 msgid "Flow Region"
 msgstr "Tördelési terület"
 
-#. TRANSLATORS: A region "cut out of" a flow region; text is not allowed to flow inside the
+#. TRANSLATORS: A region "cut out of" a flow region; text is not allowed to
+#. flow inside the
 #. * flow excluded region.  flowRegionExclude in SVG 1.2: see
 #. * http://www.w3.org/TR/2004/WD-SVG12-20041027/flow.html#flowRegion-elem and
-#. * http://www.w3.org/TR/2004/WD-SVG12-20041027/flow.html#flowRegionExclude-elem.
+#. * http://www.w3.org/TR/2004/WD-SVG12-20041027/flow.html#flowRegionExclude-
+#. elem.
 #: ../src/object/sp-flowregion.cpp:319
 msgid "Flow Excluded Region"
 msgstr "Tördelésből kizárt terület"
@@ -13739,55 +13741,55 @@ msgstr "Pacás"
 msgid "Tracing"
 msgstr "Átrajzolás"
 
-#: ../src/preferences.cpp:116
+#: ../src/preferences.cpp:117
 msgid ""
 "Inkscape will run with default settings, and new settings will not be saved. "
 msgstr ""
 "Az Inkscape az alapértelmezett beállításokat fogja használni. Az új "
 "beállítások nem kerülnek mentésre. "
 
-#: ../src/preferences.cpp:132
+#: ../src/preferences.cpp:133
 #, c-format
 msgid "Cannot create profile directory %s."
 msgstr "Nem sikerült létrehozni %s nevű profilkönyvtárt."
 
-#: ../src/preferences.cpp:141
+#: ../src/preferences.cpp:142
 #, c-format
 msgid "%s is not a valid directory."
 msgstr "A(z) %s nem egy érvényes könyvtár."
 
-#: ../src/preferences.cpp:160
+#: ../src/preferences.cpp:161
 #, c-format
 msgid "Failed to create the preferences file %s."
 msgstr "Nem sikerült létrehozni %s beállításfájlt."
 
-#: ../src/preferences.cpp:196
+#: ../src/preferences.cpp:197
 #, c-format
 msgid "The preferences file %s is not a regular file."
 msgstr "A(z) %s beállításfájl nem szokványos fájl."
 
-#: ../src/preferences.cpp:206
+#: ../src/preferences.cpp:207
 #, c-format
 msgid "The preferences file %s could not be read."
 msgstr "Nem sikerült olvasni a(z) %s beállításfájlt."
 
-#: ../src/preferences.cpp:217
+#: ../src/preferences.cpp:218
 #, c-format
 msgid "The preferences file %s is not a valid XML document."
 msgstr "A(z) %s beállításfájl nem egy érvényes XML-dokumentum."
 
-#: ../src/preferences.cpp:226
+#: ../src/preferences.cpp:227
 #, c-format
 msgid "The file %s is not a valid Inkscape preferences file."
 msgstr "A(z) %s fájl nem egy érvényes Inkscape-beállításfájl."
 
-#: ../src/preferences.cpp:276
-msgid "Preferences file was deleted."
-msgstr "Beállításfájl törölve lett."
+#: ../src/preferences.cpp:286
+msgid "Preferences file was backed up to"
+msgstr "A beállításfájl le lett mentve:"
 
-#: ../src/preferences.cpp:277
-msgid "There was an error trying to delete the preferences file."
-msgstr "A beállításfájl törlése közben hiba történt."
+#: ../src/preferences.cpp:287
+msgid "There was an error trying to reset the preferences file."
+msgstr "A beállításfájl visszaállítása közben hiba történt."
 
 #: ../src/rdf.cpp:178
 msgid "CC Attribution"
@@ -13807,11 +13809,11 @@ msgstr "CC Attribution-NonCommercial (ne adja el)"
 
 #: ../src/rdf.cpp:198
 msgid "CC Attribution-NonCommercial-ShareAlike"
-msgstr "CC Attribution-NonCommercial-ShareAlike (ne adja el - így adja tovább)"
+msgstr "CC Attribution-NonCommercial-ShareAlike (ne adja el – így adja tovább)"
 
 #: ../src/rdf.cpp:203
 msgid "CC Attribution-NonCommercial-NoDerivs"
-msgstr "CC Attribution-NonCommercial-NoDerivs (ne adja el - ne változtassa)"
+msgstr "CC Attribution-NonCommercial-NoDerivs (ne adja el – ne változtassa)"
 
 #: ../src/rdf.cpp:208
 msgid "CC0 Public Domain Dedication"
@@ -13825,7 +13827,8 @@ msgstr "FreeArt"
 msgid "Open Font License"
 msgstr "Open Font License"
 
-#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/linking.html#AElementXLinkTitleAttribute
+#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-
+#. SVG-20000802/linking.html#AElementXLinkTitleAttribute
 #: ../src/rdf.cpp:238 ../src/ui/dialog/filedialogimpl-win32.cpp:1877
 #: ../src/ui/dialog/object-attributes.cpp:48
 msgid "Title:"
@@ -13902,7 +13905,7 @@ msgstr "Kapcsolat:"
 msgid "A related resource"
 msgstr "Egy kapcsolódó dokumentum"
 
-#: ../src/rdf.cpp:270 ../src/ui/dialog/inkscape-preferences.cpp:2502
+#: ../src/rdf.cpp:270 ../src/ui/dialog/inkscape-preferences.cpp:2504
 msgid "Language:"
 msgstr "Nyelv:"
 
@@ -13918,8 +13921,10 @@ msgstr "Kulcsszavak:"
 msgid "The topic of the resource"
 msgstr "A forrás témája"
 
-#. TRANSLATORS: "Coverage": the spatial or temporal characteristics of the content.
-#. For info, see Appendix D of http://www.w3.org/TR/1998/WD-rdf-schema-19980409/
+#. TRANSLATORS: "Coverage": the spatial or temporal characteristics of the
+#. content.
+#. For info, see Appendix D of http://www.w3.org/TR/1998/WD-rdf-
+#. schema-19980409/
 #: ../src/rdf.cpp:278
 msgid "Coverage:"
 msgstr "Lefedettség:"
@@ -14070,7 +14075,8 @@ msgstr "Jelölje ki a veremben feljebb helyezendő <b>objektumokat</b>."
 msgid "We hit top."
 msgstr "Elértük a tetejét."
 
-#. TRANSLATORS: undo history: "stack up" means to raise an object of its ordinal position by 1
+#. TRANSLATORS: undo history: "stack up" means to raise an object of its
+#. ordinal position by 1
 #: ../src/selection-chemistry.cpp:1178
 msgctxt "Undo action"
 msgid "stack up"
@@ -14084,7 +14090,8 @@ msgstr "Jelölje ki a veremben lejjebb helyezendő <b>objektumokat</b>."
 msgid "We hit bottom."
 msgstr "Elértük az alját."
 
-#. TRANSLATORS: undo history: "stack down" means to lower an object of its ordinal position by 1
+#. TRANSLATORS: undo history: "stack down" means to lower an object of its
+#. ordinal position by 1
 #: ../src/selection-chemistry.cpp:1202
 msgctxt "Undo action"
 msgid "stack down"
@@ -15071,7 +15078,8 @@ msgstr "Ké_p tulajdonságai..."
 msgid "Edit Externally..."
 msgstr "Szerkesztés külső alkalmazással..."
 
-#. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
+#. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to
+#. vectorize)
 #: ../src/ui/contextmenu.cpp:707 ../src/verbs.cpp:2750
 msgid "_Trace Bitmap..."
 msgstr "Bitkép vektor_izálása..."
@@ -15149,12 +15157,11 @@ msgstr ""
 #. TRANSLATORS: This is the filename of the `About Inkscape' picture in
 #. the `screens' directory.  Thus the translation of "about.svg" should be
 #. the filename of its translated version, e.g. about.zh.svg for Chinese.
-#.
 #. Please don't translate the filename unless the translated picture exists.
-#. Try to get the translated version of the 'About Inkscape' file first.  If the
+#. Try to get the translated version of the 'About Inkscape' file first.  If
+#. the
 #. translation fails, or if the file does not exist, then fall-back to the
 #. default untranslated "about.svg" file
-#.
 #. FIXME? INKSCAPE_SCREENSDIR and "about.svg" are in UTF-8, not the
 #. native filename encoding... and the filename passed to sp_document_new
 #. should be in UTF-*8..
@@ -15603,7 +15610,8 @@ msgstr ""
 msgid "S_hift"
 msgstr "_Eltolás"
 
-#. TRANSLATORS: "shift" means: the tiles will be shifted (offset) horizontally by this amount
+#. TRANSLATORS: "shift" means: the tiles will be shifted (offset) horizontally
+#. by this amount
 #: ../src/ui/dialog/clonetiler.cpp:168
 #, no-c-format
 msgid "<b>Shift X:</b>"
@@ -15623,7 +15631,8 @@ msgstr "Oszloponkénti vízszintes eltolás (a csempeszélesség százalékában
 msgid "Randomize the horizontal shift by this percentage"
 msgstr "A vízszintes eltolás véletlenszerűsítése ennyi százalékkal"
 
-#. TRANSLATORS: "shift" means: the tiles will be shifted (offset) vertically by this amount
+#. TRANSLATORS: "shift" means: the tiles will be shifted (offset) vertically
+#. by this amount
 #: ../src/ui/dialog/clonetiler.cpp:201
 #, no-c-format
 msgid "<b>Shift Y:</b>"
@@ -16149,8 +16158,10 @@ msgstr "A kijelölés klónjainak létrehozása és csempézése"
 #. TRANSLATORS: if a group of objects are "clumped" together, then they
 #. are unevenly spread in the given amount of space - as shown in the
 #. diagrams on the left in the following screenshot:
-#. http://www.inkscape.org/screenshots/gallery/inkscape-0.42-CVS-tiles-unclump.png
-#. So unclumping is the process of spreading a number of objects out more evenly.
+#. http://www.inkscape.org/screenshots/gallery/inkscape-0.42-CVS-tiles-
+#. unclump.png
+#. So unclumping is the process of spreading a number of objects out more
+#. evenly.
 #: ../src/ui/dialog/clonetiler.cpp:1147
 msgid " _Unclump "
 msgstr " E_gyenletesítés "
@@ -16892,9 +16903,9 @@ msgid "_Height:"
 msgstr "Ma_gasság:"
 
 #: ../src/ui/dialog/export.cpp:277
-#: ../src/ui/dialog/inkscape-preferences.cpp:2084
-#: ../src/ui/dialog/inkscape-preferences.cpp:2088
-#: ../src/ui/dialog/inkscape-preferences.cpp:2122
+#: ../src/ui/dialog/inkscape-preferences.cpp:2086
+#: ../src/ui/dialog/inkscape-preferences.cpp:2090
+#: ../src/ui/dialog/inkscape-preferences.cpp:2124
 msgid "dpi"
 msgstr "dpi"
 
@@ -16986,7 +16997,8 @@ msgstr "Az exportálásra kijelölt terület érvénytelen"
 msgid "Directory %s does not exist or is not a directory.\n"
 msgstr "A könyvtár nem létezik, vagy az objektum nem könyvtár: %s.\n"
 
-#. TRANSLATORS: %1 will be the filename, %2 the width, and %3 the height of the image
+#. TRANSLATORS: %1 will be the filename, %2 the width, and %3 the height of
+#. the image
 #: ../src/ui/dialog/export.cpp:1136 ../src/ui/dialog/export.cpp:1138
 msgid "Exporting %1 (%2 x %3)"
 msgstr "%1 exportálása %2 x %3)"
@@ -17416,7 +17428,8 @@ msgstr ""
 "A célpont Y koordinátája a konvolúciós mátrixban. A konvolúció ezen pont "
 "körül lesz alkalmazva a képpontokra."
 
-#. TRANSLATORS: for info on "Kernel", see http://en.wikipedia.org/wiki/Kernel_(matrix)
+#. TRANSLATORS: for info on "Kernel", see
+#. http://en.wikipedia.org/wiki/Kernel_(matrix)
 #: ../src/ui/dialog/filter-effects-dialog.cpp:2774
 msgid "Kernel:"
 msgstr "Kernel:"
@@ -18079,7 +18092,8 @@ msgstr "Keresés peremobjektumokra"
 msgid "Nothing to replace"
 msgstr "Nincs mit kicserélni"
 
-#. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
+#. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is
+#. displayed
 #: ../src/ui/dialog/find.cpp:934
 #, c-format
 msgid "<b>%d</b> object found (out of <b>%d</b>), %s match."
@@ -18471,36 +18485,35 @@ msgstr "Lüd"
 
 #: ../src/ui/dialog/glyphs.cpp:134
 msgid "Avestan"
-msgstr ""
+msgstr "Avestan"
 
-#: ../src/ui/dialog/glyphs.cpp:135
-#, fuzzy
-msgid "Bamum. "
+#: ../src/ui/dialog/glyphs.cpp:135 ../src/ui/dialog/glyphs.cpp:346
+msgid "Bamum"
 msgstr "Bamum"
 
 #: ../src/ui/dialog/glyphs.cpp:136
 msgid "Egyptian Hieroglpyhs"
-msgstr ""
+msgstr "Egyiptomi hieroglifák"
 
 #: ../src/ui/dialog/glyphs.cpp:137
 msgid "Imperial Aramaic"
-msgstr ""
+msgstr "Birodalmi arám"
 
 #: ../src/ui/dialog/glyphs.cpp:138
 msgid "Inscriptional Pahlavi"
-msgstr ""
+msgstr "Feliratos pahlavi"
 
 #: ../src/ui/dialog/glyphs.cpp:139
 msgid "Inscriptional Parthian"
-msgstr ""
+msgstr "Feliratos parthian"
 
 #: ../src/ui/dialog/glyphs.cpp:140 ../src/ui/dialog/glyphs.cpp:357
 msgid "Javanese"
 msgstr "Jávai"
 
 #: ../src/ui/dialog/glyphs.cpp:141
-msgid "Kaithi."
-msgstr ""
+msgid "Kaithi"
+msgstr "Kaithi"
 
 #: ../src/ui/dialog/glyphs.cpp:142 ../src/ui/dialog/glyphs.cpp:343
 msgid "Lisu"
@@ -18512,12 +18525,11 @@ msgstr "Meetei mayek"
 
 #: ../src/ui/dialog/glyphs.cpp:144
 msgid "Old South Arabian"
-msgstr ""
+msgstr "Ó-délarab"
 
 #: ../src/ui/dialog/glyphs.cpp:145
-#, fuzzy
 msgid "Old Turkic"
-msgstr "Ó-olasz"
+msgstr "Ótörök"
 
 #: ../src/ui/dialog/glyphs.cpp:146 ../src/ui/dialog/glyphs.cpp:246
 msgid "Samaritan"
@@ -18532,183 +18544,172 @@ msgid "Tai Viet"
 msgstr "Tai viet"
 
 #: ../src/ui/dialog/glyphs.cpp:149
-#, fuzzy
 msgid "Batak"
-msgstr "Katakana"
+msgstr "Batak"
 
 #: ../src/ui/dialog/glyphs.cpp:150
 msgid "Brahmi"
-msgstr ""
+msgstr "Bráhmi"
 
 #: ../src/ui/dialog/glyphs.cpp:151
 msgid "Mandaic"
-msgstr ""
+msgstr "Mandaic"
 
 #: ../src/ui/dialog/glyphs.cpp:152
 msgid "Chakma"
-msgstr ""
+msgstr "Chakma"
 
 #: ../src/ui/dialog/glyphs.cpp:153
-#, fuzzy
 msgid "Meroitic Cursive"
-msgstr "Paraméteres görbék"
+msgstr "Meroita kurzív"
 
 #: ../src/ui/dialog/glyphs.cpp:154
 msgid "Meroitic Hieroglyphs"
-msgstr ""
+msgstr "Meroita hieroglifák"
 
 #: ../src/ui/dialog/glyphs.cpp:155
 msgid "Miao"
-msgstr ""
+msgstr "Miao"
 
 #: ../src/ui/dialog/glyphs.cpp:156
-#, fuzzy
 msgid "Sharada"
-msgstr "Éles"
+msgstr "Sharada"
 
 #: ../src/ui/dialog/glyphs.cpp:157
 msgid "Sora Sompeng"
-msgstr ""
+msgstr "Sora sompeng"
 
 #: ../src/ui/dialog/glyphs.cpp:158
 msgid "Takri"
-msgstr ""
+msgstr "Takri"
 
 #: ../src/ui/dialog/glyphs.cpp:159
 msgid "Bassa"
-msgstr ""
+msgstr "Bassa"
 
 #: ../src/ui/dialog/glyphs.cpp:160
 msgid "Caucasian Albanian"
-msgstr ""
+msgstr "Kaukázusi albán"
 
 #: ../src/ui/dialog/glyphs.cpp:161
 msgid "Duployan"
-msgstr ""
+msgstr "Duployan"
 
 #: ../src/ui/dialog/glyphs.cpp:162
 msgid "Elbasan"
-msgstr ""
+msgstr "Elbasani"
 
 #: ../src/ui/dialog/glyphs.cpp:163
 msgid "Grantha"
-msgstr ""
+msgstr "Grantha"
 
 #: ../src/ui/dialog/glyphs.cpp:164
-msgid "Kjohki"
-msgstr ""
+msgid "Khojki"
+msgstr "Khojki"
 
 #: ../src/ui/dialog/glyphs.cpp:165
 msgid "Khudawadi, Sindhi"
-msgstr ""
+msgstr "Khudabadi, szindhi"
 
 #: ../src/ui/dialog/glyphs.cpp:166
-#, fuzzy
 msgid "Linear A"
-msgstr "Lineáris B"
+msgstr "Lineáris A"
 
 #: ../src/ui/dialog/glyphs.cpp:167
 msgid "Mahajani"
-msgstr ""
+msgstr "Mahajani"
 
 #: ../src/ui/dialog/glyphs.cpp:168
 msgid "Manichaean"
-msgstr ""
+msgstr "Manicheus"
 
 #: ../src/ui/dialog/glyphs.cpp:169
 msgid "Mende Kikakui"
-msgstr ""
+msgstr "Mende kikakui"
 
 #: ../src/ui/dialog/glyphs.cpp:170
-#, fuzzy
 msgid "Modi"
-msgstr "_Módosítás"
+msgstr "Modi"
 
 #: ../src/ui/dialog/glyphs.cpp:171
 msgid "Mro"
-msgstr ""
+msgstr "Mro"
 
 #: ../src/ui/dialog/glyphs.cpp:172
 msgid "Nabataean"
-msgstr ""
+msgstr "Nabateus"
 
 #: ../src/ui/dialog/glyphs.cpp:173
 msgid "Old North Arabian"
-msgstr ""
+msgstr "Ó-északarab"
 
 #: ../src/ui/dialog/glyphs.cpp:174
-#, fuzzy
 msgid "Old Permic"
-msgstr "Óperzsa"
+msgstr "Ópermi"
 
 #: ../src/ui/dialog/glyphs.cpp:175
 msgid "Pahawh Hmong"
-msgstr ""
+msgstr "Pahawh Hmong"
 
 #: ../src/ui/dialog/glyphs.cpp:176
 msgid "Palmyrene"
-msgstr ""
+msgstr "Palmürai"
 
 #: ../src/ui/dialog/glyphs.cpp:177
 msgid "Pau Cin Hau"
-msgstr ""
+msgstr "Pau Cin Hau"
 
 #: ../src/ui/dialog/glyphs.cpp:178
-#, fuzzy
 msgid "Psalter Pahlavi"
-msgstr "Plakátfesték"
+msgstr "Zsoltáros pahlavi"
 
 #: ../src/ui/dialog/glyphs.cpp:179
 msgid "Siddham"
-msgstr ""
+msgstr "Sziddham"
 
 #: ../src/ui/dialog/glyphs.cpp:180
 msgid "Tirhuta"
-msgstr ""
+msgstr "Tirhuta"
 
 #: ../src/ui/dialog/glyphs.cpp:181
 msgid "Warang Citi"
-msgstr ""
+msgstr "Warang citi"
 
 #: ../src/ui/dialog/glyphs.cpp:182
 msgid "Ahom"
-msgstr ""
+msgstr "Ahom"
 
 #: ../src/ui/dialog/glyphs.cpp:183
 msgid "Anatolian Hieroglyphs"
-msgstr ""
+msgstr "Anatóliai hieroglifák"
 
 #: ../src/ui/dialog/glyphs.cpp:184
 msgid "Hatran"
-msgstr ""
+msgstr "Hatran"
 
 #: ../src/ui/dialog/glyphs.cpp:185
-#, fuzzy
 msgid "Multani"
-msgstr "Szorzás"
+msgstr "Multani"
 
 #: ../src/ui/dialog/glyphs.cpp:186
-#, fuzzy
 msgid "Old Hungarian"
-msgstr "Magyar (hu)"
+msgstr "Székely–magyar rovásírás"
 
 #: ../src/ui/dialog/glyphs.cpp:187
-#, fuzzy
 msgid "Signwriting"
-msgstr "Szkriptelés"
+msgstr "Jelnyelv"
 
 #: ../src/ui/dialog/glyphs.cpp:225
-#, fuzzy
 msgid "Basic Plane"
-msgstr "Latin alap"
+msgstr "Alap lap"
 
 #: ../src/ui/dialog/glyphs.cpp:226
 msgid "Extended Multilingual Plane"
-msgstr ""
+msgstr "Bővített többnyelvű lap"
 
 #: ../src/ui/dialog/glyphs.cpp:227
 msgid "Supplementary Ideographic Plane"
-msgstr ""
+msgstr "Kiegészítő szókép lap"
 
 #: ../src/ui/dialog/glyphs.cpp:229
 msgid "Basic Latin"
@@ -18982,10 +18983,6 @@ msgstr "Yi gyökök"
 msgid "Cyrillic Extended-B"
 msgstr "Cirill bővített - B"
 
-#: ../src/ui/dialog/glyphs.cpp:346
-msgid "Bamum"
-msgstr "Bamum"
-
 #: ../src/ui/dialog/glyphs.cpp:347
 msgid "Modifier Tone Letters"
 msgstr "Hangmódosító jelek"
@@ -19079,50 +19076,44 @@ msgid "Specials"
 msgstr "Speciális"
 
 #: ../src/ui/dialog/glyphs.cpp:381
-#, fuzzy
 msgid "Miscellaneous Symbols and Pictographs"
-msgstr "Egyéb szimbólumok és nyilak"
+msgstr "Egyéb szimbólumok és piktogramok"
 
 #: ../src/ui/dialog/glyphs.cpp:382
-#, fuzzy
 msgid "Emoticons"
-msgstr "üres ikon"
+msgstr "Hangulatjelek"
 
 #: ../src/ui/dialog/glyphs.cpp:383
 msgid "Ornamental Dingbats"
-msgstr ""
+msgstr "Díszítő ábrácskák"
 
 #: ../src/ui/dialog/glyphs.cpp:384
 msgid "Transport and Map Symbols"
-msgstr ""
+msgstr "Közlekedési és térkép szimbólumok"
 
 #: ../src/ui/dialog/glyphs.cpp:385
-#, fuzzy
 msgid "Alchemical Symbols"
-msgstr "Khmer szimbólumok"
+msgstr "Alkímiai szimbólumok"
 
 #: ../src/ui/dialog/glyphs.cpp:386
-#, fuzzy
 msgid "Geometric Shapes Extended"
-msgstr "Geometriai alakzatok"
+msgstr "Bővített geometriai alakzatok "
 
 #: ../src/ui/dialog/glyphs.cpp:387
-#, fuzzy
 msgid "Supplemental Arrows-C"
-msgstr "Kiegészítő nyilak - A"
+msgstr "Kiegészítő nyilak - C"
 
 #: ../src/ui/dialog/glyphs.cpp:388
 msgid "Supplemental Symbols and Pictographs"
-msgstr ""
+msgstr "Kiegészítő szimbólumok és piktogramok"
 
 #: ../src/ui/dialog/glyphs.cpp:389
-#, fuzzy
 msgid "Chess Symbols"
-msgstr "Khmer szimbólumok"
+msgstr "Sakk szimbólumok"
 
 #: ../src/ui/dialog/glyphs.cpp:390
 msgid "Symbols and Pictographs Extended-A"
-msgstr ""
+msgstr "Szimbólumok és piktogramok kiegészítés - A"
 
 #: ../src/ui/dialog/glyphs.cpp:452
 msgid "Script: "
@@ -19890,22 +19881,22 @@ msgid "LPE Tool"
 msgstr "Élő útvonaleffektus-eszköz"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:864
-#: ../src/ui/dialog/inkscape-preferences.cpp:1152
+#: ../src/ui/dialog/inkscape-preferences.cpp:1154
 msgid "Color for symbolic icons:"
 msgstr "Szimbolikus ikonok színe:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:866
-#: ../src/ui/dialog/inkscape-preferences.cpp:1154
+#: ../src/ui/dialog/inkscape-preferences.cpp:1156
 msgid "Color for symbolic success icons:"
 msgstr "Sikeres szimbolikus ikonok színe:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:868
-#: ../src/ui/dialog/inkscape-preferences.cpp:1156
+#: ../src/ui/dialog/inkscape-preferences.cpp:1158
 msgid "Color for symbolic warning icons:"
 msgstr "Figyelmeztető szimbolikus ikonok színe:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:870
-#: ../src/ui/dialog/inkscape-preferences.cpp:1158
+#: ../src/ui/dialog/inkscape-preferences.cpp:1160
 msgid "Color for symbolic error icons:"
 msgstr "Hibás szimbolikus ikonok színe:"
 
@@ -20406,43 +20397,58 @@ msgid "Change Gtk theme:"
 msgstr "Gtk-téma módosítása:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1112
+#: ../src/ui/dialog/inkscape-preferences.cpp:2563
+msgid "Open themes folder"
+msgstr "Témák mappa megnyitása"
+
 #: ../src/ui/dialog/inkscape-preferences.cpp:1113
+#: ../src/ui/dialog/inkscape-preferences.cpp:2564
+msgid "User themes: "
+msgstr "Felhasználói témák: "
+
+#: ../src/ui/dialog/inkscape-preferences.cpp:1113
+#: ../src/ui/dialog/inkscape-preferences.cpp:2564
+msgid "Location of the user’s themes"
+msgstr "Felhasználói témák helye"
+
+#: ../src/ui/dialog/inkscape-preferences.cpp:1114
+#: ../src/ui/dialog/inkscape-preferences.cpp:1115
 msgid "Use dark theme"
 msgstr "Sötét téma alkalmazása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1116
+#: ../src/ui/dialog/inkscape-preferences.cpp:1118
 msgid "Display icons"
 msgstr "Ikonok megjelenítése"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1139
+#: ../src/ui/dialog/inkscape-preferences.cpp:1141
 msgid "Use system icons"
 msgstr "Rendszerikonok alkalmazása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1142
+#: ../src/ui/dialog/inkscape-preferences.cpp:1144
 msgid "Change icon theme:"
 msgstr "Ikontéma módosítása:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1146
+#: ../src/ui/dialog/inkscape-preferences.cpp:1148
 msgid "Use symbolic icons"
 msgstr "Szimbolikus ikonok alkalmazása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1149
+#: ../src/ui/dialog/inkscape-preferences.cpp:1151
 msgid "Use default colors for icons"
 msgstr "Alapértelmezett színek alkalmazása az ikonok számára"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1175
+#: ../src/ui/dialog/inkscape-preferences.cpp:1177
 msgid "Icon color"
 msgstr "Ikonok színe"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1176
+#: ../src/ui/dialog/inkscape-preferences.cpp:1178
 msgid "Base color for icons. Some icons changes need reload"
 msgstr "Szimbolikus ikonok alapszíne. Néhány ikonmódosítás újratöltést igényel"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1182
+#: ../src/ui/dialog/inkscape-preferences.cpp:1184
 msgid "Highlights"
 msgstr "Kiemelések"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1183
+#: ../src/ui/dialog/inkscape-preferences.cpp:1185
 msgid ""
 "Highlights colors, some symbolic icon themes use it. Some icons changes need "
 "reload"
@@ -20450,7 +20456,7 @@ msgstr ""
 "Néhány szimbolikus ikontéma által alkalmazott kiemelési színek. Néhány "
 "ikonmódosítás újratöltést igényel"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1189
+#: ../src/ui/dialog/inkscape-preferences.cpp:1191
 msgid ""
 "Reset theme colors, some symbolic icon themes use it. Some icons changes "
 "need reload"
@@ -20458,74 +20464,74 @@ msgstr ""
 "Néhány szimbolikus ikontéma által alkalmaz színtémák alapállapotba. Néhány "
 "ikonmódosítás újratöltést igényel"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1192
+#: ../src/ui/dialog/inkscape-preferences.cpp:1194
 msgctxt "Icon size"
 msgid "Larger"
 msgstr "Nagyobb"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1192
+#: ../src/ui/dialog/inkscape-preferences.cpp:1194
 msgctxt "Icon size"
 msgid "Large"
 msgstr "Nagy"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1192
+#: ../src/ui/dialog/inkscape-preferences.cpp:1194
 msgctxt "Icon size"
 msgid "Small"
 msgstr "Kicsi"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1193
+#: ../src/ui/dialog/inkscape-preferences.cpp:1195
 msgctxt "Icon size"
 msgid "Smaller"
 msgstr "Kisebb"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1198
+#: ../src/ui/dialog/inkscape-preferences.cpp:1200
 msgid "Toolbox icon size:"
 msgstr "Eszköztár-ikonok mérete:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1199
+#: ../src/ui/dialog/inkscape-preferences.cpp:1201
 msgid "Set the size for the tool icons (requires restart)"
 msgstr ""
 "Az eszközikonok méretének beállítása (életbelépéshez újraindítás szükséges)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1202
+#: ../src/ui/dialog/inkscape-preferences.cpp:1204
 msgid "Control bar icon size:"
 msgstr "Eszközvezérlő-sáv ikonjainak mérete:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1203
+#: ../src/ui/dialog/inkscape-preferences.cpp:1205
 msgid ""
 "Set the size for the icons in tools' control bars to use (requires restart)"
 msgstr ""
 "Az eszközvezérlő-sávokon használandó ikonméret beállítása (életbelépéshez "
 "újraindítás szükséges)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1206
+#: ../src/ui/dialog/inkscape-preferences.cpp:1208
 msgid "Secondary toolbar icon size:"
 msgstr "Másodlagos eszköztár ikonjainak mérete:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1207
+#: ../src/ui/dialog/inkscape-preferences.cpp:1209
 msgid ""
 "Set the size for the icons in secondary toolbars to use (requires restart)"
 msgstr ""
 "A másodlagos eszköztárakon használandó ikonméret beállítása (életbelépéshez "
 "újraindítás szükséges)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1210
+#: ../src/ui/dialog/inkscape-preferences.cpp:1212
 msgid "Yes"
 msgstr "Igen"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1210
+#: ../src/ui/dialog/inkscape-preferences.cpp:1212
 msgid "No"
 msgstr "Nem"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1210
+#: ../src/ui/dialog/inkscape-preferences.cpp:1212
 msgid "Theme decides"
 msgstr "Témától függ"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1213
+#: ../src/ui/dialog/inkscape-preferences.cpp:1215
 msgid "Show icons in menus:"
 msgstr "Ikonok megjelenése a menükben:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1214
+#: ../src/ui/dialog/inkscape-preferences.cpp:1216
 msgid ""
 "You can either enable or disable all icons in menus. By default the theme "
 "determines which icons to display by using the 'show-icons' attribute in its "
@@ -20535,107 +20541,107 @@ msgstr ""
 "egyes menüpontokról a téma „menus.xml” fájljában lévő „show-icons” "
 "attribútumaik határozzák meg, hogy megjelennek-e (újraindítást igényel)."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1217
+#: ../src/ui/dialog/inkscape-preferences.cpp:1219
 msgid "Theme"
 msgstr "Téma"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1220
+#: ../src/ui/dialog/inkscape-preferences.cpp:1222
 msgid "Save and restore window geometry for each document"
 msgstr "Ablakgeometria elmentése és visszaállítása minden dokumentumra"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1221
+#: ../src/ui/dialog/inkscape-preferences.cpp:1223
 msgid "Remember and use last window's geometry"
 msgstr "Az utolsó ablak geometriájának megőrzése"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1222
+#: ../src/ui/dialog/inkscape-preferences.cpp:1224
 msgid "Don't save window geometry"
 msgstr "Az ablakgeometria ne legyen elmentve"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1224
+#: ../src/ui/dialog/inkscape-preferences.cpp:1226
 msgid "Save and restore dialogs status"
 msgstr "Párbeszédablakok állapotának mentése és visszaállítása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1225
-#: ../src/ui/dialog/inkscape-preferences.cpp:1266
+#: ../src/ui/dialog/inkscape-preferences.cpp:1227
+#: ../src/ui/dialog/inkscape-preferences.cpp:1268
 msgid "Don't save dialogs status"
 msgstr "Ne mentse  a párbeszédablakok állapotát"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1227
-#: ../src/ui/dialog/inkscape-preferences.cpp:1274
+#: ../src/ui/dialog/inkscape-preferences.cpp:1229
+#: ../src/ui/dialog/inkscape-preferences.cpp:1276
 msgid "Dockable"
 msgstr "Dokkolható"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1228
-#: ../src/ui/dialog/inkscape-preferences.cpp:1276
+#: ../src/ui/dialog/inkscape-preferences.cpp:1230
+#: ../src/ui/dialog/inkscape-preferences.cpp:1278
 msgid "Floating"
 msgstr "Lebegő"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1231
+#: ../src/ui/dialog/inkscape-preferences.cpp:1233
 msgid "Native open/save dialogs"
 msgstr "Natív megnyitás és mentés párbeszédablak"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1232
+#: ../src/ui/dialog/inkscape-preferences.cpp:1234
 msgid "GTK open/save dialogs"
 msgstr "GTK megnyitás/mentés párbeszédablakok"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1234
+#: ../src/ui/dialog/inkscape-preferences.cpp:1236
 msgid "Dialogs are hidden in taskbar"
 msgstr "Párbeszédablakok ne jelenjenek meg a feladatlistában"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1235
+#: ../src/ui/dialog/inkscape-preferences.cpp:1237
 msgid "Save and restore documents viewport"
 msgstr "Dokumentumok nézetablakának mentése és visszaállítása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1236
+#: ../src/ui/dialog/inkscape-preferences.cpp:1238
 msgid "Zoom when window is resized"
 msgstr "Nagyítás módosítása az ablakméret változásakor"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1237
+#: ../src/ui/dialog/inkscape-preferences.cpp:1239
 msgctxt "Dialog on top"
 msgid "None"
 msgstr "Nincs"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1239
+#: ../src/ui/dialog/inkscape-preferences.cpp:1241
 msgid "Aggressive"
 msgstr "Agresszív"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1242
+#: ../src/ui/dialog/inkscape-preferences.cpp:1244
 msgctxt "Window size"
 msgid "Default"
 msgstr "Alapértelmezett"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1243
+#: ../src/ui/dialog/inkscape-preferences.cpp:1245
 msgctxt "Window size"
 msgid "Small"
 msgstr "Kicsi"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1244
+#: ../src/ui/dialog/inkscape-preferences.cpp:1246
 msgctxt "Window size"
 msgid "Large"
 msgstr "Nagy"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1245
+#: ../src/ui/dialog/inkscape-preferences.cpp:1247
 msgctxt "Window size"
 msgid "Maximized"
 msgstr "Maximalizált"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1252
+#: ../src/ui/dialog/inkscape-preferences.cpp:1254
 msgid "Default window size:"
 msgstr "Alapértelmezett ablakméret:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1253
+#: ../src/ui/dialog/inkscape-preferences.cpp:1255
 msgid "Set the default window size"
 msgstr "Alapértelmezett ablakméret megadása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1256
+#: ../src/ui/dialog/inkscape-preferences.cpp:1258
 msgid "Saving window geometry (size and position)"
 msgstr "Ablakgeometria elmentése (méret és pozíció)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1258
+#: ../src/ui/dialog/inkscape-preferences.cpp:1260
 msgid "Let the window manager determine placement of all windows"
 msgstr "Az ablakkezelő határozza meg az összes ablak elhelyezkedését"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1260
+#: ../src/ui/dialog/inkscape-preferences.cpp:1262
 msgid ""
 "Remember and use the last window's geometry (saves geometry to user "
 "preferences)"
@@ -20643,7 +20649,7 @@ msgstr ""
 "Az utolsó ablak geometriájának megőrzése (a geometriát a felhasználói "
 "beállítások közé menti el)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1262
+#: ../src/ui/dialog/inkscape-preferences.cpp:1264
 msgid ""
 "Save and restore window geometry for each document (saves geometry in the "
 "document)"
@@ -20651,11 +20657,11 @@ msgstr ""
 "Az ablakgeometria elmentése és visszaállítása minden dokumentumra (a "
 "geometriát a dokumentumba menti el)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1264
+#: ../src/ui/dialog/inkscape-preferences.cpp:1266
 msgid "Saving dialogs status"
 msgstr "Párbeszédablakok állapotának mentése"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1268
+#: ../src/ui/dialog/inkscape-preferences.cpp:1270
 msgid ""
 "Save and restore dialogs status (the last open windows dialogs are saved "
 "when it closes)"
@@ -20663,67 +20669,67 @@ msgstr ""
 "Párbeszédablakok állapotának mentése és visszaállítása (az utoljára "
 "megnyitott párbeszédablakok el lesznek mentve bezáráskor)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1272
+#: ../src/ui/dialog/inkscape-preferences.cpp:1274
 msgid "Dialog behavior (requires restart)"
 msgstr "Párbeszédablakok viselkedése (újraindítás szükséges):"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1278
+#: ../src/ui/dialog/inkscape-preferences.cpp:1280
 msgid "Desktop integration"
 msgstr "Asztali integráció"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1280
+#: ../src/ui/dialog/inkscape-preferences.cpp:1282
 msgid "Use Windows like open and save dialogs"
 msgstr "Windows-szerű megnyitás és mentés párbeszédablakok használata"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1282
+#: ../src/ui/dialog/inkscape-preferences.cpp:1284
 msgid "Use GTK open and save dialogs "
 msgstr "GTK megnyitás és mentés párbeszédablakok használata "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1286
+#: ../src/ui/dialog/inkscape-preferences.cpp:1288
 msgid "Dialogs on top:"
 msgstr "Párbeszédablakok felülre helyezése:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1289
+#: ../src/ui/dialog/inkscape-preferences.cpp:1291
 msgid "Dialogs are treated as regular windows"
 msgstr "A párbeszédablakok normál ablakokként vannak kezelve"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1291
+#: ../src/ui/dialog/inkscape-preferences.cpp:1293
 msgid "Dialogs stay on top of document windows"
 msgstr "A párbeszédablakok a dokumentumablakok felett maradnak"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1293
+#: ../src/ui/dialog/inkscape-preferences.cpp:1295
 msgid "Same as Normal but may work better with some window managers"
 msgstr ""
 "Megegyezik a Normállal, viszont bizonyos ablakkezelők esetén jobb eredményt "
 "nyújthat"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1296
+#: ../src/ui/dialog/inkscape-preferences.cpp:1298
 msgid "Dialog Transparency"
 msgstr "Párbeszédablak-átlátszóság"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1298
+#: ../src/ui/dialog/inkscape-preferences.cpp:1300
 msgid "_Opacity when focused:"
 msgstr "Átlátszatlanság, amikor _rajta van a fókusz:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1300
+#: ../src/ui/dialog/inkscape-preferences.cpp:1302
 msgid "Opacity when _unfocused:"
 msgstr "Átlátszatlanság, amikor _nem rajta van a fókusz:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1302
+#: ../src/ui/dialog/inkscape-preferences.cpp:1304
 msgid "_Time of opacity change animation:"
 msgstr "Átlátszatlanság-változtatási animáció _időtartama:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1305
+#: ../src/ui/dialog/inkscape-preferences.cpp:1307
 msgid "Miscellaneous"
 msgstr "Egyéb"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1308
+#: ../src/ui/dialog/inkscape-preferences.cpp:1310
 msgid "Whether dialog windows are to be hidden in the window manager taskbar"
 msgstr ""
 "A párbeszédablakok ki legyenek-e hagyva az ablakkezelő által megjelenített "
 "feladatlistából"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1311
+#: ../src/ui/dialog/inkscape-preferences.cpp:1313
 msgid ""
 "Zoom drawing when document window is resized, to keep the same area visible "
 "(this is the default which can be changed in any window using the button "
@@ -20734,7 +20740,7 @@ msgstr ""
 "megadott érték az alapértelmezés. Minden egyes ablakban külön-külön is "
 "beállítható a kívánt viselkedés a jobb oldali gördítősáv feletti gombbal."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1313
+#: ../src/ui/dialog/inkscape-preferences.cpp:1315
 msgid ""
 "Save documents viewport (zoom and panning position). Useful to turn off when "
 "sharing version controlled files."
@@ -20742,98 +20748,98 @@ msgstr ""
 "Dokumentumok nézetablakának mentése (nagyítási és képcsúsztatási pozíció). "
 "Érdemes kikapcsolni verziókezelés alatt álló fájlok esetén."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1314
+#: ../src/ui/dialog/inkscape-preferences.cpp:1316
 msgid "Windows"
 msgstr "Ablakok"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1317
+#: ../src/ui/dialog/inkscape-preferences.cpp:1319
 msgid "Line color when zooming out"
 msgstr "Vonalszín távolításkor"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1320
+#: ../src/ui/dialog/inkscape-preferences.cpp:1322
 msgid "The gridlines will be shown in minor grid line color"
 msgstr "A rácsvonalak az alrácsvonalak színével jelennek meg"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1322
+#: ../src/ui/dialog/inkscape-preferences.cpp:1324
 msgid "The gridlines will be shown in major grid line color"
 msgstr "A rácsvonalak a főrácsvonalak színével jelennek meg"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1324
+#: ../src/ui/dialog/inkscape-preferences.cpp:1326
 msgid "Default grid settings"
 msgstr "Alapértelmezett rácsbeállítások"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1330
-#: ../src/ui/dialog/inkscape-preferences.cpp:1355
+#: ../src/ui/dialog/inkscape-preferences.cpp:1332
+#: ../src/ui/dialog/inkscape-preferences.cpp:1357
 msgid "Grid units:"
 msgstr "Rács-mértékegység:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1335
-#: ../src/ui/dialog/inkscape-preferences.cpp:1360
+#: ../src/ui/dialog/inkscape-preferences.cpp:1337
+#: ../src/ui/dialog/inkscape-preferences.cpp:1362
 msgid "Origin X:"
 msgstr "X-origó:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1336
-#: ../src/ui/dialog/inkscape-preferences.cpp:1361
+#: ../src/ui/dialog/inkscape-preferences.cpp:1338
+#: ../src/ui/dialog/inkscape-preferences.cpp:1363
 msgid "Origin Y:"
 msgstr "Y-origó:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1341
+#: ../src/ui/dialog/inkscape-preferences.cpp:1343
 msgid "Spacing X:"
 msgstr "X-távolság:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1342
-#: ../src/ui/dialog/inkscape-preferences.cpp:1364
+#: ../src/ui/dialog/inkscape-preferences.cpp:1344
+#: ../src/ui/dialog/inkscape-preferences.cpp:1366
 msgid "Spacing Y:"
 msgstr "Y-távolság:"
-
-#: ../src/ui/dialog/inkscape-preferences.cpp:1344
-#: ../src/ui/dialog/inkscape-preferences.cpp:1345
-#: ../src/ui/dialog/inkscape-preferences.cpp:1369
-#: ../src/ui/dialog/inkscape-preferences.cpp:1370
-msgid "Minor grid line color:"
-msgstr "Alrácsvonalak színe:"
-
-#: ../src/ui/dialog/inkscape-preferences.cpp:1345
-#: ../src/ui/dialog/inkscape-preferences.cpp:1370
-msgid "Color used for normal grid lines"
-msgstr "A normál rácsvonalakhoz használt szín"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1346
 #: ../src/ui/dialog/inkscape-preferences.cpp:1347
 #: ../src/ui/dialog/inkscape-preferences.cpp:1371
 #: ../src/ui/dialog/inkscape-preferences.cpp:1372
-msgid "Major grid line color:"
-msgstr "A fő-rácsvonalak színe:"
+msgid "Minor grid line color:"
+msgstr "Alrácsvonalak színe:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1347
 #: ../src/ui/dialog/inkscape-preferences.cpp:1372
-msgid "Color used for major (highlighted) grid lines"
-msgstr "A fő-rácsvonalakhoz (kiemelt rácsvonalakhoz) használt szín"
+msgid "Color used for normal grid lines"
+msgstr "A normál rácsvonalakhoz használt szín"
+
+#: ../src/ui/dialog/inkscape-preferences.cpp:1348
+#: ../src/ui/dialog/inkscape-preferences.cpp:1349
+#: ../src/ui/dialog/inkscape-preferences.cpp:1373
+#: ../src/ui/dialog/inkscape-preferences.cpp:1374
+msgid "Major grid line color:"
+msgstr "A fő-rácsvonalak színe:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1349
 #: ../src/ui/dialog/inkscape-preferences.cpp:1374
+msgid "Color used for major (highlighted) grid lines"
+msgstr "A fő-rácsvonalakhoz (kiemelt rácsvonalakhoz) használt szín"
+
+#: ../src/ui/dialog/inkscape-preferences.cpp:1351
+#: ../src/ui/dialog/inkscape-preferences.cpp:1376
 msgid "Major grid line every:"
 msgstr "Fő-rácsvonal minden ennyiedik:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1350
+#: ../src/ui/dialog/inkscape-preferences.cpp:1352
 msgid "Show dots instead of lines"
 msgstr "Pontok megjelenítése vonalak helyett"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1351
+#: ../src/ui/dialog/inkscape-preferences.cpp:1353
 msgid "If set, display dots at gridpoints instead of gridlines"
 msgstr ""
 "Ha az opció be van jelölve, akkor a rácsvonalak helyett csak azok "
 "metszéspontjai lesznek megjelenítve"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1425
+#: ../src/ui/dialog/inkscape-preferences.cpp:1427
 msgid "Input/Output"
 msgstr "Bemenet/kimenet"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1428
+#: ../src/ui/dialog/inkscape-preferences.cpp:1430
 msgid "Use current directory for \"Save As ...\""
 msgstr "Az aktuális könyvtár használata a „Mentés másként…” művelethez"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1430
+#: ../src/ui/dialog/inkscape-preferences.cpp:1432
 msgid ""
 "When this option is on, the \"Save as...\" and \"Save a Copy...\" dialogs "
 "will always open in the directory where the currently open document is; when "
@@ -20845,11 +20851,11 @@ msgstr ""
 "megnyitott dokumentum származik; kikapcsolva pedig azt a mappát, amelybe "
 "utoljára mentve lett egy fájl"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1432
+#: ../src/ui/dialog/inkscape-preferences.cpp:1434
 msgid "Add label comments to printing output"
 msgstr "Címke-megjegyzések a nyomtatási kimenetbe"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1434
+#: ../src/ui/dialog/inkscape-preferences.cpp:1436
 msgid ""
 "When on, a comment will be added to the raw print output, marking the "
 "rendered output for an object with its label"
@@ -20857,11 +20863,11 @@ msgstr ""
 "Ha be van kapcsolva, akkor a nyers nyomtatási kimenetbe megjegyzések lesznek "
 "helyezve - megjelölve az illető objektumokat azok címkéjével"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1436
+#: ../src/ui/dialog/inkscape-preferences.cpp:1438
 msgid "Add default metadata to new documents"
 msgstr "Alapértelmezett metaadatok hozzáadása az új dokumentumokhoz"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1438
+#: ../src/ui/dialog/inkscape-preferences.cpp:1440
 msgid ""
 "Add default metadata to new documents. Default metadata can be set from "
 "Document Properties->Metadata."
@@ -20870,15 +20876,15 @@ msgstr ""
 "alapértelmezett metaadatok a „Dokumentumbeállítások...” → „Metaadatok” fülön "
 "állíthatók be"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1442
+#: ../src/ui/dialog/inkscape-preferences.cpp:1444
 msgid "_Grab sensitivity:"
 msgstr "_Elkapási érzékenység:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1442
+#: ../src/ui/dialog/inkscape-preferences.cpp:1444
 msgid "pixels (requires restart)"
 msgstr "képpontok (újraindítás szükséges)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1443
+#: ../src/ui/dialog/inkscape-preferences.cpp:1445
 msgid ""
 "How close on the screen you need to be to an object to be able to grab it "
 "with mouse (in screen pixels)"
@@ -20886,37 +20892,37 @@ msgstr ""
 "Milyen közel kell egy objektumhoz lenni (képernyő-képpontban mérve) a "
 "képernyőn ahhoz, hogy az egérrel megfogható legyen"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1445
+#: ../src/ui/dialog/inkscape-preferences.cpp:1447
 msgid "_Click/drag threshold:"
 msgstr "_Kattintás/húzás küszöb:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1445
-#: ../src/ui/dialog/inkscape-preferences.cpp:1810
-#: ../src/ui/dialog/inkscape-preferences.cpp:1814
-#: ../src/ui/dialog/inkscape-preferences.cpp:1824 ../share/ui/units.xml:12
+#: ../src/ui/dialog/inkscape-preferences.cpp:1447
+#: ../src/ui/dialog/inkscape-preferences.cpp:1812
+#: ../src/ui/dialog/inkscape-preferences.cpp:1816
+#: ../src/ui/dialog/inkscape-preferences.cpp:1826 ../share/ui/units.xml:12
 msgid "pixels"
 msgstr "képpont"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1446
+#: ../src/ui/dialog/inkscape-preferences.cpp:1448
 msgid ""
 "Maximum mouse drag (in screen pixels) which is considered a click, not a drag"
 msgstr ""
 "Az a maximális húzási távolság (képernyő-képpontban mérve), amely még "
 "kattintásnak lesz véve, nem pedig húzásnak"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1449
+#: ../src/ui/dialog/inkscape-preferences.cpp:1451
 msgid "_Handle size:"
 msgstr "_Fogantyú mérete:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1450
+#: ../src/ui/dialog/inkscape-preferences.cpp:1452
 msgid "Set the relative size of node handles"
 msgstr "A csomópontok-fogantyúk relatív méretének beállítása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1452
+#: ../src/ui/dialog/inkscape-preferences.cpp:1454
 msgid "Use pressure-sensitive tablet (requires restart)"
 msgstr "Nyomásérzékeny tábla használata (életbelépéshez újraindítás szükséges)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1454
+#: ../src/ui/dialog/inkscape-preferences.cpp:1456
 msgid ""
 "Use the capabilities of a tablet or other pressure-sensitive device. Disable "
 "this only if you have problems with the tablet (you can still use it as a "
@@ -20926,27 +20932,27 @@ msgstr ""
 "kapcsolja ezt ki, ha problémái vannak a táblával (egérként még akkor is "
 "használhatja)."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1456
+#: ../src/ui/dialog/inkscape-preferences.cpp:1458
 msgid "Switch tool based on tablet device (requires restart)"
 msgstr ""
 "Eszközváltás a táblaeszköz alapján (életbelépéshez újraindítás szükséges)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1458
+#: ../src/ui/dialog/inkscape-preferences.cpp:1460
 msgid ""
 "Change tool as different devices are used on the tablet (pen, eraser, mouse)"
 msgstr ""
 "A tábla különböző eszközei (toll, radír, egér) közti váltáskor váltás a "
 "program eszközei közt"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1459
+#: ../src/ui/dialog/inkscape-preferences.cpp:1461
 msgid "Input devices"
 msgstr "Beviteli eszközök"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1462
+#: ../src/ui/dialog/inkscape-preferences.cpp:1464
 msgid "Use named colors"
 msgstr "Színelnevezések használata"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1463
+#: ../src/ui/dialog/inkscape-preferences.cpp:1465
 msgid ""
 "If set, write the CSS name of the color when available (e.g. 'red' or "
 "'magenta') instead of the numeric value"
@@ -20955,23 +20961,23 @@ msgstr ""
 "neve (például „red” (vörös) vagy „magenta” (bíbor) kerül kiírásra (ha "
 "elérhető)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1465
+#: ../src/ui/dialog/inkscape-preferences.cpp:1467
 msgid "XML formatting"
 msgstr "XML-formázás"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1467
+#: ../src/ui/dialog/inkscape-preferences.cpp:1469
 msgid "Inline attributes"
 msgstr "Soron belüli (inline) tulajdonságok"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1468
+#: ../src/ui/dialog/inkscape-preferences.cpp:1470
 msgid "Put attributes on the same line as the element tag"
 msgstr "A tulajdonságok ugyanazon sorba kerüljenek, mint az elem címkéje"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1471
+#: ../src/ui/dialog/inkscape-preferences.cpp:1473
 msgid "_Indent, spaces:"
 msgstr "_Behúzás, szóközök:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1471
+#: ../src/ui/dialog/inkscape-preferences.cpp:1473
 msgid ""
 "The number of spaces to use for indenting nested elements; set to 0 for no "
 "indentation"
@@ -20979,28 +20985,28 @@ msgstr ""
 "A beágyazott elemek behúzásához használt szóközök száma. Ha nem szeretne "
 "behúzást, akkor a 0 értéket adja meg."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1473
+#: ../src/ui/dialog/inkscape-preferences.cpp:1475
 msgid "Path data"
 msgstr "Útvonal-adatok"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1476
+#: ../src/ui/dialog/inkscape-preferences.cpp:1478
 msgid "Absolute"
 msgstr "Abszolút"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1476
+#: ../src/ui/dialog/inkscape-preferences.cpp:1478
 msgid "Relative"
 msgstr "Relatív"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1476
-#: ../src/ui/dialog/inkscape-preferences.cpp:1784
+#: ../src/ui/dialog/inkscape-preferences.cpp:1478
+#: ../src/ui/dialog/inkscape-preferences.cpp:1786
 msgid "Optimized"
 msgstr "Optimalizálva"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1480
+#: ../src/ui/dialog/inkscape-preferences.cpp:1482
 msgid "Path string format:"
 msgstr "Útvonal-karakterlánc formátuma:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1480
+#: ../src/ui/dialog/inkscape-preferences.cpp:1482
 msgid ""
 "Path data should be written: only with absolute coordinates, only with "
 "relative coordinates, or optimized for string length (mixed absolute and "
@@ -21010,11 +21016,11 @@ msgstr ""
 "relatív koordinátákkal, vagy a karakterlánc hosszára optimalizálva (kevert "
 "abszolút és relatív koordináták)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1482
+#: ../src/ui/dialog/inkscape-preferences.cpp:1484
 msgid "Force repeat commands"
 msgstr "Parancsok ismétlésének kikényszerítése"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1483
+#: ../src/ui/dialog/inkscape-preferences.cpp:1485
 msgid ""
 "Force repeating of the same path command (for example, 'L 1,2 L 3,4' instead "
 "of 'L 1,2 3,4')"
@@ -21022,23 +21028,23 @@ msgstr ""
 "Ugyanazon útvonalparancs ismételt használatának előírása (példa: „L 1,2 L "
 "3,4” használata „L 1,2 3,4” helyett)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1485
+#: ../src/ui/dialog/inkscape-preferences.cpp:1487
 msgid "Numbers"
 msgstr "Számok"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1488
+#: ../src/ui/dialog/inkscape-preferences.cpp:1490
 msgid "_Numeric precision:"
 msgstr "_Numerikus pontosság:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1488
+#: ../src/ui/dialog/inkscape-preferences.cpp:1490
 msgid "Significant figures of the values written to the SVG file"
 msgstr "Az SVG-fájlba írt értékek lényeges számjegyeinek száma"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1491
+#: ../src/ui/dialog/inkscape-preferences.cpp:1493
 msgid "Minimum _exponent:"
 msgstr "Minimum _kitevő:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1491
+#: ../src/ui/dialog/inkscape-preferences.cpp:1493
 msgid ""
 "The smallest number written to SVG is 10 to the power of this exponent; "
 "anything smaller is written as zero"
@@ -21046,17 +21052,17 @@ msgstr ""
 "Az SVG-be írt legkisebb szám: 10 az ennyiedik hatványon. Az ennél kisebb "
 "értékek nullaként kerülnek kiírásra."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1496
+#: ../src/ui/dialog/inkscape-preferences.cpp:1498
 msgid "Improper Attributes Actions"
 msgstr "Helytelen attribútum művelet"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1498
-#: ../src/ui/dialog/inkscape-preferences.cpp:1506
-#: ../src/ui/dialog/inkscape-preferences.cpp:1514
+#: ../src/ui/dialog/inkscape-preferences.cpp:1500
+#: ../src/ui/dialog/inkscape-preferences.cpp:1508
+#: ../src/ui/dialog/inkscape-preferences.cpp:1516
 msgid "Print warnings"
 msgstr "Figyelmeztetés kiírása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1499
+#: ../src/ui/dialog/inkscape-preferences.cpp:1501
 msgid ""
 "Print warning if invalid or non-useful attributes found. Database files "
 "located in inkscape_data_dir/attributes."
@@ -21064,20 +21070,20 @@ msgstr ""
 "Figyelmeztetés kiírása érvénytelen vagy haszontalan attribútum esetén. Az "
 "adatbázis helye: inkscape_adatmappa/attributes."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1500
+#: ../src/ui/dialog/inkscape-preferences.cpp:1502
 msgid "Remove attributes"
 msgstr "Tulajdonságok eltávolítása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1501
+#: ../src/ui/dialog/inkscape-preferences.cpp:1503
 msgid "Delete invalid or non-useful attributes from element tag"
 msgstr ""
 "Érvénytelen vagy haszontalan attribútumok eltávolítása az elem címkékről"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1504
+#: ../src/ui/dialog/inkscape-preferences.cpp:1506
 msgid "Inappropriate Style Properties Actions"
 msgstr "Alkalmatlan stílustulajdonság művelet"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1507
+#: ../src/ui/dialog/inkscape-preferences.cpp:1509
 msgid ""
 "Print warning if inappropriate style properties found (i.e. 'font-family' "
 "set on a <rect>). Database files located in inkscape_data_dir/attributes."
@@ -21086,20 +21092,20 @@ msgstr ""
 "family” beállítás ezen: <rect>). Az adatbázis helye: inkscape_adatmappa/"
 "attributes."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1508
-#: ../src/ui/dialog/inkscape-preferences.cpp:1516
+#: ../src/ui/dialog/inkscape-preferences.cpp:1510
+#: ../src/ui/dialog/inkscape-preferences.cpp:1518
 msgid "Remove style properties"
 msgstr "Stílustulajdonság eltávolítása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1509
+#: ../src/ui/dialog/inkscape-preferences.cpp:1511
 msgid "Delete inappropriate style properties"
 msgstr "Alkalmatlan stílustulajdonság törlése"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1512
+#: ../src/ui/dialog/inkscape-preferences.cpp:1514
 msgid "Non-useful Style Properties Actions"
 msgstr "Szükségtelen stílustulajdonság művelet"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1515
+#: ../src/ui/dialog/inkscape-preferences.cpp:1517
 msgid ""
 "Print warning if redundant style properties found (i.e. if a property has "
 "the default value and a different value is not inherited or if value is the "
@@ -21111,19 +21117,19 @@ msgstr ""
 "ha egy érték ugyanaz, mint ami öröklődne). Az adatbázis helye: "
 "inkscape_adatmappa/attributes."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1517
+#: ../src/ui/dialog/inkscape-preferences.cpp:1519
 msgid "Delete redundant style properties"
 msgstr "Redundáns stílustulajdonság törlése"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1519
+#: ../src/ui/dialog/inkscape-preferences.cpp:1521
 msgid "Check Attributes and Style Properties on"
 msgstr "Attribútumok és stílustulajdonság ellenőrzése"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1521
+#: ../src/ui/dialog/inkscape-preferences.cpp:1523
 msgid "Reading"
 msgstr "Olvasás"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1522
+#: ../src/ui/dialog/inkscape-preferences.cpp:1524
 msgid ""
 "Check attributes and style properties on reading in SVG files (including "
 "those internal to Inkscape which will slow down startup)"
@@ -21132,11 +21138,11 @@ msgstr ""
 "(beleértve a belső Inkscape-specifikusakat is, amelyek miatt lassú lesz az "
 "indítás)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1523
+#: ../src/ui/dialog/inkscape-preferences.cpp:1525
 msgid "Editing"
 msgstr "Szerkesztés"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1524
+#: ../src/ui/dialog/inkscape-preferences.cpp:1526
 msgid ""
 "Check attributes and style properties while editing SVG files (may slow down "
 "Inkscape, mostly useful for debugging)"
@@ -21144,99 +21150,100 @@ msgstr ""
 "Attribútumok és stílustulajdonság ellenőrzése az SVG-fájlok szerkesztésekor "
 "(az Inkscape lassulását okozhatja, inkább hibakeresésére való)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1525
+#: ../src/ui/dialog/inkscape-preferences.cpp:1527
 msgid "Writing"
 msgstr "Írás"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1526
+#: ../src/ui/dialog/inkscape-preferences.cpp:1528
 msgid "Check attributes and style properties on writing out SVG files"
 msgstr "Attribútumok és stílustulajdonság ellenőrzése az SVG-fájlok írásakor"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1528
+#: ../src/ui/dialog/inkscape-preferences.cpp:1530
 msgid "SVG output"
 msgstr "SVG-kimenet"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1533
+#: ../src/ui/dialog/inkscape-preferences.cpp:1535
 msgid "SVG 2"
 msgstr "SVG 2"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1534
+#: ../src/ui/dialog/inkscape-preferences.cpp:1536
 msgid "Insert SVG 1.1 fallback in text."
 msgstr "SVG 1.1 tartalék beszúrása a szövegbe."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1535
+#: ../src/ui/dialog/inkscape-preferences.cpp:1537
 msgid "Insert Mesh Gradient JavaScript polyfill."
 msgstr "JavaScript kódcsomag beszúrása a színátmenetes-hálóhoz."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1536
+#: ../src/ui/dialog/inkscape-preferences.cpp:1538
 msgid "Insert Hatch Paint Server JavaScript polyfill."
 msgstr "JavaScript kódcsomag beszúrása a vonalkázás festő-kiszolgáló számára"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1538
+#: ../src/ui/dialog/inkscape-preferences.cpp:1540
 msgid "Adds fallback options for non-SVG 2 renderers."
 msgstr "Tartalék megoldást ad hozzá a nem SVG2 kompatibilis megjelenítőknek."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1539
+#: ../src/ui/dialog/inkscape-preferences.cpp:1541
 msgid "Adds JavaScript polyfill to render meshes."
 msgstr "JavaScript kódcsomagot ad hozzá a színátmenetes hálók leképezéséhez"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1540
+#: ../src/ui/dialog/inkscape-preferences.cpp:1542
 msgid "Adds JavaScript polyfill to render hatches (linear and absolute paths)."
 msgstr ""
 "JavaScript kódcsomagot ad hozzá a vonalkázások megjelenítéséhez (lineáris és "
 "abszolút útvonalak)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1543
+#: ../src/ui/dialog/inkscape-preferences.cpp:1545
 msgid "SVG 2 to SVG 1.1"
 msgstr "SVG2-ből SVG 1.1"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1545
+#: ../src/ui/dialog/inkscape-preferences.cpp:1547
 msgid "Replace markers with 'auto_start_reverse'."
 msgstr "Jelölők cseréje „auto_start_reverse”-re."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1546
+#: ../src/ui/dialog/inkscape-preferences.cpp:1548
 msgid "Replace markers using 'context_paint' or 'context_fill'."
 msgstr "Jelölők cseréje „context_paint”-re vagy „context_fill”-re."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1548
+#: ../src/ui/dialog/inkscape-preferences.cpp:1550
 msgid "SVG 2 allows markers to automatically be reversed at start of path."
 msgstr ""
 "Az SVG 2 lehetővé teszi, hogy a jelölők automatikusan megforduljanak az "
 "útvonal elején."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1549
+#: ../src/ui/dialog/inkscape-preferences.cpp:1551
 msgid "SVG 2 allows markers to automatically match stroke color."
 msgstr ""
 "Az SVG 2 lehetővé teszi, hogy a jelölők automatikusan felvegyék a körvonal "
 "színét."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1551
+#: ../src/ui/dialog/inkscape-preferences.cpp:1553
 msgid "SVG export"
 msgstr "SVG export"
 
-#. TRANSLATORS: see http://www.newsandtech.com/issues/2004/03-04/pt/03-04_rendering.htm
-#: ../src/ui/dialog/inkscape-preferences.cpp:1558
+#. TRANSLATORS: see
+#. http://www.newsandtech.com/issues/2004/03-04/pt/03-04_rendering.htm
+#: ../src/ui/dialog/inkscape-preferences.cpp:1560
 msgid "Perceptual"
 msgstr "Érzékelési"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1558
+#: ../src/ui/dialog/inkscape-preferences.cpp:1560
 msgid "Relative Colorimetric"
 msgstr "Relatív színmérési"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1558
+#: ../src/ui/dialog/inkscape-preferences.cpp:1560
 msgid "Absolute Colorimetric"
 msgstr "Abszolút színmérési"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1562
+#: ../src/ui/dialog/inkscape-preferences.cpp:1564
 msgid "(Note: Color management has been disabled in this build)"
 msgstr ""
 "(Megjegyzés: ebben a programváltozatban ki van kapcsolva a színkezelés)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1566
+#: ../src/ui/dialog/inkscape-preferences.cpp:1568
 msgid "Display adjustment"
 msgstr "Képernyő-beállítás"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1575
+#: ../src/ui/dialog/inkscape-preferences.cpp:1577
 #, c-format
 msgid ""
 "The ICC profile to use to calibrate display output.\n"
@@ -21245,111 +21252,111 @@ msgstr ""
 "A képernyő kimenetének kalibrálásához használt ICC-profil.\n"
 "A könyvtárak, amelyekben a keresés történik:%s"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1576
+#: ../src/ui/dialog/inkscape-preferences.cpp:1578
 msgid "Display profile:"
 msgstr "Képernyőprofil:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1581
+#: ../src/ui/dialog/inkscape-preferences.cpp:1583
 msgid "Retrieve profile from display"
 msgstr "Profil lekérdezése a képernyőtől"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1584
+#: ../src/ui/dialog/inkscape-preferences.cpp:1586
 msgid "Retrieve profiles from those attached to displays via XICC"
 msgstr "Profilok kinyerése XICC-vel a képernyőhöz csatlakoztatottakból"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1586
+#: ../src/ui/dialog/inkscape-preferences.cpp:1588
 msgid "Retrieve profiles from those attached to displays"
 msgstr "Profilok kinyerése a képernyőhöz csatlakoztatottakból"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1591
+#: ../src/ui/dialog/inkscape-preferences.cpp:1593
 msgid "Display rendering intent:"
 msgstr "Képernyős megjelenítési cél:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1592
+#: ../src/ui/dialog/inkscape-preferences.cpp:1594
 msgid "The rendering intent to use to calibrate display output"
 msgstr "A képernyő kimenetének kalibrálásához használt megjelenítési cél"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1594
+#: ../src/ui/dialog/inkscape-preferences.cpp:1596
 msgid "Proofing"
 msgstr "Próbanyomat"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1596
+#: ../src/ui/dialog/inkscape-preferences.cpp:1598
 msgid "Simulate output on screen"
 msgstr "Kimenet szimulálása a képernyőn"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1598
+#: ../src/ui/dialog/inkscape-preferences.cpp:1600
 msgid "Simulates output of target device"
 msgstr "Szimulálja a céleszköz kimenetét"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1600
+#: ../src/ui/dialog/inkscape-preferences.cpp:1602
 msgid "Mark out of gamut colors"
 msgstr "Színskálán kívüli színek megjelölése"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1602
+#: ../src/ui/dialog/inkscape-preferences.cpp:1604
 msgid "Highlights colors that are out of gamut for the target device"
 msgstr ""
 "Kiemeli azon színeket, amelyek a céleszköznél kívül vannak a színskálán"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1609
+#: ../src/ui/dialog/inkscape-preferences.cpp:1611
 msgid "Out of gamut warning color:"
 msgstr "„Színskálán kívül” figyelmeztetés színe:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1610
+#: ../src/ui/dialog/inkscape-preferences.cpp:1612
 msgid "Selects the color used for out of gamut warning"
 msgstr ""
 "A színskálán kívül levő színre való figyelmeztetés színének kiválasztása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1612
+#: ../src/ui/dialog/inkscape-preferences.cpp:1614
 msgid "Device profile:"
 msgstr "Eszközprofil:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1613
+#: ../src/ui/dialog/inkscape-preferences.cpp:1615
 msgid "The ICC profile to use to simulate device output"
 msgstr "Az eszközkimenet szimulálásához használt ICC-profil"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1616
+#: ../src/ui/dialog/inkscape-preferences.cpp:1618
 msgid "Device rendering intent:"
 msgstr "Megjelenítési cél az eszközhöz:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1617
+#: ../src/ui/dialog/inkscape-preferences.cpp:1619
 msgid "The rendering intent to use to calibrate device output"
 msgstr "Az eszközkimenet kalibrálásához használt megjelenítési cél"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1619
+#: ../src/ui/dialog/inkscape-preferences.cpp:1621
 msgid "Black point compensation"
 msgstr "Feketepont-kompenzáció"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1621
+#: ../src/ui/dialog/inkscape-preferences.cpp:1623
 msgid "Enables black point compensation"
 msgstr "Feketepont-kompenzáció bekapcsolása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1623
+#: ../src/ui/dialog/inkscape-preferences.cpp:1625
 msgid "Preserve black"
 msgstr "Fekete megőrzése"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1630
+#: ../src/ui/dialog/inkscape-preferences.cpp:1632
 msgid "(LittleCMS 1.15 or later required)"
 msgstr "(LittleCMS 1.15 vagy újabb verzió szükséges hozzá)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1632
+#: ../src/ui/dialog/inkscape-preferences.cpp:1634
 msgid "Preserve K channel in CMYK -> CMYK transforms"
 msgstr "K-csatorna megőrzése a CMYK -> CMYK átalakításokban"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1646
+#: ../src/ui/dialog/inkscape-preferences.cpp:1648
 #: ../src/ui/widget/color-icc-selector.cpp:381
 #: ../src/ui/widget/color-icc-selector.cpp:678
 msgid "<none>"
 msgstr "<nincs>"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1691
+#: ../src/ui/dialog/inkscape-preferences.cpp:1693
 msgid "Color management"
 msgstr "Színkezelés"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1694
+#: ../src/ui/dialog/inkscape-preferences.cpp:1696
 msgid "Enable autosave (requires restart)"
 msgstr "Automatikus mentés bekapcsolása (életbelépéshez újraindítás szükséges)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1695
+#: ../src/ui/dialog/inkscape-preferences.cpp:1697
 msgid ""
 "Automatically save the current document(s) at a given interval, thus "
 "minimizing loss in case of a crash"
@@ -21357,12 +21364,12 @@ msgstr ""
 "Az aktuális dokumentumok automatikus mentése megadott időközönként, ezzel "
 "minimalizálva egy esetleges leállás által okozott adatvesztést"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1701
+#: ../src/ui/dialog/inkscape-preferences.cpp:1703
 msgctxt "Filesystem"
 msgid "Autosave _directory:"
 msgstr "Automatikus _mentés könyvtára:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1701
+#: ../src/ui/dialog/inkscape-preferences.cpp:1703
 msgid ""
 "The directory where autosaves will be written. This should be an absolute "
 "path (starts with / on UNIX or a drive letter such as C: on Windows). "
@@ -21371,34 +21378,34 @@ msgstr ""
 "kell megadni (UNIX rendszerek alatt „/” jellel kell kezdődjék, vagy Windows "
 "alatt meghajtó-betűjellel, mint pl. a „C:”). "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1703
+#: ../src/ui/dialog/inkscape-preferences.cpp:1705
 msgid "_Interval (in minutes):"
 msgstr "_Időköz (percben):"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1703
+#: ../src/ui/dialog/inkscape-preferences.cpp:1705
 msgid "Interval (in minutes) at which document will be autosaved"
 msgstr "Ennyi percenként készül automatikus mentés a dokumentumokról"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1705
+#: ../src/ui/dialog/inkscape-preferences.cpp:1707
 msgid "_Maximum number of autosaves:"
 msgstr "Automatikus mentések _maximális száma:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1705
+#: ../src/ui/dialog/inkscape-preferences.cpp:1707
 msgid ""
 "Maximum number of autosaved files; use this to limit the storage space used"
 msgstr ""
 "Maximálisan ennyi automatikus mentés (fájl) lesz megtartva. Ezzel lehet "
 "korlátozni a felhasznált tárolóhelyet."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1720
+#: ../src/ui/dialog/inkscape-preferences.cpp:1722
 msgid "Autosave"
 msgstr "Automatikus mentés"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1724
+#: ../src/ui/dialog/inkscape-preferences.cpp:1726
 msgid "Open Clip Art Library _Server Name:"
 msgstr "Open Clip Art Library-kiszolgáló_név:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1725
+#: ../src/ui/dialog/inkscape-preferences.cpp:1727
 msgid ""
 "The server name of the Open Clip Art Library webdav server; it's used by the "
 "Import and Export to OCAL function"
@@ -21406,36 +21413,36 @@ msgstr ""
 "Az Open Clip Art Library Webdav-kiszolgálójának neve. Az OCAL-hoz kapcsolódó "
 "importálási és exportálási funkciók használják."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1727
+#: ../src/ui/dialog/inkscape-preferences.cpp:1729
 msgid "Open Clip Art Library _Username:"
 msgstr "Open Clip Art Library-felhasználónév:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1728
+#: ../src/ui/dialog/inkscape-preferences.cpp:1730
 msgid "The username used to log into Open Clip Art Library"
 msgstr ""
 "Az Open Clip Art Librarybe való bejelentkezéshez használt felhasználónév"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1730
+#: ../src/ui/dialog/inkscape-preferences.cpp:1732
 msgid "Open Clip Art Library _Password:"
 msgstr "Open Clip Art Library-jelszó:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1731
+#: ../src/ui/dialog/inkscape-preferences.cpp:1733
 msgid "The password used to log into Open Clip Art Library"
 msgstr "Az Open Clip Art Librarybe való bejelentkezéshez használt jelszó"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1732
+#: ../src/ui/dialog/inkscape-preferences.cpp:1734
 msgid "Open Clip Art"
 msgstr "Open Clip Art"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1737
+#: ../src/ui/dialog/inkscape-preferences.cpp:1739
 msgid "Behavior"
 msgstr "Működés"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1741
+#: ../src/ui/dialog/inkscape-preferences.cpp:1743
 msgid "_Simplification threshold:"
 msgstr "_Egyszerűsítési küszöb:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1742
+#: ../src/ui/dialog/inkscape-preferences.cpp:1744
 msgid ""
 "How strong is the Node tool's Simplify command by default. If you invoke "
 "this command several times in quick succession, it will act more and more "
@@ -21446,44 +21453,44 @@ msgstr ""
 "erőteljesebb hatást fog kifejteni; ha viszont egy szünetet követően kerül "
 "újra végrehajtásra, akkor visszaáll az alapértelmezett küszöb."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1744
+#: ../src/ui/dialog/inkscape-preferences.cpp:1746
 msgid "Color stock markers the same color as object"
 msgstr "A készlet jelölőinek színezése az objektummal megegyező színre"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1745
+#: ../src/ui/dialog/inkscape-preferences.cpp:1747
 msgid "Color custom markers the same color as object"
 msgstr "Az egyéni jelölők színezése az objektummal megegyező színre"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1746
-#: ../src/ui/dialog/inkscape-preferences.cpp:1985
+#: ../src/ui/dialog/inkscape-preferences.cpp:1748
+#: ../src/ui/dialog/inkscape-preferences.cpp:1987
 msgid "Update marker color when object color changes"
 msgstr "Jelölő színének frissítése az objektum színének módosulásakor"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1749
+#: ../src/ui/dialog/inkscape-preferences.cpp:1751
 msgid "Select in all layers"
 msgstr "Kijelölés az összes rétegben"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1750
+#: ../src/ui/dialog/inkscape-preferences.cpp:1752
 msgid "Select only within current layer"
 msgstr "Kijelölés csak az aktuális rétegben"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1751
+#: ../src/ui/dialog/inkscape-preferences.cpp:1753
 msgid "Select in current layer and sublayers"
 msgstr "Kijelölés az aktuális rétegben és annak alrétegeiben"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1752
+#: ../src/ui/dialog/inkscape-preferences.cpp:1754
 msgid "Ignore hidden objects and layers"
 msgstr "Rejtett objektumok és rétegek figyelmen kívül hagyása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1753
+#: ../src/ui/dialog/inkscape-preferences.cpp:1755
 msgid "Ignore locked objects and layers"
 msgstr "Zárolt objektumok és rétegek figyelmen kívül hagyása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1754
+#: ../src/ui/dialog/inkscape-preferences.cpp:1756
 msgid "Deselect upon layer change"
 msgstr "Kijelölés megszüntetése rétegváltáskor"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1757
+#: ../src/ui/dialog/inkscape-preferences.cpp:1759
 msgid ""
 "Uncheck this to be able to keep the current objects selected when the "
 "current layer changes"
@@ -21492,22 +21499,22 @@ msgstr ""
 "változásakor (más rétegre való váltáskor), akkor távolítsa el a bejelölést "
 "az opcióról"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1759
+#: ../src/ui/dialog/inkscape-preferences.cpp:1761
 msgid "Ctrl+A, Tab, Shift+Tab"
 msgstr "Ctrl+A, Tabulátor, Shift+Tabulátor"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1761
+#: ../src/ui/dialog/inkscape-preferences.cpp:1763
 msgid "Make keyboard selection commands work on objects in all layers"
 msgstr ""
 "A kijelölési billentyűkombinációk az összes réteg objektumaira vonatkoznak"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1763
+#: ../src/ui/dialog/inkscape-preferences.cpp:1765
 msgid "Make keyboard selection commands work on objects in current layer only"
 msgstr ""
 "A kijelölési billentyűkombinációk csak az aktuális réteg objektumaira "
 "vonatkoznak"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1765
+#: ../src/ui/dialog/inkscape-preferences.cpp:1767
 msgid ""
 "Make keyboard selection commands work on objects in current layer and all "
 "its sublayers"
@@ -21515,7 +21522,7 @@ msgstr ""
 "A kijelölési billentyűkombinációk az aktuális réteg és annak alrétegeinek "
 "objektumaira vonatkoznak"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1767
+#: ../src/ui/dialog/inkscape-preferences.cpp:1769
 msgid ""
 "Uncheck this to be able to select objects that are hidden (either by "
 "themselves or by being in a hidden layer)"
@@ -21524,7 +21531,7 @@ msgstr ""
 "amelyek vagy egyénileg rejtettek, vagy egy rejtett rétegben vannak) is ki "
 "lehet jelölni"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1769
+#: ../src/ui/dialog/inkscape-preferences.cpp:1771
 msgid ""
 "Uncheck this to be able to select objects that are locked (either by "
 "themselves or by being in a locked layer)"
@@ -21533,75 +21540,75 @@ msgstr ""
 "amelyek vagy egyénileg zároltak, vagy egy zárolt rétegben vannak) is ki "
 "lehet jelölni"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1771
+#: ../src/ui/dialog/inkscape-preferences.cpp:1773
 msgid "Wrap when cycling objects in z-order"
 msgstr "Megállítás az objektumok z-sorrendjének forgatásakor"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1773
+#: ../src/ui/dialog/inkscape-preferences.cpp:1775
 msgid "Alt+Scroll Wheel"
 msgstr "Alt+Egérgörgő"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1775
+#: ../src/ui/dialog/inkscape-preferences.cpp:1777
 msgid "Wrap around at start and end when cycling objects in z-order"
 msgstr "Megtörés az elején és a végén objektumok z-sorrendjének forgatásakor"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1777
+#: ../src/ui/dialog/inkscape-preferences.cpp:1779
 msgid "Selecting"
 msgstr "Kijelölés"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1780
+#: ../src/ui/dialog/inkscape-preferences.cpp:1782
 #: ../src/ui/toolbar/select-toolbar.cpp:179
 msgid "Scale stroke width"
 msgstr "Körvonalszélesség átméretezése"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1781
+#: ../src/ui/dialog/inkscape-preferences.cpp:1783
 msgid "Scale rounded corners in rectangles"
 msgstr "Lekerekített csúcsok átméretezése a téglalapokban"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1782
+#: ../src/ui/dialog/inkscape-preferences.cpp:1784
 msgid "Transform gradients"
 msgstr "Színátmenetek transzformációja"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1783
+#: ../src/ui/dialog/inkscape-preferences.cpp:1785
 msgid "Transform patterns"
 msgstr "Minták transzformációja"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1785
+#: ../src/ui/dialog/inkscape-preferences.cpp:1787
 msgid "Preserved"
 msgstr "Megőrizve"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1788
+#: ../src/ui/dialog/inkscape-preferences.cpp:1790
 #: ../src/ui/toolbar/select-toolbar.cpp:180
 msgid "When scaling objects, scale the stroke width by the same proportion"
 msgstr ""
 "Objektumok átméretezésekor a körvonalszélesség is legyen - azonos arányban - "
 "átméretezve"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1790
+#: ../src/ui/dialog/inkscape-preferences.cpp:1792
 #: ../src/ui/toolbar/select-toolbar.cpp:187
 msgid "When scaling rectangles, scale the radii of rounded corners"
 msgstr ""
 "Téglalapok átméretezésekor a lekerekített csúcsok sugarai is legyenek "
 "átméretezve"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1792
+#: ../src/ui/dialog/inkscape-preferences.cpp:1794
 #: ../src/ui/toolbar/select-toolbar.cpp:194
 msgid "Move gradients (in fill or stroke) along with the objects"
 msgstr ""
 "Színátmenetek áthelyezése (kitöltésben vagy körvonalban) az objektumokkal "
 "együtt"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1794
+#: ../src/ui/dialog/inkscape-preferences.cpp:1796
 #: ../src/ui/toolbar/select-toolbar.cpp:201
 msgid "Move patterns (in fill or stroke) along with the objects"
 msgstr ""
 "Minták áthelyezése (kitöltésben vagy körvonalban) az objektumokkal együtt"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1795
+#: ../src/ui/dialog/inkscape-preferences.cpp:1797
 msgid "Store transformation"
 msgstr "Transzformációk tárolása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1797
+#: ../src/ui/dialog/inkscape-preferences.cpp:1799
 msgid ""
 "If possible, apply transformation to objects without adding a transform= "
 "attribute"
@@ -21609,33 +21616,33 @@ msgstr ""
 "A „transform=” tulajdonság hozzáadása nélkül legyenek alkalmazva a "
 "transzformációk az objektumokra, amikor csak lehetséges"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1799
+#: ../src/ui/dialog/inkscape-preferences.cpp:1801
 msgid "Always store transformation as a transform= attribute on objects"
 msgstr ""
 "A transzformációk mindig „transform=” objektumtulajdonságban legyenek "
 "eltárolva"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1801
+#: ../src/ui/dialog/inkscape-preferences.cpp:1803
 msgid "Transforms"
 msgstr "Transzformációk"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1803
+#: ../src/ui/dialog/inkscape-preferences.cpp:1805
 msgid "Scale dashes with stroke"
 msgstr "Vonalminta méretezése körvonallal"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1804
+#: ../src/ui/dialog/inkscape-preferences.cpp:1806
 msgid "When changing stroke width, scale dash array"
 msgstr "A körvonal szélességének módosításakor méretezze a vonalminta tömbjét"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1806
+#: ../src/ui/dialog/inkscape-preferences.cpp:1808
 msgid "Dashes"
 msgstr "Vonalminta"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1810
+#: ../src/ui/dialog/inkscape-preferences.cpp:1812
 msgid "Mouse _wheel scrolls by:"
 msgstr "Az egérgörgő görgetési mértéke:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1811
+#: ../src/ui/dialog/inkscape-preferences.cpp:1813
 msgid ""
 "One mouse wheel notch scrolls by this distance in screen pixels "
 "(horizontally with Shift)"
@@ -21643,25 +21650,25 @@ msgstr ""
 "Ennyi képernyő-képponttal görget az egérgörgő egységnyi megmozdítása (a "
 "Shift billentyű lenyomása esetén vízszintesen)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1812
+#: ../src/ui/dialog/inkscape-preferences.cpp:1814
 msgid "Ctrl+arrows"
 msgstr "Ctrl+nyilak"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1814
+#: ../src/ui/dialog/inkscape-preferences.cpp:1816
 msgid "Sc_roll by:"
 msgstr "_Görgetési mérték:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1815
+#: ../src/ui/dialog/inkscape-preferences.cpp:1817
 msgid "Pressing Ctrl+arrow key scrolls by this distance (in screen pixels)"
 msgstr ""
 "A Ctrl és egy nyílbillentyű lenyomása ekkora távolsággal görget (képernyő-"
 "képpontban mérve)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1817
+#: ../src/ui/dialog/inkscape-preferences.cpp:1819
 msgid "_Acceleration:"
 msgstr "Gy_orsítás:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1818
+#: ../src/ui/dialog/inkscape-preferences.cpp:1820
 msgid ""
 "Pressing and holding Ctrl+arrow will gradually speed up scrolling (0 for no "
 "acceleration)"
@@ -21669,15 +21676,15 @@ msgstr ""
 "„Ctrl+nyílbillentyű” kombináció nyomva tartása esetén fokozatosan növekedni "
 "fog a görgetési sebesség (0 esetén nincs gyorsítás)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1819
+#: ../src/ui/dialog/inkscape-preferences.cpp:1821
 msgid "Autoscrolling"
 msgstr "Automatikus görgetés"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1821
+#: ../src/ui/dialog/inkscape-preferences.cpp:1823
 msgid "_Speed:"
 msgstr "_Sebesség:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1822
+#: ../src/ui/dialog/inkscape-preferences.cpp:1824
 msgid ""
 "How fast the canvas autoscrolls when you drag beyond canvas edge (0 to turn "
 "autoscroll off)"
@@ -21685,11 +21692,11 @@ msgstr ""
 "A rajzvászon automatikus görgetésének sebessége a rajzvászon élén túl való "
 "húzáskor (0 esetén nincs automatikus görgetés)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1824
+#: ../src/ui/dialog/inkscape-preferences.cpp:1826
 msgid "_Threshold:"
 msgstr "_Küszöb:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1825
+#: ../src/ui/dialog/inkscape-preferences.cpp:1827
 msgid ""
 "How far (in screen pixels) you need to be from the canvas edge to trigger "
 "autoscroll; positive is outside the canvas, negative is within the canvas"
@@ -21698,21 +21705,21 @@ msgstr ""
 "élétől ahhoz, hogy az automatikus görgetés aktivizálódjon; a pozitív értékek "
 "a rajzvásznon kívüli területet jelölik, a negatívok pedig az azon belülit"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1826
+#: ../src/ui/dialog/inkscape-preferences.cpp:1828
 msgid "Mouse move pans when Space is pressed"
 msgstr "Szóközbillentyű lenyomásával a bal egérgomb pásztázást végez"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1828
+#: ../src/ui/dialog/inkscape-preferences.cpp:1830
 msgid "When on, pressing and holding Space and dragging pans canvas"
 msgstr ""
 "Bekapcsolva a bal egérgomb pásztázza a vásznat, ha a szóközbillentyű "
 "egyidejűleg le van nyomva"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1829
+#: ../src/ui/dialog/inkscape-preferences.cpp:1831
 msgid "Mouse wheel zooms by default"
 msgstr "Az egérgörgő alapértelmezésben nagyít"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1831
+#: ../src/ui/dialog/inkscape-preferences.cpp:1833
 msgid ""
 "When on, mouse wheel zooms without Ctrl and scrolls canvas with Ctrl; when "
 "off, it zooms with Ctrl and scrolls without Ctrl"
@@ -21722,19 +21729,19 @@ msgstr ""
 "kapcsolva, akkor a Ctrl billentyűvel nagyít és a Ctrl billentyű nélkül "
 "görget."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1832
+#: ../src/ui/dialog/inkscape-preferences.cpp:1834
 msgid "Scrolling"
 msgstr "Görgetés"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1835
+#: ../src/ui/dialog/inkscape-preferences.cpp:1837
 msgid "Snap defaults"
 msgstr "Illeszkedési alapértelmezések"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1837
+#: ../src/ui/dialog/inkscape-preferences.cpp:1839
 msgid "Enable snapping in new documents"
 msgstr "Illesztés bekapcsolása az új dokumentumokban"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1839
+#: ../src/ui/dialog/inkscape-preferences.cpp:1841
 msgid ""
 "Initial state of snapping in new documents and non-Inkscape SVGs. Snap "
 "status is subsequently saved per-document."
@@ -21743,23 +21750,23 @@ msgstr ""
 "készített SVG-ékben. Az illesztési állapot utólag kerül mentésre "
 "dokumentumonként."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1841
+#: ../src/ui/dialog/inkscape-preferences.cpp:1843
 msgid "Snap indicator"
 msgstr "Illesztésjelző"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1843
+#: ../src/ui/dialog/inkscape-preferences.cpp:1845
 msgid "Enable snap indicator"
 msgstr "Illesztésjelző bekapcsolása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1845
+#: ../src/ui/dialog/inkscape-preferences.cpp:1847
 msgid "After snapping, a symbol is drawn at the point that has snapped"
 msgstr "Illesztés után egy jel jelenik meg az illesztett pontnál"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1850
+#: ../src/ui/dialog/inkscape-preferences.cpp:1852
 msgid "Snap indicator persistence (in seconds):"
 msgstr "Illesztésjelző fennmaradása (másodperceben):"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1851
+#: ../src/ui/dialog/inkscape-preferences.cpp:1853
 msgid ""
 "Controls how long the snap indicator message will be shown, before it "
 "disappears"
@@ -21767,26 +21774,26 @@ msgstr ""
 "Szabályozza, hogy az illesztésjelző üzenet mennyi ideig jelenjen meg az "
 "eltűnése előtt"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1853
+#: ../src/ui/dialog/inkscape-preferences.cpp:1855
 msgid "What should snap"
 msgstr "Illesztés hatóköre"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1855
+#: ../src/ui/dialog/inkscape-preferences.cpp:1857
 msgid "Only snap the node closest to the pointer"
 msgstr "Csak a mutatóhoz legközelebbi csomópont illesztése"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1857
+#: ../src/ui/dialog/inkscape-preferences.cpp:1859
 msgid ""
 "Only try to snap the node that is initially closest to the mouse pointer"
 msgstr ""
 "Csak az a csomópont legyen illesztve, amelyik kezdetben a legközelebb van az "
 "egérmutatóhoz"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1860
+#: ../src/ui/dialog/inkscape-preferences.cpp:1862
 msgid "_Weight factor:"
 msgstr "Súly_tényező:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1861
+#: ../src/ui/dialog/inkscape-preferences.cpp:1863
 msgid ""
 "When multiple snap solutions are found, then Inkscape can either prefer the "
 "closest transformation (when set to 0), or prefer the node that was "
@@ -21797,11 +21804,11 @@ msgstr ""
 "a csomópontot, amelyik a legközelebb volt kezdetben a mutatóhoz (ha 1-re van "
 "állítva)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1863
+#: ../src/ui/dialog/inkscape-preferences.cpp:1865
 msgid "Snap the mouse pointer when dragging a constrained knot"
 msgstr "Az egérmutató illesztése korlátozott csomó húzásakor"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1865
+#: ../src/ui/dialog/inkscape-preferences.cpp:1867
 msgid ""
 "When dragging a knot along a constraint line, then snap the position of the "
 "mouse pointer instead of snapping the projection of the knot onto the "
@@ -21811,15 +21818,15 @@ msgstr ""
 "pozíciója legyen illesztve - ne a csomónak a korlátozóvonalra eső vetülete "
 "legyen illesztve"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1867
+#: ../src/ui/dialog/inkscape-preferences.cpp:1869
 msgid "Delayed snap"
 msgstr "Késleltetett illesztés"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1870
+#: ../src/ui/dialog/inkscape-preferences.cpp:1872
 msgid "Delay (in seconds):"
 msgstr "Késleltetés (másodpercben):"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1871
+#: ../src/ui/dialog/inkscape-preferences.cpp:1873
 msgid ""
 "Postpone snapping as long as the mouse is moving, and then wait an "
 "additional fraction of a second. This additional delay is specified here. "
@@ -21830,46 +21837,46 @@ msgstr ""
 "Ha nullára van állítva, vagy egy nagyon kicsi értékre, akkor az illesztés "
 "azonnal megtörténik."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1873
+#: ../src/ui/dialog/inkscape-preferences.cpp:1875
 msgid "Snapping"
 msgstr "Illesztés"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1878
+#: ../src/ui/dialog/inkscape-preferences.cpp:1880
 msgid "_Arrow keys move by:"
 msgstr "A nyíl_billentyűk elmozdítási mértéke:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1879
+#: ../src/ui/dialog/inkscape-preferences.cpp:1881
 msgid ""
 "Pressing an arrow key moves selected object(s) or node(s) by this distance"
 msgstr ""
 "Egy nyílbillentyű lenyomása ekkora távolságra mozdítja el a kijelölt "
 "objektumokat illetve csomópontokat"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1882
+#: ../src/ui/dialog/inkscape-preferences.cpp:1884
 msgid "&gt; and &lt; _scale by:"
 msgstr "&gt; és &lt; _méretezési mértéke:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1883
+#: ../src/ui/dialog/inkscape-preferences.cpp:1885
 msgid "Pressing > or < scales selection up or down by this increment"
 msgstr ""
 "A „>” illetve a „<” billentyű lenyomása ennyivel méretezi át a kijelölést "
 "felfelé, ill. lefelé"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1885
+#: ../src/ui/dialog/inkscape-preferences.cpp:1887
 msgid "_Inset/Outset by:"
 msgstr "_Zsugorítás/nyújtás mértéke:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1886
+#: ../src/ui/dialog/inkscape-preferences.cpp:1888
 msgid "Inset and Outset commands displace the path by this distance"
 msgstr ""
 "A zsugorítási és a nyújtási művelet ekkora távolsággal mozdítja el az "
 "útvonalat"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1887
+#: ../src/ui/dialog/inkscape-preferences.cpp:1889
 msgid "Compass-like display of angles"
 msgstr "Szögek iránytű-szerű megjelenítése"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1889
+#: ../src/ui/dialog/inkscape-preferences.cpp:1891
 msgid ""
 "When on, angles are displayed with 0 at north, 0 to 360 range, positive "
 "clockwise; otherwise with 0 at east, -180 to 180 range, positive "
@@ -21881,21 +21888,21 @@ msgstr ""
 "jelenti a 0-t, a tartomány -180-tól 180-ig terjed, az értékek pedig az "
 "óramutató járásával ellentétes irányban növekednek."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1891
+#: ../src/ui/dialog/inkscape-preferences.cpp:1893
 msgctxt "Rotation angle"
 msgid "None"
 msgstr "Nincs"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1895
+#: ../src/ui/dialog/inkscape-preferences.cpp:1897
 msgid "_Rotation snaps every:"
 msgstr "Az elforgatás illesztési lépésköze:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1895
-#: ../src/ui/dialog/inkscape-preferences.cpp:1904 ../share/ui/units.xml:54
+#: ../src/ui/dialog/inkscape-preferences.cpp:1897
+#: ../src/ui/dialog/inkscape-preferences.cpp:1906 ../share/ui/units.xml:54
 msgid "degrees"
 msgstr "fok"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1896
+#: ../src/ui/dialog/inkscape-preferences.cpp:1898
 msgid ""
 "Rotating with Ctrl pressed snaps every that much degrees; also, pressing "
 "[ or ] rotates by this amount"
@@ -21903,11 +21910,11 @@ msgstr ""
 "A Ctrl billentyű nyomva tartásával végzett elforgatás ennyi fokonként "
 "történik, továbbá a „[” és a „]” billentyű ennyivel való elforgatást jelent"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1897
+#: ../src/ui/dialog/inkscape-preferences.cpp:1899
 msgid "Relative snapping of guideline angles"
 msgstr "Segédvonalak szögének relatív illesztése"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1899
+#: ../src/ui/dialog/inkscape-preferences.cpp:1901
 msgid ""
 "When on, the snap angles when rotating a guideline will be relative to the "
 "original angle"
@@ -21915,16 +21922,16 @@ msgstr ""
 "Bekapcsolva, a segédvonalak forgatásakor a szögek illesztése relatív lesz az "
 "eredeti szöghöz képest"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1901
+#: ../src/ui/dialog/inkscape-preferences.cpp:1903
 msgid "_Zoom in/out by:"
 msgstr "_Nagyítás/kicsinyítés mértéke:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1901 ../share/ui/units.xml:4
+#: ../src/ui/dialog/inkscape-preferences.cpp:1903 ../share/ui/units.xml:4
 #: ../share/ui/units.xml:5
 msgid "%"
 msgstr "%"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1902
+#: ../src/ui/dialog/inkscape-preferences.cpp:1904
 msgid ""
 "Zoom tool click, +/- keys, and middle click zoom in and out by this "
 "multiplier"
@@ -21932,54 +21939,54 @@ msgstr ""
 "A nagyítóeszköz, a „+” illetve a „-” billentyűk és a középső egérgombbal "
 "való kattintás ekkora arányban nagyít illetve kicsinyít"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1904
+#: ../src/ui/dialog/inkscape-preferences.cpp:1906
 msgid "_Rotate canvas by:"
 msgstr "_Vászonforgatás lépésköze:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1905
+#: ../src/ui/dialog/inkscape-preferences.cpp:1907
 msgid "Rotate canvas clockwise and counter-clockwise by this amount."
 msgstr ""
 "Vászon elforgatása az óramutató járásával megegyező és ellentétes irányban "
 "ezzel a mértékkel."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1906
+#: ../src/ui/dialog/inkscape-preferences.cpp:1908
 msgid "Steps"
 msgstr "Lépések"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1909
+#: ../src/ui/dialog/inkscape-preferences.cpp:1911
 msgid "Move in parallel"
 msgstr "Párhuzamosan elmozdulnak"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1911
+#: ../src/ui/dialog/inkscape-preferences.cpp:1913
 msgid "Stay unmoved"
 msgstr "Nem mozdulnak el"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1913
+#: ../src/ui/dialog/inkscape-preferences.cpp:1915
 msgid "Move according to transform"
 msgstr "A „transform” tulajdonság szerint mozdulnak el"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1915
+#: ../src/ui/dialog/inkscape-preferences.cpp:1917
 msgid "Are unlinked"
 msgstr "Lekapcsolódnak"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1917
+#: ../src/ui/dialog/inkscape-preferences.cpp:1919
 msgid "Are deleted"
 msgstr "Törlődnek"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1920
+#: ../src/ui/dialog/inkscape-preferences.cpp:1922
 msgid "Moving original: clones and linked offsets"
 msgstr "Eredeti mozgatása: klónok és átkapcsoltak eltolása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1922
+#: ../src/ui/dialog/inkscape-preferences.cpp:1924
 msgid "Clones are translated by the same vector as their original"
 msgstr ""
 "A klónok ugyanazzal a vektorral lesznek elmozdítva, mint az eredeti objektum"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1924
+#: ../src/ui/dialog/inkscape-preferences.cpp:1926
 msgid "Clones preserve their positions when their original is moved"
 msgstr "A klónok helye nem változik az eredeti objektum elmozdításakor"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1926
+#: ../src/ui/dialog/inkscape-preferences.cpp:1928
 msgid ""
 "Each clone moves according to the value of its transform= attribute; for "
 "example, a rotated clone will move in a different direction than its original"
@@ -21988,27 +21995,27 @@ msgstr ""
 "Példa: egy elforgatott klón más irányba mozdulhat el, mint az eredeti "
 "objektum."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1927
+#: ../src/ui/dialog/inkscape-preferences.cpp:1929
 msgid "Deleting original: clones"
 msgstr "Eredeti törlése: klónok"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1929
+#: ../src/ui/dialog/inkscape-preferences.cpp:1931
 msgid "Orphaned clones are converted to regular objects"
 msgstr "Az elárvult klónok normál objektumokká lesznek alakítva"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1931
+#: ../src/ui/dialog/inkscape-preferences.cpp:1933
 msgid "Orphaned clones are deleted along with their original"
 msgstr "Az elárvult klónok az eredeti objektummal együtt törlődnek"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1933
+#: ../src/ui/dialog/inkscape-preferences.cpp:1935
 msgid "Duplicating original+clones/linked offset"
 msgstr "Az eredeti és a klónok/átkapcsoltak kettőzésekori eltolás"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1935
+#: ../src/ui/dialog/inkscape-preferences.cpp:1937
 msgid "Relink duplicated clones"
 msgstr "Kettőzött klónok átkapcsolása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1937
+#: ../src/ui/dialog/inkscape-preferences.cpp:1939
 msgid ""
 "When duplicating a selection containing both a clone and its original "
 "(possibly in groups), relink the duplicated clone to the duplicated original "
@@ -22018,15 +22025,15 @@ msgstr ""
 "(például csoportokban), a klón másolata legyen átkapcsolva az eredeti "
 "másolatához (ne pedig a korábbi eredetihez kapcsolódjon)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1939
+#: ../src/ui/dialog/inkscape-preferences.cpp:1941
 msgid "Unlinking clones"
 msgstr "Klónok lekapcsolása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1940
+#: ../src/ui/dialog/inkscape-preferences.cpp:1942
 msgid "Path operations unlink clones"
 msgstr "Klónok lekapcsolása útvonalművelet"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1942
+#: ../src/ui/dialog/inkscape-preferences.cpp:1944
 msgid ""
 "The following path operations will unlink clones: Stroke to path, Object to "
 "path, Boolean operations, Combine, Break apart"
@@ -22035,28 +22042,28 @@ msgstr ""
 "objektum útvonallá, logikai műveletek, összevonás, szétbontás"
 
 #. TRANSLATORS: Heading for the Inkscape Preferences "Clones" Page
-#: ../src/ui/dialog/inkscape-preferences.cpp:1945
+#: ../src/ui/dialog/inkscape-preferences.cpp:1947
 msgid "Clones"
 msgstr "Klónok"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1948
+#: ../src/ui/dialog/inkscape-preferences.cpp:1950
 msgid "When applying, use the topmost selected object as clippath/mask"
 msgstr ""
 "Alkalmazáskor a legfelül levő kijelölt objektum használata vágóútvonalként "
 "illetve maszkként"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1950
+#: ../src/ui/dialog/inkscape-preferences.cpp:1952
 msgid ""
 "Uncheck this to use the bottom selected object as the clipping path or mask"
 msgstr ""
 "Ha a legalsó kijelölt objektumot szeretné használni vágóútvonalként illetve "
 "maszkként, akkor távolítsa el a bejelölést az opcióról"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1951
+#: ../src/ui/dialog/inkscape-preferences.cpp:1953
 msgid "Remove clippath/mask object after applying"
 msgstr "A vágóútvonal- illetve maszkobjektum eltávolítása alkalmazás után"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1953
+#: ../src/ui/dialog/inkscape-preferences.cpp:1955
 msgid ""
 "After applying, remove the object used as the clipping path or mask from the "
 "drawing"
@@ -22064,58 +22071,58 @@ msgstr ""
 "Alkalmazás után kerüljön eltávolításra a vágóútvonalként illetve maszkként "
 "használt objektum a rajzról"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1955
+#: ../src/ui/dialog/inkscape-preferences.cpp:1957
 msgid "Before applying"
 msgstr "Alkalmazás előtt"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1957
+#: ../src/ui/dialog/inkscape-preferences.cpp:1959
 msgid "Do not group clipped/masked objects"
 msgstr "Ne legyenek csoportosítva a vágott/maszkolt objektumok"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1958
+#: ../src/ui/dialog/inkscape-preferences.cpp:1960
 msgid "Put every clipped/masked object in its own group"
 msgstr "Minden egyes vágott/maszkolt objektum kerüljön be a saját csoportjába"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1959
+#: ../src/ui/dialog/inkscape-preferences.cpp:1961
 msgid "Put all clipped/masked objects into one group"
 msgstr "Az összes vágott/maszkolt objektum kerüljön be egy csoportba"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1962
+#: ../src/ui/dialog/inkscape-preferences.cpp:1964
 msgid "Apply clippath/mask to every object"
 msgstr "Vágóútvonal/maszk alkalmazása minden egyes objektumra"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1965
+#: ../src/ui/dialog/inkscape-preferences.cpp:1967
 msgid "Apply clippath/mask to groups containing single object"
 msgstr ""
 "Vágóútvonal/maszk alkalmazása egy-egy objektumot tartalmazó csoportokra"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1968
+#: ../src/ui/dialog/inkscape-preferences.cpp:1970
 msgid "Apply clippath/mask to group containing all objects"
 msgstr ""
 "Vágóútvonal/maszk alkalmazása egy, az összes objektumot tartalmazó csoportra"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1970
+#: ../src/ui/dialog/inkscape-preferences.cpp:1972
 msgid "After releasing"
 msgstr "Eltávolítás után"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1972
+#: ../src/ui/dialog/inkscape-preferences.cpp:1974
 msgid "Ungroup automatically created groups"
 msgstr "Az automatikusan létrehozott csoportok szétbontása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1974
+#: ../src/ui/dialog/inkscape-preferences.cpp:1976
 msgid "Ungroup groups created when setting clip/mask"
 msgstr "A vágás/maszk beállításakor létrehozott csoportok szétbontása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1976
+#: ../src/ui/dialog/inkscape-preferences.cpp:1978
 msgid "Clippaths and masks"
 msgstr "Vágóútvonalak és maszkok"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1979
+#: ../src/ui/dialog/inkscape-preferences.cpp:1981
 msgid "Stroke Style Markers"
 msgstr "Körvonalstílus jelölők"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1981
 #: ../src/ui/dialog/inkscape-preferences.cpp:1983
+#: ../src/ui/dialog/inkscape-preferences.cpp:1985
 msgid ""
 "Stroke color same as object, fill color either object fill color or marker "
 "fill color"
@@ -22123,47 +22130,47 @@ msgstr ""
 "A körvonal színe ugyanaz, mint az objektumé, a kitöltés színe vagy az "
 "objektum kitöltési színe vagy a jelölő kitöltési színe"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1987
+#: ../src/ui/dialog/inkscape-preferences.cpp:1989
 msgid "Markers"
 msgstr "Jelölők"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1990
+#: ../src/ui/dialog/inkscape-preferences.cpp:1992
 msgid "Document cleanup"
 msgstr "Dokumentum tisztítása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1991
 #: ../src/ui/dialog/inkscape-preferences.cpp:1993
+#: ../src/ui/dialog/inkscape-preferences.cpp:1995
 msgid "Remove unused swatches when doing a document cleanup"
 msgstr "A nem használt színminták eltávolítása a dokumentum tisztításakor"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:1994
+#: ../src/ui/dialog/inkscape-preferences.cpp:1996
 msgid "Cleanup"
 msgstr "Tisztítás"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2002
+#: ../src/ui/dialog/inkscape-preferences.cpp:2004
 msgid "Number of _Threads:"
 msgstr "_Szálak száma:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2002
-#: ../src/ui/dialog/inkscape-preferences.cpp:2536
+#: ../src/ui/dialog/inkscape-preferences.cpp:2004
+#: ../src/ui/dialog/inkscape-preferences.cpp:2538
 msgid "(requires restart)"
 msgstr "(életbelépéshez újraindítás szükséges)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2003
+#: ../src/ui/dialog/inkscape-preferences.cpp:2005
 msgid "Configure number of processors/threads to use when rendering filters"
 msgstr ""
 "A szűrők megjelenítéséhez használandó processzorok/szálak számának beállítása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2007
+#: ../src/ui/dialog/inkscape-preferences.cpp:2009
 msgid "Rendering _cache size:"
 msgstr "Megjelenítési _gyorsítótár mérete:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2007
+#: ../src/ui/dialog/inkscape-preferences.cpp:2009
 msgctxt "mebibyte (2^20 bytes) abbreviation"
 msgid "MiB"
 msgstr "MiB"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2007
+#: ../src/ui/dialog/inkscape-preferences.cpp:2009
 msgid ""
 "Set the amount of memory per document which can be used to store rendered "
 "parts of the drawing for later reuse; set to zero to disable caching"
@@ -22172,11 +22179,11 @@ msgstr ""
 "fordítható dokumentumonkénti memória méretének beállítása; a 0 értékkel "
 "lehet a gyorsítótárazást kikapcsolni"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2011
+#: ../src/ui/dialog/inkscape-preferences.cpp:2013
 msgid "Rendering tile multiplier:"
 msgstr "Csempesokszorosító megjelenítése:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2012
+#: ../src/ui/dialog/inkscape-preferences.cpp:2014
 msgid ""
 "On modern hardware, increasing this value (default is 16) can help to get a "
 "better performance when there are large areas with filtered objects (this "
@@ -22191,45 +22198,45 @@ msgstr ""
 "területeken egy belépő szintű hardveren olyan rajzok esetén, melyekben "
 "nincsenek szűrők, vagy csak néhány."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2016
+#: ../src/ui/dialog/inkscape-preferences.cpp:2018
 msgid "Rendering XRay radius:"
 msgstr "XRay-sugár megjelenítése:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2017
+#: ../src/ui/dialog/inkscape-preferences.cpp:2019
 msgid "XRay mode radius preview"
 msgstr "XRay mód sugár előnézete"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2020
-#: ../src/ui/dialog/inkscape-preferences.cpp:2044
+#: ../src/ui/dialog/inkscape-preferences.cpp:2022
+#: ../src/ui/dialog/inkscape-preferences.cpp:2046
 msgid "Best quality (slowest)"
 msgstr "Legjobb minőség (leglassabb)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2022
-#: ../src/ui/dialog/inkscape-preferences.cpp:2046
+#: ../src/ui/dialog/inkscape-preferences.cpp:2024
+#: ../src/ui/dialog/inkscape-preferences.cpp:2048
 msgid "Better quality (slower)"
 msgstr "Jobb minőség (lassabb)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2024
-#: ../src/ui/dialog/inkscape-preferences.cpp:2048
+#: ../src/ui/dialog/inkscape-preferences.cpp:2026
+#: ../src/ui/dialog/inkscape-preferences.cpp:2050
 msgid "Average quality"
 msgstr "Átlagos minőség"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2026
-#: ../src/ui/dialog/inkscape-preferences.cpp:2050
+#: ../src/ui/dialog/inkscape-preferences.cpp:2028
+#: ../src/ui/dialog/inkscape-preferences.cpp:2052
 msgid "Lower quality (faster)"
 msgstr "Alacsonyabb minőség (gyorsabb)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2028
-#: ../src/ui/dialog/inkscape-preferences.cpp:2052
+#: ../src/ui/dialog/inkscape-preferences.cpp:2030
+#: ../src/ui/dialog/inkscape-preferences.cpp:2054
 msgid "Lowest quality (fastest)"
 msgstr "Legalacsonyabb minőség (leggyorsabb)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2031
+#: ../src/ui/dialog/inkscape-preferences.cpp:2033
 msgid "Gaussian blur quality for display"
 msgstr "A Gauss-elmosás megjelenítési minősége"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2033
-#: ../src/ui/dialog/inkscape-preferences.cpp:2057
+#: ../src/ui/dialog/inkscape-preferences.cpp:2035
+#: ../src/ui/dialog/inkscape-preferences.cpp:2059
 msgid ""
 "Best quality, but display may be very slow at high zooms (bitmap export "
 "always uses best quality)"
@@ -22237,148 +22244,149 @@ msgstr ""
 "Legjobb minőség, de a megjelenítés nagyon lassú lehet magasabb nagyítás "
 "esetén (a bitképbe való exportálás mindig a lehető legjobb minőséget adja)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2035
-#: ../src/ui/dialog/inkscape-preferences.cpp:2059
+#: ../src/ui/dialog/inkscape-preferences.cpp:2037
+#: ../src/ui/dialog/inkscape-preferences.cpp:2061
 msgid "Better quality, but slower display"
 msgstr "Jobb minőség, de lassabb megjelenítés"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2037
-#: ../src/ui/dialog/inkscape-preferences.cpp:2061
+#: ../src/ui/dialog/inkscape-preferences.cpp:2039
+#: ../src/ui/dialog/inkscape-preferences.cpp:2063
 msgid "Average quality, acceptable display speed"
 msgstr "Átlagos minőség, elfogadható sebességű megjelenítés"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2039
-#: ../src/ui/dialog/inkscape-preferences.cpp:2063
+#: ../src/ui/dialog/inkscape-preferences.cpp:2041
+#: ../src/ui/dialog/inkscape-preferences.cpp:2065
 msgid "Lower quality (some artifacts), but display is faster"
 msgstr ""
 "Rosszabb minőség (kisebb megjelenítési hibák), de gyorsabb megjelenítés"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2041
-#: ../src/ui/dialog/inkscape-preferences.cpp:2065
+#: ../src/ui/dialog/inkscape-preferences.cpp:2043
+#: ../src/ui/dialog/inkscape-preferences.cpp:2067
 msgid "Lowest quality (considerable artifacts), but display is fastest"
 msgstr ""
 "Legrosszabb minőség (jelentősebb megjelenítési hibák), de leggyorsabb "
 "megjelenítés"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2055
+#: ../src/ui/dialog/inkscape-preferences.cpp:2057
 msgid "Filter effects quality for display"
 msgstr "Szűrőeffektusok megjelenítési minősége"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2067
+#: ../src/ui/dialog/inkscape-preferences.cpp:2069
 #: ../src/ui/dialog/print.cpp:107
 msgid "Rendering"
 msgstr "Megjelenítés"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2073 ../src/verbs.cpp:159
+#: ../src/ui/dialog/inkscape-preferences.cpp:2075 ../src/verbs.cpp:159
 msgid "Edit"
 msgstr "Szerkesztés"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2074
+#: ../src/ui/dialog/inkscape-preferences.cpp:2076
 msgid "Automatically reload images"
 msgstr "Képek automatikus újratöltése"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2076
+#: ../src/ui/dialog/inkscape-preferences.cpp:2078
 msgid "Automatically reload linked images when file is changed on disk"
 msgstr ""
 "Kapcsolt képek automatikus újratöltése, amikor a fájl változik a lemezen"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2078
+#: ../src/ui/dialog/inkscape-preferences.cpp:2080
 msgid "_Bitmap editor:"
 msgstr "_Bitkép-szerkesztő:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2080
+#: ../src/ui/dialog/inkscape-preferences.cpp:2082
 msgid "_SVG editor:"
 msgstr "_SVG-szerkesztő:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2082
-#: ../share/extensions/guillotine.inx:17 ../share/extensions/plotter.inx:100
+#: ../src/ui/dialog/inkscape-preferences.cpp:2084
+#: ../share/extensions/guillotine.inx:17 ../share/extensions/layer2png.inx:19
+#: ../share/extensions/plotter.inx:100
 #: ../share/extensions/prepare_file_save_as.inx:9
 #: ../share/extensions/print_win32_vector.inx:10
 msgid "Export"
 msgstr "Exportálás"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2084
+#: ../src/ui/dialog/inkscape-preferences.cpp:2086
 msgid "Default export _resolution:"
 msgstr "Alapértelmezett _exportálási felbontás:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2085
+#: ../src/ui/dialog/inkscape-preferences.cpp:2087
 msgid "Default image resolution (in dots per inch) in the Export dialog"
 msgstr ""
 "Alapértelmezett kép-felbontás (pont/hüvelykben) az exportálási "
 "párbeszédablakban"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2086
+#: ../src/ui/dialog/inkscape-preferences.cpp:2088
 msgid "Create"
 msgstr "Létrehozás"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2088
+#: ../src/ui/dialog/inkscape-preferences.cpp:2090
 msgid "Resolution for Create Bitmap _Copy:"
 msgstr "Bitképmásolat-készítéshez használatos felbontás:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2089
+#: ../src/ui/dialog/inkscape-preferences.cpp:2091
 msgid "Resolution used by the Create Bitmap Copy command"
 msgstr "A „bitkép-másolat készítése” funkció által használt felbontás"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2092
+#: ../src/ui/dialog/inkscape-preferences.cpp:2094
 msgid "Ask about linking and scaling when importing bitmap images"
 msgstr "Bitképek importáláskor rákérdezés a hivatkozásra és a méretezésre"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2094
+#: ../src/ui/dialog/inkscape-preferences.cpp:2096
 msgid "Pop-up linking and scaling dialog when importing bitmap image."
 msgstr ""
 "A hivatkozás és méretezés párbeszédablak felugró ablakban feldobása bitkép "
 "importálásakor."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2095
+#: ../src/ui/dialog/inkscape-preferences.cpp:2097
 msgid "Ask about linking and scaling when importing SVG images"
 msgstr "SVG-képek importáláskor rákérdezés a hivatkozásra és a méretezésre"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2097
+#: ../src/ui/dialog/inkscape-preferences.cpp:2099
 msgid "Pop-up linking and scaling dialog when importing SVG image."
 msgstr ""
 "SVG-képek importálásakor a hivatkozás és méretezés párbeszédablak feldobása "
 "felugró ablakban."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2103
+#: ../src/ui/dialog/inkscape-preferences.cpp:2105
 msgid "Bitmap import/open mode:"
 msgstr "Bitképek importálásának és megnyitásának módja:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2107
+#: ../src/ui/dialog/inkscape-preferences.cpp:2109
 msgid "Include"
 msgstr "Beágyazás"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2110
+#: ../src/ui/dialog/inkscape-preferences.cpp:2112
 msgid "SVG import mode:"
 msgstr "SVG importálási mód:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2117
+#: ../src/ui/dialog/inkscape-preferences.cpp:2119
 msgid "Image scale (image-rendering):"
 msgstr "Képméretezés (image-rendering):"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2122
+#: ../src/ui/dialog/inkscape-preferences.cpp:2124
 msgid "Default _import resolution:"
 msgstr "Alapértelmezett _importálási felbontás:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2123
+#: ../src/ui/dialog/inkscape-preferences.cpp:2125
 msgid "Default import resolution (in dots per inch) for bitmap and SVG import"
 msgstr ""
 "Az alapértelmezett importálási felbontás (pont/hüvelykben) a bitkép vagy SVG "
 "importálásakor"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2124
+#: ../src/ui/dialog/inkscape-preferences.cpp:2126
 msgid "Override file resolution"
 msgstr "Fájl felbontás felülírása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2126
+#: ../src/ui/dialog/inkscape-preferences.cpp:2128
 msgid "Use default bitmap resolution in favor of information from file"
 msgstr ""
 "Az alapértelmezett bitkép-felbontás alkalmazása a fájl információi helyett"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2130
+#: ../src/ui/dialog/inkscape-preferences.cpp:2132
 msgid "Images in Outline Mode"
 msgstr "Képek a drótváz módban"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2131
+#: ../src/ui/dialog/inkscape-preferences.cpp:2133
 msgid ""
 "When active will render images while in outline mode instead of a red box "
 "with an x. This is useful for manual tracing."
@@ -22387,11 +22395,11 @@ msgstr ""
 "csak egy piros négyzettel és átlókkal lennének jelezve. Ez hasznos az "
 "átrajzolásokhoz."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2133
+#: ../src/ui/dialog/inkscape-preferences.cpp:2135
 msgid "Imported Images"
 msgstr "Importált képek"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2145
+#: ../src/ui/dialog/inkscape-preferences.cpp:2147
 msgid ""
 "Select a file of predefined shortcuts to use. Any customized shortcuts you "
 "create will be added separately to "
@@ -22399,31 +22407,31 @@ msgstr ""
 "Előre beállított gyorsbillentyűket tartalmazó fájl kijelölése. Minden egyéni "
 "gyorsbillentyű külön lesz hozzáadva "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2148
+#: ../src/ui/dialog/inkscape-preferences.cpp:2150
 msgid "Shortcut file:"
 msgstr "Gyorsbillentyű-fájl:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2151
+#: ../src/ui/dialog/inkscape-preferences.cpp:2153
 #: ../src/ui/dialog/template-load-tab.cpp:44
 msgid "Search:"
 msgstr "Keresés:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2163
+#: ../src/ui/dialog/inkscape-preferences.cpp:2165
 msgid "Shortcut"
 msgstr "Gyorsbillentyű"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2164
+#: ../src/ui/dialog/inkscape-preferences.cpp:2166
 #: ../src/ui/widget/page-sizer.cpp:96
 #: ../share/ui/dialog-livepatheffect-add.glade:431
 #: ../share/ui/dialog-livepatheffect-effect.glade:98
 msgid "Description"
 msgstr "Leírás"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2165
+#: ../src/ui/dialog/inkscape-preferences.cpp:2167
 msgid "ID"
 msgstr "Azonosító"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2209
+#: ../src/ui/dialog/inkscape-preferences.cpp:2211
 msgid ""
 "Remove all your customized keyboard shortcuts, and revert to the shortcuts "
 "in the shortcut file listed above"
@@ -22431,58 +22439,58 @@ msgstr ""
 "Minden egyéni gyorsbillentyű eltávolítása és visszatérés a fenti  "
 "gyorsbillentyű-fájl beállításaihoz"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2213
+#: ../src/ui/dialog/inkscape-preferences.cpp:2215
 msgid "Import ..."
 msgstr "Importálás..."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2215
+#: ../src/ui/dialog/inkscape-preferences.cpp:2217
 msgid "Import custom keyboard shortcuts from a file"
 msgstr "Egyéni gyorsbillentyűk importálása fájlból"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2218
+#: ../src/ui/dialog/inkscape-preferences.cpp:2220
 msgid "Export ..."
 msgstr "Exportálás..."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2220
+#: ../src/ui/dialog/inkscape-preferences.cpp:2222
 msgid "Export custom keyboard shortcuts to a file"
 msgstr "Egyéni gyorsbillentyűk exportálása fájlba"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2230
+#: ../src/ui/dialog/inkscape-preferences.cpp:2232
 msgid "Keyboard Shortcuts"
 msgstr "Gyorsbillentyűk"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2311
+#: ../src/ui/dialog/inkscape-preferences.cpp:2313
 msgid ""
 "Keyboard shortcut \"%1\"\n"
 "is already assigned to \"%2\""
 msgstr "Ez a gyorsbillentyű (%1) már hozzá lett rendelve a funkcióhoz: „%2”"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2314
+#: ../src/ui/dialog/inkscape-preferences.cpp:2316
 msgid "Reassign shortcut?"
 msgstr "Legyen újra hozzárendelve a gyorsbillentyű?"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2315
+#: ../src/ui/dialog/inkscape-preferences.cpp:2317
 msgid "Are you sure you want to reassign this shortcut?"
 msgstr "Biztosan újra hozzá lehet rendelni a gyorsbillentyűt?"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2411
+#: ../src/ui/dialog/inkscape-preferences.cpp:2413
 msgid "Misc"
 msgstr "Egyéb"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2493
+#: ../src/ui/dialog/inkscape-preferences.cpp:2495
 msgctxt "Spellchecker language"
 msgid "None"
 msgstr "Nincs"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2503
+#: ../src/ui/dialog/inkscape-preferences.cpp:2505
 msgid "Set the main spell check language"
 msgstr "A helyesírás-ellenőrzés fő nyelvének beállítása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2506
+#: ../src/ui/dialog/inkscape-preferences.cpp:2508
 msgid "Second language:"
 msgstr "Másodlagos nyelv:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2507
+#: ../src/ui/dialog/inkscape-preferences.cpp:2509
 msgid ""
 "Set the second spell check language; checking will only stop on words "
 "unknown in ALL chosen languages"
@@ -22491,11 +22499,11 @@ msgstr ""
 "olyan szavakon fog megállni, amelyek az összes kiválasztott nyelvben "
 "ismeretlenek."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2510
+#: ../src/ui/dialog/inkscape-preferences.cpp:2512
 msgid "Third language:"
 msgstr "Harmadlagos nyelv:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2511
+#: ../src/ui/dialog/inkscape-preferences.cpp:2513
 msgid ""
 "Set the third spell check language; checking will only stop on words unknown "
 "in ALL chosen languages"
@@ -22504,31 +22512,31 @@ msgstr ""
 "olyan szavakon fog megállni, amelyek az összes kiválasztott nyelvben "
 "ismeretlenek."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2513
+#: ../src/ui/dialog/inkscape-preferences.cpp:2515
 msgid "Ignore words with digits"
 msgstr "Számjegyeket tartalmazó szavak figyelmen kívül hagyása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2515
+#: ../src/ui/dialog/inkscape-preferences.cpp:2517
 msgid "Ignore words containing digits, such as \"R2D2\""
 msgstr "A számjegyeket tartalmazó szavak - mint például „R2D2” - átugrása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2517
+#: ../src/ui/dialog/inkscape-preferences.cpp:2519
 msgid "Ignore words in ALL CAPITALS"
 msgstr "CSUPA NAGYBETŰS szavak figyelmen kívül hagyása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2519
+#: ../src/ui/dialog/inkscape-preferences.cpp:2521
 msgid "Ignore words in all capitals, such as \"IUPAC\""
 msgstr "A csupa nagybetűs szavak - mint például „IUPAC” - átugrása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2521
+#: ../src/ui/dialog/inkscape-preferences.cpp:2523
 msgid "Spellcheck"
 msgstr "Helyesírás-ellenőrzés"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2536
+#: ../src/ui/dialog/inkscape-preferences.cpp:2538
 msgid "Latency _skew:"
 msgstr "Késleltetési _tényező:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2537
+#: ../src/ui/dialog/inkscape-preferences.cpp:2539
 msgid ""
 "Factor by which the event clock is skewed from the actual time (0.9766 on "
 "some systems)"
@@ -22536,11 +22544,11 @@ msgstr ""
 "Az a tényező, amennyivel az eseményóra eltér a tényleges időtől (bizonyos "
 "rendszereken ez 0,9766)"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2539
+#: ../src/ui/dialog/inkscape-preferences.cpp:2541
 msgid "Pre-render named icons"
 msgstr "Nevesített ikonok előzetes megjelenítése"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2541
+#: ../src/ui/dialog/inkscape-preferences.cpp:2543
 msgid ""
 "When on, named icons will be rendered before displaying the ui. This is for "
 "working around bugs in GTK+ named icon notification"
@@ -22549,191 +22557,179 @@ msgstr ""
 "megjelenítése előtt meg lesznek jelenítve. Ezzel kikerülhetők a GTK+ "
 "bizonyos, a nevesített ikonokkal kapcsolatos értesítési problémái."
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2543
+#: ../src/ui/dialog/inkscape-preferences.cpp:2545
 msgid "System info"
 msgstr "Rendszerinformáció"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2547
+#: ../src/ui/dialog/inkscape-preferences.cpp:2549
 msgid "Reset Preferences"
 msgstr "Beállítások visszaállítása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2550
+#: ../src/ui/dialog/inkscape-preferences.cpp:2552
 msgid "User preferences: "
 msgstr "Felhasználói beállítások: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2551
+#: ../src/ui/dialog/inkscape-preferences.cpp:2553
 msgid "Location of the user’s preferences file"
 msgstr "Felhasználói Inkscape-beállítófájl helye"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2553
+#: ../src/ui/dialog/inkscape-preferences.cpp:2555
 msgid "Open preferences folder"
 msgstr "Beállítások mappa megnyitása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2554
+#: ../src/ui/dialog/inkscape-preferences.cpp:2556
 msgid "User config: "
 msgstr "Felhasználói beállítások: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2554
+#: ../src/ui/dialog/inkscape-preferences.cpp:2556
 msgid "Location of users configuration"
 msgstr "Felhasználói Inkscape-beállítások helye"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2557
+#: ../src/ui/dialog/inkscape-preferences.cpp:2559
 msgid "Open extensions folder"
 msgstr "Kiterjesztések mappa megnyitása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2558
+#: ../src/ui/dialog/inkscape-preferences.cpp:2560
 msgid "User extensions: "
 msgstr "Felhasználói kiterjesztések: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2559
+#: ../src/ui/dialog/inkscape-preferences.cpp:2561
 msgid "Location of the user’s extensions"
 msgstr "Felhasználói Inkscape-kiterjesztések helye"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2561
-msgid "Open themes folder"
-msgstr "Témák mappa megnyitása"
-
-#: ../src/ui/dialog/inkscape-preferences.cpp:2562
-msgid "User themes: "
-msgstr "Felhasználói témák: "
-
-#: ../src/ui/dialog/inkscape-preferences.cpp:2562
-msgid "Location of the user’s themes"
-msgstr "Felhasználói témák helye"
-
-#: ../src/ui/dialog/inkscape-preferences.cpp:2565
+#: ../src/ui/dialog/inkscape-preferences.cpp:2567
 msgid "Open icons folder"
 msgstr "Ikonok mappa megnyitása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2566
+#: ../src/ui/dialog/inkscape-preferences.cpp:2568
 msgid "User icons: "
 msgstr "Felhasználói ikonok: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2566
+#: ../src/ui/dialog/inkscape-preferences.cpp:2568
 msgid "Location of the user’s icons"
 msgstr "Felhasználói ikonok helye"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2569
+#: ../src/ui/dialog/inkscape-preferences.cpp:2571
 msgid "Open templates folder"
 msgstr "Sablonok mappa megnyitása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2570
+#: ../src/ui/dialog/inkscape-preferences.cpp:2572
 msgid "User templates: "
 msgstr "Felhasználói sablonok: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2571
+#: ../src/ui/dialog/inkscape-preferences.cpp:2573
 msgid "Location of the user’s templates"
 msgstr "Felhasználói sablonok helye"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2574
+#: ../src/ui/dialog/inkscape-preferences.cpp:2576
 msgid "Open symbols folder"
 msgstr "Szimbólumok mappa megnyitása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2576
+#: ../src/ui/dialog/inkscape-preferences.cpp:2578
 msgid "User symbols: "
 msgstr "Felhasználói szimbólumok: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2576
+#: ../src/ui/dialog/inkscape-preferences.cpp:2578
 msgid "Location of the user’s symbols"
 msgstr "Felhasználói szimbólumok helye"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2580
+#: ../src/ui/dialog/inkscape-preferences.cpp:2582
 msgid "Open paint servers folder"
 msgstr "Festő-kiszolgálók mappájának megnyitása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2582
+#: ../src/ui/dialog/inkscape-preferences.cpp:2584
 msgid "User paint servers: "
 msgstr "Felhasználói festő-kiszolgálók:"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2583
+#: ../src/ui/dialog/inkscape-preferences.cpp:2585
 msgid "Location of the user’s paint servers"
 msgstr "Felhasználói festő-kiszolgálók helye"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2586
+#: ../src/ui/dialog/inkscape-preferences.cpp:2588
 msgid "Open palettes folder"
 msgstr "Paletták mappa megnyitása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2587
+#: ../src/ui/dialog/inkscape-preferences.cpp:2589
 msgid "User palettes: "
 msgstr "Felhasználói paletták: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2587
+#: ../src/ui/dialog/inkscape-preferences.cpp:2589
 msgid "Location of the user’s palettes"
 msgstr "Felhasználói paletták helye"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2591
+#: ../src/ui/dialog/inkscape-preferences.cpp:2593
 msgid "Open keyboard shortcuts folder"
 msgstr "Gyorsbillentyűk mappa megnyitása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2592
+#: ../src/ui/dialog/inkscape-preferences.cpp:2594
 msgid "User keys: "
 msgstr "Felhasználói gyorsbillentyűk: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2593
+#: ../src/ui/dialog/inkscape-preferences.cpp:2595
 msgid "Location of the user’s keyboard mapping files"
 msgstr "Felhasználói gyorsbillentyű-leképezés fájlok helye"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2596
+#: ../src/ui/dialog/inkscape-preferences.cpp:2598
 msgid "Open user interface folder"
 msgstr "Egyéni felhasználói felület mappa megnyitása"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2597
+#: ../src/ui/dialog/inkscape-preferences.cpp:2599
 msgid "User UI: "
 msgstr "Egyéni felhasználói felület: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2598
+#: ../src/ui/dialog/inkscape-preferences.cpp:2600
 msgid "Location of the user’s user interface description files"
 msgstr "Egyéni felhasználói felületleíró fájlok helye"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2602
+#: ../src/ui/dialog/inkscape-preferences.cpp:2604
 msgid "User cache: "
 msgstr "Felhasználói gyorsítótár: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2602
+#: ../src/ui/dialog/inkscape-preferences.cpp:2604
 msgid "Location of user’s cache"
 msgstr "Felhasználói gyorsítótár helye"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2610
+#: ../src/ui/dialog/inkscape-preferences.cpp:2612
 msgid "Temporary files: "
 msgstr "Ideiglenes fájlok: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2610
+#: ../src/ui/dialog/inkscape-preferences.cpp:2612
 msgid "Location of the temporary files used for autosave"
 msgstr "Az automatikus mentésekre használt ideiglenes mappa helye"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2614
+#: ../src/ui/dialog/inkscape-preferences.cpp:2616
 msgid "Inkscape data: "
 msgstr "Inkscape adatok: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2614
+#: ../src/ui/dialog/inkscape-preferences.cpp:2616
 msgid "Location of Inkscape data"
 msgstr "Inkscape adatok helye"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2618
+#: ../src/ui/dialog/inkscape-preferences.cpp:2620
 msgid "Inkscape extensions: "
 msgstr "Inkscape-kiterjesztések: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2618
+#: ../src/ui/dialog/inkscape-preferences.cpp:2620
 msgid "Location of the Inkscape extensions"
 msgstr "Inkscape-kiterjesztések helye"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2628
+#: ../src/ui/dialog/inkscape-preferences.cpp:2630
 msgid "System data: "
 msgstr "Rendszeradatok: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2628
+#: ../src/ui/dialog/inkscape-preferences.cpp:2630
 msgid "Locations of system data"
 msgstr "Rendszeradatok helye"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2642
+#: ../src/ui/dialog/inkscape-preferences.cpp:2644
 msgid "Icon theme: "
 msgstr "Ikontéma: "
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2642
+#: ../src/ui/dialog/inkscape-preferences.cpp:2644
 msgid "Locations of icon themes"
 msgstr "Ikontémák helye"
 
-#: ../src/ui/dialog/inkscape-preferences.cpp:2644
+#: ../src/ui/dialog/inkscape-preferences.cpp:2646
 msgid "System"
 msgstr "Rendszer"
 
@@ -23120,7 +23116,8 @@ msgstr "Heap"
 msgid "In Use"
 msgstr "Használatban"
 
-#. TRANSLATORS: "Slack" refers to memory which is in the heap but currently unused.
+#. TRANSLATORS: "Slack" refers to memory which is in the heap but currently
+#. unused.
 #. More typical usage is to call this memory "free" rather than "slack".
 #: ../src/ui/dialog/memory.cpp:99
 msgid "Slack"
@@ -23171,14 +23168,17 @@ msgstr "Új, sablonból"
 msgid "Href:"
 msgstr "Hivatkozás (href):"
 
-#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/linking.html#AElementXLinkRoleAttribute
+#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-
+#. SVG-20000802/linking.html#AElementXLinkRoleAttribute
 #. Identifies the type of the related resource with an absolute URI
 #: ../src/ui/dialog/object-attributes.cpp:43
 msgid "Role:"
 msgstr "Fajta (role):"
 
-#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/linking.html#AElementXLinkArcRoleAttribute
-#. For situations where the nature/role alone isn't enough, this offers an additional URI defining the purpose of the link.
+#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-
+#. SVG-20000802/linking.html#AElementXLinkArcRoleAttribute
+#. For situations where the nature/role alone isn't enough, this offers an
+#. additional URI defining the purpose of the link.
 #: ../src/ui/dialog/object-attributes.cpp:46
 msgid "Arcrole:"
 msgstr "Szerep (arcrole):"
@@ -23188,7 +23188,8 @@ msgstr "Szerep (arcrole):"
 msgid "Show:"
 msgstr "Megjelenítés (show):"
 
-#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/linking.html#AElementXLinkActuateAttribute
+#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-
+#. SVG-20000802/linking.html#AElementXLinkActuateAttribute
 #: ../src/ui/dialog/object-attributes.cpp:51
 msgid "Actuate:"
 msgstr "Indítás (actuate):"
@@ -23258,6 +23259,17 @@ msgid ""
 "Note that the specification of this property is not finalized. Support and "
 "interpretation of these values varies between renderers."
 msgstr ""
+"Az „image-rendering” tulajdonsággal lehet befolyásolni a bitképek "
+"felülméretezését:\n"
+"\t• „auto”: nincs beállítás (általában simított, de elmosott)\n"
+"\t• „optimizeQuality”: a leképezés minőségére összpontosít (általában "
+"simított, de elmosott)\n"
+"\t• „optimizeSpeed”: a leképezés gyorsaságára összpontosít (általában "
+"darabos)\n"
+"\t• „crisp-edges”: újraméretez elmosott élek nélkül (gyakran darabos)\n"
+"\t• „pixelated”: darabos leképezés\n"
+"Megjegyzés: A tulajdonság specifikációja még nem rögzített. A támogatása és "
+"értelmezése változó a különféle megjelenítők között."
 
 #: ../src/ui/dialog/object-properties.cpp:254
 msgid "Check to make the object invisible"
@@ -23538,14 +23550,12 @@ msgid "Current document"
 msgstr "Jelenlegi dokumentum"
 
 #: ../src/ui/dialog/paint-servers.cpp:92
-#, fuzzy
 msgid "Server"
-msgstr "Kiszolgáló:"
+msgstr "Kiszolgáló"
 
 #: ../src/ui/dialog/paint-servers.cpp:104
-#, fuzzy
 msgid "Change"
-msgstr "Módosítás:"
+msgstr "Módosítás"
 
 #: ../src/ui/dialog/paint-servers.cpp:108
 #: ../src/ui/dialog/paint-servers.cpp:110 ../share/extensions/frame.inx:10
@@ -23580,7 +23590,6 @@ msgid "X coordinate of the radius"
 msgstr "A sugár X koordinátája"
 
 #: ../src/ui/dialog/polar-arrange-tab.cpp:41
-#, fuzzy
 msgctxt "Polar arrange tab"
 msgid "Ending angle"
 msgstr "Befejező szög"
@@ -23816,7 +23825,6 @@ msgid "value"
 msgstr "érték"
 
 #: ../src/ui/dialog/styledialog.cpp:788
-#, fuzzy
 msgid "This value is commented"
 msgstr "Ez az érték ki van kommentelve"
 
@@ -24196,9 +24204,8 @@ msgid "All symbol sets"
 msgstr "Összes szimbólumgyűjtemény"
 
 #: ../src/ui/dialog/symbols.cpp:129
-#, fuzzy
 msgid "Symbol set"
-msgstr "Szimbólum-gyűjtemény: "
+msgstr "Szimbólum-gyűjtemény"
 
 #: ../src/ui/dialog/symbols.cpp:158
 msgid "Return to start search."
@@ -24289,9 +24296,8 @@ msgid "notitle_"
 msgstr "cím_nélküli_"
 
 #: ../src/ui/dialog/symbols.cpp:1229
-#, fuzzy
 msgid "Symbol without title"
-msgstr "Cím nélküli szimbólum "
+msgstr "Cím nélküli szimbólum"
 
 #: ../src/ui/dialog/template-widget.cpp:32
 msgid "More info"
@@ -25979,7 +25985,8 @@ msgstr "Tükrözött"
 msgid "Direct"
 msgstr "Közvetlen"
 
-#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
+#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-
+#. SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
 #: ../src/ui/toolbar/gradient-toolbar.cpp:460
 msgid ""
 "Whether to fill with flat color beyond the ends of the gradient vector "
@@ -26332,7 +26339,8 @@ msgstr "Coons-foltok"
 msgid "Bicubic"
 msgstr "Bikubikus"
 
-#. TRANSLATORS: Type of Smoothing. See https://en.wikipedia.org/wiki/Coons_patch
+#. TRANSLATORS: Type of Smoothing. See
+#. https://en.wikipedia.org/wiki/Coons_patch
 #: ../src/ui/toolbar/mesh-toolbar.cpp:329
 msgid "Coons: no smoothing. Bicubic: smoothing across patch boundaries."
 msgstr ""
@@ -27349,7 +27357,8 @@ msgstr "szabályos sokszög"
 msgid "Spoke ratio:"
 msgstr "Ágarány:"
 
-#. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
+#. TRANSLATORS: Tip radius of a star is the distance from the center to the
+#. farthest handle.
 #. Base radius is the same for the closest handle.
 #: ../src/ui/toolbar/star-toolbar.cpp:127
 msgid "Base radius to tip radius ratio"
@@ -28365,7 +28374,8 @@ msgstr "Pont létrehozása"
 msgid "Create single dot"
 msgstr "Pont létrehozása"
 
-#. TRANSLATORS: %s will be substituted with the point name (see previous messages); This is part of a compound message
+#. TRANSLATORS: %s will be substituted with the point name (see previous
+#. messages); This is part of a compound message
 #: ../src/ui/tools/gradient-tool.cpp:120 ../src/ui/tools/mesh-tool.cpp:136
 #, c-format
 msgid "%s selected"
@@ -28379,7 +28389,8 @@ msgid_plural " out of %d gradient handles"
 msgstr[0] " %d színátmenet-vezérlőelemből"
 msgstr[1] " %d színátmenet-fogantyúból"
 
-#. TRANSLATORS: Mind the space in front. (Refers to gradient handles selected). This is part of a compound message
+#. TRANSLATORS: Mind the space in front. (Refers to gradient handles
+#. selected). This is part of a compound message
 #: ../src/ui/tools/gradient-tool.cpp:123 ../src/ui/tools/gradient-tool.cpp:132
 #: ../src/ui/tools/gradient-tool.cpp:139 ../src/ui/tools/mesh-tool.cpp:139
 #: ../src/ui/tools/mesh-tool.cpp:150 ../src/ui/tools/mesh-tool.cpp:158
@@ -28389,7 +28400,8 @@ msgid_plural " on %d selected objects"
 msgstr[0] " %d kijelölt objektumon"
 msgstr[1] " %d kijelölt objektumon"
 
-#. TRANSLATORS: This is a part of a compound message (out of two more indicating: grandint handle count & object count)
+#. TRANSLATORS: This is a part of a compound message (out of two more
+#. indicating: grandint handle count & object count)
 #: ../src/ui/tools/gradient-tool.cpp:129 ../src/ui/tools/mesh-tool.cpp:146
 #, c-format
 msgid ""
@@ -28402,7 +28414,8 @@ msgstr[0] ""
 msgstr[1] ""
 "%d fázist összevonó fogantyú (különválasztás: <b>Shift</b>+húzás) kijelölve"
 
-#. TRANSLATORS: The plural refers to number of selected gradient handles. This is part of a compound message (part two indicates selected object count)
+#. TRANSLATORS: The plural refers to number of selected gradient handles. This
+#. is part of a compound message (part two indicates selected object count)
 #: ../src/ui/tools/gradient-tool.cpp:137
 #, c-format
 msgid "<b>%d</b> gradient handle selected out of %d"
@@ -28572,7 +28585,7 @@ msgstr "Háló illesztése a határoló téglalapba."
 msgid "Create mesh"
 msgstr "Háló létrehozása"
 
-#: ../src/ui/tools/node-tool.cpp:657
+#: ../src/ui/tools/node-tool.cpp:666
 msgctxt "Node tool tip"
 msgid ""
 "<b>Shift</b>: drag to add nodes to the selection, click to toggle object "
@@ -28581,19 +28594,19 @@ msgstr ""
 "<b>Shift</b>. Csomópontok felvétele a kijelölésbe: húzással. "
 "Objektumkijelölés átkapcsolása: kattintással."
 
-#: ../src/ui/tools/node-tool.cpp:661
+#: ../src/ui/tools/node-tool.cpp:670
 msgctxt "Node tool tip"
 msgid "<b>Shift</b>: drag to add nodes to the selection"
 msgstr "<b>Shift</b>. Csomópontok felvétele a kijelölésbe: húzással."
 
-#: ../src/ui/tools/node-tool.cpp:690
+#: ../src/ui/tools/node-tool.cpp:699
 #, c-format
 msgid "<b>%u of %u</b> node selected."
 msgid_plural "<b>%u of %u</b> nodes selected."
 msgstr[0] "<b>%u/%u</b> csomópont kijelölve."
 msgstr[1] "<b>%u/%u</b> csomópont kijelölve."
 
-#: ../src/ui/tools/node-tool.cpp:697
+#: ../src/ui/tools/node-tool.cpp:706
 #, c-format
 msgctxt "Node tool tip"
 msgid "%s Drag to select nodes, click to edit only this object (more: Shift)"
@@ -28601,32 +28614,32 @@ msgstr ""
 "%s Csomópontok kijelölése: húzással. Csak ezen objektum szerkesztése: "
 "kattintással. (Továbbiak: Shift.)"
 
-#: ../src/ui/tools/node-tool.cpp:703
+#: ../src/ui/tools/node-tool.cpp:712
 #, c-format
 msgctxt "Node tool tip"
 msgid "%s Drag to select nodes, click clear the selection"
 msgstr "%s Csomópontok kijelölése: húzással. Kijelölés törlése: kattintással."
 
-#: ../src/ui/tools/node-tool.cpp:712
+#: ../src/ui/tools/node-tool.cpp:721
 msgctxt "Node tool tip"
 msgid "Drag to select nodes, click to edit only this object"
 msgstr ""
 "Csomópontok kijelölése: húzással. Csak ezen objektum szerkesztése: "
 "kattintással."
 
-#: ../src/ui/tools/node-tool.cpp:715
+#: ../src/ui/tools/node-tool.cpp:724
 msgctxt "Node tool tip"
 msgid "Drag to select nodes, click to clear the selection"
 msgstr "Csomópontok kijelölése: húzással. Kijelölés törlése: kattintással."
 
-#: ../src/ui/tools/node-tool.cpp:720
+#: ../src/ui/tools/node-tool.cpp:729
 msgctxt "Node tool tip"
 msgid "Drag to select objects to edit, click to edit this object (more: Shift)"
 msgstr ""
 "Szerkesztendő objektumok kijelölése: húzással. Ezen objektum szerkesztése: "
 "kattintással. (Továbbiak: Shift.)"
 
-#: ../src/ui/tools/node-tool.cpp:723
+#: ../src/ui/tools/node-tool.cpp:732
 msgctxt "Node tool tip"
 msgid "Drag to select objects to edit"
 msgstr "Szerkesztendő objektumok kijelölése: húzással."
@@ -28897,11 +28910,11 @@ msgid "<b>Alt</b>: lock spiral radius"
 msgstr "<b>Alt</b>: a spirál sugarának megőrzése"
 
 #: ../src/ui/tools/spiral-tool.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Spiral</b>: radius %s, angle %.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr ""
-"<b>Spirál</b>. Sugár: %s, szög: %5g&#176;. Szöghöz való illesztés: <b>Ctrl</"
+"<b>Spirál</b>. Sugár: %s, szög: %.2f&#176;. Szöghöz való illesztés: <b>Ctrl</"
 "b>."
 
 #: ../src/ui/tools/spiral-tool.cpp:406
@@ -28959,20 +28972,20 @@ msgid "<b>Ctrl</b>: snap angle; keep rays radial"
 msgstr "<b>Ctrl</b>: szöghöz való illesztés; ágak sugárirányban való tartása"
 
 #: ../src/ui/tools/star-tool.cpp:397
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Polygon</b>: radius %s, angle %.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr ""
-"<b>Sokszög</b>. Sugár: %s, szög: %5g&#176;. Szöghöz való illesztés: <b>Ctrl</"
-"b>."
+"<b>Sokszög</b>. Sugár: %s, szög: %.2f&#176;. Szöghöz való illesztés: "
+"<b>Ctrl</b>."
 
 #: ../src/ui/tools/star-tool.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Star</b>: radius %s, angle %.2f&#176;; with <b>Ctrl</b> to snap angle"
 msgstr ""
-"<b>Csillag</b>. Sugár: %s, szög: %5g&#176;. Szöghöz való illesztés: <b>Ctrl</"
-"b>."
+"<b>Csillag</b>. Sugár: %s, szög: %.2f&#176;. Szöghöz való illesztés: "
+"<b>Ctrl</b>."
 
 #: ../src/ui/tools/star-tool.cpp:423
 msgid "Create star"
@@ -29278,7 +29291,7 @@ msgstr "Véletlenszerű színmódosításos manipulálás"
 msgid "Blur tweak"
 msgstr "Elmosásos manipulálás"
 
-#: ../src/ui/widget/color-entry.cpp:32
+#: ../src/ui/widget/color-entry.cpp:37
 msgid "Hexadecimal RGBA value of the color"
 msgstr "A szín hexadecimális RGBA-értéke (vörös, zöld, kék, alfa)"
 
@@ -31253,7 +31266,8 @@ msgstr "Útvonalról való _eltávolítás"
 msgid "Remove Manual _Kerns"
 msgstr "Kézi _alávágások eltávolítása"
 
-#. TRANSLATORS: "glyph": An image used in the visual representation of characters;
+#. TRANSLATORS: "glyph": An image used in the visual representation of
+#. characters;
 #. roughly speaking, how a character looks. A font is a set of glyphs.
 #: ../src/verbs.cpp:2687
 msgid "Remove all manual kerns and glyph rotations from a text object"
@@ -31305,7 +31319,8 @@ msgstr "_Felosztás"
 msgid "Cut the bottom path into pieces"
 msgstr "Az alsó útvonal feldarabolása"
 
-#. TRANSLATORS: "to cut a path" is not the same as "to break a path apart" - see the
+#. TRANSLATORS: "to cut a path" is not the same as "to break a path apart" -
+#. see the
 #. Advanced tutorial for more info
 #: ../src/verbs.cpp:2703
 msgid "Cut _Path"
@@ -31488,7 +31503,8 @@ msgstr "Összev_onás"
 msgid "Combine several paths into one"
 msgstr "Több útvonal összevonása eggyé"
 
-#. TRANSLATORS: "to cut a path" is not the same as "to break a path apart" - see the
+#. TRANSLATORS: "to cut a path" is not the same as "to break a path apart" -
+#. see the
 #. Advanced tutorial for more info
 #: ../src/verbs.cpp:2759
 msgid "Break _Apart"
@@ -32845,7 +32861,8 @@ msgstr "Inkscape: _Haladó"
 msgid "Advanced Inkscape topics"
 msgstr "Haladó szintű Inkscape-témakörök"
 
-#. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
+#. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to
+#. vectorize)
 #: ../src/verbs.cpp:3135
 msgid "Inkscape: T_racing"
 msgstr "Inkscape: _Vektorizálás"
@@ -33252,7 +33269,8 @@ msgstr "Színátmenetes-háló"
 msgid "Unset paint (make it undefined so it can be inherited)"
 msgstr "A rajzolat törlése (definiálatlanná tevés, hogy öröklődhessen)"
 
-#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
+#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-
+#. SVG-20000802/painting.html#FillRuleProperty
 #: ../src/widgets/paint-selector.cpp:241
 msgid ""
 "Any path self-intersections or subpaths create holes in the fill (fill-rule: "
@@ -33262,7 +33280,8 @@ msgstr ""
 "hoznak létre a kitöltésben (fill-rule: evenodd, azaz kitöltési szabály: "
 "váltakozó)"
 
-#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
+#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-
+#. SVG-20000802/painting.html#FillRuleProperty
 #: ../src/widgets/paint-selector.cpp:252
 msgid ""
 "Fill is solid unless a subpath is counterdirectional (fill-rule: nonzero)"
@@ -33355,8 +33374,10 @@ msgstr "_Szélesség:"
 msgid "Dashes:"
 msgstr "Vonalminta:"
 
-#. TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
-#. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
+#. TRANSLATORS: Path markers are an SVG feature that allows you to attach
+#. arbitrary shapes
+#. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes
+#. of a path.
 #: ../src/widgets/stroke-style.cpp:234
 msgid "Markers:"
 msgstr "Jelölők:"
@@ -33511,28 +33532,24 @@ msgid "Style of Paint Bucket fill objects"
 msgstr "Területkitöltési objektumok stílusa"
 
 #: ../share/ui/dialog-livepatheffect-add.glade:8
-#, fuzzy
 msgid "Live Path Effects Selector"
-msgstr "Útvonaleffektus-paraméterek szerkesztése"
+msgstr "Élő útvonaleffektus választása"
 
 #: ../share/ui/dialog-livepatheffect-add.glade:266
-#, fuzzy
 msgid "Show Experimental"
-msgstr "Eredeti megjelenítése"
+msgstr "Kísérletiek megjelenítése"
 
 #: ../share/ui/dialog-livepatheffect-add.glade:291
-#, fuzzy
 msgid "Message"
-msgstr "Üzenetek"
+msgstr "Üzenet"
 
 #: ../share/ui/dialog-livepatheffect-effect.glade:77
-#, fuzzy
 msgid "LPEName"
-msgstr "Név"
+msgstr "Élő útvonaleffektus neve"
 
 #: ../share/ui/dialog-livepatheffect-effect.glade:113
 msgid "Experimental"
-msgstr ""
+msgstr "Kísérleti"
 
 #: ../share/ui/dialog-trace.glade:92
 msgid ""
@@ -33771,7 +33788,7 @@ msgstr ""
 
 #: ../share/ui/dialog-trace.glade:841
 msgid "Voronoi"
-msgstr "Voronoi"
+msgstr "Voronoj"
 
 #: ../share/ui/dialog-trace.glade:845
 msgid "Output composed of straight lines"
@@ -33782,7 +33799,7 @@ msgid "B-splines"
 msgstr "B-spline-ok"
 
 #: ../share/ui/dialog-trace.glade:861
-msgid "Preserve staircaseing artifacts"
+msgid "Preserve staircasing artifacts"
 msgstr "Lépcsőzetes alkotások megőrzése"
 
 #: ../share/ui/dialog-trace.glade:881
@@ -33813,7 +33830,7 @@ msgstr "Nem átalakított objektumok össz-száma: {}\n"
 msgid "Please select an object."
 msgstr "Válasszon előbb egy objektumot."
 
-#: ../share/extensions/dxf_input.py:622
+#: ../share/extensions/dxf_input.py:620
 #, python-format
 msgid ""
 "%d ENTITIES of type POLYLINE encountered and ignored. Please try to convert "
@@ -33847,11 +33864,11 @@ msgstr "Kérjük, válasszon egy objektumot"
 msgid "This extension requires at least one non empty layer."
 msgstr "A kiterjesztés legalább egy nem üres réteget igényel."
 
-#: ../share/extensions/hpgl_decoder.py:46
+#: ../share/extensions/hpgl_decoder.py:40
 msgid "Movements"
 msgstr "Mozgások"
 
-#: ../share/extensions/hpgl_decoder.py:47
+#: ../share/extensions/hpgl_decoder.py:41
 msgid "Pen "
 msgstr "Toll "
 
@@ -33868,7 +33885,7 @@ msgstr ""
 "valószínű, hogy a rajzból hiányzik némi részlet."
 
 #: ../share/extensions/hpgl_output.py:55
-msgid "No paths where found. Please convert objects you want into paths."
+msgid "No paths were found. Please convert objects you want into paths."
 msgstr ""
 "Útvonalak nem találhatóak. Útvonallakká kell alakítani a kívánt objektumokat."
 
@@ -34245,12 +34262,7 @@ msgstr ""
 "Nincs objektum kiválasztva. Válasszon egy objektumot, melyen a kívánt "
 "nézetet hozzá kívánja rendelni, majd kattintson az alkalmazásra.\n"
 
-#: ../share/extensions/markers_strokepaint.py:70
-#, python-format
-msgid "No style attribute found for id: %s"
-msgstr "Nem található stílusattribútum ehhez az azonosítóhoz: %s"
-
-#: ../share/extensions/markers_strokepaint.py:117
+#: ../share/extensions/markers_strokepaint.py:90
 #, python-format
 msgid "unable to locate marker: %s"
 msgstr "nem található ilyen jelölőelem: %s"
@@ -36801,7 +36813,7 @@ msgstr ""
 
 #: ../share/extensions/generate_voronoi.inx:3
 msgid "Voronoi Pattern"
-msgstr "Voronoi minta"
+msgstr "Voronoj-minta"
 
 #: ../share/extensions/generate_voronoi.inx:9
 msgid "Average size of cell (px):"
@@ -37228,7 +37240,7 @@ msgstr "Fogantyúk megrajzolása"
 
 #: ../share/extensions/hershey.inx:3
 msgid "Hershey Text"
-msgstr "Hershey Szöveg"
+msgstr "Hershey-szöveg"
 
 #: ../share/extensions/hershey.inx:12
 msgid ""
@@ -37242,13 +37254,13 @@ msgstr ""
 msgid ""
 "A tool to replace text with stroke fonts\n"
 "\n"
-"Version 3.0.1, 2019-07-05\n"
+"Version 3.0.2, 2019-09-07\n"
 "\n"
 "\n"
 msgstr ""
 "Eszköz a szövegek körvonalas betűtípusokra való cserélésére\n"
 "\n"
-"Version 3.0.1, 2019-07-05\n"
+"3.0.2 verzió, 2019. 09. 07.\n"
 "\n"
 "\n"
 
@@ -37292,7 +37304,8 @@ msgstr "Hershey írott közepes"
 msgid "Hershey Gothic English"
 msgstr "Hershey gót angol"
 
-#. Block below this are derived from fonts licensed under SIL Open Font License
+#. Block below this are derived from fonts licensed under SIL Open Font
+#. License
 #: ../share/extensions/hershey.inx:39
 msgid "EMS Allure"
 msgstr "EMS Allure"
@@ -37329,7 +37342,8 @@ msgstr "EMS Readability Italic"
 msgid "EMS Tech"
 msgstr "EMS Tech"
 
-#. Block above this are derived from fonts licensed under SIL Open Font License
+#. Block above this are derived from fonts licensed under SIL Open Font
+#. License
 #: ../share/extensions/hershey.inx:53
 msgid "Other (given below)"
 msgstr "Egyebek (alább)"
@@ -37536,7 +37550,7 @@ msgstr ""
 
 #: ../share/extensions/hpgl_output.inx:10 ../share/extensions/plotter.inx:68
 msgid "Plotter Settings"
-msgstr "Plotter beállítások "
+msgstr "Plotter beállítások"
 
 #: ../share/extensions/hpgl_output.inx:13 ../share/extensions/plotter.inx:71
 msgid "Pen number:"
@@ -37624,7 +37638,7 @@ msgstr ""
 
 #: ../share/extensions/hpgl_output.inx:28 ../share/extensions/plotter.inx:86
 msgid "Plot Features"
-msgstr "Kirajzolási funkciók "
+msgstr "Kirajzolási funkciók"
 
 #: ../share/extensions/hpgl_output.inx:29 ../share/extensions/plotter.inx:87
 msgid "Overcut (mm):"
@@ -37806,7 +37820,9 @@ msgstr "Hivatkozás követése"
 msgid "Ask Us a Question"
 msgstr "Kérdezzen tőlünk"
 
-#. i18n. Please don't translate link unless the page exists in your language. Add your language code to the link this way: https://inkscape.org/[lang]/ask/
+#. i18n. Please don't translate link unless the page exists in your language.
+#. Add your language code to the link this way:
+#. https://inkscape.org/[lang]/ask/
 #: ../share/extensions/inkscape_help_askaquestion.inx:7
 msgid "https://inkscape.org/en/ask/"
 msgstr "https://inkscape.org/en/ask/"
@@ -37815,7 +37831,9 @@ msgstr "https://inkscape.org/en/ask/"
 msgid "Command Line Options"
 msgstr "Parancssori opciók"
 
-#. i18n. Please don't translate link unless the page exists in your language. Add your language code to the link this way: https://inkscape.org/doc/inkscape-man.[lang].html
+#. i18n. Please don't translate link unless the page exists in your language.
+#. Add your language code to the link this way: https://inkscape.org/doc
+#. /inkscape-man.[lang].html
 #: ../share/extensions/inkscape_help_commandline.inx:7
 msgid "https://inkscape.org/doc/inkscape-man.html"
 msgstr "https://inkscape.org/doc/inkscape-man.html"
@@ -37828,7 +37846,9 @@ msgstr "Gyakran feltett kérdések"
 msgid "Keys and Mouse Reference"
 msgstr "Billentyű- és egérkombinációk leírása"
 
-#. i18n. Please don't translate link unless the page exists in your language. Add your language code to the link this way: https://inkscape.org/doc/keys.[lang].html
+#. i18n. Please don't translate link unless the page exists in your language.
+#. Add your language code to the link this way:
+#. https://inkscape.org/doc/keys.[lang].html
 #: ../share/extensions/inkscape_help_keys.inx:7
 msgid "https://inkscape.org/doc/keys.html"
 msgstr "https://inkscape.org/doc/keys.hu.html"
@@ -37846,7 +37866,9 @@ msgstr "http://tavmjong.free.fr/INKSCAPE/MANUAL/html/index.php"
 msgid "New in This Version"
 msgstr "A verzió újdonságai"
 
-#. i18n. Please don't translate link unless the page exists in your language. Add your language code to the link this way: http://wiki.inkscape.org/wiki/index.php/Release_notes/1.0/[lang]
+#. i18n. Please don't translate link unless the page exists in your language.
+#. Add your language code to the link this way:
+#. http://wiki.inkscape.org/wiki/index.php/Release_notes/1.0/[lang]
 #: ../share/extensions/inkscape_help_relnotes.inx:7
 msgid "http://wiki.inkscape.org/wiki/index.php/Release_notes/1.0"
 msgstr "http://wiki.inkscape.org/wiki/index.php/Release_notes/1.0"
@@ -38069,7 +38091,7 @@ msgstr "Nincs (alapértelmezett)"
 #: ../share/extensions/jessyInk_transitions.inx:13
 #: ../share/extensions/jessyInk_transitions.inx:21
 msgid "Appear"
-msgstr "Megjelenés"
+msgstr "Azonnali megjelenés"
 
 #: ../share/extensions/jessyInk_effects.inx:14
 msgid "Fade in"
@@ -38080,7 +38102,7 @@ msgstr "Fokozatos megjelenítés"
 #: ../share/extensions/jessyInk_transitions.inx:15
 #: ../share/extensions/jessyInk_transitions.inx:23
 msgid "Pop"
-msgstr "Pop"
+msgstr "Pattogás"
 
 #: ../share/extensions/jessyInk_effects.inx:17
 msgid "Build-out effect"
@@ -38535,6 +38557,30 @@ msgstr ""
 "Ez az effektus véletlenszerűen elmozdítja a kijelölt útvonal csomópontjait "
 "(valamint kérésre a csomópont-fogantyúkat is)."
 
+#: ../share/extensions/layer2png.inx:3
+msgid "Export Layer Slices"
+msgstr "Rétegszeletek exportálása"
+
+#: ../share/extensions/layer2png.inx:6
+msgid "Icon mode"
+msgstr "Ikon mód"
+
+#: ../share/extensions/layer2png.inx:7
+msgid "Sizes"
+msgstr "Méretek"
+
+#: ../share/extensions/layer2png.inx:8
+msgid "Layer with Slices:"
+msgstr "Réteg szeletekkel:"
+
+#: ../share/extensions/layer2png.inx:9
+msgid "Overwrite existing exports"
+msgstr "Meglévő exportálások felülírása"
+
+#: ../share/extensions/layer2png.inx:10
+msgid "Directory"
+msgstr "Mappa"
+
 #: ../share/extensions/layers2svgfont.inx:3
 msgid "3 - Convert Glyph Layers to SVG Font"
 msgstr "3 - Betűkészletjel-réteg átalakítása SVG betűtípussá"
@@ -38826,7 +38872,7 @@ msgstr "Útvonal megmérése"
 
 #: ../share/extensions/measure.inx:6
 msgid "Measurement Type:"
-msgstr "Mérés típusa: "
+msgstr "Mérés típusa:"
 
 #: ../share/extensions/measure.inx:8
 msgctxt "measure extension"
@@ -39731,11 +39777,11 @@ msgstr "LaTeX (pdflatex)"
 
 #: ../share/extensions/pdflatex.inx:6
 msgid "LaTeX input:"
-msgstr "LaTeX-bemenet: "
+msgstr "LaTeX-bemenet:"
 
 #: ../share/extensions/pdflatex.inx:7
 msgid "Additional packages (comma-separated):"
-msgstr "További csomagok (vesszővel elválasztva): "
+msgstr "További csomagok (vesszővel elválasztva):"
 
 #: ../share/extensions/pdflatex.inx:12
 msgid "Mathematics"
@@ -39866,7 +39912,7 @@ msgstr ""
 
 #: ../share/extensions/plotter.inx:10
 msgid "Connection Settings"
-msgstr "Kapcsolódási beállítások "
+msgstr "Kapcsolódási beállítások"
 
 #: ../share/extensions/plotter.inx:11
 msgid "Port type:"
@@ -40489,15 +40535,15 @@ msgstr "Betűtípus keresése és cseréje"
 
 #: ../share/extensions/replace_font.inx:11
 msgid "Find font:"
-msgstr "Betűkészlet keresése: "
+msgstr "Betűkészlet keresése:"
 
 #: ../share/extensions/replace_font.inx:12
 msgid "Replace with:"
-msgstr "Csere erre: "
+msgstr "Csere erre:"
 
 #: ../share/extensions/replace_font.inx:15
 msgid "Replace all fonts with:"
-msgstr "Minden betűkészlet cseréje erre: "
+msgstr "Minden betűkészlet cseréje erre:"
 
 #: ../share/extensions/replace_font.inx:17
 msgid "List all fonts"
@@ -41554,7 +41600,8 @@ msgstr "DPI:"
 msgid "Force Dimension:"
 msgstr "Méretek kényszerítése:"
 
-#. i18n. Description duplicated in a fake value attribute in order to make it translatable
+#. i18n. Description duplicated in a fake value attribute in order to make it
+#. translatable
 #: ../share/extensions/webslicer_create_rect.inx:16
 msgid "Force Dimension must be set as <width>x<height>"
 msgstr "A méretek kényszerítését így kell megadni: <width>x<height>"
@@ -41689,7 +41736,7 @@ msgstr "Alul jobbra igazítva"
 
 #: ../share/extensions/webslicer_export.inx:3
 msgid "Export layout pieces and HTML+CSS code"
-msgstr "HTML+CSS kódot és elrendezési darabkákat exportál"
+msgstr "HTML+CSS kód és elrendezési darabkák exportálása"
 
 #: ../share/extensions/webslicer_export.inx:9
 msgid "Directory path to export:"
@@ -42019,372 +42066,3 @@ msgstr "fél em"
 #: ../share/ui/units.xml:99
 msgid "Half of font height"
 msgstr "A betűméret fele"
-
-#~ msgid ""
-#~ "background-color <hexadezimal>: the color of the background that should "
-#~ "be ignored, for example FFFFFF; default is no background color."
-#~ msgstr ""
-#~ "background-color <hexadezimal>: a háttérszín, amit figyelmen kívül kell "
-#~ "hagyni, pl. FFFFFF; alapértelmezés szerint nincs háttérszín"
-
-#~ msgid ""
-#~ "charcode <unsigned>: code of character to load from GF file, allowed are "
-#~ "0..255; default is the first character in font."
-#~ msgstr ""
-#~ "charcode <unsigned>: karakterkód, amit be kell tölteni egy GF-fájlból; "
-#~ "lehetséges értékek: 0…255; alapértelmezés az első karakter a "
-#~ "betűkészletben."
-
-#~ msgid ""
-#~ "color-count <unsigned>: number of colors a color bitmap is reduced to, it "
-#~ "does not work on grayscale, allowed are 1..256; default is 0, that means "
-#~ "not color reduction is done."
-#~ msgstr ""
-#~ "color-count <unsigned>: a színek száma, a mire csökkenteni kell a színes "
-#~ "bitképet; szürkeárnyalatos esetén nem működik; megengedett értékek: 1…"
-#~ "256; alapértelmezés a 0, ami azt jelenti, hogy nincs színcsökkentés."
-
-#~ msgid ""
-#~ "corner-always-threshold <angle-in-degrees>: if the angle at a pixel is "
-#~ "less than this, it is considered a corner, even if it is within `corner-"
-#~ "surround' pixels of another corner; default is 60. "
-#~ msgstr ""
-#~ "corner-always-threshold <angle-in-degrees>: ha egy pixelnél lévő szög "
-#~ "ennél kisebb, ahogy saroknak vélelmeződik, akkor is ha egy másik sarok "
-#~ "„corner-surround” pixeleibe esik; alapértelmezés szerint 60."
-
-#~ msgid ""
-#~ "corner-surround <unsigned>: number of pixels on either side of a point to "
-#~ "consider when determining if that point is a corner; default is 4. "
-#~ msgstr ""
-#~ "corner-surround <unsigned>: a pixelszám egy pont mindkét oldalán, amelyet "
-#~ "figyelembe kell venni annak meghatározásakor, hogy ez a pont egy sarok-e; "
-#~ "alapértelmezés szerint 4."
-
-#~ msgid ""
-#~ "corner-threshold <angle-in-degrees>: if a pixel, its predecessor(s), and "
-#~ "its successor(s) meet at an angle smaller than this, it's a corner; "
-#~ "default is 100. "
-#~ msgstr ""
-#~ "corner-threshold <angle-in-degrees>: ha egy pixel, valamint az előde(i) "
-#~ "és az utóda(i) ennél kisebb szögben találkoznak, akkor ez egy sarok; "
-#~ "alapértelmezés szerint 100."
-
-#~ msgid ""
-#~ "error-threshold <real>: subdivide fitted curves that are off by more "
-#~ "pixels than this; default is 2.0. "
-#~ msgstr ""
-#~ "error-threshold <real>: az illesztett ívek felosztása, ha ennél több "
-#~ "pixellel vannak egymástól eltávolodva; alapértelmezés szerint 2.0."
-
-#~ msgid ""
-#~ "filter-iterations <unsigned>: smooth the curve this many times before "
-#~ "fitting; default is 4."
-#~ msgstr ""
-#~ "filter-iterations <unsigned>: illesztés előtt ennyiszer legyen simítva az "
-#~ "ív; alapértelmezés szerint 4."
-
-#~ msgid ""
-#~ "line-reversion-threshold <real>: if a spline is closer to a straight line "
-#~ "than this, weighted by the square of the curve length, keep it a straight "
-#~ "line even if it is a list with curves; default is .01. "
-#~ msgstr ""
-#~ "line-reversion-threshold <real>: ha egy spline közelebb áll egy "
-#~ "egyeneshez, az ív hosszának négyzetével súlyozva, akkor tartsa "
-#~ "egyenesnek, még akkor is, ha ez görbék listája; alapértelmezés szerint "
-#~ "0,01."
-
-#~ msgid ""
-#~ "line-threshold <real>: if the spline is not more than this far away from "
-#~ "the straight line defined by its endpoints,then output a straight line; "
-#~ "default is 1. "
-#~ msgstr ""
-#~ "line-threshold <real>: ha a spline nincs ennél távolabb a végpontjai "
-#~ "által meghatározott egyenestől, akkor egyenes legyen a kimenet; "
-#~ "alapértelmezés szerint 1."
-
-#~ msgid ""
-#~ "remove-adjacent-corners: remove corners that are adjacent; default "
-#~ "doesn't remove."
-#~ msgstr ""
-#~ "remove-adjacent-corners: szomszédos sarkok eltávolítása; alapértelmezés "
-#~ "szerint nem kerülnek eltávolításra."
-
-#~ msgid ""
-#~ "tangent-surround <unsigned>: number of points on either side of a point "
-#~ "to consider when computing the tangent at that point;  default is 3."
-#~ msgstr ""
-#~ "tangent-surround <unsigned>: az egyik pont mindkét oldalán lévő pontok "
-#~ "száma, amelyet figyelembe kell venni az adott pont érintőjének "
-#~ "kiszámításakor; alapértelmezés szerint 3."
-
-#~ msgid "despeckle-level <unsigned>: 0..20; default is no despeckling. "
-#~ msgstr ""
-#~ "despeckle-level <unsigned>: 0…20; alapértelmezés szerint nincs "
-#~ "szétoszlatás. "
-
-#~ msgid "despeckle-tightness <real>: 0.0..8.0; default is 2.0. "
-#~ msgstr "despeckle-tightness <real>: 0.0…8.0; alapértelmezés a 2.0. "
-
-#~ msgid "noise-removal <real>: 1.0..0.0; default is 0.99. "
-#~ msgstr "noise-removal <real>: 1.0…0.0; alapértelmezés a 0.99. "
-
-#~ msgid ""
-#~ "centerline: trace a character's centerline, rather than its outline. "
-#~ msgstr ""
-#~ "centerline: a karakter középvonalának átrajzolása a körvonala helyett."
-
-#~ msgid ""
-#~ "preserve-width: whether to preserve linewith with centerline fitting; "
-#~ "default doesn't preserve."
-#~ msgstr ""
-#~ "preserve-width: vonalvastagság megőrzése a középvonalhoz való "
-#~ "illesztéssel; alapértelmezés szerint nincs megőrizve."
-
-#~ msgid "width-weight-factor <real>: weight factor for fitting the linewidth."
-#~ msgstr ""
-#~ "width-weight-factor <real>: súlytényező a vonalvastagság illesztéséhez."
-
-#~ msgid "color string is too short: %s"
-#~ msgstr "a szín szövege túl rövid: %s"
-
-#~ msgid "wrong char in color string: %c"
-#~ msgstr "hibás karakter a szín szövegében: %c"
-
-#~ msgid "  location: "
-#~ msgstr "  hely: "
-
-#~ msgid "Extension \""
-#~ msgstr "A(z) „"
-
-#~ msgid "Elliptic Pen"
-#~ msgstr "Elliptikus toll"
-
-#~ msgid "Thick-Thin strokes (fast)"
-#~ msgstr "Vastag-vékony körvonal (gyors)"
-
-#~ msgid "Thick-Thin strokes (slow)"
-#~ msgstr "Vastag-vékony körvonal (lassú)"
-
-#~ msgid "Choose pen type"
-#~ msgstr "Tolltípus kijelölése"
-
-#~ msgid "Pen width:"
-#~ msgstr "Toll szélessége:"
-
-#~ msgid "Maximal stroke width"
-#~ msgstr "Körvonal maximális szélessége"
-
-#~ msgid "Pen roundness:"
-#~ msgstr "Toll lekerekítettsége:"
-
-#~ msgid "Min/Max width ratio"
-#~ msgstr "Minimális/maximális szélességarány"
-
-#~ msgid "direction of thickest strokes (opposite = thinnest)"
-#~ msgstr "A legvastagabb körvonal iránya (ellentét = legvékonyabb)"
-
-#~ msgid "Choose start capping type"
-#~ msgstr "Kezdő vonalvég típusának kijelölése"
-
-#~ msgid "Choose end capping type"
-#~ msgstr "Befejező vonalvég típusának kijelölése"
-
-#~ msgid "Grow for:"
-#~ msgstr "Növekedés:"
-
-#~ msgid "Make the stroke thinner near it's start"
-#~ msgstr "A körvonal vékonyabbá tevése a kezdeténél"
-
-#~ msgid "Fade for:"
-#~ msgstr "Eltűnés:"
-
-#~ msgid "Make the stroke thinner near it's end"
-#~ msgstr "A körvonal vékonyabbá tevése a befejezésénél"
-
-#~ msgid "Round ends"
-#~ msgstr "Végek lekerekítése"
-
-#~ msgid "Strokes end with a round end"
-#~ msgstr "A körvonalvég lekerekített befejezése"
-
-#~ msgid "Capping:"
-#~ msgstr "Vonalvég:"
-
-#~ msgid "left capping"
-#~ msgstr "bal vonalvég"
-
-#~ msgid "Control handle 0:"
-#~ msgstr "0. fogantyú:"
-
-#~ msgid "Control handle 0"
-#~ msgstr "0. fogantyú"
-
-#~ msgid "Control handle 1:"
-#~ msgstr "1. fogantyú:"
-
-#~ msgid "Control handle 1"
-#~ msgstr "1. fogantyú"
-
-#~ msgid "Control handle 2:"
-#~ msgstr "2. fogantyú:"
-
-#~ msgid "Control handle 2"
-#~ msgstr "2. fogantyú"
-
-#~ msgid "Control handle 3:"
-#~ msgstr "3. fogantyú:"
-
-#~ msgid "Control handle 3"
-#~ msgstr "3. fogantyú"
-
-#~ msgid "Control handle 4:"
-#~ msgstr "4. fogantyú:"
-
-#~ msgid "Control handle 4"
-#~ msgstr "4. fogantyú"
-
-#~ msgid "Control handle 5:"
-#~ msgstr "5. fogantyú:"
-
-#~ msgid "Control handle 5"
-#~ msgstr "5. fogantyú"
-
-#~ msgid "Control handle 6:"
-#~ msgstr "6. fogantyú:"
-
-#~ msgid "Control handle 6"
-#~ msgstr "6. fogantyú"
-
-#~ msgid "Control handle 7:"
-#~ msgstr "7. fogantyú:"
-
-#~ msgid "Control handle 7"
-#~ msgstr "7. fogantyú"
-
-#~ msgid "Control handle 8:"
-#~ msgstr "8. fogantyú:"
-
-#~ msgid "Control handle 8"
-#~ msgstr "8. fogantyú"
-
-#~ msgid "Control handle 9:"
-#~ msgstr "9. fogantyú:"
-
-#~ msgid "Control handle 9"
-#~ msgstr "9. fogantyú"
-
-#~ msgid "Control handle 10:"
-#~ msgstr "10. fogantyú:"
-
-#~ msgid "Control handle 10"
-#~ msgstr "10. fogantyú"
-
-#~ msgid "Control handle 11:"
-#~ msgstr "11. fogantyú:"
-
-#~ msgid "Control handle 11"
-#~ msgstr "11. fogantyú"
-
-#~ msgid "Control handle 12:"
-#~ msgstr "12. fogantyú:"
-
-#~ msgid "Control handle 12"
-#~ msgstr "12. fogantyú"
-
-#~ msgid "Control handle 13:"
-#~ msgstr "13. fogantyú:"
-
-#~ msgid "Control handle 13"
-#~ msgstr "13. fogantyú"
-
-#~ msgid "Control handle 14:"
-#~ msgstr "14. fogantyú:"
-
-#~ msgid "Control handle 14"
-#~ msgstr "14. fogantyú"
-
-#~ msgid "Control handle 15:"
-#~ msgstr "15. fogantyú:"
-
-#~ msgid "Control handle 15"
-#~ msgstr "15. fogantyú"
-
-#~ msgid "Update on knot move"
-#~ msgstr "Frissítés csomó mozgatásakor"
-
-#~ msgid "Display unit"
-#~ msgstr "Mértékegység megjelenítése"
-
-#~ msgid "Print unit after path length"
-#~ msgstr "Mértékegység kiíratása az útvonal hossza után"
-
-#~ msgid "Iterations:"
-#~ msgstr "Iterációk:"
-
-#~ msgid "recursivity"
-#~ msgstr "rekurzivitás"
-
-#~ msgid "Float parameter"
-#~ msgstr "Lebegő paraméter"
-
-#~ msgid "just a real number like 1.4!"
-#~ msgstr "csak egy valós szám, mint az 1,4!"
-
-#~ msgid "Stack step:"
-#~ msgstr "Verem léptetése:"
-
-#~ msgid "Point param:"
-#~ msgstr "Pont paraméter:"
-
-#~ msgid "Path param:"
-#~ msgstr "Útvonal paraméter:"
-
-#~ msgid "Label:"
-#~ msgstr "Címke:"
-
-#~ msgid "Text label attached to the path"
-#~ msgstr "Útvonalhoz kapcsolt szövegcímke "
-
-#~ msgid "Pixel"
-#~ msgstr "Képpont"
-
-#~ msgid "Pica"
-#~ msgstr "Pica"
-
-#~ msgid "Millimeter"
-#~ msgstr "Milliméter"
-
-#~ msgid "Centimeter"
-#~ msgstr "Centiméter"
-
-#~ msgid "Inch"
-#~ msgstr "Hüvelyk"
-
-#~ msgid "Em square"
-#~ msgstr "Em-négyzet"
-
-#~ msgid "Text units"
-#~ msgstr "Szöveg egységei"
-
-#~ msgid "Always output text size in pixels (px)"
-#~ msgstr "Mindig jelenítse meg a szöveg méretét pixelben (px)"
-
-#~ msgid "This is your favorite effects search result"
-#~ msgstr "Ezek a keresési eredmények a kedvenc effektusok között"
-
-#~ msgid ""
-#~ "The 'image-rendering' property can influence how a bitmap is up-scaled:\n"
-#~ "\t'auto' no preference;\n"
-#~ "\t'optimizeQuality' smooth;\n"
-#~ "\t'optimizeSpeed' blocky.\n"
-#~ "Note that this behaviour is not defined in the SVG 1.1 specification and "
-#~ "not all browsers follow this interpretation."
-#~ msgstr ""
-#~ "Az „image-rendering” tulajdonság tudja befolyásolni a kép "
-#~ "felülméretezését:\n"
-#~ "\t„auto”: nincs beállítás;\n"
-#~ "\t„optimizeQuality”: simított;\n"
-#~ "\t„optimizeSpeed”: darabos.\n"
-#~ "Megjegyzés: A viselkedés nem része az SVG 1.1  specifikációnak és ezért "
-#~ "nem minden böngésző támogatja ezt az értelmezést."
