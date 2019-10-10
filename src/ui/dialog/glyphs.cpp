@@ -161,7 +161,7 @@ static std::map<GUnicodeScript, Glib::ustring> & getScriptToName()
         mappings[G_UNICODE_SCRIPT_DUPLOYAN]             = _("Duployan");                // Since: 2.42
         mappings[G_UNICODE_SCRIPT_ELBASAN]              = _("Elbasan");                 // Since: 2.42
         mappings[G_UNICODE_SCRIPT_GRANTHA]              = _("Grantha");                 // Since: 2.42
-        mappings[G_UNICODE_SCRIPT_KHOJKI]               = _("Kjohki");                  // Since: 2.42
+        mappings[G_UNICODE_SCRIPT_KHOJKI]               = _("Khojki");                  // Since: 2.42
         mappings[G_UNICODE_SCRIPT_KHUDAWADI]            = _("Khudawadi, Sindhi");       // Since: 2.42
         mappings[G_UNICODE_SCRIPT_LINEAR_A]             = _("Linear A");                // Since: 2.42
         mappings[G_UNICODE_SCRIPT_MAHAJANI]             = _("Mahajani");                // Since: 2.42
