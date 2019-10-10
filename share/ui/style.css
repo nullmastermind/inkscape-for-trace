@@ -107,19 +107,19 @@
     background-image: inherit;
 }
 
-.combobright .combo,
-.combobright menu{
-    color: @theme_bg_color;
-    background-color: @theme_fg_color;
-    background-image: image(@theme_fg_color);
-    caret-color: @theme_bg_color;
-    -gtk-secondary-caret-color: @theme_fg_color;
+.dark .combobright .combo,
+.dark .combobright menu{
+    background-color: @theme_text_color;
+    background-image: linear-gradient(to top, @theme_text_color, @theme_fd_color);
+    caret-color: @theme_base_color;
+    -gtk-secondary-caret-color: @theme_base_color;
 }
-.combobright .combo *,
-.combobright menu *{
+.dark .combobright box{
+    color: @theme_base_color;
+}
+.dark .combobright .combo *,
+.dark .combobright menu *{
     color: inherit;
-    background-color: inherit;
-    background-image: inherit;
 }
 
 .attrpop textview {
