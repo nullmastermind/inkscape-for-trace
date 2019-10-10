@@ -368,10 +368,12 @@ sp_desktop_get_color_tool(SPDesktop *desktop, Glib::ustring const &tool, bool is
     guint32 r = 0; // if there's no color, return black
     if (has_color)
         *has_color = false;
-    if (prefs->getBool(tool + "/usecurrent")) {
+    bool styleFromCurrent = prefs->getBool(tool + "/usecurrent");
+    if (styleFromCurrent) {
         css = sp_desktop_get_style(desktop, true);
     } else {
         css = prefs->getStyle(tool + "/style");
+        Inkscape::GC::anchor(css);
     }
 
     if (css) {

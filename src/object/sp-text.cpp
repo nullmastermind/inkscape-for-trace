@@ -1138,6 +1138,7 @@ SPItem *create_text_with_rectangle (SPDesktop *desktop, Geom::Point p0, Geom::Po
         defs_repr = xml_doc->createElement("svg:defs");
         xml_doc->root()->addChild(defs_repr, nullptr);
     }
+    else Inkscape::GC::anchor(defs_repr);
 
     // Add rectangle to defs.
     defs_repr->addChild(rect_repr, nullptr);
