@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-10-10 17:48+0200\n"
+"POT-Creation-Date: 2019-10-10 21:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -8510,6 +8510,7 @@ msgstr ""
 
 #: ../src/inkscape-application.cpp:559
 #: ../src/ui/widget/rendering-options.cpp:34
+#: ../share/extensions/layer2png.inx:11
 msgid "DPI"
 msgstr ""
 
@@ -17785,7 +17786,7 @@ msgid "Grantha"
 msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:164
-msgid "Kjohki"
+msgid "Khojki"
 msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:165
@@ -21158,7 +21159,8 @@ msgid "_SVG editor:"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2084
-#: ../share/extensions/guillotine.inx:17 ../share/extensions/plotter.inx:100
+#: ../share/extensions/guillotine.inx:17 ../share/extensions/layer2png.inx:19
+#: ../share/extensions/plotter.inx:100
 #: ../share/extensions/prepare_file_save_as.inx:9
 #: ../share/extensions/print_win32_vector.inx:10
 msgid "Export"
@@ -36195,6 +36197,30 @@ msgstr ""
 msgid ""
 "This effect randomly shifts the nodes (and optionally node handles) of the "
 "selected path."
+msgstr ""
+
+#: ../share/extensions/layer2png.inx:3
+msgid "Export Layer Slices"
+msgstr ""
+
+#: ../share/extensions/layer2png.inx:6
+msgid "Icon mode"
+msgstr ""
+
+#: ../share/extensions/layer2png.inx:7
+msgid "Sizes"
+msgstr ""
+
+#: ../share/extensions/layer2png.inx:8
+msgid "Layer with Slices:"
+msgstr ""
+
+#: ../share/extensions/layer2png.inx:9
+msgid "Overwrite existing exports"
+msgstr ""
+
+#: ../share/extensions/layer2png.inx:10
+msgid "Directory"
 msgstr ""
 
 #: ../share/extensions/layers2svgfont.inx:3
