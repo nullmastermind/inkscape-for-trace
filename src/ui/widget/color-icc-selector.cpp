@@ -537,9 +537,7 @@ void ColorICCSelectorImpl::_profileSelected(GtkWidget * /*src*/, gpointer data)
         self->_switchToProfile(name);
         gtk_widget_set_tooltip_text(self->_profileSel, name);
 
-        if (name) {
-            g_free(name);
-        }
+        g_free(name);
     }
 }
 #endif // defined(HAVE_LIBLCMS2)

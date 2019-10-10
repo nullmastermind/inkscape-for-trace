@@ -558,9 +558,9 @@ void Application::add_gtk_css()
     // Add style sheet (GTK3)
     auto const screen = Gdk::Screen::get_default();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    const gchar *gtk_font_name = "";
-    const gchar *gtkThemeName;
-    const gchar *gtkIconThemeName;
+    gchar *gtk_font_name = nullptr;
+    gchar *gtkThemeName = nullptr;
+    gchar *gtkIconThemeName = nullptr;
     Glib::ustring themeiconname;
     gboolean gtkApplicationPreferDarkTheme;
     GtkSettings *settings = gtk_settings_get_default();
@@ -587,6 +587,8 @@ void Application::add_gtk_css()
         g_object_get(settings, "gtk-font-name", &gtk_font_name, NULL);
     }
 
+    g_free(gtkThemeName);
+    g_free(gtkIconThemeName);
 
     Glib::ustring style = get_filename(UIS, "style.css");
     if (!style.empty()) {
@@ -613,7 +615,7 @@ void Application::add_gtk_css()
     }
     Gtk::StyleContext::add_provider_for_screen(screen, colorizeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-    if (!strncmp(gtk_font_name, "Cantarell", 9)) {
+    if (gtk_font_name && !strncmp(gtk_font_name, "Cantarell", 9)) {
         auto provider = Gtk::CssProvider::create();
         css_str = "#monoStrokeWidth,";
         css_str += "#fillEmptySpace,";
@@ -631,6 +633,7 @@ void Application::add_gtk_css()
         }
         Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
+    g_free(gtk_font_name);
 }
 
 void Application::readStyleSheets(bool forceupd)

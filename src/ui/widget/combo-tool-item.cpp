@@ -126,12 +126,12 @@ ComboToolItem::populate_combobox()
         }
         Gtk::CellRendererPixbuf *renderer = new Gtk::CellRendererPixbuf;
         renderer->set_property ("stock_size", Gtk::ICON_SIZE_LARGE_TOOLBAR);
-        _combobox->pack_start (*renderer, false);
+        _combobox->pack_start (*Gtk::manage(renderer), false);
         _combobox->add_attribute (*renderer, "icon_name", columns.col_icon );
     } else if (_use_pixbuf) {
         Gtk::CellRendererPixbuf *renderer = new Gtk::CellRendererPixbuf;
         //renderer->set_property ("stock_size", Gtk::ICON_SIZE_LARGE_TOOLBAR);
-        _combobox->pack_start (*renderer, false);
+        _combobox->pack_start (*Gtk::manage(renderer), false);
         _combobox->add_attribute (*renderer, "pixbuf", columns.col_pixbuf   );
     }
 

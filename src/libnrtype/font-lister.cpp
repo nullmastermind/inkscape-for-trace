@@ -411,7 +411,10 @@ void FontLister::update_font_data_recursive(SPObject& r, std::map<Glib::ustring,
     if (font_family_char) {
         Glib::ustring font_family(font_family_char);
         pango_font_description_unset_fields( descr, PANGO_FONT_MASK_FAMILY);
-        Glib::ustring font_style = pango_font_description_to_string(descr);
+
+        gchar* font_style_char = pango_font_description_to_string(descr);
+        Glib::ustring font_style(font_style_char);
+        g_free(font_style_char);
 
         if (!font_family.empty() && !font_style.empty()) {
             font_data[font_family].insert(font_style);
@@ -908,6 +911,7 @@ void FontLister::fill_css(SPCSSAttr *css, Glib::ustring fontspec)
         sp_repr_css_unset_property(css,  "font-variation-settings" );
     }
 #endif
+    pango_font_description_free(desc);
 }
 
 
@@ -1130,7 +1134,9 @@ gboolean font_lister_separator_func2(GtkTreeModel *model, GtkTreeIter *iter, gpo
 {
     gchar *text = nullptr;
     gtk_tree_model_get(model, iter, 0, &text, -1); // Column 0: FontList.family
-    return (text && strcmp(text, "#") == 0);
+    bool result = (text && strcmp(text, "#") == 0);
+    g_free(text);
+    return result;
 }
 
 // Draw system fonts in dark blue, missing fonts with red strikeout.
@@ -1153,7 +1159,6 @@ void font_lister_cell_data_func2(GtkCellLayout * /*cell_layout*/,
     gboolean onSystem = false;
     gtk_tree_model_get(model, iter, 0, &family, 2, &onSystem, -1);
     gchar* family_escaped = g_markup_escape_text(family, -1);
-    //g_free(family);
     Glib::ustring markup;
 
     if (!onSystem) {
@@ -1165,18 +1170,20 @@ void font_lister_cell_data_func2(GtkCellLayout * /*cell_layout*/,
 
             GtkTreeIter iter;
             gboolean valid;
-            gchar *family = nullptr;
             gboolean onSystem = true;
             gboolean found = false;
             for (valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(model), &iter);
                  valid;
                  valid = gtk_tree_model_iter_next(GTK_TREE_MODEL(model), &iter)) {
 
-                gtk_tree_model_get(model, &iter, 0, &family, 2, &onSystem, -1);
-                if (onSystem && familyNamesAreEqual(token, family)) {
+                gchar *token_family = nullptr;
+                gtk_tree_model_get(model, &iter, 0, &token_family, 2, &onSystem, -1);
+                if (onSystem && familyNamesAreEqual(token, token_family)) {
                     found = true;
+                    g_free(token_family);
                     break;
                 }
+                g_free(token_family);
             }
             if (found) {
                 markup += g_markup_escape_text(token.c_str(), -1);
@@ -1214,6 +1221,7 @@ void font_lister_cell_data_func2(GtkCellLayout * /*cell_layout*/,
     }
 
     g_object_set(G_OBJECT(cell), "markup", markup.c_str(), NULL);
+    g_free(family);
     g_free(family_escaped);
 }
 

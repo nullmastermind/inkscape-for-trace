@@ -1059,7 +1059,7 @@ SPIString::clear() {
     SPIBase::clear();
     g_free( value );
     value = nullptr;
-    if( value_default ) value = strdup( value_default );
+    if( value_default ) value = g_strdup( value_default );
 }
 
 void

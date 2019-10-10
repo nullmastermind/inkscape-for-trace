@@ -958,6 +958,7 @@ void font_instance::FindFontMetrics() {
                 // std::cout << "Math baseline: - bbox: y_min: " << acbox.yMin
                 //           << "  y_max: " << acbox.yMax
                 //           << "  math: " << math << std::endl;
+                FT_Done_Glyph(aglyph);
             }
 
             // Find hanging baseline... assume it is at top of 'म'.
@@ -971,6 +972,7 @@ void font_instance::FindFontMetrics() {
                 double hanging = (double)acbox.yMax/(double)theFace->units_per_EM;
                 _baselines[ SP_CSS_BASELINE_HANGING ] = hanging;
                 // std::cout << "Hanging baseline:  प: " << hanging << std::endl;
+                FT_Done_Glyph(aglyph);
             }
         }
 #endif

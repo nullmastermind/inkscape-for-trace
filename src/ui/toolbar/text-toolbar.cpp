@@ -212,7 +212,9 @@ namespace Toolbar {
 TextToolbar::TextToolbar(SPDesktop *desktop)
     : Toolbar(desktop)
     , _freeze(false)
+    , _text_style_from_prefs(false)
     , _outer(true)
+    , _updating(false)
     , _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
     , _tracker_fs(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
     , _cusor_numbers(0)
@@ -657,7 +659,9 @@ TextToolbar::fontfamily_value_changed()
     }
     _freeze = true;
 
-    Glib::ustring new_family = _font_family_item->get_active_text();
+    gchar *temp_family = _font_family_item->get_active_text();
+    Glib::ustring new_family(temp_family);
+    g_free(temp_family);
     css_font_family_unquote( new_family ); // Remove quotes around font family names.
 
     // TODO: Think about how to handle handle multiple selections. While

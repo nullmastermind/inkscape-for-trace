@@ -475,6 +475,7 @@ ComboBoxEntryToolItem::get_active_row_from_text(ComboBoxEntryToolItem *action,
 	// Case sensitive compare
 	if( strcmp( target_text, text ) == 0 ){
 	  found = true;
+          g_free(text);
 	  break;
 	}
       } else {
@@ -486,9 +487,11 @@ ComboBoxEntryToolItem::get_active_row_from_text(ComboBoxEntryToolItem *action,
 	g_free( target_text_casefolded );
 	if( equal ) {
 	  found = true;
+          g_free(text);
 	  break;
 	}
       }
+      g_free(text);
     }
 
     ++row;

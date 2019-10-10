@@ -963,6 +963,8 @@ void SPPaintSelector::updateMeshList( SPMeshGradient *mesh )
         gtk_tree_model_get (store, &iter, COMBO_COL_MESH, &meshid, -1);
         while (valid && strcmp(meshid, meshname)  != 0) {
             valid = gtk_tree_model_iter_next (store, &iter);
+            g_free(meshid);
+            meshid = nullptr;
             gtk_tree_model_get (store, &iter, COMBO_COL_MESH, &meshid, -1);
         }
 
@@ -971,6 +973,7 @@ void SPPaintSelector::updateMeshList( SPMeshGradient *mesh )
         }
 
         g_object_set_data(G_OBJECT(combo), "update", GINT_TO_POINTER(FALSE));
+        g_free(meshid);
     }
 }
 
@@ -1068,9 +1071,11 @@ SPMeshGradient *SPPaintSelector::getMeshGradient()
 
     gchar *meshid = nullptr;
     gboolean stockid = FALSE;
-    gchar *label = nullptr;
-    gtk_tree_model_get (store, &iter, COMBO_COL_LABEL, &label, COMBO_COL_STOCK, &stockid, COMBO_COL_MESH, &meshid,  -1);
+    // gchar *label = nullptr;
+    gtk_tree_model_get (store, &iter, COMBO_COL_STOCK, &stockid, COMBO_COL_MESH, &meshid,  -1);
+    // gtk_tree_model_get (store, &iter, COMBO_COL_LABEL, &label, COMBO_COL_STOCK, &stockid, COMBO_COL_MESH, &meshid,  -1);
     // std::cout << "  .. meshid: " << (meshid?meshid:"null") << "   label: " << (label?label:"null") << std::endl;
+    // g_free(label);
     if (meshid == nullptr) {
         return nullptr;
     }
@@ -1090,10 +1095,11 @@ SPMeshGradient *SPPaintSelector::getMeshGradient()
             mesh = SP_MESHGRADIENT(mesh_obj);
         }
         g_free(mesh_name);
-
     } else {
         std::cerr << "SPPaintSelector::getMeshGradient: Unexpected meshid value." << std::endl;
     }
+
+    g_free(meshid);
 
     return mesh;
 }
@@ -1298,8 +1304,11 @@ void SPPaintSelector::updatePatternList( SPPattern *pattern )
         gtk_tree_model_get (store, &iter, COMBO_COL_PATTERN, &patid, -1);
         while (valid && strcmp(patid, patname)  != 0) {
             valid = gtk_tree_model_iter_next (store, &iter);
+            g_free(patid);
+            patid = nullptr;
             gtk_tree_model_get (store, &iter, COMBO_COL_PATTERN, &patid, -1);
         }
+        g_free(patid);
 
         if (valid) {
             gtk_combo_box_set_active_iter(GTK_COMBO_BOX(combo), &iter);
@@ -1433,12 +1442,12 @@ SPPattern *SPPaintSelector::getPattern()
 
     gchar *patid = nullptr;
     gboolean stockid = FALSE;
-    gchar *label = nullptr;
+    // gchar *label = nullptr;
     gtk_tree_model_get(store, &iter,
-                       COMBO_COL_LABEL, &label,
+                       // COMBO_COL_LABEL, &label,
                        COMBO_COL_STOCK, &stockid,
                        COMBO_COL_PATTERN, &patid,  -1);
-
+    // g_free(label);
     if (patid == nullptr) {
         return nullptr;
     }
@@ -1464,6 +1473,8 @@ SPPattern *SPPaintSelector::getPattern()
             pat = SP_PATTERN(pat_obj)->rootPattern();
         }
     }
+
+    g_free(patid);
 
     return pat;
 }

@@ -727,7 +727,9 @@ void update_aux_toolbox(SPDesktop * /*desktop*/, ToolBase *eventcontext, GtkWidg
     gchar const *tname = ( eventcontext
                            ? eventcontext->getPrefsPath().c_str() //g_type_name(G_OBJECT_TYPE(eventcontext))
                            : nullptr );
-    GtkWidget *stack = (GtkWidget *)gtk_container_get_children((GtkContainer *)toolbox)->data;
+    GList *list = gtk_container_get_children((GtkContainer *)toolbox);
+    GtkWidget *stack = (GtkWidget *)list->data;
+    g_list_free(list);
     gtk_stack_set_visible_child_name((GtkStack *)stack, tname);
 }
 
