@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-10-10 01:12+0200\n"
+"POT-Creation-Date: 2019-10-10 17:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17668,8 +17668,8 @@ msgstr ""
 msgid "Avestan"
 msgstr ""
 
-#: ../src/ui/dialog/glyphs.cpp:135
-msgid "Bamum. "
+#: ../src/ui/dialog/glyphs.cpp:135 ../src/ui/dialog/glyphs.cpp:346
+msgid "Bamum"
 msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:136
@@ -17693,7 +17693,7 @@ msgid "Javanese"
 msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:141
-msgid "Kaithi."
+msgid "Kaithi"
 msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:142 ../src/ui/dialog/glyphs.cpp:343
@@ -18162,10 +18162,6 @@ msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:345
 msgid "Cyrillic Extended-B"
-msgstr ""
-
-#: ../src/ui/dialog/glyphs.cpp:346
-msgid "Bamum"
 msgstr ""
 
 #: ../src/ui/dialog/glyphs.cpp:347
@@ -27088,53 +27084,53 @@ msgstr ""
 msgid "Create mesh"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:664
+#: ../src/ui/tools/node-tool.cpp:666
 msgctxt "Node tool tip"
 msgid ""
 "<b>Shift</b>: drag to add nodes to the selection, click to toggle object "
 "selection"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:668
+#: ../src/ui/tools/node-tool.cpp:670
 msgctxt "Node tool tip"
 msgid "<b>Shift</b>: drag to add nodes to the selection"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:697
+#: ../src/ui/tools/node-tool.cpp:699
 #, c-format
 msgid "<b>%u of %u</b> node selected."
 msgid_plural "<b>%u of %u</b> nodes selected."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/ui/tools/node-tool.cpp:704
+#: ../src/ui/tools/node-tool.cpp:706
 #, c-format
 msgctxt "Node tool tip"
 msgid "%s Drag to select nodes, click to edit only this object (more: Shift)"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:710
+#: ../src/ui/tools/node-tool.cpp:712
 #, c-format
 msgctxt "Node tool tip"
 msgid "%s Drag to select nodes, click clear the selection"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:719
+#: ../src/ui/tools/node-tool.cpp:721
 msgctxt "Node tool tip"
 msgid "Drag to select nodes, click to edit only this object"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:722
+#: ../src/ui/tools/node-tool.cpp:724
 msgctxt "Node tool tip"
 msgid "Drag to select nodes, click to clear the selection"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:727
+#: ../src/ui/tools/node-tool.cpp:729
 msgctxt "Node tool tip"
 msgid "Drag to select objects to edit, click to edit this object (more: Shift)"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:730
+#: ../src/ui/tools/node-tool.cpp:732
 msgctxt "Node tool tip"
 msgid "Drag to select objects to edit"
 msgstr ""
@@ -27693,7 +27689,7 @@ msgstr ""
 msgid "Blur tweak"
 msgstr ""
 
-#: ../src/ui/widget/color-entry.cpp:32
+#: ../src/ui/widget/color-entry.cpp:37
 msgid "Hexadecimal RGBA value of the color"
 msgstr ""
 
@@ -31996,7 +31992,7 @@ msgid "B-splines"
 msgstr ""
 
 #: ../share/ui/dialog-trace.glade:861
-msgid "Preserve staircaseing artifacts"
+msgid "Preserve staircasing artifacts"
 msgstr ""
 
 #: ../share/ui/dialog-trace.glade:881
@@ -32027,7 +32023,7 @@ msgstr ""
 msgid "Please select an object."
 msgstr ""
 
-#: ../share/extensions/dxf_input.py:622
+#: ../share/extensions/dxf_input.py:620
 #, python-format
 msgid ""
 "%d ENTITIES of type POLYLINE encountered and ignored. Please try to convert "
@@ -32057,11 +32053,11 @@ msgstr ""
 msgid "This extension requires at least one non empty layer."
 msgstr ""
 
-#: ../share/extensions/hpgl_decoder.py:46
+#: ../share/extensions/hpgl_decoder.py:40
 msgid "Movements"
 msgstr ""
 
-#: ../share/extensions/hpgl_decoder.py:47
+#: ../share/extensions/hpgl_decoder.py:41
 msgid "Pen "
 msgstr ""
 
@@ -32076,7 +32072,7 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/hpgl_output.py:55
-msgid "No paths where found. Please convert objects you want into paths."
+msgid "No paths were found. Please convert objects you want into paths."
 msgstr ""
 
 #: ../share/extensions/inkex/bezier.py:406
@@ -32386,12 +32382,7 @@ msgid ""
 "and then press apply.\n"
 msgstr ""
 
-#: ../share/extensions/markers_strokepaint.py:70
-#, python-format
-msgid "No style attribute found for id: %s"
-msgstr ""
-
-#: ../share/extensions/markers_strokepaint.py:117
+#: ../share/extensions/markers_strokepaint.py:90
 #, python-format
 msgid "unable to locate marker: %s"
 msgstr ""
@@ -35044,7 +35035,7 @@ msgstr ""
 msgid ""
 "A tool to replace text with stroke fonts\n"
 "\n"
-"Version 3.0.1, 2019-07-05\n"
+"Version 3.0.2, 2019-09-07\n"
 "\n"
 "\n"
 msgstr ""
