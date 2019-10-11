@@ -218,6 +218,8 @@ TextToolbar::TextToolbar(SPDesktop *desktop)
     , _tracker(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
     , _tracker_fs(new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR))
     , _cusor_numbers(0)
+    , _updating(false)
+    , _text_style_from_prefs(false)
 {
     /* Line height unit tracker */
     _tracker->prependUnit(unit_table.getUnit("")); // Ratio

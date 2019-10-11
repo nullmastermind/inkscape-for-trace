@@ -400,6 +400,7 @@ SPCtrlLine *ControlManager::createControlLine(SPCanvasGroup *parent, CtrlLineTyp
 
         line->setRgba32((type == CTLINE_PRIMARY) ? LINE_COLOR_PRIMARY :
                         (type == CTLINE_SECONDARY) ? LINE_COLOR_SECONDARY : LINE_COLOR_TERTIARY);
+        line->setCoords(0, 0, 0, 0);
     }
     return line;
 }

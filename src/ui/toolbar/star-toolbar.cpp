@@ -65,7 +65,8 @@ namespace Toolbar {
 StarToolbar::StarToolbar(SPDesktop *desktop) :
     Toolbar(desktop),
     _mode_item(Gtk::manage(new UI::Widget::LabelToolItem(_("<b>New:</b>")))),
-    _repr(nullptr)
+    _repr(nullptr),
+    _freeze(false)
 {
     _mode_item->set_use_markup(true);
     add(*_mode_item);

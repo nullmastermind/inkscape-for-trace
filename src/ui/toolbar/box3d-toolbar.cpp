@@ -63,7 +63,8 @@ namespace UI {
 namespace Toolbar {
 Box3DToolbar::Box3DToolbar(SPDesktop *desktop)
         : Toolbar(desktop),
-        _repr(nullptr)
+        _repr(nullptr),
+        _freeze(false)
 {
     auto prefs      = Inkscape::Preferences::get();
     auto document   = desktop->getDocument();

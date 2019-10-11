@@ -51,6 +51,7 @@ Ruler::Ruler(Gtk::Orientation orientation)
     , _unit(nullptr)
     , _backing_store_valid(false)
     , _rect()
+    , _position(0)
 {
     set_name("InkRuler");
 

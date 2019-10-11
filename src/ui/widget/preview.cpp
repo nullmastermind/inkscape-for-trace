@@ -469,7 +469,8 @@ Preview::Preview()
       _ratio(100),
       _border(BORDER_NONE),
       _previewPixbuf(nullptr),
-      _scaled(nullptr)
+      _scaled(nullptr),
+      _linked(PREVIEW_LINK_NONE)
 {
     set_can_focus(true);
     set_receives_default(true);
