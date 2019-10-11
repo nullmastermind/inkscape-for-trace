@@ -55,15 +55,12 @@ ComboToolItem::ComboToolItem(Glib::ustring group_label,
     _use_pixbuf (true),
     _icon_size ( Gtk::ICON_SIZE_LARGE_TOOLBAR ),
     _combobox (nullptr),
-    _menuitem (nullptr),
-    _use_group_label(false)
+    _group_label_widget(nullptr),
+    _container(Gtk::manage(new Gtk::Box())),
+    _menuitem (nullptr)
 {
-    Gtk::Box* box = Gtk::manage(new Gtk::Box());
-    add(*box);
-    if (_use_group_label) {
-        Gtk::Label *group_label = Gtk::manage (new Gtk::Label( _group_label + ": " ));
-        box->add( *group_label );
-    }
+    add(*_container);
+    _container->set_spacing(3);
 
     // Create combobox
     _combobox = Gtk::manage (new Gtk::ComboBox(has_entry));
@@ -73,7 +70,7 @@ ComboToolItem::ComboToolItem(Glib::ustring group_label,
 
     _combobox->signal_changed().connect(
             sigc::mem_fun(*this, &ComboToolItem::on_changed_combobox));
-    box->add (*_combobox);
+    _container->pack_start(*_combobox);
 
     show_all();
 }
@@ -104,6 +101,24 @@ ComboToolItem::use_pixbuf(bool use_pixbuf)
 {
     _use_pixbuf = use_pixbuf;
     populate_combobox();
+}
+
+void
+ComboToolItem::use_group_label(bool use_group_label)
+{
+    if (use_group_label == (_group_label_widget != nullptr)) {
+        return;
+    }
+    if (use_group_label) {
+        _container->remove(*_combobox);
+        _group_label_widget = Gtk::manage(new Gtk::Label(_group_label + ": "));
+        _container->pack_start(*_group_label_widget);
+        _container->pack_start(*_combobox);
+    } else {
+        _container->remove(*_group_label_widget);
+        delete _group_label_widget;
+        _group_label_widget = nullptr;
+    }
 }
 
 void

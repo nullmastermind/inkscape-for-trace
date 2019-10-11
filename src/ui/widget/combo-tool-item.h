@@ -21,7 +21,9 @@
 #include <vector>
 
 namespace Gtk {
+class Box;
 class ComboBox;
+class Label;
 class MenuItem;
 class RadioMenuItem;
 }
@@ -64,7 +66,7 @@ public:
     void use_icon(   bool use_icon   );
     void focus_on_click( bool focus_on_click );
     void use_pixbuf( bool use_pixbuf );
-    void use_group_label( bool use_group_label ) { _use_group_label = use_group_label; }
+    void use_group_label( bool use_group_label ); // Applies to tool item only
   
     gint get_active() { return _active; }
     Glib::ustring get_active_text();
@@ -97,12 +99,13 @@ private:
     bool _use_label;
     bool _use_icon;   // Applies to menu item only
     bool _use_pixbuf;
-    bool _use_group_label; // Applies to tool item only
     Gtk::BuiltinIconSize _icon_size;
 
     /* Combobox in tool */
     Gtk::ComboBox* _combobox;
-  
+    Gtk::Label* _group_label_widget;
+    Gtk::Box* _container;
+
     Gtk::MenuItem* _menuitem;
     std::vector<Gtk::RadioMenuItem*> _radiomenuitems;
 
