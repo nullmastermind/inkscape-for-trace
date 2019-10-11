@@ -2623,6 +2623,7 @@ gint SPCanvas::idle_handler(gpointer data)
     if (ret) {
         // Reset idle id
         canvas->_idle_id = 0;
+        canvas->_scrooling = false;
         canvas->_forcefull = false;
         canvas->_delayrendering = 0;
 #endif
