@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
-"POT-Creation-Date: 2019-10-10 21:27+0200\n"
+"POT-Creation-Date: 2019-10-11 20:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4034,11 +4034,11 @@ msgstr ""
 msgid "<b>Guideline</b>: %s"
 msgstr ""
 
-#: ../src/desktop.cpp:839
+#: ../src/desktop.cpp:841
 msgid "No previous transform."
 msgstr ""
 
-#: ../src/desktop.cpp:862
+#: ../src/desktop.cpp:864
 msgid "No next transform."
 msgstr ""
 
@@ -4343,7 +4343,7 @@ msgstr ""
 msgid "Bounding box side midpoint"
 msgstr ""
 
-#: ../src/display/snap-indicator.cpp:197 ../src/ui/tool/node.cpp:1636
+#: ../src/display/snap-indicator.cpp:197 ../src/ui/tool/node.cpp:1626
 msgid "Smooth node"
 msgstr ""
 
@@ -8731,21 +8731,21 @@ msgstr ""
 msgid "Autosave complete."
 msgstr ""
 
-#: ../src/inkscape.cpp:778 ../src/ui/dialog/symbols.cpp:640
+#: ../src/inkscape.cpp:781 ../src/ui/dialog/symbols.cpp:640
 msgid "Untitled document"
 msgstr ""
 
-#: ../src/inkscape.cpp:807
+#: ../src/inkscape.cpp:810
 msgid "Inkscape encountered an internal error and will close now.\n"
 msgstr ""
 
-#: ../src/inkscape.cpp:808
+#: ../src/inkscape.cpp:811
 msgid ""
 "Automatic backups of unsaved documents were done to the following "
 "locations:\n"
 msgstr ""
 
-#: ../src/inkscape.cpp:809
+#: ../src/inkscape.cpp:812
 msgid "Automatic backup of the following documents failed:\n"
 msgstr ""
 
@@ -10265,7 +10265,7 @@ msgid "Reverses the second path order"
 msgstr ""
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:32
-#: ../src/ui/toolbar/text-toolbar.cpp:568
+#: ../src/ui/toolbar/text-toolbar.cpp:570
 #: ../share/extensions/render_barcode_qrcode.inx:9
 msgid "Auto"
 msgstr ""
@@ -10878,7 +10878,7 @@ msgid "Determines on which side the line or line segment is infinite."
 msgstr ""
 
 #: ../src/live_effects/lpe-measure-segments.cpp:59
-#: ../src/ui/toolbar/text-toolbar.cpp:527 ../share/extensions/empty_page.inx:18
+#: ../src/ui/toolbar/text-toolbar.cpp:529 ../share/extensions/empty_page.inx:18
 msgid "Horizontal"
 msgstr ""
 
@@ -14486,34 +14486,34 @@ msgstr ""
 msgid "Check Spellin_g..."
 msgstr ""
 
-#: ../src/ui/desktop/menubar.cpp:319
+#: ../src/ui/desktop/menubar.cpp:473
 msgctxt "Interface setup"
 msgid "Default"
 msgstr ""
 
-#: ../src/ui/desktop/menubar.cpp:319
+#: ../src/ui/desktop/menubar.cpp:473
 msgid "Default interface setup"
 msgstr ""
 
-#: ../src/ui/desktop/menubar.cpp:320
+#: ../src/ui/desktop/menubar.cpp:474
 msgctxt "Interface setup"
 msgid "Custom"
 msgstr ""
 
-#: ../src/ui/desktop/menubar.cpp:320
+#: ../src/ui/desktop/menubar.cpp:474
 msgid "Setup for custom task"
 msgstr ""
 
-#: ../src/ui/desktop/menubar.cpp:321
+#: ../src/ui/desktop/menubar.cpp:475
 msgctxt "Interface setup"
 msgid "Wide"
 msgstr ""
 
-#: ../src/ui/desktop/menubar.cpp:321
+#: ../src/ui/desktop/menubar.cpp:475
 msgid "Setup for widescreen work"
 msgstr ""
 
-#: ../src/ui/desktop/menubar.cpp:519
+#: ../src/ui/desktop/menubar.cpp:716
 msgid "Open _Recent"
 msgstr ""
 
@@ -20333,7 +20333,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1648
 #: ../src/ui/widget/color-icc-selector.cpp:381
-#: ../src/ui/widget/color-icc-selector.cpp:678
+#: ../src/ui/widget/color-icc-selector.cpp:676
 msgid "<none>"
 msgstr ""
 
@@ -23741,12 +23741,12 @@ msgstr ""
 msgid "Auto-smooth node handle"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:541
+#: ../src/ui/tool/node.cpp:535
 msgctxt "Path handle tip"
 msgid "node control handle"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:547
+#: ../src/ui/tool/node.cpp:541
 #, c-format
 msgctxt "Path handle tip"
 msgid ""
@@ -23754,24 +23754,24 @@ msgid ""
 "increments, and rotate both handles"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:554
+#: ../src/ui/tool/node.cpp:548
 #, c-format
 msgctxt "Path handle tip"
 msgid ""
 "<b>Ctrl+Alt</b>: preserve length and snap rotation angle to %g° increments"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:562
+#: ../src/ui/tool/node.cpp:556
 msgctxt "Path handle tip"
 msgid "<b>Shift+Alt</b>: preserve handle length and rotate both handles"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:566
+#: ../src/ui/tool/node.cpp:560
 msgctxt "Path handle tip"
 msgid "<b>Alt</b>: preserve handle length while dragging"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:574
+#: ../src/ui/tool/node.cpp:568
 #, c-format
 msgctxt "Path handle tip"
 msgid ""
@@ -23779,56 +23779,73 @@ msgid ""
 "handles"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:580
+#: ../src/ui/tool/node.cpp:574
 msgctxt "Path handle tip"
 msgid "<b>Ctrl</b>: Snap handle to steps defined in BSpline Live Path Effect"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:585
+#: ../src/ui/tool/node.cpp:579
 #, c-format
 msgctxt "Path handle tip"
 msgid "<b>Ctrl</b>: snap rotation angle to %g° increments, click to retract"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:592
+#: ../src/ui/tool/node.cpp:586
 msgctxt "Path handle tip"
 msgid "<b>Shift</b>: rotate both handles by the same angle"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:596
+#: ../src/ui/tool/node.cpp:590
 msgctxt "Path handle tip"
 msgid "<b>Shift</b>: move handle"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:604
+#: ../src/ui/tool/node.cpp:598
 msgctxt "Path handle tip"
 msgid "Shift, Ctrl, Alt"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:608
+#: ../src/ui/tool/node.cpp:602
 msgctxt "Path handle tip"
 msgid "Ctrl"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:612
+#: ../src/ui/tool/node.cpp:606
 msgctxt "Path handle tip"
 msgid "Ctrl, Alt"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:617 ../src/ui/tool/node.cpp:627
-#: ../src/ui/tool/node.cpp:645
+#: ../src/ui/tool/node.cpp:611
 #, c-format
 msgctxt "Path handle tip"
-msgid "<b>%s</b>: "
+msgid ""
+"<b>%s</b>: drag to shape the path, hover to lock, Shift+S to make smooth, "
+"Shift+Y to make symmetric. (more: %s)"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:636
+#: ../src/ui/tool/node.cpp:621
 #, c-format
 msgctxt "Path handle tip"
-msgid "<b>%s</b>: drag to make smooth, "
+msgid ""
+"<b>%s</b>: drag to shape the path, hover to lock, Shift+Y to make symmetric. "
+"(more: %s)"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:653
+#: ../src/ui/tool/node.cpp:630
+#, c-format
+msgctxt "Path handle tip"
+msgid ""
+"<b>%s</b>: drag to make smooth, hover to lock, Shift+Y to make symmetric. "
+"(more: %s)"
+msgstr ""
+
+#: ../src/ui/tool/node.cpp:639
+#, c-format
+msgctxt "Path handle tip"
+msgid "<b>%s</b>: drag to shape the path. (more: %s)"
+msgstr ""
+
+#: ../src/ui/tool/node.cpp:647
 #, c-format
 msgctxt "Path handle tip"
 msgid ""
@@ -23836,75 +23853,100 @@ msgid ""
 "reset. (more: %s)"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:661
+#: ../src/ui/tool/node.cpp:655
 msgctxt "Path handle tip"
 msgid "<b>unknown node handle</b>"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:684
+#: ../src/ui/tool/node.cpp:678
 #, c-format
 msgctxt "Path handle tip"
 msgid "Move handle by %s, %s; angle %.2f°, length %s"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:1527
+#: ../src/ui/tool/node.cpp:1517
 msgctxt "Path node tip"
 msgid "node handle"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:1540
+#: ../src/ui/tool/node.cpp:1530
 msgctxt "Path node tip"
 msgid "<b>Shift</b>: drag out a handle, click to toggle selection"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:1544
+#: ../src/ui/tool/node.cpp:1534
 msgctxt "Path node tip"
 msgid "<b>Shift</b>: click to toggle selection"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:1551
+#: ../src/ui/tool/node.cpp:1541
 msgctxt "Path node tip"
 msgid "<b>Ctrl+Alt</b>: move along handle lines, click to delete node"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:1555
+#: ../src/ui/tool/node.cpp:1545
 msgctxt "Path node tip"
 msgid "<b>Ctrl</b>: move along axes, click to change node type"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:1561
+#: ../src/ui/tool/node.cpp:1551
 msgctxt "Path node tip"
 msgid "<b>Alt</b>: sculpt nodes"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:1572 ../src/ui/tool/node.cpp:1587
-#: ../src/ui/tool/node.cpp:1596
+#: ../src/ui/tool/node.cpp:1562
 #, c-format
 msgctxt "Path node tip"
-msgid "<b>%s</b>: "
+msgid "<b>%s</b>: drag to shape the path. (more: Shift, Ctrl, Alt)"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:1579 ../src/ui/tool/node.cpp:1604
+#: ../src/ui/tool/node.cpp:1569
 #, c-format
 msgctxt "Path node tip"
-msgid "<b>BSpline node</b> (%.3g power): "
+msgid ""
+"<b>BSpline node</b> (%.3g power): drag to shape the path. (more: Shift, "
+"Ctrl, Alt)"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:1623
+#: ../src/ui/tool/node.cpp:1577
+#, c-format
+msgctxt "Path node tip"
+msgid ""
+"<b>%s</b>: drag to shape the path, click to toggle scale/rotation handles. "
+"(more: Shift, Ctrl, Alt)"
+msgstr ""
+
+#: ../src/ui/tool/node.cpp:1586
+#, c-format
+msgctxt "Path node tip"
+msgid ""
+"<b>%s</b>: drag to shape the path, click to select only this node. (more: "
+"Shift, Ctrl, Alt)"
+msgstr ""
+
+#: ../src/ui/tool/node.cpp:1594
+#, c-format
+msgctxt "Path node tip"
+msgid ""
+"<b>BSpline node</b> (%.3g power): drag to shape the path, click to select "
+"only this node. (more: Shift, Ctrl, Alt)"
+msgstr ""
+
+#: ../src/ui/tool/node.cpp:1613
 #, c-format
 msgctxt "Path node tip"
 msgid "Move node by %s, %s"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:1634
+#: ../src/ui/tool/node.cpp:1624
 msgid "Corner node"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:1638
+#: ../src/ui/tool/node.cpp:1628
 msgid "Symmetric node"
 msgstr ""
 
-#: ../src/ui/tool/node.cpp:1640
+#: ../src/ui/tool/node.cpp:1630
 msgid "Auto-smooth node"
 msgstr ""
 
@@ -24072,8 +24114,8 @@ msgstr ""
 #: ../src/ui/toolbar/paintbucket-toolbar.cpp:111
 #: ../src/ui/toolbar/rect-toolbar.cpp:163
 #: ../src/ui/toolbar/select-toolbar.cpp:174
-#: ../src/ui/toolbar/text-toolbar.cpp:330
-#: ../src/ui/toolbar/text-toolbar.cpp:356
+#: ../src/ui/toolbar/text-toolbar.cpp:332
+#: ../src/ui/toolbar/text-toolbar.cpp:358
 msgid "Units"
 msgstr ""
 
@@ -26062,287 +26104,287 @@ msgstr ""
 msgid "Star: Change randomization"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:242
+#: ../src/ui/toolbar/text-toolbar.cpp:244
 msgid "Font Family"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:243
+#: ../src/ui/toolbar/text-toolbar.cpp:245
 msgid "Select Font Family (Alt-X to access)"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:251
+#: ../src/ui/toolbar/text-toolbar.cpp:253
 msgid "Select all text with this font-family"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:255
+#: ../src/ui/toolbar/text-toolbar.cpp:257
 msgid "Font not found on system"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:286
+#: ../src/ui/toolbar/text-toolbar.cpp:288
 msgid "Font Style"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:287
+#: ../src/ui/toolbar/text-toolbar.cpp:289
 msgid "Font style"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:312
-#: ../src/ui/toolbar/text-toolbar.cpp:1953
+#: ../src/ui/toolbar/text-toolbar.cpp:314
+#: ../src/ui/toolbar/text-toolbar.cpp:1957
 #: ../src/ui/widget/font-selector.cpp:32 ../src/ui/widget/font-selector.cpp:145
 msgid "Font size"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:315
+#: ../src/ui/toolbar/text-toolbar.cpp:317
 msgid "Font Size"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:338
+#: ../src/ui/toolbar/text-toolbar.cpp:340
 msgid "Smaller spacing"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:338
-#: ../src/ui/toolbar/text-toolbar.cpp:437
-#: ../src/ui/toolbar/text-toolbar.cpp:455
+#: ../src/ui/toolbar/text-toolbar.cpp:340
+#: ../src/ui/toolbar/text-toolbar.cpp:439
+#: ../src/ui/toolbar/text-toolbar.cpp:457
 msgctxt "Text tool"
 msgid "Normal"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:338
+#: ../src/ui/toolbar/text-toolbar.cpp:340
 msgid "Larger spacing"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:345
+#: ../src/ui/toolbar/text-toolbar.cpp:347
 msgid "Spacing between baselines"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:372
-#: ../src/ui/toolbar/text-toolbar.cpp:373
+#: ../src/ui/toolbar/text-toolbar.cpp:374
+#: ../src/ui/toolbar/text-toolbar.cpp:375
 msgid "Align left"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:378
-#: ../src/ui/toolbar/text-toolbar.cpp:379
+#: ../src/ui/toolbar/text-toolbar.cpp:380
+#: ../src/ui/toolbar/text-toolbar.cpp:381
 msgid "Align center"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:384
-#: ../src/ui/toolbar/text-toolbar.cpp:385
+#: ../src/ui/toolbar/text-toolbar.cpp:386
+#: ../src/ui/toolbar/text-toolbar.cpp:387
 msgid "Align right"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:390
+#: ../src/ui/toolbar/text-toolbar.cpp:392
 msgid "Justify"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:391
+#: ../src/ui/toolbar/text-toolbar.cpp:393
 msgid "Justify (only flowed text)"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:396
+#: ../src/ui/toolbar/text-toolbar.cpp:398
 msgid "Alignment"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:397
+#: ../src/ui/toolbar/text-toolbar.cpp:399
 msgid "Text alignment"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:413
-#: ../src/ui/toolbar/text-toolbar.cpp:414
+#: ../src/ui/toolbar/text-toolbar.cpp:415
+#: ../src/ui/toolbar/text-toolbar.cpp:416
 msgid "Toggle superscript"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:425
-#: ../src/ui/toolbar/text-toolbar.cpp:426
+#: ../src/ui/toolbar/text-toolbar.cpp:427
+#: ../src/ui/toolbar/text-toolbar.cpp:428
 msgid "Toggle subscript"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:437
-#: ../src/ui/toolbar/text-toolbar.cpp:455
+#: ../src/ui/toolbar/text-toolbar.cpp:439
+#: ../src/ui/toolbar/text-toolbar.cpp:457
 msgid "Negative spacing"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:437
-#: ../src/ui/toolbar/text-toolbar.cpp:455
+#: ../src/ui/toolbar/text-toolbar.cpp:439
+#: ../src/ui/toolbar/text-toolbar.cpp:457
 msgid "Positive spacing"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:441
+#: ../src/ui/toolbar/text-toolbar.cpp:443
 msgid "Letter:"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:442
+#: ../src/ui/toolbar/text-toolbar.cpp:444
 msgid "Spacing between letters (px)"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:459
+#: ../src/ui/toolbar/text-toolbar.cpp:461
 msgid "Word:"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:460
+#: ../src/ui/toolbar/text-toolbar.cpp:462
 msgid "Spacing between words (px)"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:476
+#: ../src/ui/toolbar/text-toolbar.cpp:478
 msgid "Kern:"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:478
+#: ../src/ui/toolbar/text-toolbar.cpp:480
 msgid "Horizontal kerning (px)"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:492
+#: ../src/ui/toolbar/text-toolbar.cpp:494
 msgid "Vert:"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:493
+#: ../src/ui/toolbar/text-toolbar.cpp:495
 msgid "Vertical kerning (px)"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:507
+#: ../src/ui/toolbar/text-toolbar.cpp:509
 msgid "Rot:"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:508
+#: ../src/ui/toolbar/text-toolbar.cpp:510
 msgid "Character rotation (degrees)"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:528
+#: ../src/ui/toolbar/text-toolbar.cpp:530
 msgid "Horizontal text"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:533
+#: ../src/ui/toolbar/text-toolbar.cpp:535
 msgid "Vertical — RL"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:534
+#: ../src/ui/toolbar/text-toolbar.cpp:536
 msgid "Vertical text — lines: right to left"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:539
+#: ../src/ui/toolbar/text-toolbar.cpp:541
 msgid "Vertical — LR"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:540
+#: ../src/ui/toolbar/text-toolbar.cpp:542
 msgid "Vertical text — lines: left to right"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:545
+#: ../src/ui/toolbar/text-toolbar.cpp:547
 msgid "Writing mode"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:546
+#: ../src/ui/toolbar/text-toolbar.cpp:548
 msgid "Block progression"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:569
+#: ../src/ui/toolbar/text-toolbar.cpp:571
 msgid "Auto glyph orientation"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:574
+#: ../src/ui/toolbar/text-toolbar.cpp:576
 msgid "Upright"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:575
+#: ../src/ui/toolbar/text-toolbar.cpp:577
 msgid "Upright glyph orientation"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:580
+#: ../src/ui/toolbar/text-toolbar.cpp:582
 msgid "Sideways"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:581
+#: ../src/ui/toolbar/text-toolbar.cpp:583
 msgid "Sideways glyph orientation"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:586
+#: ../src/ui/toolbar/text-toolbar.cpp:588
 msgid "Text orientation"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:587
+#: ../src/ui/toolbar/text-toolbar.cpp:589
 msgid "Text (glyph) orientation in vertical text."
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:609
+#: ../src/ui/toolbar/text-toolbar.cpp:611
 msgid "LTR"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:610
+#: ../src/ui/toolbar/text-toolbar.cpp:612
 msgid "Left to right text"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:615
+#: ../src/ui/toolbar/text-toolbar.cpp:617
 msgid "RTL"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:616
+#: ../src/ui/toolbar/text-toolbar.cpp:618
 msgid "Right to left text"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:621
+#: ../src/ui/toolbar/text-toolbar.cpp:623
 msgid "Text direction"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:622
+#: ../src/ui/toolbar/text-toolbar.cpp:624
 msgid "Text direction for normally horizontal text."
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:700
+#: ../src/ui/toolbar/text-toolbar.cpp:704
 msgid "Text: Change font family"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:806
+#: ../src/ui/toolbar/text-toolbar.cpp:810
 msgid "Text: Change font size"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:849
+#: ../src/ui/toolbar/text-toolbar.cpp:853
 msgid "Text: Change font style"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:933
+#: ../src/ui/toolbar/text-toolbar.cpp:937
 msgid "Text: Change superscript or subscript"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1077
+#: ../src/ui/toolbar/text-toolbar.cpp:1081
 msgid "Text: Change alignment"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1132
+#: ../src/ui/toolbar/text-toolbar.cpp:1136
 msgid "Text: Change writing mode"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1187
+#: ../src/ui/toolbar/text-toolbar.cpp:1191
 msgid "Text: Change orientation"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1236
+#: ../src/ui/toolbar/text-toolbar.cpp:1240
 msgid "Text: Change direction"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1348
+#: ../src/ui/toolbar/text-toolbar.cpp:1352
 msgid "Text: Change line-height"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1558
+#: ../src/ui/toolbar/text-toolbar.cpp:1562
 msgid "Text: Change line-height unit"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1622
+#: ../src/ui/toolbar/text-toolbar.cpp:1626
 msgid "Text: Change word-spacing"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1663
+#: ../src/ui/toolbar/text-toolbar.cpp:1667
 msgid "Text: Change letter-spacing"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1701
+#: ../src/ui/toolbar/text-toolbar.cpp:1705
 msgid "Text: Change dx (kern)"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1736
+#: ../src/ui/toolbar/text-toolbar.cpp:1740
 msgid "Text: Change dy"
 msgstr ""
 
-#: ../src/ui/toolbar/text-toolbar.cpp:1772
+#: ../src/ui/toolbar/text-toolbar.cpp:1776
 msgid "Text: Change rotate"
 msgstr ""
 
@@ -27086,53 +27128,53 @@ msgstr ""
 msgid "Create mesh"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:666
+#: ../src/ui/tools/node-tool.cpp:671
 msgctxt "Node tool tip"
 msgid ""
 "<b>Shift</b>: drag to add nodes to the selection, click to toggle object "
 "selection"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:670
+#: ../src/ui/tools/node-tool.cpp:675
 msgctxt "Node tool tip"
 msgid "<b>Shift</b>: drag to add nodes to the selection"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:699
+#: ../src/ui/tools/node-tool.cpp:704
 #, c-format
 msgid "<b>%u of %u</b> node selected."
 msgid_plural "<b>%u of %u</b> nodes selected."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/ui/tools/node-tool.cpp:706
+#: ../src/ui/tools/node-tool.cpp:711
 #, c-format
 msgctxt "Node tool tip"
 msgid "%s Drag to select nodes, click to edit only this object (more: Shift)"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:712
+#: ../src/ui/tools/node-tool.cpp:717
 #, c-format
 msgctxt "Node tool tip"
 msgid "%s Drag to select nodes, click clear the selection"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:721
+#: ../src/ui/tools/node-tool.cpp:726
 msgctxt "Node tool tip"
 msgid "Drag to select nodes, click to edit only this object"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:724
+#: ../src/ui/tools/node-tool.cpp:729
 msgctxt "Node tool tip"
 msgid "Drag to select nodes, click to clear the selection"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:729
+#: ../src/ui/tools/node-tool.cpp:734
 msgctxt "Node tool tip"
 msgid "Drag to select objects to edit, click to edit this object (more: Shift)"
 msgstr ""
 
-#: ../src/ui/tools/node-tool.cpp:732
+#: ../src/ui/tools/node-tool.cpp:737
 msgctxt "Node tool tip"
 msgid "Drag to select objects to edit"
 msgstr ""
@@ -27563,7 +27605,7 @@ msgstr[1] ""
 msgid "Type text"
 msgstr ""
 
-#: ../src/ui/tools/tool-base.cpp:710
+#: ../src/ui/tools/tool-base.cpp:713
 msgid "<b>Space+mouse move</b> to pan canvas"
 msgstr ""
 
@@ -31464,7 +31506,7 @@ msgid "Rename gradient"
 msgstr ""
 
 #: ../src/widgets/gradient-vector.cpp:292 ../src/widgets/paint-selector.cpp:909
-#: ../src/widgets/paint-selector.cpp:1245
+#: ../src/widgets/paint-selector.cpp:1251
 #: ../src/widgets/stroke-marker-selector.cpp:145
 msgid "No document selected"
 msgstr ""
@@ -31568,30 +31610,30 @@ msgstr ""
 msgid "<b>Radial gradient</b>"
 msgstr ""
 
-#: ../src/widgets/paint-selector.cpp:1030
+#: ../src/widgets/paint-selector.cpp:1033
 msgid "Use the <b>Mesh tool</b> to modify the mesh."
 msgstr ""
 
-#: ../src/widgets/paint-selector.cpp:1043
+#: ../src/widgets/paint-selector.cpp:1046
 msgid "<b>Mesh fill</b>"
 msgstr ""
 
-#: ../src/widgets/paint-selector.cpp:1366
+#: ../src/widgets/paint-selector.cpp:1375
 msgid ""
 "Use the <b>Node tool</b> to adjust position, scale, and rotation of the "
 "pattern on canvas. Use <b>Object &gt; Pattern &gt; Objects to Pattern</b> to "
 "create a new pattern from selection."
 msgstr ""
 
-#: ../src/widgets/paint-selector.cpp:1379
+#: ../src/widgets/paint-selector.cpp:1388
 msgid "<b>Pattern fill</b>"
 msgstr ""
 
-#: ../src/widgets/paint-selector.cpp:1399
+#: ../src/widgets/paint-selector.cpp:1408
 msgid "<b>Hatch fill</b>"
 msgstr ""
 
-#: ../src/widgets/paint-selector.cpp:1497
+#: ../src/widgets/paint-selector.cpp:1508
 msgid "<b>Swatch fill</b>"
 msgstr ""
 

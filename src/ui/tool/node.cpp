@@ -523,12 +523,6 @@ static double snap_increment_degrees() {
     return 180.0 / snaps;
 }
 
-#define DRAG_TO_SHAPE    "drag to shape the path"
-#define HOVER_TO_LOCK    "hover to lock"
-#define MAKE_SMOOTH      "Shift+S to make smooth"
-#define MAKE_SYMMETRIC   "Shift+Y to make symmetric"
-#define META_KEYS        "(more: %s)"
-
 Glib::ustring Handle::_getTip(unsigned state) const
 {
     /* a trick to mark as BSpline if the node has no strength;
@@ -615,36 +609,36 @@ Glib::ustring Handle::_getTip(unsigned state) const
             if (_parent->type() == NODE_CUSP) {
                 s = format_tip(C_("Path handle tip",
                                   "<b>%s</b>: "
-                                  DRAG_TO_SHAPE  ", "
-                                  HOVER_TO_LOCK  ", "
-                                  MAKE_SMOOTH    ", "
-                                  MAKE_SYMMETRIC ". "
-                                  META_KEYS),
+                                  "drag to shape the path"  ", "
+                                  "hover to lock"  ", "
+                                  "Shift+S to make smooth"    ", "
+                                  "Shift+Y to make symmetric" ". "
+                                  "(more: %s)"),
                                handletype, more);
             }
             else if (_parent->type() == NODE_SMOOTH) {
                 s = format_tip(C_("Path handle tip",
                                   "<b>%s</b>: "
-                                  DRAG_TO_SHAPE  ", "
-                                  HOVER_TO_LOCK  ", "
-                                  MAKE_SYMMETRIC ". "
-                                  META_KEYS),
+                                  "drag to shape the path"  ", "
+                                  "hover to lock"  ", "
+                                  "Shift+Y to make symmetric" ". "
+                                  "(more: %s)"),
                                handletype, more);
             }
             else if (_parent->type() == NODE_AUTO) {
                 s = format_tip(C_("Path handle tip",
                                   "<b>%s</b>: "
                                   "drag to make smooth, "
-                                  HOVER_TO_LOCK  ", "
-                                  MAKE_SYMMETRIC ". "
-                                  META_KEYS),
+                                  "hover to lock"  ", "
+                                  "Shift+Y to make symmetric" ". "
+                                  "(more: %s)"),
                                handletype, more);
             }
             else if (_parent->type() == NODE_SYMMETRIC) {
                 s = format_tip(C_("Path handle tip",
                                   "<b>%s</b>: "
-                                  DRAG_TO_SHAPE ". "
-                                  META_KEYS),
+                                  "drag to shape the path" ". "
+                                  "(more: %s)"),
                                handletype, more);
             }
             else if (isBSpline) {
@@ -1515,10 +1509,6 @@ Node *Node::nodeAwayFrom(Handle *h)
     return nullptr;
 }
 
-#define CLICK_TO_SELECT   "click to select only this node"
-#define CLICK_TO_TOGGLE   "click to toggle scale/rotation handles"
-#define SHIFT_CTRL_ALT    "(more: Shift, Ctrl, Alt)"
-
 Glib::ustring Node::_getTip(unsigned state) const
 {
     bool isBSpline = _pm()._isBSpline();
@@ -1570,41 +1560,41 @@ Glib::ustring Node::_getTip(unsigned state) const
                 if (!isBSpline) {
                     s = format_tip(C_("Path node tip",
                                       "<b>%s</b>: "
-                                      DRAG_TO_SHAPE ". "
-                                      SHIFT_CTRL_ALT),
+                                      "drag to shape the path" ". "
+                                      "(more: Shift, Ctrl, Alt)"),
                                    nodetype);
                 }
                 else {
                     s = format_tip(C_("Path node tip",
                                       "<b>BSpline node</b> (%.3g power): "
-                                      DRAG_TO_SHAPE ". "
-                                      SHIFT_CTRL_ALT),
+                                      "drag to shape the path" ". "
+                                      "(more: Shift, Ctrl, Alt)"),
                                    power);
                 }
             }
             else {
                 s = format_tip(C_("Path node tip",
                                   "<b>%s</b>: "
-                                  DRAG_TO_SHAPE   ", "
-                                  CLICK_TO_TOGGLE ". "
-                                  SHIFT_CTRL_ALT),
+                                  "drag to shape the path"   ", "
+                                  "click to toggle scale/rotation handles" ". "
+                                  "(more: Shift, Ctrl, Alt)"),
                                nodetype);
             }
         }
         else if (!isBSpline) {
             s = format_tip(C_("Path node tip",
                               "<b>%s</b>: "
-                              DRAG_TO_SHAPE   ", "
-                              CLICK_TO_SELECT ". "
-                              SHIFT_CTRL_ALT),
+                              "drag to shape the path"   ", "
+                              "click to select only this node" ". "
+                              "(more: Shift, Ctrl, Alt)"),
                            nodetype);
         }
         else {
             s = format_tip(C_("Path node tip",
                               "<b>BSpline node</b> (%.3g power): "
-                              DRAG_TO_SHAPE   ", "
-                              CLICK_TO_SELECT ". "
-                              SHIFT_CTRL_ALT),
+                              "drag to shape the path"   ", "
+                              "click to select only this node" ". "
+                              "(more: Shift, Ctrl, Alt)"),
                            power);
         }
     }
