@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /*
- * A simple panel for objects
+ * A simple panel for objects (originally developed for Ponyscape, an Inkscape derivative)
  *
  * Authors:
  *   Theodore Janeczko
@@ -113,7 +113,8 @@ enum {
     BUTTON_GROUP,
     BUTTON_UNGROUP,
     BUTTON_COLLAPSE_ALL,
-    DRAGNDROP
+    DRAGNDROP,
+    UPDATE_TREE
 };
 
 /**
@@ -142,19 +143,19 @@ public:
     void notifyChildAdded( Node &/*node*/, Node &/*child*/, Node */*prev*/ ) override
     {
         if ( _pnl && _obj ) {
-            _pnl->_objectsChanged( _obj );
+            _pnl->_objectsChangedWrapper( _obj );
         }
     }
     void notifyChildRemoved( Node &/*node*/, Node &/*child*/, Node */*prev*/ ) override
     {
         if ( _pnl && _obj ) {
-            _pnl->_objectsChanged( _obj );
+            _pnl->_objectsChangedWrapper( _obj );
         }
     }
     void notifyChildOrderChanged( Node &/*node*/, Node &/*child*/, Node */*old_prev*/, Node */*new_prev*/ ) override
     {
         if ( _pnl && _obj ) {
-            _pnl->_objectsChanged( _obj );
+            _pnl->_objectsChangedWrapper( _obj );
         }
     }
     void notifyContentChanged( Node &/*node*/, Util::ptr_shared /*old_content*/, Util::ptr_shared /*new_content*/ ) override {}
@@ -198,6 +199,7 @@ class ObjectsPanel::InternalUIBounce
 {
 public:
     int _actionCode;
+    sigc::connection _signal;
 };
 
 class ObjectsPanel::ModelColumns : public Gtk::TreeModel::ColumnRecord
@@ -276,13 +278,7 @@ Gtk::MenuItem& ObjectsPanel::_addPopupItem( SPDesktop *desktop, unsigned int cod
     return *item;
 }
 
-/**
- * Callback function for when an object changes.  Essentially refreshes the entire tree
- * @param obj Object which was changed (currently not used as the entire tree is recreated)
- */
-void ObjectsPanel::_objectsChanged(SPObject */*obj*/)
-{
-    //First, unattach the watchers
+void ObjectsPanel::_removeWatchers() {
     while (!_objectWatchers.empty())
     {
         ObjectsPanel::ObjectWatcher *w = _objectWatchers.back();
@@ -290,7 +286,24 @@ void ObjectsPanel::_objectsChanged(SPObject */*obj*/)
         _objectWatchers.pop_back();
         delete w;
     }
-    
+}
+
+void ObjectsPanel::_objectsChangedWrapper(SPObject *obj) {
+    // We used to call _objectsChanged with a reference to _obj,
+    // but since _obj wasn't used, I'm dropping that for now
+    _takeAction(UPDATE_TREE);
+}
+
+/**
+ * Callback function for when an object changes.  Essentially refreshes the entire tree
+ * @param obj Object which was changed (currently not used as the entire tree is recreated)
+ */
+
+void ObjectsPanel::_objectsChanged(SPObject */*obj*/)
+{
+    //First, unattach the watchers
+    _removeWatchers();
+
     if (_desktop) {
         //Get the current document's root and use that to enumerate the tree
         SPDocument* document = _desktop->doc();
@@ -300,6 +313,8 @@ void ObjectsPanel::_objectsChanged(SPObject */*obj*/)
             _documentChangedCurrentLayer.block();
             //Clear the tree store
             _store->clear();
+            _tree_cache.clear();
+            _tree_cache_iter = _tree_cache.end(); // make sure we don't have any invalid iterators lingering around
             //Add all items recursively
             _addObject( root, nullptr );
             _selectedConnection.unblock();
@@ -325,11 +340,15 @@ void ObjectsPanel::_addObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
             {
                 SPItem * item = SP_ITEM(&child);
                 SPGroup * group = SP_IS_GROUP(&child) ? SP_GROUP(&child) : nullptr;
-                
+
                 //Add the item to the tree and set the column information
                 Gtk::TreeModel::iterator iter = parentRow ? _store->prepend(parentRow->children()) : _store->prepend();
                 Gtk::TreeModel::Row row = *iter;
                 row[_model->_colObject] = item;
+
+                g_assert(_store->get_flags() & Gtk::TREE_MODEL_ITERS_PERSIST);
+                _tree_cache.push_back(std::make_pair(item, iter)); // Use a row reference instead of an iter maybe?
+
                 //this seems to crash on convert stroke to path then undo (probably no ID?)
                 try {
                     row[_model->_colLabel] = item->label() ? item->label() : item->getId();
@@ -358,7 +377,7 @@ void ObjectsPanel::_addObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
                 ObjectsPanel::ObjectWatcher *w = new ObjectsPanel::ObjectWatcher(this, &child);
                 child.getRepr()->addObserver(*w);
                 _objectWatchers.push_back(w);
-                
+
                 //If the item is a group, recursively add its children
                 if (group)
                 {
@@ -377,15 +396,63 @@ void ObjectsPanel::_addObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
 void ObjectsPanel::_updateObject( SPObject *obj, bool recurse ) {
     //Find the object in the tree store and update it
 
-    //mark
-    _store->foreach_iter( sigc::bind<SPObject*>(sigc::mem_fun(*this, &ObjectsPanel::_checkForUpdated), obj) );
-    //end mark
+    // The old way: (left here for reference)
+    //_store->foreach_iter( sigc::bind<SPObject*>(sigc::mem_fun(*this, &ObjectsPanel::_checkForUpdated), obj) );
+
+    std::list<std::pair<SPItem*, Gtk::TreeModel::iterator> >::iterator iter_prev, iter_next;
+
+    do {
+        if (_tree_cache_iter != _tree_cache.end()) {
+            /* New way: very likely, the item we're searching for will be within +/- 1 step from the previously known position;
+             * so we will first look for the item around the previous position. If not found, we will iterate the whole list again
+             * starting from zero
+             */
+
+            // First, try the position after the old one; most likely to succeed
+            iter_next = std::next(_tree_cache_iter, 1);
+            if (iter_next != _tree_cache.end()) {
+                if (_checkForUpdated(iter_next->second, obj)) {
+                    _tree_cache_iter = iter_next;
+                    break;
+                }
+            }
+
+            // If that didn't succeed, then try the old iterator
+            if (_checkForUpdated(_tree_cache_iter->second, obj)) {
+                break;
+            }
+
+            // Last attempt, try the position before the old one
+            if (_tree_cache_iter != _tree_cache.begin())
+                iter_prev = std::prev(_tree_cache_iter, 1);
+                if (_checkForUpdated(iter_prev->second, obj)) {
+                    _tree_cache_iter = iter_prev;
+                    break;
+                }
+
+        }
+        /* Still no success? Then we need to take the long way home.
+         * This takes very long! To update each element in a list of n elements, we iterate through the list, n times,
+         * every time sending out a signal. So we need n^2/2 iterations, which is O(N^2)
+         * cannot use: _store->foreach_iter( sigc::bind<SPObject*>(sigc::mem_fun(*this, &ObjectsPanel::_checkForUpdated), obj) );
+         * because we want to have a copy of the iterator at which we were successful
+         */
+        _tree_cache_iter = _tree_cache.begin();
+        while (_tree_cache_iter != _tree_cache.end()) {
+            if (_checkForUpdated(_tree_cache_iter->second, obj)) {
+                break;
+            }
+            _tree_cache_iter++;
+        }
+    } while (false);
+
     if (recurse)
     {
         for (auto& iter: obj->children) {
             _updateObject(&iter, recurse);
         }
     }
+
 }
 
 /**
@@ -397,7 +464,22 @@ void ObjectsPanel::_updateObject( SPObject *obj, bool recurse ) {
 bool ObjectsPanel::_checkForUpdated(const Gtk::TreeIter& iter, SPObject* obj)
 {
     Gtk::TreeModel::Row row = *iter;
-    if (obj && *iter && obj == row[_model->_colObject] )
+
+    if (not (obj && *iter)) {
+        return false;
+    }
+
+    /* If the row in the tree has been deleted, and and old iter is being used, then we will
+     * get a segmentation fault crash here; so make sure iters don't linger around!
+     * We can only check the validity as done below, but this is rather slow according to the
+     * documentation (adds 0.25 s for a 2k long tree). But better safe than sorry (for a segfault)
+     */
+    if (not _store->iter_is_valid(iter)) {
+        g_critical("Invalid iterator to Gtk::tree in objects panel; just prevented a segfault!");
+        return false;
+    }
+
+    if (obj == row[_model->_colObject] )
     {
         //We found our item in the tree!!  Update it!
         SPItem * item = SP_IS_ITEM(obj) ? SP_ITEM(obj) : nullptr;
@@ -431,9 +513,10 @@ void ObjectsPanel::_updateComposite() {
     {
         //Set the default values
         bool setValues = true;
-        
+
         //Get/set the values
         _tree.get_selection()->selected_foreach_iter(sigc::bind<bool *>(sigc::mem_fun(*this, &ObjectsPanel::_compositingChanged), &setValues));
+
     }
 }
 
@@ -441,7 +524,6 @@ void ObjectsPanel::_updateComposite() {
  * Sets the compositing values for the first selected item in the tree
  * @param iter Current tree item
  * @param setValues Whether to set the compositing values
- * @param blur Blur value to use
  */
 void ObjectsPanel::_compositingChanged( const Gtk::TreeModel::iterator& iter, bool *setValues )
 {
@@ -527,14 +609,16 @@ void ObjectsPanel::_setCompositingValues(SPItem *item)
     _filter_modifier.set_blend_mode(spblend ? spblend->blend_mode : Inkscape::Filters::BLEND_NORMAL);
 
     //Set the blur value
-    Geom::OptRect bbox = item->bounds(SPItem::GEOMETRIC_BBOX);
-    if (bbox && spblur) {
-        double perimeter = bbox->dimensions()[Geom::X] + bbox->dimensions()[Geom::Y];   // fixme: this is only half the perimeter, is that correct?
-        _filter_modifier.set_blur_value(spblur->stdDeviation.getNumber() * 400 / perimeter);
-    } else {
-        _filter_modifier.set_blur_value(0);
+    double blur_value = 0;
+    if (spblur) {
+        Geom::OptRect bbox = item->bounds(SPItem::GEOMETRIC_BBOX); // calculating the bbox is expensive; only do this if we have an spblur in the first place
+        if (bbox) {
+            double perimeter = bbox->dimensions()[Geom::X] + bbox->dimensions()[Geom::Y];   // fixme: this is only half the perimeter, is that correct?
+            blur_value = spblur->stdDeviation.getNumber() * 400 / perimeter;
+        }
     }
-    
+    _filter_modifier.set_blur_value(blur_value);
+
     //Unblock connections
     _blurConnection.unblock();
     _blendConnection.unblock();
@@ -1104,6 +1188,29 @@ void ObjectsPanel::_doTreeMove( )
                                             _("Moved objects"));
 }
 
+void ObjectsPanel::_blockAllSignals(bool should_block = true) {
+
+    // incoming signals
+    _documentChangedCurrentLayer.block(should_block);
+    _opacityConnection.block(should_block);
+    _blendConnection.block(should_block);
+    _blurConnection.block(should_block);
+    if (_pending && should_block) {
+        // Kill any pending UI event, e.g. a delete or drag 'n drop action, which could
+        // become unpredictable after the tree has been updated
+        _pending->_signal.disconnect();
+    }
+    _removeWatchers();
+
+    _selectionChangedConnection.block(should_block);
+
+    // outgoing signal
+    _selectedConnection.block(should_block);
+
+    // These are not blocked
+    // desktopChangeConn, _documentChangedConnection;
+}
+
 /**
  * Fires the action verb
  */
@@ -1120,15 +1227,28 @@ void ObjectsPanel::_fireAction( unsigned int code )
     }
 }
 
+bool ObjectsPanel::_executeUpdate() {
+    _blockAllSignals(false);
+    _objectsChanged(nullptr);
+    _pendingUpdateTree = false;
+    return false;
+}
+
 /**
  * Executes the given button action during the idle time
  */
 void ObjectsPanel::_takeAction( int val )
 {
-    if ( !_pending ) {
+    if (val == UPDATE_TREE) {
+        if (not _pendingUpdateTree) {
+            _pendingUpdateTree = true;
+            _blockAllSignals(true);
+            Glib::signal_timeout().connect( sigc::mem_fun(*this, &ObjectsPanel::_executeUpdate), 0 );
+        }
+    } else if ( !_pending ) {
         _pending = new InternalUIBounce();
         _pending->_actionCode = val;
-        Glib::signal_timeout().connect( sigc::mem_fun(*this, &ObjectsPanel::_executeAction), 0 );
+        _pending->_signal = Glib::signal_timeout().connect( sigc::mem_fun(*this, &ObjectsPanel::_executeAction), 0 );
     }
 }
 
@@ -1629,6 +1749,7 @@ ObjectsPanel::ObjectsPanel() :
     _document(nullptr),
     _model(nullptr),
     _pending(nullptr),
+    _pendingUpdateTree(false),
     _toggleEvent(nullptr),
     _defer_target(),
     _visibleHeader(C_("Visibility", "V")),
@@ -1653,6 +1774,8 @@ ObjectsPanel::ObjectsPanel() :
     _tree.set_headers_visible(true);
     _tree.set_reorderable(true);
     _tree.enable_model_drag_dest (Gdk::ACTION_MOVE);
+
+    _tree_cache_iter = _tree_cache.end();
 
     //Create the column CellRenderers
     //Visible
@@ -2033,7 +2156,7 @@ void ObjectsPanel::setDesktop( SPDesktop* desktop )
             _documentChangedCurrentLayer = _desktop->connectCurrentLayerChanged( sigc::mem_fun(*this, &ObjectsPanel::_objectsChanged));
 
             _selectionChangedConnection = _desktop->selection->connectChanged( sigc::mem_fun(*this, &ObjectsPanel::_objectsSelected));
-            
+
             setDocument(_desktop, _desktop->doc());
         } else {
             setDocument(nullptr, nullptr);

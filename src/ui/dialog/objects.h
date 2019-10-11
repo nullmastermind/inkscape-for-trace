@@ -108,6 +108,7 @@ private:
     
     //
     InternalUIBounce* _pending;
+    bool _pendingUpdateTree;
     
     //Whether the drag & drop was dragged into an item
     gboolean _dnd_into;
@@ -131,6 +132,8 @@ private:
     Gtk::TreeModel::Path _defer_target;
 
     Glib::RefPtr<Gtk::TreeStore> _store;
+    std::list<std::pair<SPItem*, Gtk::TreeModel::iterator> > _tree_cache;
+    std::list<std::pair<SPItem*, Gtk::TreeModel::iterator> >::iterator _tree_cache_iter;
     std::vector<Gtk::Widget*> _watching;
     std::vector<Gtk::Widget*> _watchingNonTop;
     std::vector<Gtk::Widget*> _watchingNonBottom;
@@ -189,8 +192,10 @@ private:
     
     void _checkTreeSelection();
 
+    void _blockAllSignals(bool should_block);
     void _takeAction( int val );
     bool _executeAction();
+    bool _executeUpdate();
 
     void _setExpanded( const Gtk::TreeModel::iterator& iter, const Gtk::TreeModel::Path& path, bool isexpanded );
     void _setCollapsed(SPGroup * group);
@@ -208,6 +213,8 @@ private:
     void _objectsSelected(Selection *sel);
     bool _checkForSelected(const Gtk::TreePath& path, const Gtk::TreeIter& iter, SPItem* item, bool scrollto, bool expand);
 
+    void _removeWatchers();
+    void _objectsChangedWrapper(SPObject *obj);
     void _objectsChanged(SPObject *obj);
     void _addObject( SPObject* obj, Gtk::TreeModel::Row* parentRow );
     
