@@ -576,12 +576,14 @@ bool SPDesktop::displayModeToggle()
         break;
     case Inkscape::RENDERMODE_VISIBLE_HAIRLINES:
         _setDisplayMode(Inkscape::RENDERMODE_NORMAL);
+        verb = Inkscape::Verb::get(SP_VERB_VIEW_MODE_NORMAL);
         if (verb) {
             _menu_update.emit(verb->get_code(), setDisplayModeNormal());
         }
         break;
     default:
         _setDisplayMode(Inkscape::RENDERMODE_NORMAL);
+        verb = Inkscape::Verb::get(SP_VERB_VIEW_MODE_NORMAL);
         if (verb) {
             _menu_update.emit(verb->get_code(), setDisplayModeNormal());
         }
