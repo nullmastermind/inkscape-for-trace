@@ -122,6 +122,7 @@
     color: inherit;
 }
 
+/* atribute dialog popup size */
 .attrpop textview {
     font-size: 13px;
 }
@@ -149,29 +150,6 @@
     color: @success_color;
 }
 
-spinbutton {
-    padding: 0;
-    outline-style: none;
-}
-
-spinbutton entry {
-    padding-left: 2px;
-    padding-right: 0;
-}
-
-spinbutton undershoot {
-    outline-style: none;
-}
-
-spinbutton entry {
-    padding-left: 2px;
-    padding-right: 0;
-}
-
-spinbutton undershoot {
-    outline-style: none;
-}
-
 iconview *:hover {
     border-width: 1px;
     border-color: @theme_fg_color;
@@ -187,23 +165,6 @@ iconview *:hover {
     font-size: 11px;
 }
 
-.inkswitch slider {
-    min-width: 18px;
-    min-height: 18px;
-}
-
-.inkswitch image {
-    color: transparent;
-    background-color: transparent;
-    background-image: image(transparent);
-    -gtk-icon-style:symbolic;
-}
-
-.inkswitch {
-    margin: 2px;
-    padding: 0;
-    font-size: 8px;
-}
 
 /* LPE Dialog add */
 #LPESelectorFlowBox GtkFlowBoxChild,
@@ -400,13 +361,6 @@ SPCanvas {
 
 /* Reduce width of Fill and Stroke dialog */
 #ColorModeButton {
-    padding-left: 0;
-    padding-right: 0;
-}
-
-/* Reduce width of +/- buttons. */
-.up,
-.down {
     padding-left: 0;
     padding-right: 0;
 }

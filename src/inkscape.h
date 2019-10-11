@@ -109,6 +109,7 @@ public:
     Inkscape::UI::Tools::ToolBase * active_event_context();
     SPDocument * active_document();
     SPDesktop * active_desktop();
+    Glib::RefPtr<Gtk::CssProvider> themeprovider;
     Glib::RefPtr<Gtk::CssProvider> colorizeprovider;
     // Use this function to get selection model etc for a document
     Inkscape::ActionContext action_context_for_document(SPDocument *doc);

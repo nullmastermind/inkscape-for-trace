@@ -558,7 +558,6 @@ void Application::add_gtk_css()
     // Add style sheet (GTK3)
     auto const screen = Gdk::Screen::get_default();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gchar *gtk_font_name = nullptr;
     gchar *gtkThemeName = nullptr;
     gchar *gtkIconThemeName = nullptr;
     Glib::ustring themeiconname;
@@ -584,7 +583,7 @@ void Application::add_gtk_css()
         } else {
             prefs->setString("/theme/iconTheme", Glib::ustring(gtkIconThemeName));
         }
-        g_object_get(settings, "gtk-font-name", &gtk_font_name, NULL);
+
     }
 
     g_free(gtkThemeName);
@@ -601,6 +600,26 @@ void Application::add_gtk_css()
         }
         Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
+
+    Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme");
+    gtkthemename += ".css";
+    style = get_filename(UIS, gtkthemename.c_str());
+    if (!style.empty()) {
+        if (themeprovider) {
+            Gtk::StyleContext::remove_provider_for_screen(screen, themeprovider);
+        }
+        if (!themeprovider) {
+            themeprovider = Gtk::CssProvider::create();
+        }
+        try {
+            themeprovider->load_from_path(style);
+        } catch (const Gtk::CssProviderError &ex) {
+            g_critical("CSSProviderError::load_from_path(): failed to load '%s'\n(%s)", style.c_str(),
+                       ex.what().c_str());
+        }
+        Gtk::StyleContext::add_provider_for_screen(screen, themeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+
     if (!colorizeprovider) {
         colorizeprovider = Gtk::CssProvider::create();
     }
@@ -614,26 +633,6 @@ void Application::add_gtk_css()
         g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(), ex.what().c_str());
     }
     Gtk::StyleContext::add_provider_for_screen(screen, colorizeprovider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-    if (gtk_font_name && !strncmp(gtk_font_name, "Cantarell", 9)) {
-        auto provider = Gtk::CssProvider::create();
-        css_str = "#monoStrokeWidth,";
-        css_str += "#fillEmptySpace,";
-        css_str += "#SelectStatus,";
-        css_str += "#CoordinateStatusX,";
-        css_str += "#CoordinateStatusY,";
-        css_str += "#DesktopMainTable spinbutton{";
-        css_str += "    font-family: sans-serif;";
-        css_str += "}"; // we also can add to * but seems to me Cantarell looks better for other places
-        try {
-            provider->load_from_data(css_str);
-        } catch (const Gtk::CssProviderError &ex) {
-            g_critical("CSSProviderError::load_from_data(): failed to load '%s'\n(%s)", css_str.c_str(),
-                       ex.what().c_str());
-        }
-        Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    }
-    g_free(gtk_font_name);
 }
 
 void Application::readStyleSheets(bool forceupd)
