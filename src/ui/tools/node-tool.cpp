@@ -496,10 +496,12 @@ bool NodeTool::root_handler(GdkEvent* event) {
     switch (event->type)
     {
     case GDK_MOTION_NOTIFY: {
-        sp_update_helperpath(); 
-        combine_motion_events(desktop->canvas, event->motion, 0);
-        SPItem *over_item = sp_event_context_find_item (desktop, event_point(event->button),
-                FALSE, TRUE);
+        sp_update_helperpath();
+        SPItem *over_item = nullptr;
+        if (!desktop->canvas->_scrooling) {
+            combine_motion_events(desktop->canvas, event->motion, 0);
+            over_item = sp_event_context_find_item(desktop, event_point(event->button), FALSE, TRUE);
+        }
 
         Geom::Point const motion_w(event->motion.x, event->motion.y);
         Geom::Point const motion_dt(this->desktop->w2d(motion_w));
@@ -517,14 +519,14 @@ bool NodeTool::root_handler(GdkEvent* event) {
             }
         }
 
-        if (over_item != this->_last_over) {
+        if (over_item && over_item != this->_last_over) {
             this->_last_over = over_item;
             //ink_node_tool_update_tip(nt, event);
             this->update_tip(event);
         }
         // create pathflash outline
         if (prefs->getBool("/tools/nodes/pathflash_enabled")) {
-            if (over_item == this->flashed_item) {
+            if (!over_item || over_item == this->flashed_item) {
                 break;
             }
 
@@ -556,7 +558,7 @@ bool NodeTool::root_handler(GdkEvent* event) {
                 //prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff), 1.0,
                 over_item->highlight_color(), 1.0,
                 SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-            
+            this->desktop->canvas->_forcefull = true;
             sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(flash), 0, SP_WIND_RULE_NONZERO);
             this->flash_tempitem = desktop->add_temporary_canvasitem(flash,
                 prefs->getInt("/tools/nodes/pathflash_timeout", 500));
@@ -612,6 +614,9 @@ bool NodeTool::root_handler(GdkEvent* event) {
         break;
 
     case GDK_BUTTON_RELEASE:
+        if (event->button.button == 1) {
+            this->desktop->canvas->_forcefull = true;
+        }
         if (this->_selector->doubleClicked()) {
             // If the selector received the doubleclick event, then we're at some distance from
             // the path; otherwise, the doubleclick event would have been received by
@@ -647,7 +652,7 @@ bool NodeTool::root_handler(GdkEvent* event) {
         break;
     }
     // we realy dont want to stop any node operation we want to success all even the time consume it
-    this->desktop->canvas->forceFullRedrawAfterInterruptions(0);
+
     return ToolBase::root_handler(event);
 }
 

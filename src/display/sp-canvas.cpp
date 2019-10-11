@@ -39,10 +39,11 @@
 #include "display/sp-canvas-group.h"
 #include "display/sp-canvas.h"
 #include "helper/sp-marshal.h"
-#include "inkscape.h"
 #include "inkscape-window.h"
+#include "inkscape.h"
 #include "preferences.h"
 #include "sodipodi-ctrlrect.h"
+#include "ui/tools/node-tool.h"
 #include "ui/tools/tool-base.h"
 #include "widgets/desktop-widget.h"
 #include <2geom/affine.h>
@@ -896,7 +897,6 @@ void SPCanvasGroup::render(SPCanvasItem *item, SPCanvasBuf *buf)
 void SPCanvasGroup::viewboxChanged(SPCanvasItem *item, Geom::IntRect const &new_area)
 {
     SPCanvasGroup *group = SP_CANVAS_GROUP(item);
-
     for (auto & item : group->items) {
         SPCanvasItem *child = &item;
         if (child->visible) {
@@ -1018,7 +1018,10 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_changecursor = 0;
     canvas->_inside = false; // this could be wrong on start but we update it as far we bo to the other side.
     canvas->_splits = 0;
+    canvas->_forcefull = false;
+    canvas->_delayrendering = 0;
     canvas->_totalelapsed = 0;
+    canvas->_scrooling = false;
     GTimeZone *tz = g_time_zone_new(nullptr);
     canvas->_idle_time = g_date_time_new_now(tz);
     g_time_zone_unref(tz);
@@ -1177,7 +1180,7 @@ void SPCanvas::handle_get_preferred_height(GtkWidget *widget, gint *minimum_heig
 void SPCanvas::handle_size_allocate(GtkWidget *widget, GtkAllocation *allocation)
 {
     SPCanvas *canvas = SP_CANVAS (widget);
-
+    canvas->_delayrendering = 20;
     // Allocation does not depend on device scale.
     GtkAllocation old_allocation;
     gtk_widget_get_allocation(widget, &old_allocation);
@@ -2081,13 +2084,23 @@ int SPCanvas::paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const
     gint64 elapsed = (gint64)g_date_time_difference(now, setup->start_time);
     g_date_time_unref(now);
 
+    // if we do canvas resize or panning we want the canvas not redraw in enought times
+    // to make a smooth response.
+    if (_delayrendering != 0) {
+        --_delayrendering;
+        return false;
+    }
+
     // Allow only very fast buffers to be run together;
     // as soon as the total redraw time exceeds 1ms, cancel;
     // this returns control to the idle loop and allows Inkscape to process user input
     // (potentially interrupting the redraw); as soon as Inkscape has some more idle time,
     // it will get back and finish painting what remains to paint.
 
-    if (elapsed > 1000) {
+    // if force full is set we allways redraw all is used in node tool
+    // to render in one pass highlighed path or selected nodes, that can get long time
+    // to render and if the render area go across diferent rendering tiles it render splited
+    if (elapsed > 1000 && !_forcefull) {
 
         // Interrupting redraw isn't always good.
         // For example, when you drag one node of a big path, only the buffer containing
@@ -2103,7 +2116,6 @@ int SPCanvas::paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const
             if (_forced_redraw_limit != -1) {
                 _forced_redraw_count++;
             }
-
             return false;
         }
     }
@@ -2447,7 +2459,7 @@ int SPCanvas::paint()
     draw = cairo_region_create_rectangle(&crect);
     cairo_region_subtract(draw, _clean_region);
     cairo_region_get_extents(draw, &crect);
-    cairo_region_subtract_rectangle(_clean_region, &crect); 
+    cairo_region_subtract_rectangle(_clean_region, &crect);
     cairo_region_subtract(to_draw, _clean_region);
     cairo_region_subtract(to_draw_outline, _clean_region);
     cairo_region_destroy(draw);
@@ -2545,13 +2557,18 @@ gint SPCanvas::idle_handler(gpointer data)
     SPCanvas *canvas = SP_CANVAS (data);
 #ifdef DEBUG_PERFORMANCE
     static int totaloops = 1;
-    GTimeZone *tz = g_time_zone_new(nullptr);
-    GDateTime *now = g_date_time_new_now(tz);
-    g_time_zone_unref(tz);
-    gint64 elapsed = (gint64)g_date_time_difference(now, canvas->_idle_time);
-    g_date_time_unref(now);
-    g_message("[%i] start loop %i in split %i at %f", canvas->_idle_id, totaloops, canvas->_splits,
-              canvas->_totalelapsed / (double)1000000 + elapsed / (double)1000000);
+    GTimeZone *tz = nullptr;
+    GDateTime *now = nullptr;
+    gint64 elapsed = 0;
+    if (!canvas->_delayrendering) {
+        tz = g_time_zone_new(nullptr);
+        now = g_date_time_new_now(tz);
+        g_time_zone_unref(tz);
+        elapsed = (gint64)g_date_time_difference(now, canvas->_idle_time);
+        g_date_time_unref(now);
+        g_message("[%i] start loop %i in split %i at %f", canvas->_idle_id, totaloops, canvas->_splits,
+                  canvas->_totalelapsed / (double)1000000 + elapsed / (double)1000000);
+    }
 #endif
     int ret = canvas->doUpdate();
     int n_rects = cairo_region_num_rectangles(canvas->_clean_region);
@@ -2560,7 +2577,7 @@ gint SPCanvas::idle_handler(gpointer data)
     }
 
 #ifdef DEBUG_PERFORMANCE
-    if (ret == 0) {
+    if (ret == 0 && !canvas->_delayrendering) {
         tz = g_time_zone_new(nullptr);
         now = g_date_time_new_now(tz);
         g_time_zone_unref(tz);
@@ -2569,11 +2586,14 @@ gint SPCanvas::idle_handler(gpointer data)
         g_message("[%i] loop ended unclean at %f", canvas->_idle_id,
                   canvas->_totalelapsed / (double)1000000 + elapsed / (double)1000000);
     }
-    if (ret == 0) {
+    if (ret == 0 && !canvas->_delayrendering) {
         totaloops += 1;
     }
     if (ret) {
         // Reset idle id
+        canvas->_scrooling = false;
+        canvas->_forcefull = false;
+        canvas->_delayrendering = 0;
         tz = g_time_zone_new(nullptr);
         now = g_date_time_new_now(tz);
         g_time_zone_unref(tz);
@@ -2603,6 +2623,8 @@ gint SPCanvas::idle_handler(gpointer data)
     if (ret) {
         // Reset idle id
         canvas->_idle_id = 0;
+        canvas->_forcefull = false;
+        canvas->_delayrendering = 0;
 #endif
     }
     return !ret;
@@ -2717,7 +2739,7 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
 
     // Adjust the clean region
     if (clear || _spliter || _xray) {
-        dirtyAll();
+        requestFullRedraw();
     } else {
         cairo_rectangle_int_t crect = { _x0, _y0, allocation.width, allocation.height };
         cairo_region_intersect_rectangle(_clean_region, &crect);
@@ -2745,6 +2767,7 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
                         }
                     }
                 }
+                canvas->_scrooling = true;
                 gdk_window_scroll(getWindow(this), -dx, -dy);
             }
         }

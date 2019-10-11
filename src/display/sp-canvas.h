@@ -206,6 +206,9 @@ public:
     double _dy0;
     int _x0; ///< World coordinate of the leftmost pixels of window
     int _y0; ///< World coordinate of the topmost pixels of window
+    bool _forcefull;
+    bool _scrooling;
+    int _delayrendering;
     int _device_scale; ///< Scale for high DPI montiors
     GDateTime *_idle_time;
     int _splits;

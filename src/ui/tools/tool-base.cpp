@@ -455,6 +455,9 @@ bool ToolBase::root_handler(GdkEvent* event) {
         break;
 
     case GDK_MOTION_NOTIFY:
+        if (this->space_panning) {
+            this->desktop->canvas->_delayrendering = 20;
+        }
         if (panning) {
             if (panning == 4 && !xp && !yp ) {
                 // <Space> + mouse panning started, save location and grab canvas
