@@ -2007,7 +2007,7 @@ void TextToolbar::selection_changed(Inkscape::Selection *selection) // don't bot
         Glib::RefPtr<Gtk::ListStore> store = _align_item->get_store();
         Gtk::TreeModel::Row row = *(store->get_iter("3"));  // Justify entry
         UI::Widget::ComboToolItemColumns columns;
-        row[columns.col_sensitive] = isFlow || query.shape_inside.value;
+        row[columns.col_sensitive] = isFlow || query.shape_inside.set;
 
         int activeButton = 0;
         if (query.text_align.computed  == SP_CSS_TEXT_ALIGN_JUSTIFY)
