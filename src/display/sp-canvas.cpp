@@ -1018,6 +1018,11 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_changecursor = 0;
     canvas->_inside = false; // this could be wrong on start but we update it as far we bo to the other side.
     canvas->_splits = 0;
+    canvas->_totalelapsed = 0;
+    GTimeZone *tz = g_time_zone_new(nullptr);
+    canvas->_idle_time = g_date_time_new_now(tz);
+    g_time_zone_unref(tz);
+
     bool _is_dragging;
 
 #if defined(HAVE_LIBLCMS2)
@@ -1049,6 +1054,9 @@ void SPCanvas::dispose(GObject *object)
     if (canvas->_backing_store) {
         cairo_surface_destroy(canvas->_backing_store);
         canvas->_backing_store = nullptr;
+    }
+    if (canvas->_idle_time) {
+        g_date_time_unref(canvas->_idle_time);
     }
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
     if (canvas->_surface_for_similar) {
@@ -2060,24 +2068,25 @@ void SPCanvas::paintSpliter()
 
 struct PaintRectSetup {
     Geom::IntRect canvas_rect;
-    GTimeVal start_time;
+    GDateTime *start_time;
     int max_pixels;
     Geom::Point mouse_loc;
 };
 
 int SPCanvas::paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const &this_rect)
 {
-    GTimeVal now;
-    g_get_current_time (&now);
-
-    glong elapsed = (now.tv_sec - setup->start_time.tv_sec) * 1000000
-        + (now.tv_usec - setup->start_time.tv_usec);
+    GTimeZone *tz = g_time_zone_new(nullptr);
+    GDateTime *now = g_date_time_new_now(tz);
+    g_time_zone_unref(tz);
+    gint64 elapsed = (gint64)g_date_time_difference(now, setup->start_time);
+    g_date_time_unref(now);
 
     // Allow only very fast buffers to be run together;
     // as soon as the total redraw time exceeds 1ms, cancel;
     // this returns control to the idle loop and allows Inkscape to process user input
     // (potentially interrupting the redraw); as soon as Inkscape has some more idle time,
     // it will get back and finish painting what remains to paint.
+
     if (elapsed > 1000) {
 
         // Interrupting redraw isn't always good.
@@ -2223,10 +2232,13 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
     }
 
     // Start the clock
-    g_get_current_time(&(setup.start_time));
-
+    GTimeZone *tz = g_time_zone_new(nullptr);
+    setup.start_time = g_date_time_new_now(tz);
+    g_time_zone_unref(tz);
     // Go
-    return paintRectInternal(&setup, paint_rect);
+    bool ret = paintRectInternal(&setup, paint_rect);
+    g_date_time_unref(setup.start_time);
+    return ret;
 }
 
 void SPCanvas::forceFullRedrawAfterInterruptions(unsigned int count)
@@ -2531,38 +2543,60 @@ int SPCanvas::doUpdate()
 gint SPCanvas::idle_handler(gpointer data)
 {
     SPCanvas *canvas = SP_CANVAS (data);
+#ifdef DEBUG_PERFORMANCE
+    static int totaloops = 1;
+    GTimeZone *tz = g_time_zone_new(nullptr);
+    GDateTime *now = g_date_time_new_now(tz);
+    g_time_zone_unref(tz);
+    gint64 elapsed = (gint64)g_date_time_difference(now, canvas->_idle_time);
+    g_date_time_unref(now);
+    g_message("[%i] start loop %i in split %i at %f", canvas->_idle_id, totaloops, canvas->_splits,
+              canvas->_totalelapsed / (double)1000000 + elapsed / (double)1000000);
+#endif
     int ret = canvas->doUpdate();
     int n_rects = cairo_region_num_rectangles(canvas->_clean_region);
     if (n_rects > 1) { // not fully painted, maybe clean region is updated in middle of idle, reload again
         ret = 0;
     }
+
 #ifdef DEBUG_PERFORMANCE
-    static int totaloops = 1;
+    if (ret == 0) {
+        tz = g_time_zone_new(nullptr);
+        now = g_date_time_new_now(tz);
+        g_time_zone_unref(tz);
+        elapsed = (gint64)g_date_time_difference(now, canvas->_idle_time);
+        g_date_time_unref(now);
+        g_message("[%i] loop ended unclean at %f", canvas->_idle_id,
+                  canvas->_totalelapsed / (double)1000000 + elapsed / (double)1000000);
+    }
     if (ret == 0) {
         totaloops += 1;
     }
     if (ret) {
         // Reset idle id
-        canvas->_idle_id = 0;
-        static glong totalelapsed = 0;
-        GTimeVal now;
-        g_get_current_time (&now);
-        glong elapsed = (now.tv_sec - canvas->_idle_time.tv_sec) * 1000000
-        + (now.tv_usec - canvas->_idle_time.tv_usec);
-        totalelapsed += elapsed;
+        tz = g_time_zone_new(nullptr);
+        now = g_date_time_new_now(tz);
+        g_time_zone_unref(tz);
+        elapsed = (gint64)g_date_time_difference(now, canvas->_idle_time);
+        g_date_time_unref(now);
+        canvas->_totalelapsed += elapsed;
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         if (desktop) {
             SPCanvasArena *arena = SP_CANVAS_ARENA(desktop->drawing);
             Inkscape::RenderMode rm = arena->drawing.renderMode();
             if (rm == Inkscape::RENDERMODE_OUTLINE) {
-                totalelapsed = 0;
+                canvas->_totalelapsed = 0;
                 g_message("Outline mode, we reset and stop total counter");
             }
-            g_message("%i loops in last idle", totaloops);
-            g_message("%i splits in last idle", canvas->_splits);
-            g_message("%f last idle loop duration", elapsed/(double)1000000);
-            g_message("%f total rendering duration (change to outline mode to reset)", totalelapsed/(double)1000000);
+            g_message("[%i] finished", canvas->_idle_id);
+            g_message("[%i] loops %i", canvas->_idle_id, totaloops);
+            g_message("[%i] splits %i", canvas->_idle_id, canvas->_splits);
+            g_message("[%i] duration %f", canvas->_idle_id, elapsed / (double)1000000);
+            g_message("[%i] total %f (toggle outline mode to reset)", canvas->_idle_id,
+                      canvas->_totalelapsed / (double)1000000);
+            g_message("[%i] :::::::::::::::::::::::::::::::::::::::", canvas->_idle_id);
         }
+        canvas->_idle_id = 0;
         totaloops = 1;
         canvas->_splits = 0;
 #else
@@ -2578,20 +2612,26 @@ void SPCanvas::addIdle()
 {
     if (_idle_id == 0) {
 #ifdef DEBUG_PERFORMANCE
-        g_get_current_time (&_idle_time);
+        g_date_time_unref(_idle_time);
+        GTimeZone *tz = g_time_zone_new(nullptr);
+        _idle_time = g_date_time_new_now(tz);
+        g_time_zone_unref(tz);
 #endif
         _idle_id = gdk_threads_add_idle_full(UPDATE_PRIORITY, idle_handler, this, nullptr);
+#ifdef DEBUG_PERFORMANCE
+        g_message("[%i] launched %f", _idle_id, _totalelapsed / (double)1000000);
+#endif
     }
 }
 void SPCanvas::removeIdle()
 {
     if (_idle_id) {
         g_source_remove(_idle_id);
-        _idle_id = 0;
 #ifdef DEBUG_PERFORMANCE
-        g_message("idle aborted in split %i", _splits);
+        g_message("[%i] aborted in split %i", _idle_id, _splits);
         _splits = 0;
 #endif
+        _idle_id = 0;
     }
 }
 
@@ -2709,25 +2749,29 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
             }
         }
     }
-    addIdle();
 }
 
 void SPCanvas::updateNow()
 {
     if (_need_update) {
 #ifdef DEBUG_PERFORMANCE
-        GTimeVal now;
-        g_get_current_time (&now);
-        glong elapsed = (now.tv_sec - _idle_time.tv_sec) * 1000000
-        + (now.tv_usec - _idle_time.tv_usec);
-        g_message("updateNow() started %f", elapsed/(double)1000000);
+        GTimeZone *tz = g_time_zone_new(nullptr);
+        GDateTime *now = g_date_time_new_now(tz);
+        g_time_zone_unref(tz);
+        gint64 elapsed = (gint64)g_date_time_difference(now, _idle_time);
+        g_date_time_unref(now);
+        g_message("[%i] start updateNow(): %f at %f", _idle_id, elapsed / (double)1000000,
+                  _totalelapsed / (double)1000000 + elapsed / (double)1000000);
 #endif
         doUpdate();
 #ifdef DEBUG_PERFORMANCE
-        g_get_current_time (&now);
-        elapsed = (now.tv_sec - _idle_time.tv_sec) * 1000000
-        + (now.tv_usec - _idle_time.tv_usec);
-        g_message("updateNow() ended %f", elapsed/(double)1000000);
+        tz = g_time_zone_new(nullptr);
+        now = g_date_time_new_now(tz);
+        g_time_zone_unref(tz);
+        elapsed = (gint64)g_date_time_difference(now, _idle_time);
+        g_date_time_unref(now);
+        g_message("[%i] end updateNow(): %f at %f", _idle_id, elapsed / (double)1000000,
+                  _totalelapsed / (double)1000000 + elapsed / (double)1000000);
 #endif
     }
 }

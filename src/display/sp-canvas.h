@@ -25,11 +25,12 @@
 # include "config.h"  // only include where actually required!
 #endif
 
-#include <gtk/gtk.h>
-#include <cstdint>
-#include <glibmm/ustring.h>
 #include <2geom/affine.h>
 #include <2geom/rect.h>
+#include <cstdint>
+#include <glib.h>
+#include <glibmm/ustring.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
@@ -205,10 +206,10 @@ public:
     double _dy0;
     int _x0; ///< World coordinate of the leftmost pixels of window
     int _y0; ///< World coordinate of the topmost pixels of window
-
     int _device_scale; ///< Scale for high DPI montiors
-    GTimeVal _idle_time;
+    GDateTime *_idle_time;
     int _splits;
+    gint64 _totalelapsed;
 
     /// Image surface storing the contents of the widget
     cairo_surface_t *_backing_store;
