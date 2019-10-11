@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-10-10 21:27+0200\n"
-"PO-Revision-Date: 2019-10-11 19:56+0100\n"
+"PO-Revision-Date: 2019-10-12 01:44+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -9205,6 +9205,7 @@ msgstr "Zahnräder"
 #: ../src/live_effects/effect.cpp:120
 msgid "Create interlocking, configurable gears based on the nodes of a path"
 msgstr ""
+"Erstellt ineinander greifende Zahnräder auf der Basis der Knoten eines Pfades"
 
 #: ../src/live_effects/effect.cpp:130
 msgid "Pattern Along Path"
@@ -9213,6 +9214,7 @@ msgstr "Muster entlang Pfad"
 #: ../src/live_effects/effect.cpp:134
 msgid "Place one or more copies of another path along the path"
 msgstr ""
+"Platziert eine oder mehrere Kopien eines anderen Pfades entlang des Pfades"
 
 #: ../src/live_effects/effect.cpp:144
 msgid "Stitch Sub-Paths"
@@ -9222,6 +9224,8 @@ msgstr "Unterpfade vernähen"
 msgid ""
 "Draw perpendicular lines between subpaths of a path, like rungs of a ladder"
 msgstr ""
+"Zeichnet senkrechte Linien zwischen den Unterpfaden eines Pfades, wie die"
+" Stufen einer Leiter"
 
 #: ../src/live_effects/effect.cpp:159
 msgid "VonKoch"
@@ -9247,7 +9251,7 @@ msgstr "Gitter erzeugen"
 
 #: ../src/live_effects/effect.cpp:191
 msgid "Create a (perspective) grid from a 3-node path"
-msgstr ""
+msgstr "Erstellt ein (perspektivisches) Gitter aus einem Pfad mit drei Knoten"
 
 #: ../src/live_effects/effect.cpp:201
 msgid "Spiro spline"
@@ -9269,6 +9273,8 @@ msgstr "Hüllenverformung"
 #: ../src/live_effects/effect.cpp:219
 msgid "Adjust the shape of an object by transforming paths on its four sides"
 msgstr ""
+"Verändert die Form eines Objektes mit Hilfe von Pfaden entlang dessen vier"
+" Seiten"
 
 #: ../src/live_effects/effect.cpp:229
 msgid "Interpolate Sub-Paths"
@@ -9277,15 +9283,15 @@ msgstr "Unterpfade interpolieren"
 #: ../src/live_effects/effect.cpp:233
 msgid "Create a stepwise transition between the 2 subpaths of a path"
 msgstr ""
+"Erstellt stufenweise Übergänge zwischen den zwei Unterpfaden eines Pfades"
 
 #: ../src/live_effects/effect.cpp:243
 msgid "Hatches (rough)"
 msgstr "Schraffur (grob)"
 
 #: ../src/live_effects/effect.cpp:247
-#, fuzzy
 msgid "Fill the object with adjustable hatching"
-msgstr "Objekt mit vereinzelten lichtdurchlässigen Flecken versehen"
+msgstr "Füllt das Objekt mit einer anpassbaren Schraffur"
 
 #: ../src/live_effects/effect.cpp:257
 msgid "Sketch"
@@ -9294,6 +9300,8 @@ msgstr "Skizze"
 #: ../src/live_effects/effect.cpp:261
 msgid "Draw multiple short strokes along the path, as in a pencil sketch"
 msgstr ""
+"Zeichnet mehrere kurze Striche entlang des Pfades, wie in einer"
+" Bleistiftzeichnung."
 
 #: ../src/live_effects/effect.cpp:271
 msgid "Ruler"
@@ -9306,6 +9314,8 @@ msgid ""
 "Add ruler marks to the object in adjustable intervals, using the object's "
 "stroke style."
 msgstr ""
+"Fügt einem Objekt Linealmarkierungen in einstellbaren Abständen hinzu, die"
+" den Konturstil des Objektes verwenden"
 
 #: ../src/live_effects/effect.cpp:286
 msgid "Power stroke"
@@ -9326,13 +9336,12 @@ msgid "Clone original"
 msgstr "Originalpfad klonen"
 
 #: ../src/live_effects/effect.cpp:304
-#, fuzzy
 msgid ""
 "Let an object take on the shape, fill, stroke and/or other attributes of "
 "another object."
 msgstr ""
-"Alle Objekte mit der gleichen Füllung und Kontur der ausgewählten Objekte "
-"wählen"
+"Lässt ein Objekt Form, Füllung, Konturstil und / oder andere Attribute eines"
+" anderen Objektes annehmen"
 
 #
 # File: ../src/live_effects/effect.cpp, line: 319
@@ -9341,6 +9350,8 @@ msgid ""
 "Smoothen and simplify a object. This effect is also available in the Pencil "
 "tool's tool controls."
 msgstr ""
+"Glättet und vereinfacht ein Objekt; dieser Effekt ist auch in den"
+" Werkzeugeinstellungen für das Bleistiftwerkzeug zu finden."
 
 #: ../src/live_effects/effect.cpp:329
 msgid "Lattice Deformation 2"
@@ -9359,6 +9370,9 @@ msgid ""
 "Transform the object to fit into a shape with four corners, either by "
 "stretching it or creating the illusion of a 3D-perspective"
 msgstr ""
+"Transformiert das Objekt so, dass es in eine Form mit vier Ecken eingepasst"
+" wird, entweder, indem es entsprechend gestreckt oder gestaucht wird, oder"
+" indem eine perspektivische Verzerrung simuliert wird"
 
 #: ../src/live_effects/effect.cpp:357
 msgid "Interpolate points"
@@ -9371,6 +9385,8 @@ msgid ""
 "Connect the nodes of the object (e.g. corresponding to data points) by "
 "different types of lines."
 msgstr ""
+"Verbindet die Knoten eines Objektes (z.B. Datenpunkten entsprechend) mit"
+" unterschiedlichen Linientypen"
 
 #: ../src/live_effects/effect.cpp:371
 msgid "Transform by 2 points"
@@ -9378,7 +9394,7 @@ msgstr "Transformation an 2 Punkten"
 
 #: ../src/live_effects/effect.cpp:375
 msgid "Scale, stretch and rotate an object by two handles"
-msgstr ""
+msgstr "Skaliert, streckt und dreht ein Objekt mit Hilfe zweier Anfasser"
 
 #: ../src/live_effects/effect.cpp:385
 #: ../src/live_effects/lpe-show_handles.cpp:31
@@ -9391,10 +9407,14 @@ msgid ""
 "Draw the handles and nodes of objects (replaces the original styling with a "
 "black stroke)"
 msgstr ""
+"Zeichnet die Anfasser und Knoten von Objekten (ersetzt den ursprünglichen"
+" Stil mit einer schwarzen Kontur)"
 
 #: ../src/live_effects/effect.cpp:403
 msgid "Roughen an object by adding and randomly shifting new nodes"
 msgstr ""
+"Raut die Kontur eines Objektes an indem neue Knoten zufällig hinzugefügt und"
+" verschoben werden"
 
 #: ../src/live_effects/effect.cpp:413 ../src/ui/toolbar/pencil-toolbar.cpp:268
 msgid "BSpline"
@@ -9420,6 +9440,8 @@ msgid ""
 "Select among various join types for a object's corner nodes (mitre, rounded, "
 "extrapolated arc, ...)"
 msgstr ""
+"Erlaubt die Auswahl verschiedener Verbindungstypen für die spitzen Knoten"
+" eines Objektes (Gehrung, abgerundet, extrapolierter Bogen, ...)"
 
 #: ../src/live_effects/effect.cpp:441
 msgid "Taper stroke"
@@ -9427,7 +9449,7 @@ msgstr "Pfad verjüngen"
 
 #: ../src/live_effects/effect.cpp:445
 msgid "Let the path's ends narrow down to a tip"
-msgstr ""
+msgstr "Verschmälert die Enden eines Pfades zu einer Spitze"
 
 #: ../src/live_effects/effect.cpp:455
 msgid "Mirror symmetry"
@@ -9462,6 +9484,8 @@ msgstr "Pfad anheften"
 msgid ""
 "Glue the current path's ends to a specific position on one or two other paths"
 msgstr ""
+"Befestigt die Enden des aktuellen Pfades an einer bestimmten Stelle eines"
+" oder zweier anderer Pfade"
 
 #: ../src/live_effects/effect.cpp:498
 msgid "Fill between strokes"
@@ -9493,7 +9517,7 @@ msgstr "Ellipse durch 5 Punkte"
 
 #: ../src/live_effects/effect.cpp:530
 msgid "Create an ellipse from 5 nodes on its circumference"
-msgstr ""
+msgstr "Erzeugt eine Ellipse aus 5 Knoten entlang ihres Umfangs"
 
 #: ../src/live_effects/effect.cpp:540
 msgid "Bounding Box"
@@ -9502,7 +9526,7 @@ msgstr "Objektrahmen"
 #: ../src/live_effects/effect.cpp:544
 msgid ""
 "Turn the path into a bounding box that entirely encompasses another path"
-msgstr ""
+msgstr "Wandelt den Pfad in einen Objektrahmen für einen anderen Pfad um"
 
 #: ../src/live_effects/effect.cpp:555
 msgid "Measure Segments"
@@ -9513,17 +9537,20 @@ msgid ""
 "Add dimensioning for distances between nodes, optionally with projection and "
 "many other configuration options"
 msgstr ""
+"Fügt Bemaßungen für Abstände zwischen Knoten ein, optional mit Projektion und"
+" vielen weiteren Einstellungsmöglichkeiten"
 
 #: ../src/live_effects/effect.cpp:569
-#, fuzzy
 msgid "Corners (Fillet/Chamfer)"
-msgstr "Abrunden/Fasen"
+msgstr "Ecken (Abrunden/Fasen)"
 
 #: ../src/live_effects/effect.cpp:573
 msgid ""
 "Adjust the shape of a path's corners, rounding them to a specified radius, "
 "or cutting them off"
 msgstr ""
+"Erlaubt die Anpassung der Ecken eines Pfades, indem diese mit einem"
+" bestimmten Radius abgerundet oder abgeschnitten werden"
 
 #: ../src/live_effects/effect.cpp:583
 msgid "Boolean operation"
@@ -9534,6 +9561,8 @@ msgid ""
 "Cut, union, subtract, intersect and divide a path non-destructively with "
 "another path"
 msgstr ""
+"Nicht-destruktive(s) Zerschneiden, Vereinigung, Differenz, Überschneidung und"
+" Division eines Pfades mit einem anderen Pfad"
 
 #: ../src/live_effects/effect.cpp:597 ../src/live_effects/effect.cpp:601
 msgid "Embroidery stitch"
@@ -9546,6 +9575,8 @@ msgstr "Ausschneiden"
 #: ../src/live_effects/effect.cpp:615
 msgid "Invert, hide or flatten a clip (apply like a Boolean operation)"
 msgstr ""
+"Invertiert, verbirgt oder reduziert (wie bei einer Booleschen Operation)"
+" einen Ausschneidepfad"
 
 #: ../src/live_effects/effect.cpp:625
 msgid "Power mask"
@@ -9553,7 +9584,7 @@ msgstr "Maskieren"
 
 #: ../src/live_effects/effect.cpp:629
 msgid "Invert or hide a mask, or use its negative"
-msgstr ""
+msgstr "Invertiert oder verbirgt eine Maske, oder kehrt die Farbwerte darin um"
 
 #: ../src/live_effects/effect.cpp:639
 msgid "Ellipse from points"
@@ -9562,10 +9593,13 @@ msgstr "Ellipse durch 5 Punkte"
 #: ../src/live_effects/effect.cpp:643
 msgid "Draw a circle, ellipse, arc or slice based on the nodes of a path"
 msgstr ""
+"Zeichnet einen Kreis, eine Ellipse, einen Bogen oder ein Kressegment auf der"
+" Basis der Knoten eines Pfades"
 
 #: ../src/live_effects/effect.cpp:657
 msgid "Offset the path, optionally keeping cusp corners cusp"
 msgstr ""
+"Erzeugt einen Versatz des Pfades und erhält dabei optional spitze Knoten"
 
 #: ../src/live_effects/effect.cpp:667
 msgid "Dashed Stroke"
@@ -9576,6 +9610,8 @@ msgid ""
 "Add a dashed stroke whose dashes end exactly on a node, optionally with the "
 "same number of dashes per path segment"
 msgstr ""
+"Fügt eine gestrichelte Kontur ein, deren Strichelung exakt an den Knoten"
+" endet, optional mit derselben Anzahl an Strichen pro Pfadsegment"
 
 #: ../src/live_effects/effect.cpp:681
 msgid "Angle bisector"
@@ -9585,16 +9621,20 @@ msgstr "Winkelhalbierende"
 msgid ""
 "Draw a line that halves the angle between the first three nodes of the path"
 msgstr ""
+"Zeichnet eine Linie die den Winkel zwischen den ersten drei Knoten eines"
+" Pfades halbiert."
 
 #: ../src/live_effects/effect.cpp:695
 msgid "Circle (by center and radius)"
-msgstr "Kreis (Mittelpunkt+Radius)"
+msgstr "Kreis (aus Mittelpunkt und Radius)"
 
 #: ../src/live_effects/effect.cpp:699
 msgid ""
 "Draw a circle, where the first node of the path is the center, and the last "
 "determines its radius"
 msgstr ""
+"Erzeugt einen Kreis, dessen Zentrum der erste Knoten des Pfades ist, und"
+" dessen Radius durch den letzten Knoten bestimmt wird"
 
 #: ../src/live_effects/effect.cpp:709
 msgid "Circle by 3 points"
@@ -9605,6 +9645,8 @@ msgid ""
 "Draw a circle whose circumference passes through the first three nodes of "
 "the path"
 msgstr ""
+"Erzeugt einen Kreis dessen Umfang durch die ersten drei Knoten des Pfades"
+" verläuft"
 
 #: ../src/live_effects/effect.cpp:723 ../share/extensions/extrude.inx:3
 msgid "Extrude"
@@ -9612,7 +9654,7 @@ msgstr "Extrudieren"
 
 #: ../src/live_effects/effect.cpp:727
 msgid "Extrude the path, creating a face for each path segment"
-msgstr ""
+msgstr "Extrudiert den Pfad, wobei eine Fläche pro Pfadsegment erzeugt wird"
 
 #: ../src/live_effects/effect.cpp:737
 msgid "Line Segment"
@@ -9621,6 +9663,8 @@ msgstr "Liniensegment"
 #: ../src/live_effects/effect.cpp:741
 msgid "Draw a straight line that connects the first and last node of a path"
 msgstr ""
+"Erzeugt eine gerade Verbindungslinie zwischen dem ersten und dem letzten"
+" Knoten des Pfades"
 
 #: ../src/live_effects/effect.cpp:751
 #: ../src/live_effects/lpe-measure-segments.cpp:61
@@ -9631,6 +9675,8 @@ msgstr "Parallel"
 #: ../src/live_effects/effect.cpp:755
 msgid "Create a draggable line that will always be parallel to a two-node path"
 msgstr ""
+"Erzeugt eine verschiebbare Linie, die immer parallel zu einem Pfad aus zwei"
+" Knoten ausgerichtet ist"
 
 #: ../src/live_effects/effect.cpp:765
 msgid "Perpendicular bisector"
@@ -9641,6 +9687,8 @@ msgid ""
 "Draw a perpendicular line in the middle of the (imaginary) line that "
 "connects the start and end nodes"
 msgstr ""
+"Erzeugt eine senkrechte Linie in der Mitte der (imaginären) Verbindungslinie"
+" zwischen dem Start- und dem Endknoten"
 
 #: ../src/live_effects/effect.cpp:779
 msgid "Tangent to curve"
@@ -9651,6 +9699,8 @@ msgid ""
 "Draw a tangent with variable length and additional angle that can be moved "
 "along the path"
 msgstr ""
+"Zeichnet eine Tangente mit einstellbarer Länge und einem zusätzlichen Winkel,"
+" die entlang des Pfades verschoben werden kann"
 
 #: ../src/live_effects/effect.cpp:794
 msgid "doEffect stack test"
@@ -9658,7 +9708,7 @@ msgstr "AusführenEffekt-Reihentest"
 
 #: ../src/live_effects/effect.cpp:798
 msgid "Test LPE"
-msgstr ""
+msgstr "Test-Pfadeffekt"
 
 #: ../src/live_effects/effect.cpp:808
 msgid "Dynamic stroke"
@@ -9669,6 +9719,8 @@ msgid ""
 "Create calligraphic strokes with variably shaped ends, making use of a "
 "parameter for the brush angle"
 msgstr ""
+"Erstellt kalligrafische Linine mit variabel geformten Enden und nutzt dabei"
+" auch einen Wert für den Winkel des Pinsels"
 
 #: ../src/live_effects/effect.cpp:822
 msgid "Lattice Deformation"
@@ -9676,7 +9728,7 @@ msgstr "Gitterverformung"
 
 #: ../src/live_effects/effect.cpp:826
 msgid "Deform an object using a 4x4 grid"
-msgstr ""
+msgstr "Verformt ein Objekt mit Hilfe eines 4x4-Gitters"
 
 #: ../src/live_effects/effect.cpp:836
 msgid "Path length"
@@ -9684,25 +9736,23 @@ msgstr "Pfadlänge"
 
 #: ../src/live_effects/effect.cpp:840
 msgid "Display the total length of a (curved) path"
-msgstr ""
+msgstr "Zeigt die Gesamtlänge eines (gekrümmten) Pfades an"
 
 #: ../src/live_effects/effect.cpp:850
 msgid "Recursive skeleton"
 msgstr "Rekursives Gitter"
 
 #: ../src/live_effects/effect.cpp:854
-#, fuzzy
 msgid "Draw a path recursively"
-msgstr "Pfad zeichnen, der ein Gitter ist"
+msgstr "Zeichnet einen Pfad rekursiv"
 
 #: ../src/live_effects/effect.cpp:864
 msgid "Text label"
 msgstr "Text-Bezeichner"
 
 #: ../src/live_effects/effect.cpp:868
-#, fuzzy
 msgid "Add a label for the object"
-msgstr "Freiform-Bezeichner des Objektes"
+msgstr "Fügt einem Objekt eine Beschriftung hinzu"
 
 #: ../src/live_effects/effect.cpp:1104
 msgid "Is visible?"
@@ -9733,7 +9783,7 @@ msgstr "<b>Standardwert:</b> "
 
 #: ../src/live_effects/effect.cpp:1555 ../src/live_effects/effect.cpp:1619
 msgid "<b>Default value overridden:</b> "
-msgstr ""
+msgstr "<b>Überschriebener Standardwert:</b>"
 
 #: ../src/live_effects/effect.cpp:1557 ../src/live_effects/effect.cpp:1615
 #: ../share/ui/dialog-trace.glade:978
@@ -9742,7 +9792,7 @@ msgstr "Akt_ualisieren"
 
 #: ../src/live_effects/effect.cpp:1558 ../src/live_effects/effect.cpp:1618
 msgid "<b>Default value:</b> <s>"
-msgstr ""
+msgstr "<b>Standardwert:</b> <s>"
 
 #: ../src/live_effects/effect.cpp:1560 ../src/live_effects/effect.cpp:1630
 msgid "Set"
@@ -9750,7 +9800,7 @@ msgstr "Setzen"
 
 #: ../src/live_effects/effect.cpp:1561 ../src/live_effects/effect.cpp:1634
 msgid "<b>Default value overridden:</b> None\n"
-msgstr ""
+msgstr "<b>Überschriebener Standardwert:</b> Keiner\n"
 
 #: ../src/live_effects/effect.cpp:1572
 #: ../share/extensions/image_attributes.inx:24
@@ -9760,7 +9810,7 @@ msgstr "Nicht gesetzt"
 
 #: ../src/live_effects/effect.cpp:1586
 msgid "</b>: Set default parameters"
-msgstr ""
+msgstr "</b>: Standardwerte setzen"
 
 #: ../src/live_effects/effect.cpp:1705
 #, c-format
@@ -9804,7 +9854,6 @@ msgstr "Einstellen des \"linken\" Endes der Halbierenden"
 
 #: ../src/live_effects/lpe-angle_bisector.cpp:91
 #: ../src/live_effects/lpe-perp_bisector.cpp:165
-#, fuzzy
 msgid "Adjust the \"right\" end of the bisector"
 msgstr "Einstellen des \"rechten\" Endes der Halbierenden"
 
