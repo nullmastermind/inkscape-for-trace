@@ -423,12 +423,13 @@ void ObjectsPanel::_updateObject( SPObject *obj, bool recurse ) {
             }
 
             // Last attempt, try the position before the old one
-            if (_tree_cache_iter != _tree_cache.begin())
+            if (_tree_cache_iter != _tree_cache.begin()) {
                 iter_prev = std::prev(_tree_cache_iter, 1);
                 if (_checkForUpdated(iter_prev->second, obj)) {
                     _tree_cache_iter = iter_prev;
                     break;
                 }
+            }
 
         }
         /* Still no success? Then we need to take the long way home.
