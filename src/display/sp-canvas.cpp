@@ -1022,10 +1022,7 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_delayrendering = 0;
     canvas->_totalelapsed = 0;
     canvas->_scrooling = false;
-    GTimeZone *tz = g_time_zone_new(nullptr);
-    canvas->_idle_time = g_date_time_new_now(tz);
-    g_time_zone_unref(tz);
-
+    canvas->_idle_time = g_get_monotonic_time();
     bool _is_dragging;
 
 #if defined(HAVE_LIBLCMS2)
@@ -1057,9 +1054,6 @@ void SPCanvas::dispose(GObject *object)
     if (canvas->_backing_store) {
         cairo_surface_destroy(canvas->_backing_store);
         canvas->_backing_store = nullptr;
-    }
-    if (canvas->_idle_time) {
-        g_date_time_unref(canvas->_idle_time);
     }
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
     if (canvas->_surface_for_similar) {
@@ -2071,18 +2065,15 @@ void SPCanvas::paintSpliter()
 
 struct PaintRectSetup {
     Geom::IntRect canvas_rect;
-    GDateTime *start_time;
+    gint64 start_time;
     int max_pixels;
     Geom::Point mouse_loc;
 };
 
 int SPCanvas::paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const &this_rect)
 {
-    GTimeZone *tz = g_time_zone_new(nullptr);
-    GDateTime *now = g_date_time_new_now(tz);
-    g_time_zone_unref(tz);
-    gint64 elapsed = (gint64)g_date_time_difference(now, setup->start_time);
-    g_date_time_unref(now);
+    gint64 now = g_get_monotonic_time();
+    gint64 elapsed = now - setup->start_time;
 
     // if we do canvas resize or panning we want the canvas not redraw in enought times
     // to make a smooth response.
@@ -2244,13 +2235,9 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
     }
 
     // Start the clock
-    GTimeZone *tz = g_time_zone_new(nullptr);
-    setup.start_time = g_date_time_new_now(tz);
-    g_time_zone_unref(tz);
+    setup.start_time = g_get_monotonic_time();
     // Go
-    bool ret = paintRectInternal(&setup, paint_rect);
-    g_date_time_unref(setup.start_time);
-    return ret;
+    return paintRectInternal(&setup, paint_rect);
 }
 
 void SPCanvas::forceFullRedrawAfterInterruptions(unsigned int count)
@@ -2557,15 +2544,11 @@ gint SPCanvas::idle_handler(gpointer data)
     SPCanvas *canvas = SP_CANVAS (data);
 #ifdef DEBUG_PERFORMANCE
     static int totaloops = 1;
-    GTimeZone *tz = nullptr;
-    GDateTime *now = nullptr;
+    gint64 now = 0;
     gint64 elapsed = 0;
     if (!canvas->_delayrendering) {
-        tz = g_time_zone_new(nullptr);
-        now = g_date_time_new_now(tz);
-        g_time_zone_unref(tz);
-        elapsed = (gint64)g_date_time_difference(now, canvas->_idle_time);
-        g_date_time_unref(now);
+        now = g_get_monotonic_time();
+        elapsed = now - canvas->_idle_time;
         g_message("[%i] start loop %i in split %i at %f", canvas->_idle_id, totaloops, canvas->_splits,
                   canvas->_totalelapsed / (double)1000000 + elapsed / (double)1000000);
     }
@@ -2578,11 +2561,8 @@ gint SPCanvas::idle_handler(gpointer data)
 
 #ifdef DEBUG_PERFORMANCE
     if (ret == 0 && !canvas->_delayrendering) {
-        tz = g_time_zone_new(nullptr);
-        now = g_date_time_new_now(tz);
-        g_time_zone_unref(tz);
-        elapsed = (gint64)g_date_time_difference(now, canvas->_idle_time);
-        g_date_time_unref(now);
+        now = g_get_monotonic_time();
+        elapsed = now - canvas->_idle_time;
         g_message("[%i] loop ended unclean at %f", canvas->_idle_id,
                   canvas->_totalelapsed / (double)1000000 + elapsed / (double)1000000);
     }
@@ -2594,11 +2574,8 @@ gint SPCanvas::idle_handler(gpointer data)
         canvas->_scrooling = false;
         canvas->_forcefull = false;
         canvas->_delayrendering = 0;
-        tz = g_time_zone_new(nullptr);
-        now = g_date_time_new_now(tz);
-        g_time_zone_unref(tz);
-        elapsed = (gint64)g_date_time_difference(now, canvas->_idle_time);
-        g_date_time_unref(now);
+        now = g_get_monotonic_time();
+        elapsed = now - canvas->_idle_time;
         canvas->_totalelapsed += elapsed;
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         if (desktop) {
@@ -2635,10 +2612,7 @@ void SPCanvas::addIdle()
 {
     if (_idle_id == 0) {
 #ifdef DEBUG_PERFORMANCE
-        g_date_time_unref(_idle_time);
-        GTimeZone *tz = g_time_zone_new(nullptr);
-        _idle_time = g_date_time_new_now(tz);
-        g_time_zone_unref(tz);
+        _idle_time = g_get_monotonic_time();
 #endif
         _idle_id = gdk_threads_add_idle_full(UPDATE_PRIORITY, idle_handler, this, nullptr);
 #ifdef DEBUG_PERFORMANCE
@@ -2779,21 +2753,15 @@ void SPCanvas::updateNow()
 {
     if (_need_update) {
 #ifdef DEBUG_PERFORMANCE
-        GTimeZone *tz = g_time_zone_new(nullptr);
-        GDateTime *now = g_date_time_new_now(tz);
-        g_time_zone_unref(tz);
-        gint64 elapsed = (gint64)g_date_time_difference(now, _idle_time);
-        g_date_time_unref(now);
+        guint64 now = g_get_monotonic_time();
+        gint64 elapsed = now - _idle_time;
         g_message("[%i] start updateNow(): %f at %f", _idle_id, elapsed / (double)1000000,
                   _totalelapsed / (double)1000000 + elapsed / (double)1000000);
 #endif
         doUpdate();
 #ifdef DEBUG_PERFORMANCE
-        tz = g_time_zone_new(nullptr);
-        now = g_date_time_new_now(tz);
-        g_time_zone_unref(tz);
-        elapsed = (gint64)g_date_time_difference(now, _idle_time);
-        g_date_time_unref(now);
+        now = g_get_monotonic_time();
+        elapsed = now - _idle_time;
         g_message("[%i] end updateNow(): %f at %f", _idle_id, elapsed / (double)1000000,
                   _totalelapsed / (double)1000000 + elapsed / (double)1000000);
 #endif

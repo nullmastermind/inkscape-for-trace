@@ -23,9 +23,8 @@ namespace Inkscape {
 namespace Debug {
 
 std::shared_ptr<std::string> timestamp() {
-    GTimeVal timestamp;
-    g_get_current_time(&timestamp);
-    gchar *value = g_strdup_printf( "%d.%06d", static_cast<gint>(timestamp.tv_sec), static_cast<gint>(timestamp.tv_usec) );
+    gint64 micr = g_get_monotonic_time();
+    gchar *value = g_strdup_printf("%.6f", (gdouble)micr / 1000000.0);
     std::shared_ptr<std::string> result = std::make_shared<std::string>(value);
     g_free(value);
     return result;

@@ -210,7 +210,7 @@ public:
     bool _scrooling;
     int _delayrendering;
     int _device_scale; ///< Scale for high DPI montiors
-    GDateTime *_idle_time;
+    gint64 _idle_time;
     int _splits;
     gint64 _totalelapsed;
 
