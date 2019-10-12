@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-10-10 21:27+0200\n"
-"PO-Revision-Date: 2019-10-12 01:44+0100\n"
+"PO-Revision-Date: 2019-10-12 23:39+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -9994,22 +9994,20 @@ msgid "cut outside"
 msgstr "Außen zerschneiden"
 
 #: ../src/live_effects/lpe-bool.cpp:55 ../src/live_effects/lpe-bool.cpp:64
-#, fuzzy
 msgid "even-odd"
-msgstr "eben"
+msgstr "gerade-ungerade"
 
 #: ../src/live_effects/lpe-bool.cpp:56 ../src/live_effects/lpe-bool.cpp:65
 msgid "non-zero"
-msgstr ""
+msgstr "nicht-null"
 
 #: ../src/live_effects/lpe-bool.cpp:57 ../src/live_effects/lpe-bool.cpp:66
 msgid "positive"
 msgstr "Kombinieren"
 
 #: ../src/live_effects/lpe-bool.cpp:58
-#, fuzzy
 msgid "take from object"
-msgstr "Von Objekt"
+msgstr "vom Objekt übernehmen"
 
 #: ../src/live_effects/lpe-bool.cpp:73
 msgid "Operand path:"
@@ -10028,7 +10026,6 @@ msgid "Boolean Operation"
 msgstr "Boolesche Operation"
 
 #: ../src/live_effects/lpe-bool.cpp:75
-#, fuzzy
 msgid "Swap operands"
 msgstr "Operanden vertauschen"
 
@@ -10037,17 +10034,14 @@ msgid "Swap operands (useful e.g. for difference)"
 msgstr "Reihenfolge der Operanden vertauschen (nützlich z.B. für Differenz)"
 
 #: ../src/live_effects/lpe-bool.cpp:76
-#, fuzzy
 msgid "Hide Linked"
-msgstr "Knoten in Linien"
+msgstr "Verberge Verknüpftes"
 
 #: ../src/live_effects/lpe-bool.cpp:76
-#, fuzzy
 msgid "Hide linked path"
-msgstr "Verknüpfter Pfad:"
+msgstr "Verknüpften Pfad verbergen"
 
 #: ../src/live_effects/lpe-bool.cpp:78
-#, fuzzy
 msgid "Remove inner"
 msgstr "Innenliegendes entfernen"
 
@@ -10060,18 +10054,16 @@ msgstr ""
 "unsichtbare zusätzliche Knoten zu vermeiden"
 
 #: ../src/live_effects/lpe-bool.cpp:81
-#, fuzzy
 msgid "Fill type this:"
-msgstr "Alle Typen"
+msgstr "Füllregel (dieses Objekt):"
 
 #: ../src/live_effects/lpe-bool.cpp:81
 msgid "Fill type (winding mode) for this path"
-msgstr "Füllregel (winding-mode) für diesen Pfad"
+msgstr "Füllregel (winding-mode) für den Pfad mit dem Pfadeffekt"
 
 #: ../src/live_effects/lpe-bool.cpp:83
-#, fuzzy
 msgid "Fill type operand:"
-msgstr "Füllregel für den Operand"
+msgstr "Füllregel (Operand):"
 
 #: ../src/live_effects/lpe-bool.cpp:83
 msgid "Fill type (winding mode) for operand path"
@@ -10159,7 +10151,6 @@ msgid "Change scalar parameter"
 msgstr "skalaren Parameter ändern"
 
 #: ../src/live_effects/lpe-clone-original.cpp:33
-#, fuzzy
 msgid "No Shape"
 msgstr "Keine Form"
 
@@ -10174,9 +10165,8 @@ msgid "Without LPE's"
 msgstr "Ohne Pfadeffekte"
 
 #: ../src/live_effects/lpe-clone-original.cpp:36
-#, fuzzy
 msgid "Spiro or BSpline Only"
-msgstr "Spiro Spline"
+msgstr "Nur Spiro oder BSpline"
 
 #: ../src/live_effects/lpe-clone-original.cpp:42
 msgid "Linked Item:"
@@ -10187,18 +10177,16 @@ msgid "Item from which to take the original data"
 msgstr "Pfad, von dem die Orginal-Pfaddaten genommen werden"
 
 #: ../src/live_effects/lpe-clone-original.cpp:43
-#, fuzzy
 msgid "Shape"
-msgstr "Formen"
+msgstr "Form"
 
 #: ../src/live_effects/lpe-clone-original.cpp:43
 msgid "Shape linked"
 msgstr "Verknüpfe Form"
 
 #: ../src/live_effects/lpe-clone-original.cpp:49
-#, fuzzy
 msgid "Allow Transforms"
-msgstr "Transformationen"
+msgstr "Transformationen erlauben"
 
 #: ../src/live_effects/lpe-clone-original.cpp:49
 msgid "Allow transforms"
@@ -10208,7 +10196,7 @@ msgstr "Transformation erlauben"
 # File: ../src/live_effects/lpe-clone-original.cpp, line: 118
 #: ../src/live_effects/lpe-clone-original.cpp:118
 msgid "No Shape Sync to Current"
-msgstr ""
+msgstr "Aktuelle Form beibehalten"
 
 #: ../src/live_effects/lpe-constructgrid.cpp:25
 msgid "Size _X:"
@@ -10299,18 +10287,20 @@ msgstr "Lücke"
 #: ../src/live_effects/lpe-copy_rotate.cpp:70
 msgid "Gap space between copies, use small negative gaps to fix some joins"
 msgstr ""
+"Abstand zwischen den Kopien; ein geringer negativer Wert kann helfen,"
+" Verschmelzungen zu verbessern"
 
 #
 # File: ../src/live_effects/lpe-copy_rotate.cpp, line: 71
 #: ../src/live_effects/lpe-copy_rotate.cpp:71
 msgid "360° Copies"
-msgstr ""
+msgstr "Ganzer Kreis"
 
 #
 # File: ../src/live_effects/lpe-copy_rotate.cpp, line: 71
 #: ../src/live_effects/lpe-copy_rotate.cpp:71
 msgid "No rotation angle, fixed to 360°"
-msgstr ""
+msgstr "Drehwinkel wird ignoriert, Winkel ist 360°/Anzahl Kopien"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:72
 msgid "Mirror copies"
@@ -10327,7 +10317,7 @@ msgstr "Elemente trennen"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:73
 msgid "Split elements, so each can have its own style"
-msgstr ""
+msgstr "Separiert die Objekte, so dass jedes seinen eigenen Stil haben kann"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:367
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:144
@@ -10423,9 +10413,8 @@ msgid "Hole factor"
 msgstr "Skalierungsfaktor"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:20
-#, fuzzy
 msgid "Use segments"
-msgstr "Segmente benutzen"
+msgstr "Segmente verwenden"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:21
 msgid "Half start/end"
@@ -10437,25 +10426,29 @@ msgstr "Anfang und Ende jedes Segments hat die halbe Größe"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:22
 msgid "Unify dashes"
-msgstr ""
+msgstr "Strichelung angleichen"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:22
 msgid "Approximately unify the dashes length using the minimal length segment"
 msgstr ""
+"Die Länge der Einzelstriche so anpassen, dass sie überall ungefähr die Länge"
+" der Striche im kürzesten Pfadsegment haben"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:24
 #: ../src/live_effects/lpe-powerclip.cpp:37
 msgid "Info Box"
-msgstr ""
+msgstr "Hinweis"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:24
 #: ../src/live_effects/lpe-powerclip.cpp:37
 msgid "Important messages"
-msgstr "Wichtige Nachrichten"
+msgstr "Wichtige Informationen"
 
 #: ../src/live_effects/lpe-dashed-stroke.cpp:25
 msgid "Add <b>\"Fill Between Many LPE\"</b> to add fill."
 msgstr ""
+"Eine Füllung kann mit dem <b>Zwischen vielen füllen</b>-Pfadeffekt"
+" hinzugefügt werden."
 
 #: ../src/live_effects/lpe-ellipse_5pts.cpp:75
 msgid "Five points required for constructing an ellipse"
@@ -10466,85 +10459,76 @@ msgid "No ellipse found for specified points"
 msgstr "Keine Ellipse für die gewählten Punkte gefunden"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:30
-#, fuzzy
 msgid "no reordering"
-msgstr "Rendern"
+msgstr "Kein Neuordnen"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:31
 msgid "zig-zag"
-msgstr ""
+msgstr "Zickzack"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:32
 msgid "zig-zag, reverse first"
-msgstr ""
+msgstr "Zickzack, ersten umkehren"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:33
-#, fuzzy
 msgid "closest"
-msgstr "Schließen"
+msgstr "kürzeste Entfernung"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:34
 msgid "closest, reverse first"
-msgstr ""
+msgstr "kürzeste Entfernung, ersten umkehren"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:35
 msgid "traveling salesman 2-opt (fast, bad)"
-msgstr ""
+msgstr "Handlungsreisender 2-opt (schnell, niedrige Qualität)"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:36
 msgid "traveling salesman 3-opt (fast, ok)"
-msgstr ""
+msgstr "Handlungsreisender 3-opt (schnell, gute Qualität)"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:37
 msgid "traveling salesman 4-opt (seconds)"
-msgstr ""
+msgstr "Handlungsreisender 4-opt (sehr langsam)"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:38
 msgid "traveling salesman 5-opt (minutes)"
-msgstr ""
+msgstr "Handlungsreisender 5-opt (extrem langsam)"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:45
-#, fuzzy
 msgid "straight line"
-msgstr "Gitternetzlinie"
+msgstr "gerade Linie"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:46
-#, fuzzy
 msgid "move to begin"
-msgstr "Zur Ebene verschieben"
+msgstr "zum Anfang verschieben"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:47
-#, fuzzy
 msgid "move to middle"
-msgstr "Umwandeln in Abrundung"
+msgstr "zur Mitte verschieben"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:48
-#, fuzzy
 msgid "move to end"
-msgstr "Zur Ebene verschieben"
+msgstr "zum Ende verschieben"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:56
-#, fuzzy
 msgid "Ordering method"
-msgstr "Ausrichtung"
+msgstr "Reihenfolge"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:56
 msgid "Method used to order sub paths"
-msgstr ""
+msgstr "Methode zur Bestimmung der Reihenfolge der Unterpfade"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:57
-#, fuzzy
 msgid "Connection method"
-msgstr "Verbinderlänge"
+msgstr "Verbindungsmethode"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:57
 msgid "Method to connect end points of sub paths"
-msgstr ""
+msgstr "Methode zum Verbinden der Enden der Unterpfade"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:58
-#, fuzzy
 msgid "Stitch length"
-msgstr "Pfadlänge"
+msgstr "Stichlänge"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:58
 msgid "If not 0, linearize path with given step length"
