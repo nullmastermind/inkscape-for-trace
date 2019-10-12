@@ -39,14 +39,17 @@ namespace Dialog {
 
 bool SVGPreview::setDocument(SPDocument *doc)
 {
-    document = doc;
-
     if (viewer) {
-        viewer->setDocument(document);
+        viewer->setDocument(doc);
     } else {
-        viewer = Gtk::manage(new Inkscape::UI::View::SVGViewWidget(document));
+        viewer = Gtk::manage(new Inkscape::UI::View::SVGViewWidget(doc));
         pack_start(*viewer, true, true);
     }
+
+    if (document) {
+        delete document;
+    }
+    document = doc;
 
     show_all();
 
@@ -446,8 +449,7 @@ SVGPreview::SVGPreview()
     set_size_request(200, 300);
 }
 
-SVGPreview::~SVGPreview()
-= default;
+SVGPreview::~SVGPreview() { delete document; }
 
 } // namespace Dialog
 } // namespace UI
