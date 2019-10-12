@@ -347,7 +347,7 @@ void ObjectsPanel::_addObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
                 row[_model->_colObject] = item;
 
                 g_assert(_store->get_flags() & Gtk::TREE_MODEL_ITERS_PERSIST);
-                _tree_cache.push_back(std::make_pair(item, iter)); // Use a row reference instead of an iter maybe?
+                _tree_cache.emplace_back(item, iter); // Use a row reference instead of an iter maybe?
 
                 //this seems to crash on convert stroke to path then undo (probably no ID?)
                 try {
