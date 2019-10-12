@@ -530,7 +530,6 @@ bool TextTool::root_handler(GdkEvent* event) {
                 m.preSnap(Inkscape::SnapCandidatePoint(motion_dt, Inkscape::SNAPSOURCE_OTHER_HANDLE));
                 m.unSetup();
             }
-            ToolBase::root_handler(event);
             if ((event->motion.state & GDK_BUTTON1_MASK) && this->dragging && !this->space_panning) {
                 Inkscape::Text::Layout const *layout = te_get_layout(this->text);
                 if (!layout)
@@ -598,7 +597,6 @@ bool TextTool::root_handler(GdkEvent* event) {
                 this->sp_event_context_update_cursor();
                 desktop->event_context->defaultMessageContext()->clear();
             }
-            return TRUE;
         } break;
 
         case GDK_BUTTON_RELEASE:
