@@ -177,7 +177,7 @@
                     <property name="halign">end</property>
                     <property name="valign">start</property>
                     <property name="pixel_size">23</property>
-                    <property name="icon_name">infopop-outline</property>
+                    <property name="icon_name">info-outline</property>
                     <property name="icon_size">2</property>
                     <style>
                       <class name="info"/>
@@ -238,7 +238,7 @@
                     <property name="halign">start</property>
                     <property name="valign">start</property>
                     <property name="pixel_size">23</property>
-                    <property name="icon_name">on</property>
+                    <property name="icon_name">on-outline</property>
                     <property name="icon_size">2</property>
                     <style>
                       <class name="apply"/>

@@ -8,12 +8,13 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include <glibmm/ustring.h>
-#include <2geom/forward.h>
-#include "ui/widget/registry.h"
-#include <gtkmm/expander.h>
-#include "parameter/bool.h"
 #include "effect-enum.h"
+#include "parameter/bool.h"
+#include "ui/widget/registry.h"
+#include <2geom/forward.h>
+#include <glibmm/ustring.h>
+#include <gtkmm/eventbox.h>
+#include <gtkmm/expander.h>
 
 
 #define  LPE_CONVERSION_TOLERANCE 0.01    // FIXME: find good solution for this.
@@ -185,8 +186,10 @@ public:
 
 private:
     void onDefaultsExpanderChanged(Gtk::Expander * expander);
-    void setDefaultParam(Glib::ustring pref_path, Glib::ustring tooltip, Parameter *param, Gtk::Label *parameter_label, Gtk::Button *set , Gtk::Button *unset);
-    void unsetDefaultParam(Glib::ustring pref_path, Glib::ustring tooltip, Parameter *param, Gtk::Label *parameter_label, Gtk::Button *set , Gtk::Button *unset);
+    void setDefaultParam(Glib::ustring pref_path, Glib::ustring tooltip, Parameter *param, Gtk::Image *info,
+                         Gtk::Button *set, Gtk::Button *unset);
+    void unsetDefaultParam(Glib::ustring pref_path, Glib::ustring tooltip, Parameter *param, Gtk::Image *info,
+                           Gtk::Button *set, Gtk::Button *unset);
     bool provides_own_flash_paths; // if true, the standard flash path is suppressed
 
     bool is_ready;

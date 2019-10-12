@@ -29,12 +29,12 @@ namespace LivePathEffect {
 
 LPETransform2Pts::LPETransform2Pts(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    elastic(_("Elastic"), _("Elastic transform mode"), "elastic", &wr, this, false,"", INKSCAPE_ICON("on"), INKSCAPE_ICON("off")),
-    from_original_width(_("From original width"), _("From original width"), "from_original_width", &wr, this, false,"", INKSCAPE_ICON("on"), INKSCAPE_ICON("off")),
-    lock_length(_("Lock length"), _("Lock length to current distance"), "lock_length", &wr, this, false,"", INKSCAPE_ICON("on"), INKSCAPE_ICON("off")),
-    lock_angle(_("Lock angle"), _("Lock angle"), "lock_angle", &wr, this, false,"", INKSCAPE_ICON("on"), INKSCAPE_ICON("off")),
-    flip_horizontal(_("Flip horizontal"), _("Flip horizontal"), "flip_horizontal", &wr, this, false,"", INKSCAPE_ICON("on"), INKSCAPE_ICON("off")),
-    flip_vertical(_("Flip vertical"), _("Flip vertical"), "flip_vertical", &wr, this, false,"", INKSCAPE_ICON("on"), INKSCAPE_ICON("off")),
+    elastic(_("Elastic"), _("Elastic transform mode"), "elastic", &wr, this, false,"", INKSCAPE_ICON("on-outline"), INKSCAPE_ICON("off-outline")),
+    from_original_width(_("From original width"), _("From original width"), "from_original_width", &wr, this, false,"", INKSCAPE_ICON("on-outline"), INKSCAPE_ICON("off-outline")),
+    lock_length(_("Lock length"), _("Lock length to current distance"), "lock_length", &wr, this, false,"", INKSCAPE_ICON("on-outline"), INKSCAPE_ICON("off-outline")),
+    lock_angle(_("Lock angle"), _("Lock angle"), "lock_angle", &wr, this, false,"", INKSCAPE_ICON("on-outline"), INKSCAPE_ICON("off-outline")),
+    flip_horizontal(_("Flip horizontal"), _("Flip horizontal"), "flip_horizontal", &wr, this, false,"", INKSCAPE_ICON("on-outline"), INKSCAPE_ICON("off-outline")),
+    flip_vertical(_("Flip vertical"), _("Flip vertical"), "flip_vertical", &wr, this, false,"", INKSCAPE_ICON("on-outline"), INKSCAPE_ICON("off-outline")),
     start(_("Start"), _("Start point"), "start", &wr, this, "Start point"),
     end(_("End"), _("End point"), "end", &wr, this, "End point"),
     stretch(_("Stretch"), _("Stretch the result"), "stretch", &wr, this, 1),

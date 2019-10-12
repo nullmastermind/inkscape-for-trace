@@ -26,9 +26,9 @@ LPESimplify::LPESimplify(LivePathEffectObject *lpeobject)
                     &wr, this, 0.)
     , helper_size(_("Helper size:"), _("Helper size"), "helper_size", &wr, this, 5)
     , simplify_individual_paths(_("Paths separately"), _("Simplifying paths (separately)"), "simplify_individual_paths",
-                                &wr, this, false, "", INKSCAPE_ICON("on"), INKSCAPE_ICON("off"))
+                                &wr, this, false, "", INKSCAPE_ICON("on-outline"), INKSCAPE_ICON("off-outline"))
     , simplify_just_coalesce(_("Just coalesce"), _("Simplify just coalesce"), "simplify_just_coalesce", &wr, this,
-                             false, "", INKSCAPE_ICON("on"), INKSCAPE_ICON("off"))
+                             false, "", INKSCAPE_ICON("on-outline"), INKSCAPE_ICON("off-outline"))
 {
     registerParameter(&steps);
     registerParameter(&threshold);

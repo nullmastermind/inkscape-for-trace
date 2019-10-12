@@ -155,13 +155,13 @@ AttrDialog::AttrDialog()
     Gtk::Label *helpreturn = Gtk::manage(new Gtk::Label(_("Shift+Return new line")));
     helpreturn->get_style_context()->add_class("inksmall");
     Gtk::Button *apply = Gtk::manage(new Gtk::Button());
-    Gtk::Image *icon = Gtk::manage(sp_get_icon_image("on", 26));
+    Gtk::Image *icon = Gtk::manage(sp_get_icon_image("on-outline", 26));
     apply->set_relief(Gtk::RELIEF_NONE);
     icon->show();
     apply->add(*icon);
     apply->signal_clicked().connect(sigc::mem_fun(*this, &AttrDialog::valueEditedPop));
     Gtk::Button *cancel = Gtk::manage(new Gtk::Button());
-    icon = Gtk::manage(sp_get_icon_image("off", 26));
+    icon = Gtk::manage(sp_get_icon_image("off-outline", 26));
     cancel->set_relief(Gtk::RELIEF_NONE);
     icon->show();
     cancel->add(*icon);
