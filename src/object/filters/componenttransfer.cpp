@@ -53,6 +53,9 @@ static void sp_feComponentTransfer_children_modified(SPFeComponentTransfer *sp_c
             int i = 4;
 
             SPFeFuncNode *funcNode = SP_FEFUNCNODE(&node);
+	    if(!funcNode) {
+	        continue;
+	    }
 
             switch (funcNode->channel) {
             case SPFeFuncNode::R:
