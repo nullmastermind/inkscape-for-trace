@@ -51,32 +51,32 @@ public:
     /*** For convenience, we define addition/subtraction etc. as "affine" operators (i.e.,
          the result for finite points is the same as if the affine points were added ***/
     inline Pt2 &operator+(Pt2 &rhs) const {
-        Pt2 *result = new Pt2 (*this);
-        result->normalize();
+        Pt2 result (*this);
+        result.normalize();
         rhs.normalize();
         for ( unsigned i = 0 ; i < 2 ; ++i ) {
-            result->pt[i] += rhs.pt[i];
+            result.pt[i] += rhs.pt[i];
         }
-        return *result;
+        return result;
     }
 
     inline Pt2 &operator-(Pt2 &rhs) const {
-        Pt2 *result = new Pt2 (*this);
-        result->normalize();
+        Pt2 result (*this);
+        result.normalize();
         rhs.normalize();
         for ( unsigned i = 0 ; i < 2 ; ++i ) {
-            result->pt[i] -= rhs.pt[i];
+            result.pt[i] -= rhs.pt[i];
         }
-        return *result;
+        return result;
     }
 
     inline Pt2 &operator*(double const s) const {
-        Pt2 *result = new Pt2 (*this);
-        result->normalize();
+        Pt2 result (*this);
+        result.normalize();
         for ( unsigned i = 0 ; i < 2 ; ++i ) {
-            result->pt[i] *= s;
+            result.pt[i] *= s;
         }
-        return *result;
+        return result;
     }
 
     void normalize();
@@ -108,32 +108,32 @@ public:
     /*** For convenience, we define addition/subtraction etc. as "affine" operators (i.e.,
          the result for finite points is the same as if the affine points were added ***/
     inline Pt3 &operator+(Pt3 &rhs) const {
-        Pt3 *result = new Pt3 (*this);
-        result->normalize();
+        Pt3 result(*this);
+        result.normalize();
         rhs.normalize();
         for ( unsigned i = 0 ; i < 3 ; ++i ) {
-            result->pt[i] += rhs.pt[i];
+            result.pt[i] += rhs.pt[i];
         }
-        return *result;
+        return result;
     }
 
     inline Pt3 &operator-(Pt3 &rhs) const {
-        Pt3 *result = new Pt3 (*this);
-        result->normalize();
+        Pt3 result (*this);
+        result.normalize();
         rhs.normalize();
         for ( unsigned i = 0 ; i < 3 ; ++i ) {
-            result->pt[i] -= rhs.pt[i];
+            result.pt[i] -= rhs.pt[i];
         }
-        return *result;
+        return result;
     }
 
     inline Pt3 &operator*(double const s) const {
-        Pt3 *result = new Pt3 (*this);
-        result->normalize();
+        Pt3 result (*this);
+        result.normalize();
         for ( unsigned i = 0 ; i < 3 ; ++i ) {
-            result->pt[i] *= s;
+            result.pt[i] *= s;
         }
-        return *result;
+        return result;
     }
 
     inline double operator[] (unsigned int index) const {
