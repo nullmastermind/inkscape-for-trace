@@ -53,7 +53,7 @@ FILE *Extension::error_file = nullptr;
     \return  none
     \brief   Constructs an Extension from a Inkscape::XML::Node
     \param   in_repr        The repr that should be used to build it
-    \param   base_directory Base directory of extension that were loaded from a file (.inx file's location)
+    \param   base_directory Base directory of extensions that were loaded from a file (.inx file's location)
 
     This function is the basis of building an extension for Inkscape.  It
     currently extracts the fields from the Repr that are used in the
@@ -121,11 +121,11 @@ Extension::Extension(Inkscape::XML::Node *in_repr, Implementation::Implementatio
                 _widgets.push_back(widget);
             }
         } else if (!strcmp(chname, "dependency")) {
-            _deps.push_back(new Dependency(child_repr));
+            _deps.push_back(new Dependency(child_repr, this));
         } else if (!strcmp(chname, "script")) { // check command as a dependency (see LP #505920)
             for (Inkscape::XML::Node *child = child_repr->firstChild(); child != nullptr; child = child->next()) {
                 if (child->type() == Inkscape::XML::ELEMENT_NODE) { // skip non-element nodes (see LP #1372200)
-                    _deps.push_back(new Dependency(child));
+                    _deps.push_back(new Dependency(child, this));
                     break;
                 }
             }
@@ -309,7 +309,7 @@ Extension::check ()
     if (retval) {
         return imp->check(this);
     }
-    
+
     error_file_write("");
     return retval;
 }
@@ -342,7 +342,7 @@ Extension::get_repr ()
     \brief   Get the ID of this extension - not a copy don't delete!
 */
 gchar *
-Extension::get_id ()
+Extension::get_id () const
 {
     return _id;
 }
@@ -352,7 +352,7 @@ Extension::get_id ()
     \brief   Get the name of this extension - not a copy don't delete!
 */
 gchar *
-Extension::get_name ()
+Extension::get_name () const
 {
     return _name;
 }
@@ -393,6 +393,30 @@ bool
 Extension::deactivated ()
 {
     return get_state() == STATE_DEACTIVATED;
+}
+
+/** Gets the location of the dependency file as an absolute path
+  *
+  * Iterates over all dependencies of this extension and finds the one with matching name,
+  * then returns the absolute path to this dependency file as determined previously.
+  *
+  * TODO: This function should not be necessary, but we parse script dependencies twice:
+  *       - Once here in the Extension::Extension() constructor
+  *       - A second time in Script::load() in "script.cpp" when determining the script location
+  *       Theoretically we could return the wrong path if an extension depends on two files with the same name
+  *       in different relative locations. In practice this risk should be close to zero, though.
+  *
+  * @return Absolute path of the dependency file
+  */
+std::string Extension::get_dependency_location(const char *name)
+{
+    for (auto dep : _deps) {
+        if (!strcmp(name, dep->get_name())) {
+            return dep->get_path();
+        }
+    }
+
+    return "";
 }
 
 /** Gets a translation within the context of the current extension
@@ -690,7 +714,7 @@ void
 Extension::error_file_open ()
 {
     gchar *ext_error_file = Inkscape::IO::Resource::log_path(EXTENSION_ERROR_LOG_FILENAME);
-    error_file = Inkscape::IO::fopen_utf8name(ext_error_file, "w+");		
+    error_file = Inkscape::IO::fopen_utf8name(ext_error_file, "w+");
     if (!error_file) {
         g_warning(_("Could not create extension error log file '%s'"), ext_error_file);
     }

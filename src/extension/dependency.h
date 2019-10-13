@@ -17,16 +17,22 @@
 namespace Inkscape {
 namespace Extension {
 
+class Extension;
+
 /** \brief  A class to represent a dependency for an extension.  There
             are different things that can be done in a dependency, and
             this class takes care of all of them. */
 class Dependency {
+    static constexpr const char *UNCHECKED = "---unchecked---";
+    
     /** \brief  The XML representation of the dependency. */
     Inkscape::XML::Node * _repr;
     /** \brief  The string that is in the XML tags pulled out. */
-    const gchar * _string;
+    const gchar * _string = nullptr;
     /** \brief  The description of the dependency for the users. */
-    const gchar * _description;
+    const gchar * _description = nullptr;
+    /** \brief  The absolute path to the dependency file determined while checking this dependency. */
+    std::string  _absolute_location = UNCHECKED;
 
     /** \brief  All the possible types of dependencies. */
     enum type_t {
@@ -36,31 +42,37 @@ class Dependency {
         TYPE_CNT         /**< Number of types */
     };
     /** \brief  Storing the type of this particular dependency. */
-    type_t _type;
+    type_t _type = TYPE_FILE;
 
     /** \brief  All of the possible locations to look for the dependency. */
     enum location_t {
-        LOCATION_PATH,       /**< Look in the PATH for this dependency */
-        LOCATION_EXTENSIONS, /**< Look in the extensions directory */
+        LOCATION_PATH,       /**< Look in the PATH for this dependency  - historically this is the default
+                                  (it's a bit odd for interpreted script files but makes sense for other executables) */
+        LOCATION_EXTENSIONS, /**< Look in the extensions directory
+                                  (note: this can be in both, user and system locations!) */
+        LOCATION_INX,        /**< Look relative to the inx file's location */
         LOCATION_ABSOLUTE,   /**< This dependency is already defined in absolute terms */
         LOCATION_CNT         /**< Number of locations to look */
     };
     /** \brief  The location to look for this particular dependency. */
-    location_t _location;
+    location_t _location = LOCATION_PATH;
 
     /** \brief  Strings to represent the different enum values in
                 \c type_t in the XML */
-    static gchar const * _type_str[TYPE_CNT]; 
+    static gchar const * _type_str[TYPE_CNT];
     /** \brief  Strings to represent the different enum values in
                 \c location_t in the XML */
-    static gchar const * _location_str[LOCATION_CNT]; 
+    static gchar const * _location_str[LOCATION_CNT];
+
+    /** \brief  Reference to the extension requesting this dependency. */
+    const Extension *_extension;
 
 public:
-    Dependency  (Inkscape::XML::Node * in_repr);
+    Dependency (Inkscape::XML::Node *in_repr, const Extension *extension);
     virtual ~Dependency ();
-    bool check  () const;
+    bool check();
     const gchar* get_name();
-    Glib::ustring &get_link () const;
+    std::string get_path();
 
     Glib::ustring info_string();
 }; /* class Dependency */

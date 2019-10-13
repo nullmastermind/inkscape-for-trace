@@ -155,104 +155,6 @@ Script::~Script()
 = default;
 
 
-
-/**
-    \return    A string with the complete string with the relative directory expanded
-    \brief     This function takes in a Repr that contains a reldir entry
-               and returns that data with the relative directory expanded.
-               Mostly it is here so that relative directories all get used
-               the same way.
-    \param     reprin   The Inkscape::XML::Node with the reldir in it.
-
-    Basically this function looks at an attribute of the Repr, and makes
-    a decision based on that.  Currently, it is only working with the
-    'extensions' relative directory, but there will be more of them.
-    One thing to notice is that this function always returns an allocated
-    string.  This means that the caller of this function can always
-    free what they are given (and should do it too!).
-*/
-std::string Script::solve_reldir(Inkscape::XML::Node *reprin) {
-
-    gchar const *s = reprin->attribute("reldir");
-
-    // right now the only recognized relative directory is "extensions"
-    if (!s || Glib::ustring(s) != "extensions") {
-        Glib::ustring str = reprin->firstChild()->content();
-        return str;
-    }
-    using namespace Inkscape::IO::Resource;
-    return get_filename(EXTENSIONS, reprin->firstChild()->content());
-}
-
-
-
-/**
-    \return   Whether the command given exists, including in the path
-    \brief    This function is used to find out if something exists for
-              the check command.  It can look in the path if required.
-    \param    command   The command or file that should be looked for
-
-    The first thing that this function does is check to see if the
-    incoming file name has a directory delimiter in it.  This would
-    mean that it wants to control the directories, and should be
-    used directly.
-
-    If not, the path is used.  Each entry in the path is stepped through,
-    attached to the string, and then tested.  If the file is found
-    then a TRUE is returned.  If we get all the way through the path
-    then a FALSE is returned, the command could not be found.
-*/
-bool Script::check_existence(const std::string &command)
-{
-    // Check the simple case first
-    if (command.empty()) {
-        return false;
-    }
-
-    //Don't search when it is an absolute path. */
-    if (Glib::path_is_absolute(command)) {
-        return Glib::file_test(command, Glib::FILE_TEST_EXISTS);
-    }
-
-    // First search in the current directory
-    std::string path = G_SEARCHPATH_SEPARATOR_S;
-    path.append(";");
-    // And then in the PATH environment variable.
-    path.append(Glib::getenv("PATH"));
-
-    std::string::size_type pos  = 0;
-    std::string::size_type pos2 = 0;
-    while ( pos < path.size() ) {
-
-        std::string localPath;
-
-        pos2 = path.find(G_SEARCHPATH_SEPARATOR, pos);
-        if (pos2 == path.npos) {
-            localPath = path.substr(pos);
-            pos = path.size();
-        } else {
-            localPath = path.substr(pos, pos2-pos);
-            pos = pos2+1;
-        }
-
-        //printf("### %s\n", localPath.c_str());
-        std::string candidatePath =
-                      Glib::build_filename(localPath, command);
-
-        if (Glib::file_test(candidatePath,
-                      Glib::FILE_TEST_EXISTS)) {
-            return true;
-        }
-
-    }
-
-    return false;
-}
-
-
-
-
-
 /**
     \return   none
     \brief    This function 'loads' an extension, basically it determines
@@ -290,13 +192,15 @@ bool Script::load(Inkscape::Extension::Extension *module)
                         std::string interpString = resolveInterpreterExecutable(interpretstr);
                         if (interpString.empty()) {
                             continue; // can't have a script extension with empty interpreter
-                        } else {
-                            command.push_back(interpString);
                         }
+                        command.push_back(interpString);
                     }
-                    command.push_back(solve_reldir(child_repr));
-                }
-                if (!strcmp(child_repr->name(), INKSCAPE_EXTENSION_NS "helper_extension")) {
+                    // TODO: we already parse commands as dependencies in extension.cpp
+                    //       can can we optimize this to be less indirect?
+                    const char *script_name = child_repr->firstChild()->content();
+                    std::string script_location = module->get_dependency_location(script_name);
+                    command.push_back(std::move(script_location));
+                } else if (!strcmp(child_repr->name(), INKSCAPE_EXTENSION_NS "helper_extension")) {
                     helper_extension = child_repr->firstChild()->content();
                 }
             }
@@ -343,21 +247,10 @@ bool Script::check(Inkscape::Extension::Extension *module)
     while (child_repr != nullptr) {
         if (!strcmp(child_repr->name(), INKSCAPE_EXTENSION_NS "script")) {
             script_count++;
+            
+            // check if all helper_extensions attached to this script were registered
             child_repr = child_repr->firstChild();
             while (child_repr != nullptr) {
-                if (!strcmp(child_repr->name(), INKSCAPE_EXTENSION_NS "check")) {
-                    std::string command_text = solve_reldir(child_repr);
-                    if (!command_text.empty()) {
-                        /* I've got the command */
-                        bool existance = check_existence(command_text);
-                        if (!existance) {
-                            return false;
-                        }
-                    } else {
-                        return false;
-                    }
-                }
-
                 if (!strcmp(child_repr->name(), INKSCAPE_EXTENSION_NS "helper_extension")) {
                     gchar const *helper = child_repr->firstChild()->content();
                     if (Inkscape::Extension::db.get(helper) == nullptr) {
@@ -929,22 +822,12 @@ int Script::execute (const std::list<std::string> &in_command,
     std::string script = interpreted ? in_command.back() : "";
     std::string working_directory = "";
 
-    // Use Glib::find_program_in_path instead of the equivalent
-    // Glib::spawn_* functionality, because _wspawnp is broken on Windows:
-    // it doesn't work when PATH contains Unicode directories
-    //
-    // Note:
-    //  - We already have an absolute path here for interpreted scripts, see Script::resolveInterpreterExecutable()
-    //  - For "normal" scripts we might not as we only use the rudimentary functionality in Script::solve_reldir().
-    //    However we already track dependencies down in a much more reliable way in Dependency::check(), so it might
-    //    make sense to eventually store and use that result instead of duplicating partial functionality here.
+    // We should always have an absolute path here:
+    //  - For interpreted scripts, see Script::resolveInterpreterExecutable()
+    //  - For "normal" scripts this should be done as part of the dependency checking, see Dependency::check()
     if (!Glib::path_is_absolute(program)) {
-        std::string found_program = Glib::find_program_in_path(program);
-        if (found_program.empty()) {
-            g_critical("Script::execute(): failed to locate program '%s' on PATH", program.c_str());
-            return 0;
-        }
-        program = found_program;
+        g_critical("Script::execute(): Got unexpected relative path '%s'. Please report a bug.", program.c_str());
+        return 0;
     }
     argv.push_back(program);
 

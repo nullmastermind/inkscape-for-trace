@@ -20,37 +20,37 @@
 namespace Inkscape {
 namespace Extension {
 
-// These strings are for XML attribute comparisons and should not be translated
-gchar const * Dependency::_type_str[] = {
+// These strings are for XML attribute comparisons and should not be translated;
+// make sure to keep in sync with enum defined in dependency.h
+gchar const * Dependency::_type_str[TYPE_CNT] = {
     "executable",
     "file",
     "extension",
 };
 
 // These strings are for XML attribute comparisons and should not be translated
-gchar const * Dependency::_location_str[] = {
+// make sure to keep in sync with enum defined in dependency.h
+gchar const * Dependency::_location_str[LOCATION_CNT] = {
     "path",
     "extensions",
+    "inx",
     "absolute",
 };
 
 /**
     \brief   Create a dependency using an XML definition
-    \param   in_repr   XML definition of the dependency
+    \param   in_repr     XML definition of the dependency
+    \param   extension   Reference to the extension requesting this dependency
 
     This function mostly looks for the 'location' and 'type' attributes
     and turns them into the enums of the same name.  This makes things
     a little bit easier to use later.  Also, a pointer to the core
     content is pulled out -- also to make things easier.
 */
-Dependency::Dependency (Inkscape::XML::Node * in_repr)
+Dependency::Dependency (Inkscape::XML::Node * in_repr, const Extension *extension)
+    : _repr(in_repr)
+    , _extension(extension)
 {
-    _type = TYPE_FILE;
-    _location = LOCATION_PATH;
-    _repr = in_repr;
-    _string = nullptr;
-    _description = nullptr;
-
     Inkscape::GC::anchor(_repr);
 
     if (const gchar * location = _repr->attribute("location")) {
@@ -60,7 +60,7 @@ Dependency::Dependency (Inkscape::XML::Node * in_repr)
                 break;
             }
         }
-    } else if (const gchar * location = _repr->attribute("reldir")) {
+    } else if (const gchar * location = _repr->attribute("reldir")) { // backwards-compatibility
         for (int i = 0; i < LOCATION_CNT && location != nullptr; i++) {
             if (!strcmp(location, _location_str[i])) {
                 _location = (location_t)i;
@@ -68,7 +68,7 @@ Dependency::Dependency (Inkscape::XML::Node * in_repr)
             }
         }
     }
-    
+
     const gchar * type = _repr->attribute("type");
     for (int i = 0; i < TYPE_CNT && type != nullptr; i++) {
         if (!strcmp(type, _type_str[i])) {
@@ -126,17 +126,19 @@ Dependency::~Dependency ()
     found then a TRUE is returned.  If we get all the way through the
     path then a FALSE is returned, the command could not be found.
 */
-bool Dependency::check () const
+bool Dependency::check ()
 {
-    // std::cout << "Checking: " << *this << std::endl;
+    if (_string == nullptr) {
+        return false;
+    }
 
-    if (_string == nullptr) return FALSE;
+    _absolute_location = "";
 
     switch (_type) {
         case TYPE_EXTENSION: {
             Extension * myext = db.get(_string);
-            if (myext == nullptr) return FALSE;
-            if (myext->deactivated()) return FALSE;
+            if (myext == nullptr) return false;
+            if (myext->deactivated()) return false;
             break;
         }
         case TYPE_EXECUTABLE:
@@ -146,21 +148,36 @@ bool Dependency::check () const
                 filetest |= Glib::FILE_TEST_IS_EXECUTABLE;
             }
 
-            Glib::ustring location(_string);
+            std::string location(_string);
             switch (_location) {
                 case LOCATION_EXTENSIONS: {
-                    using namespace Inkscape::IO::Resource;
-                    Glib::ustring temploc = get_filename(EXTENSIONS, location.c_str());
-                    if(Glib::file_test(temploc, filetest)) {
+                    std::string temploc =
+                        Inkscape::IO::Resource::get_filename(Inkscape::IO::Resource::EXTENSIONS, location.c_str());
+                    if (Glib::file_test(temploc, filetest)) {
                         location = temploc;
+                        _absolute_location = temploc;
                         break;
                     }
-                } /* PASS THROUGH!!! */
+                } /* PASS THROUGH!!! */ // TODO: the pass-through seems wrong - either it's relative or not.
                 case LOCATION_ABSOLUTE: {
+                    // TODO: should we check if the directory actually is absolute and/or sanitize the filename somehow?
                     if (!Glib::file_test(location, filetest)) {
-                        // std::cout << "Failing on location: " << location << std::endl;
-                        return FALSE;
+                        return false;
                     }
+                    _absolute_location = location;
+                    break;
+                }
+                case LOCATION_INX: {
+                    std::string base_directory = _extension->get_base_directory();
+                    if (base_directory.empty()) {
+                        g_warning("Dependency '%s' requests location relative to .inx file, "
+                                  "which is unknown for extension '%s'", _string, _extension->get_id());
+                    }
+                    std::string absolute_location = Glib::build_filename(base_directory, location);
+                    if (!Glib::file_test(absolute_location, filetest)) {
+                        return false;
+                    }
+                    _absolute_location = absolute_location;
                     break;
                 }
                 /* The default case is to look in the path */
@@ -178,7 +195,7 @@ bool Dependency::check () const
 
                     for (; path != nullptr;) {
                         gchar * local_path; // to have the path after detection of the separator
-                        Glib::ustring final_name;
+                        std::string final_name;
 
                         local_path = path;
                         path = g_utf8_strchr(path, -1, G_SEARCHPATH_SEPARATOR);
@@ -198,35 +215,38 @@ bool Dependency::check () const
 
                         if (Glib::file_test(final_name, filetest)) {
                             g_free(orig_path);
-                            return TRUE;
+                            _absolute_location = final_name;
+                            return true;
                         }
 
                         // give it a 2nd try with ".exe" added
                         Glib::ustring final_name_exe = final_name + ".exe";
                         if (Glib::file_test(final_name_exe, filetest)) {
                             g_free(orig_path);
-                            return TRUE;
+                            _absolute_location = final_name;
+                            return true;
                         }
 
                         // and a 3rd try with ".cmd" added (mainly for UniConvertor)
                         Glib::ustring final_name_cmd = final_name + ".cmd";
                         if (Glib::file_test(final_name_cmd, filetest)) {
                             g_free(orig_path);
-                            return TRUE;
+                            _absolute_location = final_name;
+                            return true;
                         }
                     }
 
                     g_free(orig_path);
-                    return FALSE; /* Reverse logic in this one */
+                    return false; /* Reverse logic in this one */
                 }
             } /* switch _location */
             break;
         } /* TYPE_FILE, TYPE_EXECUTABLE */
         default:
-            return FALSE;
+            return false;
     } /* switch _type */
 
-    return TRUE;
+    return true;
 }
 
 /**
@@ -234,11 +254,33 @@ bool Dependency::check () const
     \return  A string containing the name of the dependency.
 
     Returns the name of the dependency as found in the configuration file.
- 
+
 */
 const gchar* Dependency::get_name()
 {
     return _string;
+}
+
+/**
+    \brief   Path of this dependency
+    \return  Absolute path to the dependency file
+             (or an empty string if dependency was not found or is of TYPE_EXTENSION)
+
+    Returns the verified absolute path of the dependency file.
+    This value is only available after checking the Dependency by calling Dependency::check().
+*/
+std::string Dependency::get_path()
+{
+    if (_type == TYPE_EXTENSION) {
+        g_warning("Requested absolute path of dependency '%s' which is of 'extension' type.", _string);
+        return "";
+    }
+    if (_absolute_location == UNCHECKED) {
+        g_warning("Requested absolute path of dependency '%s' which is unchecked.", _string);
+        return "";
+    }
+
+    return _absolute_location;
 }
 
 /**

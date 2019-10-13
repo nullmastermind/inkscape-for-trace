@@ -76,8 +76,6 @@ private:
       */
     Gtk::Window *parent_window;
 
-    std::string solve_reldir(Inkscape::XML::Node *repr_in);
-    bool check_existence (std::string const& command);
     void copy_doc(Inkscape::XML::Node * olddoc, Inkscape::XML::Node * newdoc);
     void checkStderr (Glib::ustring const& filename, Gtk::MessageType type, Glib::ustring const& message);
 

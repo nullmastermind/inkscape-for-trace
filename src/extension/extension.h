@@ -137,16 +137,17 @@ public:
     bool          loaded       ();
     virtual bool  check        ();
     Inkscape::XML::Node *      get_repr     ();
-    gchar *       get_id       ();
-    gchar *       get_name     ();
+    gchar *       get_id       () const;
+    gchar *       get_name     () const;
     void          deactivate   ();
     bool          deactivated  ();
     void          printFailure (Glib::ustring reason);
     Implementation::Implementation * get_imp () { return imp; };
     void          set_execution_env (ExecutionEnv * env) { execution_env = env; };
     ExecutionEnv *get_execution_env () { return execution_env; };
-    std::string   get_base_directory() { return _base_directory; };
+    std::string   get_base_directory() const { return _base_directory; };
     void          set_base_directory(std::string base_directory) { _base_directory = base_directory; };
+    std::string   get_dependency_location(const char *name);
     const char   *get_translation(const char* msgid, const char *msgctxt=nullptr);
 
 /* Parameter Stuff */

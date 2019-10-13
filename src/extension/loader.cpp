@@ -56,7 +56,7 @@ Implementation::Implementation *Loader::load_implementation(Inkscape::XML::Docum
             
             // Deal with dependencies if we have them
             if (!strcmp(chname, "dependency")) {
-                Dependency dep = Dependency(child_repr);
+                Dependency dep = Dependency(child_repr, nullptr); // TODO: Why is "this" not an extension?
                 // try to load it
                 bool success = load_dependency(&dep);
                 if( !success ){
