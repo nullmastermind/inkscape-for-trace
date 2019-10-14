@@ -36,7 +36,6 @@ private:
     xmlDocPtr _parsedDoc;
     xsltStylesheetPtr _stylesheet;
 
-    Glib::ustring solve_reldir(Inkscape::XML::Node *reprin);
 public:
     XSLT ();
 

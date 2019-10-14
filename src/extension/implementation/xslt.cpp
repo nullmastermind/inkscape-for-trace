@@ -57,25 +57,6 @@ XSLT::XSLT() :
 {
 }
 
-Glib::ustring XSLT::solve_reldir(Inkscape::XML::Node *reprin) {
-
-    gchar const *s = reprin->attribute("reldir");
-
-    if (!s) {
-        Glib::ustring str = reprin->firstChild()->content();
-        return str;
-    }
-
-    Glib::ustring reldir = s;
-    if (reldir == "extensions") {
-        using namespace Inkscape::IO::Resource;
-        return get_filename(EXTENSIONS, reprin->firstChild()->content());
-    } else {
-        Glib::ustring str = reprin->firstChild()->content();
-        return str;
-    }
-}
-
 bool XSLT::check(Inkscape::Extension::Extension *module)
 {
     if (load(module)) {
@@ -96,7 +77,10 @@ bool XSLT::load(Inkscape::Extension::Extension *module)
             child_repr = child_repr->firstChild();
             while (child_repr != nullptr) {
                 if (!strcmp(child_repr->name(), INKSCAPE_EXTENSION_NS "file")) {
-                    _filename = solve_reldir(child_repr);
+                    // TODO: we already parse xslt files as dependencies in extension.cpp
+                    //       can can we optimize this to be less indirect?
+                    const char *filename = child_repr->firstChild()->content();
+                    _filename = module->get_dependency_location(filename);
                 }
                 child_repr = child_repr->next();
             }
