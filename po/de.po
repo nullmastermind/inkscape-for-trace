@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-10-10 21:27+0200\n"
-"PO-Revision-Date: 2019-10-12 23:39+0100\n"
+"PO-Revision-Date: 2019-10-14 03:03+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -10532,52 +10532,52 @@ msgstr "Stichlänge"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:58
 msgid "If not 0, linearize path with given step length"
-msgstr ""
+msgstr "Pfad in Segmente der angegebenen Länge aufteilen"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:59
-#, fuzzy
 msgid "Minimum stitch length [%]"
-msgstr "Maximale Segmentlänge:"
+msgstr "Minimale Stichlänge [%]"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:59
 msgid "Combine steps shorter than this [%]"
 msgstr ""
+"Stiche, die kürzer als dieser prozentuale Anteil an der Stichlänge sind,"
+" werden zusammengefasst"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:60
-#, fuzzy
 msgid "Stitch pattern"
-msgstr "Stich-Pfad"
+msgstr "Stichmuster"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:60
 msgid "Select between different stitch patterns"
-msgstr ""
+msgstr "Auswahl zwischen verschiedenen Stichmustern"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:61
-#, fuzzy
 msgid "Show stitches"
-msgstr "Punkte anzeigen"
+msgstr "Stiche anzeigen"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:61
 msgid ""
 "Show stitches as small gaps (just for inspection - don't use for output)"
 msgstr ""
+"Erzeugt Lücken zwischen den Stichen (nur Vorschau, für die Verwendung mit"
+" Stickmaschinen deaktivieren)"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:62
 msgid "Show stitch gap"
-msgstr ""
+msgstr "Lücke zwischen Stichen"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:62
 msgid "Gap between stitches when showing stitches"
-msgstr ""
+msgstr "Länge der Lücke, wenn Stiche angezeigt werden"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:63
 msgid "Jump if longer"
-msgstr ""
+msgstr "Maximaler Abstand"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:63
-#, fuzzy
 msgid "Jump connection if longer than"
-msgstr "Verbindungspunkt entfernen"
+msgstr "Keine Verbindung erzeugen, falls länger"
 
 #: ../src/live_effects/lpe-envelope.cpp:18
 msgid "Top bend path:"
@@ -10612,7 +10612,6 @@ msgid "Left path along which to bend the original path"
 msgstr "Linker Pfad, entlang welchem der Originalpfad gebogen wird"
 
 #: ../src/live_effects/lpe-envelope.cpp:22
-#, fuzzy
 msgid "_Enable left &amp; right paths"
 msgstr "Aktiviere linke und rechte Pfade"
 
@@ -10621,7 +10620,6 @@ msgid "Enable the left and right deformation paths"
 msgstr "Aktiviere linken und rechten Verformungs-Pfad"
 
 #: ../src/live_effects/lpe-envelope.cpp:23
-#, fuzzy
 msgid "_Enable top &amp; bottom paths"
 msgstr "Aktiviere obere und untere Pfade"
 
@@ -10647,17 +10645,16 @@ msgstr "Pfade, von denen die Orginal-Pfaddaten genommen werden"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:36
 msgid "LPE's on linked:"
-msgstr ""
+msgstr "LPEs:"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:36
 msgid "LPE's on linked"
-msgstr ""
+msgstr "LPEs verknüpfter Pfade berücksichtigen"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:37
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:23
-#, fuzzy
 msgid "Fuse coincident points"
-msgstr "Neuer Connector-Punkt"
+msgstr "Aufeinanderliegende Knoten vereinigen"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:38
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:24
@@ -10672,14 +10669,12 @@ msgstr "Schließen"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:39
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:25
-#, fuzzy
 msgid "Close path"
-msgstr "Unterpfad schliessen"
+msgstr "Pfad schließen"
 
 #: ../src/live_effects/lpe-fill-between-many.cpp:40
-#, fuzzy
 msgid "Autoreverse"
-msgstr "Umkehren"
+msgstr "Automatisch umkehren"
 
 #: ../src/live_effects/lpe-fill-between-strokes.cpp:21
 msgid "Second path:"
@@ -10719,12 +10714,11 @@ msgstr "Einheit"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:43
 msgid "Methods to calculate the fillet or chamfer"
-msgstr ""
+msgstr "Methode zur Berechnung der Abrundung oder Fasung"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:45
-#, fuzzy
 msgid "Mode, fillet or chamfer"
-msgstr "Abrunden/Fasen bearbeiten"
+msgstr "Modus (z.B. Abrunden oder Fasen)"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:47
 msgid "Radius, in unit or %"
@@ -10739,9 +10733,8 @@ msgid "Chamfer steps"
 msgstr "Anzahl der Fasungen"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:51
-#, fuzzy
 msgid "Radius in %"
-msgstr "Radius, in Einheit oder %"
+msgstr "Radius in %"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:51
 msgid "Flexible radius size (%)"
@@ -10757,14 +10750,12 @@ msgid "Hide knots"
 msgstr "Knoten ausblenden"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:61
-#, fuzzy
 msgid "Apply changes if radius = 0"
-msgstr "Änderungen anwenden, wenn Gewichtung = 0%"
+msgstr "Änderungen anwenden, wenn Radius = 0"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:62
-#, fuzzy
 msgid "Apply changes if radius > 0"
-msgstr "Änderungen anwenden, wenn Gewichtung > 0%"
+msgstr "Änderungen anwenden, wenn Radius > 0"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:212
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:60
@@ -10806,13 +10797,13 @@ msgid ""
 msgstr "Zahnflankenwinkel (typ. 20-25°)."
 
 #: ../src/live_effects/lpe-gears.cpp:210
-#, fuzzy
 msgid "Min Radius:"
-msgstr "Radius:"
+msgstr "Mindestradius:"
 
 #: ../src/live_effects/lpe-gears.cpp:210
 msgid "Minimum radius, low values can be slow"
 msgstr ""
+"Kleinster erlaubter Radius; die Berechnung für kleinere Werte benötigt länger"
 
 #: ../src/live_effects/lpe-interpolate.cpp:30
 msgid "Trajectory:"
@@ -10994,9 +10985,8 @@ msgid "Overrides the miter limit and forces a join."
 msgstr "Hebt das Gehrungslimit auf und erzwingt eine Verbindung."
 
 #: ../src/live_effects/lpe-knot.cpp:354
-#, fuzzy
 msgid "_Gap length:"
-msgstr "Balkenlänge:"
+msgstr "Länge der Lücke:"
 
 #: ../src/live_effects/lpe-knot.cpp:354
 msgid "Size of hidden region of lower string"
@@ -11011,24 +11001,26 @@ msgid ""
 "Gap width is given in multiples of stroke width. When unchecked, document "
 "units are used."
 msgstr ""
+"Die Länge der Lücke wird in Vielfachen der Konturbreite angegeben. Wenn"
+" deaktiviert, wird die Einheit des Dokuments verwendet."
 
 #: ../src/live_effects/lpe-knot.cpp:360
-#, fuzzy
 msgid "_Both gaps"
-msgstr "Lücken schließen"
+msgstr "Lücken in beiden"
 
 #: ../src/live_effects/lpe-knot.cpp:360
-#, fuzzy
 msgid "Use gap in both intersection elements"
-msgstr "An Pfadüberschneidungen einrasten"
+msgstr "An Pfadüberschneidungen haben beide Pfadteile eine Lücke"
 
 #: ../src/live_effects/lpe-knot.cpp:361
 msgid "_Groups: Inverse"
-msgstr ""
+msgstr "Gruppen: Umkehren"
 
 #: ../src/live_effects/lpe-knot.cpp:361
 msgid "Use other stroke width, useful in groups with different stroke widths"
 msgstr ""
+"Die Konturbreite der anderen Gruppe wird verwendet; hilfreich bei Grupen mit"
+" Pfaden unterschiedlicher Breite."
 
 #: ../src/live_effects/lpe-knot.cpp:367
 msgid "S_witcher size:"
@@ -11051,6 +11043,9 @@ msgid ""
 "Drag to select a crossing, click to flip it, Shift + click to change all "
 "crossings, Ctrl + click to reset and change all crossings"
 msgstr ""
+"Ziehen zur Auswahl einer Kreuzung, Klick zum Umschalten, Umschalt + Klick um"
+" alle Kreuzungen zu ändern, Strg + Klick setzt alle Kreuzungen zurück und"
+" ändert alle"
 
 #: ../src/live_effects/lpe-knot.cpp:710
 msgid "Change knot crossing"
