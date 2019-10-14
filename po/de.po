@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-10-10 21:27+0200\n"
-"PO-Revision-Date: 2019-10-14 03:03+0100\n"
+"PO-Revision-Date: 2019-10-15 01:23+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -9530,7 +9530,7 @@ msgstr "Wandelt den Pfad in einen Objektrahmen für einen anderen Pfad um"
 
 #: ../src/live_effects/effect.cpp:555
 msgid "Measure Segments"
-msgstr "Messwerkzeug"
+msgstr "Bemaßungen"
 
 #: ../src/live_effects/effect.cpp:559
 msgid ""
@@ -11062,9 +11062,8 @@ msgid "Mirror movements in vertical"
 msgstr "Bewegungen vertikal spiegeln"
 
 #: ../src/live_effects/lpe-lattice2.cpp:39
-#, fuzzy
 msgid "Use only perimeter"
-msgstr "Booleschen Parameter ändern"
+msgstr "Nur Ränder verwenden"
 
 #: ../src/live_effects/lpe-lattice2.cpp:40
 msgid "Update while moving knots (maybe slow)"
@@ -11384,9 +11383,8 @@ msgstr "Vertikal:"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:67
 #: ../src/live_effects/lpe-offset.cpp:77
-#, fuzzy
 msgid "Unit of measurement"
-msgstr "Phantombild des aktuellen Maßstabs erstellen"
+msgstr "Maßeinheit"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:68
 #: ../share/extensions/gcodetools_graffiti.inx:19
@@ -11395,38 +11393,32 @@ msgid "Orientation"
 msgstr "Ausrichtung"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:68
-#, fuzzy
 msgid "Orientation of the line and labels"
-msgstr "Ausrichtung des anzudockenden Elementes"
+msgstr "Ausrichtung der Linie und der Beschriftungen"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:69
-#, fuzzy
 msgid "Color and opacity"
-msgstr "Farbe und Alpha"
+msgstr "Farbe und Deckkraft"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:69
-#, fuzzy
 msgid "Set color and opacity of the dimensions"
-msgstr "Die Einheiten, die für die Bemaßungen verwendet werden"
+msgstr "Farbe und Deckkraft der Bemaßungen wählen"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:70
 msgid "Font"
 msgstr "Schrift"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:70
-#, fuzzy
 msgid "Select font for labels"
-msgstr "In allen Ebenen auswählen"
+msgstr "Schriftart für Beschriftung wählen"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:71
-#, fuzzy
 msgid "Number of digits after the decimal point"
-msgstr "Wie viele Stellen nach dem Dezimalpunkt geschrieben werden"
+msgstr "Anzahl an Nachkommastellen"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:72
-#, fuzzy
 msgid "Merge overlaps °"
-msgstr "Max. Überlappung:"
+msgstr "Zusammenfassen ab (°)"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 72
@@ -11435,6 +11427,8 @@ msgid ""
 "Minimum angle at which overlapping dimension lines are merged into one, use "
 "180° to disable merging"
 msgstr ""
+"Kleinster Winkel, ab dem sich überschneidende Bemaßungslinien zusammengefasst"
+" werden; keine Zusammenfassung bei 180°"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:73
 #: ../share/extensions/frame.inx:14
@@ -11445,46 +11439,45 @@ msgstr "Position"
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 73
 #: ../src/live_effects/lpe-measure-segments.cpp:73
 msgid "Distance of dimension line from the path"
-msgstr ""
+msgstr "Abstand der Bemaßungslinie vom Pfad"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:74
-#, fuzzy
 msgid "Label position"
-msgstr "X-Position"
+msgstr "Position der Beschriftung"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 74
 #: ../src/live_effects/lpe-measure-segments.cpp:74
 msgid "Distance of the labels from the dimension line"
-msgstr ""
+msgstr "Abstand der Beschriftung von der Bemaßungslinie"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:75
-#, fuzzy
 msgid "Help line distance"
-msgstr "Knotenabstand"
+msgstr "Abstand Endmarkierungen"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 75
 #: ../src/live_effects/lpe-measure-segments.cpp:75
 msgid "Distance of the perpendicular lines from the path"
-msgstr ""
+msgstr "Abstand des Anfangs der senkrechten Endmarkierungen vom Pfad"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:76
-#, fuzzy
 msgid "Help line elongation"
-msgstr "Überlappungen entfernen"
+msgstr "Verlängerung Endmarkierungen"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 76
 #: ../src/live_effects/lpe-measure-segments.cpp:76
 msgid "Distance of the perpendicular lines' ends from the dimension line"
 msgstr ""
+"Endmarkierungen werden um diesen zusätzlichen Wert über den Wert des"
+" Linienabstandes hinaus verlängert"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 77
 #: ../src/live_effects/lpe-measure-segments.cpp:77
 msgid "Dimension line width. DIN standard: 0.25 or 0.35 mm"
-msgstr ""
+msgstr "Breite der Bemaßungslinien; DIN-Standard: 0,25 oder 0,35 mm"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:78
 #: ../src/selection-chemistry.cpp:2275 ../src/seltrans.cpp:490
@@ -11499,20 +11492,19 @@ msgstr "Saklierungsfaktor"
 
 #. TRANSLATORS: Don't translate "{measure}" and "{unit}" variables.
 #: ../src/live_effects/lpe-measure-segments.cpp:81
-#, fuzzy
 msgid "Label format"
-msgstr "LaTeX-Formel"
+msgstr "Format der Beschriftungen"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 81
 #: ../src/live_effects/lpe-measure-segments.cpp:81
 msgid "Label text format, available variables: {measure}, {unit}"
 msgstr ""
+"Textformatierung der Beschriftungen; verfügbare Variablen: {measure}, {unit}"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:82
-#, fuzzy
 msgid "Blacklist segments"
-msgstr "Blockelemente"
+msgstr "Segmente ausschließen"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 82
@@ -11521,21 +11513,21 @@ msgid ""
 "Comma-separated list of indices of segments that should not be measured. You "
 "can use another LPE with different parameters to measure these."
 msgstr ""
+"Komma getrennte Liste der Indizes von Segmenten, die nicht bemaßt werden"
+" sollen. Es kann auch ein zweiter LPE mit anderen Parametern verwendet"
+" werden, um diese zu bemaßen."
 
 #: ../src/live_effects/lpe-measure-segments.cpp:83
-#, fuzzy
 msgid "Invert blacklist"
-msgstr "Invertierte Abrundung"
+msgstr "Ausschlussliste umkehren"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:83
-#, fuzzy
 msgid "Use the blacklist as whitelist"
-msgstr "Schwarz-Weiß"
+msgstr "Nur Segmente in der Ausschlussliste bemaßen"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:84
-#, fuzzy
 msgid "Show segment index"
-msgstr "Auswahlmarkierung anzeigen"
+msgstr "Segmentindizes anzeigen"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 84
@@ -11543,11 +11535,12 @@ msgstr "Auswahlmarkierung anzeigen"
 msgid ""
 "Display the index of the segments in the text label for easier blacklisting"
 msgstr ""
+"Zeigt den Index der Segmente in der Beschriftung an, damit das Erstellen"
+" einer Ausschlussliste einfacher wird"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:85
-#, fuzzy
 msgid "Arrows outside"
-msgstr "Kalte Außenseite"
+msgstr "Pfeile außen"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 85
@@ -11555,22 +11548,22 @@ msgstr "Kalte Außenseite"
 msgid ""
 "Draw arrows pointing in the opposite direction outside the dimension line"
 msgstr ""
+"Pfeilspitzen, die in die Gegenrichtung weisen, an der Außenseite der"
+" Bemaßungslinie anzeigen"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:86
-#, fuzzy
 msgid "Flip side"
-msgstr "Knoten umkehren"
+msgstr "Seite wechseln"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 86
 #: ../src/live_effects/lpe-measure-segments.cpp:86
 msgid "Draw dimension lines and labels on the other side of the path"
-msgstr ""
+msgstr "Zeichnet die Bemaßungen auf der anderen Seite des Pfades"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:87
-#, fuzzy
 msgid "Scale sensitive"
-msgstr "schreibungsabhängig"
+msgstr "Skalierung berücksichtigen"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 87
@@ -11578,11 +11571,12 @@ msgstr "schreibungsabhängig"
 msgid ""
 "When the path is grouped and the group is then scaled, adjust the dimensions."
 msgstr ""
+"Wenn der Pfad gruppiert wurde und die Gruppe dann skaliert wird, werden die"
+" Bemaßungen angepasst."
 
 #: ../src/live_effects/lpe-measure-segments.cpp:88
-#, fuzzy
 msgid "Localize number format"
-msgstr "Zahlzeichen"
+msgstr "Lokales Zahlenformat"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 88
@@ -11591,54 +11585,50 @@ msgid ""
 "Use localized number formatting, e.g. '1,0' instead of '1.0' with German "
 "locale"
 msgstr ""
+"Verwendet ortsabhängiges Zahlenformat, z.B. '1,0' anstatt '1.0', wenn das"
+" Programm auf Deutsch verwendet wird"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:89
-#, fuzzy
 msgid "Rotate labels"
-msgstr "Pixelweise drehen"
+msgstr "Beschriftungen drehen"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 89
 #: ../src/live_effects/lpe-measure-segments.cpp:89
 msgid "Labels are parallel to the dimension line"
-msgstr ""
+msgstr "Die Beschriftungen werden parallel zur Bemaßungslinie ausgerichtet."
 
 #: ../src/live_effects/lpe-measure-segments.cpp:90
-#, fuzzy
 msgid "Hide line under label"
-msgstr "Ebene ausblenden"
+msgstr "Keine Linie unter Beschriftung"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 90
 #: ../src/live_effects/lpe-measure-segments.cpp:90
 msgid "Hide the dimension line where the label overlaps it"
-msgstr ""
+msgstr "Verbirgt die Bemaßungslinie im Bereich der Beschriftung"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:91
-#, fuzzy
 msgid "Hide arrows"
-msgstr "Bild ausblenden"
+msgstr "Keine Pfeile"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:91
-#, fuzzy
 msgid "Don't show any arrows"
-msgstr "Diese Warnung nicht erneut zeigen"
+msgstr "Keine Pfeile zeichnen"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:92
-#, fuzzy
 msgid "Multiply values < 1"
-msgstr "Multiplizieren"
+msgstr "Werte &lt 1 multiplizieren"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 92
 #: ../src/live_effects/lpe-measure-segments.cpp:92
 msgid "Multiply values smaller than 1 by 100 and leave out the unit"
-msgstr ""
+msgstr "Werte unter 1 werden mit 100 multipliziert und haben keine Einheit"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:93
-#, fuzzy
 msgid "Linked objects:"
-msgstr "Objekte ausblenden"
+msgstr "Verknüpfte Objekte:"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 93
@@ -11646,87 +11636,80 @@ msgstr "Objekte ausblenden"
 msgid ""
 "Objects whose nodes are projected onto the path and generate new measurements"
 msgstr ""
+"Objekte, deren Knoten auf den Pfad projiziert werden, wodurch weitere"
+" Bemaßungen entstehen"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:94
-#, fuzzy
 msgid "Distance"
-msgstr "Entfernt"
+msgstr "Abstand"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 94
 #: ../src/live_effects/lpe-measure-segments.cpp:94
 msgid "Distance of the dimension lines from the outermost node"
-msgstr ""
+msgstr "Abstand der Bemaßungslinien vom äußersten Knoten"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:95
-#, fuzzy
 msgid "Angle of projection"
-msgstr "Winkel in X-Richtung"
+msgstr "Projektionswinkel"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:95
-#, fuzzy
 msgid "Angle of projection in 90° steps"
-msgstr "Winkel in X-Richtung"
+msgstr "Projektionswinkel in 90°-Schritten"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:96
-#, fuzzy
 msgid "Activate projection"
-msgstr "Pfadeffekt aktivieren"
+msgstr "Projektion aktivieren"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:96
-#, fuzzy
 msgid "Activate projection mode"
-msgstr "Aktive Sitzungsdatei:"
+msgstr "Projektionsmodus aktivieren"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:97
-#, fuzzy
 msgid "Avoid label overlap"
-msgstr "Ebene ausblenden"
+msgstr "Überlappende Beschriftungen verhindern"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 97
 #: ../src/live_effects/lpe-measure-segments.cpp:97
 msgid "Rotate labels if the segment is shorter than the label"
 msgstr ""
+"Beschriftungen werden gedreht, wenn das Segment kürzer als die Beschriftung"
+" ist."
 
 #: ../src/live_effects/lpe-measure-segments.cpp:98
-#, fuzzy
 msgid "Measure bounding box"
-msgstr "Visueller Objektrahmen"
+msgstr "Objektrahmen vermessen"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:98
-#, fuzzy
 msgid "Add measurements for the geometrical bounding box"
-msgstr "Geometrischer Objektrahmen"
+msgstr "Zusätzlich Bemaßungen für den geometrischen Objektrahmen erstellen"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:99
-#, fuzzy
 msgid "Only bounding box"
-msgstr "Visueller Objektrahmen"
+msgstr "Nur Objektrahmen"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:99
-#, fuzzy
 msgid "Measure only the geometrical bounding box"
-msgstr "Geometrischer Objektrahmen"
+msgstr "Nur Bemaßungen für den geometrischen Objektrahmen erzeugen"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:100
-#, fuzzy
 msgid "Add object center"
-msgstr "Mittelpunkt setzen"
+msgstr "Objektmittelpunkt"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 100
 #: ../src/live_effects/lpe-measure-segments.cpp:100
 msgid "Add the projected object center"
-msgstr ""
+msgstr "Auch den Mittelpunkt des Objektes projizieren"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:101
 msgid "Only max and min"
-msgstr ""
+msgstr "Nur max und min"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:101
 msgid "Compute only max/min projection values"
-msgstr ""
+msgstr "Nur die maximalen / minimalen Projektionen berechnen"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:102
 #: ../src/live_effects/lpe-measure-segments.cpp:282 ../src/verbs.cpp:293
@@ -11775,9 +11758,8 @@ msgid "Help"
 msgstr "Hilfe"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:102
-#, fuzzy
 msgid "Measure segments help"
-msgstr "Messwerkzeug"
+msgstr "Hilfe zu den Bemaßungen"
 
 #
 # File: ../src/live_effects/lpe-measure-segments.cpp, line: 184
@@ -11803,6 +11785,28 @@ msgid ""
 "<b><i>Set Defaults:</i></b> For every LPE, default values can be set at the "
 "bottom."
 msgstr ""
+"<b><big>Allgemeines</big></b>\n"
+"Der Effekt zeichnet und positioniert Bemaßungslinien und Beschriftungen.\n"
+"\n"
+"<b><big>Projektion</big></b>\n"
+"Zeichnet eine Linie mit Bemaßungen für die gewählten Objekte.\n"
+"\n"
+"<b><big>Optionen</big></b>\n"
+"Optionen für Farbe, Genauigkeit, Formatierung der Beschriftungen und die"
+" Anzeige\n"
+"\n"
+"<b><big>Tipps</big></b>\n"
+"<b><i>Benutzerdefinierter Stil:</i></b> Um den Stil noch weiter anzupassen,"
+" kann der XML-Editor verwendet werden. Dort kann die Klasse oder ID des"
+" Objektes bestimmt werden, um dieser dann im Stildialog einen neuen Stil"
+" zuzuweisen.\n"
+"<b><i>Ausschlussliste:</i></b> Die Liste ermöglicht es, Bemaßungen für einige"
+" Segmente oder Projektionsschritte nicht anzuzeigen.\n"
+"<b><i>Mehrere Bemaßungs-LPEs:</i></b> Auf dasselbe Objekt angewendet können"
+" so mittels Ausschlusslisten unterschiedlich ausgerichtete Beschriftungen"
+" oder weitere Projektionen gezeichnet werden.\n"
+"<b><i>Standardwerte setzen:</i></b> Unten können für jeden LPE Standardwerte"
+" festgelegt werden."
 
 # !!!
 #: ../src/live_effects/lpe-measure-segments.cpp:279
@@ -11811,24 +11815,20 @@ msgid "General"
 msgstr "Allgemein"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:280
-#, fuzzy
 msgid "Projection"
-msgstr "Richtung"
+msgstr "Projektion"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:489
-#, fuzzy
 msgid "Non Uniform Scale"
-msgstr "Gleichmäßiges Rauschen"
+msgstr "Ungleichmäßige Skala"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:43
-#, fuzzy
 msgid "Vertical page center"
-msgstr "Erkennung vertikaler Kanten"
+msgstr "Vertikale Seitenmitte"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:44
-#, fuzzy
 msgid "Horizontal page center"
-msgstr "Horizontale Kantenerkennung"
+msgstr "Horizontale Seitenmitte"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:45
 #, fuzzy
