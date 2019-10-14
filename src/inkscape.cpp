@@ -709,7 +709,7 @@ Application::crash_handler (int /*signum*/)
     time_t sptime = time (nullptr);
     struct tm *sptm = localtime (&sptime);
     gchar sptstr[256];
-    strftime (sptstr, 256, "%Y_%m_%d_%H_%M_%S", sptm);
+    strftime(sptstr, 256, "%Y_%m_%d_%H_%M_%S", sptm);
 
     gint count = 0;
     gchar *curdir = g_get_current_dir(); // This one needs to be freed explicitly

@@ -395,6 +395,9 @@ DrawingItem::setStyle(SPStyle *style, SPStyle *context_style)
             _background_new = false;
             _markForUpdate(STATE_BACKGROUND, true);
         }
+    } else if (_parent && _parent->_child_type != CHILD_NORMAL && !_background_new) {
+        _background_new = true;
+        _markForUpdate(STATE_BACKGROUND, true);
     }
 
     if (context_style != nullptr) {

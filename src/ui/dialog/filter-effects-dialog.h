@@ -23,7 +23,7 @@
 #include <gtkmm/scrolledwindow.h>
 
 #include "attributes.h"
-
+#include "display/nr-filter-types.h"
 #include "ui/dialog/desktop-tracker.h"
 #include "ui/widget/combo-enums.h"
 #include "ui/widget/panel.h"

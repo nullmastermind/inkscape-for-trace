@@ -585,29 +585,21 @@ void ObjectsPanel::_setCompositingValues(SPItem *item)
     double opacity = (item->style->opacity.set ? SP_SCALE24_TO_FLOAT(item->style->opacity.value) : 1);
     opacity *= 100; // Display in percent.
     _filter_modifier.set_opacity_value(opacity);
-
-    SPFeBlend *spblend = nullptr;
+    // Set the blend mode
+    _filter_modifier.set_blend_mode(item->style->mix_blend_mode.set ? item->style->mix_blend_mode.value
+                                                                    : Inkscape::SP_CSS_BLEND_NORMAL);
     SPGaussianBlur *spblur = nullptr;
     if (item->style->getFilter()) {
-
         for (auto& primitive_obj: item->style->getFilter()->children) {
             if (!SP_IS_FILTER_PRIMITIVE(&primitive_obj)) {
                 break;
             }
-            if (SP_IS_FEBLEND(&primitive_obj) && !spblend) {
-                //Get the blend mode
-                spblend = SP_FEBLEND(&primitive_obj);
-            }
-
             if (SP_IS_GAUSSIANBLUR(&primitive_obj) && !spblur) {
                 //Get the blur value
                 spblur = SP_GAUSSIANBLUR(&primitive_obj);
             }
         }
     }
-
-    //Set the blend mode
-    _filter_modifier.set_blend_mode(spblend ? spblend->blend_mode : Inkscape::Filters::BLEND_NORMAL);
 
     //Set the blur value
     double blur_value = 0;
@@ -1634,48 +1626,14 @@ void ObjectsPanel::_blendChangedIter(const Gtk::TreeIter& iter, Glib::ustring bl
         //Since blur and blend are both filters, we need to set both at the same time
         SPStyle *style = item->style;
         g_assert(style != nullptr);
-        
-        if (blendmode != "normal") {
-            gdouble radius = 0;
-            if (item->style->getFilter()) {
-                for (auto& primitive: item->style->getFilter()->children) {
-                    if (!SP_IS_FILTER_PRIMITIVE(&primitive)) {
-                        break;
-                    }
-                    // We should read in the current radius and use that!
-                    if (SP_IS_GAUSSIANBLUR(&primitive)) {
-                        Geom::OptRect bbox = item->bounds(SPItem::GEOMETRIC_BBOX);
-                        if (bbox) {
-                            double perimeter = bbox->dimensions()[Geom::X] + bbox->dimensions()[Geom::Y];   // fixme: this is only half the perimeter, is that correct?
-                            radius =  _filter_modifier.get_blur_value() * perimeter / 400;
-                        }
-                    }
-                }
-            }
-            if (radius != 0) {
-                // The modify function expects radius to be in display pixels.
-                Geom::Affine i2d (item->i2dt_affine());
-                double expansion = i2d.descrim();
-                radius *= expansion;
-            }
-            SPFilter *filter = new_filter_simple_from_item(_document, item, blendmode.c_str(), radius);
-            sp_style_set_property_url(item, "filter", filter, false);
+        SPCSSAttr *css = sp_css_attr_from_style(style, SP_STYLE_FLAG_ALWAYS | SP_STYLE_FLAG_IFSRC);
+        if (blendmode == "normal") {
+            sp_repr_css_unset_property(css, "mix-blend-mode");
         } else {
-            for (auto& primitive: item->style->getFilter()->children) {
-                if (!SP_IS_FILTER_PRIMITIVE(&primitive)) {
-                    break;
-                }
-                if (SP_IS_FEBLEND(&primitive)) {
-                    primitive.deleteObject();
-                    break;
-                }
-            }
-            if (!item->style->getFilter()->firstChild()) {
-                remove_filter(item, false);
-            }
+            sp_repr_css_set_property(css, "mix-blend-mode", blendmode.c_str());
         }
-
-        item->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
+        sp_repr_css_change(item->getRepr(), css, "style");
+        sp_repr_css_attr_unref(css);
     }
 }
 

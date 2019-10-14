@@ -41,18 +41,19 @@ namespace UI {
 namespace Dialog {
 
 FillAndStroke::FillAndStroke()
-    : UI::Widget::Panel("/dialogs/fillstroke", SP_VERB_DIALOG_FILL_STROKE),
-      _page_fill(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true))),
-      _page_stroke_paint(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true))),
-      _page_stroke_style(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true))),
-      _composite_settings(SP_VERB_DIALOG_FILL_STROKE, "fillstroke",
+    : UI::Widget::Panel("/dialogs/fillstroke", SP_VERB_DIALOG_FILL_STROKE)
+    , _page_fill(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true)))
+    , _page_stroke_paint(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true)))
+    , _page_stroke_style(Gtk::manage(new UI::Widget::NotebookPage(1, 1, true, true)))
+    , _composite_settings(SP_VERB_DIALOG_FILL_STROKE, "fillstroke",
+                          UI::Widget::SimpleFilterModifier::BLEND |
                           UI::Widget::SimpleFilterModifier::BLUR |
-                          UI::Widget::SimpleFilterModifier::OPACITY ),
-      deskTrack(),
-      targetDesktop(nullptr),
-      fillWdgt(nullptr),
-      strokeWdgt(nullptr),
-      desktopChangeConn()
+                          UI::Widget::SimpleFilterModifier::OPACITY)
+    , deskTrack()
+    , targetDesktop(nullptr)
+    , fillWdgt(nullptr)
+    , strokeWdgt(nullptr)
+    , desktopChangeConn()
 {
     Gtk::Box *contents = _getContents();
     contents->set_spacing(2);

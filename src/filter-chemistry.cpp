@@ -284,11 +284,9 @@ new_filter_blend_gaussian_blur (SPDocument *document, const char *blendmode, gdo
  
     // get corresponding object
     SPFilter *f = SP_FILTER( document->getObjectByRepr(repr) );
-
     // Gaussian blur primitive
     if(radius != 0) {
         set_filter_area(repr, radius, expansion, expansionX, expansionY, width, height);
-
         //create feGaussianBlur node
         Inkscape::XML::Node *b_repr;
         b_repr = xml_doc->createElement("svg:feGaussianBlur");

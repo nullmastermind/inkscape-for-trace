@@ -275,7 +275,7 @@ void Preferences::reset()
     time_t sptime = time (nullptr);
     struct tm *sptm = localtime (&sptime);
     gchar sptstr[256];
-    strftime (sptstr, 256, "%Y-%m-%d_%H-%M-%S", sptm);
+    strftime(sptstr, 256, "%Y_%m_%d_%H_%M_%S", sptm);
 
     char *new_name = g_strdup_printf("%s_%s.xml", _prefs_filename.c_str(), sptstr);
 

@@ -89,6 +89,7 @@ int objects_query_strokecap (const std::vector<SPItem*> &objects, SPStyle *style
 int objects_query_strokejoin (const std::vector<SPItem*> &objects, SPStyle *style_res);
 
 int objects_query_blur (const std::vector<SPItem*> &objects, SPStyle *style_res);
+int objects_query_blend (const std::vector<SPItem*> &objects, SPStyle *style_res);
 
 int sp_desktop_query_style_from_list (const std::vector<SPItem*> &list, SPStyle *style, int property);
 int sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property);
