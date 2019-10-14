@@ -587,7 +587,7 @@ void ObjectsPanel::_setCompositingValues(SPItem *item)
     _filter_modifier.set_opacity_value(opacity);
     // Set the blend mode
     _filter_modifier.set_blend_mode(item->style->mix_blend_mode.set ? item->style->mix_blend_mode.value
-                                                                    : Inkscape::SP_CSS_BLEND_NORMAL);
+                                                                    : SP_CSS_BLEND_NORMAL);
     SPGaussianBlur *spblur = nullptr;
     if (item->style->getFilter()) {
         for (auto& primitive_obj: item->style->getFilter()->children) {
