@@ -603,7 +603,7 @@ void Application::add_gtk_css()
 
     Glib::ustring gtkthemename = prefs->getString("/theme/gtkTheme");
     gtkthemename += ".css";
-    style = get_filename(UIS, gtkthemename.c_str());
+    style = get_filename(UIS, gtkthemename.c_str(), false, true);
     if (!style.empty()) {
         if (themeprovider) {
             Gtk::StyleContext::remove_provider_for_screen(screen, themeprovider);
