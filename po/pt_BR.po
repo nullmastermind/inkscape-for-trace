@@ -25,7 +25,7 @@ msgstr ""
 #: ../share/filters/filters.svg.h:2
 #, fuzzy
 msgid "Smart Jelly"
-msgstr "Geléia fosca"
+msgstr "Efeito geléia"
 
 #: ../share/filters/filters.svg.h:3 ../share/filters/filters.svg.h:7
 #: ../share/filters/filters.svg.h:15 ../share/filters/filters.svg.h:31
@@ -42,11 +42,11 @@ msgstr "Geléia fosca"
 #: ../src/extension/internal/filter/bevels.h:145
 #: ../src/extension/internal/filter/bevels.h:229
 msgid "Bevels"
-msgstr "Chanfros"
+msgstr "Chanfrado"
 
 #: ../share/filters/filters.svg.h:4
 msgid "Same as Matte jelly but with more controls"
-msgstr ""
+msgstr "Igual ao Efeito Geléia, mas com mais opções"
 
 #: ../share/filters/filters.svg.h:6
 #, fuzzy
@@ -71,20 +71,20 @@ msgstr "Enevoar"
 #: ../src/extension/internal/filter/blurs.h:268
 #: ../src/extension/internal/filter/blurs.h:352
 msgid "Blurs"
-msgstr "Desfoques"
+msgstr "Desfoque"
 
 #: ../share/filters/filters.svg.h:12
 msgid "Edges are partly feathered out"
-msgstr "As bordas são parcialmente desfocadas para fora"
+msgstr "As bordas externas são parcialmente desfocadas"
 
 #: ../share/filters/filters.svg.h:14
 #, fuzzy
 msgid "Jigsaw Piece"
-msgstr "Peça de quebra-cabeça"
+msgstr "Quebra-cabeça"
 
 #: ../share/filters/filters.svg.h:16
 msgid "Low, sharp bevel"
-msgstr "Chanfro aguçado, baixo"
+msgstr "Chanfro baixo e aguçado"
 
 #: ../share/filters/filters.svg.h:18
 #, fuzzy
@@ -114,11 +114,11 @@ msgstr "Sobreposições"
 
 #: ../share/filters/filters.svg.h:20
 msgid "Random whiteouts inside"
-msgstr "Gera manchas vazadas"
+msgstr "Manchas vazadas aleatórias"
 
 #: ../share/filters/filters.svg.h:22
 msgid "Ink Bleed"
-msgstr "Sangria da Tinta"
+msgstr "Sangria"
 
 #: ../share/filters/filters.svg.h:23 ../share/filters/filters.svg.h:27
 #: ../share/filters/filters.svg.h:115 ../share/filters/filters.svg.h:431
@@ -127,7 +127,7 @@ msgstr "Excessos"
 
 #: ../share/filters/filters.svg.h:24
 msgid "Inky splotches underneath the object"
-msgstr "Gera sangramento de tinta por baixo do objeto"
+msgstr "Sangramento de tinta por baixo do objeto"
 
 #: ../share/filters/filters.svg.h:26
 msgid "Fire"
@@ -153,7 +153,7 @@ msgstr "Chanfrar bordas"
 
 #: ../share/filters/filters.svg.h:36
 msgid "Ridged border with inner bevel"
-msgstr "Borda chanfrada com interior em relevo"
+msgstr "Borda chanfrada com relevo interno"
 
 #: ../share/filters/filters.svg.h:38
 msgid "Ripple"
@@ -176,7 +176,7 @@ msgstr "Ondulação horizontal das bordas"
 # Traduzi como no GIMP. Preferi essa tradução às outras sugestões anteriores, ao pé da letra.
 #: ../share/filters/filters.svg.h:42
 msgid "Speckle"
-msgstr "Salpico"
+msgstr "Salpicos"
 
 #: ../share/filters/filters.svg.h:44
 msgid "Fill object with sparse translucent specks"
@@ -189,7 +189,7 @@ msgstr "Manchas de óleo"
 
 #: ../share/filters/filters.svg.h:48
 msgid "Rainbow-colored semitransparent oily splotches"
-msgstr "Simula manchas de óleo semi-transparentes em cores do arco-íris"
+msgstr "Simula manchas de óleo semi-transparentes com cores do arco-íris"
 
 #: ../share/filters/filters.svg.h:50
 msgid "Frost"
@@ -223,7 +223,7 @@ msgstr "Zebra"
 
 #: ../share/filters/filters.svg.h:60
 msgid "Irregular vertical dark stripes (loses object's own color)"
-msgstr "Listras pretas verticais (a cor do objeto será perdida)"
+msgstr "Listras pretas verticais (a cor do objeto será perdida)."
 
 #: ../share/filters/filters.svg.h:62
 msgid "Clouds"
@@ -231,7 +231,7 @@ msgstr "Nuvens"
 
 #: ../share/filters/filters.svg.h:64
 msgid "Airy, fluffy, sparse white clouds"
-msgstr "Manchas brancas, delicadas e esparsas lembrando nunvens"
+msgstr "Manchas brancas, delicadas e esparsas. Lembrando nunvens"
 
 #: ../share/filters/filters.svg.h:66
 #: ../src/extension/internal/bitmap/sharpen.cpp:39
@@ -251,7 +251,7 @@ msgstr "Aguça as bordas e as delimita ao objeto, força=0.15"
 
 #: ../share/filters/filters.svg.h:70
 msgid "Sharpen More"
-msgstr "Afiar Mais"
+msgstr "Aguçar mais"
 
 #: ../share/filters/filters.svg.h:72
 msgid "Sharpen edges and boundaries within the object, force=0.3"
@@ -355,7 +355,7 @@ msgstr "Queijo Azul"
 
 #: ../share/filters/filters.svg.h:104
 msgid "Marble-like bluish speckles"
-msgstr "Salpicos azulados em estilo mármore"
+msgstr "Salpicos azulados estilo mármore"
 
 #: ../share/filters/filters.svg.h:106
 msgid "Button"
@@ -441,7 +441,7 @@ msgstr "Relevos"
 
 #: ../share/filters/filters.svg.h:132
 msgid "Flexible bubbles effect with some displacement"
-msgstr ""
+msgstr "Efeito de bolhas com deslocamento"
 
 #: ../share/filters/filters.svg.h:134
 msgid "Glowing Bubble"
@@ -566,11 +566,11 @@ msgstr "Textura de metal erosada com sulcos, ranhuras, buracos e saliências"
 
 #: ../share/filters/filters.svg.h:182
 msgid "Cracked Lava"
-msgstr "Lava rachada"
+msgstr "Lava com rachaduras"
 
 #: ../share/filters/filters.svg.h:184
 msgid "A volcanic texture, a little like leather"
-msgstr "Uma textura vulcânica, lembrando levemente couro"
+msgstr "Textura vulcânica, parecida com couro"
 
 #: ../share/filters/filters.svg.h:186
 msgid "Bark"
@@ -602,12 +602,12 @@ msgstr "Tapete de Seda"
 
 #: ../share/filters/filters.svg.h:200
 msgid "Silk carpet texture, horizontal stripes"
-msgstr "textura de tapete de seda, listras horizontais"
+msgstr "Textura de tapete de seda, listras horizontais"
 
 #: ../share/filters/filters.svg.h:202
 #, fuzzy
 msgid "Refractive Gel A"
-msgstr "Gel refringente A"
+msgstr "Gel refrativo A"
 
 #: ../share/filters/filters.svg.h:204
 msgid "Gel effect with light refraction"
@@ -616,7 +616,7 @@ msgstr "Efeito gel com suave refração"
 #: ../share/filters/filters.svg.h:206
 #, fuzzy
 msgid "Refractive Gel B"
-msgstr "Gel refringente B"
+msgstr "Gel refrativo B"
 
 #: ../share/filters/filters.svg.h:208
 msgid "Gel effect with strong refraction"
@@ -653,7 +653,7 @@ msgstr "Borda fortemente levantada em torno de uma superfície plana"
 #: ../share/filters/filters.svg.h:222
 #, fuzzy
 msgid "Metallized Ridge"
-msgstr "Crista metalizada"
+msgstr "Topo metalizado"
 
 #: ../share/filters/filters.svg.h:224
 msgid "Gel Ridge metallized at its top"
@@ -682,7 +682,7 @@ msgstr "Morfologia"
 
 #: ../share/filters/filters.svg.h:232
 msgid "Creates a black light inside and outside"
-msgstr "Cria uma luz negra no interior e exterior"
+msgstr "Cria uma luz negra no interior e no exterior"
 
 #: ../share/filters/filters.svg.h:234
 msgid "Cubes"
@@ -691,7 +691,7 @@ msgstr "Cubos"
 #: ../share/filters/filters.svg.h:236
 #, fuzzy
 msgid "Scattered cubes; adjust the Morphology primitive to vary size"
-msgstr "Coringas em cubos; ajustar o tamanho Morfologia primitiva para variar"
+msgstr "Cubos espalhados; ajustar o tamanho Morfologia primitiva para variar"
 
 #: ../share/filters/filters.svg.h:238
 msgid "Peel Off"
@@ -700,47 +700,47 @@ msgstr "Descascar"
 #: ../share/filters/filters.svg.h:240
 #, fuzzy
 msgid "Peeling painting on a wall"
-msgstr "Peeling pintura em uma parede"
+msgstr "Parede descascada"
 
 #: ../share/filters/filters.svg.h:242
 #, fuzzy
 msgid "Gold Splatter"
-msgstr "Padrões"
+msgstr "Pingos dourados"
 
 #: ../share/filters/filters.svg.h:244
 #, fuzzy
 msgid "Splattered cast metal, with golden highlights"
-msgstr "Splattered metal fundido, com ouro destaques"
+msgstr "Metal fundido espalhado com detalhes dourados"
 
 #: ../share/filters/filters.svg.h:246
 #, fuzzy
 msgid "Gold Paste"
-msgstr "Proporção do raio"
+msgstr "Colagem dourada"
 
 #: ../share/filters/filters.svg.h:248
 #, fuzzy
 msgid "Fat pasted cast metal, with golden highlights"
-msgstr "Fat colado metal fundido, com ouro destaques"
+msgstr "Metal engordurado com detalhes dourados"
 
 #: ../share/filters/filters.svg.h:250
 #, fuzzy
 msgid "Crumpled Plastic"
-msgstr "Amassado plástico"
+msgstr "Plástico amassado"
 
 #: ../share/filters/filters.svg.h:252
 #, fuzzy
 msgid "Crumpled matte plastic, with melted edge"
-msgstr "Amassado plástico fosco, com borda derretido"
+msgstr "Plástico fosco amassado com bordas derretidas"
 
 #: ../share/filters/filters.svg.h:254
 #, fuzzy
 msgid "Enamel Jewelry"
-msgstr "Esmalte jóias"
+msgstr "Jóia esmaltada"
 
 #: ../share/filters/filters.svg.h:256
 #, fuzzy
 msgid "Slightly cracked enameled texture"
-msgstr "Ligeiramente cracking esmaltado textura"
+msgstr "Textura de tinta esmalte rachada"
 
 #: ../share/filters/filters.svg.h:258
 msgid "Rough Paper"
@@ -749,7 +749,7 @@ msgstr "Papel Duro"
 #: ../share/filters/filters.svg.h:260
 #, fuzzy
 msgid "Aquarelle paper effect which can be used for pictures as for objects"
-msgstr "Aquarelle papel efeito que pode ser usada para imagens como objetos de"
+msgstr "Efeito de papel para aquarela. Pode ser usado tanto em imagens como em objetos"
 
 #: ../share/filters/filters.svg.h:262
 #, fuzzy
@@ -761,7 +761,7 @@ msgstr "Rugoso e brilhante"
 msgid ""
 "Crumpled glossy paper effect which can be used for pictures as for objects"
 msgstr ""
-"Amassado papel brilhante efeito que pode ser usada para imagens como objetos "
+"Papel brilhante amassado. Pode ser usado tanto em imagens como em objetos"
 "de"
 
 #: ../share/filters/filters.svg.h:266
@@ -771,7 +771,7 @@ msgstr "Dentro e Fora"
 #: ../share/filters/filters.svg.h:268
 #, fuzzy
 msgid "Inner colorized shadow, outer black shadow"
-msgstr "Sombra colorida interior, sombra preta exterior"
+msgstr "Sombra interna colorida, sombra externa preta"
 
 #: ../share/filters/filters.svg.h:270
 msgid "Air Spray"
@@ -779,7 +779,7 @@ msgstr "Spray de Ar"
 
 #: ../share/filters/filters.svg.h:272
 msgid "Convert to small scattered particles with some thickness"
-msgstr ""
+msgstr "Converte em pequenas partículas espalhadas com leve espessura"
 
 #: ../share/filters/filters.svg.h:274
 msgid "Warm Inside"
@@ -787,15 +787,15 @@ msgstr "Quente Dentro"
 
 #: ../share/filters/filters.svg.h:276
 msgid "Blurred colorized contour, filled inside"
-msgstr "Contorno colorido desfocado, com preenchimento"
+msgstr "Contorno colorido desfocado com preenchimento interno"
 
 #: ../share/filters/filters.svg.h:278
 msgid "Cool Outside"
-msgstr "Fresco Fora"
+msgstr "Fresco por Fora"
 
 #: ../share/filters/filters.svg.h:280
 msgid "Blurred colorized contour, empty inside"
-msgstr "Contorno colorido desfocado, sem preenchimento"
+msgstr "Contorno colorido desfocado sem preenchimento"
 
 #: ../share/filters/filters.svg.h:282
 msgid "Electronic Microscopy"
@@ -805,28 +805,28 @@ msgstr "Microscópio Eletrônico"
 msgid ""
 "Bevel, crude light, discoloration and glow like in electronic microscopy"
 msgstr ""
-"Relevo, luz simples, descoloração e incandescência como em microscopia "
+"Relevo, luz simples, descoloração e incandescência microscópica "
 "eletrônica"
 
 #: ../share/filters/filters.svg.h:286
 #, fuzzy
 msgid "Tartan"
-msgstr "Alvo"
+msgstr "Xadrez"
 
 #: ../share/filters/filters.svg.h:288
 #, fuzzy
 msgid "Checkered tartan pattern"
-msgstr "Xadrez padrão axadrezado"
+msgstr "Padrão xadrez"
 
 #: ../share/filters/filters.svg.h:290
 #, fuzzy
 msgid "Shaken Liquid"
-msgstr "Chacoalhados líquido"
+msgstr "Líquido sacudido"
 
 #: ../share/filters/filters.svg.h:292
 #, fuzzy
 msgid "Colorizable filling with flow inside like transparency"
-msgstr "Preenchimento colorizável com fluxo no interior como transparência"
+msgstr "Preenchimento colorizável com fluxo interno como transparência"
 
 #: ../share/filters/filters.svg.h:294
 #, fuzzy
@@ -835,7 +835,7 @@ msgstr "Lente de foco suave"
 
 #: ../share/filters/filters.svg.h:296
 msgid "Glowing image content without blurring it"
-msgstr "Incandesce o conteúdo da imagem sem desfocá-lo"
+msgstr "Incandesce o conteúdo da imagem sem desfocá-la"
 
 #: ../share/filters/filters.svg.h:298
 #, fuzzy
@@ -864,7 +864,7 @@ msgstr "Relevo HSL com transparência"
 
 #: ../share/filters/filters.svg.h:308
 msgid "Same as HSL Bumps but with transparent highlights"
-msgstr ""
+msgstr "Igual ao Relevo HSL com transparência, mas com detalhes acentuados"
 
 #: ../share/filters/filters.svg.h:310
 #, fuzzy
@@ -879,7 +879,7 @@ msgstr "O mesmo que as bolhas HSL, mas com uma luz difusa em vez de especular"
 #: ../share/filters/filters.svg.h:314 ../share/filters/filters.svg.h:362
 #, fuzzy
 msgid "Torn Edges"
-msgstr "Mover nós"
+msgstr "Torcer nós"
 
 #: ../share/filters/filters.svg.h:316 ../share/filters/filters.svg.h:364
 #, fuzzy
@@ -899,7 +899,7 @@ msgstr "Aplica aspereza em todo conteúdo interno"
 #: ../share/filters/filters.svg.h:322
 #, fuzzy
 msgid "Evanescent"
-msgstr "Evanescent"
+msgstr "Dissipar"
 
 #: ../share/filters/filters.svg.h:324
 #, fuzzy
@@ -907,8 +907,8 @@ msgid ""
 "Blur the contents of objects, preserving the outline and adding progressive "
 "transparency at edges"
 msgstr ""
-"Desfocar o conteúdo de objetos, preservando o contorno e adicionando "
-"progressiva transparência em arestas"
+"Desfoca o conteúdo de objetos preservando o contorno e adicionando "
+"progressiva transparência nas arestas"
 
 #: ../share/filters/filters.svg.h:326
 #, fuzzy
@@ -918,7 +918,7 @@ msgstr "Giz e esponja"
 #: ../share/filters/filters.svg.h:328
 #, fuzzy
 msgid "Low turbulence gives sponge look and high turbulence chalk"
-msgstr "Mínimo turbulência dá aparência esponjosa e alta turbulência giz"
+msgstr "Mínima turbulência dá aparência esponjosa e alta turbulência aparência de giz"
 
 #: ../share/filters/filters.svg.h:330
 msgid "People"
@@ -927,7 +927,7 @@ msgstr "Pessoa"
 #: ../share/filters/filters.svg.h:332
 #, fuzzy
 msgid "Colorized blotches, like a crowd of people"
-msgstr "Colorida manchas, como uma multidão de pessoas"
+msgstr "Manchas coloridas como uma multidão de pessoas"
 
 #: ../share/filters/filters.svg.h:334
 msgid "Scotland"
@@ -936,38 +936,38 @@ msgstr "Escócia"
 #: ../share/filters/filters.svg.h:336
 #, fuzzy
 msgid "Colorized mountain tops out of the fog"
-msgstr "Colorida topos das montanhas do nevoeiro"
+msgstr "Montanhas coloridas fora do nevoeiro"
 
 #: ../share/filters/filters.svg.h:338
 #, fuzzy
 msgid "Garden of Delights"
-msgstr "Jardim de Delights"
+msgstr "Jardim das Delícias"
 
 #: ../share/filters/filters.svg.h:340
 #, fuzzy
 msgid ""
 "Phantasmagorical turbulent wisps, like Hieronymus Bosch's Garden of Delights"
 msgstr ""
-"Fantasmagórico WISPs turbulento, como Hieronymus Bosch&#39;s Garden of "
+"Pinceladas turbulentas e fantasmagóricas como o Jardim das Delícias de  Hieronymus Bosch&#39;s"
 "Delights"
 
 #: ../share/filters/filters.svg.h:342
 msgid "Cutout Glow"
-msgstr "recorte incandescente"
+msgstr "Recorte Incandescente"
 
 #: ../share/filters/filters.svg.h:344
 msgid "In and out glow with a possible offset and colorizable flood"
-msgstr "Incandesce dentro e fora com um possível vazamento de cor nas bordas"
+msgstr "Brilho interno e externo com possível vazamento de cores"
 
 #: ../share/filters/filters.svg.h:346
 #, fuzzy
 msgid "Dark Emboss"
-msgstr "Embutir"
+msgstr "Relevo escuro"
 
 #: ../share/filters/filters.svg.h:348
 #, fuzzy
 msgid "Emboss effect : 3D relief where white is replaced by black"
-msgstr "Emboss efeito: 3D alívio quando o branco é substituído por preto"
+msgstr "Efeito releve: suaviza o 3D quando o branco é substituído por preto"
 
 #: ../share/filters/filters.svg.h:350
 #, fuzzy
@@ -992,44 +992,44 @@ msgstr "Inkblot em mata-borrão"
 #: ../share/filters/filters.svg.h:358
 #, fuzzy
 msgid "Wax Print"
-msgstr "Impressão LaTeX"
+msgstr "Impressão Latex"
 
 #: ../share/filters/filters.svg.h:360
 #, fuzzy
 msgid "Wax print on tissue texture"
-msgstr "Wax impressão sobre tecidos textura"
+msgstr "Textura de carimbo de cera sobre tecido"
 
 #: ../share/filters/filters.svg.h:366
 #, fuzzy
 msgid "Watercolor"
-msgstr "Colar cor"
+msgstr "Aquarela"
 
 #: ../share/filters/filters.svg.h:368
 #, fuzzy
 msgid "Cloudy watercolor effect"
-msgstr "Nublado efeito aquarela"
+msgstr "Efeito de aquarela nublada"
 
 #: ../share/filters/filters.svg.h:370
 msgid "Felt"
-msgstr "Sentiu"
+msgstr "Feltro"
 
 #: ../share/filters/filters.svg.h:372
 #, fuzzy
 msgid ""
 "Felt like texture with color turbulence and slightly darker at the edges"
 msgstr ""
-"Senti como turbulência e textura com a cor ligeiramente mais escura nas "
-"bordas"
+"Textura de feltro com turbulência de cor e bordas levemente escuras"
+
 
 #: ../share/filters/filters.svg.h:374
 #, fuzzy
 msgid "Ink Paint"
-msgstr "Nenhuma pintura"
+msgstr "Tinta"
 
 #: ../share/filters/filters.svg.h:376
 #, fuzzy
 msgid "Ink paint on paper with some turbulent color shift"
-msgstr "Tinta tinta sobre papel com algumas cores turbulento turnos"
+msgstr "Tinta sobre papel com alguma turbulência de cores"
 
 #: ../share/filters/filters.svg.h:378
 #, fuzzy
