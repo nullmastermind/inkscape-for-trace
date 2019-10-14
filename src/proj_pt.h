@@ -50,7 +50,7 @@ public:
 
     /*** For convenience, we define addition/subtraction etc. as "affine" operators (i.e.,
          the result for finite points is the same as if the affine points were added ***/
-    inline Pt2 &operator+(Pt2 &rhs) const {
+    inline Pt2 operator+(Pt2 &rhs) const {
         Pt2 result (*this);
         result.normalize();
         rhs.normalize();
@@ -60,7 +60,7 @@ public:
         return result;
     }
 
-    inline Pt2 &operator-(Pt2 &rhs) const {
+    inline Pt2 operator-(Pt2 &rhs) const {
         Pt2 result (*this);
         result.normalize();
         rhs.normalize();
@@ -70,7 +70,7 @@ public:
         return result;
     }
 
-    inline Pt2 &operator*(double const s) const {
+    inline Pt2 operator*(double const s) const {
         Pt2 result (*this);
         result.normalize();
         for ( unsigned i = 0 ; i < 2 ; ++i ) {
@@ -107,7 +107,7 @@ public:
 
     /*** For convenience, we define addition/subtraction etc. as "affine" operators (i.e.,
          the result for finite points is the same as if the affine points were added ***/
-    inline Pt3 &operator+(Pt3 &rhs) const {
+    inline Pt3 operator+(Pt3 &rhs) const {
         Pt3 result(*this);
         result.normalize();
         rhs.normalize();
@@ -117,7 +117,7 @@ public:
         return result;
     }
 
-    inline Pt3 &operator-(Pt3 &rhs) const {
+    inline Pt3 operator-(Pt3 &rhs) const {
         Pt3 result (*this);
         result.normalize();
         rhs.normalize();
@@ -127,7 +127,7 @@ public:
         return result;
     }
 
-    inline Pt3 &operator*(double const s) const {
+    inline Pt3 operator*(double const s) const {
         Pt3 result (*this);
         result.normalize();
         for ( unsigned i = 0 ; i < 3 ; ++i ) {
