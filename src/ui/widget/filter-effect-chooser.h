@@ -23,27 +23,6 @@
 #include "style-enums.h"
 
 namespace Inkscape {
-enum CSSBlendMode {
-    SP_CSS_BLEND_NORMAL,
-    SP_CSS_BLEND_MULTIPLY,
-    SP_CSS_BLEND_SCREEN,
-    SP_CSS_BLEND_DARKEN,
-    SP_CSS_BLEND_LIGHTEN,
-    // New in CSS Compositing and Blending Level 1
-    SP_CSS_BLEND_OVERLAY,
-    SP_CSS_BLEND_COLORDODGE,
-    SP_CSS_BLEND_COLORBURN,
-    SP_CSS_BLEND_HARDLIGHT,
-    SP_CSS_BLEND_SOFTLIGHT,
-    SP_CSS_BLEND_DIFFERENCE,
-    SP_CSS_BLEND_EXCLUSION,
-    SP_CSS_BLEND_HUE,
-    SP_CSS_BLEND_SATURATION,
-    SP_CSS_BLEND_COLOR,
-    SP_CSS_BLEND_LUMINOSITY,
-    SP_CSS_BLEND_ENDMODE,
-};
-
 namespace UI {
 namespace Widget {
 
@@ -81,7 +60,7 @@ private:
 
     Gtk::HBox _hb_blend;
     Gtk::Label _lb_blend;
-    ComboBoxEnum<Inkscape::CSSBlendMode> _blend;
+    ComboBoxEnum<Inkscape::SPBlendMode> _blend;
     SpinScale _blur;
     SpinScale _opacity;
 

@@ -22,7 +22,7 @@ using Inkscape::Util::EnumDataConverter;
 
 namespace Inkscape {
 
-const EnumData<Inkscape::CSSBlendMode> CSSBlendModeData[SP_CSS_BLEND_ENDMODE] = {
+const EnumData<Inkscape::SPBlendMode> SPBlendModeData[SP_CSS_BLEND_ENDMODE] = {
     { SP_CSS_BLEND_NORMAL, _("Normal"), "normal" },
     { SP_CSS_BLEND_MULTIPLY, _("Multiply"), "multiply" },
     { SP_CSS_BLEND_SCREEN, _("Screen"), "screen" },
@@ -42,10 +42,10 @@ const EnumData<Inkscape::CSSBlendMode> CSSBlendModeData[SP_CSS_BLEND_ENDMODE] = 
     { SP_CSS_BLEND_LUMINOSITY, _("Luminosity"), "luminosity" }
 };
 #ifdef WITH_CSSBLEND
-const EnumDataConverter<Inkscape::CSSBlendMode> CSSBlendModeConverter(CSSBlendModeData, SP_CSS_BLEND_ENDMODE);
+const EnumDataConverter<Inkscape::SPBlendMode> SPBlendModeConverter(SPBlendModeData, SP_CSS_BLEND_ENDMODE);
 #else
 // Disable new blend modes in GUI until widely implemented.
-const EnumDataConverter<Inkscape::CSSBlendMode> CSSBlendModeConverter(CSSBlendModeData, SP_CSS_BLEND_LUMINOSITY);
+const EnumDataConverter<Inkscape::SPBlendMode> SPBlendModeConverter(SPBlendModeData, SP_CSS_BLEND_LUMINOSITY);
 #endif
 
 namespace UI {
@@ -54,7 +54,7 @@ namespace Widget {
 SimpleFilterModifier::SimpleFilterModifier(int flags)
     : _flags(flags)
     , _lb_blend(_("Blend mode:"))
-    , _blend(CSSBlendModeConverter, SP_ATTR_INVALID, false)
+    , _blend(SPBlendModeConverter, SP_ATTR_INVALID, false)
     , _blur(_("Blur (%)"), 0, 0, 100, 1, 0.1, 1)
     , _opacity(_("Opacity (%)"), 0, 0, 100, 1, 0.1, 1)
 {
@@ -109,7 +109,7 @@ sigc::signal<void>& SimpleFilterModifier::signal_opacity_changed()
 
 const Glib::ustring SimpleFilterModifier::get_blend_mode()
 {
-    const Util::EnumData<Inkscape::CSSBlendMode> *d = _blend.get_active_data();
+    const Util::EnumData<Inkscape::SPBlendMode> *d = _blend.get_active_data();
     if (d) {
         return _blend.get_active_data()->key;
     } else
