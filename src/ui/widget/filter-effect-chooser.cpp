@@ -22,7 +22,7 @@ using Inkscape::Util::EnumDataConverter;
 
 namespace Inkscape {
 
-const EnumData<Inkscape::SPBlendMode> SPBlendModeData[SP_CSS_BLEND_ENDMODE] = {
+const EnumData<SPBlendMode> SPBlendModeData[SP_CSS_BLEND_ENDMODE] = {
     { SP_CSS_BLEND_NORMAL, _("Normal"), "normal" },
     { SP_CSS_BLEND_MULTIPLY, _("Multiply"), "multiply" },
     { SP_CSS_BLEND_SCREEN, _("Screen"), "screen" },
@@ -42,10 +42,10 @@ const EnumData<Inkscape::SPBlendMode> SPBlendModeData[SP_CSS_BLEND_ENDMODE] = {
     { SP_CSS_BLEND_LUMINOSITY, _("Luminosity"), "luminosity" }
 };
 #ifdef WITH_CSSBLEND
-const EnumDataConverter<Inkscape::SPBlendMode> SPBlendModeConverter(SPBlendModeData, SP_CSS_BLEND_ENDMODE);
+const EnumDataConverter<SPBlendMode> SPBlendModeConverter(SPBlendModeData, SP_CSS_BLEND_ENDMODE);
 #else
 // Disable new blend modes in GUI until widely implemented.
-const EnumDataConverter<Inkscape::SPBlendMode> SPBlendModeConverter(SPBlendModeData, SP_CSS_BLEND_LUMINOSITY);
+const EnumDataConverter<SPBlendMode> SPBlendModeConverter(SPBlendModeData, SP_CSS_BLEND_LUMINOSITY);
 #endif
 
 namespace UI {
@@ -109,7 +109,7 @@ sigc::signal<void>& SimpleFilterModifier::signal_opacity_changed()
 
 const Glib::ustring SimpleFilterModifier::get_blend_mode()
 {
-    const Util::EnumData<Inkscape::SPBlendMode> *d = _blend.get_active_data();
+    const Util::EnumData<SPBlendMode> *d = _blend.get_active_data();
     if (d) {
         return _blend.get_active_data()->key;
     } else

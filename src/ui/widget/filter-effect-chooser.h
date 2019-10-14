@@ -60,7 +60,7 @@ private:
 
     Gtk::HBox _hb_blend;
     Gtk::Label _lb_blend;
-    ComboBoxEnum<Inkscape::SPBlendMode> _blend;
+    ComboBoxEnum<SPBlendMode> _blend;
     SpinScale _blur;
     SpinScale _opacity;
 
