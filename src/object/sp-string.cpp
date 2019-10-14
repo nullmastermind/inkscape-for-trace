@@ -53,7 +53,6 @@ void SPString::release() {
 
 void SPString::read_content() {
 
-    setLabel("SPString");
     string.clear();
 
     //XML Tree being used directly here while it shouldn't be.
