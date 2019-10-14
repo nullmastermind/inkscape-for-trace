@@ -23,6 +23,28 @@ class Extension;
             are different things that can be done in a dependency, and
             this class takes care of all of them. */
 class Dependency {
+
+public:
+    /** \brief  All the possible types of dependencies. */
+    enum type_t {
+        TYPE_EXECUTABLE, /**< Look for an executable */
+        TYPE_FILE,       /**< Look to make sure a file exists */
+        TYPE_EXTENSION,  /**< Make sure a specific extension is loaded and functional */
+        TYPE_CNT         /**< Number of types */
+    };
+    
+    /** \brief  All of the possible locations to look for the dependency. */
+    enum location_t {
+        LOCATION_PATH,       /**< Look in the PATH for this dependency  - historically this is the default
+                                  (it's a bit odd for interpreted script files but makes sense for other executables) */
+        LOCATION_EXTENSIONS, /**< Look in the extensions directory
+                                  (note: this can be in both, user and system locations!) */
+        LOCATION_INX,        /**< Look relative to the inx file's location */
+        LOCATION_ABSOLUTE,   /**< This dependency is already defined in absolute terms */
+        LOCATION_CNT         /**< Number of locations to look */
+    };
+    
+private:
     static constexpr const char *UNCHECKED = "---unchecked---";
     
     /** \brief  The XML representation of the dependency. */
@@ -34,26 +56,8 @@ class Dependency {
     /** \brief  The absolute path to the dependency file determined while checking this dependency. */
     std::string  _absolute_location = UNCHECKED;
 
-    /** \brief  All the possible types of dependencies. */
-    enum type_t {
-        TYPE_EXECUTABLE, /**< Look for an executable */
-        TYPE_FILE,       /**< Look to make sure a file exists */
-        TYPE_EXTENSION,  /**< Make sure a specific extension is loaded and functional */
-        TYPE_CNT         /**< Number of types */
-    };
     /** \brief  Storing the type of this particular dependency. */
     type_t _type = TYPE_FILE;
-
-    /** \brief  All of the possible locations to look for the dependency. */
-    enum location_t {
-        LOCATION_PATH,       /**< Look in the PATH for this dependency  - historically this is the default
-                                  (it's a bit odd for interpreted script files but makes sense for other executables) */
-        LOCATION_EXTENSIONS, /**< Look in the extensions directory
-                                  (note: this can be in both, user and system locations!) */
-        LOCATION_INX,        /**< Look relative to the inx file's location */
-        LOCATION_ABSOLUTE,   /**< This dependency is already defined in absolute terms */
-        LOCATION_CNT         /**< Number of locations to look */
-    };
     /** \brief  The location to look for this particular dependency. */
     location_t _location = LOCATION_PATH;
 
@@ -68,7 +72,7 @@ class Dependency {
     const Extension *_extension;
 
 public:
-    Dependency (Inkscape::XML::Node *in_repr, const Extension *extension);
+    Dependency (Inkscape::XML::Node *in_repr, const Extension *extension, type_t type=TYPE_FILE);
     virtual ~Dependency ();
     bool check();
     const gchar* get_name();

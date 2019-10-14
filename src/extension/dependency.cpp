@@ -22,7 +22,7 @@ namespace Extension {
 
 // These strings are for XML attribute comparisons and should not be translated;
 // make sure to keep in sync with enum defined in dependency.h
-gchar const * Dependency::_type_str[TYPE_CNT] = {
+gchar const * Dependency::_type_str[] = {
     "executable",
     "file",
     "extension",
@@ -30,7 +30,7 @@ gchar const * Dependency::_type_str[TYPE_CNT] = {
 
 // These strings are for XML attribute comparisons and should not be translated
 // make sure to keep in sync with enum defined in dependency.h
-gchar const * Dependency::_location_str[LOCATION_CNT] = {
+gchar const * Dependency::_location_str[] = {
     "path",
     "extensions",
     "inx",
@@ -39,17 +39,19 @@ gchar const * Dependency::_location_str[LOCATION_CNT] = {
 
 /**
     \brief   Create a dependency using an XML definition
-    \param   in_repr     XML definition of the dependency
-    \param   extension   Reference to the extension requesting this dependency
+    \param   in_repr       XML definition of the dependency
+    \param   extension     Reference to the extension requesting this dependency
+    \param   default_type  Default file type of the dependency (unless overridden by XML definition's "type" attribute)
 
     This function mostly looks for the 'location' and 'type' attributes
     and turns them into the enums of the same name.  This makes things
     a little bit easier to use later.  Also, a pointer to the core
     content is pulled out -- also to make things easier.
 */
-Dependency::Dependency (Inkscape::XML::Node * in_repr, const Extension *extension)
+Dependency::Dependency (Inkscape::XML::Node * in_repr, const Extension *extension, type_t default_type)
     : _repr(in_repr)
     , _extension(extension)
+    , _type(default_type)
 {
     Inkscape::GC::anchor(_repr);
 
@@ -144,9 +146,15 @@ bool Dependency::check ()
         case TYPE_EXECUTABLE:
         case TYPE_FILE: {
             Glib::FileTest filetest = Glib::FILE_TEST_EXISTS;
+
+#ifndef _WIN32
+            // There's no executable bit on Windows, so this is unreliable
+            // glib would search for "executable types" instead, which are only {".exe", ".cmd", ".bat", ".com"},
+            // and would therefore miss files without extension and other script files (like .py files)
             if (_type == TYPE_EXECUTABLE) {
-                filetest |= Glib::FILE_TEST_IS_EXECUTABLE;
+                filetest = Glib::FILE_TEST_IS_EXECUTABLE;
             }
+#endif
 
             std::string location(_string);
             switch (_location) {
@@ -183,6 +191,8 @@ bool Dependency::check ()
                 /* The default case is to look in the path */
                 case LOCATION_PATH:
                 default: {
+                    // TODO: we can likely use g_find_program_in_path (or its glibmm equivalent) for executable types
+
                     gchar * path = g_strdup(g_getenv("PATH"));
 
                     if (path == nullptr) {
@@ -219,21 +229,33 @@ bool Dependency::check ()
                             return true;
                         }
 
-                        // give it a 2nd try with ".exe" added
-                        Glib::ustring final_name_exe = final_name + ".exe";
-                        if (Glib::file_test(final_name_exe, filetest)) {
-                            g_free(orig_path);
-                            _absolute_location = final_name;
-                            return true;
-                        }
+#ifdef _WIN32
+                        // Unfortunately file extensions tend to be different on Windows and we can't know
+                        // which one it is, so try all extensions glib assumes to be executable.
+                        // As we can only guess here, return the version without extension if either one is found,
+                        // so that we don't accidentally override (or conflict with) some g_spawn_* magic.
+                        if (_type == TYPE_EXECUTABLE) {
+                            static const std::vector<std::string> extensions = {".exe", ".cmd", ".bat", ".com"};
 
-                        // and a 3rd try with ".cmd" added (mainly for UniConvertor)
-                        Glib::ustring final_name_cmd = final_name + ".cmd";
-                        if (Glib::file_test(final_name_cmd, filetest)) {
-                            g_free(orig_path);
-                            _absolute_location = final_name;
-                            return true;
+                            std::string extension;
+                            size_t index = final_name.find_last_of(".");
+                            if (index != std::string::npos) {
+                                extension = final_name.substr(index);
+                            }
+
+                            if (extension.empty() ||
+                                    std::find(extensions.begin(), extensions.end(), extension) == extensions.end())
+                            {
+                                for (auto extension : extensions) {
+                                    if (Glib::file_test(final_name + extension, filetest)) {
+                                        g_free(orig_path);
+                                        _absolute_location = final_name;
+                                        return true;
+                                    }
+                                }
+                            }
                         }
+#endif
                     }
 
                     g_free(orig_path);
