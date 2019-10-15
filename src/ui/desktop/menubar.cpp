@@ -295,6 +295,9 @@ build_menu_item_from_verb(SPAction* action,
     action->signal_set_name.connect(
         sigc::bind<Gtk::MenuItem*>(sigc::ptr_fun(&set_name), menuitem));
 
+    // initialize sensitivity with verb default
+    sp_action_set_sensitive(action, action->verb->get_default_sensitive());
+
     return menuitem;
 }
 
