@@ -224,11 +224,8 @@ bool
 Effect::check ()
 {
     if (!Extension::check()) {
-        /** \todo  Check to see if parent has this as its only child,
-                   if so, delete it too */
-        if (_menu_node != nullptr)
-            sp_repr_unparent(_menu_node);
-        _menu_node = nullptr;
+        _verb.sensitive(nullptr, false);
+        _verb.set_tip(Extension::getErrorReason().c_str()); // TODO: insensitive menuitems don't show a tooltip
         return false;
     }
     return true;

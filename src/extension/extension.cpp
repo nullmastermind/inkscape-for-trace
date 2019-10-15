@@ -291,22 +291,21 @@ Extension::loaded ()
 bool
 Extension::check ()
 {
-    bool retval = true;
-
     const char * inx_failure = _("  This is caused by an improper .inx file for this extension."
                                  "  An improper .inx file could have been caused by a faulty installation of Inkscape.");
 
     if (repr == nullptr) {
         printFailure(Glib::ustring(_("the XML description of it got lost.")) + inx_failure);
-        retval = false;
+        return false;
     }
     if (imp == nullptr) {
         printFailure(Glib::ustring(_("no implementation was defined for the extension.")) + inx_failure);
-        retval = false;
+        return false;
     }
 
+    bool retval = true;
     for (auto _dep : _deps) {
-        if (_dep->check() == FALSE) {
+        if (_dep->check() == false) {
             printFailure(Glib::ustring(_("a dependency was not met.")));
             error_file_write(_dep->info_string());
             retval = false;
@@ -330,8 +329,8 @@ Extension::check ()
 void
 Extension::printFailure (Glib::ustring reason)
 {
-    error_file_write(Glib::ustring::compose(_("Extension \"%1\" failed to load because %2"), _name, reason));
-    return;
+    _error_reason = Glib::ustring::compose(_("Extension \"%1\" failed to load because %2"), _name, reason);
+    error_file_write(_error_reason);
 }
 
 /**

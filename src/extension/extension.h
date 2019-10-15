@@ -115,6 +115,7 @@ private:
     std::vector<Dependency *>  _deps;          /**< Dependencies for this extension */
     static FILE *error_file;                   /**< This is the place where errors get reported */
     bool _gui;
+    std::string _error_reason;                 /**< Short, textual explanation for the latest error */
 
 protected:
     Inkscape::XML::Node *repr;                 /**< The XML description of the Extension */
@@ -142,6 +143,7 @@ public:
     void          deactivate   ();
     bool          deactivated  ();
     void          printFailure (Glib::ustring reason);
+    std::string   getErrorReason() { return _error_reason; };
     Implementation::Implementation * get_imp () { return imp; };
     void          set_execution_env (ExecutionEnv * env) { execution_env = env; };
     ExecutionEnv *get_execution_env () { return execution_env; };
