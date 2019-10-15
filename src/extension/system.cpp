@@ -43,7 +43,6 @@ namespace Extension {
 
 static void open_internal(Inkscape::Extension::Extension *in_plug, gpointer in_data);
 static void save_internal(Inkscape::Extension::Extension *in_plug, gpointer in_data);
-static Extension *build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation *in_imp, std::string* baseDir);
 
 /**
  * \return   A new document created from the filename passed in
@@ -409,7 +408,9 @@ get_print(gchar const *key)
 }
 
 /**
- * \return   The built module
+ * \return   true if extension successfully parsed, false otherwise
+ *           A true return value does not guarantee an extension was actually registered,
+ *           but indicates no errors occurred while parsing the extension.
  * \brief    Creates a module from a Inkscape::XML::Document describing the module
  * \param    doc  The XML description of the module
  *
@@ -423,7 +424,7 @@ get_print(gchar const *key)
  * get the load and unload functions.  If there is no implementation then these are not set.  This
  * case could apply to modules that are built in (like the SVG load/save functions).
  */
-static Extension *
+bool
 build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation *in_imp, std::string* baseDir)
 {
     enum {
@@ -441,13 +442,13 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
         MODULE_UNKNOWN_FUNC
     } module_functional_type = MODULE_UNKNOWN_FUNC;
 
-    g_return_val_if_fail(doc != nullptr, NULL);
+    g_return_val_if_fail(doc != nullptr, false);
 
     Inkscape::XML::Node *repr = doc->root();
 
     if (strcmp(repr->name(), INKSCAPE_EXTENSION_NS "inkscape-extension")) {
         g_warning("Extension definition started with <%s> instead of <" INKSCAPE_EXTENSION_NS "inkscape-extension>.  Extension will not be created. See http://wiki.inkscape.org/wiki/index.php/Extensions for reference.\n", repr->name());
-        return nullptr;
+        return false;
     }
 
     Inkscape::XML::Node *child_repr = repr->firstChild();
@@ -540,34 +541,43 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
         g_warning("Building extension failed. Extension does not have a valid ID");
     } catch (const Extension::extension_no_name& e) {
         g_warning("Building extension failed. Extension does not have a valid name");
+    } catch (const Extension::extension_not_compatible& e) {
+        return true; // This is not an actual error; just silently ignore the extension
     }
 
-    return module;
+    if (module) {
+        return true;
+    }
+
+    return false;
 }
 
 /**
- * \return   The module created
  * \brief    This function creates a module from a filename of an
  *           XML description.
  * \param    filename  The file holding the XML description of the module.
  *
  * This function calls build_from_reprdoc with using sp_repr_read_file to create the reprdoc.
  */
-Extension *
+void
 build_from_file(gchar const *filename)
 {
-    Inkscape::XML::Document *doc = sp_repr_read_file(filename, INKSCAPE_EXTENSION_URI);
     std::string dir = Glib::path_get_dirname(filename);
-    Extension *ext = build_from_reprdoc(doc, nullptr, &dir);
-    Inkscape::GC::release(doc);
-    if (!ext) {
-        g_warning("Unable to create extension from definition file %s.\n", filename);
+
+    Inkscape::XML::Document *doc = sp_repr_read_file(filename, INKSCAPE_EXTENSION_URI);
+    if (!doc) {
+        g_critical("Inkscape::Extension::build_from_file() - XML description loaded from '%s' not valid.", filename);
+        return;
     }
-    return ext;
+
+    if (!build_from_reprdoc(doc, nullptr, &dir)) {
+        g_warning("Inkscape::Extension::build_from_file() - Could not parse extension from '%s'.", filename);
+    }
+
+    Inkscape::GC::release(doc);
 }
 
 /**
- * \return   The module created, or NULL if buffer is invalid
  * \brief    This function creates a module from a buffer holding an
  *           XML description.
  * \param    buffer  The buffer holding the XML description of the module.
@@ -575,14 +585,20 @@ build_from_file(gchar const *filename)
  * This function calls build_from_reprdoc with using sp_repr_read_mem to create the reprdoc.  It
  * finds the length of the buffer using strlen.
  */
-Extension *
+void
 build_from_mem(gchar const *buffer, Implementation::Implementation *in_imp)
 {
     Inkscape::XML::Document *doc = sp_repr_read_mem(buffer, strlen(buffer), INKSCAPE_EXTENSION_URI);
-    g_return_val_if_fail(doc != nullptr, NULL);
-    Extension *ext = build_from_reprdoc(doc, in_imp, nullptr);
+    if (!doc) {
+        g_critical("Inkscape::Extension::build_from_mem() - XML description loaded from memory buffer not valid.");
+        return;
+    }
+
+    if (!build_from_reprdoc(doc, in_imp, nullptr)) {
+        g_critical("Inkscape::Extension::build_from_mem() - Could not parse extension from memory buffer.");
+    }
+
     Inkscape::GC::release(doc);
-    return ext;
 }
 
 /*

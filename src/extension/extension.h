@@ -170,6 +170,9 @@ public:
     /** no valid name found while parsing XML representation */
     class extension_no_name{};
 
+    /** extension is not compatible with the current system and should not be loaded */
+    class extension_not_compatible{};
+
     /** An error class for when a filename already exists, but the user
      * doesn't want to overwrite it */
     class no_overwrite {};

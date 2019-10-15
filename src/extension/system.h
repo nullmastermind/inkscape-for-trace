@@ -50,8 +50,8 @@ void save(Extension *key, SPDocument *doc, gchar const *filename,
           bool setextension, bool check_overwrite, bool official,
           Inkscape::Extension::FileSaveMethod save_method);
 Print *get_print(gchar const *key);
-Extension *build_from_file(gchar const *filename);
-Extension *build_from_mem(gchar const *buffer, Implementation::Implementation *in_imp);
+void build_from_file(gchar const *filename);
+void build_from_mem(gchar const *buffer, Implementation::Implementation *in_imp);
 
 /**
  * Determine the desired default file extension depending on the given file save method.
