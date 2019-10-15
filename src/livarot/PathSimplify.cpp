@@ -1209,7 +1209,7 @@ void Path::Coalesce(double tresh)
             if (lastAddition->flags != descr_moveto) {
                 FlushPendingAddition(tempDest,lastAddition.get(),pending_cubic,lastAP);
             }
-            lastAddition.reset(descr_cmd[curP]);
+            lastAddition.reset(descr_cmd[curP]->clone());
             lastAP = curP;
             FlushPendingAddition(tempDest, lastAddition.get(), pending_cubic, lastAP);
             // Added automatically (too bad about multiple moveto's).
@@ -1291,7 +1291,7 @@ void Path::Coalesce(double tresh)
                     lastA = descr_cmd[lastP]->associated;	// pourrait etre surecrit par la ligne suivante
                         /* (possible translation: Could be overwritten by the next line.) */
                     FlushPendingAddition(tempDest, lastAddition.get(), pending_cubic, lastAP);
-                    lastAddition.reset(descr_cmd[curP]);
+                    lastAddition.reset(descr_cmd[curP]->clone());
                     if ( typ == descr_cubicto ) {
                         pending_cubic = *(dynamic_cast<PathDescrCubicTo*>(descr_cmd[curP]));
                     }
@@ -1301,7 +1301,7 @@ void Path::Coalesce(double tresh)
         
 	    } else {
                 lastA = prevA /*descr_cmd[curP-1]->associated */ ;
-                lastAddition.reset(descr_cmd[curP]);
+                lastAddition.reset(descr_cmd[curP]->clone());
                 if ( typ == descr_cubicto ) {
                     pending_cubic = *(dynamic_cast<PathDescrCubicTo*>(descr_cmd[curP]));
                 }
