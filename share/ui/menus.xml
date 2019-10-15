@@ -125,9 +125,8 @@
          <!--verb verb-id="DialogPrintColorsPreview" /-->
        </submenu>
        <submenu name="_Canvas Orientation">
-         <verb verb-id="FlipHorizontal"/>
-         <verb verb-id="FlipVertical"/>
-         <verb verb-id="FlipNone"/>
+         <verb verb-id="FlipHorizontal" check="yes"/>
+         <verb verb-id="FlipVertical" check="yes"/>
          <separator/>
          <verb verb-id="RotateZero"/>
        </submenu>

@@ -380,6 +380,7 @@ public:
     void flip_relative_keep_point   (Geom::Point const &c, CanvasFlip flip);
     void flip_absolute_center_point (Geom::Point const &c, CanvasFlip flip);
     void flip_relative_center_point (Geom::Point const &c, CanvasFlip flip);
+    bool is_flipped (CanvasFlip flip);
 
     double current_rotation() const { return _current_affine.getRotation(); }
 
@@ -510,6 +511,16 @@ private:
         void setFlip( CanvasFlip flip ) {
             _flip = Geom::Scale();
             addFlip( flip );
+        }
+
+        bool isFlipped( CanvasFlip flip ) {
+            if ((flip & FLIP_HORIZONTAL) && _flip[0] != 1) {
+                return true;
+            }
+            if ((flip & FLIP_VERTICAL) && _flip[1] != 1) {
+                return true;
+            }
+            return false;
         }
 
         void addFlip( CanvasFlip flip ) {

@@ -390,6 +390,12 @@ checkitem_update(Gtk::CheckMenuItem* menuitem, SPAction* action)
         } else if (id == "ToggleStatusbar") {
             active = getStateFromPref(dt, "statusbar");
 
+        } else if (id == "FlipHorizontal") {
+            active = dt->is_flipped(SPDesktop::FLIP_HORIZONTAL);
+        
+        } else if (id == "FlipVertical") {
+            active = dt->is_flipped(SPDesktop::FLIP_VERTICAL);
+
         } else {
             std::cerr << "checkitem_update: unhandled item: " << id << std::endl;
         }
