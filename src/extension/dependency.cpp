@@ -147,6 +147,23 @@ bool Dependency::check ()
         case TYPE_FILE: {
             Glib::FileTest filetest = Glib::FILE_TEST_EXISTS;
 
+            std::string location(_string);
+
+            // get potential file extension for later usage
+            std::string extension;
+            size_t index = location.find_last_of(".");
+            if (index != std::string::npos) {
+                extension = location.substr(index);
+            }
+
+            // check interpreted scripts as "file" for backwards-compatibility, even if "executable" was requested
+            static const std::vector<std::string> interpreted = {".py", ".pl", ".rb"};
+            if (!extension.empty() &&
+                    std::find(interpreted.begin(), interpreted.end(), extension) != interpreted.end())
+            {
+                _type = TYPE_FILE;
+            }
+
 #ifndef _WIN32
             // There's no executable bit on Windows, so this is unreliable
             // glib would search for "executable types" instead, which are only {".exe", ".cmd", ".bat", ".com"},
@@ -156,7 +173,6 @@ bool Dependency::check ()
             }
 #endif
 
-            std::string location(_string);
             switch (_location) {
                 case LOCATION_EXTENSIONS: {
                     std::string temploc =
@@ -236,13 +252,6 @@ bool Dependency::check ()
                         // so that we don't accidentally override (or conflict with) some g_spawn_* magic.
                         if (_type == TYPE_EXECUTABLE) {
                             static const std::vector<std::string> extensions = {".exe", ".cmd", ".bat", ".com"};
-
-                            std::string extension;
-                            size_t index = final_name.find_last_of(".");
-                            if (index != std::string::npos) {
-                                extension = final_name.substr(index);
-                            }
-
                             if (extension.empty() ||
                                     std::find(extensions.begin(), extensions.end(), extension) == extensions.end())
                             {
