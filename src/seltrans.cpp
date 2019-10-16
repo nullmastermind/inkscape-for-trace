@@ -549,17 +549,13 @@ void Inkscape::SelTrans::stamp()
             SPItem *original_item = *x;
             Inkscape::XML::Node *original_repr = original_item->getRepr();
 
-            // remember the position of the item
-            gint pos = original_repr->position();
             // remember parent
             Inkscape::XML::Node *parent = original_repr->parent();
 
             Inkscape::XML::Node *copy_repr = original_repr->duplicate(parent->document());
 
             // add the new repr to the parent
-            parent->appendChild(copy_repr);
-            // move to the saved position
-            copy_repr->setPosition(pos > 0 ? pos : 0);
+            parent->addChild(copy_repr, original_repr->prev());
 
             SPItem *copy_item = (SPItem *) _desktop->getDocument()->getObjectByRepr(copy_repr);
 

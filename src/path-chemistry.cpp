@@ -171,10 +171,9 @@ ObjectSet::combine(bool skip_undo)
         g_free(dstring);
 
         // add the new group to the parent of the topmost
-        parent->appendChild(repr);
-
         // move to the position of the topmost, reduced by the number of deleted items
-        repr->setPosition(position > 0 ? position : 0);
+        parent->addChildAtPos(repr, position > 0 ? position : 0);
+
         if ( !skip_undo ) {
             DocumentUndo::done(doc, SP_VERB_SELECTION_COMBINE, 
                                _("Combine"));
@@ -261,10 +260,8 @@ ObjectSet::breakApart(bool skip_undo)
             g_free(str);
             
             // add the new repr to the parent
-            parent->appendChild(repr);
-
             // move to the saved position
-            repr->setPosition(pos > 0 ? pos : 0);
+            parent->addChildAtPos(repr, pos);
 
             // if it's the first one, restore id
             if (curve == *(list.begin()))
@@ -452,10 +449,7 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
         // restore class
         repr->setAttribute("class", class_attr);
         // add the new repr to the parent
-        parent->appendChild(repr);
-
-        // move to the saved position
-        repr->setPosition(pos > 0 ? pos : 0);
+        parent->addChildAtPos(repr, pos);
 
         /* Buglet: We don't re-add the (new version of the) object to the selection of any other
          * desktops where it was previously selected. */

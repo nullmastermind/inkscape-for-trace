@@ -773,21 +773,17 @@ void SimpleNode::mergeFrom(Node const *src, gchar const *key, bool extension, bo
             Node *rch=sp_repr_lookup_child(this, key, id);
             if (rch && (!extension || rch->equal(child, false))) {
                 rch->mergeFrom(child, key, extension);
+                continue;
             } else {
                 if(rch) {
                     removeChild(rch);
                 }
-                guint pos = child->position();
-                rch = child->duplicate(_document);
-                appendChild(rch);
-                rch->setPosition(pos);
-                rch->release();
             }
-        } else {
+        }
+        {
             guint pos = child->position();
             Node *rch=child->duplicate(_document);
-            appendChild(rch);
-            rch->setPosition(pos);
+            addChildAtPos(rch, pos);
             rch->release();
         }
     }

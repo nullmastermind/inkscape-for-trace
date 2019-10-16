@@ -196,10 +196,12 @@ Effect::merge_menu (Inkscape::XML::Node * base,
     } // start != NULL
 
     if (tomerge != nullptr) {
-        base->appendChild(tomerge);
+        if (position != -1) {
+            base->addChildAtPos(tomerge, position);
+        } else {
+            base->appendChild(tomerge);
+        }
         Inkscape::GC::release(tomerge);
-        if (position != -1)
-            tomerge->setPosition(position);
     }
 
     if (pattern != nullptr) {

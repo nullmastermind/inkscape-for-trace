@@ -776,10 +776,7 @@ Inkscape::XML::Node* ObjectSet::group() {
     }
 
     // Add the new group to the topmost members' parent
-    topmost_parent->appendChild(group);
-
-    // Move to the position of the topmost, reduced by the number of items deleted from topmost_parent
-    group->setPosition(topmost + 1);
+    topmost_parent->addChildAtPos(group, topmost + 1);
 
     set(doc->getObjectByRepr(group));
     DocumentUndo::done(doc, SP_VERB_SELECTION_GROUP,
@@ -3172,9 +3169,8 @@ void ObjectSet::toSymbol()
 
         gchar * title = the_group->title();
         if (title) {
-            symbol_repr->appendChild(title_repr);
+            symbol_repr->addChildAtPos(title_repr, 0);
             title_repr->appendChild(xml_doc->createTextNode(title));
-            title_repr->setPosition(0);
             Inkscape::GC::release(title_repr);
         }
         g_free(title);
@@ -3184,8 +3180,7 @@ void ObjectSet::toSymbol()
             Inkscape::XML::Node *desc_repr = xml_doc->createElement("svg:desc");
             desc_repr->setContent(desc);
             desc_repr->appendChild(xml_doc->createTextNode(desc));
-            symbol_repr->appendChild(desc_repr);
-            desc_repr->setPosition(1);
+            symbol_repr->addChildAtPos(desc_repr, 1);
             Inkscape::GC::release(desc_repr);
         }
         g_free(desc);
@@ -3208,17 +3203,15 @@ void ObjectSet::toSymbol()
     for (std::vector<SPObject*>::const_reverse_iterator i=items_.rbegin();i!=items_.rend();++i){
         gchar* title = (*i)->title();
         if (!single_group && !settitle && title) {
-            symbol_repr->appendChild(title_repr);
+            symbol_repr->addChildAtPos(title_repr, 0);
             title_repr->appendChild(xml_doc->createTextNode(title));
-            title_repr->setPosition(0);
             Inkscape::GC::release(title_repr);
             gchar * desc = (*i)->desc();
             if (desc) {
                 Inkscape::XML::Node *desc_repr = xml_doc->createElement("svg:desc");
                 desc_repr->appendChild(xml_doc->createTextNode(desc));
-                symbol_repr->appendChild(desc_repr);
+                symbol_repr->addChildAtPos(desc_repr, 1);
                 Inkscape::GC::release(desc_repr);
-                desc_repr->setPosition(1);
             }
             g_free(desc);
             settitle = true;
@@ -3431,8 +3424,7 @@ void ObjectSet::tile(bool apply)
         sp_repr_set_svg_double(rect, "y", bbox.top());
 
         // restore parent and position
-        parent->getRepr()->appendChild(rect);
-        rect->setPosition(pos > 0 ? pos : 0);
+        parent->getRepr()->addChildAtPos(rect, pos);
         SPItem *rectangle = static_cast<SPItem *>(document()->getObjectByRepr(rect));
 
         Inkscape::GC::release(rect);
@@ -3773,10 +3765,7 @@ void ObjectSet::createBitmapCopy()
         g_free(c);
 
         // add the new repr to the parent
-        parent->appendChild(repr);
-
-        // move to the saved position
-        repr->setPosition(pos > 0 ? pos + 1 : 1);
+        parent->addChildAtPos(repr, pos + 1);
 
         // Set selection to the new image
         clear();
@@ -3873,8 +3862,7 @@ void ObjectSet::setClipGroup()
 
     Inkscape::XML::Node *outer = xml_doc->createElement("svg:g");
     outer->appendChild(inner);
-    topmost_parent->appendChild(outer);
-    outer->setPosition(topmost + 1);
+    topmost_parent->addChildAtPos(outer, topmost + 1);
 
     Inkscape::XML::Node *clone = xml_doc->createElement("svg:use");
     clone->setAttribute("x", "0", false);
@@ -4049,11 +4037,9 @@ void ObjectSet::setClipGroup()
             group->setAttribute("inkscape:groupmode", "maskhelper");
 
             Inkscape::XML::Node *spnew = current->duplicate(xml_doc);
-            gint position = current->position();
-            current->parent()->appendChild(group);
+            current->parent()->addChild(group, current);
             sp_repr_unparent(current);
             group->appendChild(spnew);
-            group->setPosition(position);
 
             // Apply clip/mask to group instead
             apply_mask_to = group;
@@ -4185,15 +4171,14 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
 
         // remember parent and position of the item to which the clippath/mask was applied
         Inkscape::XML::Node *parent = (referenced_object.second)->getRepr()->parent();
-        gint pos = (referenced_object.second)->getRepr()->position();
+        Inkscape::XML::Node *ref_repr = referenced_object.second->getRepr();
 
         // Iterate through all clipped paths / masks
         for (auto i=items_to_move.rbegin();i!=items_to_move.rend();++i) {
             Inkscape::XML::Node *repr = *i;
 
             // insert into parent, restore pos
-            parent->appendChild(repr);
-            repr->setPosition((pos + 1) > 0 ? (pos + 1) : 0);
+            parent->addChild(repr, ref_repr);
 
             SPItem *mask_item = static_cast<SPItem *>(document()->getObjectByRepr(repr));
             items_to_select.push_back(mask_item);

@@ -797,10 +797,8 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
             repr->setAttribute("transform", transform);
 
             // add the new repr to the parent
-            parent->appendChild(repr);
-
             // move to the saved position
-            repr->setPosition(pos > 0 ? pos : 0);
+            parent->addChildAtPos(repr, pos);
 
             add(doc->getObjectByRepr(repr));
             Inkscape::GC::release(repr);
@@ -825,8 +823,7 @@ BoolOpErrors Inkscape::ObjectSet::pathBoolOp(bool_op bop, const bool skip_undo, 
 
         repr->setAttribute("transform", transform);
 
-        parent->appendChild(repr);
-        repr->setPosition(pos > 0 ? pos : 0);
+        parent->addChildAtPos(repr, pos);
 
         add(doc->getObjectByRepr(repr));
         Inkscape::GC::release(repr);
@@ -862,9 +859,7 @@ void sp_selected_path_outline_add_marker( SPObject *marker_object, Geom::Affine 
 
     if (marker_item->getRepr()) {
         Inkscape::XML::Node *m_repr = marker_item->getRepr()->duplicate(xml_doc);
-        g_repr->appendChild(m_repr);
-        //There is a special group to markers with this reverse the order in clussion
-        m_repr->setPosition(0);
+        g_repr->addChildAtPos(m_repr, 0);
         SPItem *marker_item = (SPItem *) doc->getObjectByRepr(m_repr);
         marker_item->doWriteTransform(tr);
         if (!legacy) {
@@ -1339,9 +1334,8 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
                 g_repr->setAttribute("style", nullptr);
 
                 // add the group to the parent
-                parent->appendChild(g_repr);
                 // move to the saved position
-                g_repr->setPosition(pos > 0 ? pos : 0);
+                parent->addChildAtPos(g_repr, pos);
 
                 //The fill
                 Inkscape::XML::Node *fill = nullptr;
@@ -1368,8 +1362,7 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
                 if(SP_SHAPE(item)->hasMarkers ()) {
                     if (!legacy) {
                         markers = xml_doc->createElement("svg:g");
-                        g_repr->appendChild(markers);
-                        markers->setPosition(pos > 0 ? pos : 0);
+                        g_repr->addChildAtPos(markers, pos);
                     } else {
                         markers = g_repr;
                     }
@@ -1555,9 +1548,9 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
 
                 sp_repr_css_attr_unref(r_style);
                 if (unique) {
-                    parent->appendChild(out);
+                    g_assert(out != g_repr);
+                    parent->addChild(out, g_repr);
                     parent->removeChild(g_repr);
-                    out->setPosition(pos > 0 ? pos : 0);
                 }
                 out->setAttribute("transform", item->getRepr()->attribute("transform"));
                 //bug lp:1290573 : completely destroy the old object first
@@ -1812,10 +1805,8 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
         }
 
         // add the new repr to the parent
-        parent->appendChild(repr);
-
         // move to the saved position
-        repr->setPosition(pos > 0 ? pos : 0);
+        parent->addChildAtPos(repr, pos);
 
         SPItem *nitem = reinterpret_cast<SPItem *>(desktop->getDocument()->getObjectByRepr(repr));
 
@@ -2021,10 +2012,8 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
             g_free(str);
 
             // add the new repr to the parent
-            parent->appendChild(repr);
-
             // move to the saved position
-            repr->setPosition(pos > 0 ? pos : 0);
+            parent->addChildAtPos(repr, pos);
 
             SPItem *newitem = (SPItem *) desktop->getDocument()->getObjectByRepr(repr);
 
@@ -2138,10 +2127,8 @@ sp_selected_path_simplify_item(SPDesktop *desktop,
     g_free(str);
 
     // add the new repr to the parent
-    parent->appendChild(repr);
-
     // move to the saved position
-    repr->setPosition(pos > 0 ? pos : 0);
+    parent->addChildAtPos(repr, pos);
 
     SPItem *newitem = (SPItem *) desktop->getDocument()->getObjectByRepr(repr);
 

@@ -601,9 +601,8 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
                     // restore id
                     newrepr->setAttribute("id", id);
                     // add the new repr to the parent
-                    parent->appendChild(newrepr);
                     // move to the saved position
-                    newrepr->setPosition(pos > 0 ? pos : 0);
+                    parent->addChildAtPos(newrepr, pos);
 
                     if (is_selected)
                         selection->add(newrepr);

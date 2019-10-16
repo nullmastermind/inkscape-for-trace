@@ -625,10 +625,9 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
     for (auto i=items.rbegin();i!=items.rend();++i) {
         Inkscape::XML::Node *repr = *i;
         // add item
-        prepr->appendChild(repr);
         // restore position; since the items list was prepended (i.e. reverse), we now add
         // all children at the same pos, which inverts the order once again
-        repr->setPosition(pos > 0 ? pos : 0);
+        prepr->addChildAtPos(repr, pos);
 
         // fill in the children list if non-null
         SPItem *item = static_cast<SPItem *>(doc->getObjectByRepr(repr));

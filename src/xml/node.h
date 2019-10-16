@@ -351,7 +351,21 @@ public:
      * @param after The node after which the inserted node should be placed, or NULL
      */
     virtual void addChild(Node *child, Node *after)=0;
-    
+
+    /**
+     * @brief Insert another node as a child of this node
+     *
+     * This is more efficient than appendChild() + setPosition().
+     *
+     * @param child The node to insert
+     * @param pos The position in parent's child order
+     */
+    void addChildAtPos(Node *child, unsigned pos)
+    {
+        Node *after = (pos == 0) ? nullptr : nthChild(pos - 1);
+        addChild(child, after);
+    }
+
     /**
      * @brief Append a node as the last child of this node
      * @param child The node to append
