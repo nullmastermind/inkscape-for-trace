@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-10-10 21:27+0200\n"
-"PO-Revision-Date: 2019-10-16 02:36+0100\n"
+"PO-Revision-Date: 2019-10-16 23:55+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -9593,7 +9593,7 @@ msgstr "Ellipse durch 5 Punkte"
 #: ../src/live_effects/effect.cpp:643
 msgid "Draw a circle, ellipse, arc or slice based on the nodes of a path"
 msgstr ""
-"Zeichnet einen Kreis, eine Ellipse, einen Bogen oder ein Kressegment auf der"
+"Zeichnet einen Kreis, eine Ellipse, einen Bogen oder einen Kreissektor auf der"
 " Basis der Knoten eines Pfades"
 
 #: ../src/live_effects/effect.cpp:657
@@ -12220,14 +12220,12 @@ msgstr ""
 "Interpolation, 1 = abgerundet"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:162
-#, fuzzy
 msgid "Width scale:"
-msgstr "Breite des Rechtecks"
+msgstr "Faktor für Strichbreite:"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:162
-#, fuzzy
 msgid "Width scale all points"
-msgstr "Schriftarten auflisten"
+msgstr "Die Breite des Striches wird über die gesamte Länge angepasst."
 
 #: ../src/live_effects/lpe-powerstroke.cpp:163
 msgid "Start cap:"
@@ -12262,34 +12260,28 @@ msgid "Zero width"
 msgstr "Nullbreite"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:36
-#, fuzzy
 msgid "Auto ellipse"
-msgstr "Ellipse erzeugen"
+msgstr "Auto-Ellipse"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:37
-#, fuzzy
 msgid "Force circle"
-msgstr "Kreisbögen erzwingen"
+msgstr "Kreis erzwingen"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:38
-#, fuzzy
 msgid "Isometric circle"
-msgstr "Isometrisches Gitter"
+msgstr "Isometrischer Kreis"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:40
-#, fuzzy
 msgid "Perspective circle"
-msgstr "Perspektive"
+msgstr "Perspektivischer Kreis"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:43
-#, fuzzy
 msgid "Steiner ellipse"
-msgstr "Stil von neuen Ellipsen"
+msgstr "Steiner-Ellipse"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:45
-#, fuzzy
 msgid "Steiner inellipse"
-msgstr "Stil von neuen Ellipsen"
+msgstr "Steiner-Inellipse"
 
 #
 # File: ../src/live_effects/lpe-pts2ellipse.cpp, line: 54
@@ -12304,22 +12296,30 @@ msgid ""
 "- Steiner ellipse: (3 points) ellipse on a triangle\n"
 "- Steiner inellipse: (3 points) ellipse inside a triangle"
 msgstr ""
+"Methoden zur Erstellung von Ellipsen\n"
+"- Auto-Ellipse: passt einen Kreis (2, 3 oder 4 Knoten) oder eine Ellipse (ab"
+" 5 Knoten) an die Knoten des Pfades an\n"
+"- Kreis erzwingen: (mindestens 2 Knoten) erzeugt immer einen Kreis\n"
+"- Isometrischer Kreis: (3 Knoten) verwendet die ersten beiden Pfadsegmente"
+" als Kanten\n"
+"- Perspektivischer Kreis: (4 Knoten) erzeugt einen perspektivisch"
+" gezeichneten Kreis in einem perspektivischen Quadrat\n"
+"- Steiner-Ellipse: (3 Knoten) Ellipse durch die Ecken eines Dreiecks\n"
+"- Steiner-Inellipse: (3 Knoten) Ellipse innerhalb eines Dreiecks"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:59
-#, fuzzy
 msgid "_Frame (isometric rectangle)"
-msgstr "„Slicer“-Rechteck erzeugen"
+msgstr "Rahmen (isometrisches Rechteck)"
 
 #
 # File: ../src/live_effects/lpe-pts2ellipse.cpp, line: 59
 #: ../src/live_effects/lpe-pts2ellipse.cpp:59
 msgid "Draw parallelogram around the ellipse"
-msgstr ""
+msgstr "Zeichnet ein Parallelogramm um die Ellipse"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:62
-#, fuzzy
 msgid "_Perspective square"
-msgstr "Perspektivischer Pfad"
+msgstr "Perspektivisches Quadrat"
 
 #
 # File: ../src/live_effects/lpe-pts2ellipse.cpp, line: 63
@@ -12328,10 +12328,12 @@ msgid ""
 "Draw square surrounding the circle in perspective view\n"
 "(only in method \"Perspective circle\")"
 msgstr ""
+"Zeichnet ein Quadrat in perspektivischer Ansicht um den Kreis (nur für"
+" \"Perspektivischer Kreis\")"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:65
 msgid "_Arc"
-msgstr ""
+msgstr "Bogen"
 
 #
 # File: ../src/live_effects/lpe-pts2ellipse.cpp, line: 66
@@ -12340,40 +12342,37 @@ msgid ""
 "Generate open arc (open ellipse) based on first and last point\n"
 "(only for methods \"Auto ellipse\" and \"Force circle\")"
 msgstr ""
+"Erzeugt einen offenen Bogen (offene Ellipse) anhand des ersten und letzten"
+" Knotens (nur für \"Auto-Ellipse\" und \"Kreis erzwingen\")"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:69
-#, fuzzy
 msgid "_Other arc side"
-msgstr "Anderes Attribut:"
+msgstr "Andere Bogenseite"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:69
-#, fuzzy
 msgid "Switch sides of the arc"
-msgstr "Breite der Halo in Pixeln"
+msgstr "Wechselt zwischen den Seiten des Bogens"
 
 # Any idea on how to translate the very specific term "slicer" to German?
 #: ../src/live_effects/lpe-pts2ellipse.cpp:70
-#, fuzzy
 msgid "_Slice arc"
-msgstr "Slicer"
+msgstr "Sektor"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:70
-#, fuzzy
 msgid "Slice the arc"
-msgstr "Nachzeichnen starten"
+msgstr "Einen Kreis-/Ellipsenausschnitt erzeugen"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:71
 msgid "A_xes"
-msgstr ""
+msgstr "Achsen"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:71
 msgid "Draw both semi-major and semi-minor axes"
-msgstr ""
+msgstr "Beide Halbachsen zeichnen"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:72
-#, fuzzy
 msgid "Perspective axes"
-msgstr "Perspektive"
+msgstr "Perspektivische Achsen"
 
 #
 # File: ../src/live_effects/lpe-pts2ellipse.cpp, line: 73
@@ -12382,26 +12381,24 @@ msgid ""
 "Draw the axes in perspective view\n"
 "(only in method \"Perspective circle\")"
 msgstr ""
+"Achsen in perspektivischer Ansicht einzeichnen (nur für \"Perspektivischer"
+" Kreis\")"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:75
-#, fuzzy
 msgid "Axes rotation"
-msgstr "Drehung"
+msgstr "Achsendrehung"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:75
-#, fuzzy
 msgid "Axes rotation angle [deg]"
-msgstr "Anpassen des Rotationswinkels"
+msgstr "Achsen um angegebenen Winkel [deg] drehen"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:76
-#, fuzzy
 msgid "Source _path"
-msgstr "Quellenbreite"
+msgstr "Quellpfad"
 
 #: ../src/live_effects/lpe-pts2ellipse.cpp:76
-#, fuzzy
 msgid "Show the original source path"
-msgstr "Originalpfad klonen"
+msgstr "Original-Quellpfad anzeigen"
 
 #: ../src/live_effects/lpe-rough-hatches.cpp:219
 msgid "Frequency randomness:"
@@ -12795,14 +12792,12 @@ msgid "Show path"
 msgstr "Pfad anzeigen"
 
 #: ../src/live_effects/lpe-show_handles.cpp:33
-#, fuzzy
 msgid "Show center of node"
-msgstr "Objektmittelpunkte einrasten"
+msgstr "Knotenmittelpunkt zeichnen"
 
 #: ../src/live_effects/lpe-show_handles.cpp:34
-#, fuzzy
 msgid "Show original"
-msgstr "Original auswählen"
+msgstr "Originalpfad zeichnen"
 
 #: ../src/live_effects/lpe-show_handles.cpp:35
 msgid "Scale nodes and handles"
@@ -13017,6 +13012,8 @@ msgid ""
 "Location of the point of attachment along the curve (between 0.0 and number-"
 "of-segments)"
 msgstr ""
+"Ort, an dem die Tangente an der Kurve angeheftet ist (zwischen 0,0 und Anzahl"
+" der Pfadsegmente)"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:63
 msgid "Specifies the left end of the tangent"
@@ -13031,14 +13028,12 @@ msgid "Adjust the point of attachment of the tangent"
 msgstr "Zwischenfarbe des Farbverlaufs bearbeiten"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:110
-#, fuzzy
 msgid "Adjust the <b>left</b> end of the tangent"
-msgstr "Einstellen des \"rechten\" Endes der Tangente"
+msgstr "Einstellen des <b>linken</b> Endes der Tangente"
 
 #: ../src/live_effects/lpe-tangent_to_curve.cpp:116
-#, fuzzy
 msgid "Adjust the <b>right</b> end of the tangent"
-msgstr "Einstellen des \"rechten\" Endes der Tangente"
+msgstr "Einstellen des <b>rechten</b> Endes der Tangente"
 
 #: ../src/live_effects/lpe-taperstroke.cpp:68
 msgid "Extrapolated"
@@ -13226,34 +13221,29 @@ msgid "Change bool parameter"
 msgstr "Booleschen Parameter ändern"
 
 #: ../src/live_effects/parameter/colorpicker.cpp:123
-#, fuzzy
 msgid "Change color button parameter"
-msgstr "Parameter für Schaltfläche ändern"
+msgstr "Wert einer Farbschaltfläche ändern"
 
 #: ../src/live_effects/parameter/enum.h:53
 msgid "Change enumeration parameter"
 msgstr "Aufzählungsparameter ändern"
 
 #: ../src/live_effects/parameter/fontbutton.cpp:79
-#, fuzzy
 msgid "Change font button parameter"
-msgstr "Parameter für Schaltfläche ändern"
+msgstr "Wert einer Schriftartschaltfläche ändern"
 
 #: ../src/live_effects/parameter/item.cpp:133
-#, fuzzy
 msgid "Link to item on clipboard"
-msgstr "Mit Pfad aus der Zwischenablage verknüpfen"
+msgstr "Mit Objekt aus der Zwischenablage verknüpfen"
 
 #: ../src/live_effects/parameter/item.cpp:255
-#, fuzzy
 msgid "Link item parameter to path"
-msgstr "Pfadparameter mit Pfad verbinden"
+msgstr "Objektparameter mit Pfad verbinden"
 
 #: ../src/live_effects/parameter/originalitem.cpp:61
 #: ../src/live_effects/parameter/originalitemarray.cpp:146
-#, fuzzy
 msgid "Link to item"
-msgstr "Mit dem Pfad verknüpfen"
+msgstr "Mit dem Objekt verknüpfen"
 
 #: ../src/live_effects/parameter/originalitem.cpp:73
 #: ../src/live_effects/parameter/originalpath.cpp:77
@@ -13261,9 +13251,8 @@ msgid "Select original"
 msgstr "Original auswählen"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:74
-#, fuzzy
 msgid "Active"
-msgstr "Alles inaktiv"
+msgstr "Aktiviert"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:81
 #: ../src/live_effects/parameter/originalpatharray.cpp:104
@@ -13275,14 +13264,12 @@ msgid "Name"
 msgstr "Name"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:121
-#, fuzzy
 msgid "Link item parameter to item"
-msgstr "Pfadparameter mit Pfad verbinden"
+msgstr "Objektparameter mit Objekt verbinden"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:158
-#, fuzzy
 msgid "Remove Item"
-msgstr "Element/Gruppe entfernen"
+msgstr "Objekt entfernen"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:170
 #: ../src/live_effects/parameter/originalpatharray.cpp:211
@@ -13297,31 +13284,26 @@ msgid "Move Up"
 msgstr "Nach oben"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:222
-#, fuzzy
 msgid "Move item up"
-msgstr "Pfad nach oben verschieben"
+msgstr "Objekt nach oben verschieben"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:252
-#, fuzzy
 msgid "Move item down"
-msgstr "Pfad nach unten verschieben"
+msgstr "Objekt nach unten verschieben"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:270
-#, fuzzy
 msgid "Remove item"
-msgstr "Filter entfernen"
+msgstr "Objekt entfernen"
 
 #: ../src/live_effects/parameter/originalitemarray.cpp:309
-#, fuzzy
 msgid "Link itemarray parameter to item"
-msgstr "Pfadparameter mit Pfad verbinden"
+msgstr "Objektesammlung mit Objekt verknüpfen"
 
 #: ../src/live_effects/parameter/originalpath.cpp:64
 #: ../src/live_effects/parameter/originalpatharray.cpp:187
 #: ../src/live_effects/parameter/path.cpp:256
-#, fuzzy
 msgid "Link to path in clipboard"
-msgstr "Mit Pfad aus der Zwischenablage verknüpfen"
+msgstr "Mit Pfad in der Zwischenablage verknüpfen"
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:89
 #: ../src/ui/toolbar/gradient-toolbar.cpp:440
@@ -13338,9 +13320,8 @@ msgid "Link path parameter to path"
 msgstr "Pfadparameter mit Pfad verbinden"
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:162
-#, fuzzy
 msgid "Toggle path parameter visibility"
-msgstr "Pfadparameter mit Pfad verbinden"
+msgstr "Sichtbarkeit eines Pfadparameters geändert"
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:199
 msgid "Remove Path"
@@ -13512,11 +13493,11 @@ msgstr "ohne URI"
 
 #: ../src/object/sp-ellipse.cpp:385 ../src/ui/toolbar/arc-toolbar.cpp:161
 msgid "Slice"
-msgstr "Scheibe"
+msgstr "Sektor"
 
 #: ../src/object/sp-ellipse.cpp:388 ../src/ui/toolbar/arc-toolbar.cpp:171
 msgid "Chord"
-msgstr ""
+msgstr "Segment"
 
 #: ../src/object/sp-ellipse.cpp:391
 msgid "Arc"
@@ -13757,14 +13738,12 @@ msgid "Conditional Group"
 msgstr "Bedingte Gruppe"
 
 #: ../src/object/sp-text.cpp:343
-#, fuzzy
 msgid "Auto-wrapped text"
-msgstr "Text hinzufügen"
+msgstr "Text mit automatischem Umbruch"
 
 #: ../src/object/sp-text.cpp:345
-#, fuzzy
 msgid "Text in-a-shape"
-msgstr "Text in Form fließen lassen"
+msgstr "Text in einer Form"
 
 #: ../src/object/sp-text.cpp:347 ../src/verbs.cpp:331
 #: ../share/extensions/hershey.inx:128 ../share/extensions/lorem_ipsum.inx:19
@@ -13972,14 +13951,12 @@ msgid "The file %s is not a valid Inkscape preferences file."
 msgstr "Die Datei %s ist keine gültige Inkscape-Einstellungsdatei."
 
 #: ../src/preferences.cpp:286
-#, fuzzy
 msgid "Preferences file was backed up to"
-msgstr "Die Einstellungsdatei %s konnte nicht gelesen werden."
+msgstr "Eine Sicherheitskopie der Einstellungsdatei wurde angelegt unter"
 
 #: ../src/preferences.cpp:287
-#, fuzzy
 msgid "There was an error trying to reset the preferences file."
-msgstr "Fehler beim Erstellen der Einstellungsdatei %s."
+msgstr "Es trat ein Fehler beim Zurücksetzen der Einstellungsdatei auf."
 
 #: ../src/rdf.cpp:178
 msgid "CC Attribution"
@@ -14270,38 +14247,34 @@ msgid "Lower to bottom"
 msgstr "Nach ganz unten absenken"
 
 #: ../src/selection-chemistry.cpp:1159
-#, fuzzy
 msgid "Select <b>object(s)</b> to stack up."
-msgstr "<b>Objekt(e)</b> auswählen, die nach oben angehoben werden sollen."
+msgstr ""
+"<b>Objekt(e)</b> zum Anheben um einen Schritt in der z-Ordnung auswählen."
 
 #: ../src/selection-chemistry.cpp:1170
-#, fuzzy
 msgid "We hit top."
-msgstr "Nach ganz oben anheben"
+msgstr "Oben angekommen"
 
 #. TRANSLATORS: undo history: "stack up" means to raise an object of its ordinal position by 1
 #: ../src/selection-chemistry.cpp:1178
-#, fuzzy
 msgctxt "Undo action"
 msgid "stack up"
-msgstr "Umschichten"
+msgstr "um einen Schritt in der z-Ordnung nach oben anheben"
 
 #: ../src/selection-chemistry.cpp:1183
-#, fuzzy
 msgid "Select <b>object(s)</b> to stack down."
-msgstr "<b>Objekte</b> zum Kombinieren auswählen."
+msgstr ""
+"<b>Objekte</b> zum Absenken um einen Schritt in der z-Ordnung auswählen."
 
 #: ../src/selection-chemistry.cpp:1194
-#, fuzzy
 msgid "We hit bottom."
-msgstr "Nach ganz unten absenken"
+msgstr "Unten angekommen."
 
 #. TRANSLATORS: undo history: "stack down" means to lower an object of its ordinal position by 1
 #: ../src/selection-chemistry.cpp:1202
-#, fuzzy
 msgctxt "Undo action"
 msgid "stack down"
-msgstr "Umschichten-Modus"
+msgstr "um einen Schritt in der z-Ordnung nach unten absenken"
 
 # !!! just make the menu item insensitive
 #: ../src/selection-chemistry.cpp:1212
@@ -14483,9 +14456,8 @@ msgid "Unlink clone"
 msgstr "Klonverbindung auftrennen"
 
 #: ../src/selection-chemistry.cpp:2806
-#, fuzzy
 msgid "Unlink clone recursively"
-msgstr "Klonverbindung auftrennen"
+msgstr "Klonverbindung rekursiv auftrennen"
 
 #: ../src/selection-chemistry.cpp:2816
 msgid ""
@@ -14640,9 +14612,8 @@ msgid "Fit Page to Selection"
 msgstr "Seite in Auswahl einpassen"
 
 #: ../src/selection-chemistry.cpp:4328 ../src/verbs.cpp:2653
-#, fuzzy
 msgid "Swap fill and stroke of an object"
-msgstr "Füllung und Linie vertauschen"
+msgstr "Füllung und Linie eines Objekts vertauschen"
 
 #: ../src/selection-chemistry.cpp:4356 ../src/verbs.cpp:3157
 msgid "Fit Page to Drawing"
@@ -25044,10 +25015,11 @@ msgid ""
 "move with <b>end point</b>; with <b>Ctrl</b> to snap angle; drag <b>inside</"
 "b> the ellipse for arc, <b>outside</b> for segment"
 msgstr ""
-"<b>Anfangspunkt</b> des Bogens oder Kreissegments setzen; <b>Umschalt</b> "
+"<b>Anfangspunkt</b> des Bogens oder Kreisektors setzen; <b>Umschalt</b> "
 "bewegt den <b>Endpunkt</b> mit; <b>Strg</b> rastet den Winkel ein; ziehen "
-"<b>innerhalb</b> der Ellipse erzeugt einen Kreisbogen - <b>außerhalb</b> ein "
-"Kreissegment"
+"<b>innerhalb</b> der Ellipse erzeugt einen Kreisbogen - <b>außerhalb</b>"
+" einen "
+"Kreissektor"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1166
 msgid ""
@@ -25055,9 +25027,9 @@ msgid ""
 "move with <b>start point</b>; with <b>Ctrl</b> to snap angle; drag "
 "<b>inside</b> the ellipse for arc, <b>outside</b> for segment"
 msgstr ""
-"<b>Endpunkt</b> des Bogens/Kreissegments setzen; <b>Umschalt</b> bewegt den "
+"<b>Endpunkt</b> des Bogens/Kreissektors setzen; <b>Umschalt</b> bewegt den "
 "<b>Startpunkt</b> mit;  <b>Strg</b> rastet Winkel ein; Ziehen <b>innerhalb</"
-"b> der Ellipse erzeugt einen Kreisbogen - <b>außerhalb</b> ein Kreissegment"
+"b> der Ellipse erzeugt einen Kreisbogen - <b>außerhalb</b> einen Kreissektor"
 
 #: ../src/ui/shape-editor-knotholders.cpp:1172
 msgid "Drag to move the ellipse"
@@ -25672,7 +25644,7 @@ msgstr "Der Winkel (in Grad) von der Horizontalen bis zum Endpunkt des Bogens"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:162
 msgid "Switch to slice (closed shape with two radii)"
-msgstr "Zu Segment (geschlossene Form mit zwei Radien) umschalten"
+msgstr "Zu Sektor (geschlossene Form mit zwei Radien) umschalten"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:166
 msgid "Arc (Open)"
@@ -25692,7 +25664,7 @@ msgstr "Schließen"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:197
 msgid "Make the shape a whole ellipse, not arc or segment"
-msgstr "Die Form zur ganzen Ellipse anstelle eines Bogens oder Segments machen"
+msgstr "Die Form zur ganzen Ellipse anstelle eines Bogens oder Sektors machen"
 
 #: ../src/ui/toolbar/arc-toolbar.cpp:287
 msgid "Ellipse: Change radius"
@@ -28281,7 +28253,7 @@ msgid ""
 "segment. <b>Click</b> to select."
 msgstr ""
 "<b>Ziehen</b> erstellt eine Ellipse. <b>Anfasser ziehen</b> erzeugt Bogen "
-"oder Kreissegment. <b>Klick</b> wählt aus."
+"oder Kreissektor. <b>Klick</b> wählt aus."
 
 #: ../src/ui/tools-switch.cpp:96
 msgid ""
@@ -28399,7 +28371,7 @@ msgid ""
 "<b>Ctrl</b>: make circle or integer-ratio ellipse, snap arc/segment angle"
 msgstr ""
 "<b>Strg</b>: Kreis oder Ellipse mit ganzzahligem Höhen-/Breitenverhältnis "
-"erzeugen, Winkel vom Bogen/Kreissegment einrasten"
+"erzeugen, Winkel vom Bogen/Kreissektor einrasten"
 
 #: ../src/ui/tools/arc-tool.cpp:244 ../src/ui/tools/rect-tool.cpp:278
 msgid "<b>Shift</b>: draw around the starting point"
