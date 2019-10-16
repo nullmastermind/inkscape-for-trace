@@ -957,6 +957,7 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
 {
     Node *child = nullptr;
     bool loose = false;
+    bool const add_whitespace_parent = add_whitespace;
 
     g_return_if_fail (repr != nullptr);
 
@@ -986,6 +987,14 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
     if (strcmp(repr->name(), "svg:text")     == 0 ||
         strcmp(repr->name(), "svg:flowRoot") == 0) {
         add_whitespace = false;
+    } else {
+        // Suppress formatting whitespace for xml:space="preserve"
+        gchar const *xml_space_attr = repr->attribute("xml:space");
+        if (g_strcmp0(xml_space_attr, "preserve") == 0) {
+            add_whitespace = false;
+        } else if (g_strcmp0(xml_space_attr, "default") == 0) {
+            add_whitespace = true;
+        }
     }
 
     for ( List<AttributeRecord const> iter = rebase_href_attrs(old_href_base, new_href_base,
@@ -1038,10 +1047,7 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
         out.writeString( " />" );
     }
 
-    // text elements cannot nest, so we can output newline
-    // after closing text
-
-    if (add_whitespace || !strcmp (repr->name(), "svg:text")) {
+    if (add_whitespace_parent) {
         out.writeChar('\n');
     }
 }
