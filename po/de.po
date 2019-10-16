@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-10-10 21:27+0200\n"
-"PO-Revision-Date: 2019-10-15 01:23+0100\n"
+"PO-Revision-Date: 2019-10-16 02:36+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -11831,19 +11831,16 @@ msgid "Horizontal page center"
 msgstr "Horizontale Seitenmitte"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:45
-#, fuzzy
 msgid "Freely defined mirror line"
-msgstr "Zentrierter Nullpunkt"
+msgstr "Frei verschiebbare Spiegelachse"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:46
-#, fuzzy
 msgid "X coordinate of mirror line midpoint"
-msgstr "X-Koordinate des Gitterursprungs"
+msgstr "X-Koordinate des Mittelpunkts der Spiegelachse"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:47
-#, fuzzy
 msgid "Y coordinate of mirror line midpoint"
-msgstr "Y-Koordinate des Gitterursprungs"
+msgstr "Y-Koordinate des Mittelpunkts der Spiegelachse"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:55
 msgid "Mode"
@@ -11856,109 +11853,97 @@ msgid ""
 "Set mode of transformation. Either freely defined by mirror line or "
 "constrained to certain symmetry points."
 msgstr ""
+"Transformationsmodus wählen: Entweder frei verschiebbare Spiegelachse oder"
+" beschränkt auf bestimmte Symmetriepunkte"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:56
-#, fuzzy
 msgid "Discard original path"
-msgstr "Originalpfad ersetzen"
+msgstr "Original nicht zeichnen"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:56
-#, fuzzy
 msgid "Only keep mirrored part of the path, remove the original."
-msgstr "Aktivieren um den gespiegelten Teil des Pfades zu behalten"
+msgstr "Nur der gespiegelte Teil wird angezeigt, das Original wird entfernt"
 
 #
 # File: ../src/live_effects/lpe-mirror_symmetry.cpp, line: 57
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:57
 msgid "Fuse original path and mirror image into a single path"
 msgstr ""
+"Die Pfade im Original und in der Spiegelung werden jeweils zu einem einzigen"
+" Pfad vereinigt."
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:58
-#, fuzzy
 msgid "Fuse opposite sides"
-msgstr "Gegensätze mischen"
+msgstr "Umgekehrt vereinigen"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:58
-#, fuzzy
 msgid "Picks the part on the other side of the mirror line as the original."
-msgstr "Klone werden mit demselben Vektor wie das Original verschoben."
+msgstr ""
+"Der Teil des Objektes auf der anderen Seite der Spiegelachse wird zum Original"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:59
 msgid ""
 "Split original and mirror image into separate paths, so each can have its "
 "own style."
 msgstr ""
+"Gespiegelte und Originalpfade werden aufgetrennt, so dass jeder einen eigenen"
+" Stil verwenden kann"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:60
-#, fuzzy
 msgid "Mirror line start"
-msgstr "Kopien spiegeln"
+msgstr "Anfang Spiegelachse"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:60
-#, fuzzy
 msgid "Start point of mirror line"
-msgstr "Anfangspunkt"
+msgstr "Anfangspunkt der Spiegelachse"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:60
-#, fuzzy
 msgid "Adjust start point of of mirror line"
-msgstr "Sättigung anpassen"
+msgstr "Anfangspunkt der Spiegelachse verschieben"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:61
-#, fuzzy
 msgid "Mirror line end"
-msgstr "Kopien spiegeln"
+msgstr "Ende der Spiegelachse"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:61
-#, fuzzy
 msgid "End point of mirror line"
-msgstr "Zentrierter Nullpunkt"
+msgstr "Endpunkt der Spiegelachse"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:61
-#, fuzzy
 msgid "Adjust end point of mirror line"
-msgstr "Einstellen des Ursprungs"
+msgstr "Endpunkt der Spiegelachse verschieben"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:62
-#, fuzzy
 msgid "Mirror line mid"
-msgstr "Schrumpmodus"
+msgstr "Mitte der Spiegelachse"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:62
-#, fuzzy
 msgid "Center point of mirror line"
-msgstr "Zentrierter Nullpunkt"
+msgstr "Mittelpunkt der Spiegelachse"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:62
-#, fuzzy
 msgid "Adjust center point of mirror line"
-msgstr "Einstellen des Ursprungs"
+msgstr "Mittelpunkt der Spiegelachse verschieben"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:138
-#, fuzzy
 msgid "Vertical center"
-msgstr "Erkennung vertikaler Kanten"
+msgstr "Vertikales Zentrum"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:141
-#, fuzzy
 msgid "Horizontal center"
-msgstr "Horizontale Kantenerkennung"
+msgstr "Horizontales Zentrum"
 
 #: ../src/live_effects/lpe-offset.cpp:82
-#, fuzzy
 msgid "Live update"
-msgstr "Vorschau"
+msgstr "Ständig aktualisieren"
 
 #: ../src/live_effects/lpe-offset.cpp:82
-#, fuzzy
 msgid "Update while moving handle"
-msgstr ""
-"Während des Verschiebens von Knoten aktualisieren (möglicherweise langsam)"
+msgstr "Während des Verschiebens der Anfasser aktualisieren"
 
 #: ../src/live_effects/lpe-offset.cpp:450
-#, fuzzy
 msgid "Offset point"
-msgstr "Versatzpunkte"
+msgstr "Versatzpunkt"
 
 #: ../src/live_effects/lpe-parallel.cpp:50
 msgid "Adjust the offset"
@@ -12155,54 +12140,50 @@ msgstr "_Leeren"
 
 # !!! mnemonics
 #: ../src/live_effects/lpe-powerclip.cpp:32
-#, fuzzy
 msgid "Hide clip"
-msgstr "Alle ausblenden"
+msgstr "Ausschneiden deaktivieren"
 
 #: ../src/live_effects/lpe-powerclip.cpp:35
-#, fuzzy
 msgid "Inverse clip"
-msgstr "Invertierte Abrundung"
+msgstr "Ausschnitt invertieren"
 
 #: ../src/live_effects/lpe-powerclip.cpp:36
-#, fuzzy
 msgid "Flatten clip"
-msgstr "Bézierkurven begradigen"
+msgstr "Ausschnitt anwenden"
 
 #: ../src/live_effects/lpe-powerclip.cpp:36
 msgid "Flatten clip, see fill rule once convert to paths"
 msgstr ""
+"Pfade tatsächlich beschneiden; Füllregel beachten, wenn in Pfade konvertiert"
 
 #: ../src/live_effects/lpe-powerclip.cpp:37
 msgid ""
 "Use fill-rule evenodd on <b>fill and stroke</b> dialog if no flatten result "
 "after convert clip to paths."
 msgstr ""
+"Füllregel Gerade-Ungerade im <b>Füllung und Kontur</b>-Dialog verwenden, wenn"
+" das Anwenden des Ausschnitts mit nachfolgendem Umwandeln in Pfade kein"
+" Ergebnis bringt"
 
 #: ../src/live_effects/lpe-powermask.cpp:37
-#, fuzzy
 msgid "Invert mask"
-msgstr "Bild _invertieren"
+msgstr "Maske invertieren"
 
 #: ../src/live_effects/lpe-powermask.cpp:39
-#, fuzzy
 msgid "Hide mask"
-msgstr "Bild ausblenden"
+msgstr "Maske verbergen"
 
 #: ../src/live_effects/lpe-powermask.cpp:40
-#, fuzzy
 msgid "Add background to mask"
-msgstr "Hintergrundbild"
+msgstr "Hintergrund zur Maske hinzufügen"
 
 #: ../src/live_effects/lpe-powermask.cpp:41
-#, fuzzy
 msgid "Background color and opacity"
-msgstr "Hintergrund-Deckkraft"
+msgstr "Hintergrundfarbe und -deckkraft"
 
 #: ../src/live_effects/lpe-powermask.cpp:41
-#, fuzzy
 msgid "Set color and opacity of the background"
-msgstr "Fügt einfärbbaren deckenden Hintergrund hinzu"
+msgstr "Farbe und Deckkraft des Hintergrundes wählen"
 
 #: ../src/live_effects/lpe-powerstroke.cpp:129
 msgid "CubicBezierSmooth"
