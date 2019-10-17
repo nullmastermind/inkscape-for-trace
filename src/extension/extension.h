@@ -143,7 +143,7 @@ public:
     void          deactivate   ();
     bool          deactivated  ();
     void          printFailure (Glib::ustring reason);
-    std::string   getErrorReason() { return _error_reason; };
+    std::string const &getErrorReason() { return _error_reason; };
     Implementation::Implementation * get_imp () { return imp; };
     void          set_execution_env (ExecutionEnv * env) { execution_env = env; };
     ExecutionEnv *get_execution_env () { return execution_env; };
