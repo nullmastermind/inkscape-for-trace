@@ -19,6 +19,9 @@
 #include "extension.h"
 #include "implementation/implementation.h"
 
+#include <glibmm/fileutils.h>
+#include <glibmm/miscutils.h>
+
 #include <glib/gstdio.h>
 #include <glib/gprintf.h>
 
@@ -80,14 +83,22 @@ Extension::Extension(Inkscape::XML::Node *in_repr, Implementation::Implementatio
     }
 
     // get name of the translation catalog ("gettext textdomain") that the extension wants to use for translations
+    // and lookup the locale directory for it
     const char *translationdomain = repr->attribute("translationdomain");
     if (translationdomain) {
-        _translationdomain = g_strdup(translationdomain);
-
+        _translationdomain = translationdomain;
+    } else {
+        _translationdomain = "inkscape"; // default to the Inkscape catalog
+    }
+    if (!strcmp(_translationdomain, "none")) {
         // special keyword "none" means the extension author does not want translation of extension strings
-        if (!strcmp(translationdomain, "none")) {
-            _translation_enabled = false;
-        }
+        _translation_enabled = false;
+        _translationdomain = nullptr;
+    } else if (!strcmp(_translationdomain, "inkscape")) {
+        // this is our default domain; we know the location already (also respects INKSCAPE_LOCALEDIR)
+        _gettext_catalog_dir = bindtextdomain("inkscape", nullptr);
+    } else {
+        lookup_translation_catalog();
     }
 
     // Read XML tree and parse extension
@@ -425,6 +436,95 @@ std::string Extension::get_dependency_location(const char *name)
     return "";
 }
 
+/** recursively searches directory for a file named filename; returns true if found */
+static bool _find_filename_recursive(std::string directory, std::string filename) {
+    Glib::Dir dir(directory);
+
+    std::string name = dir.read_name();
+    while (!name.empty()) {
+        std::string fullpath = Glib::build_filename(directory, name);
+        // g_message("%s", fullpath.c_str());
+
+        if (Glib::file_test(fullpath, Glib::FILE_TEST_IS_DIR)) {
+            if (_find_filename_recursive(fullpath, filename)) {
+                return true;
+            }
+        } else if (name == filename) {
+            return true;
+        }
+        name = dir.read_name();
+    }
+
+    return false;
+}
+
+/** Searches for a gettext catalog matching the extension's translationdomain
+  *
+  * This function will attempt to find the correct gettext catalog for the translationdomain
+  * requested by the extension.
+  *
+  * For this the following three locations are recursively searched for "${translationdomain}.mo":
+  *  - the 'locale' directory in the .inx file's folder
+  *  - the 'locale' directory in the "extensions" folder containing the .inx
+  *  - the system location for gettext catalogs, i.e. where Inkscape's own catalog is located
+  *
+  * If one matching file is found, the directory is assumed to be the correct location and registered with gettext
+  */
+void Extension::lookup_translation_catalog() {
+    g_assert(!_base_directory.empty());
+
+    // get locale folder locations
+    std::string locale_dir_current_extension;
+    std::string locale_dir_extensions;
+    std::string locale_dir_system;
+
+    locale_dir_current_extension = Glib::build_filename(_base_directory, "locale");
+
+    size_t index = _base_directory.find_last_of("extensions");
+    if (index != std::string::npos) {
+        locale_dir_extensions = Glib::build_filename(_base_directory.substr(0, index+1), "locale");
+    }
+
+    locale_dir_system = bindtextdomain("inkscape", nullptr);
+
+    // collect unique locations into vector
+    std::vector<std::string> locale_dirs;
+    if (locale_dir_current_extension != locale_dir_extensions) {
+        locale_dirs.push_back(std::move(locale_dir_current_extension));
+    }
+    locale_dirs.push_back(std::move(locale_dir_extensions));
+    locale_dirs.push_back(std::move(locale_dir_system));
+
+    // iterate over locations and look for the one that has the correct catalog
+    std::string search_name;
+    search_name += _translationdomain;
+    search_name += ".mo";
+    for (auto locale_dir : locale_dirs) {
+        if (!Glib::file_test(locale_dir, Glib::FILE_TEST_IS_DIR)) {
+            continue;
+        }
+
+        if (_find_filename_recursive(locale_dir, search_name)) {
+            _gettext_catalog_dir = locale_dir;
+            break;
+        }
+    }
+
+    // register catalog with gettext if found, disable translation for this extension otherwise
+    if (!_gettext_catalog_dir.empty()) {
+        const char *current_dir = bindtextdomain(_translationdomain, nullptr);
+        if (_gettext_catalog_dir != current_dir) {
+            g_info("Binding textdomain '%s' to '%s'.", _translationdomain, _gettext_catalog_dir.c_str());
+            bindtextdomain(_translationdomain, _gettext_catalog_dir.c_str());
+            bind_textdomain_codeset(_translationdomain, "UTF-8");
+        }
+    } else {
+        g_warning("Failed to locate message catalog for textdomain '%s'.", _translationdomain);
+        _translation_enabled = false;
+        _translationdomain = nullptr;
+    }
+}
+
 /** Gets a translation within the context of the current extension
   *
   * Query gettext for the translated version of the input string,
@@ -440,12 +540,27 @@ const char *Extension::get_translation(const char *msgid, const char *msgctxt) {
         return msgid;
     }
 
-    // Note: _translationdomain might be NULL, which is fine.
-    //       We will simply default to the domain set via textdomain() in this case (which should be 'inkscape')
     if (msgctxt) {
         return g_dpgettext2(_translationdomain, msgctxt, msgid);
     } else {
         return g_dgettext(_translationdomain, msgid);
+    }
+}
+
+/** Sets environment suitable for executing this Extension
+  *
+  * Currently sets the environment variables INKEX_GETTEXT_DOMAIN and INKEX_GETTEXT_DIRECTORY
+  * to make the "translationdomain" accessible to child processes spawned by this extension's Implementation.
+  */
+void Extension::set_environment() {
+    Glib::unsetenv("INKEX_GETTEXT_DOMAIN");
+    Glib::unsetenv("INKEX_GETTEXT_DIRECTORY");
+
+    if (_translationdomain) {
+        Glib::setenv("INKEX_GETTEXT_DOMAIN", std::string(_translationdomain));
+    }
+    if (!_gettext_catalog_dir.empty()) {
+        Glib::setenv("INKEX_GETTEXT_DIRECTORY", _gettext_catalog_dir);
     }
 }
 

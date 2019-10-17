@@ -126,8 +126,13 @@ protected:
                                                  *  relative paths in the extension should usually be relative to it */
     ExpirationTimer * timer = nullptr;         /**< Timeout to unload after a given time */
     bool _translation_enabled = true;          /**< Attempt translation of strings provided by the extension? */
+
+private:
     const char *_translationdomain = nullptr;  /**< Domainname of gettext textdomain that should
                                                  *  be used for translation of the extension's strings */
+    std::string _gettext_catalog_dir;          /**< Directory containing the gettext catalog for _translationdomain */
+
+    void lookup_translation_catalog();
 
 public:
     Extension(Inkscape::XML::Node *in_repr, Implementation::Implementation *in_imp, std::string *base_directory);
@@ -151,6 +156,7 @@ public:
     void          set_base_directory(std::string base_directory) { _base_directory = base_directory; };
     std::string   get_dependency_location(const char *name);
     const char   *get_translation(const char* msgid, const char *msgctxt=nullptr);
+    void          set_environment();
 
 /* Parameter Stuff */
 private:
