@@ -671,6 +671,10 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
             double x_in_span_last = 0.0;  // set at the END when a new cluster starts
             double x_in_span      = 0.0;  // set from the preceding at the START when a new cluster starts.
 
+            // for (int i = 0; i < unbroken_span.glyph_string->num_glyphs; ++i) {
+            //     std::cout << "Unbroken span: " << unbroken_span.glyph_string->glyphs[i].glyph << std::endl;
+            // }
+
             if (it_span->start.char_byte == 0) {
                 // Start of an unbroken span, we might have dx, dy or rotate still to process
                 // (x and y are done per chunk)
@@ -737,7 +741,9 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                 int      log_cluster_size_chars      = 0;   // Number of characters in this log_cluster 
                 unsigned end_byte                    = 0;
 
+                // Loop over glyphs in span
                 for (unsigned glyph_index = it_span->start_glyph_index ; glyph_index < it_span->end_glyph_index ; glyph_index++) {
+
                     unsigned char_byte              = iter_source_text.base() - unbroken_span.input_stream_first_character.base();
                     bool     newcluster             = false;
                     if (unbroken_span.glyph_string->glyphs[glyph_index].attr.is_cluster_start) {
@@ -852,28 +858,48 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                         new_glyph.width = unbroken_span_glyph_info->geometry.width * font_size_multiplier;
                         if ((new_glyph.width == 0) && (para.pango_items[unbroken_span.pango_item_index].font))
                             new_glyph.width = new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span_glyph_info->glyph, false);
-                            // for some reason pango returns zero width for invalid glyph characters (those empty boxes), so go to freetype for the info
+                            // Pango returns zero width for invalid glyph characters (those empty boxes), so go to freetype for the info.
                     }
 
+                    // Correct for right to left text
                     if (new_span.direction == RIGHT_TO_LEFT) {
-                        // pango wanted to give us glyphs in visual order but we refused, so we need to work
-                        // out where the cluster start is ourselves
-                        double cluster_width = 0.0;
-                        for (unsigned rtl_index = glyph_index; rtl_index < it_span->end_glyph_index ; rtl_index++) {
-                            if (unbroken_span.glyph_string->glyphs[rtl_index].attr.is_cluster_start && rtl_index != glyph_index)
-                                break;
-                            cluster_width += font_size_multiplier * unbroken_span.glyph_string->glyphs[rtl_index].geometry.width;
-                        }
-                        new_glyph.x -= cluster_width;
+
+                        // The following commented out code is from 2005. Subtracting cluster width gives wrong placement if more
+                        // than one glyph has a horizontal advance. See GitHub issue 469. I leave the old code here in case switching to
+                        // subtracting only the glyph width causes unforseen bugs.
+
+                        // // pango wanted to give us glyphs in visual order but we refused, so we need to work
+                        // // out where the cluster start is ourselves
+
+                        // // Add up widths of remaining glyphs in span.
+                        // double cluster_width = 0.0;
+                        // std::cout << "  glyph_index: " << glyph_index << " end_glyph_index: " << it_span->end_glyph_index << std::endl;
+                        // for (unsigned rtl_index = glyph_index; rtl_index < it_span->end_glyph_index ; rtl_index++) {
+                        //     if (unbroken_span.glyph_string->glyphs[rtl_index].attr.is_cluster_start && rtl_index != glyph_index) {
+                        //         break;
+                        //     }
+                        //     cluster_width += font_size_multiplier * unbroken_span.glyph_string->glyphs[rtl_index].geometry.width;
+                        // }
+                        // new_glyph.x -= cluster_width;
+
+                        new_glyph.x -= font_size_multiplier * unbroken_span.glyph_string->glyphs[glyph_index].geometry.width;
                     }
+
+                    // Store glyph data
                     _flow._glyphs.push_back(new_glyph);
 
-                    // create the Layout::Character(s)
-                    double advance_width = new_glyph.width;
+                    // Create the Layout::Character(s)
                     if (newcluster) {
                         newcluster = false;
 
-                        // find where the text ends for this log_cluster
+                        // Figure out how many glyphs are in the log_cluster.
+                        log_cluster_size_glyphs = 0;
+                        for (; log_cluster_size_glyphs + glyph_index < it_span->end_glyph_index; log_cluster_size_glyphs++){
+                           if(unbroken_span.glyph_string->log_clusters[glyph_index                          ] !=
+                              unbroken_span.glyph_string->log_clusters[glyph_index + log_cluster_size_glyphs]) break;
+                        }
+
+                        // Find where the text ends for this log_cluster.
                         end_byte = it_span->start.iter_span->text_bytes;  // Upper limit
                         for(int next_glyph_index = glyph_index+1; next_glyph_index < unbroken_span.glyph_string->num_glyphs; next_glyph_index++){
                             if(unbroken_span.glyph_string->glyphs[next_glyph_index].attr.is_cluster_start){
@@ -882,51 +908,51 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                             }
                         }
 
-                        // Figure out how many glyphs and characters are in the log_cluster.
-                        log_cluster_size_glyphs = 0;
+                        // Figure out how many characters are in the log_cluster.
                         log_cluster_size_chars  = 0;
-                        for(; log_cluster_size_glyphs + glyph_index < it_span->end_glyph_index; log_cluster_size_glyphs++){
-                           if(unbroken_span.glyph_string->log_clusters[glyph_index                          ] != 
-                              unbroken_span.glyph_string->log_clusters[glyph_index + log_cluster_size_glyphs])break;
-                        }
-
                         Glib::ustring::const_iterator lclist = iter_source_text;
                         unsigned lcb = char_byte;
-                        while(lcb < end_byte){
+                        while (lcb < end_byte){
                             log_cluster_size_chars++;
                             lclist++;
                             lcb = lclist.base() - unbroken_span.input_stream_first_character.base();
                         }
                     }
 
+                    double advance_width = new_glyph.width;
                     while (char_byte < end_byte) {
 
                         /* Hack to survive ligatures:  in log_cluster keep the number of available chars >= number of glyphs remaining.
                            When there are no ligatures these two sizes are always the same.
                         */
-                        if(log_cluster_size_chars < log_cluster_size_glyphs){
+                        if (log_cluster_size_chars < log_cluster_size_glyphs) {
                            log_cluster_size_glyphs--;
                            break;
                         }
 
-
+                        // Store character info
                         Layout::Character new_character;
                         new_character.in_span = _flow._spans.size();
                         new_character.x = x_in_span;
                         new_character.char_attributes = para.char_attributes[unbroken_span.char_index_in_para + char_index_in_unbroken_span];
                         new_character.in_glyph = _flow._glyphs.size() - 1;
                         _flow._characters.push_back(new_character);
+
+                        // Letter/word spacing and justification
                         if (new_character.char_attributes.is_white)
                             advance_width += text_source->style->word_spacing.computed * _flow.getTextLengthMultiplierDue() + add_to_each_whitespace;    // justification
                         if (new_character.char_attributes.is_cursor_position)
                             advance_width += text_source->style->letter_spacing.computed * _flow.getTextLengthMultiplierDue();
                         advance_width += _flow.getTextLengthIncrementDue();
+
+                        // Update counters
                         iter_source_text++;
                         char_index_in_unbroken_span++;
                         char_byte = iter_source_text.base() - unbroken_span.input_stream_first_character.base();
                         log_cluster_size_chars--;
                     }
 
+                    // Update x position variables
                     advance_width *= direction_sign;
                     if (new_span.direction != para.direction) {
                         counter_directional_width_remaining -= advance_width;
@@ -936,7 +962,9 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                         current_x += advance_width;
                         x_in_span_last += advance_width;
                     }
-                }
+
+                } // Loop over glyphs in span
+
             } else if (_flow._input_stream[unbroken_span.input_index]->Type() == CONTROL_CODE) {
                 current_x += static_cast<InputStreamControlCode const *>(_flow._input_stream[unbroken_span.input_index])->width;
             }
@@ -1387,76 +1415,104 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
                                 new_span.glyph_string);
 
                     if (para->pango_items[pango_item_index].item->analysis.level & 1) {
-                        // pango_shape() will reorder glyphs in rtl sections into visual order which messes
-                        // us up because the svg spec requires us to draw glyphs in logical order
-                        // let's reverse the glyphstring on a cluster-by-cluster basis
+                        // Right to left text (Arabic, Hebrew, etc.)
+
+                        // pango_shape() will reorder glyphs in rtl sections into visual order
+                        // (start offsets in accending order) which messes us up because the svg
+                        // spec requires us to draw glyphs in logical order so let's reverse the
+                        // glyphstring.
+
                         const unsigned nglyphs = new_span.glyph_string->num_glyphs;
                         std::vector<PangoGlyphInfo> infos(nglyphs);
                         std::vector<gint>           clusters(nglyphs);
-                        unsigned i, j;
-                        for (i = 0 ; i < nglyphs ; i++)new_span.glyph_string->glyphs[i].attr.is_cluster_start = 0;
-                        for (i = 0 ; i < nglyphs ; i++) {
-                            j=i;
-                            while(  (j < nglyphs-1) &&  
-                                    (new_span.glyph_string->log_clusters[j+1] == new_span.glyph_string->log_clusters[i])
-                            )j++;
-                            /*      
-                            CAREFUL, within a log_cluster the order of glyphs may not map 1:1, or
-                            even in the same order, to the original unicode characters!!!  Among
-                            other things, diacritical mark glyphs can end up sequentially in front of the base
-                            character glyph.  That makes determining kerning, even approximately, difficult
-                            later on.  
-                            
-                            To resolve this to the extent possible sort the glyphs within the same
-                            log_cluster into descending order by width in a special manner before copying.  Diacritical marks
-                            and similar have zero width and the glyph they modify has nonzero width.  The order 
-                            of the zero width ones does not matter.  A logical cluster is sorted into sequential order
-                               [base] [zw_modifier1] [zw_modifier2] 
-                            where all the modifiers have zero width and the base does not. This works for languages like Hebrew. 
-                            
-                            Pango also creates log clusters for languages like Telugu having many glyphs with nonzero widths. 
-                            Since these are nonzero, their order is not modified.
-                            
-                            If some language mixes these modes, having a log cluster having something like 
-                               [base1] [zw_modifier1] [base2] [zw_modifier2]
-                            the result will be incorrect: 
-                               base1] [base2] [zw_modifier1] [zw_modifier2]
 
-                               
-                            If ligatures other than with Mark, nonspacing are ever implemented in Pango this will screw up, for instance
-                            changing "fi" to "if".
-                            */
-                            if(j - i){
-                                std::sort(&(new_span.glyph_string->glyphs[i]), &(new_span.glyph_string->glyphs[j+1]), compareGlyphWidth);
-                            }
-
-                            new_span.glyph_string->glyphs[i].attr.is_cluster_start = 1;
-                            std::copy(&new_span.glyph_string->glyphs[      i], &new_span.glyph_string->glyphs[      j+1], infos.end()    - j -1);
-                            std::copy(&new_span.glyph_string->log_clusters[i], &new_span.glyph_string->log_clusters[j+1], clusters.end() - j -1);
-                            i = j;
+                        for (int i = 0; i < nglyphs; ++i) {
+                            std::copy(&new_span.glyph_string->glyphs[i],       &new_span.glyph_string->glyphs[i+1],       infos.end() - i - 1);
+                            std::copy(&new_span.glyph_string->log_clusters[i], &new_span.glyph_string->log_clusters[i+1], clusters.end() - i - 1);
                         }
+
                         std::copy(infos.begin(), infos.end(), new_span.glyph_string->glyphs);
                         std::copy(clusters.begin(), clusters.end(), new_span.glyph_string->log_clusters);
-                        /* glyphs[].x_offset values are probably out of order within any log_clusters, apparently harmless */
-                    }
-                    else {  //  ltr sections are in order but glyphs in a log_cluster following a ligature may not be.  Sort, but no block swapping.
-                        const unsigned nglyphs = new_span.glyph_string->num_glyphs;
-                        unsigned i, j;
-                        for (i = 0 ; i < nglyphs ; i++)new_span.glyph_string->glyphs[i].attr.is_cluster_start = 0;
-                        for (i = 0 ; i < nglyphs ; i++) {
-                            j=i;
-                            while(  (j < nglyphs-1) &&  
-                                    (new_span.glyph_string->log_clusters[j+1] == new_span.glyph_string->log_clusters[i])
-                            )j++;
-                            /* see note in preceding section */
-                            if(j - i){
-                                std::sort(&(new_span.glyph_string->glyphs[i]), &(new_span.glyph_string->glyphs[j+1]), compareGlyphWidth);
-                            }
+
+                        // We've messed up the flag that tells a glyph it is first in a cluster.
+                        for (int i = 0; i < nglyphs; ++i) {
+
+                            // Set flag for start of cluster, we skip all other glyphs in cluster below.
                             new_span.glyph_string->glyphs[i].attr.is_cluster_start = 1;
+
+                            // Find index of first glyph in next cluster
+                            int j = i + 1;
+                            while( (j < nglyphs) &&
+                                   (new_span.glyph_string->log_clusters[j] == new_span.glyph_string->log_clusters[i])
+                                ) {
+                                new_span.glyph_string->glyphs[j].attr.is_cluster_start = 0; // Zero
+                                j++;
+                            }
+
+                            // Move on to next cluster.
                             i = j;
                         }
-                        /* glyphs[].x_offset values may be out of order within any log_clusters, apparently harmless */
-                    }
+
+                    } // End right to left text.
+
+                    //  The following sorting doesn't seem to be necessary, and causes GitHub bug #394... must test further.
+
+                    /*
+                        CAREFUL, within a log_cluster the order of glyphs may not map 1:1, or
+                        even in the same order, to the original unicode characters!!!  Among
+                        other things, diacritical mark glyphs can end up sequentially in front of the base
+                        character glyph.  That makes determining kerning, even approximately, difficult
+                        later on.
+
+                        To resolve this to the extent possible sort the glyphs within the same
+                        log_cluster into descending order by width in a special manner before copying.  Diacritical marks
+                        and similar have zero width and the glyph they modify has nonzero width.  The order
+                        of the zero width ones does not matter.  A logical cluster is sorted into sequential order
+                           [base] [zw_modifier1] [zw_modifier2]
+                        where all the modifiers have zero width and the base does not. This works for languages like Hebrew.
+
+                        Pango also creates log clusters for languages like Telugu having many glyphs with nonzero widths.
+                        Since these are nonzero, their order is not modified.
+
+                        If some language mixes these modes, having a log cluster having something like
+                           [base1] [zw_modifier1] [base2] [zw_modifier2]
+                        the result will be incorrect:
+                           base1] [base2] [zw_modifier1] [zw_modifier2]
+
+                           If ligatures other than with Mark, nonspacing are ever implemented in Pango this will screw up, for instance
+                        changing "fi" to "if".
+                    */
+
+                    // If it is necessary to move zero width glyphs.. then it applies to both right-to-left and left-to-right text.
+                    // const unsigned nglyphs = new_span.glyph_string->num_glyphs;
+                    // for (int i = 0; i < nglyphs; ++i) {
+
+                    //     // Zero flag for start of cluster, we zero the rest below, and then reset it after sorting.
+                    //     new_span.glyph_string->glyphs[i].attr.is_cluster_start = 0;
+
+                    //     // Find index of first glyph in next cluster
+                    //     int j = i + 1;
+                    //     while( (j < nglyphs) &&
+                    //            (new_span.glyph_string->log_clusters[j] == new_span.glyph_string->log_clusters[i])
+                    //         ) {
+                    //         new_span.glyph_string->glyphs[j].attr.is_cluster_start = 0; // Zero
+                    //         j++;
+                    //     }
+
+                    //     if (j - i) {
+                    //         // More than one glyph in cluster -> sort.
+                    //         std::sort(&(new_span.glyph_string->glyphs[i]), &(new_span.glyph_string->glyphs[j]), compareGlyphWidth);
+                    //     }
+
+                    //     // Now we're sorted, set flag for start of cluster.
+                    //     new_span.glyph_string->glyphs[i].attr.is_cluster_start = 1;
+
+                    //     // Move on to next cluster.
+                    //     i = j;
+                    // }
+                    /* glyphs[].x_offset values are probably out of order within any log_clusters, apparently harmless */
+
+
                     new_span.pango_item_index = pango_item_index;
                     new_span.line_height_multiplier = _computeFontLineHeight( text_source->style );
                     new_span.line_height.set( para->pango_items[pango_item_index].font );
