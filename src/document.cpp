@@ -1319,6 +1319,14 @@ static std::vector<SPItem*> &find_items_in_area(std::vector<SPItem*> &s,
 
     for (auto& o: group->children) {
         if (SPItem *item = dynamic_cast<SPItem *>(&o)) {
+            if (!take_insensitive && item->isLocked()) {
+                continue;
+            }
+
+            if (!take_hidden && item->isHidden()) {
+                continue;
+            }
+
             if (SPGroup * childgroup = dynamic_cast<SPGroup *>(item)) {
                 bool is_layer = childgroup->effectiveLayerMode(dkey) == SPGroup::LAYER;
                 if (is_layer || (enter_groups)) {
@@ -1329,10 +1337,7 @@ static std::vector<SPItem*> &find_items_in_area(std::vector<SPItem*> &s,
                 }
             }
             Geom::OptRect box = item->documentVisualBounds();
-            if (box && test(area, *box)
-                && (take_insensitive || !item->isLocked())
-                && (take_hidden || !item->isHidden()))
-            {
+            if (box && test(area, *box)) {
                 s.push_back(item);
             }
         }
