@@ -1909,6 +1909,7 @@ void FilterEffectsDialog::PrimitiveList::remove_selected()
 
     if(prim) {
         _observer->set(nullptr);
+        _model->erase(get_selection()->get_selected());
 
         //XML Tree being used directly here while it shouldn't be.
         sp_repr_unparent(prim->getRepr());
