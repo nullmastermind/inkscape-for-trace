@@ -86,7 +86,6 @@ if(WIN32)
     ${MINGW_BIN}/libpangomm-1.4-[0-9]*.dll
     ${MINGW_BIN}/libpangowin32-1.0-[0-9]*.dll
     ${MINGW_BIN}/libpcre-[0-9]*.dll
-    ${MINGW_BIN}/libpdcurses.dll
     ${MINGW_BIN}/libpixman-1-[0-9]*.dll
     ${MINGW_BIN}/libplc[0-9]*.dll
     ${MINGW_BIN}/libplds[0-9]*.dll
@@ -104,6 +103,7 @@ if(WIN32)
     ${MINGW_BIN}/libsoup-2.4-[0-9]*.dll
     ${MINGW_BIN}/libsqlite3-[0-9]*.dll
     ${MINGW_BIN}/libssl-1_[0-9]*.dll
+    ${MINGW_BIN}/libssp-[0-9]*.dll
     ${MINGW_BIN}/libstdc++-[0-9]*.dll
     ${MINGW_BIN}/libtermcap-[0-9]*.dll
     ${MINGW_BIN}/libthai-[0-9]*.dll

@@ -74,6 +74,7 @@ if(WIN32)
 
     list(APPEND INKSCAPE_LIBS "-lgomp")
     list(APPEND INKSCAPE_LIBS "-lwinpthread")
+    list(APPEND INKSCAPE_LIBS "-lssp") # required for support of _FORTIFY_SOURCE with mingw-w64
 
     if(HAVE_MINGW64)
         list(APPEND INKSCAPE_CXX_FLAGS "-m64")
