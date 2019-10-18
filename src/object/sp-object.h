@@ -154,31 +154,6 @@ SPObject *sp_object_ref(SPObject *object, SPObject *owner=nullptr);
 SPObject *sp_object_unref(SPObject *object, SPObject *owner=nullptr);
 
 /**
- * Increase weak refcount.
- *
- * Hrefcount is used for weak references, for example, to
- * determine whether any graphical element references a certain gradient
- * node.
- * @param owner Ignored.
- * @return object, NULL is error
- * \pre object points to real object
- * @todo need to move this to be a member of SPObject.
- */
-SPObject *sp_object_href(SPObject *object, SPObject* owner);
-
-/**
- * Decrease weak refcount.
- *
- * Hrefcount is used for weak references, for example, to determine whether
- * any graphical element references a certain gradient node.
- * @param owner Ignored.
- * @return always NULL
- * \pre object points to real object and hrefcount>0
- * @todo need to move this to be a member of SPObject.
- */
-SPObject *sp_object_hunref(SPObject *object, SPObject* owner);
-
-/**
  * SPObject is an abstract base class of all of the document nodes at the
  * SVG document level. Each SPObject subclass implements a certain SVG
  * element node type, or is an abstract base class for different node
@@ -445,6 +420,27 @@ public:
             deleteObject(false);
         }
     }
+
+    /**
+     * Increase weak refcount.
+     *
+     * Hrefcount is used for weak references, for example, to
+     * determine whether any graphical element references a certain gradient
+     * node.
+     * It keeps a list of "owners".
+     * @param owner Used to track who uses this object.
+     */
+    void hrefObject(SPObject* owner = nullptr);
+
+    /**
+     * Decrease weak refcount.
+     *
+     * Hrefcount is used for weak references, for example, to determine whether
+     * any graphical element references a certain gradient node.
+     * @param owner Used to track who uses this object.
+     * \pre hrefcount>0
+     */
+    void unhrefObject(SPObject* owner = nullptr);
 
     /**
      * Check if object is referenced by any other object.

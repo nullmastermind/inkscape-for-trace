@@ -242,8 +242,9 @@ SPObject *sp_object_ref(SPObject *object, SPObject *owner)
     g_return_val_if_fail(!owner || SP_IS_OBJECT(owner), NULL);
 
     Inkscape::Debug::EventTracker<RefEvent> tracker(object);
-    //g_object_ref(G_OBJECT(object));
+
     object->refCount++;
+
     return object;
 }
 
@@ -254,7 +255,7 @@ SPObject *sp_object_unref(SPObject *object, SPObject *owner)
     g_return_val_if_fail(!owner || SP_IS_OBJECT(owner), NULL);
 
     Inkscape::Debug::EventTracker<UnrefEvent> tracker(object);
-    //g_object_unref(G_OBJECT(object));
+
     object->refCount--;
 
     if (object->refCount <= 0) {
@@ -264,33 +265,24 @@ SPObject *sp_object_unref(SPObject *object, SPObject *owner)
     return nullptr;
 }
 
-SPObject *sp_object_href(SPObject *object, SPObject* owner)
+void SPObject::hrefObject(SPObject* owner)
 {
-    g_return_val_if_fail(object != nullptr, NULL);
-    g_return_val_if_fail(SP_IS_OBJECT(object), NULL);
-
-    object->hrefcount++;
-    object->_updateTotalHRefCount(1);
+    hrefcount++;
+    _updateTotalHRefCount(1);
 
     if(owner)
-        object->hrefList.push_front(owner);
-
-    return object;
+        hrefList.push_front(owner);
 }
 
-SPObject *sp_object_hunref(SPObject *object, SPObject* owner)
+void SPObject::unhrefObject(SPObject* owner)
 {
-    g_return_val_if_fail(object != nullptr, NULL);
-    g_return_val_if_fail(SP_IS_OBJECT(object), NULL);
-    g_return_val_if_fail(object->hrefcount > 0, NULL);
+    g_return_if_fail(hrefcount > 0);
 
-    object->hrefcount--;
-    object->_updateTotalHRefCount(-1);
+    hrefcount--;
+    _updateTotalHRefCount(-1);
 
     if(owner)
-        object->hrefList.remove(owner);
-
-    return nullptr;
+        hrefList.remove(owner);
 }
 
 void SPObject::_updateTotalHRefCount(int increment) {

@@ -92,7 +92,8 @@ void SPShape::release() {
 
             this->_release_connect[i].disconnect();
             this->_modified_connect[i].disconnect();
-            _marker[i] = static_cast<SPMarker *>(sp_object_hunref(_marker[i], this));
+            _marker[i]->unhrefObject(this);
+            _marker[i] = nullptr;
         }
     }
     
@@ -1002,7 +1003,8 @@ sp_shape_marker_release (SPObject *marker, SPShape *shape)
             /* Detach marker */
             shape->_release_connect[i].disconnect();
             shape->_modified_connect[i].disconnect();
-            shape->_marker[i] = static_cast<SPMarker *>(sp_object_hunref(shape->_marker[i], item));
+            shape->_marker[i]->unhrefObject(item);
+            shape->_marker[i] = nullptr;
         }
     }
 }
@@ -1051,10 +1053,12 @@ sp_shape_set_marker (SPObject *object, unsigned int key, const gchar *value)
             }
 
             /* Unref marker */
-            shape->_marker[key] = static_cast<SPMarker *>(sp_object_hunref(shape->_marker[key], object));
+            shape->_marker[key]->unhrefObject(object);
+            shape->_marker[key] = nullptr;
         }
         if (marker) {
-            shape->_marker[key] = static_cast<SPMarker *>(sp_object_href(marker, object));
+            shape->_marker[key] = marker;
+            shape->_marker[key]->hrefObject(object);
             shape->_release_connect[key] = marker->connectRelease(sigc::bind<1>(sigc::ptr_fun(&sp_shape_marker_release), shape));
             shape->_modified_connect[key] = marker->connectModified(sigc::bind<2>(sigc::ptr_fun(&sp_shape_marker_modified), shape));
         }

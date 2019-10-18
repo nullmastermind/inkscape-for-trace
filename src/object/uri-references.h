@@ -36,8 +36,6 @@ class URI;
  * automatically.
  *
  * @see SPObject
- * @see sp_object_href
- * @see sp_object_hunref
  */
 class URIReference : public sigc::trackable {
 public:
