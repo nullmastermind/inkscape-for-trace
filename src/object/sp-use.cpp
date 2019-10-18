@@ -672,13 +672,17 @@ SPItem *SPUse::unlink() {
 
     Inkscape::XML::Node *copy = nullptr;
 
-    if (dynamic_cast<SPSymbol *>(orig)) { // make a group, copy children
+    if (auto symbol = dynamic_cast<SPSymbol *>(orig)) {
+        // make a group, copy children
         copy = xml_doc->createElement("svg:g");
 
         for (Inkscape::XML::Node *child = orig->getRepr()->firstChild() ; child != nullptr; child = child->next()) {
                 Inkscape::XML::Node *newchild = child->duplicate(xml_doc);
                 copy->appendChild(newchild);
         }
+
+        // viewBox transformation
+        t = symbol->c2p * t;
     } else { // just copy
         copy = orig->getRepr()->duplicate(xml_doc);
     }
