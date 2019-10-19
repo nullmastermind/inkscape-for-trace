@@ -133,8 +133,8 @@ private:
     Gtk::TreeModel::Path _defer_target;
 
     Glib::RefPtr<Gtk::TreeStore> _store;
-    std::list<std::pair<SPItem*, Gtk::TreeModel::iterator> > _tree_cache;
-    std::list<std::pair<SPItem*, Gtk::TreeModel::iterator> >::iterator _tree_cache_iter;
+    std::map<SPItem*, Gtk::TreeModel::iterator> _tree_cache;
+
     std::vector<Gtk::Widget*> _watching;
     std::vector<Gtk::Widget*> _watchingNonTop;
     std::vector<Gtk::Widget*> _watchingNonBottom;
@@ -208,11 +208,11 @@ private:
     void _updateComposite();
     void _setCompositingValues(SPItem *item);
     
+    bool _findInTreeCache(SPItem* item, Gtk::TreeModel::iterator &tree_iter);
     void _updateObject(SPObject *obj, bool recurse);
-    bool _checkForUpdated(const Gtk::TreeIter& iter, SPObject* obj);
 
     void _objectsSelected(Selection *sel);
-    bool _checkForSelected(const Gtk::TreePath& path, const Gtk::TreeIter& iter, SPItem* item, bool scrollto, bool expand);
+    void _updateObjectSelected(SPItem* item, bool scrollto, bool expand);
 
     void _removeWatchers();
     void _objectsChangedWrapper(SPObject *obj);

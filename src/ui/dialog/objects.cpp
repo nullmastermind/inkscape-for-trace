@@ -314,7 +314,6 @@ void ObjectsPanel::_objectsChanged(SPObject */*obj*/)
             //Clear the tree store
             _store->clear();
             _tree_cache.clear();
-            _tree_cache_iter = _tree_cache.end(); // make sure we don't have any invalid iterators lingering around
             //Add all items recursively
             _addObject( root, nullptr );
             _selectedConnection.unblock();
@@ -346,8 +345,8 @@ void ObjectsPanel::_addObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
                 Gtk::TreeModel::Row row = *iter;
                 row[_model->_colObject] = item;
 
-                g_assert(_store->get_flags() & Gtk::TREE_MODEL_ITERS_PERSIST);
-                _tree_cache.emplace_back(item, iter); // Use a row reference instead of an iter maybe?
+                //g_assert(_store->get_flags() & Gtk::TREE_MODEL_ITERS_PERSIST);
+                _tree_cache.emplace(item, iter); // Use a row reference instead of an iter maybe?
 
                 //this seems to crash on convert stroke to path then undo (probably no ID?)
                 try {
@@ -394,95 +393,11 @@ void ObjectsPanel::_addObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
  * @param recurse Whether to recurse through the item's children
  */
 void ObjectsPanel::_updateObject( SPObject *obj, bool recurse ) {
-    //Find the object in the tree store and update it
+    Gtk::TreeModel::iterator tree_iter;
+    if (_findInTreeCache(SP_ITEM(obj), tree_iter)) {
+        Gtk::TreeModel::Row row = *tree_iter;
 
-    // The old way: (left here for reference)
-    //_store->foreach_iter( sigc::bind<SPObject*>(sigc::mem_fun(*this, &ObjectsPanel::_checkForUpdated), obj) );
-
-    std::list<std::pair<SPItem*, Gtk::TreeModel::iterator> >::iterator iter_prev, iter_next;
-
-    do {
-        if (_tree_cache_iter != _tree_cache.end()) {
-            /* New way: very likely, the item we're searching for will be within +/- 1 step from the previously known position;
-             * so we will first look for the item around the previous position. If not found, we will iterate the whole list again
-             * starting from zero
-             */
-
-            // First, try the position after the old one; most likely to succeed
-            iter_next = std::next(_tree_cache_iter, 1);
-            if (iter_next != _tree_cache.end()) {
-                if (_checkForUpdated(iter_next->second, obj)) {
-                    _tree_cache_iter = iter_next;
-                    break;
-                }
-            }
-
-            // If that didn't succeed, then try the old iterator
-            if (_checkForUpdated(_tree_cache_iter->second, obj)) {
-                break;
-            }
-
-            // Last attempt, try the position before the old one
-            if (_tree_cache_iter != _tree_cache.begin()) {
-                iter_prev = std::prev(_tree_cache_iter, 1);
-                if (_checkForUpdated(iter_prev->second, obj)) {
-                    _tree_cache_iter = iter_prev;
-                    break;
-                }
-            }
-
-        }
-        /* Still no success? Then we need to take the long way home.
-         * This takes very long! To update each element in a list of n elements, we iterate through the list, n times,
-         * every time sending out a signal. So we need n^2/2 iterations, which is O(N^2)
-         * cannot use: _store->foreach_iter( sigc::bind<SPObject*>(sigc::mem_fun(*this, &ObjectsPanel::_checkForUpdated), obj) );
-         * because we want to have a copy of the iterator at which we were successful
-         */
-        _tree_cache_iter = _tree_cache.begin();
-        while (_tree_cache_iter != _tree_cache.end()) {
-            if (_checkForUpdated(_tree_cache_iter->second, obj)) {
-                break;
-            }
-            _tree_cache_iter++;
-        }
-    } while (false);
-
-    if (recurse)
-    {
-        for (auto& iter: obj->children) {
-            _updateObject(&iter, recurse);
-        }
-    }
-
-}
-
-/**
- * Checks items in the tree store and updates the given item
- * @param iter Current item being looked at in the tree
- * @param obj Object to update
- * @return 
- */
-bool ObjectsPanel::_checkForUpdated(const Gtk::TreeIter& iter, SPObject* obj)
-{
-    Gtk::TreeModel::Row row = *iter;
-
-    if (not (obj && *iter)) {
-        return false;
-    }
-
-    /* If the row in the tree has been deleted, and and old iter is being used, then we will
-     * get a segmentation fault crash here; so make sure iters don't linger around!
-     * We can only check the validity as done below, but this is rather slow according to the
-     * documentation (adds 0.25 s for a 2k long tree). But better safe than sorry (for a segfault)
-     */
-    if (not _store->iter_is_valid(iter)) {
-        g_critical("Invalid iterator to Gtk::tree in objects panel; just prevented a segfault!");
-        return false;
-    }
-
-    if (obj == row[_model->_colObject] )
-    {
-        //We found our item in the tree!!  Update it!
+        //We found our item in the tree; now update it!
         SPItem * item = SP_IS_ITEM(obj) ? SP_ITEM(obj) : nullptr;
         SPGroup * group = SP_IS_GROUP(obj) ? SP_GROUP(obj) : nullptr;
         gchar const * id = obj->getId();
@@ -500,10 +415,13 @@ bool ObjectsPanel::_checkForUpdated(const Gtk::TreeIter& iter, SPObject* obj)
         ) : 0;
         //row[_model->_colInsertOrder] = group ? (group->insertBottom() ? 2 : 1) : 0;
 
-        return true;
+        if (recurse)
+        {
+            for (auto& iter: obj->children) {
+                _updateObject(&iter, recurse);
+            }
+        }
     }
-
-    return false;
 }
 
 /**
@@ -544,7 +462,7 @@ void ObjectsPanel::_compositingChanged( const Gtk::TreeModel::iterator& iter, bo
  * @param sel The current selection
  */
 void ObjectsPanel::_objectsSelected( Selection *sel ) {
-    
+
     bool setOpacity = true;
     _selectedConnection.block();
     _tree.get_selection()->unselect_all();
@@ -557,13 +475,13 @@ void ObjectsPanel::_objectsSelected( Selection *sel ) {
             _setCompositingValues(item);
             setOpacity = false;
         }
-        _store->foreach(sigc::bind<SPItem *, bool>( sigc::mem_fun(*this, &ObjectsPanel::_checkForSelected), item, (*i)==items.back(), false));
+        _updateObjectSelected(item, (*i)==items.back(), false);
     }
     if (!item) {
         if (_desktop->currentLayer() && SP_IS_ITEM(_desktop->currentLayer())) {
             item = SP_ITEM(_desktop->currentLayer());
             _setCompositingValues(item);
-            _store->foreach(sigc::bind<SPItem *, bool>( sigc::mem_fun(*this, &ObjectsPanel::_checkForSelected), item, false, true));
+            _updateObjectSelected(item, false, true);
         }
     }
     _selectedConnection.unblock();
@@ -622,22 +540,49 @@ void ObjectsPanel::_setCompositingValues(SPItem *item)
     _opacityConnection.unblock();
 }
 
+bool ObjectsPanel::_findInTreeCache(SPItem* item, Gtk::TreeModel::iterator &tree_iter) {
+    if (not item) {
+        return false;
+    }
+
+    try {
+        tree_iter = _tree_cache.at(item);
+    }
+    catch (std::out_of_range) {
+        // Apparently, item cannot be found in the tree_cache, which could mean that the tree and/or tree_cache
+        // are out-dated? Could this happen when a tree update is pending?
+        return false;
+    }
+
+    /* If the row in the tree has been deleted, and an old tree_cache is being used, then we will
+     * get a segmentation fault crash somewhere here; so make sure iters don't linger around!
+     * We can only check the validity as done below, but this is rather slow according to the
+     * documentation (adds 0.25 s for a 2k long tree). But better safe than sorry
+     */
+    if (not _store->iter_is_valid(tree_iter)) {
+        g_critical("Invalid iterator to Gtk::tree in objects panel; just prevented a segfault!");
+        return false;
+    }
+
+    return true;
+}
+
+
 /**
- * Checks the tree and selects the specified item, optionally scrolling to the item
+ * Find the specified item in the tree store and (de)select it, optionally scrolling to the item
  * @param path Current tree path
  * @param iter Current tree item
  * @param item Item to select in the tree
  * @param scrollto Whether to scroll to the item
- * @return Whether to continue searching the tree
  */
-bool ObjectsPanel::_checkForSelected(const Gtk::TreePath &path, const Gtk::TreeIter& iter, SPItem* item, bool scrollto, bool expand)
+void ObjectsPanel::_updateObjectSelected(SPItem* item, bool scrollto, bool expand)
 {
-    bool stopGoing = false;
+    Gtk::TreeModel::iterator tree_iter;
+    if (_findInTreeCache(item, tree_iter)) {
+        Gtk::TreeModel::Row row = *tree_iter;
 
-    Gtk::TreeModel::Row row = *iter;
-    if ( item == row[_model->_colObject] )
-    {
-        //We found the item!  Expand to the path and select it in the tree.
+        //We found the item! Expand to the path and select it in the tree.
+        Gtk::TreePath path = _store->get_path(tree_iter);
         _tree.expand_to_path( path );
         if (!expand)
             // but don't expand itself, just the path
@@ -645,16 +590,12 @@ bool ObjectsPanel::_checkForSelected(const Gtk::TreePath &path, const Gtk::TreeI
 
         Glib::RefPtr<Gtk::TreeSelection> select = _tree.get_selection();
 
-        select->select(iter);
+        select->select(tree_iter);
         if (scrollto) {
             //Scroll to the item in the tree
             _tree.scroll_to_row(path, 0.5);
         }
-
-        stopGoing = true;
     }
-
-    return stopGoing;
 }
 
 /**
@@ -1755,8 +1696,6 @@ ObjectsPanel::ObjectsPanel() :
     _tree.set_headers_visible(true);
     _tree.set_reorderable(true);
     _tree.enable_model_drag_dest (Gdk::ACTION_MOVE);
-
-    _tree_cache_iter = _tree_cache.end();
 
     //Create the column CellRenderers
     //Visible
