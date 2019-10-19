@@ -19,7 +19,7 @@ testname=$(basename $test)
     compare -metric AE ${testname}.png ${EXPECTED}.png ${testname}-compare.png 2> .tmp
     test1=`cat .tmp`
     echo $test1
-    if [ "$test1" == 0 ]; then
+    if [ "$test1" = 0 ]; then
         echo ${testname} "PASSED"
         rm ${testname}.png ${testname}-compare.png
     else
