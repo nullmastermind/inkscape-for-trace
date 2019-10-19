@@ -226,11 +226,13 @@ InxParameter::InxParameter(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
 {
     // name (mandatory for all parameters)
     const char *name = in_repr->attribute("name");
-    if (!name) {
+    if (name) {
+        _name = g_strstrip(g_strdup(name));
+    }
+    if (!_name || !strcmp(_name, "")) {
         g_warning("Parameter without name in extension '%s'.", _extension->get_id());
         throw param_no_name();
     }
-    _name = g_strdup(name);
 
     // gui-text
     const char *gui_text = in_repr->attribute("gui-text");

@@ -540,6 +540,11 @@ const char *Extension::get_translation(const char *msgid, const char *msgctxt) {
         return msgid;
     }
 
+    if (!strcmp(msgid, "")) {
+        g_warning("Attempting to translate an empty string in extension '%s', which is not supported.", _id);
+        return msgid;
+    }
+
     if (msgctxt) {
         return g_dpgettext2(_translationdomain, msgctxt, msgid);
     } else {
