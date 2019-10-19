@@ -45,6 +45,7 @@ private:
     Glib::ustring   _blend_tag;
     Glib::ustring   _blur_tag;
     Glib::ustring   _opacity_tag;
+    Glib::ustring   _isolation_tag;
 
     StyleSubject *_subject;
 
@@ -59,7 +60,7 @@ private:
     void _subjectChanged();
     void _blendBlurValueChanged();
     void _opacityValueChanged();
-
+    void _isolationValueChanged();
 };
 
 }

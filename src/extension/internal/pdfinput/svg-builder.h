@@ -189,7 +189,7 @@ private:
     SPCSSAttr *_setStyle(GfxState *state, bool fill, bool stroke, bool even_odd=false);
     void _setStrokeStyle(SPCSSAttr *css, GfxState *state);
     void _setFillStyle(SPCSSAttr *css, GfxState *state, bool even_odd);
-
+    void _setBlendMode(Inkscape::XML::Node *node, GfxState *state);
     void _flushText();    // Write buffered text into doc
 
     std::string _BestMatchingFont(std::string PDFname);

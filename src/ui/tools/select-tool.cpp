@@ -554,7 +554,6 @@ bool SelectTool::root_handler(GdkEvent* event) {
             if ((event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning) {
                 Geom::Point const motion_pt(event->motion.x, event->motion.y);
                 Geom::Point const p(desktop->w2d(motion_pt));
-
                 if ( within_tolerance
                      && ( abs( (gint) event->motion.x - xp ) < tolerance )
                      && ( abs( (gint) event->motion.y - yp ) < tolerance ) ) {

@@ -577,17 +577,20 @@ void ObjectsPanel::_objectsSelected( Selection *sel ) {
 void ObjectsPanel::_setCompositingValues(SPItem *item)
 {
     // Block the connections to avoid interference
+    _isolationConnection.block();
     _opacityConnection.block();
     _blendConnection.block();
     _blurConnection.block();
 
+    // Set the isolation
+    int isolation = item->style->isolation.set ? item->style->isolation.value : SP_CSS_ISOLATION_AUTO;
+    _filter_modifier.set_isolation_mode(isolation, true);
     // Set the opacity
     double opacity = (item->style->opacity.set ? SP_SCALE24_TO_FLOAT(item->style->opacity.value) : 1);
     opacity *= 100; // Display in percent.
     _filter_modifier.set_opacity_value(opacity);
     // Set the blend mode
-    _filter_modifier.set_blend_mode(item->style->mix_blend_mode.set ? item->style->mix_blend_mode.value
-                                                                    : SP_CSS_BLEND_NORMAL);
+    _filter_modifier.set_blend_mode(item->style->mix_blend_mode.value, true);
     SPGaussianBlur *spblur = nullptr;
     if (item->style->getFilter()) {
         for (auto& primitive_obj: item->style->getFilter()->children) {
@@ -613,6 +616,7 @@ void ObjectsPanel::_setCompositingValues(SPItem *item)
     _filter_modifier.set_blur_value(blur_value);
 
     //Unblock connections
+    _isolationConnection.unblock();
     _blurConnection.unblock();
     _blendConnection.unblock();
     _opacityConnection.unblock();
@@ -1185,6 +1189,7 @@ void ObjectsPanel::_blockAllSignals(bool should_block = true) {
 
     // incoming signals
     _documentChangedCurrentLayer.block(should_block);
+    _isolationConnection.block(should_block);
     _opacityConnection.block(should_block);
     _blendConnection.block(should_block);
     _blurConnection.block(should_block);
@@ -1600,14 +1605,38 @@ void ObjectsPanel::_opacityChangedIter(const Gtk::TreeIter& iter)
 }
 
 /**
+ * Callback for when the isolation value is changed
+ */
+void ObjectsPanel::_isolationValueChanged()
+{
+    _blockCompositeUpdate = true;
+    _tree.get_selection()->selected_foreach_iter(sigc::mem_fun(*this, &ObjectsPanel::_isolationChangedIter));
+    DocumentUndo::maybeDone(_document, "isolation", SP_VERB_DIALOG_OBJECTS, _("Set object isolation"));
+    _blockCompositeUpdate = false;
+}
+
+/**
+ * Change the isolation of the selected items in the tree
+ * @param iter Current tree item
+ */
+void ObjectsPanel::_isolationChangedIter(const Gtk::TreeIter &iter)
+{
+    Gtk::TreeModel::Row row = *iter;
+    SPItem *item = row[_model->_colObject];
+    if (item) {
+        item->style->isolation.set = TRUE;
+        item->style->isolation.value = _filter_modifier.get_isolation_mode();
+        item->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
+    }
+}
+
+/**
  * Callback for when the blend mode is changed
  */
 void ObjectsPanel::_blendValueChanged()
 {
     _blockCompositeUpdate = true;
-    const Glib::ustring blendmode = _filter_modifier.get_blend_mode();
-
-    _tree.get_selection()->selected_foreach_iter(sigc::bind<Glib::ustring>(sigc::mem_fun(*this, &ObjectsPanel::_blendChangedIter), blendmode));
+    _tree.get_selection()->selected_foreach_iter(sigc::mem_fun(*this, &ObjectsPanel::_blendChangedIter));
     DocumentUndo::done(_document, SP_VERB_DIALOG_OBJECTS, _("Set object blend mode"));
     _blockCompositeUpdate = false;
 }
@@ -1617,23 +1646,15 @@ void ObjectsPanel::_blendValueChanged()
  * @param iter Current tree item
  * @param blendmode Blend mode to set
  */
-void ObjectsPanel::_blendChangedIter(const Gtk::TreeIter& iter, Glib::ustring blendmode)
+void ObjectsPanel::_blendChangedIter(const Gtk::TreeIter &iter)
 {
     Gtk::TreeModel::Row row = *iter;
     SPItem* item = row[_model->_colObject];
     if (item)
     {
-        //Since blur and blend are both filters, we need to set both at the same time
-        SPStyle *style = item->style;
-        g_assert(style != nullptr);
-        SPCSSAttr *css = sp_css_attr_from_style(style, SP_STYLE_FLAG_ALWAYS | SP_STYLE_FLAG_IFSRC);
-        if (blendmode == "normal") {
-            sp_repr_css_unset_property(css, "mix-blend-mode");
-        } else {
-            sp_repr_css_set_property(css, "mix-blend-mode", blendmode.c_str());
-        }
-        sp_repr_css_change(item->getRepr(), css, "style");
-        sp_repr_css_attr_unref(css);
+        item->style->mix_blend_mode.set = TRUE;
+        item->style->mix_blend_mode.value = _filter_modifier.get_blend_mode();
+        item->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
     }
 }
 
@@ -1717,7 +1738,8 @@ ObjectsPanel::ObjectsPanel() :
     _clipmaskHeader(C_("Clip and mask", "CM")),
     _highlightHeader(C_("Highlight", "HL")),
     _nameHeader(_("Label")),
-    _filter_modifier( UI::Widget::SimpleFilterModifier::BLEND   |
+    _filter_modifier( UI::Widget::SimpleFilterModifier::ISOLATION   |
+                      UI::Widget::SimpleFilterModifier::BLEND   |
                       UI::Widget::SimpleFilterModifier::BLUR    |
                       UI::Widget::SimpleFilterModifier::OPACITY ),
     _colorSelectorDialog("dialogs.colorpickerwindow")
@@ -1859,7 +1881,8 @@ ObjectsPanel::ObjectsPanel() :
     _blendConnection   = _filter_modifier.signal_blend_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_blendValueChanged));
     _blurConnection    = _filter_modifier.signal_blur_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_blurValueChanged));
     _opacityConnection = _filter_modifier.signal_opacity_changed().connect(   sigc::mem_fun(*this, &ObjectsPanel::_opacityValueChanged));
-
+    _isolationConnection = _filter_modifier.signal_isolation_changed().connect(
+        sigc::mem_fun(*this, &ObjectsPanel::_isolationValueChanged));
     //Pack the compositing functions and the button row
     _page.pack_end(_filter_modifier, Gtk::PACK_SHRINK);
     _page.pack_end(_buttonsRow, Gtk::PACK_SHRINK);

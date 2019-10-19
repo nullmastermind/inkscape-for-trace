@@ -156,7 +156,8 @@ void ink_cairo_pattern_set_matrix(cairo_pattern_t *cp, Geom::Affine const &m);
 
 void ink_matrix_to_2geom(Geom::Affine &, cairo_matrix_t const &);
 void ink_matrix_to_cairo(cairo_matrix_t &, Geom::Affine const &);
-
+cairo_operator_t ink_css_blend_to_cairo_operator(unsigned blend_mode);
+unsigned ink_cairo_operator_to_css_blend(cairo_operator_t cairo_operator);
 cairo_surface_t *ink_cairo_surface_copy(cairo_surface_t *s);
 cairo_surface_t *ink_cairo_surface_create_identical(cairo_surface_t *s);
 cairo_surface_t *ink_cairo_surface_create_same_size(cairo_surface_t *s, cairo_content_t c);

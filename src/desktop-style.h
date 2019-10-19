@@ -59,6 +59,7 @@ enum { // which property was queried (add when you need more)
     QUERY_STYLE_PROPERTY_BASELINES, // baseline-shift
     QUERY_STYLE_PROPERTY_WRITINGMODES, // writing-mode, text-orientation
     QUERY_STYLE_PROPERTY_MASTEROPACITY, // opacity
+    QUERY_STYLE_PROPERTY_ISOLATION, // isolation
     QUERY_STYLE_PROPERTY_BLEND, // blend
     QUERY_STYLE_PROPERTY_BLUR // blur
 };

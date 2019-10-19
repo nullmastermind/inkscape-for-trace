@@ -85,6 +85,7 @@ private:
     sigc::connection _selectedConnection;
     
     //Connections for when the opacity/blend/blur of the active selection in the document changes
+    sigc::connection _isolationConnection;
     sigc::connection _opacityConnection;
     sigc::connection _blendConnection;
     sigc::connection _blurConnection;
@@ -217,11 +218,14 @@ private:
     void _objectsChangedWrapper(SPObject *obj);
     void _objectsChanged(SPObject *obj);
     void _addObject( SPObject* obj, Gtk::TreeModel::Row* parentRow );
-    
+
+    void _isolationChangedIter(const Gtk::TreeIter &iter);
+    void _isolationValueChanged();
+
     void _opacityChangedIter(const Gtk::TreeIter& iter);
     void _opacityValueChanged();
-    
-    void _blendChangedIter(const Gtk::TreeIter& iter, Glib::ustring blendmode);
+
+    void _blendChangedIter(const Gtk::TreeIter &iter);
     void _blendValueChanged();
 
     void _blurChangedIter(const Gtk::TreeIter& iter, double blur);

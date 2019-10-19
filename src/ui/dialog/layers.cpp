@@ -740,6 +740,7 @@ LayersPanel::LayersPanel() :
     _pending(nullptr),
     _toggleEvent(nullptr),
     _compositeSettings(SP_VERB_DIALOG_LAYERS, "layers",
+                       UI::Widget::SimpleFilterModifier::ISOLATION |
                        UI::Widget::SimpleFilterModifier::BLEND |
                        UI::Widget::SimpleFilterModifier::OPACITY |
                        UI::Widget::SimpleFilterModifier::BLUR),

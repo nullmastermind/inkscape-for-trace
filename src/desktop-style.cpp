@@ -1750,6 +1750,54 @@ objects_query_blend (const std::vector<SPItem*> &objects, SPStyle *style_res)
     }
 }
 
+int objects_query_isolation(const std::vector<SPItem *> &objects, SPStyle *style_res)
+{
+    const int empty_prev = -2;
+    int isolation = 0;
+    float isolation_prev = empty_prev;
+    bool same_isolation = true;
+    guint items = 0;
+
+    for (auto obj : objects) {
+        if (!obj) {
+            continue;
+        }
+        SPStyle *style = obj->style;
+        if (!style || !dynamic_cast<SPItem *>(obj)) {
+            continue;
+        }
+
+        items++;
+
+        if (style->isolation.set) {
+            isolation = style->isolation.value;
+        }
+        // defaults to blend mode = "normal"
+        else {
+            isolation = 0;
+        }
+
+        if (isolation_prev != empty_prev && isolation_prev != isolation)
+            same_isolation = false;
+        isolation_prev = isolation;
+    }
+
+    if (items > 0) {
+        style_res->isolation.value = isolation;
+    }
+
+    if (items == 0) {
+        return QUERY_STYLE_NOTHING;
+    } else if (items == 1) {
+        return QUERY_STYLE_SINGLE;
+    } else {
+        if (same_isolation)
+            return QUERY_STYLE_MULTIPLE_SAME;
+        else
+            return QUERY_STYLE_MULTIPLE_DIFFERENT;
+    }
+}
+
 /**
  * Write to style_res the average blurring of a list of objects.
  */
@@ -1873,6 +1921,8 @@ sp_desktop_query_style_from_list (const std::vector<SPItem*> &list, SPStyle *sty
 
     } else if (property == QUERY_STYLE_PROPERTY_BLEND) {
         return objects_query_blend (list, style);
+    } else if (property == QUERY_STYLE_PROPERTY_ISOLATION) {
+        return objects_query_isolation(list, style);
     } else if (property == QUERY_STYLE_PROPERTY_BLUR) {
         return objects_query_blur (list, style);
     }
@@ -1924,6 +1974,7 @@ sp_desktop_query_style_all (SPDesktop *desktop, SPStyle *query)
         int result_opacity = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_MASTEROPACITY);
         int result_blur = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_BLUR);
         int result_blend = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_BLEND);
+        int result_isolation = sp_desktop_query_style (desktop, query, QUERY_STYLE_PROPERTY_ISOLATION);
 
         return (result_family != QUERY_STYLE_NOTHING ||
                 result_fstyle != QUERY_STYLE_NOTHING ||
@@ -1937,6 +1988,7 @@ sp_desktop_query_style_all (SPDesktop *desktop, SPStyle *query)
                 result_strokejoin != QUERY_STYLE_NOTHING ||
                 result_paintorder != QUERY_STYLE_NOTHING ||
                 result_blur != QUERY_STYLE_NOTHING ||
+                result_isolation != QUERY_STYLE_NOTHING ||
                 result_blend != QUERY_STYLE_NOTHING);
 }
 

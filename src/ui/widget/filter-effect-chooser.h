@@ -15,6 +15,7 @@
  */
 
 #include <gtkmm/box.h>
+#include <gtkmm/checkbutton.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/separator.h>
 
@@ -32,41 +33,44 @@ namespace Widget {
 class SimpleFilterModifier : public Gtk::VBox
 {
 public:
-    enum Flags {
-      NONE   = 0,
-      BLUR   = 1,
-      OPACITY= 2,
-      BLEND  = 4
-    };
+  enum Flags { NONE = 0, BLUR = 1, OPACITY = 2, BLEND = 4, ISOLATION = 16 };
 
-    SimpleFilterModifier(int flags);
+  SimpleFilterModifier(int flags);
 
-    sigc::signal<void>& signal_blend_changed();
-    sigc::signal<void>& signal_blur_changed();
-    sigc::signal<void>& signal_opacity_changed();
+  sigc::signal<void> &signal_blend_changed();
+  sigc::signal<void> &signal_blur_changed();
+  sigc::signal<void> &signal_opacity_changed();
+  sigc::signal<void> &signal_isolation_changed();
 
-    const Glib::ustring get_blend_mode();
-    // Uses blend mode enum values, or -1 for a complex filter
-    void set_blend_mode(const int);
+  int get_isolation_mode();
+  void set_isolation_mode(const int, bool notifi);
 
-    double get_blur_value() const;
-    void   set_blur_value(const double);
+  int get_blend_mode();
+  void set_blend_mode(const int, bool notifi);
 
-    double get_opacity_value() const;
-    void   set_opacity_value(const double);
+  double get_blur_value() const;
+  void set_blur_value(const double);
+
+  double get_opacity_value() const;
+  void set_opacity_value(const double);
 
 private:
     int _flags;
+    bool _notify;
 
     Gtk::HBox _hb_blend;
     Gtk::Label _lb_blend;
+    Gtk::Label _lb_isolation;
     ComboBoxEnum<SPBlendMode> _blend;
     SpinScale _blur;
     SpinScale _opacity;
+    Gtk::CheckButton _isolation;
 
+    sigc::signal<void> _signal_null;
     sigc::signal<void> _signal_blend_changed;
     sigc::signal<void> _signal_blur_changed;
     sigc::signal<void> _signal_opacity_changed;
+    sigc::signal<void> _signal_isolation_changed;
 };
 
 }

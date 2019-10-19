@@ -10,10 +10,13 @@
  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
  */
 
-#include "display/drawing.h"
-#include "display/drawing-item.h"
 #include "display/drawing-group.h"
-
+#include "display/cairo-utils.h"
+#include "display/drawing-context.h"
+#include "display/drawing-item.h"
+#include "display/drawing-surface.h"
+#include "display/drawing.h"
+#include "style.h"
 
 namespace Inkscape {
 
@@ -90,29 +93,70 @@ DrawingGroup::_updateItem(Geom::IntRect const &area, UpdateContext const &ctx, u
 unsigned
 DrawingGroup::_renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigned flags, DrawingItem *stop_at)
 {
-    if (stop_at == nullptr) {
-        // normal rendering
-        for (auto & i : _children) {
-            i.setAntialiasing(_antialias);
-            i.render(dc, area, flags, stop_at);
+    if (!parent() || (_isolation == SP_CSS_ISOLATION_ISOLATE && !_mix_blend_mode)) {
+        int device_scale = dc.surface()->device_scale();
+        DrawingSurface intermediate(area, device_scale);
+        DrawingContext ict(intermediate);
+        ict.setOperator(CAIRO_OPERATOR_OVER);
+        if (parent()) {
+            flags = flags | RENDER_FILTER_BACKGROUND;
         }
-    } else {
-        // background rendering
-        for (auto & i : _children) {
-            if (&i == stop_at) return RENDER_OK; // do not render the stop_at item at all
-            if (i.isAncestorOf(stop_at)) {
-                // render its ancestors without masks, opacity or filters
+        if (stop_at == nullptr) {
+            // normal rendering
+            for (auto &i : _children) {
                 i.setAntialiasing(_antialias);
-                i.render(dc, area, flags | RENDER_FILTER_BACKGROUND, stop_at);
-                // stop further rendering
-                return RENDER_OK;
-            } else {
+                i.render(ict, area, flags, stop_at);
+            }
+        } else {
+            // background rendering
+            for (auto &i : _children) {
+                if (&i == stop_at)
+                    return RENDER_OK; // do not render the stop_at item at all
+                if (i.isAncestorOf(stop_at)) {
+                    // render its ancestors without masks, opacity or filters
+                    i.setAntialiasing(_antialias);
+                    i.render(ict, area, flags | RENDER_FILTER_BACKGROUND, stop_at);
+                    break;
+                } else {
+                    i.setAntialiasing(_antialias);
+                    i.render(ict, area, flags, stop_at);
+                }
+            }
+        }
+        dc.rectangle(area);
+        dc.setSource(&intermediate);
+        dc.setOperator(CAIRO_OPERATOR_OVER);
+        dc.fill();
+        return RENDER_OK;
+    } else {
+        /* cairo_operator_t current_op = CAIRO_OPERATOR_OVER;
+        if (parent()->_isolation == SP_CSS_ISOLATION_ISOLATE && !parent()->_mix_blend_mode) {
+            dc.setOperator(CAIRO_OPERATOR_OVER);
+        } */
+        if (stop_at == nullptr) {
+            // normal rendering
+            for (auto &i : _children) {
                 i.setAntialiasing(_antialias);
                 i.render(dc, area, flags, stop_at);
             }
+        } else {
+            // background rendering
+            for (auto &i : _children) {
+                if (&i == stop_at)
+                    return RENDER_OK; // do not render the stop_at item at all
+                if (i.isAncestorOf(stop_at)) {
+                    // render its ancestors without masks, opacity or filters
+                    i.setAntialiasing(_antialias);
+                    i.render(dc, area, flags | RENDER_FILTER_BACKGROUND, stop_at);
+                    break;
+                } else {
+                    i.setAntialiasing(_antialias);
+                    i.render(dc, area, flags, stop_at);
+                }
+            }
         }
+        return RENDER_OK;
     }
-    return RENDER_OK;
 }
 
 void

@@ -101,6 +101,7 @@ public:
     void setMiterLimit(double miter) { cairo_set_miter_limit(_ct, miter); }
     void setFillRule(cairo_fill_rule_t rule) { cairo_set_fill_rule(_ct, rule); }
     void setOperator(cairo_operator_t op) { cairo_set_operator(_ct, op); }
+    cairo_operator_t getOperator() { return cairo_get_operator(_ct); }
     void setTolerance(double tol) { cairo_set_tolerance(_ct, tol); }
     void setSource(cairo_pattern_t *source) { cairo_set_source(_ct, source); }
     void setSource(cairo_surface_t *surface, double x, double y) {

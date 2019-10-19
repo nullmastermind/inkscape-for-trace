@@ -1838,7 +1838,6 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     cairo_surface_set_device_scale(imgs, _device_scale, _device_scale);
 
     buf.ct = cairo_create(imgs);
-
     cairo_save(buf.ct);
     cairo_translate(buf.ct, -paint_rect.left(), -paint_rect.top());
     cairo_set_source(buf.ct, _background);
@@ -1850,6 +1849,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     if (_root->visible) {
         SP_CANVAS_ITEM_GET_CLASS(_root)->render(_root, &buf);
     }
+
     // cairo_surface_write_to_png( imgs, "debug2.png" );
 
     // output to X

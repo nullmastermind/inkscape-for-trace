@@ -94,6 +94,9 @@ public:
     DrawingItem(Drawing &drawing);
     virtual ~DrawingItem();
 
+    unsigned _isolation : 1;
+    unsigned _mix_blend_mode : 4;
+
     Geom::OptIntRect geometricBounds() const { return _bbox; }
     Geom::OptIntRect visualBounds() const { return _drawbox; }
     Geom::OptRect itemBounds() const { return _item_bbox; }
@@ -226,9 +229,6 @@ protected:
     unsigned _pick_children : 1; ///< For groups: if true, children are returned from pick(),
                                  ///  otherwise the group is returned
     unsigned _antialias : 2; ///< antialiasing level (NONE/FAST/GOOD(DEFAULT)/BEST)
-
-    unsigned _isolation : 1;
-    unsigned _mix_blend_mode : 4;
 
     friend class Drawing;
 };

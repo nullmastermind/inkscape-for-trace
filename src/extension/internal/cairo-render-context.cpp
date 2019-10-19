@@ -1569,6 +1569,9 @@ CairoRenderContext::renderPathVector(Geom::PathVector const & pathv, SPStyle con
             } else {
                 cairo_set_fill_rule(_cr, CAIRO_FILL_RULE_WINDING);
             }
+            if (style->mix_blend_mode.set && style->mix_blend_mode.value) {
+                cairo_set_operator(_cr, ink_css_blend_to_cairo_operator(style->mix_blend_mode.value));
+            }
             cairo_fill(_cr);
             TEST(cairo_surface_write_to_png (_surface, "pathmask.png"));
         }
@@ -1597,6 +1600,10 @@ CairoRenderContext::renderPathVector(Geom::PathVector const & pathv, SPStyle con
         } else {
             cairo_set_fill_rule(_cr, CAIRO_FILL_RULE_WINDING);
         }
+    }
+
+    if (style->mix_blend_mode.set && style->mix_blend_mode.value) {
+        cairo_set_operator(_cr, ink_css_blend_to_cairo_operator(style->mix_blend_mode.value));
     }
 
     setPathVector(pathv);
@@ -1693,6 +1700,10 @@ bool CairoRenderContext::renderImage(Inkscape::Pixbuf *pb,
                 cairo_pattern_set_filter(cairo_get_source(_cr), CAIRO_FILTER_BEST);
                 break;
         }
+    }
+
+    if (style->mix_blend_mode.set && style->mix_blend_mode.value) {
+        cairo_set_operator(_cr, ink_css_blend_to_cairo_operator(style->mix_blend_mode.value));
     }
 
     cairo_paint(_cr);
@@ -1823,6 +1834,10 @@ CairoRenderContext::renderGlyphtext(PangoFont *font, Geom::Affine const &font_ma
         bool stroke = false;
         if (style->stroke.isColor() || style->stroke.isPaintserver()) {
             stroke = true;
+        }
+
+        if (style->mix_blend_mode.set && style->mix_blend_mode.value) {
+            cairo_set_operator(_cr, (cairo_operator_t)style->mix_blend_mode.value);
         }
 
         // Text never has markers
