@@ -94,9 +94,9 @@ unsigned
 DrawingGroup::_renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigned flags, DrawingItem *stop_at)
 {
     bool isolated = false;
-    if (!parent() || (_isolation == SP_CSS_ISOLATION_ISOLATE && !_mix_blend_mode)) {
+    if (!parent() || _isolation == SP_CSS_ISOLATION_ISOLATE || _mix_blend_mode) {
         isolated = true;
-    } 
+    }
     int device_scale = dc.surface()->device_scale();
     DrawingSurface intermediate(area, device_scale);
     DrawingContext ict(intermediate);
@@ -127,7 +127,7 @@ DrawingGroup::_renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigne
     if (isolated) {
         dc.rectangle(area);
         dc.setSource(&intermediate);
-        dc.setOperator(CAIRO_OPERATOR_OVER);
+        dc.setOperator(ink_css_blend_to_cairo_operator(_mix_blend_mode));
         dc.fill();
     }
     return RENDER_OK;

@@ -508,7 +508,11 @@ void ObjectsPanel::_setCompositingValues(SPItem *item)
     opacity *= 100; // Display in percent.
     _filter_modifier.set_opacity_value(opacity);
     // Set the blend mode
-    _filter_modifier.set_blend_mode(item->style->mix_blend_mode.value, true);
+    if (item->style->isolation.value == SP_CSS_ISOLATION_ISOLATE) {
+        _filter_modifier.set_blend_mode(SP_CSS_BLEND_NORMAL, true);
+    } else {
+        _filter_modifier.set_blend_mode(item->style->mix_blend_mode.value, true);
+    }
     SPGaussianBlur *spblur = nullptr;
     if (item->style->getFilter()) {
         for (auto& primitive_obj: item->style->getFilter()->children) {
@@ -1567,6 +1571,11 @@ void ObjectsPanel::_isolationChangedIter(const Gtk::TreeIter &iter)
     if (item) {
         item->style->isolation.set = TRUE;
         item->style->isolation.value = _filter_modifier.get_isolation_mode();
+        if (item->style->isolation.value == SP_CSS_ISOLATION_ISOLATE) {
+            item->style->mix_blend_mode.set = TRUE;
+            item->style->mix_blend_mode.value = SP_CSS_BLEND_NORMAL;
+            _filter_modifier.set_blend_mode(0, false);
+        }
         item->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
     }
 }
@@ -1594,7 +1603,14 @@ void ObjectsPanel::_blendChangedIter(const Gtk::TreeIter &iter)
     if (item)
     {
         item->style->mix_blend_mode.set = TRUE;
-        item->style->mix_blend_mode.value = _filter_modifier.get_blend_mode();
+        if (_filter_modifier.get_blend_mode() &&
+            item->style->isolation.value == SP_CSS_ISOLATION_ISOLATE) 
+        {
+            item->style->mix_blend_mode.value = SP_CSS_BLEND_NORMAL;
+            _filter_modifier.set_blend_mode(0, false);
+        } else { 
+            item->style->mix_blend_mode.value = _filter_modifier.get_blend_mode();
+        }
         item->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
     }
 }

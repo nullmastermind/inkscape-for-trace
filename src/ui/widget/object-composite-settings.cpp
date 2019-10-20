@@ -114,7 +114,11 @@ ObjectCompositeSettings::_blendBlurValueChanged()
         SPStyle *style = item->style;
         g_assert(style != nullptr);
         item->style->mix_blend_mode.set = TRUE;
-        item->style->mix_blend_mode.value = _filter_modifier.get_blend_mode();
+        if (item->style->isolation.value == SP_CSS_ISOLATION_ISOLATE) {
+            item->style->mix_blend_mode.value = SP_CSS_BLEND_NORMAL;
+        } else { 
+            item->style->mix_blend_mode.value = _filter_modifier.get_blend_mode();
+        }
         item->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
 
         if (radius == 0 && item->style->filter.set
@@ -193,6 +197,10 @@ void ObjectCompositeSettings::_isolationValueChanged()
     for (auto item : _subject->list()) {
         item->style->isolation.set = TRUE;
         item->style->isolation.value = _filter_modifier.get_isolation_mode();
+        if (item->style->isolation.value == SP_CSS_ISOLATION_ISOLATE) {
+            item->style->mix_blend_mode.set = TRUE;
+            item->style->mix_blend_mode.value = SP_CSS_BLEND_NORMAL;
+        }
         item->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
     }
 
