@@ -101,9 +101,7 @@ DrawingGroup::_renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigne
     DrawingSurface intermediate(area, device_scale);
     DrawingContext ict(intermediate);
     ict.setOperator(CAIRO_OPERATOR_OVER);
-    if (parent() && isolated) {
-        flags = flags | RENDER_FILTER_BACKGROUND;
-    }
+
     if (stop_at == nullptr) {
         // normal rendering
         for (auto &i : _children) {

@@ -742,9 +742,6 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     nir |= (_filter != nullptr && render_filters);                          // 3. it has a filter
     nir |= needs_opacity;                                                   // 4. it is non-opaque
     nir |= (_cache != nullptr);                                             // 5. it is to be cached
-    nir |= (_mix_blend_mode != SP_CSS_BLEND_NORMAL);                        // 6. Blend mode not normal
-    // Isolation is handled by the drawing-group
-
     /* How the rendering is done.
      *
      * Clipping, masking and opacity are done by rendering them to a surface
@@ -760,7 +757,11 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     // We also use this path for filter background rendering, because masking, clipping,
     // filters and opacity do not apply when rendering the ancestors of the filtered
     // element
+
     if ((flags & RENDER_FILTER_BACKGROUND) || !needs_intermediate_rendering) {
+        if (_cache) {
+            _cache->markDirty(*carea);
+        }
         dc.setOperator(ink_css_blend_to_cairo_operator(_mix_blend_mode));
         return _renderItem(dc, *carea, flags & ~RENDER_FILTER_BACKGROUND, stop_at);
     }
