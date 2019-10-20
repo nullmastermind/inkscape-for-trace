@@ -12,6 +12,7 @@
 ../share/extensions/hpgl_output.py
 ../share/extensions/inkex/bezier.py
 ../share/extensions/inkex/deprecated.py
+../share/extensions/inkex/localization.py
 ../share/extensions/inkex/utils.py
 ../share/extensions/interp_att_g.py
 ../share/extensions/jessyInk_autoTexts.py
@@ -27,7 +28,6 @@
 ../share/extensions/launch_webbrowser.py
 ../share/extensions/markers_strokepaint.py
 ../share/extensions/pathalongpath.py
-../share/extensions/pathmodifier.py
 ../share/extensions/pathscatter.py
 ../share/extensions/perspective.py
 ../share/extensions/plotter.py
