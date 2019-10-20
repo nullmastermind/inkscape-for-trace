@@ -66,12 +66,7 @@ private:
     Glib::ustring const _filter;
 };
 
-Preferences::Preferences() :
-    _prefs_filename(""),
-    _prefs_doc(nullptr),
-    _errorHandler(nullptr),
-    _writable(false),
-    _hasError(false)
+Preferences::Preferences()
 {
     char *path = Inkscape::IO::Resource::profile_path(PREFERENCES_FILE_NAME);
     _prefs_filename = path;
@@ -79,6 +74,8 @@ Preferences::Preferences() :
 
     _loadDefaults();
     _load();
+
+    _initialized = true;
 }
 
 Preferences::~Preferences()
@@ -720,7 +717,8 @@ void Preferences::_getRawValue(Glib::ustring const &path, gchar const *&result)
     // will return empty string if `path` was not in the cache yet
     auto& cacheref = cachedRawValue[path.c_str()];
 
-    if (!cacheref.empty()) {
+    // check in cache first
+    if (_initialized && !cacheref.empty()) {
         if (cacheref == RAWCACHE_CODE_NULL) {
             result = nullptr;
         } else {
@@ -746,11 +744,11 @@ void Preferences::_getRawValue(Glib::ustring const &path, gchar const *&result)
         }
     }
 
-    if (!result) {
-        cacheref = RAWCACHE_CODE_NULL;
-    } else {
+    if (_initialized && result) {
         cacheref = RAWCACHE_CODE_VALUE;
         cacheref += result;
+    } else {
+        cacheref = RAWCACHE_CODE_NULL;
     }
 }
 
@@ -763,7 +761,10 @@ void Preferences::_setRawValue(Glib::ustring const &path, Glib::ustring const &v
     // set the attribute
     Inkscape::XML::Node *node = _getNode(node_key, true);
     node->setAttribute(attr_key.c_str(), value.c_str());
-    cachedRawValue[path.c_str()] = RAWCACHE_CODE_VALUE + value;
+
+    if (_initialized) {
+        cachedRawValue[path.c_str()] = RAWCACHE_CODE_VALUE + value;
+    }
 }
 
 // The _extract* methods are where the actual work is done - they define how preferences are stored

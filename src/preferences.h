@@ -641,10 +641,11 @@ private:
     std::string _prefs_filename; ///< Full filename (with directory) of the prefs file
     Glib::ustring _lastErrPrimary; ///< Last primary error message, if any.
     Glib::ustring _lastErrSecondary; ///< Last secondary error message, if any.
-    XML::Document *_prefs_doc; ///< XML document storing all the preferences
-    ErrorReporter* _errorHandler; ///< Pointer to object reporting errors.
-    bool _writable; ///< Will the preferences be saved at exit?
-    bool _hasError; ///< Indication that some error has occurred;
+    XML::Document *_prefs_doc = nullptr; ///< XML document storing all the preferences
+    ErrorReporter *_errorHandler = nullptr; ///< Pointer to object reporting errors.
+    bool _writable = false; ///< Will the preferences be saved at exit?
+    bool _hasError = false; ///< Indication that some error has occurred;
+    bool _initialized = false; ///< Is this instance fully initialized? Caching should be avoided before.
     std::unordered_map<std::string, Glib::ustring> cachedRawValue;
 
     /// Wrapper class for XML node observers
