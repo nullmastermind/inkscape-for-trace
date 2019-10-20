@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-10-10 21:27+0200\n"
-"PO-Revision-Date: 2019-10-16 23:55+0100\n"
+"PO-Revision-Date: 2019-10-21 00:45+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -14763,6 +14763,9 @@ msgid ""
 "<b>Align</b> objects to the side clicked; <b>Shift</b> click to invert side; "
 "<b>Ctrl</b> to group whole selection."
 msgstr ""
+"Markierung klicken, um Objekte daran <b>auszurichten</b>;  mit <b>Umschalt</b"
+"> zur Außenseite; "
+"mit <b>Strg</b> Auswahl als Gruppe behandeln"
 
 #
 # File: ../src/seltrans-handles.cpp, line: 24
@@ -14771,6 +14774,8 @@ msgid ""
 "<b>Align</b> objects to center; <b>Shift</b> click to center vertically "
 "instead of horizontally."
 msgstr ""
+"Objekte zur Mitte <b>ausrichten</b>; mit <b>Umschalt</b> vertikal, sonst"
+" horizontal"
 
 #: ../src/seltrans.cpp:496 ../src/ui/dialog/transformation.cpp:907
 msgid "Skew"
@@ -14829,9 +14834,8 @@ msgid "Select a filename for exporting"
 msgstr "Wählen Sie einen Namen für die zu exportierende Datei"
 
 #: ../src/shortcuts.cpp:430 ../src/shortcuts.cpp:460
-#, fuzzy
 msgid "Inkscape shortcuts (*.xml)"
-msgstr "Inkscape-SVG (*.svg)"
+msgstr "Inkscape-Tastaturkürzel (*.xml)"
 
 #: ../src/shortcuts.cpp:459
 msgid "Select a file to import"
@@ -15031,10 +15035,8 @@ msgid "Convert flowed text to text"
 msgstr "Fließtext in Text umwandeln"
 
 #: ../src/text-chemistry.cpp:559
-#, fuzzy
 msgid "Flowed text(s) must be <b>visible</b> in order to be converted."
-msgstr ""
-"Der Fließtext muss <b>sichtbar</b> sein, um umgewandelt werden zu können."
+msgstr "Fließtext muss <b>sichtbar</b> sein, um umgewandelt werden zu können."
 
 #: ../src/text-chemistry.cpp:564
 msgid "<b>No flowed text(s)</b> to convert in the selection."
@@ -15141,9 +15143,8 @@ msgid "Clipboard does not contain a path."
 msgstr "Die Zwischenablage enthält keinen Pfad."
 
 #: ../src/ui/clipboard.cpp:701
-#, fuzzy
 msgid "Clipboard does not contain any."
-msgstr "Die Zwischenablage enthält keinen Pfad."
+msgstr "Die Zwischenablage enthält keine Objekte des Typs "
 
 #: ../src/ui/contextmenu.cpp:65
 msgid "Go to parent"
@@ -17244,6 +17245,7 @@ msgstr "Vorschau einschalten"
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:129
 msgid "Export as SVG 1.1 per settings in Preference Dialog."
 msgstr ""
+"Als SVG 1.1 entsprechend der Einstellungen im Einstellungsdialog exportieren"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:252
 msgid "_Open"
@@ -17411,23 +17413,20 @@ msgid "Z coordinate"
 msgstr "Z-Koordinate"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1188
-#, fuzzy
 msgid "Points At:"
-msgstr "Zeigt auf"
+msgstr "Zeigt auf:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1189
-#, fuzzy
 msgid "Specular Exponent:"
-msgstr "Glanzpunkt-Exponent"
+msgstr "Glanzpunkt-Exponent:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1189
 msgid "Exponent value controlling the focus for the light source"
 msgstr "Exponent bestimmt den Fokus der Lichtquelle"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1191
-#, fuzzy
 msgid "Cone Angle:"
-msgstr "Konuswinkel"
+msgstr "Konuswinkel:"
 
 #: ../src/ui/dialog/filter-effects-dialog.cpp:1191
 msgid ""
@@ -18698,7 +18697,7 @@ msgstr "Lydisch"
 
 #: ../src/ui/dialog/glyphs.cpp:134
 msgid "Avestan"
-msgstr ""
+msgstr "Avestische Schrift"
 
 #: ../src/ui/dialog/glyphs.cpp:135 ../src/ui/dialog/glyphs.cpp:346
 msgid "Bamum"
@@ -18706,19 +18705,19 @@ msgstr "Bamum"
 
 #: ../src/ui/dialog/glyphs.cpp:136
 msgid "Egyptian Hieroglpyhs"
-msgstr ""
+msgstr "Ägyptische Hieroglyphen"
 
 #: ../src/ui/dialog/glyphs.cpp:137
 msgid "Imperial Aramaic"
-msgstr ""
+msgstr "Reichsaramäisch"
 
 #: ../src/ui/dialog/glyphs.cpp:138
 msgid "Inscriptional Pahlavi"
-msgstr ""
+msgstr "Inschriften-Pahlavi"
 
 #: ../src/ui/dialog/glyphs.cpp:139
 msgid "Inscriptional Parthian"
-msgstr ""
+msgstr "Inschriften-Parthisch"
 
 #: ../src/ui/dialog/glyphs.cpp:140 ../src/ui/dialog/glyphs.cpp:357
 msgid "Javanese"
@@ -18726,7 +18725,7 @@ msgstr "Javanisch"
 
 #: ../src/ui/dialog/glyphs.cpp:141
 msgid "Kaithi"
-msgstr ""
+msgstr "Kaithi"
 
 #: ../src/ui/dialog/glyphs.cpp:142 ../src/ui/dialog/glyphs.cpp:343
 msgid "Lisu"
@@ -18738,12 +18737,11 @@ msgstr "Meitei-Mayek"
 
 #: ../src/ui/dialog/glyphs.cpp:144
 msgid "Old South Arabian"
-msgstr ""
+msgstr "Altsüdarabisch"
 
 #: ../src/ui/dialog/glyphs.cpp:145
-#, fuzzy
 msgid "Old Turkic"
-msgstr "Altitalisch"
+msgstr "Alttürkisch"
 
 #: ../src/ui/dialog/glyphs.cpp:146 ../src/ui/dialog/glyphs.cpp:246
 msgid "Samaritan"
@@ -18758,183 +18756,172 @@ msgid "Tai Viet"
 msgstr "Tai Viet"
 
 #: ../src/ui/dialog/glyphs.cpp:149
-#, fuzzy
 msgid "Batak"
-msgstr "Katakana"
+msgstr "Batak"
 
 #: ../src/ui/dialog/glyphs.cpp:150
 msgid "Brahmi"
-msgstr ""
+msgstr "Brahmi"
 
 #: ../src/ui/dialog/glyphs.cpp:151
 msgid "Mandaic"
-msgstr ""
+msgstr "Mandäisch"
 
 #: ../src/ui/dialog/glyphs.cpp:152
 msgid "Chakma"
-msgstr ""
+msgstr "Chakma"
 
 #: ../src/ui/dialog/glyphs.cpp:153
-#, fuzzy
 msgid "Meroitic Cursive"
-msgstr "Parametrische Kurven"
+msgstr "Meroitisch-demotisch"
 
 #: ../src/ui/dialog/glyphs.cpp:154
 msgid "Meroitic Hieroglyphs"
-msgstr ""
+msgstr "Meroitische Hieroglyphen"
 
 #: ../src/ui/dialog/glyphs.cpp:155
 msgid "Miao"
-msgstr ""
+msgstr "Pollard-Schrift"
 
 #: ../src/ui/dialog/glyphs.cpp:156
-#, fuzzy
 msgid "Sharada"
-msgstr "Schärfen"
+msgstr "Sharada"
 
 #: ../src/ui/dialog/glyphs.cpp:157
 msgid "Sora Sompeng"
-msgstr ""
+msgstr "Sorang Sompeng"
 
 #: ../src/ui/dialog/glyphs.cpp:158
 msgid "Takri"
-msgstr ""
+msgstr "Takri"
 
 #: ../src/ui/dialog/glyphs.cpp:159
 msgid "Bassa"
-msgstr ""
+msgstr "Bassa Vah"
 
 #: ../src/ui/dialog/glyphs.cpp:160
 msgid "Caucasian Albanian"
-msgstr ""
+msgstr "Alwanisch"
 
 #: ../src/ui/dialog/glyphs.cpp:161
 msgid "Duployan"
-msgstr ""
+msgstr "Duployé-Kurzschrift"
 
 #: ../src/ui/dialog/glyphs.cpp:162
 msgid "Elbasan"
-msgstr ""
+msgstr "Albanisch"
 
 #: ../src/ui/dialog/glyphs.cpp:163
 msgid "Grantha"
-msgstr ""
+msgstr "Grantha"
 
 #: ../src/ui/dialog/glyphs.cpp:164
 msgid "Khojki"
-msgstr ""
+msgstr "Khojki"
 
 #: ../src/ui/dialog/glyphs.cpp:165
 msgid "Khudawadi, Sindhi"
-msgstr ""
+msgstr "Khudabadi"
 
 #: ../src/ui/dialog/glyphs.cpp:166
-#, fuzzy
 msgid "Linear A"
-msgstr "Linearschrift B"
+msgstr "Linear A"
 
 #: ../src/ui/dialog/glyphs.cpp:167
 msgid "Mahajani"
-msgstr ""
+msgstr "Mahajani"
 
 #: ../src/ui/dialog/glyphs.cpp:168
 msgid "Manichaean"
-msgstr ""
+msgstr "Manichäisch"
 
 #: ../src/ui/dialog/glyphs.cpp:169
 msgid "Mende Kikakui"
-msgstr ""
+msgstr "Mende-Schrift"
 
 #: ../src/ui/dialog/glyphs.cpp:170
-#, fuzzy
 msgid "Modi"
-msgstr "Bearbeiten"
+msgstr "Modi"
 
 #: ../src/ui/dialog/glyphs.cpp:171
 msgid "Mro"
-msgstr ""
+msgstr "Mro"
 
 #: ../src/ui/dialog/glyphs.cpp:172
 msgid "Nabataean"
-msgstr ""
+msgstr "Nabatäisch"
 
 #: ../src/ui/dialog/glyphs.cpp:173
 msgid "Old North Arabian"
-msgstr ""
+msgstr "Aldnordarabisch"
 
 #: ../src/ui/dialog/glyphs.cpp:174
-#, fuzzy
 msgid "Old Permic"
-msgstr "Altpersisch"
+msgstr "Altpermisch"
 
 #: ../src/ui/dialog/glyphs.cpp:175
 msgid "Pahawh Hmong"
-msgstr ""
+msgstr "Pahawh Hmong"
 
 #: ../src/ui/dialog/glyphs.cpp:176
 msgid "Palmyrene"
-msgstr ""
+msgstr "Palmyrenisch"
 
 #: ../src/ui/dialog/glyphs.cpp:177
 msgid "Pau Cin Hau"
-msgstr ""
+msgstr "Pau Cin Hau"
 
 #: ../src/ui/dialog/glyphs.cpp:178
-#, fuzzy
 msgid "Psalter Pahlavi"
-msgstr "Poster-Malen"
+msgstr "Psalter-Pahlavi"
 
 #: ../src/ui/dialog/glyphs.cpp:179
 msgid "Siddham"
-msgstr ""
+msgstr "Siddham"
 
 #: ../src/ui/dialog/glyphs.cpp:180
 msgid "Tirhuta"
-msgstr ""
+msgstr "Tirhuta"
 
 #: ../src/ui/dialog/glyphs.cpp:181
 msgid "Warang Citi"
-msgstr ""
+msgstr "Varang Kshiti"
 
 #: ../src/ui/dialog/glyphs.cpp:182
 msgid "Ahom"
-msgstr ""
+msgstr "Ahom"
 
 #: ../src/ui/dialog/glyphs.cpp:183
 msgid "Anatolian Hieroglyphs"
-msgstr ""
+msgstr "Anatolische Hieroglyphen"
 
 #: ../src/ui/dialog/glyphs.cpp:184
 msgid "Hatran"
-msgstr ""
+msgstr "Hatran"
 
 #: ../src/ui/dialog/glyphs.cpp:185
-#, fuzzy
 msgid "Multani"
-msgstr "Multiplizieren"
+msgstr "Multanisch"
 
 #: ../src/ui/dialog/glyphs.cpp:186
-#, fuzzy
 msgid "Old Hungarian"
-msgstr "Ungarisch (hu)"
+msgstr "Altungarisch"
 
 #: ../src/ui/dialog/glyphs.cpp:187
-#, fuzzy
 msgid "Signwriting"
-msgstr "Skripte"
+msgstr "SignWriting (Gebärdenschrift)"
 
 #: ../src/ui/dialog/glyphs.cpp:225
-#, fuzzy
 msgid "Basic Plane"
-msgstr "Basis-Lateinisch"
+msgstr "Grundlegende mehrsprachige Ebene (BMP)"
 
 #: ../src/ui/dialog/glyphs.cpp:226
 msgid "Extended Multilingual Plane"
-msgstr ""
+msgstr "Ergänzende mehrsprachige Ebene (SMP)"
 
 #: ../src/ui/dialog/glyphs.cpp:227
 msgid "Supplementary Ideographic Plane"
-msgstr ""
+msgstr "Ergänzende ideographische Ebene (SIP)"
 
 #: ../src/ui/dialog/glyphs.cpp:229
 msgid "Basic Latin"
@@ -19303,51 +19290,44 @@ msgid "Specials"
 msgstr "Spezielles"
 
 #: ../src/ui/dialog/glyphs.cpp:381
-#, fuzzy
 msgid "Miscellaneous Symbols and Pictographs"
-msgstr "Verschiedene Symbole und Pfeile"
+msgstr "Verschiedene Symbole und Piktogramme"
 
 #: ../src/ui/dialog/glyphs.cpp:382
-#, fuzzy
 msgid "Emoticons"
-msgstr "Bewegung"
+msgstr "Emoticons"
 
 #: ../src/ui/dialog/glyphs.cpp:383
 msgid "Ornamental Dingbats"
-msgstr ""
+msgstr "Ziersymbole"
 
 #: ../src/ui/dialog/glyphs.cpp:384
-#, fuzzy
 msgid "Transport and Map Symbols"
-msgstr "Symbol fallenlassen"
+msgstr "Verkehrs- und Kartensymbole"
 
 #: ../src/ui/dialog/glyphs.cpp:385
-#, fuzzy
 msgid "Alchemical Symbols"
-msgstr "Khmer-Symbole"
+msgstr "Alchemistische Symbole"
 
 #: ../src/ui/dialog/glyphs.cpp:386
-#, fuzzy
 msgid "Geometric Shapes Extended"
-msgstr "Geometrische Formen"
+msgstr "Geometrische Formen, erweitert"
 
 #: ../src/ui/dialog/glyphs.cpp:387
-#, fuzzy
 msgid "Supplemental Arrows-C"
-msgstr "Zusätzliche Pfeile-A"
+msgstr "Zusätzliche Pfeile-C"
 
 #: ../src/ui/dialog/glyphs.cpp:388
 msgid "Supplemental Symbols and Pictographs"
-msgstr ""
+msgstr "Zusätzliche piktographische Symbole"
 
 #: ../src/ui/dialog/glyphs.cpp:389
-#, fuzzy
 msgid "Chess Symbols"
-msgstr "Khmer-Symbole"
+msgstr "Schachsymbole"
 
 #: ../src/ui/dialog/glyphs.cpp:390
 msgid "Symbols and Pictographs Extended-A"
-msgstr ""
+msgstr "Piktographische Symbole, erweitert-A"
 
 #: ../src/ui/dialog/glyphs.cpp:452
 msgid "Script: "
@@ -19485,9 +19465,8 @@ msgid "Set guide properties"
 msgstr "Hilfslinieneigenschaften setzen"
 
 #: ../src/ui/dialog/guides.cpp:151
-#, fuzzy
 msgid "Duplicate guide"
-msgstr "Knoten duplizieren"
+msgstr "Hilfslinie duplizieren"
 
 #: ../src/ui/dialog/guides.cpp:176
 msgid "Guideline"
@@ -19980,9 +19959,8 @@ msgstr ""
 "dem System nicht verfügbar sind"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:481
-#, fuzzy
 msgid "Use SVG2 auto-flowed text"
-msgstr "Fließtext erstellen"
+msgstr "SVG2-Fließtext verwenden"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:482
 msgid ""
