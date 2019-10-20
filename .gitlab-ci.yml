@@ -67,7 +67,7 @@ appimage:linux:
       - Inkscape*.AppImage*
 
     ### On mac... (this needs a custom mac runner)
- 
+
 inkscape:mac:
   stage: build
   tags:
@@ -110,7 +110,7 @@ codequality:
   allow_failure: true
 
     ### We embed script from third party libraries, that we sometimes update from their source. Hence we should NEVER modify them here before submitting the patch upstream!
-    # Ideally, we should remove all this code and use them as packaged libraries. Unfortunately this check only works for merge requests. 
+    # Ideally, we should remove all this code and use them as packaged libraries. Unfortunately this check only works for merge requests.
 
 codeprotect:
   stage: build
@@ -238,6 +238,10 @@ test:linux:
   script:
     - cd build
     - ctest -V
+  artifacts:
+    paths:
+      - build/testfiles
+    when: always
 
 
 # uploads the clang scan to user.gitlab.io/inkscape/
