@@ -210,6 +210,7 @@ protected:
     Inkscape::Filters::Filter *_filter;
     SPItem *_item; ///< Used to associate DrawingItems with SPItems that created them
     DrawingCache *_cache;
+    bool prev_nir;
 
     CacheList::iterator _cache_iterator;
 

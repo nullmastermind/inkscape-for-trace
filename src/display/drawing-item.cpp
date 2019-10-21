@@ -674,14 +674,13 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
         return RENDER_OK;
     }
 
-    setCached(true, true);
-
     // carea is the area to paint
     Geom::OptIntRect carea = Geom::intersect(area, _drawbox);
 
     // expand render on filtered items
     Geom::OptIntRect cl = _cacheRect();
     if (_filter != nullptr && render_filters && cl) {
+        setCached(true, true);
         carea = cl;
     }
     
@@ -738,10 +737,15 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     bool needs_opacity = (_opacity < 0.995);
 
     // this item needs an intermediate rendering if:
-    nir |= (_clip != nullptr);                                              // 1. it has a clipping path
-    nir |= (_mask != nullptr);                                              // 2. it has a mask
-    nir |= (_filter != nullptr && render_filters);                          // 3. it has a filter
-    nir |= needs_opacity;                                                   // 4. it is non-opaque
+    nir |= (_clip != nullptr);                       // 1. it has a clipping path
+    nir |= (_mask != nullptr);                       // 2. it has a mask
+    nir |= (_filter != nullptr && render_filters);   // 3. it has a filter
+    nir |= needs_opacity;                            // 4. it is non-opaque
+    if (prev_nir && !needs_intermediate_rendering) {
+        setCached(false, true);
+    }
+    prev_nir = needs_intermediate_rendering;
+    nir |= (_cache != nullptr);                      // 5. it is to be cached
 
     /* How the rendering is done.
      *
@@ -754,14 +758,9 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
      * the entire intermediate surface is painted with alpha corresponding
      * to the opacity value.
      * 
-     *  Blending, isolation and _cache nir check are removed because:
-     *  Blending: is handled in the shortcircuit
-     *  Isolation: Is handles in drawing-group
-     *  _cache: if nir is false, we realy dont want a cache element, never do it
-     *  previously on bug exception when previous state of nir is true that cause
-     *  inconguences with cache noticiable changing zoom, removing _cache from nir
-     *  and deleting it inside the shortcicuit seems the correct way to do
-     * 
+     * Blending and isolation nir check are removed because:
+     * Blending: is handled in the shortcircuit
+     * Isolation: Is handles in drawing-group
      */
     // Short-circuit the simple case.
     // We also use this path for filter background rendering, because masking, clipping,
@@ -769,7 +768,9 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     // element
 
     if ((flags & RENDER_FILTER_BACKGROUND) || !needs_intermediate_rendering) {
-        setCached(false, true);
+        if (needs_intermediate_rendering) {
+            setCached(false, true);
+        }
         dc.setOperator(ink_css_blend_to_cairo_operator(_mix_blend_mode));
         return _renderItem(dc, *carea, flags & ~RENDER_FILTER_BACKGROUND, stop_at);
     }
