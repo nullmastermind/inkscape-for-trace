@@ -2380,9 +2380,7 @@ public:
                    gchar const *tip,
                    gchar const *image) :
         Verb(code, id, name, tip, image, _("View"))
-    {
-        set_default_sensitive(false);
-    }
+    { }
 }; // FitCanvasVerb class
 
 /**
