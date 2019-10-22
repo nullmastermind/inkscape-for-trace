@@ -336,7 +336,7 @@ void SPFlowtext::_buildLayoutInput(SPObject *root, Shape const *exclusion_shape,
     Inkscape::Text::Layout::OptionalTextTagAttrs pi;
     bool with_indent = false;
 
-    if (dynamic_cast<SPFlowpara *>(root)) {
+    if (dynamic_cast<SPFlowpara *>(root) || dynamic_cast<SPFlowdiv *>(root)) {
 
         layout.wrap_mode = Inkscape::Text::Layout::WRAP_SHAPE_INSIDE;
 
