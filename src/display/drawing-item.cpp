@@ -336,9 +336,6 @@ DrawingItem::setStyle(SPStyle *style, SPStyle *context_style)
             _background_new = false;
             _markForUpdate(STATE_BACKGROUND, true);
         }
-    } else if (_parent && _parent->_child_type != CHILD_NORMAL && !_background_new) {
-        _background_new = true;
-        _markForUpdate(STATE_BACKGROUND, true);
     }
 
     if (context_style != nullptr) {
@@ -710,7 +707,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 
     // Render from cache if possible
     // Bypass in case of pattern, see below.
-    if (_cached && !(flags & RENDER_BYPASS_CACHE)) {
+    if (_cached && !(flags & RENDER_BYPASS_CACHE) && !(flags & RENDER_FILTER_BACKGROUND)) {
         if (_cache) {
             _cache->prepare();
             dc.setOperator(ink_css_blend_to_cairo_operator(_mix_blend_mode));
@@ -741,6 +738,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     nir |= (_mask != nullptr);                       // 2. it has a mask
     nir |= (_filter != nullptr && render_filters);   // 3. it has a filter
     nir |= needs_opacity;                            // 4. it is non-opaque
+    nir |= (_mix_blend_mode != SP_CSS_BLEND_NORMAL); // 5. it has blend mode                          
     if (prev_nir && !needs_intermediate_rendering) {
         setCached(false, true);
     }
@@ -758,9 +756,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
      * the entire intermediate surface is painted with alpha corresponding
      * to the opacity value.
      * 
-     * Blending and isolation nir check are removed because:
-     * Blending: is handled in the shortcircuit
-     * Isolation: Is handles in drawing-group
+     * Isolation: Is handled in drawing-group
      */
     // Short-circuit the simple case.
     // We also use this path for filter background rendering, because masking, clipping,
@@ -768,10 +764,6 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     // element
 
     if ((flags & RENDER_FILTER_BACKGROUND) || !needs_intermediate_rendering) {
-        if (needs_intermediate_rendering) {
-            setCached(false, true);
-        }
-        dc.setOperator(ink_css_blend_to_cairo_operator(_mix_blend_mode));
         return _renderItem(dc, *carea, flags & ~RENDER_FILTER_BACKGROUND, stop_at);
     }
 
