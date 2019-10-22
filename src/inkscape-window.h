@@ -55,6 +55,8 @@ private:
     Gtk::Box*      _mainbox;
     Gtk::MenuBar*  _menubar;
 
+    void setup_view();
+
     // Callbacks
     bool on_key_press_event(GdkEventKey* event) override;
     bool on_focus_in_event(GdkEventFocus* event) override;

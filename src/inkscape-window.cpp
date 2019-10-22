@@ -84,7 +84,28 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
 
 
     // ================ Window Options ==============
+    setup_view();
+}
 
+// Change a document, leaving desktop/view the same. (Eventually move all code here.)
+void
+InkscapeWindow::change_document(SPDocument* document)
+{
+    if (!_app) {
+        std::cerr << "Inkscapewindow::change_document: app is nullptr!" << std::endl;
+        return;
+    }
+
+    _document = document;
+    _app->set_active_document(_document);
+
+    setup_view();
+}
+
+// Sets up the window and view according to user preferences and <namedview> of the just loaded document
+void
+InkscapeWindow::setup_view()
+{
     // Make sure the GdkWindow is fully initialized before resizing/moving
     // (ensures the monitor it'll be shown on is known)
     realize();
@@ -93,9 +114,15 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     sp_namedview_window_from_document(_desktop); // This should probably be a member function here.
 
     // Must show before setting zoom and view! (crashes otherwise)
+    //
     // Showing after resizing/moving allows the window manager to correct an invalid size/position of the window
+    // TODO: This does *not* work when called from 'change_document()', i.e. when the window is already visible.
+    //       This can result in off-screen windows! We previously worked around this by hiding and re-showing
+    //       the window, but a call to hide() causes Inkscape to just exit since the migration to Gtk::Application
     show();
-    // Extra call seems to ensure toolbar widgets are visible after programmatic resize
+
+    // TODO: Extra call seems to ensure toolbar widgets are visible after programmatic resize
+    // (incomplete workaround for https://gitlab.com/inkscape/inkscape/issues/125)
     check_resize();
 
     sp_namedview_zoom_and_view_from_document(_desktop);
@@ -104,19 +131,6 @@ InkscapeWindow::InkscapeWindow(SPDocument* document)
     SPNamedView *nv = _desktop->namedview;
     if (nv && nv->lockguides) {
         nv->lockGuides();
-    }
-
-}
-
-// Change a document, leaving desktop/view the same. (Eventually move all code here.)
-void
-InkscapeWindow::change_document(SPDocument* document)
-{
-    _document = document;
-    if (_app) {
-        _app->set_active_document(_document);
-    } else {
-        std::cerr << "Inkscapewindow::change_document: app is nullptr!" << std::endl;
     }
 }
 
