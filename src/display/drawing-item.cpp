@@ -799,7 +799,11 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     unsigned render_result = RENDER_OK;
 
     // 1. Render clipping path with alpha = opacity.
-    ict.setSource(0,0,0,_opacity);
+    if (parent()) {
+        ict.setSource(0,0,0,_opacity);
+    } else {
+        ict.setSource(255, 255, 255, 1);
+    }
     // Since clip can be combined with opacity, the result could be incorrect
     // for overlapping clip children. To fix this we use the SOURCE operator
     // instead of the default OVER.
