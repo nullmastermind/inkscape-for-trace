@@ -98,7 +98,6 @@ DrawingItem::~DrawingItem()
     if (_parent) {
         _markForRendering();
     }
-
     switch (_child_type) {
     case CHILD_NORMAL: {
         ChildrenList::iterator ithis = _parent->_children.iterator_to(*this);
@@ -677,7 +676,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     // expand render on filtered items
     Geom::OptIntRect cl = _cacheRect();
     if (_filter != nullptr && render_filters && cl) {
-        setCached(true, true);
+        setCached(_cached, true);
         carea = cl;
     }
     
@@ -707,7 +706,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
 
     // Render from cache if possible
     // Bypass in case of pattern, see below.
-    if (_cached && !(flags & RENDER_BYPASS_CACHE) && !(flags & RENDER_FILTER_BACKGROUND)) {
+    if (_cached && !(flags & RENDER_BYPASS_CACHE)) {
         if (_cache) {
             _cache->prepare();
             dc.setOperator(ink_css_blend_to_cairo_operator(_mix_blend_mode));
@@ -733,14 +732,20 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     bool &nir = needs_intermediate_rendering;
     bool needs_opacity = (_opacity < 0.995);
 
-    // this item needs an intermediate rendering if:
+    // this item needs an intermediate rendering if:                      
     nir |= (_clip != nullptr);                       // 1. it has a clipping path
     nir |= (_mask != nullptr);                       // 2. it has a mask
     nir |= (_filter != nullptr && render_filters);   // 3. it has a filter
     nir |= needs_opacity;                            // 4. it is non-opaque
-    nir |= (_mix_blend_mode != SP_CSS_BLEND_NORMAL); // 5. it has blend mode                          
+    nir |= (_mix_blend_mode != SP_CSS_BLEND_NORMAL); // 5. it has blend mode           
+    nir |= (_isolation == SP_CSS_ISOLATION_ISOLATE); // 6. it is isolated    
+    nir |= !parent();                                 // 7. is root need isolation from background                            
     if (prev_nir && !needs_intermediate_rendering) {
         setCached(false, true);
+        if (_has_cache_iterator) {
+            _drawing._candidate_items.erase(_cache_iterator);
+            _has_cache_iterator = false;
+        }
     }
     prev_nir = needs_intermediate_rendering;
     nir |= (_cache != nullptr);                      // 5. it is to be cached
@@ -756,7 +761,6 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
      * the entire intermediate surface is painted with alpha corresponding
      * to the opacity value.
      * 
-     * Isolation: Is handled in drawing-group
      */
     // Short-circuit the simple case.
     // We also use this path for filter background rendering, because masking, clipping,
@@ -1042,7 +1046,7 @@ DrawingItem::_markForRendering()
 {
     // TODO: this function does too much work when a large subtree
     // is invalidated - fix
-    
+
     bool outline = _drawing.outline();
     Geom::OptIntRect dirty = outline ? _bbox : _drawbox;
     if (!dirty) return;
@@ -1131,6 +1135,9 @@ DrawingItem::_cacheScore()
 {
     Geom::OptIntRect cache_rect = _cacheRect();
     if (!cache_rect) return -1.0;
+    if (is_drawing_group(this) && !prev_nir) {
+        return -1.0;
+    }
 
     // a crude first approximation:
     // the basic score is the number of pixels in the drawbox
