@@ -1303,7 +1303,7 @@ SPIPaint::read( gchar const *str ) {
         if ( strneq(str, "url", 3) ) {
 
             // FIXME: THE FOLLOWING CODE SHOULD BE PUT IN A PRIVATE FUNCTION FOR REUSE
-            auto uri = extract_uri(str, &str);
+            auto uri = extract_uri(str, &str); // std::string
             if(uri.empty()) {
                 std::cerr << "SPIPaint::read: url is empty or invalid" << std::endl;
             } else if (!style ) {
@@ -1313,9 +1313,17 @@ SPIPaint::read( gchar const *str ) {
                 SPDocument *document = (style->object) ? style->object->document : nullptr;
 
                 // Create href if not done already
-                if (!value.href && document) {
-                    // std::cout << "  Creating value.href" << std::endl;
-                    value.href = new SPPaintServerReference(document);
+                if (!value.href) {
+
+                    if (style->object) {
+                        value.href = new SPPaintServerReference(style->object);
+                    } else if (document) {
+                        value.href = new SPPaintServerReference(document);
+                    } else {
+                        std::cerr << "SPIPaint::read: No valid object or document!" << std::endl;
+                        return;
+                    }
+
                     if (this == &style->fill) {
                         style->fill_ps_changed_connection = value.href->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_style_fill_paint_server_ref_changed), style));
                     } else {

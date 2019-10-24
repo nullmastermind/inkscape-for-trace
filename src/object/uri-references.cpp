@@ -47,7 +47,10 @@ URIReference::URIReference(SPDocument *owner_document)
     g_assert(_owner_document != nullptr);
 }
 
-URIReference::~URIReference() { detach(); }
+URIReference::~URIReference()
+{
+    detach();
+}
 
 /*
  * The main ideas here are:
@@ -105,8 +108,6 @@ bool URIReference::_acceptObject(SPObject *obj) const
     }
     return true;
 }
-
-
 
 void URIReference::attach(const URI &uri)
 {
@@ -188,7 +189,6 @@ void URIReference::attach(const URI &uri)
 
     _setObject(document->getObjectById(id));
     _connection = document->connectIdChanged(id, sigc::mem_fun(*this, &URIReference::_setObject));
-
     g_free(id);
 }
 
@@ -213,12 +213,12 @@ void URIReference::_setObject(SPObject *obj)
     _obj = obj;
 
     _release_connection.disconnect();
-    if (_obj) {
+    if (_obj && (!_owner || !_owner->cloned)) {
         _obj->hrefObject(_owner);
         _release_connection = _obj->connectRelease(sigc::mem_fun(*this, &URIReference::_release));
     }
     _changed_signal.emit(old_obj, _obj);
-    if (old_obj) {
+    if (old_obj && (!_owner || !_owner->cloned)) {
         /* release the old object _after_ the signal emission */
         old_obj->unhrefObject(_owner);
     }

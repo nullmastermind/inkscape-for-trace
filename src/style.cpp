@@ -1229,11 +1229,21 @@ sp_repr_sel_eng()
 void
 sp_style_set_ipaint_to_uri(SPStyle *style, SPIPaint *paint, const Inkscape::URI *uri, SPDocument *document)
 {
-    // std::cout << "sp_style_set_ipaint_to_uri: Entrance: " << uri << "  " << (void*)document << std::endl;
-    // it may be that this style's SPIPaint has not yet created its URIReference;
-    // now that we have a document, we can create it here
-    if (!paint->value.href && document) {
-        paint->value.href = new SPPaintServerReference(document);
+    if (!paint->value.href) {
+
+        if (style->object) {
+            // Should not happen as href should have been created in SPIPaint. (TODO: Removed code duplication.)
+            paint->value.href = new SPPaintServerReference(style->object);
+
+        } else if (document) {
+            // Used by desktop style (no object to attach to!).
+            paint->value.href = new SPPaintServerReference(document);
+
+        } else {
+            std::cerr << "sp_style_set_ipaint_to_uri: No valid object or document!" << std::endl;
+            return;
+        }
+
         if (paint == &style->fill) {
             style->fill_ps_changed_connection = paint->value.href->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_style_fill_paint_server_ref_changed), style));
         } else {

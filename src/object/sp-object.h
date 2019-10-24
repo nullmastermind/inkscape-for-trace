@@ -841,6 +841,7 @@ public:
     void objectTrace( std::string, bool in=true, unsigned flags=0 );
 };
 
+std::ostream &operator<<(std::ostream &out, const SPObject &o);
 
 /**
  * Compares height of objects in tree.
