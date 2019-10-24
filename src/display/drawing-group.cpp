@@ -15,6 +15,7 @@
 #include "display/drawing-context.h"
 #include "display/drawing-item.h"
 #include "display/drawing-surface.h"
+#include "display/drawing-text.h"
 #include "display/drawing.h"
 #include "style.h"
 
@@ -129,7 +130,15 @@ DrawingGroup::_clipItem(DrawingContext &dc, Geom::IntRect const &area)
 DrawingItem *
 DrawingGroup::_pickItem(Geom::Point const &p, double delta, unsigned flags)
 {
+    bool outline = _drawing.outline() || _drawing.getOutlineSensitive();
     for (auto & i : _children) {
+        if ((dynamic_cast<DrawingText *>(&i) != nullptr) && !outline && !(flags & PICK_AS_CLIP) && _drawbox) {
+            Geom::Rect expanded = *_drawbox;
+            expanded.expandBy(delta);
+            if (expanded.contains(p)) {
+                return this;
+            }
+        }
         DrawingItem *picked = i.pick(p, delta, flags);
         if (picked) {
             return _pick_children ? picked : this;
