@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-10-10 21:27+0200\n"
-"PO-Revision-Date: 2019-10-24 03:30+0100\n"
+"PO-Revision-Date: 2019-10-25 01:43+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -19960,31 +19960,37 @@ msgstr "Schriftartenordner"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:490
 msgid "Use Inkscape's fonts directory"
-msgstr ""
+msgstr "Inkscapes Schriftartenordner verwenden"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:491
 msgid ""
 "Load additional fonts from \"fonts\" directory located in Inkscape's global "
 "\"share\" directory"
 msgstr ""
+"Lädt zusätzliche Schriftarten aus dem Verzeichnis „fonts“ im globalen"
+" „share“-Verzeichnis der Inkscape-Installation"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:492
 msgid "Use user's fonts directory"
-msgstr ""
+msgstr "Benutzer-Schriftartenordner verwenden"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:493
 msgid ""
 "Load additional fonts from \"fonts\" directory located in Inkscape's user "
 "configuration directory"
 msgstr ""
+"Lädt zusätzliche Schriftarten aus dem Verzeichnis „fonts“ im Verzeichnis für"
+" die Inkscape-Benutzereinstellungen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:495
 msgid "Additional font directories"
-msgstr ""
+msgstr "Zusätzliche Schriftartenordner"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:495
 msgid "Load additional fonts from custom locations (one path per line)"
 msgstr ""
+"Lädt zusätzliche Schriftarten aus benutzerdefinierten Ordnern (ein Ordner pro"
+" Zeile)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:501
 msgid "Spray"
@@ -20063,7 +20069,7 @@ msgstr "LPE-Werkzeug"
 #: ../src/ui/dialog/inkscape-preferences.cpp:864
 #: ../src/ui/dialog/inkscape-preferences.cpp:1154
 msgid "Color for symbolic icons:"
-msgstr ""
+msgstr "Farbe symbolischer Icons:"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 885
@@ -20071,7 +20077,7 @@ msgstr ""
 #: ../src/ui/dialog/inkscape-preferences.cpp:866
 #: ../src/ui/dialog/inkscape-preferences.cpp:1156
 msgid "Color for symbolic success icons:"
-msgstr ""
+msgstr "Farbe symbolischer Erfolgs-Icons:"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 887
@@ -20079,7 +20085,7 @@ msgstr ""
 #: ../src/ui/dialog/inkscape-preferences.cpp:868
 #: ../src/ui/dialog/inkscape-preferences.cpp:1158
 msgid "Color for symbolic warning icons:"
-msgstr ""
+msgstr "Farbe symbolischer Warn-Icons"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 889
@@ -20087,7 +20093,7 @@ msgstr ""
 #: ../src/ui/dialog/inkscape-preferences.cpp:870
 #: ../src/ui/dialog/inkscape-preferences.cpp:1160
 msgid "Color for symbolic error icons:"
-msgstr ""
+msgstr "Farbe symbolischer Fehler-Icons"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:925
 msgid "System default"
@@ -20563,32 +20569,36 @@ msgstr ""
 #: ../src/ui/dialog/inkscape-preferences.cpp:1050
 msgid "Origin at upper left with y-axis pointing down (requires restart)"
 msgstr ""
+"Ursprung in der oberen linken Ecke, wobei die y-Achse nach unten zeigt"
+" (erfordert Neustart)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1052
 msgid "When off, origin is at lower left corner and y-axis points up"
 msgstr ""
+"Wenn deaktiviert, liegt der Ursprung in der unteren linken Ecke und die"
+" y-Achse zeigt nach oben"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1056
 msgid "Theme changes"
-msgstr ""
+msgstr "Theme"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1103
 msgid "Use system theme"
-msgstr ""
+msgstr "Theme des Systems verwenden"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1109
 msgid "Change Gtk theme:"
-msgstr ""
+msgstr "GTK-Theme ändern:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1112
 #: ../src/ui/dialog/inkscape-preferences.cpp:2563
 msgid "Open themes folder"
-msgstr ""
+msgstr "Themes-Ordner öffnen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1113
 #: ../src/ui/dialog/inkscape-preferences.cpp:2564
 msgid "User themes: "
-msgstr ""
+msgstr "Benutzer-Themes:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1113
 #: ../src/ui/dialog/inkscape-preferences.cpp:2564
@@ -20598,16 +20608,15 @@ msgstr "Ort der Benutzer-Designs"
 #: ../src/ui/dialog/inkscape-preferences.cpp:1114
 #: ../src/ui/dialog/inkscape-preferences.cpp:1115
 msgid "Use dark theme"
-msgstr ""
+msgstr "Dunkles Theme verwenden"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1118
-#, fuzzy
 msgid "Display icons"
-msgstr "Anzeige_einheiten:"
+msgstr "Icons"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1141
 msgid "Use system icons"
-msgstr ""
+msgstr "Systemicons verwenden"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1144
 msgid "Change icon theme:"
@@ -20615,29 +20624,26 @@ msgstr "Symbolthema: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1148
 msgid "Use symbolic icons"
-msgstr ""
+msgstr "Symbolische Icons verwenden"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1151
-#, fuzzy
 msgid "Use default colors for icons"
-msgstr "Füllungsfarbe auf nichts setzen"
+msgstr "Standardfarben für Icons verwenden"
 
 # !!! correct?
 #: ../src/ui/dialog/inkscape-preferences.cpp:1177
-#, fuzzy
 msgid "Icon color"
-msgstr "Schriftfarbe:"
+msgstr "Iconfarbe"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1195
 #: ../src/ui/dialog/inkscape-preferences.cpp:1178
 msgid "Base color for icons. Some icons changes need reload"
-msgstr ""
+msgstr "Grundfarbe der Icons"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1184
-#, fuzzy
 msgid "Highlights"
-msgstr "Schlaglicht-Mischung:"
+msgstr "Hervorhebungsfarben"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1202
@@ -20646,6 +20652,7 @@ msgid ""
 "Highlights colors, some symbolic icon themes use it. Some icons changes need "
 "reload"
 msgstr ""
+"Zusätzliche Hervorhebungsfarben, die von einigen Themes unterstützt werden"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1208
@@ -20654,6 +20661,8 @@ msgid ""
 "Reset theme colors, some symbolic icon themes use it. Some icons changes "
 "need reload"
 msgstr ""
+"Setzt die Farben des Themes zurück auf  den Standardwert, der für einige"
+" symbolische Icon-Themes verfügbar ist."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1194
 msgctxt "Icon size"
@@ -20709,7 +20718,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1212
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1212
 msgid "No"
@@ -20721,7 +20730,7 @@ msgstr "nach Design"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1215
 msgid "Show icons in menus:"
-msgstr ""
+msgstr "Icons in Menüs anzeigen:"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1054
@@ -20731,10 +20740,14 @@ msgid ""
 "determines which icons to display by using the 'show-icons' attribute in its "
 "'menus.xml' file. (requires restart)"
 msgstr ""
+"Die Anzeige von Icons in den Menüs kann hier aktiviert bzw. deaktiviert"
+" werden. Standardmäßig entscheidet das 'show -icons'-Attribut in der Datei"
+" 'menus.xml' darüber, ob die Icons im Menü angezeigt werden sollen (erfordert"
+" Neustart)."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1219
 msgid "Theme"
-msgstr ""
+msgstr "Theme"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1222
 msgid "Save and restore window geometry for each document"
@@ -21350,57 +21363,65 @@ msgstr "SVG-Ausgabe"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1535
 msgid "SVG 2"
-msgstr ""
+msgstr "SVG 2"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1536
 msgid "Insert SVG 1.1 fallback in text."
-msgstr ""
+msgstr "Texte enthalten eine zusätzliche, SVG1.1-kompatible Version des Textes"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1537
 msgid "Insert Mesh Gradient JavaScript polyfill."
-msgstr ""
+msgstr "JavaScript-Polyfill für Verlaufsgitter einfügen"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1555
 #: ../src/ui/dialog/inkscape-preferences.cpp:1538
 msgid "Insert Hatch Paint Server JavaScript polyfill."
-msgstr ""
+msgstr "JavaScript-Polyfill für SVG-Schraffuren einfügen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1540
 msgid "Adds fallback options for non-SVG 2 renderers."
 msgstr ""
+"Fügt Daten für die Kompatibilität mit Renderern, die SVG2 nicht unterstützen,"
+" ein."
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1558
 #: ../src/ui/dialog/inkscape-preferences.cpp:1541
 msgid "Adds JavaScript polyfill to render meshes."
-msgstr ""
+msgstr "Fügt JavaScript-Code für die Darstellung von Verlaufsgittern ein"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1559
 #: ../src/ui/dialog/inkscape-preferences.cpp:1542
 msgid "Adds JavaScript polyfill to render hatches (linear and absolute paths)."
 msgstr ""
+"Fügt JavaScript-Code für die Darstellung von SVG-Schraffuren (lineare und"
+" absolute Pfade) ein."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1545
 msgid "SVG 2 to SVG 1.1"
-msgstr ""
+msgstr "SVG 2 zu SVG 1.1"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1547
 msgid "Replace markers with 'auto_start_reverse'."
-msgstr ""
+msgstr "Markierungen, die 'auto_start_reverse' verwenden, ersetzen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1548
 msgid "Replace markers using 'context_paint' or 'context_fill'."
 msgstr ""
+"Markierungen, die 'context_paint' oder 'context_fill' verwenden, ersetzen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1550
 msgid "SVG 2 allows markers to automatically be reversed at start of path."
 msgstr ""
+"SVG 2 erlaubt es, Markierungen am Anfang eines Pfades automatisch umzukehren."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1551
 msgid "SVG 2 allows markers to automatically match stroke color."
 msgstr ""
+"SVG 2 erlaubt es, dass Markierungen automatisch an die Farbe der Kontur"
+" angepasst werden."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1553
 msgid "SVG export"
@@ -21813,7 +21834,7 @@ msgstr "Strichlinien mit Liniendicke skalieren"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1806
 msgid "When changing stroke width, scale dash array"
-msgstr ""
+msgstr "Strichlinienmuster bei Änderung der Konturbreite anpassen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1808
 msgid "Dashes"
@@ -21914,12 +21935,11 @@ msgstr "Rollen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1837
 msgid "Snap defaults"
-msgstr ""
+msgstr "Standardeinstellungen für das Einrasten"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1839
-#, fuzzy
 msgid "Enable snapping in new documents"
-msgstr "In neuem Dokument aktivieren"
+msgstr "Einrasten in neuen Dokumenten aktivieren"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1677
@@ -21928,6 +21948,8 @@ msgid ""
 "Initial state of snapping in new documents and non-Inkscape SVGs. Snap "
 "status is subsequently saved per-document."
 msgstr ""
+"Einraststatus in neuen Dokumenten und SVG-Dateien, die erstmals mit Inkscape"
+" geöffnet werden. Der Einraststatus wird danach im Dokument gespeichert."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1843
 msgid "Snap indicator"
@@ -22029,9 +22051,8 @@ msgstr ""
 "Knoten) um diese Entfernung (in SVG-Pixeln)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1884
-#, fuzzy
 msgid "&gt; and &lt; _scale by:"
-msgstr "> und < skalieren um:"
+msgstr "&gt; und &lt; skalieren um:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1885
 msgid "Pressing > or < scales selection up or down by this increment"
@@ -22123,7 +22144,7 @@ msgstr "Arbeitsfläche drehen um:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1907
 msgid "Rotate canvas clockwise and counter-clockwise by this amount."
-msgstr ""
+msgstr "Zeichenfläche in beide Richtungen jeweils um diesen Winkel drehen."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1908
 msgid "Steps"
@@ -22207,13 +22228,16 @@ msgstr "Klonverbindung auftrennen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1942
 msgid "Path operations unlink clones"
-msgstr ""
+msgstr "Klonverknüpfung bei Pfadoperationen lösen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1944
 msgid ""
 "The following path operations will unlink clones: Stroke to path, Object to "
 "path, Boolean operations, Combine, Break apart"
 msgstr ""
+"Die folgenden Pfadoperationen heben die Verknüpfung von Klonen mit dem"
+" Original auf: Kontur zu Pfad, Objekt zu Pfad, Boolesche Operationen,"
+" Kombinieren, Zerlegen"
 
 #. TRANSLATORS: Heading for the Inkscape Preferences "Clones" Page
 #: ../src/ui/dialog/inkscape-preferences.cpp:1947
@@ -22360,7 +22384,7 @@ msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2013
 msgid "Rendering tile multiplier:"
-msgstr ""
+msgstr "Renderkachelmultiplikator:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2014
 msgid ""
