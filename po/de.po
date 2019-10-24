@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-10-10 21:27+0200\n"
-"PO-Revision-Date: 2019-10-21 00:45+0100\n"
+"PO-Revision-Date: 2019-10-24 03:30+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -14763,7 +14763,7 @@ msgid ""
 "<b>Align</b> objects to the side clicked; <b>Shift</b> click to invert side; "
 "<b>Ctrl</b> to group whole selection."
 msgstr ""
-"Markierung klicken, um Objekte daran <b>auszurichten</b>;  mit <b>Umschalt</b"
+"Markierung klicken, um Objekte daran <b>auszurichten</b>; mit <b>Umschalt</b"
 "> zur Außenseite; "
 "mit <b>Strg</b> Auswahl als Gruppe behandeln"
 
@@ -15151,24 +15151,20 @@ msgid "Go to parent"
 msgstr "Zum übergeordneten Objekt gehen"
 
 #: ../src/ui/contextmenu.cpp:106
-#, fuzzy
 msgid "Hide Selected Objects"
-msgstr "Gewählte Objekte duplizieren"
+msgstr "Gewählte Objekte ausblenden"
 
 #: ../src/ui/contextmenu.cpp:114
-#, fuzzy
 msgid "Unhide Objects Below"
-msgstr "Objekte einblenden"
+msgstr "Objekte an dieser Stelle einblenden"
 
 #: ../src/ui/contextmenu.cpp:122
-#, fuzzy
 msgid "Lock Selected Objects"
-msgstr "Die gewählten Objekte gruppieren"
+msgstr "Gewählte Objekte sperren"
 
 #: ../src/ui/contextmenu.cpp:130
-#, fuzzy
 msgid "Unlock Objects Below"
-msgstr "Objekte entsperren"
+msgstr "Objekte an dieser Stelle entsperren"
 
 #. TRANSLATORS: #%1 is the id of the group e.g. <g id="#g7">, not a number.
 #: ../src/ui/contextmenu.cpp:154
@@ -15335,20 +15331,20 @@ msgid "Open _Recent"
 msgstr "Zuletzt _geöffnete Dateien"
 
 #: ../src/ui/dialog/aboutbox.cpp:88
-#, fuzzy
 msgid "Inkscape website"
-msgstr "Inkscape: _Grundlagen"
+msgstr "Inkscape-Webseite"
 
 #: ../src/ui/dialog/aboutbox.cpp:90
 msgid "© 2019 Inkscape Developers"
-msgstr ""
+msgstr "© 2019 Inkscape-Entwicklungsteam"
 
 #: ../src/ui/dialog/aboutbox.cpp:91
-#, fuzzy
 msgid ""
 "Open Source Scalable Vector Graphics Editor\n"
 "Draw Freely."
-msgstr "Skalierbare Vektorgrafiken erstellen und bearbeiten"
+msgstr ""
+"Quelloffener Editor für skalierbare Vektorgrafiken\n"
+"Draw Freely."
 
 # Hier muss die deutsche Grafik, die bei der Inkscape-Info angezeigt werden soll, benannt werden!
 #. TRANSLATORS: This is the filename of the `About Inkscape' picture in
@@ -15652,28 +15648,24 @@ msgid "Max value"
 msgstr "Größte Koordinate der Auswahl"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1093
-#, fuzzy
 msgid "Treat selection as group"
-msgstr "Auswahl als Gruppe behandeln:"
+msgstr "Auswahl als Gruppe behandeln"
 
 #
 # File: ../src/ui/dialog/align-and-distribute.cpp, line: 1107
 #: ../src/ui/dialog/align-and-distribute.cpp:1107
 msgid "Enable on-canvas alignment handles."
-msgstr ""
+msgstr "Anfasser für das Ausrichten auf der Zeichenfläche aktivieren"
 
 #: ../src/ui/dialog/attrdialog.cpp:92
-#, fuzzy
 msgid "Add a new attribute"
-msgstr "Attribut ändern"
+msgstr "Ein neues Attribut hinzufügen"
 
 #: ../src/ui/dialog/attrdialog.cpp:105
-#, fuzzy
 msgid "Attribute Name"
 msgstr "Attributname"
 
 #: ../src/ui/dialog/attrdialog.cpp:130
-#, fuzzy
 msgid "Attribute Value"
 msgstr "Attributwert"
 
@@ -15684,7 +15676,7 @@ msgstr "Wert"
 
 #: ../src/ui/dialog/attrdialog.cpp:155
 msgid "Shift+Return new line"
-msgstr ""
+msgstr "Umschalt + Enter für neue Zeile"
 
 #: ../src/ui/dialog/attrdialog.cpp:358
 msgid "<b>Click</b> attribute to edit."
@@ -15704,14 +15696,12 @@ msgid "Delete attribute"
 msgstr "Attribut löschen"
 
 #: ../src/ui/dialog/attrdialog.cpp:597
-#, fuzzy
 msgid "Rename attribute"
-msgstr "Attribute löschen"
+msgstr "Attribut umbenennen"
 
 #: ../src/ui/dialog/attrdialog.cpp:653
-#, fuzzy
 msgid "Change attribute value"
-msgstr "Attribut ändern"
+msgstr "Attributwert ändern"
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:31
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:118
@@ -16552,11 +16542,9 @@ msgid "Checkerboard background"
 msgstr "Schachbrettmuster als Hintergrund"
 
 #: ../src/ui/dialog/document-properties.cpp:104
-#, fuzzy
 msgid "If set, use a colored checkerboard for the canvas background"
 msgstr ""
-"Wenn aktiviert, wird ein Schachbrettmuster als Hintergrund verwendet, "
-"andernfalls die Hintergrundfarbe mit voller Deckkraft."
+"Wenn aktiviert, wird ein farbiges Schachbrettmuster als Hintergrund verwendet"
 
 #: ../src/ui/dialog/document-properties.cpp:105
 msgid "Show page _border"
@@ -16589,14 +16577,12 @@ msgid "Back_ground color:"
 msgstr "Hintergrundfarbe:"
 
 #: ../src/ui/dialog/document-properties.cpp:108
-#, fuzzy
 msgid ""
 "Color of the canvas background. Note: opacity is ignored except when "
 "exporting to bitmap."
 msgstr ""
-"Farbe des Seitenhintergrunds. Hinweis: Transparenzeinstellung wird während "
-"der Bearbeitung ignoriert, wenn 'Schachbrettmuster als Hintergrund' "
-"deaktiviert ist (wird für den Bitmap-Export jedoch immer benutzt)"
+"Farbe des Seitenhintergrunds. Hinweis: Transparenzeinstellung wird nur "
+"für den Bitmap-Export benutzt."
 
 #: ../src/ui/dialog/document-properties.cpp:109
 msgid "Border _color:"
@@ -16623,9 +16609,8 @@ msgid "Show or hide guides"
 msgstr "Hilfslinien anzeigen oder ausblenden"
 
 #: ../src/ui/dialog/document-properties.cpp:115
-#, fuzzy
 msgid "Lock all guides"
-msgstr "Alle Ebenen gesperret"
+msgstr "Alle Hilfslinien sperren"
 
 #: ../src/ui/dialog/document-properties.cpp:115 ../src/verbs.cpp:2646
 #: ../src/widgets/desktop-widget.cpp:379
@@ -16657,14 +16642,12 @@ msgid "Color of a guideline when it is under mouse"
 msgstr "Farbe der Hilfslinie falls unter dem Mauszeiger"
 
 #: ../src/ui/dialog/document-properties.cpp:118
-#, fuzzy
 msgid "Create guides around the page"
 msgstr "Hilfslinien an Seitenrändern erstellen"
 
 #: ../src/ui/dialog/document-properties.cpp:119
-#, fuzzy
 msgid "Delete all guides"
-msgstr "Hilfslinien löschen"
+msgstr "Alle Hilfslinien löschen"
 
 #: ../src/ui/dialog/document-properties.cpp:121
 msgid "Snap _distance"
@@ -16870,7 +16853,6 @@ msgstr "Farbprofil verknüpfen"
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:303
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:312
 #: ../src/ui/dialog/svg-fonts-dialog.cpp:321
-#, fuzzy
 msgid "_Remove"
 msgstr "_Entfernen"
 
@@ -17028,21 +17010,20 @@ msgid "B_atch export all selected objects"
 msgstr "Alle gewählten Objekte auf einmal exportieren"
 
 #: ../src/ui/dialog/export.cpp:141
-#, fuzzy
 msgid "Use interlacing"
-msgstr "Kantenglättung verwenden"
+msgstr "Interlacing verwenden"
 
 #: ../src/ui/dialog/export.cpp:142
 msgid "Bit depth"
-msgstr ""
+msgstr "Bittiefe"
 
 #: ../src/ui/dialog/export.cpp:144
 msgid "Compression"
-msgstr ""
+msgstr "Kompression"
 
 #: ../src/ui/dialog/export.cpp:146
 msgid "pHYs dpi"
-msgstr ""
+msgstr "pHYs-dpi"
 
 #: ../src/ui/dialog/export.cpp:151
 msgid "Hide all except selected"
@@ -17071,6 +17052,9 @@ msgid ""
 "Enables ADAM7 interlacing for PNG output. This results in slightly heavier "
 "images, but big images will look better sooner when loading the file"
 msgstr ""
+"Aktiviert ADAM7-Interlacing für die PNG-Ausgabe. Die Bilder werden hierdurch"
+" ein wenig größer, aber große Bilder können bereits während des Ladens"
+" (leicht unscharf) dargestellt werden."
 
 #: ../src/ui/dialog/export.cpp:171
 msgid "Once the export completes, close this dialog"
@@ -17142,13 +17126,16 @@ msgstr "Rastergrafik mit diesen Einstellungen exportieren"
 
 #: ../src/ui/dialog/export.cpp:331
 msgid "Advanced"
-msgstr ""
+msgstr "Fortgeschritten"
 
 #: ../src/ui/dialog/export.cpp:346
 msgid ""
 "Will force-set the physical dpi for the png file. Set this to 72 if you're "
 "planning to work on your png with Photoshop"
 msgstr ""
+"Erzwingt eine physische Auflösung für die PNG-Datei. Für die"
+" Weiterbearbeitung "
+"in Photoshop sollte ein Wert von 72 dpi gewählt werden."
 
 # Example file name
 #: ../src/ui/dialog/export.cpp:492
@@ -19965,11 +19952,11 @@ msgstr "SVG2-Fließtext verwenden"
 #: ../src/ui/dialog/inkscape-preferences.cpp:482
 msgid ""
 "Use SVG2 auto-flowed text instead of SVG1.2 auto-flowed text. (Recommended)"
-msgstr ""
+msgstr "SVG2-Fließtext anstelle des SVG1.2-Fließtextes verwenden (empfohlen)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:489
 msgid "Font directories"
-msgstr ""
+msgstr "Schriftartenordner"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:490
 msgid "Use Inkscape's fonts directory"
@@ -33384,7 +33371,7 @@ msgstr "_Druckfarben-Vorschau"
 
 #: ../src/widgets/desktop-widget.cpp:1078
 msgid "Locked all guides"
-msgstr "Alle Ebenen gesperret"
+msgstr "Alle Hilflinien gesperrt"
 
 #: ../src/widgets/desktop-widget.cpp:1080
 msgid "Unlocked all guides"
