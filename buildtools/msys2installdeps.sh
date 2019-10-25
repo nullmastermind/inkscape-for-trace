@@ -72,9 +72,9 @@ $ARCH-gtkspell3
 #     or (always!) run pacman with the additional command line switch
 #        --ignore=mingw-w64-*-imagemagick
 for arch in $(eval echo $ARCH); do
-  wget -nv https://gitlab.com/Ede123/bintray/raw/master/${arch}-imagemagick-6.9.9.23-1-any.pkg.tar.xz \
-    && pacman -U $PACMAN_OPTIONS ${arch}-imagemagick-6.9.9.23-1-any.pkg.tar.xz \
-    && rm  ${arch}-imagemagick-6.9.9.23-1-any.pkg.tar.xz
+  wget -nv https://gitlab.com/ede123/bintray/raw/master/${arch}-imagemagick-6.9.10.69-1-any.pkg.tar.xz \
+    && pacman -U $PACMAN_OPTIONS ${arch}-imagemagick-6.9.10.69-1-any.pkg.tar.xz \
+    && rm  ${arch}-imagemagick-6.9.10.69-1-any.pkg.tar.xz
 done
 
 
