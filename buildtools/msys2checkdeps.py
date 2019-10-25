@@ -93,7 +93,7 @@ def collect_dependencies(path):
         deps = get_dependencies(path, deps)
     elif os.path.isdir(path):
         extensions = ['.exe', '.pyd', '.dll']
-        exclusions = ['python3.7/distutils/command/wininst']
+        exclusions = ['distutils/command/wininst']  # python
         for base, dirs, files in os.walk(path):
             for f in files:
                 filepath = os.path.join(base, f)

@@ -37,7 +37,6 @@ if(WIN32)
     ${MINGW_BIN}/libenchant-[0-9]*.dll
     ${MINGW_BIN}/libepoxy-[0-9]*.dll
     ${MINGW_BIN}/libexpat-[0-9]*.dll
-    ${MINGW_BIN}/libexslt-[0-9]*.dll
     ${MINGW_BIN}/libffi-[0-9]*.dll
     ${MINGW_BIN}/libfftw3-[0-9]*.dll
     ${MINGW_BIN}/libfontconfig-[0-9]*.dll
@@ -250,6 +249,9 @@ if(WIN32)
   endif()
 
   # Python (use executable names without version number for compatibility with python from python.org)
+  file(GLOB python_version ${MINGW_BIN}/libpython3.[0-9]*.dll)
+  string(REGEX REPLACE "${MINGW_BIN}/libpython(3\.[0-9]+)\.dll" "\\1" python_version ${python_version})
+
   install(FILES
     ${MINGW_BIN}/python3.exe
     RENAME python.exe
@@ -259,16 +261,16 @@ if(WIN32)
     RENAME pythonw.exe
     DESTINATION bin)
   install(FILES
-    ${MINGW_BIN}/libpython3.7m.dll
+    ${MINGW_BIN}/libpython${python_version}.dll
     DESTINATION bin)
-  install(DIRECTORY ${MINGW_LIB}/python3.7
+  install(DIRECTORY ${MINGW_LIB}/python${python_version}
     DESTINATION lib
-    PATTERN "python3.7/site-packages" EXCLUDE # specify individual packages to install below
-    PATTERN "python3.7/test" EXCLUDE # we don't need the Python testsuite
+    PATTERN "python${python_version}/site-packages" EXCLUDE # specify individual packages to install below
+    PATTERN "python${python_version}/test" EXCLUDE # we don't need the Python testsuite
     PATTERN "*.pyc" EXCLUDE
   )
 
-  set(site_packages "lib/python3.7/site-packages")
+  set(site_packages "lib/python${python_version}/site-packages")
   # Python packages installed via pacman
   set(packages "python3-lxml" "python3-numpy" "python3-pillow" "python3-six" "python3-cairo" "python3-gobject")
   foreach(package ${packages})
