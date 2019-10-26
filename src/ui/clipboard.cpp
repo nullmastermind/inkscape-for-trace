@@ -1041,6 +1041,13 @@ bool ClipboardManagerImpl::_pasteImage(SPDocument *doc)
 
     // retrieve image data
     Glib::RefPtr<Gdk::Pixbuf> img = _clipboard->wait_for_image();
+#ifdef _WIN32
+    // For some reason the first call to wait_for_image() often fails, despite image data being available
+    // TODO: Figure out why that is and remove this hack.
+    if (!img) {
+        img = _clipboard->wait_for_image();
+    }
+#endif
     if (!img) {
         return false;
     }
