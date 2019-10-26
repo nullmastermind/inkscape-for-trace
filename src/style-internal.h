@@ -515,7 +515,6 @@ public:
 
     SPIEnum( Glib::ustring const &name, SPStyleEnum const *enums, T value = T(), bool inherits = true ) :
         SPIBase( name, inherits ),
-        enums( enums ),
         value(value),
         value_default(value)
     {
@@ -551,8 +550,6 @@ public:
 
   // To do: make private
 public:
-    SPStyleEnum const *enums;
-
     T value{};
     T computed{};
 

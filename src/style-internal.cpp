@@ -611,6 +611,41 @@ SPIFontVariationSettings::toString() const {
     return string;
 }
 
+// Helpers for SPIEnum -----------------------------------------------------
+
+// The default exists to satisfy linking of derived classes but must never be called
+template <typename T> static SPStyleEnum const *get_enums() { g_assert_not_reached(); return nullptr; }
+
+template <> SPStyleEnum const *get_enums<SPBlendMode>() { return enum_blend_mode; }
+template <> SPStyleEnum const *get_enums<SPColorInterpolation>() { return enum_color_interpolation; }
+template <> SPStyleEnum const *get_enums<SPColorRendering>() { return enum_color_rendering; }
+template <> SPStyleEnum const *get_enums<SPCSSBaseline>() { return enum_baseline; }
+template <> SPStyleEnum const *get_enums<SPCSSDirection>() { return enum_direction; }
+template <> SPStyleEnum const *get_enums<SPCSSDisplay>() { return enum_display; }
+template <> SPStyleEnum const *get_enums<SPCSSFontVariantAlternates>() { return enum_font_variant_alternates; }
+template <> SPStyleEnum const *get_enums<SPCSSTextAlign>() { return enum_text_align; }
+template <> SPStyleEnum const *get_enums<SPCSSTextOrientation>() { return enum_text_orientation; }
+template <> SPStyleEnum const *get_enums<SPCSSTextTransform>() { return enum_text_transform; }
+template <> SPStyleEnum const *get_enums<SPCSSWritingMode>() { return enum_writing_mode; }
+template <> SPStyleEnum const *get_enums<SPEnableBackground>() { return enum_enable_background; }
+template <> SPStyleEnum const *get_enums<SPImageRendering>() { return enum_image_rendering; }
+template <> SPStyleEnum const *get_enums<SPIsolation>() { return enum_isolation; }
+template <> SPStyleEnum const *get_enums<SPOverflow>() { return enum_overflow; }
+template <> SPStyleEnum const *get_enums<SPShapeRendering>() { return enum_shape_rendering; }
+template <> SPStyleEnum const *get_enums<SPStrokeCapType>() { return enum_stroke_linecap; }
+template <> SPStyleEnum const *get_enums<SPStrokeJoinType>() { return enum_stroke_linejoin; }
+template <> SPStyleEnum const *get_enums<SPTextAnchor>() { return enum_text_anchor; }
+template <> SPStyleEnum const *get_enums<SPTextRendering>() { return enum_text_rendering; }
+template <> SPStyleEnum const *get_enums<SPVisibility>() { return enum_visibility; }
+template <> SPStyleEnum const *get_enums<SPWhiteSpace>() { return enum_white_space; }
+template <> SPStyleEnum const *get_enums<SPWindRule>() { return enum_clip_rule; }
+template <> SPStyleEnum const *get_enums<SPCSSFontStyle>() { return enum_font_style; }
+template <> SPStyleEnum const *get_enums<SPCSSFontVariant>() { return enum_font_variant; }
+template <> SPStyleEnum const *get_enums<SPCSSFontWeight>() { return enum_font_weight; }
+template <> SPStyleEnum const *get_enums<SPCSSFontStretch>() { return enum_font_stretch; }
+template <> SPStyleEnum const *get_enums<SPCSSFontVariantPosition>() { return enum_font_variant_position; }
+template <> SPStyleEnum const *get_enums<SPCSSFontVariantCaps>() { return enum_font_variant_caps; }
+
 // SPIEnum --------------------------------------------------------------
 
 template <typename T>
@@ -642,6 +677,7 @@ void SPIEnum<T>::read(gchar const *str)
         set = true;
         inherit = true;
     } else {
+        auto const *enums = get_enums<T>();
         for (unsigned i = 0; enums[i].key; i++) {
             if (!strcmp(str, enums[i].key)) {
                 set = true;
@@ -661,6 +697,7 @@ template <typename T>
 const Glib::ustring SPIEnum<T>::get_value() const
 {
     if (this->inherit) return Glib::ustring("inherit");
+    auto const *enums = get_enums<T>();
     for (unsigned i = 0; enums[i].key; ++i) {
         if (enums[i].value == static_cast< gint > (this->value) ) {
             return Glib::ustring(enums[i].key);
@@ -829,6 +866,7 @@ SPILigatures::read( gchar const *str ) {
     } else {
         // We need to parse in order
         std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s+", str );
+        auto const *enums = enum_font_variant_ligatures;
         for(auto & token : tokens) {
             for (unsigned j = 0; enums[j].key; ++j ) {
                 if (token.compare( enums[j].key ) == 0 ) {
@@ -886,6 +924,7 @@ SPINumeric::read( gchar const *str ) {
     } else {
         // We need to parse in order
         std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s+", str );
+        auto const *enums = enum_font_variant_numeric;
         for(auto & token : tokens) {
             for (unsigned j = 0; enums[j].key; ++j ) {
                 if (token.compare( enums[j].key ) == 0 ) {
@@ -968,6 +1007,7 @@ SPIEastAsian::read( gchar const *str ) {
     } else {
         // We need to parse in order
         std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s+", str );
+        auto const *enums = enum_font_variant_east_asian;
         for(auto & token : tokens) {
             for (unsigned j = 0; enums[j].key; ++j ) {
                 if (token.compare( enums[j].key ) == 0 ) {
