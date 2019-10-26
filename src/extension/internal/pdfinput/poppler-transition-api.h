@@ -14,6 +14,12 @@
 
 #include <glib/poppler-features.h>
 
+#if POPPLER_CHECK_VERSION(0, 82, 0)
+#define _POPPLER_CONST_82 const
+#else
+#define _POPPLER_CONST_82
+#endif
+
 #if POPPLER_CHECK_VERSION(0, 76, 0)
 #define _POPPLER_NEW_PARSER(xref, obj) Parser(xref, obj, gFalse)
 #else

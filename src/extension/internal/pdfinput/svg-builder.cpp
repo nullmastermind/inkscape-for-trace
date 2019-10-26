@@ -1395,7 +1395,7 @@ void SvgBuilder::beginString(GfxState *state) {
 void SvgBuilder::addChar(GfxState *state, double x, double y,
                          double dx, double dy,
                          double originX, double originY,
-                         CharCode /*code*/, int /*nBytes*/, Unicode *u, int uLen) {
+                         CharCode /*code*/, int /*nBytes*/, Unicode const *u, int uLen) {
 
 
     bool is_space = ( uLen == 1 && u[0] == 32 );

@@ -142,7 +142,7 @@ public:
     void addChar(GfxState *state, double x, double y,
                  double dx, double dy,
                  double originX, double originY,
-                 CharCode code, int nBytes, Unicode *u, int uLen);
+                 CharCode code, int nBytes, Unicode const *u, int uLen);
     void beginTextObject(GfxState *state);
     void endTextObject(GfxState *state);
 
