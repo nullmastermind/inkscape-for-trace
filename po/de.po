@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-10-10 21:27+0200\n"
-"PO-Revision-Date: 2019-10-26 02:10+0100\n"
+"PO-Revision-Date: 2019-10-26 23:55+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -33457,9 +33457,8 @@ msgid "Note:"
 msgstr "Hinweis:"
 
 #: ../src/widgets/desktop-widget.cpp:1997
-#, fuzzy
 msgid "Centre Page"
-msgstr "Innenseiten"
+msgstr "Seite zentrieren"
 
 #: ../src/widgets/desktop-widget.cpp:2383
 msgid "Create guide"
@@ -33490,14 +33489,12 @@ msgid "Set gradient on stroke"
 msgstr "Farbverlauf für die Kontur setzen"
 
 #: ../src/widgets/fill-style.cpp:720
-#, fuzzy
 msgid "Set mesh on fill"
-msgstr "Muster für die Füllung setzen"
+msgstr "Verlaufsgitter für die Füllung setzen"
 
 #: ../src/widgets/fill-style.cpp:720
-#, fuzzy
 msgid "Set mesh on stroke"
-msgstr "Muster für die Kontur setzen"
+msgstr "Verlaufsgitter für die Kontur setzen"
 
 #: ../src/widgets/fill-style.cpp:781
 msgid "Set pattern on fill"
@@ -33636,11 +33633,12 @@ msgstr "<b>Radialer Farbverlauf</b>"
 #: ../src/widgets/paint-selector.cpp:1030
 msgid "Use the <b>Mesh tool</b> to modify the mesh."
 msgstr ""
+"Mit dem <b>Verlaufsgitterwerkzeug</b> kann das Verlaufsgitter bearbeitet"
+" werden."
 
 #: ../src/widgets/paint-selector.cpp:1043
-#, fuzzy
 msgid "<b>Mesh fill</b>"
-msgstr "<b>Farbmuster</b>"
+msgstr "<b>Verlaufsgitter</b>"
 
 #: ../src/widgets/paint-selector.cpp:1366
 msgid ""
@@ -33658,9 +33656,8 @@ msgid "<b>Pattern fill</b>"
 msgstr "<b>Füllmuster</b>"
 
 #: ../src/widgets/paint-selector.cpp:1399
-#, fuzzy
 msgid "<b>Hatch fill</b>"
-msgstr "<b>Farbmuster</b>"
+msgstr "<b>Schraffur</b>"
 
 #: ../src/widgets/paint-selector.cpp:1497
 msgid "<b>Swatch fill</b>"
@@ -33849,28 +33846,24 @@ msgid "Style of Paint Bucket fill objects"
 msgstr "Stil von neuen Farbeimer-Objekten"
 
 #: ../share/ui/dialog-livepatheffect-add.glade:8
-#, fuzzy
 msgid "Live Path Effects Selector"
-msgstr "Nächster Pfadeffekt-Parameter"
+msgstr "Pfadeffektauswahl"
 
 #: ../share/ui/dialog-livepatheffect-add.glade:266
-#, fuzzy
 msgid "Show Experimental"
-msgstr "Original auswählen"
+msgstr "Experimentelle Effekte zeigen"
 
 #: ../share/ui/dialog-livepatheffect-add.glade:291
-#, fuzzy
 msgid "Message"
-msgstr "Meldungen"
+msgstr "Meldung"
 
 #: ../share/ui/dialog-livepatheffect-effect.glade:77
-#, fuzzy
 msgid "LPEName"
-msgstr "Name"
+msgstr "LPE-Name"
 
 #: ../share/ui/dialog-livepatheffect-effect.glade:113
 msgid "Experimental"
-msgstr ""
+msgstr "Experimentell"
 
 #: ../share/ui/dialog-trace.glade:92
 msgid ""
@@ -33902,54 +33895,81 @@ msgid ""
 "  4) If your goal is to get few nodes and good precision, manual tracing is "
 "always best.\n"
 msgstr ""
+"\n"
+"  Mit diesem Dialog können Rastergrafiken automatisch vektorisiert werden."
+" Für die verschiedenen Anwendungsfälle stehen unterschiedliche Methoden zur"
+" Verfügung:\n"
+" * \"Helligkeitsschwellwert\" sucht nach Regionen, die dunkler als der"
+" gewählte Grenzwert sind und erstellt einen Pfad, der diese Regionen"
+" beinhaltet (verwendet die Potrace-Bibliothek).\n"
+" * \"Kantenerkennung\" sucht nach Helligkeitsänderungen. Wenn der Unterschied"
+" in der Helligkeit zwischen Farbflächen größer ist als der gewählte"
+" Grenzwert, wird dort ein Pfad erstellt, der die beiden Regionen voneinander"
+" abgrenzt (verwendet die Potrace-Bibliothek).\n"
+" * \"Farbquantisierung\" teilt das Bild in die angegebene Anzahl an Farben"
+" auf und trennt die Farbbereiche mit einem Pfad (verwendet die "
+" Potrace-Bibliothek).\n"
+" * \"Autotrace\" verwendet den Autotrace-Algorithmus mit der gewählten"
+" Option.\n"
+" * \"Linien nachzeichnen\" versucht, eine Strichzeichnung zu vektorisieren"
+" (verwendet die Autotrace-Bibliothek).\n"
+" * \"Mehrere Zwischenfarben\" teilt das Bild abhängig von der Helligkeit, den"
+" Farben oder Graustufen in Bereiche auf und erstellt für jeden Bereich einen"
+" eigenen Pfad. Kann sowohl mit Potrace als auch mit Autotrace ausgeführt"
+" werden.\n"
+" * Im Reiter \"Pixelkunst\" können mit einem Pixelerkennungs-Algorithmus"
+" Pixelkunst-Bilder vektorisiert werden..\n"
+"\n"
+" * Hinweise:\n"
+"  1) Vor dem Vektorisieren sollte gespeichert werden.\n"
+"  2) \"Pixelkunst nachzeichnen\" erzeugt pro Farbquadrat im Kunstwerk einen"
+" Pfad, und sollte daher nicht für Bilder verwendet werden, die zu groß oder"
+" keine Pixelkunst sind.\n"
+"  3) Autotrace ist langsamer als Potrace. Daher sollte es nicht für große"
+" Bilder verwendet werden. "
+"Der Bildkontrast sollte zuvor in einem anderen Programm verstärkt werden.\n"
+"  4) Wenn das Ziel ist, möglichst wenige Knoten und eine hohe Präzision zu"
+" erhalten, ist manuelles Nachzeichnen geeigneter.\n"
 
 #: ../share/ui/dialog-trace.glade:132
-#, fuzzy
 msgid "Create a single path or create a group of paths"
-msgstr "Mehrfache Abtastungen: Gruppen von Pfaden erzeugen"
+msgstr "Einen einzigen Pfad oder eine Gruppe von Pfaden erzeugen"
 
 #: ../share/ui/dialog-trace.glade:189
-#, fuzzy
 msgid "Brightness threshold"
-msgstr "Helligkeitssch_ritte"
+msgstr "Helligkeitsschwellwert"
 
 #: ../share/ui/dialog-trace.glade:224
-#, fuzzy
 msgid "Edge threshold"
-msgstr "Rauigkeits-Schwellwert:"
+msgstr "Kantenschwellwert"
 
 #: ../share/ui/dialog-trace.glade:295 ../share/ui/dialog-trace.glade:357
-#, fuzzy
 msgid "Filter iterations"
-msgstr "Allgemeine Filtereinstellungen"
+msgstr "Filterschritte"
 
 #: ../share/ui/dialog-trace.glade:320 ../share/ui/dialog-trace.glade:382
-#, fuzzy
 msgid "Error threshold"
-msgstr "Rauigkeits-Schwellwert:"
+msgstr "Fehlerschwellwert"
 
 #: ../share/ui/dialog-trace.glade:418
-#, fuzzy
 msgid "Invert image"
-msgstr "Bild _invertieren"
+msgstr "Bild invertieren"
 
 #: ../share/ui/dialog-trace.glade:422
 msgid "Invert black and white regions"
 msgstr "Schwarze und weiße Bereiche invertieren"
 
 #: ../share/ui/dialog-trace.glade:441
-#, fuzzy
 msgid "Single scan"
-msgstr "Einzeln"
+msgstr "Einmaliger Scan"
 
 #: ../share/ui/dialog-trace.glade:473
 msgid "Apply Gaussian blur to the bitmap before tracing"
 msgstr "Gaußschen Weichzeichner vor dem Nachzeichnen anwenden"
 
 #: ../share/ui/dialog-trace.glade:483
-#, fuzzy
 msgid "Stack"
-msgstr "Übereinander"
+msgstr "Stapeln"
 
 #: ../share/ui/dialog-trace.glade:487
 msgid ""
@@ -33960,7 +33980,6 @@ msgstr ""
 "mit Lücken)"
 
 #: ../share/ui/dialog-trace.glade:497
-#, fuzzy
 msgid "Remove background"
 msgstr "Hintergrund entfernen"
 
@@ -33970,19 +33989,17 @@ msgstr "Unterste Ebene (Hintergrund) nach Fertigstellung entfernen"
 
 #: ../share/ui/dialog-trace.glade:513
 msgid "Scans"
-msgstr ""
+msgstr "Scans"
 
 #: ../share/ui/dialog-trace.glade:524
 msgid "The desired number of scans"
 msgstr "Gewünschte Anzahl von Abtastungen"
 
 #: ../share/ui/dialog-trace.glade:545
-#, fuzzy
 msgid "Multiple scans"
-msgstr "Mehrere Zwischenfarben"
+msgstr "Mehrere Scans"
 
 #: ../share/ui/dialog-trace.glade:578
-#, fuzzy
 msgid "Speckles"
 msgstr "Flecken"
 
@@ -33991,18 +34008,16 @@ msgid "Ignore small spots (speckles) in the bitmap"
 msgstr "Kleine Punkte (Flecken) im Bitmap unterdrücken"
 
 #: ../share/ui/dialog-trace.glade:593
-#, fuzzy
 msgid "Smooth corners"
-msgstr "E_cken glätten"
+msgstr "Ecken glätten"
 
 #: ../share/ui/dialog-trace.glade:597
 msgid "Smooth out sharp corners of the trace"
 msgstr "Scharfe Ecken der Nachzeichnung glätten"
 
 #: ../share/ui/dialog-trace.glade:608
-#, fuzzy
 msgid "Optimize"
-msgstr "Optimiert"
+msgstr "Optimieren"
 
 #: ../share/ui/dialog-trace.glade:612
 msgid "Try to optimize paths by joining adjacent Bezier curve segments"
@@ -34027,47 +34042,48 @@ msgstr ""
 "Optimierung zu reduzieren"
 
 #: ../share/ui/dialog-trace.glade:688
-#, fuzzy
 msgid ""
 "\n"
 "Heuristics\n"
-msgstr "Heuristik"
+msgstr ""
+"\n"
+"Heuristik\n"
 
 #: ../share/ui/dialog-trace.glade:711
 msgid "Favors connections that are part of a long curve"
 msgstr "Bevorzugt Verbindungen die Teil einer langen Kurve sind"
 
 #: ../share/ui/dialog-trace.glade:712
-#, fuzzy
 msgid "Curves (multiplier)"
-msgstr "_Kurven (Multiplikator):"
+msgstr "Kurven (Multiplikator)"
 
 #: ../share/ui/dialog-trace.glade:723
 msgid "Avoid single disconnected pixels"
 msgstr "Vermeidet einzelne unverbundene Pixel"
 
 #: ../share/ui/dialog-trace.glade:724
-#, fuzzy
 msgid "Islands (weight)"
-msgstr "_Inseln (Gewichtung):"
+msgstr "Inseln (Gewichtung)"
 
 #: ../share/ui/dialog-trace.glade:735 ../share/ui/dialog-trace.glade:748
 msgid "Favors connections that are part of foreground color"
 msgstr "Bevorzugt Verbindungen die Teil der Vordergrundfarbe sind"
 
 #: ../share/ui/dialog-trace.glade:736
-#, fuzzy
 msgid ""
 "Sparse pixels\n"
 "(window radius)"
-msgstr "Verstreute Pixel (Fenster _Radius):"
+msgstr ""
+"Verstreute Pixel\n"
+"(Fensterradius)"
 
 #: ../share/ui/dialog-trace.glade:749
-#, fuzzy
 msgid ""
 "Sparse pixels\n"
 "(multiplier)"
-msgstr "Verstreute Pixel (_Multiplikator):"
+msgstr ""
+"Verstreute Pixel\n"
+"(Multiplikator)"
 
 #: ../share/ui/dialog-trace.glade:761 ../share/ui/dialog-trace.glade:804
 msgid "The heuristic computed vote will be multiplied by this value"
@@ -34083,39 +34099,36 @@ msgid "The radius of the window analyzed"
 msgstr "Der Radius des Bildausschnitts welcher analysiert wird"
 
 #: ../share/ui/dialog-trace.glade:826
-#, fuzzy
 msgid ""
 "\n"
 "Output\n"
-msgstr "Ausgabe"
+msgstr ""
+"\n"
+"Ausgabe\n"
 
 #: ../share/ui/dialog-trace.glade:841
-#, fuzzy
 msgid "Voronoi"
-msgstr "Voronoi-Muster"
+msgstr "Voronoi"
 
 #: ../share/ui/dialog-trace.glade:845
 msgid "Output composed of straight lines"
 msgstr "Ausgabe bestehend aus geraden Linien"
 
 #: ../share/ui/dialog-trace.glade:857
-#, fuzzy
 msgid "B-splines"
-msgstr "B-Spline"
+msgstr "B-Splines"
 
 #: ../share/ui/dialog-trace.glade:861
-#, fuzzy
 msgid "Preserve staircasing artifacts"
-msgstr "Geglätte Ausgabe (mit Treppenartefakten)"
+msgstr "Treppenartefakte erhalten"
 
 #: ../share/ui/dialog-trace.glade:881
-#, fuzzy
 msgid "Pixel art"
-msgstr "Verschmierte Pixel"
+msgstr "Pixelkunst"
 
 #: ../share/ui/dialog-trace.glade:991
 msgid "SIOX"
-msgstr ""
+msgstr "SIOX"
 
 #: ../share/ui/dialog-trace.glade:995
 msgid "Cover the area you want to select as the foreground"
@@ -34127,9 +34140,8 @@ msgid "_Help"
 msgstr "_Hilfe"
 
 #: ../share/ui/inkscape-application.glade:25
-#, fuzzy
 msgid "_About"
-msgstr "Über"
+msgstr "_Über"
 
 #: ../share/extensions/convert2dashes.py:41
 msgid "Total number of objects not converted: {}\n"
