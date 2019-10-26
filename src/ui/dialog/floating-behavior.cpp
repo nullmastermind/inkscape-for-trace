@@ -31,7 +31,6 @@ FloatingBehavior::FloatingBehavior(Dialog &dialog) :
     Behavior(dialog),
     _d (new Gtk::Dialog(_dialog._title))
     ,_dialog_active(_d->property_is_active())
-    ,_steps(0)
     ,_trans_focus(Inkscape::Preferences::get()->getDoubleLimited("/dialogs/transparency/on-focus", 0.95, 0.0, 1.0))
     ,_trans_blur(Inkscape::Preferences::get()->getDoubleLimited("/dialogs/transparency/on-blur", 0.50, 0.0, 1.0))
     ,_trans_time(Inkscape::Preferences::get()->getIntLimited("/dialogs/transparency/animate-time", 100, 0, 5000))
@@ -43,79 +42,28 @@ FloatingBehavior::FloatingBehavior(Dialog &dialog) :
     sp_transientize(GTK_WIDGET(_d->gobj()));
     _dialog.retransientize_suppress = false;
 
-    _focus_event();
-    _dialog_active.signal_changed().connect(sigc::mem_fun(this, &FloatingBehavior::_focus_event));
 
-}
-
-/**
- * A function called when the window gets focus.
- *
- * This function gets called on a focus event.  It figures out how much
- * time is required for a transition, and the number of steps that'll take,
- * and sets up the _trans_timer function to do the work.  If the transition
- * time is set to 0 ms it just calls _trans_timer once with _steps equal to
- * zero so that the transition happens instantaneously.  This occurs on
- * windows as opacity changes cause flicker there.
- */
-void FloatingBehavior::_focus_event ()
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    _steps = 0;
-    _trans_focus = prefs->getDoubleLimited("/dialogs/transparency/on-focus", 0.95, 0.0, 1.0);
-    _trans_blur = prefs->getDoubleLimited("/dialogs/transparency/on-blur", 0.50, 0.0, 1.0);
-    _trans_time = prefs->getIntLimited("/dialogs/transparency/animate-time", 100, 0, 5000);
-
-    if (_trans_time != 0) {
-        float diff = _trans_focus - _trans_blur;
-        if (diff < 0.0) diff *= -1.0;
-
-        while (diff > 0.05) {
-            _steps++;
-            diff = diff / 2.0;
-        }
-
-        if (_steps != 0) {
-            Glib::signal_timeout().connect(sigc::mem_fun(this, &FloatingBehavior::_trans_timer), _trans_time / _steps);
-        }
-    }
-    _trans_timer();
-
-    return;
-}
-
-/**
- * Move the opacity of a window towards our goal.
- *
- * This is a timer function that is set up by _focus_event to slightly
- * move the opacity of the window along in an animated fashion.  It moves
- * the opacity half way to the goal until it runs out of steps, and then
- * it just forces the goal.
- */
-bool FloatingBehavior::_trans_timer () {
-    // printf("Go go gadget timer: %d\n", _steps);
-    if (_steps == 0) {
-        if (_dialog_active.get_value()) {
-            _d->set_opacity(_trans_focus);
-        } else {
-            _d->set_opacity(_trans_blur);
-        }
-
-        return false;
+    // install CSS to control focused/unfocused opacity and transition time
+    // TODO: currently needs a restart (but seems reasonable, considering anybody will hardly ever change these)
+    // TODO: Do we even need all of this cruft? Three preferences to control dialog opacity seem like overkill.
+    static auto provider = Gtk::CssProvider::create();
+    static bool provider_added = false;
+    if (!provider_added) {
+        auto const screen = Gdk::Screen::get_default();
+        Gtk::StyleContext::add_provider_for_screen(screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        provider_added = true;
     }
 
-    float goal, current;
-    current = _d->get_opacity();
-
-    if (_dialog_active.get_value()) {
-        goal = _trans_focus;
-    } else {
-        goal = _trans_blur;
-    }
-
-    _d->set_opacity(current - ((current - goal) / 2));
-    _steps--;
-    return true;
+    _d->set_name("inkscape_floating_dialog");
+    std::string css_str = Glib::ustring::compose("#inkscape_floating_dialog {"
+                                                 "    transition: opacity %1s ease-out;"
+                                                 "    opacity: %2;"
+                                                 "}"
+                                                 "#inkscape_floating_dialog:backdrop {"
+                                                 "    opacity: %3;"
+                                                 "}",
+                                                 (double)_trans_time / 1000, _trans_focus, _trans_blur);
+    provider->load_from_data(css_str);
 }
 
 FloatingBehavior::~FloatingBehavior()
@@ -132,7 +80,7 @@ FloatingBehavior::create(Dialog &dialog)
 
 inline FloatingBehavior::operator Gtk::Widget &()                          { return *_d; }
 inline GtkWidget *FloatingBehavior::gobj()                                { return GTK_WIDGET(_d->gobj()); }
-inline Gtk::Box* FloatingBehavior::get_vbox()                            { 
+inline Gtk::Box* FloatingBehavior::get_vbox()                            {
     return _d->get_content_area();
 }
 inline void FloatingBehavior::present()                                   { _d->present(); }
@@ -145,7 +93,7 @@ inline void FloatingBehavior::set_position(Gtk::WindowPosition position)  { _d->
 inline void FloatingBehavior::set_size_request(int width, int height)     { _d->set_size_request(width, height); }
 inline void FloatingBehavior::size_request(Gtk::Requisition &requisition) {
 	Gtk::Requisition requisition_natural;
-	_d->get_preferred_size(requisition, requisition_natural); 
+	_d->get_preferred_size(requisition, requisition_natural);
 }
 inline void FloatingBehavior::get_position(int &x, int &y)                { _d->get_position(x, y); }
 inline void FloatingBehavior::get_size(int &width, int &height)           { _d->get_size(width, height); }
