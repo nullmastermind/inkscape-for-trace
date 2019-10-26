@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-10-10 21:27+0200\n"
-"PO-Revision-Date: 2019-10-25 01:43+0100\n"
+"PO-Revision-Date: 2019-10-26 02:10+0100\n"
 "Last-Translator: Maren Hachmann <marenhachmann@yahoo.com>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -22394,14 +22394,20 @@ msgid ""
 "zooming and panning in relevant areas faster on low-end hardware in drawings "
 "with few or no filters."
 msgstr ""
+"Auf moderner Hardware kann es helfen, diesen Wert zu erhöhen"
+" (Standardeinstellung: 16), um die Darstellung großer Flächen mit gefilterten"
+" Objekten (inklusive Unschärfe und Mischmodi) zu beschleunigen. Um das Zoomen"
+" und Verschieben der Zeichenfläche auf langsamen Computern zu beschleunigen,"
+" kann der Wert für Zeichnungen mit nur wenigen, kleinen gefilterten Objekten"
+" verringert werden."
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2018
 msgid "Rendering XRay radius:"
-msgstr ""
+msgstr "Radius des Röntgenkreises:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2019
 msgid "XRay mode radius preview"
-msgstr ""
+msgstr "Radius des Kreises um den Mauszeiger im Röntgenmodus"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2022
 #: ../src/ui/dialog/inkscape-preferences.cpp:2046
@@ -22503,10 +22509,9 @@ msgid "Default export _resolution:"
 msgstr "Standard-Exportauflösung:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2087
-#, fuzzy
 msgid "Default image resolution (in dots per inch) in the Export dialog"
 msgstr ""
-"Bevorzugte Auflösung der Bitmap (Punkte pro Zoll) im Exportieren-Dialog"
+"Bevorzugte Auflösung von Bildern (Punkte pro Zoll) im Exportieren-Dialog"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2088
 msgid "Create"
@@ -22545,11 +22550,11 @@ msgstr "Art des Bitmap-Imports:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2109
 msgid "Include"
-msgstr ""
+msgstr "Als Objekt(e) übernehmen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2112
 msgid "SVG import mode:"
-msgstr ""
+msgstr "SVG-Import-Modus:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2119
 msgid "Image scale (image-rendering):"
@@ -22656,18 +22661,20 @@ msgid ""
 "Keyboard shortcut \"%1\"\n"
 "is already assigned to \"%2\""
 msgstr ""
+"Das Tastaturkürzel \"%1\"\n"
+"wird bereits für \"%2\" verwendet."
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 2152
 #: ../src/ui/dialog/inkscape-preferences.cpp:2316
 msgid "Reassign shortcut?"
-msgstr ""
+msgstr "Tastaturkürzel neu vergeben?"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 2153
 #: ../src/ui/dialog/inkscape-preferences.cpp:2317
 msgid "Are you sure you want to reassign this shortcut?"
-msgstr ""
+msgstr "Sind Sie sicher, dass Sie dieses Tastaturkürzel neu vergeben möchten?"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2413
 msgid "Misc"
@@ -22757,9 +22764,8 @@ msgid "System info"
 msgstr "Systeminformation"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2549
-#, fuzzy
 msgid "Reset Preferences"
-msgstr "Einstellungen für Textwerkzeug"
+msgstr "Einstellungen zurücksetzen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2552
 msgid "User preferences: "
@@ -22795,24 +22801,23 @@ msgstr "Ort der Benutzererweiterungen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2567
 msgid "Open icons folder"
-msgstr ""
+msgstr "Icon-Ordner öffnen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2568
 msgid "User icons: "
-msgstr ""
+msgstr "Benutzerdefinierte Iconsätze: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2568
 msgid "Location of the user’s icons"
-msgstr ""
+msgstr "Speicherort für Iconsätze des aktuellen Benutzers"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2571
 msgid "Open templates folder"
 msgstr "Vorlagen-Ordner öffnen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2572
-#, fuzzy
 msgid "User templates: "
-msgstr "_Vorlagen..."
+msgstr "Benutzerdefinierte Vorlagen: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2573
 msgid "Location of the user’s templates"
@@ -22820,35 +22825,33 @@ msgstr "Ort der Benutzerer-Vorlagen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2576
 msgid "Open symbols folder"
-msgstr ""
+msgstr "Symbolordner öffnen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2578
 msgid "User symbols: "
-msgstr ""
+msgstr "Benutzerdefinierte Symbolsätze:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2578
 msgid "Location of the user’s symbols"
-msgstr ""
+msgstr "Speicherort der Symbolsätze des aktuellen Benutzers"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2582
-#, fuzzy
 msgid "Open paint servers folder"
-msgstr "Öffnen einer HPGL-Plotter-Datei"
+msgstr "Ordner für Muster und Schraffuren öffnen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2584
-#, fuzzy
 msgid "User paint servers: "
-msgstr "Benutzer-Farbpaletten"
+msgstr "Benutzerdefinierte Muster/Schraffuren: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2585
-#, fuzzy
 msgid "Location of the user’s paint servers"
-msgstr "Ort der Benutzer-Farbpaletten"
+msgstr ""
+"Speicherort für die SVG-Schraffuren und Musterfüllungen des aktuellen"
+" Benutzers"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2588
-#, fuzzy
 msgid "Open palettes folder"
-msgstr "Öffnen einer HPGL-Plotter-Datei"
+msgstr "Palettenordner öffnen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2589
 msgid "User palettes: "
@@ -22875,9 +22878,8 @@ msgid "Open user interface folder"
 msgstr "Ordner der Benutzeroberfläche öffnen"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2599
-#, fuzzy
 msgid "User UI: "
-msgstr "Benutzerspezifische Benutzeroberfläche"
+msgstr "Benutzerdefinierte Dateien für die Oberfläche:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2600
 msgid "Location of the user’s user interface description files"
@@ -23193,16 +23195,20 @@ msgstr "Oben"
 #: ../src/ui/dialog/livepatheffect-add.cpp:562
 msgid "You don't have any favorites yet, please disable the favorites star"
 msgstr ""
+"Es sind noch keine Favoriten vorhanden. Bitte klicken Sie erneut auf den"
+" Stern, um alle LPEs anzuzeigen."
 
 #: ../src/ui/dialog/livepatheffect-add.cpp:566
 msgid "This is your favorite effects"
-msgstr ""
+msgstr "Dies ist eine Liste der favorisierten LPEs."
 
 #: ../src/ui/dialog/livepatheffect-add.cpp:571
 #: ../src/ui/dialog/livepatheffect-add.cpp:583
 #: ../src/ui/dialog/livepatheffect-add.cpp:592
 msgid "Your search do a empty result, please try again"
 msgstr ""
+"Es konnte nichts gefunden werden. Bitte mit anderen Suchbegriffen erneut"
+" versuchen."
 
 #: ../src/ui/dialog/livepatheffect-editor.cpp:121
 msgid "Add path effect"
@@ -23412,7 +23418,7 @@ msgstr "_Titel:"
 
 #: ../src/ui/dialog/object-properties.cpp:59
 msgid "_DPI SVG:"
-msgstr ""
+msgstr "_DPI des SVG:"
 
 #: ../src/ui/dialog/object-properties.cpp:60
 msgid "_Image Rendering:"
@@ -23427,7 +23433,6 @@ msgid "L_ock"
 msgstr "_Sperren"
 
 #: ../src/ui/dialog/object-properties.cpp:63
-#, fuzzy
 msgid "Preserve Ratio"
 msgstr "Seitenverhältnis beibehalten"
 
