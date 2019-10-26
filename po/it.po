@@ -141,15 +141,15 @@ msgstr "Smussatura lieve a cuscino, con riflessi opachi"
 
 #: ../share/filters/filters.svg.h:34
 msgid "Ridged Border"
-msgstr "Bordo con cresta"
+msgstr "Bordo rialzato"
 
 #: ../share/filters/filters.svg.h:36
 msgid "Ridged border with inner bevel"
-msgstr "Bordo truccato con smussatura interna"
+msgstr "Bordo rialzato con smussatura interna"
 
 #: ../share/filters/filters.svg.h:38
 msgid "Ripple"
-msgstr "Oscillazione"
+msgstr "Ondulazione"
 
 #: ../share/filters/filters.svg.h:39 ../share/filters/filters.svg.h:123
 #: ../share/filters/filters.svg.h:315 ../share/filters/filters.svg.h:319
@@ -171,11 +171,11 @@ msgstr "Macchia"
 
 #: ../share/filters/filters.svg.h:44
 msgid "Fill object with sparse translucent specks"
-msgstr "Disegna l'oggetto con granelli traslucidi sparsi"
+msgstr "Riempi l'oggetto con granelli traslucidi sparsi"
 
 #: ../share/filters/filters.svg.h:46
 msgid "Oil Slick"
-msgstr "Macchia oleosa"
+msgstr "Effetto oleoso"
 
 #: ../share/filters/filters.svg.h:48
 msgid "Rainbow-colored semitransparent oily splotches"
@@ -191,7 +191,7 @@ msgstr "Macchie bianche simili a fiocchi di neve"
 
 #: ../share/filters/filters.svg.h:54
 msgid "Leopard Fur"
-msgstr "Pelliccia di leopardo"
+msgstr "Effetto leopardato"
 
 #: ../share/filters/filters.svg.h:55 ../share/filters/filters.svg.h:175
 #: ../share/filters/filters.svg.h:179 ../share/filters/filters.svg.h:183
@@ -205,7 +205,7 @@ msgstr "Materiali"
 
 #: ../share/filters/filters.svg.h:56
 msgid "Leopard spots (loses object's own color)"
-msgstr "Macchie di leopardo (per il colore originario dell'oggetto)"
+msgstr "Macchie di leopardo (rimuove il colore originario)"
 
 #: ../share/filters/filters.svg.h:58
 msgid "Zebra"
@@ -214,7 +214,7 @@ msgstr "Zebra"
 #: ../share/filters/filters.svg.h:60
 msgid "Irregular vertical dark stripes (loses object's own color)"
 msgstr ""
-"Irregolari strisce scure verticali (rimuove il colore originale dell'oggetto)"
+"Strisce scure verticali irregolari (rimuove il colore originario)"
 
 #: ../share/filters/filters.svg.h:62
 msgid "Clouds"
@@ -222,7 +222,7 @@ msgstr "Nuvole"
 
 #: ../share/filters/filters.svg.h:64
 msgid "Airy, fluffy, sparse white clouds"
-msgstr "Nuvole bianche sparse, soffici e rade"
+msgstr "Soffici nuvole bianche"
 
 #: ../share/filters/filters.svg.h:66
 #: ../src/extension/internal/bitmap/sharpen.cpp:39
@@ -274,12 +274,12 @@ msgstr "Colore e pittura immagine"
 
 #: ../share/filters/filters.svg.h:76
 msgid "Simulate oil painting style"
-msgstr "Simula lo stile dei dipinti ad olio"
+msgstr "Simula effetto ad olio"
 
 #: ../share/filters/filters.svg.h:78
 #: ../src/ui/dialog/inkscape-preferences.cpp:444
 msgid "Pencil"
-msgstr "Pastello"
+msgstr "Matita"
 
 #: ../share/filters/filters.svg.h:80
 msgid "Detect color edges and retrace them in grayscale"
@@ -295,7 +295,7 @@ msgstr "Rileva bordi colorati e li ridisegna in blu"
 
 #: ../share/filters/filters.svg.h:86
 msgid "Age"
-msgstr "Invecchiato"
+msgstr "Invecchiamento"
 
 #: ../share/filters/filters.svg.h:88
 msgid "Imitate aged photograph"
@@ -328,7 +328,7 @@ msgstr "Filo spinato"
 
 #: ../share/filters/filters.svg.h:96
 msgid "Gray bevelled wires with drop shadows"
-msgstr "Filo grigio spigoloso, con ombreggiature"
+msgstr "Fili grigi smussati, con ombreggiature"
 
 #: ../share/filters/filters.svg.h:98
 msgid "Swiss Cheese"
@@ -336,7 +336,7 @@ msgstr "Gruviera"
 
 #: ../share/filters/filters.svg.h:100
 msgid "Random inner-bevel holes"
-msgstr "Buchi casuali interni agli spigoli"
+msgstr "Buchi casuali interni"
 
 #: ../share/filters/filters.svg.h:102
 msgid "Blue Cheese"
@@ -344,7 +344,7 @@ msgstr "Gorgonzola"
 
 #: ../share/filters/filters.svg.h:104
 msgid "Marble-like bluish speckles"
-msgstr "Chiazze bluastre simili a marmo"
+msgstr "Marmorizzazione bluastra"
 
 #: ../share/filters/filters.svg.h:106
 msgid "Button"
@@ -352,7 +352,7 @@ msgstr "Bottone"
 
 #: ../share/filters/filters.svg.h:108
 msgid "Soft bevel, slightly depressed middle"
-msgstr "Leggera smussatura, lieve depressione intermedia"
+msgstr "Leggera smussatura con lieve depressione mediana"
 
 #: ../share/filters/filters.svg.h:110
 msgid "Inset"
@@ -403,7 +403,7 @@ msgstr "Sotto un vetro rotto"
 
 #: ../share/filters/filters.svg.h:130
 msgid "Bubbly Bumps"
-msgstr "Rughe a bolle"
+msgstr "Rigonfiamenti a bolle"
 
 #: ../share/filters/filters.svg.h:131 ../share/filters/filters.svg.h:307
 #: ../share/filters/filters.svg.h:311 ../share/filters/filters.svg.h:347
@@ -422,15 +422,15 @@ msgstr "Rughe a bolle"
 #: ../src/extension/internal/filter/bumps.h:143
 #: ../src/extension/internal/filter/bumps.h:363
 msgid "Bumps"
-msgstr "Rugosità"
+msgstr "Rigonfiamenti"
 
 #: ../share/filters/filters.svg.h:132
 msgid "Flexible bubbles effect with some displacement"
-msgstr "Bolle parametrizzate con una quantità di spostamento"
+msgstr "Effetto bolle con dispersione"
 
 #: ../share/filters/filters.svg.h:134
 msgid "Glowing Bubble"
-msgstr "Bolle con alone"
+msgstr "Bolle luminose"
 
 #: ../share/filters/filters.svg.h:135 ../share/filters/filters.svg.h:155
 #: ../share/filters/filters.svg.h:159 ../share/filters/filters.svg.h:203
@@ -449,7 +449,7 @@ msgstr "Neon"
 
 #: ../share/filters/filters.svg.h:140
 msgid "Neon light effect"
-msgstr "Luce neon"
+msgstr "Effetto luce al neon"
 
 #: ../share/filters/filters.svg.h:142
 msgid "Molten Metal"
@@ -470,7 +470,7 @@ msgstr "Metallo pressato con bordi incurvati"
 
 #: ../share/filters/filters.svg.h:150
 msgid "Matte Bevel"
-msgstr "Sfumatura opaca"
+msgstr "Smussatura opaca"
 
 #: ../share/filters/filters.svg.h:152
 msgid "Soft, pastel-colored, blurry bevel"
@@ -494,11 +494,11 @@ msgstr "Creste a pastello leggero"
 
 #: ../share/filters/filters.svg.h:162
 msgid "Glowing Metal"
-msgstr "Metallo lucidato"
+msgstr "Metallo rilucente"
 
 #: ../share/filters/filters.svg.h:164
 msgid "Glowing metal texture"
-msgstr "Texture metallica con alone"
+msgstr "Texture metallica rilucente"
 
 #: ../share/filters/filters.svg.h:166
 msgid "Leaves"
@@ -521,7 +521,7 @@ msgstr "Traslucido"
 
 #: ../share/filters/filters.svg.h:172
 msgid "Illuminated translucent plastic or glass effect"
-msgstr "Vetro o plastica lucidi e illuminati"
+msgstr "Effetto vetro o plastica translucidi illuminati"
 
 #: ../share/filters/filters.svg.h:174
 msgid "Iridescent Beeswax"
@@ -539,7 +539,7 @@ msgstr "Metallo consumato"
 
 #: ../share/filters/filters.svg.h:180
 msgid "Eroded metal texture with ridges, grooves, holes and bumps"
-msgstr "Texture a metallo consumato con sporgenze, buchi, aloni e righe"
+msgstr "Texture a metallo consumato con sporgenze, buchi, aloni e rigonfiamenti"
 
 #: ../share/filters/filters.svg.h:182
 msgid "Cracked Lava"
@@ -563,11 +563,11 @@ msgstr "Pelle di lucertola"
 
 #: ../share/filters/filters.svg.h:192
 msgid "Stylized reptile skin texture"
-msgstr "Texture stilizzata come pelle di rettile"
+msgstr "Texture a pelle di rettile stilizzata"
 
 #: ../share/filters/filters.svg.h:194
 msgid "Stone Wall"
-msgstr "Muro in pietra"
+msgstr "Muro di pietra"
 
 #: ../share/filters/filters.svg.h:196
 msgid "Stone wall texture to use with not too saturated colors"
@@ -613,7 +613,7 @@ msgstr "Confetti"
 
 #: ../share/filters/filters.svg.h:216
 msgid "Gel Ridge with a pearlescent look"
-msgstr "Cresta gelatinosa con un effetto perlaceo"
+msgstr "Cresta gelatinosa con effetto perlaceo"
 
 #: ../share/filters/filters.svg.h:218
 msgid "Raised Border"
@@ -621,15 +621,15 @@ msgstr "Bordo rialzato"
 
 #: ../share/filters/filters.svg.h:220
 msgid "Strongly raised border around a flat surface"
-msgstr "Bordo molto sporgente da una superficie piatta"
+msgstr "Bordo molto sporgente attorno una superficie piatta"
 
 #: ../share/filters/filters.svg.h:222
 msgid "Metallized Ridge"
-msgstr "Cresta metallizzata"
+msgstr "Bordo metallizzato"
 
 #: ../share/filters/filters.svg.h:224
 msgid "Gel Ridge metallized at its top"
-msgstr "Cresta gelatinosa con punta metallizzata"
+msgstr "Bordo gelatinoso con sommità metallizzata"
 
 #: ../share/filters/filters.svg.h:226
 msgid "Fat Oil"
@@ -637,7 +637,7 @@ msgstr "Copertura oleosa"
 
 #: ../share/filters/filters.svg.h:228
 msgid "Fat oil with some adjustable turbulence"
-msgstr "Copertura oleosa con turbolenza variabile"
+msgstr "Copertura oleosa con turbolenza regolabile"
 
 #: ../share/filters/filters.svg.h:230
 msgid "Black Hole"
@@ -653,7 +653,7 @@ msgstr "Morfologia"
 
 #: ../share/filters/filters.svg.h:232
 msgid "Creates a black light inside and outside"
-msgstr "Crea una luce scura all'interno e all'esterno"
+msgstr "Crea una luce scura interna ed esterna"
 
 #: ../share/filters/filters.svg.h:234
 msgid "Cubes"
@@ -661,7 +661,7 @@ msgstr "Cubi"
 
 #: ../share/filters/filters.svg.h:236
 msgid "Scattered cubes; adjust the Morphology primitive to vary size"
-msgstr "Cubi sparsi; dimensione regolabile tramite il filtro Morfologia"
+msgstr "Cubi sparsi la cui dimensione è regolabile tramite il filtro Morfologia"
 
 #: ../share/filters/filters.svg.h:238
 msgid "Peel Off"
@@ -701,19 +701,19 @@ msgstr "Gioielli smaltati"
 
 #: ../share/filters/filters.svg.h:256
 msgid "Slightly cracked enameled texture"
-msgstr "Texture smaltata con leggere striature"
+msgstr "Texture smaltata con leggera venatura"
 
 #: ../share/filters/filters.svg.h:258
 msgid "Rough Paper"
-msgstr "Carta grezza"
+msgstr "Carta ruvida"
 
 #: ../share/filters/filters.svg.h:260
 msgid "Aquarelle paper effect which can be used for pictures as for objects"
-msgstr "Carta acquarellata, usabile per oggetti o immagini"
+msgstr "Carta acquarellata, usabile sia per oggetti che per immagini"
 
 #: ../share/filters/filters.svg.h:262
 msgid "Rough and Glossy"
-msgstr "Grezza e patinata"
+msgstr "Ruvida e patinata"
 
 #: ../share/filters/filters.svg.h:264
 msgid ""
@@ -760,7 +760,7 @@ msgstr "Microscopio elettronico"
 msgid ""
 "Bevel, crude light, discoloration and glow like in electronic microscopy"
 msgstr ""
-"Luce fredda, opaca, scolorata e smussature come in un microscopio elettronico"
+"Luce fredda, opaca, scolorazioni e luminescenze come in un microscopio elettronico"
 
 #: ../share/filters/filters.svg.h:286
 msgid "Tartan"
@@ -792,7 +792,7 @@ msgstr "Vetrata"
 
 #: ../share/filters/filters.svg.h:300
 msgid "Illuminated stained glass effect"
-msgstr "Vetrata illuminata"
+msgstr "Effetto vetrata illuminata"
 
 #: ../share/filters/filters.svg.h:302
 msgid "Dark Glass"
@@ -800,15 +800,15 @@ msgstr "Vetro scuro"
 
 #: ../share/filters/filters.svg.h:304
 msgid "Illuminated glass effect with light coming from beneath"
-msgstr "Vetro illuminato da sotto"
+msgstr "Effetto vetro illuminato dal basso"
 
 #: ../share/filters/filters.svg.h:306
 msgid "HSL Bumps Alpha"
-msgstr "Rughe HSL e alpha"
+msgstr "Bozzellature HSL e alpha"
 
 #: ../share/filters/filters.svg.h:308
 msgid "Same as HSL Bumps but with transparent highlights"
-msgstr "Come Rughe HSL, ma con riflessi trasparenti"
+msgstr "Come Bozzellature HSL, ma con riflessi trasparenti"
 
 #: ../share/filters/filters.svg.h:310
 msgid "Bubbly Bumps Alpha"
@@ -825,15 +825,15 @@ msgstr "Contorni frastagliati"
 #: ../share/filters/filters.svg.h:316 ../share/filters/filters.svg.h:364
 msgid ""
 "Displace the outside of shapes and pictures without altering their content"
-msgstr "Scosta l'esterno di forme e immagine senza alterare il contenuto"
+msgstr "Scosta l'esterno delle forme e delle immagini senza alterarne il contenuto"
 
 #: ../share/filters/filters.svg.h:318
 msgid "Roughen Inside"
-msgstr "Interno nitido"
+msgstr "Interno ruvido"
 
 #: ../share/filters/filters.svg.h:320
 msgid "Roughen all inside shapes"
-msgstr "Interni delle forme più nitidi"
+msgstr "Aumenta la ruvidezza delle forme interne"
 
 #: ../share/filters/filters.svg.h:322
 msgid "Evanescent"
@@ -861,7 +861,7 @@ msgstr "Persone"
 
 #: ../share/filters/filters.svg.h:332
 msgid "Colorized blotches, like a crowd of people"
-msgstr "Macchie colorate, simile a una folla di persone"
+msgstr "Macchie colorate, simili a una folla di persone"
 
 #: ../share/filters/filters.svg.h:334
 msgid "Scotland"
