@@ -16,6 +16,7 @@
  *
  */
 
+#include <cstdint>
 #include <glib.h>
 
 #include "sp-canvas-item.h"
@@ -37,7 +38,7 @@ class Shape;
 
 /* stroke-linejoin */
 
-enum SPStrokeJoinType {
+enum SPStrokeJoinType : std::uint_least8_t {
     SP_STROKE_LINEJOIN_MITER,
     SP_STROKE_LINEJOIN_ROUND,
     SP_STROKE_LINEJOIN_BEVEL
@@ -45,7 +46,7 @@ enum SPStrokeJoinType {
 
 /* stroke-linecap */
 
-enum SPStrokeCapType {
+enum SPStrokeCapType : std::uint_least8_t {
     SP_STROKE_LINECAP_BUTT,
     SP_STROKE_LINECAP_ROUND,
     SP_STROKE_LINECAP_SQUARE
@@ -55,7 +56,7 @@ enum SPStrokeCapType {
 /* fill-rule */
 /* clip-rule */
 
-enum SPWindRule {
+enum SPWindRule : std::uint_least8_t {
     SP_WIND_RULE_NONZERO,
     SP_WIND_RULE_INTERSECT,
     SP_WIND_RULE_EVENODD,

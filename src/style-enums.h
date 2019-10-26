@@ -20,7 +20,9 @@
 
 #include "display/canvas-bpath.h" // FIXME those enums belong here!
 
-enum SPCSSFontSize {
+#include <cstdint>
+
+enum SPCSSFontSize : std::int_least8_t {
     SP_CSS_FONT_SIZE_XX_SMALL,
     SP_CSS_FONT_SIZE_X_SMALL,
     SP_CSS_FONT_SIZE_SMALL,
@@ -32,18 +34,18 @@ enum SPCSSFontSize {
     SP_CSS_FONT_SIZE_LARGER
 };
 
-enum SPCSSFontStyle {
+enum SPCSSFontStyle : std::uint_least8_t {
     SP_CSS_FONT_STYLE_NORMAL,
     SP_CSS_FONT_STYLE_ITALIC,
     SP_CSS_FONT_STYLE_OBLIQUE
 };
 
-enum SPCSSFontVariant {
+enum SPCSSFontVariant : std::uint_least8_t {
     SP_CSS_FONT_VARIANT_NORMAL,
     SP_CSS_FONT_VARIANT_SMALL_CAPS
 };
 
-enum SPCSSFontWeight {
+enum SPCSSFontWeight : std::int_least8_t {
     SP_CSS_FONT_WEIGHT_100,
     SP_CSS_FONT_WEIGHT_200,
     SP_CSS_FONT_WEIGHT_300,
@@ -59,7 +61,7 @@ enum SPCSSFontWeight {
     SP_CSS_FONT_WEIGHT_BOLDER
 };
 
-enum SPCSSFontStretch {
+enum SPCSSFontStretch : std::int_least8_t {
     SP_CSS_FONT_STRETCH_ULTRA_CONDENSED,
     SP_CSS_FONT_STRETCH_EXTRA_CONDENSED,
     SP_CSS_FONT_STRETCH_CONDENSED,
@@ -74,7 +76,7 @@ enum SPCSSFontStretch {
 };
 
 // Can select more than one
-enum SPCSSFontVariantLigatures {
+enum SPCSSFontVariantLigatures : std::uint_least8_t {
     SP_CSS_FONT_VARIANT_LIGATURES_NONE            = 0,
     SP_CSS_FONT_VARIANT_LIGATURES_COMMON          = 1,
     SP_CSS_FONT_VARIANT_LIGATURES_DISCRETIONARY   = 2,
@@ -87,13 +89,13 @@ enum SPCSSFontVariantLigatures {
     SP_CSS_FONT_VARIANT_LIGATURES_NOCONTEXTUAL    = 128
 };
 
-enum SPCSSFontVariantPosition {
+enum SPCSSFontVariantPosition : std::uint_least8_t {
     SP_CSS_FONT_VARIANT_POSITION_NORMAL = 1,
     SP_CSS_FONT_VARIANT_POSITION_SUB    = 2,
     SP_CSS_FONT_VARIANT_POSITION_SUPER  = 4
 };
 
-enum SPCSSFontVariantCaps {
+enum SPCSSFontVariantCaps : std::uint_least8_t {
     SP_CSS_FONT_VARIANT_CAPS_NORMAL      = 1,
     SP_CSS_FONT_VARIANT_CAPS_SMALL       = 2,
     SP_CSS_FONT_VARIANT_CAPS_ALL_SMALL   = 4,
@@ -104,7 +106,7 @@ enum SPCSSFontVariantCaps {
 };
 
 // Can select more than one (see spec)
-enum SPCSSFontVariantNumeric {
+enum SPCSSFontVariantNumeric : std::uint_least8_t {
     SP_CSS_FONT_VARIANT_NUMERIC_NORMAL               = 0,
     SP_CSS_FONT_VARIANT_NUMERIC_LINING_NUMS          = 1, 
     SP_CSS_FONT_VARIANT_NUMERIC_OLDSTYLE_NUMS        = 2, 
@@ -117,7 +119,7 @@ enum SPCSSFontVariantNumeric {
 };
 
 // Quite complicated... (see spec)
-enum SPCSSFontVariantAlternates {
+enum SPCSSFontVariantAlternates : std::uint_least8_t {
     SP_CSS_FONT_VARIANT_ALTERNATES_NORMAL,
     SP_CSS_FONT_VARIANT_ALTERNATES_HISTORICAL_FORMS,
     SP_CSS_FONT_VARIANT_ALTERNATES_STYLISTIC,
@@ -129,7 +131,7 @@ enum SPCSSFontVariantAlternates {
 };
 
 // Can select more than one (see spec)
-enum SPCSSFontVariantEastAsian {
+enum SPCSSFontVariantEastAsian : std::uint_least16_t {
     SP_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL                  = 0,
     SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS78                   = 1,
     SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS83                   = 2,
@@ -142,7 +144,7 @@ enum SPCSSFontVariantEastAsian {
     SP_CSS_FONT_VARIANT_EAST_ASIAN_RUBY                    = 256
 };
 
-enum SPCSSTextAlign {
+enum SPCSSTextAlign : std::uint_least8_t {
     SP_CSS_TEXT_ALIGN_START,
     SP_CSS_TEXT_ALIGN_END,
     SP_CSS_TEXT_ALIGN_LEFT,
@@ -152,19 +154,19 @@ enum SPCSSTextAlign {
     // also <string> is allowed, but only within table calls
 };
 
-enum SPCSSTextTransform {
+enum SPCSSTextTransform : std::uint_least8_t {
     SP_CSS_TEXT_TRANSFORM_CAPITALIZE,
     SP_CSS_TEXT_TRANSFORM_UPPERCASE,
     SP_CSS_TEXT_TRANSFORM_LOWERCASE,
     SP_CSS_TEXT_TRANSFORM_NONE
 };
 
-enum SPCSSDirection {
+enum SPCSSDirection : std::uint_least8_t {
     SP_CSS_DIRECTION_LTR,
     SP_CSS_DIRECTION_RTL
 };
 
-enum SPCSSWritingMode {
+enum SPCSSWritingMode : std::uint_least8_t {
     SP_CSS_WRITING_MODE_LR_TB,
     SP_CSS_WRITING_MODE_RL_TB,
     SP_CSS_WRITING_MODE_TB_RL,
@@ -172,19 +174,19 @@ enum SPCSSWritingMode {
 };
 
 // CSS WRITING MODES 3
-enum SPCSSTextOrientation {
+enum SPCSSTextOrientation : std::uint_least8_t {
     SP_CSS_TEXT_ORIENTATION_MIXED,
     SP_CSS_TEXT_ORIENTATION_UPRIGHT,
     SP_CSS_TEXT_ORIENTATION_SIDEWAYS
 };
 
-enum SPTextAnchor {
+enum SPTextAnchor : std::uint_least8_t {
     SP_CSS_TEXT_ANCHOR_START,
     SP_CSS_TEXT_ANCHOR_MIDDLE,
     SP_CSS_TEXT_ANCHOR_END
 };
 
-enum SPWhiteSpace {
+enum SPWhiteSpace : std::uint_least8_t {
     SP_CSS_WHITE_SPACE_NORMAL,
     SP_CSS_WHITE_SPACE_PRE,
     SP_CSS_WHITE_SPACE_NOWRAP,
@@ -193,7 +195,7 @@ enum SPWhiteSpace {
 };
 
 // Not complete list
-enum SPCSSBaseline {
+enum SPCSSBaseline : std::uint_least8_t {
     SP_CSS_BASELINE_AUTO,
     SP_CSS_BASELINE_ALPHABETIC,
     SP_CSS_BASELINE_IDEOGRAPHIC,
@@ -206,19 +208,19 @@ enum SPCSSBaseline {
     SP_CSS_BASELINE_SIZE  // Size of enum, keep last.
 };
     
-enum SPCSSBaselineShift {
+enum SPCSSBaselineShift : std::uint_least8_t {
     SP_CSS_BASELINE_SHIFT_BASELINE,
     SP_CSS_BASELINE_SHIFT_SUB,
     SP_CSS_BASELINE_SHIFT_SUPER
 };
 
-enum SPVisibility {
+enum SPVisibility : std::uint_least8_t {
     SP_CSS_VISIBILITY_HIDDEN,
     SP_CSS_VISIBILITY_COLLAPSE,
     SP_CSS_VISIBILITY_VISIBLE
 };
 
-enum SPOverflow {
+enum SPOverflow : std::uint_least8_t {
     SP_CSS_OVERFLOW_VISIBLE,
     SP_CSS_OVERFLOW_HIDDEN,
     SP_CSS_OVERFLOW_SCROLL,
@@ -226,7 +228,7 @@ enum SPOverflow {
 };
 
 /// \todo more display types
-enum SPCSSDisplay {
+enum SPCSSDisplay : std::uint_least8_t {
     SP_CSS_DISPLAY_NONE,
     SP_CSS_DISPLAY_INLINE,
     SP_CSS_DISPLAY_BLOCK,
@@ -246,12 +248,12 @@ enum SPCSSDisplay {
     SP_CSS_DISPLAY_TABLE_CAPTION
 };
 
-enum SPIsolation {
+enum SPIsolation : std::uint_least8_t {
     SP_CSS_ISOLATION_AUTO,
     SP_CSS_ISOLATION_ISOLATE
 };
 
-enum SPBlendMode {
+enum SPBlendMode : std::uint_least8_t {
     SP_CSS_BLEND_NORMAL,
     SP_CSS_BLEND_MULTIPLY,
     SP_CSS_BLEND_SCREEN,
@@ -271,25 +273,25 @@ enum SPBlendMode {
     SP_CSS_BLEND_ENDMODE
 };
 
-enum SPEnableBackground {
+enum SPEnableBackground : std::uint_least8_t {
     SP_CSS_BACKGROUND_ACCUMULATE,
     SP_CSS_BACKGROUND_NEW
 };
 
-enum SPColorInterpolation {
+enum SPColorInterpolation : std::uint_least8_t {
     SP_CSS_COLOR_INTERPOLATION_AUTO,
     SP_CSS_COLOR_INTERPOLATION_SRGB,
     SP_CSS_COLOR_INTERPOLATION_LINEARRGB
 };
 
-enum SPColorRendering {
+enum SPColorRendering : std::uint_least8_t {
     SP_CSS_COLOR_RENDERING_AUTO,
     SP_CSS_COLOR_RENDERING_OPTIMIZESPEED,
     SP_CSS_COLOR_RENDERING_OPTIMIZEQUALITY
 };
 
 /* Last two are CSS4 Image values... for the momement prefaced with -inkscape. */
-enum SPImageRendering {
+enum SPImageRendering : std::uint_least8_t {
     SP_CSS_IMAGE_RENDERING_AUTO,
     SP_CSS_IMAGE_RENDERING_OPTIMIZESPEED,
     SP_CSS_IMAGE_RENDERING_OPTIMIZEQUALITY,
@@ -297,21 +299,21 @@ enum SPImageRendering {
     SP_CSS_IMAGE_RENDERING_PIXELATED
 };
 
-enum SPShapeRendering {
+enum SPShapeRendering : std::uint_least8_t {
     SP_CSS_SHAPE_RENDERING_AUTO,
     SP_CSS_SHAPE_RENDERING_OPTIMIZESPEED,
     SP_CSS_SHAPE_RENDERING_CRISPEDGES,
     SP_CSS_SHAPE_RENDERING_GEOMETRICPRECISION
 };
 
-enum SPTextRendering {
+enum SPTextRendering : std::uint_least8_t {
     SP_CSS_TEXT_RENDERING_AUTO,
     SP_CSS_TEXT_RENDERING_OPTIMIZESPEED,
     SP_CSS_TEXT_RENDERING_OPTIMIZELEGIBILITY,
     SP_CSS_TEXT_RENDERING_GEOMETRICPRECISION
 };
 
-enum SPVectorEffect {
+enum SPVectorEffect : std::uint_least8_t {
     SP_VECTOR_EFFECT_NONE                 = 0,
     SP_VECTOR_EFFECT_NON_SCALING_STROKE   = 1,
     SP_VECTOR_EFFECT_NON_SCALING_SIZE     = 2,

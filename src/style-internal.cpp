@@ -2999,7 +2999,8 @@ template class SPIEnum<SPCSSFontStyle>;
 template class SPIEnum<SPCSSFontVariant>;
 template class SPIEnum<SPCSSFontVariantPosition>;
 template class SPIEnum<SPCSSFontVariantCaps>;
-template class SPIEnum<_SPCSSFontVariantLigatures_int>;
+template class SPIEnum<uint_least16_t>;
+template class SPIEnum<uint_least8_t>;
 
 
 
