@@ -1647,43 +1647,45 @@ void SPCanvas::set_cursor(GtkWidget *widget)
 {
     SPCanvas *canvas = SP_CANVAS(widget);
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop && desktop->splitMode()) {
-        GdkDisplay *display = gdk_display_get_default();
-        GdkCursor *cursor = nullptr;
-        if (canvas->_split_hover_vertical) {
-            if (canvas->_changecursor != 1) {
-                cursor = gdk_cursor_new_from_name(display, "pointer");
-                gdk_window_set_cursor(gtk_widget_get_window(widget), cursor);
-                g_object_unref(cursor);
-                canvas->paintSpliter();
-            }
+    GdkDisplay *display = gdk_display_get_default();
+    GdkCursor *cursor = nullptr;
+    if (canvas->_split_hover_vertical) {
+        if (canvas->_changecursor != 1) {
+            cursor = gdk_cursor_new_from_name(display, "pointer");
+            gdk_window_set_cursor(gtk_widget_get_window(widget), cursor);
+            g_object_unref(cursor);
+            canvas->paintSpliter();
             canvas->_changecursor = 1;
-        } else if (canvas->_split_hover_horizontal) {
-            if (canvas->_changecursor != 2) {
-                cursor = gdk_cursor_new_from_name(display, "pointer");
-                gdk_window_set_cursor(gtk_widget_get_window(widget), cursor);
-                g_object_unref(cursor);
-                canvas->paintSpliter();
-            }
+        }
+    } else if (canvas->_split_hover_horizontal) {
+        if (canvas->_changecursor != 2) {
+            cursor = gdk_cursor_new_from_name(display, "pointer");
+            gdk_window_set_cursor(gtk_widget_get_window(widget), cursor);
+            g_object_unref(cursor);
+            canvas->paintSpliter();
             canvas->_changecursor = 2;
-        } else if (canvas->_split_hover) {
-            if (canvas->_changecursor != 3) {
-                Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-                if (_split_vertical) {
-                    cursor = gdk_cursor_new_from_name(display, "ew-resize");
-                } else {
-                    cursor = gdk_cursor_new_from_name(display, "ns-resize");
-                }
-                gdk_window_set_cursor(gtk_widget_get_window(widget), cursor);
-                g_object_unref(cursor);
-                canvas->paintSpliter();
+        }  
+    } else if (canvas->_split_hover) {
+        if (canvas->_changecursor != 3) {
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            if (_split_vertical) {
+                cursor = gdk_cursor_new_from_name(display, "ew-resize");
+            } else {
+                cursor = gdk_cursor_new_from_name(display, "ns-resize");
             }
+            gdk_window_set_cursor(gtk_widget_get_window(widget), cursor);
+            g_object_unref(cursor);
+            canvas->paintSpliter();
             canvas->_changecursor = 3;
-        } else {
-            if (desktop && desktop->event_context && !canvas->_split_pressed && canvas->_changecursor != 4) {
-                desktop->event_context->sp_event_context_update_cursor();
-                canvas->paintSpliter();
-            }
+        }
+    } else {
+        if (desktop && 
+            desktop->event_context && 
+            !canvas->_split_pressed &&
+            (canvas->_changecursor != 0 && canvas->_changecursor != 4)) 
+        {
+            desktop->event_context->sp_event_context_update_cursor();
+            canvas->paintSpliter();
             canvas->_changecursor = 4;
         }
     }
@@ -1701,32 +1703,35 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
 
     if (canvas->_root == nullptr) // canvas being deleted
         return FALSE;
-
+    
     Geom::IntPoint cursor_pos = Geom::IntPoint(event->x, event->y);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (canvas->_spliter &&
-        ((*canvas->_spliter).contains(cursor_pos) || canvas->_spliter_control.contains(cursor_pos)) &&
-        !canvas->_is_dragging) {
-        canvas->_split_hover = true;
-    } else {
-        canvas->_split_hover = false;
-    }
-    if (canvas->_spliter_left && canvas->_spliter_right &&
-        ((*canvas->_spliter_left).contains(cursor_pos) || (*canvas->_spliter_right).contains(cursor_pos)) &&
-        !canvas->_is_dragging) {
-        canvas->_split_hover_horizontal = true;
-    } else {
-        canvas->_split_hover_horizontal = false;
-    }
-    if (!canvas->_split_hover_horizontal && canvas->_spliter_top && canvas->_spliter_bottom &&
-        ((*canvas->_spliter_top).contains(cursor_pos) || (*canvas->_spliter_bottom).contains(cursor_pos)) &&
-        !canvas->_is_dragging) {
-        canvas->_split_hover_vertical = true;
-    } else {
-        canvas->_split_hover_vertical = false;
-    }
+        
+    if (desktop && desktop->splitMode()) {
+        if (canvas->_spliter &&
+            ((*canvas->_spliter).contains(cursor_pos) || canvas->_spliter_control.contains(cursor_pos)) &&
+            !canvas->_is_dragging) {
+            canvas->_split_hover = true;
+        } else {
+            canvas->_split_hover = false;
+        }
+        if (canvas->_spliter_left && canvas->_spliter_right &&
+            ((*canvas->_spliter_left).contains(cursor_pos) || (*canvas->_spliter_right).contains(cursor_pos)) &&
+            !canvas->_is_dragging) {
+            canvas->_split_hover_horizontal = true;
+        } else {
+            canvas->_split_hover_horizontal = false;
+        }
+        if (!canvas->_split_hover_horizontal && canvas->_spliter_top && canvas->_spliter_bottom &&
+            ((*canvas->_spliter_top).contains(cursor_pos) || (*canvas->_spliter_bottom).contains(cursor_pos)) &&
+            !canvas->_is_dragging) {
+            canvas->_split_hover_vertical = true;
+        } else {
+            canvas->_split_hover_vertical = false;
+        }
 
-    canvas->set_cursor(widget);
+        canvas->set_cursor(widget);
+    }
     if (canvas->_split_pressed && desktop && desktop->event_context && desktop->splitMode()) {
         GtkAllocation allocation;
         canvas->_split_dragging = true;
