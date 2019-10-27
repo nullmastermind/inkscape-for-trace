@@ -126,7 +126,7 @@ class SPIBase
 
 public:
     SPIBase( Glib::ustring name="anonymous", bool inherits = true )
-        : name(std::move(name)),
+        : _name(std::move(name)),
           inherits(inherits),
           set(false),
           inherit(false),
@@ -177,7 +177,7 @@ public:
     }
 
     virtual void readAttribute( Inkscape::XML::Node *repr ) {
-        readIfUnset( repr->attribute( name.c_str() ), SP_STYLE_SRC_ATTRIBUTE );
+        readIfUnset(repr->attribute(name().c_str()), SP_STYLE_SRC_ATTRIBUTE);
     }
 
     virtual const Glib::ustring get_value() const = 0;
@@ -200,16 +200,20 @@ public:
 
     // Check apples being compared to apples
     virtual bool operator==(const SPIBase& rhs) {
-        return (name == rhs.name);
+        return (_name == rhs._name);
     }
 
     virtual bool operator!=(const SPIBase& rhs) {
         return !(*this == rhs);
     }
 
+    Glib::ustring const &name() const { return _name; }
+
+private:
+    Glib::ustring _name;
+
   // To do: make private
 public:
-    Glib::ustring name;       // Make const
     bool inherits : 1;    // Property inherits by default from parent.
     bool set : 1;         // Property has been explicitly set (vs. inherited).
     bool inherit : 1;     // Property value set to 'inherit'.

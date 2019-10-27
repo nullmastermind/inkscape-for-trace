@@ -76,7 +76,7 @@ const Glib::ustring SPIBase::write(guint const flags, SPStyleSrc const &style_sr
     if (should_write(flags, set, dfp, src)) {
         auto value = this->get_value();
         if ( !value.empty() ) {
-            return (name + ":" + value + important_str() + ";");
+            return (name() + ":" + value + important_str() + ";");
         }
     }
     return Glib::ustring("");
@@ -191,8 +191,8 @@ SPIScale24::merge( const SPIBase* const parent ) {
             }
         } else {
             // Needed only for 'opacity' and 'stop-opacity' which do not inherit. See comment at bottom of file.
-            if( name != "opacity" && name != "stop-opacity" )
-                std::cerr << "SPIScale24::merge: unhandled property: " << name << std::endl;
+            if( name() != "opacity" && name() != "stop-opacity" )
+                std::cerr << "SPIScale24::merge: unhandled property: " << name() << std::endl;
             if( !set || (!inherit && value == SP_SCALE24_MAX) ) {
                 value = p->value;
                 set = (value != SP_SCALE24_MAX);
@@ -286,7 +286,7 @@ SPILength::read( gchar const *str ) {
                 /* Percentage */
                 unit = SP_CSS_UNIT_PERCENT;
                 value = value * 0.01;
-                if (name.compare( "line-height" ) == 0) {
+                if (name() == "line-height") {
                     // See: http://www.w3.org/TR/CSS2/visudet.html#propdef-line-height
                     if( style ) {
                         computed = value * style->font_size.computed;
@@ -354,7 +354,7 @@ SPILength::cascade( const SPIBase* const parent ) {
             } else if (unit == SP_CSS_UNIT_EX) {
                 // FIXME: Get x height from libnrtype or pango.
                 computed = value * em * 0.5;
-            } else if (unit == SP_CSS_UNIT_PERCENT && name.compare( "line-height" ) == 0 ) {
+            } else if (unit == SP_CSS_UNIT_PERCENT && name() == "line-height") {
                 // Special case
                 computed = value * em;
             }
@@ -413,7 +413,7 @@ const Glib::ustring SPILength::toString(bool wname) const
 {
     CSSOStringStream os;
     if (wname) {
-        os << name << ":";
+        os << name() << ":";
     }
     os << this->get_value();
     if (wname) {
@@ -1086,13 +1086,13 @@ SPIString::read( gchar const *str ) {
         inherit = false;
 
         Glib::ustring str_temp(str);
-        if( name.compare( "d" ) == 0 && style_src == SP_STYLE_SRC_ATTRIBUTE) {
+        if (name() == "d" && style_src == SP_STYLE_SRC_ATTRIBUTE) {
             set = false;
         }
-        if( name.compare( "font-family" ) == 0 ) {
+        if (name() == "font-family") {
             // Family names may be quoted in CSS, internally we use unquoted names.
             css_font_family_unquote( str_temp );
-        } else if( name.compare( "-inkscape-font-specification" ) == 0 ) {
+        } else if (name() == "-inkscape-font-specification") {
             css_unquote( str_temp );
         }
 
@@ -1105,11 +1105,11 @@ const Glib::ustring SPIString::get_value() const
 {
     if (this->inherit) return Glib::ustring("inherit");
     if (!this->value) return Glib::ustring("");
-    if( name.compare( "font-family" ) == 0 ) {
+    if (name() == "font-family") {
         Glib::ustring font_family( this->value );
         css_font_family_quote( font_family );
         return font_family;
-    } else if( name.compare( "-inkscape-font-specification" ) == 0 ) {
+    } else if (name() == "-inkscape-font-specification") {
         Glib::ustring font_spec( this->value );
         css_quote( font_spec );
         return font_spec;
@@ -1242,7 +1242,7 @@ void SPIColor::read( gchar const *str ) {
     } else if ( !strcmp(str, "currentColor") ) {
         set = true;
         currentcolor = true;
-        if( name.compare( "color") == 0 ) {
+        if (name() == "color") {
             inherit = true;  // CSS3
         } else {
             setColor( style->color.value.color );
@@ -1519,11 +1519,11 @@ SPIPaint::reset( bool init ) {
         }
     }
     if( init ) {
-        if( name.compare( "fill" ) == 0 ) {
+        if (name() == "fill") {
             // 'black' is default for 'fill'
             setColor(0.0, 0.0, 0.0);
         }
-        if( name.compare( "text-decoration-color" ) == 0 ) {
+        if (name() == "text-decoration-color") {
             // currentcolor = true;
         }
     }
@@ -2867,7 +2867,7 @@ SPITextDecoration::write( guint const flags, SPStyleSrc const &style_src_req, SP
           && (!my_base->style->text_decoration_line.set ||
               style->text_decoration_line != my_base->style->text_decoration_line )))
     {
-        return (name + ":" + this->get_value() + important_str() + ";");
+        return (name() + ":" + this->get_value() + important_str() + ";");
     }
     return Glib::ustring("");
 }

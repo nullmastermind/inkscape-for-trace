@@ -266,10 +266,10 @@ void LPEMirrorSymmetry::cloneStyle(SPObject *orig, SPObject *dest)
     dest->getRepr()->setAttribute("style", orig->getRepr()->attribute("style"));
     for (auto iter : orig->style->properties()) {
         if (iter->style_src != SP_STYLE_SRC_UNSET) {
-            if (iter->name != "font" && iter->name != "d" && iter->name != "marker") {
-                const gchar *attr = orig->getRepr()->attribute(iter->name.c_str());
+            if (iter->name() != "font" && iter->name() != "d" && iter->name() != "marker") {
+                const gchar *attr = orig->getRepr()->attribute(iter->name().c_str());
                 if (attr) {
-                    dest->getRepr()->setAttribute(iter->name.c_str(), attr);
+                    dest->getRepr()->setAttribute(iter->name(), attr);
                 }
             }
         }

@@ -754,8 +754,7 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
             SPCSSAttr *css = sp_repr_css_attr_inherited(obj, "style");
             for (auto iter : item->style->properties()) {
                 if (iter->style_src == SP_STYLE_SRC_STYLE_SHEET) {
-                    Glib::ustring val = iter->get_value();
-                    css->setAttribute(iter->name, val.c_str());
+                    css->setAttribute(iter->name(), iter->get_value());
                 }
             }
             sp_repr_css_set(obj_copy, css, "style");

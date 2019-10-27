@@ -563,13 +563,13 @@ void StyleDialog::readStyleElement()
         Glib::ustring style = obj->getRepr()->attribute("style");
         attr_prop = parseStyle(style);
         for (auto iter : obj->style->properties()) {
-            if (attr_prop.count(iter->name)) {
+            if (attr_prop.count(iter->name())) {
                 empty = false;
                 Gtk::TreeModel::Row row = *(store->prepend());
                 row[_mColumns._colSelector] = "style_properties";
                 row[_mColumns._colSelectorPos] = 0;
                 row[_mColumns._colActive] = true;
-                row[_mColumns._colName] = iter->name;
+                row[_mColumns._colName] = iter->name();
                 row[_mColumns._colValue] = iter->get_value();
                 row[_mColumns._colStrike] = false;
                 row[_mColumns._colOwner] = Glib::ustring("Current value");
@@ -584,7 +584,7 @@ void StyleDialog::readStyleElement()
                         row[_mColumns._colLinked] = true;
                     }
                 }
-                _addOwnerStyle(iter->name, "style attribute");
+                _addOwnerStyle(iter->name(), "style attribute");
             }
         }
         // this is to fix a bug on cairo win:
@@ -766,7 +766,7 @@ void StyleDialog::readStyleElement()
                 if (iter.second.second) {
                     Glib::ustring val = "";
                     for (auto iterprop : obj->style->properties()) {
-                        if (iterprop->style_src != SP_STYLE_SRC_UNSET && iterprop->name == iter.first) {
+                        if (iterprop->style_src != SP_STYLE_SRC_UNSET && iterprop->name() == iter.first) {
                             val = iterprop->get_value();
                             break;
                         }
@@ -831,8 +831,8 @@ void StyleDialog::readStyleElement()
     if (obj) {
         for (auto iter : obj->style->properties()) {
             if (iter->style_src != SP_STYLE_SRC_UNSET) {
-                if (iter->name != "font" && iter->name != "d" && iter->name != "marker") {
-                    const gchar *attr = obj->getRepr()->attribute(iter->name.c_str());
+                if (iter->name() != "font" && iter->name() != "d" && iter->name() != "marker") {
+                    const gchar *attr = obj->getRepr()->attribute(iter->name().c_str());
                     if (attr) {
                         if (!hasattributes) {
                             Inkscape::UI::Widget::IconRenderer *addRenderer =
@@ -878,16 +878,16 @@ void StyleDialog::readStyleElement()
                         row[_mColumns._colSelector] = "attributes";
                         row[_mColumns._colSelectorPos] = selectorpos;
                         row[_mColumns._colActive] = true;
-                        row[_mColumns._colName] = iter->name;
+                        row[_mColumns._colName] = iter->name();
                         row[_mColumns._colValue] = attr;
-                        if (_owner_style.find(iter->name) != _owner_style.end()) {
+                        if (_owner_style.find(iter->name()) != _owner_style.end()) {
                             row[_mColumns._colStrike] = true;
                             Glib::ustring tooltiptext = Glib::ustring("");
                             row[_mColumns._colOwner] = tooltiptext;
                         } else {
                             row[_mColumns._colStrike] = false;
                             row[_mColumns._colOwner] = Glib::ustring("Current value");
-                            _addOwnerStyle(iter->name, "inline attributes");
+                            _addOwnerStyle(iter->name(), "inline attributes");
                         }
                         hasattributes = true;
                     }
@@ -1114,11 +1114,11 @@ void StyleDialog::_writeStyleElement(Glib::RefPtr<Gtk::TreeStore> store, Glib::u
         _updating = false;
     } else if (selector == "attributes") {
         for (auto iter : obj->style->properties()) {
-            if (iter->name != "font" && iter->name != "d" && iter->name != "marker") {
-                const gchar *attr = obj->getRepr()->attribute(iter->name.c_str());
+            if (iter->name() != "font" && iter->name() != "d" && iter->name() != "marker") {
+                const gchar *attr = obj->getRepr()->attribute(iter->name().c_str());
                 if (attr) {
                     _updating = true;
-                    obj->getRepr()->setAttribute(iter->name.c_str(), nullptr);
+                    obj->getRepr()->setAttribute(iter->name(), nullptr);
                     _updating = false;
                 }
             }
