@@ -1003,6 +1003,7 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_spliter_right = Geom::OptIntRect();
     canvas->_spliter_control_pos = Geom::Point();
     canvas->_spliter_in_control_pos = Geom::Point();
+    canvas->_xray_rect = Geom::OptIntRect();
     canvas->_split_value = 0.5;
     canvas->_split_vertical = true;
     canvas->_split_inverse = false;
@@ -1760,10 +1761,18 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
             }
             canvas->_xray = true;
             if (canvas->_xray_orig[Geom::X] != Geom::infinity()) {
+                if (canvas->_xray_rect) {
+                    canvas->dirtyRect(*canvas->_xray_rect);
+                    canvas->_xray_rect = Geom::OptIntRect();
+                }
                 canvas->addIdle();
             }
             status = 1;
         } else {
+            if (canvas->_xray_rect) {
+                canvas->dirtyRect(*canvas->_xray_rect);
+                canvas->_xray_rect = Geom::OptIntRect();
+            }
             canvas->_xray = false;
         }
         canvas->_state = event->state;
@@ -1928,7 +1937,7 @@ void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect co
     cairo_set_operator(buf.ct, CAIRO_OPERATOR_SOURCE);
     cairo_paint(buf.ct);
     cairo_translate(buf.ct, paint_rect.left(), paint_rect.top());
-        // cairo_surface_write_to_png( copy_backing, "debug1.png" );
+    // cairo_surface_write_to_png( copy_backing, "debug1.png" );
 
 
 
@@ -1948,15 +1957,16 @@ void SPCanvas::paintXRayBuffer(Geom::IntRect const &paint_rect, Geom::IntRect co
     cairo_set_source_surface(result, copy_backing, paint_rect.left(), paint_rect.top());
     cairo_set_operator(buf.ct, CAIRO_OPERATOR_IN);
     cairo_paint(result);
-    cairo_destroy(buf.ct);
-
     cairo_surface_destroy(copy_backing);
+    cairo_destroy(buf.ct);
+    cairo_destroy(result);
+    
     // cairo_surface_write_to_png( _backing_store, "debug3.png" );
     cairo_surface_mark_dirty(_backing_store);
     // Mark the painted rectangle un-clean to remove old x-ray when mouse change position
+    _xray_rect = paint_rect;
     gtk_widget_queue_draw_area(GTK_WIDGET(this), paint_rect.left() - _x0, paint_rect.top() - _y0, paint_rect.width(),
                                paint_rect.height());
-    dirtyRect(paint_rect);
 }
 
 void SPCanvas::paintSpliter()

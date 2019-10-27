@@ -186,6 +186,7 @@ public:
     Geom::OptIntRect _spliter_bottom;
     Geom::OptIntRect _spliter_left;
     Geom::OptIntRect _spliter_right;
+    Geom::OptIntRect _xray_rect;
     Geom::Point _spliter_control_pos;
     Geom::Point _spliter_in_control_pos;
     Geom::Point _xray_orig;
