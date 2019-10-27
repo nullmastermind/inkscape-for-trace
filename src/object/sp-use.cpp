@@ -699,6 +699,7 @@ SPItem *SPUse::unlink() {
     unlinked->updateRepr();
 
     // Hold onto our SPObject and repr for now.
+    sp_object_ref(this);
     Inkscape::GC::anchor(repr);
 
     // Remove ourselves, not propagating delete events to avoid a
@@ -718,6 +719,7 @@ SPItem *SPUse::unlink() {
 
     // Establish the succession and let go of our object.
     this->setSuccessor(unlinked);
+    sp_object_unref(this);
 
     SPItem *item = dynamic_cast<SPItem *>(unlinked);
     g_assert(item != nullptr);

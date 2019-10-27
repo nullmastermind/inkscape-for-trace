@@ -483,6 +483,7 @@ sp_tref_convert_to_tspan(SPObject *obj)
             new_tspan->updateRepr();
 
             // Hold onto our SPObject and repr for now.
+            sp_object_ref(tref);
             Inkscape::GC::anchor(tref_repr);
 
             // Remove ourselves, not propagating delete events to avoid a
@@ -495,6 +496,7 @@ sp_tref_convert_to_tspan(SPObject *obj)
 
             // Establish the succession and let go of our object.
             tref->setSuccessor(new_tspan);
+            sp_object_unref(tref);
         }
     }
     ////////////////////
