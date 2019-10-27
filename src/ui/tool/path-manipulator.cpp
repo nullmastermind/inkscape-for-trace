@@ -1208,28 +1208,20 @@ void PathManipulator::_createControlPointsFromGeometry()
 
     //XML Tree being used here directly while it shouldn't be.
     gchar const *nts_raw = _path ? _path->getRepr()->attribute(_nodetypesKey().data()) : nullptr;
-    std::string nodetype_string = nts_raw ? nts_raw : "";
     /* Calculate the needed length of the nodetype string.
      * For closed paths, the entry is duplicated for the starting node,
      * so we can just use the count of segments including the closing one
      * to include the extra end node. */
-    std::string::size_type nodetype_len = 0;
-    for (Geom::PathVector::const_iterator i = pathv.begin(); i != pathv.end(); ++i) {
-        if (i->empty()) continue;
-        nodetype_len += i->size_closed();
-    }
     /* pad the string to required length with a bogus value.
      * 'b' and any other letter not recognized by the parser causes the best fit to be set
      * as the node type */
-    if (nodetype_len > nodetype_string.size()) {
-        nodetype_string.append(nodetype_len - nodetype_string.size(), 'b');
-    }
-    std::string::iterator tsi = nodetype_string.begin();
+    auto const *tsi = nts_raw ? nts_raw : "";
     for (auto & _subpath : _subpaths) {
         for (auto & j : *_subpath) {
-            j.setType(Node::parse_nodetype(*tsi++), false);
+            char nodetype = (*tsi) ? (*tsi++) : 'b';
+            j.setType(Node::parse_nodetype(nodetype), false);
         }
-        if (_subpath->closed()) {
+        if (_subpath->closed() && *tsi) {
             // STUPIDITY ALERT: it seems we need to use the duplicate type symbol instead of
             // the first one to remain backward compatible.
             _subpath->begin()->setType(Node::parse_nodetype(*tsi++), false);
