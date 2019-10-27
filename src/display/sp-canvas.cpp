@@ -1020,7 +1020,6 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_inside = false; // this could be wrong on start but we update it as far we bo to the other side.
     canvas->_splits = 0;
     canvas->_forcefull = false;
-    canvas->_delayrendering = 0;
     canvas->_totalelapsed = 0;
     canvas->_scrooling = false;
     canvas->_idle_time = g_get_monotonic_time();
@@ -1175,7 +1174,6 @@ void SPCanvas::handle_get_preferred_height(GtkWidget *widget, gint *minimum_heig
 void SPCanvas::handle_size_allocate(GtkWidget *widget, GtkAllocation *allocation)
 {
     SPCanvas *canvas = SP_CANVAS (widget);
-    canvas->_delayrendering = 20;
     // Allocation does not depend on device scale.
     GtkAllocation old_allocation;
     gtk_widget_get_allocation(widget, &old_allocation);
@@ -2085,13 +2083,6 @@ int SPCanvas::paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const
     gint64 now = g_get_monotonic_time();
     gint64 elapsed = now - setup->start_time;
 
-    // if we do canvas resize or panning we want the canvas not redraw in enought times
-    // to make a smooth response.
-    if (_delayrendering != 0) {
-        --_delayrendering;
-        return false;
-    }
-
     // Allow only very fast buffers to be run together;
     // as soon as the total redraw time exceeds 1ms, cancel;
     // this returns control to the idle loop and allows Inkscape to process user input
@@ -2556,12 +2547,10 @@ gint SPCanvas::idle_handler(gpointer data)
     static int totaloops = 1;
     gint64 now = 0;
     gint64 elapsed = 0;
-    if (!canvas->_delayrendering) {
-        now = g_get_monotonic_time();
-        elapsed = now - canvas->_idle_time;
-        g_message("[%i] start loop %i in split %i at %f", canvas->_idle_id, totaloops, canvas->_splits,
-                  canvas->_totalelapsed / (double)1000000 + elapsed / (double)1000000);
-    }
+    now = g_get_monotonic_time();
+    elapsed = now - canvas->_idle_time;
+    g_message("[%i] start loop %i in split %i at %f", canvas->_idle_id, totaloops, canvas->_splits,
+                canvas->_totalelapsed / (double)1000000 + elapsed / (double)1000000);
 #endif
     int ret = canvas->doUpdate();
     int n_rects = cairo_region_num_rectangles(canvas->_clean_region);
@@ -2570,20 +2559,17 @@ gint SPCanvas::idle_handler(gpointer data)
     }
 
 #ifdef DEBUG_PERFORMANCE
-    if (ret == 0 && !canvas->_delayrendering) {
-        now = g_get_monotonic_time();
-        elapsed = now - canvas->_idle_time;
-        g_message("[%i] loop ended unclean at %f", canvas->_idle_id,
-                  canvas->_totalelapsed / (double)1000000 + elapsed / (double)1000000);
-    }
-    if (ret == 0 && !canvas->_delayrendering) {
+    now = g_get_monotonic_time();
+    elapsed = now - canvas->_idle_time;
+    g_message("[%i] loop ended unclean at %f", canvas->_idle_id,
+                canvas->_totalelapsed / (double)1000000 + elapsed / (double)1000000);
+    if (ret == 0) {
         totaloops += 1;
     }
     if (ret) {
         // Reset idle id
         canvas->_scrooling = false;
         canvas->_forcefull = false;
-        canvas->_delayrendering = 0;
         now = g_get_monotonic_time();
         elapsed = now - canvas->_idle_time;
         canvas->_totalelapsed += elapsed;
@@ -2612,7 +2598,6 @@ gint SPCanvas::idle_handler(gpointer data)
         canvas->_idle_id = 0;
         canvas->_scrooling = false;
         canvas->_forcefull = false;
-        canvas->_delayrendering = 0;
 #endif
     }
     return !ret;
