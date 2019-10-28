@@ -259,9 +259,6 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     // glyph-orientation-horizontal, glyph-orientation-vertical, kerning, lighting-color,
     // pointer-events, unicode-bidi
 
-    // For enums:   property( name, enumeration, default value , inherits = true );
-    // For scale24: property( name, default value = 0, inherits = true );
-
     // 'font', 'font-size', and 'font-family' must come first as other properties depend on them
     // for calculated values (through 'em' and 'ex'). ('ex' is currently not read.)
     // The following properties can depend on 'em' and 'ex':
@@ -274,121 +271,121 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
 
 
     // SVG 2 attributes promoted to properties. (When geometry properties are added, move after font.)
-    d(                "d"                                    ),  // SPIString Not inherited!
+    d(                      nullptr,    false),  // SPIString Not inherited!
 
     // Font related properties and 'font' shorthand
-    font_style(       "font-style",      enum_font_style,      SP_CSS_FONT_STYLE_NORMAL   ),
-    font_variant(     "font-variant",    enum_font_variant,    SP_CSS_FONT_VARIANT_NORMAL ),
-    font_weight(      "font-weight",     enum_font_weight,     SP_CSS_FONT_WEIGHT_NORMAL ),
-    font_stretch(     "font-stretch",    enum_font_stretch,    SP_CSS_FONT_STRETCH_NORMAL ), 
+    font_style(             SP_CSS_FONT_STYLE_NORMAL),
+    font_variant(           SP_CSS_FONT_VARIANT_NORMAL),
+    font_weight(            SP_CSS_FONT_WEIGHT_NORMAL),
+    font_stretch(           SP_CSS_FONT_STRETCH_NORMAL),
     font_size(),
-    line_height(      "line-height",                    1.25 ),  // SPILengthOrNormal
-    font_family(      "font-family",     "sans-serif"        ),  // SPIString w/default
+    line_height(            1.25 ),         // SPILengthOrNormal
+    font_family(            "sans-serif"),  // SPIString w/default
     font(),                                                      // SPIFont
-    font_specification( "-inkscape-font-specification"       ),  // SPIString
+    font_specification(     ),              // SPIString
 
     // Font variants (Features)
-    font_variant_ligatures( "font-variant-ligatures",  enum_font_variant_ligatures ),
-    font_variant_position(  "font-variant-position",   enum_font_variant_position,   SP_CSS_FONT_VARIANT_POSITION_NORMAL   ),
-    font_variant_caps(      "font-variant-caps",       enum_font_variant_caps,       SP_CSS_FONT_VARIANT_CAPS_NORMAL       ),
-    font_variant_numeric(   "font-variant-numeric",    enum_font_variant_numeric ),
-    font_variant_alternates("font-variant-alternates", enum_font_variant_alternates, SP_CSS_FONT_VARIANT_ALTERNATES_NORMAL ),
-    font_variant_east_asian("font-variant-east-asian", enum_font_variant_east_asian ),
-    font_feature_settings(  "font-feature-settings",   "normal" ),
+    font_variant_ligatures( ),
+    font_variant_position(  SP_CSS_FONT_VARIANT_POSITION_NORMAL),
+    font_variant_caps(      SP_CSS_FONT_VARIANT_CAPS_NORMAL),
+    font_variant_numeric(   ),
+    font_variant_alternates(SP_CSS_FONT_VARIANT_ALTERNATES_NORMAL),
+    font_variant_east_asian(),
+    font_feature_settings(  "normal"),
 
     // Variable Fonts
-    font_variation_settings( "font-variation-settings" ),  // SPIFontVariationSettings
+    font_variation_settings(),  // SPIFontVariationSettings
 
     // Text related properties
-    text_indent(      "text-indent",                     0.0 ),  // SPILength
-    text_align(       "text-align",      enum_text_align,      SP_CSS_TEXT_ALIGN_START    ),
+    text_indent(            ),  // SPILength
+    text_align(             SP_CSS_TEXT_ALIGN_START),
 
-    letter_spacing(   "letter-spacing",                  0.0 ),  // SPILengthOrNormal
-    word_spacing(     "word-spacing",                    0.0 ),  // SPILengthOrNormal
-    text_transform(   "text-transform",  enum_text_transform,  SP_CSS_TEXT_TRANSFORM_NONE ),
+    letter_spacing(         ),  // SPILengthOrNormal
+    word_spacing(           ),  // SPILengthOrNormal
+    text_transform(         SP_CSS_TEXT_TRANSFORM_NONE),
 
-    direction(        "direction",       enum_direction,       SP_CSS_DIRECTION_LTR       ),
-    writing_mode(     "writing-mode",    enum_writing_mode,    SP_CSS_WRITING_MODE_LR_TB  ),
-    text_orientation( "text-orientation",enum_text_orientation,SP_CSS_TEXT_ORIENTATION_MIXED ),
-    dominant_baseline("dominant-baseline",enum_baseline,       SP_CSS_BASELINE_AUTO       ),
+    direction(              SP_CSS_DIRECTION_LTR),
+    writing_mode(           SP_CSS_WRITING_MODE_LR_TB),
+    text_orientation(       SP_CSS_TEXT_ORIENTATION_MIXED),
+    dominant_baseline(      SP_CSS_BASELINE_AUTO),
     baseline_shift(),
-    text_anchor(      "text-anchor",     enum_text_anchor,     SP_CSS_TEXT_ANCHOR_START   ),
-    white_space(      "white-space",     enum_white_space,     SP_CSS_WHITE_SPACE_NORMAL  ),
+    text_anchor(            SP_CSS_TEXT_ANCHOR_START),
+    white_space(            SP_CSS_WHITE_SPACE_NORMAL),
 
     // SVG 2 Text Wrapping
-    shape_inside(     "shape-inside"                         ), // SPIString
-    shape_subtract(   "shape-subtract"                       ), // SPIString
-    shape_padding(    "shape-padding",   0.0                 ), // SPILength for now
-    shape_margin(     "shape-margin",    0.0                 ), // SPILength for now
-    inline_size(      "inline-size",     0.0                 ), // SPILength for now
+    shape_inside(           ), // SPIString
+    shape_subtract(         ), // SPIString
+    shape_padding(          ), // SPILength for now
+    shape_margin(           ), // SPILength for now
+    inline_size(            ), // SPILength for now
 
     text_decoration(),
     text_decoration_line(),
     text_decoration_style(),
-    text_decoration_color( "text-decoration-color" ),            // SPIColor
-    text_decoration_fill(  "text-decoration-fill" ),             // SPIPaint
-    text_decoration_stroke("text-decoration-stroke" ),           // SPIPaint
+    text_decoration_color(  ),  // SPIColor
+    text_decoration_fill(   ),  // SPIPaint
+    text_decoration_stroke( ),  // SPIPaint
 
     // General visual properties
-    clip_rule(        "clip-rule",       enum_clip_rule,       SP_WIND_RULE_NONZERO       ),
-    display(          "display",         enum_display,         SP_CSS_DISPLAY_INLINE,   false ),
-    overflow(         "overflow",        enum_overflow,        SP_CSS_OVERFLOW_VISIBLE, false ),
-    visibility(       "visibility",      enum_visibility,      SP_CSS_VISIBILITY_VISIBLE  ),
-    opacity(          "opacity",                               SP_SCALE24_MAX,          false ),
+    clip_rule(              SP_WIND_RULE_NONZERO),
+    display(                SP_CSS_DISPLAY_INLINE,   false),
+    overflow(               SP_CSS_OVERFLOW_VISIBLE, false),
+    visibility(             SP_CSS_VISIBILITY_VISIBLE),
+    opacity(                false),
 
-    isolation(        "isolation",       enum_isolation,       SP_CSS_ISOLATION_AUTO      ),
-    mix_blend_mode(   "mix-blend-mode",  enum_blend_mode,      SP_CSS_BLEND_NORMAL        ),
+    isolation(              SP_CSS_ISOLATION_AUTO),
+    mix_blend_mode(         SP_CSS_BLEND_NORMAL),
 
     paint_order(), // SPIPaintOrder
 
     // Color properties
-    color(            "color"                                ),  // SPIColor
-    color_interpolation(        "color-interpolation",         enum_color_interpolation, SP_CSS_COLOR_INTERPOLATION_SRGB),
-    color_interpolation_filters("color-interpolation-filters", enum_color_interpolation, SP_CSS_COLOR_INTERPOLATION_LINEARRGB),
+    color(                  ),  // SPIColor
+    color_interpolation(    SP_CSS_COLOR_INTERPOLATION_SRGB),
+    color_interpolation_filters(SP_CSS_COLOR_INTERPOLATION_LINEARRGB),
 
     // Solid color properties
-    solid_color(      "solid-color"                          ), // SPIColor
-    solid_opacity(    "solid-opacity",                         SP_SCALE24_MAX             ),
+    solid_color(            ), // SPIColor
+    solid_opacity(          ),
 
     // Vector effects
     vector_effect(),
 
     // Fill properties
-    fill(             "fill"                                 ),  // SPIPaint
-    fill_opacity(     "fill-opacity",                          SP_SCALE24_MAX             ),
-    fill_rule(        "fill-rule",       enum_fill_rule,       SP_WIND_RULE_NONZERO       ),
+    fill(                   ),  // SPIPaint
+    fill_opacity(           ),
+    fill_rule(              SP_WIND_RULE_NONZERO),
 
     // Stroke properites
-    stroke(           "stroke"                               ),  // SPIPaint
-    stroke_width(     "stroke-width",      1.0               ),  // SPILength
-    stroke_linecap(   "stroke-linecap",  enum_stroke_linecap,  SP_STROKE_LINECAP_BUTT     ),
-    stroke_linejoin(  "stroke-linejoin", enum_stroke_linejoin, SP_STROKE_LINEJOIN_MITER   ),
-    stroke_miterlimit("stroke-miterlimit",   4               ),  // SPIFloat (only use of float!)
+    stroke(                 ),  // SPIPaint
+    stroke_width(           1.0),  // SPILength
+    stroke_linecap(         SP_STROKE_LINECAP_BUTT),
+    stroke_linejoin(        SP_STROKE_LINEJOIN_MITER),
+    stroke_miterlimit(      4), // SPIFloat (only use of float!)
     stroke_dasharray(),                                          // SPIDashArray
-    stroke_dashoffset("stroke-dashoffset", 0.0               ),  // SPILength for now
+    stroke_dashoffset(      ),  // SPILength for now
 
-    stroke_opacity(   "stroke-opacity",    SP_SCALE24_MAX    ),
+    stroke_opacity(         ),
 
-    marker(           "marker"                               ),  // SPIString
-    marker_start(     "marker-start"                         ),  // SPIString
-    marker_mid(       "marker-mid"                           ),  // SPIString
-    marker_end(       "marker-end"                           ),  // SPIString
+    marker(                 ),  // SPIString
+    marker_start(           ),  // SPIString
+    marker_mid(             ),  // SPIString
+    marker_end(             ),  // SPIString
 
     // Filter properties
     filter(),
-    filter_blend_mode("filter-blend-mode", enum_blend_mode,    SP_CSS_BLEND_NORMAL),
-    filter_gaussianBlur_deviation( "filter-gaussianBlur-deviation", 0.0 ), // SPILength
-    enable_background("enable-background", enum_enable_background, SP_CSS_BACKGROUND_ACCUMULATE, false),
+    filter_blend_mode(      SP_CSS_BLEND_NORMAL),
+    filter_gaussianBlur_deviation(), // SPILength
+    enable_background(      SP_CSS_BACKGROUND_ACCUMULATE, false),
 
     // Rendering hint properties
-    color_rendering(  "color-rendering", enum_color_rendering, SP_CSS_COLOR_RENDERING_AUTO),
-    image_rendering(  "image-rendering", enum_image_rendering, SP_CSS_IMAGE_RENDERING_AUTO),
-    shape_rendering(  "shape-rendering", enum_shape_rendering, SP_CSS_SHAPE_RENDERING_AUTO),
-    text_rendering(   "text-rendering",  enum_text_rendering,  SP_CSS_TEXT_RENDERING_AUTO ),
+    color_rendering(        SP_CSS_COLOR_RENDERING_AUTO),
+    image_rendering(        SP_CSS_IMAGE_RENDERING_AUTO),
+    shape_rendering(        SP_CSS_SHAPE_RENDERING_AUTO),
+    text_rendering(         SP_CSS_TEXT_RENDERING_AUTO),
 
     // Stop color and opacity
-    stop_color("stop-color",                      false),       // SPIColor, does not inherit
-    stop_opacity("stop-opacity", SP_SCALE24_MAX,  false)        // Does not inherit
+    stop_color(             false),       // SPIColor, does not inherit
+    stop_opacity(           false)        // Does not inherit
 {
     // std::cout << "SPStyle::SPStyle( SPDocument ): Entrance: (" << _count << ")" << std::endl;
     // std::cout << "                      Document: " << (document_in?"present":"null") << std::endl;

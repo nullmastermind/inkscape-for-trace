@@ -1939,7 +1939,7 @@ SPIDashArray::read( gchar const *str ) {
     bool LineSolid = true;
 
     for (auto token : tokens) {
-        SPILength spilength("temp");
+        SPILength spilength;
         spilength.read(token.c_str());
         if (spilength.value > 0.00000001)
             LineSolid = false;
@@ -2029,7 +2029,7 @@ SPIFontSize::read( gchar const *str ) {
         /* Invalid */
         return;
     } else {
-        SPILength length("temp");
+        SPILength length;
         length.set = false;
         length.read( str );
         if( length.set ) {
@@ -2282,7 +2282,7 @@ SPIFont::read( gchar const *str ) {
             } else {
                 // Try to parse each property in turn
 
-                decltype(style->font_style) test_style("font-style", enum_font_style);
+                decltype(style->font_style) test_style;
                 test_style.read( lparam.c_str() );
                 if( test_style.set ) {
                     style->font_style = test_style;
@@ -2290,7 +2290,7 @@ SPIFont::read( gchar const *str ) {
                 }
 
                 // font-variant (Note: only CSS2.1 value small-caps is valid in shortcut.)
-                decltype(style->font_variant) test_variant("font-variant", enum_font_variant);
+                decltype(style->font_variant) test_variant;
                 test_variant.read( lparam.c_str() );
                 if( test_variant.set ) {
                     style->font_variant = test_variant;
@@ -2298,7 +2298,7 @@ SPIFont::read( gchar const *str ) {
                 }
 
                 // font-weight
-                decltype(style->font_weight) test_weight("font-weight", enum_font_weight);
+                decltype(style->font_weight) test_weight;
                 test_weight.read( lparam.c_str() );
                 if( test_weight.set ) {
                     style->font_weight = test_weight;
@@ -2306,7 +2306,7 @@ SPIFont::read( gchar const *str ) {
                 }
 
                 // font-stretch (added in CSS 3 Fonts)
-                decltype(style->font_stretch) test_stretch("font-stretch", enum_font_stretch);
+                decltype(style->font_stretch) test_stretch;
                 test_stretch.read( lparam.c_str() );
                 if( test_stretch.set ) {
                     style->font_stretch = test_stretch;
@@ -2407,7 +2407,7 @@ SPIBaselineShift::read( gchar const *str ) {
         /* Invalid */
         return;
     } else {
-        SPILength length( "temp" );
+        SPILength length;
         length.read( str );
         set      = length.set;
         inherit  = length.inherit;
@@ -2819,7 +2819,7 @@ SPITextDecoration::read( gchar const *str ) {
     // one is used  ???? then why break on set?
 
     // This could certainly be designed better
-    decltype(style->text_decoration_color) test_color("text-decoration-color");
+    decltype(style->text_decoration_color) test_color;
     test_color.setStylePointer( style );
     test_color.read( "currentColor" );  // Default value
     test_color.set = false;

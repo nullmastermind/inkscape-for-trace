@@ -1093,7 +1093,7 @@ Emf::select_pen(PEMF_CALLBACK_DATA d, int index)
         case U_PS_DASHDOT:
         case U_PS_DASHDOTDOT:
         {
-            SPILength spilength("temp", 1);
+            SPILength spilength(1.f);
             int penstyle = (pEmr->lopn.lopnStyle & U_PS_STYLE_MASK);
             if (!d->dc[d->level].style.stroke_dasharray.values.empty() &&
                 (d->level == 0 || (d->level > 0 && d->dc[d->level].style.stroke_dasharray !=
@@ -1189,7 +1189,7 @@ Emf::select_extpen(PEMF_CALLBACK_DATA d, int index)
                     d->dc[d->level].style.stroke_dasharray.values.clear();
                 for (unsigned int i=0; i<pEmr->elp.elpNumEntries; i++) {
                     double dash_length = pix_to_abs_size( d, pEmr->elp.elpStyleEntry[i] );
-                    d->dc[d->level].style.stroke_dasharray.values.emplace_back("temp", dash_length);
+                    d->dc[d->level].style.stroke_dasharray.values.emplace_back(dash_length);
                 }
                 d->dc[d->level].style.stroke_dasharray.set = true;
             } else {
@@ -1208,7 +1208,7 @@ Emf::select_extpen(PEMF_CALLBACK_DATA d, int index)
                 (d->level == 0 || (d->level > 0 && d->dc[d->level].style.stroke_dasharray !=
                                                        d->dc[d->level - 1].style.stroke_dasharray)))
                 d->dc[d->level].style.stroke_dasharray.values.clear();
-            SPILength spilength("temp");
+            SPILength spilength;
             if (penstyle==U_PS_DASH || penstyle==U_PS_DASHDOT || penstyle==U_PS_DASHDOTDOT) {
                 spilength.setDouble(3);
                 d->dc[d->level].style.stroke_dasharray.values.push_back(spilength);

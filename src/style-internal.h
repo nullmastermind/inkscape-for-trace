@@ -126,21 +126,14 @@ class SPIBase
 {
 
 public:
-    SPIBase()
-        : inherits(true),
+    SPIBase(bool inherits_ = true)
+        : inherits(inherits_),
           set(false),
           inherit(false),
           important(false),
           style_src(SP_STYLE_SRC_STYLE_PROP), // Default to property, see bug 1662285.
           style(nullptr)
     {}
-
-    // TODO remove name constructor
-    SPIBase(Glib::ustring const &, bool inherits_ = true)
-        : SPIBase()
-    {
-        inherits = inherits_;
-    }
 
     virtual ~SPIBase()
     = default;
@@ -258,11 +251,8 @@ class SPIFloat : public SPIBase
 {
 
 public:
-    SPIFloat() = default;
-
-    SPIFloat( Glib::ustring const &name, float value_default  = 0.0 )
-        : SPIBase( name ),
-          value(value_default),
+    SPIFloat(float value_default = 0.0 )
+        : value(value_default),
           value_default(value_default)
     {}
 
@@ -326,16 +316,12 @@ static const unsigned SP_SCALE24_MAX = 0xff0000;
 // Opacity does not inherit but stroke-opacity and fill-opacity do. 
 class SPIScale24 : public SPIBase
 {
+    static unsigned get_default() { return SP_SCALE24_MAX; }
 
 public:
-    SPIScale24()
-        : value(0)
-    {}
-
-    SPIScale24( Glib::ustring const &name, unsigned value = 0, bool inherits = true )
-        : SPIBase( name, inherits ),
-          value(value),
-          value_default(value)
+    SPIScale24(bool inherits = true )
+        : SPIBase(inherits),
+          value(get_default())
     {}
 
     ~SPIScale24() override
@@ -345,7 +331,7 @@ public:
     const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
-        value = value_default;
+        value = get_default();
     }
 
     void cascade( const SPIBase* const parent ) override;
@@ -362,9 +348,6 @@ public:
   // To do: make private
 public:
     unsigned value : 24;
-
-private:
-    unsigned value_default : 24;
 };
 
 
@@ -389,15 +372,8 @@ class SPILength : public SPIBase
 {
 
 public:
-    SPILength()
+    SPILength(float value = 0)
         : unit(SP_CSS_UNIT_NONE),
-          value(0),
-          computed(0)
-    {}
-
-    SPILength( Glib::ustring const &name, float value = 0 )
-        : SPIBase( name ),
-          unit(SP_CSS_UNIT_NONE),
           value(value),
           computed(value),
           value_default(value)
@@ -429,11 +405,11 @@ public:
     // To do: make private
   public:
     unsigned unit : 4;
-    float value;
-    float computed;
+    float value = 0.f;
+    float computed = 0.f;
 
 private:
-    float value_default;
+    float value_default = 0.f;
 };
 
 
@@ -443,12 +419,8 @@ class SPILengthOrNormal : public SPILength
 {
 
 public:
-    SPILengthOrNormal()
-        : normal(true)
-    {}
-
-    SPILengthOrNormal( Glib::ustring const &name, float value = 0 )
-        : SPILength( name, value ),
+    SPILengthOrNormal(float value = 0)
+        : SPILength(value),
           normal(true)
     {}
 
@@ -486,11 +458,6 @@ class SPIFontVariationSettings : public SPIBase
 public:
     SPIFontVariationSettings()
         : normal(true)
-    {}
-
-    SPIFontVariationSettings( Glib::ustring const &name )
-        : SPIBase( name ),
-          normal(true)
     {}
 
     ~SPIFontVariationSettings() override
@@ -536,10 +503,8 @@ class SPIEnum : public SPIBase
 {
 
 public:
-    SPIEnum() = delete;
-
-    SPIEnum( Glib::ustring const &name, SPStyleEnum const *enums, T value = T(), bool inherits = true ) :
-        SPIBase( name, inherits ),
+    SPIEnum(T value = T(), bool inherits = true) :
+        SPIBase(inherits),
         value(value),
         value_default(value)
     {
@@ -620,10 +585,8 @@ class SPILigatures : public SPIEnum<_SPCSSFontVariantLigatures_int>
 {
 
 public:
-    SPILigatures() = delete;
-
-    SPILigatures( Glib::ustring const &name, SPStyleEnum const *enums) :
-        SPIEnum<_SPCSSFontVariantLigatures_int>( name, enums, SP_CSS_FONT_VARIANT_LIGATURES_NORMAL )
+    SPILigatures() :
+        SPIEnum<_SPCSSFontVariantLigatures_int>(SP_CSS_FONT_VARIANT_LIGATURES_NORMAL)
     {}
 
     ~SPILigatures() override
@@ -641,10 +604,8 @@ class SPINumeric : public SPIEnum<_SPCSSFontVariantNumeric_int>
 {
 
 public:
-    SPINumeric() = delete;
-
-    SPINumeric( Glib::ustring const &name, SPStyleEnum const *enums) :
-        SPIEnum<_SPCSSFontVariantNumeric_int>( name, enums, SP_CSS_FONT_VARIANT_NUMERIC_NORMAL )
+    SPINumeric() :
+        SPIEnum<_SPCSSFontVariantNumeric_int>(SP_CSS_FONT_VARIANT_NUMERIC_NORMAL)
     {}
 
     ~SPINumeric() override
@@ -662,10 +623,8 @@ class SPIEastAsian : public SPIEnum<_SPCSSFontVariantEastAsian_int>
 {
 
 public:
-    SPIEastAsian() = delete;
-
-    SPIEastAsian( Glib::ustring const &name, SPStyleEnum const *enums) :
-        SPIEnum<_SPCSSFontVariantEastAsian_int>( name, enums, SP_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL )
+    SPIEastAsian() :
+        SPIEnum<_SPCSSFontVariantEastAsian_int>(SP_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL)
     {}
 
     ~SPIEastAsian() override
@@ -682,13 +641,10 @@ class SPIString : public SPIBase
 {
 
 public:
-    SPIString() = default;
-
     // TODO probably want to avoid gchar* and c-style strings.
-    SPIString( Glib::ustring const &name, gchar const* value_default_in = nullptr )
-        : SPIBase( name ),
-          value(nullptr),
-          value_default(value_default_in ? g_strdup(value_default_in) : nullptr)
+    SPIString(gchar const *value_default_in = nullptr, bool inherits = true)
+        : SPIBase(inherits)
+        , value_default(g_strdup(value_default_in))
     {}
 
     ~SPIString() override {
@@ -729,13 +685,9 @@ class SPIShapes : public SPIString
 {
 
 public:
-    SPIShapes()
-        : SPIString()
-    {}
-
     // TODO probably want to avoid gchar* and c-style strings.
-    SPIShapes( Glib::ustring const &name, gchar const* value_default_in = nullptr )
-        : SPIString( name, value_default_in )
+    SPIShapes(gchar const *value_default_in = nullptr)
+        : SPIString(value_default_in)
     {}
 
     void read( gchar const *str ) override;
@@ -749,15 +701,10 @@ class SPIColor : public SPIBase
 {
 
 public:
-    SPIColor()
-        : currentcolor(false)
+    SPIColor(bool inherits = true)
+        : SPIBase(inherits)
+        , currentcolor(false)
     {
-        value.color.set(0);
-    }
-
-    SPIColor( Glib::ustring const &name, bool inherits = true )
-        : SPIBase( name, inherits ),
-          currentcolor(false) {
         value.color.set(0);
     }
 
@@ -831,14 +778,6 @@ public:
           noneSet(false) {
         value.href = nullptr;
         clear();
-    }
-
-    SPIPaint( Glib::ustring const &name )
-        : SPIBase( name ),
-          colorSet(false),
-          noneSet(false) {
-        value.href = nullptr;
-        clear();  // Sets defaults
     }
 
     ~SPIPaint() override;  // Clear and delete href.
@@ -931,9 +870,7 @@ class SPIPaintOrder : public SPIBase
 {
 
 public:
-    SPIPaintOrder()
-        : SPIBase( "paint-order" ),
-          value(nullptr) {
+    SPIPaintOrder() {
         this->clear();
     }
 
@@ -976,7 +913,7 @@ public:
 public:
     SPPaintOrderLayer layer[PAINT_ORDER_LAYERS];
     bool layer_set[PAINT_ORDER_LAYERS];
-    gchar *value;  // Raw string
+    gchar *value = nullptr; // Raw string
 };
 
 
@@ -985,9 +922,7 @@ class SPIDashArray : public SPIBase
 {
 
 public:
-    SPIDashArray()
-        : SPIBase( "stroke-dasharray" )
-    {}  // Only one instance of SPIDashArray
+    SPIDashArray() = default;
 
     ~SPIDashArray() override
     = default;
@@ -1020,8 +955,7 @@ class SPIFilter : public SPIBase
 
 public:
     SPIFilter()
-        : SPIBase( "filter", false ),
-          href(nullptr)
+        : SPIBase(false)
     {}
 
     ~SPIFilter() override;
@@ -1040,7 +974,7 @@ public:
 
   // To do: make private
 public:
-    SPFilterReference *href;
+    SPFilterReference *href = nullptr;
 };
 
 
@@ -1056,8 +990,7 @@ class SPIFontSize : public SPIBase
 {
 
 public:
-    SPIFontSize()
-        : SPIBase( "font-size" ) {
+    SPIFontSize() {
         this->clear();
     }
 
@@ -1104,9 +1037,7 @@ class SPIFont : public SPIBase
 {
 
 public:
-    SPIFont()
-        : SPIBase( "font" )
-    {}
+    SPIFont() = default;
 
     ~SPIFont() override
     = default;
@@ -1144,7 +1075,7 @@ class SPIBaselineShift : public SPIBase
 
 public:
     SPIBaselineShift()
-        : SPIBase( "baseline-shift", false ) {
+        : SPIBase(false) {
         this->clear();
     }
 
@@ -1190,8 +1121,7 @@ class SPITextDecorationLine : public SPIBase
 {
 
 public:
-    SPITextDecorationLine()
-        : SPIBase( "text-decoration-line" ) {
+    SPITextDecorationLine() {
         this->clear();
     }
 
@@ -1229,8 +1159,7 @@ class SPITextDecorationStyle : public SPIBase
 {
 
 public:
-    SPITextDecorationStyle()
-        : SPIBase( "text-decoration-style" ) {
+    SPITextDecorationStyle() {
         this->clear();
     }
 
@@ -1276,10 +1205,7 @@ class SPITextDecoration : public SPIBase
 {
 
 public:
-    SPITextDecoration()
-        : SPIBase( "text-decoration" ),
-          style_td( nullptr )
-    {}
+    SPITextDecoration() = default;
 
     ~SPITextDecoration() override
     = default;
@@ -1309,7 +1235,7 @@ public:
     }
 
 public:
-    SPStyle* style_td;   // Style to be used for drawing CSS2 text decorations 
+    SPStyle* style_td = nullptr;   // Style to be used for drawing CSS2 text decorations
 };
 
 
@@ -1332,8 +1258,7 @@ class SPIVectorEffect : public SPIBase
 {
 
 public:
-    SPIVectorEffect()
-        : SPIBase( "vector-effect" ) {
+    SPIVectorEffect() {
         this->clear();
         inherits = false;
     }

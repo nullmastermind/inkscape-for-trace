@@ -985,7 +985,7 @@ Wmf::select_pen(PWMF_CALLBACK_DATA d, int index)
         case U_PS_DASHDOTDOT:
         {
             int penstyle = (up.Style & U_PS_STYLE_MASK);
-            SPILength spilength("temp", 1);
+            SPILength spilength(1.f);
             if (!d->dc[d->level].style.stroke_dasharray.values.empty() &&
                 (d->level == 0 || (d->level > 0 && d->dc[d->level].style.stroke_dasharray !=
                                                        d->dc[d->level - 1].style.stroke_dasharray)))
