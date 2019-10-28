@@ -896,7 +896,7 @@ void SPText::_adjustFontsizeRecursive(SPItem *item, double ex, bool is_root)
 
     if (style && !Geom::are_near(ex, 1.0)) {
         if (!style->font_size.set && is_root) {
-            style->font_size.set = 1;
+            style->font_size.set = true;
         }
         style->font_size.type = SP_FONT_SIZE_LENGTH;
         style->font_size.computed *= ex;

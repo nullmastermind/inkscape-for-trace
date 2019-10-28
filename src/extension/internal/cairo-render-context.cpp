@@ -765,7 +765,7 @@ void CairoRenderContext::tagEnd(){
 
 
 void
-CairoRenderContext::addClipPath(Geom::PathVector const &pv, SPIEnum const *fill_rule)
+CairoRenderContext::addClipPath(Geom::PathVector const &pv, SPIEnum<SPWindRule> const *fill_rule)
 {
     g_assert( _is_valid );
 
@@ -1837,7 +1837,7 @@ CairoRenderContext::renderGlyphtext(PangoFont *font, Geom::Affine const &font_ma
         }
 
         if (style->mix_blend_mode.set && style->mix_blend_mode.value) {
-            cairo_set_operator(_cr, (cairo_operator_t)style->mix_blend_mode.value);
+            cairo_set_operator(_cr, ink_css_blend_to_cairo_operator(style->mix_blend_mode.value));
         }
 
         // Text never has markers

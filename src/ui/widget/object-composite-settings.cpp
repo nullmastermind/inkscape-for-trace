@@ -259,14 +259,14 @@ ObjectCompositeSettings::_subjectChanged() {
     const int blend_result = _subject->queryStyle(&query, QUERY_STYLE_PROPERTY_BLEND);
     switch(blend_result) {
         case QUERY_STYLE_NOTHING:
-            _filter_modifier.set_blend_mode(0, false);
+            _filter_modifier.set_blend_mode(SP_CSS_BLEND_NORMAL, false);
             break;
         case QUERY_STYLE_SINGLE:
         case QUERY_STYLE_MULTIPLE_SAME:
             _filter_modifier.set_blend_mode(query.mix_blend_mode.value, true); // here dont work mix_blend_mode.set
             break;
         case QUERY_STYLE_MULTIPLE_DIFFERENT:
-            _filter_modifier.set_blend_mode(0, false);
+            _filter_modifier.set_blend_mode(SP_CSS_BLEND_NORMAL, false);
             break;
     }
 

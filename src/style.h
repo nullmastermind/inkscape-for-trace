@@ -102,13 +102,13 @@ public:
     /* Font ---------------------------- */
 
     /** Font style */
-    SPIEnum font_style;
+    SPIEnum<SPCSSFontStyle> font_style;
     /** Which substyle of the font (CSS 2. CSS 3 redefines as shorthand) */
-    SPIEnum font_variant;
+    SPIEnum<SPCSSFontVariant> font_variant;
     /** Weight of the font */
-    SPIEnum font_weight;
+    SPIEnum<SPCSSFontWeight> font_weight;
     /** Stretch of the font */
-    SPIEnum font_stretch;
+    SPIEnum<SPCSSFontStretch> font_stretch;
     /** Size of the font */
     SPIFontSize font_size;
     /** Line height (css2 10.8.1) */
@@ -124,13 +124,13 @@ public:
     /** Font variant ligatures */
     SPILigatures font_variant_ligatures;
     /** Font variant position (subscript/superscript) */
-    SPIEnum font_variant_position;
+    SPIEnum<SPCSSFontVariantPosition> font_variant_position;
     /** Font variant caps (small caps) */
-    SPIEnum font_variant_caps;
+    SPIEnum<SPCSSFontVariantCaps> font_variant_caps;
     /** Font variant numeric (numerical formatting) */
     SPINumeric font_variant_numeric;
     /** Font variant alternates (alternates/swatches) */
-    SPIEnum font_variant_alternates;
+    SPIEnum<SPCSSFontVariantAlternates> font_variant_alternates;
     /** Font variant East Asian */
     SPIEastAsian font_variant_east_asian;
     /** Font feature settings (Low level access to TrueType tables) */
@@ -144,33 +144,33 @@ public:
     /** First line indent of paragraphs (css2 16.1) */
     SPILength text_indent;
     /** text alignment (css2 16.2) (not to be confused with text-anchor) */
-    SPIEnum text_align;
+    SPIEnum<SPCSSTextAlign> text_align;
 
     /** letter spacing (css2 16.4) */
     SPILengthOrNormal letter_spacing;
     /** word spacing (also css2 16.4) */
     SPILengthOrNormal word_spacing;
     /** capitalization (css2 16.5) */
-    SPIEnum text_transform;
+    SPIEnum<SPCSSTextTransform> text_transform;
 
     /* CSS3 Text */
     /** text direction (svg1.1) */
-    SPIEnum direction;
+    SPIEnum<SPCSSDirection> direction;
     /** Writing mode (svg1.1 10.7.2, CSS Writing Modes 3) */
-    SPIEnum writing_mode;
+    SPIEnum<SPCSSWritingMode> writing_mode;
     /** Text orientation (CSS Writing Modes 3) */
-    SPIEnum text_orientation;
+    SPIEnum<SPCSSTextOrientation> text_orientation;
     /** Dominant baseline (svg1.1) */
-    SPIEnum dominant_baseline;
+    SPIEnum<SPCSSBaseline> dominant_baseline;
     /** Baseline shift (svg1.1 10.9.2) */
     SPIBaselineShift baseline_shift;
 
     /* SVG */
     /** Anchor of the text (svg1.1 10.9.1) */
-    SPIEnum text_anchor;
+    SPIEnum<SPTextAnchor> text_anchor;
 
     /** white space (svg2) */
-    SPIEnum white_space;
+    SPIEnum<SPWhiteSpace> white_space;
 
     /** SVG2 Text Wrapping */
     SPIShapes shape_inside;
@@ -198,32 +198,32 @@ public:
     /* General visual properties ------------- */
 
     /** clip-rule: 0 nonzero, 1 evenodd */
-    SPIEnum clip_rule;
+    SPIEnum<SPWindRule> clip_rule;
 
     /** display */
-    SPIEnum display;
+    SPIEnum<SPCSSDisplay> display;
 
     /** overflow */
-    SPIEnum overflow;
+    SPIEnum<SPOverflow> overflow;
 
     /** visibility */
-    SPIEnum visibility;
+    SPIEnum<SPVisibility> visibility;
 
     /** opacity */
     SPIScale24 opacity;
 
     /** mix-blend-mode:  CSS Compositing and Blending Level 1 */
-    SPIEnum isolation;
-    SPIEnum mix_blend_mode;
+    SPIEnum<SPIsolation> isolation;
+    SPIEnum<SPBlendMode> mix_blend_mode;
 
     SPIPaintOrder paint_order;
 
     /** color */
     SPIColor color;
     /** color-interpolation */
-    SPIEnum color_interpolation;
+    SPIEnum<SPColorInterpolation> color_interpolation;
     /** color-interpolation-filters */
-    SPIEnum color_interpolation_filters;
+    SPIEnum<SPColorInterpolation> color_interpolation_filters;
 
     /** solid-color */
     SPIColor solid_color;
@@ -238,16 +238,16 @@ public:
     /** fill-opacity */
     SPIScale24 fill_opacity;
     /** fill-rule: 0 nonzero, 1 evenodd */
-    SPIEnum fill_rule;
+    SPIEnum<SPWindRule> fill_rule;
 
     /** stroke */
     SPIPaint stroke;
     /** stroke-width */
     SPILength stroke_width;
     /** stroke-linecap */
-    SPIEnum stroke_linecap;
+    SPIEnum<SPStrokeCapType> stroke_linecap;
     /** stroke-linejoin */
-    SPIEnum stroke_linejoin;
+    SPIEnum<SPStrokeJoinType> stroke_linejoin;
     /** stroke-miterlimit */
     SPIFloat stroke_miterlimit;
     /** stroke-dasharray */
@@ -269,12 +269,12 @@ public:
     /** Filter effect */
     SPIFilter filter;
     /** Filter blend mode */
-    SPIEnum filter_blend_mode;
+    SPIEnum<SPBlendMode> filter_blend_mode;
     /** normally not used, but duplicates the Gaussian blur deviation (if any) from the attached
         filter when the style is used for querying */
     SPILength filter_gaussianBlur_deviation;
     /** enable-background, used for defining where filter effects get their background image */
-    SPIEnum enable_background;
+    SPIEnum<SPEnableBackground> enable_background;
 
     /** gradient-stop */
     SPIColor stop_color;
@@ -284,10 +284,10 @@ public:
 
     /** hints on how to render: e.g. speed vs. accuracy.
      * As of April, 2013, only image_rendering used. */
-    SPIEnum color_rendering;
-    SPIEnum image_rendering;
-    SPIEnum shape_rendering;
-    SPIEnum text_rendering;
+    SPIEnum<SPColorRendering> color_rendering;
+    SPIEnum<SPImageRendering> image_rendering;
+    SPIEnum<SPShapeRendering> shape_rendering;
+    SPIEnum<SPTextRendering> text_rendering;
 
     /* ----------------------- END PROPERTIES ------------------------- */
 

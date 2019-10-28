@@ -37,8 +37,6 @@
 #include "xml/repr.h"
 
 
-struct SPStyleEnum;
-
 static const unsigned SP_STYLE_FLAG_ALWAYS (1 << 2);
 static const unsigned SP_STYLE_FLAG_IFSET  (1 << 0);
 static const unsigned SP_STYLE_FLAG_IFDIFF (1 << 1);
@@ -127,7 +125,7 @@ class SPIBase
 {
 
 public:
-    SPIBase( Glib::ustring name, bool inherits = true )
+    SPIBase( Glib::ustring name="anonymous", bool inherits = true )
         : name(std::move(name)),
           inherits(inherits),
           set(false),
@@ -212,10 +210,10 @@ public:
   // To do: make private
 public:
     Glib::ustring name;       // Make const
-    unsigned inherits : 1;    // Property inherits by default from parent.
-    unsigned set : 1;         // Property has been explicitly set (vs. inherited).
-    unsigned inherit : 1;     // Property value set to 'inherit'.
-    unsigned important : 1;   // Property rule 'important' has been explicitly set.
+    bool inherits : 1;    // Property inherits by default from parent.
+    bool set : 1;         // Property has been explicitly set (vs. inherited).
+    bool inherit : 1;     // Property value set to 'inherit'.
+    bool important : 1;   // Property rule 'important' has been explicitly set.
     SPStyleSrc style_src : 2; // Source (attribute, style attribute, style-sheet).
 
   // To do: make private after g_asserts removed
@@ -508,35 +506,21 @@ public:
 
 /// Enum type internal to SPStyle.
 // Used for many properties. 'font-stretch' and 'font-weight' must be special cased.
+template <typename T>
 class SPIEnum : public SPIBase
 {
 
 public:
-    SPIEnum() :
-        SPIBase( "anonymous_enum" ),
-        enums( nullptr ),
-        value(0),
-        computed(0)
-    {}
+    SPIEnum() = delete;
 
-    SPIEnum( Glib::ustring const &name, SPStyleEnum const *enums, unsigned value = 0, bool inherits = true ) :
+    SPIEnum( Glib::ustring const &name, SPStyleEnum const *enums, T value = T(), bool inherits = true ) :
         SPIBase( name, inherits ),
         enums( enums ),
         value(value),
-        computed(value),
-        value_default(value),
-        computed_default(value)
-    {}
-
-    // Following is needed for font-weight
-    SPIEnum( Glib::ustring const &name, SPStyleEnum const *enums, SPCSSFontWeight value, SPCSSFontWeight computed ) :
-        SPIBase( name ),
-        enums( enums ),
-        value(value),
-        computed(computed),
-        value_default(value),
-        computed_default(computed)
-    {}
+        value_default(value)
+    {
+        update_computed();
+    }
 
     ~SPIEnum() override
     = default;
@@ -545,7 +529,8 @@ public:
     const Glib::ustring get_value() const override;
     void clear() override {
         SPIBase::clear();
-        value = value_default, computed = computed_default;
+        value = value_default;
+        update_computed();
     }
 
     void cascade( const SPIBase* const parent ) override;
@@ -556,7 +541,6 @@ public:
         value            = rhs.value;
         computed         = rhs.computed;
         value_default    = rhs.value_default;
-        computed_default = rhs.computed_default;
         return *this;
     }
 
@@ -569,15 +553,24 @@ public:
 public:
     SPStyleEnum const *enums;
 
-    unsigned value : 16;  // 9 bits required for 'font-variant-east-asian'
-    unsigned computed: 16;
+    T value{};
+    T computed{};
 
 private:
-    unsigned value_default : 16;
-    unsigned computed_default: 16; // for font-weight
+    T value_default{};
+
+    //! Update computed from value
+    void update_computed();
+    //! Update computed from parent computed
+    void update_computed_cascade(T const &parent_computed) {}
+    //! Update value from parent
+    //! @pre computed is up to date
+    void update_value_merge(SPIEnum<T> const &) {}
+    void update_value_merge(SPIEnum<T> const &, T, T);
 };
 
 
+#if 0
 /// SPIEnum w/ bits, allows values with multiple key words.
 class SPIEnumBits : public SPIEnum
 {
@@ -597,22 +590,22 @@ public:
     void read( gchar const *str ) override;
     const Glib::ustring get_value() const override;
 };
+#endif
 
 
 /// SPIEnum w/ extra bits. The 'font-variants-ligatures' property is a complete mess that needs
 /// special handling. For OpenType fonts the values 'common-ligatures', 'contextual',
 /// 'no-discretionary-ligatures', and 'no-historical-ligatures' are not useful but we still must be
 /// able to parse them.
-class SPILigatures : public SPIEnum
+using _SPCSSFontVariantLigatures_int = typename std::underlying_type<SPCSSFontVariantLigatures>::type;
+class SPILigatures : public SPIEnum<_SPCSSFontVariantLigatures_int>
 {
 
 public:
-    SPILigatures() :
-        SPIEnum( "anonymous_enumligatures", nullptr )
-    {}
+    SPILigatures() = delete;
 
     SPILigatures( Glib::ustring const &name, SPStyleEnum const *enums) :
-        SPIEnum( name, enums, SP_CSS_FONT_VARIANT_LIGATURES_NORMAL )
+        SPIEnum<_SPCSSFontVariantLigatures_int>( name, enums, SP_CSS_FONT_VARIANT_LIGATURES_NORMAL )
     {}
 
     ~SPILigatures() override
@@ -625,16 +618,15 @@ public:
 
 /// SPIEnum w/ extra bits. The 'font-variants-numeric' property is a complete mess that needs
 /// special handling. Multiple key words can be specified, some exclusive of others.
-class SPINumeric : public SPIEnum
+using _SPCSSFontVariantNumeric_int = typename std::underlying_type<SPCSSFontVariantNumeric>::type;
+class SPINumeric : public SPIEnum<_SPCSSFontVariantNumeric_int>
 {
 
 public:
-    SPINumeric() :
-        SPIEnum( "anonymous_enumnumeric", nullptr )
-    {}
+    SPINumeric() = delete;
 
     SPINumeric( Glib::ustring const &name, SPStyleEnum const *enums) :
-        SPIEnum( name, enums, SP_CSS_FONT_VARIANT_NUMERIC_NORMAL )
+        SPIEnum<_SPCSSFontVariantNumeric_int>( name, enums, SP_CSS_FONT_VARIANT_NUMERIC_NORMAL )
     {}
 
     ~SPINumeric() override
@@ -647,16 +639,15 @@ public:
 
 /// SPIEnum w/ extra bits. The 'font-variants-east-asian' property is a complete mess that needs
 /// special handling. Multiple key words can be specified, some exclusive of others.
-class SPIEastAsian : public SPIEnum
+using _SPCSSFontVariantEastAsian_int = typename std::underlying_type<SPCSSFontVariantEastAsian>::type;
+class SPIEastAsian : public SPIEnum<_SPCSSFontVariantEastAsian_int>
 {
 
 public:
-    SPIEastAsian() :
-        SPIEnum( "anonymous_enumeastasian", nullptr )
-    {}
+    SPIEastAsian() = delete;
 
     SPIEastAsian( Glib::ustring const &name, SPStyleEnum const *enums) :
-        SPIEnum( name, enums, SP_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL )
+        SPIEnum<_SPCSSFontVariantEastAsian_int>( name, enums, SP_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL )
     {}
 
     ~SPIEastAsian() override

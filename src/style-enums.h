@@ -430,7 +430,7 @@ static SPStyleEnum const enum_font_variant_caps[] = {
     {"petite-caps", SP_CSS_FONT_VARIANT_CAPS_PETITE},
     {"all-petite-caps", SP_CSS_FONT_VARIANT_CAPS_ALL_PETITE},
     {"unicase", SP_CSS_FONT_VARIANT_CAPS_UNICASE},
-    {"titling", SP_CSS_FONT_VARIANT_CAPS_TITLING},
+    {"titling-caps", SP_CSS_FONT_VARIANT_CAPS_TITLING},
     {nullptr, -1}
 };
     

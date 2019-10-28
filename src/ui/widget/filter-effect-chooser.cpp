@@ -142,18 +142,18 @@ sigc::signal<void>& SimpleFilterModifier::signal_opacity_changed()
     return _signal_opacity_changed;
 }
 
-int SimpleFilterModifier::get_isolation_mode()
+SPIsolation SimpleFilterModifier::get_isolation_mode()
 {
     return _isolation.get_active() ? SP_CSS_ISOLATION_ISOLATE : SP_CSS_ISOLATION_AUTO;
 }
 
-void SimpleFilterModifier::set_isolation_mode(const int val, bool notify)
+void SimpleFilterModifier::set_isolation_mode(const SPIsolation val, bool notify)
 {
     _notify = notify;
     _isolation.set_active(val == SP_CSS_ISOLATION_ISOLATE);
 }
 
-int SimpleFilterModifier::get_blend_mode()
+SPBlendMode SimpleFilterModifier::get_blend_mode()
 {
     const Util::EnumData<SPBlendMode> *d = _blend.get_active_data();
     if (d) {
@@ -163,7 +163,7 @@ int SimpleFilterModifier::get_blend_mode()
     }
 }
 
-void SimpleFilterModifier::set_blend_mode(const int val, bool notify)
+void SimpleFilterModifier::set_blend_mode(const SPBlendMode val, bool notify)
 {
     _notify = notify;
     _blend.set_active(val);

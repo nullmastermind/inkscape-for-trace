@@ -21,6 +21,8 @@
 #include <exception>
 #include <list>
 
+#include "style-enums.h"
+
 namespace Glib {
 class ustring;
 }
@@ -94,9 +96,6 @@ public:
     DrawingItem(Drawing &drawing);
     virtual ~DrawingItem();
 
-    unsigned _isolation : 1;
-    unsigned _mix_blend_mode : 4;
-
     Geom::OptIntRect geometricBounds() const { return _bbox; }
     Geom::OptIntRect visualBounds() const { return _drawbox; }
     Geom::OptRect itemBounds() const { return _item_bbox; }
@@ -121,8 +120,8 @@ public:
     virtual void setChildrenStyle(SPStyle *context_style);
     void setOpacity(float opacity);
     void setAntialiasing(unsigned a);
-    void setIsolation(unsigned isolation); // CSS Compositing and Blending
-    void setBlendMode(unsigned blend_mode);
+    void setIsolation(bool isolation); // CSS Compositing and Blending
+    void setBlendMode(SPBlendMode blend_mode);
     void setTransform(Geom::Affine const &trans);
     void setClip(DrawingItem *item);
     void setMask(DrawingItem *item);
@@ -230,6 +229,9 @@ protected:
     unsigned _pick_children : 1; ///< For groups: if true, children are returned from pick(),
                                  ///  otherwise the group is returned
     unsigned _antialias : 2; ///< antialiasing level (NONE/FAST/GOOD(DEFAULT)/BEST)
+
+    bool _isolation : 1;
+    SPBlendMode _mix_blend_mode;
 
     friend class Drawing;
 };

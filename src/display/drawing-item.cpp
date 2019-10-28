@@ -243,7 +243,7 @@ DrawingItem::setAntialiasing(unsigned a)
 }
 
 void
-DrawingItem::setIsolation(unsigned isolation)
+DrawingItem::setIsolation(bool isolation)
 {
     _isolation = isolation;
     //if( isolation != 0 ) std::cout << "isolation: " << isolation << std::endl;
@@ -251,7 +251,7 @@ DrawingItem::setIsolation(unsigned isolation)
 }
 
 void
-DrawingItem::setBlendMode(unsigned mix_blend_mode)
+DrawingItem::setBlendMode(SPBlendMode mix_blend_mode)
 {
     _mix_blend_mode = mix_blend_mode;
     //if( mix_blend_mode != 0 ) std::cout << "setBlendMode: " << mix_blend_mode << std::endl;

@@ -501,7 +501,7 @@ void ObjectsPanel::_setCompositingValues(SPItem *item)
     _blurConnection.block();
 
     // Set the isolation
-    int isolation = item->style->isolation.set ? item->style->isolation.value : SP_CSS_ISOLATION_AUTO;
+    auto isolation = item->style->isolation.set ? item->style->isolation.value : SP_CSS_ISOLATION_AUTO;
     _filter_modifier.set_isolation_mode(isolation, true);
     // Set the opacity
     double opacity = (item->style->opacity.set ? SP_SCALE24_TO_FLOAT(item->style->opacity.value) : 1);
@@ -1574,7 +1574,7 @@ void ObjectsPanel::_isolationChangedIter(const Gtk::TreeIter &iter)
         if (item->style->isolation.value == SP_CSS_ISOLATION_ISOLATE) {
             item->style->mix_blend_mode.set = TRUE;
             item->style->mix_blend_mode.value = SP_CSS_BLEND_NORMAL;
-            _filter_modifier.set_blend_mode(0, false);
+            _filter_modifier.set_blend_mode(SP_CSS_BLEND_NORMAL, false);
         }
         item->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
     }
@@ -1607,7 +1607,7 @@ void ObjectsPanel::_blendChangedIter(const Gtk::TreeIter &iter)
             item->style->isolation.value == SP_CSS_ISOLATION_ISOLATE) 
         {
             item->style->mix_blend_mode.value = SP_CSS_BLEND_NORMAL;
-            _filter_modifier.set_blend_mode(0, false);
+            _filter_modifier.set_blend_mode(SP_CSS_BLEND_NORMAL, false);
         } else { 
             item->style->mix_blend_mode.value = _filter_modifier.get_blend_mode();
         }

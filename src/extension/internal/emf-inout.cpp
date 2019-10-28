@@ -903,7 +903,7 @@ Emf::output_style(PEMF_CALLBACK_DATA d, int iType)
         snprintf(
             tmp, 1023,
             "fill-rule:%s;",
-            (d->dc[d->level].style.fill_rule.value == 0 ? "evenodd" : "nonzero")
+            (d->dc[d->level].style.fill_rule.value == SP_WIND_RULE_NONZERO ? "evenodd" : "nonzero")
         );
         tmp_style << tmp;
         tmp_style << "fill-opacity:1;";
@@ -958,17 +958,17 @@ Emf::output_style(PEMF_CALLBACK_DATA d, int iType)
 
         tmp_style << "stroke-linecap:" <<
             (
-                d->dc[d->level].style.stroke_linecap.computed == 0 ? "butt" :
-                d->dc[d->level].style.stroke_linecap.computed == 1 ? "round" :
-                d->dc[d->level].style.stroke_linecap.computed == 2 ? "square" :
+                d->dc[d->level].style.stroke_linecap.computed == SP_STROKE_LINECAP_BUTT ? "butt" :
+                d->dc[d->level].style.stroke_linecap.computed == SP_STROKE_LINECAP_ROUND ? "round" :
+                d->dc[d->level].style.stroke_linecap.computed == SP_STROKE_LINECAP_SQUARE ? "square" :
                 "unknown"
             ) << ";";
 
         tmp_style << "stroke-linejoin:" <<
             (
-                d->dc[d->level].style.stroke_linejoin.computed == 0 ? "miter" :
-                d->dc[d->level].style.stroke_linejoin.computed == 1 ? "round" :
-                d->dc[d->level].style.stroke_linejoin.computed == 2 ? "bevel" :
+                d->dc[d->level].style.stroke_linejoin.computed == SP_STROKE_LINEJOIN_MITER ? "miter" :
+                d->dc[d->level].style.stroke_linejoin.computed == SP_STROKE_LINEJOIN_ROUND ? "round" :
+                d->dc[d->level].style.stroke_linejoin.computed == SP_STROKE_LINEJOIN_BEVEL ? "bevel" :
                 "unknown"
             ) << ";";
 
@@ -1114,30 +1114,30 @@ Emf::select_pen(PEMF_CALLBACK_DATA d, int index)
                 d->dc[d->level].style.stroke_dasharray.values.push_back(spilength);
             }
 
-            d->dc[d->level].style.stroke_dasharray.set = 1;
+            d->dc[d->level].style.stroke_dasharray.set = true;
             break;
         }
 
         case U_PS_SOLID:
         default:
         {
-            d->dc[d->level].style.stroke_dasharray.set = 0;
+            d->dc[d->level].style.stroke_dasharray.set = false;
             break;
         }
     }
 
     switch (pEmr->lopn.lopnStyle & U_PS_ENDCAP_MASK) {
-        case U_PS_ENDCAP_ROUND: {  d->dc[d->level].style.stroke_linecap.computed = 1;   break; }
-        case U_PS_ENDCAP_SQUARE: { d->dc[d->level].style.stroke_linecap.computed = 2;   break; }
+        case U_PS_ENDCAP_ROUND: {  d->dc[d->level].style.stroke_linecap.computed = SP_STROKE_LINECAP_ROUND;   break; }
+        case U_PS_ENDCAP_SQUARE: { d->dc[d->level].style.stroke_linecap.computed = SP_STROKE_LINECAP_SQUARE;   break; }
         case U_PS_ENDCAP_FLAT:
-        default: {                 d->dc[d->level].style.stroke_linecap.computed = 0;   break; }
+        default: {                 d->dc[d->level].style.stroke_linecap.computed = SP_STROKE_LINECAP_BUTT;   break; }
     }
 
     switch (pEmr->lopn.lopnStyle & U_PS_JOIN_MASK) {
-        case U_PS_JOIN_BEVEL: {    d->dc[d->level].style.stroke_linejoin.computed = 2;  break; }
-        case U_PS_JOIN_MITER: {    d->dc[d->level].style.stroke_linejoin.computed = 0;  break; }
+        case U_PS_JOIN_BEVEL: {    d->dc[d->level].style.stroke_linejoin.computed = SP_STROKE_LINEJOIN_BEVEL;  break; }
+        case U_PS_JOIN_MITER: {    d->dc[d->level].style.stroke_linejoin.computed = SP_STROKE_LINEJOIN_MITER;  break; }
         case U_PS_JOIN_ROUND:
-        default: {                 d->dc[d->level].style.stroke_linejoin.computed = 1;  break; }
+        default: {                 d->dc[d->level].style.stroke_linejoin.computed = SP_STROKE_LINEJOIN_ROUND;  break; }
     }
 
     d->dc[d->level].stroke_set = true;
@@ -1191,9 +1191,9 @@ Emf::select_extpen(PEMF_CALLBACK_DATA d, int index)
                     double dash_length = pix_to_abs_size( d, pEmr->elp.elpStyleEntry[i] );
                     d->dc[d->level].style.stroke_dasharray.values.emplace_back("temp", dash_length);
                 }
-                d->dc[d->level].style.stroke_dasharray.set = 1;
+                d->dc[d->level].style.stroke_dasharray.set = true;
             } else {
-                d->dc[d->level].style.stroke_dasharray.set = 0;
+                d->dc[d->level].style.stroke_dasharray.set = false;
             }
             break;
         }
@@ -1228,7 +1228,7 @@ Emf::select_extpen(PEMF_CALLBACK_DATA d, int index)
                 d->dc[d->level].style.stroke_dasharray.values.push_back(spilength);
             }
 
-            d->dc[d->level].style.stroke_dasharray.set = 1;
+            d->dc[d->level].style.stroke_dasharray.set = true;
             break;
         }
         case U_PS_SOLID:
@@ -1240,7 +1240,7 @@ Emf::select_extpen(PEMF_CALLBACK_DATA d, int index)
 */
         default:
         {
-            d->dc[d->level].style.stroke_dasharray.set = 0;
+            d->dc[d->level].style.stroke_dasharray.set = false;
             break;
         }
     }
@@ -1248,18 +1248,18 @@ Emf::select_extpen(PEMF_CALLBACK_DATA d, int index)
     switch (pEmr->elp.elpPenStyle & U_PS_ENDCAP_MASK) {
         case U_PS_ENDCAP_ROUND:
         {
-            d->dc[d->level].style.stroke_linecap.computed = 1;
+            d->dc[d->level].style.stroke_linecap.computed = SP_STROKE_LINECAP_ROUND;
             break;
         }
         case U_PS_ENDCAP_SQUARE:
         {
-            d->dc[d->level].style.stroke_linecap.computed = 2;
+            d->dc[d->level].style.stroke_linecap.computed = SP_STROKE_LINECAP_SQUARE;
             break;
         }
         case U_PS_ENDCAP_FLAT:
         default:
         {
-            d->dc[d->level].style.stroke_linecap.computed = 0;
+            d->dc[d->level].style.stroke_linecap.computed = SP_STROKE_LINECAP_BUTT;
             break;
         }
     }
@@ -1267,18 +1267,18 @@ Emf::select_extpen(PEMF_CALLBACK_DATA d, int index)
     switch (pEmr->elp.elpPenStyle & U_PS_JOIN_MASK) {
         case U_PS_JOIN_BEVEL:
         {
-            d->dc[d->level].style.stroke_linejoin.computed = 2;
+            d->dc[d->level].style.stroke_linejoin.computed = SP_STROKE_LINEJOIN_BEVEL;
             break;
         }
         case U_PS_JOIN_MITER:
         {
-            d->dc[d->level].style.stroke_linejoin.computed = 0;
+            d->dc[d->level].style.stroke_linejoin.computed = SP_STROKE_LINEJOIN_MITER;
             break;
         }
         case U_PS_JOIN_ROUND:
         default:
         {
-            d->dc[d->level].style.stroke_linejoin.computed = 1;
+            d->dc[d->level].style.stroke_linejoin.computed = SP_STROKE_LINEJOIN_ROUND;
             break;
         }
     }
@@ -1431,7 +1431,7 @@ Emf::select_font(PEMF_CALLBACK_DATA d, int index)
         pEmr->elfw.elfLogFont.lfWeight == U_FW_BOLD ? SP_CSS_FONT_WEIGHT_BOLD :
         pEmr->elfw.elfLogFont.lfWeight == U_FW_EXTRALIGHT ? SP_CSS_FONT_WEIGHT_LIGHTER :
         pEmr->elfw.elfLogFont.lfWeight == U_FW_EXTRABOLD ? SP_CSS_FONT_WEIGHT_BOLDER :
-        U_FW_NORMAL;
+        SP_CSS_FONT_WEIGHT_NORMAL;
     d->dc[d->level].style.font_style.value = (pEmr->elfw.elfLogFont.lfItalic ? SP_CSS_FONT_STYLE_ITALIC : SP_CSS_FONT_STYLE_NORMAL);
     d->dc[d->level].style.text_decoration_line.underline    = pEmr->elfw.elfLogFont.lfUnderline;
     d->dc[d->level].style.text_decoration_line.line_through = pEmr->elfw.elfLogFont.lfStrikeOut;
@@ -2199,7 +2199,9 @@ std::cout << "BEFORE DRAW"
 
             PU_EMRSETPOLYFILLMODE pEmr = (PU_EMRSETPOLYFILLMODE) lpEMFR;
             d->dc[d->level].style.fill_rule.value =
-                (pEmr->iMode == U_ALTERNATE ? 0 : (pEmr->iMode == U_WINDING ? 1 : 0));
+                (pEmr->iMode == U_ALTERNATE
+                     ? SP_WIND_RULE_NONZERO
+                     : (pEmr->iMode == U_WINDING ? SP_WIND_RULE_INTERSECT : SP_WIND_RULE_NONZERO));
             break;
         }
         case U_EMR_SETROP2:
@@ -2542,7 +2544,7 @@ std::cout << "BEFORE DRAW"
                     case U_WHITE_PEN:
                     {
                         float val = index == U_BLACK_PEN ? 0 : 1;
-                        d->dc[d->level].style.stroke_dasharray.set = 0;
+                        d->dc[d->level].style.stroke_dasharray.set = false;
                         d->dc[d->level].style.stroke_width.value = 1.0;
                         d->dc[d->level].style.stroke.value.color.set( val, val, val );
 

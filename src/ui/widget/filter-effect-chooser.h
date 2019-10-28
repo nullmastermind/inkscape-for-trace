@@ -42,11 +42,11 @@ public:
   sigc::signal<void> &signal_opacity_changed();
   sigc::signal<void> &signal_isolation_changed();
 
-  int get_isolation_mode();
-  void set_isolation_mode(const int, bool notify);
+  SPIsolation get_isolation_mode();
+  void set_isolation_mode(const SPIsolation, bool notify);
 
-  int get_blend_mode();
-  void set_blend_mode(const int, bool notify);
+  SPBlendMode get_blend_mode();
+  void set_blend_mode(const SPBlendMode, bool notify);
 
   double get_blur_value() const;
   void set_blur_value(const double);

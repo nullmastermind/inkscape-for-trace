@@ -895,7 +895,7 @@ objects_query_strokecap (const std::vector<SPItem*> &objects, SPStyle *style_res
         return QUERY_STYLE_NOTHING;
     }
 
-    int prev_cap = -1;
+    auto prev_cap = SP_STROKE_LINECAP_BUTT;
     bool same_cap = true;
     int n_stroked = 0;
 
@@ -914,7 +914,7 @@ objects_query_strokecap (const std::vector<SPItem*> &objects, SPStyle *style_res
 
         n_stroked ++;
 
-        if (prev_cap != -1 && style->stroke_linecap.value != prev_cap)
+        if (n_stroked > 1 && style->stroke_linecap.value != prev_cap)
             same_cap = false;
         prev_cap = style->stroke_linecap.value;
     }
@@ -945,7 +945,7 @@ objects_query_strokejoin (const std::vector<SPItem*> &objects, SPStyle *style_re
         return QUERY_STYLE_NOTHING;
     }
 
-    int prev_join = -1;
+    auto prev_join = SP_STROKE_LINEJOIN_MITER;
     bool same_join = true;
     int n_stroked = 0;
 
@@ -964,7 +964,7 @@ objects_query_strokejoin (const std::vector<SPItem*> &objects, SPStyle *style_re
 
         n_stroked ++;
 
-        if (prev_join != -1 && style->stroke_linejoin.value != prev_join) {
+        if (n_stroked > 1 && style->stroke_linejoin.value != prev_join) {
             same_join = false;
         }
         prev_join = style->stroke_linejoin.value;
@@ -1299,22 +1299,20 @@ objects_query_fontvariants (const std::vector<SPItem*> &objects, SPStyle *style_
     int texts = 0;
 
     SPILigatures* ligatures_res = &(style_res->font_variant_ligatures);
-    SPIEnum* position_res       = &(style_res->font_variant_position);
-    SPIEnum* caps_res           = &(style_res->font_variant_caps);
     SPINumeric* numeric_res     = &(style_res->font_variant_numeric);
     SPIEastAsian* asian_res     = &(style_res->font_variant_east_asian);
 
     // Stores 'and' of all values
     ligatures_res->computed = SP_CSS_FONT_VARIANT_LIGATURES_NORMAL;
-    position_res->computed  = SP_CSS_FONT_VARIANT_POSITION_NORMAL;
-    caps_res->computed      = SP_CSS_FONT_VARIANT_CAPS_NORMAL;
+    int position_computed   = SP_CSS_FONT_VARIANT_POSITION_NORMAL;
+    int caps_computed       = SP_CSS_FONT_VARIANT_CAPS_NORMAL;
     numeric_res->computed   = SP_CSS_FONT_VARIANT_NUMERIC_NORMAL;
     asian_res->computed     = SP_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL;
 
     // Stores only differences
     ligatures_res->value = 0;
-    position_res->value  = 0;
-    caps_res->value      = 0;
+    int position_value   = 0;
+    int caps_value       = 0;
     numeric_res->value   = 0;
     asian_res->value     = 0;
 
@@ -1331,8 +1329,8 @@ objects_query_fontvariants (const std::vector<SPItem*> &objects, SPStyle *style_
         texts ++;
 
         SPILigatures* ligatures_in = &(style->font_variant_ligatures);
-        SPIEnum*      position_in  = &(style->font_variant_position);
-        SPIEnum*      caps_in      = &(style->font_variant_caps);
+        auto*         position_in  = &(style->font_variant_position);
+        auto*         caps_in      = &(style->font_variant_caps);
         SPINumeric*   numeric_in   = &(style->font_variant_numeric);
         SPIEastAsian* asian_in     = &(style->font_variant_east_asian);
 
@@ -1343,11 +1341,11 @@ objects_query_fontvariants (const std::vector<SPItem*> &objects, SPStyle *style_
             ligatures_res->value  |= (ligatures_res->computed ^ ligatures_in->computed );
             ligatures_res->computed &= ligatures_in->computed;
 
-            position_res->value  |= (position_res->computed ^ position_in->computed );
-            position_res->computed &= position_in->computed;
+            position_value |= (position_computed ^ position_in->computed);
+            position_computed &= position_in->computed;
 
-            caps_res->value  |= (caps_res->computed ^ caps_in->computed );
-            caps_res->computed &= caps_in->computed;
+            caps_value |= (caps_computed ^ caps_in->computed);
+            caps_computed &= caps_in->computed;
 
             numeric_res->value  |= (numeric_res->computed ^ numeric_in->computed );
             numeric_res->computed &= numeric_in->computed;
@@ -1357,8 +1355,8 @@ objects_query_fontvariants (const std::vector<SPItem*> &objects, SPStyle *style_
 
         } else {
             ligatures_res->computed  = ligatures_in->computed;
-            position_res->computed   = position_in->computed;
-            caps_res->computed       = caps_in->computed;
+            position_computed        = position_in->computed;
+            caps_computed            = caps_in->computed;
             numeric_res->computed    = numeric_in->computed;
             asian_res->computed      = asian_in->computed;
         }
@@ -1366,9 +1364,15 @@ objects_query_fontvariants (const std::vector<SPItem*> &objects, SPStyle *style_
         set = true;
     }
 
+    // violates enum type safety!
+    style_res->font_variant_position.value = static_cast<SPCSSFontVariantPosition>(position_value);
+    style_res->font_variant_position.computed = static_cast<SPCSSFontVariantPosition>(position_computed);
+    style_res->font_variant_caps.value = static_cast<SPCSSFontVariantCaps>(caps_value);
+    style_res->font_variant_caps.computed = static_cast<SPCSSFontVariantCaps>(caps_computed);
+
     bool different = (style_res->font_variant_ligatures.value  != 0 ||
-                      style_res->font_variant_position.value   != 0 ||
-                      style_res->font_variant_caps.value       != 0 ||
+                      position_value                           != 0 ||
+                      caps_value                               != 0 ||
                       style_res->font_variant_numeric.value    != 0 ||
                       style_res->font_variant_east_asian.value != 0);
 
@@ -1704,9 +1708,8 @@ objects_query_fontspecification (const std::vector<SPItem*> &objects, SPStyle *s
 int
 objects_query_blend (const std::vector<SPItem*> &objects, SPStyle *style_res)
 {
-    const int empty_prev = -2;
-    int blend = 0;
-    float blend_prev = empty_prev;
+    auto blend = SP_CSS_BLEND_NORMAL;
+    auto blend_prev = blend;
     bool same_blend = true;
     guint items = 0;
 
@@ -1726,10 +1729,10 @@ objects_query_blend (const std::vector<SPItem*> &objects, SPStyle *style_res)
         }
         // defaults to blend mode = "normal"
         else {
-            blend = 0;
+            blend = SP_CSS_BLEND_NORMAL;
         }
 
-        if(blend_prev != empty_prev && blend_prev != blend)
+        if (items > 1 && blend_prev != blend)
             same_blend = false;
         blend_prev = blend;
     }
@@ -1752,9 +1755,8 @@ objects_query_blend (const std::vector<SPItem*> &objects, SPStyle *style_res)
 
 int objects_query_isolation(const std::vector<SPItem *> &objects, SPStyle *style_res)
 {
-    const int empty_prev = -2;
-    int isolation = 0;
-    float isolation_prev = empty_prev;
+    auto isolation = SP_CSS_ISOLATION_AUTO;
+    auto isolation_prev = isolation;
     bool same_isolation = true;
     guint items = 0;
 
@@ -1772,12 +1774,11 @@ int objects_query_isolation(const std::vector<SPItem *> &objects, SPStyle *style
         if (style->isolation.set) {
             isolation = style->isolation.value;
         }
-        // defaults to blend mode = "normal"
         else {
-            isolation = 0;
+            isolation = SP_CSS_ISOLATION_AUTO;
         }
 
-        if (isolation_prev != empty_prev && isolation_prev != isolation)
+        if (items > 1 && isolation_prev != isolation)
             same_isolation = false;
         isolation_prev = isolation;
     }

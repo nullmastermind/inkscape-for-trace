@@ -278,7 +278,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     // Font related properties and 'font' shorthand
     font_style(       "font-style",      enum_font_style,      SP_CSS_FONT_STYLE_NORMAL   ),
     font_variant(     "font-variant",    enum_font_variant,    SP_CSS_FONT_VARIANT_NORMAL ),
-    font_weight(      "font-weight",     enum_font_weight,     SP_CSS_FONT_WEIGHT_NORMAL, SP_CSS_FONT_WEIGHT_400  ),
+    font_weight(      "font-weight",     enum_font_weight,     SP_CSS_FONT_WEIGHT_NORMAL ),
     font_stretch(     "font-stretch",    enum_font_stretch,    SP_CSS_FONT_STRETCH_NORMAL ), 
     font_size(),
     line_height(      "line-height",                    1.25 ),  // SPILengthOrNormal
@@ -979,23 +979,33 @@ SPStyle::getFontFeatureString() {
     if ( !(font_variant_ligatures.value & SP_CSS_FONT_VARIANT_LIGATURES_CONTEXTUAL) )
         feature_string += "calt 0, ";
 
-    if ( font_variant_position.value & SP_CSS_FONT_VARIANT_POSITION_SUB )
-        feature_string += "subs, ";
-    if ( font_variant_position.value & SP_CSS_FONT_VARIANT_POSITION_SUPER )
-        feature_string += "sups, ";
+    switch (font_variant_position.value) {
+        case SP_CSS_FONT_VARIANT_POSITION_SUB:
+            feature_string += "subs, ";
+            break;
+        case SP_CSS_FONT_VARIANT_POSITION_SUPER:
+            feature_string += "sups, ";
+    }
 
-    if ( font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_SMALL )
-        feature_string += "smcp, ";
-    if ( font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_ALL_SMALL )
-        feature_string += "smcp, c2sc, ";
-    if ( font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_PETITE )
-        feature_string += "pcap, ";
-    if ( font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_ALL_PETITE )
-        feature_string += "pcap, c2pc, ";
-    if ( font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_UNICASE )
-        feature_string += "unic, ";
-    if ( font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_TITLING )
-        feature_string += "titl, ";
+    switch (font_variant_caps.value) {
+        case SP_CSS_FONT_VARIANT_CAPS_SMALL:
+            feature_string += "smcp, ";
+            break;
+        case SP_CSS_FONT_VARIANT_CAPS_ALL_SMALL:
+            feature_string += "smcp, c2sc, ";
+            break;
+        case SP_CSS_FONT_VARIANT_CAPS_PETITE:
+            feature_string += "pcap, ";
+            break;
+        case SP_CSS_FONT_VARIANT_CAPS_ALL_PETITE:
+            feature_string += "pcap, c2pc, ";
+            break;
+        case SP_CSS_FONT_VARIANT_CAPS_UNICASE:
+            feature_string += "unic, ";
+            break;
+        case SP_CSS_FONT_VARIANT_CAPS_TITLING:
+            feature_string += "titl, ";
+    }
 
     if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_LINING_NUMS )
         feature_string += "lnum, ";
@@ -1043,8 +1053,7 @@ SPStyle::getFontFeatureString() {
         feature_string = "normal";
     } else {
         // Remove last ", "
-        feature_string.erase( feature_string.size() - 1 );
-        feature_string.erase( feature_string.size() - 1 );
+        feature_string.resize(feature_string.size() - 2);
     }
 
     return feature_string;

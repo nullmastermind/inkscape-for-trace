@@ -156,7 +156,7 @@ public:
     Geom::Affine getParentTransform() const;
 
     /* Clipping methods */
-    void addClipPath(Geom::PathVector const &pv, SPIEnum const *fill_rule);
+    void addClipPath(Geom::PathVector const &pv, SPIEnum<SPWindRule> const *fill_rule);
     void addClippingRect(double x, double y, double width, double height);
 
     /* Rendering methods */

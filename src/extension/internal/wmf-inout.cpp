@@ -808,7 +808,7 @@ Wmf::output_style(PWMF_CALLBACK_DATA d)
         snprintf(
             tmp, 1023,
             "fill-rule:%s;",
-            (d->dc[d->level].style.fill_rule.value == 0 ? "evenodd" : "nonzero")
+            (d->dc[d->level].style.fill_rule.value == SP_WIND_RULE_NONZERO ? "evenodd" : "nonzero")
         );
         tmp_style << tmp;
         tmp_style << "fill-opacity:1;";
@@ -867,17 +867,17 @@ Wmf::output_style(PWMF_CALLBACK_DATA d)
 
         tmp_style << "stroke-linecap:" <<
             (
-                d->dc[d->level].style.stroke_linecap.computed == 0 ? "butt" :
-                d->dc[d->level].style.stroke_linecap.computed == 1 ? "round" :
-                d->dc[d->level].style.stroke_linecap.computed == 2 ? "square" :
+                d->dc[d->level].style.stroke_linecap.computed == SP_STROKE_LINECAP_BUTT ? "butt" :
+                d->dc[d->level].style.stroke_linecap.computed == SP_STROKE_LINECAP_ROUND ? "round" :
+                d->dc[d->level].style.stroke_linecap.computed == SP_STROKE_LINECAP_SQUARE ? "square" :
                 "unknown"
             ) << ";";
 
         tmp_style << "stroke-linejoin:" <<
             (
-                d->dc[d->level].style.stroke_linejoin.computed == 0 ? "miter" :
-                d->dc[d->level].style.stroke_linejoin.computed == 1 ? "round" :
-                d->dc[d->level].style.stroke_linejoin.computed == 2 ? "bevel" :
+                d->dc[d->level].style.stroke_linejoin.computed == SP_STROKE_LINEJOIN_MITER ? "miter" :
+                d->dc[d->level].style.stroke_linejoin.computed == SP_STROKE_LINEJOIN_ROUND ? "round" :
+                d->dc[d->level].style.stroke_linejoin.computed == SP_STROKE_LINEJOIN_BEVEL ? "bevel" :
                 "unknown"
             ) << ";";
 
@@ -1005,30 +1005,30 @@ Wmf::select_pen(PWMF_CALLBACK_DATA d, int index)
                 d->dc[d->level].style.stroke_dasharray.values.push_back(spilength);
             }
 
-            d->dc[d->level].style.stroke_dasharray.set = 1;
+            d->dc[d->level].style.stroke_dasharray.set = true;
             break;
         }
 
         case U_PS_SOLID:
         default:
         {
-            d->dc[d->level].style.stroke_dasharray.set = 0;
+            d->dc[d->level].style.stroke_dasharray.set = false;
             break;
         }
     }
 
     switch (up.Style & U_PS_ENDCAP_MASK) {
-        case U_PS_ENDCAP_ROUND: {  d->dc[d->level].style.stroke_linecap.computed = 1;   break; }
-        case U_PS_ENDCAP_SQUARE: { d->dc[d->level].style.stroke_linecap.computed = 2;   break; }
+        case U_PS_ENDCAP_ROUND: {  d->dc[d->level].style.stroke_linecap.computed = SP_STROKE_LINECAP_ROUND;   break; }
+        case U_PS_ENDCAP_SQUARE: { d->dc[d->level].style.stroke_linecap.computed = SP_STROKE_LINECAP_SQUARE;   break; }
         case U_PS_ENDCAP_FLAT:
-        default: {                 d->dc[d->level].style.stroke_linecap.computed = 0;   break; }
+        default: {                 d->dc[d->level].style.stroke_linecap.computed = SP_STROKE_LINECAP_BUTT;   break; }
     }
 
     switch (up.Style & U_PS_JOIN_MASK) {
-        case U_PS_JOIN_BEVEL: {    d->dc[d->level].style.stroke_linejoin.computed = 2;  break; }
-        case U_PS_JOIN_MITER: {    d->dc[d->level].style.stroke_linejoin.computed = 0;  break; }
+        case U_PS_JOIN_BEVEL: {    d->dc[d->level].style.stroke_linejoin.computed = SP_STROKE_LINEJOIN_BEVEL;  break; }
+        case U_PS_JOIN_MITER: {    d->dc[d->level].style.stroke_linejoin.computed = SP_STROKE_LINEJOIN_MITER;  break; }
         case U_PS_JOIN_ROUND:
-        default: {                 d->dc[d->level].style.stroke_linejoin.computed = 1;  break; }
+        default: {                 d->dc[d->level].style.stroke_linejoin.computed = SP_STROKE_LINEJOIN_ROUND;  break; }
     }
 
 
@@ -1202,7 +1202,7 @@ Wmf::select_font(PWMF_CALLBACK_DATA d, int index)
         font.Weight == U_FW_BOLD ? SP_CSS_FONT_WEIGHT_BOLD :
         font.Weight == U_FW_EXTRALIGHT ? SP_CSS_FONT_WEIGHT_LIGHTER :
         font.Weight == U_FW_EXTRABOLD ? SP_CSS_FONT_WEIGHT_BOLDER :
-        U_FW_NORMAL;
+        SP_CSS_FONT_WEIGHT_NORMAL;
     d->dc[d->level].style.font_style.value = (font.Italic ? SP_CSS_FONT_STYLE_ITALIC : SP_CSS_FONT_STYLE_NORMAL);
     d->dc[d->level].style.text_decoration_line.underline    = font.Underline;
     d->dc[d->level].style.text_decoration_line.line_through = font.StrikeOut;
@@ -1239,9 +1239,9 @@ Wmf::delete_object(PWMF_CALLBACK_DATA d, int index)
         // If the active object is deleted set default draw values
         if(index == d->dc[d->level].active_pen){  // Use default pen: solid, black, 1 pixel wide
             d->dc[d->level].active_pen                     = -1;
-            d->dc[d->level].style.stroke_dasharray.set     = 0;
-            d->dc[d->level].style.stroke_linecap.computed  = 2; // U_PS_ENDCAP_SQUARE
-            d->dc[d->level].style.stroke_linejoin.computed = 0; // U_PS_JOIN_MITER;
+            d->dc[d->level].style.stroke_dasharray.set     = false;
+            d->dc[d->level].style.stroke_linecap.computed  = SP_STROKE_LINECAP_SQUARE; // U_PS_ENDCAP_SQUARE
+            d->dc[d->level].style.stroke_linejoin.computed = SP_STROKE_LINEJOIN_MITER; // U_PS_JOIN_MITER;
             d->dc[d->level].stroke_set                     = true;
             d->dc[d->level].style.stroke_width.value       = 1.0;
             d->dc[d->level].style.stroke.value.color.set( 0, 0, 0 );
@@ -1891,7 +1891,9 @@ std::cout << "BEFORE DRAW"
         {
             dbg_str << "<!-- U_WMR_SETPOLYFILLMODE -->\n";
             nSize = U_WMRSETPOLYFILLMODE_get(contents, &utmp16);
-            d->dc[d->level].style.fill_rule.value = (utmp16 == U_ALTERNATE ? 0 :  utmp16 == U_WINDING ? 1 : 0);
+            d->dc[d->level].style.fill_rule.value =
+                (utmp16 == U_ALTERNATE ? SP_WIND_RULE_NONZERO
+                                       : utmp16 == U_WINDING ? SP_WIND_RULE_INTERSECT : SP_WIND_RULE_NONZERO);
             break;
         }
         case U_WMR_SETSTRETCHBLTMODE:
@@ -2405,18 +2407,18 @@ std::cout << "BEFORE DRAW"
                 memcpy(&utmp4, text ,4);
                 if(Escape == U_MFE_SETLINECAP){
                     switch (utmp4 & U_PS_ENDCAP_MASK) {
-                        case U_PS_ENDCAP_ROUND: {  d->dc[d->level].style.stroke_linecap.computed = 1;   break; }
-                        case U_PS_ENDCAP_SQUARE: { d->dc[d->level].style.stroke_linecap.computed = 2;   break; }
+                        case U_PS_ENDCAP_ROUND: {  d->dc[d->level].style.stroke_linecap.computed = SP_STROKE_LINECAP_ROUND;   break; }
+                        case U_PS_ENDCAP_SQUARE: { d->dc[d->level].style.stroke_linecap.computed = SP_STROKE_LINECAP_SQUARE;   break; }
                         case U_PS_ENDCAP_FLAT:
-                        default: {                 d->dc[d->level].style.stroke_linecap.computed = 0;   break; }
+                        default: {                 d->dc[d->level].style.stroke_linecap.computed = SP_STROKE_LINECAP_BUTT;   break; }
                     }
                 }
                 else if(Escape == U_MFE_SETLINEJOIN){
                     switch (utmp4 & U_PS_JOIN_MASK) {
-                        case U_PS_JOIN_BEVEL: {    d->dc[d->level].style.stroke_linejoin.computed = 2;  break; }
-                        case U_PS_JOIN_MITER: {    d->dc[d->level].style.stroke_linejoin.computed = 0;  break; }
+                        case U_PS_JOIN_BEVEL: {    d->dc[d->level].style.stroke_linejoin.computed = SP_STROKE_LINEJOIN_BEVEL;  break; }
+                        case U_PS_JOIN_MITER: {    d->dc[d->level].style.stroke_linejoin.computed = SP_STROKE_LINEJOIN_MITER;  break; }
                         case U_PS_JOIN_ROUND:
-                        default: {                 d->dc[d->level].style.stroke_linejoin.computed = 1;  break; }
+                        default: {                 d->dc[d->level].style.stroke_linejoin.computed = SP_STROKE_LINEJOIN_ROUND;  break; }
                     }
                 }
                 else if(Escape == U_MFE_SETMITERLIMIT){
@@ -3131,9 +3133,9 @@ Wmf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
     d.dc[0].style.baseline_shift.value         = 0;
 
     // Default pen, WMF files that do not specify a pen are unlikely to look very good!
-    d.dc[0].style.stroke_dasharray.set         = 0;
-    d.dc[0].style.stroke_linecap.computed      = 2; // U_PS_ENDCAP_SQUARE;
-    d.dc[0].style.stroke_linejoin.computed     = 0; // U_PS_JOIN_MITER;
+    d.dc[0].style.stroke_dasharray.set         = false;
+    d.dc[0].style.stroke_linecap.computed      = SP_STROKE_LINECAP_SQUARE; // U_PS_ENDCAP_SQUARE;
+    d.dc[0].style.stroke_linejoin.computed     = SP_STROKE_LINEJOIN_MITER; // U_PS_JOIN_MITER;
     d.dc[0].style.stroke_width.value           = 1.0; // will be reset to something reasonable once WMF drawing size is known
     d.dc[0].style.stroke.value.color.set( 0, 0, 0 );
     d.dc[0].stroke_set                         = true;
