@@ -328,8 +328,7 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
                                         nullptr, event->button.time);
 
                     this->grabbed = SP_CANVAS_ITEM(desktop->drawing);
-
-                    desktop->canvas->forceFullRedrawAfterInterruptions(5);
+                    desktop->canvas->endForcedFullRedraws();
 
                     ret = TRUE;
                 }
@@ -338,6 +337,7 @@ bool SelectTool::item_handler(SPItem* item, GdkEvent* event) {
                 this->sp_select_context_abort();
             }
             break;
+    
 
         case GDK_ENTER_NOTIFY: {
             if (!desktop->isWaitingCursor() && !this->dragging) {
@@ -490,7 +490,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
                         this->dragging = false;
                         sp_event_context_discard_delayed_snap_event(this);
 
-                        desktop->canvas->endForcedFullRedraws();
+                        
                     } else { // switch tool
                         Geom::Point const button_pt(event->button.x, event->button.y);
                         Geom::Point const p(desktop->w2d(button_pt));
@@ -641,8 +641,9 @@ bool SelectTool::root_handler(GdkEvent* event) {
                     } else {
                         this->dragging = FALSE;
                         sp_event_context_discard_delayed_snap_event(this);
-                        desktop->canvas->endForcedFullRedraws();
+                        
                     }
+
                 } else {
                     if (Inkscape::Rubberband::get(desktop)->is_started()) {
                         Inkscape::Rubberband::get(desktop)->move(p);
@@ -655,6 +656,9 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
                         gobble_motion_events(GDK_BUTTON1_MASK);
                     }
+                }
+                if (this->button_press_ctrl || (this->button_press_alt && !this->button_press_shift && !selection->isEmpty())) {
+                    desktop->canvas->endForcedFullRedraws();
                 }
             }
             break;
@@ -704,7 +708,6 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
                     gdk_window_set_cursor(window, CursorSelectMouseover);
                     sp_event_context_discard_delayed_snap_event(this);
-                    desktop->canvas->endForcedFullRedraws();
 
                     if (this->item) {
                         sp_object_unref( this->item, nullptr);
@@ -790,6 +793,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
                     ret = TRUE;
                 }
+                desktop->canvas->endForcedFullRedraws();
 
                 if (this->grabbed) {
                     sp_canvas_item_ungrab(this->grabbed);

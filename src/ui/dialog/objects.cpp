@@ -1670,7 +1670,6 @@ void ObjectsPanel::_blurChangedIter(const Gtk::TreeIter& iter, double blur)
                     remove_filter(item, false);
                 }
             }
-            item->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
         }
     }
 }

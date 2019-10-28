@@ -2559,11 +2559,11 @@ gint SPCanvas::idle_handler(gpointer data)
     }
 
 #ifdef DEBUG_PERFORMANCE
-    now = g_get_monotonic_time();
-    elapsed = now - canvas->_idle_time;
-    g_message("[%i] loop ended unclean at %f", canvas->_idle_id,
-                canvas->_totalelapsed / (double)1000000 + elapsed / (double)1000000);
     if (ret == 0) {
+        now = g_get_monotonic_time();
+        elapsed = now - canvas->_idle_time;
+        g_message("[%i] loop ended unclean at %f", canvas->_idle_id,
+                    canvas->_totalelapsed / (double)1000000 + elapsed / (double)1000000);
         totaloops += 1;
     }
     if (ret) {
