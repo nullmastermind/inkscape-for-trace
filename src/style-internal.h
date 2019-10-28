@@ -126,15 +126,21 @@ class SPIBase
 {
 
 public:
-    SPIBase( Glib::ustring name="anonymous", bool inherits = true )
-        : _name(std::move(name)),
-          inherits(inherits),
+    SPIBase()
+        : inherits(true),
           set(false),
           inherit(false),
           important(false),
           style_src(SP_STYLE_SRC_STYLE_PROP), // Default to property, see bug 1662285.
           style(nullptr)
     {}
+
+    // TODO remove name constructor
+    SPIBase(Glib::ustring const &, bool inherits_ = true)
+        : SPIBase()
+    {
+        inherits = inherits_;
+    }
 
     virtual ~SPIBase()
     = default;
@@ -201,7 +207,7 @@ public:
 
     // Check apples being compared to apples
     virtual bool operator==(const SPIBase& rhs) {
-        return (_name == rhs._name);
+        return id() == rhs.id();
     }
 
     virtual bool operator!=(const SPIBase& rhs) {
@@ -210,9 +216,6 @@ public:
 
     virtual SPAttributeEnum id() const { return SP_ATTR_INVALID; }
     Glib::ustring const &name() const;
-
-private:
-    Glib::ustring _name;
 
   // To do: make private
 public:
@@ -255,10 +258,7 @@ class SPIFloat : public SPIBase
 {
 
 public:
-    SPIFloat()
-        : SPIBase( "anonymous_float" ),
-          value(0.0)
-    {}
+    SPIFloat() = default;
 
     SPIFloat( Glib::ustring const &name, float value_default  = 0.0 )
         : SPIBase( name ),
@@ -286,10 +286,10 @@ public:
 
   // To do: make private
 public:
-    float value;
+    float value = 0.0;
 
 private:
-    float value_default;
+    float value_default = 0.0;
 };
 
 /*
@@ -329,8 +329,7 @@ class SPIScale24 : public SPIBase
 
 public:
     SPIScale24()
-        : SPIBase( "anonymous_scale24" ),
-          value(0)
+        : value(0)
     {}
 
     SPIScale24( Glib::ustring const &name, unsigned value = 0, bool inherits = true )
@@ -391,8 +390,7 @@ class SPILength : public SPIBase
 
 public:
     SPILength()
-        : SPIBase( "anonymous_length" ),
-          unit(SP_CSS_UNIT_NONE),
+        : unit(SP_CSS_UNIT_NONE),
           value(0),
           computed(0)
     {}
@@ -446,8 +444,7 @@ class SPILengthOrNormal : public SPILength
 
 public:
     SPILengthOrNormal()
-        : SPILength( "anonymous_length" ),
-          normal(true)
+        : normal(true)
     {}
 
     SPILengthOrNormal( Glib::ustring const &name, float value = 0 )
@@ -488,8 +485,7 @@ class SPIFontVariationSettings : public SPIBase
 
 public:
     SPIFontVariationSettings()
-        : SPIBase( "anonymous_fontvariationsettings" ),
-          normal(true)
+        : normal(true)
     {}
 
     SPIFontVariationSettings( Glib::ustring const &name )
@@ -602,10 +598,6 @@ class SPIEnumBits : public SPIEnum
 {
 
 public:
-    SPIEnumBits() :
-        SPIEnum( "anonymous_enumbits", nullptr )
-    {}
-
     SPIEnumBits( Glib::ustring const &name, SPStyleEnum const *enums, unsigned value = 0, bool inherits = true ) :
         SPIEnum( name, enums, value, inherits )
     {}
@@ -690,10 +682,7 @@ class SPIString : public SPIBase
 {
 
 public:
-    SPIString()
-        : SPIBase( "anonymous_string" ),
-          value(nullptr)
-    {}
+    SPIString() = default;
 
     // TODO probably want to avoid gchar* and c-style strings.
     SPIString( Glib::ustring const &name, gchar const* value_default_in = nullptr )
@@ -729,8 +718,8 @@ public:
 
   // To do: make private, convert value to Glib::ustring
 public:
-    gchar *value;
-    gchar *value_default;
+    gchar *value = nullptr;
+    gchar *value_default = nullptr;
 };
 
 /// Shapes type internal to SPStyle.
@@ -761,8 +750,8 @@ class SPIColor : public SPIBase
 
 public:
     SPIColor()
-        : SPIBase( "anonymous_color" ),
-          currentcolor(false) {
+        : currentcolor(false)
+    {
         value.color.set(0);
     }
 
@@ -837,8 +826,7 @@ class SPIPaint : public SPIBase
 
 public:
     SPIPaint()
-        : SPIBase( "anonymous_paint" ),
-          paintOrigin( SP_CSS_PAINT_ORIGIN_NORMAL ),
+        : paintOrigin(SP_CSS_PAINT_ORIGIN_NORMAL),
           colorSet(false),
           noneSet(false) {
         value.href = nullptr;

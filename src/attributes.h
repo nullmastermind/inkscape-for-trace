@@ -21,7 +21,7 @@
  * True iff k is a property in SVG, i.e. something that can be written either in a style attribute
  * or as its own XML attribute. This must be kept in sync with SPAttributeEnum.
  */
-#define SP_ATTRIBUTE_IS_CSS(k) (((k) >= SP_ATTR_D) && ((k) <= SP_PROP_PATH_EFFECT))
+#define SP_ATTRIBUTE_IS_CSS(k) (((k) >= SP_ATTR_D) && ((k) < SP_PROP_SYSTEM_LANGUAGE))
 
 /*
  * Do not change order of attributes and properties. Attribute and
@@ -564,6 +564,9 @@ enum SPAttributeEnum : unsigned {
 
     /* LivePathEffect */
     SP_PROP_PATH_EFFECT,
+
+    // sentinel
+    SPAttributeEnum_SIZE
 };
 
 /**

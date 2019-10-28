@@ -54,7 +54,16 @@ using Inkscape::CSSOStringStream;
 
 // SPIBase --------------------------------------------------------------
 
-Glib::ustring const &SPIBase::name() const { return _name; }
+Glib::ustring const &SPIBase::name() const
+{
+    static Glib::ustring names[SPAttributeEnum_SIZE];
+    auto &name = names[id()];
+    if (name.empty()) {
+        auto const *namecstr = sp_attribute_name(id());
+        name = namecstr ? namecstr : "anonymous";
+    }
+    return name;
+}
 
 // Standard criteria for writing a property
 // dfp == different from parent
@@ -193,7 +202,7 @@ SPIScale24::merge( const SPIBase* const parent ) {
             }
         } else {
             // Needed only for 'opacity' and 'stop-opacity' which do not inherit. See comment at bottom of file.
-            if( name() != "opacity" && name() != "stop-opacity" )
+            if (id() != SP_PROP_OPACITY && id() != SP_PROP_STOP_OPACITY)
                 std::cerr << "SPIScale24::merge: unhandled property: " << name() << std::endl;
             if( !set || (!inherit && value == SP_SCALE24_MAX) ) {
                 value = p->value;
@@ -288,7 +297,7 @@ SPILength::read( gchar const *str ) {
                 /* Percentage */
                 unit = SP_CSS_UNIT_PERCENT;
                 value = value * 0.01;
-                if (name() == "line-height") {
+                if (id() == SP_PROP_LINE_HEIGHT) {
                     // See: http://www.w3.org/TR/CSS2/visudet.html#propdef-line-height
                     if( style ) {
                         computed = value * style->font_size.computed;
@@ -356,7 +365,7 @@ SPILength::cascade( const SPIBase* const parent ) {
             } else if (unit == SP_CSS_UNIT_EX) {
                 // FIXME: Get x height from libnrtype or pango.
                 computed = value * em * 0.5;
-            } else if (unit == SP_CSS_UNIT_PERCENT && name() == "line-height") {
+            } else if (unit == SP_CSS_UNIT_PERCENT && id() == SP_PROP_LINE_HEIGHT) {
                 // Special case
                 computed = value * em;
             }
@@ -1088,13 +1097,13 @@ SPIString::read( gchar const *str ) {
         inherit = false;
 
         Glib::ustring str_temp(str);
-        if (name() == "d" && style_src == SP_STYLE_SRC_ATTRIBUTE) {
+        if (id() == SP_ATTR_D && style_src == SP_STYLE_SRC_ATTRIBUTE) {
             set = false;
         }
-        if (name() == "font-family") {
+        if (id() == SP_PROP_FONT_FAMILY) {
             // Family names may be quoted in CSS, internally we use unquoted names.
             css_font_family_unquote( str_temp );
-        } else if (name() == "-inkscape-font-specification") {
+        } else if (id() == SP_PROP_INKSCAPE_FONT_SPEC) {
             css_unquote( str_temp );
         }
 
@@ -1107,11 +1116,11 @@ const Glib::ustring SPIString::get_value() const
 {
     if (this->inherit) return Glib::ustring("inherit");
     if (!this->value) return Glib::ustring("");
-    if (name() == "font-family") {
+    if (id() == SP_PROP_FONT_FAMILY) {
         Glib::ustring font_family( this->value );
         css_font_family_quote( font_family );
         return font_family;
-    } else if (name() == "-inkscape-font-specification") {
+    } else if (id() == SP_PROP_INKSCAPE_FONT_SPEC) {
         Glib::ustring font_spec( this->value );
         css_quote( font_spec );
         return font_spec;
@@ -1244,7 +1253,7 @@ void SPIColor::read( gchar const *str ) {
     } else if ( !strcmp(str, "currentColor") ) {
         set = true;
         currentcolor = true;
-        if (name() == "color") {
+        if (id() == SP_PROP_COLOR) {
             inherit = true;  // CSS3
         } else {
             setColor( style->color.value.color );
@@ -1521,11 +1530,10 @@ SPIPaint::reset( bool init ) {
         }
     }
     if( init ) {
-        if (name() == "fill") {
+        if (id() == SP_PROP_FILL) {
             // 'black' is default for 'fill'
             setColor(0.0, 0.0, 0.0);
-        }
-        if (name() == "text-decoration-color") {
+        } else if (id() == SP_PROP_TEXT_DECORATION_COLOR) {
             // currentcolor = true;
         }
     }

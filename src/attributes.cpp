@@ -561,6 +561,8 @@ static SPStyleProp const props[] = {
 
 #define n_attrs (sizeof(props) / sizeof(props[0]))
 
+static_assert(n_attrs == SPAttributeEnum_SIZE, "");
+
 /**
  * Inverse to the \c props array for lookup by name.
  */
