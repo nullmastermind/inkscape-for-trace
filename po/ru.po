@@ -16,14 +16,14 @@ msgstr ""
 "Project-Id-Version: Inkscape 0.92\n"
 "Report-Msgid-Bugs-To: inkscape-translator@lists.inkscape.org\n"
 "POT-Creation-Date: 2019-10-09 15:17+0200\n"
-"PO-Revision-Date: 2019-01-06 05:21+0300\n"
+"PO-Revision-Date: 2019-10-28 18:02+0300\n"
 "Last-Translator: Alexandre Prokoudine <alexandre.prokoudine@gmail.com>\n"
 "Language-Team: русский <gnome-cyr@lists.gnome.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Gtranslator 3.31.0\n"
+"X-Generator: Gtranslator 3.33.90\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 
@@ -8978,7 +8978,7 @@ msgstr "Запустить Inkscape в интерактивном командн
 # File: ../src/inkscape-application.cpp, line: 611
 #: ../src/inkscape-application.cpp:611
 msgid "D-Bus"
-msgstr ""
+msgstr "D-Bus"
 
 #: ../src/inkscape-application.cpp:612
 #, fuzzy
@@ -9559,9 +9559,8 @@ msgid "Offset the path, optionally keeping cusp corners cusp"
 msgstr ""
 
 #: ../src/live_effects/effect.cpp:667
-#, fuzzy
 msgid "Dashed Stroke"
-msgstr "Обводка"
+msgstr "Пунктирная обводка"
 
 #: ../src/live_effects/effect.cpp:671
 msgid ""
@@ -10139,7 +10138,6 @@ msgid "Shape linked"
 msgstr "Отсоединяются"
 
 #: ../src/live_effects/lpe-clone-original.cpp:49
-#, fuzzy
 msgid "Allow Transforms"
 msgstr "Разрешить трансформации"
 
@@ -10268,9 +10266,8 @@ msgstr "Интервал между копиями:"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:73
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:59
-#, fuzzy
 msgid "Split elements"
-msgstr "Масштабирование объектов"
+msgstr "Разделить элементы"
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:73
 #, fuzzy
@@ -11471,9 +11468,8 @@ msgid "Invert blacklist"
 msgstr "Инверсный желобок"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:83
-#, fuzzy
 msgid "Use the blacklist as whitelist"
-msgstr "Только чёрный и белый"
+msgstr "Использовать черный список как белый"
 
 #: ../src/live_effects/lpe-measure-segments.cpp:84
 #, fuzzy
@@ -20543,6 +20539,8 @@ msgstr ""
 #: ../src/ui/dialog/inkscape-preferences.cpp:1050
 msgid "Origin at upper left with y-axis pointing down (requires restart)"
 msgstr ""
+"Начало координат вверху слева, отсчет по оси Y сверху вниз (требует "
+"перезапуска)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1052
 msgid "When off, origin is at lower left corner and y-axis points up"
@@ -20553,9 +20551,8 @@ msgid "Theme changes"
 msgstr "Настройка темы"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1103
-#, fuzzy
 msgid "Use system theme"
-msgstr "Удаление сегмента"
+msgstr "Использовать системную тему"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1109
 msgid "Change Gtk theme:"
@@ -20567,14 +20564,12 @@ msgid "Use dark theme"
 msgstr "Использовать тёмную тему"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1116
-#, fuzzy
 msgid "Display icons"
-msgstr "_Единица измерения:"
+msgstr "Значки в интерфейсе"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1139
-#, fuzzy
 msgid "Use system icons"
-msgstr "Удаление сегмента"
+msgstr "Использовать системные значки"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1142
 msgid "Change icon theme:"
@@ -20585,14 +20580,12 @@ msgid "Use symbolic icons"
 msgstr "Использовать символьные значки"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1149
-#, fuzzy
 msgid "Use default colors for icons"
-msgstr "Убрать цвет заливки"
+msgstr "Использовать заданные по умолчанию цвета"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1175
-#, fuzzy
 msgid "Icon color"
-msgstr "Цвет текста:"
+msgstr "Цвет значков"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1195
@@ -20601,9 +20594,8 @@ msgid "Base color for icons. Some icons changes need reload"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1182
-#, fuzzy
 msgid "Highlights"
-msgstr "Human Highlight"
+msgstr "Подсветка значков"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1202
@@ -21767,9 +21759,8 @@ msgid "When changing stroke width, scale dash array"
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1806
-#, fuzzy
 msgid "Dashes"
-msgstr "Пунктир:"
+msgstr "Пунктир"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1810
 msgid "Mouse _wheel scrolls by:"
@@ -21863,14 +21854,12 @@ msgid "Scrolling"
 msgstr "Прокрутка"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1835
-#, fuzzy
 msgid "Snap defaults"
-msgstr "_Использовать по умолчанию"
+msgstr "Параметры по умолчанию"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1837
-#, fuzzy
 msgid "Enable snapping in new documents"
-msgstr "Без названия"
+msgstr "Включить прилипание в новых документах"
 
 #
 # File: ../src/ui/dialog/inkscape-preferences.cpp, line: 1677
@@ -21978,9 +21967,8 @@ msgstr ""
 "по нажатию клавиши со стрелкой"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1882
-#, fuzzy
 msgid "&gt; and &lt; _scale by:"
-msgstr "Шаг масштабирования по > и <:"
+msgstr "Шаг масштабирования по &gt; и &lt;:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1883
 msgid "Pressing > or < scales selection up or down by this increment"
@@ -22301,9 +22289,8 @@ msgstr ""
 "установить нуль, чтобы отключить кэширование"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2011
-#, fuzzy
 msgid "Rendering tile multiplier:"
-msgstr "_Размер кэша для рендеринга:"
+msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2012
 msgid ""
@@ -22315,13 +22302,12 @@ msgid ""
 msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2016
-#, fuzzy
 msgid "Rendering XRay radius:"
-msgstr "_Размер кэша для рендеринга:"
+msgstr "Радиус в рентгеновском режиме:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2017
 msgid "XRay mode radius preview"
-msgstr ""
+msgstr "\t"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2020
 #: ../src/ui/dialog/inkscape-preferences.cpp:2044
@@ -22684,9 +22670,8 @@ msgid "System info"
 msgstr "Информация о системе"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2547
-#, fuzzy
 msgid "Reset Preferences"
-msgstr "Параметры Текста"
+msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2550
 msgid "User preferences: "
@@ -22730,9 +22715,8 @@ msgid "Open themes folder"
 msgstr "Переименовать фильтр"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2562
-#, fuzzy
 msgid "User themes: "
-msgstr "Кэш пользователя:"
+msgstr "Пользовательские темы: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2562
 #, fuzzy
@@ -22745,9 +22729,8 @@ msgid "Open icons folder"
 msgstr "Переименовать фильтр"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2566
-#, fuzzy
 msgid "User icons: "
-msgstr "Пользовательская конфигурация:"
+msgstr "Пользовательские значки: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2566
 #, fuzzy
@@ -22760,9 +22743,8 @@ msgid "Open templates folder"
 msgstr "Ни один шаблон не выбран"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2570
-#, fuzzy
 msgid "User templates: "
-msgstr "Сохранить шаблон…"
+msgstr "Пользовательские шаблоны: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2571
 #, fuzzy
@@ -22775,9 +22757,8 @@ msgid "Open symbols folder"
 msgstr "Ничего не найдено"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2576
-#, fuzzy
 msgid "User symbols: "
-msgstr "Кхмерские символы"
+msgstr "Пользовательские символы: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2576
 #, fuzzy
@@ -22790,9 +22771,8 @@ msgid "Open paint servers folder"
 msgstr "Открыть файлы плоттеров HPGL"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2582
-#, fuzzy
 msgid "User paint servers: "
-msgstr "Данные пользователя:"
+msgstr "Пользовательские способы заливки: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2583
 #, fuzzy
@@ -22805,9 +22785,8 @@ msgid "Open palettes folder"
 msgstr "Открыть файлы плоттеров HPGL"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2587
-#, fuzzy
 msgid "User palettes: "
-msgstr "Данные пользователя:"
+msgstr "Пользовательские палитры: "
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2587
 #, fuzzy
@@ -22820,9 +22799,8 @@ msgid "Open keyboard shortcuts folder"
 msgstr "Импорт пользовательских сочетаний клавиш из файла"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2592
-#, fuzzy
 msgid "User keys: "
-msgstr "Кэш пользователя:"
+msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:2593
 #, fuzzy
@@ -23688,24 +23666,20 @@ msgid "Search"
 msgstr "Искать"
 
 #: ../src/ui/dialog/paint-servers.cpp:75
-#, fuzzy
 msgid "All paint servers"
-msgstr "Раскрашивание объектов"
+msgstr "Все способы"
 
 #: ../src/ui/dialog/paint-servers.cpp:76 ../src/ui/dialog/symbols.cpp:114
-#, fuzzy
 msgid "Current document"
 msgstr "Текущий документ"
 
 #: ../src/ui/dialog/paint-servers.cpp:92
-#, fuzzy
 msgid "Server"
-msgstr "_Развернуть"
+msgstr "Способ"
 
 #: ../src/ui/dialog/paint-servers.cpp:104
-#, fuzzy
 msgid "Change"
-msgstr "Диапазон: "
+msgstr "Изменить"
 
 #: ../src/ui/dialog/paint-servers.cpp:108
 #: ../src/ui/dialog/paint-servers.cpp:110 ../share/extensions/frame.inx:10
@@ -23977,9 +23951,8 @@ msgstr "Свойства"
 
 #: ../src/ui/dialog/styledialog.cpp:535 ../src/ui/dialog/styledialog.cpp:720
 #: ../src/ui/dialog/styledialog.cpp:860
-#, fuzzy
 msgid "value"
-msgstr "Значение"
+msgstr "значение"
 
 #: ../src/ui/dialog/styledialog.cpp:788
 msgid "This value is commented"
@@ -26154,9 +26127,8 @@ msgid "Reverse the direction of the gradient"
 msgstr "Развернуть направление градиента"
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:450
-#, fuzzy
 msgid "Repeat: "
-msgstr "Повтор:"
+msgstr "Повтор: "
 
 #: ../src/ui/toolbar/gradient-toolbar.cpp:453
 msgctxt "Gradient repeat type"
@@ -26749,9 +26721,8 @@ msgstr ""
 "можно изменить через диалог настройки Inkscape)"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:109
-#, fuzzy
 msgid "Use pressure input"
-msgstr "Параметры Ластика"
+msgstr "Учитывать силу нажатия"
 
 #: ../src/ui/toolbar/pencil-toolbar.cpp:120
 msgid "Min:"
@@ -29680,7 +29651,6 @@ msgid "Superscript"
 msgstr "Верхний индекс"
 
 #: ../src/ui/widget/font-variants.cpp:165
-#, fuzzy
 msgctxt "Font feature"
 msgid "Capitals"
 msgstr "Заглавные"
@@ -30333,9 +30303,8 @@ msgid "Pattern stroke"
 msgstr "Текстурная обводка"
 
 #: ../src/ui/widget/selected-style.cpp:193
-#, fuzzy
 msgid "Hatch"
-msgstr "Образец"
+msgstr "Штриховка"
 
 #: ../src/ui/widget/selected-style.cpp:196
 #, fuzzy
@@ -32512,16 +32481,14 @@ msgid "Rotate canvas counter-clockwise"
 msgstr "Поворот холста против часовой стрелки"
 
 #: ../src/verbs.cpp:2964
-#, fuzzy
 msgid "Reset Rotation"
-msgstr "Вращение"
+msgstr "Сбросить вращение"
 
 #: ../src/verbs.cpp:2964
 msgid "Reset canvas rotation to zero"
 msgstr "Сбросить поворот холста до нуля"
 
 #: ../src/verbs.cpp:2966
-#, fuzzy
 msgid "Flip Horizontally"
 msgstr "Отразить горизонтально"
 
@@ -32530,7 +32497,6 @@ msgid "Flip canvas horizontally"
 msgstr "Горизонтальное отражение холста"
 
 #: ../src/verbs.cpp:2968
-#, fuzzy
 msgid "Flip Vertically"
 msgstr "Отразить вертикально"
 
@@ -32539,9 +32505,8 @@ msgid "Flip canvas vertically"
 msgstr "Вертикальное отражение холста"
 
 #: ../src/verbs.cpp:2970
-#, fuzzy
 msgid "Reset Flip"
-msgstr "Сброс сетки"
+msgstr "Сбросить зеркальное отражение"
 
 #: ../src/verbs.cpp:2970
 msgid "Undo any flip"
@@ -32719,19 +32684,16 @@ msgid "Toggle between normal and grayscale color display modes"
 msgstr "Переключиться между отрисовкой в цветном режиме и градациями серого"
 
 #: ../src/verbs.cpp:3026
-#, fuzzy
 msgid "_Split View Mode"
-msgstr "Переключить режим _фокуса"
+msgstr "_Режим раздельного просмотра"
 
 #: ../src/verbs.cpp:3027
-#, fuzzy
 msgid "Split canvas in 2 to show outline"
-msgstr "Всегда показывать абрис"
+msgstr "Разделить холст на две части и показать каркас"
 
 #: ../src/verbs.cpp:3029
-#, fuzzy
 msgid "_XRay Mode"
-msgstr "Переключить режим _фокуса"
+msgstr "Рент_геновский режим"
 
 #: ../src/verbs.cpp:3029
 #, fuzzy
@@ -32820,9 +32782,8 @@ msgid "Select symbol from a symbols palette"
 msgstr "Выбрать символ из палитры символов"
 
 #: ../src/verbs.cpp:3062
-#, fuzzy
 msgid "_Paint Servers..."
-msgstr "_Устройства ввода..."
+msgstr "Спосо_бы заливки…"
 
 #: ../src/verbs.cpp:3064
 #, fuzzy
@@ -32874,13 +32835,12 @@ msgid "View and edit the XML tree of the document"
 msgstr "Просмотреть и изменить XML-дерево документа"
 
 #: ../src/verbs.cpp:3078
-#, fuzzy
 msgid "_Selectors and CSS..."
-msgstr "Наборы выде_лений..."
+msgstr "Селекторы и CSS…"
 
 #: ../src/verbs.cpp:3079
 msgid "View and edit CSS selectors and styles"
-msgstr ""
+msgstr "Просмотреть и изменить CSS-селекторы и стили"
 
 #: ../src/verbs.cpp:3080
 msgid "_Find/Replace..."
@@ -35788,9 +35748,8 @@ msgid "Icon size:"
 msgstr "Размер значка:"
 
 #: ../share/extensions/empty_icon.inx:14
-#, fuzzy
 msgid "Icon..."
-msgstr "Значок"
+msgstr "Значок…"
 
 #
 # File: ../share/extensions/empty_icon.inx, line: 16
@@ -39877,9 +39836,8 @@ msgid "Mesh-Gradient to Path"
 msgstr "Обводка сетчатого градиента"
 
 #: ../share/extensions/path_mesh_m2p.inx:14
-#, fuzzy
 msgid "Patches"
-msgstr "Образец"
+msgstr ""
 
 #: ../share/extensions/path_mesh_m2p.inx:15
 #: ../share/extensions/polyhedron_3d.inx:78
@@ -41233,7 +41191,6 @@ msgid "Weekday name font:"
 msgstr "Цвет названия рабочего дня:"
 
 #: ../share/extensions/svgcalendar.inx:42
-#, fuzzy
 msgid "Day font:"
 msgstr "Цвет дня:"
 
@@ -42186,9 +42143,8 @@ msgid "_Color Display Mode"
 msgstr "_Цветность просмотра"
 
 #: ../share/ui/menus.xml:127
-#, fuzzy
 msgid "_Canvas Orientation"
-msgstr "Ориентация холста:"
+msgstr "Ориентация _холста"
 
 #: ../share/ui/menus.xml:141
 msgid "Sh_ow/Hide"
